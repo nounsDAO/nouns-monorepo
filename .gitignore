@@ -7,3 +7,7 @@ dist
 /**/sha.h
 *.tgz
 .env
+
+packages/nouns-contracts/**/artifacts
+packages/nouns-contracts/**/cache
+packages/nouns-contracts/**/abi
