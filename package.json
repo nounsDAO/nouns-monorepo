@@ -1,0 +1,16 @@
+{
+  "name": "root",
+  "private": true,
+  "scripts": {
+    "lerna": "lerna",
+    "build": "lerna run --parallel build",
+    "format": "prettier --write \"packages/**/*.ts\""
+  },
+  "devDependencies": {
+    "lerna": "^3.22.1"
+  },
+  "dependencies": {
+    "prettier": "^2.3.0",
+    "punycode": "^2.1.1"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    /*
+     * Uncomment for small accuracy reduction & vast build time reduction for
+     * --watch mode 
+     */
+    // "assumeChangesOnlyAffectDirectDependencies": true,
+    "allowSyntheticDefaultImports": true,
+    "alwaysStrict": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "incremental": true,
+    "lib": ["esnext", "DOM"],
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "noImplicitThis":true,
+    "outDir": "build",
+    "skipLibCheck": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "target": "es6",
+  },
+  "exclude": ["**/build/"]
+}

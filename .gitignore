@@ -1,0 +1,9 @@
+node_modules
+.vscode
+data/
+build/
+dist
+/**/sha.ts
+/**/sha.h
+*.tgz
+.env
