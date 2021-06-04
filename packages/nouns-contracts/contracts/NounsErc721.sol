@@ -6,6 +6,6 @@ import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
 
 contract NounsErc721 is ERC721 {
   constructor() ERC721('Nouns', 'NOUNS') {
-      _setBaseURI('ipfs://');
-    }
+    _setBaseURI('ipfs://');
+  }
 }
