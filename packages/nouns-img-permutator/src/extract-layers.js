@@ -39,7 +39,7 @@ async function extractLayers() {
         }
 
         // make folder for noun asset
-        fse.mkdir(`../assets/noun-assets/${groupNode.name}`)
+        await fse.mkdir(`../assets/noun-assets/${groupNode.name}`)
         
         for (var z = lowerBound + 1; z < upperBound; z++) {
             
