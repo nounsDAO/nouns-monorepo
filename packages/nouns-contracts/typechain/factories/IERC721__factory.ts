@@ -5,14 +5,14 @@
 import { Contract, Signer } from "ethers";
 import { Provider } from "@ethersproject/providers";
 
-import type { IERC721 } from "../IERC721";
+import type { Ierc721 } from "../Ierc721";
 
-export class IERC721__factory {
+export class Ierc721__factory {
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): IERC721 {
-    return new Contract(address, _abi, signerOrProvider) as IERC721;
+  ): Ierc721 {
+    return new Contract(address, _abi, signerOrProvider) as Ierc721;
   }
 }
 

@@ -1,9 +1,7 @@
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { ethers } from 'hardhat';
-import {
-  NounsErc721,
-} from '../typechain';
+import { NounsErc721 } from '../typechain';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 chai.use(solidity);
@@ -14,9 +12,7 @@ describe('NounsErc721', () => {
   let nounsErc721: NounsErc721;
 
   beforeEach(async () => {
-    [
-      ownerAccount,
-    ] = await ethers.getSigners();
+    [ownerAccount] = await ethers.getSigners();
 
     const nounsErc721Factory = await ethers.getContractFactory(
       'NounsErc721',
