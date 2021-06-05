@@ -1,71 +1,47 @@
 
-const { Canvas, Image } = require('canvas');
-const mergeImages = require('merge-images')
+
+const sharp = require('sharp')
+const sizeOf = require('image-size')
 const fse = require('fs-extra') 
 
 // should be in order of z-depth. index 0 being the background layer, index 1 going on top and so on.
-const attributes = ['heads','shades','shirts']
+const attributes = ['background','body','decals-accessories','head','glasses']
 const resultImagePath = `result.png`
 
 generateImage()
 
-
 async function generateImage() {
 
-    // random kValue for layer picks
-    let kValue = await generateKValue()    
-    var layers = []
+ 
+    var layerPathNames = []
     
-    // grab layer path names
+    // grab random layer path names
     for (var i = 0; i < attributes.length; i++) {
-        let layer = await getImagePathNameFor(attributes[i], kValue[i])
-        layers.push(layer)
+        let layer = await getRandomImagePathNameForAttribute(attributes[i])
+        layerPathNames.push(layer)
     }
-    // dump layers into array
-    var pathNameForLayers = []
-    for (var i = 0; i < attributes.length; i++) {
-        pathNameForLayers.push(pathNameFor(attributes[i], layers[i]))
-    }
-    // merge images
-    b64 = await mergeImages(pathNameForLayers, { // PHAT TO MERGE INTO
-        Canvas: Canvas,
-        Image: Image
-      })  
 
-    // remove header from base64 string (contains image data)
-    let base64Image = b64.split(';base64,').pop();
+    sharp(layerPathNames[0])
+    .composite([
+        {input: layerPathNames[1], top:21 , left: xPositionForImageAtPath(layerPathNames[1])}, // body 
+        {input: layerPathNames[2], top: 21, left: xPositionForImageAtPath(layerPathNames[2])}, // decal
+        {input: layerPathNames[3], top: 6, left: xPositionForImageAtPath(layerPathNames[3])}, // head
+        {input: layerPathNames[4], top: 10, left: xPositionForImageAtPath(layerPathNames[4])}, //glasses
+    ])
+    .toFile(resultImagePath)
 
-    // write image to file to resize
-    await fse.outputFile(resultImagePath, base64Image, {encoding: 'base64'})
 
-}
-
-// get path name for layer
-function pathNameFor(attribute, layer) {
-    return `assets/${attribute}/${layer}`
 }
 
 // returns path name for file at index within attributeFolderName
-async function getImagePathNameFor(attributeFolderName, index) {
-    let files = await fse.readdir(`assets/${attributeFolderName}`)
-    return files[Number(index)]
+async function getRandomImagePathNameForAttribute(attributeFolderName) {
+    let files = await fse.readdir(`assets/noun-assets/${attributeFolderName}`)
+    files = files.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item)); // filter out hidden files (.DS_STORE)
+    return `assets/noun-assets/${attributeFolderName}/` + files[Math.floor(Math.random() * files.length)];
 }
 
-// Given number of available attributes, pick a random file within attribute folder and return array with indexes of files
-// e.g. returns [0 , 2, 1, 0]
-async function generateKValue() {
-    
-    var kValue = []
-    
-    for (key in attributes) {
-        let files = await fse.readdir(`assets/${attributes[key]}`)
-        let rand = random(files.length)
-        kValue.push(rand)
-    }
-    return kValue
-}
-
-// returns random integer with max as passed in param
-function random(max) {
-    return Math.floor(Math.random() * max);
+// function get width of image at path
+function xPositionForImageAtPath(path) {
+    const dimensions = sizeOf(path)
+    return Math.round(16 - (dimensions.width / 2))
 }
