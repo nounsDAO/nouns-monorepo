@@ -3,3 +3,7 @@ node_modules
 #Hardhat files
 cache
 artifacts
+typechain
+
+# Script output
+logs
