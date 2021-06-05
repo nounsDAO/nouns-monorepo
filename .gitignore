@@ -9,7 +9,6 @@ dist
 .env
 packages/nouns-img-permutator/assets/.DS_Store
 .DS_Store
-.gitignore
 packages/nouns-img-permutator/.DS_Store
 packages/nouns-img-permutator/.DS_Store
 packages/nouns-img-permutator/assets/.DS_Store

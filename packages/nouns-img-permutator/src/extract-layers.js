@@ -9,9 +9,6 @@ extractLayers()
 
 async function extractLayers() {
 
-    console.log(rootPath)
-
-
     // get .psd path
     const psdPath = await getPsdPath()
 
@@ -56,5 +53,11 @@ async function extractLayers() {
 
 async function getPsdPath() {
     let files = await fse.readdir(`../assets/psd/`)
-    return `../assets/psd/${files[0]}`
+    var psdFilePath;
+    files.forEach(file => {
+        if (path.extname(file) == `.psd`) {
+            psdFilePath = file
+        }
+    })
+    return '../assets/psd/' + psdFilePath
 }
