@@ -35,9 +35,9 @@ async function generateImage() {
 
 // returns path name for file at index within attributeFolderName
 async function getRandomImagePathNameForAttribute(attributeFolderName) {
-    let files = await fse.readdir(`assets/noun-assets/${attributeFolderName}`)
+    let files = await fse.readdir(`../assets/noun-assets/${attributeFolderName}`)
     files = files.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item)); // filter out hidden files (.DS_STORE)
-    return `assets/noun-assets/${attributeFolderName}/` + files[Math.floor(Math.random() * files.length)];
+    return `../assets/noun-assets/${attributeFolderName}/` + files[Math.floor(Math.random() * files.length)];
 }
 
 // function get width of image at path

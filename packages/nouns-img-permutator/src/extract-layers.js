@@ -1,11 +1,17 @@
 
 const PSD = require('psd');
 const fse = require('fs-extra')
+var path = require('path');
+
+const rootPath = path.join(__dirname, '..')
 
 extractLayers()
 
 async function extractLayers() {
-    
+
+    console.log(rootPath)
+
+
     // get .psd path
     const psdPath = await getPsdPath()
 
@@ -36,19 +42,19 @@ async function extractLayers() {
         }
 
         // make folder for noun asset
-        fse.mkdir(`assets/noun-assets/${groupNode.name}`)
+        fse.mkdir(`../assets/noun-assets/${groupNode.name}`)
         
         for (var z = lowerBound + 1; z < upperBound; z++) {
             
             // write layer node into corresponding folder 
             let layerNode = nodes[z]
             console.log(`extracting layer "${layerNode.name}" from group "${groupNode.name}" to path assets/${groupNode.name}/${layerNode.name}.png`)
-            await layerNode.layer.image.saveAsPng(`assets/noun-assets/${groupNode.name}/${layerNode.name}.png`)  
+            await layerNode.layer.image.saveAsPng(`../assets/noun-assets/${groupNode.name}/${layerNode.name}.png`)  
         }
     }
 }
 
 async function getPsdPath() {
-    let files = await fse.readdir(`assets/psd/`)
-    return `assets/psd/${files[0]}`
+    let files = await fse.readdir(`../assets/psd/`)
+    return `../assets/psd/${files[0]}`
 }
