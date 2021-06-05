@@ -5,9 +5,9 @@
 import { Signer, Contract, ContractFactory, Overrides } from "ethers";
 import { Provider, TransactionRequest } from "@ethersproject/providers";
 
-import type { ERC721 } from "../ERC721";
+import type { Erc721 } from "../Erc721";
 
-export class ERC721__factory extends ContractFactory {
+export class Erc721__factory extends ContractFactory {
   constructor(signer?: Signer) {
     super(_abi, _bytecode, signer);
   }
@@ -16,8 +16,8 @@ export class ERC721__factory extends ContractFactory {
     name_: string,
     symbol_: string,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ERC721> {
-    return super.deploy(name_, symbol_, overrides || {}) as Promise<ERC721>;
+  ): Promise<Erc721> {
+    return super.deploy(name_, symbol_, overrides || {}) as Promise<Erc721>;
   }
   getDeployTransaction(
     name_: string,
@@ -26,14 +26,14 @@ export class ERC721__factory extends ContractFactory {
   ): TransactionRequest {
     return super.getDeployTransaction(name_, symbol_, overrides || {});
   }
-  attach(address: string): ERC721 {
-    return super.attach(address) as ERC721;
+  attach(address: string): Erc721 {
+    return super.attach(address) as Erc721;
   }
-  connect(signer: Signer): ERC721__factory {
-    return super.connect(signer) as ERC721__factory;
+  connect(signer: Signer): Erc721__factory {
+    return super.connect(signer) as Erc721__factory;
   }
-  static connect(address: string, signerOrProvider: Signer | Provider): ERC721 {
-    return new Contract(address, _abi, signerOrProvider) as ERC721;
+  static connect(address: string, signerOrProvider: Signer | Provider): Erc721 {
+    return new Contract(address, _abi, signerOrProvider) as Erc721;
   }
 }
 
