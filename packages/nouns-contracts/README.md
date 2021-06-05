@@ -26,7 +26,7 @@ yarn test
 
 ## Commands
 
-```
+```sh
 # compiling
 npx hardhat compile
 
