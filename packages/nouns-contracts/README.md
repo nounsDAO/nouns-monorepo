@@ -9,7 +9,7 @@ yarn
 ## Compile contracts and generate typechain wrappers
 
 ```sh
-yarn compile
+yarn build
 ```
 
 ## Run tests
