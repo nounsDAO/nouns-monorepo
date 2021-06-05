@@ -19,6 +19,7 @@ jobs:
           node-version: 14.x
       - run: yarn 
       - run: yarn build
-      - run: |
+      - name: Run contract tests
+        run: |
           cd packages/nouns-contracts
           yarn test
