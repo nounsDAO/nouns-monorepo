@@ -2,6 +2,12 @@
 
 Script to test Nouns permutations. Extracts attributes directly from .psd file to generate a random permutation.
 
+### Build
+
+```
+npm install
+```
+
 ### .psd file requierements
 
 - Every group must be an attribute of the noun (e.g. 'body', 'accessory', etc)
