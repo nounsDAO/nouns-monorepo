@@ -19,7 +19,7 @@ describe('NounsErc721', () => {
     expect(await nounsErc721.baseURI()).to.eq('ipfs://');
   });
 
-  it('should allow owner/deployer to createNoun', async () => {
+  it('should allow owner/deployer to createNoun and emit NounCreated', async () => {
     const receipt = await (await nounsErc721.createNoun()).wait();
     expect(await nounsErc721.ownerOf(0)).to.eq(signers.deployer.address);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

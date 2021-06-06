@@ -10,6 +10,8 @@ import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import { Counters } from "@openzeppelin/contracts/utils/Counters.sol";
 import { INounsAuctionHouse } from "./interfaces/INounsAuctionHouse.sol";
+import { INounsErc721 } from "./interfaces/INounsErc721.sol";
+import "hardhat/console.sol";
 
 interface IWETH {
     function deposit() external payable;
@@ -25,6 +27,9 @@ contract NounsAuctionHouse is INounsAuctionHouse, ReentrancyGuard {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
     using Counters for Counters.Counter;
+
+    // The target NounsDAO ERC721 to mint and auction.
+    INounsErc721 public nouns;
 
     // The minimum amount of time left in an auction after a new bid is created
     uint256 public timeBuffer;
@@ -53,8 +58,9 @@ contract NounsAuctionHouse is INounsAuctionHouse, ReentrancyGuard {
     /*
      * Constructor
      */
-    constructor(address _weth) {
+    constructor(address _weth, INounsErc721 _nouns) {
         wethAddress = _weth;
+        nouns = _nouns;
         timeBuffer = 15 * 60; // extend 15 minutes after every bid made in last 15 minutes
         minBidIncrementPercentage = 5; // 5%
     }
