@@ -4,12 +4,14 @@ import { NounsErc721, Weth } from '../typechain';
 
 export type TestSigners = {
   deployer: SignerWithAddress;
+  account0: SignerWithAddress;
 }
 
 export async function getSigners(): Promise<TestSigners> {
-  const [deployer] = await ethers.getSigners();
+  const [deployer, account0] = await ethers.getSigners();
   return {
     deployer,
+    account0,
   }
 }
 

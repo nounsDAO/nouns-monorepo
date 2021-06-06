@@ -6,9 +6,9 @@ pragma experimental ABIEncoderV2;
 import { SafeMath } from "@openzeppelin/contracts/math/SafeMath.sol";
 import { IERC721, IERC165 } from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import {Counters} from "@openzeppelin/contracts/utils/Counters.sol";
+import { Counters } from "@openzeppelin/contracts/utils/Counters.sol";
 import { INounsAuctionHouse } from "./interfaces/INounsAuctionHouse.sol";
 
 interface IWETH {
@@ -19,7 +19,7 @@ interface IWETH {
 }
 
 /**
- * @title An NounsDAO auction house
+ * @title The NounsDAO auction house
  */
 contract NounsAuctionHouse is INounsAuctionHouse, ReentrancyGuard {
     using SafeMath for uint256;
