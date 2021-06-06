@@ -19,7 +19,7 @@ contract NounsErc721 is ERC721, Ownable {
     /**
      * @notice Create an new Noun.
      * @dev Call ERC721 _mint with the current noun id and increment.
-     * TODO randomness
+     * TODO randomness, de-dup
      */
     function createNoun() public onlyOwner {
         uint256 nounId = _nounIdTracker.current();
