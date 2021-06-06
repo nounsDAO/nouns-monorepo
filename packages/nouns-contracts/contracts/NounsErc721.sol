@@ -25,6 +25,8 @@ contract NounsErc721 is INounsErc721, ERC721, Ownable {
     function createNoun() public override onlyOwner {
         uint256 nounId = _nounIdTracker.current();
         _nounIdTracker.increment();
+
         _mint(owner(), nounId);
+        emit NounCreated(nounId);
     }
 }

@@ -166,12 +166,14 @@ interface NounsErc721Interface extends ethers.utils.Interface {
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
+    "NounCreated(uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "NounCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
 }
@@ -761,6 +763,10 @@ export class NounsErc721 extends Contract {
       [string, string, boolean],
       { owner: string; operator: string; approved: boolean }
     >;
+
+    NounCreated(
+      tokenId: BigNumberish | null
+    ): TypedEventFilter<[BigNumber], { tokenId: BigNumber }>;
 
     OwnershipTransferred(
       previousOwner: string | null,

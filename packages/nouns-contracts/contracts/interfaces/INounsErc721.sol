@@ -7,5 +7,9 @@ pragma experimental ABIEncoderV2;
  * @title Interface for NounsErc721.
  */
 interface INounsErc721 {
+    event NounCreated(
+        uint256 indexed tokenId
+    );
+
     function createNoun() external;
 }

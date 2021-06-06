@@ -20,8 +20,10 @@ describe('NounsErc721', () => {
   });
 
   it('should allow owner/deployer to createNoun', async () => {
-    await nounsErc721.createNoun();
+    const receipt = await (await nounsErc721.createNoun()).wait();
     expect(await nounsErc721.ownerOf(0)).to.eq(signers.deployer.address);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    expect(receipt.events![1].event).to.eq('NounCreated');
   });
 
   it('should revert on non-owner createNoun', async () => {
