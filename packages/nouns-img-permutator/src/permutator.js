@@ -1,17 +1,16 @@
 
 
-const sharp = require('sharp')
-const sizeOf = require('image-size')
+const { Canvas, Image } = require('canvas')
 const fse = require('fs-extra') 
+const mergeImages = require('merge-images')
 
 // should be in order of z-depth. index 0 being the background layer, index 1 going on top and so on.
-const attributes = ['background','body','decals-accessories','head','glasses']
+const attributes = ['body','accessory','head','glasses']
 const resultImagePath = `result.png`
 
-generateImage()
+generateImage() 
 
 async function generateImage() {
-
  
     var layerPathNames = []
     
@@ -21,16 +20,19 @@ async function generateImage() {
         layerPathNames.push(layer)
     }
 
-    sharp(layerPathNames[0])
-    .composite([
-        {input: layerPathNames[1], top:21 , left: xPositionForImageAtPath(layerPathNames[1])}, // body 
-        {input: layerPathNames[2], top: 21, left: xPositionForImageAtPath(layerPathNames[2])}, // decal
-        {input: layerPathNames[3], top: 6, left: xPositionForImageAtPath(layerPathNames[3])}, // head
-        {input: layerPathNames[4], top: 10, left: xPositionForImageAtPath(layerPathNames[4])}, //glasses
-    ])
-    .toFile(resultImagePath)
+    // merge images with rare image
+    let b64 = await mergeImages(layerPathNames, { 
+        Canvas: Canvas,
+        Image: Image
+      })
+      
+    // remove header from base64 string 
+    let base64Image = b64.split(';base64,').pop();
+    
+    // write image to file so we can upload to ipfs
+    await fse.outputFile(resultImagePath, base64Image, {encoding: 'base64'})
 
-
+    return resultImagePath
 }
 
 // returns path name for file at index within attributeFolderName
@@ -42,6 +44,7 @@ async function getRandomImagePathNameForAttribute(attributeFolderName) {
 
 // function get width of image at path
 function xPositionForImageAtPath(path) {
-    const dimensions = sizeOf(path)
-    return Math.round(16 - (dimensions.width / 2))
+    // const dimensions = sizeOf(path)
+    // return Math.round(16 - (dimensions.width / 2))
+    return 8
 }
