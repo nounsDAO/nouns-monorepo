@@ -9,11 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "canvas": "^2.8.0",
-    "fs-extra": "^10.0.0",
-    "image-size": "^1.0.0",
-    "merge-images": "^2.0.0",
-    "psd": "^3.2.0",
-    "sharp": "^0.28.3"
+    "firebase-tools": "^9.12.1",
+    "psd": "^3.2.0"
   }
 }
