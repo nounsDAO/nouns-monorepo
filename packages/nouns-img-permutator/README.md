@@ -1,6 +1,8 @@
 # nouns-img-permutator
 
-Script to test Nouns permutations. Extracts attributes directly from .psd file to generate a random permutation.
+Web app run on Firebase to test Noun permutations. 
+
+## Hosting
 
 ### Build
 
@@ -8,25 +10,24 @@ Script to test Nouns permutations. Extracts attributes directly from .psd file t
 npm install
 ```
 
-### .psd file requierements
+### Run emulators
 
-- Every group must be an attribute of the noun (e.g. 'body', 'accessory', etc)
-- Every layer directly within the group must be a layer representing an option for the attribute (e.g. body > green-body)
-
-### Extract layers from .psd files
-
-Drop .psd file in `assets/psd/` and run 
-
-```sh
-node extract-layers.js
+```
+firebase emulators:start --only hosting
 ```
 
-### Generate permutation
+## Cloud functions
 
-In `permutator.js`, edit `attributes` to match `assets/noun-assets` folders from .psd file in order of z-index (first item would be background, second body, etc).
+### Build
 
-```sh
-node permutator.js
+Change directory to `functions/` and run:
+
+```
+npm install
 ```
 
-Output of permutation will be written into `result.png`
+### Run emulators
+
+```
+firebase emulators:start --only functions
+```
