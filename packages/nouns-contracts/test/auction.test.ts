@@ -8,14 +8,18 @@ chai.use(solidity);
 const { expect } = chai;
 
 describe('NounsAuctionHouse', () => {
-
   let weth: Weth;
   let nounsAuctionHouse: NounsAuctionHouse;
   let nounsErc721: NounsErc721;
 
   async function deploy() {
-    const auctionHouseFactory = await ethers.getContractFactory('NounsAuctionHouse');
-    nounsAuctionHouse = await auctionHouseFactory.deploy(weth.address, nounsErc721.address) as NounsAuctionHouse;
+    const auctionHouseFactory = await ethers.getContractFactory(
+      'NounsAuctionHouse',
+    );
+    nounsAuctionHouse = (await auctionHouseFactory.deploy(
+      weth.address,
+      nounsErc721.address,
+    )) as NounsAuctionHouse;
   }
 
   beforeEach(async () => {

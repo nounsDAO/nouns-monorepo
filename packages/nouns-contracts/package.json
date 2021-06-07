@@ -16,7 +16,7 @@
     "@nomiclabs/hardhat-ethers": "^2.0.2",
     "@nomiclabs/hardhat-etherscan": "^2.1.2",
     "@nomiclabs/hardhat-waffle": "^2.0.1",
-    "@openzeppelin/contracts": "^3.4.0-solc-0.7",
+    "@openzeppelin/contracts": "^4.1.0",
     "@typechain/ethers-v5": "^6.0.1",
     "@types/chai": "^4.2.15",
     "@types/express": "^4.17.11",
@@ -27,6 +27,7 @@
     "hardhat": "^2.1.1",
     "hardhat-abi-exporter": "^2.2.1",
     "hardhat-typechain": "^0.3.5",
+    "prettier-plugin-solidity": "^1.0.0-beta.12",
     "prompt": "^1.1.0",
     "ts-generator": "^0.1.1"
   },

@@ -1,15 +1,14 @@
 // SPDX-License-Identifier: GPL-3.0
 
-pragma solidity ^0.7.0;
-pragma experimental ABIEncoderV2;
+pragma solidity ^0.8.4;
+
+import {IERC721} from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 
 /**
- * @title Interface for NounsErc721.
+ * @title Interface for NounsERC721.
  */
-interface INounsErc721 {
-    event NounCreated(
-        uint256 indexed tokenId
-    );
+interface INounsERC721 is IERC721 {
+    event NounCreated(uint256 indexed tokenId);
 
-    function createNoun() external;
+    function createNoun() external returns (uint256);
 }

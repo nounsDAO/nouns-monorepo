@@ -28,8 +28,6 @@ describe('NounsErc721', () => {
 
   it('should revert on non-owner createNoun', async () => {
     const account0AsNounErc721Account = nounsErc721.connect(signers.account0);
-    await expect(
-      account0AsNounErc721Account.createNoun(),
-    ).to.be.reverted;
+    await expect(account0AsNounErc721Account.createNoun()).to.be.reverted;
   });
 });
