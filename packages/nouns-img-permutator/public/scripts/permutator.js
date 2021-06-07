@@ -10,14 +10,20 @@ async function generateImage() {
 
     // disable button/ show loading
     let button = document.getElementById('generate-noun-button')
-    console.log(button)
+    
     setButtonLoading(button, true)
 
     // attempt to fetch random noun
     try {
-        let res = await fetch(generateImageEndPoint)
-        let json = await res.json()
-        document.getElementById('random-noun').setAttribute('src', json.base64)
+        // clear nouns 
+        var nounsDiv = document.getElementById("nouns")
+        nounsDiv.innerHTML = ''
+        for (var i = 0; i < 12; i++) {
+            let res = await fetch(generateImageEndPoint)
+            let json = await res.json()
+            addNounImg(json.base64)
+        }
+
         setButtonLoading(button, false, 'GO!')
     } catch (e) {
         console.log(`error fetching random noun. `, e)
@@ -39,4 +45,19 @@ function setButtonLoading(element, loading, originalText) {
         element.innerHTML = originalText
         element.disabled = loading
     }
+}
+
+function addNounImg(data) {
+    
+    var nounsDiv = document.getElementById("nouns")
+
+    let colThreeColumn = document.createElement('div')
+    colThreeColumn.classList.add('col-sm-3')
+
+    let img = document.createElement('img')
+    img.setAttribute('src', data)
+    img.classList.add('noun-img')
+
+    colThreeColumn.appendChild(img)
+    nounsDiv.appendChild(colThreeColumn)
 }

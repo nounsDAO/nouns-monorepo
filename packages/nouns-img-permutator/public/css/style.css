@@ -1,7 +1,11 @@
-.noun {
+
+#generate-noun-button {
+    margin: 30px 0px 30px 0px;
+}
+.noun-img {
     image-rendering: pixelated;
-    width: 300;
-    height:300px;
+    width: 200px;
+    height:200px;
     background-color: #7C9DB0;
-    margin: 30px;
+    margin: 10px;
 }
