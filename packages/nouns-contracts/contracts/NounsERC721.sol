@@ -39,11 +39,11 @@ contract NounsERC721 is INounsERC721, ERC721, Ownable {
      * @dev Call ERC721 _mint with the current noun id and increment.
      * TODO randomness, de-dup
      */
-    function createNoun() public override onlyOwner returns (uint256) {
         uint256 nounId = _nounIdTracker.current();
         _nounIdTracker.increment();
+    function mint() public override onlyAuction returns (uint256) {
 
-        _mint(owner(), nounId);
+        _mint(auction, nounId);
         emit NounCreated(nounId);
 
         return nounId;
