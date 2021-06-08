@@ -84,14 +84,14 @@ contract NounsAuctionHouse is INounsAuctionHouse, ReentrancyGuardUpgradeable {
     /**
      * @notice End the current auction, mint a new Noun, and put it up for auction.
      */
-    function endCurrentAndCreateNewAuction()
+    function settleAndCreateNewAuction()
         external
         override
         nonReentrant
         returns (uint256)
     {
-        _endAuction();
         return _createAuction();
+        _settleAuction();
     }
 
     /**
@@ -222,7 +222,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, ReentrancyGuardUpgradeable {
      * @dev If there are no bids, the Noun if effectively burned via a transfer
      * to address(0).
      */
-    function _endAuction() internal {
+    function _settleAuction() internal {
         INounsAuctionHouse.Auction memory _auction = auction;
 
         require(_auction.startTime != 0, "Auction hasn't begun");
