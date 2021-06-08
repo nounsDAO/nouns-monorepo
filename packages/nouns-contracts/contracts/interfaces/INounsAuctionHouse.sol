@@ -2,6 +2,8 @@
 
 pragma solidity ^0.8.4;
 
+import {INounsERC721} from './INounsERC721.sol';
+
 /**
  * @title Interface for Noun Auction Houses
  */
@@ -15,13 +17,11 @@ interface INounsAuctionHouse {
         uint256 duration;
         // The time that the auction started
         uint256 startTime;
-        // The address that should receive the funds once the Noun is sold
-        address profitRecipient;
         // The address of the current highest bid
         address payable bidder;
     }
 
-    event AuctionCreated(uint256 indexed nounId, address profitRecipient);
+    event AuctionCreated(uint256 indexed nounId);
 
     event AuctionBid(
         uint256 indexed nounId,
@@ -35,9 +35,26 @@ interface INounsAuctionHouse {
 
     event AuctionEnded(uint256 indexed nounId, address winner, uint256 amount);
 
-    function initialize() external returns (uint256);
+    event AuctionTimeBufferUpdated(uint256 timeBuffer);
+
+    event AuctionReservePriceUpdated(uint256 reservePrice);
+
+    event AuctionMinBidIncrementPercentageUpdated(
+        uint256 minBidIncrementPercentage
+    );
+
+    event AuctionDurationUpdated(uint256 duration);
 
     function endCurrentAndCreateNewAuction() external returns (uint256);
 
     function createBid(uint256 nounId, uint256 amount) external payable;
+
+    function setTimeBuffer(uint256 timeBuffer) external;
+
+    function setReservePrice(uint256 reservePrice) external;
+
+    function setMinBidIncrementPercentage(uint8 minBidIncrementPercentage)
+        external;
+
+    function setDuration(uint256 duration) external;
 }

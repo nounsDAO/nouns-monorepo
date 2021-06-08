@@ -2,8 +2,7 @@
 
 pragma solidity ^0.8.4;
 
-import {ReentrancyGuard} from '@openzeppelin/contracts/security/ReentrancyGuard.sol';
-import {Initializable} from '@openzeppelin/contracts/proxy/utils/Initializable.sol';
+import {ReentrancyGuardUpgradeable} from '@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol';
 import {IERC20} from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import {INounsAuctionHouse} from './interfaces/INounsAuctionHouse.sol';
 import {INounsERC721} from './interfaces/INounsERC721.sol';
@@ -12,34 +11,33 @@ import {IWETH} from './interfaces/IWETH.sol';
 /**
  * @title The NounsDAO auction house
  */
-contract NounsAuctionHouse is
-    INounsAuctionHouse,
-    ReentrancyGuard,
-    Initializable
-{
+contract NounsAuctionHouse is INounsAuctionHouse, ReentrancyGuardUpgradeable {
     // The Nouns ERC721 token contract
-    INounsERC721 public immutable nouns;
+    INounsERC721 public nouns;
 
     // The nounsDAO address (avatars org)
-    address public immutable nounsDAO;
+    address public nounsDAO;
 
     // The noundersDAO address (creators org)
-    address public immutable noundersDAO;
+    address public noundersDAO;
 
     // The address of the WETH contract
-    address public immutable weth;
+    address public weth;
 
     // The minimum amount of time left in an auction after a new bid is created
-    uint256 public constant timeBuffer = 15 * 60;
+    uint256 public timeBuffer;
+
+    // The minimum price accepted in an auction
+    uint256 public reservePrice;
 
     // The minimum percentage difference between the last bid amount and the current bid
-    uint8 public constant minBidIncrementPercentage = 5;
+    uint8 public minBidIncrementPercentage;
 
     // The duration of a single auction
-    uint256 public constant auctionDuration = 24 hours;
+    uint256 public duration;
 
     // The active auction
-    INounsAuctionHouse.Auction auction;
+    INounsAuctionHouse.Auction public auction;
 
     /**
      * @notice Require that the sender is the noundersDAO
@@ -49,32 +47,37 @@ contract NounsAuctionHouse is
         _;
     }
 
-    /*
-     * Constructor
+    /**
+     * @notice Initialize the auction house by populating the configuration
+     * values and creating the first Noun auction.
+     * @dev This function can only be called once.
      */
-    constructor(
+    function initialize(
         INounsERC721 _nouns,
         address _nounsDAO,
         address _noundersDAO,
-        address _weth
-    ) {
+        address _weth,
+        uint256 _timeBuffer,
+        uint8 _minBidIncrementPercentage,
+        uint256 _duration
+    ) external initializer {
+        __ReentrancyGuard_init();
+
         nouns = _nouns;
         nounsDAO = _nounsDAO;
         noundersDAO = _noundersDAO;
         weth = _weth;
+        timeBuffer = _timeBuffer;
+        minBidIncrementPercentage = _minBidIncrementPercentage;
+        duration = _duration;
     }
 
     /**
-     * @notice Initialize the auction house by creating the first Noun auction.
+     * @notice Create the first Noun auction.
      * @dev This function can only be called once by the noundersDAO.
      */
-    function initialize()
-        external
-        override
-        onlyNoundersDAO
-        initializer
-        returns (uint256)
-    {
+    function createFirstAuction() external onlyNoundersDAO returns (uint256) {
+        require(auction.nounId == 0, 'Auction house already started');
         return _createAuction();
     }
 
@@ -104,7 +107,7 @@ contract NounsAuctionHouse is
         INounsAuctionHouse.Auction memory _auction = auction;
 
         require(_auction.nounId == nounId, 'Noun not up for auction');
-        require(amount >= 1, 'Must send at least 1 wei');
+        require(amount >= reservePrice, 'Must send at least reservePrice');
         require(amount >= _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100),
             'Must send more than last bid by minBidIncrementPercentage amount'
         );
@@ -153,44 +156,102 @@ contract NounsAuctionHouse is
     }
 
     /**
+     * @notice Set the auction time buffer.
+     * @dev Only callable by the noundersDAO.
+     */
+    function setTimeBuffer(uint256 _timeBuffer)
+        external
+        override
+        onlyNoundersDAO
+    {
+        timeBuffer = _timeBuffer;
+
+        emit AuctionTimeBufferUpdated(_timeBuffer);
+    }
+
+    /**
+     * @notice Set the auction reserve price.
+     * @dev Only callable by the noundersDAO.
+     */
+    function setReservePrice(uint256 _reservePrice)
+        external
+        override
+        onlyNoundersDAO
+    {
+        reservePrice = _reservePrice;
+
+        emit AuctionReservePriceUpdated(_reservePrice);
+    }
+
+    /**
+     * @notice Set the auction minimum bid increment percentage.
+     * @dev Only callable by the noundersDAO.
+     */
+    function setMinBidIncrementPercentage(uint8 _minBidIncrementPercentage)
+        external
+        override
+        onlyNoundersDAO
+    {
+        minBidIncrementPercentage = _minBidIncrementPercentage;
+
+        emit AuctionMinBidIncrementPercentageUpdated(
+            _minBidIncrementPercentage
+        );
+    }
+
+    /**
+     * @notice Set the auction duration.
+     * @dev Only callable by the noundersDAO.
+     */
+    function setDuration(uint256 _duration) external override onlyNoundersDAO {
+        duration = _duration;
+
+        emit AuctionDurationUpdated(_duration);
+    }
+
+    /**
      * @notice Create an auction.
      * @dev Store the auction details in the `auction` state variable and emit an AuctionCreated event.
      */
     function _createAuction() internal returns (uint256) {
         uint256 nounId = nouns.createNoun();
-        address profitRecipient = _getProfitRecipient(nounId);
 
         auction = Auction({
             nounId: nounId,
             amount: 0,
-            duration: auctionDuration,
+            duration: duration,
             startTime: block.timestamp,
-            profitRecipient: profitRecipient,
             bidder: payable(0)
         });
 
-        emit AuctionCreated(nounId, profitRecipient);
+        emit AuctionCreated(nounId);
 
         return nounId;
     }
 
     /**
      * @notice End an auction, finalizing the bid and paying out to the DAO.
+     * @dev If there are no bids, the Noun if effectively burned via a transfer
+     * to address(0).
      */
     function _endAuction() internal {
         INounsAuctionHouse.Auction memory _auction = auction;
 
+        require(_auction.startTime != 0, "Auction hasn't begun");
         require(
             block.timestamp >= _auction.startTime + _auction.duration,
             "Auction hasn't completed"
         );
 
         uint256 daoProfit = _auction.amount;
+        address profitRecipient = _getProfitRecipient(_auction.nounId);
 
-        // Transfer the Noun to the winner and transfer profit to the DAO
+        // Transfer the Noun to the winner
         nouns.transferFrom(address(this), _auction.bidder, _auction.nounId);
 
-        _safeTransferETHWithFallback(_auction.profitRecipient, daoProfit);
+        if (daoProfit > 0) {
+            _safeTransferETHWithFallback(profitRecipient, daoProfit);
+        }
 
         emit AuctionEnded(_auction.nounId, _auction.bidder, daoProfit);
     }

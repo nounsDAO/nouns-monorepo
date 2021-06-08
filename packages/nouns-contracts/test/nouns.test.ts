@@ -16,14 +16,14 @@ describe('NounsErc721', () => {
   });
 
   it('should set base URI', async () => {
-    expect(await nounsErc721.baseURI()).to.eq('ipfs://');
+    await (await nounsErc721.createNoun()).wait();
+    expect(await nounsErc721.tokenURI(0)).to.eq('ipfs://0');
   });
 
   it('should allow owner/deployer to createNoun and emit NounCreated', async () => {
     const receipt = await (await nounsErc721.createNoun()).wait();
     expect(await nounsErc721.ownerOf(0)).to.eq(signers.deployer.address);
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    expect(receipt.events![1].event).to.eq('NounCreated');
+    expect(receipt.events?.[1].event).to.eq('NounCreated');
   });
 
   it('should revert on non-owner createNoun', async () => {

@@ -2,6 +2,12 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { Ownable } from "./Ownable";
+export type { IBeacon } from "./IBeacon";
+export type { Erc1967Proxy } from "./Erc1967Proxy";
+export type { Erc1967Upgrade } from "./Erc1967Upgrade";
+export type { Proxy } from "./Proxy";
+export type { ProxyAdmin } from "./ProxyAdmin";
+export type { TransparentUpgradeableProxy } from "./TransparentUpgradeableProxy";
 export type { Ierc20 } from "./Ierc20";
 export type { Erc721 } from "./Erc721";
 export type { Ierc721Metadata } from "./Ierc721Metadata";
@@ -17,6 +23,12 @@ export type { NounsErc721 } from "./NounsErc721";
 export type { Weth } from "./Weth";
 
 export { Ownable__factory } from "./factories/Ownable__factory";
+export { IBeacon__factory } from "./factories/IBeacon__factory";
+export { Erc1967Proxy__factory } from "./factories/Erc1967Proxy__factory";
+export { Erc1967Upgrade__factory } from "./factories/Erc1967Upgrade__factory";
+export { Proxy__factory } from "./factories/Proxy__factory";
+export { ProxyAdmin__factory } from "./factories/ProxyAdmin__factory";
+export { TransparentUpgradeableProxy__factory } from "./factories/TransparentUpgradeableProxy__factory";
 export { Ierc20__factory } from "./factories/Ierc20__factory";
 export { Erc721__factory } from "./factories/Erc721__factory";
 export { Ierc721Metadata__factory } from "./factories/Ierc721Metadata__factory";

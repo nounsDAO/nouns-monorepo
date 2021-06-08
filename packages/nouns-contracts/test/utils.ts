@@ -15,16 +15,18 @@ export async function getSigners(): Promise<TestSigners> {
   };
 }
 
-export async function deployNounsErc721(): Promise<NounsErc721> {
+export async function deployNounsErc721(
+  deployer?: SignerWithAddress,
+): Promise<NounsErc721> {
   const signers = await getSigners();
   return (await (
-    await ethers.getContractFactory('NounsErc721', signers.deployer)
+    await ethers.getContractFactory('NounsErc721', deployer || signers.deployer)
   ).deploy()) as NounsErc721;
 }
 
-export async function deployWeth(): Promise<Weth> {
+export async function deployWeth(deployer?: SignerWithAddress): Promise<Weth> {
   const signers = await getSigners();
   return (await (
-    await ethers.getContractFactory('WETH', signers.deployer)
+    await ethers.getContractFactory('WETH', deployer || signers.deployer)
   ).deploy()) as Weth;
 }
