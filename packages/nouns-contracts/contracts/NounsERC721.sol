@@ -8,9 +8,7 @@ import {Counters} from '@openzeppelin/contracts/utils/Counters.sol';
 import {INounsERC721} from './interfaces/INounsERC721.sol';
 
 contract NounsERC721 is INounsERC721, ERC721, Ownable {
-    using Counters for Counters.Counter;
 
-    Counters.Counter private _nounIdTracker;
     address public auction;
 
     constructor(address _auction) ERC721('Nouns', 'NOUN') Ownable() {
@@ -39,9 +37,8 @@ contract NounsERC721 is INounsERC721, ERC721, Ownable {
      * @dev Call ERC721 _mint with the current noun id and increment.
      * TODO randomness, de-dup
      */
-        uint256 nounId = _nounIdTracker.current();
-        _nounIdTracker.increment();
     function mint() public override onlyAuction returns (uint256) {
+        uint256 nounId = totalSupply();
 
         _mint(auction, nounId);
         emit NounCreated(nounId);
