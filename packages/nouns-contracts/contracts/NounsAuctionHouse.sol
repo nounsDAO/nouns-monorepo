@@ -107,6 +107,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, ReentrancyGuardUpgradeable {
         INounsAuctionHouse.Auction memory _auction = auction;
 
         require(_auction.nounId == nounId, 'Noun not up for auction');
+        require(_auction.endTime < block.timestamp, 'Auction ended');
         require(amount >= reservePrice, 'Must send at least reservePrice');
         require(amount >= _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100),
             'Must send more than last bid by minBidIncrementPercentage amount'
@@ -126,21 +127,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, ReentrancyGuardUpgradeable {
         auction.amount = amount;
         auction.bidder = payable(msg.sender);
 
-        bool extended = false;
-        // At this point we know that the timestamp is less than start + duration (since the auction would be over, otherwise)
-        // we want to know by how much the timestamp is less than start + duration
-        // if the difference is less than the timeBuffer, increase the duration by the timeBuffer
-        // prettier-ignore
-        if (_auction.startTime + _auction.duration - block.timestamp < timeBuffer) {
-            // Playing code golf for gas optimization:
-            // uint256 expectedEnd = _auction.startTime + _auction.duration;
-            // uint256 timeRemaining = expectedEnd - block.timestamp;
-            // uint256 timeToAdd = timeBuffer - timeRemaining;
-            // uint256 newDuration = _auction.duration + timeToAdd;
-            uint256 oldDuration = _auction.duration;
-            auction.duration = _auction.duration = oldDuration + (timeBuffer - _auction.startTime + oldDuration - block.timestamp);
-            extended = true;
-        }
+        bool extended = _auction.endTime - block.timestamp<=timeBuffer;
 
         emit AuctionBid(
             _auction.nounId,
@@ -151,7 +138,8 @@ contract NounsAuctionHouse is INounsAuctionHouse, ReentrancyGuardUpgradeable {
         );
 
         if (extended) {
-            emit AuctionDurationExtended(_auction.nounId, _auction.duration);
+            auction.endTime = block.timestamp + timeBuffer;
+            emit AuctionDurationExtended(_auction.nounId, auction.endTime);
         }
     }
 
@@ -219,12 +207,12 @@ contract NounsAuctionHouse is INounsAuctionHouse, ReentrancyGuardUpgradeable {
         auction = Auction({
             nounId: nounId,
             amount: 0,
-            duration: duration,
             startTime: block.timestamp,
+            endTime: block.timestamp + duration,
             bidder: payable(0)
         });
 
-        emit AuctionCreated(nounId);
+        emit AuctionCreated(nounId, auction.startTime, auction.endTime);
 
         return nounId;
     }
@@ -239,7 +227,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, ReentrancyGuardUpgradeable {
 
         require(_auction.startTime != 0, "Auction hasn't begun");
         require(
-            block.timestamp >= _auction.startTime + _auction.duration,
+            block.timestamp >= _auction.endTime,
             "Auction hasn't completed"
         );
 

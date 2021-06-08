@@ -13,15 +13,15 @@ interface INounsAuctionHouse {
         uint256 nounId;
         // The current highest bid amount
         uint256 amount;
-        // The length of time to run the auction for, after the first bid was made
-        uint256 duration;
         // The time that the auction started
         uint256 startTime;
+        // The time that the auction can be considered ended
+        uint256 endTime;
         // The address of the current highest bid
         address payable bidder;
     }
 
-    event AuctionCreated(uint256 indexed nounId);
+    event AuctionCreated(uint256 indexed nounId, uint256 startTime, uint256 endTime);
 
     event AuctionBid(
         uint256 indexed nounId,
@@ -31,7 +31,7 @@ interface INounsAuctionHouse {
         bool extended
     );
 
-    event AuctionDurationExtended(uint256 indexed nounId, uint256 duration);
+    event AuctionDurationExtended(uint256 indexed nounId, uint256 endTime);
 
     event AuctionEnded(uint256 indexed nounId, address winner, uint256 amount);
 
