@@ -21,48 +21,56 @@ const storageBucket = admin.storage().bucket()
 exports.generateRandomNoun = functions.https.onRequest(async (request, response) => {
     cors(request, response, async () => {
 
-        // should be in order of z-depth. index 0 being the background layer, index 1 going on top and so on.
-        const attributes = ['body','accessory','head','glasses']
+        // root path for layer folders 
+        const baseLayerPath = `assets/layer-`
 
-        // FETCH ONE RANDOM IMAGE PATH FOR EACH ATTRIBUTE
-        var randomAttributePaths = []
-        try {
-            for (var i = 0; i < attributes.length; i++) {
-                let attribute = attributes[i] + '/'        
-                var [files] = await storageBucket.getFiles({ prefix: attribute})
-                files = files.filter(file => file.name.includes('.png')) // filter empty files
-                var randomFile = files[Math.floor(Math.random() * files.length)]
-                randomAttributePaths.push(randomFile.name)
+        // FETCH ONE RANDOM IMAGE PATH FOR EACH LAYER
+        try {            
+            var randomLayerPaths = []
+
+            for (var i = 0; i < 10; i++) {
+                let layer = baseLayerPath + i
+                var [files] = await storageBucket.getFiles({ prefix: layer})
+
+                if (files.length > 0) {
+                    // filter empty files
+                    files = files.filter(file => file.name.includes('.png')) 
+                    // grab random file
+                    var randomFile = files[Math.floor(Math.random() * files.length)] 
+                    // add                    
+                    randomLayerPaths.push(randomFile.name)
+                } else { 
+                    console.log(`layer ${i} does not exist. ending!`)
+                    // layer does not exists, end loop.
+                    break
+                }
             }
         } catch (e) {
             console.log(`error fetching file paths for attributes. `, e)
             response.status(500).json({ error : e})
         }
-        
-        
+            
         // CREATE PATHS TO DOWNLOAD IMAGES TO    
         let randomInt = getRandomInt(1000000000)
         var pathsToDownloadImagesTo = []    
-        for (var i = 0; i < attributes.length; i++) {
+        for (var i = 0; i < randomLayerPaths.length; i++) {
             // remove directory from filepath (saves us from having to create the directory in tmp folder)
-            let pathName = randomAttributePaths[i].split('/')[1]
+            let pathName = randomLayerPaths[i].split('/')[1]
+            // add random int so each path is unique
             pathsToDownloadImagesTo.push(`${os.tmpdir()}/${randomInt}${pathName}`)
-        }
-        
+        }        
 
         // DOWNLOAD IMAGES
         try {
-            for (var i = 0; i < attributes.length; i++) {
-                console.log(`attempting to download ${randomAttributePaths[i]} to ${pathsToDownloadImagesTo[i]}`)
-                await downloadFile(pathsToDownloadImagesTo[i], randomAttributePaths[i])
+            for (var i = 0; i < randomLayerPaths.length; i++) {
+                console.log(`attempting to download ${randomLayerPaths[i]} to ${pathsToDownloadImagesTo[i]}`)
+                await downloadFile(pathsToDownloadImagesTo[i], randomLayerPaths[i])
             }
             console.log('downloaded all images!')
         } catch (e) {
             console.log(`error downloading images. `, e)
             response.status(500).json({ error : e})
         }
-
-
 
         // ATTEMPT TO MERGE IMAGES
         try {
