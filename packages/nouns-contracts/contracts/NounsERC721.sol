@@ -45,4 +45,8 @@ contract NounsERC721 is INounsERC721, ERC721, Ownable {
 
         return nounId;
     }
+
+    function exists(uint256 tokenId) public view returns (bool){
+        return _exists(tokenId);
+    }
 }
