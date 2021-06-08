@@ -20,7 +20,7 @@ export async function deployNounsErc721(
 ): Promise<NounsErc721> {
   const signers = await getSigners();
   return (await (
-    await ethers.getContractFactory('NounsErc721', deployer || signers.deployer)
+    await ethers.getContractFactory('NounsERC721', deployer || signers.deployer)
   ).deploy()) as NounsErc721;
 }
 

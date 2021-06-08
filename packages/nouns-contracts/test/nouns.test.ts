@@ -6,7 +6,7 @@ import { deployNounsErc721, getSigners, TestSigners } from './utils';
 chai.use(solidity);
 const { expect } = chai;
 
-describe('NounsErc721', () => {
+describe('NounsERC721', () => {
   let nounsErc721: NounsErc721;
   let signers: TestSigners;
 

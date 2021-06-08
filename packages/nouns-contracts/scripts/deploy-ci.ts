@@ -2,9 +2,9 @@ import { ethers } from 'hardhat';
 import fs from 'fs';
 
 async function main() {
-  const NounsErc721 = await ethers.getContractFactory('NounsErc721');
+  const NounsErc721 = await ethers.getContractFactory('NounsERC721');
 
-  let gas = await NounsErc721.signer.getGasPrice();
+  const gas = await NounsErc721.signer.getGasPrice();
 
   const price = await NounsErc721.signer.estimateGas(
     NounsErc721.getDeployTransaction({
@@ -25,10 +25,10 @@ async function main() {
 
   console.log('Contract deployed to:', deployTx.address);
 
-  if (!(await fs.existsSync('logs'))) {
-    await fs.mkdirSync('logs');
+  if (!(fs.existsSync('logs'))) {
+    fs.mkdirSync('logs');
   }
-  await fs.writeFileSync(
+  fs.writeFileSync(
     'logs/deploy.json',
     JSON.stringify({
       contractAddress: deployTx.address,
