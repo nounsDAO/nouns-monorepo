@@ -1,0 +1,18 @@
+name: Artifact Upload
+
+on:
+  push:
+    branches:
+      - carrot-img-action
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - id: upload-files
+        uses: google-github-actions/upload-cloud-storage@main
+        with:
+          credentials: ${{ secrets.GCLOUD_STORAGE_SERVICE_ACCOUNT }}
+          path: packages/nouns-img-permutator/actions_setup
+          destination: nounsdao.appspot.com
+      
