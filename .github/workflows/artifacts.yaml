@@ -3,7 +3,7 @@ name: Artifact Upload
 on:
   push:
     branches:
-      - carrot-img-action
+      - img-permutator
 jobs:
   build:
     runs-on: ubuntu-latest
