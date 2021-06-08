@@ -10,5 +10,5 @@ import {IERC721} from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 interface INounsERC721 is IERC721 {
     event NounCreated(uint256 indexed tokenId);
 
-    function createNoun() external returns (uint256);
+    function mint() external returns (uint256);
 }
