@@ -11,8 +11,20 @@ contract NounsERC721 is INounsERC721, ERC721, Ownable {
     using Counters for Counters.Counter;
 
     Counters.Counter private _nounIdTracker;
+    address public auction;
 
-    constructor() ERC721('Nouns', 'NOUNS') {}
+    constructor(address _auction) ERC721('Nouns', 'NOUN') Ownable() {
+        auction = _auction;
+    }
+
+    modifier onlyAuction(){
+        require(msg.sender == auction, 'NounsERC721: Unauthorized; Only auction allowed');
+        _;
+    }
+
+    function setAuction(address _auction) public onlyOwner returns (bool) {
+        auction = _auction;
+    }
 
     /**
      * @dev Base URI for computing {tokenURI}. Empty by default, can be overriden
