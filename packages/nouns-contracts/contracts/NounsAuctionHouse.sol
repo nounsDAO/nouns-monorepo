@@ -73,15 +73,6 @@ contract NounsAuctionHouse is INounsAuctionHouse, ReentrancyGuardUpgradeable {
     }
 
     /**
-     * @notice Create the first Noun auction.
-     * @dev This function can only be called once by the noundersDAO.
-     */
-    function createFirstAuction() external onlyNoundersDAO returns (uint256) {
-        require(auction.nounId == 0, 'Auction house already started');
-        return _createAuction();
-    }
-
-    /**
      * @notice End the current auction, mint a new Noun, and put it up for auction.
      */
     function settleAndCreateNewAuction()
@@ -90,8 +81,8 @@ contract NounsAuctionHouse is INounsAuctionHouse, ReentrancyGuardUpgradeable {
         nonReentrant
         returns (uint256)
     {
-        return _createAuction();
         _settleAuction();
+        return mintAndcreateAuction();
     }
 
     /**
@@ -201,8 +192,10 @@ contract NounsAuctionHouse is INounsAuctionHouse, ReentrancyGuardUpgradeable {
      * @notice Create an auction.
      * @dev Store the auction details in the `auction` state variable and emit an AuctionCreated event.
      */
-    function _createAuction() internal returns (uint256) {
-        uint256 nounId = nouns.createNoun();
+    function mintAndcreateAuction() public returns (uint256) {
+        require(!nouns.exists(nouns.totalSupply()) && nouns.ownerOf(auction.nounId) != address(this), 'NounsAuctionHouse: Auction has not been settled');
+
+        uint256 nounId = nouns.mint();
 
         auction = Auction({
             nounId: nounId,
