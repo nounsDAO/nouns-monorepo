@@ -5,6 +5,7 @@ import 'hardhat-typechain';
 import '@nomiclabs/hardhat-waffle';
 import '@nomiclabs/hardhat-etherscan';
 import 'hardhat-abi-exporter';
+import '@openzeppelin/hardhat-upgrades';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -21,7 +22,7 @@ task('accounts', 'Prints the list of accounts', async (_args, hre) => {
 
 const config: HardhatUserConfig = {
   solidity: {
-    version: '0.7.4',
+    version: '0.8.4',
   },
   networks: {
     mainnet: {

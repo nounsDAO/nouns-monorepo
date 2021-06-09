@@ -1,101 +1,72 @@
 // SPDX-License-Identifier: GPL-3.0
 
-pragma solidity ^0.7.0;
-pragma experimental ABIEncoderV2;
+pragma solidity ^0.8.4;
+
+import {INounsERC721} from './INounsERC721.sol';
 
 /**
- * @title Interface for Auction Houses
+ * @title Interface for Noun Auction Houses
  */
 interface INounsAuctionHouse {
     struct Auction {
-        // ID for the ERC721 token
-        uint256 tokenId;
-        // Address for the ERC721 contract
-        address tokenContract;
+        // ID for the Noun (ERC721 token ID)
+        uint256 nounId;
         // The current highest bid amount
         uint256 amount;
-        // The length of time to run the auction for, after the first bid was made
-        uint256 duration;
-        // The time of the first bid
-        uint256 firstBidTime;
-        // The minimum price of the first bid
-        uint256 reservePrice;
-        // The address that should receive the funds once the NFT is sold.
-        address tokenOwner;
+        // The time that the auction started
+        uint256 startTime;
+        // The time that the auction is scheduled to end
+        uint256 endTime;
         // The address of the current highest bid
         address payable bidder;
-        // The address of the ERC-20 currency to run the auction with.
-        // If set to 0x0, the auction will be run in ETH
-        address auctionCurrency;
+        // Whether or not the auction has been settled
+        bool settled;
     }
 
-    event AuctionCreated(
-        uint256 indexed auctionId,
-        uint256 indexed tokenId,
-        address indexed tokenContract,
-        uint256 duration,
-        uint256 reservePrice,
-        address tokenOwner,
-        address auctionCurrency
-    );
-
-    event AuctionApprovalUpdated(
-        uint256 indexed auctionId,
-        uint256 indexed tokenId,
-        address indexed tokenContract,
-        bool approved
-    );
-
-    event AuctionReservePriceUpdated(
-        uint256 indexed auctionId,
-        uint256 indexed tokenId,
-        address indexed tokenContract,
-        uint256 reservePrice
-    );
+    event AuctionCreated(uint256 indexed nounId);
 
     event AuctionBid(
-        uint256 indexed auctionId,
-        uint256 indexed tokenId,
-        address indexed tokenContract,
+        uint256 indexed nounId,
         address sender,
         uint256 value,
         bool firstBid,
         bool extended
     );
 
-    event AuctionDurationExtended(
-        uint256 indexed auctionId,
-        uint256 indexed tokenId,
-        address indexed tokenContract,
-        uint256 duration
-    );
+    event AuctionExtended(uint256 indexed nounId, uint256 endTime);
 
-    event AuctionEnded(
-        uint256 indexed auctionId,
-        uint256 indexed tokenId,
-        address indexed tokenContract,
-        address tokenOwner,
+    event AuctionSettled(
+        uint256 indexed nounId,
         address winner,
-        uint256 amount,
-        address auctionCurrency
+        uint256 amount
     );
 
-    event AuctionCanceled(
-        uint256 indexed auctionId,
-        uint256 indexed tokenId,
-        address indexed tokenContract,
-        address tokenOwner
+    event AuctionTimeBufferUpdated(uint256 timeBuffer);
+
+    event AuctionReservePriceUpdated(uint256 reservePrice);
+
+    event AuctionMinBidIncrementPercentageUpdated(
+        uint256 minBidIncrementPercentage
     );
 
-    function createAuction(
-        uint256 tokenId,
-        address tokenContract,
-        uint256 duration,
-        uint256 reservePrice,
-        address auctionCurrency
-    ) external returns (uint256);
+    event AuctionDurationUpdated(uint256 duration);
 
-    function createBid(uint256 auctionId, uint256 amount) external payable;
+    function settleAuction() external;
 
-    function endAuction(uint256 auctionId) external;
+    function settleCurrentAndCreateNewAuction() external;
+
+    function createBid(uint256 nounId) external payable;
+
+    function pause() external;
+
+    function unpause() external;
+
+    function setTimeBuffer(uint256 timeBuffer) external;
+
+    function setReservePrice(uint256 reservePrice) external;
+
+    function setMinBidIncrementPercentage(uint8 minBidIncrementPercentage)
+        external;
+
+    function setDuration(uint256 duration) external;
 }

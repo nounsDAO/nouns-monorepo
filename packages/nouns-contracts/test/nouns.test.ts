@@ -6,7 +6,7 @@ import { deployNounsErc721, getSigners, TestSigners } from './utils';
 chai.use(solidity);
 const { expect } = chai;
 
-describe('NounsErc721', () => {
+describe('NounsERC721', () => {
   let nounsErc721: NounsErc721;
   let signers: TestSigners;
 
@@ -16,20 +16,25 @@ describe('NounsErc721', () => {
   });
 
   it('should set base URI', async () => {
-    expect(await nounsErc721.baseURI()).to.eq('ipfs://');
+    await (await nounsErc721.mint()).wait();
+    expect(await nounsErc721.tokenURI(0)).to.eq('ipfs://0');
   });
 
-  it('should allow owner/deployer to createNoun and emit NounCreated', async () => {
-    const receipt = await (await nounsErc721.createNoun()).wait();
+  it('should allow owner to mint a noun', async () => {
+    const receipt = await (await nounsErc721.mint()).wait();
     expect(await nounsErc721.ownerOf(0)).to.eq(signers.deployer.address);
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    expect(receipt.events![1].event).to.eq('NounCreated');
+    expect(receipt.events?.[1].event).to.eq('NounCreated');
+  });
+
+  it('should allow owner to burn a noun', async () => {
+    await (await nounsErc721.mint()).wait();
+
+    const tx = nounsErc721.burn(0);
+    await expect(tx).to.emit(nounsErc721, 'NounBurned').withArgs(0);
   });
 
   it('should revert on non-owner createNoun', async () => {
     const account0AsNounErc721Account = nounsErc721.connect(signers.account0);
-    await expect(
-      account0AsNounErc721Account.createNoun(),
-    ).to.be.reverted;
+    await expect(account0AsNounErc721Account.mint()).to.be.reverted;
   });
 });
