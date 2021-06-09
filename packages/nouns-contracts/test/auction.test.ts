@@ -264,6 +264,6 @@ describe('NounsAuctionHouse', () => {
 
     await expect(tx)
       .to.emit(nounsAuctionHouse, 'AuctionSettled')
-      .withArgs(nounId, '0x0000000000000000000000000000000000000001', 0);
+      .withArgs(nounId, '0x0000000000000000000000000000000000000000', 0);
   });
 });

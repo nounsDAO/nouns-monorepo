@@ -127,11 +127,10 @@ contract NounsAuctionHouse is
         auction.amount = msg.value;
         auction.bidder = payable(msg.sender);
 
-        bool extended = false;
         // Extend the auction if the bid was received within `timeBuffer` of the auction end time
-        if (_auction.endTime - block.timestamp < timeBuffer) {
+        bool extended = _auction.endTime - block.timestamp < timeBuffer;
+        if (extended) {
             auction.endTime = _auction.endTime = block.timestamp + timeBuffer;
-            extended = true;
         }
 
         emit AuctionBid(
@@ -229,7 +228,7 @@ contract NounsAuctionHouse is
      * @dev Store the auction details in the `auction` state variable and emit an AuctionCreated event.
      */
     function _createAuction() internal returns (uint256) {
-        uint256 nounId = nouns.createNoun();
+        uint256 nounId = nouns.mint();
 
         auction = Auction({
             nounId: nounId,
@@ -247,8 +246,7 @@ contract NounsAuctionHouse is
 
     /**
      * @notice Settle an auction, finalizing the bid and paying out to the DAO.
-     * @dev If there are no bids, the Noun if effectively burned via a transfer
-     * to address(1).
+     * @dev If there are no bids, the Noun is burned.
      */
     function _settleAuction() internal {
         INounsAuctionHouse.Auction memory _auction = auction;
@@ -262,22 +260,19 @@ contract NounsAuctionHouse is
 
         auction.settled = true;
 
-        uint256 daoProfit = _auction.amount;
         address profitRecipient = _getProfitRecipient(_auction.nounId);
 
-        // If no bidders, set to `address(1)` to circumvent ERC721 transfer validation
         if (_auction.bidder == address(0)) {
-            _auction.bidder = payable(address(1));
+            nouns.burn(_auction.nounId);
+        } else {
+            nouns.transferFrom(address(this), _auction.bidder, _auction.nounId);
         }
 
-        // Transfer the Noun
-        nouns.transferFrom(address(this), _auction.bidder, _auction.nounId);
-
-        if (daoProfit > 0) {
-            _safeTransferETHWithFallback(profitRecipient, daoProfit);
+        if (_auction.amount > 0) {
+            _safeTransferETHWithFallback(profitRecipient, _auction.amount);
         }
 
-        emit AuctionSettled(_auction.nounId, _auction.bidder, daoProfit);
+        emit AuctionSettled(_auction.nounId, _auction.bidder, _auction.amount);
     }
 
     /**

@@ -23,9 +23,10 @@ interface NounsErc721Interface extends ethers.utils.Interface {
   functions: {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
-    "createNoun()": FunctionFragment;
+    "burn(uint256)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
+    "mint()": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
@@ -44,10 +45,7 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
-  encodeFunctionData(
-    functionFragment: "createNoun",
-    values?: undefined
-  ): string;
+  encodeFunctionData(functionFragment: "burn", values: [BigNumberish]): string;
   encodeFunctionData(
     functionFragment: "getApproved",
     values: [BigNumberish]
@@ -56,6 +54,7 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     functionFragment: "isApprovedForAll",
     values: [string, string]
   ): string;
+  encodeFunctionData(functionFragment: "mint", values?: undefined): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
@@ -94,7 +93,7 @@ interface NounsErc721Interface extends ethers.utils.Interface {
 
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "createNoun", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getApproved",
     data: BytesLike
@@ -103,6 +102,7 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     functionFragment: "isApprovedForAll",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
@@ -136,6 +136,7 @@ interface NounsErc721Interface extends ethers.utils.Interface {
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
+    "NounBurned(uint256)": EventFragment;
     "NounCreated(uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
@@ -143,6 +144,7 @@ interface NounsErc721Interface extends ethers.utils.Interface {
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "NounBurned"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NounCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
@@ -211,11 +213,13 @@ export class NounsErc721 extends Contract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    createNoun(
+    burn(
+      nounId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    "createNoun()"(
+    "burn(uint256)"(
+      nounId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -240,6 +244,14 @@ export class NounsErc721 extends Contract {
       operator: string,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
+
+    mint(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "mint()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     name(overrides?: CallOverrides): Promise<[string]>;
 
@@ -362,11 +374,13 @@ export class NounsErc721 extends Contract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  createNoun(
+  burn(
+    nounId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  "createNoun()"(
+  "burn(uint256)"(
+    nounId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -391,6 +405,14 @@ export class NounsErc721 extends Contract {
     operator: string,
     overrides?: CallOverrides
   ): Promise<boolean>;
+
+  mint(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "mint()"(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   name(overrides?: CallOverrides): Promise<string>;
 
@@ -507,9 +529,12 @@ export class NounsErc721 extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    createNoun(overrides?: CallOverrides): Promise<BigNumber>;
+    burn(nounId: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
-    "createNoun()"(overrides?: CallOverrides): Promise<BigNumber>;
+    "burn(uint256)"(
+      nounId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     getApproved(
       tokenId: BigNumberish,
@@ -532,6 +557,10 @@ export class NounsErc721 extends Contract {
       operator: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    mint(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "mint()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<string>;
 
@@ -644,6 +673,10 @@ export class NounsErc721 extends Contract {
       { owner: string; operator: string; approved: boolean }
     >;
 
+    NounBurned(
+      tokenId: BigNumberish | null
+    ): TypedEventFilter<[BigNumber], { tokenId: BigNumber }>;
+
     NounCreated(
       tokenId: BigNumberish | null
     ): TypedEventFilter<[BigNumber], { tokenId: BigNumber }>;
@@ -686,11 +719,13 @@ export class NounsErc721 extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    createNoun(
+    burn(
+      nounId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "createNoun()"(
+    "burn(uint256)"(
+      nounId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -714,6 +749,14 @@ export class NounsErc721 extends Contract {
       owner: string,
       operator: string,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    mint(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "mint()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<BigNumber>;
@@ -841,11 +884,13 @@ export class NounsErc721 extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    createNoun(
+    burn(
+      nounId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    "createNoun()"(
+    "burn(uint256)"(
+      nounId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -869,6 +914,14 @@ export class NounsErc721 extends Contract {
       owner: string,
       operator: string,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    mint(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "mint()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
