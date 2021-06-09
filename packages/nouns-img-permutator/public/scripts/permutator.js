@@ -17,7 +17,7 @@ async function generateImage() {
     try {
         // clear nouns 
         var nounsDiv = document.getElementById("nouns")
-        nounsDiv.innerHTML = ''
+        
         for (var i = 0; i < 12; i++) {
             let res = await fetch(generateImageEndPoint)
             let json = await res.json()
@@ -59,5 +59,5 @@ function addNounImg(data) {
     img.classList.add('noun-img')
 
     colThreeColumn.appendChild(img)
-    nounsDiv.appendChild(colThreeColumn)
+    nounsDiv.insertBefore(colThreeColumn, nounsDiv.children[0])
 }
