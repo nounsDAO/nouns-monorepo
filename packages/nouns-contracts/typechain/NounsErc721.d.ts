@@ -22,7 +22,6 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 interface NounsErc721Interface extends ethers.utils.Interface {
   functions: {
     "approve(address,uint256)": FunctionFragment;
-    "auctionHouse()": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "burn(uint256)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
@@ -34,7 +33,6 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     "renounceOwnership()": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
-    "setAuctionHouse(address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
     "tokenByIndex(uint256)": FunctionFragment;
@@ -48,10 +46,6 @@ interface NounsErc721Interface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "approve",
     values: [string, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "auctionHouse",
-    values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
   encodeFunctionData(functionFragment: "burn", values: [BigNumberish]): string;
@@ -81,10 +75,6 @@ interface NounsErc721Interface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "setApprovalForAll",
     values: [string, boolean]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setAuctionHouse",
-    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
@@ -117,10 +107,6 @@ interface NounsErc721Interface extends ethers.utils.Interface {
   ): string;
 
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "auctionHouse",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
   decodeFunctionResult(
@@ -145,10 +131,6 @@ interface NounsErc721Interface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "setApprovalForAll",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setAuctionHouse",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -181,7 +163,6 @@ interface NounsErc721Interface extends ethers.utils.Interface {
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
-    "AuctionHouseChanged(address,address)": EventFragment;
     "NounBurned(uint256)": EventFragment;
     "NounCreated(uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
@@ -190,7 +171,6 @@ interface NounsErc721Interface extends ethers.utils.Interface {
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "AuctionHouseChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NounBurned"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NounCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
@@ -252,10 +232,6 @@ export class NounsErc721 extends Contract {
       tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    auctionHouse(overrides?: CallOverrides): Promise<[string]>;
-
-    "auctionHouse()"(overrides?: CallOverrides): Promise<[string]>;
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -357,16 +333,6 @@ export class NounsErc721 extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    setAuctionHouse(
-      newAuctionHouse: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    "setAuctionHouse(address)"(
-      newAuctionHouse: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
@@ -453,10 +419,6 @@ export class NounsErc721 extends Contract {
     tokenId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
-
-  auctionHouse(overrides?: CallOverrides): Promise<string>;
-
-  "auctionHouse()"(overrides?: CallOverrides): Promise<string>;
 
   balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -555,16 +517,6 @@ export class NounsErc721 extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  setAuctionHouse(
-    newAuctionHouse: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  "setAuctionHouse(address)"(
-    newAuctionHouse: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   supportsInterface(
     interfaceId: BytesLike,
     overrides?: CallOverrides
@@ -648,10 +600,6 @@ export class NounsErc721 extends Contract {
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    auctionHouse(overrides?: CallOverrides): Promise<string>;
-
-    "auctionHouse()"(overrides?: CallOverrides): Promise<string>;
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -739,16 +687,6 @@ export class NounsErc721 extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setAuctionHouse(
-      newAuctionHouse: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    "setAuctionHouse(address)"(
-      newAuctionHouse: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
@@ -791,10 +729,6 @@ export class NounsErc721 extends Contract {
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
-
-    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "totalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     transferFrom(
       from: string,
@@ -840,14 +774,6 @@ export class NounsErc721 extends Contract {
       { owner: string; operator: string; approved: boolean }
     >;
 
-    AuctionHouseChanged(
-      previousAuctionHouse: string | null,
-      newAuctionHouse: string | null
-    ): TypedEventFilter<
-      [string, string],
-      { previousAuctionHouse: string; newAuctionHouse: string }
-    >;
-
     NounBurned(
       tokenId: BigNumberish | null
     ): TypedEventFilter<[BigNumber], { tokenId: BigNumber }>;
@@ -886,10 +812,6 @@ export class NounsErc721 extends Contract {
       tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
-
-    auctionHouse(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "auctionHouse()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -991,16 +913,6 @@ export class NounsErc721 extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    setAuctionHouse(
-      newAuctionHouse: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    "setAuctionHouse(address)"(
-      newAuctionHouse: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
@@ -1088,10 +1000,6 @@ export class NounsErc721 extends Contract {
       tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
-
-    auctionHouse(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    "auctionHouse()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     balanceOf(
       owner: string,
@@ -1193,16 +1101,6 @@ export class NounsErc721 extends Contract {
     "setApprovalForAll(address,bool)"(
       operator: string,
       approved: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setAuctionHouse(
-      newAuctionHouse: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    "setAuctionHouse(address)"(
-      newAuctionHouse: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

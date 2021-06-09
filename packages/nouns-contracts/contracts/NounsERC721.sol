@@ -9,22 +9,8 @@ import {INounsERC721} from './interfaces/INounsERC721.sol';
 
 contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
 
-    // The address of the auction house contract.
-    address public auctionHouse;
 
-    /**
-     * @notice Require that the sender is `auctionHouse`
-     */
-    modifier onlyAuctionHouse(){
-        require(msg.sender == auctionHouse, 'NounsERC721: caller is not auctionHouse');
-        _;
-    }
-
-    /**
-     * @notice sets the auction contract and immediatly transfers
-     * ownership to a governance address.
-     */
-    constructor() ERC721('Nouns', 'NOUN') Ownable() {}
+    constructor() ERC721('Nouns', 'NOUNS') {}
 
     /**
      * @dev Base URI for computing {tokenURI}. Empty by default, can be overriden
@@ -35,27 +21,14 @@ contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
     }
 
     /**
-     * @notice Set the auctionHouse address.
-     * @dev Only callable by the `owner`.
-     */
-    function setAuctionHouse(address newAuctionHouse) public override onlyOwner {
-        require(newAuctionHouse != address(0), "NounsERC721: new auctionHouse is the zero address");
-
-        emit AuctionHouseChanged(auctionHouse, newAuctionHouse);
-
-        auctionHouse = newAuctionHouse;
-    }
-
-    /**
      * @notice Mint a Noun.
-     * @dev Call ERC721 _mint with the next noun id.
-     * Only callable by the `auctionHouse`.
+     * @dev Call ERC721 _mint with the current noun id and increment.
      * TODO randomness, de-dup
      */
-    function mint() public override onlyAuctionHouse returns (uint256) {
+    function mint() public override onlyOwner returns (uint256) {
         uint256 nounId = totalSupply();
 
-        _mint(auctionHouse, nounId);
+        _mint(owner(), nounId);
         emit NounCreated(nounId);
 
         return nounId;
@@ -64,7 +37,7 @@ contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
     /**
      * @notice Burn a noun.
      */
-    function burn(uint256 nounId) public override onlyAuctionHouse {
+    function burn(uint256 nounId) public override onlyOwner {
         _burn(nounId);
         emit NounBurned(nounId);
     }

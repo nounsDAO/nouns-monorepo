@@ -47,7 +47,7 @@ describe('NounsAuctionHouse', () => {
     weth = await deployWeth(noundersDAO);
     await deploy(noundersDAO);
 
-    await nounsErc721.setAuctionHouse(nounsAuctionHouse.address);
+    await nounsErc721.transferOwnership(nounsAuctionHouse.address);
   });
 
   it('should revert if a second initialization is attempted', async () => {
