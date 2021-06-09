@@ -3,14 +3,12 @@
 pragma solidity ^0.8.4;
 
 import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
+import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
 import '@openzeppelin/contracts/access/Ownable.sol';
-import {Counters} from '@openzeppelin/contracts/utils/Counters.sol';
 import {INounsERC721} from './interfaces/INounsERC721.sol';
 
-contract NounsERC721 is INounsERC721, ERC721, Ownable {
-    using Counters for Counters.Counter;
+contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
 
-    Counters.Counter private _nounIdTracker;
 
     constructor() ERC721('Nouns', 'NOUNS') {}
 
@@ -28,8 +26,7 @@ contract NounsERC721 is INounsERC721, ERC721, Ownable {
      * TODO randomness, de-dup
      */
     function mint() public override onlyOwner returns (uint256) {
-        uint256 nounId = _nounIdTracker.current();
-        _nounIdTracker.increment();
+        uint256 nounId = totalSupply();
 
         _mint(owner(), nounId);
         emit NounCreated(nounId);
