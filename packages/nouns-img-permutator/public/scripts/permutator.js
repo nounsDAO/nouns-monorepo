@@ -1,10 +1,20 @@
 
-
+// api end point to fetch random noun img data
 const generateImageEndPoint = 'https://us-central1-nounsdao.cloudfunctions.net/generateRandomNoun'
+
+// hold nouns base64 data string
+var nounsData = []
+
+// display 
+const DISPLAY_MODE = {
+	TILED: "tiled",
+	SCALED: "scaled"
+}
+var selectedDisplayMode = DISPLAY_MODE.TILED;
 
 
 /**
- * Call API endpoint to fetch base64 for random noun image
+ * Calls API endpoint to fetch base64 for random noun image and add corresponding img element.
  */
 async function generateImage() {
 
@@ -21,7 +31,8 @@ async function generateImage() {
         for (var i = 0; i < 12; i++) {
             let res = await fetch(generateImageEndPoint)
             let json = await res.json()
-            addNounImg(json.base64)
+            nounsData.push(json.base64)
+            addNounImg(json.base64, selectedDisplayMode)
         }
 
         setButtonLoading(button, false, 'GO!')
@@ -46,18 +57,70 @@ function setButtonLoading(element, loading, originalText) {
         element.disabled = loading
     }
 }
-
-function addNounImg(data) {
+/** 
+ * @param {String} data Base64 image data 
+ */
+function addNounImg(data, displayMode) {    
     
     var nounsDiv = document.getElementById("nouns")
 
-    let colThreeColumn = document.createElement('div')
-    colThreeColumn.classList.add('col-sm-3')
+    if (displayMode == DISPLAY_MODE.TILED) {
+        
+        let colThreeColumn = document.createElement('div')
+        colThreeColumn.classList.add('col-sm-2')
 
-    let img = document.createElement('img')
-    img.setAttribute('src', data)
-    img.classList.add('noun-img')
+        let img = document.createElement('img')
+        img.setAttribute('src', data)
+        img.classList.add('noun-img-md')
+        img.classList.add('rounded')
 
-    colThreeColumn.appendChild(img)
-    nounsDiv.insertBefore(colThreeColumn, nounsDiv.children[0])
+        colThreeColumn.appendChild(img)
+        nounsDiv.insertBefore(colThreeColumn, nounsDiv.children[0])
+
+    } else {
+        // SCALED
+        let colThreeColumn = document.createElement('div')
+        colThreeColumn.classList.add('col-sm-6')    
+    
+        let imgSm = document.createElement('img')
+        imgSm.setAttribute('src', data)
+        imgSm.classList.add('noun-img-sm')
+        imgSm.classList.add('rounded')
+    
+        let imgMd = document.createElement('img')
+        imgMd.setAttribute('src', data)
+        imgMd.classList.add('noun-img-md')
+        imgMd.classList.add('rounded')
+    
+        let imgLg = document.createElement('img')
+        imgLg.setAttribute('src', data)
+        imgLg.classList.add('noun-img-lg')
+        imgLg.classList.add('rounded')
+    
+        colThreeColumn.appendChild(imgSm)
+        colThreeColumn.appendChild(imgMd)    
+        colThreeColumn.appendChild(imgLg)
+        nounsDiv.insertBefore(colThreeColumn, nounsDiv.children[0])
+    }
+
+}
+/** 
+ * @param {Element} element Source element from where event triggered
+ */
+function displayModeChanged(element) {
+
+    var nounsDiv = document.getElementById("nouns")
+    nounsDiv.innerHTML = ''
+
+    if (element.id == 'scaled-display-radio-btn') {
+        selectedDisplayMode = DISPLAY_MODE.SCALED
+        nounsData.forEach(nounData => {
+            addNounImg(nounData, DISPLAY_MODE.SCALED)
+        })
+    } else {
+        selectedDisplayMode = DISPLAY_MODE.TILED
+        nounsData.forEach(nounData => {
+            addNounImg(nounData, DISPLAY_MODE.TILED)
+        })
+    }
 }
