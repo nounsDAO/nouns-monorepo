@@ -16,10 +16,17 @@ admin.initializeApp({
   storageBucket: "nounsdao.appspot.com"
 });
 const storageBucket = admin.storage().bucket()
+const db = admin.firestore();
 
 
 exports.generateRandomNoun = functions.https.onRequest(async (request, response) => {
     cors(request, response, async () => {
+
+        // increment counter
+        const docRef = db.collection('admin').doc('counters');
+        await docRef.update({
+            counter: admin.firestore.FieldValue.increment(1)
+          });
 
         // root path for layer folders 
         const baseLayerPath = `assets/layer-`
