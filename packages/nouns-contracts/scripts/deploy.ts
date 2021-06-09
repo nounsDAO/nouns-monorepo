@@ -6,7 +6,7 @@ promptjs.message = '> ';
 promptjs.delimiter = '';
 
 async function main() {
-  const NounsErc721 = await ethers.getContractFactory('NounsErc721');
+  const NounsErc721 = await ethers.getContractFactory('NounsERC721');
 
   let gas = await NounsErc721.signer.getGasPrice();
   const gasInGwei = Math.round(Number(ethers.utils.formatUnits(gas, 'gwei')));
