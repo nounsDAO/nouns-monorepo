@@ -14,7 +14,11 @@ interface INounsERC721 is IERC721, IERC721Metadata, IERC721Enumerable {
 
     event NounBurned(uint256 indexed tokenId);
 
+    event AuctionHouseChanged(address indexed previousAuctionHouse, address indexed newAuctionHouse);
+
     function mint() external returns (uint256);
 
     function burn(uint256 tokenId) external;
+
+    function setAuctionHouse(address newAuctionHouse) external;
 }
