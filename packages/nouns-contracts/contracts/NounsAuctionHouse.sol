@@ -2,6 +2,7 @@
 
 pragma solidity ^0.8.4;
 
+import {PausableUpgradeable} from '@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol';
 import {ReentrancyGuardUpgradeable} from '@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol';
 import {IERC20} from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import {INounsAuctionHouse} from './interfaces/INounsAuctionHouse.sol';
@@ -11,7 +12,11 @@ import {IWETH} from './interfaces/IWETH.sol';
 /**
  * @title The NounsDAO auction house
  */
-contract NounsAuctionHouse is INounsAuctionHouse, ReentrancyGuardUpgradeable {
+contract NounsAuctionHouse is
+    INounsAuctionHouse,
+    PausableUpgradeable,
+    ReentrancyGuardUpgradeable
+{
     // The Nouns ERC721 token contract
     INounsERC721 public nouns;
 
@@ -48,8 +53,8 @@ contract NounsAuctionHouse is INounsAuctionHouse, ReentrancyGuardUpgradeable {
     }
 
     /**
-     * @notice Initialize the auction house by populating the configuration
-     * values and creating the first Noun auction.
+     * @notice Initialize the auction house and base contracts,
+     * populate configuration values, and pause the contract.
      * @dev This function can only be called once.
      */
     function initialize(
@@ -58,62 +63,58 @@ contract NounsAuctionHouse is INounsAuctionHouse, ReentrancyGuardUpgradeable {
         address _noundersDAO,
         address _weth,
         uint256 _timeBuffer,
+        uint256 _reservePrice,
         uint8 _minBidIncrementPercentage,
         uint256 _duration
     ) external initializer {
+        __Pausable_init();
         __ReentrancyGuard_init();
+
+        _pause();
 
         nouns = _nouns;
         nounsDAO = _nounsDAO;
         noundersDAO = _noundersDAO;
         weth = _weth;
         timeBuffer = _timeBuffer;
+        reservePrice = _reservePrice;
         minBidIncrementPercentage = _minBidIncrementPercentage;
         duration = _duration;
     }
 
     /**
-     * @notice Create the first Noun auction.
-     * @dev This function can only be called once by the noundersDAO.
+     * @notice Settle the current auction, mint a new Noun, and put it up for auction.
      */
-    function createFirstAuction() external onlyNoundersDAO returns (uint256) {
-        require(auction.nounId == 0, 'Auction house already started');
-        return _createAuction();
-    }
-
-    /**
-     * @notice End the current auction, mint a new Noun, and put it up for auction.
-     */
-    function endCurrentAndCreateNewAuction()
+    function settleCurrentAndCreateNewAuction()
         external
         override
         nonReentrant
-        returns (uint256)
+        whenNotPaused
     {
-        _endAuction();
-        return _createAuction();
+        _settleAuction();
+        _createAuction();
+    }
+
+    /**
+     * @notice Settle the current auction.
+     * @dev This function can only be called when the contract is paused.
+     */
+    function settleAuction() external override whenPaused nonReentrant {
+        _settleAuction();
     }
 
     /**
      * @notice Create a bid for a Noun, with a given amount.
      * @dev This contract only accepts payment in ETH.
      */
-    function createBid(uint256 nounId, uint256 amount)
-        external
-        payable
-        override
-        nonReentrant
-    {
+    function createBid(uint256 nounId) external payable override nonReentrant {
         INounsAuctionHouse.Auction memory _auction = auction;
 
         require(_auction.nounId == nounId, 'Noun not up for auction');
-        require(amount >= reservePrice, 'Must send at least reservePrice');
-        require(amount >= _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100),
+        require(block.timestamp < _auction.endTime, 'Auction expired');
+        require(msg.value >= reservePrice, 'Must send at least reservePrice');
+        require(msg.value >= _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100),
             'Must send more than last bid by minBidIncrementPercentage amount'
-        );
-        require(
-            msg.value == amount,
-            'Sent ETH Value does not match specified bid amount'
         );
 
         address payable lastBidder = _auction.bidder;
@@ -123,35 +124,49 @@ contract NounsAuctionHouse is INounsAuctionHouse, ReentrancyGuardUpgradeable {
             _safeTransferETHWithFallback(lastBidder, _auction.amount);
         }
 
-        auction.amount = amount;
+        auction.amount = msg.value;
         auction.bidder = payable(msg.sender);
 
         bool extended = false;
-        // At this point we know that the timestamp is less than start + duration (since the auction would be over, otherwise)
-        // we want to know by how much the timestamp is less than start + duration
-        // if the difference is less than the timeBuffer, increase the duration by the timeBuffer
-        // prettier-ignore
-        if (_auction.startTime + _auction.duration - block.timestamp < timeBuffer) {
-            // Playing code golf for gas optimization:
-            // uint256 expectedEnd = _auction.startTime + _auction.duration;
-            // uint256 timeRemaining = expectedEnd - block.timestamp;
-            // uint256 timeToAdd = timeBuffer - timeRemaining;
-            // uint256 newDuration = _auction.duration + timeToAdd;
-            uint256 oldDuration = _auction.duration;
-            auction.duration = _auction.duration = oldDuration + (timeBuffer - _auction.startTime + oldDuration - block.timestamp);
+        // Extend the auction if the bid was received within `timeBuffer` of the auction end time
+        if (_auction.endTime - block.timestamp < timeBuffer) {
+            auction.endTime = _auction.endTime = block.timestamp + timeBuffer;
             extended = true;
         }
 
         emit AuctionBid(
             _auction.nounId,
             msg.sender,
-            amount,
+            msg.value,
             lastBidder == address(0), // firstBid boolean
             extended
         );
 
         if (extended) {
-            emit AuctionDurationExtended(_auction.nounId, _auction.duration);
+            emit AuctionExtended(_auction.nounId, _auction.endTime);
+        }
+    }
+
+    /**
+     * @notice Pause the Nouns auction house.
+     * @dev This function can only be called by the noundersDAO when the
+     * contract is unpaused. While no new auctions can be started when paused,
+     * anyone can settle an ongoing auction.
+     */
+    function pause() external override onlyNoundersDAO {
+        _pause();
+    }
+
+    /**
+     * @notice Unpause the Nouns auction house.
+     * @dev This function can only be called by the noundersDAO when the
+     * contract is paused. If required, this function will start a new auction.
+     */
+    function unpause() external override onlyNoundersDAO {
+        _unpause();
+
+        if (auction.startTime == 0 || auction.settled) {
+            _createAuction();
         }
     }
 
@@ -219,9 +234,10 @@ contract NounsAuctionHouse is INounsAuctionHouse, ReentrancyGuardUpgradeable {
         auction = Auction({
             nounId: nounId,
             amount: 0,
-            duration: duration,
             startTime: block.timestamp,
-            bidder: payable(0)
+            endTime: block.timestamp + duration,
+            bidder: payable(0),
+            settled: false
         });
 
         emit AuctionCreated(nounId);
@@ -230,30 +246,38 @@ contract NounsAuctionHouse is INounsAuctionHouse, ReentrancyGuardUpgradeable {
     }
 
     /**
-     * @notice End an auction, finalizing the bid and paying out to the DAO.
+     * @notice Settle an auction, finalizing the bid and paying out to the DAO.
      * @dev If there are no bids, the Noun if effectively burned via a transfer
-     * to address(0).
+     * to address(1).
      */
-    function _endAuction() internal {
+    function _settleAuction() internal {
         INounsAuctionHouse.Auction memory _auction = auction;
 
         require(_auction.startTime != 0, "Auction hasn't begun");
+        require(!_auction.settled, 'Auction has already been settled');
         require(
-            block.timestamp >= _auction.startTime + _auction.duration,
+            block.timestamp >= _auction.endTime,
             "Auction hasn't completed"
         );
+
+        auction.settled = true;
 
         uint256 daoProfit = _auction.amount;
         address profitRecipient = _getProfitRecipient(_auction.nounId);
 
-        // Transfer the Noun to the winner
+        // If no bidders, set to `address(1)` to circumvent ERC721 transfer validation
+        if (_auction.bidder == address(0)) {
+            _auction.bidder = payable(address(1));
+        }
+
+        // Transfer the Noun
         nouns.transferFrom(address(this), _auction.bidder, _auction.nounId);
 
         if (daoProfit > 0) {
             _safeTransferETHWithFallback(profitRecipient, daoProfit);
         }
 
-        emit AuctionEnded(_auction.nounId, _auction.bidder, daoProfit);
+        emit AuctionSettled(_auction.nounId, _auction.bidder, daoProfit);
     }
 
     /**

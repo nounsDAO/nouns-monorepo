@@ -13,12 +13,14 @@ interface INounsAuctionHouse {
         uint256 nounId;
         // The current highest bid amount
         uint256 amount;
-        // The length of time to run the auction for, after the first bid was made
-        uint256 duration;
         // The time that the auction started
         uint256 startTime;
+        // The time that the auction is scheduled to end
+        uint256 endTime;
         // The address of the current highest bid
         address payable bidder;
+        // Whether or not the auction has been settled
+        bool settled;
     }
 
     event AuctionCreated(uint256 indexed nounId);
@@ -31,9 +33,13 @@ interface INounsAuctionHouse {
         bool extended
     );
 
-    event AuctionDurationExtended(uint256 indexed nounId, uint256 duration);
+    event AuctionExtended(uint256 indexed nounId, uint256 endTime);
 
-    event AuctionEnded(uint256 indexed nounId, address winner, uint256 amount);
+    event AuctionSettled(
+        uint256 indexed nounId,
+        address winner,
+        uint256 amount
+    );
 
     event AuctionTimeBufferUpdated(uint256 timeBuffer);
 
@@ -45,9 +51,15 @@ interface INounsAuctionHouse {
 
     event AuctionDurationUpdated(uint256 duration);
 
-    function endCurrentAndCreateNewAuction() external returns (uint256);
+    function settleAuction() external;
 
-    function createBid(uint256 nounId, uint256 amount) external payable;
+    function settleCurrentAndCreateNewAuction() external;
+
+    function createBid(uint256 nounId) external payable;
+
+    function pause() external;
+
+    function unpause() external;
 
     function setTimeBuffer(uint256 timeBuffer) external;
 

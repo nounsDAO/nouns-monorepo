@@ -25,7 +25,7 @@ async function main() {
 
   console.log('Contract deployed to:', deployTx.address);
 
-  if (!(fs.existsSync('logs'))) {
+  if (!fs.existsSync('logs')) {
     fs.mkdirSync('logs');
   }
   fs.writeFileSync(
