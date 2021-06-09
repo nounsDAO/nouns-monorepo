@@ -730,6 +730,10 @@ export class NounsErc721 extends Contract {
       overrides?: CallOverrides
     ): Promise<string>;
 
+    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "totalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     transferFrom(
       from: string,
       to: string,

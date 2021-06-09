@@ -10,7 +10,7 @@ import {INounsERC721} from './interfaces/INounsERC721.sol';
 contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
 
 
-    constructor() ERC721('Nouns', 'NOUNS') {}
+    constructor() ERC721('Nouns', 'NOUN') Ownable() {}
 
     /**
      * @dev Base URI for computing {tokenURI}. Empty by default, can be overriden
