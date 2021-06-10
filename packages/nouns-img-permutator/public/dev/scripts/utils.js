@@ -1,7 +1,7 @@
 
-const fetchLayersAndOptionsURL = 'http://localhost:5001/nounsdao/us-central1/fetchLayersAndOptions'
+const fetchLayersAndOptionsURL = 'https://us-central1-nounsdao.cloudfunctions.net/fetchLayersAndOptions'
 const generateImageEndPoint = 'https://us-central1-nounsdao.cloudfunctions.net/generateRandomNoun'
-const generateNounWithOptions = 'http://localhost:5001/nounsdao/us-central1/generateNounUsingOptions'
+const generateNounWithOptions = 'https://us-central1-nounsdao.cloudfunctions.net/generateNounUsingOptions'
 
 // object to track selected layer options
 var selectedOptions = {}
