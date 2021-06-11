@@ -12,7 +12,7 @@ contract NounsERC721 is INounsERC721, ERC721, Ownable {
 
     Counters.Counter private _nounIdTracker;
 
-    constructor() ERC721('Nouns', 'NOUNS') {}
+    constructor() ERC721('Nouns', 'NOUN') {}
 
     /**
      * @dev Base URI for computing {tokenURI}. Empty by default, can be overriden
