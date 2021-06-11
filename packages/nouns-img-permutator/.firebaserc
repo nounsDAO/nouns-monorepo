@@ -1,5 +1,17 @@
 {
   "projects": {
     "default": "nounsdao"
+  },
+  "targets": {
+    "nounsdao": {
+      "hosting": {
+        "dev": [
+          "nounsdao-dev"
+        ],
+        "external": [
+          "nounsdao"
+        ]
+      }
+    }
   }
 }
