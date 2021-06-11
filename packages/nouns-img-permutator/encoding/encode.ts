@@ -110,10 +110,7 @@ const writeEncodedImagesToFile = async () => {
     const { r, g, b } = hexToRgb(hex);
     return `${r},${g},${b}`;
   });
-  await fs.writeFile(
-    OUTPUT_FILE,
-    JSON.stringify({ colors, layers }, null, 2),
-  );
+  await fs.writeFile(OUTPUT_FILE, JSON.stringify({ colors, layers }, null, 2));
   console.log(`Encoded layers written to ${path.join(__dirname, OUTPUT_FILE)}`);
 };
 
