@@ -18,7 +18,6 @@ ts-node encode.ts
 
 Randomly generate a Noun, convert the above format to SVG, and open in your default program (likely the browser):
 
-
 ```sh
 ts-node decode.ts && open random-noun.svg
 ```
