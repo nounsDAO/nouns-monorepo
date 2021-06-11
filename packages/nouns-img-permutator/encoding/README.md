@@ -1,6 +1,6 @@
 ## Encoding
 
-This code in this folder can be used to play around with the encoding used to store Noun 'parts' on-chain.
+The code in this folder can be used to play around with the encoding used to store Noun 'parts' on-chain.
 
 ### Current Format
 
