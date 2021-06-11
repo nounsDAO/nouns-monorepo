@@ -2,12 +2,12 @@
 
 pragma solidity ^0.8.4;
 
-import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
+import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
 import '@openzeppelin/contracts/access/Ownable.sol';
 import {Counters} from '@openzeppelin/contracts/utils/Counters.sol';
 import {INounsERC721} from './interfaces/INounsERC721.sol';
 
-contract NounsERC721 is INounsERC721, ERC721, Ownable {
+contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
     using Counters for Counters.Counter;
 
     Counters.Counter private _nounIdTracker;

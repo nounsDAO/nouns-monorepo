@@ -5,6 +5,8 @@ export type { PausableUpgradeable } from "./PausableUpgradeable";
 export type { Ownable } from "./Ownable";
 export type { Ierc20 } from "./Ierc20";
 export type { Erc721 } from "./Erc721";
+export type { Erc721Enumerable } from "./Erc721Enumerable";
+export type { Ierc721Enumerable } from "./Ierc721Enumerable";
 export type { Ierc721Metadata } from "./Ierc721Metadata";
 export type { Ierc721 } from "./Ierc721";
 export type { Ierc721Receiver } from "./Ierc721Receiver";
@@ -21,6 +23,8 @@ export { PausableUpgradeable__factory } from "./factories/PausableUpgradeable__f
 export { Ownable__factory } from "./factories/Ownable__factory";
 export { Ierc20__factory } from "./factories/Ierc20__factory";
 export { Erc721__factory } from "./factories/Erc721__factory";
+export { Erc721Enumerable__factory } from "./factories/Erc721Enumerable__factory";
+export { Ierc721Enumerable__factory } from "./factories/Ierc721Enumerable__factory";
 export { Ierc721Metadata__factory } from "./factories/Ierc721Metadata__factory";
 export { Ierc721__factory } from "./factories/Ierc721__factory";
 export { Ierc721Receiver__factory } from "./factories/Ierc721Receiver__factory";
