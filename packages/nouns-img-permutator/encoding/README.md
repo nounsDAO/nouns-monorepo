@@ -6,7 +6,7 @@ This code in this folder can be used to play around with the encoding used to st
 
 Color Index (2 bytes), Length (2 bytes), X-Y Coordinate Tuples [1 Byte, 1 Byte].
 
-## Usage
+### Usage
 
 First, `cd` into this folder.
 
