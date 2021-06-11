@@ -5,11 +5,11 @@
 import { Contract, Signer } from "ethers";
 import { Provider } from "@ethersproject/providers";
 
-import type { ERC165 } from "../ERC165";
+import type { Erc165 } from "../Erc165";
 
-export class ERC165__factory {
-  static connect(address: string, signerOrProvider: Signer | Provider): ERC165 {
-    return new Contract(address, _abi, signerOrProvider) as ERC165;
+export class Erc165__factory {
+  static connect(address: string, signerOrProvider: Signer | Provider): Erc165 {
+    return new Contract(address, _abi, signerOrProvider) as Erc165;
   }
 }
 

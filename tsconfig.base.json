@@ -15,11 +15,11 @@
     "module": "CommonJS",
     "moduleResolution": "node",
     "noImplicitThis":true,
-    "outDir": "build",
+    "outDir": "dist",
     "skipLibCheck": true,
     "strict": true,
     "strictNullChecks": true,
-    "target": "es2020",
+    "target": "es6",
   },
-  "exclude": ["**/build/"]
+  "exclude": ["**/dist"]
 }

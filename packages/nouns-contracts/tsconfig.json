@@ -1,12 +1,5 @@
 {
-  "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "strict": true,
-    "esModuleInterop": true,
-    "outDir": "dist",
-    "resolveJsonModule": true
-  },
+  "extends": "../../tsconfig.base.json",
   "include": [
     "./scripts",
     "./test"

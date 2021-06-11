@@ -7,8 +7,10 @@ dist
 /**/sha.h
 *.tgz
 .env
-packages/nouns-img-permutator/assets/.DS_Store
 .DS_Store
-packages/nouns-img-permutator/.DS_Store
-packages/nouns-img-permutator/.DS_Store
-packages/nouns-img-permutator/assets/.DS_Store
+*.tsbuildinfo
+
+packages/nouns-contracts/**/artifacts
+packages/nouns-contracts/**/cache
+packages/nouns-contracts/**/abi
+

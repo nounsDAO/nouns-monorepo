@@ -19,7 +19,7 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
-interface IERC721ReceiverInterface extends ethers.utils.Interface {
+interface Ierc721ReceiverInterface extends ethers.utils.Interface {
   functions: {
     "onERC721Received(address,address,uint256,bytes)": FunctionFragment;
   };
@@ -37,7 +37,7 @@ interface IERC721ReceiverInterface extends ethers.utils.Interface {
   events: {};
 }
 
-export class IERC721Receiver extends Contract {
+export class Ierc721Receiver extends Contract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -78,7 +78,7 @@ export class IERC721Receiver extends Contract {
     toBlock?: string | number | undefined
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: IERC721ReceiverInterface;
+  interface: Ierc721ReceiverInterface;
 
   functions: {
     onERC721Received(
