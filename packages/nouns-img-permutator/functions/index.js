@@ -78,6 +78,12 @@ exports.fetchLayersAndOptions = functions.https.onRequest(async (request, respon
  exports.generateNounUsingOptions = functions.https.onRequest(async (request, response) => {
     cors(request, response, async () => {
 
+        // increment counter
+        const docRef = db.collection('admin').doc('counters');
+        await docRef.update({
+            counter: admin.firestore.FieldValue.increment(1)
+            });
+
         let options = JSON.parse(request.query.options)
         let layers = Object.keys(options)
 
