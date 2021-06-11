@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "firebase-tools": "^9.12.1",
+    "node-libpng": "^0.2.18",
     "psd": "^3.2.0"
   }
 }
