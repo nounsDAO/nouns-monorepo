@@ -1,13 +1,10 @@
 
-const fetchLayersAndOptionsURL = 'https://us-central1-nounsdao.cloudfunctions.net/fetchLayersAndOptionsWithSource'
-const generateNounWithOptions = 'https://us-central1-nounsdao.cloudfunctions.net/generateNounUsingOptionsAndSource'
-const fetchSourcesURL = 'https://us-central1-nounsdao.cloudfunctions.net/fetchSources'
+const fetchLayersAndOptionsURL = 'https://us-central1-nounsdao.cloudfunctions.net/fetchLayersAndOptions'
+const generateImageEndPoint = 'https://us-central1-nounsdao.cloudfunctions.net/generateRandomNoun'
+const generateNounWithOptions = 'https://us-central1-nounsdao.cloudfunctions.net/generateNounUsingOptions'
 
 // object to track selected layer options
-var selectedOptions = {
-    source: '',
-    layers: {}
-}
+var selectedOptions = {}
 
 // hold nouns base64 data strings
 var nounsData = []
@@ -115,19 +112,10 @@ function displayModeChanged(element) {
  * @param {[Object]} data Array of objects containing layers and their corresponding options
  */
  function setLayersAndOptionsUI(data) {
-    
-    // clear layer buttons
-    let div = document.getElementById('layer-buttons')
-    div.innerHTML = ''
-
-    // clear legend
-    let layerSelectionList = document.getElementById('layer-selection')
-    layerSelectionList.innerHTML = ''
-
     data.forEach(layer => {
-        selectedOptions.layers[layer.name] = 'random'
+        selectedOptions[layer.name] = 'random'
         addButtonDropdownWithOptions(layer)
-        addLayerToLayerDisplay(layer, 'random')
+        addLayerToLayerSelection(layer, 'random')
     })
 }
 
@@ -192,54 +180,10 @@ function addButtonDropdownWithOptions(layer) {
 }
 
 /**
- * Adds dropdown button for choosing source.
- * @param {[String]} data Array of strings corresponding to source directory names.
- */
- function addSourcesDropdownButton(data) {
-    let div = document.getElementById('main-controls')
-    
-    let btnGroup = document.createElement('div')
-    btnGroup.classList.add('btn-group')
-    btnGroup.id = 'layers-dropdown-buttons'
-    div.appendChild(btnGroup)
-
-    // button
-    let button = document.createElement('button')
-    button.id = 'source-button'
-    button.type = 'button'
-    button.classList.add('layer-btn')
-    button.classList.add('btn')
-    button.classList.add('btn-primary')
-    button.classList.add('dropdown-toggle')
-    button.setAttribute('data-toggle', 'dropdown')
-    button.setAttribute('aria-haspopup', 'true')
-    button.setAttribute('aria-expanded', 'false')
-    button.textContent = data[0]
-
-    let dropDownMenu = document.createElement('div')
-    dropDownMenu.classList.add('dropdown-menu')
-
-    // options
-    data.forEach(option => {
-        let link = document.createElement('a')
-        link.classList.add('dropdown-item')
-        link.href = '#'
-        link.textContent = option
-        link.dataset.optionName = option
-        link.onclick = () => { sourceOptionSelected(button, link.getAttribute('data-option-name')) }
-        dropDownMenu.appendChild(link)
-    })
-
-    btnGroup.appendChild(button)
-    btnGroup.appendChild(dropDownMenu)
-
-}
-
-/**
  * Adds a layer to the selection display.
  * @param {Object} layer Object representaining layer containing `object.name` property
  */
-function addLayerToLayerDisplay(layer) {
+function addLayerToLayerSelection(layer) {
 
     let layerSelectionList = document.getElementById('layer-selection')
 
@@ -265,31 +209,5 @@ function layerOptionSelected(layerName, optionName) {
     item.textContent = `${layerName}: ${optionName}`
 
     // update selectedItems
-    selectedOptions.layers[layerName] = optionName
-}
-
-/**
- * Updates UI and `selectedOptions` object upon option selection in the the layer button dropdown.
- * @param {Element} button Button to display as loading while fetching.
- * @param {String} optionSelected Name of option selected (e.g. `src-main`)
- */
- async function sourceOptionSelected(button, optionSelected) {
-    
-    setButtonLoading(button, true)
-
-    try {
-        await loadLayersAndOptions(optionSelected)
-
-        // update selected options
-        selectedOptions['source'] = optionSelected
-
-        // reflect selection in ui
-        let sourceButton = document.getElementById('source-button')
-        sourceButton.textContent = optionSelected
-
-        // end button loading
-        setButtonLoading(button, false, button.textContent)
-    } catch (e) {
-        console.log(`error loading layers and options for source. `, e)
-    }
+    selectedOptions[layerName] = optionName
 }
