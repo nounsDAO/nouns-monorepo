@@ -5,14 +5,14 @@
 import { Contract, Signer } from "ethers";
 import { Provider } from "@ethersproject/providers";
 
-import type { IERC721Enumerable } from "../IERC721Enumerable";
+import type { Ierc721Enumerable } from "../Ierc721Enumerable";
 
-export class IERC721Enumerable__factory {
+export class Ierc721Enumerable__factory {
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): IERC721Enumerable {
-    return new Contract(address, _abi, signerOrProvider) as IERC721Enumerable;
+  ): Ierc721Enumerable {
+    return new Contract(address, _abi, signerOrProvider) as Ierc721Enumerable;
   }
 }
 
