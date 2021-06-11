@@ -13,4 +13,3 @@ dist
 packages/nouns-contracts/**/artifacts
 packages/nouns-contracts/**/cache
 packages/nouns-contracts/**/abi
-
