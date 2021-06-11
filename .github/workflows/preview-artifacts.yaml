@@ -5,7 +5,7 @@ on:
     branches:
       # Match branches within the img-permutator/ path
       # Double glob (**) matches a full path so even img-permutator/foo/bar would match
-      - 'img-permutator-preview/**'
+      - 'img-permutator-preview/src-**'
 jobs:
   build:
     runs-on: ubuntu-latest
