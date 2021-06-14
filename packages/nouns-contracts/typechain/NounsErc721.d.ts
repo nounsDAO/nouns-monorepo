@@ -21,13 +21,24 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface NounsErc721Interface extends ethers.utils.Interface {
   functions: {
+    "DELEGATION_TYPEHASH()": FunctionFragment;
+    "DOMAIN_TYPEHASH()": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "burn(uint256)": FunctionFragment;
+    "checkpoints(address,uint32)": FunctionFragment;
+    "delegate(address)": FunctionFragment;
+    "delegateBySig(address,uint256,uint256,uint8,bytes32,bytes32)": FunctionFragment;
+    "delegates(address)": FunctionFragment;
+    "delegatorVotes(address)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
+    "getCurrentVotes(address)": FunctionFragment;
+    "getPriorVotes(address,uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "mint()": FunctionFragment;
     "name()": FunctionFragment;
+    "nonces(address)": FunctionFragment;
+    "numCheckpoints(address)": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
@@ -38,11 +49,20 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     "tokenByIndex(uint256)": FunctionFragment;
     "tokenOfOwnerByIndex(address,uint256)": FunctionFragment;
     "tokenURI(uint256)": FunctionFragment;
+    "tokenVotes(uint256)": FunctionFragment;
     "totalSupply()": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "DELEGATION_TYPEHASH",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "DOMAIN_TYPEHASH",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "approve",
     values: [string, BigNumberish]
@@ -50,8 +70,37 @@ interface NounsErc721Interface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
   encodeFunctionData(functionFragment: "burn", values: [BigNumberish]): string;
   encodeFunctionData(
+    functionFragment: "checkpoints",
+    values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(functionFragment: "delegate", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "delegateBySig",
+    values: [
+      string,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BytesLike,
+      BytesLike
+    ]
+  ): string;
+  encodeFunctionData(functionFragment: "delegates", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "delegatorVotes",
+    values: [string]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getApproved",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getCurrentVotes",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getPriorVotes",
+    values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "isApprovedForAll",
@@ -59,6 +108,11 @@ interface NounsErc721Interface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "mint", values?: undefined): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
+  encodeFunctionData(functionFragment: "nonces", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "numCheckpoints",
+    values: [string]
+  ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "ownerOf",
@@ -94,6 +148,10 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "tokenVotes",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "totalSupply",
     values?: undefined
   ): string;
@@ -106,11 +164,41 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     values: [string]
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "DELEGATION_TYPEHASH",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "DOMAIN_TYPEHASH",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "checkpoints",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "delegate", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "delegateBySig",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "delegates", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "delegatorVotes",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getApproved",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getCurrentVotes",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getPriorVotes",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -119,6 +207,11 @@ interface NounsErc721Interface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "nonces", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "numCheckpoints",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(
@@ -147,6 +240,7 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "tokenURI", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "tokenVotes", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "totalSupply",
     data: BytesLike
@@ -163,6 +257,8 @@ interface NounsErc721Interface extends ethers.utils.Interface {
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
+    "DelegateChanged(address,address,address)": EventFragment;
+    "DelegateVotesChanged(address,uint256,uint256)": EventFragment;
     "NounBurned(uint256)": EventFragment;
     "NounCreated(uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
@@ -171,6 +267,8 @@ interface NounsErc721Interface extends ethers.utils.Interface {
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "DelegateChanged"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "DelegateVotesChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NounBurned"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NounCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
@@ -221,6 +319,14 @@ export class NounsErc721 extends Contract {
   interface: NounsErc721Interface;
 
   functions: {
+    DELEGATION_TYPEHASH(overrides?: CallOverrides): Promise<[string]>;
+
+    "DELEGATION_TYPEHASH()"(overrides?: CallOverrides): Promise<[string]>;
+
+    DOMAIN_TYPEHASH(overrides?: CallOverrides): Promise<[string]>;
+
+    "DOMAIN_TYPEHASH()"(overrides?: CallOverrides): Promise<[string]>;
+
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -250,6 +356,65 @@ export class NounsErc721 extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    checkpoints(
+      arg0: string,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[number, BigNumber] & { fromBlock: number; votes: BigNumber }>;
+
+    "checkpoints(address,uint32)"(
+      arg0: string,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[number, BigNumber] & { fromBlock: number; votes: BigNumber }>;
+
+    delegate(
+      delegatee: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "delegate(address)"(
+      delegatee: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    delegateBySig(
+      delegatee: string,
+      nonce: BigNumberish,
+      expiry: BigNumberish,
+      v: BigNumberish,
+      r: BytesLike,
+      s: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "delegateBySig(address,uint256,uint256,uint8,bytes32,bytes32)"(
+      delegatee: string,
+      nonce: BigNumberish,
+      expiry: BigNumberish,
+      v: BigNumberish,
+      r: BytesLike,
+      s: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    delegates(arg0: string, overrides?: CallOverrides): Promise<[string]>;
+
+    "delegates(address)"(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    delegatorVotes(
+      delegator: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    "delegatorVotes(address)"(
+      delegator: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -259,6 +424,28 @@ export class NounsErc721 extends Contract {
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    getCurrentVotes(
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    "getCurrentVotes(address)"(
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    getPriorVotes(
+      account: string,
+      blockNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    "getPriorVotes(address,uint256)"(
+      account: string,
+      blockNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     isApprovedForAll(
       owner: string,
@@ -283,6 +470,20 @@ export class NounsErc721 extends Contract {
     name(overrides?: CallOverrides): Promise<[string]>;
 
     "name()"(overrides?: CallOverrides): Promise<[string]>;
+
+    nonces(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    "nonces(address)"(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    numCheckpoints(arg0: string, overrides?: CallOverrides): Promise<[number]>;
+
+    "numCheckpoints(address)"(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<[number]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
@@ -379,6 +580,16 @@ export class NounsErc721 extends Contract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
+    tokenVotes(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    "tokenVotes(uint256)"(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     totalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     "totalSupply()"(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -407,6 +618,14 @@ export class NounsErc721 extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
+
+  DELEGATION_TYPEHASH(overrides?: CallOverrides): Promise<string>;
+
+  "DELEGATION_TYPEHASH()"(overrides?: CallOverrides): Promise<string>;
+
+  DOMAIN_TYPEHASH(overrides?: CallOverrides): Promise<string>;
+
+  "DOMAIN_TYPEHASH()"(overrides?: CallOverrides): Promise<string>;
 
   approve(
     to: string,
@@ -437,6 +656,65 @@ export class NounsErc721 extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  checkpoints(
+    arg0: string,
+    arg1: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<[number, BigNumber] & { fromBlock: number; votes: BigNumber }>;
+
+  "checkpoints(address,uint32)"(
+    arg0: string,
+    arg1: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<[number, BigNumber] & { fromBlock: number; votes: BigNumber }>;
+
+  delegate(
+    delegatee: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "delegate(address)"(
+    delegatee: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  delegateBySig(
+    delegatee: string,
+    nonce: BigNumberish,
+    expiry: BigNumberish,
+    v: BigNumberish,
+    r: BytesLike,
+    s: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "delegateBySig(address,uint256,uint256,uint8,bytes32,bytes32)"(
+    delegatee: string,
+    nonce: BigNumberish,
+    expiry: BigNumberish,
+    v: BigNumberish,
+    r: BytesLike,
+    s: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  delegates(arg0: string, overrides?: CallOverrides): Promise<string>;
+
+  "delegates(address)"(
+    arg0: string,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  delegatorVotes(
+    delegator: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  "delegatorVotes(address)"(
+    delegator: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   getApproved(
     tokenId: BigNumberish,
     overrides?: CallOverrides
@@ -446,6 +724,28 @@ export class NounsErc721 extends Contract {
     tokenId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<string>;
+
+  getCurrentVotes(
+    account: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  "getCurrentVotes(address)"(
+    account: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  getPriorVotes(
+    account: string,
+    blockNumber: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  "getPriorVotes(address,uint256)"(
+    account: string,
+    blockNumber: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   isApprovedForAll(
     owner: string,
@@ -470,6 +770,20 @@ export class NounsErc721 extends Contract {
   name(overrides?: CallOverrides): Promise<string>;
 
   "name()"(overrides?: CallOverrides): Promise<string>;
+
+  nonces(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+  "nonces(address)"(
+    arg0: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  numCheckpoints(arg0: string, overrides?: CallOverrides): Promise<number>;
+
+  "numCheckpoints(address)"(
+    arg0: string,
+    overrides?: CallOverrides
+  ): Promise<number>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
@@ -560,6 +874,16 @@ export class NounsErc721 extends Contract {
     overrides?: CallOverrides
   ): Promise<string>;
 
+  tokenVotes(
+    tokenId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  "tokenVotes(uint256)"(
+    tokenId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
   "totalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -589,6 +913,14 @@ export class NounsErc721 extends Contract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    DELEGATION_TYPEHASH(overrides?: CallOverrides): Promise<string>;
+
+    "DELEGATION_TYPEHASH()"(overrides?: CallOverrides): Promise<string>;
+
+    DOMAIN_TYPEHASH(overrides?: CallOverrides): Promise<string>;
+
+    "DOMAIN_TYPEHASH()"(overrides?: CallOverrides): Promise<string>;
+
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -615,6 +947,62 @@ export class NounsErc721 extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    checkpoints(
+      arg0: string,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[number, BigNumber] & { fromBlock: number; votes: BigNumber }>;
+
+    "checkpoints(address,uint32)"(
+      arg0: string,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[number, BigNumber] & { fromBlock: number; votes: BigNumber }>;
+
+    delegate(delegatee: string, overrides?: CallOverrides): Promise<void>;
+
+    "delegate(address)"(
+      delegatee: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    delegateBySig(
+      delegatee: string,
+      nonce: BigNumberish,
+      expiry: BigNumberish,
+      v: BigNumberish,
+      r: BytesLike,
+      s: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "delegateBySig(address,uint256,uint256,uint8,bytes32,bytes32)"(
+      delegatee: string,
+      nonce: BigNumberish,
+      expiry: BigNumberish,
+      v: BigNumberish,
+      r: BytesLike,
+      s: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    delegates(arg0: string, overrides?: CallOverrides): Promise<string>;
+
+    "delegates(address)"(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    delegatorVotes(
+      delegator: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "delegatorVotes(address)"(
+      delegator: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -624,6 +1012,28 @@ export class NounsErc721 extends Contract {
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    getCurrentVotes(
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "getCurrentVotes(address)"(
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getPriorVotes(
+      account: string,
+      blockNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "getPriorVotes(address,uint256)"(
+      account: string,
+      blockNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     isApprovedForAll(
       owner: string,
@@ -644,6 +1054,20 @@ export class NounsErc721 extends Contract {
     name(overrides?: CallOverrides): Promise<string>;
 
     "name()"(overrides?: CallOverrides): Promise<string>;
+
+    nonces(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    "nonces(address)"(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    numCheckpoints(arg0: string, overrides?: CallOverrides): Promise<number>;
+
+    "numCheckpoints(address)"(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<number>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -730,6 +1154,16 @@ export class NounsErc721 extends Contract {
       overrides?: CallOverrides
     ): Promise<string>;
 
+    tokenVotes(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "tokenVotes(uint256)"(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     "totalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -778,6 +1212,24 @@ export class NounsErc721 extends Contract {
       { owner: string; operator: string; approved: boolean }
     >;
 
+    DelegateChanged(
+      delegator: string | null,
+      fromDelegate: string | null,
+      toDelegate: string | null
+    ): TypedEventFilter<
+      [string, string, string],
+      { delegator: string; fromDelegate: string; toDelegate: string }
+    >;
+
+    DelegateVotesChanged(
+      delegate: string | null,
+      previousBalance: null,
+      newBalance: null
+    ): TypedEventFilter<
+      [string, BigNumber, BigNumber],
+      { delegate: string; previousBalance: BigNumber; newBalance: BigNumber }
+    >;
+
     NounBurned(
       tokenId: BigNumberish | null
     ): TypedEventFilter<[BigNumber], { tokenId: BigNumber }>;
@@ -805,6 +1257,14 @@ export class NounsErc721 extends Contract {
   };
 
   estimateGas: {
+    DELEGATION_TYPEHASH(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "DELEGATION_TYPEHASH()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    DOMAIN_TYPEHASH(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "DOMAIN_TYPEHASH()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -834,6 +1294,65 @@ export class NounsErc721 extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    checkpoints(
+      arg0: string,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "checkpoints(address,uint32)"(
+      arg0: string,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    delegate(
+      delegatee: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "delegate(address)"(
+      delegatee: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    delegateBySig(
+      delegatee: string,
+      nonce: BigNumberish,
+      expiry: BigNumberish,
+      v: BigNumberish,
+      r: BytesLike,
+      s: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "delegateBySig(address,uint256,uint256,uint8,bytes32,bytes32)"(
+      delegatee: string,
+      nonce: BigNumberish,
+      expiry: BigNumberish,
+      v: BigNumberish,
+      r: BytesLike,
+      s: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    delegates(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    "delegates(address)"(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    delegatorVotes(
+      delegator: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "delegatorVotes(address)"(
+      delegator: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -841,6 +1360,28 @@ export class NounsErc721 extends Contract {
 
     "getApproved(uint256)"(
       tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getCurrentVotes(
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "getCurrentVotes(address)"(
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getPriorVotes(
+      account: string,
+      blockNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "getPriorVotes(address,uint256)"(
+      account: string,
+      blockNumber: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -867,6 +1408,20 @@ export class NounsErc721 extends Contract {
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
     "name()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    nonces(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    "nonces(address)"(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    numCheckpoints(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    "numCheckpoints(address)"(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -963,6 +1518,16 @@ export class NounsErc721 extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    tokenVotes(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "tokenVotes(uint256)"(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     "totalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -993,6 +1558,20 @@ export class NounsErc721 extends Contract {
   };
 
   populateTransaction: {
+    DELEGATION_TYPEHASH(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "DELEGATION_TYPEHASH()"(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    DOMAIN_TYPEHASH(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "DOMAIN_TYPEHASH()"(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -1025,6 +1604,68 @@ export class NounsErc721 extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    checkpoints(
+      arg0: string,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "checkpoints(address,uint32)"(
+      arg0: string,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    delegate(
+      delegatee: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "delegate(address)"(
+      delegatee: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    delegateBySig(
+      delegatee: string,
+      nonce: BigNumberish,
+      expiry: BigNumberish,
+      v: BigNumberish,
+      r: BytesLike,
+      s: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "delegateBySig(address,uint256,uint256,uint8,bytes32,bytes32)"(
+      delegatee: string,
+      nonce: BigNumberish,
+      expiry: BigNumberish,
+      v: BigNumberish,
+      r: BytesLike,
+      s: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    delegates(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "delegates(address)"(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    delegatorVotes(
+      delegator: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "delegatorVotes(address)"(
+      delegator: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -1032,6 +1673,28 @@ export class NounsErc721 extends Contract {
 
     "getApproved(uint256)"(
       tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getCurrentVotes(
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "getCurrentVotes(address)"(
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getPriorVotes(
+      account: string,
+      blockNumber: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "getPriorVotes(address,uint256)"(
+      account: string,
+      blockNumber: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1058,6 +1721,26 @@ export class NounsErc721 extends Contract {
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "name()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    nonces(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "nonces(address)"(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    numCheckpoints(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "numCheckpoints(address)"(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1150,6 +1833,16 @@ export class NounsErc721 extends Contract {
     ): Promise<PopulatedTransaction>;
 
     "tokenURI(uint256)"(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    tokenVotes(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "tokenVotes(uint256)"(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
