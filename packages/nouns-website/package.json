@@ -1,0 +1,10 @@
+{
+  "name": "nouns-website",
+  "version": "0.0.0",
+  "description": "The Nouns website",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "echo 'Nothing to build'"
+  }
+}
