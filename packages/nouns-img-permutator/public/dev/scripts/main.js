@@ -8,11 +8,15 @@ window.onload = () => {
 const fetchSources = async () => {
     let res = await fetch(fetchSourcesURL)
     let json = await res.json()
+    let data = json.sources
 
-    selectedOptions.source = json.sources[0] // set default source
+    // set 'src-main' as first option
+    data.splice(data.indexOf('src-main'), 1)
+    data.unshift('src-main')
 
-    addSourcesDropdownButton(json.sources) // add sources
-    loadLayersAndOptions(json.sources[0]) // load layers and corresponding options using source
+    selectedOptions.source = data[0] // set default source
+    addSourcesDropdownButton(data) // add sources
+    loadLayersAndOptions(data[0]) // load layers and corresponding options using source
 }
 
 
