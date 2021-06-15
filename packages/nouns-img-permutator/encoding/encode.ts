@@ -1,10 +1,9 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { readPngFile } from 'node-libpng';
 import { promises as fs } from 'fs';
 import path from 'path';
 
-// Format: Color Index (2 bytes), Length (2 bytes), X-Y Coordinate Tuples [1 Byte, 1 Byte].
-
-type ColorCoordinates = { [color: string]: [number, number][] };
+// Format: Palette Index, Bounds [Top (Y), Right (X), Bottom (Y), Left (X)] (4 Bytes), [Pixel Length (1 Byte), Color Index (1 Byte)][].
 
 interface ImageData {
   name: string;
@@ -36,48 +35,95 @@ const hexToRgb = (hex: string) => {
 
 const getFolder = (i: number) => `../assets/layer-${i}`;
 
+const colors: Map<string, number> = new Map([['#123456', 0]]);
+
 const getEncodedImage = async (
   folder: string,
   file: string,
-  coordinates: ColorCoordinates = {},
 ) => {
   const image = await readPngFile(path.join(folder, file));
 
+  const bounds = { topY: 0, bottomY: 0, leftX: 0, rightX: 0 };
+  const lineBounds: { [number: number]: { leftX: number, rightX: number } } = {};
+  const lines: { [number: number]: [length: number, colorIndex: number][] } = {};
   for (let y = 0; y < image.height; y++) {
     for (let x = 0; x < image.width; x++) {
       const { r, g, b, a } = image.rgbaAt(x, y);
-      if (a !== 0) {
-        const hexColor = rgbToHex(r, g, b);
+      const hexColor = rgbToHex(r, g, b);
 
-        coordinates[hexColor] ||= [];
-        coordinates[hexColor].push([x, y]);
+      if (!colors.has(hexColor)) {
+        colors.set(hexColor, colors.size);
+      }
+      const colorIndex = a === 0 ? 0 : colors.get(hexColor)!;
+
+      lines[y] ||= [];
+      if (!lines[y].length || lines[y][lines[y].length - 1][1] !== colorIndex) {
+        lines[y].push([1, colorIndex]); // First pixel of line or different color than previous
+      } else {
+        lines[y][lines[y].length - 1][0]++; // Same color as the pixel to the left
       }
     }
-  }
-
-  const colorCoordinates = Object.values(coordinates);
-  const encoded = colorCoordinates.reduce((result, coordinateSet, i) => {
-    const coordinates = Buffer.from(coordinateSet.flatMap(([x, y]) => [x, y]));
-    if (!coordinates.length) {
-      return result;
+    if (!(lines[y][0][0] === 32 && lines[y][0][1] === 0) && bounds.topY === 0) {
+      bounds.topY = y - 1; // shift top bound to `y - 1`
     }
+    if (bounds.topY !== 0) {
+      if (lines[y][0][0] === 32 && lines[y][0][1] === 0 || y === 31) {
+        if (bounds.bottomY === 0) {
+          bounds.bottomY = y; // Set bottom bound to `y`
+        }
+      } else {
+        bounds.bottomY = 0; // Reset bottom bound
+      }
+    }
+    lineBounds[y] = {
+      leftX: lines[y][0][0],
+      rightX: 32 - lines[y][lines[y].length - 1][0],
+    };
+  }
+  for (let i = 0; i <= bounds.topY; i++) {
+    delete lines[i]; // Delete all rows above the top bound
+    delete lineBounds[i];
+  }
+  for (let i = 31; i >= bounds.bottomY; i--) {
+    delete lines[i]; // Delete all rows below the bottom bound
+    delete lineBounds[i];
+  }
+  bounds.leftX = Math.min(...Object.values(lineBounds).map(b => b.leftX));
+  bounds.rightX = Math.max(...Object.values(lineBounds).map(b => b.rightX));
 
-    result += `${toPaddedHex(i, 4)}${toPaddedHex(
-      coordinates.length,
-      4,
-    )}${coordinates.toString('hex')}`;
+  const initial = `0x00${toPaddedHex(bounds.topY, 2)}${toPaddedHex(bounds.rightX, 2)}${toPaddedHex(bounds.bottomY, 2)}${toPaddedHex(bounds.leftX, 2)}`;
+  const encoded = Object.values(lines).reduce((result, line) => {
+    const lineBuffer = Buffer.from(line.flatMap(([length, colorIndex], i) => {
+      if (i === 0 && i === line.length - 1) {
+        return [bounds.rightX - bounds.leftX, colorIndex];
+      }
+
+      if (i === 0) {
+        if (length > bounds.leftX) {
+          return [length - bounds.leftX, colorIndex];
+        } else if (length === bounds.leftX) {
+          return [];
+        }
+      }
+      if (i === line.length - 1) {
+        if (length > 32 - bounds.rightX) {
+          return [length - (32 - bounds.rightX), colorIndex];
+        } else if (length === 32 - bounds.rightX) {
+          return [];
+        }
+      }
+      return [length, colorIndex];
+    }));
+
+    result += lineBuffer.toString('hex');
     return result;
-  }, '0x');
-
-  // Reset coordinates, but keep color indexes
-  Object.keys(coordinates).forEach(color => (coordinates[color] = []));
+  }, initial);
 
   return encoded;
 };
 
 const getAllEncodedImagesInFolder = async (
   folder: string,
-  coordinates: ColorCoordinates = {},
 ) => {
   const images: ImageData[] = [];
 
@@ -85,32 +131,29 @@ const getAllEncodedImagesInFolder = async (
   for (const file of files) {
     images.push({
       name: file.replace(/\.png$/, ''),
-      data: await getEncodedImage(folder, file, coordinates),
+      data: await getEncodedImage(folder, file),
     });
   }
   return images;
 };
 
-const getEncodedImagesForAllLayers = async (
-  coordinates: ColorCoordinates = {},
-) => {
+const getEncodedImagesForAllLayers = async () => {
   const layers: ImageData[][] = [];
 
   for (let i = 1; i <= LAYER_COUNT; i++) {
     const folder = getFolder(i);
-    layers.push(await getAllEncodedImagesInFolder(folder, coordinates));
+    layers.push(await getAllEncodedImagesInFolder(folder));
   }
   return layers;
 };
 
 const writeEncodedImagesToFile = async () => {
-  const coordinates: ColorCoordinates = {};
-  const layers = await getEncodedImagesForAllLayers(coordinates);
-  const colors = Object.keys(coordinates).map(hex => {
+  const layers = await getEncodedImagesForAllLayers();
+  const rgbColors = [...colors.keys()].map(hex => {
     const { r, g, b } = hexToRgb(hex);
     return `${r},${g},${b}`;
   });
-  await fs.writeFile(OUTPUT_FILE, JSON.stringify({ colors, layers }, null, 2));
+  await fs.writeFile(OUTPUT_FILE, JSON.stringify({ colors: rgbColors, layers }, null, 2));
   console.log(`Encoded layers written to ${path.join(__dirname, OUTPUT_FILE)}`);
 };
 

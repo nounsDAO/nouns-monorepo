@@ -2,7 +2,7 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 
-// Format: Color Index (2 bytes), Length (2 bytes), X-Y Coordinate Tuples [1 Byte, 1 Byte].
+// Format: Palette Index, Bounds [Top (Y), Right (X), Bottom (Y), Left (X)] (4 Bytes), [Pixel Length (1 Byte), Color Index (1 Byte)][].
 
 interface ImageData {
   name: string;
@@ -14,34 +14,42 @@ interface EncodedData {
   layers: ImageData[][];
 }
 
-interface ColorCoordinates {
-  colorIndex: number;
-  coordinates: [number, number][];
+interface Bounds {
+  top: number;
+  right: number;
+  bottom: number;
+  left: number;
+}
+
+interface DecodedImage {
+  paletteIndex: number;
+  bounds: Bounds;
+  rects: [length: number, colorIndex: number][];
 }
 
 const OUTPUT_FILE = 'random-noun.svg';
 
-const decodeImage = (image: string) => {
-  const colorCoordinates: ColorCoordinates[] = [];
+const decodeImage = (image: string): DecodedImage => {
+  const data = image.replace(/^0x/, '');
+  const paletteIndex = parseInt(data.substring(0, 2), 16);
+  const bounds = {
+    top: parseInt(data.substring(2, 4), 16),
+    right: parseInt(data.substring(4, 6), 16),
+    bottom: parseInt(data.substring(6, 8), 16),
+    left: parseInt(data.substring(8, 10), 16),
+  }; 
+  const rects = data.substring(10);
 
-  let remaining = image.replace(/^0x/, '');
-  while (remaining.length > 0) {
-    const colorIndex = parseInt(remaining.substring(0, 4), 16);
-    const coordinateLength = parseInt(remaining.substring(4, 8), 16);
-    const coordinates = remaining.substring(8, 8 + coordinateLength * 2);
-
-    colorCoordinates.push({
-      colorIndex,
-      coordinates: coordinates
-        .match(/.{1,4}/g)!
-        .map(set => [
-          parseInt(set.substring(0, 2), 16),
-          parseInt(set.substring(2, 4), 16),
-        ]),
-    });
-    remaining = remaining.substring(8 + coordinateLength * 2);
-  }
-  return colorCoordinates;
+  return {
+    paletteIndex,
+    bounds,
+    rects: rects
+      .match(/.{1,4}/g)!
+      .map(rect => [
+        parseInt(rect.substring(0, 2), 16),
+        parseInt(rect.substring(2, 4), 16),
+      ]),
+  };
 };
 
 const getRandom = (array: ImageData[]) =>
@@ -61,21 +69,34 @@ const getRandomNoun = async () => {
   ];
 
   const svgWithoutEndTag = parts.reduce((result, part) => {
-    const rects: string[] = [];
+    const svgRects: string[] = [];
+    const { bounds, rects } = decodeImage(part.data);
 
-    const color = decodeImage(part.data);
-    color.forEach(color => {
-      const rgbColor = data.colors[color.colorIndex];
-      color.coordinates.forEach(coordinate => {
-        const [x, y] = coordinate;
-        rects.push(
-          `<rect width="10" height="10" x="${x * 10}" y="${
-            y * 10
+    let currentX = bounds.left;
+    let currentY = bounds.top;
+
+    const boundWidth = bounds.right - bounds.left;
+
+    rects.forEach(rect => {
+      const [length, colorIndex] = rect;
+      const rgbColor = data.colors[colorIndex];
+
+      // Do not push rect if transparent
+      if (colorIndex !== 0) {
+        svgRects.push(
+          `<rect width="${length * 10}" height="10" x="${currentX * 10}" y="${
+            currentY * 10
           }" fill="rgb(${rgbColor})" />`,
         );
-      });
+      }
+
+      currentX += length;
+      if (currentX - bounds.left === boundWidth) {
+        currentX = bounds.left;
+        currentY++;
+      }
     });
-    result += rects.join('');
+    result += svgRects.join('');
     return result;
   }, '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="320" height="320">');
 
