@@ -48,7 +48,7 @@ const fetchSources = async () => {
             let res = await fetch(`${generateNounWithOptions}?options=${JSON.stringify(selectedOptions)}`)
             let json = await res.json()
             nounsData.push(json.base64)
-            addNounImg(json.base64, selectedDisplayMode)
+            addNounImg(json.base64, json.dominantColorHSL, selectedDisplayMode)
         }
 
         setButtonLoading(generateButton, false, 'GO!')
