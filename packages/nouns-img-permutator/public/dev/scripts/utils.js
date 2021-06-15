@@ -1,6 +1,6 @@
 
 const fetchLayersAndOptionsURL = 'https://us-central1-nounsdao.cloudfunctions.net/fetchLayersAndOptionsWithSource'
-const generateNounWithOptions = 'https://us-central1-nounsdao.cloudfunctions.net/generateNounUsingOptionsAndSource'
+const generateNounWithOptions = 'https://us-central1-nounsdao.cloudfunctions.net/generateNounUsingOptionsAndSourceAndBG'
 const fetchSourcesURL = 'https://us-central1-nounsdao.cloudfunctions.net/fetchSources'
 
 // object to track selected layer options
@@ -26,8 +26,10 @@ var selectedDisplayMode = DISPLAY_MODE.TILED;
 
 /** 
  * @param {String} data Base64 image data 
+ * @param {[Number]} dominantColorHSL array of values indicating hue, saturation and lightness
+ * @param {DISPLAY_MODE} displayMode Mode to add noun img with 
  */
-function addNounImg(data, displayMode) {    
+function addNounImg(data, dominantColorHSL, displayMode) {    
     
     var nounsDiv = document.getElementById("nouns")
 
@@ -40,6 +42,10 @@ function addNounImg(data, displayMode) {
         img.setAttribute('src', data)
         img.classList.add('noun-img-md')
         img.classList.add('rounded')
+
+        // create hsl css to set as bg color 
+        let hsl = `hsl(${dominantColorHSL[0]},${dominantColorHSL[1]-10}%,${70}%)`
+        img.style.backgroundColor = hsl
 
         colThreeColumn.appendChild(img)
         nounsDiv.insertBefore(colThreeColumn, nounsDiv.children[0])
