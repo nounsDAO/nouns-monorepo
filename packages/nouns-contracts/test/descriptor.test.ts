@@ -2,7 +2,7 @@ import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { ethers } from 'hardhat';
 import { NounsDescriptor } from '../typechain';
-import { colors, layers } from './data/encoded-layers.json';
+import { colors, layers } from './files/encoded-layers.json';
 
 chai.use(solidity);
 const { expect } = chai;
