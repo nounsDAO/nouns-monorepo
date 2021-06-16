@@ -172,57 +172,63 @@ describe('Nouns Governance', () => {
     });
   });
 
-  // describe('getPriorVotes', () => {
-  //   it('reverts if block number >= current block', async () => {
-  //     await expect(call(token, 'getPriorVotes', [a1, 5e10])).rejects.toRevert("revert Comp::getPriorVotes: not yet determined");
-  //   });
+  describe('getPriorVotes', () => {
+    it('reverts if block number >= current block', async () => {
+      await expect(token.getPriorVotes(a1, 5e10)).to.be.revertedWith("ERC721Governance::getPriorVotes: not yet determined");
+    });
 
-  //   it('returns 0 if there are no checkpoints', async () => {
-  //     expect(await call(token, 'getPriorVotes', [a1, 0])).toEqual('0');
-  //   });
+    it('returns 0 if there are no checkpoints', async () => {
+      expect(await token.getPriorVotes(a1, 0)).to.equal(0);
+    });
 
-  //   it('returns the latest block if >= last checkpoint block', async () => {
-  //     const t1 = await send(token, 'delegate', [a1], { from: root });
-  //     await mineBlock();
-  //     await mineBlock();
+    it('returns the latest block if >= last checkpoint block', async () => {
+      await mintNouns(1)
+      const t1 = await (await tokenCallFromDeployer.delegate(a1)).wait()
+      await mineBlock();
+      await mineBlock();
 
-  //     expect(await call(token, 'getPriorVotes', [a1, t1.blockNumber])).toEqual('10000000000000000000000000');
-  //     expect(await call(token, 'getPriorVotes', [a1, t1.blockNumber + 1])).toEqual('10000000000000000000000000');
-  //   });
+      expect(await token.getPriorVotes(a1, t1.blockNumber)).to.equal(1);
+      expect(await token.getPriorVotes(a1, t1.blockNumber+1)).to.equal(1);
+    });
 
-  //   it('returns zero if < first checkpoint block', async () => {
-  //     await mineBlock();
-  //     const t1 = await send(token, 'delegate', [a1], { from: root });
-  //     await mineBlock();
-  //     await mineBlock();
+    it('returns zero if < first checkpoint block', async () => {
+      await mineBlock();
+      await mintNouns(1)
+      const t1 = await (await tokenCallFromDeployer.delegate(a1)).wait()
+      await mineBlock();
+      await mineBlock();
 
-  //     expect(await call(token, 'getPriorVotes', [a1, t1.blockNumber - 1])).toEqual('0');
-  //     expect(await call(token, 'getPriorVotes', [a1, t1.blockNumber + 1])).toEqual('10000000000000000000000000');
-  //   });
+      expect(await token.getPriorVotes(a1, t1.blockNumber-1)).to.equal(0);
+      expect(await token.getPriorVotes(a1, t1.blockNumber+1)).to.equal(1);
+    });
 
-  //   it('generally returns the voting balance at the appropriate checkpoint', async () => {
-  //     const t1 = await send(token, 'delegate', [a1], { from: root });
-  //     await mineBlock();
-  //     await mineBlock();
-  //     const t2 = await send(token, 'transfer', [a2, 10], { from: root });
-  //     await mineBlock();
-  //     await mineBlock();
-  //     const t3 = await send(token, 'transfer', [a2, 10], { from: root });
-  //     await mineBlock();
-  //     await mineBlock();
-  //     const t4 = await send(token, 'transfer', [root, 20], { from: a2 });
-  //     await mineBlock();
-  //     await mineBlock();
+    it('generally returns the voting balance at the appropriate checkpoint', async () => {
+      await mintNouns(3)
+      const t1 = await (await tokenCallFromDeployer.delegate(a1)).wait()
+      await mineBlock();
+      await mineBlock();
 
-  //     expect(await call(token, 'getPriorVotes', [a1, t1.blockNumber - 1])).toEqual('0');
-  //     expect(await call(token, 'getPriorVotes', [a1, t1.blockNumber])).toEqual('10000000000000000000000000');
-  //     expect(await call(token, 'getPriorVotes', [a1, t1.blockNumber + 1])).toEqual('10000000000000000000000000');
-  //     expect(await call(token, 'getPriorVotes', [a1, t2.blockNumber])).toEqual('9999999999999999999999990');
-  //     expect(await call(token, 'getPriorVotes', [a1, t2.blockNumber + 1])).toEqual('9999999999999999999999990');
-  //     expect(await call(token, 'getPriorVotes', [a1, t3.blockNumber])).toEqual('9999999999999999999999980');
-  //     expect(await call(token, 'getPriorVotes', [a1, t3.blockNumber + 1])).toEqual('9999999999999999999999980');
-  //     expect(await call(token, 'getPriorVotes', [a1, t4.blockNumber])).toEqual('10000000000000000000000000');
-  //     expect(await call(token, 'getPriorVotes', [a1, t4.blockNumber + 1])).toEqual('10000000000000000000000000');
-  //   });
-  // });
+      const t2 = await (await tokenCallFromDeployer.transferFrom(deployer, guy, 0)).wait()
+      await mineBlock();
+      await mineBlock();
+
+      const t3 = await (await tokenCallFromDeployer.transferFrom(deployer, guy, 1)).wait()
+      await mineBlock();
+      await mineBlock();
+
+      const t4 = await (await tokenCallFromGuy.transferFrom(guy, deployer, 0)).wait()
+      await mineBlock();
+      await mineBlock();
+
+      expect(await token.getPriorVotes(a1, t1.blockNumber-1)).to.equal(0);
+      expect(await token.getPriorVotes(a1, t1.blockNumber)).to.equal(3);
+      expect(await token.getPriorVotes(a1, t1.blockNumber+1)).to.equal(3);
+      expect(await token.getPriorVotes(a1, t2.blockNumber)).to.equal(2);
+      expect(await token.getPriorVotes(a1, t2.blockNumber+1)).to.equal(2);
+      expect(await token.getPriorVotes(a1, t3.blockNumber)).to.equal(1);
+      expect(await token.getPriorVotes(a1, t3.blockNumber+1)).to.equal(1);
+      expect(await token.getPriorVotes(a1, t4.blockNumber)).to.equal(2);
+      expect(await token.getPriorVotes(a1, t4.blockNumber+1)).to.equal(2);
+    });
+  });
 });
