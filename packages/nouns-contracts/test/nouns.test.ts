@@ -15,6 +15,14 @@ describe('NounsERC721', () => {
     nounsErc721 = await deployNounsErc721();
   });
 
+  it('should set symbol', async () => {
+    expect(await nounsErc721.symbol()).to.eq('NOUN');
+  });
+
+  it('should set name', async () => {
+    expect(await nounsErc721.name()).to.eq('Nouns');
+  });
+
   it('should set base URI', async () => {
     await (await nounsErc721.mint()).wait();
     expect(await nounsErc721.tokenURI(0)).to.eq('ipfs://0');
