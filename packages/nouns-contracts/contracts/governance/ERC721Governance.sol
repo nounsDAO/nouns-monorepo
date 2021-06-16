@@ -58,7 +58,7 @@ abstract contract ERC721Governance is ERC721Enumerable {
 
         uint96 amount = tokenVotes(tokenId);
 
-        _moveDelegates(from, to, amount);
+        _moveDelegates(delegates[from], delegates[to], amount);
     }
 
     /**
