@@ -7,7 +7,7 @@ import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
 abstract contract ERC721Governance is ERC721Enumerable {
 
     /// @notice A record of each accounts delegate
-    mapping (address => address) public delegates;
+    mapping (address => address) private _delegates;
 
     /// @notice A checkpoint for marking number of votes from a given block
     struct Checkpoint {
@@ -37,7 +37,8 @@ abstract contract ERC721Governance is ERC721Enumerable {
     event DelegateVotesChanged(address indexed delegate, uint previousBalance, uint newBalance);
 
     /**
-     * @notice The voting power an address can delegate
+     * @notice The voting power an address can delegate.
+     * Used when calling `_delegate()`
     */
     function delegatorVotes(address delegator) public view returns (uint96) {
         return safe96(balanceOf(delegator), "ERC721Governance::delegatorVotes: amount exceeds 96 bits");
@@ -51,6 +52,16 @@ abstract contract ERC721Governance is ERC721Enumerable {
     }
 
     /**
+     * @notice Overrides the standard `Comp.sol` delegates mapping to return
+     * the delegator's own address if they haven't delegated.
+     * This avoids having to delegate to oneself.
+    */
+    function delegates(address delegator) public view returns (address){
+        address current = _delegates[delegator];
+        return current == address(0) ? delegator : current;
+    }
+
+    /**
      * @notice Adapted from `_transferTokens()` in `Comp.sol`; hooks into `ERC721._transfer` to update delegate votes
     */
     function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal override {
@@ -58,12 +69,8 @@ abstract contract ERC721Governance is ERC721Enumerable {
 
         uint96 amount = tokenVotes(tokenId);
 
-        /// @notice Differs from `transferTokens` so that holders auto-delegate to themselves if they haven't set a delegate.
-        address fromDelegate = delegates[from];
-        address toDelegate = delegates[to];
-        if (fromDelegate == address(0)) fromDelegate = from;
-        if (toDelegate == address(0)) toDelegate = to;
-        _moveDelegates(fromDelegate, toDelegate, amount);
+        /// @notice Differs from `_transferTokens()` to use `delegates` override method to simulate auto-delegation
+        _moveDelegates(delegates(from), delegates(to), amount);
     }
 
     /**
@@ -147,11 +154,11 @@ abstract contract ERC721Governance is ERC721Enumerable {
     }
 
     function _delegate(address delegator, address delegatee) internal {
-        address currentDelegate = delegates[delegator];
 
-        /// @notice differs from `_delegate()` in `Comp.sol` so that auto-delegate to themselves unless explictely chaning here.
-        if (currentDelegate == address(0)) currentDelegate = delegator;
-        delegates[delegator] = delegatee;
+        /// @notice differs from `_delegate()` in `Comp.sol` to use `delegates` override method to simulate auto-delegation
+        address currentDelegate = delegates(delegator);
+
+        _delegates[delegator] = delegatee;
 
         emit DelegateChanged(delegator, currentDelegate, delegatee);
 

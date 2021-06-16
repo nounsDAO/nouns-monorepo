@@ -398,10 +398,10 @@ export class NounsErc721 extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    delegates(arg0: string, overrides?: CallOverrides): Promise<[string]>;
+    delegates(delegator: string, overrides?: CallOverrides): Promise<[string]>;
 
     "delegates(address)"(
-      arg0: string,
+      delegator: string,
       overrides?: CallOverrides
     ): Promise<[string]>;
 
@@ -698,10 +698,10 @@ export class NounsErc721 extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  delegates(arg0: string, overrides?: CallOverrides): Promise<string>;
+  delegates(delegator: string, overrides?: CallOverrides): Promise<string>;
 
   "delegates(address)"(
-    arg0: string,
+    delegator: string,
     overrides?: CallOverrides
   ): Promise<string>;
 
@@ -986,10 +986,10 @@ export class NounsErc721 extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    delegates(arg0: string, overrides?: CallOverrides): Promise<string>;
+    delegates(delegator: string, overrides?: CallOverrides): Promise<string>;
 
     "delegates(address)"(
-      arg0: string,
+      delegator: string,
       overrides?: CallOverrides
     ): Promise<string>;
 
@@ -1336,10 +1336,10 @@ export class NounsErc721 extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    delegates(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+    delegates(delegator: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     "delegates(address)"(
-      arg0: string,
+      delegator: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1647,12 +1647,12 @@ export class NounsErc721 extends Contract {
     ): Promise<PopulatedTransaction>;
 
     delegates(
-      arg0: string,
+      delegator: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     "delegates(address)"(
-      arg0: string,
+      delegator: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

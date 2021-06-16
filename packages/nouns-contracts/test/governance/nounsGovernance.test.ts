@@ -76,7 +76,7 @@ describe('Nouns Governance', () => {
       const signature = await signers.account0._signTypedData(domain, Types, { delegatee, nonce, expiry });
       const {v, r, s } = ethers.utils.splitSignature(signature)
 
-      expect(await token.delegates(signers.account0.address)).to.equal(address(0))
+      expect(await token.delegates(signers.account0.address)).to.equal(signers.account0.address)
 
       const tx = await (await token.delegateBySig(delegatee, nonce, expiry, v, r, s)).wait()
 
