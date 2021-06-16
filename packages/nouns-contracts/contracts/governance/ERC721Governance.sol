@@ -51,14 +51,19 @@ abstract contract ERC721Governance is ERC721Enumerable {
     }
 
     /**
-     * @notice Hooks into `ERC721._transfer` to update delegate votes
+     * @notice Adapted from `_transferTokens()` in `Comp.sol`; hooks into `ERC721._transfer` to update delegate votes
     */
     function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal override {
         super._beforeTokenTransfer(from, to, tokenId);
 
         uint96 amount = tokenVotes(tokenId);
 
-        _moveDelegates(delegates[from], delegates[to], amount);
+        /// @notice Differs from `transferTokens` so that holders auto-delegate to themselves if they haven't set a delegate.
+        address fromDelegate = delegates[from];
+        address toDelegate = delegates[to];
+        if (fromDelegate == address(0)) fromDelegate = from;
+        if (toDelegate == address(0)) toDelegate = to;
+        _moveDelegates(fromDelegate, toDelegate, amount);
     }
 
     /**
@@ -143,6 +148,9 @@ abstract contract ERC721Governance is ERC721Enumerable {
 
     function _delegate(address delegator, address delegatee) internal {
         address currentDelegate = delegates[delegator];
+
+        /// @notice differs from `_delegate()` in `Comp.sol` so that auto-delegate to themselves unless explictely chaning here.
+        if (currentDelegate == address(0)) currentDelegate = delegator;
         delegates[delegator] = delegatee;
 
         emit DelegateChanged(delegator, currentDelegate, delegatee);
