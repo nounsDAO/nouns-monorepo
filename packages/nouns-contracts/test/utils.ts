@@ -38,7 +38,7 @@ export async function deployWeth(deployer?: SignerWithAddress): Promise<Weth> {
 }
 
 export function MintNouns(token: NounsErc721): (amount: number) => Promise<void> {
-  return async function (amount: number): Promise<void>{
+  return async function (amount: number): Promise<void> {
     for (let i=0; i<amount; i++){
       await token.mint();
     }
@@ -47,15 +47,23 @@ export function MintNouns(token: NounsErc721): (amount: number) => Promise<void>
 
 
 
-export async function minerStop(){
+export async function minerStop(): Promise<void> {
   await hardhat.network.provider.send("evm_setAutomine", [false])
   await hardhat.network.provider.send("evm_setIntervalMining", [0])
 }
 
-export async function minerStart(){
+export async function minerStart(): Promise<void> {
   await hardhat.network.provider.send("evm_setAutomine", [true])
 }
 
-export async function mineBlock(){
+export async function mineBlock(): Promise<void> {
   await hardhat.network.provider.send("evm_mine")
+}
+
+export function address(n: number): string {
+  return `0x${n.toString(16).padStart(40, '0')}`;
+}
+
+export async function chainId(): Promise<number> {
+  return parseInt(await hardhat.network.provider.send("eth_chainId"), 16);
 }

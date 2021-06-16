@@ -1,32 +1,24 @@
-// const {
-//   address,
-//   minerStart,
-//   minerStop,
-//   unlockedAccount,
-//   mineBlock
-// } = require('../Utils/Ethereum');
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
+import { ethers } from 'hardhat';
 import { NounsErc721 } from '../../typechain';
-import { deployNounsErc721, getSigners, TestSigners, MintNouns, minerStart, minerStop, mineBlock } from '../utils';
-import hardhat from 'hardhat';
+import {
+  deployNounsErc721,
+  getSigners,
+  TestSigners,
+  MintNouns,
+  minerStart,
+  minerStop,
+  mineBlock,
+  address,
+  chainId
+} from '../utils';
 chai.use(solidity);
 const { expect } = chai;
 
-
-/*
-You can change the mining behavior on runtime using two RPC methods: evm_setAutomine and evm_setIntervalMining. For example, to disable automining:
-
-await network.provider.send("evm_setAutomine", [false])
-And to enable interval mining:
-
-await network.provider.send("evm_setIntervalMining", [5000])
-*/
-
-// const EIP712 = require('../Utils/EIP712');
-
 describe('Nouns Governance', () => {
   let token: NounsErc721;
+  let signers: TestSigners
   let mintNouns: (amount: number) => Promise<void>;
   let tokenCallFromGuy: NounsErc721;
   let tokenCallFromDeployer: NounsErc721;
@@ -34,10 +26,20 @@ describe('Nouns Governance', () => {
   let a1: string;
   let a2: string;
   let deployer: string;
+  const Domain = (name: string, verifyingContract: string, chainId: number) => ({ name, chainId, verifyingContract });
+  let domain: any;
+  const Types = {
+    Delegation: [
+      { name: 'delegatee', type: 'address' },
+      { name: 'nonce', type: 'uint256' },
+      { name: 'expiry', type: 'uint256' }
+    ]
+  };
 
   beforeEach(async () => {
-    const signers: TestSigners = await getSigners();
+    signers = await getSigners();
     token = await deployNounsErc721();
+    domain = Domain('Nouns', token.address, await chainId())
     mintNouns = MintNouns(token);
     tokenCallFromGuy = token.connect(signers.account0);
     tokenCallFromDeployer = token;
@@ -48,42 +50,41 @@ describe('Nouns Governance', () => {
   });
 
 
-  // describe('delegateBySig', () => {
-  //   const Domain = (token) => ({ name, chainId, verifyingContract: token._address });
-  //   const Types = {
-  //     Delegation: [
-  //       { name: 'delegatee', type: 'address' },
-  //       { name: 'nonce', type: 'uint256' },
-  //       { name: 'expiry', type: 'uint256' }
-  //     ]
-  //   };
+  describe('delegateBySig', () => {
+    it('reverts if the signatory is invalid', async () => {
+      const delegatee = signers.account1.address, nonce = 0, expiry = 0;
+      const badhex = "0xbad0000000000000000000000000000000000000000000000000000000000000";
+      await expect(token.delegateBySig(delegatee, nonce, expiry, 0, badhex, badhex)).to.be.revertedWith("ERC721Governance::delegateBySig: invalid signature");
+    });
 
-  //   it('reverts if the signatory is invalid', async () => {
-  //     const delegatee = root, nonce = 0, expiry = 0;
-  //     await expect(send(token, 'delegateBySig', [delegatee, nonce, expiry, 0, '0xbad', '0xbad'])).rejects.toRevert("revert Comp::delegateBySig: invalid signature");
-  //   });
+    it('reverts if the nonce is bad ', async () => {
+      const delegatee = signers.account1.address, nonce = 1, expiry = 0;
+      const signature = await signers.account0._signTypedData(domain, Types, { delegatee, nonce, expiry });
+      const {v, r, s } = ethers.utils.splitSignature(signature)
+      await expect(token.delegateBySig(delegatee, nonce, expiry, v, r, s)).to.be.revertedWith("ERC721Governance::delegateBySig: invalid nonce");
+    });
 
-  //   it('reverts if the nonce is bad ', async () => {
-  //     const delegatee = root, nonce = 1, expiry = 0;
-  //     const { v, r, s } = EIP712.sign(Domain(token), 'Delegation', { delegatee, nonce, expiry }, Types, unlockedAccount(a1).secretKey);
-  //     await expect(send(token, 'delegateBySig', [delegatee, nonce, expiry, v, r, s])).rejects.toRevert("revert Comp::delegateBySig: invalid nonce");
-  //   });
+    it('reverts if the signature has expired', async () => {
+      const delegatee = signers.account1.address, nonce = 0, expiry = 0;
+      const signature = await signers.account0._signTypedData(domain, Types, { delegatee, nonce, expiry });
+      const {v, r, s } = ethers.utils.splitSignature(signature)
+      await expect(token.delegateBySig(delegatee, nonce, expiry, v, r, s)).to.be.revertedWith("ERC721Governance::delegateBySig: signature expired");
+    });
 
-  //   it('reverts if the signature has expired', async () => {
-  //     const delegatee = root, nonce = 0, expiry = 0;
-  //     const { v, r, s } = EIP712.sign(Domain(token), 'Delegation', { delegatee, nonce, expiry }, Types, unlockedAccount(a1).secretKey);
-  //     await expect(send(token, 'delegateBySig', [delegatee, nonce, expiry, v, r, s])).rejects.toRevert("revert Comp::delegateBySig: signature expired");
-  //   });
+    it('delegates on behalf of the signatory', async () => {
+      const delegatee = signers.account1.address, nonce = 0, expiry = 10e9;
+      const signature = await signers.account0._signTypedData(domain, Types, { delegatee, nonce, expiry });
+      const {v, r, s } = ethers.utils.splitSignature(signature)
 
-  //   it('delegates on behalf of the signatory', async () => {
-  //     const delegatee = root, nonce = 0, expiry = 10e9;
-  //     const { v, r, s } = EIP712.sign(Domain(token), 'Delegation', { delegatee, nonce, expiry }, Types, unlockedAccount(a1).secretKey);
-  //     expect(await call(token, 'delegates', [a1])).toEqual(address(0));
-  //     const tx = await send(token, 'delegateBySig', [delegatee, nonce, expiry, v, r, s]);
-  //     expect(tx.gasUsed < 80000);
-  //     expect(await call(token, 'delegates', [a1])).toEqual(root);
-  //   });
-  // });
+      expect(await token.delegates(signers.account0.address)).to.equal(address(0))
+
+      const tx = await (await token.delegateBySig(delegatee, nonce, expiry, v, r, s)).wait()
+
+      expect(tx.gasUsed.toNumber() < 80000);
+      expect(await token.delegates(signers.account0.address)).to.equal(signers.account1.address)
+
+    });
+  });
 
   describe('numCheckpoints', () => {
     it('returns the number of checkpoints for a delegate', async () => {
