@@ -23,7 +23,7 @@ describe('NounsERC721', () => {
   it('should allow owner to mint a noun', async () => {
     const receipt = await (await nounsErc721.mint()).wait();
     expect(await nounsErc721.ownerOf(0)).to.eq(signers.deployer.address);
-    expect(receipt.events?.[1].event).to.eq('NounCreated');
+    expect(receipt.events?.[2].event).to.eq('NounCreated');
   });
 
   it('should allow owner to burn a noun', async () => {
