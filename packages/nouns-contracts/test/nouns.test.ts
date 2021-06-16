@@ -15,11 +15,6 @@ describe('NounsERC721', () => {
     nounsErc721 = await deployNounsErc721();
   });
 
-  it('should set base URI', async () => {
-    await (await nounsErc721.mint()).wait();
-    expect(await nounsErc721.tokenURI(0)).to.eq('ipfs://0');
-  });
-
   it('should allow owner to mint a noun', async () => {
     const receipt = await (await nounsErc721.mint()).wait();
     expect(await nounsErc721.ownerOf(0)).to.eq(signers.deployer.address);
