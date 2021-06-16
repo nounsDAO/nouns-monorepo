@@ -24,6 +24,7 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "burn(uint256)": FunctionFragment;
+    "descriptor()": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "mint()": FunctionFragment;
@@ -33,6 +34,7 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     "renounceOwnership()": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
+    "setDescriptor(address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
     "tokenByIndex(uint256)": FunctionFragment;
@@ -49,6 +51,10 @@ interface NounsErc721Interface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
   encodeFunctionData(functionFragment: "burn", values: [BigNumberish]): string;
+  encodeFunctionData(
+    functionFragment: "descriptor",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "getApproved",
     values: [BigNumberish]
@@ -75,6 +81,10 @@ interface NounsErc721Interface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "setApprovalForAll",
     values: [string, boolean]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setDescriptor",
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
@@ -109,6 +119,7 @@ interface NounsErc721Interface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "descriptor", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getApproved",
     data: BytesLike
@@ -131,6 +142,10 @@ interface NounsErc721Interface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "setApprovalForAll",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setDescriptor",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -163,6 +178,7 @@ interface NounsErc721Interface extends ethers.utils.Interface {
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
+    "DescriptorUpdated(address)": EventFragment;
     "NounBurned(uint256)": EventFragment;
     "NounCreated(uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
@@ -171,6 +187,7 @@ interface NounsErc721Interface extends ethers.utils.Interface {
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "DescriptorUpdated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NounBurned"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NounCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
@@ -249,6 +266,10 @@ export class NounsErc721 extends Contract {
       nounId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    descriptor(overrides?: CallOverrides): Promise<[string]>;
+
+    "descriptor()"(overrides?: CallOverrides): Promise<[string]>;
 
     getApproved(
       tokenId: BigNumberish,
@@ -330,6 +351,16 @@ export class NounsErc721 extends Contract {
     "setApprovalForAll(address,bool)"(
       operator: string,
       approved: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setDescriptor(
+      _descriptor: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "setDescriptor(address)"(
+      _descriptor: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -437,6 +468,10 @@ export class NounsErc721 extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  descriptor(overrides?: CallOverrides): Promise<string>;
+
+  "descriptor()"(overrides?: CallOverrides): Promise<string>;
+
   getApproved(
     tokenId: BigNumberish,
     overrides?: CallOverrides
@@ -514,6 +549,16 @@ export class NounsErc721 extends Contract {
   "setApprovalForAll(address,bool)"(
     operator: string,
     approved: boolean,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setDescriptor(
+    _descriptor: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "setDescriptor(address)"(
+    _descriptor: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -615,6 +660,10 @@ export class NounsErc721 extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    descriptor(overrides?: CallOverrides): Promise<string>;
+
+    "descriptor()"(overrides?: CallOverrides): Promise<string>;
+
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -684,6 +733,16 @@ export class NounsErc721 extends Contract {
     "setApprovalForAll(address,bool)"(
       operator: string,
       approved: boolean,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setDescriptor(
+      _descriptor: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "setDescriptor(address)"(
+      _descriptor: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -778,6 +837,10 @@ export class NounsErc721 extends Contract {
       { owner: string; operator: string; approved: boolean }
     >;
 
+    DescriptorUpdated(
+      descriptor: null
+    ): TypedEventFilter<[string], { descriptor: string }>;
+
     NounBurned(
       tokenId: BigNumberish | null
     ): TypedEventFilter<[BigNumber], { tokenId: BigNumber }>;
@@ -833,6 +896,10 @@ export class NounsErc721 extends Contract {
       nounId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    descriptor(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "descriptor()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     getApproved(
       tokenId: BigNumberish,
@@ -914,6 +981,16 @@ export class NounsErc721 extends Contract {
     "setApprovalForAll(address,bool)"(
       operator: string,
       approved: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setDescriptor(
+      _descriptor: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "setDescriptor(address)"(
+      _descriptor: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1025,6 +1102,10 @@ export class NounsErc721 extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    descriptor(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "descriptor()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
@@ -1105,6 +1186,16 @@ export class NounsErc721 extends Contract {
     "setApprovalForAll(address,bool)"(
       operator: string,
       approved: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setDescriptor(
+      _descriptor: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "setDescriptor(address)"(
+      _descriptor: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

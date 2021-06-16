@@ -18,34 +18,21 @@ const toPaddedHex = (c: number, pad = 2) => {
 };
 
 const rgbToHex = (r: number, g: number, b: number) => {
-  return `#${toPaddedHex(r)}${toPaddedHex(g)}${toPaddedHex(b)}`;
-};
-
-const hexToRgb = (hex: string) => {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  if (!result) {
-    throw new Error(`Invalid Hex Color: ${hex}`);
-  }
-  return {
-    r: parseInt(result[1], 16),
-    g: parseInt(result[2], 16),
-    b: parseInt(result[3], 16),
-  };
+  return `0x${toPaddedHex(r)}${toPaddedHex(g)}${toPaddedHex(b)}`;
 };
 
 const getFolder = (i: number) => `../assets/layer-${i}`;
 
-const colors: Map<string, number> = new Map([['#123456', 0]]);
+const colors: Map<string, number> = new Map([['0x123456', 0]]);
 
-const getEncodedImage = async (
-  folder: string,
-  file: string,
-) => {
+const getEncodedImage = async (folder: string, file: string) => {
   const image = await readPngFile(path.join(folder, file));
 
   const bounds = { topY: 0, bottomY: 0, leftX: 0, rightX: 0 };
-  const lineBounds: { [number: number]: { leftX: number, rightX: number } } = {};
-  const lines: { [number: number]: [length: number, colorIndex: number][] } = {};
+  const lineBounds: { [number: number]: { leftX: number; rightX: number } } =
+    {};
+  const lines: { [number: number]: [length: number, colorIndex: number][] } =
+    {};
   for (let y = 0; y < image.height; y++) {
     for (let x = 0; x < image.width; x++) {
       const { r, g, b, a } = image.rgbaAt(x, y);
@@ -67,7 +54,7 @@ const getEncodedImage = async (
       bounds.topY = y - 1; // shift top bound to `y - 1`
     }
     if (bounds.topY !== 0) {
-      if (lines[y][0][0] === 32 && lines[y][0][1] === 0 || y === 31) {
+      if ((lines[y][0][0] === 32 && lines[y][0][1] === 0) || y === 31) {
         if (bounds.bottomY === 0) {
           bounds.bottomY = y; // Set bottom bound to `y`
         }
@@ -91,29 +78,34 @@ const getEncodedImage = async (
   bounds.leftX = Math.min(...Object.values(lineBounds).map(b => b.leftX));
   bounds.rightX = Math.max(...Object.values(lineBounds).map(b => b.rightX));
 
-  const initial = `0x00${toPaddedHex(bounds.topY, 2)}${toPaddedHex(bounds.rightX, 2)}${toPaddedHex(bounds.bottomY, 2)}${toPaddedHex(bounds.leftX, 2)}`;
+  const initial = `0x00${toPaddedHex(bounds.topY, 2)}${toPaddedHex(
+    bounds.rightX,
+    2,
+  )}${toPaddedHex(bounds.bottomY, 2)}${toPaddedHex(bounds.leftX, 2)}`;
   const encoded = Object.values(lines).reduce((result, line) => {
-    const lineBuffer = Buffer.from(line.flatMap(([length, colorIndex], i) => {
-      if (i === 0 && i === line.length - 1) {
-        return [bounds.rightX - bounds.leftX, colorIndex];
-      }
+    const lineBuffer = Buffer.from(
+      line.flatMap(([length, colorIndex], i) => {
+        if (i === 0 && i === line.length - 1) {
+          return [bounds.rightX - bounds.leftX, colorIndex];
+        }
 
-      if (i === 0) {
-        if (length > bounds.leftX) {
-          return [length - bounds.leftX, colorIndex];
-        } else if (length === bounds.leftX) {
-          return [];
+        if (i === 0) {
+          if (length > bounds.leftX) {
+            return [length - bounds.leftX, colorIndex];
+          } else if (length === bounds.leftX) {
+            return [];
+          }
         }
-      }
-      if (i === line.length - 1) {
-        if (length > 32 - bounds.rightX) {
-          return [length - (32 - bounds.rightX), colorIndex];
-        } else if (length === 32 - bounds.rightX) {
-          return [];
+        if (i === line.length - 1) {
+          if (length > 32 - bounds.rightX) {
+            return [length - (32 - bounds.rightX), colorIndex];
+          } else if (length === 32 - bounds.rightX) {
+            return [];
+          }
         }
-      }
-      return [length, colorIndex];
-    }));
+        return [length, colorIndex];
+      }),
+    );
 
     result += lineBuffer.toString('hex');
     return result;
@@ -122,9 +114,7 @@ const getEncodedImage = async (
   return encoded;
 };
 
-const getAllEncodedImagesInFolder = async (
-  folder: string,
-) => {
+const getAllEncodedImagesInFolder = async (folder: string) => {
   const images: ImageData[] = [];
 
   const files = await fs.readdir(folder);
@@ -149,11 +139,10 @@ const getEncodedImagesForAllLayers = async () => {
 
 const writeEncodedImagesToFile = async () => {
   const layers = await getEncodedImagesForAllLayers();
-  const rgbColors = [...colors.keys()].map(hex => {
-    const { r, g, b } = hexToRgb(hex);
-    return `${r},${g},${b}`;
-  });
-  await fs.writeFile(OUTPUT_FILE, JSON.stringify({ colors: rgbColors, layers }, null, 2));
+  await fs.writeFile(
+    OUTPUT_FILE,
+    JSON.stringify({ colors: [...colors.keys()], layers }, null, 2),
+  );
   console.log(`Encoded layers written to ${path.join(__dirname, OUTPUT_FILE)}`);
 };
 

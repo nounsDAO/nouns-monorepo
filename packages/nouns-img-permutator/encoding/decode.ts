@@ -37,7 +37,7 @@ const decodeImage = (image: string): DecodedImage => {
     right: parseInt(data.substring(4, 6), 16),
     bottom: parseInt(data.substring(6, 8), 16),
     left: parseInt(data.substring(8, 10), 16),
-  }; 
+  };
   const rects = data.substring(10);
 
   return {
