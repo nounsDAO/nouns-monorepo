@@ -22,7 +22,7 @@ a:link, a:visited, a:hover, a:active {
 }
 
 .side-column {
-    background-color: #CD4A39;
+    background-color: rgb(191, 176, 166);
 }
 
 /* TOP-LEFT ICON */
@@ -80,7 +80,6 @@ a:link, a:visited, a:hover, a:active {
     margin: 10px 20px;
     border-radius: 25px;
     background-color: #D99DEE;
-    font-family: 'londrina_solid';
 }
 
 /* LEARN */
@@ -92,6 +91,6 @@ a:link, a:visited, a:hover, a:active {
 /* NOUNS GRID */
 
 #nouns-grid {
-    background-color: firebrick;
+    background-color: rgb(191, 176, 166);
 }
 
