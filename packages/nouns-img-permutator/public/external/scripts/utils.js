@@ -153,11 +153,14 @@ function displayModeChanged(element) {
 function addButtonDropdownWithOptions(layer) {
     
     let div = document.getElementById('layer-buttons')
+
+    let column = document.createElement('div')
+    column.classList.add('col-lg-4')
     
     let btnGroup = document.createElement('div')
     btnGroup.classList.add('btn-group')
-    btnGroup.id = 'layers-dropdown-buttons'
-    div.appendChild(btnGroup)
+    btnGroup.id = 'layers-dropdown-buttons'    
+    btnGroup.style.width = '100%'
 
     // button
     let button = document.createElement('button')
@@ -170,6 +173,7 @@ function addButtonDropdownWithOptions(layer) {
     button.setAttribute('aria-haspopup', 'true')
     button.setAttribute('aria-expanded', 'false')
     button.textContent = layer.name
+    button.style.width = '100%'
 
     let dropDownMenu = document.createElement('div')
     dropDownMenu.classList.add('dropdown-menu')
@@ -203,6 +207,8 @@ function addButtonDropdownWithOptions(layer) {
 
     btnGroup.appendChild(button)
     btnGroup.appendChild(dropDownMenu)
+    column.appendChild(btnGroup)
+    div.appendChild(column)
 
 }
 
@@ -212,17 +218,20 @@ function addButtonDropdownWithOptions(layer) {
  */
  function addSourcesDropdownButton(data) {
     let div = document.getElementById('main-controls')
+
+    let column = document.createElement('div')
+    column.classList.add('col-lg-4')
+    column.classList.add('col-md-12')
     
     let btnGroup = document.createElement('div')
     btnGroup.classList.add('btn-group')
-    btnGroup.id = 'layers-dropdown-buttons'
-    div.appendChild(btnGroup)
+    btnGroup.id = 'layers-dropdown-buttons'    
+    btnGroup.style.width = "100%";
 
     // button
     let button = document.createElement('button')
     button.id = 'source-button'
     button.type = 'button'
-    button.classList.add('layer-btn')
     button.classList.add('btn')
     button.classList.add('btn-primary')
     button.classList.add('dropdown-toggle')
@@ -230,6 +239,7 @@ function addButtonDropdownWithOptions(layer) {
     button.setAttribute('aria-haspopup', 'true')
     button.setAttribute('aria-expanded', 'false')
     button.textContent = data[0]
+    button.style.width = "100%";
 
     let dropDownMenu = document.createElement('div')
     dropDownMenu.classList.add('dropdown-menu')
@@ -247,7 +257,8 @@ function addButtonDropdownWithOptions(layer) {
 
     btnGroup.appendChild(button)
     btnGroup.appendChild(dropDownMenu)
-
+    column.appendChild(btnGroup)
+    div.appendChild(column)
 }
 
 /**

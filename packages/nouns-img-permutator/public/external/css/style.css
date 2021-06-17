@@ -3,23 +3,26 @@
 .row {
     margin: 50px 20px;
 }
+.btn {
+    height: 50px;
+}
+#main-controls .col-md-12 {
+    margin: 10px 0px;
+}
 #generate-noun-button {
     margin-right: 50px;
-}
-#nouns {
-    text-align: center;
-}
-#nouns img {
-    margin: 10px;
-}
-#layer-buttons {
-    margin-top: 50px;
 }
 .layer-btn {
     margin: 10px 10px;
 }
 /* NOUNS IMG */
 
+#nouns {
+    text-align: center;
+}
+#nouns img {
+    margin: 10px;
+}
 .noun-img {
     image-rendering: pixelated;
     width: 100%;
