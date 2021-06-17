@@ -1,6 +1,6 @@
 
 const fetchLayersAndOptionsURL = 'https://us-central1-nounsdao.cloudfunctions.net/fetchLayersAndOptionsWithSource'
-const generateNounWithOptions = 'https://us-central1-nounsdao.cloudfunctions.net/generateNounUsingOptionsAndSource'
+const generateNounWithOptions = 'https://us-central1-nounsdao.cloudfunctions.net/generateNounUsingOptionsAndSourceAndBG'
 const fetchSourcesURL = 'https://us-central1-nounsdao.cloudfunctions.net/fetchSources'
 
 // object to track selected layer options
@@ -9,7 +9,7 @@ var selectedOptions = {
     layers: {}
 }
 
-// hold nouns base64 data strings
+// hold nouns base64 data strings { base64: base64String, dominantColorHSL: [H,S,L]}
 var nounsData = []
 
 // tracking display modes
@@ -26,20 +26,28 @@ var selectedDisplayMode = DISPLAY_MODE.TILED;
 
 /** 
  * @param {String} data Base64 image data 
+ * @param {[Number]} dominantColorHSL array of values indicating hue, saturation and lightness
+ * @param {DISPLAY_MODE} displayMode Mode to add noun img with 
  */
-function addNounImg(data, displayMode) {    
-    
+function addNounImg(data, dominantColorHSL, displayMode) {    
+
     var nounsDiv = document.getElementById("nouns")
 
     if (displayMode == DISPLAY_MODE.TILED) {
         
         let colThreeColumn = document.createElement('div')
-        colThreeColumn.classList.add('col-sm-2')
+        colThreeColumn.className = ''
+        colThreeColumn.classList.add('col-lg-2')
+        colThreeColumn.classList.add('col-md-4')        
 
         let img = document.createElement('img')
         img.setAttribute('src', data)
-        img.classList.add('noun-img-md')
+        img.classList.add('noun-img')
         img.classList.add('rounded')
+
+        // create hsl css to set as bg color 
+        let hsl = `hsl(${dominantColorHSL[0]},${dominantColorHSL[1]-10}%,${70}%)`
+        img.style.backgroundColor = hsl
 
         colThreeColumn.appendChild(img)
         nounsDiv.insertBefore(colThreeColumn, nounsDiv.children[0])
@@ -63,6 +71,12 @@ function addNounImg(data, displayMode) {
         imgLg.setAttribute('src', data)
         imgLg.classList.add('noun-img-lg')
         imgLg.classList.add('rounded')
+
+        // create hsl css to set as bg color 
+        let hsl = `hsl(${dominantColorHSL[0]},${dominantColorHSL[1]-10}%,${70}%)`
+        imgSm.style.backgroundColor = hsl
+        imgMd.style.backgroundColor = hsl
+        imgLg.style.backgroundColor = hsl
     
         colThreeColumn.appendChild(imgSm)
         colThreeColumn.appendChild(imgMd)    
@@ -83,12 +97,13 @@ function displayModeChanged(element) {
     if (element.id == 'scaled-display-radio-btn') {
         selectedDisplayMode = DISPLAY_MODE.SCALED
         nounsData.forEach(nounData => {
-            addNounImg(nounData, DISPLAY_MODE.SCALED)
+            console.log(nounsData)
+            addNounImg(nounData.base64, nounData.dominantColorHSL, DISPLAY_MODE.SCALED)
         })
     } else {
         selectedDisplayMode = DISPLAY_MODE.TILED
         nounsData.forEach(nounData => {
-            addNounImg(nounData, DISPLAY_MODE.TILED)
+            addNounImg(nounData.base64, nounData.dominantColorHSL, DISPLAY_MODE.TILED)
         })
     }
 }
@@ -138,11 +153,14 @@ function displayModeChanged(element) {
 function addButtonDropdownWithOptions(layer) {
     
     let div = document.getElementById('layer-buttons')
+
+    let column = document.createElement('div')
+    column.classList.add('col-lg-4')
     
     let btnGroup = document.createElement('div')
     btnGroup.classList.add('btn-group')
-    btnGroup.id = 'layers-dropdown-buttons'
-    div.appendChild(btnGroup)
+    btnGroup.id = 'layers-dropdown-buttons'    
+    btnGroup.style.width = '100%'
 
     // button
     let button = document.createElement('button')
@@ -155,6 +173,7 @@ function addButtonDropdownWithOptions(layer) {
     button.setAttribute('aria-haspopup', 'true')
     button.setAttribute('aria-expanded', 'false')
     button.textContent = layer.name
+    button.style.width = '100%'
 
     let dropDownMenu = document.createElement('div')
     dropDownMenu.classList.add('dropdown-menu')
@@ -188,6 +207,8 @@ function addButtonDropdownWithOptions(layer) {
 
     btnGroup.appendChild(button)
     btnGroup.appendChild(dropDownMenu)
+    column.appendChild(btnGroup)
+    div.appendChild(column)
 
 }
 
@@ -197,17 +218,20 @@ function addButtonDropdownWithOptions(layer) {
  */
  function addSourcesDropdownButton(data) {
     let div = document.getElementById('main-controls')
+
+    let column = document.createElement('div')
+    column.classList.add('col-lg-4')
+    column.classList.add('col-md-12')
     
     let btnGroup = document.createElement('div')
     btnGroup.classList.add('btn-group')
-    btnGroup.id = 'layers-dropdown-buttons'
-    div.appendChild(btnGroup)
+    btnGroup.id = 'layers-dropdown-buttons'    
+    btnGroup.style.width = "100%";
 
     // button
     let button = document.createElement('button')
     button.id = 'source-button'
     button.type = 'button'
-    button.classList.add('layer-btn')
     button.classList.add('btn')
     button.classList.add('btn-primary')
     button.classList.add('dropdown-toggle')
@@ -215,6 +239,7 @@ function addButtonDropdownWithOptions(layer) {
     button.setAttribute('aria-haspopup', 'true')
     button.setAttribute('aria-expanded', 'false')
     button.textContent = data[0]
+    button.style.width = "100%";
 
     let dropDownMenu = document.createElement('div')
     dropDownMenu.classList.add('dropdown-menu')
@@ -232,7 +257,8 @@ function addButtonDropdownWithOptions(layer) {
 
     btnGroup.appendChild(button)
     btnGroup.appendChild(dropDownMenu)
-
+    column.appendChild(btnGroup)
+    div.appendChild(column)
 }
 
 /**
