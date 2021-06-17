@@ -32,10 +32,50 @@ describe('NounsDescriptor', () => {
     return nounsDescriptor.deployed();
   }
 
+  const longestLengths = [0, 0, 0, 0, 0];
+  const longestIndices = [0, 0, 0, 0, 0];
+
   beforeEach(async () => {
     nounsDescriptor = await deploy();
 
     const [bodies, accessories, heads, glasses, arms] = layers;
+
+    for (const [i, item] of bodies.entries()) {
+      if (item.data.length > longestLengths[0]) {
+        longestLengths[0] = item.data.length;
+        longestIndices[0] = i;
+      }
+    }
+    for (const [i, item] of accessories.entries()) {
+      if (item.data.length > longestLengths[1]) {
+        longestLengths[1] = item.data.length;
+        longestIndices[1] = i;
+      }
+    }
+    for (const [i, item] of heads.entries()) {
+      if (item.data.length > longestLengths[2]) {
+        longestLengths[2] = item.data.length;
+        longestIndices[2] = i;
+      }
+    }
+    for (const [i, item] of glasses.entries()) {
+      if (item.data.length > longestLengths[3]) {
+        longestLengths[3] = item.data.length;
+        longestIndices[3] = i;
+      }
+    }
+    for (const [i, item] of arms.entries()) {
+      if (item.data.length > longestLengths[4]) {
+        longestLengths[4] = item.data.length;
+        longestIndices[4] = i;
+      }
+    }
+
+    console.log(`Longest body: #${longestIndices[0]} (${longestLengths[0]})`);
+    console.log(`Longest accessory: #${longestIndices[1]} (${longestLengths[1]})`);
+    console.log(`Longest head: #${longestIndices[2]} (${longestLengths[2]})`);
+    console.log(`Longest glasses: #${longestIndices[3]} (${longestLengths[3]})`);
+    console.log(`Longest arms: #${longestIndices[4]} (${longestLengths[4]})`);
 
     await Promise.all([
       nounsDescriptor.addManyColorsToPalette(
@@ -59,7 +99,13 @@ describe('NounsDescriptor', () => {
   it('should generate valid token uri metadata', async () => {
     const tokenUri = await nounsDescriptor.tokenURI(
       0,
-      [10, 0, 0, 0, 0],
+      [
+        longestIndices[0], 
+        longestIndices[1], 
+        longestIndices[2], 
+        longestIndices[3], 
+        longestIndices[4]
+      ],
     );
     expect(tokenUri).to.not.be.undefined;
   });
