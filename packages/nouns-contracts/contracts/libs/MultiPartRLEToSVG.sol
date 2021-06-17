@@ -58,6 +58,13 @@ library MultiPartRLEToSVG {
         SVGParams memory params,
         mapping(uint8 => bytes3[]) storage palettes
     ) private view returns (string memory svg) {
+        string[33] memory lookup = [
+            "0", "10", "20", "30", "40", "50", "60", "70", 
+            "80", "90", "100", "110", "120", "130", "140", "150", 
+            "160", "170", "180", "190", "200", "210", "220", "230", 
+            "240", "250", "260", "270", "280", "290", "300", "310",
+            "320"
+        ];
         string memory rects;
         for (uint8 p = 0; p < params.parts.length; p++) {
             DecodedImage memory image = decodeRLEImage(params.parts[p]);
@@ -65,26 +72,42 @@ library MultiPartRLEToSVG {
             uint256 currentX = image.bounds.left;
             uint256 currentY = image.bounds.top;
             uint256 boundWidth = image.bounds.right - image.bounds.left;
+            uint256 cursor = 0;
+            string[16] memory buffer;
 
             for (uint256 i = 0; i < image.rects.length; i++) {
                 Rect memory rect = image.rects[i];
                 if (rect.colorIndex != 0) {
-                    bytes3 color = palette[rect.colorIndex];
-
-                    string memory width = (rect.length * 10).toString();
-                    string memory x = (currentX * 10).toString();
-                    string memory y = (currentY * 10).toString();
-                    string memory r = uint8(color[0]).toString();
-                    string memory g = uint8(color[1]).toString();
-                    string memory b = uint8(color[2]).toString();
+                    string memory color = "#FF0000"; // TODO: pull this from palette
+                    string memory width = lookup[rect.length];
+                    string memory x = lookup[currentX];
+                    string memory y = lookup[currentY];
+                    
 
                     // prettier-ignore
-                    rects = string(
-                        abi.encodePacked(
-                            rects,
-                            '<rect width="', width, '" height="10" x="', x, '" y="', y, '" fill="rgb(', r, ',', g, ',', b, ')" />'
-                        )
-                    );
+                    if (cursor >= 16) {
+                        rects = string(
+                            abi.encodePacked(
+                                rects,
+                                string(abi.encodePacked(
+                                    '<rect width="', buffer[0], '" height="10" x="', buffer[1], '" y="', buffer[2], '" fill="', buffer[3], ')" />',
+                                    '<rect width="', buffer[4], '" height="10" x="', buffer[5], '" y="', buffer[6], '" fill="', buffer[7], ')" />'
+                                )),
+                                string(abi.encodePacked(
+                                    '<rect width="', buffer[8], '" height="10" x="', buffer[9], '" y="', buffer[10], '" fill="', buffer[11], ')" />',
+                                    '<rect width="', buffer[12], '" height="10" x="', buffer[13], '" y="', buffer[14], '" fill="', buffer[15], ')" />'
+                                ))
+                            )
+                        );
+                        cursor = 0;
+                    }
+
+                    buffer[cursor] = width;
+                    buffer[cursor + 1] = x;
+                    buffer[cursor + 2] = y;
+                    buffer[cursor + 3] = color;
+
+                    cursor += 4;
                 }
 
                 currentX += rect.length;
@@ -93,6 +116,8 @@ library MultiPartRLEToSVG {
                     currentY++;
                 }
             }
+
+            // TODO: Write out anything left in the buffer
         }
         return rects;
     }
@@ -113,14 +138,14 @@ library MultiPartRLEToSVG {
             left: uint8(image[4])
         });
 
-        uint256 counter;
+        uint256 cursor;
         Rect[] memory rects = new Rect[]((image.length - 5) / 2);
         for (uint256 i = 5; i < image.length; i += 2) {
-            rects[counter] = Rect({
+            rects[cursor] = Rect({
                 length: uint8(image[i]),
                 colorIndex: uint8(image[i + 1])
             });
-            counter++;
+            cursor++;
         }
         // prettier-ignore
         return DecodedImage({
