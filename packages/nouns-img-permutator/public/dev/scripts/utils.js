@@ -36,11 +36,13 @@ function addNounImg(data, dominantColorHSL, displayMode) {
     if (displayMode == DISPLAY_MODE.TILED) {
         
         let colThreeColumn = document.createElement('div')
-        colThreeColumn.classList.add('col-sm-2')
+        colThreeColumn.className = ''
+        colThreeColumn.classList.add('col-lg-2')
+        colThreeColumn.classList.add('col-md-4')        
 
         let img = document.createElement('img')
         img.setAttribute('src', data)
-        img.classList.add('noun-img-md')
+        img.classList.add('noun-img')
         img.classList.add('rounded')
 
         // create hsl css to set as bg color 

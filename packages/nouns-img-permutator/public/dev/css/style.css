@@ -20,6 +20,12 @@
 }
 /* NOUNS IMG */
 
+.noun-img {
+    image-rendering: pixelated;
+    width: 100%;
+    height: auto;
+    margin: 10px;
+}
 .noun-img-sm {
     image-rendering: pixelated;
     width: 50px;
