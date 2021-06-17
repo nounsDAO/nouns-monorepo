@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Londrina+Solid:wght@400;900&display=swap');
+
+body {
+    font-family: 'helvetica';
+}
+.lond-font-reg {
+    font-family: 'Londrina Solid';
+}
+.lond-font-black {
+    font-family: 'Londrina Solid';
+    font-weight: bold;
+}
+.gray-font {
+    color: #8B9094;
+}
+.black-font {
+    color: #000000;
+}
+a:link, a:visited, a:hover, a:active {
+    font-weight: bold;
+    color: #000000;
+}
+
+.side-column {
+    background-color: #CD4A39;
+}
+
+/* TOP-LEFT ICON */
+
+#icon-container {
+    padding: 20px 0px;
+    height: 20%;
+    background-color: white;
+}
+#icon-container img {
+    height: 100%;
+    width: auto;
+}
+
+/* GOVERNANCE */
+
+#governance-container {  
+    padding: 10px 0px; 
+    background-color: #F7F7F8;
+    height: 80%;
+}
+
+.governance-item-row {
+    height: 100px;
+    margin-top: 20px;
+    font-size: large;
+}
+#governance-container img.noun {
+    image-rendering: pixelated;
+    width: 80px;
+}
+
+/* AUCTION */
+
+#auction-column {
+    background-color: #DFE2E6;
+}
+
+#current-auction {
+    height: 500px;
+}
+#current-auction img {
+    image-rendering: pixelated;
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+}
+.current-auction-boxes {
+    height: 200px;
+    background-color: #f4f4f4;
+}
+.bid-btn {
+    width: 60%;
+    font-size: xx-large;
+    margin: 10px 20px;
+    border-radius: 25px;
+    background-color: #D99DEE;
+    font-family: 'londrina_solid';
+}
+
+/* LEARN */
+
+#learn {
+    height: 100%;    
+}
+
+/* NOUNS GRID */
+
+#nouns-grid {
+    background-color: firebrick;
+}
+
