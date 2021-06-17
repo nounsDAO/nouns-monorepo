@@ -72,7 +72,7 @@ library MultiPartRLEToSVG {
             uint256 currentX = image.bounds.left;
             uint256 currentY = image.bounds.top;
             uint256 boundWidth = image.bounds.right - image.bounds.left;
-            uint256 cursor = 0;
+            uint256 cursor;
             string[16] memory buffer;
 
             for (uint256 i = 0; i < image.rects.length; i++) {
