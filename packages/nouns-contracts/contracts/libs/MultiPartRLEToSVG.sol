@@ -29,7 +29,6 @@ library MultiPartRLEToSVG {
         Rect[] rects;
     }
 
-
     /**
      * @notice Given RLE image parts and color palettes, merge to generate a single SVG image.
      */

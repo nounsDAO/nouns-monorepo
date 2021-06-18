@@ -11,13 +11,40 @@ import {INounsERC721} from './interfaces/INounsERC721.sol';
 contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
     using Counters for Counters.Counter;
 
+    // The nounsDAO address (avatars org)
+    address public immutable nounsDAO;
+
+    // The Nouns token URI descriptor
     INounsDescriptor public descriptor;
 
+    // Whether the descriptor can be updated
+    bool public isDescriptorLocked;
+
+    // The internal noun ID tracker
     Counters.Counter private _nounIdTracker;
 
     mapping(uint256 => uint256[5]) _seeds;
 
-    constructor(INounsDescriptor _descriptor) ERC721('Nouns', 'NOUN') {
+    /**
+     * @notice Require that the descriptor has not been locked.
+     */
+    modifier whenDescriptorNotLocked() {
+        require(!isDescriptorLocked, 'Descriptor is locked');
+        _;
+    }
+
+    /**
+     * @notice Require that the sender is the nounsDAO.
+     */
+    modifier onlyNounsDAO() {
+        require(msg.sender == nounsDAO, 'Sender is not the nounsDAO');
+        _;
+    }
+
+    constructor(address _nounsDAO, INounsDescriptor _descriptor)
+        ERC721('Nouns', 'NOUN')
+    {
+        nounsDAO = _nounsDAO;
         descriptor = _descriptor;
     }
 
@@ -58,15 +85,24 @@ contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
 
     /**
      * @notice Set the token URI descriptor.
-     * @dev Only callable by {TODO}.
-     * TODO: Lock down function call, add ability to burn access.
+     * @dev Only callable by the nounsDAO.
      */
     function setDescriptor(INounsDescriptor _descriptor)
         external
         override
+        onlyNounsDAO
+        whenDescriptorNotLocked
     {
         descriptor = _descriptor;
 
         emit DescriptorUpdated(_descriptor);
+    }
+
+    /**
+     * @notice Lock the descriptor.
+     * @dev This cannot be reversed.
+     */
+    function lockDescriptor() external onlyNounsDAO whenDescriptorNotLocked {
+        isDescriptorLocked = true;
     }
 }

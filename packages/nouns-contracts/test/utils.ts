@@ -18,7 +18,7 @@ export async function getSigners(): Promise<TestSigners> {
 
 export async function deployNounsErc721(
   deployer?: SignerWithAddress,
-  descriptor = constants.AddressZero
+  descriptor = constants.AddressZero,
 ): Promise<NounsErc721> {
   const signers = await getSigners();
   return (await (
