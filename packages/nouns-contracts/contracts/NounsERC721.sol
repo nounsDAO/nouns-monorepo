@@ -97,4 +97,12 @@ contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
 
         emit DescriptorUpdated(_descriptor);
     }
+
+    /**
+     * @notice Lock the descriptor.
+     * @dev This cannot be reversed.
+     */
+    function lockDescriptor() external onlyNounsDAO whenDescriptorNotLocked {
+        isDescriptorLocked = true;
+    }
 }
