@@ -19,14 +19,14 @@ library NFTDescriptor {
      */
     function constructTokenURI(
         ConstructTokenURIParams memory params,
-        mapping(uint8 => bytes3[]) storage palettes
+        mapping(uint8 => string[]) storage palettes
     ) public view returns (string memory) {
         string memory name = string(
             abi.encodePacked('Noun #', params.tokenId.toString())
         );
-        string memory description = generateDescription(params.tokenId);
+        string memory description = _generateDescription(params.tokenId);
         string memory image = Base64.encode(
-            bytes(generateSVGImage(params, palettes))
+            bytes(_generateSVGImage(params, palettes))
         );
 
         // prettier-ignore
@@ -45,7 +45,7 @@ library NFTDescriptor {
     /**
      * @notice Generate a description for use in the ERC721 token URI.
      */
-    function generateDescription(uint256 tokenId)
+    function _generateDescription(uint256 tokenId)
         private
         pure
         returns (string memory)
@@ -62,10 +62,10 @@ library NFTDescriptor {
     /**
      * @notice Generate an SVG image for use in the ERC721 token URI.
      */
-    function generateSVGImage(
+    function _generateSVGImage(
         ConstructTokenURIParams memory params,
-        mapping(uint8 => bytes3[]) storage palettes
-    ) internal view returns (string memory svg) {
+        mapping(uint8 => string[]) storage palettes
+    ) private view returns (string memory svg) {
         // prettier-ignore
         MultiPartRLEToSVG.SVGParams memory svgParams = MultiPartRLEToSVG.SVGParams({
             parts: params.parts

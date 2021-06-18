@@ -18,12 +18,12 @@ const toPaddedHex = (c: number, pad = 2) => {
 };
 
 const rgbToHex = (r: number, g: number, b: number) => {
-  return `0x${toPaddedHex(r)}${toPaddedHex(g)}${toPaddedHex(b)}`;
+  return `${toPaddedHex(r)}${toPaddedHex(g)}${toPaddedHex(b)}`;
 };
 
 const getFolder = (i: number) => `../assets/layer-${i}`;
 
-const colors: Map<string, number> = new Map([['0x123456', 0]]);
+const colors: Map<string, number> = new Map([['', 0]]);
 
 const getEncodedImage = async (folder: string, file: string) => {
   const image = await readPngFile(path.join(folder, file));

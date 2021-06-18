@@ -14,7 +14,7 @@ interface INounsDescriptor {
     function palettes(uint8 paletteIndex, uint256 colorIndex)
         external
         view
-        returns (bytes3);
+        returns (string memory);
 
     function bodies(uint256 index) external view returns (bytes memory);
 

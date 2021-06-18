@@ -11,7 +11,7 @@ import {NFTDescriptor} from './libs/NFTDescriptor.sol';
  */
 contract NounsDescriptor is INounsDescriptor {
     // Noun Color Palettes
-    mapping(uint8 => bytes3[]) public override palettes;
+    mapping(uint8 => string[]) public override palettes;
 
     // Noun Bodies
     bytes[] public override bodies;
@@ -70,7 +70,7 @@ contract NounsDescriptor is INounsDescriptor {
      */
     function addManyColorsToPalette(
         uint8 paletteIndex,
-        bytes3[] calldata newColors
+        string[] calldata newColors
     ) external {
         require(
             palettes[paletteIndex].length + newColors.length <= 256,
@@ -144,7 +144,7 @@ contract NounsDescriptor is INounsDescriptor {
         return NFTDescriptor.constructTokenURI(params, palettes);
     }
 
-    function _addColorToPalette(uint8 _paletteIndex, bytes3 _color) internal {
+    function _addColorToPalette(uint8 _paletteIndex, string calldata _color) internal {
         palettes[_paletteIndex].push(_color);
     }
 
