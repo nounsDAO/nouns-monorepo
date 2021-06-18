@@ -6,6 +6,10 @@ pragma solidity ^0.8.5;
  * @title Interface for NounsDescriptor.
  */
 interface INounsDescriptor {
+    function nounsDAO() external returns (address);
+
+    function isLocked() external returns (bool);
+
     function tokenURI(uint256 tokenId, uint256[5] memory seed)
         external
         view
