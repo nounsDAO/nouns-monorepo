@@ -112,7 +112,8 @@ const handler: Handler = async (event, context) => {
   return {
     statusCode: 200,
     headers: {
-      'Content-Type':'image/svg+xml'
+      'Content-Type':'image/svg+xml',
+      'Access-Control-Allow-Origin': "*"
     },
     body: svg
   };
