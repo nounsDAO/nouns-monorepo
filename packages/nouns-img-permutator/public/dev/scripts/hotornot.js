@@ -4,8 +4,8 @@ window.onload = async () => {
     await fetchRandomNouns()
 }
 
-const randomNounURL = 'http://localhost:5001/nounsdao/us-central1/generateNounUsingOptionsAndSource'
-const voteURL = 'http://localhost:5001/nounsdao/us-central1/addVoteToLayersEXT'
+const randomNounURL = 'https://us-central1-nounsdao.cloudfunctions.net/generateNounUsingOptionsAndSource'
+const voteURL = 'https://us-central1-nounsdao.cloudfunctions.net/addVoteToLayersEXT'
 var randomNounsData = []
  
 fetchRandomNouns = async () => {
@@ -96,7 +96,7 @@ displayResults = (results) => {
 
     results.updatedDocs.forEach(doc => {
         let div = document.createElement('div')
-        div.classList.add('fs-3')
+        div.classList.add('fs-5')
         div.classList.add('lond-font')
         div.textContent = doc.fileName + ': ' + doc.votes + ' votes'
         column.appendChild(div)
