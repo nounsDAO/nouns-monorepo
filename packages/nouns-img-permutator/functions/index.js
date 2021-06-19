@@ -321,8 +321,15 @@ exports.fetchLayersAndOptionsWithSource = functions.https.onRequest(async (reque
                 Canvas: Canvas,
                 Image: Image
             })
+
+            // clean up layer paths to remove everything but the final file name
+            for (var i = 0; i < layerPaths.length; i++) {
+                layerPaths[i] = layerPaths[i].split('/')[3]    
+                layerPaths[i] = layerPaths[i].split('.')[0]                
+            }
+
             // return base64 image data
-            response.status(200).json( { base64: b64})
+            response.status(200).json( { base64: b64, layers: layerPaths})
         } catch (e) {
             console.log(`error merging images. `, e)
             response.status(500).json( { error: e})
