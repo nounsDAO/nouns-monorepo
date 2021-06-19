@@ -328,12 +328,54 @@ exports.fetchLayersAndOptionsWithSource = functions.https.onRequest(async (reque
                 layerPaths[i] = layerPaths[i].split('.')[0]                
             }
 
-            // return base64 image data
+            // return base64 image data            
             response.status(200).json( { base64: b64, layers: layerPaths})
         } catch (e) {
             console.log(`error merging images. `, e)
             response.status(500).json( { error: e})
         }
+    })
+})
+
+/**
+ * Adds vote to item within layer:
+ * Accepts an array of objects each denoting a `layerName` and `fileName` to use to add vote to in db.
+ * Adds +1 in Firestore to ${layersName}/${fileName}/${voteEXT}
+ */
+exports.addVoteToLayersEXT = functions.https.onRequest(async (request, response) => {
+    cors(request, response, async () => {
+
+        let options = JSON.parse(request.query.options)
+        
+        var updatedDocsData = []
+        try {
+            for (var i = 0; i < options.length; i++) {
+                const docRef = db.collection(`layer-${i}-EXT`).doc(options[i]);
+                const doc = await docRef.get()
+                if (!doc.exists) {
+                    // doc does not exist -> first vote
+                    await docRef.set({
+                        votes: 1
+                    })           
+                } else {
+                    // doc does not exist -> n + 1 vote 
+                    await docRef.update({
+                        votes: admin.firestore.FieldValue.increment(1)
+                    })           
+                }
+                // fetch updated doc
+                const updatedDoc = await docRef.get()
+                updatedDocsData.push({
+                    fileName: options[i],
+                    votes: updatedDoc.data().votes
+                })
+            }
+        } catch (e) {
+            response.status(500).json( { error: e})
+        }
+
+        response.status(200).json( { updatedDocs: updatedDocsData})
+        
     })
 })
 
