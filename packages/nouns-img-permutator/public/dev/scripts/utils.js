@@ -289,7 +289,7 @@ function layerOptionSelected(layerName, optionName) {
     listItems = listItems.filter(item => { return item.dataset.layerName == layerName})
     let item = listItems[0]
     item.textContent = `${layerName}: ${optionName}`
-
+    console.log(`LAYER NAME: ${layerName}`)
     // update selectedItems
     selectedOptions.layers[layerName] = optionName
 }
