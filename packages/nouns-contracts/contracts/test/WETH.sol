@@ -58,9 +58,7 @@ contract WETH {
     ) public returns (bool) {
         require(balanceOf[src] >= wad);
 
-        if (
-            src != msg.sender && allowance[src][msg.sender] != type(uint256).max
-        ) {
+        if (src != msg.sender && allowance[src][msg.sender] != type(uint256).max) {
             require(allowance[src][msg.sender] >= wad);
             allowance[src][msg.sender] -= wad;
         }

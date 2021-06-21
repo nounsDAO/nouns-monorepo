@@ -79,14 +79,14 @@ const getRandomNoun = async () => {
 
     rects.forEach(rect => {
       const [length, colorIndex] = rect;
-      const rgbColor = data.colors[colorIndex];
+      const hexColor = data.colors[colorIndex];
 
       // Do not push rect if transparent
       if (colorIndex !== 0) {
         svgRects.push(
           `<rect width="${length * 10}" height="10" x="${currentX * 10}" y="${
             currentY * 10
-          }" fill="rgb(${rgbColor})" />`,
+          }" fill="#${hexColor}" />`,
         );
       }
 

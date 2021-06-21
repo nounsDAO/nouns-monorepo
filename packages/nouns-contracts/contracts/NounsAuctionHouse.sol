@@ -2,21 +2,17 @@
 
 pragma solidity ^0.8.5;
 
-import {PausableUpgradeable} from '@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol';
-import {ReentrancyGuardUpgradeable} from '@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol';
-import {IERC20} from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
-import {INounsAuctionHouse} from './interfaces/INounsAuctionHouse.sol';
-import {INounsERC721} from './interfaces/INounsERC721.sol';
-import {IWETH} from './interfaces/IWETH.sol';
+import { PausableUpgradeable } from '@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol';
+import { ReentrancyGuardUpgradeable } from '@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol';
+import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+import { INounsAuctionHouse } from './interfaces/INounsAuctionHouse.sol';
+import { INounsERC721 } from './interfaces/INounsERC721.sol';
+import { IWETH } from './interfaces/IWETH.sol';
 
 /**
  * @title The NounsDAO auction house
  */
-contract NounsAuctionHouse is
-    INounsAuctionHouse,
-    PausableUpgradeable,
-    ReentrancyGuardUpgradeable
-{
+contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, ReentrancyGuardUpgradeable {
     // The Nouns ERC721 token contract
     INounsERC721 public nouns;
 
@@ -85,12 +81,7 @@ contract NounsAuctionHouse is
     /**
      * @notice Settle the current auction, mint a new Noun, and put it up for auction.
      */
-    function settleCurrentAndCreateNewAuction()
-        external
-        override
-        nonReentrant
-        whenNotPaused
-    {
+    function settleCurrentAndCreateNewAuction() external override nonReentrant whenNotPaused {
         _settleAuction();
         _createAuction();
     }
@@ -113,7 +104,8 @@ contract NounsAuctionHouse is
         require(_auction.nounId == nounId, 'Noun not up for auction');
         require(block.timestamp < _auction.endTime, 'Auction expired');
         require(msg.value >= reservePrice, 'Must send at least reservePrice');
-        require(msg.value >= _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100),
+        require(
+            msg.value >= _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100),
             'Must send more than last bid by minBidIncrementPercentage amount'
         );
 
@@ -173,11 +165,7 @@ contract NounsAuctionHouse is
      * @notice Set the auction time buffer.
      * @dev Only callable by the noundersDAO.
      */
-    function setTimeBuffer(uint256 _timeBuffer)
-        external
-        override
-        onlyNoundersDAO
-    {
+    function setTimeBuffer(uint256 _timeBuffer) external override onlyNoundersDAO {
         timeBuffer = _timeBuffer;
 
         emit AuctionTimeBufferUpdated(_timeBuffer);
@@ -187,11 +175,7 @@ contract NounsAuctionHouse is
      * @notice Set the auction reserve price.
      * @dev Only callable by the noundersDAO.
      */
-    function setReservePrice(uint256 _reservePrice)
-        external
-        override
-        onlyNoundersDAO
-    {
+    function setReservePrice(uint256 _reservePrice) external override onlyNoundersDAO {
         reservePrice = _reservePrice;
 
         emit AuctionReservePriceUpdated(_reservePrice);
@@ -201,16 +185,10 @@ contract NounsAuctionHouse is
      * @notice Set the auction minimum bid increment percentage.
      * @dev Only callable by the noundersDAO.
      */
-    function setMinBidIncrementPercentage(uint8 _minBidIncrementPercentage)
-        external
-        override
-        onlyNoundersDAO
-    {
+    function setMinBidIncrementPercentage(uint8 _minBidIncrementPercentage) external override onlyNoundersDAO {
         minBidIncrementPercentage = _minBidIncrementPercentage;
 
-        emit AuctionMinBidIncrementPercentageUpdated(
-            _minBidIncrementPercentage
-        );
+        emit AuctionMinBidIncrementPercentageUpdated(_minBidIncrementPercentage);
     }
 
     /**
@@ -253,10 +231,7 @@ contract NounsAuctionHouse is
 
         require(_auction.startTime != 0, "Auction hasn't begun");
         require(!_auction.settled, 'Auction has already been settled');
-        require(
-            block.timestamp >= _auction.endTime,
-            "Auction hasn't completed"
-        );
+        require(block.timestamp >= _auction.endTime, "Auction hasn't completed");
 
         auction.settled = true;
 
@@ -280,7 +255,7 @@ contract NounsAuctionHouse is
      */
     function _safeTransferETHWithFallback(address to, uint256 amount) internal {
         if (!_safeTransferETH(to, amount)) {
-            IWETH(weth).deposit{value: amount}();
+            IWETH(weth).deposit{ value: amount }();
             IERC20(weth).transfer(to, amount);
         }
     }
@@ -288,11 +263,8 @@ contract NounsAuctionHouse is
     /**
      * @notice Transfer ETH and return the success status.
      */
-    function _safeTransferETH(address to, uint256 value)
-        internal
-        returns (bool)
-    {
-        (bool success, ) = to.call{value: value}(new bytes(0));
+    function _safeTransferETH(address to, uint256 value) internal returns (bool) {
+        (bool success, ) = to.call{ value: value }(new bytes(0));
         return success;
     }
 
@@ -302,11 +274,7 @@ contract NounsAuctionHouse is
      * while auction #366 - #730 proceeds will be sent to the NoudersDAO. After auction #730,
      * proceeds will be sent to the NounsDAO in perpetuity.
      */
-    function _getProfitRecipient(uint256 nounId)
-        internal
-        view
-        returns (address)
-    {
+    function _getProfitRecipient(uint256 nounId) internal view returns (address) {
         if (nounId <= 365 || nounId >= 731) {
             return nounsDAO;
         }

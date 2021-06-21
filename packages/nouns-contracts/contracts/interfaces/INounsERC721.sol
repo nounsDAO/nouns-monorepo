@@ -2,8 +2,8 @@
 
 pragma solidity ^0.8.5;
 
-import {IERC721} from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
-import {INounsDescriptor} from './INounsDescriptor.sol';
+import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
+import { INounsDescriptor } from './INounsDescriptor.sol';
 
 /**
  * @title Interface for NounsERC721.

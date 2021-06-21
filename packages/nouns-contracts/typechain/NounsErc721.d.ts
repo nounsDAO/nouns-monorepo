@@ -27,8 +27,11 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     "descriptor()": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
+    "isDescriptorLocked()": FunctionFragment;
+    "lockDescriptor()": FunctionFragment;
     "mint()": FunctionFragment;
     "name()": FunctionFragment;
+    "nounsDAO()": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
@@ -63,8 +66,17 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     functionFragment: "isApprovedForAll",
     values: [string, string]
   ): string;
+  encodeFunctionData(
+    functionFragment: "isDescriptorLocked",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "lockDescriptor",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "mint", values?: undefined): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
+  encodeFunctionData(functionFragment: "nounsDAO", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "ownerOf",
@@ -128,8 +140,17 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     functionFragment: "isApprovedForAll",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "isDescriptorLocked",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "lockDescriptor",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "nounsDAO", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
   decodeFunctionResult(
@@ -293,6 +314,18 @@ export class NounsErc721 extends Contract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
+    isDescriptorLocked(overrides?: CallOverrides): Promise<[boolean]>;
+
+    "isDescriptorLocked()"(overrides?: CallOverrides): Promise<[boolean]>;
+
+    lockDescriptor(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "lockDescriptor()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     mint(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -304,6 +337,10 @@ export class NounsErc721 extends Contract {
     name(overrides?: CallOverrides): Promise<[string]>;
 
     "name()"(overrides?: CallOverrides): Promise<[string]>;
+
+    nounsDAO(overrides?: CallOverrides): Promise<[string]>;
+
+    "nounsDAO()"(overrides?: CallOverrides): Promise<[string]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
@@ -494,6 +531,18 @@ export class NounsErc721 extends Contract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
+  isDescriptorLocked(overrides?: CallOverrides): Promise<boolean>;
+
+  "isDescriptorLocked()"(overrides?: CallOverrides): Promise<boolean>;
+
+  lockDescriptor(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "lockDescriptor()"(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   mint(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -505,6 +554,10 @@ export class NounsErc721 extends Contract {
   name(overrides?: CallOverrides): Promise<string>;
 
   "name()"(overrides?: CallOverrides): Promise<string>;
+
+  nounsDAO(overrides?: CallOverrides): Promise<string>;
+
+  "nounsDAO()"(overrides?: CallOverrides): Promise<string>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
@@ -686,6 +739,14 @@ export class NounsErc721 extends Contract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
+    isDescriptorLocked(overrides?: CallOverrides): Promise<boolean>;
+
+    "isDescriptorLocked()"(overrides?: CallOverrides): Promise<boolean>;
+
+    lockDescriptor(overrides?: CallOverrides): Promise<void>;
+
+    "lockDescriptor()"(overrides?: CallOverrides): Promise<void>;
+
     mint(overrides?: CallOverrides): Promise<BigNumber>;
 
     "mint()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -693,6 +754,10 @@ export class NounsErc721 extends Contract {
     name(overrides?: CallOverrides): Promise<string>;
 
     "name()"(overrides?: CallOverrides): Promise<string>;
+
+    nounsDAO(overrides?: CallOverrides): Promise<string>;
+
+    "nounsDAO()"(overrides?: CallOverrides): Promise<string>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -923,6 +988,18 @@ export class NounsErc721 extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    isDescriptorLocked(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "isDescriptorLocked()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    lockDescriptor(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "lockDescriptor()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     mint(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -934,6 +1011,10 @@ export class NounsErc721 extends Contract {
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
     "name()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    nounsDAO(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "nounsDAO()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1128,6 +1209,22 @@ export class NounsErc721 extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    isDescriptorLocked(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "isDescriptorLocked()"(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    lockDescriptor(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "lockDescriptor()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     mint(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
@@ -1139,6 +1236,10 @@ export class NounsErc721 extends Contract {
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "name()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    nounsDAO(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "nounsDAO()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

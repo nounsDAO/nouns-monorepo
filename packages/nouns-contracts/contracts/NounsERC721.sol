@@ -2,11 +2,11 @@
 
 pragma solidity ^0.8.5;
 
-import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
-import '@openzeppelin/contracts/access/Ownable.sol';
-import {Counters} from '@openzeppelin/contracts/utils/Counters.sol';
-import {INounsDescriptor} from './interfaces/INounsDescriptor.sol';
-import {INounsERC721} from './interfaces/INounsERC721.sol';
+import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
+import { ERC721Enumerable, ERC721 } from '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
+import { Counters } from '@openzeppelin/contracts/utils/Counters.sol';
+import { INounsDescriptor } from './interfaces/INounsDescriptor.sol';
+import { INounsERC721 } from './interfaces/INounsERC721.sol';
 
 contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
     using Counters for Counters.Counter;
@@ -41,9 +41,7 @@ contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
         _;
     }
 
-    constructor(address _nounsDAO, INounsDescriptor _descriptor)
-        ERC721('Nouns', 'NOUN')
-    {
+    constructor(address _nounsDAO, INounsDescriptor _descriptor) ERC721('Nouns', 'NOUN') {
         nounsDAO = _nounsDAO;
         descriptor = _descriptor;
     }
@@ -74,12 +72,7 @@ contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
     /**
      * @dev See {IERC721Metadata-tokenURI}.
      */
-    function tokenURI(uint256 tokenId)
-        public
-        view
-        override
-        returns (string memory)
-    {
+    function tokenURI(uint256 tokenId) public view override returns (string memory) {
         return descriptor.tokenURI(tokenId, _seeds[tokenId]);
     }
 
@@ -87,12 +80,7 @@ contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
      * @notice Set the token URI descriptor.
      * @dev Only callable by the nounsDAO.
      */
-    function setDescriptor(INounsDescriptor _descriptor)
-        external
-        override
-        onlyNounsDAO
-        whenDescriptorNotLocked
-    {
+    function setDescriptor(INounsDescriptor _descriptor) external override onlyNounsDAO whenDescriptorNotLocked {
         descriptor = _descriptor;
 
         emit DescriptorUpdated(_descriptor);
