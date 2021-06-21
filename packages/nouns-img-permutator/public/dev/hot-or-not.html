@@ -19,21 +19,23 @@
       <img src="assets/icon.png" id="noun-icon" class="mx-auto">
     </div>
     <div class="row">      
-        <div class="col-lg-8 offset-lg-2" class="rounded" id="hot-or-not-container">
+        <div class="col-md-12 col-lg-8 offset-lg-2 col-xl-6 offset-xl-3" class="rounded" id="hot-or-not-container">
             <div class="row text-center" id="loading-title">
                 <h1 class='fs-1'><span class="spinner-border text-secondary" style="width: 2rem; height: 2rem;"></span> Fetching nouns from the ether...</h1>                
+            </div>
+            <div class="row text-center" id="vote-streak-row">      
             </div>            
             <div class="row" id="hot-or-not-content">
                 <div class="col-lg-6 text-center" id="noun-0-col" style="display: none;">
-                    <img src="" class="noun-img" id="noun-0-img">
-                    <div class="col-lg-12 text-center">
-                        <button type="button" class="btn btn-primary mx-auto" onclick="voted(0, this)">VOTE</button>                            
+                    <img src="" class="noun-img pixelated" id="noun-0-img">
+                    <div class="col-12 text-center">
+                        <button type="button" class="btn btn-primary mx-auto" onclick="voted(0)">VOTE</button>                            
                     </div>
                 </div>
-                <div class="col-lg-6 text-center" id="noun-1-col" style="display: none;">
-                    <img src="" class="noun-img" id="noun-1-img">
-                    <div class="col-lg-12 text-center">
-                        <button type="button" class="btn btn-primary mx-auto" onclick="voted(1, this)">VOTE</button>                            
+                <div class="col-lg-6  text-center" id="noun-1-col" style="display: none;">
+                    <img src="" class="noun-img pixelated" id="noun-1-img">
+                    <div class="col-12 text-center">
+                        <button type="button" class="btn btn-primary mx-auto" onclick="voted(1)">VOTE</button>                            
                     </div>                    
                 </div>             
             </div>

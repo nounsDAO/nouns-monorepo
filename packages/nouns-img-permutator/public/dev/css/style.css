@@ -10,22 +10,19 @@ body {
     background-color: var(--background-color);
 }
 .row {
-    margin: 50px 20px;
+    margin: 20px;
 }
 .btn {
     height: 50px;
 }
 #noun-icon {
-    height: 100px;
+    height: 60px;
     width: auto;
 }
 .lond-font {
     font-family: 'Londrina Solid'
 }
-#loading-title {
-    font-family: 'Londrina Solid';
-    color: var(--nounsdao-color);
-}
+
 
 /* CONTROLS */
 #main-controls .col-md-12 {
@@ -47,37 +44,47 @@ body {
     margin: 10px;
 }
 .noun-img {
-    image-rendering: pixelated;
     width: 100%;
     height: auto;
     margin: 10px;
 }
 .noun-img-sm {
-    image-rendering: pixelated;
     width: 50px;
     height:50px;
     margin: 10px;
 }
 .noun-img-md {
-    image-rendering: pixelated;
     width: 150px;
     height:150px;
     margin: 10px;
 }
 .noun-img-lg {
-    image-rendering: pixelated;
     width: 300px;
     height:300px;
     margin: 10px;
 }
+.pixelated {
+    image-rendering: -moz-crisp-edges;
+    image-rendering: pixelated;
+}
 
 /* HOT OR NOT */
+
+#loading-title {
+    font-family: 'Londrina Solid';
+    color: var(--nounsdao-color);
+}
+#vote-streak-row {
+    font-family: 'Londrina Solid';
+    color: gray;
+    margin: 30px 0px 10px 0px;
+}
 #hot-or-not-container {
     background-color: white;
     border-radius: 15px;
 }
-.border-left {
-    border-left: 0.5px solid var(--background-color);
+#hot-or-not-content {
+    margin-top: 0px;
 }
 #hot-or-not-container button {
     margin: 25px 0px;
@@ -89,6 +96,7 @@ body {
     height: 80px;
     width: 70%;
 }
+
 #twitter-handle {
     font-family: 'Londrina Solid';
     color: gray;
