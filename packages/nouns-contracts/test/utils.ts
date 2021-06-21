@@ -2,8 +2,6 @@ import { ethers } from 'hardhat';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { NounsErc721, Weth } from '../typechain';
 
-import hardhat from 'hardhat';
-
 export type TestSigners = {
   deployer: SignerWithAddress;
   account0: SignerWithAddress;
@@ -43,27 +41,4 @@ export function MintNouns(token: NounsErc721): (amount: number) => Promise<void>
       await token.mint();
     }
   }
-}
-
-
-
-export async function minerStop(): Promise<void> {
-  await hardhat.network.provider.send("evm_setAutomine", [false])
-  await hardhat.network.provider.send("evm_setIntervalMining", [0])
-}
-
-export async function minerStart(): Promise<void> {
-  await hardhat.network.provider.send("evm_setAutomine", [true])
-}
-
-export async function mineBlock(): Promise<void> {
-  await hardhat.network.provider.send("evm_mine")
-}
-
-export function address(n: number): string {
-  return `0x${n.toString(16).padStart(40, '0')}`;
-}
-
-export async function chainId(): Promise<number> {
-  return parseInt(await hardhat.network.provider.send("eth_chainId"), 16);
 }

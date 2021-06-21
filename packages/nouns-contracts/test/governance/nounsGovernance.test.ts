@@ -7,12 +7,16 @@ import {
   getSigners,
   TestSigners,
   MintNouns,
+} from '../utils';
+
+import {
   minerStart,
   minerStop,
   mineBlock,
   address,
   chainId
-} from '../utils';
+} from './utils/Ethereum'
+
 chai.use(solidity);
 const { expect } = chai;
 
