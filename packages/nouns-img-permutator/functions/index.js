@@ -221,10 +221,17 @@ exports.fetchLayersAndOptionsWithSource = functions.https.onRequest(async (reque
                 dominantColorRGB[2]
             )
 
+            // clean up layer paths to remove everything but the final file name
+            for (var i = 0; i < layerPaths.length; i++) {
+                layerPaths[i] = layerPaths[i].split('/')[3]    
+                layerPaths[i] = layerPaths[i].split('.')[0]                
+            }
+
             // return base64 image data
             response.status(200).json({ 
                 base64: base64,
-                dominantColorHSL: dominantColorHSL
+                dominantColorHSL: dominantColorHSL,
+                layers: layerPaths
             })
 
         } catch (e) {
