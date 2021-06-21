@@ -140,9 +140,17 @@ function displayModeChanged(element) {
     layerSelectionList.innerHTML = ''
 
     data.forEach(layer => {
-        selectedOptions.layers[layer.name] = 'random'
-        addButtonDropdownWithOptions(layer)
-        addLayerToLayerDisplay(layer, 'random')
+        // set default for layer-0 as `transparent-bg.png`
+        if (layer.name == 'layer-0') {
+            selectedOptions.layers[layer.name] = 'transparent-bg.png'
+            addButtonDropdownWithOptions(layer)
+            addLayerToLayerDisplay(layer, 'transparent-bg.png')
+        } else {
+            // else, default as random
+            selectedOptions.layers[layer.name] = 'random'
+            addButtonDropdownWithOptions(layer)
+            addLayerToLayerDisplay(layer, 'random')
+        }        
     })
 }
 
@@ -262,17 +270,18 @@ function addButtonDropdownWithOptions(layer) {
 }
 
 /**
- * Adds a layer to the selection display.
+ * Adds a layer to the selection display. Used to initialize layers display. 
  * @param {Object} layer Object representaining layer containing `object.name` property
+ * @param {String} name Strign to set as the 
  */
-function addLayerToLayerDisplay(layer) {
+function addLayerToLayerDisplay(layer, name) {
 
     let layerSelectionList = document.getElementById('layer-selection')
 
     let listItem = document.createElement('li')
     listItem.classList.add('list-group-item')
     listItem.dataset.layerName = layer.name
-    listItem.textContent = layer.name + ': random'
+    listItem.textContent = layer.name + ': ' + name
     
     layerSelectionList.appendChild(listItem)
 }
@@ -289,7 +298,7 @@ function layerOptionSelected(layerName, optionName) {
     listItems = listItems.filter(item => { return item.dataset.layerName == layerName})
     let item = listItems[0]
     item.textContent = `${layerName}: ${optionName}`
-    console.log(`LAYER NAME: ${layerName}`)
+
     // update selectedItems
     selectedOptions.layers[layerName] = optionName
 }
