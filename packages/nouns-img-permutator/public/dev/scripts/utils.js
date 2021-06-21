@@ -43,7 +43,6 @@ function addNounImg(data, dominantColorHSL, displayMode) {
         let img = document.createElement('img')
         img.setAttribute('src', data)
         img.classList.add('noun-img')
-        img.classList.add('rounded')
 
         // create hsl css to set as bg color 
         let hsl = `hsl(${dominantColorHSL[0]},${dominantColorHSL[1]-10}%,${70}%)`
@@ -60,17 +59,14 @@ function addNounImg(data, dominantColorHSL, displayMode) {
         let imgSm = document.createElement('img')
         imgSm.setAttribute('src', data)
         imgSm.classList.add('noun-img-sm')
-        imgSm.classList.add('rounded')
     
         let imgMd = document.createElement('img')
         imgMd.setAttribute('src', data)
         imgMd.classList.add('noun-img-md')
-        imgMd.classList.add('rounded')
     
         let imgLg = document.createElement('img')
         imgLg.setAttribute('src', data)
         imgLg.classList.add('noun-img-lg')
-        imgLg.classList.add('rounded')
 
         // create hsl css to set as bg color 
         let hsl = `hsl(${dominantColorHSL[0]},${dominantColorHSL[1]-10}%,${70}%)`
