@@ -32,14 +32,15 @@ library MultiPartRLEToSVG {
     /**
      * @notice Given RLE image parts and color palettes, merge to generate a single SVG image.
      */
-    // prettier-ignore
-    function generateSVG(
-        SVGParams memory params,
-        mapping(uint8 => string[]) storage palettes
-    ) internal view returns (string memory svg) {
+    function generateSVG(SVGParams memory params, mapping(uint8 => string[]) storage palettes)
+        internal
+        view
+        returns (string memory svg)
+    {
+        // prettier-ignore
         return string(
             abi.encodePacked(
-                '<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">',
+                '<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">',
                 _generateSVGRects(params, palettes),
                 '</svg>'
             )
@@ -49,10 +50,12 @@ library MultiPartRLEToSVG {
     /**
      * @notice Given RLE image parts and color palettes, generate SVG rects.
      */
-    function _generateSVGRects(
-        SVGParams memory params,
-        mapping(uint8 => string[]) storage palettes
-    ) private view returns (string memory svg) {
+    // prettier-ignore
+    function _generateSVGRects(SVGParams memory params, mapping(uint8 => string[]) storage palettes)
+        private
+        view
+        returns (string memory svg)
+    {
         string[33] memory lookup = [
             '0', '10', '20', '30', '40', '50', '60', '70', 
             '80', '90', '100', '110', '120', '130', '140', '150', 
@@ -80,7 +83,6 @@ library MultiPartRLEToSVG {
 
                     cursor += 4;
 
-                    // prettier-ignore
                     if (cursor >= 16) {
                         part = string(
                             abi.encodePacked(
@@ -117,6 +119,7 @@ library MultiPartRLEToSVG {
     /**
      * @notice Return all rects that remain in the buffer after looping over all part rects.
      */
+    // prettier-ignore
     function _getRemainder(uint256 cursor, string[16] memory buffer) internal pure returns (string memory) {
         string memory remainder;
         for (uint256 i = 0; i < cursor; i += 4) {
@@ -133,11 +136,7 @@ library MultiPartRLEToSVG {
     /**
      * @notice Decode a single RLE compressed image into a `DecodedImage`.
      */
-    function _decodeRLEImage(bytes memory image)
-        private
-        pure
-        returns (DecodedImage memory)
-    {
+    function _decodeRLEImage(bytes memory image) private pure returns (DecodedImage memory) {
         uint8 paletteIndex = uint8(image[0]);
         ContentBounds memory bounds = ContentBounds({
             top: uint8(image[1]),
@@ -150,18 +149,9 @@ library MultiPartRLEToSVG {
         uint256 cursor;
         Rect[] memory rects = new Rect[]((image.length - 5) / 2);
         for (uint256 i = 5; i < image.length; i += 2) {
-            rects[cursor] = Rect({
-                length: uint8(image[i]),
-                colorIndex: uint8(image[i + 1])
-            });
+            rects[cursor] = Rect({ length: uint8(image[i]), colorIndex: uint8(image[i + 1]) });
             cursor++;
         }
-        // prettier-ignore
-        return DecodedImage({
-            paletteIndex: paletteIndex,
-            bounds: bounds,
-            width: width,
-            rects: rects
-        });
+        return DecodedImage({ paletteIndex: paletteIndex, bounds: bounds, width: width, rects: rects });
     }
 }

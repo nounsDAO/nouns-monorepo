@@ -18,12 +18,13 @@ export async function getSigners(): Promise<TestSigners> {
 
 export async function deployNounsErc721(
   deployer?: SignerWithAddress,
+  nounsDAO = constants.AddressZero,
   descriptor = constants.AddressZero,
 ): Promise<NounsErc721> {
   const signers = await getSigners();
   return (await (
     await ethers.getContractFactory('NounsERC721', deployer || signers.deployer)
-  ).deploy(descriptor)) as NounsErc721;
+  ).deploy(nounsDAO, descriptor)) as NounsErc721;
 }
 
 export async function deployWeth(deployer?: SignerWithAddress): Promise<Weth> {

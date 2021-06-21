@@ -1,5 +1,14 @@
 {
   "singleQuote": true,
   "trailingComma": "all",
-  "arrowParens": "avoid"
+  "arrowParens": "avoid",
+  "overrides": [
+    {
+      "files": "*.sol",
+      "options": {
+        "printWidth": 120,
+        "bracketSpacing": true
+      }
+    }
+  ]
 }

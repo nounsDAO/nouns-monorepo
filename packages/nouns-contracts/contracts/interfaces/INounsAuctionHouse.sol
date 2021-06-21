@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.5;
 
-import {INounsERC721} from './INounsERC721.sol';
+import { INounsERC721 } from './INounsERC721.sol';
 
 /**
  * @title Interface for Noun Auction Houses
@@ -25,29 +25,17 @@ interface INounsAuctionHouse {
 
     event AuctionCreated(uint256 indexed nounId);
 
-    event AuctionBid(
-        uint256 indexed nounId,
-        address sender,
-        uint256 value,
-        bool firstBid,
-        bool extended
-    );
+    event AuctionBid(uint256 indexed nounId, address sender, uint256 value, bool firstBid, bool extended);
 
     event AuctionExtended(uint256 indexed nounId, uint256 endTime);
 
-    event AuctionSettled(
-        uint256 indexed nounId,
-        address winner,
-        uint256 amount
-    );
+    event AuctionSettled(uint256 indexed nounId, address winner, uint256 amount);
 
     event AuctionTimeBufferUpdated(uint256 timeBuffer);
 
     event AuctionReservePriceUpdated(uint256 reservePrice);
 
-    event AuctionMinBidIncrementPercentageUpdated(
-        uint256 minBidIncrementPercentage
-    );
+    event AuctionMinBidIncrementPercentageUpdated(uint256 minBidIncrementPercentage);
 
     event AuctionDurationUpdated(uint256 duration);
 
@@ -65,8 +53,7 @@ interface INounsAuctionHouse {
 
     function setReservePrice(uint256 reservePrice) external;
 
-    function setMinBidIncrementPercentage(uint8 minBidIncrementPercentage)
-        external;
+    function setMinBidIncrementPercentage(uint8 minBidIncrementPercentage) external;
 
     function setDuration(uint256 duration) external;
 }

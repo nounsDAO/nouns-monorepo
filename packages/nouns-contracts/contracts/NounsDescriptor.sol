@@ -2,8 +2,8 @@
 
 pragma solidity ^0.8.5;
 
-import {INounsDescriptor} from './interfaces/INounsDescriptor.sol';
-import {NFTDescriptor} from './libs/NFTDescriptor.sol';
+import { INounsDescriptor } from './interfaces/INounsDescriptor.sol';
+import { NFTDescriptor } from './libs/NFTDescriptor.sol';
 
 /**
  * @title The Nouns NFT descriptor.
@@ -96,14 +96,12 @@ contract NounsDescriptor is INounsDescriptor {
      * @param paletteIndex The color palette index
      * @param newColors The colors to add to the color palette
      */
-    function addManyColorsToPalette(
-        uint8 paletteIndex,
-        string[] calldata newColors
-    ) external {
-        require(
-            palettes[paletteIndex].length + newColors.length <= 256,
-            'Palettes can only hold 256 colors'
-        );
+    function addManyColorsToPalette(uint8 paletteIndex, string[] calldata newColors)
+        external
+        onlyNounsDAO
+        whenNotLocked
+    {
+        require(palettes[paletteIndex].length + newColors.length <= 256, 'Palettes can only hold 256 colors');
 
         for (uint256 i = 0; i < newColors.length; i++) {
             _addColorToPalette(paletteIndex, newColors[i]);
@@ -113,11 +111,7 @@ contract NounsDescriptor is INounsDescriptor {
     /**
      * @notice Batch add Noun bodies.
      */
-    function addManyBodies(bytes[] calldata _bodies)
-        external
-        onlyNounsDAO
-        whenNotLocked
-    {
+    function addManyBodies(bytes[] calldata _bodies) external onlyNounsDAO whenNotLocked {
         for (uint256 i = 0; i < _bodies.length; i++) {
             _addBody(_bodies[i]);
         }
@@ -126,11 +120,7 @@ contract NounsDescriptor is INounsDescriptor {
     /**
      * @notice Batch add Noun accessories.
      */
-    function addManyAccessories(bytes[] calldata _accessories)
-        external
-        onlyNounsDAO
-        whenNotLocked
-    {
+    function addManyAccessories(bytes[] calldata _accessories) external onlyNounsDAO whenNotLocked {
         for (uint256 i = 0; i < _accessories.length; i++) {
             _addAccessory(_accessories[i]);
         }
@@ -139,11 +129,7 @@ contract NounsDescriptor is INounsDescriptor {
     /**
      * @notice Batch add Noun heads.
      */
-    function addManyHeads(bytes[] calldata _heads)
-        external
-        onlyNounsDAO
-        whenNotLocked
-    {
+    function addManyHeads(bytes[] calldata _heads) external onlyNounsDAO whenNotLocked {
         for (uint256 i = 0; i < _heads.length; i++) {
             _addHead(_heads[i]);
         }
@@ -152,11 +138,7 @@ contract NounsDescriptor is INounsDescriptor {
     /**
      * @notice Batch add Noun glasses.
      */
-    function addManyGlasses(bytes[] calldata _glasses)
-        external
-        onlyNounsDAO
-        whenNotLocked
-    {
+    function addManyGlasses(bytes[] calldata _glasses) external onlyNounsDAO whenNotLocked {
         for (uint256 i = 0; i < _glasses.length; i++) {
             _addGlasses(_glasses[i]);
         }
@@ -165,11 +147,7 @@ contract NounsDescriptor is INounsDescriptor {
     /**
      * @notice Batch add Noun arms.
      */
-    function addManyArms(bytes[] calldata _arms)
-        external
-        onlyNounsDAO
-        whenNotLocked
-    {
+    function addManyArms(bytes[] calldata _arms) external onlyNounsDAO whenNotLocked {
         for (uint256 i = 0; i < _arms.length; i++) {
             _addArms(_arms[i]);
         }
@@ -185,11 +163,7 @@ contract NounsDescriptor is INounsDescriptor {
     /**
      * @notice Add a Noun accessory.
      */
-    function addAccessory(bytes calldata _accessory)
-        external
-        onlyNounsDAO
-        whenNotLocked
-    {
+    function addAccessory(bytes calldata _accessory) external onlyNounsDAO whenNotLocked {
         _addAccessory(_accessory);
     }
 
@@ -203,11 +177,7 @@ contract NounsDescriptor is INounsDescriptor {
     /**
      * @notice Add Noun glasses.
      */
-    function addGlasses(bytes calldata _glasses)
-        external
-        onlyNounsDAO
-        whenNotLocked
-    {
+    function addGlasses(bytes calldata _glasses) external onlyNounsDAO whenNotLocked {
         _addGlasses(_glasses);
     }
 
@@ -229,13 +199,7 @@ contract NounsDescriptor is INounsDescriptor {
     /**
      * @notice Given a token ID and seed, construct the token URI.
      */
-    // prettier-ignore
-    function tokenURI(uint256 tokenId, uint256[5] memory seed)
-        external
-        view
-        override
-        returns (string memory)
-    {
+    function tokenURI(uint256 tokenId, uint256[5] memory seed) external view override returns (string memory) {
         NFTDescriptor.ConstructTokenURIParams memory params = NFTDescriptor.ConstructTokenURIParams({
             tokenId: tokenId,
             parts: _getPartsForSeed(seed)
@@ -267,11 +231,7 @@ contract NounsDescriptor is INounsDescriptor {
         arms.push(_arms);
     }
 
-    function _getPartsForSeed(uint256[5] memory seed)
-        internal
-        view
-        returns (bytes[] memory)
-    {
+    function _getPartsForSeed(uint256[5] memory seed) internal view returns (bytes[] memory) {
         bytes[] memory _parts = new bytes[](5);
         _parts[0] = bodies[seed[0]];
         _parts[1] = accessories[seed[1]];

@@ -10,15 +10,9 @@ interface INounsDescriptor {
 
     function isLocked() external returns (bool);
 
-    function tokenURI(uint256 tokenId, uint256[5] memory seed)
-        external
-        view
-        returns (string memory);
+    function tokenURI(uint256 tokenId, uint256[5] memory seed) external view returns (string memory);
 
-    function palettes(uint8 paletteIndex, uint256 colorIndex)
-        external
-        view
-        returns (string memory);
+    function palettes(uint8 paletteIndex, uint256 colorIndex) external view returns (string memory);
 
     function bodies(uint256 index) external view returns (bytes memory);
 

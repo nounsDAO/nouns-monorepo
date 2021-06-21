@@ -1,18 +1,22 @@
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { ethers } from 'hardhat';
 import { NounsDescriptor } from '../typechain';
 import { colors, layers } from './files/encoded-layers.json';
+import { LongestPart } from './types';
 
 chai.use(solidity);
 const { expect } = chai;
 
 describe('NounsDescriptor', () => {
   let nounsDescriptor: NounsDescriptor;
+  let nounsDAO: SignerWithAddress;
 
   async function deploy() {
     const nftDescriptorLibraryFactory = await ethers.getContractFactory(
       'NFTDescriptor',
+      nounsDAO,
     );
     const nftDescriptorLibrary = await nftDescriptorLibraryFactory.deploy();
 
@@ -21,61 +25,58 @@ describe('NounsDescriptor', () => {
     const nounsDescriptorFactory = await ethers.getContractFactory(
       'NounsDescriptor',
       {
+        signer: nounsDAO,
         libraries: {
           NFTDescriptor: nftDescriptorLibrary.address,
         },
       },
     );
-    nounsDescriptor =
-      (await nounsDescriptorFactory.deploy()) as NounsDescriptor;
+    nounsDescriptor = (await nounsDescriptorFactory.deploy(
+      nounsDAO.address,
+    )) as NounsDescriptor;
 
     return nounsDescriptor.deployed();
   }
 
-  const longestLengths = [0, 0, 0, 0, 0];
-  const longestIndices = [0, 0, 0, 0, 0];
+  const part: LongestPart = {
+    length: 0,
+    index: 0,
+  };
+  const longestParts = [part, part, part, part, part];
+  let longestBody: LongestPart;
+  let longestAccessory: LongestPart;
+  let longestHead: LongestPart;
+  let longestGlasses: LongestPart;
+  let longestArms: LongestPart;
 
   beforeEach(async () => {
+    [nounsDAO] = await ethers.getSigners();
     nounsDescriptor = await deploy();
 
     const [bodies, accessories, heads, glasses, arms] = layers;
 
-    for (const [i, item] of bodies.entries()) {
-      if (item.data.length > longestLengths[0]) {
-        longestLengths[0] = item.data.length;
-        longestIndices[0] = i;
+    for (const [l, layer] of layers.entries()) {
+      for (const [i, item] of layer.entries()) {
+        if (item.data.length > longestParts[l].length) {
+          longestParts[l] = {
+            length: item.data.length,
+            index: i,
+          };
+        }
       }
     }
-    for (const [i, item] of accessories.entries()) {
-      if (item.data.length > longestLengths[1]) {
-        longestLengths[1] = item.data.length;
-        longestIndices[1] = i;
-      }
-    }
-    for (const [i, item] of heads.entries()) {
-      if (item.data.length > longestLengths[2]) {
-        longestLengths[2] = item.data.length;
-        longestIndices[2] = i;
-      }
-    }
-    for (const [i, item] of glasses.entries()) {
-      if (item.data.length > longestLengths[3]) {
-        longestLengths[3] = item.data.length;
-        longestIndices[3] = i;
-      }
-    }
-    for (const [i, item] of arms.entries()) {
-      if (item.data.length > longestLengths[4]) {
-        longestLengths[4] = item.data.length;
-        longestIndices[4] = i;
-      }
-    }
+    [longestBody, longestAccessory, longestHead, longestGlasses, longestArms] =
+      longestParts;
 
-    console.log(`Longest body: #${longestIndices[0]} (${longestLengths[0]})`);
-    console.log(`Longest accessory: #${longestIndices[1]} (${longestLengths[1]})`);
-    console.log(`Longest head: #${longestIndices[2]} (${longestLengths[2]})`);
-    console.log(`Longest glasses: #${longestIndices[3]} (${longestLengths[3]})`);
-    console.log(`Longest arms: #${longestIndices[4]} (${longestLengths[4]})`);
+    console.log(`Longest body: #${longestBody.index} (${longestBody.length})`);
+    console.log(
+      `Longest accessory: #${longestAccessory.index} (${longestAccessory.length})`,
+    );
+    console.log(`Longest head: #${longestHead.index} (${longestHead.length})`);
+    console.log(
+      `Longest glasses: #${longestGlasses.index} (${longestGlasses.length})`,
+    );
+    console.log(`Longest arms: #${longestArms.index} (${longestArms.length})`);
 
     await Promise.all([
       nounsDescriptor.addManyColorsToPalette(
@@ -97,16 +98,13 @@ describe('NounsDescriptor', () => {
   });
 
   it('should generate valid token uri metadata', async () => {
-    const tokenUri = await nounsDescriptor.tokenURI(
-      0,
-      [
-        longestIndices[0], 
-        longestIndices[1], 
-        longestIndices[2], 
-        longestIndices[3], 
-        longestIndices[4]
-      ],
-    );
+    const tokenUri = await nounsDescriptor.tokenURI(0, [
+      longestBody.index,
+      longestAccessory.index,
+      longestHead.index,
+      longestGlasses.index,
+      longestArms.index,
+    ]);
     expect(tokenUri).to.not.be.undefined;
   });
 });
