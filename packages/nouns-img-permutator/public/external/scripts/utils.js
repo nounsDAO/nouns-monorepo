@@ -136,8 +136,9 @@ function displayModeChanged(element) {
     layerSelectionList.innerHTML = ''
 
     data.forEach(layer => {
-        // set default for layer-0 as `transparent-bg.png`
-        if (layer.name == 'layer-0') {
+        
+        // if layer-0 for source has `transparent-bg.png`, set as default
+        if (layer.options.includes('transparent-bg.png') && layer.name == 'layer-0') {
             selectedOptions.layers[layer.name] = 'transparent-bg.png'
             addButtonDropdownWithOptions(layer)
             addLayerToLayerDisplay(layer, 'transparent-bg.png')
