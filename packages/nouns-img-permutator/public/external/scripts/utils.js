@@ -43,7 +43,6 @@ function addNounImg(data, dominantColorHSL, displayMode) {
         let img = document.createElement('img')
         img.setAttribute('src', data)
         img.classList.add('noun-img')
-        img.classList.add('rounded')
 
         // create hsl css to set as bg color 
         let hsl = `hsl(${dominantColorHSL[0]},${dominantColorHSL[1]-10}%,${70}%)`
@@ -60,17 +59,14 @@ function addNounImg(data, dominantColorHSL, displayMode) {
         let imgSm = document.createElement('img')
         imgSm.setAttribute('src', data)
         imgSm.classList.add('noun-img-sm')
-        imgSm.classList.add('rounded')
     
         let imgMd = document.createElement('img')
         imgMd.setAttribute('src', data)
         imgMd.classList.add('noun-img-md')
-        imgMd.classList.add('rounded')
     
         let imgLg = document.createElement('img')
         imgLg.setAttribute('src', data)
         imgLg.classList.add('noun-img-lg')
-        imgLg.classList.add('rounded')
 
         // create hsl css to set as bg color 
         let hsl = `hsl(${dominantColorHSL[0]},${dominantColorHSL[1]-10}%,${70}%)`
@@ -140,9 +136,18 @@ function displayModeChanged(element) {
     layerSelectionList.innerHTML = ''
 
     data.forEach(layer => {
-        selectedOptions.layers[layer.name] = 'random'
-        addButtonDropdownWithOptions(layer)
-        addLayerToLayerDisplay(layer, 'random')
+        
+        // if layer-0 for source has `transparent-bg.png`, set as default
+        if (layer.options.includes('transparent-bg.png') && layer.name == 'layer-0') {
+            selectedOptions.layers[layer.name] = 'transparent-bg.png'
+            addButtonDropdownWithOptions(layer)
+            addLayerToLayerDisplay(layer, 'transparent-bg.png')
+        } else {
+            // else, default as random
+            selectedOptions.layers[layer.name] = 'random'
+            addButtonDropdownWithOptions(layer)
+            addLayerToLayerDisplay(layer, 'random')
+        }        
     })
 }
 
@@ -262,17 +267,18 @@ function addButtonDropdownWithOptions(layer) {
 }
 
 /**
- * Adds a layer to the selection display.
+ * Adds a layer to the selection display. Used to initialize layers display. 
  * @param {Object} layer Object representaining layer containing `object.name` property
+ * @param {String} name Strign to set as the 
  */
-function addLayerToLayerDisplay(layer) {
+function addLayerToLayerDisplay(layer, name) {
 
     let layerSelectionList = document.getElementById('layer-selection')
 
     let listItem = document.createElement('li')
     listItem.classList.add('list-group-item')
     listItem.dataset.layerName = layer.name
-    listItem.textContent = layer.name + ': random'
+    listItem.textContent = layer.name + ': ' + name
     
     layerSelectionList.appendChild(listItem)
 }
