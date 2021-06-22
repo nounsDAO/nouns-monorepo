@@ -7,13 +7,13 @@ import "./GovernorBravoInterfaces.sol";
 contract GovernorBravoDelegate is GovernorBravoDelegateStorageV1, GovernorBravoEvents {
 
     /// @notice The name of this contract
-    string public constant name = "Compound Governor Bravo";
+    string public constant name = "Nouns Governor";
 
     /// @notice The minimum setable proposal threshold
-    uint public constant MIN_PROPOSAL_THRESHOLD = 50000e18; // 50,000 Comp
+    uint public constant MIN_PROPOSAL_THRESHOLD = 1; // 50,000 Comp
 
     /// @notice The maximum setable proposal threshold
-    uint public constant MAX_PROPOSAL_THRESHOLD = 100000e18; //100,000 Comp
+    uint public constant MAX_PROPOSAL_THRESHOLD = 10; //100,000 Comp
 
     /// @notice The minimum setable voting period
     uint public constant MIN_VOTING_PERIOD = 5760; // About 24 hours
@@ -28,7 +28,7 @@ contract GovernorBravoDelegate is GovernorBravoDelegateStorageV1, GovernorBravoE
     uint public constant MAX_VOTING_DELAY = 40320; // About 1 week
 
     /// @notice The number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed
-    uint public constant quorumVotes = 400000e18; // 400,000 = 4% of Comp
+    uint public constant quorumVotes = 1; // 400,000 = 4% of Comp
 
     /// @notice The maximum number of actions that can be included in a proposal
     uint public constant proposalMaxOperations = 10; // 10 actions
@@ -47,7 +47,7 @@ contract GovernorBravoDelegate is GovernorBravoDelegateStorageV1, GovernorBravoE
       * @param votingDelay_ The initial voting delay
       * @param proposalThreshold_ The initial proposal threshold
       */
-    function initialize(address timelock_, address comp_, uint votingPeriod_, uint votingDelay_, uint proposalThreshold_) public {
+    function initialize(address timelock_, address comp_, uint votingPeriod_, uint votingDelay_, uint proposalThreshold_) virtual public {
         require(address(timelock) == address(0), "GovernorBravo::initialize: can only initialize once");
         require(msg.sender == admin, "GovernorBravo::initialize: admin only");
         require(timelock_ != address(0), "GovernorBravo::initialize: invalid timelock address");

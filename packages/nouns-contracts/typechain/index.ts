@@ -27,6 +27,7 @@ export type { INounsErc721 } from "./INounsErc721";
 export type { Iweth } from "./Iweth";
 export type { NounsAuctionHouse } from "./NounsAuctionHouse";
 export type { NounsErc721 } from "./NounsErc721";
+export type { GovernorBravoDelegateHarness } from "./GovernorBravoDelegateHarness";
 export type { Weth } from "./Weth";
 
 export { PausableUpgradeable__factory } from "./factories/PausableUpgradeable__factory";
@@ -55,4 +56,5 @@ export { INounsErc721__factory } from "./factories/INounsErc721__factory";
 export { Iweth__factory } from "./factories/Iweth__factory";
 export { NounsAuctionHouse__factory } from "./factories/NounsAuctionHouse__factory";
 export { NounsErc721__factory } from "./factories/NounsErc721__factory";
+export { GovernorBravoDelegateHarness__factory } from "./factories/GovernorBravoDelegateHarness__factory";
 export { Weth__factory } from "./factories/Weth__factory";
