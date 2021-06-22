@@ -43,7 +43,7 @@ library NFTDescriptor {
      * @notice Generate a description for use in the ERC721 token URI.
      */
     function _generateDescription(uint256 tokenId) private pure returns (string memory) {
-        return string(abi.encodePacked('This unique Noun was bought in auction #', tokenId.toString()));
+        return string(abi.encodePacked('Noun #', tokenId.toString(), ' is a member of the NounsDAO'));
     }
 
     /**

@@ -30,9 +30,6 @@ contract NounsDescriptor is INounsDescriptor {
     // Noun Glasses
     bytes[] public override glasses;
 
-    // Noun Arms
-    bytes[] public override arms;
-
     /**
      * @notice Require that the contract has not been locked.
      */
@@ -82,13 +79,6 @@ contract NounsDescriptor is INounsDescriptor {
      */
     function glassesCount() external view override returns (uint256) {
         return glasses.length;
-    }
-
-    /**
-     * @notice Get the number of Noun available Noun `arms`.
-     */
-    function armsCount() external view override returns (uint256) {
-        return arms.length;
     }
 
     /**
@@ -148,16 +138,6 @@ contract NounsDescriptor is INounsDescriptor {
     }
 
     /**
-     * @notice Batch add Noun arms.
-     * @dev This function can only be called by nounDAO when not locked.
-     */
-    function addManyArms(bytes[] calldata _arms) external override onlyNounsDAO whenNotLocked {
-        for (uint256 i = 0; i < _arms.length; i++) {
-            _addArms(_arms[i]);
-        }
-    }
-
-    /**
      * @notice Add a single color to a color palette.
      * @dev This function can only be called by nounDAO when not locked.
      */
@@ -204,14 +184,6 @@ contract NounsDescriptor is INounsDescriptor {
     }
 
     /**
-     * @notice Add Noun arms.
-     * @dev This function can only be called by nounDAO when not locked.
-     */
-    function addArms(bytes calldata _arms) external override onlyNounsDAO whenNotLocked {
-        _addArms(_arms);
-    }
-
-    /**
      * @notice Lock all Noun parts and color palettes.
      * @dev This cannot be reversed and can only be called by nounDAO when not locked.
      */
@@ -222,7 +194,7 @@ contract NounsDescriptor is INounsDescriptor {
     /**
      * @notice Given a token ID and seed, construct the token URI.
      */
-    function tokenURI(uint256 tokenId, uint256[5] memory seed) external view override returns (string memory) {
+    function tokenURI(uint256 tokenId, uint256[4] memory seed) external view override returns (string memory) {
         NFTDescriptor.ConstructTokenURIParams memory params = NFTDescriptor.ConstructTokenURIParams({
             tokenId: tokenId,
             parts: _getPartsForSeed(seed)
@@ -266,22 +238,14 @@ contract NounsDescriptor is INounsDescriptor {
     }
 
     /**
-     * @notice Add Noun arms.
-     */
-    function _addArms(bytes calldata _arms) internal {
-        arms.push(_arms);
-    }
-
-    /**
      * @notice Get all Noun parts for the passed `seed`.
      */
-    function _getPartsForSeed(uint256[5] memory seed) internal view returns (bytes[] memory) {
-        bytes[] memory _parts = new bytes[](5);
+    function _getPartsForSeed(uint256[4] memory seed) internal view returns (bytes[] memory) {
+        bytes[] memory _parts = new bytes[](4);
         _parts[0] = bodies[seed[0]];
         _parts[1] = accessories[seed[1]];
         _parts[2] = heads[seed[2]];
         _parts[3] = glasses[seed[3]];
-        _parts[4] = arms[seed[4]];
         return _parts;
     }
 }

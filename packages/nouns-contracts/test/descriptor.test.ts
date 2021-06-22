@@ -42,18 +42,17 @@ describe('NounsDescriptor', () => {
     length: 0,
     index: 0,
   };
-  const longestParts = [part, part, part, part, part];
+  const longestParts = [part, part, part, part];
   let longestBody: LongestPart;
   let longestAccessory: LongestPart;
   let longestHead: LongestPart;
   let longestGlasses: LongestPart;
-  let longestArms: LongestPart;
 
   beforeEach(async () => {
     [nounsDAO] = await ethers.getSigners();
     nounsDescriptor = await deploy();
 
-    const [bodies, accessories, heads, glasses, arms] = layers;
+    const [bodies, accessories, heads, glasses] = layers;
 
     for (const [l, layer] of layers.entries()) {
       for (const [i, item] of layer.entries()) {
@@ -65,8 +64,7 @@ describe('NounsDescriptor', () => {
         }
       }
     }
-    [longestBody, longestAccessory, longestHead, longestGlasses, longestArms] =
-      longestParts;
+    [longestBody, longestAccessory, longestHead, longestGlasses] = longestParts;
 
     await Promise.all([
       nounsDescriptor.addManyColorsToPalette(
@@ -83,7 +81,6 @@ describe('NounsDescriptor', () => {
         heads.map(({ data }) => data).filter((_, i) => i % 2 === 1),
       ),
       nounsDescriptor.addManyGlasses(glasses.map(({ data }) => data)),
-      nounsDescriptor.addManyArms(arms.map(({ data }) => data)),
     ]);
   });
 
@@ -93,7 +90,6 @@ describe('NounsDescriptor', () => {
       longestAccessory.index,
       longestHead.index,
       longestGlasses.index,
-      longestArms.index,
     ]);
     const { name, description, image } = JSON.parse(
       Buffer.from(
@@ -102,7 +98,7 @@ describe('NounsDescriptor', () => {
       ).toString('ascii'),
     );
     expect(name).to.equal('Noun #0');
-    expect(description).to.equal('This unique Noun was bought in auction #0');
+    expect(description).to.equal('Noun #0 is a member of the NounsDAO');
     expect(image).to.not.be.undefined;
   });
 });

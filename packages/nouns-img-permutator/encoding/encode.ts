@@ -34,7 +34,7 @@ interface Line {
 
 type Lines = { [number: number]: Line };
 
-const LAYER_COUNT = 5;
+const LAYER_COUNT = 4;
 const OUTPUT_FILE = 'encoded-layers.json';
 
 const toPaddedHex = (c: number, pad = 2) => {

@@ -23,7 +23,7 @@ contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
     // The internal noun ID tracker
     Counters.Counter private _nounIdTracker;
 
-    mapping(uint256 => uint256[5]) _seeds;
+    mapping(uint256 => uint256[4]) _seeds;
 
     /**
      * @notice Require that the descriptor has not been locked.

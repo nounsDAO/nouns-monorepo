@@ -59,13 +59,12 @@ const getRandomNoun = async () => {
   const fileJSON = await fs.readFile('encoded-layers.json', 'utf8');
   const data: EncodedData = JSON.parse(fileJSON);
 
-  const [bodies, accessories, heads, glasses, arms] = data.layers;
+  const [bodies, accessories, heads, glasses] = data.layers;
   const parts = [
     getRandom(bodies),
     getRandom(accessories),
     getRandom(heads),
     getRandom(glasses),
-    getRandom(arms),
   ];
 
   const svgWithoutEndTag = parts.reduce((result, part) => {
