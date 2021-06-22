@@ -12,7 +12,7 @@ contract NounsSeeder is INounsSeeder {
     function generateSeed(INounsDescriptor descriptor) external view override returns (uint256[4] memory) {
         uint256 bhash = uint256(blockhash(block.number - 1));
 
-        uint64[4] memory pseudorandommness = [
+        uint64[4] memory pseudorandomness = [
             uint64(bhash),
             uint64(bhash >> 64),
             uint64(bhash >> 128),
@@ -25,10 +25,10 @@ contract NounsSeeder is INounsSeeder {
         uint256 glassesCount = descriptor.glassesCount();
 
         return [
-            pseudorandommness[0] % bodyCount,
-            pseudorandommness[1] % accessoryCount,
-            pseudorandommness[2] % headCount,
-            pseudorandommness[3] % glassesCount
+            pseudorandomness[0] % bodyCount,
+            pseudorandomness[1] % accessoryCount,
+            pseudorandomness[2] % headCount,
+            pseudorandomness[3] % glassesCount
         ];
     }
 }
