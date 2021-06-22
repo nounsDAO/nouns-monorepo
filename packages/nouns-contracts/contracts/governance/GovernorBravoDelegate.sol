@@ -90,10 +90,10 @@ contract GovernorBravoDelegate is GovernorBravoDelegateStorageV1, GovernorBravoE
         uint startBlock = add256(block.number, votingDelay);
         uint endBlock = add256(startBlock, votingPeriod);
 
-        uint newProposalId = proposalCount+1;
-        Proposal storage newProposal = proposals[newProposalId];
+        proposalCount++;
+        Proposal storage newProposal = proposals[proposalCount];
 
-        newProposal.id = newProposalId;
+        newProposal.id = proposalCount;
         newProposal.proposer = msg.sender;
         newProposal.eta = 0;
         newProposal.targets = targets;
@@ -108,7 +108,7 @@ contract GovernorBravoDelegate is GovernorBravoDelegateStorageV1, GovernorBravoE
         newProposal.canceled = false;
         newProposal.executed = false;
 
-        latestProposalIds[newProposal.proposer] = newProposalId;
+        latestProposalIds[newProposal.proposer] = proposalCount;
 
         emit ProposalCreated(newProposal.id, msg.sender, targets, values, signatures, calldatas, startBlock, endBlock, description);
         return newProposal.id;
