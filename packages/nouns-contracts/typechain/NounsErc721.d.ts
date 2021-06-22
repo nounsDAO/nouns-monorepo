@@ -28,7 +28,9 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     "getApproved(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "isDescriptorLocked()": FunctionFragment;
+    "isSeederLocked()": FunctionFragment;
     "lockDescriptor()": FunctionFragment;
+    "lockSeeder()": FunctionFragment;
     "mint()": FunctionFragment;
     "name()": FunctionFragment;
     "nounsDAO()": FunctionFragment;
@@ -36,8 +38,10 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     "ownerOf(uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
+    "seeder()": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
     "setDescriptor(address)": FunctionFragment;
+    "setSeeder(address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
     "tokenByIndex(uint256)": FunctionFragment;
@@ -71,7 +75,15 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "isSeederLocked",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "lockDescriptor",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "lockSeeder",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "mint", values?: undefined): string;
@@ -90,6 +102,7 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     functionFragment: "safeTransferFrom",
     values: [string, string, BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "seeder", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "setApprovalForAll",
     values: [string, boolean]
@@ -98,6 +111,7 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     functionFragment: "setDescriptor",
     values: [string]
   ): string;
+  encodeFunctionData(functionFragment: "setSeeder", values: [string]): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [BytesLike]
@@ -145,9 +159,14 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "isSeederLocked",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "lockDescriptor",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "lockSeeder", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "nounsDAO", data: BytesLike): Result;
@@ -161,6 +180,7 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     functionFragment: "safeTransferFrom",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "seeder", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setApprovalForAll",
     data: BytesLike
@@ -169,6 +189,7 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     functionFragment: "setDescriptor",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setSeeder", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "supportsInterface",
     data: BytesLike
@@ -201,8 +222,9 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     "ApprovalForAll(address,address,bool)": EventFragment;
     "DescriptorUpdated(address)": EventFragment;
     "NounBurned(uint256)": EventFragment;
-    "NounCreated(uint256)": EventFragment;
+    "NounCreated(uint256,uint256[4])": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
+    "SeederUpdated(address)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
   };
 
@@ -212,6 +234,7 @@ interface NounsErc721Interface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "NounBurned"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NounCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SeederUpdated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
 }
 
@@ -318,11 +341,23 @@ export class NounsErc721 extends Contract {
 
     "isDescriptorLocked()"(overrides?: CallOverrides): Promise<[boolean]>;
 
+    isSeederLocked(overrides?: CallOverrides): Promise<[boolean]>;
+
+    "isSeederLocked()"(overrides?: CallOverrides): Promise<[boolean]>;
+
     lockDescriptor(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     "lockDescriptor()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    lockSeeder(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "lockSeeder()"(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -379,6 +414,10 @@ export class NounsErc721 extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    seeder(overrides?: CallOverrides): Promise<[string]>;
+
+    "seeder()"(overrides?: CallOverrides): Promise<[string]>;
+
     setApprovalForAll(
       operator: string,
       approved: boolean,
@@ -398,6 +437,16 @@ export class NounsErc721 extends Contract {
 
     "setDescriptor(address)"(
       _descriptor: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setSeeder(
+      _seeder: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "setSeeder(address)"(
+      _seeder: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -535,11 +584,23 @@ export class NounsErc721 extends Contract {
 
   "isDescriptorLocked()"(overrides?: CallOverrides): Promise<boolean>;
 
+  isSeederLocked(overrides?: CallOverrides): Promise<boolean>;
+
+  "isSeederLocked()"(overrides?: CallOverrides): Promise<boolean>;
+
   lockDescriptor(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   "lockDescriptor()"(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  lockSeeder(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "lockSeeder()"(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -593,6 +654,10 @@ export class NounsErc721 extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  seeder(overrides?: CallOverrides): Promise<string>;
+
+  "seeder()"(overrides?: CallOverrides): Promise<string>;
+
   setApprovalForAll(
     operator: string,
     approved: boolean,
@@ -612,6 +677,16 @@ export class NounsErc721 extends Contract {
 
   "setDescriptor(address)"(
     _descriptor: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setSeeder(
+    _seeder: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "setSeeder(address)"(
+    _seeder: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -743,9 +818,17 @@ export class NounsErc721 extends Contract {
 
     "isDescriptorLocked()"(overrides?: CallOverrides): Promise<boolean>;
 
+    isSeederLocked(overrides?: CallOverrides): Promise<boolean>;
+
+    "isSeederLocked()"(overrides?: CallOverrides): Promise<boolean>;
+
     lockDescriptor(overrides?: CallOverrides): Promise<void>;
 
     "lockDescriptor()"(overrides?: CallOverrides): Promise<void>;
+
+    lockSeeder(overrides?: CallOverrides): Promise<void>;
+
+    "lockSeeder()"(overrides?: CallOverrides): Promise<void>;
 
     mint(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -789,6 +872,10 @@ export class NounsErc721 extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    seeder(overrides?: CallOverrides): Promise<string>;
+
+    "seeder()"(overrides?: CallOverrides): Promise<string>;
+
     setApprovalForAll(
       operator: string,
       approved: boolean,
@@ -808,6 +895,13 @@ export class NounsErc721 extends Contract {
 
     "setDescriptor(address)"(
       _descriptor: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setSeeder(_seeder: string, overrides?: CallOverrides): Promise<void>;
+
+    "setSeeder(address)"(
+      _seeder: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -911,8 +1005,12 @@ export class NounsErc721 extends Contract {
     ): TypedEventFilter<[BigNumber], { tokenId: BigNumber }>;
 
     NounCreated(
-      tokenId: BigNumberish | null
-    ): TypedEventFilter<[BigNumber], { tokenId: BigNumber }>;
+      tokenId: BigNumberish | null,
+      seed: null
+    ): TypedEventFilter<
+      [BigNumber, [BigNumber, BigNumber, BigNumber, BigNumber]],
+      { tokenId: BigNumber; seed: [BigNumber, BigNumber, BigNumber, BigNumber] }
+    >;
 
     OwnershipTransferred(
       previousOwner: string | null,
@@ -921,6 +1019,8 @@ export class NounsErc721 extends Contract {
       [string, string],
       { previousOwner: string; newOwner: string }
     >;
+
+    SeederUpdated(seeder: null): TypedEventFilter<[string], { seeder: string }>;
 
     Transfer(
       from: string | null,
@@ -992,11 +1092,23 @@ export class NounsErc721 extends Contract {
 
     "isDescriptorLocked()"(overrides?: CallOverrides): Promise<BigNumber>;
 
+    isSeederLocked(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "isSeederLocked()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     lockDescriptor(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     "lockDescriptor()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    lockSeeder(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "lockSeeder()"(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1053,6 +1165,10 @@ export class NounsErc721 extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    seeder(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "seeder()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     setApprovalForAll(
       operator: string,
       approved: boolean,
@@ -1072,6 +1188,16 @@ export class NounsErc721 extends Contract {
 
     "setDescriptor(address)"(
       _descriptor: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setSeeder(
+      _seeder: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "setSeeder(address)"(
+      _seeder: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1217,11 +1343,25 @@ export class NounsErc721 extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    isSeederLocked(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "isSeederLocked()"(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     lockDescriptor(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     "lockDescriptor()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    lockSeeder(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "lockSeeder()"(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1278,6 +1418,10 @@ export class NounsErc721 extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    seeder(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "seeder()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     setApprovalForAll(
       operator: string,
       approved: boolean,
@@ -1297,6 +1441,16 @@ export class NounsErc721 extends Contract {
 
     "setDescriptor(address)"(
       _descriptor: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setSeeder(
+      _seeder: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "setSeeder(address)"(
+      _seeder: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

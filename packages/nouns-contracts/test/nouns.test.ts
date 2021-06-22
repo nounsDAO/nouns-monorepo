@@ -1,7 +1,13 @@
+import { BigNumber as EthersBN } from 'ethers';
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
-import { NounsErc721 } from '../typechain';
-import { deployNounsErc721, getSigners, TestSigners } from './utils';
+import { NounsDescriptor__factory, NounsErc721 } from '../typechain';
+import {
+  deployNounsERC721,
+  getSigners,
+  populateDescriptor,
+  TestSigners,
+} from './utils';
 
 chai.use(solidity);
 const { expect } = chai;
@@ -12,13 +18,27 @@ describe('NounsERC721', () => {
 
   beforeEach(async () => {
     signers = await getSigners();
-    nounsErc721 = await deployNounsErc721();
+    nounsErc721 = await deployNounsERC721();
+
+    const descriptor = await nounsErc721.descriptor();
+
+    await populateDescriptor(
+      NounsDescriptor__factory.connect(descriptor, signers.deployer),
+    );
   });
 
   it('should allow owner to mint a noun', async () => {
     const receipt = await (await nounsErc721.mint()).wait();
+    const nounCreated = receipt.events?.[1];
+
     expect(await nounsErc721.ownerOf(0)).to.eq(signers.deployer.address);
-    expect(receipt.events?.[1].event).to.eq('NounCreated');
+    expect(nounCreated?.event).to.eq('NounCreated');
+    expect(nounCreated?.args?.tokenId).to.eq(0);
+    expect(nounCreated?.args?.seed.length).to.equal(4);
+
+    nounCreated?.args?.seed.forEach((item: EthersBN) =>
+      expect(item.toNumber()).to.be.a('number'),
+    );
   });
 
   it('should allow owner to burn a noun', async () => {

@@ -1,42 +1,15 @@
-import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
-import { ethers } from 'hardhat';
 import { NounsDescriptor } from '../typechain';
-import { colors, layers } from './files/encoded-layers.json';
+import { layers } from './files/encoded-layers.json';
 import { LongestPart } from './types';
+import { deployNounsDescriptor, populateDescriptor } from './utils';
 
 chai.use(solidity);
 const { expect } = chai;
 
 describe('NounsDescriptor', () => {
   let nounsDescriptor: NounsDescriptor;
-  let nounsDAO: SignerWithAddress;
-
-  async function deploy() {
-    const nftDescriptorLibraryFactory = await ethers.getContractFactory(
-      'NFTDescriptor',
-      nounsDAO,
-    );
-    const nftDescriptorLibrary = await nftDescriptorLibraryFactory.deploy();
-
-    await nftDescriptorLibrary.deployed();
-
-    const nounsDescriptorFactory = await ethers.getContractFactory(
-      'NounsDescriptor',
-      {
-        signer: nounsDAO,
-        libraries: {
-          NFTDescriptor: nftDescriptorLibrary.address,
-        },
-      },
-    );
-    nounsDescriptor = (await nounsDescriptorFactory.deploy(
-      nounsDAO.address,
-    )) as NounsDescriptor;
-
-    return nounsDescriptor.deployed();
-  }
 
   const part: LongestPart = {
     length: 0,
@@ -49,10 +22,7 @@ describe('NounsDescriptor', () => {
   let longestGlasses: LongestPart;
 
   beforeEach(async () => {
-    [nounsDAO] = await ethers.getSigners();
-    nounsDescriptor = await deploy();
-
-    const [bodies, accessories, heads, glasses] = layers;
+    nounsDescriptor = await deployNounsDescriptor();
 
     for (const [l, layer] of layers.entries()) {
       for (const [i, item] of layer.entries()) {
@@ -66,22 +36,7 @@ describe('NounsDescriptor', () => {
     }
     [longestBody, longestAccessory, longestHead, longestGlasses] = longestParts;
 
-    await Promise.all([
-      nounsDescriptor.addManyColorsToPalette(
-        0,
-        colors.map(color => color),
-      ),
-      nounsDescriptor.addManyBodies(bodies.map(({ data }) => data)),
-      nounsDescriptor.addManyAccessories(accessories.map(({ data }) => data)),
-      // Split up head insertion due to high gas usage
-      nounsDescriptor.addManyHeads(
-        heads.map(({ data }) => data).filter((_, i) => i % 2 === 0),
-      ),
-      nounsDescriptor.addManyHeads(
-        heads.map(({ data }) => data).filter((_, i) => i % 2 === 1),
-      ),
-      nounsDescriptor.addManyGlasses(glasses.map(({ data }) => data)),
-    ]);
+    await populateDescriptor(nounsDescriptor);
   });
 
   it('should generate valid token uri metadata', async () => {

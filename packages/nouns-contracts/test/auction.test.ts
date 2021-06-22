@@ -2,8 +2,13 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { ethers, upgrades } from 'hardhat';
-import { NounsAuctionHouse, NounsErc721, Weth } from '../typechain';
-import { deployNounsErc721, deployWeth } from './utils';
+import {
+  NounsAuctionHouse,
+  NounsDescriptor__factory,
+  NounsErc721,
+  Weth,
+} from '../typechain';
+import { deployNounsERC721, deployWeth, populateDescriptor } from './utils';
 
 chai.use(solidity);
 const { expect } = chai;
@@ -43,9 +48,15 @@ describe('NounsAuctionHouse', () => {
 
   beforeEach(async () => {
     [noundersDAO, nounsDAO, bidderA, bidderB] = await ethers.getSigners();
-    nounsErc721 = await deployNounsErc721(noundersDAO);
+    nounsErc721 = await deployNounsERC721(noundersDAO, nounsDAO.address);
     weth = await deployWeth(noundersDAO);
     await deploy(noundersDAO);
+
+    const descriptor = await nounsErc721.descriptor();
+
+    await populateDescriptor(
+      NounsDescriptor__factory.connect(descriptor, nounsDAO),
+    );
 
     await nounsErc721.transferOwnership(nounsAuctionHouse.address);
   });
