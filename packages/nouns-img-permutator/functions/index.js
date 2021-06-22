@@ -221,10 +221,17 @@ exports.fetchLayersAndOptionsWithSource = functions.https.onRequest(async (reque
                 dominantColorRGB[2]
             )
 
+            // clean up layer paths to remove everything but the final file name
+            for (var i = 0; i < layerPaths.length; i++) {
+                layerPaths[i] = layerPaths[i].split('/')[3]    
+                layerPaths[i] = layerPaths[i].split('.')[0]                
+            }
+
             // return base64 image data
             response.status(200).json({ 
                 base64: base64,
-                dominantColorHSL: dominantColorHSL
+                dominantColorHSL: dominantColorHSL,
+                layers: layerPaths
             })
 
         } catch (e) {
@@ -255,7 +262,7 @@ exports.fetchLayersAndOptionsWithSource = functions.https.onRequest(async (reque
         // root path for asset folder
         const baseLayerPath = source + `/assets/`
 
-        // GET
+        // GET PATHS FOR LAYERS
         try {            
             var layerPaths = []
 
@@ -321,12 +328,105 @@ exports.fetchLayersAndOptionsWithSource = functions.https.onRequest(async (reque
                 Canvas: Canvas,
                 Image: Image
             })
-            // return base64 image data
-            response.status(200).json( { base64: b64})
+
+            // clean up layer paths to remove everything but the final file name
+            for (var i = 0; i < layerPaths.length; i++) {
+                layerPaths[i] = layerPaths[i].split('/')[3]    
+                layerPaths[i] = layerPaths[i].split('.')[0]                
+            }
+
+            // return base64 image data            
+            response.status(200).json( { base64: b64, layers: layerPaths})
         } catch (e) {
             console.log(`error merging images. `, e)
             response.status(500).json( { error: e})
         }
+    })
+})
+
+/**
+ * **EXTERNAL VOTES ONLY**
+ * Adds votes to item within layer
+ * Accepts an array of objects each denoting a `layerName` and `fileName` to use to add vote to in db.
+ * Adds +1 in Firestore to ${layersName}/${fileName}/${voteEXT}
+ */
+exports.addVoteToLayersEXT = functions.https.onRequest(async (request, response) => {
+    cors(request, response, async () => {
+
+        let options = JSON.parse(request.query.options)
+        
+        var updatedDocsData = []
+        try {
+            for (var i = 0; i < options.length; i++) {
+                const docRef = db.collection(`layer-${i}-EXT`).doc(options[i]);
+                const doc = await docRef.get()
+                if (!doc.exists) {
+                    // doc does not exist -> first vote
+                    await docRef.set({
+                        votes: 1
+                    })           
+                } else {
+                    // doc does not exist -> n + 1 vote 
+                    await docRef.update({
+                        votes: admin.firestore.FieldValue.increment(1)
+                    })           
+                }
+                // fetch updated doc
+                const updatedDoc = await docRef.get()
+                updatedDocsData.push({
+                    fileName: options[i],
+                    votes: updatedDoc.data().votes
+                })
+            }
+        } catch (e) {
+            response.status(500).json( { error: e})
+        }
+
+        response.status(200).json( { updatedDocs: updatedDocsData})
+        
+    })
+})
+
+/**
+ * **INTERNAL VOTES ONLY**
+ * Adds votes to item within layer
+ * Accepts an array of objects each denoting a `layerName` and `fileName` to use to add vote to in db.
+ * Adds +1 in Firestore to ${layersName}/${fileName}/${voteEXT}
+ */
+ exports.addVoteToLayersINT = functions.https.onRequest(async (request, response) => {
+    cors(request, response, async () => {
+
+        let options = JSON.parse(request.query.options)
+        
+        var updatedDocsData = []
+        try {
+            for (var i = 0; i < options.length; i++) {
+                const docRef = db.collection(`layer-${i}-INT`).doc(options[i]);
+                const doc = await docRef.get()
+                if (!doc.exists) {
+                    // doc does not exist -> first vote
+                    await docRef.set({
+                        votes: 1
+                    })           
+                } else {
+                    // doc does not exist -> n + 1 vote 
+                    await docRef.update({
+                        votes: admin.firestore.FieldValue.increment(1)
+                    })           
+                }
+                // fetch updated doc
+                const updatedDoc = await docRef.get()
+                updatedDocsData.push({
+                    fileName: options[i],
+                    votes: updatedDoc.data().votes
+                })
+            }
+        } catch (e) {
+            response.status(500).json( { error: e})
+        }
+
+        response.status(200).json( { updatedDocs: updatedDocsData})
+        
     })
 })
 
