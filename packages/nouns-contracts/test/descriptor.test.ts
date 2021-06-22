@@ -68,16 +68,6 @@ describe('NounsDescriptor', () => {
     [longestBody, longestAccessory, longestHead, longestGlasses, longestArms] =
       longestParts;
 
-    console.log(`Longest body: #${longestBody.index} (${longestBody.length})`);
-    console.log(
-      `Longest accessory: #${longestAccessory.index} (${longestAccessory.length})`,
-    );
-    console.log(`Longest head: #${longestHead.index} (${longestHead.length})`);
-    console.log(
-      `Longest glasses: #${longestGlasses.index} (${longestGlasses.length})`,
-    );
-    console.log(`Longest arms: #${longestArms.index} (${longestArms.length})`);
-
     await Promise.all([
       nounsDescriptor.addManyColorsToPalette(
         0,
