@@ -222,7 +222,7 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     "ApprovalForAll(address,address,bool)": EventFragment;
     "DescriptorUpdated(address)": EventFragment;
     "NounBurned(uint256)": EventFragment;
-    "NounCreated(uint256,uint256[4])": EventFragment;
+    "NounCreated(uint256,tuple)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "SeederUpdated(address)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
@@ -1008,8 +1008,24 @@ export class NounsErc721 extends Contract {
       tokenId: BigNumberish | null,
       seed: null
     ): TypedEventFilter<
-      [BigNumber, [BigNumber, BigNumber, BigNumber, BigNumber]],
-      { tokenId: BigNumber; seed: [BigNumber, BigNumber, BigNumber, BigNumber] }
+      [
+        BigNumber,
+        [BigNumber, BigNumber, BigNumber, BigNumber] & {
+          body: BigNumber;
+          accessory: BigNumber;
+          head: BigNumber;
+          glasses: BigNumber;
+        }
+      ],
+      {
+        tokenId: BigNumber;
+        seed: [BigNumber, BigNumber, BigNumber, BigNumber] & {
+          body: BigNumber;
+          accessory: BigNumber;
+          head: BigNumber;
+          glasses: BigNumber;
+        };
+      }
     >;
 
     OwnershipTransferred(

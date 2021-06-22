@@ -8,5 +8,12 @@ import { INounsDescriptor } from './INounsDescriptor.sol';
  * @title Interface for NounsSeeder.
  */
 interface INounsSeeder {
-    function generateSeed(INounsDescriptor descriptor) external view returns (uint256[4] memory);
+    struct Seed {
+        uint64 body;
+        uint64 accessory;
+        uint64 head;
+        uint64 glasses;
+    }
+
+    function generateSeed(uint256 nounId, INounsDescriptor descriptor) external view returns (Seed memory);
 }

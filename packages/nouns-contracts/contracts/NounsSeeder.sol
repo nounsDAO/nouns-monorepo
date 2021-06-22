@@ -7,28 +7,32 @@ import { INounsDescriptor } from './interfaces/INounsDescriptor.sol';
 
 contract NounsSeeder is INounsSeeder {
     /**
-     * @notice Generate a pseudo-random Noun seed using the previous blockhash.
+     * @notice Generate a pseudo-random Noun seed using the previous blockhash and noun ID.
      */
-    function generateSeed(INounsDescriptor descriptor) external view override returns (uint256[4] memory) {
-        uint256 bhash = uint256(blockhash(block.number - 1));
-
-        uint64[4] memory pseudorandomness = [
-            uint64(bhash),
-            uint64(bhash >> 64),
-            uint64(bhash >> 128),
-            uint64(bhash >> 192)
-        ];
+    // prettier-ignore
+    function generateSeed(uint256 nounId, INounsDescriptor descriptor) external view override returns (Seed memory) {
+        uint256 pseudorandomness = uint256(
+            keccak256(abi.encodePacked(blockhash(block.number - 1), nounId))
+        );
 
         uint256 bodyCount = descriptor.bodyCount();
         uint256 accessoryCount = descriptor.accessoryCount();
         uint256 headCount = descriptor.headCount();
         uint256 glassesCount = descriptor.glassesCount();
 
-        return [
-            pseudorandomness[0] % bodyCount,
-            pseudorandomness[1] % accessoryCount,
-            pseudorandomness[2] % headCount,
-            pseudorandomness[3] % glassesCount
-        ];
+        return Seed({
+            body: uint64(
+                uint64(pseudorandomness) % bodyCount
+            ),
+            accessory: uint64(
+                uint64(pseudorandomness >> 64) % accessoryCount
+            ),
+            head: uint64(
+                uint64(pseudorandomness >> 128) % headCount
+            ),
+            glasses: uint64(
+                uint64(pseudorandomness >> 192) % glassesCount
+            )
+        });
     }
 }

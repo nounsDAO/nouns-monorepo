@@ -3,6 +3,7 @@
 pragma solidity ^0.8.5;
 
 import { INounsDescriptor } from './interfaces/INounsDescriptor.sol';
+import { INounsSeeder } from './interfaces/INounsSeeder.sol';
 import { NFTDescriptor } from './libs/NFTDescriptor.sol';
 
 /**
@@ -194,7 +195,7 @@ contract NounsDescriptor is INounsDescriptor {
     /**
      * @notice Given a token ID and seed, construct the token URI.
      */
-    function tokenURI(uint256 tokenId, uint256[4] memory seed) external view override returns (string memory) {
+    function tokenURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view override returns (string memory) {
         NFTDescriptor.ConstructTokenURIParams memory params = NFTDescriptor.ConstructTokenURIParams({
             tokenId: tokenId,
             parts: _getPartsForSeed(seed)
@@ -240,12 +241,12 @@ contract NounsDescriptor is INounsDescriptor {
     /**
      * @notice Get all Noun parts for the passed `seed`.
      */
-    function _getPartsForSeed(uint256[4] memory seed) internal view returns (bytes[] memory) {
+    function _getPartsForSeed(INounsSeeder.Seed memory seed) internal view returns (bytes[] memory) {
         bytes[] memory _parts = new bytes[](4);
-        _parts[0] = bodies[seed[0]];
-        _parts[1] = accessories[seed[1]];
-        _parts[2] = heads[seed[2]];
-        _parts[3] = glasses[seed[3]];
+        _parts[0] = bodies[seed.body];
+        _parts[1] = accessories[seed.accessory];
+        _parts[2] = heads[seed.head];
+        _parts[3] = glasses[seed.glasses];
         return _parts;
     }
 }

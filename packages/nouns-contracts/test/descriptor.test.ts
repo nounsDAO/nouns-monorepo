@@ -40,12 +40,12 @@ describe('NounsDescriptor', () => {
   });
 
   it('should generate valid token uri metadata', async () => {
-    const tokenUri = await nounsDescriptor.tokenURI(0, [
-      longestBody.index,
-      longestAccessory.index,
-      longestHead.index,
-      longestGlasses.index,
-    ]);
+    const tokenUri = await nounsDescriptor.tokenURI(0, {
+      body: longestBody.index,
+      accessory: longestAccessory.index,
+      head: longestHead.index,
+      glasses: longestGlasses.index,
+    });
     const { name, description, image } = JSON.parse(
       Buffer.from(
         tokenUri.replace('data:application/json;base64,', ''),

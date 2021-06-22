@@ -2,6 +2,8 @@
 
 pragma solidity ^0.8.5;
 
+import { INounsSeeder } from './INounsSeeder.sol';
+
 /**
  * @title Interface for NounsDescriptor.
  */
@@ -50,5 +52,5 @@ interface INounsDescriptor {
 
     function lock() external;
 
-    function tokenURI(uint256 tokenId, uint256[4] memory seed) external view returns (string memory);
+    function tokenURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view returns (string memory);
 }

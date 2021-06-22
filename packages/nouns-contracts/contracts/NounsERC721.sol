@@ -31,7 +31,7 @@ contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
     Counters.Counter private _nounIdTracker;
 
     // The internal noun seeds
-    mapping(uint256 => uint256[4]) private _seeds;
+    mapping(uint256 => INounsSeeder.Seed) private _seeds;
 
     /**
      * @notice Require that the descriptor has not been locked.
@@ -75,7 +75,7 @@ contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
         uint256 nounId = _nounIdTracker.current();
         _nounIdTracker.increment();
 
-        uint256[4] memory seed = _seeds[nounId] = seeder.generateSeed(descriptor);
+        INounsSeeder.Seed memory seed = _seeds[nounId] = seeder.generateSeed(nounId, descriptor);
 
         _mint(owner(), nounId);
         emit NounCreated(nounId, seed);
