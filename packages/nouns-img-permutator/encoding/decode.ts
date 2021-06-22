@@ -14,7 +14,7 @@ interface EncodedData {
   layers: ImageData[][];
 }
 
-interface Bounds {
+interface ImageBounds {
   top: number;
   right: number;
   bottom: number;
@@ -23,7 +23,7 @@ interface Bounds {
 
 interface DecodedImage {
   paletteIndex: number;
-  bounds: Bounds;
+  bounds: ImageBounds;
   rects: [length: number, colorIndex: number][];
 }
 
@@ -98,7 +98,7 @@ const getRandomNoun = async () => {
     });
     result += svgRects.join('');
     return result;
-  }, '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="320" height="320">');
+  }, '<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">');
 
   return `${svgWithoutEndTag}</svg>`;
 };

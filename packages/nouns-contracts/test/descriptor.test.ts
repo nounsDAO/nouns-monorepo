@@ -105,6 +105,14 @@ describe('NounsDescriptor', () => {
       longestGlasses.index,
       longestArms.index,
     ]);
-    expect(tokenUri).to.not.be.undefined;
+    const { name, description, image } = JSON.parse(
+      Buffer.from(
+        tokenUri.replace('data:application/json;base64,', ''),
+        'base64',
+      ).toString('ascii'),
+    );
+    expect(name).to.equal('Noun #0');
+    expect(description).to.equal('This unique Noun was bought in auction #0');
+    expect(image).to.not.be.undefined;
   });
 });

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { readPngFile } from 'node-libpng';
+import { ColorRGBA, readPngFile } from 'node-libpng';
 import { promises as fs } from 'fs';
 import path from 'path';
 
@@ -9,6 +9,30 @@ interface ImageData {
   name: string;
   data: string;
 }
+
+interface ImageBounds {
+  top: number;
+  right: number;
+  bottom: number;
+  left: number;
+}
+
+interface LineBounds {
+  left: number;
+  right: number;
+}
+
+interface Rect {
+  length: number;
+  colorIndex: number;
+}
+
+interface Line {
+  rects: Rect[];
+  bounds: LineBounds;
+}
+
+type Lines = { [number: number]: Line };
 
 const LAYER_COUNT = 5;
 const OUTPUT_FILE = 'encoded-layers.json';
@@ -25,81 +49,96 @@ const getFolder = (i: number) => `../assets/layer-${i}`;
 
 const colors: Map<string, number> = new Map([['', 0]]);
 
+const addPixelToRect = (color: ColorRGBA, lines: Lines, y: number) => {
+  const { r, g, b, a } = color;
+  const hexColor = rgbToHex(r, g, b);
+
+  if (!colors.has(hexColor)) {
+    colors.set(hexColor, colors.size);
+  }
+  const colorIndex = a === 0 ? 0 : colors.get(hexColor)!;
+
+  lines[y] ||= {
+    rects: [],
+    bounds: { left: 0, right: 0 },
+  };
+  const { rects } = lines[y];
+  if (!rects.length || rects[rects.length - 1].colorIndex !== colorIndex) {
+    rects.push({ length: 1, colorIndex }); // First pixel of line or different color than previous
+  } else {
+    rects[rects.length - 1].length++; // Same color as the pixel to the left
+  }
+};
+
+// prettier-ignore
+const updateBounds = (bounds: ImageBounds, lines: Lines, y: number) => {
+  const { rects } = lines[y];
+    if (!(rects[0].length === 32 && rects[0].colorIndex === 0) && bounds.top === 0) {
+      bounds.top = y - 1; // shift top bound to `y - 1`
+    }
+    if (bounds.top !== 0) {
+      if ((rects[0].length === 32 && rects[0].colorIndex === 0) || y === 31) {
+        if (bounds.bottom === 0) {
+          bounds.bottom = y; // Set bottom bound to `y`
+        }
+      } else {
+        bounds.bottom = 0; // Reset bottom bound
+      }
+    }
+    lines[y].bounds = {
+      left: rects[0].length,
+      right: 32 - rects[rects.length - 1].length,
+    };
+};
+
 const getEncodedImage = async (folder: string, file: string) => {
   const image = await readPngFile(path.join(folder, file));
 
-  const bounds = { topY: 0, bottomY: 0, leftX: 0, rightX: 0 };
-  const lineBounds: { [number: number]: { leftX: number; rightX: number } } =
-    {};
-  const lines: { [number: number]: [length: number, colorIndex: number][] } =
-    {};
+  const bounds: ImageBounds = { top: 0, bottom: 0, left: 0, right: 0 };
+  const lines: Lines = {};
   for (let y = 0; y < image.height; y++) {
     for (let x = 0; x < image.width; x++) {
-      const { r, g, b, a } = image.rgbaAt(x, y);
-      const hexColor = rgbToHex(r, g, b);
-
-      if (!colors.has(hexColor)) {
-        colors.set(hexColor, colors.size);
-      }
-      const colorIndex = a === 0 ? 0 : colors.get(hexColor)!;
-
-      lines[y] ||= [];
-      if (!lines[y].length || lines[y][lines[y].length - 1][1] !== colorIndex) {
-        lines[y].push([1, colorIndex]); // First pixel of line or different color than previous
-      } else {
-        lines[y][lines[y].length - 1][0]++; // Same color as the pixel to the left
-      }
+      addPixelToRect(image.rgbaAt(x, y), lines, y);
     }
-    if (!(lines[y][0][0] === 32 && lines[y][0][1] === 0) && bounds.topY === 0) {
-      bounds.topY = y - 1; // shift top bound to `y - 1`
-    }
-    if (bounds.topY !== 0) {
-      if ((lines[y][0][0] === 32 && lines[y][0][1] === 0) || y === 31) {
-        if (bounds.bottomY === 0) {
-          bounds.bottomY = y; // Set bottom bound to `y`
-        }
-      } else {
-        bounds.bottomY = 0; // Reset bottom bound
-      }
-    }
-    lineBounds[y] = {
-      leftX: lines[y][0][0],
-      rightX: 32 - lines[y][lines[y].length - 1][0],
-    };
+    updateBounds(bounds, lines, y);
   }
-  for (let i = 0; i <= bounds.topY; i++) {
+
+  for (let i = 0; i <= bounds.top; i++) {
     delete lines[i]; // Delete all rows above the top bound
-    delete lineBounds[i];
   }
-  for (let i = 31; i >= bounds.bottomY; i--) {
+  for (let i = 31; i >= bounds.bottom; i--) {
     delete lines[i]; // Delete all rows below the bottom bound
-    delete lineBounds[i];
   }
-  bounds.leftX = Math.min(...Object.values(lineBounds).map(b => b.leftX));
-  bounds.rightX = Math.max(...Object.values(lineBounds).map(b => b.rightX));
 
-  const initial = `0x00${toPaddedHex(bounds.topY, 2)}${toPaddedHex(
-    bounds.rightX,
+  bounds.left = Math.min(...Object.values(lines).map(l => l.bounds.left));
+  bounds.right = Math.max(...Object.values(lines).map(l => l.bounds.right));
+
+  const initial = `0x00${toPaddedHex(bounds.top, 2)}${toPaddedHex(
+    bounds.right,
     2,
-  )}${toPaddedHex(bounds.bottomY, 2)}${toPaddedHex(bounds.leftX, 2)}`;
+  )}${toPaddedHex(bounds.bottom, 2)}${toPaddedHex(bounds.left, 2)}`;
   const encoded = Object.values(lines).reduce((result, line) => {
     const lineBuffer = Buffer.from(
-      line.flatMap(([length, colorIndex], i) => {
-        if (i === 0 && i === line.length - 1) {
-          return [bounds.rightX - bounds.leftX, colorIndex];
+      line.rects.flatMap(({ length, colorIndex }, i) => {
+        // Line only contains a single rect
+        if (i === 0 && i === line.rects.length - 1) {
+          return [bounds.right - bounds.left, colorIndex];
         }
 
+        // Set left bound
         if (i === 0) {
-          if (length > bounds.leftX) {
-            return [length - bounds.leftX, colorIndex];
-          } else if (length === bounds.leftX) {
+          if (length > bounds.left) {
+            return [length - bounds.left, colorIndex];
+          } else if (length === bounds.left) {
             return [];
           }
         }
-        if (i === line.length - 1) {
-          if (length > 32 - bounds.rightX) {
-            return [length - (32 - bounds.rightX), colorIndex];
-          } else if (length === 32 - bounds.rightX) {
+
+        // Set right bound
+        if (i === line.rects.length - 1) {
+          if (length > 32 - bounds.right) {
+            return [length - (32 - bounds.right), colorIndex];
+          } else if (length === 32 - bounds.right) {
             return [];
           }
         }
