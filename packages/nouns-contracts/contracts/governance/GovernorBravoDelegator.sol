@@ -1,9 +1,12 @@
 // SPDX-License-Identifier: MIT
 
+// Uses parts of [Open Zeppelin's Proxy.sol] (https://github.com/OpenZeppelin/openzeppelin-contracts/blob/5c8746f56b4bed8cc9e0e044f5f69ab2f9428ce1/contracts/proxy/Proxy.sol) to deal with newer version of Solidity's fallback() and receive()
+
 pragma solidity ^0.8.4;
 
 import "./GovernorBravoInterfaces.sol";
 
+// @QUESTIONS: can admin be changed?
 contract GovernorBravoDelegator is GovernorBravoDelegatorStorage, GovernorBravoEvents {
 	constructor(
 			address timelock_,
@@ -64,7 +67,7 @@ contract GovernorBravoDelegator is GovernorBravoDelegatorStorage, GovernorBravoE
      * It returns to the external caller whatever the implementation returns
      * or forwards reverts.
      */
-    fallback() external payable {
+    function _fallback() internal {
         // delegate all other functions to current implementation
         (bool success, ) = implementation.delegatecall(msg.data);
 
@@ -76,5 +79,21 @@ contract GovernorBravoDelegator is GovernorBravoDelegatorStorage, GovernorBravoE
               case 0 { revert(free_mem_ptr, returndatasize()) }
               default { return(free_mem_ptr, returndatasize()) }
         }
+    }
+
+    /**
+     * @dev Fallback function that delegates calls to the `implementation`. Will run if no other
+     * function in the contract matches the call data.
+     */
+    fallback() external payable {
+        _fallback();
+    }
+
+    /**
+     * @dev Fallback function that delegates calls to `implementation`. Will run if call data
+     * is empty.
+     */
+    receive() external payable {
+        _fallback();
     }
 }
