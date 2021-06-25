@@ -1010,20 +1010,22 @@ export class NounsErc721 extends Contract {
     ): TypedEventFilter<
       [
         BigNumber,
-        [BigNumber, BigNumber, BigNumber, BigNumber] & {
-          body: BigNumber;
-          accessory: BigNumber;
-          head: BigNumber;
-          glasses: BigNumber;
+        [number, number, number, number, number] & {
+          background: number;
+          body: number;
+          accessory: number;
+          head: number;
+          glasses: number;
         }
       ],
       {
         tokenId: BigNumber;
-        seed: [BigNumber, BigNumber, BigNumber, BigNumber] & {
-          body: BigNumber;
-          accessory: BigNumber;
-          head: BigNumber;
-          glasses: BigNumber;
+        seed: [number, number, number, number, number] & {
+          background: number;
+          body: number;
+          accessory: number;
+          head: number;
+          glasses: number;
         };
       }
     >;

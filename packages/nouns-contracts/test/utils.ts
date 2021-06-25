@@ -84,6 +84,7 @@ export const deployWeth = async (
 export const populateDescriptor = async (
   nounsDescriptor: NounsDescriptor,
 ): Promise<void> => {
+  const backgrounds = ['e1e5e3'];
   const [bodies, accessories, heads, glasses] = layers;
 
   await Promise.all([
@@ -91,6 +92,7 @@ export const populateDescriptor = async (
       0,
       colors.map(color => color),
     ),
+    nounsDescriptor.addManyBackgrounds(backgrounds),
     nounsDescriptor.addManyBodies(bodies.map(({ data }) => data)),
     nounsDescriptor.addManyAccessories(accessories.map(({ data }) => data)),
     // Split up head insertion due to high gas usage

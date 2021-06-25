@@ -16,19 +16,22 @@ contract NounsDescriptor is INounsDescriptor {
     // Whether new Noun parts can be added
     bool public override isLocked;
 
-    // Noun Color Palettes
+    // Noun Color Palettes (Index => Hex Colors)
     mapping(uint8 => string[]) public override palettes;
 
-    // Noun Bodies
+    // Noun Backgrounds (Hex Colors)
+    string[] public override backgrounds;
+
+    // Noun Bodies (Custom RLE)
     bytes[] public override bodies;
 
-    // Noun Accessories
+    // Noun Accessories (Custom RLE)
     bytes[] public override accessories;
 
-    // Noun Heads
+    // Noun Heads (Custom RLE)
     bytes[] public override heads;
 
-    // Noun Glasses
+    // Noun Glasses (Custom RLE)
     bytes[] public override glasses;
 
     /**
@@ -55,28 +58,35 @@ contract NounsDescriptor is INounsDescriptor {
     }
 
     /**
-     * @notice Get the number of Noun available Noun `bodies`.
+     * @notice Get the number of available Noun `backgrounds`.
+     */
+    function backgroundCount() external view override returns (uint256) {
+        return backgrounds.length;
+    }
+
+    /**
+     * @notice Get the number of available Noun `bodies`.
      */
     function bodyCount() external view override returns (uint256) {
         return bodies.length;
     }
 
     /**
-     * @notice Get the number of Noun available Noun `accessories`.
+     * @notice Get the number of available Noun `accessories`.
      */
     function accessoryCount() external view override returns (uint256) {
         return accessories.length;
     }
 
     /**
-     * @notice Get the number of Noun available Noun `heads`.
+     * @notice Get the number of available Noun `heads`.
      */
     function headCount() external view override returns (uint256) {
         return heads.length;
     }
 
     /**
-     * @notice Get the number of Noun available Noun `glasses`.
+     * @notice Get the number of available Noun `glasses`.
      */
     function glassesCount() external view override returns (uint256) {
         return glasses.length;
@@ -84,7 +94,7 @@ contract NounsDescriptor is INounsDescriptor {
 
     /**
      * @notice Add colors to a color palette.
-     * @dev This function can only be called by nounDAO when not locked.
+     * @dev This function can only be called by nounsDAO when not locked.
      */
     function addManyColorsToPalette(uint8 paletteIndex, string[] calldata newColors)
         external
@@ -99,8 +109,18 @@ contract NounsDescriptor is INounsDescriptor {
     }
 
     /**
+     * @notice Batch add Noun backgrounds.
+     * @dev This function can only be called by nounsDAO when not locked.
+     */
+    function addManyBackgrounds(string[] calldata _backgrounds) external override onlyNounsDAO whenNotLocked {
+        for (uint256 i = 0; i < _backgrounds.length; i++) {
+            _addBackground(_backgrounds[i]);
+        }
+    }
+
+    /**
      * @notice Batch add Noun bodies.
-     * @dev This function can only be called by nounDAO when not locked.
+     * @dev This function can only be called by nounsDAO when not locked.
      */
     function addManyBodies(bytes[] calldata _bodies) external override onlyNounsDAO whenNotLocked {
         for (uint256 i = 0; i < _bodies.length; i++) {
@@ -110,7 +130,7 @@ contract NounsDescriptor is INounsDescriptor {
 
     /**
      * @notice Batch add Noun accessories.
-     * @dev This function can only be called by nounDAO when not locked.
+     * @dev This function can only be called by nounsDAO when not locked.
      */
     function addManyAccessories(bytes[] calldata _accessories) external override onlyNounsDAO whenNotLocked {
         for (uint256 i = 0; i < _accessories.length; i++) {
@@ -120,7 +140,7 @@ contract NounsDescriptor is INounsDescriptor {
 
     /**
      * @notice Batch add Noun heads.
-     * @dev This function can only be called by nounDAO when not locked.
+     * @dev This function can only be called by nounsDAO when not locked.
      */
     function addManyHeads(bytes[] calldata _heads) external override onlyNounsDAO whenNotLocked {
         for (uint256 i = 0; i < _heads.length; i++) {
@@ -130,7 +150,7 @@ contract NounsDescriptor is INounsDescriptor {
 
     /**
      * @notice Batch add Noun glasses.
-     * @dev This function can only be called by nounDAO when not locked.
+     * @dev This function can only be called by nounsDAO when not locked.
      */
     function addManyGlasses(bytes[] calldata _glasses) external override onlyNounsDAO whenNotLocked {
         for (uint256 i = 0; i < _glasses.length; i++) {
@@ -140,7 +160,7 @@ contract NounsDescriptor is INounsDescriptor {
 
     /**
      * @notice Add a single color to a color palette.
-     * @dev This function can only be called by nounDAO when not locked.
+     * @dev This function can only be called by nounsDAO when not locked.
      */
     function addColorToPalette(uint8 _paletteIndex, string calldata _color)
         external
@@ -153,8 +173,16 @@ contract NounsDescriptor is INounsDescriptor {
     }
 
     /**
+     * @notice Add a Noun background.
+     * @dev This function can only be called by nounsDAO when not locked.
+     */
+    function addBackground(string calldata _background) external override onlyNounsDAO whenNotLocked {
+        _addBackground(_background);
+    }
+
+    /**
      * @notice Add a Noun body.
-     * @dev This function can only be called by nounDAO when not locked.
+     * @dev This function can only be called by nounsDAO when not locked.
      */
     function addBody(bytes calldata _body) external override onlyNounsDAO whenNotLocked {
         _addBody(_body);
@@ -162,7 +190,7 @@ contract NounsDescriptor is INounsDescriptor {
 
     /**
      * @notice Add a Noun accessory.
-     * @dev This function can only be called by nounDAO when not locked.
+     * @dev This function can only be called by nounsDAO when not locked.
      */
     function addAccessory(bytes calldata _accessory) external override onlyNounsDAO whenNotLocked {
         _addAccessory(_accessory);
@@ -170,7 +198,7 @@ contract NounsDescriptor is INounsDescriptor {
 
     /**
      * @notice Add a Noun head.
-     * @dev This function can only be called by nounDAO when not locked.
+     * @dev This function can only be called by nounsDAO when not locked.
      */
     function addHead(bytes calldata _head) external override onlyNounsDAO whenNotLocked {
         _addHead(_head);
@@ -178,7 +206,7 @@ contract NounsDescriptor is INounsDescriptor {
 
     /**
      * @notice Add Noun glasses.
-     * @dev This function can only be called by nounDAO when not locked.
+     * @dev This function can only be called by nounsDAO when not locked.
      */
     function addGlasses(bytes calldata _glasses) external override onlyNounsDAO whenNotLocked {
         _addGlasses(_glasses);
@@ -186,7 +214,7 @@ contract NounsDescriptor is INounsDescriptor {
 
     /**
      * @notice Lock all Noun parts and color palettes.
-     * @dev This cannot be reversed and can only be called by nounDAO when not locked.
+     * @dev This cannot be reversed and can only be called by nounsDAO when not locked.
      */
     function lock() external override onlyNounsDAO whenNotLocked {
         isLocked = true;
@@ -198,7 +226,8 @@ contract NounsDescriptor is INounsDescriptor {
     function tokenURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view override returns (string memory) {
         NFTDescriptor.ConstructTokenURIParams memory params = NFTDescriptor.ConstructTokenURIParams({
             tokenId: tokenId,
-            parts: _getPartsForSeed(seed)
+            parts: _getPartsForSeed(seed),
+            background: backgrounds[seed.background]
         });
         return NFTDescriptor.constructTokenURI(params, palettes);
     }
@@ -208,6 +237,13 @@ contract NounsDescriptor is INounsDescriptor {
      */
     function _addColorToPalette(uint8 _paletteIndex, string calldata _color) internal {
         palettes[_paletteIndex].push(_color);
+    }
+
+    /**
+     * @notice Add a Noun background.
+     */
+    function _addBackground(string calldata _background) internal {
+        backgrounds.push(_background);
     }
 
     /**

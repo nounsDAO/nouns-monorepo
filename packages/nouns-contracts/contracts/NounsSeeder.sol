@@ -15,23 +15,27 @@ contract NounsSeeder is INounsSeeder {
             keccak256(abi.encodePacked(blockhash(block.number - 1), nounId))
         );
 
+        uint256 backgroundCount = descriptor.backgroundCount();
         uint256 bodyCount = descriptor.bodyCount();
         uint256 accessoryCount = descriptor.accessoryCount();
         uint256 headCount = descriptor.headCount();
         uint256 glassesCount = descriptor.glassesCount();
 
         return Seed({
-            body: uint64(
-                uint64(pseudorandomness) % bodyCount
+            background: uint48(
+                uint48(pseudorandomness) % backgroundCount
             ),
-            accessory: uint64(
-                uint64(pseudorandomness >> 64) % accessoryCount
+            body: uint48(
+                uint48(pseudorandomness >> 48) % bodyCount
             ),
-            head: uint64(
-                uint64(pseudorandomness >> 128) % headCount
+            accessory: uint48(
+                uint48(pseudorandomness >> 96) % accessoryCount
             ),
-            glasses: uint64(
-                uint64(pseudorandomness >> 192) % glassesCount
+            head: uint48(
+                uint48(pseudorandomness >> 144) % headCount
+            ),
+            glasses: uint48(
+                uint48(pseudorandomness >> 192) % glassesCount
             )
         });
     }

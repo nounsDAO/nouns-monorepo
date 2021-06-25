@@ -41,6 +41,7 @@ describe('NounsDescriptor', () => {
 
   it('should generate valid token uri metadata', async () => {
     const tokenUri = await nounsDescriptor.tokenURI(0, {
+      background: 0,
       body: longestBody.index,
       accessory: longestAccessory.index,
       head: longestHead.index,
