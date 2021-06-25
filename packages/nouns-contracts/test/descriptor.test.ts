@@ -39,7 +39,24 @@ describe('NounsDescriptor', () => {
     await populateDescriptor(nounsDescriptor);
   });
 
-  it('should generate valid token uri metadata', async () => {
+  it('should generate valid token uri metadata when data uris are disabled', async () => {
+    const BASE_URI = 'https://api.nouns.wtf/nouns/';
+
+    await nounsDescriptor.setBaseURI(BASE_URI);
+
+    const tokenUri = await nounsDescriptor.tokenURI(0, {
+      background: 0,
+      body: longestBody.index,
+      accessory: longestAccessory.index,
+      head: longestHead.index,
+      glasses: longestGlasses.index,
+    });
+    expect(tokenUri).to.equal(`${BASE_URI}0`);
+  });
+
+  it('should generate valid token uri metadata when data uris are enabled', async () => {
+    await nounsDescriptor.setDataURIEnabled(true);
+
     const tokenUri = await nounsDescriptor.tokenURI(0, {
       background: 0,
       body: longestBody.index,

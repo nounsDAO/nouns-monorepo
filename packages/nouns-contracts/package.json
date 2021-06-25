@@ -10,7 +10,8 @@
     "build": "npx hardhat compile",
     "deploy": "hardhat run scripts/deploy.ts",
     "accounts": "npx hardhat accounts",
-    "test": "npx hardhat test"
+    "test": "npx hardhat test",
+    "postinstall": "yarn build"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.2",

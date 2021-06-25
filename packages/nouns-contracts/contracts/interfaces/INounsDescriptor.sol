@@ -10,7 +10,11 @@ import { INounsSeeder } from './INounsSeeder.sol';
 interface INounsDescriptor {
     function nounsDAO() external returns (address);
 
-    function isLocked() external returns (bool);
+    function arePartsLocked() external returns (bool);
+
+    function isDataURIEnabled() external returns (bool);
+
+    function baseURI() external returns (string memory);
 
     function palettes(uint8 paletteIndex, uint256 colorIndex) external view returns (string memory);
 
@@ -58,7 +62,13 @@ interface INounsDescriptor {
 
     function addGlasses(bytes calldata glasses) external;
 
-    function lock() external;
+    function lockParts() external;
+
+    function setDataURIEnabled(bool isDataURIEnabled) external;
+
+    function setBaseURI(string calldata baseURI) external;
 
     function tokenURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view returns (string memory);
+
+    function dataURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view returns (string memory);
 }
