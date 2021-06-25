@@ -6,9 +6,9 @@ const hardhat = require('hardhat');
 const ethers = hardhat.ethers;
 const BigNumber = ethers.BigNumber;
 
-// function rpc({method, params}){
-//   return hardhat.network.provider.send(method, params)
-// }
+function rpc({method, params}: {method: string, params?: any[]}){
+  return hardhat.network.provider.send(method, params)
+}
 
 // function UInt256Max() {
 //   return ethers.constants.MaxUint256;
@@ -84,30 +84,44 @@ export function encodeParameters(types: string[], values: any[]) {
 //   return rpc({method: 'evm_mineBlockNumber', params: [blockNumber]});
 // }
 
+export async function blockByNumber(n: number|string){
+  return await rpc({method: 'eth_getBlockByNumber', params: [n, false]})
+}
 
-// async function increaseTime(seconds) {
-//   await rpc({ method: 'evm_increaseTime', params: [seconds] });
-//   return rpc({ method: 'evm_mine' });
-// }
+export async function increaseTime(seconds: number) {
+  await rpc({ method: 'evm_increaseTime', params: [seconds] });
+  return rpc({ method: 'evm_mine' });
+}
 
 // async function setTime(seconds) {
 //   await rpc({ method: 'evm_setTime', params: [new Date(seconds * 1000)] });
 // }
 
-// async function freezeTime(seconds) {
-//   await rpc({ method: 'evm_freezeTime', params: [seconds] });
-//   return rpc({ method: 'evm_mine' });
-// }
+export async function freezeTime(seconds: number) {
+  await rpc({ method: 'evm_increaseTime', params: [-1*seconds] });
+  return rpc({ method: 'evm_mine' });
+}
 
-// async function advanceBlocks(blocks) {
-//   let { result: num } = await rpc({ method: 'eth_blockNumber' });
-//   await rpc({ method: 'evm_mineBlockNumber', params: [blocks + parseInt(num)] });
-// }
+export async function advanceBlocks(blocks: number) {
+  for (let i=0; i<blocks; i++){
+    await mineBlock()
+  }
+}
 
-// async function blockNumber() {
-//   let { result: num } = await rpc({ method: 'eth_blockNumber' });
-//   return parseInt(num);
-// }
+export async function blockNumber(parse: boolean = true): Promise<number> {
+  let result = await rpc({ method: 'eth_blockNumber' });
+  return parse ? parseInt(result) : result;
+}
+
+export async function blockTimestamp(n: number|string, parse: boolean = true): Promise<number|string>{
+  const block = await blockByNumber(n)
+  return parse ? parseInt(block.timestamp) : block.timestamp;
+}
+
+export async function setNextBlockTimestamp(n: number, mine: boolean = true){
+  await rpc({method: 'evm_setNextBlockTimestamp', params: [n]})
+  if (mine) await mineBlock()
+}
 
 // async function rpc(request) {
 //   return new Promise((okay, fail) => web3.currentProvider.send(request, (err, res) => err ? fail(err) : okay(res)));
