@@ -30,8 +30,8 @@ import {
   NounsErc721,
   TimelockHarness,
   TimelockHarness__factory,
-  GovernorBravoImmutable,
-  GovernorBravoImmutable__factory
+  GovernorNImmutable,
+  GovernorNImmutable__factory
 } from '../../../typechain';
 
 
@@ -56,7 +56,7 @@ let account1: SignerWithAddress;
 let account2: SignerWithAddress;
 let signers: TestSigners;
 
-let gov: GovernorBravoImmutable;
+let gov: GovernorNImmutable;
 let timelock: TimelockHarness;
 let delay: number;
 
@@ -85,7 +85,7 @@ async function reset(proposer: SignerWithAddress = deployer, mintAmount: number 
 
   timelock = await new TimelockHarness__factory(deployer).deploy(deployer.address, delay);
 
-  gov = await new GovernorBravoImmutable__factory(deployer).deploy(timelock.address, token.address, deployer.address, 1728, 1, 1)
+  gov = await new GovernorNImmutable__factory(deployer).deploy(timelock.address, token.address, deployer.address, 1728, 1, 1)
 
   await gov.functions["_initiate()"]()
   await timelock.harnessSetAdmin(gov.address)
@@ -103,7 +103,7 @@ async function reset(proposer: SignerWithAddress = deployer, mintAmount: number 
   proposalId = await gov.latestProposalIds(proposer.address);
 }
 
-describe('GovernorBravo#state/1', () => {
+describe('GovernorN#state/1', () => {
 
   before(async () => {
     await freezeTime(100);
@@ -118,7 +118,7 @@ describe('GovernorBravo#state/1', () => {
     await reset()
     await expect(
       gov.state(5)
-    ).revertedWith("GovernorBravo::state: invalid proposal id");
+    ).revertedWith("GovernorN::state: invalid proposal id");
   })
 
   it("Pending", async () => {

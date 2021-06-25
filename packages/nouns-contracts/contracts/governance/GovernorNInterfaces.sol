@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.4;
 
-contract GovernorBravoEvents {
+contract GovernorNEvents {
     /// @notice An event emitted when a new proposal is created
     event ProposalCreated(uint id, address proposer, address[] targets, uint[] values, string[] signatures, bytes[] calldatas, uint startBlock, uint endBlock, string description);
 
@@ -42,7 +42,7 @@ contract GovernorBravoEvents {
     event NewAdmin(address oldAdmin, address newAdmin);
 }
 
-contract GovernorBravoDelegatorStorage {
+contract GovernorNDelegatorStorage {
     /// @notice Administrator for this contract
     address public admin;
 
@@ -56,11 +56,11 @@ contract GovernorBravoDelegatorStorage {
 
 /**
  * @title Storage for Governor Bravo Delegate
- * @notice For future upgrades, do not change GovernorBravoDelegateStorageV1. Create a new
- * contract which implements GovernorBravoDelegateStorageV1 and following the naming convention
- * GovernorBravoDelegateStorageVX.
+ * @notice For future upgrades, do not change GovernorNDelegateStorageV1. Create a new
+ * contract which implements GovernorNDelegateStorageV1 and following the naming convention
+ * GovernorNDelegateStorageVX.
  */
-contract GovernorBravoDelegateStorageV1 is GovernorBravoDelegatorStorage {
+contract GovernorNDelegateStorageV1 is GovernorNDelegatorStorage {
 
     /// @notice The delay before voting on a proposal may take place, once proposed, in blocks
     uint public votingDelay;

@@ -2,9 +2,9 @@
 
 pragma solidity ^0.8.4;
 
-import "../governance/GovernorBravoDelegate.sol";
+import "../governance/GovernorNDelegate.sol";
 
-contract GovernorBravoImmutable is GovernorBravoDelegate {
+contract GovernorNImmutable is GovernorNDelegate {
 
      constructor(
             address timelock_,
@@ -21,8 +21,8 @@ contract GovernorBravoImmutable is GovernorBravoDelegate {
 
 
     function initialize(address timelock_, address comp_, uint votingPeriod_, uint votingDelay_, uint proposalThreshold_) override public {
-        require(msg.sender == admin, "GovernorBravo::initialize: admin only");
-        require(address(timelock) == address(0), "GovernorBravo::initialize: can only initialize once");
+        require(msg.sender == admin, "GovernorN::initialize: admin only");
+        require(address(timelock) == address(0), "GovernorN::initialize: can only initialize once");
         
         timelock = TimelockInterface(timelock_);
         comp = CompInterface(comp_);

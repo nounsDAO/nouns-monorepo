@@ -23,9 +23,9 @@ import {
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsErc721,
-  GovernorBravoDelegator,
-  GovernorBravoDelegateHarness,
-  GovernorBravoDelegateHarness__factory
+  GovernorNDelegator,
+  GovernorNDelegateHarness,
+  GovernorNDelegateHarness__factory
 } from '../../../typechain';
 
 
@@ -55,15 +55,15 @@ const { expect } = chai;
 async function deployGovernor(
   deployer: SignerWithAddress,
   tokenAddress: string,
-): Promise<GovernorBravoDelegateHarness> {
-  const {address: govDelegateAddress } = await new GovernorBravoDelegateHarness__factory(deployer).deploy()
+): Promise<GovernorNDelegateHarness> {
+  const {address: govDelegateAddress } = await new GovernorNDelegateHarness__factory(deployer).deploy()
   const params = [address(0), tokenAddress, deployer.address, govDelegateAddress, 17280, 1, "1"]
 
   const {address: _govDelegatorAddress} = await (
-    await ethers.getContractFactory('GovernorBravoDelegator', deployer)
+    await ethers.getContractFactory('GovernorNDelegator', deployer)
   ).deploy(...params)
 
-  return GovernorBravoDelegateHarness__factory.connect(_govDelegatorAddress, deployer)
+  return GovernorNDelegateHarness__factory.connect(_govDelegatorAddress, deployer)
 }
 
 let token: NounsErc721;
@@ -73,7 +73,7 @@ let account1: SignerWithAddress;
 let account2: SignerWithAddress;
 let signers: TestSigners;
 
-let gov: GovernorBravoDelegateHarness;
+let gov: GovernorNDelegateHarness;
 let targets: string[];
 let values: string[];
 let signatures: string[];
@@ -106,7 +106,7 @@ async function propose(proposer: SignerWithAddress){
   proposalId = await gov.latestProposalIds(proposer.address);
 }
 
-describe("governorBravo#castVote/2", () => {
+describe("GovernorN#castVote/2", () => {
 
   before(async () => {
     signers = await getSigners();
@@ -123,7 +123,7 @@ describe("governorBravo#castVote/2", () => {
     it("There does not exist a proposal with matching proposal id where the current block number is between the proposal's start block (exclusive) and end block (inclusive)", async () => {
       await expect(
         gov.castVote(proposalId, 1)
-      ).revertedWith("GovernorBravo::castVoteInternal: voting is closed");
+      ).revertedWith("GovernorN::castVoteInternal: voting is closed");
     });
 
     it("Such proposal already has an entry in its voters set matching the sender", async () => {
@@ -139,7 +139,7 @@ describe("governorBravo#castVote/2", () => {
 
       await expect(
         gov.connect(account0).castVote(proposalId, 1)
-      ).revertedWith("GovernorBravo::castVoteInternal: voter already voted");
+      ).revertedWith("GovernorN::castVoteInternal: voter already voted");
     });
   });
 
@@ -207,7 +207,7 @@ describe("governorBravo#castVote/2", () => {
     //   };
 
     //   it('reverts if the signatory is invalid', async () => {
-    //     await expect(send(gov, 'castVoteBySig', [proposalId, 0, 0, '0xbad', '0xbad'])).rejects.toRevert("revert GovernorBravo::castVoteBySig: invalid signature");
+    //     await expect(send(gov, 'castVoteBySig', [proposalId, 0, 0, '0xbad', '0xbad'])).rejects.toRevert("revert GovernorN::castVoteBySig: invalid signature");
     //   });
 
     //   it('casts vote on behalf of the signatory', async () => {

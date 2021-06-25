@@ -4,10 +4,10 @@
 
 pragma solidity ^0.8.4;
 
-import "./GovernorBravoInterfaces.sol";
+import "./GovernorNInterfaces.sol";
 
 // @QUESTIONS: can admin be changed?
-contract GovernorBravoDelegator is GovernorBravoDelegatorStorage, GovernorBravoEvents {
+contract GovernorNDelegator is GovernorNDelegatorStorage, GovernorNEvents {
 	constructor(
 			address timelock_,
 			address comp_,
@@ -38,8 +38,8 @@ contract GovernorBravoDelegator is GovernorBravoDelegatorStorage, GovernorBravoE
      * @param implementation_ The address of the new implementation for delegation
      */
     function _setImplementation(address implementation_) public {
-        require(msg.sender == admin, "GovernorBravoDelegator::_setImplementation: admin only");
-        require(implementation_ != address(0), "GovernorBravoDelegator::_setImplementation: invalid implementation address");
+        require(msg.sender == admin, "GovernorNDelegator::_setImplementation: admin only");
+        require(implementation_ != address(0), "GovernorNDelegator::_setImplementation: invalid implementation address");
 
         address oldImplementation = implementation;
         implementation = implementation_;
