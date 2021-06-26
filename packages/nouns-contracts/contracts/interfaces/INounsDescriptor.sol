@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Unlicense
 
-pragma solidity ^0.8.5;
+pragma solidity ^0.8.6;
 
 import { INounsSeeder } from './INounsSeeder.sol';
 

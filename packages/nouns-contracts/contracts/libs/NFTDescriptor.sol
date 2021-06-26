@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Unlicense
 
-pragma solidity ^0.8.5;
+pragma solidity ^0.8.6;
 
 import { Base64 } from 'base64-sol/base64.sol';
 import { Strings } from '@openzeppelin/contracts/utils/Strings.sol';

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Unlicense
 
-pragma solidity ^0.8.5;
+pragma solidity ^0.8.6;
 
 /**
  * @title A library used to convert multi-part RLE compressed images to SVG.

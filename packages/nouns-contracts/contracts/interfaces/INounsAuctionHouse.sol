@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-pragma solidity ^0.8.5;
+pragma solidity ^0.8.6;
 
 import { INounsERC721 } from './INounsERC721.sol';
 
