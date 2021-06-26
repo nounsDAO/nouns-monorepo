@@ -6,6 +6,7 @@ import '@nomiclabs/hardhat-waffle';
 import '@nomiclabs/hardhat-etherscan';
 import 'hardhat-abi-exporter';
 import '@openzeppelin/hardhat-upgrades';
+import 'hardhat-gas-reporter';
 import 'solidity-coverage';
 import dotenv from 'dotenv';
 
@@ -43,6 +44,13 @@ const config: HardhatUserConfig = {
   abiExporter: {
     path: './abi',
     clear: true,
+  },
+  gasReporter: {
+    enabled: !process.env.CI,
+    currency: 'USD',
+    gasPrice: 50,
+    src: 'contracts',
+    coinmarketcap: '7643dfc7-a58f-46af-8314-2db32bdd18ba',
   },
 };
 export default config;

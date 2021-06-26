@@ -31,10 +31,12 @@
     "ethers": "^5.0.32",
     "hardhat": "^2.1.1",
     "hardhat-abi-exporter": "^2.2.1",
+    "hardhat-gas-reporter": "^1.0.4",
     "hardhat-typechain": "^0.3.5",
     "prettier-plugin-solidity": "^1.0.0-beta.12",
     "prompt": "^1.1.0",
-    "solidity-coverage": "^0.7.16"
+    "solidity-coverage": "^0.7.16",
+    "ts-node": "^10.0.0"
   },
   "dependencies": {
     "dotenv": "^10.0.0"
