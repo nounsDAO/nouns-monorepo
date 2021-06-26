@@ -1,0 +1,15 @@
+body{
+	font-size: 18px;
+}
+
+li{
+
+}
+
+li.head{
+	font-weight: bold;
+}
+
+li.sub-head{
+	margin-bottom: 1rem;
+}
