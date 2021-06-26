@@ -11,6 +11,7 @@
     "deploy": "hardhat run scripts/deploy.ts",
     "accounts": "npx hardhat accounts",
     "test": "npx hardhat test",
+    "coverage": "npx hardhat coverage",
     "postinstall": "yarn build"
   },
   "devDependencies": {
@@ -33,7 +34,7 @@
     "hardhat-typechain": "^0.3.5",
     "prettier-plugin-solidity": "^1.0.0-beta.12",
     "prompt": "^1.1.0",
-    "ts-generator": "^0.1.1"
+    "solidity-coverage": "^0.7.16"
   },
   "dependencies": {
     "dotenv": "^10.0.0"
