@@ -22,6 +22,8 @@ interface INounsERC721 is IERC721 {
 
     function burn(uint256 tokenId) external;
 
+    function dataURI(uint256 tokenId) external returns (string memory);
+
     function setDescriptor(INounsDescriptor descriptor) external;
 
     function lockDescriptor() external;

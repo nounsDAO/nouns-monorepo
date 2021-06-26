@@ -92,11 +92,21 @@ contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
     }
 
     /**
+     * @notice A distinct Uniform Resource Identifier (URI) for a given asset.
      * @dev See {IERC721Metadata-tokenURI}.
      */
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
         require(_exists(tokenId), 'NounsERC721: URI query for nonexistent token');
         return descriptor.tokenURI(tokenId, _seeds[tokenId]);
+    }
+
+    /**
+     * @notice Similar to `tokenURI`, but always serves a base64 encoded data URI
+     * with the JSON contents directly inlined.
+     */
+    function dataURI(uint256 tokenId) public view override returns (string memory) {
+        require(_exists(tokenId), 'NounsERC721: URI query for nonexistent token');
+        return descriptor.dataURI(tokenId, _seeds[tokenId]);
     }
 
     /**
