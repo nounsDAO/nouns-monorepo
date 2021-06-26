@@ -4,7 +4,9 @@
 const { Canvas, Image } = require('canvas')
 const mergeImages = require('merge-images')
 const os = require("os") // access tmp folders
-
+const { getColorFromURL } = require('color-thief-node');
+const fse = require('fs-extra')
+var convert = require('color-convert');
 
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
@@ -20,14 +22,52 @@ const db = admin.firestore();
 
 
 /**
+ * Retrieves available top-level directories within bucket
+ * Returns an array of of objects, each object being a layer with its options
+ */
+ exports.fetchSources = functions.https.onRequest(async (request, response) => {
+    cors(request, response, async () => {
+
+        const sourcePrefix = 'src-'
+
+        try {            
+
+            var [files] = await storageBucket.getFiles({ 
+                prefix: sourcePrefix,
+                delimiter: '.png'
+            })
+            if (files.length > 0) {
+
+                var sourceFolders = []
+                files.forEach(file => {
+                    let name = file.name.split('/')[0]
+                    sourceFolders.push(name)
+                })
+                sourceFolders = sourceFolders.unique()
+                response.status(200).json({ sources: sourceFolders})
+                
+            } else { 
+                console.log(`no source folders found.`)
+                response.status(500).json({ error : 'no sources found.'})                
+            }                
+        } catch (e) {
+            console.log(`error fetching file paths for attributes. `, e)
+            response.status(500).json({ error : e})
+        }        
+    })
+})
+
+
+/**
  * Retrieves available layers and their corresponding layer.
  * Returns an array of of objects, each object being a layer with its options
  */
-exports.fetchLayersAndOptions = functions.https.onRequest(async (request, response) => {
+exports.fetchLayersAndOptionsWithSource = functions.https.onRequest(async (request, response) => {
     cors(request, response, async () => {
 
         // root path for layer folders 
-        const baseFolder = `assets/`
+        let source = request.query.source
+        const baseFolder = source + `/assets/`
         const baseLayerPath = `layer-`
 
         try {            
@@ -75,22 +115,23 @@ exports.fetchLayersAndOptions = functions.https.onRequest(async (request, respon
  * its keys are the layer name and values are an array of option strings. 
  * Returns the base64 string representing the finalized noun image.
  */
- exports.generateNounUsingOptions = functions.https.onRequest(async (request, response) => {
+ exports.generateNounUsingOptionsAndSourceAndBG = functions.https.onRequest(async (request, response) => {
     cors(request, response, async () => {
 
         // increment counter
         const docRef = db.collection('admin').doc('counters');
         await docRef.update({
             counter: admin.firestore.FieldValue.increment(1)
-            });
+        });
 
         let options = JSON.parse(request.query.options)
-        let layers = Object.keys(options)
+        let layers = Object.keys(options.layers)
+        let source = options.source
 
         // root path for asset folder
-        const baseLayerPath = `assets/`
+        const baseLayerPath = source + `/assets/`
 
-        // FETCH ONE RANDOM IMAGE PATH FOR EACH LAYER
+        // GET
         try {            
             var layerPaths = []
 
@@ -98,8 +139,9 @@ exports.fetchLayersAndOptions = functions.https.onRequest(async (request, respon
 
                 // base path for layer
                 let layerPath = baseLayerPath + layers[i] + '/'
-                
-                if (options[layers[i]] == 'random') {
+                let optionForLayer = options.layers[layers[i]]
+
+                if (optionForLayer == 'random') {
                     
                     var [files] = await storageBucket.getFiles({ prefix: layerPath})
                     
@@ -116,21 +158,9 @@ exports.fetchLayersAndOptions = functions.https.onRequest(async (request, respon
                         break
                     }
                 } else {
-
                     // if fetching specific layer option, add path 
-                    layerPath = layerPath + options[layers[i]] 
-                    
-                    var [files] = await storageBucket.getFiles({ prefix: layerPath})
-                    if (files.length > 0) {
-                        // filter empty files
-                        files = files.filter(file => file.name.includes('.png')) 
-                        // add             
-                        layerPaths.push(files[0].name)
-                    } else { 
-                        // layer does not exists, end loop.
-                        console.log(`layer ${i} does not exist. ending!`)                        
-                        break
-                    }
+                    layerPath = layerPath + optionForLayer
+                    layerPaths.push(layerPath)
                 }                
 
             }
@@ -138,13 +168,13 @@ exports.fetchLayersAndOptions = functions.https.onRequest(async (request, respon
             console.log(`error fetching file paths for attributes. `, e)
             response.status(500).json({ error : e})
         }
-            
+
         // CREATE PATHS TO DOWNLOAD IMAGES TO    
         let randomInt = Math.floor(Math.random() * 1000000000);
         var pathsToDownloadImagesTo = []    
         for (var i = 0; i < layerPaths.length; i++) {
             // remove directory from filepath (saves us from having to create the directory in tmp folder)
-            let pathName = layerPaths[i].split('/')[1]
+            let pathName = layerPaths[i].split('/')[3]
             // add random int so each path is unique
             pathsToDownloadImagesTo.push(`${os.tmpdir()}/${randomInt}${pathName}`)
         }        
@@ -162,69 +192,120 @@ exports.fetchLayersAndOptions = functions.https.onRequest(async (request, respon
         }
 
         // ATTEMPT TO MERGE IMAGES
+        var base64;
         try {
-            let b64 = await mergeImages(pathsToDownloadImagesTo, { 
+            base64 = await mergeImages(pathsToDownloadImagesTo, { 
                 Canvas: Canvas,
                 Image: Image
             })
-            // return base64 image data
-            response.status(200).json( { base64: b64})
         } catch (e) {
             console.log(`error merging images. `, e)
+            response.status(500).json( { error: e})
+        }
+
+        // GET DOMINANT COLOR FOR BG
+        const mergedImagePath = `${os.tmpdir()}/${randomInt}mergedImage.png`         
+        try {
+            
+            // write merged noun to tmp folder
+            const b64 = base64.split(';base64,').pop();
+            await fse.outputFile(mergedImagePath, b64, {encoding: 'base64'})
+            
+            // extract color
+            const dominantColorRGB = await getColorFromURL(mergedImagePath);
+            
+            // convert rgb to hsl
+            let dominantColorHSL = convert.rgb.hsl(
+                dominantColorRGB[0], 
+                dominantColorRGB[1], 
+                dominantColorRGB[2]
+            )
+
+            // clean up layer paths to remove everything but the final file name
+            for (var i = 0; i < layerPaths.length; i++) {
+                layerPaths[i] = layerPaths[i].split('/')[3]    
+                layerPaths[i] = layerPaths[i].split('.')[0]                
+            }
+
+            // return base64 image data
+            response.status(200).json({ 
+                base64: base64,
+                dominantColorHSL: dominantColorHSL,
+                layers: layerPaths
+            })
+
+        } catch (e) {
+            console.log(`error writing merged image to tmp folder. `, e)
             response.status(500).json( { error: e})
         }
     })
 })
 
-
 /**
- * Generates random noun.
+ * Accepts options for layers to create noun using data. Data should be formatted as an object where
+ * its keys are the layer name and values are an array of option strings. 
  * Returns the base64 string representing the finalized noun image.
  */
-exports.generateRandomNoun = functions.https.onRequest(async (request, response) => {
+ exports.generateNounUsingOptionsAndSource = functions.https.onRequest(async (request, response) => {
     cors(request, response, async () => {
 
         // increment counter
         const docRef = db.collection('admin').doc('counters');
         await docRef.update({
             counter: admin.firestore.FieldValue.increment(1)
-          });
+        });
 
-        // root path for layer folders 
-        const baseLayerPath = `assets/layer-`
+        let options = JSON.parse(request.query.options)
+        let layers = Object.keys(options.layers)
+        let source = options.source
 
-        // FETCH ONE RANDOM IMAGE PATH FOR EACH LAYER
+        // root path for asset folder
+        const baseLayerPath = source + `/assets/`
+
+        // GET PATHS FOR LAYERS
         try {            
             var layerPaths = []
 
-            for (var i = 0; i < 10; i++) {
-                let layer = baseLayerPath + i
-                var [files] = await storageBucket.getFiles({ prefix: layer})
+            for (var i = 0; i < layers.length; i++) {
 
-                if (files.length > 0) {
-                    // filter empty files
-                    files = files.filter(file => file.name.includes('.png')) 
-                    // grab random file
-                    var randomFile = files[Math.floor(Math.random() * files.length)] 
-                    // add                    
-                    layerPaths.push(randomFile.name)
-                } else { 
-                    console.log(`layer ${i} does not exist. ending!`)
-                    // layer does not exists, end loop.
-                    break
-                }
+                // base path for layer
+                let layerPath = baseLayerPath + layers[i] + '/'
+                let optionForLayer = options.layers[layers[i]]
+
+                if (optionForLayer == 'random') {
+                    
+                    var [files] = await storageBucket.getFiles({ prefix: layerPath})
+                    
+                    if (files.length > 0) {
+                        // filter empty files
+                        files = files.filter(file => file.name.includes('.png')) 
+                        // grab random file
+                        var randomFile = files[Math.floor(Math.random() * files.length)] 
+                        // add                    
+                        layerPaths.push(randomFile.name)
+                    } else { 
+                        // layer does not exists, end loop.
+                        console.log(`layer ${i} does not exist. ending!`)                        
+                        break
+                    }
+                } else {
+                    // if fetching specific layer option, add path 
+                    layerPath = layerPath + optionForLayer
+                    layerPaths.push(layerPath)
+                }                
+
             }
         } catch (e) {
             console.log(`error fetching file paths for attributes. `, e)
             response.status(500).json({ error : e})
         }
-            
+
         // CREATE PATHS TO DOWNLOAD IMAGES TO    
         let randomInt = Math.floor(Math.random() * 1000000000);
         var pathsToDownloadImagesTo = []    
         for (var i = 0; i < layerPaths.length; i++) {
             // remove directory from filepath (saves us from having to create the directory in tmp folder)
-            let pathName = layerPaths[i].split('/')[1]
+            let pathName = layerPaths[i].split('/')[3]
             // add random int so each path is unique
             pathsToDownloadImagesTo.push(`${os.tmpdir()}/${randomInt}${pathName}`)
         }        
@@ -247,8 +328,15 @@ exports.generateRandomNoun = functions.https.onRequest(async (request, response)
                 Canvas: Canvas,
                 Image: Image
             })
-            // return base64 image data
-            response.status(200).json( { base64: b64})
+
+            // clean up layer paths to remove everything but the final file name
+            for (var i = 0; i < layerPaths.length; i++) {
+                layerPaths[i] = layerPaths[i].split('/')[3]    
+                layerPaths[i] = layerPaths[i].split('.')[0]                
+            }
+
+            // return base64 image data            
+            response.status(200).json( { base64: b64, layers: layerPaths})
         } catch (e) {
             console.log(`error merging images. `, e)
             response.status(500).json( { error: e})
@@ -256,6 +344,91 @@ exports.generateRandomNoun = functions.https.onRequest(async (request, response)
     })
 })
 
+/**
+ * **EXTERNAL VOTES ONLY**
+ * Adds votes to item within layer
+ * Accepts an array of objects each denoting a `layerName` and `fileName` to use to add vote to in db.
+ * Adds +1 in Firestore to ${layersName}/${fileName}/${voteEXT}
+ */
+exports.addVoteToLayersEXT = functions.https.onRequest(async (request, response) => {
+    cors(request, response, async () => {
+
+        let options = JSON.parse(request.query.options)
+        
+        var updatedDocsData = []
+        try {
+            for (var i = 0; i < options.length; i++) {
+                const docRef = db.collection(`layer-${i}-EXT`).doc(options[i]);
+                const doc = await docRef.get()
+                if (!doc.exists) {
+                    // doc does not exist -> first vote
+                    await docRef.set({
+                        votes: 1
+                    })           
+                } else {
+                    // doc does not exist -> n + 1 vote 
+                    await docRef.update({
+                        votes: admin.firestore.FieldValue.increment(1)
+                    })           
+                }
+                // fetch updated doc
+                const updatedDoc = await docRef.get()
+                updatedDocsData.push({
+                    fileName: options[i],
+                    votes: updatedDoc.data().votes
+                })
+            }
+        } catch (e) {
+            response.status(500).json( { error: e})
+        }
+
+        response.status(200).json( { updatedDocs: updatedDocsData})
+        
+    })
+})
+
+/**
+ * **INTERNAL VOTES ONLY**
+ * Adds votes to item within layer
+ * Accepts an array of objects each denoting a `layerName` and `fileName` to use to add vote to in db.
+ * Adds +1 in Firestore to ${layersName}/${fileName}/${voteEXT}
+ */
+ exports.addVoteToLayersINT = functions.https.onRequest(async (request, response) => {
+    cors(request, response, async () => {
+
+        let options = JSON.parse(request.query.options)
+        
+        var updatedDocsData = []
+        try {
+            for (var i = 0; i < options.length; i++) {
+                const docRef = db.collection(`layer-${i}-INT`).doc(options[i]);
+                const doc = await docRef.get()
+                if (!doc.exists) {
+                    // doc does not exist -> first vote
+                    await docRef.set({
+                        votes: 1
+                    })           
+                } else {
+                    // doc does not exist -> n + 1 vote 
+                    await docRef.update({
+                        votes: admin.firestore.FieldValue.increment(1)
+                    })           
+                }
+                // fetch updated doc
+                const updatedDoc = await docRef.get()
+                updatedDocsData.push({
+                    fileName: options[i],
+                    votes: updatedDoc.data().votes
+                })
+            }
+        } catch (e) {
+            response.status(500).json( { error: e})
+        }
+
+        response.status(200).json( { updatedDocs: updatedDocsData})
+        
+    })
+})
 
 
 /**
@@ -277,4 +450,23 @@ async function downloadFile(destinationFileName, fileToDownloadPath) {
       console.log(`error downloading file ${fileToDownloadPath}. error: ${e}`)
       throw `error downloading file ${fileToDownloadPath}. error: ${e}`
     }
+}
+
+Array.prototype.contains = function(v) {
+    for (var i = 0; i < this.length; i++) {
+      if (this[i] === v) return true;
+    }
+    return false;
+  };
+/**
+ * @returns Array with unique values
+ */
+Array.prototype.unique = function() {
+    var arr = [];
+    for (var i = 0; i < this.length; i++) {
+      if (!arr.contains(this[i])) {
+        arr.push(this[i]);
+      }
+    }
+    return arr;
   }

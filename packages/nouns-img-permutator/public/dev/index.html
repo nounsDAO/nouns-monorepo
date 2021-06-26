@@ -14,30 +14,36 @@
 </head>
 
 <body>
-  <div class="conatiner">
-
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <img src="assets/icon.png" id="noun-icon" class="mx-auto">
+      </div>
+    </div>
     <div class="row">      
-      <div class="col-sm-8 text-center">
-        <div class="col-sm-12 text-center">        
-          <button type="button" class="btn btn-success" id="generate-noun-button" onclick="generateImage()">GENERATE</button>        
-          <div class="btn-group" id="display-mode-radios" role="group" aria-label="Basic radio toggle button group">
-            <input type="radio" class="btn-check" name="btnradio" id="tiled-display-radio-btn" autocomplete="off" onchange="displayModeChanged(this)" checked>
-            <label class="btn btn-outline-primary" for="tiled-display-radio-btn">Tiled</label>        
-            <input type="radio" class="btn-check" name="btnradio" id="scaled-display-radio-btn" onchange="displayModeChanged(this)" autocomplete="off">
-            <label class="btn btn-outline-primary" for="scaled-display-radio-btn">Scaled</label>      
-          </div>        
+      <div class="col-lg-8 text-center">
+        <div class="row" id="main-controls">
+          <div class='col-md-12 col-lg-4'>
+            <button type="button" class="btn btn-success" id="generate-noun-button" onclick="generateImage()" style='width:100%;'>GENERATE</button>        
+          </div>            
+          <div class='col-md-12 col-lg-4'>
+            <div class="btn-group" id="display-mode-radios" role="group" aria-label="Basic radio toggle button group" style='width: 100%;'>
+              <input type="radio" class="btn-check" name="btnradio" id="tiled-display-radio-btn" autocomplete="off" onchange="displayModeChanged(this)" checked>
+              <label class="btn btn-outline-primary" for="tiled-display-radio-btn">Tiled</label>        
+              <input type="radio" class="btn-check" name="btnradio" id="scaled-display-radio-btn" onchange="displayModeChanged(this)" autocomplete="off">
+              <label class="btn btn-outline-primary" for="scaled-display-radio-btn">Scaled</label>      
+            </div>   
+          </div>           
         </div>
-        <div class="col-sm-12 text-center">        
-          <div id="layer-buttons"></div>
+        <div class="row" id="layer-buttons">
         </div>                  
       </div>
-      <div class="col-sm-4 mx-auto">      
-        <ul class="list-group" id="layer-selection">
-        </ul>  
+      <div class="col-lg-4 mx-auto">      
+        <div class="row">
+          <ul class="list-group" id="layer-selection">
+          </ul>  
+        </div>
       </div>   
-    </div>
-    <div class="row">
-   
     </div>
     <div class="row" id="nouns" class='text-center'>
     </div>
