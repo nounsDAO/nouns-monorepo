@@ -4,20 +4,18 @@ The code in this folder can be used to play around with the encoding used to sto
 
 ### Current Format
 
-Color Index (2 bytes), Length (2 bytes), X-Y Coordinate Tuples [1 Byte, 1 Byte].
+Palette Index, Bounds [Top (Y), Right (X), Bottom (Y), Left (X)] (4 Bytes), [Pixel Length (1 Byte), Color Index (1 Byte)][].
 
 ### Usage
-
-First, `cd` into this folder.
 
 Update `encoded-layers.json`:
 
 ```sh
-ts-node encode.ts
+yarn encode
 ```
 
 Randomly generate a Noun, convert the above format to SVG, and open in your default program (likely the browser):
 
 ```sh
-ts-node decode.ts && open random-noun.svg
+yarn decode && open random-noun.svg
 ```

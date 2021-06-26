@@ -45,7 +45,7 @@ const rgbToHex = (r: number, g: number, b: number) => {
   return `${toPaddedHex(r)}${toPaddedHex(g)}${toPaddedHex(b)}`;
 };
 
-const getFolder = (i: number) => `../assets/layer-${i}`;
+const getFolder = (i: number) => path.join(__dirname, `../assets/layer-${i}`);
 
 const colors: Map<string, number> = new Map([['', 0]]);
 
