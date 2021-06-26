@@ -14,7 +14,7 @@ interface EncodedData {
   layers: ImageData[][];
 }
 
-interface Bounds {
+interface ImageBounds {
   top: number;
   right: number;
   bottom: number;
@@ -23,7 +23,7 @@ interface Bounds {
 
 interface DecodedImage {
   paletteIndex: number;
-  bounds: Bounds;
+  bounds: ImageBounds;
   rects: [length: number, colorIndex: number][];
 }
 
@@ -37,7 +37,7 @@ const decodeImage = (image: string): DecodedImage => {
     right: parseInt(data.substring(4, 6), 16),
     bottom: parseInt(data.substring(6, 8), 16),
     left: parseInt(data.substring(8, 10), 16),
-  }; 
+  };
   const rects = data.substring(10);
 
   return {
@@ -59,13 +59,12 @@ const getRandomNoun = async () => {
   const fileJSON = await fs.readFile('encoded-layers.json', 'utf8');
   const data: EncodedData = JSON.parse(fileJSON);
 
-  const [bodies, accessories, heads, glasses, arms] = data.layers;
+  const [bodies, accessories, heads, glasses] = data.layers;
   const parts = [
     getRandom(bodies),
     getRandom(accessories),
     getRandom(heads),
     getRandom(glasses),
-    getRandom(arms),
   ];
 
   const svgWithoutEndTag = parts.reduce((result, part) => {
@@ -79,14 +78,14 @@ const getRandomNoun = async () => {
 
     rects.forEach(rect => {
       const [length, colorIndex] = rect;
-      const rgbColor = data.colors[colorIndex];
+      const hexColor = data.colors[colorIndex];
 
       // Do not push rect if transparent
       if (colorIndex !== 0) {
         svgRects.push(
           `<rect width="${length * 10}" height="10" x="${currentX * 10}" y="${
             currentY * 10
-          }" fill="rgb(${rgbColor})" />`,
+          }" fill="#${hexColor}" />`,
         );
       }
 
@@ -98,7 +97,7 @@ const getRandomNoun = async () => {
     });
     result += svgRects.join('');
     return result;
-  }, '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="320" height="320">');
+  }, '<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">');
 
   return `${svgWithoutEndTag}</svg>`;
 };
