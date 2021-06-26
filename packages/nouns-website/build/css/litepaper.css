@@ -2,6 +2,11 @@ body{
 	font-size: 18px;
 }
 
+.wrapper{
+	width: 700px;
+	margin: 0 auto;
+}
+
 li{
 
 }
