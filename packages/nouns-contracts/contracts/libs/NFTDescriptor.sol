@@ -12,6 +12,7 @@ library NFTDescriptor {
     struct ConstructTokenURIParams {
         uint256 tokenId;
         bytes[] parts;
+        string background;
     }
 
     /**
@@ -54,7 +55,10 @@ library NFTDescriptor {
         view
         returns (string memory svg)
     {
-        MultiPartRLEToSVG.SVGParams memory svgParams = MultiPartRLEToSVG.SVGParams({ parts: params.parts });
+        MultiPartRLEToSVG.SVGParams memory svgParams = MultiPartRLEToSVG.SVGParams({
+            parts: params.parts,
+            background: params.background
+        });
         return MultiPartRLEToSVG.generateSVG(svgParams, palettes);
     }
 }
