@@ -95,6 +95,7 @@ contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
      * @dev See {IERC721Metadata-tokenURI}.
      */
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
+        require(_exists(tokenId), 'NounsERC721: URI query for nonexistent token');
         return descriptor.tokenURI(tokenId, _seeds[tokenId]);
     }
 

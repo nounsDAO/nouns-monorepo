@@ -9,10 +9,11 @@ import { INounsDescriptor } from './INounsDescriptor.sol';
  */
 interface INounsSeeder {
     struct Seed {
-        uint64 body;
-        uint64 accessory;
-        uint64 head;
-        uint64 glasses;
+        uint48 background;
+        uint48 body;
+        uint48 accessory;
+        uint48 head;
+        uint48 glasses;
     }
 
     function generateSeed(uint256 nounId, INounsDescriptor descriptor) external view returns (Seed memory);

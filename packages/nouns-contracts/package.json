@@ -11,7 +11,8 @@
     "deploy": "hardhat run scripts/deploy.ts",
     "accounts": "npx hardhat accounts",
     "test": "npx hardhat test",
-    "coverage": "npx hardhat coverage"
+    "coverage": "npx hardhat coverage",
+    "postinstall": "yarn build"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.2",

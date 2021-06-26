@@ -34,11 +34,12 @@ describe('NounsERC721', () => {
     expect(await nounsErc721.ownerOf(0)).to.eq(signers.deployer.address);
     expect(nounCreated?.event).to.eq('NounCreated');
     expect(nounCreated?.args?.tokenId).to.eq(0);
-    expect(nounCreated?.args?.seed.length).to.equal(4);
+    expect(nounCreated?.args?.seed.length).to.equal(5);
 
-    nounCreated?.args?.seed.forEach((item: EthersBN) =>
-      expect(item.toNumber()).to.be.a('number'),
-    );
+    nounCreated?.args?.seed.forEach((item: EthersBN | number) => {
+      const value = typeof item !== 'number' ? item?.toNumber() : item;
+      expect(value).to.be.a('number');
+    });
   });
 
   it('should allow owner to burn a noun', async () => {
