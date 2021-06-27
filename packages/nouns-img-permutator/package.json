@@ -1,5 +1,5 @@
 {
-  "name": "nouns-image-permutator",
+  "name": "@nouns/image-permutator",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

@@ -1,4 +1,4 @@
-# nouns-img-permutator
+# @nouns/img-permutator
 
 Web app run on Firebase to test Noun permutations. 
 

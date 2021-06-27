@@ -1,4 +1,4 @@
-# nouns-contracts
+# @nouns/contracts
 
 ## Build
 

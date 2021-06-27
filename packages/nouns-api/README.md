@@ -1,4 +1,4 @@
-# nouns-api
+# @nouns/api
 
 ```sh
 yarn

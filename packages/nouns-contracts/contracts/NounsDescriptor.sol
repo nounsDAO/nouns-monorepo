@@ -105,11 +105,7 @@ contract NounsDescriptor is INounsDescriptor {
      * @notice Add colors to a color palette.
      * @dev This function can only be called by nounsDAO.
      */
-    function addManyColorsToPalette(uint8 paletteIndex, string[] calldata newColors)
-        external
-        override
-        onlyNounsDAO
-    {
+    function addManyColorsToPalette(uint8 paletteIndex, string[] calldata newColors) external override onlyNounsDAO {
         require(palettes[paletteIndex].length + newColors.length <= 256, 'Palettes can only hold 256 colors');
         for (uint256 i = 0; i < newColors.length; i++) {
             _addColorToPalette(paletteIndex, newColors[i]);
@@ -170,11 +166,7 @@ contract NounsDescriptor is INounsDescriptor {
      * @notice Add a single color to a color palette.
      * @dev This function can only be called by nounsDAO.
      */
-    function addColorToPalette(uint8 _paletteIndex, string calldata _color)
-        external
-        override
-        onlyNounsDAO
-    {
+    function addColorToPalette(uint8 _paletteIndex, string calldata _color) external override onlyNounsDAO {
         require(palettes[_paletteIndex].length <= 255, 'Palettes can only hold 256 colors');
         _addColorToPalette(_paletteIndex, _color);
     }

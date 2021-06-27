@@ -40,7 +40,7 @@ describe('NounsDescriptor', () => {
   });
 
   it('should generate valid token uri metadata when data uris are disabled', async () => {
-    const BASE_URI = 'https://api.nouns.wtf/nouns/';
+    const BASE_URI = 'https://api.nouns.wtf/metadata/';
 
     await nounsDescriptor.setBaseURI(BASE_URI);
 
