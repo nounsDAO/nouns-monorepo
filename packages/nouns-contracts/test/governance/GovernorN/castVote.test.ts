@@ -92,8 +92,6 @@ async function reset(){
 
   gov = await deployGovernor(deployer, token.address)
 
-  // Not sure why but have to access `_initiate()` this way
-  await gov.functions["_initiate()"]();
 }
 
 async function propose(proposer: SignerWithAddress){

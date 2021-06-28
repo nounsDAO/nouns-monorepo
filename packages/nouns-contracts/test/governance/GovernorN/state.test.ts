@@ -87,7 +87,6 @@ async function reset(proposer: SignerWithAddress = deployer, mintAmount: number 
 
   gov = await new GovernorNImmutable__factory(deployer).deploy(timelock.address, token.address, deployer.address, 1728, 1, 1, 1)
 
-  await gov.functions["_initiate()"]()
   await timelock.harnessSetAdmin(gov.address)
 
   targets = [deployer.address];

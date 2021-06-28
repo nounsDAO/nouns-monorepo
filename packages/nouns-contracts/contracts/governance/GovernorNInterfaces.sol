@@ -79,9 +79,6 @@ contract GovernorNDelegateStorageV1 is GovernorNDelegatorStorage {
     /// @notice The basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed. *DIFFERS from GovernerBravo
     uint public quorumVotesBPS;
 
-    /// @notice Initial proposal id set at become
-    uint public initialProposalId;
-
     /// @notice The total number of proposals
     uint public proposalCount;
 

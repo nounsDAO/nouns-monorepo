@@ -32,9 +32,4 @@ contract GovernorNImmutable is GovernorNDelegate {
         proposalThresholdBPS = proposalThresholdBPS_;
         quorumVotesBPS = quorumVotesBPS_;
     }
-
-    function _initiate() public {
-        proposalCount = 1;
-        initialProposalId = 1;
-    }
 }

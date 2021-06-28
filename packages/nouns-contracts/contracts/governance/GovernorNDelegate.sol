@@ -97,9 +97,6 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
 
         temp.totalSupply = nouns.totalSupply();
 
-        // Reject proposals before initiating as Governor
-        require(initialProposalId != 0, "GovernorN::propose: Governor Bravo not active");
-
         temp.proposalThreshold = bps2Uint(proposalThresholdBPS, temp.totalSupply);
 
         require(nouns.getPriorVotes(msg.sender, sub256(block.number, 1)) > temp.proposalThreshold, "GovernorN::propose: proposer votes below proposal threshold");
@@ -227,7 +224,7 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
       * @return Proposal state
       */
     function state(uint proposalId) public view returns (ProposalState) {
-        require(proposalCount >= proposalId && proposalId > initialProposalId, "GovernorN::state: invalid proposal id");
+        require(proposalCount >= proposalId, "GovernorN::state: invalid proposal id");
         Proposal storage proposal = proposals[proposalId];
         if (proposal.canceled) {
             return ProposalState.Canceled;
@@ -364,19 +361,6 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
         quorumVotesBPS = newQuorumVotesBPS;
 
         emit QuorumVotesBPSSet(oldQuorumVotesBPS, quorumVotesBPS);
-    }
-
-    /**
-      * @notice Initiate the GovernorN contract
-      * @dev Admin only. Sets initial proposal id which initiates the contract, ensuring a continuous proposal id count
-      * @param governorAlpha The address for the Governor to continue the proposal id count from
-      */
-    function _initiate(address governorAlpha) external {
-        require(msg.sender == admin, "GovernorN::_initiate: admin only");
-        require(initialProposalId == 0, "GovernorN::_initiate: can only initiate once");
-        proposalCount = GovernorAlpha(governorAlpha).proposalCount();
-        initialProposalId = proposalCount;
-        timelock.acceptAdmin();
     }
 
     /**

@@ -5,14 +5,6 @@ pragma solidity ^0.8.4;
 import "../governance/GovernorNDelegate.sol";
 
 contract GovernorNDelegateHarness is GovernorNDelegate {
-	// @notice Harness initiate the GovenorBravo contract
-	// @dev This function bypasses the need to initiate the GovernorN contract from an existing GovernorAlpha for testing.
-	// Actual use will only use the _initiate(address) function
-    function _initiate() external {
-        proposalCount = 1;
-        initialProposalId = 1;
-    }
-    
     function initialize(
         address timelock_,
         address nouns_,
