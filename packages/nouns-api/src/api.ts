@@ -22,7 +22,7 @@ export const createAPI = (): Express => {
     async (req: Request, res) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).send({ errors: errors.array() });
       }
 
       const metadata = await getTokenMetadata(req.params.tokenId);
