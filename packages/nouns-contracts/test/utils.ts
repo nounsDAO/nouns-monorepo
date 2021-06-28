@@ -31,10 +31,7 @@ export const deployNounsDescriptor = async (
 ): Promise<NounsDescriptor> => {
   const signers = await getSigners();
   const signer = deployer || signers.deployer;
-  const nftDescriptorLibraryFactory = await ethers.getContractFactory(
-    'NFTDescriptor',
-    signer,
-  );
+  const nftDescriptorLibraryFactory = await ethers.getContractFactory('NFTDescriptor', signer);
   const nftDescriptorLibrary = await nftDescriptorLibraryFactory.deploy();
   const nounsDescriptorFactory = new NounsDescriptor__factory(
     {
@@ -46,9 +43,7 @@ export const deployNounsDescriptor = async (
   return nounsDescriptorFactory.deploy(nounsDAO || signer.address);
 };
 
-export const deployNounsSeeder = async (
-  deployer?: SignerWithAddress,
-): Promise<NounsSeeder> => {
+export const deployNounsSeeder = async (deployer?: SignerWithAddress): Promise<NounsSeeder> => {
   const signers = await getSigners();
   const factory = new NounsSeeder__factory(deployer || signers.deployer);
 
@@ -72,18 +67,14 @@ export const deployNounsERC721 = async (
   );
 };
 
-export const deployWeth = async (
-  deployer?: SignerWithAddress,
-): Promise<Weth> => {
+export const deployWeth = async (deployer?: SignerWithAddress): Promise<Weth> => {
   const signers = await getSigners();
   const factory = new Weth__factory(deployer || signers.deployer);
 
   return factory.deploy();
 };
 
-export const populateDescriptor = async (
-  nounsDescriptor: NounsDescriptor,
-): Promise<void> => {
+export const populateDescriptor = async (nounsDescriptor: NounsDescriptor): Promise<void> => {
   const backgrounds = ['e1e5e3'];
   const [bodies, accessories, heads, glasses] = layers;
 
@@ -96,12 +87,8 @@ export const populateDescriptor = async (
     nounsDescriptor.addManyBodies(bodies.map(({ data }) => data)),
     nounsDescriptor.addManyAccessories(accessories.map(({ data }) => data)),
     // Split up head insertion due to high gas usage
-    nounsDescriptor.addManyHeads(
-      heads.map(({ data }) => data).filter((_, i) => i % 2 === 0),
-    ),
-    nounsDescriptor.addManyHeads(
-      heads.map(({ data }) => data).filter((_, i) => i % 2 === 1),
-    ),
+    nounsDescriptor.addManyHeads(heads.map(({ data }) => data).filter((_, i) => i % 2 === 0)),
+    nounsDescriptor.addManyHeads(heads.map(({ data }) => data).filter((_, i) => i % 2 === 1)),
     nounsDescriptor.addManyGlasses(glasses.map(({ data }) => data)),
   ]);
 };

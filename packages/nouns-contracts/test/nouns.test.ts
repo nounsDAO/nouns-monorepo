@@ -2,12 +2,7 @@ import { BigNumber as EthersBN } from 'ethers';
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { NounsDescriptor__factory, NounsErc721 } from '../typechain';
-import {
-  deployNounsERC721,
-  getSigners,
-  populateDescriptor,
-  TestSigners,
-} from './utils';
+import { deployNounsERC721, getSigners, populateDescriptor, TestSigners } from './utils';
 
 chai.use(solidity);
 const { expect } = chai;
@@ -22,9 +17,7 @@ describe('NounsERC721', () => {
 
     const descriptor = await nounsErc721.descriptor();
 
-    await populateDescriptor(
-      NounsDescriptor__factory.connect(descriptor, signers.deployer),
-    );
+    await populateDescriptor(NounsDescriptor__factory.connect(descriptor, signers.deployer));
   });
 
   it('should allow owner to mint a noun', async () => {

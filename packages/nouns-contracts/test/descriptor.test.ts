@@ -65,10 +65,9 @@ describe('NounsDescriptor', () => {
       glasses: longestGlasses.index,
     });
     const { name, description, image } = JSON.parse(
-      Buffer.from(
-        tokenUri.replace('data:application/json;base64,', ''),
-        'base64',
-      ).toString('ascii'),
+      Buffer.from(tokenUri.replace('data:application/json;base64,', ''), 'base64').toString(
+        'ascii',
+      ),
     );
     expect(name).to.equal('Noun #0');
     expect(description).to.equal('Noun #0 is a member of the NounsDAO');

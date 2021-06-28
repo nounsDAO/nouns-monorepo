@@ -45,27 +45,18 @@ const decodeImage = (image: string): DecodedImage => {
     bounds,
     rects: rects
       .match(/.{1,4}/g)!
-      .map(rect => [
-        parseInt(rect.substring(0, 2), 16),
-        parseInt(rect.substring(2, 4), 16),
-      ]),
+      .map(rect => [parseInt(rect.substring(0, 2), 16), parseInt(rect.substring(2, 4), 16)]),
   };
 };
 
-const getRandom = (array: ImageData[]) =>
-  array[Math.floor(Math.random() * array.length)];
+const getRandom = (array: ImageData[]) => array[Math.floor(Math.random() * array.length)];
 
 const getRandomNoun = async () => {
   const fileJSON = await fs.readFile('encoded-layers.json', 'utf8');
   const data: EncodedData = JSON.parse(fileJSON);
 
   const [bodies, accessories, heads, glasses] = data.layers;
-  const parts = [
-    getRandom(bodies),
-    getRandom(accessories),
-    getRandom(heads),
-    getRandom(glasses),
-  ];
+  const parts = [getRandom(bodies), getRandom(accessories), getRandom(heads), getRandom(glasses)];
 
   const svgWithoutEndTag = parts.reduce((result, part) => {
     const svgRects: string[] = [];

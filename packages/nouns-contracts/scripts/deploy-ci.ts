@@ -1,11 +1,7 @@
 import { ethers } from 'hardhat';
 import fs from 'fs';
 
-type ContractName =
-  | 'NFTDescriptor'
-  | 'NounsDescriptor'
-  | 'NounsSeeder'
-  | 'NounsERC721';
+type ContractName = 'NFTDescriptor' | 'NounsDescriptor' | 'NounsSeeder' | 'NounsERC721';
 
 interface Contract {
   args?: (string | number | (() => string | undefined))[];
@@ -52,10 +48,7 @@ async function main() {
     const deploymentCost = deploymentGas.mul(gasPrice);
 
     console.log(
-      `Estimated cost to deploy ${name}: ${ethers.utils.formatUnits(
-        deploymentCost,
-        'ether',
-      )} ETH`,
+      `Estimated cost to deploy ${name}: ${ethers.utils.formatUnits(deploymentCost, 'ether')} ETH`,
     );
 
     console.log('Deploying...');

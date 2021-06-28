@@ -22,4 +22,8 @@ export const jsonRpcProvider = new providers.JsonRpcProvider(config.jsonRpcUrl);
 /**
  * Nouns ERC721 Token Contract
  */
-export const nounsTokenContract = new Contract(config.nounsTokenAddress, NounsERC721ABI, jsonRpcProvider);
+export const nounsTokenContract = new Contract(
+  config.nounsTokenAddress,
+  NounsERC721ABI,
+  jsonRpcProvider,
+);

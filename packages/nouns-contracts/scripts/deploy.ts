@@ -5,11 +5,7 @@ promptjs.colors = false;
 promptjs.message = '> ';
 promptjs.delimiter = '';
 
-type ContractName =
-  | 'NFTDescriptor'
-  | 'NounsDescriptor'
-  | 'NounsSeeder'
-  | 'NounsERC721';
+type ContractName = 'NFTDescriptor' | 'NounsDescriptor' | 'NounsSeeder' | 'NounsERC721';
 
 interface Contract {
   args?: (string | number | (() => string | undefined))[];
@@ -44,9 +40,7 @@ async function main() {
     });
 
     let gasPrice = await factory.signer.getGasPrice();
-    const gasInGwei = Math.round(
-      Number(ethers.utils.formatUnits(gasPrice, 'gwei')),
-    );
+    const gasInGwei = Math.round(Number(ethers.utils.formatUnits(gasPrice, 'gwei')));
 
     promptjs.start();
 
@@ -76,10 +70,7 @@ async function main() {
     const deploymentCost = deploymentGas.mul(gasPrice);
 
     console.log(
-      `Estimated cost to deploy ${name}: ${ethers.utils.formatUnits(
-        deploymentCost,
-        'ether',
-      )} ETH`,
+      `Estimated cost to deploy ${name}: ${ethers.utils.formatUnits(deploymentCost, 'ether')} ETH`,
     );
 
     result = await promptjs.get([

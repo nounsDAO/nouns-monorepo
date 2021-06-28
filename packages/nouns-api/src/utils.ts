@@ -1,5 +1,6 @@
 import { nounsTokenContract, redis, storage } from './clients';
 import { TokenMetadata } from './types';
+import { tryF, isError } from 'ts-try';
 import sharp from 'sharp';
 
 /**
@@ -20,13 +21,14 @@ export const getTokenMetadata = async (tokenId: string): Promise<undefined | Tok
     return JSON.parse(cachedMetadata);
   }
 
-  const dataURI = nounsTokenContract.dataURI(tokenId);
-  if (!dataURI) {
+  const dataURI = await tryF(() => nounsTokenContract.dataURI(tokenId));
+  if (isError(dataURI)) {
+    console.error(`Error fetching dataURI for token ID ${tokenId}: ${dataURI.message}`);
     return;
   }
 
   const data: TokenMetadata = JSON.parse(
-    Buffer.from(dataURI.substring(29), 'base64').toString('ascii')
+    Buffer.from(dataURI.substring(29), 'base64').toString('ascii'),
   );
   const svg = Buffer.from(data.image.substring(26), 'base64');
   const png = await sharp(svg).png().toBuffer();
