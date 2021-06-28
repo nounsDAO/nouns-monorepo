@@ -57,7 +57,7 @@ async function deployGovernor(
   tokenAddress: string,
 ): Promise<GovernorNDelegateHarness> {
   const {address: govDelegateAddress } = await new GovernorNDelegateHarness__factory(deployer).deploy()
-  const params = [address(0), tokenAddress, deployer.address, govDelegateAddress, 17280, 1, "1"]
+  const params = [address(0), tokenAddress, deployer.address, govDelegateAddress, 17280, 1, 1, 1]
 
   const {address: _govDelegatorAddress} = await (
     await ethers.getContractFactory('GovernorNDelegator', deployer)
@@ -118,7 +118,10 @@ describe("GovernorN#castVote/2", () => {
 
   describe("We must revert if:", () => {
 
-    before(()=>reset().then(()=>propose(deployer)))
+    before(async ()=>{
+      await reset()
+      await propose(deployer)
+    })
 
     it("There does not exist a proposal with matching proposal id where the current block number is between the proposal's start block (exclusive) and end block (inclusive)", async () => {
       await expect(
@@ -171,7 +174,10 @@ describe("GovernorN#castVote/2", () => {
 
         let afterFors = (await gov.proposals(proposalId)).forVotes;
 
-        expect(afterFors).to.equal(beforeFors.add(await token.balanceOf(actor.address)));
+        const balance = (await token.balanceOf(actor.address)).toString();
+        const votes = ethers.utils.parseUnits(balance,'ether');
+
+        expect(afterFors).to.equal(beforeFors.add(votes));
       })
 
       it("or AgainstVotes corresponding to the caller's support flag.", async () => {
@@ -188,7 +194,10 @@ describe("GovernorN#castVote/2", () => {
 
         let afterAgainst = (await gov.proposals(proposalId)).againstVotes;
 
-        expect(afterAgainst).to.equal(beforeAgainst.add(await token.balanceOf(actor.address)));
+        const balance = (await token.balanceOf(actor.address)).toString();
+        const votes = ethers.utils.parseUnits(balance,'ether');
+
+        expect(afterAgainst).to.equal(beforeAgainst.add(votes));
 
       });
     });

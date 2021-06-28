@@ -1,6 +1,7 @@
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { ethers } from 'hardhat';
+import { BigNumber as EthersBN } from 'ethers';
 import { NounsErc721 } from '../../typechain';
 import {
   deployNounsErc721,
@@ -30,6 +31,9 @@ describe('Nouns Governance', () => {
   let a1: string;
   let a2: string;
   let deployer: string;
+  const ONE: EthersBN = ethers.utils.parseUnits("1", "ether");
+  const TWO: EthersBN = ethers.utils.parseUnits("2", "ether");
+  const THREE: EthersBN = ethers.utils.parseUnits("3", "ether");
   const Domain = (name: string, verifyingContract: string, chainId: number) => ({ name, chainId, verifyingContract });
   let domain: any;
   const Types = {
@@ -192,8 +196,8 @@ describe('Nouns Governance', () => {
       await mineBlock();
       await mineBlock();
 
-      expect(await token.getPriorVotes(a1, t1.blockNumber)).to.equal(1);
-      expect(await token.getPriorVotes(a1, t1.blockNumber+1)).to.equal(1);
+      expect(await token.getPriorVotes(a1, t1.blockNumber)).to.equal(ONE);
+      expect(await token.getPriorVotes(a1, t1.blockNumber+1)).to.equal(ONE);
     });
 
     it('returns zero if < first checkpoint block', async () => {
@@ -204,7 +208,7 @@ describe('Nouns Governance', () => {
       await mineBlock();
 
       expect(await token.getPriorVotes(a1, t1.blockNumber-1)).to.equal(0);
-      expect(await token.getPriorVotes(a1, t1.blockNumber+1)).to.equal(1);
+      expect(await token.getPriorVotes(a1, t1.blockNumber+1)).to.equal(ONE);
     });
 
     it('generally returns the voting balance at the appropriate checkpoint', async () => {
@@ -226,14 +230,14 @@ describe('Nouns Governance', () => {
       await mineBlock();
 
       expect(await token.getPriorVotes(a1, t1.blockNumber-1)).to.equal(0);
-      expect(await token.getPriorVotes(a1, t1.blockNumber)).to.equal(3);
-      expect(await token.getPriorVotes(a1, t1.blockNumber+1)).to.equal(3);
-      expect(await token.getPriorVotes(a1, t2.blockNumber)).to.equal(2);
-      expect(await token.getPriorVotes(a1, t2.blockNumber+1)).to.equal(2);
-      expect(await token.getPriorVotes(a1, t3.blockNumber)).to.equal(1);
-      expect(await token.getPriorVotes(a1, t3.blockNumber+1)).to.equal(1);
-      expect(await token.getPriorVotes(a1, t4.blockNumber)).to.equal(2);
-      expect(await token.getPriorVotes(a1, t4.blockNumber+1)).to.equal(2);
+      expect(await token.getPriorVotes(a1, t1.blockNumber)).to.equal(THREE);
+      expect(await token.getPriorVotes(a1, t1.blockNumber+1)).to.equal(THREE);
+      expect(await token.getPriorVotes(a1, t2.blockNumber)).to.equal(TWO);
+      expect(await token.getPriorVotes(a1, t2.blockNumber+1)).to.equal(TWO);
+      expect(await token.getPriorVotes(a1, t3.blockNumber)).to.equal(ONE);
+      expect(await token.getPriorVotes(a1, t3.blockNumber+1)).to.equal(ONE);
+      expect(await token.getPriorVotes(a1, t4.blockNumber)).to.equal(TWO);
+      expect(await token.getPriorVotes(a1, t4.blockNumber+1)).to.equal(TWO);
     });
   });
 });

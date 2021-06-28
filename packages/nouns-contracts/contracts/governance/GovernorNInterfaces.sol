@@ -6,6 +6,8 @@ contract GovernorNEvents {
     /// @notice An event emitted when a new proposal is created
     event ProposalCreated(uint id, address proposer, address[] targets, uint[] values, string[] signatures, bytes[] calldatas, uint startBlock, uint endBlock, string description);
 
+    event ProposalRequirements(uint id, address proposer, uint startBlock, uint endBlock, uint proposalThreshold, uint quorumVotes, string description);
+
     /// @notice An event emitted when a vote has been cast on a proposal
     /// @param voter The address which casted a vote
     /// @param proposalId The proposal id which was voted on
@@ -32,8 +34,11 @@ contract GovernorNEvents {
     /// @notice Emitted when implementation is changed
     event NewImplementation(address oldImplementation, address newImplementation);
 
-    /// @notice Emitted when proposal threshold is set
-    event ProposalThresholdSet(uint oldProposalThreshold, uint newProposalThreshold);
+    /// @notice Emitted when proposal threshold basis points is set
+    event ProposalThresholdBPSSet(uint oldProposalThresholdBPS, uint newProposalThresholdBPS);
+
+    /// @notice Emitted when quorum votes basis points is set
+    event QuorumVotesBPSSet(uint oldQuorumVotesBPS, uint newQuorumVotesBPS);
 
     /// @notice Emitted when pendingAdmin is changed
     event NewPendingAdmin(address oldPendingAdmin, address newPendingAdmin);
@@ -68,8 +73,11 @@ contract GovernorNDelegateStorageV1 is GovernorNDelegatorStorage {
     /// @notice The duration of voting on a proposal, in blocks
     uint public votingPeriod;
 
-    /// @notice The number of votes required in order for a voter to become a proposer
-    uint public proposalThreshold;
+    /// @notice The basis point number of votes required in order for a voter to become a proposer. *DIFFERS from GovernerBravo
+    uint public proposalThresholdBPS;
+
+    /// @notice The basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed. *DIFFERS from GovernerBravo
+    uint public quorumVotesBPS;
 
     /// @notice Initial proposal id set at become
     uint public initialProposalId;
@@ -80,8 +88,8 @@ contract GovernorNDelegateStorageV1 is GovernorNDelegatorStorage {
     /// @notice The address of the Compound Protocol Timelock
     TimelockInterface public timelock;
 
-    /// @notice The address of the Compound governance token
-    CompInterface public comp;
+    /// @notice The address of the Nouns tokens
+    NounsInterface public nouns;
 
     /// @notice The official record of all proposals ever proposed
     mapping (uint => Proposal) public proposals;
@@ -96,6 +104,12 @@ contract GovernorNDelegateStorageV1 is GovernorNDelegatorStorage {
 
         /// @notice Creator of the proposal
         address proposer;
+
+        /// @notice The number of votes needed to create a proposal at the time of proposal creation. *DIFFERS from GovernerBravo
+        uint proposalThreshold;
+
+        /// @notice The number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed at the time of proposal creation. *DIFFERS from GovernerBravo
+        uint quorumVotes;
 
         /// @notice The timestamp that the proposal will be available for execution, set once the vote succeeds
         uint eta;
@@ -172,8 +186,9 @@ interface TimelockInterface {
     function executeTransaction(address target, uint value, string calldata signature, bytes calldata data, uint eta) external payable returns (bytes memory);
 }
 
-interface CompInterface {
+interface NounsInterface {
     function getPriorVotes(address account, uint blockNumber) external view returns (uint96);
+    function totalSupply() external view returns (uint256);
 }
 
 interface GovernorAlpha {

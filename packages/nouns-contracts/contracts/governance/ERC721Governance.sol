@@ -41,14 +41,14 @@ abstract contract ERC721Governance is ERC721Enumerable {
      * Used when calling `_delegate()`
     */
     function delegatorVotes(address delegator) public view returns (uint96) {
-        return safe96(balanceOf(delegator), "ERC721Governance::delegatorVotes: amount exceeds 96 bits");
+        return safe96(balanceOf(delegator)*10**18, "ERC721Governance::delegatorVotes: amount exceeds 96 bits");
     }
 
     /**
      * @notice The voting power of a single tokenId
     */
     function tokenVotes(uint256 tokenId) public view returns (uint96) {
-        return 1;
+        return 10**18;
     }
 
     /**

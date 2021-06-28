@@ -8,27 +8,29 @@ contract GovernorNImmutable is GovernorNDelegate {
 
      constructor(
             address timelock_,
-            address comp_,
+            address nouns_,
             address admin_,
             uint votingPeriod_,
             uint votingDelay_,
-            uint proposalThreshold_) {
+            uint proposalThresholdBPS_,
+            uint quorumVotesBPS_) {
         admin = msg.sender;
-        initialize(timelock_, comp_, votingPeriod_, votingDelay_, proposalThreshold_);
+        initialize(timelock_, nouns_, votingPeriod_, votingDelay_, proposalThresholdBPS_, quorumVotesBPS_);
 
         admin = admin_;
     }
 
 
-    function initialize(address timelock_, address comp_, uint votingPeriod_, uint votingDelay_, uint proposalThreshold_) override public {
+    function initialize(address timelock_, address nouns_, uint votingPeriod_, uint votingDelay_, uint proposalThresholdBPS_, uint quorumVotesBPS_) override public {
         require(msg.sender == admin, "GovernorN::initialize: admin only");
         require(address(timelock) == address(0), "GovernorN::initialize: can only initialize once");
         
         timelock = TimelockInterface(timelock_);
-        comp = CompInterface(comp_);
+        nouns = NounsInterface(nouns_);
         votingPeriod = votingPeriod_;
         votingDelay = votingDelay_;
-        proposalThreshold = proposalThreshold_;
+        proposalThresholdBPS = proposalThresholdBPS_;
+        quorumVotesBPS = quorumVotesBPS_;
     }
 
     function _initiate() public {

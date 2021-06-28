@@ -10,22 +10,24 @@ import "./GovernorNInterfaces.sol";
 contract GovernorNDelegator is GovernorNDelegatorStorage, GovernorNEvents {
 	constructor(
 			address timelock_,
-			address comp_,
+			address nouns_,
 			address admin_,
 	        address implementation_,
 	        uint votingPeriod_,
 	        uint votingDelay_,
-            uint proposalThreshold_) {
+            uint proposalThresholdBPS_,
+            uint quorumVotesBPS_) {
 
         // Admin set to msg.sender for initialization
         admin = msg.sender;
 
-        delegateTo(implementation_, abi.encodeWithSignature("initialize(address,address,uint256,uint256,uint256)",
+        delegateTo(implementation_, abi.encodeWithSignature("initialize(address,address,uint256,uint256,uint256,uint256)",
                                                             timelock_,
-                                                            comp_,
+                                                            nouns_,
                                                             votingPeriod_,
                                                             votingDelay_,
-                                                            proposalThreshold_));
+                                                            proposalThresholdBPS_,
+                                                            quorumVotesBPS_));
 
         _setImplementation(implementation_);
 

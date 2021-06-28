@@ -7,13 +7,13 @@ import "./GovernorNInterfaces.sol";
 contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
 
     /// @notice The name of this contract
-    string public constant name = "Nouns Governor";
+    string public constant name = "GovernerN";
 
     /// @notice The minimum setable proposal threshold
-    uint public constant MIN_PROPOSAL_THRESHOLD = 1; // 50,000 Comp
+    uint public constant MIN_PROPOSAL_THRESHOLD_BPS = 1; // 1 basis point or 0.01%
 
     /// @notice The maximum setable proposal threshold
-    uint public constant MAX_PROPOSAL_THRESHOLD = 10; //100,000 Comp
+    uint public constant MAX_PROPOSAL_THRESHOLD_BPS = 1000; // 1,000 basis points or 10%
 
     /// @notice The minimum setable voting period
     uint public constant MIN_VOTING_PERIOD = 5760; // About 24 hours
@@ -27,8 +27,11 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
     /// @notice The max setable voting delay
     uint public constant MAX_VOTING_DELAY = 40320; // About 1 week
 
-    /// @notice The number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed
-    uint public constant quorumVotes = 1; // 400,000 = 4% of Comp
+    /// @notice The minimum setable quorum votes basis points
+    uint public constant MIN_QUORUM_VOTES_BPS = 50; // 50 basis points or 0.5%
+
+    /// @notice The maximum setable quorum votes basis points
+    uint public constant MAX_QUORUM_VOTES_BPS = 2000; // 2,000 basis points or 20%
 
     /// @notice The maximum number of actions that can be included in a proposal
     uint public constant proposalMaxOperations = 10; // 10 actions
@@ -42,25 +45,41 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
     /**
       * @notice Used to initialize the contract during delegator contructor
       * @param timelock_ The address of the Timelock
-      * @param comp_ The address of the COMP token
+      * @param nouns_ The address of the NOUN tokens
       * @param votingPeriod_ The initial voting period
       * @param votingDelay_ The initial voting delay
-      * @param proposalThreshold_ The initial proposal threshold
+      * @param proposalThresholdBPS_ The initial proposal threshold in basis points
+      * * @param quorumVotesBPS_ The initial quorum votes threshold in basis points
       */
-    function initialize(address timelock_, address comp_, uint votingPeriod_, uint votingDelay_, uint proposalThreshold_) virtual public {
+    function initialize(address timelock_, address nouns_, uint votingPeriod_, uint votingDelay_, uint proposalThresholdBPS_, uint quorumVotesBPS_) virtual public {
         require(address(timelock) == address(0), "GovernorN::initialize: can only initialize once");
         require(msg.sender == admin, "GovernorN::initialize: admin only");
         require(timelock_ != address(0), "GovernorN::initialize: invalid timelock address");
-        require(comp_ != address(0), "GovernorN::initialize: invalid comp address");
+        require(nouns_ != address(0), "GovernorN::initialize: invalid nouns address");
         require(votingPeriod_ >= MIN_VOTING_PERIOD && votingPeriod_ <= MAX_VOTING_PERIOD, "GovernorN::initialize: invalid voting period");
         require(votingDelay_ >= MIN_VOTING_DELAY && votingDelay_ <= MAX_VOTING_DELAY, "GovernorN::initialize: invalid voting delay");
-        require(proposalThreshold_ >= MIN_PROPOSAL_THRESHOLD && proposalThreshold_ <= MAX_PROPOSAL_THRESHOLD, "GovernorN::initialize: invalid proposal threshold");
+        require(proposalThresholdBPS_ >= MIN_PROPOSAL_THRESHOLD_BPS && proposalThresholdBPS_ <= MAX_PROPOSAL_THRESHOLD_BPS, "GovernorN::initialize: invalid proposal threshold");
+        require(quorumVotesBPS_ >= MIN_QUORUM_VOTES_BPS && quorumVotesBPS_ <= MAX_QUORUM_VOTES_BPS, "GovernorN::initialize: invalid proposal threshold");
+
+        emit VotingPeriodSet(votingPeriod, votingPeriod_);
+        emit VotingDelaySet(votingDelay, votingDelay_);
+        emit ProposalThresholdBPSSet(proposalThresholdBPS, proposalThresholdBPS_);
+        emit QuorumVotesBPSSet(quorumVotesBPS, quorumVotesBPS_);
 
         timelock = TimelockInterface(timelock_);
-        comp = CompInterface(comp_);
+        nouns = NounsInterface(nouns_);
         votingPeriod = votingPeriod_;
         votingDelay = votingDelay_;
-        proposalThreshold = proposalThreshold_;
+        proposalThresholdBPS = proposalThresholdBPS_;
+        quorumVotesBPS = quorumVotesBPS_;
+    }
+
+    struct ProposalTemp {
+        uint totalSupply;
+        uint proposalThreshold;
+        uint latestProposalId;
+        uint startBlock;
+        uint endBlock;
     }
 
     /**
@@ -73,35 +92,45 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
       * @return Proposal id of new proposal
       */
     function propose(address[] memory targets, uint[] memory values, string[] memory signatures, bytes[] memory calldatas, string memory description) public returns (uint) {
+
+        ProposalTemp memory temp;
+
+        temp.totalSupply = nouns.totalSupply();
+
         // Reject proposals before initiating as Governor
         require(initialProposalId != 0, "GovernorN::propose: Governor Bravo not active");
-        require(comp.getPriorVotes(msg.sender, sub256(block.number, 1)) > proposalThreshold, "GovernorN::propose: proposer votes below proposal threshold");
+
+        temp.proposalThreshold = bps2Uint(proposalThresholdBPS, temp.totalSupply);
+
+        require(nouns.getPriorVotes(msg.sender, sub256(block.number, 1)) > temp.proposalThreshold, "GovernorN::propose: proposer votes below proposal threshold");
         require(targets.length == values.length && targets.length == signatures.length && targets.length == calldatas.length, "GovernorN::propose: proposal function information arity mismatch");
         require(targets.length != 0, "GovernorN::propose: must provide actions");
         require(targets.length <= proposalMaxOperations, "GovernorN::propose: too many actions");
 
-        uint latestProposalId = latestProposalIds[msg.sender];
-        if (latestProposalId != 0) {
-          ProposalState proposersLatestProposalState = state(latestProposalId);
+        temp.latestProposalId = latestProposalIds[msg.sender];
+        if (temp.latestProposalId != 0) {
+          ProposalState proposersLatestProposalState = state(temp.latestProposalId);
           require(proposersLatestProposalState != ProposalState.Active, "GovernorN::propose: one live proposal per proposer, found an already active proposal");
           require(proposersLatestProposalState != ProposalState.Pending, "GovernorN::propose: one live proposal per proposer, found an already pending proposal");
         }
 
-        uint startBlock = add256(block.number, votingDelay);
-        uint endBlock = add256(startBlock, votingPeriod);
+        temp.startBlock = add256(block.number, votingDelay);
+        temp.endBlock = add256(temp.startBlock, votingPeriod);
 
         proposalCount++;
         Proposal storage newProposal = proposals[proposalCount];
 
         newProposal.id = proposalCount;
         newProposal.proposer = msg.sender;
+        newProposal.proposalThreshold = temp.proposalThreshold;
+        newProposal.quorumVotes = bps2Uint(quorumVotesBPS, temp.totalSupply);
         newProposal.eta = 0;
         newProposal.targets = targets;
         newProposal.values = values;
         newProposal.signatures = signatures;
         newProposal.calldatas = calldatas;
-        newProposal.startBlock = startBlock;
-        newProposal.endBlock = endBlock;
+        newProposal.startBlock = temp.startBlock;
+        newProposal.endBlock = temp.endBlock;
         newProposal.forVotes = 0;
         newProposal.againstVotes = 0;
         newProposal.abstainVotes = 0;
@@ -110,7 +139,10 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
 
         latestProposalIds[newProposal.proposer] = proposalCount;
 
-        emit ProposalCreated(newProposal.id, msg.sender, targets, values, signatures, calldatas, startBlock, endBlock, description);
+        emit ProposalCreated(newProposal.id, msg.sender, targets, values, signatures, calldatas, newProposal.startBlock, newProposal.endBlock, description);
+
+        emit ProposalRequirements(newProposal.id, msg.sender, newProposal.startBlock, newProposal.endBlock, newProposal.proposalThreshold, newProposal.quorumVotes, description);
+
         return newProposal.id;
     }
 
@@ -156,7 +188,7 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
         require(state(proposalId) != ProposalState.Executed, "GovernorN::cancel: cannot cancel executed proposal");
 
         Proposal storage proposal = proposals[proposalId];
-        require(msg.sender == proposal.proposer || comp.getPriorVotes(proposal.proposer, sub256(block.number, 1)) < proposalThreshold, "GovernorN::cancel: proposer above threshold");
+        require(msg.sender == proposal.proposer || nouns.getPriorVotes(proposal.proposer, sub256(block.number, 1)) < proposal.proposalThreshold, "GovernorN::cancel: proposer above threshold");
 
         proposal.canceled = true;
         for (uint i = 0; i < proposal.targets.length; i++) {
@@ -203,7 +235,7 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
             return ProposalState.Pending;
         } else if (block.number <= proposal.endBlock) {
             return ProposalState.Active;
-        } else if (proposal.forVotes <= proposal.againstVotes || proposal.forVotes < quorumVotes) {
+        } else if (proposal.forVotes <= proposal.againstVotes || proposal.forVotes < proposal.quorumVotes) {
             return ProposalState.Defeated;
         } else if (proposal.eta == 0) {
             return ProposalState.Succeeded;
@@ -261,7 +293,9 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
         Proposal storage proposal = proposals[proposalId];
         Receipt storage receipt = proposal.receipts[voter];
         require(receipt.hasVoted == false, "GovernorN::castVoteInternal: voter already voted");
-        uint96 votes = comp.getPriorVotes(voter, proposal.startBlock);
+
+        /// @notice: Unlike GovernerBravo, votes are considered from the block the proposal was created in order to normalize quorumVotes and proposalThreshold metrics
+        uint96 votes = nouns.getPriorVotes(voter, proposal.startBlock-votingDelay);
 
         if (support == 0) {
             proposal.againstVotes = add256(proposal.againstVotes, votes);
@@ -305,17 +339,31 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
     }
 
     /**
-      * @notice Admin function for setting the proposal threshold
-      * @dev newProposalThreshold must be greater than the hardcoded min
-      * @param newProposalThreshold new proposal threshold
+      * @notice Admin function for setting the proposal threshold basis points
+      * @dev newProposalThresholdBPS must be greater than the hardcoded min
+      * @param newProposalThresholdBPS new proposal threshold
       */
-    function _setProposalThreshold(uint newProposalThreshold) external {
-        require(msg.sender == admin, "GovernorN::_setProposalThreshold: admin only");
-        require(newProposalThreshold >= MIN_PROPOSAL_THRESHOLD && newProposalThreshold <= MAX_PROPOSAL_THRESHOLD, "GovernorN::_setProposalThreshold: invalid proposal threshold");
-        uint oldProposalThreshold = proposalThreshold;
-        proposalThreshold = newProposalThreshold;
+    function _setProposalThresholdBPS(uint newProposalThresholdBPS) external {
+        require(msg.sender == admin, "GovernorN::_setProposalThresholdBPS: admin only");
+        require(newProposalThresholdBPS >= MIN_PROPOSAL_THRESHOLD_BPS && newProposalThresholdBPS <= MAX_PROPOSAL_THRESHOLD_BPS, "GovernorN::_setProposalThreshold: invalid proposal threshold");
+        uint oldProposalThresholdBPS = proposalThresholdBPS;
+        proposalThresholdBPS = newProposalThresholdBPS;
 
-        emit ProposalThresholdSet(oldProposalThreshold, proposalThreshold);
+        emit ProposalThresholdBPSSet(oldProposalThresholdBPS, proposalThresholdBPS);
+    }
+
+    /**
+      * @notice Admin function for setting the quorum votes basis points
+      * @dev newQuorumVotesBPS must be greater than the hardcoded min
+      * @param newQuorumVotesBPS new proposal threshold
+      */
+    function _setQuorumVotesBPS(uint newQuorumVotesBPS) external {
+        require(msg.sender == admin, "GovernorN::_setQuorumVotesBPS: admin only");
+        require(newQuorumVotesBPS >= MIN_QUORUM_VOTES_BPS && newQuorumVotesBPS <= MAX_QUORUM_VOTES_BPS, "GovernorN::_setProposalThreshold: invalid proposal threshold");
+        uint oldQuorumVotesBPS = quorumVotesBPS;
+        quorumVotesBPS = newQuorumVotesBPS;
+
+        emit QuorumVotesBPSSet(oldQuorumVotesBPS, quorumVotesBPS);
     }
 
     /**
@@ -370,6 +418,28 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
 
         emit NewAdmin(oldAdmin, admin);
         emit NewPendingAdmin(oldPendingAdmin, pendingAdmin);
+    }
+
+    function proposalThreshold(uint256 proposalId) public view returns (uint){
+        Proposal storage proposal = proposals[proposalId];
+        return proposal.proposalThreshold;
+    }
+
+    function proposalThreshold() public view returns (uint){
+        return bps2Uint(proposalThresholdBPS, nouns.totalSupply());
+    }
+
+    function quorumVotes(uint256 proposalId) public view returns (uint){
+        Proposal storage proposal = proposals[proposalId];
+        return proposal.quorumVotes;
+    }
+
+    function quorumVotes() public view returns (uint){
+        return bps2Uint(quorumVotesBPS, nouns.totalSupply());
+    }
+
+    function bps2Uint(uint bps, uint number) internal pure returns (uint) {
+        return number * 10000 / bps;
     }
 
     function add256(uint256 a, uint256 b) internal pure returns (uint) {
