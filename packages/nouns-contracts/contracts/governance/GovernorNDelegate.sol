@@ -423,7 +423,7 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
     }
 
     function bps2Uint(uint bps, uint number) internal pure returns (uint) {
-        return number * 10000 / bps;
+        return number * bps / 10000;
     }
 
     function add256(uint256 a, uint256 b) internal pure returns (uint) {
