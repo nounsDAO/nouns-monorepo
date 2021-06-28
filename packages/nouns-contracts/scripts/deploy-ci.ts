@@ -1,29 +1,76 @@
 import { ethers } from 'hardhat';
 import fs from 'fs';
 
+type ContractName =
+  | 'NFTDescriptor'
+  | 'NounsDescriptor'
+  | 'NounsSeeder'
+  | 'NounsERC721';
+
+interface Contract {
+  args?: (string | number | (() => string | undefined))[];
+  address?: string;
+  libraries?: () => Record<string, string>;
+}
+
 async function main() {
-  const NounsErc721 = await ethers.getContractFactory('NounsERC721');
+  const [nounsDAO] = await ethers.getSigners(); // Use during development only
 
-  const gas = await NounsErc721.signer.getGasPrice();
+  const contracts: Record<ContractName, Contract> = {
+    NFTDescriptor: {},
+    NounsDescriptor: {
+      args: [nounsDAO.address],
+      libraries: () => ({
+        NFTDescriptor: contracts['NFTDescriptor'].address as string,
+      }),
+    },
+    NounsSeeder: {},
+    NounsERC721: {
+      args: [
+        nounsDAO.address,
+        () => contracts['NounsDescriptor'].address,
+        () => contracts['NounsSeeder'].address,
+      ],
+    },
+  };
 
-  const price = await NounsErc721.signer.estimateGas(
-    NounsErc721.getDeployTransaction({
-      gasPrice: gas,
-    }),
-  );
-  console.log(
-    'Estimated cost to deploy contact:',
-    ethers.utils.formatUnits(price.mul(gas), 'ether'),
-    'ETH',
-  );
+  for (const [name, contract] of Object.entries(contracts)) {
+    const factory = await ethers.getContractFactory(name, {
+      libraries: contract?.libraries?.(),
+    });
 
-  console.log('Deploying...');
+    const gasPrice = await factory.signer.getGasPrice();
 
-  const deployTx = await NounsErc721.deploy({
-    gasPrice: gas,
-  });
+    const deploymentGas = await factory.signer.estimateGas(
+      factory.getDeployTransaction(
+        ...(contract.args?.map(a => (typeof a === 'function' ? a() : a)) ?? []),
+        {
+          gasPrice,
+        },
+      ),
+    );
+    const deploymentCost = deploymentGas.mul(gasPrice);
 
-  console.log('Contract deployed to:', deployTx.address);
+    console.log(
+      `Estimated cost to deploy ${name}: ${ethers.utils.formatUnits(
+        deploymentCost,
+        'ether',
+      )} ETH`,
+    );
+
+    console.log('Deploying...');
+
+    const deployedContract = await factory.deploy(
+      ...(contract.args?.map(a => (typeof a === 'function' ? a() : a)) ?? []),
+      {
+        gasPrice,
+      },
+    );
+
+    contracts[name as ContractName].address = deployedContract.address;
+
+    console.log(`${name} contract deployed to ${deployedContract.address}`);
+  }
 
   if (!fs.existsSync('logs')) {
     fs.mkdirSync('logs');
@@ -31,7 +78,12 @@ async function main() {
   fs.writeFileSync(
     'logs/deploy.json',
     JSON.stringify({
-      contractAddress: deployTx.address,
+      contractAddresses: {
+        NFTDescriptor: contracts.NFTDescriptor.address,
+        NounsDescriptor: contracts.NounsDescriptor.address,
+        NounsSeeder: contracts.NounsSeeder.address,
+        NounsERC721: contracts.NounsERC721.address,
+      },
       gitHub: {
         // Get the commit sha when running in CI
         sha: process.env.GITHUB_SHA,
