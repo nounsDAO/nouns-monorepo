@@ -6,6 +6,8 @@ import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
 
 abstract contract ERC721Governance is ERC721Enumerable {
 
+    uint96 public constant votesPertoken = 10**18;
+
     /// @notice A record of each accounts delegate
     mapping (address => address) private _delegates;
 
@@ -38,17 +40,15 @@ abstract contract ERC721Governance is ERC721Enumerable {
 
     /**
      * @notice The voting power an address can delegate.
+     * Matches ERC-20 convention of 18 decimal number
      * Used when calling `_delegate()`
     */
-    function delegatorVotes(address delegator) public view returns (uint96) {
-        return safe96(balanceOf(delegator)*10**18, "ERC721Governance::delegatorVotes: amount exceeds 96 bits");
+    function votesToDelegate(address delegator) public view returns (uint96) {
+        return safe96(balanceOf(delegator)*votesPertoken, "ERC721Governance::votesToDelegate: amount exceeds 96 bits");
     }
 
-    /**
-     * @notice The voting power of a single tokenId
-    */
-    function tokenVotes(uint256 tokenId) public view returns (uint96) {
-        return 10**18;
+    function totalVotes() public view returns (uint96){
+        return uint96(totalSupply())*votesPertoken;
     }
 
     /**
@@ -67,10 +67,8 @@ abstract contract ERC721Governance is ERC721Enumerable {
     function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal override {
         super._beforeTokenTransfer(from, to, tokenId);
 
-        uint96 amount = tokenVotes(tokenId);
-
         /// @notice Differs from `_transferTokens()` to use `delegates` override method to simulate auto-delegation
-        _moveDelegates(delegates(from), delegates(to), amount);
+        _moveDelegates(delegates(from), delegates(to), votesPertoken);
     }
 
     /**
@@ -162,7 +160,7 @@ abstract contract ERC721Governance is ERC721Enumerable {
 
         emit DelegateChanged(delegator, currentDelegate, delegatee);
 
-        uint96 amount = delegatorVotes(delegator);
+        uint96 amount = votesToDelegate(delegator);
 
         _moveDelegates(currentDelegate, delegatee, amount);
     }
