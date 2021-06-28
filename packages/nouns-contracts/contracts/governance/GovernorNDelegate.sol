@@ -75,7 +75,7 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
     }
 
     struct ProposalTemp {
-        uint totalSupply;
+        uint totalVotes;
         uint proposalThreshold;
         uint latestProposalId;
         uint startBlock;
@@ -95,9 +95,10 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
 
         ProposalTemp memory temp;
 
-        temp.totalSupply = nouns.totalSupply();
+        /// @notice totalVotes returns the total number of Nouns, but the total number of
+        temp.totalVotes = nouns.totalVotes();
 
-        temp.proposalThreshold = bps2Uint(proposalThresholdBPS, temp.totalSupply);
+        temp.proposalThreshold = bps2Uint(proposalThresholdBPS, temp.totalVotes);
 
         require(nouns.getPriorVotes(msg.sender, sub256(block.number, 1)) > temp.proposalThreshold, "GovernorN::propose: proposer votes below proposal threshold");
         require(targets.length == values.length && targets.length == signatures.length && targets.length == calldatas.length, "GovernorN::propose: proposal function information arity mismatch");
@@ -120,7 +121,7 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
         newProposal.id = proposalCount;
         newProposal.proposer = msg.sender;
         newProposal.proposalThreshold = temp.proposalThreshold;
-        newProposal.quorumVotes = bps2Uint(quorumVotesBPS, temp.totalSupply);
+        newProposal.quorumVotes = bps2Uint(quorumVotesBPS, temp.totalVotes);
         newProposal.eta = 0;
         newProposal.targets = targets;
         newProposal.values = values;
@@ -404,22 +405,20 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
         emit NewPendingAdmin(oldPendingAdmin, pendingAdmin);
     }
 
-    function proposalThreshold(uint256 proposalId) public view returns (uint){
-        Proposal storage proposal = proposals[proposalId];
-        return proposal.proposalThreshold;
-    }
-
+    /**
+      * @notice Current proposal threshold using Noun Total Supply
+      * Differs from `GovernerBravo` which uses fixed amount
+      */
     function proposalThreshold() public view returns (uint){
-        return bps2Uint(proposalThresholdBPS, nouns.totalSupply());
+        return bps2Uint(proposalThresholdBPS, nouns.totalVotes());
     }
 
-    function quorumVotes(uint256 proposalId) public view returns (uint){
-        Proposal storage proposal = proposals[proposalId];
-        return proposal.quorumVotes;
-    }
-
+    /**
+      * @notice Current quorum votes using Noun Total Supply
+      * Differs from `GovernerBravo` which uses fixed amount
+      */
     function quorumVotes() public view returns (uint){
-        return bps2Uint(quorumVotesBPS, nouns.totalSupply());
+        return bps2Uint(quorumVotesBPS, nouns.totalVotes());
     }
 
     function bps2Uint(uint bps, uint number) internal pure returns (uint) {
