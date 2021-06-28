@@ -10,8 +10,11 @@
     "build": "yarn build:sol && yarn build:ts",
     "build:ts": "tsc -p .",
     "build:sol": "npx hardhat compile",
-    "deploy": "hardhat run scripts/deploy.ts",
-    "accounts": "npx hardhat accounts",
+    "hardhat": "npx hardhat",
+    "task:accounts": "npx hardhat accounts",
+    "task:deploy": "npx hardhat deploy",
+    "task:mint-noun": "npx hardhat mint-noun",
+    "task:populate-descriptor": "npx hardhat populate-descriptor",
     "test": "npx hardhat test",
     "coverage": "npx hardhat coverage",
     "postinstall": "yarn build"
