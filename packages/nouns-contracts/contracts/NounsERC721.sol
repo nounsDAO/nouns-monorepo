@@ -4,14 +4,11 @@ pragma solidity ^0.8.6;
 
 import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
 import { ERC721Enumerable, ERC721 } from '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
-import { Counters } from '@openzeppelin/contracts/utils/Counters.sol';
 import { INounsDescriptor } from './interfaces/INounsDescriptor.sol';
 import { INounsSeeder } from './interfaces/INounsSeeder.sol';
 import { INounsERC721 } from './interfaces/INounsERC721.sol';
 
 contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
-    using Counters for Counters.Counter;
-
     // An address who has permissions to mint Nouns
     address public minter;
 
@@ -34,7 +31,7 @@ contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
     bool public isSeederLocked;
 
     // The internal noun ID tracker
-    Counters.Counter private _nounIdTracker;
+    uint256 private _currentNounId;
 
     // The internal noun seeds
     mapping(uint256 => INounsSeeder.Seed) private _seeds;
@@ -85,17 +82,15 @@ contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
 
     /**
      * @notice Mint a Noun to the minter, along with a possible nounders reward
-     * Noun. Nounders reward Nouns are minted every 10 Nouns, starting at #1,
-     * until 180 nounder Nouns have been minted (5 years w/ 24 hour auctions).
-     * @dev Call _mintTo with the to address(es) and current noun id(s) and increment.
+     * Noun. Nounders reward Nouns are minted every 10 Nouns, starting at #0,
+     * until 183 nounder Nouns have been minted (5 years w/ 24 hour auctions).
+     * @dev Call _mintTo with the to address(es).
      */
     function mint() public override onlyMinter returns (uint256) {
-        uint256 nounId = _nounIdTracker.current();
-
-        if (nounId <= 1791 && nounId % 10 == 1) {
-            _mintTo(noundersDAO, nounId++);
+        if (_currentNounId <= 1820 && _currentNounId % 10 == 0) {
+            _mintTo(noundersDAO, _currentNounId++);
         }
-        return _mintTo(minter, nounId);
+        return _mintTo(minter, _currentNounId++);
     }
 
     /**
@@ -182,8 +177,6 @@ contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
      * @notice Mint a Noun with `nounId` to the provided `to` address.
      */
     function _mintTo(address to, uint256 nounId) internal returns (uint256) {
-        _nounIdTracker.increment();
-
         INounsSeeder.Seed memory seed = _seeds[nounId] = seeder.generateSeed(nounId, descriptor);
 
         _mint(to, nounId);
