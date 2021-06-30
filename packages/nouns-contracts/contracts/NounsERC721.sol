@@ -9,11 +9,11 @@ import { INounsSeeder } from './interfaces/INounsSeeder.sol';
 import { INounsERC721 } from './interfaces/INounsERC721.sol';
 
 contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
+    // The nounders DAO address (creators org)
+    address public noundersDAO;
+
     // An address who has permissions to mint Nouns
     address public minter;
-
-    // The noundersDAO address (creators org)
-    address public noundersDAO;
 
     // The Nouns token URI descriptor
     INounsDescriptor public descriptor;
@@ -61,6 +61,14 @@ contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
     }
 
     /**
+     * @notice Require that the sender is the nounders DAO.
+     */
+    modifier onlyNoundersDAO() {
+        require(msg.sender == noundersDAO, 'Sender is not the nounders DAO');
+        _;
+    }
+
+    /**
      * @notice Require that the sender is the minter.
      */
     modifier onlyMinter() {
@@ -69,13 +77,13 @@ contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
     }
 
     constructor(
-        address _minter,
         address _noundersDAO,
+        address _minter,
         INounsDescriptor _descriptor,
         INounsSeeder _seeder
     ) ERC721('Nouns', 'NOUN') {
-        minter = _minter;
         noundersDAO = _noundersDAO;
+        minter = _minter;
         descriptor = _descriptor;
         seeder = _seeder;
     }
@@ -117,6 +125,16 @@ contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
     function dataURI(uint256 tokenId) public view override returns (string memory) {
         require(_exists(tokenId), 'NounsERC721: URI query for nonexistent token');
         return descriptor.dataURI(tokenId, _seeds[tokenId]);
+    }
+
+    /**
+     * @notice Set the nounders DAO.
+     * @dev Only callable by the nounders DAO when not locked.
+     */
+    function setNoundersDAO(address _noundersDAO) external override onlyNoundersDAO {
+        noundersDAO = _noundersDAO;
+
+        emit NoundersDAOUpdated(_noundersDAO);
     }
 
     /**

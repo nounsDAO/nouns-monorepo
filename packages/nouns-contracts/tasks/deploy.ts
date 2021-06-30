@@ -14,15 +14,9 @@ interface Contract {
 }
 
 task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsERC721')
-  .addParam(
-    'nounsAuctionHouse',
-    'The NounsAuctionHouse proxy contract address',
-  )
-  .addParam(
-    'noundersDAO',
-    'The noundersDAO contract address',
-  )
-  .setAction(async ({ nounsAuctionHouse, noundersDAO }, { ethers }) => {
+  .addParam('noundersDAO', 'The nounders DAO contract address')
+  .addParam('nounsAuctionHouse', 'The NounsAuctionHouse proxy contract address')
+  .setAction(async ({ noundersDAO, nounsAuctionHouse }, { ethers }) => {
     const contracts: Record<ContractName, Contract> = {
       NFTDescriptor: {},
       NounsDescriptor: {
@@ -33,8 +27,8 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsER
       NounsSeeder: {},
       NounsERC721: {
         args: [
-          nounsAuctionHouse,
           noundersDAO,
+          nounsAuctionHouse,
           () => contracts['NounsDescriptor'].address,
           () => contracts['NounsSeeder'].address,
         ],

@@ -1,14 +1,20 @@
 import fs from 'fs';
 import { task } from 'hardhat/config';
+import { constants } from 'ethers';
 
 task('deploy-ci', 'Deploy contracts (automated by CI)')
+  .addOptionalParam('noundersDAO', 'The nounders DAO contract address')
   .addOptionalParam(
-    'nounsDAO',
-    'The NounsDAO contract address',
-    '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
+    'nounsAuctionHouse',
+    'The NounsAuctionHouse proxy contract address',
+    constants.AddressZero,
   )
-  .setAction(async ({ nounsDAO }, { run }) => {
-    const contracts = await run('deploy', { nounsDAO });
+  .setAction(async ({ noundersDAO, nounsAuctionHouse }, { ethers, run }) => {
+    const [deployer] = await ethers.getSigners();
+    const contracts = await run('deploy', {
+      nounsAuctionHouse,
+      noundersDAO: noundersDAO || deployer.address,
+    });
 
     if (!fs.existsSync('logs')) {
       fs.mkdirSync('logs');

@@ -1,6 +1,6 @@
 import chai from 'chai';
 import { ethers } from 'hardhat';
-import { BigNumber as EthersBN,  } from 'ethers';
+import { BigNumber as EthersBN } from 'ethers';
 import { solidity } from 'ethereum-waffle';
 import { NounsDescriptor__factory, NounsErc721 } from '../typechain';
 import { deployNounsERC721, populateDescriptor } from './utils';
@@ -16,7 +16,7 @@ describe('NounsERC721', () => {
 
   beforeEach(async () => {
     [deployer, noundersDAO] = await ethers.getSigners();
-    nounsErc721 = await deployNounsERC721(deployer, deployer.address, noundersDAO.address);
+    nounsErc721 = await deployNounsERC721(deployer, noundersDAO.address, deployer.address);
 
     const descriptor = await nounsErc721.descriptor();
 

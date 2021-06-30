@@ -14,6 +14,8 @@ interface INounsERC721 is IERC721 {
 
     event NounBurned(uint256 indexed tokenId);
 
+    event NoundersDAOUpdated(address noundersDAO);
+
     event MinterUpdated(address minter);
 
     event DescriptorUpdated(INounsDescriptor descriptor);
@@ -25,6 +27,8 @@ interface INounsERC721 is IERC721 {
     function burn(uint256 tokenId) external;
 
     function dataURI(uint256 tokenId) external returns (string memory);
+
+    function setNoundersDAO(address noundersDAO) external;
 
     function setMinter(address minter) external;
 

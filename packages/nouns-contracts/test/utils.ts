@@ -51,8 +51,8 @@ export const deployNounsSeeder = async (deployer?: SignerWithAddress): Promise<N
 
 export const deployNounsERC721 = async (
   deployer?: SignerWithAddress,
-  minter?: string,
   noundersDAO?: string,
+  minter?: string,
   descriptor?: string,
   seeder?: string,
 ): Promise<NounsErc721> => {
@@ -61,8 +61,8 @@ export const deployNounsERC721 = async (
   const factory = new NounsErc721__factory(signer);
 
   return factory.deploy(
-    minter || signer.address,
     noundersDAO || signer.address,
+    minter || signer.address,
     descriptor || (await deployNounsDescriptor(signer)).address,
     seeder || (await deployNounsSeeder(signer)).address,
   );

@@ -37,8 +37,8 @@ describe('NounsAuctionHouse', () => {
 
   beforeEach(async () => {
     [deployer, noundersDAO, bidderA, bidderB] = await ethers.getSigners();
-    
-    nounsErc721 = await deployNounsERC721(deployer, deployer.address, noundersDAO.address);
+
+    nounsErc721 = await deployNounsERC721(deployer, noundersDAO.address, deployer.address);
     weth = await deployWeth(deployer);
     nounsAuctionHouse = await deploy(deployer);
 
@@ -256,7 +256,7 @@ describe('NounsAuctionHouse', () => {
       .withArgs(nounId, bidderA.address, RESERVE_PRICE);
 
     const paused = await nounsAuctionHouse.paused();
-    
+
     expect(paused).to.equal(true);
   });
 
