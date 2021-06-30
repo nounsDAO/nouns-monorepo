@@ -1,5 +1,5 @@
 {
-  "name": "nouns-contracts",
+  "name": "@nouns/contracts",
   "private": true,
   "version": "0.1.0",
   "description": "nouns solidity contracts",
@@ -7,9 +7,14 @@
   "license": "UNLICENSED",
   "main": "src/index.ts",
   "scripts": {
-    "build": "npx hardhat compile",
-    "deploy": "hardhat run scripts/deploy.ts",
-    "accounts": "npx hardhat accounts",
+    "build": "yarn build:sol && yarn build:ts",
+    "build:ts": "tsc -p .",
+    "build:sol": "npx hardhat compile",
+    "hardhat": "npx hardhat",
+    "task:accounts": "npx hardhat accounts",
+    "task:deploy": "npx hardhat deploy",
+    "task:mint-noun": "npx hardhat mint-noun",
+    "task:populate-descriptor": "npx hardhat populate-descriptor",
     "test": "npx hardhat test",
     "coverage": "npx hardhat coverage",
     "postinstall": "yarn build"

@@ -113,10 +113,10 @@ const getEncodedImage = async (folder: string, file: string) => {
   bounds.left = Math.min(...Object.values(lines).map(l => l.bounds.left));
   bounds.right = Math.max(...Object.values(lines).map(l => l.bounds.right));
 
-  const initial = `0x00${toPaddedHex(bounds.top, 2)}${toPaddedHex(
-    bounds.right,
+  const initial = `0x00${toPaddedHex(bounds.top, 2)}${toPaddedHex(bounds.right, 2)}${toPaddedHex(
+    bounds.bottom,
     2,
-  )}${toPaddedHex(bounds.bottom, 2)}${toPaddedHex(bounds.left, 2)}`;
+  )}${toPaddedHex(bounds.left, 2)}`;
   const encoded = Object.values(lines).reduce((result, line) => {
     const lineBuffer = Buffer.from(
       line.rects.flatMap(({ length, colorIndex }, i) => {
@@ -178,10 +178,7 @@ const getEncodedImagesForAllLayers = async () => {
 
 const writeEncodedImagesToFile = async () => {
   const layers = await getEncodedImagesForAllLayers();
-  await fs.writeFile(
-    OUTPUT_FILE,
-    JSON.stringify({ colors: [...colors.keys()], layers }, null, 2),
-  );
+  await fs.writeFile(OUTPUT_FILE, JSON.stringify({ colors: [...colors.keys()], layers }, null, 2));
   console.log(`Encoded layers written to ${path.join(__dirname, OUTPUT_FILE)}`);
 };
 

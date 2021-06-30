@@ -1,12 +1,12 @@
-# nouns-contracts
+# @nouns/contracts
 
-## Build
+## Install dependencies
 
 ```sh
 yarn
 ```
 
-## Compile contracts and generate typechain wrappers
+## Compile typescript, contracts, and generate typechain wrappers
 
 ```sh
 yarn build

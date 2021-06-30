@@ -40,7 +40,7 @@ describe('NounsDescriptor', () => {
   });
 
   it('should generate valid token uri metadata when data uris are disabled', async () => {
-    const BASE_URI = 'https://api.nouns.wtf/nouns/';
+    const BASE_URI = 'https://api.nouns.wtf/metadata/';
 
     await nounsDescriptor.setBaseURI(BASE_URI);
 
@@ -65,10 +65,9 @@ describe('NounsDescriptor', () => {
       glasses: longestGlasses.index,
     });
     const { name, description, image } = JSON.parse(
-      Buffer.from(
-        tokenUri.replace('data:application/json;base64,', ''),
-        'base64',
-      ).toString('ascii'),
+      Buffer.from(tokenUri.replace('data:application/json;base64,', ''), 'base64').toString(
+        'ascii',
+      ),
     );
     expect(name).to.equal('Noun #0');
     expect(description).to.equal('Noun #0 is a member of the NounsDAO');

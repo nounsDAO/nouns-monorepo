@@ -4,6 +4,7 @@ pragma solidity ^0.8.6;
 
 import { PausableUpgradeable } from '@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol';
 import { ReentrancyGuardUpgradeable } from '@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol';
+import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { INounsAuctionHouse } from './interfaces/INounsAuctionHouse.sol';
 import { INounsERC721 } from './interfaces/INounsERC721.sol';
@@ -12,15 +13,12 @@ import { IWETH } from './interfaces/IWETH.sol';
 /**
  * @title The NounsDAO auction house
  */
-contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, ReentrancyGuardUpgradeable {
+contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, ReentrancyGuardUpgradeable, OwnableUpgradeable {
     // The Nouns ERC721 token contract
     INounsERC721 public nouns;
 
     // The nounsDAO address (avatars org)
     address public nounsDAO;
-
-    // The noundersDAO address (creators org)
-    address public noundersDAO;
 
     // The address of the WETH contract
     address public weth;
@@ -41,14 +39,6 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     INounsAuctionHouse.Auction public auction;
 
     /**
-     * @notice Require that the sender is the noundersDAO
-     */
-    modifier onlyNoundersDAO() {
-        require(msg.sender == noundersDAO, 'Sender is not the noundersDAO');
-        _;
-    }
-
-    /**
      * @notice Initialize the auction house and base contracts,
      * populate configuration values, and pause the contract.
      * @dev This function can only be called once.
@@ -56,7 +46,6 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     function initialize(
         INounsERC721 _nouns,
         address _nounsDAO,
-        address _noundersDAO,
         address _weth,
         uint256 _timeBuffer,
         uint256 _reservePrice,
@@ -65,12 +54,12 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     ) external initializer {
         __Pausable_init();
         __ReentrancyGuard_init();
+        __Ownable_init();
 
         _pause();
 
         nouns = _nouns;
         nounsDAO = _nounsDAO;
-        noundersDAO = _noundersDAO;
         weth = _weth;
         timeBuffer = _timeBuffer;
         reservePrice = _reservePrice;
@@ -140,20 +129,20 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
 
     /**
      * @notice Pause the Nouns auction house.
-     * @dev This function can only be called by the noundersDAO when the
+     * @dev This function can only be called by the owner when the
      * contract is unpaused. While no new auctions can be started when paused,
      * anyone can settle an ongoing auction.
      */
-    function pause() external override onlyNoundersDAO {
+    function pause() external override onlyOwner {
         _pause();
     }
 
     /**
      * @notice Unpause the Nouns auction house.
-     * @dev This function can only be called by the noundersDAO when the
+     * @dev This function can only be called by the owner when the
      * contract is paused. If required, this function will start a new auction.
      */
-    function unpause() external override onlyNoundersDAO {
+    function unpause() external override onlyOwner {
         _unpause();
 
         if (auction.startTime == 0 || auction.settled) {
@@ -163,9 +152,9 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
 
     /**
      * @notice Set the auction time buffer.
-     * @dev Only callable by the noundersDAO.
+     * @dev Only callable by the owner.
      */
-    function setTimeBuffer(uint256 _timeBuffer) external override onlyNoundersDAO {
+    function setTimeBuffer(uint256 _timeBuffer) external override onlyOwner {
         timeBuffer = _timeBuffer;
 
         emit AuctionTimeBufferUpdated(_timeBuffer);
@@ -173,9 +162,9 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
 
     /**
      * @notice Set the auction reserve price.
-     * @dev Only callable by the noundersDAO.
+     * @dev Only callable by the owner.
      */
-    function setReservePrice(uint256 _reservePrice) external override onlyNoundersDAO {
+    function setReservePrice(uint256 _reservePrice) external override onlyOwner {
         reservePrice = _reservePrice;
 
         emit AuctionReservePriceUpdated(_reservePrice);
@@ -183,22 +172,12 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
 
     /**
      * @notice Set the auction minimum bid increment percentage.
-     * @dev Only callable by the noundersDAO.
+     * @dev Only callable by the owner.
      */
-    function setMinBidIncrementPercentage(uint8 _minBidIncrementPercentage) external override onlyNoundersDAO {
+    function setMinBidIncrementPercentage(uint8 _minBidIncrementPercentage) external override onlyOwner {
         minBidIncrementPercentage = _minBidIncrementPercentage;
 
         emit AuctionMinBidIncrementPercentageUpdated(_minBidIncrementPercentage);
-    }
-
-    /**
-     * @notice Set the auction duration.
-     * @dev Only callable by the noundersDAO.
-     */
-    function setDuration(uint256 _duration) external override onlyNoundersDAO {
-        duration = _duration;
-
-        emit AuctionDurationUpdated(_duration);
     }
 
     /**
@@ -235,8 +214,6 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
 
         auction.settled = true;
 
-        address profitRecipient = _getProfitRecipient(_auction.nounId);
-
         if (_auction.bidder == address(0)) {
             nouns.burn(_auction.nounId);
         } else {
@@ -244,7 +221,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
         }
 
         if (_auction.amount > 0) {
-            _safeTransferETHWithFallback(profitRecipient, _auction.amount);
+            _safeTransferETHWithFallback(nounsDAO, _auction.amount);
         }
 
         emit AuctionSettled(_auction.nounId, _auction.bidder, _auction.amount);
@@ -266,18 +243,5 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     function _safeTransferETH(address to, uint256 value) internal returns (bool) {
         (bool success, ) = to.call{ value: value }(new bytes(0));
         return success;
-    }
-
-    /**
-     * @notice Get the profit recipient for a given `nounId`.
-     * @dev Auction proceeds from inception to auction #365 will be donated to the NounsDAO,
-     * while auction #366 - #730 proceeds will be sent to the NoudersDAO. After auction #730,
-     * proceeds will be sent to the NounsDAO in perpetuity.
-     */
-    function _getProfitRecipient(uint256 nounId) internal view returns (address) {
-        if (nounId <= 365 || nounId >= 731) {
-            return nounsDAO;
-        }
-        return noundersDAO;
     }
 }
