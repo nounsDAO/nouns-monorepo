@@ -8,8 +8,6 @@ import { INounsSeeder } from './INounsSeeder.sol';
  * @title Interface for NounsDescriptor.
  */
 interface INounsDescriptor {
-    function nounsDAO() external returns (address);
-
     function arePartsLocked() external returns (bool);
 
     function isDataURIEnabled() external returns (bool);

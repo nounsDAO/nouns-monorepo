@@ -12,6 +12,7 @@ describe('NounsAuctionHouse', () => {
   let nounsAuctionHouse: NounsAuctionHouse;
   let nounsErc721: NounsErc721;
   let weth: Weth;
+  let deployer: SignerWithAddress;
   let noundersDAO: SignerWithAddress;
   let nounsDAO: SignerWithAddress;
   let bidderA: SignerWithAddress;
@@ -24,38 +25,37 @@ describe('NounsAuctionHouse', () => {
 
   async function deploy(deployer?: SignerWithAddress) {
     const auctionHouseFactory = await ethers.getContractFactory('NounsAuctionHouse', deployer);
-    nounsAuctionHouse = (await upgrades.deployProxy(auctionHouseFactory, [
+    return upgrades.deployProxy(auctionHouseFactory, [
       nounsErc721.address,
       nounsDAO.address,
-      noundersDAO.address,
       weth.address,
       TIME_BUFFER,
       RESERVE_PRICE,
       MIN_INCREMENT_BID_PERCENTAGE,
       DURATION,
-    ])) as NounsAuctionHouse;
-
-    return nounsAuctionHouse.deployed();
+    ]) as Promise<NounsAuctionHouse>;
   }
 
   beforeEach(async () => {
-    [noundersDAO, nounsDAO, bidderA, bidderB] = await ethers.getSigners();
-    nounsErc721 = await deployNounsERC721(noundersDAO, nounsDAO.address);
-    weth = await deployWeth(noundersDAO);
-    await deploy(noundersDAO);
+    [deployer, noundersDAO, nounsDAO, bidderA, bidderB] = await ethers.getSigners();
+    
+    nounsErc721 = await deployNounsERC721(deployer, deployer.address, noundersDAO.address);
+    weth = await deployWeth(deployer);
+    nounsAuctionHouse = await deploy(deployer);
 
     const descriptor = await nounsErc721.descriptor();
 
-    await populateDescriptor(NounsDescriptor__factory.connect(descriptor, nounsDAO));
+    await populateDescriptor(NounsDescriptor__factory.connect(descriptor, deployer));
 
-    await nounsErc721.transferOwnership(nounsAuctionHouse.address);
+    await nounsErc721.setMinter(nounsAuctionHouse.address, {
+      from: deployer.address,
+    });
   });
 
   it('should revert if a second initialization is attempted', async () => {
     const tx = nounsAuctionHouse.initialize(
       nounsErc721.address,
       nounsDAO.address,
-      noundersDAO.address,
       weth.address,
       TIME_BUFFER,
       RESERVE_PRICE,
@@ -199,7 +199,7 @@ describe('NounsAuctionHouse', () => {
       expect(tx)
         .to.emit(nounsAuctionHouse, 'AuctionSettled')
         .withArgs(nounId, bidderA.address, RESERVE_PRICE),
-      expect(tx).to.emit(nounsAuctionHouse, 'AuctionCreated').withArgs(nounId.add(1)),
+      expect(tx).to.emit(nounsAuctionHouse, 'AuctionCreated').withArgs(nounId.add(2)),
     ]);
   });
 
@@ -235,7 +235,7 @@ describe('NounsAuctionHouse', () => {
       .withArgs(nounId, bidderA.address, RESERVE_PRICE);
 
     const unpauseTx = nounsAuctionHouse.unpause();
-    await expect(unpauseTx).to.emit(nounsAuctionHouse, 'AuctionCreated').withArgs(nounId.add(1));
+    await expect(unpauseTx).to.emit(nounsAuctionHouse, 'AuctionCreated').withArgs(nounId.add(2));
   });
 
   it('should burn a Noun on auction settlement if no bids are received', async () => {

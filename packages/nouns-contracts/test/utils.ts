@@ -27,7 +27,6 @@ export const getSigners = async (): Promise<TestSigners> => {
 
 export const deployNounsDescriptor = async (
   deployer?: SignerWithAddress,
-  nounsDAO?: string,
 ): Promise<NounsDescriptor> => {
   const signers = await getSigners();
   const signer = deployer || signers.deployer;
@@ -40,7 +39,7 @@ export const deployNounsDescriptor = async (
     signer,
   );
 
-  return nounsDescriptorFactory.deploy(nounsDAO || signer.address);
+  return nounsDescriptorFactory.deploy();
 };
 
 export const deployNounsSeeder = async (deployer?: SignerWithAddress): Promise<NounsSeeder> => {
@@ -52,7 +51,8 @@ export const deployNounsSeeder = async (deployer?: SignerWithAddress): Promise<N
 
 export const deployNounsERC721 = async (
   deployer?: SignerWithAddress,
-  nounsDAO?: string,
+  minter?: string,
+  noundersDAO?: string,
   descriptor?: string,
   seeder?: string,
 ): Promise<NounsErc721> => {
@@ -61,8 +61,9 @@ export const deployNounsERC721 = async (
   const factory = new NounsErc721__factory(signer);
 
   return factory.deploy(
-    nounsDAO || signer.address,
-    descriptor || (await deployNounsDescriptor(signer, nounsDAO)).address,
+    minter || signer.address,
+    noundersDAO || signer.address,
+    descriptor || (await deployNounsDescriptor(signer)).address,
     seeder || (await deployNounsSeeder(signer)).address,
   );
 };

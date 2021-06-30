@@ -12,14 +12,20 @@ import { INounsERC721 } from './interfaces/INounsERC721.sol';
 contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
     using Counters for Counters.Counter;
 
-    // The nounsDAO address (avatars org)
-    address public immutable nounsDAO;
+    // An address who has permissions to mint Nouns
+    address public minter;
+
+    // The noundersDAO address (creators org)
+    address public noundersDAO;
 
     // The Nouns token URI descriptor
     INounsDescriptor public descriptor;
 
     // The Nouns token seeder
     INounsSeeder public seeder;
+
+    // Whether the minter can be updated
+    bool public isMinterLocked;
 
     // Whether the descriptor can be updated
     bool public isDescriptorLocked;
@@ -32,6 +38,14 @@ contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
 
     // The internal noun seeds
     mapping(uint256 => INounsSeeder.Seed) private _seeds;
+
+    /**
+     * @notice Require that the minter has not been locked.
+     */
+    modifier whenMinterNotLocked() {
+        require(!isMinterLocked, 'Minter is locked');
+        _;
+    }
 
     /**
      * @notice Require that the descriptor has not been locked.
@@ -50,43 +64,44 @@ contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
     }
 
     /**
-     * @notice Require that the sender is the nounsDAO.
+     * @notice Require that the sender is the minter.
      */
-    modifier onlyNounsDAO() {
-        require(msg.sender == nounsDAO, 'Sender is not the nounsDAO');
+    modifier onlyMinter() {
+        require(msg.sender == minter, 'Sender is not the minter');
         _;
     }
 
     constructor(
-        address _nounsDAO,
+        address _minter,
+        address _noundersDAO,
         INounsDescriptor _descriptor,
         INounsSeeder _seeder
     ) ERC721('Nouns', 'NOUN') {
-        nounsDAO = _nounsDAO;
+        minter = _minter;
+        noundersDAO = _noundersDAO;
         descriptor = _descriptor;
         seeder = _seeder;
     }
 
     /**
-     * @notice Mint a Noun.
-     * @dev Call ERC721 _mint with the current noun id and increment.
+     * @notice Mint a Noun to the owner, along with a possible nounders reward
+     * Noun. Nounders reward Nouns are minted every 10 Nouns, starting at #1,
+     * until 180 nounder Nouns have been minted (5 years w/ 24 hour auctions).
+     * @dev Call _mintTo with the to address(es) and current noun id(s) and increment.
      */
-    function mint() public override onlyOwner returns (uint256) {
+    function mint() public override onlyMinter returns (uint256) {
         uint256 nounId = _nounIdTracker.current();
-        _nounIdTracker.increment();
 
-        INounsSeeder.Seed memory seed = _seeds[nounId] = seeder.generateSeed(nounId, descriptor);
-
-        _mint(owner(), nounId);
-        emit NounCreated(nounId, seed);
-
-        return nounId;
+        if (nounId <= 1791 && nounId % 10 == 1) {
+            _mintTo(noundersDAO, nounId++);
+        }
+        return _mintTo(minter, nounId);
     }
 
     /**
      * @notice Burn a noun.
      */
-    function burn(uint256 nounId) public override onlyOwner {
+    function burn(uint256 nounId) public override onlyMinter {
         _burn(nounId);
         emit NounBurned(nounId);
     }
@@ -110,10 +125,28 @@ contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
     }
 
     /**
-     * @notice Set the token URI descriptor.
-     * @dev Only callable by the nounDAO when not locked.
+     * @notice Set the token minter.
+     * @dev Only callable by the owner when not locked.
      */
-    function setDescriptor(INounsDescriptor _descriptor) external override onlyNounsDAO whenDescriptorNotLocked {
+    function setMinter(address _minter) external override onlyOwner whenMinterNotLocked {
+        minter = _minter;
+
+        emit MinterUpdated(_minter);
+    }
+
+    /**
+     * @notice Lock the minter.
+     * @dev This cannot be reversed and is only callable by the owner when not locked.
+     */
+    function lockMinter() external override onlyOwner whenMinterNotLocked {
+        isMinterLocked = true;
+    }
+
+    /**
+     * @notice Set the token URI descriptor.
+     * @dev Only callable by the owner when not locked.
+     */
+    function setDescriptor(INounsDescriptor _descriptor) external override onlyOwner whenDescriptorNotLocked {
         descriptor = _descriptor;
 
         emit DescriptorUpdated(_descriptor);
@@ -121,17 +154,17 @@ contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
 
     /**
      * @notice Lock the descriptor.
-     * @dev This cannot be reversed and is only callable by the nounDAO when not locked.
+     * @dev This cannot be reversed and is only callable by the owner when not locked.
      */
-    function lockDescriptor() external override onlyNounsDAO whenDescriptorNotLocked {
+    function lockDescriptor() external override onlyOwner whenDescriptorNotLocked {
         isDescriptorLocked = true;
     }
 
     /**
      * @notice Set the token seeder.
-     * @dev Only callable by the nounDAO when not locked.
+     * @dev Only callable by the owner when not locked.
      */
-    function setSeeder(INounsSeeder _seeder) external override onlyNounsDAO whenSeederNotLocked {
+    function setSeeder(INounsSeeder _seeder) external override onlyOwner whenSeederNotLocked {
         seeder = _seeder;
 
         emit SeederUpdated(_seeder);
@@ -139,9 +172,23 @@ contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
 
     /**
      * @notice Lock the seeder.
-     * @dev This cannot be reversed and is only callable by the nounDAO when not locked.
+     * @dev This cannot be reversed and is only callable by the owner when not locked.
      */
-    function lockSeeder() external override onlyNounsDAO whenSeederNotLocked {
+    function lockSeeder() external override onlyOwner whenSeederNotLocked {
         isSeederLocked = true;
+    }
+
+    /**
+     * @notice Mint a Noun with `nounId` to the provided `to` address.
+     */
+    function _mintTo(address to, uint256 nounId) internal returns (uint256) {
+        _nounIdTracker.increment();
+
+        INounsSeeder.Seed memory seed = _seeds[nounId] = seeder.generateSeed(nounId, descriptor);
+
+        _mint(to, nounId);
+        emit NounCreated(nounId, seed);
+
+        return nounId;
     }
 }
