@@ -17,9 +17,6 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     // The Nouns ERC721 token contract
     INounsERC721 public nouns;
 
-    // The nounsDAO address (avatars org)
-    address public nounsDAO;
-
     // The address of the WETH contract
     address public weth;
 
@@ -45,7 +42,6 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      */
     function initialize(
         INounsERC721 _nouns,
-        address _nounsDAO,
         address _weth,
         uint256 _timeBuffer,
         uint256 _reservePrice,
@@ -59,7 +55,6 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
         _pause();
 
         nouns = _nouns;
-        nounsDAO = _nounsDAO;
         weth = _weth;
         timeBuffer = _timeBuffer;
         reservePrice = _reservePrice;
@@ -183,26 +178,28 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     /**
      * @notice Create an auction.
      * @dev Store the auction details in the `auction` state variable and emit an AuctionCreated event.
+     * If the mint reverts, the minter was updated without pausing this contract first. To remedy this,
+     * catch the revert and pause this contract.
      */
-    function _createAuction() internal returns (uint256) {
-        uint256 nounId = nouns.mint();
+    function _createAuction() internal {
+        try nouns.mint() returns (uint256 nounId) {
+            auction = Auction({
+                nounId: nounId,
+                amount: 0,
+                startTime: block.timestamp,
+                endTime: block.timestamp + duration,
+                bidder: payable(0),
+                settled: false
+            });
 
-        auction = Auction({
-            nounId: nounId,
-            amount: 0,
-            startTime: block.timestamp,
-            endTime: block.timestamp + duration,
-            bidder: payable(0),
-            settled: false
-        });
-
-        emit AuctionCreated(nounId);
-
-        return nounId;
+            emit AuctionCreated(nounId);
+        } catch {
+            _pause();
+        }
     }
 
     /**
-     * @notice Settle an auction, finalizing the bid and paying out to the DAO.
+     * @notice Settle an auction, finalizing the bid and paying out to the owner.
      * @dev If there are no bids, the Noun is burned.
      */
     function _settleAuction() internal {
@@ -221,7 +218,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
         }
 
         if (_auction.amount > 0) {
-            _safeTransferETHWithFallback(nounsDAO, _auction.amount);
+            _safeTransferETHWithFallback(owner(), _auction.amount);
         }
 
         emit AuctionSettled(_auction.nounId, _auction.bidder, _auction.amount);

@@ -23,35 +23,18 @@ describe('NounsERC721', () => {
     await populateDescriptor(NounsDescriptor__factory.connect(descriptor, deployer));
   });
 
-  it('should allow minter to mint a noun to itself', async () => {
-    const receipt = await (await nounsErc721.mint()).wait();
-    const nounCreated = receipt.events?.[1];
-
-    expect(await nounsErc721.ownerOf(0)).to.eq(deployer.address);
-    expect(nounCreated?.event).to.eq('NounCreated');
-    expect(nounCreated?.args?.tokenId).to.eq(0);
-    expect(nounCreated?.args?.seed.length).to.equal(5);
-
-    nounCreated?.args?.seed.forEach((item: EthersBN | number) => {
-      const value = typeof item !== 'number' ? item?.toNumber() : item;
-      expect(value).to.be.a('number');
-    });
-  });
-
   it('should allow the minter to mint a noun to itself and a reward noun to the noundersDAO', async () => {
-    await (await nounsErc721.mint()).wait();
-
     const receipt = await (await nounsErc721.mint()).wait();
     const [, noundersNounCreated, , ownersNounCreated] = receipt.events || [];
 
-    expect(await nounsErc721.ownerOf(1)).to.eq(noundersDAO.address);
+    expect(await nounsErc721.ownerOf(0)).to.eq(noundersDAO.address);
     expect(noundersNounCreated?.event).to.eq('NounCreated');
-    expect(noundersNounCreated?.args?.tokenId).to.eq(1);
+    expect(noundersNounCreated?.args?.tokenId).to.eq(0);
     expect(noundersNounCreated?.args?.seed.length).to.equal(5);
 
-    expect(await nounsErc721.ownerOf(2)).to.eq(deployer.address);
+    expect(await nounsErc721.ownerOf(1)).to.eq(deployer.address);
     expect(ownersNounCreated?.event).to.eq('NounCreated');
-    expect(ownersNounCreated?.args?.tokenId).to.eq(2);
+    expect(ownersNounCreated?.args?.tokenId).to.eq(1);
     expect(ownersNounCreated?.args?.seed.length).to.equal(5);
 
     noundersNounCreated?.args?.seed.forEach((item: EthersBN | number) => {
@@ -60,6 +43,23 @@ describe('NounsERC721', () => {
     });
 
     ownersNounCreated?.args?.seed.forEach((item: EthersBN | number) => {
+      const value = typeof item !== 'number' ? item?.toNumber() : item;
+      expect(value).to.be.a('number');
+    });
+  });
+
+  it('should allow minter to mint a noun to itself', async () => {
+    await (await nounsErc721.mint()).wait();
+
+    const receipt = await (await nounsErc721.mint()).wait();
+    const nounCreated = receipt.events?.[1];
+
+    expect(await nounsErc721.ownerOf(2)).to.eq(deployer.address);
+    expect(nounCreated?.event).to.eq('NounCreated');
+    expect(nounCreated?.args?.tokenId).to.eq(2);
+    expect(nounCreated?.args?.seed.length).to.equal(5);
+
+    nounCreated?.args?.seed.forEach((item: EthersBN | number) => {
       const value = typeof item !== 'number' ? item?.toNumber() : item;
       expect(value).to.be.a('number');
     });
