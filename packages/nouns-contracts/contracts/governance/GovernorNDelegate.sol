@@ -46,12 +46,13 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
       * @notice Used to initialize the contract during delegator contructor
       * @param timelock_ The address of the Timelock
       * @param nouns_ The address of the NOUN tokens
+      * @param vetoer_ The address allowed to unilaterally veto proposals
       * @param votingPeriod_ The initial voting period
       * @param votingDelay_ The initial voting delay
       * @param proposalThresholdBPS_ The initial proposal threshold in basis points
       * * @param quorumVotesBPS_ The initial quorum votes threshold in basis points
       */
-    function initialize(address timelock_, address nouns_, uint votingPeriod_, uint votingDelay_, uint proposalThresholdBPS_, uint quorumVotesBPS_) virtual public {
+    function initialize(address timelock_, address nouns_, address vetoer_, uint votingPeriod_, uint votingDelay_, uint proposalThresholdBPS_, uint quorumVotesBPS_) virtual public {
         require(address(timelock) == address(0), "GovernorN::initialize: can only initialize once");
         require(msg.sender == admin, "GovernorN::initialize: admin only");
         require(timelock_ != address(0), "GovernorN::initialize: invalid timelock address");
@@ -68,6 +69,7 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
 
         timelock = TimelockInterface(timelock_);
         nouns = NounsInterface(nouns_);
+        vetoer = vetoer_;
         votingPeriod = votingPeriod_;
         votingDelay = votingDelay_;
         proposalThresholdBPS = proposalThresholdBPS_;
@@ -197,6 +199,25 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
     }
 
     /**
+      * @notice Vetoes a proposal only if sender is the vetoer and the proposal has not been executed.
+      * @param proposalId The id of the proposal to veto
+      */
+    function veto(uint proposalId) external {
+        require(vetoer != address(0), "GovernorN::veto: veto power burned");
+        require(msg.sender == vetoer, "GovernorN::veto: only vetoer");
+        require(state(proposalId) != ProposalState.Executed, "GovernorN::veto: cannot veto executed proposal");
+
+        Proposal storage proposal = proposals[proposalId];
+
+        proposal.vetoed = true;
+        for (uint i = 0; i < proposal.targets.length; i++) {
+            timelock.cancelTransaction(proposal.targets[i], proposal.values[i], proposal.signatures[i], proposal.calldatas[i], proposal.eta);
+        }
+
+        emit ProposalVetoed(proposalId);
+    }
+
+    /**
       * @notice Gets actions of a proposal
       * @param proposalId the id of the proposal
       * @return targets
@@ -227,7 +248,9 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
     function state(uint proposalId) public view returns (ProposalState) {
         require(proposalCount >= proposalId, "GovernorN::state: invalid proposal id");
         Proposal storage proposal = proposals[proposalId];
-        if (proposal.canceled) {
+        if (proposal.vetoed) {
+            return ProposalState.Vetoed;
+        } else if (proposal.canceled) {
             return ProposalState.Canceled;
         } else if (block.number <= proposal.startBlock) {
             return ProposalState.Pending;
@@ -403,6 +426,29 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
 
         emit NewAdmin(oldAdmin, admin);
         emit NewPendingAdmin(oldPendingAdmin, pendingAdmin);
+    }
+
+    /**
+      * @notice Changes vetoer address
+      * @dev Vetoer function for updating vetoer address
+      */
+    function _setVetoer(address newVetoer) public {
+        require(msg.sender == vetoer, "GovernorN:_setVetoer: vetoer only");
+
+        emit NewVetoer(vetoer, newVetoer);
+
+        vetoer = newVetoer;
+    }
+
+    /**
+      * @notice Burns veto priviledges
+      * @dev Vetoer function destroying veto power forever
+      */
+    function _burnVetoPower() public {
+        // Check caller is pendingAdmin and pendingAdmin ≠ address(0)
+        require(msg.sender == vetoer, "GovernorN:_burnVetoPower: vetoer only");
+
+        _setVetoer(address(0));
     }
 
     /**

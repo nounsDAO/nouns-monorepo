@@ -33,31 +33,12 @@ import {
 chai.use(solidity);
 const { expect } = chai;
 
-
-// const {
-//   address,
-//   etherMantissa,
-//   encodeParameters,
-//   mineBlock,
-//   unlockedAccount,
-//   mergeInterface
-// } = require('../../Utils/Ethereum');
-// const EIP712 = require('../../Utils/EIP712');
-// const BigNumber = require('bignumber.js');
-// const chalk = require('chalk');
-
-// async function enfranchise(comp, actor, amount) {
-//   await send(comp, 'transfer', [actor, etherMantissa(amount)]);
-//   await send(comp, 'delegate', [actor], { from: actor });
-// }
-
-
 async function deployGovernor(
   deployer: SignerWithAddress,
   tokenAddress: string,
 ): Promise<GovernorNDelegateHarness> {
   const {address: govDelegateAddress } = await new GovernorNDelegateHarness__factory(deployer).deploy()
-  const params = [address(0), tokenAddress, deployer.address, govDelegateAddress, 17280, 1, 1, 1]
+  const params = [address(0), tokenAddress, deployer.address, address(0), govDelegateAddress,  17280, 1, 1, 1]
 
   const {address: _govDelegatorAddress} = await (
     await ethers.getContractFactory('GovernorNDelegator', deployer)

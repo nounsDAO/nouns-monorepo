@@ -6,11 +6,11 @@ pragma solidity ^0.8.4;
 
 import "./GovernorNInterfaces.sol";
 
-// @QUESTIONS: can admin be changed?
 contract GovernorNDelegator is GovernorNDelegatorStorage, GovernorNEvents {
 	constructor(
 			address timelock_,
 			address nouns_,
+            address vetoer_,
 			address admin_,
 	        address implementation_,
 	        uint votingPeriod_,
@@ -21,9 +21,10 @@ contract GovernorNDelegator is GovernorNDelegatorStorage, GovernorNEvents {
         // Admin set to msg.sender for initialization
         admin = msg.sender;
 
-        delegateTo(implementation_, abi.encodeWithSignature("initialize(address,address,uint256,uint256,uint256,uint256)",
+        delegateTo(implementation_, abi.encodeWithSignature("initialize(address,address,address,uint256,uint256,uint256,uint256)",
                                                             timelock_,
                                                             nouns_,
+                                                            vetoer_,
                                                             votingPeriod_,
                                                             votingDelay_,
                                                             proposalThresholdBPS_,

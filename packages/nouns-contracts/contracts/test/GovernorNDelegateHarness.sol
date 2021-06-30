@@ -8,6 +8,7 @@ contract GovernorNDelegateHarness is GovernorNDelegate {
     function initialize(
         address timelock_,
         address nouns_,
+        address vetoer_,
         uint votingPeriod_,
         uint votingDelay_,
         uint proposalThresholdBPS_,
@@ -18,6 +19,7 @@ contract GovernorNDelegateHarness is GovernorNDelegate {
         
         timelock = TimelockInterface(timelock_);
         nouns = NounsInterface(nouns_);
+        vetoer = vetoer_;
         votingPeriod = votingPeriod_;
         votingDelay = votingDelay_;
         proposalThresholdBPS = proposalThresholdBPS_;

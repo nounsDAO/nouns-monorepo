@@ -32,29 +32,8 @@ import {
   Timelock__factory
 } from '../../../typechain';
 
-
-
 chai.use(solidity);
 const { expect } = chai;
-
-
-// const {
-//   address,
-//   etherMantissa,
-//   encodeParameters,
-//   mineBlock,
-//   unlockedAccount,
-//   mergeInterface
-// } = require('../../Utils/Ethereum');
-// const EIP712 = require('../../Utils/EIP712');
-// const BigNumber = require('bignumber.js');
-// const chalk = require('chalk');
-
-// async function enfranchise(comp, actor, amount) {
-//   await send(comp, 'transfer', [actor, etherMantissa(amount)]);
-//   await send(comp, 'delegate', [actor], { from: actor });
-// }
-
 
 function votes(n: number|string){
   return ethers.utils.parseUnits(String(n),'ether')
@@ -62,18 +41,25 @@ function votes(n: number|string){
 
 async function reset(): Promise<void> {
 
+  const govDelegatorAddress = ethers.utils.getContractAddress({
+    from: deployer.address,
+    nonce: await deployer.getTransactionCount() + 3
+  })
+
+  // Deploy Timelock with pre-computed Delegator address
+  const {address: timelockAddress} = await new Timelock__factory(deployer).deploy(govDelegatorAddress, timelockDelay)
+
   // Deploy Delegate
   const {address: govDelegateAddress } = await new GovernorNDelegate__factory(deployer).deploy()
 
-  // Deploy Timelock
-  const {address: timelockAddress} = await new Timelock__factory(deployer).deploy(govDelegateAddress, timelockDelay)
-
   // Deploy Nouns token
   token = await deployNounsErc721()
+
+  // bind MintNouns to token contract
   mintNouns = MintNouns(token)
 
   // Deploy Delegator
-  const {address: govDelegatorAddress} = await new GovernorNDelegator__factory(deployer).deploy(timelockAddress, token.address, timelockAddress, govDelegateAddress, 5760, 1, proposalThresholdBPS, quorumVotesBPS)
+  await new GovernorNDelegator__factory(deployer).deploy(timelockAddress, token.address, address(0), timelockAddress, govDelegateAddress, 5760, 1, proposalThresholdBPS, quorumVotesBPS)
 
   // Cast Delegator as Delegate
   gov = GovernorNDelegate__factory.connect(govDelegatorAddress, deployer)
@@ -108,17 +94,6 @@ let signatures: string[];
 let callDatas: string[];
 let proposalId: EthersBN;
 let mintNouns: (amount: number) => Promise<void>;
-
-
-// async function propose(proposer: SignerWithAddress){
-//   targets = [account0.address];
-//   values = ["0"];
-//   signatures = ["getBalanceOf(address)"];
-//   callDatas = [encodeParameters(['address'], [account0.address])];
-
-//   await gov.connect(proposer).propose(targets, values, signatures, callDatas, "do nothing");
-//   proposalId = await gov.latestProposalIds(proposer.address);
-// }
 
 describe("GovernorN#inflationHandling", () => {
 
@@ -221,11 +196,18 @@ describe("GovernorN#inflationHandling", () => {
     expect(proposal.againstVotes).to.equal(votes(5))
   })
 
-  it('succeeds when for votes > quorumVotes and againstVotes', async () => {
+  it('succeeds when for forVotes > quorumVotes and againstVotes', async () => {
     await advanceBlocks(5760)
-    proposal = await gov.proposals(proposalId);
     const state = await gov.state(proposalId)
     expect(state).to.equal(4)
   })
+
+  it('is defeated when forVotes < quorumVotes')
+
+  it('is defeated when forVotes > quorumVotes and forVotes < againstVotes ')
+
+  it('cannot cancel due to inflation')
+
+  it('can cancel due to drop in proposalThreshold')
 
 });

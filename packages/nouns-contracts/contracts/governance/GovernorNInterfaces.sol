@@ -25,6 +25,9 @@ contract GovernorNEvents {
     /// @notice An event emitted when a proposal has been executed in the Timelock
     event ProposalExecuted(uint id);
 
+    /// @notice An event emitted when a proposal has been vetoed by vetoAddress
+    event ProposalVetoed(uint id);
+
     /// @notice An event emitted when the voting delay is set
     event VotingDelaySet(uint oldVotingDelay, uint newVotingDelay);
 
@@ -45,6 +48,9 @@ contract GovernorNEvents {
 
     /// @notice Emitted when pendingAdmin is accepted, which means admin is updated
     event NewAdmin(address oldAdmin, address newAdmin);
+
+    /// @notice Emitted when vetoer is changed
+    event NewVetoer(address oldVetoer, address newVetoer);
 }
 
 contract GovernorNDelegatorStorage {
@@ -66,6 +72,9 @@ contract GovernorNDelegatorStorage {
  * GovernorNDelegateStorageVX.
  */
 contract GovernorNDelegateStorageV1 is GovernorNDelegatorStorage {
+
+    /// @notice Vetoer who has the ability to veto any proposal
+    address public vetoer;
 
     /// @notice The delay before voting on a proposal may take place, once proposed, in blocks
     uint public votingDelay;
@@ -141,6 +150,9 @@ contract GovernorNDelegateStorageV1 is GovernorNDelegatorStorage {
         /// @notice Flag marking whether the proposal has been canceled
         bool canceled;
 
+        /// @notice Flag marking whether the proposal has been vetoed
+        bool vetoed;
+
         /// @notice Flag marking whether the proposal has been executed
         bool executed;
 
@@ -169,7 +181,8 @@ contract GovernorNDelegateStorageV1 is GovernorNDelegatorStorage {
         Succeeded,
         Queued,
         Expired,
-        Executed
+        Executed,
+        Vetoed
     }
 }
 
