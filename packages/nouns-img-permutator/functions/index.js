@@ -367,6 +367,9 @@ exports.addVoteToLayersEXT = functions.https.onRequest(async (request, response)
 
         let options = JSON.parse(request.query.options)
         
+        // hit grafana dashboard counter endpoint
+        https.get('https://simple-counter.nouns.tools/count/inc/layer-votes-cast')
+
         var updatedDocsData = []
         try {
             for (var i = 0; i < options.length; i++) {
@@ -409,6 +412,9 @@ exports.addVoteToLayersEXT = functions.https.onRequest(async (request, response)
     cors(request, response, async () => {
 
         let options = JSON.parse(request.query.options)
+        
+        // hit grafana dashboard counter endpoint
+        https.get('https://simple-counter.nouns.tools/count/inc/layer-votes-cast')
         
         var updatedDocsData = []
         try {
