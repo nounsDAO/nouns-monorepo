@@ -43,5 +43,8 @@ const config: HardhatUserConfig = {
     src: 'contracts',
     coinmarketcap: '7643dfc7-a58f-46af-8314-2db32bdd18ba',
   },
+  mocha: {
+    timeout: 60_000,
+  },
 };
 export default config;
