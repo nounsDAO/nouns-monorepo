@@ -17,6 +17,7 @@ describe('NounsAuctionHouse', () => {
   let noundersDAO: SignerWithAddress;
   let bidderA: SignerWithAddress;
   let bidderB: SignerWithAddress;
+  let snapshotId: number;
 
   const TIME_BUFFER = 15 * 60;
   const RESERVE_PRICE = 2;
@@ -35,7 +36,7 @@ describe('NounsAuctionHouse', () => {
     ]) as Promise<NounsAuctionHouse>;
   }
 
-  beforeEach(async () => {
+  before(async () => {
     [deployer, noundersDAO, bidderA, bidderB] = await ethers.getSigners();
 
     nounsErc721 = await deployNounsERC721(deployer, noundersDAO.address, deployer.address);
@@ -49,6 +50,14 @@ describe('NounsAuctionHouse', () => {
     await nounsErc721.setMinter(nounsAuctionHouse.address, {
       from: deployer.address,
     });
+  });
+
+  beforeEach(async () => {
+    snapshotId = await ethers.provider.send('evm_snapshot', []);
+  });
+
+  afterEach(async () => {
+    await ethers.provider.send('evm_revert', [snapshotId]);
   });
 
   it('should revert if a second initialization is attempted', async () => {
@@ -68,7 +77,7 @@ describe('NounsAuctionHouse', () => {
     await tx.wait();
 
     const auction = await nounsAuctionHouse.auction();
-    await expect(auction.startTime.toNumber()).to.be.greaterThan(0);
+    expect(auction.startTime.toNumber()).to.be.greaterThan(0);
   });
 
   it('should revert if a user creates a bid for an inactive auction', async () => {

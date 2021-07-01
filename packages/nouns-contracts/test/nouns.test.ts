@@ -13,14 +13,23 @@ describe('NounsERC721', () => {
   let nounsErc721: NounsErc721;
   let deployer: SignerWithAddress;
   let noundersDAO: SignerWithAddress;
+  let snapshotId: number;
 
-  beforeEach(async () => {
+  before(async () => {
     [deployer, noundersDAO] = await ethers.getSigners();
     nounsErc721 = await deployNounsERC721(deployer, noundersDAO.address, deployer.address);
 
     const descriptor = await nounsErc721.descriptor();
 
     await populateDescriptor(NounsDescriptor__factory.connect(descriptor, deployer));
+  });
+
+  beforeEach(async () => {
+    snapshotId = await ethers.provider.send('evm_snapshot', []);
+  });
+
+  afterEach(async () => {
+    await ethers.provider.send('evm_revert', [snapshotId]);
   });
 
   it('should allow the minter to mint a noun to itself and a reward noun to the noundersDAO', async () => {

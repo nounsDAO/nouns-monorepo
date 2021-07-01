@@ -4,12 +4,14 @@ import { NounsDescriptor } from '../typechain';
 import { parts } from '../files/encoded-layers.json';
 import { LongestPart } from './types';
 import { deployNounsDescriptor, populateDescriptor } from './utils';
+import { ethers } from 'hardhat';
 
 chai.use(solidity);
 const { expect } = chai;
 
 describe('NounsDescriptor', () => {
   let nounsDescriptor: NounsDescriptor;
+  let snapshotId: number;
 
   const part: LongestPart = {
     length: 0,
@@ -21,7 +23,7 @@ describe('NounsDescriptor', () => {
   let longestHead: LongestPart;
   let longestGlasses: LongestPart;
 
-  beforeEach(async () => {
+  before(async () => {
     nounsDescriptor = await deployNounsDescriptor();
 
     for (const [l, layer] of parts.entries()) {
@@ -37,6 +39,14 @@ describe('NounsDescriptor', () => {
     [longestBody, longestAccessory, longestHead, longestGlasses] = longestParts;
 
     await populateDescriptor(nounsDescriptor);
+  });
+
+  beforeEach(async () => {
+    snapshotId = await ethers.provider.send('evm_snapshot', []);
+  });
+
+  afterEach(async () => {
+    await ethers.provider.send('evm_revert', [snapshotId]);
   });
 
   it('should generate valid token uri metadata when data uris are disabled', async () => {
