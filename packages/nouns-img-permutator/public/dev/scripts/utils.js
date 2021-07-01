@@ -155,6 +155,7 @@ function displayModeChanged(element) {
     })
 }
 
+
 /**
  * Add dropdown button representing layer and its corresponding options
  * @param {Object} layer Object representing a layer containing properties `object.name` and `object.options`
@@ -167,8 +168,7 @@ function addButtonDropdownWithOptions(layer) {
     column.classList.add('col-lg-4')
     
     let btnGroup = document.createElement('div')
-    btnGroup.classList.add('btn-group')
-    btnGroup.id = 'layers-dropdown-buttons'    
+    btnGroup.classList.add('dropdown')
     btnGroup.style.width = '100%'
 
     // button
@@ -178,16 +178,18 @@ function addButtonDropdownWithOptions(layer) {
     button.classList.add('btn')
     button.classList.add('btn-primary')
     button.classList.add('dropdown-toggle')
-    button.setAttribute('data-toggle', 'dropdown')
-    button.setAttribute('aria-haspopup', 'true')
+    button.id = layer.name
+    button.setAttribute('data-bs-toggle', 'dropdown')
     button.setAttribute('aria-expanded', 'false')
     button.textContent = layer.name
     button.style.width = '100%'
 
-    let dropDownMenu = document.createElement('div')
+    let dropDownMenu = document.createElement('ul')
     dropDownMenu.classList.add('dropdown-menu')
+    dropDownMenu.setAttribute('aria-labelledby', layer.name)
 
     // random option
+    let listItem = document.createElement('li')
     let randLink = document.createElement('a')
     randLink.classList.add('dropdown-item')
     randLink.href = '#'
@@ -195,15 +197,19 @@ function addButtonDropdownWithOptions(layer) {
     randLink.dataset.layerName = layer.name
     randLink.dataset.optionName = 'random'
     randLink.onclick = () => { layerOptionSelected(randLink.getAttribute('data-layer-name'), randLink.getAttribute('data-option-name')) }
-    dropDownMenu.appendChild(randLink)
+    listItem.appendChild(randLink)
+    dropDownMenu.appendChild(listItem)
 
     // separator
-    let separatorDiv = document.createElement('div')
+    let listItemDivider = document.createElement('li')
+    let separatorDiv = document.createElement('hr')
     separatorDiv.classList.add('dropdown-divider')
-    dropDownMenu.appendChild(separatorDiv)
+    listItemDivider.appendChild(separatorDiv)
+    dropDownMenu.appendChild(listItemDivider)
 
     // options
     layer.options.forEach(option => {
+        let listItem = document.createElement('li')
         let link = document.createElement('a')
         link.classList.add('dropdown-item')
         link.href = '#'
@@ -211,7 +217,8 @@ function addButtonDropdownWithOptions(layer) {
         link.dataset.layerName = layer.name
         link.dataset.optionName = option
         link.onclick = () => { layerOptionSelected(link.getAttribute('data-layer-name'), link.getAttribute('data-option-name')) }
-        dropDownMenu.appendChild(link)
+        listItem.appendChild(link)
+        dropDownMenu.appendChild(listItem)
     })
 
     btnGroup.appendChild(button)
@@ -220,6 +227,7 @@ function addButtonDropdownWithOptions(layer) {
     div.appendChild(column)
 
 }
+
 
 /**
  * Adds dropdown button for choosing source.
@@ -233,8 +241,7 @@ function addButtonDropdownWithOptions(layer) {
     column.classList.add('col-md-12')
     
     let btnGroup = document.createElement('div')
-    btnGroup.classList.add('btn-group')
-    btnGroup.id = 'layers-dropdown-buttons'    
+    btnGroup.classList.add('dropdown')
     btnGroup.style.width = "100%";
 
     // button
@@ -244,24 +251,26 @@ function addButtonDropdownWithOptions(layer) {
     button.classList.add('btn')
     button.classList.add('btn-primary')
     button.classList.add('dropdown-toggle')
-    button.setAttribute('data-toggle', 'dropdown')
-    button.setAttribute('aria-haspopup', 'true')
+    button.setAttribute('data-bs-toggle', 'dropdown')
     button.setAttribute('aria-expanded', 'false')
     button.textContent = data[0]
     button.style.width = "100%";
 
-    let dropDownMenu = document.createElement('div')
+    let dropDownMenu = document.createElement('ul')
     dropDownMenu.classList.add('dropdown-menu')
+    dropDownMenu.setAttribute('aria-labelledby', data[0])
 
     // options
     data.forEach(option => {
+        let listItem = document.createElement('li')
         let link = document.createElement('a')
         link.classList.add('dropdown-item')
         link.href = '#'
         link.textContent = option
         link.dataset.optionName = option
         link.onclick = () => { sourceOptionSelected(button, link.getAttribute('data-option-name')) }
-        dropDownMenu.appendChild(link)
+        listItem.appendChild(link)
+        dropDownMenu.appendChild(listItem)
     })
 
     btnGroup.appendChild(button)
