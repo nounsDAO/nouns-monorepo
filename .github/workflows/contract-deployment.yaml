@@ -39,7 +39,7 @@ jobs:
           MNEMONIC: ${{ secrets.MNEMONIC }}
         run: |
           cd packages/nouns-contracts
-          npx hardhat run --network rinkeby scripts/deploy-ci.ts
+          npx hardhat deploy-ci --network rinkeby
       - name: Verify contract on Etherscan
         env:
           INFURA_PROJECT_ID: ${{ secrets.INFURA_PROJECT_ID }}

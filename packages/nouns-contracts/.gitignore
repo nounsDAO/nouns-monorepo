@@ -3,8 +3,12 @@ node_modules
 #Hardhat files
 cache
 artifacts
-typechain
+typechain/**
 .openzeppelin
 
 # Script output
 logs
+
+# Coverage result files
+coverage/
+coverage.json

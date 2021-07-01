@@ -9,4 +9,3 @@ This site is automatically deployed to https://nouns-home.netlify.app/ via Netli
 ## Pull Request Previews
 
 This deployment is configured to support pull request deployments. After opening a pull request, see the `Checks` portion of the GitHub UI for the preview link.
-

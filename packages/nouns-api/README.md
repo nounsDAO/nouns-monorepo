@@ -1,6 +1,19 @@
-# nouns-api
+# @nouns/api
+
+## Install dependencies
 
 ```sh
 yarn
-yarn start
+```
+
+## Start Redis
+
+```sh
+docker-compose up -d
+```
+
+## Start API (Development)
+
+```sh
+yarn dev
 ```

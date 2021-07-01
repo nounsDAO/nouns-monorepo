@@ -1,9 +1,10 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
+import { constants } from 'ethers';
 import { ethers, upgrades } from 'hardhat';
-import { NounsAuctionHouse, NounsErc721, Weth } from '../typechain';
-import { deployNounsErc721, deployWeth } from './utils';
+import { NounsAuctionHouse, NounsDescriptor__factory, NounsErc721, Weth } from '../typechain';
+import { deployNounsERC721, deployWeth, populateDescriptor } from './utils';
 
 chai.use(solidity);
 const { expect } = chai;
@@ -12,8 +13,8 @@ describe('NounsAuctionHouse', () => {
   let nounsAuctionHouse: NounsAuctionHouse;
   let nounsErc721: NounsErc721;
   let weth: Weth;
+  let deployer: SignerWithAddress;
   let noundersDAO: SignerWithAddress;
-  let nounsDAO: SignerWithAddress;
   let bidderA: SignerWithAddress;
   let bidderB: SignerWithAddress;
 
@@ -23,47 +24,43 @@ describe('NounsAuctionHouse', () => {
   const DURATION = 60 * 60 * 24;
 
   async function deploy(deployer?: SignerWithAddress) {
-    const auctionHouseFactory = await ethers.getContractFactory(
-      'NounsAuctionHouse',
-      deployer,
-    );
-    nounsAuctionHouse = (await upgrades.deployProxy(auctionHouseFactory, [
+    const auctionHouseFactory = await ethers.getContractFactory('NounsAuctionHouse', deployer);
+    return upgrades.deployProxy(auctionHouseFactory, [
       nounsErc721.address,
-      nounsDAO.address,
-      noundersDAO.address,
       weth.address,
       TIME_BUFFER,
       RESERVE_PRICE,
       MIN_INCREMENT_BID_PERCENTAGE,
       DURATION,
-    ])) as NounsAuctionHouse;
-
-    return nounsAuctionHouse.deployed();
+    ]) as Promise<NounsAuctionHouse>;
   }
 
   beforeEach(async () => {
-    [noundersDAO, nounsDAO, bidderA, bidderB] = await ethers.getSigners();
-    nounsErc721 = await deployNounsErc721(noundersDAO);
-    weth = await deployWeth(noundersDAO);
-    await deploy(noundersDAO);
+    [deployer, noundersDAO, bidderA, bidderB] = await ethers.getSigners();
 
-    await nounsErc721.transferOwnership(nounsAuctionHouse.address);
+    nounsErc721 = await deployNounsERC721(deployer, noundersDAO.address, deployer.address);
+    weth = await deployWeth(deployer);
+    nounsAuctionHouse = await deploy(deployer);
+
+    const descriptor = await nounsErc721.descriptor();
+
+    await populateDescriptor(NounsDescriptor__factory.connect(descriptor, deployer));
+
+    await nounsErc721.setMinter(nounsAuctionHouse.address, {
+      from: deployer.address,
+    });
   });
 
   it('should revert if a second initialization is attempted', async () => {
     const tx = nounsAuctionHouse.initialize(
       nounsErc721.address,
-      nounsDAO.address,
-      noundersDAO.address,
       weth.address,
       TIME_BUFFER,
       RESERVE_PRICE,
       MIN_INCREMENT_BID_PERCENTAGE,
       DURATION,
     );
-    await expect(tx).to.be.revertedWith(
-      'Initializable: contract is already initialized',
-    );
+    await expect(tx).to.be.revertedWith('Initializable: contract is already initialized');
   });
 
   it('should allow the noundersDAO to unpause the contract and create the first auction', async () => {
@@ -139,9 +136,7 @@ describe('NounsAuctionHouse', () => {
     });
     const bidderAPostRefundBalance = await bidderA.getBalance();
 
-    expect(bidderAPostRefundBalance).to.equal(
-      bidderAPostBidBalance.add(RESERVE_PRICE),
-    );
+    expect(bidderAPostRefundBalance).to.equal(bidderAPostBidBalance.add(RESERVE_PRICE));
   });
 
   it('should emit an `AuctionBid` event on a successful bid', async () => {
@@ -162,9 +157,7 @@ describe('NounsAuctionHouse', () => {
 
     const { nounId, endTime } = await nounsAuctionHouse.auction();
 
-    await ethers.provider.send('evm_setNextBlockTimestamp', [
-      endTime.sub(60 * 5).toNumber(),
-    ]); // Subtract 5 mins from current end time
+    await ethers.provider.send('evm_setNextBlockTimestamp', [endTime.sub(60 * 5).toNumber()]); // Subtract 5 mins from current end time
 
     const tx = nounsAuctionHouse.connect(bidderA).createBid(nounId, {
       value: RESERVE_PRICE,
@@ -183,9 +176,7 @@ describe('NounsAuctionHouse', () => {
     await nounsAuctionHouse.connect(bidderA).createBid(nounId, {
       value: RESERVE_PRICE,
     });
-    const tx = nounsAuctionHouse
-      .connect(bidderA)
-      .settleCurrentAndCreateNewAuction();
+    const tx = nounsAuctionHouse.connect(bidderA).settleCurrentAndCreateNewAuction();
 
     await expect(tx).to.be.revertedWith("Auction hasn't completed");
   });
@@ -200,17 +191,13 @@ describe('NounsAuctionHouse', () => {
     });
 
     await ethers.provider.send('evm_increaseTime', [60 * 60 * 25]); // Add 25 hours
-    const tx = nounsAuctionHouse
-      .connect(bidderA)
-      .settleCurrentAndCreateNewAuction();
+    const tx = nounsAuctionHouse.connect(bidderA).settleCurrentAndCreateNewAuction();
 
     await Promise.all([
       expect(tx)
         .to.emit(nounsAuctionHouse, 'AuctionSettled')
         .withArgs(nounId, bidderA.address, RESERVE_PRICE),
-      expect(tx)
-        .to.emit(nounsAuctionHouse, 'AuctionCreated')
-        .withArgs(nounId.add(1)),
+      expect(tx).to.emit(nounsAuctionHouse, 'AuctionCreated').withArgs(nounId.add(1)),
     ]);
   });
 
@@ -223,7 +210,7 @@ describe('NounsAuctionHouse', () => {
 
     const { nounId } = await nounsAuctionHouse.auction();
 
-    expect(nounId).to.equal(0);
+    expect(nounId).to.equal(1);
   });
 
   it('should create a new auction if the auction house is paused and unpaused after an auction is settled', async () => {
@@ -246,9 +233,31 @@ describe('NounsAuctionHouse', () => {
       .withArgs(nounId, bidderA.address, RESERVE_PRICE);
 
     const unpauseTx = nounsAuctionHouse.unpause();
-    await expect(unpauseTx)
-      .to.emit(nounsAuctionHouse, 'AuctionCreated')
-      .withArgs(nounId.add(1));
+    await expect(unpauseTx).to.emit(nounsAuctionHouse, 'AuctionCreated').withArgs(nounId.add(1));
+  });
+
+  it('should settle the current auction and pause the contract if the minter is updated while the auction house is unpaused', async () => {
+    await (await nounsAuctionHouse.unpause()).wait();
+
+    const { nounId } = await nounsAuctionHouse.auction();
+
+    await nounsAuctionHouse.connect(bidderA).createBid(nounId, {
+      value: RESERVE_PRICE,
+    });
+
+    await nounsErc721.setMinter(constants.AddressZero);
+
+    await ethers.provider.send('evm_increaseTime', [60 * 60 * 25]); // Add 25 hours
+
+    const settleTx = nounsAuctionHouse.connect(bidderA).settleCurrentAndCreateNewAuction();
+
+    await expect(settleTx)
+      .to.emit(nounsAuctionHouse, 'AuctionSettled')
+      .withArgs(nounId, bidderA.address, RESERVE_PRICE);
+
+    const paused = await nounsAuctionHouse.paused();
+
+    expect(paused).to.equal(true);
   });
 
   it('should burn a Noun on auction settlement if no bids are received', async () => {
@@ -258,9 +267,7 @@ describe('NounsAuctionHouse', () => {
 
     await ethers.provider.send('evm_increaseTime', [60 * 60 * 25]); // Add 25 hours
 
-    const tx = nounsAuctionHouse
-      .connect(bidderA)
-      .settleCurrentAndCreateNewAuction();
+    const tx = nounsAuctionHouse.connect(bidderA).settleCurrentAndCreateNewAuction();
 
     await expect(tx)
       .to.emit(nounsAuctionHouse, 'AuctionSettled')
