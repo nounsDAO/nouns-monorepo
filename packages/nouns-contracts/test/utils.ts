@@ -10,7 +10,8 @@ import {
   Weth,
   Weth__factory,
 } from '../typechain';
-import { colors, layers } from './files/encoded-layers.json';
+import { bgcolors, partcolors, parts } from '../files/encoded-layers.json';
+import { chunkArray } from '../utils';
 
 export type TestSigners = {
   deployer: SignerWithAddress;
@@ -76,20 +77,17 @@ export const deployWeth = async (deployer?: SignerWithAddress): Promise<Weth> =>
 };
 
 export const populateDescriptor = async (nounsDescriptor: NounsDescriptor): Promise<void> => {
-  const backgrounds = ['e1e5e3'];
-  const [bodies, accessories, heads, glasses] = layers;
+  const [bodies, accessories, heads, glasses] = parts;
 
+  // Split up head and accessory population due to high gas usage
   await Promise.all([
-    nounsDescriptor.addManyColorsToPalette(
-      0,
-      colors.map(color => color),
-    ),
-    nounsDescriptor.addManyBackgrounds(backgrounds),
+    nounsDescriptor.addManyBackgrounds(bgcolors),
+    nounsDescriptor.addManyColorsToPalette(0, partcolors),
     nounsDescriptor.addManyBodies(bodies.map(({ data }) => data)),
-    nounsDescriptor.addManyAccessories(accessories.map(({ data }) => data)),
-    // Split up head insertion due to high gas usage
-    nounsDescriptor.addManyHeads(heads.map(({ data }) => data).filter((_, i) => i % 2 === 0)),
-    nounsDescriptor.addManyHeads(heads.map(({ data }) => data).filter((_, i) => i % 2 === 1)),
+    chunkArray(accessories, 10).map(chunk =>
+      nounsDescriptor.addManyAccessories(chunk.map(({ data }) => data)),
+    ),
+    chunkArray(heads, 10).map(chunk => nounsDescriptor.addManyHeads(chunk.map(({ data }) => data))),
     nounsDescriptor.addManyGlasses(glasses.map(({ data }) => data)),
   ]);
 };

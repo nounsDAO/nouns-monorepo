@@ -1,7 +1,7 @@
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { NounsDescriptor } from '../typechain';
-import { layers } from './files/encoded-layers.json';
+import { parts } from '../files/encoded-layers.json';
 import { LongestPart } from './types';
 import { deployNounsDescriptor, populateDescriptor } from './utils';
 
@@ -24,7 +24,7 @@ describe('NounsDescriptor', () => {
   beforeEach(async () => {
     nounsDescriptor = await deployNounsDescriptor();
 
-    for (const [l, layer] of layers.entries()) {
+    for (const [l, layer] of parts.entries()) {
       for (const [i, item] of layer.entries()) {
         if (item.data.length > longestParts[l].length) {
           longestParts[l] = {

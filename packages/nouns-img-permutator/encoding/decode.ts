@@ -10,8 +10,9 @@ interface ImageData {
 }
 
 interface EncodedData {
-  colors: string[];
-  layers: ImageData[][];
+  bgcolors: string[];
+  partcolors: string[];
+  parts: ImageData[][];
 }
 
 interface ImageBounds {
@@ -49,13 +50,14 @@ const decodeImage = (image: string): DecodedImage => {
   };
 };
 
-const getRandom = (array: ImageData[]) => array[Math.floor(Math.random() * array.length)];
+const getRandom = <T>(array: T[]) => array[Math.floor(Math.random() * array.length)];
 
 const getRandomNoun = async () => {
   const fileJSON = await fs.readFile('encoded-layers.json', 'utf8');
   const data: EncodedData = JSON.parse(fileJSON);
 
-  const [bodies, accessories, heads, glasses] = data.layers;
+  const [bodies, accessories, heads, glasses] = data.parts;
+  const backgroundColor = getRandom(data.bgcolors);
   const parts = [getRandom(bodies), getRandom(accessories), getRandom(heads), getRandom(glasses)];
 
   const svgWithoutEndTag = parts.reduce((result, part) => {
@@ -69,7 +71,7 @@ const getRandomNoun = async () => {
 
     rects.forEach(rect => {
       const [length, colorIndex] = rect;
-      const hexColor = data.colors[colorIndex];
+      const hexColor = data.partcolors[colorIndex];
 
       // Do not push rect if transparent
       if (colorIndex !== 0) {
@@ -88,7 +90,7 @@ const getRandomNoun = async () => {
     });
     result += svgRects.join('');
     return result;
-  }, '<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">');
+  }, `<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="#${backgroundColor}" />`);
 
   return `${svgWithoutEndTag}</svg>`;
 };

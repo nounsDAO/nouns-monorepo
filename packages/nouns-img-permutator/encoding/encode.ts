@@ -47,16 +47,35 @@ const rgbToHex = (r: number, g: number, b: number) => {
 
 const getFolder = (i: number) => path.join(__dirname, `../assets/layer-${i}`);
 
-const colors: Map<string, number> = new Map([['', 0]]);
+const getImageBackgroundColor = async (folder: string, file: string) => {
+  const image = await readPngFile(path.join(folder, file));
+
+  // It's assumed that all pixels are the same color
+  const { r, g, b } = image.rgbaAt(0, 0);
+
+  return rgbToHex(r, g, b);
+};
+
+const getAllImageBackgroundColorsInFolder = async (folder: string) => {
+  const colors = new Set<string>();
+
+  const files = await fs.readdir(folder);
+  for (const file of files) {
+    colors.add(await getImageBackgroundColor(folder, file));
+  }
+  return [...colors];
+};
+
+const partcolors: Map<string, number> = new Map([['', 0]]);
 
 const addPixelToRect = (color: ColorRGBA, lines: Lines, y: number) => {
   const { r, g, b, a } = color;
   const hexColor = rgbToHex(r, g, b);
 
-  if (!colors.has(hexColor)) {
-    colors.set(hexColor, colors.size);
+  if (!partcolors.has(hexColor)) {
+    partcolors.set(hexColor, partcolors.size);
   }
-  const colorIndex = a === 0 ? 0 : colors.get(hexColor)!;
+  const colorIndex = a === 0 ? 0 : partcolors.get(hexColor)!;
 
   lines[y] ||= {
     rects: [],
@@ -74,7 +93,7 @@ const addPixelToRect = (color: ColorRGBA, lines: Lines, y: number) => {
 const updateBounds = (bounds: ImageBounds, lines: Lines, y: number) => {
   const { rects } = lines[y];
     if (!(rects[0].length === 32 && rects[0].colorIndex === 0) && bounds.top === 0) {
-      bounds.top = y - 1; // shift top bound to `y - 1`
+      bounds.top = y === 0 ? y : y - 1; // shift top bound to `y - 1` if > 0
     }
     if (bounds.top !== 0) {
       if ((rects[0].length === 32 && rects[0].colorIndex === 0) || y === 31) {
@@ -103,15 +122,17 @@ const getEncodedImage = async (folder: string, file: string) => {
     updateBounds(bounds, lines, y);
   }
 
-  for (let i = 0; i <= bounds.top; i++) {
+  for (let i = 0; i < bounds.top; i++) {
     delete lines[i]; // Delete all rows above the top bound
   }
-  for (let i = 31; i >= bounds.bottom; i--) {
+  for (let i = 31; i > bounds.bottom; i--) {
     delete lines[i]; // Delete all rows below the bottom bound
   }
 
-  bounds.left = Math.min(...Object.values(lines).map(l => l.bounds.left));
-  bounds.right = Math.max(...Object.values(lines).map(l => l.bounds.right));
+  if (Object.keys(lines).length) {
+    bounds.left = Math.min(...Object.values(lines).map(l => l.bounds.left));
+    bounds.right = Math.max(...Object.values(lines).map(l => l.bounds.right));
+  }
 
   const initial = `0x00${toPaddedHex(bounds.top, 2)}${toPaddedHex(bounds.right, 2)}${toPaddedHex(
     bounds.bottom,
@@ -177,8 +198,12 @@ const getEncodedImagesForAllLayers = async () => {
 };
 
 const writeEncodedImagesToFile = async () => {
-  const layers = await getEncodedImagesForAllLayers();
-  await fs.writeFile(OUTPUT_FILE, JSON.stringify({ colors: [...colors.keys()], layers }, null, 2));
+  const bgcolors = await getAllImageBackgroundColorsInFolder(getFolder(0));
+  const parts = await getEncodedImagesForAllLayers();
+  await fs.writeFile(
+    OUTPUT_FILE,
+    JSON.stringify({ bgcolors, partcolors: [...partcolors.keys()], parts }, null, 2),
+  );
   console.log(`Encoded layers written to ${path.join(__dirname, OUTPUT_FILE)}`);
 };
 

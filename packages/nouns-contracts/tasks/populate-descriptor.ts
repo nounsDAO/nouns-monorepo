@@ -1,5 +1,6 @@
 import { task, types } from 'hardhat/config';
-import { colors, layers } from '../test/files/encoded-layers.json';
+import { bgcolors, partcolors, parts } from '../files/encoded-layers.json';
+import { chunkArray } from '../utils';
 
 task('populate-descriptor', 'Populates the descriptor with color palettes and Noun parts')
   .addOptionalParam(
@@ -22,19 +23,19 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and No
     });
     const descriptorContract = descriptorFactory.attach(nounsDescriptor);
 
-    const backgrounds = ['e1e5e3'];
-    const [bodies, accessories, heads, glasses] = layers;
+    const [bodies, accessories, heads, glasses] = parts;
+
+    // Chunk head and accessory population due to high gas usage
     await Promise.all([
-      descriptorContract.addManyColorsToPalette(
-        0,
-        colors.map(color => color),
-      ),
-      descriptorContract.addManyBackgrounds(backgrounds),
+      descriptorContract.addManyBackgrounds(bgcolors),
+      descriptorContract.addManyColorsToPalette(0, partcolors),
       descriptorContract.addManyBodies(bodies.map(({ data }) => data)),
-      descriptorContract.addManyAccessories(accessories.map(({ data }) => data)),
-      // Split up head insertion due to high gas usage
-      descriptorContract.addManyHeads(heads.map(({ data }) => data).filter((_, i) => i % 2 === 0)),
-      descriptorContract.addManyHeads(heads.map(({ data }) => data).filter((_, i) => i % 2 === 1)),
+      chunkArray(accessories, 10).map(chunk =>
+        chunk.map(({ data }) => descriptorContract.addManyAccessories(data)),
+      ),
+      chunkArray(heads, 10).map(chunk =>
+        chunk.map(({ data }) => descriptorContract.addManyHeads(data)),
+      ),
       descriptorContract.addManyGlasses(glasses.map(({ data }) => data)),
     ]);
     console.log('Descriptor populated with palettes and parts');
