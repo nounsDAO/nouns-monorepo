@@ -27,6 +27,7 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     "balanceOf(address)": FunctionFragment;
     "burn(uint256)": FunctionFragment;
     "checkpoints(address,uint32)": FunctionFragment;
+    "decimals()": FunctionFragment;
     "delegate(address)": FunctionFragment;
     "delegateBySig(address,uint256,uint256,uint8,bytes32,bytes32)": FunctionFragment;
     "delegates(address)": FunctionFragment;
@@ -49,7 +50,6 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     "tokenOfOwnerByIndex(address,uint256)": FunctionFragment;
     "tokenURI(uint256)": FunctionFragment;
     "totalSupply()": FunctionFragment;
-    "totalVotes()": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "votesToDelegate(address)": FunctionFragment;
@@ -73,6 +73,7 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     functionFragment: "checkpoints",
     values: [string, BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
   encodeFunctionData(functionFragment: "delegate", values: [string]): string;
   encodeFunctionData(
     functionFragment: "delegateBySig",
@@ -148,10 +149,6 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "totalVotes",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "transferFrom",
     values: [string, string, BigNumberish]
   ): string;
@@ -179,6 +176,7 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     functionFragment: "checkpoints",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "delegate", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "delegateBySig",
@@ -240,7 +238,6 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     functionFragment: "totalSupply",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "totalVotes", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "transferFrom",
     data: BytesLike
@@ -367,6 +364,10 @@ export class NounsErc721 extends Contract {
       arg1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[number, BigNumber] & { fromBlock: number; votes: BigNumber }>;
+
+    decimals(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    "decimals()"(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     delegate(
       delegatee: string,
@@ -574,10 +575,6 @@ export class NounsErc721 extends Contract {
 
     "totalSupply()"(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    totalVotes(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    "totalVotes()"(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     transferFrom(
       from: string,
       to: string,
@@ -661,6 +658,10 @@ export class NounsErc721 extends Contract {
     arg1: BigNumberish,
     overrides?: CallOverrides
   ): Promise<[number, BigNumber] & { fromBlock: number; votes: BigNumber }>;
+
+  decimals(overrides?: CallOverrides): Promise<BigNumber>;
+
+  "decimals()"(overrides?: CallOverrides): Promise<BigNumber>;
 
   delegate(
     delegatee: string,
@@ -862,10 +863,6 @@ export class NounsErc721 extends Contract {
 
   "totalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-  totalVotes(overrides?: CallOverrides): Promise<BigNumber>;
-
-  "totalVotes()"(overrides?: CallOverrides): Promise<BigNumber>;
-
   transferFrom(
     from: string,
     to: string,
@@ -946,6 +943,10 @@ export class NounsErc721 extends Contract {
       arg1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[number, BigNumber] & { fromBlock: number; votes: BigNumber }>;
+
+    decimals(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "decimals()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     delegate(delegatee: string, overrides?: CallOverrides): Promise<void>;
 
@@ -1136,10 +1137,6 @@ export class NounsErc721 extends Contract {
 
     "totalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-    totalVotes(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "totalVotes()"(overrides?: CallOverrides): Promise<BigNumber>;
-
     transferFrom(
       from: string,
       to: string,
@@ -1287,6 +1284,10 @@ export class NounsErc721 extends Contract {
       arg1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    decimals(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "decimals()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     delegate(
       delegatee: string,
@@ -1494,10 +1495,6 @@ export class NounsErc721 extends Contract {
 
     "totalSupply()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-    totalVotes(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "totalVotes()"(overrides?: CallOverrides): Promise<BigNumber>;
-
     transferFrom(
       from: string,
       to: string,
@@ -1591,6 +1588,10 @@ export class NounsErc721 extends Contract {
       arg1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    decimals(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "decimals()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     delegate(
       delegatee: string,
@@ -1806,10 +1807,6 @@ export class NounsErc721 extends Contract {
     totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "totalSupply()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    totalVotes(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    "totalVotes()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     transferFrom(
       from: string,
