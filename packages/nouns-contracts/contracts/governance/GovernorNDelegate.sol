@@ -28,7 +28,7 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
     uint public constant MAX_VOTING_DELAY = 40320; // About 1 week
 
     /// @notice The minimum setable quorum votes basis points
-    uint public constant MIN_QUORUM_VOTES_BPS = 50; // 50 basis points or 0.5%
+    uint public constant MIN_QUORUM_VOTES_BPS = 200; // 200 basis points or 2%
 
     /// @notice The maximum setable quorum votes basis points
     uint public constant MAX_QUORUM_VOTES_BPS = 2000; // 2,000 basis points or 20%
