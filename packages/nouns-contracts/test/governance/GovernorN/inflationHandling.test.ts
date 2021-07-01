@@ -35,10 +35,6 @@ import {
 chai.use(solidity);
 const { expect } = chai;
 
-function votes(n: number|string){
-  return ethers.utils.parseUnits(String(n),'ether')
-}
-
 async function reset(): Promise<void> {
 
   const govDelegatorAddress = ethers.utils.getContractAddress({
@@ -85,8 +81,8 @@ let signers: TestSigners;
 let gov: GovernorNDelegate;
 const timelockDelay = 172800 // 2 days
 
-const proposalThresholdBPS = 500 // 5%
-const quorumVotesBPS = 1000 // 10%
+const proposalThresholdBPS = 678 // 6.78%
+const quorumVotesBPS = 1100 // 11%
 
 let targets: string[];
 let values: string[];
@@ -122,10 +118,12 @@ describe("GovernorN#inflationHandling", () => {
     // Total Supply = 40
     await mintNouns(40)
 
-    // 5% of 40 = 2
-    expect(await gov.proposalThreshold()).to.equal(votes('2'))
-    // 10% of 40 = 4
-    expect(await gov.quorumVotes()).to.equal(votes('4'))
+    await mineBlock()
+
+    // 6.78% of 40 = 2.712, floored to 2
+    expect(await gov.proposalThreshold()).to.equal(2)
+    // 11% of 40 = 4.4, floored to 4
+    expect(await gov.quorumVotes()).to.equal(4)
   })
 
   it('rejects if proposing below threshold', async () => {
@@ -157,18 +155,18 @@ describe("GovernorN#inflationHandling", () => {
 
   it('sets proposal attributes correctly', async () => {
     const proposal = await gov.proposals(proposalId);
-    expect(proposal.proposalThreshold).to.equal(votes(2))
-    expect(proposal.quorumVotes).to.equal(votes(4))
+    expect(proposal.proposalThreshold).to.equal(2)
+    expect(proposal.quorumVotes).to.equal(4)
   })
 
   it('returns updated quorum votes and proposal threshold when total supply changes', async () => {
     // Total Supply = 80
     await mintNouns(40)
 
-    // 5% of 80 = 4
-    expect(await gov.proposalThreshold()).to.equal(votes('4'))
-    // 10% of 80 = 8
-    expect(await gov.quorumVotes()).to.equal(votes('8'))
+    // 6.78% of 80 = 5.424, floored to 5
+    expect(await gov.proposalThreshold()).to.equal(5)
+    // 11% of 80 = 8.88, floored to 8
+    expect(await gov.quorumVotes()).to.equal(8)
   })
 
   it('rejects proposals that were previously above proposal threshold, but due to increasing supply are now below', async () => {
@@ -179,8 +177,8 @@ describe("GovernorN#inflationHandling", () => {
 
   it('does not change previous proposal attributes when total supply changes', async () =>{
     const proposal = await gov.proposals(proposalId);
-    expect(proposal.proposalThreshold).to.equal(votes(2))
-    expect(proposal.quorumVotes).to.equal(votes(4))
+    expect(proposal.proposalThreshold).to.equal(2)
+    expect(proposal.quorumVotes).to.equal(4)
   })
 
   it('updates for/against votes correctly', async () => {
@@ -192,8 +190,8 @@ describe("GovernorN#inflationHandling", () => {
     await gov.connect(account2).castVote(proposalId,0) // 5
 
     const proposal = await gov.proposals(proposalId);
-    expect(proposal.forVotes).to.equal(votes(6))
-    expect(proposal.againstVotes).to.equal(votes(5))
+    expect(proposal.forVotes).to.equal(6)
+    expect(proposal.againstVotes).to.equal(5)
   })
 
   it('succeeds when for forVotes > quorumVotes and againstVotes', async () => {

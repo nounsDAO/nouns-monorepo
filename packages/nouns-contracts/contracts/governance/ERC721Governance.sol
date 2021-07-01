@@ -6,8 +6,6 @@ import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
 
 abstract contract ERC721Governance is ERC721Enumerable {
 
-    uint96 public constant votesPertoken = 10**18;
-
     /// @notice A record of each accounts delegate
     mapping (address => address) private _delegates;
 
@@ -44,12 +42,9 @@ abstract contract ERC721Governance is ERC721Enumerable {
      * Used when calling `_delegate()`
     */
     function votesToDelegate(address delegator) public view returns (uint96) {
-        return safe96(balanceOf(delegator)*votesPertoken, "ERC721Governance::votesToDelegate: amount exceeds 96 bits");
+        return safe96(balanceOf(delegator), "ERC721Governance::votesToDelegate: amount exceeds 96 bits");
     }
 
-    function totalVotes() public view returns (uint96){
-        return uint96(totalSupply())*votesPertoken;
-    }
 
     /**
      * @notice Overrides the standard `Comp.sol` delegates mapping to return
@@ -68,7 +63,7 @@ abstract contract ERC721Governance is ERC721Enumerable {
         super._beforeTokenTransfer(from, to, tokenId);
 
         /// @notice Differs from `_transferTokens()` to use `delegates` override method to simulate auto-delegation
-        _moveDelegates(delegates(from), delegates(to), votesPertoken);
+        _moveDelegates(delegates(from), delegates(to), 1);
     }
 
     /**

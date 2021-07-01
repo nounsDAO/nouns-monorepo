@@ -77,7 +77,7 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
     }
 
     struct ProposalTemp {
-        uint totalVotes;
+        uint totalSupply;
         uint proposalThreshold;
         uint latestProposalId;
         uint startBlock;
@@ -97,10 +97,10 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
 
         ProposalTemp memory temp;
 
-        /// @notice totalVotes returns the total number of Nouns, but the total number of
-        temp.totalVotes = nouns.totalVotes();
+        /// @notice totalSupply returns the total number of Nouns, but the total number of
+        temp.totalSupply = nouns.totalSupply();
 
-        temp.proposalThreshold = bps2Uint(proposalThresholdBPS, temp.totalVotes);
+        temp.proposalThreshold = bps2Uint(proposalThresholdBPS, temp.totalSupply);
 
         require(nouns.getPriorVotes(msg.sender, sub256(block.number, 1)) > temp.proposalThreshold, "GovernorN::propose: proposer votes below proposal threshold");
         require(targets.length == values.length && targets.length == signatures.length && targets.length == calldatas.length, "GovernorN::propose: proposal function information arity mismatch");
@@ -123,7 +123,7 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
         newProposal.id = proposalCount;
         newProposal.proposer = msg.sender;
         newProposal.proposalThreshold = temp.proposalThreshold;
-        newProposal.quorumVotes = bps2Uint(quorumVotesBPS, temp.totalVotes);
+        newProposal.quorumVotes = bps2Uint(quorumVotesBPS, temp.totalSupply);
         newProposal.eta = 0;
         newProposal.targets = targets;
         newProposal.values = values;
@@ -456,7 +456,7 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
       * Differs from `GovernerBravo` which uses fixed amount
       */
     function proposalThreshold() public view returns (uint){
-        return bps2Uint(proposalThresholdBPS, nouns.totalVotes());
+        return bps2Uint(proposalThresholdBPS, nouns.totalSupply());
     }
 
     /**
@@ -464,7 +464,7 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
       * Differs from `GovernerBravo` which uses fixed amount
       */
     function quorumVotes() public view returns (uint){
-        return bps2Uint(quorumVotesBPS, nouns.totalVotes());
+        return bps2Uint(quorumVotesBPS, nouns.totalSupply());
     }
 
     function bps2Uint(uint bps, uint number) internal pure returns (uint) {

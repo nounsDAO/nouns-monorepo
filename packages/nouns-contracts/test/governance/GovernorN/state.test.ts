@@ -73,7 +73,7 @@ async function expectState(proposalId: number|EthersBN, expectedState: any){
   expect(actualState).to.equal(expectedState);
 }
 
-async function reset(proposer: SignerWithAddress = deployer, mintAmount: number = 5,transferAmount: number = 0, transferTo: SignerWithAddress = proposer){
+async function reset(proposer: SignerWithAddress = deployer, mintAmount: number = 5,transferAmount: number = 0, transferTo: SignerWithAddress = proposer, proposalThresholdBPS: number = 1){
 
   token = await deployNounsErc721()
 
@@ -85,7 +85,7 @@ async function reset(proposer: SignerWithAddress = deployer, mintAmount: number 
 
   timelock = await new TimelockHarness__factory(deployer).deploy(deployer.address, delay);
 
-  gov = await new GovernorNImmutable__factory(deployer).deploy(timelock.address, token.address, address(0), deployer.address, 1728, 1, 1, 1)
+  gov = await new GovernorNImmutable__factory(deployer).deploy(timelock.address, token.address, address(0), deployer.address, 1728, 1, proposalThresholdBPS, 1)
 
   await timelock.harnessSetAdmin(gov.address)
 
@@ -137,10 +137,15 @@ describe('GovernorN#state/1', () => {
   })
 
   it("Canceled", async () => {
-    await reset(account0, 5, 2)
+
+    // set proposalThresholdBPS to 10% (1 token) so proposalThreshold is > 0
+    await reset(account0, 10, 2, account0, 1000)
 
     // send away the delegates
     await token.connect(account0).delegate(deployer.address)
+
+    await mineBlock()
+    await mineBlock()
 
     await gov.cancel(proposalId)
 

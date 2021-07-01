@@ -31,9 +31,9 @@ describe('Nouns Governance', () => {
   let a1: string;
   let a2: string;
   let deployer: string;
-  const ONE: EthersBN = ethers.utils.parseUnits("1", "ether");
-  const TWO: EthersBN = ethers.utils.parseUnits("2", "ether");
-  const THREE: EthersBN = ethers.utils.parseUnits("3", "ether");
+  const ONE: number = 1;
+  const TWO: number = 2;
+  const THREE: number = 3;
   const Domain = (name: string, verifyingContract: string, chainId: number) => ({ name, chainId, verifyingContract });
   let domain: any;
   const Types = {

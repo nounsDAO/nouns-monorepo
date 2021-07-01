@@ -198,7 +198,7 @@ interface TimelockInterface {
 
 interface NounsInterface {
     function getPriorVotes(address account, uint blockNumber) external view returns (uint96);
-    function totalVotes() external view returns (uint96);
+    function totalSupply() external view returns (uint96);
 }
 
 interface GovernorAlpha {

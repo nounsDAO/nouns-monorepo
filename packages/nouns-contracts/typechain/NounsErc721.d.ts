@@ -52,7 +52,6 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     "totalVotes()": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "votesPertoken()": FunctionFragment;
     "votesToDelegate(address)": FunctionFragment;
   };
 
@@ -161,10 +160,6 @@ interface NounsErc721Interface extends ethers.utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "votesPertoken",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "votesToDelegate",
     values: [string]
   ): string;
@@ -252,10 +247,6 @@ interface NounsErc721Interface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "votesPertoken",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -611,10 +602,6 @@ export class NounsErc721 extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    votesPertoken(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    "votesPertoken()"(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     votesToDelegate(
       delegator: string,
       overrides?: CallOverrides
@@ -903,10 +890,6 @@ export class NounsErc721 extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  votesPertoken(overrides?: CallOverrides): Promise<BigNumber>;
-
-  "votesPertoken()"(overrides?: CallOverrides): Promise<BigNumber>;
-
   votesToDelegate(
     delegator: string,
     overrides?: CallOverrides
@@ -1180,10 +1163,6 @@ export class NounsErc721 extends Contract {
       newOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    votesPertoken(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "votesPertoken()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     votesToDelegate(
       delegator: string,
@@ -1543,10 +1522,6 @@ export class NounsErc721 extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    votesPertoken(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "votesPertoken()"(overrides?: CallOverrides): Promise<BigNumber>;
-
     votesToDelegate(
       delegator: string,
       overrides?: CallOverrides
@@ -1859,10 +1834,6 @@ export class NounsErc721 extends Contract {
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
-
-    votesPertoken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    "votesPertoken()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     votesToDelegate(
       delegator: string,

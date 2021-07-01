@@ -154,9 +154,8 @@ describe("GovernorN#castVote/2", () => {
         let afterFors = (await gov.proposals(proposalId)).forVotes;
 
         const balance = (await token.balanceOf(actor.address)).toString();
-        const votes = ethers.utils.parseUnits(balance,'ether');
 
-        expect(afterFors).to.equal(beforeFors.add(votes));
+        expect(afterFors).to.equal(beforeFors.add(balance));
       })
 
       it("or AgainstVotes corresponding to the caller's support flag.", async () => {
@@ -174,9 +173,8 @@ describe("GovernorN#castVote/2", () => {
         let afterAgainst = (await gov.proposals(proposalId)).againstVotes;
 
         const balance = (await token.balanceOf(actor.address)).toString();
-        const votes = ethers.utils.parseUnits(balance,'ether');
 
-        expect(afterAgainst).to.equal(beforeAgainst.add(votes));
+        expect(afterAgainst).to.equal(beforeAgainst.add(balance));
 
       });
     });
