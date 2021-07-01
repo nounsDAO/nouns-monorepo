@@ -15,3 +15,4 @@ jobs:
           credentials: ${{ secrets.GCLOUD_STORAGE_SERVICE_ACCOUNT }}
           path: packages/nouns-img-permutator/assets/
           destination: nounsdao.appspot.com/src-main
+          parent: false
