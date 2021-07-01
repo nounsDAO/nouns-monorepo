@@ -130,6 +130,9 @@ exports.fetchLayersAndOptionsWithSource = functions.https.onRequest(async (reque
             counter: admin.firestore.FieldValue.increment(1)
         });
 
+        // hit grafana dashboard counter endpoint
+        https.get('https://simple-counter.nouns.tools/count/inc/nouns-wtf-generated')
+
         let options = JSON.parse(request.query.options)
         let layers = Object.keys(options.layers)
         let source = options.source
@@ -260,6 +263,9 @@ exports.fetchLayersAndOptionsWithSource = functions.https.onRequest(async (reque
         await docRef.update({
             counter: admin.firestore.FieldValue.increment(1)
         });
+
+        // hit grafana dashboard counter endpoint
+        https.get('https://simple-counter.nouns.tools/count/inc/nouns-wtf-generated')
 
         let options = JSON.parse(request.query.options)
         let layers = Object.keys(options.layers)
