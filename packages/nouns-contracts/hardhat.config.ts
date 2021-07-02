@@ -1,28 +1,21 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { HardhatUserConfig, task } from 'hardhat/config';
+import { HardhatUserConfig } from 'hardhat/config';
+import dotenv from 'dotenv';
 import '@nomiclabs/hardhat-waffle';
 import 'hardhat-typechain';
 import '@nomiclabs/hardhat-waffle';
 import '@nomiclabs/hardhat-etherscan';
 import 'hardhat-abi-exporter';
 import '@openzeppelin/hardhat-upgrades';
-import dotenv from 'dotenv';
+import 'hardhat-gas-reporter';
+import 'solidity-coverage';
+import './tasks';
 
 dotenv.config();
 
-// This is a sample Hardhat task. To learn how to create your own go to
-// https://hardhat.org/guides/create-task.html
-task('accounts', 'Prints the list of accounts', async (_args, hre) => {
-  const accounts = await hre.ethers.getSigners();
-
-  for (const account of accounts) {
-    console.log(account.address);
-  }
-});
-
 const config: HardhatUserConfig = {
   solidity: {
-    version: '0.8.4',
+    version: '0.8.6',
     settings: {
       optimizer: {
         enabled: true,
@@ -48,6 +41,16 @@ const config: HardhatUserConfig = {
   abiExporter: {
     path: './abi',
     clear: true,
+  },
+  gasReporter: {
+    enabled: !process.env.CI,
+    currency: 'USD',
+    gasPrice: 50,
+    src: 'contracts',
+    coinmarketcap: '7643dfc7-a58f-46af-8314-2db32bdd18ba',
+  },
+  mocha: {
+    timeout: 60_000,
   },
 };
 export default config;
