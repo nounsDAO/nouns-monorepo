@@ -19,3 +19,4 @@ packages/nouns-contracts/abi/contracts/**
 
 !packages/nouns-contracts/abi/contracts
 !packages/nouns-contracts/abi/contracts/NounsERC721.sol
+!packages/nouns-contracts/abi/contracts/NounsAuctionHouse.sol
