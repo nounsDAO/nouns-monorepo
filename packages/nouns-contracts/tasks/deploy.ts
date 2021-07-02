@@ -20,6 +20,7 @@ interface Contract {
   args?: (string | number | (() => string | undefined))[];
   address?: string;
   libraries?: () => Record<string, string>;
+  waitForConfirmation?: boolean;
 }
 
 task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsERC721')
@@ -59,7 +60,9 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsER
           () => contracts['NounsSeeder'].address,
         ],
       },
-      NounsAuctionHouse: {},
+      NounsAuctionHouse: {
+        waitForConfirmation: true,
+      },
       NounsAuctionHouseProxyAdmin: {},
       NounsAuctionHouseProxy: {
         args: [
@@ -144,6 +147,10 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsER
           gasPrice,
         },
       );
+
+      if (contract.waitForConfirmation) {
+        await deployedContract.deployed();
+      }
 
       contracts[name as ContractName].address = deployedContract.address;
 
