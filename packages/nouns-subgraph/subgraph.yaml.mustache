@@ -18,9 +18,12 @@ dataSources:
       file: ./src/nouns-auction-house.ts
       entities:
         - Auction
+        - Bid
       abis:
         - name: NounsAuctionHouse
           file: ./abis/NounsAuctionHouse.json
       eventHandlers:
         - event: AuctionCreated(indexed uint256)
           handler: handleAuctionCreated
+        - event: AuctionBid(indexed uint256,address,uint256,bool,bool)
+          handler: handleAuctionBid
