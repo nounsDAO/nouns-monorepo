@@ -97,7 +97,10 @@ export function MintNouns(token: NounsErc721, burnNoundersTokens: boolean = true
   return async function (amount: number): Promise<void> {
     for (let i=0; i<amount; i++){
       await token.mint();
-      if (burnNoundersTokens && i%10 == 0) await token.burn(i)
+      if (!burnNoundersTokens) continue
+      if (i%10 == 0 || (i+1)%10==0) {
+        await token.burn(i%10==0 ? i : i+1)
+      }
     }
   }
 }

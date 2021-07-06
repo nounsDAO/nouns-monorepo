@@ -7,10 +7,11 @@ const { ethers } = hardhat
 import { BigNumber as EthersBN } from 'ethers';
 
 import {
-  deployNounsErc721,
+  deployNounsERC721,
   getSigners,
   TestSigners,
   MintNouns,
+  populateDescriptor
 } from '../../utils';
 
 import {
@@ -28,6 +29,7 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 import {
   NounsErc721,
+  NounsDescriptor__factory,
   TimelockHarness,
   TimelockHarness__factory,
   GovernorNImmutable,
@@ -68,16 +70,14 @@ let proposalId: EthersBN;
 
 let mintNouns: (amount: number) => Promise<void>;
 
+let snapshotId: number;
+
 async function expectState(proposalId: number|EthersBN, expectedState: any){
   const actualState = states[await gov.state(proposalId)]
   expect(actualState).to.equal(expectedState);
 }
 
-async function reset(proposer: SignerWithAddress = deployer, mintAmount: number = 5,transferAmount: number = 0, transferTo: SignerWithAddress = proposer, proposalThresholdBPS: number = 1){
-
-  token = await deployNounsErc721()
-
-  mintNouns = MintNouns(token)
+async function makeProposal(proposer: SignerWithAddress = deployer, mintAmount: number = 5,transferAmount: number = 0, transferTo: SignerWithAddress = proposer, proposalThresholdBPS: number = 1){
 
   await mintNouns(mintAmount)
 
@@ -94,8 +94,10 @@ async function reset(proposer: SignerWithAddress = deployer, mintAmount: number 
   signatures = ["getBalanceOf(address)"]
   callDatas = [encodeParameters(['address'], [deployer.address])];
 
-  for (let i=0; i<transferAmount; i++){
+  for (let i=0; transferAmount>0; i++){
+    if (i%10 == 0) continue; // skip id 0, 10, 20... because it's been burned
     await token.transferFrom(deployer.address, transferTo.address, i);
+    transferAmount--;
   }
 
   await gov.connect(proposer).propose(targets, values, signatures, callDatas, "do nothing");
@@ -111,22 +113,35 @@ describe('GovernorN#state/1', () => {
     account0 = signers.account0;
     account1 = signers.account1;
     account2 = signers.account2;
+
+    token = await deployNounsERC721(signers.deployer);
+
+    await populateDescriptor(NounsDescriptor__factory.connect(await token.descriptor(), signers.deployer));
+    mintNouns = MintNouns(token);
+  });
+
+  beforeEach(async () => {
+    snapshotId = await ethers.provider.send('evm_snapshot', []);
+  });
+
+  afterEach(async () => {
+    await ethers.provider.send('evm_revert', [snapshotId]);
   });
 
   it("Invalid for proposal not found", async () => {
-    await reset()
+    await makeProposal()
     await expect(
       gov.state(5)
     ).revertedWith("GovernorN::state: invalid proposal id");
   })
 
   it("Pending", async () => {
-    await reset()
+    await makeProposal()
     expectState(proposalId,"Pending");
   })
 
   it("Active", async () => {
-    await reset()
+    await makeProposal()
     expectState(proposalId,"Pending");
 
     // mine blocks passed voting delay; voting delay is 1 block, have to wait 2 blocks
@@ -139,7 +154,8 @@ describe('GovernorN#state/1', () => {
   it("Canceled", async () => {
 
     // set proposalThresholdBPS to 10% (1 token) so proposalThreshold is > 0
-    await reset(account0, 10, 2, account0, 1000)
+    await makeProposal(account0, 10, 2, account0, 1000)
+    const prop = await gov.proposals(proposalId)
 
     // send away the delegates
     await token.connect(account0).delegate(deployer.address)
@@ -153,7 +169,7 @@ describe('GovernorN#state/1', () => {
   })
 
   it("Defeated by running out of time", async () => {
-    await reset()
+    await makeProposal()
     // travel to end block
     await advanceBlocks(2000)
 
@@ -161,7 +177,7 @@ describe('GovernorN#state/1', () => {
   })
 
   it("Defeated by voting against", async () => {
-    await reset(deployer, 5, 3, account0)
+    await makeProposal(deployer, 5, 3, account0)
 
     // pass the waiting period of 1 block
     await mineBlock()
@@ -179,7 +195,7 @@ describe('GovernorN#state/1', () => {
 
   it("Succeeded", async () => {
     // deployer mints 5, sends 2 to account0, account0 proposes,
-    await reset(account0, 5, 2)
+    await makeProposal(account0, 5, 2)
     await mineBlock()
 
     // cast 3 votes for
@@ -194,7 +210,7 @@ describe('GovernorN#state/1', () => {
   })
 
   it('Cannot queue if defeated', async () => {
-    await reset()
+    await makeProposal()
     await advanceBlocks(2000)
 
     expectState(proposalId, "Defeated")
@@ -205,7 +221,7 @@ describe('GovernorN#state/1', () => {
   })
 
   it('Cannot queue if canceled', async () => {
-    await reset()
+    await makeProposal()
     await gov.cancel(proposalId)
 
     expectState(proposalId, "Canceled")
@@ -216,7 +232,7 @@ describe('GovernorN#state/1', () => {
   })
 
   it("Queued", async () => {
-    await reset()
+    await makeProposal()
     await mineBlock()
 
     await gov.connect(deployer).castVote(proposalId, 1);
@@ -234,7 +250,7 @@ describe('GovernorN#state/1', () => {
   })
 
   it("Expired", async () => {
-    await reset()
+    await makeProposal()
     await mineBlock()
 
     await gov.connect(deployer).castVote(proposalId, 1);
@@ -257,7 +273,7 @@ describe('GovernorN#state/1', () => {
   })
 
   it("Executed, only after queued", async () => {
-    await reset()
+    await makeProposal()
     await mineBlock()
 
     await gov.connect(deployer).castVote(proposalId, 1);
