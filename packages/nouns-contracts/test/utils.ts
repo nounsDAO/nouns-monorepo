@@ -92,8 +92,12 @@ export const populateDescriptor = async (nounsDescriptor: NounsDescriptor): Prom
   ]);
 };
 
-// Nounders tokens are minted at id 0, 10, 20... `burnNoundersTokens` burns them
-export function MintNouns(token: NounsErc721, burnNoundersTokens: boolean = true): (amount: number) => Promise<void> {
+/**
+ * Return a function used to mint `amount` Nouns on the provided `token`
+ * @param token The Nouns ERC721 token
+ * @param amount The number of Nouns to mint
+ */
+export const MintNouns = (token: NounsErc721, burnNoundersTokens: boolean = true): (amount: number) => Promise<void> => {
   return async function (amount: number): Promise<void> {
     for (let i=0; i<amount; i++){
       await token.mint();
