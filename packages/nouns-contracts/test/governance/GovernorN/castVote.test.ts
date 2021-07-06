@@ -7,10 +7,11 @@ const { ethers } = hardhat
 import { BigNumber as EthersBN } from 'ethers';
 
 import {
-  deployNounsErc721,
+  deployNounsERC721,
   getSigners,
   TestSigners,
   MintNouns,
+  populateDescriptor
 } from '../../utils';
 
 import {
@@ -23,6 +24,7 @@ import {
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsErc721,
+  NounsDescriptor__factory,
   GovernorNDelegator,
   GovernorNDelegateHarness,
   GovernorNDelegateHarness__factory
@@ -65,7 +67,9 @@ let mintNouns: (amount: number) => Promise<void>;
 
 async function reset(){
 
-  token = await deployNounsErc721()
+  token = await deployNounsERC721(signers.deployer);
+
+  await populateDescriptor(NounsDescriptor__factory.connect(await token.descriptor(), signers.deployer));
 
   mintNouns = MintNouns(token)
 
@@ -112,8 +116,8 @@ describe("GovernorN#castVote/2", () => {
       await mineBlock();
       await mineBlock();
 
-      await token.transferFrom(deployer.address, account0.address, 0);
-      await token.transferFrom(deployer.address, account1.address, 1);
+      await token.transferFrom(deployer.address, account0.address, 1);
+      await token.transferFrom(deployer.address, account1.address, 2);
 
       await gov.connect(account0).castVote(proposalId, 1);
 
@@ -143,8 +147,8 @@ describe("GovernorN#castVote/2", () => {
       it("and we add that ForVotes", async () => {
         actor = account0
 
-        await token.transferFrom(deployer.address, actor.address, 0);
         await token.transferFrom(deployer.address, actor.address, 1);
+        await token.transferFrom(deployer.address, actor.address, 2);
         await propose(actor)
 
         let beforeFors = (await gov.proposals(proposalId)).forVotes;
@@ -160,8 +164,8 @@ describe("GovernorN#castVote/2", () => {
 
       it("or AgainstVotes corresponding to the caller's support flag.", async () => {
         actor = account1
-        await token.transferFrom(deployer.address, actor.address, 2);
         await token.transferFrom(deployer.address, actor.address, 3);
+        await token.transferFrom(deployer.address, actor.address, 4);
 
         await propose(actor)
 
