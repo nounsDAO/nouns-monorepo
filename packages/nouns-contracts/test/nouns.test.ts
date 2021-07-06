@@ -34,7 +34,8 @@ describe('NounsERC721', () => {
 
   it('should allow the minter to mint a noun to itself and a reward noun to the noundersDAO', async () => {
     const receipt = await (await nounsErc721.mint()).wait();
-    const [, noundersNounCreated, , ownersNounCreated] = receipt.events || [];
+
+    const [, , noundersNounCreated, , , ownersNounCreated] = receipt.events || [];
 
     expect(await nounsErc721.ownerOf(0)).to.eq(noundersDAO.address);
     expect(noundersNounCreated?.event).to.eq('NounCreated');
@@ -69,7 +70,7 @@ describe('NounsERC721', () => {
     await (await nounsErc721.mint()).wait();
 
     const receipt = await (await nounsErc721.mint()).wait();
-    const nounCreated = receipt.events?.[1];
+    const nounCreated = receipt.events?.[2];
 
     expect(await nounsErc721.ownerOf(2)).to.eq(deployer.address);
     expect(nounCreated?.event).to.eq('NounCreated');
