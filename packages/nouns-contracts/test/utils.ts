@@ -96,10 +96,12 @@ export const populateDescriptor = async (nounsDescriptor: NounsDescriptor): Prom
   ]);
 };
 
-export function MintNouns(token: NounsErc721): (amount: number) => Promise<void> {
+// Nounders tokens are minted at id 0, 10, 20... `burnNoundersTokens` burns them
+export function MintNouns(token: NounsErc721, burnNoundersTokens: boolean = true): (amount: number) => Promise<void> {
   return async function (amount: number): Promise<void> {
     for (let i=0; i<amount; i++){
       await token.mint();
+      if (burnNoundersTokens && i%10 == 0) await token.burn(i)
     }
   }
 }

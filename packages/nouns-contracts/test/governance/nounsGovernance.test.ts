@@ -2,12 +2,14 @@ import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { ethers } from 'hardhat';
 import { BigNumber as EthersBN } from 'ethers';
-import { NounsErc721 } from '../../typechain';
+import { NounsErc721, NounsDescriptor__factory } from '../../typechain';
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
-  deployNounsErc721,
+  deployNounsERC721,
   getSigners,
   TestSigners,
   MintNouns,
+  populateDescriptor
 } from '../utils';
 
 import {
@@ -22,15 +24,16 @@ chai.use(solidity);
 const { expect } = chai;
 
 describe('Nouns Governance', () => {
+  let snapshotId: number;
   let token: NounsErc721;
   let signers: TestSigners
   let mintNouns: (amount: number) => Promise<void>;
   let tokenCallFromGuy: NounsErc721;
   let tokenCallFromDeployer: NounsErc721;
-  let guy: string;
-  let a1: string;
-  let a2: string;
-  let deployer: string;
+  let account0: SignerWithAddress;
+  let account1: SignerWithAddress;
+  let account2: SignerWithAddress;
+  let deployer: SignerWithAddress;
   const ONE: number = 1;
   const TWO: number = 2;
   const THREE: number = 3;
@@ -44,92 +47,112 @@ describe('Nouns Governance', () => {
     ]
   };
 
-  beforeEach(async () => {
-    signers = await getSigners();
-    token = await deployNounsErc721();
+  before(async () => {
+    const signers: TestSigners = await getSigners();
+
+    account0 = signers.account0;
+    account1 = signers.account1;
+    account2 = signers.account2;
+    deployer = signers.deployer;
+
+    token = await deployNounsERC721(signers.deployer);
+
+    await populateDescriptor(NounsDescriptor__factory.connect(await token.descriptor(), signers.deployer));
+
     domain = Domain('Nouns', token.address, await chainId())
+
     mintNouns = MintNouns(token);
+
     tokenCallFromGuy = token.connect(signers.account0);
     tokenCallFromDeployer = token;
-    guy = signers.account0.address;
-    a1 = signers.account1.address;
-    a2 = signers.account2.address;
-    deployer = signers.deployer.address;
   });
 
-
   describe('delegateBySig', () => {
+    beforeEach(async () => {
+      snapshotId = await ethers.provider.send('evm_snapshot', []);
+    });
+
+    afterEach(async () => {
+      await ethers.provider.send('evm_revert', [snapshotId]);
+    });
     it('reverts if the signatory is invalid', async () => {
-      const delegatee = signers.account1.address, nonce = 0, expiry = 0;
+      const delegatee = account1.address, nonce = 0, expiry = 0;
       const badhex = "0xbad0000000000000000000000000000000000000000000000000000000000000";
       await expect(token.delegateBySig(delegatee, nonce, expiry, 0, badhex, badhex)).to.be.revertedWith("ERC721Governance::delegateBySig: invalid signature");
     });
 
     it('reverts if the nonce is bad ', async () => {
-      const delegatee = signers.account1.address, nonce = 1, expiry = 0;
-      const signature = await signers.account0._signTypedData(domain, Types, { delegatee, nonce, expiry });
+      const delegatee = account1.address, nonce = 1, expiry = 0;
+      const signature = await account0._signTypedData(domain, Types, { delegatee, nonce, expiry });
       const {v, r, s } = ethers.utils.splitSignature(signature)
       await expect(token.delegateBySig(delegatee, nonce, expiry, v, r, s)).to.be.revertedWith("ERC721Governance::delegateBySig: invalid nonce");
     });
 
     it('reverts if the signature has expired', async () => {
-      const delegatee = signers.account1.address, nonce = 0, expiry = 0;
-      const signature = await signers.account0._signTypedData(domain, Types, { delegatee, nonce, expiry });
+      const delegatee = account1.address, nonce = 0, expiry = 0;
+      const signature = await account0._signTypedData(domain, Types, { delegatee, nonce, expiry });
       const {v, r, s } = ethers.utils.splitSignature(signature)
       await expect(token.delegateBySig(delegatee, nonce, expiry, v, r, s)).to.be.revertedWith("ERC721Governance::delegateBySig: signature expired");
     });
 
     it('delegates on behalf of the signatory', async () => {
-      const delegatee = signers.account1.address, nonce = 0, expiry = 10e9;
-      const signature = await signers.account0._signTypedData(domain, Types, { delegatee, nonce, expiry });
+      const delegatee = account1.address, nonce = 0, expiry = 10e9;
+      const signature = await account0._signTypedData(domain, Types, { delegatee, nonce, expiry });
       const {v, r, s } = ethers.utils.splitSignature(signature)
 
-      expect(await token.delegates(signers.account0.address)).to.equal(signers.account0.address)
+      expect(await token.delegates(account0.address)).to.equal(account0.address)
 
       const tx = await (await token.delegateBySig(delegatee, nonce, expiry, v, r, s)).wait()
 
       expect(tx.gasUsed.toNumber() < 80000);
-      expect(await token.delegates(signers.account0.address)).to.equal(signers.account1.address)
+      expect(await token.delegates(account0.address)).to.equal(account1.address)
 
     });
   });
 
   describe('numCheckpoints', () => {
+    beforeEach(async () => {
+      snapshotId = await ethers.provider.send('evm_snapshot', []);
+    });
+
+    afterEach(async () => {
+      await ethers.provider.send('evm_revert', [snapshotId]);
+    });
     it('returns the number of checkpoints for a delegate', async () => {
       await mintNouns(3);
 
-      // Give guy tokens
-      await tokenCallFromDeployer.transferFrom(deployer, guy, 0);
-      await tokenCallFromDeployer.transferFrom(deployer, guy, 1);
+      // Give account0.address tokens
+      await tokenCallFromDeployer.transferFrom(deployer.address, account0.address, 1);
+      await tokenCallFromDeployer.transferFrom(deployer.address, account0.address, 2);
 
-      expect(await token.numCheckpoints(a1)).to.equal(0);
+      expect(await token.numCheckpoints(account1.address)).to.equal(0);
 
-      const t1 = await tokenCallFromGuy.delegate(a1);
-      expect(await token.numCheckpoints(a1)).to.equal(1);
-      const t2 = await tokenCallFromGuy.transferFrom(guy, a2, 0);
-      expect(await token.numCheckpoints(a1)).to.equal(2);
-
-
-      const t3 = await tokenCallFromGuy.transferFrom(guy, a2, 1);
-      expect(await token.numCheckpoints(a1)).to.equal(3);
+      const t1 = await tokenCallFromGuy.delegate(account1.address);
+      expect(await token.numCheckpoints(account1.address)).to.equal(1);
+      const t2 = await tokenCallFromGuy.transferFrom(account0.address, account2.address, 1);
+      expect(await token.numCheckpoints(account1.address)).to.equal(2);
 
 
-      const t4 = await tokenCallFromDeployer.transferFrom(deployer, guy, 2);
-      expect(await token.numCheckpoints(a1)).to.equal(4);
+      const t3 = await tokenCallFromGuy.transferFrom(account0.address, account2.address, 2);
+      expect(await token.numCheckpoints(account1.address)).to.equal(3);
 
-      const checkpoint0 = await token.checkpoints(a1, 0);
+
+      const t4 = await tokenCallFromDeployer.transferFrom(deployer.address, account0.address, 3);
+      expect(await token.numCheckpoints(account1.address)).to.equal(4);
+
+      const checkpoint0 = await token.checkpoints(account1.address, 0);
       expect(checkpoint0.fromBlock).to.equal(t1.blockNumber);
       expect(checkpoint0.votes.toString(),'2');
 
-      const checkpoint1 = await token.checkpoints(a1, 1);
+      const checkpoint1 = await token.checkpoints(account1.address, 1);
       expect(checkpoint1.fromBlock).to.equal(t2.blockNumber);
       expect(checkpoint1.votes.toString(),'1');
 
-      const checkpoint2 = await token.checkpoints(a1, 2);
+      const checkpoint2 = await token.checkpoints(account1.address, 2);
       expect(checkpoint2.fromBlock).to.equal(t3.blockNumber);
       expect(checkpoint2.votes.toString(),'0');
 
-      const checkpoint3 = await token.checkpoints(a1, 3);
+      const checkpoint3 = await token.checkpoints(account1.address, 3);
       expect(checkpoint3.fromBlock).to.equal(t4.blockNumber);
       expect(checkpoint3.votes.toString(),'1');
 
@@ -138,18 +161,18 @@ describe('Nouns Governance', () => {
     it('does not add more than one checkpoint in a block', async () => {
       await mintNouns(4)
 
-      // Give guy tokens
-      await tokenCallFromDeployer.transferFrom(deployer, guy, 0);
-      await tokenCallFromDeployer.transferFrom(deployer, guy, 1);
-      await tokenCallFromDeployer.transferFrom(deployer, guy, 2);
+      // Give account0.address tokens
+      await tokenCallFromDeployer.transferFrom(deployer.address, account0.address, 1);
+      await tokenCallFromDeployer.transferFrom(deployer.address, account0.address, 2);
+      await tokenCallFromDeployer.transferFrom(deployer.address, account0.address, 3);
 
-      expect(await token.numCheckpoints(a1)).to.equal(0);
+      expect(await token.numCheckpoints(account1.address)).to.equal(0);
 
       await minerStop();
 
-      const tx1 = await tokenCallFromGuy.delegate(a1); // delegate 3 votes
-      const tx2 = await tokenCallFromGuy.transferFrom(guy, a2, 0); // transfer 1 vote
-      const tx3 = await tokenCallFromGuy.transferFrom(guy, a2, 1); // transfer 1 vote
+      const tx1 = await tokenCallFromGuy.delegate(account1.address); // delegate 3 votes
+      const tx2 = await tokenCallFromGuy.transferFrom(account0.address, account2.address, 1); // transfer 1 vote
+      const tx3 = await tokenCallFromGuy.transferFrom(account0.address, account2.address, 2); // transfer 1 vote
 
       await mineBlock();
       const receipt1 = await tx1.wait();
@@ -158,86 +181,98 @@ describe('Nouns Governance', () => {
 
       await minerStart();
 
-      expect(await token.numCheckpoints(a1)).to.equal(1);
+      expect(await token.numCheckpoints(account1.address)).to.equal(1);
 
-      const checkpoint0 = await token.checkpoints(a1, 0);
+      const checkpoint0 = await token.checkpoints(account1.address, 0);
       expect(checkpoint0.fromBlock).to.equal(receipt1.blockNumber);
       expect(checkpoint0.votes.toString(),'1');
 
-      let checkpoint1 = await token.checkpoints(a1, 1);
+      let checkpoint1 = await token.checkpoints(account1.address, 1);
       expect(checkpoint1.fromBlock).to.equal(0);
       expect(checkpoint1.votes.toString(),'0');
 
-      const checkpoint2 = await token.checkpoints(a1, 2);
+      const checkpoint2 = await token.checkpoints(account1.address, 2);
       expect(checkpoint2.fromBlock).to.equal(0);
       expect(checkpoint2.votes.toString(),'0');
 
-      const tx4 = await tokenCallFromDeployer.transferFrom(deployer, guy, 3);
-      expect(await token.numCheckpoints(a1)).to.equal(2);
+      const tx4 = await tokenCallFromDeployer.transferFrom(deployer.address, account0.address, 4);
+      expect(await token.numCheckpoints(account1.address)).to.equal(2);
 
-      checkpoint1 = await token.checkpoints(a1, 1);
+      checkpoint1 = await token.checkpoints(account1.address, 1);
       expect(checkpoint1.fromBlock).to.equal(tx4.blockNumber);
       expect(checkpoint1.votes.toString(),'1');
     });
   });
 
   describe('getPriorVotes', () => {
+
+    beforeEach(async () => {
+      snapshotId = await ethers.provider.send('evm_snapshot', []);
+    });
+
+    afterEach(async () => {
+      await ethers.provider.send('evm_revert', [snapshotId]);
+    });
+
     it('reverts if block number >= current block', async () => {
-      await expect(token.getPriorVotes(a1, 5e10)).to.be.revertedWith("ERC721Governance::getPriorVotes: not yet determined");
+      await expect(token.getPriorVotes(account1.address, 5e10)).to.be.revertedWith("ERC721Governance::getPriorVotes: not yet determined");
     });
 
     it('returns 0 if there are no checkpoints', async () => {
-      expect(await token.getPriorVotes(a1, 0)).to.equal(0);
+      expect(await token.getPriorVotes(account1.address, 0)).to.equal(0);
     });
 
     it('returns the latest block if >= last checkpoint block', async () => {
       await mintNouns(1)
-      const t1 = await (await tokenCallFromDeployer.delegate(a1)).wait()
+      const t1 = await (await tokenCallFromDeployer.delegate(account1.address)).wait()
       await mineBlock();
       await mineBlock();
 
-      expect(await token.getPriorVotes(a1, t1.blockNumber)).to.equal(ONE);
-      expect(await token.getPriorVotes(a1, t1.blockNumber+1)).to.equal(ONE);
+      expect(await token.getPriorVotes(account1.address, t1.blockNumber)).to.equal(ONE);
+      expect(await token.getPriorVotes(account1.address, t1.blockNumber+1)).to.equal(ONE);
     });
 
     it('returns zero if < first checkpoint block', async () => {
       await mineBlock();
       await mintNouns(1)
-      const t1 = await (await tokenCallFromDeployer.delegate(a1)).wait()
+      const t1 = await (await tokenCallFromDeployer.delegate(account1.address)).wait()
       await mineBlock();
       await mineBlock();
 
-      expect(await token.getPriorVotes(a1, t1.blockNumber-1)).to.equal(0);
-      expect(await token.getPriorVotes(a1, t1.blockNumber+1)).to.equal(ONE);
+      expect(await token.getPriorVotes(account1.address, t1.blockNumber-1)).to.equal(0);
+      expect(await token.getPriorVotes(account1.address, t1.blockNumber+1)).to.equal(ONE);
     });
 
     it('generally returns the voting balance at the appropriate checkpoint', async () => {
       await mintNouns(3)
-      const t1 = await (await tokenCallFromDeployer.delegate(a1)).wait()
+      const t1 = await (await tokenCallFromDeployer.delegate(account1.address)).wait()
       await mineBlock();
       await mineBlock();
 
-      const t2 = await (await tokenCallFromDeployer.transferFrom(deployer, guy, 0)).wait()
+      // deployer -> account0.address id 1
+      const t2 = await (await tokenCallFromDeployer.transferFrom(deployer.address, account0.address, 1)).wait()
       await mineBlock();
       await mineBlock();
 
-      const t3 = await (await tokenCallFromDeployer.transferFrom(deployer, guy, 1)).wait()
+      // deployer -> account0.address id 2
+      const t3 = await (await tokenCallFromDeployer.transferFrom(deployer.address, account0.address, 2)).wait()
       await mineBlock();
       await mineBlock();
 
-      const t4 = await (await tokenCallFromGuy.transferFrom(guy, deployer, 0)).wait()
+      // account0.address -> deployer id 1
+      const t4 = await (await tokenCallFromGuy.transferFrom(account0.address, deployer.address, 1)).wait()
       await mineBlock();
       await mineBlock();
 
-      expect(await token.getPriorVotes(a1, t1.blockNumber-1)).to.equal(0);
-      expect(await token.getPriorVotes(a1, t1.blockNumber)).to.equal(THREE);
-      expect(await token.getPriorVotes(a1, t1.blockNumber+1)).to.equal(THREE);
-      expect(await token.getPriorVotes(a1, t2.blockNumber)).to.equal(TWO);
-      expect(await token.getPriorVotes(a1, t2.blockNumber+1)).to.equal(TWO);
-      expect(await token.getPriorVotes(a1, t3.blockNumber)).to.equal(ONE);
-      expect(await token.getPriorVotes(a1, t3.blockNumber+1)).to.equal(ONE);
-      expect(await token.getPriorVotes(a1, t4.blockNumber)).to.equal(TWO);
-      expect(await token.getPriorVotes(a1, t4.blockNumber+1)).to.equal(TWO);
+      expect(await token.getPriorVotes(account1.address, t1.blockNumber-1)).to.equal(0);
+      expect(await token.getPriorVotes(account1.address, t1.blockNumber)).to.equal(THREE);
+      expect(await token.getPriorVotes(account1.address, t1.blockNumber+1)).to.equal(THREE);
+      expect(await token.getPriorVotes(account1.address, t2.blockNumber)).to.equal(TWO);
+      expect(await token.getPriorVotes(account1.address, t2.blockNumber+1)).to.equal(TWO);
+      expect(await token.getPriorVotes(account1.address, t3.blockNumber)).to.equal(ONE);
+      expect(await token.getPriorVotes(account1.address, t3.blockNumber+1)).to.equal(ONE);
+      expect(await token.getPriorVotes(account1.address, t4.blockNumber)).to.equal(TWO);
+      expect(await token.getPriorVotes(account1.address, t4.blockNumber+1)).to.equal(TWO);
     });
   });
 });
