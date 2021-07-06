@@ -86,12 +86,7 @@ library MultiPartRLEToSVG {
                     cursor += 4;
 
                     if (cursor >= 16) {
-                        part = string(
-                            abi.encodePacked(
-                                part,
-                                _getChunk(cursor, buffer)
-                            )
-                        );
+                        part = string(abi.encodePacked(part, _getChunk(cursor, buffer)));
                         cursor = 0;
                     }
                 }
