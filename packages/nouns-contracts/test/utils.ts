@@ -33,8 +33,7 @@ export const getSigners = async (): Promise<TestSigners> => {
 export const deployNounsDescriptor = async (
   deployer?: SignerWithAddress,
 ): Promise<NounsDescriptor> => {
-  const signers = await getSigners();
-  const signer = deployer || signers.deployer;
+  const signer = deployer || (await getSigners()).deployer;
   const nftDescriptorLibraryFactory = await ethers.getContractFactory('NFTDescriptor', signer);
   const nftDescriptorLibrary = await nftDescriptorLibraryFactory.deploy();
   const nounsDescriptorFactory = new NounsDescriptor__factory(
@@ -48,8 +47,7 @@ export const deployNounsDescriptor = async (
 };
 
 export const deployNounsSeeder = async (deployer?: SignerWithAddress): Promise<NounsSeeder> => {
-  const signers = await getSigners();
-  const factory = new NounsSeeder__factory(deployer || signers.deployer);
+  const factory = new NounsSeeder__factory(deployer || (await getSigners()).deployer);
 
   return factory.deploy();
 };
@@ -61,8 +59,7 @@ export const deployNounsERC721 = async (
   descriptor?: string,
   seeder?: string,
 ): Promise<NounsErc721> => {
-  const signers = await getSigners();
-  const signer = deployer || signers.deployer;
+  const signer = deployer || (await getSigners()).deployer;
   const factory = new NounsErc721__factory(signer);
 
   return factory.deploy(
@@ -74,8 +71,7 @@ export const deployNounsERC721 = async (
 };
 
 export const deployWeth = async (deployer?: SignerWithAddress): Promise<Weth> => {
-  const signers = await getSigners();
-  const factory = new Weth__factory(deployer || signers.deployer);
+  const factory = new Weth__factory(deployer || (await await getSigners()).deployer);
 
   return factory.deploy();
 };
