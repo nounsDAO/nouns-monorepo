@@ -605,7 +605,7 @@
       },
       {
         "name": "accessory-none",
-        "data": "0x0000000020e000"
+        "data": "0x0000000000"
       },
       {
         "name": "accessory-oldshirt",
