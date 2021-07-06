@@ -8,8 +8,8 @@ dotenv.config();
 console.log('hello world', config.nounsSubgraph);
 
 const AUCTIONS_QUERY = gql`
-  query($auctionId: 2) {
-    auctions(last: $auctionId) {
+  query GetAuctions {
+    auctions {
       id
     }
   }
