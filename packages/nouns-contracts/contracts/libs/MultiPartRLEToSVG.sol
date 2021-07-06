@@ -89,14 +89,7 @@ library MultiPartRLEToSVG {
                         part = string(
                             abi.encodePacked(
                                 part,
-                                string(abi.encodePacked(
-                                    '<rect width="', buffer[0], '" height="10" x="', buffer[1], '" y="', buffer[2], '" fill="#', buffer[3], '" />',
-                                    '<rect width="', buffer[4], '" height="10" x="', buffer[5], '" y="', buffer[6], '" fill="#', buffer[7], '" />'
-                                )),
-                                string(abi.encodePacked(
-                                    '<rect width="', buffer[8], '" height="10" x="', buffer[9], '" y="', buffer[10], '" fill="#', buffer[11], '" />',
-                                    '<rect width="', buffer[12], '" height="10" x="', buffer[13], '" y="', buffer[14], '" fill="#', buffer[15], '" />'
-                                ))
+                                _getChunk(cursor, buffer)
                             )
                         );
                         cursor = 0;
@@ -111,7 +104,7 @@ library MultiPartRLEToSVG {
             }
 
             if (cursor != 0) {
-                part = string(abi.encodePacked(part, _getRemainder(cursor, buffer)));
+                part = string(abi.encodePacked(part, _getChunk(cursor, buffer)));
             }
             rects = string(abi.encodePacked(rects, part));
         }
@@ -119,20 +112,20 @@ library MultiPartRLEToSVG {
     }
 
     /**
-     * @notice Return all rects that remain in the buffer after looping over all part rects.
+     * @notice Return a string that consists of all rects in the provided `buffer`.
      */
     // prettier-ignore
-    function _getRemainder(uint256 cursor, string[16] memory buffer) internal pure returns (string memory) {
-        string memory remainder;
+    function _getChunk(uint256 cursor, string[16] memory buffer) private pure returns (string memory) {
+        string memory chunk;
         for (uint256 i = 0; i < cursor; i += 4) {
-            remainder = string(
+            chunk = string(
                 abi.encodePacked(
-                    remainder,
+                    chunk,
                     '<rect width="', buffer[i], '" height="10" x="', buffer[i + 1], '" y="', buffer[i + 2], '" fill="#', buffer[i + 3], '" />'
                 )
             );
         }
-        return remainder;
+        return chunk;
     }
 
     /**

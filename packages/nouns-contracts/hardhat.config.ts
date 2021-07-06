@@ -16,6 +16,12 @@ dotenv.config();
 const config: HardhatUserConfig = {
   solidity: {
     version: '0.8.6',
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 10_000,
+      },
+    },
   },
   networks: {
     mainnet: {
@@ -44,7 +50,7 @@ const config: HardhatUserConfig = {
     coinmarketcap: '7643dfc7-a58f-46af-8314-2db32bdd18ba',
   },
   mocha: {
-    timeout: 60_000,
+    timeout: 120_000,
   },
 };
 export default config;
