@@ -1,0 +1,4 @@
+type Auction @entity {
+  id: ID! # The Noun's ERC721 token id being auctioned.
+  nounId: BigInt!
+}

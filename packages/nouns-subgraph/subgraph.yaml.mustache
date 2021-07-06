@@ -1,0 +1,26 @@
+specVersion: 0.0.3
+description: >-
+  Randomly generated avatar NFTs auctioned daily.
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: NounsAuctionHouse
+    network: {{network}}
+    source:
+      address: '{{address}}'
+      abi: NounsAuctionHouse
+      startBlock: {{startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/nouns-auction-house.ts
+      entities:
+        - Auction
+      abis:
+        - name: NounsAuctionHouse
+          file: ./abis/NounsAuctionHouse.json
+      eventHandlers:
+        - event: AuctionCreated(indexed uint256)
+          handler: handleAuctionCreated
