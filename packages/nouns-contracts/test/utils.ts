@@ -1,4 +1,4 @@
-import { ethers } from 'hardhat';
+import hardhat from 'hardhat';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsDescriptor,
@@ -12,6 +12,9 @@ import {
 } from '../typechain';
 import { bgcolors, partcolors, parts } from '../files/encoded-layers.json';
 import { chunkArray } from '../utils';
+
+const ethers = hardhat.ethers;
+const BigNumber = ethers.BigNumber;
 
 export type TestSigners = {
   deployer: SignerWithAddress;
@@ -129,4 +132,71 @@ export const setTotalSupply = async (token: NounsErc721, newTotalSupply: number)
     }
 
   }
+}
+
+// The following adapted from `https://github.com/compound-finance/compound-protocol/blob/master/tests/Utils/Ethereum.js`
+
+function rpc({method, params}: {method: string, params?: any[]}){
+  return hardhat.network.provider.send(method, params)
+}
+
+export function encodeParameters(types: string[], values: any[]) {
+  const abi = new ethers.utils.AbiCoder();
+  return abi.encode(types, values);
+}
+
+export async function blockByNumber(n: number|string){
+  return await rpc({method: 'eth_getBlockByNumber', params: [n, false]})
+}
+
+export async function increaseTime(seconds: number) {
+  await rpc({ method: 'evm_increaseTime', params: [seconds] });
+  return rpc({ method: 'evm_mine' });
+}
+
+export async function freezeTime(seconds: number) {
+  await rpc({ method: 'evm_increaseTime', params: [-1*seconds] });
+  return rpc({ method: 'evm_mine' });
+}
+
+export async function advanceBlocks(blocks: number) {
+  for (let i=0; i<blocks; i++){
+    await mineBlock()
+  }
+}
+
+export async function blockNumber(parse: boolean = true): Promise<number> {
+  let result = await rpc({ method: 'eth_blockNumber' });
+  return parse ? parseInt(result) : result;
+}
+
+export async function blockTimestamp(n: number|string, parse: boolean = true): Promise<number|string>{
+  const block = await blockByNumber(n)
+  return parse ? parseInt(block.timestamp) : block.timestamp;
+}
+
+export async function setNextBlockTimestamp(n: number, mine: boolean = true){
+  await rpc({method: 'evm_setNextBlockTimestamp', params: [n]})
+  if (mine) await mineBlock()
+}
+
+export async function minerStop(): Promise<void> {
+  await hardhat.network.provider.send("evm_setAutomine", [false])
+  await hardhat.network.provider.send("evm_setIntervalMining", [0])
+}
+
+export async function minerStart(): Promise<void> {
+  await hardhat.network.provider.send("evm_setAutomine", [true])
+}
+
+export async function mineBlock(): Promise<void> {
+  await hardhat.network.provider.send("evm_mine")
+}
+
+export async function chainId(): Promise<number> {
+  return parseInt(await hardhat.network.provider.send("eth_chainId"), 16);
+}
+
+export function address(n: number): string {
+  return `0x${n.toString(16).padStart(40, '0')}`;
 }

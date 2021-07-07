@@ -7,7 +7,7 @@
 //   etherMantissa,
 //   encodeParameters,
 //   mineBlock
-// } = require('../../Utils/Ethereum');
+// } = require('../../../utils');
 
 // describe('GovernorBravo#propose/5', () => {
 //   let gov, root, acct;

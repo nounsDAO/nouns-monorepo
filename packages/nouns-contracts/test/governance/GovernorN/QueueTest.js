@@ -9,7 +9,7 @@
 //   advanceBlocks,
 //   freezeTime,
 //   mineBlock
-// } = require('../../Utils/Ethereum');
+// } = require('../../../utils');
 
 // async function enfranchise(comp, actor, amount) {
 //   await send(comp, 'transfer', [actor, etherMantissa(amount)]);

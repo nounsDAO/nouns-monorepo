@@ -21,7 +21,7 @@ import {
   advanceBlocks,
   blockTimestamp,
   setNextBlockTimestamp
-} from '../utils/Ethereum'
+} from '../../utils'
 
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {

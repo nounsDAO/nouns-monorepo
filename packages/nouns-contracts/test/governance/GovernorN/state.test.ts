@@ -23,7 +23,7 @@ import {
   blockNumber,
   increaseTime,
   setNextBlockTimestamp
-} from '../utils/Ethereum'
+} from '../../utils'
 
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
