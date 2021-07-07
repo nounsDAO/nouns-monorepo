@@ -10,7 +10,7 @@
  *
  * - Value passed along using `timelock.executeTransaction{value: proposal.value}` in `execute(uint proposalId)`.
  *   This contract should not hold funds and to guarantee it doesn't, all funds sent are forwarded to
- *   timelock (see `receive()` fallback). Since timelock is the owner of the Nouns token, and proceeds of auctions
+ *   timelock (see `receive()` and `fallback()`). Since timelock is the owner of the Nouns token, and proceeds of auctions
  *   are sent there, without this removal, execution of transactions would fail as this contract
  *   does not have the value to send along.
  *
@@ -21,7 +21,7 @@
  * - Quorum Votes basis points instead of fixed number
  *   due to the Noun token's increasing supply
  *
- * - Per propsosal storing of fixed `proposalThreshold`
+ * - Per proposal storing of fixed `proposalThreshold`
  *   and `quorumVotes` calculated using the Noun token's total supply
  *   at the block the proposal was created and the basis point parameters
  *
@@ -37,8 +37,9 @@
  *   The `veto(uint proposalId)` logic is a modified version of `cancel(uint proposalId)`
  *   A `vetoed` flag was added to the `Proposal` struct to support this.
  *
- * - A `receive()` fallback function that forwards value to timelock. This contract should not hold funds
- *   and to guarantee it doesn't, all funds sent are forwarded to timelock, which acts as treasury.
+ * - Fallback functions `receive()` and `fallback()` that forward value to timelock.
+ *   This contract should not hold funds and to guarantee it doesn't, all funds sent are
+ *   forwarded to timelock, which acts as treasury.
  */
 
 pragma solidity ^0.8.4;
