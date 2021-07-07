@@ -141,7 +141,8 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
 
         emit ProposalCreated(newProposal.id, msg.sender, targets, values, signatures, calldatas, newProposal.startBlock, newProposal.endBlock, description);
 
-        emit ProposalRequirements(newProposal.id, msg.sender, newProposal.startBlock, newProposal.endBlock, newProposal.proposalThreshold, newProposal.quorumVotes, description);
+        /// @notice Updated event with `proposalThreshold` and `quorumVotes`
+        emit ProposalCreatedWithRequirements(newProposal.id, msg.sender, targets, values, signatures, calldatas, newProposal.startBlock, newProposal.endBlock, newProposal.proposalThreshold, newProposal.quorumVotes, description);
 
         return newProposal.id;
     }
