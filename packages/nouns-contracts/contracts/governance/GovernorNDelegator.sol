@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: MIT
 
-// Uses parts of [Open Zeppelin's Proxy.sol] (https://github.com/OpenZeppelin/openzeppelin-contracts/blob/5c8746f56b4bed8cc9e0e044f5f69ab2f9428ce1/contracts/proxy/Proxy.sol) to deal with newer version of Solidity's fallback() and receive()
+/**
+ * Modified version of from [Compound Governance GovernorBravoDelegator](https://github.com/compound-finance/compound-protocol/blob/b9b14038612d846b83f8a009a82c38974ff2dcfe/contracts/Governance/GovernorBravoDelegator.sol)
+ *
+ * This Delegator uses parts of [Open Zeppelin's Proxy.sol] (https://github.com/OpenZeppelin/openzeppelin-contracts/blob/5c8746f56b4bed8cc9e0e044f5f69ab2f9428ce1/contracts/proxy/Proxy.sol) to allow GovernorBravoDelegator to handle fallback() and receive() as per Solidity > 0.6.0
+ */
 
 pragma solidity ^0.8.4;
 

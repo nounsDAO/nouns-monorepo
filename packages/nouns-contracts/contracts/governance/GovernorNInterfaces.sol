@@ -1,5 +1,12 @@
 // SPDX-License-Identifier: MIT
 
+/**
+ * Modified version of [Compound GovernorBravoInterfaces] (https://github.com/compound-finance/compound-protocol/blob/b9b14038612d846b83f8a009a82c38974ff2dcfe/contracts/Governance/GovernorBravoInterfaces.sol)
+ *
+ * GovernorNEvents adds support for changes made by GovernorN to GovernorBravo
+ * See `GovernorNDelegate.sol` for more details
+ */
+
 pragma solidity ^0.8.4;
 
 contract GovernorNEvents {

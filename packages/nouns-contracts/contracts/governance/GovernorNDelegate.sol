@@ -1,5 +1,46 @@
 // SPDX-License-Identifier: MIT
 
+/**
+ * GovernorN forks [Compound Governance GovernorBravo](https://github.com/compound-finance/compound-protocol/blob/b9b14038612d846b83f8a009a82c38974ff2dcfe/contracts/Governance/GovernorBravoDelegate.sol)
+ *
+ * GovernorN REMOVES:
+ * - `initialProposalId` and `_initiate()` due to this being the
+ *   first instance of the governance contract unlike
+ *   GovernorBravo which upgrades GovernorAlpha
+ *
+ * - Value passed along using `timelock.executeTransaction{value: proposal.value}` in `execute(uint proposalId)`.
+ *   This contract should not hold funds and to guarantee it doesn't, all funds sent are forwarded to
+ *   timelock (see `receive()` fallback). Since timelock is the owner of the Nouns token, and proceeds of auctions
+ *   are sent there, without this removal, execution of transactions would fail as this contract
+ *   does not have the value to send along.
+ *
+ * GovernorN ADDS:
+ * - Proposal Threshold basis points instead of fixed number
+ *   due to the Noun token's increasing supply
+ *
+ * - Quorum Votes basis points instead of fixed number
+ *   due to the Noun token's increasing supply
+ *
+ * - Per propsosal storing of fixed `proposalThreshold`
+ *   and `quorumVotes` calculated using the Noun token's total supply
+ *   at the block the proposal was created and the basis point parameters
+ *
+ * - `ProposalCreatedWithRequirements` event that emits `ProposalCreated` parameters with
+ *   the addition of `proposalThreshold` and `quorumVotes`
+ *
+ * - Votes are counted from the block a proposal is created instead of
+ *   the proposal's voting start block to align with the parameters
+ *   stored with the proposal
+ *
+ * - Veto ability which allows `veteor` to halt any proposal at any stage unless
+ *   the proposal is executed.
+ *   The `veto(uint proposalId)` logic is a modified version of `cancel(uint proposalId)`
+ *   A `vetoed` flag was added to the `Proposal` struct to support this.
+ *
+ * - A `receive()` fallback function that forwards value to timelock. This contract should not hold funds
+ *   and to guarantee it doesn't, all funds sent are forwarded to timelock, which acts as treasury.
+ */
+
 pragma solidity ^0.8.4;
 
 import "./GovernorNInterfaces.sol";
@@ -13,25 +54,25 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
     uint public constant MIN_PROPOSAL_THRESHOLD_BPS = 1; // 1 basis point or 0.01%
 
     /// @notice The maximum setable proposal threshold
-    uint public constant MAX_PROPOSAL_THRESHOLD_BPS = 1000; // 1,000 basis points or 10%
+    uint public constant MAX_PROPOSAL_THRESHOLD_BPS = 1_000; // 1,000 basis points or 10%
 
     /// @notice The minimum setable voting period
-    uint public constant MIN_VOTING_PERIOD = 5760; // About 24 hours
+    uint public constant MIN_VOTING_PERIOD = 5_760; // About 24 hours
 
     /// @notice The max setable voting period
-    uint public constant MAX_VOTING_PERIOD = 80640; // About 2 weeks
+    uint public constant MAX_VOTING_PERIOD = 80_640; // About 2 weeks
 
     /// @notice The min setable voting delay
     uint public constant MIN_VOTING_DELAY = 1;
 
     /// @notice The max setable voting delay
-    uint public constant MAX_VOTING_DELAY = 40320; // About 1 week
+    uint public constant MAX_VOTING_DELAY = 40_320; // About 1 week
 
     /// @notice The minimum setable quorum votes basis points
     uint public constant MIN_QUORUM_VOTES_BPS = 200; // 200 basis points or 2%
 
     /// @notice The maximum setable quorum votes basis points
-    uint public constant MAX_QUORUM_VOTES_BPS = 2000; // 2,000 basis points or 20%
+    uint public constant MAX_QUORUM_VOTES_BPS = 2_000; // 2,000 basis points or 20%
 
     /// @notice The maximum number of actions that can be included in a proposal
     uint public constant proposalMaxOperations = 10; // 10 actions
@@ -140,6 +181,7 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
 
         latestProposalIds[newProposal.proposer] = newProposal.id;
 
+        /// @notice Maintains backwards compatibility with GovernorBravo events
         emit ProposalCreated(newProposal.id, msg.sender, targets, values, signatures, calldatas, newProposal.startBlock, newProposal.endBlock, description);
 
         /// @notice Updated event with `proposalThreshold` and `quorumVotes`
@@ -396,7 +438,7 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
       */
     function _setPendingAdmin(address newPendingAdmin) external {
         // Check caller = admin
-        require(msg.sender == admin, "GovernorN:_setPendingAdmin: admin only");
+        require(msg.sender == admin, "GovernorN::_setPendingAdmin: admin only");
 
         // Save current value, if any, for inclusion in log
         address oldPendingAdmin = pendingAdmin;
@@ -414,7 +456,7 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
       */
     function _acceptAdmin() external {
         // Check caller is pendingAdmin and pendingAdmin ≠ address(0)
-        require(msg.sender == pendingAdmin && msg.sender != address(0), "GovernorN:_acceptAdmin: pending admin only");
+        require(msg.sender == pendingAdmin && msg.sender != address(0), "GovernorN::_acceptAdmin: pending admin only");
 
         // Save current values for inclusion in log
         address oldAdmin = admin;
@@ -435,7 +477,7 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
       * @dev Vetoer function for updating vetoer address
       */
     function _setVetoer(address newVetoer) public {
-        require(msg.sender == vetoer, "GovernorN:_setVetoer: vetoer only");
+        require(msg.sender == vetoer, "GovernorN::_setVetoer: vetoer only");
 
         emit NewVetoer(vetoer, newVetoer);
 
@@ -448,7 +490,7 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
       */
     function _burnVetoPower() public {
         // Check caller is pendingAdmin and pendingAdmin ≠ address(0)
-        require(msg.sender == vetoer, "GovernorN:_burnVetoPower: vetoer only");
+        require(msg.sender == vetoer, "GovernorN::_burnVetoPower: vetoer only");
 
         _setVetoer(address(0));
     }
