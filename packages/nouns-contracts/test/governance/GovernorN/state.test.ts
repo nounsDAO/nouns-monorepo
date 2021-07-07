@@ -95,7 +95,6 @@ async function makeProposal(proposer: SignerWithAddress = deployer, mintAmount: 
   callDatas = [encodeParameters(['address'], [deployer.address])];
 
   for (let i=0; transferAmount>0; i++){
-    if (i%10 == 0) continue; // skip id 0, 10, 20... because it's been burned
     await token.transferFrom(deployer.address, transferTo.address, i);
     transferAmount--;
   }

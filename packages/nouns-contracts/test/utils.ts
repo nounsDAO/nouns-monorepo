@@ -101,10 +101,13 @@ export const MintNouns = (token: NounsErc721, burnNoundersTokens: boolean = true
   return async function (amount: number): Promise<void> {
     for (let i=0; i<amount; i++){
       await token.mint();
-      if (!burnNoundersTokens) continue
-      if (i%10 == 0 || (i+1)%10==0) {
-        await token.burn(i%10==0 ? i : i+1)
-      }
+    }
+    if (!burnNoundersTokens) return
+
+    // Make totalSupply match `amount`
+    const burnAmount = (await token.totalSupply()).toNumber() - amount
+    for (let i=amount; i<amount+burnAmount; i++){
+      await token.burn(i)
     }
   }
 }

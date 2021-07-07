@@ -116,8 +116,8 @@ describe("GovernorN#castVote/2", () => {
       await mineBlock();
       await mineBlock();
 
-      await token.transferFrom(deployer.address, account0.address, 1);
-      await token.transferFrom(deployer.address, account1.address, 2);
+      await token.transferFrom(deployer.address, account0.address, 0);
+      await token.transferFrom(deployer.address, account1.address, 1);
 
       await gov.connect(account0).castVote(proposalId, 1);
 
@@ -147,8 +147,8 @@ describe("GovernorN#castVote/2", () => {
       it("and we add that ForVotes", async () => {
         actor = account0
 
+        await token.transferFrom(deployer.address, actor.address, 0);
         await token.transferFrom(deployer.address, actor.address, 1);
-        await token.transferFrom(deployer.address, actor.address, 2);
         await propose(actor)
 
         let beforeFors = (await gov.proposals(proposalId)).forVotes;
@@ -164,8 +164,8 @@ describe("GovernorN#castVote/2", () => {
 
       it("or AgainstVotes corresponding to the caller's support flag.", async () => {
         actor = account1
+        await token.transferFrom(deployer.address, actor.address, 2);
         await token.transferFrom(deployer.address, actor.address, 3);
-        await token.transferFrom(deployer.address, actor.address, 4);
 
         await propose(actor)
 
