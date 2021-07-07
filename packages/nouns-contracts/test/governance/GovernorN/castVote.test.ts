@@ -49,6 +49,8 @@ async function deployGovernor(
   return GovernorNDelegateHarness__factory.connect(_govDelegatorAddress, deployer)
 }
 
+let snapshotId: number;
+
 let token: NounsErc721;
 let deployer: SignerWithAddress;
 let account0: SignerWithAddress;
@@ -65,7 +67,11 @@ let proposalId: EthersBN;
 
 
 async function reset(){
-
+  if (snapshotId) {
+    await ethers.provider.send('evm_revert', [snapshotId]);
+    snapshotId = await ethers.provider.send('evm_snapshot', []);
+    return
+  }
   token = await deployNounsERC721(signers.deployer);
 
   await populateDescriptor(NounsDescriptor__factory.connect(await token.descriptor(), signers.deployer));
@@ -73,7 +79,7 @@ async function reset(){
   await setTotalSupply(token, 10)
 
   gov = await deployGovernor(deployer, token.address)
-
+  snapshotId = await ethers.provider.send('evm_snapshot', []);
 }
 
 async function propose(proposer: SignerWithAddress){

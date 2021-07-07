@@ -59,6 +59,12 @@ function votes(n: number|string){
 }
 
 async function reset(): Promise<void> {
+  if (snapshotId) {
+    await ethers.provider.send('evm_revert', [snapshotId]);
+    snapshotId = await ethers.provider.send('evm_snapshot', []);
+    return
+  }
+
   // nonce 0: Deploy Timelock
   // nonce 1: Deploy GovernorNDelegate
   // nonce 2: Deploy nftDescriptorLibraryFactory
@@ -67,7 +73,6 @@ async function reset(): Promise<void> {
   // nonce 5: Deploy NounsERC721
   // nonce 6: Deploy GovernorNDelegator
   // nonce 7+: populate Descriptor
-
 
   vetoer = deployer
 
@@ -94,6 +99,7 @@ async function reset(): Promise<void> {
 
   await populateDescriptor(NounsDescriptor__factory.connect(await token.descriptor(), deployer));
 
+  snapshotId = await ethers.provider.send('evm_snapshot', []);
 }
 
 async function propose(proposer: SignerWithAddress, mint: boolean = true){
@@ -187,13 +193,15 @@ describe("GovernorN#vetoing", () => {
 
   describe('vetoing works correctly for proposal state', async () => {
     before(reset)
+
     beforeEach(async () => {
       snapshotId = await ethers.provider.send('evm_snapshot', []);
-    });
+    })
 
     afterEach(async () => {
       await ethers.provider.send('evm_revert', [snapshotId]);
-    });
+    })
+
     it('Pending', async () => {
       await propose(account0)
       await expectState(proposalId, "Pending")
