@@ -12,8 +12,8 @@ yarn
 docker-compose up -d
 ```
 
-## Start bots (Development)
+## Start bots
 
 ```sh
-yarn dev
+yarn start
 ```
