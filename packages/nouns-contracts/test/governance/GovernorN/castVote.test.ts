@@ -10,7 +10,7 @@ import {
   deployNounsERC721,
   getSigners,
   TestSigners,
-  MintNouns,
+  setTotalSupply,
   populateDescriptor
 } from '../../utils';
 
@@ -62,7 +62,6 @@ let values: string[];
 let signatures: string[];
 let callDatas: string[];
 let proposalId: EthersBN;
-let mintNouns: (amount: number) => Promise<void>;
 
 
 async function reset(){
@@ -71,9 +70,7 @@ async function reset(){
 
   await populateDescriptor(NounsDescriptor__factory.connect(await token.descriptor(), signers.deployer));
 
-  mintNouns = MintNouns(token)
-
-  await mintNouns(10)
+  await setTotalSupply(token, 10)
 
   gov = await deployGovernor(deployer, token.address)
 

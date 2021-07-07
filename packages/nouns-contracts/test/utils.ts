@@ -104,10 +104,29 @@ export const MintNouns = (token: NounsErc721, burnNoundersTokens: boolean = true
     }
     if (!burnNoundersTokens) return
 
-    // Make totalSupply match `amount`
-    const burnAmount = (await token.totalSupply()).toNumber() - amount
-    for (let i=amount; i<amount+burnAmount; i++){
+    await setTotalSupply(token, amount)
+  }
+}
+
+/**
+ * Mints or burns tokens to target a total supply. Due to Nounders' rewards tokens may be burned and tokenIds will not be sequential
+ */
+export const setTotalSupply = async (token: NounsErc721, newTotalSupply: number): Promise<void> => {
+
+  const totalSupply = (await token.totalSupply()).toNumber()
+
+  if (totalSupply < newTotalSupply) {
+    for (let i=0; i<newTotalSupply-totalSupply; i++){
+      await token.mint();
+    }
+    // If Nounder's reward tokens were minted totalSupply will be more than expected, so run setTotalSupply again to burn extra tokens
+    await setTotalSupply(token, newTotalSupply)
+  }
+
+  if (totalSupply > newTotalSupply){
+    for (let i=newTotalSupply; i<totalSupply; i++){
       await token.burn(i)
     }
+
   }
 }

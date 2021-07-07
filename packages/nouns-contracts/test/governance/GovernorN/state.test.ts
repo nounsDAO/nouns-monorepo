@@ -10,7 +10,7 @@ import {
   deployNounsERC721,
   getSigners,
   TestSigners,
-  MintNouns,
+  setTotalSupply,
   populateDescriptor
 } from '../../utils';
 
@@ -68,8 +68,6 @@ let signatures: string[];
 let callDatas: string[];
 let proposalId: EthersBN;
 
-let mintNouns: (amount: number) => Promise<void>;
-
 let snapshotId: number;
 
 async function expectState(proposalId: number|EthersBN, expectedState: any){
@@ -79,7 +77,7 @@ async function expectState(proposalId: number|EthersBN, expectedState: any){
 
 async function makeProposal(proposer: SignerWithAddress = deployer, mintAmount: number = 5,transferAmount: number = 0, transferTo: SignerWithAddress = proposer, proposalThresholdBPS: number = 1){
 
-  await mintNouns(mintAmount)
+  await setTotalSupply(token, mintAmount)
 
   delay = 4 * 24 * 60 * 60
 
@@ -116,7 +114,6 @@ describe('GovernorN#state/1', () => {
     token = await deployNounsERC721(signers.deployer);
 
     await populateDescriptor(NounsDescriptor__factory.connect(await token.descriptor(), signers.deployer));
-    mintNouns = MintNouns(token);
   });
 
   beforeEach(async () => {
