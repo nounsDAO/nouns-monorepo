@@ -7,10 +7,11 @@ const { ethers } = hardhat
 import { BigNumber as EthersBN } from 'ethers';
 
 import {
-  deployNounsErc721,
+  deployNounsERC721,
   getSigners,
   TestSigners,
-  MintNouns,
+  setTotalSupply,
+  populateDescriptor
 } from '../../utils';
 
 import {
@@ -24,6 +25,7 @@ import {
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsErc721,
+  NounsDescriptor__factory,
   GovernorNDelegator,
   GovernorNDelegator__factory,
   GovernorNDelegate,
@@ -36,29 +38,36 @@ chai.use(solidity);
 const { expect } = chai;
 
 async function reset(): Promise<void> {
+  // nonce 0: Deploy Timelock
+  // nonce 1: Deploy GovernorNDelegate
+  // nonce 2: Deploy nftDescriptorLibraryFactory
+  // nonce 3: Deploy NounsDescriptor
+  // nonce 4: Deploy NounsSeeder
+  // nonce 5: Deploy NounsERC721
+  // nonce 6: Deploy GovernorNDelegator
+  // nonce 7+: populate Descriptor
 
   const govDelegatorAddress = ethers.utils.getContractAddress({
     from: deployer.address,
-    nonce: await deployer.getTransactionCount() + 3
+    nonce: await deployer.getTransactionCount() + 6
   })
+
 
   // Deploy Timelock with pre-computed Delegator address
   const {address: timelockAddress} = await new Timelock__factory(deployer).deploy(govDelegatorAddress, timelockDelay)
 
   // Deploy Delegate
   const {address: govDelegateAddress } = await new GovernorNDelegate__factory(deployer).deploy()
-
   // Deploy Nouns token
-  token = await deployNounsErc721()
-
-  // bind MintNouns to token contract
-  mintNouns = MintNouns(token)
+  token = await deployNounsERC721(deployer);
 
   // Deploy Delegator
-  await new GovernorNDelegator__factory(deployer).deploy(timelockAddress, token.address, address(0), timelockAddress, govDelegateAddress, 5760, 1, proposalThresholdBPS, quorumVotesBPS)
+  const governorNDelegator = await new GovernorNDelegator__factory(deployer).deploy(timelockAddress, token.address, address(0), timelockAddress, govDelegateAddress, 5760, 1, proposalThresholdBPS, quorumVotesBPS)
 
   // Cast Delegator as Delegate
   gov = GovernorNDelegate__factory.connect(govDelegatorAddress, deployer)
+
+  await populateDescriptor(NounsDescriptor__factory.connect(await token.descriptor(), deployer));
 }
 
 async function propose(proposer: SignerWithAddress){
@@ -116,7 +125,7 @@ describe("GovernorN#inflationHandling", () => {
 
   it('returns quorum votes and proposal threshold based on Noun total supply', async () => {
     // Total Supply = 40
-    await mintNouns(40)
+    await setTotalSupply(token, 40)
 
     await mineBlock()
 
@@ -161,7 +170,7 @@ describe("GovernorN#inflationHandling", () => {
 
   it('returns updated quorum votes and proposal threshold when total supply changes', async () => {
     // Total Supply = 80
-    await mintNouns(40)
+    await setTotalSupply(token, 80)
 
     // 6.78% of 80 = 5.424, floored to 5
     expect(await gov.proposalThreshold()).to.equal(5)
