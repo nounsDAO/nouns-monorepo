@@ -7,10 +7,11 @@ const { ethers } = hardhat
 import { BigNumber as EthersBN } from 'ethers';
 
 import {
-  deployNounsErc721,
+  deployNounsERC721,
   getSigners,
   TestSigners,
-  MintNouns,
+  setTotalSupply,
+  populateDescriptor
 } from '../../utils';
 
 import {
@@ -25,6 +26,7 @@ import {
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsErc721,
+  NounsDescriptor__factory,
   GovernorNDelegator,
   GovernorNDelegator__factory,
   GovernorNDelegate,
@@ -57,11 +59,21 @@ function votes(n: number|string){
 }
 
 async function reset(): Promise<void> {
+  // nonce 0: Deploy Timelock
+  // nonce 1: Deploy GovernorNDelegate
+  // nonce 2: Deploy nftDescriptorLibraryFactory
+  // nonce 3: Deploy NounsDescriptor
+  // nonce 4: Deploy NounsSeeder
+  // nonce 5: Deploy NounsERC721
+  // nonce 6: Deploy GovernorNDelegator
+  // nonce 7+: populate Descriptor
+
+
   vetoer = deployer
 
   const govDelegatorAddress = ethers.utils.getContractAddress({
     from: deployer.address,
-    nonce: await deployer.getTransactionCount() + 3
+    nonce: await deployer.getTransactionCount() + 6
   })
 
   // Deploy Timelock with pre-computed Delegator address
@@ -72,10 +84,7 @@ async function reset(): Promise<void> {
   const {address: govDelegateAddress } = await new GovernorNDelegate__factory(deployer).deploy()
 
   // Deploy Nouns token
-  token = await deployNounsErc721()
-
-  // bind MintNouns to token contract
-  mintNouns = MintNouns(token)
+  token = await deployNounsERC721(deployer)
 
   // Deploy Delegator
   await new GovernorNDelegator__factory(deployer).deploy(timelockAddress, token.address, vetoer.address, timelockAddress, govDelegateAddress, 5760, 1, proposalThresholdBPS, quorumVotesBPS)
@@ -83,17 +92,17 @@ async function reset(): Promise<void> {
   // Cast Delegator as Delegate
   gov = GovernorNDelegate__factory.connect(govDelegatorAddress, deployer)
 
-}
-
-async function mintAndTransfer(to: string, amount: number = 1){
-  await mintNouns(amount)
-  for(;amount>0;amount--){
-    await token.transferFrom(deployer.address, to, (await token.totalSupply()).sub(amount));
-  }
+  await populateDescriptor(NounsDescriptor__factory.connect(await token.descriptor(), deployer));
 
 }
+
 async function propose(proposer: SignerWithAddress, mint: boolean = true){
-  if (mint) await mintAndTransfer(proposer.address)
+  if (mint) {
+    await setTotalSupply(token, 1)
+    if (proposer.address !== deployer.address){
+      await token.transferFrom(deployer.address, proposer.address, 0);
+    }
+  }
   await mineBlock()
   targets = [account0.address];
   values = ["0"];
@@ -103,6 +112,8 @@ async function propose(proposer: SignerWithAddress, mint: boolean = true){
   await gov.connect(proposer).propose(targets, values, signatures, callDatas, "do nothing");
   proposalId = await gov.latestProposalIds(proposer.address);
 }
+
+let snapshotId: number;
 
 let token: NounsErc721;
 let deployer: SignerWithAddress;
@@ -175,7 +186,14 @@ describe("GovernorN#vetoing", () => {
   })
 
   describe('vetoing works correctly for proposal state', async () => {
-    beforeEach(reset)
+    before(reset)
+    beforeEach(async () => {
+      snapshotId = await ethers.provider.send('evm_snapshot', []);
+    });
+
+    afterEach(async () => {
+      await ethers.provider.send('evm_revert', [snapshotId]);
+    });
     it('Pending', async () => {
       await propose(account0)
       await expectState(proposalId, "Pending")
@@ -201,12 +219,17 @@ describe("GovernorN#vetoing", () => {
       await expectState(proposalId, "Vetoed")
     })
     it('Defeated', async () => {
-      await mintAndTransfer(account1.address,2)
-      await propose(account0)
+      await setTotalSupply(token, 3)
+      await token.transferFrom(deployer.address, account0.address, 0)
+      await token.transferFrom(deployer.address, account1.address, 1)
+      await token.transferFrom(deployer.address, account1.address, 2)
+      await propose(account0,false)
       await mineBlock()
       await mineBlock()
       await expectState(proposalId, "Active")
+      // account0 with 1 vote casts for vote
       await gov.connect(account0).castVote(proposalId,1)
+      // account1 with 2 votes casts against vote
       await gov.connect(account1).castVote(proposalId,0)
       await advanceBlocks(5780)
       await expectState(proposalId, "Defeated")
@@ -214,12 +237,17 @@ describe("GovernorN#vetoing", () => {
       await expectState(proposalId, "Vetoed")
     })
     it('Succeeded', async () => {
-      await mintAndTransfer(account1.address,2)
-      await propose(account0)
+      await setTotalSupply(token, 3)
+      await token.transferFrom(deployer.address, account0.address, 0)
+      await token.transferFrom(deployer.address, account1.address, 1)
+      await token.transferFrom(deployer.address, account1.address, 2)
+      await propose(account0,false)
       await mineBlock()
       await mineBlock()
       await expectState(proposalId, "Active")
+      // account0 with 1 vote casts against vote
       await gov.connect(account0).castVote(proposalId,0)
+      // account1 with 2 votes casts for vote
       await gov.connect(account1).castVote(proposalId,1)
       await advanceBlocks(5780)
       await expectState(proposalId, "Succeeded")
