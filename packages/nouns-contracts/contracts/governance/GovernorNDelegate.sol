@@ -136,8 +136,9 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
         newProposal.abstainVotes = 0;
         newProposal.canceled = false;
         newProposal.executed = false;
+        newProposal.vetoed = false;
 
-        latestProposalIds[newProposal.proposer] = proposalCount;
+        latestProposalIds[newProposal.proposer] = newProposal.id;
 
         emit ProposalCreated(newProposal.id, msg.sender, targets, values, signatures, calldatas, newProposal.startBlock, newProposal.endBlock, description);
 
