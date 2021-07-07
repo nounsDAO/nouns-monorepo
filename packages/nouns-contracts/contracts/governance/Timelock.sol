@@ -30,9 +30,6 @@ contract Timelock {
         delay = delay_;
     }
 
-    // @TODO: check if this should be fallback() or receive()
-    //function() external payable { }
-
     function setDelay(uint delay_) public {
         require(msg.sender == address(this), "Timelock::setDelay: Call must come from Timelock.");
         require(delay_ >= MINIMUM_DELAY, "Timelock::setDelay: Delay must exceed minimum delay.");
@@ -77,7 +74,7 @@ contract Timelock {
         emit CancelTransaction(txHash, target, value, signature, data, eta);
     }
 
-    function executeTransaction(address target, uint value, string memory signature, bytes memory data, uint eta) public payable returns (bytes memory) {
+    function executeTransaction(address target, uint value, string memory signature, bytes memory data, uint eta) public returns (bytes memory) {
         require(msg.sender == admin, "Timelock::executeTransaction: Call must come from admin.");
 
         bytes32 txHash = keccak256(abi.encode(target, value, signature, data, eta));
@@ -108,4 +105,8 @@ contract Timelock {
         // solium-disable-next-line security/no-block-members
         return block.timestamp;
     }
+
+    receive() external payable {}
+
+    fallback() external payable {}
 }
