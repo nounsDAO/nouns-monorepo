@@ -1,0 +1,65 @@
+.activityContainer {
+  padding: 2rem;
+  color: white;
+}
+
+.activityContainer h2 {
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.activityContainer ul {
+  padding: 0;
+  list-style-type: none;
+  overflow-y: hidden;
+}
+
+.activityContainer li {
+  font-weight: bold;
+  margin: 0.5rem 0rem;
+}
+
+.bidBtn {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  border: 0 none;
+  background-color: #6da886;
+  width: 40%;
+  height: 20%;
+  font-weight: bold;
+  font-size: x-large;
+  color: white;
+}
+
+.bidInput {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border-radius: 0;
+  width: 60%;
+  height: 20%;
+  font-weight: bold;
+  font-size: x-large;
+  color: black;
+  padding-left: 1rem;
+  border: 0.5px solid rgb(231, 231, 231);
+  border-top: 0 none;
+  border-left: 0 none;
+}
+.bidInput:focus,
+.bidInput:focus {
+  outline: none;
+}
+
+/* REMOVE UP/DOWN ARROWS FROM INPUT */
+/* Chrome, Safari, Edge, Opera */
+.bidInput::-webkit-outer-spin-button,
+.bidInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+.bidInput[type='number'] {
+  -moz-appearance: textfield;
+}

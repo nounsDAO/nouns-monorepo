@@ -1,0 +1,6 @@
+.img {
+  image-rendering: -moz-crisp-edges;
+  image-rendering: pixelated;
+  width: 100%;
+  height: auto;
+}
