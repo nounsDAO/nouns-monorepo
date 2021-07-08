@@ -1,4 +1,29 @@
+type Seed @entity {
+  id: ID!             # The Noun's ERC721 token id
+  background: BigInt! # The background index
+  body: BigInt!       # The body index
+  accessory: BigInt!  # The accessory index
+  head: BigInt!       # The head index
+  glasses: BigInt!    # The glasses index
+}
+
+type Noun @entity {
+  id: ID!        # The Noun's ERC721 token id
+  seed: Seed!    # The seed used to determine the Noun's traits
+  owner: Account # The owner of the Noun
+}
+
+type Account @entity {
+  id: ID!                                      # The Ethereum address
+  nouns: [Noun!]! @derivedFrom(field: "owner") # The Nouns owned by this account
+}
+
 type Auction @entity {
-  id: ID! # The Noun's ERC721 token id being auctioned.
-  nounId: BigInt!
+  id: ID!            # The Noun's ERC721 token id
+  noun: Noun!        # The Noun
+  amount: BigInt!    # The current highest bid amount
+  startTime: BigInt! # The time that the auction started
+  endTime: BigInt!   # The time that the auction is scheduled to end
+  bidder: Account    # The account with the current highest bid
+  settled: Boolean!  # Whether or not the auction has been settled
 }
