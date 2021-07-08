@@ -11,7 +11,7 @@ const TopTorso = () => {
     <Col lg={12} className={classes.topTorso}>
       <Row noGutters={true}>
         {nounImgs.map(img => (
-          <PastNoun imgPath={img} />
+          <PastNoun imgPath={img} key={Math.random()} />
         ))}
       </Row>
     </Col>

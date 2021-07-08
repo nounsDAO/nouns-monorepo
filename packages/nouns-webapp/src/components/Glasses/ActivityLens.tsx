@@ -7,10 +7,10 @@ const ActivityLens = () => {
       <div className={classes.activityContainer}>
         <h2>Recent Activity:</h2>
         <ul>
-          <li>0.01 0xabc 1h</li>
-          <li>0.01 0xabc 1h</li>
-          <li>0.01 0xabc 1h</li>
-          <li>0.01 0xabc 1h</li>
+          <li key={Math.random()}>0.01 0xabc 1h</li>
+          <li key={Math.random()}>0.01 0xabc 1h</li>
+          <li key={Math.random()}>0.01 0xabc 1h</li>
+          <li key={Math.random()}>0.01 0xabc 1h</li>
         </ul>
       </div>
       <button className={classes.bidBtn}>BID</button>
