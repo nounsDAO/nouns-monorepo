@@ -9,16 +9,13 @@ import {
   getSigners,
   TestSigners,
   setTotalSupply,
-  populateDescriptor
-} from '../utils';
-
-import {
+  populateDescriptor,
   minerStart,
   minerStop,
   mineBlock,
   address,
   chainId
-} from './utils/Ethereum'
+} from '../utils';
 
 chai.use(solidity);
 const { expect } = chai;
