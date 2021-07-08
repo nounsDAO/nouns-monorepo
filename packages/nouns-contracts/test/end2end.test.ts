@@ -250,7 +250,7 @@ describe('End to End test with deployment, auction, proposing, voting, executing
 
   it('does not allow GovernorN to accept funds', async () => {
 
-    let error1 = new Error()
+    let error1;
 
     // GovernorN does not accept value without calldata
     try {
@@ -262,9 +262,9 @@ describe('End to End test with deployment, auction, proposing, voting, executing
       error1 = e
     }
 
-    expect(error1.message).to.match(/no fallback nor receive function/)
+    expect(error1)
 
-    let error2 = new Error()
+    let error2;
 
     // GovernorN does not accept value with calldata
     try {
@@ -277,7 +277,7 @@ describe('End to End test with deployment, auction, proposing, voting, executing
       error2 = e
     }
 
-    expect(error2.message).to.match(/no fallback function/)
+    expect(error2)
 
   })
 
