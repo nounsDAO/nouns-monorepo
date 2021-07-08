@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
-import './App.css';
 import { useEthers } from '@usedapp/core';
-import NavBar from './components/NavBar';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { useAppDispatch } from './hooks';
 import { setActiveAccount } from './state/slices/account';
-import { Router, Switch, Route,  } from 'react-router-dom';
-import OpenSeaItem from './layout/OpenSeaItem';
+import { Router, Switch, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import NavBar from './components/NavBar';
+import OpenSeaItem from './layout/OpenSeaItem';
 import CurrentAuction from './components/CurrentAuction';
 
 function App() {
