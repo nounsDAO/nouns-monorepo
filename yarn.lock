@@ -1005,6 +1005,31 @@
     unique-filename "^1.1.1"
     which "^1.3.1"
 
+"@float-capital/solidity-coverage@^0.7.17":
+  version "0.7.17"
+  resolved "https://registry.yarnpkg.com/@float-capital/solidity-coverage/-/solidity-coverage-0.7.17.tgz#454eb53b00dd5c80d7b253db1513ccd9cfb68424"
+  integrity sha512-LeG+GcmrGxLWmSn5KReAp3Ii+8v5e0HXb6/ZQJPO4zNG8jpE96QRFys+NBq4A8VVgzdUyFj5ipnR5TiGyhuUgw==
+  dependencies:
+    "@solidity-parser/parser" "^0.12.0"
+    "@truffle/provider" "^0.2.24"
+    chalk "^2.4.2"
+    death "^1.1.0"
+    detect-port "^1.3.0"
+    fs-extra "^8.1.0"
+    ganache-cli "^6.11.0"
+    ghost-testrpc "^0.0.2"
+    global-modules "^2.0.0"
+    globby "^10.0.1"
+    jsonschema "^1.2.4"
+    lodash "^4.17.15"
+    node-emoji "^1.10.0"
+    pify "^4.0.1"
+    recursive-readdir "^2.2.2"
+    sc-istanbul "^0.4.5"
+    semver "^7.3.4"
+    shelljs "^0.8.3"
+    web3-utils "^1.3.0"
+
 "@google-cloud/paginator@^3.0.0":
   version "3.0.5"
   resolved "https://registry.yarnpkg.com/@google-cloud/paginator/-/paginator-3.0.5.tgz#9d6b96c421a89bd560c1bc2c197c7611ef21db6c"
@@ -13429,31 +13454,6 @@ solidity-comments-extractor@^0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/solidity-comments-extractor/-/solidity-comments-extractor-0.0.7.tgz#99d8f1361438f84019795d928b931f4e5c39ca19"
   integrity sha512-wciNMLg/Irp8OKGrh3S2tfvZiZ0NEyILfcRCXCD4mp7SgK/i9gzLfhY2hY7VMCQJ3kH9UB9BzNdibIVMchzyYw==
-
-solidity-coverage@^0.7.16:
-  version "0.7.16"
-  resolved "https://registry.yarnpkg.com/solidity-coverage/-/solidity-coverage-0.7.16.tgz#c8c8c46baa361e2817bbf275116ddd2ec90a55fb"
-  integrity sha512-ttBOStywE6ZOTJmmABSg4b8pwwZfYKG8zxu40Nz+sRF5bQX7JULXWj/XbX0KXps3Fsp8CJXg8P29rH3W54ipxw==
-  dependencies:
-    "@solidity-parser/parser" "^0.12.0"
-    "@truffle/provider" "^0.2.24"
-    chalk "^2.4.2"
-    death "^1.1.0"
-    detect-port "^1.3.0"
-    fs-extra "^8.1.0"
-    ganache-cli "^6.11.0"
-    ghost-testrpc "^0.0.2"
-    global-modules "^2.0.0"
-    globby "^10.0.1"
-    jsonschema "^1.2.4"
-    lodash "^4.17.15"
-    node-emoji "^1.10.0"
-    pify "^4.0.1"
-    recursive-readdir "^2.2.2"
-    sc-istanbul "^0.4.5"
-    semver "^7.3.4"
-    shelljs "^0.8.3"
-    web3-utils "^1.3.0"
 
 sort-keys@^2.0.0:
   version "2.0.0"
