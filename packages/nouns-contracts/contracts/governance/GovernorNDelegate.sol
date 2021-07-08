@@ -143,7 +143,7 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
 
         temp.proposalThreshold = bps2Uint(proposalThresholdBPS, temp.totalSupply);
 
-        require(nouns.getPriorVotes(msg.sender, sub256(block.number, 1)) > temp.proposalThreshold, "GovernorN::propose: proposer votes below proposal threshold");
+        require(nouns.getPriorVotes(msg.sender, block.number-1) > temp.proposalThreshold, "GovernorN::propose: proposer votes below proposal threshold");
         require(targets.length == values.length && targets.length == signatures.length && targets.length == calldatas.length, "GovernorN::propose: proposal function information arity mismatch");
         require(targets.length != 0, "GovernorN::propose: must provide actions");
         require(targets.length <= proposalMaxOperations, "GovernorN::propose: too many actions");
@@ -155,8 +155,8 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
           require(proposersLatestProposalState != ProposalState.Pending, "GovernorN::propose: one live proposal per proposer, found an already pending proposal");
         }
 
-        temp.startBlock = add256(block.number, votingDelay);
-        temp.endBlock = add256(temp.startBlock, votingPeriod);
+        temp.startBlock = block.number + votingDelay;
+        temp.endBlock = temp.startBlock + votingPeriod;
 
         proposalCount++;
         Proposal storage newProposal = proposals[proposalCount];
@@ -197,7 +197,7 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
     function queue(uint proposalId) external {
         require(state(proposalId) == ProposalState.Succeeded, "GovernorN::queue: proposal can only be queued if it is succeeded");
         Proposal storage proposal = proposals[proposalId];
-        uint eta = add256(block.timestamp, timelock.delay());
+        uint eta = block.timestamp + timelock.delay();
         for (uint i = 0; i < proposal.targets.length; i++) {
             queueOrRevertInternal(proposal.targets[i], proposal.values[i], proposal.signatures[i], proposal.calldatas[i], eta);
         }
@@ -232,7 +232,7 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
         require(state(proposalId) != ProposalState.Executed, "GovernorN::cancel: cannot cancel executed proposal");
 
         Proposal storage proposal = proposals[proposalId];
-        require(msg.sender == proposal.proposer || nouns.getPriorVotes(proposal.proposer, sub256(block.number, 1)) < proposal.proposalThreshold, "GovernorN::cancel: proposer above threshold");
+        require(msg.sender == proposal.proposer || nouns.getPriorVotes(proposal.proposer, block.number-1) < proposal.proposalThreshold, "GovernorN::cancel: proposer above threshold");
 
         proposal.canceled = true;
         for (uint i = 0; i < proposal.targets.length; i++) {
@@ -306,7 +306,7 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
             return ProposalState.Succeeded;
         } else if (proposal.executed) {
             return ProposalState.Executed;
-        } else if (block.timestamp >= add256(proposal.eta, timelock.GRACE_PERIOD())) {
+        } else if (block.timestamp >= proposal.eta + timelock.GRACE_PERIOD()) {
             return ProposalState.Expired;
         } else {
             return ProposalState.Queued;
@@ -363,11 +363,11 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
         uint96 votes = nouns.getPriorVotes(voter, proposal.startBlock-votingDelay);
 
         if (support == 0) {
-            proposal.againstVotes = add256(proposal.againstVotes, votes);
+            proposal.againstVotes = proposal.againstVotes + votes;
         } else if (support == 1) {
-            proposal.forVotes = add256(proposal.forVotes, votes);
+            proposal.forVotes = proposal.forVotes + votes;
         } else if (support == 2) {
-            proposal.abstainVotes = add256(proposal.abstainVotes, votes);
+            proposal.abstainVotes = proposal.abstainVotes + votes;
         }
 
         receipt.hasVoted = true;
@@ -529,17 +529,6 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
 
     function bps2Uint(uint bps, uint number) internal pure returns (uint) {
         return number * bps / 10000;
-    }
-
-    function add256(uint256 a, uint256 b) internal pure returns (uint) {
-        uint c = a + b;
-        require(c >= a, "addition overflow");
-        return c;
-    }
-
-    function sub256(uint256 a, uint256 b) internal pure returns (uint) {
-        require(b <= a, "subtraction underflow");
-        return a - b;
     }
 
     function getChainIdInternal() internal view returns (uint) {
