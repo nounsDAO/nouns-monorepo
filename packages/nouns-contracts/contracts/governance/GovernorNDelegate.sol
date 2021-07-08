@@ -49,7 +49,7 @@ import "./GovernorNInterfaces.sol";
 contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
 
     /// @notice The name of this contract
-    string public constant name = "GovernerN";
+    string public constant name = "GovernorN";
 
     /// @notice The minimum setable proposal threshold
     uint public constant MIN_PROPOSAL_THRESHOLD_BPS = 1; // 1 basis point or 0.01%
@@ -139,7 +139,6 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
 
         ProposalTemp memory temp;
 
-        /// @notice totalSupply returns the total number of Nouns, but the total number of
         temp.totalSupply = nouns.totalSupply();
 
         temp.proposalThreshold = bps2Uint(proposalThresholdBPS, temp.totalSupply);
