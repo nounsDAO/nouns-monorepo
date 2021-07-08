@@ -8,11 +8,9 @@
  *   first instance of the governance contract unlike
  *   GovernorBravo which upgrades GovernorAlpha
  *
- * - Value passed along using `timelock.executeTransaction{value: proposal.value}` in `execute(uint proposalId)`.
- *   This contract should not hold funds and to guarantee it doesn't, all funds sent are forwarded to
- *   timelock (see `receive()` and `fallback()`). Since timelock is the owner of the Nouns token, and proceeds of auctions
- *   are sent there, without this removal, execution of transactions would fail as this contract
- *   does not have the value to send along.
+ * - Value passed along using `timelock.executeTransaction{value: proposal.value}`
+ *   in `execute(uint proposalId)`. This contract should not hold funds and does not
+ *   implement `receive()` or `fallback()` functions.
  *
  * GovernorN ADDS:
  * - Proposal Threshold basis points instead of fixed number
@@ -36,10 +34,6 @@
  *   the proposal is executed.
  *   The `veto(uint proposalId)` logic is a modified version of `cancel(uint proposalId)`
  *   A `vetoed` flag was added to the `Proposal` struct to support this.
- *
- * - Fallback functions `receive()` and `fallback()` that forward value to timelock.
- *   This contract should not hold funds and to guarantee it doesn't, all funds sent are
- *   forwarded to timelock, which acts as treasury.
  */
 
 pragma solidity ^0.8.4;
@@ -509,22 +503,6 @@ contract GovernorNDelegate is GovernorNDelegateStorageV1, GovernorNEvents {
       */
     function quorumVotes() public view returns (uint){
         return bps2Uint(quorumVotesBPS, nouns.totalSupply());
-    }
-
-    receive() external payable {
-        _fallback();
-    }
-
-    fallback() external payable {
-        _fallback();
-    }
-
-    /**
-     * @notice Forwards any value sent to this contract to timelock
-     */
-    function _fallback() internal{
-        (bool success, ) = address(timelock).call{value: msg.value}("");
-        require(success, "GovernorN::_fallback: Transaction execution reverted.");
     }
 
     function bps2Uint(uint bps, uint number) internal pure returns (uint) {

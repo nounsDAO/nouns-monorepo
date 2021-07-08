@@ -248,38 +248,56 @@ describe('End to End test with deployment, auction, proposing, voting, executing
     expect(await ethers.provider.getBalance(address(2))).to.equal(RESERVE_PRICE)
   })
 
-  it('does not allow GovernorN to hold funds, forwards funds to timelock', async () => {
+  it('does not allow GovernorN to accept funds', async () => {
+
+    let error1 = new Error()
+
+    // GovernorN does not accept value without calldata
+    try {
+      await bidderA.sendTransaction({
+        to: gov.address,
+        value: 10
+      })
+    } catch(e){
+      error1 = e
+    }
+
+    expect(error1.message).to.match(/no fallback nor receive function/)
+
+    let error2 = new Error()
+
+    // GovernorN does not accept value with calldata
+    try {
+      await bidderA.sendTransaction({
+        data: "0xb6b55f250000000000000000000000000000000000000000000000000000000000000001",
+        to: gov.address,
+        value: 10
+      })
+    } catch(e){
+      error2 = e
+    }
+
+    expect(error2.message).to.match(/no fallback function/)
+
+  })
+
+  it('allows Timelock to receive funds', async ()=> {
 
     // test receive()
     await bidderA.sendTransaction({
-      to: gov.address,
+      to: timelock.address,
       value: 10
     })
 
-    expect(await ethers.provider.getBalance(gov.address)).to.equal(0)
-    expect(await ethers.provider.getBalance(await gov.implementation())).to.equal(0)
     expect(await ethers.provider.getBalance(timelock.address)).to.equal(10)
 
     // test fallback() calls deposit(uint) which is not implemented
     await bidderA.sendTransaction({
       data: "0xb6b55f250000000000000000000000000000000000000000000000000000000000000001",
-      to: gov.address,
+      to:  timelock.address,
       value: 10
     })
 
-    expect(await ethers.provider.getBalance(gov.address)).to.equal(0)
-    expect(await ethers.provider.getBalance(await gov.implementation())).to.equal(0)
     expect(await ethers.provider.getBalance(timelock.address)).to.equal(20)
-
-    // test receive() directly on delegate contract
-    await bidderA.sendTransaction({
-      to: await gov.implementation(),
-      value: 10
-    })
-
-    expect(await ethers.provider.getBalance(gov.address)).to.equal(0)
-    expect(await ethers.provider.getBalance(await gov.implementation())).to.equal(0)
-    // timelock is zero address if calling implemenation not through proxy
-    expect(await ethers.provider.getBalance(address(0))).to.equal(10)
   })
 })
