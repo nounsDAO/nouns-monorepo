@@ -166,7 +166,7 @@ describe("GovernorN#vetoing", () => {
   })
 
   it('rejects setting a new vetoer when sender is not vetoer', async () => {
-    await expect(gov.connect(account0)._setVetoer(account1.address)).revertedWith('GovernorN:_setVetoer: vetoer only')
+    await expect(gov.connect(account0)._setVetoer(account1.address)).revertedWith('GovernorN::_setVetoer: vetoer only')
   })
 
   it('allows setting a new vetoer when sender is vetoer', async () => {
@@ -184,7 +184,7 @@ describe("GovernorN#vetoing", () => {
   it('burns veto power correctly', async () => {
      // vetoer is still set
     expect(await gov.vetoer()).to.equal(vetoer.address);
-    await expect(gov._burnVetoPower()).revertedWith("GovernorN:_burnVetoPower: vetoer only")
+    await expect(gov._burnVetoPower()).revertedWith("GovernorN::_burnVetoPower: vetoer only")
     // burn
     await gov.connect(vetoer)._burnVetoPower()
     expect(await gov.vetoer()).to.equal(address(0));
