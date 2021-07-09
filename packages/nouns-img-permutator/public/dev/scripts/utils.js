@@ -28,8 +28,9 @@ var selectedDisplayMode = DISPLAY_MODE.TILED;
  * @param {String} data Base64 image data 
  * @param {[Number]} dominantColorHSL array of values indicating hue, saturation and lightness
  * @param {DISPLAY_MODE} displayMode Mode to add noun img with 
+ * @param {[String]} layers Array of strings describing the layers that make up the noun img.
  */
-function addNounImg(data, dominantColorHSL, displayMode) {    
+function addNounImg(data, dominantColorHSL, displayMode, layers) {    
 
     var nounsDiv = document.getElementById("nouns")
 
@@ -44,6 +45,7 @@ function addNounImg(data, dominantColorHSL, displayMode) {
         img.setAttribute('src', data)
         img.classList.add('noun-img')
         img.classList.add('pixelated')
+        addLayersTooltipToElement(img, layers)
 
         // create hsl css to set as bg color 
         let hsl = `hsl(${dominantColorHSL[0]},${dominantColorHSL[1]-10}%,${70}%)`
@@ -61,16 +63,19 @@ function addNounImg(data, dominantColorHSL, displayMode) {
         imgSm.setAttribute('src', data)
         imgSm.classList.add('noun-img-sm')
         imgSm.classList.add('pixelated')
+        addLayersTooltipToElement(imgSm, layers)
     
         let imgMd = document.createElement('img')
         imgMd.setAttribute('src', data)
         imgMd.classList.add('noun-img-md')
         imgMd.classList.add('pixelated')
+        addLayersTooltipToElement(imgMd, layers)
     
         let imgLg = document.createElement('img')
         imgLg.setAttribute('src', data)
         imgLg.classList.add('noun-img-lg')
         imgLg.classList.add('pixelated')
+        addLayersTooltipToElement(imgLg, layers)
 
         // create hsl css to set as bg color 
         let hsl = `hsl(${dominantColorHSL[0]},${dominantColorHSL[1]-10}%,${70}%)`
@@ -83,7 +88,6 @@ function addNounImg(data, dominantColorHSL, displayMode) {
         colThreeColumn.appendChild(imgLg)
         nounsDiv.insertBefore(colThreeColumn, nounsDiv.children[0])
     }
-
 }
 
 /** 
@@ -96,16 +100,14 @@ function displayModeChanged(element) {
 
     if (element.id == 'scaled-display-radio-btn') {
         selectedDisplayMode = DISPLAY_MODE.SCALED
-        nounsData.forEach(nounData => {
-            console.log(nounsData)
-            addNounImg(nounData.base64, nounData.dominantColorHSL, DISPLAY_MODE.SCALED)
-        })
+
     } else {
         selectedDisplayMode = DISPLAY_MODE.TILED
-        nounsData.forEach(nounData => {
-            addNounImg(nounData.base64, nounData.dominantColorHSL, DISPLAY_MODE.TILED)
-        })
     }
+    nounsData.forEach(nounData => {
+        addNounImg(nounData.base64, nounData.dominantColorHSL, selectedDisplayMode, nounData.layers)
+    })
+    initTooltips()
 }
 
 /** 
@@ -155,6 +157,7 @@ function displayModeChanged(element) {
     })
 }
 
+
 /**
  * Add dropdown button representing layer and its corresponding options
  * @param {Object} layer Object representing a layer containing properties `object.name` and `object.options`
@@ -167,8 +170,7 @@ function addButtonDropdownWithOptions(layer) {
     column.classList.add('col-lg-4')
     
     let btnGroup = document.createElement('div')
-    btnGroup.classList.add('btn-group')
-    btnGroup.id = 'layers-dropdown-buttons'    
+    btnGroup.classList.add('dropdown')
     btnGroup.style.width = '100%'
 
     // button
@@ -178,16 +180,18 @@ function addButtonDropdownWithOptions(layer) {
     button.classList.add('btn')
     button.classList.add('btn-primary')
     button.classList.add('dropdown-toggle')
-    button.setAttribute('data-toggle', 'dropdown')
-    button.setAttribute('aria-haspopup', 'true')
+    button.id = layer.name
+    button.setAttribute('data-bs-toggle', 'dropdown')
     button.setAttribute('aria-expanded', 'false')
     button.textContent = layer.name
     button.style.width = '100%'
 
-    let dropDownMenu = document.createElement('div')
+    let dropDownMenu = document.createElement('ul')
     dropDownMenu.classList.add('dropdown-menu')
+    dropDownMenu.setAttribute('aria-labelledby', layer.name)
 
     // random option
+    let listItem = document.createElement('li')
     let randLink = document.createElement('a')
     randLink.classList.add('dropdown-item')
     randLink.href = '#'
@@ -195,15 +199,19 @@ function addButtonDropdownWithOptions(layer) {
     randLink.dataset.layerName = layer.name
     randLink.dataset.optionName = 'random'
     randLink.onclick = () => { layerOptionSelected(randLink.getAttribute('data-layer-name'), randLink.getAttribute('data-option-name')) }
-    dropDownMenu.appendChild(randLink)
+    listItem.appendChild(randLink)
+    dropDownMenu.appendChild(listItem)
 
     // separator
-    let separatorDiv = document.createElement('div')
+    let listItemDivider = document.createElement('li')
+    let separatorDiv = document.createElement('hr')
     separatorDiv.classList.add('dropdown-divider')
-    dropDownMenu.appendChild(separatorDiv)
+    listItemDivider.appendChild(separatorDiv)
+    dropDownMenu.appendChild(listItemDivider)
 
     // options
     layer.options.forEach(option => {
+        let listItem = document.createElement('li')
         let link = document.createElement('a')
         link.classList.add('dropdown-item')
         link.href = '#'
@@ -211,7 +219,8 @@ function addButtonDropdownWithOptions(layer) {
         link.dataset.layerName = layer.name
         link.dataset.optionName = option
         link.onclick = () => { layerOptionSelected(link.getAttribute('data-layer-name'), link.getAttribute('data-option-name')) }
-        dropDownMenu.appendChild(link)
+        listItem.appendChild(link)
+        dropDownMenu.appendChild(listItem)
     })
 
     btnGroup.appendChild(button)
@@ -220,6 +229,7 @@ function addButtonDropdownWithOptions(layer) {
     div.appendChild(column)
 
 }
+
 
 /**
  * Adds dropdown button for choosing source.
@@ -233,8 +243,7 @@ function addButtonDropdownWithOptions(layer) {
     column.classList.add('col-md-12')
     
     let btnGroup = document.createElement('div')
-    btnGroup.classList.add('btn-group')
-    btnGroup.id = 'layers-dropdown-buttons'    
+    btnGroup.classList.add('dropdown')
     btnGroup.style.width = "100%";
 
     // button
@@ -244,24 +253,26 @@ function addButtonDropdownWithOptions(layer) {
     button.classList.add('btn')
     button.classList.add('btn-primary')
     button.classList.add('dropdown-toggle')
-    button.setAttribute('data-toggle', 'dropdown')
-    button.setAttribute('aria-haspopup', 'true')
+    button.setAttribute('data-bs-toggle', 'dropdown')
     button.setAttribute('aria-expanded', 'false')
     button.textContent = data[0]
     button.style.width = "100%";
 
-    let dropDownMenu = document.createElement('div')
+    let dropDownMenu = document.createElement('ul')
     dropDownMenu.classList.add('dropdown-menu')
+    dropDownMenu.setAttribute('aria-labelledby', data[0])
 
     // options
     data.forEach(option => {
+        let listItem = document.createElement('li')
         let link = document.createElement('a')
         link.classList.add('dropdown-item')
         link.href = '#'
         link.textContent = option
         link.dataset.optionName = option
         link.onclick = () => { sourceOptionSelected(button, link.getAttribute('data-option-name')) }
-        dropDownMenu.appendChild(link)
+        listItem.appendChild(link)
+        dropDownMenu.appendChild(listItem)
     })
 
     btnGroup.appendChild(button)
@@ -328,4 +339,43 @@ function layerOptionSelected(layerName, optionName) {
     } catch (e) {
         console.log(`error loading layers and options for source. `, e)
     }
+}
+
+
+/**
+ * Adds layers tooltip to element
+ * @param {Element} element Element to add tooltip to
+ * @param {[String]} layers Array of string to add as copy within tooltip
+ */
+function addLayersTooltipToElement(element, layers) {
+    element.setAttribute('data-bs-toggle', 'tooltip')
+    element.setAttribute('data-bs-placement', 'top')
+    element.setAttribute('data-bs-html', 'true')        
+    element.setAttribute('title', layersHTML(layers))
+}
+
+/**
+ * Initialize hover tooltips
+ */
+ function initTooltips() {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    tooltipTriggerList.map((tooltipTriggerEl) => {
+        return new bootstrap.Tooltip(tooltipTriggerEl, {
+            trigger : 'hover'
+        })
+    })
+}
+/**
+ * Parses array of layer names into more readable html
+ * @param {[String]} layers Array of string to parse into formatted html
+ */
+function layersHTML(layers) {
+    tooltip = ''
+    let div = document.createElement('div')
+    div.classList.add('text-start')
+    for (var i = 0; i < layers.length; i++) {
+        tooltip = tooltip + `layer-${i}: ${layers[i]}<br>`
+    }
+    div.innerHTML = tooltip
+    return div.outerHTML
 }

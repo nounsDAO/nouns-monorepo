@@ -135,8 +135,8 @@ const getEncodedImage = async (folder: string, file: string) => {
     bounds.right = Math.max(...Object.values(lines).map(l => l.bounds.right));
 
     // Exit early if image is empty
-    const [rect] = lines[0].rects;
-    if (lineLength === 1 && rect.length === 32 && rect.colorIndex === 0) {
+    const [rect] = lines[0]?.rects || [];
+    if (lineLength === 1 && rect?.length === 32 && rect?.colorIndex === 0) {
       return '0x0000000000';
     }
   }
