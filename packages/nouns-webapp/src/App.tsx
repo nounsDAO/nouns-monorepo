@@ -23,6 +23,7 @@ function App() {
   return (
     <div className="App">
       <NavBar />
+      <Container fluid="lg">
       <Router history={history}>
         <Switch>
           <Route path="/">
@@ -33,6 +34,7 @@ function App() {
           </Route>
         </Switch>
       </Router>
+      </Container>
     </div>
   );
 }

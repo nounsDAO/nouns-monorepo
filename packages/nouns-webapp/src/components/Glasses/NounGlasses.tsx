@@ -1,4 +1,4 @@
-import { Row, Container } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
 import LeftHandle from './LeftHandle';
 import NounsLens from './NounsLens';
 import CenterHandle from './CenterHandle';
@@ -14,14 +14,12 @@ const NounGlasses = () => {
   const auction = useAuction(config.auctionProxyAddress);
 
   return (
-    <Container fluid="lg">
-      <Row noGutters={true}>
-        <LeftHandle nounId={auction ? auction.nounId.toString() : ''} />
-        <NounsLens imgSrc={noun ? noun.image : ''} />
-        <CenterHandle />
-        <ActivityLens />
-      </Row>
-    </Container>
+    <Row noGutters={true}>
+      <LeftHandle nounId={auction ? auction.nounId.toString() : ''} />
+      <NounsLens imgSrc={noun ? noun.image : ''} />
+      <CenterHandle />
+      <ActivityLens />
+    </Row>
   );
 };
 
