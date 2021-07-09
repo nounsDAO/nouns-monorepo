@@ -1,14 +1,17 @@
 import { useEffect } from 'react';
-import './App.css';
 import { useEthers } from '@usedapp/core';
-import NavBar from './components/NavBar';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { useAppDispatch } from './hooks';
 import { setActiveAccount } from './state/slices/account';
-import { Router, Switch, Route,  } from 'react-router-dom';
-import OpenSeaItem from './layout/OpenSeaItem';
+import { Router, Switch, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
-import CurrentAuction from './components/CurrentAuction';
+
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import NavBar from './components/NavBar';
+import OpenSeaItem from './layout/OpenSeaItem';
+import NounGlasses from './components/NounGlasses/NounGlasses';
+import NounBody from './components/NounBody/NounBody';
+import { Container } from 'react-bootstrap';
 
 function App() {
   const { account } = useEthers();
@@ -18,21 +21,24 @@ function App() {
   useEffect(() => {
     // Local account array updated
     dispatch(setActiveAccount(account));
-  }, [account]);
+  }, [account, dispatch]);
 
   return (
     <div className="App">
       <NavBar />
-      <Router history={history}>
-        <Switch>
-          <Route path="/">
-            <CurrentAuction />
-          </Route>
-          <Route path="/opensea">
-            <OpenSeaItem id={1} />
-          </Route>
-        </Switch>
-      </Router>
+      <Container fluid="lg">
+        <Router history={history}>
+          <Switch>
+            <Route path="/">
+              <NounGlasses />
+              <NounBody />
+            </Route>
+            <Route path="/opensea">
+              <OpenSeaItem id={1} />
+            </Route>
+          </Switch>
+        </Router>
+      </Container>
     </div>
   );
 }

@@ -1,0 +1,38 @@
+.left-bottom-handle {
+  margin-top: 100%; /* % margin is calculated from width of parent (left-bottom-handle is 0.5x width of left-handle) */
+  display: inline-block;
+  margin-left: 20%;
+  width: 100%;
+  height: 0;
+  padding-bottom: 200%; /* when height is 0, padding is used to determine height - this way we can set height based on changing widths */
+  background-color: #c34a62;
+  box-shadow: -25px 20px 0px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 6; /* used to stack box-shadows between glasses comps */
+}
+
+.left-handle {
+  margin-top: 50%; /* % margin is calculated from width of parent (left-handle is 2x width of left-bottom-handle) */
+  display: inline-block;
+  height: 0;
+  padding-bottom: 50%; /* (see note above) sets height of class to be 50% of parent container width when height: 0 */
+  width: 100%;
+  background-color: #c34a62;
+  vertical-align: top;
+  box-shadow: -25px 20px 0px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 5; /* used to stack box-shadows between glasses comps */
+}
+
+.noun-id-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
+.noun-id-container h1 {
+  color: white;
+  font-weight: bolder;
+}
