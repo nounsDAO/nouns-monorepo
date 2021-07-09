@@ -14,7 +14,7 @@ export function handleNounCreated(event: NounCreated): void {
   seed.save();
 
   let noun = Noun.load(nounId);
-  if (!noun) {
+  if (noun == null) {
     log.error('[handleNounCreated] Noun #{} not found. Hash: {}', [
       nounId,
       event.transaction.hash.toHex(),
@@ -31,13 +31,13 @@ export function handleNounTransferred(event: Transfer): void {
   let toAddress = event.params.to.toHex();
 
   let to = Account.load(toAddress);
-  if (!to) {
+  if (to == null) {
     to = new Account(toAddress);
     to.save();
   }
 
   let noun = Noun.load(nounId);
-  if (!noun) {
+  if (noun == null) {
     noun = new Noun(nounId);
   }
 

@@ -8,9 +8,9 @@ type Seed @entity {
 }
 
 type Noun @entity {
-  id: ID!        # The Noun's ERC721 token id
-  seed: Seed!    # The seed used to determine the Noun's traits
-  owner: Account # The owner of the Noun
+  id: ID!         # The Noun's ERC721 token id
+  seed: Seed      # The seed used to determine the Noun's traits
+  owner: Account! # The owner of the Noun
 }
 
 type Account @entity {
