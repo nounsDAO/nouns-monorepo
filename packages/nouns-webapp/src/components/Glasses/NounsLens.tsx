@@ -1,11 +1,10 @@
 import Lens from './Lens';
 import Noun from '../Shared/Noun';
-import nounImg from '../../assets/noun.png';
 
-const NounsLens = () => {
+const NounsLens: React.FC<{ imgSrc: string }> = props => {
   return (
     <Lens zIndex={4}>
-      <Noun imgPath={nounImg} />
+      <Noun imgPath={props.imgSrc} />
     </Lens>
   );
 };

@@ -1,7 +1,8 @@
 import classes from './LeftHandle.module.css';
 import { Col } from 'react-bootstrap';
+import React from 'react';
 
-const LeftHandle = () => {
+const LeftHandle: React.FC<{ nounId: string }> = props => {
   return (
     <>
       <Col lg={1}>
@@ -10,7 +11,7 @@ const LeftHandle = () => {
       <Col lg={2}>
         <div className={classes['left-handle']}>
           <div className={classes['noun-id-container']}>
-            <h1>#121</h1>
+            <h1>{`#${props.nounId}`}</h1>
           </div>
         </div>
       </Col>
