@@ -11,7 +11,7 @@ const LeftHandle: React.FC<{ nounId: string }> = props => {
       <Col lg={2}>
         <div className={classes['left-handle']}>
           <div className={classes['noun-id-container']}>
-            <h1>{`#${props.nounId}`}</h1>
+            <h1>{props.nounId && `#${props.nounId}`}</h1>
           </div>
         </div>
       </Col>
