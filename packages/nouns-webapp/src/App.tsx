@@ -4,11 +4,15 @@ import { useAppDispatch } from './hooks';
 import { setActiveAccount } from './state/slices/account';
 import { Router, Switch, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
+
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './components/NavBar';
 import OpenSeaItem from './layout/OpenSeaItem';
 import CurrentAuction from './components/CurrentAuction';
+import NounGlasses from './components/Glasses/NounGlasses';
+import NounBody from './components/NounBody/NounBody';
+import { Container } from 'react-bootstrap';
 
 function App() {
   const { account } = useEthers();
@@ -24,16 +28,18 @@ function App() {
     <div className="App">
       <NavBar />
       <Container fluid="lg">
-      <Router history={history}>
-        <Switch>
-          <Route path="/">
-            <CurrentAuction />
-          </Route>
-          <Route path="/opensea">
-            <OpenSeaItem id={1} />
-          </Route>
-        </Switch>
-      </Router>
+        <Router history={history}>
+          <Switch>
+            <Route path="/">
+              <NounGlasses />
+              <NounBody />
+              {/* <CurrentAuction /> */}
+            </Route>
+            <Route path="/opensea">
+              <OpenSeaItem id={1} />
+            </Route>
+          </Switch>
+        </Router>
       </Container>
     </div>
   );
