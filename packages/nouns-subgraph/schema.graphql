@@ -19,20 +19,22 @@ type Account @entity {
 }
 
 type Bid @entity {
-  id: ID!              # Bid transaction hash + amount
+  id: ID!              # Bid transaction hash
   noun: Noun!          # The Noun being bid on
   amount: BigInt!      # Bid amount
   bidder: Account      # Bidder account
   blockNumber: BigInt! # Block number of the bid
   txIndex: BigInt!     # Index of transaction within block
+  auction: Auction!    # The auction being bid in
 }
 
 type Auction @entity {
-  id: ID!            # The Noun's ERC721 token id
-  noun: Noun!        # The Noun
-  amount: BigInt!    # The current highest bid amount
-  startTime: BigInt! # The time that the auction started
-  endTime: BigInt!   # The time that the auction is scheduled to end
-  bidder: Account    # The account with the current highest bid
-  settled: Boolean!  # Whether or not the auction has been settled
+  id: ID!                                      # The Noun's ERC721 token id
+  noun: Noun!                                  # The Noun
+  amount: BigInt!                              # The current highest bid amount
+  startTime: BigInt!                           # The time that the auction started
+  endTime: BigInt!                             # The time that the auction is scheduled to end
+  bidder: Account                              # The account with the current highest bid
+  settled: Boolean!                            # Whether or not the auction has been settled
+  bids: [Bid!]! @derivedFrom(field: "auction") # The auction bids
 }
