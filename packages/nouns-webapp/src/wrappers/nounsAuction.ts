@@ -12,7 +12,7 @@ export enum AuctionHouseContractFunctions {
   settleCurrentAndCreateNewAuction = 'settleCurrentAndCreateNewAuction',
 }
 
-interface Auction {
+export interface Auction {
   amount: BigNumberish;
   bidder: string;
   endTime: BigNumberish;

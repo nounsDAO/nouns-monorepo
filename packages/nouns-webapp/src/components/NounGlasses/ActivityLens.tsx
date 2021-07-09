@@ -1,21 +1,9 @@
 import Lens from './Lens';
+import Bid from './Bid';
 import classes from './ActivityLens.module.css';
-import { useState } from 'react';
+import { Auction } from '../../wrappers/nounsAuction';
 
-const ActivityLens: React.FC<{ onPlaceBid: (bidAmount: number) => void }> = props => {
-  const [bid, setBid] = useState(0);
-
-  const placeBidHandler = () => {
-    props.onPlaceBid(bid);
-  };
-
-  const bidInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const bidNumber = Number(event.target.value);
-    if (bidNumber > 0) {
-      setBid(bidNumber);
-    }
-  };
-
+const ActivityLens: React.FC<{ auction: Auction }> = props => {
   return (
     <Lens zIndex={2}>
       <div className={classes.activityContainer}>
@@ -27,16 +15,7 @@ const ActivityLens: React.FC<{ onPlaceBid: (bidAmount: number) => void }> = prop
           <li key={Math.random()}>0.01 0xabc 1h</li>
         </ul>
       </div>
-      <button className={classes.bidBtn} onClick={placeBidHandler}>
-        BID
-      </button>
-      <input
-        className={classes.bidInput}
-        onChange={bidInputHandler}
-        type="number"
-        placeholder="ETH"
-        min="0"
-      ></input>
+      <Bid auction={props.auction && props.auction} />
     </Lens>
   );
 };
