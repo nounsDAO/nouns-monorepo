@@ -9,7 +9,6 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './components/NavBar';
 import OpenSeaItem from './layout/OpenSeaItem';
-import CurrentAuction from './components/CurrentAuction';
 import NounGlasses from './components/Glasses/NounGlasses';
 import NounBody from './components/NounBody/NounBody';
 import { Container } from 'react-bootstrap';
@@ -22,7 +21,7 @@ function App() {
   useEffect(() => {
     // Local account array updated
     dispatch(setActiveAccount(account));
-  }, [account]);
+  }, [account, dispatch]);
 
   return (
     <div className="App">
