@@ -1,15 +1,18 @@
 import Lens from './Lens';
 import classes from './ActivityLens.module.css';
-import React from 'react';
-import { useRef } from 'react';
+import { useState } from 'react';
 
 const ActivityLens: React.FC<{ onPlaceBid: (bidAmount: number) => void }> = props => {
-  const placeBidInputRef = useRef<HTMLInputElement>(null);
+  const [bid, setBid] = useState(0);
 
   const placeBidHandler = () => {
-    const bid = Number(placeBidInputRef.current!.value);
-    if (bid > 0) {
-      props.onPlaceBid(bid);
+    props.onPlaceBid(bid);
+  };
+
+  const bidInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const bidNumber = Number(event.target.value);
+    if (bidNumber > 0) {
+      setBid(bidNumber);
     }
   };
 
@@ -29,7 +32,7 @@ const ActivityLens: React.FC<{ onPlaceBid: (bidAmount: number) => void }> = prop
       </button>
       <input
         className={classes.bidInput}
-        ref={placeBidInputRef}
+        onChange={bidInputHandler}
         type="number"
         placeholder="ETH"
         min="0"
