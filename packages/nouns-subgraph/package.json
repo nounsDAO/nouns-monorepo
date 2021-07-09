@@ -1,0 +1,25 @@
+{
+  "name": "@nouns/nouns-subgraph",
+  "version": "0.1.0",
+  "description": "A subgraph that indexes nouns events",
+  "author": "nounsDAO",
+  "homepage": "",
+  "license": "UNLICENSED",
+  "main": "build/index.js",
+  "directories": {
+    "src": "src"
+  },
+  "scripts": {
+    "clean": "rm -rf ./src/types ./build subgraph.yaml",
+    "codegen": "graph codegen --output-dir src/types/",
+    "deploy": "graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/",
+    "prepare:rinkeby": "mustache config/rinkeby.json subgraph.yaml.mustache > subgraph.yaml",
+    "deploy:rinkeby": "yarn clean && yarn prepare:rinkeby && yarn codegen && yarn deploy nounsdao/nouns-subgraph-rinkeby"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "^0.20.1",
+    "@graphprotocol/graph-ts": "^0.20.0",
+    "mustache": "^4.2.0",
+    "typescript": "^4.1.3"
+  }
+}

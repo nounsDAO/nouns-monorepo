@@ -7,4 +7,5 @@ import { ProxyAdmin } from '@openzeppelin/contracts/proxy/transparent/ProxyAdmin
 /**
  * @title The NounsDAO auction house proxy admin
  */
+// prettier-ignore
 contract NounsAuctionHouseProxyAdmin is ProxyAdmin {}
