@@ -5,12 +5,37 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
+    name: NounsERC721
+    network: {{network}}
+    source:
+      address: '{{nounsERC721.address}}'
+      abi: NounsERC721
+      startBlock: {{nounsERC721.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/nouns-erc-721.ts
+      entities:
+        - Account
+        - Noun
+        - Seed
+        - Bid
+      abis:
+        - name: NounsERC721
+          file: ../nouns-contracts/abi/contracts/NounsERC721.sol/NounsERC721.json
+      eventHandlers:
+        - event: NounCreated(indexed uint256,(uint48,uint48,uint48,uint48,uint48))
+          handler: handleNounCreated
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleNounTransferred
+  - kind: ethereum/contract
     name: NounsAuctionHouse
     network: {{network}}
     source:
-      address: '{{address}}'
+      address: '{{nounsAuctionHouse.address}}'
       abi: NounsAuctionHouse
-      startBlock: {{startBlock}}
+      startBlock: {{nounsAuctionHouse.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -20,7 +45,13 @@ dataSources:
         - Auction
       abis:
         - name: NounsAuctionHouse
-          file: ./abis/NounsAuctionHouse.json
+          file: ../nouns-contracts/abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json
       eventHandlers:
-        - event: AuctionCreated(indexed uint256)
+        - event: AuctionCreated(indexed uint256,uint256,uint256)
           handler: handleAuctionCreated
+        - event: AuctionBid(indexed uint256,address,uint256,bool)
+          handler: handleAuctionBid
+        - event: AuctionExtended(indexed uint256,uint256)
+          handler: handleAuctionExtended
+        - event: AuctionSettled(indexed uint256,address,uint256)
+          handler: handleAuctionSettled
