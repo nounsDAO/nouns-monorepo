@@ -18,6 +18,13 @@ type Account @entity {
   nouns: [Noun!]! @derivedFrom(field: "owner") # The Nouns owned by this account
 }
 
+type Bid @entity {
+  id: ID!            # Bid transaction hash + amount
+  noun: Noun!        # The Noun being bid on
+  amount: BigInt!    # Bid amount
+  bidder: Account    # Bidder account
+}
+
 type Auction @entity {
   id: ID!            # The Noun's ERC721 token id
   noun: Noun!        # The Noun

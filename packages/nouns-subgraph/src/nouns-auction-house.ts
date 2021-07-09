@@ -5,7 +5,7 @@ import {
   AuctionExtended,
   AuctionSettled,
 } from './types/NounsAuctionHouse/NounsAuctionHouse';
-import { Account, Auction, Noun } from './types/schema';
+import { Account, Auction, Noun, Bid } from './types/schema';
 
 export function handleAuctionCreated(event: AuctionCreated): void {
   let nounId = event.params.nounId.toString();
@@ -50,6 +50,13 @@ export function handleAuctionBid(event: AuctionBid): void {
   auction.amount = event.params.value;
   auction.bidder = bidder.id;
   auction.save();
+
+  // Save Bid
+  const bid = new Bid(event.transaction.hash.toHex());
+  bid.bidder = bidder.id;
+  bid.amount = auction.amount;
+  bid.noun = auction.noun;
+  bid.save();
 }
 
 export function handleAuctionExtended(event: AuctionExtended): void {
