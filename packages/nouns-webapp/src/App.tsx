@@ -32,7 +32,6 @@ function App() {
             <Route path="/">
               <NounGlasses />
               <NounBody />
-              {/* <CurrentAuction /> */}
             </Route>
             <Route path="/opensea">
               <OpenSeaItem id={1} />

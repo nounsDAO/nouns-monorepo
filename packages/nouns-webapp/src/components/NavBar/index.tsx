@@ -1,5 +1,6 @@
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
+import { Container } from 'react-bootstrap';
 // import NavDropdown from 'react-bootstrap/NavDropdown';
 // import Form from 'react-bootstrap/Form';
 // import FormControl from 'react-bootstrap/FormControl';
@@ -13,8 +14,17 @@ const NavBar = () => {
   const { activateBrowserWallet } = useEthers();
 
   return (
-    <Navbar bg="light" expand="lg">
-      <Navbar.Brand href="#home">Nouns</Navbar.Brand>
+    <Container>
+    <Navbar bg="transparent" expand="lg">
+      <Navbar.Brand href="#home">
+        <img
+          src="/logo.svg"
+          width="70"
+          height="70"
+          className="d-inline-block align-middle"
+          alt="React Bootstrap logo"
+        />
+      </Navbar.Brand>
 
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
@@ -40,6 +50,7 @@ const NavBar = () => {
         )}
       </Navbar.Collapse>
     </Navbar>
+    </Container>
   );
 };
 
