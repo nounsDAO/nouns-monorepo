@@ -3,6 +3,15 @@ import { BigNumberish, utils } from 'ethers';
 import auctionHouseAbi from '../abis/NounsAuctionHouse.json';
 import { Contract } from '@ethersproject/contracts';
 
+export enum AuctionHouseContractFunctions {
+  auction = 'auction',
+  duration = 'duration',
+  minBidIncrementPercentage = 'minBidIncrementPercentage',
+  nouns = 'nouns',
+  createBid = 'createBid',
+  settleCurrentAndCreateNewAuction = 'settleCurrentAndCreateNewAuction',
+}
+
 interface Auction {
   amount: BigNumberish;
   bidder: string;
