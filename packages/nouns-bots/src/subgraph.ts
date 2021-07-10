@@ -11,7 +11,7 @@ export async function getLastAuctionId(): Promise<number> {
     config.nounsSubgraph,
     gql`
       query {
-        auctions(first: 1 orderBy: nounId orderDirection: desc) {
+        auctions(orderBy: startTime orderDirection: desc first: 1) {
           id
         }
       }
