@@ -1,6 +1,8 @@
 import { config } from './config';
 import Redis from 'ioredis';
 import TwitterApi from 'twitter-api-v2';
+import { Contract, providers } from 'ethers';
+import { NounsERC721ABI } from '@nouns/contracts';
 
 /**
  * Redis Client
@@ -16,3 +18,17 @@ export const twitter = new TwitterApi({
   accessToken: config.twitterAccessToken,
   accessSecret: config.twitterAccessSecret,
 });
+
+/**
+ * Ethers JSON RPC Provider
+ */
+export const jsonRpcProvider = new providers.JsonRpcProvider(config.jsonRpcUrl);
+
+/**
+ * Nouns ERC721 Token Contract
+ */
+export const nounsTokenContract = new Contract(
+  config.nounsTokenAddress,
+  NounsERC721ABI,
+  jsonRpcProvider,
+);
