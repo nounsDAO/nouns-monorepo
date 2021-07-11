@@ -1,6 +1,6 @@
 const config = {
-	auctionProxyAddress: "0x27c2511eBF928DE31ED3Ba641cA17774f8AA7d11",
-	tokenAddress: "0xfdb7e811ff0e7e10a0a7b14536b66a501c226739",
-}
+  auctionProxyAddress: '0x6DbDc9346140792B9dd024D01C3c532d12907666',
+  tokenAddress: '0xD6e4cbd35832193b477A968307c99f74F59C9df7',
+};
 
 export default config;
