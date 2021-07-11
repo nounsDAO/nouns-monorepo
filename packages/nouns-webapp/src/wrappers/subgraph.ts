@@ -71,9 +71,9 @@ export const auctionQuery = gql`
   }
  `
 
-export const latestAuctionsQuery = gql`
+export const latestAuctionsQuery = (first: number = 50) => gql`
  {
-	auctions(orderDirection: desc, first: 50) {
+	auctions(orderDirection: desc, first: ${first}) {
 	  id
 	  amount
 	  settled
