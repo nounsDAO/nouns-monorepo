@@ -4,9 +4,9 @@ import {
 	gql
 } from "@apollo/client";
 
-export const auctionQuery = gql`
+export const auctionQuery = (auctionId: number) => gql`
 {
-	auction(id: 1) {
+	auction(id: ${auctionId}) {
 	  id
 	  amount
 	  settled
