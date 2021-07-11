@@ -7,7 +7,7 @@ import { formatEther } from '@ethersproject/units';
 import { compareBids } from '../../utils/compareBids';
 import * as R from 'ramda';
 
-const historyLength = 4;
+const historyLength = 6;
 
 export const BidHistory: React.FC<{ auctionId: string }> = props => {
   const { auctionId } = props;
