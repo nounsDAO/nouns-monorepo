@@ -7,6 +7,11 @@ import { ChainId, DAppProvider } from '@usedapp/core';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import accountReducer from './state/slices/account';
+import {
+  ApolloProvider,
+} from "@apollo/client";
+import { clientFactory } from './wrappers/subgraph';
+import config from './config';
 
 const store = configureStore({
   reducer: {
@@ -17,12 +22,16 @@ const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
+const client = clientFactory(config.subgraphApiUri)
+
 ReactDOM.render(
   <Provider store={store}>
     <React.StrictMode>
+      <ApolloProvider client={client}>
       <DAppProvider config={{ supportedChains: [ChainId.Rinkeby] }}>
         <App />
       </DAppProvider>
+      </ApolloProvider>
     </React.StrictMode>
   </Provider>,
   document.getElementById('root'),

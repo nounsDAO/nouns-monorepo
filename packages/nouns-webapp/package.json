@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@apollo/client":"^3.3.21",
     "@reduxjs/toolkit": "^1.6.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -16,6 +17,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
     "ethers": "^5.4.1",
+    "graphql":"^15.5.1",
     "moment":"^2.29.1",
     "ramda": "^0.27.1",
     "react": "^17.0.2",
