@@ -10,42 +10,46 @@ const AuctionTimer: React.FC<{ auction: Auction }> = props => {
 
   const [timeLeft, setTimeLeft] = useState(0);
   const [auctionEnded, setAuctionEnded] = useState(false);
-
   const timerDuration = moment.duration(timeLeft, 's');
 
   useEffect(() => {
+    if (auctionEnded) {
+      return;
+    }
+
     const endMoment = moment(auction && Number(auction.endTime.toString()) * 1000);
     const blockTimestampMoment = moment(timestamp && timestamp.getTime());
     const timeLeftMoment = moment(endMoment.diff(blockTimestampMoment));
 
-    // inital timeset on valid auction && timestamp
     setTimeLeft(prevState => {
       if (prevState === 0 && auction && timestamp) {
+        // inital set on valid auction and timestamp data
         return timeLeftMoment.unix();
       } else {
+        // on timestamp/auction changes
         return prevState;
       }
     });
-  }, [auction, timestamp]);
+  }, [auction, timestamp, auctionEnded]);
 
   // timer logic
   useEffect(() => {
-    if (timeLeft < 0) {
-      auctionEndedHandler();
+    if (auctionEnded) {
       return;
-    } else {
-      const timerId = setInterval(() => {
-        setTimeLeft(prevState => prevState - 1);
-      }, 1000);
-
-      return () => clearInterval(timerId);
     }
-  });
+    const timerId = setInterval(() => {
+      setTimeLeft(prevState => {
+        if (prevState === 1) {
+          setAuctionEnded(true);
+          return 0;
+        } else {
+          return prevState - 1;
+        }
+      });
+    }, 1000);
 
-  const auctionEndedHandler = () => {
-    setTimeLeft(0);
-    setAuctionEnded(true);
-  };
+    return () => clearInterval(timerId);
+  });
 
   const auctionContent = auctionEnded ? 'Auction ended!' : 'Auction ends in';
 
