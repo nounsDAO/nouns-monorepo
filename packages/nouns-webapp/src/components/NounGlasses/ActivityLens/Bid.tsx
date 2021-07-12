@@ -2,8 +2,8 @@ import {
   Auction,
   auctionHouseContractFactory,
   AuctionHouseContractFunctions,
-} from '../../wrappers/nounsAuction';
-import config from '../../config';
+} from '../../../wrappers/nounsAuction';
+import config from '../../../config';
 import { useContractFunction } from '@usedapp/core';
 import { useState } from 'react';
 import { utils } from 'ethers';
