@@ -1,5 +1,11 @@
 {
   "network": "rinkeby",
-  "address": "0x27c2511eBF928DE31ED3Ba641cA17774f8AA7d11",
-  "startBlock": 8868210
+  "nounsERC721": {
+    "address": "0xD6e4cbd35832193b477A968307c99f74F59C9df7",
+    "startBlock": 8904333
+  },
+  "nounsAuctionHouse": {
+    "address": "0x6DbDc9346140792B9dd024D01C3c532d12907666",
+    "startBlock": 8904337
+  }
 }

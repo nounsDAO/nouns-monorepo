@@ -23,12 +23,6 @@
       {
         "indexed": false,
         "internalType": "bool",
-        "name": "firstBid",
-        "type": "bool"
-      },
-      {
-        "indexed": false,
-        "internalType": "bool",
         "name": "extended",
         "type": "bool"
       }
@@ -43,6 +37,18 @@
         "indexed": true,
         "internalType": "uint256",
         "name": "nounId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "startTime",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "endTime",
         "type": "uint256"
       }
     ],

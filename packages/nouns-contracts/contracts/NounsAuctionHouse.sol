@@ -109,13 +109,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
             auction.endTime = _auction.endTime = block.timestamp + timeBuffer;
         }
 
-        emit AuctionBid(
-            _auction.nounId,
-            msg.sender,
-            msg.value,
-            lastBidder == address(0), // firstBid boolean
-            extended
-        );
+        emit AuctionBid(_auction.nounId, msg.sender, msg.value, extended);
 
         if (extended) {
             emit AuctionExtended(_auction.nounId, _auction.endTime);
@@ -183,16 +177,19 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      */
     function _createAuction() internal {
         try nouns.mint() returns (uint256 nounId) {
+            uint256 startTime = block.timestamp;
+            uint256 endTime = startTime + duration;
+
             auction = Auction({
                 nounId: nounId,
                 amount: 0,
-                startTime: block.timestamp,
-                endTime: block.timestamp + duration,
+                startTime: startTime,
+                endTime: endTime,
                 bidder: payable(0),
                 settled: false
             });
 
-            emit AuctionCreated(nounId);
+            emit AuctionCreated(nounId, startTime, endTime);
         } catch {
             _pause();
         }

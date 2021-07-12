@@ -6,6 +6,17 @@ import { TokenMetadata } from './types';
 export const getAuctionCacheKey = 'NOUNS_AUCTION_CACHE';
 
 /**
+ * Get tweet text for auction started.
+ * @param auctionId The started auction id.
+ * @returns Text to be used in tweet when auction starts.
+ */
+export function getAuctionStartedTweetText(auctionId: string | number) {
+  return `An auction has started for noun #${auctionId}!
+        
+  Learn more at https://nouns.wtf`;
+}
+
+/**
  * Get the current cache contents or 0 if empty
  * @returns The current cache contents as number or 0 if null
  */
