@@ -4,21 +4,33 @@ import { Auction } from '../../wrappers/nounsAuction';
 import Bid from './ActivityLens/Bid';
 import BidTimer from './ActivityLens/AuctionTimer';
 import CurrentBid from './ActivityLens/CurrentBid';
+import { useState } from 'react';
 
 const ActivityLens: React.FC<{ auction: Auction }> = props => {
   const { auction } = props;
 
-  const nounId = auction ? `Noun #${auction.nounId}` : '';
+  const [auctionEnded, setAuctionEnded] = useState(false);
+  const setAuctionStateHandler = (ended: boolean) => {
+    setAuctionEnded(ended);
+  };
+
+  const nounIdContent = auction ? `Noun #${auction.nounId}` : '';
 
   return (
     <Lens zIndex={2}>
       <div className={classes.activityContainer}>
+        <h1>{nounIdContent}</h1>
         <h1>{nounId}</h1>
         <CurrentBid auction={auction} />
         <BidTimer auction={auction} />
+        <BidTimer
+          auction={auction}
+          auctionEnded={auctionEnded}
+          setAuctionEnded={setAuctionStateHandler}
+        />
         {/* {auction && <BidHistory auctionId={auction.nounId.toString()} />} */}
       </div>
-      <Bid auction={auction} />
+      <Bid auction={auction} auctionEnded={auctionEnded} />
     </Lens>
   );
 };

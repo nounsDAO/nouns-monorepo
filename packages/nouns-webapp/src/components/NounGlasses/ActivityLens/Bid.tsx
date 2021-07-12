@@ -9,21 +9,20 @@ import { useState } from 'react';
 import { utils } from 'ethers';
 import classes from './Bid.module.css';
 
-const Bid: React.FC<{ auction: Auction }> = props => {
+const Bid: React.FC<{ auction: Auction; auctionEnded: boolean }> = props => {
+  const { auction, auctionEnded } = props;
   const auctionHouseContract = auctionHouseContractFactory(config.auctionProxyAddress);
-  const { send } = useContractFunction(
+
+  const { send: placeBid } = useContractFunction(
     auctionHouseContract as any,
     AuctionHouseContractFunctions.createBid,
   );
+  const { send: settleAuction } = useContractFunction(
+    auctionHouseContract as any,
+    AuctionHouseContractFunctions.settleCurrentAndCreateNewAuction,
+  );
 
   const [bid, setBid] = useState(0);
-
-  const placeBidHandler = () => {
-    send(props.auction.nounId, {
-      value: utils.parseEther(bid.toString()),
-    });
-  };
-
   const bidInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const bidNumber = Number(event.target.value);
     if (bidNumber > 0) {
@@ -31,13 +30,28 @@ const Bid: React.FC<{ auction: Auction }> = props => {
     }
   };
 
+  const placeBidHandler = () => {
+    placeBid(auction.nounId, {
+      value: utils.parseEther(bid.toString()),
+    });
+  };
+
+  const settleAuctionHandler = () => {
+    settleAuction();
+  };
+
+  const buttonContent = auctionEnded ? 'SETTLE AUCTION' : 'BID';
+
   return (
     <>
-      <button className={classes.bidBtn} onClick={placeBidHandler}>
-        BID
+      <button
+        className={auctionEnded ? classes.bidBtnAuctionEnded : classes.bidBtn}
+        onClick={auctionEnded ? settleAuctionHandler : placeBidHandler}
+      >
+        {buttonContent}
       </button>
       <input
-        className={classes.bidInput}
+        className={auctionEnded ? classes.bidInputAuctionEnded : classes.bidInput}
         onChange={bidInputHandler}
         type="number"
         placeholder="ETH"

@@ -4,10 +4,13 @@ import classes from './AuctionTimer.module.css';
 import { useState, useEffect, useRef } from 'react';
 import { BigNumber } from '@ethersproject/bignumber';
 
-const AuctionTimer: React.FC<{ auction: Auction }> = props => {
-  const { auction } = props;
+const AuctionTimer: React.FC<{
+  auction: Auction;
+  auctionEnded: boolean;
+  setAuctionEnded: (ended: boolean) => void;
+}> = props => {
+  const { auction, auctionEnded, setAuctionEnded } = props;
 
-  const [auctionEnded, setAuctionEnded] = useState(false);
   const [auctionTimer, setAuctionTimer] = useState(0);
   const auctionTimerRef = useRef(auctionTimer); // to access within setTimeout
   auctionTimerRef.current = auctionTimer;
@@ -17,9 +20,11 @@ const AuctionTimer: React.FC<{ auction: Auction }> = props => {
   // timer logic
   useEffect(() => {
     const timeLeft = (auction && BigNumber.from(auction.endTime).toNumber()) - moment().unix();
+    // const timeLeft = (auction && 1626129172 + 30) - moment().unix();
+
     setAuctionTimer(auction && timeLeft);
 
-    if (auction && auctionTimer <= 0) {
+    if (auction && timeLeft <= 0) {
       setAuctionTimer(0);
       setAuctionEnded(true);
     } else {
@@ -32,25 +37,25 @@ const AuctionTimer: React.FC<{ auction: Auction }> = props => {
         clearTimeout(timer);
       };
     }
-  }, [auction, auctionTimer]);
+  }, [auction, auctionTimer, setAuctionEnded]);
 
-  const auctionContent = auctionEnded ? 'Auction ended!' : 'Auction ends in';
+  const auctionContent = auctionEnded ? 'Auction ended' : 'Auction ends in';
 
   return (
     <>
-      <h2 className={classes.title}>{auctionContent}</h2>
+      <h2 className={classes.title}>{auction && auctionContent}</h2>
       <div className={classes.timerWrapper}>
         <div className={classes.timerSection}>
-          <span className={classes.time}>{Math.floor(timerDuration.hours())}</span>
-          <span className={classes.timeSubtitle}>Hours</span>
+          <span className={classes.time}>{auction && Math.floor(timerDuration.hours())}</span>
+          <span className={classes.timeSubtitle}>{auction && 'Hours'}</span>
         </div>
         <div className={classes.timerSection}>
-          <span className={classes.time}>{Math.floor(timerDuration.minutes())}</span>
-          <span className={classes.timeSubtitle}>Mins</span>
+          <span className={classes.time}>{auction && Math.floor(timerDuration.minutes())}</span>
+          <span className={classes.timeSubtitle}>{auction && 'Mins'}</span>
         </div>
         <div className={classes.timerSection}>
-          <span className={classes.time}>{Math.floor(timerDuration.seconds())}</span>
-          <span className={classes.timeSubtitle}>Secs</span>
+          <span className={classes.time}>{auction && Math.floor(timerDuration.seconds())}</span>
+          <span className={classes.timeSubtitle}>{auction && 'Secs'}</span>
         </div>
       </div>
     </>
