@@ -1,0 +1,23 @@
+.title {
+  margin-bottom: 0.5rem;
+}
+
+.timerWrapper {
+  display: flex;
+}
+
+.timerSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-right: 2rem;
+}
+
+.time {
+  font-size: xx-large;
+  font-weight: bold;
+}
+
+.timeSubtitle {
+  font-size: small;
+}
