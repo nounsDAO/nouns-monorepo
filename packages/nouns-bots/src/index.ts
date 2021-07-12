@@ -1,4 +1,3 @@
-
 import { getAuctionCache, getAuctionStartedTweetText, getNounPngBuffer, updateAuctionCache } from './utils';
 import { getLastAuctionId } from './subgraph';
 import { twitter } from './clients';
@@ -10,7 +9,6 @@ async function processLastAuction() {
   const cachedAuctionId = await getAuctionCache();
   const lastAuctionId = await getLastAuctionId();
   console.log(`processLastAuction cachedAuctionId(${cachedAuctionId}) lastAuctionId(${lastAuctionId})`);
-
 
   if (cachedAuctionId < lastAuctionId) {
     const png = await getNounPngBuffer(lastAuctionId.toString());
