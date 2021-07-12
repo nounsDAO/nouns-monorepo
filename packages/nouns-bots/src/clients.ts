@@ -7,7 +7,10 @@ import { NounsERC721ABI } from '@nouns/contracts';
 /**
  * Redis Client
  */
-export const redis = new Redis(config.redisPort, config.redisHost);
+export const redis = new Redis(config.redisPort, config.redisHost, {
+  db: config.redisDb,
+  password: config.redisPassword,
+});
 
 /**
  * Twitter Client
