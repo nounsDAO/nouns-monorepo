@@ -1,10 +1,10 @@
 import moment from 'moment';
 import { Auction } from '../../../wrappers/nounsAuction';
 import { useBlockMeta } from '@usedapp/core';
-import classes from './BidTimer.module.css';
+import classes from './AuctionTimer.module.css';
 import { useState, useEffect } from 'react';
 
-const BidTimer: React.FC<{ auction: Auction }> = props => {
+const AuctionTimer: React.FC<{ auction: Auction }> = props => {
   const { auction } = props;
   const { timestamp } = useBlockMeta();
 
@@ -70,4 +70,4 @@ const BidTimer: React.FC<{ auction: Auction }> = props => {
   );
 };
 
-export default BidTimer;
+export default AuctionTimer;

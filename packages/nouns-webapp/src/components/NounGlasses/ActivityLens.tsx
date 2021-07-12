@@ -2,7 +2,7 @@ import Lens from './Lens';
 import classes from './ActivityLens.module.css';
 import { Auction } from '../../wrappers/nounsAuction';
 import Bid from './ActivityLens/Bid';
-import BidTimer from './ActivityLens/BidTimer';
+import BidTimer from './ActivityLens/AuctionTimer';
 import CurrentBid from './ActivityLens/CurrentBid';
 
 const ActivityLens: React.FC<{ auction: Auction }> = props => {
