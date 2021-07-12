@@ -1,55 +1,38 @@
 import moment from 'moment';
 import { Auction } from '../../../wrappers/nounsAuction';
-import { useBlockMeta } from '@usedapp/core';
 import classes from './AuctionTimer.module.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { BigNumber } from '@ethersproject/bignumber';
 
 const AuctionTimer: React.FC<{ auction: Auction }> = props => {
   const { auction } = props;
-  const { timestamp } = useBlockMeta();
 
-  const [timeLeft, setTimeLeft] = useState(0);
   const [auctionEnded, setAuctionEnded] = useState(false);
-  const timerDuration = moment.duration(timeLeft, 's');
+  const [auctionTimer, setAuctionTimer] = useState(0);
+  const auctionTimerRef = useRef(auctionTimer); // to access within setTimeout
+  auctionTimerRef.current = auctionTimer;
 
-  useEffect(() => {
-    if (auctionEnded) {
-      return;
-    }
-
-    const endMoment = moment(auction && Number(auction.endTime.toString()) * 1000);
-    const blockTimestampMoment = moment(timestamp && timestamp.getTime());
-    const timeLeftMoment = moment(endMoment.diff(blockTimestampMoment));
-
-    setTimeLeft(prevState => {
-      if (prevState === 0 && auction && timestamp) {
-        // inital set on valid auction and timestamp data
-        return timeLeftMoment.unix();
-      } else {
-        // on timestamp/auction changes
-        return prevState;
-      }
-    });
-  }, [auction, timestamp, auctionEnded]);
+  const timerDuration = moment.duration(auctionTimerRef.current, 's');
 
   // timer logic
   useEffect(() => {
-    if (auctionEnded) {
-      return;
-    }
-    const timerId = setInterval(() => {
-      setTimeLeft(prevState => {
-        if (prevState === 1) {
-          setAuctionEnded(true);
-          return 0;
-        } else {
-          return prevState - 1;
-        }
-      });
-    }, 1000);
+    const timeLeft = (auction && BigNumber.from(auction.endTime).toNumber()) - moment().unix();
+    setAuctionTimer(auction && timeLeft);
 
-    return () => clearInterval(timerId);
-  });
+    if (auction && auctionTimer <= 0) {
+      setAuctionTimer(0);
+      setAuctionEnded(true);
+    } else {
+      setAuctionEnded(false);
+      const timer = setTimeout(() => {
+        setAuctionTimer(auctionTimerRef.current - 1);
+      }, 1000);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [auction, auctionTimer]);
 
   const auctionContent = auctionEnded ? 'Auction ended!' : 'Auction ends in';
 
