@@ -14,7 +14,10 @@ type ContractName =
   | 'NounsERC721'
   | 'NounsAuctionHouse'
   | 'NounsAuctionHouseProxyAdmin'
-  | 'NounsAuctionHouseProxy';
+  | 'NounsAuctionHouseProxy'
+  | 'Timelock'
+  | 'GovernorNDelegate'
+  | 'GovernorNDelegator';
 
 interface Contract {
   args?: (string | number | (() => string | undefined))[];
@@ -26,7 +29,7 @@ interface Contract {
 task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsERC721')
   .addParam('noundersdao', 'The nounders DAO contract address', undefined, types.string)
   .addParam('weth', 'The WETH contract address', undefined, types.string)
-  .addOptionalParam('auctionTimeBuffer', 'The auction time buffer (seconds)', 15 * 60, types.int)
+  .addOptionalParam('auctionTimeBuffer', 'The auction time buffer (seconds)', 5 * 60, types.int)
   .addOptionalParam('auctionReservePrice', 'The auction reserve price (wei)', 1, types.int)
   .addOptionalParam(
     'auctionMinIncrementBidPercentage',
@@ -34,15 +37,25 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsER
     5,
     types.int,
   )
-  .addOptionalParam('auctionDuration', 'The auction duration (seconds)', 60 * 60 * 24, types.int)
+  .addOptionalParam('auctionDuration', 'The auction duration (seconds)', 60 * 60 * 24, types.int) // Default: 24 hours
+  .addOptionalParam('timelockDelay', 'The timelock delay (seconds)', 60 * 60 * 24 * 2, types.int) // Default: 2 days
+  .addOptionalParam('votingPeriod', 'The voting period (blocks)', 4 * 60 * 24 * 3, types.int) // Default: 3 days
+  .addOptionalParam('votingDelay', 'The voting delay (blocks)', 1, types.int) // Default: 1 block
+  .addOptionalParam('proposalThresholdBps', 'The proposal threshold (basis points)', 500, types.int) // Default: 5%
+  .addOptionalParam('quorumVotesBps', 'Votes required for quorum (basis points)', 1_000, types.int) // Default: 10%
   .setAction(async (args, { ethers }) => {
     const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 6;
+    const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 9;
 
     const [deployer] = await ethers.getSigners();
     const nonce = await deployer.getTransactionCount();
     const expectedAuctionHouseProxyAddress = ethers.utils.getContractAddress({
       from: deployer.address,
       nonce: nonce + AUCTION_HOUSE_PROXY_NONCE_OFFSET,
+    });
+    const expectedGovernorNDelegatorAddress = ethers.utils.getContractAddress({
+      from: deployer.address,
+      nonce: nonce + GOVERNOR_N_DELEGATOR_NONCE_OFFSET,
     });
     const contracts: Record<ContractName, Contract> = {
       NFTDescriptor: {},
@@ -77,6 +90,28 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsER
               args.auctionMinIncrementBidPercentage,
               args.auctionDuration,
             ]),
+        ],
+      },
+      Timelock: {
+        args: [
+          expectedGovernorNDelegatorAddress,
+          args.timelockDelay,
+        ],
+      },
+      GovernorNDelegate: {
+        waitForConfirmation: true,
+      },
+      GovernorNDelegator: {
+        args: [
+          () => contracts['Timelock'].address,
+          () => contracts['NounsERC721'].address,
+          args.noundersdao,
+          () => contracts['Timelock'].address,
+          () => contracts['GovernorNDelegate'].address,
+          args.votingPeriod,
+          args.votingDelay,
+          args.proposalThresholdBps,
+          args.quorumVotesBps,
         ],
       },
     };

@@ -224,19 +224,6 @@
   {
     "inputs": [
       {
-        "internalType": "bytes32",
-        "name": "c__0x5098d820",
-        "type": "bytes32"
-      }
-    ],
-    "name": "c_0x5098d820",
-    "outputs": [],
-    "stateMutability": "pure",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "uint256",
         "name": "nounId",
         "type": "uint256"
