@@ -1,18 +1,24 @@
 import Lens from './Lens';
-import Bid from './Bid';
 import classes from './ActivityLens.module.css';
 import { Auction } from '../../wrappers/nounsAuction';
-import { BidHistory } from '../BidHistory';
+import Bid from './ActivityLens/Bid';
+import BidTimer from './ActivityLens/BidTimer';
+import CurrentBid from './ActivityLens/CurrentBid';
 
 const ActivityLens: React.FC<{ auction: Auction }> = props => {
   const { auction } = props;
+
+  const nounId = auction ? `Noun #${auction.nounId}` : '';
+
   return (
     <Lens zIndex={2}>
       <div className={classes.activityContainer}>
-        <h2>Recent Activity:</h2>
-        {auction && <BidHistory auctionId={auction.nounId.toString()} />}
+        <h1>{nounId}</h1>
+        <CurrentBid auction={auction} />
+        <BidTimer auction={auction} />
+        {/* {auction && <BidHistory auctionId={auction.nounId.toString()} />} */}
       </div>
-      <Bid auction={props.auction && props.auction} />
+      <Bid auction={auction} />
     </Lens>
   );
 };

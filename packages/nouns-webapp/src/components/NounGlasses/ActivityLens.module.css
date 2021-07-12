@@ -1,11 +1,23 @@
 .activityContainer {
-  padding: 2rem;
+  padding: 1rem 2rem;
   color: white;
 }
 
-.activityContainer h2 {
+.activityContainer h1 {
   font-weight: bold;
   margin-bottom: 1rem;
+}
+.activityContainer .bidSection {
+  margin-bottom: 1rem;
+}
+
+.activityContainer h2 {
+  font-size: medium;
+}
+
+.activityContainer .bid {
+  font-size: x-large;
+  font-weight: bold;
 }
 
 .activityContainer ul {
