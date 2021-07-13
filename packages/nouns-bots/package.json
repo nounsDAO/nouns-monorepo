@@ -28,6 +28,7 @@
   "dependencies": {
     "@nouns/contracts": "^0.1.0",
     "dotenv": "^8.2.0",
+    "discord.js":"^12.5.3",
     "ethers": "^5.4.0",
     "graphql": "^15.3.0",
     "graphql-request": "^3.1.0",

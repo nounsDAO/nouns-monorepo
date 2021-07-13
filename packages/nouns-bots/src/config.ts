@@ -15,4 +15,6 @@ export const config = {
   nounsTokenAddress:
     process.env.NOUNS_TOKEN_ADDRESS ?? '0xD6e4cbd35832193b477A968307c99f74F59C9df7',
   jsonRpcUrl: process.env.JSON_RPC_URL ?? 'http://localhost:8545',
+  discordWebhookToken: process.env.DISCORD_WEBHOOK_TOKEN ?? '',
+  discordWebhookId: process.env.DISCORD_WEBHOOK_ID ?? '',
 };

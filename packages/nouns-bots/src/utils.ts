@@ -54,3 +54,11 @@ export async function getNounPngBuffer(tokenId: string): Promise<Buffer | undefi
   const svg = Buffer.from(data.image.substring(26), 'base64');
   return sharp(svg).png().toBuffer();
 }
+
+/**
+ * Generate a counter name with the appropriate
+ * prefix
+ * @param counterName Counter name to prefix
+ * @returns Prefixed counter name
+ */
+export const buildCounterName = (counterName: string) => `bots_${counterName}`;

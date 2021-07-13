@@ -3,6 +3,8 @@ import Redis from 'ioredis';
 import TwitterApi from 'twitter-api-v2';
 import { Contract, providers } from 'ethers';
 import { NounsERC721ABI } from '@nouns/contracts';
+import Discord from 'discord.js';
+import axios from 'axios';
 
 /**
  * Redis Client
@@ -35,3 +37,19 @@ export const nounsTokenContract = new Contract(
   NounsERC721ABI,
   jsonRpcProvider,
 );
+
+/**
+ * Discord webhook client for sending messages to discord
+ */
+export const discordWebhook = new Discord.WebhookClient(
+  config.discordWebhookId,
+  config.discordWebhookToken,
+);
+
+/**
+ * Increment one of the Nouns infra counters
+ * @param counterName counter name to increment
+ * @returns
+ */
+export const incrementCounter = (counterName: string) =>
+  axios.post(`https://simple-counter.nouns.tools/count/inc/${counterName}`);
