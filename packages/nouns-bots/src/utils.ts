@@ -13,7 +13,7 @@ export const getAuctionCacheKey = 'NOUNS_AUCTION_CACHE';
 export function getAuctionStartedTweetText(auctionId: string | number) {
   return `An auction has started for noun #${auctionId}!
         
-  Learn more at https://nouns.wtf`;
+  This is a TESTNET (Rinkeby) noun. Learn more at https://nouns.wtf`;
 }
 
 /**
