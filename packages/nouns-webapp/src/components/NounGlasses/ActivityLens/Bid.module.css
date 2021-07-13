@@ -11,6 +11,11 @@
   color: white;
 }
 
+.bidBtn:hover {
+  background-color: #5c8f71;
+  color: rgb(209, 207, 207);
+}
+
 .bidInput {
   position: absolute;
   bottom: 0;
