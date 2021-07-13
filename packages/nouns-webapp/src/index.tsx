@@ -22,13 +22,20 @@ const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
+const useDappConfig = {
+  readOnlyChainId: ChainId.Rinkeby,
+  readOnlyUrls: {
+    [ChainId.Rinkeby]: process.env.REACT_APP_RINKEBY_JSONRPC || `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`
+  },
+}
+
 const client = clientFactory(config.subgraphApiUri)
 
 ReactDOM.render(
   <Provider store={store}>
     <React.StrictMode>
       <ApolloProvider client={client}>
-      <DAppProvider config={{ supportedChains: [ChainId.Rinkeby] }}>
+      <DAppProvider config={useDappConfig}>
         <App />
       </DAppProvider>
       </ApolloProvider>
