@@ -1,4 +1,10 @@
-import { getAuctionCache, getAuctionStartedTweetText, getNounPngBuffer, updateAuctionCache } from './utils';
+import {
+  buildCounterName,
+  getAuctionCache,
+  getAuctionStartedTweetText,
+  getNounPngBuffer,
+  updateAuctionCache,
+} from './utils';
 import { getLastAuctionId } from './subgraph';
 import { discordWebhook, incrementCounter, twitter } from './clients';
 import Discord from 'discord.js';
