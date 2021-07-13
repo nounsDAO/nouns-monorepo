@@ -14,7 +14,7 @@ const NounGlasses = () => {
 
   return (
     <Row noGutters={true}>
-      <LeftHandle nounId={auction ? auction.nounId.toString() : ''} />
+      <LeftHandle />
       {auction ? <NounsLens nounId={BigNumber.from(auction.nounId)} /> : <LoadingNounLens />}
       <CenterHandle />
       <ActivityLens auction={auction && auction} />
