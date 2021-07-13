@@ -20,7 +20,6 @@ const AuctionTimer: React.FC<{
   // timer logic
   useEffect(() => {
     const timeLeft = (auction && BigNumber.from(auction.endTime).toNumber()) - moment().unix();
-    // const timeLeft = (auction && 1626129172 + 30) - moment().unix();
 
     setAuctionTimer(auction && timeLeft);
 
