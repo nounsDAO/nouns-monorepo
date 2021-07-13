@@ -15,26 +15,28 @@ import Discord from 'discord.js';
 async function processLastAuction() {
   const cachedAuctionId = await getAuctionCache();
   const lastAuctionId = await getLastAuctionId();
-  console.log(`processLastAuction cachedAuctionId(${cachedAuctionId}) lastAuctionId(${lastAuctionId})`);
+  console.log(
+    `processLastAuction cachedAuctionId(${cachedAuctionId}) lastAuctionId(${lastAuctionId})`,
+  );
 
   if (cachedAuctionId < lastAuctionId) {
     const png = await getNounPngBuffer(lastAuctionId.toString());
-    if(png) {
+    if (png) {
       console.log(`processLastAuction tweeting discovered auction id and noun`);
-      // const mediaId = await twitter.v1.uploadMedia(png, { type: 'png' });
-      // await twitter.v1.tweet(
-      //   getAuctionStartedTweetText(lastAuctionId),
-      //   {
-      //     media_ids: mediaId,
-      //   },
-      // // );
-      // discordWebhook.send(
-      //   new Discord.MessageEmbed()
-      //   .setTitle(`Discovered new auction`)
-      //   .setURL('https://nounsdao-dev.web.app/auction')
-      //   .addField('Auction ID', lastAuctionId, true)
-      //   .setTimestamp()
-      //   )
+      const mediaId = await twitter.v1.uploadMedia(png, { type: 'png' });
+      await twitter.v1.tweet(
+        getAuctionStartedTweetText(lastAuctionId),
+        {
+          media_ids: mediaId,
+        },
+      );
+      discordWebhook.send(
+        new Discord.MessageEmbed()
+        .setTitle(`Discovered new auction`)
+        .setURL('https://nounsdao-dev.web.app/auction')
+        .addField('Auction ID', lastAuctionId, true)
+        .setTimestamp()
+        )
       incrementCounter(buildCounterName(`auctions_discovered`));
     } else {
       console.error(`Error generating png for noun auction ${lastAuctionId}`);
