@@ -26,19 +26,17 @@ function App() {
   return (
     <div className="App">
       <NavBar />
-      <Container fluid="lg">
-        <Router history={history}>
-          <Switch>
-            <Route path="/">
-              <CurrentAuction />
-              <NounBody />
-            </Route>
-            <Route path="/opensea">
-              <OpenSeaItem id={1} />
-            </Route>
-          </Switch>
-        </Router>
-      </Container>
+      <Router history={history}>
+        <Switch>
+          <Route path="/">
+            <CurrentAuction />
+            <NounBody />
+          </Route>
+          <Route path="/opensea">
+            <OpenSeaItem id={1} />
+          </Route>
+        </Switch>
+      </Router>
     </div>
   );
 }
