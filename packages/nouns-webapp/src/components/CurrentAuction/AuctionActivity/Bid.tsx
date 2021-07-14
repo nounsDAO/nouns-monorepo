@@ -146,6 +146,7 @@ const Bid: React.FC<{ auction: Auction; auctionEnded: boolean }> = props => {
       <button
         className={auctionEnded ? classes.bidBtnAuctionEnded : classes.bidBtn}
         onClick={auctionEnded ? settleAuctionHandler : placeBidHandler}
+        disabled={placeBidState.status === 'Mining' || settleAuctionState.status === 'Mining'}
       >
         {bidButtonContent.loading ? <Spinner animation="border" /> : bidButtonContent.content}
       </button>
