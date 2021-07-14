@@ -11,6 +11,7 @@ import NavBar from './components/NavBar';
 import OpenSeaItem from './layout/OpenSeaItem';
 import CurrentAuction from './components/CurrentAuction/CurrentAuction';
 import Banner from './components/Banner';
+import Documentation from './components/Documentation';
 
 function App() {
   const { account } = useEthers();
@@ -30,6 +31,7 @@ function App() {
           <Route path="/">
             <CurrentAuction />
             <Banner />
+            <Documentation />
           </Route>
           <Route path="/opensea">
             <OpenSeaItem id={1} />
