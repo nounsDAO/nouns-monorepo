@@ -13,7 +13,9 @@ const NounGlasses = () => {
       <Col lg={{ span: 4, offset: 2 }}>
         {auction && <StandaloneNoun nounId={auction && auction.nounId} />}
       </Col>
-      <ActivityLens auction={auction && auction} />
+      <Col lg={4}>
+        <ActivityLens auction={auction && auction} />
+      </Col>
     </Row>
   );
 };
