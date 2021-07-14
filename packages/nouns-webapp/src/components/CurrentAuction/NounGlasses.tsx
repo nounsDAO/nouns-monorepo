@@ -4,7 +4,7 @@ import { useAuction } from '../../wrappers/nounsAuction';
 import config from '../../config';
 import StandaloneNoun from '../StandaloneNoun';
 
-import ActivityLens from './ActivityLens';
+import AuctionActivity from './AuctionActivity';
 const NounGlasses = () => {
   const auction = useAuction(config.auctionProxyAddress);
 
@@ -14,7 +14,7 @@ const NounGlasses = () => {
         {auction && <StandaloneNoun nounId={auction && auction.nounId} />}
       </Col>
       <Col lg={4}>
-        <ActivityLens auction={auction && auction} />
+        <AuctionActivity auction={auction && auction} />
       </Col>
     </Row>
   );

@@ -1,9 +1,9 @@
 import { Auction } from '../../wrappers/nounsAuction';
 import { useState } from 'react';
-import classes from './ActivityLens.module.css';
-import Bid from './ActivityLens/Bid';
-import BidTimer from './ActivityLens/AuctionTimer';
-import CurrentBid from './ActivityLens/CurrentBid';
+import classes from './AuctionActivity.module.css';
+import Bid from './AuctionActivity/Bid';
+import BidTimer from './AuctionActivity/AuctionTimer';
+import CurrentBid from './AuctionActivity/CurrentBid';
 
 const ActivityLens: React.FC<{ auction: Auction }> = props => {
   const { auction } = props;
