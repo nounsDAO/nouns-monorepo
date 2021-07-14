@@ -110,7 +110,7 @@ const Bid: React.FC<{ auction: Auction; auctionEnded: boolean }> = props => {
       case 'Success':
         setModal({
           title: 'Success',
-          message: `Settled auctio successfully!`,
+          message: `Settled auction successfully!`,
           show: true,
         });
         setBidButtonContent({ loading: false, content: 'Settle Auction' });
