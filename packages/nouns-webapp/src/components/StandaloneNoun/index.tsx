@@ -1,5 +1,6 @@
 import { BigNumber, BigNumberish } from 'ethers';
 import { useNounToken } from '../../wrappers/nounToken';
+import Noun from '../Shared/Noun';
 import classes from './StandaloneNoun.module.css';
 
 interface StandaloneNounProps {
@@ -12,7 +13,7 @@ const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProp
 
   return (
     <div className={classes.standaloneNoun}>
-      <img src={noun?.image} alt={noun?.description} />
+      <Noun imgPath={noun ? noun.image : ''} alt={noun ? noun.description : ''} />
     </div>
   );
 };
