@@ -9,7 +9,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './components/NavBar';
 import OpenSeaItem from './layout/OpenSeaItem';
-import NounGlasses from './components/NounGlasses/NounGlasses';
+import NounGlasses from './components/CurrentAuction/NounGlasses';
 import NounBody from './components/NounBody/NounBody';
 import { Container } from 'react-bootstrap';
 

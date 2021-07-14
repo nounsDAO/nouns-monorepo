@@ -8,7 +8,7 @@
   background-color: #c34a62;
   box-shadow: -25px 20px 0px rgba(0, 0, 0, 0.3);
   position: relative;
-  z-index: 5; /* used to stack box-shadows between glasses comps */
+  z-index: 6; /* used to stack box-shadows between glasses comps */
 }
 
 .left-handle {
@@ -21,7 +21,7 @@
   vertical-align: top;
   box-shadow: -25px 20px 0px rgba(0, 0, 0, 0.3);
   position: relative;
-  z-index: 4; /* used to stack box-shadows between glasses comps */
+  z-index: 5; /* used to stack box-shadows between glasses comps */
 }
 
 .noun-id-container {
