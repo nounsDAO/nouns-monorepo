@@ -11,6 +11,8 @@ import NavBar from './components/NavBar';
 import OpenSeaItem from './layout/OpenSeaItem';
 import CurrentAuction from './components/CurrentAuction/CurrentAuction';
 import Banner from './components/Banner';
+import HistoryCollection from './components/HistoryCollection';
+import { BigNumber } from '@usedapp/core/node_modules/ethers';
 import Documentation from './components/Documentation';
 
 function App() {
@@ -31,6 +33,11 @@ function App() {
           <Route path="/">
             <CurrentAuction />
             <Banner />
+            <HistoryCollection
+              latestNounId={BigNumber.from(62).sub(1)}
+              historyCount={8}
+              rtl={true}
+            />
             <Documentation />
           </Route>
           <Route path="/opensea">
