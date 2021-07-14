@@ -9,7 +9,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './components/NavBar';
 import OpenSeaItem from './layout/OpenSeaItem';
-import NounGlasses from './components/CurrentAuction/NounGlasses';
+import CurrentAuction from './components/CurrentAuction/CurrentAuction';
 import NounBody from './components/NounBody/NounBody';
 import { Container } from 'react-bootstrap';
 
@@ -30,7 +30,7 @@ function App() {
         <Router history={history}>
           <Switch>
             <Route path="/">
-              <NounGlasses />
+              <CurrentAuction />
               <NounBody />
             </Route>
             <Route path="/opensea">

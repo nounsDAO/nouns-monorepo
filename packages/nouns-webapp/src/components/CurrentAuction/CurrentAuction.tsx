@@ -3,9 +3,9 @@ import { Col } from 'react-bootstrap';
 import { useAuction } from '../../wrappers/nounsAuction';
 import config from '../../config';
 import StandaloneNoun from '../StandaloneNoun';
-
 import AuctionActivity from './AuctionActivity';
-const NounGlasses = () => {
+
+const CurrentAuction = () => {
   const auction = useAuction(config.auctionProxyAddress);
 
   return (
@@ -20,4 +20,4 @@ const NounGlasses = () => {
   );
 };
 
-export default NounGlasses;
+export default CurrentAuction;
