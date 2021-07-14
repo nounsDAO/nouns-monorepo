@@ -4,7 +4,7 @@ import Noun from '../Shared/Noun';
 const LoadingNounLens = () => {
   return (
     <Lens zIndex={4}>
-      <Noun imgPath="" />
+      <Noun imgPath="" alt="" />
     </Lens>
   );
 };

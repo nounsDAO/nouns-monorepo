@@ -19,7 +19,7 @@ const ActivityLens: React.FC<{ auction: Auction }> = props => {
   return (
     <Lens zIndex={2}>
       <div className={classes.activityContainer}>
-        <h1>{nounIdContent}</h1>
+        <h1 className={classes.nounTitle}>{nounIdContent}</h1>
         <CurrentBid auction={auction} auctionEnded={auctionEnded} />
         <BidTimer
           auction={auction}
