@@ -28,16 +28,22 @@
 }
 
 .bidBtnAuctionEnded {
-  border-radius: 50px 0px 0px 50px;
+  border-radius: 50px;
   border: 0 none;
   background-color: #6da886;
-  width: 50%;
+  width: 100%;
   height: 4rem;
   font-weight: bold;
   font-size: xx-large;
   color: white;
   font-family: 'Londrina Solid';
 }
+
+.bidBtnAuctionEnded:hover {
+  background-color: #5c8f71;
+  color: rgb(209, 207, 207);
+}
+
 .bidInputAuctionEnded {
   display: none;
 }
