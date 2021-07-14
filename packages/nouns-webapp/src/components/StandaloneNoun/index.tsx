@@ -12,7 +12,7 @@ const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProp
 
   return (
     <div className={classes.standaloneNoun}>
-      <img src={noun?.image} />
+      <img src={noun?.image} alt={noun?.description} />
     </div>
   );
 };
