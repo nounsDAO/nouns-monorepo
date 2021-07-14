@@ -10,8 +10,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './components/NavBar';
 import OpenSeaItem from './layout/OpenSeaItem';
 import CurrentAuction from './components/CurrentAuction/CurrentAuction';
-import NounBody from './components/NounBody/NounBody';
-import { Container } from 'react-bootstrap';
 
 function App() {
   const { account } = useEthers();
@@ -30,7 +28,6 @@ function App() {
         <Switch>
           <Route path="/">
             <CurrentAuction />
-            <NounBody />
           </Route>
           <Route path="/opensea">
             <OpenSeaItem id={1} />
