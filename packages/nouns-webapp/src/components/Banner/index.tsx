@@ -5,7 +5,7 @@ import { Col } from 'react-bootstrap';
 const Banner = () => {
   return (
     <Section bgColor="white" fullWidth={false}>
-      <Col lg={{ span: 8, offset: 2 }}>
+      <Col lg={{ span: 10, offset: 1 }}>
         <div className={classes.wrapper}>
           <h1>ONE NOUN,</h1>
           <h1>EVERY DAY,</h1>
