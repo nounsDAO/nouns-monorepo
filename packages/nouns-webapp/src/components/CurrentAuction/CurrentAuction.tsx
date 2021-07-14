@@ -10,10 +10,10 @@ const CurrentAuction = () => {
 
   return (
     <Row noGutters={true}>
-      <Col lg={{ span: 4, offset: 2 }}>
+      <Col lg={{ span: 5, offset: 1 }}>
         {auction && <StandaloneNoun nounId={auction && auction.nounId} />}
       </Col>
-      <Col lg={4}>
+      <Col lg={{ span: 4, offset: 1 }}>
         <AuctionActivity auction={auction && auction} />
       </Col>
     </Row>

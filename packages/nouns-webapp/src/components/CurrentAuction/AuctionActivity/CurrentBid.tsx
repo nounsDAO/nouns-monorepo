@@ -5,7 +5,7 @@ import classes from './CurrentBid.module.css';
 const CurrentBid: React.FC<{ auction: Auction; auctionEnded: boolean }> = props => {
   const { auction, auctionEnded } = props;
 
-  const currentBid = auction ? `${utils.formatEther(auction.amount)} Ξ` : '';
+  const currentBid = auction ? `${utils.formatEther(auction.amount)} ETH` : '';
 
   const titleContent = auctionEnded ? 'Winning bid' : 'Current bid';
 

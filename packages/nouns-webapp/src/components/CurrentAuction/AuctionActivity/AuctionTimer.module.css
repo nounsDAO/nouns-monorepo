@@ -14,10 +14,11 @@
 }
 
 .time {
-  font-size: xx-large;
-  font-weight: bold;
+  font-size: 3rem;
+  font-weight: lighter;
+  font-family: 'Londrina Solid';
 }
 
 .timeSubtitle {
-  font-size: small;
+  font-size: medium;
 }

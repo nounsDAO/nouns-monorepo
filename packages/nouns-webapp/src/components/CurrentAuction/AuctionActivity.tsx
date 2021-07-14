@@ -4,6 +4,7 @@ import classes from './AuctionActivity.module.css';
 import Bid from './AuctionActivity/Bid';
 import BidTimer from './AuctionActivity/AuctionTimer';
 import CurrentBid from './AuctionActivity/CurrentBid';
+import moment from 'moment';
 
 const ActivityLens: React.FC<{ auction: Auction }> = props => {
   const { auction } = props;
@@ -18,6 +19,7 @@ const ActivityLens: React.FC<{ auction: Auction }> = props => {
   return (
     <>
       <div className={classes.activityContainer}>
+        <h2>{moment().format('MMM DD YYYY')}</h2>
         <h1 className={classes.nounTitle}>{nounIdContent}</h1>
         <CurrentBid auction={auction} auctionEnded={auctionEnded} />
         <BidTimer

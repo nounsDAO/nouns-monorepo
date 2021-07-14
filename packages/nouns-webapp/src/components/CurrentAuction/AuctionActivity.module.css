@@ -1,36 +1,16 @@
 .activityContainer {
   padding: 1rem 2rem;
-  color: white;
-}
-
-.activityContainer h1 {
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
-.activityContainer .bidSection {
-  margin-bottom: 1rem;
-}
-
-.activityContainer h2 {
-  font-size: medium;
-}
-
-.activityContainer .bid {
-  font-size: x-large;
-  font-weight: bold;
-}
-
-.activityContainer ul {
-  padding: 0;
-  list-style-type: none;
-  overflow-y: hidden;
-}
-
-.activityContainer li {
-  font-weight: bold;
-  margin: 0.5rem 0rem;
+  color: #504f49;
 }
 
 .nounTitle {
-  font-family: 'Londrina Solid'
+  font-family: 'Londrina Solid';
+  font-weight: bold;
+  font-size: 3.5rem;
+}
+/* section titles (date, current bid, auction ends */
+.activityContainer h2 {
+  color: #34ac80;
+  font-weight: bold;
+  font-size: 1.5rem;
 }
