@@ -1,18 +1,24 @@
+import { BigNumber } from '@ethersproject/bignumber';
 import { Row, Col } from 'react-bootstrap';
-import nounImg from '../../assets/noun.png';
 import Noun from '../Shared/Noun';
 import classes from './TopTorso.module.css';
+import HistoryCollection from '../HistoryCollection';
+import { useAuction } from '../../wrappers/nounsAuction';
+import config from '../../config';
 
 const TopTorso = () => {
-  // state management here
-  const nounImgs = [nounImg, nounImg, nounImg, nounImg];
+  const auction = useAuction(config.auctionProxyAddress);
 
   return (
     <Col lg={12} className={classes.topTorso}>
       <Row noGutters={true}>
-        {nounImgs.map(img => (
-          <PastNoun imgPath={img} key={Math.random()} />
-        ))}
+        {auction && (
+          <HistoryCollection
+            latestNounId={BigNumber.from(auction.nounId).sub(1)}
+            historyCount={8}
+            rtl={true}
+          />
+        )}
       </Row>
     </Col>
   );
