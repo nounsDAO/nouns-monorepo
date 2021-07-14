@@ -38,7 +38,7 @@ task('deploy-local', 'Deploy contracts to hardhat')
       return;
     }
 
-    const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 6;
+    const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 7;
 
     const [deployer] = await ethers.getSigners();
     const nonce = await deployer.getTransactionCount();
