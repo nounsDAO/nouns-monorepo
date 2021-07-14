@@ -8,12 +8,23 @@ export const getAuctionCacheKey = 'NOUNS_AUCTION_CACHE';
 /**
  * Get tweet text for auction started.
  * @param auctionId The started auction id.
+ * @param durationSeconds The duration of the auction in seconds.
  * @returns Text to be used in tweet when auction starts.
  */
-export function getAuctionStartedTweetText(auctionId: string | number) {
-  return `An auction has started for noun #${auctionId}!
+export function getAuctionStartedTweetText(auctionId: number, durationSeconds: number) {
+  return `*Bleep Bloop Blop*
         
-  This is a TESTNET (Rinkeby) noun. Learn more at https://nouns.wtf`;
+ A ${secondsToHoursFloor(durationSeconds)} hour auction has started for: Noun #${auctionId}
+ Learn more at https://nouns.wtf`;
+}
+
+/**
+ * Convert a duration of seconds into hours
+ * @param seconds The total seconds (duration) to convert
+ * @returns The number of hours (floor) represented by `seconds`
+ */
+export function secondsToHoursFloor(seconds: number): number {
+  return Math.floor(seconds / (60 * 60));
 }
 
 /**

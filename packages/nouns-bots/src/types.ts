@@ -1,5 +1,7 @@
 export interface Auction {
-  id: string;
+  id: number;
+  startTime: number;
+  endTime: number;
 }
 
 export interface TokenMetadata {

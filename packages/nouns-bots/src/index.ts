@@ -1,5 +1,5 @@
 import { getAuctionCache, getAuctionStartedTweetText, getNounPngBuffer, updateAuctionCache } from './utils';
-import { getLastAuctionId } from './subgraph';
+import { getLastAuction } from './subgraph';
 import { twitter } from './clients';
 
 /**
@@ -7,16 +7,16 @@ import { twitter } from './clients';
  */
 async function processLastAuction() {
   const cachedAuctionId = await getAuctionCache();
-  const lastAuctionId = await getLastAuctionId();
+  const { id: lastAuctionId, startTime, endTime } = await getLastAuction();
   console.log(`processLastAuction cachedAuctionId(${cachedAuctionId}) lastAuctionId(${lastAuctionId})`);
 
   if (cachedAuctionId < lastAuctionId) {
     const png = await getNounPngBuffer(lastAuctionId.toString());
-    if(png) {
+    if (png) {
       console.log(`processLastAuction tweeting discovered auction id and noun`);
       const mediaId = await twitter.v1.uploadMedia(png, { type: 'png' });
       await twitter.v1.tweet(
-        getAuctionStartedTweetText(lastAuctionId),
+        getAuctionStartedTweetText(lastAuctionId, endTime - startTime),
         {
           media_ids: mediaId,
         },
