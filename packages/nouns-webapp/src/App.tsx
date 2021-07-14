@@ -10,6 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './components/NavBar';
 import OpenSeaItem from './layout/OpenSeaItem';
 import CurrentAuction from './components/CurrentAuction/CurrentAuction';
+import Banner from './components/Banner';
 
 function App() {
   const { account } = useEthers();
@@ -28,6 +29,7 @@ function App() {
         <Switch>
           <Route path="/">
             <CurrentAuction />
+            <Banner />
           </Route>
           <Route path="/opensea">
             <OpenSeaItem id={1} />
