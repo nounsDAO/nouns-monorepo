@@ -1,6 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { Row, Col } from 'react-bootstrap';
-import Noun from '../Shared/Noun';
 import classes from './TopTorso.module.css';
 import HistoryCollection from '../HistoryCollection';
 import { useAuction } from '../../wrappers/nounsAuction';
@@ -24,14 +23,3 @@ const TopTorso = () => {
   );
 };
 export default TopTorso;
-
-const PastNoun: React.FC<{ imgPath: string }> = props => {
-  return (
-    <Col lg={3} className={classes.col}>
-      <div className={classes.pastNoun}>
-        <Noun imgPath={props.imgPath} />
-        <span className={classes.rightSubtitle}>#140</span>
-      </div>
-    </Col>
-  );
-};
