@@ -1,4 +1,3 @@
-import { Container, Row } from 'react-bootstrap';
 import { Col } from 'react-bootstrap';
 import { useAuction } from '../../wrappers/nounsAuction';
 import config from '../../config';
@@ -10,17 +9,13 @@ const CurrentAuction = () => {
   const auction = useAuction(config.auctionProxyAddress);
 
   return (
-    <Section bgColor="#c5ecf8">
-      <Container fluid="lg">
-        <Row noGutters={true}>
-          <Col lg={{ span: 4, offset: 2 }}>
-            {auction && <StandaloneNoun nounId={auction && auction.nounId} />}
-          </Col>
-          <Col lg={{ span: 4, offset: 1 }}>
-            <AuctionActivity auction={auction && auction} />
-          </Col>
-        </Row>
-      </Container>
+    <Section bgColor="#c5ecf8" fullWidth={false}>
+      <Col lg={{ span: 5, offset: 1 }}>
+        {auction && <StandaloneNoun nounId={auction && auction.nounId} />}
+      </Col>
+      <Col lg={{ span: 4, offset: 1 }}>
+        <AuctionActivity auction={auction && auction} />
+      </Col>
     </Section>
   );
 };

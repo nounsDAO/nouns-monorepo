@@ -1,10 +1,10 @@
-import { Col } from 'react-bootstrap';
-import Section from '../Section';
 import classes from './Banner.module.css';
+import Section from '../Section';
+import { Col } from 'react-bootstrap';
 
 const Banner = () => {
   return (
-    <Section bgColor="white">
+    <Section bgColor="white" fullWidth={false}>
       <Col lg={{ span: 8, offset: 2 }}>
         <div className={classes.wrapper}>
           <h1>ONE NOUN,</h1>
