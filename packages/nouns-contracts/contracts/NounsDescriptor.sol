@@ -245,6 +245,18 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     }
 
     /**
+     * @notice Given a seed, construct a base64 encoded SVG image.
+     */
+    function generateSVGImage(INounsSeeder.Seed memory seed) external view override returns (string memory) {
+        NFTDescriptor.ConstructTokenURIParams memory params = NFTDescriptor.ConstructTokenURIParams({
+            tokenId: 0,
+            parts: _getPartsForSeed(seed),
+            background: backgrounds[seed.background]
+        });
+        return NFTDescriptor.generateSVGImage(params, palettes);
+    }
+
+    /**
      * @notice Add a single color to a color palette.
      */
     function _addColorToPalette(uint8 _paletteIndex, string calldata _color) internal {

@@ -4,23 +4,13 @@ import { chunkArray } from '../utils';
 
 task('populate-descriptor', 'Populates the descriptor with color palettes and Noun parts')
   .addOptionalParam(
-    'nftDescriptor',
-    'The `NFTDescriptor` contract address',
-    '0x5FbDB2315678afecb367f032d93F642f64180aa3',
-    types.string,
-  )
-  .addOptionalParam(
     'nounsDescriptor',
     'The `NounsDescriptor` contract address',
     '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
     types.string,
   )
-  .setAction(async ({ nftDescriptor, nounsDescriptor }, { ethers }) => {
-    const descriptorFactory = await ethers.getContractFactory('NounsDescriptor', {
-      libraries: {
-        NFTDescriptor: nftDescriptor,
-      },
-    });
+  .setAction(async ({ nounsDescriptor }, { ethers }) => {
+    const descriptorFactory = await ethers.getContractFactory('NounsDescriptor');
     const descriptorContract = descriptorFactory.attach(nounsDescriptor);
 
     const [bodies, accessories, heads, glasses] = parts;

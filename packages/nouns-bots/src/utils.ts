@@ -30,7 +30,7 @@ export async function getAuctionCache(): Promise<number> {
 
 /**
  * Update the auction cache with `id`
- * @param id 
+ * @param id
  */
 export async function updateAuctionCache(id: number) {
   await redis.set(getAuctionCacheKey, id);

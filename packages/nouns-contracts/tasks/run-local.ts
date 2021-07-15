@@ -12,7 +12,6 @@ task(
   const contracts = await run('deploy-local');
 
   await run('populate-descriptor', {
-    nftDescriptor: contracts.NFTDescriptor.instance.address,
     nounsDescriptor: contracts.NounsDescriptor.instance.address,
   });
 

@@ -31,14 +31,7 @@ export const deployNounsDescriptor = async (
 ): Promise<NounsDescriptor> => {
   const signers = await getSigners();
   const signer = deployer || signers.deployer;
-  const nftDescriptorLibraryFactory = await ethers.getContractFactory('NFTDescriptor', signer);
-  const nftDescriptorLibrary = await nftDescriptorLibraryFactory.deploy();
-  const nounsDescriptorFactory = new NounsDescriptor__factory(
-    {
-      __$e1d8844a0810dc0e87a665b1f2b5fa7c69$__: nftDescriptorLibrary.address,
-    },
-    signer,
-  );
+  const nounsDescriptorFactory = new NounsDescriptor__factory(signer);
 
   return nounsDescriptorFactory.deploy();
 };

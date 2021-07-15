@@ -8,7 +8,6 @@ promptjs.message = '> ';
 promptjs.delimiter = '';
 
 type ContractName =
-  | 'NFTDescriptor'
   | 'NounsDescriptor'
   | 'NounsSeeder'
   | 'NounsERC721'
@@ -23,7 +22,7 @@ interface Contract {
   waitForConfirmation?: boolean;
 }
 
-task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsERC721')
+task('deploy', 'Deploys NounsDescriptor, NounsSeeder, and NounsERC721')
   .addParam('noundersdao', 'The nounders DAO contract address', undefined, types.string)
   .addParam('weth', 'The WETH contract address', undefined, types.string)
   .addOptionalParam('auctionTimeBuffer', 'The auction time buffer (seconds)', 15 * 60, types.int)
@@ -45,12 +44,7 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsER
       nonce: nonce + AUCTION_HOUSE_PROXY_NONCE_OFFSET,
     });
     const contracts: Record<ContractName, Contract> = {
-      NFTDescriptor: {},
-      NounsDescriptor: {
-        libraries: () => ({
-          NFTDescriptor: contracts['NFTDescriptor'].address as string,
-        }),
-      },
+      NounsDescriptor: {},
       NounsSeeder: {},
       NounsERC721: {
         args: [

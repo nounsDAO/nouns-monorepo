@@ -69,4 +69,6 @@ interface INounsDescriptor {
     function tokenURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view returns (string memory);
 
     function dataURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view returns (string memory);
+
+    function generateSVGImage(INounsSeeder.Seed memory seed) external view returns (string memory);
 }

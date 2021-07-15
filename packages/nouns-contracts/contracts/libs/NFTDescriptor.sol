@@ -19,13 +19,13 @@ library NFTDescriptor {
      * @notice Construct an ERC721 token URI.
      */
     function constructTokenURI(ConstructTokenURIParams memory params, mapping(uint8 => string[]) storage palettes)
-        public
+        internal
         view
         returns (string memory)
     {
         string memory name = string(abi.encodePacked('Noun #', params.tokenId.toString()));
         string memory description = _generateDescription(params.tokenId);
-        string memory image = Base64.encode(bytes(_generateSVGImage(params, palettes)));
+        string memory image = generateSVGImage(params, palettes);
 
         // prettier-ignore
         return string(
@@ -41,17 +41,10 @@ library NFTDescriptor {
     }
 
     /**
-     * @notice Generate a description for use in the ERC721 token URI.
-     */
-    function _generateDescription(uint256 tokenId) private pure returns (string memory) {
-        return string(abi.encodePacked('Noun #', tokenId.toString(), ' is a member of the NounsDAO'));
-    }
-
-    /**
      * @notice Generate an SVG image for use in the ERC721 token URI.
      */
-    function _generateSVGImage(ConstructTokenURIParams memory params, mapping(uint8 => string[]) storage palettes)
-        private
+    function generateSVGImage(ConstructTokenURIParams memory params, mapping(uint8 => string[]) storage palettes)
+        internal
         view
         returns (string memory svg)
     {
@@ -59,6 +52,13 @@ library NFTDescriptor {
             parts: params.parts,
             background: params.background
         });
-        return MultiPartRLEToSVG.generateSVG(svgParams, palettes);
+        return Base64.encode(bytes(MultiPartRLEToSVG.generateSVG(svgParams, palettes)));
+    }
+
+    /**
+     * @notice Generate a description for use in the ERC721 token URI.
+     */
+    function _generateDescription(uint256 tokenId) private pure returns (string memory) {
+        return string(abi.encodePacked('Noun #', tokenId.toString(), ' is a member of the NounsDAO'));
     }
 }
