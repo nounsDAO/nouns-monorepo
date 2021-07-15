@@ -12,7 +12,12 @@ const NavBar = () => {
 
   const connectedContent = (
     <>
-      <a href="https://faucet.rinkeby.io/" className={classes.getFakeEth} target="_blank">
+      <a
+        href="https://faucet.rinkeby.io/"
+        className={classes.getFakeEth}
+        target="_blank"
+        rel="noreferrer"
+      >
         GET RINKEBY ETH
       </a>
       <div className={classes.connectedDiv}>
