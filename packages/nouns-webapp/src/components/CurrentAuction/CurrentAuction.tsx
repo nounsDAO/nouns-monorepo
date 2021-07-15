@@ -10,7 +10,7 @@ const CurrentAuction = () => {
   const auction = useAuction(config.auctionProxyAddress);
 
   return (
-    <Section bgColor="#c5ecf8" fullWidth={false}>
+    <Section bgColor="transparent" fullWidth={false}>
       <Col lg={{ span: 5, offset: 1 }}>
         {auction ? <StandaloneNoun nounId={auction.nounId} /> : <Noun imgPath="" alt="" />}
       </Col>

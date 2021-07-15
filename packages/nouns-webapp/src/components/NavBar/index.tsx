@@ -4,6 +4,7 @@ import { Container } from 'react-bootstrap';
 import Navbar from 'react-bootstrap/Navbar';
 import ShortAddress from '../ShortAddress';
 import classes from './NavBar.module.css';
+import logo from '../../assets/logo.svg';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
@@ -24,7 +25,7 @@ const NavBar = () => {
       <Navbar bg="transparent" expand="lg">
         <Navbar.Brand href="#home">
           <img
-            src="/logo.svg"
+            src={logo}
             width="70"
             height="70"
             className="d-inline-block align-middle"
