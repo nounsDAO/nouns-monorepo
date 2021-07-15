@@ -4,17 +4,20 @@ import { useAppDispatch } from './hooks';
 import { setActiveAccount } from './state/slices/account';
 import { Router, Switch, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
+import { BigNumber } from '@usedapp/core/node_modules/ethers';
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './components/NavBar';
 import OpenSeaItem from './layout/OpenSeaItem';
-import NounGlasses from './components/NounGlasses/NounGlasses';
-import NounBody from './components/NounBody/NounBody';
-import { Container } from 'react-bootstrap';
+import CurrentAuction from './components/CurrentAuction/CurrentAuction';
+import Banner from './components/Banner';
+import HistoryCollection from './components/HistoryCollection';
+import Documentation from './components/Documentation';
+import NetworkAlert from './components/NetworkAlert';
 
 function App() {
-  const { account } = useEthers();
+  const { account, chainId } = useEthers();
   const dispatch = useAppDispatch();
   const history = createBrowserHistory();
 
@@ -25,20 +28,25 @@ function App() {
 
   return (
     <div className="App">
+      {chainId !== 4 && <NetworkAlert />}
       <NavBar />
-      <Container fluid="lg">
-        <Router history={history}>
-          <Switch>
-            <Route path="/">
-              <NounGlasses />
-              <NounBody />
-            </Route>
-            <Route path="/opensea">
-              <OpenSeaItem id={1} />
-            </Route>
-          </Switch>
-        </Router>
-      </Container>
+      <Router history={history}>
+        <Switch>
+          <Route path="/">
+            <CurrentAuction />
+            <Banner />
+            <HistoryCollection
+              latestNounId={BigNumber.from(62).sub(1)}
+              historyCount={8}
+              rtl={true}
+            />
+            <Documentation />
+          </Route>
+          <Route path="/opensea">
+            <OpenSeaItem id={1} />
+          </Route>
+        </Switch>
+      </Router>
     </div>
   );
 }

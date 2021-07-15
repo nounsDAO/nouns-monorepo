@@ -1,0 +1,16 @@
+.activityContainer {
+  padding: 1rem 2rem;
+  color: #504f49;
+}
+
+.nounTitle {
+  font-family: 'Londrina Solid';
+  font-weight: bold;
+  font-size: 3.5rem;
+}
+/* section titles (date, current bid, auction ends */
+.activityContainer h2 {
+  color: #34ac80;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
