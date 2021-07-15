@@ -1,0 +1,39 @@
+.connectButton {
+  margin-left: auto;
+  border-radius: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  border: 0 none;
+  height: 3rem;
+  font-size: large;
+  font-weight: normal;
+  font-family: 'Londrina Solid';
+  background-color: #d89eef;
+  color: white;
+}
+.connectButton:hover,
+.connectButton:active,
+.connectButton:focus {
+  background-color: #b886cc;
+  color: rgb(209, 207, 207);
+}
+
+div.connectedDiv {
+  margin-left: auto;
+  border-radius: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  border: 0 none;
+  background-color: #ffffff;
+  height: 3rem;
+  font-size: large;
+  font-weight: normal;
+  color: rgb(144, 144, 144);
+  font-family: 'Londrina Solid';
+}
