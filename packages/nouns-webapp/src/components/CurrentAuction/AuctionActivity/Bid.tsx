@@ -146,20 +146,24 @@ const Bid: React.FC<{ auction: Auction; auctionEnded: boolean }> = props => {
       {modal.show && (
         <Modal title={modal.title} message={modal.message} onDismiss={dismissModalHanlder} />
       )}
-      <button
-        className={auctionEnded ? classes.bidBtnAuctionEnded : classes.bidBtn}
-        onClick={auctionEnded ? settleAuctionHandler : placeBidHandler}
-        disabled={placeBidState.status === 'Mining' || settleAuctionState.status === 'Mining'}
-      >
-        {bidButtonContent.loading ? <Spinner animation="border" /> : bidButtonContent.content}
-      </button>
-      <input
-        className={auctionEnded ? classes.bidInputAuctionEnded : classes.bidInput}
-        onChange={bidInputHandler}
-        type="number"
-        placeholder="ETH"
-        min="0"
-      ></input>
+      {auction && (
+        <>
+          <button
+            className={auctionEnded ? classes.bidBtnAuctionEnded : classes.bidBtn}
+            onClick={auctionEnded ? settleAuctionHandler : placeBidHandler}
+            disabled={placeBidState.status === 'Mining' || settleAuctionState.status === 'Mining'}
+          >
+            {bidButtonContent.loading ? <Spinner animation="border" /> : bidButtonContent.content}
+          </button>
+          <input
+            className={auctionEnded ? classes.bidInputAuctionEnded : classes.bidInput}
+            onChange={bidInputHandler}
+            type="number"
+            placeholder="ETH"
+            min="0"
+          ></input>
+        </>
+      )}
     </>
   );
 };
