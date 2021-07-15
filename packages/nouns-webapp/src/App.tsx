@@ -4,6 +4,7 @@ import { useAppDispatch } from './hooks';
 import { setActiveAccount } from './state/slices/account';
 import { Router, Switch, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
+import { BigNumber } from '@usedapp/core/node_modules/ethers';
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -12,11 +13,11 @@ import OpenSeaItem from './layout/OpenSeaItem';
 import CurrentAuction from './components/CurrentAuction/CurrentAuction';
 import Banner from './components/Banner';
 import HistoryCollection from './components/HistoryCollection';
-import { BigNumber } from '@usedapp/core/node_modules/ethers';
 import Documentation from './components/Documentation';
+import NetworkAlert from './components/NetworkAlert';
 
 function App() {
-  const { account } = useEthers();
+  const { account, chainId } = useEthers();
   const dispatch = useAppDispatch();
   const history = createBrowserHistory();
 
@@ -27,6 +28,7 @@ function App() {
 
   return (
     <div className="App">
+      {chainId !== 4 && <NetworkAlert />}
       <NavBar />
       <Router history={history}>
         <Switch>
