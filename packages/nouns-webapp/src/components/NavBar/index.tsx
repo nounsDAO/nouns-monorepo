@@ -42,7 +42,7 @@ const NavBar = () => {
             width="70"
             height="70"
             className="d-inline-block align-middle"
-            alt="React Bootstrap logo"
+            alt="Nouns DAO logo"
           />
         </Navbar.Brand>
         {activeAccount ? connectedContent : disconnectedContent}
