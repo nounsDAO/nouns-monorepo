@@ -1,4 +1,17 @@
-.wrapper h1 {
+.headerWrapper h1 {
   font-family: 'Londrina Solid';
   font-size: 4rem;
+}
+.headerWrapper p {
+  margin: 3rem 0;
+}
+.card {
+  border: none;
+}
+.cardHeader {
+  border: none;
+  background-color: transparent;
+  font-family: 'Londrina Solid';
+  font-size: 2rem;
+  cursor: pointer;
 }
