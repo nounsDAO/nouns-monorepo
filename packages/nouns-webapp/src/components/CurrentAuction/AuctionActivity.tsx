@@ -1,5 +1,6 @@
 import { Auction } from '../../wrappers/nounsAuction';
 import { useState } from 'react';
+import { BigNumber } from '@usedapp/core/node_modules/ethers';
 import classes from './AuctionActivity.module.css';
 import Bid from './AuctionActivity/Bid';
 import BidTimer from './AuctionActivity/AuctionTimer';
@@ -14,12 +15,17 @@ const ActivityLens: React.FC<{ auction: Auction }> = props => {
     setAuctionEnded(ended);
   };
 
-  const nounIdContent = auction ? `Noun #${auction.nounId}` : '';
+  const nounIdContent = auction && `Noun #${auction.nounId}`;
+  const auctionStartTimeUTC =
+    auction &&
+    moment(BigNumber.from(auction.startTime).toNumber() * 1000)
+      .utc()
+      .format('MMM DD YYYY');
 
   return (
     <>
       <div className={classes.activityContainer}>
-        <h2>{auction && moment().format('MMM DD YYYY')}</h2>
+        <h2>{auction && `${auctionStartTimeUTC} (GMT)`}</h2>
         <h1 className={classes.nounTitle}>{nounIdContent}</h1>
         <CurrentBid auction={auction} auctionEnded={auctionEnded} />
         <BidTimer
