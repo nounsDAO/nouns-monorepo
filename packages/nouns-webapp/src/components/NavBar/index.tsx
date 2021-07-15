@@ -10,11 +10,19 @@ const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { activateBrowserWallet } = useEthers();
 
-  const connectedContent = activeAccount ? (
-    <div className={classes.connectedDiv}>
-      <ShortAddress>{activeAccount}</ShortAddress>
-    </div>
-  ) : (
+  const connectedContent = (
+    <>
+      <a href="https://faucet.rinkeby.io/" className={classes.getFakeEth} target="_blank">
+        GET RINKEBY ETH
+      </a>
+      <div className={classes.connectedDiv}>
+        <ShortAddress>{activeAccount}</ShortAddress>
+        <span className={classes.greenStatusCircle}></span>
+      </div>
+    </>
+  );
+
+  const disconnectedContent = (
     <button className={classes.connectButton} onClick={() => activateBrowserWallet()}>
       Connect Wallet
     </button>
@@ -23,7 +31,7 @@ const NavBar = () => {
   return (
     <Container>
       <Navbar bg="transparent" expand="lg">
-        <Navbar.Brand href="#home">
+        <Navbar.Brand href="#home" className="mr-auto">
           <img
             src={logo}
             width="70"
@@ -32,7 +40,7 @@ const NavBar = () => {
             alt="React Bootstrap logo"
           />
         </Navbar.Brand>
-        {connectedContent}
+        {activeAccount ? connectedContent : disconnectedContent}
       </Navbar>
     </Container>
   );

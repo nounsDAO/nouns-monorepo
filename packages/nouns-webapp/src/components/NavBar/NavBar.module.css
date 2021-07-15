@@ -1,5 +1,4 @@
 .connectButton {
-  margin-left: auto;
   border-radius: 50px;
   display: flex;
   flex-direction: column;
@@ -7,7 +6,7 @@
   justify-content: center;
   padding: 2rem;
   border: 0 none;
-  height: 3rem;
+  height: 2.5rem;
   font-size: large;
   font-weight: normal;
   font-family: 'Londrina Solid';
@@ -22,19 +21,49 @@
   color: rgb(209, 207, 207);
 }
 
-div.connectedDiv {
-  margin-left: auto;
+.connectedDiv {
   border-radius: 50px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 2rem;
   border: 0 none;
   background-color: #ffffff;
-  height: 3rem;
+  height: 2.5rem;
   font-size: large;
   font-weight: normal;
   color: rgb(144, 144, 144);
   font-family: 'Londrina Solid';
+}
+
+.connectedDiv .greenStatusCircle {
+  width: 10px;
+  height: 10px;
+  background-color: #7fc59c;
+  transform: translateY(-14px) translateX(3px);
+  border-radius: 50%;
+}
+
+.getFakeEth {
+  margin-right: 1rem;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  border: 0 none;
+  background-color: #ffffff;
+  height: 2.5rem;
+  font-size: large;
+  font-weight: normal;
+  color: rgb(144, 144, 144);
+  font-family: 'Londrina Solid';
+}
+.getFakeEth:visited {
+  color: rgb(144, 144, 144);
+}
+.getFakeEth:hover,
+.getFakeEth:focus {
+  text-decoration: none;
+  color: #5c8f71;
 }
