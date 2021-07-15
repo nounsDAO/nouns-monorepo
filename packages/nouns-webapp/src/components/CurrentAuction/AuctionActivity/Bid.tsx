@@ -43,6 +43,9 @@ const Bid: React.FC<{ auction: Auction; auctionEnded: boolean }> = props => {
   };
 
   const placeBidHandler = () => {
+    if (!auction) {
+      return;
+    }
     placeBid(auction.nounId, {
       value: utils.parseEther(bidAmount.toString()),
     });
