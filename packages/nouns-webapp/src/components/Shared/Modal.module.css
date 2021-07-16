@@ -1,0 +1,48 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.modal {
+  position: fixed;
+  top: 30vh;
+  left: 10%;
+  width: 80%;
+  z-index: 100;
+  background-color: white;
+  padding: 2rem;
+  text-align: center;
+  border-radius: 1px;
+}
+
+.modal h3 {
+  font-weight: bold;
+}
+
+.content {
+  padding: 1rem;
+}
+
+.modal button {
+  position: absolute;
+  top: 1rem;
+  right: 2rem;
+  border: 0 none;
+  background-color: transparent;
+}
+.modal button img {
+  width: 1rem;
+  height: auto;
+}
+
+@media (min-width: 768px) {
+  .modal {
+    left: calc(50% - 15rem);
+    width: 30rem;
+  }
+}
