@@ -1,7 +1,5 @@
 export interface Auction {
   id: number;
-  startTime: number;
-  endTime: number;
 }
 
 export interface TokenMetadata {

@@ -11,20 +11,11 @@ export const getAuctionCacheKey = 'NOUNS_AUCTION_CACHE';
  * @param durationSeconds The duration of the auction in seconds.
  * @returns Text to be used in tweet when auction starts.
  */
-export function getAuctionStartedTweetText(auctionId: number, durationSeconds: number) {
+export function getAuctionStartedTweetText(auctionId: number) {
   return `＊Bleep Bloop Blop＊
         
- A ${secondsToHoursFloor(durationSeconds)} hour auction has started for: Noun #${auctionId}
+ An auction has started for Noun #${auctionId}
  Learn more at https://nouns.wtf`;
-}
-
-/**
- * Convert a duration of seconds into hours
- * @param seconds The total seconds (duration) to convert
- * @returns The number of hours (floor) represented by `seconds`
- */
-export function secondsToHoursFloor(seconds: number): number {
-  return Math.floor(seconds / (60 * 60));
 }
 
 /**

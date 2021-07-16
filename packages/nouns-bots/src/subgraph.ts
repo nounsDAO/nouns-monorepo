@@ -13,8 +13,6 @@ export async function getLastAuction(): Promise<Auction> {
       query {
         auctions(orderBy: startTime orderDirection: desc first: 1) {
           id
-          startTime
-          endTime
         }
       }
     `,
