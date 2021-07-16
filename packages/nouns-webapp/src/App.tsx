@@ -15,6 +15,7 @@ import Banner from './components/Banner';
 import HistoryCollection from './components/HistoryCollection';
 import Documentation from './components/Documentation';
 import NetworkAlert from './components/NetworkAlert';
+import Footer from './components/Footer';
 
 function App() {
   const { account, chainId } = useEthers();
@@ -41,6 +42,7 @@ function App() {
               rtl={true}
             />
             <Documentation />
+            <Footer />
           </Route>
           <Route path="/opensea">
             <OpenSeaItem id={1} />
