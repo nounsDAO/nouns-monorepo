@@ -12,6 +12,7 @@ import {
 } from "@apollo/client";
 import { clientFactory } from './wrappers/subgraph';
 import config from './config';
+require('dotenv').config()
 
 const store = configureStore({
   reducer: {

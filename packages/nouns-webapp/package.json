@@ -32,6 +32,9 @@
     "web-vitals": "^1.0.1",
     "@usedapp/core": "^0.4.0"
   },
+  "devDependencies": {
+    "dotenv":"^10.0.0"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
