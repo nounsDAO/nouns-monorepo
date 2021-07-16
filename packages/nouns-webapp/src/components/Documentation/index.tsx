@@ -50,15 +50,13 @@ const Documentation = () => {
             </Accordion.Toggle>
             <Accordion.Collapse eventKey="1">
               <Card.Body>
-                The nouns auction contract will act as a self-sufficient noun generation and
-                distribution mechanism, auctioning one noun every 24 hours forever. 100% of the
-                proceeds for each auction are automatically deposited in the Nouns DAO treasury,
-                where they are governed by noun owners. Each time an auction is settled, the
-                settlement transaction will result in the minting and auction of a new noun by the
-                contract. While settlement is most heavily incentivized for the winning bidder, it
+                <p>The Nouns Auction Contract will act as a self-sufficient noun generation and
+                distribution mechanism, auctioning one noun every 24 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the Nouns DAO treasury,
+                where they are governed by noun owners.</p>
+
+                <p>Each time an auction is settled, the settlement transaction will also cause a new noun to be minted and a new 24 hour auction to begin. </p><p>While settlement is most heavily incentivized for the winning bidder, it
                 can be triggered by anyone, allowing the system to trustlessly auction nouns as long
-                as Ethereum is operational and there are interested participants. Noun auctions
-                utilize a fork of Zora's auction house. You can see the contracts here: [url]
+                as Ethereum is operational and there are interested bidders.</p>
               </Card.Body>
             </Accordion.Collapse>
           </Card>
@@ -68,13 +66,12 @@ const Documentation = () => {
             </Accordion.Toggle>
             <Accordion.Collapse eventKey="2">
               <Card.Body>
-                Nouns DAO utilizes a fork of Compound Governance and is the main governing body of
-                the nouns ecosystem. The Nouns DAO treasury receives 100% of ETH proceeds from daily
-                noun auctions. Each noun is an irrevocable member of Nouns DAO and entitled to 1
+                Nouns DAO utilizes a fork of <a href="https://compound.finance/governance"> Compound Governance</a> and is the main governing body of
+                the Nouns ecosystem. The Nouns DAO treasury receives 100% of ETH proceeds from daily
+                noun auctions. Each noun is an irrevocable member of Nouns DAO and entitled to one
                 vote in all governance matters. Noun votes are non-transferable (if you sell your
-                Noun the vote goes with it) but delegatable, which means you can assign your vote to
-                someone else as long as you own your noun. Nouns governance contracts are available
-                here: [url]
+                noun the vote goes with it) but delegatable, which means you can assign your vote to
+                someone else as long as you own your noun.
               </Card.Body>
             </Accordion.Collapse>
           </Card>
@@ -84,15 +81,21 @@ const Documentation = () => {
             </Accordion.Toggle>
             <Accordion.Collapse eventKey="3">
               <Card.Body>
-                "Nounders" are the group of ten artists and software developers that created Nouns.
-                After the mainnet launch of the project, they will cede control of the project to
-                Nouns DAO. As compensation for developing Nouns, Nounders have awarded themselves
-                every 10th noun for the first 5 years of the project (183 of the first 1830 Nouns).
-                Noun ids #0, #10, #20, #30 and so on, will be automatically sent to the Nounder's
-                multisig to be vested and shared among the 10 founding members of the project.
-                Nounder distributions don't interfere with the cadence of 24 hour auctions. Nouns
+                <p>'Nounders' are the group of ten builders that initiated Nouns:</p>
+                
+                <ul>
+                  <li>@cryptoseneca</li>
+                  <li>@supergremplin</li>
+                  <li>@punk4156</li>
+                  <li>@eboyarts</li>
+                </ul>
+
+                <p>Because 100% of noun auction proceeds are sent to Nouns DAO, Nounders have chosen to compensate themselves with nouns. Every 10th noun for the first 5 years of the project (noun ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's
+                multisig to be vested and shared among the founding members of the project.</p>
+
+                <p>Nounder distributions don't interfere with the cadence of 24 hour auctions. Nouns
                 are sent directly to the Nounder's Multisig, and auctions continue on schedule with
-                the next available noun ID.
+                the next available noun ID.</p>
               </Card.Body>
             </Accordion.Collapse>
           </Card>
@@ -102,13 +105,9 @@ const Documentation = () => {
             </Accordion.Toggle>
             <Accordion.Collapse eventKey="4">
               <Card.Body>
-                An additional governance veto right has been added by the Nounders to ensure that no
-                malicious proposals can be passed early in the project's history. The veto allows
-                Nounders to prevent any governance proposal from being implemented, and is intended
-                to be used only in a scenario where an obviously malicious proposal has been passed.
-                The Nounders will revoke the veto right on-chain as soon as they deem it safe to do
-                so. This decision will be based on fair distribution of early nouns and an active
-                community of noun owners that demonstrate goodwill towards the project.
+                <p>In addition to the usual precautions taken by Compound Governance, Nounders have given themselves a special veto right to ensure that no
+                malicious proposals can be passed while the noun supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort.</p>
+                <p>Nounders will proveably revoke this veto right as soon as they deem it safe to do so. This decision will be based on a healthy noun distribution and a community that is engaged in the governance process.</p>
               </Card.Body>
             </Accordion.Collapse>
           </Card>
