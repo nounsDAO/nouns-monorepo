@@ -49,13 +49,16 @@ const fetchSources = async () => {
             let json = await res.json()
             nounsData.push({
                 base64: json.base64,
-                dominantColorHSL: json.dominantColorHSL
+                dominantColorHSL: json.dominantColorHSL,
+                layers: json.layers
             })
-            addNounImg(json.base64, json.dominantColorHSL, selectedDisplayMode)
+            addNounImg(json.base64, json.dominantColorHSL, selectedDisplayMode, json.layers)
         }
 
         setButtonLoading(generateButton, false, 'GO!')
         sourceButton.disabled = false
+        
+        initTooltips()
     } catch (e) {
         console.log(`error fetching random noun. `, e)
         setButtonLoading(generateButton, false, 'GO!')

@@ -13,5 +13,6 @@ jobs:
         uses: google-github-actions/upload-cloud-storage@main
         with:
           credentials: ${{ secrets.GCLOUD_STORAGE_SERVICE_ACCOUNT }}
-          path: packages/nouns-img-permutator/assets
-          destination: nounsdao.appspot.com/src-main
+          path: packages/nouns-img-permutator/assets/
+          destination: nounsdao.appspot.com/src-main/assets/
+          parent: false

@@ -158,7 +158,7 @@ describe('NounsAuctionHouse', () => {
 
     await expect(tx)
       .to.emit(nounsAuctionHouse, 'AuctionBid')
-      .withArgs(nounId, bidderA.address, RESERVE_PRICE, true, false);
+      .withArgs(nounId, bidderA.address, RESERVE_PRICE, false);
   });
 
   it('should emit an `AuctionExtended` event if the auction end time is within the time buffer', async () => {
@@ -200,14 +200,21 @@ describe('NounsAuctionHouse', () => {
     });
 
     await ethers.provider.send('evm_increaseTime', [60 * 60 * 25]); // Add 25 hours
-    const tx = nounsAuctionHouse.connect(bidderA).settleCurrentAndCreateNewAuction();
+    const tx = await nounsAuctionHouse.connect(bidderA).settleCurrentAndCreateNewAuction();
 
-    await Promise.all([
-      expect(tx)
-        .to.emit(nounsAuctionHouse, 'AuctionSettled')
-        .withArgs(nounId, bidderA.address, RESERVE_PRICE),
-      expect(tx).to.emit(nounsAuctionHouse, 'AuctionCreated').withArgs(nounId.add(1)),
-    ]);
+    const receipt = await tx.wait();
+    const { timestamp } = await ethers.provider.getBlock(receipt.blockHash);
+
+    const settledEvent = receipt.events?.find(e => e.event === 'AuctionSettled');
+    const createdEvent = receipt.events?.find(e => e.event === 'AuctionCreated');
+
+    expect(settledEvent?.args?.nounId).to.equal(nounId);
+    expect(settledEvent?.args?.winner).to.equal(bidderA.address);
+    expect(settledEvent?.args?.amount).to.equal(RESERVE_PRICE);
+
+    expect(createdEvent?.args?.nounId).to.equal(nounId.add(1));
+    expect(createdEvent?.args?.startTime).to.equal(timestamp);
+    expect(createdEvent?.args?.endTime).to.equal(timestamp + DURATION);
   });
 
   it('should not create a new auction if the auction house is paused and unpaused while an auction is ongoing', async () => {
@@ -241,8 +248,15 @@ describe('NounsAuctionHouse', () => {
       .to.emit(nounsAuctionHouse, 'AuctionSettled')
       .withArgs(nounId, bidderA.address, RESERVE_PRICE);
 
-    const unpauseTx = nounsAuctionHouse.unpause();
-    await expect(unpauseTx).to.emit(nounsAuctionHouse, 'AuctionCreated').withArgs(nounId.add(1));
+    const unpauseTx = await nounsAuctionHouse.unpause();
+    const receipt = await unpauseTx.wait();
+    const { timestamp } = await ethers.provider.getBlock(receipt.blockHash);
+
+    const createdEvent = receipt.events?.find(e => e.event === 'AuctionCreated');
+
+    expect(createdEvent?.args?.nounId).to.equal(nounId.add(1));
+    expect(createdEvent?.args?.startTime).to.equal(timestamp);
+    expect(createdEvent?.args?.endTime).to.equal(timestamp + DURATION);
   });
 
   it('should settle the current auction and pause the contract if the minter is updated while the auction house is unpaused', async () => {

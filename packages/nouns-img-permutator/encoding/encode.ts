@@ -129,9 +129,16 @@ const getEncodedImage = async (folder: string, file: string) => {
     delete lines[i]; // Delete all rows below the bottom bound
   }
 
-  if (Object.keys(lines).length) {
+  const lineLength = Object.keys(lines).length;
+  if (lineLength) {
     bounds.left = Math.min(...Object.values(lines).map(l => l.bounds.left));
     bounds.right = Math.max(...Object.values(lines).map(l => l.bounds.right));
+
+    // Exit early if image is empty
+    const [rect] = lines[0]?.rects || [];
+    if (lineLength === 1 && rect?.length === 32 && rect?.colorIndex === 0) {
+      return '0x0000000000';
+    }
   }
 
   const initial = `0x00${toPaddedHex(bounds.top, 2)}${toPaddedHex(bounds.right, 2)}${toPaddedHex(

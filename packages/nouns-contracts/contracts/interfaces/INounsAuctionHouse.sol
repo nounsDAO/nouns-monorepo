@@ -23,9 +23,9 @@ interface INounsAuctionHouse {
         bool settled;
     }
 
-    event AuctionCreated(uint256 indexed nounId);
+    event AuctionCreated(uint256 indexed nounId, uint256 startTime, uint256 endTime);
 
-    event AuctionBid(uint256 indexed nounId, address sender, uint256 value, bool firstBid, bool extended);
+    event AuctionBid(uint256 indexed nounId, address sender, uint256 value, bool extended);
 
     event AuctionExtended(uint256 indexed nounId, uint256 endTime);
 
