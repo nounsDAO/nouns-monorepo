@@ -160,9 +160,10 @@ const Documentation = () => {
 
                 <p>
                   The compressed parts are efficiently converted into a single base64 encoded SVG
-                  image on-chain and each part is decoded into an intermediate format before being
-                  converted into a series of SVG rects using batched, on-chain string concatenation.
-                  Once the entire SVG has been generated, it is base64 encoded.
+                  image on-chain. To accomplish this, each part is decoded into an intermediate
+                  format before being converted into a series of SVG rects using batched, on-chain
+                  string concatenation. Once the entire SVG has been generated, it is base64
+                  encoded.
                 </p>
               </Card.Body>
             </Accordion.Collapse>
@@ -180,8 +181,9 @@ const Documentation = () => {
                   future updates. Currently, Noun traits are determined using pseudo-random number
                   generation:
                 </p>
-
-                <p>keccak256(abi.encodePacked(blockhash(block.number - 1), nounId))</p>
+                <code>keccak256(abi.encodePacked(blockhash(block.number - 1), nounId))</code>
+                <br />
+                <br />
                 <p>
                   Trait generation is not truly random. Traits can be predicted when minting a Noun
                   on the pending block.
