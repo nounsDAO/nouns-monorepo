@@ -75,36 +75,6 @@ const Documentation = () => {
             </Accordion.Collapse>
           </Card>
           <Card className={classes.card}>
-            <Accordion.Toggle as={Card.Header} eventKey="3" className={classes.cardHeader}>
-              Nounders Reward
-            </Accordion.Toggle>
-            <Accordion.Collapse eventKey="3">
-              <Card.Body>
-                <p>'Nounders' are the group of ten builders that initiated Nouns. Here are some of the Nounders:</p>
-                
-                <ul>
-                  <li>@cryptoseneca</li>
-                  <li>@supergremplin</li>
-                  <li>@punk4156</li>
-                  <li>@eboyarts</li>
-                  <li>@punk4464</li>
-                  <li>solimander</li>
-                  <li>@dhof</li>
-                  <li>devcarrot</li>
-                  <li>@TimpersHD</li>
-                  <li>@lastpunk9999</li>
-                </ul>
-
-                <p>Because 100% of noun auction proceeds are sent to Nouns DAO, Nounders have chosen to compensate themselves with nouns. Every 10th noun for the first 5 years of the project (noun ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's
-                multisig to be vested and shared among the founding members of the project.</p>
-
-                <p>Nounder distributions don't interfere with the cadence of 24 hour auctions. Nouns
-                are sent directly to the Nounder's Multisig, and auctions continue on schedule with
-                the next available noun ID.</p>
-              </Card.Body>
-            </Accordion.Collapse>
-          </Card>
-          <Card className={classes.card}>
             <Accordion.Toggle as={Card.Header} eventKey="4" className={classes.cardHeader}>
               Governance ‘Slow Start’
             </Accordion.Toggle>
@@ -122,17 +92,17 @@ const Documentation = () => {
             </Accordion.Toggle>
             <Accordion.Collapse eventKey="5">
               <Card.Body>
-                Nouns are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules
+                <p>Nouns are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules
                 governing noun trait scarcity, which makes all nouns equally rare. As of this
-                writing, nouns are made up of:
+                writing, nouns are made up of:</p>
                 <ul>
-                  <li>Backgrounds (2) </li>
-                  <li>Bodies (30)</li>
-                  <li>Accessories (136) </li>
-                  <li>Heads(206) </li>
-                  <li>Glasses (19)</li>
+                  <li>backgrounds (2) </li>
+                  <li>bodies (30)</li>
+                  <li>accessories (136) </li>
+                  <li>heads(206) </li>
+                  <li>glasses (19)</li>
                 </ul>
-                You can experiment with noun generation at <a href="https://nouns.wtf/playground">nouns.wtf/playground</a>
+                You can experiment with off-chain noun generation at <a href="https://nouns.wtf/playground">nouns.wtf/playground</a>
               </Card.Body>
             </Accordion.Collapse>
           </Card>
@@ -155,12 +125,40 @@ const Documentation = () => {
             </Accordion.Toggle>
             <Accordion.Collapse eventKey="7">
               <Card.Body>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                deserunt mollit anim id est laborum.
+                <p>The Noun Seeder contract is used to determine Noun traits during the minting process. The seeder contract can be replaced to allow for future trait generation algorithm upgrades. Additionally, it can be locked by the Nouns DAO to prevent any future updates. Currently, Noun traits are determined using pseudo-random number generation:</p>
+
+                <p>keccak256(abi.encodePacked(blockhash(block.number - 1), nounId))</p>
+                <p>Trait generation is not truly random. Traits can be predicted when minting a Noun on the pending block.</p>
+              </Card.Body>
+            </Accordion.Collapse>
+          </Card>
+          <Card className={classes.card}>
+            <Accordion.Toggle as={Card.Header} eventKey="3" className={classes.cardHeader}>
+              Nounder's Rewards
+            </Accordion.Toggle>
+            <Accordion.Collapse eventKey="3">
+              <Card.Body>
+                <p>'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:</p>
+                
+                <ul>
+                  <li>@cryptoseneca</li>
+                  <li>@supergremplin</li>
+                  <li>@punk4156</li>
+                  <li>@eboyarts</li>
+                  <li>@punk4464</li>
+                  <li>solimander</li>
+                  <li>@dhof</li>
+                  <li>devcarrot</li>
+                  <li>@TimpersHD</li>
+                  <li>@lastpunk9999</li>
+                </ul>
+
+                <p>Because 100% of noun auction proceeds are sent to Nouns DAO, Nounders have chosen to compensate themselves with nouns. Every 10th noun for the first 5 years of the project (noun ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's
+                multisig to be vested and shared among the founding members of the project.</p>
+
+                <p>Nounder distributions don't interfere with the cadence of 24 hour auctions. Nouns
+                are sent directly to the Nounder's Multisig, and auctions continue on schedule with
+                the next available noun ID.</p>
               </Card.Body>
             </Accordion.Collapse>
           </Card>
