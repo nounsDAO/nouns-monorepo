@@ -14,9 +14,8 @@ const Documentation = () => {
             communities. While projects such as <a href="https://www.larvalabs.com/cryptopunks">Cryptopunks</a> have attempted to bootstrap digital
             community and identity, Nouns attempt to bootstrap identity, community, governance and a
             treasury that can be used by the community for the creation of long-term value.
-            Additionally, Nouns attempt to significantly slow community formation to ensure
-            continuous community growth over time and to incentivize long-term thinking.
           </p>
+          <p>Learn more about on-chain nouns below, or make some off-chain nouns using <a href="https://nouns.wtf/playground">nouns playground</a>.</p>
         </div>
         <Accordion>
           <Card className={classes.card}>
@@ -26,18 +25,18 @@ const Documentation = () => {
             <Accordion.Collapse eventKey="0">
               <Card.Body>
                 <ul>
+                  <li>nouns artwork is <a href="https://creativecommons.org/publicdomain/zero/1.0/">public domain</a></li>
                   <li>1 noun trustlessly auctioned every 24 hours, forever</li>
+                  <li>100% of noun auction proceeds are trustlessly sent to Nouns DAO treasury</li>
                   <li>settlement of one auction kicks off the next</li>
                   <li>all nouns are members of Nouns DAO</li>
                   <li>Nouns DAO uses a fork of <a href="https://compound.finance/governance"> Compound Governance</a></li>
                   <li>1 noun = 1 vote</li>
-                  <li>100% of noun auction proceeds are trustlessly sent to Nouns DAO treasury</li>
-                  <li>treasury is controlled by nouns via governance</li>
+                  <li>treasury is controlled exclusively by nouns via governance</li>
                   <li>artwork is generative and stored directly on-chain (not IPFS)</li>
                   <li>no explicit rules for attribute scarcity, all nouns are equally rare</li>
-                  <li>nouns artwork is <a href="https://creativecommons.org/publicdomain/zero/1.0/">public domain</a></li>
                   <li>
-                    project creators (‘Nounders’) receive rewards in the form of nouns (10% of
+                    'Nounders' receive rewards in the form of nouns (10% of
                     supply for first 5 years)
                   </li>
                 </ul>
@@ -123,19 +122,17 @@ const Documentation = () => {
             </Accordion.Toggle>
             <Accordion.Collapse eventKey="5">
               <Card.Body>
-                Nouns are generated randomly based Ethereum block hashes and a set of encoded
-                on-chain assets per layer of artwork. There are no 'if' statements or other rules
+                Nouns are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules
                 governing noun trait scarcity, which makes all nouns equally rare. As of this
                 writing, nouns are made up of:
                 <ul>
-                  <li>Layer 1: backgrounds (1/2) </li>
-                  <li>Layer 2: shirts (1/X)</li>
-                  <li>Layer 3: accessories: (1/X) </li>
-                  <li>Layer 4: heads (1/X) </li>
-                  <li>Layer 5: glasses (1/X)</li>
+                  <li>Backgrounds (2) </li>
+                  <li>Bodies (30)</li>
+                  <li>Accessories (136) </li>
+                  <li>Heads(206) </li>
+                  <li>Glasses (19)</li>
                 </ul>
-                You can use the same algorithm to generate off-chain Nouns by visiting
-                nouns.wtf/generator
+                You can experiment with noun generation at <a href="https://nouns.wtf/playground">nouns.wtf/playground</a>
               </Card.Body>
             </Accordion.Collapse>
           </Card>
