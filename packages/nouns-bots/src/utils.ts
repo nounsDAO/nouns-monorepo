@@ -12,7 +12,7 @@ export const getAuctionCacheKey = 'NOUNS_AUCTION_CACHE';
  * @returns Text to be used in tweet when auction starts.
  */
 export function getAuctionStartedTweetText(auctionId: number, durationSeconds: number) {
-  return `*Bleep Bloop Blop*
+  return `＊Bleep Bloop Blop＊
         
  A ${secondsToHoursFloor(durationSeconds)} hour auction has started for: Noun #${auctionId}
  Learn more at https://nouns.wtf`;
