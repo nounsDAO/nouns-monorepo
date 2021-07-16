@@ -31,11 +31,11 @@ contract NounsERC721 is INounsERC721, ERC721Governance, Ownable {
     // Whether the seeder can be updated
     bool public isSeederLocked;
 
+    // The noun seeds
+    mapping(uint256 => INounsSeeder.Seed) public seeds;
+
     // The internal noun ID tracker
     uint256 private _currentNounId;
-
-    // The internal noun seeds
-    mapping(uint256 => INounsSeeder.Seed) private _seeds;
 
     /**
      * @notice Require that the minter has not been locked.
@@ -116,7 +116,7 @@ contract NounsERC721 is INounsERC721, ERC721Governance, Ownable {
      */
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
         require(_exists(tokenId), 'NounsERC721: URI query for nonexistent token');
-        return descriptor.tokenURI(tokenId, _seeds[tokenId]);
+        return descriptor.tokenURI(tokenId, seeds[tokenId]);
     }
 
     /**
@@ -125,7 +125,7 @@ contract NounsERC721 is INounsERC721, ERC721Governance, Ownable {
      */
     function dataURI(uint256 tokenId) public view override returns (string memory) {
         require(_exists(tokenId), 'NounsERC721: URI query for nonexistent token');
-        return descriptor.dataURI(tokenId, _seeds[tokenId]);
+        return descriptor.dataURI(tokenId, seeds[tokenId]);
     }
 
     /**
@@ -196,7 +196,7 @@ contract NounsERC721 is INounsERC721, ERC721Governance, Ownable {
      * @notice Mint a Noun with `nounId` to the provided `to` address.
      */
     function _mintTo(address to, uint256 nounId) internal returns (uint256) {
-        INounsSeeder.Seed memory seed = _seeds[nounId] = seeder.generateSeed(nounId, descriptor);
+        INounsSeeder.Seed memory seed = seeds[nounId] = seeder.generateSeed(nounId, descriptor);
 
         _mint(to, nounId);
         emit NounCreated(nounId, seed);
