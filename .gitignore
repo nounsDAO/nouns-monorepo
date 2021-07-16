@@ -14,8 +14,9 @@ dist
 packages/nouns-contracts/**/artifacts
 packages/nouns-contracts/**/cache
 
-packages/nouns-contracts/abi/**
-packages/nouns-contracts/abi/contracts/**
+packages/nouns-contracts/abi/@openzeppelin/*
+packages/nouns-contracts/abi/contracts/*
 
 !packages/nouns-contracts/abi/contracts
 !packages/nouns-contracts/abi/contracts/NounsERC721.sol
+!packages/nouns-contracts/abi/contracts/NounsAuctionHouse.sol

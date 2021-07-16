@@ -1,25 +1,30 @@
 
 
-
+// image merging
 const { Canvas, Image } = require('canvas')
 const mergeImages = require('merge-images')
 const os = require("os") // access tmp folders
+
+// bg color generation
 const { getColorFromURL } = require('color-thief-node');
-const fse = require('fs-extra')
 var convert = require('color-convert');
 
+// firebase 
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 const serviceAccount = require("./serviceAccount.json")
-const cors = require("cors")({origin: true})
-
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   storageBucket: "nounsdao.appspot.com"
 });
+
+// google cloud storage 
 const storageBucket = admin.storage().bucket()
 const db = admin.firestore();
 
+const fse = require('fs-extra')
+const cors = require("cors")({origin: true})
+const https = require('https');
 
 /**
  * Retrieves available top-level directories within bucket
@@ -113,7 +118,8 @@ exports.fetchLayersAndOptionsWithSource = functions.https.onRequest(async (reque
 /**
  * Accepts options for layers to create noun using data. Data should be formatted as an object where
  * its keys are the layer name and values are an array of option strings. 
- * Returns the base64 string representing the finalized noun image.
+ * Returns object with base64 string representing the finalized noun image, 
+ * layer names and HSL color representation of generated noun dominant color.
  */
  exports.generateNounUsingOptionsAndSourceAndBG = functions.https.onRequest(async (request, response) => {
     cors(request, response, async () => {
@@ -123,6 +129,9 @@ exports.fetchLayersAndOptionsWithSource = functions.https.onRequest(async (reque
         await docRef.update({
             counter: admin.firestore.FieldValue.increment(1)
         });
+
+        // hit grafana dashboard counter endpoint
+        https.get('https://simple-counter.nouns.tools/count/inc/nouns-wtf-generated')
 
         let options = JSON.parse(request.query.options)
         let layers = Object.keys(options.layers)
@@ -244,7 +253,7 @@ exports.fetchLayersAndOptionsWithSource = functions.https.onRequest(async (reque
 /**
  * Accepts options for layers to create noun using data. Data should be formatted as an object where
  * its keys are the layer name and values are an array of option strings. 
- * Returns the base64 string representing the finalized noun image.
+  * Returns object with base64 string representing the finalized noun image and layer names.
  */
  exports.generateNounUsingOptionsAndSource = functions.https.onRequest(async (request, response) => {
     cors(request, response, async () => {
@@ -254,6 +263,9 @@ exports.fetchLayersAndOptionsWithSource = functions.https.onRequest(async (reque
         await docRef.update({
             counter: admin.firestore.FieldValue.increment(1)
         });
+
+        // hit grafana dashboard counter endpoint
+        https.get('https://simple-counter.nouns.tools/count/inc/nouns-wtf-generated')
 
         let options = JSON.parse(request.query.options)
         let layers = Object.keys(options.layers)
@@ -355,6 +367,9 @@ exports.addVoteToLayersEXT = functions.https.onRequest(async (request, response)
 
         let options = JSON.parse(request.query.options)
         
+        // hit grafana dashboard counter endpoint
+        https.get('https://simple-counter.nouns.tools/count/inc/layer-votes-cast')
+
         var updatedDocsData = []
         try {
             for (var i = 0; i < options.length; i++) {
@@ -397,6 +412,9 @@ exports.addVoteToLayersEXT = functions.https.onRequest(async (request, response)
     cors(request, response, async () => {
 
         let options = JSON.parse(request.query.options)
+        
+        // hit grafana dashboard counter endpoint
+        https.get('https://simple-counter.nouns.tools/count/inc/layer-votes-cast')
         
         var updatedDocsData = []
         try {
