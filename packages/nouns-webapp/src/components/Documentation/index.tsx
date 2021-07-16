@@ -11,11 +11,11 @@ const Documentation = () => {
           <h1>What is this?</h1>
           <p>
             Nouns are an experimental attempt to improve the formation of on-chain avatar
-            communities. While projects such as Cryptopunks have attempted to bootstrap digital
+            communities. While projects such as <a href="https://www.larvalabs.com/cryptopunks">Cryptopunks</a> have attempted to bootstrap digital
             community and identity, Nouns attempt to bootstrap identity, community, governance and a
             treasury that can be used by the community for the creation of long-term value.
-            Additionally, nouns attempt to significantly slow community formation to ensure
-            continuous community growth over time and to incentivize long-term thinking
+            Additionally, Nouns attempt to significantly slow community formation to ensure
+            continuous community growth over time and to incentivize long-term thinking.
           </p>
         </div>
         <Accordion>
@@ -28,19 +28,16 @@ const Documentation = () => {
                 <ul>
                   <li>1 noun trustlessly auctioned every 24 hours, forever</li>
                   <li>settlement of one auction kicks off the next</li>
-                  <li>all nouns are members of nounsDAO</li>
-                  <li>nounsDAO uses a fork of Compound Governance</li>
+                  <li>all nouns are members of Nouns DAO</li>
+                  <li>Nouns DAO uses a fork of <a href="https://compound.finance/governance"> Compound Governance</a></li>
                   <li>1 noun = 1 vote</li>
-                  <li>votes are delegatable, but non-transferable</li>
-                  <li>100% of noun auction proceeds are trustlessly sent to nounsDAO treasury</li>
-                  <li>treasury is controlled by Compound Governance framework</li>
-                  <li>artwork is generative, on-chain</li>
-                  <li>on-chain source of randomness, artwork lives on Ethereum (not IPFS)</li>
-                  <li>200 different noun bodies, ~100 shirts and accessories, ~25 glasses</li>
+                  <li>100% of noun auction proceeds are trustlessly sent to Nouns DAO treasury</li>
+                  <li>treasury is controlled by nouns via governance</li>
+                  <li>artwork is generative and stored directly on-chain (not IPFS)</li>
                   <li>no explicit rules for attribute scarcity, all nouns are equally rare</li>
-                  <li>artwork is public domain</li>
+                  <li>nouns artwork is <a href="https://creativecommons.org/publicdomain/zero/1.0/">public domain</a></li>
                   <li>
-                    project creators (‘nounders’) receive rewards in the form of nouns (10% of
+                    project creators (‘Nounders’) receive rewards in the form of nouns (10% of
                     supply for first 5 years)
                   </li>
                 </ul>
@@ -55,7 +52,7 @@ const Documentation = () => {
               <Card.Body>
                 The nouns auction contract will act as a self-sufficient noun generation and
                 distribution mechanism, auctioning one noun every 24 hours forever. 100% of the
-                proceeds for each auction are automatically deposited in the NounsDAO treasury,
+                proceeds for each auction are automatically deposited in the Nouns DAO treasury,
                 where they are governed by noun owners. Each time an auction is settled, the
                 settlement transaction will result in the minting and auction of a new noun by the
                 contract. While settlement is most heavily incentivized for the winning bidder, it
@@ -105,11 +102,11 @@ const Documentation = () => {
             </Accordion.Toggle>
             <Accordion.Collapse eventKey="4">
               <Card.Body>
-                An additional governance veto right has been added by the nounders to ensure that no
+                An additional governance veto right has been added by the Nounders to ensure that no
                 malicious proposals can be passed early in the project's history. The veto allows
-                nounders to prevent any governance proposal from being implemented, and is intended
+                Nounders to prevent any governance proposal from being implemented, and is intended
                 to be used only in a scenario where an obviously malicious proposal has been passed.
-                The nounders will revoke the veto right on-chain as soon as they deem it safe to do
+                The Nounders will revoke the veto right on-chain as soon as they deem it safe to do
                 so. This decision will be based on fair distribution of early nouns and an active
                 community of noun owners that demonstrate goodwill towards the project.
               </Card.Body>
@@ -143,12 +140,10 @@ const Documentation = () => {
             </Accordion.Toggle>
             <Accordion.Collapse eventKey="6">
               <Card.Body>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                deserunt mollit anim id est laborum.
+                <p>Nouns are stored directly on Ethereum and do not utilize pointers to other networks such as IPFS. This is possible because noun parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression.</p>
+
+                <p>The compressed parts are efficiently converted into a single base64 encoded SVG image on-chain and each part is decoded into an intermediate format before being converted into a series of SVG rects using batched, on-chain string concatenation. Once the entire SVG has been generated, it is base64 encoded.</p>
+
               </Card.Body>
             </Accordion.Collapse>
           </Card>
