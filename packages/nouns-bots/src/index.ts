@@ -7,7 +7,7 @@ import { twitter } from './clients';
  */
 async function processLastAuction() {
   const cachedAuctionId = await getAuctionCache();
-  const { id: lastAuctionId, startTime, endTime } = await getLastAuction();
+  const { id: lastAuctionId } = await getLastAuction();
   console.log(`processLastAuction cachedAuctionId(${cachedAuctionId}) lastAuctionId(${lastAuctionId})`);
 
   if (cachedAuctionId < lastAuctionId) {
@@ -16,7 +16,7 @@ async function processLastAuction() {
       console.log(`processLastAuction tweeting discovered auction id and noun`);
       const mediaId = await twitter.v1.uploadMedia(png, { type: 'png' });
       await twitter.v1.tweet(
-        getAuctionStartedTweetText(lastAuctionId, endTime - startTime),
+        getAuctionStartedTweetText(lastAuctionId),
         {
           media_ids: mediaId,
         },
