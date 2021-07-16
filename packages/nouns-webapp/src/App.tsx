@@ -37,7 +37,7 @@ function App() {
             <CurrentAuction />
             <Banner />
             <HistoryCollection
-              latestNounId={BigNumber.from(62).sub(1)}
+              latestNounId={BigNumber.from(8).sub(1)}
               historyCount={8}
               rtl={true}
             />
