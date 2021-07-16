@@ -81,13 +81,19 @@ const Documentation = () => {
             </Accordion.Toggle>
             <Accordion.Collapse eventKey="3">
               <Card.Body>
-                <p>'Nounders' are the group of ten builders that initiated Nouns:</p>
+                <p>'Nounders' are the group of ten builders that initiated Nouns. Here are some of the Nounders:</p>
                 
                 <ul>
                   <li>@cryptoseneca</li>
                   <li>@supergremplin</li>
                   <li>@punk4156</li>
                   <li>@eboyarts</li>
+                  <li>@punk4464</li>
+                  <li>solimander</li>
+                  <li>@dhof</li>
+                  <li>devcarrot</li>
+                  <li>@TimpersHD</li>
+                  <li>@lastpunk9999</li>
                 </ul>
 
                 <p>Because 100% of noun auction proceeds are sent to Nouns DAO, Nounders have chosen to compensate themselves with nouns. Every 10th noun for the first 5 years of the project (noun ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's
@@ -105,15 +111,15 @@ const Documentation = () => {
             </Accordion.Toggle>
             <Accordion.Collapse eventKey="4">
               <Card.Body>
-                <p>In addition to the usual precautions taken by Compound Governance, Nounders have given themselves a special veto right to ensure that no
+                <p>In addition to the precautions taken by Compound Governance, Nounders have given themselves a special veto right to ensure that no
                 malicious proposals can be passed while the noun supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort.</p>
-                <p>Nounders will proveably revoke this veto right as soon as they deem it safe to do so. This decision will be based on a healthy noun distribution and a community that is engaged in the governance process.</p>
+                <p>Nounders will proveably revoke this veto right when they deem it safe to do so. This decision will be based on a healthy noun distribution and a community that is engaged in the governance process.</p>
               </Card.Body>
             </Accordion.Collapse>
           </Card>
           <Card className={classes.card}>
             <Accordion.Toggle as={Card.Header} eventKey="5" className={classes.cardHeader}>
-              Noun Traits and Randomness
+              Noun Traits
             </Accordion.Toggle>
             <Accordion.Collapse eventKey="5">
               <Card.Body>
