@@ -11,8 +11,8 @@ import classes from './Bid.module.css';
 import Modal from '../../Shared/Modal';
 import { Spinner } from 'react-bootstrap';
 
-const Bid: React.FC<{ auction: Auction; auctionEnded: boolean }> = props => {
-  const { auction, auctionEnded } = props;
+const Bid: React.FC<{ auction: Auction; auctionEnded: boolean; minBid: number }> = props => {
+  const { auction, auctionEnded, minBid } = props;
   const auctionHouseContract = auctionHouseContractFactory(config.auctionProxyAddress);
 
   const [bidAmount, setBidAmount] = useState(0);
@@ -44,6 +44,9 @@ const Bid: React.FC<{ auction: Auction; auctionEnded: boolean }> = props => {
 
   const placeBidHandler = () => {
     if (!auction) {
+      return;
+    }
+    if (bidAmount < minBid) {
       return;
     }
     placeBid(auction.nounId, {

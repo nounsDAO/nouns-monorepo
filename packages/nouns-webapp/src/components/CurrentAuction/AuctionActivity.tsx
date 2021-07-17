@@ -48,7 +48,7 @@ const ActivityLens: React.FC<{ auction: Auction }> = props => {
             />
           </Col>
           <Col lg={12}>
-            <Bid auction={auction} auctionEnded={auctionEnded} />
+            <Bid auction={auction} auctionEnded={auctionEnded} minBid={minBid} />
           </Col>
           <Col lg={12}>
             <div className={classes.minBidWrapper}>
