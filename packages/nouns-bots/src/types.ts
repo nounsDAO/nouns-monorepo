@@ -1,5 +1,5 @@
 export interface Auction {
-  id: string;
+  id: number;
 }
 
 export interface TokenMetadata {

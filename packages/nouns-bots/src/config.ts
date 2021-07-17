@@ -8,6 +8,7 @@ export const config = {
   redisDb: Number(process.env.REDIS_DB ?? 0),
   redisPassword: process.env.REDIS_PASSWORD,
   nounsSubgraph: process.env.NOUNS_SUBGRAPH_URL ?? 'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph-rinkeby',
+  twitterEnabled: process.env.TWITTER_ENABLED === "true",
   twitterAppKey: process.env.TWITTER_APP_KEY ?? '',
   twitterAppSecret: process.env.TWITTER_APP_SECRET ?? '',
   twitterAccessToken: process.env.TWITTER_ACCESS_TOKEN ?? '',
@@ -15,6 +16,7 @@ export const config = {
   nounsTokenAddress:
     process.env.NOUNS_TOKEN_ADDRESS ?? '0xD6e4cbd35832193b477A968307c99f74F59C9df7',
   jsonRpcUrl: process.env.JSON_RPC_URL ?? 'http://localhost:8545',
+  discordEnabled: process.env.DISCORD_ENABLED === "true",
   discordWebhookToken: process.env.DISCORD_WEBHOOK_TOKEN ?? '',
   discordWebhookId: process.env.DISCORD_WEBHOOK_ID ?? '',
 };

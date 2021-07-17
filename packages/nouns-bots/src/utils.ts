@@ -8,12 +8,14 @@ export const getAuctionCacheKey = 'NOUNS_AUCTION_CACHE';
 /**
  * Get tweet text for auction started.
  * @param auctionId The started auction id.
+ * @param durationSeconds The duration of the auction in seconds.
  * @returns Text to be used in tweet when auction starts.
  */
-export function getAuctionStartedTweetText(auctionId: string | number) {
-  return `An auction has started for noun #${auctionId}!
+export function getAuctionStartedTweetText(auctionId: number) {
+  return `＊Bleep Bloop Blop＊
         
-  Learn more at https://nouns.wtf`;
+ An auction has started for Noun #${auctionId}
+ Learn more at https://nouns.wtf`;
 }
 
 /**
