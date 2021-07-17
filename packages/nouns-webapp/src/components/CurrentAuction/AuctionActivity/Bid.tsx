@@ -147,7 +147,7 @@ const Bid: React.FC<{ auction: Auction; auctionEnded: boolean }> = props => {
         <Modal title={modal.title} message={modal.message} onDismiss={dismissModalHanlder} />
       )}
       {auction && (
-        <>
+        <div className={classes.bidWrapper}>
           <button
             className={auctionEnded ? classes.bidBtnAuctionEnded : classes.bidBtn}
             onClick={auctionEnded ? settleAuctionHandler : placeBidHandler}
@@ -162,7 +162,7 @@ const Bid: React.FC<{ auction: Auction; auctionEnded: boolean }> = props => {
             placeholder="ETH"
             min="0"
           ></input>
-        </>
+        </div>
       )}
     </>
   );

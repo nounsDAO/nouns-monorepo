@@ -1,3 +1,7 @@
+.bidWrapper {
+  margin: 1rem 0;
+}
+
 .bidBtn {
   border-radius: 50px 0px 0px 50px;
   border: 0 none;
