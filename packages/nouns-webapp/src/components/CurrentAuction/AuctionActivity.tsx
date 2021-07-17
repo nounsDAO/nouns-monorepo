@@ -31,6 +31,13 @@ const ActivityLens: React.FC<{ auction: Auction }> = props => {
     auction &&
     (BigNumber.from(minBidInc).toNumber() / 100 + 1) * Number(utils.formatEther(auction.amount));
 
+  const minBidContent = auction && minBidInc && (
+    <div className={classes.minBidWrapper}>
+      <img src={nounPointerImg} alt="Pointer noun" />
+      <h3 className={classes.minBid}>You must bid at least {minBid} ETH</h3>
+    </div>
+  );
+
   return (
     <>
       <div className={classes.activityContainer}>
@@ -50,12 +57,7 @@ const ActivityLens: React.FC<{ auction: Auction }> = props => {
           <Col lg={12}>
             <Bid auction={auction} auctionEnded={auctionEnded} minBid={minBid} />
           </Col>
-          <Col lg={12}>
-            <div className={classes.minBidWrapper}>
-              <img src={nounPointerImg} alt="Pointer noun" />
-              <h3 className={classes.minBid}>You must bid at least {minBid} ETH</h3>
-            </div>
-          </Col>
+          <Col lg={12}>{minBidContent}</Col>
         </Row>
       </div>
     </>
