@@ -5,7 +5,7 @@ import {
 } from '../../../wrappers/nounsAuction';
 import config from '../../../config';
 import { useContractFunction } from '@usedapp/core';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { utils } from 'ethers';
 import classes from './Bid.module.css';
 import Modal from '../../Shared/Modal';
@@ -25,6 +25,7 @@ const Bid: React.FC<{ auction: Auction; auctionEnded: boolean; minBid: number }>
     title: 'Title',
     message: 'Some text would go here. And maybe here.',
   });
+  const bidInputRef = useRef<HTMLInputElement>(null);
 
   const { send: placeBid, state: placeBidState } = useContractFunction(
     auctionHouseContract as any,
@@ -46,7 +47,10 @@ const Bid: React.FC<{ auction: Auction; auctionEnded: boolean; minBid: number }>
     if (!auction) {
       return;
     }
-    if (bidAmount < minBid) {
+    if (!bidInputRef.current) {
+      return;
+    }
+    if (Number(bidInputRef.current.value) < minBid) {
       return;
     }
     placeBid(auction.nounId, {
@@ -60,6 +64,12 @@ const Bid: React.FC<{ auction: Auction; auctionEnded: boolean; minBid: number }>
 
   const dismissModalHanlder = () => {
     setModal({ ...modal, show: false });
+  };
+
+  const clearBidInput = () => {
+    if (bidInputRef.current) {
+      bidInputRef.current.value = '';
+    }
   };
 
   // placing bid transaction state hook
@@ -81,6 +91,7 @@ const Bid: React.FC<{ auction: Auction; auctionEnded: boolean; minBid: number }>
           show: true,
         });
         setBidButtonContent({ loading: false, content: 'Bid' });
+        clearBidInput();
         break;
       case 'Fail':
         setModal({
@@ -164,6 +175,7 @@ const Bid: React.FC<{ auction: Auction; auctionEnded: boolean; minBid: number }>
             type="number"
             placeholder="ETH"
             min="0"
+            ref={bidInputRef}
           ></input>
         </div>
       )}
