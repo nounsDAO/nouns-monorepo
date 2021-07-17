@@ -52,10 +52,11 @@ const Bid: React.FC<{ auction: Auction; auctionEnded: boolean; minBid: number }>
     }
     if (Number(bidInputRef.current.value) < minBid) {
       return;
+    } else {
+      placeBid(auction.nounId, {
+        value: utils.parseEther(bidInputRef.current.value.toString()),
+      });
     }
-    placeBid(auction.nounId, {
-      value: utils.parseEther(bidAmount.toString()),
-    });
   };
 
   const settleAuctionHandler = () => {
