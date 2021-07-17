@@ -15,7 +15,6 @@ const Bid: React.FC<{ auction: Auction; auctionEnded: boolean; minBid: number }>
   const { auction, auctionEnded, minBid } = props;
   const auctionHouseContract = auctionHouseContractFactory(config.auctionProxyAddress);
 
-  const [bidAmount, setBidAmount] = useState(0);
   const [bidButtonContent, setBidButtonContent] = useState({
     loading: false,
     content: auctionEnded ? 'Settle' : 'Bid',
@@ -35,13 +34,6 @@ const Bid: React.FC<{ auction: Auction; auctionEnded: boolean; minBid: number }>
     auctionHouseContract as any,
     AuctionHouseContractFunctions.settleCurrentAndCreateNewAuction,
   );
-
-  const bidInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const bidNumber = Number(event.target.value);
-    if (bidNumber > 0) {
-      setBidAmount(bidNumber);
-    }
-  };
 
   const placeBidHandler = () => {
     if (!auction) {
@@ -172,7 +164,6 @@ const Bid: React.FC<{ auction: Auction; auctionEnded: boolean; minBid: number }>
           </button>
           <input
             className={auctionEnded ? classes.bidInputAuctionEnded : classes.bidInput}
-            onChange={bidInputHandler}
             type="number"
             placeholder="ETH"
             min="0"
