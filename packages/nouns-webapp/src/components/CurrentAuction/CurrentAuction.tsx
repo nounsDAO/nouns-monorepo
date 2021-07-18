@@ -32,7 +32,7 @@ const CurrentAuction = () => {
           <Noun imgPath="" alt="" />
         )}
       </Col>
-      <Col lg={{ span: 5, offset: 1 }}>
+      <Col lg={6}>
         <AuctionActivity auction={auction && auction} />
       </Col>
     </Section>
