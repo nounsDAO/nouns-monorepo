@@ -7,8 +7,8 @@ import classes from './AuctionActivity.module.css';
 import Bid from './AuctionActivity/Bid';
 import BidTimer from './AuctionActivity/AuctionTimer';
 import CurrentBid from './AuctionActivity/CurrentBid';
+import MinBid from './AuctionActivity/MinBid';
 import moment from 'moment';
-import nounPointerImg from '../../assets/noun-pointer.png';
 
 const ActivityLens: React.FC<{ auction: Auction }> = props => {
   const { auction } = props;
@@ -26,17 +26,21 @@ const ActivityLens: React.FC<{ auction: Auction }> = props => {
       .format('MMM DD YYYY');
 
   const minBidInc = useAuctionMinBidIncPercentage();
-  const minBid =
+  const minBid: number =
     minBidInc &&
     auction &&
-    (BigNumber.from(minBidInc).toNumber() / 100 + 1) * Number(utils.formatEther(auction.amount));
+    (
+      (BigNumber.from(minBidInc).toNumber() / 100 + 1) *
+      Number(utils.formatEther(auction.amount))
+    ).toFixed(2);
 
-  const minBidContent = auction && minBidInc && (
-    <div className={classes.minBidWrapper}>
-      <img src={nounPointerImg} alt="Pointer noun" />
-      <h3 className={classes.minBid}>You must bid at least {minBid} ETH</h3>
-    </div>
-  );
+  const [useMinBid, setUseMinBid] = useState(false);
+  const minBidTappedHandler = () => {
+    setUseMinBid(true);
+  };
+  const bidInputChangeHandler = () => {
+    setUseMinBid(false);
+  };
 
   return (
     <>
@@ -55,9 +59,17 @@ const ActivityLens: React.FC<{ auction: Auction }> = props => {
             />
           </Col>
           <Col lg={12}>
-            <Bid auction={auction} auctionEnded={auctionEnded} minBid={minBid} />
+            <Bid
+              auction={auction}
+              auctionEnded={auctionEnded}
+              minBid={minBid}
+              useMinBid={useMinBid}
+              onInputChange={bidInputChangeHandler}
+            />
           </Col>
-          <Col lg={12}>{minBidContent}</Col>
+          <Col lg={12}>
+            <MinBid minBid={minBid} onClick={minBidTappedHandler} />
+          </Col>
         </Row>
       </div>
     </>

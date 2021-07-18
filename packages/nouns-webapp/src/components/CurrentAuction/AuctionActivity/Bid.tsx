@@ -5,16 +5,23 @@ import {
 } from '../../../wrappers/nounsAuction';
 import config from '../../../config';
 import { useContractFunction } from '@usedapp/core';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, ChangeEvent } from 'react';
 import { utils } from 'ethers';
 import classes from './Bid.module.css';
 import Modal from '../../Shared/Modal';
 import { Spinner } from 'react-bootstrap';
 
-const Bid: React.FC<{ auction: Auction; auctionEnded: boolean; minBid: number }> = props => {
-  const { auction, auctionEnded, minBid } = props;
+const Bid: React.FC<{
+  auction: Auction;
+  auctionEnded: boolean;
+  minBid: number;
+  useMinBid: boolean;
+  onInputChange: () => void;
+}> = props => {
+  const { auction, auctionEnded, minBid, useMinBid, onInputChange } = props;
   const auctionHouseContract = auctionHouseContractFactory(config.auctionProxyAddress);
 
+  const [bidInput, setBidInput] = useState('');
   const [bidButtonContent, setBidButtonContent] = useState({
     loading: false,
     content: auctionEnded ? 'Settle' : 'Bid',
@@ -34,6 +41,11 @@ const Bid: React.FC<{ auction: Auction; auctionEnded: boolean; minBid: number }>
     auctionHouseContract as any,
     AuctionHouseContractFunctions.settleCurrentAndCreateNewAuction,
   );
+
+  const bidInputHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    setBidInput(event.target.value);
+    onInputChange();
+  };
 
   const placeBidHandler = () => {
     if (!auction) {
@@ -167,6 +179,8 @@ const Bid: React.FC<{ auction: Auction; auctionEnded: boolean; minBid: number }>
             type="number"
             placeholder="ETH"
             min="0"
+            value={useMinBid ? minBid.toString() : bidInput}
+            onChange={bidInputHandler}
             ref={bidInputRef}
           ></input>
         </div>

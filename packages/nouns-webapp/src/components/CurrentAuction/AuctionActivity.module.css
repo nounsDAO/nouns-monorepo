@@ -15,16 +15,3 @@
   font-weight: bold;
   font-size: 1.5rem;
 }
-
-.minBidWrapper {
-  margin-top: 1rem;
-  display: flex;
-}
-
-.minBid {
-  font-family: 'Londrina Solid';
-  margin-left: 1rem;
-  color: #504f49;
-  font-weight: normal;
-  font-size: 1.25rem;
-}
