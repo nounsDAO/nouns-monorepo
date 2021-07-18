@@ -67,9 +67,11 @@ const ActivityLens: React.FC<{ auction: Auction }> = props => {
               onInputChange={bidInputChangeHandler}
             />
           </Col>
-          <Col lg={12}>
-            <MinBid minBid={minBid} onClick={minBidTappedHandler} />
-          </Col>
+          {auction && !auctionEnded && (
+            <Col lg={12}>
+              <MinBid minBid={minBid} onClick={minBidTappedHandler} />
+            </Col>
+          )}
         </Row>
       </div>
     </>
