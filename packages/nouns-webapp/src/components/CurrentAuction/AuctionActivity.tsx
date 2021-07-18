@@ -1,7 +1,7 @@
 import { Auction } from '../../wrappers/nounsAuction';
 import { useState } from 'react';
 import { useAuctionMinBidIncPercentage } from '../../wrappers/nounsAuction';
-import { BigNumber, utils } from '@usedapp/core/node_modules/ethers';
+import { BigNumber, utils, FixedNumber } from '@usedapp/core/node_modules/ethers';
 import { Row, Col } from 'react-bootstrap';
 import classes from './AuctionActivity.module.css';
 import Bid from './AuctionActivity/Bid';
@@ -9,6 +9,17 @@ import BidTimer from './AuctionActivity/AuctionTimer';
 import CurrentBid from './AuctionActivity/CurrentBid';
 import MinBid from './AuctionActivity/MinBid';
 import moment from 'moment';
+
+export const useMinBid = (auction: Auction | undefined) => {
+  const minBidIncPercentage = useAuctionMinBidIncPercentage();
+  if (!auction || !minBidIncPercentage) {
+    return 0;
+  }
+
+  const minBidInc = (minBidIncPercentage / 100 + 1).toString();
+  const auctionAmount = FixedNumber.from(utils.formatEther(auction.amount));
+  return FixedNumber.from(minBidInc).mulUnsafe(auctionAmount).toUnsafeFloat();
+};
 
 const ActivityLens: React.FC<{ auction: Auction }> = props => {
   const { auction } = props;
@@ -25,21 +36,13 @@ const ActivityLens: React.FC<{ auction: Auction }> = props => {
       .utc()
       .format('MMM DD YYYY');
 
-  const minBidInc = useAuctionMinBidIncPercentage();
-  const minBid: number =
-    minBidInc &&
-    auction &&
-    (
-      (BigNumber.from(minBidInc).toNumber() / 100 + 1) *
-      Number(utils.formatEther(auction.amount))
-    ).toFixed(2);
-
-  const [useMinBid, setUseMinBid] = useState(false);
+  const minBid = useMinBid(auction);
+  const [displayMinBid, setDisplayMinBid] = useState(false);
   const minBidTappedHandler = () => {
-    setUseMinBid(true);
+    setDisplayMinBid(true);
   };
   const bidInputChangeHandler = () => {
-    setUseMinBid(false);
+    setDisplayMinBid(false);
   };
 
   return (
@@ -63,7 +66,7 @@ const ActivityLens: React.FC<{ auction: Auction }> = props => {
               auction={auction}
               auctionEnded={auctionEnded}
               minBid={minBid}
-              useMinBid={useMinBid}
+              useMinBid={displayMinBid}
               onInputChange={bidInputChangeHandler}
             />
           </Col>
