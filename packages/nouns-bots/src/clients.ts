@@ -5,6 +5,7 @@ import { Contract, providers } from 'ethers';
 import { NounsERC721ABI } from '@nouns/contracts';
 import Discord from 'discord.js';
 import axios from 'axios';
+import pinataSdk from '@pinata/sdk'
 
 /**
  * Redis Client
@@ -39,11 +40,21 @@ export const nounsTokenContract = new Contract(
 );
 
 /**
- * Discord webhook client for sending messages to discord
+ * Discord webhook client for sending messages to the private
+ * Discord channel
  */
-export const discordWebhook = new Discord.WebhookClient(
+export const internalDiscordWebhook = new Discord.WebhookClient(
   config.discordWebhookId,
   config.discordWebhookToken,
+);
+
+/**
+ * Discord webhook client for sending messages to the public
+ * Discord channel
+ */
+export const publicDiscordWebhook = new Discord.WebhookClient(
+  config.discordPublicWebhookId,
+  config.discordPublicWebhookToken,
 );
 
 /**
@@ -53,3 +64,11 @@ export const discordWebhook = new Discord.WebhookClient(
  */
 export const incrementCounter = (counterName: string) =>
   axios.post(`https://simple-counter.nouns.tools/count/inc/${counterName}`);
+
+/**
+ * Pinata.Cloud client for hosting IPFS assets
+ */
+export const pinataClient = pinataSdk(
+  config.pinataApiKey,
+  config.pinataApiSecretKey
+);

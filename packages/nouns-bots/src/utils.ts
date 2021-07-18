@@ -64,3 +64,10 @@ export async function getNounPngBuffer(tokenId: string): Promise<Buffer | undefi
  * @returns Prefixed counter name
  */
 export const buildCounterName = (counterName: string) => `bots_${counterName}`;
+
+/**
+ * Build an IPFS gateway URL using an iPFS hash
+ * @param ipfsHash IPFS hash to generate a URL to
+ * @returns HTTP url using an active IPFS gateway
+ */
+export const buildIpfsUrl = (ipfsHash: string) => `https://gateway.pinata.cloud/ipfs/${ipfsHash}`
