@@ -8,29 +8,36 @@ on:
 jobs:
   build_and_test:
     name: Build and Test
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 14.x
         uses: actions/setup-node@v1
         with:
           node-version: 14.x
+      - name: Install Yarn
+        run: npm install -g yarn
       - run: yarn 
       - run: yarn build
       - name: Run contract tests
         run: |
           cd packages/nouns-contracts
           yarn test
+      - name: Uninstall Yarn
+        if: always()
+        run: npm uninstall -g yarn
   build_and_deploy:
     name: Build and Deploy
     needs: build_and_test
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 14.x
         uses: actions/setup-node@v1
         with:
           node-version: 14.x
+      - name: Install Yarn
+        run: npm install -g yarn
       - run: yarn 
       - run: yarn build
       - name: Deploy contract to Rinkeby
@@ -53,3 +60,6 @@ jobs:
         run: |
           cd packages/nouns-contracts
           echo "Contract deployed on Rinkeby to `cat logs/deploy.json| jq -r '.contractAddress'`"
+      - name: Uninstall Yarn
+        if: always()
+        run: npm uninstall -g yarn
