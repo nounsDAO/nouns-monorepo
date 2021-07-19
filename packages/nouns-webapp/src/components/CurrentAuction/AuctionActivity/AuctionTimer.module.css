@@ -1,0 +1,24 @@
+.title {
+  margin-bottom: 0.5rem;
+}
+
+.timerWrapper {
+  display: flex;
+}
+
+.timerSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-right: 2rem;
+}
+
+.time {
+  font-size: 3rem;
+  font-weight: bold;
+  font-family: 'Londrina Solid';
+}
+
+.timeSubtitle {
+  font-size: medium;
+}

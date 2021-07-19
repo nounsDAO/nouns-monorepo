@@ -1,0 +1,10 @@
+.wrapper h1 {
+  font-family: 'Londrina Solid';
+  font-size: 5rem;
+}
+
+@media (min-width: 992px) {
+  .wrapper h1 {
+    font-size: 8rem;
+  }
+}
