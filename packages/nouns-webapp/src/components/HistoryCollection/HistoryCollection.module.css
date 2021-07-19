@@ -1,20 +1,19 @@
 .historyCollection {
-  display:grid;
+  display: grid;
   grid-auto-flow: column dense;
   column-gap: 8px;
   width: 100%;
   max-height: 175px;
   padding: 8px;
   overflow-y: hidden;
-  overflow-x: hidden;
-  overflow: hidden;
+  overflow-x: scroll;
 }
 
 .rtl {
-  direction: rtl;
+  direction: ltr;
 }
 
 .historyCollection div {
   width: 146px;
-  margin: 5px
+  margin: 2px;
 }

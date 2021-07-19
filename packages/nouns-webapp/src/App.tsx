@@ -40,8 +40,8 @@ function App() {
             <CurrentAuction auction={auction} />
             <Banner />
             <HistoryCollection
-              latestNounId={BigNumber.from(8).sub(1)}
-              historyCount={8}
+              latestNounId={auction && BigNumber.from(auction.nounId).sub(1)}
+              historyCount={10}
               rtl={true}
             />
             <Documentation />
