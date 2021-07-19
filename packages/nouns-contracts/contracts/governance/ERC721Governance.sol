@@ -7,7 +7,7 @@ import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
 abstract contract ERC721Governance is ERC721Enumerable {
 
     /// @notice Defines decimals as per ERC-20 convention to make integrations with 3rd party governance platforms easier
-    uint8 public constant decimals = 1;
+    uint8 public constant decimals = 0;
 
     /// @notice A record of each accounts delegate
     mapping (address => address) private _delegates;
