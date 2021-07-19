@@ -45,16 +45,17 @@ const AuctionTimer: React.FC<{
       <h2 className={classes.title}>{auction && auctionContent}</h2>
       <div className={classes.timerWrapper}>
         <div className={classes.timerSection}>
-          <span className={classes.time}>{auction && Math.floor(timerDuration.hours())}</span>
-          <span className={classes.timeSubtitle}>{auction && 'Hours'}</span>
+          <span className={classes.time}>{auction && `${Math.floor(timerDuration.hours())}h`}</span>
         </div>
         <div className={classes.timerSection}>
-          <span className={classes.time}>{auction && Math.floor(timerDuration.minutes())}</span>
-          <span className={classes.timeSubtitle}>{auction && 'Mins'}</span>
+          <span className={classes.time}>
+            {auction && `${Math.floor(timerDuration.minutes())}m`}
+          </span>
         </div>
         <div className={classes.timerSection}>
-          <span className={classes.time}>{auction && Math.floor(timerDuration.seconds())}</span>
-          <span className={classes.timeSubtitle}>{auction && 'Secs'}</span>
+          <span className={classes.time}>
+            {auction && `${Math.floor(timerDuration.seconds())}s`}
+          </span>
         </div>
       </div>
     </>

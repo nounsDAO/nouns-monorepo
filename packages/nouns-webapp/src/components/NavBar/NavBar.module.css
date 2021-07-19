@@ -1,69 +1,53 @@
-.connectButton {
-  border-radius: 50px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  border: 0 none;
-  height: 2.5rem;
-  font-size: large;
-  font-weight: normal;
-  font-family: 'Londrina Solid';
-  background-color: #6da886;
+.navBarBrand {
+  margin-right: 0;
+}
+
+/* connect button displays differently to default NavBarItems, thus the !importants */
+.connectBtn {
+  background-color: #6da886 !important;
+  color: white !important;
+  cursor: pointer;
+}
+.connectBtn:hover,
+.connectBtn:active,
+.connectBtn:focus {
+  background-color: #5c8f71 !important;
   color: white;
+  cursor: pointer !important;
 }
 
-.connectButton:hover,
-.connectButton:active,
-.connectButton:focus {
-  background-color: #5c8f71;
-  color: rgb(209, 207, 207);
-}
-
-.connectedDiv {
-  border-radius: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  border: 0 none;
-  background-color: #ffffff;
-  height: 2.5rem;
-  font-size: large;
-  font-weight: normal;
-  color: rgb(144, 144, 144);
-  font-family: 'Londrina Solid';
-}
-
-.connectedDiv .greenStatusCircle {
+.greenStatusCircle {
+  position: absolute;
   width: 10px;
   height: 10px;
   background-color: #7fc59c;
-  transform: translateY(-14px) translateX(3px);
   border-radius: 50%;
+  transform: translateY(-14px) translateX(55px);
 }
 
-.getFakeEth {
-  margin-right: 1rem;
-  border-radius: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  border: 0 none;
-  background-color: #ffffff;
-  height: 2.5rem;
-  font-size: large;
-  font-weight: normal;
-  color: rgb(144, 144, 144);
-  font-family: 'Londrina Solid';
-}
 .getFakeEth:visited {
-  color: rgb(144, 144, 144);
+  color: #504f49;
 }
 .getFakeEth:hover,
 .getFakeEth:focus {
   text-decoration: none;
   color: #5c8f71;
+}
+
+.testnet {
+  margin-left: 1.5rem;
+  margin-right: auto;
+}
+.testnetImg {
+  width: auto;
+  height: 45px;
+}
+
+@media (max-width: 992px) {
+  .testnet {
+    margin: 0 auto !important;
+  }
+  .connectBtn:hover {
+    color: #5c8f71 !important;
+  }
 }

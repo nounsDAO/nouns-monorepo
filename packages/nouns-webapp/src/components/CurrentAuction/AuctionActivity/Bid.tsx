@@ -5,17 +5,23 @@ import {
 } from '../../../wrappers/nounsAuction';
 import config from '../../../config';
 import { useContractFunction } from '@usedapp/core';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, ChangeEvent } from 'react';
 import { utils } from 'ethers';
 import classes from './Bid.module.css';
 import Modal from '../../Shared/Modal';
 import { Spinner } from 'react-bootstrap';
 
-const Bid: React.FC<{ auction: Auction; auctionEnded: boolean }> = props => {
-  const { auction, auctionEnded } = props;
+const Bid: React.FC<{
+  auction: Auction;
+  auctionEnded: boolean;
+  minBid: number;
+  useMinBid: boolean;
+  onInputChange: () => void;
+}> = props => {
+  const { auction, auctionEnded, minBid, useMinBid, onInputChange } = props;
   const auctionHouseContract = auctionHouseContractFactory(config.auctionProxyAddress);
 
-  const [bidAmount, setBidAmount] = useState(0);
+  const [bidInput, setBidInput] = useState('');
   const [bidButtonContent, setBidButtonContent] = useState({
     loading: false,
     content: auctionEnded ? 'Settle' : 'Bid',
@@ -25,6 +31,7 @@ const Bid: React.FC<{ auction: Auction; auctionEnded: boolean }> = props => {
     title: 'Title',
     message: 'Some text would go here. And maybe here.',
   });
+  const bidInputRef = useRef<HTMLInputElement>(null);
 
   const { send: placeBid, state: placeBidState } = useContractFunction(
     auctionHouseContract as any,
@@ -35,20 +42,25 @@ const Bid: React.FC<{ auction: Auction; auctionEnded: boolean }> = props => {
     AuctionHouseContractFunctions.settleCurrentAndCreateNewAuction,
   );
 
-  const bidInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const bidNumber = Number(event.target.value);
-    if (bidNumber > 0) {
-      setBidAmount(bidNumber);
-    }
+  const bidInputHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    setBidInput(event.target.value);
+    onInputChange();
   };
 
   const placeBidHandler = () => {
     if (!auction) {
       return;
     }
-    placeBid(auction.nounId, {
-      value: utils.parseEther(bidAmount.toString()),
-    });
+    if (!bidInputRef.current) {
+      return;
+    }
+    if (Number(bidInputRef.current.value) < minBid) {
+      return;
+    } else {
+      placeBid(auction.nounId, {
+        value: utils.parseEther(bidInputRef.current.value.toString()),
+      });
+    }
   };
 
   const settleAuctionHandler = () => {
@@ -57,6 +69,12 @@ const Bid: React.FC<{ auction: Auction; auctionEnded: boolean }> = props => {
 
   const dismissModalHanlder = () => {
     setModal({ ...modal, show: false });
+  };
+
+  const clearBidInput = () => {
+    if (bidInputRef.current) {
+      bidInputRef.current.value = '';
+    }
   };
 
   // placing bid transaction state hook
@@ -78,6 +96,7 @@ const Bid: React.FC<{ auction: Auction; auctionEnded: boolean }> = props => {
           show: true,
         });
         setBidButtonContent({ loading: false, content: 'Bid' });
+        clearBidInput();
         break;
       case 'Fail':
         setModal({
@@ -147,7 +166,7 @@ const Bid: React.FC<{ auction: Auction; auctionEnded: boolean }> = props => {
         <Modal title={modal.title} message={modal.message} onDismiss={dismissModalHanlder} />
       )}
       {auction && (
-        <>
+        <div className={classes.bidWrapper}>
           <button
             className={auctionEnded ? classes.bidBtnAuctionEnded : classes.bidBtn}
             onClick={auctionEnded ? settleAuctionHandler : placeBidHandler}
@@ -157,12 +176,14 @@ const Bid: React.FC<{ auction: Auction; auctionEnded: boolean }> = props => {
           </button>
           <input
             className={auctionEnded ? classes.bidInputAuctionEnded : classes.bidInput}
-            onChange={bidInputHandler}
             type="number"
             placeholder="ETH"
             min="0"
+            value={useMinBid ? minBid.toString() : bidInput}
+            onChange={bidInputHandler}
+            ref={bidInputRef}
           ></input>
-        </>
+        </div>
       )}
     </>
   );
