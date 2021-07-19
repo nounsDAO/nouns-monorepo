@@ -11,7 +11,7 @@ import config from './config';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './components/NavBar';
-import CurrentAuction from './components/CurrentAuction/CurrentAuction';
+import CurrentAuction from './components/CurrentAuction';
 import Banner from './components/Banner';
 import HistoryCollection from './components/HistoryCollection';
 import Documentation from './components/Documentation';
