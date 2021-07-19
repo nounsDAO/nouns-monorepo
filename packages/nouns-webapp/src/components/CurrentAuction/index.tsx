@@ -1,7 +1,7 @@
 import { Col } from 'react-bootstrap';
 import StandaloneNoun from '../StandaloneNoun';
 import AuctionActivity from '../AuctionActivity';
-import Section from '../Section';
+import Section from '../../layout/Section';
 import Noun from '../Noun';
 import { Auction } from '../../wrappers/nounsAuction';
 

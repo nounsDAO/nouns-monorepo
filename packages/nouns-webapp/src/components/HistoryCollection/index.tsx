@@ -1,5 +1,5 @@
 import { BigNumber, BigNumberish } from 'ethers';
-import Section from '../Section';
+import Section from '../../layout/Section';
 import classes from './HistoryCollection.module.css';
 import clsx from 'clsx';
 import StandaloneNoun from '../StandaloneNoun';

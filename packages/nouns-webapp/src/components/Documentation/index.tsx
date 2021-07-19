@@ -1,4 +1,4 @@
-import Section from '../Section';
+import Section from '../../layout/Section';
 import { Col, Card } from 'react-bootstrap';
 import classes from './Documentation.module.css';
 import Accordion from 'react-bootstrap/Accordion';
