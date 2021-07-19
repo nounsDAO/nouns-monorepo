@@ -1,13 +1,13 @@
-import { Auction } from '../../wrappers/nounsAuction';
+import { Auction } from '../../../wrappers/nounsAuction';
 import { useState } from 'react';
-import { useAuctionMinBidIncPercentage } from '../../wrappers/nounsAuction';
+import { useAuctionMinBidIncPercentage } from '../../../wrappers/nounsAuction';
 import { BigNumber, utils, FixedNumber } from '@usedapp/core/node_modules/ethers';
 import { Row, Col } from 'react-bootstrap';
 import classes from './AuctionActivity.module.css';
-import Bid from './AuctionActivity/Bid';
-import BidTimer from './AuctionActivity/AuctionTimer';
-import CurrentBid from './AuctionActivity/CurrentBid';
-import MinBid from './AuctionActivity/MinBid';
+import Bid from './Bid';
+import BidTimer from './AuctionTimer';
+import CurrentBid from './CurrentBid';
+import MinBid from './MinBid';
 import moment from 'moment';
 
 export const useMinBid = (auction: Auction | undefined) => {

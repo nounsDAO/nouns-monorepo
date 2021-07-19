@@ -1,4 +1,4 @@
-import { Auction } from '../../../wrappers/nounsAuction';
+import { Auction } from '../../../../wrappers/nounsAuction';
 import { utils } from 'ethers';
 import classes from './CurrentBid.module.css';
 
