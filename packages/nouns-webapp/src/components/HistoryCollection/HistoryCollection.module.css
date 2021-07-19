@@ -6,7 +6,8 @@
   max-height: 175px;
   padding: 8px;
   overflow-y: hidden;
-  overflow-x: scroll;
+  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .rtl {
