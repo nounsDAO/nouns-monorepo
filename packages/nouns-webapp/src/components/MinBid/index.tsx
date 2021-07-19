@@ -1,4 +1,4 @@
-import nounPointerImg from '../../../../assets/noun-pointer.png';
+import nounPointerImg from '../../assets/noun-pointer.png';
 import classes from './MinBid.module.css';
 
 const MinBid: React.FC<{ minBid: number; onClick: () => void }> = props => {
