@@ -21,7 +21,7 @@ export const useMinBid = (auction: Auction | undefined) => {
   return FixedNumber.from(minBidInc).mulUnsafe(auctionAmount).toUnsafeFloat();
 };
 
-const ActivityLens: React.FC<{ auction: Auction }> = props => {
+const AuctionActivity: React.FC<{ auction: Auction }> = props => {
   const { auction } = props;
 
   const [auctionEnded, setAuctionEnded] = useState(false);
@@ -81,4 +81,4 @@ const ActivityLens: React.FC<{ auction: Auction }> = props => {
   );
 };
 
-export default ActivityLens;
+export default AuctionActivity;
