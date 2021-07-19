@@ -5,38 +5,49 @@ import Navbar from 'react-bootstrap/Navbar';
 import ShortAddress from '../ShortAddress';
 import classes from './NavBar.module.css';
 import logo from '../../assets/logo.svg';
+import testnetNoun from '../../assets/testnet-noun.png';
+import NavBarItem from './NavBarItem';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { activateBrowserWallet } = useEthers();
 
+  const testnetContent = (
+    <NavBarItem className={classes.testnet}>
+      <img className={classes.testnetImg} src={testnetNoun} alt="testnet noun" />
+      <span>TESTNET</span>
+    </NavBarItem>
+  );
+
   const connectedContent = (
     <>
-      <a
-        href="https://faucet.rinkeby.io/"
-        className={classes.getFakeEth}
-        target="_blank"
-        rel="noreferrer"
-      >
-        GET RINKEBY ETH
-      </a>
-      <div className={classes.connectedDiv}>
+      <NavBarItem>
+        <a
+          href="https://faucet.rinkeby.io/"
+          className={classes.getFakeEth}
+          target="_blank"
+          rel="noreferrer"
+        >
+          GET RINKEBY ETH
+        </a>
+      </NavBarItem>
+      <NavBarItem className={classes.connectedBtn}>
         <ShortAddress>{activeAccount}</ShortAddress>
-        <span className={classes.greenStatusCircle}></span>
-      </div>
+        <span className={classes.greenStatusCircle} />
+      </NavBarItem>
     </>
   );
 
   const disconnectedContent = (
-    <button className={classes.connectButton} onClick={() => activateBrowserWallet()}>
+    <NavBarItem className={classes.connectBtn} onClick={() => activateBrowserWallet()}>
       Connect Wallet
-    </button>
+    </NavBarItem>
   );
 
   return (
     <Container>
       <Navbar bg="transparent" expand="lg">
-        <Navbar.Brand href="#home" className="mr-auto">
+        <Navbar.Brand href="#home" className={classes.navBarBrand}>
           <img
             src={logo}
             width="70"
@@ -45,7 +56,11 @@ const NavBar = () => {
             alt="Nouns DAO logo"
           />
         </Navbar.Brand>
-        {activeAccount ? connectedContent : disconnectedContent}
+        {testnetContent}
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse className="justify-content-end">
+          {activeAccount ? connectedContent : disconnectedContent}
+        </Navbar.Collapse>
       </Navbar>
     </Container>
   );
