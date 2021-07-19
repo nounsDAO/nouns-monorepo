@@ -2,8 +2,6 @@
 
 pragma solidity ^0.8.6;
 
-import { INounsERC721 } from './INounsERC721.sol';
-
 /**
  * @title Interface for Noun Auction Houses
  */

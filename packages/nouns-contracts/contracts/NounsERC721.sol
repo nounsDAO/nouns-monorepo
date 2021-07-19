@@ -90,7 +90,7 @@ contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
 
     /**
      * @notice Mint a Noun to the minter, along with a possible nounders reward
-     * Noun. Nounders reward Nouns are minted every 10 Nouns, starting at #0,
+     * Noun. Nounders reward Nouns are minted every 10 Nouns, starting at 0,
      * until 183 nounder Nouns have been minted (5 years w/ 24 hour auctions).
      * @dev Call _mintTo with the to address(es).
      */
