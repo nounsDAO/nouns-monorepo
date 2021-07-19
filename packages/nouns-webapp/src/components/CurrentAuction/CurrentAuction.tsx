@@ -1,13 +1,12 @@
 import { Col } from 'react-bootstrap';
-import { useAuction } from '../../wrappers/nounsAuction';
-import config from '../../config';
 import StandaloneNoun from '../StandaloneNoun';
 import AuctionActivity from './AuctionActivity';
 import Section from '../Section';
 import Noun from '../Shared/Noun';
+import { Auction } from '../../wrappers/nounsAuction';
 
-const CurrentAuction = () => {
-  const auction = useAuction(config.auctionProxyAddress);
+const CurrentAuction: React.FC<{ auction: Auction }> = props => {
+  const { auction } = props;
 
   return (
     <Section bgColor="transparent" fullWidth={false}>
