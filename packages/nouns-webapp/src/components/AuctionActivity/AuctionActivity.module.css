@@ -7,6 +7,7 @@
 }
 .modalTitle {
   margin: 0 auto;
+  color: var(--dark-gray);
 }
 .modalHeader button {
   position: absolute;
