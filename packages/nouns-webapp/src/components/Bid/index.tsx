@@ -163,7 +163,11 @@ const Bid: React.FC<{
   return (
     <>
       {modal.show && (
-        <Modal title={modal.title} message={modal.message} onDismiss={dismissModalHanlder} />
+        <Modal
+          title={modal.title}
+          content={<p>{modal.message}</p>}
+          onDismiss={dismissModalHanlder}
+        />
       )}
       {auction && (
         <div className={classes.bidWrapper}>
