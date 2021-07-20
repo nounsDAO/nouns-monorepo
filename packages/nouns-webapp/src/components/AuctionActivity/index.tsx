@@ -29,7 +29,7 @@ const AuctionActivity: React.FC<{ auction: Auction }> = props => {
     setAuctionEnded(ended);
   };
 
-  const nounIdContent = auction && `Noun #${auction.nounId}`;
+  const nounIdContent = auction && `Noun ${auction.nounId}`;
   const auctionStartTimeUTC =
     auction &&
     moment(BigNumber.from(auction.startTime).toNumber() * 1000)
@@ -51,10 +51,10 @@ const AuctionActivity: React.FC<{ auction: Auction }> = props => {
         <h2>{auction && `${auctionStartTimeUTC} (GMT)`}</h2>
         <h1 className={classes.nounTitle}>{nounIdContent}</h1>
         <Row>
-          <Col lg={6}>
+          <Col lg={5}>
             <CurrentBid auction={auction} auctionEnded={auctionEnded} />
           </Col>
-          <Col lg={6}>
+          <Col lg={5}>
             <BidTimer
               auction={auction}
               auctionEnded={auctionEnded}
