@@ -19,14 +19,14 @@ type Account @entity {
 }
 
 type Bid @entity {
-  id: ID!                # Bid transaction hash
-  noun: Noun!            # The Noun being bid on
-  amount: BigInt!        # Bid amount
-  bidder: Account        # Bidder account
-  blockNumber: BigInt!   # Block number of the bid
-  txIndex: BigInt!       # Index of transaction within block
-  auction: Auction!      # The auction being bid in
-  blockTimestamp: BigInt # The timestamp of the block the bid is in
+  id: ID!                 # Bid transaction hash
+  noun: Noun!             # The Noun being bid on
+  amount: BigInt!         # Bid amount
+  bidder: Account         # Bidder account
+  blockNumber: BigInt!    # Block number of the bid
+  txIndex: BigInt!        # Index of transaction within block
+  auction: Auction!       # The auction being bid in
+  blockTimestamp: BigInt! # The timestamp of the block the bid is in
 }
 
 type Auction @entity {
