@@ -9,8 +9,8 @@ import AuctionTimer from '../AuctionTimer';
 import CurrentBid from '../CurrentBid';
 import MinBid from '../MinBid';
 import moment from 'moment';
-import { BidHistory } from '../BidHistory';
-import Modal from '../Modal';
+import BidHistory from '../BidHistory';
+import { Modal } from 'react-bootstrap';
 
 export const useMinBid = (auction: Auction | undefined) => {
   const minBidIncPercentage = useAuctionMinBidIncPercentage();
@@ -55,14 +55,23 @@ const AuctionActivity: React.FC<{ auction: Auction }> = props => {
     setShowBidModal(false);
   };
 
+  const bidHistoryTitle = `Noun ${
+    auction && BigNumber.from(auction.nounId).toString()
+  } bid history`;
+
   return (
     <>
-      {showBidModal && (
-        <Modal
-          title="Bid History"
-          content={<BidHistory auctionId="17" />}
-          onDismiss={dismissBidModalHanlder}
-        />
+      {showBidModal && auction && (
+        <Modal show={showBidModal} onHide={dismissBidModalHanlder} size="lg">
+          <Modal.Header closeButton className={classes.modalHeader}>
+            <Modal.Title className={classes.modalTitle}>
+              <h1>{bidHistoryTitle}</h1>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <BidHistory auctionId={auction && BigNumber.from(auction.nounId).toString()} />
+          </Modal.Body>
+        </Modal>
       )}
 
       <div className={classes.activityContainer}>

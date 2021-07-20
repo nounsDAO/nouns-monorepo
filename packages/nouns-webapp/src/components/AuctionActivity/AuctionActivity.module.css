@@ -2,6 +2,19 @@
   padding: 1rem 2rem;
   color: var(--dark-gray);
 }
+.modalHeader {
+  border-bottom: none;
+}
+.modalTitle {
+  margin: 0 auto;
+}
+.modalHeader button {
+  position: absolute;
+  right: 1rem;
+}
+.modalHeader h1 {
+  font-family: 'Londrina Solid';
+}
 
 .nounTitle {
   font-family: 'Londrina Solid';
