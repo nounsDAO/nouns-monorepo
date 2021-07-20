@@ -17,6 +17,7 @@ import HistoryCollection from './components/HistoryCollection';
 import Documentation from './components/Documentation';
 import NetworkAlert from './components/NetworkAlert';
 import Footer from './components/Footer';
+import nounstooth from './assets/nounstooth_doublebig_peche.png'
 
 function App() {
   const { account, chainId } = useEthers();
@@ -30,7 +31,7 @@ function App() {
   }, [account, dispatch]);
 
   return (
-    <div className="App">
+    <div className="App" style={{backgroundImage: `url(${nounstooth})`}}>
       {chainId !== 4 && <NetworkAlert />}
       <NavBar />
       <Router history={history}>

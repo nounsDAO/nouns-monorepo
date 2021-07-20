@@ -14,7 +14,7 @@ const CurrentAuction: React.FC<{ auction: Auction }> = props => {
       <Col lg={{ span: 6}}>
         {auction ? (
           <>
-          <div style={{margin: "2rem", boxShadow: "-15px 15px 0px #bbb"}}>
+          <div style={{margin: "3rem", boxShadow: "rgb(0 0 0 / 28%) -12px 12px 0px"}}>
             <StandaloneNoun nounId={auction.nounId} />
           </div>
           </>
