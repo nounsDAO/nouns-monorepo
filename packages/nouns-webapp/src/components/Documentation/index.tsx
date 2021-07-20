@@ -23,7 +23,7 @@ const Documentation = () => {
     <Section bgColor="white" fullWidth={false}>
       <Col lg={{ span: 10, offset: 1 }}>
         <div className={classes.headerWrapper}>
-          <h1>What is this?</h1>
+          <h1>WTF?</h1>
           <p>
             Nouns are an experimental attempt to improve the formation of on-chain avatar
             communities. While projects such as {cryotopunksLink} have attempted to bootstrap
