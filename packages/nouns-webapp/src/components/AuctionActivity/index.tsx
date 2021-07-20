@@ -5,7 +5,7 @@ import { BigNumber, utils, FixedNumber } from '@usedapp/core/node_modules/ethers
 import { Row, Col } from 'react-bootstrap';
 import classes from './AuctionActivity.module.css';
 import Bid from '../Bid';
-import BidTimer from '../AuctionTimer';
+import AuctionTimer from '../AuctionTimer';
 import CurrentBid from '../CurrentBid';
 import MinBid from '../MinBid';
 import moment from 'moment';
@@ -55,7 +55,7 @@ const AuctionActivity: React.FC<{ auction: Auction }> = props => {
             <CurrentBid auction={auction} auctionEnded={auctionEnded} />
           </Col>
           <Col lg={6}>
-            <BidTimer
+            <AuctionTimer
               auction={auction}
               auctionEnded={auctionEnded}
               setAuctionEnded={setAuctionStateHandler}
