@@ -14,7 +14,9 @@ const CurrentAuction: React.FC<{ auction: Auction }> = props => {
       <Col lg={{ span: 6}}>
         {auction ? (
           <>
+          <div style={{padding: "2rem"}}>
             <StandaloneNoun nounId={auction.nounId} />
+          </div>
           </>
         ) : (
           <Noun imgPath="" alt="" />

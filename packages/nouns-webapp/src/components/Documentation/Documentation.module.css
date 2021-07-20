@@ -5,6 +5,13 @@
 .headerWrapper p {
   margin: 3rem 0;
 }
+
+@media (max-width:  992px){
+  .headerWrapper{
+    padding:  1rem;
+  }
+}
+
 .card {
   border: none;
 }
