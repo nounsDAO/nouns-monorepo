@@ -4,10 +4,10 @@ import { useAuctionMinBidIncPercentage } from '../../wrappers/nounsAuction';
 import { BigNumber, utils, FixedNumber } from '@usedapp/core/node_modules/ethers';
 import { Row, Col } from 'react-bootstrap';
 import classes from './AuctionActivity.module.css';
-import Bid from './AuctionActivity/Bid';
-import BidTimer from './AuctionActivity/AuctionTimer';
-import CurrentBid from './AuctionActivity/CurrentBid';
-import MinBid from './AuctionActivity/MinBid';
+import Bid from '../Bid';
+import BidTimer from '../AuctionTimer';
+import CurrentBid from '../CurrentBid';
+import MinBid from '../MinBid';
 import moment from 'moment';
 
 export const useMinBid = (auction: Auction | undefined) => {
@@ -21,7 +21,7 @@ export const useMinBid = (auction: Auction | undefined) => {
   return FixedNumber.from(minBidInc).mulUnsafe(auctionAmount).toUnsafeFloat();
 };
 
-const ActivityLens: React.FC<{ auction: Auction }> = props => {
+const AuctionActivity: React.FC<{ auction: Auction }> = props => {
   const { auction } = props;
 
   const [auctionEnded, setAuctionEnded] = useState(false);
@@ -81,4 +81,4 @@ const ActivityLens: React.FC<{ auction: Auction }> = props => {
   );
 };
 
-export default ActivityLens;
+export default AuctionActivity;

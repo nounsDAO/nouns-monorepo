@@ -2,13 +2,13 @@ import {
   Auction,
   auctionHouseContractFactory,
   AuctionHouseContractFunctions,
-} from '../../../wrappers/nounsAuction';
-import config from '../../../config';
+} from '../../wrappers/nounsAuction';
+import config from '../../config';
 import { useContractFunction } from '@usedapp/core';
 import { useEffect, useState, useRef, ChangeEvent } from 'react';
 import { utils } from 'ethers';
 import classes from './Bid.module.css';
-import Modal from '../../Shared/Modal';
+import Modal from '../Modal';
 import { Spinner } from 'react-bootstrap';
 
 const Bid: React.FC<{

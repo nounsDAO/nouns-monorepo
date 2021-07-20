@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { Auction } from '../../../wrappers/nounsAuction';
+import { Auction } from '../../wrappers/nounsAuction';
 import classes from './AuctionTimer.module.css';
 import { useState, useEffect, useRef } from 'react';
 import { BigNumber } from '@ethersproject/bignumber';

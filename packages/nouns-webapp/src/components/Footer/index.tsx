@@ -1,5 +1,5 @@
 import classes from './Footer.module.css';
-import Section from '../Section';
+import Section from '../../layout/Section';
 import heartNoun from '../../assets/heart-noun.png';
 
 const Footer = () => {

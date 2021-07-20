@@ -1,8 +1,8 @@
 import { Col } from 'react-bootstrap';
 import StandaloneNoun from '../StandaloneNoun';
-import AuctionActivity from './AuctionActivity';
-import Section from '../Section';
-import Noun from '../Shared/Noun';
+import AuctionActivity from '../AuctionActivity';
+import Section from '../../layout/Section';
+import Noun from '../Noun';
 import { Auction } from '../../wrappers/nounsAuction';
 
 const CurrentAuction: React.FC<{ auction: Auction }> = props => {

@@ -1,5 +1,5 @@
 import classes from './Banner.module.css';
-import Section from '../Section';
+import Section from '../../layout/Section';
 import { Col } from 'react-bootstrap';
 
 const Banner = () => {

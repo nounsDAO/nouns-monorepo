@@ -11,8 +11,7 @@ import config from './config';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './components/NavBar';
-import OpenSeaItem from './layout/OpenSeaItem';
-import CurrentAuction from './components/CurrentAuction/CurrentAuction';
+import CurrentAuction from './components/CurrentAuction';
 import Banner from './components/Banner';
 import HistoryCollection from './components/HistoryCollection';
 import Documentation from './components/Documentation';
@@ -46,9 +45,6 @@ function App() {
             />
             <Documentation />
             <Footer />
-          </Route>
-          <Route path="/opensea">
-            <OpenSeaItem id={1} />
           </Route>
         </Switch>
       </Router>
