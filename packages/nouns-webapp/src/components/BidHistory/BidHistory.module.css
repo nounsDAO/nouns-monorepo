@@ -1,8 +1,51 @@
-.bidRow {
-	display: grid;
-	grid-template-columns: 2fr 1fr;
+.altWrapper {
+  text-align: center;
 }
 
 .bidCollection {
-	overflow: scroll;
+  display: grid;
+  text-align: start;
+  list-style-type: none;
+  row-gap: 1rem;
+  padding: 0;
+}
+
+.bidRow {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(211, 211, 211, 0.322);
+}
+.bidItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.leftSectionWrapper {
+  display: flex;
+  flex-direction: column;
+}
+.bidder {
+  font-weight: bold;
+  color: var(--dark-gray);
+}
+.bidDate {
+  color: gray;
+}
+.rightSectionWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.bidAmount {
+  color: var(--dark-gray);
+  margin-right: 1rem;
+  font-size: xx-large;
+  font-family: 'Londrina Solid';
+}
+.linkSymbol,
+.linkSymbol a {
+  color: var(--dark-gray);
+}
+.linkSymbol a:hover {
+  color: rgb(32, 32, 32);
 }
