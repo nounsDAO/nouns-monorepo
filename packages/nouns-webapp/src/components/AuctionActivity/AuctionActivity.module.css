@@ -1,6 +1,6 @@
 .activityContainer {
   padding: 1rem 2rem;
-  color: #504f49;
+  color: var(--dark-gray);
 }
 
 .nounTitle {
@@ -10,7 +10,7 @@
 }
 /* section titles (date, current bid, auction ends */
 .activityContainer h2 {
-  color: #5c8f71;
+  color: var(--brand-dark-green);
   font-weight: bold;
   font-size: 1.5rem;
 }
