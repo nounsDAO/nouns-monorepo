@@ -9,6 +9,8 @@ import AuctionTimer from '../AuctionTimer';
 import CurrentBid from '../CurrentBid';
 import MinBid from '../MinBid';
 import moment from 'moment';
+import { BidHistory } from '../BidHistory';
+import Modal from '../Modal';
 
 export const useMinBid = (auction: Auction | undefined) => {
   const minBidIncPercentage = useAuctionMinBidIncPercentage();
@@ -45,8 +47,24 @@ const AuctionActivity: React.FC<{ auction: Auction }> = props => {
     setDisplayMinBid(false);
   };
 
+  const [showBidModal, setShowBidModal] = useState(false);
+  const showBidModalHandler = () => {
+    setShowBidModal(true);
+  };
+  const dismissBidModalHanlder = () => {
+    setShowBidModal(false);
+  };
+
   return (
     <>
+      {showBidModal && (
+        <Modal
+          title="Bid History"
+          content={<BidHistory auctionId="17" />}
+          onDismiss={dismissBidModalHanlder}
+        />
+      )}
+
       <div className={classes.activityContainer}>
         <h2>{auction && `${auctionStartTimeUTC} (GMT)`}</h2>
         <h1 className={classes.nounTitle}>{nounIdContent}</h1>
@@ -61,6 +79,11 @@ const AuctionActivity: React.FC<{ auction: Auction }> = props => {
               setAuctionEnded={setAuctionStateHandler}
             />
           </Col>
+          {auction && !auctionEnded && (
+            <Col lg={12}>
+              <MinBid minBid={minBid} onClick={minBidTappedHandler} />
+            </Col>
+          )}
           <Col lg={12}>
             <Bid
               auction={auction}
@@ -70,9 +93,11 @@ const AuctionActivity: React.FC<{ auction: Auction }> = props => {
               onInputChange={bidInputChangeHandler}
             />
           </Col>
-          {auction && !auctionEnded && (
+          {auction && (
             <Col lg={12}>
-              <MinBid minBid={minBid} onClick={minBidTappedHandler} />
+              <button className={classes.bidHistoryBtn} onClick={showBidModalHandler}>
+                Bid history
+              </button>
             </Col>
           )}
         </Row>
