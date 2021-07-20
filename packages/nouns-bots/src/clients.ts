@@ -5,7 +5,7 @@ import { Contract, providers } from 'ethers';
 import { NounsERC721ABI } from '@nouns/contracts';
 import Discord from 'discord.js';
 import axios from 'axios';
-import pinataSdk from '@pinata/sdk'
+import pinataSdk from '@pinata/sdk';
 
 /**
  * Redis Client
@@ -68,7 +68,4 @@ export const incrementCounter = (counterName: string) =>
 /**
  * Pinata.Cloud client for hosting IPFS assets
  */
-export const pinataClient = pinataSdk(
-  config.pinataApiKey,
-  config.pinataApiSecretKey
-);
+export const pinataClient = pinataSdk(config.pinataApiKey, config.pinataApiSecretKey);
