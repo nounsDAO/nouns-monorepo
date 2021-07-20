@@ -1,5 +1,5 @@
 import Discord from 'discord.js';
-import { internalDiscordWebhook } from "../clients"
+import { internalDiscordWebhook } from '../clients';
 import { config } from '../config';
 
 /**
@@ -9,16 +9,20 @@ import { config } from '../config';
  * @param imageUrl A URL where the Noun's image is uploaded to
  * @returns void
  */
-export const processNewAuction = async (client: Discord.WebhookClient, auctionId: number, imageUrl: string) => {
-	if (!config.discordEnabled) return;
-	client.send(
-		new Discord.MessageEmbed()
-			.setTitle(`New Testnet Auction Discovered`)
-			.setDescription(`An auction has started for Noun #${auctionId}`)
-			.setURL('https://nouns.wtf')
-			.setImage(imageUrl)
-			.addField('Noun ID', auctionId, true)
-			.setTimestamp()
-	)
-	console.log('posted discord update')
-}
+export const processNewAuction = async (
+  client: Discord.WebhookClient,
+  auctionId: number,
+  imageUrl: string,
+) => {
+  if (!config.discordEnabled) return;
+  client.send(
+    new Discord.MessageEmbed()
+      .setTitle(`New Testnet Auction Discovered`)
+      .setDescription(`An auction has started for Noun #${auctionId}`)
+      .setURL('https://nouns.wtf')
+      .setImage(imageUrl)
+      .addField('Noun ID', auctionId, true)
+      .setTimestamp(),
+  );
+  console.log('posted discord update');
+};
