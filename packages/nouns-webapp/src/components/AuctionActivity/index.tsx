@@ -31,7 +31,7 @@ const AuctionActivity: React.FC<{ auction: Auction }> = props => {
     setAuctionEnded(ended);
   };
 
-  const nounIdContent = auction && `Noun #${auction.nounId}`;
+  const nounIdContent = auction && `Noun ${auction.nounId}`;
   const auctionStartTimeUTC =
     auction &&
     moment(BigNumber.from(auction.startTime).toNumber() * 1000)
