@@ -17,7 +17,7 @@ import HistoryCollection from './components/HistoryCollection';
 import Documentation from './components/Documentation';
 import NetworkAlert from './components/NetworkAlert';
 import Footer from './components/Footer';
-import nounstooth from './assets/noun_clouds.png'
+import nounstooth from './assets/noun_clouds3.png'
 
 function App() {
   const { account, chainId } = useEthers();
