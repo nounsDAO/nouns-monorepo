@@ -1,4 +1,4 @@
-import { Col } from 'react-bootstrap';
+import { Row,Col } from 'react-bootstrap';
 import StandaloneNoun from '../StandaloneNoun';
 import AuctionActivity from '../AuctionActivity';
 import Section from '../../layout/Section';
@@ -10,7 +10,8 @@ const CurrentAuction: React.FC<{ auction: Auction }> = props => {
 
   return (
     <Section bgColor="transparent" fullWidth={false}>
-      <Col lg={{ span: 5, offset: 1 }}>
+      <Row className='align-items-center'>
+      <Col lg={{ span: 6}}>
         {auction ? (
           <>
             <StandaloneNoun nounId={auction.nounId} />
@@ -19,9 +20,10 @@ const CurrentAuction: React.FC<{ auction: Auction }> = props => {
           <Noun imgPath="" alt="" />
         )}
       </Col>
-      <Col lg={6}>
+      <Col lg={{span: 6}}>
         <AuctionActivity auction={auction && auction} />
       </Col>
+      </Row>
     </Section>
   );
 };

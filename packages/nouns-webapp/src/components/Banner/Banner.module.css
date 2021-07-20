@@ -3,6 +3,10 @@
   font-size: 5rem;
 }
 
+.nounGif{
+  width: 100%;
+}
+
 @media (min-width: 992px) {
   .wrapper h1 {
     font-size: 7rem;
