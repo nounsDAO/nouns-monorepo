@@ -1,5 +1,5 @@
 .historyCollection {
-  display:grid;
+  display: grid;
   grid-auto-flow: column dense;
   column-gap: 8px;
   width: 100%;
@@ -11,10 +11,10 @@
 }
 
 .rtl {
-  direction: rtl;
+  direction: ltr;
 }
 
 .historyCollection div {
   width: 146px;
-  margin: 5px
+  margin: 2px;
 }

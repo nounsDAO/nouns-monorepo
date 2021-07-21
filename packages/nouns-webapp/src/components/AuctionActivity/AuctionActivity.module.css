@@ -1,0 +1,49 @@
+.activityContainer {
+  padding: 1rem 2rem;
+  color: var(--dark-gray);
+}
+.modalHeader {
+  border-bottom: none;
+}
+.modalTitle {
+  margin: 0 auto;
+  color: var(--dark-gray);
+}
+.modalHeader button {
+  position: absolute;
+  right: 1rem;
+}
+.modalHeader h1 {
+  font-family: 'Londrina Solid';
+}
+
+.nounTitle {
+  font-family: 'Londrina Solid';
+  font-weight: bold;
+  font-size: 3.5rem;
+}
+/* section titles (date, current bid, auction ends */
+.activityContainer h2 {
+  color: var(--brand-dark-green);
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.bidHistoryBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50px;
+  border: 0 none;
+  background-color: var(--dark-gray);
+  width: 100%;
+  height: 4rem;
+  font-weight: bold;
+  font-size: xx-large;
+  color: white;
+  font-family: 'Londrina Solid';
+}
+.bidHistoryBtn:hover {
+  color: rgb(209, 207, 207);
+  background-color: #302f2b;
+}

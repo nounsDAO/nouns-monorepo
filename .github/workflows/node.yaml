@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     strategy:
       matrix:
         node-version: [14.x]
@@ -20,5 +20,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Install Yarn
+        run: npm install -g yarn
       - run: yarn 
       - run: yarn build
+      - name: Uninstall Yarn
+        if: always()
+        run: npm uninstall -g yarn

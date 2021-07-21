@@ -5,12 +5,13 @@ import { setActiveAccount } from './state/slices/account';
 import { Router, Switch, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import { BigNumber } from '@usedapp/core/node_modules/ethers';
+import { useAuction } from './wrappers/nounsAuction';
+import config from './config';
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './components/NavBar';
-import OpenSeaItem from './layout/OpenSeaItem';
-import CurrentAuction from './components/CurrentAuction/CurrentAuction';
+import CurrentAuction from './components/CurrentAuction';
 import Banner from './components/Banner';
 import HistoryCollection from './components/HistoryCollection';
 import Documentation from './components/Documentation';
@@ -21,6 +22,7 @@ function App() {
   const { account, chainId } = useEthers();
   const dispatch = useAppDispatch();
   const history = createBrowserHistory();
+  const auction = useAuction(config.auctionProxyAddress);
 
   useEffect(() => {
     // Local account array updated
@@ -34,18 +36,15 @@ function App() {
       <Router history={history}>
         <Switch>
           <Route path="/">
-            <CurrentAuction />
+            <CurrentAuction auction={auction} />
             <Banner />
             <HistoryCollection
-              latestNounId={BigNumber.from(8).sub(1)}
-              historyCount={8}
+              latestNounId={auction && BigNumber.from(auction.nounId).sub(1)}
+              historyCount={10}
               rtl={true}
             />
             <Documentation />
             <Footer />
-          </Route>
-          <Route path="/opensea">
-            <OpenSeaItem id={1} />
           </Route>
         </Switch>
       </Router>

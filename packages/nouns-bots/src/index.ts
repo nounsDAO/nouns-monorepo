@@ -1,6 +1,17 @@
-import { getAuctionCache, getAuctionStartedTweetText, getNounPngBuffer, updateAuctionCache } from './utils';
+import {
+  buildCounterName,
+  buildIpfsUrl,
+  getAuctionCache,
+  getAuctionStartedTweetText,
+  getNounPngBuffer,
+  updateAuctionCache,
+} from './utils';
+import { internalDiscordWebhook, incrementCounter, twitter, publicDiscordWebhook } from './clients';
 import { getLastAuction } from './subgraph';
-import { twitter } from './clients';
+import { config } from './config';
+import { processNewAuction as twitterProcessNewAuction } from './handlers/twitter';
+import { processNewAuction as discordProcessNewAuction } from './handlers/discord';
+import { processNewAuction as pinataProcessNewAuction } from './handlers/pinata';
 
 /**
  * Process the last auction, update cache and push socials if new auction discovered
@@ -11,21 +22,17 @@ async function processLastAuction() {
   console.log(`processLastAuction cachedAuctionId(${cachedAuctionId}) lastAuctionId(${lastAuctionId})`);
 
   if (cachedAuctionId < lastAuctionId) {
-    const png = await getNounPngBuffer(lastAuctionId.toString());
-    if (png) {
-      console.log(`processLastAuction tweeting discovered auction id and noun`);
-      const mediaId = await twitter.v1.uploadMedia(png, { type: 'png' });
-      await twitter.v1.tweet(
-        getAuctionStartedTweetText(lastAuctionId),
-        {
-          media_ids: mediaId,
-        },
-      );
-    } else {
-      console.error(`Error generating png for noun auction ${lastAuctionId}`);
+    const pinataUpload = await pinataProcessNewAuction(lastAuctionId)
+    await twitterProcessNewAuction(lastAuctionId)
+    if (pinataUpload !== undefined) {
+      await discordProcessNewAuction(internalDiscordWebhook, lastAuctionId, buildIpfsUrl(pinataUpload.IpfsHash))
+      await discordProcessNewAuction(publicDiscordWebhook, lastAuctionId, buildIpfsUrl(pinataUpload.IpfsHash))
     }
+    incrementCounter(buildCounterName(`auctions_discovered`));
     await updateAuctionCache(lastAuctionId);
+    incrementCounter(buildCounterName('auction_cache_updates'));
   }
+  incrementCounter(buildCounterName('auction_process_last_auction'));
 }
 
 setInterval(

@@ -23,7 +23,7 @@ library NFTDescriptor {
         view
         returns (string memory)
     {
-        string memory name = string(abi.encodePacked('Noun #', params.tokenId.toString()));
+        string memory name = string(abi.encodePacked('Noun ', params.tokenId.toString()));
         string memory description = _generateDescription(params.tokenId);
         string memory image = Base64.encode(bytes(_generateSVGImage(params, palettes)));
 
@@ -44,7 +44,7 @@ library NFTDescriptor {
      * @notice Generate a description for use in the ERC721 token URI.
      */
     function _generateDescription(uint256 tokenId) private pure returns (string memory) {
-        return string(abi.encodePacked('Noun #', tokenId.toString(), ' is a member of the NounsDAO'));
+        return string(abi.encodePacked('Noun ', tokenId.toString(), ' is a member of the NounsDAO'));
     }
 
     /**
