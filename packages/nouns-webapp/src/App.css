@@ -1,3 +1,5 @@
+@import './css/colors.css';
+
 .App {
-  background-color: #edf2f0;
+  background-color: var(--brand-bg-green);
 }

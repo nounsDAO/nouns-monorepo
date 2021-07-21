@@ -36,12 +36,13 @@ export const auctionQuery = (auctionId: number) => gql`
   }
   `
 
- export const bidsByAuctionQuery = (auctionId: string) => gql`
+export const bidsByAuctionQuery = (auctionId: string) => gql`
  {
 	bids(where:{auction: "${auctionId}"}) {
 	  id
 	  amount
 	  blockNumber
+	  blockTimestamp
 	  txIndex
 	  bidder {
 	  	id
@@ -53,7 +54,7 @@ export const auctionQuery = (auctionId: number) => gql`
   }
  `
 
- export const nounQuery = (id: string) => gql`
+export const nounQuery = (id: string) => gql`
  {
 	noun(id:"${id}") {
 	  id
@@ -87,6 +88,6 @@ export const latestAuctionsQuery = (first: number = 50) => gql`
 `
 
 export const clientFactory = (uri: string) => new ApolloClient({
-	uri,
+    uri,
 	cache: new InMemoryCache()
-});
+  });

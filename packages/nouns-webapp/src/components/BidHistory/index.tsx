@@ -6,14 +6,46 @@ import classes from './BidHistory.module.css';
 import { formatEther } from '@ethersproject/units';
 import { compareBids } from '../../utils/compareBids';
 import * as R from 'ramda';
+import { Spinner } from 'react-bootstrap';
+import moment from 'moment';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+import { buildEtherscanTxLink, Network } from '../../utils/buildEtherscanLink';
 
-const historyLength = 6;
-
-export const BidHistory: React.FC<{ auctionId: string }> = props => {
+const BidHistory: React.FC<{ auctionId: string }> = props => {
   const { auctionId } = props;
   const { loading, error, data, refetch } = useQuery(bidsByAuctionQuery(auctionId));
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error :(</p>;
+
+  const bidContent =
+    data &&
+    R.sort(compareBids, data.bids)
+      .reverse()
+      .map((bid: any, i: number) => {
+        const bidAmount = formatEther(bid.amount);
+        const date = moment(bid.blockTimestamp * 1000).format('MMM DD yy on hh:mm a');
+        const txLink = buildEtherscanTxLink(bid.id, Network.rinkeby);
+
+        return (
+          <li key={i} className={classes.bidRow}>
+            <div className={classes.bidItem}>
+              <div className={classes.leftSectionWrapper}>
+                <div className={classes.bidder}>
+                  <ShortAddress>{bid.bidder.id}</ShortAddress>
+                </div>
+                <div className={classes.bidDate}>{date}</div>
+              </div>
+              <div className={classes.rightSectionWrapper}>
+                <div className={classes.bidAmount}>{bidAmount} ETH</div>
+                <div className={classes.linkSymbol}>
+                  <a href={txLink.toString()} target="_blank" rel="noreferrer">
+                    <FontAwesomeIcon icon={faExternalLinkAlt} />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </li>
+        );
+      });
 
   const periodicFetch = () => {
     setTimeout(() => {
@@ -24,26 +56,20 @@ export const BidHistory: React.FC<{ auctionId: string }> = props => {
   periodicFetch();
 
   return (
-    <div>
-      {loading && <div>Loading</div>}
-      {error && <div>Error {error}</div>}
-      {!loading && !error && (
-        <ul className={classes.bidCollection}>
-          {R.sort(compareBids, data.bids)
-            // TODO refactor this out
-            .reverse()
-            .slice(0, historyLength)
-            .reverse()
-            .map((bid: any, i: number) => (
-              <li key={i} className={classes.bidRow}>
-                <div>
-                  <ShortAddress>{bid.bidder.id}</ShortAddress>
-                </div>
-                <div>Ξ{formatEther(bid.amount)}</div>
-              </li>
-            ))}
-        </ul>
+    <>
+      {loading && !error && (
+        <div className={classes.altWrapper}>
+          <Spinner animation="border" />
+        </div>
       )}
-    </div>
+      {!loading && error && (
+        <div className={classes.altWrapper}>
+          <div>Error {error}</div>
+        </div>
+      )}
+      {!loading && !error && <ul className={classes.bidCollection}>{bidContent}</ul>}
+    </>
   );
 };
+
+export default BidHistory;
