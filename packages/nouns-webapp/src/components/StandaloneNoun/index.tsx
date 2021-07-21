@@ -5,14 +5,15 @@ import classes from './StandaloneNoun.module.css';
 
 interface StandaloneNounProps {
   nounId: BigNumberish;
+  boxShadow?: boolean;
 }
 
 const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProps) => {
-  const { nounId } = props;
+  const { nounId, boxShadow } = props;
   const noun = useNounToken(BigNumber.from(nounId));
 
   return (
-    <div className={classes.standaloneNoun}>
+    <div className={noun && boxShadow ? classes.boxShadow : ''}>
       <Noun imgPath={noun ? noun.image : ''} alt={noun ? noun.description : ''} />
     </div>
   );
