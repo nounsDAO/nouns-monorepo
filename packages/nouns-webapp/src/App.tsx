@@ -8,7 +8,7 @@ import { BigNumber } from '@usedapp/core/node_modules/ethers';
 import { useAuction } from './wrappers/nounsAuction';
 import config from './config';
 
-import './App.css';
+import classes from './App.module.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './components/NavBar';
 import CurrentAuction from './components/CurrentAuction';
@@ -30,7 +30,7 @@ function App() {
   }, [account, dispatch]);
 
   return (
-    <div className="App">
+    <div className={classes.wrapper}>
       {chainId !== 4 && <NetworkAlert />}
       <NavBar />
       <Router history={history}>

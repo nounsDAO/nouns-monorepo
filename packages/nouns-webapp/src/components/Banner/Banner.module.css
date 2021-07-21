@@ -3,8 +3,20 @@
   font-size: 5rem;
 }
 
+.nounGif{
+  width: 100%;
+  padding:  2rem;
+}
+
+@media (max-width:  992px){
+  .wrapper{
+    padding:  2rem;
+  }
+}
+
 @media (min-width: 992px) {
+
   .wrapper h1 {
-    font-size: 8rem;
+    font-size: 7rem;
   }
 }

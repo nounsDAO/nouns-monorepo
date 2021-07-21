@@ -38,7 +38,7 @@ const AuctionTimer: React.FC<{
     }
   }, [auction, auctionTimer, setAuctionEnded]);
 
-  const auctionContent = auctionEnded ? 'Auction ended' : 'Auction ends in';
+  const auctionContent = auctionEnded ? 'Auction ended' : 'Ends in';
 
   return (
     <>

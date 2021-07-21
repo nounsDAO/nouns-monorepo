@@ -45,8 +45,9 @@ const NavBar = () => {
   );
 
   return (
-    <Container>
-      <Navbar bg="transparent" expand="lg">
+    
+      <Navbar expand="lg">
+      <Container>
         <Navbar.Brand href="#home" className={classes.navBarBrand}>
           <img
             src={logo}
@@ -61,8 +62,9 @@ const NavBar = () => {
         <Navbar.Collapse className="justify-content-end">
           {activeAccount ? connectedContent : disconnectedContent}
         </Navbar.Collapse>
+            </Container>
       </Navbar>
-    </Container>
+
   );
 };
 
