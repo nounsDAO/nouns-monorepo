@@ -1,3 +1,5 @@
+@import './css/colors.css';
+
 .wrapper {
   background-color: #e9ecef;
   background-image: url('./assets/noun_clouds3.png');
