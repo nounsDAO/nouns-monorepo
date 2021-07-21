@@ -3,11 +3,6 @@
   font-size: 5rem;
 }
 
-.nounGif{
-  width: 100%;
-  padding:  2rem;
-}
-
 @media (max-width:  992px){
   .wrapper{
     padding:  2rem;
