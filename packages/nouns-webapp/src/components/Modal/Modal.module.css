@@ -21,7 +21,9 @@
 }
 
 .modal h3 {
+  font-size: xx-large;
   font-weight: bold;
+  font-family: 'Londrina Solid';
 }
 
 .content {

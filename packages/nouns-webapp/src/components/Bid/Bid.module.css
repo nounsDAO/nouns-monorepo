@@ -15,7 +15,7 @@
 }
 
 .bidBtn:hover {
-  background-color: #5c8f71;
+  background-color: var(--brand-dark-green);
   color: rgb(209, 207, 207);
 }
 
@@ -34,7 +34,7 @@
 .bidBtnAuctionEnded {
   border-radius: 50px;
   border: 0 none;
-  background-color: #6da886;
+  background-color: var(--brand-light-green);
   width: 100%;
   height: 4rem;
   font-weight: bold;
@@ -44,7 +44,7 @@
 }
 
 .bidBtnAuctionEnded:hover {
-  background-color: #5c8f71;
+  background-color: var(--brand-dark-green);
   color: rgb(209, 207, 207);
 }
 
