@@ -8,7 +8,7 @@ import { BigNumber } from '@usedapp/core/node_modules/ethers';
 import { useAuction } from './wrappers/nounsAuction';
 import config from './config';
 
-import './App.css';
+import classes from './App.module.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './components/NavBar';
 import CurrentAuction from './components/CurrentAuction';
@@ -17,7 +17,6 @@ import HistoryCollection from './components/HistoryCollection';
 import Documentation from './components/Documentation';
 import NetworkAlert from './components/NetworkAlert';
 import Footer from './components/Footer';
-import nounstooth from './assets/noun_clouds3.png'
 
 function App() {
   const { account, chainId } = useEthers();
@@ -31,7 +30,7 @@ function App() {
   }, [account, dispatch]);
 
   return (
-    <div className="App" style={{backgroundImage: `url(${nounstooth})`}}>
+    <div className={classes.wrapper}>
       {chainId !== 4 && <NetworkAlert />}
       <NavBar />
       <Router history={history}>
