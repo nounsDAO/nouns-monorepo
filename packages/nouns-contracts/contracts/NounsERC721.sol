@@ -3,12 +3,13 @@
 pragma solidity ^0.8.6;
 
 import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
-import { ERC721Enumerable, ERC721 } from '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
+import { ERC721 } from '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
+import { ERC721Governance } from './governance/ERC721Governance.sol';
 import { INounsDescriptor } from './interfaces/INounsDescriptor.sol';
 import { INounsSeeder } from './interfaces/INounsSeeder.sol';
 import { INounsERC721 } from './interfaces/INounsERC721.sol';
 
-contract NounsERC721 is INounsERC721, ERC721Enumerable, Ownable {
+contract NounsERC721 is INounsERC721, ERC721Governance, Ownable {
     // The nounders DAO address (creators org)
     address public noundersDAO;
 
