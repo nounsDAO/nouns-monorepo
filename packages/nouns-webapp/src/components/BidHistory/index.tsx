@@ -10,6 +10,7 @@ import { Spinner } from 'react-bootstrap';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+import { buildEtherscanTxLink, Network } from '../../utils/buildEtherscanLink';
 
 const BidHistory: React.FC<{ auctionId: string }> = props => {
   const { auctionId } = props;
@@ -22,8 +23,7 @@ const BidHistory: React.FC<{ auctionId: string }> = props => {
       .map((bid: any, i: number) => {
         const bidAmount = formatEther(bid.amount);
         const date = moment(bid.blockTimestamp * 1000).format('MMM DD yy on hh:mm a');
-        const txId = bid.id;
-        const txLink = `https://rinkeby.etherscan.io/tx/${txId}`;
+        const txLink = buildEtherscanTxLink(bid.id, Network.rinkeby);
 
         return (
           <li key={i} className={classes.bidRow}>
@@ -37,7 +37,7 @@ const BidHistory: React.FC<{ auctionId: string }> = props => {
               <div className={classes.rightSectionWrapper}>
                 <div className={classes.bidAmount}>{bidAmount} ETH</div>
                 <div className={classes.linkSymbol}>
-                  <a href={txLink} target="_blank" rel="noreferrer">
+                  <a href={txLink.toString()} target="_blank" rel="noreferrer">
                     <FontAwesomeIcon icon={faExternalLinkAlt} />
                   </a>
                 </div>
