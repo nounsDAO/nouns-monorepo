@@ -1,8 +1,9 @@
 import classes from './Banner.module.css';
 import Section from '../../layout/Section';
 import { Col } from 'react-bootstrap';
-import panelAnimation from '../../assets/panel-animation2.gif';
+import calendar_noun from '../../assets/calendar_noun.png';
 import Image from 'react-bootstrap/Image';
+import Noun from '../Noun';
 
 const Banner = () => {
   return (
@@ -19,7 +20,9 @@ const Banner = () => {
         </div>
       </Col>
       <Col lg={6}>
-        <Image className={classes.nounGif} src={panelAnimation} fluid />
+        <div style={{padding: "2rem"}}>
+          <Noun imgPath={calendar_noun} alt="noun" />
+        </div>
       </Col>
     </Section>
   );
