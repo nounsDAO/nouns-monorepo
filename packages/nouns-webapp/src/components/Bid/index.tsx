@@ -43,6 +43,12 @@ const Bid: React.FC<{
   );
 
   const bidInputHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const input = event.target.value;
+
+    // disable more than 2 digits after decimal point
+    if (input.includes('.') && event.target.value.split('.')[1].length > 2) {
+      return;
+    }
     setBidInput(event.target.value);
     onInputChange();
   };
