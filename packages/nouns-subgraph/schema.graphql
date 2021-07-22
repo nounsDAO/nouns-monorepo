@@ -1,41 +1,233 @@
 type Seed @entity {
-  id: ID!             # The Noun's ERC721 token id
-  background: BigInt! # The background index
-  body: BigInt!       # The body index
-  accessory: BigInt!  # The accessory index
-  head: BigInt!       # The head index
-  glasses: BigInt!    # The glasses index
+  "The Noun's ERC721 token id"
+  id: ID!
+
+  "The background index"
+  background: BigInt!
+
+  "The body index"
+  body: BigInt!
+
+  "The accessory index"
+  accessory: BigInt!
+
+  "The head index"
+  head: BigInt!
+
+  "The glasses index"
+  glasses: BigInt!
 }
 
 type Noun @entity {
-  id: ID!         # The Noun's ERC721 token id
-  seed: Seed      # The seed used to determine the Noun's traits
-  owner: Account! # The owner of the Noun
+  "The Noun's ERC721 token id"
+  id: ID!
+
+  "The seed used to determine the Noun's traits"
+  seed: Seed
+
+  "The owner of the Noun"
+  owner: Account!
 }
 
 type Account @entity {
-  id: ID!                                      # The Ethereum address
-  nouns: [Noun!]! @derivedFrom(field: "owner") # The Nouns owned by this account
+  "The Ethereum address"
+  id: ID!
+
+  "The Nouns owned by this account"
+  nouns: [Noun!]! @derivedFrom(field: "owner")
 }
 
 type Bid @entity {
-  id: ID!                 # Bid transaction hash
-  noun: Noun!             # The Noun being bid on
-  amount: BigInt!         # Bid amount
-  bidder: Account         # Bidder account
-  blockNumber: BigInt!    # Block number of the bid
-  txIndex: BigInt!        # Index of transaction within block
-  auction: Auction!       # The auction being bid in
-  blockTimestamp: BigInt! # The timestamp of the block the bid is in
+  "Bid transaction hash"
+  id: ID!
+
+  "The Noun being bid on"
+  noun: Noun!
+
+  "Bid amount"
+  amount: BigInt!
+
+  "Bidder account"
+  bidder: Account
+
+  "Block number of the bid"
+  blockNumber: BigInt!
+
+  "Index of transaction within block"
+  txIndex: BigInt!
+
+  "The auction being bid in"
+  auction: Auction!
+
+  "The timestamp of the block the bid is in"
+  blockTimestamp: BigInt!
 }
 
 type Auction @entity {
-  id: ID!                                      # The Noun's ERC721 token id
-  noun: Noun!                                  # The Noun
-  amount: BigInt!                              # The current highest bid amount
-  startTime: BigInt!                           # The time that the auction started
-  endTime: BigInt!                             # The time that the auction is scheduled to end
-  bidder: Account                              # The account with the current highest bid
-  settled: Boolean!                            # Whether or not the auction has been settled
-  bids: [Bid!]! @derivedFrom(field: "auction") # The auction bids
+  "The Noun's ERC721 token id"
+  id: ID!
+
+  "The Noun"
+  noun: Noun!
+
+  "The current highest bid amount"
+  amount: BigInt!
+
+  "The time that the auction started"
+  startTime: BigInt!
+
+  "The time that the auction is scheduled to end"
+  endTime: BigInt!
+
+  "The account with the current highest bid"
+  bidder: Account
+
+  "Whether or not the auction has been settled"
+  settled: Boolean!
+
+  "The auction bids"
+  bids: [Bid!]! @derivedFrom(field: "auction")
+}
+
+enum ProposalStatus {
+  PENDING
+  ACTIVE
+  CANCELLED
+  QUEUED
+  EXECUTED
+}
+
+type TokenHolder @entity {
+  "A TokenHolder is any address that holds any amount of Nouns, the id used is the blockchain address."
+  id: ID!
+
+  "Delegate address of the token holder which will participate in votings. Delegates don't need to hold any tokens and can even be the token holder itself."
+  delegate: Delegate
+
+  "Noun balance of this address expressed in the smallest unit of the Nouns ERC721 Token"
+  tokenBalanceRaw: BigInt!
+
+  "Noun balance of this address expressed as a BigInt normalized value for the Nouns ERC721 Token"
+  tokenBalance: BigInt!
+
+  "Total amount of Nouns ever held by this address expressed in the smallest unit of the Nouns ERC721 Token"
+  totalTokensHeldRaw: BigInt!
+
+  "Total amount of Nouns ever held by this address expressed as a BigInt normalized value for the Nouns ERC721 Token"
+  totalTokensHeld: BigInt!
+}
+
+type Delegate @entity {
+  "A Delegate is any address that has been delegated with voting tokens by a token holder, id is the blockchain address of said delegate"
+  id: ID!
+
+  "Amount of votes delegated to this delegate to be used on proposal votings expressed in the smallest unit of the Nouns ERC721 Token"
+  delegatedVotesRaw: BigInt!
+
+  "Amount of votes delegated to this delegate to be used on proposal votings expressed as a BigInt normalized value for the Nouns ERC721 Token"
+  delegatedVotes: BigInt!
+
+  tokenHoldersRepresentedAmount: Int!
+
+  "Token holders that this delegate represents"
+  tokenHoldersRepresented: [TokenHolder!]! @derivedFrom(field: "delegate")
+
+  "Votes that a delegate has made in different proposals"
+  votes: [Vote!]! @derivedFrom(field: "voter")
+
+  "Proposals that the delegate has created"
+  proposals: [Proposal!]! @derivedFrom(field: "proposer")
+}
+
+type Proposal @entity {
+  "Internal proposal ID, in this implementation it seems to be a autoincremental id"
+  id: ID!
+
+  "Delegate that proposed the change"
+  proposer: Delegate!
+
+  "Targets data for the change"
+  targets: [Bytes!]
+
+  "Values data for the change"
+  values: [BigInt!]
+
+  "Signature data for the change"
+  signatures: [String!]
+
+  "Call data for the change"
+  calldatas: [Bytes!]
+
+  "Block number from where the voting starts"
+  startBlock: BigInt!
+
+  "Block number from where the voting ends"
+  endBlock: BigInt!
+
+  "The proposal threshold at the time of proposal creation"
+  proposalThreshold: BigInt!
+
+  "The required number of votes for quorum at the time of proposal creation"
+  quorumVotes: BigInt!
+
+  "String description of the change"
+  description: String!
+
+  "Status of the proposal"
+  status: ProposalStatus!
+
+  "Once the proposal is queued for execution it will have an ETA of the execution"
+  executionETA: BigInt
+
+  "Votes associated to this proposal"
+  votes: [Vote!]! @derivedFrom(field: "proposal")
+}
+
+type Vote @entity {
+  "Delegate ID + Proposal ID"
+  id: ID!
+
+  "Whether the vote is in favour or against the proposal"
+  support: Boolean!
+
+  "Amount of votes in favour or against expressed in the smallest unit of the Nouns ERC721 Token"
+  votesRaw: BigInt!
+
+  "Amount of votes in favour or against expressed as a BigInt normalized value for the Nouns ERC721 Token"
+  votes: BigInt!
+
+  "Delegate that emitted the vote"
+  voter: Delegate!
+
+  "Proposal that is being voted on"
+  proposal: Proposal!
+}
+
+type Governance @entity {
+  "Unique entity used to keep track of common aggregated data"
+  id: ID!
+
+  "Number of proposals created"
+  proposals: BigInt!
+
+  "Total number of token holders currently"
+  currentTokenHolders: BigInt!
+
+  "Total number of delegates participating on the governance currently"
+  currentDelegates: BigInt!
+
+  "Total number of token holders"
+  totalTokenHolders: BigInt!
+
+  "Total number of delegates that held delegated votes"
+  totalDelegates: BigInt!
+
+  "Total number of votes delegated expressed in the smallest unit of the Nouns ERC721 Token"
+  delegatedVotesRaw: BigInt!
+
+  "Total number of votes delegated expressed as a BigInt normalized value for the Nouns ERC721 Token"
+  delegatedVotes: BigInt!
+
+  "Number of proposals currently queued for execution"
+  proposalsQueued: BigInt!
 }

@@ -55,3 +55,39 @@ dataSources:
           handler: handleAuctionExtended
         - event: AuctionSettled(indexed uint256,address,uint256)
           handler: handleAuctionSettled
+  - kind: ethereum/contract
+    name: NounsGovernor
+    network: {{network}}
+    source:
+      address: '{{nounsGovernor.address}}'
+      abi: NounsGovernor
+      startBlock: {{nounsGovernor.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/nouns-governance.ts
+      entities:
+        - TokenHolder
+        - Delegate
+        - Proposal
+        - Vote
+        - Governance
+      abis:
+        - name: NounsERC721
+          file: ../nouns-contracts/abi/contracts/NounsERC721.sol/NounsERC721.json
+        - name: NounsGovernor
+          file: ../nouns-contracts/abi/contracts/governance/GovernorNDelegate.sol/GovernorNDelegate.json
+      eventHandlers:
+        - event: ProposalCreatedWithRequirements(uint256,address,address[],uint256[],string[],bytes[],uint256,uint256,uint256,uint256,string)
+          handler: handleProposalCreatedWithRequirements
+        - event: ProposalCanceled(uint256)
+          handler: handleProposalCanceled
+        - event: ProposalVetoed(uint256)
+          handler: handleProposalVetoed
+        - event: ProposalQueued(uint256,uint256)
+          handler: handleProposalQueued
+        - event: ProposalExecuted(uint256)
+          handler: handleProposalExecuted
+        - event: VoteCast(indexed address,uint256,uint8,uint256,string)
+          handler: handleVoteCast
