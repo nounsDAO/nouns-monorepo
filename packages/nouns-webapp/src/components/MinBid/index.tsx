@@ -1,13 +1,17 @@
 import nounPointerImg from '../../assets/noun-pointer.png';
 import classes from './MinBid.module.css';
+import { BigNumber } from '@usedapp/core/node_modules/ethers';
+import TruncatedAmount from '../TruncatedAmount';
 
-const MinBid: React.FC<{ minBid: number; onClick: () => void }> = props => {
+const MinBid: React.FC<{ minBid: BigNumber; onClick: () => void }> = props => {
   const { minBid, onClick } = props;
 
   return (
     <div className={classes.minBidWrapper} onClick={onClick}>
       <img src={nounPointerImg} alt="Pointer noun" />
-      <h3 className={classes.minBid}>You must bid at least {minBid && minBid} ETH</h3>
+      <h3 className={classes.minBid}>
+        You must bid at least {minBid && <TruncatedAmount amount={minBid} />}
+      </h3>
     </div>
   );
 };

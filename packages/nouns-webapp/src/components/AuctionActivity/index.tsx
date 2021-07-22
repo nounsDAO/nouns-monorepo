@@ -1,7 +1,7 @@
 import { Auction } from '../../wrappers/nounsAuction';
 import { useState } from 'react';
 import { useAuctionMinBidIncPercentage } from '../../wrappers/nounsAuction';
-import { BigNumber, utils, FixedNumber } from '@usedapp/core/node_modules/ethers';
+import { BigNumber, utils } from '@usedapp/core/node_modules/ethers';
 import { Row, Col } from 'react-bootstrap';
 import classes from './AuctionActivity.module.css';
 import Bid from '../Bid';
@@ -14,13 +14,21 @@ import { Modal } from 'react-bootstrap';
 
 export const useMinBid = (auction: Auction | undefined) => {
   const minBidIncPercentage = useAuctionMinBidIncPercentage();
+
   if (!auction || !minBidIncPercentage) {
-    return 0;
+    return BigNumber.from(0);
   }
 
-  const minBidInc = (minBidIncPercentage / 100 + 1).toString();
-  const auctionAmount = FixedNumber.from(utils.formatEther(auction.amount));
-  return FixedNumber.from(minBidInc).mulUnsafe(auctionAmount).toUnsafeFloat();
+  const roundUp = (v: number, n: number) => {
+    return Math.ceil(v * Math.pow(10, n)) / Math.pow(10, n);
+  };
+
+  const weiIncrement = BigNumber.from(auction.amount).div(100).mul(minBidIncPercentage);
+  const minBidWei = BigNumber.from(auction.amount).add(weiIncrement);
+  const minBidEth = Number(utils.formatEther(minBidWei));
+  const roundedMinBidEth = roundUp(minBidEth, 2).toString();
+  const roundedMinBidWei = utils.parseEther(roundedMinBidEth);
+  return roundedMinBidWei;
 };
 
 const AuctionActivity: React.FC<{ auction: Auction }> = props => {
@@ -79,7 +87,9 @@ const AuctionActivity: React.FC<{ auction: Auction }> = props => {
         <h1 className={classes.nounTitle}>{nounIdContent}</h1>
         <Row>
           <Col lg={6}>
-            <CurrentBid auction={auction} auctionEnded={auctionEnded} />
+            {auction && (
+              <CurrentBid currentBid={BigNumber.from(auction.amount)} auctionEnded={auctionEnded} />
+            )}
           </Col>
           <Col lg={6}>
             <AuctionTimer

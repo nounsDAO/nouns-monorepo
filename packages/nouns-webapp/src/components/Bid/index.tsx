@@ -6,7 +6,7 @@ import {
 import config from '../../config';
 import { useContractFunction } from '@usedapp/core';
 import { useEffect, useState, useRef, ChangeEvent } from 'react';
-import { utils } from 'ethers';
+import { BigNumber, utils } from 'ethers';
 import classes from './Bid.module.css';
 import Modal from '../Modal';
 import { Spinner } from 'react-bootstrap';
@@ -14,7 +14,7 @@ import { Spinner } from 'react-bootstrap';
 const Bid: React.FC<{
   auction: Auction;
   auctionEnded: boolean;
-  minBid: number;
+  minBid: BigNumber;
   useMinBid: boolean;
   onInputChange: () => void;
 }> = props => {
@@ -48,19 +48,16 @@ const Bid: React.FC<{
   };
 
   const placeBidHandler = () => {
-    if (!auction) {
+    if (!auction || !bidInputRef.current) {
       return;
     }
-    if (!bidInputRef.current) {
+    if (Number(bidInputRef.current.value) < Number(utils.formatEther(minBid))) {
       return;
     }
-    if (Number(bidInputRef.current.value) < minBid) {
-      return;
-    } else {
-      placeBid(auction.nounId, {
-        value: utils.parseEther(bidInputRef.current.value.toString()),
-      });
-    }
+
+    placeBid(auction.nounId, {
+      value: utils.parseEther(bidInputRef.current.value.toString()),
+    });
   };
 
   const settleAuctionHandler = () => {
@@ -183,7 +180,7 @@ const Bid: React.FC<{
             type="number"
             placeholder="ETH"
             min="0"
-            value={useMinBid ? minBid.toString() : bidInput}
+            value={useMinBid ? Number(utils.formatEther(minBid)).toFixed(2) : bidInput}
             onChange={bidInputHandler}
             ref={bidInputRef}
           ></input>
