@@ -2,7 +2,6 @@ import classes from './Banner.module.css';
 import Section from '../../layout/Section';
 import { Col } from 'react-bootstrap';
 import calendar_noun from '../../assets/calendar_noun.png';
-import Image from 'react-bootstrap/Image';
 import Noun from '../Noun';
 
 const Banner = () => {
