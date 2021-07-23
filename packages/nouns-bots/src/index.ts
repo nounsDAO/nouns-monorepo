@@ -2,13 +2,10 @@ import {
   buildCounterName,
   buildIpfsUrl,
   getAuctionCache,
-  getAuctionStartedTweetText,
-  getNounPngBuffer,
   updateAuctionCache,
 } from './utils';
-import { internalDiscordWebhook, incrementCounter, twitter, publicDiscordWebhook } from './clients';
+import { internalDiscordWebhook, incrementCounter, publicDiscordWebhook } from './clients';
 import { getLastAuction } from './subgraph';
-import { config } from './config';
 import { processNewAuction as twitterProcessNewAuction } from './handlers/twitter';
 import { processNewAuction as discordProcessNewAuction } from './handlers/discord';
 import { processNewAuction as pinataProcessNewAuction } from './handlers/pinata';
@@ -22,6 +19,7 @@ async function processLastAuction() {
   console.log(`processLastAuction cachedAuctionId(${cachedAuctionId}) lastAuctionId(${lastAuctionId})`);
 
   if (cachedAuctionId < lastAuctionId) {
+    // new auction detected
     const pinataUpload = await pinataProcessNewAuction(lastAuctionId)
     await twitterProcessNewAuction(lastAuctionId)
     if (pinataUpload !== undefined) {
