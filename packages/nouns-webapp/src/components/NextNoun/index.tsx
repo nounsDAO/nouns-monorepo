@@ -30,7 +30,7 @@ const NextNoun: React.FC<NextNounProps> = (props: NextNounProps) => {
     <Section bgColor="white" fullWidth={false}>
       <Col lg={7}>
         <div>
-          <h3>If minted in the next block, the Noun #0 would be:</h3>
+          <h3>If minted in the next block, Noun #0 would be:</h3>
           <table>
             {nextSeed &&
               Object.keys(nextSeed[0])
