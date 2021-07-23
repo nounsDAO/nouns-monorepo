@@ -17,6 +17,7 @@ import HistoryCollection from './components/HistoryCollection';
 import Documentation from './components/Documentation';
 import NetworkAlert from './components/NetworkAlert';
 import Footer from './components/Footer';
+import NextNoun from './components/NextNoun';
 
 function App() {
   const { account, chainId } = useEthers();
@@ -38,6 +39,7 @@ function App() {
           <Route path="/">
             <CurrentAuction auction={auction} />
             <Banner />
+            <NextNoun />
             <HistoryCollection
               latestNounId={auction && BigNumber.from(auction.nounId).sub(1)}
               historyCount={10}

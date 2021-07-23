@@ -3,7 +3,7 @@ import { BigNumber, utils } from 'ethers';
 import nounsERC721ABI from '../abis/NounsERC721.json';
 import config from '../config';
 
-interface NounToken {
+export interface NounToken {
   name: string;
   description: string;
   image: string;

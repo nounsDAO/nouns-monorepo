@@ -1,0 +1,11 @@
+.match {
+	background-color: aqua;
+}
+
+.goldenMatch {
+	background-color: gold !important;
+}
+
+.miss {
+	background-color: white;
+}
