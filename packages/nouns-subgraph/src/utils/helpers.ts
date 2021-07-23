@@ -1,5 +1,5 @@
 import {
-  TokenHolder,
+  Account,
   Delegate,
   Proposal,
   Governance,
@@ -11,32 +11,26 @@ import {
   BIGINT_ONE,
 } from './constants';
 
-export function getOrCreateTokenHolder(
+export function getOrCreateAccount(
   id: string,
   createIfNotFound: boolean = true,
   save: boolean = true
-): TokenHolder {
-  let tokenHolder = TokenHolder.load(id);
+): Account {
+  let tokenHolder = Account.load(id);
 
   if (tokenHolder == null && createIfNotFound) {
-    tokenHolder = new TokenHolder(id);
+    tokenHolder = new Account(id);
     tokenHolder.tokenBalanceRaw = BIGINT_ZERO;
     tokenHolder.tokenBalance = BIGINT_ZERO;
     tokenHolder.totalTokensHeldRaw = BIGINT_ZERO;
     tokenHolder.totalTokensHeld = BIGINT_ZERO;
-
-    if (id != ZERO_ADDRESS) {
-      let governance = getGovernanceEntity();
-      governance.totalTokenHolders = governance.totalTokenHolders + BIGINT_ONE;
-      governance.save();
-    }
 
     if (save) {
       tokenHolder.save();
     }
   }
 
-  return tokenHolder as TokenHolder;
+  return tokenHolder as Account;
 }
 
 export function getOrCreateDelegate(

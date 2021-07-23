@@ -29,14 +29,6 @@ type Noun @entity {
   owner: Account!
 }
 
-type Account @entity {
-  "The Ethereum address"
-  id: ID!
-
-  "The Nouns owned by this account"
-  nouns: [Noun!]! @derivedFrom(field: "owner")
-}
-
 type Bid @entity {
   "Bid transaction hash"
   id: ID!
@@ -93,12 +85,13 @@ enum ProposalStatus {
   PENDING
   ACTIVE
   CANCELLED
+  VETOED
   QUEUED
   EXECUTED
 }
 
-type TokenHolder @entity {
-  "A TokenHolder is any address that holds any amount of Nouns, the id used is the blockchain address."
+type Account @entity {
+  "An Account is any address that holds any amount of Nouns, the id used is the blockchain address."
   id: ID!
 
   "Delegate address of the token holder which will participate in votings. Delegates don't need to hold any tokens and can even be the token holder itself."
@@ -115,6 +108,9 @@ type TokenHolder @entity {
 
   "Total amount of Nouns ever held by this address expressed as a BigInt normalized value for the Nouns ERC721 Token"
   totalTokensHeld: BigInt!
+
+  "The Nouns owned by this account"
+  nouns: [Noun!]! @derivedFrom(field: "owner")
 }
 
 type Delegate @entity {
@@ -130,7 +126,7 @@ type Delegate @entity {
   tokenHoldersRepresentedAmount: Int!
 
   "Token holders that this delegate represents"
-  tokenHoldersRepresented: [TokenHolder!]! @derivedFrom(field: "delegate")
+  tokenHoldersRepresented: [Account!]! @derivedFrom(field: "delegate")
 
   "Votes that a delegate has made in different proposals"
   votes: [Vote!]! @derivedFrom(field: "voter")
