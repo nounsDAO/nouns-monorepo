@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: Unlicense
 
-pragma solidity ^0.8.4;
+pragma solidity ^0.8.6;
 
-import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
+import '../base/ERC721Enumerable.sol';
 
 abstract contract NounsCheckpointer is ERC721Enumerable {
     /// @notice Defines decimals as per ERC-20 convention to make integrations with 3rd party governance platforms easier

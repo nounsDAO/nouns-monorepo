@@ -14,7 +14,6 @@ import { bgcolors, partcolors, parts } from '../files/encoded-layers.json';
 import { chunkArray } from '../utils';
 
 const ethers = hardhat.ethers;
-const BigNumber = ethers.BigNumber;
 
 export type TestSigners = {
   deployer: SignerWithAddress;
@@ -102,7 +101,7 @@ export const populateDescriptor = async (nounsDescriptor: NounsDescriptor): Prom
  */
 export const MintNouns = (
   token: NounsToken,
-  burnNoundersTokens: boolean = true,
+  burnNoundersTokens = true,
 ): ((amount: number) => Promise<void>) => {
   return async function (amount: number): Promise<void> {
     for (let i = 0; i < amount; i++) {
@@ -166,20 +165,20 @@ export async function advanceBlocks(blocks: number) {
   }
 }
 
-export async function blockNumber(parse: boolean = true): Promise<number> {
-  let result = await rpc({ method: 'eth_blockNumber' });
+export async function blockNumber(parse = true): Promise<number> {
+  const result = await rpc({ method: 'eth_blockNumber' });
   return parse ? parseInt(result) : result;
 }
 
 export async function blockTimestamp(
   n: number | string,
-  parse: boolean = true,
+  parse = true,
 ): Promise<number | string> {
   const block = await blockByNumber(n);
   return parse ? parseInt(block.timestamp) : block.timestamp;
 }
 
-export async function setNextBlockTimestamp(n: number, mine: boolean = true) {
+export async function setNextBlockTimestamp(n: number, mine = true) {
   await rpc({ method: 'evm_setNextBlockTimestamp', params: [n] });
   if (mine) await mineBlock();
 }
