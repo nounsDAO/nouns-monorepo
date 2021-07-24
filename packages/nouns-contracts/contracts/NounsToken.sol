@@ -125,7 +125,7 @@ contract NounsToken is INounsToken, NounsCheckpointer, Ownable {
      */
     function dataURI(uint256 tokenId) public view override returns (string memory) {
         require(_exists(tokenId), 'NounsToken: URI query for nonexistent token');
-        return descriptor.dataURI(tokenId, seeds[tokenId]);
+        return descriptor.officialNounDataURI(tokenId, seeds[tokenId]);
     }
 
     /**

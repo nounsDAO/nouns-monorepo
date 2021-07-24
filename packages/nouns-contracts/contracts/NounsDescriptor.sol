@@ -7,6 +7,7 @@ import { Strings } from '@openzeppelin/contracts/utils/Strings.sol';
 import { INounsDescriptor } from './interfaces/INounsDescriptor.sol';
 import { INounsSeeder } from './interfaces/INounsSeeder.sol';
 import { NFTDescriptor } from './libs/NFTDescriptor.sol';
+import { MultiPartRLEToSVG } from './libs/MultiPartRLEToSVG.sol';
 
 /**
  * @title The Nouns NFT descriptor.
@@ -227,21 +228,54 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
      */
     function tokenURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view override returns (string memory) {
         if (isDataURIEnabled) {
-            return dataURI(tokenId, seed);
+            return officialNounDataURI(tokenId, seed);
         }
         return string(abi.encodePacked(baseURI, tokenId.toString()));
     }
 
     /**
-     * @notice Given a token ID and seed, construct a base64 encoded data URI.
+     * @notice Given a token ID and seed, construct a base64 encoded data URI for an official Nouns DAO noun.
      */
-    function dataURI(uint256 tokenId, INounsSeeder.Seed memory seed) public view override returns (string memory) {
-        NFTDescriptor.ConstructTokenURIParams memory params = NFTDescriptor.ConstructTokenURIParams({
-            tokenId: tokenId,
+    function officialNounDataURI(uint256 tokenId, INounsSeeder.Seed memory seed)
+        public
+        view
+        override
+        returns (string memory)
+    {
+        string memory name = string(abi.encodePacked('Noun ', tokenId.toString()));
+        string memory description = string(
+            abi.encodePacked('Noun ', tokenId.toString(), ' is a member of the Nouns DAO')
+        );
+
+        return dataURI(name, description, seed);
+    }
+
+    /**
+     * @notice Given a name, description, and seed, construct a base64 encoded data URI.
+     */
+    function dataURI(
+        string memory name,
+        string memory description,
+        INounsSeeder.Seed memory seed
+    ) public view override returns (string memory) {
+        NFTDescriptor.TokenURIParams memory params = NFTDescriptor.TokenURIParams({
+            name: name,
+            description: description,
             parts: _getPartsForSeed(seed),
             background: backgrounds[seed.background]
         });
         return NFTDescriptor.constructTokenURI(params, palettes);
+    }
+
+    /**
+     * @notice Given a seed, construct a base64 encoded SVG image.
+     */
+    function generateSVGImage(INounsSeeder.Seed memory seed) external view override returns (string memory) {
+        MultiPartRLEToSVG.SVGParams memory params = MultiPartRLEToSVG.SVGParams({
+            parts: _getPartsForSeed(seed),
+            background: backgrounds[seed.background]
+        });
+        return NFTDescriptor.generateSVGImage(params, palettes);
     }
 
     /**

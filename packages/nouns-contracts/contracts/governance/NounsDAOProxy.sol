@@ -50,10 +50,7 @@ contract NounsDAOProxy is NounsDAOProxyStorage, NounsDAOEvents {
      */
     function _setImplementation(address implementation_) public {
         require(msg.sender == admin, 'NounsDAOProxy::_setImplementation: admin only');
-        require(
-            implementation_ != address(0),
-            'NounsDAOProxy::_setImplementation: invalid implementation address'
-        );
+        require(implementation_ != address(0), 'NounsDAOProxy::_setImplementation: invalid implementation address');
 
         address oldImplementation = implementation;
         implementation = implementation_;

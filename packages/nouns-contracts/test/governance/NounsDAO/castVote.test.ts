@@ -14,11 +14,7 @@ import {
   populateDescriptor,
 } from '../../utils';
 
-import {
-  mineBlock,
-  address,
-  encodeParameters,
-} from '../../utils';
+import { mineBlock, address, encodeParameters } from '../../utils';
 
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {

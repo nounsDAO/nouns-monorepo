@@ -67,7 +67,10 @@ contract NounsDAOExecutor {
     }
 
     function setPendingAdmin(address pendingAdmin_) public {
-        require(msg.sender == address(this), 'NounsDAOExecutor::setPendingAdmin: Call must come from NounsDAOExecutor.');
+        require(
+            msg.sender == address(this),
+            'NounsDAOExecutor::setPendingAdmin: Call must come from NounsDAOExecutor.'
+        );
         pendingAdmin = pendingAdmin_;
 
         emit NewPendingAdmin(pendingAdmin);
@@ -119,8 +122,14 @@ contract NounsDAOExecutor {
 
         bytes32 txHash = keccak256(abi.encode(target, value, signature, data, eta));
         require(queuedTransactions[txHash], "NounsDAOExecutor::executeTransaction: Transaction hasn't been queued.");
-        require(getBlockTimestamp() >= eta, "NounsDAOExecutor::executeTransaction: Transaction hasn't surpassed time lock.");
-        require(getBlockTimestamp() <= eta + GRACE_PERIOD, 'NounsDAOExecutor::executeTransaction: Transaction is stale.');
+        require(
+            getBlockTimestamp() >= eta,
+            "NounsDAOExecutor::executeTransaction: Transaction hasn't surpassed time lock."
+        );
+        require(
+            getBlockTimestamp() <= eta + GRACE_PERIOD,
+            'NounsDAOExecutor::executeTransaction: Transaction is stale.'
+        );
 
         queuedTransactions[txHash] = false;
 

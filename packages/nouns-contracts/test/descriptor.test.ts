@@ -80,7 +80,7 @@ describe('NounsDescriptor', () => {
       ),
     );
     expect(name).to.equal('Noun 0');
-    expect(description).to.equal('Noun 0 is a member of the NounsDAO');
+    expect(description).to.equal('Noun 0 is a member of the Nouns DAO');
     expect(image).to.not.be.undefined;
   });
 });
