@@ -93,10 +93,7 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsER
         ],
       },
       Timelock: {
-        args: [
-          expectedGovernorNDelegatorAddress,
-          args.timelockDelay,
-        ],
+        args: [expectedGovernorNDelegatorAddress, args.timelockDelay],
       },
       GovernorNDelegate: {
         waitForConfirmation: true,

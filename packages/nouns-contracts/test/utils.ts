@@ -29,7 +29,7 @@ export const getSigners = async (): Promise<TestSigners> => {
     deployer,
     account0,
     account1,
-    account2
+    account2,
   };
 };
 
@@ -100,44 +100,45 @@ export const populateDescriptor = async (nounsDescriptor: NounsDescriptor): Prom
  * @param token The Nouns ERC721 token
  * @param amount The number of Nouns to mint
  */
-export const MintNouns = (token: NounsErc721, burnNoundersTokens: boolean = true): (amount: number) => Promise<void> => {
+export const MintNouns = (
+  token: NounsErc721,
+  burnNoundersTokens: boolean = true,
+): ((amount: number) => Promise<void>) => {
   return async function (amount: number): Promise<void> {
-    for (let i=0; i<amount; i++){
+    for (let i = 0; i < amount; i++) {
       await token.mint();
     }
-    if (!burnNoundersTokens) return
+    if (!burnNoundersTokens) return;
 
-    await setTotalSupply(token, amount)
-  }
-}
+    await setTotalSupply(token, amount);
+  };
+};
 
 /**
  * Mints or burns tokens to target a total supply. Due to Nounders' rewards tokens may be burned and tokenIds will not be sequential
  */
 export const setTotalSupply = async (token: NounsErc721, newTotalSupply: number): Promise<void> => {
-
-  const totalSupply = (await token.totalSupply()).toNumber()
+  const totalSupply = (await token.totalSupply()).toNumber();
 
   if (totalSupply < newTotalSupply) {
-    for (let i=0; i<newTotalSupply-totalSupply; i++){
+    for (let i = 0; i < newTotalSupply - totalSupply; i++) {
       await token.mint();
     }
     // If Nounder's reward tokens were minted totalSupply will be more than expected, so run setTotalSupply again to burn extra tokens
-    await setTotalSupply(token, newTotalSupply)
+    await setTotalSupply(token, newTotalSupply);
   }
 
-  if (totalSupply > newTotalSupply){
-    for (let i=newTotalSupply; i<totalSupply; i++){
-      await token.burn(i)
+  if (totalSupply > newTotalSupply) {
+    for (let i = newTotalSupply; i < totalSupply; i++) {
+      await token.burn(i);
     }
-
   }
-}
+};
 
 // The following adapted from `https://github.com/compound-finance/compound-protocol/blob/master/tests/Utils/Ethereum.js`
 
-function rpc({method, params}: {method: string, params?: any[]}){
-  return hardhat.network.provider.send(method, params)
+function rpc({ method, params }: { method: string; params?: any[] }) {
+  return hardhat.network.provider.send(method, params);
 }
 
 export function encodeParameters(types: string[], values: any[]) {
@@ -145,8 +146,8 @@ export function encodeParameters(types: string[], values: any[]) {
   return abi.encode(types, values);
 }
 
-export async function blockByNumber(n: number|string){
-  return await rpc({method: 'eth_getBlockByNumber', params: [n, false]})
+export async function blockByNumber(n: number | string) {
+  return await rpc({ method: 'eth_getBlockByNumber', params: [n, false] });
 }
 
 export async function increaseTime(seconds: number) {
@@ -155,13 +156,13 @@ export async function increaseTime(seconds: number) {
 }
 
 export async function freezeTime(seconds: number) {
-  await rpc({ method: 'evm_increaseTime', params: [-1*seconds] });
+  await rpc({ method: 'evm_increaseTime', params: [-1 * seconds] });
   return rpc({ method: 'evm_mine' });
 }
 
 export async function advanceBlocks(blocks: number) {
-  for (let i=0; i<blocks; i++){
-    await mineBlock()
+  for (let i = 0; i < blocks; i++) {
+    await mineBlock();
   }
 }
 
@@ -170,31 +171,34 @@ export async function blockNumber(parse: boolean = true): Promise<number> {
   return parse ? parseInt(result) : result;
 }
 
-export async function blockTimestamp(n: number|string, parse: boolean = true): Promise<number|string>{
-  const block = await blockByNumber(n)
+export async function blockTimestamp(
+  n: number | string,
+  parse: boolean = true,
+): Promise<number | string> {
+  const block = await blockByNumber(n);
   return parse ? parseInt(block.timestamp) : block.timestamp;
 }
 
-export async function setNextBlockTimestamp(n: number, mine: boolean = true){
-  await rpc({method: 'evm_setNextBlockTimestamp', params: [n]})
-  if (mine) await mineBlock()
+export async function setNextBlockTimestamp(n: number, mine: boolean = true) {
+  await rpc({ method: 'evm_setNextBlockTimestamp', params: [n] });
+  if (mine) await mineBlock();
 }
 
 export async function minerStop(): Promise<void> {
-  await hardhat.network.provider.send("evm_setAutomine", [false])
-  await hardhat.network.provider.send("evm_setIntervalMining", [0])
+  await hardhat.network.provider.send('evm_setAutomine', [false]);
+  await hardhat.network.provider.send('evm_setIntervalMining', [0]);
 }
 
 export async function minerStart(): Promise<void> {
-  await hardhat.network.provider.send("evm_setAutomine", [true])
+  await hardhat.network.provider.send('evm_setAutomine', [true]);
 }
 
 export async function mineBlock(): Promise<void> {
-  await hardhat.network.provider.send("evm_mine")
+  await hardhat.network.provider.send('evm_mine');
 }
 
 export async function chainId(): Promise<number> {
-  return parseInt(await hardhat.network.provider.send("eth_chainId"), 16);
+  return parseInt(await hardhat.network.provider.send('eth_chainId'), 16);
 }
 
 export function address(n: number): string {

@@ -2,7 +2,7 @@ import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import hardhat from 'hardhat';
 
-const { ethers } = hardhat
+const { ethers } = hardhat;
 
 import { BigNumber as EthersBN } from 'ethers';
 
@@ -11,15 +11,15 @@ import {
   getSigners,
   TestSigners,
   setTotalSupply,
-  populateDescriptor
+  populateDescriptor,
 } from '../../utils';
 
 import {
   mineBlock,
   address,
-  encodeParameters
+  encodeParameters,
   // chainId
-} from '../../utils'
+} from '../../utils';
 
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
@@ -27,10 +27,8 @@ import {
   NounsDescriptor__factory,
   GovernorNDelegator,
   GovernorNDelegateHarness,
-  GovernorNDelegateHarness__factory
+  GovernorNDelegateHarness__factory,
 } from '../../../typechain';
-
-
 
 chai.use(solidity);
 const { expect } = chai;
@@ -39,14 +37,26 @@ async function deployGovernor(
   deployer: SignerWithAddress,
   tokenAddress: string,
 ): Promise<GovernorNDelegateHarness> {
-  const {address: govDelegateAddress } = await new GovernorNDelegateHarness__factory(deployer).deploy()
-  const params = [address(0), tokenAddress, deployer.address, address(0), govDelegateAddress,  17280, 1, 1, 1]
+  const { address: govDelegateAddress } = await new GovernorNDelegateHarness__factory(
+    deployer,
+  ).deploy();
+  const params = [
+    address(0),
+    tokenAddress,
+    deployer.address,
+    address(0),
+    govDelegateAddress,
+    17280,
+    1,
+    1,
+    1,
+  ];
 
-  const {address: _govDelegatorAddress} = await (
+  const { address: _govDelegatorAddress } = await (
     await ethers.getContractFactory('GovernorNDelegator', deployer)
-  ).deploy(...params)
+  ).deploy(...params);
 
-  return GovernorNDelegateHarness__factory.connect(_govDelegatorAddress, deployer)
+  return GovernorNDelegateHarness__factory.connect(_govDelegatorAddress, deployer);
 }
 
 let snapshotId: number;
@@ -65,57 +75,56 @@ let signatures: string[];
 let callDatas: string[];
 let proposalId: EthersBN;
 
-
-async function reset(){
+async function reset() {
   if (snapshotId) {
     await ethers.provider.send('evm_revert', [snapshotId]);
     snapshotId = await ethers.provider.send('evm_snapshot', []);
-    return
+    return;
   }
   token = await deployNounsERC721(signers.deployer);
 
-  await populateDescriptor(NounsDescriptor__factory.connect(await token.descriptor(), signers.deployer));
+  await populateDescriptor(
+    NounsDescriptor__factory.connect(await token.descriptor(), signers.deployer),
+  );
 
-  await setTotalSupply(token, 10)
+  await setTotalSupply(token, 10);
 
-  gov = await deployGovernor(deployer, token.address)
+  gov = await deployGovernor(deployer, token.address);
   snapshotId = await ethers.provider.send('evm_snapshot', []);
 }
 
-async function propose(proposer: SignerWithAddress){
+async function propose(proposer: SignerWithAddress) {
   targets = [account0.address];
-  values = ["0"];
-  signatures = ["getBalanceOf(address)"];
+  values = ['0'];
+  signatures = ['getBalanceOf(address)'];
   callDatas = [encodeParameters(['address'], [account0.address])];
 
-  await gov.connect(proposer).propose(targets, values, signatures, callDatas, "do nothing");
+  await gov.connect(proposer).propose(targets, values, signatures, callDatas, 'do nothing');
   proposalId = await gov.latestProposalIds(proposer.address);
 }
 
-describe("GovernorN#castVote/2", () => {
-
+describe('GovernorN#castVote/2', () => {
   before(async () => {
     signers = await getSigners();
     deployer = signers.deployer;
     account0 = signers.account0;
     account1 = signers.account1;
     account2 = signers.account2;
-  })
+  });
 
-  describe("We must revert if:", () => {
-
-    before(async ()=>{
-      await reset()
-      await propose(deployer)
-    })
-
-    it("There does not exist a proposal with matching proposal id where the current block number is between the proposal's start block (exclusive) and end block (inclusive)", async () => {
-      await expect(
-        gov.castVote(proposalId, 1)
-      ).revertedWith("GovernorN::castVoteInternal: voting is closed");
+  describe('We must revert if:', () => {
+    before(async () => {
+      await reset();
+      await propose(deployer);
     });
 
-    it("Such proposal already has an entry in its voters set matching the sender", async () => {
+    it("There does not exist a proposal with matching proposal id where the current block number is between the proposal's start block (exclusive) and end block (inclusive)", async () => {
+      await expect(gov.castVote(proposalId, 1)).revertedWith(
+        'GovernorN::castVoteInternal: voting is closed',
+      );
+    });
+
+    it('Such proposal already has an entry in its voters set matching the sender', async () => {
       await mineBlock();
       await mineBlock();
 
@@ -124,35 +133,35 @@ describe("GovernorN#castVote/2", () => {
 
       await gov.connect(account0).castVote(proposalId, 1);
 
-      await gov.connect(account1).castVoteWithReason(proposalId, 1, "");
+      await gov.connect(account1).castVoteWithReason(proposalId, 1, '');
 
-      await expect(
-        gov.connect(account0).castVote(proposalId, 1)
-      ).revertedWith("GovernorN::castVoteInternal: voter already voted");
+      await expect(gov.connect(account0).castVote(proposalId, 1)).revertedWith(
+        'GovernorN::castVoteInternal: voter already voted',
+      );
     });
   });
 
-  describe("Otherwise", () => {
+  describe('Otherwise', () => {
     it("we add the sender to the proposal's voters set", async () => {
-        const voteReceipt1 = await gov.getReceipt(proposalId, account2.address)
-        expect(voteReceipt1.hasVoted).to.equal(false)
+      const voteReceipt1 = await gov.getReceipt(proposalId, account2.address);
+      expect(voteReceipt1.hasVoted).to.equal(false);
 
-        await gov.connect(account2).castVote(proposalId, 1);
-        const voteReceipt2 = await gov.getReceipt(proposalId, account2.address)
-        expect(voteReceipt2.hasVoted).to.equal(true)
+      await gov.connect(account2).castVote(proposalId, 1);
+      const voteReceipt2 = await gov.getReceipt(proposalId, account2.address);
+      expect(voteReceipt2.hasVoted).to.equal(true);
     });
 
     describe("and we take the balance returned by GetPriorVotes for the given sender and the proposal's start block, which may be zero,", () => {
       let actor: SignerWithAddress; // an account that will propose, receive tokens, delegate to self, and vote on own proposal
 
-      before(reset)
+      before(reset);
 
-      it("and we add that ForVotes", async () => {
-        actor = account0
+      it('and we add that ForVotes', async () => {
+        actor = account0;
 
         await token.transferFrom(deployer.address, actor.address, 0);
         await token.transferFrom(deployer.address, actor.address, 1);
-        await propose(actor)
+        await propose(actor);
 
         let beforeFors = (await gov.proposals(proposalId)).forVotes;
         await mineBlock();
@@ -163,14 +172,14 @@ describe("GovernorN#castVote/2", () => {
         const balance = (await token.balanceOf(actor.address)).toString();
 
         expect(afterFors).to.equal(beforeFors.add(balance));
-      })
+      });
 
       it("or AgainstVotes corresponding to the caller's support flag.", async () => {
-        actor = account1
+        actor = account1;
         await token.transferFrom(deployer.address, actor.address, 2);
         await token.transferFrom(deployer.address, actor.address, 3);
 
-        await propose(actor)
+        await propose(actor);
 
         let beforeAgainst = (await gov.proposals(proposalId)).againstVotes;
 
@@ -182,7 +191,6 @@ describe("GovernorN#castVote/2", () => {
         const balance = (await token.balanceOf(actor.address)).toString();
 
         expect(afterAgainst).to.equal(beforeAgainst.add(balance));
-
       });
     });
 

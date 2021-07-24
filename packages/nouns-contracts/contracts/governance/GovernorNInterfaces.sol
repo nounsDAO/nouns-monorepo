@@ -11,9 +11,31 @@ pragma solidity ^0.8.4;
 
 contract GovernorNEvents {
     /// @notice An event emitted when a new proposal is created
-    event ProposalCreated(uint id, address proposer, address[] targets, uint[] values, string[] signatures, bytes[] calldatas, uint startBlock, uint endBlock, string description);
+    event ProposalCreated(
+        uint256 id,
+        address proposer,
+        address[] targets,
+        uint256[] values,
+        string[] signatures,
+        bytes[] calldatas,
+        uint256 startBlock,
+        uint256 endBlock,
+        string description
+    );
 
-    event ProposalCreatedWithRequirements(uint id, address proposer, address[] targets, uint[] values, string[] signatures, bytes[] calldatas, uint startBlock, uint endBlock, uint proposalThreshold, uint quorumVotes, string description);
+    event ProposalCreatedWithRequirements(
+        uint256 id,
+        address proposer,
+        address[] targets,
+        uint256[] values,
+        string[] signatures,
+        bytes[] calldatas,
+        uint256 startBlock,
+        uint256 endBlock,
+        uint256 proposalThreshold,
+        uint256 quorumVotes,
+        string description
+    );
 
     /// @notice An event emitted when a vote has been cast on a proposal
     /// @param voter The address which casted a vote
@@ -21,34 +43,34 @@ contract GovernorNEvents {
     /// @param support Support value for the vote. 0=against, 1=for, 2=abstain
     /// @param votes Number of votes which were cast by the voter
     /// @param reason The reason given for the vote by the voter
-    event VoteCast(address indexed voter, uint proposalId, uint8 support, uint votes, string reason);
+    event VoteCast(address indexed voter, uint256 proposalId, uint8 support, uint256 votes, string reason);
 
     /// @notice An event emitted when a proposal has been canceled
-    event ProposalCanceled(uint id);
+    event ProposalCanceled(uint256 id);
 
     /// @notice An event emitted when a proposal has been queued in the Timelock
-    event ProposalQueued(uint id, uint eta);
+    event ProposalQueued(uint256 id, uint256 eta);
 
     /// @notice An event emitted when a proposal has been executed in the Timelock
-    event ProposalExecuted(uint id);
+    event ProposalExecuted(uint256 id);
 
     /// @notice An event emitted when a proposal has been vetoed by vetoAddress
-    event ProposalVetoed(uint id);
+    event ProposalVetoed(uint256 id);
 
     /// @notice An event emitted when the voting delay is set
-    event VotingDelaySet(uint oldVotingDelay, uint newVotingDelay);
+    event VotingDelaySet(uint256 oldVotingDelay, uint256 newVotingDelay);
 
     /// @notice An event emitted when the voting period is set
-    event VotingPeriodSet(uint oldVotingPeriod, uint newVotingPeriod);
+    event VotingPeriodSet(uint256 oldVotingPeriod, uint256 newVotingPeriod);
 
     /// @notice Emitted when implementation is changed
     event NewImplementation(address oldImplementation, address newImplementation);
 
     /// @notice Emitted when proposal threshold basis points is set
-    event ProposalThresholdBPSSet(uint oldProposalThresholdBPS, uint newProposalThresholdBPS);
+    event ProposalThresholdBPSSet(uint256 oldProposalThresholdBPS, uint256 newProposalThresholdBPS);
 
     /// @notice Emitted when quorum votes basis points is set
-    event QuorumVotesBPSSet(uint oldQuorumVotesBPS, uint newQuorumVotesBPS);
+    event QuorumVotesBPSSet(uint256 oldQuorumVotesBPS, uint256 newQuorumVotesBPS);
 
     /// @notice Emitted when pendingAdmin is changed
     event NewPendingAdmin(address oldPendingAdmin, address newPendingAdmin);
@@ -71,7 +93,6 @@ contract GovernorNDelegatorStorage {
     address public implementation;
 }
 
-
 /**
  * @title Storage for Governor Bravo Delegate
  * @notice For future upgrades, do not change GovernorNDelegateStorageV1. Create a new
@@ -79,24 +100,23 @@ contract GovernorNDelegatorStorage {
  * GovernorNDelegateStorageVX.
  */
 contract GovernorNDelegateStorageV1 is GovernorNDelegatorStorage {
-
     /// @notice Vetoer who has the ability to veto any proposal
     address public vetoer;
 
     /// @notice The delay before voting on a proposal may take place, once proposed, in blocks
-    uint public votingDelay;
+    uint256 public votingDelay;
 
     /// @notice The duration of voting on a proposal, in blocks
-    uint public votingPeriod;
+    uint256 public votingPeriod;
 
     /// @notice The basis point number of votes required in order for a voter to become a proposer. *DIFFERS from GovernerBravo
-    uint public proposalThresholdBPS;
+    uint256 public proposalThresholdBPS;
 
     /// @notice The basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed. *DIFFERS from GovernerBravo
-    uint public quorumVotesBPS;
+    uint256 public quorumVotesBPS;
 
     /// @notice The total number of proposals
-    uint public proposalCount;
+    uint256 public proposalCount;
 
     /// @notice The address of the Compound Protocol Timelock
     TimelockInterface public timelock;
@@ -105,76 +125,56 @@ contract GovernorNDelegateStorageV1 is GovernorNDelegatorStorage {
     NounsInterface public nouns;
 
     /// @notice The official record of all proposals ever proposed
-    mapping (uint => Proposal) public proposals;
+    mapping(uint256 => Proposal) public proposals;
 
     /// @notice The latest proposal for each proposer
-    mapping (address => uint) public latestProposalIds;
-
+    mapping(address => uint256) public latestProposalIds;
 
     struct Proposal {
         /// @notice Unique id for looking up a proposal
-        uint id;
-
+        uint256 id;
         /// @notice Creator of the proposal
         address proposer;
-
         /// @notice The number of votes needed to create a proposal at the time of proposal creation. *DIFFERS from GovernerBravo
-        uint proposalThreshold;
-
+        uint256 proposalThreshold;
         /// @notice The number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed at the time of proposal creation. *DIFFERS from GovernerBravo
-        uint quorumVotes;
-
+        uint256 quorumVotes;
         /// @notice The timestamp that the proposal will be available for execution, set once the vote succeeds
-        uint eta;
-
+        uint256 eta;
         /// @notice the ordered list of target addresses for calls to be made
         address[] targets;
-
         /// @notice The ordered list of values (i.e. msg.value) to be passed to the calls to be made
-        uint[] values;
-
+        uint256[] values;
         /// @notice The ordered list of function signatures to be called
         string[] signatures;
-
         /// @notice The ordered list of calldata to be passed to each call
         bytes[] calldatas;
-
         /// @notice The block at which voting begins: holders must delegate their votes prior to this block
-        uint startBlock;
-
+        uint256 startBlock;
         /// @notice The block at which voting ends: votes must be cast prior to this block
-        uint endBlock;
-
+        uint256 endBlock;
         /// @notice Current number of votes in favor of this proposal
-        uint forVotes;
-
+        uint256 forVotes;
         /// @notice Current number of votes in opposition to this proposal
-        uint againstVotes;
-
+        uint256 againstVotes;
         /// @notice Current number of votes for abstaining for this proposal
-        uint abstainVotes;
-
+        uint256 abstainVotes;
         /// @notice Flag marking whether the proposal has been canceled
         bool canceled;
-
         /// @notice Flag marking whether the proposal has been vetoed
         bool vetoed;
-
         /// @notice Flag marking whether the proposal has been executed
         bool executed;
-
         /// @notice Receipts of ballots for the entire set of voters
-        mapping (address => Receipt) receipts;
+        mapping(address => Receipt) receipts;
     }
 
     /// @notice Ballot receipt record for a voter
     struct Receipt {
         /// @notice Whether or not a vote has been cast
         bool hasVoted;
-
         /// @notice Whether or not the voter supports the proposal or abstains
         uint8 support;
-
         /// @notice The number of votes the voter had, which were cast
         uint96 votes;
     }
@@ -194,21 +194,46 @@ contract GovernorNDelegateStorageV1 is GovernorNDelegatorStorage {
 }
 
 interface TimelockInterface {
-    function delay() external view returns (uint);
-    function GRACE_PERIOD() external view returns (uint);
+    function delay() external view returns (uint256);
+
+    function GRACE_PERIOD() external view returns (uint256);
+
     function acceptAdmin() external;
+
     function queuedTransactions(bytes32 hash) external view returns (bool);
-    function queueTransaction(address target, uint value, string calldata signature, bytes calldata data, uint eta) external returns (bytes32);
-    function cancelTransaction(address target, uint value, string calldata signature, bytes calldata data, uint eta) external;
-    function executeTransaction(address target, uint value, string calldata signature, bytes calldata data, uint eta) external payable returns (bytes memory);
+
+    function queueTransaction(
+        address target,
+        uint256 value,
+        string calldata signature,
+        bytes calldata data,
+        uint256 eta
+    ) external returns (bytes32);
+
+    function cancelTransaction(
+        address target,
+        uint256 value,
+        string calldata signature,
+        bytes calldata data,
+        uint256 eta
+    ) external;
+
+    function executeTransaction(
+        address target,
+        uint256 value,
+        string calldata signature,
+        bytes calldata data,
+        uint256 eta
+    ) external payable returns (bytes memory);
 }
 
 interface NounsInterface {
-    function getPriorVotes(address account, uint blockNumber) external view returns (uint96);
+    function getPriorVotes(address account, uint256 blockNumber) external view returns (uint96);
+
     function totalSupply() external view returns (uint96);
 }
 
 interface GovernorAlpha {
     /// @notice The total number of proposals
-    function proposalCount() external returns (uint);
+    function proposalCount() external returns (uint256);
 }

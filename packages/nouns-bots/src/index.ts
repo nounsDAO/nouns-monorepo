@@ -19,14 +19,24 @@ import { processNewAuction as pinataProcessNewAuction } from './handlers/pinata'
 async function processLastAuction() {
   const cachedAuctionId = await getAuctionCache();
   const { id: lastAuctionId } = await getLastAuction();
-  console.log(`processLastAuction cachedAuctionId(${cachedAuctionId}) lastAuctionId(${lastAuctionId})`);
+  console.log(
+    `processLastAuction cachedAuctionId(${cachedAuctionId}) lastAuctionId(${lastAuctionId})`,
+  );
 
   if (cachedAuctionId < lastAuctionId) {
-    const pinataUpload = await pinataProcessNewAuction(lastAuctionId)
-    await twitterProcessNewAuction(lastAuctionId)
+    const pinataUpload = await pinataProcessNewAuction(lastAuctionId);
+    await twitterProcessNewAuction(lastAuctionId);
     if (pinataUpload !== undefined) {
-      await discordProcessNewAuction(internalDiscordWebhook, lastAuctionId, buildIpfsUrl(pinataUpload.IpfsHash))
-      await discordProcessNewAuction(publicDiscordWebhook, lastAuctionId, buildIpfsUrl(pinataUpload.IpfsHash))
+      await discordProcessNewAuction(
+        internalDiscordWebhook,
+        lastAuctionId,
+        buildIpfsUrl(pinataUpload.IpfsHash),
+      );
+      await discordProcessNewAuction(
+        publicDiscordWebhook,
+        lastAuctionId,
+        buildIpfsUrl(pinataUpload.IpfsHash),
+      );
     }
     incrementCounter(buildCounterName(`auctions_discovered`));
     await updateAuctionCache(lastAuctionId);
@@ -35,11 +45,6 @@ async function processLastAuction() {
   incrementCounter(buildCounterName('auction_process_last_auction'));
 }
 
-setInterval(
-  async () => processLastAuction(),
-  30000,
-)
+setInterval(async () => processLastAuction(), 30000);
 
-processLastAuction().then(
-  () => 'processLastAuction',
-);
+processLastAuction().then(() => 'processLastAuction');

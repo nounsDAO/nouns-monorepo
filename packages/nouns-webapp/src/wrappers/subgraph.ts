@@ -1,8 +1,4 @@
-import {
-	ApolloClient,
-	InMemoryCache,
-	gql
-} from "@apollo/client";
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
 
 export const auctionQuery = (auctionId: number) => gql`
 {
@@ -34,7 +30,7 @@ export const auctionQuery = (auctionId: number) => gql`
 	  }
 	}
   }
-  `
+  `;
 
 export const bidsByAuctionQuery = (auctionId: string) => gql`
  {
@@ -52,7 +48,7 @@ export const bidsByAuctionQuery = (auctionId: string) => gql`
 	  }
 	}
   }
- `
+ `;
 
 export const nounQuery = (id: string) => gql`
  {
@@ -70,7 +66,7 @@ export const nounQuery = (id: string) => gql`
 	  }
 	}
   }
- `
+ `;
 
 export const latestAuctionsQuery = (first: number = 50) => gql`
  {
@@ -85,9 +81,10 @@ export const latestAuctionsQuery = (first: number = 50) => gql`
 	  }
 	}
   }
-`
+`;
 
-export const clientFactory = (uri: string) => new ApolloClient({
+export const clientFactory = (uri: string) =>
+  new ApolloClient({
     uri,
-	cache: new InMemoryCache()
+    cache: new InMemoryCache(),
   });
