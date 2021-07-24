@@ -11,7 +11,7 @@ import {
   getOrCreateDelegate,
   getOrCreateProposal,
   getOrCreateVote,
-  getGovernanceEntity
+  getGovernanceEntity,
 } from './utils/helpers';
 import {
   BIGINT_ONE,
@@ -20,22 +20,21 @@ import {
   STATUS_PENDING,
   STATUS_EXECUTED,
   STATUS_CANCELLED,
-  STATUS_VETOED
+  STATUS_VETOED,
 } from './utils/constants';
 
-export function handleProposalCreatedWithRequirements(event: ProposalCreatedWithRequirements): void {
+export function handleProposalCreatedWithRequirements(
+  event: ProposalCreatedWithRequirements,
+): void {
   let proposal = getOrCreateProposal(event.params.id.toString());
-  let proposer = getOrCreateDelegate(
-    event.params.proposer.toHexString(),
-    false
-  );
+  let proposer = getOrCreateDelegate(event.params.proposer.toHexString(), false);
 
   // Check if the proposer was a delegate already accounted for, if not we should log an error
   // since it shouldn't be possible for a delegate to propose anything without first being 'created'
   if (proposer == null) {
     log.error('Delegate {} not found on ProposalCreated. tx_hash: {}', [
       event.params.proposer.toHexString(),
-      event.transaction.hash.toHexString()
+      event.transaction.hash.toHexString(),
     ]);
   }
 
@@ -52,8 +51,7 @@ export function handleProposalCreatedWithRequirements(event: ProposalCreatedWith
   proposal.proposalThreshold = event.params.proposalThreshold;
   proposal.quorumVotes = event.params.quorumVotes;
   proposal.description = event.params.description;
-  proposal.status =
-    event.block.number >= proposal.startBlock ? STATUS_ACTIVE : STATUS_PENDING;
+  proposal.status = event.block.number >= proposal.startBlock ? STATUS_ACTIVE : STATUS_PENDING;
 
   proposal.save();
 }
@@ -110,7 +108,7 @@ export function handleVoteCast(event: VoteCast): void {
   if (voter == null) {
     log.error('Delegate {} not found on VoteCast. tx_hash: {}', [
       event.params.voter.toHexString(),
-      event.transaction.hash.toHexString()
+      event.transaction.hash.toHexString(),
     ]);
   }
 

@@ -32,7 +32,7 @@ export async function getAuctionCache(): Promise<number> {
 
 /**
  * Update the auction cache with `id`
- * @param id 
+ * @param id
  */
 export async function updateAuctionCache(id: number) {
   await redis.set(getAuctionCacheKey, id);
@@ -70,4 +70,4 @@ export const buildCounterName = (counterName: string) => `bots_${counterName}`;
  * @param ipfsHash IPFS hash to generate a URL to
  * @returns HTTP url using an active IPFS gateway
  */
-export const buildIpfsUrl = (ipfsHash: string) => `https://gateway.pinata.cloud/ipfs/${ipfsHash}`
+export const buildIpfsUrl = (ipfsHash: string) => `https://gateway.pinata.cloud/ipfs/${ipfsHash}`;
