@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 /**
- * Modications to OpenZeppelin's ERC721 implementation:
+ * Modifications to OpenZeppelin's ERC721 implementation:
  * -  `_safeMint` and `_mint` contain an additional `creator` argument and
  * emit two `Transfer` logs, rather than one. The first log displays the
  * transfer (mint) from `address(0)` to the `creator`. The second displays the

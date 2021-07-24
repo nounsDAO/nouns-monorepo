@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 /**
- * Modications to OpenZeppelin's ERC721Enumerable implementation:
+ * Modifications to OpenZeppelin's ERC721Enumerable implementation:
  * - Consumes modified `ERC721` contract. See notes in `ERC721.sol`.
  */
 
