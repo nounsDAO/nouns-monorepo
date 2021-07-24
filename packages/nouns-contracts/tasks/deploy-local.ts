@@ -8,7 +8,7 @@ type ContractName =
   | 'NFTDescriptor'
   | 'NounsDescriptor'
   | 'NounsSeeder'
-  | 'NounsERC721'
+  | 'NounsToken'
   | 'NounsAuctionHouse'
   | 'NounsAuctionHouseProxyAdmin'
   | 'NounsAuctionHouseProxy';
@@ -55,7 +55,7 @@ task('deploy-local', 'Deploy contracts to hardhat')
         }),
       },
       NounsSeeder: {},
-      NounsERC721: {
+      NounsToken: {
         args: [
           args.noundersdao || deployer.address,
           expectedAuctionHouseProxyAddress,
@@ -73,7 +73,7 @@ task('deploy-local', 'Deploy contracts to hardhat')
           () => contracts['NounsAuctionHouseProxyAdmin'].instance?.address,
           () =>
             new Interface(NounsAuctionHouseABI).encodeFunctionData('initialize', [
-              contracts['NounsERC721'].instance?.address,
+              contracts['NounsToken'].instance?.address,
               contracts['WETH'].instance?.address,
               args.auctionTimeBuffer,
               args.auctionReservePrice,

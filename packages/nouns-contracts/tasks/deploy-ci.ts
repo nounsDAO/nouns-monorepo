@@ -25,7 +25,7 @@ task('deploy-ci', 'Deploy contracts (automated by CI)')
           NFTDescriptor: contracts.NFTDescriptor.address,
           NounsDescriptor: contracts.NounsDescriptor.address,
           NounsSeeder: contracts.NounsSeeder.address,
-          NounsERC721: contracts.NounsERC721.address,
+          NounsToken: contracts.NounsToken.address,
         },
         gitHub: {
           // Get the commit sha when running in CI

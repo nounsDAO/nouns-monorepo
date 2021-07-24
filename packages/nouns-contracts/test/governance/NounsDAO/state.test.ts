@@ -7,7 +7,7 @@ const { ethers } = hardhat;
 import { BigNumber as EthersBN } from 'ethers';
 
 import {
-  deployNounsERC721,
+  deployNounsToken,
   getSigners,
   TestSigners,
   setTotalSupply,
@@ -20,20 +20,18 @@ import {
   encodeParameters,
   freezeTime,
   advanceBlocks,
-  blockNumber,
-  increaseTime,
   setNextBlockTimestamp,
 } from '../../utils';
 
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 import {
-  NounsErc721,
+  NounsToken,
   NounsDescriptor__factory,
-  TimelockHarness,
-  TimelockHarness__factory,
-  GovernorNImmutable,
-  GovernorNImmutable__factory,
+  NounsDaoExecutorHarness,
+  NounsDaoExecutorHarness__factory,
+  NounsDaoImmutable,
+  NounsDaoImmutable__factory,
 } from '../../../typechain';
 
 chai.use(solidity);
@@ -50,15 +48,14 @@ const states: string[] = [
   'Executed',
 ];
 
-let token: NounsErc721;
+let token: NounsToken;
 let deployer: SignerWithAddress;
 let account0: SignerWithAddress;
 let account1: SignerWithAddress;
-let account2: SignerWithAddress;
 let signers: TestSigners;
 
-let gov: GovernorNImmutable;
-let timelock: TimelockHarness;
+let gov: NounsDaoImmutable;
+let timelock: NounsDaoExecutorHarness;
 let delay: number;
 
 let targets: string[];
@@ -69,25 +66,25 @@ let proposalId: EthersBN;
 
 let snapshotId: number;
 
-async function expectState(proposalId: number | EthersBN, expectedState: any) {
+async function expectState(proposalId: number | EthersBN, expectedState: string) {
   const actualState = states[await gov.state(proposalId)];
   expect(actualState).to.equal(expectedState);
 }
 
 async function makeProposal(
   proposer: SignerWithAddress = deployer,
-  mintAmount: number = 5,
-  transferAmount: number = 0,
+  mintAmount = 5,
+  transferAmount = 0,
   transferTo: SignerWithAddress = proposer,
-  proposalThresholdBPS: number = 1,
+  proposalThresholdBPS = 1,
 ) {
   await setTotalSupply(token, mintAmount);
 
   delay = 4 * 24 * 60 * 60;
 
-  timelock = await new TimelockHarness__factory(deployer).deploy(deployer.address, delay);
+  timelock = await new NounsDaoExecutorHarness__factory(deployer).deploy(deployer.address, delay);
 
-  gov = await new GovernorNImmutable__factory(deployer).deploy(
+  gov = await new NounsDaoImmutable__factory(deployer).deploy(
     timelock.address,
     token.address,
     address(0),
@@ -114,16 +111,15 @@ async function makeProposal(
   proposalId = await gov.latestProposalIds(proposer.address);
 }
 
-describe('GovernorN#state/1', () => {
+describe('NounsDAO#state/1', () => {
   before(async () => {
     await freezeTime(100);
     signers = await getSigners();
     deployer = signers.deployer;
     account0 = signers.account0;
     account1 = signers.account1;
-    account2 = signers.account2;
 
-    token = await deployNounsERC721(signers.deployer);
+    token = await deployNounsToken(signers.deployer);
 
     await populateDescriptor(
       NounsDescriptor__factory.connect(await token.descriptor(), signers.deployer),
@@ -140,7 +136,7 @@ describe('GovernorN#state/1', () => {
 
   it('Invalid for proposal not found', async () => {
     await makeProposal();
-    await expect(gov.state(5)).revertedWith('GovernorN::state: invalid proposal id');
+    await expect(gov.state(5)).revertedWith('NounsDAO::state: invalid proposal id');
   });
 
   it('Pending', async () => {
@@ -162,7 +158,7 @@ describe('GovernorN#state/1', () => {
   it('Canceled', async () => {
     // set proposalThresholdBPS to 10% (1 token) so proposalThreshold is > 0
     await makeProposal(account0, 10, 2, account0, 1000);
-    const prop = await gov.proposals(proposalId);
+    await gov.proposals(proposalId);
 
     // send away the delegates
     await token.connect(account0).delegate(deployer.address);
@@ -265,8 +261,8 @@ describe('GovernorN#state/1', () => {
     await advanceBlocks(2000);
 
     await gov.connect(account0).queue(proposalId);
-    let gracePeriod = await timelock.GRACE_PERIOD();
-    let { eta } = await gov.proposals(proposalId);
+    const gracePeriod = await timelock.GRACE_PERIOD();
+    const { eta } = await gov.proposals(proposalId);
 
     // 1 second before grace period, still Queued
     await setNextBlockTimestamp(eta.add(gracePeriod).sub(1).toNumber());
@@ -297,8 +293,8 @@ describe('GovernorN#state/1', () => {
 
     await gov.connect(account0).queue(proposalId);
 
-    let gracePeriod = await timelock.GRACE_PERIOD();
-    let { eta } = await gov.proposals(proposalId);
+    const gracePeriod = await timelock.GRACE_PERIOD();
+    const { eta } = await gov.proposals(proposalId);
 
     await setNextBlockTimestamp(eta.add(gracePeriod).sub(2).toNumber());
 

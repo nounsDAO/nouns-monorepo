@@ -2,9 +2,9 @@
 
 pragma solidity ^0.8.4;
 
-import '../governance/GovernorNDelegate.sol';
+import '../governance/NounsDAOLogicV1.sol';
 
-contract GovernorNImmutable is GovernorNDelegate {
+contract NounsDAOImmutable is NounsDAOLogicV1 {
     constructor(
         address timelock_,
         address nouns_,
@@ -30,11 +30,11 @@ contract GovernorNImmutable is GovernorNDelegate {
         uint256 proposalThresholdBPS_,
         uint256 quorumVotesBPS_
     ) public override {
-        require(msg.sender == admin, 'GovernorN::initialize: admin only');
-        require(address(timelock) == address(0), 'GovernorN::initialize: can only initialize once');
+        require(msg.sender == admin, 'NounsDAO::initialize: admin only');
+        require(address(timelock) == address(0), 'NounsDAO::initialize: can only initialize once');
 
-        timelock = TimelockInterface(timelock_);
-        nouns = NounsInterface(nouns_);
+        timelock = INounsDAOExecutor(timelock_);
+        nouns = NounsTokenLike(nouns_);
         vetoer = vetoer_;
         votingPeriod = votingPeriod_;
         votingDelay = votingDelay_;

@@ -42,7 +42,7 @@ task(
     `Noun contracts deployed to local node at http://localhost:8545 (Chain ID: ${chainId})`,
   );
   console.log(`Auction House Proxy address: ${contracts.NounsAuctionHouseProxy.instance.address}`);
-  console.log(`Nouns ERC721 address: ${contracts.NounsERC721.instance.address}`);
+  console.log(`Nouns ERC721 address: ${contracts.NounsToken.instance.address}`);
 
   await ethers.provider.send('evm_setIntervalMining', [12_000]);
 

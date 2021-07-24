@@ -3,13 +3,13 @@
 /**
  * Modified version of [Compound GovernorBravoInterfaces] (https://github.com/compound-finance/compound-protocol/blob/b9b14038612d846b83f8a009a82c38974ff2dcfe/contracts/Governance/GovernorBravoInterfaces.sol)
  *
- * GovernorNEvents adds support for changes made by GovernorN to GovernorBravo
- * See `GovernorNDelegate.sol` for more details
+ * NounsDAOEvents adds support for changes made by NounsDAO to GovernorBravo
+ * See `NounsDAOLogicV1.sol` for more details
  */
 
 pragma solidity ^0.8.4;
 
-contract GovernorNEvents {
+contract NounsDAOEvents {
     /// @notice An event emitted when a new proposal is created
     event ProposalCreated(
         uint256 id,
@@ -48,10 +48,10 @@ contract GovernorNEvents {
     /// @notice An event emitted when a proposal has been canceled
     event ProposalCanceled(uint256 id);
 
-    /// @notice An event emitted when a proposal has been queued in the Timelock
+    /// @notice An event emitted when a proposal has been queued in the NounsDAOExecutor
     event ProposalQueued(uint256 id, uint256 eta);
 
-    /// @notice An event emitted when a proposal has been executed in the Timelock
+    /// @notice An event emitted when a proposal has been executed in the NounsDAOExecutor
     event ProposalExecuted(uint256 id);
 
     /// @notice An event emitted when a proposal has been vetoed by vetoAddress
@@ -82,7 +82,7 @@ contract GovernorNEvents {
     event NewVetoer(address oldVetoer, address newVetoer);
 }
 
-contract GovernorNDelegatorStorage {
+contract NounsDAOProxyStorage {
     /// @notice Administrator for this contract
     address public admin;
 
@@ -95,11 +95,11 @@ contract GovernorNDelegatorStorage {
 
 /**
  * @title Storage for Governor Bravo Delegate
- * @notice For future upgrades, do not change GovernorNDelegateStorageV1. Create a new
- * contract which implements GovernorNDelegateStorageV1 and following the naming convention
- * GovernorNDelegateStorageVX.
+ * @notice For future upgrades, do not change NounsDAOLogicV1StorageV1. Create a new
+ * contract which implements NounsDAOLogicV1StorageV1 and following the naming convention
+ * NounsDAOLogicV1StorageVX.
  */
-contract GovernorNDelegateStorageV1 is GovernorNDelegatorStorage {
+contract NounsDAOLogicV1StorageV1 is NounsDAOProxyStorage {
     /// @notice Vetoer who has the ability to veto any proposal
     address public vetoer;
 
@@ -118,11 +118,11 @@ contract GovernorNDelegateStorageV1 is GovernorNDelegatorStorage {
     /// @notice The total number of proposals
     uint256 public proposalCount;
 
-    /// @notice The address of the Compound Protocol Timelock
-    TimelockInterface public timelock;
+    /// @notice The address of the Nouns DAO Executor NounsDAOExecutor
+    INounsDAOExecutor public timelock;
 
     /// @notice The address of the Nouns tokens
-    NounsInterface public nouns;
+    NounsTokenLike public nouns;
 
     /// @notice The official record of all proposals ever proposed
     mapping(uint256 => Proposal) public proposals;
@@ -193,7 +193,7 @@ contract GovernorNDelegateStorageV1 is GovernorNDelegatorStorage {
     }
 }
 
-interface TimelockInterface {
+interface INounsDAOExecutor {
     function delay() external view returns (uint256);
 
     function GRACE_PERIOD() external view returns (uint256);
@@ -227,13 +227,8 @@ interface TimelockInterface {
     ) external payable returns (bytes memory);
 }
 
-interface NounsInterface {
+interface NounsTokenLike {
     function getPriorVotes(address account, uint256 blockNumber) external view returns (uint96);
 
     function totalSupply() external view returns (uint96);
-}
-
-interface GovernorAlpha {
-    /// @notice The total number of proposals
-    function proposalCount() external returns (uint256);
 }

@@ -1,7 +1,7 @@
 import { config } from './config';
 import { Contract, providers } from 'ethers';
 import { NFTStorage } from 'nft.storage';
-import { NounsERC721ABI } from '@nouns/contracts';
+import { NounsTokenABI } from '@nouns/contracts';
 import Redis from 'ioredis';
 
 /**
@@ -24,6 +24,6 @@ export const jsonRpcProvider = new providers.JsonRpcProvider(config.jsonRpcUrl);
  */
 export const nounsTokenContract = new Contract(
   config.nounsTokenAddress,
-  NounsERC721ABI,
+  NounsTokenABI,
   jsonRpcProvider,
 );

@@ -4,7 +4,7 @@ import {
   DelegateVotesChanged,
   NounCreated,
   Transfer,
-} from './types/NounsERC721/NounsERC721';
+} from './types/NounsToken/NounsToken';
 import { Noun, Seed } from './types/schema';
 import { BIGINT_ONE, BIGINT_ZERO, ZERO_ADDRESS } from './utils/constants';
 import { getGovernanceEntity, getOrCreateDelegate, getOrCreateAccount } from './utils/helpers';

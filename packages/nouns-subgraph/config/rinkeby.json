@@ -1,6 +1,6 @@
 {
   "network": "rinkeby",
-  "nounsERC721": {
+  "nounsToken": {
     "address": "0xc52bb4Fc4ed72f2a910BF0481D620B927Ded76f7",
     "startBlock": 8947618
   },

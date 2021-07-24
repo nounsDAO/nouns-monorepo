@@ -3,15 +3,15 @@ import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { constants } from 'ethers';
 import { ethers, upgrades } from 'hardhat';
-import { NounsAuctionHouse, NounsDescriptor__factory, NounsErc721, Weth } from '../typechain';
-import { deployNounsERC721, deployWeth, populateDescriptor } from './utils';
+import { NounsAuctionHouse, NounsDescriptor__factory, NounsToken, Weth } from '../typechain';
+import { deployNounsToken, deployWeth, populateDescriptor } from './utils';
 
 chai.use(solidity);
 const { expect } = chai;
 
 describe('NounsAuctionHouse', () => {
   let nounsAuctionHouse: NounsAuctionHouse;
-  let nounsErc721: NounsErc721;
+  let nounsToken: NounsToken;
   let weth: Weth;
   let deployer: SignerWithAddress;
   let noundersDAO: SignerWithAddress;
@@ -27,7 +27,7 @@ describe('NounsAuctionHouse', () => {
   async function deploy(deployer?: SignerWithAddress) {
     const auctionHouseFactory = await ethers.getContractFactory('NounsAuctionHouse', deployer);
     return upgrades.deployProxy(auctionHouseFactory, [
-      nounsErc721.address,
+      nounsToken.address,
       weth.address,
       TIME_BUFFER,
       RESERVE_PRICE,
@@ -39,15 +39,15 @@ describe('NounsAuctionHouse', () => {
   before(async () => {
     [deployer, noundersDAO, bidderA, bidderB] = await ethers.getSigners();
 
-    nounsErc721 = await deployNounsERC721(deployer, noundersDAO.address, deployer.address);
+    nounsToken = await deployNounsToken(deployer, noundersDAO.address, deployer.address);
     weth = await deployWeth(deployer);
     nounsAuctionHouse = await deploy(deployer);
 
-    const descriptor = await nounsErc721.descriptor();
+    const descriptor = await nounsToken.descriptor();
 
     await populateDescriptor(NounsDescriptor__factory.connect(descriptor, deployer));
 
-    await nounsErc721.setMinter(nounsAuctionHouse.address, {
+    await nounsToken.setMinter(nounsAuctionHouse.address, {
       from: deployer.address,
     });
   });
@@ -62,7 +62,7 @@ describe('NounsAuctionHouse', () => {
 
   it('should revert if a second initialization is attempted', async () => {
     const tx = nounsAuctionHouse.initialize(
-      nounsErc721.address,
+      nounsToken.address,
       weth.address,
       TIME_BUFFER,
       RESERVE_PRICE,
@@ -268,7 +268,7 @@ describe('NounsAuctionHouse', () => {
       value: RESERVE_PRICE,
     });
 
-    await nounsErc721.setMinter(constants.AddressZero);
+    await nounsToken.setMinter(constants.AddressZero);
 
     await ethers.provider.send('evm_increaseTime', [60 * 60 * 25]); // Add 25 hours
 

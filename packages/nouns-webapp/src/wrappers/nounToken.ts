@@ -1,6 +1,6 @@
 import { useContractCall } from '@usedapp/core';
 import { BigNumber, utils } from 'ethers';
-import nounsERC721ABI from '../abis/NounsERC721.json';
+import nounsTokenABI from '../abis/NounsToken.json';
 import config from '../config';
 
 interface NounToken {
@@ -11,7 +11,7 @@ interface NounToken {
 
 export const useNounToken = (nounId: BigNumber) => {
   const noun = useContractCall({
-    abi: new utils.Interface(nounsERC721ABI),
+    abi: new utils.Interface(nounsTokenABI),
     address: config.tokenAddress,
     method: 'dataURI',
     args: [nounId],
