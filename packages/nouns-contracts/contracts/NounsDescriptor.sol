@@ -223,12 +223,17 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     }
 
     /**
-     * @notice Given a token ID and seed, construct the token URI.
+     * @notice Given a token ID and seed, construct a token URI for an official Nouns DAO noun.
      * @dev The returned value may be a base64 encoded data URI or an API URL.
      */
-    function tokenURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view override returns (string memory) {
+    function officialTokenURI(uint256 tokenId, INounsSeeder.Seed memory seed)
+        external
+        view
+        override
+        returns (string memory)
+    {
         if (isDataURIEnabled) {
-            return officialNounDataURI(tokenId, seed);
+            return officialDataURI(tokenId, seed);
         }
         return string(abi.encodePacked(baseURI, tokenId.toString()));
     }
@@ -236,16 +241,15 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     /**
      * @notice Given a token ID and seed, construct a base64 encoded data URI for an official Nouns DAO noun.
      */
-    function officialNounDataURI(uint256 tokenId, INounsSeeder.Seed memory seed)
+    function officialDataURI(uint256 tokenId, INounsSeeder.Seed memory seed)
         public
         view
         override
         returns (string memory)
     {
-        string memory name = string(abi.encodePacked('Noun ', tokenId.toString()));
-        string memory description = string(
-            abi.encodePacked('Noun ', tokenId.toString(), ' is a member of the Nouns DAO')
-        );
+        string memory nounId = tokenId.toString();
+        string memory name = string(abi.encodePacked('Noun ', nounId));
+        string memory description = string(abi.encodePacked('Noun ', nounId, ' is a member of the Nouns DAO'));
 
         return dataURI(name, description, seed);
     }

@@ -66,9 +66,9 @@ interface INounsDescriptor {
 
     function setBaseURI(string calldata baseURI) external;
 
-    function tokenURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view returns (string memory);
+    function officialTokenURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view returns (string memory);
 
-    function officialNounDataURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view returns (string memory);
+    function officialDataURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view returns (string memory);
 
     function dataURI(
         string calldata name,
