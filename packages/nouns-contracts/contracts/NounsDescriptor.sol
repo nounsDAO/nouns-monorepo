@@ -247,10 +247,9 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         override
         returns (string memory)
     {
-        string memory name = string(abi.encodePacked('Noun ', tokenId.toString()));
-        string memory description = string(
-            abi.encodePacked('Noun ', tokenId.toString(), ' is a member of the Nouns DAO')
-        );
+        string memory nounId = tokenId.toString();
+        string memory name = string(abi.encodePacked('Noun ', nounId));
+        string memory description = string(abi.encodePacked('Noun ', nounId, ' is a member of the Nouns DAO'));
 
         return dataURI(name, description, seed);
     }
