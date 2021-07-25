@@ -1,5 +1,11 @@
-export interface Auction {
+export interface Bid {
+  id: string,
+  amount: string,
+}
+
+export interface AuctionBids {
   id: number;
+  bids: Bid[];
 }
 
 export interface TokenMetadata {
