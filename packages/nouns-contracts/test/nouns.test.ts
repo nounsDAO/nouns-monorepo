@@ -96,9 +96,7 @@ describe('NounsToken', () => {
     await expect(tx)
       .to.emit(nounsToken, 'Transfer')
       .withArgs(constants.AddressZero, creator.address, 2);
-    await expect(tx)
-      .to.emit(nounsToken, 'Transfer')
-      .withArgs(creator.address, minter.address, 2);
+    await expect(tx).to.emit(nounsToken, 'Transfer').withArgs(creator.address, minter.address, 2);
   });
 
   it('should allow minter to burn a noun', async () => {

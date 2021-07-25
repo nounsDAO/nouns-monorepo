@@ -18,8 +18,8 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     // Whether or not new Noun parts can be added
     bool public override arePartsLocked;
 
-    // Whether or not `tokenURI` should be returned as a data URI
-    bool public override isDataURIEnabled;
+    // Whether or not `tokenURI` should be returned as a data URI (Default: true)
+    bool public override isDataURIEnabled = true;
 
     // Base URI
     string public override baseURI;
@@ -201,15 +201,20 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
      */
     function lockParts() external override onlyOwner whenPartsNotLocked {
         arePartsLocked = true;
+
+        emit PartsLocked();
     }
 
     /**
-     * @notice Set a boolean value which determines if `tokenURI` returns a data URI
+     * @notice Toggle a boolean value which determines if `tokenURI` returns a data URI
      * or an HTTP URL.
      * @dev This can only be called by the owner.
      */
-    function setDataURIEnabled(bool _isDataURIEnabled) external override onlyOwner {
-        isDataURIEnabled = _isDataURIEnabled;
+    function toggleDataURIEnabled() external override onlyOwner {
+        bool enabled = !isDataURIEnabled;
+
+        isDataURIEnabled = enabled;
+        emit DataURIToggled(enabled);
     }
 
     /**
@@ -220,6 +225,8 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
      */
     function setBaseURI(string calldata _baseURI) external override onlyOwner {
         baseURI = _baseURI;
+
+        emit BaseURIUpdated(_baseURI);
     }
 
     /**

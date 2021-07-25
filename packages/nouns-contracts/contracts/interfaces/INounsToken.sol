@@ -18,9 +18,15 @@ interface INounsToken is IERC721 {
 
     event MinterUpdated(address minter);
 
+    event MinterLocked();
+
     event DescriptorUpdated(INounsDescriptor descriptor);
 
+    event DescriptorLocked();
+
     event SeederUpdated(INounsSeeder seeder);
+
+    event SeederLocked();
 
     function mint() external returns (uint256);
 

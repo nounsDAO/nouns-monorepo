@@ -1,4 +1,4 @@
-import hardhat from 'hardhat';
+import { ethers, network } from 'hardhat';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsDescriptor,
@@ -11,9 +11,8 @@ import {
   Weth__factory,
 } from '../typechain';
 import { bgcolors, partcolors, parts } from '../files/encoded-layers.json';
+import { Block } from '@ethersproject/abstract-provider';
 import { chunkArray } from '../utils';
-
-const ethers = hardhat.ethers;
 
 export type TestSigners = {
   deployer: SignerWithAddress;
@@ -103,7 +102,7 @@ export const MintNouns = (
   token: NounsToken,
   burnNoundersTokens = true,
 ): ((amount: number) => Promise<void>) => {
-  return async function (amount: number): Promise<void> {
+  return async (amount: number): Promise<void> => {
     for (let i = 0; i < amount; i++) {
       await token.mint();
     }
@@ -136,70 +135,76 @@ export const setTotalSupply = async (token: NounsToken, newTotalSupply: number):
 
 // The following adapted from `https://github.com/compound-finance/compound-protocol/blob/master/tests/Utils/Ethereum.js`
 
-function rpc({ method, params }: { method: string; params?: any[] }) {
-  return hardhat.network.provider.send(method, params);
-}
+const rpc = <T = unknown>({
+  method,
+  params,
+}: {
+  method: string;
+  params?: unknown[];
+}): Promise<T> => {
+  return network.provider.send(method, params);
+};
 
-export function encodeParameters(types: string[], values: any[]) {
+export const encodeParameters = (types: string[], values: unknown[]): string => {
   const abi = new ethers.utils.AbiCoder();
   return abi.encode(types, values);
-}
+};
 
-export async function blockByNumber(n: number | string) {
-  return await rpc({ method: 'eth_getBlockByNumber', params: [n, false] });
-}
+export const blockByNumber = async (n: number | string): Promise<Block> => {
+  return rpc({ method: 'eth_getBlockByNumber', params: [n, false] });
+};
 
-export async function increaseTime(seconds: number) {
+export const increaseTime = async (seconds: number): Promise<unknown> => {
   await rpc({ method: 'evm_increaseTime', params: [seconds] });
   return rpc({ method: 'evm_mine' });
-}
+};
 
-export async function freezeTime(seconds: number) {
+export const freezeTime = async (seconds: number): Promise<unknown> => {
   await rpc({ method: 'evm_increaseTime', params: [-1 * seconds] });
   return rpc({ method: 'evm_mine' });
-}
+};
 
-export async function advanceBlocks(blocks: number) {
+export const advanceBlocks = async (blocks: number): Promise<void> => {
   for (let i = 0; i < blocks; i++) {
     await mineBlock();
   }
-}
+};
 
-export async function blockNumber(parse = true): Promise<number> {
-  const result = await rpc({ method: 'eth_blockNumber' });
-  return parse ? parseInt(result) : result;
-}
+export const blockNumber = async (parse = true): Promise<number> => {
+  const result = await rpc<number>({ method: 'eth_blockNumber' });
+  return parse ? parseInt(result.toString()) : result;
+};
 
-export async function blockTimestamp(
+export const blockTimestamp = async (
   n: number | string,
   parse = true,
-): Promise<number | string> {
+): Promise<number | string> => {
   const block = await blockByNumber(n);
-  return parse ? parseInt(block.timestamp) : block.timestamp;
-}
+  return parse ? parseInt(block.timestamp.toString()) : block.timestamp;
+};
 
-export async function setNextBlockTimestamp(n: number, mine = true) {
+export const setNextBlockTimestamp = async (n: number, mine = true): Promise<void> => {
   await rpc({ method: 'evm_setNextBlockTimestamp', params: [n] });
   if (mine) await mineBlock();
-}
+};
 
-export async function minerStop(): Promise<void> {
-  await hardhat.network.provider.send('evm_setAutomine', [false]);
-  await hardhat.network.provider.send('evm_setIntervalMining', [0]);
-}
+export const minerStop = async (): Promise<void> => {
+  await network.provider.send('evm_setAutomine', [false]);
+  await network.provider.send('evm_setIntervalMining', [0]);
+};
 
-export async function minerStart(): Promise<void> {
-  await hardhat.network.provider.send('evm_setAutomine', [true]);
-}
+export const minerStart = async (): Promise<void> => {
+  await network.provider.send('evm_setAutomine', [true]);
+};
 
-export async function mineBlock(): Promise<void> {
-  await hardhat.network.provider.send('evm_mine');
-}
+export const mineBlock = async (): Promise<void> => {
+  await network.provider.send('evm_mine');
+};
 
-export async function chainId(): Promise<number> {
-  return parseInt(await hardhat.network.provider.send('eth_chainId'), 16);
-}
+export const chainId = async (): Promise<number> => {
+  return parseInt(await network.provider.send('eth_chainId'), 16);
+};
 
-export function address(n: number): string {
+export const address = (n: number): string => {
   return `0x${n.toString(16).padStart(40, '0')}`;
-}
+};
