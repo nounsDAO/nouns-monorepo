@@ -23,11 +23,19 @@ async function processAuction() {
 
   // check if new auction discovered
   if (cachedAuctionId < lastAuctionId) {
-    const pinataUpload = await pinataProcessNewAuction(lastAuctionId)
-    await twitterProcessNewAuction(lastAuctionId)
+    const pinataUpload = await pinataProcessNewAuction(lastAuctionId);
+    await twitterProcessNewAuction(lastAuctionId);
     if (pinataUpload !== undefined) {
-      await discordProcessNewAuction(internalDiscordWebhook, lastAuctionId, buildIpfsUrl(pinataUpload.IpfsHash))
-      await discordProcessNewAuction(publicDiscordWebhook, lastAuctionId, buildIpfsUrl(pinataUpload.IpfsHash))
+      await discordProcessNewAuction(
+        internalDiscordWebhook,
+        lastAuctionId,
+        buildIpfsUrl(pinataUpload.IpfsHash),
+      );
+      await discordProcessNewAuction(
+        publicDiscordWebhook,
+        lastAuctionId,
+        buildIpfsUrl(pinataUpload.IpfsHash),
+      );
     }
     incrementCounter(buildCounterName(`auctions_discovered`));
     await updateAuctionCache(lastAuctionId);

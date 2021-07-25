@@ -5,31 +5,6 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: NounsERC721
-    network: {{network}}
-    source:
-      address: '{{nounsERC721.address}}'
-      abi: NounsERC721
-      startBlock: {{nounsERC721.startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      file: ./src/nouns-erc-721.ts
-      entities:
-        - Account
-        - Noun
-        - Seed
-        - Bid
-      abis:
-        - name: NounsERC721
-          file: ../nouns-contracts/abi/contracts/NounsERC721.sol/NounsERC721.json
-      eventHandlers:
-        - event: NounCreated(indexed uint256,(uint48,uint48,uint48,uint48,uint48))
-          handler: handleNounCreated
-        - event: Transfer(indexed address,indexed address,indexed uint256)
-          handler: handleNounTransferred
-  - kind: ethereum/contract
     name: NounsAuctionHouse
     network: {{network}}
     source:
@@ -42,7 +17,10 @@ dataSources:
       language: wasm/assemblyscript
       file: ./src/nouns-auction-house.ts
       entities:
+        - Account
         - Auction
+        - Bid
+        - Noun
       abis:
         - name: NounsAuctionHouse
           file: ../nouns-contracts/abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json
@@ -55,3 +33,67 @@ dataSources:
           handler: handleAuctionExtended
         - event: AuctionSettled(indexed uint256,address,uint256)
           handler: handleAuctionSettled
+  - kind: ethereum/contract
+    name: NounsERC721
+    network: {{network}}
+    source:
+      address: '{{nounsERC721.address}}'
+      abi: NounsERC721
+      startBlock: {{nounsERC721.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/nouns-erc-721.ts
+      entities:
+        - Noun
+        - Seed
+        - Account
+        - Delegate
+        - Governance
+      abis:
+        - name: NounsERC721
+          file: ../nouns-contracts/abi/contracts/NounsERC721.sol/NounsERC721.json
+      eventHandlers:
+        - event: NounCreated(indexed uint256,(uint48,uint48,uint48,uint48,uint48))
+          handler: handleNounCreated
+        - event: DelegateChanged(indexed address,indexed address,indexed address)
+          handler: handleDelegateChanged
+        - event: DelegateVotesChanged(indexed address,uint256,uint256)
+          handler: handleDelegateVotesChanged
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+  - kind: ethereum/contract
+    name: NounsGovernor
+    network: {{network}}
+    source:
+      address: '{{nounsGovernor.address}}'
+      abi: NounsGovernor
+      startBlock: {{nounsGovernor.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/nouns-governor.ts
+      entities:
+        - Account
+        - Delegate
+        - Proposal
+        - Vote
+        - Governance
+      abis:
+        - name: NounsGovernor
+          file: ../nouns-contracts/abi/contracts/governance/GovernorNDelegate.sol/GovernorNDelegate.json
+      eventHandlers:
+        - event: ProposalCreatedWithRequirements(uint256,address,address[],uint256[],string[],bytes[],uint256,uint256,uint256,uint256,string)
+          handler: handleProposalCreatedWithRequirements
+        - event: ProposalCanceled(uint256)
+          handler: handleProposalCanceled
+        - event: ProposalVetoed(uint256)
+          handler: handleProposalVetoed
+        - event: ProposalQueued(uint256,uint256)
+          handler: handleProposalQueued
+        - event: ProposalExecuted(uint256)
+          handler: handleProposalExecuted
+        - event: VoteCast(indexed address,uint256,uint8,uint256,string)
+          handler: handleVoteCast
