@@ -6,7 +6,8 @@ import {
 import config from '../../config';
 import { useContractFunction } from '@usedapp/core';
 import { useEffect, useState, useRef, ChangeEvent } from 'react';
-import { BigNumber, utils } from 'ethers';
+import { utils, BigNumber as EthersBN } from 'ethers';
+import BigNumber from 'bignumber.js';
 import classes from './Bid.module.css';
 import Modal from '../Modal';
 import { Spinner } from 'react-bootstrap';
@@ -54,10 +55,12 @@ const Bid: React.FC<{
   };
 
   const placeBidHandler = () => {
-    if (!auction || !bidInputRef.current) {
+    if (!auction || !bidInputRef.current || !bidInputRef.current.value) {
       return;
     }
-    if (Number(bidInputRef.current.value) < Number(utils.formatEther(minBid))) {
+
+    const currentBid = new BigNumber(utils.parseEther(bidInputRef.current.value).toString());
+    if (currentBid.isLessThanOrEqualTo(minBid)) {
       return;
     }
 
@@ -186,7 +189,7 @@ const Bid: React.FC<{
             type="number"
             placeholder="ETH"
             min="0"
-            value={useMinBid ? Number(utils.formatEther(minBid)).toFixed(2) : bidInput}
+            value={useMinBid ? utils.formatEther(EthersBN.from(minBid.toString())) : bidInput}
             onChange={bidInputHandler}
             ref={bidInputRef}
           ></input>

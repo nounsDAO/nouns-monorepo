@@ -1,6 +1,6 @@
 import nounPointerImg from '../../assets/noun-pointer.png';
 import classes from './MinBid.module.css';
-import { BigNumber } from '@usedapp/core/node_modules/ethers';
+import BigNumber from 'bignumber.js';
 import TruncatedAmount from '../TruncatedAmount';
 
 const MinBid: React.FC<{ minBid: BigNumber; onClick: () => void }> = props => {

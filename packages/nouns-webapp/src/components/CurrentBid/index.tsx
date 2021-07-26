@@ -1,4 +1,4 @@
-import { BigNumber } from 'ethers';
+import BigNumber from 'bignumber.js';
 import classes from './CurrentBid.module.css';
 import TruncatedAmount from '../TruncatedAmount';
 
@@ -11,7 +11,7 @@ const CurrentBid: React.FC<{ currentBid: BigNumber; auctionEnded: boolean }> = p
     <div className={classes.section}>
       <h2>{titleContent}</h2>
       <span>
-        <TruncatedAmount amount={currentBid ? currentBid : BigNumber.from(0)} />
+        <TruncatedAmount amount={currentBid && currentBid} />
       </span>
     </div>
   );

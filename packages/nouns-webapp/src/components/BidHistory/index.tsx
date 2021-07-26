@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { buildEtherscanTxLink, Network } from '../../utils/buildEtherscanLink';
 import TruncatedAmount from '../TruncatedAmount';
-import { BigNumber } from '@ethersproject/bignumber';
+import BigNumber from 'bignumber.js';
 
 const BidHistory: React.FC<{ auctionId: string }> = props => {
   const { auctionId } = props;
@@ -22,7 +22,7 @@ const BidHistory: React.FC<{ auctionId: string }> = props => {
     R.sort(compareBids, data.bids)
       .reverse()
       .map((bid: any, i: number) => {
-        const bidAmount = <TruncatedAmount amount={BigNumber.from(bid.amount)} />;
+        const bidAmount = <TruncatedAmount amount={new BigNumber(bid.amount)} />;
         const date = moment(bid.blockTimestamp * 1000).format('MMM DD yy on hh:mm a');
         const txLink = buildEtherscanTxLink(bid.id, Network.rinkeby);
 

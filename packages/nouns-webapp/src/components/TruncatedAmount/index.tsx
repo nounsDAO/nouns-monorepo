@@ -1,9 +1,11 @@
-import { BigNumber } from '@ethersproject/bignumber';
+import BigNumber from 'bignumber.js';
 import { utils } from 'ethers';
 import React from 'react';
 
 const TruncatedAmount: React.FC<{ amount: BigNumber }> = props => {
   const { amount } = props;
-  return <span>{`${Number(utils.formatEther(amount)).toFixed(2)} ETH`}</span>;
+
+  const eth = new BigNumber(utils.formatEther(amount.toString())).toFixed(2);
+  return <span>{`${eth} ETH`}</span>;
 };
 export default TruncatedAmount;

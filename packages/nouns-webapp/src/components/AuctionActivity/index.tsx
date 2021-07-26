@@ -1,7 +1,7 @@
 import { Auction } from '../../wrappers/nounsAuction';
 import { useState } from 'react';
 import { useAuctionMinBidIncPercentage } from '../../wrappers/nounsAuction';
-import { BigNumber, utils } from '@usedapp/core/node_modules/ethers';
+import BigNumber from 'bignumber.js';
 import { Row, Col } from 'react-bootstrap';
 import classes from './AuctionActivity.module.css';
 import Bid from '../Bid';
@@ -16,19 +16,14 @@ export const useMinBid = (auction: Auction | undefined) => {
   const minBidIncPercentage = useAuctionMinBidIncPercentage();
 
   if (!auction || !minBidIncPercentage) {
-    return BigNumber.from(0);
+    return new BigNumber(0);
   }
 
-  const roundUp = (v: number, n: number) => {
-    return Math.ceil(v * Math.pow(10, n)) / Math.pow(10, n);
-  };
-
-  const weiIncrement = BigNumber.from(auction.amount).div(100).mul(minBidIncPercentage);
-  const minBidWei = BigNumber.from(auction.amount).add(weiIncrement);
-  const minBidEth = Number(utils.formatEther(minBidWei));
-  const roundedMinBidEth = roundUp(minBidEth, 2).toString();
-  const roundedMinBidWei = utils.parseEther(roundedMinBidEth);
-  return roundedMinBidWei;
+  const currentBid = new BigNumber(auction.amount.toString());
+  const minBid = currentBid
+    .times(minBidIncPercentage.div(100).plus(1))
+    .decimalPlaces(2, BigNumber.ROUND_CEIL);
+  return minBid;
 };
 
 const AuctionActivity: React.FC<{ auction: Auction }> = props => {
@@ -42,7 +37,7 @@ const AuctionActivity: React.FC<{ auction: Auction }> = props => {
   const nounIdContent = auction && `Noun ${auction.nounId}`;
   const auctionStartTimeUTC =
     auction &&
-    moment(BigNumber.from(auction.startTime).toNumber() * 1000)
+    moment(Number(auction.startTime.toString()) * 1000)
       .utc()
       .format('MMM DD YYYY');
 
@@ -63,9 +58,7 @@ const AuctionActivity: React.FC<{ auction: Auction }> = props => {
     setShowBidModal(false);
   };
 
-  const bidHistoryTitle = `Noun ${
-    auction && BigNumber.from(auction.nounId).toString()
-  } bid history`;
+  const bidHistoryTitle = `Noun ${auction && auction.nounId.toString()} bid history`;
 
   return (
     <>
@@ -77,7 +70,7 @@ const AuctionActivity: React.FC<{ auction: Auction }> = props => {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <BidHistory auctionId={auction && BigNumber.from(auction.nounId).toString()} />
+            <BidHistory auctionId={auction && auction.nounId.toString()} />
           </Modal.Body>
         </Modal>
       )}
@@ -88,7 +81,10 @@ const AuctionActivity: React.FC<{ auction: Auction }> = props => {
         <Row>
           <Col lg={6}>
             {auction && (
-              <CurrentBid currentBid={BigNumber.from(auction.amount)} auctionEnded={auctionEnded} />
+              <CurrentBid
+                currentBid={new BigNumber(auction.amount.toString())}
+                auctionEnded={auctionEnded}
+              />
             )}
           </Col>
           <Col lg={6}>
