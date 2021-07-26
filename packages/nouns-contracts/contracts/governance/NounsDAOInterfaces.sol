@@ -95,11 +95,11 @@ contract NounsDAOProxyStorage {
 
 /**
  * @title Storage for Governor Bravo Delegate
- * @notice For future upgrades, do not change NounsDAOLogicV1StorageV1. Create a new
- * contract which implements NounsDAOLogicV1StorageV1 and following the naming convention
- * NounsDAOLogicV1StorageVX.
+ * @notice For future upgrades, do not change NounsDAOStorageV1. Create a new
+ * contract which implements NounsDAOStorageV1 and following the naming convention
+ * NounsDAOStorageVX.
  */
-contract NounsDAOLogicV1StorageV1 is NounsDAOProxyStorage {
+contract NounsDAOStorageV1 is NounsDAOProxyStorage {
     /// @notice Vetoer who has the ability to veto any proposal
     address public vetoer;
 
