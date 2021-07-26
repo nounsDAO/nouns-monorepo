@@ -7,9 +7,9 @@ import { INounsDescriptor } from './INounsDescriptor.sol';
 import { INounsSeeder } from './INounsSeeder.sol';
 
 /**
- * @title Interface for NounsERC721.
+ * @title Interface for NounsToken.
  */
-interface INounsERC721 is IERC721 {
+interface INounsToken is IERC721 {
     event NounCreated(uint256 indexed tokenId, INounsSeeder.Seed seed);
 
     event NounBurned(uint256 indexed tokenId);

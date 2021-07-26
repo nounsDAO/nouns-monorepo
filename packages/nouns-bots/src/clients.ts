@@ -2,7 +2,7 @@ import { config } from './config';
 import Redis from 'ioredis';
 import TwitterApi from 'twitter-api-v2';
 import { Contract, providers } from 'ethers';
-import { NounsERC721ABI } from '@nouns/contracts';
+import { NounsTokenABI } from '@nouns/contracts';
 import Discord from 'discord.js';
 import axios from 'axios';
 import pinataSdk from '@pinata/sdk';
@@ -35,7 +35,7 @@ export const jsonRpcProvider = new providers.JsonRpcProvider(config.jsonRpcUrl);
  */
 export const nounsTokenContract = new Contract(
   config.nounsTokenAddress,
-  NounsERC721ABI,
+  NounsTokenABI,
   jsonRpcProvider,
 );
 

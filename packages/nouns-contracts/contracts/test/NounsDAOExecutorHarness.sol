@@ -2,14 +2,14 @@
 
 pragma solidity ^0.8.4;
 
-import '../governance/Timelock.sol';
+import '../governance/NounsDAOExecutor.sol';
 
 interface Administered {
     function _acceptAdmin() external returns (uint256);
 }
 
-contract TimelockHarness is Timelock {
-    constructor(address admin_, uint256 delay_) Timelock(admin_, delay_) {}
+contract NounsDAOExecutorHarness is NounsDAOExecutor {
+    constructor(address admin_, uint256 delay_) NounsDAOExecutor(admin_, delay_) {}
 
     function harnessSetPendingAdmin(address pendingAdmin_) public {
         pendingAdmin = pendingAdmin_;
@@ -20,8 +20,8 @@ contract TimelockHarness is Timelock {
     }
 }
 
-contract TimelockTest is Timelock {
-    constructor(address admin_, uint256 delay_) Timelock(admin_, 2 days) {
+contract NounsDAOExecutorTest is NounsDAOExecutor {
+    constructor(address admin_, uint256 delay_) NounsDAOExecutor(admin_, 2 days) {
         delay = delay_;
     }
 

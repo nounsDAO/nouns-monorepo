@@ -11,13 +11,13 @@ type ContractName =
   | 'NFTDescriptor'
   | 'NounsDescriptor'
   | 'NounsSeeder'
-  | 'NounsERC721'
+  | 'NounsToken'
   | 'NounsAuctionHouse'
   | 'NounsAuctionHouseProxyAdmin'
   | 'NounsAuctionHouseProxy'
-  | 'Timelock'
-  | 'GovernorNDelegate'
-  | 'GovernorNDelegator';
+  | 'NounsDAOExecutor'
+  | 'NounsDAOLogicV1'
+  | 'NounsDAOProxy';
 
 interface Contract {
   args?: (string | number | (() => string | undefined))[];
@@ -26,7 +26,7 @@ interface Contract {
   waitForConfirmation?: boolean;
 }
 
-task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsERC721')
+task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsToken')
   .addParam('noundersdao', 'The nounders DAO contract address', undefined, types.string)
   .addParam('weth', 'The WETH contract address', undefined, types.string)
   .addOptionalParam('auctionTimeBuffer', 'The auction time buffer (seconds)', 5 * 60, types.int)
@@ -53,7 +53,7 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsER
       from: deployer.address,
       nonce: nonce + AUCTION_HOUSE_PROXY_NONCE_OFFSET,
     });
-    const expectedGovernorNDelegatorAddress = ethers.utils.getContractAddress({
+    const expectedNounsDAOProxyAddress = ethers.utils.getContractAddress({
       from: deployer.address,
       nonce: nonce + GOVERNOR_N_DELEGATOR_NONCE_OFFSET,
     });
@@ -65,7 +65,7 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsER
         }),
       },
       NounsSeeder: {},
-      NounsERC721: {
+      NounsToken: {
         args: [
           args.noundersdao,
           expectedAuctionHouseProxyAddress,
@@ -83,7 +83,7 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsER
           () => contracts['NounsAuctionHouseProxyAdmin'].address,
           () =>
             new Interface(NounsAuctionHouseABI).encodeFunctionData('initialize', [
-              contracts['NounsERC721'].address,
+              contracts['NounsToken'].address,
               args.weth,
               args.auctionTimeBuffer,
               args.auctionReservePrice,
@@ -92,19 +92,19 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsER
             ]),
         ],
       },
-      Timelock: {
-        args: [expectedGovernorNDelegatorAddress, args.timelockDelay],
+      NounsDAOExecutor: {
+        args: [expectedNounsDAOProxyAddress, args.timelockDelay],
       },
-      GovernorNDelegate: {
+      NounsDAOLogicV1: {
         waitForConfirmation: true,
       },
-      GovernorNDelegator: {
+      NounsDAOProxy: {
         args: [
-          () => contracts['Timelock'].address,
-          () => contracts['NounsERC721'].address,
+          () => contracts['NounsDAOExecutor'].address,
+          () => contracts['NounsToken'].address,
           args.noundersdao,
-          () => contracts['Timelock'].address,
-          () => contracts['GovernorNDelegate'].address,
+          () => contracts['NounsDAOExecutor'].address,
+          () => contracts['NounsDAOLogicV1'].address,
           args.votingPeriod,
           args.votingDelay,
           args.proposalThresholdBps,

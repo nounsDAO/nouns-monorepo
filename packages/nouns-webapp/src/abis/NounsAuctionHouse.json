@@ -244,7 +244,7 @@
   {
     "inputs": [
       {
-        "internalType": "contract INounsERC721",
+        "internalType": "contract INounsToken",
         "name": "_nouns",
         "type": "address"
       },
@@ -297,7 +297,7 @@
     "name": "nouns",
     "outputs": [
       {
-        "internalType": "contract INounsERC721",
+        "internalType": "contract INounsToken",
         "name": "",
         "type": "address"
       }

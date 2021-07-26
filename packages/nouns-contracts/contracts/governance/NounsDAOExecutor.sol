@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.4;
 
-contract Timelock {
+contract NounsDAOExecutor {
     event NewAdmin(address indexed newAdmin);
     event NewPendingAdmin(address indexed newPendingAdmin);
     event NewDelay(uint256 indexed newDelay);
@@ -42,24 +42,24 @@ contract Timelock {
     mapping(bytes32 => bool) public queuedTransactions;
 
     constructor(address admin_, uint256 delay_) {
-        require(delay_ >= MINIMUM_DELAY, 'Timelock::constructor: Delay must exceed minimum delay.');
-        require(delay_ <= MAXIMUM_DELAY, 'Timelock::setDelay: Delay must not exceed maximum delay.');
+        require(delay_ >= MINIMUM_DELAY, 'NounsDAOExecutor::constructor: Delay must exceed minimum delay.');
+        require(delay_ <= MAXIMUM_DELAY, 'NounsDAOExecutor::setDelay: Delay must not exceed maximum delay.');
 
         admin = admin_;
         delay = delay_;
     }
 
     function setDelay(uint256 delay_) public {
-        require(msg.sender == address(this), 'Timelock::setDelay: Call must come from Timelock.');
-        require(delay_ >= MINIMUM_DELAY, 'Timelock::setDelay: Delay must exceed minimum delay.');
-        require(delay_ <= MAXIMUM_DELAY, 'Timelock::setDelay: Delay must not exceed maximum delay.');
+        require(msg.sender == address(this), 'NounsDAOExecutor::setDelay: Call must come from NounsDAOExecutor.');
+        require(delay_ >= MINIMUM_DELAY, 'NounsDAOExecutor::setDelay: Delay must exceed minimum delay.');
+        require(delay_ <= MAXIMUM_DELAY, 'NounsDAOExecutor::setDelay: Delay must not exceed maximum delay.');
         delay = delay_;
 
         emit NewDelay(delay);
     }
 
     function acceptAdmin() public {
-        require(msg.sender == pendingAdmin, 'Timelock::acceptAdmin: Call must come from pendingAdmin.');
+        require(msg.sender == pendingAdmin, 'NounsDAOExecutor::acceptAdmin: Call must come from pendingAdmin.');
         admin = msg.sender;
         pendingAdmin = address(0);
 
@@ -67,7 +67,7 @@ contract Timelock {
     }
 
     function setPendingAdmin(address pendingAdmin_) public {
-        require(msg.sender == address(this), 'Timelock::setPendingAdmin: Call must come from Timelock.');
+        require(msg.sender == address(this), 'NounsDAOExecutor::setPendingAdmin: Call must come from NounsDAOExecutor.');
         pendingAdmin = pendingAdmin_;
 
         emit NewPendingAdmin(pendingAdmin);
@@ -80,10 +80,10 @@ contract Timelock {
         bytes memory data,
         uint256 eta
     ) public returns (bytes32) {
-        require(msg.sender == admin, 'Timelock::queueTransaction: Call must come from admin.');
+        require(msg.sender == admin, 'NounsDAOExecutor::queueTransaction: Call must come from admin.');
         require(
             eta >= getBlockTimestamp() + delay,
-            'Timelock::queueTransaction: Estimated execution block must satisfy delay.'
+            'NounsDAOExecutor::queueTransaction: Estimated execution block must satisfy delay.'
         );
 
         bytes32 txHash = keccak256(abi.encode(target, value, signature, data, eta));
@@ -100,7 +100,7 @@ contract Timelock {
         bytes memory data,
         uint256 eta
     ) public {
-        require(msg.sender == admin, 'Timelock::cancelTransaction: Call must come from admin.');
+        require(msg.sender == admin, 'NounsDAOExecutor::cancelTransaction: Call must come from admin.');
 
         bytes32 txHash = keccak256(abi.encode(target, value, signature, data, eta));
         queuedTransactions[txHash] = false;
@@ -115,12 +115,12 @@ contract Timelock {
         bytes memory data,
         uint256 eta
     ) public returns (bytes memory) {
-        require(msg.sender == admin, 'Timelock::executeTransaction: Call must come from admin.');
+        require(msg.sender == admin, 'NounsDAOExecutor::executeTransaction: Call must come from admin.');
 
         bytes32 txHash = keccak256(abi.encode(target, value, signature, data, eta));
-        require(queuedTransactions[txHash], "Timelock::executeTransaction: Transaction hasn't been queued.");
-        require(getBlockTimestamp() >= eta, "Timelock::executeTransaction: Transaction hasn't surpassed time lock.");
-        require(getBlockTimestamp() <= eta + GRACE_PERIOD, 'Timelock::executeTransaction: Transaction is stale.');
+        require(queuedTransactions[txHash], "NounsDAOExecutor::executeTransaction: Transaction hasn't been queued.");
+        require(getBlockTimestamp() >= eta, "NounsDAOExecutor::executeTransaction: Transaction hasn't surpassed time lock.");
+        require(getBlockTimestamp() <= eta + GRACE_PERIOD, 'NounsDAOExecutor::executeTransaction: Transaction is stale.');
 
         queuedTransactions[txHash] = false;
 
@@ -134,7 +134,7 @@ contract Timelock {
 
         // solium-disable-next-line security/no-call-value
         (bool success, bytes memory returnData) = target.call{ value: value }(callData);
-        require(success, 'Timelock::executeTransaction: Transaction execution reverted.');
+        require(success, 'NounsDAOExecutor::executeTransaction: Transaction execution reverted.');
 
         emit ExecuteTransaction(txHash, target, value, signature, data, eta);
 

@@ -1,1 +1,1 @@
-export { default as NounsERC721ABI } from './abi/contracts/NounsERC721.sol/NounsERC721.json';
+export { default as NounsTokenABI } from './abi/contracts/NounsToken.sol/NounsToken.json';

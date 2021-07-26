@@ -8,9 +8,9 @@
 
 pragma solidity ^0.8.4;
 
-import './GovernorNInterfaces.sol';
+import './NounsDAOInterfaces.sol';
 
-contract GovernorNDelegator is GovernorNDelegatorStorage, GovernorNEvents {
+contract NounsDAOProxy is NounsDAOProxyStorage, NounsDAOEvents {
     constructor(
         address timelock_,
         address nouns_,
@@ -49,10 +49,10 @@ contract GovernorNDelegator is GovernorNDelegatorStorage, GovernorNEvents {
      * @param implementation_ The address of the new implementation for delegation
      */
     function _setImplementation(address implementation_) public {
-        require(msg.sender == admin, 'GovernorNDelegator::_setImplementation: admin only');
+        require(msg.sender == admin, 'NounsDAOProxy::_setImplementation: admin only');
         require(
             implementation_ != address(0),
-            'GovernorNDelegator::_setImplementation: invalid implementation address'
+            'NounsDAOProxy::_setImplementation: invalid implementation address'
         );
 
         address oldImplementation = implementation;

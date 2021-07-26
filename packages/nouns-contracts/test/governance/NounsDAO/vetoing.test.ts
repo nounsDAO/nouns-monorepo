@@ -7,7 +7,7 @@ const { ethers } = hardhat;
 import { BigNumber as EthersBN } from 'ethers';
 
 import {
-  deployNounsERC721,
+  deployNounsToken,
   getSigners,
   TestSigners,
   setTotalSupply,
@@ -19,26 +19,24 @@ import {
   address,
   encodeParameters,
   advanceBlocks,
-  blockTimestamp,
   setNextBlockTimestamp,
 } from '../../utils';
 
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
-  NounsErc721,
+  NounsToken,
   NounsDescriptor__factory,
-  GovernorNDelegator,
-  GovernorNDelegator__factory,
-  GovernorNDelegate,
-  GovernorNDelegate__factory,
-  Timelock,
-  Timelock__factory,
+  NounsDaoProxy__factory,
+  NounsDaoLogicV1,
+  NounsDaoLogicV1__factory,
+  NounsDaoExecutor,
+  NounsDaoExecutor__factory,
 } from '../../../typechain';
 
 chai.use(solidity);
 const { expect } = chai;
 
-async function expectState(proposalId: number | EthersBN, expectedState: any) {
+async function expectState(proposalId: number | EthersBN, expectedState: string) {
   const states: string[] = [
     'Pending',
     'Active',
@@ -54,10 +52,6 @@ async function expectState(proposalId: number | EthersBN, expectedState: any) {
   expect(actualState).to.equal(expectedState);
 }
 
-function votes(n: number | string) {
-  return ethers.utils.parseUnits(String(n), 'ether');
-}
-
 async function reset(): Promise<void> {
   if (snapshotId) {
     await ethers.provider.send('evm_revert', [snapshotId]);
@@ -65,13 +59,13 @@ async function reset(): Promise<void> {
     return;
   }
 
-  // nonce 0: Deploy Timelock
-  // nonce 1: Deploy GovernorNDelegate
+  // nonce 0: Deploy NounsDAOExecutor
+  // nonce 1: Deploy NounsDAOLogicV1
   // nonce 2: Deploy nftDescriptorLibraryFactory
   // nonce 3: Deploy NounsDescriptor
   // nonce 4: Deploy NounsSeeder
-  // nonce 5: Deploy NounsERC721
-  // nonce 6: Deploy GovernorNDelegator
+  // nonce 5: Deploy NounsToken
+  // nonce 6: Deploy NounsDAOProxy
   // nonce 7+: populate Descriptor
 
   vetoer = deployer;
@@ -81,18 +75,18 @@ async function reset(): Promise<void> {
     nonce: (await deployer.getTransactionCount()) + 6,
   });
 
-  // Deploy Timelock with pre-computed Delegator address
-  timelock = await new Timelock__factory(deployer).deploy(govDelegatorAddress, timelockDelay);
+  // Deploy NounsDAOExecutor with pre-computed Delegator address
+  timelock = await new NounsDaoExecutor__factory(deployer).deploy(govDelegatorAddress, timelockDelay);
   const timelockAddress = timelock.address;
 
   // Deploy Delegate
-  const { address: govDelegateAddress } = await new GovernorNDelegate__factory(deployer).deploy();
+  const { address: govDelegateAddress } = await new NounsDaoLogicV1__factory(deployer).deploy();
 
   // Deploy Nouns token
-  token = await deployNounsERC721(deployer);
+  token = await deployNounsToken(deployer);
 
   // Deploy Delegator
-  await new GovernorNDelegator__factory(deployer).deploy(
+  await new NounsDaoProxy__factory(deployer).deploy(
     timelockAddress,
     token.address,
     vetoer.address,
@@ -105,14 +99,14 @@ async function reset(): Promise<void> {
   );
 
   // Cast Delegator as Delegate
-  gov = GovernorNDelegate__factory.connect(govDelegatorAddress, deployer);
+  gov = NounsDaoLogicV1__factory.connect(govDelegatorAddress, deployer);
 
   await populateDescriptor(NounsDescriptor__factory.connect(await token.descriptor(), deployer));
 
   snapshotId = await ethers.provider.send('evm_snapshot', []);
 }
 
-async function propose(proposer: SignerWithAddress, mint: boolean = true) {
+async function propose(proposer: SignerWithAddress, mint = true) {
   if (mint) {
     await setTotalSupply(token, 1);
     if (proposer.address !== deployer.address) {
@@ -131,7 +125,7 @@ async function propose(proposer: SignerWithAddress, mint: boolean = true) {
 
 let snapshotId: number;
 
-let token: NounsErc721;
+let token: NounsToken;
 let deployer: SignerWithAddress;
 let vetoer: SignerWithAddress;
 let account0: SignerWithAddress;
@@ -139,8 +133,8 @@ let account1: SignerWithAddress;
 let account2: SignerWithAddress;
 let signers: TestSigners;
 
-let gov: GovernorNDelegate;
-let timelock: Timelock;
+let gov: NounsDaoLogicV1;
+let timelock: NounsDaoExecutor;
 const timelockDelay = 172800; // 2 days
 
 const proposalThresholdBPS = 500; // 5%
@@ -151,9 +145,8 @@ let values: string[];
 let signatures: string[];
 let callDatas: string[];
 let proposalId: EthersBN;
-let mintNouns: (amount: number) => Promise<void>;
 
-describe('GovernorN#vetoing', () => {
+describe('NounsDAO#vetoing', () => {
   before(async () => {
     signers = await getSigners();
     deployer = signers.deployer;
@@ -175,7 +168,7 @@ describe('GovernorN#vetoing', () => {
 
   it('rejects setting a new vetoer when sender is not vetoer', async () => {
     await expect(gov.connect(account0)._setVetoer(account1.address)).revertedWith(
-      'GovernorN::_setVetoer: vetoer only',
+      'NounsDAO::_setVetoer: vetoer only',
     );
   });
 
@@ -188,18 +181,18 @@ describe('GovernorN#vetoing', () => {
 
   it('only vetoer can veto', async () => {
     await propose(account0);
-    await expect(gov.veto(proposalId)).revertedWith('GovernorN::veto: only vetoer');
+    await expect(gov.veto(proposalId)).revertedWith('NounsDAO::veto: only vetoer');
   });
 
   it('burns veto power correctly', async () => {
     // vetoer is still set
     expect(await gov.vetoer()).to.equal(vetoer.address);
-    await expect(gov._burnVetoPower()).revertedWith('GovernorN::_burnVetoPower: vetoer only');
+    await expect(gov._burnVetoPower()).revertedWith('NounsDAO::_burnVetoPower: vetoer only');
     // burn
     await gov.connect(vetoer)._burnVetoPower();
     expect(await gov.vetoer()).to.equal(address(0));
     await expect(gov.connect(vetoer).veto(proposalId)).revertedWith(
-      'GovernorN::veto: veto power burned',
+      'NounsDAO::veto: veto power burned',
     );
   });
 
@@ -315,7 +308,7 @@ describe('GovernorN#vetoing', () => {
       await gov.execute(proposalId);
       await expectState(proposalId, 'Executed');
       await expect(gov.veto(proposalId)).revertedWith(
-        'GovernorN::veto: cannot veto executed proposal',
+        'NounsDAO::veto: cannot veto executed proposal',
       );
     });
     it('Vetoed', async () => {

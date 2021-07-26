@@ -34,12 +34,12 @@ dataSources:
         - event: AuctionSettled(indexed uint256,address,uint256)
           handler: handleAuctionSettled
   - kind: ethereum/contract
-    name: NounsERC721
+    name: NounsToken
     network: {{network}}
     source:
-      address: '{{nounsERC721.address}}'
-      abi: NounsERC721
-      startBlock: {{nounsERC721.startBlock}}
+      address: '{{nounsToken.address}}'
+      abi: NounsToken
+      startBlock: {{nounsToken.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -52,8 +52,8 @@ dataSources:
         - Delegate
         - Governance
       abis:
-        - name: NounsERC721
-          file: ../nouns-contracts/abi/contracts/NounsERC721.sol/NounsERC721.json
+        - name: NounsToken
+          file: ../nouns-contracts/abi/contracts/NounsToken.sol/NounsToken.json
       eventHandlers:
         - event: NounCreated(indexed uint256,(uint48,uint48,uint48,uint48,uint48))
           handler: handleNounCreated
@@ -83,7 +83,7 @@ dataSources:
         - Governance
       abis:
         - name: NounsGovernor
-          file: ../nouns-contracts/abi/contracts/governance/GovernorNDelegate.sol/GovernorNDelegate.json
+          file: ../nouns-contracts/abi/contracts/governance/NounsDAOLogicV1.sol/NounsDAOLogicV1.json
       eventHandlers:
         - event: ProposalCreatedWithRequirements(uint256,address,address[],uint256[],string[],bytes[],uint256,uint256,uint256,uint256,string)
           handler: handleProposalCreatedWithRequirements

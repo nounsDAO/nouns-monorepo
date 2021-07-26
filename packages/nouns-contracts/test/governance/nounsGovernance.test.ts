@@ -2,10 +2,10 @@ import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { ethers } from 'hardhat';
 import { BigNumber as EthersBN } from 'ethers';
-import { NounsErc721, NounsDescriptor__factory } from '../../typechain';
+import { NounsToken, NounsDescriptor__factory } from '../../typechain';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
-  deployNounsERC721,
+  deployNounsToken,
   getSigners,
   TestSigners,
   setTotalSupply,
@@ -22,11 +22,11 @@ const { expect } = chai;
 
 describe('Nouns Governance', () => {
   let snapshotId: number;
-  let token: NounsErc721;
+  let token: NounsToken;
   let signers: TestSigners;
   let mintNouns: (amount: number) => Promise<void>;
-  let tokenCallFromGuy: NounsErc721;
-  let tokenCallFromDeployer: NounsErc721;
+  let tokenCallFromGuy: NounsToken;
+  let tokenCallFromDeployer: NounsToken;
   let account0: SignerWithAddress;
   let account1: SignerWithAddress;
   let account2: SignerWithAddress;
@@ -56,7 +56,7 @@ describe('Nouns Governance', () => {
     account2 = signers.account2;
     deployer = signers.deployer;
 
-    token = await deployNounsERC721(signers.deployer);
+    token = await deployNounsToken(signers.deployer);
 
     await populateDescriptor(
       NounsDescriptor__factory.connect(await token.descriptor(), signers.deployer),
@@ -83,7 +83,7 @@ describe('Nouns Governance', () => {
       const badhex = '0xbad0000000000000000000000000000000000000000000000000000000000000';
       await expect(
         token.delegateBySig(delegatee, nonce, expiry, 0, badhex, badhex),
-      ).to.be.revertedWith('ERC721Governance::delegateBySig: invalid signature');
+      ).to.be.revertedWith('NounsCheckpointer::delegateBySig: invalid signature');
     });
 
     it('reverts if the nonce is bad ', async () => {
@@ -93,7 +93,7 @@ describe('Nouns Governance', () => {
       const signature = await account0._signTypedData(domain, Types, { delegatee, nonce, expiry });
       const { v, r, s } = ethers.utils.splitSignature(signature);
       await expect(token.delegateBySig(delegatee, nonce, expiry, v, r, s)).to.be.revertedWith(
-        'ERC721Governance::delegateBySig: invalid nonce',
+        'NounsCheckpointer::delegateBySig: invalid nonce',
       );
     });
 
@@ -104,7 +104,7 @@ describe('Nouns Governance', () => {
       const signature = await account0._signTypedData(domain, Types, { delegatee, nonce, expiry });
       const { v, r, s } = ethers.utils.splitSignature(signature);
       await expect(token.delegateBySig(delegatee, nonce, expiry, v, r, s)).to.be.revertedWith(
-        'ERC721Governance::delegateBySig: signature expired',
+        'NounsCheckpointer::delegateBySig: signature expired',
       );
     });
 
@@ -227,7 +227,7 @@ describe('Nouns Governance', () => {
 
     it('reverts if block number >= current block', async () => {
       await expect(token.getPriorVotes(account1.address, 5e10)).to.be.revertedWith(
-        'ERC721Governance::getPriorVotes: not yet determined',
+        'NounsCheckpointer::getPriorVotes: not yet determined',
       );
     });
 

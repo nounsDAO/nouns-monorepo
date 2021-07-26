@@ -4,12 +4,12 @@ pragma solidity ^0.8.6;
 
 import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
 import { ERC721 } from '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
-import { ERC721Governance } from './governance/ERC721Governance.sol';
+import { NounsCheckpointer } from './governance/NounsCheckpointer.sol';
 import { INounsDescriptor } from './interfaces/INounsDescriptor.sol';
 import { INounsSeeder } from './interfaces/INounsSeeder.sol';
-import { INounsERC721 } from './interfaces/INounsERC721.sol';
+import { INounsToken } from './interfaces/INounsToken.sol';
 
-contract NounsERC721 is INounsERC721, ERC721Governance, Ownable {
+contract NounsToken is INounsToken, NounsCheckpointer, Ownable {
     // The nounders DAO address (creators org)
     address public noundersDAO;
 
@@ -115,7 +115,7 @@ contract NounsERC721 is INounsERC721, ERC721Governance, Ownable {
      * @dev See {IERC721Metadata-tokenURI}.
      */
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
-        require(_exists(tokenId), 'NounsERC721: URI query for nonexistent token');
+        require(_exists(tokenId), 'NounsToken: URI query for nonexistent token');
         return descriptor.tokenURI(tokenId, seeds[tokenId]);
     }
 
@@ -124,7 +124,7 @@ contract NounsERC721 is INounsERC721, ERC721Governance, Ownable {
      * with the JSON contents directly inlined.
      */
     function dataURI(uint256 tokenId) public view override returns (string memory) {
-        require(_exists(tokenId), 'NounsERC721: URI query for nonexistent token');
+        require(_exists(tokenId), 'NounsToken: URI query for nonexistent token');
         return descriptor.dataURI(tokenId, seeds[tokenId]);
     }
 

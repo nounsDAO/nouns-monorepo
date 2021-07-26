@@ -7,38 +7,36 @@ const { ethers } = hardhat;
 import { BigNumber as EthersBN } from 'ethers';
 
 import {
-  deployNounsERC721,
+  deployNounsToken,
   getSigners,
   TestSigners,
   setTotalSupply,
   populateDescriptor,
 } from '../../utils';
 
-import { mineBlock, address, encodeParameters, advanceBlocks, blockNumber } from '../../utils';
+import { mineBlock, address, encodeParameters, advanceBlocks } from '../../utils';
 
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
-  NounsErc721,
+  NounsToken,
   NounsDescriptor__factory,
-  GovernorNDelegator,
-  GovernorNDelegator__factory,
-  GovernorNDelegate,
-  GovernorNDelegate__factory,
-  Timelock,
-  Timelock__factory,
+  NounsDaoProxy__factory,
+  NounsDaoLogicV1,
+  NounsDaoLogicV1__factory,
+  NounsDaoExecutor__factory,
 } from '../../../typechain';
 
 chai.use(solidity);
 const { expect } = chai;
 
 async function reset(): Promise<void> {
-  // nonce 0: Deploy Timelock
-  // nonce 1: Deploy GovernorNDelegate
+  // nonce 0: Deploy NounsDAOExecutor
+  // nonce 1: Deploy NounsDAOLogicV1
   // nonce 2: Deploy nftDescriptorLibraryFactory
   // nonce 3: Deploy NounsDescriptor
   // nonce 4: Deploy NounsSeeder
-  // nonce 5: Deploy NounsERC721
-  // nonce 6: Deploy GovernorNDelegator
+  // nonce 5: Deploy NounsToken
+  // nonce 6: Deploy NounsDAOProxy
   // nonce 7+: populate Descriptor
 
   const govDelegatorAddress = ethers.utils.getContractAddress({
@@ -46,19 +44,19 @@ async function reset(): Promise<void> {
     nonce: (await deployer.getTransactionCount()) + 6,
   });
 
-  // Deploy Timelock with pre-computed Delegator address
-  const { address: timelockAddress } = await new Timelock__factory(deployer).deploy(
+  // Deploy NounsDAOExecutor with pre-computed Delegator address
+  const { address: timelockAddress } = await new NounsDaoExecutor__factory(deployer).deploy(
     govDelegatorAddress,
     timelockDelay,
   );
 
   // Deploy Delegate
-  const { address: govDelegateAddress } = await new GovernorNDelegate__factory(deployer).deploy();
+  const { address: govDelegateAddress } = await new NounsDaoLogicV1__factory(deployer).deploy();
   // Deploy Nouns token
-  token = await deployNounsERC721(deployer);
+  token = await deployNounsToken(deployer);
 
   // Deploy Delegator
-  const governorNDelegator = await new GovernorNDelegator__factory(deployer).deploy(
+  await new NounsDaoProxy__factory(deployer).deploy(
     timelockAddress,
     token.address,
     address(0),
@@ -71,7 +69,7 @@ async function reset(): Promise<void> {
   );
 
   // Cast Delegator as Delegate
-  gov = GovernorNDelegate__factory.connect(govDelegatorAddress, deployer);
+  gov = NounsDaoLogicV1__factory.connect(govDelegatorAddress, deployer);
 
   await populateDescriptor(NounsDescriptor__factory.connect(await token.descriptor(), deployer));
 }
@@ -86,14 +84,14 @@ async function propose(proposer: SignerWithAddress) {
   proposalId = await gov.latestProposalIds(proposer.address);
 }
 
-let token: NounsErc721;
+let token: NounsToken;
 let deployer: SignerWithAddress;
 let account0: SignerWithAddress;
 let account1: SignerWithAddress;
 let account2: SignerWithAddress;
 let signers: TestSigners;
 
-let gov: GovernorNDelegate;
+let gov: NounsDaoLogicV1;
 const timelockDelay = 172800; // 2 days
 
 const proposalThresholdBPS = 678; // 6.78%
@@ -104,9 +102,8 @@ let values: string[];
 let signatures: string[];
 let callDatas: string[];
 let proposalId: EthersBN;
-let mintNouns: (amount: number) => Promise<void>;
 
-describe('GovernorN#inflationHandling', () => {
+describe('NounsDAO#inflationHandling', () => {
   before(async () => {
     signers = await getSigners();
     deployer = signers.deployer;
@@ -145,7 +142,7 @@ describe('GovernorN#inflationHandling', () => {
     await mineBlock();
     await expect(
       gov.connect(account0).propose(targets, values, signatures, callDatas, 'do nothing'),
-    ).revertedWith('GovernorN::propose: proposer votes below proposal threshold');
+    ).revertedWith('NounsDAO::propose: proposer votes below proposal threshold');
   });
   it('allows proposing if above threshold', async () => {
     // account0 has 3 token, requires 3
@@ -188,7 +185,7 @@ describe('GovernorN#inflationHandling', () => {
     // account1 has 3 tokens, but requires 5 to pass new proposal threshold when totalSupply = 80 and threshold = 5%
     await expect(
       gov.connect(account1).propose(targets, values, signatures, callDatas, 'do nothing'),
-    ).revertedWith('GovernorN::propose: proposer votes below proposal threshold');
+    ).revertedWith('NounsDAO::propose: proposer votes below proposal threshold');
   });
 
   it('does not change previous proposal attributes when total supply changes', async () => {
