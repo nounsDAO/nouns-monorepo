@@ -36,7 +36,7 @@
  *   A `vetoed` flag was added to the `Proposal` struct to support this.
  */
 
-pragma solidity ^0.8.4;
+pragma solidity ^0.8.6;
 
 import './NounsDAOInterfaces.sol';
 

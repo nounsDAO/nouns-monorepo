@@ -6,7 +6,7 @@
  * This Delegator uses parts of [Open Zeppelin's Proxy.sol] (https://github.com/OpenZeppelin/openzeppelin-contracts/blob/5c8746f56b4bed8cc9e0e044f5f69ab2f9428ce1/contracts/proxy/Proxy.sol) to allow GovernorBravoDelegator to handle fallback() and receive() as per Solidity > 0.6.0
  */
 
-pragma solidity ^0.8.4;
+pragma solidity ^0.8.6;
 
 import './NounsDAOInterfaces.sol';
 

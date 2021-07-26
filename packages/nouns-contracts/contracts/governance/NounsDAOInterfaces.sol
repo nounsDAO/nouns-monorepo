@@ -7,7 +7,7 @@
  * See `NounsDAOLogicV1.sol` for more details
  */
 
-pragma solidity ^0.8.4;
+pragma solidity ^0.8.6;
 
 contract NounsDAOEvents {
     /// @notice An event emitted when a new proposal is created

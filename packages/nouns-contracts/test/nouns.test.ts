@@ -1,6 +1,6 @@
 import chai from 'chai';
 import { ethers } from 'hardhat';
-import { BigNumber as EthersBN } from 'ethers';
+import { BigNumber as EthersBN, constants } from 'ethers';
 import { solidity } from 'ethereum-waffle';
 import { NounsDescriptor__factory, NounsToken } from '../typechain';
 import { deployNounsToken, populateDescriptor } from './utils';
@@ -35,7 +35,7 @@ describe('NounsToken', () => {
   it('should allow the minter to mint a noun to itself and a reward noun to the noundersDAO', async () => {
     const receipt = await (await nounsToken.mint()).wait();
 
-    const [, , noundersNounCreated, , , ownersNounCreated] = receipt.events || [];
+    const [, , , noundersNounCreated, , , , ownersNounCreated] = receipt.events || [];
 
     expect(await nounsToken.ownerOf(0)).to.eq(noundersDAO.address);
     expect(noundersNounCreated?.event).to.eq('NounCreated');
@@ -70,7 +70,7 @@ describe('NounsToken', () => {
     await (await nounsToken.mint()).wait();
 
     const receipt = await (await nounsToken.mint()).wait();
-    const nounCreated = receipt.events?.[2];
+    const nounCreated = receipt.events?.[3];
 
     expect(await nounsToken.ownerOf(2)).to.eq(deployer.address);
     expect(nounCreated?.event).to.eq('NounCreated');
@@ -81,6 +81,22 @@ describe('NounsToken', () => {
       const value = typeof item !== 'number' ? item?.toNumber() : item;
       expect(value).to.be.a('number');
     });
+  });
+
+  it('should emit two transfer logs on mint', async () => {
+    const [, , creator, minter] = await ethers.getSigners();
+
+    await (await nounsToken.mint()).wait();
+
+    await (await nounsToken.setMinter(minter.address)).wait();
+    await (await nounsToken.transferOwnership(creator.address)).wait();
+
+    const tx = nounsToken.connect(minter).mint();
+
+    await expect(tx)
+      .to.emit(nounsToken, 'Transfer')
+      .withArgs(constants.AddressZero, creator.address, 2);
+    await expect(tx).to.emit(nounsToken, 'Transfer').withArgs(creator.address, minter.address, 2);
   });
 
   it('should allow minter to burn a noun', async () => {

@@ -3,11 +3,11 @@
 pragma solidity ^0.8.6;
 
 import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
-import { ERC721 } from '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
 import { NounsCheckpointer } from './governance/NounsCheckpointer.sol';
 import { INounsDescriptor } from './interfaces/INounsDescriptor.sol';
 import { INounsSeeder } from './interfaces/INounsSeeder.sol';
 import { INounsToken } from './interfaces/INounsToken.sol';
+import { ERC721 } from './base/ERC721.sol';
 
 contract NounsToken is INounsToken, NounsCheckpointer, Ownable {
     // The nounders DAO address (creators org)
@@ -204,7 +204,7 @@ contract NounsToken is INounsToken, NounsCheckpointer, Ownable {
     function _mintTo(address to, uint256 nounId) internal returns (uint256) {
         INounsSeeder.Seed memory seed = seeds[nounId] = seeder.generateSeed(nounId, descriptor);
 
-        _mint(to, nounId);
+        _mint(owner(), to, nounId);
         emit NounCreated(nounId, seed);
 
         return nounId;
