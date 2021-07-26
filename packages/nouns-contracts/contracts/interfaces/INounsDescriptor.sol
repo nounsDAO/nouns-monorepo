@@ -72,11 +72,11 @@ interface INounsDescriptor {
 
     function setBaseURI(string calldata baseURI) external;
 
-    function officialTokenURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view returns (string memory);
+    function tokenURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view returns (string memory);
 
-    function officialDataURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view returns (string memory);
+    function dataURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view returns (string memory);
 
-    function dataURI(
+    function genericDataURI(
         string calldata name,
         string calldata description,
         INounsSeeder.Seed memory seed

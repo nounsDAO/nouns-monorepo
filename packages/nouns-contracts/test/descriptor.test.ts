@@ -55,7 +55,7 @@ describe('NounsDescriptor', () => {
     await nounsDescriptor.setBaseURI(BASE_URI);
     await nounsDescriptor.toggleDataURIEnabled();
 
-    const tokenUri = await nounsDescriptor.officialTokenURI(0, {
+    const tokenUri = await nounsDescriptor.tokenURI(0, {
       background: 0,
       body: longestBody.index,
       accessory: longestAccessory.index,
@@ -66,7 +66,7 @@ describe('NounsDescriptor', () => {
   });
 
   it('should generate valid token uri metadata when data uris are enabled', async () => {
-    const tokenUri = await nounsDescriptor.officialTokenURI(0, {
+    const tokenUri = await nounsDescriptor.tokenURI(0, {
       background: 0,
       body: longestBody.index,
       accessory: longestAccessory.index,
