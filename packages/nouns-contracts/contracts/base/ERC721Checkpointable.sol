@@ -4,6 +4,19 @@ pragma solidity ^0.8.6;
 
 import './ERC721Enumerable.sol';
 
+/**
+ * ERC721Checkpointable uses the checkpointing code from [Comp.sol](https://github.com/compound-finance/compound-protocol/blob/ae4388e780a8d596d97619d9704a931a2752c2bc/contracts/Governance/Comp.sol)
+ *
+  * ERC721Checkpointable CHANGES:
+  * - `delegates` is renamed to `_delegates` and becomes private
+  *
+  * - `delegates` is a public function that uses the `_delegates` mapping look-up, but unlike
+  *   `Comp.sol`, returns the delegator's own address if there is no delegate.
+  *   This avoids the delegator needing to "delegate to self" with an additional transaction
+  *
+  * - `_transferTokens()` is renamed `_beforeTokenTransfer()` and adapted to hook into OpenZeppelin's ERC721 hooks.
+ *
+*/
 
 abstract contract ERC721Checkpointable is ERC721Enumerable {
     /// @notice Defines decimals as per ERC-20 convention to make integrations with 3rd party governance platforms easier
@@ -42,9 +55,8 @@ abstract contract ERC721Checkpointable is ERC721Enumerable {
     event DelegateVotesChanged(address indexed delegate, uint256 previousBalance, uint256 newBalance);
 
     /**
-     * @notice The voting power an address can delegate.
-     * Matches ERC-20 convention of 18 decimal number
-     * Used when calling `_delegate()`
+     * @notice The votes a delegator can delegate, which is the current balance of the delegator.
+     * @dev Used when calling `_delegate()`
      */
     function votesToDelegate(address delegator) public view returns (uint96) {
         return safe96(balanceOf(delegator), 'ERC721Checkpointable::votesToDelegate: amount exceeds 96 bits');
@@ -61,7 +73,8 @@ abstract contract ERC721Checkpointable is ERC721Enumerable {
     }
 
     /**
-     * @notice Adapted from `_transferTokens()` in `Comp.sol`; hooks into `ERC721._transfer` to update delegate votes
+     * @notice Adapted from `_transferTokens()` in `Comp.sol` to update delegate votes.
+     * @dev hooks into OpenZeppelin's `ERC721._transfer`
      */
     function _beforeTokenTransfer(
         address from,
