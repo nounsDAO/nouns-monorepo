@@ -22,7 +22,7 @@ export function getAuctionStartedTweetText(auctionId: number) {
 }
 
 export function getBidTweetText(id: number, bid: Bid) {
-  return `Noun ${id} has received a bid of Ξ${ethers.utils.formatEther(bid.amount)} in tx https://rinkeby.etherscan.io/tx/${bid.id}`;
+  return `Noun ${id} has received a bid of Ξ${ethers.utils.formatEther(bid.amount)}`;
 }
 
 /**
