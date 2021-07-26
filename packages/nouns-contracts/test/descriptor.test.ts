@@ -53,6 +53,7 @@ describe('NounsDescriptor', () => {
     const BASE_URI = 'https://api.nouns.wtf/metadata/';
 
     await nounsDescriptor.setBaseURI(BASE_URI);
+    await nounsDescriptor.toggleDataURIEnabled();
 
     const tokenUri = await nounsDescriptor.tokenURI(0, {
       background: 0,
@@ -65,8 +66,6 @@ describe('NounsDescriptor', () => {
   });
 
   it('should generate valid token uri metadata when data uris are enabled', async () => {
-    await nounsDescriptor.setDataURIEnabled(true);
-
     const tokenUri = await nounsDescriptor.tokenURI(0, {
       background: 0,
       body: longestBody.index,
@@ -80,7 +79,7 @@ describe('NounsDescriptor', () => {
       ),
     );
     expect(name).to.equal('Noun 0');
-    expect(description).to.equal('Noun 0 is a member of the NounsDAO');
+    expect(description).to.equal('Noun 0 is a member of the Nouns DAO');
     expect(image).to.not.be.undefined;
   });
 });

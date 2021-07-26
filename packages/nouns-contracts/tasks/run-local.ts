@@ -16,8 +16,6 @@ task(
     nounsDescriptor: contracts.NounsDescriptor.instance.address,
   });
 
-  await contracts.NounsDescriptor.instance.setDataURIEnabled(true);
-
   await contracts.NounsAuctionHouse.instance
     .attach(contracts.NounsAuctionHouseProxy.instance.address)
     .unpause({

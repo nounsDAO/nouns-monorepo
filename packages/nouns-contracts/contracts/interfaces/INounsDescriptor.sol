@@ -8,6 +8,12 @@ import { INounsSeeder } from './INounsSeeder.sol';
  * @title Interface for NounsDescriptor.
  */
 interface INounsDescriptor {
+    event PartsLocked();
+
+    event DataURIToggled(bool enabled);
+
+    event BaseURIUpdated(string baseURI);
+
     function arePartsLocked() external returns (bool);
 
     function isDataURIEnabled() external returns (bool);
@@ -62,11 +68,19 @@ interface INounsDescriptor {
 
     function lockParts() external;
 
-    function setDataURIEnabled(bool isDataURIEnabled) external;
+    function toggleDataURIEnabled() external;
 
     function setBaseURI(string calldata baseURI) external;
 
     function tokenURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view returns (string memory);
 
     function dataURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view returns (string memory);
+
+    function genericDataURI(
+        string calldata name,
+        string calldata description,
+        INounsSeeder.Seed memory seed
+    ) external view returns (string memory);
+
+    function generateSVGImage(INounsSeeder.Seed memory seed) external view returns (string memory);
 }

@@ -154,6 +154,8 @@ contract NounsToken is INounsToken, NounsCheckpointer, Ownable {
      */
     function lockMinter() external override onlyOwner whenMinterNotLocked {
         isMinterLocked = true;
+
+        emit MinterLocked();
     }
 
     /**
@@ -172,6 +174,8 @@ contract NounsToken is INounsToken, NounsCheckpointer, Ownable {
      */
     function lockDescriptor() external override onlyOwner whenDescriptorNotLocked {
         isDescriptorLocked = true;
+
+        emit DescriptorLocked();
     }
 
     /**
@@ -190,6 +194,8 @@ contract NounsToken is INounsToken, NounsCheckpointer, Ownable {
      */
     function lockSeeder() external override onlyOwner whenSeederNotLocked {
         isSeederLocked = true;
+
+        emit SeederLocked();
     }
 
     /**

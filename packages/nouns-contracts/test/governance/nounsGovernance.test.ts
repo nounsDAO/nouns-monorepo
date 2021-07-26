@@ -1,7 +1,6 @@
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { ethers } from 'hardhat';
-import { BigNumber as EthersBN } from 'ethers';
 import { NounsToken, NounsDescriptor__factory } from '../../typechain';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
@@ -13,7 +12,6 @@ import {
   minerStart,
   minerStop,
   mineBlock,
-  address,
   chainId,
 } from '../utils';
 
@@ -23,23 +21,25 @@ const { expect } = chai;
 describe('Nouns Governance', () => {
   let snapshotId: number;
   let token: NounsToken;
-  let signers: TestSigners;
-  let mintNouns: (amount: number) => Promise<void>;
   let tokenCallFromGuy: NounsToken;
   let tokenCallFromDeployer: NounsToken;
   let account0: SignerWithAddress;
   let account1: SignerWithAddress;
   let account2: SignerWithAddress;
   let deployer: SignerWithAddress;
-  const ONE: number = 1;
-  const TWO: number = 2;
-  const THREE: number = 3;
+
+  const ONE = 1;
+  const TWO = 2;
+  const THREE = 3;
+
   const Domain = (name: string, verifyingContract: string, chainId: number) => ({
     name,
     chainId,
     verifyingContract,
   });
-  let domain: any;
+
+  let domain: { name: string; verifyingContract: string; chainId: number };
+
   const Types = {
     Delegation: [
       { name: 'delegatee', type: 'address' },
@@ -188,8 +188,8 @@ describe('Nouns Governance', () => {
 
       await mineBlock();
       const receipt1 = await tx1.wait();
-      const receipt2 = await tx2.wait();
-      const receipt3 = await tx3.wait();
+      await tx2.wait();
+      await tx3.wait();
 
       await minerStart();
 
