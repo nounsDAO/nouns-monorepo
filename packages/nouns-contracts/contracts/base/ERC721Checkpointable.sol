@@ -2,9 +2,23 @@
 
 pragma solidity ^0.8.6;
 
-import '../base/ERC721Enumerable.sol';
+import './ERC721Enumerable.sol';
 
-abstract contract NounsCheckpointer is ERC721Enumerable {
+/**
+ * ERC721Checkpointable uses the checkpointing code from [Comp.sol](https://github.com/compound-finance/compound-protocol/blob/ae4388e780a8d596d97619d9704a931a2752c2bc/contracts/Governance/Comp.sol)
+ *
+  * ERC721Checkpointable CHANGES:
+  * - `delegates` is renamed to `_delegates` and becomes private
+  *
+  * - `delegates` is a public function that uses the `_delegates` mapping look-up, but unlike
+  *   `Comp.sol`, returns the delegator's own address if there is no delegate.
+  *   This avoids the delegator needing to "delegate to self" with an additional transaction
+  *
+  * - `_transferTokens()` is renamed `_beforeTokenTransfer()` and adapted to hook into OpenZeppelin's ERC721 hooks.
+ *
+*/
+
+abstract contract ERC721Checkpointable is ERC721Enumerable {
     /// @notice Defines decimals as per ERC-20 convention to make integrations with 3rd party governance platforms easier
     uint8 public constant decimals = 0;
 
@@ -41,12 +55,11 @@ abstract contract NounsCheckpointer is ERC721Enumerable {
     event DelegateVotesChanged(address indexed delegate, uint256 previousBalance, uint256 newBalance);
 
     /**
-     * @notice The voting power an address can delegate.
-     * Matches ERC-20 convention of 18 decimal number
-     * Used when calling `_delegate()`
+     * @notice The votes a delegator can delegate, which is the current balance of the delegator.
+     * @dev Used when calling `_delegate()`
      */
     function votesToDelegate(address delegator) public view returns (uint96) {
-        return safe96(balanceOf(delegator), 'NounsCheckpointer::votesToDelegate: amount exceeds 96 bits');
+        return safe96(balanceOf(delegator), 'ERC721Checkpointable::votesToDelegate: amount exceeds 96 bits');
     }
 
     /**
@@ -60,7 +73,8 @@ abstract contract NounsCheckpointer is ERC721Enumerable {
     }
 
     /**
-     * @notice Adapted from `_transferTokens()` in `Comp.sol`; hooks into `ERC721._transfer` to update delegate votes
+     * @notice Adapted from `_transferTokens()` in `Comp.sol` to update delegate votes.
+     * @dev hooks into OpenZeppelin's `ERC721._transfer`
      */
     function _beforeTokenTransfer(
         address from,
@@ -104,9 +118,9 @@ abstract contract NounsCheckpointer is ERC721Enumerable {
         bytes32 structHash = keccak256(abi.encode(DELEGATION_TYPEHASH, delegatee, nonce, expiry));
         bytes32 digest = keccak256(abi.encodePacked('\x19\x01', domainSeparator, structHash));
         address signatory = ecrecover(digest, v, r, s);
-        require(signatory != address(0), 'NounsCheckpointer::delegateBySig: invalid signature');
-        require(nonce == nonces[signatory]++, 'NounsCheckpointer::delegateBySig: invalid nonce');
-        require(block.timestamp <= expiry, 'NounsCheckpointer::delegateBySig: signature expired');
+        require(signatory != address(0), 'ERC721Checkpointable::delegateBySig: invalid signature');
+        require(nonce == nonces[signatory]++, 'ERC721Checkpointable::delegateBySig: invalid nonce');
+        require(block.timestamp <= expiry, 'ERC721Checkpointable::delegateBySig: signature expired');
         return _delegate(signatory, delegatee);
     }
 
@@ -128,7 +142,7 @@ abstract contract NounsCheckpointer is ERC721Enumerable {
      * @return The number of votes the account had as of the given block
      */
     function getPriorVotes(address account, uint256 blockNumber) public view returns (uint96) {
-        require(blockNumber < block.number, 'NounsCheckpointer::getPriorVotes: not yet determined');
+        require(blockNumber < block.number, 'ERC721Checkpointable::getPriorVotes: not yet determined');
 
         uint32 nCheckpoints = numCheckpoints[account];
         if (nCheckpoints == 0) {
@@ -183,14 +197,14 @@ abstract contract NounsCheckpointer is ERC721Enumerable {
             if (srcRep != address(0)) {
                 uint32 srcRepNum = numCheckpoints[srcRep];
                 uint96 srcRepOld = srcRepNum > 0 ? checkpoints[srcRep][srcRepNum - 1].votes : 0;
-                uint96 srcRepNew = sub96(srcRepOld, amount, 'NounsCheckpointer::_moveDelegates: amount underflows');
+                uint96 srcRepNew = sub96(srcRepOld, amount, 'ERC721Checkpointable::_moveDelegates: amount underflows');
                 _writeCheckpoint(srcRep, srcRepNum, srcRepOld, srcRepNew);
             }
 
             if (dstRep != address(0)) {
                 uint32 dstRepNum = numCheckpoints[dstRep];
                 uint96 dstRepOld = dstRepNum > 0 ? checkpoints[dstRep][dstRepNum - 1].votes : 0;
-                uint96 dstRepNew = add96(dstRepOld, amount, 'NounsCheckpointer::_moveDelegates: amount overflows');
+                uint96 dstRepNew = add96(dstRepOld, amount, 'ERC721Checkpointable::_moveDelegates: amount overflows');
                 _writeCheckpoint(dstRep, dstRepNum, dstRepOld, dstRepNew);
             }
         }
@@ -202,7 +216,7 @@ abstract contract NounsCheckpointer is ERC721Enumerable {
         uint96 oldVotes,
         uint96 newVotes
     ) internal {
-        uint32 blockNumber = safe32(block.number, 'NounsCheckpointer::_writeCheckpoint: block number exceeds 32 bits');
+        uint32 blockNumber = safe32(block.number, 'ERC721Checkpointable::_writeCheckpoint: block number exceeds 32 bits');
 
         if (nCheckpoints > 0 && checkpoints[delegatee][nCheckpoints - 1].fromBlock == blockNumber) {
             checkpoints[delegatee][nCheckpoints - 1].votes = newVotes;

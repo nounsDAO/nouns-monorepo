@@ -83,7 +83,7 @@ describe('Nouns Governance', () => {
       const badhex = '0xbad0000000000000000000000000000000000000000000000000000000000000';
       await expect(
         token.delegateBySig(delegatee, nonce, expiry, 0, badhex, badhex),
-      ).to.be.revertedWith('NounsCheckpointer::delegateBySig: invalid signature');
+      ).to.be.revertedWith('ERC721Checkpointable::delegateBySig: invalid signature');
     });
 
     it('reverts if the nonce is bad ', async () => {
@@ -93,7 +93,7 @@ describe('Nouns Governance', () => {
       const signature = await account0._signTypedData(domain, Types, { delegatee, nonce, expiry });
       const { v, r, s } = ethers.utils.splitSignature(signature);
       await expect(token.delegateBySig(delegatee, nonce, expiry, v, r, s)).to.be.revertedWith(
-        'NounsCheckpointer::delegateBySig: invalid nonce',
+        'ERC721Checkpointable::delegateBySig: invalid nonce',
       );
     });
 
@@ -104,7 +104,7 @@ describe('Nouns Governance', () => {
       const signature = await account0._signTypedData(domain, Types, { delegatee, nonce, expiry });
       const { v, r, s } = ethers.utils.splitSignature(signature);
       await expect(token.delegateBySig(delegatee, nonce, expiry, v, r, s)).to.be.revertedWith(
-        'NounsCheckpointer::delegateBySig: signature expired',
+        'ERC721Checkpointable::delegateBySig: signature expired',
       );
     });
 
@@ -227,7 +227,7 @@ describe('Nouns Governance', () => {
 
     it('reverts if block number >= current block', async () => {
       await expect(token.getPriorVotes(account1.address, 5e10)).to.be.revertedWith(
-        'NounsCheckpointer::getPriorVotes: not yet determined',
+        'ERC721Checkpointable::getPriorVotes: not yet determined',
       );
     });
 
