@@ -11,7 +11,7 @@ import config from './config';
 import classes from './App.module.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar from './components/NavBar';
-import CurrentAuction from './components/CurrentAuction';
+import Auction from './components/Auction';
 import Banner from './components/Banner';
 import HistoryCollection from './components/HistoryCollection';
 import Documentation from './components/Documentation';
@@ -36,7 +36,7 @@ function App() {
       <Router history={history}>
         <Switch>
           <Route path="/">
-            <CurrentAuction auction={auction} />
+            <Auction auction={auction} />
             <Banner />
             <HistoryCollection
               latestNounId={auction && BigNumber.from(auction.nounId).sub(1)}

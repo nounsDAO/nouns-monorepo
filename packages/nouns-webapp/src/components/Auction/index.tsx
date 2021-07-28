@@ -3,10 +3,10 @@ import StandaloneNoun from '../StandaloneNoun';
 import AuctionActivity from '../AuctionActivity';
 import Section from '../../layout/Section';
 import Noun from '../Noun';
-import { Auction } from '../../wrappers/nounsAuction';
-import classes from './CurrentAuction.module.css';
+import { Auction as CurrentAuction } from '../../wrappers/nounsAuction';
+import classes from './Auction.module.css';
 
-const CurrentAuction: React.FC<{ auction: Auction }> = props => {
+const Auction: React.FC<{ auction: CurrentAuction }> = props => {
   const { auction } = props;
 
   return (
@@ -29,4 +29,4 @@ const CurrentAuction: React.FC<{ auction: Auction }> = props => {
   );
 };
 
-export default CurrentAuction;
+export default Auction;
