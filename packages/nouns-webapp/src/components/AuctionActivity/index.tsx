@@ -12,18 +12,16 @@ import moment from 'moment';
 import BidHistory from '../BidHistory';
 import { Modal } from 'react-bootstrap';
 
-export const useMinBid = (auction: Auction | undefined) => {
-  const minBidIncPercentage = useAuctionMinBidIncPercentage();
-
-  if (!auction || !minBidIncPercentage) {
+const computeMinimumNextBid = (
+  currentBid: BigNumber,
+  minBidIncPercentage: BigNumber | undefined,
+): BigNumber => {
+  if (!minBidIncPercentage) {
     return new BigNumber(0);
   }
-
-  const currentBid = new BigNumber(auction.amount.toString());
-  const minBid = currentBid
+  return currentBid
     .times(minBidIncPercentage.div(100).plus(1))
     .decimalPlaces(2, BigNumber.ROUND_CEIL);
-  return minBid;
 };
 
 const AuctionActivity: React.FC<{ auction: Auction }> = props => {
@@ -41,7 +39,12 @@ const AuctionActivity: React.FC<{ auction: Auction }> = props => {
       .utc()
       .format('MMM DD YYYY');
 
-  const minBid = useMinBid(auction);
+  const minBidIncPercentage = useAuctionMinBidIncPercentage();
+  const minBid = computeMinimumNextBid(
+    auction && new BigNumber(auction.amount.toString()),
+    minBidIncPercentage,
+  );
+
   const [displayMinBid, setDisplayMinBid] = useState(false);
   const minBidTappedHandler = () => {
     setDisplayMinBid(true);
