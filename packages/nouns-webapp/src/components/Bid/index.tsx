@@ -6,7 +6,8 @@ import {
 import config from '../../config';
 import { useContractFunction } from '@usedapp/core';
 import { useEffect, useState, useRef, ChangeEvent } from 'react';
-import { utils } from 'ethers';
+import { utils, BigNumber as EthersBN } from 'ethers';
+import BigNumber from 'bignumber.js';
 import classes from './Bid.module.css';
 import Modal from '../Modal';
 import { Spinner } from 'react-bootstrap';
@@ -14,7 +15,7 @@ import { Spinner } from 'react-bootstrap';
 const Bid: React.FC<{
   auction: Auction;
   auctionEnded: boolean;
-  minBid: number;
+  minBid: BigNumber;
   useMinBid: boolean;
   onInputChange: () => void;
 }> = props => {
@@ -43,24 +44,29 @@ const Bid: React.FC<{
   );
 
   const bidInputHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const input = event.target.value;
+
+    // disable more than 2 digits after decimal point
+    if (input.includes('.') && event.target.value.split('.')[1].length > 2) {
+      return;
+    }
     setBidInput(event.target.value);
     onInputChange();
   };
 
   const placeBidHandler = () => {
-    if (!auction) {
+    if (!auction || !bidInputRef.current || !bidInputRef.current.value) {
       return;
     }
-    if (!bidInputRef.current) {
+
+    const currentBid = new BigNumber(utils.parseEther(bidInputRef.current.value).toString());
+    if (currentBid.isLessThan(minBid)) {
       return;
     }
-    if (Number(bidInputRef.current.value) < minBid) {
-      return;
-    } else {
-      placeBid(auction.nounId, {
-        value: utils.parseEther(bidInputRef.current.value.toString()),
-      });
-    }
+
+    placeBid(auction.nounId, {
+      value: utils.parseEther(bidInputRef.current.value.toString()),
+    });
   };
 
   const settleAuctionHandler = () => {
@@ -183,7 +189,7 @@ const Bid: React.FC<{
             type="number"
             placeholder="ETH"
             min="0"
-            value={useMinBid ? minBid.toString() : bidInput}
+            value={useMinBid ? utils.formatEther(EthersBN.from(minBid.toString())) : bidInput}
             onChange={bidInputHandler}
             ref={bidInputRef}
           ></input>

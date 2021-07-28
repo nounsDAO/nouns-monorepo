@@ -3,7 +3,6 @@ import { useQuery } from '@apollo/client';
 import { bidsByAuctionQuery } from '../../wrappers/subgraph';
 import ShortAddress from '../ShortAddress';
 import classes from './BidHistory.module.css';
-import { formatEther } from '@ethersproject/units';
 import { compareBids } from '../../utils/compareBids';
 import * as R from 'ramda';
 import { Spinner } from 'react-bootstrap';
@@ -11,6 +10,8 @@ import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { buildEtherscanTxLink, Network } from '../../utils/buildEtherscanLink';
+import TruncatedAmount from '../TruncatedAmount';
+import BigNumber from 'bignumber.js';
 
 const BidHistory: React.FC<{ auctionId: string }> = props => {
   const { auctionId } = props;
@@ -21,7 +22,7 @@ const BidHistory: React.FC<{ auctionId: string }> = props => {
     R.sort(compareBids, data.bids)
       .reverse()
       .map((bid: any, i: number) => {
-        const bidAmount = formatEther(bid.amount);
+        const bidAmount = <TruncatedAmount amount={new BigNumber(bid.amount)} />;
         const date = moment(bid.blockTimestamp * 1000).format('MMM DD yy on hh:mm a');
         const txLink = buildEtherscanTxLink(bid.id, Network.rinkeby);
 
@@ -35,7 +36,7 @@ const BidHistory: React.FC<{ auctionId: string }> = props => {
                 <div className={classes.bidDate}>{date}</div>
               </div>
               <div className={classes.rightSectionWrapper}>
-                <div className={classes.bidAmount}>{bidAmount} ETH</div>
+                <div className={classes.bidAmount}>{bidAmount}</div>
                 <div className={classes.linkSymbol}>
                   <a href={txLink.toString()} target="_blank" rel="noreferrer">
                     <FontAwesomeIcon icon={faExternalLinkAlt} />

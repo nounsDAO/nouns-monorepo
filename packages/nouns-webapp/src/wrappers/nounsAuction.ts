@@ -3,6 +3,7 @@ import { BigNumberish, utils } from 'ethers';
 import { Contract } from '@ethersproject/contracts';
 import auctionHouseAbi from '../abis/NounsAuctionHouse.json';
 import config from '../config';
+import BigNumber from 'bignumber.js';
 
 export enum AuctionHouseContractFunctions {
   auction = 'auction',
@@ -50,7 +51,5 @@ export const useAuctionMinBidIncPercentage = () => {
     return;
   }
 
-  const minBidData = minBidIncrement[0];
-
-  return minBidData;
+  return new BigNumber(minBidIncrement[0]);
 };

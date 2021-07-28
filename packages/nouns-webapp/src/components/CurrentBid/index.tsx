@@ -1,18 +1,18 @@
-import { Auction } from '../../wrappers/nounsAuction';
-import { utils } from 'ethers';
+import BigNumber from 'bignumber.js';
 import classes from './CurrentBid.module.css';
+import TruncatedAmount from '../TruncatedAmount';
 
-const CurrentBid: React.FC<{ auction: Auction; auctionEnded: boolean }> = props => {
-  const { auction, auctionEnded } = props;
-
-  const currentBid = auction ? `${utils.formatEther(auction.amount)} ETH` : '';
+const CurrentBid: React.FC<{ currentBid: BigNumber; auctionEnded: boolean }> = props => {
+  const { currentBid, auctionEnded } = props;
 
   const titleContent = auctionEnded ? 'Winning bid' : 'Current bid';
 
   return (
     <div className={classes.section}>
-      <h2>{auction && titleContent}</h2>
-      <span>{currentBid}</span>
+      <h2>{titleContent}</h2>
+      <span>
+        <TruncatedAmount amount={currentBid && currentBid} />
+      </span>
     </div>
   );
 };
