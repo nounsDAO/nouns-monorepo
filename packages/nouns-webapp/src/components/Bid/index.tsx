@@ -60,7 +60,7 @@ const Bid: React.FC<{
     }
 
     const currentBid = new BigNumber(utils.parseEther(bidInputRef.current.value).toString());
-    if (currentBid.isLessThanOrEqualTo(minBid)) {
+    if (currentBid.isLessThan(minBid)) {
       return;
     }
 
