@@ -53,20 +53,20 @@ const AuctionActivity: React.FC<{ auction: Auction }> = props => {
     setDisplayMinBid(false);
   };
 
-  const [showBidModal, setShowBidModal] = useState(false);
+  const [showBidHistoryModal, setShowBidHistoryModal] = useState(false);
   const showBidModalHandler = () => {
-    setShowBidModal(true);
+    setShowBidHistoryModal(true);
   };
   const dismissBidModalHanlder = () => {
-    setShowBidModal(false);
+    setShowBidHistoryModal(false);
   };
 
   const bidHistoryTitle = `Noun ${auction && auction.nounId.toString()} bid history`;
 
   return (
     <>
-      {showBidModal && auction && (
-        <Modal show={showBidModal} onHide={dismissBidModalHanlder} size="lg">
+      {showBidHistoryModal && auction && (
+        <Modal show={showBidHistoryModal} onHide={dismissBidModalHanlder} size="lg">
           <Modal.Header closeButton className={classes.modalHeader}>
             <Modal.Title className={classes.modalTitle}>
               <h1>{bidHistoryTitle}</h1>
