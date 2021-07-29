@@ -8,12 +8,12 @@ import Bid from '../Bid';
 import AuctionTimer from '../AuctionTimer';
 import CurrentBid from '../CurrentBid';
 import MinBid from '../MinBid';
-import moment from 'moment';
 import BidHistory from '../BidHistory';
 import { Modal } from 'react-bootstrap';
 import AuctionNavigation from '../AuctionNavigation';
 import AuctionActivityWrapper from '../AuctionActivityWrapper';
 import AuctionActivityNounTitle from '../AuctionActivityNounTitle';
+import AuctionActivityDateHeadline from '../AuctionActivityDateHeadline';
 
 const computeMinimumNextBid = (
   currentBid: BigNumber,
@@ -40,12 +40,6 @@ const AuctionActivity: React.FC<{
   const setAuctionStateHandler = (ended: boolean) => {
     setAuctionEnded(ended);
   };
-
-  const auctionStartTimeUTC =
-    auction &&
-    moment(Number(auction.startTime.toString()) * 1000)
-      .utc()
-      .format('MMM DD YYYY');
 
   const minBidIncPercentage = useAuctionMinBidIncPercentage();
   const minBid = computeMinimumNextBid(
@@ -89,7 +83,7 @@ const AuctionActivity: React.FC<{
       <AuctionActivityWrapper>
         <Row>
           <Col lg={12}>
-            <h2>{auction && `${auctionStartTimeUTC} (GMT)`}</h2>
+            <AuctionActivityDateHeadline startTime={auction && auction.startTime} />
           </Col>
           <Col lg={12}>
             <AuctionActivityNounTitle nounId={auction && auction.nounId} nounderNoun={false} />
