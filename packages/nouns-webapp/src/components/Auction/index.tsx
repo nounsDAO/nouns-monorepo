@@ -8,6 +8,12 @@ import classes from './Auction.module.css';
 import { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { auctionQuery } from '../../wrappers/subgraph';
+import { BigNumber } from 'ethers';
+import NounderNounContent from '../NounderNounContent';
+
+const isNounderNoun = (nounId: BigNumber) => {
+  return nounId.mod(10).eq(0);
+};
 
 const Auction: React.FC<{ auction: IAuction }> = props => {
   const { auction: currentAuction } = props;
@@ -82,11 +88,23 @@ const Auction: React.FC<{ auction: IAuction }> = props => {
     />
   );
 
+  const nounderNounContent = (
+    <NounderNounContent
+      nounId={onDisplayNounId}
+      isFirstAuction={isFirstAuction}
+      isLastAuction={isLastAuction}
+      onPrevAuctionClick={prevAuctionHandler}
+      onNextAuctionClick={nextAuctionHandler}
+    />
+  );
+
   return (
     <Section bgColor="transparent" fullWidth={false}>
       <Col lg={{ span: 6 }}>{!loading && onDisplayNounId ? nounContent : loadingNoun}</Col>
       <Col lg={{ span: 6 }} className={classes.auctionActivityCol}>
-        {auctionActivityContent}
+        {onDisplayNounId && isNounderNoun(onDisplayNounId)
+          ? nounderNounContent
+          : auctionActivityContent}
       </Col>
     </Section>
   );
