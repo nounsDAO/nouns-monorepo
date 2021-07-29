@@ -24,8 +24,8 @@ const computeMinimumNextBid = (
     .decimalPlaces(2, BigNumber.ROUND_CEIL);
 };
 
-const AuctionActivity: React.FC<{ auction: Auction }> = props => {
-  const { auction } = props;
+const AuctionActivity: React.FC<{ auction: Auction; isPastAuction: boolean }> = props => {
+  const { auction, isPastAuction } = props;
 
   const [auctionEnded, setAuctionEnded] = useState(false);
   const setAuctionStateHandler = (ended: boolean) => {
@@ -102,15 +102,17 @@ const AuctionActivity: React.FC<{ auction: Auction }> = props => {
               <MinBid minBid={minBid} onClick={minBidTappedHandler} />
             </Col>
           )}
-          <Col lg={12}>
-            <Bid
-              auction={auction}
-              auctionEnded={auctionEnded}
-              minBid={minBid}
-              useMinBid={displayMinBid}
-              onInputChange={bidInputChangeHandler}
-            />
-          </Col>
+          {!isPastAuction && (
+            <Col lg={12}>
+              <Bid
+                auction={auction}
+                auctionEnded={auctionEnded}
+                minBid={minBid}
+                useMinBid={displayMinBid}
+                onInputChange={bidInputChangeHandler}
+              />
+            </Col>
+          )}
           {auction && (
             <Col lg={12}>
               <button className={classes.bidHistoryBtn} onClick={showBidModalHandler}>

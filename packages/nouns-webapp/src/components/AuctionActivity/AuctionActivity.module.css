@@ -43,6 +43,7 @@
   font-size: xx-large;
   color: white;
   font-family: 'Londrina Solid';
+  margin-top: 0.5rem;
 }
 .bidHistoryBtn:hover {
   color: rgb(209, 207, 207);

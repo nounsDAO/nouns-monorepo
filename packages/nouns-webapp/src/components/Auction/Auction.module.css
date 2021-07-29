@@ -1,3 +1,26 @@
 .nounWrapper {
   margin: 3rem;
 }
+
+.leftArrow {
+  position: absolute;
+  left: -2rem;
+  top: 5rem;
+  border: solid var(--brand-dark-green);
+  border-width: 0 5px 5px 0;
+  display: inline-block;
+  padding: 10px;
+  transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+}
+.rightArrow {
+  position: absolute;
+  left: -1rem;
+  top: 5rem;
+  border: solid var(--brand-dark-green);
+  border-width: 0 5px 5px 0;
+  display: inline-block;
+  padding: 10px;
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
