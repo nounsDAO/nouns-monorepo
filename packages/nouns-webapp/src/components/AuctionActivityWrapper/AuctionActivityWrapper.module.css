@@ -3,3 +3,8 @@
   color: var(--dark-gray);
   align-self: flex-start !important;
 }
+@media (max-width: 992px) {
+  .wrapper {
+    padding: 1rem;
+  }
+}

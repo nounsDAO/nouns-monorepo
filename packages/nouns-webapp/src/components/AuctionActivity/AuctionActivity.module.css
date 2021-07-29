@@ -46,9 +46,3 @@ h2 {
   color: rgb(209, 207, 207);
   background-color: #302f2b;
 }
-
-@media (max-width: 992px) {
-  .activityContainer {
-    padding: 1rem;
-  }
-}
