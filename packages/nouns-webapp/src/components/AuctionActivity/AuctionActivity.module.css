@@ -88,4 +88,7 @@
   .activityContainer {
     padding: 1rem;
   }
+  .leftArrow {
+    margin-left: 1rem;
+  }
 }
