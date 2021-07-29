@@ -24,8 +24,14 @@ const computeMinimumNextBid = (
     .decimalPlaces(2, BigNumber.ROUND_CEIL);
 };
 
-const AuctionActivity: React.FC<{ auction: Auction; isPastAuction: boolean }> = props => {
-  const { auction, isPastAuction } = props;
+const AuctionActivity: React.FC<{
+  auction: Auction;
+  isFirstAuction: boolean;
+  isLastAuction: boolean;
+  onPrevAuctionClick: () => void;
+  onNextAuctionClick: () => void;
+}> = props => {
+  const { auction, isFirstAuction, isLastAuction, onPrevAuctionClick, onNextAuctionClick } = props;
 
   const [auctionEnded, setAuctionEnded] = useState(false);
   const setAuctionStateHandler = (ended: boolean) => {
@@ -79,9 +85,28 @@ const AuctionActivity: React.FC<{ auction: Auction; isPastAuction: boolean }> = 
       )}
 
       <div className={classes.activityContainer}>
-        <h2>{auction && `${auctionStartTimeUTC} (GMT)`}</h2>
-        <h1 className={classes.nounTitle}>{nounIdContent}</h1>
         <Row>
+          <Col lg={12}>
+            <h2>{auction && `${auctionStartTimeUTC} (GMT)`}</h2>
+          </Col>
+
+          <Col lg={12}>
+            <h1 className={classes.nounTitle}>{nounIdContent}</h1>
+            {
+              <button
+                onClick={onPrevAuctionClick}
+                className={classes.leftArrow}
+                disabled={isFirstAuction}
+              />
+            }
+            {
+              <button
+                onClick={onNextAuctionClick}
+                className={classes.rightArrow}
+                disabled={isLastAuction}
+              />
+            }
+          </Col>
           <Col lg={6}>
             {auction && (
               <CurrentBid
@@ -102,7 +127,7 @@ const AuctionActivity: React.FC<{ auction: Auction; isPastAuction: boolean }> = 
               <MinBid minBid={minBid} onClick={minBidTappedHandler} />
             </Col>
           )}
-          {!isPastAuction && (
+          {isLastAuction && (
             <Col lg={12}>
               <Bid
                 auction={auction}

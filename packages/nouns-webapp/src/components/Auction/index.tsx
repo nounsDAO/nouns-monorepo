@@ -16,7 +16,7 @@ const Auction: React.FC<{ auction: IAuction }> = props => {
   const [isLastAuction, setIsLastAuction] = useState(true);
   const [isFirstAuction, setIsFirstAuction] = useState(false);
 
-  const { data } = useQuery(auctionQuery(onDisplayNounId && onDisplayNounId.toNumber()));
+  const { loading, data } = useQuery(auctionQuery(onDisplayNounId && onDisplayNounId.toNumber()));
   const pastAuction: IAuction = data &&
     data.auction && {
       amount: data.auction.amount,
@@ -62,10 +62,6 @@ const Auction: React.FC<{ auction: IAuction }> = props => {
 
   const nounContent = (
     <div className={classes.nounWrapper}>
-      {currentAuction && !isFirstAuction && (
-        <button onClick={prevAuctionHandler} className={classes.leftArrow} />
-      )}
-      {!isLastAuction && <button onClick={nextAuctionHandler} className={classes.rightArrow} />}
       <StandaloneNoun nounId={onDisplayNounId} boxShadow={true} />
     </div>
   );
@@ -78,15 +74,20 @@ const Auction: React.FC<{ auction: IAuction }> = props => {
 
   const auctionActivityContent = onDisplayNounId && currentAuction && pastAuction && (
     <AuctionActivity
-      auction={isLastAuction ? currentAuction : pastAuction}
-      isPastAuction={!isLastAuction}
+      auction={!loading && isLastAuction ? currentAuction : pastAuction}
+      isFirstAuction={isFirstAuction}
+      isLastAuction={isLastAuction}
+      onPrevAuctionClick={prevAuctionHandler}
+      onNextAuctionClick={nextAuctionHandler}
     />
   );
 
   return (
     <Section bgColor="transparent" fullWidth={false}>
-      <Col lg={{ span: 6 }}>{onDisplayNounId ? nounContent : loadingNoun}</Col>
-      <Col lg={{ span: 6 }}>{auctionActivityContent}</Col>
+      <Col lg={{ span: 6 }}>{!loading && onDisplayNounId ? nounContent : loadingNoun}</Col>
+      <Col lg={{ span: 6 }} className={classes.auctionActivityCol}>
+        {auctionActivityContent}
+      </Col>
     </Section>
   );
 };
