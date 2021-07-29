@@ -12,14 +12,6 @@
 .modalHeader h1 {
   font-family: 'Londrina Solid';
 }
-
-.nounTitle {
-  display: inline-block;
-  font-family: 'Londrina Solid';
-  font-weight: bold;
-  font-size: 4rem;
-  margin-bottom: 1rem;
-}
 /* section titles (date, current bid, auction ends */
 h2 {
   color: var(--brand-dark-green);

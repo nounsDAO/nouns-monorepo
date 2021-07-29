@@ -13,6 +13,7 @@ import BidHistory from '../BidHistory';
 import { Modal } from 'react-bootstrap';
 import AuctionNavigation from '../AuctionNavigation';
 import AuctionActivityWrapper from '../AuctionActivityWrapper';
+import AuctionActivityNounTitle from '../AuctionActivityNounTitle';
 
 const computeMinimumNextBid = (
   currentBid: BigNumber,
@@ -40,7 +41,6 @@ const AuctionActivity: React.FC<{
     setAuctionEnded(ended);
   };
 
-  const nounIdContent = auction && `Noun ${auction.nounId}`;
   const auctionStartTimeUTC =
     auction &&
     moment(Number(auction.startTime.toString()) * 1000)
@@ -92,7 +92,7 @@ const AuctionActivity: React.FC<{
             <h2>{auction && `${auctionStartTimeUTC} (GMT)`}</h2>
           </Col>
           <Col lg={12}>
-            <h1 className={classes.nounTitle}>{nounIdContent}</h1>
+            <AuctionActivityNounTitle nounId={auction && auction.nounId} nounderNoun={false} />
             <AuctionNavigation
               isFirstAuction={isFirstAuction}
               isLastAuction={isLastAuction}
