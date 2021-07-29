@@ -77,9 +77,9 @@
 }
 .leftArrow:hover,
 .rightArrow:hover {
-  opacity: 90%;
+  opacity: 0.9;
 }
 .leftArrow:disabled,
 .rightArrow:disabled {
-  opacity: 50%;
+  opacity: 0.5;
 }
