@@ -12,6 +12,7 @@ import moment from 'moment';
 import BidHistory from '../BidHistory';
 import { Modal } from 'react-bootstrap';
 import AuctionNavigation from '../AuctionNavigation';
+import AuctionActivityWrapper from '../AuctionActivityWrapper';
 
 const computeMinimumNextBid = (
   currentBid: BigNumber,
@@ -85,7 +86,7 @@ const AuctionActivity: React.FC<{
         </Modal>
       )}
 
-      <div className={classes.activityContainer}>
+      <AuctionActivityWrapper>
         <Row>
           <Col lg={12}>
             <h2>{auction && `${auctionStartTimeUTC} (GMT)`}</h2>
@@ -138,7 +139,7 @@ const AuctionActivity: React.FC<{
             </Col>
           )}
         </Row>
-      </div>
+      </AuctionActivityWrapper>
     </>
   );
 };
