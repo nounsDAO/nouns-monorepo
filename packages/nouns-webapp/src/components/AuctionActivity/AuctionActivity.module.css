@@ -83,3 +83,9 @@
 .rightArrow:disabled {
   opacity: 0.5;
 }
+
+@media (max-width: 992px) {
+  .activityContainer {
+    padding: 1rem;
+  }
+}

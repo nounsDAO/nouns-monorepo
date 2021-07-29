@@ -6,3 +6,9 @@
   margin-top: 1rem;
   align-self: start !important; /* maintains auction arrow buttons fixed from auction to auction  */
 }
+
+@media (max-width: 992px) {
+  .nounWrapper {
+    margin: 1rem;
+  }
+}
