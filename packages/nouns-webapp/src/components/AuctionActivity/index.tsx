@@ -11,6 +11,7 @@ import MinBid from '../MinBid';
 import moment from 'moment';
 import BidHistory from '../BidHistory';
 import { Modal } from 'react-bootstrap';
+import AuctionNavigation from '../AuctionNavigation';
 
 const computeMinimumNextBid = (
   currentBid: BigNumber,
@@ -89,23 +90,14 @@ const AuctionActivity: React.FC<{
           <Col lg={12}>
             <h2>{auction && `${auctionStartTimeUTC} (GMT)`}</h2>
           </Col>
-
           <Col lg={12}>
             <h1 className={classes.nounTitle}>{nounIdContent}</h1>
-            {
-              <button
-                onClick={onPrevAuctionClick}
-                className={classes.leftArrow}
-                disabled={isFirstAuction}
-              />
-            }
-            {
-              <button
-                onClick={onNextAuctionClick}
-                className={classes.rightArrow}
-                disabled={isLastAuction}
-              />
-            }
+            <AuctionNavigation
+              isFirstAuction={isFirstAuction}
+              isLastAuction={isLastAuction}
+              onNextAuctionClick={onNextAuctionClick}
+              onPrevAuctionClick={onPrevAuctionClick}
+            />
           </Col>
           <Col lg={6}>
             {auction && (
