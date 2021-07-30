@@ -23,6 +23,8 @@ const Auction: React.FC<{ auction: IAuction }> = props => {
   const [isFirstAuction, setIsFirstAuction] = useState(false);
 
   const { loading, data } = useQuery(auctionQuery(onDisplayNounId && onDisplayNounId.toNumber()));
+  useQuery(auctionQuery(onDisplayNounId && onDisplayNounId.sub(1).toNumber()));
+
   const pastAuction: IAuction = data &&
     data.auction && {
       amount: data.auction.amount,
