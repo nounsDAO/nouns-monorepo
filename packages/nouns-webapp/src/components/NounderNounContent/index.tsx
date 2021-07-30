@@ -18,7 +18,7 @@ const NounderNounContent: React.FC<{
     <AuctionActivityWrapper>
       <Row>
         <Col lg={12}>
-          <AuctionActivityNounTitle nounId={nounId} nounderNoun={true} />
+          <AuctionActivityNounTitle nounId={nounId} />
           <AuctionNavigation
             isFirstAuction={isFirstAuction}
             isLastAuction={isLastAuction}
