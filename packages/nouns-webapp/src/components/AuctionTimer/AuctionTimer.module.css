@@ -19,8 +19,15 @@
   font-family: 'Londrina Solid';
 }
 
-.staticTime {
+.doubleDigitStaticTime {
   min-width: 74px;
+}
+
+.singleDigitStaticTime {
+  min-width: 50px;
+}
+
+.staticTime {
   text-align: right;
 }
 
