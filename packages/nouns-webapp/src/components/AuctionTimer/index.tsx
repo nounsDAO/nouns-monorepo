@@ -3,6 +3,7 @@ import { Auction } from '../../wrappers/nounsAuction';
 import classes from './AuctionTimer.module.css';
 import { useState, useEffect, useRef } from 'react';
 import { BigNumber } from '@ethersproject/bignumber';
+import clsx from 'clsx';
 
 const AuctionTimer: React.FC<{
   auction: Auction;
@@ -48,12 +49,12 @@ const AuctionTimer: React.FC<{
           <span className={classes.time}>{auction && `${Math.floor(timerDuration.hours())}h`}</span>
         </div>
         <div className={classes.timerSection}>
-          <span className={classes.time}>
+          <span className={clsx(classes.time, classes.staticTime)}>
             {auction && `${Math.floor(timerDuration.minutes())}m`}
           </span>
         </div>
         <div className={classes.timerSection}>
-          <span className={classes.time}>
+          <span className={clsx(classes.time, classes.staticTime)}>
             {auction && `${Math.floor(timerDuration.seconds())}s`}
           </span>
         </div>

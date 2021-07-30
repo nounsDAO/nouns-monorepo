@@ -10,13 +10,18 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  margin-right: 2rem;
+  margin-right: 0.5rem;
 }
 
 .time {
   font-size: 3rem;
   font-weight: bold;
   font-family: 'Londrina Solid';
+}
+
+.staticTime {
+  min-width: 74px;
+  text-align: right;
 }
 
 .timeSubtitle {
