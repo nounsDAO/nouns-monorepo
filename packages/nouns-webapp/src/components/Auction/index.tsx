@@ -15,6 +15,19 @@ const isNounderNoun = (nounId: BigNumber) => {
   return nounId.mod(10).eq(0);
 };
 
+const createAuctionObj = (data: any): IAuction => {
+  const auction: IAuction = {
+    amount: data.auction.amount,
+    bidder: '',
+    endTime: data.auction.endTime,
+    startTime: data.auction.startTime,
+    length: data.auction.endTime - data.auction.startTime,
+    nounId: data.auction.id,
+    settled: data.auction.settled,
+  };
+  return auction;
+};
+
 const Auction: React.FC<{ auction: IAuction }> = props => {
   const { auction: currentAuction } = props;
 
@@ -22,19 +35,23 @@ const Auction: React.FC<{ auction: IAuction }> = props => {
   const [isLastAuction, setIsLastAuction] = useState(true);
   const [isFirstAuction, setIsFirstAuction] = useState(false);
 
-  const { loading, data } = useQuery(auctionQuery(onDisplayNounId && onDisplayNounId.toNumber()));
+  const { loading: loadingCurrent, data: dataCurrent } = useQuery(
+    auctionQuery(onDisplayNounId && onDisplayNounId.toNumber()),
+  );
+  const { data: dataNext } = useQuery(
+    auctionQuery(onDisplayNounId && onDisplayNounId.add(1).toNumber()),
+  );
+  // Query prev auction to cache and allow for a smoother browsing ux
   useQuery(auctionQuery(onDisplayNounId && onDisplayNounId.sub(1).toNumber()));
 
-  const pastAuction: IAuction = data &&
-    data.auction && {
-      amount: data.auction.amount,
-      bidder: '',
-      endTime: data.auction.endTime,
-      startTime: data.auction.startTime,
-      length: 100,
-      nounId: data.auction.id,
-      settled: data.auction.settled,
-    };
+  /**
+   * Auction derived from `onDisplayNounId` query
+   */
+  const auction: IAuction = dataCurrent && dataCurrent.auction && createAuctionObj(dataCurrent);
+  /**
+   * Auction derived from `onDisplayNounId.add(1)` query
+   */
+  const nextAuction: IAuction = dataNext && dataNext.auction && createAuctionObj(dataNext);
 
   useEffect(() => {
     if (!onDisplayNounId) {
@@ -80,9 +97,9 @@ const Auction: React.FC<{ auction: IAuction }> = props => {
     </div>
   );
 
-  const auctionActivityContent = onDisplayNounId && currentAuction && pastAuction && (
+  const auctionActivityContent = onDisplayNounId && currentAuction && auction && (
     <AuctionActivity
-      auction={!loading && isLastAuction ? currentAuction : pastAuction}
+      auction={!loadingCurrent && isLastAuction ? currentAuction : auction}
       isFirstAuction={isFirstAuction}
       isLastAuction={isLastAuction}
       onPrevAuctionClick={prevAuctionHandler}
@@ -102,7 +119,7 @@ const Auction: React.FC<{ auction: IAuction }> = props => {
 
   return (
     <Section bgColor="transparent" fullWidth={false}>
-      <Col lg={{ span: 6 }}>{!loading && onDisplayNounId ? nounContent : loadingNoun}</Col>
+      <Col lg={{ span: 6 }}>{!loadingCurrent && onDisplayNounId ? nounContent : loadingNoun}</Col>
       <Col lg={{ span: 6 }} className={classes.auctionActivityCol}>
         {onDisplayNounId && isNounderNoun(onDisplayNounId)
           ? nounderNounContent
