@@ -11,8 +11,10 @@ import {
   ApolloProvider,
 } from "@apollo/client";
 import { clientFactory } from './wrappers/subgraph';
-import config from './config';
-require('dotenv').config()
+import config, { CHAIN_ID } from './config';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const store = configureStore({
   reducer: {
@@ -24,9 +26,10 @@ export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
 const useDappConfig = {
-  readOnlyChainId: ChainId.Rinkeby,
+  readOnlyChainId: CHAIN_ID,
   readOnlyUrls: {
-    [ChainId.Rinkeby]: process.env.REACT_APP_RINKEBY_JSONRPC || `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`
+    [ChainId.Rinkeby]: process.env.REACT_APP_RINKEBY_JSONRPC || `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
+    [ChainId.Mainnet]: process.env.REACT_APP_MAINNET_JSONRPC || `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`
   },
 }
 
