@@ -107,8 +107,9 @@ const Auction: React.FC<{ auction: IAuction }> = props => {
     />
   );
 
-  const nounderNounContent = (
+  const nounderNounContent = nextAuction && (
     <NounderNounContent
+      mintTimestamp={nextAuction.startTime}
       nounId={onDisplayNounId}
       isFirstAuction={isFirstAuction}
       isLastAuction={isLastAuction}

@@ -3,21 +3,31 @@ import { BigNumber } from 'ethers';
 import AuctionActivityWrapper from '../AuctionActivityWrapper';
 import AuctionNavigation from '../AuctionNavigation';
 import AuctionActivityNounTitle from '../AuctionActivityNounTitle';
+import AuctionActivityDateHeadline from '../AuctionActivityDateHeadline';
 import classes from './NounderNounContent.module.css';
 
 const NounderNounContent: React.FC<{
+  mintTimestamp: BigNumber;
   nounId: BigNumber;
   isFirstAuction: boolean;
   isLastAuction: boolean;
   onPrevAuctionClick: () => void;
   onNextAuctionClick: () => void;
 }> = props => {
-  const { nounId, isFirstAuction, isLastAuction, onPrevAuctionClick, onNextAuctionClick } = props;
+  const {
+    mintTimestamp,
+    nounId,
+    isFirstAuction,
+    isLastAuction,
+    onPrevAuctionClick,
+    onNextAuctionClick,
+  } = props;
 
   return (
     <AuctionActivityWrapper>
       <Row>
         <Col lg={12}>
+          <AuctionActivityDateHeadline startTime={mintTimestamp} />
           <AuctionActivityNounTitle nounId={nounId} />
           <AuctionNavigation
             isFirstAuction={isFirstAuction}
