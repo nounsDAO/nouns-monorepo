@@ -26,7 +26,7 @@
 }
 
 .getFakeEth:visited {
-  color: var(--dark-gray);
+  color: var(--brand-black);
 }
 .getFakeEth:hover,
 .getFakeEth:focus {

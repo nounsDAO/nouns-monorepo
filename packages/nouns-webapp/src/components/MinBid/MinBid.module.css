@@ -6,7 +6,7 @@
 .minBid {
   font-family: 'Londrina Solid';
   margin-left: 1rem;
-  color: var(--dark-gray);
+  color: var(--brand-black);
   font-weight: normal;
   font-size: 1.25rem;
   cursor: pointer;
