@@ -14,7 +14,7 @@ const NavBar = () => {
   const connectedContent = (
     <>
       <NavBarItem>
-        <a href="/playground" className={classes.getFakeEth} target="_blank" rel="noreferrer">
+        <a href="/playground" className={classes.playground} target="_blank" rel="noreferrer">
           PLAYGROUND
         </a>
       </NavBarItem>
