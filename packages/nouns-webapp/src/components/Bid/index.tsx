@@ -29,8 +29,8 @@ const Bid: React.FC<{
   });
   const [modal, setModal] = useState({
     show: false,
-    title: 'Title',
-    message: 'Some text would go here. And maybe here.',
+    title: '',
+    message: '',
   });
   const bidInputRef = useRef<HTMLInputElement>(null);
 
