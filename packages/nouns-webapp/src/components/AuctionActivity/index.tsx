@@ -13,6 +13,7 @@ import AuctionNavigation from '../AuctionNavigation';
 import AuctionActivityWrapper from '../AuctionActivityWrapper';
 import AuctionActivityNounTitle from '../AuctionActivityNounTitle';
 import AuctionActivityDateHeadline from '../AuctionActivityDateHeadline';
+import BidHistoryBtn from '../BidHistoryBtn';
 
 const computeMinimumNextBid = (
   currentBid: BigNumber,
@@ -118,9 +119,7 @@ const AuctionActivity: React.FC<{
           )}
           {auction && (
             <Col lg={12}>
-              <button className={classes.bidHistoryBtn} onClick={showBidModalHandler}>
-                Bid history
-              </button>
+              <BidHistoryBtn onClick={showBidModalHandler} />
             </Col>
           )}
         </Row>
