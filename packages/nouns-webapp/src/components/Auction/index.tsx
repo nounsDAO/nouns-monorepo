@@ -1,7 +1,7 @@
 import { Col } from 'react-bootstrap';
 import StandaloneNoun from '../StandaloneNoun';
 import AuctionActivity from '../AuctionActivity';
-import Section from '../../layout/Section';
+import { Row, Container } from 'react-bootstrap';
 import Noun from '../Noun';
 import { Auction as IAuction } from '../../wrappers/nounsAuction';
 import classes from './Auction.module.css';
@@ -119,14 +119,18 @@ const Auction: React.FC<{ auction: IAuction }> = props => {
   );
 
   return (
-    <Section bgColor="transparent" fullWidth={false}>
-      <Col lg={{ span: 6 }}>{!loadingCurrent && onDisplayNounId ? nounContent : loadingNoun}</Col>
-      <Col lg={{ span: 6 }} className={classes.auctionActivityCol}>
-        {onDisplayNounId && isNounderNoun(onDisplayNounId)
-          ? nounderNounContent
-          : auctionActivityContent}
-      </Col>
-    </Section>
+    <Container>
+      <Row>
+        <Col lg={{ span: 6 }} className={classes.nounContentCol}>
+          {!loadingCurrent && onDisplayNounId ? nounContent : loadingNoun}
+        </Col>
+        <Col lg={{ span: 6 }} className={classes.auctionActivityCol}>
+          {onDisplayNounId && isNounderNoun(onDisplayNounId)
+            ? nounderNounContent
+            : auctionActivityContent}
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
