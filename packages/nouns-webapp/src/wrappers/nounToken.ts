@@ -9,6 +9,14 @@ interface NounToken {
   image: string;
 }
 
+interface NounSeed {
+  accessory: number;
+  background: number;
+  body: number;
+  glasses: number;
+  head: number;
+}
+
 export const useNounToken = (nounId: BigNumber) => {
   const noun = useContractCall({
     abi: new utils.Interface(nounsTokenABI),
@@ -25,4 +33,14 @@ export const useNounToken = (nounId: BigNumber) => {
   let json = JSON.parse(atob(nounImgData));
 
   return json as NounToken;
+};
+
+export const useNounSeed = (nounId: BigNumber) => {
+  const seed = useContractCall({
+    abi: new utils.Interface(nounsTokenABI),
+    address: config.tokenAddress,
+    method: 'seeds',
+    args: [nounId],
+  }) as { [key: string]: any };
+  return seed as NounSeed;
 };
