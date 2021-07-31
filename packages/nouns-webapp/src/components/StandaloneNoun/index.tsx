@@ -1,7 +1,6 @@
 import { BigNumber } from 'ethers';
 import { useNounToken } from '../../wrappers/nounToken';
 import Noun from '../Noun';
-import classes from './StandaloneNoun.module.css';
 
 interface StandaloneNounProps {
   nounId: BigNumber;
