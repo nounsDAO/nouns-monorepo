@@ -1,6 +1,5 @@
 import { Auction } from '../../wrappers/nounsAuction';
 import { useState } from 'react';
-import { useAuctionMinBidIncPercentage } from '../../wrappers/nounsAuction';
 import BigNumber from 'bignumber.js';
 import { Row, Col } from 'react-bootstrap';
 import classes from './AuctionActivity.module.css';
@@ -15,18 +14,6 @@ import AuctionActivityNounTitle from '../AuctionActivityNounTitle';
 import AuctionActivityDateHeadline from '../AuctionActivityDateHeadline';
 import BidHistoryBtn from '../BidHistoryBtn';
 
-const computeMinimumNextBid = (
-  currentBid: BigNumber,
-  minBidIncPercentage: BigNumber | undefined,
-): BigNumber => {
-  if (!minBidIncPercentage) {
-    return new BigNumber(0);
-  }
-  return currentBid
-    .times(minBidIncPercentage.div(100).plus(1))
-    .decimalPlaces(2, BigNumber.ROUND_CEIL);
-};
-
 const AuctionActivity: React.FC<{
   auction: Auction;
   isFirstAuction: boolean;
@@ -39,17 +26,6 @@ const AuctionActivity: React.FC<{
   const [auctionEnded, setAuctionEnded] = useState(false);
   const setAuctionStateHandler = (ended: boolean) => {
     setAuctionEnded(ended);
-  };
-
-  const minBidIncPercentage = useAuctionMinBidIncPercentage();
-  const minBid = computeMinimumNextBid(
-    auction && new BigNumber(auction.amount.toString()),
-    minBidIncPercentage,
-  );
-
-  const [displayMinBid, setDisplayMinBid] = useState(true);
-  const bidInputChangeHandler = () => {
-    setDisplayMinBid(false);
   };
 
   const [showBidHistoryModal, setShowBidHistoryModal] = useState(false);
@@ -108,13 +84,7 @@ const AuctionActivity: React.FC<{
           </Col>
           {isLastAuction && (
             <Col lg={12}>
-              <Bid
-                auction={auction}
-                auctionEnded={auctionEnded}
-                minBid={minBid}
-                useMinBid={displayMinBid}
-                onInputChange={bidInputChangeHandler}
-              />
+              <Bid auction={auction} auctionEnded={auctionEnded} />
             </Col>
           )}
           {auction && (

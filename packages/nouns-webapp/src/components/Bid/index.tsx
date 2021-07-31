@@ -11,17 +11,33 @@ import BigNumber from 'bignumber.js';
 import classes from './Bid.module.css';
 import Modal from '../Modal';
 import { Spinner } from 'react-bootstrap';
+import { useAuctionMinBidIncPercentage } from '../../wrappers/nounsAuction';
+
+const computeMinimumNextBid = (
+  currentBid: BigNumber,
+  minBidIncPercentage: BigNumber | undefined,
+): BigNumber => {
+  return !minBidIncPercentage
+    ? new BigNumber(0)
+    : currentBid.times(minBidIncPercentage.div(100).plus(1));
+};
+
+const minBidEth = (minBid: BigNumber): string => {
+  return minBid.isZero()
+    ? ''
+    : Number(utils.formatEther(EthersBN.from(minBid.toString()))).toFixed(2);
+};
 
 const Bid: React.FC<{
   auction: Auction;
   auctionEnded: boolean;
-  minBid: BigNumber;
-  useMinBid: boolean;
-  onInputChange: () => void;
 }> = props => {
-  const { auction, auctionEnded, minBid, useMinBid, onInputChange } = props;
+  const { auction, auctionEnded } = props;
   const auctionHouseContract = auctionHouseContractFactory(config.auctionProxyAddress);
 
+  const bidInputRef = useRef<HTMLInputElement>(null);
+
+  const [displayMinBid, setDisplayMinBid] = useState(true);
   const [bidInput, setBidInput] = useState('');
   const [bidButtonContent, setBidButtonContent] = useState({
     loading: false,
@@ -32,7 +48,12 @@ const Bid: React.FC<{
     title: '',
     message: '',
   });
-  const bidInputRef = useRef<HTMLInputElement>(null);
+
+  const minBidIncPercentage = useAuctionMinBidIncPercentage();
+  const minBid = computeMinimumNextBid(
+    auction && new BigNumber(auction.amount.toString()),
+    minBidIncPercentage,
+  );
 
   const { send: placeBid, state: placeBidState } = useContractFunction(
     auctionHouseContract as any,
@@ -51,7 +72,7 @@ const Bid: React.FC<{
       return;
     }
     setBidInput(event.target.value);
-    onInputChange();
+    setDisplayMinBid(false);
   };
 
   const placeBidHandler = () => {
@@ -189,7 +210,7 @@ const Bid: React.FC<{
             type="number"
             placeholder="ETH"
             min="0"
-            value={useMinBid ? utils.formatEther(EthersBN.from(minBid.toString())) : bidInput}
+            value={displayMinBid ? minBidEth(minBid) : bidInput}
             onChange={bidInputHandler}
             ref={bidInputRef}
           ></input>
