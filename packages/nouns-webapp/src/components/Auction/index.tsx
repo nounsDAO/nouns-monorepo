@@ -87,7 +87,7 @@ const Auction: React.FC<{ auction: IAuction }> = props => {
 
   const nounContent = (
     <div className={classes.nounWrapper}>
-      <StandaloneNoun nounId={onDisplayNounId} boxShadow={true} />
+      <StandaloneNoun nounId={onDisplayNounId} />
     </div>
   );
 
