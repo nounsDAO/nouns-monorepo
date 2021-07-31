@@ -7,7 +7,6 @@ import classes from './AuctionActivity.module.css';
 import Bid from '../Bid';
 import AuctionTimer from '../AuctionTimer';
 import CurrentBid from '../CurrentBid';
-import MinBid from '../MinBid';
 import BidHistory from '../BidHistory';
 import { Modal } from 'react-bootstrap';
 import AuctionNavigation from '../AuctionNavigation';
@@ -47,10 +46,7 @@ const AuctionActivity: React.FC<{
     minBidIncPercentage,
   );
 
-  const [displayMinBid, setDisplayMinBid] = useState(false);
-  const minBidTappedHandler = () => {
-    setDisplayMinBid(true);
-  };
+  const [displayMinBid, setDisplayMinBid] = useState(true);
   const bidInputChangeHandler = () => {
     setDisplayMinBid(false);
   };
@@ -109,11 +105,6 @@ const AuctionActivity: React.FC<{
               setAuctionEnded={setAuctionStateHandler}
             />
           </Col>
-          {auction && !auctionEnded && (
-            <Col lg={12}>
-              <MinBid minBid={minBid} onClick={minBidTappedHandler} />
-            </Col>
-          )}
           {isLastAuction && (
             <Col lg={12}>
               <Bid
