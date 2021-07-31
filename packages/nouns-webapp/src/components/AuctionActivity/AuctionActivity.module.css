@@ -38,3 +38,11 @@ h2 {
   color: rgb(209, 207, 207);
   background-color: #302f2b;
 }
+
+/* Fix Firefox navigation arrow alignment issues */
+@-moz-document url-prefix() {
+  .colAlignCenter {
+    display: flex;
+    align-items: center;
+  }
+}

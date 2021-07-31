@@ -85,7 +85,7 @@ const AuctionActivity: React.FC<{
           <Col lg={12}>
             <AuctionActivityDateHeadline startTime={auction && auction.startTime} />
           </Col>
-          <Col lg={12}>
+          <Col lg={12} className={classes.colAlignCenter}>
             <AuctionActivityNounTitle nounId={auction && auction.nounId} />
             <AuctionNavigation
               isFirstAuction={isFirstAuction}

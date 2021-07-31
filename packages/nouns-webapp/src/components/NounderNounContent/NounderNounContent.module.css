@@ -5,3 +5,11 @@
   color: #212529;
   text-align: left;
 }
+
+/* Fix Firefox navigation arrow alignment issues */
+@-moz-document url-prefix() {
+  .colAlignCenter {
+    display: flex;
+    align-items: center;
+  }
+}
