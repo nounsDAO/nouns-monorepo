@@ -5,7 +5,7 @@ import {
 } from '../../wrappers/nounsAuction';
 import config from '../../config';
 import { useContractFunction } from '@usedapp/core';
-import { useEffect, useState, useRef, ChangeEvent } from 'react';
+import React, { useEffect, useState, useRef, ChangeEvent } from 'react';
 import { utils, BigNumber as EthersBN } from 'ethers';
 import BigNumber from 'bignumber.js';
 import classes from './Bid.module.css';
@@ -26,6 +26,13 @@ const minBidEth = (minBid: BigNumber): string => {
   return minBid.isZero()
     ? ''
     : Number(utils.formatEther(EthersBN.from(minBid.toString()))).toFixed(2);
+};
+
+const currentBid = (bidInputRef: React.RefObject<HTMLInputElement>) => {
+  if (!bidInputRef.current || !bidInputRef.current.value) {
+    return new BigNumber(0);
+  }
+  return new BigNumber(utils.parseEther(bidInputRef.current.value).toString());
 };
 
 const Bid: React.FC<{
@@ -71,6 +78,7 @@ const Bid: React.FC<{
     if (input.includes('.') && event.target.value.split('.')[1].length > 2) {
       return;
     }
+
     setBidInput(event.target.value);
     setDisplayMinBid(false);
   };
@@ -80,8 +88,15 @@ const Bid: React.FC<{
       return;
     }
 
-    const currentBid = new BigNumber(utils.parseEther(bidInputRef.current.value).toString());
-    if (currentBid.isLessThan(minBid)) {
+    if (currentBid(bidInputRef).isLessThan(minBid)) {
+      setModal({
+        show: true,
+        title: 'Insufficient Bid Amount',
+        message: `Please place a bid higher than or equal to the minimum bid amount of ${minBidEth(
+          minBid,
+        )} ETH.`,
+      });
+      setBidInput(minBidEth(minBid));
       return;
     }
 
