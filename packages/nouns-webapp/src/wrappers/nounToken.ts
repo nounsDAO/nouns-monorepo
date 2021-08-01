@@ -9,7 +9,7 @@ interface NounToken {
   image: string;
 }
 
-interface NounSeed {
+export interface INounSeed {
   accessory: number;
   background: number;
   body: number;
@@ -42,5 +42,5 @@ export const useNounSeed = (nounId: BigNumber) => {
     method: 'seeds',
     args: [nounId],
   }) as { [key: string]: any };
-  return seed as NounSeed;
+  return seed as INounSeed;
 };

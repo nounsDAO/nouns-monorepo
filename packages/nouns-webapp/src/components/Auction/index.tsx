@@ -1,5 +1,5 @@
 import { Col } from 'react-bootstrap';
-import StandaloneNoun from '../StandaloneNoun';
+import { StandaloneNounWithSeed } from '../StandaloneNoun';
 import AuctionActivity from '../AuctionActivity';
 import { Row, Container } from 'react-bootstrap';
 import Noun from '../Noun';
@@ -9,8 +9,8 @@ import { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { auctionQuery } from '../../wrappers/subgraph';
 import { BigNumber } from 'ethers';
+import { INounSeed } from '../../wrappers/nounToken';
 import NounderNounContent from '../NounderNounContent';
-import { useNounSeed } from '../../wrappers/nounToken';
 
 const isNounderNoun = (nounId: BigNumber) => {
   return nounId.mod(10).eq(0);
@@ -55,10 +55,9 @@ const Auction: React.FC<{ auction: IAuction; bgColorHandler: (useGrey: boolean) 
      */
     const nextAuction: IAuction = dataNext && dataNext.auction && createAuctionObj(dataNext);
 
-    const seed = useNounSeed(onDisplayNounId && onDisplayNounId);
-    useEffect(() => {
-      bgColorHandler(seed && seed.background === 0);
-    }, [seed, bgColorHandler]);
+    const loadedNounHandler = (seed: INounSeed) => {
+      bgColorHandler(seed.background === 0);
+    };
 
     useEffect(() => {
       if (!onDisplayNounId) {
@@ -94,7 +93,7 @@ const Auction: React.FC<{ auction: IAuction; bgColorHandler: (useGrey: boolean) 
 
     const nounContent = (
       <div className={classes.nounWrapper}>
-        <StandaloneNoun nounId={onDisplayNounId} />
+        <StandaloneNounWithSeed nounId={onDisplayNounId} onLoadSeed={loadedNounHandler} />
       </div>
     );
 
