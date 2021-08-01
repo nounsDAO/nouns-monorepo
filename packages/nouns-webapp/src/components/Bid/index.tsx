@@ -91,7 +91,7 @@ const Bid: React.FC<{
     if (currentBid(bidInputRef).isLessThan(minBid)) {
       setModal({
         show: true,
-        title: 'Insufficient Bid Amount',
+        title: 'insufficient bid amount 🤏',
         message: `Please place a bid higher than or equal to the minimum bid amount of ${minBidEth(
           minBid,
         )} ETH.`,
