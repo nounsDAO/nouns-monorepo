@@ -1,13 +1,12 @@
-.minBidWrapper {
-  margin-top: 1rem;
+.bidHistoryWrapper {
   display: flex;
+  padding-top: 1rem;
 }
-
-.minBid {
+.bidHistory {
   font-family: 'Londrina Solid';
-  margin-left: 1rem;
   color: var(--brand-black);
+  margin-left: 1rem;
   font-weight: normal;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   cursor: pointer;
 }

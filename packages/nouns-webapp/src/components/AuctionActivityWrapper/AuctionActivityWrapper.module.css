@@ -1,0 +1,10 @@
+.wrapper {
+  padding: 1rem 2rem;
+  color: var(--brand-black);
+  align-self: flex-start !important;
+}
+@media (max-width: 992px) {
+  .wrapper {
+    padding: 1rem;
+  }
+}

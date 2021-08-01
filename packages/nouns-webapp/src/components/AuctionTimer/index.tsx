@@ -3,6 +3,7 @@ import { Auction } from '../../wrappers/nounsAuction';
 import classes from './AuctionTimer.module.css';
 import { useState, useEffect, useRef } from 'react';
 import { BigNumber } from '@ethersproject/bignumber';
+import clsx from 'clsx';
 
 const AuctionTimer: React.FC<{
   auction: Auction;
@@ -40,6 +41,9 @@ const AuctionTimer: React.FC<{
 
   const auctionContent = auctionEnded ? 'Auction ended' : 'Ends in';
 
+  const flooredMinutes = Math.floor(timerDuration.minutes())
+  const flooredSeconds = Math.floor(timerDuration.seconds())
+
   return (
     <>
       <h2 className={classes.title}>{auction && auctionContent}</h2>
@@ -48,13 +52,17 @@ const AuctionTimer: React.FC<{
           <span className={classes.time}>{auction && `${Math.floor(timerDuration.hours())}h`}</span>
         </div>
         <div className={classes.timerSection}>
-          <span className={classes.time}>
-            {auction && `${Math.floor(timerDuration.minutes())}m`}
+          <span className={clsx(classes.time, classes.staticTime, (
+            flooredMinutes < 10 ? classes.singleDigitStaticTime : classes.doubleDigitStaticTime
+          ) )}>
+            {auction && `${flooredMinutes}m`}
           </span>
         </div>
         <div className={classes.timerSection}>
-          <span className={classes.time}>
-            {auction && `${Math.floor(timerDuration.seconds())}s`}
+          <span className={clsx(classes.time, classes.staticTime, (
+            flooredSeconds < 10 ? classes.singleDigitStaticTime : classes.doubleDigitStaticTime
+          ))}>
+            {auction && `${flooredSeconds}s`}
           </span>
         </div>
       </div>
