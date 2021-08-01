@@ -1,14 +1,19 @@
 .nounWrapper {
-  margin: 3rem;
+  align-self: flex-end;
+  width: 100%;
 }
-
+.nounContentCol {
+  display: flex;
+}
 .auctionActivityCol {
-  margin-top: 1rem;
+  padding-top: 2rem;
   align-self: start !important; /* maintains auction arrow buttons fixed from auction to auction  */
 }
 
 @media (max-width: 992px) {
-  .nounWrapper {
-    margin: 1rem;
+  .auctionActivityCol {
+    background-color: white;
+    border-bottom: 1px solid lightgray;
+    padding-bottom: 2rem;
   }
 }

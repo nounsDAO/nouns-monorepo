@@ -25,28 +25,16 @@
   transform: translateY(-14px) translateX(55px);
 }
 
-.getFakeEth:visited {
-  color: var(--dark-gray);
+.playground:visited {
+  color: var(--brand-black);
 }
-.getFakeEth:hover,
-.getFakeEth:focus {
+.playground:hover,
+.playground:focus {
   text-decoration: none;
   color: var(--brand-dark-green);
 }
 
-.testnet {
-  margin-left: 1.5rem;
-  margin-right: auto;
-}
-.testnetImg {
-  width: auto;
-  height: 45px;
-}
-
 @media (max-width: 992px) {
-  .testnet {
-    margin: 0 auto !important;
-  }
   .connectBtn:hover {
     color: var(--brand-dark-green) !important;
   }

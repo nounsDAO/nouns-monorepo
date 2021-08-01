@@ -1,31 +1,18 @@
 import { Auction } from '../../wrappers/nounsAuction';
 import { useState } from 'react';
-import { useAuctionMinBidIncPercentage } from '../../wrappers/nounsAuction';
 import BigNumber from 'bignumber.js';
 import { Row, Col } from 'react-bootstrap';
 import classes from './AuctionActivity.module.css';
 import Bid from '../Bid';
 import AuctionTimer from '../AuctionTimer';
 import CurrentBid from '../CurrentBid';
-import MinBid from '../MinBid';
 import BidHistory from '../BidHistory';
 import { Modal } from 'react-bootstrap';
 import AuctionNavigation from '../AuctionNavigation';
 import AuctionActivityWrapper from '../AuctionActivityWrapper';
 import AuctionActivityNounTitle from '../AuctionActivityNounTitle';
 import AuctionActivityDateHeadline from '../AuctionActivityDateHeadline';
-
-const computeMinimumNextBid = (
-  currentBid: BigNumber,
-  minBidIncPercentage: BigNumber | undefined,
-): BigNumber => {
-  if (!minBidIncPercentage) {
-    return new BigNumber(0);
-  }
-  return currentBid
-    .times(minBidIncPercentage.div(100).plus(1))
-    .decimalPlaces(2, BigNumber.ROUND_CEIL);
-};
+import BidHistoryBtn from '../BidHistoryBtn';
 
 const AuctionActivity: React.FC<{
   auction: Auction;
@@ -39,20 +26,6 @@ const AuctionActivity: React.FC<{
   const [auctionEnded, setAuctionEnded] = useState(false);
   const setAuctionStateHandler = (ended: boolean) => {
     setAuctionEnded(ended);
-  };
-
-  const minBidIncPercentage = useAuctionMinBidIncPercentage();
-  const minBid = computeMinimumNextBid(
-    auction && new BigNumber(auction.amount.toString()),
-    minBidIncPercentage,
-  );
-
-  const [displayMinBid, setDisplayMinBid] = useState(false);
-  const minBidTappedHandler = () => {
-    setDisplayMinBid(true);
-  };
-  const bidInputChangeHandler = () => {
-    setDisplayMinBid(false);
   };
 
   const [showBidHistoryModal, setShowBidHistoryModal] = useState(false);
@@ -109,27 +82,14 @@ const AuctionActivity: React.FC<{
               setAuctionEnded={setAuctionStateHandler}
             />
           </Col>
-          {auction && !auctionEnded && (
-            <Col lg={12}>
-              <MinBid minBid={minBid} onClick={minBidTappedHandler} />
-            </Col>
-          )}
           {isLastAuction && (
             <Col lg={12}>
-              <Bid
-                auction={auction}
-                auctionEnded={auctionEnded}
-                minBid={minBid}
-                useMinBid={displayMinBid}
-                onInputChange={bidInputChangeHandler}
-              />
+              <Bid auction={auction} auctionEnded={auctionEnded} />
             </Col>
           )}
           {auction && (
             <Col lg={12}>
-              <button className={classes.bidHistoryBtn} onClick={showBidModalHandler}>
-                Bid history
-              </button>
+              <BidHistoryBtn onClick={showBidModalHandler} />
             </Col>
           )}
         </Row>

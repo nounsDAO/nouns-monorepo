@@ -3,7 +3,7 @@
 }
 .modalTitle {
   margin: 0 auto;
-  color: var(--dark-gray);
+  color: var(--brand-black);
 }
 .modalHeader button {
   position: absolute;
@@ -17,26 +17,6 @@ h2 {
   color: var(--brand-dark-green);
   font-weight: bold;
   font-size: 1.4rem;
-}
-
-.bidHistoryBtn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50px;
-  border: 0 none;
-  background-color: var(--dark-gray);
-  width: 100%;
-  height: 4rem;
-  font-weight: bold;
-  font-size: xx-large;
-  color: white;
-  font-family: 'Londrina Solid';
-  margin-top: 0.5rem;
-}
-.bidHistoryBtn:hover {
-  color: rgb(209, 207, 207);
-  background-color: #302f2b;
 }
 
 /* Fix Firefox navigation arrow alignment issues */

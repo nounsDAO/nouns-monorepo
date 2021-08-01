@@ -5,23 +5,46 @@ import {
 } from '../../wrappers/nounsAuction';
 import config from '../../config';
 import { useContractFunction } from '@usedapp/core';
-import { useEffect, useState, useRef, ChangeEvent } from 'react';
+import React, { useEffect, useState, useRef, ChangeEvent } from 'react';
 import { utils, BigNumber as EthersBN } from 'ethers';
 import BigNumber from 'bignumber.js';
 import classes from './Bid.module.css';
 import Modal from '../Modal';
 import { Spinner } from 'react-bootstrap';
+import { useAuctionMinBidIncPercentage } from '../../wrappers/nounsAuction';
+
+const computeMinimumNextBid = (
+  currentBid: BigNumber,
+  minBidIncPercentage: BigNumber | undefined,
+): BigNumber => {
+  return !minBidIncPercentage
+    ? new BigNumber(0)
+    : currentBid.times(minBidIncPercentage.div(100).plus(1));
+};
+
+const minBidEth = (minBid: BigNumber): string => {
+  return minBid.isZero()
+    ? ''
+    : Number(utils.formatEther(EthersBN.from(minBid.toString()))).toFixed(2);
+};
+
+const currentBid = (bidInputRef: React.RefObject<HTMLInputElement>) => {
+  if (!bidInputRef.current || !bidInputRef.current.value) {
+    return new BigNumber(0);
+  }
+  return new BigNumber(utils.parseEther(bidInputRef.current.value).toString());
+};
 
 const Bid: React.FC<{
   auction: Auction;
   auctionEnded: boolean;
-  minBid: BigNumber;
-  useMinBid: boolean;
-  onInputChange: () => void;
 }> = props => {
-  const { auction, auctionEnded, minBid, useMinBid, onInputChange } = props;
+  const { auction, auctionEnded } = props;
   const auctionHouseContract = auctionHouseContractFactory(config.auctionProxyAddress);
 
+  const bidInputRef = useRef<HTMLInputElement>(null);
+
+  const [displayMinBid, setDisplayMinBid] = useState(true);
   const [bidInput, setBidInput] = useState('');
   const [bidButtonContent, setBidButtonContent] = useState({
     loading: false,
@@ -29,10 +52,15 @@ const Bid: React.FC<{
   });
   const [modal, setModal] = useState({
     show: false,
-    title: 'Title',
-    message: 'Some text would go here. And maybe here.',
+    title: '',
+    message: '',
   });
-  const bidInputRef = useRef<HTMLInputElement>(null);
+
+  const minBidIncPercentage = useAuctionMinBidIncPercentage();
+  const minBid = computeMinimumNextBid(
+    auction && new BigNumber(auction.amount.toString()),
+    minBidIncPercentage,
+  );
 
   const { send: placeBid, state: placeBidState } = useContractFunction(
     auctionHouseContract as any,
@@ -50,8 +78,9 @@ const Bid: React.FC<{
     if (input.includes('.') && event.target.value.split('.')[1].length > 2) {
       return;
     }
+
     setBidInput(event.target.value);
-    onInputChange();
+    setDisplayMinBid(false);
   };
 
   const placeBidHandler = () => {
@@ -59,8 +88,15 @@ const Bid: React.FC<{
       return;
     }
 
-    const currentBid = new BigNumber(utils.parseEther(bidInputRef.current.value).toString());
-    if (currentBid.isLessThan(minBid)) {
+    if (currentBid(bidInputRef).isLessThan(minBid)) {
+      setModal({
+        show: true,
+        title: 'Insufficient Bid Amount',
+        message: `Please place a bid higher than or equal to the minimum bid amount of ${minBidEth(
+          minBid,
+        )} ETH.`,
+      });
+      setBidInput(minBidEth(minBid));
       return;
     }
 
@@ -189,7 +225,7 @@ const Bid: React.FC<{
             type="number"
             placeholder="ETH"
             min="0"
-            value={useMinBid ? utils.formatEther(EthersBN.from(minBid.toString())) : bidInput}
+            value={displayMinBid ? minBidEth(minBid) : bidInput}
             onChange={bidInputHandler}
             ref={bidInputRef}
           ></input>
