@@ -65,31 +65,17 @@ const Auction: React.FC<{ auction: IAuction; bgColorHandler: (useGrey: boolean) 
       }
     }, [onDisplayNounId, currentAuction]);
 
-    const prevAuctionHandler = () => {
+    const auctionHandlerFactory = (nounIdMutator: (prev: BigNumber) => BigNumber) => () => {
       setOnDisplayNounId(prev => {
-        const updatedNounId = prev.sub(1);
-        if (updatedNounId.eq(0)) {
-          setIsFirstAuction(true);
-          return updatedNounId;
-        } else {
-          setIsLastAuction(false);
-          return updatedNounId;
-        }
+        const updatedNounId = nounIdMutator(prev);
+        setIsFirstAuction(updatedNounId.eq(0) ? true : false);
+        setIsLastAuction(updatedNounId.eq(currentAuction && currentAuction.nounId) ? true : false);
+        return updatedNounId;
       });
     };
 
-    const nextAuctionHandler = () => {
-      setOnDisplayNounId(prev => {
-        const updatedNounId = prev.add(1);
-        if (updatedNounId.eq(currentAuction && currentAuction.nounId)) {
-          setIsLastAuction(true);
-          return updatedNounId;
-        } else {
-          setIsFirstAuction(false);
-          return updatedNounId;
-        }
-      });
-    };
+    const prevAuctionHandler = auctionHandlerFactory((prev: BigNumber) => prev.sub(1));
+    const nextAuctionHandler = auctionHandlerFactory((prev: BigNumber) => prev.add(1));
 
     const nounContent = (
       <div className={classes.nounWrapper}>
