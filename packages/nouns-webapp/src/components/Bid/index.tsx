@@ -23,9 +23,14 @@ const computeMinimumNextBid = (
 };
 
 const minBidEth = (minBid: BigNumber): string => {
-  return minBid.isZero()
-    ? ''
-    : Number(utils.formatEther(EthersBN.from(minBid.toString()))).toFixed(2);
+  if (minBid.isZero()) {
+    return '';
+  }
+
+  const eth = Number(utils.formatEther(EthersBN.from(minBid.toString())));
+  const roundedEth = Math.ceil(eth * 100) / 100;
+
+  return roundedEth.toString();
 };
 
 const currentBid = (bidInputRef: React.RefObject<HTMLInputElement>) => {
