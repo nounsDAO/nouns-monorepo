@@ -1,1 +1,0 @@
-Place the static website content here.
