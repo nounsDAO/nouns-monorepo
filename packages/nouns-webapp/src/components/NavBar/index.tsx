@@ -22,13 +22,8 @@ const NavBar = () => {
   const connectedContent = (
     <>
       <NavBarItem>
-        <a
-          href="https://faucet.rinkeby.io/"
-          className={classes.getFakeEth}
-          target="_blank"
-          rel="noreferrer"
-        >
-          GET RINKEBY ETH
+        <a href="/playground" className={classes.playground} target="_blank" rel="noreferrer">
+          PLAYGROUND
         </a>
       </NavBarItem>
       <NavBarItem className={classes.connectedBtn}>

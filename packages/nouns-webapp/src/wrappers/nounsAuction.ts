@@ -1,5 +1,5 @@
 import { useContractCall } from '@usedapp/core';
-import { BigNumberish, utils } from 'ethers';
+import { BigNumber as EthersBN, utils } from 'ethers';
 import { Contract } from '@ethersproject/contracts';
 import { NounsAuctionHouseABI } from '@nouns/contracts';
 import config from '../config';
@@ -15,12 +15,12 @@ export enum AuctionHouseContractFunctions {
 }
 
 export interface Auction {
-  amount: BigNumberish;
+  amount: EthersBN;
   bidder: string;
-  endTime: BigNumberish;
-  startTime: BigNumberish;
+  endTime: EthersBN;
+  startTime: EthersBN;
   length: number;
-  nounId: BigNumberish;
+  nounId: EthersBN;
   settled: boolean;
 }
 

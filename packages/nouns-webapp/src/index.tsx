@@ -7,6 +7,7 @@ import { ChainId, DAppProvider } from '@usedapp/core';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import account from './state/slices/account';
+import application from './state/slices/application';
 import logs from './state/slices/logs';
 import {
   ApolloProvider,
@@ -21,6 +22,7 @@ dotenv.config();
 const store = configureStore({
   reducer: {
     account,
+    application,
     logs,
   },
 });

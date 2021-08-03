@@ -1,5 +1,4 @@
 import Discord from 'discord.js';
-import { internalDiscordWebhook } from '../clients';
 import { config } from '../config';
 
 /**

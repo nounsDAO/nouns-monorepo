@@ -25,7 +25,7 @@
 }
 .bidder {
   font-weight: bold;
-  color: var(--dark-gray);
+  color: var(--brand-black);
 }
 .bidDate {
   color: gray;
@@ -37,14 +37,14 @@
   align-items: center;
 }
 .bidAmount {
-  color: var(--dark-gray);
+  color: var(--brand-black);
   margin-right: 1rem;
   font-size: xx-large;
   font-family: 'Londrina Solid';
 }
 .linkSymbol,
 .linkSymbol a {
-  color: var(--dark-gray);
+  color: var(--brand-black);
 }
 .linkSymbol a:hover {
   color: rgb(32, 32, 32);

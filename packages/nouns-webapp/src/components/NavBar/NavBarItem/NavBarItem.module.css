@@ -6,7 +6,7 @@
   padding: 1.75rem;
   height: 2rem;
   background-color: white;
-  color: var(--dark-gray);
+  color: var(--brand-black);
   border-radius: 50px;
   border: 0 none;
   font-size: large;
@@ -15,10 +15,17 @@
   cursor: default;
 }
 
+.navBarItem a {
+  color: var(--brand-black);
+}
+.navBarItem a:hover {
+  color: var(--brand-dark-green);
+}
+
 @media (max-width: 992px) {
   .navBarItem {
     background-color: transparent !important;
-    color: var(--dark-gray) !important;
+    color: var(--brand-black) !important;
   }
   .navBarItem:hover {
     background-color: transparent !important;

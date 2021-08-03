@@ -3,7 +3,7 @@ import { useAllProposals } from '../../wrappers/nounsDao';
 import { useUserDelegatee, useUserVotes } from '../../wrappers/nounToken';
 import Proposals from '../../components/Proposals';
 
-const Governance = () => {
+const GovernancePage = () => {
   const { data: proposals, loading: proposalsLoading } = useAllProposals();
   const availableVotes = useUserVotes();
   const userDelegatee = useUserDelegatee();
@@ -14,4 +14,4 @@ const Governance = () => {
     </Container>
   );
 }
-export default Governance;
+export default GovernancePage;

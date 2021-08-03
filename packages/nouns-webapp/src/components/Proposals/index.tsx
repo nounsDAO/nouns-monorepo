@@ -16,9 +16,9 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
 
   return (
     <div className={classes.proposals}>
-      {proposals.slice(0).reverse().map(p => {
+      {proposals.slice(0).reverse().map((p, i) => {
         return (
-          <Button variant="dark" as={Link} to={`/vote/${p.id}`} key={p.id}>
+          <Button variant="dark" as={Link} to={`/vote/${p.id}`} key={i}>
             <span>{p.id}.</span>{' '}
             <span>{p.title}</span>{' '}
             <ProposalStatus status={p.status}></ProposalStatus>

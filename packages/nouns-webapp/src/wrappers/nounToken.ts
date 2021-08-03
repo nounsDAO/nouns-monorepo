@@ -9,6 +9,14 @@ interface NounToken {
   image: string;
 }
 
+export interface INounSeed {
+  accessory: number;
+  background: number;
+  body: number;
+  glasses: number;
+  head: number;
+}
+
 const abi = new utils.Interface(NounsTokenABI);
 
 export const useNounToken = (nounId: EthersBN) => {
@@ -24,9 +32,19 @@ export const useNounToken = (nounId: EthersBN) => {
   }
 
   const nounImgData = noun.split(';base64,').pop() as string;
-  const json = JSON.parse(atob(nounImgData));
+  const json: NounToken = JSON.parse(atob(nounImgData));
 
-  return json as NounToken;
+  return json;
+};
+
+export const useNounSeed = (nounId: EthersBN) => {
+  const [seed] = useContractCall<[INounSeed]>({
+    abi,
+    address: config.tokenAddress,
+    method: 'seeds',
+    args: [nounId],
+  }) || [];
+  return seed;
 };
 
 export const useUserVotes = (): number | undefined => {

@@ -1,18 +1,22 @@
 import { request, gql } from 'graphql-request';
 import { config } from './config';
-import { Auction } from './types';
+import { AuctionBids } from './types';
 
 /**
- * Query the subgraph and return the last auction id created.
- * @returns The last auction id from the subgraph.
+ * Query the subgraph and return the last auction id and bid created.
+ * @returns The last auction id and bid from the subgraph.
  */
-export async function getLastAuction(): Promise<Auction> {
-  const res = await request<{ auctions: Auction[] }>(
+export async function getLastAuctionBids(): Promise<AuctionBids> {
+  const res = await request<{ auctions: AuctionBids[] }>(
     config.nounsSubgraph,
     gql`
       query {
         auctions(orderBy: startTime, orderDirection: desc, first: 1) {
           id
+          bids(orderBy: blockNumber orderDirection: desc, first: 1) {
+            id
+            amount
+          }
         }
       }
     `,

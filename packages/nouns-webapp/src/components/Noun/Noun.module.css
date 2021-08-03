@@ -1,5 +1,5 @@
 .img {
-  image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
   width: 100%;
 }

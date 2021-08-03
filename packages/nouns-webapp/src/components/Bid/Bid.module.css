@@ -52,7 +52,6 @@
   display: none;
 }
 
-.bidInput:focus,
 .bidInput:focus {
   outline: none;
 }
@@ -67,4 +66,10 @@
 /* Firefox */
 .bidInput[type='number'] {
   -moz-appearance: textfield;
+}
+
+@media (max-width: 992px) {
+  .bidInput {
+    border-color: #c3c3c3;
+  }
 }
