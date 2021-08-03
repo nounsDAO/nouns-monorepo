@@ -19,7 +19,7 @@ export enum ProposalState {
   VETOED,
 }
 
-interface Proposal {
+interface ProposalCallResult {
   id: EthersBN;
   abstainVotes: EthersBN;
   againstVotes: EthersBN;
@@ -33,6 +33,34 @@ interface Proposal {
   proposalThreshold: EthersBN;
   proposer: string;
   quorumVotes: EthersBN;
+}
+
+interface ProposalDetail {
+  target: string
+  functionSig: string
+  callData: string
+}
+
+export interface Proposal {
+  id: string | undefined;
+  title: string;
+  description: string;
+  status: ProposalState;
+  forCount: number;
+  againstCount: number;
+  abstainCount: number;
+  startBlock: number;
+  endBlock: number;
+  eta: Date | undefined;
+  proposer: string | undefined;
+  proposalThreshold: number;
+  quorumVotes: number;
+  details: ProposalDetail[];
+}
+
+interface ProposalData {
+  data: Proposal[]
+  loading: boolean;
 }
 
 const abi = new utils.Interface(NounsDAOABI);
@@ -84,14 +112,14 @@ const useFormattedProposalCreatedLogs = () => {
   }, [useLogsResult]);
 };
 
-export const useAllProposals = () => {
+export const useAllProposals = (): ProposalData => {
   const proposalCount = useProposalCount(contract.address);
 
   const govProposalIndexes = useMemo(() => {
     return countToIndices(proposalCount)
   }, [proposalCount]);
 
-  const proposals = useContractCalls<Proposal>(
+  const proposals = useContractCalls<ProposalCallResult>(
     govProposalIndexes.map(index => ({
       abi,
       address: contract.address,
@@ -127,12 +155,15 @@ export const useAllProposals = () => {
             description: description ?? 'No description.',
             proposer: proposal?.proposer,
             status: proposalStates[i]?.[0] ?? ProposalState.UNDETERMINED,
+            proposalThreshold: parseInt(proposal?.proposalThreshold?.toString() ?? '0'),
+            quorumVotes: parseInt(proposal?.quorumVotes?.toString() ?? '0'),
             forCount: parseInt(proposal?.forVotes?.toString() ?? '0'),
             againstCount: parseInt(proposal?.againstVotes?.toString() ?? '0'),
+            abstainCount: parseInt(proposal?.againstVotes?.toString() ?? '0'),
             startBlock: parseInt(proposal?.startBlock?.toString() ?? ''),
             endBlock: parseInt(proposal?.endBlock?.toString() ?? ''),
+            eta: proposal?.eta ? new Date(proposal?.eta?.toNumber() * 1000) : undefined,
             details: logs[i]?.details,
-            governorIndex: i >= govProposalIndexes.length ? 1 : 0,
           }
         }),
         loading: false,

@@ -1,0 +1,4 @@
+.proposals {
+  display: flex;
+  flex-direction: column;
+}
