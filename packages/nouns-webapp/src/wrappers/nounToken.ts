@@ -1,5 +1,5 @@
-import { useContractCall } from '@usedapp/core';
-import { BigNumber, utils } from 'ethers';
+import { useContractCall, useEthers } from '@usedapp/core';
+import { BigNumber as EthersBN, utils } from 'ethers';
 import { NounsTokenABI } from '@nouns/contracts';
 import config from '../config';
 
@@ -9,20 +9,44 @@ interface NounToken {
   image: string;
 }
 
-export const useNounToken = (nounId: BigNumber) => {
-  const noun = useContractCall({
-    abi: new utils.Interface(NounsTokenABI),
+const abi = new utils.Interface(NounsTokenABI);
+
+export const useNounToken = (nounId: EthersBN) => {
+  const [noun] = useContractCall<[string]>({
+    abi,
     address: config.tokenAddress,
     method: 'dataURI',
     args: [nounId],
-  }) as { [key: string]: any };
+  }) || [];
 
   if (!noun) {
     return;
   }
 
-  const nounImgData = noun[0].split(';base64,').pop();
-  let json = JSON.parse(atob(nounImgData));
+  const nounImgData = noun.split(';base64,').pop() as string;
+  const json = JSON.parse(atob(nounImgData));
 
   return json as NounToken;
 };
+
+export const useUserVotes = (): number | undefined => {
+  const { account } = useEthers();
+  const [votes] = useContractCall<[EthersBN]>({
+    abi,
+    address: config.tokenAddress,
+    method: 'getCurrentVotes',
+    args: [account],
+  }) || [];
+  return votes?.toNumber();
+}
+
+export const useUserDelegatee = (): string | undefined => {
+  const { account } = useEthers()
+  const [delegate] = useContractCall<[string]>({
+    abi,
+    address: config.tokenAddress,
+    method: 'delegates',
+    args: [account],
+  }) || [];
+  return delegate;
+}

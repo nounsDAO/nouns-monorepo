@@ -6,11 +6,13 @@ import reportWebVitals from './reportWebVitals';
 import { ChainId, DAppProvider } from '@usedapp/core';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
-import accountReducer from './state/slices/account';
+import account from './state/slices/account';
+import logs from './state/slices/logs';
 import {
   ApolloProvider,
-} from "@apollo/client";
+} from '@apollo/client';
 import { clientFactory } from './wrappers/subgraph';
+import LogsUpdater from './state/updaters/logs';
 import config, { CHAIN_ID } from './config';
 import dotenv from 'dotenv';
 
@@ -18,7 +20,8 @@ dotenv.config();
 
 const store = configureStore({
   reducer: {
-    account: accountReducer,
+    account,
+    logs,
   },
 });
 
@@ -35,12 +38,21 @@ const useDappConfig = {
 
 const client = clientFactory(config.subgraphApiUri)
 
+const Updaters = () => {
+  return (
+    <>
+      <LogsUpdater />
+    </>
+  )
+}
+
 ReactDOM.render(
   <Provider store={store}>
     <React.StrictMode>
       <ApolloProvider client={client}>
       <DAppProvider config={useDappConfig}>
         <App />
+        <Updaters />
       </DAppProvider>
       </ApolloProvider>
     </React.StrictMode>
