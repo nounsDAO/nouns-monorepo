@@ -7,12 +7,12 @@ import { ChainId, DAppProvider } from '@usedapp/core';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import accountReducer from './state/slices/account';
-import {
-  ApolloProvider,
-} from "@apollo/client";
+import { ApolloProvider } from '@apollo/client';
 import { clientFactory } from './wrappers/subgraph';
 import config from './config';
-require('dotenv').config()
+import { Web3ReactProvider } from '@web3-react/core';
+import { Web3Provider } from '@ethersproject/providers';
+require('dotenv').config();
 
 const store = configureStore({
   reducer: {
@@ -26,20 +26,28 @@ export type AppDispatch = typeof store.dispatch;
 const useDappConfig = {
   readOnlyChainId: ChainId.Rinkeby,
   readOnlyUrls: {
-    [ChainId.Rinkeby]: process.env.REACT_APP_RINKEBY_JSONRPC || `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`
+    [ChainId.Rinkeby]:
+      process.env.REACT_APP_RINKEBY_JSONRPC ||
+      `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
   },
-}
+};
 
-const client = clientFactory(config.subgraphApiUri)
+const client = clientFactory(config.subgraphApiUri);
 
 ReactDOM.render(
   <Provider store={store}>
     <React.StrictMode>
-      <ApolloProvider client={client}>
-      <DAppProvider config={useDappConfig}>
-        <App />
-      </DAppProvider>
-      </ApolloProvider>
+      <Web3ReactProvider
+        getLibrary={
+          (provider, connector) => new Web3Provider(provider) // this will vary according to whether you use e.g. ethers or web3.js
+        }
+      >
+        <ApolloProvider client={client}>
+          <DAppProvider config={useDappConfig}>
+            <App />
+          </DAppProvider>
+        </ApolloProvider>
+      </Web3ReactProvider>
     </React.StrictMode>
   </Provider>,
   document.getElementById('root'),
