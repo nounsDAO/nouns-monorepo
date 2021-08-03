@@ -5,11 +5,19 @@ import Navbar from 'react-bootstrap/Navbar';
 import ShortAddress from '../ShortAddress';
 import classes from './NavBar.module.css';
 import logo from '../../assets/logo.svg';
+import testnetNoun from '../../assets/testnet-noun.png';
 import NavBarItem from './NavBarItem';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { activateBrowserWallet } = useEthers();
+
+  const testnetContent = (
+    <NavBarItem className={classes.testnet}>
+      <img className={classes.testnetImg} src={testnetNoun} alt="testnet noun" />
+      <span>TESTNET</span>
+    </NavBarItem>
+  );
 
   const connectedContent = (
     <>
@@ -32,7 +40,8 @@ const NavBar = () => {
   );
 
   return (
-    <Navbar expand="lg">
+    
+      <Navbar expand="lg">
       <Container>
         <Navbar.Brand href="#home" className={classes.navBarBrand}>
           <img
@@ -43,12 +52,14 @@ const NavBar = () => {
             alt="Nouns DAO logo"
           />
         </Navbar.Brand>
+        {testnetContent}
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse className="justify-content-end">
           {activeAccount ? connectedContent : disconnectedContent}
         </Navbar.Collapse>
-      </Container>
-    </Navbar>
+            </Container>
+      </Navbar>
+
   );
 };
 
