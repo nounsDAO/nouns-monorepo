@@ -46,8 +46,8 @@ const AuctionTimer: React.FC<{
 
   return (
     <>
-      <h2 className={classes.title}>{auction && auctionContent}</h2>
-      <div className={classes.timerWrapper}>
+      <h4 className={classes.title}>{auction && auctionContent}</h4>
+      <h2 className={classes.timerWrapper}>
         <div className={classes.timerSection}>
           <span className={classes.time}>{auction && `${Math.floor(timerDuration.hours())}h`}</span>
         </div>
@@ -65,7 +65,7 @@ const AuctionTimer: React.FC<{
             {auction && `${flooredSeconds}s`}
           </span>
         </div>
-      </div>
+      </h2>
     </>
   );
 };

@@ -31,7 +31,7 @@ const BidHistory: React.FC<{ auctionId: string }> = props => {
             <div className={classes.bidItem}>
               <div className={classes.leftSectionWrapper}>
                 <div className={classes.bidder}>
-                  <ShortAddress>{bid.bidder.id}</ShortAddress>
+                  <div><ShortAddress>bid.bidder.id</ShortAddress></div>
                 </div>
                 <div className={classes.bidDate}>{date}</div>
               </div>

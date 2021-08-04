@@ -1,3 +1,27 @@
+.wrapper {
+  padding: 1rem 2rem;
+  color: var(--brand-black);
+  align-self: flex-start !important;
+}
+
+@media (max-width: 992px) {
+  .wrapper {
+    padding: 1rem;
+  }
+}
+
+.activityRow {
+  margin-bottom:  1rem;
+}
+
+h1 {
+  font-size:  4rem;
+}
+
+h2 {
+  font-size:  3rem;
+}
+
 .modalHeader {
   border-bottom: none;
 }
@@ -12,12 +36,8 @@
 .modalHeader h1 {
   font-family: 'Londrina Solid';
 }
+
 /* section titles (date, current bid, auction ends */
-h2 {
-  color: var(--brand-dark-green);
-  font-weight: bold;
-  font-size: 1.4rem;
-}
 
 /* Fix Firefox navigation arrow alignment issues */
 @-moz-document url-prefix() {

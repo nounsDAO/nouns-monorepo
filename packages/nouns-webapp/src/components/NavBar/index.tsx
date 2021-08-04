@@ -1,46 +1,43 @@
 import { useAppSelector } from '../../hooks';
 import { useEthers } from '@usedapp/core';
-import { Container } from 'react-bootstrap';
-import Navbar from 'react-bootstrap/Navbar';
 import ShortAddress from '../ShortAddress';
 import classes from './NavBar.module.css';
 import logo from '../../assets/logo.svg';
 import testnetNoun from '../../assets/testnet-noun.png';
-import NavBarItem from './NavBarItem';
+import { Nav, Navbar, Container } from 'react-bootstrap';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { activateBrowserWallet } = useEthers();
 
-  const testnetContent = (
-    <NavBarItem className={classes.testnet}>
-      <img className={classes.testnetImg} src={testnetNoun} alt="testnet noun" />
-      <span>TESTNET</span>
-    </NavBarItem>
-  );
-
   const connectedContent = (
     <>
-      <NavBarItem>
-        <a href="/playground" className={classes.playground} target="_blank" rel="noreferrer">
+      <Nav.Item>
+        <Nav.Link className={classes.nounsNavLink} href="governance" rel="noreferrer">
+          GOVERNANCE
+        </Nav.Link>
+      </Nav.Item>
+      <Nav.Item>
+        <Nav.Link className={classes.nounsNavLink} href="playground" target="_blank" rel="noreferrer">
           PLAYGROUND
-        </a>
-      </NavBarItem>
-      <NavBarItem className={classes.connectedBtn}>
-        <ShortAddress>{activeAccount}</ShortAddress>
-        <span className={classes.greenStatusCircle} />
-      </NavBarItem>
+        </Nav.Link>
+      </Nav.Item>
+      <Nav.Item>
+        <Nav.Link className={classes.nounsNavLink} disabled>
+          <span className={classes.greenStatusCircle} />
+          <span><ShortAddress>activeAccount</ShortAddress></span>
+        </Nav.Link>
+      </Nav.Item>
     </>
   );
 
   const disconnectedContent = (
-    <NavBarItem className={classes.connectBtn} onClick={() => activateBrowserWallet()}>
+    <Nav.Item className={classes.connectBtn} onClick={() => activateBrowserWallet()}>
       Connect Wallet
-    </NavBarItem>
+    </Nav.Item>
   );
 
   return (
-    
       <Navbar expand="lg">
       <Container>
         <Navbar.Brand href="#home" className={classes.navBarBrand}>
@@ -52,10 +49,9 @@ const NavBar = () => {
             alt="Nouns DAO logo"
           />
         </Navbar.Brand>
-        {testnetContent}
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse className="justify-content-end">
-          {activeAccount ? connectedContent : disconnectedContent}
+          <Nav className={classes.nounsNav}>{activeAccount ? connectedContent : disconnectedContent}</Nav>
         </Navbar.Collapse>
             </Container>
       </Navbar>

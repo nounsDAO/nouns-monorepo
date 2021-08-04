@@ -14,9 +14,7 @@
 }
 
 .time {
-  font-size: 3rem;
-  font-weight: bold;
-  font-family: 'Londrina Solid';
+  /*font-family: 'Londrina Solid';*/
 }
 
 .doubleDigitStaticTime {

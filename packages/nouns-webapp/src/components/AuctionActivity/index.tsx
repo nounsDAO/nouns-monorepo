@@ -54,7 +54,7 @@ const AuctionActivity: React.FC<{
       )}
 
       <AuctionActivityWrapper>
-        <Row>
+        <Row className={classes.activityRow}>
           <Col lg={12}>
             <AuctionActivityDateHeadline startTime={auction && auction.startTime} />
           </Col>
@@ -67,7 +67,9 @@ const AuctionActivity: React.FC<{
               onPrevAuctionClick={onPrevAuctionClick}
             />
           </Col>
-          <Col lg={6}>
+        </Row>
+        <Row className={classes.activityRow}>
+          <Col lg={12}>
             {auction && (
               <CurrentBid
                 currentBid={new BigNumber(auction.amount.toString())}
@@ -75,24 +77,32 @@ const AuctionActivity: React.FC<{
               />
             )}
           </Col>
-          <Col lg={6}>
+         </Row>
+         <Row className={classes.activityRow}>
+          <Col lg={12}>
             <AuctionTimer
               auction={auction}
               auctionEnded={auctionEnded}
               setAuctionEnded={setAuctionStateHandler}
             />
           </Col>
+          </Row>
           {isLastAuction && (
-            <Col lg={12}>
-              <Bid auction={auction} auctionEnded={auctionEnded} />
-            </Col>
+            <Row className={classes.activityRow}>
+              <Col lg={12}>
+                <Bid auction={auction} auctionEnded={auctionEnded} />
+              </Col>
+            </Row>
           )}
+
           {auction && (
-            <Col lg={12}>
-              <BidHistoryBtn onClick={showBidModalHandler} />
-            </Col>
+            <Row className={classes.activityRow}>
+              <Col lg={12}>
+                <BidHistoryBtn onClick={showBidModalHandler} />
+              </Col>
+            </Row>
           )}
-        </Row>
+
       </AuctionActivityWrapper>
     </>
   );
