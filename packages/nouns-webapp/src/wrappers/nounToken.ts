@@ -38,12 +38,12 @@ export const useNounToken = (nounId: EthersBN) => {
 };
 
 export const useNounSeed = (nounId: EthersBN) => {
-  const [seed] = useContractCall<[INounSeed]>({
+  const seed = useContractCall<INounSeed>({
     abi,
     address: config.tokenAddress,
     method: 'seeds',
     args: [nounId],
-  }) || [];
+  });
   return seed;
 };
 
