@@ -8,8 +8,8 @@ const Backdrop: React.FC<{ onDismiss: () => void }> = props => {
 };
 
 const ModalOverlay: React.FC<{
-  title: string;
-  content: React.ReactNode;
+  title?: string;
+  content?: React.ReactNode;
   onDismiss: () => void;
 }> = props => {
   const { title, content, onDismiss } = props;
@@ -24,7 +24,7 @@ const ModalOverlay: React.FC<{
   );
 };
 
-const Modal: React.FC<{ title: string; content: React.ReactNode; onDismiss: () => void }> =
+const Modal: React.FC<{ title?: string; content?: React.ReactNode; onDismiss: () => void }> =
   props => {
     const { title, content, onDismiss } = props;
     return (

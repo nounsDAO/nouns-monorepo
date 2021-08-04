@@ -59,7 +59,7 @@ export const useUserVotes = (): number | undefined => {
 }
 
 export const useUserDelegatee = (): string | undefined => {
-  const { account } = useEthers()
+  const { account } = useEthers();
   const [delegate] = useContractCall<[string]>({
     abi,
     address: config.tokenAddress,
@@ -67,4 +67,17 @@ export const useUserDelegatee = (): string | undefined => {
     args: [account],
   }) || [];
   return delegate;
+}
+
+export const useUserVotesAsOfBlock = (block: number | undefined): number | undefined => {
+  const { account } = useEthers();
+
+  // Check for available votes
+  const [votes] = useContractCall<[number]>({
+    abi,
+    address: config.tokenAddress,
+    method: 'getPriorVotes',
+    args: [account ?? undefined, block ?? undefined],
+  }) || [];
+  return votes;
 }

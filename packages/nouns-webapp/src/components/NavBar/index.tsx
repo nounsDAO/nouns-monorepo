@@ -7,6 +7,8 @@ import classes from './NavBar.module.css';
 import logo from '../../assets/logo.svg';
 import testnetNoun from '../../assets/testnet-noun.png';
 import NavBarItem from './NavBarItem';
+import NavBarLink from './NavBarLink';
+import { Link } from 'react-router-dom';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
@@ -40,24 +42,26 @@ const NavBar = () => {
   );
 
   return (
-    
       <Navbar expand="lg">
-      <Container>
-        <Navbar.Brand href="#home" className={classes.navBarBrand}>
-          <img
-            src={logo}
-            width="70"
-            height="70"
-            className="d-inline-block align-middle"
-            alt="Nouns DAO logo"
-          />
-        </Navbar.Brand>
-        {testnetContent}
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse className="justify-content-end">
-          {activeAccount ? connectedContent : disconnectedContent}
-        </Navbar.Collapse>
-            </Container>
+        <Container>
+          <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
+            <img
+              src={logo}
+              width="70"
+              height="70"
+              className="d-inline-block align-middle"
+              alt="Nouns DAO logo"
+            />
+          </Navbar.Brand>
+          {testnetContent}
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse className="justify-content-end">
+            <NavBarLink to="/vote">
+              GOVERNANCE
+            </NavBarLink>
+            {activeAccount ? connectedContent : disconnectedContent}
+          </Navbar.Collapse>
+        </Container>
       </Navbar>
 
   );

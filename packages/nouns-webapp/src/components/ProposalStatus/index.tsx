@@ -1,7 +1,7 @@
 import { Badge } from 'react-bootstrap'
 import { ProposalState } from '../../wrappers/nounsDao'
 
-const statusVariant = (status: ProposalState) => {
+const statusVariant = (status: ProposalState | undefined) => {
   switch (status) {
     case ProposalState.PENDING:
     case ProposalState.ACTIVE:
@@ -20,7 +20,7 @@ const statusVariant = (status: ProposalState) => {
   }
 }
 
-const statusText = (status: ProposalState) => {
+const statusText = (status: ProposalState | undefined) => {
   switch (status) {
     case ProposalState.PENDING:
       return 'Pending';
@@ -45,7 +45,7 @@ const statusText = (status: ProposalState) => {
   }
 }
 
-const ProposalStatus = ({ status }: { status: ProposalState }) => {
+const ProposalStatus = ({ status }: { status: ProposalState | undefined }) => {
   return (
     <Badge variant={statusVariant(status)}>{statusText(status)}</Badge>
   )

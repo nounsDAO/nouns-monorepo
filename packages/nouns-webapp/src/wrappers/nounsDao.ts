@@ -1,10 +1,16 @@
 import { NounsDAOABI } from '@nouns/contracts';
-import { useContractCall, useContractCalls } from '@usedapp/core';
+import { useContractCall, useContractCalls, useContractFunction } from '@usedapp/core';
 import { utils, Contract, BigNumber as EthersBN } from 'ethers';
 import { defaultAbiCoder } from 'ethers/lib/utils';
 import { useMemo } from 'react';
-import config from '../config';
 import { useLogs } from '../hooks/useLogs';
+import config from '../config';
+
+export enum Vote {
+  AGAINST = 0,
+  FOR = 1,
+  ABSTAIN = 2,
+}
 
 export enum ProposalState {
   UNDETERMINED = -1,
@@ -66,6 +72,8 @@ interface ProposalData {
 const abi = new utils.Interface(NounsDAOABI);
 const contract = new Contract(config.nounsDaoAddress, abi);
 const proposalCreatedFilter = contract.filters?.ProposalCreated();
+
+const untypedContract: any = contract; // useDapp type incompatibility
 
 const useProposalCount = (nounsDao: string): number | undefined => {
   const [count] = useContractCall<[EthersBN]>({
@@ -168,5 +176,18 @@ export const useAllProposals = (): ProposalData => {
         }),
         loading: false,
       }
-  }, [formattedLogs, govProposalIndexes.length, proposalStates, proposals])
+  }, [formattedLogs, proposalStates, proposals])
+};
+
+export const useProposal = (id: string): Proposal | undefined => {
+  const { data } = useAllProposals();
+  return data?.find((p) => p.id === id);
+};
+
+export const useCastVote = () => {
+  const { send: castVote, state: castVoteState } = useContractFunction(
+    untypedContract,
+    'castVote',
+  );
+  return { castVote, castVoteState };
 };

@@ -9,9 +9,10 @@ import React, { useEffect, useState, useRef, ChangeEvent } from 'react';
 import { utils, BigNumber as EthersBN } from 'ethers';
 import BigNumber from 'bignumber.js';
 import classes from './Bid.module.css';
-import Modal from '../Modal';
 import { Spinner } from 'react-bootstrap';
 import { useAuctionMinBidIncPercentage } from '../../wrappers/nounsAuction';
+import { useAppDispatch } from '../../hooks';
+import { AlertModal, setAlertModal } from '../../state/slices/application';
 
 const computeMinimumNextBid = (
   currentBid: BigNumber,
@@ -55,11 +56,11 @@ const Bid: React.FC<{
     loading: false,
     content: auctionEnded ? 'Settle' : 'Bid',
   });
-  const [modal, setModal] = useState({
-    show: false,
-    title: '',
-    message: '',
-  });
+
+  const dispatch = useAppDispatch();
+  const setModal = (modal: AlertModal) => dispatch(
+    setAlertModal(modal),
+  );
 
   const minBidIncPercentage = useAuctionMinBidIncPercentage();
   const minBid = computeMinimumNextBid(
@@ -112,10 +113,6 @@ const Bid: React.FC<{
 
   const settleAuctionHandler = () => {
     settleAuction();
-  };
-
-  const dismissModalHanlder = () => {
-    setModal({ ...modal, show: false });
   };
 
   const clearBidInput = () => {
@@ -209,13 +206,6 @@ const Bid: React.FC<{
 
   return (
     <>
-      {modal.show && (
-        <Modal
-          title={modal.title}
-          content={<p>{modal.message}</p>}
-          onDismiss={dismissModalHanlder}
-        />
-      )}
       {auction && (
         <div className={classes.bidWrapper}>
           <button

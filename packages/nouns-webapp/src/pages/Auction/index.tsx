@@ -12,13 +12,10 @@ const AuctionPage = () => {
   const auction = useAuction(config.auctionProxyAddress);
 
   const dispatch = useAppDispatch();
-  const bgColorHandler = (useGrey: boolean) => {
-    dispatch(setUseGreyBackground(useGrey));
-  };
 
   return (
     <>
-      <Auction auction={auction} bgColorHandler={bgColorHandler} />
+      <Auction auction={auction} bgColorHandler={useGrey => dispatch(setUseGreyBackground(useGrey))} />
       <Banner />
       <HistoryCollection
         latestNounId={auction && BigNumber.from(auction.nounId).sub(1)}
@@ -29,5 +26,4 @@ const AuctionPage = () => {
     </>
   );
 };
-
 export default AuctionPage;

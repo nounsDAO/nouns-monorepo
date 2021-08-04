@@ -1,0 +1,16 @@
+.heading {
+  display: inline-block;
+  font-family: 'Londrina Solid';
+  font-weight: bold;
+  font-size: 3rem;
+}
+
+.subheading {
+  color: var(--brand-dark-green);
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+p {
+  padding-top: 1rem;
+}
