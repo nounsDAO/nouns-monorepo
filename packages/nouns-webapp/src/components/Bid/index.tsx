@@ -206,7 +206,9 @@ const Bid: React.FC<{
         break;
     }
   }, [settleAuctionState, auctionEnded]);
+
   if (!auction) return null
+
   return (
     <>
       {modal.show && (
