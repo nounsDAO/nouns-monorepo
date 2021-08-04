@@ -38,9 +38,11 @@ const AuctionActivity: React.FC<{
 
   const bidHistoryTitle = `Noun ${auction && auction.nounId.toString()} bid history`;
 
+  if (!auction) return null;
+
   return (
     <>
-      {showBidHistoryModal && auction && (
+      {showBidHistoryModal && (
         <Modal show={showBidHistoryModal} onHide={dismissBidModalHanlder} size="lg">
           <Modal.Header closeButton className={classes.modalHeader}>
             <Modal.Title className={classes.modalTitle}>
@@ -48,7 +50,7 @@ const AuctionActivity: React.FC<{
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <BidHistory auctionId={auction && auction.nounId.toString()} />
+            <BidHistory auctionId={auction.nounId.toString()} />
           </Modal.Body>
         </Modal>
       )}
@@ -56,10 +58,10 @@ const AuctionActivity: React.FC<{
       <AuctionActivityWrapper>
         <Row className={classes.activityRow}>
           <Col lg={12}>
-            <AuctionActivityDateHeadline startTime={auction && auction.startTime} />
+            <AuctionActivityDateHeadline startTime={auction.startTime} />
           </Col>
           <Col lg={12} className={classes.colAlignCenter}>
-            <AuctionActivityNounTitle nounId={auction && auction.nounId} />
+            <AuctionActivityNounTitle nounId={auction.nounId} />
             <AuctionNavigation
               isFirstAuction={isFirstAuction}
               isLastAuction={isLastAuction}
@@ -69,39 +71,34 @@ const AuctionActivity: React.FC<{
           </Col>
         </Row>
         <Row className={classes.activityRow}>
-          <Col lg={12}>
-            {auction && (
-              <CurrentBid
-                currentBid={new BigNumber(auction.amount.toString())}
-                auctionEnded={auctionEnded}
-              />
-            )}
+          <Col lg={6}>
+            <CurrentBid
+              currentBid={new BigNumber(auction.amount.toString())}
+              auctionEnded={auctionEnded}
+            />
           </Col>
-         </Row>
-         <Row className={classes.activityRow}>
-          <Col lg={12}>
+          <Col lg={6}>
             <AuctionTimer
               auction={auction}
               auctionEnded={auctionEnded}
               setAuctionEnded={setAuctionStateHandler}
             />
           </Col>
-          </Row>
-          {isLastAuction && (
-            <Row className={classes.activityRow}>
-              <Col lg={12}>
-                <Bid auction={auction} auctionEnded={auctionEnded} />
-              </Col>
-            </Row>
-          )}
+        </Row>
 
-          {auction && (
-            <Row className={classes.activityRow}>
-              <Col lg={12}>
-                <BidHistoryBtn onClick={showBidModalHandler} />
-              </Col>
-            </Row>
-          )}
+        {isLastAuction && (
+          <Row className={classes.activityRow}>
+            <Col lg={12}>
+              <Bid auction={auction} auctionEnded={auctionEnded} />
+            </Col>
+          </Row>
+        )}
+
+        <Row className={classes.activityRow}>
+          <Col lg={12}>
+            <BidHistoryBtn onClick={showBidModalHandler} />
+          </Col>
+        </Row>
 
       </AuctionActivityWrapper>
     </>
