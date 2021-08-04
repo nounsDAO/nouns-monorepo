@@ -8,7 +8,6 @@ import { INounsDescriptor } from './interfaces/INounsDescriptor.sol';
 import { INounsSeeder } from './interfaces/INounsSeeder.sol';
 import { INounsToken } from './interfaces/INounsToken.sol';
 import { ERC721 } from './base/ERC721.sol';
-import { Base64 } from 'base64-sol/base64.sol';
 
 contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     // The nounders DAO address (creators org)
@@ -39,7 +38,7 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     uint256 private _currentNounId;
 
     // IPFS content hash of contract-level metadata
-    string private _contractURIHash = "abc123";
+    string private _contractURIHash = "QmcJp8dTZxKUbnUK2h4YuXBF533zWhwHXzVh45z7wMqqMh";
 
     /**
      * @notice Require that the minter has not been locked.
@@ -97,7 +96,7 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
      * @notice The IPFS URI of contract-level metadata.
      */
     function contractURI() public view returns (string memory){
-      return string(abi.encodePacked('https://ipfs.io/ipfs/', _contractURIHash));
+      return string(abi.encodePacked('ipfs://', _contractURIHash));
     }
 
     /**
