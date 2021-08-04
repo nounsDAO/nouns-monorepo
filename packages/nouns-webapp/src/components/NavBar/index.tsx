@@ -25,7 +25,7 @@ const NavBar = () => {
       <Nav.Item>
         <Nav.Link className={classes.nounsNavLink} disabled>
           <span className={classes.greenStatusCircle} />
-          <span><ShortAddress>activeAccount</ShortAddress></span>
+          <span><ShortAddress>{activeAccount}</ShortAddress></span>
         </Nav.Link>
       </Nav.Item>
     </>
