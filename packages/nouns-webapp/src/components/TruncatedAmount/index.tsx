@@ -6,6 +6,6 @@ const TruncatedAmount: React.FC<{ amount: BigNumber }> = props => {
   const { amount } = props;
 
   const eth = new BigNumber(utils.formatEther(amount.toString())).toFixed(2);
-  return <>{`${eth} ETH`}</>;
+  return <>Ξ {`${eth}`}</>;
 };
 export default TruncatedAmount;
