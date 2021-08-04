@@ -207,7 +207,7 @@ const Bid: React.FC<{
     }
   }, [settleAuctionState, auctionEnded]);
 
-  if (!auction) return null
+  if (!auction) return null;
 
   return (
     <>
@@ -218,15 +218,16 @@ const Bid: React.FC<{
           onDismiss={dismissModalHanlder}
         />
       )}
-      <InputGroup className="mb-3">
-        <Button>
-          Button
-        </Button>
-        <FormControl
-          aria-label="Example text with button addon"
-          aria-describedby="basic-addon1"
-        />
-      </InputGroup>
+      <InputGroup>
+          <Button className={classes.bidBtn}>
+            Bid
+          </Button>
+          <FormControl
+            aria-label="Example text with button addon"
+            aria-describedby="basic-addon1"
+            className={classes.bidInput}
+          />
+        </InputGroup>
 
       {/*<div className={classes.bidWrapper}>
         <button
