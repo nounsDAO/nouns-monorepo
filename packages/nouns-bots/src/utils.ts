@@ -46,11 +46,11 @@ export async function updateAuctionCache(id: number) {
 }
 
 /**
- * 
+ *
  * @returns The bid cache id or null
  */
 export async function getBidCache(): Promise<string> {
-  return await redis.get(getBidCacheKey) ?? '';
+  return (await redis.get(getBidCacheKey)) ?? '';
 }
 
 /**

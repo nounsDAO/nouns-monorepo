@@ -7,16 +7,16 @@ import './ERC721Enumerable.sol';
 /**
  * ERC721Checkpointable uses the checkpointing code from [Comp.sol](https://github.com/compound-finance/compound-protocol/blob/ae4388e780a8d596d97619d9704a931a2752c2bc/contracts/Governance/Comp.sol)
  *
-  * ERC721Checkpointable CHANGES:
-  * - `delegates` is renamed to `_delegates` and becomes private
-  *
-  * - `delegates` is a public function that uses the `_delegates` mapping look-up, but unlike
-  *   `Comp.sol`, returns the delegator's own address if there is no delegate.
-  *   This avoids the delegator needing to "delegate to self" with an additional transaction
-  *
-  * - `_transferTokens()` is renamed `_beforeTokenTransfer()` and adapted to hook into OpenZeppelin's ERC721 hooks.
+ * ERC721Checkpointable CHANGES:
+ * - `delegates` is renamed to `_delegates` and becomes private
  *
-*/
+ * - `delegates` is a public function that uses the `_delegates` mapping look-up, but unlike
+ *   `Comp.sol`, returns the delegator's own address if there is no delegate.
+ *   This avoids the delegator needing to "delegate to self" with an additional transaction
+ *
+ * - `_transferTokens()` is renamed `_beforeTokenTransfer()` and adapted to hook into OpenZeppelin's ERC721 hooks.
+ *
+ */
 
 abstract contract ERC721Checkpointable is ERC721Enumerable {
     /// @notice Defines decimals as per ERC-20 convention to make integrations with 3rd party governance platforms easier
@@ -216,7 +216,10 @@ abstract contract ERC721Checkpointable is ERC721Enumerable {
         uint96 oldVotes,
         uint96 newVotes
     ) internal {
-        uint32 blockNumber = safe32(block.number, 'ERC721Checkpointable::_writeCheckpoint: block number exceeds 32 bits');
+        uint32 blockNumber = safe32(
+            block.number,
+            'ERC721Checkpointable::_writeCheckpoint: block number exceeds 32 bits'
+        );
 
         if (nCheckpoints > 0 && checkpoints[delegatee][nCheckpoints - 1].fromBlock == blockNumber) {
             checkpoints[delegatee][nCheckpoints - 1].votes = newVotes;

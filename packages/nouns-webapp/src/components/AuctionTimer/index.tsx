@@ -41,8 +41,8 @@ const AuctionTimer: React.FC<{
 
   const auctionContent = auctionEnded ? 'Auction ended' : 'Ends in';
 
-  const flooredMinutes = Math.floor(timerDuration.minutes())
-  const flooredSeconds = Math.floor(timerDuration.seconds())
+  const flooredMinutes = Math.floor(timerDuration.minutes());
+  const flooredSeconds = Math.floor(timerDuration.seconds());
 
   return (
     <>
@@ -52,16 +52,24 @@ const AuctionTimer: React.FC<{
           <span className={classes.time}>{auction && `${Math.floor(timerDuration.hours())}h`}</span>
         </div>
         <div className={classes.timerSection}>
-          <span className={clsx(classes.time, classes.staticTime, (
-            flooredMinutes < 10 ? classes.singleDigitStaticTime : classes.doubleDigitStaticTime
-          ) )}>
+          <span
+            className={clsx(
+              classes.time,
+              classes.staticTime,
+              flooredMinutes < 10 ? classes.singleDigitStaticTime : classes.doubleDigitStaticTime,
+            )}
+          >
             {auction && `${flooredMinutes}m`}
           </span>
         </div>
         <div className={classes.timerSection}>
-          <span className={clsx(classes.time, classes.staticTime, (
-            flooredSeconds < 10 ? classes.singleDigitStaticTime : classes.doubleDigitStaticTime
-          ))}>
+          <span
+            className={clsx(
+              classes.time,
+              classes.staticTime,
+              flooredSeconds < 10 ? classes.singleDigitStaticTime : classes.doubleDigitStaticTime,
+            )}
+          >
             {auction && `${flooredSeconds}s`}
           </span>
         </div>

@@ -15,7 +15,10 @@ const AuctionPage = () => {
 
   return (
     <>
-      <Auction auction={auction} bgColorHandler={useGrey => dispatch(setUseGreyBackground(useGrey))} />
+      <Auction
+        auction={auction}
+        bgColorHandler={useGrey => dispatch(setUseGreyBackground(useGrey))}
+      />
       <Banner />
       <HistoryCollection
         latestNounId={auction && BigNumber.from(auction.nounId).sub(1)}

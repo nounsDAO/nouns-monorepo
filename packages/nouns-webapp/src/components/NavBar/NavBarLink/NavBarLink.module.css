@@ -16,7 +16,7 @@
   text-decoration: none !important;
 }
 .navBarLink:hover {
-  color: var(--brand-black) !important;
+  color: var(--brand-dark-green) !important;
   background-color: #f2f2f2;
 }
 

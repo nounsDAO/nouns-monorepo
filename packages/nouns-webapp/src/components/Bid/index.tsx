@@ -5,7 +5,7 @@ import {
 } from '../../wrappers/nounsAuction';
 import config from '../../config';
 import { useContractFunction } from '@usedapp/core';
-import React, { useEffect, useState, useRef, ChangeEvent } from 'react';
+import React, { useEffect, useState, useRef, ChangeEvent, useCallback } from 'react';
 import { utils, BigNumber as EthersBN } from 'ethers';
 import BigNumber from 'bignumber.js';
 import classes from './Bid.module.css';
@@ -58,9 +58,7 @@ const Bid: React.FC<{
   });
 
   const dispatch = useAppDispatch();
-  const setModal = (modal: AlertModal) => dispatch(
-    setAlertModal(modal),
-  );
+  const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
 
   const minBidIncPercentage = useAuctionMinBidIncPercentage();
   const minBid = computeMinimumNextBid(
@@ -159,7 +157,7 @@ const Bid: React.FC<{
         setBidButtonContent({ loading: false, content: 'Bid' });
         break;
     }
-  }, [placeBidState, auctionEnded]);
+  }, [placeBidState, auctionEnded, setModal]);
 
   // settle auction transaction state hook
   useEffect(() => {
@@ -202,7 +200,7 @@ const Bid: React.FC<{
         setBidButtonContent({ loading: false, content: 'Settle Auction' });
         break;
     }
-  }, [settleAuctionState, auctionEnded]);
+  }, [settleAuctionState, auctionEnded, setModal]);
 
   return (
     <>

@@ -9,19 +9,31 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
     <div className={classes.proposals}>
       <div>
         <h3 className={classes.heading}>Proposals</h3>
-        <Button className={classes.createProposalLink} as={Link} to="/create-proposal">Create Proposal</Button>
+        <Button className={classes.createProposalLink} as={Link} to="/create-proposal">
+          Create Proposal
+        </Button>
       </div>
-      {proposals?.length ? proposals.slice(0).reverse().map((p, i) => {
-        return (
-          <Button className={classes.proposalLink} variant="dark" as={Link} to={`/vote/${p.id}`} key={i}>
-            <span>
-              <span>{p.id}.</span>{' '}
-              <span>{p.title}</span>
-            </span>
-            <ProposalStatus status={p.status}></ProposalStatus>
-          </Button>
-        );
-      }) : (
+      {proposals?.length ? (
+        proposals
+          .slice(0)
+          .reverse()
+          .map((p, i) => {
+            return (
+              <Button
+                className={classes.proposalLink}
+                variant="dark"
+                as={Link}
+                to={`/vote/${p.id}`}
+                key={i}
+              >
+                <span>
+                  <span>{p.id}.</span> <span>{p.title}</span>
+                </span>
+                <ProposalStatus status={p.status}></ProposalStatus>
+              </Button>
+            );
+          })
+      ) : (
         <Alert variant="secondary">
           <Alert.Heading>No proposals found.</Alert.Heading>
           <p>Proposals submitted by community members will appear here.</p>

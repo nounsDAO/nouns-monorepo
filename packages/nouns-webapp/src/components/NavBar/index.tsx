@@ -42,28 +42,25 @@ const NavBar = () => {
   );
 
   return (
-      <Navbar expand="lg">
-        <Container>
-          <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
-            <img
-              src={logo}
-              width="70"
-              height="70"
-              className="d-inline-block align-middle"
-              alt="Nouns DAO logo"
-            />
-          </Navbar.Brand>
-          {testnetContent}
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse className="justify-content-end">
-            <NavBarLink to="/vote">
-              GOVERNANCE
-            </NavBarLink>
-            {activeAccount ? connectedContent : disconnectedContent}
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-
+    <Navbar expand="lg">
+      <Container>
+        <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
+          <img
+            src={logo}
+            width="70"
+            height="70"
+            className="d-inline-block align-middle"
+            alt="Nouns DAO logo"
+          />
+        </Navbar.Brand>
+        {testnetContent}
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse className="justify-content-end">
+          <NavBarLink to="/vote">GOVERNANCE</NavBarLink>
+          {activeAccount ? connectedContent : disconnectedContent}
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 };
 

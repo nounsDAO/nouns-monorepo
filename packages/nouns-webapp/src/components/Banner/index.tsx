@@ -19,7 +19,7 @@ const Banner = () => {
         </div>
       </Col>
       <Col lg={6}>
-        <div style={{padding: "2rem"}}>
+        <div style={{ padding: '2rem' }}>
           <Noun imgPath={calendar_noun} alt="noun" />
         </div>
       </Col>

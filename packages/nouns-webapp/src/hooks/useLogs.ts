@@ -1,8 +1,8 @@
-import { useBlockNumber } from '@usedapp/core'
+import { useBlockNumber } from '@usedapp/core';
 import { useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { addListener, removeListener } from '../state/slices/logs';
-import { EventFilter, filterToKey, Log } from '../utils/logParsing'
+import { EventFilter, filterToKey, Log } from '../utils/logParsing';
 
 enum LogsState {
   // The filter is invalid
@@ -18,8 +18,8 @@ enum LogsState {
 }
 
 export interface UseLogsResult {
-  logs: Log[] | undefined
-  state: LogsState
+  logs: Log[] | undefined;
+  state: LogsState;
 }
 
 /**
@@ -29,7 +29,7 @@ export interface UseLogsResult {
 export function useLogs(filter: EventFilter | undefined): UseLogsResult {
   const blockNumber = useBlockNumber();
 
-  const logs = useAppSelector((state) => state.logs);
+  const logs = useAppSelector(state => state.logs);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -38,37 +38,37 @@ export function useLogs(filter: EventFilter | undefined): UseLogsResult {
     dispatch(addListener({ filter }));
     return () => {
       dispatch(removeListener({ filter }));
-    }
-  }, [dispatch, filter])
+    };
+  }, [dispatch, filter]);
 
-  const filterKey = useMemo(() => (filter ? filterToKey(filter) : undefined), [filter])
+  const filterKey = useMemo(() => (filter ? filterToKey(filter) : undefined), [filter]);
 
   return useMemo(() => {
     if (!filterKey || !blockNumber)
       return {
         logs: undefined,
         state: LogsState.INVALID,
-      }
+      };
 
-    const state = logs[filterKey]
-    const result = state?.results
+    const state = logs[filterKey];
+    const result = state?.results;
     if (!result) {
       return {
         state: LogsState.LOADING,
         logs: undefined,
-      }
+      };
     }
 
     if (result.error) {
       return {
         state: LogsState.ERROR,
         logs: undefined,
-      }
+      };
     }
 
     return {
       state: result.blockNumber >= blockNumber ? LogsState.SYNCED : LogsState.SYNCING,
       logs: result.logs,
-    }
-  }, [blockNumber, filterKey, logs])
+    };
+  }, [blockNumber, filterKey, logs]);
 }

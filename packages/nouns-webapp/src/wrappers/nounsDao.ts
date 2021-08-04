@@ -42,9 +42,9 @@ interface ProposalCallResult {
 }
 
 interface ProposalDetail {
-  target: string
-  functionSig: string
-  callData: string
+  target: string;
+  functionSig: string;
+  callData: string;
 }
 
 export interface Proposal {
@@ -65,7 +65,7 @@ export interface Proposal {
 }
 
 interface ProposalData {
-  data: Proposal[]
+  data: Proposal[];
   loading: boolean;
 }
 
@@ -76,47 +76,48 @@ const proposalCreatedFilter = contract.filters?.ProposalCreated();
 const untypedContract: any = contract; // useDapp type incompatibility
 
 const useProposalCount = (nounsDao: string): number | undefined => {
-  const [count] = useContractCall<[EthersBN]>({
-    abi,
-    address: nounsDao,
-    method: 'proposalCount',
-    args: [],
-  }) || [];
+  const [count] =
+    useContractCall<[EthersBN]>({
+      abi,
+      address: nounsDao,
+      method: 'proposalCount',
+      args: [],
+    }) || [];
   return count?.toNumber();
-}
+};
 
 const countToIndices = (count: number | undefined) => {
-  return typeof count === 'number' ? new Array(count).fill(0).map((_, i) => [i + 1]) : []
-}
+  return typeof count === 'number' ? new Array(count).fill(0).map((_, i) => [i + 1]) : [];
+};
 
 const useFormattedProposalCreatedLogs = () => {
   const useLogsResult = useLogs(proposalCreatedFilter);
 
   return useMemo(() => {
-    return useLogsResult?.logs?.map((log) => {
-      const parsed = abi.parseLog(log).args
+    return useLogsResult?.logs?.map(log => {
+      const parsed = abi.parseLog(log).args;
       return {
         description: parsed.description,
         details: parsed.targets.map((target: string, i: number) => {
-          const signature = parsed.signatures[i]
-          const [name, types] = signature.substr(0, signature.length - 1)?.split('(')
+          const signature = parsed.signatures[i];
+          const [name, types] = signature.substr(0, signature.length - 1)?.split('(');
           if (!name || !types) {
             return {
               target,
               functionSig: name === '' ? 'transfer' : name === undefined ? 'unknown' : name,
               callData: types ?? '',
-            }
+            };
           }
-          const calldata = parsed.calldatas[i]
-          const decoded = defaultAbiCoder.decode(types.split(','), calldata)
+          const calldata = parsed.calldatas[i];
+          const decoded = defaultAbiCoder.decode(types.split(','), calldata);
           return {
             target,
             functionSig: name,
             callData: decoded.join(', '),
-          }
+          };
         }),
-      }
-    })
+      };
+    });
   }, [useLogsResult]);
 };
 
@@ -124,7 +125,7 @@ export const useAllProposals = (): ProposalData => {
   const proposalCount = useProposalCount(contract.address);
 
   const govProposalIndexes = useMemo(() => {
-    return countToIndices(proposalCount)
+    return countToIndices(proposalCount);
   }, [proposalCount]);
 
   const proposals = useContractCalls<ProposalCallResult>(
@@ -147,47 +148,44 @@ export const useAllProposals = (): ProposalData => {
 
   const formattedLogs = useFormattedProposalCreatedLogs();
 
-    // Early return until events are fetched
-    return useMemo(() => {
-      const logs = formattedLogs ?? []
-      if (proposals.length && !logs.length) {
-        return { data: [], loading: true };
-      }
+  // Early return until events are fetched
+  return useMemo(() => {
+    const logs = formattedLogs ?? [];
+    if (proposals.length && !logs.length) {
+      return { data: [], loading: true };
+    }
 
-      return {
-        data: proposals.map((proposal, i) => {
-          const description = logs[i]?.description;
-          return {
-            id: proposal?.id.toString(),
-            title: description?.split(/# |\n/g)[1] ?? 'Untitled',
-            description: description ?? 'No description.',
-            proposer: proposal?.proposer,
-            status: proposalStates[i]?.[0] ?? ProposalState.UNDETERMINED,
-            proposalThreshold: parseInt(proposal?.proposalThreshold?.toString() ?? '0'),
-            quorumVotes: parseInt(proposal?.quorumVotes?.toString() ?? '0'),
-            forCount: parseInt(proposal?.forVotes?.toString() ?? '0'),
-            againstCount: parseInt(proposal?.againstVotes?.toString() ?? '0'),
-            abstainCount: parseInt(proposal?.againstVotes?.toString() ?? '0'),
-            startBlock: parseInt(proposal?.startBlock?.toString() ?? ''),
-            endBlock: parseInt(proposal?.endBlock?.toString() ?? ''),
-            eta: proposal?.eta ? new Date(proposal?.eta?.toNumber() * 1000) : undefined,
-            details: logs[i]?.details,
-          }
-        }),
-        loading: false,
-      }
-  }, [formattedLogs, proposalStates, proposals])
+    return {
+      data: proposals.map((proposal, i) => {
+        const description = logs[i]?.description;
+        return {
+          id: proposal?.id.toString(),
+          title: description?.split(/# |\n/g)[1] ?? 'Untitled',
+          description: description ?? 'No description.',
+          proposer: proposal?.proposer,
+          status: proposalStates[i]?.[0] ?? ProposalState.UNDETERMINED,
+          proposalThreshold: parseInt(proposal?.proposalThreshold?.toString() ?? '0'),
+          quorumVotes: parseInt(proposal?.quorumVotes?.toString() ?? '0'),
+          forCount: parseInt(proposal?.forVotes?.toString() ?? '0'),
+          againstCount: parseInt(proposal?.againstVotes?.toString() ?? '0'),
+          abstainCount: parseInt(proposal?.againstVotes?.toString() ?? '0'),
+          startBlock: parseInt(proposal?.startBlock?.toString() ?? ''),
+          endBlock: parseInt(proposal?.endBlock?.toString() ?? ''),
+          eta: proposal?.eta ? new Date(proposal?.eta?.toNumber() * 1000) : undefined,
+          details: logs[i]?.details,
+        };
+      }),
+      loading: false,
+    };
+  }, [formattedLogs, proposalStates, proposals]);
 };
 
 export const useProposal = (id: string): Proposal | undefined => {
   const { data } = useAllProposals();
-  return data?.find((p) => p.id === id);
+  return data?.find(p => p.id === id);
 };
 
 export const useCastVote = () => {
-  const { send: castVote, state: castVoteState } = useContractFunction(
-    untypedContract,
-    'castVote',
-  );
+  const { send: castVote, state: castVoteState } = useContractFunction(untypedContract, 'castVote');
   return { castVote, castVoteState };
 };

@@ -1,7 +1,14 @@
 import { twitter } from '../clients';
 import { config } from '../config';
 import { Bid } from '../types';
-import { getAuctionStartedTweetText, getBidReplyTweetId, getBidTweetText, getNounPngBuffer, updateBidCache, updateBidReplyTweetId } from '../utils';
+import {
+  getAuctionStartedTweetText,
+  getBidReplyTweetId,
+  getBidTweetText,
+  getNounPngBuffer,
+  updateBidCache,
+  updateBidReplyTweetId,
+} from '../utils';
 
 /**
  * Process a new auction event
@@ -23,7 +30,7 @@ export async function processNewAuction(auctionId: number) {
     await updateBidReplyTweetId(tweet.id_str);
   }
   console.log('tweeted auction update');
-};
+}
 
 /**
  * Process a new bid and tweet out a reply update to an existing tweet

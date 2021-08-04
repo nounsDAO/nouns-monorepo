@@ -1,4 +1,4 @@
-import { Row, Col, Alert, Button } from 'react-bootstrap';
+import { Row, Col, Alert, Button, Card, ProgressBar } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import { ProposalState, useProposal, Vote } from '../../wrappers/nounsDao';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
@@ -8,8 +8,8 @@ import { useBlockMeta, useBlockNumber } from '@usedapp/core';
 import leftArrow from '../../assets/noun_arrow_left_brand_green_shadow.png';
 import ProposalStatus from '../../components/ProposalStatus';
 import moment from 'moment-timezone';
-import { useState } from 'react';
 import VoteModal from '../../components/VoteModal';
+import { useState } from 'react';
 
 const AVERAGE_BLOCK_TIME_IN_SECS = 13;
 
@@ -26,25 +26,24 @@ const VotePage = ({
 
   // Get and format date from data
   const { timestamp } = useBlockMeta();
-  const currentBlock = useBlockNumber()
-  const endDate = proposal && timestamp && currentBlock ? moment(timestamp).add(
-    AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
-    'seconds'
-  ) : undefined;
+  const currentBlock = useBlockNumber();
+  const endDate =
+    proposal && timestamp && currentBlock
+      ? moment(timestamp).add(
+          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
+          'seconds',
+        )
+      : undefined;
   const timezone = moment.tz(moment.tz.guess()).zoneAbbr();
   const now = moment();
 
   // Get total votes and format percentages for UI
-  const totalVotes = proposal ? proposal.forCount + proposal.againstCount + proposal.abstainCount : undefined;
-  const forPercentage = `${
-    proposal && totalVotes ? ((proposal.forCount * 100) / totalVotes).toFixed(0) : '0'
-  } %`;
-  const againstPercentage = `${
-    proposal && totalVotes ? ((proposal.againstCount * 100) / totalVotes).toFixed(0) : '0'
-  } %`;
-  const abstainPercentage = `${
-    proposal && totalVotes ? ((proposal.abstainCount * 100) / totalVotes).toFixed(0) : '0'
-  } %`;
+  const totalVotes = proposal
+    ? proposal.forCount + proposal.againstCount + proposal.abstainCount
+    : undefined;
+  const forPercentage = proposal && totalVotes ? (proposal.forCount * 100) / totalVotes : 0;
+  const againstPercentage = proposal && totalVotes ? (proposal.againstCount * 100) / totalVotes : 0;
+  const abstainPercentage = proposal && totalVotes ? (proposal.abstainCount * 100) / totalVotes : 0;
 
   // Only count available votes as of the proposal start block
   const availableVotes = useUserVotesAsOfBlock(proposal?.startBlock ?? undefined);
@@ -54,7 +53,12 @@ const VotePage = ({
 
   return (
     <Section bgColor="white" fullWidth={true}>
-      <VoteModal show={showVoteModal} onHide={() => setShowVoteModal(false)} proposalId={proposal?.id} vote={vote} />
+      <VoteModal
+        show={showVoteModal}
+        onHide={() => setShowVoteModal(false)}
+        proposalId={proposal?.id}
+        vote={vote}
+      />
       <Col lg={{ span: 8, offset: 2 }}>
         <Link to="/vote">
           <img className={classes.backArrow} src={leftArrow} alt="Back" /> All Proposals
@@ -63,9 +67,13 @@ const VotePage = ({
         <ProposalStatus status={proposal?.status}></ProposalStatus>
         <div>
           {endDate && endDate.isBefore(now) ? (
-            <span>Voting ended {endDate.format('LLL')} {timezone}</span>
+            <span>
+              Voting ended {endDate.format('LLL')} {timezone}
+            </span>
           ) : proposal ? (
-            <span>Voting ends approximately {endDate?.format('LLL')} {timezone}</span>
+            <span>
+              Voting ends approximately {endDate?.format('LLL')} {timezone}
+            </span>
           ) : (
             ''
           )}
@@ -79,30 +87,83 @@ const VotePage = ({
         {showVotingButtons ? (
           <Row>
             <Col>
-              <Button onClick={() => {
-                setVote(Vote.FOR);
-                setShowVoteModal(true);
-              }}>Vote for</Button>
+              <Button
+                className={classes.votingButton}
+                onClick={() => {
+                  setVote(Vote.FOR);
+                  setShowVoteModal(true);
+                }}
+                block
+              >
+                Vote for
+              </Button>
             </Col>
             <Col>
-              <Button onClick={() => {
-                setVote(Vote.AGAINST);
-                setShowVoteModal(true);
-              }}>Vote Against</Button>
+              <Button
+                className={classes.votingButton}
+                onClick={() => {
+                  setVote(Vote.AGAINST);
+                  setShowVoteModal(true);
+                }}
+                block
+              >
+                Vote Against
+              </Button>
             </Col>
             <Col>
-              <Button onClick={() => {
-                setVote(Vote.ABSTAIN);
-                setShowVoteModal(true);
-              }}>Abstain</Button>
+              <Button
+                className={classes.votingButton}
+                onClick={() => {
+                  setVote(Vote.ABSTAIN);
+                  setShowVoteModal(true);
+                }}
+                block
+              >
+                Abstain
+              </Button>
             </Col>
           </Row>
         ) : (
           ''
         )}
+        <Row>
+          <Col lg={4}>
+            <Card className={classes.voteCountCard}>
+              <Card.Body>
+                <Card.Text>
+                  <span>For</span>
+                  <span>{proposal?.forCount}</span>
+                </Card.Text>
+                <ProgressBar variant="success" now={forPercentage} />
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col lg={4}>
+            <Card className={classes.voteCountCard}>
+              <Card.Body>
+                <Card.Text>
+                  <span>Against</span>
+                  <span>{proposal?.againstCount}</span>
+                </Card.Text>
+                <ProgressBar variant="danger" now={againstPercentage} />
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col lg={4}>
+            <Card className={classes.voteCountCard}>
+              <Card.Body>
+                <Card.Text>
+                  <span>Abstain</span>
+                  <span>{proposal?.abstainCount}</span>
+                </Card.Text>
+                <ProgressBar variant="info" now={abstainPercentage} />
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
       </Col>
     </Section>
   );
-}
+};
 
 export default VotePage;

@@ -1,11 +1,11 @@
-import { Badge } from 'react-bootstrap'
-import { ProposalState } from '../../wrappers/nounsDao'
+import { Badge } from 'react-bootstrap';
+import { ProposalState } from '../../wrappers/nounsDao';
 
 const statusVariant = (status: ProposalState | undefined) => {
   switch (status) {
     case ProposalState.PENDING:
     case ProposalState.ACTIVE:
-      return 'primary'
+      return 'primary';
     case ProposalState.SUCCEEDED:
     case ProposalState.EXECUTED:
       return 'success';
@@ -18,7 +18,7 @@ const statusVariant = (status: ProposalState | undefined) => {
     default:
       return 'secondary';
   }
-}
+};
 
 const statusText = (status: ProposalState | undefined) => {
   switch (status) {
@@ -41,14 +41,12 @@ const statusText = (status: ProposalState | undefined) => {
     case ProposalState.EXPIRED:
       return 'Expired';
     default:
-      return 'Undetermined'
+      return 'Undetermined';
   }
-}
+};
 
 const ProposalStatus = ({ status }: { status: ProposalState | undefined }) => {
-  return (
-    <Badge variant={statusVariant(status)}>{statusText(status)}</Badge>
-  )
-}
+  return <Badge variant={statusVariant(status)}>{statusText(status)}</Badge>;
+};
 
 export default ProposalStatus;

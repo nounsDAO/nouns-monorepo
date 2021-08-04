@@ -20,12 +20,13 @@ export interface INounSeed {
 const abi = new utils.Interface(NounsTokenABI);
 
 export const useNounToken = (nounId: EthersBN) => {
-  const [noun] = useContractCall<[string]>({
-    abi,
-    address: config.tokenAddress,
-    method: 'dataURI',
-    args: [nounId],
-  }) || [];
+  const [noun] =
+    useContractCall<[string]>({
+      abi,
+      address: config.tokenAddress,
+      method: 'dataURI',
+      args: [nounId],
+    }) || [];
 
   if (!noun) {
     return;
@@ -49,35 +50,38 @@ export const useNounSeed = (nounId: EthersBN) => {
 
 export const useUserVotes = (): number | undefined => {
   const { account } = useEthers();
-  const [votes] = useContractCall<[EthersBN]>({
-    abi,
-    address: config.tokenAddress,
-    method: 'getCurrentVotes',
-    args: [account],
-  }) || [];
+  const [votes] =
+    useContractCall<[EthersBN]>({
+      abi,
+      address: config.tokenAddress,
+      method: 'getCurrentVotes',
+      args: [account],
+    }) || [];
   return votes?.toNumber();
-}
+};
 
 export const useUserDelegatee = (): string | undefined => {
   const { account } = useEthers();
-  const [delegate] = useContractCall<[string]>({
-    abi,
-    address: config.tokenAddress,
-    method: 'delegates',
-    args: [account],
-  }) || [];
+  const [delegate] =
+    useContractCall<[string]>({
+      abi,
+      address: config.tokenAddress,
+      method: 'delegates',
+      args: [account],
+    }) || [];
   return delegate;
-}
+};
 
 export const useUserVotesAsOfBlock = (block: number | undefined): number | undefined => {
   const { account } = useEthers();
 
   // Check for available votes
-  const [votes] = useContractCall<[number]>({
-    abi,
-    address: config.tokenAddress,
-    method: 'getPriorVotes',
-    args: [account, block],
-  }) || [];
+  const [votes] =
+    useContractCall<[number]>({
+      abi,
+      address: config.tokenAddress,
+      method: 'getPriorVotes',
+      args: [account, block],
+    }) || [];
   return votes;
-}
+};

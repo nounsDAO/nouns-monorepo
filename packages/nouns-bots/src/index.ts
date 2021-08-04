@@ -7,7 +7,10 @@ import {
 } from './utils';
 import { internalDiscordWebhook, incrementCounter, publicDiscordWebhook } from './clients';
 import { getLastAuctionBids } from './subgraph';
-import { processNewAuction as twitterProcessNewAuction, processNewBid as twitterProcessNewBid } from './handlers/twitter';
+import {
+  processNewAuction as twitterProcessNewAuction,
+  processNewBid as twitterProcessNewBid,
+} from './handlers/twitter';
 import { processNewAuction as discordProcessNewAuction } from './handlers/discord';
 import { processNewAuction as pinataProcessNewAuction } from './handlers/pinata';
 
@@ -49,11 +52,6 @@ async function processAuction() {
   }
 }
 
-setInterval(
-  async () => processAuction(),
-  30000,
-)
+setInterval(async () => processAuction(), 30000);
 
-processAuction().then(
-  () => 'processAuction',
-);
+processAuction().then(() => 'processAuction');
