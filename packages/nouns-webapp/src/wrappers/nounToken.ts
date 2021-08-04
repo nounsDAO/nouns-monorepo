@@ -77,7 +77,7 @@ export const useUserVotesAsOfBlock = (block: number | undefined): number | undef
     abi,
     address: config.tokenAddress,
     method: 'getPriorVotes',
-    args: [account ?? undefined, block ?? undefined],
+    args: [account, block],
   }) || [];
   return votes;
 }
