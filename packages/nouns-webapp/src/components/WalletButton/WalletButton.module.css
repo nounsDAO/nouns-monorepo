@@ -1,0 +1,17 @@
+.walletButton {
+  border: none;
+  margin: 5px;
+  padding: 5px 20px;
+  border-radius: 5px;
+  background-color: rgba(211, 211, 211, 0.664);
+  color: var(--brand-black);
+  border: none;
+}
+.walletButton img {
+  margin-right: 10px;
+}
+.walletButton:hover {
+  background-color: lightgray;
+  color: var(--brand-dark-green);
+  color: white;
+}
