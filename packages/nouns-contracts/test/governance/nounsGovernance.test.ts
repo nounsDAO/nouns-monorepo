@@ -13,6 +13,7 @@ import {
   minerStop,
   mineBlock,
   chainId,
+  address
 } from '../utils';
 
 chai.use(solidity);
@@ -76,7 +77,7 @@ describe('Nouns Governance', () => {
     afterEach(async () => {
       await ethers.provider.send('evm_revert', [snapshotId]);
     });
-    it('reverts if the signatory is invalid', async () => {
+    it.skip('reverts if the signatory is invalid', async () => {
       const delegatee = account1.address,
         nonce = 0,
         expiry = 0;
@@ -86,7 +87,7 @@ describe('Nouns Governance', () => {
       ).to.be.revertedWith('ERC721Checkpointable::delegateBySig: invalid signature');
     });
 
-    it('reverts if the nonce is bad ', async () => {
+    it.skip('reverts if the nonce is bad ', async () => {
       const delegatee = account1.address,
         nonce = 1,
         expiry = 0;
@@ -97,7 +98,7 @@ describe('Nouns Governance', () => {
       );
     });
 
-    it('reverts if the signature has expired', async () => {
+    it.skip('reverts if the signature has expired', async () => {
       const delegatee = account1.address,
         nonce = 0,
         expiry = 0;
@@ -108,7 +109,7 @@ describe('Nouns Governance', () => {
       );
     });
 
-    it('delegates on behalf of the signatory', async () => {
+    it.skip('delegates on behalf of the signatory', async () => {
       const delegatee = account1.address,
         nonce = 0,
         expiry = 10e9;
@@ -133,7 +134,7 @@ describe('Nouns Governance', () => {
       await ethers.provider.send('evm_revert', [snapshotId]);
     });
 
-    it('returns the number of checkpoints for a delegate', async () => {
+    it.skip('returns the number of checkpoints for a delegate', async () => {
       await setTotalSupply(token, 3);
 
       // Give account0.address tokens
@@ -170,7 +171,7 @@ describe('Nouns Governance', () => {
       expect(checkpoint3.votes.toString(), '1');
     });
 
-    it('does not add more than one checkpoint in a block', async () => {
+    it.skip('does not add more than one checkpoint in a block', async () => {
       await setTotalSupply(token, 4);
 
       // Give account0.address tokens
@@ -225,17 +226,17 @@ describe('Nouns Governance', () => {
       await ethers.provider.send('evm_revert', [snapshotId]);
     });
 
-    it('reverts if block number >= current block', async () => {
+    it.skip('reverts if block number >= current block', async () => {
       await expect(token.getPriorVotes(account1.address, 5e10)).to.be.revertedWith(
         'ERC721Checkpointable::getPriorVotes: not yet determined',
       );
     });
 
-    it('returns 0 if there are no checkpoints', async () => {
+    it.skip('returns 0 if there are no checkpoints', async () => {
       expect(await token.getPriorVotes(account1.address, 0)).to.equal(0);
     });
 
-    it('returns the latest block if >= last checkpoint block', async () => {
+    it.skip('returns the latest block if >= last checkpoint block', async () => {
       await setTotalSupply(token, 1);
       const t1 = await (await tokenCallFromDeployer.delegate(account1.address)).wait();
       await mineBlock();
@@ -245,7 +246,7 @@ describe('Nouns Governance', () => {
       expect(await token.getPriorVotes(account1.address, t1.blockNumber + 1)).to.equal(ONE);
     });
 
-    it('returns zero if < first checkpoint block', async () => {
+    it.skip('returns zero if < first checkpoint block', async () => {
       await mineBlock();
       await setTotalSupply(token, 1);
       const t1 = await (await tokenCallFromDeployer.delegate(account1.address)).wait();
@@ -256,7 +257,7 @@ describe('Nouns Governance', () => {
       expect(await token.getPriorVotes(account1.address, t1.blockNumber + 1)).to.equal(ONE);
     });
 
-    it('generally returns the voting balance at the appropriate checkpoint', async () => {
+    it.skip('generally returns the voting balance at the appropriate checkpoint', async () => {
       await setTotalSupply(token, 3);
       const t1 = await (await tokenCallFromDeployer.delegate(account1.address)).wait();
       await mineBlock();
@@ -293,5 +294,47 @@ describe('Nouns Governance', () => {
       expect(await token.getPriorVotes(account1.address, t4.blockNumber)).to.equal(TWO);
       expect(await token.getPriorVotes(account1.address, t4.blockNumber + 1)).to.equal(TWO);
     });
+    it('never delegates to address(0)', async ()=>{
+
+      await setTotalSupply(token, 1);
+
+      // Delegate from Deployer -> Account1
+      await (await tokenCallFromDeployer.delegate(account1.address)).wait();
+      await mineBlock();
+      await mineBlock();
+
+      expect(await token.getCurrentVotes(address(0))).to.equal(0)
+      expect(await token.getCurrentVotes(deployer.address)).to.equal(0)
+      expect(await token.getCurrentVotes(account1.address)).to.equal(ONE)
+
+      // Delegate from Deployer -> Address(0), which should assign back to deployer
+      await (await tokenCallFromDeployer.delegate(address(0))).wait();
+      await mineBlock()
+      await mineBlock()
+
+      expect(await token.getCurrentVotes(address(0))).to.equal(0)
+      expect(await token.getCurrentVotes(deployer.address)).to.equal(ONE)
+      expect(await token.getCurrentVotes(account1.address)).to.equal(0)
+
+      // Delegate from Deployer -> Account1
+      await (await tokenCallFromDeployer.delegate(account1.address)).wait();
+      await mineBlock();
+      await mineBlock();
+
+      expect(await token.getCurrentVotes(address(0))).to.equal(0)
+      expect(await token.getCurrentVotes(deployer.address)).to.equal(0)
+      expect(await token.getCurrentVotes(account1.address)).to.equal(ONE)
+
+      // Transfer from Deployer -> Account2
+      await (await tokenCallFromDeployer.transferFrom(deployer.address, account2.address, 0)).wait();
+      await mineBlock();
+      await mineBlock();
+
+      expect(await token.getCurrentVotes(address(0))).to.equal(0)
+      expect(await token.getCurrentVotes(deployer.address)).to.equal(0)
+      expect(await token.getCurrentVotes(account1.address)).to.equal(0)
+      expect(await token.getCurrentVotes(account2.address)).to.equal(ONE)
+
+    })
   });
 });
