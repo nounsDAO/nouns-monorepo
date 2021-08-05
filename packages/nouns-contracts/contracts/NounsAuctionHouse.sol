@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 
+// NounsAuctionHouse is a modified version of [Zora Auction House](https://github.com/ourzora/auction-house/blob/54a12ec1a6cf562e49f0a4917990474b11350a2d/contracts/AuctionHouse.sol)
+
 pragma solidity ^0.8.6;
 
 import { PausableUpgradeable } from '@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol';
