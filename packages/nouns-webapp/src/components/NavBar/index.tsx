@@ -8,10 +8,14 @@ import logo from '../../assets/logo.svg';
 import NavBarItem from './NavBarItem';
 import { useState } from 'react';
 import WalletConnectModal from '../WalletConnectModal';
+import { InjectedConnector } from '@web3-react/injected-connector'
+import { WalletLinkConnector } from '@web3-react/walletlink-connector'
+import {FortmaticConnector} from "@web3-react/fortmatic-connector"
+import config from '../../config';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
-  const { activateBrowserWallet } = useEthers();
+  const { activateBrowserWallet, activate, deactivate } = useEthers();
 
   const [showConnectModal, setShowConnectModal] = useState(true);
   // USE TO PASS INTO CONNECT TO WALLET BUTTON
@@ -33,13 +37,41 @@ const NavBar = () => {
         <ShortAddress>{activeAccount}</ShortAddress>
         <span className={classes.greenStatusCircle} />
       </NavBarItem>
+      <NavBarItem onClick={() => {deactivate()}} className={classes.connectedBtn}>
+        Disconnect
+      </NavBarItem>
     </>
   );
 
   const disconnectedContent = (
-    <NavBarItem className={classes.connectBtn} onClick={() => activateBrowserWallet()}>
+    <>
+    <NavBarItem className={classes.connectBtn} onClick={() => {
+      const injected = new InjectedConnector({ supportedChainIds: config.supportedChainIds })
+      activate(injected)
+    }}>
       Connect Wallet
     </NavBarItem>
+    <NavBarItem className={classes.connectBtn} onClick={() => {
+      const walletlink = new WalletLinkConnector({
+        appName:"Nouns.WTF",
+        appLogoUrl:"https://nouns.wtf/static/media/logo.cdea1650.svg",
+        url: config.rinkebyJsonRpc,
+        supportedChainIds: config.supportedChainIds
+        })
+        activate(walletlink)
+    }}>
+      WalletLink
+    </NavBarItem>
+    <NavBarItem className={classes.connectBtn} onClick={async () => {
+      const fortmatic = new FortmaticConnector({
+         apiKey:"pk_test_FB5E5C15F2EC5AE6",
+         chainId: 4
+        })
+        activate(fortmatic)
+    }}>
+      Fortmatic
+    </NavBarItem>
+    </>
   );
 
   return (
