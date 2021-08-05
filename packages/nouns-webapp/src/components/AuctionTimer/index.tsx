@@ -8,9 +8,8 @@ import clsx from 'clsx';
 const AuctionTimer: React.FC<{
   auction: Auction;
   auctionEnded: boolean;
-  setAuctionEnded: (ended: boolean) => void;
 }> = props => {
-  const { auction, auctionEnded, setAuctionEnded } = props;
+  const { auction, auctionEnded } = props;
 
   const [auctionTimer, setAuctionTimer] = useState(0);
   const auctionTimerRef = useRef(auctionTimer); // to access within setTimeout
@@ -20,15 +19,13 @@ const AuctionTimer: React.FC<{
 
   // timer logic
   useEffect(() => {
-    const timeLeft = (auction && BigNumber.from(auction.endTime).toNumber()) - moment().unix();
+    const timeLeft = (auction && Number(auction.endTime)) - moment().unix();
 
     setAuctionTimer(auction && timeLeft);
 
     if (auction && timeLeft <= 0) {
       setAuctionTimer(0);
-      setAuctionEnded(true);
     } else {
-      setAuctionEnded(false);
       const timer = setTimeout(() => {
         setAuctionTimer(auctionTimerRef.current - 1);
       }, 1000);
@@ -37,7 +34,7 @@ const AuctionTimer: React.FC<{
         clearTimeout(timer);
       };
     }
-  }, [auction, auctionTimer, setAuctionEnded]);
+  }, [auction, auctionTimer]);
 
   const auctionContent = auctionEnded ? 'Auction ended' : 'Ends in';
 

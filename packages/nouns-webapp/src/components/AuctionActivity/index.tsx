@@ -25,9 +25,7 @@ const AuctionActivity: React.FC<{
   const { auction, isFirstAuction, isLastAuction, onPrevAuctionClick, onNextAuctionClick } = props;
 
   const [auctionEnded, setAuctionEnded] = useState(false);
-  const setAuctionStateHandler = (ended: boolean) => {
-    setAuctionEnded(ended);
-  };
+  const [auctionTimer, setAuctionTimer] = useState(false);
 
   const [showBidHistoryModal, setShowBidHistoryModal] = useState(false);
   const showBidModalHandler = () => {
@@ -38,6 +36,27 @@ const AuctionActivity: React.FC<{
   };
 
   const bidHistoryTitle = `Noun ${auction && auction.nounId.toString()} bid history`;
+
+
+  // timer logic
+  useEffect(() => {
+    if (!auction) return
+
+    const timeLeft = Number(auction.endTime) - Math.floor(Date.now()/1000);
+
+    if (auction && timeLeft <= 0) {
+      setAuctionEnded(true);
+    } else {
+      setAuctionEnded(false);
+      const timer = setTimeout(() => {
+        setAuctionTimer(!auctionTimer);
+      }, 1000);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [auctionTimer, auction]);
 
   if (!auction) return null;
 
@@ -83,7 +102,6 @@ const AuctionActivity: React.FC<{
               <AuctionTimer
                 auction={auction}
                 auctionEnded={auctionEnded}
-                setAuctionEnded={setAuctionStateHandler}
               />
             </Col>
 
