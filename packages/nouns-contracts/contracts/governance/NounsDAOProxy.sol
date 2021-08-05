@@ -16,6 +16,9 @@ pragma solidity ^0.8.6;
 
 import './NounsDAOInterfaces.sol';
 
+/**
+ * @title The Nouns DAO proxy contract
+ */
 contract NounsDAOProxy is NounsDAOProxyStorage, NounsDAOEvents {
     constructor(
         address timelock_,

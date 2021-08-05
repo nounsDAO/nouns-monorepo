@@ -16,6 +16,9 @@
 
 pragma solidity ^0.8.6;
 
+/**
+ * @title The Nouns DAO executor and treasury
+ */
 contract NounsDAOExecutor {
     event NewAdmin(address indexed newAdmin);
     event NewPendingAdmin(address indexed newPendingAdmin);

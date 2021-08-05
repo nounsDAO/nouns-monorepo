@@ -5,6 +5,9 @@ pragma solidity ^0.8.6;
 import { INounsSeeder } from './interfaces/INounsSeeder.sol';
 import { INounsDescriptor } from './interfaces/INounsDescriptor.sol';
 
+/**
+ * @title The NounsToken pseudo-random seed generator
+ */
 contract NounsSeeder is INounsSeeder {
     /**
      * @notice Generate a pseudo-random Noun seed using the previous blockhash and noun ID.

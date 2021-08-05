@@ -24,6 +24,9 @@ import './ERC721Enumerable.sol';
  *
 */
 
+/**
+ * @title Vote checkpointing for an ERC-721 token
+ */
 abstract contract ERC721Checkpointable is ERC721Enumerable {
     /// @notice Defines decimals as per ERC-20 convention to make integrations with 3rd party governance platforms easier
     uint8 public constant decimals = 0;

@@ -13,7 +13,7 @@ import { INounsToken } from './interfaces/INounsToken.sol';
 import { IWETH } from './interfaces/IWETH.sol';
 
 /**
- * @title The NounsDAO auction house
+ * @title The Nouns DAO auction house
  */
 contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, ReentrancyGuardUpgradeable, OwnableUpgradeable {
     // The Nouns ERC721 token contract
