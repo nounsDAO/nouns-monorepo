@@ -15,31 +15,32 @@
 }
 
 .bidBtn {
-  border-radius: 50px 0px 0px 50px;
-  border: 0 none;
+  /*border-radius: 0px 50px 50px 0px;*/
   background-color: var(--brand-black);
-  width: 50%;
-  height: 4rem;
-  font-weight: bold;
-  font-size: 2.5rem;
+  width: 40%;
+  height: 3rem;
+/*  font-weight: bold;
+  font-size: 2.5rem;*/
   color: white;
   /*font-family: 'Londrina Solid';*/
 }
 
 .bidBtn:hover {
-  background-color: var(--brand-dark-green);
-  color: rgb(209, 207, 207);
+/*  background-color: var(--brand-dark-green);
+  color: rgb(209, 207, 207);*/
 }
 
 .bidInput {
-  border-radius: 0px 50px 50px 0px;
-  width: 50%;
-  height: 4rem;
-  font-weight: bold;
-  font-size: xx-large;
+
+  /*border-radius: 50px 0px 0px 50px;*/
+  /*border: 0 none;*/
+  width: 60%;
+  height: 3rem;
+  /*font-weight: bold;
+  font-size: xx-large;*/
   color: black;
-  padding-left: 1rem;
-  border: 1px solid white;
+  border: 1px solid var(--brand-black);
+  background-color: transparent;
   /*font-family: 'Londrina Solid';*/
 }
 

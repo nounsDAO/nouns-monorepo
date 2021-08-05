@@ -219,14 +219,18 @@ const Bid: React.FC<{
         />
       )}
       <InputGroup>
-          <Button className={classes.bidBtn}>
-            Bid
-          </Button>
+
           <FormControl
             aria-label="Example text with button addon"
             aria-describedby="basic-addon1"
             className={classes.bidInput}
+            type="number"
+            placeholder={`Min bid: ${displayMinBid ? minBidEth(minBid) : bidInput} ETH`}
+            min="0"
           />
+          <Button className={classes.bidBtn}>
+            Bid
+          </Button>
         </InputGroup>
 
       {/*<div className={classes.bidWrapper}>

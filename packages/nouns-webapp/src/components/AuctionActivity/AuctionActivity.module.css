@@ -10,8 +10,12 @@
   }
 }
 
+.informationRow {
+  border-bottom: 1px solid #aaa;
+  margin-bottom:  3rem;
+}
 .activityRow {
-  margin-bottom:  1rem;
+  margin-bottom:  1.5rem;
 }
 
 h1 {
