@@ -7,9 +7,9 @@
 */
 
 /**
- * NounsDAO forks [Compound Governance GovernorBravo](https://github.com/compound-finance/compound-protocol/blob/b9b14038612d846b83f8a009a82c38974ff2dcfe/contracts/Governance/GovernorBravoDelegate.sol)
+ * NounsDAOLogicV1 is a modified version of [Compound Governance GovernorBravo](https://github.com/compound-finance/compound-protocol/blob/b9b14038612d846b83f8a009a82c38974ff2dcfe/contracts/Governance/GovernorBravoDelegate.sol)
  *
- * NounsDAO REMOVES:
+ * NounsDAOLogicV1 REMOVES:
  * - `initialProposalId` and `_initiate()` due to this being the
  *   first instance of the governance contract unlike
  *   GovernorBravo which upgrades GovernorAlpha
@@ -18,7 +18,7 @@
  *   in `execute(uint proposalId)`. This contract should not hold funds and does not
  *   implement `receive()` or `fallback()` functions.
  *
- * NounsDAO ADDS:
+ * NounsDAOLogicV1 ADDS:
  * - Proposal Threshold basis points instead of fixed number
  *   due to the Noun token's increasing supply
  *
