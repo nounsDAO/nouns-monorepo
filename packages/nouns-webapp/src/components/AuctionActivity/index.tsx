@@ -1,5 +1,5 @@
 import { Auction } from '../../wrappers/nounsAuction';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
 import { Row, Col } from 'react-bootstrap';
 import classes from './AuctionActivity.module.css';
@@ -7,6 +7,7 @@ import bidHistoryClasses from './BidHistory.module.css';
 import Bid from '../Bid';
 import AuctionTimer from '../AuctionTimer';
 import CurrentBid from '../CurrentBid';
+import Winner from '../Winner';
 import BidHistory from '../BidHistory';
 import { Modal } from 'react-bootstrap';
 import AuctionNavigation from '../AuctionNavigation';
@@ -99,10 +100,15 @@ const AuctionActivity: React.FC<{
               />
             </Col>
             <Col lg={6}>
+            { auctionEnded ?
+              <Winner winner={auction.bidder} />
+              :
               <AuctionTimer
                 auction={auction}
                 auctionEnded={auctionEnded}
               />
+            }
+
             </Col>
 
           </Row>
