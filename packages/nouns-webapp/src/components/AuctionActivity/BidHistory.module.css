@@ -23,7 +23,7 @@
   flex-direction: column;
 }
 .bidder {
-  font-weight: bold;
+  /*font-weight: bold;*/
   color: var(--brand-black);
 }
 .bidDate {
