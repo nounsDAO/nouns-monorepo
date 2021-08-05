@@ -7,6 +7,10 @@
  * transfer (mint) from `address(0)` to the `creator`. The second displays the
  * transfer from the `creator` to the `to` address. This enables correct
  * attribution on various NFT marketplaces.
+ *
+ * - `isApprovedForAll` modified to check a ProxyRegistry contract to facilitate OpenSea proxy accounts.
+ * Uses code from: https://github.com/ProjectOpenSea/opensea-creatures/blob/f7257a043e82fae8251eec2bdde37a44fee474c4/contracts/ERC721Tradable.sol#L73
+ * See also: https://docs.opensea.io/docs/1-structuring-your-smart-contract#opensea-whitelisting-optional
  */
 
 pragma solidity ^0.8.6;
@@ -18,6 +22,7 @@ import '@openzeppelin/contracts/utils/Address.sol';
 import '@openzeppelin/contracts/utils/Context.sol';
 import '@openzeppelin/contracts/utils/Strings.sol';
 import '@openzeppelin/contracts/utils/introspection/ERC165.sol';
+import './ProxyRegistry.sol';
 
 /**
  * @dev Implementation of https://eips.ethereum.org/EIPS/eip-721[ERC721] Non-Fungible Token Standard, including
@@ -46,12 +51,17 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     // Mapping from owner to operator approvals
     mapping(address => mapping(address => bool)) private _operatorApprovals;
 
+    // OpenSea Proxy Registry
+    address public immutable proxyRegistryAddress;
+
     /**
-     * @dev Initializes the contract by setting a `name` and a `symbol` to the token collection.
+     * @notice Modified to include `proxyRegistryAddress` as per OpenSea
+     * @dev Initializes the contract by setting a `name`, a `symbol`, and a `proxyRegistryAddress` to the token collection.
      */
-    constructor(string memory name_, string memory symbol_) {
+    constructor(string memory name_, string memory symbol_, address _proxyRegistryAddress) {
         _name = name_;
         _symbol = symbol_;
+        proxyRegistryAddress = _proxyRegistryAddress;
     }
 
     /**
@@ -149,9 +159,17 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata {
     }
 
     /**
+     * @notice Modify isApprovedForAll to whitelist user's OpenSea proxy accounts to enable gas-less listings.
      * @dev See {IERC721-isApprovedForAll}.
      */
     function isApprovedForAll(address owner, address operator) public view virtual override returns (bool) {
+
+        // Whitelist OpenSea proxy contract for easy trading.
+        ProxyRegistry proxyRegistry = ProxyRegistry(proxyRegistryAddress);
+        if (address(proxyRegistry.proxies(owner)) == operator) {
+            return true;
+        }
+
         return _operatorApprovals[owner][operator];
     }
 

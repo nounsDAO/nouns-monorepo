@@ -84,8 +84,9 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
         address _noundersDAO,
         address _minter,
         INounsDescriptor _descriptor,
-        INounsSeeder _seeder
-    ) ERC721('Nouns', 'NOUN') {
+        INounsSeeder _seeder,
+        address _proxyRegistryAddress
+    ) ERC721('Nouns', 'NOUN', _proxyRegistryAddress) {
         noundersDAO = _noundersDAO;
         minter = _minter;
         descriptor = _descriptor;
