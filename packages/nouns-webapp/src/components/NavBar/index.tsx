@@ -18,14 +18,21 @@ const NavBar = () => {
         </Nav.Link>
       </Nav.Item>
       <Nav.Item>
-        <Nav.Link className={classes.nounsNavLink} href="playground" target="_blank" rel="noreferrer">
+        <Nav.Link
+          className={classes.nounsNavLink}
+          href="playground"
+          target="_blank"
+          rel="noreferrer"
+        >
           PLAYGROUND
         </Nav.Link>
       </Nav.Item>
       <Nav.Item>
         <Nav.Link className={classes.nounsNavLink} disabled>
           <span className={classes.greenStatusCircle} />
-          <span><ShortAddress>{activeAccount}</ShortAddress></span>
+          <span>
+            <ShortAddress>{activeAccount}</ShortAddress>
+          </span>
         </Nav.Link>
       </Nav.Item>
     </>
@@ -38,7 +45,7 @@ const NavBar = () => {
   );
 
   return (
-      <Navbar expand="lg">
+    <Navbar expand="lg">
       <Container>
         <Navbar.Brand href="#home" className={classes.navBarBrand}>
           <img
@@ -51,11 +58,12 @@ const NavBar = () => {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse className="justify-content-end">
-          <Nav className={classes.nounsNav}>{activeAccount ? connectedContent : disconnectedContent}</Nav>
+          <Nav className={classes.nounsNav}>
+            {activeAccount ? connectedContent : disconnectedContent}
+          </Nav>
         </Navbar.Collapse>
-            </Container>
-      </Navbar>
-
+      </Container>
+    </Navbar>
   );
 };
 
