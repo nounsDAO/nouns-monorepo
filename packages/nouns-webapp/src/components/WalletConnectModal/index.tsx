@@ -4,6 +4,7 @@ import { WALLET_TYPE } from '../WalletButton';
 import { useEthers } from '@usedapp/core';
 import { InjectedConnector } from '@web3-react/injected-connector';
 import { WalletLinkConnector } from '@web3-react/walletlink-connector';
+import {WalletConnectConnector} from '@web3-react/walletconnect-connector'
 import { LedgerConnector } from '@web3-react/ledger-connector';
 import { TrezorConnector } from '@web3-react/trezor-connector';
 import { FortmaticConnector } from '@web3-react/fortmatic-connector';
@@ -11,7 +12,7 @@ import config from '../../config';
 
 const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
   const { onDismiss } = props;
-  const { activateBrowserWallet, activate, deactivate } = useEthers();
+  const { activate } = useEthers();
 
   const wallets = (
     <>
@@ -36,6 +37,18 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
       />
       <WalletButton
         onClick={() => {
+          const walletlink = new WalletConnectConnector({
+            supportedChainIds: [config.supportedChainId],
+            rpc: {
+              [config.supportedChainId]: config.rinkebyJsonRpc
+            }
+          });
+          activate(walletlink);
+        }}
+        walletType={WALLET_TYPE.walletconnect}
+      />
+      <WalletButton
+        onClick={() => {
           const walletlink = new WalletLinkConnector({
             appName: 'Nouns.WTF',
             appLogoUrl: 'https://nouns.wtf/static/media/logo.cdea1650.svg',
@@ -44,7 +57,7 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
           });
           activate(walletlink);
         }}
-        walletType={WALLET_TYPE.walletconnect}
+        walletType={WALLET_TYPE.walletlink}
       />
       <WalletButton
         onClick={() => {
