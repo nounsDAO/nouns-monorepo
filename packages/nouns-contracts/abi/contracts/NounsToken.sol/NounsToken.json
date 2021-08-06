@@ -20,11 +20,6 @@
         "internalType": "contract INounsSeeder",
         "name": "_seeder",
         "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_proxyRegistryAddress",
-        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
@@ -794,19 +789,6 @@
       }
     ],
     "name": "ownerOf",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "proxyRegistryAddress",
     "outputs": [
       {
         "internalType": "address",
