@@ -3,9 +3,6 @@ import { useEthers } from '@usedapp/core';
 import ShortAddress from '../ShortAddress';
 import classes from './NavBar.module.css';
 import logo from '../../assets/logo.svg';
-import testnetNoun from '../../assets/testnet-noun.png';
-import NavBarItem from './NavBarItem';
-import NavBarLink from './NavBarLink';
 import { Link } from 'react-router-dom';
 import { Nav, Navbar, Container } from 'react-bootstrap';
 
@@ -46,8 +43,12 @@ const NavBar = () => {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse className="justify-content-end">
-          <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>GOVERNANCE</Nav.Link>
-          <Nav.Link href="playground" className={classes.nounsNavLink} target="_blank">PLAYGROUND</Nav.Link>
+          <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>
+            GOVERNANCE
+          </Nav.Link>
+          <Nav.Link href="playground" className={classes.nounsNavLink} target="_blank">
+            PLAYGROUND
+          </Nav.Link>
           {activeAccount ? connectedContent : disconnectedContent}
         </Navbar.Collapse>
       </Container>

@@ -1,4 +1,3 @@
-import nounPointerImg from '../../assets/noun-pointer.png';
 import classes from './BidHistoryBtn.module.css';
 
 const BidHistoryBtn: React.FC<{ onClick: () => void }> = props => {

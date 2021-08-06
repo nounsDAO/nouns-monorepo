@@ -1,14 +1,11 @@
 import { Col } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import { useAllProposals } from '../../wrappers/nounsDao';
-import { useUserDelegatee, useUserVotes } from '../../wrappers/nounToken';
 import Proposals from '../../components/Proposals';
 import classes from './Governance.module.css';
 
 const GovernancePage = () => {
-  const { data: proposals, loading: proposalsLoading } = useAllProposals();
-  const availableVotes = useUserVotes();
-  const userDelegatee = useUserDelegatee();
+  const { data: proposals } = useAllProposals();
 
   return (
     <Section bgColor="white" fullWidth={true}>

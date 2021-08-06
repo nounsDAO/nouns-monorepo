@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js';
 import classes from '../CurrentBid/CurrentBid.module.css';
 import ShortAddress from '../ShortAddress';
 

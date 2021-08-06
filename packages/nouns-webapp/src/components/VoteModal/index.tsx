@@ -1,6 +1,5 @@
 import { Modal } from 'react-bootstrap';
-import { useCastVote, Vote } from '../../wrappers/nounsDao';
-import { useUserVotes } from '../../wrappers/nounToken';
+import { Vote } from '../../wrappers/nounsDao';
 
 interface VoteModalProps {
   show: boolean;
@@ -21,9 +20,6 @@ const modalTitle = (vote: Vote | undefined, proposalId: string | undefined) => {
 };
 
 const VoteModal = ({ show, onHide, proposalId, vote }: VoteModalProps) => {
-  const availableVotes = useUserVotes();
-  const { castVote, castVoteState } = useCastVote();
-
   return (
     <Modal show={show} onHide={onHide}>
       <Modal.Header>

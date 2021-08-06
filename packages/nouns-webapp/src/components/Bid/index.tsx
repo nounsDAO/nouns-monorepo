@@ -10,7 +10,6 @@ import React, { useEffect, useState, useRef, ChangeEvent, useCallback } from 're
 import { utils, BigNumber as EthersBN } from 'ethers';
 import BigNumber from 'bignumber.js';
 import classes from './Bid.module.css';
-import Modal from '../Modal';
 import { Spinner, InputGroup, FormControl, Button } from 'react-bootstrap';
 import { useAuctionMinBidIncPercentage } from '../../wrappers/nounsAuction';
 import { useAppDispatch } from '../../hooks';
@@ -53,7 +52,6 @@ const Bid: React.FC<{
 
   const bidInputRef = useRef<HTMLInputElement>(null);
 
-  const [displayMinBid, setDisplayMinBid] = useState(true);
   const [bidInput, setBidInput] = useState('');
   const [bidButtonContent, setBidButtonContent] = useState({
     loading: false,
@@ -87,7 +85,6 @@ const Bid: React.FC<{
     }
 
     setBidInput(event.target.value);
-    setDisplayMinBid(false);
   };
 
   const placeBidHandler = () => {
@@ -207,50 +204,30 @@ const Bid: React.FC<{
 
   if (!auction) return null;
 
-  const isDisabled = placeBidState.status === 'Mining' || settleAuctionState.status === 'Mining' || !activeAccount
+  const isDisabled =
+    placeBidState.status === 'Mining' || settleAuctionState.status === 'Mining' || !activeAccount;
 
   return (
     <>
       <InputGroup>
-
-          <FormControl
-            aria-label="Example text with button addon"
-            aria-describedby="basic-addon1"
-            className={classes.bidInput}
-            type="number"
-            placeholder={`Minimum bid: ${minBidEth(minBid)} ETH`}
-            min="0"
-            onChange={bidInputHandler}
-            ref={bidInputRef}
-            disabled={isDisabled}
-          />
-          <Button
-            className={auctionEnded ? classes.bidBtnAuctionEnded : classes.bidBtn}
-            onClick={auctionEnded ? settleAuctionHandler : placeBidHandler}
-            disabled={isDisabled}
-            >
-            {bidButtonContent.loading ? <Spinner animation="border" /> : bidButtonContent.content}
-          </Button>
-        </InputGroup>
-
-      {/*<div className={classes.bidWrapper}>
-        <button
+        <FormControl
+          aria-label="Example text with button addon"
+          aria-describedby="basic-addon1"
+          className={classes.bidInput}
+          type="number"
+          placeholder={`Minimum bid: ${minBidEth(minBid)} ETH`}
+          min="0"
+          onChange={bidInputHandler}
+          ref={bidInputRef}
+        />
+        <Button
           className={auctionEnded ? classes.bidBtnAuctionEnded : classes.bidBtn}
           onClick={auctionEnded ? settleAuctionHandler : placeBidHandler}
           disabled={placeBidState.status === 'Mining' || settleAuctionState.status === 'Mining'}
         >
           {bidButtonContent.loading ? <Spinner animation="border" /> : bidButtonContent.content}
-        </button>
-        <input
-          className={auctionEnded ? classes.bidInputAuctionEnded : classes.bidInput}
-          type="number"
-          placeholder="ETH"
-          min="0"
-          value={displayMinBid ? minBidEth(minBid) : bidInput}
-          onChange={bidInputHandler}
-          ref={bidInputRef}
-        ></input>
-      </div>*/}
+        </Button>
+      </InputGroup>
     </>
   );
 };

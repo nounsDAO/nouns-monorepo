@@ -2,8 +2,6 @@ import moment from 'moment';
 import { Auction } from '../../wrappers/nounsAuction';
 import classes from './AuctionTimer.module.css';
 import { useState, useEffect, useRef } from 'react';
-import { BigNumber } from '@ethersproject/bignumber';
-import clsx from 'clsx';
 
 const AuctionTimer: React.FC<{
   auction: Auction;
@@ -41,7 +39,7 @@ const AuctionTimer: React.FC<{
   const flooredMinutes = Math.floor(timerDuration.minutes());
   const flooredSeconds = Math.floor(timerDuration.seconds());
 
-  if (!auction) return null
+  if (!auction) return null;
 
   return (
     <>
