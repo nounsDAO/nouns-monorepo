@@ -32,9 +32,9 @@ const NavBar = () => {
   );
 
   const disconnectedContent = (
-    <Nav.Item className={classes.connectBtn} onClick={() => activateBrowserWallet()}>
-      Connect Wallet
-    </Nav.Item>
+    <Nav.Link className={classes.nounsNavLink} onClick={() => activateBrowserWallet()}>
+      CONNECT WALLET
+    </Nav.Link>
   );
 
   return (
