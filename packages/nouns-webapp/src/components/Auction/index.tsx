@@ -55,15 +55,15 @@ const Auction: React.FC<{ auction: IAuction; bgColorHandler: (useGrey: boolean) 
     );
 
     /**
-     * Auction derived from `onDisplayNounId` query.
+     * Auction derived from `onDisplayNounId` query
      */
     const auction: IAuction = dataCurrent && dataCurrent.auction && createAuctionObj(dataCurrent);
     /**
-     * Auction derived from `onDisplayNounId.add(1)` query.
+     * Auction derived from `onDisplayNounId.add(1)` query
      */
     const nextAuction: IAuction = dataNext && dataNext.auction && createAuctionObj(dataNext);
     /**
-     * Auction derived from `onDisplayNounId.sub(1)` query.
+     * Auction derived from `onDisplayNounId.sub(1)` query
      */
     const prevAuction: IAuction = dataPrev && dataPrev.auction && createAuctionObj(dataPrev);
 
