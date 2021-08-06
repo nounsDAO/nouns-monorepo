@@ -12,19 +12,17 @@
 
 .heading {
   display: inline-block;
-  /*font-family: 'Londrina Solid';*/
   font-size: 2rem;
   margin: 0 !important;
 }
 
 .createProposalLink {
-  padding: .9rem 1.5rem;
-  background-color: var(--brand-light-green);;
+  padding: 0.9rem 1.5rem;
+  background-color: var(--brand-light-green);
   border-radius: 50px;
   border: 0 none;
   font-size: large;
   font-weight: normal;
-  /*font-family: 'Londrina Solid';*/
   cursor: default;
 }
 
@@ -33,7 +31,7 @@
 }
 
 .proposalLink {
-  margin-top: .4rem;
+  margin-top: 0.4rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
