@@ -214,10 +214,16 @@ const Bid: React.FC<{
             aria-describedby="basic-addon1"
             className={classes.bidInput}
             type="number"
-            placeholder={`Min bid: ${displayMinBid ? minBidEth(minBid) : bidInput} ETH`}
+            placeholder={`Min bid: ${minBidEth(minBid)} ETH`}
             min="0"
+            onChange={bidInputHandler}
+            ref={bidInputRef}
           />
-          <Button className={classes.bidBtn}>
+          <Button
+            className={auctionEnded ? classes.bidBtnAuctionEnded : classes.bidBtn}
+            onClick={auctionEnded ? settleAuctionHandler : placeBidHandler}
+            disabled={placeBidState.status === 'Mining' || settleAuctionState.status === 'Mining'}
+            >
             Bid
           </Button>
         </InputGroup>
