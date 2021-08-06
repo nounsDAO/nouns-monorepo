@@ -18,16 +18,18 @@ const NavBar = () => {
       <Nav.Item>
         <Nav.Link className={classes.nounsNavLink} disabled>
           <span className={classes.greenStatusCircle} />
-          <span><ShortAddress>{activeAccount}</ShortAddress></span>
+          <span>
+            <ShortAddress>{activeAccount}</ShortAddress>
+          </span>
         </Nav.Link>
       </Nav.Item>
     </>
   );
 
   const disconnectedContent = (
-    <Nav.Item className={classes.connectBtn} onClick={() => activateBrowserWallet()}>
-      Connect Wallet
-    </Nav.Item>
+    <Nav.Link className={classes.nounsNavLink} onClick={() => activateBrowserWallet()}>
+      CONNECT WALLET
+    </Nav.Link>
   );
 
   return (
@@ -36,8 +38,8 @@ const NavBar = () => {
         <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
           <img
             src={logo}
-            width="70"
-            height="70"
+            width="85"
+            height="85"
             className="d-inline-block align-middle"
             alt="Nouns DAO logo"
           />

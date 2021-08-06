@@ -3,14 +3,17 @@
   font-size: 5rem;
 }
 
-@media (max-width:  992px){
-  .wrapper{
-    padding:  2rem;
+.bannerSection {
+  border-top: 4px #aaaa solid;
+}
+
+@media (max-width: 992px) {
+  .wrapper {
+    padding: 2rem;
   }
 }
 
 @media (min-width: 992px) {
-
   .wrapper h1 {
     font-size: 7rem;
   }

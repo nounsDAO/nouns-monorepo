@@ -6,12 +6,17 @@
   display: grid;
   text-align: start;
   list-style-type: none;
-  row-gap: 1rem;
+  row-gap: 0.5rem;
   padding: 0;
 }
 
 .bidRow {
+  background-color: rgba(255, 255, 255, 0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
   border-bottom: 1px solid rgba(211, 211, 211, 0.322);
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 .bidItem {
   display: flex;
@@ -23,7 +28,6 @@
   flex-direction: column;
 }
 .bidder {
-  /*font-weight: bold;*/
   color: var(--brand-black);
 }
 .bidDate {
@@ -45,5 +49,5 @@
   color: var(--brand-black);
 }
 .linkSymbol a:hover {
-  color: rgb(32, 32, 32);
+  color: gray;
 }

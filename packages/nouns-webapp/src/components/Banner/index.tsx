@@ -6,7 +6,7 @@ import Noun from '../Noun';
 
 const Banner = () => {
   return (
-    <Section bgColor="white" fullWidth={false}>
+    <Section bgColor="white" fullWidth={false} className={classes.bannerSection}>
       <Col lg={6}>
         <div className={classes.wrapper}>
           <h1>
