@@ -6,12 +6,11 @@
 
 .bidBtn {
   margin-left: 1rem;
-  background-color: var(--brand-black);
   width: 40%;
   height: 3rem;
   color: white;
-  border: 1px solid var(--brand-dark-red);
-  background-color: var(--brand-dark-red);
+  border: transparent;
+  background-color: var(--brand-black);
 }
 
 .bidBtn:hover {
@@ -23,7 +22,7 @@
   width: 60%;
   height: 3rem;
   color: black;
-  border: 1px solid transparent;
+  border: 1px solid white;
   background-color: transparent;
   border-radius: 0.25rem !important;
   background-color: white;
