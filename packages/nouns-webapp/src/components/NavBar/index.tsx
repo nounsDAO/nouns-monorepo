@@ -46,8 +46,8 @@ const NavBar = () => {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse className="justify-content-end">
-          <NavBarLink to="/vote">GOVERNANCE</NavBarLink>
-          <NavBarLink to={`${window.location.origin}/playground`}>PLAYGROUND</NavBarLink>
+          <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>GOVERNANCE</Nav.Link>
+          <Nav.Link href="playground" className={classes.nounsNavLink} target="_blank">PLAYGROUND</Nav.Link>
           {activeAccount ? connectedContent : disconnectedContent}
         </Navbar.Collapse>
       </Container>
