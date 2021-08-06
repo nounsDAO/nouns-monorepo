@@ -2,6 +2,7 @@
   display: flex;
 }
 .bidHistory {
+  margin-left: 0.5rem;
   color: var(--brand-black);
   font-weight: normal;
   font-size: 1rem;

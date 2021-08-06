@@ -125,7 +125,6 @@ const AuctionActivity: React.FC<{
             </Col>
           </Row>
         )}
-
         <Row className={classes.activityRow}>
           <Col lg={12}>
             <BidHistory auctionId={auction.nounId.toString()} max={3} classes={bidHistoryClasses} />
