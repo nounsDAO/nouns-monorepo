@@ -5,6 +5,7 @@ export interface Bid {
 
 export interface AuctionBids {
   id: number;
+  endTime: number;
   bids: Bid[];
 }
 

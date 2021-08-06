@@ -1,7 +1,7 @@
 import { twitter } from '../clients';
 import { config } from '../config';
 import { Bid } from '../types';
-import { getAuctionStartedTweetText, getBidReplyTweetId, getBidTweetText, getNounPngBuffer, updateBidCache, updateBidReplyTweetId } from '../utils';
+import { getAuctionEndingSoonTweetText, getAuctionStartedTweetText, getAuctionReplyTweetId, getBidTweetText, getNounPngBuffer, updateBidCache, updateAuctionReplyTweetId, updateAuctionEndingSoonCache } from '../utils';
 
 /**
  * Process a new auction event
@@ -20,7 +20,7 @@ export async function processNewAuction(auctionId: number) {
     const tweet = await twitter.v1.tweet(getAuctionStartedTweetText(auctionId), {
       media_ids: mediaId,
     });
-    await updateBidReplyTweetId(tweet.id_str);
+    await updateAuctionReplyTweetId(tweet.id_str);
   }
   console.log('tweeted auction update');
 };
@@ -33,12 +33,24 @@ export async function processNewAuction(auctionId: number) {
  */
 export async function processNewBid(id: number, bid: Bid) {
   await updateBidCache(bid.id);
-  const tweetReplyId = await getBidReplyTweetId();
+  const tweetReplyId = await getAuctionReplyTweetId();
   if (!tweetReplyId) {
     console.error(`twitter::processNewBid no reply tweet id exists: auction(${id}) bid(${bid.id})`);
     return;
   }
   const tweet = await twitter.v1.reply(getBidTweetText(id, bid), tweetReplyId);
-  await updateBidReplyTweetId(tweet.id_str);
+  await updateAuctionReplyTweetId(tweet.id_str);
   console.log('tweeted bid update');
+}
+
+export async function processAuctionEndingSoon(id: number) {
+  await updateAuctionEndingSoonCache(id);
+  const tweetReplyId = await getAuctionReplyTweetId();
+  if (!tweetReplyId) {
+    console.error(`twitter::processAuctionEndingSoon no reply tweet id exists`);
+    return;
+  }
+  const tweet = await twitter.v1.reply(getAuctionEndingSoonTweetText(), tweetReplyId);
+  await updateAuctionReplyTweetId(tweet.id_str);
+  console.log('tweeted auction ending soon update');
 }

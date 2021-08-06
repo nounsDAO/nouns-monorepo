@@ -4,9 +4,25 @@ import { isError, tryF } from 'ts-try';
 import { nounsTokenContract, redis } from './clients';
 import { Bid, TokenMetadata } from './types';
 
+/**
+ * Key mapped to the current auction
+ */
 export const getAuctionCacheKey = 'NOUNS_AUCTION_CACHE';
+
+/**
+ * Key mapped to the last processed bid
+ */
 export const getBidCacheKey = 'NOUNS_BID_CACHE';
-export const getBidReplyTweetIdKey = 'NOUNS_BID_REPLY_TWEET_ID';
+
+/**
+ * Key mapped to the tweet id to reply updates to
+ */
+export const getReplyTweetIdKey = 'NOUNS_REPLY_TWEET_ID';
+
+/**
+ * Key mapped to the latest auction id processed for auction ending soon
+ */
+export const getAuctionEndingSoonCacheKey = 'NOUNS_AUCTION_ENDING_SOON_CACHE';
 
 /**
  * Get tweet text for auction started.
@@ -21,8 +37,22 @@ export function getAuctionStartedTweetText(auctionId: number) {
  Learn more at https://nouns.wtf`;
 }
 
+/**
+ * Get the tweet text for a new bid.
+ * @param id The auction/noun id
+ * @param bid The amount of the current bid
+ * @returns The bid update tweet text
+ */
 export function getBidTweetText(id: number, bid: Bid) {
   return `Noun ${id} has received a bid of Ξ${ethers.utils.formatEther(bid.amount)}`;
+}
+
+/**
+ * Get the tweet text for an auction ending soon.
+ * @returns The auction ending soon text
+ */
+export function getAuctionEndingSoonTweetText() {
+  return `This auction is ending soon! Bid now at https://nouns.wtf`;
 }
 
 /**
@@ -46,7 +76,7 @@ export async function updateAuctionCache(id: number) {
 }
 
 /**
- * 
+ * Get the contents of the bid cache
  * @returns The bid cache id or null
  */
 export async function getBidCache(): Promise<string> {
@@ -65,16 +95,36 @@ export async function updateBidCache(id: string) {
  * Get the current tweet id to reply bids to or null
  * @returns The current tweet id to reply to or null
  */
-export async function getBidReplyTweetId(): Promise<string | null> {
-  return redis.get(getBidReplyTweetIdKey);
+export async function getAuctionReplyTweetId(): Promise<string | null> {
+  return redis.get(getReplyTweetIdKey);
 }
 
 /**
  * Update the cache with the id_str of the tweet to reply to next
  * @param id The id_str of the tweet
  */
-export async function updateBidReplyTweetId(id: string) {
-  await redis.set(getBidReplyTweetIdKey, id);
+export async function updateAuctionReplyTweetId(id: string) {
+  await redis.set(getReplyTweetIdKey, id);
+}
+
+/**
+ * Get the last auction id processed for ending soon
+ * @returns The last auction to be processed for ending soon
+ */
+export async function getAuctionEndingSoonCache(): Promise<number> {
+  const auctionId = await redis.get(getAuctionEndingSoonCacheKey);
+  if (auctionId) {
+    return Number(auctionId);
+  }
+  return 0;
+}
+
+/**
+ * Update the auction ending soon cache with `id`
+ * @param id The auction id
+ */
+export async function updateAuctionEndingSoonCache(id: number) {
+  await redis.set(getAuctionEndingSoonCacheKey, id);
 }
 
 /**
