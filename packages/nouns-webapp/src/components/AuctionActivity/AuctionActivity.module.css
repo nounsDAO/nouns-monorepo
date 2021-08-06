@@ -32,17 +32,22 @@ h4 {
 
 .modalHeader {
   border-bottom: none;
+  justify-content: flex-start;
+  align-items: center;
 }
-.modalTitle {
-  margin: 0 auto;
+.modalTitleWrapper {
   color: var(--brand-black);
 }
-.modalHeader button {
-  position: absolute;
-  right: 1rem;
+.modalTitleWrapper h1 {
+  font-size: xx-large;
+  margin-left: 2rem;
 }
-.modalHeader h1 {
-  font-family: 'Londrina Solid';
+.modalHeader button {
+  align-self: flex-start;
+}
+.modalHeaderNounImgWrapper {
+  width: 150px;
+  height: 150px;
 }
 
 .currentBidCol {
