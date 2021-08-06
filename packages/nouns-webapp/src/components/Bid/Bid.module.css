@@ -10,12 +10,12 @@
   width: 40%;
   height: 3rem;
   color: white;
-  border: 1px solid var(--brand-dark-green);
-  background-color: var(--brand-dark-green);
+  border: 1px solid var(--brand-dark-red);
+  background-color: var(--brand-dark-red);
 }
 
 .bidBtn:hover {
-  /*  background-color: var(--brand-dark-green);
+  /*  background-color: var(--brand-dark-red);
   color: rgb(209, 207, 207);*/
 }
 
@@ -42,7 +42,7 @@
 }
 
 .bidBtnAuctionEnded:hover {
-  background-color: var(--brand-dark-green);
+  background-color: var(--brand-dark-red);
   color: rgb(209, 207, 207);
 }
 

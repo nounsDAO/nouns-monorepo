@@ -13,7 +13,7 @@
 .connectBtn:hover,
 .connectBtn:active,
 .connectBtn:focus {
-  background-color: var(--brand-dark-green) !important;
+  background-color: var(--brand-dark-red) !important;
   color: white;
   cursor: pointer !important;
 }
@@ -33,5 +33,5 @@
   color: var(--brand-black) !important;
 }
 .nounsNavLink:hover {
-  color: var(--brand-dark-green) !important;
+  color: var(--brand-dark-red) !important;
 }

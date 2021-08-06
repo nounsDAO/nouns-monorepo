@@ -19,7 +19,7 @@
   color: var(--brand-black);
 }
 .navBarItem a:hover {
-  color: var(--brand-dark-green);
+  color: var(--brand-dark-red);
 }
 
 @media (max-width: 992px) {
