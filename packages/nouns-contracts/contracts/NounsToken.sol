@@ -37,6 +37,9 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     // The internal noun ID tracker
     uint256 private _currentNounId;
 
+    // IPFS content hash of contract-level metadata
+    string private _contractURIHash = "QmcJp8dTZxKUbnUK2h4YuXBF533zWhwHXzVh45z7wMqqMh";
+
     /**
      * @notice Require that the minter has not been locked.
      */
@@ -87,6 +90,21 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
         minter = _minter;
         descriptor = _descriptor;
         seeder = _seeder;
+    }
+
+    /**
+     * @notice The IPFS URI of contract-level metadata.
+     */
+    function contractURI() public view returns (string memory){
+      return string(abi.encodePacked('ipfs://', _contractURIHash));
+    }
+
+    /**
+     * @notice Set the _contractURIHash.
+     * @dev Only callable by the owner.
+     */
+    function setContractURIHash(string memory newContractURIHash) external onlyOwner {
+        _contractURIHash = newContractURIHash;
     }
 
     /**

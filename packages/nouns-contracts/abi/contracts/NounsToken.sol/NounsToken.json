@@ -404,6 +404,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "contractURI",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -910,6 +923,19 @@
       }
     ],
     "name": "setApprovalForAll",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "newContractURIHash",
+        "type": "string"
+      }
+    ],
+    "name": "setContractURIHash",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
