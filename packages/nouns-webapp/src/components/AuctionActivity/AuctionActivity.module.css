@@ -12,18 +12,18 @@
 
 .informationRow {
   border-bottom: 1px solid #aaa;
-  margin-bottom:  3rem;
+  margin-bottom: 2rem;
 }
 .activityRow {
-  margin-bottom:  1.5rem;
+  margin-bottom: 1rem;
 }
 
 h1 {
-  font-size:  3rem;
+  font-size: 3rem;
 }
 
 h2 {
-  font-size:  2.5rem;
+  font-size: 2.5rem;
 }
 
 h4 {
