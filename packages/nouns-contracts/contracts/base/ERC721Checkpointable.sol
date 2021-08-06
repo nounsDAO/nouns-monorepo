@@ -92,6 +92,7 @@ abstract contract ERC721Checkpointable is ERC721Enumerable {
      * @param delegatee The address to delegate votes to
      */
     function delegate(address delegatee) public {
+        if (delegatee == address(0)) delegatee = msg.sender;
         return _delegate(msg.sender, delegatee);
     }
 

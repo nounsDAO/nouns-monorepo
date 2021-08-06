@@ -13,6 +13,7 @@ import {
   minerStop,
   mineBlock,
   chainId,
+  address
 } from '../utils';
 
 chai.use(solidity);
@@ -293,5 +294,47 @@ describe('Nouns Governance', () => {
       expect(await token.getPriorVotes(account1.address, t4.blockNumber)).to.equal(TWO);
       expect(await token.getPriorVotes(account1.address, t4.blockNumber + 1)).to.equal(TWO);
     });
+    it('never delegates to address(0)', async ()=>{
+
+      await setTotalSupply(token, 1);
+
+      // Delegate from Deployer -> Account1
+      await (await tokenCallFromDeployer.delegate(account1.address)).wait();
+      await mineBlock();
+      await mineBlock();
+
+      expect(await token.getCurrentVotes(address(0))).to.equal(0)
+      expect(await token.getCurrentVotes(deployer.address)).to.equal(0)
+      expect(await token.getCurrentVotes(account1.address)).to.equal(ONE)
+
+      // Delegate from Deployer -> Address(0), which should assign back to deployer
+      await (await tokenCallFromDeployer.delegate(address(0))).wait();
+      await mineBlock()
+      await mineBlock()
+
+      expect(await token.getCurrentVotes(address(0))).to.equal(0)
+      expect(await token.getCurrentVotes(deployer.address)).to.equal(ONE)
+      expect(await token.getCurrentVotes(account1.address)).to.equal(0)
+
+      // Delegate from Deployer -> Account1
+      await (await tokenCallFromDeployer.delegate(account1.address)).wait();
+      await mineBlock();
+      await mineBlock();
+
+      expect(await token.getCurrentVotes(address(0))).to.equal(0)
+      expect(await token.getCurrentVotes(deployer.address)).to.equal(0)
+      expect(await token.getCurrentVotes(account1.address)).to.equal(ONE)
+
+      // Transfer from Deployer -> Account2
+      await (await tokenCallFromDeployer.transferFrom(deployer.address, account2.address, 0)).wait();
+      await mineBlock();
+      await mineBlock();
+
+      expect(await token.getCurrentVotes(address(0))).to.equal(0)
+      expect(await token.getCurrentVotes(deployer.address)).to.equal(0)
+      expect(await token.getCurrentVotes(account1.address)).to.equal(0)
+      expect(await token.getCurrentVotes(account2.address)).to.equal(ONE)
+
+    })
   });
 });
