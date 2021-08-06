@@ -1,7 +1,8 @@
 .navBarBrand {
-  margin-right: 0;
+  position: relative;
+  top: 1rem;
+  z-index: 9999;
 }
-
 
 /* connect button displays differently to default NavBarItems, thus the !importants */
 .connectBtn {
@@ -17,7 +18,6 @@
   cursor: pointer !important;
 }
 
-
 .greenStatusCircle {
   display: inline-block;
   width: 10px;
@@ -27,9 +27,11 @@
   margin-right: 5px;
 }
 
-.nounsNavLink, .nounsNavLink:active, .nounsNavLink:visited{
-  color:  var(--brand-black) !important;
+.nounsNavLink,
+.nounsNavLink:active,
+.nounsNavLink:visited {
+  color: var(--brand-black) !important;
 }
-.nounsNavLink:hover{
-  color:  var(--brand-dark-green) !important;
+.nounsNavLink:hover {
+  color: var(--brand-dark-green) !important;
 }
