@@ -4,12 +4,27 @@ import { Link } from 'react-router-dom';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
 
+import { useCallback } from 'react';
+import { useAppDispatch } from '../../hooks';
+import { AlertModal, setAlertModal } from '../../state/slices/application';
+
+
 const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
+  const dispatch = useAppDispatch();
+  const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
+  const onClickCreateProposal = () =>{
+    setModal({
+      show: true,
+      title: 'Create a Proposal',
+      message: 'Coming soon!',
+    });
+  }
+
   return (
     <div className={classes.proposals}>
       <div>
         <h3 className={classes.heading}>Proposals</h3>
-        <Button className={classes.createProposalLink} as={Link} to="/create-proposal">
+        <Button className={classes.createProposalLink} onClick={onClickCreateProposal}>
           Create Proposal
         </Button>
       </div>
