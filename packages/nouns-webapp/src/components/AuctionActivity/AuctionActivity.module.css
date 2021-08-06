@@ -3,13 +3,6 @@
   color: var(--brand-black);
   align-self: flex-start !important;
 }
-
-@media (max-width: 992px) {
-  .wrapper {
-    padding: 1rem;
-  }
-}
-
 .informationRow {
   margin-bottom: 2rem;
 }
@@ -49,12 +42,20 @@ h4 {
   width: 150px;
   height: 150px;
 }
-
 .currentBidCol {
   border-right: 1px solid var(--brand-black);
 }
 .auctionTimerCol {
   padding-left: 3rem;
+}
+
+@media (max-width: 992px) {
+  .wrapper {
+    padding: 1rem;
+  }
+  .auctionTimerCol {
+    padding-left: 15px;
+  }
 }
 
 /* Fix Firefox navigation arrow alignment issues */

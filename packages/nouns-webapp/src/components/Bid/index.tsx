@@ -214,7 +214,7 @@ const Bid: React.FC<{
             aria-describedby="basic-addon1"
             className={classes.bidInput}
             type="number"
-            placeholder={`Min bid: ${minBidEth(minBid)} ETH`}
+            placeholder={`Minimum bid: ${minBidEth(minBid)} ETH`}
             min="0"
             onChange={bidInputHandler}
             ref={bidInputRef}

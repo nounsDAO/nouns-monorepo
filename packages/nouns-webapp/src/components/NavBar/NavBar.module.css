@@ -1,7 +1,7 @@
 .navBarBrand {
   position: relative;
   top: 1rem;
-  z-index: 9999;
+  z-index: 2;
 }
 
 /* connect button displays differently to default NavBarItems, thus the !importants */

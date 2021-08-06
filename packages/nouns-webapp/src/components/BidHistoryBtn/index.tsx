@@ -5,9 +5,8 @@ const BidHistoryBtn: React.FC<{ onClick: () => void }> = props => {
   const { onClick } = props;
   return (
     <div className={classes.bidHistoryWrapper}>
-      {/*<img src={nounPointerImg} alt="Pointer noun" />*/}
       <div className={classes.bidHistory} onClick={onClick}>
-        {`>`} see more
+        Bid History →
       </div>
     </div>
   );
