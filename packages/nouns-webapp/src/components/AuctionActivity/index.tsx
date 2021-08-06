@@ -38,12 +38,11 @@ const AuctionActivity: React.FC<{
 
   const bidHistoryTitle = `Noun ${auction && auction.nounId.toString()} bid history`;
 
-
   // timer logic
   useEffect(() => {
-    if (!auction) return
+    if (!auction) return;
 
-    const timeLeft = Number(auction.endTime) - Math.floor(Date.now()/1000);
+    const timeLeft = Number(auction.endTime) - Math.floor(Date.now() / 1000);
 
     if (auction && timeLeft <= 0) {
       setAuctionEnded(true);
@@ -71,7 +70,7 @@ const AuctionActivity: React.FC<{
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <BidHistory auctionId={auction.nounId.toString()} max={9999}/>
+            <BidHistory auctionId={auction.nounId.toString()} max={9999} />
           </Modal.Body>
         </Modal>
       )}
@@ -93,24 +92,19 @@ const AuctionActivity: React.FC<{
             </Col>
           </Row>
           <Row className={classes.activityRow}>
-            <Col lg={6}>
+            <Col lg={5} className={classes.currentBidCol}>
               <CurrentBid
                 currentBid={new BigNumber(auction.amount.toString())}
                 auctionEnded={auctionEnded}
               />
             </Col>
-            <Col lg={6}>
-            { auctionEnded ?
-              <Winner winner={auction.bidder} />
-              :
-              <AuctionTimer
-                auction={auction}
-                auctionEnded={auctionEnded}
-              />
-            }
-
+            <Col lg={5} className={classes.auctionTimerCol}>
+              {auctionEnded ? (
+                <Winner winner={auction.bidder} />
+              ) : (
+                <AuctionTimer auction={auction} auctionEnded={auctionEnded} />
+              )}
             </Col>
-
           </Row>
         </div>
         {isLastAuction && (
@@ -127,7 +121,6 @@ const AuctionActivity: React.FC<{
             <BidHistoryBtn onClick={showBidModalHandler} />
           </Col>
         </Row>
-
       </AuctionActivityWrapper>
     </>
   );

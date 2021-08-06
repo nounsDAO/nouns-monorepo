@@ -45,7 +45,12 @@ h4 {
   font-family: 'Londrina Solid';
 }
 
-/* section titles (date, current bid, auction ends */
+.currentBidCol {
+  border-right: 1px solid var(--brand-black);
+}
+.auctionTimerCol {
+  padding-left: 3rem;
+}
 
 /* Fix Firefox navigation arrow alignment issues */
 @-moz-document url-prefix() {
