@@ -1,12 +1,22 @@
 // SPDX-License-Identifier: Unlicense
 
+/// @title Interface for NounsSeeder.
+
+/*********************************
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
+ * ░░░░░░▒▒▒▒▒▒▒▒▒░░▒▒▒▒▒▒▒▒▒░░░ *
+ * ░░░░░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
+ * ░░▒▒▒▒▒▒░░░▒▒▒▒▒▒▒▒░░░▒▒▒▒░░░ *
+ * ░░▒▒░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
+ * ░░▒▒░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
+ * ░░░░░░▒▒▒▒▒▒▒▒▒░░▒▒▒▒▒▒▒▒▒░░░ *
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
+*********************************/
+
 pragma solidity ^0.8.6;
 
 import { INounsDescriptor } from './INounsDescriptor.sol';
 
-/**
- * @title Interface for NounsSeeder.
- */
 interface INounsSeeder {
     struct Seed {
         uint48 background;

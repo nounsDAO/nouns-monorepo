@@ -1,12 +1,22 @@
 // SPDX-License-Identifier: Unlicense
 
+/// @title Interface for NounsDescriptor.
+
+/*********************************
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
+ * ░░░░░░▒▒▒▒▒▒▒▒▒░░▒▒▒▒▒▒▒▒▒░░░ *
+ * ░░░░░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
+ * ░░▒▒▒▒▒▒░░░▒▒▒▒▒▒▒▒░░░▒▒▒▒░░░ *
+ * ░░▒▒░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
+ * ░░▒▒░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
+ * ░░░░░░▒▒▒▒▒▒▒▒▒░░▒▒▒▒▒▒▒▒▒░░░ *
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
+*********************************/
+
 pragma solidity ^0.8.6;
 
 import { INounsSeeder } from './INounsSeeder.sol';
 
-/**
- * @title Interface for NounsDescriptor.
- */
 interface INounsDescriptor {
     event PartsLocked();
 

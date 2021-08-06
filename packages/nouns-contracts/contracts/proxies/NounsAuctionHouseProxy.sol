@@ -1,12 +1,22 @@
 // SPDX-License-Identifier: Unlicense
 
+/// @title The NounsDAO auction house proxy
+
+/*********************************
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
+ * ░░░░░░▒▒▒▒▒▒▒▒▒░░▒▒▒▒▒▒▒▒▒░░░ *
+ * ░░░░░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
+ * ░░▒▒▒▒▒▒░░░▒▒▒▒▒▒▒▒░░░▒▒▒▒░░░ *
+ * ░░▒▒░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
+ * ░░▒▒░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
+ * ░░░░░░▒▒▒▒▒▒▒▒▒░░▒▒▒▒▒▒▒▒▒░░░ *
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
+*********************************/
+
 pragma solidity ^0.8.6;
 
 import { TransparentUpgradeableProxy } from '@openzeppelin/contracts/proxy/transparent/TransparentUpgradeableProxy.sol';
 
-/**
- * @title The NounsDAO auction house proxy
- */
 contract NounsAuctionHouseProxy is TransparentUpgradeableProxy {
     constructor(
         address logic,

@@ -1,10 +1,20 @@
 // SPDX-License-Identifier: Unlicense
 
+/// @title A library used to convert multi-part RLE compressed images to SVG.
+
+/*********************************
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
+ * ░░░░░░▒▒▒▒▒▒▒▒▒░░▒▒▒▒▒▒▒▒▒░░░ *
+ * ░░░░░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
+ * ░░▒▒▒▒▒▒░░░▒▒▒▒▒▒▒▒░░░▒▒▒▒░░░ *
+ * ░░▒▒░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
+ * ░░▒▒░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
+ * ░░░░░░▒▒▒▒▒▒▒▒▒░░▒▒▒▒▒▒▒▒▒░░░ *
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
+*********************************/
+
 pragma solidity ^0.8.6;
 
-/**
- * @title A library used to convert multi-part RLE compressed images to SVG.
- */
 library MultiPartRLEToSVG {
     struct SVGParams {
         bytes[] parts;

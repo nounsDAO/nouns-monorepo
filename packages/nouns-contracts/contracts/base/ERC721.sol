@@ -1,21 +1,32 @@
 // SPDX-License-Identifier: MIT
 
-/**
- * LICENSE
- * ERC721.sol modifies OpenZeppelin's ERC721.sol:
- * https://github.com/OpenZeppelin/openzeppelin-contracts/blob/6618f9f18424ade44116d0221719f4c93be6a078/contracts/token/ERC721/ERC721.sol
- *
- * ERC721.sol source code copyright OpenZeppelin licensed under under MIT License.
- * With modifications by Nounders DAO.
- *
- *
- * MODIFICATIONS:
- * `_safeMint` and `_mint` contain an additional `creator` argument and
- * emit two `Transfer` logs, rather than one. The first log displays the
- * transfer (mint) from `address(0)` to the `creator`. The second displays the
- * transfer from the `creator` to the `to` address. This enables correct
- * attribution on various NFT marketplaces.
- */
+/// @title ERC721 Token Implementation
+
+/*********************************
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
+ * ░░░░░░▒▒▒▒▒▒▒▒▒░░▒▒▒▒▒▒▒▒▒░░░ *
+ * ░░░░░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
+ * ░░▒▒▒▒▒▒░░░▒▒▒▒▒▒▒▒░░░▒▒▒▒░░░ *
+ * ░░▒▒░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
+ * ░░▒▒░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
+ * ░░░░░░▒▒▒▒▒▒▒▒▒░░▒▒▒▒▒▒▒▒▒░░░ *
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
+*********************************/
+
+// LICENSE
+// ERC721.sol modifies OpenZeppelin's ERC721.sol:
+// https://github.com/OpenZeppelin/openzeppelin-contracts/blob/6618f9f18424ade44116d0221719f4c93be6a078/contracts/token/ERC721/ERC721.sol
+//
+// ERC721.sol source code copyright OpenZeppelin licensed under under MIT License.
+// With modifications by Nounders DAO.
+//
+//
+// MODIFICATIONS:
+// `_safeMint` and `_mint` contain an additional `creator` argument and
+// emit two `Transfer` logs, rather than one. The first log displays the
+// transfer (mint) from `address(0)` to the `creator`. The second displays the
+// transfer from the `creator` to the `to` address. This enables correct
+// attribution on various NFT marketplaces.
 
 pragma solidity ^0.8.6;
 

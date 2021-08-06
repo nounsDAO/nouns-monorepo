@@ -1,25 +1,33 @@
 // SPDX-License-Identifier: BSD-3-Clause
 
-/**
- * LICENSE
- * NounsDAOExecutor.sol is a modified version of Compound Lab's Timelock.sol:
- * https://github.com/compound-finance/compound-protocol/blob/20abad28055a2f91df48a90f8bb6009279a4cb35/contracts/Timelock.sol
- *
- * Timelock.sol source code Copyright 2020 Compound Labs, Inc. licensed under the BSD-3-Clause license.
- * With modifications by Nounders DAO.
- *
- * Additional conditions of BSD-3-Clause can be found here: https://opensource.org/licenses/BSD-3-Clause
- *
- * MODIFICATIONS
- * NounsDAOExecutor.sol modifies Timelock to use Solidity 0.8.x receive(), fallback(), and built-in over/underflow protection
- * This contract acts as executor of Nouns DAO governance and its treasury, so it has been modified to accept ETH.
- */
+/// @title The Nouns DAO executor and treasury
+
+/*********************************
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
+ * ░░░░░░▒▒▒▒▒▒▒▒▒░░▒▒▒▒▒▒▒▒▒░░░ *
+ * ░░░░░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
+ * ░░▒▒▒▒▒▒░░░▒▒▒▒▒▒▒▒░░░▒▒▒▒░░░ *
+ * ░░▒▒░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
+ * ░░▒▒░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
+ * ░░░░░░▒▒▒▒▒▒▒▒▒░░▒▒▒▒▒▒▒▒▒░░░ *
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
+*********************************/
+
+// LICENSE
+// NounsDAOExecutor.sol is a modified version of Compound Lab's Timelock.sol:
+// https://github.com/compound-finance/compound-protocol/blob/20abad28055a2f91df48a90f8bb6009279a4cb35/contracts/Timelock.sol
+//
+// Timelock.sol source code Copyright 2020 Compound Labs, Inc. licensed under the BSD-3-Clause license.
+// With modifications by Nounders DAO.
+//
+// Additional conditions of BSD-3-Clause can be found here: https://opensource.org/licenses/BSD-3-Clause
+//
+// MODIFICATIONS
+// NounsDAOExecutor.sol modifies Timelock to use Solidity 0.8.x receive(), fallback(), and built-in over/underflow protection
+// This contract acts as executor of Nouns DAO governance and its treasury, so it has been modified to accept ETH.
 
 pragma solidity ^0.8.6;
 
-/**
- * @title The Nouns DAO executor and treasury
- */
 contract NounsDAOExecutor {
     event NewAdmin(address indexed newAdmin);
     event NewPendingAdmin(address indexed newPendingAdmin);
