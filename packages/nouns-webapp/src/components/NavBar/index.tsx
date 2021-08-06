@@ -6,6 +6,8 @@ import ShortAddress from '../ShortAddress';
 import classes from './NavBar.module.css';
 import logo from '../../assets/logo.svg';
 import NavBarItem from './NavBarItem';
+import { useState } from 'react';
+import WalletConnectModal from '../WalletConnectModal';
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { WalletLinkConnector } from '@web3-react/walletlink-connector'
 import {FortmaticConnector} from "@web3-react/fortmatic-connector"
@@ -14,6 +16,15 @@ import config from '../../config';
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { activateBrowserWallet, activate, deactivate } = useEthers();
+
+  const [showConnectModal, setShowConnectModal] = useState(true);
+  // USE TO PASS INTO CONNECT TO WALLET BUTTON
+  // const showModalHandler = () => {
+  //   setShowConnectModal(true);
+  // };
+  const hideModalHandler = () => {
+    setShowConnectModal(false);
+  };
 
   const connectedContent = (
     <>
@@ -64,23 +75,26 @@ const NavBar = () => {
   );
 
   return (
-    <Navbar expand="lg">
-      <Container>
-        <Navbar.Brand href="#home" className={classes.navBarBrand}>
-          <img
-            src={logo}
-            width="70"
-            height="70"
-            className="d-inline-block align-middle"
-            alt="Nouns DAO logo"
-          />
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse className="justify-content-end">
-          {activeAccount ? connectedContent : disconnectedContent}
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+    <>
+      {showConnectModal && <WalletConnectModal onDismiss={hideModalHandler} />}
+      <Navbar expand="lg">
+        <Container>
+          <Navbar.Brand href="#home" className={classes.navBarBrand}>
+            <img
+              src={logo}
+              width="70"
+              height="70"
+              className="d-inline-block align-middle"
+              alt="Nouns DAO logo"
+            />
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse className="justify-content-end">
+            {activeAccount ? connectedContent : disconnectedContent}
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+    </>
   );
 };
 
