@@ -8,6 +8,8 @@ import { INounsDescriptor } from './interfaces/INounsDescriptor.sol';
 import { INounsSeeder } from './interfaces/INounsSeeder.sol';
 import { INounsToken } from './interfaces/INounsToken.sol';
 import { ERC721 } from './base/ERC721.sol';
+import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
+import { ProxyRegistry } from './base/ProxyRegistry.sol';
 
 contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     // The nounders DAO address (creators org)
@@ -39,6 +41,9 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
 
     // IPFS content hash of contract-level metadata
     string private _contractURIHash = "QmcJp8dTZxKUbnUK2h4YuXBF533zWhwHXzVh45z7wMqqMh";
+
+    // OpenSea's Proxy Registry
+    address public immutable proxyRegistryAddress;
 
     /**
      * @notice Require that the minter has not been locked.
@@ -84,12 +89,14 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
         address _noundersDAO,
         address _minter,
         INounsDescriptor _descriptor,
-        INounsSeeder _seeder
+        INounsSeeder _seeder,
+        address _proxyRegistryAddress
     ) ERC721('Nouns', 'NOUN') {
         noundersDAO = _noundersDAO;
         minter = _minter;
         descriptor = _descriptor;
         seeder = _seeder;
+        proxyRegistryAddress = _proxyRegistryAddress;
     }
 
     /**
@@ -105,6 +112,18 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
      */
     function setContractURIHash(string memory newContractURIHash) external onlyOwner {
         _contractURIHash = newContractURIHash;
+    }
+
+    /**
+     * @notice Override isApprovedForAll to whitelist user's OpenSea proxy accounts to enable gas-less listings.
+     */
+    function isApprovedForAll(address owner, address operator) public view override(IERC721, ERC721) returns (bool) {
+        // Whitelist OpenSea proxy contract for easy trading.
+        ProxyRegistry proxyRegistry = ProxyRegistry(proxyRegistryAddress);
+        if (address(proxyRegistry.proxies(owner)) == operator) {
+            return true;
+        }
+        return super.isApprovedForAll(owner, operator);
     }
 
     /**
