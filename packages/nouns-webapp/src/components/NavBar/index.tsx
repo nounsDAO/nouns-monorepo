@@ -16,16 +16,6 @@ const NavBar = () => {
   const connectedContent = (
     <>
       <Nav.Item>
-        <Nav.Link className={classes.nounsNavLink} href="governance" rel="noreferrer">
-          GOVERNANCE
-        </Nav.Link>
-      </Nav.Item>
-      <Nav.Item>
-        <Nav.Link className={classes.nounsNavLink} href="playground" target="_blank" rel="noreferrer">
-          PLAYGROUND
-        </Nav.Link>
-      </Nav.Item>
-      <Nav.Item>
         <Nav.Link className={classes.nounsNavLink} disabled>
           <span className={classes.greenStatusCircle} />
           <span><ShortAddress>{activeAccount}</ShortAddress></span>
@@ -55,6 +45,7 @@ const NavBar = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse className="justify-content-end">
           <NavBarLink to="/vote">GOVERNANCE</NavBarLink>
+          <NavBarLink to={`${window.location.origin}/playground`}>PLAYGROUND</NavBarLink>
           {activeAccount ? connectedContent : disconnectedContent}
         </Navbar.Collapse>
       </Container>
