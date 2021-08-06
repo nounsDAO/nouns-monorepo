@@ -15,6 +15,7 @@ import AuctionActivityWrapper from '../AuctionActivityWrapper';
 import AuctionActivityNounTitle from '../AuctionActivityNounTitle';
 import AuctionActivityDateHeadline from '../AuctionActivityDateHeadline';
 import BidHistoryBtn from '../BidHistoryBtn';
+import StandaloneNoun from '../StandaloneNoun';
 
 const AuctionActivity: React.FC<{
   auction: Auction;
@@ -36,7 +37,12 @@ const AuctionActivity: React.FC<{
     setShowBidHistoryModal(false);
   };
 
-  const bidHistoryTitle = `Noun ${auction && auction.nounId.toString()} bid history`;
+  const bidHistoryTitle = (
+    <h1>
+      Noun {auction && auction.nounId.toString()}
+      <br /> Bid History
+    </h1>
+  );
 
   // timer logic
   useEffect(() => {
@@ -63,11 +69,16 @@ const AuctionActivity: React.FC<{
   return (
     <>
       {showBidHistoryModal && (
-        <Modal show={showBidHistoryModal} onHide={dismissBidModalHanlder} size="lg">
+        <Modal
+          show={showBidHistoryModal}
+          onHide={dismissBidModalHanlder}
+          dialogClassName="modal-90w"
+        >
           <Modal.Header closeButton className={classes.modalHeader}>
-            <Modal.Title className={classes.modalTitle}>
-              <h1>{bidHistoryTitle}</h1>
-            </Modal.Title>
+            <div className={classes.modalHeaderNounImgWrapper}>
+              <StandaloneNoun nounId={auction && auction.nounId} />
+            </div>
+            <Modal.Title className={classes.modalTitleWrapper}>{bidHistoryTitle}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <BidHistory auctionId={auction.nounId.toString()} max={9999} />
