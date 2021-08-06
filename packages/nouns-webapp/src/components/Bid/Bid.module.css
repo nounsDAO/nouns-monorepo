@@ -1,47 +1,32 @@
-
-
-
-
-
-
-
-
-
 /* OLD */
-
 
 .bidWrapper {
   margin: 1rem 0;
 }
 
 .bidBtn {
-  /*border-radius: 0px 50px 50px 0px;*/
+  margin-left: 1rem;
   background-color: var(--brand-black);
   width: 40%;
   height: 3rem;
-/*  font-weight: bold;
-  font-size: 2.5rem;*/
   color: white;
-  /*font-family: 'Londrina Solid';*/
+  border: 1px solid var(--brand-dark-green);
+  background-color: var(--brand-dark-green);
 }
 
 .bidBtn:hover {
-/*  background-color: var(--brand-dark-green);
+  /*  background-color: var(--brand-dark-green);
   color: rgb(209, 207, 207);*/
 }
 
 .bidInput {
-
-  /*border-radius: 50px 0px 0px 50px;*/
-  /*border: 0 none;*/
   width: 60%;
   height: 3rem;
-  /*font-weight: bold;
-  font-size: xx-large;*/
   color: black;
-  border: 1px solid var(--brand-black);
+  border: 1px solid transparent;
   background-color: transparent;
-  /*font-family: 'Londrina Solid';*/
+  border-radius: 0.25rem !important;
+  background-color: white;
 }
 
 .bidBtnAuctionEnded {
