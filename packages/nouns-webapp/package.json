@@ -22,6 +22,8 @@
     "@web3-react/injected-connector":"^6.0.7",
     "@web3-react/walletlink-connector":"^6.2.3",
     "@web3-react/fortmatic-connector":"^6.1.6",
+    "@web3-react/ledger-connector":"^6.1.9",
+    "@web3-react/trezor-connector":"^6.1.9",
     "axios": "^0.21.1",
     "bignumber.js": "^9.0.1",
     "bootstrap": "^4.6.0",

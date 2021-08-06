@@ -4,7 +4,8 @@ const config = {
   subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph-rinkeby',
   rinkebyJsonRpc: process.env.REACT_APP_RINKEBY_JSONRPC ||
       `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
-  supportedChainIds: [4]
+  supportedChainId: 4,
+  ledgerDerivationPath: "m/44'/60'/0'/0"
 };
 
 export default config;
