@@ -26,7 +26,7 @@ const computeMinimumNextBid = (
 
 const minBidEth = (minBid: BigNumber): string => {
   if (minBid.isZero()) {
-    return '';
+    return '0.01';
   }
 
   const eth = Number(utils.formatEther(EthersBN.from(minBid.toString())));
@@ -224,7 +224,7 @@ const Bid: React.FC<{
             onClick={auctionEnded ? settleAuctionHandler : placeBidHandler}
             disabled={placeBidState.status === 'Mining' || settleAuctionState.status === 'Mining'}
             >
-            Bid
+            {bidButtonContent.loading ? <Spinner animation="border" /> : bidButtonContent.content}
           </Button>
         </InputGroup>
 
