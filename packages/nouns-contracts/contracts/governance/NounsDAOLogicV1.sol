@@ -1,24 +1,17 @@
 // SPDX-License-Identifier: BSD-3-Clause
-/**
- * Original Copyright 2020 Compound Labs, Inc.
- * Modified Copyright 2021 Nouns DAO
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
 
 /**
- * NounsDAOLogicV1 is a modified version of [Compound Governance GovernorBravo](https://github.com/compound-finance/compound-protocol/blob/b9b14038612d846b83f8a009a82c38974ff2dcfe/contracts/Governance/GovernorBravoDelegate.sol)
+ * LICENSE
+ * NounsDAOLogicV1.sol is a modified version of Compound Lab's GovernorBravoDelegate.sol:
+ * https://github.com/compound-finance/compound-protocol/blob/b9b14038612d846b83f8a009a82c38974ff2dcfe/contracts/Governance/GovernorBravoDelegate.sol
  *
- * NounsDAOLogicV1 REMOVES:
- * - `initialProposalId` and `_initiate()` due to this being the
- *   first instance of the governance contract unlike
- *   GovernorBravo which upgrades GovernorAlpha
+ * GovernorBravoDelegate.sol source code Copyright 2020 Compound Labs, Inc. licensed under the BSD-3-Clause license.
+ * With modifications by Nounders DAO.
  *
- * - Value passed along using `timelock.executeTransaction{value: proposal.value}`
- *   in `execute(uint proposalId)`. This contract should not hold funds and does not
- *   implement `receive()` or `fallback()` functions.
+ * Additional conditions of BSD-3-Clause can be found here: https://opensource.org/licenses/BSD-3-Clause
  *
- * NounsDAOLogicV1 ADDS:
+ * MODIFICATIONS
+ * NounsDAOLogicV1 adds:
  * - Proposal Threshold basis points instead of fixed number
  *   due to the Noun token's increasing supply
  *
@@ -40,6 +33,15 @@
  *   the proposal is executed.
  *   The `veto(uint proposalId)` logic is a modified version of `cancel(uint proposalId)`
  *   A `vetoed` flag was added to the `Proposal` struct to support this.
+
+ * NounsDAOLogicV1 removes:
+ * - `initialProposalId` and `_initiate()` due to this being the
+ *   first instance of the governance contract unlike
+ *   GovernorBravo which upgrades GovernorAlpha
+ *
+ * - Value passed along using `timelock.executeTransaction{value: proposal.value}`
+ *   in `execute(uint proposalId)`. This contract should not hold funds and does not
+ *   implement `receive()` or `fallback()` functions.
  */
 
 pragma solidity ^0.8.6;

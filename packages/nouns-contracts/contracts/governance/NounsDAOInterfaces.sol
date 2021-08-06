@@ -1,16 +1,18 @@
 // SPDX-License-Identifier: BSD-3-Clause
-/**
- * Original Copyright 2020 Compound Labs, Inc.
- * Modified Copyright 2021 Nouns DAO
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
 
 /**
- * NounsDAOInterfaces is a modified version of [Compound GovernorBravoInterfaces] (https://github.com/compound-finance/compound-protocol/blob/b9b14038612d846b83f8a009a82c38974ff2dcfe/contracts/Governance/GovernorBravoInterfaces.sol)
+ * LICENSE
+ * NounsDAOInterfaces.sol is a modified version of Compound Lab's GovernorBravoInterfaces.sol:
+ * https://github.com/compound-finance/compound-protocol/blob/b9b14038612d846b83f8a009a82c38974ff2dcfe/contracts/Governance/GovernorBravoInterfaces.sol
  *
- * NounsDAOEvents, NounsDAOProxyStorage, NounsDAOStorageV1 adds support for changes made by Nouns DAO to GovernorBravo
- * See `NounsDAOLogicV1.sol` for more details
+ * GovernorBravoInterfaces.sol source code Copyright 2020 Compound Labs, Inc. licensed under the BSD-3-Clause license.
+ * With modifications by Nounders DAO.
+ *
+ * Additional conditions of BSD-3-Clause can be found here: https://opensource.org/licenses/BSD-3-Clause
+ *
+ * MODIFICATIONS
+ * NounsDAOEvents, NounsDAOProxyStorage, NounsDAOStorageV1 adds support for changes made by Nouns DAO to GovernorBravo.sol
+ * See NounsDAOLogicV1.sol for more details.
  */
 
 pragma solidity ^0.8.6;

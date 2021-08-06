@@ -1,15 +1,23 @@
 // SPDX-License-Identifier: BSD-3-Clause
-/**
- * Original Copyright 2020 Compound Labs, Inc.
- * Modified Copyright 2021 Nouns DAO
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
 
 /**
- * Modified version of from [Compound Governance GovernorBravoDelegator](https://github.com/compound-finance/compound-protocol/blob/b9b14038612d846b83f8a009a82c38974ff2dcfe/contracts/Governance/GovernorBravoDelegator.sol)
+ * LICENSE
+ * NounsDAOProxy.sol is a modified version of Compound Lab's GovernorBravoDelegator.sol:
+ * https://github.com/compound-finance/compound-protocol/blob/b9b14038612d846b83f8a009a82c38974ff2dcfe/contracts/Governance/GovernorBravoDelegator.sol
  *
- * This Delegator uses parts of [Open Zeppelin's Proxy.sol] (https://github.com/OpenZeppelin/openzeppelin-contracts/blob/5c8746f56b4bed8cc9e0e044f5f69ab2f9428ce1/contracts/proxy/Proxy.sol) to allow GovernorBravoDelegator to handle fallback() and receive() as per Solidity > 0.6.0
+ * GovernorBravoDelegator.sol source code Copyright 2020 Compound Labs, Inc. licensed under the BSD-3-Clause license.
+ * With modifications by Nounders DAO.
+ *
+ * Additional conditions of BSD-3-Clause can be found here: https://opensource.org/licenses/BSD-3-Clause
+ *
+ *
+ * NounsDAOProxy.sol uses parts of Open Zeppelin's Proxy.sol:
+ * https://github.com/OpenZeppelin/openzeppelin-contracts/blob/5c8746f56b4bed8cc9e0e044f5f69ab2f9428ce1/contracts/proxy/Proxy.sol
+ *
+ * Proxy.sol source code licensed under MIT License.
+ *
+ * MODIFICATIONS
+ * The fallback() and receive() functions of Proxy.sol have been used to allow Solidity > 0.6.0 compatibility
  */
 
 pragma solidity ^0.8.6;

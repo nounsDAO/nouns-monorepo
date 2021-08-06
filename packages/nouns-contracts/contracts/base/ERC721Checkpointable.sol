@@ -1,28 +1,27 @@
 // SPDX-License-Identifier: BSD-3-Clause
+
 /**
- * Original Copyright 2020 Compound Labs, Inc.
- * Modified Copyright 2021 Nouns DAO
+ * LICENSE
+ * ERC721Checkpointable.sol uses and modifies part of Compound Lab's Comp.sol:
+ * https://github.com/compound-finance/compound-protocol/blob/ae4388e780a8d596d97619d9704a931a2752c2bc/contracts/Governance/Comp.sol
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ * Comp.sol source code Copyright 2020 Compound Labs, Inc. licensed under the BSD-3-Clause license.
+ * With modifications by Nounders DAO.
+ *
+ * Additional conditions of BSD-3-Clause can be found here: https://opensource.org/licenses/BSD-3-Clause
+ *
+ * MODIFICATIONS
+ * Checkpointing logic from Comp.sol has been used with the following modifications:
+ * - `delegates` is renamed to `_delegates` and is set to private
+ * - `delegates` is a public function that uses the `_delegates` mapping look-up, but unlike
+ *   Comp.sol, returns the delegator's own address if there is no delegate.
+ *   This avoids the delegator needing to "delegate to self" with an additional transaction
+ * - `_transferTokens()` is renamed `_beforeTokenTransfer()` and adapted to hook into OpenZeppelin's ERC721 hooks.
+ */
 
 pragma solidity ^0.8.6;
 
 import './ERC721Enumerable.sol';
-
-/**
- * ERC721Checkpointable uses the checkpointing code from [Comp.sol](https://github.com/compound-finance/compound-protocol/blob/ae4388e780a8d596d97619d9704a931a2752c2bc/contracts/Governance/Comp.sol)
- *
-  * ERC721Checkpointable CHANGES:
-  * - `delegates` is renamed to `_delegates` and becomes private
-  *
-  * - `delegates` is a public function that uses the `_delegates` mapping look-up, but unlike
-  *   `Comp.sol`, returns the delegator's own address if there is no delegate.
-  *   This avoids the delegator needing to "delegate to self" with an additional transaction
-  *
-  * - `_transferTokens()` is renamed `_beforeTokenTransfer()` and adapted to hook into OpenZeppelin's ERC721 hooks.
- *
-*/
 
 /**
  * @title Vote checkpointing for an ERC-721 token

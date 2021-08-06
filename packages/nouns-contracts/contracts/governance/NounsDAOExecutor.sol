@@ -1,17 +1,18 @@
 // SPDX-License-Identifier: BSD-3-Clause
-/**
- * Original Copyright 2020 Compound Labs, Inc.
- * Modified Copyright 2021 Nouns DAO
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
 
 /**
- * NounsDAOExecutor is a modified version of from [Compound Governance Timelock](https://github.com/compound-finance/compound-protocol/blob/20abad28055a2f91df48a90f8bb6009279a4cb35/contracts/Timelock.sol)
+ * LICENSE
+ * NounsDAOExecutor.sol is a modified version of Compound Lab's Timelock.sol:
+ * https://github.com/compound-finance/compound-protocol/blob/20abad28055a2f91df48a90f8bb6009279a4cb35/contracts/Timelock.sol
  *
- * This modifies Timelock to use Solidity 0.8.x receive(), fallback(), and built-in over/underflow protection
+ * Timelock.sol source code Copyright 2020 Compound Labs, Inc. licensed under the BSD-3-Clause license.
+ * With modifications by Nounders DAO.
+ *
+ * Additional conditions of BSD-3-Clause can be found here: https://opensource.org/licenses/BSD-3-Clause
+ *
+ * MODIFICATIONS
+ * NounsDAOExecutor.sol modifies Timelock to use Solidity 0.8.x receive(), fallback(), and built-in over/underflow protection
  * This contract acts as executor of Nouns DAO governance and its treasury, so it has been modified to accept ETH.
- *
  */
 
 pragma solidity ^0.8.6;
