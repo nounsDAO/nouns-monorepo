@@ -219,11 +219,12 @@ const Bid: React.FC<{
           min="0"
           onChange={bidInputHandler}
           ref={bidInputRef}
+          value={bidInput}
         />
         <Button
           className={auctionEnded ? classes.bidBtnAuctionEnded : classes.bidBtn}
           onClick={auctionEnded ? settleAuctionHandler : placeBidHandler}
-          disabled={placeBidState.status === 'Mining' || settleAuctionState.status === 'Mining'}
+          disabled={isDisabled}
         >
           {bidButtonContent.loading ? <Spinner animation="border" /> : bidButtonContent.content}
         </Button>
