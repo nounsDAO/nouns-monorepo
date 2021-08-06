@@ -12,7 +12,7 @@
 
 .heading {
   display: inline-block;
-  font-family: 'Londrina Solid';
+  /*font-family: 'Londrina Solid';*/
   font-size: 2rem;
   margin: 0 !important;
 }
@@ -24,12 +24,12 @@
   border: 0 none;
   font-size: large;
   font-weight: normal;
-  font-family: 'Londrina Solid';
+  /*font-family: 'Londrina Solid';*/
   cursor: default;
 }
 
 .createProposalLink:hover {
-  background-color: var(--brand-dark-green);
+  background-color: var(--brand-dark-red);
 }
 
 .proposalLink {
