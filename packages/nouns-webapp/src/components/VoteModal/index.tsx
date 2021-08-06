@@ -29,7 +29,7 @@ const VoteModal = ({ show, onHide, proposalId, vote }: VoteModalProps) => {
       <Modal.Header>
         <Modal.Title>{modalTitle(vote, proposalId)}</Modal.Title>
       </Modal.Header>
-      <Modal.Body></Modal.Body>
+      <Modal.Body>Coming soon!</Modal.Body>
     </Modal>
   );
 };
