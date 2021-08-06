@@ -16,10 +16,6 @@ const isNounderNoun = (nounId: BigNumber) => {
   return nounId.mod(10).eq(0);
 };
 
-const prevAuctionsAvailable = (loadingPrev: boolean, prevAuction: IAuction) => {
-  return !loadingPrev && prevAuction !== null;
-};
-
 const createAuctionObj = (data: any): IAuction => {
   const auction: IAuction = {
     amount: data.auction.amount,
@@ -41,31 +37,23 @@ const Auction: React.FC<{ auction: IAuction; bgColorHandler: (useGrey: boolean) 
     const [isLastAuction, setIsLastAuction] = useState(true);
     const [isFirstAuction, setIsFirstAuction] = useState(false);
 
-    // Query onDisplayNounId auction. Used to display past auctions' data.
-    const { data: dataCurrent } = useQuery(
+    const { loading: loadingCurrent, data: dataCurrent } = useQuery(
       auctionQuery(onDisplayNounId && onDisplayNounId.toNumber()),
     );
-    // Query onDisplayNounId auction plus one. Used to determine nounder noun timestamp.
     const { data: dataNext } = useQuery(
       auctionQuery(onDisplayNounId && onDisplayNounId.add(1).toNumber()),
     );
-    // Query onDisplayNounId auction minus one. Used to cache prev auction + check if The Graph queries are functional.
-    const { loading: loadingPrev, data: dataPrev } = useQuery(
-      auctionQuery(onDisplayNounId && onDisplayNounId.sub(1).toNumber()),
-    );
+    // Query prev auction to cache and allow for a smoother browsing ux
+    useQuery(auctionQuery(onDisplayNounId && onDisplayNounId.sub(1).toNumber()));
 
     /**
-     * Auction derived from `onDisplayNounId` query.
+     * Auction derived from `onDisplayNounId` query
      */
     const auction: IAuction = dataCurrent && dataCurrent.auction && createAuctionObj(dataCurrent);
     /**
-     * Auction derived from `onDisplayNounId.add(1)` query.
+     * Auction derived from `onDisplayNounId.add(1)` query
      */
     const nextAuction: IAuction = dataNext && dataNext.auction && createAuctionObj(dataNext);
-    /**
-     * Auction derived from `onDisplayNounId.sub(1)` query.
-     */
-    const prevAuction: IAuction = dataPrev && dataPrev.auction && createAuctionObj(dataPrev);
 
     const loadedNounHandler = (seed: INounSeed) => {
       bgColorHandler(seed.background === 0);
@@ -101,22 +89,15 @@ const Auction: React.FC<{ auction: IAuction; bgColorHandler: (useGrey: boolean) 
       </div>
     );
 
-    const auctionActivityContent = (auction: IAuction, displayGraphDepComps: boolean) => (
+    const auctionActivityContent = onDisplayNounId && currentAuction && auction && (
       <AuctionActivity
-        auction={auction}
+        auction={!loadingCurrent && isLastAuction ? currentAuction : auction}
         isFirstAuction={isFirstAuction}
         isLastAuction={isLastAuction}
         onPrevAuctionClick={prevAuctionHandler}
         onNextAuctionClick={nextAuctionHandler}
-        displayGraphDepComps={displayGraphDepComps}
       />
     );
-
-    const currentAuctionActivityContent =
-      currentAuction &&
-      auctionActivityContent(currentAuction, prevAuctionsAvailable(loadingPrev, prevAuction));
-
-    const pastAuctionActivityContent = auction && auctionActivityContent(auction, true);
 
     const nounderNounContent = nextAuction && (
       <NounderNounContent
@@ -133,14 +114,12 @@ const Auction: React.FC<{ auction: IAuction; bgColorHandler: (useGrey: boolean) 
       <Container fluid="lg">
         <Row>
           <Col lg={{ span: 6 }} className={classes.nounContentCol}>
-            {onDisplayNounId ? nounContent : loadingNoun}
+            {!loadingCurrent && onDisplayNounId ? nounContent : loadingNoun}
           </Col>
           <Col lg={{ span: 6 }} className={classes.auctionActivityCol}>
             {onDisplayNounId && isNounderNoun(onDisplayNounId)
               ? nounderNounContent
-              : isLastAuction
-              ? currentAuctionActivityContent
-              : pastAuctionActivityContent}
+              : auctionActivityContent}
           </Col>
         </Row>
       </Container>

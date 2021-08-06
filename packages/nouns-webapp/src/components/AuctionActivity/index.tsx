@@ -14,24 +14,14 @@ import AuctionActivityNounTitle from '../AuctionActivityNounTitle';
 import AuctionActivityDateHeadline from '../AuctionActivityDateHeadline';
 import BidHistoryBtn from '../BidHistoryBtn';
 
-interface AuctionActivityProps {
+const AuctionActivity: React.FC<{
   auction: Auction;
   isFirstAuction: boolean;
   isLastAuction: boolean;
   onPrevAuctionClick: () => void;
   onNextAuctionClick: () => void;
-  displayGraphDepComps: boolean;
-}
-
-const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityProps) => {
-  const {
-    auction,
-    isFirstAuction,
-    isLastAuction,
-    onPrevAuctionClick,
-    onNextAuctionClick,
-    displayGraphDepComps,
-  } = props;
+}> = props => {
+  const { auction, isFirstAuction, isLastAuction, onPrevAuctionClick, onNextAuctionClick } = props;
 
   const [auctionEnded, setAuctionEnded] = useState(false);
   const setAuctionStateHandler = (ended: boolean) => {
@@ -70,14 +60,12 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
           </Col>
           <Col lg={12} className={classes.colAlignCenter}>
             <AuctionActivityNounTitle nounId={auction && auction.nounId} />
-            {displayGraphDepComps && (
-              <AuctionNavigation
-                isFirstAuction={isFirstAuction}
-                isLastAuction={isLastAuction}
-                onNextAuctionClick={onNextAuctionClick}
-                onPrevAuctionClick={onPrevAuctionClick}
-              />
-            )}
+            <AuctionNavigation
+              isFirstAuction={isFirstAuction}
+              isLastAuction={isLastAuction}
+              onNextAuctionClick={onNextAuctionClick}
+              onPrevAuctionClick={onPrevAuctionClick}
+            />
           </Col>
           <Col lg={6}>
             {auction && (
@@ -99,7 +87,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
               <Bid auction={auction} auctionEnded={auctionEnded} />
             </Col>
           )}
-          {auction && displayGraphDepComps && (
+          {auction && (
             <Col lg={12}>
               <BidHistoryBtn onClick={showBidModalHandler} />
             </Col>
