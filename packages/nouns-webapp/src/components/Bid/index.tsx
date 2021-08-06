@@ -9,7 +9,8 @@ import React, { useEffect, useState, useRef, ChangeEvent, useCallback } from 're
 import { utils, BigNumber as EthersBN } from 'ethers';
 import BigNumber from 'bignumber.js';
 import classes from './Bid.module.css';
-import { Spinner } from 'react-bootstrap';
+import Modal from '../Modal';
+import { Spinner, InputGroup, FormControl, Button } from 'react-bootstrap';
 import { useAuctionMinBidIncPercentage } from '../../wrappers/nounsAuction';
 import { useAppDispatch } from '../../hooks';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
@@ -202,28 +203,43 @@ const Bid: React.FC<{
     }
   }, [settleAuctionState, auctionEnded, setModal]);
 
+  if (!auction) return null;
+
   return (
     <>
-      {auction && (
-        <div className={classes.bidWrapper}>
-          <button
-            className={auctionEnded ? classes.bidBtnAuctionEnded : classes.bidBtn}
-            onClick={auctionEnded ? settleAuctionHandler : placeBidHandler}
-            disabled={placeBidState.status === 'Mining' || settleAuctionState.status === 'Mining'}
-          >
-            {bidButtonContent.loading ? <Spinner animation="border" /> : bidButtonContent.content}
-          </button>
-          <input
-            className={auctionEnded ? classes.bidInputAuctionEnded : classes.bidInput}
+      <InputGroup>
+
+          <FormControl
+            aria-label="Example text with button addon"
+            aria-describedby="basic-addon1"
+            className={classes.bidInput}
             type="number"
-            placeholder="ETH"
+            placeholder={`Min bid: ${displayMinBid ? minBidEth(minBid) : bidInput} ETH`}
             min="0"
-            value={displayMinBid ? minBidEth(minBid) : bidInput}
-            onChange={bidInputHandler}
-            ref={bidInputRef}
-          ></input>
-        </div>
-      )}
+          />
+          <Button className={classes.bidBtn}>
+            Bid
+          </Button>
+        </InputGroup>
+
+      {/*<div className={classes.bidWrapper}>
+        <button
+          className={auctionEnded ? classes.bidBtnAuctionEnded : classes.bidBtn}
+          onClick={auctionEnded ? settleAuctionHandler : placeBidHandler}
+          disabled={placeBidState.status === 'Mining' || settleAuctionState.status === 'Mining'}
+        >
+          {bidButtonContent.loading ? <Spinner animation="border" /> : bidButtonContent.content}
+        </button>
+        <input
+          className={auctionEnded ? classes.bidInputAuctionEnded : classes.bidInput}
+          type="number"
+          placeholder="ETH"
+          min="0"
+          value={displayMinBid ? minBidEth(minBid) : bidInput}
+          onChange={bidInputHandler}
+          ref={bidInputRef}
+        ></input>
+      </div>*/}
     </>
   );
 };

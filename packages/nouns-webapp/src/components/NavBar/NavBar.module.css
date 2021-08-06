@@ -2,6 +2,7 @@
   margin-right: 0;
 }
 
+
 /* connect button displays differently to default NavBarItems, thus the !importants */
 .connectBtn {
   background-color: var(--brand-light-green) !important;
@@ -16,38 +17,19 @@
   cursor: pointer !important;
 }
 
+
 .greenStatusCircle {
-  position: absolute;
+  display: inline-block;
   width: 10px;
   height: 10px;
   background-color: #7fc59c;
   border-radius: 50%;
-  transform: translateY(-14px) translateX(55px);
+  margin-right: 5px;
 }
 
-.playground:visited {
-  color: var(--brand-black);
+.nounsNavLink, .nounsNavLink:active, .nounsNavLink:visited{
+  color:  var(--brand-black) !important;
 }
-.playground:hover,
-.playground:focus {
-  text-decoration: none;
-  color: var(--brand-dark-green);
-}
-
-.testnet {
-  margin-left: 1.5rem;
-  margin-right: auto;
-}
-.testnetImg {
-  width: auto;
-  height: 45px;
-}
-
-@media (max-width: 992px) {
-  .testnet {
-    margin: 0 auto !important;
-  }
-  .connectBtn:hover {
-    color: var(--brand-dark-green) !important;
-  }
+.nounsNavLink:hover{
+  color:  var(--brand-dark-green) !important;
 }
