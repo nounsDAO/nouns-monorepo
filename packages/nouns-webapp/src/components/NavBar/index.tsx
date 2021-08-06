@@ -8,11 +8,10 @@ import NavBarItem from './NavBarItem';
 import { useState } from 'react';
 import { useEthers } from '@usedapp/core';
 import WalletConnectModal from '../WalletConnectModal';
-import config from '../../config';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
-  const {activate, deactivate } = useEthers();
+  const {deactivate } = useEthers();
 
   const [showConnectModal, setShowConnectModal] = useState(true);
   // USE TO PASS INTO CONNECT TO WALLET BUTTON

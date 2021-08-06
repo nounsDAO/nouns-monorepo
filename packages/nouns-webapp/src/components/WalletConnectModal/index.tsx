@@ -5,7 +5,6 @@ import { useEthers } from '@usedapp/core';
 import { InjectedConnector } from '@web3-react/injected-connector';
 import { WalletLinkConnector } from '@web3-react/walletlink-connector';
 import {WalletConnectConnector} from '@web3-react/walletconnect-connector'
-import { LedgerConnector } from '@web3-react/ledger-connector';
 import { TrezorConnector } from '@web3-react/trezor-connector';
 import { FortmaticConnector } from '@web3-react/fortmatic-connector';
 import config from '../../config';
