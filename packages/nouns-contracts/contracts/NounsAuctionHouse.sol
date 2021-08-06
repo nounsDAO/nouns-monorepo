@@ -190,7 +190,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
             });
 
             emit AuctionCreated(nounId, startTime, endTime);
-        } catch {
+        } catch Error(string memory) {
             _pause();
         }
     }
