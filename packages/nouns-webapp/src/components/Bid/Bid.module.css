@@ -16,7 +16,8 @@
 
 .bidBtn:hover,
 .bidBtn:active,
-.bidBtn:focus {
+.bidBtn:focus,
+.bidBtn:disabled {
   background-color: gray !important;
 }
 

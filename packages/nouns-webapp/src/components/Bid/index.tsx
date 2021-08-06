@@ -5,6 +5,7 @@ import {
 } from '../../wrappers/nounsAuction';
 import config from '../../config';
 import { useContractFunction } from '@usedapp/core';
+import { useAppSelector } from '../../hooks';
 import React, { useEffect, useState, useRef, ChangeEvent, useCallback } from 'react';
 import { utils, BigNumber as EthersBN } from 'ethers';
 import BigNumber from 'bignumber.js';
@@ -46,6 +47,7 @@ const Bid: React.FC<{
   auction: Auction;
   auctionEnded: boolean;
 }> = props => {
+  const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { auction, auctionEnded } = props;
   const auctionHouseContract = auctionHouseContractFactory(config.auctionProxyAddress);
 
@@ -205,6 +207,8 @@ const Bid: React.FC<{
 
   if (!auction) return null;
 
+  const isDisabled = placeBidState.status === 'Mining' || settleAuctionState.status === 'Mining' || !activeAccount
+
   return (
     <>
       <InputGroup>
@@ -218,11 +222,12 @@ const Bid: React.FC<{
             min="0"
             onChange={bidInputHandler}
             ref={bidInputRef}
+            disabled={isDisabled}
           />
           <Button
             className={auctionEnded ? classes.bidBtnAuctionEnded : classes.bidBtn}
             onClick={auctionEnded ? settleAuctionHandler : placeBidHandler}
-            disabled={placeBidState.status === 'Mining' || settleAuctionState.status === 'Mining'}
+            disabled={isDisabled}
             >
             {bidButtonContent.loading ? <Spinner animation="border" /> : bidButtonContent.content}
           </Button>
