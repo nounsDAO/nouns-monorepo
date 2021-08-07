@@ -64,12 +64,12 @@ dataSources:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
   - kind: ethereum/contract
-    name: NounsGovernor
+    name: NounsDAO
     network: {{network}}
     source:
-      address: '{{nounsGovernor.address}}'
-      abi: NounsGovernor
-      startBlock: {{nounsGovernor.startBlock}}
+      address: '{{nounsDAO.address}}'
+      abi: NounsDAO
+      startBlock: {{nounsDAO.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -82,7 +82,7 @@ dataSources:
         - Vote
         - Governance
       abis:
-        - name: NounsGovernor
+        - name: NounsDAO
           file: ../nouns-contracts/abi/contracts/governance/NounsDAOLogicV1.sol/NounsDAOLogicV1.json
       eventHandlers:
         - event: ProposalCreatedWithRequirements(uint256,address,address[],uint256[],string[],bytes[],uint256,uint256,uint256,uint256,string)
