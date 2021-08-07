@@ -22,7 +22,7 @@ const prevAuctionsAvailable = (loadingPrev: boolean, prevAuction: IAuction) => {
 
 const createAuctionObj = (data: any): IAuction => {
   const auction: IAuction = {
-    amount: data.auction.amount,
+    amount: BigNumber.from(data.auction.amount),
     bidder: data.auction?.bidder?.id,
     endTime: data.auction.endTime,
     startTime: data.auction.startTime,
