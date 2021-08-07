@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 
+/// @title A library used to construct ERC721 token URIs and SVG images
+
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░▒▒▒▒▒▒▒▒▒░░▒▒▒▒▒▒▒▒▒░░░ *
