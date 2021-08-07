@@ -17,14 +17,24 @@ import AuctionActivityDateHeadline from '../AuctionActivityDateHeadline';
 import BidHistoryBtn from '../BidHistoryBtn';
 import StandaloneNoun from '../StandaloneNoun';
 
-const AuctionActivity: React.FC<{
+interface AuctionActivityProps {
   auction: Auction;
   isFirstAuction: boolean;
   isLastAuction: boolean;
   onPrevAuctionClick: () => void;
   onNextAuctionClick: () => void;
-}> = props => {
-  const { auction, isFirstAuction, isLastAuction, onPrevAuctionClick, onNextAuctionClick } = props;
+  displayGraphDepComps: boolean;
+}
+
+const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityProps) => {
+  const {
+    auction,
+    isFirstAuction,
+    isLastAuction,
+    onPrevAuctionClick,
+    onNextAuctionClick,
+    displayGraphDepComps,
+  } = props;
 
   const [auctionEnded, setAuctionEnded] = useState(false);
   const [auctionTimer, setAuctionTimer] = useState(false);
@@ -94,12 +104,14 @@ const AuctionActivity: React.FC<{
             </Col>
             <Col lg={12} className={classes.colAlignCenter}>
               <AuctionActivityNounTitle nounId={auction.nounId} />
-              <AuctionNavigation
-                isFirstAuction={isFirstAuction}
-                isLastAuction={isLastAuction}
-                onNextAuctionClick={onNextAuctionClick}
-                onPrevAuctionClick={onPrevAuctionClick}
-              />
+              {displayGraphDepComps && (
+                <AuctionNavigation
+                  isFirstAuction={isFirstAuction}
+                  isLastAuction={isLastAuction}
+                  onNextAuctionClick={onNextAuctionClick}
+                  onPrevAuctionClick={onPrevAuctionClick}
+                />
+              )}
             </Col>
           </Row>
           <Row className={classes.activityRow}>
@@ -125,12 +137,18 @@ const AuctionActivity: React.FC<{
             </Col>
           </Row>
         )}
-        <Row className={classes.activityRow}>
-          <Col lg={12}>
-            <BidHistory auctionId={auction.nounId.toString()} max={3} classes={bidHistoryClasses} />
-            <BidHistoryBtn onClick={showBidModalHandler} />
-          </Col>
-        </Row>
+        {displayGraphDepComps && (
+          <Row className={classes.activityRow}>
+            <Col lg={12}>
+              <BidHistory
+                auctionId={auction.nounId.toString()}
+                max={3}
+                classes={bidHistoryClasses}
+              />
+              <BidHistoryBtn onClick={showBidModalHandler} />
+            </Col>
+          </Row>
+        )}
       </AuctionActivityWrapper>
     </>
   );

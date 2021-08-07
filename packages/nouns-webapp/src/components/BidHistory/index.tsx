@@ -66,7 +66,7 @@ const BidHistory: React.FC<{ auctionId: string, max: number, classes?: any }> = 
           <Spinner animation="border" />
         </div>
       )}
-      {!loading && error && (
+      {!loading && !error && (
         <div className={classes.altWrapper}>
           <div>Error {error}</div>
         </div>
