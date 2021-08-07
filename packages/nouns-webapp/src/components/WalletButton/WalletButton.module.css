@@ -10,8 +10,13 @@
 .walletButton img {
   margin-right: 10px;
 }
-.walletButton:hover {
-  background-color: lightgray;
+.walletButton:hover,
+.walletButton:active,
+.walletButton:focus,
+.walletButton:disabled {
+  outline: none !important;
+  box-shadow: none !important;
+  background-color: lightgray !important;
   color: var(--brand-dark-green);
   color: white;
 }
