@@ -37,9 +37,8 @@
 }
 
 .bidBtnAuctionEnded {
-  border-radius: 50px;
   border: 0 none;
-  background-color: var(--brand-light-green);
+  background-color: var(--brand-black) !important;
   width: 100%;
   height: 4rem;
   font-weight: bold;
@@ -47,9 +46,13 @@
   color: white;
 }
 
-.bidBtnAuctionEnded:hover {
-  background-color: var(--brand-dark-red);
+.bidBtnAuctionEnded:hover,
+.bidBtnAuctionEnded:active,
+.bidBtnAuctionEnded:focus {
+  background-color: gray !important;
   color: rgb(209, 207, 207);
+  outline: none !important;
+  box-shadow: none;
 }
 
 .bidInputAuctionEnded {
