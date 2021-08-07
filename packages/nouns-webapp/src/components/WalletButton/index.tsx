@@ -6,6 +6,7 @@ import walletconnectLogo from '../../assets/wallet-brand-assets/walletconnect-lo
 import braveLogo from '../../assets/wallet-brand-assets/brave.svg';
 import ledgerLogo from '../../assets/wallet-brand-assets/ledger.svg';
 import trezorLogo from '../../assets/wallet-brand-assets/trezor.svg';
+import coinbaseWalletLogo from '../../assets/wallet-brand-assets/coinbase-wallet-dot.svg';
 
 export enum WALLET_TYPE {
   metamask = 'Metamask',
@@ -31,6 +32,8 @@ const logo = (walletType: WALLET_TYPE) => {
       return ledgerLogo;
     case WALLET_TYPE.trezor:
       return trezorLogo;
+    case WALLET_TYPE.walletlink:
+      return coinbaseWalletLogo;
     default:
       return "";
   }
