@@ -2,7 +2,6 @@ import { useAppSelector } from '../../hooks';
 import ShortAddress from '../ShortAddress';
 import classes from './NavBar.module.css';
 import logo from '../../assets/logo.svg';
-import NavBarItem from './NavBarItem';
 import { useState } from 'react';
 import { useEthers } from '@usedapp/core';
 import WalletConnectModal from '../WalletConnectModal';
@@ -33,9 +32,9 @@ const NavBar = () => {
           </span>
         </Nav.Link>
       </Nav.Item>
-      <NavBarItem className={clsx(classes.nounsNavLink, classes.disconnectBtn)} onClick={() => {deactivate()}} >
+      <Nav.Item className={clsx(classes.nounsNavLink, classes.disconnectBtn)} onClick={() => {deactivate()}} >
         DISCONNECT
-      </NavBarItem>
+      </Nav.Item>
     </>
   );
 
