@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Unlicense
 
-/// @title The NounsDAO auction house proxy admin
+/// @title The Nouns DAO auction house proxy admin
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
