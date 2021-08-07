@@ -1,6 +1,6 @@
 const config = {
-  auctionProxyAddress: '0xBA088c634394775D89cAC7c67DFD52D73bfdFa05',
-  tokenAddress: '0xc52bb4Fc4ed72f2a910BF0481D620B927Ded76f7',
+  auctionProxyAddress: '0x7cb0384b923280269b3BD85f0a7fEaB776588382',
+  tokenAddress: '0x7cb0384b923280269b3BD85f0a7fEaB776588382',
   subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph-rinkeby',
 };
 
