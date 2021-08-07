@@ -38,6 +38,7 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
         onClick={() => {
           const walletlink = new WalletConnectConnector({
             supportedChainIds: [config.supportedChainId],
+            chainId: config.supportedChainId,
             rpc: {
               [config.supportedChainId]: config.rinkebyJsonRpc
             }
