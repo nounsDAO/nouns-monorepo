@@ -1,6 +1,6 @@
 # @nouns/img-permutator
 
-Web app run on Firebase to test Noun permutations. 
+Web app run on Firebase to test Noun permutations.
 
 ### External
 
@@ -12,7 +12,7 @@ https://nounsdao-dev.web.app/
 
 ## Branch based sourcing
 
-To generate a new source for the generator, branch off of `img-permutator` using the following format to name the new branch: 
+To generate a new source for the generator, branch off of `img-permutator` using the following format to name the new branch:
 
 ```
 img-permutator-preview/src-YOUR_BRANCH_NAME
