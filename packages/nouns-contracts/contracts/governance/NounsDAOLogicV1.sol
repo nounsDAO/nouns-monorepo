@@ -42,7 +42,7 @@ import './NounsDAOInterfaces.sol';
 
 contract NounsDAOLogicV1 is NounsDAOStorageV1, NounsDAOEvents {
     /// @notice The name of this contract
-    string public constant name = 'NounsDAO';
+    string public constant name = 'Nouns DAO';
 
     /// @notice The minimum setable proposal threshold
     uint256 public constant MIN_PROPOSAL_THRESHOLD_BPS = 1; // 1 basis point or 0.01%
