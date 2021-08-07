@@ -51,3 +51,9 @@
 .linkSymbol a:hover {
   color: gray;
 }
+
+@media (max-width: 992px) {
+  .bidRow {
+    border-radius: 0px;
+  }
+}

@@ -18,8 +18,8 @@
 
 .createProposalLink {
   padding: 0.9rem 1.5rem;
-  background-color: var(--brand-light-green);
-  border-radius: 50px;
+  background-color: gray;
+  border-radius: 5px;
   border: 0 none;
   font-size: large;
   font-weight: normal;
@@ -27,7 +27,7 @@
 }
 
 .createProposalLink:hover {
-  background-color: var(--brand-dark-red);
+  background-color: rgb(104, 104, 104);
 }
 
 .proposalLink {
