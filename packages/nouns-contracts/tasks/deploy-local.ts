@@ -63,7 +63,7 @@ task('deploy-local', 'Deploy contracts to hardhat')
           expectedAuctionHouseProxyAddress,
           () => contracts['NounsDescriptor'].instance?.address,
           () => contracts['NounsSeeder'].instance?.address,
-          proxyRegistryAddress
+          proxyRegistryAddress,
         ],
       },
       NounsAuctionHouse: {

@@ -8,7 +8,11 @@ import {
 } from './utils';
 import { internalDiscordWebhook, incrementCounter, publicDiscordWebhook } from './clients';
 import { getLastAuctionBids } from './subgraph';
-import { processNewAuction as twitterProcessNewAuction, processNewBid as twitterProcessNewBid, processAuctionEndingSoon as twitterProcessAuctionEndingSoon } from './handlers/twitter';
+import {
+  processNewAuction as twitterProcessNewAuction,
+  processNewBid as twitterProcessNewBid,
+  processAuctionEndingSoon as twitterProcessAuctionEndingSoon,
+} from './handlers/twitter';
 import { processNewAuction as discordProcessNewAuction } from './handlers/discord';
 import { processNewAuction as pinataProcessNewAuction } from './handlers/pinata';
 
@@ -53,17 +57,12 @@ async function processAuction() {
   // check if auction ending soon
   const currentTimestamp = ~~(Date.now() / 1000); // second timestamp utc
   const endTime = lastAuctionBids.endTime;
-  const secondsUntilAuctionEnds = endTime-currentTimestamp;
-  if (secondsUntilAuctionEnds < (20 * 60) && cachedAuctionEndingSoon < lastAuctionId) {
+  const secondsUntilAuctionEnds = endTime - currentTimestamp;
+  if (secondsUntilAuctionEnds < 20 * 60 && cachedAuctionEndingSoon < lastAuctionId) {
     await twitterProcessAuctionEndingSoon(lastAuctionId);
   }
 }
 
-setInterval(
-  async () => processAuction(),
-  30000,
-)
+setInterval(async () => processAuction(), 30000);
 
-processAuction().then(
-  () => 'processAuction',
-);
+processAuction().then(() => 'processAuction');
