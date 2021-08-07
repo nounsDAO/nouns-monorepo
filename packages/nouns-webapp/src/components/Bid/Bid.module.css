@@ -17,6 +17,8 @@
 .bidBtn:focus,
 .bidBtn:disabled {
   background-color: gray !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .bidInput {
@@ -28,6 +30,11 @@
   border-radius: 0.25rem !important;
   background-color: white;
   font-weight: bold;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.bidInput:focus {
+  border: none !important;
 }
 .bidInput::-webkit-input-placeholder,
 .bidInput::-moz-placeholder,
