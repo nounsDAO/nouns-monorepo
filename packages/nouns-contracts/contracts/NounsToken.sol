@@ -9,7 +9,7 @@ import { INounsSeeder } from './interfaces/INounsSeeder.sol';
 import { INounsToken } from './interfaces/INounsToken.sol';
 import { ERC721 } from './base/ERC721.sol';
 import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
-import { ProxyRegistry } from './base/ProxyRegistry.sol';
+import { IProxyRegistry } from './external/opensea/IProxyRegistry.sol';
 
 contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     // The nounders DAO address (creators org)
@@ -43,7 +43,7 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     string private _contractURIHash = "QmcJp8dTZxKUbnUK2h4YuXBF533zWhwHXzVh45z7wMqqMh";
 
     // OpenSea's Proxy Registry
-    address public immutable proxyRegistryAddress;
+    IProxyRegistry public immutable proxyRegistry;
 
     /**
      * @notice Require that the minter has not been locked.
@@ -90,13 +90,13 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
         address _minter,
         INounsDescriptor _descriptor,
         INounsSeeder _seeder,
-        address _proxyRegistryAddress
+        IProxyRegistry _proxyRegistry
     ) ERC721('Nouns', 'NOUN') {
         noundersDAO = _noundersDAO;
         minter = _minter;
         descriptor = _descriptor;
         seeder = _seeder;
-        proxyRegistryAddress = _proxyRegistryAddress;
+        proxyRegistry = _proxyRegistry;
     }
 
     /**
@@ -119,8 +119,7 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
      */
     function isApprovedForAll(address owner, address operator) public view override(IERC721, ERC721) returns (bool) {
         // Whitelist OpenSea proxy contract for easy trading.
-        ProxyRegistry proxyRegistry = ProxyRegistry(proxyRegistryAddress);
-        if (address(proxyRegistry.proxies(owner)) == operator) {
+        if (proxyRegistry.proxies(owner) == operator) {
             return true;
         }
         return super.isApprovedForAll(owner, operator);

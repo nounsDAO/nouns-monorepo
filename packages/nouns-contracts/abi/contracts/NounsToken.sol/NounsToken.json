@@ -22,8 +22,8 @@
         "type": "address"
       },
       {
-        "internalType": "address",
-        "name": "_proxyRegistryAddress",
+        "internalType": "contract IProxyRegistry",
+        "name": "_proxyRegistry",
         "type": "address"
       }
     ],
@@ -806,10 +806,10 @@
   },
   {
     "inputs": [],
-    "name": "proxyRegistryAddress",
+    "name": "proxyRegistry",
     "outputs": [
       {
-        "internalType": "address",
+        "internalType": "contract IProxyRegistry",
         "name": "",
         "type": "address"
       }
