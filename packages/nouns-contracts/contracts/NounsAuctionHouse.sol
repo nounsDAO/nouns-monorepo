@@ -11,7 +11,7 @@
  * ░░▒▒░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
  * ░░░░░░▒▒▒▒▒▒▒▒▒░░▒▒▒▒▒▒▒▒▒░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
-*********************************/
+ *********************************/
 
 // LICENSE
 // NounsAuctionHouse.sol is a modified version of Zora's AuctionHouse.sol:
@@ -19,8 +19,6 @@
 //
 // AuctionHouse.sol source code Copyright Zora licensed under the GPL-3.0 license.
 // With modifications by Nounders DAO.
-
-
 
 pragma solidity ^0.8.6;
 

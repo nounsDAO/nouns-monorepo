@@ -11,7 +11,7 @@
  * ░░▒▒░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
  * ░░░░░░▒▒▒▒▒▒▒▒▒░░▒▒▒▒▒▒▒▒▒░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
-*********************************/
+ *********************************/
 
 // LICENSE
 // NounsDAOInterfaces.sol is a modified version of Compound Lab's GovernorBravoInterfaces.sol:

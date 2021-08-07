@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Unlicense
 
-/// / @title The NounsToken pseudo-random seed generator.
+/// @title The NounsToken pseudo-random seed generator
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -11,7 +11,7 @@
  * ░░▒▒░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
  * ░░░░░░▒▒▒▒▒▒▒▒▒░░▒▒▒▒▒▒▒▒▒░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
-*********************************/
+ *********************************/
 
 pragma solidity ^0.8.6;
 
