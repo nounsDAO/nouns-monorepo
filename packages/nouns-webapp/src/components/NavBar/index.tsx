@@ -11,10 +11,10 @@ import clsx from 'clsx';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
-  const {deactivate } = useEthers();
+  const { deactivate } = useEthers();
 
-  const [showConnectModal, setShowConnectModal] = useState(true);
-  // USE TO PASS INTO CONNECT TO WALLET BUTTON
+  const [showConnectModal, setShowConnectModal] = useState(false);
+
   const showModalHandler = () => {
     setShowConnectModal(true);
   };
@@ -32,7 +32,12 @@ const NavBar = () => {
           </span>
         </Nav.Link>
       </Nav.Item>
-      <Nav.Item className={clsx(classes.nounsNavLink, classes.disconnectBtn)} onClick={() => {deactivate()}} >
+      <Nav.Item
+        className={clsx(classes.nounsNavLink, classes.disconnectBtn)}
+        onClick={() => {
+          deactivate();
+        }}
+      >
         DISCONNECT
       </Nav.Item>
     </>
@@ -40,37 +45,42 @@ const NavBar = () => {
 
   const disconnectedContent = (
     <>
-    <Nav.Link className={clsx(classes.nounsNavLink, classes.connectBtn)} onClick={showModalHandler} >
-      CONNECT WALLET
-    </Nav.Link>
+      <Nav.Link
+        className={clsx(classes.nounsNavLink, classes.connectBtn)}
+        onClick={showModalHandler}
+      >
+        CONNECT WALLET
+      </Nav.Link>
     </>
   );
 
   return (
     <>
-      {showConnectModal && activeAccount === undefined && <WalletConnectModal onDismiss={hideModalHandler} />}
+      {showConnectModal && activeAccount === undefined && (
+        <WalletConnectModal onDismiss={hideModalHandler} />
+      )}
       <Navbar expand="lg">
-      <Container>
-        <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
-          <img
-            src={logo}
-            width="85"
-            height="85"
-            className="d-inline-block align-middle"
-            alt="Nouns DAO logo"
-          />
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse className="justify-content-end">
-          <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>
-            GOVERNANCE
-          </Nav.Link>
-          <Nav.Link href="playground" className={classes.nounsNavLink} target="_blank">
-            PLAYGROUND
-          </Nav.Link>
-          {activeAccount ? connectedContent : disconnectedContent}
-        </Navbar.Collapse>
-            </Container>
+        <Container>
+          <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
+            <img
+              src={logo}
+              width="85"
+              height="85"
+              className="d-inline-block align-middle"
+              alt="Nouns DAO logo"
+            />
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse className="justify-content-end">
+            <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>
+              GOVERNANCE
+            </Nav.Link>
+            <Nav.Link href="playground" className={classes.nounsNavLink} target="_blank">
+              PLAYGROUND
+            </Nav.Link>
+            {activeAccount ? connectedContent : disconnectedContent}
+          </Navbar.Collapse>
+        </Container>
       </Navbar>
     </>
   );
