@@ -210,17 +210,19 @@ const Bid: React.FC<{
   return (
     <>
       <InputGroup>
-        <FormControl
-          aria-label="Example text with button addon"
-          aria-describedby="basic-addon1"
-          className={classes.bidInput}
-          type="number"
-          placeholder={`Minimum bid: ${minBidEth(minBid)} ETH`}
-          min="0"
-          onChange={bidInputHandler}
-          ref={bidInputRef}
-          value={bidInput}
-        />
+        {!auctionEnded && (
+          <FormControl
+            aria-label="Example text with button addon"
+            aria-describedby="basic-addon1"
+            className={classes.bidInput}
+            type="number"
+            placeholder={`Minimum bid: ${minBidEth(minBid)} ETH`}
+            min="0"
+            onChange={bidInputHandler}
+            ref={bidInputRef}
+            value={bidInput}
+          />
+        )}
         <Button
           className={auctionEnded ? classes.bidBtnAuctionEnded : classes.bidBtn}
           onClick={auctionEnded ? settleAuctionHandler : placeBidHandler}
