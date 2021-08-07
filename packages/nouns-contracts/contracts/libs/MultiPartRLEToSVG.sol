@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: Unlicense
+// SPDX-License-Identifier: GPL-3.0
 
 /// @title A library used to convert multi-part RLE compressed images to SVG
 
