@@ -54,7 +54,8 @@
 
 .bidBtnAuctionEnded:hover,
 .bidBtnAuctionEnded:active,
-.bidBtnAuctionEnded:focus {
+.bidBtnAuctionEnded:focus,
+.bidBtnAuctionEnded:disabled {
   background-color: gray !important;
   color: rgb(209, 207, 207);
   outline: none !important;
