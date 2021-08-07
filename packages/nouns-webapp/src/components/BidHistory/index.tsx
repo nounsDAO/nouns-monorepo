@@ -13,8 +13,8 @@ import { buildEtherscanTxLink, Network } from '../../utils/buildEtherscanLink';
 import TruncatedAmount from '../TruncatedAmount';
 import BigNumber from 'bignumber.js';
 
-const BidHistory: React.FC<{ auctionId: string, max: number, classes?: any }> = props => {
-  const { auctionId, max, classes=_classes } = props;
+const BidHistory: React.FC<{ auctionId: string; max: number; classes?: any }> = props => {
+  const { auctionId, max, classes = _classes } = props;
   const { loading, error, data, refetch } = useQuery(bidsByAuctionQuery(auctionId));
 
   const bidContent =
@@ -24,8 +24,9 @@ const BidHistory: React.FC<{ auctionId: string, max: number, classes?: any }> = 
       .slice(0, max)
       .map((bid: any, i: number) => {
         const bidAmount = <TruncatedAmount amount={new BigNumber(bid.amount)} />;
-        const date = `${moment(bid.blockTimestamp * 1000).format('MMM DD')} at ${
-         moment(bid.blockTimestamp * 1000).format('hh:mm a')}`;
+        const date = `${moment(bid.blockTimestamp * 1000).format('MMM DD')} at ${moment(
+          bid.blockTimestamp * 1000,
+        ).format('hh:mm a')}`;
 
         const txLink = buildEtherscanTxLink(bid.id, Network.rinkeby);
 
@@ -34,7 +35,9 @@ const BidHistory: React.FC<{ auctionId: string, max: number, classes?: any }> = 
             <div className={classes.bidItem}>
               <div className={classes.leftSectionWrapper}>
                 <div className={classes.bidder}>
-                  <div><ShortAddress>{bid.bidder.id}</ShortAddress></div>
+                  <div>
+                    <ShortAddress>{bid.bidder.id}</ShortAddress>
+                  </div>
                 </div>
                 <div className={classes.bidDate}>{date}</div>
               </div>
