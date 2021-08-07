@@ -114,7 +114,7 @@ describe('NounsToken', () => {
   describe('contractURI', async () => {
     it('should return correct contractURI', async () => {
       expect(await nounsToken.contractURI()).to.eq(
-        'ipfs://QmcJp8dTZxKUbnUK2h4YuXBF533zWhwHXzVh45z7wMqqMh',
+        'ipfs://QmZi1n79FqWt2tTLwCqiy6nLM6xLGRsEPQ5JmReJQKNNzX',
       );
     });
     it('should allow owner to set contractURI', async () => {
