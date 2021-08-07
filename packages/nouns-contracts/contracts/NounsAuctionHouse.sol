@@ -190,7 +190,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
             });
 
             emit AuctionCreated(nounId, startTime, endTime);
-        } catch {
+        } catch Error(string memory) {
             _pause();
         }
     }
@@ -233,9 +233,10 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
 
     /**
      * @notice Transfer ETH and return the success status.
+     * @dev This function only forwards 30,000 gas to the callee.
      */
     function _safeTransferETH(address to, uint256 value) internal returns (bool) {
-        (bool success, ) = to.call{ value: value }(new bytes(0));
+        (bool success, ) = to.call{ value: value, gas: 30_000 }(new bytes(0));
         return success;
     }
 }

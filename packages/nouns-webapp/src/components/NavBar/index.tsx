@@ -4,6 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import ShortAddress from '../ShortAddress';
 import classes from './NavBar.module.css';
 import logo from '../../assets/logo.svg';
+import testnetNoun from '../../assets/testnet-noun.png';
 import NavBarItem from './NavBarItem';
 import { useState } from 'react';
 import { useEthers } from '@usedapp/core';
@@ -21,6 +22,13 @@ const NavBar = () => {
   const hideModalHandler = () => {
     setShowConnectModal(false);
   };
+
+  const testnetContent = (
+    <NavBarItem className={classes.testnet}>
+      <img className={classes.testnetImg} src={testnetNoun} alt="testnet noun" />
+      <span>TESTNET</span>
+    </NavBarItem>
+  );
 
   const connectedContent = (
     <>
@@ -48,26 +56,26 @@ const NavBar = () => {
   );
 
   return (
-    <>
-      {showConnectModal && activeAccount === undefined && <WalletConnectModal onDismiss={hideModalHandler} />}
+    
       <Navbar expand="lg">
-        <Container>
-          <Navbar.Brand href="#home" className={classes.navBarBrand}>
-            <img
-              src={logo}
-              width="70"
-              height="70"
-              className="d-inline-block align-middle"
-              alt="Nouns DAO logo"
-            />
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse className="justify-content-end">
-            {activeAccount ? connectedContent : disconnectedContent}
-          </Navbar.Collapse>
-        </Container>
+      <Container>
+        <Navbar.Brand href="#home" className={classes.navBarBrand}>
+          <img
+            src={logo}
+            width="70"
+            height="70"
+            className="d-inline-block align-middle"
+            alt="Nouns DAO logo"
+          />
+        </Navbar.Brand>
+        {testnetContent}
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse className="justify-content-end">
+          {activeAccount ? connectedContent : disconnectedContent}
+        </Navbar.Collapse>
+            </Container>
       </Navbar>
-    </>
+
   );
 };
 
