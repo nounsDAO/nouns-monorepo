@@ -13,7 +13,7 @@ import { INounSeed } from '../../wrappers/nounToken';
 import NounderNounContent from '../NounderNounContent';
 
 const isNounderNoun = (nounId: BigNumber) => {
-  return nounId.mod(10).eq(0);
+  return nounId.mod(10).eq(0) || nounId.eq(0);
 };
 
 const prevAuctionsAvailable = (loadingPrev: boolean, prevAuction: IAuction) => {
@@ -116,7 +116,12 @@ const Auction: React.FC<{ auction: IAuction; bgColorHandler: (useGrey: boolean) 
 
     const currentAuctionActivityContent =
       currentAuction &&
-      auctionActivityContent(currentAuction, prevAuctionsAvailable(loadingPrev, prevAuction));
+      auctionActivityContent(
+        currentAuction,
+        onDisplayNounId && isNounderNoun(onDisplayNounId.sub(1)) // if prev noun is nounder noun
+          ? true // show nav arrows
+          : prevAuctionsAvailable(loadingPrev, prevAuction), // else check if prev auct is avail
+      );
 
     const pastAuctionActivityContent = auction && auctionActivityContent(auction, true);
 
