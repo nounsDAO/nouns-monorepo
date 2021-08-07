@@ -3,6 +3,7 @@ import Section from '../../layout/Section';
 import classes from './HistoryCollection.module.css';
 import clsx from 'clsx';
 import StandaloneNoun from '../StandaloneNoun';
+import config from '../../config';
 
 interface HistoryCollectionProps {
   historyCount: number;
@@ -23,7 +24,7 @@ const HistoryCollection: React.FC<HistoryCollectionProps> = (props: HistoryColle
   return (
     <Section bgColor="white" fullWidth={true}>
       <div className={clsx(classes.historyCollection, rtl && classes.rtl)}>
-        {nounIds && nounIds.map((nounId, i) => <StandaloneNoun key={i} nounId={nounId} />)}
+        {config.enableHistory && nounIds && nounIds.map((nounId, i) => <StandaloneNoun key={i} nounId={nounId} />)}
       </div>
     </Section>
   );
