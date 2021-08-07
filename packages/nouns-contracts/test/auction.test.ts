@@ -154,7 +154,7 @@ describe('NounsAuctionHouse', () => {
     expect(bidderAPostRefundBalance).to.equal(bidderAPostBidBalance.add(RESERVE_PRICE));
   });
 
-  it('should cap the maximum bid griefing cost at 10K gas + the cost to wrap and transfer WETH', async () => {
+  it('should cap the maximum bid griefing cost at 30K gas + the cost to wrap and transfer WETH', async () => {
     await (await nounsAuctionHouse.unpause()).wait();
 
     const { nounId } = await nounsAuctionHouse.auction();
