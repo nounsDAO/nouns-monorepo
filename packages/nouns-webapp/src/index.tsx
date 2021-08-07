@@ -6,7 +6,6 @@ import reportWebVitals from './reportWebVitals';
 import { ChainId, DAppProvider } from '@usedapp/core';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
-import accountReducer from './state/slices/account';
 import { Web3ReactProvider } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import account from './state/slices/account';

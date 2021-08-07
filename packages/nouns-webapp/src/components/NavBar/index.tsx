@@ -2,7 +2,6 @@ import { useAppSelector } from '../../hooks';
 import ShortAddress from '../ShortAddress';
 import classes from './NavBar.module.css';
 import logo from '../../assets/logo.svg';
-import testnetNoun from '../../assets/testnet-noun.png';
 import NavBarItem from './NavBarItem';
 import { useState } from 'react';
 import { useEthers } from '@usedapp/core';
