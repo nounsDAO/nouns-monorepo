@@ -113,15 +113,19 @@ describe('NounsToken', () => {
 
   describe('contractURI', async () => {
     it('should return correct contractURI', async () => {
-      expect(await nounsToken.contractURI()).to.eq('ipfs://QmcJp8dTZxKUbnUK2h4YuXBF533zWhwHXzVh45z7wMqqMh')
-    })
+      expect(await nounsToken.contractURI()).to.eq(
+        'ipfs://QmcJp8dTZxKUbnUK2h4YuXBF533zWhwHXzVh45z7wMqqMh',
+      );
+    });
     it('should allow owner to set contractURI', async () => {
-      await nounsToken.setContractURIHash("ABC123")
-      expect(await nounsToken.contractURI()).to.eq('ipfs://ABC123')
-    })
+      await nounsToken.setContractURIHash('ABC123');
+      expect(await nounsToken.contractURI()).to.eq('ipfs://ABC123');
+    });
     it('should not allow non owner to set contractURI', async () => {
       const [, nonOwner] = await ethers.getSigners();
-     await expect(nounsToken.connect(nonOwner).setContractURIHash("BAD")).to.be.revertedWith("Ownable: caller is not the owner")
-    })
-  })
+      await expect(nounsToken.connect(nonOwner).setContractURIHash('BAD')).to.be.revertedWith(
+        'Ownable: caller is not the owner',
+      );
+    });
+  });
 });
