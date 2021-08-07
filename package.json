@@ -7,7 +7,7 @@
     "test": "lerna run --parallel test",
     "postinstall": "lerna run --parallel postinstall",
     "lint": "eslint 'packages/**/*.ts' --fix",
-    "format": "prettier --write 'packages/**/*.{ts,sol}' '!**/typechain/**'"
+    "format": "prettier --write 'packages/**/*.{ts(x)?,sol}' '!**/typechain/**'"
   },
   "devDependencies": {
     "@types/mocha": "^8.2.2",

@@ -1,6 +1,4 @@
 import { useAppSelector } from '../../hooks';
-import { Container } from 'react-bootstrap';
-import Navbar from 'react-bootstrap/Navbar';
 import ShortAddress from '../ShortAddress';
 import classes from './NavBar.module.css';
 import logo from '../../assets/logo.svg';
@@ -9,6 +7,9 @@ import NavBarItem from './NavBarItem';
 import { useState } from 'react';
 import { useEthers } from '@usedapp/core';
 import WalletConnectModal from '../WalletConnectModal';
+import { Link } from 'react-router-dom';
+import { Nav, Navbar, Container } from 'react-bootstrap';
+import clsx from 'clsx';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
@@ -23,35 +24,27 @@ const NavBar = () => {
     setShowConnectModal(false);
   };
 
-  const testnetContent = (
-    <NavBarItem className={classes.testnet}>
-      <img className={classes.testnetImg} src={testnetNoun} alt="testnet noun" />
-      <span>TESTNET</span>
-    </NavBarItem>
-  );
-
   const connectedContent = (
     <>
-      <NavBarItem>
-        <a href="/playground" className={classes.playground} target="_blank" rel="noreferrer">
-          PLAYGROUND
-        </a>
-      </NavBarItem>
-      <NavBarItem className={classes.connectedBtn}>
-        <ShortAddress>{activeAccount}</ShortAddress>
-        <span className={classes.greenStatusCircle} />
-      </NavBarItem>
-      <NavBarItem onClick={() => {deactivate()}} className={classes.connectedBtn}>
-        Disconnect
+      <Nav.Item>
+        <Nav.Link className={classes.nounsNavLink} disabled>
+          <span className={classes.greenStatusCircle} />
+          <span>
+            <ShortAddress>{activeAccount}</ShortAddress>
+          </span>
+        </Nav.Link>
+      </Nav.Item>
+      <NavBarItem className={clsx(classes.nounsNavLink, classes.disconnectBtn)} onClick={() => {deactivate()}} >
+        DISCONNECT
       </NavBarItem>
     </>
   );
 
   const disconnectedContent = (
     <>
-    <NavBarItem className={classes.connectBtn} onClick={showModalHandler} >
-      Connect Wallet
-    </NavBarItem>
+    <Nav.Link className={clsx(classes.nounsNavLink, classes.connectBtn)} onClick={showModalHandler} >
+      CONNECT WALLET
+    </Nav.Link>
     </>
   );
 
@@ -60,18 +53,23 @@ const NavBar = () => {
       {showConnectModal && activeAccount === undefined && <WalletConnectModal onDismiss={hideModalHandler} />}
       <Navbar expand="lg">
       <Container>
-        <Navbar.Brand href="#home" className={classes.navBarBrand}>
+        <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
           <img
             src={logo}
-            width="70"
-            height="70"
+            width="85"
+            height="85"
             className="d-inline-block align-middle"
             alt="Nouns DAO logo"
           />
         </Navbar.Brand>
-        {testnetContent}
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse className="justify-content-end">
+          <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>
+            GOVERNANCE
+          </Nav.Link>
+          <Nav.Link href="playground" className={classes.nounsNavLink} target="_blank">
+            PLAYGROUND
+          </Nav.Link>
           {activeAccount ? connectedContent : disconnectedContent}
         </Navbar.Collapse>
             </Container>

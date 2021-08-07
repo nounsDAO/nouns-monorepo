@@ -7,18 +7,19 @@ import { WalletLinkConnector } from '@web3-react/walletlink-connector';
 import {WalletConnectConnector} from '@web3-react/walletconnect-connector'
 import { TrezorConnector } from '@web3-react/trezor-connector';
 import { FortmaticConnector } from '@web3-react/fortmatic-connector';
-import config from '../../config';
+import config, { CHAIN_ID } from '../../config';
 
 const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
   const { onDismiss } = props;
   const { activate } = useEthers();
+  const supportedChainIds = [CHAIN_ID]
 
   const wallets = (
     <>
       <WalletButton
         onClick={() => {
           const injected = new InjectedConnector({ 
-            supportedChainIds: [config.supportedChainId]
+            supportedChainIds
           });
           activate(injected);
         }}
@@ -28,7 +29,7 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
         onClick={() => {
           const fortmatic = new FortmaticConnector({
             apiKey: 'pk_test_FB5E5C15F2EC5AE6',
-            chainId: config.supportedChainId,
+            chainId: CHAIN_ID
           });
           activate(fortmatic);
         }}
@@ -37,10 +38,10 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
       <WalletButton
         onClick={() => {
           const walletlink = new WalletConnectConnector({
-            supportedChainIds: [config.supportedChainId],
-            chainId: config.supportedChainId,
+            supportedChainIds,
+            chainId: CHAIN_ID,
             rpc: {
-              [config.supportedChainId]: config.rinkebyJsonRpc
+              [CHAIN_ID]: config.jsonRpcUri
             }
           });
           activate(walletlink);
@@ -52,8 +53,8 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
           const walletlink = new WalletLinkConnector({
             appName: 'Nouns.WTF',
             appLogoUrl: 'https://nouns.wtf/static/media/logo.cdea1650.svg',
-            url: config.rinkebyJsonRpc,
-            supportedChainIds: [config.supportedChainId],
+            url: config.jsonRpcUri,
+            supportedChainIds
           });
           activate(walletlink);
         }}
@@ -62,7 +63,7 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
       <WalletButton
         onClick={() => {
           const injected = new InjectedConnector({ 
-            supportedChainIds: [config.supportedChainId]
+            supportedChainIds
            });
           activate(injected);
         }}
@@ -82,9 +83,8 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
       <WalletButton
         onClick={() => {
           const trezor = new TrezorConnector({
-            // TODO: refactor
-            chainId: config.supportedChainId,
-            url: config.rinkebyJsonRpc,
+            chainId: CHAIN_ID,
+            url: config.jsonRpcUri,
             manifestAppUrl: 'nounops+trezorconnect@protonmail.com',
             manifestEmail: 'https://nouns.wtf',
           });

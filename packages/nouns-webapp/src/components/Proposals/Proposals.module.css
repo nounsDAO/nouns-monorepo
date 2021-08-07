@@ -1,0 +1,38 @@
+.proposals {
+  display: flex;
+  flex-direction: column;
+}
+
+.proposals > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.heading {
+  display: inline-block;
+  font-size: 2rem;
+  margin: 0 !important;
+}
+
+.createProposalLink {
+  padding: 0.9rem 1.5rem;
+  background-color: var(--brand-light-green);
+  border-radius: 50px;
+  border: 0 none;
+  font-size: large;
+  font-weight: normal;
+  cursor: default;
+}
+
+.createProposalLink:hover {
+  background-color: var(--brand-dark-red);
+}
+
+.proposalLink {
+  margin-top: 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

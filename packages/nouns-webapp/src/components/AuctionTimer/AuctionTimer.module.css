@@ -7,28 +7,12 @@
 }
 
 .timerSection {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
   margin-right: 0.5rem;
 }
 
-.time {
-  font-size: 3rem;
-  font-weight: bold;
-  font-family: 'Londrina Solid';
-}
-
-.doubleDigitStaticTime {
-  min-width: 74px;
-}
-
-.singleDigitStaticTime {
-  min-width: 50px;
-}
-
-.staticTime {
-  text-align: right;
+.small {
+  padding-left: 0.1rem;
+  font-size: 0.65em;
 }
 
 .timeSubtitle {

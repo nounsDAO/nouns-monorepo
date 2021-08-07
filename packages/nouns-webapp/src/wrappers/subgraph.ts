@@ -6,6 +6,9 @@ export const auctionQuery = (auctionId: number) => gql`
 	  id
 	  amount
 	  settled
+	  bidder {
+	  	id
+	  }
 	  startTime
 	  endTime
 	  noun {
