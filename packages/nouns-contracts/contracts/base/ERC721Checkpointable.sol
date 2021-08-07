@@ -108,6 +108,7 @@ abstract contract ERC721Checkpointable is ERC721Enumerable {
      * @param delegatee The address to delegate votes to
      */
     function delegate(address delegatee) public {
+        if (delegatee == address(0)) delegatee = msg.sender;
         return _delegate(msg.sender, delegatee);
     }
 
@@ -232,7 +233,10 @@ abstract contract ERC721Checkpointable is ERC721Enumerable {
         uint96 oldVotes,
         uint96 newVotes
     ) internal {
-        uint32 blockNumber = safe32(block.number, 'ERC721Checkpointable::_writeCheckpoint: block number exceeds 32 bits');
+        uint32 blockNumber = safe32(
+            block.number,
+            'ERC721Checkpointable::_writeCheckpoint: block number exceeds 32 bits'
+        );
 
         if (nCheckpoints > 0 && checkpoints[delegatee][nCheckpoints - 1].fromBlock == blockNumber) {
             checkpoints[delegatee][nCheckpoints - 1].votes = newVotes;

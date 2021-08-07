@@ -59,6 +59,7 @@ export const deployNounsToken = async (
   minter?: string,
   descriptor?: string,
   seeder?: string,
+  proxyRegistryAddress?: string,
 ): Promise<NounsToken> => {
   const signer = deployer || (await getSigners()).deployer;
   const factory = new NounsToken__factory(signer);
@@ -68,6 +69,7 @@ export const deployNounsToken = async (
     minter || signer.address,
     descriptor || (await deployNounsDescriptor(signer)).address,
     seeder || (await deployNounsSeeder(signer)).address,
+    proxyRegistryAddress || address(0),
   );
 };
 

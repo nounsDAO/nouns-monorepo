@@ -38,6 +38,8 @@ task('deploy-local', 'Deploy contracts to hardhat')
       return;
     }
 
+    const proxyRegistryAddress = '0xa5409ec958c83c3f309868babaca7c86dcb077c1';
+
     const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 7;
 
     const [deployer] = await ethers.getSigners();
@@ -61,6 +63,7 @@ task('deploy-local', 'Deploy contracts to hardhat')
           expectedAuctionHouseProxyAddress,
           () => contracts['NounsDescriptor'].instance?.address,
           () => contracts['NounsSeeder'].instance?.address,
+          proxyRegistryAddress,
         ],
       },
       NounsAuctionHouse: {
