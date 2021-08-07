@@ -19,7 +19,7 @@ const isNounderNoun = (nounId: BigNumber) => {
 const createAuctionObj = (data: any): IAuction => {
   const auction: IAuction = {
     amount: data.auction.amount,
-    bidder: '',
+    bidder: data.auction?.bidder?.id,
     endTime: data.auction.endTime,
     startTime: data.auction.startTime,
     length: data.auction.endTime - data.auction.startTime,

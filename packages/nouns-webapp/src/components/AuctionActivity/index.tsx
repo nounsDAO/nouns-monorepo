@@ -1,11 +1,13 @@
 import { Auction } from '../../wrappers/nounsAuction';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
 import { Row, Col } from 'react-bootstrap';
 import classes from './AuctionActivity.module.css';
+import bidHistoryClasses from './BidHistory.module.css';
 import Bid from '../Bid';
 import AuctionTimer from '../AuctionTimer';
 import CurrentBid from '../CurrentBid';
+import Winner from '../Winner';
 import BidHistory from '../BidHistory';
 import { Modal } from 'react-bootstrap';
 import AuctionNavigation from '../AuctionNavigation';
@@ -13,6 +15,7 @@ import AuctionActivityWrapper from '../AuctionActivityWrapper';
 import AuctionActivityNounTitle from '../AuctionActivityNounTitle';
 import AuctionActivityDateHeadline from '../AuctionActivityDateHeadline';
 import BidHistoryBtn from '../BidHistoryBtn';
+import StandaloneNoun from '../StandaloneNoun';
 
 const AuctionActivity: React.FC<{
   auction: Auction;
@@ -24,9 +27,7 @@ const AuctionActivity: React.FC<{
   const { auction, isFirstAuction, isLastAuction, onPrevAuctionClick, onNextAuctionClick } = props;
 
   const [auctionEnded, setAuctionEnded] = useState(false);
-  const setAuctionStateHandler = (ended: boolean) => {
-    setAuctionEnded(ended);
-  };
+  const [auctionTimer, setAuctionTimer] = useState(false);
 
   const [showBidHistoryModal, setShowBidHistoryModal] = useState(false);
   const showBidModalHandler = () => {
@@ -36,62 +37,99 @@ const AuctionActivity: React.FC<{
     setShowBidHistoryModal(false);
   };
 
-  const bidHistoryTitle = `Noun ${auction && auction.nounId.toString()} bid history`;
+  const bidHistoryTitle = (
+    <h1>
+      Noun {auction && auction.nounId.toString()}
+      <br /> Bid History
+    </h1>
+  );
+
+  // timer logic
+  useEffect(() => {
+    if (!auction) return;
+
+    const timeLeft = Number(auction.endTime) - Math.floor(Date.now() / 1000);
+
+    if (auction && timeLeft <= 0) {
+      setAuctionEnded(true);
+    } else {
+      setAuctionEnded(false);
+      const timer = setTimeout(() => {
+        setAuctionTimer(!auctionTimer);
+      }, 1000);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [auctionTimer, auction]);
+
+  if (!auction) return null;
 
   return (
     <>
-      {showBidHistoryModal && auction && (
-        <Modal show={showBidHistoryModal} onHide={dismissBidModalHanlder} size="lg">
+      {showBidHistoryModal && (
+        <Modal
+          show={showBidHistoryModal}
+          onHide={dismissBidModalHanlder}
+          dialogClassName="modal-90w"
+        >
           <Modal.Header closeButton className={classes.modalHeader}>
-            <Modal.Title className={classes.modalTitle}>
-              <h1>{bidHistoryTitle}</h1>
-            </Modal.Title>
+            <div className={classes.modalHeaderNounImgWrapper}>
+              <StandaloneNoun nounId={auction && auction.nounId} />
+            </div>
+            <Modal.Title className={classes.modalTitleWrapper}>{bidHistoryTitle}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <BidHistory auctionId={auction && auction.nounId.toString()} />
+            <BidHistory auctionId={auction.nounId.toString()} max={9999} />
           </Modal.Body>
         </Modal>
       )}
 
       <AuctionActivityWrapper>
-        <Row>
-          <Col lg={12}>
-            <AuctionActivityDateHeadline startTime={auction && auction.startTime} />
-          </Col>
-          <Col lg={12} className={classes.colAlignCenter}>
-            <AuctionActivityNounTitle nounId={auction && auction.nounId} />
-            <AuctionNavigation
-              isFirstAuction={isFirstAuction}
-              isLastAuction={isLastAuction}
-              onNextAuctionClick={onNextAuctionClick}
-              onPrevAuctionClick={onPrevAuctionClick}
-            />
-          </Col>
-          <Col lg={6}>
-            {auction && (
+        <div className={classes.informationRow}>
+          <Row className={classes.activityRow}>
+            <Col lg={12}>
+              <AuctionActivityDateHeadline startTime={auction.startTime} />
+            </Col>
+            <Col lg={12} className={classes.colAlignCenter}>
+              <AuctionActivityNounTitle nounId={auction.nounId} />
+              <AuctionNavigation
+                isFirstAuction={isFirstAuction}
+                isLastAuction={isLastAuction}
+                onNextAuctionClick={onNextAuctionClick}
+                onPrevAuctionClick={onPrevAuctionClick}
+              />
+            </Col>
+          </Row>
+          <Row className={classes.activityRow}>
+            <Col lg={5} className={classes.currentBidCol}>
               <CurrentBid
                 currentBid={new BigNumber(auction.amount.toString())}
                 auctionEnded={auctionEnded}
               />
-            )}
-          </Col>
-          <Col lg={6}>
-            <AuctionTimer
-              auction={auction}
-              auctionEnded={auctionEnded}
-              setAuctionEnded={setAuctionStateHandler}
-            />
-          </Col>
-          {isLastAuction && (
+            </Col>
+            <Col lg={5} className={classes.auctionTimerCol}>
+              {auctionEnded ? (
+                <Winner winner={auction.bidder} />
+              ) : (
+                <AuctionTimer auction={auction} auctionEnded={auctionEnded} />
+              )}
+            </Col>
+          </Row>
+        </div>
+        {isLastAuction && (
+          <Row className={classes.activityRow}>
             <Col lg={12}>
               <Bid auction={auction} auctionEnded={auctionEnded} />
             </Col>
-          )}
-          {auction && (
-            <Col lg={12}>
-              <BidHistoryBtn onClick={showBidModalHandler} />
-            </Col>
-          )}
+          </Row>
+        )}
+        <Row className={classes.activityRow}>
+          <Col lg={12}>
+            <BidHistory auctionId={auction.nounId.toString()} max={3} classes={bidHistoryClasses} />
+            <BidHistoryBtn onClick={showBidModalHandler} />
+          </Col>
         </Row>
       </AuctionActivityWrapper>
     </>

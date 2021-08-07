@@ -1,22 +1,61 @@
+.wrapper {
+  padding: 1rem 2rem;
+  color: var(--brand-black);
+  align-self: flex-start !important;
+}
+.informationRow {
+  margin-bottom: 2rem;
+}
+.activityRow {
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+h2 {
+  font-size: 2.5rem;
+}
+
+h4 {
+  font-size: 1rem;
+  font-weight: 400;
+}
+
 .modalHeader {
   border-bottom: none;
+  justify-content: flex-start;
+  align-items: center;
 }
-.modalTitle {
-  margin: 0 auto;
+.modalTitleWrapper {
   color: var(--brand-black);
 }
+.modalTitleWrapper h1 {
+  font-size: xx-large;
+  margin-left: 2rem;
+}
 .modalHeader button {
-  position: absolute;
-  right: 1rem;
+  align-self: flex-start;
 }
-.modalHeader h1 {
-  font-family: 'Londrina Solid';
+.modalHeaderNounImgWrapper {
+  width: 150px;
+  height: 150px;
 }
-/* section titles (date, current bid, auction ends */
-h2 {
-  color: var(--brand-dark-green);
-  font-weight: bold;
-  font-size: 1.4rem;
+.currentBidCol {
+  border-right: 1px solid var(--brand-black);
+}
+.auctionTimerCol {
+  padding-left: 3rem;
+}
+
+@media (max-width: 992px) {
+  .wrapper {
+    padding: 1rem;
+  }
+  .auctionTimerCol {
+    padding-left: 15px;
+  }
 }
 
 /* Fix Firefox navigation arrow alignment issues */
