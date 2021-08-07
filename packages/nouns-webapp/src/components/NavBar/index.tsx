@@ -56,7 +56,8 @@ const NavBar = () => {
   );
 
   return (
-    
+    <>
+      {showConnectModal && activeAccount === undefined && <WalletConnectModal onDismiss={hideModalHandler} />}
       <Navbar expand="lg">
       <Container>
         <Navbar.Brand href="#home" className={classes.navBarBrand}>
@@ -75,7 +76,7 @@ const NavBar = () => {
         </Navbar.Collapse>
             </Container>
       </Navbar>
-
+    </>
   );
 };
 
