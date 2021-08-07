@@ -3,7 +3,13 @@ import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { constants } from 'ethers';
 import { ethers, upgrades } from 'hardhat';
-import { NounsAuctionHouse, NounsDescriptor__factory, NounsToken, Weth } from '../typechain';
+import {
+  MaliciousBidder__factory,
+  NounsAuctionHouse,
+  NounsDescriptor__factory,
+  NounsToken,
+  Weth,
+} from '../typechain';
 import { deployNounsToken, deployWeth, populateDescriptor } from './utils';
 
 chai.use(solidity);
@@ -146,6 +152,31 @@ describe('NounsAuctionHouse', () => {
     const bidderAPostRefundBalance = await bidderA.getBalance();
 
     expect(bidderAPostRefundBalance).to.equal(bidderAPostBidBalance.add(RESERVE_PRICE));
+  });
+
+  it('should cap the maximum bid griefing cost at 10K gas + the cost to wrap and transfer WETH', async () => {
+    await (await nounsAuctionHouse.unpause()).wait();
+
+    const { nounId } = await nounsAuctionHouse.auction();
+
+    const maliciousBidderFactory = new MaliciousBidder__factory(bidderA);
+    const maliciousBidder = await maliciousBidderFactory.deploy();
+
+    const maliciousBid = await maliciousBidder
+      .connect(bidderA)
+      .bid(nounsAuctionHouse.address, nounId, {
+        value: RESERVE_PRICE,
+      });
+    await maliciousBid.wait();
+
+    const tx = await nounsAuctionHouse.connect(bidderB).createBid(nounId, {
+      value: RESERVE_PRICE * 2,
+      gasLimit: 1_000_000,
+    });
+    const result = await tx.wait();
+
+    expect(result.gasUsed.toNumber()).to.be.lessThan(200_000);
+    expect(await weth.balanceOf(maliciousBidder.address)).to.equal(RESERVE_PRICE);
   });
 
   it('should emit an `AuctionBid` event on a successful bid', async () => {

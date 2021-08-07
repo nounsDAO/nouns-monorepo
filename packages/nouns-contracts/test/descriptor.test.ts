@@ -109,10 +109,13 @@ describe('NounsDescriptor', () => {
       expect(description).to.equal(`Noun ${i} is a member of the Nouns DAO`);
       expect(image).to.not.be.undefined;
 
-      appendFileSync('parts.html', Buffer.from(image.split(';base64,').pop(), 'base64').toString('ascii'));
+      appendFileSync(
+        'parts.html',
+        Buffer.from(image.split(';base64,').pop(), 'base64').toString('ascii'),
+      );
 
       if (i && i % Math.round(max / 10) === 0) {
-        console.log(`${Math.round((i / max) * 100)}% complete`)
+        console.log(`${Math.round((i / max) * 100)}% complete`);
       }
     }
   });
