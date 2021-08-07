@@ -1,4 +1,17 @@
-// SPDX-License-Identifier: Unlicense
+// SPDX-License-Identifier: GPL-3.0
+
+/// @title The Nouns NFT descriptor
+
+/*********************************
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
+ * ░░░░░░▒▒▒▒▒▒▒▒▒░░▒▒▒▒▒▒▒▒▒░░░ *
+ * ░░░░░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
+ * ░░▒▒▒▒▒▒░░░▒▒▒▒▒▒▒▒░░░▒▒▒▒░░░ *
+ * ░░▒▒░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
+ * ░░▒▒░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
+ * ░░░░░░▒▒▒▒▒▒▒▒▒░░▒▒▒▒▒▒▒▒▒░░░ *
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
+ *********************************/
 
 pragma solidity ^0.8.6;
 
@@ -9,11 +22,12 @@ import { INounsSeeder } from './interfaces/INounsSeeder.sol';
 import { NFTDescriptor } from './libs/NFTDescriptor.sol';
 import { MultiPartRLEToSVG } from './libs/MultiPartRLEToSVG.sol';
 
-/**
- * @title The Nouns NFT descriptor.
- */
 contract NounsDescriptor is INounsDescriptor, Ownable {
     using Strings for uint256;
+
+    // prettier-ignore
+    // https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt
+    bytes32 constant COPYRIGHT_CC0_1_0_UNIVERSAL_LICENSE = 0xa2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499;
 
     // Whether or not new Noun parts can be added
     bool public override arePartsLocked;

@@ -1,4 +1,34 @@
-// SPDX-License-Identifier: Unlicense
+// SPDX-License-Identifier: BSD-3-Clause
+
+/// @title Vote checkpointing for an ERC-721 token
+
+/*********************************
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
+ * ░░░░░░▒▒▒▒▒▒▒▒▒░░▒▒▒▒▒▒▒▒▒░░░ *
+ * ░░░░░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
+ * ░░▒▒▒▒▒▒░░░▒▒▒▒▒▒▒▒░░░▒▒▒▒░░░ *
+ * ░░▒▒░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
+ * ░░▒▒░░▒▒░░░▒▒▒▒░░▒▒░░░▒▒▒▒░░░ *
+ * ░░░░░░▒▒▒▒▒▒▒▒▒░░▒▒▒▒▒▒▒▒▒░░░ *
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
+ *********************************/
+
+// LICENSE
+// ERC721Checkpointable.sol uses and modifies part of Compound Lab's Comp.sol:
+// https://github.com/compound-finance/compound-protocol/blob/ae4388e780a8d596d97619d9704a931a2752c2bc/contracts/Governance/Comp.sol
+//
+// Comp.sol source code Copyright 2020 Compound Labs, Inc. licensed under the BSD-3-Clause license.
+// With modifications by Nounders DAO.
+//
+// Additional conditions of BSD-3-Clause can be found here: https://opensource.org/licenses/BSD-3-Clause
+//
+// MODIFICATIONS
+// Checkpointing logic from Comp.sol has been used with the following modifications:
+// - `delegates` is renamed to `_delegates` and is set to private
+// - `delegates` is a public function that uses the `_delegates` mapping look-up, but unlike
+//   Comp.sol, returns the delegator's own address if there is no delegate.
+//   This avoids the delegator needing to "delegate to self" with an additional transaction
+// - `_transferTokens()` is renamed `_beforeTokenTransfer()` and adapted to hook into OpenZeppelin's ERC721 hooks.
 
 pragma solidity ^0.8.6;
 
@@ -92,6 +122,7 @@ abstract contract ERC721Checkpointable is ERC721Enumerable {
      * @param delegatee The address to delegate votes to
      */
     function delegate(address delegatee) public {
+        if (delegatee == address(0)) delegatee = msg.sender;
         return _delegate(msg.sender, delegatee);
     }
 

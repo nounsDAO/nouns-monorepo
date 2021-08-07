@@ -44,6 +44,12 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
   .addOptionalParam('proposalThresholdBps', 'The proposal threshold (basis points)', 500, types.int) // Default: 5%
   .addOptionalParam('quorumVotesBps', 'Votes required for quorum (basis points)', 1_000, types.int) // Default: 10%
   .setAction(async (args, { ethers }) => {
+    const network = await ethers.provider.getNetwork();
+    const proxyRegistryAddress =
+      network.chainId === 1
+        ? '0xa5409ec958c83c3f309868babaca7c86dcb077c1'
+        : '0xf57b2c51ded3a29e6891aba85459d600256cf317';
+
     const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 6;
     const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 9;
 
@@ -71,6 +77,7 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
           expectedAuctionHouseProxyAddress,
           () => contracts['NounsDescriptor'].address,
           () => contracts['NounsSeeder'].address,
+          proxyRegistryAddress,
         ],
       },
       NounsAuctionHouse: {
