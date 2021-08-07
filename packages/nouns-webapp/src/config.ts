@@ -20,7 +20,7 @@ const config: Record<SupportedChains, Config> = {
     tokenAddress: '0x632f34c3aee991b10D4b421Bc05413a03d7a37eB',
     nounsDaoAddress: '0xd1C753D9A23eb5c57e0d023e993B9bd4F5086b04',
     subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph-rinkeby-v4',
-    enableHistory: process.env.ENABLE_HISTORY === "true" || false
+    enableHistory: process.env.REACT_APP_ENABLE_HISTORY === "true" || false
   },
   [ChainId.Mainnet]: {
     auctionProxyAddress: '0x0000000000000000000000000000000000000000',
@@ -29,6 +29,7 @@ const config: Record<SupportedChains, Config> = {
     subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph',
     jsonRpcUri: process.env.REACT_APP_MAINNET_JSONRPC || `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
     enableHistory: process.env.ENABLE_HISTORY === "true" || false
+
   },
 };
 
