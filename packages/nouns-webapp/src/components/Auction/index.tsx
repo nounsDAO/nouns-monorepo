@@ -77,7 +77,7 @@ const Auction: React.FC<{ auction: IAuction; bgColorHandler: (useGrey: boolean) 
         setOnDisplayNounId(currentAuction && currentAuction.nounId);
         setLastAuctionId(currentAuction && currentAuction.nounId);
       }
-    }, [onDisplayNounId, currentAuction]);
+    }, [onDisplayNounId, currentAuction, lastAuctionId]);
 
     const auctionHandlerFactory = (nounIdMutator: (prev: BigNumber) => BigNumber) => () => {
       setOnDisplayNounId(prev => {
