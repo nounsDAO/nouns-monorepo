@@ -38,3 +38,9 @@
 .nounsNavLink:hover {
   color: var(--brand-dark-red) !important;
 }
+
+.testnetImg {
+  width: auto;
+  height: 45px;
+}
+

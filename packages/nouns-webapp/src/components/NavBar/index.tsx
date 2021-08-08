@@ -7,6 +7,7 @@ import { useEthers } from '@usedapp/core';
 import WalletConnectModal from '../WalletConnectModal';
 import { Link } from 'react-router-dom';
 import { Nav, Navbar, Container } from 'react-bootstrap';
+import testnetNoun from '../../assets/testnet-noun.png'
 import clsx from 'clsx';
 
 const NavBar = () => {
@@ -71,6 +72,11 @@ const NavBar = () => {
               alt="Nouns DAO logo"
             />
           </Navbar.Brand>
+          <Nav.Item>
+                  <img className={classes.testnetImg} src={testnetNoun} alt="testnet noun" />
+
+            TESTNET
+          </Nav.Item>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse className="justify-content-end">
             <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>
