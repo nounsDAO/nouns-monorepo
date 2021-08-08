@@ -21,9 +21,9 @@ const config: Record<SupportedChains, Config> = {
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === "true" || false
   },
   [ChainId.Mainnet]: {
-    auctionProxyAddress: '0x0000000000000000000000000000000000000000',
-    tokenAddress: '0x0000000000000000000000000000000000000000',
-    nounsDaoAddress: '0x0000000000000000000000000000000000000000',
+    auctionProxyAddress: '0xE83d46D049679dD9b2736c2F4c6a75f64eAd0394',
+    tokenAddress: '0xfC40A203C1ed9F4985a73a10Df818ec9620083E3',
+    nounsDaoAddress: '0xc0b6662F16786E9352679710cFE16898d89Caf1F',
     subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === "true" || false
   },
