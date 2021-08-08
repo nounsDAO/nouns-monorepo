@@ -15,7 +15,7 @@ export enum WALLET_TYPE {
   walletconnect = 'WalletConnect',
   fortmatic = 'Fortmatic',
   trezor = 'Trezor',
-  walletlink = 'WalletLink',
+  coinbaseWallet = 'Coinbase Wallet',
 }
 
 const logo = (walletType: WALLET_TYPE) => {
@@ -32,10 +32,10 @@ const logo = (walletType: WALLET_TYPE) => {
       return ledgerLogo;
     case WALLET_TYPE.trezor:
       return trezorLogo;
-    case WALLET_TYPE.walletlink:
+    case WALLET_TYPE.coinbaseWallet:
       return coinbaseWalletLogo;
     default:
-      return "";
+      return '';
   }
 };
 

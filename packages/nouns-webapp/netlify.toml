@@ -1,2 +1,9 @@
 [context.production.environment]
   REACT_APP_ENABLE_HISTORY = "true"
+
+[context."mainnet-staging".environment]
+  REACT_APP_CHAIN_ID = "1"
+
+[context.deploy-preview.environment]
+  REACT_APP_CHAIN_ID = "1"
+

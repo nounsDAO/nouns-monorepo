@@ -137,9 +137,9 @@ const Documentation = () => {
                 <ul>
                   <li>backgrounds (2) </li>
                   <li>bodies (30)</li>
-                  <li>accessories (136) </li>
-                  <li>heads(206) </li>
-                  <li>glasses (19)</li>
+                  <li>accessories (137) </li>
+                  <li>heads (234) </li>
+                  <li>glasses (21)</li>
                 </ul>
                 You can experiment with off-chain noun generation at the {playgroundLink}
               </Card.Body>

@@ -16,3 +16,11 @@ export const buildEtherscanTxLink = (txHash: string, network: Network = Network.
   const path = `tx/${txHash}`;
   return new URL(path, baseURL(network));
 };
+
+export const buildEtherscanAddressLink = (
+  address: string,
+  network: Network = Network.mainnet,
+): URL => {
+  const path = `address/${address}`;
+  return new URL(path, baseURL(network));
+};

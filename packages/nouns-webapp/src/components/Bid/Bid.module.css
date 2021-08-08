@@ -20,13 +20,17 @@
   outline: none !important;
   box-shadow: none !important;
 }
-
+.minBidCopy {
+  padding-top: 0;
+  font-size: small;
+  margin-left: 0.25rem;
+  margin-bottom: 0.3rem;
+}
 .bidInput {
   width: 60%;
   height: 3rem;
   color: black;
-  border: 1px solid white;
-  background-color: transparent;
+  border: 1px solid #aaa !important;
   border-radius: 0.25rem !important;
   background-color: white;
   font-weight: bold;
@@ -35,14 +39,16 @@
 }
 .bidInput:focus {
   border: none !important;
+  border: 1px solid #aaa !important;
 }
-.bidInput::-webkit-input-placeholder,
-.bidInput::-moz-placeholder,
-.bidInput::-ms-input-placeholder {
+.customPlaceholder {
+  position: absolute;
+  top: 25%;
+  left: 46%;
   font-weight: bold;
-  color: #afb2b3;
+  color: #aaa;
+  z-index: 3;
 }
-
 .bidBtnAuctionEnded {
   width: 100%;
   height: 3rem;
