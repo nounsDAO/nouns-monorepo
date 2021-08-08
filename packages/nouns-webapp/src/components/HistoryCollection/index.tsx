@@ -18,13 +18,16 @@ const HistoryCollection: React.FC<HistoryCollectionProps> = (props: HistoryColle
     latestNounId &&
     new Array(historyCount)
       .fill(0)
-      .map((_, i) => BigNumber.from(latestNounId).sub(BigNumber.from(i)))
-      .reverse();
+      .map((_, i) => BigNumber.from(latestNounId).sub(BigNumber.from(i)));
+
+  rtl && nounIds && nounIds.reverse();
 
   return (
     <Section bgColor="white" fullWidth={true}>
       <div className={clsx(classes.historyCollection, rtl && classes.rtl)}>
-        {config.enableHistory && nounIds && nounIds.map((nounId, i) => <StandaloneNoun key={i} nounId={nounId} />)}
+        {config.enableHistory &&
+          nounIds &&
+          nounIds.map((nounId, i) => <StandaloneNoun key={i} nounId={nounId} />)}
       </div>
     </Section>
   );
