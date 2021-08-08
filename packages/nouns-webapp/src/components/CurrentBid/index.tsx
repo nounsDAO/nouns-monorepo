@@ -9,10 +9,10 @@ const CurrentBid: React.FC<{ currentBid: BigNumber; auctionEnded: boolean }> = p
 
   return (
     <div className={classes.section}>
-      <h2>{titleContent}</h2>
-      <span>
+      <h4>{titleContent}</h4>
+      <h2>
         <TruncatedAmount amount={currentBid && currentBid} />
-      </span>
+      </h2>
     </div>
   );
 };
