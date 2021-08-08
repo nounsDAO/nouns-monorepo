@@ -13,6 +13,7 @@ import Footer from './components/Footer';
 import AuctionPage from './pages/Auction';
 import GovernancePage from './pages/Governance';
 import VotePage from './pages/Vote';
+import { CHAIN_ID } from './config';
 
 function App() {
   const { account, chainId } = useEthers();
@@ -28,7 +29,7 @@ function App() {
 
   return (
     <div className={useGreyBg ? classes.greyBg : classes.beigeBg}>
-      {chainId !== 4 && <NetworkAlert />}
+      {Number(CHAIN_ID) !== chainId && <NetworkAlert />}
       {alertModal.show && (
         <AlertModal
           title={alertModal.title}
