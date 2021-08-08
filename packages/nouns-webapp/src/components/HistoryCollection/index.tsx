@@ -4,6 +4,7 @@ import classes from './HistoryCollection.module.css';
 import clsx from 'clsx';
 import StandaloneNoun from '../StandaloneNoun';
 import config from '../../config';
+import { Container, Row } from 'react-bootstrap';
 
 interface HistoryCollectionProps {
   historyCount: number;
@@ -24,11 +25,15 @@ const HistoryCollection: React.FC<HistoryCollectionProps> = (props: HistoryColle
 
   return (
     <Section bgColor="white" fullWidth={true}>
-      <div className={clsx(classes.historyCollection, rtl && classes.rtl)}>
-        {config.enableHistory &&
-          nounIds &&
-          nounIds.map((nounId, i) => <StandaloneNoun key={i} nounId={nounId} />)}
-      </div>
+      <Container fluid>
+        <Row className="justify-content-md-center">
+          <div className={clsx(classes.historyCollection, rtl && classes.rtl)}>
+            {config.enableHistory &&
+              nounIds &&
+              nounIds.map((nounId, i) => <StandaloneNoun key={i} nounId={nounId} />)}
+          </div>
+        </Row>
+      </Container>
     </Section>
   );
 };
