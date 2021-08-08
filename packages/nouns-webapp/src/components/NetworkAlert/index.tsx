@@ -21,7 +21,7 @@ const NetworkAlert = () => {
         </Modal.Header>
         <Modal.Body>
           <p>
-            Nouns DAO testnet auctions require you to switch over {networkName()} to be able
+            Nouns DAO auctions require you to switch over {networkName()} to be able
             to participate.
           </p>
           <p>
