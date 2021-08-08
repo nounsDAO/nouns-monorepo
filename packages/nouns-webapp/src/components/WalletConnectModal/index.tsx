@@ -58,7 +58,7 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
           });
           activate(walletlink);
         }}
-        walletType={WALLET_TYPE.walletlink}
+        walletType={WALLET_TYPE.coinbaseWallet}
       />
       <WalletButton
         onClick={() => {
