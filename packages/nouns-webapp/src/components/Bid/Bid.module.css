@@ -25,8 +25,7 @@
   width: 60%;
   height: 3rem;
   color: black;
-  border: 1px solid white;
-  background-color: transparent;
+  border: 1px solid #aaa !important;
   border-radius: 0.25rem !important;
   background-color: white;
   font-weight: bold;
@@ -35,6 +34,7 @@
 }
 .bidInput:focus {
   border: none !important;
+  border: 1px solid #aaa !important;
 }
 .bidInput::-webkit-input-placeholder,
 .bidInput::-moz-placeholder,
