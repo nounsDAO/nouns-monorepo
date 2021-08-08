@@ -42,11 +42,6 @@ const currentBid = (bidInputRef: React.RefObject<HTMLInputElement>) => {
   return new BigNumber(utils.parseEther(bidInputRef.current.value).toString());
 };
 
-const inputPlaceholderCopy = (minBid: BigNumber, isMobile: boolean) => {
-  let copy = isMobile ? 'Min bid:' : 'Minimum bid:';
-  return `${copy} ${minBidEth(minBid)} ETH`;
-};
-
 const Bid: React.FC<{
   auction: Auction;
   auctionEnded: boolean;
@@ -123,18 +118,6 @@ const Bid: React.FC<{
       bidInputRef.current.value = '';
     }
   };
-
-  const [isMobile, setIsMobile] = useState(false);
-  const handleResize = () => {
-    if (window.innerWidth < 992) {
-      setIsMobile(true);
-    } else {
-      setIsMobile(false);
-    }
-  };
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-  });
 
   // placing bid transaction state hook
   useEffect(() => {
@@ -226,19 +209,24 @@ const Bid: React.FC<{
 
   return (
     <>
+      <p className={classes.minBidCopy}>{`Minimum bid: ${minBidEth(minBid)} ETH`}</p>
       <InputGroup>
         {!auctionEnded && (
-          <FormControl
-            aria-label="Example text with button addon"
-            aria-describedby="basic-addon1"
-            className={classes.bidInput}
-            type="number"
-            placeholder={inputPlaceholderCopy(minBid, isMobile)}
-            min="0"
-            onChange={bidInputHandler}
-            ref={bidInputRef}
-            value={bidInput}
-          />
+          // <div className={classes.bidInputWrapper}>
+          <>
+            <FormControl
+              aria-label="Example text with button addon"
+              aria-describedby="basic-addon1"
+              className={classes.bidInput}
+              type="number"
+              min="0"
+              onChange={bidInputHandler}
+              ref={bidInputRef}
+              value={bidInput}
+            />
+            <span className={classes.customPlaceholder}>ETH</span>
+          </>
+          // </div>
         )}
         <Button
           className={auctionEnded ? classes.bidBtnAuctionEnded : classes.bidBtn}
