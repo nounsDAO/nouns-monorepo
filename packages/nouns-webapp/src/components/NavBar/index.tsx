@@ -35,6 +35,7 @@ const NavBar = () => {
       <Nav.Item
         className={clsx(classes.nounsNavLink, classes.disconnectBtn)}
         onClick={() => {
+          setShowConnectModal(false);
           deactivate();
         }}
       >
