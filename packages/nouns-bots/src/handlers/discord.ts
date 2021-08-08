@@ -16,7 +16,7 @@ export const processNewAuction = async (
   if (!config.discordEnabled) return;
   client.send(
     new Discord.MessageEmbed()
-      .setTitle(`New Testnet Auction Discovered`)
+      .setTitle(`New Auction Discovered`)
       .setDescription(`An auction has started for Noun #${auctionId}`)
       .setURL('https://nouns.wtf')
       .setImage(imageUrl)
