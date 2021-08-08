@@ -12,10 +12,13 @@ import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { buildEtherscanTxLink, Network } from '../../utils/buildEtherscanLink';
 import TruncatedAmount from '../TruncatedAmount';
 import BigNumber from 'bignumber.js';
+import { useAppSelector } from '../../hooks';
 
 const BidHistory: React.FC<{ auctionId: string; max: number; classes?: any }> = props => {
   const { auctionId, max, classes = _classes } = props;
   const { loading, error, data, refetch } = useQuery(bidsByAuctionQuery(auctionId));
+
+  const activeAccount = useAppSelector(state => state.account.activeAccount);
 
   const bidContent =
     data &&
@@ -36,7 +39,7 @@ const BidHistory: React.FC<{ auctionId: string; max: number; classes?: any }> = 
               <div className={classes.leftSectionWrapper}>
                 <div className={classes.bidder}>
                   <div>
-                    <ShortAddress>{bid.bidder.id}</ShortAddress>
+                    {bid.bidder.id?.toLowerCase() === activeAccount?.toLowerCase() ? `You` : <ShortAddress>{bid.bidder.id}</ShortAddress>}
                   </div>
                 </div>
                 <div className={classes.bidDate}>{date}</div>
