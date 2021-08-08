@@ -1,4 +1,16 @@
 import { Modal } from 'react-bootstrap';
+import { CHAIN_ID } from '../../config';
+
+const networkName = () => {
+  switch (Number(CHAIN_ID)) {
+    case 1:
+      return "Ethereum Mainnet";
+    case 4:
+      return "the Rinkeby network";
+    default:
+      return `Network ${CHAIN_ID}`;
+  }
+}
 
 const NetworkAlert = () => {
   return (
@@ -9,7 +21,7 @@ const NetworkAlert = () => {
         </Modal.Header>
         <Modal.Body>
           <p>
-            Nouns DAO testnet auctions require you to switch over to the Rinkeby network to be able
+            Nouns DAO testnet auctions require you to switch over {networkName()} to be able
             to participate.
           </p>
           <p>
