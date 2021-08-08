@@ -38,6 +38,7 @@ const NavBar = () => {
         className={clsx(classes.nounsNavLink, classes.disconnectBtn)}
         onClick={() => {
           deactivate();
+          setShowConnectModal(false);
         }}
       >
         <FontAwesomeIcon icon={faPowerOff} color={'#212529'} />
