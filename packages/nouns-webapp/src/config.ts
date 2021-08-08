@@ -25,9 +25,9 @@ const config: Record<SupportedChains, Config> = {
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true' || false,
   },
   [ChainId.Mainnet]: {
-    auctionProxyAddress: '0xE83d46D049679dD9b2736c2F4c6a75f64eAd0394',
-    tokenAddress: '0xfC40A203C1ed9F4985a73a10Df818ec9620083E3',
-    nounsDaoAddress: '0xc0b6662F16786E9352679710cFE16898d89Caf1F',
+    auctionProxyAddress: '0x830BD73E4184ceF73443C15111a1DF14e495C706',
+    tokenAddress: '0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03',
+    nounsDaoAddress: '0x0BC3807Ec262cB779b38D65b38158acC3bfedE10',
     subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph',
     jsonRpcUri:
       process.env.REACT_APP_MAINNET_JSONRPC ||
