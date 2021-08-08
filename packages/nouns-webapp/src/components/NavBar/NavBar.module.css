@@ -5,15 +5,19 @@
 
 /* connect button displays differently to default NavBarItems, thus the !importants */
 .connectBtn {
-  background-color: var(--brand-light-green) !important;
-  color: white !important;
   cursor: pointer;
 }
 .connectBtn:hover,
 .connectBtn:active,
 .connectBtn:focus {
-  background-color: var(--brand-dark-red) !important;
-  color: white;
+  cursor: pointer !important;
+}
+.disconnectBtn {
+  cursor: pointer;
+}
+.disconnectBtn:hover,
+.disconnectBtn:active,
+.disconnectBtn:focus {
   cursor: pointer !important;
 }
 

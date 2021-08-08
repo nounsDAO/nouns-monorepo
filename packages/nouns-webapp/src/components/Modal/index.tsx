@@ -15,7 +15,7 @@ const ModalOverlay: React.FC<{
   const { title, content, onDismiss } = props;
   return (
     <div className={classes.modal}>
-      <button onClick={onDismiss}>
+      <button className={classes.closeButton} onClick={onDismiss}>
         <img src={xIcon} alt="Button to close modal" />
       </button>
       <h3>{title}</h3>
