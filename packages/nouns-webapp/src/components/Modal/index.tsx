@@ -8,14 +8,14 @@ const Backdrop: React.FC<{ onDismiss: () => void }> = props => {
 };
 
 const ModalOverlay: React.FC<{
-  title: string;
-  content: React.ReactNode;
+  title?: string;
+  content?: React.ReactNode;
   onDismiss: () => void;
 }> = props => {
   const { title, content, onDismiss } = props;
   return (
     <div className={classes.modal}>
-      <button onClick={onDismiss}>
+      <button className={classes.closeButton} onClick={onDismiss}>
         <img src={xIcon} alt="Button to close modal" />
       </button>
       <h3>{title}</h3>
@@ -24,7 +24,7 @@ const ModalOverlay: React.FC<{
   );
 };
 
-const Modal: React.FC<{ title: string; content: React.ReactNode; onDismiss: () => void }> =
+const Modal: React.FC<{ title?: string; content?: React.ReactNode; onDismiss: () => void }> =
   props => {
     const { title, content, onDismiss } = props;
     return (

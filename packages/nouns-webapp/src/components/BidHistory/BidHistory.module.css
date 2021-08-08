@@ -6,7 +6,7 @@
   display: grid;
   text-align: start;
   list-style-type: none;
-  row-gap: 1rem;
+  row-gap: 0.5rem;
   padding: 0;
 }
 
@@ -39,13 +39,12 @@
 .bidAmount {
   color: var(--brand-black);
   margin-right: 1rem;
-  font-size: xx-large;
-  font-family: 'Londrina Solid';
+  font-size: 1.5rem;
 }
 .linkSymbol,
 .linkSymbol a {
   color: var(--brand-black);
 }
 .linkSymbol a:hover {
-  color: rgb(32, 32, 32);
+  color: gray;
 }

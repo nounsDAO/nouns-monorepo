@@ -3,23 +3,13 @@
   align-items: center;
   justify-content: center;
   margin-right: 1rem;
-  padding: 1.75rem;
-  height: 2rem;
-  background-color: white;
-  color: var(--brand-black);
-  border-radius: 50px;
-  border: 0 none;
-  font-size: large;
-  font-weight: normal;
-  font-family: 'Londrina Solid';
-  cursor: default;
 }
 
 .navBarItem a {
   color: var(--brand-black);
 }
 .navBarItem a:hover {
-  color: var(--brand-dark-green);
+  color: var(--brand-dark-red);
 }
 
 @media (max-width: 992px) {

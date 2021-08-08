@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 import { bidsByAuctionQuery } from '../../wrappers/subgraph';
 import ShortAddress from '../ShortAddress';
-import classes from './BidHistory.module.css';
+import _classes from './BidHistory.module.css';
 import { compareBids } from '../../utils/compareBids';
 import * as R from 'ramda';
 import { Spinner } from 'react-bootstrap';
@@ -13,17 +13,21 @@ import { buildEtherscanTxLink, Network } from '../../utils/buildEtherscanLink';
 import TruncatedAmount from '../TruncatedAmount';
 import BigNumber from 'bignumber.js';
 
-const BidHistory: React.FC<{ auctionId: string }> = props => {
-  const { auctionId } = props;
+const BidHistory: React.FC<{ auctionId: string; max: number; classes?: any }> = props => {
+  const { auctionId, max, classes = _classes } = props;
   const { loading, error, data, refetch } = useQuery(bidsByAuctionQuery(auctionId));
 
   const bidContent =
     data &&
     R.sort(compareBids, data.bids)
       .reverse()
+      .slice(0, max)
       .map((bid: any, i: number) => {
         const bidAmount = <TruncatedAmount amount={new BigNumber(bid.amount)} />;
-        const date = moment(bid.blockTimestamp * 1000).format('MMM DD yy on hh:mm a');
+        const date = `${moment(bid.blockTimestamp * 1000).format('MMM DD')} at ${moment(
+          bid.blockTimestamp * 1000,
+        ).format('hh:mm a')}`;
+
         const txLink = buildEtherscanTxLink(bid.id, Network.rinkeby);
 
         return (
@@ -31,7 +35,9 @@ const BidHistory: React.FC<{ auctionId: string }> = props => {
             <div className={classes.bidItem}>
               <div className={classes.leftSectionWrapper}>
                 <div className={classes.bidder}>
-                  <ShortAddress>{bid.bidder.id}</ShortAddress>
+                  <div>
+                    <ShortAddress>{bid.bidder.id}</ShortAddress>
+                  </div>
                 </div>
                 <div className={classes.bidDate}>{date}</div>
               </div>

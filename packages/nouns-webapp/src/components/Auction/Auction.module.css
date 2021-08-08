@@ -5,6 +5,7 @@
 .nounContentCol {
   display: flex;
 }
+
 .auctionActivityCol {
   padding-top: 2rem;
   align-self: start !important; /* maintains auction arrow buttons fixed from auction to auction  */

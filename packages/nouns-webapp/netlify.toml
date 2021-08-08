@@ -1,0 +1,2 @@
+[context.production.environment]
+  REACT_APP_ENABLE_HISTORY = "true"

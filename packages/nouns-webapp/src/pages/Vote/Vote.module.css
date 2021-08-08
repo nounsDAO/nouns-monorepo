@@ -1,0 +1,16 @@
+.backArrow {
+  height: 2rem;
+}
+
+.votingButton {
+  margin-top: 1rem;
+}
+
+.voteCountCard {
+  margin-top: 1rem;
+}
+
+.voteCountCard p {
+  display: flex;
+  justify-content: space-between;
+}

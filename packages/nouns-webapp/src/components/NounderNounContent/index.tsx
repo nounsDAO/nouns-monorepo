@@ -40,10 +40,11 @@ const NounderNounContent: React.FC<{
         </Col>
         <Col lg={12}>
           <p className={classes.content}>
-            Because 100% of noun auction proceeds are sent to Nouns DAO, Nounders have chosen to
-            compensate themselves with nouns. Every 10th noun for the first 5 years of the project
-            (noun ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's
-            multisig to be vested and shared among the founding members of the project.
+            100% of noun auction proceeds belong to NounsDAO. For this reason, the project's
+            founders (‘Nounders’) are compensated with nouns. <br />
+            <br />
+            Every 10th noun for the first 5 years of the project will be sent to the Nounders. This
+            is noun {nounId.toNumber() / 10 + 1} of 183.
           </p>
         </Col>
       </Row>
