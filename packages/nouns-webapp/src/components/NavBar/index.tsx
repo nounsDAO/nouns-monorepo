@@ -8,8 +8,6 @@ import WalletConnectModal from '../WalletConnectModal';
 import { Link } from 'react-router-dom';
 import { Nav, Navbar, Container } from 'react-bootstrap';
 import clsx from 'clsx';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPowerOff } from '@fortawesome/free-solid-svg-icons';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
@@ -41,7 +39,7 @@ const NavBar = () => {
           setShowConnectModal(false);
         }}
       >
-        <FontAwesomeIcon icon={faPowerOff} color={'#212529'} />
+        DISCONNECT
       </Nav.Item>
     </>
   );
