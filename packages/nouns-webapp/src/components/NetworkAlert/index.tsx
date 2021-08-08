@@ -12,6 +12,17 @@ const networkName = () => {
   }
 }
 
+const metamaskNetworkName = () => {
+  switch (Number(CHAIN_ID)) {
+    case 1:
+      return "Ethereum Mainnet";
+    case 4:
+      return "Rinkeby Test Network";
+    default:
+      return `Network ${CHAIN_ID}`;
+  }
+}
+
 const NetworkAlert = () => {
   return (
     <>
@@ -25,12 +36,12 @@ const NetworkAlert = () => {
             to participate.
           </p>
           <p>
-            <b>To get started, please swtich your network by following the instructions below:</b>
+            <b>To get started, please switch your network by following the instructions below:</b>
           </p>
           <ol>
             <li>Open Metamask</li>
-            <li>Click on "Ethereum Mainnet" button at the top</li>
-            <li>Click on the "Rinkeby Test Network"</li>
+            <li>Click the network select dropdown</li>
+            <li>Click on "{metamaskNetworkName()}"</li>
           </ol>
         </Modal.Body>
       </Modal>
