@@ -43,8 +43,7 @@ const NounderNounContent: React.FC<{
             100% of noun auction proceeds belong to NounsDAO. For this reason, the project's
             founders (‘Nounders’) are compensated with nouns. <br />
             <br />
-            Every 10th noun for the first 5 years of the project will be sent to the Nounders. This
-            is noun {nounId.toNumber() / 10 + 1} of 183.
+            Every 10th noun for the first 5 years of the project will be sent to the Nounders.
           </p>
         </Col>
       </Row>
