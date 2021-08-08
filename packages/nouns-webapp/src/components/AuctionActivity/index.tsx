@@ -145,7 +145,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
                 max={3}
                 classes={bidHistoryClasses}
               />
-              <BidHistoryBtn onClick={showBidModalHandler} />
+              {!auction.amount.eq(0) && <BidHistoryBtn onClick={showBidModalHandler} />}
             </Col>
           </Row>
         )}

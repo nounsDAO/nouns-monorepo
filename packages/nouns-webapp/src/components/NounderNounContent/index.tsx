@@ -44,7 +44,7 @@ const NounderNounContent: React.FC<{
             founders (‘Nounders’) are compensated with nouns. <br />
             <br />
             Every 10th noun for the first 5 years of the project will be sent to the Nounders. This
-            is noun {nounId.toNumber() / 10} of 183.
+            is noun {nounId.toNumber() / 10 + 1} of 183.
           </p>
         </Col>
       </Row>

@@ -13,7 +13,7 @@ import { INounSeed } from '../../wrappers/nounToken';
 import NounderNounContent from '../NounderNounContent';
 
 const isNounderNoun = (nounId: BigNumber) => {
-  return nounId.mod(10).eq(0);
+  return nounId.mod(10).eq(0) || nounId.eq(0);
 };
 
 const prevAuctionsAvailable = (loadingPrev: boolean, prevAuction: IAuction) => {
@@ -22,7 +22,7 @@ const prevAuctionsAvailable = (loadingPrev: boolean, prevAuction: IAuction) => {
 
 const createAuctionObj = (data: any): IAuction => {
   const auction: IAuction = {
-    amount: data.auction.amount,
+    amount: BigNumber.from(data.auction.amount),
     bidder: data.auction?.bidder?.id,
     endTime: data.auction.endTime,
     startTime: data.auction.startTime,
@@ -38,6 +38,7 @@ const Auction: React.FC<{ auction: IAuction; bgColorHandler: (useGrey: boolean) 
     const { auction: currentAuction, bgColorHandler } = props;
 
     const [onDisplayNounId, setOnDisplayNounId] = useState(currentAuction && currentAuction.nounId);
+    const [lastAuctionId, setLastAuctionId] = useState(currentAuction && currentAuction.nounId);
     const [isLastAuction, setIsLastAuction] = useState(true);
     const [isFirstAuction, setIsFirstAuction] = useState(false);
 
@@ -72,10 +73,11 @@ const Auction: React.FC<{ auction: IAuction; bgColorHandler: (useGrey: boolean) 
     };
 
     useEffect(() => {
-      if (!onDisplayNounId) {
+      if (!onDisplayNounId || (currentAuction && currentAuction.nounId.gt(lastAuctionId))) {
         setOnDisplayNounId(currentAuction && currentAuction.nounId);
+        setLastAuctionId(currentAuction && currentAuction.nounId);
       }
-    }, [onDisplayNounId, currentAuction]);
+    }, [onDisplayNounId, currentAuction, lastAuctionId]);
 
     const auctionHandlerFactory = (nounIdMutator: (prev: BigNumber) => BigNumber) => () => {
       setOnDisplayNounId(prev => {
@@ -114,7 +116,12 @@ const Auction: React.FC<{ auction: IAuction; bgColorHandler: (useGrey: boolean) 
 
     const currentAuctionActivityContent =
       currentAuction &&
-      auctionActivityContent(currentAuction, prevAuctionsAvailable(loadingPrev, prevAuction));
+      auctionActivityContent(
+        currentAuction,
+        onDisplayNounId && isNounderNoun(onDisplayNounId.sub(1)) // if prev noun is nounder noun
+          ? true // show nav arrows
+          : prevAuctionsAvailable(loadingPrev, prevAuction), // else check if prev auct is avail
+      );
 
     const pastAuctionActivityContent = auction && auctionActivityContent(auction, true);
 
