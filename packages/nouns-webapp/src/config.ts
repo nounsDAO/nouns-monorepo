@@ -32,7 +32,7 @@ const config: Record<SupportedChains, Config> = {
     jsonRpcUri:
       process.env.REACT_APP_MAINNET_JSONRPC ||
       `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
-    enableHistory: process.env.ENABLE_HISTORY === 'true' || false,
+    enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true' || false,
   },
 };
 
