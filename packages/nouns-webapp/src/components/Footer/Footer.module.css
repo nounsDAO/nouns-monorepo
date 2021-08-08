@@ -6,6 +6,7 @@
 .footerSignature a {
   text-decoration: none;
   color: black;
+  margin: 0 5px;
 }
 .footerSignature a:hover {
   text-decoration: underline;
