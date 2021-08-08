@@ -20,7 +20,7 @@ const config: Record<SupportedChains, Config> = {
     tokenAddress: '0xc52bb4Fc4ed72f2a910BF0481D620B927Ded76f7',
     nounsDaoAddress: '0x2817A1A4Ae32AEc0D15b2E751AC207Da306Ea213',
     subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph-rinkeby',
-    enableHistory: process.env.REACT_APP_ENABLE_HISTORY === "true" || false
+    enableHistory: true
   },
   [ChainId.Mainnet]: {
     auctionProxyAddress: '0x0000000000000000000000000000000000000000',
