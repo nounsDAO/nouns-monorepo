@@ -16,10 +16,10 @@ export const CHAIN_ID: SupportedChains = parseInt(process.env.REACT_APP_CHAIN_ID
 const config: Record<SupportedChains, Config> = {
   [ChainId.Rinkeby]: {
     jsonRpcUri:process.env.REACT_APP_RINKEBY_JSONRPC || `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
-    auctionProxyAddress: '0x7cb0384b923280269b3BD85f0a7fEaB776588382',
-    tokenAddress: '0x632f34c3aee991b10D4b421Bc05413a03d7a37eB',
-    nounsDaoAddress: '0xd1C753D9A23eb5c57e0d023e993B9bd4F5086b04',
-    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph-rinkeby-v4',
+    auctionProxyAddress: '0xBA088c634394775D89cAC7c67DFD52D73bfdFa05',
+    tokenAddress: '0xc52bb4Fc4ed72f2a910BF0481D620B927Ded76f7',
+    nounsDaoAddress: '0x2817A1A4Ae32AEc0D15b2E751AC207Da306Ea213',
+    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph-rinkeby',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === "true" || false
   },
   [ChainId.Mainnet]: {
