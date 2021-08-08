@@ -12,6 +12,7 @@ import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { buildEtherscanTxLink, Network } from '../../utils/buildEtherscanLink';
 import TruncatedAmount from '../TruncatedAmount';
 import BigNumber from 'bignumber.js';
+import { CHAIN_ID } from '../../config';
 
 const BidHistory: React.FC<{ auctionId: string; max: number; classes?: any }> = props => {
   const { auctionId, max, classes = _classes } = props;
@@ -28,7 +29,10 @@ const BidHistory: React.FC<{ auctionId: string; max: number; classes?: any }> = 
           bid.blockTimestamp * 1000,
         ).format('hh:mm a')}`;
 
-        const txLink = buildEtherscanTxLink(bid.id, Network.rinkeby);
+        const txLink = buildEtherscanTxLink(
+          bid.id,
+          Number(CHAIN_ID) === 1 ? Network.mainnet : Network.rinkeby,
+        );
 
         return (
           <li key={i} className={classes.bidRow}>
