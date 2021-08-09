@@ -20,11 +20,6 @@ const AuctionPage = () => {
         bgColorHandler={useGrey => dispatch(setUseGreyBackground(useGrey))}
       />
       <Banner />
-      <HistoryCollection
-        latestNounId={auction && BigNumber.from(auction.nounId).sub(1)}
-        historyCount={10}
-        rtl={false}
-      />
       <Documentation />
     </>
   );
