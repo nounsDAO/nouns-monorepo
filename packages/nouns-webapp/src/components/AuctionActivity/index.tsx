@@ -3,19 +3,14 @@ import { useState, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
 import { Row, Col } from 'react-bootstrap';
 import classes from './AuctionActivity.module.css';
-import bidHistoryClasses from './BidHistory.module.css';
 import Bid from '../Bid';
 import AuctionTimer from '../AuctionTimer';
 import CurrentBid from '../CurrentBid';
 import Winner from '../Winner';
-import BidHistory from '../BidHistory';
-import { Modal } from 'react-bootstrap';
 import AuctionNavigation from '../AuctionNavigation';
 import AuctionActivityWrapper from '../AuctionActivityWrapper';
 import AuctionActivityNounTitle from '../AuctionActivityNounTitle';
 import AuctionActivityDateHeadline from '../AuctionActivityDateHeadline';
-import BidHistoryBtn from '../BidHistoryBtn';
-import StandaloneNoun from '../StandaloneNoun';
 
 interface AuctionActivityProps {
   auction: Auction;
@@ -38,21 +33,6 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
 
   const [auctionEnded, setAuctionEnded] = useState(false);
   const [auctionTimer, setAuctionTimer] = useState(false);
-
-  const [showBidHistoryModal, setShowBidHistoryModal] = useState(false);
-  const showBidModalHandler = () => {
-    setShowBidHistoryModal(true);
-  };
-  const dismissBidModalHanlder = () => {
-    setShowBidHistoryModal(false);
-  };
-
-  const bidHistoryTitle = (
-    <h1>
-      Noun {auction && auction.nounId.toString()}
-      <br /> Bid History
-    </h1>
-  );
 
   // timer logic
   useEffect(() => {
@@ -78,24 +58,6 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
 
   return (
     <>
-      {showBidHistoryModal && (
-        <Modal
-          show={showBidHistoryModal}
-          onHide={dismissBidModalHanlder}
-          dialogClassName="modal-90w"
-        >
-          <Modal.Header closeButton className={classes.modalHeader}>
-            <div className={classes.modalHeaderNounImgWrapper}>
-              <StandaloneNoun nounId={auction && auction.nounId} />
-            </div>
-            <Modal.Title className={classes.modalTitleWrapper}>{bidHistoryTitle}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <BidHistory auctionId={auction.nounId.toString()} max={9999} />
-          </Modal.Body>
-        </Modal>
-      )}
-
       <AuctionActivityWrapper>
         <div className={classes.informationRow}>
           <Row className={classes.activityRow}>
@@ -134,18 +96,6 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
           <Row className={classes.activityRow}>
             <Col lg={12}>
               <Bid auction={auction} auctionEnded={auctionEnded} />
-            </Col>
-          </Row>
-        )}
-        {displayGraphDepComps && (
-          <Row className={classes.activityRow}>
-            <Col lg={12}>
-              <BidHistory
-                auctionId={auction.nounId.toString()}
-                max={3}
-                classes={bidHistoryClasses}
-              />
-              {!auction.amount.eq(0) && <BidHistoryBtn onClick={showBidModalHandler} />}
             </Col>
           </Row>
         )}
