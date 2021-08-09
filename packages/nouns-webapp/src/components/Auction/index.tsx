@@ -2,7 +2,7 @@ import { Col } from 'react-bootstrap';
 import { StandaloneNounWithSeed } from '../StandaloneNoun';
 import AuctionActivity from '../AuctionActivity';
 import { Row, Container } from 'react-bootstrap';
-import Noun from '../Noun';
+import { LoadingNoun } from '../Noun';
 import { Auction as IAuction } from '../../wrappers/nounsAuction';
 import classes from './Auction.module.css';
 import { useEffect, useState } from 'react';
@@ -99,7 +99,7 @@ const Auction: React.FC<{ auction: IAuction; bgColorHandler: (useGrey: boolean) 
 
     const loadingNoun = (
       <div className={classes.nounWrapper}>
-        <Noun imgPath="" alt="" />
+        <LoadingNoun />
       </div>
     );
 
