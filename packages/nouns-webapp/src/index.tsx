@@ -37,6 +37,7 @@ const useDappConfig = {
     [ChainId.Rinkeby]: process.env.REACT_APP_RINKEBY_JSONRPC || `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
     [ChainId.Mainnet]: process.env.REACT_APP_MAINNET_JSONRPC || `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
   },
+  pollingInterval: 1000
 };
 
 const client = clientFactory(config.subgraphApiUri);
