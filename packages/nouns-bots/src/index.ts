@@ -13,7 +13,7 @@ import {
   processNewBid as twitterProcessNewBid,
   processAuctionEndingSoon as twitterProcessAuctionEndingSoon,
 } from './handlers/twitter';
-import { processNewAuction as discordProcessNewAuction } from './handlers/discord';
+import { processNewAuction as discordProcessNewAuction, processNewBid as discordProcessNewBid } from './handlers/discord';
 import { processNewAuction as pinataProcessNewAuction } from './handlers/pinata';
 
 /**
@@ -52,6 +52,8 @@ async function processAuction() {
   // check if new bid discovered
   if (lastAuctionBids.bids.length > 0 && cachedBidId != lastAuctionBids.bids[0].id) {
     await twitterProcessNewBid(lastAuctionId, lastAuctionBids.bids[0]);
+    await discordProcessNewBid(internalDiscordWebhook, lastAuctionId, lastAuctionBids.bids[0]);
+    await discordProcessNewBid(publicDiscordWebhook, lastAuctionId, lastAuctionBids.bids[0]);
   }
 
   // check if auction ending soon
