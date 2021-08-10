@@ -2,6 +2,7 @@ import Discord from 'discord.js';
 import { ethers } from 'ethers';
 import { config } from '../config';
 import { Bid } from '../types';
+import { getBidTweetText } from '../utils';
 
 /**
  * Process a new auction event
@@ -44,7 +45,7 @@ export const processNewBid = async (
   client.send(
     new Discord.MessageEmbed()
       .setTitle(`New Bid Placed`)
-      .setDescription(`Noun ${auctionId} has received a bid of Ξ${ethers.utils.formatEther(bid.amount)}`)
+      .setDescription(getBidTweetText(auctionId, bid))
       .setTimestamp(),
   );
   console.log('posted discord bid update');
