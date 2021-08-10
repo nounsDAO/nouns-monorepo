@@ -6,7 +6,7 @@ export enum ExternalURL {
 export const externalURL = (externalURL: ExternalURL) => {
   switch (externalURL) {
     case ExternalURL.discord:
-      return 'https://discord.gg/kDSTd39Ukz';
+      return 'http://discord.gg/nouns';
     case ExternalURL.twitter:
       return 'https://twitter.com/nounsdao';
   }
