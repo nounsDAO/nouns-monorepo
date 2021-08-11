@@ -75,7 +75,7 @@ const BidHistory: React.FC<{ auctionId: string; max: number; classes?: any }> = 
       )}
       {!loading && error && (
         <div className={classes.altWrapper}>
-          <div>Error {error}</div>
+          <div>Error loading bid history</div>
         </div>
       )}
       {!loading && !error && <ul className={classes.bidCollection}>{bidContent}</ul>}
