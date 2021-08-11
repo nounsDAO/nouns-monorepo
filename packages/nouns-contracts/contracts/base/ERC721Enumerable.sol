@@ -1,9 +1,29 @@
 // SPDX-License-Identifier: MIT
 
-/**
- * Modifications to OpenZeppelin's ERC721Enumerable implementation:
- * - Consumes modified `ERC721` contract. See notes in `ERC721.sol`.
- */
+/// @title ERC721 Enumerable Extension
+
+/*********************************
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
+ * ░░░░░░█████████░░█████████░░░ *
+ * ░░░░░░██░░░████░░██░░░████░░░ *
+ * ░░██████░░░████████░░░████░░░ *
+ * ░░██░░██░░░████░░██░░░████░░░ *
+ * ░░██░░██░░░████░░██░░░████░░░ *
+ * ░░░░░░█████████░░█████████░░░ *
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
+ *********************************/
+
+// LICENSE
+// ERC721.sol modifies OpenZeppelin's ERC721Enumerable.sol:
+// https://github.com/OpenZeppelin/openzeppelin-contracts/blob/6618f9f18424ade44116d0221719f4c93be6a078/contracts/token/ERC721/extensions/ERC721Enumerable.sol
+//
+// ERC721Enumerable.sol source code copyright OpenZeppelin licensed under the MIT License.
+// With modifications by Nounders DAO.
+//
+// MODIFICATIONS:
+// Consumes modified `ERC721` contract. See notes in `ERC721.sol`.
 
 pragma solidity ^0.8.0;
 

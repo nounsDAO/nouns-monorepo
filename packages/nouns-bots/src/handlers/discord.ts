@@ -1,5 +1,8 @@
 import Discord from 'discord.js';
+import { ethers } from 'ethers';
 import { config } from '../config';
+import { Bid } from '../types';
+import { getBidTweetText } from '../utils';
 
 /**
  * Process a new auction event
@@ -16,7 +19,7 @@ export const processNewAuction = async (
   if (!config.discordEnabled) return;
   client.send(
     new Discord.MessageEmbed()
-      .setTitle(`New Testnet Auction Discovered`)
+      .setTitle(`New Auction Discovered`)
       .setDescription(`An auction has started for Noun #${auctionId}`)
       .setURL('https://nouns.wtf')
       .setImage(imageUrl)
@@ -25,3 +28,25 @@ export const processNewAuction = async (
   );
   console.log('posted discord update');
 };
+
+/**
+ * Process a new bid event
+ * @param client Discord webhook client
+ * @param auctionId Noun auction number
+ * @param bid Bid amount and ID
+ * @returns void
+ */
+export const processNewBid = async (
+  client: Discord.WebhookClient,
+  auctionId: number,
+  bid: Bid
+) => {
+  if (!config.discordEnabled) return;
+  client.send(
+    new Discord.MessageEmbed()
+      .setTitle(`New Bid Placed`)
+      .setDescription(getBidTweetText(auctionId, bid))
+      .setTimestamp(),
+  );
+  console.log('posted discord bid update');
+}

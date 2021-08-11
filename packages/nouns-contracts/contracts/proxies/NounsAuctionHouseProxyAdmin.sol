@@ -1,11 +1,23 @@
-// SPDX-License-Identifier: Unlicense
+// SPDX-License-Identifier: GPL-3.0
+
+/// @title The Nouns DAO auction house proxy admin
+
+/*********************************
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
+ * ░░░░░░█████████░░█████████░░░ *
+ * ░░░░░░██░░░████░░██░░░████░░░ *
+ * ░░██████░░░████████░░░████░░░ *
+ * ░░██░░██░░░████░░██░░░████░░░ *
+ * ░░██░░██░░░████░░██░░░████░░░ *
+ * ░░░░░░█████████░░█████████░░░ *
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
+ *********************************/
 
 pragma solidity ^0.8.6;
 
 import { ProxyAdmin } from '@openzeppelin/contracts/proxy/transparent/ProxyAdmin.sol';
 
-/**
- * @title The NounsDAO auction house proxy admin
- */
 // prettier-ignore
 contract NounsAuctionHouseProxyAdmin is ProxyAdmin {}

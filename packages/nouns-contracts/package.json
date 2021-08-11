@@ -2,8 +2,8 @@
   "name": "@nouns/contracts",
   "private": true,
   "version": "0.1.0",
-  "description": "nouns solidity contracts",
-  "author": "nounsDAO",
+  "description": "Nouns solidity contracts",
+  "author": "Nouns DAO",
   "license": "UNLICENSED",
   "main": "src/index.ts",
   "scripts": {

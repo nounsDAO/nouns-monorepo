@@ -1,58 +1,51 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useEthers } from '@usedapp/core';
-import { useAppDispatch } from './hooks';
+import { useAppDispatch, useAppSelector } from './hooks';
 import { setActiveAccount } from './state/slices/account';
-import { Router, Switch, Route } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
-import { BigNumber } from '@usedapp/core/node_modules/ethers';
-import { useAuction } from './wrappers/nounsAuction';
-import config from './config';
-
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { setAlertModal } from './state/slices/application';
 import classes from './App.module.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import AlertModal from './components/Modal';
 import NavBar from './components/NavBar';
-import Auction from './components/Auction';
-import Banner from './components/Banner';
-import HistoryCollection from './components/HistoryCollection';
-import Documentation from './components/Documentation';
 import NetworkAlert from './components/NetworkAlert';
 import Footer from './components/Footer';
+import AuctionPage from './pages/Auction';
+import GovernancePage from './pages/Governance';
+import VotePage from './pages/Vote';
+import { CHAIN_ID } from './config';
 
 function App() {
   const { account, chainId } = useEthers();
   const dispatch = useAppDispatch();
-  const history = createBrowserHistory();
-  const auction = useAuction(config.auctionProxyAddress);
 
   useEffect(() => {
     // Local account array updated
     dispatch(setActiveAccount(account));
   }, [account, dispatch]);
 
-  const [useGreyBg, setUseGreyBg] = useState(true);
-  const bgColorHandler = (useGrey: boolean) => {
-    setUseGreyBg(useGrey);
-  };
+  const alertModal = useAppSelector(state => state.application.alertModal);
+  const useGreyBg = useAppSelector(state => state.application.useGreyBackground);
 
   return (
     <div className={useGreyBg ? classes.greyBg : classes.beigeBg}>
-      {chainId !== 4 && <NetworkAlert />}
-      <NavBar />
-      <Router history={history}>
+      {Number(CHAIN_ID) !== chainId && <NetworkAlert />}
+      {alertModal.show && (
+        <AlertModal
+          title={alertModal.title}
+          content={<p>{alertModal.message}</p>}
+          onDismiss={() => dispatch(setAlertModal({ ...alertModal, show: false }))}
+        />
+      )}
+      <BrowserRouter>
+        <NavBar />
         <Switch>
-          <Route path="/">
-            <Auction auction={auction} bgColorHandler={bgColorHandler} />
-            <Banner />
-            <HistoryCollection
-              latestNounId={auction && BigNumber.from(auction.nounId).sub(1)}
-              historyCount={10}
-              rtl={true}
-            />
-            <Documentation />
-            <Footer />
-          </Route>
+          <Route exact path="/" component={AuctionPage} />
+          <Route exact path="/vote" component={GovernancePage} />
+          <Route exact path="/vote/:id" component={VotePage} />
         </Switch>
-      </Router>
+        <Footer />
+      </BrowserRouter>
     </div>
   );
 }

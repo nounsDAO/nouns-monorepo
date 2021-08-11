@@ -1,10 +1,11 @@
 export interface Bid {
-  id: string,
-  amount: string,
+  id: string;
+  amount: string;
 }
 
 export interface AuctionBids {
   id: number;
+  endTime: number;
   bids: Bid[];
 }
 

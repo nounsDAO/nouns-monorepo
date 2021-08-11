@@ -5,13 +5,15 @@ import {
 } from '../../wrappers/nounsAuction';
 import config from '../../config';
 import { useContractFunction } from '@usedapp/core';
-import React, { useEffect, useState, useRef, ChangeEvent } from 'react';
+import { useAppSelector } from '../../hooks';
+import React, { useEffect, useState, useRef, ChangeEvent, useCallback } from 'react';
 import { utils, BigNumber as EthersBN } from 'ethers';
 import BigNumber from 'bignumber.js';
 import classes from './Bid.module.css';
-import Modal from '../Modal';
-import { Spinner } from 'react-bootstrap';
+import { Spinner, InputGroup, FormControl, Button } from 'react-bootstrap';
 import { useAuctionMinBidIncPercentage } from '../../wrappers/nounsAuction';
+import { useAppDispatch } from '../../hooks';
+import { AlertModal, setAlertModal } from '../../state/slices/application';
 
 const computeMinimumNextBid = (
   currentBid: BigNumber,
@@ -24,7 +26,7 @@ const computeMinimumNextBid = (
 
 const minBidEth = (minBid: BigNumber): string => {
   if (minBid.isZero()) {
-    return '';
+    return '0.01';
   }
 
   const eth = Number(utils.formatEther(EthersBN.from(minBid.toString())));
@@ -44,22 +46,20 @@ const Bid: React.FC<{
   auction: Auction;
   auctionEnded: boolean;
 }> = props => {
+  const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { auction, auctionEnded } = props;
   const auctionHouseContract = auctionHouseContractFactory(config.auctionProxyAddress);
 
   const bidInputRef = useRef<HTMLInputElement>(null);
 
-  const [displayMinBid, setDisplayMinBid] = useState(true);
   const [bidInput, setBidInput] = useState('');
   const [bidButtonContent, setBidButtonContent] = useState({
     loading: false,
     content: auctionEnded ? 'Settle' : 'Bid',
   });
-  const [modal, setModal] = useState({
-    show: false,
-    title: '',
-    message: '',
-  });
+
+  const dispatch = useAppDispatch();
+  const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
 
   const minBidIncPercentage = useAuctionMinBidIncPercentage();
   const minBid = computeMinimumNextBid(
@@ -85,7 +85,6 @@ const Bid: React.FC<{
     }
 
     setBidInput(event.target.value);
-    setDisplayMinBid(false);
   };
 
   const placeBidHandler = () => {
@@ -96,7 +95,7 @@ const Bid: React.FC<{
     if (currentBid(bidInputRef).isLessThan(minBid)) {
       setModal({
         show: true,
-        title: 'insufficient bid amount 🤏',
+        title: 'Insufficient bid amount 🤏',
         message: `Please place a bid higher than or equal to the minimum bid amount of ${minBidEth(
           minBid,
         )} ETH.`,
@@ -112,10 +111,6 @@ const Bid: React.FC<{
 
   const settleAuctionHandler = () => {
     settleAuction();
-  };
-
-  const dismissModalHanlder = () => {
-    setModal({ ...modal, show: false });
   };
 
   const clearBidInput = () => {
@@ -162,7 +157,7 @@ const Bid: React.FC<{
         setBidButtonContent({ loading: false, content: 'Bid' });
         break;
     }
-  }, [placeBidState, auctionEnded]);
+  }, [placeBidState, auctionEnded, setModal]);
 
   // settle auction transaction state hook
   useEffect(() => {
@@ -205,37 +200,42 @@ const Bid: React.FC<{
         setBidButtonContent({ loading: false, content: 'Settle Auction' });
         break;
     }
-  }, [settleAuctionState, auctionEnded]);
+  }, [settleAuctionState, auctionEnded, setModal]);
+
+  if (!auction) return null;
+
+  const isDisabled =
+    placeBidState.status === 'Mining' || settleAuctionState.status === 'Mining' || !activeAccount;
 
   return (
     <>
-      {modal.show && (
-        <Modal
-          title={modal.title}
-          content={<p>{modal.message}</p>}
-          onDismiss={dismissModalHanlder}
-        />
-      )}
-      {auction && (
-        <div className={classes.bidWrapper}>
-          <button
-            className={auctionEnded ? classes.bidBtnAuctionEnded : classes.bidBtn}
-            onClick={auctionEnded ? settleAuctionHandler : placeBidHandler}
-            disabled={placeBidState.status === 'Mining' || settleAuctionState.status === 'Mining'}
-          >
-            {bidButtonContent.loading ? <Spinner animation="border" /> : bidButtonContent.content}
-          </button>
-          <input
-            className={auctionEnded ? classes.bidInputAuctionEnded : classes.bidInput}
-            type="number"
-            placeholder="ETH"
-            min="0"
-            value={displayMinBid ? minBidEth(minBid) : bidInput}
-            onChange={bidInputHandler}
-            ref={bidInputRef}
-          ></input>
-        </div>
-      )}
+      <p className={classes.minBidCopy}>{`Minimum bid: ${minBidEth(minBid)} ETH`}</p>
+      <InputGroup>
+        {!auctionEnded && (
+          // <div className={classes.bidInputWrapper}>
+          <>
+            <FormControl
+              aria-label="Example text with button addon"
+              aria-describedby="basic-addon1"
+              className={classes.bidInput}
+              type="number"
+              min="0"
+              onChange={bidInputHandler}
+              ref={bidInputRef}
+              value={bidInput}
+            />
+            <span className={classes.customPlaceholder}>ETH</span>
+          </>
+          // </div>
+        )}
+        <Button
+          className={auctionEnded ? classes.bidBtnAuctionEnded : classes.bidBtn}
+          onClick={auctionEnded ? settleAuctionHandler : placeBidHandler}
+          disabled={isDisabled}
+        >
+          {bidButtonContent.loading ? <Spinner animation="border" /> : bidButtonContent.content}
+        </Button>
+      </InputGroup>
     </>
   );
 };

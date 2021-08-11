@@ -20,6 +20,11 @@
         "internalType": "contract INounsSeeder",
         "name": "_seeder",
         "type": "address"
+      },
+      {
+        "internalType": "contract IProxyRegistry",
+        "name": "_proxyRegistry",
+        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
@@ -398,6 +403,19 @@
         "internalType": "uint96",
         "name": "votes",
         "type": "uint96"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "contractURI",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
       }
     ],
     "stateMutability": "view",
@@ -788,6 +806,19 @@
   },
   {
     "inputs": [],
+    "name": "proxyRegistry",
+    "outputs": [
+      {
+        "internalType": "contract IProxyRegistry",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "renounceOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -910,6 +941,19 @@
       }
     ],
     "name": "setApprovalForAll",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "newContractURIHash",
+        "type": "string"
+      }
+    ],
+    "name": "setContractURIHash",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

@@ -6,7 +6,7 @@ import Noun from '../Noun';
 
 const Banner = () => {
   return (
-    <Section bgColor="white" fullWidth={false}>
+    <Section bgColor="white" fullWidth={false} className={classes.bannerSection}>
       <Col lg={6}>
         <div className={classes.wrapper}>
           <h1>
@@ -19,7 +19,7 @@ const Banner = () => {
         </div>
       </Col>
       <Col lg={6}>
-        <div style={{padding: "2rem"}}>
+        <div style={{ padding: '2rem' }}>
           <Noun imgPath={calendar_noun} alt="noun" />
         </div>
       </Col>

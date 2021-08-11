@@ -6,8 +6,7 @@ const AuctionActivityDateHeadline: React.FC<{ startTime: BigNumber }> = props =>
   const auctionStartTimeUTC = moment(Number(startTime.toString()) * 1000)
     .utc()
     .format('MMM DD YYYY');
-
-  return <h2>{`${auctionStartTimeUTC} (GMT)`}</h2>;
+  return <h4>{`${auctionStartTimeUTC}`}</h4>;
 };
 
 export default AuctionActivityDateHeadline;
