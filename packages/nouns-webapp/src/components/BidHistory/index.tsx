@@ -16,7 +16,9 @@ import { CHAIN_ID } from '../../config';
 
 const BidHistory: React.FC<{ auctionId: string; max: number; classes?: any }> = props => {
   const { auctionId, max, classes = _classes } = props;
-  const { loading, error, data, refetch } = useQuery(bidsByAuctionQuery(auctionId));
+  const { loading, error, data } = useQuery(bidsByAuctionQuery(auctionId), {
+    pollInterval: 5000,
+  });
 
   const bidContent =
     data &&
@@ -57,14 +59,6 @@ const BidHistory: React.FC<{ auctionId: string; max: number; classes?: any }> = 
           </li>
         );
       });
-
-  const periodicFetch = () => {
-    setTimeout(() => {
-      refetch();
-      periodicFetch();
-    }, 5000);
-  };
-  periodicFetch();
 
   return (
     <>
