@@ -16,6 +16,16 @@ import AuctionActivityNounTitle from '../AuctionActivityNounTitle';
 import AuctionActivityDateHeadline from '../AuctionActivityDateHeadline';
 import BidHistoryBtn from '../BidHistoryBtn';
 import StandaloneNoun from '../StandaloneNoun';
+import config, { CHAIN_ID } from '../../config';
+import { buildEtherscanAddressLink, Network } from '../../utils/buildEtherscanLink';
+
+const openEtherscanBidHistory = () => {
+  const url = buildEtherscanAddressLink(
+    config.auctionProxyAddress,
+    CHAIN_ID === 1 ? Network.mainnet : Network.rinkeby,
+  );
+  window.open(url.toString());
+};
 
 interface AuctionActivityProps {
   auction: Auction;
@@ -137,18 +147,25 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
             </Col>
           </Row>
         )}
-        {displayGraphDepComps && (
-          <Row className={classes.activityRow}>
-            <Col lg={12}>
+        <Row className={classes.activityRow}>
+          <Col lg={12}>
+            {displayGraphDepComps && (
               <BidHistory
                 auctionId={auction.nounId.toString()}
                 max={3}
                 classes={bidHistoryClasses}
               />
-              {!auction.amount.eq(0) && <BidHistoryBtn onClick={showBidModalHandler} />}
-            </Col>
-          </Row>
-        )}
+            )}
+            {/* If no bids, show nothing. If bids avail:graph is stable? show bid history modal,
+            else show etherscan contract link */}
+            {!auction.amount.eq(0) &&
+              (displayGraphDepComps ? (
+                <BidHistoryBtn onClick={showBidModalHandler} />
+              ) : (
+                <BidHistoryBtn onClick={openEtherscanBidHistory} />
+              ))}
+          </Col>
+        </Row>
       </AuctionActivityWrapper>
     </>
   );
