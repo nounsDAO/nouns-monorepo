@@ -7,7 +7,9 @@ import { useEthers } from '@usedapp/core';
 import WalletConnectModal from '../WalletConnectModal';
 import { Link } from 'react-router-dom';
 import { Nav, Navbar, Container } from 'react-bootstrap';
+import testnetNoun from '../../assets/testnet-noun.png';
 import clsx from 'clsx';
+import { CHAIN_ID } from '../../config';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
@@ -27,14 +29,13 @@ const NavBar = () => {
       <Nav.Item>
         <Nav.Link className={classes.nounsNavLink} disabled>
           <span className={classes.greenStatusCircle} />
-          <span>
-            <ShortAddress>{activeAccount}</ShortAddress>
-          </span>
+          <span>{activeAccount && <ShortAddress address={activeAccount} />}</span>
         </Nav.Link>
       </Nav.Item>
       <Nav.Item
         className={clsx(classes.nounsNavLink, classes.disconnectBtn)}
         onClick={() => {
+          setShowConnectModal(false);
           deactivate();
           setShowConnectModal(false);
         }}
@@ -71,6 +72,12 @@ const NavBar = () => {
               alt="Nouns DAO logo"
             />
           </Navbar.Brand>
+          {Number(CHAIN_ID) !== 1 && (
+            <Nav.Item>
+              <img className={classes.testnetImg} src={testnetNoun} alt="testnet noun" />
+              TESTNET
+            </Nav.Item>
+          )}
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse className="justify-content-end">
             <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>

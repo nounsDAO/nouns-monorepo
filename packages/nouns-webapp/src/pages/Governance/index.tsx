@@ -12,7 +12,7 @@ const GovernancePage = () => {
       <Col lg={{ span: 8, offset: 2 }}>
         <h1 className={classes.heading}>Nouns DAO Governance</h1>
         <h2 className={classes.subheading}>
-          Nouns govern NounsDAO.. You can vote on each proposal yourself or delegate your votes to a
+          Nouns govern NounsDAO. You can vote on each proposal yourself or delegate your votes to a
           third party.
         </h2>
         <Proposals proposals={proposals} />

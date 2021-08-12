@@ -3,29 +3,47 @@ import Section from '../../layout/Section';
 import classes from './HistoryCollection.module.css';
 import clsx from 'clsx';
 import StandaloneNoun from '../StandaloneNoun';
+import { LoadingNoun } from '../Noun';
 import config from '../../config';
+import { Container, Row } from 'react-bootstrap';
 
 interface HistoryCollectionProps {
   historyCount: number;
   latestNounId: BigNumberish;
-  rtl: boolean;
 }
 
 const HistoryCollection: React.FC<HistoryCollectionProps> = (props: HistoryCollectionProps) => {
-  const { historyCount, latestNounId, rtl } = props;
+  const { historyCount, latestNounId } = props;
 
-  let nounIds =
-    latestNounId &&
-    new Array(historyCount)
-      .fill(0)
-      .map((_, i) => BigNumber.from(latestNounId).sub(BigNumber.from(i)))
-      .reverse();
+  if (!latestNounId) return null;
+
+  const startAtZero = BigNumber.from(latestNounId).sub(historyCount).lt(0);
+
+  let nounIds: Array<BigNumber | null> = new Array(historyCount);
+  nounIds = nounIds.fill(null).map((_, i) => {
+    if (BigNumber.from(i).lt(latestNounId)) {
+      const index = startAtZero
+        ? BigNumber.from(0)
+        : BigNumber.from(Number(latestNounId) - historyCount);
+      return index.add(i);
+    } else {
+      return null;
+    }
+  });
+
+  const nounsContent = nounIds.map((nounId, i) => {
+    return !nounId ? <LoadingNoun key={i} /> : <StandaloneNoun key={i} nounId={nounId} />;
+  });
 
   return (
     <Section bgColor="white" fullWidth={true}>
-      <div className={clsx(classes.historyCollection, rtl && classes.rtl)}>
-        {config.enableHistory && nounIds && nounIds.map((nounId, i) => <StandaloneNoun key={i} nounId={nounId} />)}
-      </div>
+      <Container fluid>
+        <Row className="justify-content-md-center">
+          <div className={clsx(classes.historyCollection)}>
+            {config.enableHistory && nounsContent}
+          </div>
+        </Row>
+      </Container>
     </Section>
   );
 };

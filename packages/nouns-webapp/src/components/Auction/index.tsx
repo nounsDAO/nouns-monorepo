@@ -2,7 +2,7 @@ import { Col } from 'react-bootstrap';
 import { StandaloneNounWithSeed } from '../StandaloneNoun';
 import AuctionActivity from '../AuctionActivity';
 import { Row, Container } from 'react-bootstrap';
-import Noun from '../Noun';
+import { LoadingNoun } from '../Noun';
 import { Auction as IAuction } from '../../wrappers/nounsAuction';
 import classes from './Auction.module.css';
 import { useEffect, useState } from 'react';
@@ -11,13 +11,18 @@ import { auctionQuery } from '../../wrappers/subgraph';
 import { BigNumber } from 'ethers';
 import { INounSeed } from '../../wrappers/nounToken';
 import NounderNounContent from '../NounderNounContent';
+import { ApolloError } from '@apollo/client';
 
 const isNounderNoun = (nounId: BigNumber) => {
   return nounId.mod(10).eq(0) || nounId.eq(0);
 };
 
-const prevAuctionsAvailable = (loadingPrev: boolean, prevAuction: IAuction) => {
-  return !loadingPrev && prevAuction !== null;
+const prevAuctionsAvailable = (
+  loadingPrev: boolean,
+  errorPrev: ApolloError | undefined,
+  prevAuction: IAuction,
+) => {
+  return !loadingPrev && prevAuction !== undefined && !errorPrev;
 };
 
 const createAuctionObj = (data: any): IAuction => {
@@ -50,10 +55,15 @@ const Auction: React.FC<{ auction: IAuction; bgColorHandler: (useGrey: boolean) 
     const { data: dataNext } = useQuery(
       auctionQuery(onDisplayNounId && onDisplayNounId.add(1).toNumber()),
     );
+
     // Query onDisplayNounId auction minus one. Used to cache prev auction + check if The Graph queries are functional.
-    const { loading: loadingPrev, data: dataPrev } = useQuery(
-      auctionQuery(onDisplayNounId && onDisplayNounId.sub(1).toNumber()),
-    );
+    const {
+      loading: loadingPrev,
+      data: dataPrev,
+      error: errorPrev,
+    } = useQuery(auctionQuery(onDisplayNounId && onDisplayNounId.sub(1).toNumber()), {
+      pollInterval: 10000,
+    });
 
     /**
      * Auction derived from `onDisplayNounId` query
@@ -99,7 +109,7 @@ const Auction: React.FC<{ auction: IAuction; bgColorHandler: (useGrey: boolean) 
 
     const loadingNoun = (
       <div className={classes.nounWrapper}>
-        <Noun imgPath="" alt="" />
+        <LoadingNoun />
       </div>
     );
 
@@ -118,12 +128,12 @@ const Auction: React.FC<{ auction: IAuction; bgColorHandler: (useGrey: boolean) 
       currentAuction &&
       auctionActivityContent(
         currentAuction,
-        onDisplayNounId && isNounderNoun(onDisplayNounId.sub(1)) // if prev noun is nounder noun
-          ? true // show nav arrows
-          : prevAuctionsAvailable(loadingPrev, prevAuction), // else check if prev auct is avail
+        onDisplayNounId && prevAuctionsAvailable(loadingPrev, errorPrev, prevAuction), // else check if prev auct is avail
       );
 
-    const pastAuctionActivityContent = auction && auctionActivityContent(auction, true);
+    const pastAuctionActivityContent =
+      auction &&
+      auctionActivityContent(auction, prevAuctionsAvailable(loadingPrev, errorPrev, prevAuction));
 
     const nounderNounContent = nextAuction && (
       <NounderNounContent

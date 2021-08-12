@@ -21,9 +21,8 @@ const AuctionPage = () => {
       />
       <Banner />
       <HistoryCollection
-        latestNounId={auction && BigNumber.from(auction.nounId).sub(1)}
+        latestNounId={auction && BigNumber.from(auction.nounId)}
         historyCount={10}
-        rtl={true}
       />
       <Documentation />
     </>

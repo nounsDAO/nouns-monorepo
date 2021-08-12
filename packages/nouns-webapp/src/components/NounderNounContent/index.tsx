@@ -40,12 +40,9 @@ const NounderNounContent: React.FC<{
         </Col>
         <Col lg={12}>
           <p className={classes.content}>
-            This Noun was not auctioned. Every 10th Noun for 5 years is sent to the "Nounders DAO", the project founders' multi-signature wallet.
-            {/*<br/><br/>*/}
-            {/*This is {nounId.toNumber() / 10 + 1} of 183 Nouns to be sent.*/}
+            This Noun was not auctioned. Every 10th Noun for the first 5 years of the project is sent to the "Nounders DAO", the project founders' multi-signature wallet.
             <br/><br/>
-            All proceeds from Noun auctions are sent to the Nouns DAO treasury.<br />
-
+            All proceeds from Noun auctions are sent to the Nouns DAO treasury.
           </p>
         </Col>
       </Row>
