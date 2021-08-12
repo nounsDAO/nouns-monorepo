@@ -13,6 +13,42 @@ import { buildEtherscanTxLink, Network } from '../../utils/buildEtherscanLink';
 import TruncatedAmount from '../TruncatedAmount';
 import BigNumber from 'bignumber.js';
 import { CHAIN_ID } from '../../config';
+import { IBid } from '../../wrappers/subgraph';
+
+const bidItem = (bid: IBid, index: number, classes: any) => {
+  const bidAmount = <TruncatedAmount amount={new BigNumber(bid.amount)} />;
+  const date = `${moment(bid.blockTimestamp * 1000).format('MMM DD')} at ${moment(
+    bid.blockTimestamp * 1000,
+  ).format('hh:mm a')}`;
+
+  const txLink = buildEtherscanTxLink(
+    bid.id,
+    Number(CHAIN_ID) === 1 ? Network.mainnet : Network.rinkeby,
+  );
+
+  return (
+    <li key={index} className={classes.bidRow}>
+      <div className={classes.bidItem}>
+        <div className={classes.leftSectionWrapper}>
+          <div className={classes.bidder}>
+            <div>
+              <ShortAddress>{bid.bidder.id}</ShortAddress>
+            </div>
+          </div>
+          <div className={classes.bidDate}>{date}</div>
+        </div>
+        <div className={classes.rightSectionWrapper}>
+          <div className={classes.bidAmount}>{bidAmount}</div>
+          <div className={classes.linkSymbol}>
+            <a href={txLink.toString()} target="_blank" rel="noreferrer">
+              <FontAwesomeIcon icon={faExternalLinkAlt} />
+            </a>
+          </div>
+        </div>
+      </div>
+    </li>
+  );
+};
 
 const BidHistory: React.FC<{ auctionId: string; max: number; classes?: any }> = props => {
   const { auctionId, max, classes = _classes } = props;
@@ -20,45 +56,13 @@ const BidHistory: React.FC<{ auctionId: string; max: number; classes?: any }> = 
     pollInterval: 5000,
   });
 
+  const bids = data && R.sort(compareBids, data.bids).reverse().slice(0, max);
+
   const bidContent =
-    data &&
-    R.sort(compareBids, data.bids)
-      .reverse()
-      .slice(0, max)
-      .map((bid: any, i: number) => {
-        const bidAmount = <TruncatedAmount amount={new BigNumber(bid.amount)} />;
-        const date = `${moment(bid.blockTimestamp * 1000).format('MMM DD')} at ${moment(
-          bid.blockTimestamp * 1000,
-        ).format('hh:mm a')}`;
-
-        const txLink = buildEtherscanTxLink(
-          bid.id,
-          Number(CHAIN_ID) === 1 ? Network.mainnet : Network.rinkeby,
-        );
-
-        return (
-          <li key={i} className={classes.bidRow}>
-            <div className={classes.bidItem}>
-              <div className={classes.leftSectionWrapper}>
-                <div className={classes.bidder}>
-                  <div>
-                    <ShortAddress>{bid.bidder.id}</ShortAddress>
-                  </div>
-                </div>
-                <div className={classes.bidDate}>{date}</div>
-              </div>
-              <div className={classes.rightSectionWrapper}>
-                <div className={classes.bidAmount}>{bidAmount}</div>
-                <div className={classes.linkSymbol}>
-                  <a href={txLink.toString()} target="_blank" rel="noreferrer">
-                    <FontAwesomeIcon icon={faExternalLinkAlt} />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </li>
-        );
-      });
+    bids &&
+    bids.map((bid: IBid, i: number) => {
+      return bidItem(bid, i, classes);
+    });
 
   return (
     <>
