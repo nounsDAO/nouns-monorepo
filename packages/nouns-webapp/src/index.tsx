@@ -11,11 +11,18 @@ import { Web3Provider } from '@ethersproject/providers';
 import account from './state/slices/account';
 import application from './state/slices/application';
 import logs from './state/slices/logs';
+import auction, { setActiveAuction, setAuctionExtended, setAuctionSettled } from './state/slices/auction';
 import { ApolloProvider } from '@apollo/client';
 import { clientFactory } from './wrappers/subgraph';
 import LogsUpdater from './state/updaters/logs';
 import config, { CHAIN_ID } from './config';
+import { WebSocketProvider } from '@ethersproject/providers';
+import { Contract } from 'ethers';
+import { NounsAuctionHouseABI } from '@nouns/contracts';
 import dotenv from 'dotenv';
+import { props } from 'ramda';
+import { useAppDispatch } from './hooks';
+import { appendBid } from './state/slices/auction';
 
 dotenv.config();
 
@@ -23,6 +30,7 @@ const store = configureStore({
   reducer: {
     account,
     application,
+    auction,
     logs,
   },
 });
@@ -49,8 +57,37 @@ const Updaters = () => {
   );
 };
 
+const ChainSubscriber: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const wsProvider = new WebSocketProvider(config.wsRpcUri);
+  const auctionContract = new Contract(
+    config.auctionProxyAddress,
+    NounsAuctionHouseABI,
+    wsProvider,
+  );
+  const bidFilter = auctionContract.filters.AuctionBid();
+  const extendedFilter = auctionContract.filters.AuctionExtended();
+  const createdFilter = auctionContract.filters.AuctionCreated();
+  const settledFilter = auctionContract.filters.AuctionSettled();
+  auctionContract.on(bidFilter, (nounId, sender, value, extended) => {
+    dispatch(appendBid({ nounId, sender, value, extended }));
+  });
+  auctionContract.on(createdFilter, (nounId, startTime, endTime) => {
+    dispatch(setActiveAuction({ nounId, startTime, endTime }));
+  });
+  auctionContract.on(extendedFilter, (nounId, endTime) => {
+    dispatch(setAuctionExtended({nounId, endTime}))
+  });
+  auctionContract.on(settledFilter, (nounId, winner, amount) => {
+    dispatch(setAuctionSettled({nounId, amount, winner}))
+  });
+
+  return <></>;
+};
+
 ReactDOM.render(
   <Provider store={store}>
+    <ChainSubscriber />
     <React.StrictMode>
       <Web3ReactProvider
         getLibrary={
