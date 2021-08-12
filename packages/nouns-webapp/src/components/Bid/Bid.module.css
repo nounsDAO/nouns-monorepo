@@ -92,4 +92,7 @@
   .bidInput {
     border-color: #c3c3c3;
   }
+  .customPlaceholder {
+    left: 44%;
+  }
 }
