@@ -155,11 +155,12 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
             )}
             {/* If no bids, show nothing. If bids avail:graph is stable? show bid history modal,
             else show etherscan contract link */}
-            {!auction.amount.eq(0) && displayGraphDepComps ? (
-              <BidHistoryBtn onClick={showBidModalHandler} />
-            ) : (
-              <BidHistoryBtn onClick={openEtherscanBidHistory} />
-            )}
+            {!auction.amount.eq(0) &&
+              (displayGraphDepComps ? (
+                <BidHistoryBtn onClick={showBidModalHandler} />
+              ) : (
+                <BidHistoryBtn onClick={openEtherscanBidHistory} />
+              ))}
           </Col>
         </Row>
       </AuctionActivityWrapper>
