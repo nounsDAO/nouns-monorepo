@@ -1,4 +1,18 @@
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
+import BigNumber from 'bignumber.js';
+
+export interface IBid {
+  amount: BigNumber;
+  bidder: {
+    id: string;
+  };
+  blockNumber: number;
+  blockTimestamp: number;
+  id: string;
+  noun: {
+    id: number;
+  };
+}
 
 export const auctionQuery = (auctionId: number) => gql`
 {
