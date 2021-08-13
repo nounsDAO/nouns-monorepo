@@ -3,17 +3,21 @@ import ShortAddress from '../ShortAddress';
 import classes from './NavBar.module.css';
 import logo from '../../assets/logo.svg';
 import { useState } from 'react';
-import { useEthers } from '@usedapp/core';
+import { useEtherBalance, useEthers } from '@usedapp/core';
 import WalletConnectModal from '../WalletConnectModal';
 import { Link } from 'react-router-dom';
 import { Nav, Navbar, Container } from 'react-bootstrap';
 import testnetNoun from '../../assets/testnet-noun.png';
 import clsx from 'clsx';
-import { CHAIN_ID } from '../../config';
-
+import config, { CHAIN_ID } from '../../config';
+import { utils } from 'ethers';
+import { buildEtherscanAddressLink, Network } from '../../utils/buildEtherscanLink';
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { deactivate } = useEthers();
+
+  const treasuryBalance = useEtherBalance(config.nounsDaoAddress);
+  const daoEtherscanLink = buildEtherscanAddressLink(config.nounsDaoAddress, Network.mainnet);
 
   const [showConnectModal, setShowConnectModal] = useState(false);
 
@@ -72,6 +76,9 @@ const NavBar = () => {
               alt="Nouns DAO logo"
             />
           </Navbar.Brand>
+          <Nav.Link href="playground" className={classes.nounsNavLink} target="_blank">
+            PLAYGROUND
+          </Nav.Link>
           {Number(CHAIN_ID) !== 1 && (
             <Nav.Item>
               <img className={classes.testnetImg} src={testnetNoun} alt="testnet noun" />
@@ -83,9 +90,13 @@ const NavBar = () => {
             <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>
               GOVERNANCE
             </Nav.Link>
-            <Nav.Link href="playground" className={classes.nounsNavLink} target="_blank">
-              PLAYGROUND
-            </Nav.Link>
+            <Nav.Item>
+              {treasuryBalance && (
+                <Nav.Link href={daoEtherscanLink.toString()} className={classes.nounsNavLink}>
+                  TREASURY: Ξ {utils.formatEther(treasuryBalance.toString())}
+                </Nav.Link>
+              )}
+            </Nav.Item>
             {activeAccount ? connectedContent : disconnectedContent}
           </Navbar.Collapse>
         </Container>
