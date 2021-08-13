@@ -90,15 +90,15 @@ const NavBar = () => {
             <Nav.Item>
               {treasuryBalance && (
                 <Nav.Link href={daoEtherscanLink.toString()} className={classes.nounsNavLink}>
-                  TREASURY: Ξ {utils.formatEther(treasuryBalance.toString())}
+                  TREASURY Ξ {utils.formatEther(treasuryBalance.toString())}
                 </Nav.Link>
               )}
             </Nav.Item>
             <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>
-              GOVERNANCE
+              GOVERN
             </Nav.Link>
             <Nav.Link href="playground" className={classes.nounsNavLink} target="_blank">
-              PLAYGROUND
+              EXPLORE
             </Nav.Link>
             {activeAccount ? connectedContent : disconnectedContent}
           </Navbar.Collapse>
