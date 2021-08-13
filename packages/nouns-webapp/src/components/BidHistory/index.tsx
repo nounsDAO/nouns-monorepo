@@ -32,7 +32,7 @@ const bidItem = (bid: IBid, index: number, classes: any) => {
         <div className={classes.leftSectionWrapper}>
           <div className={classes.bidder}>
             <div>
-              <ShortAddress>{bid.bidder.id}</ShortAddress>
+              <ShortAddress address={bid.bidder.id} />
             </div>
           </div>
           <div className={classes.bidDate}>{date}</div>
