@@ -12,6 +12,7 @@ import clsx from 'clsx';
 import config, { CHAIN_ID } from '../../config';
 import { utils } from 'ethers';
 import { buildEtherscanAddressLink, Network } from '../../utils/buildEtherscanLink';
+
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { deactivate } = useEthers();
@@ -36,15 +37,17 @@ const NavBar = () => {
           <span>{activeAccount && <ShortAddress address={activeAccount} />}</span>
         </Nav.Link>
       </Nav.Item>
-      <Nav.Item
-        className={clsx(classes.nounsNavLink, classes.disconnectBtn)}
-        onClick={() => {
-          setShowConnectModal(false);
-          deactivate();
-          setShowConnectModal(false);
-        }}
-      >
-        DISCONNECT
+      <Nav.Item>
+        <Nav.Link
+          className={clsx(classes.nounsNavLink, classes.disconnectBtn)}
+          onClick={() => {
+            setShowConnectModal(false);
+            deactivate();
+            setShowConnectModal(false);
+          }}
+        >
+          DISCONNECT
+        </Nav.Link>
       </Nav.Item>
     </>
   );
@@ -76,9 +79,6 @@ const NavBar = () => {
               alt="Nouns DAO logo"
             />
           </Navbar.Brand>
-          <Nav.Link href="playground" className={classes.nounsNavLink} target="_blank">
-            PLAYGROUND
-          </Nav.Link>
           {Number(CHAIN_ID) !== 1 && (
             <Nav.Item>
               <img className={classes.testnetImg} src={testnetNoun} alt="testnet noun" />
@@ -87,9 +87,6 @@ const NavBar = () => {
           )}
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse className="justify-content-end">
-            <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>
-              GOVERNANCE
-            </Nav.Link>
             <Nav.Item>
               {treasuryBalance && (
                 <Nav.Link href={daoEtherscanLink.toString()} className={classes.nounsNavLink}>
@@ -97,6 +94,12 @@ const NavBar = () => {
                 </Nav.Link>
               )}
             </Nav.Item>
+            <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>
+              GOVERNANCE
+            </Nav.Link>
+            <Nav.Link href="playground" className={classes.nounsNavLink} target="_blank">
+              PLAYGROUND
+            </Nav.Link>
             {activeAccount ? connectedContent : disconnectedContent}
           </Navbar.Collapse>
         </Container>

@@ -33,6 +33,8 @@
 .nounsNavLink,
 .nounsNavLink:active,
 .nounsNavLink:visited {
+  font-size: 0.9rem;
+  padding: 0.5rem 0.6rem !important;
   color: var(--brand-black) !important;
 }
 .nounsNavLink:hover {
@@ -43,4 +45,3 @@
   width: auto;
   height: 45px;
 }
-
