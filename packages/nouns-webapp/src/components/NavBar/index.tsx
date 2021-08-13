@@ -3,17 +3,22 @@ import ShortAddress from '../ShortAddress';
 import classes from './NavBar.module.css';
 import logo from '../../assets/logo.svg';
 import { useState } from 'react';
-import { useEthers } from '@usedapp/core';
+import { useEtherBalance, useEthers } from '@usedapp/core';
 import WalletConnectModal from '../WalletConnectModal';
 import { Link } from 'react-router-dom';
 import { Nav, Navbar, Container } from 'react-bootstrap';
 import testnetNoun from '../../assets/testnet-noun.png';
 import clsx from 'clsx';
-import { CHAIN_ID } from '../../config';
+import config, { CHAIN_ID } from '../../config';
+import { utils } from 'ethers';
+import { buildEtherscanAddressLink, Network } from '../../utils/buildEtherscanLink';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { deactivate } = useEthers();
+
+  const treasuryBalance = useEtherBalance(config.nounsDaoAddress);
+  const daoEtherscanLink = buildEtherscanAddressLink(config.nounsDaoAddress, Network.mainnet);
 
   const [showConnectModal, setShowConnectModal] = useState(false);
 
@@ -29,20 +34,20 @@ const NavBar = () => {
       <Nav.Item>
         <Nav.Link className={classes.nounsNavLink} disabled>
           <span className={classes.greenStatusCircle} />
-          <span>
-            <ShortAddress>{activeAccount}</ShortAddress>
-          </span>
+          <span>{activeAccount && <ShortAddress address={activeAccount} />}</span>
         </Nav.Link>
       </Nav.Item>
-      <Nav.Item
-        className={clsx(classes.nounsNavLink, classes.disconnectBtn)}
-        onClick={() => {
-          setShowConnectModal(false);
-          deactivate();
-          setShowConnectModal(false);
-        }}
-      >
-        DISCONNECT
+      <Nav.Item>
+        <Nav.Link
+          className={clsx(classes.nounsNavLink, classes.disconnectBtn)}
+          onClick={() => {
+            setShowConnectModal(false);
+            deactivate();
+            setShowConnectModal(false);
+          }}
+        >
+          DISCONNECT
+        </Nav.Link>
       </Nav.Item>
     </>
   );
@@ -82,11 +87,18 @@ const NavBar = () => {
           )}
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse className="justify-content-end">
+            <Nav.Item>
+              {treasuryBalance && (
+                <Nav.Link href={daoEtherscanLink.toString()} className={classes.nounsNavLink}>
+                  TREASURY Ξ {utils.formatEther(treasuryBalance.toString())}
+                </Nav.Link>
+              )}
+            </Nav.Item>
             <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>
-              GOVERNANCE
+              GOVERN
             </Nav.Link>
             <Nav.Link href="playground" className={classes.nounsNavLink} target="_blank">
-              PLAYGROUND
+              EXPLORE
             </Nav.Link>
             {activeAccount ? connectedContent : disconnectedContent}
           </Navbar.Collapse>
