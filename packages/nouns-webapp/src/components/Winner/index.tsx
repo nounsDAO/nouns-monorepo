@@ -8,7 +8,7 @@ const Winner: React.FC<{ winner: string }> = props => {
     <div className={classes.section}>
       <h4>Winner</h4>
       <h2>
-        <ShortAddress>{winner}</ShortAddress>
+        <ShortAddress address={winner} />
       </h2>
     </div>
   );
