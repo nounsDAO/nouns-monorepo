@@ -8,10 +8,13 @@ import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
 import { TrezorConnector } from '@web3-react/trezor-connector';
 import { FortmaticConnector } from '@web3-react/fortmatic-connector';
 import config, { CHAIN_ID } from '../../config';
+import classes from './WalletConnectModal.module.css';
+import { useState } from 'react';
 
 const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
   const { onDismiss } = props;
   const { activate } = useEthers();
+  const [advancedOpen, setAdvancedOpen] = useState(false);
   const supportedChainIds = [CHAIN_ID];
 
   const wallets = (
@@ -92,6 +95,19 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
         }}
         walletType={WALLET_TYPE.trezor}
       />
+      <div className={classes.clickable} onClick={() => setAdvancedOpen(!advancedOpen)}>
+        Advanced {advancedOpen ? '^' : 'v'}
+      </div>
+      {advancedOpen && (
+        <div
+          className={classes.clickable}
+          onClick={() => {
+            console.log(localStorage.removeItem('walletconnect'));
+          }}
+        >
+          Clear WalletConnect Data
+        </div>
+      )}
     </>
   );
   return <Modal title="Connect your wallet" content={wallets} onDismiss={onDismiss} />;
