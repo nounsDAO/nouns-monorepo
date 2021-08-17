@@ -107,12 +107,12 @@ const NoundersPage = () => {
          <BioCards min={5} max={10}/>
         </Row>
 
-       <h3>Nounders' Rewards</h3>
+       <h3>Nounders' Reward</h3>
        <p>
-         100% of noun auction proceeds belong to Nouns DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with nouns. Every 10th noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders.
+         100% of Noun auction proceeds belong to Nouns DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders.
        </p>
        <p>
-         The Nounders reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures. Since there are 10 Nounders, we will individually own 1% of Noun issuance for the first 5 years of the project.
+         The Nounders reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures. Since there are 10 Nounders, after 5 years each Nounder could receive up to 1% of the Noun supply.
        </p>
      </Col>
     </Section>
