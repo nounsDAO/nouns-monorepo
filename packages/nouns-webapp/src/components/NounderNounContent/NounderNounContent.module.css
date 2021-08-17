@@ -5,3 +5,11 @@
 .link:hover {
  color: var(--brand-dark-red);
 }
+
+.bidRow {
+  font-weight: 100 !important;
+}
+
+.currentBidCol {
+  border-right:  0 !important;
+}

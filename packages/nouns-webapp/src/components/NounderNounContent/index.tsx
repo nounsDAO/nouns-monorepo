@@ -45,7 +45,7 @@ const NounderNounContent: React.FC<{
           </Col>
         </Row>
         <Row className={auctionActivityClasses.activityRow}>
-          <Col lg={5} className={auctionActivityClasses.auctionTimerCol}>
+          <Col lg={5} className={`${auctionActivityClasses.currentBidCol} ${nounContentClasses.currentBidCol}`}>
             <div className={auctionActivityClasses.section}>
               <h4>Owner</h4>
               <h2>
@@ -58,8 +58,8 @@ const NounderNounContent: React.FC<{
       <Row className={auctionActivityClasses.activityRow}>
         <Col lg={12}>
         <ul className={auctionBidClasses.bidCollection}>
-          <li className={auctionBidClasses.bidRow}>
-            100% of noun auction proceeds belong to <Link to="vote" className={nounContentClasses.link}>Nouns DAO</Link>. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with nouns. Every 10th noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders.
+          <li className={`${auctionBidClasses.bidRow} ${nounContentClasses.bidRow}`}>
+            Noun auction proceeds belong to <Link to="vote" className={nounContentClasses.link}>Nouns DAO</Link>. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders.
           </li>
         </ul>
 
