@@ -62,6 +62,10 @@ const NounderNounContent: React.FC<{
             100% of noun auction proceeds belong to <Link to="vote" className={nounContentClasses.link}>Nouns DAO</Link>. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with nouns. Every 10th noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders.
           </li>
         </ul>
+
+        <div className={bidBtnClasses.bidHistoryWrapper}>
+            <Link to="nounders" className={bidBtnClasses.bidHistory}>Learn More →</Link>
+        </div>
         </Col>
       </Row>
     </AuctionActivityWrapper>
