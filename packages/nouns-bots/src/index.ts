@@ -1,19 +1,9 @@
 import {
   buildCounterName,
   buildIpfsUrl,
-  getAuctionCache,
-  getAuctionEndingSoonCache,
-  getBidCache,
-  updateAuctionCache,
 } from './utils';
 import { internalDiscordWebhook, incrementCounter, publicDiscordWebhook } from './clients';
 import { getLastAuctionBids } from './subgraph';
-import {
-  processNewAuction as twitterProcessNewAuction,
-  processNewBid as twitterProcessNewBid,
-  processAuctionEndingSoon as twitterProcessAuctionEndingSoon,
-} from './handlers/twitter';
-import { processNewAuction as discordProcessNewAuction, processNewBid as discordProcessNewBid } from './handlers/discord';
 import { processNewAuction as pinataProcessNewAuction } from './handlers/pinata';
 
 /**

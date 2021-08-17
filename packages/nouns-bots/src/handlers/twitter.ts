@@ -1,65 +1,67 @@
+import { getAuctionReplyTweetId, updateAuctionEndingSoonCache, updateAuctionReplyTweetId, updateBidCache } from '../cache';
 import { twitter } from '../clients';
 import { config } from '../config';
-import { Bid } from '../types';
+import { IAuctionLifecycleHandler, Bid } from '../types';
 import {
   getAuctionEndingSoonTweetText,
   getAuctionStartedTweetText,
-  getAuctionReplyTweetId,
   getBidTweetText,
   getNounPngBuffer,
-  updateBidCache,
-  updateAuctionReplyTweetId,
-  updateAuctionEndingSoonCache,
 } from '../utils';
 
-/**
- * Process a new auction event
- *
- * This will tweet a picture of the current noun alerting users
- * to the new auction
- * @param auctionId Auction ID o announce
- * @returns void
- */
-export async function processNewAuction(auctionId: number) {
-  if (!config.twitterEnabled) return;
-  const png = await getNounPngBuffer(auctionId.toString());
-  if (png) {
-    console.log(`processLastAuction tweeting discovered auction id and noun`);
-    const mediaId = await twitter.v1.uploadMedia(png, { type: 'png' });
-    const tweet = await twitter.v1.tweet(getAuctionStartedTweetText(auctionId), {
-      media_ids: mediaId,
-    });
+export class TwitterAuctionLifecycleHandler implements IAuctionLifecycleHandler {
+  /**
+   * Tweet a picture of the current noun alerting users
+   * to the new auction and update the tweet reply id cache
+   * @param auctionId The current auction ID
+   */
+  async handleNewAuction(auctionId: number) {
+    if (!config.twitterEnabled) return;
+    const png = await getNounPngBuffer(auctionId.toString());
+    if (png) {
+      console.log(`handleNewAuction tweeting discovered auction id ${auctionId}`);
+      const mediaId = await twitter.v1.uploadMedia(png, { type: 'png' });
+      const tweet = await twitter.v1.tweet(getAuctionStartedTweetText(auctionId), {
+        media_ids: mediaId,
+      });
+      await updateAuctionReplyTweetId(tweet.id_str);
+    }
+    console.log(`tweeted new auction ${auctionId}`);
+  }
+
+  /**
+   * Tweet a reply with new bid information to the reply id cache
+   * We intentionally update the bid cache before safety checks to ensure we do not double tweet a bid
+   * @param auctionId The current auction id
+   * @param bid The current bid
+   */
+  async handleNewBid(auctionId: number, bid: Bid) {
+    if (!config.twitterEnabled) return;
+    await updateBidCache(bid.id);
+    const tweetReplyId = await getAuctionReplyTweetId();
+    if (!tweetReplyId) {
+      console.error(`handleNewBid no reply tweet id exists: auction(${auctionId}) bid(${bid.id})`);
+      return;
+    }
+    const tweet = await twitter.v1.reply(getBidTweetText(auctionId, bid), tweetReplyId);
     await updateAuctionReplyTweetId(tweet.id_str);
+    console.log(`tweeted bid update ${bid.id} for auction ${auctionId}`);
   }
-  console.log('tweeted auction update');
-}
 
-/**
- * Process a new bid and tweet out a reply update to an existing tweet
- * We intentionally update the bid cache before safety checks to ensure we do not double tweet a bid
- * @param id The auction/noun id
- * @param bid The bid
- */
-export async function processNewBid(id: number, bid: Bid) {
-  await updateBidCache(bid.id);
-  const tweetReplyId = await getAuctionReplyTweetId();
-  if (!tweetReplyId) {
-    console.error(`twitter::processNewBid no reply tweet id exists: auction(${id}) bid(${bid.id})`);
-    return;
+  /**
+   * Tweet a reply informing observers that the auction is ending soon
+   * @param auctionId The current auction id
+   */
+  async handleAuctionEndingSoon(auctionId: number) {
+    if (!config.twitterEnabled) return;
+    await updateAuctionEndingSoonCache(auctionId);
+    const tweetReplyId = await getAuctionReplyTweetId();
+    if (!tweetReplyId) {
+      console.error(`handleAuctionEndingSoon no reply tweet id exists for auction ${auctionId}`);
+      return;
+    }
+    const tweet = await twitter.v1.reply(getAuctionEndingSoonTweetText(), tweetReplyId);
+    await updateAuctionReplyTweetId(tweet.id_str);
+    console.log(`tweeted auction ending soon update for auction ${auctionId}`);
   }
-  const tweet = await twitter.v1.reply(getBidTweetText(id, bid), tweetReplyId);
-  await updateAuctionReplyTweetId(tweet.id_str);
-  console.log('tweeted bid update');
-}
-
-export async function processAuctionEndingSoon(id: number) {
-  await updateAuctionEndingSoonCache(id);
-  const tweetReplyId = await getAuctionReplyTweetId();
-  if (!tweetReplyId) {
-    console.error(`twitter::processAuctionEndingSoon no reply tweet id exists`);
-    return;
-  }
-  const tweet = await twitter.v1.reply(getAuctionEndingSoonTweetText(), tweetReplyId);
-  await updateAuctionReplyTweetId(tweet.id_str);
-  console.log('tweeted auction ending soon update');
 }
