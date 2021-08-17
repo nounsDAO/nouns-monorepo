@@ -78,7 +78,7 @@ const BioCard: React.FC<{
       <Card.Img variant="top" src={image} />
       <Card.Title>
         {handle && (
-          <a href={`https://twitter.com/${handle}`} target="_blank">
+          <a href={`https://twitter.com/${handle}`} target="_blank" rel="noreferrer">
             <svg
               fill="currentColor"
               viewBox="0 0 20 20"
