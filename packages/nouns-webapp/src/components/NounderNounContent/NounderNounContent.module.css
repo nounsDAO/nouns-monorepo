@@ -1,15 +1,7 @@
-.content {
-  font-size: 1.3rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #212529;
-  text-align: left;
+.link, .link:visited, .link:active {
+  color:  var(--brand-dark-green);
+  text-decoration: underline;
 }
-
-/* Fix Firefox navigation arrow alignment issues */
-@-moz-document url-prefix() {
-  .colAlignCenter {
-    display: flex;
-    align-items: center;
-  }
+.link:hover {
+ color: var(--brand-dark-red);
 }
