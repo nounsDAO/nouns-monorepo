@@ -11,18 +11,23 @@ import { Web3Provider } from '@ethersproject/providers';
 import account from './state/slices/account';
 import application from './state/slices/application';
 import logs from './state/slices/logs';
-import auction, { setActiveAuction, setAuctionExtended, setAuctionSettled } from './state/slices/auction';
+import auction, {
+  setActiveAuction,
+  setAuctionExtended,
+  setAuctionSettled,
+  setFullAuction,
+} from './state/slices/auction';
 import { ApolloProvider } from '@apollo/client';
 import { clientFactory } from './wrappers/subgraph';
 import LogsUpdater from './state/updaters/logs';
 import config, { CHAIN_ID } from './config';
 import { WebSocketProvider } from '@ethersproject/providers';
-import { Contract } from 'ethers';
+import { BigNumberish, Contract } from 'ethers';
 import { NounsAuctionHouseABI } from '@nouns/contracts';
 import dotenv from 'dotenv';
-import { props } from 'ramda';
 import { useAppDispatch } from './hooks';
 import { appendBid } from './state/slices/auction';
+import {Auction as IAuction} from './wrappers/nounsAuction'
 
 dotenv.config();
 
@@ -57,30 +62,64 @@ const Updaters = () => {
   );
 };
 
+const BLOCKS_PER_DAY = 6_500;
+
 const ChainSubscriber: React.FC = () => {
   const dispatch = useAppDispatch();
-  const wsProvider = new WebSocketProvider(config.wsRpcUri);
-  const auctionContract = new Contract(
-    config.auctionProxyAddress,
-    NounsAuctionHouseABI,
-    wsProvider,
-  );
-  const bidFilter = auctionContract.filters.AuctionBid();
-  const extendedFilter = auctionContract.filters.AuctionExtended();
-  const createdFilter = auctionContract.filters.AuctionCreated();
-  const settledFilter = auctionContract.filters.AuctionSettled();
-  auctionContract.on(bidFilter, (nounId, sender, value, extended) => {
-    dispatch(appendBid({ nounId, sender, value, extended }));
-  });
-  auctionContract.on(createdFilter, (nounId, startTime, endTime) => {
-    dispatch(setActiveAuction({ nounId, startTime, endTime }));
-  });
-  auctionContract.on(extendedFilter, (nounId, endTime) => {
-    dispatch(setAuctionExtended({nounId, endTime}))
-  });
-  auctionContract.on(settledFilter, (nounId, winner, amount) => {
-    dispatch(setAuctionSettled({nounId, amount, winner}))
-  });
+
+  const loadState = async () => {
+    const wsProvider = new WebSocketProvider(config.wsRpcUri);
+    const auctionContract = new Contract(
+      config.auctionProxyAddress,
+      NounsAuctionHouseABI,
+      wsProvider,
+    );
+
+    const bidFilter = auctionContract.filters.AuctionBid();
+    const extendedFilter = auctionContract.filters.AuctionExtended();
+    const createdFilter = auctionContract.filters.AuctionCreated();
+    const settledFilter = auctionContract.filters.AuctionSettled();
+    const processBidFilter = (
+      nounId: BigNumberish,
+      sender: string,
+      value: BigNumberish,
+      extended: boolean,
+    ) => {
+      dispatch(appendBid({ nounId, sender, value, extended }));
+    };
+    const processAuctionCreated = (
+      nounId: BigNumberish,
+      startTime: BigNumberish,
+      endTime: BigNumberish,
+    ) => {
+      dispatch(setActiveAuction({ nounId, startTime, endTime }));
+    };
+    const processAuctionExtended = (nounId: BigNumberish, endTime: BigNumberish) => {
+      dispatch(setAuctionExtended({ nounId, endTime }));
+    };
+    const processAuctionSettled = (nounId: BigNumberish, winner: string, amount: BigNumberish) => {
+      dispatch(setAuctionSettled({ nounId, amount, winner }));
+    };
+
+    // Fetch the current auction
+    const currentAuction: IAuction = await auctionContract.auction();
+    dispatch(setFullAuction(currentAuction))
+    
+    // Fetch the previous 24hours of  bids
+    const previousBids = await auctionContract
+      .queryFilter(bidFilter, 0 - BLOCKS_PER_DAY)
+    for (let event of previousBids) {
+      if (event.args === undefined) return;
+      //@ts-ignore
+      processBidFilter(...event.args)
+    }
+
+    auctionContract.on(bidFilter, processBidFilter);
+    auctionContract.on(createdFilter, processAuctionCreated);
+    auctionContract.on(extendedFilter, processAuctionExtended);
+    auctionContract.on(settledFilter, processAuctionSettled);
+  };
+  loadState();
 
   return <></>;
 };
