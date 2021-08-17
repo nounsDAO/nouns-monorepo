@@ -118,7 +118,7 @@ const BioCards: React.FC<{ min: number; max: number }> = props => {
 const NoundersPage = () => {
   return (
     <Section bgColor="transparent" fullWidth={true} className={classes.noundersPage}>
-      <Col lg={{ span: 6, offset: 3 }} style={{ textAlign: 'center' }}>
+      <Col lg={{ span: 6, offset: 3 }}>
         <h2 style={{ marginBottom: '2rem' }}>The Nounders</h2>
         <h3 style={{ marginBottom: '2rem' }}>5 artists, 5 technologists</h3>
         <Row style={{ marginBottom: '0rem', textAlign: 'center' }}>
@@ -127,7 +127,7 @@ const NoundersPage = () => {
         </Row>
         <h3>Nounders' Reward</h3>
         <p style={{ textAlign: 'justify' }}>
-          100% of Noun auction proceeds belong to Nouns DAO. For this reason, we, the project's
+          All Noun auction proceeds are sent to the Nouns DAO. For this reason, we, the project's
           founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th noun for
           the first 5 years of the project will be sent to our multisig (5/10), where it will be
           vested and distributed to individual Nounders.
