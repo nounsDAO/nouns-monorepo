@@ -1,4 +1,4 @@
-import { Col, Row, Card } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import { BigNumber } from 'ethers';
 import AuctionActivityWrapper from '../AuctionActivityWrapper';
 import AuctionNavigation from '../AuctionNavigation';
