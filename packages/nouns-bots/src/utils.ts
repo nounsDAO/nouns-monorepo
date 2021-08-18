@@ -10,7 +10,7 @@ import { Bid, TokenMetadata } from './types';
  * @param durationSeconds The duration of the auction in seconds.
  * @returns Text to be used in tweet when auction starts.
  */
-export function getAuctionStartedTweetText(auctionId: number) {
+export function formatAuctionStartedTweetText(auctionId: number) {
   return `＊Bleep Bloop Blop＊
         
  An auction has started for Noun #${auctionId}
@@ -18,12 +18,12 @@ export function getAuctionStartedTweetText(auctionId: number) {
 }
 
 /**
- * Get the tweet text for a new bid.
+ * Get the formatted text for a new bid.
  * @param id The auction/noun id
  * @param bid The amount of the current bid
  * @returns The bid update tweet text
  */
-export function getBidTweetText(id: number, bid: Bid) {
+export function formatBidMessageText(id: number, bid: Bid) {
   return `Noun ${id} has received a bid of Ξ${ethers.utils.formatEther(bid.amount)}`;
 }
 
@@ -61,10 +61,3 @@ export async function getNounPngBuffer(tokenId: string): Promise<Buffer | undefi
  * @returns Prefixed counter name
  */
 export const buildCounterName = (counterName: string) => `bots_${counterName}`;
-
-/**
- * Build an IPFS gateway URL using an iPFS hash
- * @param ipfsHash IPFS hash to generate a URL to
- * @returns HTTP url using an active IPFS gateway
- */
-export const buildIpfsUrl = (ipfsHash: string) => `https://gateway.pinata.cloud/ipfs/${ipfsHash}`;

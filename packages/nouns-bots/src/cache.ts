@@ -1,4 +1,4 @@
-import { redis } from "./clients";
+import { redis } from './clients';
 
 /**
  * Key mapped to the current auction
