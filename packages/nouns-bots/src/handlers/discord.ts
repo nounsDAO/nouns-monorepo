@@ -1,52 +1,47 @@
 import Discord from 'discord.js';
-import { ethers } from 'ethers';
-import { config } from '../config';
-import { Bid } from '../types';
-import { getBidTweetText } from '../utils';
+import { formatBidMessageText, getNounPngBuffer } from '../utils';
+import { Bid, IAuctionLifecycleHandler } from '../types';
 
-/**
- * Process a new auction event
- * @param client The Discord Webhook client to send the message via
- * @param auctionId The auction ID to include in the message
- * @param imageUrl A URL where the Noun's image is uploaded to
- * @returns void
- */
-export const processNewAuction = async (
-  client: Discord.WebhookClient,
-  auctionId: number,
-  imageUrl: string,
-) => {
-  if (!config.discordEnabled) return;
-  client.send(
-    new Discord.MessageEmbed()
-      .setTitle(`New Auction Discovered`)
-      .setDescription(`An auction has started for Noun #${auctionId}`)
-      .setURL('https://nouns.wtf')
-      .setImage(imageUrl)
-      .addField('Noun ID', auctionId, true)
-      .setTimestamp(),
-  );
-  console.log('posted discord update');
-};
+export class DiscordAuctionLifecycleHandler implements IAuctionLifecycleHandler {
+  constructor(public readonly discordClients: Discord.WebhookClient[]) {}
 
-/**
- * Process a new bid event
- * @param client Discord webhook client
- * @param auctionId Noun auction number
- * @param bid Bid amount and ID
- * @returns void
- */
-export const processNewBid = async (
-  client: Discord.WebhookClient,
-  auctionId: number,
-  bid: Bid
-) => {
-  if (!config.discordEnabled) return;
-  client.send(
-    new Discord.MessageEmbed()
+  /**
+   * Send Discord message with an image of the current noun alerting users
+   * @param auctionId The current auction ID
+   */
+  async handleNewAuction(auctionId: number) {
+    const png = await getNounPngBuffer(auctionId.toString());
+    if (png) {
+      const attachmentName = `Auction-${auctionId}.png`;
+      const attachment = new Discord.MessageAttachment(png, attachmentName);
+      const message = new Discord.MessageEmbed()
+        .setTitle(`New Auction Discovered`)
+        .setDescription(`An auction has started for Noun #${auctionId}`)
+        .setURL('https://nouns.wtf')
+        .addField('Noun ID', auctionId, true)
+        .attachFiles([attachment])
+        .setImage(`attachment://${attachmentName}`)
+        .setTimestamp();
+      await Promise.all(this.discordClients.map(c => c.send(message)));
+    }
+    console.log(`processed discord new auction ${auctionId}`);
+  }
+
+  /**
+   * Send Discord message with new bid event data
+   * @param auctionId Noun auction number
+   * @param bid Bid amount and ID
+   */
+  async handleNewBid(auctionId: number, bid: Bid) {
+    const message = new Discord.MessageEmbed()
       .setTitle(`New Bid Placed`)
-      .setDescription(getBidTweetText(auctionId, bid))
-      .setTimestamp(),
-  );
-  console.log('posted discord bid update');
+      .setDescription(formatBidMessageText(auctionId, bid))
+      .setTimestamp();
+    await Promise.all(this.discordClients.map(c => c.send(message)));
+    console.log(`processed discord new bid ${auctionId}:${bid.id}`);
+  }
+
+  async handleAuctionEndingSoon(_auctionId: number) {
+    return;
+  }
 }
