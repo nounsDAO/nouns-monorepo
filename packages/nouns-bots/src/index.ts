@@ -13,7 +13,10 @@ import {
   processNewBid as twitterProcessNewBid,
   processAuctionEndingSoon as twitterProcessAuctionEndingSoon,
 } from './handlers/twitter';
-import { processNewAuction as discordProcessNewAuction, processNewBid as discordProcessNewBid } from './handlers/discord';
+import {
+  processNewAuction as discordProcessNewAuction,
+  processNewBid as discordProcessNewBid,
+} from './handlers/discord';
 import { processNewAuction as pinataProcessNewAuction } from './handlers/pinata';
 
 /**

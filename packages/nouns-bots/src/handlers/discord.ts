@@ -36,11 +36,7 @@ export const processNewAuction = async (
  * @param bid Bid amount and ID
  * @returns void
  */
-export const processNewBid = async (
-  client: Discord.WebhookClient,
-  auctionId: number,
-  bid: Bid
-) => {
+export const processNewBid = async (client: Discord.WebhookClient, auctionId: number, bid: Bid) => {
   if (!config.discordEnabled) return;
   client.send(
     new Discord.MessageEmbed()
@@ -49,4 +45,4 @@ export const processNewBid = async (
       .setTimestamp(),
   );
   console.log('posted discord bid update');
-}
+};

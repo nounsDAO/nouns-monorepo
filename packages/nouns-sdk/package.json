@@ -1,0 +1,17 @@
+{
+  "name": "@nouns/sdk",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Nouns SDK",
+  "author": "Nounders",
+  "homepage": "https://nouns.wtf",
+  "license": "GPL-3.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p ."
+  },
+  "dependencies": {
+    "node-libpng": "^0.2.18"
+  }
+}

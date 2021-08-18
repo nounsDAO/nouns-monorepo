@@ -1,0 +1,40 @@
+export interface Encoder {
+  encodeImage(image: unknown): string;
+}
+
+export interface Rect {
+  length: number;
+  colorIndex: number;
+}
+
+export interface LineBounds {
+  left: number;
+  right: number;
+}
+
+export interface ImageRow {
+  rects: Rect[];
+  bounds: LineBounds;
+}
+
+export type ImageRows = { [number: number]: ImageRow };
+
+export interface ImageBounds {
+  top: number;
+  right: number;
+  bottom: number;
+  left: number;
+}
+
+export interface RGBAColor {
+  r: number;
+  g: number;
+  b: number;
+  a: number;
+}
+
+export interface DecodedImage {
+  paletteIndex: number;
+  bounds: ImageBounds;
+  rects: [length: number, colorIndex: number][];
+}
