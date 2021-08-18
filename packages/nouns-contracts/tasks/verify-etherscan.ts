@@ -57,10 +57,7 @@ const contracts: Record<ContractName, VerifyArgs> = {
   },
   NounsDAOExecutor: {
     address: '0x0BC3807Ec262cB779b38D65b38158acC3bfedE10',
-    constructorArguments: [
-      '0x6f3E6272A167e8AcCb32072d08E0957F9c79223d',
-      172800,
-    ],
+    constructorArguments: ['0x6f3E6272A167e8AcCb32072d08E0957F9c79223d', 172800],
   },
   NounsDAOLogicV1: {
     address: '0xa43aFE317985726E4e194eb061Af77fbCb43F944',
@@ -81,14 +78,11 @@ const contracts: Record<ContractName, VerifyArgs> = {
   },
 };
 
-task(
-  'verify-etherscan',
-  'Verify the Solidity contracts on Etherscan',
-).setAction(async (_, hre) => {
+task('verify-etherscan', 'Verify the Solidity contracts on Etherscan').setAction(async (_, hre) => {
   for (const [name, args] of Object.entries(contracts)) {
     console.log(`verifying ${name}...`);
     try {
-      await hre.run("verify:verify", {
+      await hre.run('verify:verify', {
         ...args,
       });
     } catch (e) {
