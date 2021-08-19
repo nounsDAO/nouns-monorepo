@@ -1,5 +1,5 @@
 {
-  "name": "@nouns/nouns-subgraph",
+  "name": "@nouns/subgraph",
   "version": "0.1.0",
   "description": "A subgraph that indexes nouns events",
   "author": "nounsDAO",
