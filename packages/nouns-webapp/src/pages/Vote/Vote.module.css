@@ -1,5 +1,6 @@
 .backArrow {
-  height: 2rem;
+  height: 1rem;
+
 }
 
 .votingButton {
@@ -10,7 +11,17 @@
   margin-top: 1rem;
 }
 
+.proposalId {
+  margin: 1rem 0;
+}
+
 .voteCountCard p {
   display: flex;
   justify-content: space-between;
+}
+
+.description {
+  border-top:  1px solid #e9ecef;
+  padding-top: 2rem;
+  margin-top: 2rem;
 }

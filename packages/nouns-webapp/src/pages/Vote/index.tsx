@@ -53,7 +53,7 @@ const VotePage = ({
   const showVotingButtons = availableVotes && proposal?.status === ProposalState.ACTIVE;
 
   return (
-    <Section bgColor="white" fullWidth={true}>
+    <Section bgColor="white" fullWidth={false}>
       <VoteModal
         show={showVoteModal}
         onHide={() => setShowVoteModal(false)}
@@ -64,7 +64,7 @@ const VotePage = ({
         <Link to="/vote">
           <img className={classes.backArrow} src={leftArrow} alt="Back" /> All Proposals
         </Link>
-        <h1>Proposal {proposal?.id}</h1>
+        <h5 className={classes.proposalId}>Proposal {proposal?.id}</h5>
         <ProposalStatus status={proposal?.status}></ProposalStatus>
         <div>
           {endDate && endDate.isBefore(now) ? (
