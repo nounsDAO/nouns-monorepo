@@ -28,6 +28,14 @@ const VotePage = ({
   // Get and format date from data
   const { timestamp } = useBlockMeta();
   const currentBlock = useBlockNumber();
+  const startDate =
+    proposal && timestamp && currentBlock
+      ? moment(timestamp).add(
+          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
+          'seconds',
+        )
+      : undefined;
+
   const endDate =
     proposal && timestamp && currentBlock
       ? moment(timestamp).add(
@@ -66,6 +74,17 @@ const VotePage = ({
         </Link>
         <h5 className={classes.proposalId}>Proposal {proposal?.id}</h5>
         <ProposalStatus status={proposal?.status}></ProposalStatus>
+        <div>
+          {startDate && startDate.isBefore(now) ? (
+            null
+          ) : proposal ? (
+            <span>
+              Voting starts approximately {startDate?.format('LLL')} {timezone}
+            </span>
+          ) : (
+            ''
+          )}
+        </div>
         <div>
           {endDate && endDate.isBefore(now) ? (
             <span>
