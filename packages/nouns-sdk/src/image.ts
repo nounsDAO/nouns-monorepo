@@ -13,18 +13,30 @@ export class Image {
   private _bounds: ImageBounds = { top: 0, bottom: 0, left: 0, right: 0 };
   private _rle: string | undefined;
 
+  /**
+   * The image's pixel width
+   */
   get width(): number {
     return this._width;
   }
 
+  /**
+   * The image's pixel height
+   */
   get height(): number {
     return this._height;
   }
 
+  /**
+   * The number of rows to run-length encode
+   */
   get rows(): ImageRows {
     return this._rows;
   }
 
+  /**
+   * The bounds of the inner rect to run-length encode
+   */
   get bounds(): ImageBounds {
     return this._bounds;
   }

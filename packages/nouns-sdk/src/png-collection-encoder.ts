@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { PngImage } from 'node-libpng';
 import { promises as fs } from 'fs';
 import { EncodedImage, IEncoder } from './types';
