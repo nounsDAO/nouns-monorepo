@@ -8,7 +8,7 @@ export const toPaddedHex = (c: number, pad = 2): string => {
 };
 
 /**
- * Convert an RGB color to hex (without `0x`)
+ * Convert an RGB color to hex (without `#` prefix)
  * @param r The red value
  * @param g The green value
  * @param b The blue value

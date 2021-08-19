@@ -1,5 +1,6 @@
-import { ImageBounds, ImageRow, ImageRows, Rect } from './types';
-import { toPaddedHex } from './utils';
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { ImageBounds, ImageRow, ImageRows, Rect, RGBAColor } from './types';
+import { rgbToHex, toPaddedHex } from './utils';
 
 /**
  * A class used to convert an image into the following RLE format:
@@ -10,6 +11,7 @@ export class Image {
   private _height: number;
   private _rows: ImageRows = {};
   private _bounds: ImageBounds = { top: 0, bottom: 0, left: 0, right: 0 };
+  private _rle: string | undefined;
 
   get width(): number {
     return this._width;
@@ -33,9 +35,48 @@ export class Image {
   }
 
   /**
-   * Get the run-length encoded image data
+   * Convert an image to a run-length encoded string using the provided RGBA
+   * and color palette values.
+   * @param getRgbaAt A function used to fetch the RGBA values at specific x-y coordinates
+   * @param colors The color palette map
    */
-  public getRLE(): string {
+  public toRLE(
+    getRgbaAt: (x: number, y: number) => RGBAColor,
+    colors: Map<string, number>,
+  ): string {
+    if (!this._rle) {
+      this._rle = this.encode(getRgbaAt, colors);
+    }
+    return this._rle;
+  }
+
+  /**
+   * Using the image pixel inforation, run-length encode an image.
+   * @param getRgbaAt A function used to fetch the RGBA values at specific x-y coordinates
+   * @param colors The color palette map
+   */
+  private encode(
+    getRgbaAt: (x: number, y: number) => RGBAColor,
+    colors: Map<string, number>,
+  ): string {
+    for (let y = 0; y < this._height; y++) {
+      for (let x = 0; x < this._width; x++) {
+        const { r, g, b, a } = getRgbaAt(x, y);
+        const hexColor = rgbToHex(r, g, b);
+
+        // Insert the color if it does not yet exist
+        if (!colors.has(hexColor)) {
+          colors.set(hexColor, colors.size);
+        }
+
+        // If alpha is 0, use 'transparent' index, otherwise get color index
+        const colorIndex = a === 0 ? 0 : colors.get(hexColor)!;
+
+        this.appendPixelToRect(colorIndex, y);
+      }
+      this.updateImageBounds(y);
+    }
+
     this.deleteEmptyRows();
 
     // Set the left and right bounds. Return early if empty
@@ -65,7 +106,7 @@ export class Image {
    * @param colorIndex The color array index
    * @param y The current `y` coordinate
    */
-  public appendPixelToRect(colorIndex: number, y: number): void {
+  private appendPixelToRect(colorIndex: number, y: number): void {
     // Create the row if it does not exist yet
     const { rects } = (this._rows[y] ||= {
       rects: [],
@@ -86,7 +127,7 @@ export class Image {
    * Update the bounds of the provided image
    * @param y The current `y` coordinate
    */
-  public updateImageBounds(y: number): void {
+  private updateImageBounds(y: number): void {
     const { rects } = this._rows[y];
 
     // Shift top bound to `y - 1` if row is not empty, top bound is 0, and y != 0
@@ -164,9 +205,9 @@ export class Image {
 
         // Set right bound
         if (i === row.rects.length - 1) {
-          if (length > 32 - bounds.right) {
-            return [length - (32 - bounds.right), colorIndex];
-          } else if (length === 32 - bounds.right) {
+          if (length > this._width - bounds.right) {
+            return [length - (this._width - bounds.right), colorIndex];
+          } else if (length === this._width - bounds.right) {
             return [];
           }
         }
@@ -181,6 +222,6 @@ export class Image {
    * @param rect The rect to inspect
    */
   private isEmptyRow(rect: Rect) {
-    return rect?.length === 32 && rect?.colorIndex === 0;
+    return rect?.length === this._width && rect?.colorIndex === 0;
   }
 }

@@ -1,5 +1,5 @@
-export interface Encoder {
-  encodeImage(image: unknown): string;
+export interface IEncoder {
+  encodeImage(filename: string, image: unknown): string;
 }
 
 export interface Rect {
@@ -37,4 +37,9 @@ export interface DecodedImage {
   paletteIndex: number;
   bounds: ImageBounds;
   rects: [length: number, colorIndex: number][];
+}
+
+export interface EncodedImage {
+  filename: string;
+  data: string;
 }
