@@ -157,7 +157,7 @@ export const useAllProposals = (): ProposalData => {
 
     return {
       data: proposals.map((proposal, i) => {
-        const description = logs[i]?.description;
+        const description = logs[i]?.description?.replace(/\\n/g,"\n");
         return {
           id: proposal?.id.toString(),
           title: description?.split(/# |\n/g)[1] ?? 'Untitled',
