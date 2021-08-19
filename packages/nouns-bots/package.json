@@ -3,9 +3,9 @@
   "private": true,
   "version": "0.1.0",
   "description": "nouns backend bots",
-  "author": "nounsDAO",
-  "homepage": "",
-  "license": "UNLICENSED",
+  "author": "Nounders",
+  "homepage": "https://nouns.wtf",
+  "license": "GPL-3.0",
   "main": "src/index.ts",
   "directories": {
     "lib": "lib",
