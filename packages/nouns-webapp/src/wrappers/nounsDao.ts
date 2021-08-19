@@ -70,7 +70,7 @@ interface ProposalData {
 }
 
 const abi = new utils.Interface(NounsDAOABI);
-const contract = new Contract(config.nounsDaoAddress, abi);
+const contract = new Contract(config.nounsDaoProxyAddress, abi);
 const proposalCreatedFilter = contract.filters?.ProposalCreated();
 
 const untypedContract: any = contract; // useDapp type incompatibility
