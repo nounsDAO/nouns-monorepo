@@ -1,10 +1,10 @@
 # nouns-monorepo
 
-NounsDAO is a generative avatar art collective run by a group of crypto misfits.
+Nouns DAO is a generative avatar art collective run by a group of crypto misfits.
 
 ## Contributing
 
-If you're interested in contributing to NounsDAO repos we're excited to have you. Please discuss any changes in `#developers` in [discord.gg/nouns](https://discord.gg/nouns) prior to contributing to reduce duplication of effort and in case there is any prior art that may be useful to you.
+If you're interested in contributing to Nouns DAO repos we're excited to have you. Please discuss any changes in `#developers` in [discord.gg/nouns](https://discord.gg/nouns) prior to contributing to reduce duplication of effort and in case there is any prior art that may be useful to you.
 
 ## Packages
 
@@ -18,7 +18,7 @@ The [nouns-bots](packages/nouns-bots) package contains a bot that monitors for c
 
 ### nouns-contracts
 
-The [nouns contracts](packages/nouns-contracts) is the suite of Solidity contracts powering NounsDAO.
+The [nouns contracts](packages/nouns-contracts) is the suite of Solidity contracts powering Nouns DAO.
 
 ### nouns-subgraph
 
