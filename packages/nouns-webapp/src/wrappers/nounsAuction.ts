@@ -30,12 +30,12 @@ export const auctionHouseContractFactory = (auctionHouseProxyAddress: string) =>
   new Contract(auctionHouseProxyAddress, abi);
 
 export const useAuction = (auctionHouseProxyAddress: string) => {
-  const auction = useContractCall({
+  const auction = useContractCall<Auction>({
     abi,
     address: auctionHouseProxyAddress,
     method: 'auction',
     args: [],
-  }) as { [key: string]: any };
+  });
   return auction as Auction;
 };
 
