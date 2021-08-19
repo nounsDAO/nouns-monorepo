@@ -5,7 +5,7 @@ import { NounsAuctionHouseABI } from '@nouns/contracts';
 import config from '../config';
 import BigNumber from 'bignumber.js';
 
-export enum AuctionHouseContractFunctions {
+export enum AuctionHouseContractFunction {
   auction = 'auction',
   duration = 'duration',
   minBidIncrementPercentage = 'minBidIncrementPercentage',

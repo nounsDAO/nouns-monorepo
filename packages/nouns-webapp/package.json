@@ -17,7 +17,7 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/react-router-dom": "^5.1.7",
-    "@usedapp/core": "^0.4.0",
+    "@usedapp/core": "^0.4.4",
     "@web3-react/core":"^6.1.9",
     "@web3-react/injected-connector":"^6.0.7",
     "@web3-react/walletlink-connector":"^6.2.3",
