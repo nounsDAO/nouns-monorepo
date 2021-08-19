@@ -10,6 +10,7 @@ import ProposalStatus from '../../components/ProposalStatus';
 import moment from 'moment-timezone';
 import VoteModal from '../../components/VoteModal';
 import { useState } from 'react';
+import ReactMarkdown from 'react-markdown'
 
 const AVERAGE_BLOCK_TIME_IN_SECS = 13;
 
@@ -159,6 +160,11 @@ const VotePage = ({
                 <ProgressBar variant="info" now={abstainPercentage} />
               </Card.Body>
             </Card>
+          </Col>
+        </Row>
+        <Row>
+          <Col className={classes.description}>
+            { proposal?.description && <ReactMarkdown children={proposal.description} /> }
           </Col>
         </Row>
       </Col>
