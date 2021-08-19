@@ -29,7 +29,7 @@ const config: Record<SupportedChains, Config> = {
   [ChainId.Mainnet]: {
     auctionProxyAddress: '0x830BD73E4184ceF73443C15111a1DF14e495C706',
     tokenAddress: '0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03',
-    nounsDaoAddress: '0x0BC3807Ec262cB779b38D65b38158acC3bfedE10',
+    nounsDaoAddress: '0x6f3E6272A167e8AcCb32072d08E0957F9c79223d',
     subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph',
     jsonRpcUri:
       process.env.REACT_APP_MAINNET_JSONRPC ||
