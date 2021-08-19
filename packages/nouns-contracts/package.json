@@ -3,8 +3,9 @@
   "private": true,
   "version": "0.1.0",
   "description": "Nouns solidity contracts",
-  "author": "Nouns DAO",
-  "license": "UNLICENSED",
+  "author": "Nounders",
+  "homepage": "https://nouns.wtf",
+  "license": "GPL-3.0",
   "main": "src/index.ts",
   "scripts": {
     "build": "yarn build:sol && yarn build:ts",

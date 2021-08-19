@@ -3607,17 +3607,6 @@
     proper-lockfile "^4.1.1"
     solidity-ast "^0.4.15"
 
-"@pinata/sdk@^1.1.23":
-  version "1.1.23"
-  resolved "https://registry.yarnpkg.com/@pinata/sdk/-/sdk-1.1.23.tgz#91d7e289a29f514ee35d8d2ad62f8ef891b57ea0"
-  integrity sha512-ZIQI6acEu2m3tuLW9UCUNVgqbHc5U+t657ukunamV0E8XcW639vgtGa5rd5C/9mVIxoWpp5CJ9q7FA1OT88huQ==
-  dependencies:
-    axios "^0.21.1"
-    base-path-converter "^1.0.2"
-    form-data "^2.3.3"
-    is-ipfs "^0.6.0"
-    recursive-fs "^1.1.2"
-
 "@pmmmwh/react-refresh-webpack-plugin@0.4.3":
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/@pmmmwh/react-refresh-webpack-plugin/-/react-refresh-webpack-plugin-0.4.3.tgz#1eec460596d200c0236bf195b078a5d1df89b766"
@@ -6669,11 +6658,6 @@ balanced-match@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
-
-base-path-converter@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/base-path-converter/-/base-path-converter-1.0.2.tgz#e80b4b4f31c7b1561e632158e00774b6f2f27978"
-  integrity sha512-51R8JiuXadknn6ouVUteOhDpmI3G5u5GqjruL7bPJpfxUHVgosaO5uPAvRP4FeR4VyyH4sSvsN78Ci6ouoRYqQ==
 
 base-x@^3.0.2, base-x@^3.0.8:
   version "3.0.8"
@@ -11103,7 +11087,7 @@ fork-ts-checker-webpack-plugin@4.1.6:
     tapable "^1.0.0"
     worker-rpc "^0.1.0"
 
-form-data@^2.2.0, form-data@^2.3.3:
+form-data@^2.2.0:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/form-data/-/form-data-2.5.1.tgz#f2cbec57b5e59e23716e128fe44d4e5dd23895f4"
   integrity sha512-m21N3WOmEEURgk6B9GLOE4RuWOFf28Lhh9qGYeNlGq4VDXUlJy2th2slBNU8Gp8EzloYZOibZJ7t5ecIrFSjVA==
@@ -13074,7 +13058,7 @@ is-ip@^3.1.0:
   dependencies:
     ip-regex "^4.0.0"
 
-is-ipfs@^0.6.0, is-ipfs@~0.6.1:
+is-ipfs@~0.6.1:
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/is-ipfs/-/is-ipfs-0.6.3.tgz#82a5350e0a42d01441c40b369f8791e91404c497"
   integrity sha512-HyRot1dvLcxImtDqPxAaY1miO6WsiP/z7Yxpg2qpaLWv5UdhAPtLvHJ4kMLM0w8GSl8AFsVF23PHe1LzuWrUlQ==
@@ -16097,13 +16081,6 @@ node-int64@^0.4.0:
   resolved "https://registry.yarnpkg.com/node-int64/-/node-int64-0.4.0.tgz#87a9065cdb355d3182d8f94ce11188b825c68a3b"
   integrity sha1-h6kGXNs1XTGC2PlM4RGIuCXGijs=
 
-node-libpng@^0.2.18:
-  version "0.2.20"
-  resolved "https://registry.yarnpkg.com/node-libpng/-/node-libpng-0.2.20.tgz#788f9e3b8e091478b51a20296ceba0098a9ec31e"
-  integrity sha512-2r6y7Z3svNlSip+Dwper6NeuUgI5BDEeI/1daZI4X+VKpOFS6ymhU3kIPZpzN+5qusYOw/grJGfSRoZdBhyx2A==
-  dependencies:
-    request "^2.88.2"
-
 node-libs-browser@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/node-libs-browser/-/node-libs-browser-2.2.1.tgz#b64f513d18338625f90346d27b0d235e631f6425"
@@ -19004,11 +18981,6 @@ rechoir@^0.6.2:
   dependencies:
     resolve "^1.1.6"
 
-recursive-fs@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/recursive-fs/-/recursive-fs-1.1.2.tgz#1d752e2f1a65d25fb6964109a9dbf83a335f90f0"
-  integrity sha512-QPFEt5EwzwlHoqYsZc+NkUSyDTQf1Hvq7c/kpQJHi77OSCAiDXI3wfB0J04ZG+ekGHmv37mdR8MDPEshD3/RlQ==
-
 recursive-readdir@2.2.2, recursive-readdir@^2.2.2:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/recursive-readdir/-/recursive-readdir-2.2.2.tgz#9946fb3274e1628de6e36b2f6714953b4845094f"
@@ -19265,7 +19237,7 @@ request-promise-native@^1.0.5:
     stealthy-require "^1.1.1"
     tough-cookie "^2.3.3"
 
-request@^2.67.0, request@^2.79.0, request@^2.85.0, request@^2.88.0, request@^2.88.2:
+request@^2.67.0, request@^2.79.0, request@^2.85.0, request@^2.88.0:
   version "2.88.2"
   resolved "https://registry.yarnpkg.com/request/-/request-2.88.2.tgz#d73c918731cb5a87da047e207234146f664d12b3"
   integrity sha512-MsvtOrfG9ZcrOwAW+Qi+F6HbD0CWXEh9ou77uOb7FM2WPhwT7smM833PzanhJLsgXjN89Ir6V2PczXNnMpwKhw==
