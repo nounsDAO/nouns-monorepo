@@ -176,7 +176,7 @@ export const useAllProposals = (): ProposalData => {
           endBlock: parseInt(proposal?.endBlock?.toString() ?? ''),
           eta: proposal?.eta ? new Date(proposal?.eta?.toNumber() * 1000) : undefined,
           details: logs[i]?.details,
-          transactionHash: logs[i]?.transactionHash
+          transactionHash: logs[i]?.transactionHash,
         };
       }),
       loading: false,
