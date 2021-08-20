@@ -89,7 +89,7 @@ const NavBar = () => {
           <Navbar.Collapse className="justify-content-end">
             <Nav.Item>
               {treasuryBalance && (
-                <Nav.Link href={daoEtherscanLink.toString()} className={classes.nounsNavLink}>
+                <Nav.Link href={daoEtherscanLink.toString()} className={classes.nounsNavLink} target="_blank" rel="noreferrer">
                   TREASURY Ξ {utils.formatEther(treasuryBalance.toString())}
                 </Nav.Link>
               )}
@@ -97,7 +97,7 @@ const NavBar = () => {
             <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>
               GOVERN
             </Nav.Link>
-            <Nav.Link href="playground" className={classes.nounsNavLink} target="_blank">
+            <Nav.Link href="/playground" className={classes.nounsNavLink} target="_blank">
               EXPLORE
             </Nav.Link>
             {activeAccount ? connectedContent : disconnectedContent}

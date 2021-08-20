@@ -95,17 +95,18 @@ const useFormattedProposalCreatedLogs = () => {
 
   return useMemo(() => {
     return useLogsResult?.logs?.map(log => {
-      const parsed = abi.parseLog(log).args;
+      const { args: parsed } = abi.parseLog(log);
       return {
         description: parsed.description,
         details: parsed.targets.map((target: string, i: number) => {
           const signature = parsed.signatures[i];
+          const value = parsed[3][i];
           const [name, types] = signature.substr(0, signature.length - 1)?.split('(');
           if (!name || !types) {
             return {
               target,
               functionSig: name === '' ? 'transfer' : name === undefined ? 'unknown' : name,
-              callData: types ?? '',
+              callData: types ? types : value ? value.toString() : '',
             };
           }
           const calldata = parsed.calldatas[i];
@@ -157,7 +158,7 @@ export const useAllProposals = (): ProposalData => {
 
     return {
       data: proposals.map((proposal, i) => {
-        const description = logs[i]?.description?.replace(/\\n/g,"\n");
+        const description = logs[i]?.description?.replace(/\\n/g, '\n');
         return {
           id: proposal?.id.toString(),
           title: description?.split(/# |\n/g)[1] ?? 'Untitled',

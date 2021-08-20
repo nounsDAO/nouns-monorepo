@@ -10,6 +10,6 @@
 }
 
 .bidHistory:hover {
-  color:  var(--brand-dark-red);
+  color: var(--brand-dark-red);
   text-decoration: none;
 }
