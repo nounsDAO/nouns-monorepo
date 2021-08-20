@@ -11,6 +11,7 @@ export interface AuctionCreateEvent {
 	nounId: BigNumberish;
 	startTime: BigNumberish;
 	endTime: BigNumberish;
+	settled: boolean;
 }
 
 export interface AuctionSettledEvent {

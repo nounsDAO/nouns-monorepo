@@ -12,7 +12,7 @@ import { BigNumber } from 'ethers';
 import { INounSeed } from '../../wrappers/nounToken';
 import NounderNounContent from '../NounderNounContent';
 import { ApolloError } from '@apollo/client';
-import { useAppSelector } from '../../hooks';
+// import { useAppSelector } from '../../hooks';
 
 const isNounderNoun = (nounId: BigNumber) => {
   return nounId.mod(10).eq(0) || nounId.eq(0);
@@ -42,8 +42,11 @@ const createAuctionObj = (data: any): IAuction => {
 const Auction: React.FC<{ auction: IAuction; bgColorHandler: (useGrey: boolean) => void }> =
   props => {
     const { auction: currentAuction, bgColorHandler } = props;
+    /*
+    Use this to fetch the current auction and bids
     const stateAuction = useAppSelector(state => state.auction.activeAuction);
     const stateBids = useAppSelector(state => state.auction.bids);
+    */
 
     const [onDisplayNounId, setOnDisplayNounId] = useState(currentAuction && currentAuction.nounId);
     const [lastAuctionId, setLastAuctionId] = useState(currentAuction && currentAuction.nounId);

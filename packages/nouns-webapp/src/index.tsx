@@ -12,13 +12,15 @@ import account from './state/slices/account';
 import application from './state/slices/application';
 import logs from './state/slices/logs';
 import auction, {
+  reduxSafeActiveAuction,
+  reduxSafeBid,
   setActiveAuction,
   setAuctionExtended,
   setAuctionSettled,
   setFullAuction,
 } from './state/slices/auction';
-import { ApolloProvider } from '@apollo/client';
-import { clientFactory } from './wrappers/subgraph';
+import { ApolloProvider  } from '@apollo/client';
+import { clientFactory} from './wrappers/subgraph';
 import LogsUpdater from './state/updaters/logs';
 import config, { CHAIN_ID } from './config';
 import { WebSocketProvider } from '@ethersproject/providers';
@@ -27,7 +29,7 @@ import { NounsAuctionHouseABI } from '@nouns/contracts';
 import dotenv from 'dotenv';
 import { useAppDispatch } from './hooks';
 import { appendBid } from './state/slices/auction';
-import {Auction as IAuction} from './wrappers/nounsAuction'
+import { Auction as IAuction } from './wrappers/nounsAuction';
 
 dotenv.config();
 
@@ -85,14 +87,16 @@ const ChainSubscriber: React.FC = () => {
       value: BigNumberish,
       extended: boolean,
     ) => {
-      dispatch(appendBid({ nounId, sender, value, extended }));
+      dispatch(appendBid(reduxSafeBid({ nounId, sender, value, extended })));
     };
     const processAuctionCreated = (
       nounId: BigNumberish,
       startTime: BigNumberish,
       endTime: BigNumberish,
     ) => {
-      dispatch(setActiveAuction({ nounId, startTime, endTime }));
+      dispatch(
+        setActiveAuction(reduxSafeActiveAuction({ nounId, startTime, endTime, settled: false })),
+      );
     };
     const processAuctionExtended = (nounId: BigNumberish, endTime: BigNumberish) => {
       dispatch(setAuctionExtended({ nounId, endTime }));
@@ -103,15 +107,14 @@ const ChainSubscriber: React.FC = () => {
 
     // Fetch the current auction
     const currentAuction: IAuction = await auctionContract.auction();
-    dispatch(setFullAuction(currentAuction))
-    
+    dispatch(setFullAuction(reduxSafeActiveAuction(currentAuction)));
+
     // Fetch the previous 24hours of  bids
-    const previousBids = await auctionContract
-      .queryFilter(bidFilter, 0 - BLOCKS_PER_DAY)
+    const previousBids = await auctionContract.queryFilter(bidFilter, 0 - BLOCKS_PER_DAY);
     for (let event of previousBids) {
       if (event.args === undefined) return;
       //@ts-ignore
-      processBidFilter(...event.args)
+      processBidFilter(...event.args);
     }
 
     auctionContract.on(bidFilter, processBidFilter);
