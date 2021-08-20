@@ -4,7 +4,7 @@ import { ProposalState, useProposal, Vote } from '../../wrappers/nounsDao';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Vote.module.css';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { useBlockMeta, useBlockNumber } from '@usedapp/core';
+import { useBlockNumber } from '@usedapp/core';
 import { buildEtherscanAddressLink, buildEtherscanTxLink, Network } from '../../utils/buildEtherscanLink';
 import ProposalStatus from '../../components/ProposalStatus';
 import moment from 'moment-timezone';
@@ -27,7 +27,7 @@ const VotePage = ({
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
 
   // Get and format date from data
-  const { timestamp } = useBlockMeta();
+  const timestamp = Math.floor(Date.now() / 1000)
   const currentBlock = useBlockNumber();
   const startDate =
     proposal && timestamp && currentBlock
