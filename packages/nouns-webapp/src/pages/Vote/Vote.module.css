@@ -19,12 +19,6 @@
   margin-top: 1rem;
 }
 
-.proposalHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
 .proposalId {
   margin: 1rem 0;
 }

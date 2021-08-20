@@ -95,7 +95,7 @@ const VotePage = ({
         </Link>
       </Col>
       <Col lg={{span: 8, offset: 2}} className={classes.proposal}>
-        <div className={classes.proposalHeader}>
+        <div className="d-flex justify-content-between align-items-center">
           <h3 className={classes.proposalId}>Proposal {proposal?.id}</h3>
           <ProposalStatus status={proposal?.status}></ProposalStatus>
         </div>
