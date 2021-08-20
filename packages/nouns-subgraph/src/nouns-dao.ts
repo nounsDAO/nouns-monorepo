@@ -50,7 +50,7 @@ export function handleProposalCreatedWithRequirements(
   proposal.endBlock = event.params.endBlock;
   proposal.proposalThreshold = event.params.proposalThreshold;
   proposal.quorumVotes = event.params.quorumVotes;
-  proposal.description = event.params.description;
+  proposal.description = event.params.description.split('\\n').join('\n'); // The Graph's AssemblyScript version does not support string.replace
   proposal.status = event.block.number >= proposal.startBlock ? STATUS_ACTIVE : STATUS_PENDING;
 
   proposal.save();
