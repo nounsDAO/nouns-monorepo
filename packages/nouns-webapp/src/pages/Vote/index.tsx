@@ -93,9 +93,9 @@ const VotePage = ({
         <Link to="/vote">
           <img className={classes.backArrow} src={leftArrow} alt="Back" /> All Proposals
         </Link>
-        <div className={classes.proposalHeader}>
-          <h3 className={classes.proposalId}>Proposal {proposal?.id}</h3>
-          <ProposalStatus status={proposal?.status}></ProposalStatus>
+        <div className="d-flex justify-content-between align-items-center">
+            <h3 className={classes.proposalId}>Proposal {proposal?.id}</h3>
+            <ProposalStatus status={proposal?.status}></ProposalStatus>
         </div>
         <div>
           {startDate && startDate.isBefore(now) ? (
