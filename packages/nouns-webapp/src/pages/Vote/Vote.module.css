@@ -1,6 +1,5 @@
 .backArrow {
   height: 1rem;
-
 }
 
 .votingButton {
@@ -9,6 +8,12 @@
 
 .voteCountCard {
   margin-top: 1rem;
+}
+
+.proposalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .proposalId {
@@ -20,8 +25,18 @@
   justify-content: space-between;
 }
 
-.description {
-  border-top:  1px solid #e9ecef;
+.section {
+  border-top: 1px solid #e9ecef;
   padding-top: 2rem;
   margin-top: 2rem;
+}
+
+.markdown h1 {
+  font-size: 2rem;
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+.markdown h3 {
+  font-size: 1.5rem;
 }

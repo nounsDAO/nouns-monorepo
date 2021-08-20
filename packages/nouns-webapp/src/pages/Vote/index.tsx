@@ -6,11 +6,13 @@ import classes from './Vote.module.css';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { useBlockMeta, useBlockNumber } from '@usedapp/core';
 import leftArrow from '../../assets/noun_arrow_left_brand_green_shadow.png';
+import { buildEtherscanAddressLink, Network } from '../../utils/buildEtherscanLink';
 import ProposalStatus from '../../components/ProposalStatus';
 import moment from 'moment-timezone';
 import VoteModal from '../../components/VoteModal';
 import { useState } from 'react';
 import ReactMarkdown from 'react-markdown'
+import { utils } from 'ethers';
 
 const AVERAGE_BLOCK_TIME_IN_SECS = 13;
 
@@ -60,6 +62,17 @@ const VotePage = ({
   // Only show voting if user has > 0 votes at proposal start block and proposal is active
   const showVotingButtons = availableVotes && proposal?.status === ProposalState.ACTIVE;
 
+  const linkIfAddress = (content: string, network = Network.mainnet) => {
+    if (utils.isAddress(content)) {
+      return (
+        <a href={buildEtherscanAddressLink(content, network).toString()} target="_blank" rel="noreferrer">
+          {content}
+        </a>
+      );
+    }
+    return <span>{content}</span>;
+  };  
+
   return (
     <Section bgColor="white" fullWidth={false}>
       <VoteModal
@@ -72,8 +85,10 @@ const VotePage = ({
         <Link to="/vote">
           <img className={classes.backArrow} src={leftArrow} alt="Back" /> All Proposals
         </Link>
-        <h5 className={classes.proposalId}>Proposal {proposal?.id}</h5>
-        <ProposalStatus status={proposal?.status}></ProposalStatus>
+        <div className={classes.proposalHeader}>
+          <h3 className={classes.proposalId}>Proposal {proposal?.id}</h3>
+          <ProposalStatus status={proposal?.status}></ProposalStatus>
+        </div>
         <div>
           {startDate && startDate.isBefore(now) ? (
             null
@@ -149,8 +164,8 @@ const VotePage = ({
         <Row>
           <Col lg={4}>
             <Card className={classes.voteCountCard}>
-              <Card.Body>
-                <Card.Text>
+              <Card.Body className="p-2">
+                <Card.Text className="py-2 m-0">
                   <span>For</span>
                   <span>{proposal?.forCount}</span>
                 </Card.Text>
@@ -160,8 +175,8 @@ const VotePage = ({
           </Col>
           <Col lg={4}>
             <Card className={classes.voteCountCard}>
-              <Card.Body>
-                <Card.Text>
+              <Card.Body className="p-2">
+                <Card.Text className="py-2 m-0">
                   <span>Against</span>
                   <span>{proposal?.againstCount}</span>
                 </Card.Text>
@@ -171,8 +186,8 @@ const VotePage = ({
           </Col>
           <Col lg={4}>
             <Card className={classes.voteCountCard}>
-              <Card.Body>
-                <Card.Text>
+              <Card.Body className="p-2">
+                <Card.Text className="py-2 m-0">
                   <span>Abstain</span>
                   <span>{proposal?.abstainCount}</span>
                 </Card.Text>
@@ -182,8 +197,36 @@ const VotePage = ({
           </Col>
         </Row>
         <Row>
-          <Col className={classes.description}>
-            { proposal?.description && <ReactMarkdown children={proposal.description} /> }
+          <Col className={classes.section}>
+            <h5>Description</h5>
+            { proposal?.description && <ReactMarkdown className={classes.markdown} children={proposal.description} /> }
+          </Col>
+        </Row>
+        <Row>
+          <Col className={classes.section}>
+            <h5>Details</h5>
+            {proposal?.details?.map((d, i) => {
+              return (
+                <p key={i} className="m-0">
+                  {i + 1}: {linkIfAddress(d.target)}.{d.functionSig}(
+                  {d.callData.split(',').map((content, i) => {
+                    return (
+                      <span key={i}>
+                        {linkIfAddress(content)}
+                        {d.callData.split(',').length - 1 === i ? '' : ','}
+                      </span>
+                    )
+                  })}
+                  )
+                </p>
+              )
+            })}
+          </Col>
+        </Row>
+        <Row>
+          <Col className={classes.section}>
+            <h5>Proposer</h5>
+            {proposal?.proposer && linkIfAddress(proposal.proposer)}
           </Col>
         </Row>
       </Col>
