@@ -106,7 +106,7 @@ const useFormattedProposalCreatedLogs = () => {
             return {
               target,
               functionSig: name === '' ? 'transfer' : name === undefined ? 'unknown' : name,
-              callData: types ? types : value ? value.toString() : '',
+              callData: types ? types : value ? `${utils.formatEther(value)} ETH` : '',
             };
           }
           const calldata = parsed.calldatas[i];
