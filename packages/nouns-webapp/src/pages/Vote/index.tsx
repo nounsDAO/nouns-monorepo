@@ -5,7 +5,6 @@ import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Vote.module.css';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { useBlockMeta, useBlockNumber } from '@usedapp/core';
-import leftArrow from '../../assets/noun_arrow_left_brand_green_shadow.png';
 import { buildEtherscanAddressLink, buildEtherscanTxLink, Network } from '../../utils/buildEtherscanLink';
 import ProposalStatus from '../../components/ProposalStatus';
 import moment from 'moment-timezone';
