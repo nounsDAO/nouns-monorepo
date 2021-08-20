@@ -6,7 +6,7 @@ import classes from './Vote.module.css';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { useBlockMeta, useBlockNumber } from '@usedapp/core';
 import leftArrow from '../../assets/noun_arrow_left_brand_green_shadow.png';
-import { buildEtherscanAddressLink, Network } from '../../utils/buildEtherscanLink';
+import { buildEtherscanAddressLink, buildEtherscanTxLink, Network } from '../../utils/buildEtherscanLink';
 import ProposalStatus from '../../components/ProposalStatus';
 import moment from 'moment-timezone';
 import VoteModal from '../../components/VoteModal';
@@ -71,7 +71,15 @@ const VotePage = ({
       );
     }
     return <span>{content}</span>;
-  };  
+  };
+
+  const transactionLink = (content: string, network = Network.mainnet) => {
+    return (
+      <a href={buildEtherscanTxLink(content, network).toString()} target="_blank" rel="noreferrer">
+        {content.substring(0,7)}
+      </a>
+    )
+  }
 
   return (
     <Section bgColor="white" fullWidth={false}>
@@ -226,7 +234,7 @@ const VotePage = ({
         <Row>
           <Col className={classes.section}>
             <h5>Proposer</h5>
-            {proposal?.proposer && linkIfAddress(proposal.proposer)}
+            {proposal?.proposer && proposal?.transactionHash && <>{linkIfAddress(proposal.proposer)} at {transactionLink(proposal.transactionHash)}</> }
           </Col>
         </Row>
       </Col>

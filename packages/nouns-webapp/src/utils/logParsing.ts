@@ -5,6 +5,7 @@ export interface EventFilter {
 
 export interface Log {
   topics: Array<string>;
+  transactionHash: string;
   data: string;
 }
 

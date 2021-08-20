@@ -62,6 +62,7 @@ export interface Proposal {
   proposalThreshold: number;
   quorumVotes: number;
   details: ProposalDetail[];
+  transactionHash: string;
 }
 
 interface ProposalData {
@@ -98,6 +99,7 @@ const useFormattedProposalCreatedLogs = () => {
       const { args: parsed } = abi.parseLog(log);
       return {
         description: parsed.description,
+        transactionHash: log.transactionHash,
         details: parsed.targets.map((target: string, i: number) => {
           const signature = parsed.signatures[i];
           const value = parsed[3][i];
@@ -174,6 +176,7 @@ export const useAllProposals = (): ProposalData => {
           endBlock: parseInt(proposal?.endBlock?.toString() ?? ''),
           eta: proposal?.eta ? new Date(proposal?.eta?.toNumber() * 1000) : undefined,
           details: logs[i]?.details,
+          transactionHash: logs[i]?.transactionHash
         };
       }),
       loading: false,
