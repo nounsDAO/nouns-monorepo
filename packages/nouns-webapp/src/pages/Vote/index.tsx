@@ -27,7 +27,7 @@ const VotePage = ({
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
 
   // Get and format date from data
-  const timestamp = Math.floor(Date.now() / 1000)
+  const timestamp = Date.now()
   const currentBlock = useBlockNumber();
   const startDate =
     proposal && timestamp && currentBlock
