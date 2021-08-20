@@ -82,7 +82,7 @@ const VotePage = ({
   }
 
   return (
-    <Section bgColor="white" fullWidth={false}>
+    <Section bgColor="transparent" fullWidth={false} className={classes.votePage}>
       <VoteModal
         show={showVoteModal}
         onHide={() => setShowVoteModal(false)}
@@ -91,8 +91,10 @@ const VotePage = ({
       />
       <Col lg={{ span: 8, offset: 2 }}>
         <Link to="/vote">
-          <img className={classes.backArrow} src={leftArrow} alt="Back" /> All Proposals
+          ← All Proposals
         </Link>
+      </Col>
+      <Col lg={{span: 8, offset: 2}} className={classes.proposal}>
         <div className={classes.proposalHeader}>
           <h3 className={classes.proposalId}>Proposal {proposal?.id}</h3>
           <ProposalStatus status={proposal?.status}></ProposalStatus>
