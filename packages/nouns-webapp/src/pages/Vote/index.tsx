@@ -212,7 +212,7 @@ const VotePage = ({
         </Row>
         <Row>
           <Col className={classes.section}>
-            <h5>Details</h5>
+            <h5>Proposed Transactions</h5>
             {proposal?.details?.map((d, i) => {
               return (
                 <p key={i} className="m-0">
