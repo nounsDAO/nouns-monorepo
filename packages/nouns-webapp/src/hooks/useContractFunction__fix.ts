@@ -1,9 +1,8 @@
 import { useCallback, useState } from 'react';
 import { usePromiseTransaction } from '@usedapp/core/dist/esm/src/hooks/usePromiseTransaction';
-import { Contract } from '@usedapp/core/node_modules/ethers';
-import { Web3Provider } from '@usedapp/core/node_modules/@ethersproject/providers';
+import { connectContractToSigner } from '@usedapp/core';
+import { Contract } from '@ethersproject/contracts';
 import { TransactionOptions, useEthers } from '@usedapp/core';
-import { Signer } from 'ethers';
 
 // Temporary fix: https://github.com/EthWorks/useDApp/issues/289
 
@@ -42,24 +41,4 @@ export const useContractFunction__fix = (
   );
 
   return { send, state, events };
-};
-
-const connectContractToSigner = (
-  contract: Contract,
-  options?: TransactionOptions,
-  library?: Web3Provider,
-) => {
-  if (contract.signer) {
-    return contract;
-  }
-
-  if (options?.signer) {
-    return contract.connect(options.signer as Signer);
-  }
-
-  if (library?.getSigner()) {
-    return contract.connect(library.getSigner());
-  }
-
-  throw new TypeError('No signer available in contract, options or library');
 };

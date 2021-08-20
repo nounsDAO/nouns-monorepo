@@ -1,6 +1,6 @@
 import { useContractCall } from '@usedapp/core';
 import { BigNumber as EthersBN, utils } from 'ethers';
-import { Contract } from '@usedapp/core/node_modules/ethers';
+import { Contract } from '@ethersproject/contracts';
 import { NounsAuctionHouseABI } from '@nouns/contracts';
 import config from '../config';
 import BigNumber from 'bignumber.js';
