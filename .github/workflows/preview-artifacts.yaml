@@ -22,4 +22,3 @@ jobs:
           path: packages/nouns-img-permutator/assets
           destination: nounsdao.appspot.com/${{ steps.extract_branch.outputs.branch }}
           parent: false
-
