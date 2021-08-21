@@ -186,7 +186,7 @@ const VotePage = ({
         )}
         {showVotingButtons ? (
           <Row>
-            <Col>
+            <Col lg={4}>
               <Button
                 className={classes.votingButton}
                 onClick={() => {
@@ -198,7 +198,7 @@ const VotePage = ({
                 Vote For
               </Button>
             </Col>
-            <Col>
+            <Col lg={4}>
               <Button
                 className={classes.votingButton}
                 onClick={() => {
@@ -210,7 +210,7 @@ const VotePage = ({
                 Vote Against
               </Button>
             </Col>
-            <Col>
+            <Col lg={4}>
               <Button
                 className={classes.votingButton}
                 onClick={() => {
