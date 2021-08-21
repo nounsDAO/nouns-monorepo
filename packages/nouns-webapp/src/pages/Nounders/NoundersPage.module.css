@@ -1,4 +1,6 @@
-.noundersPage h1, .noundersPage h2, .noundersPage h3 {
+.noundersPage h1,
+.noundersPage h2,
+.noundersPage h3 {
   font-family: 'Londrina Solid';
 }
 
@@ -7,17 +9,16 @@
 }
 
 .noundersPage a {
-  color:  var(--brand-black);
+  color: var(--brand-black);
 }
 .noundersPage a:hover {
-  color:  var(--brand-dark-red);
+  color: var(--brand-dark-red);
 }
 
 .noundersPage img {
   border-radius: 50%;
-  width:  50%;
+  width: 50%;
 }
-
 
 .marginBottom {
   margin-bottom: 0rem;
@@ -33,17 +34,17 @@
 }
 
 .twitterIcon {
-  width:  20px;
-  color:  #aaa;
+  width: 20px;
+  color: #aaa;
 }
 
 .card {
   border: none;
 }
 
-.card, .headerWrapper{
-    font-size: 1.3rem;
-
+.card,
+.headerWrapper {
+  font-size: 1.3rem;
 }
 .cardHeader {
   border: none;
