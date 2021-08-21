@@ -170,7 +170,7 @@ export const useAllProposals = (): ProposalData => {
           quorumVotes: parseInt(proposal?.quorumVotes?.toString() ?? '0'),
           forCount: parseInt(proposal?.forVotes?.toString() ?? '0'),
           againstCount: parseInt(proposal?.againstVotes?.toString() ?? '0'),
-          abstainCount: parseInt(proposal?.againstVotes?.toString() ?? '0'),
+          abstainCount: parseInt(proposal?.abstainVotes?.toString() ?? '0'),
           startBlock: parseInt(proposal?.startBlock?.toString() ?? ''),
           endBlock: parseInt(proposal?.endBlock?.toString() ?? ''),
           eta: proposal?.eta ? new Date(proposal?.eta?.toNumber() * 1000) : undefined,
