@@ -4,12 +4,14 @@ import { ProposalState, useProposal, Vote } from '../../wrappers/nounsDao';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Vote.module.css';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { useBlockMeta, useBlockNumber } from '@usedapp/core';
-import leftArrow from '../../assets/noun_arrow_left_brand_green_shadow.png';
+import { useBlockNumber } from '@usedapp/core';
+import { buildEtherscanAddressLink, buildEtherscanTxLink, Network } from '../../utils/buildEtherscanLink';
 import ProposalStatus from '../../components/ProposalStatus';
 import moment from 'moment-timezone';
 import VoteModal from '../../components/VoteModal';
 import { useState } from 'react';
+import ReactMarkdown from 'react-markdown'
+import { utils } from 'ethers';
 
 const AVERAGE_BLOCK_TIME_IN_SECS = 13;
 
@@ -25,8 +27,16 @@ const VotePage = ({
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
 
   // Get and format date from data
-  const { timestamp } = useBlockMeta();
+  const timestamp = Date.now()
   const currentBlock = useBlockNumber();
+  const startDate =
+    proposal && timestamp && currentBlock
+      ? moment(timestamp).add(
+          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
+          'seconds',
+        )
+      : undefined;
+
   const endDate =
     proposal && timestamp && currentBlock
       ? moment(timestamp).add(
@@ -51,8 +61,27 @@ const VotePage = ({
   // Only show voting if user has > 0 votes at proposal start block and proposal is active
   const showVotingButtons = availableVotes && proposal?.status === ProposalState.ACTIVE;
 
+  const linkIfAddress = (content: string, network = Network.mainnet) => {
+    if (utils.isAddress(content)) {
+      return (
+        <a href={buildEtherscanAddressLink(content, network).toString()} target="_blank" rel="noreferrer">
+          {content}
+        </a>
+      );
+    }
+    return <span>{content}</span>;
+  };
+
+  const transactionLink = (content: string, network = Network.mainnet) => {
+    return (
+      <a href={buildEtherscanTxLink(content, network).toString()} target="_blank" rel="noreferrer">
+        {content.substring(0,7)}
+      </a>
+    )
+  }
+
   return (
-    <Section bgColor="white" fullWidth={true}>
+    <Section bgColor="transparent" fullWidth={false} className={classes.votePage}>
       <VoteModal
         show={showVoteModal}
         onHide={() => setShowVoteModal(false)}
@@ -61,10 +90,25 @@ const VotePage = ({
       />
       <Col lg={{ span: 8, offset: 2 }}>
         <Link to="/vote">
-          <img className={classes.backArrow} src={leftArrow} alt="Back" /> All Proposals
+          ← All Proposals
         </Link>
-        <h1>Proposal {proposal?.id}</h1>
-        <ProposalStatus status={proposal?.status}></ProposalStatus>
+      </Col>
+      <Col lg={{span: 8, offset: 2}} className={classes.proposal}>
+        <div className="d-flex justify-content-between align-items-center">
+          <h3 className={classes.proposalId}>Proposal {proposal?.id}</h3>
+          <ProposalStatus status={proposal?.status}></ProposalStatus>
+        </div>
+        <div>
+          {startDate && startDate.isBefore(now) ? (
+            null
+          ) : proposal ? (
+            <span>
+              Voting starts approximately {startDate?.format('LLL')} {timezone}
+            </span>
+          ) : (
+            ''
+          )}
+        </div>
         <div>
           {endDate && endDate.isBefore(now) ? (
             <span>
@@ -129,8 +173,8 @@ const VotePage = ({
         <Row>
           <Col lg={4}>
             <Card className={classes.voteCountCard}>
-              <Card.Body>
-                <Card.Text>
+              <Card.Body className="p-2">
+                <Card.Text className="py-2 m-0">
                   <span>For</span>
                   <span>{proposal?.forCount}</span>
                 </Card.Text>
@@ -140,8 +184,8 @@ const VotePage = ({
           </Col>
           <Col lg={4}>
             <Card className={classes.voteCountCard}>
-              <Card.Body>
-                <Card.Text>
+              <Card.Body className="p-2">
+                <Card.Text className="py-2 m-0">
                   <span>Against</span>
                   <span>{proposal?.againstCount}</span>
                 </Card.Text>
@@ -151,14 +195,47 @@ const VotePage = ({
           </Col>
           <Col lg={4}>
             <Card className={classes.voteCountCard}>
-              <Card.Body>
-                <Card.Text>
+              <Card.Body className="p-2">
+                <Card.Text className="py-2 m-0">
                   <span>Abstain</span>
                   <span>{proposal?.abstainCount}</span>
                 </Card.Text>
                 <ProgressBar variant="info" now={abstainPercentage} />
               </Card.Body>
             </Card>
+          </Col>
+        </Row>
+        <Row>
+          <Col className={classes.section}>
+            <h5>Description</h5>
+            { proposal?.description && <ReactMarkdown className={classes.markdown} children={proposal.description} /> }
+          </Col>
+        </Row>
+        <Row>
+          <Col className={classes.section}>
+            <h5>Proposed Transactions</h5>
+            {proposal?.details?.map((d, i) => {
+              return (
+                <p key={i} className="m-0">
+                  {i + 1}: {linkIfAddress(d.target)}.{d.functionSig}(
+                  {d.callData.split(',').map((content, i) => {
+                    return (
+                      <span key={i}>
+                        {linkIfAddress(content)}
+                        {d.callData.split(',').length - 1 === i ? '' : ','}
+                      </span>
+                    )
+                  })}
+                  )
+                </p>
+              )
+            })}
+          </Col>
+        </Row>
+        <Row>
+          <Col className={classes.section}>
+            <h5>Proposer</h5>
+            {proposal?.proposer && proposal?.transactionHash && <>{linkIfAddress(proposal.proposer)} at {transactionLink(proposal.transactionHash)}</> }
           </Col>
         </Row>
       </Col>

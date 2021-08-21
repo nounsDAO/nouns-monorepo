@@ -17,8 +17,8 @@ const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { deactivate } = useEthers();
 
-  const treasuryBalance = useEtherBalance(config.nounsDaoAddress);
-  const daoEtherscanLink = buildEtherscanAddressLink(config.nounsDaoAddress, Network.mainnet);
+  const treasuryBalance = useEtherBalance(config.nounsDaoExecutorAddress);
+  const daoEtherscanLink = buildEtherscanAddressLink(config.nounsDaoExecutorAddress, Network.mainnet);
 
   const [showConnectModal, setShowConnectModal] = useState(false);
 
@@ -89,7 +89,7 @@ const NavBar = () => {
           <Navbar.Collapse className="justify-content-end">
             <Nav.Item>
               {treasuryBalance && (
-                <Nav.Link href={daoEtherscanLink.toString()} className={classes.nounsNavLink}>
+                <Nav.Link href={daoEtherscanLink.toString()} className={classes.nounsNavLink} target="_blank" rel="noreferrer">
                   TREASURY Ξ {utils.formatEther(treasuryBalance.toString())}
                 </Nav.Link>
               )}
@@ -97,7 +97,7 @@ const NavBar = () => {
             <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>
               GOVERN
             </Nav.Link>
-            <Nav.Link href="playground" className={classes.nounsNavLink} target="_blank">
+            <Nav.Link href="/playground" className={classes.nounsNavLink} target="_blank">
               EXPLORE
             </Nav.Link>
             {activeAccount ? connectedContent : disconnectedContent}
