@@ -1,8 +1,7 @@
 import { useCallback, useState } from 'react';
 import { usePromiseTransaction } from '@usedapp/core/dist/esm/src/hooks/usePromiseTransaction';
-import { connectContractToSigner } from '@usedapp/core';
 import { Contract } from '@ethersproject/contracts';
-import { TransactionOptions, useEthers } from '@usedapp/core';
+import { TransactionOptions, useEthers, connectContractToSigner } from '@usedapp/core';
 
 // Temporary fix: https://github.com/EthWorks/useDApp/issues/289
 
