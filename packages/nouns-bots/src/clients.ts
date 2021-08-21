@@ -5,7 +5,6 @@ import { Contract, providers } from 'ethers';
 import { NounsTokenABI } from '@nouns/contracts';
 import Discord from 'discord.js';
 import axios from 'axios';
-import pinataSdk from '@pinata/sdk';
 
 /**
  * Redis Client
@@ -64,8 +63,3 @@ export const publicDiscordWebhook = new Discord.WebhookClient(
  */
 export const incrementCounter = (counterName: string) =>
   axios.post(`https://simple-counter.nouns.tools/count/inc/${counterName}`);
-
-/**
- * Pinata.Cloud client for hosting IPFS assets
- */
-export const pinataClient = pinataSdk(config.pinataApiKey, config.pinataApiSecretKey);

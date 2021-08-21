@@ -1,4 +1,4 @@
-# `nouns-subgraph`
+# @nouns/subgraph
 
 A subgraph that indexes nouns events.
 

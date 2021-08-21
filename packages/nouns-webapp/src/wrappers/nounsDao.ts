@@ -62,6 +62,7 @@ export interface Proposal {
   proposalThreshold: number;
   quorumVotes: number;
   details: ProposalDetail[];
+  transactionHash: string;
 }
 
 interface ProposalData {
@@ -70,7 +71,7 @@ interface ProposalData {
 }
 
 const abi = new utils.Interface(NounsDAOABI);
-const contract = new Contract(config.nounsDaoAddress, abi);
+const contract = new Contract(config.nounsDaoProxyAddress, abi);
 const proposalCreatedFilter = contract.filters?.ProposalCreated();
 
 const untypedContract: any = contract; // useDapp type incompatibility
@@ -95,17 +96,19 @@ const useFormattedProposalCreatedLogs = () => {
 
   return useMemo(() => {
     return useLogsResult?.logs?.map(log => {
-      const parsed = abi.parseLog(log).args;
+      const { args: parsed } = abi.parseLog(log);
       return {
         description: parsed.description,
+        transactionHash: log.transactionHash,
         details: parsed.targets.map((target: string, i: number) => {
           const signature = parsed.signatures[i];
+          const value = parsed[3][i];
           const [name, types] = signature.substr(0, signature.length - 1)?.split('(');
           if (!name || !types) {
             return {
               target,
               functionSig: name === '' ? 'transfer' : name === undefined ? 'unknown' : name,
-              callData: types ?? '',
+              callData: types ? types : value ? `${utils.formatEther(value)} ETH` : '',
             };
           }
           const calldata = parsed.calldatas[i];
@@ -157,7 +160,7 @@ export const useAllProposals = (): ProposalData => {
 
     return {
       data: proposals.map((proposal, i) => {
-        const description = logs[i]?.description;
+        const description = logs[i]?.description?.replace(/\\n/g, '\n');
         return {
           id: proposal?.id.toString(),
           title: description?.split(/# |\n/g)[1] ?? 'Untitled',
@@ -173,6 +176,7 @@ export const useAllProposals = (): ProposalData => {
           endBlock: parseInt(proposal?.endBlock?.toString() ?? ''),
           eta: proposal?.eta ? new Date(proposal?.eta?.toNumber() * 1000) : undefined,
           details: logs[i]?.details,
+          transactionHash: logs[i]?.transactionHash,
         };
       }),
       loading: false,
