@@ -110,6 +110,7 @@ const VotePage = ({
           show: true,
         });
         setVotePending(false);
+        setShowVoteModal(false);
         break;
       case 'Fail':
         setModal({
