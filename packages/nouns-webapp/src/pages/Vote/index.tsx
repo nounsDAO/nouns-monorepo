@@ -1,17 +1,19 @@
 import { Row, Col, Alert, Button, Card, ProgressBar } from 'react-bootstrap';
 import Section from '../../layout/Section';
-import { ProposalState, useProposal, Vote } from '../../wrappers/nounsDao';
+import { ProposalState, useCastVote, useProposal, Vote } from '../../wrappers/nounsDao';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Vote.module.css';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { useBlockNumber } from '@usedapp/core';
 import { buildEtherscanAddressLink, buildEtherscanTxLink, Network } from '../../utils/buildEtherscanLink';
+import { AlertModal, setAlertModal } from '../../state/slices/application';
 import ProposalStatus from '../../components/ProposalStatus';
 import moment from 'moment-timezone';
 import VoteModal from '../../components/VoteModal';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown'
 import { utils } from 'ethers';
+import { useAppDispatch } from '../../hooks';
 
 const AVERAGE_BLOCK_TIME_IN_SECS = 13;
 
@@ -25,6 +27,12 @@ const VotePage = ({
   const [vote, setVote] = useState<Vote>();
 
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
+  const [isVotePending, setVotePending] = useState<boolean>(false);
+
+  const dispatch = useAppDispatch();
+  const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
+
+  const { castVote, castVoteState } = useCastVote();
 
   // Get and format date from data
   const timestamp = Date.now()
@@ -80,12 +88,60 @@ const VotePage = ({
     )
   }
 
+  const getVoteErrorMessage = (error: string | undefined) => {
+    if (error?.match(/voter already voted/)) {
+      return 'User Already Voted';
+    }
+    return error;
+  };
+
+  useEffect(() => {
+    switch (castVoteState.status) {
+      case 'None':
+        setVotePending(false);
+        break;
+      case 'Mining':
+        setVotePending(true);
+        break;
+      case 'Success':
+        setModal({
+          title: 'Success',
+          message: 'Vote Successful!',
+          show: true,
+        });
+        setVotePending(false);
+        setShowVoteModal(false);
+        break;
+      case 'Fail':
+        setModal({
+          title: 'Transaction Failed',
+          message: castVoteState?.errorMessage || 'Please try again.',
+          show: true,
+        });
+        setVotePending(false);
+        setShowVoteModal(false);
+        break;
+      case 'Exception':
+        setModal({
+          title: 'Error',
+          message: getVoteErrorMessage(castVoteState?.errorMessage) || 'Please try again.',
+          show: true,
+        });
+        setVotePending(false);
+        setShowVoteModal(false);
+        break;
+    }
+  }, [castVoteState, setModal]);
+
   return (
     <Section bgColor="transparent" fullWidth={false} className={classes.votePage}>
       <VoteModal
         show={showVoteModal}
         onHide={() => setShowVoteModal(false)}
+        onVote={() => castVote(proposal?.id, vote)}
+        isLoading={isVotePending}
         proposalId={proposal?.id}
+        availableVotes={availableVotes}
         vote={vote}
       />
       <Col lg={{ span: 8, offset: 2 }}>
@@ -123,14 +179,14 @@ const VotePage = ({
           )}
         </div>
         {proposal && proposal.status === ProposalState.ACTIVE && !showVotingButtons && (
-          <Alert variant="secondary">
+          <Alert variant="secondary" className={classes.voterIneligibleAlert}>
             Only NOUN votes that were self delegated or delegated to another address before block{' '}
             {proposal.startBlock} are eligible for voting.
           </Alert>
         )}
         {showVotingButtons ? (
           <Row>
-            <Col>
+            <Col lg={4}>
               <Button
                 className={classes.votingButton}
                 onClick={() => {
@@ -139,10 +195,10 @@ const VotePage = ({
                 }}
                 block
               >
-                Vote for
+                Vote For
               </Button>
             </Col>
-            <Col>
+            <Col lg={4}>
               <Button
                 className={classes.votingButton}
                 onClick={() => {
@@ -154,7 +210,7 @@ const VotePage = ({
                 Vote Against
               </Button>
             </Col>
-            <Col>
+            <Col lg={4}>
               <Button
                 className={classes.votingButton}
                 onClick={() => {
