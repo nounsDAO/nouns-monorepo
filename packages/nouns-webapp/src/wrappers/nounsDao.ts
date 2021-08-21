@@ -1,5 +1,6 @@
 import { NounsDAOABI } from '@nouns/contracts';
-import { useContractCall, useContractCalls, useContractFunction } from '@usedapp/core';
+import { useContractCall, useContractCalls } from '@usedapp/core';
+import { useContractFunction__fix } from '../hooks/useContractFunction__fix';
 import { utils, Contract, BigNumber as EthersBN } from 'ethers';
 import { defaultAbiCoder } from 'ethers/lib/utils';
 import { useMemo } from 'react';
@@ -73,8 +74,6 @@ interface ProposalData {
 const abi = new utils.Interface(NounsDAOABI);
 const contract = new Contract(config.nounsDaoProxyAddress, abi);
 const proposalCreatedFilter = contract.filters?.ProposalCreated();
-
-const untypedContract: any = contract; // useDapp type incompatibility
 
 const useProposalCount = (nounsDao: string): number | undefined => {
   const [count] =
@@ -171,7 +170,7 @@ export const useAllProposals = (): ProposalData => {
           quorumVotes: parseInt(proposal?.quorumVotes?.toString() ?? '0'),
           forCount: parseInt(proposal?.forVotes?.toString() ?? '0'),
           againstCount: parseInt(proposal?.againstVotes?.toString() ?? '0'),
-          abstainCount: parseInt(proposal?.againstVotes?.toString() ?? '0'),
+          abstainCount: parseInt(proposal?.abstainVotes?.toString() ?? '0'),
           startBlock: parseInt(proposal?.startBlock?.toString() ?? ''),
           endBlock: parseInt(proposal?.endBlock?.toString() ?? ''),
           eta: proposal?.eta ? new Date(proposal?.eta?.toNumber() * 1000) : undefined,
@@ -190,6 +189,6 @@ export const useProposal = (id: string): Proposal | undefined => {
 };
 
 export const useCastVote = () => {
-  const { send: castVote, state: castVoteState } = useContractFunction(untypedContract, 'castVote');
+  const { send: castVote, state: castVoteState } = useContractFunction__fix(contract, 'castVote');
   return { castVote, castVoteState };
 };
