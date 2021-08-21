@@ -30,7 +30,7 @@ const VoteModal = ({ show, onHide, onVote, proposalId, availableVotes, vote, isL
         <Modal.Title>{voteActionText(vote, proposalId)}</Modal.Title>
       </Modal.Header>
       <Modal.Body className="text-center">
-        <p className={classes.voteModalText}>{availableVotes} Votes Available</p>
+        <p className={classes.voteModalText}>{availableVotes && `${availableVotes} ${availableVotes > 1 ? 'Votes' : 'Vote'}`} Available</p>
         <Button onClick={onVote} block>
           {isLoading ? <Spinner animation="border" /> : voteActionText(vote, proposalId)}
         </Button>
