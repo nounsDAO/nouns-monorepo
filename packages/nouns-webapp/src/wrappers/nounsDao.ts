@@ -56,6 +56,7 @@ export interface Proposal {
   forCount: number;
   againstCount: number;
   abstainCount: number;
+  createdBlock: number;
   startBlock: number;
   endBlock: number;
   eta: Date | undefined;
@@ -84,6 +85,17 @@ const useProposalCount = (nounsDao: string): number | undefined => {
       args: [],
     }) || [];
   return count?.toNumber();
+};
+
+const useVotingDelay = (nounsDao: string): number | undefined => {
+  const [blockDelay] =
+    useContractCall<[EthersBN]>({
+      abi,
+      address: nounsDao,
+      method: 'votingDelay',
+      args: [],
+    }) || [];
+  return blockDelay?.toNumber();
 };
 
 const countToIndices = (count: number | undefined) => {
@@ -125,6 +137,7 @@ const useFormattedProposalCreatedLogs = () => {
 
 export const useAllProposals = (): ProposalData => {
   const proposalCount = useProposalCount(contract.address);
+  const votingDelay = useVotingDelay(contract.address);
 
   const govProposalIndexes = useMemo(() => {
     return countToIndices(proposalCount);
@@ -171,6 +184,7 @@ export const useAllProposals = (): ProposalData => {
           forCount: parseInt(proposal?.forVotes?.toString() ?? '0'),
           againstCount: parseInt(proposal?.againstVotes?.toString() ?? '0'),
           abstainCount: parseInt(proposal?.abstainVotes?.toString() ?? '0'),
+          createdBlock: parseInt(proposal?.startBlock.sub(votingDelay ?? 0)?.toString() ?? ''),
           startBlock: parseInt(proposal?.startBlock?.toString() ?? ''),
           endBlock: parseInt(proposal?.endBlock?.toString() ?? ''),
           eta: proposal?.eta ? new Date(proposal?.eta?.toNumber() * 1000) : undefined,
@@ -180,7 +194,7 @@ export const useAllProposals = (): ProposalData => {
       }),
       loading: false,
     };
-  }, [formattedLogs, proposalStates, proposals]);
+  }, [formattedLogs, proposalStates, proposals, votingDelay]);
 };
 
 export const useProposal = (id: string): Proposal | undefined => {
