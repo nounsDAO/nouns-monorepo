@@ -26,14 +26,22 @@ export const useContractFunction__fix = (
         },
       );
 
-      const receipt: any = await promiseTransaction(sendPromise);
-
-      if (receipt) {
-        if (receipt.logs && receipt.logs.length > 0) {
-          setEvents(receipt.logs.map((log: any) => contract.interface.parseLog(log)));
-        } else {
-          setEvents([]);
+      try {
+        const receipt: any = await promiseTransaction(sendPromise);
+        if (receipt) {
+          if (receipt.logs && receipt.logs.length > 0) {
+            setEvents(
+              receipt.logs.map((log: any) => {
+                console.log(log);
+                return contract.interface.parseLog(log);
+              }),
+            );
+          } else {
+            setEvents([]);
+          }
         }
+      } catch (e) {
+        console.log(e);
       }
     },
     [contract, functionName, chainId, promiseTransaction, library, options],
