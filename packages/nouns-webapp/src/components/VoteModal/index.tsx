@@ -1,31 +1,40 @@
-import { Modal } from 'react-bootstrap';
+import { Button, Modal, Spinner } from 'react-bootstrap';
+import classes from './VoteModal.module.css';
 import { Vote } from '../../wrappers/nounsDao';
 
 interface VoteModalProps {
   show: boolean;
   onHide: () => void;
+  onVote: () => void;
+  isLoading: boolean;
   proposalId: string | undefined;
+  availableVotes: number | undefined;
   vote: Vote | undefined;
 }
 
-const modalTitle = (vote: Vote | undefined, proposalId: string | undefined) => {
+const voteActionText = (vote: Vote | undefined, proposalId: string | undefined) => {
   switch (vote) {
     case Vote.FOR:
-      return `Vote for proposal ${proposalId}`;
+      return `Vote For Proposal ${proposalId}`;
     case Vote.AGAINST:
-      return `Vote against proposal ${proposalId}`;
+      return `Vote Against Proposal ${proposalId}`;
     case Vote.ABSTAIN:
-      return `Vote to abstain on proposal ${proposalId}`;
+      return `Vote to Abstain on Proposal ${proposalId}`;
   }
 };
 
-const VoteModal = ({ show, onHide, proposalId, vote }: VoteModalProps) => {
+const VoteModal = ({ show, onHide, onVote, proposalId, availableVotes, vote, isLoading }: VoteModalProps) => {
   return (
-    <Modal show={show} onHide={onHide}>
-      <Modal.Header>
-        <Modal.Title>{modalTitle(vote, proposalId)}</Modal.Title>
+    <Modal show={show} onHide={onHide} dialogClassName={classes.voteModal} centered>
+      <Modal.Header closeButton>
+        <Modal.Title>{voteActionText(vote, proposalId)}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>Coming soon!</Modal.Body>
+      <Modal.Body className="text-center">
+        <p className={classes.voteModalText}>{availableVotes} Votes Available</p>
+        <Button onClick={onVote} block>
+          {isLoading ? <Spinner animation="border" /> : voteActionText(vote, proposalId)}
+        </Button>
+      </Modal.Body>
     </Modal>
   );
 };
