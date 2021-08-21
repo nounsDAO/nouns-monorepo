@@ -118,6 +118,7 @@ const VotePage = ({
           show: true,
         });
         setVotePending(false);
+        setShowVoteModal(false);
         break;
       case 'Exception':
         setModal({
@@ -126,6 +127,7 @@ const VotePage = ({
           show: true,
         });
         setVotePending(false);
+        setShowVoteModal(false);
         break;
     }
   }, [castVoteState, setModal]);
