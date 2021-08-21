@@ -56,6 +56,7 @@ export interface Proposal {
   forCount: number;
   againstCount: number;
   abstainCount: number;
+  createdBlock: number;
   startBlock: number;
   endBlock: number;
   eta: Date | undefined;
@@ -183,7 +184,8 @@ export const useAllProposals = (): ProposalData => {
           forCount: parseInt(proposal?.forVotes?.toString() ?? '0'),
           againstCount: parseInt(proposal?.againstVotes?.toString() ?? '0'),
           abstainCount: parseInt(proposal?.abstainVotes?.toString() ?? '0'),
-          startBlock: parseInt(proposal?.startBlock.sub(votingDelay ?? 0)?.toString() ?? ''),
+          createdBlock: parseInt(proposal?.startBlock.sub(votingDelay ?? 0)?.toString() ?? ''),
+          startBlock: parseInt(proposal?.startBlock?.toString() ?? ''),
           endBlock: parseInt(proposal?.endBlock?.toString() ?? ''),
           eta: proposal?.eta ? new Date(proposal?.eta?.toNumber() * 1000) : undefined,
           details: logs[i]?.details,
