@@ -39,7 +39,7 @@ export class TwitterAuctionLifecycleHandler implements IAuctionLifecycleHandler 
       console.error(`handleNewBid no reply tweet id exists: auction(${auctionId}) bid(${bid.id})`);
       return;
     }
-    const tweet = await twitter.v1.reply(formatBidMessageText(auctionId, bid), tweetReplyId);
+    const tweet = await twitter.v1.reply(await formatBidMessageText(auctionId, bid), tweetReplyId);
     await updateAuctionReplyTweetId(tweet.id_str);
     console.log(`processed twitter new bid ${bid.id}:${auctionId}`);
   }
