@@ -1,4 +1,4 @@
-import { buildCounterName, formatBidMessageText } from './utils';
+import { buildCounterName } from './utils';
 import { internalDiscordWebhook, incrementCounter, publicDiscordWebhook } from './clients';
 import { getLastAuctionBids } from './subgraph';
 import {

@@ -11,7 +11,8 @@ import { Bid, TokenMetadata } from './types';
  * @returns The resolved ENS lookup domain or a formatted address
  */
 export async function resolveEnsOrFormatAddress(address: string) {
-  return (await ethers.getDefaultProvider().lookupAddress(address)) || address.substr(0, 6);
+  return (await ethers.getDefaultProvider().lookupAddress(address))
+    || `${address.substr(0, 4)}...${address.substr(address.length - 4)}`;
 }
 
 /**
