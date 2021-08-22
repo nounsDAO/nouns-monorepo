@@ -19,10 +19,10 @@ import auction, {
   setAuctionSettled,
   setFullAuction,
 } from './state/slices/auction';
-import { ApolloProvider  } from '@apollo/client';
-import { clientFactory} from './wrappers/subgraph';
+import { ApolloProvider } from '@apollo/client';
+import { clientFactory } from './wrappers/subgraph';
 import LogsUpdater from './state/updaters/logs';
-import config, { CHAIN_ID } from './config';
+import config, { CHAIN_ID, LOCAL_CHAIN_ID } from './config';
 import { WebSocketProvider } from '@ethersproject/providers';
 import { BigNumberish, Contract } from 'ethers';
 import { NounsAuctionHouseABI } from '@nouns/contracts';
@@ -51,6 +51,7 @@ const useDappConfig = {
   readOnlyUrls: {
     [ChainId.Rinkeby]: process.env.REACT_APP_RINKEBY_JSONRPC || `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
     [ChainId.Mainnet]: process.env.REACT_APP_MAINNET_JSONRPC || `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
+    [LOCAL_CHAIN_ID]: "http://localhost:8545"
   },
 };
 

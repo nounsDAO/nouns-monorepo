@@ -22,7 +22,7 @@ interface Contract {
 
 task('deploy-local', 'Deploy contracts to hardhat')
   .addOptionalParam('noundersdao', 'The nounders DAO contract address')
-  .addOptionalParam('auctionTimeBuffer', 'The auction time buffer (seconds)', 30 * 60, types.int) // Default: 30 seconds
+  .addOptionalParam('auctionTimeBuffer', 'The auction time buffer (seconds)', 30, types.int) // Default: 30 seconds
   .addOptionalParam('auctionReservePrice', 'The auction reserve price (wei)', 1, types.int) // Default: 1 wei
   .addOptionalParam(
     'auctionMinIncrementBidPercentage',
@@ -30,7 +30,7 @@ task('deploy-local', 'Deploy contracts to hardhat')
     5,
     types.int,
   )
-  .addOptionalParam('auctionDuration', 'The auction duration (seconds)', 60 * 60 * 2, types.int) // Default: 2 minutes
+  .addOptionalParam('auctionDuration', 'The auction duration (seconds)', 60 * 2, types.int) // Default: 2 minutes
   .setAction(async (args, { ethers }) => {
     const network = await ethers.provider.getNetwork();
     if (network.chainId !== 31337) {

@@ -212,12 +212,4 @@ describe('NounsDAO#inflationHandling', () => {
     const state = await gov.state(proposalId);
     expect(state).to.equal(4);
   });
-
-  it('is defeated when forVotes < quorumVotes');
-
-  it('is defeated when forVotes > quorumVotes and forVotes < againstVotes ');
-
-  it('cannot cancel due to inflation');
-
-  it('can cancel due to drop in proposalThreshold');
 });

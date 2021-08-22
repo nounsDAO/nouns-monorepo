@@ -14,3 +14,9 @@ export interface TokenMetadata {
   description: string;
   image: string;
 }
+
+export interface IAuctionLifecycleHandler {
+  handleNewAuction(auctionId: number): Promise<void>;
+  handleNewBid(auctionId: number, bid: Bid): Promise<void>;
+  handleAuctionEndingSoon(auctionId: number): Promise<void>;
+}

@@ -1,10 +1,11 @@
 import {
   Auction,
   auctionHouseContractFactory,
-  AuctionHouseContractFunctions,
+  AuctionHouseContractFunction,
 } from '../../wrappers/nounsAuction';
 import config from '../../config';
-import { useContractFunction } from '@usedapp/core';
+import { connectContractToSigner, useEthers } from '@usedapp/core';
+import { useContractFunction__fix } from '../../hooks/useContractFunction__fix';
 import { useAppSelector } from '../../hooks';
 import React, { useEffect, useState, useRef, ChangeEvent, useCallback } from 'react';
 import { utils, BigNumber as EthersBN } from 'ethers';
@@ -47,6 +48,7 @@ const Bid: React.FC<{
   auctionEnded: boolean;
 }> = props => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
+  const { library } = useEthers();
   const { auction, auctionEnded } = props;
   const auctionHouseContract = auctionHouseContractFactory(config.auctionProxyAddress);
 
@@ -67,13 +69,13 @@ const Bid: React.FC<{
     minBidIncPercentage,
   );
 
-  const { send: placeBid, state: placeBidState } = useContractFunction(
-    auctionHouseContract as any,
-    AuctionHouseContractFunctions.createBid,
+  const { send: placeBid, state: placeBidState } = useContractFunction__fix(
+    auctionHouseContract,
+    AuctionHouseContractFunction.createBid,
   );
-  const { send: settleAuction, state: settleAuctionState } = useContractFunction(
-    auctionHouseContract as any,
-    AuctionHouseContractFunctions.settleCurrentAndCreateNewAuction,
+  const { send: settleAuction, state: settleAuctionState } = useContractFunction__fix(
+    auctionHouseContract,
+    AuctionHouseContractFunction.settleCurrentAndCreateNewAuction,
   );
 
   const bidInputHandler = (event: ChangeEvent<HTMLInputElement>) => {
@@ -87,7 +89,7 @@ const Bid: React.FC<{
     setBidInput(event.target.value);
   };
 
-  const placeBidHandler = () => {
+  const placeBidHandler = async () => {
     if (!auction || !bidInputRef.current || !bidInputRef.current.value) {
       return;
     }
@@ -104,8 +106,14 @@ const Bid: React.FC<{
       return;
     }
 
+    const value = utils.parseEther(bidInputRef.current.value.toString());
+    const contract = connectContractToSigner(auctionHouseContract, undefined, library);
+    const gasLimit = await contract.estimateGas.createBid(auction.nounId, {
+      value,
+    });
     placeBid(auction.nounId, {
-      value: utils.parseEther(bidInputRef.current.value.toString()),
+      value,
+      gasLimit: gasLimit.add(10_000), // A 10,000 gas pad is used to avoid 'Out of gas' errors
     });
   };
 
