@@ -63,10 +63,10 @@ const VotePage = ({
   const againstPercentage = proposal && totalVotes ? (proposal.againstCount * 100) / totalVotes : 0;
   const abstainPercentage = proposal && totalVotes ? (proposal.abstainCount * 100) / totalVotes : 0;
 
-  // Only count available votes as of the proposal start block
-  const availableVotes = useUserVotesAsOfBlock(proposal?.startBlock ?? undefined);
+  // Only count available votes as of the proposal created block
+  const availableVotes = useUserVotesAsOfBlock(proposal?.createdBlock ?? undefined);
 
-  // Only show voting if user has > 0 votes at proposal start block and proposal is active
+  // Only show voting if user has > 0 votes at proposal created block and proposal is active
   const showVotingButtons = availableVotes && proposal?.status === ProposalState.ACTIVE;
 
   const linkIfAddress = (content: string, network = Network.mainnet) => {
