@@ -82,13 +82,18 @@ const ChainSubscriber: React.FC = () => {
     const extendedFilter = auctionContract.filters.AuctionExtended();
     const createdFilter = auctionContract.filters.AuctionCreated();
     const settledFilter = auctionContract.filters.AuctionSettled();
-    const processBidFilter = (
+    const processBidFilter = async (
       nounId: BigNumberish,
       sender: string,
       value: BigNumberish,
       extended: boolean,
+      event: any,
     ) => {
-      dispatch(appendBid(reduxSafeBid({ nounId, sender, value, extended })));
+      const timestamp = (await event.getBlock()).timestamp;
+      const transactionHash = event.transactionHash;
+      dispatch(
+        appendBid(reduxSafeBid({ nounId, sender, value, extended, transactionHash, timestamp })),
+      );
     };
     const processAuctionCreated = (
       nounId: BigNumberish,
@@ -115,7 +120,7 @@ const ChainSubscriber: React.FC = () => {
     for (let event of previousBids) {
       if (event.args === undefined) return;
       //@ts-ignore
-      processBidFilter(...event.args);
+      processBidFilter(...event.args, event);
     }
 
     auctionContract.on(bidFilter, processBidFilter);

@@ -1,7 +1,12 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AuctionCreateEvent, AuctionExtendedEvent, AuctionSettledEvent, BidEvent } from '../../utils/types';
-import { Auction as IAuction } from '../../wrappers/nounsAuction'
+import {
+  AuctionCreateEvent,
+  AuctionExtendedEvent,
+  AuctionSettledEvent,
+  BidEvent,
+} from '../../utils/types';
+import { Auction as IAuction } from '../../wrappers/nounsAuction';
 
 interface ActiveAuction {
   nounId: BigNumberish;
@@ -19,25 +24,29 @@ interface AuctionState {
 
 const initialState: AuctionState = {
   activeAuction: undefined,
-  bids: []
+  bids: [],
 };
 
 export const reduxSafeActiveAuction = (auction: IAuction | AuctionCreateEvent): ActiveAuction => ({
   nounId: BigNumber.from(auction.nounId).toJSON(),
   startTime: BigNumber.from(auction.startTime).toJSON(),
   endTime: BigNumber.from(auction.startTime).toJSON(),
-  settled: auction.settled
-})
+  settled: auction.settled,
+});
 
 export const reduxSafeBid = (bid: BidEvent): BidEvent => ({
-	nounId: BigNumber.from(bid.nounId).toJSON(),
-	sender: bid.sender,
-	value: BigNumber.from(bid.value).toJSON(),
-	extended: bid.extended
-})
+  nounId: BigNumber.from(bid.nounId).toJSON(),
+  sender: bid.sender,
+  value: BigNumber.from(bid.value).toJSON(),
+  extended: bid.extended,
+  transactionHash: bid.transactionHash,
+  timestamp: bid.timestamp,
+});
 
-const auctionsEqual = (a: ActiveAuction, b: AuctionSettledEvent | AuctionCreateEvent | BidEvent | AuctionExtendedEvent) =>
-  BigNumber.from(a.nounId).eq(BigNumber.from(b.nounId))
+const auctionsEqual = (
+  a: ActiveAuction,
+  b: AuctionSettledEvent | AuctionCreateEvent | BidEvent | AuctionExtendedEvent,
+) => BigNumber.from(a.nounId).eq(BigNumber.from(b.nounId));
 
 export const auctionSlice = createSlice({
   name: 'auction',
@@ -71,6 +80,12 @@ export const auctionSlice = createSlice({
   },
 });
 
-export const { setActiveAuction, appendBid, setAuctionExtended, setAuctionSettled, setFullAuction } = auctionSlice.actions;
+export const {
+  setActiveAuction,
+  appendBid,
+  setAuctionExtended,
+  setAuctionSettled,
+  setFullAuction,
+} = auctionSlice.actions;
 
 export default auctionSlice.reducer;
