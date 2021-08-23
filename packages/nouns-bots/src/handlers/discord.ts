@@ -35,7 +35,8 @@ export class DiscordAuctionLifecycleHandler implements IAuctionLifecycleHandler 
   async handleNewBid(auctionId: number, bid: Bid) {
     const message = new Discord.MessageEmbed()
       .setTitle(`New Bid Placed`)
-      .setDescription(formatBidMessageText(auctionId, bid))
+      .setURL('https://nouns.wtf')
+      .setDescription(await formatBidMessageText(auctionId, bid))
       .setTimestamp();
     await Promise.all(this.discordClients.map(c => c.send(message)));
     console.log(`processed discord new bid ${auctionId}:${bid.id}`);

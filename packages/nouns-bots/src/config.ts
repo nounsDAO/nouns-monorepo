@@ -9,14 +9,14 @@ export const config = {
   redisPassword: process.env.REDIS_PASSWORD,
   nounsSubgraph:
     process.env.NOUNS_SUBGRAPH_URL ??
-    'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph-rinkeby',
+    'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph',
   twitterEnabled: process.env.TWITTER_ENABLED === 'true',
   twitterAppKey: process.env.TWITTER_APP_KEY ?? '',
   twitterAppSecret: process.env.TWITTER_APP_SECRET ?? '',
   twitterAccessToken: process.env.TWITTER_ACCESS_TOKEN ?? '',
   twitterAccessSecret: process.env.TWITTER_ACCESS_SECRET ?? '',
   nounsTokenAddress:
-    process.env.NOUNS_TOKEN_ADDRESS ?? '0xc52bb4Fc4ed72f2a910BF0481D620B927Ded76f7',
+    process.env.NOUNS_TOKEN_ADDRESS ?? '0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03',
   jsonRpcUrl: process.env.JSON_RPC_URL ?? 'http://localhost:8545',
   discordEnabled: process.env.DISCORD_ENABLED === 'true',
   discordWebhookToken: process.env.DISCORD_WEBHOOK_TOKEN ?? '',
