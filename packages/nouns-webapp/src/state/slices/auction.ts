@@ -8,7 +8,7 @@ import {
 } from '../../utils/types';
 import { Auction as IAuction } from '../../wrappers/nounsAuction';
 
-interface ActiveAuction {
+export interface ActiveAuction {
   nounId: BigNumberish;
   startTime: BigNumberish;
   endTime: BigNumberish;
@@ -17,7 +17,7 @@ interface ActiveAuction {
   winAmount?: BigNumberish;
 }
 
-interface AuctionState {
+export interface AuctionState {
   activeAuction?: ActiveAuction;
   bids: BidEvent[];
 }

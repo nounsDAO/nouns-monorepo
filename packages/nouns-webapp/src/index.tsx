@@ -19,8 +19,10 @@ import auction, {
   setAuctionSettled,
   setFullAuction,
 } from './state/slices/auction';
-import { ApolloProvider } from '@apollo/client';
-import { clientFactory } from './wrappers/subgraph';
+import { ApolloProvider, useLazyQuery } from '@apollo/client';
+import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
+import { useEffect } from 'react';
+import pastAuctions, { addPastAuctions } from './state/slices/pastAuctions';
 import LogsUpdater from './state/updaters/logs';
 import config, { CHAIN_ID, LOCAL_CHAIN_ID } from './config';
 import { WebSocketProvider } from '@ethersproject/providers';
@@ -33,12 +35,13 @@ import { Auction as IAuction } from './wrappers/nounsAuction';
 
 dotenv.config();
 
-const store = configureStore({
+export const store = configureStore({
   reducer: {
     account,
     application,
     auction,
     logs,
+    pastAuctions,
   },
 });
 
@@ -133,6 +136,17 @@ const ChainSubscriber: React.FC = () => {
   return <></>;
 };
 
+const PastAuctions: React.FC = () => {
+  const [fetchAuctions, { data }] = useLazyQuery(latestAuctionsQuery(10));
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    fetchAuctions();
+    data && dispatch(addPastAuctions({ data }));
+  }, [data, dispatch, fetchAuctions]);
+
+  return <></>;
+};
+
 ReactDOM.render(
   <Provider store={store}>
     <ChainSubscriber />
@@ -143,6 +157,7 @@ ReactDOM.render(
         }
       >
         <ApolloProvider client={client}>
+          <PastAuctions />
           <DAppProvider config={useDappConfig}>
             <App />
             <Updaters />

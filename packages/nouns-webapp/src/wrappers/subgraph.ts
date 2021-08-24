@@ -3,20 +3,20 @@ import { BigNumberish } from '@ethersproject/bignumber';
 import BigNumber from 'bignumber.js';
 
 export interface IBid {
-	id: string;
-	bidder: {
-		id: string;
-	};
-	amount: BigNumber;
-	blockNumber: number;
-	blockTimestamp: number;
-	txIndex?: number;
-	noun: {
-		id: number;
-		startTime?: BigNumberish;
-		endTime?: BigNumberish;
-		settled?: boolean;
-	};
+  id: string;
+  bidder: {
+    id: string;
+  };
+  amount: BigNumber;
+  blockNumber: number;
+  blockTimestamp: number;
+  txIndex?: number;
+  noun: {
+    id: number;
+    startTime?: BigNumberish;
+    endTime?: BigNumberish;
+    settled?: boolean;
+  };
 }
 
 export const auctionQuery = (auctionId: number) => gql`
@@ -92,15 +92,31 @@ export const nounQuery = (id: string) => gql`
 
 export const latestAuctionsQuery = (first: number = 50) => gql`
  {
-	auctions(orderDirection: desc, first: ${first}) {
-	  id
-	  amount
-	  settled
-	  startTime
-	  endTime
-	  noun {
+	auctions(orderBy: startTime, orderDirection: desc, first: ${first}) {	
 		id
-	  }
+		amount
+		settled
+		bidder {
+			id
+		}
+		startTime
+		endTime
+		noun {
+		  id
+		  owner {
+			id
+		  }
+		}
+		bids {
+			id
+			amount
+			blockNumber
+			blockTimestamp
+			txIndex
+			bidder {
+				id
+			}
+		}
 	}
   }
 `;
@@ -131,7 +147,7 @@ export const latestBidsQuery = (first: number = 10) => gql`
 `;
 
 export const clientFactory = (uri: string) =>
-	new ApolloClient({
-		uri,
-		cache: new InMemoryCache(),
-	});
+  new ApolloClient({
+    uri,
+    cache: new InMemoryCache(),
+  });
