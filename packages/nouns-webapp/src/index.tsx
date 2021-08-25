@@ -12,7 +12,8 @@ import account from './state/slices/account';
 import application from './state/slices/application';
 import logs from './state/slices/logs';
 import auction, {
-  reduxSafeActiveAuction,
+  reduxSafeAuction,
+  reduxSafeNewAuction,
   reduxSafeBid,
   setActiveAuction,
   setAuctionExtended,
@@ -106,7 +107,7 @@ const ChainSubscriber: React.FC = () => {
       endTime: BigNumberish,
     ) => {
       dispatch(
-        setActiveAuction(reduxSafeActiveAuction({ nounId, startTime, endTime, settled: false })),
+        setActiveAuction(reduxSafeNewAuction({ nounId, startTime, endTime, settled: false })),
       );
     };
     const processAuctionExtended = (nounId: BigNumberish, endTime: BigNumberish) => {
@@ -118,7 +119,7 @@ const ChainSubscriber: React.FC = () => {
 
     // Fetch the current auction
     const currentAuction: IAuction = await auctionContract.auction();
-    dispatch(setFullAuction(reduxSafeActiveAuction(currentAuction)));
+    dispatch(setFullAuction(reduxSafeAuction(currentAuction)));
 
     // Fetch the previous 24hours of  bids
     const previousBids = await auctionContract.queryFilter(bidFilter, 0 - BLOCKS_PER_DAY);
@@ -139,7 +140,7 @@ const ChainSubscriber: React.FC = () => {
 };
 
 const PastAuctions: React.FC = () => {
-  const [fetchAuctions, { data }] = useLazyQuery(latestAuctionsQuery(10));
+  const [fetchAuctions, { data }] = useLazyQuery(latestAuctionsQuery(200));
   const dispatch = useAppDispatch();
   useEffect(() => {
     fetchAuctions();
