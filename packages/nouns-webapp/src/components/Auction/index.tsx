@@ -13,6 +13,8 @@ import { INounSeed } from '../../wrappers/nounToken';
 import NounderNounContent from '../NounderNounContent';
 import { ApolloError } from '@apollo/client';
 // import { useAppSelector } from '../../hooks';
+import { useHistory } from 'react-router-dom';
+import { ActiveAuction, activeAuctionToIAuction } from '../../state/slices/auction';
 
 const isNounderNoun = (nounId: BigNumber) => {
   return nounId.mod(10).eq(0) || nounId.eq(0);
@@ -39,14 +41,20 @@ const createAuctionObj = (data: any): IAuction => {
   return auction;
 };
 
-const Auction: React.FC<{ auction: IAuction; bgColorHandler: (useGrey: boolean) => void }> =
+interface AuctionProps {
+ auction: IAuction;
+ bgColorHandler: (useGrey: boolean) => void;
+}
+
+const Auction: React.FC<AuctionProps> =
   props => {
-    const { auction: currentAuction, bgColorHandler } = props;
     /*
     Use this to fetch the current auction and bids
     const stateAuction = useAppSelector(state => state.auction.activeAuction);
     const stateBids = useAppSelector(state => state.auction.bids);
     */
+    const { auction: currentAuction, bgColorHandler } = props;
+    const history = useHistory();
 
     const [onDisplayNounId, setOnDisplayNounId] = useState(currentAuction && currentAuction.nounId);
     const [lastAuctionId, setLastAuctionId] = useState(currentAuction && currentAuction.nounId);
@@ -100,6 +108,7 @@ const Auction: React.FC<{ auction: IAuction; bgColorHandler: (useGrey: boolean) 
         const updatedNounId = nounIdMutator(prev);
         setIsFirstAuction(updatedNounId.eq(0) ? true : false);
         setIsLastAuction(updatedNounId.eq(currentAuction && currentAuction.nounId) ? true : false);
+        history.push(`/noun/${updatedNounId}`)
         return updatedNounId;
       });
     };

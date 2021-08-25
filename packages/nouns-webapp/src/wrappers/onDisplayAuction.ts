@@ -3,7 +3,7 @@ import { ActiveAuction } from '../state/slices/auction';
 import { useAppSelector } from '../hooks';
 
 const useOnDisplayAuction = (): ActiveAuction | undefined => {
-  const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
+  const lastAuctionNounId = useAppSelector(state => state.auction.activeAuction?.nounId);
   const onDisplayAuctionNounId = useAppSelector(
     state => state.onDisplayAuction.onDisplayAuctionNounId,
   );
