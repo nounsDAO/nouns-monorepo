@@ -5,20 +5,39 @@ import Documentation from '../../components/Documentation';
 import HistoryCollection from '../../components/HistoryCollection';
 import { useAuction } from '../../wrappers/nounsAuction';
 import { setUseGreyBackground } from '../../state/slices/application';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import config from '../../config';
+import { setOnDisplayAuctionNounId } from '../../state/slices/onDisplayAuction';
+import useOnDisplayAuction from '../../wrappers/onDisplayAuction';
+import { activeAuctionToIAuction, reduxSafeActiveAuction } from '../../state/slices/auction';
+import { useEffect } from 'react';
 
-const AuctionPage = () => {
+interface AuctionPageProps {
+  initialAuctionId?: number 
+}
+
+const AuctionPage: React.FC<AuctionPageProps> = (props) => {
+  const { initialAuctionId } = props;
   const auction = useAuction(config.auctionProxyAddress);
+  const onDisplayAuction = useOnDisplayAuction();
+  const onDisplayAuctionId = useAppSelector(state => state.onDisplayAuction.onDisplayAuctionNounId)
 
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    if(!initialAuctionId && !onDisplayAuction && auction) dispatch(setOnDisplayAuctionNounId(auction.nounId.toNumber()))
+  }, [initialAuctionId, auction, onDisplayAuctionId])
+
+  if(initialAuctionId) dispatch(setOnDisplayAuctionNounId(initialAuctionId))
+
   return (
     <>
+    {onDisplayAuction &&
       <Auction
-        auction={auction}
+        auction={activeAuctionToIAuction(onDisplayAuction)}
         bgColorHandler={useGrey => dispatch(setUseGreyBackground(useGrey))}
       />
+    }
       <Banner />
       <HistoryCollection
         latestNounId={auction && BigNumber.from(auction.nounId)}

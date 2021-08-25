@@ -15,6 +15,7 @@ import GovernancePage from './pages/Governance';
 import VotePage from './pages/Vote';
 import NoundersPage from './pages/Nounders';
 import { CHAIN_ID } from './config';
+import { BigNumber } from 'ethers';
 
 function App() {
   const { account, chainId } = useEthers();
@@ -43,6 +44,7 @@ function App() {
         <NavBar />
         <Switch>
           <Route exact path="/" component={AuctionPage} />
+          <Route exact path="/noun/:id" render={(props) => <AuctionPage initialAuctionId={Number(props.match.params.id)} />} />
           <Route exact path="/nounders" component={NoundersPage} />
           <Route exact path="/vote" component={GovernancePage} />
           <Route exact path="/vote/:id" component={VotePage} />

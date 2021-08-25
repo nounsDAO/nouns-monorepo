@@ -34,6 +34,16 @@ export const reduxSafeActiveAuction = (auction: IAuction | AuctionCreateEvent): 
   settled: auction.settled,
 });
 
+export const activeAuctionToIAuction = (auction: ActiveAuction): IAuction => ({
+  ...auction,
+  nounId: BigNumber.from(auction.nounId),
+  startTime: BigNumber.from(auction.startTime),
+  endTime: BigNumber.from(auction.endTime),
+  amount: BigNumber.from(auction.winAmount),
+  bidder: auction.winner ?? "",
+  length: 0
+})
+
 export const reduxSafeBid = (bid: BidEvent): BidEvent => ({
   nounId: BigNumber.from(bid.nounId).toJSON(),
   sender: bid.sender,
