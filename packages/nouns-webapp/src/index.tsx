@@ -19,6 +19,7 @@ import auction, {
   setAuctionSettled,
   setFullAuction,
 } from './state/slices/auction';
+import onDisplayAuction from './state/slices/onDisplayAuction';
 import { ApolloProvider, useLazyQuery } from '@apollo/client';
 import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
 import { useEffect } from 'react';
@@ -42,6 +43,7 @@ export const store = configureStore({
     auction,
     logs,
     pastAuctions,
+    onDisplayAuction,
   },
 });
 
