@@ -20,7 +20,7 @@ import auction, {
   setAuctionSettled,
   setFullAuction,
 } from './state/slices/auction';
-import onDisplayAuction from './state/slices/onDisplayAuction';
+import onDisplayAuction, { setLastAuctionNounId } from './state/slices/onDisplayAuction';
 import { ApolloProvider, useLazyQuery } from '@apollo/client';
 import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
 import { useEffect } from 'react';
@@ -120,6 +120,7 @@ const ChainSubscriber: React.FC = () => {
     // Fetch the current auction
     const currentAuction: IAuction = await auctionContract.auction();
     dispatch(setFullAuction(reduxSafeAuction(currentAuction)));
+    dispatch(setLastAuctionNounId(currentAuction.nounId.toNumber()));
 
     // Fetch the previous 24hours of  bids
     const previousBids = await auctionContract.queryFilter(bidFilter, 0 - BLOCKS_PER_DAY);

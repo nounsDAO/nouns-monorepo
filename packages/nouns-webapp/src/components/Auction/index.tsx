@@ -5,11 +5,15 @@ import { Row, Container } from 'react-bootstrap';
 import { LoadingNoun } from '../Noun';
 import { Auction as IAuction } from '../../wrappers/nounsAuction';
 import classes from './Auction.module.css';
-import { useEffect, useState } from 'react';
 import { BigNumber } from 'ethers';
 import { INounSeed } from '../../wrappers/nounToken';
 import NounderNounContent from '../NounderNounContent';
 import { useHistory } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import {
+  setNextOnDisplayAuctionNounId,
+  setPrevOnDisplayAuctionNounId,
+} from '../../state/slices/onDisplayAuction';
 
 const isNounderNoun = (nounId: BigNumber) => {
   return nounId.mod(10).eq(0) || nounId.eq(0);
@@ -22,40 +26,27 @@ interface AuctionProps {
 
 const Auction: React.FC<AuctionProps> = props => {
   const { auction: currentAuction, bgColorHandler } = props;
-  const history = useHistory();
 
-  const [onDisplayNounId, setOnDisplayNounId] = useState(currentAuction && currentAuction.nounId);
-  const [lastAuctionId, setLastAuctionId] = useState(currentAuction && currentAuction.nounId);
-  const [isLastAuction, setIsLastAuction] = useState(true);
-  const [isFirstAuction, setIsFirstAuction] = useState(false);
+  const history = useHistory();
+  const dispatch = useAppDispatch();
+  const lastNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
 
   const loadedNounHandler = (seed: INounSeed) => {
     bgColorHandler(seed.background === 0);
   };
 
-  useEffect(() => {
-    if (!onDisplayNounId || (currentAuction && currentAuction.nounId.gt(lastAuctionId))) {
-      setOnDisplayNounId(currentAuction && currentAuction.nounId);
-      setLastAuctionId(currentAuction && currentAuction.nounId);
-    }
-  }, [onDisplayNounId, currentAuction, lastAuctionId]);
-
-  const auctionHandlerFactory = (nounIdMutator: (prev: BigNumber) => BigNumber) => () => {
-    setOnDisplayNounId(prev => {
-      const updatedNounId = nounIdMutator(prev);
-      setIsFirstAuction(updatedNounId.eq(0) ? true : false);
-      setIsLastAuction(updatedNounId.eq(currentAuction && currentAuction.nounId) ? true : false);
-      history.push(`/noun/${updatedNounId}`);
-      return updatedNounId;
-    });
+  const prevAuctionHandler = () => {
+    dispatch(setPrevOnDisplayAuctionNounId());
+    history.push(`/noun/${currentAuction.nounId.toNumber() - 1}`);
   };
-
-  const prevAuctionHandler = auctionHandlerFactory((prev: BigNumber) => prev.sub(1));
-  const nextAuctionHandler = auctionHandlerFactory((prev: BigNumber) => prev.add(1));
+  const nextAuctionHandler = () => {
+    dispatch(setNextOnDisplayAuctionNounId());
+    history.push(`/noun/${currentAuction.nounId.toNumber() + 1}`);
+  };
 
   const nounContent = (
     <div className={classes.nounWrapper}>
-      <StandaloneNounWithSeed nounId={onDisplayNounId} onLoadSeed={loadedNounHandler} />
+      <StandaloneNounWithSeed nounId={currentAuction.nounId} onLoadSeed={loadedNounHandler} />
     </div>
   );
 
@@ -65,23 +56,22 @@ const Auction: React.FC<AuctionProps> = props => {
     </div>
   );
 
-  const currentAuctionActivityContent = (
+  const currentAuctionActivityContent = lastNounId && (
     <AuctionActivity
       auction={currentAuction}
-      isFirstAuction={isFirstAuction}
-      isLastAuction={isLastAuction}
+      isFirstAuction={currentAuction.nounId.eq(0)}
+      isLastAuction={currentAuction.nounId.eq(lastNounId)}
       onPrevAuctionClick={prevAuctionHandler}
       onNextAuctionClick={nextAuctionHandler}
       displayGraphDepComps={true}
     />
   );
-
-  const nounderNounContent = (
+  const nounderNounContent = lastNounId && (
     <NounderNounContent
       mintTimestamp={BigNumber.from(0)}
-      nounId={onDisplayNounId}
-      isFirstAuction={isFirstAuction}
-      isLastAuction={isLastAuction}
+      nounId={currentAuction.nounId}
+      isFirstAuction={currentAuction.nounId.eq(0)}
+      isLastAuction={currentAuction.nounId.eq(lastNounId)}
       onPrevAuctionClick={prevAuctionHandler}
       onNextAuctionClick={nextAuctionHandler}
     />
@@ -91,10 +81,10 @@ const Auction: React.FC<AuctionProps> = props => {
     <Container fluid="lg">
       <Row>
         <Col lg={{ span: 6 }} className={classes.nounContentCol}>
-          {onDisplayNounId ? nounContent : loadingNoun}
+          {currentAuction ? nounContent : loadingNoun}
         </Col>
         <Col lg={{ span: 6 }} className={classes.auctionActivityCol}>
-          {onDisplayNounId && isNounderNoun(onDisplayNounId)
+          {isNounderNoun(currentAuction.nounId)
             ? nounderNounContent
             : currentAuctionActivityContent}
         </Col>
