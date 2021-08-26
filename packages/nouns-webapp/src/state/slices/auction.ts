@@ -66,6 +66,7 @@ export const auctionSlice = createSlice({
     appendBid: (state, action: PayloadAction<BidEvent>) => {
       if (!(state.activeAuction && auctionsEqual(state.activeAuction, action.payload))) return;
       state.bids = [reduxSafeBid(action.payload), ...state.bids];
+      state.activeAuction.amount = BigNumber.from(action.payload.value).toJSON();
       console.log('processed bid', action.payload);
     },
     setAuctionSettled: (state, action: PayloadAction<AuctionSettledEvent>) => {
