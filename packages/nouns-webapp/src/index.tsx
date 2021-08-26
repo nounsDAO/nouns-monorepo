@@ -20,7 +20,10 @@ import auction, {
   setAuctionSettled,
   setFullAuction,
 } from './state/slices/auction';
-import onDisplayAuction, { setLastAuctionNounId } from './state/slices/onDisplayAuction';
+import onDisplayAuction, {
+  setLastAuctionNounId,
+  setOnDisplayAuctionNounId,
+} from './state/slices/onDisplayAuction';
 import { ApolloProvider, useLazyQuery } from '@apollo/client';
 import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
 import { useEffect } from 'react';
@@ -28,7 +31,7 @@ import pastAuctions, { addPastAuctions } from './state/slices/pastAuctions';
 import LogsUpdater from './state/updaters/logs';
 import config, { CHAIN_ID, LOCAL_CHAIN_ID } from './config';
 import { WebSocketProvider } from '@ethersproject/providers';
-import { BigNumberish, Contract } from 'ethers';
+import { BigNumber, BigNumberish, Contract } from 'ethers';
 import { NounsAuctionHouseABI } from '@nouns/contracts';
 import dotenv from 'dotenv';
 import { useAppDispatch } from './hooks';
@@ -109,6 +112,8 @@ const ChainSubscriber: React.FC = () => {
       dispatch(
         setActiveAuction(reduxSafeNewAuction({ nounId, startTime, endTime, settled: false })),
       );
+      dispatch(setLastAuctionNounId(BigNumber.from(nounId).toNumber()));
+      dispatch(setOnDisplayAuctionNounId(BigNumber.from(nounId).toNumber()));
     };
     const processAuctionExtended = (nounId: BigNumberish, endTime: BigNumberish) => {
       dispatch(setAuctionExtended({ nounId, endTime }));
