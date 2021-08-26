@@ -57,7 +57,7 @@ const OwnSocialCursor: React.FC<{ color: string, emoji: string, onChange: (c: Ow
 			className={classes.cursor}
 			style={{ left: clientX, top: clientY, borderColor: color }}>
 			<i>{emoji}</i>
-			{writeable ? <input type="text" value={message} onChange={onMessageChange} placeholder="type message ..." autoFocus /> : null}
+			{writeable ? <input type="text" value={message} onChange={onMessageChange} placeholder="type message ..." autoFocus maxLength={50} /> : null}
 		</div>
 	)
 }

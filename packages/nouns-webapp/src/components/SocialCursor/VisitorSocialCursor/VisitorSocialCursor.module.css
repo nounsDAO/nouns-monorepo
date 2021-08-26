@@ -8,6 +8,7 @@
 	color: white;
 	border-radius: 20px;
 	box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .3);
+	cursor: default;
 }
 
 .cursor i {
@@ -20,7 +21,6 @@
 	margin-left: 4px;
 	font-weight: bold;
 	font-size: medium;
-	max-width: 200px;
     white-space: nowrap;
 }
 

@@ -21,6 +21,7 @@
 	border: 0;
 	margin-left: 4px;
 	font-size: small;
+	width: 200px;
 }
 
 .cursor input:focus {
