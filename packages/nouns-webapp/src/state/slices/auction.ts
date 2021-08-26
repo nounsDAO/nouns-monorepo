@@ -45,6 +45,12 @@ export const reduxSafeBid = (bid: BidEvent): BidEvent => ({
   timestamp: bid.timestamp,
 });
 
+const maxBid = (bids: BidEvent[]): BidEvent => {
+  return bids.reduce((prev, current) => {
+    return BigNumber.from(prev.value).gt(BigNumber.from(current.value)) ? prev : current;
+  });
+};
+
 const auctionsEqual = (
   a: IAuction,
   b: AuctionSettledEvent | AuctionCreateEvent | BidEvent | AuctionExtendedEvent,
@@ -66,7 +72,9 @@ export const auctionSlice = createSlice({
     appendBid: (state, action: PayloadAction<BidEvent>) => {
       if (!(state.activeAuction && auctionsEqual(state.activeAuction, action.payload))) return;
       state.bids = [reduxSafeBid(action.payload), ...state.bids];
-      state.activeAuction.amount = BigNumber.from(action.payload.value).toJSON();
+      const maxBid_ = maxBid(state.bids);
+      state.activeAuction.amount = BigNumber.from(maxBid_.value).toJSON();
+      state.activeAuction.bidder = maxBid_.sender;
       console.log('processed bid', action.payload);
     },
     setAuctionSettled: (state, action: PayloadAction<AuctionSettledEvent>) => {
