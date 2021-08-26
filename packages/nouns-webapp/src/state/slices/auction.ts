@@ -72,12 +72,12 @@ export const auctionSlice = createSlice({
       if (!(state.activeAuction && auctionsEqual(state.activeAuction, action.payload))) return;
       state.activeAuction.settled = true;
       state.activeAuction.bidder = action.payload.winner;
-      state.activeAuction.amount = BigNumber.from(action.payload.amount);
+      state.activeAuction.amount = BigNumber.from(action.payload.amount).toJSON();
       console.log('processed auction settled', action.payload);
     },
     setAuctionExtended: (state, action: PayloadAction<AuctionExtendedEvent>) => {
       if (!(state.activeAuction && auctionsEqual(state.activeAuction, action.payload))) return;
-      state.activeAuction.endTime = BigNumber.from(action.payload.endTime);
+      state.activeAuction.endTime = BigNumber.from(action.payload.endTime).toJSON();
       console.log('processed auction extended', action.payload);
     },
   },
