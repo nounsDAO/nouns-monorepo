@@ -6,36 +6,13 @@ import { LoadingNoun } from '../Noun';
 import { Auction as IAuction } from '../../wrappers/nounsAuction';
 import classes from './Auction.module.css';
 import { useEffect, useState } from 'react';
-import { useQuery } from '@apollo/client';
-import { auctionQuery } from '../../wrappers/subgraph';
 import { BigNumber } from 'ethers';
 import { INounSeed } from '../../wrappers/nounToken';
 import NounderNounContent from '../NounderNounContent';
-import { ApolloError } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 
 const isNounderNoun = (nounId: BigNumber) => {
   return nounId.mod(10).eq(0) || nounId.eq(0);
-};
-
-const prevAuctionsAvailable = (
-  loadingPrev: boolean,
-  errorPrev: ApolloError | undefined,
-  prevAuction: IAuction,
-) => {
-  return !loadingPrev && prevAuction !== undefined && !errorPrev;
-};
-
-const createAuctionObj = (data: any): IAuction => {
-  const auction: IAuction = {
-    amount: BigNumber.from(data.auction.amount),
-    bidder: data.auction?.bidder?.id,
-    endTime: data.auction.endTime,
-    startTime: data.auction.startTime,
-    nounId: data.auction.id,
-    settled: data.auction.settled,
-  };
-  return auction;
 };
 
 interface AuctionProps {
@@ -44,11 +21,6 @@ interface AuctionProps {
 }
 
 const Auction: React.FC<AuctionProps> = props => {
-  /*
-    Use this to fetch the current auction and bids
-    const stateAuction = useAppSelector(state => state.auction.activeAuction);
-    const stateBids = useAppSelector(state => state.auction.bids);
-    */
   const { auction: currentAuction, bgColorHandler } = props;
   const history = useHistory();
 
@@ -56,37 +28,6 @@ const Auction: React.FC<AuctionProps> = props => {
   const [lastAuctionId, setLastAuctionId] = useState(currentAuction && currentAuction.nounId);
   const [isLastAuction, setIsLastAuction] = useState(true);
   const [isFirstAuction, setIsFirstAuction] = useState(false);
-
-  // Query onDisplayNounId auction. Used to display past auctions' data.
-  const { data: dataCurrent } = useQuery(
-    auctionQuery(onDisplayNounId && onDisplayNounId.toNumber()),
-  );
-  // Query onDisplayNounId auction plus one. Used to determine nounder noun timestamp.
-  const { data: dataNext } = useQuery(
-    auctionQuery(onDisplayNounId && onDisplayNounId.add(1).toNumber()),
-  );
-
-  // Query onDisplayNounId auction minus one. Used to cache prev auction + check if The Graph queries are functional.
-  const {
-    loading: loadingPrev,
-    data: dataPrev,
-    error: errorPrev,
-  } = useQuery(auctionQuery(onDisplayNounId && onDisplayNounId.sub(1).toNumber()), {
-    pollInterval: 10000,
-  });
-
-  /**
-   * Auction derived from `onDisplayNounId` query
-   */
-  const auction: IAuction = dataCurrent && dataCurrent.auction && createAuctionObj(dataCurrent);
-  /**
-   * Auction derived from `onDisplayNounId.add(1)` query
-   */
-  const nextAuction: IAuction = dataNext && dataNext.auction && createAuctionObj(dataNext);
-  /**
-   * Auction derived from `onDisplayNounId.sub(1)` query
-   */
-  const prevAuction: IAuction = dataPrev && dataPrev.auction && createAuctionObj(dataPrev);
 
   const loadedNounHandler = (seed: INounSeed) => {
     bgColorHandler(seed.background === 0);
@@ -124,31 +65,20 @@ const Auction: React.FC<AuctionProps> = props => {
     </div>
   );
 
-  const auctionActivityContent = (auction: IAuction, displayGraphDepComps: boolean) => (
+  const currentAuctionActivityContent = (
     <AuctionActivity
-      auction={auction}
+      auction={currentAuction}
       isFirstAuction={isFirstAuction}
       isLastAuction={isLastAuction}
       onPrevAuctionClick={prevAuctionHandler}
       onNextAuctionClick={nextAuctionHandler}
-      displayGraphDepComps={displayGraphDepComps}
+      displayGraphDepComps={true}
     />
   );
 
-  const currentAuctionActivityContent =
-    currentAuction &&
-    auctionActivityContent(
-      currentAuction,
-      onDisplayNounId && prevAuctionsAvailable(loadingPrev, errorPrev, prevAuction), // else check if prev auct is avail
-    );
-
-  const pastAuctionActivityContent =
-    auction &&
-    auctionActivityContent(auction, prevAuctionsAvailable(loadingPrev, errorPrev, prevAuction));
-
-  const nounderNounContent = nextAuction && (
+  const nounderNounContent = (
     <NounderNounContent
-      mintTimestamp={nextAuction.startTime}
+      mintTimestamp={BigNumber.from(0)}
       nounId={onDisplayNounId}
       isFirstAuction={isFirstAuction}
       isLastAuction={isLastAuction}
@@ -166,9 +96,7 @@ const Auction: React.FC<AuctionProps> = props => {
         <Col lg={{ span: 6 }} className={classes.auctionActivityCol}>
           {onDisplayNounId && isNounderNoun(onDisplayNounId)
             ? nounderNounContent
-            : isLastAuction
-            ? currentAuctionActivityContent
-            : pastAuctionActivityContent}
+            : currentAuctionActivityContent}
         </Col>
       </Row>
     </Container>
