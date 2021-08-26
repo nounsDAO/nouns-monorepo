@@ -23,7 +23,16 @@ const reduxSafePastAuctions = (data: any): AuctionState[] => {
         nounId: BigNumber.from(auction.id).toJSON(),
         settled: false,
       },
-      bids: auction.bids,
+      bids: auction.bids.map((bid: any) => {
+        return {
+          nounId: BigNumber.from(auction.id).toJSON(),
+          sender: bid.bidder.id,
+          value: BigNumber.from(bid.amount).toJSON(),
+          extended: false,
+          transactionHash: bid.id,
+          timestamp: BigNumber.from(bid.blockTimestamp).toJSON(),
+        };
+      }),
     };
   });
 };
