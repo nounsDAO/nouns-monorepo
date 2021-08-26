@@ -17,11 +17,11 @@
 }
 
 .cursor span {
-    overflow: hidden;
+	overflow: hidden;
 	margin-left: 4px;
 	font-weight: bold;
 	font-size: medium;
-    white-space: nowrap;
+	white-space: nowrap;
 }
 
 .triangle {
@@ -31,26 +31,27 @@
 	top: -18px;
 	margin-right: -6px;
 }
-.triangle:before,
-.triangle:after {
+
+.triangle:before, .triangle:after {
 	content: '';
 	position: absolute;
 	background-color: inherit;
 }
-.triangle,
-.triangle:before,
-.triangle:after {
-	width:  7px;
+
+.triangle, .triangle:before, .triangle:after {
+	width: 7px;
 	height: 7px;
 	border-top-right-radius: 60%;
 }
 
 .triangle {
-	transform: rotate(-110deg) skewX(-30deg) scale(1,.866);
+	transform: rotate(-110deg) skewX(-30deg) scale(1, .866);
 }
+
 .triangle:before {
-	transform: rotate(-135deg) skewX(-45deg) scale(1.414,.707) translate(0,-50%);
+	transform: rotate(-135deg) skewX(-45deg) scale(1.414, .707) translate(0, -50%);
 }
+
 .triangle:after {
-	transform: rotate(135deg) skewY(-45deg) scale(.707,1.414) translate(50%);
+	transform: rotate(135deg) skewY(-45deg) scale(.707, 1.414) translate(50%);
 }
