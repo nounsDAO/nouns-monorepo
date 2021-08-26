@@ -1,6 +1,11 @@
+export interface Account {
+  id: string;
+}
+
 export interface Bid {
   id: string;
   amount: string;
+  bidder: Account;
 }
 
 export interface AuctionBids {
