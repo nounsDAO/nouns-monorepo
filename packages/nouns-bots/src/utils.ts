@@ -1,8 +1,21 @@
 import { ethers } from 'ethers';
 import sharp from 'sharp';
 import { isError, tryF } from 'ts-try';
-import { nounsTokenContract, redis } from './clients';
+import { nounsTokenContract } from './clients';
 import { Bid, TokenMetadata } from './types';
+
+/**
+ * Try to reverse resolve an ENS domain and return it for display,
+ * If no result truncate the address and return it
+ * @param address The address to ENS lookup or format
+ * @returns The resolved ENS lookup domain or a formatted address
+ */
+export async function resolveEnsOrFormatAddress(address: string) {
+  return (
+    (await ethers.getDefaultProvider().lookupAddress(address)) ||
+    `${address.substr(0, 4)}...${address.substr(address.length - 4)}`
+  );
+}
 
 /**
  * Get tweet text for auction started.
@@ -23,8 +36,9 @@ export function formatAuctionStartedTweetText(auctionId: number) {
  * @param bid The amount of the current bid
  * @returns The bid update tweet text
  */
-export function formatBidMessageText(id: number, bid: Bid) {
-  return `Noun ${id} has received a bid of Ξ${ethers.utils.formatEther(bid.amount)}`;
+export async function formatBidMessageText(id: number, bid: Bid) {
+  const bidder = await resolveEnsOrFormatAddress(bid.bidder.id);
+  return `Noun ${id} has received a bid of Ξ${ethers.utils.formatEther(bid.amount)} from ${bidder}`;
 }
 
 /**

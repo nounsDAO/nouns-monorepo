@@ -17,6 +17,9 @@ export async function getLastAuctionBids(): Promise<AuctionBids> {
           bids(orderBy: blockNumber, orderDirection: desc, first: 1) {
             id
             amount
+            bidder {
+              id
+            }
           }
         }
       }
