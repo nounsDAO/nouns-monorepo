@@ -50,7 +50,7 @@ const OwnSocialCursor: React.FC<{ color: string, emoji: string, onChange: (c: Ow
 
 	useThrottledEffect(() => {
 		onChange({ x: clientX, y: clientY, color: color, emoji: emoji, message: message })
-	}, [message, clientX, clientY, color, emoji], 100)
+	}, [message, clientX, clientY, color, emoji], 50)
 
 	return (
 		<div
