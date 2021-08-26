@@ -18784,6 +18784,11 @@ react-transition-group@^4.4.1:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
+react-use-websocket@^2.7.1:
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/react-use-websocket/-/react-use-websocket-2.7.1.tgz#51e4798aa4e328595b86e63b9d667ae2114eed1b"
+  integrity sha512-n0H429jQGaZAnn8BJljCcAgeSezXYzTLO0tb5QvdZnNjhAA8Br3A3GjU5ziNMlxant++Iv/IRQRNMKCfWnsHrQ==
+
 react@^17.0.2:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react/-/react-17.0.2.tgz#d0b5cc516d29eb3eee383f75b62864cfb6800037"

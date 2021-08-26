@@ -3,6 +3,7 @@ import Banner from '../../components/Banner';
 import Auction from '../../components/Auction';
 import Documentation from '../../components/Documentation';
 import HistoryCollection from '../../components/HistoryCollection';
+import SocialCursorCollection from '../../components/SocialCursorCollection';
 import { useAuction } from '../../wrappers/nounsAuction';
 import { setUseGreyBackground } from '../../state/slices/application';
 import { useAppDispatch } from '../../hooks';
@@ -15,6 +16,7 @@ const AuctionPage = () => {
 
   return (
     <>
+      <SocialCursorCollection></SocialCursorCollection>
       <Auction
         auction={auction}
         bgColorHandler={useGrey => dispatch(setUseGreyBackground(useGrey))}
