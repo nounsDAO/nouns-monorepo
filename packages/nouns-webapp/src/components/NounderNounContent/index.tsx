@@ -54,7 +54,7 @@ const NounderNounContent: React.FC<{
             </Col>
           <Col lg={5} className={`${auctionActivityClasses.currentBidCol} ${nounContentClasses.currentBidCol}`}>
             <div className={auctionActivityClasses.section}>
-              <h4>Owner</h4>
+              <h4>Winner</h4>
               <h2>
                 nounders.eth
               </h2>
