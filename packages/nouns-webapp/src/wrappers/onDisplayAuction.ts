@@ -1,5 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { useAppSelector } from '../hooks';
+import { Bid, BidEvent } from '../utils/types';
 import { Auction } from './nounsAuction';
 
 const deserializeAuction = (reduxSafeAuction: Auction): Auction => {
@@ -10,6 +11,17 @@ const deserializeAuction = (reduxSafeAuction: Auction): Auction => {
     endTime: BigNumber.from(reduxSafeAuction.endTime),
     nounId: BigNumber.from(reduxSafeAuction.nounId),
     settled: false,
+  };
+};
+
+const deserializeBid = (reduxSafeBid: BidEvent): Bid => {
+  return {
+    nounId: BigNumber.from(reduxSafeBid.nounId),
+    sender: reduxSafeBid.sender,
+    value: BigNumber.from(reduxSafeBid.value),
+    extended: reduxSafeBid.extended,
+    transactionHash: reduxSafeBid.transactionHash,
+    timestamp: BigNumber.from(reduxSafeBid.timestamp),
   };
 };
 
@@ -35,4 +47,18 @@ const useOnDisplayAuction = (): Auction | undefined => {
     return reduxSafeAuction ? deserializeAuction(reduxSafeAuction) : undefined;
   }
 };
+
+export const useAuctionBids = (auctionNounId: BigNumber): Bid[] | undefined => {
+  const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
+  const lastAuctionBids = useAppSelector(state => state.auction.bids);
+
+  if (lastAuctionNounId === auctionNounId.toNumber()) {
+    return lastAuctionBids
+      .map(bid => deserializeBid(bid))
+      .sort((a: Bid, b: Bid) => {
+        return b.timestamp.toNumber() - a.timestamp.toNumber();
+      });
+  }
+};
+
 export default useOnDisplayAuction;

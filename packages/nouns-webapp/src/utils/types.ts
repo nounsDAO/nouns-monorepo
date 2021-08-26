@@ -1,4 +1,4 @@
-import { BigNumberish } from '@ethersproject/bignumber';
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 
 export interface BidEvent {
   nounId: BigNumberish;
@@ -25,4 +25,13 @@ export interface AuctionSettledEvent {
 export interface AuctionExtendedEvent {
   nounId: BigNumberish;
   endTime: BigNumberish;
+}
+
+export interface Bid {
+  nounId: BigNumber;
+  sender: string;
+  value: BigNumber;
+  extended: boolean;
+  transactionHash: string;
+  timestamp: BigNumber;
 }
