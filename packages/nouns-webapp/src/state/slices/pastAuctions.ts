@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AuctionState } from './auction';
 import { BigNumber } from '@ethersproject/bignumber';
+import { emptyNounderAuction } from '../../utils/nounderNoun';
 
 interface PastAuctionsState {
   pastAuctions: AuctionState[];
@@ -13,7 +14,7 @@ const initialState: PastAuctionsState = {
 const reduxSafePastAuctions = (data: any): AuctionState[] => {
   const auctions = data.data.auctions as any[];
   if (auctions.length < 0) return [];
-  return auctions.map(auction => {
+  const pastAuctions: AuctionState[] = auctions.map(auction => {
     return {
       activeAuction: {
         amount: BigNumber.from(auction.amount).toJSON(),
@@ -35,6 +36,32 @@ const reduxSafePastAuctions = (data: any): AuctionState[] => {
       }),
     };
   });
+  return addEmptyNounderAuctions(pastAuctions);
+};
+
+/**
+ * Adds empty `Auction` objects to `pastAuctions` with Nounder
+ * noun IDs to fill empty fetches from The Graph for Nounder auctions.
+ */
+const addEmptyNounderAuctions = (auctions: AuctionState[]) => {
+  const latestAuctionNounId = auctions.reduce((prev, current) => {
+    return BigNumber.from(prev.activeAuction?.nounId).gt(
+      BigNumber.from(current.activeAuction?.nounId),
+    )
+      ? prev
+      : current;
+  }).activeAuction?.nounId;
+
+  const numNounAuctionsToAdd = BigNumber.from(latestAuctionNounId).div(10).toNumber();
+
+  for (var i = 0; i <= numNounAuctionsToAdd; i++) {
+    auctions.push({
+      activeAuction: emptyNounderAuction(i * 10),
+      bids: [],
+    });
+  }
+
+  return auctions;
 };
 
 const pastAuctionsSlice = createSlice({

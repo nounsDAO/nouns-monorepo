@@ -146,7 +146,7 @@ const ChainSubscriber: React.FC = () => {
 };
 
 const PastAuctions: React.FC = () => {
-  const [fetchAuctions, { data }] = useLazyQuery(latestAuctionsQuery(200));
+  const [fetchAuctions, { data }] = useLazyQuery(latestAuctionsQuery(300));
   const dispatch = useAppDispatch();
   useEffect(() => {
     fetchAuctions();

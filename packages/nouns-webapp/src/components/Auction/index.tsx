@@ -10,14 +10,11 @@ import { INounSeed } from '../../wrappers/nounToken';
 import NounderNounContent from '../NounderNounContent';
 import { useHistory } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
+import { isNounderNoun } from '../../utils/nounderNoun';
 import {
   setNextOnDisplayAuctionNounId,
   setPrevOnDisplayAuctionNounId,
 } from '../../state/slices/onDisplayAuction';
-
-const isNounderNoun = (nounId: BigNumber) => {
-  return nounId.mod(10).eq(0) || nounId.eq(0);
-};
 
 interface AuctionProps {
   auction: IAuction;
