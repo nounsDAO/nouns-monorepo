@@ -12,13 +12,17 @@ import clsx from 'clsx';
 import config, { CHAIN_ID } from '../../config';
 import { utils } from 'ethers';
 import { buildEtherscanAddressLink, Network } from '../../utils/buildEtherscanLink';
+import { ExternalURL, externalURL } from '../../utils/externalURL';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { deactivate } = useEthers();
 
   const treasuryBalance = useEtherBalance(config.nounsDaoExecutorAddress);
-  const daoEtherscanLink = buildEtherscanAddressLink(config.nounsDaoExecutorAddress, Network.mainnet);
+  const daoEtherscanLink = buildEtherscanAddressLink(
+    config.nounsDaoExecutorAddress,
+    Network.mainnet,
+  );
 
   const [showConnectModal, setShowConnectModal] = useState(false);
 
@@ -89,7 +93,12 @@ const NavBar = () => {
           <Navbar.Collapse className="justify-content-end">
             <Nav.Item>
               {treasuryBalance && (
-                <Nav.Link href={daoEtherscanLink.toString()} className={classes.nounsNavLink} target="_blank" rel="noreferrer">
+                <Nav.Link
+                  href={daoEtherscanLink.toString()}
+                  className={classes.nounsNavLink}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   TREASURY Ξ {utils.formatEther(treasuryBalance.toString())}
                 </Nav.Link>
               )}
@@ -97,8 +106,16 @@ const NavBar = () => {
             <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>
               GOVERN
             </Nav.Link>
-            <Nav.Link href="/playground" className={classes.nounsNavLink} target="_blank">
+            <Nav.Link
+              href={externalURL(ExternalURL.notion)}
+              className={classes.nounsNavLink}
+              target="_blank"
+              rel="noreferrer"
+            >
               EXPLORE
+            </Nav.Link>
+            <Nav.Link href="/playground" className={classes.nounsNavLink} target="_blank">
+              PLAYGROUND
             </Nav.Link>
             {activeAccount ? connectedContent : disconnectedContent}
           </Navbar.Collapse>
