@@ -56,6 +56,9 @@ const auctionsEqual = (
   b: AuctionSettledEvent | AuctionCreateEvent | BidEvent | AuctionExtendedEvent,
 ) => BigNumber.from(a.nounId).eq(BigNumber.from(b.nounId));
 
+/**
+ * State of **current** auction (sourced via websocket)
+ */
 export const auctionSlice = createSlice({
   name: 'auction',
   initialState,
@@ -71,7 +74,14 @@ export const auctionSlice = createSlice({
     },
     appendBid: (state, action: PayloadAction<BidEvent>) => {
       if (!(state.activeAuction && auctionsEqual(state.activeAuction, action.payload))) return;
-      state.bids = [reduxSafeBid(action.payload), ...state.bids];
+
+      // check if bid exists already
+      const bidExist = state.bids.find(
+        bid => bid.transactionHash === action.payload.transactionHash,
+      );
+      if (!bidExist) state.bids = [reduxSafeBid(action.payload), ...state.bids];
+
+      // update current auction
       const maxBid_ = maxBid(state.bids);
       state.activeAuction.amount = BigNumber.from(maxBid_.value).toJSON();
       state.activeAuction.bidder = maxBid_.sender;
