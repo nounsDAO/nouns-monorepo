@@ -5,7 +5,6 @@ import { Row, Container } from 'react-bootstrap';
 import { LoadingNoun } from '../Noun';
 import { Auction as IAuction } from '../../wrappers/nounsAuction';
 import classes from './Auction.module.css';
-import { BigNumber } from 'ethers';
 import { INounSeed } from '../../wrappers/nounToken';
 import NounderNounContent from '../NounderNounContent';
 import { useHistory } from 'react-router-dom';
@@ -65,7 +64,7 @@ const Auction: React.FC<AuctionProps> = props => {
   );
   const nounderNounContent = lastNounId && (
     <NounderNounContent
-      mintTimestamp={BigNumber.from(0)}
+      mintTimestamp={currentAuction.startTime}
       nounId={currentAuction.nounId}
       isFirstAuction={currentAuction.nounId.eq(0)}
       isLastAuction={currentAuction.nounId.eq(lastNounId)}
