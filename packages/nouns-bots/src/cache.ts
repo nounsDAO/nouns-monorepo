@@ -1,4 +1,5 @@
 import { redis } from './clients';
+import { Proposal } from './types';
 
 /**
  * Key mapped to the current auction
@@ -19,6 +20,11 @@ export const getReplyTweetIdKey = 'NOUNS_REPLY_TWEET_ID';
  * Key mapped to the latest auction id processed for auction ending soon
  */
 export const getAuctionEndingSoonCacheKey = 'NOUNS_AUCTION_ENDING_SOON_CACHE';
+
+/**
+ * Key prefix for caching proposal records
+ */
+export const getProposalCacheKeyPrefix = 'NOUNS_PROPOSAL_'
 
 /**
  * Update the auction cache with `id`
@@ -90,4 +96,40 @@ export async function getAuctionCache(): Promise<number> {
     return Number(auctionId);
   }
   return 0;
+}
+
+
+/**
+ * Proposal functions
+ */
+
+/**
+ * Build the proposal cache redis key
+ * @param id Proposal ID
+ * @returns Proposal cache redis key
+ */
+const proposalCacheKey = (id: Number) => [getProposalCacheKeyPrefix, id].join('')
+
+/**
+ * Store a proposal into the redis cache
+ * @param proposal Proposal to store
+ * @returns "OK" | null
+ */
+export const updateProposalCache = async (proposal: Proposal) => {
+  const cacheKey = proposalCacheKey(proposal.id)
+  return await redis.set(cacheKey, JSON.stringify(proposal))
+}
+
+/**
+ * Attempt to fetch a proposal from the redis cache
+ * @param id ID of the proposal to fetch
+ * @returns Proposal | null
+ */
+export const getProposalCache = async (id: Number) => {
+  const cacheKey = proposalCacheKey(id)
+  const proposal = await redis.get(cacheKey);
+  if (proposal) {
+    return JSON.parse(proposal) as Proposal;
+  }
+  return null;
 }

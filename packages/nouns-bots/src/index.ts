@@ -1,18 +1,22 @@
 import { buildCounterName } from './utils';
 import { internalDiscordWebhook, incrementCounter, publicDiscordWebhook } from './clients';
-import { getLastAuctionBids } from './subgraph';
+import { getAllProposals, getLastAuctionBids } from './subgraph';
 import {
   getAuctionCache,
   getAuctionEndingSoonCache,
   getBidCache,
+  getProposalCache,
   updateAuctionCache,
   updateAuctionEndingSoonCache,
   updateBidCache,
+  updateProposalCache,
 } from './cache';
 import { IAuctionLifecycleHandler } from './types';
 import { config } from './config';
 import { TwitterAuctionLifecycleHandler } from './handlers/twitter';
 import { DiscordAuctionLifecycleHandler } from './handlers/discord';
+import R from 'ramda'
+import { extractNewVotes } from './utils/proposals';
 
 /**
  * Create configured `IAuctionLifecycleHandler`s
@@ -66,5 +70,29 @@ async function processAuctionTick() {
   }
 }
 
+const processGovernanceTick = async () => {
+  const proposals = await getAllProposals();
+  R.map(async (proposal) => {
+    const cachedProposal = await getProposalCache(proposal.id);
+
+    if (cachedProposal === null) {
+      // New proposal
+      await Promise.all(auctionLifecycleHandlers.map(h => h.handleNewProposal(proposal)));
+    } else {
+      // Proposal has changed status
+      if (cachedProposal.status !== proposal.status) {
+        await Promise.all(auctionLifecycleHandlers.map(h => h.handleUpdatedProposalStatus(proposal)));
+      }
+      const newVotes = extractNewVotes(cachedProposal, proposal);
+      R.map(async (newVote) => {
+        // New proposal votes
+        await Promise.all(auctionLifecycleHandlers.map(h => h.handleGovernanceVote(proposal, newVote)));
+      }, newVotes)
+    }
+    await updateProposalCache(proposal)
+  }, proposals)
+}
+
 setInterval(async () => processAuctionTick(), 30000);
+setInterval(async () => processGovernanceTick(), 3000);
 processAuctionTick().then(() => 'processAuctionTick');
