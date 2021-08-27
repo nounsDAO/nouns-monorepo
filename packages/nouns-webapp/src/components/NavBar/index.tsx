@@ -104,7 +104,7 @@ const NavBar = () => {
               )}
             </Nav.Item>
             <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>
-              GOVERN
+              DAO
             </Nav.Link>
             <Nav.Link
               href={externalURL(ExternalURL.notion)}
@@ -112,7 +112,7 @@ const NavBar = () => {
               target="_blank"
               rel="noreferrer"
             >
-              EXPLORE
+              DOCS
             </Nav.Link>
             <Nav.Link href="/playground" className={classes.nounsNavLink} target="_blank">
               PLAYGROUND
