@@ -40,7 +40,12 @@ const useOnDisplayAuction = (): Auction | undefined => {
   const currentAuction = useAppSelector(state => state.auction.activeAuction);
   const pastAuctions = useAppSelector(state => state.pastAuctions.pastAuctions);
 
-  if (!onDisplayAuctionNounId || !lastAuctionNounId || !currentAuction || !pastAuctions)
+  if (
+    onDisplayAuctionNounId === undefined ||
+    lastAuctionNounId === undefined ||
+    currentAuction === undefined ||
+    !pastAuctions
+  )
     return undefined;
 
   if (BigNumber.from(onDisplayAuctionNounId).eq(lastAuctionNounId)) {

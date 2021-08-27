@@ -19,7 +19,7 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
 
   const dispatch = useAppDispatch();
 
-  if (initialAuctionId) {
+  if (initialAuctionId !== undefined) {
     dispatch(setOnDisplayAuctionNounId(initialAuctionId));
   } else {
     if (lastAuctionNounId) dispatch(setOnDisplayAuctionNounId(lastAuctionNounId));
