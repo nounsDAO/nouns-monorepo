@@ -76,12 +76,23 @@ const abi = new utils.Interface(NounsDAOABI);
 const contract = new Contract(config.nounsDaoProxyAddress, abi);
 const proposalCreatedFilter = contract.filters?.ProposalCreated();
 
-const useProposalCount = (nounsDao: string): number | undefined => {
+export const useProposalCount = (): number | undefined => {
   const [count] =
     useContractCall<[EthersBN]>({
       abi,
-      address: nounsDao,
+      address: contract.address,
       method: 'proposalCount',
+      args: [],
+    }) || [];
+  return count?.toNumber();
+};
+
+export const useProposalThreshold = (): number | undefined => {
+  const [count] =
+    useContractCall<[EthersBN]>({
+      abi,
+      address: contract.address,
+      method: 'proposalThreshold',
       args: [],
     }) || [];
   return count?.toNumber();
@@ -136,7 +147,7 @@ const useFormattedProposalCreatedLogs = () => {
 };
 
 export const useAllProposals = (): ProposalData => {
-  const proposalCount = useProposalCount(contract.address);
+  const proposalCount = useProposalCount();
   const votingDelay = useVotingDelay(contract.address);
 
   const govProposalIndexes = useMemo(() => {
@@ -197,12 +208,17 @@ export const useAllProposals = (): ProposalData => {
   }, [formattedLogs, proposalStates, proposals, votingDelay]);
 };
 
-export const useProposal = (id: string): Proposal | undefined => {
+export const useProposal = (id: string | number): Proposal | undefined => {
   const { data } = useAllProposals();
-  return data?.find(p => p.id === id);
+  return data?.find(p => p.id === id.toString());
 };
 
 export const useCastVote = () => {
   const { send: castVote, state: castVoteState } = useContractFunction__fix(contract, 'castVote');
   return { castVote, castVoteState };
+};
+
+export const usePropose = () => {
+  const { send: propose, state: proposeState } = useContractFunction__fix(contract, 'propose');
+  return { propose, proposeState };
 };

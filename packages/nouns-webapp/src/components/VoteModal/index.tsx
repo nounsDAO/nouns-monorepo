@@ -23,14 +23,24 @@ const voteActionText = (vote: Vote | undefined, proposalId: string | undefined) 
   }
 };
 
-const VoteModal = ({ show, onHide, onVote, proposalId, availableVotes, vote, isLoading }: VoteModalProps) => {
+const VoteModal = ({
+  show,
+  onHide,
+  onVote,
+  proposalId,
+  availableVotes,
+  vote,
+  isLoading,
+}: VoteModalProps) => {
   return (
     <Modal show={show} onHide={onHide} dialogClassName={classes.voteModal} centered>
       <Modal.Header closeButton>
         <Modal.Title>{voteActionText(vote, proposalId)}</Modal.Title>
       </Modal.Header>
       <Modal.Body className="text-center">
-        <p className={classes.voteModalText}>{availableVotes && `${availableVotes} ${availableVotes > 1 ? 'Votes' : 'Vote'}`} Available</p>
+        <p className={classes.voteModalText}>
+          {availableVotes && `${availableVotes} ${availableVotes > 1 ? 'Votes' : 'Vote'}`} Available
+        </p>
         <Button onClick={onVote} block>
           {isLoading ? <Spinner animation="border" /> : voteActionText(vote, proposalId)}
         </Button>

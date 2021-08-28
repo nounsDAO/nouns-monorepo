@@ -18,7 +18,10 @@ const NavBar = () => {
   const { deactivate } = useEthers();
 
   const treasuryBalance = useEtherBalance(config.nounsDaoExecutorAddress);
-  const daoEtherscanLink = buildEtherscanAddressLink(config.nounsDaoExecutorAddress, Network.mainnet);
+  const daoEtherscanLink = buildEtherscanAddressLink(
+    config.nounsDaoExecutorAddress,
+    Network.mainnet,
+  );
 
   const [showConnectModal, setShowConnectModal] = useState(false);
 
@@ -89,7 +92,12 @@ const NavBar = () => {
           <Navbar.Collapse className="justify-content-end">
             <Nav.Item>
               {treasuryBalance && (
-                <Nav.Link href={daoEtherscanLink.toString()} className={classes.nounsNavLink} target="_blank" rel="noreferrer">
+                <Nav.Link
+                  href={daoEtherscanLink.toString()}
+                  className={classes.nounsNavLink}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   TREASURY Ξ {utils.formatEther(treasuryBalance.toString())}
                 </Nav.Link>
               )}
