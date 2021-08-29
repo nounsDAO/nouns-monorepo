@@ -22,6 +22,7 @@ const ProposalTransactionFormModal = ({
   const [address, setAddress] = useState('');
   const [abi, setABI] = useState<Interface>();
   const [value, setValue] = useState('0');
+  const [func, setFunction] = useState('');
 
   const addressValidator = (s: string) => {
     if (!utils.isAddress(s)) {
@@ -43,9 +44,7 @@ const ProposalTransactionFormModal = ({
   const populateABIIfExists = async (address: string) => {
     try {
       const result = await getABI(address);
-      if (typeof result === 'object') {
-        setABI(result);
-      }
+      setABI(new Interface(JSON.parse(result)));
     } catch {}
   };
 
@@ -100,7 +99,10 @@ const ProposalTransactionFormModal = ({
         </Step>
         <Step step={2}>
           <label htmlFor="function">Function</label>
-          <FormControl as="select" id="function"></FormControl>
+          <FormControl as="select" id="function" onChange={e => setFunction(e.target.value)}>
+            <option className="text-muted">Select Contract Function (Optional)</option>
+            {abi && Object.keys(abi.functions).map(func => <option value={func}>{func}</option>)}
+          </FormControl>
         </Step>
         <Step step={3}>
           <h1>Calldata Content</h1>
