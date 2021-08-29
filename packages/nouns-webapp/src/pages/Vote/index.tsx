@@ -5,11 +5,7 @@ import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Vote.module.css';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { useBlockNumber } from '@usedapp/core';
-import {
-  buildEtherscanAddressLink,
-  buildEtherscanTxLink,
-  Network,
-} from '../../utils/buildEtherscanLink';
+import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../utils/etherscan';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import ProposalStatus from '../../components/ProposalStatus';
 import moment from 'moment-timezone';
@@ -73,14 +69,10 @@ const VotePage = ({
   // Only show voting if user has > 0 votes at proposal created block and proposal is active
   const showVotingButtons = availableVotes && proposal?.status === ProposalState.ACTIVE;
 
-  const linkIfAddress = (content: string, network = Network.mainnet) => {
+  const linkIfAddress = (content: string) => {
     if (utils.isAddress(content)) {
       return (
-        <a
-          href={buildEtherscanAddressLink(content, network).toString()}
-          target="_blank"
-          rel="noreferrer"
-        >
+        <a href={buildEtherscanAddressLink(content)} target="_blank" rel="noreferrer">
           {content}
         </a>
       );
@@ -88,9 +80,9 @@ const VotePage = ({
     return <span>{content}</span>;
   };
 
-  const transactionLink = (content: string, network = Network.mainnet) => {
+  const transactionLink = (content: string) => {
     return (
-      <a href={buildEtherscanTxLink(content, network).toString()} target="_blank" rel="noreferrer">
+      <a href={buildEtherscanTxLink(content)} target="_blank" rel="noreferrer">
         {content.substring(0, 7)}
       </a>
     );

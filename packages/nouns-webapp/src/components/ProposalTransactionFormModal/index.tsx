@@ -1,7 +1,12 @@
 import { utils } from 'ethers';
-import { FormControl, Modal } from 'react-bootstrap';
-import StepProgressBar from 'react-step-progress';
-import 'react-step-progress/dist/index.css';
+import { Interface } from 'ethers/lib/utils';
+import { useState } from 'react';
+import { Button, FormControl, Modal } from 'react-bootstrap';
+import { useStepProgress, Step, StepProgressBar } from 'react-stepz';
+import { buildEtherscanApiQuery } from '../../utils/etherscan';
+import classes from './ProposalTransactionFormModal.module.css';
+import BigNumber from 'bignumber.js';
+import 'react-stepz/dist/index.css';
 
 interface ProposalTransactionFormModalProps {
   show: boolean;
@@ -9,82 +14,108 @@ interface ProposalTransactionFormModalProps {
   onProposalTransactionAdded: (transaction: any /* TODO */) => void;
 }
 
-const addressContent = (() => {
-  return (
-    <>
-      <label htmlFor="callee-address">Address to call</label>
-      <FormControl id="callee-address"></FormControl>
-    </>
-  );
-})();
-const valuesContent = (() => {
-  return (
-    <>
-      <label htmlFor="eth-value">Value in ETH (optional)</label>
-      <FormControl id="eth-value"></FormControl>
-    </>
-  );
-})();
-const functionContent = (() => {
-  return (
-    <>
-      <label htmlFor="function">Function</label>
-      <FormControl as="select" id="function"></FormControl>
-    </>
-  );
-})();
-const calldataContent = <h1>Call Data Content</h1>;
-const summaryContent = <h1>Summary Content</h1>;
-
-const addressValidator = (s: string) => utils.isAddress(s);
-
-const valuesValidator = () => true;
-
 const ProposalTransactionFormModal = ({
   show,
   onHide,
   onProposalTransactionAdded,
 }: ProposalTransactionFormModalProps) => {
+  const [address, setAddress] = useState('');
+  const [abi, setABI] = useState<Interface>();
+  const [value, setValue] = useState('0');
+
+  const addressValidator = (s: string) => {
+    if (!utils.isAddress(s)) {
+      return false;
+    }
+    // To avoid blocking stepper progress, do not `await`
+    populateABIIfExists(s);
+    return true;
+  };
+
+  const valueValidator = (v: string) => !v || !new BigNumber(v).isNaN();
+
+  const getABI = async (address: string) => {
+    const response = await fetch(buildEtherscanApiQuery(address));
+    const json = await response.json();
+    return json?.result;
+  };
+
+  const populateABIIfExists = async (address: string) => {
+    try {
+      const result = await getABI(address);
+      if (typeof result === 'object') {
+        setABI(result);
+      }
+    } catch {}
+  };
+
+  const steps = [
+    {
+      label: 'Address',
+      name: 'address',
+      validator: () => addressValidator(address),
+    },
+    {
+      label: 'Value',
+      name: 'value',
+      validator: () => valueValidator(value),
+    },
+    {
+      label: 'Function',
+      name: 'function',
+    },
+    {
+      label: 'Calldata',
+      name: 'calldata',
+    },
+    {
+      label: 'Summary',
+      name: 'summary',
+    },
+  ];
+
+  const { stepForward, stepBackwards } = useStepProgress({
+    steps,
+    startingStep: 0,
+  });
+
   return (
-    <Modal size="lg" show={show} onHide={onHide} centered>
+    <Modal show={show} onHide={onHide} dialogClassName={classes.transactionFormModal} centered>
       <Modal.Header closeButton>
         <Modal.Title>Add a Proposal Transaction</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <StepProgressBar
-          startingStep={0}
-          onSubmit={() => onProposalTransactionAdded({})}
-          submitBtnName="Add Transaction"
-          steps={[
-            {
-              label: 'Address',
-              name: 'address',
-              content: addressContent,
-              validator: addressValidator,
-            },
-            {
-              label: 'Values',
-              name: 'values',
-              content: valuesContent,
-              validator: valuesValidator,
-            },
-            {
-              label: 'Function',
-              name: 'function',
-              content: functionContent,
-            },
-            {
-              label: 'Call Data',
-              name: 'calldata',
-              content: calldataContent,
-            },
-            {
-              label: 'Summary',
-              name: 'summary',
-              content: summaryContent,
-            },
-          ]}
-        />
+        <StepProgressBar className={classes.stepProgressBar} steps={steps} />
+        <Step step={0}>
+          <label htmlFor="callee-address">Address to Call</label>
+          <FormControl
+            type="text"
+            id="callee-address"
+            onChange={e => setAddress(e.target.value)}
+          ></FormControl>
+        </Step>
+        <Step step={1}>
+          <label htmlFor="eth-value">Value in ETH (Optional)</label>
+          <FormControl id="eth-value" onChange={e => setValue(e.target.value)}></FormControl>
+        </Step>
+        <Step step={2}>
+          <label htmlFor="function">Function</label>
+          <FormControl as="select" id="function"></FormControl>
+        </Step>
+        <Step step={3}>
+          <h1>Calldata Content</h1>
+        </Step>
+        <Step step={4}>
+          <h1>Summary Content</h1>;
+        </Step>
+        <div className="d-flex justify-content-between align-items-center pt-3">
+          <Button onClick={stepBackwards} variant="outline-secondary" size="lg">
+            Back
+          </Button>
+          <Button onClick={stepForward} variant="primary" size="lg">
+            Next
+          </Button>
+        </div>
       </Modal.Body>
     </Modal>
   );

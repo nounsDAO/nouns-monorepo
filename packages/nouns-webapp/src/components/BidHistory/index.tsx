@@ -9,10 +9,9 @@ import { Spinner } from 'react-bootstrap';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
-import { buildEtherscanTxLink, Network } from '../../utils/buildEtherscanLink';
+import { buildEtherscanTxLink } from '../../utils/etherscan';
 import TruncatedAmount from '../TruncatedAmount';
 import BigNumber from 'bignumber.js';
-import { CHAIN_ID } from '../../config';
 import { IBid } from '../../wrappers/subgraph';
 
 const bidItem = (bid: IBid, index: number, classes: any) => {
@@ -21,10 +20,7 @@ const bidItem = (bid: IBid, index: number, classes: any) => {
     bid.blockTimestamp * 1000,
   ).format('hh:mm a')}`;
 
-  const txLink = buildEtherscanTxLink(
-    bid.id,
-    Number(CHAIN_ID) === 1 ? Network.mainnet : Network.rinkeby,
-  );
+  const txLink = buildEtherscanTxLink(bid.id);
 
   return (
     <li key={index} className={classes.bidRow}>
@@ -40,7 +36,7 @@ const bidItem = (bid: IBid, index: number, classes: any) => {
         <div className={classes.rightSectionWrapper}>
           <div className={classes.bidAmount}>{bidAmount}</div>
           <div className={classes.linkSymbol}>
-            <a href={txLink.toString()} target="_blank" rel="noreferrer">
+            <a href={txLink} target="_blank" rel="noreferrer">
               <FontAwesomeIcon icon={faExternalLinkAlt} />
             </a>
           </div>

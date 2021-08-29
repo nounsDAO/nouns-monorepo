@@ -16,6 +16,8 @@ export const LOCAL_CHAIN_ID = 31337;
 
 export const CHAIN_ID: SupportedChains = parseInt(process.env.REACT_APP_CHAIN_ID ?? '4');
 
+export const ETHERSCAN_API_KEY = process.env.REACT_APP_ETHERSCAN_API_KEY ?? '';
+
 const config: Record<SupportedChains, Config> = {
   [ChainId.Rinkeby]: {
     jsonRpcUri:

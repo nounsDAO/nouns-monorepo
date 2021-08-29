@@ -11,11 +11,12 @@ import { useUserVotes } from '../../wrappers/nounToken';
 import classes from './CreateProposal.module.css';
 import { Link } from 'react-router-dom';
 import { useEthers } from '@usedapp/core';
-import { buildEtherscanAddressLink, Network } from '../../utils/buildEtherscanLink';
+import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import ProposalEditor from '../../components/ProposalEditor';
 import CreateProposalButton from '../../components/CreateProposalButton';
 import ProposalTransactionFormModal from '../../components/ProposalTransactionFormModal';
+import { withStepProgress } from 'react-stepz';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { utils } from 'ethers';
 import { useAppDispatch } from '../../hooks';
@@ -103,14 +104,10 @@ const CreateProposalPage = () => {
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
 
-  const linkIfAddress = (content: string, network = Network.mainnet) => {
+  const linkIfAddress = (content: string) => {
     if (utils.isAddress(content)) {
       return (
-        <a
-          href={buildEtherscanAddressLink(content, network).toString()}
-          target="_blank"
-          rel="noreferrer"
-        >
+        <a href={buildEtherscanAddressLink(content)} target="_blank" rel="noreferrer">
           {content}
         </a>
       );
@@ -202,4 +199,4 @@ const CreateProposalPage = () => {
   );
 };
 
-export default CreateProposalPage;
+export default withStepProgress(CreateProposalPage);

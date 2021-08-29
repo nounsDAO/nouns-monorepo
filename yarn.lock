@@ -18774,10 +18774,12 @@ react-scripts@4.0.3:
   optionalDependencies:
     fsevents "^2.1.3"
 
-react-step-progress@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/react-step-progress/-/react-step-progress-1.0.3.tgz#8c93a7e4f5fd020888873944534cd97ab7641535"
-  integrity sha512-AsebjdBZsoZzZuN50p24TMwKt8JVdyhsAPL/xvpY4c3dpQ9XBiRcZlADD0BoKP3iIxpEm+7ufwITmwY66FEfjQ==
+react-stepz@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-stepz/-/react-stepz-1.0.2.tgz#b5cb6852de2dc24209a4b2f04bbfa0f058255db6"
+  integrity sha512-vGST7yNBDVtE9wDRyM1vwrQAikzaD91lnVq2aKHmfdvHAwrJKzUjNWI3nZrI4jFlPUaLDwc5zRlyJEq0YoKtug==
+  dependencies:
+    tiny-invariant "^1.1.0"
 
 react-transition-group@^4.4.1:
   version "4.4.2"
@@ -21247,7 +21249,7 @@ timsort@^0.3.0:
   resolved "https://registry.yarnpkg.com/timsort/-/timsort-0.3.0.tgz#405411a8e7e6339fe64db9a234de11dc31e02bd4"
   integrity sha1-QFQRqOfmM5/mTbmiNN4R3DHgK9Q=
 
-tiny-invariant@^1.0.2, tiny-invariant@^1.0.6:
+tiny-invariant@^1.0.2, tiny-invariant@^1.0.6, tiny-invariant@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/tiny-invariant/-/tiny-invariant-1.1.0.tgz#634c5f8efdc27714b7f386c35e6760991d230875"
   integrity sha512-ytxQvrb1cPc9WBEI/HSeYYoGD0kWnGEOR8RY6KomWLBVhqz0RgTwVO9dLrGz7dC+nN9llyI7OKAgRq8Vq4ZBSw==
