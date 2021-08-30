@@ -238,7 +238,12 @@ const ProposalTransactionFormModal = ({
           ))}
         </Step>
         <div className="d-flex justify-content-between align-items-center pt-3">
-          <Button onClick={stepBackwards} variant="outline-secondary" size="lg">
+          <Button
+            onClick={stepBackwards}
+            variant="outline-secondary"
+            size="lg"
+            disabled={currentStep === 0}
+          >
             Back
           </Button>
           <Button onClick={stepForwardOrCallback} variant="primary" size="lg">
