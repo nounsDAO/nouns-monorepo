@@ -56,6 +56,8 @@ const auctionsEqual = (
   b: AuctionSettledEvent | AuctionCreateEvent | BidEvent | AuctionExtendedEvent,
 ) => BigNumber.from(a.nounId).eq(BigNumber.from(b.nounId));
 
+const containsBid = (bidEvents: BidEvent[], bidEvent: BidEvent) => bidEvents.map(bid => bid.transactionHash).indexOf(bidEvent.transactionHash) >= 0
+
 export const auctionSlice = createSlice({
   name: 'auction',
   initialState,
@@ -71,6 +73,7 @@ export const auctionSlice = createSlice({
     },
     appendBid: (state, action: PayloadAction<BidEvent>) => {
       if (!(state.activeAuction && auctionsEqual(state.activeAuction, action.payload))) return;
+      if(containsBid(state.bids, action.payload)) return;
       state.bids = [reduxSafeBid(action.payload), ...state.bids];
       const maxBid_ = maxBid(state.bids);
       state.activeAuction.amount = BigNumber.from(maxBid_.value).toJSON();
