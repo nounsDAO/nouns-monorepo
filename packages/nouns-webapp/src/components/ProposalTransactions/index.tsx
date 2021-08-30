@@ -65,7 +65,7 @@ const ProposalTransactions = ({
             <div>
               <span>Transaction #{i + 1} - </span>
               <span>
-                <b>{tx.signature}</b>
+                <b>{tx.signature || 'transfer()'}</b>
               </span>
             </div>
             <button
