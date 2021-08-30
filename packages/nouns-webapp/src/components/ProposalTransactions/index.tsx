@@ -63,8 +63,10 @@ const ProposalTransactions = ({
             className={`${classes.transactionDetails} d-flex justify-content-between align-items-center`}
           >
             <div>
-              <span>Transaction #{i + 1}</span>
-              <span>{tx.signature}</span>
+              <span>Transaction #{i + 1} - </span>
+              <span>
+                <b>{tx.signature}</b>
+              </span>
             </div>
             <button
               className={classes.removeTransactionButton}

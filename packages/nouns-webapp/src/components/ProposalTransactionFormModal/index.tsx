@@ -186,7 +186,10 @@ const ProposalTransactionFormModal = ({
                       <InputGroup.Text className={classes.inputGroupText}>
                         {input.type}
                       </InputGroup.Text>
-                      <FormControl value={args[i]} onChange={e => setArgument(i, e.target.value)} />
+                      <FormControl
+                        value={args[i] ?? ''}
+                        onChange={e => setArgument(i, e.target.value)}
+                      />
                     </InputGroup>
                   </Col>
                 </>
