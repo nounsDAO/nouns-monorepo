@@ -4,8 +4,6 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ChainId, DAppProvider } from '@usedapp/core';
-import { configureStore } from '@reduxjs/toolkit';
-import { Provider } from 'react-redux';
 import { Web3ReactProvider } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import account from './state/slices/account';
@@ -37,19 +35,45 @@ import dotenv from 'dotenv';
 import { useAppDispatch } from './hooks';
 import { appendBid } from './state/slices/auction';
 import { Auction as IAuction } from './wrappers/nounsAuction';
+import { ConnectedRouter, connectRouter } from 'connected-react-router';
+import { createBrowserHistory, History } from 'history';
+import { applyMiddleware, createStore, combineReducers } from 'redux';
+import { routerMiddleware } from 'connected-react-router';
+import { Provider } from 'react-redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import { push } from 'connected-react-router';
 
 dotenv.config();
 
-export const store = configureStore({
-  reducer: {
+export const history = createBrowserHistory();
+
+const createRootReducer = (history: History) =>
+  combineReducers({
+    router: connectRouter(history),
     account,
     application,
     auction,
     logs,
     pastAuctions,
     onDisplayAuction,
-  },
-});
+  });
+
+export default function configureStore(preloadedState: any) {
+  const store = createStore(
+    createRootReducer(history), // root reducer with router state
+    preloadedState,
+    composeWithDevTools(
+      applyMiddleware(
+        routerMiddleware(history), // for dispatching history actions
+        // ... other middlewares ...
+      ),
+    ),
+  );
+
+  return store;
+}
+
+const store = configureStore({});
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
@@ -78,6 +102,8 @@ const BLOCKS_PER_DAY = 6_500;
 
 const ChainSubscriber: React.FC = () => {
   const dispatch = useAppDispatch();
+
+  const nounPath = (nounId: Number) => `/noun/${nounId}`;
 
   const loadState = async () => {
     const wsProvider = new WebSocketProvider(config.wsRpcUri);
@@ -112,8 +138,10 @@ const ChainSubscriber: React.FC = () => {
       dispatch(
         setActiveAuction(reduxSafeNewAuction({ nounId, startTime, endTime, settled: false })),
       );
-      dispatch(setLastAuctionNounId(BigNumber.from(nounId).toNumber()));
-      dispatch(setOnDisplayAuctionNounId(BigNumber.from(nounId).toNumber()));
+      const nounIdNumber = BigNumber.from(nounId).toNumber();
+      dispatch(setLastAuctionNounId(nounIdNumber));
+      dispatch(setOnDisplayAuctionNounId(nounIdNumber));
+      dispatch(push(nounPath(nounIdNumber)));
     };
     const processAuctionExtended = (nounId: BigNumberish, endTime: BigNumberish) => {
       dispatch(setAuctionExtended({ nounId, endTime }));
@@ -158,22 +186,24 @@ const PastAuctions: React.FC = () => {
 
 ReactDOM.render(
   <Provider store={store}>
-    <ChainSubscriber />
-    <React.StrictMode>
-      <Web3ReactProvider
-        getLibrary={
-          (provider, connector) => new Web3Provider(provider) // this will vary according to whether you use e.g. ethers or web3.js
-        }
-      >
-        <ApolloProvider client={client}>
-          <PastAuctions />
-          <DAppProvider config={useDappConfig}>
-            <App />
-            <Updaters />
-          </DAppProvider>
-        </ApolloProvider>
-      </Web3ReactProvider>
-    </React.StrictMode>
+    <ConnectedRouter history={history}>
+      <ChainSubscriber />
+      <React.StrictMode>
+        <Web3ReactProvider
+          getLibrary={
+            (provider, connector) => new Web3Provider(provider) // this will vary according to whether you use e.g. ethers or web3.js
+          }
+        >
+          <ApolloProvider client={client}>
+            <PastAuctions />
+            <DAppProvider config={useDappConfig}>
+              <App />
+              <Updaters />
+            </DAppProvider>
+          </ApolloProvider>
+        </Web3ReactProvider>
+      </React.StrictMode>
+    </ConnectedRouter>
   </Provider>,
   document.getElementById('root'),
 );

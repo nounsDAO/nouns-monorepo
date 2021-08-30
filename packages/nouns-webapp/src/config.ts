@@ -55,7 +55,7 @@ const config: Record<SupportedChains, Config> = {
     subgraphApiUri: '',
     jsonRpcUri: 'http://localhost:8545',
     enableHistory: false,
-    wsRpcUri: '',
+    wsRpcUri: 'ws://localhost:8545',
   },
 };
 
