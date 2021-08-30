@@ -5,3 +5,12 @@
 .stepProgressBar {
   padding: 0 0 2rem 0 !important;
 }
+
+.inputGroupText {
+  border-radius: 0.25rem 0 0 0.25rem;
+  border-right: none;
+}
+
+.functionName {
+  white-space: nowrap;
+}

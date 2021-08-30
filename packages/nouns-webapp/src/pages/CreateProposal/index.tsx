@@ -2,6 +2,7 @@ import { Col, Alert, Button } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import {
   ProposalState,
+  ProposalTransaction,
   useProposal,
   useProposalCount,
   useProposalThreshold,
@@ -11,22 +12,14 @@ import { useUserVotes } from '../../wrappers/nounToken';
 import classes from './CreateProposal.module.css';
 import { Link } from 'react-router-dom';
 import { useEthers } from '@usedapp/core';
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import ProposalEditor from '../../components/ProposalEditor';
 import CreateProposalButton from '../../components/CreateProposalButton';
+import ProposalTransactions from '../../components/ProposalTransactions';
 import ProposalTransactionFormModal from '../../components/ProposalTransactionFormModal';
 import { withStepProgress } from 'react-stepz';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { utils } from 'ethers';
 import { useAppDispatch } from '../../hooks';
-
-interface ProposalTransaction {
-  address: string;
-  value: string;
-  signature: string;
-  calldata: string;
-}
 
 const CreateProposalPage = () => {
   const { account } = useEthers();
@@ -50,6 +43,7 @@ const CreateProposalPage = () => {
         transaction.calldata = `0x${transaction.calldata}`;
       }
       setProposalTransactions([...proposalTransactions, transaction]);
+      setShowTransactionFormModal(false);
     },
     [proposalTransactions],
   );
@@ -87,15 +81,13 @@ const CreateProposalPage = () => {
   const handleCreateProposal = async () => {
     if (!proposalTransactions?.length) return;
 
-    await propose({
-      targets: proposalTransactions.map(({ address }) => address),
-      values: proposalTransactions.map(({ value }) =>
-        value ? utils.parseEther(value).toString() : '0',
-      ),
-      signatures: proposalTransactions.map(({ signature }) => signature),
-      calldatas: proposalTransactions.map(({ calldata }) => calldata),
-      description: `# ${titleValue}\n\n${bodyValue}`,
-    });
+    await propose(
+      proposalTransactions.map(({ address }) => address), // Targets
+      proposalTransactions.map(({ value }) => value ?? '0'), // Values
+      proposalTransactions.map(({ signature }) => signature), // Signatures
+      proposalTransactions.map(({ calldata }) => calldata), // Calldatas
+      `# ${titleValue}\n\n${bodyValue}`, // Description
+    );
   };
 
   const [showTransactionFormModal, setShowTransactionFormModal] = useState(false);
@@ -103,17 +95,6 @@ const CreateProposalPage = () => {
 
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
-
-  const linkIfAddress = (content: string) => {
-    if (utils.isAddress(content)) {
-      return (
-        <a href={buildEtherscanAddressLink(content)} target="_blank" rel="noreferrer">
-          {content}
-        </a>
-      );
-    }
-    return <span>{content}</span>;
-  };
 
   useEffect(() => {
     switch (proposeState.status) {
@@ -175,7 +156,10 @@ const CreateProposalPage = () => {
         >
           Add Transaction
         </Button>
-        {/* TODO: Add action detail */}
+        <ProposalTransactions
+          proposalTransactions={proposalTransactions}
+          onRemoveProposalTransaction={handleRemoveProposalAction}
+        />
         <ProposalEditor
           title={titleValue}
           body={bodyValue}
@@ -184,11 +168,12 @@ const CreateProposalPage = () => {
         />
         <CreateProposalButton
           className={classes.createProposalButton}
+          isLoading={isProposePending}
           proposalThreshold={proposalThreshold}
-          // TODO: Double check this
           hasActiveOrPendingProposal={
-            latestProposal?.status === ProposalState.ACTIVE ||
-            latestProposal?.status === ProposalState.PENDING
+            (latestProposal?.status === ProposalState.ACTIVE ||
+              latestProposal?.status === ProposalState.PENDING) &&
+            latestProposal.proposer === account
           }
           hasEnoughVote={hasEnoughVote}
           isFormInvalid={isFormInvalid}

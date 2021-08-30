@@ -72,6 +72,13 @@ interface ProposalData {
   loading: boolean;
 }
 
+export interface ProposalTransaction {
+  address: string;
+  value: string;
+  signature: string;
+  calldata: string;
+}
+
 const abi = new utils.Interface(NounsDAOABI);
 const contract = new Contract(config.nounsDaoProxyAddress, abi);
 const proposalCreatedFilter = contract.filters?.ProposalCreated();

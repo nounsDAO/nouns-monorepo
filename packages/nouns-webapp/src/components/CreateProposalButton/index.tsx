@@ -1,7 +1,8 @@
-import { Button } from 'react-bootstrap';
+import { Button, Spinner } from 'react-bootstrap';
 
 const CreateProposalButton = ({
   className,
+  isLoading,
   proposalThreshold,
   hasActiveOrPendingProposal,
   hasEnoughVote,
@@ -9,12 +10,26 @@ const CreateProposalButton = ({
   handleCreateProposal,
 }: {
   className?: string;
+  isLoading: boolean;
   proposalThreshold?: number;
   hasActiveOrPendingProposal: boolean;
   hasEnoughVote: boolean;
   isFormInvalid: boolean;
   handleCreateProposal: () => void;
 }) => {
+  const buttonText = () => {
+    if (hasActiveOrPendingProposal) {
+      return 'You already have an active or pending proposal';
+    }
+    if (!hasEnoughVote) {
+      if (proposalThreshold) {
+        return `You must have ${proposalThreshold} votes to submit a proposal`;
+      }
+      return "You don't have enough votes to submit a proposal";
+    }
+    return 'Create Proposal';
+  };
+
   return (
     <Button
       className={className}
@@ -23,17 +38,7 @@ const CreateProposalButton = ({
       onClick={handleCreateProposal}
       block
     >
-      {hasActiveOrPendingProposal ? (
-        'You already have an active or pending proposal'
-      ) : !hasEnoughVote ? (
-        <>
-          {proposalThreshold
-            ? 'You must have {proposalThreshold} votes to submit a proposal'
-            : "You don't have enough votes to submit a proposal"}
-        </>
-      ) : (
-        'Create Proposal'
-      )}
+      {isLoading ? <Spinner animation="border" /> : buttonText()}
     </Button>
   );
 };
