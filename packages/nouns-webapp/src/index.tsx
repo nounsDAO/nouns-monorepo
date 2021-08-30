@@ -37,7 +37,7 @@ import { appendBid } from './state/slices/auction';
 import { Auction as IAuction } from './wrappers/nounsAuction';
 import { ConnectedRouter, connectRouter } from 'connected-react-router';
 import { createBrowserHistory, History } from 'history';
-import { applyMiddleware, compose, createStore, combineReducers } from 'redux';
+import { applyMiddleware, createStore, combineReducers } from 'redux';
 import { routerMiddleware } from 'connected-react-router';
 import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
@@ -103,7 +103,7 @@ const BLOCKS_PER_DAY = 6_500;
 const ChainSubscriber: React.FC = () => {
   const dispatch = useAppDispatch();
 
-  const nounPath = (nounId: Number) => `/noun/${nounId}`
+  const nounPath = (nounId: Number) => `/noun/${nounId}`;
 
   const loadState = async () => {
     const wsProvider = new WebSocketProvider(config.wsRpcUri);
