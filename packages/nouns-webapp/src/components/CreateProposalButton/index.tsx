@@ -23,7 +23,7 @@ const CreateProposalButton = ({
     }
     if (!hasEnoughVote) {
       if (proposalThreshold) {
-        return `You must have ${proposalThreshold} votes to submit a proposal`;
+        return `You must have ${proposalThreshold + 1} votes to submit a proposal`;
       }
       return "You don't have enough votes to submit a proposal";
     }
