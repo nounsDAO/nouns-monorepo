@@ -21,6 +21,7 @@ import auction, {
 import onDisplayAuction, {
   setLastAuctionNounId,
   setOnDisplayAuctionNounId,
+  setIsNewAuction,
 } from './state/slices/onDisplayAuction';
 import { ApolloProvider, useLazyQuery } from '@apollo/client';
 import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
@@ -41,6 +42,7 @@ import { applyMiddleware, createStore, combineReducers } from 'redux';
 import { routerMiddleware } from 'connected-react-router';
 import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import { nounPath } from './utils/history';
 import { push } from 'connected-react-router';
 
 dotenv.config();
@@ -103,8 +105,6 @@ const BLOCKS_PER_DAY = 6_500;
 const ChainSubscriber: React.FC = () => {
   const dispatch = useAppDispatch();
 
-  const nounPath = (nounId: Number) => `/noun/${nounId}`;
-
   const loadState = async () => {
     const wsProvider = new WebSocketProvider(config.wsRpcUri);
     const auctionContract = new Contract(
@@ -142,6 +142,7 @@ const ChainSubscriber: React.FC = () => {
       dispatch(setLastAuctionNounId(nounIdNumber));
       dispatch(setOnDisplayAuctionNounId(nounIdNumber));
       dispatch(push(nounPath(nounIdNumber)));
+      dispatch(setIsNewAuction(true));
     };
     const processAuctionExtended = (nounId: BigNumberish, endTime: BigNumberish) => {
       dispatch(setAuctionExtended({ nounId, endTime }));
