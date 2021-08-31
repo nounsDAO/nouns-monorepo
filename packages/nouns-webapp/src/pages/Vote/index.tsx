@@ -5,13 +5,13 @@ import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Vote.module.css';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { useBlockNumber } from '@usedapp/core';
-import { buildEtherscanAddressLink, buildEtherscanTxLink, Network } from '../../utils/buildEtherscanLink';
+import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../utils/etherscan';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import ProposalStatus from '../../components/ProposalStatus';
 import moment from 'moment-timezone';
 import VoteModal from '../../components/VoteModal';
 import { useCallback, useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown'
+import ReactMarkdown from 'react-markdown';
 import { utils } from 'ethers';
 import { useAppDispatch } from '../../hooks';
 
@@ -35,7 +35,7 @@ const VotePage = ({
   const { castVote, castVoteState } = useCastVote();
 
   // Get and format date from data
-  const timestamp = Date.now()
+  const timestamp = Date.now();
   const currentBlock = useBlockNumber();
   const startDate =
     proposal && timestamp && currentBlock
@@ -69,10 +69,10 @@ const VotePage = ({
   // Only show voting if user has > 0 votes at proposal created block and proposal is active
   const showVotingButtons = availableVotes && proposal?.status === ProposalState.ACTIVE;
 
-  const linkIfAddress = (content: string, network = Network.mainnet) => {
+  const linkIfAddress = (content: string) => {
     if (utils.isAddress(content)) {
       return (
-        <a href={buildEtherscanAddressLink(content, network).toString()} target="_blank" rel="noreferrer">
+        <a href={buildEtherscanAddressLink(content)} target="_blank" rel="noreferrer">
           {content}
         </a>
       );
@@ -80,13 +80,13 @@ const VotePage = ({
     return <span>{content}</span>;
   };
 
-  const transactionLink = (content: string, network = Network.mainnet) => {
+  const transactionLink = (content: string) => {
     return (
-      <a href={buildEtherscanTxLink(content, network).toString()} target="_blank" rel="noreferrer">
-        {content.substring(0,7)}
+      <a href={buildEtherscanTxLink(content)} target="_blank" rel="noreferrer">
+        {content.substring(0, 7)}
       </a>
-    )
-  }
+    );
+  };
 
   const getVoteErrorMessage = (error: string | undefined) => {
     if (error?.match(/voter already voted/)) {
@@ -145,19 +145,15 @@ const VotePage = ({
         vote={vote}
       />
       <Col lg={{ span: 8, offset: 2 }}>
-        <Link to="/vote">
-          ← All Proposals
-        </Link>
+        <Link to="/vote">← All Proposals</Link>
       </Col>
-      <Col lg={{span: 8, offset: 2}} className={classes.proposal}>
+      <Col lg={{ span: 8, offset: 2 }} className={classes.proposal}>
         <div className="d-flex justify-content-between align-items-center">
           <h3 className={classes.proposalId}>Proposal {proposal?.id}</h3>
           <ProposalStatus status={proposal?.status}></ProposalStatus>
         </div>
         <div>
-          {startDate && startDate.isBefore(now) ? (
-            null
-          ) : proposal ? (
+          {startDate && startDate.isBefore(now) ? null : proposal ? (
             <span>
               Voting starts approximately {startDate?.format('LLL')} {timezone}
             </span>
@@ -264,7 +260,9 @@ const VotePage = ({
         <Row>
           <Col className={classes.section}>
             <h5>Description</h5>
-            { proposal?.description && <ReactMarkdown className={classes.markdown} children={proposal.description} /> }
+            {proposal?.description && (
+              <ReactMarkdown className={classes.markdown} children={proposal.description} />
+            )}
           </Col>
         </Row>
         <Row>
@@ -280,18 +278,22 @@ const VotePage = ({
                         {linkIfAddress(content)}
                         {d.callData.split(',').length - 1 === i ? '' : ','}
                       </span>
-                    )
+                    );
                   })}
                   )
                 </p>
-              )
+              );
             })}
           </Col>
         </Row>
         <Row>
           <Col className={classes.section}>
             <h5>Proposer</h5>
-            {proposal?.proposer && proposal?.transactionHash && <>{linkIfAddress(proposal.proposer)} at {transactionLink(proposal.transactionHash)}</> }
+            {proposal?.proposer && proposal?.transactionHash && (
+              <>
+                {linkIfAddress(proposal.proposer)} at {transactionLink(proposal.transactionHash)}
+              </>
+            )}
           </Col>
         </Row>
       </Col>
