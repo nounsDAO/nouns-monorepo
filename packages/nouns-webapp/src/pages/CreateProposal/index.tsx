@@ -75,7 +75,7 @@ const CreateProposalPage = () => {
   );
 
   const hasEnoughVote = Boolean(
-    availableVotes && proposalThreshold && availableVotes > proposalThreshold,
+    availableVotes && proposalThreshold !== undefined && availableVotes > proposalThreshold,
   );
 
   const handleCreateProposal = async () => {
