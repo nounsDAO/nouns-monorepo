@@ -57,7 +57,7 @@ const ProposalTransactionFormModal = ({
     }
 
     try {
-      return !!abi?.encodeFunctionData(func, args);
+      return !!abi?._encodeParams(abi?.functions[func]?.inputs, args);
     } catch {
       return false;
     }
@@ -130,7 +130,7 @@ const ProposalTransactionFormModal = ({
       address,
       value: value ? utils.parseEther(value).toString() : '0',
       signature: func,
-      calldata: abi?.encodeFunctionData(func, args) ?? '0x',
+      calldata: abi?._encodeParams(abi?.functions[func]?.inputs, args) ?? '0x',
     });
     clearState();
   };
