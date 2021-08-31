@@ -175,7 +175,7 @@ const ProposalTransactionFormModal = ({
     setABIUploadValid(undefined);
     setABIFileName(undefined);
 
-    for (let i = 1; i < steps.length; i++) {
+    for (let i = currentStep; i > 0; i--) {
       stepBackwards();
     }
   };
