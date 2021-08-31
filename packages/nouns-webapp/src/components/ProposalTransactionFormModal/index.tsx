@@ -263,7 +263,7 @@ const ProposalTransactionFormModal = ({
             <Col sm="3">
               <b>Address</b>
             </Col>
-            <Col sm="9">
+            <Col sm="9" className="text-break">
               <a href={buildEtherscanAddressLink(address)} target="_blank" rel="noreferrer">
                 {address}
               </a>
@@ -279,7 +279,9 @@ const ProposalTransactionFormModal = ({
             <Col sm="3">
               <b>Function</b>
             </Col>
-            <Col sm="9">{func || 'None'}</Col>
+            <Col sm="9" className="text-break">
+              {func || 'None'}
+            </Col>
           </Row>
           <Row>
             <Col sm="3">
@@ -291,11 +293,13 @@ const ProposalTransactionFormModal = ({
             <Col sm="9">{abi?.functions[func]?.inputs?.length ? '' : 'None'}</Col>
           </Row>
           {abi?.functions[func]?.inputs.map((input, i) => (
-            <Row>
+            <Row key={i}>
               <Col sm="3" className={classes.functionName}>
                 {i + 1}. {input.name}
               </Col>
-              <Col sm="9">{args[i]}</Col>
+              <Col sm="9" className="text-break">
+                {args[i]}
+              </Col>
             </Row>
           ))}
         </Step>
