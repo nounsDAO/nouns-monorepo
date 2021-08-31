@@ -117,7 +117,8 @@ const ProposalTransactionFormModal = ({
       setABIUploadValid(true);
       setABIFileName('etherscan-abi-download.json');
     } catch {
-      setABIInvalid();
+      setABIUploadValid(false);
+      setABIFileName(undefined);
     }
   };
 
