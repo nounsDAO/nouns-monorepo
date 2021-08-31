@@ -11,7 +11,7 @@ import testnetNoun from '../../assets/testnet-noun.png';
 import clsx from 'clsx';
 import config, { CHAIN_ID } from '../../config';
 import { utils } from 'ethers';
-import { buildEtherscanAddressLink, Network } from '../../utils/buildEtherscanLink';
+import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import { ExternalURL, externalURL } from '../../utils/externalURL';
 
 const NavBar = () => {
@@ -19,10 +19,7 @@ const NavBar = () => {
   const { deactivate } = useEthers();
 
   const treasuryBalance = useEtherBalance(config.nounsDaoExecutorAddress);
-  const daoEtherscanLink = buildEtherscanAddressLink(
-    config.nounsDaoExecutorAddress,
-    Network.mainnet,
-  );
+  const daoEtherscanLink = buildEtherscanAddressLink(config.nounsDaoExecutorAddress);
 
   const [showConnectModal, setShowConnectModal] = useState(false);
 
@@ -94,7 +91,7 @@ const NavBar = () => {
             <Nav.Item>
               {treasuryBalance && (
                 <Nav.Link
-                  href={daoEtherscanLink.toString()}
+                  href={daoEtherscanLink}
                   className={classes.nounsNavLink}
                   target="_blank"
                   rel="noreferrer"
