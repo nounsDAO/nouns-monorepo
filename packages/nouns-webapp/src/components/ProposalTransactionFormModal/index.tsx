@@ -1,10 +1,11 @@
 import { utils } from 'ethers';
 import { Interface } from 'ethers/lib/utils';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import {
   Button,
   Col,
   FormControl,
+  FormFile,
   FormGroup,
   FormLabel,
   InputGroup,
@@ -16,6 +17,7 @@ import { buildEtherscanAddressLink, buildEtherscanApiQuery } from '../../utils/e
 import { ProposalTransaction } from '../../wrappers/nounsDao';
 import classes from './ProposalTransactionFormModal.module.css';
 import BigNumber from 'bignumber.js';
+import 'bs-custom-file-input';
 import 'react-stepz/dist/index.css';
 
 interface ProposalTransactionFormModalProps {
@@ -34,6 +36,9 @@ const ProposalTransactionFormModal = ({
   const [value, setValue] = useState('');
   const [func, setFunction] = useState('');
   const [args, setArguments] = useState<string[]>([]);
+
+  const [isABIUploadValid, setABIUploadValid] = useState<boolean>();
+  const [abiFileName, setABIFileName] = useState<string | undefined>('');
 
   const addressValidator = (s: string) => {
     if (!utils.isAddress(s)) {
@@ -64,6 +69,37 @@ const ProposalTransactionFormModal = ({
     setArguments(values);
   };
 
+  let abiErrorTimeout: NodeJS.Timeout;
+  const setABIInvalid = () => {
+    setABIUploadValid(false);
+    setABIFileName(undefined);
+    abiErrorTimeout = setTimeout(() => {
+      setABIUploadValid(undefined);
+    }, 5_000);
+  };
+
+  const validateAndSetABI = (file: File | undefined) => {
+    if (abiErrorTimeout) {
+      clearTimeout(abiErrorTimeout);
+    }
+    if (!file) {
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = async e => {
+      try {
+        const abi = e?.target?.result?.toString() ?? '';
+        setABI(new Interface(JSON.parse(abi)));
+        setABIUploadValid(true);
+        setABIFileName(file.name);
+      } catch {
+        setABIInvalid();
+      }
+    };
+    reader.readAsText(file);
+  };
+
   const getABI = async (address: string) => {
     const response = await fetch(buildEtherscanApiQuery(address));
     const json = await response.json();
@@ -71,10 +107,18 @@ const ProposalTransactionFormModal = ({
   };
 
   const populateABIIfExists = async (address: string) => {
+    if (abiErrorTimeout) {
+      clearTimeout(abiErrorTimeout);
+    }
+
     try {
       const result = await getABI(address);
       setABI(new Interface(JSON.parse(result)));
-    } catch {}
+      setABIUploadValid(true);
+      setABIFileName('etherscan-abi-download.json');
+    } catch {
+      setABIInvalid();
+    }
   };
 
   const stepForwardOrCallback = () => {
@@ -172,6 +216,18 @@ const ProposalTransactionFormModal = ({
             <option className="text-muted">Select Contract Function</option>
             {abi && Object.keys(abi.functions).map(func => <option value={func}>{func}</option>)}
           </FormControl>
+          <label style={{ marginTop: '1rem' }} htmlFor="import-abi">
+            ABI
+          </label>
+          <FormFile
+            id="import-abi"
+            label={abiFileName ?? 'Import ABI'}
+            accept="application/JSON"
+            isValid={isABIUploadValid}
+            isInvalid={isABIUploadValid === false}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => validateAndSetABI(e.target.files?.[0])}
+            custom
+          />
         </Step>
         <Step step={3}>
           {abi?.functions[func]?.inputs?.length ? (
