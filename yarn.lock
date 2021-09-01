@@ -19172,6 +19172,15 @@ relateurl@^0.2.7:
   resolved "https://registry.yarnpkg.com/relateurl/-/relateurl-0.2.7.tgz#54dbf377e51440aca90a4cd274600d3ff2d888a9"
   integrity sha1-VNvzd+UUQKypCkzSdGANP/LYiKk=
 
+remark-breaks@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/remark-breaks/-/remark-breaks-3.0.1.tgz#2af93d7e91487ca1d191c6855d07f81bfdc79cfb"
+  integrity sha512-moTj/P9newDT4rKNszN8s0aHURuX4DGRU0srYz9jwqaCOM18D9a64TJzdqBR9om/ysyR2YvcqOoiQc4Y8ZPX0A==
+  dependencies:
+    "@types/mdast" "^3.0.0"
+    unified "^10.0.0"
+    unist-util-visit "^4.0.0"
+
 remark-parse@^10.0.0:
   version "10.0.0"
   resolved "https://registry.yarnpkg.com/remark-parse/-/remark-parse-10.0.0.tgz#65e2b2b34d8581d36b97f12a2926bb2126961cb4"
