@@ -21,9 +21,8 @@ import auction, {
 import onDisplayAuction, {
   setLastAuctionNounId,
   setOnDisplayAuctionNounId,
-  setIsNewAuction,
 } from './state/slices/onDisplayAuction';
-import { ApolloProvider, useLazyQuery } from '@apollo/client';
+import { ApolloProvider, useQuery } from '@apollo/client';
 import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
 import { useEffect } from 'react';
 import pastAuctions, { addPastAuctions } from './state/slices/pastAuctions';
@@ -33,7 +32,7 @@ import { WebSocketProvider } from '@ethersproject/providers';
 import { BigNumber, BigNumberish, Contract } from 'ethers';
 import { NounsAuctionHouseABI } from '@nouns/contracts';
 import dotenv from 'dotenv';
-import { useAppDispatch } from './hooks';
+import { useAppDispatch, useAppSelector } from './hooks';
 import { appendBid } from './state/slices/auction';
 import { Auction as IAuction } from './wrappers/nounsAuction';
 import { ConnectedRouter, connectRouter } from 'connected-react-router';
@@ -142,7 +141,6 @@ const ChainSubscriber: React.FC = () => {
       dispatch(setLastAuctionNounId(nounIdNumber));
       dispatch(setOnDisplayAuctionNounId(nounIdNumber));
       dispatch(push(nounPath(nounIdNumber)));
-      dispatch(setIsNewAuction(true));
     };
     const processAuctionExtended = (nounId: BigNumberish, endTime: BigNumberish) => {
       dispatch(setAuctionExtended({ nounId, endTime }));
@@ -175,12 +173,13 @@ const ChainSubscriber: React.FC = () => {
 };
 
 const PastAuctions: React.FC = () => {
-  const [fetchAuctions, { data }] = useLazyQuery(latestAuctionsQuery(300));
+  const latestAuctionId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
+  const { data } = useQuery(latestAuctionsQuery(latestAuctionId));
   const dispatch = useAppDispatch();
+
   useEffect(() => {
-    fetchAuctions();
     data && dispatch(addPastAuctions({ data }));
-  }, [data, dispatch, fetchAuctions]);
+  }, [data, latestAuctionId, dispatch]);
 
   return <></>;
 };
