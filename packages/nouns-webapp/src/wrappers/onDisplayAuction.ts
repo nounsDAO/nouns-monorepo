@@ -1,5 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { useAppSelector } from '../hooks';
+import { generateEmptyNounderAuction, isNounderNoun } from '../utils/nounderNoun';
 import { Bid, BidEvent } from '../utils/types';
 import { Auction } from './nounsAuction';
 
@@ -48,15 +49,28 @@ const useOnDisplayAuction = (): Auction | undefined => {
   )
     return undefined;
 
+  // current auction
   if (BigNumber.from(onDisplayAuctionNounId).eq(lastAuctionNounId)) {
     return deserializeAuction(currentAuction);
   } else {
-    const reduxSafeAuction: Auction | undefined = pastAuctions.find(auction => {
-      const nounId = auction.activeAuction && BigNumber.from(auction.activeAuction.nounId);
-      return nounId && nounId.toNumber() === onDisplayAuctionNounId;
-    })?.activeAuction;
+    // nounder auction
+    if (isNounderNoun(BigNumber.from(onDisplayAuctionNounId))) {
+      console.log('generating empty nounder auc');
+      const emptyNounderAuction = generateEmptyNounderAuction(
+        BigNumber.from(onDisplayAuctionNounId),
+        pastAuctions,
+      );
 
-    return reduxSafeAuction ? deserializeAuction(reduxSafeAuction) : undefined;
+      return deserializeAuction(emptyNounderAuction);
+    } else {
+      // past auction
+      const reduxSafeAuction: Auction | undefined = pastAuctions.find(auction => {
+        const nounId = auction.activeAuction && BigNumber.from(auction.activeAuction.nounId);
+        return nounId && nounId.toNumber() === onDisplayAuctionNounId;
+      })?.activeAuction;
+
+      return reduxSafeAuction ? deserializeAuction(reduxSafeAuction) : undefined;
+    }
   }
 };
 
