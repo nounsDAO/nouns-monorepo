@@ -26,7 +26,7 @@ const onDisplayAuction = createSlice({
       state.onDisplayAuctionNounId = state.onDisplayAuctionNounId - 1;
     },
     setNextOnDisplayAuctionNounId: state => {
-      if (!state.onDisplayAuctionNounId) return;
+      if (state.onDisplayAuctionNounId === undefined) return;
       if (state.lastAuctionNounId === state.onDisplayAuctionNounId) return;
       state.onDisplayAuctionNounId = state.onDisplayAuctionNounId + 1;
     },
