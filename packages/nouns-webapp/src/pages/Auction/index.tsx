@@ -31,14 +31,18 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
         dispatch(setOnDisplayAuctionNounId(lastAuctionNounId));
         dispatch(push(nounPath(lastAuctionNounId)));
       } else {
-        // handle regular noun path ids
-        dispatch(setOnDisplayAuctionNounId(initialAuctionId));
+        if (onDisplayAuction === undefined) {
+          // handle regular noun path ids on first load
+          dispatch(setOnDisplayAuctionNounId(initialAuctionId));
+        }
       }
     } else {
       // no noun path id set
-      if (lastAuctionNounId) dispatch(setOnDisplayAuctionNounId(lastAuctionNounId));
+      if (lastAuctionNounId) {
+        dispatch(setOnDisplayAuctionNounId(lastAuctionNounId));
+      }
     }
-  }, [lastAuctionNounId, dispatch, initialAuctionId]);
+  }, [lastAuctionNounId, dispatch, initialAuctionId, onDisplayAuction]);
 
   return (
     <>
