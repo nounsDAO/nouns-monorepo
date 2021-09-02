@@ -1,5 +1,6 @@
 import { NounsDAOABI } from '@nouns/contracts';
-import { useContractCall, useContractCalls, useContractFunction } from '@usedapp/core';
+import { useContractCall, useContractCalls } from '@usedapp/core';
+import { useContractFunction__fix } from '../hooks/useContractFunction__fix';
 import { utils, Contract, BigNumber as EthersBN } from 'ethers';
 import { defaultAbiCoder } from 'ethers/lib/utils';
 import { useMemo } from 'react';
@@ -55,6 +56,7 @@ export interface Proposal {
   forCount: number;
   againstCount: number;
   abstainCount: number;
+  createdBlock: number;
   startBlock: number;
   endBlock: number;
   eta: Date | undefined;
@@ -70,21 +72,48 @@ interface ProposalData {
   loading: boolean;
 }
 
+export interface ProposalTransaction {
+  address: string;
+  value: string;
+  signature: string;
+  calldata: string;
+}
+
 const abi = new utils.Interface(NounsDAOABI);
 const contract = new Contract(config.nounsDaoProxyAddress, abi);
 const proposalCreatedFilter = contract.filters?.ProposalCreated();
 
-const untypedContract: any = contract; // useDapp type incompatibility
-
-const useProposalCount = (nounsDao: string): number | undefined => {
+export const useProposalCount = (): number | undefined => {
   const [count] =
     useContractCall<[EthersBN]>({
       abi,
-      address: nounsDao,
+      address: contract.address,
       method: 'proposalCount',
       args: [],
     }) || [];
   return count?.toNumber();
+};
+
+export const useProposalThreshold = (): number | undefined => {
+  const [count] =
+    useContractCall<[EthersBN]>({
+      abi,
+      address: contract.address,
+      method: 'proposalThreshold',
+      args: [],
+    }) || [];
+  return count?.toNumber();
+};
+
+const useVotingDelay = (nounsDao: string): number | undefined => {
+  const [blockDelay] =
+    useContractCall<[EthersBN]>({
+      abi,
+      address: nounsDao,
+      method: 'votingDelay',
+      args: [],
+    }) || [];
+  return blockDelay?.toNumber();
 };
 
 const countToIndices = (count: number | undefined) => {
@@ -125,7 +154,8 @@ const useFormattedProposalCreatedLogs = () => {
 };
 
 export const useAllProposals = (): ProposalData => {
-  const proposalCount = useProposalCount(contract.address);
+  const proposalCount = useProposalCount();
+  const votingDelay = useVotingDelay(contract.address);
 
   const govProposalIndexes = useMemo(() => {
     return countToIndices(proposalCount);
@@ -171,7 +201,8 @@ export const useAllProposals = (): ProposalData => {
           quorumVotes: parseInt(proposal?.quorumVotes?.toString() ?? '0'),
           forCount: parseInt(proposal?.forVotes?.toString() ?? '0'),
           againstCount: parseInt(proposal?.againstVotes?.toString() ?? '0'),
-          abstainCount: parseInt(proposal?.againstVotes?.toString() ?? '0'),
+          abstainCount: parseInt(proposal?.abstainVotes?.toString() ?? '0'),
+          createdBlock: parseInt(proposal?.startBlock.sub(votingDelay ?? 0)?.toString() ?? ''),
           startBlock: parseInt(proposal?.startBlock?.toString() ?? ''),
           endBlock: parseInt(proposal?.endBlock?.toString() ?? ''),
           eta: proposal?.eta ? new Date(proposal?.eta?.toNumber() * 1000) : undefined,
@@ -181,15 +212,20 @@ export const useAllProposals = (): ProposalData => {
       }),
       loading: false,
     };
-  }, [formattedLogs, proposalStates, proposals]);
+  }, [formattedLogs, proposalStates, proposals, votingDelay]);
 };
 
-export const useProposal = (id: string): Proposal | undefined => {
+export const useProposal = (id: string | number): Proposal | undefined => {
   const { data } = useAllProposals();
-  return data?.find(p => p.id === id);
+  return data?.find(p => p.id === id.toString());
 };
 
 export const useCastVote = () => {
-  const { send: castVote, state: castVoteState } = useContractFunction(untypedContract, 'castVote');
+  const { send: castVote, state: castVoteState } = useContractFunction__fix(contract, 'castVote');
   return { castVote, castVoteState };
+};
+
+export const usePropose = () => {
+  const { send: propose, state: proposeState } = useContractFunction__fix(contract, 'propose');
+  return { propose, proposeState };
 };

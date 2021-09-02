@@ -1,17 +1,20 @@
 import { Row, Col, Alert, Button, Card, ProgressBar } from 'react-bootstrap';
 import Section from '../../layout/Section';
-import { ProposalState, useProposal, Vote } from '../../wrappers/nounsDao';
+import { ProposalState, useCastVote, useProposal, Vote } from '../../wrappers/nounsDao';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Vote.module.css';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { useBlockNumber } from '@usedapp/core';
-import { buildEtherscanAddressLink, buildEtherscanTxLink, Network } from '../../utils/buildEtherscanLink';
+import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../utils/etherscan';
+import { AlertModal, setAlertModal } from '../../state/slices/application';
 import ProposalStatus from '../../components/ProposalStatus';
 import moment from 'moment-timezone';
 import VoteModal from '../../components/VoteModal';
-import { useState } from 'react';
-import ReactMarkdown from 'react-markdown'
+import { useCallback, useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkBreaks from 'remark-breaks';
 import { utils } from 'ethers';
+import { useAppDispatch } from '../../hooks';
 
 const AVERAGE_BLOCK_TIME_IN_SECS = 13;
 
@@ -25,9 +28,15 @@ const VotePage = ({
   const [vote, setVote] = useState<Vote>();
 
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
+  const [isVotePending, setVotePending] = useState<boolean>(false);
+
+  const dispatch = useAppDispatch();
+  const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
+
+  const { castVote, castVoteState } = useCastVote();
 
   // Get and format date from data
-  const timestamp = Date.now()
+  const timestamp = Date.now();
   const currentBlock = useBlockNumber();
   const startDate =
     proposal && timestamp && currentBlock
@@ -55,16 +64,16 @@ const VotePage = ({
   const againstPercentage = proposal && totalVotes ? (proposal.againstCount * 100) / totalVotes : 0;
   const abstainPercentage = proposal && totalVotes ? (proposal.abstainCount * 100) / totalVotes : 0;
 
-  // Only count available votes as of the proposal start block
-  const availableVotes = useUserVotesAsOfBlock(proposal?.startBlock ?? undefined);
+  // Only count available votes as of the proposal created block
+  const availableVotes = useUserVotesAsOfBlock(proposal?.createdBlock ?? undefined);
 
-  // Only show voting if user has > 0 votes at proposal start block and proposal is active
+  // Only show voting if user has > 0 votes at proposal created block and proposal is active
   const showVotingButtons = availableVotes && proposal?.status === ProposalState.ACTIVE;
 
-  const linkIfAddress = (content: string, network = Network.mainnet) => {
+  const linkIfAddress = (content: string) => {
     if (utils.isAddress(content)) {
       return (
-        <a href={buildEtherscanAddressLink(content, network).toString()} target="_blank" rel="noreferrer">
+        <a href={buildEtherscanAddressLink(content)} target="_blank" rel="noreferrer">
           {content}
         </a>
       );
@@ -72,36 +81,80 @@ const VotePage = ({
     return <span>{content}</span>;
   };
 
-  const transactionLink = (content: string, network = Network.mainnet) => {
+  const transactionLink = (content: string) => {
     return (
-      <a href={buildEtherscanTxLink(content, network).toString()} target="_blank" rel="noreferrer">
-        {content.substring(0,7)}
+      <a href={buildEtherscanTxLink(content)} target="_blank" rel="noreferrer">
+        {content.substring(0, 7)}
       </a>
-    )
-  }
+    );
+  };
+
+  const getVoteErrorMessage = (error: string | undefined) => {
+    if (error?.match(/voter already voted/)) {
+      return 'User Already Voted';
+    }
+    return error;
+  };
+
+  useEffect(() => {
+    switch (castVoteState.status) {
+      case 'None':
+        setVotePending(false);
+        break;
+      case 'Mining':
+        setVotePending(true);
+        break;
+      case 'Success':
+        setModal({
+          title: 'Success',
+          message: 'Vote Successful!',
+          show: true,
+        });
+        setVotePending(false);
+        setShowVoteModal(false);
+        break;
+      case 'Fail':
+        setModal({
+          title: 'Transaction Failed',
+          message: castVoteState?.errorMessage || 'Please try again.',
+          show: true,
+        });
+        setVotePending(false);
+        setShowVoteModal(false);
+        break;
+      case 'Exception':
+        setModal({
+          title: 'Error',
+          message: getVoteErrorMessage(castVoteState?.errorMessage) || 'Please try again.',
+          show: true,
+        });
+        setVotePending(false);
+        setShowVoteModal(false);
+        break;
+    }
+  }, [castVoteState, setModal]);
 
   return (
     <Section bgColor="transparent" fullWidth={false} className={classes.votePage}>
       <VoteModal
         show={showVoteModal}
         onHide={() => setShowVoteModal(false)}
+        onVote={() => castVote(proposal?.id, vote)}
+        isLoading={isVotePending}
         proposalId={proposal?.id}
+        availableVotes={availableVotes}
         vote={vote}
       />
       <Col lg={{ span: 8, offset: 2 }}>
-        <Link to="/vote">
-          ← All Proposals
-        </Link>
+        <Link to="/vote">← All Proposals</Link>
       </Col>
-      <Col lg={{span: 8, offset: 2}} className={classes.proposal}>
+      <Col lg={{ span: 8, offset: 2 }} className={classes.proposal}>
         <div className="d-flex justify-content-between align-items-center">
           <h3 className={classes.proposalId}>Proposal {proposal?.id}</h3>
           <ProposalStatus status={proposal?.status}></ProposalStatus>
         </div>
         <div>
-          {startDate && startDate.isBefore(now) ? (
-            null
-          ) : proposal ? (
+          {startDate && startDate.isBefore(now) ? null : proposal ? (
             <span>
               Voting starts approximately {startDate?.format('LLL')} {timezone}
             </span>
@@ -123,14 +176,14 @@ const VotePage = ({
           )}
         </div>
         {proposal && proposal.status === ProposalState.ACTIVE && !showVotingButtons && (
-          <Alert variant="secondary">
+          <Alert variant="secondary" className={classes.voterIneligibleAlert}>
             Only NOUN votes that were self delegated or delegated to another address before block{' '}
-            {proposal.startBlock} are eligible for voting.
+            {proposal.createdBlock} are eligible for voting.
           </Alert>
         )}
         {showVotingButtons ? (
           <Row>
-            <Col>
+            <Col lg={4}>
               <Button
                 className={classes.votingButton}
                 onClick={() => {
@@ -139,10 +192,10 @@ const VotePage = ({
                 }}
                 block
               >
-                Vote for
+                Vote For
               </Button>
             </Col>
-            <Col>
+            <Col lg={4}>
               <Button
                 className={classes.votingButton}
                 onClick={() => {
@@ -154,7 +207,7 @@ const VotePage = ({
                 Vote Against
               </Button>
             </Col>
-            <Col>
+            <Col lg={4}>
               <Button
                 className={classes.votingButton}
                 onClick={() => {
@@ -208,7 +261,13 @@ const VotePage = ({
         <Row>
           <Col className={classes.section}>
             <h5>Description</h5>
-            { proposal?.description && <ReactMarkdown className={classes.markdown} children={proposal.description} /> }
+            {proposal?.description && (
+              <ReactMarkdown
+                className={classes.markdown}
+                children={proposal.description}
+                remarkPlugins={[remarkBreaks]}
+              />
+            )}
           </Col>
         </Row>
         <Row>
@@ -224,18 +283,22 @@ const VotePage = ({
                         {linkIfAddress(content)}
                         {d.callData.split(',').length - 1 === i ? '' : ','}
                       </span>
-                    )
+                    );
                   })}
                   )
                 </p>
-              )
+              );
             })}
           </Col>
         </Row>
         <Row>
           <Col className={classes.section}>
             <h5>Proposer</h5>
-            {proposal?.proposer && proposal?.transactionHash && <>{linkIfAddress(proposal.proposer)} at {transactionLink(proposal.transactionHash)}</> }
+            {proposal?.proposer && proposal?.transactionHash && (
+              <>
+                {linkIfAddress(proposal.proposer)} at {transactionLink(proposal.transactionHash)}
+              </>
+            )}
           </Col>
         </Row>
       </Col>

@@ -17,6 +17,8 @@ export const LOCAL_CHAIN_ID = 31337;
 
 export const CHAIN_ID: SupportedChains = parseInt(process.env.REACT_APP_CHAIN_ID ?? '4');
 
+export const ETHERSCAN_API_KEY = process.env.REACT_APP_ETHERSCAN_API_KEY ?? '';
+
 const config: Record<SupportedChains, Config> = {
   [ChainId.Rinkeby]: {
     jsonRpcUri:
@@ -50,8 +52,8 @@ const config: Record<SupportedChains, Config> = {
     auctionProxyAddress: '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853',
     tokenAddress: '0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9',
     // Temporarily set this to _any_ address until local deployment is configured
-    nounsDaoExecutorAddress: '0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9',
-    nounsDaoProxyAddress: '0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9',
+    nounsDaoExecutorAddress: '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6',
+    nounsDaoProxyAddress: '0x610178dA211FEF7D417bC0e6FeD39F05609AD788',
     subgraphApiUri: '',
     jsonRpcUri: 'http://localhost:8545',
     enableHistory: false,

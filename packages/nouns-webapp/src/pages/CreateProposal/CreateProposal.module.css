@@ -1,0 +1,26 @@
+.createProposalPage a {
+  color: var(--brand-dark-red);
+}
+
+.createProposalForm {
+  border-radius: 5px;
+  padding: 1rem 2.5rem;
+  margin-top: 1em;
+  background-color: white;
+}
+
+.heading {
+  margin: 1rem 0;
+}
+
+.section {
+  border-top: 1px solid #e9ecef;
+  word-wrap: break-word;
+  padding-top: 2rem;
+  margin-top: 2rem;
+}
+
+.addTransactionButton,
+.createProposalButton {
+  margin-top: 1rem;
+}

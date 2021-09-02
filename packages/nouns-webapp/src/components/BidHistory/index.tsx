@@ -4,13 +4,10 @@ import _classes from './BidHistory.module.css';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
-import { buildEtherscanTxLink, Network } from '../../utils/buildEtherscanLink';
+import { buildEtherscanTxLink } from '../../utils/etherscan';
 import TruncatedAmount from '../TruncatedAmount';
 import BigNumber from 'bignumber.js';
-import { BigNumber as EthersBN } from '@ethersproject/bignumber';
-import { CHAIN_ID } from '../../config';
-import { Bid } from '../../utils/types';
-import { useAuctionBids } from '../../wrappers/onDisplayAuction';
+import { IBid } from '../../wrappers/subgraph';
 
 const bidItem = (bid: Bid, index: number, classes: any) => {
   const bidAmount = <TruncatedAmount amount={new BigNumber(EthersBN.from(bid.value).toString())} />;
@@ -18,10 +15,7 @@ const bidItem = (bid: Bid, index: number, classes: any) => {
     bid.timestamp.toNumber() * 1000,
   ).format('hh:mm a')}`;
 
-  const txLink = buildEtherscanTxLink(
-    bid.transactionHash,
-    Number(CHAIN_ID) === 1 ? Network.mainnet : Network.rinkeby,
-  );
+  const txLink = buildEtherscanTxLink(bid.id);
 
   return (
     <li key={index} className={classes.bidRow}>
@@ -37,7 +31,7 @@ const bidItem = (bid: Bid, index: number, classes: any) => {
         <div className={classes.rightSectionWrapper}>
           <div className={classes.bidAmount}>{bidAmount}</div>
           <div className={classes.linkSymbol}>
-            <a href={txLink.toString()} target="_blank" rel="noreferrer">
+            <a href={txLink} target="_blank" rel="noreferrer">
               <FontAwesomeIcon icon={faExternalLinkAlt} />
             </a>
           </div>

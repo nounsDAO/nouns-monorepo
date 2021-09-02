@@ -163,7 +163,7 @@ const Bid: React.FC<{
         break;
       case 'Fail':
         setModal({
-          title: 'Tx Failed',
+          title: 'Transaction Failed',
           message: placeBidState.errorMessage ? placeBidState.errorMessage : 'Please try again.',
           show: true,
         });
@@ -202,7 +202,7 @@ const Bid: React.FC<{
         break;
       case 'Fail':
         setModal({
-          title: 'Tx Failed',
+          title: 'Transaction Failed',
           message: settleAuctionState.errorMessage
             ? settleAuctionState.errorMessage
             : 'Please try again.',
