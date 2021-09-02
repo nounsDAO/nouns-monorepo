@@ -7,7 +7,9 @@ import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { buildEtherscanTxLink } from '../../utils/etherscan';
 import TruncatedAmount from '../TruncatedAmount';
 import BigNumber from 'bignumber.js';
-import { IBid } from '../../wrappers/subgraph';
+import { Bid } from '../../utils/types';
+import { BigNumber as EthersBN } from '@ethersproject/bignumber';
+import { useAuctionBids } from '../../wrappers/onDisplayAuction';
 
 const bidItem = (bid: Bid, index: number, classes: any) => {
   const bidAmount = <TruncatedAmount amount={new BigNumber(EthersBN.from(bid.value).toString())} />;
@@ -15,7 +17,7 @@ const bidItem = (bid: Bid, index: number, classes: any) => {
     bid.timestamp.toNumber() * 1000,
   ).format('hh:mm a')}`;
 
-  const txLink = buildEtherscanTxLink(bid.id);
+  const txLink = buildEtherscanTxLink(bid.transactionHash);
 
   return (
     <li key={index} className={classes.bidRow}>
