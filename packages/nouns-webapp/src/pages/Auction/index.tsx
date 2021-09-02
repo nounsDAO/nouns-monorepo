@@ -5,7 +5,7 @@ import Documentation from '../../components/Documentation';
 import HistoryCollection from '../../components/HistoryCollection';
 import { setUseGreyBackground } from '../../state/slices/application';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setOnDisplayAuctionNounId, setIsNewAuction } from '../../state/slices/onDisplayAuction';
+import { setOnDisplayAuctionNounId } from '../../state/slices/onDisplayAuction';
 import { push } from 'connected-react-router';
 import { nounPath } from '../../utils/history';
 import useOnDisplayAuction from '../../wrappers/onDisplayAuction';
@@ -19,18 +19,13 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
   const { initialAuctionId } = props;
   const onDisplayAuction = useOnDisplayAuction();
   const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
-  const isNewAuction = useAppSelector(state => state.onDisplayAuction.isNewAuction);
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (!lastAuctionNounId) return;
 
-    if (isNewAuction) {
-      dispatch(setOnDisplayAuctionNounId(lastAuctionNounId));
-      dispatch(push(nounPath(lastAuctionNounId)));
-      dispatch(setIsNewAuction(false));
-    } else if (initialAuctionId !== undefined) {
+    if (initialAuctionId !== undefined) {
       // handle out of bounds noun path ids
       if (initialAuctionId > lastAuctionNounId || initialAuctionId < 0) {
         dispatch(setOnDisplayAuctionNounId(lastAuctionNounId));
@@ -43,7 +38,7 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
       // no noun path id set
       if (lastAuctionNounId) dispatch(setOnDisplayAuctionNounId(lastAuctionNounId));
     }
-  }, [lastAuctionNounId, dispatch, initialAuctionId, isNewAuction]);
+  }, [lastAuctionNounId, dispatch, initialAuctionId]);
 
   return (
     <>

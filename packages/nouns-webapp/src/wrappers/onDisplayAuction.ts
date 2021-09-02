@@ -55,7 +55,6 @@ const useOnDisplayAuction = (): Auction | undefined => {
   } else {
     // nounder auction
     if (isNounderNoun(BigNumber.from(onDisplayAuctionNounId))) {
-      console.log('generating empty nounder auc');
       const emptyNounderAuction = generateEmptyNounderAuction(
         BigNumber.from(onDisplayAuctionNounId),
         pastAuctions,
