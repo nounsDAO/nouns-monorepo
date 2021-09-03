@@ -12,6 +12,7 @@ import moment from 'moment-timezone';
 import VoteModal from '../../components/VoteModal';
 import { useCallback, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import remarkBreaks from 'remark-breaks';
 import { utils } from 'ethers';
 import { useAppDispatch } from '../../hooks';
 
@@ -261,7 +262,11 @@ const VotePage = ({
           <Col className={classes.section}>
             <h5>Description</h5>
             {proposal?.description && (
-              <ReactMarkdown className={classes.markdown} children={proposal.description} />
+              <ReactMarkdown
+                className={classes.markdown}
+                children={proposal.description}
+                remarkPlugins={[remarkBreaks]}
+              />
             )}
           </Col>
         </Row>
