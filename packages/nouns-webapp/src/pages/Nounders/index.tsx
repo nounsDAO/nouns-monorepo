@@ -130,7 +130,7 @@ const NoundersPage = () => {
     <Section bgColor="transparent" fullWidth={true} className={classes.noundersPage}>
       <Col lg={{ span: 6, offset: 3 }}>
         <h2 style={{ marginBottom: '2rem' }}>The Nounders</h2>
-        <h3 style={{ marginBottom: '2rem' }}>5 artists, 5 technologists</h3>
+        <h3 style={{ marginBottom: '2rem' }}>3.5 artists, 6.5 technologists</h3>
         <Row style={{ marginBottom: '0rem', textAlign: 'center' }}>
           <BioCards min={0} max={5} />
           <BioCards min={5} max={10} />
