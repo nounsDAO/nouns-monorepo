@@ -43,11 +43,6 @@ function App() {
         <NavBar />
         <Switch>
           <Route exact path="/" component={AuctionPage} />
-          <Route
-            exact
-            path="/noun/:id"
-            render={props => <AuctionPage initialAuctionId={Number(props.match.params.id)} />}
-          />
           <Route exact path="/nounders" component={NoundersPage} />
           <Route exact path="/create-proposal" component={CreateProposalPage} />
           <Route exact path="/vote" component={GovernancePage} />

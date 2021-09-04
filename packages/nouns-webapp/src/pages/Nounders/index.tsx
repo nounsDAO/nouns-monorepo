@@ -2,75 +2,65 @@ import React from 'react';
 import classes from './NoundersPage.module.css';
 import Section from '../../layout/Section';
 import { Col, Row, Card } from 'react-bootstrap';
-import pfp4156 from '../../assets/nounder-pfps/4156.png';
-import pfp9999 from '../../assets/nounder-pfps/9999.png';
-import pfpCryptoseneca from '../../assets/nounder-pfps/cryptoseneca.png';
-import pfpDevcarrot from '../../assets/nounder-pfps/devcarrot.png';
-import pfpDom from '../../assets/nounder-pfps/dom.png';
-import pfpKai from '../../assets/nounder-pfps/kai.png';
-import pfpSolimander from '../../assets/nounder-pfps/solimander.png';
-import pfpGremplin from '../../assets/nounder-pfps/gremplin.png';
-import pfpTimpers from '../../assets/nounder-pfps/timpers.png';
-import pfpVapeape from '../../assets/nounder-pfps/vapeape.png';
 
 const bios = [
   {
     name: '4156',
-    image: pfp4156,
+    image: 'https://pbs.twimg.com/profile_images/1427291352254095361/Syua0jjs_400x400.jpg',
     description: undefined,
     handle: 'punk4156',
   },
   {
     name: 'cryptoseneca',
-    image: pfpCryptoseneca,
+    image: 'https://pbs.twimg.com/profile_images/1424812781396692992/fxnkc6FK_400x400.jpg',
     description: undefined,
     handle: 'cryptoseneca',
   },
   {
     name: 'Kai@eboy',
-    image: pfpKai,
+    image: 'https://pbs.twimg.com/profile_images/1425696316785532931/z3DhhLmv_400x400.jpg',
     description: undefined,
     handle: 'eBoyArts',
   },
   {
     name: 'dom',
-    image: pfpDom,
+    image: 'https://pbs.twimg.com/profile_images/1424866679104868358/FoE9kefa_400x400.jpg',
     description: undefined,
     handle: 'dhof',
   },
   {
     name: 'vapeape',
-    image: pfpVapeape,
+    image: 'https://pbs.twimg.com/profile_images/1425124752495054853/HZdD7xGp_400x400.jpg',
     description: undefined,
     handle: 'punk4464',
   },
   {
     name: 'gremplin',
-    image: pfpGremplin,
+    image: 'https://pbs.twimg.com/profile_images/1426784131073986568/X8DyfmgW_400x400.jpg',
     description: undefined,
     handle: 'supergremplin',
   },
   {
     name: 'solimader',
-    image: pfpSolimander,
+    image: 'https://avatars.githubusercontent.com/u/85371573?v=4',
     description: undefined,
     handle: '',
   },
   {
     name: 'devcarrot',
-    image: pfpDevcarrot,
+    image: 'https://pbs.twimg.com/profile_images/1424432415796195335/FyMNOjQ3_400x400.jpg',
     description: undefined,
     handle: 'carrot_init',
   },
   {
     name: 'timpers',
-    image: pfpTimpers,
+    image: 'https://pbs.twimg.com/profile_images/1427009618107117573/rUYTq68W_400x400.jpg',
     description: undefined,
     handle: 'TimpersHD',
   },
   {
     name: '9999',
-    image: pfp9999,
+    image: 'https://pbs.twimg.com/profile_images/1425183530817052678/1MCh18JH_400x400.png',
     description: undefined,
     handle: 'lastpunk9999',
   },
@@ -130,7 +120,7 @@ const NoundersPage = () => {
     <Section bgColor="transparent" fullWidth={true} className={classes.noundersPage}>
       <Col lg={{ span: 6, offset: 3 }}>
         <h2 style={{ marginBottom: '2rem' }}>The Nounders</h2>
-        <h3 style={{ marginBottom: '2rem' }}>3.5 artists, 6.5 technologists</h3>
+        <h3 style={{ marginBottom: '2rem' }}>5 artists, 5 technologists</h3>
         <Row style={{ marginBottom: '0rem', textAlign: 'center' }}>
           <BioCards min={0} max={5} />
           <BioCards min={5} max={10} />
