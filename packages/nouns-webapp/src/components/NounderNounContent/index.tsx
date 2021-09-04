@@ -65,7 +65,7 @@ const NounderNounContent: React.FC<{
           <ul className={auctionBidClasses.bidCollection}>
             <li className={`${auctionBidClasses.bidRow} ${nounContentClasses.bidRow}`}>
               All Noun auction proceeds are sent to the{' '}
-              <Link to="vote" className={nounContentClasses.link}>
+              <Link to="/vote" className={nounContentClasses.link}>
                 Nouns DAO
               </Link>
               . For this reason, we, the project's founders (‘Nounders’) have chosen to compensate
@@ -75,7 +75,7 @@ const NounderNounContent: React.FC<{
             </li>
           </ul>
           <div className={bidBtnClasses.bidHistoryWrapper}>
-            <Link to="nounders" className={bidBtnClasses.bidHistory}>
+            <Link to="/nounders" className={bidBtnClasses.bidHistory}>
               Learn More →
             </Link>
           </div>
