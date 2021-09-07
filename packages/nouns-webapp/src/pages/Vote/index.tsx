@@ -112,6 +112,9 @@ const VotePage = ({
     return [ProposalState.SUCCEEDED, ProposalState.QUEUED].includes(proposal?.status ?? -1);
   };
 
+  const { forCount = 0, againstCount = 0, quorumVotes = 0 } = proposal || {};
+  const quorumReached = forCount > againstCount && forCount >= quorumVotes;
+
   const isSucceededState = proposal?.status === ProposalState.SUCCEEDED;
   const moveStateTitle = isSucceededState ? 'Queue' : 'Execute';
   const moveStateAction = (() => {
@@ -225,7 +228,7 @@ const VotePage = ({
                 Voting ended {endDate.format('LLL')} {timezone}
               </div>
               <div>
-                This proposal has reached quorum{' '}
+                This proposal has {quorumReached ? 'reached' : 'failed to reach'} quorum{' '}
                 {proposal?.quorumVotes !== undefined && `(${proposal.quorumVotes} votes)`}
               </div>
             </>
@@ -235,7 +238,7 @@ const VotePage = ({
                 Voting ends approximately {endDate?.format('LLL')} {timezone}
               </div>
               {proposal?.quorumVotes !== undefined && (
-                <div>{proposal.quorumVotes} votes are required to reach quorum</div>
+                <div>A total of {proposal.quorumVotes} votes are required to reach quorum</div>
               )}
             </>
           ) : (
