@@ -1,10 +1,17 @@
-import { Row, Col, Alert, Button, Card, ProgressBar } from 'react-bootstrap';
+import { Row, Col, Alert, Button, Card, ProgressBar, Spinner } from 'react-bootstrap';
 import Section from '../../layout/Section';
-import { ProposalState, useCastVote, useProposal, Vote } from '../../wrappers/nounsDao';
+import {
+  ProposalState,
+  useCastVote,
+  useExecuteProposal,
+  useProposal,
+  useQueueProposal,
+  Vote,
+} from '../../wrappers/nounsDao';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Vote.module.css';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { useBlockNumber } from '@usedapp/core';
+import { TransactionStatus, useBlockNumber } from '@usedapp/core';
 import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../utils/etherscan';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import ProposalStatus from '../../components/ProposalStatus';
@@ -30,10 +37,15 @@ const VotePage = ({
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
   const [isVotePending, setVotePending] = useState<boolean>(false);
 
+  const [isQueuePending, setQueuePending] = useState<boolean>(false);
+  const [isExecutePending, setExecutePending] = useState<boolean>(false);
+
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
 
   const { castVote, castVoteState } = useCastVote();
+  const { queueProposal, queueProposalState } = useQueueProposal();
+  const { executeProposal, executeProposalState } = useExecuteProposal();
 
   // Get and format date from data
   const timestamp = Date.now();
@@ -96,43 +108,87 @@ const VotePage = ({
     return error;
   };
 
-  useEffect(() => {
-    switch (castVoteState.status) {
-      case 'None':
-        setVotePending(false);
-        break;
-      case 'Mining':
-        setVotePending(true);
-        break;
-      case 'Success':
-        setModal({
-          title: 'Success',
-          message: 'Vote Successful!',
-          show: true,
-        });
-        setVotePending(false);
-        setShowVoteModal(false);
-        break;
-      case 'Fail':
-        setModal({
-          title: 'Transaction Failed',
-          message: castVoteState?.errorMessage || 'Please try again.',
-          show: true,
-        });
-        setVotePending(false);
-        setShowVoteModal(false);
-        break;
-      case 'Exception':
-        setModal({
-          title: 'Error',
-          message: getVoteErrorMessage(castVoteState?.errorMessage) || 'Please try again.',
-          show: true,
-        });
-        setVotePending(false);
-        setShowVoteModal(false);
-        break;
+  const isAwaitingStateChange = () => {
+    return [ProposalState.SUCCEEDED, ProposalState.QUEUED].includes(proposal?.status ?? -1);
+  };
+
+  const isSucceededState = proposal?.status === ProposalState.SUCCEEDED;
+  const moveStateTitle = isSucceededState ? 'Queue' : 'Execute';
+  const moveStateAction = (() => {
+    if (isSucceededState) {
+      return () => queueProposal(proposal?.id);
     }
-  }, [castVoteState, setModal]);
+    return () => executeProposal(proposal?.id);
+  })();
+
+  const onTransactionStateChange = useCallback(
+    (
+      tx: TransactionStatus,
+      successMessage?: string,
+      setPending?: (isPending: boolean) => void,
+      getErrorMessage?: (error?: string) => string | undefined,
+      onFinalState?: () => void,
+    ) => {
+      switch (tx.status) {
+        case 'None':
+          setPending?.(false);
+          break;
+        case 'Mining':
+          setPending?.(true);
+          break;
+        case 'Success':
+          setModal({
+            title: 'Success',
+            message: successMessage || 'Transaction Successful!',
+            show: true,
+          });
+          setPending?.(false);
+          onFinalState?.();
+          break;
+        case 'Fail':
+          setModal({
+            title: 'Transaction Failed',
+            message: tx?.errorMessage || 'Please try again.',
+            show: true,
+          });
+          setPending?.(false);
+          onFinalState?.();
+          break;
+        case 'Exception':
+          setModal({
+            title: 'Error',
+            message: getErrorMessage?.(tx?.errorMessage) || 'Please try again.',
+            show: true,
+          });
+          setPending?.(false);
+          onFinalState?.();
+          break;
+      }
+    },
+    [setModal],
+  );
+
+  useEffect(
+    () =>
+      onTransactionStateChange(
+        castVoteState,
+        'Vote Successful!',
+        setVotePending,
+        getVoteErrorMessage,
+        () => setShowVoteModal(false),
+      ),
+    [castVoteState, onTransactionStateChange, setModal],
+  );
+
+  useEffect(
+    () => onTransactionStateChange(queueProposalState, 'Proposal Queued!', setQueuePending),
+    [queueProposalState, onTransactionStateChange, setModal],
+  );
+
+  useEffect(
+    () => onTransactionStateChange(executeProposalState, 'Proposal Executed!', setExecutePending),
+    [executeProposalState, onTransactionStateChange, setModal],
+  );
 
   return (
     <Section bgColor="transparent" fullWidth={false} className={classes.votePage}>
@@ -164,13 +220,24 @@ const VotePage = ({
         </div>
         <div>
           {endDate && endDate.isBefore(now) ? (
-            <span>
-              Voting ended {endDate.format('LLL')} {timezone}
-            </span>
+            <>
+              <div>
+                Voting ended {endDate.format('LLL')} {timezone}
+              </div>
+              <div>
+                This proposal has reached quorum{' '}
+                {proposal?.quorumVotes !== undefined && `(${proposal.quorumVotes} votes)`}
+              </div>
+            </>
           ) : proposal ? (
-            <span>
-              Voting ends approximately {endDate?.format('LLL')} {timezone}
-            </span>
+            <>
+              <div>
+                Voting ends approximately {endDate?.format('LLL')} {timezone}
+              </div>
+              {proposal?.quorumVotes !== undefined && (
+                <div>{proposal.quorumVotes} votes are required to reach quorum</div>
+              )}
+            </>
           ) : (
             ''
           )}
@@ -222,6 +289,19 @@ const VotePage = ({
           </Row>
         ) : (
           ''
+        )}
+        {isAwaitingStateChange() && (
+          <Row className={classes.section}>
+            <Col>
+              <Button onClick={moveStateAction} variant="dark" block>
+                {isQueuePending || isExecutePending ? (
+                  <Spinner animation="border" />
+                ) : (
+                  moveStateTitle
+                )}
+              </Button>
+            </Col>
+          </Row>
         )}
         <Row>
           <Col lg={4}>

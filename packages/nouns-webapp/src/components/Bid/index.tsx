@@ -4,8 +4,7 @@ import {
   AuctionHouseContractFunction,
 } from '../../wrappers/nounsAuction';
 import config from '../../config';
-import { connectContractToSigner, useEthers } from '@usedapp/core';
-import { useContractFunction__fix } from '../../hooks/useContractFunction__fix';
+import { connectContractToSigner, useEthers, useContractFunction } from '@usedapp/core';
 import { useAppSelector } from '../../hooks';
 import React, { useEffect, useState, useRef, ChangeEvent, useCallback } from 'react';
 import { utils, BigNumber as EthersBN } from 'ethers';
@@ -71,11 +70,11 @@ const Bid: React.FC<{
     minBidIncPercentage,
   );
 
-  const { send: placeBid, state: placeBidState } = useContractFunction__fix(
+  const { send: placeBid, state: placeBidState } = useContractFunction(
     auctionHouseContract,
     AuctionHouseContractFunction.createBid,
   );
-  const { send: settleAuction, state: settleAuctionState } = useContractFunction__fix(
+  const { send: settleAuction, state: settleAuctionState } = useContractFunction(
     auctionHouseContract,
     AuctionHouseContractFunction.settleCurrentAndCreateNewAuction,
   );
