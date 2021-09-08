@@ -4,6 +4,10 @@ import Section from '../../layout/Section';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import nounsHackathonGif from '../../assets/images/hackathon/hackathon.gif';
 import awardsGraphic from '../../assets/images/hackathon/hackaprize.png';
+import artGraphic from '../../assets/images/hackathon/art.png';
+import onChainGraphic from '../../assets/images/hackathon/onchain.png';
+import offChainGraphic from '../../assets/images/hackathon/offchain.png';
+import communityGraphic from '../../assets/images/hackathon/community.png';
 
 const HackathonPage = () => {
   return (
@@ -77,7 +81,7 @@ const HackathonPage = () => {
             bodies, etc.), physical artwork, and Nouns in new mediums.
           </p>
           <Col className={classes.artBlock} md={{ span: 4 }}>
-            Art Illustration
+            <img src={artGraphic} alt="Art Graphic" />
           </Col>
           <Col lg={{ span: 6 }}>
             <p>Example projects could include:</p>
@@ -96,7 +100,7 @@ const HackathonPage = () => {
             Noun fractionalization.
           </p>
           <Col className={classes.artBlock} md={{ span: 4 }}>
-            On-chain Illustration
+            <img src={onChainGraphic} alt="On-Chain Graphic" />
           </Col>
           <Col lg={{ span: 6 }}>
             <p>Examples projects could include:</p>
@@ -117,7 +121,7 @@ const HackathonPage = () => {
             surrounding the Nouns ecosystem.
           </p>
           <Col className={classes.artBlock} md={{ span: 4 }}>
-            Off-chain Illustration
+            <img src={offChainGraphic} alt="Off-Chain Graphic" />
           </Col>
           <Col lg={{ span: 6 }}>
             <p>Example projects could include:</p>
@@ -140,7 +144,7 @@ const HackathonPage = () => {
             important.
           </p>
           <Col className={classes.artBlock} md={{ span: 4 }}>
-            Community Illustration
+            <img src={communityGraphic} alt="Community Graphic" />
           </Col>
           <Col lg={{ span: 6 }}>
             <p>Example projects could include:</p>
