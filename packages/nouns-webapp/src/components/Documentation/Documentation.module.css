@@ -14,6 +14,12 @@
 
 .card {
   border: none;
+  margin-bottom: 2.5rem;
+  max-width: fit-content;
+}
+
+.cardHeader:hover {
+  color: var(--brand-dark-red);
 }
 
 .card,
@@ -26,4 +32,8 @@
   font-family: 'Londrina Solid';
   font-size: 2.5rem;
   cursor: pointer;
+  line-height: normal;
+  padding-top: 0;
+  padding-bottom: 0;
+  max-width: max-content;
 }
