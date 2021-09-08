@@ -15,6 +15,7 @@ import GovernancePage from './pages/Governance';
 import CreateProposalPage from './pages/CreateProposal';
 import VotePage from './pages/Vote';
 import NoundersPage from './pages/Nounders';
+import HackathonPage from './pages/Hackathon';
 import { CHAIN_ID } from './config';
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
           <Route exact path="/create-proposal" component={CreateProposalPage} />
           <Route exact path="/vote" component={GovernancePage} />
           <Route exact path="/vote/:id" component={VotePage} />
+          <Route exact path="/hackathon" component={HackathonPage} />
         </Switch>
         <Footer />
       </BrowserRouter>
