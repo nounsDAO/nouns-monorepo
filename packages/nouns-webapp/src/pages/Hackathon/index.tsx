@@ -9,7 +9,7 @@ const HackathonPage = () => {
   return (
     <Section bgColor="transparent" fullWidth={true} className={classes.hackathonPage}>
       <div className={classes.hackathonBanner}>
-        <img src={nounsHackathonGif} />
+        <img src={nounsHackathonGif} alt="Nounish things typing on a shared keyboard that says 'Hackathon'"/>
       </div>
       <Col lg={{ span: 6, offset: 3 }}>
         <h1 id="nouns-hackathon">Nouns Hackathon</h1>
@@ -175,7 +175,7 @@ const HackathonPage = () => {
           Meaning your project could win up to 18 ETH! (1st place + best of category + community
           favorite)
         </p>
-        <img src={awardsGraphic} />
+        <img src={awardsGraphic} alt="Illustration showing a podium and awards for the four categories" />
         <h2 id="rules">Rules</h2>
         <ol type="1">
           <li>
