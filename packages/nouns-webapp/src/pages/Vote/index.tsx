@@ -108,17 +108,23 @@ const VotePage = ({
     return error;
   };
 
+  const hasSucceeded = proposal?.status === ProposalState.SUCCEEDED;
   const isAwaitingStateChange = () => {
-    return [ProposalState.SUCCEEDED, ProposalState.QUEUED].includes(proposal?.status ?? -1);
+    if (hasSucceeded) {
+      return true;
+    }
+    if (proposal?.status === ProposalState.QUEUED) {
+      return new Date() >= (proposal?.eta ?? Number.MAX_SAFE_INTEGER);
+    }
+    return false;
   };
 
   const { forCount = 0, againstCount = 0, quorumVotes = 0 } = proposal || {};
   const quorumReached = forCount > againstCount && forCount >= quorumVotes;
 
-  const isSucceededState = proposal?.status === ProposalState.SUCCEEDED;
-  const moveStateTitle = isSucceededState ? 'Queue' : 'Execute';
+  const moveStateButtonAction = hasSucceeded ? 'Queue' : 'Execute';
   const moveStateAction = (() => {
-    if (isSucceededState) {
+    if (hasSucceeded) {
       return () => queueProposal(proposal?.id);
     }
     return () => executeProposal(proposal?.id);
@@ -305,7 +311,7 @@ const VotePage = ({
                 {isQueuePending || isExecutePending ? (
                   <Spinner animation="border" />
                 ) : (
-                  moveStateTitle
+                  `${moveStateButtonAction} Proposal`
                 )}
               </Button>
             </Col>
