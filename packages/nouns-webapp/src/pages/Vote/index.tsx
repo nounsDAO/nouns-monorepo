@@ -296,7 +296,12 @@ const VotePage = ({
         {isAwaitingStateChange() && (
           <Row className={classes.section}>
             <Col>
-              <Button onClick={moveStateAction} variant="dark" block>
+              <Button
+                onClick={moveStateAction}
+                disabled={isQueuePending || isExecutePending}
+                variant="dark"
+                block
+              >
                 {isQueuePending || isExecutePending ? (
                   <Spinner animation="border" />
                 ) : (
