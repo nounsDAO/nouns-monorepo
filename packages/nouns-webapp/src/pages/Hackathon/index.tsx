@@ -3,13 +3,16 @@ import classes from './Hackathon.module.css';
 import Section from '../../layout/Section';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import nounsHackathonGif from '../../assets/images/hackathon/hackathon.gif';
-import awardsGraphic from '../../assets/images/hackathon/awards.png';
+import awardsGraphic from '../../assets/images/hackathon/hackaprize.png';
 
 const HackathonPage = () => {
   return (
     <Section bgColor="transparent" fullWidth={true} className={classes.hackathonPage}>
       <div className={classes.hackathonBanner}>
-        <img src={nounsHackathonGif} alt="Nounish things typing on a shared keyboard that says 'Hackathon'"/>
+        <img
+          src={nounsHackathonGif}
+          alt="Nounish things typing on a shared keyboard that says 'Hackathon'"
+        />
       </div>
       <Col lg={{ span: 6, offset: 3 }}>
         <h1 id="nouns-hackathon">Nouns Hackathon</h1>
@@ -175,7 +178,14 @@ const HackathonPage = () => {
           Meaning your project could win up to 18 ETH! (1st place + best of category + community
           favorite)
         </p>
-        <img src={awardsGraphic} alt="Illustration showing a podium and awards for the four categories" />
+        <Container>
+          <Row className="justify-content-md-center">
+            <img
+              src={awardsGraphic}
+              alt="Illustration showing a podium and awards for the four categories"
+            />
+          </Row>
+        </Container>
         <h2 id="rules">Rules</h2>
         <ol type="1">
           <li>
@@ -191,11 +201,11 @@ const HackathonPage = () => {
           <li>(Normal hackathon code of conduct here)</li>
         </ol>
         <Container>
-        <Row className="justify-content-md-center">
-        <a href="https://nouns.wtf/discord">
-          <Button className={classes.ctaButton}>Join Us In #hackathon</Button>
-        </a>
-        </Row>
+          <Row className="justify-content-md-center">
+            <a href="https://nouns.wtf/discord">
+              <Button className={classes.ctaButton}>Join us in #hackathon</Button>
+            </a>
+          </Row>
         </Container>
       </Col>
     </Section>
