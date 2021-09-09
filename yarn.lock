@@ -4434,10 +4434,10 @@
   resolved "https://registry.yarnpkg.com/@ungap/promise-all-settled/-/promise-all-settled-1.1.2.tgz#aa58042711d6e3275dd37dc597e5d31e8c290a44"
   integrity sha512-sL/cEvJWAnClXw0wHk85/2L0G6Sj8UB0Ctc1TEMbKSsmpRosqhwj9gWgFRZSrBr2f9tiXISwNhCPmlfqUqyb9Q==
 
-"@usedapp/core@^0.4.4":
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/@usedapp/core/-/core-0.4.4.tgz#2142443a04fbd770c8e4dc7345aa7cb130dc1451"
-  integrity sha512-6kNJ0bPR4gM1NpcKU9gswD2sfWgH5WSWtrT4KjefHAZBz2In35nHEfifgWw7bpCULKkJsnVJtzT938XWaUpngg==
+"@usedapp/core@^0.4.7":
+  version "0.4.7"
+  resolved "https://registry.yarnpkg.com/@usedapp/core/-/core-0.4.7.tgz#87964abf14ba87edd4fe068ee73fe0cb9fcdee2d"
+  integrity sha512-0JpzUPUHFgmq8GWTl9EGZKR5nS8HQ2e5wwaIG8GBE2VUS40uKwlNhlqkIwD2mkFhpMj8EssMArzcZRzLqZmEPA==
   dependencies:
     "@types/react" "17.0.1"
     "@web3-react/core" "6.1.1"
