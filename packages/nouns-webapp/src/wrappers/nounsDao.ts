@@ -1,6 +1,5 @@
 import { NounsDAOABI } from '@nouns/contracts';
-import { useContractCall, useContractCalls } from '@usedapp/core';
-import { useContractFunction__fix } from '../hooks/useContractFunction__fix';
+import { useContractCall, useContractCalls, useContractFunction } from '@usedapp/core';
 import { utils, Contract, BigNumber as EthersBN } from 'ethers';
 import { defaultAbiCoder } from 'ethers/lib/utils';
 import { useMemo } from 'react';
@@ -221,11 +220,24 @@ export const useProposal = (id: string | number): Proposal | undefined => {
 };
 
 export const useCastVote = () => {
-  const { send: castVote, state: castVoteState } = useContractFunction__fix(contract, 'castVote');
+  const { send: castVote, state: castVoteState } = useContractFunction(contract, 'castVote');
   return { castVote, castVoteState };
 };
 
 export const usePropose = () => {
-  const { send: propose, state: proposeState } = useContractFunction__fix(contract, 'propose');
+  const { send: propose, state: proposeState } = useContractFunction(contract, 'propose');
   return { propose, proposeState };
+};
+
+export const useQueueProposal = () => {
+  const { send: queueProposal, state: queueProposalState } = useContractFunction(contract, 'queue');
+  return { queueProposal, queueProposalState };
+};
+
+export const useExecuteProposal = () => {
+  const { send: executeProposal, state: executeProposalState } = useContractFunction(
+    contract,
+    'execute',
+  );
+  return { executeProposal, executeProposalState };
 };
