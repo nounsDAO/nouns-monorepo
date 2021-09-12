@@ -37,21 +37,21 @@
   padding-bottom: 0;
   max-width: max-content;
 }
-ul {
+.card ul {
   width: max-content;
 }
-ul a {
+.card ul a {
   color: var(--brand-dark-red);
 }
 
-ul a li {
+.card ul a li {
   width: max-content;
 }
 
-ul a:hover {
+.card ul a:hover {
   color: var(--brand-dark-red);
 }
 
-ul li::marker {
+.card ul li::marker {
   color: black;
 }
