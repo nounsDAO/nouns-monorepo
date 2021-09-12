@@ -202,16 +202,54 @@ const Documentation = () => {
                   Nounders:
                 </p>
                 <ul>
-                  <li>@cryptoseneca</li>
-                  <li>@supergremplin</li>
-                  <li>@punk4156</li>
-                  <li>@eboyarts</li>
-                  <li>@punk4464</li>
+                  <li>
+                    <a href="https://twitter.com/cryptoseneca" target="_blank" rel="noreferrer">
+                      @cryptoseneca
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://twitter.com/supergremplin" target="_blank" rel="noreferrer">
+                      @supergremplin
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://twitter.com/punk4156" target="_blank" rel="noreferrer">
+                      @punk4156
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://twitter.com/eBoyArts" target="_blank" rel="noreferrer">
+                      @eboyarts
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://twitter.com/punk4464" target="_blank" rel="noreferrer">
+                      @punk4464
+                    </a>
+                  </li>
+
                   <li>solimander</li>
-                  <li>@dhof</li>
-                  <li>devcarrot</li>
-                  <li>@TimpersHD</li>
-                  <li>@lastpunk9999</li>
+
+                  <li>
+                    <a href="https://twitter.com/dhof" target="_blank" rel="noreferrer">
+                      @dhof
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://twitter.com/carrot_init" target="_blank" rel="noreferrer">
+                      @devcarrot
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://twitter.com/TimpersHD" target="_blank" rel="noreferrer">
+                      @TimpersHD
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://twitter.com/lastpunk9999" target="_blank" rel="noreferrer">
+                      @lastpunk9999
+                    </a>
+                  </li>
                 </ul>
                 <p>
                   Because 100% of noun auction proceeds are sent to Nouns DAO, Nounders have chosen
