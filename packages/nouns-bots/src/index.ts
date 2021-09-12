@@ -32,6 +32,15 @@ if (config.discordEnabled) {
 }
 
 /**
+ * Seed cache the current auction id
+ */
+async function setupAuction() {
+  const lastAuctionBids = await getLastAuctionBids();
+  const lastAuctionId = lastAuctionBids.id;
+  await updateAuctionCache(lastAuctionId);
+}
+
+/**
  * Process the last auction, update cache and push socials if new auction or respective bid is discovered
  */
 async function processAuctionTick() {
@@ -70,7 +79,15 @@ async function processAuctionTick() {
   }
 }
 
-const processGovernanceTick = async () => {
+/**
+ * Seed cache with current proposals
+ */
+async function setupGovernance() {
+  const proposals = await getAllProposals();
+  await Promise.all(proposals.map(p => updateProposalCache(p)));
+}
+
+async function processGovernanceTick() {
   const proposals = await getAllProposals();
   R.map(async (proposal) => {
     const cachedProposal = await getProposalCache(proposal.id);
@@ -94,5 +111,6 @@ const processGovernanceTick = async () => {
 }
 
 setInterval(async () => processAuctionTick(), 30000);
-setInterval(async () => processGovernanceTick(), 3000);
-processAuctionTick().then(() => 'processAuctionTick');
+setInterval(async () => processGovernanceTick(), 60000);
+setupAuction().then(() => 'setupAuction');
+setupGovernance().then(() => 'setupGovernance');
