@@ -20,9 +20,16 @@ const VerifyPage: React.FC<VerifyPageProp> = props => {
   const [signedMessage, setSignedMessage] = useState<undefined | object>(undefined);
   const { library } = useEthers();
 
-  const extractOwnedNounIdsFromNounsIndex = (owner: string, nounsIndex: any) =>
+  const extractOwnedNounIdsFromNounsIndex = (owner: string | undefined, nounsIndex: any) =>
     R.pipe(
-      (nouns: any) => nouns.filter((noun: any) => (noun.owner.id as string).toLocaleLowerCase().localeCompare(owner.toLocaleLowerCase()) === 0),
+      (nouns: any) =>
+        nouns.filter((noun: any) =>
+          !owner
+            ? false
+            : (noun.owner.id as string)
+                .toLocaleLowerCase()
+                .localeCompare(owner.toLocaleLowerCase()) === 0,
+        ),
       R.map((noun: any) => Number(noun.id)),
       R.sort((a: number, b: number) => a - b),
     )(nounsIndex.nouns);
@@ -30,11 +37,12 @@ const VerifyPage: React.FC<VerifyPageProp> = props => {
   const loadingContent = () => <div className={classes.loadingContent}>loading your Nouns...</div>;
 
   useEffect(() => {
-    if (!data || !activeAccount) return;
+    if (!data) return;
     const initialMessage = (nouns: number[]) =>
-      `I am ${activeAccount}${
-        nouns.length >= 0 ? ` and I own Noun${nouns.length > 1 ? 's' : ''} ${nouns.join(', ')}` : ``
-      }`;
+      [
+        activeAccount ? `I am ${activeAccount}` : undefined,
+        nouns.length > 0 ? ` and I own Noun${nouns.length > 1 ? 's' : ''} ${nouns.join(', ')}` : undefined,
+      ].filter((part: string | undefined) => part).join(' ');
     setMessageToSign(initialMessage(extractOwnedNounIdsFromNounsIndex(activeAccount, data)));
   }, [data, activeAccount]);
 
