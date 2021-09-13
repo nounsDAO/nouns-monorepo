@@ -20,8 +20,9 @@ const VerifyPage: React.FC<VerifyPageProp> = props => {
   const [signedMessage, setSignedMessage] = useState<undefined | object>(undefined);
   const { library } = useEthers();
 
-  const extractNounIdsFromNounsIndex = (nounsIndex: any) =>
+  const extractOwnedNounIdsFromNounsIndex = (owner: string, nounsIndex: any) =>
     R.pipe(
+      (nouns: any) => nouns.filter((noun: any) => (noun.owner.id as string).toLocaleLowerCase().localeCompare(owner.toLocaleLowerCase()) === 0),
       R.map((noun: any) => Number(noun.id)),
       R.sort((a: number, b: number) => a - b),
     )(nounsIndex.nouns);
@@ -29,12 +30,12 @@ const VerifyPage: React.FC<VerifyPageProp> = props => {
   const loadingContent = () => <div className={classes.loadingContent}>loading your Nouns...</div>;
 
   useEffect(() => {
-    if (data === undefined) return;
+    if (!data || !activeAccount) return;
     const initialMessage = (nouns: number[]) =>
       `I am ${activeAccount}${
         nouns.length >= 0 ? ` and I own Noun${nouns.length > 1 ? 's' : ''} ${nouns.join(', ')}` : ``
       }`;
-    setMessageToSign(initialMessage(extractNounIdsFromNounsIndex(data)));
+    setMessageToSign(initialMessage(extractOwnedNounIdsFromNounsIndex(activeAccount, data)));
   }, [data, activeAccount]);
 
   return (
