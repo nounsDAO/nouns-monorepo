@@ -5,7 +5,7 @@ import Accordion from 'react-bootstrap/Accordion';
 import Link from '../Link';
 
 const Documentation = () => {
-  const cryotopunksLink = (
+  const cryptopunksLink = (
     <Link text="Cryptopunks" url="https://www.larvalabs.com/cryptopunks" leavesPage={true} />
   );
   const playgroundLink = <Link text="nouns playground" url="/playground" leavesPage={false} />;
@@ -26,7 +26,7 @@ const Documentation = () => {
           <h1>WTF?</h1>
           <p>
             Nouns are an experimental attempt to improve the formation of on-chain avatar
-            communities. While projects such as {cryotopunksLink} have attempted to bootstrap
+            communities. While projects such as {cryptopunksLink} have attempted to bootstrap
             digital community and identity, Nouns attempt to bootstrap identity, community,
             governance and a treasury that can be used by the community for the creation of
             long-term value.
