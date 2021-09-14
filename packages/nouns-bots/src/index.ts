@@ -15,7 +15,7 @@ import { IAuctionLifecycleHandler } from './types';
 import { config } from './config';
 import { TwitterAuctionLifecycleHandler } from './handlers/twitter';
 import { DiscordAuctionLifecycleHandler } from './handlers/discord';
-import R from 'ramda'
+import R from 'ramda';
 import { extractNewVotes } from './utils/proposals';
 
 /**
@@ -29,6 +29,15 @@ if (config.discordEnabled) {
   auctionLifecycleHandlers.push(
     new DiscordAuctionLifecycleHandler([internalDiscordWebhook, publicDiscordWebhook]),
   );
+}
+
+/**
+ * Seed cache the current auction id
+ */
+async function setupAuction() {
+  const lastAuctionBids = await getLastAuctionBids();
+  const lastAuctionId = lastAuctionBids.id;
+  await updateAuctionCache(lastAuctionId);
 }
 
 /**
@@ -70,9 +79,18 @@ async function processAuctionTick() {
   }
 }
 
-const processGovernanceTick = async () => {
+/**
+ * Seed cache with current proposals
+ */
+async function setupGovernance() {
   const proposals = await getAllProposals();
-  R.map(async (proposal) => {
+  await Promise.all(proposals.map(p => updateProposalCache(p)));
+}
+
+async function processGovernanceTick() {
+  const proposals = await getAllProposals();
+  console.log(`processGovernanceTick: all proposal ids(${proposals.map(p => p.id).join(',')})`);
+  R.map(async proposal => {
     const cachedProposal = await getProposalCache(proposal.id);
 
     if (cachedProposal === null) {
@@ -81,18 +99,23 @@ const processGovernanceTick = async () => {
     } else {
       // Proposal has changed status
       if (cachedProposal.status !== proposal.status) {
-        await Promise.all(auctionLifecycleHandlers.map(h => h.handleUpdatedProposalStatus(proposal)));
+        await Promise.all(
+          auctionLifecycleHandlers.map(h => h.handleUpdatedProposalStatus(proposal)),
+        );
       }
       const newVotes = extractNewVotes(cachedProposal, proposal);
-      R.map(async (newVote) => {
+      R.map(async newVote => {
         // New proposal votes
-        await Promise.all(auctionLifecycleHandlers.map(h => h.handleGovernanceVote(proposal, newVote)));
-      }, newVotes)
+        await Promise.all(
+          auctionLifecycleHandlers.map(h => h.handleGovernanceVote(proposal, newVote)),
+        );
+      }, newVotes);
     }
-    await updateProposalCache(proposal)
-  }, proposals)
+    await updateProposalCache(proposal);
+  }, proposals);
 }
 
 setInterval(async () => processAuctionTick(), 30000);
-setInterval(async () => processGovernanceTick(), 3000);
-processAuctionTick().then(() => 'processAuctionTick');
+setInterval(async () => processGovernanceTick(), 60000);
+setupAuction().then(() => 'setupAuction');
+setupGovernance().then(() => 'setupGovernance');

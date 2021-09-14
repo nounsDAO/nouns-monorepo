@@ -70,5 +70,4 @@ export class TwitterAuctionLifecycleHandler implements IAuctionLifecycleHandler 
   async handleGovernanceVote(proposal: Proposal, vote: Vote) {
     //TODO
   }
-
 }

@@ -5,7 +5,8 @@ import { nounsTokenContract } from './clients';
 import { Bid, Proposal, TokenMetadata, Vote } from './types';
 import { extractProposalTitle } from './utils/proposals';
 
-const shortAddress = (address: string) => `${address.substr(0, 4)}...${address.substr(address.length - 4)}`
+const shortAddress = (address: string) =>
+  `${address.substr(0, 4)}...${address.substr(address.length - 4)}`;
 
 /**
  * Try to reverse resolve an ENS domain and return it for display,
@@ -14,9 +15,7 @@ const shortAddress = (address: string) => `${address.substr(0, 4)}...${address.s
  * @returns The resolved ENS lookup domain or a formatted address
  */
 export async function resolveEnsOrFormatAddress(address: string) {
-  return (
-    (await ethers.getDefaultProvider().lookupAddress(address)) || shortAddress(address)
-  );
+  return (await ethers.getDefaultProvider().lookupAddress(address)) || shortAddress(address);
 }
 
 /**
@@ -51,14 +50,21 @@ export function getAuctionEndingSoonTweetText() {
   return `This auction is ending soon! Bid now at https://nouns.wtf`;
 }
 
-export const formatNewGovernanceProposalText = (proposal: Proposal) =>
-  `A new NounsDAO proposal (#${proposal.id}) has been created: ${extractProposalTitle(proposal)}`
+export function formatNewGovernanceProposalText(proposal: Proposal) {
+  return `A new NounsDAO proposal (#${proposal.id}) has been created: ${extractProposalTitle(
+    proposal,
+  )}`;
+}
 
-export const formatUpdatedGovernanceProposalStatusText = (proposal: Proposal) =>
-  `The NounsDAO proposal has changed to status: ${proposal.status.toLocaleLowerCase()}`
+export function formatUpdatedGovernanceProposalStatusText(proposal: Proposal) {
+  return `The NounsDAO proposal has changed to status: ${proposal.status.toLocaleLowerCase()}`;
+}
 
-export const formatNewGovernanceVoteText = (proposal: Proposal, vote: Vote) =>
-  `${shortAddress(vote.voter.id)} has voted ${vote.votes} ${vote.support ? "for" : "against" } Proposal #${proposal.id}: ${proposal.status.toLocaleLowerCase()}`
+export async function formatNewGovernanceVoteText(proposal: Proposal, vote: Vote) {
+  return `${await resolveEnsOrFormatAddress(vote.voter.id)} has voted ${
+    vote.support ? 'for' : 'against'
+  } Proposal #${proposal.id}`;
+}
 
 /**
  * Get the PNG buffer data of a Noun

@@ -24,7 +24,7 @@ export const getAuctionEndingSoonCacheKey = 'NOUNS_AUCTION_ENDING_SOON_CACHE';
 /**
  * Key prefix for caching proposal records
  */
-export const getProposalCacheKeyPrefix = 'NOUNS_PROPOSAL_'
+export const getProposalCacheKeyPrefix = 'NOUNS_PROPOSAL_';
 
 /**
  * Update the auction cache with `id`
@@ -98,7 +98,6 @@ export async function getAuctionCache(): Promise<number> {
   return 0;
 }
 
-
 /**
  * Proposal functions
  */
@@ -108,7 +107,7 @@ export async function getAuctionCache(): Promise<number> {
  * @param id Proposal ID
  * @returns Proposal cache redis key
  */
-const proposalCacheKey = (id: Number) => [getProposalCacheKeyPrefix, id].join('')
+const proposalCacheKey = (id: Number) => [getProposalCacheKeyPrefix, id].join('');
 
 /**
  * Store a proposal into the redis cache
@@ -116,9 +115,9 @@ const proposalCacheKey = (id: Number) => [getProposalCacheKeyPrefix, id].join(''
  * @returns "OK" | null
  */
 export const updateProposalCache = async (proposal: Proposal) => {
-  const cacheKey = proposalCacheKey(proposal.id)
-  return await redis.set(cacheKey, JSON.stringify(proposal))
-}
+  const cacheKey = proposalCacheKey(proposal.id);
+  return await redis.set(cacheKey, JSON.stringify(proposal));
+};
 
 /**
  * Attempt to fetch a proposal from the redis cache
@@ -126,10 +125,10 @@ export const updateProposalCache = async (proposal: Proposal) => {
  * @returns Proposal | null
  */
 export const getProposalCache = async (id: Number) => {
-  const cacheKey = proposalCacheKey(id)
+  const cacheKey = proposalCacheKey(id);
   const proposal = await redis.get(cacheKey);
   if (proposal) {
     return JSON.parse(proposal) as Proposal;
   }
   return null;
-}
+};
