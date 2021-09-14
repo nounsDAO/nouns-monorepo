@@ -15,6 +15,14 @@
   color: var(--brand-dark-red);
 }
 
+.bioGroup {
+  padding-right: 5px;
+  padding-left: 5px;
+}
+.bioGroup a {
+  font-size: 1rem;
+}
+
 .noundersPage img {
   border-radius: 50%;
   width: 50%;
@@ -28,7 +36,9 @@
   margin-bottom: 2rem;
   text-align: center;
 }
-
+.bioGroup a:hover svg {
+  fill: var(--brand-dark-red);
+}
 .bioGroup img {
   margin-bottom: 1rem;
 }
@@ -36,6 +46,7 @@
 .twitterIcon {
   width: 20px;
   color: #aaa;
+  margin-right: 5px;
 }
 
 .card {
