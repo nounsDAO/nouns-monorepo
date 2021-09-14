@@ -203,52 +203,48 @@ const Documentation = () => {
                 </p>
                 <ul>
                   <li>
-                    <a href="https://twitter.com/cryptoseneca" target="_blank" rel="noreferrer">
-                      @cryptoseneca
-                    </a>
+                    <Link
+                      text="@cryptoseneca"
+                      url="https://twitter.com/cryptoseneca"
+                      leavesPage={true}
+                    />
                   </li>
                   <li>
-                    <a href="https://twitter.com/supergremplin" target="_blank" rel="noreferrer">
-                      @supergremplin
-                    </a>
+                    <Link
+                      text="@supergremplin"
+                      url="https://twitter.com/supergremplin"
+                      leavesPage={true}
+                    />
                   </li>
                   <li>
-                    <a href="https://twitter.com/punk4156" target="_blank" rel="noreferrer">
-                      @punk4156
-                    </a>
+                    <Link text="@punk4156" url="https://twitter.com/punk4156" leavesPage={true} />
                   </li>
                   <li>
-                    <a href="https://twitter.com/eBoyArts" target="_blank" rel="noreferrer">
-                      @eboyarts
-                    </a>
+                    <Link text="@eboyarts" url="https://twitter.com/eBoyArts" leavesPage={true} />
                   </li>
                   <li>
-                    <a href="https://twitter.com/punk4464" target="_blank" rel="noreferrer">
-                      @punk4464
-                    </a>
+                    <Link text="@punk4464" url="https://twitter.com/punk4464" leavesPage={true} />
                   </li>
-
                   <li>solimander</li>
-
                   <li>
-                    <a href="https://twitter.com/dhof" target="_blank" rel="noreferrer">
-                      @dhof
-                    </a>
+                    <Link text="@dhof" url="https://twitter.com/dhof" leavesPage={true} />
                   </li>
                   <li>
-                    <a href="https://twitter.com/carrot_init" target="_blank" rel="noreferrer">
-                      @devcarrot
-                    </a>
+                    <Link
+                      text="@devcarrot"
+                      url="https://twitter.com/carrot_init"
+                      leavesPage={true}
+                    />
                   </li>
                   <li>
-                    <a href="https://twitter.com/TimpersHD" target="_blank" rel="noreferrer">
-                      @TimpersHD
-                    </a>
+                    <Link text="@TimpersHD" url="https://twitter.com/TimpersHD" leavesPage={true} />
                   </li>
                   <li>
-                    <a href="https://twitter.com/lastpunk9999" target="_blank" rel="noreferrer">
-                      @lastpunk9999
-                    </a>
+                    <Link
+                      text="@lastpunk9999"
+                      url="https://twitter.com/lastpunk9999"
+                      leavesPage={true}
+                    />
                   </li>
                 </ul>
                 <p>
