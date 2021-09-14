@@ -37,29 +37,29 @@ export async function getAllProposals(): Promise<Proposal[]> {
   const res = await request<ProposalSubgraphResponse>(
     config.nounsSubgraph,
     gql`
-    {
-      proposals {
-        id
-        proposer {
+      {
+        proposals {
           id
-        }
-        description
-        status
-        quorumVotes
-        proposalThreshold
-        startBlock
-        endBlock
-        executionETA
-        votes {
-          id
-          voter {
+          proposer {
             id
           }
-          votes
-          support
+          description
+          status
+          quorumVotes
+          proposalThreshold
+          startBlock
+          endBlock
+          executionETA
+          votes {
+            id
+            voter {
+              id
+            }
+            votes
+            support
+          }
         }
       }
-    }
     `,
   );
   return parseProposalSubgraphResponse(res);

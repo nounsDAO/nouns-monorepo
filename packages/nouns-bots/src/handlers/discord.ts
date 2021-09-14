@@ -1,5 +1,11 @@
 import Discord from 'discord.js';
-import { formatBidMessageText, formatNewGovernanceProposalText, formatNewGovernanceVoteText, formatUpdatedGovernanceProposalStatusText, getNounPngBuffer } from '../utils';
+import {
+  formatBidMessageText,
+  formatNewGovernanceProposalText,
+  formatNewGovernanceVoteText,
+  formatUpdatedGovernanceProposalStatusText,
+  getNounPngBuffer,
+} from '../utils';
 import { Bid, IAuctionLifecycleHandler, Proposal, Vote } from '../types';
 
 export class DiscordAuctionLifecycleHandler implements IAuctionLifecycleHandler {
@@ -46,20 +52,20 @@ export class DiscordAuctionLifecycleHandler implements IAuctionLifecycleHandler 
     const message = new Discord.MessageEmbed()
       .setTitle(`New Governance Proposal`)
       .setURL(`https://nouns.wtf/vote/${proposal.id}`)
-      .setDescription(await formatNewGovernanceProposalText(proposal))
+      .setDescription(formatNewGovernanceProposalText(proposal))
       .setTimestamp();
     await Promise.all(this.discordClients.map(c => c.send(message)));
-    console.log(`processed discord new proposal ${proposal.id}`)
+    console.log(`processed discord new proposal ${proposal.id}`);
   }
 
   async handleUpdatedProposalStatus(proposal: Proposal) {
     const message = new Discord.MessageEmbed()
       .setTitle(`Proposal Status Update`)
       .setURL(`https://nouns.wtf/vote/${proposal.id}`)
-      .setDescription(await formatUpdatedGovernanceProposalStatusText(proposal))
+      .setDescription(formatUpdatedGovernanceProposalStatusText(proposal))
       .setTimestamp();
     await Promise.all(this.discordClients.map(c => c.send(message)));
-    console.log(`processed discord proposal update ${proposal.id}`)
+    console.log(`processed discord proposal update ${proposal.id}`);
   }
 
   async handleGovernanceVote(proposal: Proposal, vote: Vote) {
@@ -69,7 +75,7 @@ export class DiscordAuctionLifecycleHandler implements IAuctionLifecycleHandler 
       .setDescription(await formatNewGovernanceVoteText(proposal, vote))
       .setTimestamp();
     await Promise.all(this.discordClients.map(c => c.send(message)));
-    console.log(`processed discord new vote for proposal ${proposal.id};${vote.id}`)
+    console.log(`processed discord new vote for proposal ${proposal.id};${vote.id}`);
   }
 
   async handleAuctionEndingSoon(_auctionId: number) {

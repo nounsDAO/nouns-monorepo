@@ -39,16 +39,22 @@ export interface IAuctionLifecycleHandler {
 }
 
 export interface ProposalSubgraphResponse {
-  proposals: Proposal[]
+  proposals: Proposal[];
 }
 
-export type ProposalStatus = typeof STATUS_ACTIVE | typeof STATUS_CANCELLED | typeof STATUS_EXECUTED | typeof STATUS_PENDING | typeof STATUS_QUEUED | typeof STATUS_VETOED
+export type ProposalStatus =
+  | typeof STATUS_ACTIVE
+  | typeof STATUS_CANCELLED
+  | typeof STATUS_EXECUTED
+  | typeof STATUS_PENDING
+  | typeof STATUS_QUEUED
+  | typeof STATUS_VETOED;
 
 export interface Proposal {
   id: Number;
   proposer: Account;
   description: string;
-  status: ProposalStatus
+  status: ProposalStatus;
   quorumVotes: Number;
   proposalThreshold: Number;
   startBlock: Number;
