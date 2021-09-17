@@ -142,18 +142,20 @@ export class Image {
   private updateImageBounds(y: number): void {
     const { rects } = this._rows[y];
 
-    // Shift top bound to `y - 1` if row is not empty, top bound is 0, and y != 0
+    // Shift top bound to `y` if row is not empty and top bound is 0
     if (!this.isEmptyRow(rects[0]) && this._bounds.top === 0) {
-      this._bounds.top = y === 0 ? y : y - 1;
+      this._bounds.top = y;
     }
 
     if (this._bounds.top !== 0) {
       // Set bottom bound to `y` if row is empty or we're on the last row.
       // Otherwise, reset the bottom bound
-      if (this.isEmptyRow(rects[0]) || y === 31) {
+      if (this.isEmptyRow(rects[0])) {
         if (this._bounds.bottom === 0) {
-          this._bounds.bottom = y;
+          this._bounds.bottom = y - 1;
         }
+      } else if (y === 31) {
+        this._bounds.bottom = y;
       } else {
         this._bounds.bottom = 0;
       }
