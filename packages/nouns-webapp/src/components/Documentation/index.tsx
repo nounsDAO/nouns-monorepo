@@ -141,7 +141,7 @@ const Documentation = () => {
                   <li>heads (234) </li>
                   <li>glasses (21)</li>
                 </ul>
-                You can experiment with off-chain noun generation at the {playgroundLink}
+                You can experiment with off-chain noun generation at the {playgroundLink}.
               </Card.Body>
             </Accordion.Collapse>
           </Card>
