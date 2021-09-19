@@ -53,6 +53,11 @@
   font-size: 1.3rem;
 }
 
+.markdown img {
+  max-width: 100%;
+  height: auto;
+}
+
 .voterIneligibleAlert {
   margin: 1rem 0 0 0;
 }
