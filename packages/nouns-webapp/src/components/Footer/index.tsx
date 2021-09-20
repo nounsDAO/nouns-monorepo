@@ -5,6 +5,7 @@ import { useAppSelector } from '../../hooks';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import { externalURL, ExternalURL } from '../../utils/externalURL';
 import config from '../../config';
+import Link from '../Link';
 
 const Footer = () => {
   const twitterURL = externalURL(ExternalURL.twitter);
@@ -23,15 +24,9 @@ const Footer = () => {
   return (
     <Section bgColor={bgColor} fullWidth={false}>
       <footer className={classes.footerSignature}>
-        <a href={twitterURL} target="_blank" rel="noreferrer">
-          twitter
-        </a>
-        <a href={etherscanURL} target="_blank" rel="noreferrer">
-          etherscan
-        </a>
-        <a href={discordURL} target="_blank" rel="noreferrer">
-          discord
-        </a>
+        <Link text="twitter" url={twitterURL} leavesPage={true} />
+        <Link text="etherscan" url={etherscanURL} leavesPage={true} />
+        <Link text="discord" url={discordURL} leavesPage={true} />
       </footer>
     </Section>
   );
