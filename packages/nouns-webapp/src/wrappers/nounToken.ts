@@ -77,11 +77,11 @@ export const useUserVotesAsOfBlock = (block: number | undefined): number | undef
 
   // Check for available votes
   const [votes] =
-    useContractCall<[number]>({
+    useContractCall<[EthersBN]>({
       abi,
       address: config.tokenAddress,
       method: 'getPriorVotes',
       args: [account, block],
     }) || [];
-  return votes;
+  return votes?.toNumber();
 };

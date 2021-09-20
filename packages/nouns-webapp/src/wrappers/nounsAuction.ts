@@ -5,7 +5,7 @@ import { NounsAuctionHouseABI } from '@nouns/contracts';
 import config from '../config';
 import BigNumber from 'bignumber.js';
 
-export enum AuctionHouseContractFunctions {
+export enum AuctionHouseContractFunction {
   auction = 'auction',
   duration = 'duration',
   minBidIncrementPercentage = 'minBidIncrementPercentage',
@@ -19,7 +19,6 @@ export interface Auction {
   bidder: string;
   endTime: EthersBN;
   startTime: EthersBN;
-  length: number;
   nounId: EthersBN;
   settled: boolean;
 }
@@ -30,12 +29,12 @@ export const auctionHouseContractFactory = (auctionHouseProxyAddress: string) =>
   new Contract(auctionHouseProxyAddress, abi);
 
 export const useAuction = (auctionHouseProxyAddress: string) => {
-  const auction = useContractCall({
+  const auction = useContractCall<Auction>({
     abi,
     address: auctionHouseProxyAddress,
     method: 'auction',
     args: [],
-  }) as { [key: string]: any };
+  });
   return auction as Auction;
 };
 

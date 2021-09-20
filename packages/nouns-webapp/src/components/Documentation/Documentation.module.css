@@ -6,19 +6,25 @@
   margin: 3rem 0;
 }
 
-@media (max-width:  992px){
-  .headerWrapper{
-    padding:  1rem;
+@media (max-width: 992px) {
+  .headerWrapper {
+    padding: 1rem;
   }
 }
 
 .card {
   border: none;
+  margin-bottom: 2.5rem;
+  max-width: fit-content;
 }
 
-.card, .headerWrapper{
-    font-size: 1.3rem;
+.cardHeader:hover {
+  color: var(--brand-dark-red);
+}
 
+.card,
+.headerWrapper {
+  font-size: 1.3rem;
 }
 .cardHeader {
   border: none;
@@ -26,4 +32,8 @@
   font-family: 'Londrina Solid';
   font-size: 2.5rem;
   cursor: pointer;
+  line-height: normal;
+  padding-top: 0;
+  padding-bottom: 0;
+  max-width: max-content;
 }

@@ -55,6 +55,7 @@ export interface Proposal {
   forCount: number;
   againstCount: number;
   abstainCount: number;
+  createdBlock: number;
   startBlock: number;
   endBlock: number;
   eta: Date | undefined;
@@ -62,6 +63,7 @@ export interface Proposal {
   proposalThreshold: number;
   quorumVotes: number;
   details: ProposalDetail[];
+  transactionHash: string;
 }
 
 interface ProposalData {
@@ -69,21 +71,48 @@ interface ProposalData {
   loading: boolean;
 }
 
+export interface ProposalTransaction {
+  address: string;
+  value: string;
+  signature: string;
+  calldata: string;
+}
+
 const abi = new utils.Interface(NounsDAOABI);
-const contract = new Contract(config.nounsDaoAddress, abi);
+const contract = new Contract(config.nounsDaoProxyAddress, abi);
 const proposalCreatedFilter = contract.filters?.ProposalCreated();
 
-const untypedContract: any = contract; // useDapp type incompatibility
-
-const useProposalCount = (nounsDao: string): number | undefined => {
+export const useProposalCount = (): number | undefined => {
   const [count] =
     useContractCall<[EthersBN]>({
       abi,
-      address: nounsDao,
+      address: contract.address,
       method: 'proposalCount',
       args: [],
     }) || [];
   return count?.toNumber();
+};
+
+export const useProposalThreshold = (): number | undefined => {
+  const [count] =
+    useContractCall<[EthersBN]>({
+      abi,
+      address: contract.address,
+      method: 'proposalThreshold',
+      args: [],
+    }) || [];
+  return count?.toNumber();
+};
+
+const useVotingDelay = (nounsDao: string): number | undefined => {
+  const [blockDelay] =
+    useContractCall<[EthersBN]>({
+      abi,
+      address: nounsDao,
+      method: 'votingDelay',
+      args: [],
+    }) || [];
+  return blockDelay?.toNumber();
 };
 
 const countToIndices = (count: number | undefined) => {
@@ -95,17 +124,19 @@ const useFormattedProposalCreatedLogs = () => {
 
   return useMemo(() => {
     return useLogsResult?.logs?.map(log => {
-      const parsed = abi.parseLog(log).args;
+      const { args: parsed } = abi.parseLog(log);
       return {
         description: parsed.description,
+        transactionHash: log.transactionHash,
         details: parsed.targets.map((target: string, i: number) => {
           const signature = parsed.signatures[i];
+          const value = parsed[3][i];
           const [name, types] = signature.substr(0, signature.length - 1)?.split('(');
           if (!name || !types) {
             return {
               target,
               functionSig: name === '' ? 'transfer' : name === undefined ? 'unknown' : name,
-              callData: types ?? '',
+              callData: types ? types : value ? `${utils.formatEther(value)} ETH` : '',
             };
           }
           const calldata = parsed.calldatas[i];
@@ -122,7 +153,8 @@ const useFormattedProposalCreatedLogs = () => {
 };
 
 export const useAllProposals = (): ProposalData => {
-  const proposalCount = useProposalCount(contract.address);
+  const proposalCount = useProposalCount();
+  const votingDelay = useVotingDelay(contract.address);
 
   const govProposalIndexes = useMemo(() => {
     return countToIndices(proposalCount);
@@ -157,7 +189,7 @@ export const useAllProposals = (): ProposalData => {
 
     return {
       data: proposals.map((proposal, i) => {
-        const description = logs[i]?.description;
+        const description = logs[i]?.description?.replace(/\\n/g, '\n');
         return {
           id: proposal?.id.toString(),
           title: description?.split(/# |\n/g)[1] ?? 'Untitled',
@@ -168,24 +200,44 @@ export const useAllProposals = (): ProposalData => {
           quorumVotes: parseInt(proposal?.quorumVotes?.toString() ?? '0'),
           forCount: parseInt(proposal?.forVotes?.toString() ?? '0'),
           againstCount: parseInt(proposal?.againstVotes?.toString() ?? '0'),
-          abstainCount: parseInt(proposal?.againstVotes?.toString() ?? '0'),
+          abstainCount: parseInt(proposal?.abstainVotes?.toString() ?? '0'),
+          createdBlock: parseInt(proposal?.startBlock.sub(votingDelay ?? 0)?.toString() ?? ''),
           startBlock: parseInt(proposal?.startBlock?.toString() ?? ''),
           endBlock: parseInt(proposal?.endBlock?.toString() ?? ''),
           eta: proposal?.eta ? new Date(proposal?.eta?.toNumber() * 1000) : undefined,
           details: logs[i]?.details,
+          transactionHash: logs[i]?.transactionHash,
         };
       }),
       loading: false,
     };
-  }, [formattedLogs, proposalStates, proposals]);
+  }, [formattedLogs, proposalStates, proposals, votingDelay]);
 };
 
-export const useProposal = (id: string): Proposal | undefined => {
+export const useProposal = (id: string | number): Proposal | undefined => {
   const { data } = useAllProposals();
-  return data?.find(p => p.id === id);
+  return data?.find(p => p.id === id.toString());
 };
 
 export const useCastVote = () => {
-  const { send: castVote, state: castVoteState } = useContractFunction(untypedContract, 'castVote');
+  const { send: castVote, state: castVoteState } = useContractFunction(contract, 'castVote');
   return { castVote, castVoteState };
+};
+
+export const usePropose = () => {
+  const { send: propose, state: proposeState } = useContractFunction(contract, 'propose');
+  return { propose, proposeState };
+};
+
+export const useQueueProposal = () => {
+  const { send: queueProposal, state: queueProposalState } = useContractFunction(contract, 'queue');
+  return { queueProposal, queueProposalState };
+};
+
+export const useExecuteProposal = () => {
+  const { send: executeProposal, state: executeProposalState } = useContractFunction(
+    contract,
+    'execute',
+  );
+  return { executeProposal, executeProposalState };
 };

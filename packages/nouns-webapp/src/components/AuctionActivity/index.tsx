@@ -16,15 +16,12 @@ import AuctionActivityNounTitle from '../AuctionActivityNounTitle';
 import AuctionActivityDateHeadline from '../AuctionActivityDateHeadline';
 import BidHistoryBtn from '../BidHistoryBtn';
 import StandaloneNoun from '../StandaloneNoun';
-import config, { CHAIN_ID } from '../../config';
-import { buildEtherscanAddressLink, Network } from '../../utils/buildEtherscanLink';
+import config from '../../config';
+import { buildEtherscanAddressLink } from '../../utils/etherscan';
 
 const openEtherscanBidHistory = () => {
-  const url = buildEtherscanAddressLink(
-    config.auctionProxyAddress,
-    CHAIN_ID === 1 ? Network.mainnet : Network.rinkeby,
-  );
-  window.open(url.toString());
+  const url = buildEtherscanAddressLink(config.auctionProxyAddress);
+  window.open(url);
 };
 
 interface AuctionActivityProps {

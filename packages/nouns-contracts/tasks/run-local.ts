@@ -22,6 +22,10 @@ task(
       gasLimit: 1_000_000,
     });
 
+  await run('create-proposal', {
+    nounsDaoProxy: contracts.NounsDAOProxy.instance.address,
+  });
+
   const { chainId } = await ethers.provider.getNetwork();
 
   const accounts = {
@@ -41,6 +45,8 @@ task(
   );
   console.log(`Auction House Proxy address: ${contracts.NounsAuctionHouseProxy.instance.address}`);
   console.log(`Nouns ERC721 address: ${contracts.NounsToken.instance.address}`);
+  console.log(`Nouns DAO Executor address: ${contracts.NounsDAOExecutor.instance.address}`);
+  console.log(`Nouns DAO Proxy address: ${contracts.NounsDAOProxy.instance.address}`);
 
   await ethers.provider.send('evm_setIntervalMining', [12_000]);
 

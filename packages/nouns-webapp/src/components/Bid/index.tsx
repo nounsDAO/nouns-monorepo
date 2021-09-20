@@ -1,10 +1,10 @@
 import {
   Auction,
   auctionHouseContractFactory,
-  AuctionHouseContractFunctions,
+  AuctionHouseContractFunction,
 } from '../../wrappers/nounsAuction';
 import config from '../../config';
-import { useContractFunction } from '@usedapp/core';
+import { connectContractToSigner, useEthers, useContractFunction } from '@usedapp/core';
 import { useAppSelector } from '../../hooks';
 import React, { useEffect, useState, useRef, ChangeEvent, useCallback } from 'react';
 import { utils, BigNumber as EthersBN } from 'ethers';
@@ -47,8 +47,11 @@ const Bid: React.FC<{
   auctionEnded: boolean;
 }> = props => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
+  const { library } = useEthers();
   const { auction, auctionEnded } = props;
   const auctionHouseContract = auctionHouseContractFactory(config.auctionProxyAddress);
+
+  const account = useAppSelector(state => state.account.activeAccount);
 
   const bidInputRef = useRef<HTMLInputElement>(null);
 
@@ -68,12 +71,12 @@ const Bid: React.FC<{
   );
 
   const { send: placeBid, state: placeBidState } = useContractFunction(
-    auctionHouseContract as any,
-    AuctionHouseContractFunctions.createBid,
+    auctionHouseContract,
+    AuctionHouseContractFunction.createBid,
   );
   const { send: settleAuction, state: settleAuctionState } = useContractFunction(
-    auctionHouseContract as any,
-    AuctionHouseContractFunctions.settleCurrentAndCreateNewAuction,
+    auctionHouseContract,
+    AuctionHouseContractFunction.settleCurrentAndCreateNewAuction,
   );
 
   const bidInputHandler = (event: ChangeEvent<HTMLInputElement>) => {
@@ -87,7 +90,7 @@ const Bid: React.FC<{
     setBidInput(event.target.value);
   };
 
-  const placeBidHandler = () => {
+  const placeBidHandler = async () => {
     if (!auction || !bidInputRef.current || !bidInputRef.current.value) {
       return;
     }
@@ -104,8 +107,14 @@ const Bid: React.FC<{
       return;
     }
 
+    const value = utils.parseEther(bidInputRef.current.value.toString());
+    const contract = connectContractToSigner(auctionHouseContract, undefined, library);
+    const gasLimit = await contract.estimateGas.createBid(auction.nounId, {
+      value,
+    });
     placeBid(auction.nounId, {
-      value: utils.parseEther(bidInputRef.current.value.toString()),
+      value,
+      gasLimit: gasLimit.add(10_000), // A 10,000 gas pad is used to avoid 'Out of gas' errors
     });
   };
 
@@ -119,6 +128,26 @@ const Bid: React.FC<{
     }
   };
 
+  // successful bid using redux store state
+  useEffect(() => {
+    if (!account) return;
+
+    // tx state is mining
+    const isMiningUserTx = placeBidState.status === 'Mining';
+    // allows user to rebid against themselves so long as it is not the same tx
+    const isCorrectTx = currentBid(bidInputRef).isEqualTo(new BigNumber(auction.amount.toString()));
+    if (isMiningUserTx && auction.bidder === account && isCorrectTx) {
+      placeBidState.status = 'Success';
+      setModal({
+        title: 'Success',
+        message: `Bid was placed successfully!`,
+        show: true,
+      });
+      setBidButtonContent({ loading: false, content: 'Bid' });
+      clearBidInput();
+    }
+  }, [auction, placeBidState, account, setModal]);
+
   // placing bid transaction state hook
   useEffect(() => {
     switch (!auctionEnded && placeBidState.status) {
@@ -131,18 +160,9 @@ const Bid: React.FC<{
       case 'Mining':
         setBidButtonContent({ loading: true, content: '' });
         break;
-      case 'Success':
-        setModal({
-          title: 'Success',
-          message: `Bid was placed successfully!`,
-          show: true,
-        });
-        setBidButtonContent({ loading: false, content: 'Bid' });
-        clearBidInput();
-        break;
       case 'Fail':
         setModal({
-          title: 'Tx Failed',
+          title: 'Transaction Failed',
           message: placeBidState.errorMessage ? placeBidState.errorMessage : 'Please try again.',
           show: true,
         });
@@ -181,7 +201,7 @@ const Bid: React.FC<{
         break;
       case 'Fail':
         setModal({
-          title: 'Tx Failed',
+          title: 'Transaction Failed',
           message: settleAuctionState.errorMessage
             ? settleAuctionState.errorMessage
             : 'Please try again.',
