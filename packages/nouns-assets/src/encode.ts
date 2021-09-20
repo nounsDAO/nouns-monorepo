@@ -1,4 +1,4 @@
-import { PNGCollectionEncoder } from '../../nouns-sdk/src'; // TODO: '@nouns/sdk'
+import { PNGCollectionEncoder } from '@nouns/sdk';
 import { readPngFile } from 'node-libpng';
 import { promises as fs } from 'fs';
 import path from 'path';
