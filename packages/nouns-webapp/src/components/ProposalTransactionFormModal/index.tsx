@@ -57,7 +57,7 @@ const ProposalTransactionFormModal = ({
     }
 
     try {
-      return !!abi?._encodeParams(abi?.functions[func]?.inputs, args);
+      return !!abi?._encodeParams(abi?.functions[func]?.inputs, a);
     } catch {
       return false;
     }
