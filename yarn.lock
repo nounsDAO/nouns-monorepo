@@ -2026,6 +2026,26 @@
   dependencies:
     prop-types "^15.7.2"
 
+"@gnosis.pm/safe-apps-provider@^0.7.1":
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-apps-provider/-/safe-apps-provider-0.7.1.tgz#d55ba011cd496322faa346a50c1b6aea64b1da43"
+  integrity sha512-+y+hQ9Zr1GGrzehqdkhOUTEX1Ixm0jGUGMxbXQbG4C3PJRvQ2UVoqIXa7CJcqg0Gzru2bOM5CzNvv8pxxv23GA==
+  dependencies:
+    "@gnosis.pm/safe-apps-sdk" "4.2.0"
+    events "^3.3.0"
+
+"@gnosis.pm/safe-apps-react-sdk@^4.0.3":
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-apps-react-sdk/-/safe-apps-react-sdk-4.0.3.tgz#14eda4890e641e151d67ba3f6b0a37ffcefe245c"
+  integrity sha512-hJUKuAnTwMfgwO2EETwVe9qKDa4xwHR4y2nAwyUmdjsRkiIbQLqIGTDBYoCElH2ZxQS8/PJVWZ5efT6cB83i+Q==
+  dependencies:
+    "@gnosis.pm/safe-apps-sdk" "4.2.0"
+
+"@gnosis.pm/safe-apps-sdk@4.2.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-apps-sdk/-/safe-apps-sdk-4.2.0.tgz#77069de1b4f3db724d1ded1fab39e1feacc7bc05"
+  integrity sha512-GpaxIbi658+KLtJpTGq6qdpVkbW7OQUKh8i0uhZ04SiAoIAtR9QNbP7V04OvvuqhKjhvCnvh37mJH2RZ2zZHDA==
+
 "@graphprotocol/graph-cli@^0.20.1":
   version "0.20.1"
   resolved "https://registry.yarnpkg.com/@graphprotocol/graph-cli/-/graph-cli-0.20.1.tgz#659459091821861987e6596b46e692ca4a3c2b3b"
@@ -10245,7 +10265,7 @@ eventemitter3@^3.1.0:
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-3.1.2.tgz#2d3d48f9c346698fce83a85d7d664e98535df6e7"
   integrity sha512-tvtQIeLVHjDkJYnzf2dgVMxfuSGJeM/7UCG17TT4EumTfNtF+0nebF/4zWOIkCreAbtNqhGEboB6BWrwqNaw4Q==
 
-events@^3.0.0:
+events@^3.0.0, events@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/events/-/events-3.3.0.tgz#31a95ad0a924e2d2c419a813aeb2c4e878ea7400"
   integrity sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==

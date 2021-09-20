@@ -1,6 +1,11 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "name": "Nouns DAO",
+  "description": "One Noun, every day, forever. Nouns DAO is an experiment on the Ethereum blockchain.",
+  "providedBy": {
+    "name": "Nouns DAO",
+    "url": "https://nouns.wtf"
+  },
+  "iconPath": "logo.svg",
   "icons": [
     {
       "src": "favicon.ico",

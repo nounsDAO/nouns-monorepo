@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
@@ -41,6 +41,8 @@ import { applyMiddleware, createStore, combineReducers } from 'redux';
 import { routerMiddleware } from 'connected-react-router';
 import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import { useSafeAppsSDK } from '@gnosis.pm/safe-apps-react-sdk';
+import { SafeAppProvider } from '@gnosis.pm/safe-apps-provider';
 import { nounPath } from './utils/history';
 import { push } from 'connected-react-router';
 
@@ -184,15 +186,18 @@ const PastAuctions: React.FC = () => {
   return <></>;
 };
 
+const GnosisSafeProvider = () => {
+  const { sdk, safe } = useSafeAppsSDK();
+  return useMemo(() => new Web3Provider(new SafeAppProvider(safe, sdk)), [sdk, safe]);
+};
+
 ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
       <ChainSubscriber />
       <React.StrictMode>
         <Web3ReactProvider
-          getLibrary={
-            (provider, connector) => new Web3Provider(provider) // this will vary according to whether you use e.g. ethers or web3.js
-          }
+          getLibrary={() => GnosisSafeProvider()}
         >
           <ApolloProvider client={client}>
             <PastAuctions />
