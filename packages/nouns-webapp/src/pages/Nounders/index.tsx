@@ -131,7 +131,7 @@ const NoundersPage = () => {
       <Col lg={{ span: 6, offset: 3 }}>
         <h2 style={{ marginBottom: '2rem' }}>The Nounders</h2>
         <h3 style={{ marginBottom: '2rem' }}>3.5 artists, 6.5 technologists</h3>
-        <Row style={{ marginBottom: '0rem', textAlign: 'center', justifyContent: 'center' }}>
+        <Row style={{ marginBottom: '0rem' }}>
           <BioCards min={0} max={5} />
           <BioCards min={5} max={10} />
         </Row>
