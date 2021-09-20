@@ -1,0 +1,17 @@
+{
+  "name": "@nouns/assets",
+  "private": true,
+  "version": "0.1.0",
+  "description": "nouns assets",
+  "author": "Nounders",
+  "homepage": "https://nouns.wtf",
+  "license": "GPL-3.0",
+  "main": "src/build.ts",
+  "scripts": {
+    "encode": "ts-node src/encode.ts"
+  },
+  "devDependencies": {
+    "@nouns/sdk": "^0.1.0",
+    "node-libpng": "^0.2.18"
+  }
+}
