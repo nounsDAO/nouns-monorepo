@@ -30,7 +30,7 @@ library MultiPartRLEToSVG {
         uint8 left;
     }
 
-    struct Rect {
+    struct Draw {
         uint8 length;
         uint8 colorIndex;
     }
@@ -38,7 +38,7 @@ library MultiPartRLEToSVG {
     struct DecodedImage {
         uint8 paletteIndex;
         ContentBounds bounds;
-        Rect[] rects;
+        Draw[] draws;
     }
 
     /**
@@ -86,26 +86,33 @@ library MultiPartRLEToSVG {
             string[16] memory buffer;
 
             string memory part;
-            for (uint256 i = 0; i < image.rects.length; i++) {
-                Rect memory rect = image.rects[i];
-                if (rect.colorIndex != 0) {
-                    buffer[cursor] = lookup[rect.length];          // width
-                    buffer[cursor + 1] = lookup[currentX];         // x
-                    buffer[cursor + 2] = lookup[currentY];         // y
-                    buffer[cursor + 3] = palette[rect.colorIndex]; // color
+            for (uint256 i = 0; i < image.draws.length; i++) {
+                Draw memory draw = image.draws[i];
 
-                    cursor += 4;
+                uint8 length = _getRectLength(currentX, draw.length, image.bounds.right);
+                while (length > 0) {
+                    if (draw.colorIndex != 0) {
+                        buffer[cursor] = lookup[length];               // width
+                        buffer[cursor + 1] = lookup[currentX];         // x
+                        buffer[cursor + 2] = lookup[currentY];         // y
+                        buffer[cursor + 3] = palette[draw.colorIndex]; // color
 
-                    if (cursor >= 16) {
-                        part = string(abi.encodePacked(part, _getChunk(cursor, buffer)));
-                        cursor = 0;
+                        cursor += 4;
+
+                        if (cursor >= 16) {
+                            part = string(abi.encodePacked(part, _getChunk(cursor, buffer)));
+                            cursor = 0;
+                        }
                     }
-                }
 
-                currentX += rect.length;
-                if (currentX == image.bounds.right) {
-                    currentX = image.bounds.left;
-                    currentY++;
+                    currentX += length;
+                    if (currentX == image.bounds.right) {
+                        currentX = image.bounds.left;
+                        currentY++;
+                    }
+
+                    draw.length -= length;
+                    length = _getRectLength(currentX, draw.length, image.bounds.right);
                 }
             }
 
@@ -115,6 +122,19 @@ library MultiPartRLEToSVG {
             rects = string(abi.encodePacked(rects, part));
         }
         return rects;
+    }
+
+    /**
+     * @notice Given an x-coordinate, draw length, and right bound, return the draw
+     * length for a single SVG rectangle.
+     */
+    function _getRectLength(
+        uint256 currentX,
+        uint8 drawLength,
+        uint8 rightBound
+    ) internal pure returns (uint8) {
+        uint8 remainingPixelsInLine = rightBound - uint8(currentX);
+        return drawLength <= remainingPixelsInLine ? drawLength : remainingPixelsInLine;
     }
 
     /**
@@ -147,11 +167,11 @@ library MultiPartRLEToSVG {
         });
 
         uint256 cursor;
-        Rect[] memory rects = new Rect[]((image.length - 5) / 2);
+        Draw[] memory draws = new Draw[]((image.length - 5) / 2);
         for (uint256 i = 5; i < image.length; i += 2) {
-            rects[cursor] = Rect({ length: uint8(image[i]), colorIndex: uint8(image[i + 1]) });
+            draws[cursor] = Draw({ length: uint8(image[i]), colorIndex: uint8(image[i + 1]) });
             cursor++;
         }
-        return DecodedImage({ paletteIndex: paletteIndex, bounds: bounds, rects: rects });
+        return DecodedImage({ paletteIndex: paletteIndex, bounds: bounds, draws: draws });
     }
 }
