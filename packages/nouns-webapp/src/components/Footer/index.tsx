@@ -21,7 +21,7 @@ const Footer = () => {
       : '#e1d7d5';
 
   return (
-    <Section bgColor={bgColor} fullWidth={false}>
+    <Section bgColor={bgColor} fullWidth={false} className={classes.alignBottom}>
       <footer className={classes.footerSignature}>
         <a href={twitterURL} target="_blank" rel="noreferrer">
           twitter

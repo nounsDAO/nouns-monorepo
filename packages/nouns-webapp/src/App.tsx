@@ -31,7 +31,7 @@ function App() {
   const useGreyBg = useAppSelector(state => state.application.useGreyBackground);
 
   return (
-    <div className={useGreyBg ? classes.greyBg : classes.beigeBg}>
+    <div className={`${classes.wrapper} ${useGreyBg ? classes.greyBg : classes.beigeBg}`}>
       {Number(CHAIN_ID) !== chainId && <NetworkAlert />}
       {alertModal.show && (
         <AlertModal
@@ -53,7 +53,7 @@ function App() {
           <Route exact path="/create-proposal" component={CreateProposalPage} />
           <Route exact path="/vote" component={GovernancePage} />
           <Route exact path="/vote/:id" component={VotePage} />
-          <Route component={NotFoundPage}/>
+          <Route component={NotFoundPage} />
         </Switch>
         <Footer />
       </BrowserRouter>
