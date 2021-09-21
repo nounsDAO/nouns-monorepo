@@ -11,6 +11,7 @@ const Footer = () => {
   const twitterURL = externalURL(ExternalURL.twitter);
   const discordURL = externalURL(ExternalURL.discord);
   const etherscanURL = buildEtherscanAddressLink(config.tokenAddress);
+  const discourseURL = externalURL(ExternalURL.discourse);
 
   const location = useLocation();
   const useGreyBg = useAppSelector(state => state.application.useGreyBackground);
@@ -24,9 +25,10 @@ const Footer = () => {
   return (
     <Section bgColor={bgColor} fullWidth={false}>
       <footer className={classes.footerSignature}>
+        <Link text="discord" url={discordURL} leavesPage={true} />
         <Link text="twitter" url={twitterURL} leavesPage={true} />
         <Link text="etherscan" url={etherscanURL} leavesPage={true} />
-        <Link text="discord" url={discordURL} leavesPage={true} />
+        <Link text="discourse" url={discourseURL} leavesPage={false} />
       </footer>
     </Section>
   );
