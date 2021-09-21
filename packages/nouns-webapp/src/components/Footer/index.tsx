@@ -23,7 +23,7 @@ const Footer = () => {
       : '#e1d7d5';
 
   return (
-    <Section bgColor={bgColor} fullWidth={false}>
+    <Section bgColor={bgColor} fullWidth={false} className={classes.alignBottom}>
       <footer className={classes.footerSignature}>
         <Link text="discord" url={discordURL} leavesPage={true} />
         <Link text="twitter" url={twitterURL} leavesPage={true} />

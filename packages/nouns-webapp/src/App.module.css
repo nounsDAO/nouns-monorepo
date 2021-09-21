@@ -1,5 +1,11 @@
 @import './css/colors.css';
 
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 .greyBg {
   background-color: #d5d7e1;
 }
