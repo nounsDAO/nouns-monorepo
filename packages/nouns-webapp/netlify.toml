@@ -12,3 +12,8 @@
 
 [context.deploy-preview.environment]
   REACT_APP_ENABLE_HISTORY = "true"
+
+[[headers]]
+  for = "/*"
+    [headers.values]
+    Access-Control-Allow-Origin = "*"
