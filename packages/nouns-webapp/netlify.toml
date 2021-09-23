@@ -11,6 +11,4 @@
   REACT_APP_ENABLE_HISTORY = "true"
 
 [context.deploy-preview.environment]
-  REACT_APP_CHAIN_ID = "1"
   REACT_APP_ENABLE_HISTORY = "true"
-
