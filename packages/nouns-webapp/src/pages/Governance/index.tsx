@@ -11,12 +11,11 @@ const GovernancePage = () => {
     <Section bgColor="transparent" fullWidth={true}>
       <Col lg={{ span: 8, offset: 2 }}>
         <h1 className={classes.heading}>Nouns DAO Governance</h1>
-        <h2 className={classes.subheading}>
-          Nouns govern NounsDAO. You can vote on each proposal yourself or delegate your votes to a
-          third party.
-        </h2>
+        <p className={classes.subheading}>
+          Nouns govern NounsDAO. Nouns can vote on proposals or delegate their vote to a third
+          party. A minimum threshold of 1% of the total NOUN supply is required to submit proposals.
+        </p>
         <Proposals proposals={proposals} />
-        <p>A minimum threshold of 5% of the total NOUN supply is required to submit proposals</p>
       </Col>
     </Section>
   );

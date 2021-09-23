@@ -100,7 +100,7 @@ const BioCard: React.FC<{
                 d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84"
                 data-v-6cab4e66=""
               ></path>
-            </svg>{' '}
+            </svg>
             {name}
           </a>
         )}
@@ -117,7 +117,7 @@ const BioCards: React.FC<{ min: number; max: number }> = props => {
   return (
     <>
       {bios.slice(min, max).map(bio => (
-        <Col xs={4} lg={3} className={classes.bioGroup}>
+        <Col xs={5} md={3} lg={3} className={classes.bioGroup}>
           <BioCard {...bio} />
         </Col>
       ))}
@@ -131,7 +131,7 @@ const NoundersPage = () => {
       <Col lg={{ span: 6, offset: 3 }}>
         <h2 style={{ marginBottom: '2rem' }}>The Nounders</h2>
         <h3 style={{ marginBottom: '2rem' }}>3.5 artists, 6.5 technologists</h3>
-        <Row style={{ marginBottom: '0rem', textAlign: 'center' }}>
+        <Row style={{ marginBottom: '0rem' }}>
           <BioCards min={0} max={5} />
           <BioCards min={5} max={10} />
         </Row>
