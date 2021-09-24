@@ -1,11 +1,11 @@
 import React from 'react';
 import classes from './Directory.module.css';
 import Section from '../../layout/Section';
-import { Col, Row, Card } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 import { useAppSelector } from '../../hooks';
 import { BigNumber } from '@ethersproject/bignumber';
 import StandaloneNoun from '../../components/StandaloneNoun';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Directory = () => {
   const auctions = useAppSelector(state =>
