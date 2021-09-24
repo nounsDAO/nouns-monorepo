@@ -1,0 +1,29 @@
+.directory h1,
+.directory h2,
+.directory h3 {
+  font-family: 'Londrina Solid';
+}
+
+.directory h2 {
+  margin-bottom: 2rem;
+}
+
+.directoryGrid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.nounEntry {
+  display: flex;
+  flex-direction: column-reverse;
+  margin: 5px;
+  border: #BA8C63 8px solid;
+}
+
+.nounEntry h3 {
+  background-color: #BA8C63;
+  padding-left: 8px;
+  margin:0;
+}

@@ -17,6 +17,7 @@ import VotePage from './pages/Vote';
 import NoundersPage from './pages/Nounders';
 import NotFoundPage from './pages/NotFound';
 import { CHAIN_ID } from './config';
+import Directory from './pages/Directory';
 
 function App() {
   const { account, chainId } = useEthers();
@@ -50,6 +51,7 @@ function App() {
             render={props => <AuctionPage initialAuctionId={Number(props.match.params.id)} />}
           />
           <Route exact path="/nounders" component={NoundersPage} />
+          <Route exact path="/directory" component={Directory} />
           <Route exact path="/create-proposal" component={CreateProposalPage} />
           <Route exact path="/vote" component={GovernancePage} />
           <Route exact path="/vote/:id" component={VotePage} />
