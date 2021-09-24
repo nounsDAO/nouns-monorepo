@@ -19,13 +19,14 @@
   display: flex;
   flex-direction: column-reverse;
   margin: 5px;
-  border: #BA8C63 8px solid;
+  position: relative;
 }
 
 .nounEntry h3 {
-  background-color: #BA8C63;
   padding-left: 8px;
   margin:0;
+  position: absolute;
+  font-size: x-large;
 }
 
 .nounTitle {
