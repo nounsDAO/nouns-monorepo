@@ -10,6 +10,8 @@ import { push } from 'connected-react-router';
 import { nounPath } from '../../utils/history';
 import useOnDisplayAuction from '../../wrappers/onDisplayAuction';
 import { useEffect } from 'react';
+import classes from './Auction.module.css';
+import clsx from 'clsx';
 
 interface AuctionPageProps {
   initialAuctionId?: number;
@@ -19,6 +21,7 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
   const { initialAuctionId } = props;
   const onDisplayAuction = useOnDisplayAuction();
   const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
+  const useGreyBg = useAppSelector(state => state.application.useGreyBackground);
 
   const dispatch = useAppDispatch();
 
@@ -45,7 +48,7 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
   }, [lastAuctionNounId, dispatch, initialAuctionId, onDisplayAuction]);
 
   return (
-    <>
+    <div className={clsx(useGreyBg ? classes.greyBg : classes.beigeBg)}>
       {onDisplayAuction && (
         <Auction
           auction={onDisplayAuction}
@@ -57,7 +60,7 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
         <HistoryCollection latestNounId={BigNumber.from(lastAuctionNounId)} historyCount={10} />
       )}
       <Documentation />
-    </>
+    </div>
   );
 };
 export default AuctionPage;

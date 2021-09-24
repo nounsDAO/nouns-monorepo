@@ -22,11 +22,13 @@ const Directory = () => {
         <h2 style={{ marginBottom: '2rem' }}>Nouns Directory</h2>
         <div className={classes.directoryGrid}>
           {auctions.map((auction: number, i: number) => (
-            <div key={i} className={classes.nounEntry}>
+            <div key={i}>
               <Link to={`/noun/${i}`} className={classes.nounTitle}>
-                <h3 className={classes.nounTitle}>Noun {i}</h3>
+                <div className={classes.nounEntry}>
+                  <h3 className={classes.nounTitle}>Noun {i}</h3>
+                  <StandaloneNoun nounId={BigNumber.from(i)} />
+                </div>
               </Link>
-              <StandaloneNoun nounId={BigNumber.from(i)} />
             </div>
           ))}
         </div>
