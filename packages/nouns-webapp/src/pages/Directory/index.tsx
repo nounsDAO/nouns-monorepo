@@ -5,6 +5,7 @@ import { Col, Row, Card } from 'react-bootstrap';
 import { useAppSelector } from '../../hooks';
 import { BigNumber } from '@ethersproject/bignumber';
 import StandaloneNoun from '../../components/StandaloneNoun';
+import {Link} from 'react-router-dom';
 
 const Directory = () => {
   const auctions = useAppSelector(state =>
@@ -22,7 +23,9 @@ const Directory = () => {
         <div className={classes.directoryGrid}>
           {auctions.map((auction: number, i: number) => (
             <div key={i} className={classes.nounEntry}>
-              <h3 className={classes.nounTitle}>Noun {i}</h3>
+              <Link to={`/noun/${i}`} className={classes.nounTitle}>
+                <h3 className={classes.nounTitle}>Noun {i}</h3>
+              </Link>
               <StandaloneNoun nounId={BigNumber.from(i)} />
             </div>
           ))}

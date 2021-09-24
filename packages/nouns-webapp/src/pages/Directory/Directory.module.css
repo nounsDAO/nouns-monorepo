@@ -27,3 +27,12 @@
   padding-left: 8px;
   margin:0;
 }
+
+.nounTitle {
+  text-decoration: none;
+  color: #212529;
+}
+
+.nounTitle:hover {
+  text-decoration: none;
+}
