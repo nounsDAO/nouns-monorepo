@@ -18,7 +18,6 @@ import NoundersPage from './pages/Nounders';
 import NotFoundPage from './pages/NotFound';
 import { CHAIN_ID } from './config';
 import Directory from './pages/Directory';
-import clsx from 'clsx';
 
 function App() {
   const { account, chainId } = useEthers();
