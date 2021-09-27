@@ -26,7 +26,7 @@ const nounsGql = `
 export const normalizeNoun = (noun: any) => ({
   id: Number(noun.id),
   owner: noun.owner.id,
-  delegatedTo: noun.owner.delegate.id,
+  delegatedTo: noun.owner.delegate?.id,
 })
 
 export const normalizeNouns = R.map(normalizeNoun)
