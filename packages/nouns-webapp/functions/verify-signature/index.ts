@@ -1,8 +1,8 @@
 import { Handler } from "@netlify/functions";
 import { verifyMessage } from '@ethersproject/wallet';
 import { has } from 'ramda'
-import { BigNumber } from '@ethersproject/bignumber'
 import { bigNumbersEqual } from "../utils";
+import { isNounDelegate, isNounOwner, normalizeNouns, nounsQuery } from "../theGraph";
 
 interface ErrorReason {
   error: string;
@@ -32,9 +32,29 @@ const handler: Handler = async (event, context) => {
   }
   const { message, signature, signer } = JSON.parse(event.body);
   const recoveredAddress = verifyMessage(message, signature);
+  const validSignature = bigNumbersEqual(signer, recoveredAddress);
+
+  // check for ownership and delegation
+  let participantData = {}
+  if (event.queryStringParameters.fetchParticipation && validSignature) {
+    const nounsResponse = await nounsQuery();
+    const normalizedNouns = normalizeNouns(nounsResponse.data.data.nouns)
+    participantData = {
+      isNounDelegate: isNounDelegate(signer, normalizedNouns),
+      isNounOwner: isNounOwner(signer, normalizedNouns),
+    }
+  }
+
   return {
     statusCode: 200,
-    body: JSON.stringify({ message, signature, providedSigner: signer, recoveredAddress, validSignature: bigNumbersEqual(signer, recoveredAddress) }),
+    body: JSON.stringify({
+      message,
+      signature,
+      providedSigner: signer,
+      recoveredAddress,
+      validSignature,
+      ...participantData
+    }),
   };
 };
 
