@@ -1,5 +1,5 @@
 import { Handler } from '@netlify/functions';
-import { delegateFilterFactory, isNounDelegate, normalizeNouns, nounsQuery } from '../theGraph';
+import { isNounDelegate, normalizeNouns, nounsQuery } from '../../theGraph';
 
 const handler: Handler = async (event, context) => {
   const graphResponse = await nounsQuery();
