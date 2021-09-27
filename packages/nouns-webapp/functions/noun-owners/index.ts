@@ -24,7 +24,7 @@ const handler: Handler = async (event, context) => {
   const nouns = R.map(normalizeNoun, graphResponse.data.data.nouns);
   return {
     statusCode: 200,
-    body: JSON.stringify(R.map(normalizeNoun, nouns))
+    body: JSON.stringify(nouns)
   };
 };
 

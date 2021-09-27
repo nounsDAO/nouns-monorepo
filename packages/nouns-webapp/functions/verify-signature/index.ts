@@ -1,6 +1,8 @@
 import { Handler } from "@netlify/functions";
 import { verifyMessage } from '@ethersproject/wallet';
 import { has } from 'ramda'
+import { BigNumber } from '@ethersproject/bignumber'
+import { bigNumbersEqual } from "../utils";
 
 interface ErrorReason {
   error: string;
@@ -32,7 +34,7 @@ const handler: Handler = async (event, context) => {
   const recoveredAddress = verifyMessage(message, signature);
   return {
     statusCode: 200,
-    body: JSON.stringify({ message, signature, providedSigner: signer, recoveredAddress, validSignature: recoveredAddress.localeCompare(signer) }),
+    body: JSON.stringify({ message, signature, providedSigner: signer, recoveredAddress, validSignature: bigNumbersEqual(signer, recoveredAddress) }),
   };
 };
 
