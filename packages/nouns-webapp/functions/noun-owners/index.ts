@@ -1,12 +1,12 @@
-import { Handler } from "@netlify/functions";
-import { normalizeNouns, nounsQuery } from "../theGraph";
+import { Handler } from '@netlify/functions';
+import { normalizeNouns, nounsQuery } from '../theGraph';
 
 const handler: Handler = async (event, context) => {
-  const graphResponse = await nounsQuery()
+  const graphResponse = await nounsQuery();
   const nouns = normalizeNouns(graphResponse.data.data.nouns);
   return {
     statusCode: 200,
-    body: JSON.stringify(nouns)
+    body: JSON.stringify(nouns),
   };
 };
 

@@ -1,12 +1,12 @@
-import { Handler } from "@netlify/functions";
-import { isNounOwner, normalizeNouns, nounsQuery, ownerFilterFactory } from "../theGraph";
+import { Handler } from '@netlify/functions';
+import { isNounOwner, normalizeNouns, nounsQuery, ownerFilterFactory } from '../theGraph';
 
 const handler: Handler = async (event, context) => {
   const graphResponse = await nounsQuery();
   const nouns = normalizeNouns(graphResponse.data.data.nouns);
   return {
     statusCode: 200,
-    body: JSON.stringify(isNounOwner(event.body, nouns))
+    body: JSON.stringify(isNounOwner(event.body, nouns)),
   };
 };
 
