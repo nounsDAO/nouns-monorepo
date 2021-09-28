@@ -1,8 +1,8 @@
 import { Handler } from '@netlify/functions';
 import { verifyMessage } from '@ethersproject/wallet';
 import { has } from 'ramda';
-import { bigNumbersEqual } from '../../utils';
-import { isNounDelegate, isNounOwner, normalizeNouns, nounsQuery } from '../../theGraph';
+import { bigNumbersEqual } from '../utils';
+import { isNounDelegate, isNounOwner, normalizeNouns, nounsQuery } from '../theGraph';
 
 interface ErrorReason {
   error: string;

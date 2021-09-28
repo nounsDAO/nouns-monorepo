@@ -12,14 +12,14 @@ Nouns is a new project and these API endpoints may change, be sure to join [`#de
 
 ## `V0`
 
-The `V0` namespace is an incubator for serverless functions before the next stable version release. Functions within this namespace may change before becoming promoted.
+The `V0` namespace is an incubator for serverless functions before the next stable version release. Functions within this namespace may change before becoming promoted. Once promoted to "stable" they'll get their final function names and will be locked in. Any further function changes will result in new function names on breaking changes.
 
-### `GET /V0/noun-owners`
+### `GET /v0-noun-owners`
 
 The `noun-owners` endpoint will return an array of all Nouns, their owner's address, and the address it is delegated to - if any.
 
 #### Response
-```
+```ts
 NormalizedNoun {
   id: number;
   owner: string;
@@ -27,7 +27,7 @@ NormalizedNoun {
 }
 ```
 
-### `POST /V0/verify-signature`
+### `POST /v0-verify-signature`
 
 The `verify-signature` endpoint will attempt to validate a signature payload and optionally check to see if the address owns or is delegated a Noun if the signature is valid. A client can provide the request parameter `?fetchParticipation=true` to check for delegation and ownership while validating the message signature.
 
@@ -35,16 +35,19 @@ The `verify-signature` endpoint will attempt to validate a signature payload and
 
 An `application/json` encoded signature like from the [nouns.wtf sign page](https://nouns.wtf/sign).
 
-```
+```ts
 VerifySignatureRequest {
+	// The message that has been signed
 	message: string;
+	// The signature data
 	signature: string;
+	// The address signing the message
 	signer: string;
 }
 ```
 
 #### Response Body
-```
+```ts
 VerifySignatureResponse {
   // Message provided
   message: string;
@@ -63,7 +66,7 @@ VerifySignatureResponse {
 }
 ```
 
-### `POST /V0/is-noun-owner`
+### `POST /v0-is-noun-owner`
 
 The `is-noun-owner` endpoint will check if the provided address is an owner of a Noun.
 
@@ -75,7 +78,7 @@ The request body should contain only the address to check.
 
 The endpoint will return a boolean `true` or `false` if the address owns a Noun.
 
-### `POST /V0/is-noun-delegate`
+### `POST /v0-is-noun-delegate`
 
 The `is-noun-delegate` endpoint will check if the provided address has been delegated voting power of a Noun.
 

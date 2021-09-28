@@ -70,7 +70,7 @@ const VerifyPage: React.FC<VerifyPageProp> = props => {
                     const signature = await library?.getSigner().signMessage(messageToSign);
                     setSignedMessage({
                       message: messageToSign,
-                      address: activeAccount,
+                      signer: activeAccount,
                       signature,
                     });
                   }}
