@@ -6,6 +6,9 @@ const handler: Handler = async (event, context) => {
   const nouns = normalizeNouns(graphResponse.data.data.nouns);
   return {
     statusCode: 200,
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify(nouns),
   };
 };
