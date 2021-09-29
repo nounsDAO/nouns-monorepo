@@ -5,6 +5,8 @@ interface Config {
   tokenAddress: string;
   nounsDaoProxyAddress: string;
   nounsDaoExecutorAddress: string;
+  nounsDescriptorAddress: string;
+  nounsSeederAddress: string;
   subgraphApiUri: string;
   jsonRpcUri: string;
   wsRpcUri: string;
@@ -31,6 +33,8 @@ const config: Record<SupportedChains, Config> = {
     tokenAddress: '0x632f34c3aee991b10D4b421Bc05413a03d7a37eB',
     nounsDaoProxyAddress: '0xd1C753D9A23eb5c57e0d023e993B9bd4F5086b04',
     nounsDaoExecutorAddress: '0xd1C753D9A23eb5c57e0d023e993B9bd4F5086b04',
+    nounsDescriptorAddress: '0x0Cfdb3Ba1694c2bb2CFACB0339ad7b1Ae5932B63',
+    nounsSeederAddress: '0xCC8a0FB5ab3C7132c1b2A0109142Fb112c4Ce515',
     subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph-rinkeby-v4',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true' || false,
   },
@@ -39,6 +43,8 @@ const config: Record<SupportedChains, Config> = {
     tokenAddress: '0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03',
     nounsDaoProxyAddress: '0x6f3E6272A167e8AcCb32072d08E0957F9c79223d',
     nounsDaoExecutorAddress: '0x0BC3807Ec262cB779b38D65b38158acC3bfedE10',
+    nounsDescriptorAddress: '0x0Cfdb3Ba1694c2bb2CFACB0339ad7b1Ae5932B63',
+    nounsSeederAddress: '0xCC8a0FB5ab3C7132c1b2A0109142Fb112c4Ce515',
     subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph',
     jsonRpcUri:
       process.env.REACT_APP_MAINNET_JSONRPC ||
@@ -54,6 +60,8 @@ const config: Record<SupportedChains, Config> = {
     // Temporarily set this to _any_ address until local deployment is configured
     nounsDaoExecutorAddress: '0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6',
     nounsDaoProxyAddress: '0x610178dA211FEF7D417bC0e6FeD39F05609AD788',
+    nounsDescriptorAddress: '0x31671F0b0378B128691b53096757614090b20602',
+    nounsSeederAddress: '0xCC8a0FB5ab3C7132c1b2A0109142Fb112c4Ce515',
     subgraphApiUri: '',
     jsonRpcUri: 'http://localhost:8545',
     enableHistory: false,
