@@ -1,0 +1,20 @@
+.heading {
+  display: inline-block;
+  font-weight: bold;
+  font-size: 3rem;
+}
+
+.subheading {
+  color: var(--brand-dark-green);
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.birthday {
+  color: var(--brand-dark-green);
+  font-size: 1.7rem;
+}
+
+p {
+  padding-top: 1rem;
+}

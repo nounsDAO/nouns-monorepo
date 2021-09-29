@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useEthers } from '@usedapp/core';
 import { useAppDispatch, useAppSelector } from './hooks';
 import { setActiveAccount } from './state/slices/account';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, useLocation } from 'react-router-dom';
 import { setAlertModal } from './state/slices/application';
 import classes from './App.module.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -16,7 +16,9 @@ import CreateProposalPage from './pages/CreateProposal';
 import VotePage from './pages/Vote';
 import NoundersPage from './pages/Nounders';
 import NotFoundPage from './pages/NotFound';
+import ProfilePage from './pages/Profile';
 import { CHAIN_ID } from './config';
+import { selectPageBgColors } from './utils/selectPageBgColor';
 
 function App() {
   const { account, chainId } = useEthers();
@@ -29,9 +31,10 @@ function App() {
 
   const alertModal = useAppSelector(state => state.application.alertModal);
   const useGreyBg = useAppSelector(state => state.application.useGreyBackground);
+  const location = useLocation();
 
   return (
-    <div className={`${classes.wrapper} ${useGreyBg ? classes.greyBg : classes.beigeBg}`}>
+    <div className={`${classes.wrapper} ${selectPageBgColors(useGreyBg, location.pathname)}`}>
       {Number(CHAIN_ID) !== chainId && <NetworkAlert />}
       {alertModal.show && (
         <AlertModal
@@ -53,6 +56,11 @@ function App() {
           <Route exact path="/create-proposal" component={CreateProposalPage} />
           <Route exact path="/vote" component={GovernancePage} />
           <Route exact path="/vote/:id" component={VotePage} />
+          <Route
+            exact
+            path="/profile/:id"
+            render={props => <ProfilePage nounId={Number(props.match.params.id)} />}
+          />
           <Route component={NotFoundPage} />
         </Switch>
         <Footer />

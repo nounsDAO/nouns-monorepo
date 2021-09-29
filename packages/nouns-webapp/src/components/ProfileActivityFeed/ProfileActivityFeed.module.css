@@ -1,0 +1,61 @@
+.heading {
+  display: inline-block;
+  font-weight: bold;
+  font-size: 3rem;
+}
+
+.recentActivityCollection {
+  display: grid;
+  text-align: start;
+  list-style-type: none;
+  row-gap: 0.5rem;
+  padding: 0;
+}
+
+.recentActivityRow {
+  background-color: rgba(213, 215, 225, 0.3);
+  padding: 0.7rem 1rem;
+  border-radius: 5px;
+  border-bottom: 1px solid rgba(211, 211, 211, 0.322);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.recentActivityRow:hover {
+  background-color: rgba(138, 138, 138, 0.3);
+}
+
+.recentActivityItem {
+  display: flex;
+  flex-direction: column;
+  color: black;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.recentActivityLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.recentActivityLink:focus,
+.recentActivityLink:hover,
+.recentActivityLink:visited,
+.recentActivityLink:active,
+.recentActivityLink:link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.voteYes {
+  color: green;
+}
+
+.voteNo {
+  color: red;
+}
+
+.activityRowItemText {
+  float: 'left';
+  display: 'inline-block';
+}

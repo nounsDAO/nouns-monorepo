@@ -19,6 +19,20 @@ export interface IBid {
   };
 }
 
+export const nounVotingHistoryQuery = (nounId: number) => gql`
+{
+	noun(id: ${nounId}) {
+		id
+		votes {
+		proposal {
+			id
+		}
+		support
+		}
+	}
+}
+`;
+
 export const auctionQuery = (auctionId: number) => gql`
 {
 	auction(id: ${auctionId}) {

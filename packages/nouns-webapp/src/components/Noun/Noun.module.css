@@ -3,3 +3,13 @@
   image-rendering: -moz-crisp-edges;
   width: 100%;
 }
+
+.smallImg {
+  height: 64px;
+  width: 64px;
+}
+
+.largeImg {
+  height: 256px;
+  width: 256px;
+}

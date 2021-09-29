@@ -12,4 +12,19 @@ const Noun: React.FC<{ imgPath: string; alt: string }> = props => {
   return <Image className={classes.img} src={imgPath ? imgPath : loadingNoun} alt={alt} fluid />;
 };
 
+export const NounCircleImg: React.FC<{ imgPath: string; alt: string; isSmall: boolean }> =
+  props => {
+    const { imgPath, alt, isSmall } = props;
+
+    return (
+      <Image
+        className={`${classes.img} ${isSmall ? classes.smallImg : classes.largeImg}`}
+        src={imgPath ? imgPath : loadingNoun}
+        alt={alt}
+        fluid
+        roundedCircle
+      />
+    );
+  };
+
 export default Noun;
