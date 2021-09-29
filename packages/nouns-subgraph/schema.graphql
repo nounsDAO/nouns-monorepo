@@ -27,6 +27,9 @@ type Noun @entity {
 
   "The owner of the Noun"
   owner: Account!
+
+  "Historical votes for the Noun"
+  votes: [Vote!]! @derivedFrom(field: "nouns")
 }
 
 type Bid @entity {
@@ -110,7 +113,7 @@ type Account @entity {
   totalTokensHeld: BigInt!
 
   "The Nouns owned by this account"
-  nouns: [Noun!]! @derivedFrom(field: "owner")
+  nouns: [Noun!]!
 }
 
 type Delegate @entity {
@@ -127,6 +130,9 @@ type Delegate @entity {
 
   "Token holders that this delegate represents"
   tokenHoldersRepresented: [Account!]! @derivedFrom(field: "delegate")
+
+  "Nouns that this delegate represents"
+  nounsRepresented: [Noun!]!
 
   "Votes that a delegate has made in different proposals"
   votes: [Vote!]! @derivedFrom(field: "voter")
@@ -194,6 +200,9 @@ type Vote @entity {
 
   "Delegate that emitted the vote"
   voter: Delegate!
+
+  "The Nouns used to vote"
+  nouns: [Noun!]
 
   "Proposal that is being voted on"
   proposal: Proposal!
