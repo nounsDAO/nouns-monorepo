@@ -20,6 +20,8 @@ packages/nouns-contracts/abi/contracts/governance/*
 
 !packages/nouns-contracts/abi/contracts
 !packages/nouns-contracts/abi/contracts/governance
+!packages/nouns-contracts/abi/contracts/NounsDescriptor.sol
+!packages/nouns-contracts/abi/contracts/NounsSeeder.sol
 !packages/nouns-contracts/abi/contracts/NounsToken.sol
 !packages/nouns-contracts/abi/contracts/NounsAuctionHouse.sol
 !packages/nouns-contracts/abi/contracts/governance/NounsDAOLogicV1.sol
