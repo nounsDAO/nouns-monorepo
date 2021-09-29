@@ -111,7 +111,7 @@ const NavBar = () => {
             >
               DOCS
             </Nav.Link>
-            <Nav.Link href="/playground" className={classes.nounsNavLink} target="_blank">
+            <Nav.Link href="/playground" className={classes.nounsNavLink}>
               PLAYGROUND
             </Nav.Link>
             {activeAccount ? connectedContent : disconnectedContent}
