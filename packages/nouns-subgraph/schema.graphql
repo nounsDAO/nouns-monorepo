@@ -189,8 +189,11 @@ type Vote @entity {
   "Delegate ID + Proposal ID"
   id: ID!
 
-  "Whether the vote is in favour or against the proposal"
+  "Whether the vote is in favour of the proposal"
   support: Boolean!
+
+  "The integer support value: against (0), for (1), or abstain (2)"
+  supportDetailed: Int!
 
   "Amount of votes in favour or against expressed in the smallest unit of the Nouns ERC721 Token"
   votesRaw: BigInt!
