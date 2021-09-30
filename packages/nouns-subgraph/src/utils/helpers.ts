@@ -14,6 +14,7 @@ export function getOrCreateAccount(
     tokenHolder.tokenBalance = BIGINT_ZERO;
     tokenHolder.totalTokensHeldRaw = BIGINT_ZERO;
     tokenHolder.totalTokensHeld = BIGINT_ZERO;
+    tokenHolder.nouns = [];
 
     if (save) {
       tokenHolder.save();
@@ -35,6 +36,7 @@ export function getOrCreateDelegate(
     delegate.delegatedVotesRaw = BIGINT_ZERO;
     delegate.delegatedVotes = BIGINT_ZERO;
     delegate.tokenHoldersRepresentedAmount = 0;
+    delegate.nounsRepresented = [];
 
     if (id != ZERO_ADDRESS) {
       let governance = getGovernanceEntity();
