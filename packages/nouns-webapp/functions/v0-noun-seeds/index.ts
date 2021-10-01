@@ -1,0 +1,26 @@
+import { Handler } from '@netlify/functions';
+import { NormalizedNoun, NormalizedVote, nounsQuery, Seed } from '../theGraph';
+import * as R from 'ramda'
+
+interface SeededNoun {
+  id: number;
+  seed: Seed;
+}
+
+const buildSeededNoun = R.pick(['id', 'seed'])
+
+const buildSeededNouns = R.map(buildSeededNoun)
+
+const handler: Handler = async (event, context) => {
+  const nouns = await nounsQuery();
+  const seededNouns: SeededNoun[] = buildSeededNouns(nouns)
+  return {
+    statusCode: 200,
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(seededNouns)
+  };
+};
+
+export { handler };

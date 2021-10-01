@@ -1,26 +1,27 @@
 import { Handler } from '@netlify/functions';
-import { NormalizedNoun, nounsQuery } from '../theGraph';
+import { NormalizedNoun, NormalizedVote, nounsQuery } from '../theGraph';
 import * as R from 'ramda'
 
-export interface LiteNoun {
+interface NounVote {
   id: number;
   owner: string;
   delegatedTo: null | string;
+  votes: NormalizedVote[];
 }
 
-const lightenNoun = R.pick(['id', 'owner', 'delegatedTo'])
+const buildNounVote = R.pick(['id', 'owner', 'delegatedTo', 'votes'])
 
-const lightenNouns = R.map(lightenNoun)
+const buildNounVotes = R.map(buildNounVote)
 
 const handler: Handler = async (event, context) => {
   const nouns = await nounsQuery();
-  const liteNouns: LiteNoun[] = lightenNouns(nouns)
+  const nounVotes: NounVote[] = buildNounVotes(nouns)
   return {
     statusCode: 200,
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify(liteNouns)
+    body: JSON.stringify(nounVotes)
   };
 };
 

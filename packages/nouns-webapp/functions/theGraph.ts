@@ -8,11 +8,20 @@ export interface NormalizedVote {
   supportDetailed: number;
 }
 
+export interface Seed {
+  background: number;
+  body: number;
+  accessory: number;
+  head: number;
+  glasses: number;
+}
+
 export interface NormalizedNoun {
   id: number;
   owner: string;
   delegatedTo: null | string;
   votes: NormalizedVote[];
+  seed: Seed;
 }
 
 const nounsGql = `
@@ -31,6 +40,13 @@ const nounsGql = `
       }
       supportDetailed
     }
+    seed {
+      background
+      body
+      accessory
+      head
+      glasses
+    }
   }
 }
 `;
@@ -40,11 +56,20 @@ export const normalizeVote = (vote: any): NormalizedVote => ({
   supportDetailed: Number(vote.supportDetailed),
 });
 
+export const normalizeSeed = (seed: any): Seed => ({
+  background: Number(seed.background),
+  body: Number(seed.body),
+  glasses: Number(seed.glasses),
+  accessory: Number(seed.accessory),
+  head: Number(seed.head)
+})
+
 export const normalizeNoun = (noun: any): NormalizedNoun => ({
   id: Number(noun.id),
   owner: noun.owner.id,
   delegatedTo: noun.owner.delegate?.id,
   votes: normalizeVotes(noun.votes),
+  seed: normalizeSeed(noun.seed)
 });
 
 export const normalizeNouns = R.map(normalizeNoun);
