@@ -17,6 +17,7 @@ import VotePage from './pages/Vote';
 import NoundersPage from './pages/Nounders';
 import NotFoundPage from './pages/NotFound';
 import { CHAIN_ID } from './config';
+import Directory from './pages/Directory';
 
 function App() {
   const { account, chainId } = useEthers();
@@ -28,10 +29,9 @@ function App() {
   }, [account, dispatch]);
 
   const alertModal = useAppSelector(state => state.application.alertModal);
-  const useGreyBg = useAppSelector(state => state.application.useGreyBackground);
 
   return (
-    <div className={`${classes.wrapper} ${useGreyBg ? classes.greyBg : classes.beigeBg}`}>
+    <div className={classes.wrapper}>
       {Number(CHAIN_ID) !== chainId && <NetworkAlert />}
       {alertModal.show && (
         <AlertModal
@@ -50,6 +50,7 @@ function App() {
             render={props => <AuctionPage initialAuctionId={Number(props.match.params.id)} />}
           />
           <Route exact path="/nounders" component={NoundersPage} />
+          <Route exact path="/nouns" component={Directory} />
           <Route exact path="/create-proposal" component={CreateProposalPage} />
           <Route exact path="/vote" component={GovernancePage} />
           <Route exact path="/vote/:id" component={VotePage} />

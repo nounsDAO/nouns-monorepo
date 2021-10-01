@@ -19,6 +19,8 @@ const NavBar = () => {
   const { deactivate } = useEthers();
 
   const treasuryBalance = useEtherBalance(config.nounsDaoExecutorAddress);
+  const useGreyBg = useAppSelector(state => state.application.useGreyBackground);
+  const isAuctionPage = window.location.pathname.match(/^\/(noun\/\d+)?$/)
   const daoEtherscanLink = buildEtherscanAddressLink(config.nounsDaoExecutorAddress);
 
   const [showConnectModal, setShowConnectModal] = useState(false);
@@ -65,7 +67,7 @@ const NavBar = () => {
   );
 
   return (
-    <>
+    <div className={clsx(isAuctionPage && (useGreyBg ? classes.greyBg : classes.beigeBg))}>
       {showConnectModal && activeAccount === undefined && (
         <WalletConnectModal onDismiss={hideModalHandler} />
       )}
@@ -118,7 +120,7 @@ const NavBar = () => {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-    </>
+    </div>
   );
 };
 
