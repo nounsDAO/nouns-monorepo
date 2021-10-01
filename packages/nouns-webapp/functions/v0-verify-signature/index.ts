@@ -1,7 +1,7 @@
 import { Handler } from '@netlify/functions';
 import { verifyMessage } from '@ethersproject/wallet';
 import { has } from 'ramda';
-import { bigNumbersEqual } from '../utils';
+import { bigNumbersEqual, sharedResponseHeaders } from '../utils';
 import { isNounDelegate, isNounOwner, nounsQuery } from '../theGraph';
 
 interface ErrorReason {
@@ -48,7 +48,8 @@ const handler: Handler = async (event, context) => {
   return {
     statusCode: 200,
     headers: {
-      "Content-Type": "application/json"
+      'Content-Type': 'application/json',
+      ...sharedResponseHeaders,
     },
     body: JSON.stringify({
       message,

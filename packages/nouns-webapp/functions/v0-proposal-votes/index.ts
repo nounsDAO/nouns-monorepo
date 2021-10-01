@@ -1,5 +1,6 @@
 import { Handler } from '@netlify/functions';
-import { NormalizedNoun, NormalizedVote, normalizeNoun, nounsQuery } from '../theGraph';
+import { NormalizedNoun, NormalizedVote, nounsQuery } from '../theGraph';
+import { sharedResponseHeaders } from '../utils';
 
 interface ProposalVote {
   nounId: number;
@@ -35,6 +36,7 @@ const handler: Handler = async (event, context) => {
     statusCode: 200,
     headers: {
       'Content-Type': 'application/json',
+      ...sharedResponseHeaders,
     },
     body: JSON.stringify(reduceProposalVotes(nouns)),
   };
