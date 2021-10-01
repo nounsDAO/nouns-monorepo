@@ -1,9 +1,8 @@
 import { Handler } from '@netlify/functions';
-import { isNounOwner, normalizeNouns, nounsQuery } from '../theGraph';
+import { isNounOwner, nounsQuery } from '../theGraph';
 
 const handler: Handler = async (event, context) => {
-  const graphResponse = await nounsQuery();
-  const nouns = normalizeNouns(graphResponse.data.data.nouns);
+  const nouns = await nounsQuery();
   return {
     statusCode: 200,
     headers: {
