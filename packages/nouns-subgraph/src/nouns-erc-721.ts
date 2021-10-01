@@ -153,11 +153,11 @@ export function handleTransfer(event: Transfer): void {
   if (toHolder.tokenBalanceRaw == BIGINT_ZERO && toHolderPreviousBalance > BIGINT_ZERO) {
     governance.currentTokenHolders = governance.currentTokenHolders - BIGINT_ONE;
     governance.save();
-
-    toHolder.delegate = toHolder.id;
   } else if (toHolder.tokenBalanceRaw > BIGINT_ZERO && toHolderPreviousBalance == BIGINT_ZERO) {
     governance.currentTokenHolders = governance.currentTokenHolders + BIGINT_ONE;
     governance.save();
+
+    toHolder.delegate = toHolder.id;
   }
 
   let noun = Noun.load(transferredNounId);
