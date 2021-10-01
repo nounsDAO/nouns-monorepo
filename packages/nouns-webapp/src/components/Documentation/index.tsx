@@ -5,7 +5,7 @@ import Accordion from 'react-bootstrap/Accordion';
 import Link from '../Link';
 
 const Documentation = () => {
-  const cryotopunksLink = (
+  const cryptopunksLink = (
     <Link text="Cryptopunks" url="https://www.larvalabs.com/cryptopunks" leavesPage={true} />
   );
   const playgroundLink = <Link text="nouns playground" url="/playground" leavesPage={false} />;
@@ -26,7 +26,7 @@ const Documentation = () => {
           <h1>WTF?</h1>
           <p>
             Nouns are an experimental attempt to improve the formation of on-chain avatar
-            communities. While projects such as {cryotopunksLink} have attempted to bootstrap
+            communities. While projects such as {cryptopunksLink} have attempted to bootstrap
             digital community and identity, Nouns attempt to bootstrap identity, community,
             governance and a treasury that can be used by the community for the creation of
             long-term value.
@@ -202,16 +202,50 @@ const Documentation = () => {
                   Nounders:
                 </p>
                 <ul>
-                  <li>@cryptoseneca</li>
-                  <li>@supergremplin</li>
-                  <li>@punk4156</li>
-                  <li>@eboyarts</li>
-                  <li>@punk4464</li>
+                  <li>
+                    <Link
+                      text="@cryptoseneca"
+                      url="https://twitter.com/cryptoseneca"
+                      leavesPage={true}
+                    />
+                  </li>
+                  <li>
+                    <Link
+                      text="@supergremplin"
+                      url="https://twitter.com/supergremplin"
+                      leavesPage={true}
+                    />
+                  </li>
+                  <li>
+                    <Link text="@punk4156" url="https://twitter.com/punk4156" leavesPage={true} />
+                  </li>
+                  <li>
+                    <Link text="@eboyarts" url="https://twitter.com/eBoyArts" leavesPage={true} />
+                  </li>
+                  <li>
+                    <Link text="@punk4464" url="https://twitter.com/punk4464" leavesPage={true} />
+                  </li>
                   <li>solimander</li>
-                  <li>@dhof</li>
-                  <li>devcarrot</li>
-                  <li>@TimpersHD</li>
-                  <li>@lastpunk9999</li>
+                  <li>
+                    <Link text="@dhof" url="https://twitter.com/dhof" leavesPage={true} />
+                  </li>
+                  <li>
+                    <Link
+                      text="@devcarrot"
+                      url="https://twitter.com/carrot_init"
+                      leavesPage={true}
+                    />
+                  </li>
+                  <li>
+                    <Link text="@TimpersHD" url="https://twitter.com/TimpersHD" leavesPage={true} />
+                  </li>
+                  <li>
+                    <Link
+                      text="@lastpunk9999"
+                      url="https://twitter.com/lastpunk9999"
+                      leavesPage={true}
+                    />
+                  </li>
                 </ul>
                 <p>
                   Because 100% of noun auction proceeds are sent to Nouns DAO, Nounders have chosen

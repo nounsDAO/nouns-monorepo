@@ -18,6 +18,10 @@
   margin: 0 8px;
 }
 
+.alignBottom {
+  margin-top: auto;
+}
+
 @keyframes slidein {
   from {
     margin-left: 100%;
