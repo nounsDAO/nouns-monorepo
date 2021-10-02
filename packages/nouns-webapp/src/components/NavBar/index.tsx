@@ -96,7 +96,7 @@ const NavBar = () => {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  TREASURY Ξ {utils.formatEther(treasuryBalance.toString())}
+                  TREASURY Ξ {Number(utils.formatEther(treasuryBalance)).toFixed(0)}
                 </Nav.Link>
               )}
             </Nav.Item>
