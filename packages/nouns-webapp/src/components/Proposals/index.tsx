@@ -9,7 +9,12 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
     <div className={classes.proposals}>
       <div>
         <h3 className={classes.heading}>Proposals</h3>
-        <Button className={classes.createProposalLink} as={Link} to="/create-proposal">
+        <Button
+          variant="success"
+          className={classes.createProposalLink}
+          as={Link}
+          to="/create-proposal"
+        >
           Create Proposal
         </Button>
       </div>
