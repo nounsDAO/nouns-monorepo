@@ -1,36 +1,35 @@
 import { Col, Image, Button, Row } from 'react-bootstrap';
+import { buildNounSVG } from '../../utils/buildNounSVG';
+import { EncodedLayers } from '@nouns/contracts';
 import Section from '../../layout/Section';
 import classes from './Playground.module.css';
-import { useEthers } from '@usedapp/core';
 import { useState } from 'react';
-import { ethers } from 'ethers';
-import config from '../../config';
-import { NounsDescriptorABI, NounsSeederABI } from '@nouns/contracts';
+
+const { bgcolors, partcolors, parts } = EncodedLayers;
+const [bodies, accessories, heads, glasses] = parts;
+
+const getRandom = <T extends unknown>(array: T[]) => {
+  return array[Math.floor(Math.random() * array.length)];
+};
+
+const getRandomNoun = () => {
+  const backgroundColor = getRandom(bgcolors);
+  const selectedParts = [
+    getRandom(bodies),
+    getRandom(accessories),
+    getRandom(heads),
+    getRandom(glasses),
+  ];
+  return buildNounSVG(selectedParts, partcolors, backgroundColor);
+};
 
 const Playground = () => {
   const [svgs, setSvgs] = useState<string[]>();
-
-  const ethersUseDapp = useEthers();
-  const descriptor = new ethers.Contract(
-    config.nounsDescriptorAddress,
-    NounsDescriptorABI,
-    ethersUseDapp.library,
-  );
-  const seeder = new ethers.Contract(
-    config.nounsSeederAddress,
-    NounsSeederABI,
-    ethersUseDapp.library,
-  );
-
   const fetchSVG = async () => {
     for (let i = 0; i < 10; i++) {
-      const seed = await seeder.generateSeed(
-        Math.floor(Math.random() * 10000000000),
-        config.nounsDescriptorAddress,
-      );
-      const svg = await descriptor.generateSVGImage(seed);
+      const base64SVG = btoa(getRandomNoun());
       setSvgs(prev => {
-        return prev ? [svg, ...prev] : [svg];
+        return prev ? [base64SVG, ...prev] : [base64SVG];
       });
     }
   };
