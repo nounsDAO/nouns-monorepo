@@ -29,9 +29,11 @@ const decodeImage = (image: string): DecodedImage => {
   return {
     paletteIndex,
     bounds,
-    rects: rects
-      .match(/.{1,4}/g)!
-      .map(rect => [parseInt(rect.substring(0, 2), 16), parseInt(rect.substring(2, 4), 16)]),
+    rects:
+      rects
+        ?.match(/.{1,4}/g)
+        ?.map(rect => [parseInt(rect.substring(0, 2), 16), parseInt(rect.substring(2, 4), 16)]) ??
+      [],
   };
 };
 
