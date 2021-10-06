@@ -15,7 +15,9 @@
   },
   "dependencies": {
     "@nouns/contracts": "^0.1.0",
-    "ethers": "^5.4.7",
+    "ethers": "^5.4.7"
+  },
+  "devDependencies": {
     "node-libpng": "^0.2.18"
   }
 }

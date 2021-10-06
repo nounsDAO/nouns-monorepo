@@ -43,3 +43,9 @@ export interface EncodedImage {
   filename: string;
   data: string;
 }
+
+export interface PngImage {
+  width: number;
+  height: number;
+  rgbaAt(x: number, y: number): RGBAColor;
+}

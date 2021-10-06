@@ -1,7 +1,7 @@
 import { DecodedImage } from './types';
 
 /**
- * Decode the RLE image data into a format that's easier to consume in `createNounSVG`.
+ * Decode the RLE image data into a format that's easier to consume in `buildSVG`.
  * @param image The RLE image data
  */
 const decodeImage = (image: string): DecodedImage => {
@@ -27,12 +27,12 @@ const decodeImage = (image: string): DecodedImage => {
 };
 
 /**
- * Given RLE parts, palette colors, and a background color, create a Noun SVG.
- * @param parts The Noun RLE part datas
+ * Given RLE parts, palette colors, and a background color, build an SVG image.
+ * @param parts The RLE part datas
  * @param paletteColors The hex palette colors
  * @param bgColor The hex background color
  */
-export const buildNounSVG = (
+export const buildSVG = (
   parts: { data: string }[],
   paletteColors: string[],
   bgColor: string,

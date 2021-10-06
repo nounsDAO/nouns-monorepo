@@ -1,6 +1,5 @@
-import { PngImage } from 'node-libpng';
 import { promises as fs } from 'fs';
-import { EncodedImage, IEncoder } from './types';
+import { EncodedImage, IEncoder, PngImage } from './types';
 import { Image } from './image';
 
 /**
