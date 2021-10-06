@@ -5,7 +5,7 @@
     "lerna": "lerna",
     "build": "lerna run --parallel build",
     "test": "lerna run --parallel test",
-    "postinstall": "lerna run --parallel postinstall",
+    "prepare": "lerna run --parallel prepare",
     "lint": "eslint 'packages/**/*.ts' --fix",
     "format": "prettier --write 'packages/**/*.{ts(x)?,sol,md,css}' '!**/typechain/**'"
   },

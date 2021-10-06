@@ -20,7 +20,7 @@
     "task:run-local": "npx hardhat run-local",
     "test": "npx hardhat test",
     "coverage": "npx hardhat coverage",
-    "postinstall": "yarn build"
+    "prepare": "yarn build"
   },
   "devDependencies": {
     "@float-capital/solidity-coverage": "^0.7.17",
