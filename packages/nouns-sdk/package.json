@@ -9,6 +9,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "clean": "rm -rf dist tsconfig.build.tsbuildinfo",
     "build": "tsc -p tsconfig.build.json",
     "test": "mocha -r ts-node/register \"test/**/*.test.ts\""
   },

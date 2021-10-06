@@ -11,26 +11,30 @@ export class PNGCollectionEncoder implements IEncoder {
   private readonly _transparent: [string, number] = ['', 0];
   private _colors: Map<string, number> = new Map([this._transparent]);
   private _images: Map<string, string> = new Map();
+  private _folders: { [name: string]: string[] } = {};
 
   /**
    * The run-length encoded image data and file names
    */
-  public get parts(): EncodedImage[] {
-    return [...this._images.entries()].map(([filename, data]) => ({
-      filename,
-      data,
-    }));
+  public get images(): EncodedImage[] {
+    return this.format(true).root;
   }
 
   /**
    * Decode a PNG image and re-encode using a custom run-length encoding
-   * @param image The PNG image data
+   * @param image The image name
+   * @param png The png image data
+   * @param folder An optional containing folder name
    */
-  public encodeImage(filename: string, png: PngImage): string {
+  public encodeImage(name: string, png: PngImage, folder?: string): string {
     const image = new Image(png.width, png.height);
     const rle = image.toRLE((x, y) => png.rgbaAt(x, y), this._colors);
 
-    this._images.set(filename, rle);
+    this._images.set(name, rle);
+
+    if (folder) {
+      (this._folders[folder] ||= []).push(name);
+    }
 
     return rle;
   }
@@ -42,7 +46,43 @@ export class PNGCollectionEncoder implements IEncoder {
   public async writeToFile(outputFile = 'encoded-images.json'): Promise<void> {
     await fs.writeFile(
       outputFile,
-      JSON.stringify({ partcolors: [...this._colors.keys()], parts: this.parts }, null, 2),
+      JSON.stringify({ palette: [...this._colors.keys()], images: this.format() }, null, 2),
     );
+  }
+
+  /**
+   * Return an object that contains all encoded images in their respective folders.
+   * @param flatten Whether all image data should be flattened (no sub-folders)
+   */
+  private format(flatten = false) {
+    const images = new Map(this._images);
+    const folders = Object.entries(this._folders);
+
+    let data: Record<string, EncodedImage[]> = {};
+    if (!flatten && folders.length) {
+      data = folders.reduce<Record<string, EncodedImage[]>>((result, [folder, filenames]) => {
+        result[folder] = [];
+
+        // Write all files to the folder, delete from the Map once written.
+        filenames.forEach(filename => {
+          result[folder].push({
+            filename,
+            data: images.get(filename) as string,
+          });
+          images.delete(filename);
+        });
+
+        return result;
+      }, {});
+    }
+
+    // Write all remaining files to `root`
+    if (images.size) {
+      data.root = [...images.entries()].map(([filename, data]) => ({
+        filename,
+        data,
+      }));
+    }
+    return data;
   }
 }

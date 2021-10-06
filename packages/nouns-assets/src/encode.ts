@@ -14,7 +14,7 @@ const encode = async () => {
     const files = await fs.readdir(folderpath);
     for (const file of files) {
       const image = await readPngFile(path.join(folderpath, file));
-      encoder.encodeImage(file.replace(/\.png$/, ''), image);
+      encoder.encodeImage(file.replace(/\.png$/, ''), image, folder.replace(/^\d-/, ''));
     }
   }
   await encoder.writeToFile(DESTINATION);
