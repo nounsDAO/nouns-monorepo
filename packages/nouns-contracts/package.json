@@ -6,10 +6,10 @@
   "author": "Nounders",
   "homepage": "https://nouns.wtf",
   "license": "GPL-3.0",
-  "main": "src/index.ts",
+  "main": "dist/src/index.js",
   "scripts": {
     "build": "yarn build:sol && yarn build:ts",
-    "build:ts": "tsc -p .",
+    "build:ts": "tsc -p tsconfig.build.json",
     "build:sol": "npx hardhat compile",
     "hardhat": "npx hardhat",
     "task:accounts": "npx hardhat accounts",

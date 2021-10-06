@@ -9,14 +9,3 @@ dist
 .DS_Store
 *.tsbuildinfo
 *.log
-
-packages/nouns-contracts/**/artifacts
-packages/nouns-contracts/**/cache
-
-packages/nouns-contracts/abi/@openzeppelin
-packages/nouns-contracts/abi/contracts/base
-packages/nouns-contracts/abi/contracts/external
-packages/nouns-contracts/abi/contracts/governance
-packages/nouns-contracts/abi/contracts/interfaces
-packages/nouns-contracts/abi/contracts/proxies
-packages/nouns-contracts/abi/contracts/test

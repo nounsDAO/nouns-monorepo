@@ -2,7 +2,8 @@
   "extends": "../../tsconfig.base.json",
   "include": [
     "./tasks",
-    "./test"
+    "./src",
+    "./test",
   ],
   "files": ["./hardhat.config.ts"]
 }
