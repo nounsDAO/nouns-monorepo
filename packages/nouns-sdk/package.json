@@ -14,6 +14,7 @@
     "test": "mocha -r ts-node/register \"test/**/*.test.ts\""
   },
   "dependencies": {
+    "@nouns/contracts": "^0.1.0",
     "node-libpng": "^0.2.18"
   }
 }
