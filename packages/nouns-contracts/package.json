@@ -8,9 +8,10 @@
   "license": "GPL-3.0",
   "main": "dist/src/index.js",
   "scripts": {
-    "build": "yarn build:sol && yarn build:ts",
+    "build": "yarn build:sol && yarn build:ts && yarn build:declarations",
     "build:ts": "tsc -p tsconfig.build.json",
     "build:sol": "npx hardhat compile",
+    "build:declarations": "cp typechain/*.d.ts dist/typechain",
     "hardhat": "npx hardhat",
     "task:accounts": "npx hardhat accounts",
     "task:deploy": "npx hardhat deploy",

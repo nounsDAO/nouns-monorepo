@@ -28,10 +28,10 @@ const chainIdToAddresses: { [chainId: number]: ContractAddresses } = {
 };
 
 /**
- * Used to get addresses of contracts that have been deployed to the
- * Ethereum mainnet or a supported testnet. Throws if there are no known
- * contracts deployed on the corresponding chain.
- * @param chainId The desired chainId.
+ * Get addresses of contracts that have been deployed to the
+ * Ethereum mainnet or a supported testnet. Throws if there are
+ * no known contracts deployed on the corresponding chain.
+ * @param chainId The desired chainId
  */
 export const getContractAddressesForChainOrThrow = (chainId: ChainId): ContractAddresses => {
   if (!chainIdToAddresses[chainId]) {
