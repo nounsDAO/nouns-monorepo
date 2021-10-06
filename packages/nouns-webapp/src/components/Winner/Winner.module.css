@@ -1,0 +1,16 @@
+.verifyButton {
+  height: 3rem;
+  color: white;
+  border: transparent;
+  background-color: var(--brand-black);
+  font-weight: bold;
+}
+
+.verifyButton:hover,
+.verifyButton:active,
+.verifyButton:focus,
+.verifyButton:disabled {
+  background-color: gray !important;
+  outline: none !important;
+  box-shadow: none !important;
+}

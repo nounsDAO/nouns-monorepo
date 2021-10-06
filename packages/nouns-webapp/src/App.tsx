@@ -15,7 +15,9 @@ import GovernancePage from './pages/Governance';
 import CreateProposalPage from './pages/CreateProposal';
 import VotePage from './pages/Vote';
 import NoundersPage from './pages/Nounders';
+import NotFoundPage from './pages/NotFound';
 import { CHAIN_ID } from './config';
+import VerifyPage from './pages/Verify';
 
 function App() {
   const { account, chainId } = useEthers();
@@ -30,7 +32,7 @@ function App() {
   const useGreyBg = useAppSelector(state => state.application.useGreyBackground);
 
   return (
-    <div className={useGreyBg ? classes.greyBg : classes.beigeBg}>
+    <div className={`${classes.wrapper} ${useGreyBg ? classes.greyBg : classes.beigeBg}`}>
       {Number(CHAIN_ID) !== chainId && <NetworkAlert />}
       {alertModal.show && (
         <AlertModal
@@ -49,9 +51,12 @@ function App() {
             render={props => <AuctionPage initialAuctionId={Number(props.match.params.id)} />}
           />
           <Route exact path="/nounders" component={NoundersPage} />
+          <Route exact path="/sign" component={VerifyPage} />
+          <Route exact path="/verify" component={VerifyPage} />
           <Route exact path="/create-proposal" component={CreateProposalPage} />
           <Route exact path="/vote" component={GovernancePage} />
           <Route exact path="/vote/:id" component={VotePage} />
+          <Route component={NotFoundPage} />
         </Switch>
         <Footer />
       </BrowserRouter>
