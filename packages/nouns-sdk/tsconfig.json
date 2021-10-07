@@ -3,5 +3,10 @@
   "compilerOptions": {
     "rootDirs": ["src", "test"],
     "outDir": "dist"
-  }
+  },
+  "references": [
+    {
+      "path": "../nouns-contracts"
+    }
+  ]
 }

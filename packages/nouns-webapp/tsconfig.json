@@ -22,5 +22,10 @@
   },
   "include": [
     "src"
+  ],
+  "references": [
+    {
+      "path": "../nouns-contracts"
+    }
   ]
 }

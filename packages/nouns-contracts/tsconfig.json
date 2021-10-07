@@ -5,5 +5,10 @@
     "./src",
     "./test",
   ],
-  "files": ["./hardhat.config.ts"]
+  "files": ["./hardhat.config.ts"],
+  "references": [
+    {
+      "path": "../nouns-assets"
+    }
+  ]
 }

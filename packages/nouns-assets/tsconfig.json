@@ -3,5 +3,10 @@
   "compilerOptions": {
     "rootDirs": ["src", "scripts"],
     "outDir": "dist"
-  }
+  },
+  "references": [
+    {
+      "path": "../nouns-sdk"
+    }
+  ]
 }
