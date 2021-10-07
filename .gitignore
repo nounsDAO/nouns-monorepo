@@ -23,7 +23,7 @@ packages/nouns-contracts/abi/contracts/governance/*
 !packages/nouns-contracts/abi/contracts/governance
 !packages/nouns-contracts/abi/contracts/NounsToken.sol
 !packages/nouns-contracts/abi/contracts/NounsAuctionHouse.sol
-
+!packages/nouns-contracts/abi/contracts/governance/NounsDAOLogicV1.sol
 
 # Created by https://www.toptal.com/developers/gitignore/api/jetbrains
 # Edit at https://www.toptal.com/developers/gitignore?templates=jetbrains
@@ -135,5 +135,3 @@ fabric.properties
 .idea/codestream.xml
 
 # End of https://www.toptal.com/developers/gitignore/api/jetbrains
-
-!packages/nouns-contracts/abi/contracts/governance/NounsDAOLogicV1.sol
