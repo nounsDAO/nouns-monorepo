@@ -1,5 +1,5 @@
 import { task, types } from 'hardhat/config';
-import { bgcolors, partcolors, parts } from '../files/encoded-layers.json';
+import { ImageData } from '@nouns/assets';
 import { chunkArray } from '../utils';
 
 task('populate-descriptor', 'Populates the descriptor with color palettes and Noun parts')
@@ -23,11 +23,12 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and No
     });
     const descriptorContract = descriptorFactory.attach(nounsDescriptor);
 
-    const [bodies, accessories, heads, glasses] = parts;
+    const { bgcolors, palette, images } = ImageData;
+    const { bodies, accessories, heads, glasses } = images;
 
     // Chunk head and accessory population due to high gas usage
     await descriptorContract.addManyBackgrounds(bgcolors);
-    await descriptorContract.addManyColorsToPalette(0, partcolors);
+    await descriptorContract.addManyColorsToPalette(0, palette);
     await descriptorContract.addManyBodies(bodies.map(({ data }) => data));
 
     const accessoryChunk = chunkArray(accessories, 10);

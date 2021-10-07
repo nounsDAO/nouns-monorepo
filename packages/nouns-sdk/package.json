@@ -19,5 +19,13 @@
   },
   "devDependencies": {
     "node-libpng": "^0.2.18"
+  },
+  "peerDependencies": {
+    "ethers": ">=5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "ethers": {
+      "optional": true
+    }
   }
 }

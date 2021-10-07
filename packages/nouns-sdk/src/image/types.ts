@@ -44,6 +44,11 @@ export interface EncodedImage {
   data: string;
 }
 
+export interface ImageData {
+  palette: string[];
+  images: Record<string, EncodedImage[]>;
+}
+
 export interface PngImage {
   width: number;
   height: number;

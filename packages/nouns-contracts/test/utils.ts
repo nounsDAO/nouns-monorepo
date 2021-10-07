@@ -10,7 +10,7 @@ import {
   Weth,
   Weth__factory,
 } from '../typechain';
-import { bgcolors, partcolors, parts } from '../files/encoded-layers.json';
+import { ImageData } from '@nouns/assets';
 import { Block } from '@ethersproject/abstract-provider';
 import { chunkArray } from '../utils';
 
@@ -80,12 +80,13 @@ export const deployWeth = async (deployer?: SignerWithAddress): Promise<Weth> =>
 };
 
 export const populateDescriptor = async (nounsDescriptor: NounsDescriptor): Promise<void> => {
-  const [bodies, accessories, heads, glasses] = parts;
+  const { bgcolors, palette, images } = ImageData;
+  const { bodies, accessories, heads, glasses } = images;
 
   // Split up head and accessory population due to high gas usage
   await Promise.all([
     nounsDescriptor.addManyBackgrounds(bgcolors),
-    nounsDescriptor.addManyColorsToPalette(0, partcolors),
+    nounsDescriptor.addManyColorsToPalette(0, palette),
     nounsDescriptor.addManyBodies(bodies.map(({ data }) => data)),
     chunkArray(accessories, 10).map(chunk =>
       nounsDescriptor.addManyAccessories(chunk.map(({ data }) => data)),

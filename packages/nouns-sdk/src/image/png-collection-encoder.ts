@@ -1,5 +1,5 @@
 import { promises as fs } from 'fs';
-import { EncodedImage, IEncoder, PngImage } from './types';
+import { EncodedImage, IEncoder, ImageData, PngImage } from './types';
 import { Image } from './image';
 
 /**
@@ -13,10 +13,17 @@ export class PNGCollectionEncoder implements IEncoder {
   private _folders: { [name: string]: string[] } = {};
 
   /**
-   * The run-length encoded image data and file names
+   * The flattened run-length encoded image data
    */
   public get images(): EncodedImage[] {
     return this.format(true).root;
+  }
+
+  /**
+   * The run-length encoded image data and file names in their respective folders
+   */
+  public get data(): ImageData {
+    return { palette: [...this._colors.keys()], images: this.format() };
   }
 
   /**
@@ -43,10 +50,7 @@ export class PNGCollectionEncoder implements IEncoder {
    * @param outputFile The output file path and name
    */
   public async writeToFile(outputFile = 'encoded-images.json'): Promise<void> {
-    await fs.writeFile(
-      outputFile,
-      JSON.stringify({ palette: [...this._colors.keys()], images: this.format() }, null, 2),
-    );
+    await fs.writeFile(outputFile, JSON.stringify(this.data, null, 2));
   }
 
   /**
