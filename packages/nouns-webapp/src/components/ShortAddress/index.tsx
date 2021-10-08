@@ -15,11 +15,13 @@ const ShortAddress: React.FC<{ address: string, avatar?: boolean }> = props => {
 
   return <div className={classes.shortAddress}>
     {avatar &&
+      <div key={address}>
     <Davatar
       size={24}
       address={address}
       provider={provider}
-    />}
+    />
+      </div>}
     {ens ? ens : shortAddress}</div>;
 };
 
