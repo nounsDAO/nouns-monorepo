@@ -21,7 +21,7 @@ const Winner: React.FC<{ winner: string }> = props => {
             </Link>
           </div>
         ) : (
-          <ShortAddress address={winner} />
+          <ShortAddress address={winner} avatar={true} />
         )}
       </h2>
     </div>
