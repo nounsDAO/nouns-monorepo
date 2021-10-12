@@ -7,6 +7,7 @@
   "homepage": "https://nouns.wtf",
   "license": "GPL-3.0",
   "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "scripts": {
     "build": "yarn build:sol && yarn build:ts && yarn build:declarations",
     "build:ts": "tsc -p tsconfig.build.json",
@@ -27,7 +28,6 @@
     "@nomiclabs/hardhat-ethers": "^2.0.2",
     "@nomiclabs/hardhat-etherscan": "^2.1.2",
     "@nomiclabs/hardhat-waffle": "^2.0.1",
-    "@nouns/assets": "^0.1.0",
     "@openzeppelin/contracts": "^4.1.0",
     "@openzeppelin/contracts-upgradeable": "^4.1.0",
     "@openzeppelin/hardhat-upgrades": "^1.8.2",

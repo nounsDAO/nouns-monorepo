@@ -11,6 +11,7 @@
   "scripts": {
     "clean": "rm -rf dist tsconfig.build.tsbuildinfo",
     "build": "tsc -p tsconfig.build.json",
+    "prepare": "yarn build",
     "test": "mocha -r ts-node/register \"test/**/*.test.ts\""
   },
   "dependencies": {

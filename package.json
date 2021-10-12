@@ -3,9 +3,9 @@
   "private": true,
   "scripts": {
     "lerna": "lerna",
-    "build": "lerna run --parallel build",
+    "build": "lerna run build",
     "test": "lerna run --parallel test",
-    "prepare": "lerna run --parallel prepare",
+    "prepare": "lerna run prepare --scope=@nouns/{assets,contracts,sdk}",
     "lint": "eslint 'packages/**/*.ts' --fix",
     "format": "prettier --write 'packages/**/*.{ts(x)?,sol,md,css}' '!**/typechain/**'"
   },

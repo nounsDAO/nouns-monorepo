@@ -10,7 +10,7 @@ import {
   Weth,
   Weth__factory,
 } from '../typechain';
-import { ImageData } from '@nouns/assets';
+import ImageData from '../files/image-data.json';
 import { Block } from '@ethersproject/abstract-provider';
 import { chunkArray } from '../utils';
 

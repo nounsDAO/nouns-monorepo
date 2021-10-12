@@ -1,5 +1,5 @@
 import { task, types } from 'hardhat/config';
-import { ImageData } from '@nouns/assets';
+import ImageData from '../files/image-data.json';
 import { chunkArray } from '../utils';
 
 task('populate-descriptor', 'Populates the descriptor with color palettes and Noun parts')

@@ -6,7 +6,7 @@
   },
   "references": [
     {
-      "path": "../nouns-contracts"
+      "path": "../nouns-contracts/tsconfig.build.json"
     }
   ]
 }

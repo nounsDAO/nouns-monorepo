@@ -7,10 +7,12 @@
   "homepage": "https://nouns.wtf",
   "license": "GPL-3.0",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "encode": "ts-node scripts/encode.ts",
     "clean": "rm -rf dist tsconfig.build.tsbuildinfo",
-    "build": "tsc -p tsconfig.build.json"
+    "build": "tsc -p tsconfig.build.json",
+    "prepare": "yarn build"
   },
   "devDependencies": {
     "@nouns/sdk": "^0.1.0",
