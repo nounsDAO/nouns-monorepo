@@ -36,7 +36,7 @@ const HistoryCollection: React.FC<HistoryCollectionProps> = (props: HistoryColle
   });
 
   return (
-    <Section bgColor="white" fullWidth={true}>
+    <Section fullWidth={true}>
       <Container fluid>
         <Row className="justify-content-md-center">
           <div className={clsx(classes.historyCollection)}>

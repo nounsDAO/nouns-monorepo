@@ -37,7 +37,7 @@ const Playground = () => {
   };
 
   return (
-    <Section bgColor="transparent" fullWidth={false}>
+    <Section fullWidth={false}>
       <Row>
         <Col lg={10}>
           <h1>Playground</h1>

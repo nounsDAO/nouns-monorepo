@@ -20,7 +20,7 @@ const Documentation = () => {
     <Link text="Compound Governance" url="https://compound.finance/governance" leavesPage={true} />
   );
   return (
-    <Section bgColor="white" fullWidth={false}>
+    <Section fullWidth={false}>
       <Col lg={{ span: 10, offset: 1 }}>
         <div className={classes.headerWrapper}>
           <h1>WTF?</h1>

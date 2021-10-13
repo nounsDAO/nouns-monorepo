@@ -5,7 +5,7 @@ import _404img from '../../assets/404noun.png';
 
 const NotFoundPage = () => {
   return (
-    <Section bgColor="transparent" fullWidth={false}>
+    <Section fullWidth={false}>
       <Col lg={4}>
         <Image src={_404img} fluid />
       </Col>

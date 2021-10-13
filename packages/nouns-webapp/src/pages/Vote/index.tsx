@@ -200,7 +200,7 @@ const VotePage = ({
   );
 
   return (
-    <Section bgColor="transparent" fullWidth={false} className={classes.votePage}>
+    <Section fullWidth={false} className={classes.votePage}>
       <VoteModal
         show={showVoteModal}
         onHide={() => setShowVoteModal(false)}

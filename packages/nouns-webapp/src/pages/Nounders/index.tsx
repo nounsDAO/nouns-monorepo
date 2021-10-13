@@ -127,7 +127,7 @@ const BioCards: React.FC<{ min: number; max: number }> = props => {
 
 const NoundersPage = () => {
   return (
-    <Section bgColor="transparent" fullWidth={true} className={classes.noundersPage}>
+    <Section fullWidth={true} className={classes.noundersPage}>
       <Col lg={{ span: 6, offset: 3 }}>
         <h2 style={{ marginBottom: '2rem' }}>The Nounders</h2>
         <h3 style={{ marginBottom: '2rem' }}>3.5 artists, 6.5 technologists</h3>

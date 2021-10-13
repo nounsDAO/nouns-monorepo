@@ -12,7 +12,7 @@ const Footer = () => {
   const discourseURL = externalURL(ExternalURL.discourse);
 
   return (
-    <Section bgColor="" fullWidth={false} className={classes.alignBottom}>
+    <Section fullWidth={false} className={classes.alignBottom}>
       <footer className={classes.footerSignature}>
         <Link text="discord" url={discordURL} leavesPage={true} />
         <Link text="twitter" url={twitterURL} leavesPage={true} />

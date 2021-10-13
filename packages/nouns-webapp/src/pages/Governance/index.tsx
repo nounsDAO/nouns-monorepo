@@ -8,7 +8,7 @@ const GovernancePage = () => {
   const { data: proposals } = useAllProposals();
 
   return (
-    <Section bgColor="transparent" fullWidth={true}>
+    <Section fullWidth={true}>
       <Col lg={{ span: 8, offset: 2 }}>
         <h1 className={classes.heading}>Nouns DAO Governance</h1>
         <h2 className={classes.subheading}>

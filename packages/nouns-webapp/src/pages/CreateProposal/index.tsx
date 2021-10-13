@@ -132,7 +132,7 @@ const CreateProposalPage = () => {
   }, [proposeState, setModal]);
 
   return (
-    <Section bgColor="transparent" fullWidth={false} className={classes.createProposalPage}>
+    <Section fullWidth={false} className={classes.createProposalPage}>
       <ProposalTransactionFormModal
         show={showTransactionFormModal}
         onHide={() => setShowTransactionFormModal(false)}
