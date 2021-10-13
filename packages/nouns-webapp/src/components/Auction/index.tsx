@@ -2,6 +2,7 @@ import { Col } from 'react-bootstrap';
 import { StandaloneNounWithSeed } from '../StandaloneNoun';
 import AuctionActivity from '../AuctionActivity';
 import { Row, Container } from 'react-bootstrap';
+import { setStateBackgroundColor } from '../../state/slices/application';
 import { LoadingNoun } from '../Noun';
 import { Auction as IAuction } from '../../wrappers/nounsAuction';
 import classes from './Auction.module.css';
@@ -14,21 +15,22 @@ import {
   setNextOnDisplayAuctionNounId,
   setPrevOnDisplayAuctionNounId,
 } from '../../state/slices/onDisplayAuction';
+import { beige, grey } from '../../utils/nounBgColors';
 
 interface AuctionProps {
   auction: IAuction;
-  bgColorHandler: (useGrey: boolean) => void;
 }
 
 const Auction: React.FC<AuctionProps> = props => {
-  const { auction: currentAuction, bgColorHandler } = props;
+  const { auction: currentAuction } = props;
 
   const history = useHistory();
   const dispatch = useAppDispatch();
+  let stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
   const lastNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
 
   const loadedNounHandler = (seed: INounSeed) => {
-    bgColorHandler(seed.background === 0);
+    dispatch(setStateBackgroundColor(seed.background === 0 ? grey : beige));
   };
 
   const prevAuctionHandler = () => {
@@ -74,18 +76,20 @@ const Auction: React.FC<AuctionProps> = props => {
   );
 
   return (
-    <Container fluid="lg">
-      <Row>
-        <Col lg={{ span: 6 }} className={classes.nounContentCol}>
-          {currentAuction ? nounContent : loadingNoun}
-        </Col>
-        <Col lg={{ span: 6 }} className={classes.auctionActivityCol}>
-          {isNounderNoun(currentAuction.nounId)
-            ? nounderNounContent
-            : currentAuctionActivityContent}
-        </Col>
-      </Row>
-    </Container>
+    <div style={{ backgroundColor: stateBgColor }}>
+      <Container fluid="lg">
+        <Row>
+          <Col lg={{ span: 6 }} className={classes.nounContentCol}>
+            {currentAuction ? nounContent : loadingNoun}
+          </Col>
+          <Col lg={{ span: 6 }} className={classes.auctionActivityCol}>
+            {isNounderNoun(currentAuction.nounId)
+              ? nounderNounContent
+              : currentAuctionActivityContent}
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 };
 

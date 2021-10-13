@@ -3,7 +3,6 @@ import Banner from '../../components/Banner';
 import Auction from '../../components/Auction';
 import Documentation from '../../components/Documentation';
 import HistoryCollection from '../../components/HistoryCollection';
-import { setUseGreyBackground } from '../../state/slices/application';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setOnDisplayAuctionNounId } from '../../state/slices/onDisplayAuction';
 import { push } from 'connected-react-router';
@@ -46,12 +45,7 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
 
   return (
     <>
-      {onDisplayAuction && (
-        <Auction
-          auction={onDisplayAuction}
-          bgColorHandler={useGrey => dispatch(setUseGreyBackground(useGrey))}
-        />
-      )}
+      {onDisplayAuction && <Auction auction={onDisplayAuction} />}
       <Banner />
       {lastAuctionNounId && (
         <HistoryCollection latestNounId={BigNumber.from(lastAuctionNounId)} historyCount={10} />

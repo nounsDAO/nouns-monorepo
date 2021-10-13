@@ -5,6 +5,7 @@ import logo from '../../assets/logo.svg';
 import { useState } from 'react';
 import { useEtherBalance, useEthers } from '@usedapp/core';
 import WalletConnectModal from '../WalletConnectModal';
+import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Nav, Navbar, Container } from 'react-bootstrap';
 import testnetNoun from '../../assets/testnet-noun.png';
@@ -18,6 +19,8 @@ const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { deactivate } = useEthers();
 
+  const stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
+  const history = useHistory();
   const treasuryBalance = useEtherBalance(config.nounsDaoExecutorAddress);
   const daoEtherscanLink = buildEtherscanAddressLink(config.nounsDaoExecutorAddress);
 
@@ -64,12 +67,15 @@ const NavBar = () => {
     </>
   );
 
+  const useStateBg =
+    history.location.pathname === '/' || history.location.pathname.includes('/noun');
+
   return (
     <>
       {showConnectModal && activeAccount === undefined && (
         <WalletConnectModal onDismiss={hideModalHandler} />
       )}
-      <Navbar expand="lg">
+      <Navbar expand="lg" style={{ backgroundColor: `${useStateBg ? stateBgColor : ''}` }}>
         <Container>
           <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
             <img
