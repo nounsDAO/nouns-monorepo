@@ -1,25 +1,16 @@
+.headerRow {
+  margin: 2rem 0;
+}
+
 .generateBtn {
   width: 100%;
   height: 4rem;
   font-weight: bold;
+  margin-bottom: 2rem;
+  border-radius: 12px;
 }
-.nounWrapper {
-  width: 90%;
-  border-radius: 5px;
-  background-color: white;
-  padding: 1rem;
-  margin: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.noun {
-  border-radius: 5px;
-  width: 80%;
-  height: 100%;
-}
-.saveNounBtn {
-  width: 80%;
-  margin-top: 1rem;
+
+.nounImg {
+  border-radius: 16px;
+  margin: 0.25rem 0;
 }

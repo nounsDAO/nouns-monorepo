@@ -1,5 +1,4 @@
-import { Col, Image, Button, Row } from 'react-bootstrap';
-import Section from '../../layout/Section';
+import { Container, Col, Button, Row, DropdownButton, Dropdown } from 'react-bootstrap';
 import classes from './Playground.module.css';
 import { useEthers } from '@usedapp/core';
 import { useState } from 'react';
@@ -37,18 +36,18 @@ const Playground = () => {
   };
 
   return (
-    <Section fullWidth={false}>
+    <Container>
       <Row>
-        <Col lg={10}>
+        <Col lg={10} className={classes.headerRow}>
+          <span>Explore</span>
           <h1>Playground</h1>
           <p>
             The playground was built using the Nouns protocol. Each Noun's traits are generated
             using the NounsSeeder contract. Using the seed, the Noun is then rendered using the
-            NounsDescriptor contract. Take a look at the docs to learn more!
+            NounsDescriptor contract.
           </p>
         </Col>
-      </Row>
-      <Row>
+
         <Col lg={3}>
           <Button onClick={fetchSVG} className={classes.generateBtn}>
             GENERATE NOUNS
@@ -59,15 +58,19 @@ const Playground = () => {
             {svgs &&
               svgs.map(svg => {
                 return (
-                  <Col lg={3}>
-                    <Noun imgPath={`data:image/svg+xml;base64,${svg}`} alt="noun" />
+                  <Col xs={4} lg={3}>
+                    <Noun
+                      imgPath={`data:image/svg+xml;base64,${svg}`}
+                      alt="noun"
+                      className={classes.nounImg}
+                    />
                   </Col>
                 );
               })}
           </Row>
         </Col>
       </Row>
-    </Section>
+    </Container>
   );
 };
 export default Playground;

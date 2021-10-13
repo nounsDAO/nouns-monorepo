@@ -7,9 +7,16 @@ export const LoadingNoun = () => {
   return <Image className={classes.img} src={loadingNoun} alt={'loading noun'} fluid />;
 };
 
-const Noun: React.FC<{ imgPath: string; alt: string }> = props => {
-  const { imgPath, alt } = props;
-  return <Image className={classes.img} src={imgPath ? imgPath : loadingNoun} alt={alt} fluid />;
+const Noun: React.FC<{ imgPath: string; alt: string; className?: string }> = props => {
+  const { imgPath, alt, className } = props;
+  return (
+    <Image
+      className={`${classes.img} ${className}`}
+      src={imgPath ? imgPath : loadingNoun}
+      alt={alt}
+      fluid
+    />
+  );
 };
 
 export default Noun;
