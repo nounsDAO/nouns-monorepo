@@ -3,10 +3,5 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist"
-  },
-  "references": [
-    {
-      "path": "../nouns-contracts/tsconfig.build.json"
-    }
-  ]
+  }
 }

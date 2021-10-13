@@ -1,8 +1,7 @@
 {
   "name": "@nouns/assets",
-  "private": true,
   "version": "0.1.0",
-  "description": "nouns assets",
+  "description": "Nouns run-length encoded image data",
   "author": "Nounders",
   "homepage": "https://nouns.wtf",
   "license": "GPL-3.0",
@@ -10,7 +9,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "encode": "ts-node scripts/encode.ts",
-    "clean": "rm -rf dist tsconfig.build.tsbuildinfo",
+    "clean": "rimraf dist tsconfig.build.tsbuildinfo",
     "build": "tsc -p tsconfig.build.json",
     "prepare": "yarn build"
   },

@@ -4,5 +4,5 @@
     "rootDir": "src",
     "outDir": "dist",
   },
-  "exclude": ["test"]
+  "exclude": ["test", "dist"]
 }
