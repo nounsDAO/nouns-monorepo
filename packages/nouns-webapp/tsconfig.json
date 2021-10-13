@@ -17,5 +17,10 @@
   },
   "include": [
     "src"
+  ],
+  "references": [
+    {
+      "path": "../nouns-contracts/tsconfig.build.json"
+    }
   ]
 }

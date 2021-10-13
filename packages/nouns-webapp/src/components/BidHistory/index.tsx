@@ -25,7 +25,7 @@ const bidItem = (bid: Bid, index: number, classes: any) => {
         <div className={classes.leftSectionWrapper}>
           <div className={classes.bidder}>
             <div>
-              <ShortAddress address={bid.sender} avatar={true}/>
+              <ShortAddress address={bid.sender} avatar={true} />
             </div>
           </div>
           <div className={classes.bidDate}>{date}</div>
