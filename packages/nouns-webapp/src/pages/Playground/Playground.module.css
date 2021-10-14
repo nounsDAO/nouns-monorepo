@@ -9,6 +9,10 @@
   margin-bottom: 2rem;
   border-radius: 12px;
 }
+.dropdownBtn {
+  width: 100%;
+  margin: 1rem 0;
+}
 
 .nounImg {
   border-radius: 16px;
