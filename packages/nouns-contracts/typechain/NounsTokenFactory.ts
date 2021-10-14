@@ -2,12 +2,13 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Signer, Contract, ContractFactory, Overrides } from "ethers";
+import { Signer } from "ethers";
 import { Provider, TransactionRequest } from "@ethersproject/providers";
+import { Contract, ContractFactory, Overrides } from "@ethersproject/contracts";
 
-import type { NounsToken } from "../NounsToken";
+import type { NounsToken } from "./NounsToken";
 
-export class NounsToken__factory extends ContractFactory {
+export class NounsTokenFactory extends ContractFactory {
   constructor(signer?: Signer) {
     super(_abi, _bytecode, signer);
   }
@@ -18,7 +19,7 @@ export class NounsToken__factory extends ContractFactory {
     _descriptor: string,
     _seeder: string,
     _proxyRegistry: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides
   ): Promise<NounsToken> {
     return super.deploy(
       _noundersDAO,
@@ -35,7 +36,7 @@ export class NounsToken__factory extends ContractFactory {
     _descriptor: string,
     _seeder: string,
     _proxyRegistry: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides
   ): TransactionRequest {
     return super.getDeployTransaction(
       _noundersDAO,
@@ -49,8 +50,8 @@ export class NounsToken__factory extends ContractFactory {
   attach(address: string): NounsToken {
     return super.attach(address) as NounsToken;
   }
-  connect(signer: Signer): NounsToken__factory {
-    return super.connect(signer) as NounsToken__factory;
+  connect(signer: Signer): NounsTokenFactory {
+    return super.connect(signer) as NounsTokenFactory;
   }
   static connect(
     address: string,

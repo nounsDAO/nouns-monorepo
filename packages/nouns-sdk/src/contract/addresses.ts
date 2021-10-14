@@ -33,7 +33,7 @@ const chainIdToAddresses: { [chainId: number]: ContractAddresses } = {
  * no known contracts deployed on the corresponding chain.
  * @param chainId The desired chainId
  */
-export const getContractAddressesForChainOrThrow = (chainId: ChainId): ContractAddresses => {
+export const getContractAddressesForChainOrThrow = (chainId: number): ContractAddresses => {
   if (!chainIdToAddresses[chainId]) {
     throw new Error(
       `Unknown chain id (${chainId}). No known contracts have been deployed on this chain.`,

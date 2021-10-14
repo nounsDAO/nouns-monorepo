@@ -2,13 +2,13 @@ import { ethers, network } from 'hardhat';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsDescriptor,
-  NounsDescriptor__factory,
+  NounsDescriptorFactory,
   NounsToken,
-  NounsToken__factory,
+  NounsTokenFactory,
   NounsSeeder,
-  NounsSeeder__factory,
+  NounsSeederFactory,
   Weth,
-  Weth__factory,
+  WethFactory,
 } from '../typechain';
 import ImageData from '../files/image-data.json';
 import { Block } from '@ethersproject/abstract-provider';
@@ -37,7 +37,7 @@ export const deployNounsDescriptor = async (
   const signer = deployer || (await getSigners()).deployer;
   const nftDescriptorLibraryFactory = await ethers.getContractFactory('NFTDescriptor', signer);
   const nftDescriptorLibrary = await nftDescriptorLibraryFactory.deploy();
-  const nounsDescriptorFactory = new NounsDescriptor__factory(
+  const nounsDescriptorFactory = new NounsDescriptorFactory(
     {
       __$e1d8844a0810dc0e87a665b1f2b5fa7c69$__: nftDescriptorLibrary.address,
     },
@@ -48,7 +48,7 @@ export const deployNounsDescriptor = async (
 };
 
 export const deployNounsSeeder = async (deployer?: SignerWithAddress): Promise<NounsSeeder> => {
-  const factory = new NounsSeeder__factory(deployer || (await getSigners()).deployer);
+  const factory = new NounsSeederFactory(deployer || (await getSigners()).deployer);
 
   return factory.deploy();
 };
@@ -62,7 +62,7 @@ export const deployNounsToken = async (
   proxyRegistryAddress?: string,
 ): Promise<NounsToken> => {
   const signer = deployer || (await getSigners()).deployer;
-  const factory = new NounsToken__factory(signer);
+  const factory = new NounsTokenFactory(signer);
 
   return factory.deploy(
     noundersDAO || signer.address,
@@ -74,7 +74,7 @@ export const deployNounsToken = async (
 };
 
 export const deployWeth = async (deployer?: SignerWithAddress): Promise<Weth> => {
-  const factory = new Weth__factory(deployer || (await await getSigners()).deployer);
+  const factory = new WethFactory(deployer || (await await getSigners()).deployer);
 
   return factory.deploy();
 };

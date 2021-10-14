@@ -2,19 +2,20 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Signer, Contract, ContractFactory, Overrides } from "ethers";
+import { Signer } from "ethers";
 import { Provider, TransactionRequest } from "@ethersproject/providers";
+import { Contract, ContractFactory, Overrides } from "@ethersproject/contracts";
 
-import type { NounsDescriptor } from "../NounsDescriptor";
+import type { NounsDescriptor } from "./NounsDescriptor";
 
-export class NounsDescriptor__factory extends ContractFactory {
+export class NounsDescriptorFactory extends ContractFactory {
   constructor(
     linkLibraryAddresses: NounsDescriptorLibraryAddresses,
     signer?: Signer
   ) {
     super(
       _abi,
-      NounsDescriptor__factory.linkBytecode(linkLibraryAddresses),
+      NounsDescriptorFactory.linkBytecode(linkLibraryAddresses),
       signer
     );
   }
@@ -34,21 +35,17 @@ export class NounsDescriptor__factory extends ContractFactory {
     return linkedBytecode;
   }
 
-  deploy(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<NounsDescriptor> {
+  deploy(overrides?: Overrides): Promise<NounsDescriptor> {
     return super.deploy(overrides || {}) as Promise<NounsDescriptor>;
   }
-  getDeployTransaction(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): TransactionRequest {
+  getDeployTransaction(overrides?: Overrides): TransactionRequest {
     return super.getDeployTransaction(overrides || {});
   }
   attach(address: string): NounsDescriptor {
     return super.attach(address) as NounsDescriptor;
   }
-  connect(signer: Signer): NounsDescriptor__factory {
-    return super.connect(signer) as NounsDescriptor__factory;
+  connect(signer: Signer): NounsDescriptorFactory {
+    return super.connect(signer) as NounsDescriptorFactory;
   }
   static connect(
     address: string,

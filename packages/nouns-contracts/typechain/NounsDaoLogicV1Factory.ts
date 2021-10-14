@@ -2,31 +2,28 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Signer, Contract, ContractFactory, Overrides } from "ethers";
+import { Signer } from "ethers";
 import { Provider, TransactionRequest } from "@ethersproject/providers";
+import { Contract, ContractFactory, Overrides } from "@ethersproject/contracts";
 
-import type { NounsDaoLogicV1 } from "../NounsDaoLogicV1";
+import type { NounsDaoLogicV1 } from "./NounsDaoLogicV1";
 
-export class NounsDaoLogicV1__factory extends ContractFactory {
+export class NounsDaoLogicV1Factory extends ContractFactory {
   constructor(signer?: Signer) {
     super(_abi, _bytecode, signer);
   }
 
-  deploy(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<NounsDaoLogicV1> {
+  deploy(overrides?: Overrides): Promise<NounsDaoLogicV1> {
     return super.deploy(overrides || {}) as Promise<NounsDaoLogicV1>;
   }
-  getDeployTransaction(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): TransactionRequest {
+  getDeployTransaction(overrides?: Overrides): TransactionRequest {
     return super.getDeployTransaction(overrides || {});
   }
   attach(address: string): NounsDaoLogicV1 {
     return super.attach(address) as NounsDaoLogicV1;
   }
-  connect(signer: Signer): NounsDaoLogicV1__factory {
-    return super.connect(signer) as NounsDaoLogicV1__factory;
+  connect(signer: Signer): NounsDaoLogicV1Factory {
+    return super.connect(signer) as NounsDaoLogicV1Factory;
   }
   static connect(
     address: string,

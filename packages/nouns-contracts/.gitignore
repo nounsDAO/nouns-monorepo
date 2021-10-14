@@ -6,12 +6,11 @@ cache
 artifacts
 typechain/*.js
 typechain/*.ts
-typechain/factories/*
-!typechain/factories/NounsToken__factory.ts
-!typechain/factories/NounsAuctionHouse__factory.ts
-!typechain/factories/NounsDescriptor__factory.ts
-!typechain/factories/NounsSeeder__factory.ts
-!typechain/factories/NounsDaoLogicV1__factory.ts
+!typechain/NounsTokenFactory.ts
+!typechain/NounsAuctionHouseFactory.ts
+!typechain/NounsDescriptorFactory.ts
+!typechain/NounsSeederFactory.ts
+!typechain/NounsDaoLogicV1Factory.ts
 .openzeppelin
 
 # Script output
