@@ -27,7 +27,7 @@
     "prettier": "^2.1.2"
   },
   "dependencies": {
-    "@nouns/contracts": "^0.1.0",
+    "@nouns/contracts": "^0.1.1",
     "dotenv": "^8.2.0",
     "discord.js":"^12.5.3",
     "ethers": "^5.4.0",

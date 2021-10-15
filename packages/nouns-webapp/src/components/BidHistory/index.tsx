@@ -1,7 +1,7 @@
 import React from 'react';
 import ShortAddress from '../ShortAddress';
 import _classes from './BidHistory.module.css';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { buildEtherscanTxLink } from '../../utils/etherscan';
@@ -13,7 +13,7 @@ import { useAuctionBids } from '../../wrappers/onDisplayAuction';
 
 const bidItem = (bid: Bid, index: number, classes: any) => {
   const bidAmount = <TruncatedAmount amount={new BigNumber(EthersBN.from(bid.value).toString())} />;
-  const date = `${moment(bid.timestamp.toNumber() * 1000).format('MMM DD')} at ${moment(
+  const date = `${dayjs(bid.timestamp.toNumber() * 1000).format('MMM DD')} at ${dayjs(
     bid.timestamp.toNumber() * 1000,
   ).format('hh:mm a')}`;
 
@@ -25,7 +25,7 @@ const bidItem = (bid: Bid, index: number, classes: any) => {
         <div className={classes.leftSectionWrapper}>
           <div className={classes.bidder}>
             <div>
-              <ShortAddress address={bid.sender} avatar={true}/>
+              <ShortAddress address={bid.sender} avatar={true} />
             </div>
           </div>
           <div className={classes.bidDate}>{date}</div>

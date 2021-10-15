@@ -91,15 +91,15 @@ export const nounQuery = (id: string) => gql`
  `;
 
 export const nounsIndex = () => gql`
- {
-	nouns {
-	  id
-	  owner {
-		id
-	  }
-	}
+  {
+    nouns {
+      id
+      owner {
+        id
+      }
+    }
   }
- `;
+`;
 
 export const latestAuctionsQuery = (first: number = 50) => gql`
  {
