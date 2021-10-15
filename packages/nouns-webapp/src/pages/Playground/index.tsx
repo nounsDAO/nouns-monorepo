@@ -32,7 +32,6 @@ const Playground = () => {
 
   const fetchSVG = async () => {
     for (let i = 0; i < fetchesOnTap; i++) {
-    for (let i = 0; i < 10; i++) {
       const seed = await seeder.generateSeed(
         Math.floor(Math.random() * 10000000000),
         config.nounsDescriptorAddress,
@@ -47,6 +46,10 @@ const Playground = () => {
   useEffect(() => {
     if (!ethersUseDapp.library) return;
 
+    // on load fetch of nouns
+    fetchSVG();
+
+    // fetch trait counts
     const fetchPartsCount = async () => {
       const [backgroundCount, bodyCount, accessoryCount, headCount, glasssesCount] = [
         (await descriptor.backgroundCount()) as BigNumber,
@@ -70,7 +73,9 @@ const Playground = () => {
 
   const options = (numOptions: number) => {
     return Array.from(Array(numOptions)).map((_, index) => {
-      return <Dropdown.Item key={index}>{`Option #${index + 1}`} </Dropdown.Item>;
+      return (
+        <Dropdown.Item key={index}>{index === 0 ? `Random` : `Option #${index}`} </Dropdown.Item>
+      );
     });
   };
 
