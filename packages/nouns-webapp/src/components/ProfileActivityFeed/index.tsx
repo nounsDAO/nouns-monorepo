@@ -1,15 +1,8 @@
 import React from "react";
-import { Col, Container, Row , Image, Button, Table} from "react-bootstrap";
+import { Col, Table} from "react-bootstrap";
 import Section from "../../layout/Section";
 import classes from './ProfileActivityFeed.module.css';
 
-
-import _YesVoteIcon from '../../assets/icons/YesVote.svg';
-import _NoVoteIcon from '../../assets/icons/NoVote.svg';
-import _AbsentVoteIcon from '../../assets/icons/AbsentVote.svg';
-
-import _VotePassedIcon from '../../assets/icons/VotePassed.svg';
-import _VoteFailedIcon from '../../assets/icons/VoteFailed.svg';
 import { useQuery } from "@apollo/client";
 import { Proposal, useAllProposals } from "../../wrappers/nounsDao";
 import { nounVotingHistoryQuery } from "../../wrappers/subgraph";

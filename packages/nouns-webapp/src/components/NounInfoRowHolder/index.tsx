@@ -4,7 +4,6 @@ import { Image } from "react-bootstrap";
 import _LinkIcon from '../../assets/icons/Link.svg';
 import { useReverseENSLookUp } from "../../utils/ensLookup";
 import { nounQuery } from "../../wrappers/subgraph";
-import Link from "../Link";
 
 import classes from "./NounInfoRowHolder.module.css";
 

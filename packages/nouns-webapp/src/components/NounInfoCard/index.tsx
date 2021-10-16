@@ -1,14 +1,11 @@
 import React from "react";
-import { Row, Image , Button} from "react-bootstrap";
+import { Row } from "react-bootstrap";
 
-// TODO note this is wrong in terms of path
 import classes from './NounInfoCard.module.css';
 
 import _AddressIcon from '../../assets/icons/Address.svg';
 import _BirthdayIcon from '../../assets/icons/Birthday.svg';
 import _HeartIcon from '../../assets/icons/Heart.svg';
-import _ClockIcon from '../../assets/icons/Clock.svg';
-import _LinkIcon from '../../assets/icons/Link.svg';
 import _BidsIcon from '../../assets/icons/Bids.svg';
 
 import NounInfoRowIcon from '../../components/NounInfoRowIcon';
