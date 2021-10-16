@@ -1,0 +1,12 @@
+/* .nounHolderEtherscanLink {
+    color: black;
+} */
+
+.nounHolderEtherscanLink,
+.nounHolderEtherscanLink:hover,
+.nounHolderEtherscanLink:active {
+    color: black;
+}
+.nounHolderEtherscanLink:hover {
+  text-decoration: none;
+}

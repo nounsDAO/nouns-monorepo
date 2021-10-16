@@ -1,0 +1,8 @@
+.nounProfilePictureCol {
+    display: flex;
+}
+
+.nounWrapper {
+    align-self: flex-end;
+    width: 100%;
+}
