@@ -47,7 +47,6 @@ const selectIconForNounVoteActivityRow = (nounVoted: boolean, nounSupported: boo
   };
 
   const createProposalStatusGem = (proposal: Proposal) => {
-      console.log("Proposal: " + proposal.title + " Status: " + proposal.status.toString());
       switch (proposal.status) {
           case ProposalState.SUCCEEDED:
               return (
