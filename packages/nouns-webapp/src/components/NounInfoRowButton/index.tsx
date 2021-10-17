@@ -1,5 +1,6 @@
 import React from "react";
-import { Button, Image } from "react-bootstrap";
+import { Image } from "react-bootstrap";
+import classes from './NounInfoRowButton.module.css';
 
 interface NounInfoRowButtonProps {
     iconImgSource: string;
@@ -10,22 +11,14 @@ interface NounInfoRowButtonProps {
 const NounInfoRowButton: React.FC<NounInfoRowButtonProps> = props => {
     const { iconImgSource, btnText, onClickHandler } = props;
         return (
-            <>
-                <Button variant='light' style={{
-                    fontFamily: 'PT Root UI Bold',
-                    backgroundColor: '#E9EBF3',
-                    border: '0px',
-                    borderRadius: '10px',
-                    marginRight: '10px',
-                    marginTop: '5px',
-                    marginBottom: '5px'
-                }} onClick={onClickHandler}>
-                    <Image src={iconImgSource} style = {{
-                        paddingRight: 5
-                    }}/>
-                        {btnText}
-                </Button>
-            </>
+            <div className={classes.nounButton} onClick={onClickHandler}>
+                <div className={classes.nounButtonContents}>
+                    <Image src={iconImgSource} style={{
+                       marginBottom: '3px' 
+                    }} /> {btnText} 
+                </div>
+            </div>
+            
     );
 };
 

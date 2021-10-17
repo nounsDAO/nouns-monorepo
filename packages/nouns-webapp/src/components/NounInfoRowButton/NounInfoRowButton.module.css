@@ -1,12 +1,35 @@
-/* .nounHolderEtherscanLink {
-    color: black;
-} */
-
-.nounHolderEtherscanLink,
+/* .nounHolderEtherscanLink,
 .nounHolderEtherscanLink:hover,
 .nounHolderEtherscanLink:active {
     color: black;
 }
 .nounHolderEtherscanLink:hover {
   text-decoration: none;
+} */
+
+.nounButton {
+  height: 40px;
+  background-color: #E9EBF3;
+  border-radius: 10px;
+  margin-right: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-family: 'PT Root UI Bold';
+  cursor: pointer;
+  vertical-align: middle;
+  padding: 5px;
+  text-align: center;
+}
+
+.nounButton:hover {
+  text-decoration: none;
+  background-color: white;
+}
+
+.nounButton:active {
+  color: black;
+}
+
+.nounButtonContents {
+  display: inline-block;
 }
