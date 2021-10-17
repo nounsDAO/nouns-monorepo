@@ -1,0 +1,11 @@
+.nounInfoRowBirthday {
+    font-family: 'PT Root UI Bold';
+}
+
+.birthdayInfoContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 210px;
+    height: 25px;
+}

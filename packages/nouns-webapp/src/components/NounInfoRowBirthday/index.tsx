@@ -1,6 +1,5 @@
 import { useQuery } from "@apollo/client";
 import { BigNumber } from "@ethersproject/bignumber";
-import { reduce } from "ramda";
 import React from "react";
 import { isNounderNoun } from "../../utils/nounderNoun";
 import { auctionQuery } from "../../wrappers/subgraph";
