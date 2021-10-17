@@ -1,4 +1,5 @@
-.nounHolderEtherscanLink a {
+.nounHolderEtherscanLink {
+    font-family: 'PT Root UI Bold';
     color: '#4965F0';
 }
 
@@ -6,6 +7,6 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 256px;
+    width: 205px;
     height: 25px;
 }

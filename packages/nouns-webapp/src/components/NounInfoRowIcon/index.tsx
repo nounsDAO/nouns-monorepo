@@ -9,9 +9,7 @@ const NounInfoRowIcon: React.FC<NounInfoRowIconProps> = props => {
     const { imgSrc } = props;
 
     return (
-        <Image src={imgSrc} style={{
-            paddingRight: 5 
-        }}/> 
+        <Image src={imgSrc}/> 
     )
 };
 
