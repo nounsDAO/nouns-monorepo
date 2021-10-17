@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 import React from "react";
 import { Row } from "react-bootstrap";
 
@@ -12,6 +13,7 @@ import NounInfoRowIcon from '../../components/NounInfoRowIcon';
 import NounInfoRowBirthday from "../NounInfoRowBirthday";
 import NounInfoRowHolder from "../NounInfoRowHolder";
 import NounInfoRowButton from "../NounInfoRowButton";
+import { useHistory } from "react-router";
 
 
 
@@ -23,6 +25,8 @@ interface NounInfoCardProps {
 const NounInfoCard: React.FC<NounInfoCardProps> = props => {
 
     const { nounId } = props;
+    const history = useHistory();
+
 
     return (
         <>
@@ -42,8 +46,8 @@ const NounInfoCard: React.FC<NounInfoCardProps> = props => {
                     <NounInfoRowHolder nounId={nounId} />
                 </Row>
                 <Row className={classes.nounInfoRow}>
-                    <NounInfoRowButton iconImgSource={_BidsIcon} btnText={"Bids"} linkURL={"/noun/"+nounId.toString()} isInternalLink={true} />
-                    <NounInfoRowButton iconImgSource={_AddressIcon} btnText={"Etherscan"} linkURL={"https://etherscan.io/address/0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03/" + nounId.toString()} isInternalLink={false} />
+                    <NounInfoRowButton iconImgSource={_BidsIcon} btnText={"Bids"} onClickHandler={() => history.push('/noun/' + nounId.toString())}/>
+                    <NounInfoRowButton iconImgSource={_AddressIcon} btnText={"Etherscan"} onClickHandler={() => location.href = "https://etherscan.io/address/0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03/" + nounId.toString()}/>
                 </Row>
             </div>
     </>
