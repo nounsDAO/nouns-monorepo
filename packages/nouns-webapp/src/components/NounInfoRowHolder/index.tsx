@@ -32,25 +32,18 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
     }
 
     return (
-        <>
-            Held by <strong style={{
-                paddingLeft: 4,
-                fontWeight: 'bold',
-            }}>
-                    <a
-                        className={classes.nounHolderEtherscanLink}
-                        href={etherscanURL}
-                        target={'_blank'}
-                        rel="noreferrer"
-                        >
-                        {userENSAddress || userAddressRaw}
-                    </a>
-            </strong>    
-                
-            <Image src={_LinkIcon} style = {{
-                paddingLeft: 5
-            }}/>
-        </>
+        <div className={classes.nounHolderInfoContainer}>
+            Held by
+            <a
+                className={classes.nounHolderEtherscanLink}
+                href={etherscanURL}
+                target={'_blank'}
+                rel="noreferrer"
+                >
+                {userENSAddress || userAddressRaw}
+            </a>
+            <Image src={_LinkIcon} /> 
+        </div>
     )
 };
 

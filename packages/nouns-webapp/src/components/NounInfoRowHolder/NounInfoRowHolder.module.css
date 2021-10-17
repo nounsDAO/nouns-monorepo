@@ -1,3 +1,11 @@
 .nounHolderEtherscanLink a {
     color: '#4965F0';
 }
+
+.nounHolderInfoContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 256px;
+    height: 25px;
+}
