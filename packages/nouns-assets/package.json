@@ -1,6 +1,6 @@
 {
   "name": "@nouns/assets",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Nouns run-length encoded image data",
   "author": "Nounders",
   "homepage": "https://nouns.wtf",
@@ -14,7 +14,7 @@
     "prepare": "yarn build"
   },
   "devDependencies": {
-    "@nouns/sdk": "^0.1.1",
+    "@nouns/sdk": "^0.1.2",
     "node-libpng": "^0.2.18"
   }
 }
