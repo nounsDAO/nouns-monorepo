@@ -49,9 +49,7 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
         <Section bgColor="white" fullWidth={false}>
             <Col lg={{ span: 10, offset: 1 }}>
             <div className={classes.headerWrapper}>
-                    <h1 style={{
-                        paddingBottom: '16px'
-                    }}>Activity</h1>
+                    <h1>Activity</h1>
             </div>
 
             <Table responsive hover>

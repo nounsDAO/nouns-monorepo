@@ -10,6 +10,8 @@
   @media (max-width: 992px) {
     .headerWrapper {
       padding: 1rem;
+      display: block;
+      padding-bottom: 16px;
     }
   }
 
