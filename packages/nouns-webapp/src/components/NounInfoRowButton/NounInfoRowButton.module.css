@@ -25,3 +25,7 @@
 .nounButtonContents {
   display: inline-block;
 }
+
+.buttonIcon {
+  margin-bottom: '3px';
+}
