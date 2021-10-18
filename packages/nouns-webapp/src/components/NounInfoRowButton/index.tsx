@@ -13,7 +13,7 @@ const NounInfoRowButton: React.FC<NounInfoRowButtonProps> = props => {
         return (
             <div className={classes.nounButton} onClick={onClickHandler}>
                 <div className={classes.nounButtonContents}>
-                    <Image src={iconImgSource} className={classes.buttonIcon}/> 
+                    <Image src={iconImgSource} className={classes.buttonIcon}/>
                     {btnText} 
                 </div>
             </div>

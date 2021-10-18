@@ -9,7 +9,7 @@
   cursor: pointer;
   vertical-align: middle;
   padding: 5px;
-  padding-right: 10px;
+  padding-right: 5px;
   text-align: center;
 }
 
@@ -23,9 +23,7 @@
 }
 
 .nounButtonContents {
-  display: inline-block;
-}
-
-.buttonIcon {
-  margin-bottom: '3px';
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
