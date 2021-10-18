@@ -43,15 +43,11 @@ const selectIconForNounVoteActivityRow = (nounVoted: boolean, nounSupported: boo
     }
   };
 
-  const createProposalStatusGem = (proposal: Proposal) => {
+  const selectProposalStatusIcon = (proposal: Proposal) => {
       switch (proposal.status) {
           case ProposalState.SUCCEEDED:
               return (
-                <td style={{
-                    textAlign: 'right'
-                }}>
-                    <Image src={_VotePassedIcon} />
-                </td>
+                  <Image src={_VotePassedIcon} />
               );
            case ProposalState.EXECUTED:
                 return (
@@ -89,7 +85,7 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
                     </div>
                 </td>
                 <td className={classes.voteProposalStatus}>
-                    {createProposalStatusGem(proposal)}
+                    {selectProposalStatusIcon(proposal)}
                 </td>
         </tr>
     )
