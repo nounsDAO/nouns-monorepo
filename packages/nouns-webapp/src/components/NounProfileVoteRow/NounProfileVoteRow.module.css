@@ -1,0 +1,11 @@
+.voteIcon {
+    margin-right: 10px;
+}
+
+.voteInfoContainer {
+    display: inline-block;
+}
+
+.voteProposalStatus {
+    text-align: right;
+}

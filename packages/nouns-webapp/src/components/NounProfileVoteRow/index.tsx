@@ -7,6 +7,7 @@ import { ProposalState } from '../../wrappers/nounsDao';
 
 import _VotePassedIcon from '../../assets/icons/VotePassed.svg';
 import _VoteFailedIcon from '../../assets/icons/VoteFailed.svg';
+import classes from "./NounProfileVoteRow.module.css";
 
 interface NounProfileVoteRowProps {
     proposal: Proposal,
@@ -17,21 +18,17 @@ interface NounProfileVoteRowProps {
 const selectIconForNounVoteActivityRow = (nounVoted: boolean, nounSupported: boolean) => {
     if (!nounVoted) {
         return (
-            <Image src={_AbsentVoteIcon} style={{
-                marginRight: '10px',
-            }} />
-          );    } else if (nounSupported) {
+            <Image src={_AbsentVoteIcon} className={classes.voteIcon} />
+          );    
+    } else if (nounSupported) {
       return (
-        <Image src={_YesVoteIcon} style={{
-            marginRight: '10px',
-        }} />
+        <Image src={_YesVoteIcon} className={classes.voteIcon} />
       );
     } else {
         return (
-            <Image src={_NoVoteIcon} style={{
-                marginRight: '10px',
-            }} />
-          );    }
+            <Image src={_NoVoteIcon} className={classes.voteIcon} />
+          );    
+    }
   };
 
   const selectVotingInfoText = (nounVoted: boolean, nounSupported: boolean) => {
@@ -58,39 +55,23 @@ const selectIconForNounVoteActivityRow = (nounVoted: boolean, nounSupported: boo
               );
            case ProposalState.EXECUTED:
                 return (
-                  <td style={{
-                      textAlign: 'right'
-                  }}>
-                      <Image src={_VotePassedIcon} />
-                  </td>
+                    <Image src={_VotePassedIcon} />
                 );
            case ProposalState.QUEUED:
                 return (
-                  <td style={{
-                      textAlign: 'right'
-                  }}>
-                      <Image src={_VotePassedIcon} />
-                  </td>
+                    <Image src={_VotePassedIcon} />
                 );
           case ProposalState.DEFEATED:
               return (
-                <td style={{
-                    textAlign: 'right'
-                }}>
                     <Image src={_VoteFailedIcon} />
-                </td>
               );
         case ProposalState.VETOED:
               return (
-                <td style={{
-                    textAlign: 'right'
-                }}>
                     <Image src={_VoteFailedIcon} />
-                </td>
               );
           default:
               return (
-                  <td></td>
+                  <></>
               );
       }
   };
@@ -102,10 +83,14 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
     return (
         <tr>
                 <td>
-                    {selectIconForNounVoteActivityRow(nounVoted, nounSupported)}
-                    {selectVotingInfoText(nounVoted, nounSupported)} <strong>{proposal.title}</strong>
+                    <div className={classes.voteInfoContainer}>
+                        {selectIconForNounVoteActivityRow(nounVoted, nounSupported)}
+                        {selectVotingInfoText(nounVoted, nounSupported)} <strong>{proposal.title}</strong>
+                    </div>
                 </td>
-                {createProposalStatusGem(proposal)}
+                <td className={classes.voteProposalStatus}>
+                    {createProposalStatusGem(proposal)}
+                </td>
         </tr>
     )
 };
