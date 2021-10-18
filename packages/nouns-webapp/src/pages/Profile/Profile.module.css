@@ -6,3 +6,9 @@
     align-self: flex-end;
     width: 100%;
 }
+
+.nounProfileWrapper {
+    font-family: 'PT Root UI Medium';
+    font-style: normal;
+    font-feature-settings: 'tnum' on, 'lnum' on, 'ss01' on, 'liga' off;
+}

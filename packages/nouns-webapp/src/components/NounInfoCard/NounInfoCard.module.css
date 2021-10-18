@@ -2,17 +2,16 @@
     padding-top: 10rem;
     display: inline-block;
     padding-left: 0rem;
+    font-family: 'Londrina Solid';
 }
 
 .nounInfoHeader h2 {
-    font-family: 'Londrina Solid';
     font-size: 56px;
     margin-bottom: 18px;
 }
 
 
 .nounInfoHeader h3 {
-    font-family: 'Londrina Solid';
     font-size: 24px;
     margin-bottom: '0px';
     color: #79809C;
@@ -20,9 +19,6 @@
 
 .nounInfoRow {
     padding-bottom: 1rem;
-    font-family: 'PT Root UI Medium';
-    font-style: normal;
-    font-feature-settings: 'tnum' on, 'lnum' on, 'ss01' on, 'liga' off;
     font-size: 18px;
 }
 

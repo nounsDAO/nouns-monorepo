@@ -33,7 +33,7 @@ const ProfilePage: React.FC<ProfilePageProps> = props => {
      );
 
     return (
-        <>
+        <div className={classes.nounProfileWrapper} >
             <Container fluid="lg">
                 <Row>
                     <Col lg={{ span: 6 }} className={classes.nounProfilePictureCol}>
@@ -45,7 +45,7 @@ const ProfilePage: React.FC<ProfilePageProps> = props => {
                 </Row>
             </Container>
             <ProfileActivityFeed nounId={nounId} />
-        </>
+        </div>
     );
 };
 

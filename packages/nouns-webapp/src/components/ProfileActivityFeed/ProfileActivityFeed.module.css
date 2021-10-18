@@ -17,8 +17,5 @@
 
   .nounInfoPadding {
     padding-bottom: 1rem;
-    font-family: 'PT Root UI Medium';
-    font-style: normal;
-    font-feature-settings: 'tnum' on, 'lnum' on, 'ss01' on, 'liga' off;
     font-size: 18px;
   }
