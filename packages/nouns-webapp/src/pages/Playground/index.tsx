@@ -97,9 +97,10 @@ const Playground = () => {
             GENERATE NOUNS
           </Button>
           {traits &&
-            traits.map(trait => {
+            traits.map((trait, index) => {
               return (
                 <DropdownButton
+                  key={index}
                   id="dropdown-basic-button"
                   title={trait.title}
                   className={classes.dropdownBtn}
