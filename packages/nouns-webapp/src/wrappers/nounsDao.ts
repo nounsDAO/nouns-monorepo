@@ -4,7 +4,6 @@ import { utils, BigNumber as EthersBN } from 'ethers';
 import { defaultAbiCoder } from 'ethers/lib/utils';
 import { useMemo } from 'react';
 import { useLogs } from '../hooks/useLogs';
-import config from '../config';
 import * as R from 'ramda';
 import { CHAIN_ID } from '../config';
 
@@ -253,7 +252,7 @@ export const useAllProposals = (): ProposalData => {
       }),
       loading: false,
     };
-  }, [formattedLogs, proposalStates, proposals, votingDelay]);
+  }, [formattedLogs, proposalStates, proposals, votingDelay, extractTitle, removeMarkdownStyle]);
 };
 
 export const useProposal = (id: string | number): Proposal | undefined => {
