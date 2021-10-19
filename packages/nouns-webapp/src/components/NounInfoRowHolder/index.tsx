@@ -2,8 +2,8 @@ import { useQuery } from "@apollo/client";
 import React from "react";
 import { Image } from "react-bootstrap";
 import _LinkIcon from '../../assets/icons/Link.svg';
-import { useReverseENSLookUp } from "../../utils/ensLookup";
 import { nounQuery } from "../../wrappers/subgraph";
+import ShortAddress from "../ShortAddress";
 
 import classes from "./NounInfoRowHolder.module.css";
 
@@ -16,13 +16,7 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
 
     const { loading, error, data } = useQuery(nounQuery(nounId.toString()));
 
-    var userAddressRaw = "";
-    if (data) {
-        userAddressRaw = data.noun.owner.id;
-    }
-  
-    const userENSAddress = useReverseENSLookUp(userAddressRaw);
-    const etherscanURL = "https://etherscan.io/address/" + userAddressRaw;
+    const etherscanURL = `https://etherscan.io/address/${data.noun.owner.id}`;
 
 
     if (loading) {
@@ -40,7 +34,7 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
                 target={'_blank'}
                 rel="noreferrer"
                 >
-                {userENSAddress || userAddressRaw}
+                    <ShortAddress address={data.noun.owner.id} />
             </a>
             <Image src={_LinkIcon} /> 
         </div>
