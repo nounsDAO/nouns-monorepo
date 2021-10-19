@@ -191,42 +191,42 @@ export const useAllProposals = (): ProposalData => {
 
   const formattedLogs = useFormattedProposalCreatedLogs();
 
-  const hashRegex = /^\s*#{1,6}\s+([^\n]+)/
-  const equalTitleRegex = /^\s*([^\n]+)\n(={3,25}|-{3,25})/
-
-  /**
-   * Extract a markdown title from a proposal body that uses the `# Title` format
-   * Returns null if no title found.
-   */
-  const extractHashTitle = (body: string) => body.match(hashRegex)
-  /**
-   * Extract a markdown title from a proposal body that uses the `Title\n===` format.
-   * Returns null if no title found.
-   */
-  const extractEqualTitle = (body: string) => body.match(equalTitleRegex)
-
-  /**
-   * Extract title from a proposal's body/description. Returns null if no title found in the first line.
-   * @param body proposal body
-   */
-  const extractTitle = (body: string | undefined): string | null => {
-    if (!body) return null;
-    const hashResult = extractHashTitle(body)
-    const equalResult = extractEqualTitle(body)
-    return hashResult ? hashResult[1] : equalResult ? equalResult[1] : null
-  }
-
-  const removeBold = (text: string | null): string | null => text ? text.replace(/\*\*/g, '') : text;
-  const removeItalics = (text: string | null): string | null => text ? text.replace(/__/g, '') : text;
-
-  const removeMarkdownStyle = R.compose(removeBold, removeItalics)
-
   // Early return until events are fetched
   return useMemo(() => {
     const logs = formattedLogs ?? [];
     if (proposals.length && !logs.length) {
       return { data: [], loading: true };
     }
+
+    const hashRegex = /^\s*#{1,6}\s+([^\n]+)/
+    const equalTitleRegex = /^\s*([^\n]+)\n(={3,25}|-{3,25})/
+
+    /**
+     * Extract a markdown title from a proposal body that uses the `# Title` format
+     * Returns null if no title found.
+     */
+    const extractHashTitle = (body: string) => body.match(hashRegex)
+    /**
+     * Extract a markdown title from a proposal body that uses the `Title\n===` format.
+     * Returns null if no title found.
+     */
+    const extractEqualTitle = (body: string) => body.match(equalTitleRegex)
+
+    /**
+     * Extract title from a proposal's body/description. Returns null if no title found in the first line.
+     * @param body proposal body
+     */
+    const extractTitle = (body: string | undefined): string | null => {
+      if (!body) return null;
+      const hashResult = extractHashTitle(body)
+      const equalResult = extractEqualTitle(body)
+      return hashResult ? hashResult[1] : equalResult ? equalResult[1] : null
+    }
+
+    const removeBold = (text: string | null): string | null => text ? text.replace(/\*\*/g, '') : text;
+    const removeItalics = (text: string | null): string | null => text ? text.replace(/__/g, '') : text;
+
+    const removeMarkdownStyle = R.compose(removeBold, removeItalics)
 
     return {
       data: proposals.map((proposal, i) => {
@@ -252,7 +252,7 @@ export const useAllProposals = (): ProposalData => {
       }),
       loading: false,
     };
-  }, [formattedLogs, proposalStates, proposals, votingDelay, extractTitle, removeMarkdownStyle]);
+  }, [formattedLogs, proposalStates, proposals, votingDelay]);
 };
 
 export const useProposal = (id: string | number): Proposal | undefined => {
