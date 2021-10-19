@@ -4,5 +4,5 @@ export const bigNumbersEqual = (a: BigNumberish, b: BigNumberish) =>
   BigNumber.from(a).eq(BigNumber.from(b));
 
 export const sharedResponseHeaders = {
-  "Access-Control-Allow-Origin": "*"
-}
+  'Access-Control-Allow-Origin': '*',
+};

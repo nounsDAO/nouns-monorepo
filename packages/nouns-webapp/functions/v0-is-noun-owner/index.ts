@@ -7,8 +7,8 @@ const handler: Handler = async (event, context) => {
   return {
     statusCode: 200,
     headers: {
-      "Content-Type": "application/json",
-      ...sharedResponseHeaders
+      'Content-Type': 'application/json',
+      ...sharedResponseHeaders,
     },
     body: JSON.stringify(isNounOwner(event.body, nouns)),
   };

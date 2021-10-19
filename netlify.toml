@@ -1,0 +1,22 @@
+[context.production.environment]
+  REACT_APP_CHAIN_ID = "1"
+  REACT_APP_ENABLE_HISTORY = "true"
+
+[context."staging".environment]
+  REACT_APP_CHAIN_ID = "1"
+  REACT_APP_ENABLE_HISTORY = "true"
+
+[context."master".environment]
+  REACT_APP_CHAIN_ID = "4"
+  REACT_APP_ENABLE_HISTORY = "true"
+
+[context.deploy-preview.environment]
+  REACT_APP_CHAIN_ID = "1"
+  REACT_APP_ENABLE_HISTORY = "true"
+
+[functions]
+  directory = "packages/nouns-webapp/functions"
+
+[build]
+  command = "yarn workspace @nouns/webapp build"
+  publish = "packages/nouns-webapp/build"

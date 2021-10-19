@@ -33,9 +33,9 @@ const NavBar = () => {
   const connectedContent = (
     <>
       <Nav.Item>
-        <Nav.Link className={classes.nounsNavLink} disabled>
+        <Nav.Link className={clsx(classes.nounsNavLink, classes.addressNavLink)} disabled>
           <span className={classes.greenStatusCircle} />
-          <span>{activeAccount && <ShortAddress address={activeAccount} />}</span>
+          <span>{activeAccount && <ShortAddress address={activeAccount} avatar={true} />}</span>
         </Nav.Link>
       </Nav.Item>
       <Nav.Item>

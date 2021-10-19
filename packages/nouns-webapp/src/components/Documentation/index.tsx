@@ -28,8 +28,7 @@ const Documentation = () => {
             Nouns are an experimental attempt to improve the formation of on-chain avatar
             communities. While projects such as {cryptopunksLink} have attempted to bootstrap
             digital community and identity, Nouns attempt to bootstrap identity, community,
-            governance and a treasury that can be used by the community for the creation of
-            long-term value.
+            governance and a treasury that can be used by the community.
           </p>
           <p>
             Learn more about on-chain nouns below, or make some off-chain nouns using{' '}

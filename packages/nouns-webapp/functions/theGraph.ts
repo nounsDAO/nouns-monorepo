@@ -61,15 +61,15 @@ export const normalizeSeed = (seed: any): Seed => ({
   body: Number(seed.body),
   glasses: Number(seed.glasses),
   accessory: Number(seed.accessory),
-  head: Number(seed.head)
-})
+  head: Number(seed.head),
+});
 
 export const normalizeNoun = (noun: any): NormalizedNoun => ({
   id: Number(noun.id),
   owner: noun.owner.id,
   delegatedTo: noun.owner.delegate?.id,
   votes: normalizeVotes(noun.votes),
-  seed: normalizeSeed(noun.seed)
+  seed: normalizeSeed(noun.seed),
 });
 
 export const normalizeNouns = R.map(normalizeNoun);
