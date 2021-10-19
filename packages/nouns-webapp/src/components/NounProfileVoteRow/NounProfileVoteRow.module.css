@@ -9,3 +9,14 @@
 .voteProposalStatus {
     text-align: right;
 }
+
+.proposalLink:focus,
+.proposalLink:hover,
+.proposalLink:visited,
+.proposalLink:active,
+.proposalLink:link {
+  text-decoration: none;
+  color: black;
+  font-family: 'PT Root UI Bold';
+  margin-left: 5px;
+}

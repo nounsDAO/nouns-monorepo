@@ -9,6 +9,8 @@ import _VotePassedIcon from '../../assets/icons/VotePassed.svg';
 import _VoteFailedIcon from '../../assets/icons/VoteFailed.svg';
 import classes from "./NounProfileVoteRow.module.css";
 
+import { Link } from 'react-router-dom';
+
 interface NounProfileVoteRowProps {
     proposal: Proposal,
     nounVoted: boolean, 
@@ -81,7 +83,10 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
                 <td>
                     <div className={classes.voteInfoContainer}>
                         {selectIconForNounVoteActivityRow(nounVoted, nounSupported)}
-                        {selectVotingInfoText(nounVoted, nounSupported)} <strong>{proposal.title}</strong>
+                        {selectVotingInfoText(nounVoted, nounSupported)}
+                        <Link to={proposal.id ? '/vote/'+proposal.id.toString(): '/vote' } className={classes.proposalLink}>
+                            {proposal.title}
+                        </Link>
                     </div>
                 </td>
                 <td className={classes.voteProposalStatus}>
