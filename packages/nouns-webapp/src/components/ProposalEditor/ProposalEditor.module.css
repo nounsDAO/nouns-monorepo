@@ -1,5 +1,6 @@
 .proposalEditor {
   margin-top: 1rem;
+  margin-bottom: 1rem;
   padding: 0.5rem 1rem 1rem 1rem;
   border: 1px solid #aaa !important;
   border-radius: 0.25rem !important;
@@ -27,4 +28,12 @@
 .divider {
   width: 100%;
   margin: 0 0 0.5rem 0;
+}
+
+.previewArea {
+  padding: 0.5rem 1rem 1rem 1rem;
+  border: 1px solid #aaa !important;
+  border-radius: 0.25rem !important;
+  outline: none !important;
+  box-shadow: none !important;
 }

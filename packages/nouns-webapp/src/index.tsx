@@ -29,15 +29,14 @@ import pastAuctions, { addPastAuctions } from './state/slices/pastAuctions';
 import LogsUpdater from './state/updaters/logs';
 import config, { CHAIN_ID, LOCAL_CHAIN_ID } from './config';
 import { WebSocketProvider } from '@ethersproject/providers';
-import { BigNumber, BigNumberish, Contract } from 'ethers';
-import { NounsAuctionHouseABI } from '@nouns/contracts';
+import { BigNumber, BigNumberish } from 'ethers';
+import { getContractsForChainOrThrow } from '@nouns/sdk';
 import dotenv from 'dotenv';
 import { useAppDispatch, useAppSelector } from './hooks';
 import { appendBid } from './state/slices/auction';
-import { Auction as IAuction } from './wrappers/nounsAuction';
 import { ConnectedRouter, connectRouter } from 'connected-react-router';
 import { createBrowserHistory, History } from 'history';
-import { applyMiddleware, createStore, combineReducers } from 'redux';
+import { applyMiddleware, createStore, combineReducers, PreloadedState } from 'redux';
 import { routerMiddleware } from 'connected-react-router';
 import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
@@ -59,7 +58,7 @@ const createRootReducer = (history: History) =>
     onDisplayAuction,
   });
 
-export default function configureStore(preloadedState: any) {
+export default function configureStore(preloadedState: PreloadedState<any>) {
   const store = createStore(
     createRootReducer(history), // root reducer with router state
     preloadedState,
@@ -106,16 +105,12 @@ const ChainSubscriber: React.FC = () => {
 
   const loadState = async () => {
     const wsProvider = new WebSocketProvider(config.wsRpcUri);
-    const auctionContract = new Contract(
-      config.auctionProxyAddress,
-      NounsAuctionHouseABI,
-      wsProvider,
-    );
+    const { nounsAuctionHouseContract } = getContractsForChainOrThrow(CHAIN_ID, wsProvider);
 
-    const bidFilter = auctionContract.filters.AuctionBid();
-    const extendedFilter = auctionContract.filters.AuctionExtended();
-    const createdFilter = auctionContract.filters.AuctionCreated();
-    const settledFilter = auctionContract.filters.AuctionSettled();
+    const bidFilter = nounsAuctionHouseContract.filters.AuctionBid(null, null, null, null);
+    const extendedFilter = nounsAuctionHouseContract.filters.AuctionExtended(null, null);
+    const createdFilter = nounsAuctionHouseContract.filters.AuctionCreated(null, null, null);
+    const settledFilter = nounsAuctionHouseContract.filters.AuctionSettled(null, null, null);
     const processBidFilter = async (
       nounId: BigNumberish,
       sender: string,
@@ -150,22 +145,29 @@ const ChainSubscriber: React.FC = () => {
     };
 
     // Fetch the current auction
-    const currentAuction: IAuction = await auctionContract.auction();
+    const currentAuction = await nounsAuctionHouseContract.auction();
     dispatch(setFullAuction(reduxSafeAuction(currentAuction)));
     dispatch(setLastAuctionNounId(currentAuction.nounId.toNumber()));
 
     // Fetch the previous 24hours of  bids
-    const previousBids = await auctionContract.queryFilter(bidFilter, 0 - BLOCKS_PER_DAY);
+    const previousBids = await nounsAuctionHouseContract.queryFilter(bidFilter, 0 - BLOCKS_PER_DAY);
     for (let event of previousBids) {
       if (event.args === undefined) return;
-      //@ts-ignore
-      processBidFilter(...event.args, event);
+      processBidFilter(...(event.args as [BigNumber, string, BigNumber, boolean]), event);
     }
 
-    auctionContract.on(bidFilter, processBidFilter);
-    auctionContract.on(createdFilter, processAuctionCreated);
-    auctionContract.on(extendedFilter, processAuctionExtended);
-    auctionContract.on(settledFilter, processAuctionSettled);
+    nounsAuctionHouseContract.on(bidFilter, (nounId, sender, value, extended, event) =>
+      processBidFilter(nounId, sender, value, extended, event),
+    );
+    nounsAuctionHouseContract.on(createdFilter, (nounId, startTime, endTime) =>
+      processAuctionCreated(nounId, startTime, endTime),
+    );
+    nounsAuctionHouseContract.on(extendedFilter, (nounId, endTime) =>
+      processAuctionExtended(nounId, endTime),
+    );
+    nounsAuctionHouseContract.on(settledFilter, (nounId, winner, amount) =>
+      processAuctionSettled(nounId, winner, amount),
+    );
   };
   loadState();
 
@@ -191,7 +193,7 @@ ReactDOM.render(
       <React.StrictMode>
         <Web3ReactProvider
           getLibrary={
-            (provider, connector) => new Web3Provider(provider) // this will vary according to whether you use e.g. ethers or web3.js
+            provider => new Web3Provider(provider) // this will vary according to whether you use e.g. ethers or web3.js
           }
         >
           <ApolloProvider client={client}>

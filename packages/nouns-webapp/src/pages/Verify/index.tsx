@@ -41,8 +41,12 @@ const VerifyPage: React.FC<VerifyPageProp> = props => {
     const initialMessage = (nouns: number[]) =>
       [
         activeAccount ? `I am ${activeAccount}` : undefined,
-        nouns.length > 0 ? ` and I own Noun${nouns.length > 1 ? 's' : ''} ${nouns.join(', ')}` : undefined,
-      ].filter((part: string | undefined) => part).join(' ');
+        nouns.length > 0
+          ? ` and I own Noun${nouns.length > 1 ? 's' : ''} ${nouns.join(', ')}`
+          : undefined,
+      ]
+        .filter((part: string | undefined) => part)
+        .join(' ');
     setMessageToSign(initialMessage(extractOwnedNounIdsFromNounsIndex(activeAccount, data)));
   }, [data, activeAccount]);
 

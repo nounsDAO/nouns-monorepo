@@ -25,9 +25,17 @@ const VerifySignature: React.FC<{}> = props => {
       case undefined:
         break;
       case true:
-        return <div className={clsx(classes.verifyMessage, classes.verifySuccess)}>Verification Success</div>
+        return (
+          <div className={clsx(classes.verifyMessage, classes.verifySuccess)}>
+            Verification Success
+          </div>
+        );
       case false:
-        return <div className={clsx(classes.verifyMessage, classes.verifyFailure)}>Verification Failed</div>
+        return (
+          <div className={clsx(classes.verifyMessage, classes.verifyFailure)}>
+            Verification Failed
+          </div>
+        );
     }
   };
 

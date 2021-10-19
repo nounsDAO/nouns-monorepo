@@ -11,20 +11,19 @@ export const useEnsAvatarLookup = (address: string) => {
       library
         .lookupAddress(address)
         .then(name => {
-          library.getResolver(name).then(
-            resolver => {
-              if (!resolver) return;
-              resolver.getText('avatar')
-                .then(avatar => {
-                  if (mounted) {
-                    setEnsAvatar(avatar)
-                  }
-                })
-                .catch(error => {
-                  console.log(`error resolving ens avatar: `, error);
-                });
-            }
-          )
+          library.getResolver(name).then(resolver => {
+            if (!resolver) return;
+            resolver
+              .getText('avatar')
+              .then(avatar => {
+                if (mounted) {
+                  setEnsAvatar(avatar);
+                }
+              })
+              .catch(error => {
+                console.log(`error resolving ens avatar: `, error);
+              });
+          });
         })
         .catch(error => {
           console.log(`error resolving reverse ens lookup: `, error);

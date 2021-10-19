@@ -1,7 +1,7 @@
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { NounsDescriptor } from '../typechain';
-import { bgcolors, parts } from '../files/encoded-layers.json';
+import ImageData from '../files/image-data.json';
 import { LongestPart } from './types';
 import { deployNounsDescriptor, populateDescriptor } from './utils';
 import { ethers } from 'hardhat';
@@ -18,26 +18,26 @@ describe('NounsDescriptor', () => {
     length: 0,
     index: 0,
   };
-  const longestParts = [part, part, part, part];
-  let longestBody: LongestPart;
-  let longestAccessory: LongestPart;
-  let longestHead: LongestPart;
-  let longestGlasses: LongestPart;
+  const longest: Record<string, LongestPart> = {
+    bodies: part,
+    accessories: part,
+    heads: part,
+    glasses: part,
+  };
 
   before(async () => {
     nounsDescriptor = await deployNounsDescriptor();
 
-    for (const [l, layer] of parts.entries()) {
+    for (const [l, layer] of Object.entries(ImageData.images)) {
       for (const [i, item] of layer.entries()) {
-        if (item.data.length > longestParts[l].length) {
-          longestParts[l] = {
+        if (item.data.length > longest[l].length) {
+          longest[l] = {
             length: item.data.length,
             index: i,
           };
         }
       }
     }
-    [longestBody, longestAccessory, longestHead, longestGlasses] = longestParts;
 
     await populateDescriptor(nounsDescriptor);
   });
@@ -58,10 +58,10 @@ describe('NounsDescriptor', () => {
 
     const tokenUri = await nounsDescriptor.tokenURI(0, {
       background: 0,
-      body: longestBody.index,
-      accessory: longestAccessory.index,
-      head: longestHead.index,
-      glasses: longestGlasses.index,
+      body: longest.bodies.index,
+      accessory: longest.accessories.index,
+      head: longest.heads.index,
+      glasses: longest.glasses.index,
     });
     expect(tokenUri).to.equal(`${BASE_URI}0`);
   });
@@ -69,10 +69,10 @@ describe('NounsDescriptor', () => {
   it('should generate valid token uri metadata when data uris are enabled', async () => {
     const tokenUri = await nounsDescriptor.tokenURI(0, {
       background: 0,
-      body: longestBody.index,
-      accessory: longestAccessory.index,
-      head: longestHead.index,
-      glasses: longestGlasses.index,
+      body: longest.bodies.index,
+      accessory: longest.accessories.index,
+      head: longest.heads.index,
+      glasses: longest.glasses.index,
     });
     const { name, description, image } = JSON.parse(
       Buffer.from(tokenUri.replace('data:application/json;base64,', ''), 'base64').toString(
@@ -90,7 +90,8 @@ describe('NounsDescriptor', () => {
   it.skip('should generate valid token uri metadata for all supported parts when data uris are enabled', async () => {
     console.log('Running... this may take a little while...');
 
-    const [bodies, accessories, heads, glasses] = parts;
+    const { bgcolors, images } = ImageData;
+    const { bodies, accessories, heads, glasses } = images;
     const max = Math.max(bodies.length, accessories.length, heads.length, glasses.length);
     for (let i = 0; i < max; i++) {
       const tokenUri = await nounsDescriptor.tokenURI(i, {
