@@ -3,6 +3,8 @@ import { buildSVG } from '@nouns/sdk';
 import { BigNumber as EthersBN } from 'ethers';
 import { INounSeed, useNounSeed } from '../../wrappers/nounToken';
 import Noun from '../Noun';
+import { Link } from 'react-router-dom';
+import classes from './StandaloneNoun.module.css';
 
 interface StandaloneNounProps {
   nounId: EthersBN;
@@ -32,7 +34,11 @@ const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProp
   const seed = useNounSeed(nounId);
   const noun = seed && getNoun(nounId, seed);
 
-  return <Noun imgPath={noun ? noun.image : ''} alt={noun ? noun.description : 'Noun'} />;
+  return (
+    <Link to={'/profile/' + nounId.toString()} className={classes.clickableNoun}>
+      <Noun imgPath={noun ? noun.image : ''} alt={noun ? noun.description : 'Noun'} />
+    </Link>
+  );
 };
 
 export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = (
@@ -47,7 +53,11 @@ export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = (
 
     const { image, description } = getNoun(nounId, seed);
 
-    return <Noun imgPath={image} alt={description} />;
+    return (
+      <Link to={'/profile/' + nounId.toString()} className={classes.clickableNoun}>
+        <Noun imgPath={image} alt={description} />
+      </Link>
+    );
   } else {
     return <Noun imgPath="" alt="Noun" />;
   }
