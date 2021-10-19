@@ -2,6 +2,14 @@
     display: flex;
 }
 
+@media only screen and (max-width: 600px) {
+    .nounProfilePictureCol {
+        display: flex;
+        flex-direction: column;
+        order: 1;
+    }
+}
+
 .nounWrapper {
     align-self: flex-end;
     width: 100%;
@@ -11,4 +19,11 @@
     font-family: 'PT Root UI Medium';
     font-style: normal;
     font-feature-settings: 'tnum' on, 'lnum' on, 'ss01' on, 'liga' off;
+}
+
+@media only screen and (max-width: 600px) {
+    .nounProfileInfo {
+        padding-left: 25%;
+        order: 0;
+    }
 }

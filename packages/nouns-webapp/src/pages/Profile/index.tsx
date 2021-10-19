@@ -39,7 +39,7 @@ const ProfilePage: React.FC<ProfilePageProps> = props => {
                     <Col lg={{ span: 6 }} className={classes.nounProfilePictureCol}>
                         {nounContent}
                     </Col>
-                    <Col lg={{ span: 6 }}>
+                    <Col lg={{ span: 6 }} className={classes.nounProfileInfo}> 
                       <NounInfoCard nounId={nounId} /> 
                     </Col>
                 </Row>

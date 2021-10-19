@@ -16,7 +16,7 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
 
     const { loading, error, data } = useQuery(nounQuery(nounId.toString()));
 
-    const etherscanURL = `https://etherscan.io/address/${data.noun.owner.id}`;
+    const etherscanURL = `https://etherscan.io/address/${data && data.noun.owner.id}`;
 
 
     if (loading) {
