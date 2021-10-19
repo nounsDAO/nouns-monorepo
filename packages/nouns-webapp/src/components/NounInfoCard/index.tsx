@@ -26,10 +26,10 @@ const NounInfoCard: React.FC<NounInfoCardProps> = props => {
     const { nounId } = props;
     const history = useHistory();
 
-    const etherscanBaseURL = "https://etherscan.io/address/0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03/";
-    const bidHistoryButtonClickHandler = () => history.push('/noun/' + nounId.toString());
+    const etherscanBaseURL = "https://etherscan.io/address/0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03";
+    const bidHistoryButtonClickHandler = () => history.push(`/noun/${nounId}`);
     // eslint-disable-next-line no-restricted-globals
-    const etherscanButtonClickHandler = () => location.href = etherscanBaseURL + nounId.toString();
+    const etherscanButtonClickHandler = () => location.href = `${etherscanBaseURL}/${nounId}`;
 
 
     return (

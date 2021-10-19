@@ -33,11 +33,11 @@ const Auction: React.FC<AuctionProps> = props => {
 
   const prevAuctionHandler = () => {
     dispatch(setPrevOnDisplayAuctionNounId());
-    history.push(`/noun/${currentAuction.nounId.toNumber() - 1}`);
+    history.push(`/auction/${currentAuction.nounId.toNumber() - 1}`);
   };
   const nextAuctionHandler = () => {
     dispatch(setNextOnDisplayAuctionNounId());
-    history.push(`/noun/${currentAuction.nounId.toNumber() + 1}`);
+    history.push(`/auction/${currentAuction.nounId.toNumber() + 1}`);
   };
 
   const nounContent = (

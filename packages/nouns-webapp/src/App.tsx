@@ -48,7 +48,7 @@ function App() {
           <Route exact path="/" component={AuctionPage} />
           <Route
             exact
-            path="/noun/:id"
+            path="/auction/:id"
             render={props => <AuctionPage initialAuctionId={Number(props.match.params.id)} />}
           />
           <Route exact path="/nounders" component={NoundersPage} />
@@ -59,7 +59,7 @@ function App() {
           <Route exact path="/vote/:id" component={VotePage} />
           <Route
             exact
-            path="/profile/:id"
+            path="/noun/:id"
             render={props => <ProfilePage nounId={Number(props.match.params.id)} />}
           />
           <Route component={NotFoundPage} />
