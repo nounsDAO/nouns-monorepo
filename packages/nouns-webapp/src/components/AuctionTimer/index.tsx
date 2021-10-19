@@ -1,7 +1,10 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 import { Auction } from '../../wrappers/nounsAuction';
 import classes from './AuctionTimer.module.css';
 import { useState, useEffect, useRef } from 'react';
+
+dayjs.extend(duration);
 
 const AuctionTimer: React.FC<{
   auction: Auction;
@@ -13,11 +16,11 @@ const AuctionTimer: React.FC<{
   const auctionTimerRef = useRef(auctionTimer); // to access within setTimeout
   auctionTimerRef.current = auctionTimer;
 
-  const timerDuration = moment.duration(auctionTimerRef.current, 's');
+  const timerDuration = dayjs.duration(auctionTimerRef.current, 's');
 
   // timer logic
   useEffect(() => {
-    const timeLeft = (auction && Number(auction.endTime)) - moment().unix();
+    const timeLeft = (auction && Number(auction.endTime)) - dayjs().unix();
 
     setAuctionTimer(auction && timeLeft);
 

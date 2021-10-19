@@ -51,7 +51,7 @@ const config: Record<SupportedChains, Config> = {
       `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
     wsRpcUri:
       process.env.REACT_APP_MAINNET_WSRPC ||
-      `wss://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
+      `wss://mainnet.infura.io/ws/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true' || false,
   },
   [LOCAL_CHAIN_ID]: {

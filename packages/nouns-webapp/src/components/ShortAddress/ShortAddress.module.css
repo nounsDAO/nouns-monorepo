@@ -1,0 +1,6 @@
+.shortAddress {
+  display: flex;
+  flex-direction: row;
+  column-gap: 0.25rem;
+  align-items: center;
+}

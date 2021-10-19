@@ -120,6 +120,8 @@ export function handleVoteCast(event: VoteCast): void {
   vote.votesRaw = event.params.votes;
   vote.votes = event.params.votes;
   vote.support = event.params.support == 1;
+  vote.supportDetailed = event.params.support;
+  vote.nouns = voter.nounsRepresented;
 
   vote.save();
 

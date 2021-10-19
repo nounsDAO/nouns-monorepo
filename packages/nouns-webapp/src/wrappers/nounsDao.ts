@@ -1,10 +1,10 @@
-import { NounsDAOABI } from '@nouns/contracts';
+import { getContractsForChainOrThrow, NounsDAOABI } from '@nouns/sdk';
 import { useContractCall, useContractCalls, useContractFunction } from '@usedapp/core';
-import { utils, Contract, BigNumber as EthersBN } from 'ethers';
+import { utils, BigNumber as EthersBN } from 'ethers';
 import { defaultAbiCoder } from 'ethers/lib/utils';
 import { useMemo } from 'react';
 import { useLogs } from '../hooks/useLogs';
-import config from '../config';
+import { CHAIN_ID } from '../config';
 
 export enum Vote {
   AGAINST = 0,
@@ -79,14 +79,24 @@ export interface ProposalTransaction {
 }
 
 const abi = new utils.Interface(NounsDAOABI);
-const contract = new Contract(config.nounsDaoProxyAddress, abi);
-const proposalCreatedFilter = contract.filters?.ProposalCreated();
+const { nounsDaoContract } = getContractsForChainOrThrow(CHAIN_ID);
+const proposalCreatedFilter = nounsDaoContract.filters?.ProposalCreated(
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+);
 
 export const useProposalCount = (): number | undefined => {
   const [count] =
     useContractCall<[EthersBN]>({
       abi,
-      address: contract.address,
+      address: nounsDaoContract.address,
       method: 'proposalCount',
       args: [],
     }) || [];
@@ -97,7 +107,7 @@ export const useProposalThreshold = (): number | undefined => {
   const [count] =
     useContractCall<[EthersBN]>({
       abi,
-      address: contract.address,
+      address: nounsDaoContract.address,
       method: 'proposalThreshold',
       args: [],
     }) || [];
@@ -154,7 +164,7 @@ const useFormattedProposalCreatedLogs = () => {
 
 export const useAllProposals = (): ProposalData => {
   const proposalCount = useProposalCount();
-  const votingDelay = useVotingDelay(contract.address);
+  const votingDelay = useVotingDelay(nounsDaoContract.address);
 
   const govProposalIndexes = useMemo(() => {
     return countToIndices(proposalCount);
@@ -163,7 +173,7 @@ export const useAllProposals = (): ProposalData => {
   const proposals = useContractCalls<ProposalCallResult>(
     govProposalIndexes.map(index => ({
       abi,
-      address: contract.address,
+      address: nounsDaoContract.address,
       method: 'proposals',
       args: [index],
     })),
@@ -172,7 +182,7 @@ export const useAllProposals = (): ProposalData => {
   const proposalStates = useContractCalls<[ProposalState]>(
     govProposalIndexes.map(index => ({
       abi,
-      address: contract.address,
+      address: nounsDaoContract.address,
       method: 'state',
       args: [index],
     })),
@@ -220,23 +230,29 @@ export const useProposal = (id: string | number): Proposal | undefined => {
 };
 
 export const useCastVote = () => {
-  const { send: castVote, state: castVoteState } = useContractFunction(contract, 'castVote');
+  const { send: castVote, state: castVoteState } = useContractFunction(
+    nounsDaoContract,
+    'castVote',
+  );
   return { castVote, castVoteState };
 };
 
 export const usePropose = () => {
-  const { send: propose, state: proposeState } = useContractFunction(contract, 'propose');
+  const { send: propose, state: proposeState } = useContractFunction(nounsDaoContract, 'propose');
   return { propose, proposeState };
 };
 
 export const useQueueProposal = () => {
-  const { send: queueProposal, state: queueProposalState } = useContractFunction(contract, 'queue');
+  const { send: queueProposal, state: queueProposalState } = useContractFunction(
+    nounsDaoContract,
+    'queue',
+  );
   return { queueProposal, queueProposalState };
 };
 
 export const useExecuteProposal = () => {
   const { send: executeProposal, state: executeProposalState } = useContractFunction(
-    contract,
+    nounsDaoContract,
     'execute',
   );
   return { executeProposal, executeProposalState };

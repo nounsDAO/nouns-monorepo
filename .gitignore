@@ -1,6 +1,5 @@
 node_modules
 .vscode
-data/
 build/
 dist
 /**/sha.ts
@@ -10,18 +9,3 @@ dist
 .DS_Store
 *.tsbuildinfo
 *.log
-
-packages/nouns-contracts/**/artifacts
-packages/nouns-contracts/**/cache
-
-packages/nouns-contracts/abi/@openzeppelin/*
-packages/nouns-contracts/abi/contracts/*
-packages/nouns-contracts/abi/contracts/governance/*
-
-!packages/nouns-contracts/abi/contracts
-!packages/nouns-contracts/abi/contracts/governance
-!packages/nouns-contracts/abi/contracts/NounsDescriptor.sol
-!packages/nouns-contracts/abi/contracts/NounsSeeder.sol
-!packages/nouns-contracts/abi/contracts/NounsToken.sol
-!packages/nouns-contracts/abi/contracts/NounsAuctionHouse.sol
-!packages/nouns-contracts/abi/contracts/governance/NounsDAOLogicV1.sol

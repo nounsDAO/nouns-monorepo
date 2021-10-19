@@ -36,7 +36,7 @@ const NavBar = () => {
   const connectedContent = (
     <>
       <Nav.Item>
-        <Nav.Link className={classes.nounsNavLink} disabled>
+        <Nav.Link className={clsx(classes.nounsNavLink, classes.addressNavLink)} disabled>
           <span className={classes.greenStatusCircle} />
           <span>{activeAccount && <ShortAddress address={activeAccount} />}</span>
         </Nav.Link>
@@ -102,7 +102,7 @@ const NavBar = () => {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  TREASURY Ξ {utils.formatEther(treasuryBalance.toString())}
+                  TREASURY Ξ {Number(utils.formatEther(treasuryBalance)).toFixed(0)}
                 </Nav.Link>
               )}
             </Nav.Item>

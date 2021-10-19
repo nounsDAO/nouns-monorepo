@@ -15,13 +15,20 @@ import { TransactionStatus, useBlockNumber } from '@usedapp/core';
 import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../utils/etherscan';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import ProposalStatus from '../../components/ProposalStatus';
-import moment from 'moment-timezone';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import advanced from 'dayjs/plugin/advancedFormat';
 import VoteModal from '../../components/VoteModal';
 import { useCallback, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 import { utils } from 'ethers';
 import { useAppDispatch } from '../../hooks';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.extend(advanced);
 
 const AVERAGE_BLOCK_TIME_IN_SECS = 13;
 
@@ -52,7 +59,7 @@ const VotePage = ({
   const currentBlock = useBlockNumber();
   const startDate =
     proposal && timestamp && currentBlock
-      ? moment(timestamp).add(
+      ? dayjs(timestamp).add(
           AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
           'seconds',
         )
@@ -60,13 +67,12 @@ const VotePage = ({
 
   const endDate =
     proposal && timestamp && currentBlock
-      ? moment(timestamp).add(
+      ? dayjs(timestamp).add(
           AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
           'seconds',
         )
       : undefined;
-  const timezone = moment.tz(moment.tz.guess()).zoneAbbr();
-  const now = moment();
+  const now = dayjs();
 
   // Get total votes and format percentages for UI
   const totalVotes = proposal
@@ -220,9 +226,7 @@ const VotePage = ({
         </div>
         <div>
           {startDate && startDate.isBefore(now) ? null : proposal ? (
-            <span>
-              Voting starts approximately {startDate?.format('LLL')} {timezone}
-            </span>
+            <span>Voting starts approximately {startDate?.format('MMMM D, YYYY h:mm A z')}</span>
           ) : (
             ''
           )}
@@ -230,9 +234,7 @@ const VotePage = ({
         <div>
           {endDate && endDate.isBefore(now) ? (
             <>
-              <div>
-                Voting ended {endDate.format('LLL')} {timezone}
-              </div>
+              <div>Voting ended {endDate.format('MMMM D, YYYY h:mm A z')}</div>
               <div>
                 This proposal has {quorumReached ? 'reached' : 'failed to reach'} quorum{' '}
                 {proposal?.quorumVotes !== undefined && `(${proposal.quorumVotes} votes)`}
@@ -240,9 +242,7 @@ const VotePage = ({
             </>
           ) : proposal ? (
             <>
-              <div>
-                Voting ends approximately {endDate?.format('LLL')} {timezone}
-              </div>
+              <div>Voting ends approximately {endDate?.format('MMMM D, YYYY h:mm A z')}</div>
               {proposal?.quorumVotes !== undefined && (
                 <div>A total of {proposal.quorumVotes} votes are required to reach quorum</div>
               )}

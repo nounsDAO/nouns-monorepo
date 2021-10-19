@@ -4,7 +4,13 @@ parts.html
 #Hardhat files
 cache
 artifacts
-typechain/**
+typechain/*.js
+typechain/*.ts
+!typechain/NounsTokenFactory.ts
+!typechain/NounsAuctionHouseFactory.ts
+!typechain/NounsDescriptorFactory.ts
+!typechain/NounsSeederFactory.ts
+!typechain/NounsDaoLogicV1Factory.ts
 .openzeppelin
 
 # Script output
@@ -13,3 +19,11 @@ logs
 # Coverage result files
 coverage/
 coverage.json
+
+abi/@openzeppelin
+abi/contracts/base
+abi/contracts/external
+abi/contracts/governance
+abi/contracts/interfaces
+abi/contracts/proxies
+abi/contracts/test
