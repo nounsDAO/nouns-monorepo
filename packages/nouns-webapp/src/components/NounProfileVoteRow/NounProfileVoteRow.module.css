@@ -1,13 +1,13 @@
 .voteIcon {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .voteInfoContainer {
-    display: inline-block;
+  display: inline-block;
 }
 
 .voteProposalStatus {
-    text-align: right;
+  text-align: right;
 }
 
 .proposalLink:focus,

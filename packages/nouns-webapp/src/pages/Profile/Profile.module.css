@@ -1,39 +1,39 @@
 .nounProfilePictureCol {
-    display: flex;
+  display: flex;
 }
 
 @media only screen and (max-width: 600px) {
-    .nounProfilePictureCol {
-        display: flex;
-        flex-direction: column;
-        order: 1;
-    }
+  .nounProfilePictureCol {
+    display: flex;
+    flex-direction: column;
+    order: 1;
+  }
 }
 
 .nounWrapper {
-    align-self: flex-end;
-    width: 100%;
+  align-self: flex-end;
+  width: 100%;
 }
 
 .nounProfileWrapper {
-    font-family: 'PT Root UI Medium';
-    font-style: normal;
-    font-feature-settings: 'tnum' on, 'lnum' on, 'ss01' on, 'liga' off;
-    background-color: white;
-    flex: 1;
+  font-family: 'PT Root UI Medium';
+  font-style: normal;
+  font-feature-settings: 'tnum' on, 'lnum' on, 'ss01' on, 'liga' off;
+  background-color: white;
+  flex: 1;
 }
 
 @media only screen and (max-width: 600px) {
-    .nounProfileInfo {
-        padding-left: 25%;
-        order: 0;
-    }
+  .nounProfileInfo {
+    padding-left: 25%;
+    order: 0;
+  }
 }
 
 .greyBg {
-    background-color: #d5d7e1;
+  background-color: #d5d7e1;
 }
 
 .beigeBg {
-    background-color: #e1d7d5;
+  background-color: #e1d7d5;
 }

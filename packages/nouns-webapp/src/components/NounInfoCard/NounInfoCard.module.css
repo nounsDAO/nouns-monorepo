@@ -1,28 +1,27 @@
 .nounInfoHeader {
-    padding-top: 10rem;
-    display: inline-block;
-    padding-left: 0rem;
-    font-family: 'Londrina Solid';
+  padding-top: 10rem;
+  display: inline-block;
+  padding-left: 0rem;
+  font-family: 'Londrina Solid';
 }
 
 .nounInfoHeader h2 {
-    font-size: 56px;
-    margin-bottom: 18px;
+  font-size: 56px;
+  margin-bottom: 18px;
 }
 
-
 .nounInfoHeader h3 {
-    font-size: 24px;
-    margin-bottom: '0px';
-    color: #79809C;
+  font-size: 24px;
+  margin-bottom: '0px';
+  color: #79809c;
 }
 
 .nounInfoRow {
-    padding-bottom: 1rem;
-    font-size: 18px;
+  padding-bottom: 1rem;
+  font-size: 18px;
 }
 
 .nounInfoRowText {
-    padding-left: 4;
-    font-family: 'PT Root UI Bold';
+  padding-left: 4;
+  font-family: 'PT Root UI Bold';
 }
