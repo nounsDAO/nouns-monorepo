@@ -4,11 +4,8 @@ import { Row } from "react-bootstrap";
 import classes from './NounInfoCard.module.css';
 
 import _AddressIcon from '../../assets/icons/Address.svg';
-import _BirthdayIcon from '../../assets/icons/Birthday.svg';
-import _HeartIcon from '../../assets/icons/Heart.svg';
 import _BidsIcon from '../../assets/icons/Bids.svg';
 
-import NounInfoRowIcon from '../../components/NounInfoRowIcon';
 import NounInfoRowBirthday from "../NounInfoRowBirthday";
 import NounInfoRowHolder from "../NounInfoRowHolder";
 import NounInfoRowButton from "../NounInfoRowButton";
@@ -42,11 +39,9 @@ const NounInfoCard: React.FC<NounInfoCardProps> = props => {
             </Row>
             <div className={classes.nounInfo}>
                 <Row className={classes.nounInfoRow}> 
-                    <NounInfoRowIcon imgSrc={_BirthdayIcon}/>
                     <NounInfoRowBirthday nounId={nounId} />
                 </Row>
                 <Row className={classes.nounInfoRow}> 
-                    <NounInfoRowIcon imgSrc={_HeartIcon} />
                     <NounInfoRowHolder nounId={nounId} />
                 </Row>
                 <Row className={classes.nounInfoRow}>

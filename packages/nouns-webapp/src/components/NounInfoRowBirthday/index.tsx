@@ -5,6 +5,9 @@ import { isNounderNoun } from "../../utils/nounderNoun";
 import { auctionQuery } from "../../wrappers/subgraph";
 
 import classes from './NounInfoRowBirthday.module.css';
+import _BirthdayIcon from '../../assets/icons/Birthday.svg';
+
+import { Image } from "react-bootstrap";
 
 interface NounInfoRowBirthdayProps {
     nounId: number;
@@ -34,10 +37,13 @@ const NounInfoRowBirthday: React.FC<NounInfoRowBirthdayProps> = props => {
 
     return (
             <div className={classes.birthdayInfoContainer} >
+              <span>
+                <Image src={_BirthdayIcon} className={classes.birthdayIcon}/>
+              </span>
                 Born 
-              <div className={classes.nounInfoRowBirthday}> 
+              <span className={classes.nounInfoRowBirthday}> 
                   {monthNames[birthday.getUTCMonth()]} {birthday.getUTCDate()}, {birthday.getUTCFullYear()}
-              </div>
+              </span>
           </div>
     );
 };

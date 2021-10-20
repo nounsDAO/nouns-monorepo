@@ -1,12 +1,24 @@
 .nounHolderEtherscanLink {
     font-family: 'PT Root UI Bold';
     color: '#4965F0';
+    margin-left: 5px;
 }
 
 .nounHolderInfoContainer {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 205px;
-    height: 25px;
+    display: inline;
+    width: 350px;
+    height: 35px;
+}
+
+.linkIconSpan {
+    margin-left: 5px;
+}
+
+.linkIcon {
+    margin-bottom: 5px;
+}
+
+.heartIcon {
+    margin-bottom: 4px;
+    margin-right: 7px;
 }
