@@ -37,16 +37,16 @@ describe('NounsToken', () => {
 
     const [, , , ownersNounCreated] = receipt.events || [];
  
-    expect(await tellerToken.ownerOf(1)).to.eq(deployer.address);
-    expect(ownersNounCreated?.event).to.eq('NounCreated');
+    expect(await tellerToken.ownerOf(0)).to.eq(deployer.address);
+    expect(ownersNounCreated?.event).to.eq('TellerCardCreated');
     expect(ownersNounCreated?.args?.tokenId).to.eq(0);
-    expect(ownersNounCreated?.args?.seed.length).to.equal(5);
+    //expect(ownersNounCreated?.args?.seed.length).to.equal(5);
  
 
-    ownersNounCreated?.args?.seed.forEach((item: EthersBN | number) => {
+    /*ownersNounCreated?.args?.seed.forEach((item: EthersBN | number) => {
       const value = typeof item !== 'number' ? item?.toNumber() : item;
       expect(value).to.be.a('number');
-    });
+    });*/
   });
 
   it('should set symbol', async () => {
@@ -63,15 +63,15 @@ describe('NounsToken', () => {
     const receipt = await (await tellerToken.mint()).wait();
     const nounCreated = receipt.events?.[3];
 
-    expect(await tellerToken.ownerOf(2)).to.eq(deployer.address);
-    expect(nounCreated?.event).to.eq('NounCreated');
-    expect(nounCreated?.args?.tokenId).to.eq(2);
-    expect(nounCreated?.args?.seed.length).to.equal(5);
+    expect(await tellerToken.ownerOf(1)).to.eq(deployer.address);
+    expect(nounCreated?.event).to.eq('TellerCardCreated');
+    expect(nounCreated?.args?.tokenId).to.eq(1);
+    //expect(nounCreated?.args?.seed.length).to.equal(5);
 
-    nounCreated?.args?.seed.forEach((item: EthersBN | number) => {
+    /*nounCreated?.args?.seed.forEach((item: EthersBN | number) => {
       const value = typeof item !== 'number' ? item?.toNumber() : item;
       expect(value).to.be.a('number');
-    });
+    });*/
   });
 
   it('should emit two transfer logs on mint', async () => {
@@ -86,15 +86,16 @@ describe('NounsToken', () => {
 
     await expect(tx)
       .to.emit(tellerToken, 'Transfer')
-      .withArgs(constants.AddressZero, creator.address, 2);
-    await expect(tx).to.emit(tellerToken, 'Transfer').withArgs(creator.address, minter.address, 2);
+      .withArgs(constants.AddressZero, creator.address, 1);
+
+    await expect(tx).to.emit(tellerToken, 'Transfer').withArgs(creator.address, minter.address, 1);
   });
 
   it('should allow minter to burn a noun', async () => {
     await (await tellerToken.mint()).wait();
 
     const tx = tellerToken.burn(0);
-    await expect(tx).to.emit(tellerToken, 'NounBurned').withArgs(0);
+    await expect(tx).to.emit(tellerToken, 'TellerCardBurned').withArgs(0);
   });
 
   it('should revert on non-minter mint', async () => {
