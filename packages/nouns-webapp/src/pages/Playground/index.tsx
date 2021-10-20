@@ -3,6 +3,7 @@ import classes from './Playground.module.css';
 import { useEffect, useState } from 'react';
 import { ImageData, getNounData, getRandomNounSeed } from '@nouns/assets';
 import { buildSVG } from '@nouns/sdk';
+import React from 'react';
 import Noun from '../../components/Noun';
 
 interface Trait {
@@ -13,16 +14,43 @@ interface Trait {
 const Playground = () => {
   const [nounSvgs, setNounSvgs] = useState<string[]>();
   const [traits, setTraits] = useState<Trait[]>();
+  const [modSeed, setModSeed] = useState<{ [key: string]: number }>();
+
+  const generateNounSvg = React.useCallback(() => {
+    const seed = { ...getRandomNounSeed(), ...modSeed };
+    const { parts, background } = getNounData(seed);
+    const image = `data:image/svg+xml;base64,${btoa(
+      buildSVG(parts, ImageData.palette, background),
+    )}`;
+    setNounSvgs(prev => {
+      return prev ? [image, ...prev] : [image];
+    });
+  }, [modSeed]);
+
+  const attributeButtonHandler = (trait: string, attributeNum: number) => {
+    setModSeed(prev => {
+      // -1 attributeNum = random
+      if (attributeNum < 0) {
+        let state = { ...prev };
+        delete state[trait];
+        return state;
+      }
+
+      return {
+        ...prev,
+        [trait]: attributeNum,
+      };
+    });
+  };
 
   useEffect(() => {
-    const traitNames = ['backgrounds', ...Object.keys(ImageData.images)];
+    const traitNames = ['background', 'body', 'accessory', 'head', 'glasses'];
     const traitCounts = [
       ImageData.bgcolors.length,
       ...Object.values(ImageData.images).map(i => {
         return i.length;
       }),
     ];
-
     setTraits(
       traitNames.map((value, index) => {
         return {
@@ -32,27 +60,20 @@ const Playground = () => {
       }),
     );
 
-    fetchNounSvg();
-  }, []);
+    generateNounSvg();
+  }, [generateNounSvg]);
 
-  const fetchNounSvg = async () => {
-    const { parts, background } = getNounData(getRandomNounSeed());
-    const image = `data:image/svg+xml;base64,${btoa(
-      buildSVG(parts, ImageData.palette, background),
-    )}`;
-    setNounSvgs(prev => {
-      if (prev) {
-        return [image, ...prev];
-      } else {
-        return [image];
-      }
-    });
-  };
-
-  const options = (numOptions: number) => {
-    return Array.from(Array(numOptions)).map((_, index) => {
+  const attributeOptionButtons = (trait: Trait) => {
+    return Array.from(Array(trait.count + 1)).map((_, index) => {
       return (
-        <Dropdown.Item key={index}>{index === 0 ? `Random` : `Option #${index}`} </Dropdown.Item>
+        <Dropdown.Item
+          key={index}
+          onClick={() => {
+            attributeButtonHandler(trait.title, index - 1);
+          }}
+        >
+          {index === 0 ? `Random` : `Option #${index}`}
+        </Dropdown.Item>
       );
     });
   };
@@ -71,7 +92,7 @@ const Playground = () => {
         </Col>
 
         <Col lg={3}>
-          <Button onClick={fetchNounSvg} className={classes.generateBtn}>
+          <Button onClick={generateNounSvg} className={classes.generateBtn}>
             GENERATE NOUNS
           </Button>
           {traits &&
@@ -83,7 +104,7 @@ const Playground = () => {
                   title={trait.title}
                   className={classes.dropdownBtn}
                 >
-                  {options(trait.count)}
+                  {attributeOptionButtons({ title: trait.title, count: trait.count })}
                 </DropdownButton>
               );
             })}
