@@ -1,12 +1,9 @@
 import { Container, Col, Button, Row, DropdownButton, Dropdown } from 'react-bootstrap';
 import classes from './Playground.module.css';
-import { useEthers } from '@usedapp/core';
 import { useEffect, useState } from 'react';
-import { ethers, BigNumber } from 'ethers';
-import { INounSeed } from '../../wrappers/nounToken';
-import config from '../../config';
+import { ImageData, getNounData, getRandomNounSeed } from '@nouns/assets';
+import { buildSVG } from '@nouns/sdk';
 import Noun from '../../components/Noun';
-import { NounsDescriptorABI, NounsSeederABI } from '@nouns/contracts';
 
 interface Trait {
   title: string;
@@ -14,62 +11,43 @@ interface Trait {
 }
 
 const Playground = () => {
-  const [svgs, setSvgs] = useState<string[]>();
+  const [nounSvgs, setNounSvgs] = useState<string[]>();
   const [traits, setTraits] = useState<Trait[]>();
 
-  const fetchesOnTap = 8;
-  const ethersUseDapp = useEthers();
-  const descriptor = new ethers.Contract(
-    config.nounsDescriptorAddress,
-    NounsDescriptorABI,
-    ethersUseDapp.library,
-  );
-  const seeder = new ethers.Contract(
-    config.nounsSeederAddress,
-    NounsSeederABI,
-    ethersUseDapp.library,
-  );
-
-  const fetchSVG = async () => {
-    for (let i = 0; i < fetchesOnTap; i++) {
-      const seed = await seeder.generateSeed(
-        Math.floor(Math.random() * 10000000000),
-        config.nounsDescriptorAddress,
-      );
-      const svg = await descriptor.generateSVGImage(seed);
-      setSvgs(prev => {
-        return prev ? [svg, ...prev] : [svg];
-      });
-    }
-  };
-
   useEffect(() => {
-    if (!ethersUseDapp.library) return;
+    const traitNames = ['backgrounds', ...Object.keys(ImageData.images)];
+    const traitCounts = [
+      ImageData.bgcolors.length,
+      ...Object.values(ImageData.images).map(i => {
+        return i.length;
+      }),
+    ];
 
-    // on load fetch of nouns
-    fetchSVG();
+    setTraits(
+      traitNames.map((value, index) => {
+        return {
+          title: value,
+          count: traitCounts[index],
+        };
+      }),
+    );
 
-    // fetch trait counts
-    const fetchPartsCount = async () => {
-      const [backgroundCount, bodyCount, accessoryCount, headCount, glasssesCount] = [
-        (await descriptor.backgroundCount()) as BigNumber,
-        (await descriptor.bodyCount()) as BigNumber,
-        (await descriptor.accessoryCount()) as BigNumber,
-        (await descriptor.headCount()) as BigNumber,
-        (await descriptor.glassesCount()) as BigNumber,
-      ];
+    fetchNounSvg();
+  }, []);
 
-      setTraits([
-        { title: 'Head', count: headCount.toNumber() },
-        { title: 'Glasses', count: glasssesCount.toNumber() },
-        { title: 'Body', count: bodyCount.toNumber() },
-        { title: 'Accessory', count: accessoryCount.toNumber() },
-        { title: 'Background', count: backgroundCount.toNumber() },
-      ]);
-    };
-
-    fetchPartsCount();
-  }, [ethersUseDapp.library]);
+  const fetchNounSvg = async () => {
+    const { parts, background } = getNounData(getRandomNounSeed());
+    const image = `data:image/svg+xml;base64,${btoa(
+      buildSVG(parts, ImageData.palette, background),
+    )}`;
+    setNounSvgs(prev => {
+      if (prev) {
+        return [image, ...prev];
+      } else {
+        return [image];
+      }
+    });
+  };
 
   const options = (numOptions: number) => {
     return Array.from(Array(numOptions)).map((_, index) => {
@@ -93,7 +71,7 @@ const Playground = () => {
         </Col>
 
         <Col lg={3}>
-          <Button onClick={fetchSVG} className={classes.generateBtn}>
+          <Button onClick={fetchNounSvg} className={classes.generateBtn}>
             GENERATE NOUNS
           </Button>
           {traits &&
@@ -112,15 +90,11 @@ const Playground = () => {
         </Col>
         <Col lg={9}>
           <Row>
-            {svgs &&
-              svgs.map((svg, i) => {
+            {nounSvgs &&
+              nounSvgs.map((svg, i) => {
                 return (
                   <Col xs={4} lg={3} key={i}>
-                    <Noun
-                      imgPath={`data:image/svg+xml;base64,${svg}`}
-                      alt="noun"
-                      className={classes.nounImg}
-                    />
+                    <Noun imgPath={svg} alt="noun" className={classes.nounImg} />
                   </Col>
                 );
               })}
