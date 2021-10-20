@@ -83,14 +83,14 @@ export const populateDescriptor = async (nounsDescriptor: TokenDescriptor): Prom
 
   // Split up head and accessory population due to high gas usage
   await Promise.all([
-    nounsDescriptor.addManyBackgrounds(bgcolors),
+   /* nounsDescriptor.addManyBackgrounds(bgcolors),
     nounsDescriptor.addManyColorsToPalette(0, palette),
     nounsDescriptor.addManyBodies(bodies.map(({ data }) => data)),
     chunkArray(accessories, 10).map(chunk =>
       nounsDescriptor.addManyAccessories(chunk.map(({ data }) => data)),
     ),
     chunkArray(heads, 10).map(chunk => nounsDescriptor.addManyHeads(chunk.map(({ data }) => data))),
-    nounsDescriptor.addManyGlasses(glasses.map(({ data }) => data)),
+    nounsDescriptor.addManyGlasses(glasses.map(({ data }) => data)),*/
   ]);
 };
 
