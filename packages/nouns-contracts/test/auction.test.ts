@@ -247,15 +247,21 @@ describe('TellerAuctionHouse', () => {
   });
 
   it('should not create a new auction if the auction house is paused and unpaused while an auction is ongoing', async () => {
+    
+    
+    let auctionData = await tellerAuctionHouse.auction();
+
+    expect(auctionData.tokenId).to.equal(0);
+    
     await (await tellerAuctionHouse.unpause()).wait();
 
     await (await tellerAuctionHouse.pause()).wait();
 
     await (await tellerAuctionHouse.unpause()).wait();
 
-    const { tokenId } = await tellerAuctionHouse.auction();
+    auctionData = await tellerAuctionHouse.auction();
 
-    expect(tokenId).to.equal(1);
+    expect(auctionData.tokenId).to.equal(0);
   });
 
   it('should create a new auction if the auction house is paused and unpaused after an auction is settled', async () => {
@@ -283,7 +289,7 @@ describe('TellerAuctionHouse', () => {
 
     const createdEvent = receipt.events?.find(e => e.event === 'AuctionCreated');
 
-    expect(createdEvent?.args?.nounId).to.equal(tokenId.add(1));
+    expect(createdEvent?.args?.tokenId).to.equal(tokenId.add(1));
     expect(createdEvent?.args?.startTime).to.equal(timestamp);
     expect(createdEvent?.args?.endTime).to.equal(timestamp + DURATION);
   });
