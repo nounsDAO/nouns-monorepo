@@ -26,7 +26,7 @@ const ProfilePage: React.FC<ProfilePageProps> = props => {
 
   const nounContent = (
     <div className={classes.nounWrapper}>
-      <StandaloneNounWithSeed nounId={BigNumber.from(nounId)} onLoadSeed={loadedNounHandler} />
+      <StandaloneNounWithSeed nounId={BigNumber.from(nounId)} onLoadSeed={loadedNounHandler} shouldLinkToProfile={false}/>
     </div>
   );
 

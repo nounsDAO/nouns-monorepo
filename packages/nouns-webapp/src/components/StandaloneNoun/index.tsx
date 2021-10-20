@@ -13,6 +13,7 @@ interface StandaloneNounProps {
 interface StandaloneNounWithSeedProps {
   nounId: EthersBN;
   onLoadSeed?: (seed: INounSeed) => void;
+  shouldLinkToProfile: boolean;
 }
 
 const getNoun = (nounId: string | EthersBN, seed: INounSeed) => {
@@ -44,7 +45,7 @@ const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProp
 export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = (
   props: StandaloneNounWithSeedProps,
 ) => {
-  const { nounId, onLoadSeed } = props;
+  const { nounId, onLoadSeed , shouldLinkToProfile } = props;
 
   const seed = useNounSeed(nounId);
 
@@ -53,11 +54,19 @@ export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = (
 
     const { image, description } = getNoun(nounId, seed);
 
-    return (
-      <Link to={'/noun/' + nounId.toString()} className={classes.clickableNoun}>
-        <Noun imgPath={image} alt={description} />
-      </Link>
+    const noun = (
+      <Noun imgPath={image} alt={description} />
     );
+
+    if (shouldLinkToProfile) {
+     return (
+        <Link to={'/noun/' + nounId.toString()} className={classes.clickableNoun}>
+          {noun}
+        </Link> 
+     );
+    } else {
+      return noun;
+    }
   } else {
     return <Noun imgPath="" alt="Noun" />;
   }

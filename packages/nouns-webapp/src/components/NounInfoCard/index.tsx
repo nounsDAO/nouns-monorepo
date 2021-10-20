@@ -43,7 +43,7 @@ const NounInfoCard: React.FC<NounInfoCardProps> = props => {
         <Row className={classes.nounInfoRow}>
           <NounInfoRowButton
             iconImgSource={_BidsIcon}
-            btnText={'Bids'}
+            btnText={'Bid History'}
             onClickHandler={bidHistoryButtonClickHandler}
           />
           <NounInfoRowButton

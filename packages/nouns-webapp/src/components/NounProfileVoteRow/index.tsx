@@ -68,6 +68,16 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
 
   // In this case, noun was not yet minted at time of proposal
   if (data && data.auctions.length > 0 && nounId > data.auctions[0].id) {
+    if (proposal.id ===  "1") {
+      return (
+        <div style={{
+          textAlign: 'center'
+        }}>
+          There have been no proposals since this noun was minted. Check back soon!
+        </div>
+      );
+    }
+
     return <></>;
   }
 
