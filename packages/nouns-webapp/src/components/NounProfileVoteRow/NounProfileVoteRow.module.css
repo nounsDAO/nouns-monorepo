@@ -10,11 +10,7 @@
   text-align: right;
 }
 
-.proposalLink:focus,
-.proposalLink:hover,
-.proposalLink:visited,
-.proposalLink:active,
-.proposalLink:link {
+.proposalLink {
   text-decoration: none;
   color: black;
   font-family: 'PT Root UI Bold';
@@ -23,4 +19,8 @@
 
 .nullStateCopy {
   opacity: 50%;
+}
+
+.voteInfoRow {
+  cursor: pointer;
 }

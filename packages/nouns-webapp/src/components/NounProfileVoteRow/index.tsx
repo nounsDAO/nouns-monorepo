@@ -9,7 +9,7 @@ import _VotePassedIcon from '../../assets/icons/VotePassed.svg';
 import _VoteFailedIcon from '../../assets/icons/VoteFailed.svg';
 import classes from './NounProfileVoteRow.module.css';
 
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { highestNounIdMintedAtProposalTime } from '../../wrappers/subgraph';
 
@@ -57,10 +57,13 @@ const selectProposalStatusIcon = (proposal: Proposal) => {
   }
 };
 
+// const truncateProposalText
+
 const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
   const { proposal, nounVoted, nounSupported, nounId } = props;
 
   const { loading, error, data } = useQuery(highestNounIdMintedAtProposalTime(proposal.startBlock));
+  const history = useHistory();
 
   if (loading || error) {
     return <></>;
@@ -75,24 +78,22 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
         </div>
       );
     }
-
     return <></>;
   }
 
-  console.log(proposal);
+  const proposalOnClickHandler = () => (history.push(proposal.id ? `/vote/${proposal.id}` : '/vote'));
 
   return (
-    <tr>
+    <tr onClick={proposalOnClickHandler} className={classes.voteInfoRow}>
+      <td>
+          {selectIconForNounVoteActivityRow(nounVoted, nounSupported)}
+      </td>
       <td>
         <div className={classes.voteInfoContainer}>
-          {selectIconForNounVoteActivityRow(nounVoted, nounSupported)}
           {selectVotingInfoText(nounVoted, nounSupported)}
-          <Link
-            to={proposal.id ? '/vote/' + proposal.id.toString() : '/vote'}
-            className={classes.proposalLink}
-          >
+          <span className={classes.proposalLink}>
             {proposal.title}
-          </Link>
+          </span>
         </div>
       </td>
       <td className={classes.voteProposalStatus}>{selectProposalStatusIcon(proposal)}</td>
