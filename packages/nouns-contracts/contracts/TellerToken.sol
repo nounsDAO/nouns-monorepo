@@ -1,43 +1,36 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title The Nouns ERC-721 token
+/// @title ERC-721 token
 
-/*********************************
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- * ░░░░░░█████████░░█████████░░░ *
- * ░░░░░░██░░░████░░██░░░████░░░ *
- * ░░██████░░░████████░░░████░░░ *
- * ░░██░░██░░░████░░██░░░████░░░ *
- * ░░██░░██░░░████░░██░░░████░░░ *
- * ░░░░░░█████████░░█████████░░░ *
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- *********************************/
+ 
 
 pragma solidity ^0.8.6;
 
 import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
 import { ERC721Checkpointable } from './base/ERC721Checkpointable.sol';
-import { INounsDescriptor } from './interfaces/INounsDescriptor.sol';
-import { INounsSeeder } from './interfaces/INounsSeeder.sol';
-import { INounsToken } from './interfaces/INounsToken.sol';
+import { ITokenDescriptor } from './interfaces/ITokenDescriptor.sol';
+ 
+import { ITellerToken } from './interfaces/ITellerToken.sol';
 import { ERC721 } from './base/ERC721.sol';
 import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import { IProxyRegistry } from './external/opensea/IProxyRegistry.sol';
 
-contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
-    // The nounders DAO address (creators org)
-    address public noundersDAO;
+contract TellerToken is ITellerToken, Ownable, ERC721Checkpointable {
+    // The treasury DAO address (creators org)
+    address public treasuryDAO;
 
-    // An address who has permissions to mint Nouns
+    // IPFS content hash of contract-level metadata
+    string private _contractURIHash = 'QmZi1n79FqWt2tTLwCqiy6nLM6xLGRsEPQ5JmReJQKNNzX';
+
+
+    // An address who has permissions to mint (auction house)
     address public minter;
 
-    // The Nouns token URI descriptor
-    INounsDescriptor public descriptor;
+    // The Teller token URI descriptor
+    ITokenDescriptor public descriptor;
 
-    // The Nouns token seeder
-    INounsSeeder public seeder;
+    // The Teller token seeder
+    //ITokenSeeder public seeder;
 
     // Whether the minter can be updated
     bool public isMinterLocked;
@@ -46,17 +39,15 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     bool public isDescriptorLocked;
 
     // Whether the seeder can be updated
-    bool public isSeederLocked;
+    //bool public isSeederLocked;
 
-    // The noun seeds
-    mapping(uint256 => INounsSeeder.Seed) public seeds;
+    // The token seeds
+    //mapping(uint256 => ITokenSeeder.Seed) public seeds;
 
-    // The internal noun ID tracker
-    uint256 private _currentNounId;
+    // The internal token ID tracker
+    uint256 private _currentTokenId;
 
-    // IPFS content hash of contract-level metadata
-    string private _contractURIHash = 'QmZi1n79FqWt2tTLwCqiy6nLM6xLGRsEPQ5JmReJQKNNzX';
-
+    
     // OpenSea's Proxy Registry
     IProxyRegistry public immutable proxyRegistry;
 
@@ -79,16 +70,16 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     /**
      * @notice Require that the seeder has not been locked.
      */
-    modifier whenSeederNotLocked() {
+   /* modifier whenSeederNotLocked() {
         require(!isSeederLocked, 'Seeder is locked');
         _;
-    }
+    }*/
 
     /**
-     * @notice Require that the sender is the nounders DAO.
+     * @notice Require that the sender is the treasury DAO.
      */
-    modifier onlyNoundersDAO() {
-        require(msg.sender == noundersDAO, 'Sender is not the nounders DAO');
+    modifier onlyTreasuryDAO() {
+        require(msg.sender == treasuryDAO, 'Sender is not the treasury DAO');
         _;
     }
 
@@ -101,16 +92,16 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     }
 
     constructor(
-        address _noundersDAO,
+        address _treasuryDAO,
         address _minter,
-        INounsDescriptor _descriptor,
-        INounsSeeder _seeder,
+        ITokenDescriptor _descriptor,
+        //ITokenSeeder _seeder,
         IProxyRegistry _proxyRegistry
-    ) ERC721('Nouns', 'NOUN') {
-        noundersDAO = _noundersDAO;
+    ) ERC721('TellerCard', 'TCARD') {
+        treasuryDAO = _treasuryDAO;
         minter = _minter;
         descriptor = _descriptor;
-        seeder = _seeder;
+        //seeder = _seeder;
         proxyRegistry = _proxyRegistry;
     }
 
@@ -141,24 +132,22 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     }
 
     /**
-     * @notice Mint a Noun to the minter, along with a possible nounders reward
-     * Noun. Nounders reward Nouns are minted every 10 Nouns, starting at 0,
-     * until 183 nounder Nouns have been minted (5 years w/ 24 hour auctions).
+     * @notice Mint a token to the minter 
      * @dev Call _mintTo with the to address(es).
      */
     function mint() public override onlyMinter returns (uint256) {
-        if (_currentNounId <= 1820 && _currentNounId % 10 == 0) {
-            _mintTo(noundersDAO, _currentNounId++);
-        }
-        return _mintTo(minter, _currentNounId++);
+        /*if (_currentTokenId <= 1820 && _currentTokenId % 10 == 0) {
+            _mintTo(treasuryDAO, _currentTokenId++);
+        }*/
+        return _mintTo(minter, _currentTokenId++);
     }
 
     /**
-     * @notice Burn a noun.
+     * @notice Burn a token.
      */
-    function burn(uint256 nounId) public override onlyMinter {
-        _burn(nounId);
-        emit NounBurned(nounId);
+    function burn(uint256 tokenId) public override onlyMinter {
+        _burn(tokenId);
+        emit TellerCardBurned(tokenId);
     }
 
     /**
@@ -166,27 +155,19 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
      * @dev See {IERC721Metadata-tokenURI}.
      */
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
-        require(_exists(tokenId), 'NounsToken: URI query for nonexistent token');
-        return descriptor.tokenURI(tokenId, seeds[tokenId]);
+        require(_exists(tokenId), 'TellerToken: URI query for nonexistent token');
+        return descriptor.tokenURI(tokenId);
     }
 
+   
     /**
-     * @notice Similar to `tokenURI`, but always serves a base64 encoded data URI
-     * with the JSON contents directly inlined.
+     * @notice Set the treasury DAO.
+     * @dev Only callable by the treasury DAO when not locked.
      */
-    function dataURI(uint256 tokenId) public view override returns (string memory) {
-        require(_exists(tokenId), 'NounsToken: URI query for nonexistent token');
-        return descriptor.dataURI(tokenId, seeds[tokenId]);
-    }
+    function setTreasuryDAO(address _treasuryDAO) external override onlyTreasuryDAO {
+        treasuryDAO = _treasuryDAO;
 
-    /**
-     * @notice Set the nounders DAO.
-     * @dev Only callable by the nounders DAO when not locked.
-     */
-    function setNoundersDAO(address _noundersDAO) external override onlyNoundersDAO {
-        noundersDAO = _noundersDAO;
-
-        emit NoundersDAOUpdated(_noundersDAO);
+        emit TreasuryDAOUpdated(_treasuryDAO);
     }
 
     /**
@@ -213,7 +194,7 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
      * @notice Set the token URI descriptor.
      * @dev Only callable by the owner when not locked.
      */
-    function setDescriptor(INounsDescriptor _descriptor) external override onlyOwner whenDescriptorNotLocked {
+    function setDescriptor(ITokenDescriptor _descriptor) external override onlyOwner whenDescriptorNotLocked {
         descriptor = _descriptor;
 
         emit DescriptorUpdated(_descriptor);
@@ -233,31 +214,32 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
      * @notice Set the token seeder.
      * @dev Only callable by the owner when not locked.
      */
-    function setSeeder(INounsSeeder _seeder) external override onlyOwner whenSeederNotLocked {
+    /*function setSeeder(ITokenSeeder _seeder) external override onlyOwner whenSeederNotLocked {
         seeder = _seeder;
 
         emit SeederUpdated(_seeder);
-    }
+    }*/
 
     /**
      * @notice Lock the seeder.
      * @dev This cannot be reversed and is only callable by the owner when not locked.
      */
+     /*
     function lockSeeder() external override onlyOwner whenSeederNotLocked {
         isSeederLocked = true;
 
         emit SeederLocked();
-    }
+    }*/
 
     /**
-     * @notice Mint a Noun with `nounId` to the provided `to` address.
+     * @notice Mint a Token with `tokenId` to the provided `to` address.
      */
-    function _mintTo(address to, uint256 nounId) internal returns (uint256) {
-        INounsSeeder.Seed memory seed = seeds[nounId] = seeder.generateSeed(nounId, descriptor);
+    function _mintTo(address to, uint256 tokenId) internal returns (uint256) {
+        //ITokenSeeder.Seed memory seed = seeds[tokenId] = seeder.generateSeed(tokenId, descriptor);
 
-        _mint(owner(), to, nounId);
-        emit NounCreated(nounId, seed);
+        _mint(owner(), to, tokenId);
+        emit TellerCardCreated(tokenId);
 
-        return nounId;
+        return tokenId;
     }
 }

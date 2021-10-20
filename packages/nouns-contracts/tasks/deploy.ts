@@ -1,4 +1,4 @@
-import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json';
+import { default as TellerAuctionHouseABI } from '../abi/contracts/TellerAuctionHouse.sol/TellerAuctionHouse.json';
 import { Interface } from 'ethers/lib/utils';
 import { task, types } from 'hardhat/config';
 import promptjs from 'prompt';
@@ -9,15 +9,15 @@ promptjs.delimiter = '';
 
 type ContractName =
   | 'NFTDescriptor'
-  | 'NounsDescriptor'
-  | 'NounsSeeder'
-  | 'NounsToken'
-  | 'NounsAuctionHouse'
-  | 'NounsAuctionHouseProxyAdmin'
-  | 'NounsAuctionHouseProxy'
-  | 'NounsDAOExecutor'
-  | 'NounsDAOLogicV1'
-  | 'NounsDAOProxy';
+  | 'TokenDescriptor'
+  //| 'NounsSeeder'
+  | 'TellerToken'
+  | 'TellerAuctionHouse'
+  | 'TellerAuctionHouseProxyAdmin'
+  | 'TellerAuctionHouseProxy'
+  //| 'NounsDAOExecutor'
+  //| 'NounsDAOLogicV1'
+  //| 'NounsDAOProxy';
 
 interface Contract {
   args?: (string | number | (() => string | undefined))[];
@@ -65,32 +65,32 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
     });
     const contracts: Record<ContractName, Contract> = {
       NFTDescriptor: {},
-      NounsDescriptor: {
+      TokenDescriptor: {
         libraries: () => ({
-          NFTDescriptor: contracts['NFTDescriptor'].address as string,
+          NFTDescriptor: contracts['TokenDescriptor'].address as string,
         }),
       },
-      NounsSeeder: {},
-      NounsToken: {
+      //NounsSeeder: {},
+      TellerToken: {
         args: [
           args.noundersdao,
           expectedAuctionHouseProxyAddress,
-          () => contracts['NounsDescriptor'].address,
-          () => contracts['NounsSeeder'].address,
+          () => contracts['TokenDescriptor'].address,
+          //() => contracts['NounsSeeder'].address,
           proxyRegistryAddress,
         ],
       },
-      NounsAuctionHouse: {
+      TellerAuctionHouse: {
         waitForConfirmation: true,
       },
-      NounsAuctionHouseProxyAdmin: {},
-      NounsAuctionHouseProxy: {
+      TellerAuctionHouseProxyAdmin: {},
+      TellerAuctionHouseProxy: {
         args: [
-          () => contracts['NounsAuctionHouse'].address,
-          () => contracts['NounsAuctionHouseProxyAdmin'].address,
+          () => contracts['TellerAuctionHouse'].address,
+          () => contracts['TellerAuctionHouseProxyAdmin'].address,
           () =>
-            new Interface(NounsAuctionHouseABI).encodeFunctionData('initialize', [
-              contracts['NounsToken'].address,
+            new Interface(TellerAuctionHouseABI).encodeFunctionData('initialize', [
+              contracts['TellerToken'].address,
               args.weth,
               args.auctionTimeBuffer,
               args.auctionReservePrice,
@@ -99,7 +99,7 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
             ]),
         ],
       },
-      NounsDAOExecutor: {
+     /* NounsDAOExecutor: {
         args: [expectedNounsDAOProxyAddress, args.timelockDelay],
       },
       NounsDAOLogicV1: {
@@ -117,7 +117,7 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
           args.proposalThresholdBps,
           args.quorumVotesBps,
         ],
-      },
+      },*/
     };
 
     let gasPrice = await ethers.provider.getGasPrice();

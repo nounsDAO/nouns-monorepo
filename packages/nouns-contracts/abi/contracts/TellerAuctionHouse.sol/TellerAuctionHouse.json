@@ -5,7 +5,7 @@
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "nounId",
+        "name": "tokenId",
         "type": "uint256"
       },
       {
@@ -36,7 +36,7 @@
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "nounId",
+        "name": "tokenId",
         "type": "uint256"
       },
       {
@@ -61,7 +61,7 @@
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "nounId",
+        "name": "tokenId",
         "type": "uint256"
       },
       {
@@ -106,7 +106,7 @@
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "nounId",
+        "name": "tokenId",
         "type": "uint256"
       },
       {
@@ -189,7 +189,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "nounId",
+        "name": "tokenId",
         "type": "uint256"
       },
       {
@@ -225,7 +225,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "nounId",
+        "name": "tokenId",
         "type": "uint256"
       }
     ],
@@ -250,8 +250,8 @@
   {
     "inputs": [
       {
-        "internalType": "contract INounsToken",
-        "name": "_nouns",
+        "internalType": "contract ITellerToken",
+        "name": "_tellerTokenContract",
         "type": "address"
       },
       {
@@ -293,19 +293,6 @@
         "internalType": "uint8",
         "name": "",
         "type": "uint8"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "nouns",
-    "outputs": [
-      {
-        "internalType": "contract INounsToken",
-        "name": "",
-        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -415,6 +402,19 @@
     "name": "settleCurrentAndCreateNewAuction",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "tellerTokens",
+    "outputs": [
+      {
+        "internalType": "contract ITellerToken",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {

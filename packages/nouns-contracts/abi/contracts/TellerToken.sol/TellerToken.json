@@ -3,7 +3,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_noundersDAO",
+        "name": "_treasuryDAO",
         "type": "address"
       },
       {
@@ -12,13 +12,8 @@
         "type": "address"
       },
       {
-        "internalType": "contract INounsDescriptor",
+        "internalType": "contract ITokenDescriptor",
         "name": "_descriptor",
-        "type": "address"
-      },
-      {
-        "internalType": "contract INounsSeeder",
-        "name": "_seeder",
         "type": "address"
       },
       {
@@ -141,7 +136,7 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "contract INounsDescriptor",
+        "internalType": "contract ITokenDescriptor",
         "name": "descriptor",
         "type": "address"
       }
@@ -173,78 +168,6 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "NounBurned",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint48",
-            "name": "background",
-            "type": "uint48"
-          },
-          {
-            "internalType": "uint48",
-            "name": "body",
-            "type": "uint48"
-          },
-          {
-            "internalType": "uint48",
-            "name": "accessory",
-            "type": "uint48"
-          },
-          {
-            "internalType": "uint48",
-            "name": "head",
-            "type": "uint48"
-          },
-          {
-            "internalType": "uint48",
-            "name": "glasses",
-            "type": "uint48"
-          }
-        ],
-        "indexed": false,
-        "internalType": "struct INounsSeeder.Seed",
-        "name": "seed",
-        "type": "tuple"
-      }
-    ],
-    "name": "NounCreated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "noundersDAO",
-        "type": "address"
-      }
-    ],
-    "name": "NoundersDAOUpdated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
         "internalType": "address",
         "name": "previousOwner",
         "type": "address"
@@ -261,21 +184,28 @@
   },
   {
     "anonymous": false,
-    "inputs": [],
-    "name": "SeederLocked",
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "TellerCardBurned",
     "type": "event"
   },
   {
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
-        "internalType": "contract INounsSeeder",
-        "name": "seeder",
-        "type": "address"
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
       }
     ],
-    "name": "SeederUpdated",
+    "name": "TellerCardCreated",
     "type": "event"
   },
   {
@@ -301,6 +231,19 @@
       }
     ],
     "name": "Transfer",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "treasuryDAO",
+        "type": "address"
+      }
+    ],
+    "name": "TreasuryDAOUpdated",
     "type": "event"
   },
   {
@@ -370,7 +313,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "nounId",
+        "name": "tokenId",
         "type": "uint256"
       }
     ],
@@ -411,25 +354,6 @@
   {
     "inputs": [],
     "name": "contractURI",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "dataURI",
     "outputs": [
       {
         "internalType": "string",
@@ -528,7 +452,7 @@
     "name": "descriptor",
     "outputs": [
       {
-        "internalType": "contract INounsDescriptor",
+        "internalType": "contract ITokenDescriptor",
         "name": "",
         "type": "address"
       }
@@ -650,19 +574,6 @@
   },
   {
     "inputs": [],
-    "name": "isSeederLocked",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "lockDescriptor",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -671,13 +582,6 @@
   {
     "inputs": [],
     "name": "lockMinter",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "lockSeeder",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -735,19 +639,6 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "noundersDAO",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -876,58 +767,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "seeder",
-    "outputs": [
-      {
-        "internalType": "contract INounsSeeder",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "seeds",
-    "outputs": [
-      {
-        "internalType": "uint48",
-        "name": "background",
-        "type": "uint48"
-      },
-      {
-        "internalType": "uint48",
-        "name": "body",
-        "type": "uint48"
-      },
-      {
-        "internalType": "uint48",
-        "name": "accessory",
-        "type": "uint48"
-      },
-      {
-        "internalType": "uint48",
-        "name": "head",
-        "type": "uint48"
-      },
-      {
-        "internalType": "uint48",
-        "name": "glasses",
-        "type": "uint48"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -961,7 +800,7 @@
   {
     "inputs": [
       {
-        "internalType": "contract INounsDescriptor",
+        "internalType": "contract ITokenDescriptor",
         "name": "_descriptor",
         "type": "address"
       }
@@ -988,24 +827,11 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_noundersDAO",
+        "name": "_treasuryDAO",
         "type": "address"
       }
     ],
-    "name": "setNoundersDAO",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract INounsSeeder",
-        "name": "_seeder",
-        "type": "address"
-      }
-    ],
-    "name": "setSeeder",
+    "name": "setTreasuryDAO",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1151,6 +977,19 @@
     "name": "transferOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "treasuryDAO",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {

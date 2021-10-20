@@ -1,4 +1,4 @@
-import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json';
+import { default as NounsAuctionHouseABI } from '../abi/contracts/TellerAuctionHouse.sol/TellerAuctionHouse.json';
 import { task, types } from 'hardhat/config';
 import { Interface } from 'ethers/lib/utils';
 import { Contract as EthersContract } from 'ethers';
@@ -6,15 +6,15 @@ import { Contract as EthersContract } from 'ethers';
 type ContractName =
   | 'WETH'
   | 'NFTDescriptor'
-  | 'NounsDescriptor'
-  | 'NounsSeeder'
-  | 'NounsToken'
-  | 'NounsAuctionHouse'
-  | 'NounsAuctionHouseProxyAdmin'
-  | 'NounsAuctionHouseProxy'
-  | 'NounsDAOExecutor'
-  | 'NounsDAOLogicV1'
-  | 'NounsDAOProxy';
+  | 'TokenDescriptor'
+  //| 'NounsSeeder'
+  | 'TellerToken'
+  | 'TellerAuctionHouse'
+  | 'TellerAuctionHouseProxyAdmin'
+  | 'TellerAuctionHouseProxy'
+  //| 'NounsDAOExecutor'
+  //| 'NounsDAOLogicV1'
+  //| 'NounsDAOProxy';
 
 interface Contract {
   args?: (string | number | (() => string | undefined))[];
@@ -53,7 +53,7 @@ task('deploy-local', 'Deploy contracts to hardhat')
 
     const [deployer] = await ethers.getSigners();
     const nonce = await deployer.getTransactionCount();
-    const expectedNounsDAOProxyAddress = ethers.utils.getContractAddress({
+    const expectedTreasuryDAOProxyAddress = ethers.utils.getContractAddress({
       from: deployer.address,
       nonce: nonce + GOVERNOR_N_DELEGATOR_NONCE_OFFSET,
     });
@@ -64,32 +64,32 @@ task('deploy-local', 'Deploy contracts to hardhat')
     const contracts: Record<ContractName, Contract> = {
       WETH: {},
       NFTDescriptor: {},
-      NounsDescriptor: {
+      TokenDescriptor: {
         libraries: () => ({
           NFTDescriptor: contracts['NFTDescriptor'].instance?.address as string,
         }),
       },
-      NounsSeeder: {},
-      NounsToken: {
+      //NounsSeeder: {},
+      TellerToken: {
         args: [
           args.noundersdao || deployer.address,
           expectedAuctionHouseProxyAddress,
-          () => contracts['NounsDescriptor'].instance?.address,
-          () => contracts['NounsSeeder'].instance?.address,
+          () => contracts['TokenDescriptor'].instance?.address,
+          //() => contracts['NounsSeeder'].instance?.address,
           proxyRegistryAddress,
         ],
       },
-      NounsAuctionHouse: {
+      TellerAuctionHouse: {
         waitForConfirmation: true,
       },
-      NounsAuctionHouseProxyAdmin: {},
-      NounsAuctionHouseProxy: {
+      TellerAuctionHouseProxyAdmin: {},
+      TellerAuctionHouseProxy: {
         args: [
-          () => contracts['NounsAuctionHouse'].instance?.address,
-          () => contracts['NounsAuctionHouseProxyAdmin'].instance?.address,
+          () => contracts['TellerAuctionHouse'].instance?.address,
+          () => contracts['TellerAuctionHouseProxyAdmin'].instance?.address,
           () =>
             new Interface(NounsAuctionHouseABI).encodeFunctionData('initialize', [
-              contracts['NounsToken'].instance?.address,
+              contracts['TellerToken'].instance?.address,
               contracts['WETH'].instance?.address,
               args.auctionTimeBuffer,
               args.auctionReservePrice,
@@ -98,8 +98,8 @@ task('deploy-local', 'Deploy contracts to hardhat')
             ]),
         ],
       },
-      NounsDAOExecutor: {
-        args: [expectedNounsDAOProxyAddress, args.timelockDelay],
+      /*NounsDAOExecutor: {
+        args: [expectedTreasuryDAOProxyAddress, args.timelockDelay],
       },
       NounsDAOLogicV1: {
         waitForConfirmation: true,
@@ -116,7 +116,7 @@ task('deploy-local', 'Deploy contracts to hardhat')
           args.proposalThresholdBps,
           args.quorumVotesBps,
         ],
-      },
+      },*/
     };
 
     for (const [name, contract] of Object.entries(contracts)) {
