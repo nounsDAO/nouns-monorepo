@@ -60,7 +60,7 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
                     .reverse()
                     .map((p: Proposal, i: number) => {
                         return (
-                            <NounProfileVoteRow proposal={p} nounVoted={proposalsVotedOn.includes(p.id)} nounSupported={supportedProposals.includes(p.id)} />
+                            <NounProfileVoteRow proposal={p} nounVoted={proposalsVotedOn.includes(p.id)} nounSupported={supportedProposals.includes(p.id)} nounId={nounId} />
                         );
                     })
                 ) : (

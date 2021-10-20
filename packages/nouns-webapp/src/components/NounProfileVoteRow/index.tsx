@@ -10,11 +10,14 @@ import _VoteFailedIcon from '../../assets/icons/VoteFailed.svg';
 import classes from "./NounProfileVoteRow.module.css";
 
 import { Link } from 'react-router-dom';
+import { useQuery } from "@apollo/client";
+import { highestNounIdMintedAtProposalTime } from "../../wrappers/subgraph";
 
 interface NounProfileVoteRowProps {
     proposal: Proposal,
     nounVoted: boolean, 
-    nounSupported: boolean
+    nounSupported: boolean,
+    nounId: number
 }
 
 const selectIconForNounVoteActivityRow = (nounVoted: boolean, nounSupported: boolean) => {
@@ -76,7 +79,20 @@ const selectIconForNounVoteActivityRow = (nounVoted: boolean, nounSupported: boo
 
 const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
 
-    const { proposal, nounVoted, nounSupported } = props;
+    const { proposal, nounVoted, nounSupported , nounId } = props;
+
+    const { loading, error, data } = useQuery(highestNounIdMintedAtProposalTime(proposal.startBlock));
+
+    if (loading || error) {
+        return <></>;
+    }
+
+    // In this case, noun was not yet minted at time of proposal
+    if (data && data.auctions.length >0 && nounId > data.auctions[0].id) {
+        return <></>;
+    }
+
+    console.log(proposal);
 
     return (
         <tr>
