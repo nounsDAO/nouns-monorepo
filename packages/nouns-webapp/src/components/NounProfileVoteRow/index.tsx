@@ -74,7 +74,7 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
     if (proposal.id ===  "1") {
       return (
         <div className={classes.nullStateCopy}> 
-          There have been no proposals since this Noun was minted. Check back soon!
+        This Noun has no activity yet. Check back soon!
         </div>
       );
     }

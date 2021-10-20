@@ -4,6 +4,7 @@
 
 .voteInfoContainer {
   display: inline-block;
+  margin-top: 4px;
 }
 
 .voteProposalStatus {
