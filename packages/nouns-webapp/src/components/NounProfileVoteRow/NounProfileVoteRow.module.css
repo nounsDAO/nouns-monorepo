@@ -20,3 +20,7 @@
   font-family: 'PT Root UI Bold';
   margin-left: 5px;
 }
+
+.nullStateCopy {
+  opacity: 50%;
+}

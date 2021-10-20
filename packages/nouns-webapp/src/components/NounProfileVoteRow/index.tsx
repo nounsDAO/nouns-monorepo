@@ -70,10 +70,8 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
   if (data && data.auctions.length > 0 && nounId > data.auctions[0].id) {
     if (proposal.id ===  "1") {
       return (
-        <div style={{
-          textAlign: 'center'
-        }}>
-          There have been no proposals since this noun was minted. Check back soon!
+        <div className={classes.nullStateCopy}> 
+          There have been no proposals since this Noun was minted. Check back soon!
         </div>
       );
     }
