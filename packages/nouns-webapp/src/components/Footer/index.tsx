@@ -16,7 +16,7 @@ const Footer = () => {
   const location = useLocation();
   const useGreyBg = useAppSelector(state => state.application.useGreyBackground);
   const bgColor =
-    location.pathname === '/' || location.pathname.startsWith('') || location.pathname.startsWith('/auction/')
+    location.pathname === '/' || location.pathname.startsWith('/auction/') || location.pathname.startsWith('/noun/')
       ? 'white'
       : useGreyBg
       ? '#d5d7e1'
