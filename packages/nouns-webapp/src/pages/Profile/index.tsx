@@ -2,7 +2,7 @@ import { BigNumber } from "ethers";
 import React from "react";
 import { Row, Col, Container } from "react-bootstrap";
 import { StandaloneNounWithSeed } from "../../components/StandaloneNoun";
-import { useAppDispatch } from "../../hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import { setUseGreyBackground } from '../../state/slices/application';
 import { INounSeed } from "../../wrappers/nounToken";
 
@@ -32,17 +32,21 @@ const ProfilePage: React.FC<ProfilePageProps> = props => {
         </div>
      );
 
+    const useGreyBg = useAppSelector(state => state.application.useGreyBackground);
+
     return (
         <div className={classes.nounProfileWrapper} >
-            <Container fluid="lg">
-                <Row>
-                    <Col lg={{ span: 6 }} className={classes.nounProfilePictureCol}>
-                        {nounContent}
-                    </Col>
-                    <Col lg={{ span: 6 }} className={classes.nounProfileInfo}> 
-                      <NounInfoCard nounId={nounId} /> 
-                    </Col>
-                </Row>
+            <Container fluid={true} className={useGreyBg ? classes.greyBg : classes.beigeBg}>
+                <Container fluid="lg">
+                    <Row>
+                        <Col lg={{ span: 6 }} className={classes.nounProfilePictureCol}>
+                            {nounContent}
+                        </Col>
+                        <Col lg={{ span: 6 }} className={classes.nounProfileInfo}> 
+                        <NounInfoCard nounId={nounId} /> 
+                        </Col>
+                    </Row>
+                </Container>
             </Container>
             <ProfileActivityFeed nounId={nounId} />
         </div>
