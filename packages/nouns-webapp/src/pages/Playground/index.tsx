@@ -8,13 +8,16 @@ import Noun from '../../components/Noun';
 
 interface Trait {
   title: string;
-  count: number;
+  traitNames: string[];
 }
+
+const parseTraitName = (partName: string): string => partName.substring(partName.indexOf('-') + 1);
 
 const Playground = () => {
   const [nounSvgs, setNounSvgs] = useState<string[]>();
   const [traits, setTraits] = useState<Trait[]>();
   const [modSeed, setModSeed] = useState<{ [key: string]: number }>();
+  const [initLoad, setInitLoad] = useState<boolean>(true);
 
   const generateNounSvg = React.useCallback(
     (amount: number = 1) => {
@@ -32,10 +35,10 @@ const Playground = () => {
     [modSeed],
   );
 
-  const attributeButtonHandler = (trait: string, attributeNum: number) => {
+  const traitButtonHandler = (trait: string, traitIndex: number) => {
     setModSeed(prev => {
-      // -1 attributeNum = random
-      if (attributeNum < 0) {
+      // -1 traitIndex = random
+      if (traitIndex < 0) {
         let state = { ...prev };
         delete state[trait];
         return state;
@@ -43,41 +46,44 @@ const Playground = () => {
 
       return {
         ...prev,
-        [trait]: attributeNum,
+        [trait]: traitIndex,
       };
     });
   };
 
   useEffect(() => {
-    const traitNames = ['background', 'body', 'accessory', 'head', 'glasses'];
-    const traitCounts = [
-      ImageData.bgcolors.length,
+    const traitTitles = ['background', 'body', 'accessory', 'head', 'glasses'];
+    const traitNames = [
+      ['cool', 'warm'],
       ...Object.values(ImageData.images).map(i => {
-        return i.length;
+        return i.map(imageData => imageData.filename);
       }),
     ];
     setTraits(
-      traitNames.map((value, index) => {
+      traitTitles.map((value, index) => {
         return {
           title: value,
-          count: traitCounts[index],
+          traitNames: traitNames[index],
         };
       }),
     );
 
-    generateNounSvg(8);
-  }, [generateNounSvg]);
+    if (initLoad) {
+      generateNounSvg(8);
+      setInitLoad(false);
+    }
+  }, [generateNounSvg, initLoad]);
 
-  const attributeOptionButtons = (trait: Trait) => {
-    return Array.from(Array(trait.count + 1)).map((_, index) => {
+  const traitOptionButtons = (trait: Trait) => {
+    return Array.from(Array(trait.traitNames.length + 1)).map((_, index) => {
       return (
         <Dropdown.Item
           key={index}
           onClick={() => {
-            attributeButtonHandler(trait.title, index - 1);
+            traitButtonHandler(trait.title, index - 1);
           }}
         >
-          {index === 0 ? `Random` : `Option #${index}`}
+          {index === 0 ? `Random` : parseTraitName(trait.traitNames[index - 1])}
         </Dropdown.Item>
       );
     });
@@ -114,7 +120,7 @@ const Playground = () => {
                   title={trait.title}
                   className={classes.dropdownBtn}
                 >
-                  {attributeOptionButtons({ title: trait.title, count: trait.count })}
+                  {traitOptionButtons({ title: trait.title, traitNames: trait.traitNames })}
                 </DropdownButton>
               );
             })}
