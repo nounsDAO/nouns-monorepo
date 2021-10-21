@@ -15,6 +15,7 @@ Every day, one NFT will be auctioned.
 // AuctionHouse.sol source code Copyright Zora licensed under the GPL-3.0 license.
  
 
+
 pragma solidity ^0.8.6;
 
 import { PausableUpgradeable } from '@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol';
@@ -150,7 +151,7 @@ contract TellerAuctionHouse is ITellerAuctionHouse, PausableUpgradeable, Reentra
      */
     function unpause() external override onlyOwner {
         _unpause();
-
+    
         if (auction.startTime == 0 || auction.settled) {
             _createAuction();
         }

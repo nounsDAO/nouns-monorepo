@@ -49,9 +49,10 @@ describe('TellerAuctionHouse', () => {
 
     weth = await deployWeth(deployer);
     
-    tellerToken = await deployTellerToken(deployer, deployer.address);
     
     tellerTreasury = await deployTellerTreasury(deployer)
+    tellerToken = await deployTellerToken(deployer, deployer.address);
+    
     tellerAuctionHouse = await deploy(deployer);
     
 
@@ -59,8 +60,8 @@ describe('TellerAuctionHouse', () => {
 
     //await populateDescriptor(TokenDescriptorFactory.connect(descriptor, deployer));
 
-   // await tellerToken.setMinter(tellerAuctionHouse.address);
-   await tellerTreasury.connect(deployer).setAuctionHouse( tellerAuctionHouse.address );
+   await tellerToken.setMinter(tellerAuctionHouse.address);
+   await tellerTreasury.setAuctionHouse( tellerAuctionHouse.address );
   });
 
   beforeEach(async () => {
@@ -84,8 +85,14 @@ describe('TellerAuctionHouse', () => {
     await expect(tx).to.be.revertedWith('Initializable: contract is already initialized');
   });
 
+  it('auctionhouse owner should be the deployer', async () => {
+    const ownerAddress = await tellerAuctionHouse.owner()
+     
+    expect(ownerAddress).to.equal(deployer.address)
+  });
+
   it('should allow the treasuryDAO to unpause the contract and create the first auction', async () => {
-    const tx = await tellerAuctionHouse.unpause();
+    const tx = await tellerAuctionHouse.connect(deployer).unpause();
     await tx.wait();
 
     const auction = await tellerAuctionHouse.auction();

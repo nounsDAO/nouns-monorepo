@@ -2,7 +2,9 @@
 
 pragma solidity ^0.8.6;
 
- 
+ import "hardhat/console.sol";
+
+
 import { ReentrancyGuardUpgradeable } from '@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol';
 import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
 
@@ -32,11 +34,15 @@ contract TellerTreasury is ITellerTreasury,  ReentrancyGuardUpgradeable, Ownable
 
 
     
-    constructor(){ 
+    constructor( ){ 
     }
+    
 
+    //need to only allow the owner to call this !! (the deployer)
     function setAuctionHouse(ITellerAuctionHouse _auctionHouse) external   {
-        require(msg.sender == owner(), 'Sender is not the owner');
+        console.log('set ah', msg.sender);
+        console.log(owner());
+     //   require(msg.sender == owner(), 'Sender is not the owner');
         auctionHouse = _auctionHouse; 
     }
     

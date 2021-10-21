@@ -76,7 +76,7 @@ export const deployTellerToken = async (
 export const deployTellerTreasury = async (
   deployer?: SignerWithAddress
   ): Promise<TellerTreasury> => {
-  //const signer = deployer || (await getSigners()).deployer;
+   const signer = deployer || (await getSigners()).deployer;
   const factory = new TellerTreasuryFactory(deployer || (await await getSigners()).deployer);
 
   return factory.deploy(
