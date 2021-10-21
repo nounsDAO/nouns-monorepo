@@ -21,7 +21,7 @@ const NounInfoCard: React.FC<NounInfoCardProps> = props => {
 
   const etherscanBaseURL =
     'https://etherscan.io/address/0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03';
-  const bidHistoryButtonClickHandler = () => history.push(`/noun/${nounId}`);
+  const bidHistoryButtonClickHandler = () => history.push(`/auction/${nounId}`);
   // eslint-disable-next-line no-restricted-globals
   const etherscanButtonClickHandler = () => (location.href = `${etherscanBaseURL}/${nounId}`);
 

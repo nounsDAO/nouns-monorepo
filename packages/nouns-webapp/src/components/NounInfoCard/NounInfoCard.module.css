@@ -7,7 +7,8 @@
 
 @media only screen and (max-width: 600px) {
   .nounInfoHeader {
-    padding-top: 1rem;
+    padding-top: 1.5rem;
+    margin-bottom: 0;
   }
 }
 
