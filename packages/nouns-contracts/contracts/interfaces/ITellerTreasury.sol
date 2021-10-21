@@ -11,6 +11,6 @@ interface ITellerTreasury {
  
     event PersonalEscrowAmountUpdated(uint256 indexed tokenId,uint256 amount);
  
-    function setPersonalEscrowAmount(uint256 tokenId, uint256 amount) external;
+   // function setPersonalEscrowAmount(uint256 tokenId, uint256 amount) external;
  
 }

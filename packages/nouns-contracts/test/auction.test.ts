@@ -47,16 +47,20 @@ describe('TellerAuctionHouse', () => {
   before(async () => {
     [deployer,  bidderA, bidderB] = await ethers.getSigners();
 
-    tellerTreasury = await deployTellerTreasury(deployer)
-    tellerToken = await deployTellerToken(deployer, tellerTreasury.address, deployer.address);
     weth = await deployWeth(deployer);
+    
+    tellerToken = await deployTellerToken(deployer, deployer.address);
+    
+    tellerTreasury = await deployTellerTreasury(deployer)
     tellerAuctionHouse = await deploy(deployer);
+    
 
     //const descriptor = await tellerToken.descriptor();
 
     //await populateDescriptor(TokenDescriptorFactory.connect(descriptor, deployer));
 
-    await tellerToken.setMinter(tellerAuctionHouse.address);
+   // await tellerToken.setMinter(tellerAuctionHouse.address);
+   await tellerTreasury.connect(deployer).setAuctionHouse( tellerAuctionHouse.address );
   });
 
   beforeEach(async () => {

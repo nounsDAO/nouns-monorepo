@@ -21,7 +21,7 @@ describe('NounsToken', () => {
     [deployer] = await ethers.getSigners();
 
     tellerTreasury = await deployTellerTreasury(deployer);
-    tellerToken = await deployTellerToken(deployer, tellerTreasury.address, deployer.address);
+    tellerToken = await deployTellerToken(deployer,  deployer.address);
 
     const descriptor = await tellerToken.descriptor();
 
@@ -103,7 +103,7 @@ describe('NounsToken', () => {
   });
 
   it('should revert on non-minter mint', async () => {
-    const account0AsNounErc721Account = tellerToken.connect(deployer);
+    const account0AsNounErc721Account = tellerToken.connect(tellerTreasury.address);
     await expect(account0AsNounErc721Account.mint()).to.be.reverted;
   });
 

@@ -15,6 +15,7 @@ import {
 import ImageData from '../files/image-data.json';
 import { Block } from '@ethersproject/abstract-provider';
 import { chunkArray } from '../utils';
+import { Signer } from 'crypto';
 
 export type TestSigners = {
   deployer: SignerWithAddress;
@@ -54,11 +55,9 @@ export const deployTokenDescriptor = async (
 };*/
 
 export const deployTellerToken = async (
-  deployer?: SignerWithAddress,
-  noundersDAO?: string,
+  deployer?: SignerWithAddress, 
   minter?: string,
-  descriptor?: string,
-  seeder?: string,
+  descriptor?: string, 
   proxyRegistryAddress?: string,
 ): Promise<TellerToken> => {
   const signer = deployer || (await getSigners()).deployer;
@@ -74,10 +73,15 @@ export const deployTellerToken = async (
 
 
 
-export const deployTellerTreasury = async (deployer?: SignerWithAddress): Promise<TellerTreasury> => {
+export const deployTellerTreasury = async (
+  deployer?: SignerWithAddress
+  ): Promise<TellerTreasury> => {
+  //const signer = deployer || (await getSigners()).deployer;
   const factory = new TellerTreasuryFactory(deployer || (await await getSigners()).deployer);
 
-  return factory.deploy();
+  return factory.deploy(
+     
+  );
 };
 
 export const deployWeth = async (deployer?: SignerWithAddress): Promise<Weth> => {
