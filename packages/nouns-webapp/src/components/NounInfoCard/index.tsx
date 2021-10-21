@@ -33,7 +33,7 @@ const NounInfoCard: React.FC<NounInfoCardProps> = props => {
           <h2>Noun {nounId}</h2>
         </div>
       </Row>
-      <div className={classes.nounInfo}>
+      <div>
         <Row className={classes.nounInfoRow}>
           <NounInfoRowBirthday nounId={nounId} />
         </Row>
