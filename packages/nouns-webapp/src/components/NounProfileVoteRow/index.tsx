@@ -12,6 +12,7 @@ import classes from './NounProfileVoteRow.module.css';
 import { useHistory } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { highestNounIdMintedAtProposalTime } from '../../wrappers/subgraph';
+import VoteStatusPill from '../VoteStatusPill';
 
 interface NounProfileVoteRowProps {
   proposal: Proposal;
@@ -30,8 +31,11 @@ const selectIconForNounVoteActivityRow = (nounVoted: boolean, nounSupported: boo
   }
 };
 
-const selectVotingInfoText = (nounVoted: boolean, nounSupported: boolean) => {
+const selectVotingInfoText = (nounVoted: boolean, nounSupported: boolean, proposal: Proposal) => {
   if (!nounVoted) {
+    if (proposal.status === ProposalState.PENDING || proposal.status === ProposalState.ACTIVE) {
+      return 'Has not yet voted on'
+    }
     return 'Was absent for';
   } else if (nounSupported) {
     return 'Voted for';
@@ -43,21 +47,17 @@ const selectVotingInfoText = (nounVoted: boolean, nounSupported: boolean) => {
 const selectProposalStatusIcon = (proposal: Proposal) => {
   switch (proposal.status) {
     case ProposalState.SUCCEEDED:
-      return <Image src={_VotePassedIcon} />;
+      return <VoteStatusPill status={'success'} />;
     case ProposalState.EXECUTED:
-      return <Image src={_VotePassedIcon} />;
+      return <VoteStatusPill status={'success'} />;
     case ProposalState.QUEUED:
-      return <Image src={_VotePassedIcon} />;
+      return <VoteStatusPill status={'success'} />;
     case ProposalState.DEFEATED:
-      return <Image src={_VoteFailedIcon} />;
+      return <VoteStatusPill status={'failure'} />;
     case ProposalState.VETOED:
-      return <Image src={_VoteFailedIcon} />;
+      return <VoteStatusPill status={'failure'} />;
     default:
-      return (<div className={classes.nounButton}>
-        <div className={classes.nounButtonContents}>
-          Pending
-        </div>
-      </div>);
+      return <VoteStatusPill status={'pending'} />;
   }
 };
 
@@ -88,17 +88,22 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
   return (
     <tr onClick={proposalOnClickHandler} className={classes.voteInfoRow}>
       <td>
+        <span>
+
           {selectIconForNounVoteActivityRow(nounVoted, nounSupported)}
-      </td>
-      <td>
+        </span>
         <div className={classes.voteInfoContainer}>
-          {selectVotingInfoText(nounVoted, nounSupported)}
+          {selectVotingInfoText(nounVoted, nounSupported, proposal)}
           <span className={classes.proposalLink}>
             {proposal.title}
           </span>
         </div>
       </td>
-      <td className={classes.voteProposalStatus}>{selectProposalStatusIcon(proposal)}</td>
+      <td className={classes.voteStatusWrapper}>
+        <div className={classes.voteProposalStatus}>
+          {selectProposalStatusIcon(proposal)}
+        </div>
+        </td>
     </tr>
   );
 };
