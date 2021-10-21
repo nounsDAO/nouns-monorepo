@@ -2,8 +2,9 @@ import chai from 'chai';
 import { ethers } from 'hardhat';
 import { BigNumber as EthersBN, constants } from 'ethers';
 import { solidity } from 'ethereum-waffle';
-import {  TellerToken } from '../typechain';
-import { deployNounsToken, populateDescriptor } from './utils';
+import {  TellerToken, TellerTreasury } from '../typechain';
+import { deployTellerToken, deployWeth, deployTellerTreasury } from './utils';
+
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 chai.use(solidity);
@@ -11,13 +12,16 @@ const { expect } = chai;
 
 describe('NounsToken', () => {
   let tellerToken: TellerToken;
+  let tellerTreasury: TellerTreasury;
   let deployer: SignerWithAddress;
-  let TreasuryDAO: SignerWithAddress;
+  //let TreasuryDAO: SignerWithAddress;
   let snapshotId: number;
 
   before(async () => {
-    [deployer, TreasuryDAO] = await ethers.getSigners();
-    tellerToken = await deployNounsToken(deployer, TreasuryDAO.address, deployer.address);
+    [deployer] = await ethers.getSigners();
+
+    tellerTreasury = await deployTellerTreasury(deployer);
+    tellerToken = await deployTellerToken(deployer, tellerTreasury.address, deployer.address);
 
     const descriptor = await tellerToken.descriptor();
 
@@ -99,7 +103,7 @@ describe('NounsToken', () => {
   });
 
   it('should revert on non-minter mint', async () => {
-    const account0AsNounErc721Account = tellerToken.connect(TreasuryDAO);
+    const account0AsNounErc721Account = tellerToken.connect(deployer);
     await expect(account0AsNounErc721Account.mint()).to.be.reverted;
   });
 

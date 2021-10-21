@@ -64,8 +64,7 @@ export const deployTellerToken = async (
   const signer = deployer || (await getSigners()).deployer;
   const factory = new TellerTokenFactory(signer);
 
-  return factory.deploy(
-    noundersDAO || signer.address,
+  return factory.deploy( 
     minter || signer.address,
     descriptor || (await deployTokenDescriptor(signer)).address,
     //seeder || (await deployNounsSeeder(signer)).address,
