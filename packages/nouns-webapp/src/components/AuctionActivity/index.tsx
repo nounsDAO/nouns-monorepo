@@ -18,6 +18,7 @@ import BidHistoryBtn from '../BidHistoryBtn';
 import StandaloneNoun from '../StandaloneNoun';
 import config from '../../config';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
+import { Link } from 'react-router-dom';
 
 const openEtherscanBidHistory = () => {
   const url = buildEtherscanAddressLink(config.auctionProxyAddress);
@@ -56,7 +57,9 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
 
   const bidHistoryTitle = (
     <h1>
-      Noun {auction && auction.nounId.toString()}
+      <Link to={`/noun/${auction ? auction.nounId : ""}`}>
+        Noun {auction && auction.nounId.toString()}
+      </Link>
       <br /> Bid History
     </h1>
   );
