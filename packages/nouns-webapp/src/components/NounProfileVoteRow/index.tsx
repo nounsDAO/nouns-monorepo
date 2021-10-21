@@ -94,8 +94,8 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
 
   return (
     <tr onClick={proposalOnClickHandler} className={classes.voteInfoRow}>
-      <td>
-        <span>{selectIconForNounVoteActivityRow(nounVoted, nounSupported, proposal)}</span>
+      <td className={classes.voteIcon}>
+        {selectIconForNounVoteActivityRow(nounVoted, nounSupported, proposal)}
       </td>
       <td>
         <div className={classes.voteInfoContainer}>
