@@ -5,8 +5,6 @@ import _NoVoteIcon from '../../assets/icons/NoVote.svg';
 import _AbsentVoteIcon from '../../assets/icons/AbsentVote.svg';
 import { ProposalState } from '../../wrappers/nounsDao';
 
-import _VotePassedIcon from '../../assets/icons/VotePassed.svg';
-import _VoteFailedIcon from '../../assets/icons/VoteFailed.svg';
 import classes from './NounProfileVoteRow.module.css';
 
 import { useHistory } from 'react-router-dom';
@@ -19,6 +17,7 @@ interface NounProfileVoteRowProps {
   nounVoted: boolean;
   nounSupported: boolean;
   nounId: number;
+  latestProposalId: number;
 }
 
 const selectIconForNounVoteActivityRow = (nounVoted: boolean, nounSupported: boolean) => {
@@ -62,8 +61,9 @@ const selectProposalStatusIcon = (proposal: Proposal) => {
 };
 
 const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
-  const { proposal, nounVoted, nounSupported, nounId } = props;
+  const { proposal, nounVoted, nounSupported, nounId, latestProposalId } = props;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { loading, error, data } = useQuery(highestNounIdMintedAtProposalTime(proposal.startBlock));
   const history = useHistory();
 
@@ -73,13 +73,13 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
 
   // In this case, noun was not yet minted at time of proposal
   if (data && data.auctions.length > 0 && nounId > data.auctions[0].id) {
-    // if (proposal.id ===  "1") {
-    //   return (
-    //     <div className={classes.nullStateCopy}> 
-    //     This Noun has no activity yet. Check back soon!
-    //     </div>
-    //   );
-    // }
+    if (proposal.id === latestProposalId.toString()) {
+      return (
+        <tr className={classes.nullStateCopy}>
+          This Noun has no activity yet. Check back soon!
+        </tr>
+      );
+    }
     return <></>;
   }
 

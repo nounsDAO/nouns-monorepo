@@ -37,10 +37,13 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
   const proposalsVotedOn = data.noun.votes
     .slice(0)
     .map((h: NounVoteHistory, i: number) => h.proposal.id);
+
   const supportedProposals = data.noun.votes
     .slice(0)
     .filter((h: NounVoteHistory, i: number) => h.support)
     .map((h: NounVoteHistory, i: number) => h.proposal.id);
+
+  const latestProposalId = proposals?.length;
 
   return (
     <Section bgColor="white" fullWidth={false}>
@@ -61,6 +64,7 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
                       proposal={p}
                       nounVoted={proposalsVotedOn.includes(p.id)}
                       nounSupported={supportedProposals.includes(p.id)}
+                      latestProposalId={latestProposalId}
                       nounId={nounId}
                     />
                   );
