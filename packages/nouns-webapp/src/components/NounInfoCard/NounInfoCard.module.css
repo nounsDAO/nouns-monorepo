@@ -5,6 +5,12 @@
   font-family: 'Londrina Solid';
 }
 
+@media only screen and (max-width: 600px) {
+  .nounInfoHeader {
+    padding-top: 1rem;
+  }
+}
+
 .nounInfoHeader h2 {
   font-size: 56px;
   margin-bottom: 18px;
