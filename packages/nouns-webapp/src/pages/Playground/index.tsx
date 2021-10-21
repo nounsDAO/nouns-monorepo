@@ -16,16 +16,21 @@ const Playground = () => {
   const [traits, setTraits] = useState<Trait[]>();
   const [modSeed, setModSeed] = useState<{ [key: string]: number }>();
 
-  const generateNounSvg = React.useCallback(() => {
-    const seed = { ...getRandomNounSeed(), ...modSeed };
-    const { parts, background } = getNounData(seed);
-    const image = `data:image/svg+xml;base64,${btoa(
-      buildSVG(parts, ImageData.palette, background),
-    )}`;
-    setNounSvgs(prev => {
-      return prev ? [image, ...prev] : [image];
-    });
-  }, [modSeed]);
+  const generateNounSvg = React.useCallback(
+    (amount: number = 1) => {
+      for (let i = 0; i < amount; i++) {
+        const seed = { ...getRandomNounSeed(), ...modSeed };
+        const { parts, background } = getNounData(seed);
+        const image = `data:image/svg+xml;base64,${btoa(
+          buildSVG(parts, ImageData.palette, background),
+        )}`;
+        setNounSvgs(prev => {
+          return prev ? [image, ...prev] : [image];
+        });
+      }
+    },
+    [modSeed],
+  );
 
   const attributeButtonHandler = (trait: string, attributeNum: number) => {
     setModSeed(prev => {
@@ -60,7 +65,7 @@ const Playground = () => {
       }),
     );
 
-    generateNounSvg();
+    generateNounSvg(8);
   }, [generateNounSvg]);
 
   const attributeOptionButtons = (trait: Trait) => {
@@ -92,7 +97,12 @@ const Playground = () => {
         </Col>
 
         <Col lg={3}>
-          <Button onClick={generateNounSvg} className={classes.generateBtn}>
+          <Button
+            onClick={() => {
+              generateNounSvg();
+            }}
+            className={classes.generateBtn}
+          >
             GENERATE NOUNS
           </Button>
           {traits &&
