@@ -1,5 +1,6 @@
 .voteIcon {
   width: 41px;
+  margin-right: 5px;
 }
 
 .voteInfoContainer {
@@ -11,7 +12,7 @@
   text-align: right;
 }
 
-.proposalLink {
+.proposalTitle {
   text-decoration: none;
   color: black;
   font-family: 'PT Root UI Bold';

@@ -100,7 +100,7 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
       <td>
         <div className={classes.voteInfoContainer}>
           {selectVotingInfoText(nounVoted, nounSupported, proposal)}
-          <span className={classes.proposalLink}>{proposal.title}</span>
+          <span className={classes.proposalTitle}>{proposal.title}</span>
         </div>
       </td>
       <td className={classes.voteStatusWrapper}>
