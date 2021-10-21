@@ -53,11 +53,13 @@ const selectProposalStatusIcon = (proposal: Proposal) => {
     case ProposalState.VETOED:
       return <Image src={_VoteFailedIcon} />;
     default:
-      return <></>;
+      return (<div className={classes.nounButton}>
+        <div className={classes.nounButtonContents}>
+          Pending
+        </div>
+      </div>);
   }
 };
-
-// const truncateProposalText
 
 const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
   const { proposal, nounVoted, nounSupported, nounId } = props;
@@ -65,19 +67,19 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
   const { loading, error, data } = useQuery(highestNounIdMintedAtProposalTime(proposal.startBlock));
   const history = useHistory();
 
-  if (loading || error) {
+  if (loading) {
     return <></>;
   }
 
   // In this case, noun was not yet minted at time of proposal
   if (data && data.auctions.length > 0 && nounId > data.auctions[0].id) {
-    if (proposal.id ===  "1") {
-      return (
-        <div className={classes.nullStateCopy}> 
-        This Noun has no activity yet. Check back soon!
-        </div>
-      );
-    }
+    // if (proposal.id ===  "1") {
+    //   return (
+    //     <div className={classes.nullStateCopy}> 
+    //     This Noun has no activity yet. Check back soon!
+    //     </div>
+    //   );
+    // }
     return <></>;
   }
 
