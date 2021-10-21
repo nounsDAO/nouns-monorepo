@@ -6,11 +6,11 @@ import { ethers, upgrades } from 'hardhat';
 import {
   MaliciousBidderFactory,
   TellerAuctionHouse,
-  TokenDescriptorFactory,
+  TellerTreasury,
   TellerToken,
   Weth,
 } from '../typechain';
-import { deployNounsToken, deployWeth, populateDescriptor } from './utils';
+import { deployTellerToken, deployWeth, deployTellerTreasury } from './utils';
 
 chai.use(solidity);
 const { expect } = chai;
@@ -18,9 +18,10 @@ const { expect } = chai;
 describe('TellerAuctionHouse', () => {
   let tellerAuctionHouse: TellerAuctionHouse;
   let tellerToken: TellerToken;
+  let tellerTreasury: TellerTreasury;
   let weth: Weth;
   let deployer: SignerWithAddress;
-  let treasuryDAO: SignerWithAddress;
+  //let treasuryDAO: SignerWithAddress;
   let bidderA: SignerWithAddress;
   let bidderB: SignerWithAddress;
   let snapshotId: number;
@@ -34,6 +35,7 @@ describe('TellerAuctionHouse', () => {
     const auctionHouseFactory = await ethers.getContractFactory('TellerAuctionHouse', deployer);
     return upgrades.deployProxy(auctionHouseFactory, [
       tellerToken.address,
+      tellerTreasury.address,
       weth.address,
       TIME_BUFFER,
       RESERVE_PRICE,
@@ -43,9 +45,10 @@ describe('TellerAuctionHouse', () => {
   }
 
   before(async () => {
-    [deployer, treasuryDAO, bidderA, bidderB] = await ethers.getSigners();
+    [deployer,  bidderA, bidderB] = await ethers.getSigners();
 
-    tellerToken = await deployNounsToken(deployer, treasuryDAO.address, deployer.address);
+    tellerTreasury = await deployTellerTreasury(deployer)
+    tellerToken = await deployTellerToken(deployer, tellerTreasury.address, deployer.address);
     weth = await deployWeth(deployer);
     tellerAuctionHouse = await deploy(deployer);
 
@@ -67,6 +70,7 @@ describe('TellerAuctionHouse', () => {
   it('should revert if a second initialization is attempted', async () => {
     const tx = tellerAuctionHouse.initialize(
       tellerToken.address,
+      tellerTreasury.address,
       weth.address,
       TIME_BUFFER,
       RESERVE_PRICE,

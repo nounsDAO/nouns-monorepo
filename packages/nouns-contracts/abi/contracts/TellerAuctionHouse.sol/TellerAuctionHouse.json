@@ -255,6 +255,11 @@
         "type": "address"
       },
       {
+        "internalType": "contract ITellerTreasury",
+        "name": "_tellerTreasury",
+        "type": "address"
+      },
+      {
         "internalType": "address",
         "name": "_weth",
         "type": "address"
@@ -410,6 +415,19 @@
     "outputs": [
       {
         "internalType": "contract ITellerToken",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "tellerTreasury",
+    "outputs": [
+      {
+        "internalType": "contract ITellerTreasury",
         "name": "",
         "type": "address"
       }

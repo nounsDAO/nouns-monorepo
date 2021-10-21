@@ -9,6 +9,8 @@ import {
   //NounsSeederFactory,
   Weth,
   WethFactory,
+  TellerTreasury,
+  TellerTreasuryFactory
 } from '../typechain';
 import ImageData from '../files/image-data.json';
 import { Block } from '@ethersproject/abstract-provider';
@@ -51,7 +53,7 @@ export const deployTokenDescriptor = async (
   return factory.deploy();
 };*/
 
-export const deployNounsToken = async (
+export const deployTellerToken = async (
   deployer?: SignerWithAddress,
   noundersDAO?: string,
   minter?: string,
@@ -69,6 +71,14 @@ export const deployNounsToken = async (
     //seeder || (await deployNounsSeeder(signer)).address,
     proxyRegistryAddress || address(0),
   );
+};
+
+
+
+export const deployTellerTreasury = async (deployer?: SignerWithAddress): Promise<TellerTreasury> => {
+  const factory = new TellerTreasuryFactory(deployer || (await await getSigners()).deployer);
+
+  return factory.deploy();
 };
 
 export const deployWeth = async (deployer?: SignerWithAddress): Promise<Weth> => {

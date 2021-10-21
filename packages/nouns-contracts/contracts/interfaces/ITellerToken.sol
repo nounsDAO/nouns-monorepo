@@ -12,9 +12,7 @@ interface ITellerToken is IERC721 {
     event TellerCardCreated(uint256 indexed tokenId);
 
     event TellerCardBurned(uint256 indexed tokenId);
-
-    event TreasuryDAOUpdated(address treasuryDAO);
-
+ 
     event MinterUpdated(address minter);
 
     event MinterLocked();
@@ -22,7 +20,7 @@ interface ITellerToken is IERC721 {
     event DescriptorUpdated(ITokenDescriptor descriptor);
 
     event DescriptorLocked();
-
+ 
     //event SeederUpdated(ITokenSeeder seeder);
 
     //event SeederLocked();
@@ -32,9 +30,7 @@ interface ITellerToken is IERC721 {
     function burn(uint256 tokenId) external;
 
     //function dataURI(uint256 tokenId) external returns (string memory);
-
-    function setTreasuryDAO(address treasuryDAO) external;
-
+  
     function setMinter(address minter) external;
 
     function lockMinter() external;

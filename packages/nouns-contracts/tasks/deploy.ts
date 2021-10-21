@@ -12,6 +12,7 @@ type ContractName =
   | 'TokenDescriptor'
   //| 'NounsSeeder'
   | 'TellerToken'
+  | 'TellerTreasury'
   | 'TellerAuctionHouse'
   | 'TellerAuctionHouseProxyAdmin'
   | 'TellerAuctionHouseProxy'
@@ -72,14 +73,14 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
       },
       //NounsSeeder: {},
       TellerToken: {
-        args: [
-          args.noundersdao,
+        args: [ 
           expectedAuctionHouseProxyAddress,
           () => contracts['TokenDescriptor'].address,
           //() => contracts['NounsSeeder'].address,
           proxyRegistryAddress,
         ],
       },
+      TellerTreasury:{},
       TellerAuctionHouse: {
         waitForConfirmation: true,
       },
@@ -91,6 +92,7 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
           () =>
             new Interface(TellerAuctionHouseABI).encodeFunctionData('initialize', [
               contracts['TellerToken'].address,
+              contracts['TellerTreasury'].address,
               args.weth,
               args.auctionTimeBuffer,
               args.auctionReservePrice,

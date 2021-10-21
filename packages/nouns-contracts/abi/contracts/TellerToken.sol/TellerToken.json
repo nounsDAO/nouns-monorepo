@@ -3,11 +3,6 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_treasuryDAO",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
         "name": "_minter",
         "type": "address"
       },
@@ -231,19 +226,6 @@
       }
     ],
     "name": "Transfer",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "treasuryDAO",
-        "type": "address"
-      }
-    ],
-    "name": "TreasuryDAOUpdated",
     "type": "event"
   },
   {
@@ -826,19 +808,6 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_treasuryDAO",
-        "type": "address"
-      }
-    ],
-    "name": "setTreasuryDAO",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "bytes4",
         "name": "interfaceId",
         "type": "bytes4"
@@ -977,19 +946,6 @@
     "name": "transferOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "treasuryDAO",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {

@@ -23,11 +23,14 @@ import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/O
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { ITellerAuctionHouse } from './interfaces/ITellerAuctionHouse.sol';
 import { ITellerToken } from './interfaces/ITellerToken.sol';
+import { ITellerTreasury } from './interfaces/ITellerTreasury.sol';
 import { IWETH } from './interfaces/IWETH.sol';
 
 contract TellerAuctionHouse is ITellerAuctionHouse, PausableUpgradeable, ReentrancyGuardUpgradeable, OwnableUpgradeable {
     // ERC721 token contract
     ITellerToken public tellerTokens;
+
+    ITellerTreasury public tellerTreasury;
 
     // The address of the WETH contract
     address public weth;
@@ -54,6 +57,7 @@ contract TellerAuctionHouse is ITellerAuctionHouse, PausableUpgradeable, Reentra
      */
     function initialize(
         ITellerToken _tellerTokenContract,
+        ITellerTreasury _tellerTreasury,
         address _weth,
         uint256 _timeBuffer,
         uint256 _reservePrice,
@@ -66,6 +70,7 @@ contract TellerAuctionHouse is ITellerAuctionHouse, PausableUpgradeable, Reentra
 
         _pause();
 
+        tellerTreasury = _tellerTreasury;
         tellerTokens = _tellerTokenContract;
         weth = _weth;
         timeBuffer = _timeBuffer;
@@ -223,11 +228,12 @@ contract TellerAuctionHouse is ITellerAuctionHouse, PausableUpgradeable, Reentra
         if (_auction.bidder == address(0)) {
             tellerTokens.burn(_auction.tokenId);
         } else {
-            tellerTokens.transferFrom(address(this), _auction.bidder, _auction.tokenId);
+            tellerTokens.transferFrom(address(this), _auction.bidder, _auction.tokenId);            
         }
 
         if (_auction.amount > 0) {
-            _safeTransferETHWithFallback(owner(), _auction.amount);
+            _safeTransferETHWithFallback(address(tellerTreasury), _auction.amount);
+            tellerTreasury.setPersonalEscrowAmount(_auction.tokenId, _auction.amount);
         }
 
         emit AuctionSettled(_auction.tokenId, _auction.bidder, _auction.amount);

@@ -9,6 +9,7 @@ type ContractName =
   | 'TokenDescriptor'
   //| 'NounsSeeder'
   | 'TellerToken'
+  | 'TellerTreasury'
   | 'TellerAuctionHouse'
   | 'TellerAuctionHouseProxyAdmin'
   | 'TellerAuctionHouseProxy'
@@ -71,14 +72,14 @@ task('deploy-local', 'Deploy contracts to hardhat')
       },
       //NounsSeeder: {},
       TellerToken: {
-        args: [
-          args.noundersdao || deployer.address,
+        args: [ 
           expectedAuctionHouseProxyAddress,
           () => contracts['TokenDescriptor'].instance?.address,
           //() => contracts['NounsSeeder'].instance?.address,
           proxyRegistryAddress,
         ],
       },
+      TellerTreasury:{},
       TellerAuctionHouse: {
         waitForConfirmation: true,
       },
@@ -90,6 +91,7 @@ task('deploy-local', 'Deploy contracts to hardhat')
           () =>
             new Interface(NounsAuctionHouseABI).encodeFunctionData('initialize', [
               contracts['TellerToken'].instance?.address,
+              contracts['TellerTreasury'].instance?.address,
               contracts['WETH'].instance?.address,
               args.auctionTimeBuffer,
               args.auctionReservePrice,

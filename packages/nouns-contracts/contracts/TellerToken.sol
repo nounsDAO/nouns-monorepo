@@ -16,9 +16,7 @@ import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import { IProxyRegistry } from './external/opensea/IProxyRegistry.sol';
 
 contract TellerToken is ITellerToken, Ownable, ERC721Checkpointable {
-    // The treasury DAO address (creators org)
-    address public treasuryDAO;
-
+    
     // IPFS content hash of contract-level metadata
     string private _contractURIHash = 'QmZi1n79FqWt2tTLwCqiy6nLM6xLGRsEPQ5JmReJQKNNzX';
 
@@ -75,13 +73,7 @@ contract TellerToken is ITellerToken, Ownable, ERC721Checkpointable {
         _;
     }*/
 
-    /**
-     * @notice Require that the sender is the treasury DAO.
-     */
-    modifier onlyTreasuryDAO() {
-        require(msg.sender == treasuryDAO, 'Sender is not the treasury DAO');
-        _;
-    }
+   
 
     /**
      * @notice Require that the sender is the minter.
@@ -92,13 +84,13 @@ contract TellerToken is ITellerToken, Ownable, ERC721Checkpointable {
     }
 
     constructor(
-        address _treasuryDAO,
+        
         address _minter,
         ITokenDescriptor _descriptor,
         //ITokenSeeder _seeder,
         IProxyRegistry _proxyRegistry
     ) ERC721('TellerCard', 'TCARD') {
-        treasuryDAO = _treasuryDAO;
+         
         minter = _minter;
         descriptor = _descriptor;
         //seeder = _seeder;
@@ -158,17 +150,8 @@ contract TellerToken is ITellerToken, Ownable, ERC721Checkpointable {
         require(_exists(tokenId), 'TellerToken: URI query for nonexistent token');
         return descriptor.tokenURI(tokenId);
     }
-
-   
-    /**
-     * @notice Set the treasury DAO.
-     * @dev Only callable by the treasury DAO when not locked.
-     */
-    function setTreasuryDAO(address _treasuryDAO) external override onlyTreasuryDAO {
-        treasuryDAO = _treasuryDAO;
-
-        emit TreasuryDAOUpdated(_treasuryDAO);
-    }
+ 
+    
 
     /**
      * @notice Set the token minter.
