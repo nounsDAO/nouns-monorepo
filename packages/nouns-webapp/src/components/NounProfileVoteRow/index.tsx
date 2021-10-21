@@ -39,9 +39,9 @@ const selectIconForNounVoteActivityRow = (nounVoted: boolean, nounSupported: boo
 const selectVotingInfoText = (nounVoted: boolean, nounSupported: boolean, proposal: Proposal) => {
   if (!nounVoted) {
     if (proposal.status === ProposalState.PENDING || proposal.status === ProposalState.ACTIVE) {
-      return 'This Noun has not yet voted on'
+      return 'Waiting for'
     }
-    return 'Was absent for';
+    return 'Absent for';
   } else if (nounSupported) {
     return 'Voted for';
   } else {
@@ -97,7 +97,9 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
         <span>
           {selectIconForNounVoteActivityRow(nounVoted, nounSupported, proposal)}
         </span>
-        <div className={classes.voteInfoContainer}>
+      </td>
+      <td>
+        <div className={classes.voteInfoContainer}> 
           {selectVotingInfoText(nounVoted, nounSupported, proposal)}
           <span className={classes.proposalLink}>
             {proposal.title}
