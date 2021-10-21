@@ -12,7 +12,6 @@ import { useQuery } from '@apollo/client';
 import { highestNounIdMintedAtProposalTime } from '../../wrappers/subgraph';
 import VoteStatusPill from '../VoteStatusPill';
 
-
 import _PendingVoteIcon from '../../assets/icons/PendingVote.svg';
 
 interface NounProfileVoteRowProps {
@@ -23,12 +22,16 @@ interface NounProfileVoteRowProps {
   latestProposalId: number;
 }
 
-const selectIconForNounVoteActivityRow = (nounVoted: boolean, nounSupported: boolean, proposal: Proposal) => {
+const selectIconForNounVoteActivityRow = (
+  nounVoted: boolean,
+  nounSupported: boolean,
+  proposal: Proposal,
+) => {
   if (!nounVoted) {
     if (proposal.status === ProposalState.PENDING || proposal.status === ProposalState.ACTIVE) {
-        return <Image src={_PendingVoteIcon} className={classes.voteIcon} />;
-      }
-      return <Image src={_AbsentVoteIcon} className={classes.voteIcon} />;
+      return <Image src={_PendingVoteIcon} className={classes.voteIcon} />;
+    }
+    return <Image src={_AbsentVoteIcon} className={classes.voteIcon} />;
   } else if (nounSupported) {
     return <Image src={_YesVoteIcon} className={classes.voteIcon} />;
   } else {
@@ -39,7 +42,7 @@ const selectIconForNounVoteActivityRow = (nounVoted: boolean, nounSupported: boo
 const selectVotingInfoText = (nounVoted: boolean, nounSupported: boolean, proposal: Proposal) => {
   if (!nounVoted) {
     if (proposal.status === ProposalState.PENDING || proposal.status === ProposalState.ACTIVE) {
-      return 'Waiting for'
+      return 'Waiting for';
     }
     return 'Absent for';
   } else if (nounSupported) {
@@ -81,36 +84,28 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
   if (data && data.auctions.length > 0 && nounId > data.auctions[0].id) {
     if (proposal.id === latestProposalId.toString()) {
       return (
-        <tr className={classes.nullStateCopy}>
-          This Noun has no activity yet. Check back soon!
-        </tr>
+        <tr className={classes.nullStateCopy}>This Noun has no activity yet. Check back soon!</tr>
       );
     }
     return <></>;
   }
 
-  const proposalOnClickHandler = () => (history.push(proposal.id ? `/vote/${proposal.id}` : '/vote'));
+  const proposalOnClickHandler = () => history.push(proposal.id ? `/vote/${proposal.id}` : '/vote');
 
   return (
     <tr onClick={proposalOnClickHandler} className={classes.voteInfoRow}>
       <td>
-        <span>
-          {selectIconForNounVoteActivityRow(nounVoted, nounSupported, proposal)}
-        </span>
+        <span>{selectIconForNounVoteActivityRow(nounVoted, nounSupported, proposal)}</span>
       </td>
       <td>
-        <div className={classes.voteInfoContainer}> 
+        <div className={classes.voteInfoContainer}>
           {selectVotingInfoText(nounVoted, nounSupported, proposal)}
-          <span className={classes.proposalLink}>
-            {proposal.title}
-          </span>
+          <span className={classes.proposalLink}>{proposal.title}</span>
         </div>
       </td>
       <td className={classes.voteStatusWrapper}>
-        <div className={classes.voteProposalStatus}>
-          {selectProposalStatusIcon(proposal)}
-        </div>
-        </td>
+        <div className={classes.voteProposalStatus}>{selectProposalStatusIcon(proposal)}</div>
+      </td>
     </tr>
   );
 };
