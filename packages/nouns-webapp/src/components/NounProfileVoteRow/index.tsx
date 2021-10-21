@@ -12,6 +12,9 @@ import { useQuery } from '@apollo/client';
 import { highestNounIdMintedAtProposalTime } from '../../wrappers/subgraph';
 import VoteStatusPill from '../VoteStatusPill';
 
+
+import _PendingVoteIcon from '../../assets/icons/PendingVote.svg';
+
 interface NounProfileVoteRowProps {
   proposal: Proposal;
   nounVoted: boolean;
@@ -20,9 +23,12 @@ interface NounProfileVoteRowProps {
   latestProposalId: number;
 }
 
-const selectIconForNounVoteActivityRow = (nounVoted: boolean, nounSupported: boolean) => {
+const selectIconForNounVoteActivityRow = (nounVoted: boolean, nounSupported: boolean, proposal: Proposal) => {
   if (!nounVoted) {
-    return <Image src={_AbsentVoteIcon} className={classes.voteIcon} />;
+    if (proposal.status === ProposalState.PENDING || proposal.status === ProposalState.ACTIVE) {
+        return <Image src={_PendingVoteIcon} className={classes.voteIcon} />;
+      }
+      return <Image src={_AbsentVoteIcon} className={classes.voteIcon} />;
   } else if (nounSupported) {
     return <Image src={_YesVoteIcon} className={classes.voteIcon} />;
   } else {
@@ -33,7 +39,7 @@ const selectIconForNounVoteActivityRow = (nounVoted: boolean, nounSupported: boo
 const selectVotingInfoText = (nounVoted: boolean, nounSupported: boolean, proposal: Proposal) => {
   if (!nounVoted) {
     if (proposal.status === ProposalState.PENDING || proposal.status === ProposalState.ACTIVE) {
-      return 'Has not yet voted on'
+      return 'This Noun has not yet voted on'
     }
     return 'Was absent for';
   } else if (nounSupported) {
@@ -89,8 +95,7 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
     <tr onClick={proposalOnClickHandler} className={classes.voteInfoRow}>
       <td>
         <span>
-
-          {selectIconForNounVoteActivityRow(nounVoted, nounSupported)}
+          {selectIconForNounVoteActivityRow(nounVoted, nounSupported, proposal)}
         </span>
         <div className={classes.voteInfoContainer}>
           {selectVotingInfoText(nounVoted, nounSupported, proposal)}
