@@ -5,13 +5,12 @@ pragma solidity ^0.8.6;
  import "hardhat/console.sol";
 
 
-import { ReentrancyGuardUpgradeable } from '@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol';
-import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
+import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
 
 import { ITellerAuctionHouse } from './interfaces/ITellerAuctionHouse.sol';
 import { ITellerTreasury } from './interfaces/ITellerTreasury.sol';
 
-contract TellerTreasury is ITellerTreasury,  ReentrancyGuardUpgradeable, OwnableUpgradeable{
+contract TellerTreasury is ITellerTreasury, Ownable{
 
     // The address of the WETH contract
     address public weth;
@@ -27,10 +26,10 @@ contract TellerTreasury is ITellerTreasury,  ReentrancyGuardUpgradeable, Ownable
     /**
      * @notice Require that the sender is the auction house.
      */
-    /*modifier onlyAuctionHouse() {
+    modifier onlyAuctionHouse() {
         require(msg.sender == address(auctionHouse), 'Sender is not the auctionHouse');
         _;
-    }*/
+    }
 
 
     
@@ -39,21 +38,18 @@ contract TellerTreasury is ITellerTreasury,  ReentrancyGuardUpgradeable, Ownable
     
 
     //need to only allow the owner to call this !! (the deployer)
-    function setAuctionHouse(ITellerAuctionHouse _auctionHouse) external   {
-        console.log('set ah', msg.sender);
-        console.log(owner());
-     //   require(msg.sender == owner(), 'Sender is not the owner');
+    function setAuctionHouse(ITellerAuctionHouse _auctionHouse) external onlyOwner  {
         auctionHouse = _auctionHouse; 
     }
     
 
  
-/*
-    function setPersonalEscrowAmount(uint256 tokenId, uint256 amount) external override   {
+ 
+    function setPersonalEscrowAmount(uint256 tokenId, uint256 amount) external override onlyAuctionHouse  {
         require(msg.sender == address(auctionHouse), 'Sender is not the auctionHouse');
         require(personalEscrowAmount[tokenId] == 0);
         personalEscrowAmount[tokenId] = amount;
         emit PersonalEscrowAmountUpdated(tokenId,amount);
-    }  */
+    }   
     
 }

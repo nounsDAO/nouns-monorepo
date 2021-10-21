@@ -234,7 +234,7 @@ contract TellerAuctionHouse is ITellerAuctionHouse, PausableUpgradeable, Reentra
 
         if (_auction.amount > 0) {
             _safeTransferETHWithFallback(address(tellerTreasury), _auction.amount);
-      //      tellerTreasury.setPersonalEscrowAmount(_auction.tokenId, _auction.amount);
+             tellerTreasury.setPersonalEscrowAmount(_auction.tokenId, _auction.amount);
         }
 
         emit AuctionSettled(_auction.tokenId, _auction.bidder, _auction.amount);
