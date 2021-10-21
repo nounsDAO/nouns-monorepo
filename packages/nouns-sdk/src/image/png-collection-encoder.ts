@@ -12,6 +12,14 @@ export class PNGCollectionEncoder implements IEncoder {
   private _images: Map<string, string> = new Map();
   private _folders: { [name: string]: string[] } = {};
 
+  constructor(colors?: string[]) {
+    if (!colors) return;
+    // Optionally pre-populate colors with an existing palette
+    colors.forEach((color, index) => {
+      this._colors.set(color, index);
+    });
+  }
+
   /**
    * The flattened run-length encoded image data
    */
@@ -35,7 +43,7 @@ export class PNGCollectionEncoder implements IEncoder {
   public encodeImage(name: string, png: PngImage, folder?: string): string {
     const image = new Image(png.width, png.height);
     const rle = image.toRLE((x, y) => png.rgbaAt(x, y), this._colors);
-
+    
     this._images.set(name, rle);
 
     if (folder) {
