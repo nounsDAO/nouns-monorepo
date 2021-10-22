@@ -82,6 +82,7 @@ const Playground = () => {
           onClick={() => {
             traitButtonHandler(trait.title, index - 1);
           }}
+          className={classes.dropdownItemLink}
         >
           {index === 0 ? `Random` : parseTraitName(trait.traitNames[index - 1])}
         </Dropdown.Item>
@@ -101,7 +102,8 @@ const Playground = () => {
             NounsDescriptor contract.
           </p>
         </Col>
-
+      </Row>
+      <Row>
         <Col lg={3}>
           <Button
             onClick={() => {
@@ -109,19 +111,22 @@ const Playground = () => {
             }}
             className={classes.generateBtn}
           >
-            GENERATE NOUNS
+            Generate Nouns
           </Button>
           {traits &&
             traits.map((trait, index) => {
               return (
-                <DropdownButton
-                  key={index}
-                  id="dropdown-basic-button"
-                  title={trait.title}
-                  className={classes.dropdownBtn}
-                >
-                  {traitOptionButtons({ title: trait.title, traitNames: trait.traitNames })}
-                </DropdownButton>
+                <Dropdown>
+                  <Dropdown.Toggle id="dropdown-basic" key={index} className={classes.dropdownBtn}>
+                    <div className={classes.dropdownBtnTextContainer}>
+                      <span className={classes.header}>{trait.title}</span>
+                      <span className={classes.selection}>Random</span>
+                    </div>
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu className={classes.dropdownMenuBtn}>
+                    {traitOptionButtons({ title: trait.title, traitNames: trait.traitNames })}
+                  </Dropdown.Menu>
+                </Dropdown>
               );
             })}
         </Col>
