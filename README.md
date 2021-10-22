@@ -3,6 +3,17 @@
 Teller Auction DAO is a decentralized lending collective run by a group of degens.
 
 
+## Tri-Crypto 
+
+More complex => we give them the option 
+The user is forced to put their ETH into tri-crypto
+
+Buy the Noun with ETH.  Can borrow that ETH but you have to pay interest on it.   Can borrow out in ETH/bitcoin/tether . 
+
+
+User is paying back interest or they would default and lose the Noun (liquidate) 
+
+
 
 
 ## Packages

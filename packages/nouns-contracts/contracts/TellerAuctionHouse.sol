@@ -30,7 +30,8 @@ import { IWETH } from './interfaces/IWETH.sol';
 contract TellerAuctionHouse is ITellerAuctionHouse, PausableUpgradeable, ReentrancyGuardUpgradeable, OwnableUpgradeable {
     // ERC721 token contract
     ITellerToken public tellerTokens;
-
+    
+    // The address of the treasury contract
     ITellerTreasury public tellerTreasury;
 
     // The address of the WETH contract

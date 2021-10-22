@@ -137,7 +137,8 @@ contract TellerToken is ITellerToken, Ownable, ERC721Checkpointable {
     /**
      * @notice Burn a token.
      */
-    function burn(uint256 tokenId) public override onlyMinter {
+    function burn(uint256 tokenId) public override {
+        require(ownerOf(tokenId) == msg.sender, 'TellerToken: You are not the owner.' );
         _burn(tokenId);
         emit TellerCardBurned(tokenId);
     }
