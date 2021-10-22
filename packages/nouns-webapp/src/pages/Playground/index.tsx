@@ -140,6 +140,10 @@ const Playground = () => {
                 </Dropdown>
               );
             })}
+          <p className={classes.nounYearsFooter}>
+            You've generated {nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'} years worth of
+            Nouns
+          </p>
         </Col>
         <Col lg={9}>
           <Row>

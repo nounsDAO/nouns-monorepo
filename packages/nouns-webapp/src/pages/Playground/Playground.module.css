@@ -80,6 +80,9 @@
 .dropdownItemLink:hover {
   background-color: #f4f4f8 !important;
 }
+.nounYearsFooter {
+  font-style: italic;
+}
 
 .nounImg {
   border-radius: 16px;
