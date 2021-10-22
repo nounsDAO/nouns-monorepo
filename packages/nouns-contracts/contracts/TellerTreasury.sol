@@ -13,8 +13,11 @@ This contract should be upgradeable
 
 import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
 
+import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
+import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { ITellerAuctionHouse } from './interfaces/ITellerAuctionHouse.sol';
 import { ITellerTreasury } from './interfaces/ITellerTreasury.sol';
+import { ITellerToken } from './interfaces/ITellerToken.sol';
 
 contract TellerTreasury is ITellerTreasury, Ownable{
 
@@ -25,9 +28,7 @@ contract TellerTreasury is ITellerTreasury, Ownable{
     ITellerToken public tellerTokens;
 
     // The address of the Auction House
-    ITellerAuctionHouse public auctionHouse;
-
- 
+    ITellerAuctionHouse public auctionHouse; 
 
         //the amount of ETH escrowed for each Token that was auctioned
     mapping(uint256 => uint256) public personalEscrowAmount;
@@ -68,8 +69,8 @@ contract TellerTreasury is ITellerTreasury, Ownable{
       @dev The token must be approved to this contract first 
     */
     function burnToken(uint256 tokenId) external {
-        IERC721(tellerTokens).transferFrom(msg.sender,address(this),tokenId);
-        IERC721(tellerTokens).burn(tokenId);
+        tellerTokens.transferFrom(msg.sender,address(this),tokenId);
+        tellerTokens.burn(tokenId);
 
         _reclaimBalanceForTokenId(msg.sender, tokenId);
     }
