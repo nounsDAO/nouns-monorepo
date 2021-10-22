@@ -11,7 +11,10 @@ interface Trait {
   traitNames: string[];
 }
 
-const parseTraitName = (partName: string): string => partName.substring(partName.indexOf('-') + 1);
+const parseTraitName = (partName: string): string =>
+  capitalizeFirstLetter(partName.substring(partName.indexOf('-') + 1));
+
+const capitalizeFirstLetter = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 
 const Playground = () => {
   const [nounSvgs, setNounSvgs] = useState<string[]>();
@@ -90,6 +93,12 @@ const Playground = () => {
     });
   };
 
+  const selectedOptionForTrait = (traitTitle: string): string => {
+    if (!traits || !modSeed) return 'Random';
+    const trait = traits.find(trait => trait.title == traitTitle)?.traitNames[modSeed[traitTitle]];
+    return trait ? parseTraitName(trait) : 'Random';
+  };
+
   return (
     <Container>
       <Row>
@@ -119,8 +128,10 @@ const Playground = () => {
                 <Dropdown>
                   <Dropdown.Toggle id="dropdown-basic" key={index} className={classes.dropdownBtn}>
                     <div className={classes.dropdownBtnTextContainer}>
-                      <span className={classes.header}>{trait.title}</span>
-                      <span className={classes.selection}>Random</span>
+                      <span className={classes.header}>{capitalizeFirstLetter(trait.title)}</span>
+                      <span className={classes.selection}>
+                        {selectedOptionForTrait(trait.title)}
+                      </span>
                     </div>
                   </Dropdown.Toggle>
                   <Dropdown.Menu className={classes.dropdownMenuBtn}>
