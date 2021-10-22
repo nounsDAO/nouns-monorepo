@@ -1,4 +1,4 @@
-import { Container, Col, Button, Row, DropdownButton, Dropdown } from 'react-bootstrap';
+import { Container, Col, Button, Row, Dropdown } from 'react-bootstrap';
 import classes from './Playground.module.css';
 import { useEffect, useState } from 'react';
 import { ImageData, getNounData, getRandomNounSeed } from '@nouns/assets';
@@ -95,7 +95,7 @@ const Playground = () => {
 
   const selectedOptionForTrait = (traitTitle: string): string => {
     if (!traits || !modSeed) return 'Random';
-    const trait = traits.find(trait => trait.title == traitTitle)?.traitNames[modSeed[traitTitle]];
+    const trait = traits.find(trait => trait.title === traitTitle)?.traitNames[modSeed[traitTitle]];
     return trait ? parseTraitName(trait) : 'Random';
   };
 
