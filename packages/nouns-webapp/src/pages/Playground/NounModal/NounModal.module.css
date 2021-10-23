@@ -1,0 +1,38 @@
+.modal {
+  position: fixed;
+  top: 15vh;
+  left: 10%;
+  width: 80%;
+  z-index: 100;
+  padding: 2rem;
+  text-align: center;
+  border-radius: 15px;
+  left: calc(50% - 15rem);
+  width: 30rem;
+}
+
+.displayNounFooter {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.displayNounFooter span {
+  color: white;
+  font-weight: bold;
+}
+.displayNounFooter button {
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+}
+
+.displayNounFooter button:hover,
+.displayNounFooter button:active,
+.displayNounFooter button:focus {
+  background: rgba(255, 255, 255, 0.4) !important;
+  box-shadow: none !important;
+}
+
+.nounImg {
+  border-radius: 16px;
+  margin: 0.75rem 0;
+}

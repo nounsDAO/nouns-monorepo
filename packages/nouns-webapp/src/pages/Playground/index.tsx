@@ -1,10 +1,10 @@
 import { Container, Col, Button, Row, Dropdown } from 'react-bootstrap';
 import classes from './Playground.module.css';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ImageData, getNounData, getRandomNounSeed } from '@nouns/assets';
 import { buildSVG } from '@nouns/sdk';
-import React from 'react';
 import Noun from '../../components/Noun';
+import NounModal from './NounModal';
 
 interface Trait {
   title: string;
@@ -16,11 +16,13 @@ const parseTraitName = (partName: string): string =>
 
 const capitalizeFirstLetter = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 
-const Playground = () => {
+const Playground: React.FC = () => {
   const [nounSvgs, setNounSvgs] = useState<string[]>();
   const [traits, setTraits] = useState<Trait[]>();
   const [modSeed, setModSeed] = useState<{ [key: string]: number }>();
   const [initLoad, setInitLoad] = useState<boolean>(true);
+  const [displayNoun, setDisplayNoun] = useState<boolean>(false);
+  const [indexOfNounToDisplay, setIndexOfNounToDisplay] = useState<number>();
 
   const generateNounSvg = React.useCallback(
     (amount: number = 1) => {
@@ -100,65 +102,87 @@ const Playground = () => {
   };
 
   return (
-    <Container>
-      <Row>
-        <Col lg={10} className={classes.headerRow}>
-          <span>Explore</span>
-          <h1>Playground</h1>
-          <p>
-            The playground was built using the Nouns protocol. Each Noun's traits are generated
-            using the NounsSeeder contract. Using the seed, the Noun is then rendered using the
-            NounsDescriptor contract.
-          </p>
-        </Col>
-      </Row>
-      <Row>
-        <Col lg={3}>
-          <Button
-            onClick={() => {
-              generateNounSvg();
-            }}
-            className={classes.generateBtn}
-          >
-            Generate Nouns
-          </Button>
-          {traits &&
-            traits.map((trait, index) => {
-              return (
-                <Dropdown>
-                  <Dropdown.Toggle id="dropdown-basic" key={index} className={classes.dropdownBtn}>
-                    <div className={classes.dropdownBtnTextContainer}>
-                      <span className={classes.header}>{capitalizeFirstLetter(trait.title)}</span>
-                      <span className={classes.selection}>
-                        {selectedOptionForTrait(trait.title)}
-                      </span>
-                    </div>
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu className={classes.dropdownMenuBtn}>
-                    {traitOptionButtons({ title: trait.title, traitNames: trait.traitNames })}
-                  </Dropdown.Menu>
-                </Dropdown>
-              );
-            })}
-          <p className={classes.nounYearsFooter}>
-            You've generated {nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'} years worth of
-            Nouns
-          </p>
-        </Col>
-        <Col lg={9}>
-          <Row>
-            {nounSvgs &&
-              nounSvgs.map((svg, i) => {
+    <>
+      {displayNoun && indexOfNounToDisplay !== undefined && nounSvgs && (
+        <NounModal
+          onDismiss={() => {
+            setDisplayNoun(false);
+          }}
+          imgSrc={nounSvgs[indexOfNounToDisplay]}
+        />
+      )}
+
+      <Container>
+        <Row>
+          <Col lg={10} className={classes.headerRow}>
+            <span>Explore</span>
+            <h1>Playground</h1>
+            <p>
+              The playground was built using the Nouns protocol. Each Noun's traits are generated
+              using the NounsSeeder contract. Using the seed, the Noun is then rendered using the
+              NounsDescriptor contract.
+            </p>
+          </Col>
+        </Row>
+        <Row>
+          <Col lg={3}>
+            <Button
+              onClick={() => {
+                generateNounSvg();
+              }}
+              className={classes.generateBtn}
+            >
+              Generate Nouns
+            </Button>
+            {traits &&
+              traits.map((trait, index) => {
                 return (
-                  <Col xs={4} lg={3} key={i}>
-                    <Noun imgPath={svg} alt="noun" className={classes.nounImg} />
-                  </Col>
+                  <Dropdown>
+                    <Dropdown.Toggle
+                      id="dropdown-basic"
+                      key={index}
+                      className={classes.dropdownBtn}
+                    >
+                      <div className={classes.dropdownBtnTextContainer}>
+                        <span className={classes.header}>{capitalizeFirstLetter(trait.title)}</span>
+                        <span className={classes.selection}>
+                          {selectedOptionForTrait(trait.title)}
+                        </span>
+                      </div>
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu className={classes.dropdownMenuBtn}>
+                      {traitOptionButtons({ title: trait.title, traitNames: trait.traitNames })}
+                    </Dropdown.Menu>
+                  </Dropdown>
                 );
               })}
-          </Row>
-        </Col>
-      </Row>
-    </Container>
+            <p className={classes.nounYearsFooter}>
+              You've generated {nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'} years worth of
+              Nouns
+            </p>
+          </Col>
+          <Col lg={9}>
+            <Row>
+              {nounSvgs &&
+                nounSvgs.map((svg, i) => {
+                  return (
+                    <Col xs={4} lg={3} key={i}>
+                      <div
+                        onClick={() => {
+                          setIndexOfNounToDisplay(i);
+                          setDisplayNoun(true);
+                        }}
+                      >
+                        <Noun imgPath={svg} alt="noun" className={classes.nounImg} />
+                      </div>
+                    </Col>
+                  );
+                })}
+            </Row>
+          </Col>
+        </Row>
+      </Container>
+    </>
   );
 };
 export default Playground;
