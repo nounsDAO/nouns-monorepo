@@ -1,5 +1,5 @@
 import { ChainId, ContractAddresses } from './types';
-
+import localContracts from '../localContracts.json';
 const chainIdToAddresses: { [chainId: number]: ContractAddresses } = {
   [ChainId.Mainnet]: {
     nounsToken: '0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03',
@@ -25,6 +25,7 @@ const chainIdToAddresses: { [chainId: number]: ContractAddresses } = {
     nounsDAOProxy: '0xd1C753D9A23eb5c57e0d023e993B9bd4F5086b04',
     nounsDAOLogicV1: '0xdF05F2D3276F3F3fA00296702e4cf7190B78F6F9',
   },
+  [ChainId.Local]: localContracts,
 };
 
 /**

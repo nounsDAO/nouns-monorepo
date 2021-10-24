@@ -2,6 +2,7 @@ import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHo
 import { task, types } from 'hardhat/config';
 import { Interface } from 'ethers/lib/utils';
 import { Contract as EthersContract } from 'ethers';
+import fs from 'fs';
 
 type ContractName =
   | 'WETH'
@@ -134,8 +135,28 @@ task('deploy-local', 'Deploy contracts to hardhat')
 
       contracts[name as ContractName].instance = deployedContract;
 
-      console.log(`${name} contract deployed to ${deployedContract.address}`);
+      if ((name as ContractName) != 'WETH') {
+        console.log(`${name} contract deployed to ${deployedContract.address}`);
+      }
     }
+
+    const localContracts = {
+      nounsToken: contracts?.NounsToken?.instance?.address,
+      nounsSeeder: contracts?.NounsSeeder?.instance?.address,
+      nounsDescriptor: contracts?.NounsDescriptor?.instance?.address,
+      nftDescriptor: contracts?.NFTDescriptor?.instance?.address,
+      nounsAuctionHouse: contracts?.NounsAuctionHouse?.instance?.address,
+      nounsAuctionHouseProxy: contracts?.NounsAuctionHouseProxy?.instance?.address,
+      nounsAuctionHouseProxyAdmin: contracts?.NounsAuctionHouseProxyAdmin?.instance?.address,
+      nounsDaoExecutor: contracts?.NounsDAOExecutor?.instance?.address,
+      nounsDAOProxy: contracts?.NounsDAOProxy?.instance?.address,
+      nounsDAOLogicV1: contracts?.NounsDAOLogicV1?.instance?.address,
+    };
+
+    fs.writeFileSync(
+      '../../packages/nouns-sdk/src/localContracts.json',
+      JSON.stringify(localContracts),
+    );
 
     return contracts;
   });
