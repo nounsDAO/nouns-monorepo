@@ -135,9 +135,7 @@ task('deploy-local', 'Deploy contracts to hardhat')
 
       contracts[name as ContractName].instance = deployedContract;
 
-      if ((name as ContractName) != 'WETH') {
         console.log(`${name} contract deployed to ${deployedContract.address}`);
-      }
     }
 
     const localContracts = {
