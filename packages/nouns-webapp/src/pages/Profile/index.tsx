@@ -19,22 +19,29 @@ const ProfilePage: React.FC<ProfilePageProps> = props => {
   const { nounId } = props;
 
   const dispatch = useAppDispatch();
+  const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
 
   const loadedNounHandler = (seed: INounSeed) => {
     dispatch(setUseGreyBackground(seed.background === 0));
   };
 
+  const useGreyBg = useAppSelector(state => state.application.useGreyBackground);
+
+  if (!lastAuctionNounId) {
+    return <></>;
+  }
+
+  const nounIdForDisplay = Math.min(nounId, lastAuctionNounId);
+
   const nounContent = (
     <div className={classes.nounWrapper}>
       <StandaloneNounWithSeed
-        nounId={BigNumber.from(nounId)}
+        nounId={BigNumber.from(nounIdForDisplay)}
         onLoadSeed={loadedNounHandler}
         shouldLinkToProfile={false}
       />
     </div>
   );
-
-  const useGreyBg = useAppSelector(state => state.application.useGreyBackground);
 
   return (
     <div className={classes.nounProfileWrapper}>
@@ -45,12 +52,12 @@ const ProfilePage: React.FC<ProfilePageProps> = props => {
               {nounContent}
             </Col>
             <Col lg={{ span: 6 }} className={classes.nounProfileInfo}>
-              <NounInfoCard nounId={nounId} />
+              <NounInfoCard nounId={nounIdForDisplay} />
             </Col>
           </Row>
         </Container>
       </Container>
-      <ProfileActivityFeed nounId={nounId} />
+      <ProfileActivityFeed nounId={nounIdForDisplay} />
     </div>
   );
 };
