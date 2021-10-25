@@ -22,11 +22,7 @@ const ShortAddress: React.FC<{ address: string; avatar?: boolean }> = props => {
     );
   }
 
-  return  (
-    <>
-      {ens ? ens : shortAddress}
-    </>
-  );
+  return <>{ens ? ens : shortAddress}</>;
 };
 
 export default ShortAddress;

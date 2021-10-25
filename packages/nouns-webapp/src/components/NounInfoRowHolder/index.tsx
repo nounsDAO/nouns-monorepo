@@ -27,26 +27,26 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
     return <div>Failed to fetch noun info</div>;
   }
 
-  const shortAddressComponent = (
-      <ShortAddress address={data && data.noun.owner.id} />
-  );
+  const shortAddressComponent = <ShortAddress address={data && data.noun.owner.id} />;
 
   return (
     <div className={classes.nounHolderInfoContainer}>
       <span>
         <Image src={_HeartIcon} className={classes.heartIcon} />
       </span>
+      <span>Held by</span>
       <span>
-      Held by
-      </span>
-      <span>
-          <a
+        <a
           className={classes.nounHolderEtherscanLink}
           href={etherscanURL}
           target={'_blank'}
           rel="noreferrer"
-        >{data.noun.owner.id.toLowerCase() === config.auctionProxyAddress.toLowerCase() ? 'Nouns Auction House' : shortAddressComponent}</a>
-        </span>
+        >
+          {data.noun.owner.id.toLowerCase() === config.auctionProxyAddress.toLowerCase()
+            ? 'Nouns Auction House'
+            : shortAddressComponent}
+        </a>
+      </span>
       <span className={classes.linkIconSpan}>
         <Image src={_LinkIcon} className={classes.linkIcon} />
       </span>
