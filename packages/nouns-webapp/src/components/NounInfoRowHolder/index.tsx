@@ -32,7 +32,7 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
   } else if (error) {
     return <div>Failed to fetch noun info</div>;
   }
-  const auctionedNounAddress = ens ? ens : shortenAddress(data.noun.owner.id); 
+  const auctionedNounAddress = ens ? ens : shortenAddress(data.noun.owner.id);
 
   return (
     <div className={classes.nounHolderInfoContainer}>
@@ -47,7 +47,9 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
           target={'_blank'}
           rel="noreferrer"
         >
-          {data.noun.owner.id.toLowerCase() === config.auctionProxyAddress.toLowerCase() ? 'Nouns Auction House' : auctionedNounAddress}
+          {data.noun.owner.id.toLowerCase() === config.auctionProxyAddress.toLowerCase()
+            ? 'Nouns Auction House'
+            : auctionedNounAddress}
         </a>
       </span>
       <span className={classes.linkIconSpan}>
