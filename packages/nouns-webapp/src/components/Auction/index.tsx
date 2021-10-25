@@ -45,7 +45,7 @@ const Auction: React.FC<AuctionProps> = props => {
       <StandaloneNounWithSeed
         nounId={currentAuction.nounId}
         onLoadSeed={loadedNounHandler}
-        shouldLinkToProfile={true}
+        shouldLinkToProfile={false}
       />
     </div>
   );
