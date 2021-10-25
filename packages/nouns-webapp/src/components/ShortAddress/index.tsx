@@ -13,11 +13,19 @@ const ShortAddress: React.FC<{ address: string; avatar?: boolean }> = props => {
   console.log(ensAvatar);
   const shortAddress = address && [address.substr(0, 4), address.substr(38, 4)].join('...');
 
-  return (
-    <div className={classes.shortAddress}>
-      {avatar && <Davatar size={24} address={address} provider={provider} />}
+  if (avatar) {
+    return (
+      <div className={classes.shortAddress}>
+        {avatar && <Davatar size={24} address={address} provider={provider} />}
+        {ens ? ens : shortAddress}
+      </div>
+    );
+  }
+
+  return  (
+    <>
       {ens ? ens : shortAddress}
-    </div>
+    </>
   );
 };
 

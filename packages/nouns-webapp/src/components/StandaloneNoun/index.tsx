@@ -49,25 +49,19 @@ export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = (
 
   const seed = useNounSeed(nounId);
 
-  if (seed && nounId && onLoadSeed) {
-    onLoadSeed(seed);
+  if (!seed || !nounId || !onLoadSeed) return <Noun imgPath="" alt="Noun" />;
 
-    const { image, description } = getNoun(nounId, seed);
+  onLoadSeed(seed);
 
-    const noun = <Noun imgPath={image} alt={description} />;
+  const { image, description } = getNoun(nounId, seed);
 
-    if (shouldLinkToProfile) {
-      return (
-        <Link to={'/noun/' + nounId.toString()} className={classes.clickableNoun}>
-          {noun}
-        </Link>
-      );
-    } else {
-      return noun;
-    }
-  } else {
-    return <Noun imgPath="" alt="Noun" />;
-  }
+  const noun = <Noun imgPath={image} alt={description} />;
+  const nounWithLink = (
+    <Link to={'/noun/' + nounId.toString()} className={classes.clickableNoun}>
+      {noun}
+    </Link>
+  );
+  return shouldLinkToProfile ? nounWithLink : noun;
 };
 
 export default StandaloneNoun;

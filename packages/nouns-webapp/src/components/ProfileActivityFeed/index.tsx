@@ -66,6 +66,7 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
                       nounSupported={supportedProposals.includes(p.id)}
                       latestProposalId={latestProposalId}
                       nounId={nounId}
+                      key={p.id}
                     />
                   );
                 })
