@@ -6,7 +6,7 @@ const AuctionActivityNounTitle: React.FC<{ nounId: BigNumber }> = props => {
   const nounIdContent = `Noun ${nounId.toString()}`;
   return (
     <div className={classes.wrapper}>
-        <h1>{nounIdContent}</h1>
+      <h1>{nounIdContent}</h1>
     </div>
   );
 };
