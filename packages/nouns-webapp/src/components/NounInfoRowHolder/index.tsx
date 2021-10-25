@@ -8,6 +8,8 @@ import { nounQuery } from '../../wrappers/subgraph';
 import _HeartIcon from '../../assets/icons/Heart.svg';
 import classes from './NounInfoRowHolder.module.css';
 
+import config from '../../config';
+
 interface NounInfoRowHolderProps {
   nounId: number;
 }
@@ -30,6 +32,7 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
   } else if (error) {
     return <div>Failed to fetch noun info</div>;
   }
+  const auctionedNounAddress = ens ? ens : shortenAddress(data.noun.owner.id); 
 
   return (
     <div className={classes.nounHolderInfoContainer}>
@@ -44,7 +47,7 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
           target={'_blank'}
           rel="noreferrer"
         >
-          {ens ? ens : shortenAddress(data.noun.owner.id)}
+          {data.noun.owner.id.toLowerCase() === config.auctionProxyAddress.toLowerCase() ? 'Nouns Auction House' : auctionedNounAddress}
         </a>
       </span>
       <span className={classes.linkIconSpan}>

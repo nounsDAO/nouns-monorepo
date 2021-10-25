@@ -10,6 +10,7 @@ import NounInfoRowBirthday from '../NounInfoRowBirthday';
 import NounInfoRowHolder from '../NounInfoRowHolder';
 import NounInfoRowButton from '../NounInfoRowButton';
 import { useHistory } from 'react-router';
+import { useAppSelector } from '../../hooks';
 
 interface NounInfoCardProps {
   nounId: number;
@@ -24,6 +25,8 @@ const NounInfoCard: React.FC<NounInfoCardProps> = props => {
   const bidHistoryButtonClickHandler = () => history.push(`/auction/${nounId}`);
   // eslint-disable-next-line no-restricted-globals
   const etherscanButtonClickHandler = () => (location.href = `${etherscanBaseURL}/${nounId}`);
+
+  const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
 
   return (
     <>
@@ -43,7 +46,7 @@ const NounInfoCard: React.FC<NounInfoCardProps> = props => {
         <Row className={classes.nounInfoRow}>
           <NounInfoRowButton
             iconImgSource={_BidsIcon}
-            btnText={'Bid history'}
+            btnText={lastAuctionNounId === nounId ? 'Bids': 'Bid history'}
             onClickHandler={bidHistoryButtonClickHandler}
           />
           <NounInfoRowButton
