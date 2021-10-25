@@ -18,7 +18,6 @@ import BidHistoryBtn from '../BidHistoryBtn';
 import StandaloneNoun from '../StandaloneNoun';
 import config from '../../config';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import { Link } from 'react-router-dom';
 
 const openEtherscanBidHistory = () => {
   const url = buildEtherscanAddressLink(config.auctionProxyAddress);
