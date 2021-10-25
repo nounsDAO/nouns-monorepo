@@ -6,10 +6,12 @@ const AuctionActivityNounTitle: React.FC<{ nounId: BigNumber }> = props => {
   const { nounId } = props;
   const nounIdContent = `Noun ${nounId.toString()}`;
   return (
-    <div className={classes.nounTitle}>
-      <Link to={`/noun/${nounId}`}>
-        <h1>{nounIdContent}</h1>
-      </Link>
+    <div className={classes.wrapper}>
+      <div className={classes.nounTitle}>
+        <Link to={`/noun/${nounId}`}>
+          <h1>{nounIdContent}</h1>
+        </Link>
+      </div>
     </div>
   );
 };

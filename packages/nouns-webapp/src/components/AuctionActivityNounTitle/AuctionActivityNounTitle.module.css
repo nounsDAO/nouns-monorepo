@@ -17,3 +17,7 @@
 .nounTitle:active {
   color: black;
 }
+
+.wrapper {
+  display: inline-block;
+}
