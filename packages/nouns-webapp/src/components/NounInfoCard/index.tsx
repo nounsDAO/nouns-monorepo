@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 
 import classes from './NounInfoCard.module.css';
 
@@ -32,32 +32,30 @@ const NounInfoCard: React.FC<NounInfoCardProps> = props => {
 
   return (
     <>
-      <Row>
+      <Col lg={12}>
         <div className={classes.nounInfoHeader}>
           <h3>Profile</h3>
           <h2>Noun {nounId}</h2>
         </div>
-      </Row>
-      <div>
-        <Row className={classes.nounInfoRow}>
-          <NounInfoRowBirthday nounId={nounId} />
-        </Row>
-        <Row className={classes.nounInfoRow}>
-          <NounInfoRowHolder nounId={nounId} />
-        </Row>
-        <Row className={classes.nounInfoRow}>
-          <NounInfoRowButton
-            iconImgSource={_BidsIcon}
-            btnText={lastAuctionNounId === nounId ? 'Bids' : 'Bid history'}
-            onClickHandler={bidHistoryButtonClickHandler}
-          />
-          <NounInfoRowButton
-            iconImgSource={_AddressIcon}
-            btnText={'Etherscan'}
-            onClickHandler={etherscanButtonClickHandler}
-          />
-        </Row>
-      </div>
+      </Col>
+      <Col lg={12} className={classes.nounInfoRow}>
+        <NounInfoRowBirthday nounId={nounId} />
+      </Col>
+      <Col lg={12} className={classes.nounInfoRow}>
+        <NounInfoRowHolder nounId={nounId} />
+      </Col>
+      <Col lg={12} className={classes.nounInfoRow}>
+        <NounInfoRowButton
+          iconImgSource={_BidsIcon}
+          btnText={lastAuctionNounId === nounId ? 'Bids' : 'Bid history'}
+          onClickHandler={bidHistoryButtonClickHandler}
+        />
+        <NounInfoRowButton
+          iconImgSource={_AddressIcon}
+          btnText={'Etherscan'}
+          onClickHandler={etherscanButtonClickHandler}
+        />
+      </Col>
     </>
   );
 };

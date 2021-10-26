@@ -1,5 +1,4 @@
 .nounInfoHeader {
-  padding-top: 10rem;
   display: inline-block;
   padding-left: 0rem;
   font-family: 'Londrina Solid';
@@ -26,6 +25,7 @@
 .nounInfoRow {
   padding-bottom: 1rem;
   font-size: 18px;
+  display: flex;
 }
 
 .nounInfoRowText {

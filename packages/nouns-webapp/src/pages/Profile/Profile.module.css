@@ -1,18 +1,5 @@
-.nounProfilePictureCol {
-  display: flex;
-}
-
-@media only screen and (max-width: 600px) {
-  .nounProfilePictureCol {
-    display: flex;
-    flex-direction: column;
-    order: 1;
-  }
-}
-
-.nounWrapper {
-  align-self: flex-end;
-  width: 100%;
+.nounProfileInfo {
+  margin-top: 10rem;
 }
 
 .nounProfileWrapper {
@@ -23,27 +10,11 @@
   flex: 1;
 }
 
-@media only screen and (max-width: 600px) {
+@media (max-width: 992px) {
   .nounProfileInfo {
-    padding-left: 10%;
-    order: 0;
+    background-color: white;
+    padding-bottom: 2rem;
+    padding-top: 2rem;
+    margin-top: 0rem;
   }
-}
-
-.nounProfileInfo {
-  margin-bottom: 50px;
-}
-
-@media only screen and (max-width: 600px) {
-  .nounProfileInfo {
-    margin-bottom: 0px;
-  }
-}
-
-.greyBg {
-  background-color: #d5d7e1;
-}
-
-.beigeBg {
-  background-color: #e1d7d5;
 }
