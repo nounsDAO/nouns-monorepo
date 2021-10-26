@@ -27,10 +27,10 @@ import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
 import { useEffect } from 'react';
 import pastAuctions, { addPastAuctions } from './state/slices/pastAuctions';
 import LogsUpdater from './state/updaters/logs';
-import config, { CHAIN_ID, LOCAL_CHAIN_ID } from './config';
+import config, { CHAIN_ID, createNetworkHttpUrl } from './config';
 import { WebSocketProvider } from '@ethersproject/providers';
 import { BigNumber, BigNumberish } from 'ethers';
-import { getContractsForChainOrThrow } from '@nouns/sdk';
+import { NounsAuctionHouseFactory } from '@nouns/sdk';
 import dotenv from 'dotenv';
 import { useAppDispatch, useAppSelector } from './hooks';
 import { appendBid } from './state/slices/auction';
@@ -82,13 +82,13 @@ export type AppDispatch = typeof store.dispatch;
 const useDappConfig = {
   readOnlyChainId: CHAIN_ID,
   readOnlyUrls: {
-    [ChainId.Rinkeby]: process.env.REACT_APP_RINKEBY_JSONRPC || `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
-    [ChainId.Mainnet]: process.env.REACT_APP_MAINNET_JSONRPC || `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
-    [LOCAL_CHAIN_ID]: "http://localhost:8545"
+    [ChainId.Rinkeby]: createNetworkHttpUrl('rinkeby'),
+    [ChainId.Mainnet]: createNetworkHttpUrl('mainnet'),
+    [ChainId.Hardhat]: "http://localhost:8545"
   },
 };
 
-const client = clientFactory(config.subgraphApiUri);
+const client = clientFactory(config.app.subgraphApiUri);
 
 const Updaters = () => {
   return (
@@ -104,8 +104,11 @@ const ChainSubscriber: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const loadState = async () => {
-    const wsProvider = new WebSocketProvider(config.wsRpcUri);
-    const { nounsAuctionHouseContract } = getContractsForChainOrThrow(CHAIN_ID, wsProvider);
+    const wsProvider = new WebSocketProvider(config.app.wsRpcUri);
+    const nounsAuctionHouseContract = NounsAuctionHouseFactory.connect(
+      config.addresses.nounsAuctionHouseProxy,
+      wsProvider,
+    );
 
     const bidFilter = nounsAuctionHouseContract.filters.AuctionBid(null, null, null, null);
     const extendedFilter = nounsAuctionHouseContract.filters.AuctionExtended(null, null);

@@ -18,8 +18,8 @@ const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { deactivate } = useEthers();
 
-  const treasuryBalance = useEtherBalance(config.nounsDaoExecutorAddress);
-  const daoEtherscanLink = buildEtherscanAddressLink(config.nounsDaoExecutorAddress);
+  const treasuryBalance = useEtherBalance(config.addresses.nounsDaoExecutor);
+  const daoEtherscanLink = buildEtherscanAddressLink(config.addresses.nounsDaoExecutor);
 
   const [showConnectModal, setShowConnectModal] = useState(false);
 
