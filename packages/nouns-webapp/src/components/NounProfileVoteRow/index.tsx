@@ -55,13 +55,10 @@ const selectVotingInfoText = (nounVoted: boolean, nounSupported: boolean, propos
 const selectProposalStatusIcon = (proposal: Proposal) => {
   switch (proposal.status) {
     case ProposalState.SUCCEEDED:
-      return <VoteStatusPill status={'success'} />;
     case ProposalState.EXECUTED:
-      return <VoteStatusPill status={'success'} />;
     case ProposalState.QUEUED:
       return <VoteStatusPill status={'success'} />;
     case ProposalState.DEFEATED:
-      return <VoteStatusPill status={'failure'} />;
     case ProposalState.VETOED:
       return <VoteStatusPill status={'failure'} />;
     default:
