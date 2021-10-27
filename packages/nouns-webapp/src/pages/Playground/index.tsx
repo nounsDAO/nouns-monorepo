@@ -156,7 +156,7 @@ const Playground: React.FC = () => {
                       <div
                         onClick={() => {
                           setIndexOfNounToDisplay(i);
-                          setDisplayNoun(true);
+                          // setDisplayNoun(true);
                         }}
                       >
                         <Noun imgPath={svg} alt="noun" className={classes.nounImg} />
