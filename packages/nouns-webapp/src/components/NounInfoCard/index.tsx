@@ -14,6 +14,8 @@ import { useAppSelector } from '../../hooks';
 
 import config from '../../config';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
+import { setOnDisplayAuctionNounId } from '../../state/slices/onDisplayAuction';
+import { useDispatch } from 'react-redux';
 
 interface NounInfoCardProps {
   nounId: number;
@@ -22,9 +24,13 @@ interface NounInfoCardProps {
 const NounInfoCard: React.FC<NounInfoCardProps> = props => {
   const { nounId } = props;
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const etherscanBaseURL = buildEtherscanAddressLink(config.tokenAddress);
-  const bidHistoryButtonClickHandler = () => history.push(`/auction/${nounId}`);
+  const bidHistoryButtonClickHandler = () => {
+    dispatch(setOnDisplayAuctionNounId(nounId));
+    history.push(`/auction/${nounId}`);
+  };
   // eslint-disable-next-line no-restricted-globals
   const etherscanButtonClickHandler = () => (location.href = `${etherscanBaseURL}/${nounId}`);
 
@@ -61,3 +67,7 @@ const NounInfoCard: React.FC<NounInfoCardProps> = props => {
 };
 
 export default NounInfoCard;
+function dispatch(arg0: { payload: number; type: string; }) {
+  throw new Error('Function not implemented.');
+}
+
