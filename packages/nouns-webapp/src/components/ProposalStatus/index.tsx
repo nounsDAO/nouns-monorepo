@@ -46,7 +46,7 @@ const statusText = (status: ProposalState | undefined) => {
 };
 
 const ProposalStatus = ({ status }: { status: ProposalState | undefined }) => {
-  return <Badge variant={statusVariant(status)}>{statusText(status)}</Badge>;
+  return <Badge bg={statusVariant(status)}>{statusText(status)}</Badge>;
 };
 
 export default ProposalStatus;
