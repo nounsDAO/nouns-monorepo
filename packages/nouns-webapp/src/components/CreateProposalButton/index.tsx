@@ -31,15 +31,16 @@ const CreateProposalButton = ({
   };
 
   return (
-    <Button
-      className={className}
-      variant={hasActiveOrPendingProposal || !hasEnoughVote ? 'danger' : 'primary'}
-      disabled={isFormInvalid || hasActiveOrPendingProposal || !hasEnoughVote}
-      onClick={handleCreateProposal}
-      block
-    >
-      {isLoading ? <Spinner animation="border" /> : buttonText()}
-    </Button>
+    <div className="d-grid gap-2">
+      <Button
+        className={className}
+        variant={hasActiveOrPendingProposal || !hasEnoughVote ? 'danger' : 'primary'}
+        disabled={isFormInvalid || hasActiveOrPendingProposal || !hasEnoughVote}
+        onClick={handleCreateProposal}
+      >
+        {isLoading ? <Spinner animation="border" /> : buttonText()}
+      </Button>
+    </div>
   );
 };
 export default CreateProposalButton;

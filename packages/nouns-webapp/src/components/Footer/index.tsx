@@ -24,12 +24,14 @@ const Footer = () => {
 
   return (
     <Section bgColor={bgColor} fullWidth={false} className={classes.alignBottom}>
-      <footer className={classes.footerSignature}>
-        <Link text="discord" url={discordURL} leavesPage={true} />
-        <Link text="twitter" url={twitterURL} leavesPage={true} />
-        <Link text="etherscan" url={etherscanURL} leavesPage={true} />
-        <Link text="discourse" url={discourseURL} leavesPage={false} />
-      </footer>
+      <div className="text-center">
+        <footer className={classes.footerSignature}>
+          <Link text="discord" url={discordURL} leavesPage={true} />
+          <Link text="twitter" url={twitterURL} leavesPage={true} />
+          <Link text="etherscan" url={etherscanURL} leavesPage={true} />
+          <Link text="discourse" url={discourseURL} leavesPage={false} />
+        </footer>
+      </div>
     </Section>
   );
 };
