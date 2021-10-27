@@ -1,4 +1,4 @@
-import { Container, Col, Button, Row, Dropdown } from 'react-bootstrap';
+import { Container, Col, Button, Row, FloatingLabel, Form } from 'react-bootstrap';
 import classes from './Playground.module.css';
 import React, { useEffect, useState } from 'react';
 import { ImageData, getNounData, getRandomNounSeed } from '@nouns/assets';
@@ -40,22 +40,6 @@ const Playground: React.FC = () => {
     [modSeed],
   );
 
-  const traitButtonHandler = (trait: string, traitIndex: number) => {
-    setModSeed(prev => {
-      // -1 traitIndex = random
-      if (traitIndex < 0) {
-        let state = { ...prev };
-        delete state[trait];
-        return state;
-      }
-
-      return {
-        ...prev,
-        [trait]: traitIndex,
-      };
-    });
-  };
-
   useEffect(() => {
     const traitTitles = ['background', 'body', 'accessory', 'head', 'glasses'];
     const traitNames = [
@@ -79,26 +63,26 @@ const Playground: React.FC = () => {
     }
   }, [generateNounSvg, initLoad]);
 
-  const traitOptionButtons = (trait: Trait) => {
+  const traitOptions = (trait: Trait) => {
     return Array.from(Array(trait.traitNames.length + 1)).map((_, index) => {
-      return (
-        <Dropdown.Item
-          key={index}
-          onClick={() => {
-            traitButtonHandler(trait.title, index - 1);
-          }}
-          className={classes.dropdownItemLink}
-        >
-          {index === 0 ? `Random` : parseTraitName(trait.traitNames[index - 1])}
-        </Dropdown.Item>
-      );
+      const parsedTitle = index === 0 ? `Random` : parseTraitName(trait.traitNames[index - 1]);
+      return <option key={index}>{parsedTitle}</option>;
     });
   };
 
-  const selectedOptionForTrait = (traitTitle: string): string => {
-    if (!traits || !modSeed) return 'Random';
-    const trait = traits.find(trait => trait.title === traitTitle)?.traitNames[modSeed[traitTitle]];
-    return trait ? parseTraitName(trait) : 'Random';
+  const traitButtonHandler = (trait: Trait, traitIndex: number) => {
+    setModSeed(prev => {
+      // -1 traitIndex = random
+      if (traitIndex < 0) {
+        let state = { ...prev };
+        delete state[trait.title];
+        return state;
+      }
+      return {
+        ...prev,
+        [trait.title]: traitIndex,
+      };
+    });
   };
 
   return (
@@ -137,23 +121,25 @@ const Playground: React.FC = () => {
             {traits &&
               traits.map((trait, index) => {
                 return (
-                  <Dropdown>
-                    <Dropdown.Toggle
-                      id="dropdown-basic"
+                  <Form className={classes.traitForm}>
+                    <FloatingLabel
+                      controlId="floatingSelect"
+                      label={capitalizeFirstLetter(trait.title)}
                       key={index}
-                      className={classes.dropdownBtn}
+                      className={classes.floatingLabel}
                     >
-                      <div className={classes.dropdownBtnTextContainer}>
-                        <span className={classes.header}>{capitalizeFirstLetter(trait.title)}</span>
-                        <span className={classes.selection}>
-                          {selectedOptionForTrait(trait.title)}
-                        </span>
-                      </div>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu className={classes.dropdownMenuBtn}>
-                      {traitOptionButtons({ title: trait.title, traitNames: trait.traitNames })}
-                    </Dropdown.Menu>
-                  </Dropdown>
+                      <Form.Select
+                        aria-label="Floating label select example"
+                        className={classes.traitFormBtn}
+                        onChange={e => {
+                          let index = e.currentTarget.selectedIndex;
+                          traitButtonHandler(trait, index - 1); // - 1 to account for 'random'
+                        }}
+                      >
+                        {traitOptions(trait)}
+                      </Form.Select>
+                    </FloatingLabel>
+                  </Form>
                 );
               })}
             <p className={classes.nounYearsFooter}>
