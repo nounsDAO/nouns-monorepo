@@ -67,7 +67,3 @@ const NounInfoCard: React.FC<NounInfoCardProps> = props => {
 };
 
 export default NounInfoCard;
-function dispatch(arg0: { payload: number; type: string; }) {
-  throw new Error('Function not implemented.');
-}
-
