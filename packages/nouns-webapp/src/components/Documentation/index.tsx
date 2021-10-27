@@ -109,7 +109,7 @@ const Documentation = () => {
             </Accordion.Body>
           </Accordion.Item>
           <Accordion.Item eventKey="4" className={classes.accordionItem}>
-            <Accordion.Header className={classes.accordionHeader}>Noun TRaits</Accordion.Header>
+            <Accordion.Header className={classes.accordionHeader}>Noun Traits</Accordion.Header>
             <Accordion.Body>
               <p>
                 Nouns are generated randomly based Ethereum block hashes. There are no 'if'
