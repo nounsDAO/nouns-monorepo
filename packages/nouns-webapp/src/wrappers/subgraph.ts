@@ -157,6 +157,27 @@ export const latestBidsQuery = (first: number = 10) => gql`
   }  
 `;
 
+export const nounVotingHistoryQuery = (nounId: number) => gql`
+{
+	noun(id: ${nounId}) {
+		id
+		votes {
+		proposal {
+			id
+		}
+		support
+		}
+	}
+}
+`;
+
+export const highestNounIdMintedAtProposalTime = (proposalStartBlock: number) => gql`
+{
+	auctions(orderBy: endTime orderDirection: desc first: 1 block: { number: ${proposalStartBlock} }) {
+		id
+	}
+}`;
+
 export const clientFactory = (uri: string) =>
   new ApolloClient({
     uri,

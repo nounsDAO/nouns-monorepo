@@ -1,0 +1,20 @@
+.headerWrapper h1 {
+  font-family: 'Londrina Solid';
+  font-size: 32px;
+}
+
+.headerWrapper p {
+  margin: 3rem 0;
+}
+
+@media (max-width: 992px) {
+  .headerWrapper {
+    display: block;
+    padding-bottom: 16px;
+  }
+}
+
+.nounInfoPadding {
+  padding-bottom: 1rem;
+  font-size: 18px;
+}

@@ -1,0 +1,24 @@
+.containerWrapper {
+  width: 100%;
+}
+
+.nounProfileInfo {
+  padding-left: 5rem;
+  margin-top: 10rem;
+}
+
+.nounProfileWrapper {
+  font-family: 'PT Root UI Medium';
+  font-style: normal;
+  font-feature-settings: 'tnum' on, 'lnum' on, 'ss01' on, 'liga' off;
+  background-color: white;
+  flex: 1;
+}
+
+@media (max-width: 992px) {
+  .nounProfileInfo {
+    padding-left: calc(var(--bs-gutter-x) * 0.5); /* bootstrap default */
+    background-color: white;
+    margin-top: 0rem;
+  }
+}
