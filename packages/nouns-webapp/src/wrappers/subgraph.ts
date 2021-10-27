@@ -101,9 +101,9 @@ export const nounsIndex = () => gql`
   }
 `;
 
-export const latestAuctionsQuery = (first: number = 50) => gql`
+export const latestAuctionsQuery = () => gql`
  {
-	auctions(orderBy: startTime, orderDirection: desc, first: ${first}) {	
+	auctions(orderBy: startTime, orderDirection: desc ) {	
 		id
 		amount
 		settled
