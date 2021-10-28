@@ -1,6 +1,9 @@
 .nounWrapper {
   align-self: flex-end;
+  position: relative;
+  padding-top: 100%;
   width: 100%;
+  height: 0;
 }
 .nounContentCol {
   display: flex;

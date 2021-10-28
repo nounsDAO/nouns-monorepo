@@ -1,5 +1,10 @@
 .img {
   image-rendering: pixelated;
   image-rendering: -moz-crisp-edges;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
+  height: auto;
+  vertical-align: middle;
 }
