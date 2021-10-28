@@ -3,7 +3,8 @@
 }
 
 .bidBtn {
-  margin-left: 1rem;
+  margin-left: 1rem !important;
+  border-radius: 00.25rem !important;
   width: 40%;
   height: 3rem;
   color: white;
