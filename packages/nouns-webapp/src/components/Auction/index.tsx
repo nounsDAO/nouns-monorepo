@@ -16,7 +16,7 @@ import {
 } from '../../state/slices/onDisplayAuction';
 
 interface AuctionProps {
-  auction: IAuction;
+  auction?: IAuction;
   bgColorHandler: (useGrey: boolean) => void;
 }
 
@@ -33,16 +33,20 @@ const Auction: React.FC<AuctionProps> = props => {
 
   const prevAuctionHandler = () => {
     dispatch(setPrevOnDisplayAuctionNounId());
-    history.push(`/noun/${currentAuction.nounId.toNumber() - 1}`);
+    currentAuction && history.push(`/auction/${currentAuction.nounId.toNumber() - 1}`);
   };
   const nextAuctionHandler = () => {
     dispatch(setNextOnDisplayAuctionNounId());
-    history.push(`/noun/${currentAuction.nounId.toNumber() + 1}`);
+    currentAuction && history.push(`/auction/${currentAuction.nounId.toNumber() + 1}`);
   };
 
-  const nounContent = (
+  const nounContent = currentAuction && (
     <div className={classes.nounWrapper}>
-      <StandaloneNounWithSeed nounId={currentAuction.nounId} onLoadSeed={loadedNounHandler} />
+      <StandaloneNounWithSeed
+        nounId={currentAuction.nounId}
+        onLoadSeed={loadedNounHandler}
+        shouldLinkToProfile={false}
+      />
     </div>
   );
 
@@ -52,7 +56,7 @@ const Auction: React.FC<AuctionProps> = props => {
     </div>
   );
 
-  const currentAuctionActivityContent = lastNounId && (
+  const currentAuctionActivityContent = currentAuction && lastNounId && (
     <AuctionActivity
       auction={currentAuction}
       isFirstAuction={currentAuction.nounId.eq(0)}
@@ -62,7 +66,7 @@ const Auction: React.FC<AuctionProps> = props => {
       displayGraphDepComps={true}
     />
   );
-  const nounderNounContent = lastNounId && (
+  const nounderNounContent = currentAuction && lastNounId && (
     <NounderNounContent
       mintTimestamp={currentAuction.startTime}
       nounId={currentAuction.nounId}
@@ -80,9 +84,10 @@ const Auction: React.FC<AuctionProps> = props => {
           {currentAuction ? nounContent : loadingNoun}
         </Col>
         <Col lg={{ span: 6 }} className={classes.auctionActivityCol}>
-          {isNounderNoun(currentAuction.nounId)
-            ? nounderNounContent
-            : currentAuctionActivityContent}
+          {currentAuction &&
+            (isNounderNoun(currentAuction.nounId)
+              ? nounderNounContent
+              : currentAuctionActivityContent)}
         </Col>
       </Row>
     </Container>

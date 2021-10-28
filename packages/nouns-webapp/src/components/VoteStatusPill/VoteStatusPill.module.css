@@ -1,0 +1,39 @@
+.nounButtonContents {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.nounButton {
+  height: 28px;
+  border-radius: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-family: 'PT Root UI Bold';
+  vertical-align: middle;
+  text-align: center;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 10px;
+  color: rgb(67, 179, 105);
+  background-color: rgba(67, 179, 105, 0.1);
+  font-size: 14px;
+}
+
+.pass {
+  color: rgb(67, 179, 105);
+  background-color: rgba(67, 179, 105, 0.1);
+}
+
+.fail {
+  color: rgba(214, 60, 94);
+  background-color: rgba(214, 60, 94, 0.1);
+}
+
+.pending {
+  color: #4965f0;
+  background-color: rgb(73, 101, 240, 0.1);
+}

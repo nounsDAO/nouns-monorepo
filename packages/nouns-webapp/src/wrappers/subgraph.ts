@@ -101,34 +101,34 @@ export const nounsIndex = () => gql`
   }
 `;
 
-export const latestAuctionsQuery = (first: number = 50) => gql`
- {
-	auctions(orderBy: startTime, orderDirection: desc, first: ${first}) {	
-		id
-		amount
-		settled
-		bidder {
-			id
-		}
-		startTime
-		endTime
-		noun {
-		  id
-		  owner {
-			id
-		  }
-		}
-		bids {
-			id
-			amount
-			blockNumber
-			blockTimestamp
-			txIndex
-			bidder {
-				id
-			}
-		}
-	}
+export const latestAuctionsQuery = () => gql`
+  {
+    auctions(orderBy: startTime, orderDirection: desc) {
+      id
+      amount
+      settled
+      bidder {
+        id
+      }
+      startTime
+      endTime
+      noun {
+        id
+        owner {
+          id
+        }
+      }
+      bids {
+        id
+        amount
+        blockNumber
+        blockTimestamp
+        txIndex
+        bidder {
+          id
+        }
+      }
+    }
   }
 `;
 
@@ -156,6 +156,27 @@ export const latestBidsQuery = (first: number = 10) => gql`
 	}
   }  
 `;
+
+export const nounVotingHistoryQuery = (nounId: number) => gql`
+{
+	noun(id: ${nounId}) {
+		id
+		votes {
+		proposal {
+			id
+		}
+		support
+		}
+	}
+}
+`;
+
+export const highestNounIdMintedAtProposalTime = (proposalStartBlock: number) => gql`
+{
+	auctions(orderBy: endTime orderDirection: desc first: 1 block: { number: ${proposalStartBlock} }) {
+		id
+	}
+}`;
 
 export const clientFactory = (uri: string) =>
   new ApolloClient({

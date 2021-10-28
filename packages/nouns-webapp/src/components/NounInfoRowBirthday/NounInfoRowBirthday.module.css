@@ -1,0 +1,15 @@
+.nounInfoRowBirthday {
+  font-family: 'PT Root UI Bold';
+  margin-left: 5px;
+}
+
+.birthdayInfoContainer {
+  display: inline;
+  width: 250px;
+  height: 25px;
+}
+
+.birthdayIcon {
+  margin-bottom: 4px;
+  margin-right: 7px;
+}

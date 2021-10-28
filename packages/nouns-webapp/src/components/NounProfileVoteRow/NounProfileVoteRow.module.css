@@ -1,0 +1,36 @@
+.voteIcon {
+  width: 41px;
+  margin-right: 5px;
+}
+
+.voteInfoContainer {
+  display: inline-block;
+  margin-top: 4px;
+}
+
+.voteProposalStatus {
+  text-align: right;
+}
+
+.proposalTitle {
+  text-decoration: none;
+  color: black;
+  font-family: 'PT Root UI Bold';
+  margin-left: 5px;
+}
+
+.nullStateCopy {
+  opacity: 50%;
+}
+
+.voteInfoRow {
+  cursor: pointer;
+}
+
+.voteStatusWrapper {
+  width: 71px;
+}
+
+.nullStateCopy:hover {
+  background-color: rgba(0, 0, 0, 0) !important;
+}
