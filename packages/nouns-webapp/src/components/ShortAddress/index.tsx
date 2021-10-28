@@ -22,7 +22,6 @@ const ShortAddress: React.FC<{ address: string; avatar?: boolean }> = props => {
       )}
       {ens ? ens : shortAddress}
     </div>
-    );
   }
 
   return <>{ens ? ens : shortAddress}</>;
