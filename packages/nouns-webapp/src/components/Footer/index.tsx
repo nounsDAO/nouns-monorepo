@@ -1,5 +1,5 @@
 import classes from './Footer.module.css';
-import Section from '../../layout/Section';
+import { Container } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
 import { useAppSelector } from '../../hooks';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
@@ -16,21 +16,25 @@ const Footer = () => {
   const location = useLocation();
   const useGreyBg = useAppSelector(state => state.application.useGreyBackground);
   const bgColor =
-    location.pathname === '/' || location.pathname.startsWith('/noun/')
+    location.pathname === '/' ||
+    location.pathname.startsWith('/auction/') ||
+    location.pathname.startsWith('/noun/')
       ? 'white'
       : useGreyBg
       ? '#d5d7e1'
       : '#e1d7d5';
 
   return (
-    <Section bgColor={bgColor} fullWidth={false} className={classes.alignBottom}>
-      <footer className={classes.footerSignature}>
-        <Link text="discord" url={discordURL} leavesPage={true} />
-        <Link text="twitter" url={twitterURL} leavesPage={true} />
-        <Link text="etherscan" url={etherscanURL} leavesPage={true} />
-        <Link text="discourse" url={discourseURL} leavesPage={false} />
-      </footer>
-    </Section>
+    <div className={classes.wrapper} style={{ backgroundColor: bgColor }}>
+      <Container className={classes.container}>
+        <footer className={classes.footerSignature}>
+          <Link text="discord" url={discordURL} leavesPage={true} />
+          <Link text="twitter" url={twitterURL} leavesPage={true} />
+          <Link text="etherscan" url={etherscanURL} leavesPage={true} />
+          <Link text="discourse" url={discourseURL} leavesPage={false} />
+        </footer>
+      </Container>
+    </div>
   );
 };
 export default Footer;
