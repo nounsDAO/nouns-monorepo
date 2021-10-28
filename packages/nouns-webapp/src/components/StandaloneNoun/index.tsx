@@ -3,6 +3,8 @@ import { buildSVG } from '@nouns/sdk';
 import { BigNumber as EthersBN } from 'ethers';
 import { INounSeed, useNounSeed } from '../../wrappers/nounToken';
 import Noun from '../Noun';
+import { Link } from 'react-router-dom';
+import classes from './StandaloneNoun.module.css';
 
 interface StandaloneNounProps {
   nounId: EthersBN;
@@ -11,6 +13,7 @@ interface StandaloneNounProps {
 interface StandaloneNounWithSeedProps {
   nounId: EthersBN;
   onLoadSeed?: (seed: INounSeed) => void;
+  shouldLinkToProfile: boolean;
 }
 
 const getNoun = (nounId: string | EthersBN, seed: INounSeed) => {
@@ -32,25 +35,33 @@ const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProp
   const seed = useNounSeed(nounId);
   const noun = seed && getNoun(nounId, seed);
 
-  return <Noun imgPath={noun ? noun.image : ''} alt={noun ? noun.description : 'Noun'} />;
+  return (
+    <Link to={'/noun/' + nounId.toString()} className={classes.clickableNoun}>
+      <Noun imgPath={noun ? noun.image : ''} alt={noun ? noun.description : 'Noun'} />
+    </Link>
+  );
 };
 
 export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = (
   props: StandaloneNounWithSeedProps,
 ) => {
-  const { nounId, onLoadSeed } = props;
+  const { nounId, onLoadSeed, shouldLinkToProfile } = props;
 
   const seed = useNounSeed(nounId);
 
-  if (seed && nounId && onLoadSeed) {
-    onLoadSeed(seed);
+  if (!seed || !nounId || !onLoadSeed) return <Noun imgPath="" alt="Noun" />;
 
-    const { image, description } = getNoun(nounId, seed);
+  onLoadSeed(seed);
 
-    return <Noun imgPath={image} alt={description} />;
-  } else {
-    return <Noun imgPath="" alt="Noun" />;
-  }
+  const { image, description } = getNoun(nounId, seed);
+
+  const noun = <Noun imgPath={image} alt={description} />;
+  const nounWithLink = (
+    <Link to={'/noun/' + nounId.toString()} className={classes.clickableNoun}>
+      {noun}
+    </Link>
+  );
+  return shouldLinkToProfile ? nounWithLink : noun;
 };
 
 export default StandaloneNoun;

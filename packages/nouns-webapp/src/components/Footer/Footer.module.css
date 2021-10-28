@@ -1,7 +1,16 @@
+.wrapper {
+  display: flex;
+  flex: 1;
+}
+.container {
+  display: flex;
+}
 .footerSignature {
-  margin: 0 auto;
+  margin: auto auto 0 auto;
   font-family: 'Londrina Solid';
   font-size: 1rem;
+  text-align: center;
+  padding: 1rem 0;
 }
 .footerSignature a {
   text-decoration: none;
@@ -16,10 +25,6 @@
   width: 32px;
   height: 32px;
   margin: 0 8px;
-}
-
-.alignBottom {
-  margin-top: auto;
 }
 
 @keyframes slidein {
