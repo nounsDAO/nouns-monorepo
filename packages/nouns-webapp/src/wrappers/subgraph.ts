@@ -102,33 +102,33 @@ export const nounsIndex = () => gql`
 `;
 
 export const latestAuctionsQuery = () => gql`
- {
-	auctions(orderBy: startTime, orderDirection: desc ) {	
-		id
-		amount
-		settled
-		bidder {
-			id
-		}
-		startTime
-		endTime
-		noun {
-		  id
-		  owner {
-			id
-		  }
-		}
-		bids {
-			id
-			amount
-			blockNumber
-			blockTimestamp
-			txIndex
-			bidder {
-				id
-			}
-		}
-	}
+  {
+    auctions(orderBy: startTime, orderDirection: desc) {
+      id
+      amount
+      settled
+      bidder {
+        id
+      }
+      startTime
+      endTime
+      noun {
+        id
+        owner {
+          id
+        }
+      }
+      bids {
+        id
+        amount
+        blockNumber
+        blockTimestamp
+        txIndex
+        bidder {
+          id
+        }
+      }
+    }
   }
 `;
 
