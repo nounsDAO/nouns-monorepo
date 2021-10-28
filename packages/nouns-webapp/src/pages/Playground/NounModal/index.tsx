@@ -3,10 +3,20 @@ import classes from './NounModal.module.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Noun from '../../../components/Noun';
+import { svg2png } from '../../../utils/svg2png';
 import { Backdrop } from '../../../components/Modal';
 
-const NounModal: React.FC<{ onDismiss: () => void; imgSrc: string }> = props => {
-  const { onDismiss, imgSrc } = props;
+const downloadNounPNG = async (svgString: string) => {
+  const png = await svg2png(svgString);
+  if (png === null) return;
+  const downloadEl = document.createElement('a');
+  downloadEl.href = png;
+  downloadEl.download = 'noun.png';
+  downloadEl.click();
+};
+
+const NounModal: React.FC<{ onDismiss: () => void; svg: string }> = props => {
+  const { onDismiss, svg } = props;
   return (
     <>
       {ReactDOM.createPortal(
@@ -19,10 +29,20 @@ const NounModal: React.FC<{ onDismiss: () => void; imgSrc: string }> = props => 
       )}
       {ReactDOM.createPortal(
         <div className={classes.modal}>
-          <Noun imgPath={imgSrc} alt="fff" className={classes.nounImg} />
+          <Noun
+            imgPath={`data:image/svg+xml;base64,${btoa(svg)}`}
+            alt="noun"
+            className={classes.nounImg}
+          />
           <div className={classes.displayNounFooter}>
             <span>Use this Noun as your profile picture!</span>
-            <Button>Download</Button>
+            <Button
+              onClick={() => {
+                downloadNounPNG(svg);
+              }}
+            >
+              Download
+            </Button>
           </div>
         </div>,
         document.getElementById('overlay-root')!,

@@ -29,11 +29,9 @@ const Playground: React.FC = () => {
       for (let i = 0; i < amount; i++) {
         const seed = { ...getRandomNounSeed(), ...modSeed };
         const { parts, background } = getNounData(seed);
-        const image = `data:image/svg+xml;base64,${btoa(
-          buildSVG(parts, ImageData.palette, background),
-        )}`;
+        const svg = buildSVG(parts, ImageData.palette, background);
         setNounSvgs(prev => {
-          return prev ? [image, ...prev] : [image];
+          return prev ? [svg, ...prev] : [svg];
         });
       }
     },
@@ -92,7 +90,7 @@ const Playground: React.FC = () => {
           onDismiss={() => {
             setDisplayNoun(false);
           }}
-          imgSrc={nounSvgs[indexOfNounToDisplay]}
+          svg={nounSvgs[indexOfNounToDisplay]}
         />
       )}
 
@@ -159,7 +157,11 @@ const Playground: React.FC = () => {
                           setDisplayNoun(true);
                         }}
                       >
-                        <Noun imgPath={svg} alt="noun" className={classes.nounImg} />
+                        <Noun
+                          imgPath={`data:image/svg+xml;base64,${btoa(svg)}`}
+                          alt="noun"
+                          className={classes.nounImg}
+                        />
                       </div>
                     </Col>
                   );
