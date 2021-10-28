@@ -22,7 +22,7 @@
 }
 
 .bodyInput {
-  min-height: 340px;
+  min-height: 340px !important;
 }
 
 .divider {
