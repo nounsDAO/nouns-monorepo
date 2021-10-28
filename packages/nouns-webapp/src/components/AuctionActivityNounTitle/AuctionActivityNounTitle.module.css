@@ -1,3 +1,23 @@
 .nounTitle {
+  color: black;
+}
+
+.nounTitle a:link {
+  color: black;
+}
+
+.nounTitle a:visited {
+  color: black;
+}
+
+.nounTitle a:hover {
+  color: black;
+}
+
+.nounTitle:active {
+  color: black;
+}
+
+.wrapper {
   display: inline-block;
 }
