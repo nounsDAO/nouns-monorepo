@@ -94,7 +94,7 @@ const Playground: React.FC = () => {
         />
       )}
 
-      <Container>
+      <Container fluid="lg">
         <Row>
           <Col lg={10} className={classes.headerRow}>
             <span>Explore</span>
