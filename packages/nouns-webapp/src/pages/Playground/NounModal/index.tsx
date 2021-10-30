@@ -50,7 +50,14 @@ const NounModal: React.FC<{ onDismiss: () => void; svg: string }> = props => {
       )}
       {ReactDOM.createPortal(
         <div className={classes.modal}>
-          {png && <Noun imgPath={png} alt="noun" className={classes.nounImg} />}
+          {png && (
+            <Noun
+              imgPath={png}
+              alt="noun"
+              className={classes.nounImg}
+              wrapperClassName={classes.nounWrapper}
+            />
+          )}
           <div className={classes.displayNounFooter}>
             <span>Use this Noun as your profile picture!</span>
             {!isMobile && png && (

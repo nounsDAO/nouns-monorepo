@@ -161,6 +161,7 @@ const Playground: React.FC = () => {
                           imgPath={`data:image/svg+xml;base64,${btoa(svg)}`}
                           alt="noun"
                           className={classes.nounImg}
+                          wrapperClassName={classes.nounWrapper}
                         />
                       </div>
                     </Col>

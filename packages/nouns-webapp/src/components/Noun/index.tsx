@@ -11,10 +11,15 @@ export const LoadingNoun = () => {
   );
 };
 
-const Noun: React.FC<{ imgPath: string; alt: string; className?: string }> = props => {
-  const { imgPath, alt, className } = props;
+const Noun: React.FC<{
+  imgPath: string;
+  alt: string;
+  className?: string;
+  wrapperClassName?: string;
+}> = props => {
+  const { imgPath, alt, className, wrapperClassName } = props;
   return (
-    <div className={classes.imgWrapper}>
+    <div className={`${classes.imgWrapper} ${wrapperClassName}`}>
       <Image
         className={`${classes.img} ${className}`}
         src={imgPath ? imgPath : loadingNoun}

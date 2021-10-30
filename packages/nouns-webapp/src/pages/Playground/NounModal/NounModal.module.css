@@ -34,7 +34,9 @@
 
 .nounImg {
   border-radius: 16px;
-  margin: 0.75rem 0;
+}
+.nounWrapper {
+  margin-bottom: 1rem;
 }
 
 @media (max-width: 992px) {
