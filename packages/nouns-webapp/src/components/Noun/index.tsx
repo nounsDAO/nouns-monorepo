@@ -14,12 +14,14 @@ export const LoadingNoun = () => {
 const Noun: React.FC<{ imgPath: string; alt: string; className?: string }> = props => {
   const { imgPath, alt, className } = props;
   return (
-    <Image
-      className={`${classes.img} ${className}`}
-      src={imgPath ? imgPath : loadingNoun}
-      alt={alt}
-      fluid
-    />
+    <div className={classes.imgWrapper}>
+      <Image
+        className={`${classes.img} ${className}`}
+        src={imgPath ? imgPath : loadingNoun}
+        alt={alt}
+        fluid
+      />
+    </div>
   );
 };
 

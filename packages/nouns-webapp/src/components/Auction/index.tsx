@@ -18,7 +18,7 @@ import {
 import { beige, grey } from '../../utils/nounBgColors';
 
 interface AuctionProps {
-  auction: IAuction;
+  auction?: IAuction;
 }
 
 const Auction: React.FC<AuctionProps> = props => {
@@ -87,9 +87,10 @@ const Auction: React.FC<AuctionProps> = props => {
             {currentAuction ? nounContent : loadingNoun}
           </Col>
           <Col lg={{ span: 6 }} className={classes.auctionActivityCol}>
-            {isNounderNoun(currentAuction.nounId)
-              ? nounderNounContent
-              : currentAuctionActivityContent}
+            {currentAuction &&
+              (isNounderNoun(currentAuction.nounId)
+                ? nounderNounContent
+                : currentAuctionActivityContent)}
           </Col>
         </Row>
       </Container>

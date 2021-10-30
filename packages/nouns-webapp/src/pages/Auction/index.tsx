@@ -45,7 +45,7 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
 
   return (
     <>
-      {onDisplayAuction && <Auction auction={onDisplayAuction} />}
+      <Auction auction={onDisplayAuction} />
       <Banner />
       {lastAuctionNounId && (
         <HistoryCollection latestNounId={BigNumber.from(lastAuctionNounId)} historyCount={10} />
