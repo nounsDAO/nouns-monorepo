@@ -20,7 +20,7 @@ import config from '../../config';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 
 const openEtherscanBidHistory = () => {
-  const url = buildEtherscanAddressLink(config.auctionProxyAddress);
+  const url = buildEtherscanAddressLink(config.addresses.nounsAuctionHouseProxy);
   window.open(url);
 };
 

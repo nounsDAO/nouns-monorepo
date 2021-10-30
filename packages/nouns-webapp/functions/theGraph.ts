@@ -89,4 +89,6 @@ export const isNounDelegate = (address: string, nouns: NormalizedNoun[]) =>
   delegateFilterFactory(address)(nouns).length > 0;
 
 export const nounsQuery = async () =>
-  normalizeNouns((await axios.post(config.subgraphApiUri, { query: nounsGql })).data.data.nouns);
+  normalizeNouns(
+    (await axios.post(config.app.subgraphApiUri, { query: nounsGql })).data.data.nouns,
+  );
