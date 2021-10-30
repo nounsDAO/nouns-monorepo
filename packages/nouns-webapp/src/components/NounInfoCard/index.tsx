@@ -26,7 +26,7 @@ const NounInfoCard: React.FC<NounInfoCardProps> = props => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const etherscanBaseURL = buildEtherscanAddressLink(config.tokenAddress);
+  const etherscanBaseURL = buildEtherscanAddressLink(config.addresses.nounsToken);
   const bidHistoryButtonClickHandler = () => {
     dispatch(setOnDisplayAuctionNounId(nounId));
     history.push(`/auction/${nounId}`);
