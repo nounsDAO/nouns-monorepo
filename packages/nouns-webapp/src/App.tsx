@@ -20,6 +20,7 @@ import NotFoundPage from './pages/NotFound';
 import Playground from './pages/Playground';
 import { CHAIN_ID } from './config';
 import VerifyPage from './pages/Verify';
+import ProfilePage from './pages/Profile';
 
 function App() {
   const { account, chainId } = useEthers();
@@ -48,7 +49,7 @@ function App() {
           <Route exact path="/" component={AuctionPage} />
           <Route
             exact
-            path="/noun/:id"
+            path="/auction/:id"
             render={props => <AuctionPage initialAuctionId={Number(props.match.params.id)} />}
           />
           <Route exact path="/nounders" component={NoundersPage} />
@@ -58,6 +59,11 @@ function App() {
           <Route exact path="/vote" component={GovernancePage} />
           <Route exact path="/vote/:id" component={VotePage} />
           <Route exact path="/playground" component={Playground} />
+          <Route
+            exact
+            path="/noun/:id"
+            render={props => <ProfilePage nounId={Number(props.match.params.id)} />}
+          />
           <Route component={NotFoundPage} />
         </Switch>
         <Footer />

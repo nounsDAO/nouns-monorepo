@@ -1,10 +1,10 @@
-import { getContractsForChainOrThrow, NounsDAOABI } from '@nouns/sdk';
+import { NounsDAOABI, NounsDaoLogicV1Factory } from '@nouns/sdk';
 import { useContractCall, useContractCalls, useContractFunction } from '@usedapp/core';
 import { utils, BigNumber as EthersBN } from 'ethers';
 import { defaultAbiCoder } from 'ethers/lib/utils';
 import { useMemo } from 'react';
 import { useLogs } from '../hooks/useLogs';
-import { CHAIN_ID } from '../config';
+import config from '../config';
 
 export enum Vote {
   AGAINST = 0,
@@ -79,7 +79,7 @@ export interface ProposalTransaction {
 }
 
 const abi = new utils.Interface(NounsDAOABI);
-const { nounsDaoContract } = getContractsForChainOrThrow(CHAIN_ID);
+const nounsDaoContract = new NounsDaoLogicV1Factory().attach(config.addresses.nounsDAOProxy);
 const proposalCreatedFilter = nounsDaoContract.filters?.ProposalCreated(
   null,
   null,

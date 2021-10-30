@@ -21,8 +21,8 @@ const NavBar = () => {
 
   const stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
   const history = useHistory();
-  const treasuryBalance = useEtherBalance(config.nounsDaoExecutorAddress);
-  const daoEtherscanLink = buildEtherscanAddressLink(config.nounsDaoExecutorAddress);
+  const treasuryBalance = useEtherBalance(config.addresses.nounsDaoExecutor);
+  const daoEtherscanLink = buildEtherscanAddressLink(config.addresses.nounsDaoExecutor);
 
   const [showConnectModal, setShowConnectModal] = useState(false);
 
@@ -68,7 +68,9 @@ const NavBar = () => {
   );
 
   const useStateBg =
-    history.location.pathname === '/' || history.location.pathname.includes('/noun');
+    history.location.pathname === '/' ||
+    history.location.pathname.includes('/noun') ||
+    history.location.pathname.includes('/auction');
 
   return (
     <>
