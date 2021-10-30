@@ -100,9 +100,9 @@ const Playground: React.FC = () => {
             <span>Explore</span>
             <h1>Playground</h1>
             <p>
-              The playground was built using the Nouns protocol. Each Noun's traits are generated
-              using the NounsSeeder contract. Using the seed, the Noun is then rendered using the
-              NounsDescriptor contract.
+              The playground was built using the Nouns protocol. Noun's traits are determined by the
+              Noun Seed. The seed was generated using the Nouns Assets and rendered using the Nouns
+              SDK.
             </p>
           </Col>
         </Row>
