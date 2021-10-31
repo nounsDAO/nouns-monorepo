@@ -46,7 +46,7 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
   const latestProposalId = proposals?.length;
 
   return (
-    <Section bgColor="white" fullWidth={false}>
+    <Section fullWidth={false}>
       <Col lg={{ span: 10, offset: 1 }}>
         <div className={classes.headerWrapper}>
           <h1>Activity</h1>

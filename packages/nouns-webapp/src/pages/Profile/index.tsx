@@ -3,7 +3,8 @@ import React from 'react';
 import { Row, Col, Container } from 'react-bootstrap';
 import { StandaloneNounWithSeed } from '../../components/StandaloneNoun';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setUseGreyBackground } from '../../state/slices/application';
+import { setStateBackgroundColor } from '../../state/slices/application';
+import { grey, beige } from '../../utils/nounBgColors';
 import { INounSeed } from '../../wrappers/nounToken';
 
 import classes from './Profile.module.css';
@@ -20,9 +21,10 @@ const ProfilePage: React.FC<ProfilePageProps> = props => {
 
   const dispatch = useAppDispatch();
   const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
+  let stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
 
   const loadedNounHandler = (seed: INounSeed) => {
-    dispatch(setUseGreyBackground(seed.background === 0));
+    dispatch(setStateBackgroundColor(seed.background === 0 ? grey : beige));
   };
 
   if (!lastAuctionNounId) {
@@ -41,14 +43,16 @@ const ProfilePage: React.FC<ProfilePageProps> = props => {
 
   return (
     <>
-      <Container fluid="lg">
-        <Row>
-          <Col lg={6}>{nounContent}</Col>
-          <Col lg={6} className={classes.nounProfileInfo}>
-            <NounInfoCard nounId={nounIdForDisplay} />
-          </Col>
-        </Row>
-      </Container>
+      <div style={{ backgroundColor: stateBgColor }}>
+        <Container>
+          <Row>
+            <Col lg={6}>{nounContent}</Col>
+            <Col lg={6} className={classes.nounProfileInfo}>
+              <NounInfoCard nounId={nounIdForDisplay} />
+            </Col>
+          </Row>
+        </Container>
+      </div>
       <ProfileActivityFeed nounId={nounIdForDisplay} />
     </>
   );

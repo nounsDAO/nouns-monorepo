@@ -4,8 +4,8 @@ import { ChangeEvent, useState } from 'react';
 import {
   Button,
   Col,
+  Form,
   FormControl,
-  FormFile,
   FormGroup,
   FormLabel,
   InputGroup,
@@ -220,16 +220,15 @@ const ProposalTransactionFormModal = ({
             {abi && Object.keys(abi.functions).map(func => <option value={func}>{func}</option>)}
           </FormControl>
           <label style={{ marginTop: '1rem' }} htmlFor="import-abi">
-            ABI
+            {abiFileName ? abiFileName : 'Import ABI'}
           </label>
-          <FormFile
+          <Form.Control
+            type="file"
             id="import-abi"
-            label={abiFileName ?? 'Import ABI'}
             accept="application/JSON"
             isValid={isABIUploadValid}
             isInvalid={isABIUploadValid === false}
             onChange={(e: ChangeEvent<HTMLInputElement>) => validateAndSetABI(e.target.files?.[0])}
-            custom
           />
         </Step>
         <Step step={3}>

@@ -18,3 +18,17 @@ export const getNounData = (seed: NounSeed): NounData => {
     background: bgcolors[seed.background],
   };
 };
+
+/**
+ * Generate a random Noun seed
+ * @param seed The Noun seed
+ */
+export const getRandomNounSeed = (): NounSeed => {
+  return {
+    background: Math.floor(Math.random() * bgcolors.length),
+    body: Math.floor(Math.random() * bodies.length),
+    accessory: Math.floor(Math.random() * accessories.length),
+    head: Math.floor(Math.random() * heads.length),
+    glasses: Math.floor(Math.random() * glasses.length),
+  };
+};

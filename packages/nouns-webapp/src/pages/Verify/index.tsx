@@ -52,7 +52,7 @@ const VerifyPage: React.FC<VerifyPageProp> = props => {
 
   return (
     <div className={clsx(classes.verifyBlock)}>
-      <Section fullWidth={true} bgColor="white">
+      <Section fullWidth={true}>
         <Col lg={{ span: 6, offset: 3 }}>
           {messageToSign === undefined ? (
             loadingContent()
