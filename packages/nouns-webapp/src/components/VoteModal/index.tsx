@@ -41,7 +41,7 @@ const VoteModal = ({
         <p className={classes.voteModalText}>
           {availableVotes && `${availableVotes} ${availableVotes > 1 ? 'Votes' : 'Vote'}`} Available
         </p>
-        <Button onClick={onVote} block>
+        <Button onClick={onVote}>
           {isLoading ? <Spinner animation="border" /> : voteActionText(vote, proposalId)}
         </Button>
       </Modal.Body>

@@ -42,7 +42,8 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
           target={'_blank'}
           rel="noreferrer"
         >
-          {data.noun.owner.id.toLowerCase() === config.auctionProxyAddress.toLowerCase()
+          {data.noun.owner.id.toLowerCase() ===
+          config.addresses.nounsAuctionHouseProxy.toLowerCase()
             ? 'Nouns Auction House'
             : shortAddressComponent}
         </a>

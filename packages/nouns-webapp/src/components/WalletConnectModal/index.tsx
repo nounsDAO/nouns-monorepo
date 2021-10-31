@@ -44,7 +44,7 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
             supportedChainIds,
             chainId: CHAIN_ID,
             rpc: {
-              [CHAIN_ID]: config.jsonRpcUri,
+              [CHAIN_ID]: config.app.jsonRpcUri,
             },
           });
           activate(walletlink);
@@ -56,7 +56,7 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
           const walletlink = new WalletLinkConnector({
             appName: 'Nouns.WTF',
             appLogoUrl: 'https://nouns.wtf/static/media/logo.cdea1650.svg',
-            url: config.jsonRpcUri,
+            url: config.app.jsonRpcUri,
             supportedChainIds,
           });
           activate(walletlink);
@@ -87,7 +87,7 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
         onClick={() => {
           const trezor = new TrezorConnector({
             chainId: CHAIN_ID,
-            url: config.jsonRpcUri,
+            url: config.app.jsonRpcUri,
             manifestAppUrl: 'nounops+trezorconnect@protonmail.com',
             manifestEmail: 'https://nouns.wtf',
           });

@@ -37,7 +37,7 @@ export const useAuction = (auctionHouseProxyAddress: string) => {
 export const useAuctionMinBidIncPercentage = () => {
   const minBidIncrement = useContractCall({
     abi,
-    address: config.auctionProxyAddress,
+    address: config.addresses.nounsAuctionHouseProxy,
     method: 'minBidIncrementPercentage',
     args: [],
   });
