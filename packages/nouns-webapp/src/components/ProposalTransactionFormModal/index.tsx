@@ -220,7 +220,7 @@ const ProposalTransactionFormModal = ({
             {abi && Object.keys(abi.functions).map(func => <option value={func}>{func}</option>)}
           </FormControl>
           <label style={{ marginTop: '1rem' }} htmlFor="import-abi">
-            {abiFileName ? abiFileName : 'Import ABI'}
+            {abiFileName === 'etherscan-abi-download.json' ? abiFileName : 'ABI'}
           </label>
           <Form.Control
             type="file"
