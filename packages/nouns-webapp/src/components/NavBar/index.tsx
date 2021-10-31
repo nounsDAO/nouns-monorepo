@@ -119,7 +119,7 @@ const NavBar = () => {
             >
               DOCS
             </Nav.Link>
-            <Nav.Link href="/playground" className={classes.nounsNavLink}>
+            <Nav.Link as={Link} to="/playground" className={classes.nounsNavLink}>
               PLAYGROUND
             </Nav.Link>
             {activeAccount ? connectedContent : disconnectedContent}
