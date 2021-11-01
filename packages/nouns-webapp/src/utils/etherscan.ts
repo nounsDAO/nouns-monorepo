@@ -36,7 +36,7 @@ const API_BASE_URL = getApiBaseURL(CHAIN_ID);
 export const buildEtherscanApiQuery = (
   address: string,
   module = 'contract',
-  action = 'getabi',
+  action = 'getsourcecode',
 ): string => {
   const params = new URLSearchParams({
     module,
