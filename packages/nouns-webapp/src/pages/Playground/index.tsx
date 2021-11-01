@@ -12,7 +12,7 @@ interface Trait {
   traitNames: string[];
 }
 
-const nounsPortocolLink = (
+const nounsProtocolLink = (
   <Link
     text="Nouns Protocol"
     url="https://www.notion.so/Noun-Protocol-32e4f0bf74fe433e927e2ea35e52a507"
@@ -125,7 +125,7 @@ const Playground: React.FC = () => {
             <span>Explore</span>
             <h1>Playground</h1>
             <p>
-              The playground was built using the {nounsPortocolLink}. Noun's traits are determined
+              The playground was built using the {nounsProtocolLink}. Noun's traits are determined
               by the Noun Seed. The seed was generated using {nounsAssetsLink} and rendered using
               the {nounsSDKLink}.
             </p>
