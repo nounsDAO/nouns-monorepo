@@ -2,13 +2,20 @@ import { Proposal } from '../../wrappers/nounsDao';
 import { Alert, Button } from 'react-bootstrap';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
+import { useHistory } from 'react-router-dom';
 
 const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
+  const history = useHistory();
+
   return (
     <div className={classes.proposals}>
       <div>
         <h3 className={classes.heading}>Proposals</h3>
-        <Button variant="success" className={classes.createProposalLink} href="/create-proposal">
+        <Button
+          variant="success"
+          className={classes.createProposalLink}
+          onClick={() => history.push('create-proposal')}
+        >
           Create Proposal
         </Button>
       </div>
@@ -21,7 +28,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
               <Button
                 className={classes.proposalLink}
                 variant="dark"
-                href={`/vote/${p.id}`}
+                onClick={() => history.push(`/vote/${p.id}`)}
                 key={i}
               >
                 <span>
