@@ -298,7 +298,7 @@ const VotePage = ({
         )}
         {isAwaitingStateChange() && (
           <Row className={classes.section}>
-            <Col>
+            <Col className="d-grid">
               <Button
                 onClick={moveStateAction}
                 disabled={isQueuePending || isExecutePending}

@@ -62,6 +62,10 @@
 .nounImg {
   border-radius: 16px;
 }
+.nounImg:hover {
+  cursor: pointer;
+  transform: scale(1.01);
+}
 .nounWrapper {
   margin-bottom: 1rem;
 }
