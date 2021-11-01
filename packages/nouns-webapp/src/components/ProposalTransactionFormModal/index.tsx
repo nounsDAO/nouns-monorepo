@@ -100,10 +100,18 @@ const ProposalTransactionFormModal = ({
     reader.readAsText(file);
   };
 
-  const getABI = async (address: string) => {
+  const getContractInformation = async (address: string) => {
     const response = await fetch(buildEtherscanApiQuery(address));
     const json = await response.json();
-    return json?.result;
+    return json?.result?.[0];
+  };
+
+  const getABI = async (address: string) => {
+    let info = await getContractInformation(address);
+    if (info?.Proxy === '1' && utils.isAddress(info?.Implementation)) {
+      info = await getContractInformation(info.Implementation);
+    }
+    return info.ABI;
   };
 
   const populateABIIfExists = async (address: string) => {

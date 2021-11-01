@@ -1,6 +1,7 @@
 import { Container, Col, Button, Row, FloatingLabel, Form } from 'react-bootstrap';
 import classes from './Playground.module.css';
 import React, { useEffect, useState } from 'react';
+import Link from '../../components/Link';
 import { ImageData, getNounData, getRandomNounSeed } from '@nouns/assets';
 import { buildSVG } from '@nouns/sdk';
 import Noun from '../../components/Noun';
@@ -10,6 +11,30 @@ interface Trait {
   title: string;
   traitNames: string[];
 }
+
+const nounsProtocolLink = (
+  <Link
+    text="Nouns Protocol"
+    url="https://www.notion.so/Noun-Protocol-32e4f0bf74fe433e927e2ea35e52a507"
+    leavesPage={true}
+  />
+);
+
+const nounsAssetsLink = (
+  <Link
+    text="nouns-assets"
+    url="https://github.com/nounsDAO/nouns-monorepo/tree/master/packages/nouns-assets"
+    leavesPage={true}
+  />
+);
+
+const nounsSDKLink = (
+  <Link
+    text="nouns-sdk"
+    url="https://github.com/nounsDAO/nouns-monorepo/tree/master/packages/nouns-sdk"
+    leavesPage={true}
+  />
+);
 
 const parseTraitName = (partName: string): string =>
   capitalizeFirstLetter(partName.substring(partName.indexOf('-') + 1));
@@ -100,9 +125,9 @@ const Playground: React.FC = () => {
             <span>Explore</span>
             <h1>Playground</h1>
             <p>
-              The playground was built using the Nouns protocol. Noun's traits are determined by the
-              Noun Seed. The seed was generated using the Nouns Assets and rendered using the Nouns
-              SDK.
+              The playground was built using the {nounsProtocolLink}. Noun's traits are determined
+              by the Noun Seed. The seed was generated using {nounsAssetsLink} and rendered using
+              the {nounsSDKLink}.
             </p>
           </Col>
         </Row>
