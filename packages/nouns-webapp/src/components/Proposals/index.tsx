@@ -1,6 +1,5 @@
 import { Proposal } from '../../wrappers/nounsDao';
 import { Alert, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
 
@@ -9,12 +8,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
     <div className={classes.proposals}>
       <div>
         <h3 className={classes.heading}>Proposals</h3>
-        <Button
-          variant="success"
-          className={classes.createProposalLink}
-          as={Link}
-          to="/create-proposal"
-        >
+        <Button variant="success" className={classes.createProposalLink} href="/create-proposal">
           Create Proposal
         </Button>
       </div>
@@ -27,8 +21,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
               <Button
                 className={classes.proposalLink}
                 variant="dark"
-                as={Link}
-                to={`/vote/${p.id}`}
+                href={`/vote/${p.id}`}
                 key={i}
               >
                 <span>

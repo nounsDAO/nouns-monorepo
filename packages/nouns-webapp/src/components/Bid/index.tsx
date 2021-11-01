@@ -1,5 +1,4 @@
 import { Auction, AuctionHouseContractFunction } from '../../wrappers/nounsAuction';
-import { CHAIN_ID } from '../../config';
 import { connectContractToSigner, useEthers, useContractFunction } from '@usedapp/core';
 import { useAppSelector } from '../../hooks';
 import React, { useEffect, useState, useRef, ChangeEvent, useCallback } from 'react';
@@ -10,7 +9,8 @@ import { Spinner, InputGroup, FormControl, Button } from 'react-bootstrap';
 import { useAuctionMinBidIncPercentage } from '../../wrappers/nounsAuction';
 import { useAppDispatch } from '../../hooks';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
-import { getContractsForChainOrThrow } from '@nouns/sdk';
+import { NounsAuctionHouseFactory } from '@nouns/sdk';
+import config from '../../config';
 
 const computeMinimumNextBid = (
   currentBid: BigNumber,
@@ -46,7 +46,9 @@ const Bid: React.FC<{
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { library } = useEthers();
   const { auction, auctionEnded } = props;
-  const { nounsAuctionHouseContract } = getContractsForChainOrThrow(CHAIN_ID);
+  const nounsAuctionHouseContract = new NounsAuctionHouseFactory().attach(
+    config.addresses.nounsAuctionHouseProxy,
+  );
 
   const account = useAppSelector(state => state.account.activeAccount);
 

@@ -206,7 +206,7 @@ const VotePage = ({
   );
 
   return (
-    <Section bgColor="transparent" fullWidth={false} className={classes.votePage}>
+    <Section fullWidth={false} className={classes.votePage}>
       <VoteModal
         show={showVoteModal}
         onHide={() => setShowVoteModal(false)}
@@ -266,7 +266,6 @@ const VotePage = ({
                   setVote(Vote.FOR);
                   setShowVoteModal(true);
                 }}
-                block
               >
                 Vote For
               </Button>
@@ -278,7 +277,6 @@ const VotePage = ({
                   setVote(Vote.AGAINST);
                   setShowVoteModal(true);
                 }}
-                block
               >
                 Vote Against
               </Button>
@@ -290,7 +288,6 @@ const VotePage = ({
                   setVote(Vote.ABSTAIN);
                   setShowVoteModal(true);
                 }}
-                block
               >
                 Abstain
               </Button>
@@ -306,7 +303,6 @@ const VotePage = ({
                 onClick={moveStateAction}
                 disabled={isQueuePending || isExecutePending}
                 variant="dark"
-                block
               >
                 {isQueuePending || isExecutePending ? (
                   <Spinner animation="border" />
