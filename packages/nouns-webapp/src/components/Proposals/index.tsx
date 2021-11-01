@@ -28,7 +28,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
               <Button
                 className={classes.proposalLink}
                 variant="dark"
-                onClick={() => history.push(`/vote/${p.id}`)}
+                onClick={() => history.push(`vote/${p.id}`)}
                 key={i}
               >
                 <span>
