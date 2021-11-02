@@ -113,7 +113,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
               <AuctionActivityDateHeadline startTime={auction.startTime} />
             </Col>
             <Col lg={12} className={classes.colAlignCenter}>
-              <AuctionActivityNounTitle nounId={auction.nounId} />
+              <AuctionActivityNounTitle whaleId={auction.nounId} />
               {displayGraphDepComps && (
                 <AuctionNavigation
                   isFirstAuction={isFirstAuction}

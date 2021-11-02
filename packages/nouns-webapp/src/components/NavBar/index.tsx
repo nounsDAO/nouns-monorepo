@@ -50,7 +50,7 @@ const NavBar = () => {
             setShowConnectModal(false);
           }}
         >
-          DISCONNECT
+          Disconnect
         </Nav.Link>
       </Nav.Item>
     </>
@@ -62,7 +62,7 @@ const NavBar = () => {
         className={clsx(classes.nounsNavLink, classes.connectBtn)}
         onClick={showModalHandler}
       >
-        CONNECT WALLET
+        Connect Wallet
       </Nav.Link>
     </>
   );
@@ -80,13 +80,7 @@ const NavBar = () => {
       <Navbar expand="lg" style={{ backgroundColor: `${useStateBg ? stateBgColor : ''}` }}>
         <Container>
           <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
-            <img
-              src={logo}
-              width="85"
-              height="85"
-              className="d-inline-block align-middle"
-              alt="Nouns DAO logo"
-            />
+            <strong>Diatom</strong> DAO
           </Navbar.Brand>
           {Number(CHAIN_ID) !== 1 && (
             <Nav.Item>
@@ -96,7 +90,7 @@ const NavBar = () => {
           )}
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse className="justify-content-end">
-            <Nav.Item>
+            {/* <Nav.Item>
               {treasuryBalance && (
                 <Nav.Link
                   href={daoEtherscanLink}
@@ -121,6 +115,18 @@ const NavBar = () => {
             </Nav.Link>
             <Nav.Link href="/playground" className={classes.nounsNavLink}>
               PLAYGROUND
+            </Nav.Link> */}
+            <Nav.Link href="#join" className={classes.nounsNavLink}>
+              What is Diatom
+            </Nav.Link>
+            <Nav.Link href="#join" className={classes.nounsNavLink}>
+              How it Works
+            </Nav.Link>
+            <Nav.Link href="#join" className={classes.nounsNavLink}>
+              How to Join
+            </Nav.Link>
+            <Nav.Link href="#join" className={classes.nounsNavLink}>
+              Join the Community
             </Nav.Link>
             {activeAccount ? connectedContent : disconnectedContent}
           </Navbar.Collapse>

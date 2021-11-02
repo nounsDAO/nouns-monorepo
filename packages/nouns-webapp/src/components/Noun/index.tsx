@@ -6,7 +6,7 @@ import Image from 'react-bootstrap/Image';
 export const LoadingNoun = () => {
   return (
     <div className={classes.imgWrapper}>
-      <Image className={classes.img} src={loadingNoun} alt={'loading noun'} fluid />
+      <Image className={classes.img} src={loadingNoun} alt={'loading Whale'} fluid />
     </div>
   );
 };
@@ -26,6 +26,10 @@ const Noun: React.FC<{
         alt={alt}
         fluid
       />
+      <div className={classes.imgTitle}>
+        <h3>Cetaceous Prime <span style={{ color: "#828282" }}>| Whale 01</span></h3>
+        <p>"Freedom is the right of all sentient beings"</p>
+      </div>
     </div>
   );
 };

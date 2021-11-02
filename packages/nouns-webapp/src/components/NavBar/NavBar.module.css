@@ -1,6 +1,8 @@
 .navBarBrand {
   position: relative;
   z-index: 2;
+
+  font-size: 2rem;
 }
 
 /* connect button displays differently to default NavBarItems, thus the !importants */
@@ -34,6 +36,7 @@
 .nounsNavLink:active,
 .nounsNavLink:visited {
   font-size: 0.9rem;
+  font-weight: bold;
   padding: 0.5rem 0.8rem !important;
   color: var(--brand-black) !important;
 }
