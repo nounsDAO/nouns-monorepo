@@ -19,8 +19,8 @@ tags:
 - name: "Cryptography"
   description: "Functions for verifying identity"
 servers:
-  - url: "https://deploy-preview-222--nouns-home.netlify.app/.netlify/functions/"
-    description: Preview Deployment
+  - url: "https://nouns.wtf/.netlify/functions/"
+    description: Production Deployment
 paths:
   /v0-is-noun-owner:
     post:

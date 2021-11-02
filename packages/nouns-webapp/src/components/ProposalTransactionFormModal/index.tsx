@@ -100,10 +100,18 @@ const ProposalTransactionFormModal = ({
     reader.readAsText(file);
   };
 
-  const getABI = async (address: string) => {
+  const getContractInformation = async (address: string) => {
     const response = await fetch(buildEtherscanApiQuery(address));
     const json = await response.json();
-    return json?.result;
+    return json?.result?.[0];
+  };
+
+  const getABI = async (address: string) => {
+    let info = await getContractInformation(address);
+    if (info?.Proxy === '1' && utils.isAddress(info?.Implementation)) {
+      info = await getContractInformation(info.Implementation);
+    }
+    return info.ABI;
   };
 
   const populateABIIfExists = async (address: string) => {
@@ -220,7 +228,7 @@ const ProposalTransactionFormModal = ({
             {abi && Object.keys(abi.functions).map(func => <option value={func}>{func}</option>)}
           </FormControl>
           <label style={{ marginTop: '1rem' }} htmlFor="import-abi">
-            {abiFileName ? abiFileName : 'Import ABI'}
+            {abiFileName === 'etherscan-abi-download.json' ? abiFileName : 'ABI'}
           </label>
           <Form.Control
             type="file"
