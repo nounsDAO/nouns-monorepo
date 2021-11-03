@@ -43,11 +43,11 @@ contract NounDelegator is OwnableUpgradeable, INounDelegator {
      */
     function withdrawAll() external onlyOwner {
         NounsTokenLike nouns = factory.nouns();
-        address avatar = factory.avatar();
+        address safe = factory.avatar();
         uint256 balance = nouns.balanceOf(address(this));
 
         for (uint256 i = 0; i < balance; i++) {
-            nouns.transferFrom(address(this), avatar, nouns.tokenOfOwnerByIndex(address(this), i));
+            nouns.transferFrom(address(this), safe, nouns.tokenOfOwnerByIndex(address(this), i));
         }
     }
 }
