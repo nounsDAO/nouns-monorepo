@@ -1,40 +1,121 @@
 .wrapper {
   display: flex;
   flex: 1;
+
+  background: #91f8b6;
 }
-.container {
-  display: flex;
-}
+
 .footerSignature {
-  margin: auto auto 0 auto;
-  font-family: 'Londrina Solid';
   font-size: 1rem;
-  text-align: center;
-  padding: 1rem 0;
+  padding: 3rem 1.5rem 1rem;
+
+  width: 100%;
+  max-width: 1080px;
 }
+
+.footerTitle h2 {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #4c4c4c;
+  margin: 0;
+}
+
+.footerTitle p {
+  font-size: 1.25rem;
+  margin-top: .5rem;
+  padding: 0;
+
+  opacity: 0.7;
+
+  font-weight: 300;
+}
+
 .footerSignature a {
   text-decoration: none;
   color: black;
   margin: 0 5px;
-}
-.footerSignature a:hover {
-  text-decoration: underline;
-  animation-name: slidein;
-}
-.footerSignature img {
-  width: 32px;
-  height: 32px;
-  margin: 0 8px;
+
+  width: fit-content;
 }
 
-@keyframes slidein {
-  from {
-    margin-left: 100%;
-    width: 300%;
+.linksContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  margin-top: 3rem;
+}
+
+.link {
+  display: flex;
+  gap: 1.2rem;
+}
+
+.link h4 {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: #4c4c4c;
+  margin: 0;
+}
+
+.link p {
+  font-size: 1.25rem;
+  margin: 0;
+  padding: 0;
+
+  opacity: 0.7;
+
+  font-weight: 300;
+}
+
+.linkIcon {
+  width: 35px;
+  height: 35px;
+
+  min-width: 35px;
+  min-height: 35px;
+}
+
+.copyright {
+  display: flex;
+  flex-direction: column;
+
+  margin-top: 4rem;
+
+  text-align: center;
+}
+
+.copyright p {
+  font-size: 1.25rem;
+  margin: 0;
+  padding: 0;
+
+  opacity: 0.7;
+
+  font-weight: 300;
+}
+
+.copyright h5 {
+  font-size: 1.75rem;
+  margin-bottom: .5rem;
+}
+
+@media (min-width: 990px) {
+  .footerSignature {
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
   }
 
-  to {
-    margin-left: 0%;
-    width: 100%;
+  .link {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .copyright {
+    margin-top: 9rem;
+  }
+
+  .copyright h5 {
+    margin-bottom: 1rem;
   }
 }

@@ -1,0 +1,119 @@
+.LungsContentWrapper {
+  display: flex;
+  gap: 5rem;
+  max-width: 1000px;
+
+  margin: 7rem auto 0;
+  padding: 6rem 0;
+  color: white;
+
+}
+
+.diatomImg {
+  min-width: 100px;
+  height: 100px;
+
+  background: white;
+
+  border-radius: 50%;
+}
+
+.LungsContent h2 {
+  color: #fff;
+  font-size: 2.75rem;
+  font-weight: bold;
+}
+
+.LungsContent p {
+  opacity: 0.75;
+
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+  font-weight: 300;
+
+  padding: .5rem 0 0;
+
+  max-width: 600px;
+}
+
+.LungsContent a {
+  position: relative;
+  text-decoration: none;
+
+  font-size: 1.25rem;
+  font-weight: 300;
+  color: #fff;
+  opacity: 0.25;
+
+  transition: opacity 300ms ease-out;
+}
+
+.LungsContent a img {
+  margin-left: 5px;
+  width: 30px;
+}
+
+.LungsContent a::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: -5px;
+
+  height: 2px;
+  width: 0;
+  background: #FFF;
+  transition: width 300ms ease-out;
+}
+
+.LungsContent a:hover {
+  opacity: 0.5;
+}
+
+.LungsContent a:hover::after {
+  width: 110px;
+}
+
+.topics {
+  display: flex;
+  flex-direction: column;
+  padding: 6rem 0;
+  gap: 4rem;
+
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.dot {
+  width: 50px;
+  height: 50px;
+
+  background: #000;
+  border-radius: 50%;
+}
+
+.topic {  
+  display: flex;
+  flex-direction: column;
+}
+
+.topic h5 {
+  color: #4c4c4c;
+  font-size: 1.5rem;
+  margin-top: 3rem;
+}
+
+.topic p {
+  opacity: 0.75;
+
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+  font-weight: 300;
+
+  padding: .5rem 0 0;
+}
+
+@media (min-width: 990px) {
+  .topics {
+    flex-direction: row;
+  }
+}

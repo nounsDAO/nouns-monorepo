@@ -1,14 +1,15 @@
-import { BigNumber } from 'ethers';
+// import { BigNumber } from 'ethers';
 import Auction from '../../components/Auction';
 // import Banner from '../../components/Banner';
 // import Documentation from '../../components/Documentation';
-import HistoryCollection from '../../components/HistoryCollection';
+// import HistoryCollection from '../../components/HistoryCollection';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setOnDisplayAuctionNounId } from '../../state/slices/onDisplayAuction';
 import { push } from 'connected-react-router';
 import { nounPath } from '../../utils/history';
 import useOnDisplayAuction from '../../wrappers/onDisplayAuction';
 import { useEffect } from 'react';
+import DiatomInfo from '../../components/DiatomInfo';
 
 interface AuctionPageProps {
   initialAuctionId?: number;
@@ -44,14 +45,15 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
   }, [lastAuctionNounId, dispatch, initialAuctionId, onDisplayAuction]);
 
   return (
-    <>
+    <div style={{ backgroundColor: "#91f8b6" }}>
       <Auction auction={onDisplayAuction} />
+      <DiatomInfo />
       {/* <Banner /> */}
-      {lastAuctionNounId && (
+      {/* {lastAuctionNounId && (
         <HistoryCollection latestNounId={BigNumber.from(lastAuctionNounId)} historyCount={10} />
-      )}
+      )} */}
       {/* <Documentation /> */}
-    </>
+    </div>
   );
 };
 export default AuctionPage;
