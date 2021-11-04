@@ -3,4 +3,6 @@ pragma solidity ^0.8.6;
 
 interface INounDelegator {
     function initialize(address owner) external;
+
+    function emergencyWithdrawAll() external;
 }

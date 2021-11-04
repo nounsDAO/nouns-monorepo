@@ -11,10 +11,18 @@ contract NounDelegator is OwnableUpgradeable, INounDelegator {
     NounDelegatorFactoryModuleLike public factory;
 
     /**
-     * Initialize this contract by setting the factory address
+     * @notice Require that the sender is the factory.
+     */
+    modifier onlyFactory() {
+        require(msg.sender == address(factory), 'Sender is not the factory');
+        _;
+    }
+
+    /**
+     * Initialize this contract by setting the factory address.
+     * @dev This function can only be called once.
      */
     function initialize(address _owner) external override {
-        require(address(factory) == address(0), 'Already initialized');
         factory = NounDelegatorFactoryModuleLike(msg.sender);
 
         __Ownable_init();
@@ -23,25 +31,43 @@ contract NounDelegator is OwnableUpgradeable, INounDelegator {
     }
 
     /**
-     * @notice Delegate votes from `msg.sender` to `delegatee`
-     * @param delegatee The address to delegate votes to
+     * @notice Delegate votes from `msg.sender` to `delegatee`.
+     * @param delegatee The address to delegate votes to.
+     * @dev This function can only be called by the owner.
      */
     function delegate(address delegatee) external onlyOwner {
         factory.nouns().delegate(delegatee);
     }
 
     /**
-     * Withdraw a single Noun from this contract to the Gnosis Safe
-     * @param nounId The ID of he noun with withdraw
+     * Withdraw a single Noun from this contract to the Gnosis Safe.
+     * @param nounId The ID of he noun with withdraw.
+     * @dev This function can only be called by the owner.
      */
     function withdraw(uint256 nounId) external onlyOwner {
         factory.nouns().transferFrom(address(this), factory.avatar(), nounId);
     }
 
     /**
-     * Withdraw all Nouns from this contract to the Gnosis Safe
+     * Withdraw all Nouns from this contract to the Gnosis Safe.
+     * @dev This function can only be called by the owner.
      */
     function withdrawAll() external onlyOwner {
+        _withdrawAll();
+    }
+
+    /**
+     * Withdraw all Nouns from this contract to the Gnosis Safe.
+     * @dev This function can only be called by the factory.
+     */
+    function emergencyWithdrawAll() external override onlyFactory {
+        _withdrawAll();
+    }
+
+    /**
+     * Withdraw all Nouns from this contract to the Gnosis Safe.
+     */
+    function _withdrawAll() internal {
         NounsTokenLike nouns = factory.nouns();
         address safe = factory.avatar();
         uint256 balance = nouns.balanceOf(address(this));
