@@ -1,3 +1,9 @@
+.navArrowsContainer {
+  position: absolute;
+  margin-top: 0.3rem;
+  margin-left: 12.5rem;
+}
+
 .leftArrow {
   margin-left: 1rem;
   display: inline-block;
@@ -33,5 +39,11 @@
 @media (max-width: 992px) {
   .leftArrow {
     margin-left: 1rem;
+  }
+}
+@-moz-document url-prefix() {
+  .navArrowsContainer {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
   }
 }
