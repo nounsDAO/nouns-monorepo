@@ -9,7 +9,7 @@ const AuctionNavigation: React.FC<{
 }> = props => {
   const { isFirstAuction, isLastAuction, onPrevAuctionClick, onNextAuctionClick } = props;
   return (
-    <div>
+    <div className={classes.navArrowsContainer}>
       <button
         onClick={() => onPrevAuctionClick()}
         className={classes.leftArrow}

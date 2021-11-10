@@ -28,7 +28,7 @@ const seed = {
   background: 0,
   body: 17,
   accessory: 41,
-  head: 71
+  head: 71,
   glasses: 2,
 };
 const { parts, background } = getNounData(seed);
