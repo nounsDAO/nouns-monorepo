@@ -12,6 +12,7 @@ import BidHistory from '../BidHistory';
 import { Modal } from 'react-bootstrap';
 import AuctionNavigation from '../AuctionNavigation';
 import AuctionActivityWrapper from '../AuctionActivityWrapper';
+import AuctionTitleAndNavWrapper from '../AuctionTitleAndNavWrapper';
 import AuctionActivityNounTitle from '../AuctionActivityNounTitle';
 import AuctionActivityDateHeadline from '../AuctionActivityDateHeadline';
 import BidHistoryBtn from '../BidHistoryBtn';
@@ -112,7 +113,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
             <Col lg={12}>
               <AuctionActivityDateHeadline startTime={auction.startTime} />
             </Col>
-            <Col lg={12} className={classes.colAlignCenter}>
+            <AuctionTitleAndNavWrapper>
               <AuctionActivityNounTitle nounId={auction.nounId} />
               {displayGraphDepComps && (
                 <AuctionNavigation
@@ -122,7 +123,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
                   onPrevAuctionClick={onPrevAuctionClick}
                 />
               )}
-            </Col>
+            </AuctionTitleAndNavWrapper>
           </Row>
           <Row className={classes.activityRow}>
             <Col lg={5} className={classes.currentBidCol}>

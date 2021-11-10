@@ -4,6 +4,7 @@ import {
   ProposalState,
   useCastVote,
   useExecuteProposal,
+  useHasVotedOnProposal,
   useProposal,
   useQueueProposal,
   Vote,
@@ -85,8 +86,11 @@ const VotePage = ({
   // Only count available votes as of the proposal created block
   const availableVotes = useUserVotesAsOfBlock(proposal?.createdBlock ?? undefined);
 
+  const hasVoted = useHasVotedOnProposal(proposal?.id);
+
   // Only show voting if user has > 0 votes at proposal created block and proposal is active
-  const showVotingButtons = availableVotes && proposal?.status === ProposalState.ACTIVE;
+  const showVotingButtons =
+    availableVotes && !hasVoted && proposal?.status === ProposalState.ACTIVE;
 
   const linkIfAddress = (content: string) => {
     if (utils.isAddress(content)) {
@@ -252,14 +256,18 @@ const VotePage = ({
           )}
         </div>
         {proposal && proposal.status === ProposalState.ACTIVE && !showVotingButtons && (
-          <Alert variant="secondary" className={classes.voterIneligibleAlert}>
-            Only NOUN votes that were self delegated or delegated to another address before block{' '}
-            {proposal.createdBlock} are eligible for voting.
+          <Alert
+            variant={hasVoted ? 'success' : 'secondary'}
+            className={classes.voterIneligibleAlert}
+          >
+            {hasVoted
+              ? 'Thank you for your vote!'
+              : `Only NOUN votes that were self delegated or delegated to another address before block ${proposal.createdBlock} are eligible for voting.`}
           </Alert>
         )}
         {showVotingButtons ? (
           <Row>
-            <Col lg={4}>
+            <Col lg={4} className="d-grid gap-2">
               <Button
                 className={classes.votingButton}
                 onClick={() => {
@@ -270,7 +278,7 @@ const VotePage = ({
                 Vote For
               </Button>
             </Col>
-            <Col lg={4}>
+            <Col lg={4} className="d-grid gap-2">
               <Button
                 className={classes.votingButton}
                 onClick={() => {
@@ -281,7 +289,7 @@ const VotePage = ({
                 Vote Against
               </Button>
             </Col>
-            <Col lg={4}>
+            <Col lg={4} className="d-grid gap-2">
               <Button
                 className={classes.votingButton}
                 onClick={() => {

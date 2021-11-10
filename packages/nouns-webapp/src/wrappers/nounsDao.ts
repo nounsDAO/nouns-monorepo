@@ -1,5 +1,5 @@
 import { NounsDAOABI, NounsDaoLogicV1Factory } from '@nouns/sdk';
-import { useContractCall, useContractCalls, useContractFunction } from '@usedapp/core';
+import { useContractCall, useContractCalls, useContractFunction, useEthers } from '@usedapp/core';
 import { utils, BigNumber as EthersBN } from 'ethers';
 import { defaultAbiCoder } from 'ethers/lib/utils';
 import { useMemo } from 'react';
@@ -92,6 +92,20 @@ const proposalCreatedFilter = nounsDaoContract.filters?.ProposalCreated(
   null,
   null,
 );
+
+export const useHasVotedOnProposal = (proposalId: string | undefined): boolean => {
+  const { account } = useEthers();
+
+  // Fetch a voting receipt for the passed proposal id
+  const [receipt] =
+    useContractCall<[any]>({
+      abi,
+      address: nounsDaoContract.address,
+      method: 'getReceipt',
+      args: [proposalId, account],
+    }) || [];
+  return receipt?.hasVoted ?? false;
+};
 
 export const useProposalCount = (): number | undefined => {
   const [count] =
