@@ -195,7 +195,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      * catch the revert and pause this contract.
      */
     function _createAuction() internal {
-        try nouns.mint() returns (uint256 nounId) {
+        try nouns.mint("asd") returns (uint256 nounId) {
             uint256 startTime = block.timestamp;
             uint256 endTime = startTime + duration;
 

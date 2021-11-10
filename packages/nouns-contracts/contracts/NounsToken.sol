@@ -18,69 +18,39 @@
 pragma solidity ^0.8.6;
 
 import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
-import { ERC721Checkpointable } from './base/ERC721Checkpointable.sol';
-import { INounsDescriptor } from './interfaces/INounsDescriptor.sol';
-import { INounsSeeder } from './interfaces/INounsSeeder.sol';
+import { ERC721Enumerable } from './base/ERC721Enumerable.sol';
+import { IERC721Enumerable } from '@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol';
+import { IERC165 } from '@openzeppelin/contracts/utils/introspection/IERC165.sol';
+import { ERC721URIStorage } from './base/ERC721URIStorage.sol';
 import { INounsToken } from './interfaces/INounsToken.sol';
 import { ERC721 } from './base/ERC721.sol';
 import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import { IProxyRegistry } from './external/opensea/IProxyRegistry.sol';
 
-contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
+contract NounsToken is INounsToken, Ownable, ERC721URIStorage, ERC721Enumerable {
     // The nounders DAO address (creators org)
     address public noundersDAO;
 
     // An address who has permissions to mint Nouns
     address public minter;
 
-    // The Nouns token URI descriptor
-    INounsDescriptor public descriptor;
-
-    // The Nouns token seeder
-    INounsSeeder public seeder;
-
     // Whether the minter can be updated
     bool public isMinterLocked;
-
-    // Whether the descriptor can be updated
-    bool public isDescriptorLocked;
-
-    // Whether the seeder can be updated
-    bool public isSeederLocked;
-
-    // The noun seeds
-    mapping(uint256 => INounsSeeder.Seed) public seeds;
 
     // The internal noun ID tracker
     uint256 private _currentNounId;
 
-    // IPFS content hash of contract-level metadata
-    string private _contractURIHash = 'QmZi1n79FqWt2tTLwCqiy6nLM6xLGRsEPQ5JmReJQKNNzX';
-
     // OpenSea's Proxy Registry
     IProxyRegistry public immutable proxyRegistry;
+
+    // max supply
+    uint256 private maxSupply;
 
     /**
      * @notice Require that the minter has not been locked.
      */
     modifier whenMinterNotLocked() {
         require(!isMinterLocked, 'Minter is locked');
-        _;
-    }
-
-    /**
-     * @notice Require that the descriptor has not been locked.
-     */
-    modifier whenDescriptorNotLocked() {
-        require(!isDescriptorLocked, 'Descriptor is locked');
-        _;
-    }
-
-    /**
-     * @notice Require that the seeder has not been locked.
-     */
-    modifier whenSeederNotLocked() {
-        require(!isSeederLocked, 'Seeder is locked');
         _;
     }
 
@@ -103,30 +73,16 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     constructor(
         address _noundersDAO,
         address _minter,
-        INounsDescriptor _descriptor,
-        INounsSeeder _seeder,
         IProxyRegistry _proxyRegistry
-    ) ERC721('Nouns', 'NOUN') {
+    ) ERC721('whalez', 'WHALEZ') {
         noundersDAO = _noundersDAO;
         minter = _minter;
-        descriptor = _descriptor;
-        seeder = _seeder;
         proxyRegistry = _proxyRegistry;
+        maxSupply = 50;
     }
 
-    /**
-     * @notice The IPFS URI of contract-level metadata.
-     */
-    function contractURI() public view returns (string memory) {
-        return string(abi.encodePacked('ipfs://', _contractURIHash));
-    }
-
-    /**
-     * @notice Set the _contractURIHash.
-     * @dev Only callable by the owner.
-     */
-    function setContractURIHash(string memory newContractURIHash) external onlyOwner {
-        _contractURIHash = newContractURIHash;
+    function getMaxSupply() external view override returns (uint256) {
+        return maxSupply;
     }
 
     /**
@@ -146,11 +102,12 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
      * until 183 nounder Nouns have been minted (5 years w/ 24 hour auctions).
      * @dev Call _mintTo with the to address(es).
      */
-    function mint() public override onlyMinter returns (uint256) {
-        if (_currentNounId <= 1820 && _currentNounId % 10 == 0) {
-            _mintTo(noundersDAO, _currentNounId++);
-        }
-        return _mintTo(minter, _currentNounId++);
+    function mint(string memory tokenIpfsURI) public override onlyMinter returns (uint256) {
+        _currentNounId = _currentNounId + 1;
+        require(_currentNounId <= maxSupply, 'max supply reached');
+        uint256 tokenId = _mintTo(minter, _currentNounId);
+        _setTokenURI(_currentNounId, tokenIpfsURI);
+        return tokenId;
     }
 
     /**
@@ -162,21 +119,10 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     }
 
     /**
-     * @notice A distinct Uniform Resource Identifier (URI) for a given asset.
-     * @dev See {IERC721Metadata-tokenURI}.
+     * @dev overrides default base url
      */
-    function tokenURI(uint256 tokenId) public view override returns (string memory) {
-        require(_exists(tokenId), 'NounsToken: URI query for nonexistent token');
-        return descriptor.tokenURI(tokenId, seeds[tokenId]);
-    }
-
-    /**
-     * @notice Similar to `tokenURI`, but always serves a base64 encoded data URI
-     * with the JSON contents directly inlined.
-     */
-    function dataURI(uint256 tokenId) public view override returns (string memory) {
-        require(_exists(tokenId), 'NounsToken: URI query for nonexistent token');
-        return descriptor.dataURI(tokenId, seeds[tokenId]);
+    function _baseURI() internal pure override returns (string memory) {
+        return 'ipfs://';
     }
 
     /**
@@ -210,54 +156,42 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     }
 
     /**
-     * @notice Set the token URI descriptor.
-     * @dev Only callable by the owner when not locked.
-     */
-    function setDescriptor(INounsDescriptor _descriptor) external override onlyOwner whenDescriptorNotLocked {
-        descriptor = _descriptor;
-
-        emit DescriptorUpdated(_descriptor);
-    }
-
-    /**
-     * @notice Lock the descriptor.
-     * @dev This cannot be reversed and is only callable by the owner when not locked.
-     */
-    function lockDescriptor() external override onlyOwner whenDescriptorNotLocked {
-        isDescriptorLocked = true;
-
-        emit DescriptorLocked();
-    }
-
-    /**
-     * @notice Set the token seeder.
-     * @dev Only callable by the owner when not locked.
-     */
-    function setSeeder(INounsSeeder _seeder) external override onlyOwner whenSeederNotLocked {
-        seeder = _seeder;
-
-        emit SeederUpdated(_seeder);
-    }
-
-    /**
-     * @notice Lock the seeder.
-     * @dev This cannot be reversed and is only callable by the owner when not locked.
-     */
-    function lockSeeder() external override onlyOwner whenSeederNotLocked {
-        isSeederLocked = true;
-
-        emit SeederLocked();
-    }
-
-    /**
      * @notice Mint a Noun with `nounId` to the provided `to` address.
      */
     function _mintTo(address to, uint256 nounId) internal returns (uint256) {
-        INounsSeeder.Seed memory seed = seeds[nounId] = seeder.generateSeed(nounId, descriptor);
-
         _mint(owner(), to, nounId);
-        emit NounCreated(nounId, seed);
+        emit NounCreated(nounId);
 
         return nounId;
+    }
+
+    /**
+     * override(ERC721, ERC721Enumerable)
+     * here you're overriding _beforeTokenTransfer method of
+     * two Base classes namely ERC721, ERC721Enumerable
+     * */
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId
+    ) internal override(ERC721, ERC721Enumerable) {
+        super._beforeTokenTransfer(from, to, tokenId);
+    }
+
+    function tokenURI(uint256 tokenId) public view override(ERC721, ERC721URIStorage) returns (string memory) {
+        return super.tokenURI(tokenId);
+    }
+
+    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
+        super._burn(tokenId);
+    }
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721, ERC721Enumerable, IERC165)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
     }
 }
