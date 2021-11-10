@@ -18,7 +18,7 @@ import {
 } from '../typechain';
 
 import {
-  deployNounsToken,
+  deployWhalezToken,
   deployWeth,
   populateDescriptor,
   address,
@@ -85,7 +85,7 @@ async function deploy() {
   // nonce ++: set ownable contracts owner to timelock
 
   // 1. DEPLOY Nouns token
-  nounsToken = await deployNounsToken(
+  nounsToken = await deployWhalezToken(
     deployer,
     noundersDAO.address,
     deployer.address, // do not know minter/auction house yet

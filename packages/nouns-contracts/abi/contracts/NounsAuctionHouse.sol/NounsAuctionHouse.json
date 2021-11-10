@@ -250,7 +250,7 @@
   {
     "inputs": [
       {
-        "internalType": "contract INounsToken",
+        "internalType": "contract IWhalezToken",
         "name": "_nouns",
         "type": "address"
       },
@@ -303,7 +303,7 @@
     "name": "nouns",
     "outputs": [
       {
-        "internalType": "contract INounsToken",
+        "internalType": "contract IWhalezToken",
         "name": "",
         "type": "address"
       }

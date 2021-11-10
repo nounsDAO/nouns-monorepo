@@ -3,7 +3,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_noundersDAO",
+        "name": "_diatomDAO",
         "type": "address"
       },
       {
@@ -72,6 +72,19 @@
   },
   {
     "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "diatomDAO",
+        "type": "address"
+      }
+    ],
+    "name": "DiatomDAOUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
     "inputs": [],
     "name": "MinterLocked",
     "type": "event"
@@ -87,45 +100,6 @@
       }
     ],
     "name": "MinterUpdated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "NounBurned",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "NounCreated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "noundersDAO",
-        "type": "address"
-      }
-    ],
-    "name": "NoundersDAOUpdated",
     "type": "event"
   },
   {
@@ -173,6 +147,32 @@
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "WhaleBurned",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "WhaleCreated",
+    "type": "event"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -213,13 +213,26 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "nounId",
+        "name": "whaleId",
         "type": "uint256"
       }
     ],
     "name": "burn",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "diatomDAO",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -338,19 +351,6 @@
         "internalType": "string",
         "name": "",
         "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "noundersDAO",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -481,11 +481,11 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_minter",
+        "name": "_diatomDAO",
         "type": "address"
       }
     ],
-    "name": "setMinter",
+    "name": "setDiatomDAO",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -494,11 +494,11 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_noundersDAO",
+        "name": "_minter",
         "type": "address"
       }
     ],
-    "name": "setNoundersDAO",
+    "name": "setMinter",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

@@ -4,7 +4,7 @@ import { ethers } from 'hardhat';
 import { NounsToken, NounsDescriptorFactory } from '../../typechain';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
-  deployNounsToken,
+  deployWhalezToken,
   getSigners,
   TestSigners,
   setTotalSupply,
@@ -57,7 +57,7 @@ describe('Nouns Governance', () => {
     account2 = signers.account2;
     deployer = signers.deployer;
 
-    token = await deployNounsToken(signers.deployer);
+    token = await deployWhalezToken(signers.deployer);
 
     await populateDescriptor(
       NounsDescriptorFactory.connect(await token.descriptor(), signers.deployer),

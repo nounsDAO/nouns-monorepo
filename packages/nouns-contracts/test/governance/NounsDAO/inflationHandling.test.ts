@@ -7,7 +7,7 @@ const { ethers } = hardhat;
 import { BigNumber as EthersBN } from 'ethers';
 
 import {
-  deployNounsToken,
+  deployWhalezToken,
   getSigners,
   TestSigners,
   setTotalSupply,
@@ -53,7 +53,7 @@ async function reset(): Promise<void> {
   // Deploy Delegate
   const { address: govDelegateAddress } = await new NounsDaoLogicV1Factory(deployer).deploy();
   // Deploy Nouns token
-  token = await deployNounsToken(deployer);
+  token = await deployWhalezToken(deployer);
 
   // Deploy Delegator
   await new NounsDaoProxyFactory(deployer).deploy(

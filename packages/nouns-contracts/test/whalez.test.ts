@@ -2,23 +2,23 @@ import chai from 'chai';
 import { ethers } from 'hardhat';
 import { constants } from 'ethers';
 import { solidity } from 'ethereum-waffle';
-import { NounsToken } from '../typechain';
-import { deployNounsToken } from './utils';
+import { WhalezToken } from '../typechain';
+import { deployWhalezToken } from './utils';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 chai.use(solidity);
 const { expect } = chai;
 const IPFS_URL = 'someIpfsURL';
 
-describe('NounsToken', () => {
-  let nounsToken: NounsToken;
+describe('WhalezToken', () => {
+  let whalezToken: WhalezToken;
   let deployer: SignerWithAddress;
-  let noundersDAO: SignerWithAddress;
+  let diatomDAO: SignerWithAddress;
   let snapshotId: number;
 
   before(async () => {
-    [deployer, noundersDAO] = await ethers.getSigners();
-    nounsToken = await deployNounsToken(deployer, noundersDAO.address, deployer.address);
+    [deployer, diatomDAO] = await ethers.getSigners();
+    whalezToken = await deployWhalezToken(deployer, diatomDAO.address, deployer.address);
   });
 
   beforeEach(async () => {
@@ -29,49 +29,49 @@ describe('NounsToken', () => {
     await ethers.provider.send('evm_revert', [snapshotId]);
   });
 
-  it('should allow the minter to mint a noun to itself', async () => {
-    const receipt = await (await nounsToken.mint(IPFS_URL)).wait();
+  it('should allow the minter to mint a whale to itself', async () => {
+    const receipt = await (await whalezToken.mint(IPFS_URL)).wait();
 
-    const [, , noundersNounCreated] = receipt.events || [];
+    const [, , whaleCreated] = receipt.events || [];
 
-    expect(await nounsToken.ownerOf(1)).to.eq(deployer.address);
-    expect(noundersNounCreated?.event).to.eq('NounCreated');
-    expect(noundersNounCreated?.args?.tokenId).to.eq(1);
+    expect(await whalezToken.ownerOf(1)).to.eq(deployer.address);
+    expect(whaleCreated?.event).to.eq('WhaleCreated');
+    expect(whaleCreated?.args?.tokenId).to.eq(1);
   });
 
   it('should set symbol', async () => {
-    expect(await nounsToken.symbol()).to.eq('WHALEZ');
+    expect(await whalezToken.symbol()).to.eq('WHALEZ');
   });
 
   it('should set name', async () => {
-    expect(await nounsToken.name()).to.eq('whalez');
+    expect(await whalezToken.name()).to.eq('whalez');
   });
 
   it('should emit two transfer logs on mint', async () => {
     const [, , creator, minter] = await ethers.getSigners();
 
-    await (await nounsToken.mint(IPFS_URL)).wait();
+    await (await whalezToken.mint(IPFS_URL)).wait();
 
-    await (await nounsToken.setMinter(minter.address)).wait();
-    await (await nounsToken.transferOwnership(creator.address)).wait();
+    await (await whalezToken.setMinter(minter.address)).wait();
+    await (await whalezToken.transferOwnership(creator.address)).wait();
 
-    const tx = nounsToken.connect(minter).mint(IPFS_URL);
+    const tx = whalezToken.connect(minter).mint(IPFS_URL);
 
     await expect(tx)
-      .to.emit(nounsToken, 'Transfer')
+      .to.emit(whalezToken, 'Transfer')
       .withArgs(constants.AddressZero, creator.address, 2);
-    await expect(tx).to.emit(nounsToken, 'Transfer').withArgs(creator.address, minter.address, 2);
+    await expect(tx).to.emit(whalezToken, 'Transfer').withArgs(creator.address, minter.address, 2);
   });
 
-  it('should allow minter to burn a noun', async () => {
-    await (await nounsToken.mint(IPFS_URL)).wait();
+  it('should allow minter to burn a whale', async () => {
+    await (await whalezToken.mint(IPFS_URL)).wait();
 
-    const tx = nounsToken.burn(1);
-    await expect(tx).to.emit(nounsToken, 'NounBurned').withArgs(1);
+    const tx = whalezToken.burn(1);
+    await expect(tx).to.emit(whalezToken, 'WhaleBurned').withArgs(1);
   });
 
   it('should revert on non-minter mint', async () => {
-    const account0AsNounErc721Account = nounsToken.connect(noundersDAO);
+    const account0AsNounErc721Account = whalezToken.connect(diatomDAO);
     await expect(account0AsNounErc721Account.mint(IPFS_URL)).to.be.reverted;
   });
 });

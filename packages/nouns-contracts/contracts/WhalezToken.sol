@@ -1,19 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title The Nouns ERC-721 token
-
-/*********************************
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- * ░░░░░░█████████░░█████████░░░ *
- * ░░░░░░██░░░████░░██░░░████░░░ *
- * ░░██████░░░████████░░░████░░░ *
- * ░░██░░██░░░████░░██░░░████░░░ *
- * ░░██░░██░░░████░░██░░░████░░░ *
- * ░░░░░░█████████░░█████████░░░ *
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- *********************************/
+/// @title The Whales ERC-721 token
 
 pragma solidity ^0.8.6;
 
@@ -22,23 +9,23 @@ import { ERC721Enumerable } from './base/ERC721Enumerable.sol';
 import { IERC721Enumerable } from '@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol';
 import { IERC165 } from '@openzeppelin/contracts/utils/introspection/IERC165.sol';
 import { ERC721URIStorage } from './base/ERC721URIStorage.sol';
-import { INounsToken } from './interfaces/INounsToken.sol';
+import { IWhalezToken } from './interfaces/IWhalezToken.sol';
 import { ERC721 } from './base/ERC721.sol';
 import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import { IProxyRegistry } from './external/opensea/IProxyRegistry.sol';
 
-contract NounsToken is INounsToken, Ownable, ERC721URIStorage, ERC721Enumerable {
-    // The nounders DAO address (creators org)
-    address public noundersDAO;
+contract WhalezToken is IWhalezToken, Ownable, ERC721URIStorage, ERC721Enumerable {
+    // The diatom DAO address (creators org)
+    address public diatomDAO;
 
-    // An address who has permissions to mint Nouns
+    // An address who has permissions to mint Whales
     address public minter;
 
     // Whether the minter can be updated
     bool public isMinterLocked;
 
-    // The internal noun ID tracker
-    uint256 private _currentNounId;
+    // The internal whale ID tracker
+    uint256 private _currentWhaleId;
 
     // OpenSea's Proxy Registry
     IProxyRegistry public immutable proxyRegistry;
@@ -55,10 +42,10 @@ contract NounsToken is INounsToken, Ownable, ERC721URIStorage, ERC721Enumerable 
     }
 
     /**
-     * @notice Require that the sender is the nounders DAO.
+     * @notice Require that the sender is the diatom DAO.
      */
-    modifier onlyNoundersDAO() {
-        require(msg.sender == noundersDAO, 'Sender is not the nounders DAO');
+    modifier onlyDiatomDAO() {
+        require(msg.sender == diatomDAO, 'Sender is not the diatom DAO');
         _;
     }
 
@@ -71,11 +58,11 @@ contract NounsToken is INounsToken, Ownable, ERC721URIStorage, ERC721Enumerable 
     }
 
     constructor(
-        address _noundersDAO,
+        address _diatomDAO,
         address _minter,
         IProxyRegistry _proxyRegistry
     ) ERC721('whalez', 'WHALEZ') {
-        noundersDAO = _noundersDAO;
+        diatomDAO = _diatomDAO;
         minter = _minter;
         proxyRegistry = _proxyRegistry;
         maxSupply = 50;
@@ -97,25 +84,23 @@ contract NounsToken is INounsToken, Ownable, ERC721URIStorage, ERC721Enumerable 
     }
 
     /**
-     * @notice Mint a Noun to the minter, along with a possible nounders reward
-     * Noun. Nounders reward Nouns are minted every 10 Nouns, starting at 0,
-     * until 183 nounder Nouns have been minted (5 years w/ 24 hour auctions).
+     * @notice Mint a Whale to the minter
      * @dev Call _mintTo with the to address(es).
      */
     function mint(string memory tokenIpfsURI) public override onlyMinter returns (uint256) {
-        _currentNounId = _currentNounId + 1;
-        require(_currentNounId <= maxSupply, 'max supply reached');
-        uint256 tokenId = _mintTo(minter, _currentNounId);
-        _setTokenURI(_currentNounId, tokenIpfsURI);
+        _currentWhaleId = _currentWhaleId + 1;
+        require(_currentWhaleId <= maxSupply, 'max supply reached');
+        uint256 tokenId = _mintTo(minter, _currentWhaleId);
+        _setTokenURI(_currentWhaleId, tokenIpfsURI);
         return tokenId;
     }
 
     /**
-     * @notice Burn a noun.
+     * @notice Burn a whale.
      */
-    function burn(uint256 nounId) public override onlyMinter {
-        _burn(nounId);
-        emit NounBurned(nounId);
+    function burn(uint256 whaleId) public override onlyMinter {
+        _burn(whaleId);
+        emit WhaleBurned(whaleId);
     }
 
     /**
@@ -126,13 +111,13 @@ contract NounsToken is INounsToken, Ownable, ERC721URIStorage, ERC721Enumerable 
     }
 
     /**
-     * @notice Set the nounders DAO.
-     * @dev Only callable by the nounders DAO when not locked.
+     * @notice Set the diatom DAO.
+     * @dev Only callable by the diatom DAO when not locked.
      */
-    function setNoundersDAO(address _noundersDAO) external override onlyNoundersDAO {
-        noundersDAO = _noundersDAO;
+    function setDiatomDAO(address _diatomDAO) external override onlyDiatomDAO {
+        diatomDAO = _diatomDAO;
 
-        emit NoundersDAOUpdated(_noundersDAO);
+        emit DiatomDAOUpdated(_diatomDAO);
     }
 
     /**
@@ -156,13 +141,13 @@ contract NounsToken is INounsToken, Ownable, ERC721URIStorage, ERC721Enumerable 
     }
 
     /**
-     * @notice Mint a Noun with `nounId` to the provided `to` address.
+     * @notice Mint a Whale with `whaleId` to the provided `to` address.
      */
-    function _mintTo(address to, uint256 nounId) internal returns (uint256) {
-        _mint(owner(), to, nounId);
-        emit NounCreated(nounId);
+    function _mintTo(address to, uint256 whaleId) internal returns (uint256) {
+        _mint(owner(), to, whaleId);
+        emit WhaleCreated(whaleId);
 
-        return nounId;
+        return whaleId;
     }
 
     /**

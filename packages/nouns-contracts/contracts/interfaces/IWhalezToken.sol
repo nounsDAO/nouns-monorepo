@@ -1,30 +1,17 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title Interface for NounsToken
-
-/*********************************
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- * ░░░░░░█████████░░█████████░░░ *
- * ░░░░░░██░░░████░░██░░░████░░░ *
- * ░░██████░░░████████░░░████░░░ *
- * ░░██░░██░░░████░░██░░░████░░░ *
- * ░░██░░██░░░████░░██░░░████░░░ *
- * ░░░░░░█████████░░█████████░░░ *
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- *********************************/
+/// @title Interface for WhalezToken
 
 pragma solidity ^0.8.6;
 
 import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 
-interface INounsToken is IERC721 {
-    event NounCreated(uint256 indexed tokenId);
+interface IWhalezToken is IERC721 {
+    event WhaleCreated(uint256 indexed tokenId);
 
-    event NounBurned(uint256 indexed tokenId);
+    event WhaleBurned(uint256 indexed tokenId);
 
-    event NoundersDAOUpdated(address noundersDAO);
+    event DiatomDAOUpdated(address diatomDAO);
 
     event MinterUpdated(address minter);
 
@@ -36,7 +23,7 @@ interface INounsToken is IERC721 {
 
     function burn(uint256 tokenId) external;
 
-    function setNoundersDAO(address noundersDAO) external;
+    function setDiatomDAO(address diatomDAO) external;
 
     function setMinter(address minter) external;
 

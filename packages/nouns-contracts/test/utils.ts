@@ -1,6 +1,6 @@
 import { ethers } from 'hardhat';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { NounsToken, NounsTokenFactory, Weth, WethFactory } from '../typechain';
+import { WhalezToken, WhalezTokenFactory, Weth, WethFactory } from '../typechain';
 
 export type TestSigners = {
   deployer: SignerWithAddress;
@@ -19,14 +19,14 @@ export const getSigners = async (): Promise<TestSigners> => {
   };
 };
 
-export const deployNounsToken = async (
+export const deployWhalezToken = async (
   deployer?: SignerWithAddress,
   noundersDAO?: string,
   minter?: string,
   proxyRegistryAddress?: string,
-): Promise<NounsToken> => {
+): Promise<WhalezToken> => {
   const signer = deployer || (await getSigners()).deployer;
-  const factory = new NounsTokenFactory(signer);
+  const factory = new WhalezTokenFactory(signer);
 
   return factory.deploy(
     noundersDAO || signer.address,
@@ -47,7 +47,7 @@ export const deployWeth = async (deployer?: SignerWithAddress): Promise<Weth> =>
  * @param amount The number of Nouns to mint
  */
 export const MintNouns = (
-  token: NounsToken,
+  token: WhalezToken,
   burnNoundersTokens = true,
 ): ((amount: number) => Promise<void>) => {
   return async (amount: number): Promise<void> => {
@@ -63,7 +63,7 @@ export const MintNouns = (
 /**
  * Mints or burns tokens to target a total supply. Due to Nounders' rewards tokens may be burned and tokenIds will not be sequential
  */
-export const setTotalSupply = async (token: NounsToken, newTotalSupply: number): Promise<void> => {
+export const setTotalSupply = async (token: WhalezToken, newTotalSupply: number): Promise<void> => {
   const totalSupply = (await token.totalSupply()).toNumber();
 
   if (totalSupply < newTotalSupply) {
