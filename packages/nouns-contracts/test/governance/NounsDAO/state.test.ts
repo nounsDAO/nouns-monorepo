@@ -7,7 +7,7 @@ const { ethers } = hardhat;
 import { BigNumber as EthersBN } from 'ethers';
 
 import {
-  deployNounsToken,
+  deployWhalezToken,
   getSigners,
   TestSigners,
   setTotalSupply,
@@ -119,7 +119,7 @@ describe('NounsDAO#state/1', () => {
     account0 = signers.account0;
     account1 = signers.account1;
 
-    token = await deployNounsToken(signers.deployer);
+    token = await deployWhalezToken(signers.deployer);
 
     await populateDescriptor(
       NounsDescriptorFactory.connect(await token.descriptor(), signers.deployer),

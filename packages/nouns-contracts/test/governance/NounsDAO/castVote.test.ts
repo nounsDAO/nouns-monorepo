@@ -7,7 +7,7 @@ const { ethers } = hardhat;
 import { BigNumber as EthersBN } from 'ethers';
 
 import {
-  deployNounsToken,
+  deployWhalezToken,
   getSigners,
   TestSigners,
   setTotalSupply,
@@ -75,7 +75,7 @@ async function reset() {
     snapshotId = await ethers.provider.send('evm_snapshot', []);
     return;
   }
-  token = await deployNounsToken(signers.deployer);
+  token = await deployWhalezToken(signers.deployer);
 
   await populateDescriptor(
     NounsDescriptorFactory.connect(await token.descriptor(), signers.deployer),
