@@ -52,7 +52,7 @@ export const MintNouns = (
 ): ((amount: number) => Promise<void>) => {
   return async (amount: number): Promise<void> => {
     for (let i = 0; i < amount; i++) {
-      await token.mint("ipfsURL");
+      await token.mint();
     }
     if (!burnNoundersTokens) return;
 
@@ -68,7 +68,7 @@ export const setTotalSupply = async (token: WhalezToken, newTotalSupply: number)
 
   if (totalSupply < newTotalSupply) {
     for (let i = 0; i < newTotalSupply - totalSupply; i++) {
-      await token.mint("ipfsURL");
+      await token.mint();
     }
     // If Nounder's reward tokens were minted totalSupply will be more than expected, so run setTotalSupply again to burn extra tokens
     await setTotalSupply(token, newTotalSupply);

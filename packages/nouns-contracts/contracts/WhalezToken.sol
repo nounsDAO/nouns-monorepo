@@ -5,16 +5,18 @@
 pragma solidity ^0.8.6;
 
 import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
+import { Strings } from '@openzeppelin/contracts/utils/Strings.sol';
 import { ERC721Enumerable } from './base/ERC721Enumerable.sol';
 import { IERC721Enumerable } from '@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol';
 import { IERC165 } from '@openzeppelin/contracts/utils/introspection/IERC165.sol';
-import { ERC721URIStorage } from './base/ERC721URIStorage.sol';
 import { IWhalezToken } from './interfaces/IWhalezToken.sol';
 import { ERC721 } from './base/ERC721.sol';
 import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import { IProxyRegistry } from './external/opensea/IProxyRegistry.sol';
 
-contract WhalezToken is IWhalezToken, Ownable, ERC721URIStorage, ERC721Enumerable {
+contract WhalezToken is IWhalezToken, Ownable, ERC721Enumerable {
+    using Strings for uint256;
+
     // The diatom DAO address (creators org)
     address public diatomDAO;
 
@@ -29,6 +31,9 @@ contract WhalezToken is IWhalezToken, Ownable, ERC721URIStorage, ERC721Enumerabl
 
     // OpenSea's Proxy Registry
     IProxyRegistry public immutable proxyRegistry;
+
+    // IPFS content hash of contract-level metadata
+    string private _contractURIHash = 'changeThis';
 
     // max supply
     uint256 private maxSupply;
@@ -87,12 +92,10 @@ contract WhalezToken is IWhalezToken, Ownable, ERC721URIStorage, ERC721Enumerabl
      * @notice Mint a Whale to the minter
      * @dev Call _mintTo with the to address(es).
      */
-    function mint(string memory tokenIpfsURI) public override onlyMinter returns (uint256) {
+    function mint() public override onlyMinter returns (uint256) {
         _currentWhaleId = _currentWhaleId + 1;
         require(_currentWhaleId <= maxSupply, 'max supply reached');
-        uint256 tokenId = _mintTo(minter, _currentWhaleId);
-        _setTokenURI(_currentWhaleId, tokenIpfsURI);
-        return tokenId;
+        return _mintTo(minter, _currentWhaleId);
     }
 
     /**
@@ -150,33 +153,8 @@ contract WhalezToken is IWhalezToken, Ownable, ERC721URIStorage, ERC721Enumerabl
         return whaleId;
     }
 
-    /**
-     * override(ERC721, ERC721Enumerable)
-     * here you're overriding _beforeTokenTransfer method of
-     * two Base classes namely ERC721, ERC721Enumerable
-     * */
-    function _beforeTokenTransfer(
-        address from,
-        address to,
-        uint256 tokenId
-    ) internal override(ERC721, ERC721Enumerable) {
-        super._beforeTokenTransfer(from, to, tokenId);
-    }
-
-    function tokenURI(uint256 tokenId) public view override(ERC721, ERC721URIStorage) returns (string memory) {
-        return super.tokenURI(tokenId);
-    }
-
-    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
-        super._burn(tokenId);
-    }
-
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override(ERC721, ERC721Enumerable, IERC165)
-        returns (bool)
-    {
-        return super.supportsInterface(interfaceId);
+    function tokenURI(uint256 tokenId) public view override returns (string memory) {
+        require(_exists(tokenId), 'WhalezToken: URI query for nonexistent token');
+        return string(abi.encodePacked('ipfs://', _contractURIHash, '/', tokenId.toString()));
     }
 }

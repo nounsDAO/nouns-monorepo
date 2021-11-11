@@ -8,7 +8,7 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 chai.use(solidity);
 const { expect } = chai;
-const IPFS_URL = 'someIpfsURL';
+const IPFS_URL = 'changeThis';
 
 describe('WhalezToken', () => {
   let whalezToken: WhalezToken;
@@ -30,7 +30,7 @@ describe('WhalezToken', () => {
   });
 
   it('should allow the minter to mint a whale to itself', async () => {
-    const receipt = await (await whalezToken.mint(IPFS_URL)).wait();
+    const receipt = await (await whalezToken.mint()).wait();
 
     const [, , whaleCreated] = receipt.events || [];
 
@@ -38,6 +38,13 @@ describe('WhalezToken', () => {
     expect(whaleCreated?.event).to.eq('WhaleCreated');
     expect(whaleCreated?.args?.tokenId).to.eq(1);
   });
+
+  it('should return correct tokenURI', async () => {
+    await (await whalezToken.mint()).wait();
+
+    const tokenURI = await whalezToken.tokenURI(1);
+    expect(tokenURI).to.equal(`ipfs://${IPFS_URL}/1`)
+  })
 
   it('should set symbol', async () => {
     expect(await whalezToken.symbol()).to.eq('WHALEZ');
@@ -50,12 +57,12 @@ describe('WhalezToken', () => {
   it('should emit two transfer logs on mint', async () => {
     const [, , creator, minter] = await ethers.getSigners();
 
-    await (await whalezToken.mint(IPFS_URL)).wait();
+    await (await whalezToken.mint()).wait();
 
     await (await whalezToken.setMinter(minter.address)).wait();
     await (await whalezToken.transferOwnership(creator.address)).wait();
 
-    const tx = whalezToken.connect(minter).mint(IPFS_URL);
+    const tx = whalezToken.connect(minter).mint();
 
     await expect(tx)
       .to.emit(whalezToken, 'Transfer')
@@ -64,7 +71,7 @@ describe('WhalezToken', () => {
   });
 
   it('should allow minter to burn a whale', async () => {
-    await (await whalezToken.mint(IPFS_URL)).wait();
+    await (await whalezToken.mint()).wait();
 
     const tx = whalezToken.burn(1);
     await expect(tx).to.emit(whalezToken, 'WhaleBurned').withArgs(1);
@@ -72,7 +79,7 @@ describe('WhalezToken', () => {
 
   it('should revert on non-minter mint', async () => {
     const account0AsNounErc721Account = whalezToken.connect(diatomDAO);
-    await expect(account0AsNounErc721Account.mint(IPFS_URL)).to.be.reverted;
+    await expect(account0AsNounErc721Account.mint()).to.be.reverted;
   });
 
   it('should get max supply', async () => {

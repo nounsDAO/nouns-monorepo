@@ -312,13 +312,7 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "tokenIpfsURI",
-        "type": "string"
-      }
-    ],
+    "inputs": [],
     "name": "mint",
     "outputs": [
       {

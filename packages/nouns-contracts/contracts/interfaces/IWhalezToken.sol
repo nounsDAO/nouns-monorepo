@@ -19,7 +19,7 @@ interface IWhalezToken is IERC721 {
 
     function getMaxSupply() external view returns (uint256);
 
-    function mint(string memory tokenId) external returns (uint256);
+    function mint() external returns (uint256);
 
     function burn(uint256 tokenId) external;
 
