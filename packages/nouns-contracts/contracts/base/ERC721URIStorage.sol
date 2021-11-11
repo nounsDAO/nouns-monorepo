@@ -1,5 +1,18 @@
 // SPDX-License-Identifier: MIT
 
+/// @title ERC721 URIStorage Extension
+
+
+// LICENSE
+// ERC721.sol modifies OpenZeppelin's ERC721URIStorage.sol:
+// https://github.com/OpenZeppelin/openzeppelin-contracts/blob/23869e5b2a7c6b9c3e27dee4289615b8cf50e36b/contracts/token/ERC721/extensions/ERC721URIStorage.sol
+//
+// ERC721URIStorage.sol source code copyright OpenZeppelin licensed under the MIT License.
+// With modifications by Diatom DAO.
+//
+// MODIFICATIONS:
+// Consumes modified `ERC721` contract. See notes in `ERC721.sol`.
+
 pragma solidity ^0.8.0;
 
 import "./ERC721.sol";

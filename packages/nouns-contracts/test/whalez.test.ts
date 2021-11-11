@@ -74,4 +74,26 @@ describe('WhalezToken', () => {
     const account0AsNounErc721Account = whalezToken.connect(diatomDAO);
     await expect(account0AsNounErc721Account.mint(IPFS_URL)).to.be.reverted;
   });
+
+  it('should get max supply', async () => {
+    const maxSupply = await whalezToken.getMaxSupply();
+    expect(maxSupply).to.equal(50);
+  });
+
+  it('should update diatomDAO address from original diatomDAO address', async () => {
+    const [, , , newDiatomDAOaddress] = await ethers.getSigners();
+
+    const diatomDAOAccount = whalezToken.connect(diatomDAO);
+    await expect(diatomDAOAccount.setDiatomDAO(newDiatomDAOaddress.address))
+      .to.emit(diatomDAOAccount, 'DiatomDAOUpdated')
+      .withArgs(newDiatomDAOaddress.address);
+
+    expect(await whalezToken.diatomDAO()).to.equal(newDiatomDAOaddress.address);
+  });
+
+  it('should revert on non-diatomDAO update', async () => {
+    const [, , , newDiatomDAOaddress] = await ethers.getSigners();
+
+    await expect(whalezToken.setDiatomDAO(newDiatomDAOaddress.address)).to.be.reverted;
+  });
 });
