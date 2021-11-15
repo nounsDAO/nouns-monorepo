@@ -5,6 +5,7 @@
     "./tasks",
     "./src",
     "./test",
+    "./scripts",
     "./typechain",
     "./abi/**/*.json",
     "./files/*.json"
