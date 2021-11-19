@@ -2,11 +2,20 @@ import { ethers } from 'ethers';
 import sharp from 'sharp';
 import { isError, tryF } from 'ts-try';
 import { nounsTokenContract } from './clients';
-import { Bid, Proposal, TokenMetadata, Vote } from './types';
+import { Bid, Proposal, TokenMetadata, Vote, VoteDirection } from './types';
 import { extractProposalTitle } from './utils/proposals';
 
 const shortAddress = (address: string) =>
   `${address.substr(0, 4)}...${address.substr(address.length - 4)}`;
+
+const voteDirectionToText = (direction: VoteDirection) => {
+  const map = {
+    [VoteDirection.FOR]: 'for',
+    [VoteDirection.AGAINST]: 'against',
+    [VoteDirection.ABSTAIN]: 'to abstain on',
+  };
+  return map[direction];
+};
 
 /**
  * Try to reverse resolve an ENS domain and return it for display,
@@ -61,9 +70,9 @@ export function formatUpdatedGovernanceProposalStatusText(proposal: Proposal) {
 }
 
 export async function formatNewGovernanceVoteText(proposal: Proposal, vote: Vote) {
-  return `${await resolveEnsOrFormatAddress(vote.voter.id)} has voted ${
-    vote.support ? 'for' : 'against'
-  } Proposal #${proposal.id}`;
+  return `${await resolveEnsOrFormatAddress(vote.voter.id)} has voted ${voteDirectionToText(
+    vote.supportDetailed,
+  )} Proposal #${proposal.id}`;
 }
 
 /**

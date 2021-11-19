@@ -51,15 +51,15 @@ export type ProposalStatus =
   | typeof STATUS_VETOED;
 
 export interface Proposal {
-  id: Number;
+  id: number;
   proposer: Account;
   description: string;
   status: ProposalStatus;
-  quorumVotes: Number;
-  proposalThreshold: Number;
-  startBlock: Number;
-  endBlock: Number;
-  executionETA: Number;
+  quorumVotes: number;
+  proposalThreshold: number;
+  startBlock: number;
+  endBlock: number;
+  executionETA: number;
   votes: Vote[];
 }
 
@@ -67,9 +67,15 @@ export interface Account {
   id: string;
 }
 
+export enum VoteDirection {
+  AGAINST = 0,
+  FOR = 1,
+  ABSTAIN = 2,
+}
+
 export interface Vote {
   id: string;
   voter: Account;
-  votes: Number;
-  support: boolean;
+  votes: number;
+  supportDetailed: VoteDirection;
 }

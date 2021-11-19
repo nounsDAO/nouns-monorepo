@@ -1,6 +1,5 @@
 import { Proposal, ProposalSubgraphResponse, Vote } from '../types';
 import R from 'ramda';
-import { stringify } from 'querystring';
 
 /**
  * Parse Proposal Subgraph Response into usable types

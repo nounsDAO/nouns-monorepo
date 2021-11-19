@@ -56,7 +56,7 @@ export async function getAllProposals(): Promise<Proposal[]> {
               id
             }
             votes
-            support
+            supportDetailed
           }
         }
       }
