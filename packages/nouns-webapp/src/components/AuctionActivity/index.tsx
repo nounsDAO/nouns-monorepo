@@ -12,19 +12,17 @@ import BidHistory from '../BidHistory';
 import { Modal } from 'react-bootstrap';
 import AuctionNavigation from '../AuctionNavigation';
 import AuctionActivityWrapper from '../AuctionActivityWrapper';
+import AuctionTitleAndNavWrapper from '../AuctionTitleAndNavWrapper';
 import AuctionActivityNounTitle from '../AuctionActivityNounTitle';
 import AuctionActivityDateHeadline from '../AuctionActivityDateHeadline';
 import BidHistoryBtn from '../BidHistoryBtn';
 import StandaloneNoun from '../StandaloneNoun';
-import config, { CHAIN_ID } from '../../config';
-import { buildEtherscanAddressLink, Network } from '../../utils/buildEtherscanLink';
+import config from '../../config';
+import { buildEtherscanAddressLink } from '../../utils/etherscan';
 
 const openEtherscanBidHistory = () => {
-  const url = buildEtherscanAddressLink(
-    config.auctionProxyAddress,
-    CHAIN_ID === 1 ? Network.mainnet : Network.rinkeby,
-  );
-  window.open(url.toString());
+  const url = buildEtherscanAddressLink(config.addresses.nounsAuctionHouseProxy);
+  window.open(url);
 };
 
 interface AuctionActivityProps {
@@ -64,7 +62,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
     </h1>
   );
 
-  // timer logic
+  // timer logic - check auction status every 30 seconds, until five minutes remain, then check status every second
   useEffect(() => {
     if (!auction) return;
 
@@ -74,9 +72,12 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
       setAuctionEnded(true);
     } else {
       setAuctionEnded(false);
-      const timer = setTimeout(() => {
-        setAuctionTimer(!auctionTimer);
-      }, 1000);
+      const timer = setTimeout(
+        () => {
+          setAuctionTimer(!auctionTimer);
+        },
+        timeLeft > 300 ? 30000 : 1000,
+      );
 
       return () => {
         clearTimeout(timer);
@@ -112,7 +113,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
             <Col lg={12}>
               <AuctionActivityDateHeadline startTime={auction.startTime} />
             </Col>
-            <Col lg={12} className={classes.colAlignCenter}>
+            <AuctionTitleAndNavWrapper>
               <AuctionActivityNounTitle nounId={auction.nounId} />
               {displayGraphDepComps && (
                 <AuctionNavigation
@@ -122,7 +123,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
                   onPrevAuctionClick={onPrevAuctionClick}
                 />
               )}
-            </Col>
+            </AuctionTitleAndNavWrapper>
           </Row>
           <Row className={classes.activityRow}>
             <Col lg={5} className={classes.currentBidCol}>

@@ -9,14 +9,22 @@ const AuctionNavigation: React.FC<{
 }> = props => {
   const { isFirstAuction, isLastAuction, onPrevAuctionClick, onNextAuctionClick } = props;
   return (
-    <>
-      <button onClick={onPrevAuctionClick} className={classes.leftArrow} disabled={isFirstAuction}>
+    <div className={classes.navArrowsContainer}>
+      <button
+        onClick={() => onPrevAuctionClick()}
+        className={classes.leftArrow}
+        disabled={isFirstAuction}
+      >
         ←
       </button>
-      <button onClick={onNextAuctionClick} className={classes.rightArrow} disabled={isLastAuction}>
+      <button
+        onClick={() => onNextAuctionClick()}
+        className={classes.rightArrow}
+        disabled={isLastAuction}
+      >
         →
       </button>
-    </>
+    </div>
   );
 };
 export default AuctionNavigation;

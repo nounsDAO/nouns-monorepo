@@ -1,11 +1,5 @@
-import {
-  Auction,
-  auctionHouseContractFactory,
-  AuctionHouseContractFunction,
-} from '../../wrappers/nounsAuction';
-import config from '../../config';
-import { connectContractToSigner, useEthers } from '@usedapp/core';
-import { useContractFunction__fix } from '../../hooks/useContractFunction__fix';
+import { Auction, AuctionHouseContractFunction } from '../../wrappers/nounsAuction';
+import { connectContractToSigner, useEthers, useContractFunction } from '@usedapp/core';
 import { useAppSelector } from '../../hooks';
 import React, { useEffect, useState, useRef, ChangeEvent, useCallback } from 'react';
 import { utils, BigNumber as EthersBN } from 'ethers';
@@ -15,6 +9,8 @@ import { Spinner, InputGroup, FormControl, Button } from 'react-bootstrap';
 import { useAuctionMinBidIncPercentage } from '../../wrappers/nounsAuction';
 import { useAppDispatch } from '../../hooks';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
+import { NounsAuctionHouseFactory } from '@nouns/sdk';
+import config from '../../config';
 
 const computeMinimumNextBid = (
   currentBid: BigNumber,
@@ -50,7 +46,11 @@ const Bid: React.FC<{
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { library } = useEthers();
   const { auction, auctionEnded } = props;
-  const auctionHouseContract = auctionHouseContractFactory(config.auctionProxyAddress);
+  const nounsAuctionHouseContract = new NounsAuctionHouseFactory().attach(
+    config.addresses.nounsAuctionHouseProxy,
+  );
+
+  const account = useAppSelector(state => state.account.activeAccount);
 
   const bidInputRef = useRef<HTMLInputElement>(null);
 
@@ -69,12 +69,12 @@ const Bid: React.FC<{
     minBidIncPercentage,
   );
 
-  const { send: placeBid, state: placeBidState } = useContractFunction__fix(
-    auctionHouseContract,
+  const { send: placeBid, state: placeBidState } = useContractFunction(
+    nounsAuctionHouseContract,
     AuctionHouseContractFunction.createBid,
   );
-  const { send: settleAuction, state: settleAuctionState } = useContractFunction__fix(
-    auctionHouseContract,
+  const { send: settleAuction, state: settleAuctionState } = useContractFunction(
+    nounsAuctionHouseContract,
     AuctionHouseContractFunction.settleCurrentAndCreateNewAuction,
   );
 
@@ -107,7 +107,7 @@ const Bid: React.FC<{
     }
 
     const value = utils.parseEther(bidInputRef.current.value.toString());
-    const contract = connectContractToSigner(auctionHouseContract, undefined, library);
+    const contract = connectContractToSigner(nounsAuctionHouseContract, undefined, library);
     const gasLimit = await contract.estimateGas.createBid(auction.nounId, {
       value,
     });
@@ -127,6 +127,26 @@ const Bid: React.FC<{
     }
   };
 
+  // successful bid using redux store state
+  useEffect(() => {
+    if (!account) return;
+
+    // tx state is mining
+    const isMiningUserTx = placeBidState.status === 'Mining';
+    // allows user to rebid against themselves so long as it is not the same tx
+    const isCorrectTx = currentBid(bidInputRef).isEqualTo(new BigNumber(auction.amount.toString()));
+    if (isMiningUserTx && auction.bidder === account && isCorrectTx) {
+      placeBidState.status = 'Success';
+      setModal({
+        title: 'Success',
+        message: `Bid was placed successfully!`,
+        show: true,
+      });
+      setBidButtonContent({ loading: false, content: 'Bid' });
+      clearBidInput();
+    }
+  }, [auction, placeBidState, account, setModal]);
+
   // placing bid transaction state hook
   useEffect(() => {
     switch (!auctionEnded && placeBidState.status) {
@@ -138,15 +158,6 @@ const Bid: React.FC<{
         break;
       case 'Mining':
         setBidButtonContent({ loading: true, content: '' });
-        break;
-      case 'Success':
-        setModal({
-          title: 'Success',
-          message: `Bid was placed successfully!`,
-          show: true,
-        });
-        setBidButtonContent({ loading: false, content: 'Bid' });
-        clearBidInput();
         break;
       case 'Fail':
         setModal({

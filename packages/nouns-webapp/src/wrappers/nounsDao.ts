@@ -1,10 +1,10 @@
-import { NounsDAOABI } from '@nouns/contracts';
-import { useContractCall, useContractCalls } from '@usedapp/core';
-import { useContractFunction__fix } from '../hooks/useContractFunction__fix';
-import { utils, Contract, BigNumber as EthersBN } from 'ethers';
+import { NounsDAOABI, NounsDaoLogicV1Factory } from '@nouns/sdk';
+import { useContractCall, useContractCalls, useContractFunction, useEthers } from '@usedapp/core';
+import { utils, BigNumber as EthersBN } from 'ethers';
 import { defaultAbiCoder } from 'ethers/lib/utils';
 import { useMemo } from 'react';
 import { useLogs } from '../hooks/useLogs';
+import * as R from 'ramda';
 import config from '../config';
 
 export enum Vote {
@@ -72,16 +72,58 @@ interface ProposalData {
   loading: boolean;
 }
 
-const abi = new utils.Interface(NounsDAOABI);
-const contract = new Contract(config.nounsDaoProxyAddress, abi);
-const proposalCreatedFilter = contract.filters?.ProposalCreated();
+export interface ProposalTransaction {
+  address: string;
+  value: string;
+  signature: string;
+  calldata: string;
+}
 
-const useProposalCount = (nounsDao: string): number | undefined => {
+const abi = new utils.Interface(NounsDAOABI);
+const nounsDaoContract = new NounsDaoLogicV1Factory().attach(config.addresses.nounsDAOProxy);
+const proposalCreatedFilter = nounsDaoContract.filters?.ProposalCreated(
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+);
+
+export const useHasVotedOnProposal = (proposalId: string | undefined): boolean => {
+  const { account } = useEthers();
+
+  // Fetch a voting receipt for the passed proposal id
+  const [receipt] =
+    useContractCall<[any]>({
+      abi,
+      address: nounsDaoContract.address,
+      method: 'getReceipt',
+      args: [proposalId, account],
+    }) || [];
+  return receipt?.hasVoted ?? false;
+};
+
+export const useProposalCount = (): number | undefined => {
   const [count] =
     useContractCall<[EthersBN]>({
       abi,
-      address: nounsDao,
+      address: nounsDaoContract.address,
       method: 'proposalCount',
+      args: [],
+    }) || [];
+  return count?.toNumber();
+};
+
+export const useProposalThreshold = (): number | undefined => {
+  const [count] =
+    useContractCall<[EthersBN]>({
+      abi,
+      address: nounsDaoContract.address,
+      method: 'proposalThreshold',
       args: [],
     }) || [];
   return count?.toNumber();
@@ -136,8 +178,8 @@ const useFormattedProposalCreatedLogs = () => {
 };
 
 export const useAllProposals = (): ProposalData => {
-  const proposalCount = useProposalCount(contract.address);
-  const votingDelay = useVotingDelay(contract.address);
+  const proposalCount = useProposalCount();
+  const votingDelay = useVotingDelay(nounsDaoContract.address);
 
   const govProposalIndexes = useMemo(() => {
     return countToIndices(proposalCount);
@@ -146,7 +188,7 @@ export const useAllProposals = (): ProposalData => {
   const proposals = useContractCalls<ProposalCallResult>(
     govProposalIndexes.map(index => ({
       abi,
-      address: contract.address,
+      address: nounsDaoContract.address,
       method: 'proposals',
       args: [index],
     })),
@@ -155,7 +197,7 @@ export const useAllProposals = (): ProposalData => {
   const proposalStates = useContractCalls<[ProposalState]>(
     govProposalIndexes.map(index => ({
       abi,
-      address: contract.address,
+      address: nounsDaoContract.address,
       method: 'state',
       args: [index],
     })),
@@ -170,12 +212,44 @@ export const useAllProposals = (): ProposalData => {
       return { data: [], loading: true };
     }
 
+    const hashRegex = /^\s*#{1,6}\s+([^\n]+)/;
+    const equalTitleRegex = /^\s*([^\n]+)\n(={3,25}|-{3,25})/;
+
+    /**
+     * Extract a markdown title from a proposal body that uses the `# Title` format
+     * Returns null if no title found.
+     */
+    const extractHashTitle = (body: string) => body.match(hashRegex);
+    /**
+     * Extract a markdown title from a proposal body that uses the `Title\n===` format.
+     * Returns null if no title found.
+     */
+    const extractEqualTitle = (body: string) => body.match(equalTitleRegex);
+
+    /**
+     * Extract title from a proposal's body/description. Returns null if no title found in the first line.
+     * @param body proposal body
+     */
+    const extractTitle = (body: string | undefined): string | null => {
+      if (!body) return null;
+      const hashResult = extractHashTitle(body);
+      const equalResult = extractEqualTitle(body);
+      return hashResult ? hashResult[1] : equalResult ? equalResult[1] : null;
+    };
+
+    const removeBold = (text: string | null): string | null =>
+      text ? text.replace(/\*\*/g, '') : text;
+    const removeItalics = (text: string | null): string | null =>
+      text ? text.replace(/__/g, '') : text;
+
+    const removeMarkdownStyle = R.compose(removeBold, removeItalics);
+
     return {
       data: proposals.map((proposal, i) => {
         const description = logs[i]?.description?.replace(/\\n/g, '\n');
         return {
           id: proposal?.id.toString(),
-          title: description?.split(/# |\n/g)[1] ?? 'Untitled',
+          title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
           description: description ?? 'No description.',
           proposer: proposal?.proposer,
           status: proposalStates[i]?.[0] ?? ProposalState.UNDETERMINED,
@@ -197,12 +271,36 @@ export const useAllProposals = (): ProposalData => {
   }, [formattedLogs, proposalStates, proposals, votingDelay]);
 };
 
-export const useProposal = (id: string): Proposal | undefined => {
+export const useProposal = (id: string | number): Proposal | undefined => {
   const { data } = useAllProposals();
-  return data?.find(p => p.id === id);
+  return data?.find(p => p.id === id.toString());
 };
 
 export const useCastVote = () => {
-  const { send: castVote, state: castVoteState } = useContractFunction__fix(contract, 'castVote');
+  const { send: castVote, state: castVoteState } = useContractFunction(
+    nounsDaoContract,
+    'castVote',
+  );
   return { castVote, castVoteState };
+};
+
+export const usePropose = () => {
+  const { send: propose, state: proposeState } = useContractFunction(nounsDaoContract, 'propose');
+  return { propose, proposeState };
+};
+
+export const useQueueProposal = () => {
+  const { send: queueProposal, state: queueProposalState } = useContractFunction(
+    nounsDaoContract,
+    'queue',
+  );
+  return { queueProposal, queueProposalState };
+};
+
+export const useExecuteProposal = () => {
+  const { send: executeProposal, state: executeProposalState } = useContractFunction(
+    nounsDaoContract,
+    'execute',
+  );
+  return { executeProposal, executeProposalState };
 };

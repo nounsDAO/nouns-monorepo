@@ -23,7 +23,7 @@ export const useNounToken = (nounId: EthersBN) => {
   const [noun] =
     useContractCall<[string]>({
       abi,
-      address: config.tokenAddress,
+      address: config.addresses.nounsToken,
       method: 'dataURI',
       args: [nounId],
     }) || [];
@@ -41,7 +41,7 @@ export const useNounToken = (nounId: EthersBN) => {
 export const useNounSeed = (nounId: EthersBN) => {
   const seed = useContractCall<INounSeed>({
     abi,
-    address: config.tokenAddress,
+    address: config.addresses.nounsToken,
     method: 'seeds',
     args: [nounId],
   });
@@ -53,7 +53,7 @@ export const useUserVotes = (): number | undefined => {
   const [votes] =
     useContractCall<[EthersBN]>({
       abi,
-      address: config.tokenAddress,
+      address: config.addresses.nounsToken,
       method: 'getCurrentVotes',
       args: [account],
     }) || [];
@@ -65,7 +65,7 @@ export const useUserDelegatee = (): string | undefined => {
   const [delegate] =
     useContractCall<[string]>({
       abi,
-      address: config.tokenAddress,
+      address: config.addresses.nounsToken,
       method: 'delegates',
       args: [account],
     }) || [];
@@ -79,7 +79,7 @@ export const useUserVotesAsOfBlock = (block: number | undefined): number | undef
   const [votes] =
     useContractCall<[EthersBN]>({
       abi,
-      address: config.tokenAddress,
+      address: config.addresses.nounsToken,
       method: 'getPriorVotes',
       args: [account, block],
     }) || [];

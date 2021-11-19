@@ -1,7 +1,6 @@
 import { useContractCall } from '@usedapp/core';
 import { BigNumber as EthersBN, utils } from 'ethers';
-import { Contract } from '@ethersproject/contracts';
-import { NounsAuctionHouseABI } from '@nouns/contracts';
+import { NounsAuctionHouseABI } from '@nouns/sdk';
 import config from '../config';
 import BigNumber from 'bignumber.js';
 
@@ -19,15 +18,11 @@ export interface Auction {
   bidder: string;
   endTime: EthersBN;
   startTime: EthersBN;
-  length: number;
   nounId: EthersBN;
   settled: boolean;
 }
 
 const abi = new utils.Interface(NounsAuctionHouseABI);
-
-export const auctionHouseContractFactory = (auctionHouseProxyAddress: string) =>
-  new Contract(auctionHouseProxyAddress, abi);
 
 export const useAuction = (auctionHouseProxyAddress: string) => {
   const auction = useContractCall<Auction>({
@@ -42,7 +37,7 @@ export const useAuction = (auctionHouseProxyAddress: string) => {
 export const useAuctionMinBidIncPercentage = () => {
   const minBidIncrement = useContractCall({
     abi,
-    address: config.auctionProxyAddress,
+    address: config.addresses.nounsAuctionHouseProxy,
     method: 'minBidIncrementPercentage',
     args: [],
   });

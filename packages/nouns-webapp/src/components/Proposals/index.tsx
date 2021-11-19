@@ -1,30 +1,21 @@
 import { Proposal } from '../../wrappers/nounsDao';
 import { Alert, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
-
-import { useCallback } from 'react';
-import { useAppDispatch } from '../../hooks';
-import { AlertModal, setAlertModal } from '../../state/slices/application';
-
+import { useHistory } from 'react-router-dom';
 
 const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
-  const dispatch = useAppDispatch();
-  const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
-  const onClickCreateProposal = () =>{
-    setModal({
-      show: true,
-      title: 'Create a Proposal',
-      message: 'Coming soon!',
-    });
-  }
+  const history = useHistory();
 
   return (
     <div className={classes.proposals}>
       <div>
         <h3 className={classes.heading}>Proposals</h3>
-        <Button className={classes.createProposalLink} onClick={onClickCreateProposal}>
+        <Button
+          variant="success"
+          className={classes.createProposalLink}
+          onClick={() => history.push('create-proposal')}
+        >
           Create Proposal
         </Button>
       </div>
@@ -37,8 +28,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
               <Button
                 className={classes.proposalLink}
                 variant="dark"
-                as={Link}
-                to={`/vote/${p.id}`}
+                onClick={() => history.push(`vote/${p.id}`)}
                 key={i}
               >
                 <span>
