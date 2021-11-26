@@ -83,14 +83,17 @@ const VotePage = ({
   const againstPercentage = proposal && totalVotes ? (proposal.againstCount * 100) / totalVotes : 0;
   const abstainPercentage = proposal && totalVotes ? (proposal.abstainCount * 100) / totalVotes : 0;
 
+  const proposalActive = proposal?.status === ProposalState.ACTIVE;
+
   // Only count available votes as of the proposal created block
   const availableVotes = useUserVotesAsOfBlock(proposal?.createdBlock ?? undefined);
 
   const hasVoted = useHasVotedOnProposal(proposal?.id);
 
+  const showBlockRestriction = proposalActive;
+
   // Only show voting if user has > 0 votes at proposal created block and proposal is active
-  const showVotingButtons =
-    availableVotes && !hasVoted && proposal?.status === ProposalState.ACTIVE;
+  const showVotingButtons = availableVotes && !hasVoted && proposalActive;
 
   const linkIfAddress = (content: string) => {
     if (utils.isAddress(content)) {
@@ -255,15 +258,25 @@ const VotePage = ({
             ''
           )}
         </div>
-        {proposal && proposal.status === ProposalState.ACTIVE && !showVotingButtons && (
-          <Alert
-            variant={hasVoted ? 'success' : 'secondary'}
-            className={classes.voterIneligibleAlert}
-          >
-            {hasVoted
-              ? 'Thank you for your vote!'
-              : `Only NOUN votes that were self delegated or delegated to another address before block ${proposal.createdBlock} are eligible for voting.`}
-          </Alert>
+        {proposal && proposalActive && (
+          <>
+            {showBlockRestriction && !hasVoted && (
+              <Alert
+              variant="secondary"
+                className={classes.blockRestrictionAlert}
+              >
+                  Only NOUN votes that were self delegated or delegated to another address before block {proposal.createdBlock} are eligible for voting.
+              </Alert>
+            )}
+            {hasVoted && (
+              <Alert
+                variant='success'
+                className={classes.voterIneligibleAlert}
+              >
+                  Thank you for your vote!
+              </Alert>
+            )}
+          </>
         )}
         {showVotingButtons ? (
           <Row>
