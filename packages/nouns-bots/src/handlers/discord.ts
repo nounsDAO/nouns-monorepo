@@ -70,7 +70,7 @@ export class DiscordAuctionLifecycleHandler implements IAuctionLifecycleHandler 
 
   async handleGovernanceVote(proposal: Proposal, vote: Vote) {
     const message = new Discord.MessageEmbed()
-      .setTitle(`New Proposal Status Vote`)
+      .setTitle(`New Proposal Vote`)
       .setURL(`https://nouns.wtf/vote/${proposal.id}`)
       .setDescription(await formatNewGovernanceVoteText(proposal, vote))
       .setTimestamp();
