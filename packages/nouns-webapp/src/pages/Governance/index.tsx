@@ -7,7 +7,8 @@ import classes from './Governance.module.css';
 const GovernancePage = () => {
   const { data: proposals } = useAllProposals();
   const threshold = useProposalThreshold();
-  const nounsCopy = threshold === 0 ? `1 Noun` : `${threshold} Nouns`;
+  const nounsCopy =
+    threshold !== undefined && `${threshold + 1} ${threshold === 0 ? 'Noun' : 'Nouns'}`;
 
   return (
     <Section fullWidth={true}>
