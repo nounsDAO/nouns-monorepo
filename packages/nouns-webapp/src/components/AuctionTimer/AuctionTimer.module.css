@@ -18,3 +18,12 @@
 .timeSubtitle {
   font-size: medium;
 }
+
+.clockSection {
+  margin-right: 0rem;
+  min-width: 250px
+}
+
+.auctionTimerSection {
+  cursor: pointer;
+}
