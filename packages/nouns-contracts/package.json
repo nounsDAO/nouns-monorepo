@@ -12,7 +12,7 @@
     "build": "yarn build:sol && yarn build:ts && yarn build:declarations",
     "build:ts": "tsc -p tsconfig.build.json",
     "build:sol": "npx hardhat compile",
-    "build:declarations": "cp typechain/*.d.ts dist/typechain",
+    "build:declarations": "shx cp typechain/*.d.ts dist/typechain",
     "hardhat": "npx hardhat",
     "task:accounts": "npx hardhat accounts",
     "task:deploy": "npx hardhat deploy",
@@ -44,6 +44,7 @@
     "hardhat-typechain": "^0.3.5",
     "prettier-plugin-solidity": "^1.0.0-beta.12",
     "prompt": "^1.1.0",
+    "shx": "^0.3.3",
     "ts-node": "^10.0.0"
   }
 }
