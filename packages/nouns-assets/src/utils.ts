@@ -1,3 +1,5 @@
+import { keccak256 as solidityKeccak256 } from '@ethersproject/solidity';
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import { NounSeed, NounData } from './types';
 import { images, bgcolors } from './image-data.json';
 
@@ -32,3 +34,43 @@ export const getRandomNounSeed = (): NounSeed => {
     glasses: Math.floor(Math.random() * glasses.length),
   };
 };
+
+/**
+ * Emulate bitwise right shift and uint cast
+ * @param hex Hex representation of a number
+ * @param shiftAmount The amount to right shift
+ * @param uintSize The uint bit size to cast to
+ */
+export const hexShiftAndCast = (hex: string, shiftAmount: number, uintSize: number): string => {
+  hex = hex.replace(/0x/,'')
+  const start = hex.length - ((shiftAmount + uintSize)/4)
+  const end = hex.length - (shiftAmount/4)
+  return "0x" + hex.substring(start,end)
+}
+
+/**
+ * Emulates the NounsSeeder.sol methodology for pseudorandomly selecting a part
+ * @param pseudorandomness Hex representation of a number
+ * @param shiftAmount The amount to right shift
+ * @param partCount The number of parts to pseudorandomly choose from
+ */
+export const getPseudorandomPart = (pseudorandomness: string, partCount: number, shiftAmount: number, uintSize: number = 48): number => {
+  const uint48 = hexShiftAndCast(pseudorandomness, shiftAmount, uintSize)
+  return BigNumber.from(uint48).mod(partCount).toNumber()
+}
+
+/**
+ * Emulates the NounsSeeder.sol methodology for generating a Noun seed
+ * @param nounId The Noun tokenId used to create pseudorandomness
+ * @param blockHash The block hash use to create pseudorandomness
+ */
+export const getNounSeedFromBlockHash = (nounId: BigNumberish, blockHash: string): NounSeed => {
+  const pseudorandomness = solidityKeccak256(["bytes32", "uint256"], [blockHash, nounId])
+  return {
+      background: getPseudorandomPart(pseudorandomness, bgcolors.length, 0),
+      body: getPseudorandomPart(pseudorandomness, bodies.length, 48),
+      accessory: getPseudorandomPart(pseudorandomness, accessories.length, 96),
+      head: getPseudorandomPart(pseudorandomness, heads.length, 144),
+      glasses: getPseudorandomPart(pseudorandomness, glasses.length, 192),
+  }
+}
