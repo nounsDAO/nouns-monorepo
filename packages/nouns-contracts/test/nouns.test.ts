@@ -2,7 +2,7 @@ import chai from 'chai';
 import { ethers } from 'hardhat';
 import { BigNumber as EthersBN, constants } from 'ethers';
 import { solidity } from 'ethereum-waffle';
-import { NounsDescriptorFactory, NounsToken } from '../typechain';
+import { NounsDescriptor__factory as NounsDescriptorFactory, NounsToken } from '../typechain';
 import { deployNounsToken, populateDescriptor } from './utils';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 

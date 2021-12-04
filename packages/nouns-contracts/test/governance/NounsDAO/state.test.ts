@@ -27,11 +27,11 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 import {
   NounsToken,
-  NounsDescriptorFactory,
+  NounsDescriptor__factory as NounsDescriptorFactory,
   NounsDaoExecutorHarness,
-  NounsDaoExecutorHarnessFactory,
+  NounsDaoExecutorHarness__factory as NounsDaoExecutorHarnessFactory,
   NounsDaoImmutable,
-  NounsDaoImmutableFactory,
+  NounsDaoImmutable__factory as NounsDaoImmutableFactory,
 } from '../../../typechain';
 
 chai.use(solidity);
