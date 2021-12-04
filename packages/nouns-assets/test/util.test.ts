@@ -18,7 +18,6 @@ describe('@noun/assets utils', () => {
   }
   const NOUN116_PREV_BLOCKHASH = "0x5014101691e81d79a2eba711e698118e1a90c9be7acb2f40d7f200134ee53e01"
   const NOUN116_PSEUDORANDOMNESS = solidityKeccak256(["bytes32", "uint256"], [NOUN116_PREV_BLOCKHASH, NOUN116_ID])
-  console.log(getNounData(NOUN116_SEED))
 
   describe('hexShiftAndCast', () => {
     it('should work correctly', () => {
