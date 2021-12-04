@@ -11,6 +11,7 @@ export const useReverseENSLookUp = (address: string) => {
       library
         .lookupAddress(address)
         .then(name => {
+          if (!name) return;
           if (mounted) {
             setEns(name);
           }

@@ -6,6 +6,7 @@ cache
 artifacts
 typechain/*.js
 typechain/*.ts
+typechain/factories
 !typechain/NounsTokenFactory.ts
 !typechain/NounsAuctionHouseFactory.ts
 !typechain/NounsDescriptorFactory.ts
