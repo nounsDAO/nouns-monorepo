@@ -55,8 +55,8 @@ export const hexShiftAndCast = (hex: string, shiftAmount: number, uintSize: numb
  * @param partCount The number of parts to pseudorandomly choose from
  */
 export const getPseudorandomPart = (pseudorandomness: string, partCount: number, shiftAmount: number, uintSize: number = 48): number => {
-  const uint48 = hexShiftAndCast(pseudorandomness, shiftAmount, uintSize)
-  return BigNumber.from(uint48).mod(partCount).toNumber()
+  const hex = hexShiftAndCast(pseudorandomness, shiftAmount, uintSize)
+  return BigNumber.from(hex).mod(partCount).toNumber()
 }
 
 /**
