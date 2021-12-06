@@ -39,8 +39,8 @@ const { parts, background } = getNounData(seed);
 ```ts
 import { getNounSeedFromBlockHash } from '@nouns/assets';
 
-const blockHash = "0x5014101691e81d79a2eba711e698118e1a90c9be7acb2f40d7f200134ee53e01"
-const nounId = 116
+const blockHash = '0x5014101691e81d79a2eba711e698118e1a90c9be7acb2f40d7f200134ee53e01';
+const nounId = 116;
 
 /**
  {
@@ -51,9 +51,8 @@ const nounId = 116
     glasses: 15
   }
 */
-const seed = getNounSeedFromBlockHash(nounId, blockHash)
+const seed = getNounSeedFromBlockHash(nounId, blockHash);
 ```
-
 
 ## Examples
 
@@ -118,7 +117,7 @@ const svgBase64 = btoa(svgBinary);
 The Noun SVG can then be displayed. Here's a dummy example using React
 
 ```ts
-function SVG({ svgBase64 }){
-  return <img src={`data:image/svg+xml;base64,${svgBase64}`} />
+function SVG({ svgBase64 }) {
+  return <img src={`data:image/svg+xml;base64,${svgBase64}`} />;
 }
 ```

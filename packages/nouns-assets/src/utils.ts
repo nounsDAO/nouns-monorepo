@@ -41,10 +41,14 @@ export const getRandomNounSeed = (): NounSeed => {
  * @param shiftAmount The amount to right shift
  * @param uintSize The uint bit size to cast to
  */
-export const shiftRightAndCast = (value: BigNumberish, shiftAmount: number, uintSize: number): string => {
+export const shiftRightAndCast = (
+  value: BigNumberish,
+  shiftAmount: number,
+  uintSize: number,
+): string => {
   const shifted = BigNumber.from(value).shr(shiftAmount).toHexString();
-  return `0x${shifted.substring(shifted.length - (uintSize / 4))}`;
-}
+  return `0x${shifted.substring(shifted.length - uintSize / 4)}`;
+};
 
 /**
  * Emulates the NounsSeeder.sol methodology for pseudorandomly selecting a part
@@ -52,10 +56,15 @@ export const shiftRightAndCast = (value: BigNumberish, shiftAmount: number, uint
  * @param shiftAmount The amount to right shift
  * @param partCount The number of parts to pseudorandomly choose from
  */
-export const getPseudorandomPart = (pseudorandomness: string, partCount: number, shiftAmount: number, uintSize: number = 48): number => {
-  const hex = shiftRightAndCast(pseudorandomness, shiftAmount, uintSize)
-  return BigNumber.from(hex).mod(partCount).toNumber()
-}
+export const getPseudorandomPart = (
+  pseudorandomness: string,
+  partCount: number,
+  shiftAmount: number,
+  uintSize: number = 48,
+): number => {
+  const hex = shiftRightAndCast(pseudorandomness, shiftAmount, uintSize);
+  return BigNumber.from(hex).mod(partCount).toNumber();
+};
 
 /**
  * Emulates the NounsSeeder.sol methodology for generating a Noun seed
@@ -63,12 +72,12 @@ export const getPseudorandomPart = (pseudorandomness: string, partCount: number,
  * @param blockHash The block hash use to create pseudorandomness
  */
 export const getNounSeedFromBlockHash = (nounId: BigNumberish, blockHash: string): NounSeed => {
-  const pseudorandomness = solidityKeccak256(["bytes32", "uint256"], [blockHash, nounId])
+  const pseudorandomness = solidityKeccak256(['bytes32', 'uint256'], [blockHash, nounId]);
   return {
-      background: getPseudorandomPart(pseudorandomness, bgcolors.length, 0),
-      body: getPseudorandomPart(pseudorandomness, bodies.length, 48),
-      accessory: getPseudorandomPart(pseudorandomness, accessories.length, 96),
-      head: getPseudorandomPart(pseudorandomness, heads.length, 144),
-      glasses: getPseudorandomPart(pseudorandomness, glasses.length, 192),
-  }
-}
+    background: getPseudorandomPart(pseudorandomness, bgcolors.length, 0),
+    body: getPseudorandomPart(pseudorandomness, bodies.length, 48),
+    accessory: getPseudorandomPart(pseudorandomness, accessories.length, 96),
+    head: getPseudorandomPart(pseudorandomness, heads.length, 144),
+    glasses: getPseudorandomPart(pseudorandomness, glasses.length, 192),
+  };
+};

@@ -4,5 +4,5 @@ export {
   getRandomNounSeed,
   shiftRightAndCast,
   getPseudorandomPart,
-  getNounSeedFromBlockHash
+  getNounSeedFromBlockHash,
 } from './utils';
