@@ -49,8 +49,9 @@ contract NounDelegatorFactoryModule is Module {
      * @dev This function can only be called once.
      */
     function setUp(bytes memory initParams) public override {
-        (address _owner, address _avatar, address _target) = abi.decode(initParams, (address, address, address));
         __Ownable_init();
+
+        (address _owner, address _avatar, address _target) = abi.decode(initParams, (address, address, address));
 
         avatar = _avatar;
         target = _target;
@@ -65,7 +66,7 @@ contract NounDelegatorFactoryModule is Module {
      * @param info Information required to initialize the delegation contract.
      * @dev This function can only be called by the owner.
      */
-    function createDelegator(DelegatorInfo memory info) external onlyOwner returns (address delegator) {
+    function createDelegator(DelegatorInfo memory info) external onlyOwner returns (address) {
         return _createDelegator(info);
     }
 
@@ -74,9 +75,14 @@ contract NounDelegatorFactoryModule is Module {
      * @param infos Information required to initialize the delegation contracts.
      * @dev This function can only be called by the owner.
      */
-    function createDelegators(DelegatorInfo[] memory infos) external onlyOwner returns (address[] memory delegators) {
+    function createDelegators(DelegatorInfo[] memory infos)
+        external
+        onlyOwner
+        returns (address[] memory newDelegators)
+    {
+        newDelegators = new address[](infos.length);
         for (uint256 i = 0; i < infos.length; i++) {
-            delegators[i] = _createDelegator(infos[i]);
+            newDelegators[i] = _createDelegator(infos[i]);
         }
     }
 
@@ -84,22 +90,24 @@ contract NounDelegatorFactoryModule is Module {
      * Create a Noun delegator contract and optionally transfer Nouns to it.
      * @param info Information required to initialize the delegation contract.
      */
-    function _createDelegator(DelegatorInfo memory info) internal returns (address delegator) {
-        delegator = Clones.clone(delegatorImplementation);
+    function _createDelegator(DelegatorInfo memory info) internal returns (address newDelegator) {
+        newDelegator = Clones.clone(delegatorImplementation);
 
-        INounDelegator(delegator).initialize(info.owner);
+        INounDelegator(newDelegator).initialize(info.owner);
+
+        delegators.push(newDelegator);
 
         uint256 nounCount = info.nounIds.length;
         for (uint256 i = 0; i < nounCount; i++) {
             bool success = exec(
                 address(nouns),
                 0,
-                abi.encodeWithSignature(TRANSFER_SIGNATURE, avatar, delegator, info.nounIds[i]),
+                abi.encodeWithSignature(TRANSFER_SIGNATURE, avatar, newDelegator, info.nounIds[i]),
                 Enum.Operation.Call
             );
             require(success, 'Failed to transfer Noun to delegator');
         }
 
-        emit DelegatorCreated(delegator);
+        emit DelegatorCreated(newDelegator);
     }
 }
