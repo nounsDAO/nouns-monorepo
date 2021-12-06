@@ -42,10 +42,8 @@ export const getRandomNounSeed = (): NounSeed => {
  * @param uintSize The uint bit size to cast to
  */
 export const hexShiftAndCast = (hex: string, shiftAmount: number, uintSize: number): string => {
-  hex = hex.replace(/0x/,'')
-  const start = hex.length - ((shiftAmount + uintSize)/4)
-  const end = hex.length - (shiftAmount/4)
-  return "0x" + hex.substring(start,end)
+  const shifted = BigNumber.from(hex).shr(shiftAmount).toHexString();
+  return `0x${shifted.substring(shifted.length - (uintSize / 4))}`;
 }
 
 /**
