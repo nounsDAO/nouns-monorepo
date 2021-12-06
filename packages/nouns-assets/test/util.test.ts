@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { keccak256 as solidityKeccak256 } from '@ethersproject/solidity';
-import { hexShiftAndCast, getPseudorandomPart, getNounSeedFromBlockHash, getNounData } from '../src/index';
+import { shiftRightAndCast, getPseudorandomPart, getNounSeedFromBlockHash, getNounData } from '../src/index';
 import { images } from '../src/image-data.json';
 import { NounSeed } from '../src/types';
 
@@ -19,10 +19,10 @@ describe('@noun/assets utils', () => {
   const NOUN116_PREV_BLOCKHASH = "0x5014101691e81d79a2eba711e698118e1a90c9be7acb2f40d7f200134ee53e01"
   const NOUN116_PSEUDORANDOMNESS = solidityKeccak256(["bytes32", "uint256"], [NOUN116_PREV_BLOCKHASH, NOUN116_ID])
 
-  describe('hexShiftAndCast', () => {
+  describe('shiftRightAndCast', () => {
     it('should work correctly', () => {
-      expect(hexShiftAndCast(NOUN116_PREV_BLOCKHASH, 0, 48)).to.equal('0x00134ee53e01');
-      expect(hexShiftAndCast(NOUN116_PREV_BLOCKHASH, 48, 48)).to.equal('0x7acb2f40d7f2');
+      expect(shiftRightAndCast(NOUN116_PREV_BLOCKHASH, 0, 48)).to.equal('0x00134ee53e01');
+      expect(shiftRightAndCast(NOUN116_PREV_BLOCKHASH, 48, 48)).to.equal('0x7acb2f40d7f2');
     });
   });
 
