@@ -14,7 +14,7 @@ describe('PNGCollectionEncoder', () => {
 
   it('should run-length encode an image with no content', async () => {
     const name = 'empty';
-    const [empty, ] = expected.images.root;
+    const [empty] = expected.images.root;
     const image = await readPngFile(join(__dirname, `./lib/images/${name}.png`));
 
     const rle = encoder.encodeImage(name, image);

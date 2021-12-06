@@ -53,8 +53,9 @@ export const shiftRightAndCast = (
 /**
  * Emulates the NounsSeeder.sol methodology for pseudorandomly selecting a part
  * @param pseudorandomness Hex representation of a number
- * @param shiftAmount The amount to right shift
  * @param partCount The number of parts to pseudorandomly choose from
+ * @param shiftAmount The amount to right shift
+ * @param uintSize The size of the unsigned integer
  */
 export const getPseudorandomPart = (
   pseudorandomness: string,
