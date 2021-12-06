@@ -67,16 +67,47 @@ const selectVotingInfoText = (proposal: Proposal, vote?: NounVoteHistory) => {
 };
 
 const selectProposalStatusIcon = (proposal: Proposal) => {
+  return (
+    <VoteStatusPill status={selectProposalStatus(proposal)} text={selectProposalText(proposal)} />
+  );
+};
+
+const selectProposalStatus = (proposal: Proposal) => {
   switch (proposal.status) {
     case ProposalState.SUCCEEDED:
     case ProposalState.EXECUTED:
     case ProposalState.QUEUED:
-      return <VoteStatusPill status={'success'} />;
+      return 'success';
     case ProposalState.DEFEATED:
     case ProposalState.VETOED:
-      return <VoteStatusPill status={'failure'} />;
+      return 'failure';
     default:
-      return <VoteStatusPill status={'pending'} />;
+      return 'pending';
+  }
+};
+
+const selectProposalText = (proposal: Proposal) => {
+  switch (proposal.status) {
+    case ProposalState.PENDING:
+      return 'Pending';
+    case ProposalState.ACTIVE:
+      return 'Active';
+    case ProposalState.SUCCEEDED:
+      return 'Succeeded';
+    case ProposalState.EXECUTED:
+      return 'Executed';
+    case ProposalState.DEFEATED:
+      return 'Defeated';
+    case ProposalState.QUEUED:
+      return 'Queued';
+    case ProposalState.CANCELED:
+      return 'Canceled';
+    case ProposalState.VETOED:
+      return 'Vetoed';
+    case ProposalState.EXPIRED:
+      return 'Expired';
+    default:
+      return 'Undetermined';
   }
 };
 
