@@ -37,15 +37,17 @@ export const getRandomNounSeed = (): NounSeed => {
 
 /**
  * Emulate bitwise right shift and uint cast
- * @param hex Hex representation of a number
+ * @param value A Big Number
  * @param shiftAmount The amount to right shift
  * @param uintSize The uint bit size to cast to
  */
-export const hexShiftAndCast = (hex: string, shiftAmount: number, uintSize: number): string => {
-  hex = hex.replace(/0x/, '');
-  const start = hex.length - (shiftAmount + uintSize) / 4;
-  const end = hex.length - shiftAmount / 4;
-  return `0x${hex.substring(start, end)}`;
+export const shiftRightAndCast = (
+  value: BigNumberish,
+  shiftAmount: number,
+  uintSize: number,
+): string => {
+  const shifted = BigNumber.from(value).shr(shiftAmount).toHexString();
+  return `0x${shifted.substring(shifted.length - uintSize / 4)}`;
 };
 
 /**
@@ -59,10 +61,10 @@ export const getPseudorandomPart = (
   pseudorandomness: string,
   partCount: number,
   shiftAmount: number,
-  uintSize = 48,
+  uintSize: number = 48,
 ): number => {
-  const uint48 = hexShiftAndCast(pseudorandomness, shiftAmount, uintSize);
-  return BigNumber.from(uint48).mod(partCount).toNumber();
+  const hex = shiftRightAndCast(pseudorandomness, shiftAmount, uintSize);
+  return BigNumber.from(hex).mod(partCount).toNumber();
 };
 
 /**
