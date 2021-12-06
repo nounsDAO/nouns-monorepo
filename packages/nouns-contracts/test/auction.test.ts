@@ -4,9 +4,9 @@ import { solidity } from 'ethereum-waffle';
 import { constants } from 'ethers';
 import { ethers, upgrades } from 'hardhat';
 import {
-  MaliciousBidderFactory,
+  MaliciousBidder__factory as MaliciousBidderFactory,
   NounsAuctionHouse,
-  NounsDescriptorFactory,
+  NounsDescriptor__factory as NounsDescriptorFactory,
   NounsToken,
   Weth,
 } from '../typechain';

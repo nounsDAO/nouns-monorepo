@@ -14,7 +14,7 @@ describe('PNGCollectionEncoder', () => {
 
   it('should run-length encode an image with no content', async () => {
     const name = 'empty';
-    const [empty] = expected.parts;
+    const [empty] = expected.images.root;
     const image = await readPngFile(join(__dirname, `./lib/images/${name}.png`));
 
     const rle = encoder.encodeImage(name, image);
@@ -23,7 +23,7 @@ describe('PNGCollectionEncoder', () => {
 
   it('should run-length encode an image with content', async () => {
     const name = 'head-cone';
-    const [, headCone] = expected.parts;
+    const [, headCone] = expected.images.root;
     const image = await readPngFile(join(__dirname, `./lib/images/${name}.png`));
 
     const rle = encoder.encodeImage(name, image);

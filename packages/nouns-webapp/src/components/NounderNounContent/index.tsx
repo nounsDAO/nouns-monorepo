@@ -4,6 +4,7 @@ import AuctionActivityWrapper from '../AuctionActivityWrapper';
 import AuctionNavigation from '../AuctionNavigation';
 import AuctionActivityNounTitle from '../AuctionActivityNounTitle';
 import AuctionActivityDateHeadline from '../AuctionActivityDateHeadline';
+import AuctionTitleAndNavWrapper from '../AuctionTitleAndNavWrapper';
 import { Link } from 'react-router-dom';
 import nounContentClasses from './NounderNounContent.module.css';
 import auctionBidClasses from '../AuctionActivity/BidHistory.module.css';
@@ -35,7 +36,7 @@ const NounderNounContent: React.FC<{
           <Col lg={12}>
             <AuctionActivityDateHeadline startTime={mintTimestamp} />
           </Col>
-          <Col lg={12} className={auctionActivityClasses.colAlignCenter}>
+          <AuctionTitleAndNavWrapper>
             <AuctionActivityNounTitle nounId={nounId} />
             <AuctionNavigation
               isFirstAuction={isFirstAuction}
@@ -43,7 +44,7 @@ const NounderNounContent: React.FC<{
               onNextAuctionClick={onNextAuctionClick}
               onPrevAuctionClick={onPrevAuctionClick}
             />
-          </Col>
+          </AuctionTitleAndNavWrapper>
         </Row>
         <Row className={auctionActivityClasses.activityRow}>
           <Col lg={5} className={auctionActivityClasses.currentBidCol}>

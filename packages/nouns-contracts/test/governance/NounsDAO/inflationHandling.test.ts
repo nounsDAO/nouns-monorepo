@@ -19,11 +19,11 @@ import { mineBlock, address, encodeParameters, advanceBlocks } from '../../utils
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
-  NounsDescriptorFactory,
-  NounsDaoProxyFactory,
+  NounsDescriptor__factory as NounsDescriptorFactory,
+  NounsDaoProxy__factory as NounsDaoProxyFactory,
   NounsDaoLogicV1,
-  NounsDaoLogicV1Factory,
-  NounsDaoExecutorFactory,
+  NounsDaoLogicV1__factory as NounsDaoLogicV1Factory,
+  NounsDaoExecutor__factory as NounsDaoExecutorFactory,
 } from '../../../typechain';
 
 chai.use(solidity);
