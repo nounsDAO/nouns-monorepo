@@ -11,10 +11,10 @@ contract NounDelegator is OwnableUpgradeable, INounDelegator {
     NounDelegatorFactoryModuleLike public factory;
 
     /**
-     * @notice Require that the sender is the factory.
+     * @notice Require that the sender is the Gnosis Safe.
      */
-    modifier onlyFactory() {
-        require(msg.sender == address(factory), 'Sender is not the factory');
+    modifier onlySafe() {
+        require(msg.sender == factory.avatar(), 'Sender is not the safe');
         _;
     }
 
@@ -58,9 +58,9 @@ contract NounDelegator is OwnableUpgradeable, INounDelegator {
 
     /**
      * Withdraw all Nouns from this contract to the Gnosis Safe.
-     * @dev This function can only be called by the factory.
+     * @dev This function can only be called by the Gnosis Safe.
      */
-    function emergencyWithdrawAll() external override onlyFactory {
+    function emergencyWithdrawAll() external override onlySafe {
         _withdrawAll();
     }
 

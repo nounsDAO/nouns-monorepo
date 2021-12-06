@@ -61,14 +61,6 @@ contract NounDelegatorFactoryModule is Module {
     }
 
     /**
-     * Emergency withdraw all Nouns from a single delegator.
-     * @dev This function can only be called by the owner.
-     */
-    function emergencyWithdrawAll(address delegator) external onlyOwner {
-        INounDelegator(delegator).emergencyWithdrawAll();
-    }
-
-    /**
      * Create a Noun delegator contract and optionally transfer Nouns to it.
      * @param info Information required to initialize the delegation contract.
      * @dev This function can only be called by the owner.
