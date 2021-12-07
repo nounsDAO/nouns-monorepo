@@ -14,6 +14,7 @@ import config, { CHAIN_ID } from '../../config';
 import { utils } from 'ethers';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import { ExternalURL, externalURL } from '../../utils/externalURL';
+import useLidoBalance from '../../hooks/useLidoBalance';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
@@ -21,8 +22,9 @@ const NavBar = () => {
 
   const stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
   const history = useHistory();
-  const treasuryBalance = useEtherBalance(config.addresses.nounsDaoExecutor);
-  const daoEtherscanLink = buildEtherscanAddressLink(config.addresses.nounsDaoExecutor);
+  const ethBalance = useEtherBalance(config.addresses.nounsDaoExecutor);
+  const lidoBalanceAsETH = useLidoBalance();
+  const treasuryBalance = ethBalance && lidoBalanceAsETH && ethBalance.add(lidoBalanceAsETH);
 
   const [showConnectModal, setShowConnectModal] = useState(false);
 
