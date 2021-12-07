@@ -42,7 +42,6 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
       return acc;
     }, {});
 
-
   const latestProposalId = proposals?.length;
 
   return (
