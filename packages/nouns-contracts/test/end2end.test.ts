@@ -7,14 +7,14 @@ import {
   Weth,
   NounsToken,
   NounsAuctionHouse,
-  NounsAuctionHouseFactory,
+  NounsAuctionHouse__factory as NounsAuctionHouseFactory,
   NounsDescriptor,
-  NounsDescriptorFactory,
-  NounsDaoProxyFactory,
+  NounsDescriptor__factory as NounsDescriptorFactory,
+  NounsDaoProxy__factory as NounsDaoProxyFactory,
   NounsDaoLogicV1,
-  NounsDaoLogicV1Factory,
+  NounsDaoLogicV1__factory as NounsDaoLogicV1Factory,
   NounsDaoExecutor,
-  NounsDaoExecutorFactory,
+  NounsDaoExecutor__factory as NounsDaoExecutorFactory,
 } from '../typechain';
 
 import {

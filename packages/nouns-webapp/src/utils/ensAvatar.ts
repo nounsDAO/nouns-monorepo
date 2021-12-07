@@ -11,6 +11,7 @@ export const useEnsAvatarLookup = (address: string) => {
       library
         .lookupAddress(address)
         .then(name => {
+          if (!name) return;
           library.getResolver(name).then(resolver => {
             if (!resolver) return;
             resolver

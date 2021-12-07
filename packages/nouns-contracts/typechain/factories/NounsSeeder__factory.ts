@@ -2,28 +2,31 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Signer } from "ethers";
+import { Signer, Contract, ContractFactory, Overrides } from "ethers";
 import { Provider, TransactionRequest } from "@ethersproject/providers";
-import { Contract, ContractFactory, Overrides } from "@ethersproject/contracts";
 
-import type { NounsSeeder } from "./NounsSeeder";
+import type { NounsSeeder } from "../NounsSeeder";
 
-export class NounsSeederFactory extends ContractFactory {
+export class NounsSeeder__factory extends ContractFactory {
   constructor(signer?: Signer) {
     super(_abi, _bytecode, signer);
   }
 
-  deploy(overrides?: Overrides): Promise<NounsSeeder> {
+  deploy(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<NounsSeeder> {
     return super.deploy(overrides || {}) as Promise<NounsSeeder>;
   }
-  getDeployTransaction(overrides?: Overrides): TransactionRequest {
+  getDeployTransaction(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): TransactionRequest {
     return super.getDeployTransaction(overrides || {});
   }
   attach(address: string): NounsSeeder {
     return super.attach(address) as NounsSeeder;
   }
-  connect(signer: Signer): NounsSeederFactory {
-    return super.connect(signer) as NounsSeederFactory;
+  connect(signer: Signer): NounsSeeder__factory {
+    return super.connect(signer) as NounsSeeder__factory;
   }
   static connect(
     address: string,
