@@ -119,6 +119,14 @@ const NavBar = () => {
             >
               DOCS
             </Nav.Link>
+            <Nav.Link 
+              href={externalURL(ExternalURL.discourse)}
+              className={classes.nounsNavLink}
+              target="_blank"
+              rel="noreferrer"
+            >
+              DISCOURSE
+            </Nav.Link>
             <Nav.Link as={Link} to="/playground" className={classes.nounsNavLink}>
               PLAYGROUND
             </Nav.Link>
