@@ -14,11 +14,14 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-color: transparent;
-  font-size: xx-large;
+  font-size: large;
+  border-radius: 50%;
+  color: #79809C;
+  background-color: #E9EBF3;;
+  font-weight: bold;
 }
 .rightArrow {
-  /* margin-left: 1rem;
-  margin-left: 0.6rem; */
+  margin-left: 0.3rem; 
   display: inline-block;
   width: 2rem;
   height: 2rem;
@@ -26,11 +29,16 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-color: transparent;
-  font-size: xx-large;
+  font-size: large;
+  color: #79809C;
+  background-color: #E9EBF3;
+  border-radius: 50%;
+  font-weight: bold;
 }
 .leftArrow:hover,
 .rightArrow:hover {
   opacity: 0.9;
+  background-color: #f0f0f3;
 }
 .leftArrow:disabled,
 .rightArrow:disabled {
