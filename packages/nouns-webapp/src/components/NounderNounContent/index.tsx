@@ -32,22 +32,26 @@ const NounderNounContent: React.FC<{
   return (
     <AuctionActivityWrapper>
       <div className={auctionActivityClasses.informationRow}>
+        <Row> 
+                <Col sm={2}>
+                      <AuctionNavigation
+                        isFirstAuction={isFirstAuction}
+                        isLastAuction={isLastAuction}
+                        onNextAuctionClick={onNextAuctionClick}
+                        onPrevAuctionClick={onPrevAuctionClick}
+                      />
+                </Col>
+                <Col>
+                  <AuctionActivityDateHeadline startTime={mintTimestamp} />
+                </Col>
+                </Row>
+            <Row>
+              <AuctionTitleAndNavWrapper>
+                <AuctionActivityNounTitle nounId={nounId} />
+              </AuctionTitleAndNavWrapper>
+            </Row>
         <Row className={auctionActivityClasses.activityRow}>
-          <Col lg={12}>
-            <AuctionActivityDateHeadline startTime={mintTimestamp} />
-          </Col>
-          <AuctionTitleAndNavWrapper>
-            <AuctionActivityNounTitle nounId={nounId} />
-            <AuctionNavigation
-              isFirstAuction={isFirstAuction}
-              isLastAuction={isLastAuction}
-              onNextAuctionClick={onNextAuctionClick}
-              onPrevAuctionClick={onPrevAuctionClick}
-            />
-          </AuctionTitleAndNavWrapper>
-        </Row>
-        <Row className={auctionActivityClasses.activityRow}>
-          <Col lg={5} className={auctionActivityClasses.currentBidCol}>
+          <Col lg={3} className={auctionActivityClasses.currentBidCol}>
             <CurrentBid currentBid={BID_N_A} auctionEnded={true} />
           </Col>
           <Col

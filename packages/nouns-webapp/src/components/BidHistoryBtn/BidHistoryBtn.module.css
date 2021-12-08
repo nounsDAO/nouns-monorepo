@@ -2,14 +2,18 @@
   display: flex;
 }
 .bidHistory {
-  margin-left: 0.5rem;
+  width: 100%;
+  height: 100%;
   color: var(--brand-black);
-  font-weight: normal;
   font-size: 1rem;
   cursor: pointer;
+  background-color: #E9EBF3;
+  border-radius: 10px;
+  text-align: center;
+  font-family: 'PT Root UI Bold';
 }
 
 .bidHistory:hover {
-  color: var(--brand-dark-red);
+  background-color: #ffffff;
   text-decoration: none;
 }

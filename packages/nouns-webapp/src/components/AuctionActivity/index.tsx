@@ -110,7 +110,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
 
       <AuctionActivityWrapper>
         <div className={classes.informationRow}>
-            <Row className={classes.activityRow}>
+            <Row> 
                 <Col sm={2}>
                   {displayGraphDepComps && (
                       <AuctionNavigation
@@ -158,12 +158,12 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
          {isLastAuction && (
            <>
           <Row className={classes.activityRow}>
-            <Col lg={12}>
+            <Col lg={9}>
               <Bid auction={auction} auctionEnded={auctionEnded} />
             </Col>
           </Row>
           <Row className={classes.activityRow}>
-          <Col lg={12}>
+          <Col lg={9}>
             {displayGraphDepComps && (
               <BidHistory
                 auctionId={auction.nounId.toString()}

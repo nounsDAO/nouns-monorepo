@@ -228,14 +228,12 @@ const Bid: React.FC<{
 
   return (
     <>
-      {!auctionEnded && (
-        <p className={classes.minBidCopy}>{`Minimum bid: ${minBidEth(minBid)} ETH`}</p>
-      )}
       <InputGroup>
         {!auctionEnded && (
           <>
             <FormControl
               aria-label="Example text with button addon"
+              placeholder={`${minBidEth(minBid)} or more`}
               aria-describedby="basic-addon1"
               className={classes.bidInput}
               type="number"

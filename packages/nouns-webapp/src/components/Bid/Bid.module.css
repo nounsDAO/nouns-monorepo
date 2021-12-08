@@ -8,8 +8,8 @@
   width: 40%;
   height: 3rem;
   color: white;
+  background-color: #151C3B !important;
   border: transparent;
-  background-color: var(--brand-black);
   font-weight: bold;
 }
 
@@ -17,7 +17,8 @@
 .bidBtn:active,
 .bidBtn:focus,
 .bidBtn:disabled {
-  background-color: gray !important;
+  background-color: #26336b !important;
+  color: white;
   outline: none !important;
   box-shadow: none !important;
 }
@@ -30,17 +31,16 @@
 .bidInput {
   width: 60%;
   height: 3rem;
-  color: black;
-  border: 1px solid #aaa !important;
-  border-radius: 0.25rem !important;
+  font-family: 'PT Root UI Bold'  !important;
+  border-radius: 12px !important;
   background-color: white;
   font-weight: bold;
   outline: none !important;
   box-shadow: none !important;
+  font-size: 18px !important;
 }
 .bidInput:focus {
   border: none !important;
-  border: 1px solid #aaa !important;
 }
 .customPlaceholder {
   position: absolute;
