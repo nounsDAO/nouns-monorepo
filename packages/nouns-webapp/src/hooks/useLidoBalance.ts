@@ -5,25 +5,24 @@ import { utils, BigNumber } from 'ethers';
 import config from '../config';
 import ERC20 from '../libs/abi/ERC20.json';
 
-const {
-  addresses: { lidoToken, nounsDaoExecutor },
-} = config;
+const { addresses } = config;
 
-const abi = new utils.Interface(ERC20);
+const erc20Interface = new utils.Interface(ERC20);
 
 function useLidoBalance(): BigNumber | undefined {
   const { library } = useEthers();
 
   const [balance, setBalance] = useState(undefined);
 
-  const contract = useMemo(() => {
-    return library && lidoToken && new Contract(lidoToken, abi, library);
+  const lidoContract = useMemo((): Contract | undefined => {
+    if (!library || !addresses.lidoToken) return;
+    return new Contract(addresses.lidoToken, erc20Interface, library);
   }, [library]);
 
   useEffect(() => {
-    if (!contract || !nounsDaoExecutor) return;
-    contract.balanceOf(nounsDaoExecutor).then(setBalance);
-  }, [contract]);
+    if (!lidoContract || !addresses.nounsDaoExecutor) return;
+    lidoContract.balanceOf(addresses.nounsDaoExecutor).then(setBalance);
+  }, [lidoContract]);
 
   return balance;
 }
