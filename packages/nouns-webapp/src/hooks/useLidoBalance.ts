@@ -18,12 +18,12 @@ function useLidoBalance(): BigNumber | undefined {
 
   const contract = useMemo(() => {
     return library && lidoToken && new Contract(lidoToken, abi, library);
-  }, [library, lidoToken]);
+  }, [library]);
 
   useEffect(() => {
     if (!contract || !nounsDaoExecutor) return;
     contract.balanceOf(nounsDaoExecutor).then(setBalance);
-  }, [contract, nounsDaoExecutor]);
+  }, [contract]);
 
   return balance;
 }
