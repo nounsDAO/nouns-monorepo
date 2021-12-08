@@ -14,3 +14,13 @@
   outline: none !important;
   box-shadow: none !important;
 }
+.section h4 {
+  color: #79809C;
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.section h2 {
+  font-family: 'PT Root UI Bold';
+  font-size: 32px;
+}

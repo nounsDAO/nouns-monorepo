@@ -43,7 +43,7 @@ h4 {
   height: 150px;
 }
 .currentBidCol {
-  border-right: 1px solid var(--brand-black);
+  border-right: 1px solid #79809c49;
 }
 .auctionTimerCol {
   padding-left: 3rem;
