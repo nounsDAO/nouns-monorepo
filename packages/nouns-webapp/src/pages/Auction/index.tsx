@@ -9,6 +9,7 @@ import { push } from 'connected-react-router';
 import { nounPath } from '../../utils/history';
 import useOnDisplayAuction from '../../wrappers/onDisplayAuction';
 import { useEffect } from 'react';
+import ProfileActivityFeed from '../../components/ProfileActivityFeed';
 
 interface AuctionPageProps {
   initialAuctionId?: number;
@@ -17,6 +18,7 @@ interface AuctionPageProps {
 const AuctionPage: React.FC<AuctionPageProps> = props => {
   const { initialAuctionId } = props;
   const onDisplayAuction = useOnDisplayAuction();
+  const onDisplayAuctionNounId = onDisplayAuction?.nounId.toNumber();
   const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
 
   const dispatch = useAppDispatch();
@@ -46,7 +48,13 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
   return (
     <>
       <Auction auction={onDisplayAuction} />
-      <Banner />
+      {
+         onDisplayAuctionNounId && onDisplayAuctionNounId !== lastAuctionNounId
+        ? 
+          <ProfileActivityFeed nounId={onDisplayAuctionNounId} />
+        :
+          <Banner/>
+      }
       {lastAuctionNounId && (
         <HistoryCollection latestNounId={BigNumber.from(lastAuctionNounId)} historyCount={10} />
       )}
