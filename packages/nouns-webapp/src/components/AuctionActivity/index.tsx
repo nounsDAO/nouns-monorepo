@@ -111,7 +111,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
       <AuctionActivityWrapper>
         <div className={classes.informationRow}>
             <Row className={classes.activityRow}>
-                <Col sm={3}>
+                <Col sm={2}>
                   {displayGraphDepComps && (
                       <AuctionNavigation
                         isFirstAuction={isFirstAuction}
@@ -133,7 +133,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
             </Row>
 
           <Row className={classes.activityRow}>
-            <Col lg={5} className={classes.currentBidCol}>
+            <Col lg={3} className={classes.currentBidCol}>
               <CurrentBid
                 currentBid={new BigNumber(auction.amount.toString())}
                 auctionEnded={auctionEnded}
@@ -148,16 +148,21 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
             </Col>
           </Row>
 
-          <NounInfoCard nounId={auction.nounId.toNumber()} />
+          {
+            !isLastAuction && (
+            <NounInfoCard nounId={auction.nounId.toNumber()} />
+            )
+          }
         </div>
-        {/* {isLastAuction && (
+
+         {isLastAuction && (
+           <>
           <Row className={classes.activityRow}>
             <Col lg={12}>
               <Bid auction={auction} auctionEnded={auctionEnded} />
             </Col>
           </Row>
-        )} */}
-        {/* <Row className={classes.activityRow}>
+          <Row className={classes.activityRow}>
           <Col lg={12}>
             {displayGraphDepComps && (
               <BidHistory
@@ -173,7 +178,9 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
                 <BidHistoryBtn onClick={openEtherscanBidHistory} />
               ))}
           </Col>
-        </Row> */}
+        </Row> 
+        </>
+        )} 
       </AuctionActivityWrapper>
     </>
   );

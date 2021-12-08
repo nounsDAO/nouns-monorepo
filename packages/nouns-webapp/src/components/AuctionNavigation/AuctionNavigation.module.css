@@ -1,7 +1,5 @@
 .navArrowsContainer {
-  /* position: absolute; */
-  /* margin-top: 0.3rem;
-  margin-left: 12.35rem; */
+  margin-top: 0.6rem;
 }
 
 .leftArrow {
@@ -38,7 +36,7 @@
 .leftArrow:hover,
 .rightArrow:hover {
   opacity: 0.9;
-  background-color: #f0f0f3;
+  background-color: #ffffff;
 }
 .leftArrow:disabled,
 .rightArrow:disabled {
