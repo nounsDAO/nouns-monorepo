@@ -3,7 +3,6 @@
 }
 
 .leftArrow {
-  /* margin-left: 1rem; */
   display: inline-block;
   width: 2rem;
   height: 2rem;
@@ -43,11 +42,6 @@
   opacity: 0.5;
 }
 
-@media (max-width: 992px) {
-  .leftArrow {
-    margin-left: 1rem;
-  }
-}
 @-moz-document url-prefix() {
   .navArrowsContainer {
     margin-top: 0;
