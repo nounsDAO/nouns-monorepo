@@ -1,0 +1,9 @@
+.wrapper {
+    margin-top: 1rem;
+}
+
+.wrapper h4 {
+    font-family: 'PT Root UI Bold';
+    color: #79809C;
+    font-size: 18px;
+}

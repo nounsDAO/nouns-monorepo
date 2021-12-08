@@ -20,4 +20,17 @@
 
 .wrapper {
   display: inline-block;
+  padding-left: 0rem;
+  font-family: 'Londrina Solid';
+}
+
+.wrapper h1 {
+  font-size: 72pt;
+}
+
+@media only screen and (max-width: 600px) {
+  .wrapper {
+    padding-top: 1.5rem;
+    margin-bottom: 0;
+  }
 }

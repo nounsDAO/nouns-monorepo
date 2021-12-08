@@ -38,12 +38,6 @@ const NounInfoCard: React.FC<NounInfoCardProps> = props => {
 
   return (
     <>
-      <Col lg={12}>
-        <div className={classes.nounInfoHeader}>
-          <h3>Profile</h3>
-          <h2>Noun {nounId}</h2>
-        </div>
-      </Col>
       <Col lg={12} className={classes.nounInfoRow}>
         <NounInfoRowBirthday nounId={nounId} />
       </Col>

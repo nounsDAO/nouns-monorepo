@@ -19,6 +19,7 @@ import BidHistoryBtn from '../BidHistoryBtn';
 import StandaloneNoun from '../StandaloneNoun';
 import config from '../../config';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
+import NounInfoCard from '../../components/NounInfoCard';
 
 const openEtherscanBidHistory = () => {
   const url = buildEtherscanAddressLink(config.addresses.nounsAuctionHouseProxy);
@@ -109,22 +110,28 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
 
       <AuctionActivityWrapper>
         <div className={classes.informationRow}>
-          <Row className={classes.activityRow}>
-            <Col lg={12}>
-              <AuctionActivityDateHeadline startTime={auction.startTime} />
-            </Col>
-            <AuctionTitleAndNavWrapper>
-              <AuctionActivityNounTitle nounId={auction.nounId} />
-              {displayGraphDepComps && (
-                <AuctionNavigation
-                  isFirstAuction={isFirstAuction}
-                  isLastAuction={isLastAuction}
-                  onNextAuctionClick={onNextAuctionClick}
-                  onPrevAuctionClick={onPrevAuctionClick}
-                />
-              )}
-            </AuctionTitleAndNavWrapper>
-          </Row>
+            <Row className={classes.activityRow}>
+                <Col sm={3}>
+                  {displayGraphDepComps && (
+                      <AuctionNavigation
+                        isFirstAuction={isFirstAuction}
+                        isLastAuction={isLastAuction}
+                        onNextAuctionClick={onNextAuctionClick}
+                        onPrevAuctionClick={onPrevAuctionClick}
+                      />
+                    )
+                    }
+                </Col>
+                <Col>
+                  <AuctionActivityDateHeadline startTime={auction.startTime} />
+                </Col>
+                </Row>
+            <Row>
+              <AuctionTitleAndNavWrapper>
+                <AuctionActivityNounTitle nounId={auction.nounId} />
+              </AuctionTitleAndNavWrapper>
+            </Row>
+
           <Row className={classes.activityRow}>
             <Col lg={5} className={classes.currentBidCol}>
               <CurrentBid
@@ -140,15 +147,17 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
               )}
             </Col>
           </Row>
+
+          <NounInfoCard nounId={auction.nounId.toNumber()} />
         </div>
-        {isLastAuction && (
+        {/* {isLastAuction && (
           <Row className={classes.activityRow}>
             <Col lg={12}>
               <Bid auction={auction} auctionEnded={auctionEnded} />
             </Col>
           </Row>
-        )}
-        <Row className={classes.activityRow}>
+        )} */}
+        {/* <Row className={classes.activityRow}>
           <Col lg={12}>
             {displayGraphDepComps && (
               <BidHistory
@@ -157,8 +166,6 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
                 classes={bidHistoryClasses}
               />
             )}
-            {/* If no bids, show nothing. If bids avail:graph is stable? show bid history modal,
-            else show etherscan contract link */}
             {!auction.amount.eq(0) &&
               (displayGraphDepComps ? (
                 <BidHistoryBtn onClick={showBidModalHandler} />
@@ -166,7 +173,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
                 <BidHistoryBtn onClick={openEtherscanBidHistory} />
               ))}
           </Col>
-        </Row>
+        </Row> */}
       </AuctionActivityWrapper>
     </>
   );

@@ -1,11 +1,11 @@
 .navArrowsContainer {
-  position: absolute;
-  margin-top: 0.3rem;
-  margin-left: 12.35rem;
+  /* position: absolute; */
+  /* margin-top: 0.3rem;
+  margin-left: 12.35rem; */
 }
 
 .leftArrow {
-  margin-left: 1rem;
+  /* margin-left: 1rem; */
   display: inline-block;
   width: 2rem;
   height: 2rem;
@@ -17,8 +17,8 @@
   font-size: xx-large;
 }
 .rightArrow {
-  margin-left: 1rem;
-  margin-left: 0.6rem;
+  /* margin-left: 1rem;
+  margin-left: 0.6rem; */
   display: inline-block;
   width: 2rem;
   height: 2rem;
