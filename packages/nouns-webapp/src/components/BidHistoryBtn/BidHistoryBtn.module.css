@@ -7,13 +7,13 @@
   color: var(--brand-black);
   font-size: 1rem;
   cursor: pointer;
-  background-color: #e9ebf3;
+  background-color: var(--brand-cool-accent);
   border-radius: 10px;
   text-align: center;
   font-family: 'PT Root UI Bold';
 }
 
 .bidHistory:hover {
-  background-color: #ffffff;
+  background-color: var(--brand-gray-hover);
   text-decoration: none;
 }

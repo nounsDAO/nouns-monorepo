@@ -13,8 +13,8 @@
   background-color: transparent;
   font-size: large;
   border-radius: 50%;
-  color: #79809c;
-  background-color: #e9ebf3;
+  color: var(--brand-cool-dark-text);
+  background-color: var(--brand-cool-accent);
   font-weight: bold;
 }
 .rightArrow {
@@ -28,15 +28,15 @@
   background-repeat: no-repeat;
   background-color: transparent;
   font-size: large;
-  color: #79809c;
-  background-color: #e9ebf3;
+  color: var(--brand-cool-dark-text);
+  background-color: var(--brand-cool-accent);
   border-radius: 50%;
   font-weight: bold;
 }
 .leftArrow:hover,
 .rightArrow:hover {
   opacity: 0.9;
-  background-color: #ffffff;
+  background-color: var(--brand-gray-hover);
 }
 .leftArrow:disabled,
 .rightArrow:disabled {

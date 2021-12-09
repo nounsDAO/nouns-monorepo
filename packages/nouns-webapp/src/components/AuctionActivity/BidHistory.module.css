@@ -59,17 +59,17 @@
 }
 .bidRow {
   border-radius: 10px;
-  background-color: #e9ebf3;
+  background-color: var(--brand-cool-accent);
   font-family: 'PT Root UI Bold';
   font-size: medium;
-  color: #151c3b;
+  color: var(--brand-cool-dark-text);
 }
 
 .linkSymbol,
 .linkSymbol a {
-  color: gray;
+  color: var(--brand-gray-light-text) 
 }
 
 .linkSymbol a:hover {
-  color: rgb(136, 136, 136);
+  color: var(--brand-gray-hover) 
 }

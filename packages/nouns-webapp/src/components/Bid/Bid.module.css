@@ -8,7 +8,7 @@
   width: 40%;
   height: 3rem;
   color: white;
-  background-color: #151c3b !important;
+  background-color: var(--brand-cool-dark-text) !important;
   border: transparent;
   font-weight: bold;
 }
@@ -97,7 +97,7 @@
     left: 42%;
     margin-top: 0.12rem;
     font-family: 'PT Root UI';
-    color: #79809c;
+    color: var(--brand-cool-light-text);
     font-size: 15px;
   }
 }

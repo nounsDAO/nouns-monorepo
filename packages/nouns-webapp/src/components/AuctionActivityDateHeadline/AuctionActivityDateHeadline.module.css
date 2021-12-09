@@ -4,6 +4,6 @@
 
 .wrapper h4 {
   font-family: 'PT Root UI Bold';
-  color: #79809c;
+  color: var(--brand-cool-light-text);
   font-size: 18px;
 }

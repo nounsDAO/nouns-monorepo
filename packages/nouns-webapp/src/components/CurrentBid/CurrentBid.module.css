@@ -5,7 +5,7 @@
 }
 
 .section h4 {
-  color: #79809c;
+  color: var(--brand-cool-light-text);
   font-weight: 500;
   font-size: 18px;
 }
