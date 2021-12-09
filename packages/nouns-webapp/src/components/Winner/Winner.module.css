@@ -24,3 +24,13 @@
   font-family: 'PT Root UI Bold';
   font-size: 32px;
 }
+
+@media (max-width: 992px) {
+  .section h4 {
+    display: none;
+  }
+
+  .section h2 {
+    font-size: 23px;
+  }
+}

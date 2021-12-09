@@ -9,8 +9,9 @@ dayjs.extend(duration);
 const AuctionTimer: React.FC<{
   auction: Auction;
   auctionEnded: boolean;
+  isMobileView: boolean;
 }> = props => {
-  const { auction, auctionEnded } = props;
+  const { auction, auctionEnded, isMobileView } = props;
 
   const [auctionTimer, setAuctionTimer] = useState(0);
   const [timerToggle, setTimerToggle] = useState(true);
@@ -39,7 +40,7 @@ const AuctionTimer: React.FC<{
     }
   }, [auction, auctionTimer]);
 
-  const auctionContent = auctionEnded ? 'Auction ended' : (timerToggle ? 'Ends in' : `Ends on ${endTime.format('MMM Do')} at`);
+  const auctionContent = auctionEnded ? 'Auction ended' : (timerToggle ? 'Auction Ends in' : `Ends on ${endTime.format('MMM Do')} at`);
 
   const flooredMinutes = Math.floor(timerDuration.minutes());
   const flooredSeconds = Math.floor(timerDuration.seconds());
@@ -48,7 +49,7 @@ const AuctionTimer: React.FC<{
 
   return (
     <div onClick={() => setTimerToggle(!timerToggle)} className={classes.auctionTimerSection}>
-          <h4 className={classes.title}>{auctionContent}</h4>
+          { !isMobileView ?  <h4 className={classes.title}>{auctionContent}</h4> : <></>}
       {timerToggle ? (
           <h2 className={classes.timerWrapper}>
             <div className={classes.timerSection}>
@@ -63,7 +64,8 @@ const AuctionTimer: React.FC<{
                 <span className={classes.small}>m</span>
               </span>
             </div>
-            <div className={classes.timerSection}>
+            {/* Remove margin right on mobile to make it look nice */}
+            <div className={ !isMobileView ? classes.timerSection : ''}>
               <span>
                 {`${flooredSeconds}`}
                 <span className={classes.small}>s</span>

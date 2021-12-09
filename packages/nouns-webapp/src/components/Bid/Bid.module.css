@@ -94,6 +94,10 @@
     border-color: #c3c3c3;
   }
   .customPlaceholder {
-    left: 44%;
+    left: 42%;
+    margin-top: .12rem;
+    font-family: 'PT Root UI';
+    color: #79809C;
+    font-size: 15px;
   }
 }

@@ -19,6 +19,7 @@
 }
 .rightArrow {
   margin-left: 0.3rem; 
+  margin-right: 0.3rem; 
   display: inline-block;
   width: 2rem;
   height: 2rem;
@@ -42,9 +43,27 @@
   opacity: 0.5;
 }
 
+.mobileDateHeadline {
+  display: inline-block;
+  margin-left: 0.3rem;
+}
+
 @-moz-document url-prefix() {
   .navArrowsContainer {
     margin-top: 0;
     margin-bottom: 0.5rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .navArrowsContainer {
+    margin-top: 0.6rem;
+    min-width: 5rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .hideOnDesktop {
+    display: none;
   }
 }

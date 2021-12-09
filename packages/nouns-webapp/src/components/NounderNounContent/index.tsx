@@ -37,11 +37,12 @@ const NounderNounContent: React.FC<{
                       <AuctionNavigation
                         isFirstAuction={isFirstAuction}
                         isLastAuction={isLastAuction}
+                        startTime={mintTimestamp}
                         onNextAuctionClick={onNextAuctionClick}
                         onPrevAuctionClick={onPrevAuctionClick}
                       />
                 </Col>
-                <Col>
+                <Col className={auctionActivityClasses.hideOnMobile}>
                   <AuctionActivityDateHeadline startTime={mintTimestamp} />
                 </Col>
                 </Row>

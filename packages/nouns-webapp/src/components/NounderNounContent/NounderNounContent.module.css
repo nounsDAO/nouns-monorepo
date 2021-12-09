@@ -15,3 +15,9 @@
 .currentBidCol {
   border-right: 0 !important;
 }
+
+@media (max-width: 992px) {
+  .hideOnMobile {
+    display: none;
+  }
+}

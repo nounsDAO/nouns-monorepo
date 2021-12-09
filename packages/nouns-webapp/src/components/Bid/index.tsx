@@ -12,6 +12,7 @@ import { AlertModal, setAlertModal } from '../../state/slices/application';
 import { NounsAuctionHouseFactory } from '@nouns/sdk';
 import config from '../../config';
 
+
 const computeMinimumNextBid = (
   currentBid: BigNumber,
   minBidIncPercentage: BigNumber | undefined,
@@ -57,7 +58,7 @@ const Bid: React.FC<{
   const [bidInput, setBidInput] = useState('');
   const [bidButtonContent, setBidButtonContent] = useState({
     loading: false,
-    content: auctionEnded ? 'Settle' : 'Bid',
+    content: auctionEnded ? 'Settle' : 'Place Bid',
   });
 
   const dispatch = useAppDispatch();
@@ -142,7 +143,7 @@ const Bid: React.FC<{
         message: `Bid was placed successfully!`,
         show: true,
       });
-      setBidButtonContent({ loading: false, content: 'Bid' });
+      setBidButtonContent({ loading: false, content: 'Place Bid' });
       clearBidInput();
     }
   }, [auction, placeBidState, account, setModal]);
@@ -153,7 +154,7 @@ const Bid: React.FC<{
       case 'None':
         setBidButtonContent({
           loading: false,
-          content: 'Bid',
+          content: 'Place Bid',
         });
         break;
       case 'Mining':
@@ -165,7 +166,7 @@ const Bid: React.FC<{
           message: placeBidState.errorMessage ? placeBidState.errorMessage : 'Please try again.',
           show: true,
         });
-        setBidButtonContent({ loading: false, content: 'Bid' });
+        setBidButtonContent({ loading: false, content: 'Place Bid' });
         break;
       case 'Exception':
         setModal({
@@ -173,7 +174,7 @@ const Bid: React.FC<{
           message: placeBidState.errorMessage ? placeBidState.errorMessage : 'Please try again.',
           show: true,
         });
-        setBidButtonContent({ loading: false, content: 'Bid' });
+        setBidButtonContent({ loading: false, content: 'Place Bid' });
         break;
     }
   }, [placeBidState, auctionEnded, setModal]);
@@ -233,7 +234,7 @@ const Bid: React.FC<{
           <>
             <FormControl
               aria-label="Example text with button addon"
-              placeholder={`${minBidEth(minBid)} or more`}
+              placeholder={ window.innerWidth <= 992 ?  `> ${minBidEth(minBid)}` : `${minBidEth(minBid)} or more`}
               aria-describedby="basic-addon1"
               className={classes.bidInput}
               type="number"

@@ -20,6 +20,7 @@ import StandaloneNoun from '../StandaloneNoun';
 import config from '../../config';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import NounInfoCard from '../../components/NounInfoCard';
+import TruncatedAmount from '../TruncatedAmount';
 
 const openEtherscanBidHistory = () => {
   const url = buildEtherscanAddressLink(config.addresses.nounsAuctionHouseProxy);
@@ -62,6 +63,19 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
       <br /> Bid History
     </h1>
   );
+
+  const winnerCopy = (
+    <>
+      Winner
+    </>
+  );
+
+  const timeLeftCopy = (
+    <>
+    Time Left
+    </>
+  )
+
 
   // timer logic - check auction status every 30 seconds, until five minutes remain, then check status every second
   useEffect(() => {
@@ -116,13 +130,14 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
                       <AuctionNavigation
                         isFirstAuction={isFirstAuction}
                         isLastAuction={isLastAuction}
+                        startTime={auction.startTime}
                         onNextAuctionClick={onNextAuctionClick}
                         onPrevAuctionClick={onPrevAuctionClick}
                       />
                     )
                     }
                 </Col>
-                <Col>
+                <Col className={classes.hideOnMobile}>
                   <AuctionActivityDateHeadline startTime={auction.startTime} />
                 </Col>
                 </Row>
@@ -132,18 +147,54 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
               </AuctionTitleAndNavWrapper>
             </Row>
 
+            
           <Row className={classes.activityRow}>
-            <Col lg={3} className={classes.currentBidCol}>
+              <Row className={classes.hideOnDesktop}>
+                <Col style={{
+                  fontFamily: 'PT Root UI Bold',
+                  fontSize: '18px',
+                  color: '#79809C'
+                }}>
+                    Current Bid
+                </Col>
+                <Col style={{
+                  fontFamily: 'PT Root UI Bold',
+                  fontSize: '23px',
+                  textAlign: 'right'
+                }}>
+                  <TruncatedAmount amount={ auction && new BigNumber(auction.amount.toString())} />
+                </Col>
+              </Row>
+              <Row className={classes.hideOnDesktop}>
+                  <Col style={{
+                  fontFamily: 'PT Root UI Bold',
+                  fontSize: '18px',
+                  color: '#79809C'
+                }}>
+                  { auctionEnded ? winnerCopy : timeLeftCopy }
+                </Col>
+                <Col> 
+                {auctionEnded ? (
+                  <Winner winner={auction.bidder} />
+                ) : (
+                    <AuctionTimer auction={auction} auctionEnded={auctionEnded} isMobileView={true}/>
+                )}
+                </Col>
+
+              </Row>
+
+
+            <Col lg={3} className={`${classes.currentBidCol} ${classes.hideOnMobile}`}>
               <CurrentBid
                 currentBid={new BigNumber(auction.amount.toString())}
                 auctionEnded={auctionEnded}
               />
             </Col>
-            <Col lg={5} className={classes.auctionTimerCol}>
+            <Col lg={5} className={` ${classes.auctionTimerCol} ${classes.hideOnMobile}`}>
               {auctionEnded ? (
                 <Winner winner={auction.bidder} />
               ) : (
-                <AuctionTimer auction={auction} auctionEnded={auctionEnded} />
+                <AuctionTimer auction={auction} auctionEnded={auctionEnded} isMobileView={false} />
               )}
             </Col>
           </Row>
@@ -155,6 +206,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
           }
         </div>
 
+        <div className={classes.auctionInfoContainer}>  
          {isLastAuction && (
            <>
           <Row className={classes.activityRow}>
@@ -181,6 +233,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
         </Row> 
         </>
         )} 
+        </div>  
       </AuctionActivityWrapper>
     </>
   );

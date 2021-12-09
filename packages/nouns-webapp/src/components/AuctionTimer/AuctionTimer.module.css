@@ -1,9 +1,14 @@
 .title {
   margin-bottom: 0.5rem;
+  color: #79809C;
+  font-weight: 500;
+  font-size: 18px;
 }
 
 .timerWrapper {
   display: flex;
+  font-size: 32px;
+  font-family: 'PT Root UI Bold';
 }
 
 .timerSection {
@@ -26,4 +31,10 @@
 
 .auctionTimerSection {
   cursor: pointer;
+}
+
+@media (max-width: 992px) {
+  .timerWrapper {
+    justify-content: flex-end;
+  }
 }

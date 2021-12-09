@@ -33,4 +33,8 @@
     padding-top: 1.5rem;
     margin-bottom: 0;
   }
+
+  .wrapper h1 {
+    font-size: 56px;
+  }
 }

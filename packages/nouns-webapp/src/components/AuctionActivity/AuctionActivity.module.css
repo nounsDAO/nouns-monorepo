@@ -56,6 +56,11 @@ h4 {
   .auctionTimerCol {
     padding-left: 15px;
   }
+
+  .informationRow {
+    margin-right: 1.0rem;
+    margin-left: 1.0rem;
+  }
 }
 
 /* Fix Firefox navigation arrow alignment issues */
@@ -63,5 +68,23 @@ h4 {
   .colAlignCenter {
     display: flex;
     align-items: center;
+  }
+}
+
+@media (max-width: 992px) {
+  .hideOnMobile {
+    display: none;
+  }
+
+  .auctionInfoContainer {
+    margin-left: 1.0rem;
+    margin-right: 1.0rem;
+  }
+}
+
+
+@media (min-width: 992px) {
+  .hideOnDesktop {
+    display: none;
   }
 }
