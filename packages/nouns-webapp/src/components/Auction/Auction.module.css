@@ -13,7 +13,6 @@
 
 @media (max-width: 992px) {
   .auctionActivityCol {
-    background-color: white;
     border-bottom: 1px solid lightgray;
     padding-bottom: 2rem;
   }
