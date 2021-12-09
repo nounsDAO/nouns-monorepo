@@ -6,10 +6,7 @@ const BidHistoryBtn: React.FC<{ onClick: () => void }> = props => {
     <div className={classes.bidHistoryWrapper}>
       <div className={classes.bidHistory} onClick={onClick}>
         <div
-          style={{
-            marginTop: '.5rem',
-            marginBottom: '.5em',
-          }}
+         className={classes.buttonCopy} 
         >
           View Bid History
         </div>

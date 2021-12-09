@@ -49,6 +49,18 @@ h4 {
   padding-left: 3rem;
 }
 
+.mobileAuctionInfoCopy {
+  font-family: 'PT Root UI Bold';
+  font-size: 18px;
+  color: var(--brand-cool-light-text);
+}
+
+.mobileAuctionAmount {
+  font-family: 'PT Root UI Bold';
+  font-size: 23px;
+  text-align: right;
+}
+
 @media (max-width: 992px) {
   .wrapper {
     padding: 1rem;

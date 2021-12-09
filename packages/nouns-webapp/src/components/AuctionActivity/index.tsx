@@ -139,33 +139,15 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
 
           <Row className={classes.activityRow}>
             <Row className={classes.hideOnDesktop}>
-              <Col
-                style={{
-                  fontFamily: 'PT Root UI Bold',
-                  fontSize: '18px',
-                  color: '#79809C',
-                }}
-              >
+              <Col className={classes.mobileAuctionInfoCopy}>
                 Current Bid
               </Col>
-              <Col
-                style={{
-                  fontFamily: 'PT Root UI Bold',
-                  fontSize: '23px',
-                  textAlign: 'right',
-                }}
-              >
+              <Col className={classes.mobileAuctionAmount}>
                 <TruncatedAmount amount={auction && new BigNumber(auction.amount.toString())} />
               </Col>
             </Row>
             <Row className={classes.hideOnDesktop}>
-              <Col
-                style={{
-                  fontFamily: 'PT Root UI Bold',
-                  fontSize: '18px',
-                  color: '#79809C',
-                }}
-              >
+              <Col className={classes.mobileAuctionInfoCopy}>
                 {auctionEnded ? winnerCopy : timeLeftCopy}
               </Col>
               <Col>
