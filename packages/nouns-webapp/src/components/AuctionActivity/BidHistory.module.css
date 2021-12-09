@@ -67,9 +67,9 @@
 
 .linkSymbol,
 .linkSymbol a {
-  color: var(--brand-gray-light-text) 
+  color: var(--brand-gray-light-text);
 }
 
 .linkSymbol a:hover {
-  color: var(--brand-gray-hover) 
+  color: var(--brand-gray-hover);
 }

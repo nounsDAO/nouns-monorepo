@@ -139,9 +139,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
 
           <Row className={classes.activityRow}>
             <Row className={classes.hideOnDesktop}>
-              <Col className={classes.mobileAuctionInfoCopy}>
-                Current Bid
-              </Col>
+              <Col className={classes.mobileAuctionInfoCopy}>Current Bid</Col>
               <Col className={classes.mobileAuctionAmount}>
                 <TruncatedAmount amount={auction && new BigNumber(auction.amount.toString())} />
               </Col>

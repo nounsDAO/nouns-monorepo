@@ -52,7 +52,7 @@ const AuctionTimer: React.FC<{
 
   return (
     <div onClick={() => setTimerToggle(!timerToggle)} className={classes.auctionTimerSection}>
-    <h4 className={classes.title}>{auctionContent}</h4> 
+      <h4 className={classes.title}>{auctionContent}</h4>
       {timerToggle ? (
         <h2 className={classes.timerWrapper}>
           <div className={classes.timerSection}>
