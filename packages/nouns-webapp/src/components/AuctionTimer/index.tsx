@@ -9,9 +9,8 @@ dayjs.extend(duration);
 const AuctionTimer: React.FC<{
   auction: Auction;
   auctionEnded: boolean;
-  isMobileView: boolean;
 }> = props => {
-  const { auction, auctionEnded, isMobileView } = props;
+  const { auction, auctionEnded } = props;
 
   const [auctionTimer, setAuctionTimer] = useState(0);
   const [timerToggle, setTimerToggle] = useState(true);
@@ -53,7 +52,7 @@ const AuctionTimer: React.FC<{
 
   return (
     <div onClick={() => setTimerToggle(!timerToggle)} className={classes.auctionTimerSection}>
-      {!isMobileView ? <h4 className={classes.title}>{auctionContent}</h4> : <></>}
+    <h4 className={classes.title}>{auctionContent}</h4> 
       {timerToggle ? (
         <h2 className={classes.timerWrapper}>
           <div className={classes.timerSection}>
@@ -68,8 +67,7 @@ const AuctionTimer: React.FC<{
               <span className={classes.small}>m</span>
             </span>
           </div>
-          {/* Remove margin right on mobile to make it look nice */}
-          <div className={!isMobileView ? classes.timerSection : ''}>
+          <div className={classes.timerSectionSeconds}>
             <span>
               {`${flooredSeconds}`}
               <span className={classes.small}>s</span>

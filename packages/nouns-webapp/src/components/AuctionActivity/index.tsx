@@ -172,7 +172,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
                 {auctionEnded ? (
                   <Winner winner={auction.bidder} />
                 ) : (
-                  <AuctionTimer auction={auction} auctionEnded={auctionEnded} isMobileView={true} />
+                  <AuctionTimer auction={auction} auctionEnded={auctionEnded} />
                 )}
               </Col>
             </Row>
@@ -187,7 +187,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
               {auctionEnded ? (
                 <Winner winner={auction.bidder} />
               ) : (
-                <AuctionTimer auction={auction} auctionEnded={auctionEnded} isMobileView={false} />
+                <AuctionTimer auction={auction} auctionEnded={auctionEnded} />
               )}
             </Col>
           </Row>
