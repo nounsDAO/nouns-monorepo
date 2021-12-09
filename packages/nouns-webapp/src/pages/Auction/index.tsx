@@ -48,13 +48,11 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
   return (
     <>
       <Auction auction={onDisplayAuction} />
-      {
-         onDisplayAuctionNounId && onDisplayAuctionNounId !== lastAuctionNounId
-        ? 
-          <ProfileActivityFeed nounId={onDisplayAuctionNounId} />
-        :
-          <Banner/>
-      }
+      {onDisplayAuctionNounId && onDisplayAuctionNounId !== lastAuctionNounId ? (
+        <ProfileActivityFeed nounId={onDisplayAuctionNounId} />
+      ) : (
+        <Banner />
+      )}
       {lastAuctionNounId && (
         <HistoryCollection latestNounId={BigNumber.from(lastAuctionNounId)} historyCount={10} />
       )}

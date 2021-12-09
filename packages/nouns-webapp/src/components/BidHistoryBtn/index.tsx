@@ -5,10 +5,12 @@ const BidHistoryBtn: React.FC<{ onClick: () => void }> = props => {
   return (
     <div className={classes.bidHistoryWrapper}>
       <div className={classes.bidHistory} onClick={onClick}>
-        <div style={{
-          marginTop: '.5rem',
-          marginBottom: '.5em'
-        }}>
+        <div
+          style={{
+            marginTop: '.5rem',
+            marginBottom: '.5em',
+          }}
+        >
           View Bid History
         </div>
       </div>

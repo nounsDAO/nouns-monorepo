@@ -8,7 +8,7 @@
   width: 40%;
   height: 3rem;
   color: white;
-  background-color: #151C3B !important;
+  background-color: #151c3b !important;
   border: transparent;
   font-weight: bold;
 }
@@ -31,7 +31,7 @@
 .bidInput {
   width: 60%;
   height: 3rem;
-  font-family: 'PT Root UI Bold'  !important;
+  font-family: 'PT Root UI Bold' !important;
   border-radius: 12px !important;
   background-color: white;
   font-weight: bold;
@@ -95,9 +95,9 @@
   }
   .customPlaceholder {
     left: 42%;
-    margin-top: .12rem;
+    margin-top: 0.12rem;
     font-family: 'PT Root UI';
-    color: #79809C;
+    color: #79809c;
     font-size: 15px;
   }
 }

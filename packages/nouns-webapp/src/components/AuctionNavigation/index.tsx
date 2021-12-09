@@ -10,7 +10,8 @@ const AuctionNavigation: React.FC<{
   onPrevAuctionClick: () => void;
   onNextAuctionClick: () => void;
 }> = props => {
-  const { isFirstAuction, isLastAuction, startTime, onPrevAuctionClick, onNextAuctionClick } = props;
+  const { isFirstAuction, isLastAuction, startTime, onPrevAuctionClick, onNextAuctionClick } =
+    props;
   return (
     <div className={classes.navArrowsContainer}>
       <button
@@ -28,8 +29,8 @@ const AuctionNavigation: React.FC<{
         →
       </button>
       <div className={`${classes.hideOnDesktop} ${classes.mobileDateHeadline}`}>
-            <AuctionActivityDateHeadline startTime={startTime} />
-        </div>
+        <AuctionActivityDateHeadline startTime={startTime} />
+      </div>
     </div>
   );
 };

@@ -64,18 +64,9 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
     </h1>
   );
 
-  const winnerCopy = (
-    <>
-      Winner
-    </>
-  );
+  const winnerCopy = <>Winner</>;
 
-  const timeLeftCopy = (
-    <>
-    Time Left
-    </>
-  )
-
+  const timeLeftCopy = <>Time Left</>;
 
   // timer logic - check auction status every 30 seconds, until five minutes remain, then check status every second
   useEffect(() => {
@@ -124,65 +115,67 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
 
       <AuctionActivityWrapper>
         <div className={classes.informationRow}>
-            <Row> 
-                <Col sm={2}>
-                  {displayGraphDepComps && (
-                      <AuctionNavigation
-                        isFirstAuction={isFirstAuction}
-                        isLastAuction={isLastAuction}
-                        startTime={auction.startTime}
-                        onNextAuctionClick={onNextAuctionClick}
-                        onPrevAuctionClick={onPrevAuctionClick}
-                      />
-                    )
-                    }
-                </Col>
-                <Col className={classes.hideOnMobile}>
-                  <AuctionActivityDateHeadline startTime={auction.startTime} />
-                </Col>
-                </Row>
-            <Row>
-              <AuctionTitleAndNavWrapper>
-                <AuctionActivityNounTitle nounId={auction.nounId} />
-              </AuctionTitleAndNavWrapper>
-            </Row>
+          <Row>
+            <Col sm={2}>
+              {displayGraphDepComps && (
+                <AuctionNavigation
+                  isFirstAuction={isFirstAuction}
+                  isLastAuction={isLastAuction}
+                  startTime={auction.startTime}
+                  onNextAuctionClick={onNextAuctionClick}
+                  onPrevAuctionClick={onPrevAuctionClick}
+                />
+              )}
+            </Col>
+            <Col className={classes.hideOnMobile}>
+              <AuctionActivityDateHeadline startTime={auction.startTime} />
+            </Col>
+          </Row>
+          <Row>
+            <AuctionTitleAndNavWrapper>
+              <AuctionActivityNounTitle nounId={auction.nounId} />
+            </AuctionTitleAndNavWrapper>
+          </Row>
 
-            
           <Row className={classes.activityRow}>
-              <Row className={classes.hideOnDesktop}>
-                <Col style={{
+            <Row className={classes.hideOnDesktop}>
+              <Col
+                style={{
                   fontFamily: 'PT Root UI Bold',
                   fontSize: '18px',
-                  color: '#79809C'
-                }}>
-                    Current Bid
-                </Col>
-                <Col style={{
+                  color: '#79809C',
+                }}
+              >
+                Current Bid
+              </Col>
+              <Col
+                style={{
                   fontFamily: 'PT Root UI Bold',
                   fontSize: '23px',
-                  textAlign: 'right'
-                }}>
-                  <TruncatedAmount amount={ auction && new BigNumber(auction.amount.toString())} />
-                </Col>
-              </Row>
-              <Row className={classes.hideOnDesktop}>
-                  <Col style={{
+                  textAlign: 'right',
+                }}
+              >
+                <TruncatedAmount amount={auction && new BigNumber(auction.amount.toString())} />
+              </Col>
+            </Row>
+            <Row className={classes.hideOnDesktop}>
+              <Col
+                style={{
                   fontFamily: 'PT Root UI Bold',
                   fontSize: '18px',
-                  color: '#79809C'
-                }}>
-                  { auctionEnded ? winnerCopy : timeLeftCopy }
-                </Col>
-                <Col> 
+                  color: '#79809C',
+                }}
+              >
+                {auctionEnded ? winnerCopy : timeLeftCopy}
+              </Col>
+              <Col>
                 {auctionEnded ? (
                   <Winner winner={auction.bidder} />
                 ) : (
-                    <AuctionTimer auction={auction} auctionEnded={auctionEnded} isMobileView={true}/>
+                  <AuctionTimer auction={auction} auctionEnded={auctionEnded} isMobileView={true} />
                 )}
-                </Col>
-
-              </Row>
-
+              </Col>
+            </Row>
 
             <Col lg={3} className={`${classes.currentBidCol} ${classes.hideOnMobile}`}>
               <CurrentBid
@@ -199,41 +192,37 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
             </Col>
           </Row>
 
-          {
-            !isLastAuction && (
-            <NounInfoCard nounId={auction.nounId.toNumber()} />
-            )
-          }
+          {!isLastAuction && <NounInfoCard nounId={auction.nounId.toNumber()} />}
         </div>
 
-        <div className={classes.auctionInfoContainer}>  
-         {isLastAuction && (
-           <>
-          <Row className={classes.activityRow}>
-            <Col lg={9}>
-              <Bid auction={auction} auctionEnded={auctionEnded} />
-            </Col>
-          </Row>
-          <Row className={classes.activityRow}>
-          <Col lg={9}>
-            {displayGraphDepComps && (
-              <BidHistory
-                auctionId={auction.nounId.toString()}
-                max={3}
-                classes={bidHistoryClasses}
-              />
-            )}
-            {!auction.amount.eq(0) &&
-              (displayGraphDepComps ? (
-                <BidHistoryBtn onClick={showBidModalHandler} />
-              ) : (
-                <BidHistoryBtn onClick={openEtherscanBidHistory} />
-              ))}
-          </Col>
-        </Row> 
-        </>
-        )} 
-        </div>  
+        <div className={classes.auctionInfoContainer}>
+          {isLastAuction && (
+            <>
+              <Row className={classes.activityRow}>
+                <Col lg={9}>
+                  <Bid auction={auction} auctionEnded={auctionEnded} />
+                </Col>
+              </Row>
+              <Row className={classes.activityRow}>
+                <Col lg={9}>
+                  {displayGraphDepComps && (
+                    <BidHistory
+                      auctionId={auction.nounId.toString()}
+                      max={3}
+                      classes={bidHistoryClasses}
+                    />
+                  )}
+                  {!auction.amount.eq(0) &&
+                    (displayGraphDepComps ? (
+                      <BidHistoryBtn onClick={showBidModalHandler} />
+                    ) : (
+                      <BidHistoryBtn onClick={openEtherscanBidHistory} />
+                    ))}
+                </Col>
+              </Row>
+            </>
+          )}
+        </div>
       </AuctionActivityWrapper>
     </>
   );

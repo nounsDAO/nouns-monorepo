@@ -12,7 +12,6 @@ import { AlertModal, setAlertModal } from '../../state/slices/application';
 import { NounsAuctionHouseFactory } from '@nouns/sdk';
 import config from '../../config';
 
-
 const computeMinimumNextBid = (
   currentBid: BigNumber,
   minBidIncPercentage: BigNumber | undefined,
@@ -234,7 +233,9 @@ const Bid: React.FC<{
           <>
             <FormControl
               aria-label="Example text with button addon"
-              placeholder={ window.innerWidth <= 992 ?  `> ${minBidEth(minBid)}` : `${minBidEth(minBid)} or more`}
+              placeholder={
+                window.innerWidth <= 992 ? `> ${minBidEth(minBid)}` : `${minBidEth(minBid)} or more`
+              }
               aria-describedby="basic-addon1"
               className={classes.bidInput}
               type="number"

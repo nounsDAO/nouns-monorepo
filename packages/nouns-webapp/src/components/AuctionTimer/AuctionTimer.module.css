@@ -1,6 +1,6 @@
 .title {
   margin-bottom: 0.5rem;
-  color: #79809C;
+  color: #79809c;
   font-weight: 500;
   font-size: 18px;
 }
@@ -26,7 +26,7 @@
 
 .clockSection {
   margin-right: 0rem;
-  min-width: 250px
+  min-width: 250px;
 }
 
 .auctionTimerSection {
