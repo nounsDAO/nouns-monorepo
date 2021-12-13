@@ -28,9 +28,9 @@ export interface NounVoteHistory {
 }
 
 const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
-  const { nounId , shouldTruncateProposals } = props;
+  const { nounId, shouldTruncateProposals } = props;
 
-  const [truncateProposals, setTruncateProposals ] = useState(true);
+  const [truncateProposals, setTruncateProposals] = useState(true);
 
   const numProposalsToShowDefault = 5;
 
@@ -59,71 +59,72 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
           <h1>Activity</h1>
         </div>
 
-      <Table responsive hover className={classes.aboveTheFoldEventsTable}>
-            <tbody className={classes.nounInfoPadding}>
-              {proposals?.length ? (
-                proposals
-                  .slice(0)
-                  .reverse()
-                  .slice(0, numProposalsToShowDefault)
-                  .map((p: Proposal, i: number) => {
-                    const vote = p.id ? nounVotes[p.id] : undefined;
-                    return (
-                            <NounProfileVoteRow
-                              proposal={p}
-                              vote={vote}
-                              latestProposalId={latestProposalId}
-                              nounId={nounId}
-                              key={i}
-                            />
-                    );
-                  })
-              ) : (
-                <LoadingNoun />
-              )}
-            </tbody>
-          </Table>
+        <Table responsive hover className={classes.aboveTheFoldEventsTable}>
+          <tbody className={classes.nounInfoPadding}>
+            {proposals?.length ? (
+              proposals
+                .slice(0)
+                .reverse()
+                .slice(0, numProposalsToShowDefault)
+                .map((p: Proposal, i: number) => {
+                  const vote = p.id ? nounVotes[p.id] : undefined;
+                  return (
+                    <NounProfileVoteRow
+                      proposal={p}
+                      vote={vote}
+                      latestProposalId={latestProposalId}
+                      nounId={nounId}
+                      key={i}
+                    />
+                  );
+                })
+            ) : (
+              <LoadingNoun />
+            )}
+          </tbody>
+        </Table>
         <Collapse in={!truncateProposals}>
           <div>
-          <Table responsive hover>
-            <tbody className={classes.nounInfoPadding}>
-              {proposals?.length ? (
-                proposals
-                  .slice(0)
-                  .reverse()
-                  .slice(numProposalsToShowDefault + 1, proposals.length)
-                  .map((p: Proposal, i: number) => {
-                    const vote = p.id ? nounVotes[p.id] : undefined;
-                    return (
-                            <NounProfileVoteRow
-                              proposal={p}
-                              vote={vote}
-                              latestProposalId={latestProposalId}
-                              nounId={nounId}
-                              key={i}
-                            />
-                    );
-                  })
-              ) : (
-                <LoadingNoun />
-              )}
-            </tbody>
-          </Table>
+            <Table responsive hover>
+              <tbody className={classes.nounInfoPadding}>
+                {proposals?.length ? (
+                  proposals
+                    .slice(0)
+                    .reverse()
+                    .slice(numProposalsToShowDefault + 1, proposals.length)
+                    .map((p: Proposal, i: number) => {
+                      const vote = p.id ? nounVotes[p.id] : undefined;
+                      return (
+                        <NounProfileVoteRow
+                          proposal={p}
+                          vote={vote}
+                          latestProposalId={latestProposalId}
+                          nounId={nounId}
+                          key={i}
+                        />
+                      );
+                    })
+                ) : (
+                  <LoadingNoun />
+                )}
+              </tbody>
+            </Table>
           </div>
         </Collapse>
 
-          {  shouldTruncateProposals ? ( truncateProposals ?  (
-              <div className={classes.expandCollapseCopy} onClick={() => setTruncateProposals(false)}>
-                Show all events <FontAwesomeIcon icon={faChevronDown} />
-              </div>
-          ) : 
-            (
-              <div className={classes.expandCollapseCopy}  onClick={() => setTruncateProposals(true)}>
-                 Show fewer <FontAwesomeIcon icon={faChevronUp} />
-               </div>
-            )
-          ) : (<></>)
-          }
+        {shouldTruncateProposals ? (
+          truncateProposals ? (
+            <div className={classes.expandCollapseCopy} onClick={() => setTruncateProposals(false)}>
+              Show all events <FontAwesomeIcon icon={faChevronDown} />
+            </div>
+          ) : (
+            <div className={classes.expandCollapseCopy} onClick={() => setTruncateProposals(true)}>
+              Show fewer <FontAwesomeIcon icon={faChevronUp} />
+            </div>
+          )
+        ) : (
+          <></>
+        )}
       </Col>
     </Section>
   );
