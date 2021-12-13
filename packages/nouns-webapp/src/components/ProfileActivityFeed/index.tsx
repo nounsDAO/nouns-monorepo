@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Col, Table } from 'react-bootstrap';
+import { Col, Table, Collapse, Fade } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import classes from './ProfileActivityFeed.module.css';
 
@@ -65,23 +65,47 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
               proposals
                 .slice(0)
                 .reverse()
-                .slice(0,  shouldTruncateProposals && truncateProposals ? numProposalsToShowDefault : proposals.length)
+                .slice(0,  numProposalsToShowDefault)
                 .map((p: Proposal, i: number) => {
                   const vote = p.id ? nounVotes[p.id] : undefined;
                   return (
-                    <NounProfileVoteRow
-                      proposal={p}
-                      vote={vote}
-                      latestProposalId={latestProposalId}
-                      nounId={nounId}
-                      key={i}
-                    />
+                          <NounProfileVoteRow
+                            proposal={p}
+                            vote={vote}
+                            latestProposalId={latestProposalId}
+                            nounId={nounId}
+                            key={i}
+                          />
                   );
                 })
             ) : (
               <LoadingNoun />
             )}
           </tbody>
+          <Fade in={!truncateProposals}>
+            <tbody className={classes.nounInfoPadding} style={{borderTop: '0px'}}>
+              {proposals?.length && !truncateProposals ? (
+                proposals
+                  .slice(0)
+                  .reverse()
+                  .slice(numProposalsToShowDefault + 1,  proposals.length)
+                  .map((p: Proposal, i: number) => {
+                    const vote = p.id ? nounVotes[p.id] : undefined;
+                    return (
+                            <NounProfileVoteRow
+                              proposal={p}
+                              vote={vote}
+                              latestProposalId={latestProposalId}
+                              nounId={nounId}
+                              key={i}
+                            />
+                    );
+                  })
+              ) : (
+                <></>
+              )}
+            </tbody>
+          </Fade>
         </Table>
           {  shouldTruncateProposals ? ( truncateProposals ?  (
               <div style={{
