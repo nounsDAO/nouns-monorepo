@@ -65,7 +65,7 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
               proposals
                 .slice(0)
                 .reverse()
-                .slice(0, numProposalsToShowDefault)
+                .slice(0, shouldTruncateProposals ? numProposalsToShowDefault : proposals.length)
                 .map((p: Proposal, i: number) => {
                   const vote = p.id ? nounVotes[p.id] : undefined;
                   return (
