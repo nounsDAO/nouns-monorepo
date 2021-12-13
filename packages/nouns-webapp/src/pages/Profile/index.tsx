@@ -53,7 +53,7 @@ const ProfilePage: React.FC<ProfilePageProps> = props => {
           </Row>
         </Container>
       </div>
-      <ProfileActivityFeed nounId={nounIdForDisplay} />
+      <ProfileActivityFeed nounId={nounIdForDisplay} shouldTruncateProposals={false} />
     </>
   );
 };

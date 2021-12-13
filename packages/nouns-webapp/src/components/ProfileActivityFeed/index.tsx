@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Col, Table } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import classes from './ProfileActivityFeed.module.css';
@@ -8,9 +8,13 @@ import { Proposal, useAllProposals } from '../../wrappers/nounsDao';
 import { nounVotingHistoryQuery } from '../../wrappers/subgraph';
 import NounProfileVoteRow from '../NounProfileVoteRow';
 import { LoadingNoun } from '../Noun';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faChevronUp } from '@fortawesome/free-solid-svg-icons';
 
 interface ProfileActivityFeedProps {
   nounId: number;
+  shouldTruncateProposals: boolean;
 }
 
 interface ProposalInfo {
@@ -24,7 +28,11 @@ export interface NounVoteHistory {
 }
 
 const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
-  const { nounId } = props;
+  const { nounId , shouldTruncateProposals } = props;
+
+  const [truncateProposals, setTruncateProposals ] = useState(true);
+
+  const numProposalsToShowDefault = 5;
 
   const { loading, error, data } = useQuery(nounVotingHistoryQuery(nounId));
   const { data: proposals } = useAllProposals();
@@ -57,6 +65,7 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
               proposals
                 .slice(0)
                 .reverse()
+                .slice(0,  shouldTruncateProposals && truncateProposals ? numProposalsToShowDefault : proposals.length)
                 .map((p: Proposal, i: number) => {
                   const vote = p.id ? nounVotes[p.id] : undefined;
                   return (
@@ -74,6 +83,30 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
             )}
           </tbody>
         </Table>
+          {  shouldTruncateProposals ? ( truncateProposals ?  (
+              <div style={{
+               color: 'var(--brand-cool-light-text)',
+               fontFamily: 'PT Root UI Bold',
+               fontSize: '20px',
+               textAlign: 'center',
+               cursor: 'pointer'
+              }} onClick={() => setTruncateProposals(false)}>
+                Show all {proposals.length} events <FontAwesomeIcon icon={faChevronDown} />
+              </div>
+          ) : 
+            (
+              <div style={{
+                color: 'var(--brand-cool-light-text)',
+                fontFamily: 'PT Root UI Bold',
+                fontSize: '20px',
+                textAlign: 'center',
+                cursor: 'pointer'
+               }} onClick={() => setTruncateProposals(true)}>
+                 Show fewer <FontAwesomeIcon icon={faChevronUp} />
+               </div>
+            )
+          ) : (<></>)
+          }
       </Col>
     </Section>
   );

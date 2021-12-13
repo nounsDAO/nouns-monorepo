@@ -49,7 +49,7 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
     <>
       <Auction auction={onDisplayAuction} />
       {onDisplayAuctionNounId && onDisplayAuctionNounId !== lastAuctionNounId ? (
-        <ProfileActivityFeed nounId={onDisplayAuctionNounId} />
+        <ProfileActivityFeed nounId={onDisplayAuctionNounId} shouldTruncateProposals={true} />
       ) : (
         <Banner />
       )}
