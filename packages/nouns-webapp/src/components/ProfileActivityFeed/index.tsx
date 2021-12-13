@@ -59,36 +59,14 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
           <h1>Activity</h1>
         </div>
 
-        <Table responsive hover>
-          <tbody className={classes.nounInfoPadding}>
-            {proposals?.length ? (
-              proposals
-                .slice(0)
-                .reverse()
-                .slice(0,  numProposalsToShowDefault)
-                .map((p: Proposal, i: number) => {
-                  const vote = p.id ? nounVotes[p.id] : undefined;
-                  return (
-                          <NounProfileVoteRow
-                            proposal={p}
-                            vote={vote}
-                            latestProposalId={latestProposalId}
-                            nounId={nounId}
-                            key={i}
-                          />
-                  );
-                })
-            ) : (
-              <LoadingNoun />
-            )}
-          </tbody>
-          <Fade in={!truncateProposals}>
-            <tbody className={classes.nounInfoPadding} style={{borderTop: '0px'}}>
-              {proposals?.length && !truncateProposals ? (
+        {/* <Fade in={!truncateProposals}>
+          <Table responsive hover>
+            <tbody className={classes.nounInfoPadding}>
+              {proposals?.length ? (
                 proposals
                   .slice(0)
                   .reverse()
-                  .slice(numProposalsToShowDefault + 1,  proposals.length)
+                  .slice(0,  numProposalsToShowDefault)
                   .map((p: Proposal, i: number) => {
                     const vote = p.id ? nounVotes[p.id] : undefined;
                     return (
@@ -102,11 +80,66 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
                     );
                   })
               ) : (
-                <></>
+                <LoadingNoun />
               )}
             </tbody>
-          </Fade>
-        </Table>
+          </Table>
+        </Fade> */}
+
+      <Table responsive hover style={{marginBottom: '0px'}}>
+            <tbody className={classes.nounInfoPadding}>
+              {proposals?.length ? (
+                proposals
+                  .slice(0)
+                  .reverse()
+                  .slice(0, numProposalsToShowDefault)
+                  .map((p: Proposal, i: number) => {
+                    const vote = p.id ? nounVotes[p.id] : undefined;
+                    return (
+                            <NounProfileVoteRow
+                              proposal={p}
+                              vote={vote}
+                              latestProposalId={latestProposalId}
+                              nounId={nounId}
+                              key={i}
+                            />
+                    );
+                  })
+              ) : (
+                <LoadingNoun />
+              )}
+            </tbody>
+          </Table>
+        <Collapse in={!truncateProposals}>
+          <div>
+          <Table responsive hover>
+            <tbody className={classes.nounInfoPadding}>
+              {proposals?.length ? (
+                proposals
+                  .slice(0)
+                  .reverse()
+                  .slice(numProposalsToShowDefault + 1, proposals.length)
+                  .map((p: Proposal, i: number) => {
+                    const vote = p.id ? nounVotes[p.id] : undefined;
+                    return (
+                            <NounProfileVoteRow
+                              proposal={p}
+                              vote={vote}
+                              latestProposalId={latestProposalId}
+                              nounId={nounId}
+                              key={i}
+                            />
+                    );
+                  })
+              ) : (
+                <LoadingNoun />
+              )}
+            </tbody>
+          </Table>
+          </div>
+        </Collapse>
+
+
           {  shouldTruncateProposals ? ( truncateProposals ?  (
               <div style={{
                color: 'var(--brand-cool-light-text)',
@@ -115,7 +148,7 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
                textAlign: 'center',
                cursor: 'pointer'
               }} onClick={() => setTruncateProposals(false)}>
-                Show all {proposals.length} events <FontAwesomeIcon icon={faChevronDown} />
+                Show all events <FontAwesomeIcon icon={faChevronDown} />
               </div>
           ) : 
             (
