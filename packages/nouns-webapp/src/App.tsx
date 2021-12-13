@@ -20,7 +20,6 @@ import NotFoundPage from './pages/NotFound';
 import Playground from './pages/Playground';
 import { CHAIN_ID } from './config';
 import VerifyPage from './pages/Verify';
-import ProfilePage from './pages/Profile';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import dayjs from 'dayjs';
 
@@ -65,7 +64,7 @@ function App() {
           <Route
             exact
             path="/noun/:id"
-            render={props => <ProfilePage nounId={Number(props.match.params.id)} />}
+            render={props => <AuctionPage initialAuctionId={Number(props.match.params.id)} />}
           />
           <Route component={NotFoundPage} />
         </Switch>

@@ -57,7 +57,7 @@ export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = (
 
   const noun = <Noun imgPath={image} alt={description} />;
   const nounWithLink = (
-    <Link to={'/noun/' + nounId.toString()} className={classes.clickableNoun}>
+    <Link to={'/auction/' + nounId.toString()} className={classes.clickableNoun}>
       {noun}
     </Link>
   );
