@@ -61,6 +61,7 @@ function App() {
           <Route exact path="/vote" component={GovernancePage} />
           <Route exact path="/vote/:id" component={VotePage} />
           <Route exact path="/playground" component={Playground} />
+          {/* This is kept for backwards compatibility */}
           <Route
             exact
             path="/noun/:id"

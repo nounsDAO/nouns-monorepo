@@ -10,7 +10,6 @@ import { nounPath } from '../../utils/history';
 import useOnDisplayAuction from '../../wrappers/onDisplayAuction';
 import { useEffect } from 'react';
 import ProfileActivityFeed from '../../components/ProfileActivityFeed';
-import { Accordion, Card } from 'react-bootstrap';
 
 interface AuctionPageProps {
   initialAuctionId?: number;
