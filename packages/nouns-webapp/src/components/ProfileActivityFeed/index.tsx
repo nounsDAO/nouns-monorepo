@@ -59,34 +59,7 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
           <h1>Activity</h1>
         </div>
 
-        {/* <Fade in={!truncateProposals}>
-          <Table responsive hover>
-            <tbody className={classes.nounInfoPadding}>
-              {proposals?.length ? (
-                proposals
-                  .slice(0)
-                  .reverse()
-                  .slice(0,  numProposalsToShowDefault)
-                  .map((p: Proposal, i: number) => {
-                    const vote = p.id ? nounVotes[p.id] : undefined;
-                    return (
-                            <NounProfileVoteRow
-                              proposal={p}
-                              vote={vote}
-                              latestProposalId={latestProposalId}
-                              nounId={nounId}
-                              key={i}
-                            />
-                    );
-                  })
-              ) : (
-                <LoadingNoun />
-              )}
-            </tbody>
-          </Table>
-        </Fade> */}
-
-      <Table responsive hover style={{marginBottom: '0px'}}>
+      <Table responsive hover className={classes.aboveTheFoldEventsTable}>
             <tbody className={classes.nounInfoPadding}>
               {proposals?.length ? (
                 proposals
@@ -139,26 +112,13 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
           </div>
         </Collapse>
 
-
           {  shouldTruncateProposals ? ( truncateProposals ?  (
-              <div style={{
-               color: 'var(--brand-cool-light-text)',
-               fontFamily: 'PT Root UI Bold',
-               fontSize: '20px',
-               textAlign: 'center',
-               cursor: 'pointer'
-              }} onClick={() => setTruncateProposals(false)}>
+              <div className={classes.expandCollapseCopy} onClick={() => setTruncateProposals(false)}>
                 Show all events <FontAwesomeIcon icon={faChevronDown} />
               </div>
           ) : 
             (
-              <div style={{
-                color: 'var(--brand-cool-light-text)',
-                fontFamily: 'PT Root UI Bold',
-                fontSize: '20px',
-                textAlign: 'center',
-                cursor: 'pointer'
-               }} onClick={() => setTruncateProposals(true)}>
+              <div className={classes.expandCollapseCopy}  onClick={() => setTruncateProposals(true)}>
                  Show fewer <FontAwesomeIcon icon={faChevronUp} />
                </div>
             )
