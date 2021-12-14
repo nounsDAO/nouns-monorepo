@@ -1,6 +1,6 @@
 {
   "name": "@nouns/contracts",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Nouns solidity contracts & artifacts",
   "author": "Nounders",
   "homepage": "https://nouns.wtf",
@@ -12,7 +12,7 @@
     "build": "yarn build:sol && yarn build:ts && yarn build:declarations",
     "build:ts": "tsc -p tsconfig.build.json",
     "build:sol": "npx hardhat compile",
-    "build:declarations": "cp typechain/*.d.ts dist/typechain",
+    "build:declarations": "shx cp typechain/*.d.ts dist/typechain",
     "hardhat": "npx hardhat",
     "task:accounts": "npx hardhat accounts",
     "task:deploy": "npx hardhat deploy",
@@ -37,13 +37,16 @@
     "base64-sol": "^1.0.1",
     "dotenv": "^10.0.0",
     "ethereum-waffle": "^3.3.0",
-    "ethers": "^5.4.7",
     "hardhat": "^2.1.1",
     "hardhat-abi-exporter": "^2.2.1",
     "hardhat-gas-reporter": "^1.0.4",
     "hardhat-typechain": "^0.3.5",
     "prettier-plugin-solidity": "^1.0.0-beta.12",
     "prompt": "^1.1.0",
+    "shx": "^0.3.3",
     "ts-node": "^10.0.0"
+  },
+  "dependencies": {
+    "ethers": "^5.4.7"
   }
 }

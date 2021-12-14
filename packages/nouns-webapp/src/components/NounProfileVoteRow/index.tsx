@@ -3,6 +3,7 @@ import { Image } from 'react-bootstrap';
 import _YesVoteIcon from '../../assets/icons/YesVote.svg';
 import _NoVoteIcon from '../../assets/icons/NoVote.svg';
 import _AbsentVoteIcon from '../../assets/icons/AbsentVote.svg';
+import _AbstainVoteIcon from '../../assets/icons/Abstain.svg';
 import { ProposalState } from '../../wrappers/nounsDao';
 
 import classes from './NounProfileVoteRow.module.css';
@@ -13,61 +14,105 @@ import { highestNounIdMintedAtProposalTime } from '../../wrappers/subgraph';
 import VoteStatusPill from '../VoteStatusPill';
 
 import _PendingVoteIcon from '../../assets/icons/PendingVote.svg';
+import { Vote } from '../../utils/vote';
+import { NounVoteHistory } from '../ProfileActivityFeed';
 
 interface NounProfileVoteRowProps {
   proposal: Proposal;
-  nounVoted: boolean;
-  nounSupported: boolean;
   nounId: number;
   latestProposalId: number;
+  vote?: NounVoteHistory;
 }
 
 const selectIconForNounVoteActivityRow = (
-  nounVoted: boolean,
-  nounSupported: boolean,
   proposal: Proposal,
+  vote?: NounVoteHistory,
 ) => {
-  if (!nounVoted) {
+  if (!vote) {
     if (proposal.status === ProposalState.PENDING || proposal.status === ProposalState.ACTIVE) {
       return <Image src={_PendingVoteIcon} className={classes.voteIcon} />;
     }
     return <Image src={_AbsentVoteIcon} className={classes.voteIcon} />;
-  } else if (nounSupported) {
-    return <Image src={_YesVoteIcon} className={classes.voteIcon} />;
+  } else if (vote.supportDetailed) {
+    switch (vote.supportDetailed) {
+      case Vote.FOR:
+        return <Image src={_YesVoteIcon} className={classes.voteIcon} />;
+      case Vote.ABSTAIN:
+      default:
+        return <Image src={_AbstainVoteIcon} className={classes.voteIcon} />;
+    }
   } else {
     return <Image src={_NoVoteIcon} className={classes.voteIcon} />;
   }
 };
 
-const selectVotingInfoText = (nounVoted: boolean, nounSupported: boolean, proposal: Proposal) => {
-  if (!nounVoted) {
+const selectVotingInfoText = (proposal: Proposal, vote?: NounVoteHistory) => {
+  if (!vote) {
     if (proposal.status === ProposalState.PENDING || proposal.status === ProposalState.ACTIVE) {
       return 'Waiting for';
     }
     return 'Absent for';
-  } else if (nounSupported) {
-    return 'Voted for';
+  } else if (vote.supportDetailed) {
+    switch (vote.supportDetailed) {
+      case Vote.FOR:
+        return 'Voted for';
+      case Vote.ABSTAIN:
+      default:
+        return 'Abstained on';
+    }
+
   } else {
     return 'Voted aginst';
   }
 };
 
 const selectProposalStatusIcon = (proposal: Proposal) => {
+  return (
+    <VoteStatusPill status={selectProposalStatus(proposal)} text={selectProposalText(proposal)} />
+  );
+};
+
+const selectProposalStatus = (proposal: Proposal) => {
   switch (proposal.status) {
     case ProposalState.SUCCEEDED:
     case ProposalState.EXECUTED:
     case ProposalState.QUEUED:
-      return <VoteStatusPill status={'success'} />;
+      return 'success';
     case ProposalState.DEFEATED:
     case ProposalState.VETOED:
-      return <VoteStatusPill status={'failure'} />;
+      return 'failure';
     default:
-      return <VoteStatusPill status={'pending'} />;
+      return 'pending';
+  }
+};
+
+const selectProposalText = (proposal: Proposal) => {
+  switch (proposal.status) {
+    case ProposalState.PENDING:
+      return 'Pending';
+    case ProposalState.ACTIVE:
+      return 'Active';
+    case ProposalState.SUCCEEDED:
+      return 'Succeeded';
+    case ProposalState.EXECUTED:
+      return 'Executed';
+    case ProposalState.DEFEATED:
+      return 'Defeated';
+    case ProposalState.QUEUED:
+      return 'Queued';
+    case ProposalState.CANCELED:
+      return 'Canceled';
+    case ProposalState.VETOED:
+      return 'Vetoed';
+    case ProposalState.EXPIRED:
+      return 'Expired';
+    default:
+      return 'Undetermined';
   }
 };
 
 const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
-  const { proposal, nounVoted, nounSupported, nounId, latestProposalId } = props;
+  const { proposal, vote, nounId, latestProposalId } = props;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { loading, error, data } = useQuery(highestNounIdMintedAtProposalTime(proposal.startBlock));
@@ -92,11 +137,11 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
   return (
     <tr onClick={proposalOnClickHandler} className={classes.voteInfoRow}>
       <td className={classes.voteIcon}>
-        {selectIconForNounVoteActivityRow(nounVoted, nounSupported, proposal)}
+        {selectIconForNounVoteActivityRow(proposal, vote)}
       </td>
       <td>
         <div className={classes.voteInfoContainer}>
-          {selectVotingInfoText(nounVoted, nounSupported, proposal)}
+          {selectVotingInfoText(proposal, vote)}
           <span className={classes.proposalTitle}>{proposal.title}</span>
         </div>
       </td>

@@ -1,7 +1,7 @@
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { ethers } from 'hardhat';
-import { NounsToken, NounsDescriptorFactory } from '../../typechain';
+import { NounsToken, NounsDescriptor__factory as NounsDescriptorFactory } from '../../typechain';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   deployNounsToken,
