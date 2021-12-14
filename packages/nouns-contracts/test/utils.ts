@@ -2,13 +2,13 @@ import { ethers, network } from 'hardhat';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsDescriptor,
-  NounsDescriptorFactory,
+  NounsDescriptor__factory as NounsDescriptorFactory,
   NounsToken,
-  NounsTokenFactory,
+  NounsToken__factory as NounsTokenFactory,
   NounsSeeder,
-  NounsSeederFactory,
+  NounsSeeder__factory as NounsSeederFactory,
   Weth,
-  WethFactory,
+  Weth__factory as WethFactory,
 } from '../typechain';
 import ImageData from '../files/image-data.json';
 import { Block } from '@ethersproject/abstract-provider';
