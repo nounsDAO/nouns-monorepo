@@ -18,7 +18,7 @@ const AuctionTimer: React.FC<{
   auctionTimerRef.current = auctionTimer;
 
   const timerDuration = dayjs.duration(auctionTimerRef.current, 's');
-  const endTime = dayjs().add(auctionTimerRef.current, "s").local()
+  const endTime = dayjs().add(auctionTimerRef.current, 's').local();
 
   // timer logic
   useEffect(() => {
@@ -39,7 +39,11 @@ const AuctionTimer: React.FC<{
     }
   }, [auction, auctionTimer]);
 
-  const auctionContent = auctionEnded ? 'Auction ended' : (timerToggle ? 'Ends in' : `Ends on ${endTime.format('MMM Do')} at`);
+  const auctionContent = auctionEnded
+    ? 'Auction ended'
+    : timerToggle
+    ? 'Ends in'
+    : `Ends on ${endTime.format('MMM Do')} at`;
 
   const flooredMinutes = Math.floor(timerDuration.minutes());
   const flooredSeconds = Math.floor(timerDuration.seconds());
@@ -48,36 +52,34 @@ const AuctionTimer: React.FC<{
 
   return (
     <div onClick={() => setTimerToggle(!timerToggle)} className={classes.auctionTimerSection}>
-          <h4 className={classes.title}>{auctionContent}</h4>
+      <h4 className={classes.title}>{auctionContent}</h4>
       {timerToggle ? (
-          <h2 className={classes.timerWrapper}>
-            <div className={classes.timerSection}>
-              <span>
-                {`${Math.floor(timerDuration.hours())}`}
-                <span className={classes.small}>h</span>
-              </span>
-            </div>
-            <div className={classes.timerSection}>
-              <span>
-                {`${flooredMinutes}`}
-                <span className={classes.small}>m</span>
-              </span>
-            </div>
-            <div className={classes.timerSection}>
-              <span>
-                {`${flooredSeconds}`}
-                <span className={classes.small}>s</span>
-              </span>
-            </div>
-          </h2>
+        <h2 className={classes.timerWrapper}>
+          <div className={classes.timerSection}>
+            <span>
+              {`${Math.floor(timerDuration.hours())}`}
+              <span className={classes.small}>h</span>
+            </span>
+          </div>
+          <div className={classes.timerSection}>
+            <span>
+              {`${flooredMinutes}`}
+              <span className={classes.small}>m</span>
+            </span>
+          </div>
+          <div className={classes.timerSection}>
+            <span>
+              {`${flooredSeconds}`}
+              <span className={classes.small}>s</span>
+            </span>
+          </div>
+        </h2>
       ) : (
-          <h2 className={classes.timerWrapper}>
-            <div className={classes.clockSection}>
-              <span>
-              {endTime.format('h:mm:ss a')}
-              </span>
-            </div>
-          </h2>
+        <h2 className={classes.timerWrapper}>
+          <div className={classes.clockSection}>
+            <span>{endTime.format('h:mm:ss a')}</span>
+          </div>
+        </h2>
       )}
     </div>
   );
