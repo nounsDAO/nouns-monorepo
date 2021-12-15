@@ -35,7 +35,7 @@ const config: HardhatUserConfig = {
         : [process.env.WALLET_PRIVATE_KEY!].filter(Boolean),
     },
     hardhat: {
-      initialBaseFeePerGas: 0, 
+      initialBaseFeePerGas: 0,
     },
   },
   etherscan: {
