@@ -160,6 +160,9 @@ type Proposal @entity {
   "Call data for the change"
   calldatas: [Bytes!]
 
+  "The proposal creation timestamp"
+  createdTimestamp: BigInt!
+
   "Block number from where the voting starts"
   startBlock: BigInt!
 
