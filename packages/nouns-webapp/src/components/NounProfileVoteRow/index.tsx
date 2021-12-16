@@ -24,10 +24,7 @@ interface NounProfileVoteRowProps {
   vote?: NounVoteHistory;
 }
 
-const selectIconForNounVoteActivityRow = (
-  proposal: Proposal,
-  vote?: NounVoteHistory,
-) => {
+const selectIconForNounVoteActivityRow = (proposal: Proposal, vote?: NounVoteHistory) => {
   if (!vote) {
     if (proposal.status === ProposalState.PENDING || proposal.status === ProposalState.ACTIVE) {
       return <Image src={_PendingVoteIcon} className={classes.voteIcon} />;
@@ -60,7 +57,6 @@ const selectVotingInfoText = (proposal: Proposal, vote?: NounVoteHistory) => {
       default:
         return 'Abstained on';
     }
-
   } else {
     return 'Voted aginst';
   }
@@ -136,9 +132,7 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
 
   return (
     <tr onClick={proposalOnClickHandler} className={classes.voteInfoRow}>
-      <td className={classes.voteIcon}>
-        {selectIconForNounVoteActivityRow(proposal, vote)}
-      </td>
+      <td className={classes.voteIcon}>{selectIconForNounVoteActivityRow(proposal, vote)}</td>
       <td>
         <div className={classes.voteInfoContainer}>
           {selectVotingInfoText(proposal, vote)}

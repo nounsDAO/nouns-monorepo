@@ -1,6 +1,15 @@
-import { ContractAddresses, getContractAddressesForChainOrThrow } from '@nouns/sdk';
+import {
+  ContractAddresses as NounsContractAddresses,
+  getContractAddressesForChainOrThrow,
+} from '@nouns/sdk';
 import { ChainId } from '@usedapp/core';
 import maticLogo from "./assets/matic-logo.svg";
+
+interface ExternalContractAddresses {
+  lidoToken: string | undefined;
+}
+
+export type ContractAddresses = NounsContractAddresses & ExternalContractAddresses;
 
 interface AppConfig {
   jsonRpcUri: string;
@@ -64,12 +73,24 @@ const app: Record<SupportedChains, AppConfig> = {
   }
 };
 
-const getAddresses = () => {
+const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
+  [ChainId.Rinkeby]: {
+    lidoToken: '0xF4242f9d78DB7218Ad72Ee3aE14469DBDE8731eD',
+  },
+  [ChainId.Mainnet]: {
+    lidoToken: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
+  },
+  [ChainId.Hardhat]: {
+    lidoToken: undefined,
+  },
+};
+
+const getAddresses = (): ContractAddresses => {
+  let nounsAddresses = {} as NounsContractAddresses;
   try {
-    return getContractAddressesForChainOrThrow(CHAIN_ID);
-  } catch {
-    return {} as ContractAddresses;
-  }
+    nounsAddresses = getContractAddressesForChainOrThrow(CHAIN_ID);
+  } catch {}
+  return { ...nounsAddresses, ...externalAddresses[CHAIN_ID] };
 };
 
 const config = {
