@@ -7,6 +7,8 @@ const networkName = () => {
       return 'Ethereum Mainnet';
     case 4:
       return 'the Rinkeby network';
+    case 43114:
+      return 'Avalanche testnet';
     default:
       return `Network ${CHAIN_ID}`;
   }
@@ -18,10 +20,43 @@ const metamaskNetworkName = () => {
       return 'Ethereum Mainnet';
     case 4:
       return 'Rinkeby Test Network';
+    case 43114:
+      return 'Avalanche testnet';
     default:
       return `Network ${CHAIN_ID}`;
   }
 };
+
+const AVALANCHE_TESTNET_PARAMS = {
+  chainId: '0xa86a',
+  chainName: 'Avalanche testnet',
+  nativeCurrency: {
+      name: 'Avalanche',
+      symbol: 'AVAX',
+      decimals: 2
+  },
+  rpcUrls: ['https://api.avax-test.network/ext/bc/C/rpc'],
+  blockExplorerUrls: ['https://testnet.snowtrace.io/']
+}
+
+const handleAddNetworkClick = () => {
+  const injected = new InjectedConnector({
+          supportedChainIds: [43114],
+        });
+
+  injected.getProvider().then(provider => {
+    provider
+      .request({
+        method: 'wallet_addEthereumChain',
+        params: [AVALANCHE_TESTNET_PARAMS]
+      })
+      .catch((error: any) => {
+        console.log(error)
+      })
+  })
+
+  return false;
+}
 
 const NetworkAlert = () => {
   return (

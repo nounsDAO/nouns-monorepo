@@ -5,6 +5,10 @@ const getBaseURL = (network: ChainId) => {
   switch (network) {
     case ChainId.Rinkeby:
       return 'https://rinkeby.etherscan.io/';
+    case ChainId.Polygon:
+      return 'https://polygonscan.com/';
+    case ChainId.Fuji:
+      return 'https://snowtrace.io/';
     default:
       return 'https://etherscan.io/';
   }
@@ -22,10 +26,19 @@ export const buildEtherscanAddressLink = (address: string): string => {
   return new URL(path, BASE_URL).toString();
 };
 
+export const buildEtherscanTokenLink = (address: string): string => {
+  const path = `token/${address}`;
+  return new URL(path, BASE_URL).toString();
+};
+
 const getApiBaseURL = (network: ChainId) => {
   switch (network) {
     case ChainId.Rinkeby:
       return `https://api-rinkeby.etherscan.io/`;
+    case ChainId.Polygon:
+      return 'https://api.polygonscan.com/';
+    case ChainId.Fuji:
+      return 'https://api.testnet.snowtrace.io/'
     default:
       return 'https://api.etherscan.io/';
   }

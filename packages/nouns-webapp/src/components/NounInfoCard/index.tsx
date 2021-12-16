@@ -58,7 +58,7 @@ const NounInfoCard: React.FC<NounInfoCardProps> = props => {
         />
         <NounInfoRowButton
           iconImgSource={_AddressIcon}
-          btnText={'Etherscan'}
+          btnText={'Snowtrace'}
           onClickHandler={etherscanButtonClickHandler}
         />
       </Col>

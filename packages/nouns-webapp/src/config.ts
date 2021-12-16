@@ -1,5 +1,6 @@
 import { ContractAddresses, getContractAddressesForChainOrThrow } from '@nouns/sdk';
 import { ChainId } from '@usedapp/core';
+import maticLogo from "./assets/matic-logo.svg";
 
 interface AppConfig {
   jsonRpcUri: string;
@@ -8,7 +9,11 @@ interface AppConfig {
   enableHistory: boolean;
 }
 
-type SupportedChains = ChainId.Rinkeby | ChainId.Mainnet | ChainId.Hardhat;
+export const CURRENCY_SYMBOL = "MATIC";
+export const CURRENCY_LOGO = maticLogo;
+export const INITIAL_DEFAULT_PRICE = 50;
+
+type SupportedChains = ChainId.Rinkeby | ChainId.Mainnet | ChainId.Polygon | ChainId.Hardhat | ChainId.Avalanche | ChainId.Fuji;
 
 export const CHAIN_ID: SupportedChains = parseInt(process.env.REACT_APP_CHAIN_ID ?? '4');
 
@@ -33,6 +38,12 @@ const app: Record<SupportedChains, AppConfig> = {
     subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph-rinkeby-v4',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
+  [ChainId.Polygon]: {
+    jsonRpcUri: createNetworkHttpUrl('polygon'),
+    wsRpcUri: createNetworkWsUrl('polygon'),
+    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/noname-dao/noname-subgraph-main',
+    enableHistory: false,
+  },
   [ChainId.Mainnet]: {
     jsonRpcUri: createNetworkHttpUrl('mainnet'),
     wsRpcUri: createNetworkWsUrl('mainnet'),
@@ -45,6 +56,12 @@ const app: Record<SupportedChains, AppConfig> = {
     subgraphApiUri: '',
     enableHistory: false,
   },
+  [ChainId.Fuji]: {
+    jsonRpcUri: 'https://api.avax-test.network/ext/bc/C/rpc',
+    wsRpcUri: 'wss://api.avax-test.network/ext/bc/C/rpc',
+    subgraphApiUri: '',
+    enableHistory: ProcessingInstruction.env.REACT_APP_ENABLE_HISTORY === 'true',
+  }
 };
 
 const getAddresses = () => {
