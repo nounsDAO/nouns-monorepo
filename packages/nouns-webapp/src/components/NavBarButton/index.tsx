@@ -37,9 +37,14 @@ const NavBarButton: React.FC<NavBarButtonProps> = props => {
         <>
             <div className={`${classes.wrapper} ${variant()}`}>
                 <div className={classes.button}>
-                    <div className={classes.icon}>
-                        {buttonIcon}
-                    </div>
+
+                    {
+                        buttonIcon ?  (
+                            <div className={classes.icon}>
+                                {buttonIcon}
+                            </div>
+                        ): (<></>)
+                    }
                     <div>
                         {buttonText}
                     </div>
