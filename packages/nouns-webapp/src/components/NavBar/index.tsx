@@ -17,7 +17,11 @@ import { ExternalURL, externalURL } from '../../utils/externalURL';
 import useLidoBalance from '../../hooks/useLidoBalance';
 import NavBarButton from '../NavBarButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBookOpen } from '@fortawesome/free-solid-svg-icons';
+import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
+import { faPlay } from '@fortawesome/free-solid-svg-icons';
+import NavBarTreasury from "../NavBarTreasury";
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
@@ -66,8 +70,13 @@ const NavBar = () => {
     history.location.pathname === '/' ||
     history.location.pathname.includes('/noun') ||
     history.location.pathname.includes('/auction');
+  
+  const greyBg = '#d5d7e1';
 
-  console.log(stateBgColor);
+  const nonWalletButtonStyle = !useStateBg ? 'white-info' : (
+    stateBgColor === greyBg ? 'cool-info' : 'warm-info'
+  );
+
 
   const disconnectedContent = (
     <>
@@ -76,7 +85,7 @@ const NavBar = () => {
         onClick={showModalHandler}
       >
         <NavBarButton buttonStyle = {
-          useStateBg && stateBgColor === '#d5d7e1' ? 'cool-wallet': 'warm-wallet'
+          useStateBg && stateBgColor === greyBg ? 'cool-wallet': 'warm-wallet'
         } 
         buttonText={'Connect wallet'}
         />
@@ -106,22 +115,30 @@ const NavBar = () => {
               TESTNET
             </Nav.Item>
           )}
+          <Nav.Item>
+            {treasuryBalance && useStateBg && (
+              <Nav.Link
+                href={daoEtherscanLink}
+                className={classes.nounsNavLink}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <NavBarTreasury treasuryBalance={Number(utils.formatEther(treasuryBalance)).toFixed(0)} isWarmStyle={stateBgColor !== greyBg}/>
+              </Nav.Link>
+            )}
+          </Nav.Item>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse className="justify-content-end">
-            <Nav.Item>
-              {treasuryBalance && (
-                <Nav.Link
-                  href={daoEtherscanLink}
-                  className={classes.nounsNavLink}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  TREASURY Ξ {Number(utils.formatEther(treasuryBalance)).toFixed(0)}
-                </Nav.Link>
-              )}
-            </Nav.Item>
             <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>
-              DAO
+              <NavBarButton 
+              buttonText = {'DAO'}
+              buttonIcon = {(
+                <FontAwesomeIcon icon={faUsers} />
+              )}
+              buttonStyle={
+                nonWalletButtonStyle
+              }
+              />
             </Nav.Link>
             <Nav.Link
               href={externalURL(ExternalURL.notion)}
@@ -129,7 +146,15 @@ const NavBar = () => {
               target="_blank"
               rel="noreferrer"
             >
-              DOCS
+                <NavBarButton 
+                buttonText = {'Docs'}
+                buttonIcon = {(
+                  <FontAwesomeIcon icon={faBookOpen} />
+                )}
+                buttonStyle={
+                  nonWalletButtonStyle
+                }
+                />
             </Nav.Link>
             <Nav.Link
               href={externalURL(ExternalURL.discourse)}
@@ -137,10 +162,26 @@ const NavBar = () => {
               target="_blank"
               rel="noreferrer"
             >
-              DISCOURSE
+              <NavBarButton 
+                buttonText = {'Discourse'}
+                buttonIcon = {(
+                  <FontAwesomeIcon icon={faComments} />
+                )}
+                buttonStyle={
+                  nonWalletButtonStyle
+                }
+                />
             </Nav.Link>
             <Nav.Link as={Link} to="/playground" className={classes.nounsNavLink}>
-              PLAYGROUND
+              <NavBarButton 
+                  buttonText = {'Playground'}
+                  buttonIcon = {(
+                    <FontAwesomeIcon icon={faPlay} />
+                  )}
+                  buttonStyle={
+                    nonWalletButtonStyle
+                  }
+                  /> 
             </Nav.Link>
             {activeAccount ? connectedContent : disconnectedContent}
           </Navbar.Collapse>

@@ -1,0 +1,74 @@
+.wrapper {
+    border-radius: 10px;
+    font-size: 16px;
+    font-family: 'PT Root UI Bold';
+    padding: 0px 12px 0px 8px;
+
+}
+
+.button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    padding-bottom: .25rem;
+}
+
+.icon {
+    margin-left: 1.0rem;
+    border-left: 1px solid #D5D7E0;
+    padding-left: .5rem;
+    color: #79809C;
+}
+
+.treasuryInfoWrapper {
+    margin-top: .25rem;
+}
+
+.treasuryHeader {
+    font-size: 12px;
+}
+
+.warmInfo .icon {
+    color: #B6A9A7;
+    border-left: 1px solid #E1D7D5;
+}
+
+.treasuryBalance {
+    font-size: 15px;
+}
+
+.warmInfo .treasuryBalance {
+    color: #221B1A;
+}
+
+.coolInfo .treasuryBalance {
+    color: #151C3B;
+}
+
+.button:hover {
+    cursor: pointer;
+}
+
+.coolInfo {
+    color: #79809C;
+    background-color: #E9EBF3;
+}
+
+.coolInfo:hover {
+    background-color: white;
+    color: black;
+}
+
+
+.warmInfo {
+    color: #B6A9A7;
+    background-color: #FDF9F9;
+}
+
+.warmInfo:hover {
+    background-color: white;
+    color: black;
+}
