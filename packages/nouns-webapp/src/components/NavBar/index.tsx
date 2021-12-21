@@ -15,6 +15,9 @@ import { utils } from 'ethers';
 import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
 import { ExternalURL, externalURL } from '../../utils/externalURL';
 import useLidoBalance from '../../hooks/useLidoBalance';
+import NavBarButton from '../NavBarButton';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faComments } from '@fortawesome/free-solid-svg-icons';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
@@ -59,21 +62,27 @@ const NavBar = () => {
     </>
   );
 
+  const useStateBg =
+    history.location.pathname === '/' ||
+    history.location.pathname.includes('/noun') ||
+    history.location.pathname.includes('/auction');
+
+  console.log(stateBgColor);
+
   const disconnectedContent = (
     <>
       <Nav.Link
         className={clsx(classes.nounsNavLink, classes.connectBtn)}
         onClick={showModalHandler}
       >
-        CONNECT WALLET
+        <NavBarButton buttonStyle = {
+          useStateBg && stateBgColor === '#d5d7e1' ? 'cool-wallet': 'warm-wallet'
+        } 
+        buttonText={'Connect wallet'}
+        />
       </Nav.Link>
     </>
   );
-
-  const useStateBg =
-    history.location.pathname === '/' ||
-    history.location.pathname.includes('/noun') ||
-    history.location.pathname.includes('/auction');
 
   return (
     <>

@@ -1,0 +1,84 @@
+.wrapper {
+    height: 40px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-family: 'PT Root UI Bold';
+    padding: 0px 12px 0px 8px;
+}
+
+.button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.icon {
+    margin-right: .5rem;
+}
+
+.button:hover {
+    cursor: pointer;
+}
+
+.coolInfo {
+    color: #79809C;
+    background-color: #E9EBF3;
+}
+
+.coolInfo:hover {
+    background-color: white;
+    color: black;
+}
+
+.coolWallet {
+    background-color: #4965F0;    
+    color: white;
+}
+
+.coolWallet:hover {
+    background-color: rgba(73, 101, 240, 0.1);
+}
+
+.warnInfo {
+    color: #B6A9A7;
+    background-color: #FDF9F9;
+}
+
+.warnInfo:hover {
+    background-color: white;
+    color: black;
+}
+
+.warmWallet {
+    background-color: #D63C5E;
+    color: white;
+}
+
+.warmWallet:hover {
+    background-color: rgba(214, 60, 94, 0.1);
+}
+
+.whiteInfo {
+    background-color: white;
+    border: 1px solid #E2E3E8;
+    color: #79809C
+}
+
+.whiteInfo:hover {
+    background-color: #e2e3e8;
+}
+
+.whiteActive {
+    background-color: #F4F4F8;
+    border: 1px solid #E2E3E8;
+    color: black;
+}
+
+.whiteActive .icon{
+    color: #D63C5E; 
+}
+
+
