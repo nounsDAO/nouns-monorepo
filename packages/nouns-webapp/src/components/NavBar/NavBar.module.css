@@ -14,6 +14,7 @@
 }
 .disconnectBtn {
   cursor: pointer;
+  font-family: 'PT Root UI Bold';
 }
 .disconnectBtn:hover,
 .disconnectBtn:active,
@@ -33,6 +34,7 @@
 .nounsNavLink,
 .nounsNavLink:active,
 .nounsNavLink:visited {
+  font-family: 'PT Root UI Bold';
   font-size: 0.9rem;
   padding: 0.5rem 0.8rem !important;
   color: var(--brand-black) !important;

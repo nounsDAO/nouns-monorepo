@@ -15,6 +15,12 @@ import { utils } from 'ethers';
 import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
 import { ExternalURL, externalURL } from '../../utils/externalURL';
 import useLidoBalance from '../../hooks/useLidoBalance';
+import NavBarButton from '../NavBarButton';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBookOpen } from '@fortawesome/free-solid-svg-icons';
+import { faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faComments } from '@fortawesome/free-solid-svg-icons';
+import { faPlay } from '@fortawesome/free-solid-svg-icons';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
@@ -59,21 +65,32 @@ const NavBar = () => {
     </>
   );
 
+  const useStateBg =
+    history.location.pathname === '/' ||
+    history.location.pathname.includes('/noun') ||
+    history.location.pathname.includes('/auction');
+  
+  const greyBg = '#d5d7e1';
+
+  const nonWalletButtonStyle = !useStateBg ? 'white-info' : (
+    stateBgColor === greyBg ? 'cool-info' : 'warm-info'
+  );
+
+
   const disconnectedContent = (
     <>
       <Nav.Link
         className={clsx(classes.nounsNavLink, classes.connectBtn)}
         onClick={showModalHandler}
       >
-        CONNECT WALLET
+        <NavBarButton buttonStyle = {
+          useStateBg && stateBgColor === greyBg ? 'cool-wallet': 'warm-wallet'
+        } 
+        buttonText={'Connect wallet'}
+        />
       </Nav.Link>
     </>
   );
-
-  const useStateBg =
-    history.location.pathname === '/' ||
-    history.location.pathname.includes('/noun') ||
-    history.location.pathname.includes('/auction');
 
   return (
     <>
@@ -112,7 +129,16 @@ const NavBar = () => {
               )}
             </Nav.Item>
             <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>
-              DAO
+              {/* DAO */}
+              <NavBarButton 
+              buttonText = {'DAO'}
+              buttonIcon = {(
+                <FontAwesomeIcon icon={faUsers} />
+              )}
+              buttonStyle={
+                nonWalletButtonStyle
+              }
+              />
             </Nav.Link>
             <Nav.Link
               href={externalURL(ExternalURL.notion)}
@@ -120,7 +146,15 @@ const NavBar = () => {
               target="_blank"
               rel="noreferrer"
             >
-              DOCS
+                <NavBarButton 
+                buttonText = {'Docs'}
+                buttonIcon = {(
+                  <FontAwesomeIcon icon={faBookOpen} />
+                )}
+                buttonStyle={
+                  nonWalletButtonStyle
+                }
+                />
             </Nav.Link>
             <Nav.Link
               href={externalURL(ExternalURL.discourse)}
@@ -128,10 +162,26 @@ const NavBar = () => {
               target="_blank"
               rel="noreferrer"
             >
-              DISCOURSE
+              <NavBarButton 
+                buttonText = {'Discourse'}
+                buttonIcon = {(
+                  <FontAwesomeIcon icon={faComments} />
+                )}
+                buttonStyle={
+                  nonWalletButtonStyle
+                }
+                />
             </Nav.Link>
             <Nav.Link as={Link} to="/playground" className={classes.nounsNavLink}>
-              PLAYGROUND
+              <NavBarButton 
+                  buttonText = {'Playground'}
+                  buttonIcon = {(
+                    <FontAwesomeIcon icon={faPlay} />
+                  )}
+                  buttonStyle={
+                    nonWalletButtonStyle
+                  }
+                  /> 
             </Nav.Link>
             {activeAccount ? connectedContent : disconnectedContent}
           </Navbar.Collapse>
