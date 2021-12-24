@@ -21,6 +21,7 @@ import { faBookOpen } from '@fortawesome/free-solid-svg-icons';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
+import NavBarTreasury from '../NavBarTreasury';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
@@ -114,20 +115,22 @@ const NavBar = () => {
               TESTNET
             </Nav.Item>
           )}
+          <Nav.Item>
+            {treasuryBalance && useStateBg && (
+              <Nav.Link
+                href={daoEtherscanLink}
+                className={classes.nounsNavLink}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <NavBarTreasury treasuryBalance={Number(utils.formatEther(treasuryBalance)).toFixed(0)} isWarmStyle={stateBgColor !== greyBg}/>
+              </Nav.Link>
+            )}
+          </Nav.Item>
+
+          
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse className="justify-content-end">
-            <Nav.Item>
-              {treasuryBalance && (
-                <Nav.Link
-                  href={daoEtherscanLink}
-                  className={classes.nounsNavLink}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  TREASURY Ξ {Number(utils.formatEther(treasuryBalance)).toFixed(0)}
-                </Nav.Link>
-              )}
-            </Nav.Item>
             <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>
               {/* DAO */}
               <NavBarButton 
