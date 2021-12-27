@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { keccak256 as solidityKeccak256 } from '@ethersproject/solidity';
 import {
-  hexShiftAndCast,
+  shiftRightAndCast,
   getPseudorandomPart,
   getNounSeedFromBlockHash,
   getNounData,
@@ -28,10 +28,10 @@ describe('@noun/assets utils', () => {
     [NOUN116_PREV_BLOCKHASH, NOUN116_ID],
   );
 
-  describe('hexShiftAndCast', () => {
+  describe('shiftRightAndCast', () => {
     it('should work correctly', () => {
-      expect(hexShiftAndCast(NOUN116_PREV_BLOCKHASH, 0, 48)).to.equal('0x00134ee53e01');
-      expect(hexShiftAndCast(NOUN116_PREV_BLOCKHASH, 48, 48)).to.equal('0x7acb2f40d7f2');
+      expect(shiftRightAndCast(NOUN116_PREV_BLOCKHASH, 0, 48)).to.equal('0x00134ee53e01');
+      expect(shiftRightAndCast(NOUN116_PREV_BLOCKHASH, 48, 48)).to.equal('0x7acb2f40d7f2');
     });
   });
 

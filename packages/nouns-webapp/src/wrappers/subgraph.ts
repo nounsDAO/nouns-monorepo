@@ -166,6 +166,7 @@ export const nounVotingHistoryQuery = (nounId: number) => gql`
 			id
 		}
 		support
+		supportDetailed
 		}
 	}
 }

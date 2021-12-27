@@ -21,10 +21,13 @@ import Playground from './pages/Playground';
 import { CHAIN_ID } from './config';
 import VerifyPage from './pages/Verify';
 import ProfilePage from './pages/Profile';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import dayjs from 'dayjs';
 
 function App() {
   const { account, chainId } = useEthers();
   const dispatch = useAppDispatch();
+  dayjs.extend(relativeTime);
 
   useEffect(() => {
     // Local account array updated
