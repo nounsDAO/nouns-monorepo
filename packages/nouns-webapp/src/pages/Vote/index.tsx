@@ -21,7 +21,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
 import VoteModal from '../../components/VoteModal';
-import { useCallback, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 import { utils } from 'ethers';
@@ -394,14 +394,14 @@ const VotePage = ({
                     <br />
                     {d.callData.split(',').map((content, i) => {
                       return (
-                        <>
+                        <Fragment key={i}>
                           <span key={i}>
                             &emsp;
                             {linkIfAddress(content)}
                             {d.callData.split(',').length - 1 === i ? '' : ','}
                           </span>
                           <br />
-                        </>
+                        </Fragment>
                       );
                     })}
                     )
