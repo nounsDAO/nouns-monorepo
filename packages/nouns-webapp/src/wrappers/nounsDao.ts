@@ -44,6 +44,7 @@ interface ProposalCallResult {
 
 interface ProposalDetail {
   target: string;
+  value: string;
   functionSig: string;
   callData: string;
 }
@@ -169,7 +170,8 @@ const useFormattedProposalCreatedLogs = () => {
           return {
             target,
             functionSig: name,
-            callData: decoded.join(', '),
+            callData: decoded.join(),
+            value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH }` : '',
           };
         }),
       };
