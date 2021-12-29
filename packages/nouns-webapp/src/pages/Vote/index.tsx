@@ -21,7 +21,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
 import VoteModal from '../../components/VoteModal';
-import { useCallback, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 import { utils } from 'ethers';
@@ -385,22 +385,30 @@ const VotePage = ({
         <Row>
           <Col className={classes.section}>
             <h5>Proposed Transactions</h5>
-            {proposal?.details?.map((d, i) => {
-              return (
-                <p key={i} className="m-0">
-                  {i + 1}: {linkIfAddress(d.target)}.{d.functionSig}(
-                  {d.callData.split(',').map((content, i) => {
-                    return (
-                      <span key={i}>
-                        {linkIfAddress(content)}
-                        {d.callData.split(',').length - 1 === i ? '' : ','}
-                      </span>
-                    );
-                  })}
-                  )
-                </p>
-              );
-            })}
+            <ol>
+              {proposal?.details?.map((d, i) => {
+                return (
+                  <li key={i} className="m-0">
+                    {linkIfAddress(d.target)}.{d.functionSig}
+                    {d.value}(
+                    <br />
+                    {d.callData.split(',').map((content, i) => {
+                      return (
+                        <Fragment key={i}>
+                          <span key={i}>
+                            &emsp;
+                            {linkIfAddress(content)}
+                            {d.callData.split(',').length - 1 === i ? '' : ','}
+                          </span>
+                          <br />
+                        </Fragment>
+                      );
+                    })}
+                    )
+                  </li>
+                );
+              })}
+            </ol>
           </Col>
         </Row>
         <Row>

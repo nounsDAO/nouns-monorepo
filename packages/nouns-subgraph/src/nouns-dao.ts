@@ -46,6 +46,7 @@ export function handleProposalCreatedWithRequirements(
   proposal.values = event.params.values;
   proposal.signatures = event.params.signatures;
   proposal.calldatas = event.params.calldatas;
+  proposal.createdTimestamp = event.block.timestamp;
   proposal.startBlock = event.params.startBlock;
   proposal.endBlock = event.params.endBlock;
   proposal.proposalThreshold = event.params.proposalThreshold;
