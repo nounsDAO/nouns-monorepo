@@ -216,7 +216,8 @@ const VotePage = ({
 
   return (
     <Container fluid="lg">
-      <Row className={classes.headerRow} style={{marginBottom: '0rem'}}>
+       {/* <Row className={classes.headerRow} style={{marginBottom: '0rem'}}> */}
+     <Row className={classes.headerRow} style={{marginBottom: '0rem'}}>
         <Col lg={10} style={{ marginBottom: '0rem'}} className={classes.headerRow}>
             <span>Proposal #{proposal && proposal.id}</span>
         </Col>
@@ -281,26 +282,49 @@ const VotePage = ({
                 </div>
               <ProgressBar variant="success" now={forPercentage} />
               <Row>
-                <Col style={{margin: '0rem', backgroundColor: 'red'}}>
+                {/* Maybe make this a table instead */}
+                <Col style={{margin: '0rem', backgroundColor: 'red'}} sm={3}>
                   <div style={{height: '64px', width: '64px'}}>
                     <StandaloneNoun nounId={EthersBN.from(69)} />
                   </div>
                 </Col>
-                <Col style={{margin: '0rem'}}>
+                <Col style={{margin: '0rem', backgroundColor: 'red'}} sm={3}>
                   <div style={{height: '64px', width: '64px'}}>
                     <StandaloneNoun nounId={EthersBN.from(69)} />
                   </div>
                 </Col>
-                <Col style={{margin: '0rem'}}>
+                <Col style={{margin: '0rem', backgroundColor: 'red'}} sm={3}>
                   <div style={{height: '64px', width: '64px'}}>
                     <StandaloneNoun nounId={EthersBN.from(69)} />
                   </div>
                 </Col>
-                <Col style={{margin: '0rem'}}>
+                <Col style={{margin: '0rem', backgroundColor: 'red'}} sm={3}>
                   <div style={{height: '64px', width: '64px'}}>
                     <StandaloneNoun nounId={EthersBN.from(69)} />
                   </div>
                 </Col>
+                <Col style={{margin: '0rem', backgroundColor: 'red'}} sm={3}>
+                  <div style={{height: '64px', width: '64px'}}>
+                    <StandaloneNoun nounId={EthersBN.from(69)} />
+                  </div>
+                </Col>
+                <Col style={{margin: '0rem', backgroundColor: 'red'}} sm={3}>
+                  <div style={{height: '64px', width: '64px'}}>
+                    <StandaloneNoun nounId={EthersBN.from(69)} />
+                  </div>
+                </Col>
+                <Col style={{margin: '0rem', backgroundColor: 'red'}} sm={3}>
+                  <div style={{height: '64px', width: '64px'}}>
+                    <StandaloneNoun nounId={EthersBN.from(69)} />
+                  </div>
+                </Col>
+                <Col style={{margin: '0rem', backgroundColor: 'red'}} sm={3}>
+                  <div style={{height: '64px', width: '64px'}}>
+                    <StandaloneNoun nounId={EthersBN.from(69)} />
+                  </div>
+                </Col>
+               
+               
                 
               </Row>
         </Col>
