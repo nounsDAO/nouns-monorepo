@@ -1,4 +1,4 @@
-import { Row, Col, Alert, Button, Card, ProgressBar, Spinner } from 'react-bootstrap';
+import { Row, Col, Alert, Button, Card, ProgressBar, Spinner, Container } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import {
   ProposalState,
@@ -26,6 +26,8 @@ import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 import { utils } from 'ethers';
 import { useAppDispatch } from '../../hooks';
+import StandaloneNoun from '../../components/StandaloneNoun';
+import { BigNumber as EthersBN } from 'ethers';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -213,216 +215,153 @@ const VotePage = ({
   );
 
   return (
-    <Section fullWidth={false} className={classes.votePage}>
-      <VoteModal
-        show={showVoteModal}
-        onHide={() => setShowVoteModal(false)}
-        onVote={() => castVote(proposal?.id, vote)}
-        isLoading={isVotePending}
-        proposalId={proposal?.id}
-        availableVotes={availableVotes}
-        vote={vote}
-      />
-      <Col lg={{ span: 8, offset: 2 }}>
-        <Link to="/vote">← All Proposals</Link>
-      </Col>
-      <Col lg={{ span: 8, offset: 2 }} className={classes.proposal}>
-        <div className="d-flex justify-content-between align-items-center">
-          <h3 className={classes.proposalId}>Proposal {proposal?.id}</h3>
-          <ProposalStatus status={proposal?.status}></ProposalStatus>
-        </div>
-        <div>
-          {startDate && startDate.isBefore(now) ? null : proposal ? (
-            <span>
-              Voting starts approximately {startDate?.format('MMMM D, YYYY h:mm A z')}{' '}
-              {startDate && `(${(startDate as any).fromNow()})`}{' '}
-            </span>
-          ) : (
-            ''
-          )}
-        </div>
-        <div>
-          {endDate && endDate.isBefore(now) ? (
-            <>
-              <div>Voting ended {endDate.format('MMMM D, YYYY h:mm A z')}</div>
-              <div>
-                This proposal has {quorumReached ? 'reached' : 'failed to reach'} quorum{' '}
-                {proposal?.quorumVotes !== undefined && `(${proposal.quorumVotes} votes)`}
-              </div>
-            </>
-          ) : proposal ? (
-            <>
-              <div>
-                Voting ends approximately {endDate?.format('MMMM D, YYYY h:mm A z')}{' '}
-                {endDate && `(${(endDate as any).fromNow()})`}{' '}
-              </div>
-              {proposal?.quorumVotes !== undefined && (
-                <div>A total of {proposal.quorumVotes} votes are required to reach quorum</div>
-              )}
-            </>
-          ) : (
-            ''
-          )}
-        </div>
-        {proposal && proposalActive && (
-          <>
-            {showBlockRestriction && !hasVoted && (
-              <Alert variant="secondary" className={classes.blockRestrictionAlert}>
-                Only NOUN votes that were self delegated or delegated to another address before
-                block {proposal.createdBlock} are eligible for voting.
-              </Alert>
-            )}
-            {hasVoted && (
-              <Alert variant="success" className={classes.voterIneligibleAlert}>
-                Thank you for your vote!
-              </Alert>
-            )}
-          </>
-        )}
-        {showVotingButtons ? (
-          <Row>
-            <Col lg={4} className="d-grid gap-2">
+    <Container fluid="lg">
+      <Row className={classes.headerRow} style={{marginBottom: '0rem'}}>
+        <Col lg={10} style={{ marginBottom: '0rem'}} className={classes.headerRow}>
+            <span>Proposal #{proposal && proposal.id}</span>
+        </Col>
+      </Row>
+      <Row>
+
+           <Col lg={5} className={classes.headerRow} style={{
+             margin: '2rem 0',
+             marginTop: '0rem',
+             marginLeft: '0rem',
+             paddingLeft: '1.5rem'
+           }}>
+                <h1>{proposal && proposal.title}</h1>
+           </Col>
+           <Col lg={1} style={{
+             margin: '2rem 0',
+             marginTop: '0rem',
+             marginLeft: '0rem',
+             paddingTop: '.5rem'
+           }}>
+            <ProposalStatus status={proposal && proposal.status} /> 
+           </Col>
+           <Col lg={4}>
+             <div style={{flexDirection: 'row', display: 'flex', justifyContent: 'space-between'}}>
+              <span style={{
+              fontFamily: 'PT Root UI Bold', 
+              color: '#8C8D92',
+              fontSize: '16px',
+              marginTop: '.7rem'
+            }}>Connect a wallet to vote.</span>
               <Button
-                className={classes.votingButton}
-                onClick={() => {
-                  setVote(Vote.FOR);
-                  setShowVoteModal(true);
-                }}
-              >
-                Vote For
-              </Button>
-            </Col>
-            <Col lg={4} className="d-grid gap-2">
-              <Button
-                className={classes.votingButton}
-                onClick={() => {
-                  setVote(Vote.AGAINST);
-                  setShowVoteModal(true);
-                }}
-              >
-                Vote Against
-              </Button>
-            </Col>
-            <Col lg={4} className="d-grid gap-2">
-              <Button
-                className={classes.votingButton}
-                onClick={() => {
-                  setVote(Vote.ABSTAIN);
-                  setShowVoteModal(true);
-                }}
-              >
-                Abstain
-              </Button>
-            </Col>
-          </Row>
-        ) : (
-          ''
-        )}
-        {isAwaitingStateChange() && (
-          <Row className={classes.section}>
-            <Col className="d-grid">
-              <Button
-                onClick={moveStateAction}
-                disabled={isQueuePending || isExecutePending}
-                variant="dark"
-              >
-                {isQueuePending || isExecutePending ? (
-                  <Spinner animation="border" />
-                ) : (
-                  `${moveStateButtonAction} Proposal`
-                )}
-              </Button>
-            </Col>
-          </Row>
-        )}
-        <Row>
-          <Col lg={4}>
-            <Card className={classes.voteCountCard}>
-              <Card.Body className="p-2">
-                <Card.Text className="py-2 m-0">
-                  <span>For</span>
-                  <span>{proposal?.forCount}</span>
-                </Card.Text>
-                <ProgressBar variant="success" now={forPercentage} />
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col lg={4}>
-            <Card className={classes.voteCountCard}>
-              <Card.Body className="p-2">
-                <Card.Text className="py-2 m-0">
-                  <span>Against</span>
-                  <span>{proposal?.againstCount}</span>
-                </Card.Text>
+                  onClick={() => {
+                    console.log("hi there")
+                  }}
+                  className={classes.generateBtn}
+                >
+                  Submit vote
+                </Button>
+             </div>
+           </Col>
+      </Row>
+      <Row>
+        <Col style={{border: '1px #E2E3E8 solid', borderRadius: '12px', marginRight: '1rem', marginLeft: '1rem', padding: '1rem', minWidth: '18rem'}} >
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between'
+                }}>
+                  <div style={{
+                    fontFamily: 'Londrina Solid',
+                    fontSize: '24px',
+                    color: '#43B369'
+                  }}>
+                    For 
+                  </div>
+                  <div style={{
+                    fontSize: '16px',
+                    fontFamily: 'PT Root UI Bold'
+                  }}>
+                    {proposal?.forCount}
+                  </div>
+                </div>
+              <ProgressBar variant="success" now={forPercentage} />
+              <Row>
+                <Col style={{margin: '0rem', backgroundColor: 'red'}}>
+                  <div style={{height: '64px', width: '64px'}}>
+                    <StandaloneNoun nounId={EthersBN.from(69)} />
+                  </div>
+                </Col>
+                <Col style={{margin: '0rem'}}>
+                  <div style={{height: '64px', width: '64px'}}>
+                    <StandaloneNoun nounId={EthersBN.from(69)} />
+                  </div>
+                </Col>
+                <Col style={{margin: '0rem'}}>
+                  <div style={{height: '64px', width: '64px'}}>
+                    <StandaloneNoun nounId={EthersBN.from(69)} />
+                  </div>
+                </Col>
+                <Col style={{margin: '0rem'}}>
+                  <div style={{height: '64px', width: '64px'}}>
+                    <StandaloneNoun nounId={EthersBN.from(69)} />
+                  </div>
+                </Col>
+                
+              </Row>
+        </Col>
+        <Col style={{border: '1px #E2E3E8 solid', borderRadius: '12px', marginRight: '1rem', padding: '1rem', minWidth: '18rem'}} >
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between'
+                }}>
+                  <div style={{
+                    fontFamily: 'Londrina Solid',
+                    fontSize: '24px',
+                    color: '#8C8D92'
+                  }}>
+                    Aginst 
+                  </div>
+                  <div style={{
+                    fontSize: '16px',
+                    fontFamily: 'PT Root UI Bold'
+                  }}>
+                    {proposal?.againstCount}
+                  </div>
+                </div>
                 <ProgressBar variant="danger" now={againstPercentage} />
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col lg={4}>
-            <Card className={classes.voteCountCard}>
-              <Card.Body className="p-2">
-                <Card.Text className="py-2 m-0">
-                  <span>Abstain</span>
-                  <span>{proposal?.abstainCount}</span>
-                </Card.Text>
+        </Col>
+        <Col style={{border: '1px #E2E3E8 solid', borderRadius: '12px', marginRight: '1rem', padding: '1rem', minWidth: '18rem' }} >
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between'
+                }}>
+                  <div style={{
+                    fontFamily: 'Londrina Solid',
+                    fontSize: '24px',
+                    color: '#D63C5E'
+                  }}>
+                    Abstain 
+                  </div>
+                  <div style={{
+                    fontSize: '16px',
+                    fontFamily: 'PT Root UI Bold'
+                  }}>
+                    {proposal?.abstainCount}
+                  </div>
+                </div>
                 <ProgressBar variant="info" now={abstainPercentage} />
-              </Card.Body>
-            </Card>
+        </Col>
+      </Row>
+      <Row>
+        <Col lg={10} style={{margin: '2rem 0'}}>
+        {proposal?.description && (
+                <ReactMarkdown
+                  className={classes.markdown}
+                  children={proposal.description}
+                  remarkPlugins={[remarkBreaks]}
+                />
+              )}
           </Col>
-        </Row>
-        <Row>
-          <Col className={classes.section}>
-            <h5>Description</h5>
-            {proposal?.description && (
-              <ReactMarkdown
-                className={classes.markdown}
-                children={proposal.description}
-                remarkPlugins={[remarkBreaks]}
-              />
-            )}
-          </Col>
-        </Row>
-        <Row>
-          <Col className={classes.section}>
-            <h5>Proposed Transactions</h5>
-            <ol>
-              {proposal?.details?.map((d, i) => {
-                return (
-                  <li key={i} className="m-0">
-                    {linkIfAddress(d.target)}.{d.functionSig}
-                    {d.value}(
-                    <br />
-                    {d.callData.split(',').map((content, i) => {
-                      return (
-                        <Fragment key={i}>
-                          <span key={i}>
-                            &emsp;
-                            {linkIfAddress(content)}
-                            {d.callData.split(',').length - 1 === i ? '' : ','}
-                          </span>
-                          <br />
-                        </Fragment>
-                      );
-                    })}
-                    )
-                  </li>
-                );
-              })}
-            </ol>
-          </Col>
-        </Row>
-        <Row>
-          <Col className={classes.section}>
-            <h5>Proposer</h5>
-            {proposal?.proposer && proposal?.transactionHash && (
-              <>
-                {linkIfAddress(proposal.proposer)} at {transactionLink(proposal.transactionHash)}
-              </>
-            )}
-          </Col>
-        </Row>
-      </Col>
-    </Section>
+      </Row>
+
+    </Container>
   );
 };
 

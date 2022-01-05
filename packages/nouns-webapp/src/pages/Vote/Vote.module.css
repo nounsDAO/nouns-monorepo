@@ -1,3 +1,42 @@
+.headerRow {
+  margin: 2rem 0;
+}
+.headerRow span {
+  color: #8c8d92;
+  font-size: 24px;
+  font-family: 'Londrina Solid';
+}
+.headerRow h1 {
+  color: #14161b;
+  font-size: 42px;
+  font-family: 'Londrina Solid';
+}
+.headerRow p {
+  color: #14161b;
+}
+
+.generateBtn {
+  width: 100%;
+  max-width: 9rem;
+  height: 3rem;
+  font-family: 'PT Root UI Bold';
+  font-size: 16px;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  background-color: var(--brand-dark-red);
+  border: var(--brand-dark-red);
+}
+.generateBtn:focus,
+.generateBtn:hover {
+  background-color: var(--brand-dark-red) !important;
+  box-shadow: 0 0 0 0.2rem rgb(214, 60, 94, 0.75);
+}
+.generateBtn:active {
+  background-color: var(--brand-dark-red) !important;
+}
+
+/******/
+
 .votePage a {
   color: var(--brand-dark-red);
 }
