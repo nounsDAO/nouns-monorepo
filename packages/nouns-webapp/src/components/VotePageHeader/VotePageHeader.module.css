@@ -37,3 +37,37 @@ buttons looking disabled when they were not */
   .headerRow p {
     color: #14161b;
   }
+
+  .generateBtn {
+    width: 100%;
+    max-width: 8rem;
+    height: 3rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    border-radius: 12px;
+    background-color: var(--brand-dark-red);
+    border: var(--brand-dark-red);
+  }
+  .generateBtn:focus,
+  .generateBtn:hover {
+    background-color: var(--brand-dark-red) !important;
+    box-shadow: 0 0 0 0.2rem rgb(214, 60, 94, 0.75);
+  }
+  .generateBtn:active {
+    background-color: var(--brand-dark-red) !important;
+  }
+  .generateBtnDisabled {
+      background-color: var(--brand-gray-light-text) !important;
+      width: 100%;
+      max-width: 8rem;
+      height: 3rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      border-radius: 12px;
+      border: var(--brand-dark-red);
+      opacity: 50%;
+  }
+
+  .generateBtnDisabled:hover {
+      cursor: not-allowed;
+  }

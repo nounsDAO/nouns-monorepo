@@ -217,9 +217,13 @@ const VotePage = ({
 
   return (
     <Container fluid="lg">
-      <Col lg={12}  style={{margin: '2rem 0'}}>
-        <VotePageHeader />
-      </Col>
+      <Row>
+        <Col lg={1}/>
+        <Col lg={10}  style={{margin: '2rem 0'}}>
+          <VotePageHeader />
+        </Col>
+        <Col lg={1}/>
+      </Row>
     </Container>
   );
 };
