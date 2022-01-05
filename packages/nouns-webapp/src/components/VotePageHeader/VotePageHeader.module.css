@@ -1,0 +1,22 @@
+.leftArrowCool {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    border: none;
+    background-size: contain;
+    background-repeat: no-repeat;
+    font-size: large;
+    border-radius: 50%;
+    color: var(--brand-cool-dark-text);
+    background-color: var(--brand-cool-accent);
+    font-weight: bold;
+}
+
+/* Disable hover on mobile because it was leading to
+buttons looking disabled when they were not */
+@media (min-width: 992px) {
+    .leftArrowCool:hover {
+      opacity: 0.9;
+      background-color: var(--brand-gray-hover);
+    }
+  }

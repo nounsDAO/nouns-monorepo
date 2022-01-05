@@ -3,4 +3,24 @@
   --brand-dark-red: #d63c5e;
   --brand-light-green: #6da886;
   --brand-black: #212529;
+  /* Updated color pallet from Figma */
+  --brand-cool-background: #d5d7e0;
+  --brand-cool-dark-text: #151c3b;
+  --brand-cool-light-text: #79809c;
+  --brand-cool-accent: #e9ebf3;
+  --brand-warm-background: #d5d7e0;
+  --brand-warm-dark-text: #221B1A;
+  --brand-warm-light-text: #8f7e7c;
+  --brand-warm-accent: #F9F1F1;
+  --brand-gray-dark-text: #14161b;
+  --brand-gray-border: #e2e3eb;
+  --brand-gray-background: #f4f4f8;
+  --brand-gray-light-text: #8c8d92;
+  --brand-gray-hover: #fafafb;
+  --brand-color-red: #D63C5E;
+  --brand-color-blue: #4965f0;
+  --brand-color-green: #43b369;
+  --brand-color-red-translucent: rgba(214, 60, 94, 0.1);
+  --brand-color-blue-translucent: rgba(73, 101, 240, 0.1);
+  --brand-color-green-translucent: rgba(67, 179, 105, 0.1);
 }
