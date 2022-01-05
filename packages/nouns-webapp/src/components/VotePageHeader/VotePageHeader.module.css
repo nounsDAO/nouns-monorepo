@@ -2,13 +2,13 @@
     display: inline-block;
     width: 2rem;
     height: 2rem;
-    border: none;
+    border: 1px solid var(--brand-cool-accent);
     background-size: contain;
     background-repeat: no-repeat;
     font-size: large;
     border-radius: 50%;
-    color: var(--brand-cool-dark-text);
-    background-color: var(--brand-cool-accent);
+    color: var(--brand-gray-light-text);
+    background-color: white;
     font-weight: bold;
 }
 
@@ -19,4 +19,21 @@ buttons looking disabled when they were not */
       opacity: 0.9;
       background-color: var(--brand-gray-hover);
     }
+}
+
+.headerRow {
+    margin: 2rem 0;
+  }
+  .headerRow span {
+    color: #8c8d92;
+    font-size: 24px;
+    font-family: 'Londrina Solid';
+  }
+  .headerRow h1 {
+    color: #14161b;
+    font-size: 42px;
+    font-family: 'Londrina Solid';
+  }
+  .headerRow p {
+    color: #14161b;
   }
