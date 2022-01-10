@@ -273,7 +273,7 @@ const Bid: React.FC<{
                 className={classes.bidBtnAuctionEnded}
                 onClick={fomoNounsBtnOnClickHandler}
               >
-                Vote for the next Noun ⌐◨-◨
+                Vote for the next Noun ⌐◧-◧
             </Button>
             {/* Only show force settle button if wallet connected */}
             {isWalletConnected &&  (<p className={classes.emergencySettleWrapper}>
