@@ -17,6 +17,15 @@
 
 .voteCountCard {
   margin-top: 1rem;
+  padding: 0.5rem;
+  border-radius: 12px;
+  background-color: #f4f4f8;
+}
+
+.voteInfoCard {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  border-radius: 12px;
 }
 
 .proposalId {
@@ -29,26 +38,41 @@
 }
 
 .section {
-  border-top: 1px solid #e9ecef;
   word-wrap: break-word;
   padding-top: 2rem;
   margin-top: 2rem;
 }
 
+/*
+* Add some margin to the markdown section on desktop.
+* We remove it on mobile because it looks sorta strange. 
+*/
+@media (min-width: 992px) {
+  .section {
+    margin-left: 2rem;
+    margin-right: 2rem;
+  }
+}
+
+.markdown {
+  font-family: 'PT Root UI';
+}
+
 .markdown h1 {
   font-size: 1.7rem;
   margin-top: 1rem;
-  font-weight: bold;
+  font-family: 'Londrina Solid';
 }
 
 .markdown h2 {
   font-size: 1.5rem;
   margin-top: 1rem;
-  font-weight: bold;
+  font-family: 'PT Root UI Bold';
 }
 
 .markdown h3 {
   font-size: 1.3rem;
+  font-family: 'PT Root UI Bold';
 }
 
 .markdown img {
@@ -62,4 +86,155 @@
 
 .blockRestrictionAlert {
   margin: 1rem 0 0 0;
+}
+
+/* Updated css */
+.leftArrowCool {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--brand-cool-accent);
+  background-size: contain;
+  background-repeat: no-repeat;
+  font-size: large;
+  border-radius: 50%;
+  color: var(--brand-gray-light-text);
+  background-color: white;
+  font-weight: bold;
+  margin-right: 1rem;
+}
+
+.leftArrowCool:hover {
+  opacity: 50%;
+}
+
+.headerRow span {
+  color: #8c8d92;
+  font-size: 24px;
+  font-family: 'Londrina Solid';
+}
+.headerRow h1 {
+  color: #14161b;
+  font-size: 42px;
+  font-family: 'Londrina Solid';
+}
+
+.voteCardHeaderText {
+  font-size: 24px;
+  font-family: 'Londrina Solid';
+}
+
+.voteCardVoteCount {
+  font-size: 22px;
+  font-family: 'PT Root UI Bold';
+}
+
+.for {
+  color: var(--brand-color-green);
+}
+
+.against {
+  color: var(--brand-color-red);
+}
+
+.abstain {
+  color: var(--brand-gray-light-text);
+}
+
+.spinner {
+  opacity: 50%;
+  margin-left: 50%;
+  margin-right: 50%;
+}
+
+.grayCircle {
+  height: 42px;
+  width: 42px;
+  border-radius: 50%;
+  background-color: #e0e0e7;
+  opacity: 50%;
+  margin-top: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.votingNoun {
+  margin-top: 0.5rem;
+}
+
+.nounProfilePics {
+  margin-top: 0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.2rem;
+}
+
+.voteMetadataRow h1 {
+  font-size: 20px;
+  color: var(--brand-gray-light-text);
+  font-family: 'Londrina Solid';
+}
+
+.voteMetadataRow span {
+  font-size: 14px;
+  font-family: 'PT Root UI';
+  color: var(--brand-gray-light-text);
+}
+
+.voteMetadataRow h3 {
+  font-size: 18px;
+  font-family: 'PT Root UI Bold';
+}
+
+.connectWalletText {
+  color: var(--brand-gray-light-text);
+  font-family: 'PT Root UI Bold';
+  font-size: 16px;
+  min-width: 12rem;
+}
+
+.submitBtn {
+  width: 100%;
+  max-width: 8rem;
+  min-width: 8rem;
+  height: 3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  background-color: var(--brand-dark-red);
+  border: var(--brand-dark-red);
+}
+.submitBtn:focus,
+.submitBtn:hover {
+  background-color: var(--brand-dark-red) !important;
+  box-shadow: 0 0 0 0.2rem rgb(214, 60, 94, 0.75);
+}
+.submitBtn:active {
+  background-color: var(--brand-dark-red) !important;
+}
+.submitBtnDisabled {
+  background-color: var(--brand-gray-light-text) !important;
+  width: 100%;
+  max-width: 8rem;
+  min-width: 8rem;
+  height: 3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  border: var(--brand-dark-red);
+  opacity: 50%;
+}
+
+.submitBtnDisabled:hover {
+  cursor: not-allowed;
+}
+
+.proposalStatus {
+  vertical-align: top;
+}
+
+.voteMetadataRowTitle {
+  margin-top: 0.1rem;
+}
+
+.voteMetadataTime {
+  min-width: 11rem;
 }

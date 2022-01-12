@@ -179,6 +179,19 @@ export const highestNounIdMintedAtProposalTime = (proposalStartBlock: number) =>
 	}
 }`;
 
+export const nounVotesForProposalQuery = (proposalId: string) => gql`
+{
+	proposals(where: {id: ${proposalId}}) {
+    votes {
+      supportDetailed
+      nouns {
+        id
+      }
+    }
+  }	
+}
+`;
+
 export const clientFactory = (uri: string) =>
   new ApolloClient({
     uri,

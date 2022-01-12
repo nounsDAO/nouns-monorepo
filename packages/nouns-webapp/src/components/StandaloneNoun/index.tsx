@@ -5,6 +5,7 @@ import { INounSeed, useNounSeed } from '../../wrappers/nounToken';
 import Noun from '../Noun';
 import { Link } from 'react-router-dom';
 import classes from './StandaloneNoun.module.css';
+import nounClasses from '../Noun/Noun.module.css';
 
 interface StandaloneNounProps {
   nounId: EthersBN;
@@ -38,6 +39,25 @@ const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProp
   return (
     <Link to={'/noun/' + nounId.toString()} className={classes.clickableNoun}>
       <Noun imgPath={noun ? noun.image : ''} alt={noun ? noun.description : 'Noun'} />
+    </Link>
+  );
+};
+
+export const StandaloneNounCircular: React.FC<StandaloneNounProps> = (
+  props: StandaloneNounProps,
+) => {
+  const { nounId } = props;
+  const seed = useNounSeed(nounId);
+  const noun = seed && getNoun(nounId, seed);
+
+  return (
+    <Link to={'/noun/' + nounId.toString()} className={classes.clickableNoun}>
+      <Noun
+        imgPath={noun ? noun.image : ''}
+        alt={noun ? noun.description : 'Noun'}
+        wrapperClassName={nounClasses.small}
+        className={nounClasses.circular}
+      />
     </Link>
   );
 };

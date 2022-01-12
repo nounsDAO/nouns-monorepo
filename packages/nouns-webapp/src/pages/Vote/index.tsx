@@ -1,4 +1,4 @@
-import { Row, Col, Alert, Button, Card, ProgressBar, Spinner } from 'react-bootstrap';
+import { Row, Col, Alert, Button, Card, Spinner } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import {
   ProposalState,
@@ -11,7 +11,7 @@ import {
 } from '../../wrappers/nounsDao';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Vote.module.css';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import { TransactionStatus, useBlockNumber } from '@usedapp/core';
 import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../utils/etherscan';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
@@ -25,13 +25,28 @@ import { Fragment, useCallback, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 import { utils } from 'ethers';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { nounVotesForProposalQuery } from '../../wrappers/subgraph';
+import { useQuery } from '@apollo/client';
+import VoteProgresBar, { ProgressBarVariant } from '../../components/VoteProgressBar';
+import proposalStatusClasses from '../../components/ProposalStatus/ProposalStatus.module.css';
+import NounImageVoteTable from '../../components/NounImageVoteTable';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(advanced);
 
 const AVERAGE_BLOCK_TIME_IN_SECS = 13;
+
+// Helper function to transform response from graph into flat list of nounIds that voted
+// supportDetailed for the given prop
+const getNounVotes = (data: any, supportDetailed: number) => {
+  return data.proposals[0].votes
+    .filter((vote: any) => vote.supportDetailed === supportDetailed)
+    .map((vote: any) => vote.nouns)
+    .flat(1)
+    .map((noun: any) => noun.id);
+};
 
 const VotePage = ({
   match: {
@@ -132,9 +147,6 @@ const VotePage = ({
     return false;
   };
 
-  const { forCount = 0, againstCount = 0, quorumVotes = 0 } = proposal || {};
-  const quorumReached = forCount > againstCount && forCount >= quorumVotes;
-
   const moveStateButtonAction = hasSucceeded ? 'Queue' : 'Execute';
   const moveStateAction = (() => {
     if (hasSucceeded) {
@@ -212,6 +224,53 @@ const VotePage = ({
     [executeProposalState, onTransactionStateChange, setModal],
   );
 
+  const backButtonClickHandler = () => {
+    // eslint-disable-next-line no-restricted-globals
+    location.href = '/vote';
+  };
+
+  const activeAccount = useAppSelector(state => state.account.activeAccount);
+
+  const { loading, error, data } = useQuery(
+    nounVotesForProposalQuery(proposal && proposal.id ? proposal?.id : '0'),
+  );
+  if (!proposal || loading || !data || data.proposals.length === 0) {
+    return (
+      <div className={classes.spinner}>
+        <Spinner animation="border" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return <>Failed to fetch</>;
+  }
+
+  const forNouns = getNounVotes(data, 1);
+  const againstNouns = getNounVotes(data, 0);
+  const abstainNouns = getNounVotes(data, 2);
+
+  const startOrEndTimeCopy = () => {
+    if (startDate?.isBefore(now) && endDate?.isAfter(now)) {
+      return 'Ends';
+    } else if (endDate?.isBefore(now)) {
+      return 'Ended';
+    } else {
+      return 'Starts';
+    }
+  };
+
+  const startOrEndTimeTime = () => {
+    if (!startDate?.isBefore(now)) {
+      return startDate;
+    } else {
+      return endDate;
+    }
+  };
+
+  const isWalletConnected = !(activeAccount === undefined);
+  const isActiveForVoting = startDate?.isBefore(now) && endDate?.isAfter(now);
+
   return (
     <Section fullWidth={false} className={classes.votePage}>
       <VoteModal
@@ -223,46 +282,42 @@ const VotePage = ({
         availableVotes={availableVotes}
         vote={vote}
       />
-      <Col lg={{ span: 8, offset: 2 }}>
-        <Link to="/vote">← All Proposals</Link>
-      </Col>
-      <Col lg={{ span: 8, offset: 2 }} className={classes.proposal}>
+      <Col lg={{ span: 10, offset: 1 }} className={classes.proposal}>
         <div className="d-flex justify-content-between align-items-center">
-          <h3 className={classes.proposalId}>Proposal {proposal?.id}</h3>
-          <ProposalStatus status={proposal?.status}></ProposalStatus>
-        </div>
-        <div>
-          {startDate && startDate.isBefore(now) ? null : proposal ? (
-            <span>
-              Voting starts approximately {startDate?.format('MMMM D, YYYY h:mm A z')}{' '}
-              {startDate && `(${(startDate as any).fromNow()})`}{' '}
-            </span>
-          ) : (
-            ''
-          )}
-        </div>
-        <div>
-          {endDate && endDate.isBefore(now) ? (
-            <>
-              <div>Voting ended {endDate.format('MMMM D, YYYY h:mm A z')}</div>
-              <div>
-                This proposal has {quorumReached ? 'reached' : 'failed to reach'} quorum{' '}
-                {proposal?.quorumVotes !== undefined && `(${proposal.quorumVotes} votes)`}
-              </div>
-            </>
-          ) : proposal ? (
-            <>
-              <div>
-                Voting ends approximately {endDate?.format('MMMM D, YYYY h:mm A z')}{' '}
-                {endDate && `(${(endDate as any).fromNow()})`}{' '}
-              </div>
-              {proposal?.quorumVotes !== undefined && (
-                <div>A total of {proposal.quorumVotes} votes are required to reach quorum</div>
-              )}
-            </>
-          ) : (
-            ''
-          )}
+          <div className="d-flex justify-content-start align-items-start">
+            <button className={classes.leftArrowCool} onClick={backButtonClickHandler}>
+              ←
+            </button>
+            <div className={classes.headerRow}>
+              <span>Proposal {proposal.id}</span>
+              <h1>
+                {proposal.title}{' '}
+                <span className={classes.proposalStatus}>
+                  <ProposalStatus
+                    status={proposal?.status}
+                    className={proposalStatusClasses.votePageProposalStatus}
+                  />
+                </span>
+              </h1>
+            </div>
+          </div>
+          <div className="d-flex justify-content-end align-items-end">
+            {isActiveForVoting && (
+              <>
+                {isWalletConnected ? (
+                  <></>
+                ) : (
+                  <div className={classes.connectWalletText}>Connect a wallet to vote.</div>
+                )}
+                <Button
+                  className={isWalletConnected ? classes.submitBtn : classes.submitBtnDisabled}
+                  onClick={backButtonClickHandler}
+                >
+                  Submit vote
+                </Button>
+              </>
+            )}
+          </div>
         </div>
         {proposal && proposalActive && (
           <>
@@ -340,10 +395,13 @@ const VotePage = ({
             <Card className={classes.voteCountCard}>
               <Card.Body className="p-2">
                 <Card.Text className="py-2 m-0">
-                  <span>For</span>
-                  <span>{proposal?.forCount}</span>
+                  <span className={`${classes.voteCardHeaderText} ${classes.for}`}>For</span>
+                  <span className={classes.voteCardVoteCount}>{proposal?.forCount}</span>
                 </Card.Text>
-                <ProgressBar variant="success" now={forPercentage} />
+                <VoteProgresBar variant={ProgressBarVariant.FOR} percentage={forPercentage} />
+                <Row className={classes.nounProfilePics}>
+                  <NounImageVoteTable nounIds={forNouns} />
+                </Row>
               </Card.Body>
             </Card>
           </Col>
@@ -351,10 +409,18 @@ const VotePage = ({
             <Card className={classes.voteCountCard}>
               <Card.Body className="p-2">
                 <Card.Text className="py-2 m-0">
-                  <span>Against</span>
-                  <span>{proposal?.againstCount}</span>
+                  <span className={`${classes.voteCardHeaderText} ${classes.against}`}>
+                    Against
+                  </span>
+                  <span className={classes.voteCardVoteCount}>{proposal?.againstCount}</span>
                 </Card.Text>
-                <ProgressBar variant="danger" now={againstPercentage} />
+                <VoteProgresBar
+                  variant={ProgressBarVariant.AGINST}
+                  percentage={againstPercentage}
+                />
+                <Row className={classes.nounProfilePics}>
+                  <NounImageVoteTable nounIds={againstNouns} />
+                </Row>
               </Card.Body>
             </Card>
           </Col>
@@ -362,17 +428,77 @@ const VotePage = ({
             <Card className={classes.voteCountCard}>
               <Card.Body className="p-2">
                 <Card.Text className="py-2 m-0">
-                  <span>Abstain</span>
-                  <span>{proposal?.abstainCount}</span>
+                  <span className={`${classes.voteCardHeaderText} ${classes.abstain}`}>
+                    Abstain
+                  </span>
+                  <span className={classes.voteCardVoteCount}>{proposal?.abstainCount}</span>
                 </Card.Text>
-                <ProgressBar variant="info" now={abstainPercentage} />
+                <VoteProgresBar
+                  variant={ProgressBarVariant.ABSTAIN}
+                  percentage={abstainPercentage}
+                />
+                <Row className={classes.nounProfilePics}>
+                  <NounImageVoteTable nounIds={abstainNouns} />
+                </Row>
               </Card.Body>
             </Card>
           </Col>
         </Row>
+
+        <Row>
+          <Col lg={4}>
+            <Card className={classes.voteInfoCard}>
+              <Card.Body className="p-2">
+                <Row className={classes.voteMetadataRow}>
+                  <Col className={classes.voteMetadataRowTitle}>
+                    <h1>Threshold</h1>
+                  </Col>
+                  <Col>
+                    <span>Differential</span>
+                    <h3>{proposal.forCount - proposal.againstCount} votes</h3>
+                  </Col>
+                  <Col>
+                    <span>Quorum</span>
+                    <h3>{proposal.quorumVotes} votes</h3>
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col lg={4}>
+            <Card className={classes.voteInfoCard}>
+              <Card.Body className="p-2">
+                <Row className={classes.voteMetadataRow}>
+                  <Col className={classes.voteMetadataRowTitle}>
+                    <h1>{startOrEndTimeCopy()}</h1>
+                  </Col>
+                  <Col className={classes.voteMetadataTime}>
+                    <span>{startOrEndTimeTime() && startOrEndTimeTime()?.format('h:mm A z')}</span>
+                    <h3>{startOrEndTimeTime() && startOrEndTimeTime()?.format('MMMM D, YYYY')}</h3>
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col lg={4}>
+            <Card className={classes.voteInfoCard}>
+              <Card.Body className="p-2">
+                <Row className={classes.voteMetadataRow}>
+                  <Col className={classes.voteMetadataRowTitle}>
+                    <h1>Snapshot</h1>
+                  </Col>
+                  <Col>
+                    <span>Taken at block</span>
+                    <h3>{proposal.createdBlock}</h3>
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+
         <Row>
           <Col className={classes.section}>
-            <h5>Description</h5>
             {proposal?.description && (
               <ReactMarkdown
                 className={classes.markdown}

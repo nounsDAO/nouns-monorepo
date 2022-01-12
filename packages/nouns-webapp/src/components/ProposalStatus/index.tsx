@@ -1,22 +1,22 @@
-import { Badge } from 'react-bootstrap';
+import classes from './ProposalStatus.module.css';
 import { ProposalState } from '../../wrappers/nounsDao';
 
 const statusVariant = (status: ProposalState | undefined) => {
   switch (status) {
     case ProposalState.PENDING:
     case ProposalState.ACTIVE:
-      return 'primary';
+      return classes.primary;
     case ProposalState.SUCCEEDED:
     case ProposalState.EXECUTED:
-      return 'success';
+      return classes.success;
     case ProposalState.DEFEATED:
     case ProposalState.VETOED:
-      return 'danger';
+      return classes.danger;
     case ProposalState.QUEUED:
     case ProposalState.CANCELED:
     case ProposalState.EXPIRED:
     default:
-      return 'secondary';
+      return classes.secondary;
   }
 };
 
@@ -45,8 +45,18 @@ const statusText = (status: ProposalState | undefined) => {
   }
 };
 
-const ProposalStatus = ({ status }: { status: ProposalState | undefined }) => {
-  return <Badge bg={statusVariant(status)}>{statusText(status)}</Badge>;
+interface ProposalStateProps {
+  status: ProposalState;
+  className?: string;
+}
+
+const ProposalStatus: React.FC<ProposalStateProps> = props => {
+  const { status, className } = props;
+  return (
+    <button className={`${classes.status} ${statusVariant(status)} ${className}`} disabled={true}>
+      {statusText(status)}
+    </button>
+  );
 };
 
 export default ProposalStatus;
