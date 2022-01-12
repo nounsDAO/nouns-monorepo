@@ -1,9 +1,18 @@
 import classes from './NavBarButton.module.css';
 
+export enum NavBarButtonStyle {
+    COOL_INFO,
+    COOL_WALLET,
+    WARM_INFO,
+    WARM_WALLET,
+    WHITE_INFO,
+    WHITE_ACTIVE
+}
+
 interface NavBarButtonProps {
     buttonText: string;
     buttonIcon?: React.ReactNode;
-    buttonStyle?: string;
+    buttonStyle?: NavBarButtonStyle;
 }
 
 const NavBarButton: React.FC<NavBarButtonProps> = props => {
@@ -11,22 +20,22 @@ const NavBarButton: React.FC<NavBarButtonProps> = props => {
 
     const variant = () => {
         switch (buttonStyle) {
-            case 'cool-info': {
+            case NavBarButtonStyle.COOL_INFO: {
                 return classes.coolInfo;
             }
-            case 'cool-wallet': {
+            case NavBarButtonStyle.COOL_WALLET: {
                 return classes.coolWallet;
             }
-            case 'warm-info': {
+            case NavBarButtonStyle.WARM_INFO: {
                 return classes.warnInfo;
             }
-            case 'warm-wallet': {
+            case NavBarButtonStyle.WARM_WALLET: {
                 return classes.warmWallet;
             }
-            case 'white-info': {
+            case NavBarButtonStyle.WHITE_INFO: {
                 return classes.whiteInfo;
             }
-            case 'white-active': {
+            case NavBarButtonStyle.WHITE_ACTIVE: {
                 return classes.whiteActive;
             }
             default: {return classes.info;}

@@ -15,7 +15,7 @@ import { utils } from 'ethers';
 import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
 import { ExternalURL, externalURL } from '../../utils/externalURL';
 import useLidoBalance from '../../hooks/useLidoBalance';
-import NavBarButton from '../NavBarButton';
+import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookOpen } from '@fortawesome/free-solid-svg-icons';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
@@ -73,8 +73,8 @@ const NavBar = () => {
   
   const greyBg = '#d5d7e1';
 
-  const nonWalletButtonStyle = !useStateBg ? 'white-info' : (
-    stateBgColor === greyBg ? 'cool-info' : 'warm-info'
+  const nonWalletButtonStyle = !useStateBg ? NavBarButtonStyle.WHITE_INFO : (
+    stateBgColor === greyBg ? NavBarButtonStyle.COOL_INFO : NavBarButtonStyle.WARM_INFO 
   );
 
 
@@ -85,7 +85,7 @@ const NavBar = () => {
         onClick={showModalHandler}
       >
         <NavBarButton buttonStyle = {
-          useStateBg && stateBgColor === greyBg ? 'cool-wallet': 'warm-wallet'
+          useStateBg && stateBgColor === greyBg ? NavBarButtonStyle.COOL_WALLET: NavBarButtonStyle.WARM_WALLET 
         } 
         buttonText={'Connect wallet'}
         />
