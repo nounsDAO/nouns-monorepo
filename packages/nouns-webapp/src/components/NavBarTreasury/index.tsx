@@ -21,7 +21,7 @@ const NavBarTreasury: React.FC<NavBarTreasuryProps> = props => {
                         Treasury
                     </Row>
                     <Row className={classes.treasuryBalance}>
-                        Ξ {treasuryBalance}
+                        Ξ {Number(treasuryBalance).toLocaleString("en-US")}
                     </Row>
                 </Container>
             </div>
