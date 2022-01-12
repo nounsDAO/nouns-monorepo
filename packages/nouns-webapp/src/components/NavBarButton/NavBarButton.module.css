@@ -40,7 +40,7 @@
 }
 
 .coolWallet:hover {
-    background-color: rgba(73, 101, 240, 0.1);
+    background-color: rgba(73, 101, 240, 0.7);
 }
 
 .warnInfo {
@@ -60,7 +60,7 @@
 }
 
 .warmWallet:hover {
-    background-color: rgba(214, 60, 94, 0.1);
+    background-color: rgba(214, 60, 94, 0.7);
 }
 
 .whiteInfo {
