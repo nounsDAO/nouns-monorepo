@@ -36,7 +36,7 @@
 .nounsNavLink:visited {
   font-family: 'PT Root UI Bold';
   font-size: 0.9rem;
-  padding: 0.5rem 0.8rem !important;
+  padding: 0.5rem 0.3rem !important;
   color: var(--brand-black) !important;
 }
 .nounsNavLink:hover {
