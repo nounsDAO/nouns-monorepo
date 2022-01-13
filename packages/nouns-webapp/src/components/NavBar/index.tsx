@@ -111,13 +111,13 @@ const NavBar = () => {
               alt="Nouns DAO logo"
             />
             </Link>
-            {treasuryBalance && useStateBg && (
+            {treasuryBalance &&  (
               <Nav.Link
                 href={daoEtherscanLink}
                 target="_blank"
                 rel="noreferrer"
               >
-                <NavBarTreasury treasuryBalance={Number(utils.formatEther(treasuryBalance)).toFixed(0)} isWarmStyle={stateBgColor !== greyBg}/>
+                <NavBarTreasury treasuryBalance={Number(utils.formatEther(treasuryBalance)).toFixed(0)} treasuryStyle={nonWalletButtonStyle}/>
               </Nav.Link>
             )}
           </div>

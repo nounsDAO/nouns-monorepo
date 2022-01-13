@@ -2,18 +2,33 @@ import classes from './NavBarTreasury.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import { Container, Row } from 'react-bootstrap';
+import { NavBarButtonStyle } from '../NavBarButton';
 
 interface NavBarTreasuryProps {
     treasuryBalance:  string;
-    isWarmStyle: boolean;
+    treasuryStyle: NavBarButtonStyle;
 }
 
 const NavBarTreasury: React.FC<NavBarTreasuryProps> = props => {
 
-    const { treasuryBalance, isWarmStyle } = props;
+    const { treasuryBalance, treasuryStyle } = props;
+
+    let treasuryStyleClass;
+    switch(treasuryStyle) {
+        case NavBarButtonStyle.WARM_INFO:
+            treasuryStyleClass = classes.warmInfo;
+            break;
+        case NavBarButtonStyle.COOL_INFO:
+            treasuryStyleClass = classes.coolInfo;
+            break;
+        case NavBarButtonStyle.WHITE_INFO:
+        default:
+            treasuryStyleClass = classes.whiteInfo;
+            break;
+    }
 
     return (
-        <div className={`${classes.wrapper} ${isWarmStyle ? classes.warmInfo : classes.coolInfo}`} >
+        <div className={`${classes.wrapper} ${treasuryStyleClass}`} >
         <div className={classes.button}>
             <div>
                 <Container className={classes.treasuryInfoWrapper}>

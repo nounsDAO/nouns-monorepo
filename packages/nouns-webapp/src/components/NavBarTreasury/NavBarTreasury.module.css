@@ -37,6 +37,7 @@
 
 .treasuryBalance {
     font-size: 15px;
+    color: black;
 }
 
 .warmInfo .treasuryBalance {
@@ -69,5 +70,16 @@
 
 .warmInfo:hover {
     background-color: white;
+    color: black;
+}
+
+.whiteInfo {
+    background-color: white;
+    border: 1px solid #E2E3E8;
+    color: #79809C
+}
+
+.whiteInfo:hover {
+    background-color: #e2e3e8;
     color: black;
 }
