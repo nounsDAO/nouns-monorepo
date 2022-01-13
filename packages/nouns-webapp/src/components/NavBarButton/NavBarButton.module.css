@@ -1,86 +1,84 @@
 .wrapper {
-    height: 40px;
-    border-radius: 10px;
-    font-size: 16px;
-    font-family: 'PT Root UI Bold';
-    padding: 0px 12px 0px 12px;
+  height: 40px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-family: 'PT Root UI Bold';
+  padding: 0px 12px 0px 12px;
 }
 
 .button {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
 }
 
 .icon {
-    margin-right: .5rem;
+  margin-right: 0.5rem;
 }
 
 .button:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .coolInfo {
-    color: #79809C;
-    background-color: #E9EBF3;
+  color: #79809c;
+  background-color: #e9ebf3;
 }
 
 .coolInfo:hover {
-    background-color: white;
-    color: black;
+  background-color: white;
+  color: black;
 }
 
 .coolWallet {
-    background-color: #4965F0;    
-    color: white;
-    padding: 0px 12px 0px 12px;
+  background-color: #4965f0;
+  color: white;
+  padding: 0px 12px 0px 12px;
 }
 
 .coolWallet:hover {
-    background-color: rgba(73, 101, 240, 0.7);
+  background-color: rgba(73, 101, 240, 0.7);
 }
 
 .warnInfo {
-    color: #B6A9A7;
-    background-color: #FDF9F9;
+  color: #b6a9a7;
+  background-color: #fdf9f9;
 }
 
 .warnInfo:hover {
-    background-color: white;
-    color: black;
+  background-color: white;
+  color: black;
 }
 
 .warmWallet {
-    background-color: #D63C5E;
-    color: white;
-    padding: 0px 12px 0px 12px;
+  background-color: #d63c5e;
+  color: white;
+  padding: 0px 12px 0px 12px;
 }
 
 .warmWallet:hover {
-    background-color: rgba(214, 60, 94, 0.7);
+  background-color: rgba(214, 60, 94, 0.7);
 }
 
 .whiteInfo {
-    background-color: white;
-    border: 1px solid #E2E3E8;
-    color: #79809C
+  background-color: white;
+  border: 1px solid #e2e3e8;
+  color: #79809c;
 }
 
 .whiteInfo:hover {
-    background-color: #e2e3e8;
+  background-color: #e2e3e8;
 }
 
 .whiteActive {
-    background-color: #F4F4F8;
-    border: 1px solid #E2E3E8;
-    color: black;
+  background-color: #f4f4f8;
+  border: 1px solid #e2e3e8;
+  color: black;
 }
 
-.whiteActive .icon{
-    color: #D63C5E; 
+.whiteActive .icon {
+  color: #d63c5e;
 }
-
-

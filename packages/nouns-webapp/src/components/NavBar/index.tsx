@@ -21,7 +21,7 @@ import { faBookOpen } from '@fortawesome/free-solid-svg-icons';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
-import NavBarTreasury from "../NavBarTreasury";
+import NavBarTreasury from '../NavBarTreasury';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
@@ -70,13 +70,14 @@ const NavBar = () => {
     history.location.pathname === '/' ||
     history.location.pathname.includes('/noun') ||
     history.location.pathname.includes('/auction');
-  
+
   const greyBg = '#d5d7e1';
 
-  const nonWalletButtonStyle = !useStateBg ? NavBarButtonStyle.WHITE_INFO : (
-    stateBgColor === greyBg ? NavBarButtonStyle.COOL_INFO : NavBarButtonStyle.WARM_INFO 
-  );
-
+  const nonWalletButtonStyle = !useStateBg
+    ? NavBarButtonStyle.WHITE_INFO
+    : stateBgColor === greyBg
+    ? NavBarButtonStyle.COOL_INFO
+    : NavBarButtonStyle.WARM_INFO;
 
   const disconnectedContent = (
     <>
@@ -84,10 +85,13 @@ const NavBar = () => {
         className={clsx(classes.nounsNavLink, classes.connectBtn)}
         onClick={showModalHandler}
       >
-        <NavBarButton buttonStyle = {
-          useStateBg && stateBgColor === greyBg ? NavBarButtonStyle.COOL_WALLET: NavBarButtonStyle.WARM_WALLET 
-        } 
-        buttonText={'Connect wallet'}
+        <NavBarButton
+          buttonStyle={
+            useStateBg && stateBgColor === greyBg
+              ? NavBarButtonStyle.COOL_WALLET
+              : NavBarButtonStyle.WARM_WALLET
+          }
+          buttonText={'Connect wallet'}
         />
       </Nav.Link>
     </>
@@ -100,27 +104,26 @@ const NavBar = () => {
       )}
       <Navbar expand="lg" style={{ backgroundColor: `${useStateBg ? stateBgColor : ''}` }}>
         <Container>
-          <Navbar.Brand className={classes.navBarBrand} >
-          <div className="d-flex justify-content-between align-items-center ">
-            <Link to={"/"}>
-            <img
-              src={logo}
-              width="85"
-              height="85"
-              className="d-inline-block align-middle"
-              alt="Nouns DAO logo"
-            />
-            </Link>
-            {treasuryBalance &&  (
-              <Nav.Link
-                href={daoEtherscanLink}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <NavBarTreasury treasuryBalance={Number(utils.formatEther(treasuryBalance)).toFixed(0)} treasuryStyle={nonWalletButtonStyle}/>
-              </Nav.Link>
-            )}
-          </div>
+          <Navbar.Brand className={classes.navBarBrand}>
+            <div className="d-flex justify-content-between align-items-center ">
+              <Link to={'/'}>
+                <img
+                  src={logo}
+                  width="85"
+                  height="85"
+                  className="d-inline-block align-middle"
+                  alt="Nouns DAO logo"
+                />
+              </Link>
+              {treasuryBalance && (
+                <Nav.Link href={daoEtherscanLink} target="_blank" rel="noreferrer">
+                  <NavBarTreasury
+                    treasuryBalance={Number(utils.formatEther(treasuryBalance)).toFixed(0)}
+                    treasuryStyle={nonWalletButtonStyle}
+                  />
+                </Nav.Link>
+              )}
+            </div>
           </Navbar.Brand>
           {Number(CHAIN_ID) !== 1 && (
             <Nav.Item>
@@ -131,14 +134,10 @@ const NavBar = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse className="justify-content-end">
             <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>
-              <NavBarButton 
-              buttonText = {'DAO'}
-              buttonIcon = {(
-                <FontAwesomeIcon icon={faUsers} />
-              )}
-              buttonStyle={
-                nonWalletButtonStyle
-              }
+              <NavBarButton
+                buttonText={'DAO'}
+                buttonIcon={<FontAwesomeIcon icon={faUsers} />}
+                buttonStyle={nonWalletButtonStyle}
               />
             </Nav.Link>
             <Nav.Link
@@ -147,15 +146,11 @@ const NavBar = () => {
               target="_blank"
               rel="noreferrer"
             >
-                <NavBarButton 
-                buttonText = {'Docs'}
-                buttonIcon = {(
-                  <FontAwesomeIcon icon={faBookOpen} />
-                )}
-                buttonStyle={
-                  nonWalletButtonStyle
-                }
-                />
+              <NavBarButton
+                buttonText={'Docs'}
+                buttonIcon={<FontAwesomeIcon icon={faBookOpen} />}
+                buttonStyle={nonWalletButtonStyle}
+              />
             </Nav.Link>
             <Nav.Link
               href={externalURL(ExternalURL.discourse)}
@@ -163,26 +158,18 @@ const NavBar = () => {
               target="_blank"
               rel="noreferrer"
             >
-              <NavBarButton 
-                buttonText = {'Discourse'}
-                buttonIcon = {(
-                  <FontAwesomeIcon icon={faComments} />
-                )}
-                buttonStyle={
-                  nonWalletButtonStyle
-                }
-                />
+              <NavBarButton
+                buttonText={'Discourse'}
+                buttonIcon={<FontAwesomeIcon icon={faComments} />}
+                buttonStyle={nonWalletButtonStyle}
+              />
             </Nav.Link>
             <Nav.Link as={Link} to="/playground" className={classes.nounsNavLink}>
-              <NavBarButton 
-                  buttonText = {'Playground'}
-                  buttonIcon = {(
-                    <FontAwesomeIcon icon={faPlay} />
-                  )}
-                  buttonStyle={
-                    nonWalletButtonStyle
-                  }
-                  /> 
+              <NavBarButton
+                buttonText={'Playground'}
+                buttonIcon={<FontAwesomeIcon icon={faPlay} />}
+                buttonStyle={nonWalletButtonStyle}
+              />
             </Nav.Link>
             {activeAccount ? connectedContent : disconnectedContent}
           </Navbar.Collapse>

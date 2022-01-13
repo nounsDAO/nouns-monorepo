@@ -1,85 +1,84 @@
 .wrapper {
-    border-radius: 10px;
-    font-size: 16px;
-    font-family: 'PT Root UI Bold';
-    padding: 0px 12px 0px 8px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-family: 'PT Root UI Bold';
+  padding: 0px 12px 0px 8px;
 }
 
 .button {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-    padding-bottom: .25rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  padding-bottom: 0.25rem;
 }
 
 .icon {
-    margin-left: 1.0rem;
-    border-left: 1px solid #D5D7E0;
-    padding-left: .5rem;
-    color: #79809C;
+  margin-left: 1rem;
+  border-left: 1px solid #d5d7e0;
+  padding-left: 0.5rem;
+  color: #79809c;
 }
 
 .treasuryInfoWrapper {
-    margin-top: .25rem;
+  margin-top: 0.25rem;
 }
 
 .treasuryHeader {
-    font-size: 12px;
+  font-size: 12px;
 }
 
 .warmInfo .icon {
-    color: #B6A9A7;
-    border-left: 1px solid #E1D7D5;
+  color: #b6a9a7;
+  border-left: 1px solid #e1d7d5;
 }
 
 .treasuryBalance {
-    font-size: 15px;
-    color: black;
+  font-size: 15px;
+  color: black;
 }
 
 .warmInfo .treasuryBalance {
-    color: #221B1A;
+  color: #221b1a;
 }
 
 .coolInfo .treasuryBalance {
-    color: #151C3B;
+  color: #151c3b;
 }
 
 .button:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .coolInfo {
-    color: #79809C;
-    background-color: #E9EBF3;
+  color: #79809c;
+  background-color: #e9ebf3;
 }
 
 .coolInfo:hover {
-    background-color: white;
-    color: black;
+  background-color: white;
+  color: black;
 }
 
-
 .warmInfo {
-    color: #B6A9A7;
-    background-color: #FDF9F9;
+  color: #b6a9a7;
+  background-color: #fdf9f9;
 }
 
 .warmInfo:hover {
-    background-color: white;
-    color: black;
+  background-color: white;
+  color: black;
 }
 
 .whiteInfo {
-    background-color: white;
-    border: 1px solid #E2E3E8;
-    color: #79809C
+  background-color: white;
+  border: 1px solid #e2e3e8;
+  color: #79809c;
 }
 
 .whiteInfo:hover {
-    background-color: #e2e3e8;
-    color: black;
+  background-color: #e2e3e8;
+  color: black;
 }
