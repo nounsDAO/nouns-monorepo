@@ -48,11 +48,11 @@ const NavBarButton: React.FC<NavBarButtonProps> = props => {
                 <div className={classes.button}>
 
                     {
-                        buttonIcon ?  (
+                        buttonIcon &&  (
                             <div className={classes.icon}>
                                 {buttonIcon}
                             </div>
-                        ): (<></>)
+                        )
                     }
                     <div>
                         {buttonText}
