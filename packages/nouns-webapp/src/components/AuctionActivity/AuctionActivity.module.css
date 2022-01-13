@@ -56,6 +56,9 @@ h4 {
   .auctionTimerCol {
     padding-left: 15px;
   }
+  .fomoNounsLink {
+    text-align: center;
+  }
 }
 
 /* Fix Firefox navigation arrow alignment issues */
@@ -64,4 +67,19 @@ h4 {
     display: flex;
     align-items: center;
   }
+}
+.fomoNounsLink {
+  color: #8c8d92;
+}
+
+.fomoNounsLink a,
+.fomoNounsLink:hover a .fomoNounsLink:active a {
+  color: #8c8d92;
+  padding-left: 0.5rem;
+}
+
+.fomoNounsLink:hover,
+.fomoNounsLink:hover a {
+  text-decoration: underline;
+  color: #8c8d9275;
 }
