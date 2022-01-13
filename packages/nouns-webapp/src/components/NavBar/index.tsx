@@ -100,7 +100,9 @@ const NavBar = () => {
       )}
       <Navbar expand="lg" style={{ backgroundColor: `${useStateBg ? stateBgColor : ''}` }}>
         <Container>
-          <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
+          <Navbar.Brand className={classes.navBarBrand} >
+          <div className="d-flex justify-content-between align-items-center ">
+            <Link to={"/"}>
             <img
               src={logo}
               width="85"
@@ -108,6 +110,17 @@ const NavBar = () => {
               className="d-inline-block align-middle"
               alt="Nouns DAO logo"
             />
+            </Link>
+            {treasuryBalance && useStateBg && (
+              <Nav.Link
+                href={daoEtherscanLink}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <NavBarTreasury treasuryBalance={Number(utils.formatEther(treasuryBalance)).toFixed(0)} isWarmStyle={stateBgColor !== greyBg}/>
+              </Nav.Link>
+            )}
+          </div>
           </Navbar.Brand>
           {Number(CHAIN_ID) !== 1 && (
             <Nav.Item>
@@ -115,18 +128,6 @@ const NavBar = () => {
               TESTNET
             </Nav.Item>
           )}
-          <Nav.Item>
-            {treasuryBalance && useStateBg && (
-              <Nav.Link
-                href={daoEtherscanLink}
-                className={classes.nounsNavLink}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <NavBarTreasury treasuryBalance={Number(utils.formatEther(treasuryBalance)).toFixed(0)} isWarmStyle={stateBgColor !== greyBg}/>
-              </Nav.Link>
-            )}
-          </Nav.Item>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse className="justify-content-end">
             <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>
