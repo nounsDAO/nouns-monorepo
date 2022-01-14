@@ -19,6 +19,8 @@ import BidHistoryBtn from '../BidHistoryBtn';
 import StandaloneNoun from '../StandaloneNoun';
 import config from '../../config';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 const openEtherscanBidHistory = () => {
   const url = buildEtherscanAddressLink(config.addresses.nounsAuctionHouseProxy);
@@ -142,11 +144,23 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
           </Row>
         </div>
         {isLastAuction && (
-          <Row className={classes.activityRow}>
-            <Col lg={12}>
-              <Bid auction={auction} auctionEnded={auctionEnded} />
-            </Col>
-          </Row>
+          <>
+            <Row className={classes.activityRow}>
+              <Col lg={12}>
+                <Bid auction={auction} auctionEnded={auctionEnded} />
+              </Col>
+            </Row>
+            {!auctionEnded && (
+              <Row className={classes.activityRow}>
+                <Col lg={12} className={classes.fomoNounsLink}>
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  <a href={'https://fomonouns.wtf'} target={'_blank'} rel="noreferrer">
+                    Help mint the next Noun
+                  </a>
+                </Col>
+              </Row>
+            )}
+          </>
         )}
         <Row className={classes.activityRow}>
           <Col lg={12}>
