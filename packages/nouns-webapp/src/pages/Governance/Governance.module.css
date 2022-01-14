@@ -4,9 +4,26 @@
   font-size: 3rem;
 }
 
+.headerRow span {
+  color: #8c8d92;
+  font-size: 24px;
+  font-family: 'Londrina Solid';
+}
+
+.headerRow h1 {
+  color: #14161b;
+  font-size: 56px;
+  font-family: 'Londrina Solid';
+}
+
 .subheading {
   color: var(--brand-dark-green);
+  font-family: 'PT Root UI';
   font-size: 1.2rem;
+}
+
+.boldText {
+  font-family: 'PT Root UI Bold';
 }
 
 p {

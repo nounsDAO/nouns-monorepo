@@ -11,22 +11,48 @@
 }
 
 .heading {
-  display: inline-block;
+  font-family: 'Londrina Solid';
   font-size: 2rem;
   margin: 0 !important;
 }
 
-.createProposalLink {
-  padding: 0.9rem 1.5rem;
-  border-radius: 5px;
-  border: 0 none;
-  font-size: large;
-  font-weight: normal;
-  cursor: default;
+.generateBtn {
+  max-width: 10rem;
+  height: 3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  background-color: var(--brand-dark-red);
+  border: var(--brand-dark-red);
+}
+.generateBtn:focus,
+.generateBtn:hover {
+  background-color: var(--brand-dark-red) !important;
+  box-shadow: 0 0 0 0.2rem rgb(214, 60, 94, 0.75);
+}
+.generateBtn:active {
+  background-color: var(--brand-dark-red) !important;
 }
 
-.createProposalLink:hover {
-  background-color: rgb(104, 104, 104);
+.generateBtnDisabled {
+  max-width: 10rem;
+  height: 3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  background-color: #F4F4F8;
+  border: #F4F4F8;
+  color: #8C8D92;
+  border: 1px solid #E2E3E8;
+}
+.generateBtnDisabled:focus,
+.generateBtnDisabled:hover, 
+.generateBtnDisabled:active {
+  cursor: not-allowed;
+  background-color: #F4F4F8 !important;
+  border: #F4F4F8 !important;
+  color: #8C8D92 !important;
+  border: 1px solid #E2E3E8 !important;
 }
 
 .proposalLink {
@@ -35,6 +61,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border: 1px solid #E2E3E8;
+  box-sizing: border-box;
+  border-radius: 16px;
+  background: #F4F4F8;
+  font-size: 22px;
+  font-family: 'PT Root UI Bold';
+}
+
+.proposalLink:hover {
+  background: white;
 }
 
 .markdown h1 {
