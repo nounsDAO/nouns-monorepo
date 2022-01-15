@@ -35,11 +35,11 @@ const Auction: React.FC<AuctionProps> = props => {
 
   const prevAuctionHandler = () => {
     dispatch(setPrevOnDisplayAuctionNounId());
-    currentAuction && history.push(`/auction/${currentAuction.nounId.toNumber() - 1}`);
+    currentAuction && history.push(`/noun/${currentAuction.nounId.toNumber() - 1}`);
   };
   const nextAuctionHandler = () => {
     dispatch(setNextOnDisplayAuctionNounId());
-    currentAuction && history.push(`/auction/${currentAuction.nounId.toNumber() + 1}`);
+    currentAuction && history.push(`/noun/${currentAuction.nounId.toNumber() + 1}`);
   };
 
   const nounContent = currentAuction && (
@@ -81,7 +81,7 @@ const Auction: React.FC<AuctionProps> = props => {
 
   return (
     <div style={{ backgroundColor: stateBgColor }}>
-      <Container fluid="lg">
+      <Container fluid="xl">
         <Row>
           <Col lg={{ span: 6 }} className={classes.nounContentCol}>
             {currentAuction ? nounContent : loadingNoun}

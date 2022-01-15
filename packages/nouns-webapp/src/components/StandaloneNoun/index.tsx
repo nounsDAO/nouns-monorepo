@@ -3,8 +3,10 @@ import { buildSVG } from '@nouns/sdk';
 import { BigNumber as EthersBN } from 'ethers';
 import { INounSeed, useNounSeed } from '../../wrappers/nounToken';
 import Noun from '../Noun';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import classes from './StandaloneNoun.module.css';
+import { useDispatch } from 'react-redux';
+import { setOnDisplayAuctionNounId } from '../../state/slices/onDisplayAuction';
 
 interface StandaloneNounProps {
   nounId: EthersBN;
@@ -35,8 +37,20 @@ const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProp
   const seed = useNounSeed(nounId);
   const noun = seed && getNoun(nounId, seed);
 
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const onClickHandler = () => {
+    dispatch(setOnDisplayAuctionNounId(nounId.toNumber()));
+    history.push(`/noun/${nounId}`);
+  };
+
   return (
-    <Link to={'/noun/' + nounId.toString()} className={classes.clickableNoun}>
+    <Link
+      to={'/noun/' + nounId.toString()}
+      className={classes.clickableNoun}
+      onClick={onClickHandler}
+    >
       <Noun imgPath={noun ? noun.image : ''} alt={noun ? noun.description : 'Noun'} />
     </Link>
   );
@@ -47,17 +61,28 @@ export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = (
 ) => {
   const { nounId, onLoadSeed, shouldLinkToProfile } = props;
 
+  const dispatch = useDispatch();
+  const history = useHistory();
   const seed = useNounSeed(nounId);
 
   if (!seed || !nounId || !onLoadSeed) return <Noun imgPath="" alt="Noun" />;
 
   onLoadSeed(seed);
 
+  const onClickHandler = () => {
+    dispatch(setOnDisplayAuctionNounId(nounId.toNumber()));
+    history.push(`/noun/${nounId}`);
+  };
+
   const { image, description } = getNoun(nounId, seed);
 
   const noun = <Noun imgPath={image} alt={description} />;
   const nounWithLink = (
-    <Link to={'/noun/' + nounId.toString()} className={classes.clickableNoun}>
+    <Link
+      to={'/noun/' + nounId.toString()}
+      className={classes.clickableNoun}
+      onClick={onClickHandler}
+    >
       {noun}
     </Link>
   );

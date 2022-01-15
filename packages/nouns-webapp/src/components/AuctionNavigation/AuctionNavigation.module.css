@@ -1,47 +1,86 @@
 .navArrowsContainer {
   position: absolute;
-  margin-top: 0.3rem;
-  margin-left: 12.35rem;
 }
 
-.leftArrow {
-  margin-left: 1rem;
-  display: inline-block;
-  width: 2rem;
-  height: 2rem;
-  border: none;
-  background-color: #6db3f2;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-color: transparent;
-  font-size: xx-large;
-}
-.rightArrow {
-  margin-left: 1rem;
-  margin-left: 0.6rem;
+.leftArrowCool {
   display: inline-block;
   width: 2rem;
   height: 2rem;
   border: none;
   background-size: contain;
   background-repeat: no-repeat;
-  background-color: transparent;
-  font-size: xx-large;
-}
-.leftArrow:hover,
-.rightArrow:hover {
-  opacity: 0.9;
-}
-.leftArrow:disabled,
-.rightArrow:disabled {
-  opacity: 0.5;
+  font-size: large;
+  border-radius: 50%;
+  color: var(--brand-cool-dark-text);
+  background-color: var(--brand-cool-accent);
+  font-weight: bold;
 }
 
-@media (max-width: 992px) {
-  .leftArrow {
-    margin-left: 1rem;
+.rightArrowCool {
+  margin-left: 0.3rem;
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  background-size: contain;
+  background-repeat: no-repeat;
+  font-size: large;
+  color: var(--brand-cool-dark-text);
+  background-color: var(--brand-cool-accent);
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+.leftArrowWarm {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  background-size: contain;
+  background-repeat: no-repeat;
+  font-size: large;
+  border-radius: 50%;
+  color: var(--brand-warm-dark-text);
+  background-color: var(--brand-warm-accent);
+  font-weight: bold;
+}
+
+.rightArrowWarm {
+  margin-left: 0.3rem;
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  background-size: contain;
+  background-repeat: no-repeat;
+  font-size: large;
+  color: var(--brand-warm-dark-text);
+  background-color: var(--brand-warm-accent);
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+/* Disable hover on mobile because it was leading to
+buttons looking disabled when they were not */
+@media (min-width: 992px) {
+
+  .leftArrowWarm:hover,
+  .leftArrowCool:hover,
+  .rightArrowWarm:hover,
+  .rightArrowCool:hover {
+    opacity: 0.9;
+    background-color: var(--brand-gray-hover);
   }
 }
+
+.leftArrowWarm:disabled,
+.leftArrowCool:disabled,
+.rightArrowWarm:disabled,
+.rightArrowCool:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 @-moz-document url-prefix() {
   .navArrowsContainer {
     margin-top: 0;

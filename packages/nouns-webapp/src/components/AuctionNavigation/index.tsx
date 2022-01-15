@@ -1,5 +1,6 @@
 import React from 'react';
 import classes from './AuctionNavigation.module.css';
+import { useAppSelector } from '../../hooks';
 
 const AuctionNavigation: React.FC<{
   isFirstAuction: boolean;
@@ -8,18 +9,19 @@ const AuctionNavigation: React.FC<{
   onNextAuctionClick: () => void;
 }> = props => {
   const { isFirstAuction, isLastAuction, onPrevAuctionClick, onNextAuctionClick } = props;
+  const isCool = useAppSelector(state => state.application.stateBackgroundColor) === '#d5d7e1';
   return (
     <div className={classes.navArrowsContainer}>
       <button
         onClick={() => onPrevAuctionClick()}
-        className={classes.leftArrow}
+        className={isCool ? classes.leftArrowCool : classes.leftArrowWarm}
         disabled={isFirstAuction}
       >
         ←
       </button>
       <button
         onClick={() => onNextAuctionClick()}
-        className={classes.rightArrow}
+        className={isCool ? classes.rightArrowCool : classes.rightArrowWarm}
         disabled={isLastAuction}
       >
         →

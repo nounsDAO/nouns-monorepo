@@ -1,0 +1,43 @@
+diff a/packages/nouns-webapp/src/components/AuctionActivity/index.tsx b/packages/nouns-webapp/src/components/AuctionActivity/index.tsx	(rejected hunks)
+@@ -1,24 +1,26 @@
+ import { Auction } from '../../wrappers/nounsAuction';
+-import { useState, useEffect } from 'react';
+-import BigNumber from 'bignumber.js';
+-import { Row, Col } from 'react-bootstrap';
+-import classes from './AuctionActivity.module.css';
+-import bidHistoryClasses from './BidHistory.module.css';
+-import Bid from '../Bid';
+-import AuctionTimer from '../AuctionTimer';
+-import CurrentBid from '../CurrentBid';
+-import Winner from '../Winner';
+-import BidHistory from '../BidHistory';
++import { buildEtherscanAddressLink } from '../../utils/etherscan';
+ import { Modal } from 'react-bootstrap';
+-import AuctionNavigation from '../AuctionNavigation';
++import { Row, Col } from 'react-bootstrap';
++import { useAppSelector } from '../../hooks';
++import { useState, useEffect } from 'react';
++import AuctionActivityDateHeadline from '../AuctionActivityDateHeadline';
++import AuctionActivityNounTitle from '../AuctionActivityNounTitle';
+ import AuctionActivityWrapper from '../AuctionActivityWrapper';
++import AuctionNavigation from '../AuctionNavigation';
++import AuctionTimer from '../AuctionTimer';
+ import AuctionTitleAndNavWrapper from '../AuctionTitleAndNavWrapper';
+-import AuctionActivityNounTitle from '../AuctionActivityNounTitle';
+-import AuctionActivityDateHeadline from '../AuctionActivityDateHeadline';
++import Bid from '../Bid';
++import BidHistory from '../BidHistory';
+ import BidHistoryBtn from '../BidHistoryBtn';
+-import StandaloneNoun from '../StandaloneNoun';
++import bidHistoryClasses from './BidHistory.module.css';
++import BigNumber from 'bignumber.js';
++import classes from './AuctionActivity.module.css';
+ import config from '../../config';
+-import { buildEtherscanAddressLink } from '../../utils/etherscan';
++import CurrentBid from '../CurrentBid';
++import NounInfoCard from '../../components/NounInfoCard';
++import StandaloneNoun from '../StandaloneNoun';
++import Winner from '../Winner';
+ 
+ const openEtherscanBidHistory = () => {
+   const url = buildEtherscanAddressLink(config.addresses.nounsAuctionHouseProxy);

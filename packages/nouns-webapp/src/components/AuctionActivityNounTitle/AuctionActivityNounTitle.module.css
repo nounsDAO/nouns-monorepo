@@ -1,23 +1,15 @@
-.nounTitle {
-  color: black;
-}
-
-.nounTitle a:link {
-  color: black;
-}
-
-.nounTitle a:visited {
-  color: black;
-}
-
-.nounTitle a:hover {
-  color: black;
-}
-
-.nounTitle:active {
-  color: black;
-}
-
 .wrapper {
   display: inline-block;
+}
+
+.wrapper h1 {
+  font-family: 'Londrina Solid';
+  font-size: 54pt;
+  margin-bottom: 0px;
+}
+
+@media (max-width: 992px) {
+  .wrapper h1 {
+    font-size: 56px;
+  }
 }

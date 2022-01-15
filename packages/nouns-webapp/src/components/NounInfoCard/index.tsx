@@ -19,18 +19,21 @@ import { useDispatch } from 'react-redux';
 
 interface NounInfoCardProps {
   nounId: number;
+  bidHistoryOnClickHandler?: () => void;
 }
 
 const NounInfoCard: React.FC<NounInfoCardProps> = props => {
-  const { nounId } = props;
+  const { nounId, bidHistoryOnClickHandler } = props;
   const history = useHistory();
   const dispatch = useDispatch();
 
   const etherscanBaseURL = buildEtherscanAddressLink(config.addresses.nounsToken);
-  const bidHistoryButtonClickHandler = () => {
-    dispatch(setOnDisplayAuctionNounId(nounId));
-    history.push(`/auction/${nounId}`);
-  };
+  const bidHistoryButtonClickHandler = bidHistoryOnClickHandler
+    ? bidHistoryOnClickHandler
+    : () => {
+        dispatch(setOnDisplayAuctionNounId(nounId));
+        history.push(`/noun/${nounId}`);
+      };
   // eslint-disable-next-line no-restricted-globals
   const etherscanButtonClickHandler = () => (location.href = `${etherscanBaseURL}/${nounId}`);
 
@@ -38,12 +41,6 @@ const NounInfoCard: React.FC<NounInfoCardProps> = props => {
 
   return (
     <>
-      <Col lg={12}>
-        <div className={classes.nounInfoHeader}>
-          <h3>Profile</h3>
-          <h2>Noun {nounId}</h2>
-        </div>
-      </Col>
       <Col lg={12} className={classes.nounInfoRow}>
         <NounInfoRowBirthday nounId={nounId} />
       </Col>

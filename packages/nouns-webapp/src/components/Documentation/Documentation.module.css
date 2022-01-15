@@ -17,6 +17,10 @@
   border: none;
 }
 
+.aboutText {
+  margin: 0px !important;
+}
+
 .accordionItem,
 .headerWrapper {
   font-size: 1.3rem;
@@ -35,6 +39,7 @@
   line-height: normal;
   padding-top: 0;
   padding-bottom: 0;
+  padding-left: 0;
 }
 .accordionHeader button:not(.collapsed) {
   color: #212529;

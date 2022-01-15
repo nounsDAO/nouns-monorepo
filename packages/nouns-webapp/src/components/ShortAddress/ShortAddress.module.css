@@ -1,6 +1,10 @@
 .shortAddress {
   display: flex;
-  flex-direction: row;
-  column-gap: 0.25rem;
+  flex-flow: row nowrap;
+  gap: 6px;
   align-items: center;
+}
+
+.shortAddress > div {
+  padding-top: -2px;
 }

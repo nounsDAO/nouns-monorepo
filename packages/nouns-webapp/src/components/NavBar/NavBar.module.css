@@ -7,14 +7,17 @@
 .connectBtn {
   cursor: pointer;
 }
+
 .connectBtn:hover,
 .connectBtn:active,
 .connectBtn:focus {
   cursor: pointer !important;
 }
+
 .disconnectBtn {
   cursor: pointer;
 }
+
 .disconnectBtn:hover,
 .disconnectBtn:active,
 .disconnectBtn:focus {
@@ -22,21 +25,26 @@
 }
 
 .greenStatusCircle {
-  display: inline-block;
+  display: relative;
   width: 10px;
   height: 10px;
   background-color: #7fc59c;
   border-radius: 50%;
-  margin-right: 5px;
+  margin-right: -30px;
+  margin-left: 20px;
+  margin-top: -20px;
+  z-index: 3;
 }
 
 .nounsNavLink,
 .nounsNavLink:active,
 .nounsNavLink:visited {
-  font-size: 0.9rem;
+  font-family: 'PT Root UI Medium' !important;
+  font-size: 16px;
   padding: 0.5rem 0.8rem !important;
   color: var(--brand-black) !important;
 }
+
 .nounsNavLink:hover {
   color: var(--brand-dark-red) !important;
 }

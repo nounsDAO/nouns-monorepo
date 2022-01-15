@@ -3,6 +3,9 @@ import { BigNumber as EthersBN, utils } from 'ethers';
 import { NounsAuctionHouseABI } from '@nouns/sdk';
 import config from '../config';
 import BigNumber from 'bignumber.js';
+import { isNounderNoun } from '../utils/nounderNoun';
+import { useAppSelector } from '../hooks';
+import { AuctionState } from '../state/slices/auction';
 
 export enum AuctionHouseContractFunction {
   auction = 'auction',
@@ -47,4 +50,20 @@ export const useAuctionMinBidIncPercentage = () => {
   }
 
   return new BigNumber(minBidIncrement[0]);
+};
+
+// Nouns can vote when the auction for the next noun starts
+export const useNounCanVoteTimestamp = (nounId: number) => {
+  const nextNounId = nounId + 1;
+
+  const nextNounIdForQuery = isNounderNoun(EthersBN.from(nextNounId)) ? nextNounId + 1 : nextNounId;
+
+  const pastAuctions = useAppSelector(state => state.pastAuctions.pastAuctions);
+
+  return EthersBN.from(
+    pastAuctions.find((auction: AuctionState, i: number) => {
+      const maybeNounId = auction.activeAuction?.nounId;
+      return maybeNounId ? EthersBN.from(maybeNounId).eq(EthersBN.from(nextNounIdForQuery)) : false;
+    })?.activeAuction?.startTime,
+  );
 };

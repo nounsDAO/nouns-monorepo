@@ -3,8 +3,8 @@ import { useEthers } from '@usedapp/core';
 import Davatar from '@davatar/react';
 import classes from './ShortAddress.module.css';
 
-const ShortAddress: React.FC<{ address: string; avatar?: boolean }> = props => {
-  const { address, avatar } = props;
+const ShortAddress: React.FC<{ address: string; avatar?: boolean; size?: number }> = props => {
+  const { address, avatar, size = 28 } = props;
   const { library: provider } = useEthers();
 
   const ens = useReverseENSLookUp(address);
@@ -15,10 +15,12 @@ const ShortAddress: React.FC<{ address: string; avatar?: boolean }> = props => {
       <div className={classes.shortAddress}>
         {avatar && (
           <div key={address}>
-            <Davatar size={24} address={address} provider={provider} />
+            <Davatar size={size} address={address} provider={provider} />
           </div>
         )}
-        {ens ? ens : shortAddress}
+        <span style={{ letterSpacing: '0.2px', fontFamily: 'PT Root UI Bold' }}>
+          {ens ? ens : shortAddress}
+        </span>
       </div>
     );
   }

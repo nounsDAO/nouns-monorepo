@@ -6,9 +6,9 @@ import Link from '../Link';
 
 const Documentation = () => {
   const cryptopunksLink = (
-    <Link text="Cryptopunks" url="https://www.larvalabs.com/cryptopunks" leavesPage={true} />
+    <Link text="CryptoPunks" url="https://www.larvalabs.com/cryptopunks" leavesPage={true} />
   );
-  const playgroundLink = <Link text="nouns playground" url="/playground" leavesPage={false} />;
+  const playgroundLink = <Link text="Playground" url="/playground" leavesPage={false} />;
   const publicDomainLink = (
     <Link
       text="public domain"
@@ -24,15 +24,14 @@ const Documentation = () => {
       <Col lg={{ span: 10, offset: 1 }}>
         <div className={classes.headerWrapper}>
           <h1>WTF?</h1>
-          <p>
+          <p className={classes.aboutText}>
             Nouns are an experimental attempt to improve the formation of on-chain avatar
             communities. While projects such as {cryptopunksLink} have attempted to bootstrap
             digital community and identity, Nouns attempt to bootstrap identity, community,
-            governance and a treasury that can be used by the community.
+            governance, and a treasury that can be used by the community.
           </p>
-          <p>
-            Learn more about on-chain nouns below, or make some off-chain nouns using{' '}
-            {playgroundLink}.
+          <p className={classes.aboutText} style={{paddingBottom: "4rem"}}>
+            Learn more below, or start creating Nouns off-chain using the {playgroundLink}.
           </p>
         </div>
         <Accordion flush>
@@ -60,14 +59,14 @@ const Documentation = () => {
           <Accordion.Item eventKey="1" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>Daily Auctions</Accordion.Header>
             <Accordion.Body>
-              <p>
+              <p className={classes.aboutText}>
                 The Nouns Auction Contract will act as a self-sufficient noun generation and
                 distribution mechanism, auctioning one noun every 24 hours, forever. 100% of auction
                 proceeds (ETH) are automatically deposited in the Nouns DAO treasury, where they are
                 governed by noun owners.
               </p>
 
-              <p>
+              <p className={classes.aboutText}>
                 Each time an auction is settled, the settlement transaction will also cause a new
                 noun to be minted and a new 24 hour auction to begin.{' '}
               </p>

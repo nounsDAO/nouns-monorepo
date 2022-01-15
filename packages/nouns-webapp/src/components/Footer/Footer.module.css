@@ -7,20 +7,25 @@
 }
 .footerSignature {
   margin: auto auto 0 auto;
-  font-family: 'Londrina Solid';
-  font-size: 1rem;
-  text-align: center;
-  padding: 1rem 0;
+  font-family: 'PT Root UI Medium' !important;
+  font-size: 18px;
+  padding-bottom: 4rem;
+  padding-top: 2rem;
+  color: var(--brand-black) !important;
 }
+
 .footerSignature a {
   text-decoration: none;
   color: black;
-  margin: 0 5px;
+  margin: 0 14px;
+  transition: all 0.15s ease-in-out;
 }
+
 .footerSignature a:hover {
-  text-decoration: underline;
-  animation-name: slidein;
+  text-decoration: none;
+  font-weight: bold;
 }
+
 .footerSignature img {
   width: 32px;
   height: 32px;

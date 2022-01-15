@@ -1,7 +1,27 @@
-.nounHolderEtherscanLink {
+.nounHolderEtherscanLinkCool {
   font-family: 'PT Root UI Bold';
-  color: '#4965F0';
+  color: var(--brand-color-blue);
   margin-left: 5px;
+  text-decoration: none;
+  transition: all 0.15s ease-in-out;
+}
+
+.nounHolderEtherscanLinkWarm {
+  font-family: 'PT Root UI Bold';
+  color: var(--brand-color-red);
+  margin-left: 5px;
+  text-decoration: none;
+  transition: all 0.15s ease-in-out;
+}
+
+.nounHolderEtherscanLinkWarm:hover {
+  color: var(--brand-color-red) !important;
+  filter: brightness(110%);
+}
+
+.nounHolderEtherscanLinkCool:hover {
+  color: var(--brand-color-blue) !important;
+  filter: brightness(110%);
 }
 
 .nounHolderInfoContainer {

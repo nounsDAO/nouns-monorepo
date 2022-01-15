@@ -46,6 +46,8 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
     displayGraphDepComps,
   } = props;
 
+  const isCool = useAppSelector(state => state.application.stateBackgroundColor) === '#d5d7e1';
+
   const [auctionEnded, setAuctionEnded] = useState(false);
   const [auctionTimer, setAuctionTimer] = useState(false);
 
@@ -112,11 +114,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
       <AuctionActivityWrapper>
         <div className={classes.informationRow}>
           <Row className={classes.activityRow}>
-            <Col lg={12}>
-              <AuctionActivityDateHeadline startTime={auction.startTime} />
-            </Col>
             <AuctionTitleAndNavWrapper>
-              <AuctionActivityNounTitle nounId={auction.nounId} />
               {displayGraphDepComps && (
                 <AuctionNavigation
                   isFirstAuction={isFirstAuction}
@@ -126,15 +124,19 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
                 />
               )}
             </AuctionTitleAndNavWrapper>
+            <AuctionActivityDateHeadline startTime={auction.startTime} />
+            <Col lg={12}>
+              <AuctionActivityNounTitle isCool={isCool} nounId={auction.nounId} />
+            </Col>
           </Row>
           <Row className={classes.activityRow}>
-            <Col lg={5} className={classes.currentBidCol}>
+            <Col lg={4} className={classes.currentBidCol}>
               <CurrentBid
                 currentBid={new BigNumber(auction.amount.toString())}
                 auctionEnded={auctionEnded}
               />
             </Col>
-            <Col lg={5} className={classes.auctionTimerCol}>
+            <Col lg={6} className={classes.auctionTimerCol}>
               {auctionEnded ? (
                 <Winner winner={auction.bidder} />
               ) : (
@@ -164,16 +166,24 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
         )}
         <Row className={classes.activityRow}>
           <Col lg={12}>
-            {displayGraphDepComps && (
-              <BidHistory
-                auctionId={auction.nounId.toString()}
-                max={3}
-                classes={bidHistoryClasses}
+            {!isLastAuction ? (
+              <NounInfoCard
+                nounId={auction.nounId.toNumber()}
+                bidHistoryOnClickHandler={showBidModalHandler}
               />
+            ) : (
+              displayGraphDepComps && (
+                <BidHistory
+                  auctionId={auction.nounId.toString()}
+                  max={3}
+                  classes={bidHistoryClasses}
+                />
+              )
             )}
             {/* If no bids, show nothing. If bids avail:graph is stable? show bid history modal,
             else show etherscan contract link */}
-            {!auction.amount.eq(0) &&
+            {isLastAuction &&
+              !auction.amount.eq(0) &&
               (displayGraphDepComps ? (
                 <BidHistoryBtn onClick={showBidModalHandler} />
               ) : (

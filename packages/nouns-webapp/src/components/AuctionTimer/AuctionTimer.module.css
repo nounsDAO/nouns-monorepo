@@ -1,13 +1,31 @@
 .title {
-  margin-bottom: 0.5rem;
+  font-family: 'PT Root UI';
+  font-size: 18px;
+  margin-bottom: 0;
 }
 
 .timerWrapper {
   display: flex;
 }
 
+.timerSection span {
+  font-family: 'PT Root UI Bold';
+  font-weight: bold;
+  font-size: 32px;
+}
+
 .timerSection {
   margin-right: 0.5rem;
+}
+
+.timerSectionFinal {
+  margin-right: 0.5rem;
+}
+
+.timerSectionFinal span {
+  font-family: 'PT Root UI Bold';
+  font-weight: bold;
+  font-size: 32px;
 }
 
 .small {
@@ -26,4 +44,42 @@
 
 .auctionTimerSection {
   cursor: pointer;
+  margin-top: 6px;
+  margin-left: 6px;
+}
+
+.leftCol h4 {
+  font-family: 'PT Root UI Bold';
+}
+
+@media (max-width: 992px) {
+  .timerSection span {
+    font-size: 23px;
+  }
+
+  .timerSectionFinal span {
+    font-size: 23px;
+  }
+
+  .title {
+    font-size: 18px;
+    margin-top: 1.25rem;
+  }
+
+  .section {
+    justify-content: space-between;
+  }
+
+  .wrapper {
+    padding-left: 0.5rem;
+    padding-right: 2rem;
+  }
+
+  .leftCol {
+    padding-left: 0rem;
+  }
+
+  .timerSectionFinal {
+    margin-right: 0rem !important;
+  }
 }

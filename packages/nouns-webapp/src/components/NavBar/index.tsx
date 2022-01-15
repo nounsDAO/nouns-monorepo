@@ -41,7 +41,9 @@ const NavBar = () => {
       <Nav.Item>
         <Nav.Link className={clsx(classes.nounsNavLink, classes.addressNavLink)} disabled>
           <span className={classes.greenStatusCircle} />
-          <span>{activeAccount && <ShortAddress address={activeAccount} avatar={true} />}</span>
+          <span>
+            {activeAccount && <ShortAddress size={40} address={activeAccount} avatar={true} />}
+          </span>
         </Nav.Link>
       </Nav.Item>
       <Nav.Item>
@@ -53,7 +55,7 @@ const NavBar = () => {
             setShowConnectModal(false);
           }}
         >
-          DISCONNECT
+          Sign Out
         </Nav.Link>
       </Nav.Item>
     </>
@@ -65,7 +67,7 @@ const NavBar = () => {
         className={clsx(classes.nounsNavLink, classes.connectBtn)}
         onClick={showModalHandler}
       >
-        CONNECT WALLET
+        Connect
       </Nav.Link>
     </>
   );
@@ -80,15 +82,18 @@ const NavBar = () => {
       {showConnectModal && activeAccount === undefined && (
         <WalletConnectModal onDismiss={hideModalHandler} />
       )}
-      <Navbar expand="lg" style={{ backgroundColor: `${useStateBg ? stateBgColor : ''}` }}>
+      <Navbar
+        expand="lg"
+        style={{ backgroundColor: `${useStateBg ? stateBgColor : ''}`, padding: '2rem 0rem' }}
+      >
         <Container>
           <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
             <img
               src={logo}
-              width="85"
-              height="85"
+              width="72"
+              height="72"
               className="d-inline-block align-middle"
-              alt="Nouns DAO logo"
+              alt="Nouns logo"
             />
           </Navbar.Brand>
           {Number(CHAIN_ID) !== 1 && (
@@ -107,7 +112,10 @@ const NavBar = () => {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  TREASURY Ξ {Number(utils.formatEther(treasuryBalance)).toFixed(0)}
+                  Treasury{' '}
+                  <strong style={{ letterSpacing: '0.8px' }}>
+                    Ξ {Number(utils.formatEther(treasuryBalance)).toFixed(0)}
+                  </strong>
                 </Nav.Link>
               )}
             </Nav.Item>
@@ -120,7 +128,7 @@ const NavBar = () => {
               target="_blank"
               rel="noreferrer"
             >
-              DOCS
+              Explore
             </Nav.Link>
             <Nav.Link
               href={externalURL(ExternalURL.discourse)}
@@ -128,10 +136,10 @@ const NavBar = () => {
               target="_blank"
               rel="noreferrer"
             >
-              DISCOURSE
+              Forums
             </Nav.Link>
             <Nav.Link as={Link} to="/playground" className={classes.nounsNavLink}>
-              PLAYGROUND
+              Playground
             </Nav.Link>
             {activeAccount ? connectedContent : disconnectedContent}
           </Navbar.Collapse>

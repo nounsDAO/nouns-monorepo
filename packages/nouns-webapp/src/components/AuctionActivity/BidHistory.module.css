@@ -8,52 +8,105 @@
   list-style-type: none;
   row-gap: 0.5rem;
   padding: 0;
+  margin-bottom: 8px;
 }
 
-.bidRow {
-  background-color: rgba(255, 255, 255, 0.3);
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
+.bidRowCool {
+  background-color: var(--brand-cool-accent);
+  font-family: 'PT Root UI', sans-serif;
+  padding: 0.5rem 0.75rem;
+  border-radius: 12px;
   border-bottom: 1px solid rgba(211, 211, 211, 0.322);
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: bold;
+  transition: all 0.2s ease-in-out;
 }
+
+.bidRowWarm {
+  background-color: var(--brand-warm-accent);
+  font-family: 'PT Root UI', sans-serif;
+  padding: 0.5rem 0.75rem;
+  border-radius: 12px;
+  border-bottom: 1px solid rgba(211, 211, 211, 0.322);
+  font-size: 0.95rem;
+  font-weight: bold;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+}
+
+.bidRowWarm a {
+  color: var(--brand-color-red) !important;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.bidRowCool a {
+  color: var(--brand-color-blue) !important;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.bidRowWarm a:hover, .bidRowCool a:hover {
+  filter: brightness(110%);
+}
+
+.bidRow:hover {
+  filter: brightness(102%);
+}
+
 .bidItem {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 .leftSectionWrapper {
   display: flex;
   flex-direction: column;
 }
-.bidder {
-  color: var(--brand-black);
+
+.bidder>div>div {
+  color: var(--brand-cool-dark-text);
+  font-family: 'PT Root UI Bold';
+  font-size: 18px;
 }
+
 .bidDate {
   display: none;
   color: gray;
 }
+
 .rightSectionWrapper {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
 }
+
 .bidAmount {
-  color: var(--brand-black);
+  color: var(--brand-cool-dark-text);
+  font-family: 'PT Root UI Bold';
   margin-right: 1rem;
+  font-size: 18px;
+  padding-top: 2px;
 }
-.linkSymbol,
-.linkSymbol a {
-  color: var(--brand-black);
+
+.linkSymbol {
+  color: var(--brand-cool-light-text);
 }
-.linkSymbol a:hover {
-  color: gray;
+
+.linkSymbol:hover {
+  color: var(--brand-cool-dark-text);
 }
 
 @media (max-width: 992px) {
   .bidRow {
-    border-radius: 0px;
+    border-radius: 10px;
+  }
+
+  .bidAmount .linkSymbol .bidder {
+    font-size: 16px;
   }
 }

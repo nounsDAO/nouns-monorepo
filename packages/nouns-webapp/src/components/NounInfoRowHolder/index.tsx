@@ -10,13 +10,15 @@ import config from '../../config';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import ShortAddress from '../ShortAddress';
 
+import { useAppSelector } from '../../hooks';
+
 interface NounInfoRowHolderProps {
   nounId: number;
 }
 
 const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
   const { nounId } = props;
-
+  const isCool = useAppSelector(state => state.application.stateBackgroundColor) === '#d5d7e1';
   const { loading, error, data } = useQuery(nounQuery(nounId.toString()));
 
   const etherscanURL = buildEtherscanAddressLink(data && data.noun.owner.id);
@@ -37,7 +39,9 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
       <span>Held by</span>
       <span>
         <a
-          className={classes.nounHolderEtherscanLink}
+          className={
+            isCool ? classes.nounHolderEtherscanLinkCool : classes.nounHolderEtherscanLinkWarm
+          }
           href={etherscanURL}
           target={'_blank'}
           rel="noreferrer"

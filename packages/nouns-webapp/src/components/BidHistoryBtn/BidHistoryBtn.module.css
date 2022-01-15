@@ -1,15 +1,82 @@
 .bidHistoryWrapper {
+  background-color: var(--brand-cool-accent);
   display: flex;
-}
-.bidHistory {
-  margin-left: 0.5rem;
-  color: var(--brand-black);
-  font-weight: normal;
-  font-size: 1rem;
+  border-radius: 10px !important;
+  justify-content: center;
   cursor: pointer;
+  transition: all 0.2s ease-in-out;
 }
 
-.bidHistory:hover {
-  color: var(--brand-dark-red);
+.bidHistoryWrapperCool {
+  background-color: var(--brand-cool-accent);
+  display: flex;
+  border-radius: 10px !important;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.bidHistoryWrapperWarm {
+  background-color: var(--brand-warm-accent);
+  display: flex;
+  border-radius: 10px !important;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.bidHistory {
+  margin-left: 0.5rem;
+  color: var(--brand-color-cool);
+  font-family: 'PT Root UI Bold';
+  font-size: 1rem;
+  font-size: 16px;
+  padding: 0.5rem 1rem;
+}
+
+.bidHistoryWarm {
+  margin-left: 0.5rem;
+  color: var(--brand-color-red);
+  font-family: 'PT Root UI Bold';
+  font-size: 1rem;
+  font-size: 16px;
+  padding: 0.5rem 1rem;
+}
+
+.bidHistoryCool {
+  margin-left: 0.5rem;
+  color: var(--brand-color-blue);
+  font-family: 'PT Root UI Bold';
+  font-size: 1rem;
+  font-size: 16px;
+  padding: 0.5rem 1rem;
+}
+
+.bidHistoryWarm, .bidHistoryCool {
   text-decoration: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.bidHistoryWarm:hover {
+  filter: brightness(110%);
+  color: var(--brand-color-red);
+}
+
+.bidHistoryCool:hover {
+  filter: brightness(110%);
+  color: var(--brand-color-blue);
+}
+
+.bidHistoryWrapperWarm:hover {
+  background: var(--brand-warm-accent);
+  filter: brightness(110%);
+}
+
+.bidHistoryWrapperCool:hover {
+  background: var(--brand-cool-accent);
+  filter: brightness(110%);
+}
+
+.bidHistoryWrapper:hover {
+  background-color: var(--brand-gray-hover);
 }

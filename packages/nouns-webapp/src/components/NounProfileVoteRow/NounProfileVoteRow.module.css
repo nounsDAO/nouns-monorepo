@@ -1,6 +1,8 @@
 .voteIcon {
-  width: 41px;
-  margin-right: 5px;
+  width: 38px;
+  margin-right: 0px;
+  margin-bottom: 4px;
+  margin-left: 6px;
 }
 
 .voteInfoContainer {
@@ -25,10 +27,18 @@
 
 .voteInfoRow {
   cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.voteInfoRow:hover {
+  --bs-table-hover-bg: rgba(0,0,0,0.03);
 }
 
 .voteStatusWrapper {
-  width: 71px;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .nullStateCopy:hover {
