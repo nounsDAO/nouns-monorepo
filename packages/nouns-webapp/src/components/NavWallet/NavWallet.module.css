@@ -23,11 +23,11 @@
 
 .arrowDown {
   margin-bottom: 0.25rem;
-  margin-left: 0.25rem;
+  margin-left: 0.5rem;
 }
 
 .arrowUp {
-  margin-left: 0.25rem;
+  margin-left: 0.5rem;
   margin-top: 0.5rem;
 }
 
@@ -111,6 +111,7 @@
   font-size: 0.9rem;
   padding: 0.3rem 0.3rem !important;
   color: var(--brand-black) !important;
+  transition: all 0.125s ease-in-out;
 }
 
 /* connect button displays differently to default NavBarItems, thus the !importants */

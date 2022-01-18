@@ -176,7 +176,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
           <div style={{
               fontFamily: "PT Root UI Bold",
               fontSize: "18px",
-              marginRight: '1.5rem',
+              marginRight: '2.25rem',
               marginTop: '1rem',
               height: '2rem'
           }} className="d-flex flex-row">
@@ -200,7 +200,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
   );
 
   const connectedContentDesktop = (
-    <Dropdown>
+    <Dropdown className={classes.nounsNavLink}>
       <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
         Custom toggle
       </Dropdown.Toggle>
