@@ -1,7 +1,4 @@
 import classes from './NavBarTreasury.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
-import { Container, Row } from 'react-bootstrap';
 import { NavBarButtonStyle } from '../NavBarButton';
 
 interface NavBarTreasuryProps {
@@ -29,17 +26,15 @@ const NavBarTreasury: React.FC<NavBarTreasuryProps> = props => {
   return (
     <div className={`${classes.wrapper} ${treasuryStyleClass}`}>
       <div className={classes.button}>
-        <div>
-          <Container className={classes.treasuryInfoWrapper}>
-            <Row className={classes.treasuryHeader}>Treasury</Row>
-            <Row className={classes.treasuryBalance}>
+          <div className='d-flex flex-row justify-content-around'>
+            <div className={classes.treasuryHeader}>
+              Treasury
+            </div>
+            <div className={classes.treasuryBalance}>
               Ξ {Number(treasuryBalance).toLocaleString('en-US')}
-            </Row>
-          </Container>
-        </div>
-        <div className={classes.icon}>
-          <FontAwesomeIcon icon={faQuestionCircle} />
-        </div>
+            </div>
+
+          </div>
       </div>
     </div>
   );

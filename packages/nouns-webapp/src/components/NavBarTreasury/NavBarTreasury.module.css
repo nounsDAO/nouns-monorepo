@@ -1,9 +1,11 @@
 .wrapper {
-  border-radius: 12px;
+  height: 40px;
+  border-radius: 10px;
   font-size: 16px;
   font-family: 'PT Root UI Bold';
-  padding: 2px 12px 4px 12px;
+  padding: 0px 10px 0px 10px;
   transition: all 0.125s ease-in-out;
+  box-shadow: none;
 }
 
 .button {
@@ -15,19 +17,10 @@
   width: 100%;
 }
 
-.icon {
-  margin-left: 1rem;
-  border-left: 1px solid #d5d7e0;
-  padding-left: 0.5rem;
-  color: #79809c;
-}
-
-.treasuryInfoWrapper {
-  margin-top: 0.25rem;
-}
-
 .treasuryHeader {
-  font-size: 12px;
+  font-size: 15px;
+  margin-left: 0.25rem;
+  margin-right: 0.4rem;
 }
 
 .warmInfo .icon {
@@ -38,10 +31,8 @@
 .treasuryBalance {
   font-size: 16px;
   letter-spacing: 0.5px;
-}
-
-.icon {
-  padding-top: 2px;
+  margin-left: 0.4rem;
+  margin-right: 0.25rem;
 }
 
 .warmInfo .treasuryBalance {
