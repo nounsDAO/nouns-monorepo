@@ -83,7 +83,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
           onClick(e);
         }}
       >
-        <div className={classes.button} onClick={() => setButtonUp(!buttonUp)}>
+        <div className={classes.button}>
           <div className={classes.icon}>
             {' '}
             <Davatar size={21} address={address} provider={provider} />
@@ -200,11 +200,8 @@ const NavWallet: React.FC<NavWalletProps> = props => {
   );
 
   const connectedContentDesktop = (
-    <Dropdown className={classes.nounsNavLink}>
-      <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
-        Custom toggle
-      </Dropdown.Toggle>
-
+    <Dropdown className={classes.nounsNavLink} onToggle={() => setButtonUp(!buttonUp)}>
+      <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components"  />
       <Dropdown.Menu
         style={{
           borderRadius: '12px',
