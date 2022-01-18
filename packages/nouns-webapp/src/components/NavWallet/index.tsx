@@ -124,7 +124,82 @@ const NavWallet: React.FC<NavWalletProps> = props => {
     </>
   );
 
-  const connectedContent = (
+  const connectedContent = () => {
+    if(window.innerWidth < 992) {
+        return connectedContentMobile;
+    }
+    return connectedContentDesktop;
+   };
+
+  const mobileTextColor = () => {
+
+    if(!useStateBg) {
+        return 'rgba(140, 141, 146, 1)';
+    }
+    if (stateBgColor === greyBg) {
+        return 'rgba(121, 128, 156, 1)';
+    }
+    return 'rgba(142, 129, 127, 1)'
+  };
+
+
+  const mobileBorderColor = () => {
+
+    if(!useStateBg) {
+        return 'rgba(140, 141, 146, .5)';
+    }
+    if (stateBgColor === greyBg) {
+        return 'rgba(121, 128, 156, .5)';
+    }
+    return 'rgba(142, 129, 127, .5)'
+  };
+
+  const connectedContentMobile = (
+      <div className="d-flex flex-row justify-content-between">
+          <div style={{
+              marginLeft: '.25rem',
+              marginTop: '.3rem'
+          }}>
+                    <div
+                    className={`${classes.wrapper} ${variant()}`}
+                    >
+                    <div className={classes.button} >
+                    <div className={classes.icon}>
+                        {' '}
+                        <Davatar size={21} address={address} provider={provider} />
+                    </div>
+                    <div>{ens ? ens : shortAddress}</div>
+                    </div>
+                </div>  
+          </div>
+
+          <div style={{
+              fontFamily: "PT Root UI Bold",
+              fontSize: "18px",
+              marginRight: '1.5rem',
+              marginTop: '1rem',
+              height: '2rem'
+          }} className="d-flex flex-row">
+              <div style={{borderRight: `1px solid ${mobileBorderColor()}`, marginRight: '1rem', paddingRight: '1rem', color: mobileTextColor()}} onClick={() => {
+            setShowConnectModal(false);
+            deactivate();
+            setShowConnectModal(false);
+            setShowConnectModal(true);
+          }}>
+                  Swtich
+              </div>
+              <div style={{color: 'var(--brand-color-red)'}} onClick={() => {
+            setShowConnectModal(false);
+            deactivate();
+          }}>
+                  Disconnect
+              </div>
+          </div>
+      </div>
+
+  );
+
+  const connectedContentDesktop = (
     <Dropdown>
       <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
         Custom toggle
@@ -168,7 +243,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
       {showConnectModal && activeAccount === undefined && (
         <WalletConnectModal onDismiss={hideModalHandler} />
       )}
-      {activeAccount ? connectedContent : disconnectedContent}
+      {activeAccount ? connectedContent() : disconnectedContent}
     </>
   );
 };

@@ -102,3 +102,24 @@
     font-size: 18px;
   }
 }
+
+
+.nounsNavLink,
+.nounsNavLink:active,
+.nounsNavLink:visited {
+  font-family: 'PT Root UI Bold';
+  font-size: 0.9rem;
+  padding: 0.3rem 0.3rem !important;
+  color: var(--brand-black) !important;
+}
+
+/* connect button displays differently to default NavBarItems, thus the !importants */
+.connectBtn {
+  cursor: pointer;
+}
+
+.connectBtn:hover,
+.connectBtn:active,
+.connectBtn:focus {
+  cursor: pointer !important;
+}
