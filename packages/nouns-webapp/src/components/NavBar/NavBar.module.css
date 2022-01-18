@@ -1,12 +1,19 @@
 .navBarBrand {
   position: relative;
   z-index: 2;
+  padding: 1rem 0rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.navBarBrand:hover {
+  transform: scale(0.95);
 }
 
 /* connect button displays differently to default NavBarItems, thus the !importants */
 .connectBtn {
   cursor: pointer;
 }
+
 .connectBtn:hover,
 .connectBtn:active,
 .connectBtn:focus {
@@ -36,7 +43,7 @@
 .nounsNavLink:visited {
   font-family: 'PT Root UI Bold';
   font-size: 0.9rem;
-  padding: 0.5rem 0.3rem !important;
+  padding: 0.3rem 0.3rem !important;
   color: var(--brand-black) !important;
 }
 .nounsNavLink:hover {

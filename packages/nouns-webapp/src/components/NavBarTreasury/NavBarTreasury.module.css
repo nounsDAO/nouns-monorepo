@@ -1,8 +1,9 @@
 .wrapper {
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 16px;
   font-family: 'PT Root UI Bold';
-  padding: 0px 12px 0px 8px;
+  padding: 2px 12px 4px 12px;
+  transition: all 0.125s ease-in-out;
 }
 
 .button {
@@ -12,18 +13,17 @@
   justify-content: center;
   height: 100%;
   width: 100%;
-  padding-bottom: 0.25rem;
 }
 
 .icon {
-  margin-left: 1rem;
-  border-left: 1px solid #d5d7e0;
-  padding-left: 0.5rem;
-  color: #79809c;
+  margin-left: 1.0rem;
+  border-left: 1px solid #D5D7E0;
+  padding-left: .5rem;
+  color: #79809C;
 }
 
 .treasuryInfoWrapper {
-  margin-top: 0.25rem;
+  margin-top: .25rem;
 }
 
 .treasuryHeader {
@@ -31,21 +31,25 @@
 }
 
 .warmInfo .icon {
-  color: #b6a9a7;
-  border-left: 1px solid #e1d7d5;
+  color: #B6A9A7;
+  border-left: 1px solid #E1D7D5;
 }
 
 .treasuryBalance {
-  font-size: 15px;
-  color: black;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+}
+
+.icon {
+  padding-top: 2px;
 }
 
 .warmInfo .treasuryBalance {
-  color: #221b1a;
+  color: #221B1A;
 }
 
 .coolInfo .treasuryBalance {
-  color: #151c3b;
+  color: #151C3B;
 }
 
 .button:hover {
@@ -53,8 +57,8 @@
 }
 
 .coolInfo {
-  color: #79809c;
-  background-color: #e9ebf3;
+  color: #79809C;
+  background-color: #E9EBF3;
 }
 
 .coolInfo:hover {
@@ -63,22 +67,11 @@
 }
 
 .warmInfo {
-  color: #b6a9a7;
-  background-color: #fdf9f9;
+  color: #B6A9A7;
+  background-color: #FDF9F9;
 }
 
 .warmInfo:hover {
   background-color: white;
-  color: black;
-}
-
-.whiteInfo {
-  background-color: white;
-  border: 1px solid #e2e3e8;
-  color: #79809c;
-}
-
-.whiteInfo:hover {
-  background-color: #e2e3e8;
   color: black;
 }

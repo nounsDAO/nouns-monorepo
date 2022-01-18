@@ -104,34 +104,46 @@ const NavBar = () => {
       )}
       <Navbar expand="lg" style={{ backgroundColor: `${useStateBg ? stateBgColor : ''}` }}>
         <Container>
-          <Navbar.Brand className={classes.navBarBrand}>
-            <div className="d-flex justify-content-between align-items-center ">
-              <Link to={'/'}>
-                <img
-                  src={logo}
-                  width="85"
-                  height="85"
-                  className="d-inline-block align-middle"
-                  alt="Nouns DAO logo"
-                />
-              </Link>
-              {treasuryBalance && (
-                <Nav.Link href={daoEtherscanLink} target="_blank" rel="noreferrer">
+        <div
+            style={{
+              display: 'flex',
+              flexFlow: 'row nowrap',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
+              <img
+                src={logo}
+                width="75"
+                height="75"
+                className="d-inline-block align-middle"
+                alt="Nouns DAO logo"
+              />
+            </Navbar.Brand>
+            {Number(CHAIN_ID) !== 1 && (
+              <Nav.Item>
+                <img className={classes.testnetImg} src={testnetNoun} alt="testnet noun" />
+                TESTNET
+              </Nav.Item>
+            )}
+            <Nav.Item>
+              {treasuryBalance && useStateBg && (
+                <Nav.Link
+                  href={daoEtherscanLink}
+                  className={classes.nounsNavLink}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   <NavBarTreasury
                     treasuryBalance={Number(utils.formatEther(treasuryBalance)).toFixed(0)}
                     treasuryStyle={nonWalletButtonStyle}
                   />
                 </Nav.Link>
               )}
-            </div>
-          </Navbar.Brand>
-          {Number(CHAIN_ID) !== 1 && (
-            <Nav.Item>
-              <img className={classes.testnetImg} src={testnetNoun} alt="testnet noun" />
-              TESTNET
             </Nav.Item>
-          )}
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          </div> 
+          <Navbar.Toggle style={{borderRadius: "10px", height: "44px", padding: "0.25rem 0.5rem"}} id="mobileNav" aria-controls="basic-navbar-nav" />
           <Navbar.Collapse className="justify-content-end">
             <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>
               <NavBarButton
