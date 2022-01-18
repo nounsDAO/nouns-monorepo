@@ -21,6 +21,16 @@
   margin-right: 0.5rem;
 }
 
+.arrowDown {
+  margin-bottom: 0.25rem;
+  margin-left: 0.25rem;
+}
+
+.arrowUp {
+  margin-left: 0.25rem;
+  margin-top: 0.5rem;
+}
+
 .button:hover {
   cursor: pointer;
 }

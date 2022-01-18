@@ -1,15 +1,11 @@
 import { useAppSelector } from '../../hooks';
-import ShortAddress from '../ShortAddress';
 import classes from './NavBar.module.css';
 import logo from '../../assets/logo.svg';
-import { useState } from 'react';
-import { useEtherBalance, useEthers } from '@usedapp/core';
-import WalletConnectModal from '../WalletConnectModal';
+import { useEtherBalance } from '@usedapp/core';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Nav, Navbar, Container } from 'react-bootstrap';
 import testnetNoun from '../../assets/testnet-noun.png';
-import clsx from 'clsx';
 import config, { CHAIN_ID } from '../../config';
 import { utils } from 'ethers';
 import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
@@ -22,10 +18,10 @@ import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import NavBarTreasury from '../NavBarTreasury';
+import NavWallet from '../NavWallet';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
-  const { deactivate } = useEthers();
 
   const stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
   const history = useHistory();
@@ -33,38 +29,6 @@ const NavBar = () => {
   const lidoBalanceAsETH = useLidoBalance();
   const treasuryBalance = ethBalance && lidoBalanceAsETH && ethBalance.add(lidoBalanceAsETH);
   const daoEtherscanLink = buildEtherscanHoldingsLink(config.addresses.nounsDaoExecutor);
-
-  const [showConnectModal, setShowConnectModal] = useState(false);
-
-  const showModalHandler = () => {
-    setShowConnectModal(true);
-  };
-  const hideModalHandler = () => {
-    setShowConnectModal(false);
-  };
-
-  const connectedContent = (
-    <>
-      <Nav.Item>
-        <Nav.Link className={clsx(classes.nounsNavLink, classes.addressNavLink)} disabled>
-          <span className={classes.greenStatusCircle} />
-          <span>{activeAccount && <ShortAddress address={activeAccount} avatar={true} />}</span>
-        </Nav.Link>
-      </Nav.Item>
-      <Nav.Item>
-        <Nav.Link
-          className={clsx(classes.nounsNavLink, classes.disconnectBtn)}
-          onClick={() => {
-            setShowConnectModal(false);
-            deactivate();
-            setShowConnectModal(false);
-          }}
-        >
-          DISCONNECT
-        </Nav.Link>
-      </Nav.Item>
-    </>
-  );
 
   const useStateBg =
     history.location.pathname === '/' ||
@@ -79,32 +43,11 @@ const NavBar = () => {
     ? NavBarButtonStyle.COOL_INFO
     : NavBarButtonStyle.WARM_INFO;
 
-  const disconnectedContent = (
-    <>
-      <Nav.Link
-        className={clsx(classes.nounsNavLink, classes.connectBtn)}
-        onClick={showModalHandler}
-      >
-        <NavBarButton
-          buttonStyle={
-            useStateBg && stateBgColor === greyBg
-              ? NavBarButtonStyle.COOL_WALLET
-              : NavBarButtonStyle.WARM_WALLET
-          }
-          buttonText={'Connect wallet'}
-        />
-      </Nav.Link>
-    </>
-  );
-
   return (
     <>
-      {showConnectModal && activeAccount === undefined && (
-        <WalletConnectModal onDismiss={hideModalHandler} />
-      )}
       <Navbar expand="lg" style={{ backgroundColor: `${useStateBg ? stateBgColor : ''}` }}>
         <Container>
-        <div
+          <div
             style={{
               display: 'flex',
               flexFlow: 'row nowrap',
@@ -142,8 +85,12 @@ const NavBar = () => {
                 </Nav.Link>
               )}
             </Nav.Item>
-          </div> 
-          <Navbar.Toggle style={{borderRadius: "10px", height: "44px", padding: "0.25rem 0.5rem"}} id="mobileNav" aria-controls="basic-navbar-nav" />
+          </div>
+          <Navbar.Toggle
+            style={{ borderRadius: '10px', height: '44px', padding: '0.25rem 0.5rem' }}
+            id="mobileNav"
+            aria-controls="basic-navbar-nav"
+          />
           <Navbar.Collapse className="justify-content-end">
             <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>
               <NavBarButton
@@ -183,7 +130,7 @@ const NavBar = () => {
                 buttonStyle={nonWalletButtonStyle}
               />
             </Nav.Link>
-            {activeAccount ? connectedContent : disconnectedContent}
+            <NavWallet address={activeAccount || '0'} buttonStyle={nonWalletButtonStyle} />{' '}
           </Navbar.Collapse>
         </Container>
       </Navbar>
