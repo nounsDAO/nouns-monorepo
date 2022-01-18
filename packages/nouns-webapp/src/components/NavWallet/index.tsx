@@ -2,7 +2,7 @@ import Davatar from '@davatar/react';
 import { useEthers } from '@usedapp/core';
 import React, { useState } from 'react';
 import { useReverseENSLookUp } from '../../utils/ensLookup';
-import { NavBarButtonStyle } from '../NavBarButton';
+import { getNavBarButtonVariant, NavBarButtonStyle } from '../NavBarButton';
 import classes from './NavWallet.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSortDown } from '@fortawesome/free-solid-svg-icons';
@@ -14,43 +14,31 @@ import { Nav } from 'react-bootstrap';
 import NavBarButton from '../NavBarButton';
 import clsx from 'clsx';
 import { useHistory } from 'react-router-dom';
+import { useShortAddress } from '../ShortAddress';
+import { isMobileScreen } from '../../utils/isMobile';
+import {
+  shouldUseStateBg,
+  useIsCoolState,
+  usePickByState,
+} from '../../utils/colorResponsiveUIUtils';
 
 interface NavWalletProps {
   address: string;
   buttonStyle?: NavBarButtonStyle;
 }
 
+type Props = {
+  onClick: (e: any) => void;
+  value: string;
+};
+
+type RefType = number;
+
 const NavWallet: React.FC<NavWalletProps> = props => {
   const { address, buttonStyle } = props;
   const [buttonUp, setButtonUp] = useState(false);
 
-  const variant = () => {
-    switch (buttonStyle) {
-      case NavBarButtonStyle.COOL_INFO: {
-        return classes.coolInfo;
-      }
-      case NavBarButtonStyle.COOL_WALLET: {
-        return classes.coolWallet;
-      }
-      case NavBarButtonStyle.WARM_INFO: {
-        return classes.warnInfo;
-      }
-      case NavBarButtonStyle.WARM_WALLET: {
-        return classes.warmWallet;
-      }
-      case NavBarButtonStyle.WHITE_INFO: {
-        return classes.whiteInfo;
-      }
-      case NavBarButtonStyle.WHITE_ACTIVE: {
-        return classes.whiteActive;
-      }
-      default: {
-        return classes.info;
-      }
-    }
-  };
   const history = useHistory();
-
   const { library: provider } = useEthers();
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { deactivate } = useEthers();
@@ -65,19 +53,55 @@ const NavWallet: React.FC<NavWalletProps> = props => {
   };
 
   const ens = useReverseENSLookUp(address);
-  const shortAddress = address && [address.substr(0, 4), address.substr(38, 4)].join('...');
+  const shortAddress = useShortAddress(address);
 
-  type Props = {
-    onClick: (e: any) => void;
-    value: string;
+  const useStateBg = shouldUseStateBg(history);
+
+  const isCoolState = useIsCoolState();
+
+  const mobileTextColor = () => {
+    if (!useStateBg) {
+      return 'rgba(140, 141, 146, 1)';
+    }
+    if (isCoolState) {
+      return 'rgba(121, 128, 156, 1)';
+    }
+    return 'rgba(142, 129, 127, 1)';
   };
 
-  type RefType = number;
+  const mobileBorderColor = () => {
+    if (!useStateBg) {
+      return 'rgba(140, 141, 146, .5)';
+    }
+    if (isCoolState) {
+      return 'rgba(121, 128, 156, .5)';
+    }
+    return 'rgba(142, 129, 127, .5)';
+  };
 
-  const CustomToggle = React.forwardRef<RefType, Props>(({ onClick, value }, ref) => (
+  const disconnectedContent = (
+    <>
+      <Nav.Link
+        className={clsx(classes.nounsNavLink, classes.connectBtn)}
+        onClick={showModalHandler}
+      >
+        <NavBarButton
+          buttonStyle={usePickByState(
+            NavBarButtonStyle.WHITE_WALLET,
+            NavBarButtonStyle.COOL_WALLET,
+            NavBarButtonStyle.WARM_WALLET,
+            history,
+          )}
+          buttonText={'Connect'}
+        />
+      </Nav.Link>
+    </>
+  );
+
+  const customDropdownToggle = React.forwardRef<RefType, Props>(({ onClick, value }, ref) => (
     <>
       <div
-        className={`${classes.wrapper} ${variant()}`}
+        className={`${classes.wrapper} ${getNavBarButtonVariant(buttonStyle)}`}
         onClick={e => {
           e.preventDefault();
           onClick(e);
@@ -97,121 +121,27 @@ const NavWallet: React.FC<NavWalletProps> = props => {
     </>
   ));
 
-  const stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
-
-  const useStateBg =
-    history.location.pathname === '/' ||
-    history.location.pathname.includes('/noun') ||
-    history.location.pathname.includes('/auction');
-
-  const greyBg = '#d5d7e1';
-
-  const disconnectedContent = (
-    <>
-      <Nav.Link
-        className={clsx(classes.nounsNavLink, classes.connectBtn)}
-        onClick={showModalHandler}
-      >
-        <NavBarButton
-          buttonStyle={
-            useStateBg && stateBgColor === greyBg
-              ? NavBarButtonStyle.COOL_WALLET
-              : NavBarButtonStyle.WARM_WALLET
-          }
-          buttonText={'Connect'}
-        />
-      </Nav.Link>
-    </>
-  );
-
-  const connectedContent = () => {
-    if(window.innerWidth < 992) {
-        return connectedContentMobile;
-    }
-    return connectedContentDesktop;
-   };
-
-  const mobileTextColor = () => {
-
-    if(!useStateBg) {
-        return 'rgba(140, 141, 146, 1)';
-    }
-    if (stateBgColor === greyBg) {
-        return 'rgba(121, 128, 156, 1)';
-    }
-    return 'rgba(142, 129, 127, 1)'
-  };
-
-
-  const mobileBorderColor = () => {
-
-    if(!useStateBg) {
-        return 'rgba(140, 141, 146, .5)';
-    }
-    if (stateBgColor === greyBg) {
-        return 'rgba(121, 128, 156, .5)';
-    }
-    return 'rgba(142, 129, 127, .5)'
-  };
-
   const connectedContentMobile = (
-      <div className="d-flex flex-row justify-content-between">
-          <div style={{
-              marginLeft: '.25rem',
-              marginTop: '.3rem'
-          }}>
-                    <div
-                    className={`${classes.wrapper} ${variant()}`}
-                    >
-                    <div className={classes.button} >
-                    <div className={classes.icon}>
-                        {' '}
-                        <Davatar size={21} address={address} provider={provider} />
-                    </div>
-                    <div>{ens ? ens : shortAddress}</div>
-                    </div>
-                </div>  
+    <div className="d-flex flex-row justify-content-between">
+      <div className={classes.connectContentMobileWrapper}>
+        <div className={`${classes.wrapper} ${getNavBarButtonVariant(buttonStyle)}`}>
+          <div className={classes.button}>
+            <div className={classes.icon}>
+              {' '}
+              <Davatar size={21} address={address} provider={provider} />
+            </div>
+            <div>{ens ? ens : shortAddress}</div>
           </div>
-
-          <div style={{
-              fontFamily: "PT Root UI Bold",
-              fontSize: "18px",
-              marginRight: '2.25rem',
-              marginTop: '1rem',
-              height: '2rem'
-          }} className="d-flex flex-row">
-              <div style={{borderRight: `1px solid ${mobileBorderColor()}`, marginRight: '1rem', paddingRight: '1rem', color: mobileTextColor()}} onClick={() => {
-            setShowConnectModal(false);
-            deactivate();
-            setShowConnectModal(false);
-            setShowConnectModal(true);
-          }}>
-                  Swtich
-              </div>
-              <div style={{color: 'var(--brand-color-red)'}} onClick={() => {
-            setShowConnectModal(false);
-            deactivate();
-          }}>
-                  Disconnect
-              </div>
-          </div>
+        </div>
       </div>
 
-  );
-
-  const connectedContentDesktop = (
-    <Dropdown className={classes.nounsNavLink} onToggle={() => setButtonUp(!buttonUp)}>
-      <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components"  />
-      <Dropdown.Menu
-        style={{
-          borderRadius: '12px',
-          marginTop: '.5rem',
-          border: '0',
-        }}
-        className={`${variant()}`}
-      >
-        <Dropdown.Item
-          eventKey="1"
+      <div className={`d-flex flex-row ${classes.connectContentMobileText}`}>
+        <div
+          style={{
+            borderRight: `1px solid ${mobileBorderColor()}`,
+            color: mobileTextColor(),
+          }}
+          className={classes.mobileSwitchWalletText}
           onClick={() => {
             setShowConnectModal(false);
             deactivate();
@@ -219,28 +149,64 @@ const NavWallet: React.FC<NavWalletProps> = props => {
             setShowConnectModal(true);
           }}
         >
-          Switch wallet
-        </Dropdown.Item>
-        <Dropdown.Item
-          eventKey="2"
-          style={{ color: 'var(--brand-color-red' }}
+          Swtich
+        </div>
+        <div
+          className={classes.disconnectText}
           onClick={() => {
             setShowConnectModal(false);
             deactivate();
           }}
         >
           Disconnect
-        </Dropdown.Item>
-      </Dropdown.Menu>
+        </div>
+      </div>
+    </div>
+  );
+
+  const connectedContentDesktop = (
+    <Dropdown className={classes.nounsNavLink} onToggle={() => setButtonUp(!buttonUp)}>
+      <Dropdown.Toggle as={customDropdownToggle} id="dropdown-custom-components" />
+      <div className={classes.menuWrapper}>
+        <Dropdown.Menu
+          className={`${getNavBarButtonVariant(buttonStyle)} ${classes.desktopDropdown} `}
+        >
+          <Dropdown.Item
+            eventKey="1"
+            onClick={() => {
+              setShowConnectModal(false);
+              deactivate();
+              setShowConnectModal(false);
+              setShowConnectModal(true);
+            }}
+          >
+            Switch wallet
+          </Dropdown.Item>
+          <Dropdown.Item
+            eventKey="2"
+            className={classes.disconnectText}
+            onClick={() => {
+              setShowConnectModal(false);
+              deactivate();
+            }}
+          >
+            Disconnect
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </div>
     </Dropdown>
   );
+
+  const getConnectedContent = () => {
+    return isMobileScreen() ? connectedContentMobile : connectedContentDesktop;
+  };
 
   return (
     <>
       {showConnectModal && activeAccount === undefined && (
         <WalletConnectModal onDismiss={hideModalHandler} />
       )}
-      {activeAccount ? connectedContent() : disconnectedContent}
+      {activeAccount ? getConnectedContent() : disconnectedContent}
     </>
   );
 };

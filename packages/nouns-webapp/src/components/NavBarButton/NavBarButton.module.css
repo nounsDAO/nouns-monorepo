@@ -36,13 +36,14 @@
 }
 
 .coolWallet {
-  background-color: #4965f0;
-  color: white;
+  background-color: #e9ebf3;
+  color: #79809c;
   padding: 0px 12px 0px 12px;
 }
 
 .coolWallet:hover {
-  filter: brightness(110%);
+  background-color: white;
+  color: black;
 }
 
 .warnInfo {
@@ -56,13 +57,14 @@
 }
 
 .warmWallet {
-  background-color: #d63c5e;
-  color: white;
+  color: #b6a9a7;
+  background-color: #fdf9f9;
   padding: 0px 12px 0px 12px;
 }
 
 .warmWallet:hover {
-  filter: brightness(110%);
+  background-color: white;
+  color: black;
 }
 
 .whiteInfo {
@@ -83,6 +85,21 @@
 
 .whiteActive .icon {
   color: #d63c5e;
+}
+
+.whiteWallet {
+  background-color: white;
+  box-shadow: 0px 0px 0px 1px #e2e3e8;
+  color: #79809c;
+  padding: 0px 12px 0px 12px;
+}
+
+.whiteWallet:hover {
+  filter: brightness(100%);
+}
+
+.whiteWallet:hover {
+  background-color: #e2e3e8;
 }
 
 @media (max-width: 992px) {

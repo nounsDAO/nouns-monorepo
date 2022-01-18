@@ -103,7 +103,6 @@
   }
 }
 
-
 .nounsNavLink,
 .nounsNavLink:active,
 .nounsNavLink:visited {
@@ -123,4 +122,44 @@
 .connectBtn:active,
 .connectBtn:focus {
   cursor: pointer !important;
+}
+
+.menuWrapper .whiteInfo:hover {
+  background-color: white;
+}
+
+.menuWrapper .warnInfo:hover {
+  background-color: #fdf9f9;
+}
+
+.menuWrapper .coolInfo:hover {
+  background-color: #e9ebf3;
+}
+
+.connectContentMobileWrapper {
+  margin-left: 0.25rem;
+  margin-top: 0.3rem;
+}
+
+.connectContentMobileText {
+  font-family: 'PT Root UI Bold';
+  font-size: 18px;
+  margin-right: 2.25rem;
+  margin-top: 1rem;
+  height: 2rem;
+}
+
+.disconnectText {
+  color: var(--brand-color-red);
+}
+
+.mobileSwitchWalletText {
+  margin-right: 1rem;
+  padding-right: 1rem;
+}
+
+.desktopDropdown {
+  border-radius: 12px;
+  margin-top: 0.5rem;
+  border: 0rem;
 }
