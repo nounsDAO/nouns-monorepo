@@ -118,7 +118,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
               ? NavBarButtonStyle.COOL_WALLET
               : NavBarButtonStyle.WARM_WALLET
           }
-          buttonText={'Connect wallet'}
+          buttonText={'Connect'}
         />
       </Nav.Link>
     </>
