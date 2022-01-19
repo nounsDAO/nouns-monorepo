@@ -1,6 +1,8 @@
 import { Proposal, ProposalSubgraphResponse, Vote } from '../types';
 import R from 'ramda';
 
+const SECONDS_IN_DAY = 60 * 60 * 24;
+
 /**
  * Parse Proposal Subgraph Response into usable types
  * @param psgRes Response from Proposal Subgraph query
@@ -53,3 +55,19 @@ export const extractNewVotes = (proposalBefore: Proposal, proposalAfter: Proposa
  */
 export const extractProposalTitle = (proposal: Proposal): string =>
   proposal.description.split('\n')[0].replace(/^#\s*/, '');
+
+/**
+ * Determine if the passed proposal is at-risk of expiry
+ * @param proposal Proposal object
+ */
+export const isAtRiskOfExpiry = (proposal: Proposal) => {
+  if (proposal.status !== 'QUEUED') {
+    return false;
+  }
+  const expiresAt = proposal.executionETA + SECONDS_IN_DAY * 14;
+  const currentTimestamp = Math.floor(Date.now() / 1000);
+  const secondsUntilExpiry = expiresAt - currentTimestamp;
+
+  // Proposals are at-risk of expiry if within 2 days of the 14 day limit
+  return secondsUntilExpiry > 0 && secondsUntilExpiry <= SECONDS_IN_DAY * 2;
+};

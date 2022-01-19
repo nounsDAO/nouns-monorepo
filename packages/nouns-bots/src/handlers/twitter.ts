@@ -67,6 +67,10 @@ export class TwitterAuctionLifecycleHandler implements IAuctionLifecycleHandler 
     //TODO
   }
 
+  async handleProposalAtRiskOfExpiry(_proposal: Proposal) {
+    // noop, discord-only notification.
+  }
+
   async handleGovernanceVote(proposal: Proposal, vote: Vote) {
     //TODO
   }

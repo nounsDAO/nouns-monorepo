@@ -3,6 +3,7 @@ import {
   formatBidMessageText,
   formatNewGovernanceProposalText,
   formatNewGovernanceVoteText,
+  formatProposalAtRiskOfExpiryText,
   formatUpdatedGovernanceProposalStatusText,
   getNounPngBuffer,
 } from '../utils';
@@ -66,6 +67,16 @@ export class DiscordAuctionLifecycleHandler implements IAuctionLifecycleHandler 
       .setTimestamp();
     await Promise.all(this.discordClients.map(c => c.send(message)));
     console.log(`processed discord proposal update ${proposal.id}`);
+  }
+
+  async handleProposalAtRiskOfExpiry(proposal: Proposal) {
+    const message = new Discord.MessageEmbed()
+      .setTitle(`Proposal At-Risk of Expiry`)
+      .setURL(`https://nouns.wtf/vote/${proposal.id}`)
+      .setDescription(formatProposalAtRiskOfExpiryText(proposal))
+      .setTimestamp();
+    await Promise.all(this.discordClients.map(c => c.send(message)));
+    console.log(`processed discord proposal expiry warning ${proposal.id}`);
   }
 
   async handleGovernanceVote(proposal: Proposal, vote: Vote) {

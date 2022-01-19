@@ -6,6 +6,8 @@ import {
   getAuctionEndingSoonCache,
   getBidCache,
   getProposalCache,
+  hasWarnedOfExpiry,
+  setProposalExpiryWarningSent,
   updateAuctionCache,
   updateAuctionEndingSoonCache,
   updateBidCache,
@@ -15,8 +17,8 @@ import { IAuctionLifecycleHandler } from './types';
 import { config } from './config';
 import { TwitterAuctionLifecycleHandler } from './handlers/twitter';
 import { DiscordAuctionLifecycleHandler } from './handlers/discord';
+import { extractNewVotes, isAtRiskOfExpiry } from './utils/proposals';
 import R from 'ramda';
-import { extractNewVotes } from './utils/proposals';
 
 /**
  * Create configured `IAuctionLifecycleHandler`s
@@ -110,6 +112,14 @@ async function processGovernanceTick() {
           auctionLifecycleHandlers.map(h => h.handleGovernanceVote(proposal, newVote)),
         );
       }, newVotes);
+
+      // Proposal is at-risk of expiry
+      if (isAtRiskOfExpiry(proposal) && !hasWarnedOfExpiry(proposal.id)) {
+        await Promise.all(
+          auctionLifecycleHandlers.map(h => h.handleProposalAtRiskOfExpiry(proposal)),
+        );
+        await setProposalExpiryWarningSent(proposal.id);
+      }
     }
     await updateProposalCache(proposal);
   }, proposals);

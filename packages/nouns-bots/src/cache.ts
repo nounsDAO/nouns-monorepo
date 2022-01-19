@@ -27,6 +27,11 @@ export const getAuctionEndingSoonCacheKey = 'NOUNS_AUCTION_ENDING_SOON_CACHE';
 export const getProposalCacheKeyPrefix = 'NOUNS_PROPOSAL_';
 
 /**
+ * Key prefix for caching proposal expiry warning sent records
+ */
+export const getProposalExpiryWarningSentCacheKeyPrefix = 'NOUNS_PROPOSAL_EXPIRY_WARNING_SENT_';
+
+/**
  * Update the auction cache with `id`
  * @param id
  */
@@ -107,7 +112,15 @@ export async function getAuctionCache(): Promise<number> {
  * @param id Proposal ID
  * @returns Proposal cache redis key
  */
-const proposalCacheKey = (id: Number) => [getProposalCacheKeyPrefix, id].join('');
+const proposalCacheKey = (id: number) => `${getProposalCacheKeyPrefix}${id}`;
+
+/**
+ * Build the proposal expiry warning sent cache redis key
+ * @param id Proposal ID
+ * @returns Proposal expiry warning sent cache redis key
+ */
+// prettier-ignore
+const proposalExpiryWarningSentCacheKey = (id: number) => `${getProposalExpiryWarningSentCacheKeyPrefix}${id}`;
 
 /**
  * Store a proposal into the redis cache
@@ -124,11 +137,31 @@ export const updateProposalCache = async (proposal: Proposal) => {
  * @param id ID of the proposal to fetch
  * @returns Proposal | null
  */
-export const getProposalCache = async (id: Number) => {
+export const getProposalCache = async (id: number) => {
   const cacheKey = proposalCacheKey(id);
   const proposal = await redis.get(cacheKey);
   if (proposal) {
     return JSON.parse(proposal) as Proposal;
   }
   return null;
+};
+
+/**
+ * Store a proposal expiry notification receipt in the redis cache
+ * @param id ID of the at-risk proposal
+ * @returns "OK" | null
+ */
+export const setProposalExpiryWarningSent = async (id: number) => {
+  const cacheKey = proposalExpiryWarningSentCacheKey(id);
+  return redis.set(cacheKey, 1);
+};
+
+/**
+ * Determine if an expiry warning has been sent for a specific proposal id
+ * @param id ID of the at-risk proposal
+ * @returns boolean
+ */
+export const hasWarnedOfExpiry = async (id: number) => {
+  const cacheKey = proposalExpiryWarningSentCacheKey(id);
+  return Boolean(await redis.exists(cacheKey));
 };
