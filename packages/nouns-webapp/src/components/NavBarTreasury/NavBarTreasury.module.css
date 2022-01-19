@@ -18,9 +18,10 @@
 }
 
 .treasuryHeader {
-  font-size: 15px;
+  font-size: 14.5px;
   margin-left: 0.25rem;
   margin-right: 0.4rem;
+  margin-bottom: -1px;
 }
 
 .warmInfo .icon {

@@ -34,6 +34,13 @@ type Props = {
 
 type RefType = number;
 
+type CustomMenuProps = {
+  children?: React.ReactNode;
+  style?: React.CSSProperties;
+  className?: string;
+  labeledBy?: string;
+};
+
 const NavWallet: React.FC<NavWalletProps> = props => {
   const { address, buttonStyle } = props;
   const [buttonUp, setButtonUp] = useState(false);
@@ -98,10 +105,26 @@ const NavWallet: React.FC<NavWalletProps> = props => {
     </>
   );
 
+  const statePrimaryButtonClass = usePickByState(
+    classes.whiteInfo,
+    classes.coolInfo,
+    classes.warnInfo,
+    history,
+  );
+
+  const stateSelectedDropdownClass = usePickByState(
+    classes.whiteInfoSelected,
+    classes.dropdownActive,
+    classes.dropdownActive,
+    history,
+  );
+
   const customDropdownToggle = React.forwardRef<RefType, Props>(({ onClick, value }, ref) => (
     <>
       <div
-        className={`${classes.wrapper} ${getNavBarButtonVariant(buttonStyle)}`}
+        className={`${classes.wrapper} ${
+          buttonUp ? stateSelectedDropdownClass : statePrimaryButtonClass
+        }`}
         onClick={e => {
           e.preventDefault();
           onClick(e);
@@ -120,6 +143,69 @@ const NavWallet: React.FC<NavWalletProps> = props => {
       </div>
     </>
   ));
+
+  const CustomMenu = React.forwardRef((props: CustomMenuProps, ref: React.Ref<HTMLDivElement>) => {
+    return (
+      <div
+        ref={ref}
+        style={props.style}
+        className={props.className}
+        aria-labelledby={props.labeledBy}
+      >
+        <div>
+          <div
+            onClick={() => {
+              setShowConnectModal(false);
+              setButtonUp(false);
+              deactivate();
+              setShowConnectModal(false);
+              setShowConnectModal(true);
+            }}
+            style={{
+              borderRadius: '12px 12px 0px 0px',
+              paddingTop: '.5rem',
+              paddingLeft: '1rem',
+              justifyContent: 'flex-start',
+              width: '8.4rem',
+              paddingBottom: '.25rem',
+            }}
+            className={`${classes.button} ${classes.switchWalletText} ${usePickByState(
+              classes.whiteInfoSelectedTop,
+              classes.coolInfoSelected,
+              classes.warnInfoSelected,
+              history,
+            )}`}
+          >
+            Switch Wallet
+          </div>
+
+          <div
+            onClick={() => {
+              setShowConnectModal(false);
+              setButtonUp(false);
+              deactivate();
+            }}
+            style={{
+              borderRadius: '0px 0px 12px 12px',
+              paddingBottom: '.5rem',
+              paddingLeft: '1rem',
+              justifyContent: 'flex-start',
+              color: 'var(--brand-color-red)',
+              width: '8.4rem',
+            }}
+            className={`${classes.button} ${usePickByState(
+              classes.whiteInfoSelectedBottom,
+              classes.coolInfoSelected,
+              classes.warnInfoSelected,
+              history,
+            )} ${classes.disconnectText} `}
+          >
+            Disconnect
+          </div>
+        </div>
+      </div>
+    );
+  });
 
   const connectedContentMobile = (
     <div className="d-flex flex-row justify-content-between">
@@ -168,31 +254,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
     <Dropdown className={classes.nounsNavLink} onToggle={() => setButtonUp(!buttonUp)}>
       <Dropdown.Toggle as={customDropdownToggle} id="dropdown-custom-components" />
       <div className={classes.menuWrapper}>
-        <Dropdown.Menu
-          className={`${getNavBarButtonVariant(buttonStyle)} ${classes.desktopDropdown} `}
-        >
-          <Dropdown.Item
-            eventKey="1"
-            onClick={() => {
-              setShowConnectModal(false);
-              deactivate();
-              setShowConnectModal(false);
-              setShowConnectModal(true);
-            }}
-          >
-            Switch wallet
-          </Dropdown.Item>
-          <Dropdown.Item
-            eventKey="2"
-            className={classes.disconnectText}
-            onClick={() => {
-              setShowConnectModal(false);
-              deactivate();
-            }}
-          >
-            Disconnect
-          </Dropdown.Item>
-        </Dropdown.Menu>
+        <Dropdown.Menu className={`${classes.desktopDropdown} `} as={CustomMenu} />
       </div>
     </Dropdown>
   );

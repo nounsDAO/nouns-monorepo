@@ -26,15 +26,17 @@ const NavBarTreasury: React.FC<NavBarTreasuryProps> = props => {
   return (
     <div className={`${classes.wrapper} ${treasuryStyleClass}`}>
       <div className={classes.button}>
-          <div className='d-flex flex-row justify-content-around'>
-            <div className={classes.treasuryHeader}>
-              Treasury
-            </div>
-            <div className={classes.treasuryBalance}>
-              Ξ {Number(treasuryBalance).toLocaleString('en-US')}
-            </div>
-
+        <div
+          className="d-flex flex-row justify-content-around"
+          style={{
+            paddingTop: '1px',
+          }}
+        >
+          <div className={classes.treasuryHeader}>Treasury</div>
+          <div className={classes.treasuryBalance}>
+            Ξ {Number(treasuryBalance).toLocaleString('en-US')}
           </div>
+        </div>
       </div>
     </div>
   );
