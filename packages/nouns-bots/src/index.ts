@@ -114,7 +114,7 @@ async function processGovernanceTick() {
       }, newVotes);
 
       // Proposal is at-risk of expiry
-      if (isAtRiskOfExpiry(proposal) && !hasWarnedOfExpiry(proposal.id)) {
+      if (isAtRiskOfExpiry(proposal) && !(await hasWarnedOfExpiry(proposal.id))) {
         await Promise.all(
           auctionLifecycleHandlers.map(h => h.handleProposalAtRiskOfExpiry(proposal)),
         );
