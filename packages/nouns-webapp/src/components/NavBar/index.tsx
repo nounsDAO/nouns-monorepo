@@ -47,14 +47,7 @@ const NavBar = () => {
     <>
       <Navbar expand="lg" style={{ backgroundColor: `${useStateBg ? stateBgColor : ''}` }}>
         <Container>
-          <div
-            style={{
-              display: 'flex',
-              flexFlow: 'row nowrap',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
+          <div className={classes.brandAndTreasuryWrapper}>
             <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
               <img
                 src={logo}
@@ -87,7 +80,7 @@ const NavBar = () => {
             </Nav.Item>
           </div>
           <Navbar.Toggle
-            style={{ borderRadius: '10px', height: '44px', padding: '0.25rem 0.5rem' }}
+            className={classes.navBarToggle}
             id="mobileNav"
             aria-controls="basic-navbar-nav"
           />

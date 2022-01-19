@@ -61,3 +61,16 @@
   flex-direction: row;
   align-items: center;
 }
+
+.brandAndTreasuryWrapper {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.navBarToggle {
+  border-radius: 10px;
+  height: 44px;
+  padding: 0.25rem 0.5rem;
+}

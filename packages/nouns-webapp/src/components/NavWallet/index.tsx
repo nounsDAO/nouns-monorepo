@@ -48,11 +48,8 @@ const NavWallet: React.FC<NavWalletProps> = props => {
   const ens = useReverseENSLookUp(address);
   const shortAddress = useShortAddress(address);
 
-  const showModalHandler = () => {
-    setShowConnectModal(true);
-  };
-  const hideModalHandler = () => {
-    setShowConnectModal(false);
+  const setModalStateHandler = (state: boolean) => {
+    setShowConnectModal(state);
   };
 
   const switchWalletHandler = () => {
@@ -107,9 +104,10 @@ const NavWallet: React.FC<NavWalletProps> = props => {
   const customDropdownToggle = React.forwardRef<RefType, Props>(({ onClick, value }, ref) => (
     <>
       <div
-        className={`${classes.wrapper} ${
-          buttonUp ? stateSelectedDropdownClass : statePrimaryButtonClass
-        }`}
+        className={clsx(
+          classes.wrapper,
+          buttonUp ? stateSelectedDropdownClass : statePrimaryButtonClass,
+        )}
         onClick={e => {
           e.preventDefault();
           onClick(e);
@@ -140,26 +138,34 @@ const NavWallet: React.FC<NavWalletProps> = props => {
         <div>
           <div
             onClick={switchWalletHandler}
-            className={` ${classes.dropDownTop} ${classes.button} ${
-              classes.switchWalletText
-            } ${usePickByState(
-              classes.whiteInfoSelectedTop,
-              classes.coolInfoSelected,
-              classes.warnInfoSelected,
-              history,
-            )}`}
+            className={clsx(
+              classes.dropDownTop,
+              classes.button,
+              classes.switchWalletText,
+              usePickByState(
+                classes.whiteInfoSelectedTop,
+                classes.coolInfoSelected,
+                classes.warnInfoSelected,
+                history,
+              ),
+            )}
           >
             Switch Wallet
           </div>
 
           <div
             onClick={disconectWalletHandler}
-            className={`${classes.dropDownBottom} ${classes.button} ${usePickByState(
-              classes.whiteInfoSelectedBottom,
-              classes.coolInfoSelected,
-              classes.warnInfoSelected,
-              history,
-            )} ${classes.disconnectText} `}
+            className={clsx(
+              classes.dropDownBottom,
+              classes.button,
+              usePickByState(
+                classes.whiteInfoSelectedBottom,
+                classes.coolInfoSelected,
+                classes.warnInfoSelected,
+                history,
+              ),
+              classes.disconnectText,
+            )}
           >
             Disconnect
           </div>
@@ -171,7 +177,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
   const walletConnectedContentMobile = (
     <div className="d-flex flex-row justify-content-between">
       <div className={classes.connectContentMobileWrapper}>
-        <div className={`${classes.wrapper} ${getNavBarButtonVariant(buttonStyle)}`}>
+        <div className={clsx(classes.wrapper, getNavBarButtonVariant(buttonStyle))}>
           <div className={classes.button}>
             <div className={classes.icon}>
               {' '}
@@ -210,7 +216,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
   return (
     <>
       {showConnectModal && activeAccount === undefined && (
-        <WalletConnectModal onDismiss={hideModalHandler} />
+        <WalletConnectModal onDismiss={() => setModalStateHandler(false)} />
       )}
       {activeAccount ? (
         isMobileScreen() ? (
@@ -221,7 +227,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
       ) : (
         <WalletConnectButton
           className={clsx(classes.nounsNavLink, classes.connectBtn)}
-          onClickHandler={showModalHandler}
+          onClickHandler={() => setModalStateHandler(true)}
           buttonStyle={connectWalletButtonStyle}
         />
       )}
