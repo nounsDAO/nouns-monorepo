@@ -10,17 +10,12 @@ import { faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { Dropdown } from 'react-bootstrap';
 import WalletConnectModal from '../WalletConnectModal';
 import { useAppSelector } from '../../hooks';
-import { Nav } from 'react-bootstrap';
-import NavBarButton from '../NavBarButton';
 import clsx from 'clsx';
 import { useHistory } from 'react-router-dom';
 import { useShortAddress } from '../ShortAddress';
 import { isMobileScreen } from '../../utils/isMobile';
-import {
-  shouldUseStateBg,
-  useIsCoolState,
-  usePickByState,
-} from '../../utils/colorResponsiveUIUtils';
+import { usePickByState } from '../../utils/colorResponsiveUIUtils';
+import WalletConnectButton from './WalletConnectButton';
 
 interface NavWalletProps {
   address: string;
@@ -43,14 +38,15 @@ type CustomMenuProps = {
 
 const NavWallet: React.FC<NavWalletProps> = props => {
   const { address, buttonStyle } = props;
-  const [buttonUp, setButtonUp] = useState(false);
 
+  const [buttonUp, setButtonUp] = useState(false);
+  const [showConnectModal, setShowConnectModal] = useState(false);
   const history = useHistory();
   const { library: provider } = useEthers();
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { deactivate } = useEthers();
-
-  const [showConnectModal, setShowConnectModal] = useState(false);
+  const ens = useReverseENSLookUp(address);
+  const shortAddress = useShortAddress(address);
 
   const showModalHandler = () => {
     setShowConnectModal(true);
@@ -59,51 +55,19 @@ const NavWallet: React.FC<NavWalletProps> = props => {
     setShowConnectModal(false);
   };
 
-  const ens = useReverseENSLookUp(address);
-  const shortAddress = useShortAddress(address);
-
-  const useStateBg = shouldUseStateBg(history);
-
-  const isCoolState = useIsCoolState();
-
-  const mobileTextColor = () => {
-    if (!useStateBg) {
-      return 'rgba(140, 141, 146, 1)';
-    }
-    if (isCoolState) {
-      return 'rgba(121, 128, 156, 1)';
-    }
-    return 'rgba(142, 129, 127, 1)';
+  const switchWalletHandler = () => {
+    setShowConnectModal(false);
+    setButtonUp(false);
+    deactivate();
+    setShowConnectModal(false);
+    setShowConnectModal(true);
   };
 
-  const mobileBorderColor = () => {
-    if (!useStateBg) {
-      return 'rgba(140, 141, 146, .5)';
-    }
-    if (isCoolState) {
-      return 'rgba(121, 128, 156, .5)';
-    }
-    return 'rgba(142, 129, 127, .5)';
+  const disconectWalletHandler = () => {
+    setShowConnectModal(false);
+    setButtonUp(false);
+    deactivate();
   };
-
-  const disconnectedContent = (
-    <>
-      <Nav.Link
-        className={clsx(classes.nounsNavLink, classes.connectBtn)}
-        onClick={showModalHandler}
-      >
-        <NavBarButton
-          buttonStyle={usePickByState(
-            NavBarButtonStyle.WHITE_WALLET,
-            NavBarButtonStyle.COOL_WALLET,
-            NavBarButtonStyle.WARM_WALLET,
-            history,
-          )}
-          buttonText={'Connect'}
-        />
-      </Nav.Link>
-    </>
-  );
 
   const statePrimaryButtonClass = usePickByState(
     classes.whiteInfo,
@@ -116,6 +80,27 @@ const NavWallet: React.FC<NavWalletProps> = props => {
     classes.whiteInfoSelected,
     classes.dropdownActive,
     classes.dropdownActive,
+    history,
+  );
+
+  const mobileTextColor = usePickByState(
+    'rgba(140, 141, 146, 1)',
+    'rgba(121, 128, 156, 1)',
+    'rgba(142, 129, 127, 1)',
+    history,
+  );
+
+  const mobileBorderColor = usePickByState(
+    'rgba(140, 141, 146, .5)',
+    'rgba(121, 128, 156, .5)',
+    'rgba(142, 129, 127, .5)',
+    history,
+  );
+
+  const connectWalletButtonStyle = usePickByState(
+    NavBarButtonStyle.WHITE_WALLET,
+    NavBarButtonStyle.COOL_WALLET,
+    NavBarButtonStyle.WARM_WALLET,
     history,
   );
 
@@ -154,22 +139,10 @@ const NavWallet: React.FC<NavWalletProps> = props => {
       >
         <div>
           <div
-            onClick={() => {
-              setShowConnectModal(false);
-              setButtonUp(false);
-              deactivate();
-              setShowConnectModal(false);
-              setShowConnectModal(true);
-            }}
-            style={{
-              borderRadius: '12px 12px 0px 0px',
-              paddingTop: '.5rem',
-              paddingLeft: '1rem',
-              justifyContent: 'flex-start',
-              width: '8.4rem',
-              paddingBottom: '.25rem',
-            }}
-            className={`${classes.button} ${classes.switchWalletText} ${usePickByState(
+            onClick={switchWalletHandler}
+            className={` ${classes.dropDownTop} ${classes.button} ${
+              classes.switchWalletText
+            } ${usePickByState(
               classes.whiteInfoSelectedTop,
               classes.coolInfoSelected,
               classes.warnInfoSelected,
@@ -180,20 +153,8 @@ const NavWallet: React.FC<NavWalletProps> = props => {
           </div>
 
           <div
-            onClick={() => {
-              setShowConnectModal(false);
-              setButtonUp(false);
-              deactivate();
-            }}
-            style={{
-              borderRadius: '0px 0px 12px 12px',
-              paddingBottom: '.5rem',
-              paddingLeft: '1rem',
-              justifyContent: 'flex-start',
-              color: 'var(--brand-color-red)',
-              width: '8.4rem',
-            }}
-            className={`${classes.button} ${usePickByState(
+            onClick={disconectWalletHandler}
+            className={`${classes.dropDownBottom} ${classes.button} ${usePickByState(
               classes.whiteInfoSelectedBottom,
               classes.coolInfoSelected,
               classes.warnInfoSelected,
@@ -207,7 +168,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
     );
   });
 
-  const connectedContentMobile = (
+  const walletConnectedContentMobile = (
     <div className="d-flex flex-row justify-content-between">
       <div className={classes.connectContentMobileWrapper}>
         <div className={`${classes.wrapper} ${getNavBarButtonVariant(buttonStyle)}`}>
@@ -224,51 +185,46 @@ const NavWallet: React.FC<NavWalletProps> = props => {
       <div className={`d-flex flex-row ${classes.connectContentMobileText}`}>
         <div
           style={{
-            borderRight: `1px solid ${mobileBorderColor()}`,
-            color: mobileTextColor(),
+            borderRight: `1px solid ${mobileBorderColor}`,
+            color: mobileTextColor,
           }}
           className={classes.mobileSwitchWalletText}
-          onClick={() => {
-            setShowConnectModal(false);
-            deactivate();
-            setShowConnectModal(false);
-            setShowConnectModal(true);
-          }}
+          onClick={switchWalletHandler}
         >
           Swtich
         </div>
-        <div
-          className={classes.disconnectText}
-          onClick={() => {
-            setShowConnectModal(false);
-            deactivate();
-          }}
-        >
+        <div className={classes.disconnectText} onClick={disconectWalletHandler}>
           Disconnect
         </div>
       </div>
     </div>
   );
 
-  const connectedContentDesktop = (
+  const walletConnectedContentDesktop = (
     <Dropdown className={classes.nounsNavLink} onToggle={() => setButtonUp(!buttonUp)}>
       <Dropdown.Toggle as={customDropdownToggle} id="dropdown-custom-components" />
-      <div className={classes.menuWrapper}>
-        <Dropdown.Menu className={`${classes.desktopDropdown} `} as={CustomMenu} />
-      </div>
+      <Dropdown.Menu className={`${classes.desktopDropdown} `} as={CustomMenu} />
     </Dropdown>
   );
-
-  const getConnectedContent = () => {
-    return isMobileScreen() ? connectedContentMobile : connectedContentDesktop;
-  };
 
   return (
     <>
       {showConnectModal && activeAccount === undefined && (
         <WalletConnectModal onDismiss={hideModalHandler} />
       )}
-      {activeAccount ? getConnectedContent() : disconnectedContent}
+      {activeAccount ? (
+        isMobileScreen() ? (
+          walletConnectedContentMobile
+        ) : (
+          walletConnectedContentDesktop
+        )
+      ) : (
+        <WalletConnectButton
+          className={clsx(classes.nounsNavLink, classes.connectBtn)}
+          onClickHandler={showModalHandler}
+          buttonStyle={connectWalletButtonStyle}
+        />
+      )}
     </>
   );
 };

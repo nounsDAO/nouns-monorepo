@@ -124,18 +124,6 @@
   cursor: pointer !important;
 }
 
-.menuWrapper .whiteInfo:hover {
-  background-color: white;
-}
-
-.menuWrapper .warnInfo:hover {
-  background-color: #fdf9f9;
-}
-
-.menuWrapper .coolInfo:hover {
-  background-color: #e9ebf3;
-}
-
 .connectContentMobileWrapper {
   margin-left: 0.25rem;
   margin-top: 0.3rem;
@@ -224,4 +212,22 @@
 .dropdownActive {
   background-color: white;
   color: black;
+}
+
+.dropDownTop {
+  border-radius: 12px 12px 0px 0px;
+  padding-top: 0.5rem;
+  padding-left: 1rem;
+  justify-content: flex-start;
+  width: 8.4rem;
+  padding-bottom: 0.25rem;
+}
+
+.dropDownBottom {
+  border-radius: 0px 0px 12px 12px;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  justify-content: flex-start;
+  color: var(--brand-color-red);
+  width: 8.4rem;
 }
