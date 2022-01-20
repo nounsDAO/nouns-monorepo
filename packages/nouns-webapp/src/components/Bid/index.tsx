@@ -11,6 +11,7 @@ import { useAppDispatch } from '../../hooks';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import { NounsAuctionHouseFactory } from '@nouns/sdk';
 import config from '../../config';
+import SettleManuallyBtn from '../SettleManuallyBtn';
 
 const computeMinimumNextBid = (
   currentBid: BigNumber,
@@ -269,11 +270,7 @@ const Bid: React.FC<{
             </Button>
             {/* Only show force settle button if wallet connected */}
             {isWalletConnected && (
-              <p className={classes.emergencySettleWrapper}>
-                <button onClick={settleAuctionHandler} className={classes.emergencySettleButton}>
-                  Pay to settle manually
-                </button>
-              </p>
+              <SettleManuallyBtn settleAuctionHandler={settleAuctionHandler} auction={auction} />
             )}
           </>
         )}
