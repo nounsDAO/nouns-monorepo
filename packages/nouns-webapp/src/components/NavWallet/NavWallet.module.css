@@ -87,12 +87,12 @@
   filter: brightness(110%);
 }
 
-.warnInfo {
+.warmInfo {
   color: #b6a9a7;
   background-color: #fdf9f9;
 }
 
-.warnInfo:hover {
+.warmInfo:hover {
   background-color: white;
   color: black;
 }
@@ -237,7 +237,7 @@
   background-color: #e9ebf3;
 }
 
-.warnInfoSelected {
+.warmInfoSelected {
   background-color: #fdf9f9;
   color: rgba(142, 129, 127, 1);
 }
@@ -255,6 +255,11 @@
   justify-content: flex-start;
   margin-left: 4px;
   border-bottom: 1px solid rgba(0,0,0,0.06);
+  transition: all 0.125s ease-in-out;
+}
+
+.dropDownTop:hover {
+  color: black;
 }
 
 .dropDownBottom {

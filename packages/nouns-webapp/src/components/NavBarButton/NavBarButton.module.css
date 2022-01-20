@@ -57,12 +57,12 @@
   filter: brightness(110%);
 }
 
-.warnInfo {
+.warmInfo {
   color: #B6A9A7;
   background-color: #FDF9F9;
 }
 
-.warnInfo:hover {
+.warmInfo:hover {
   background-color: white;
   color: black;
 }
