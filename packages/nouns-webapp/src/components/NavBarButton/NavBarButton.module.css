@@ -2,8 +2,9 @@
   height: 40px;
   border-radius: 10px;
   font-size: 16px;
+  line-height: 16px;
   font-family: 'PT Root UI Bold';
-  padding: 0px 10px 0px 12px;
+  padding: 0px 12px 0px 12px;
   transition: all 0.125s ease-in-out;
   box-shadow: none;
 }
@@ -18,7 +19,17 @@
 }
 
 .icon {
-  margin-right: 0.5rem;
+  margin-right: .4rem;
+}
+
+.icon>svg {
+  max-height: 14px;
+}
+
+@media (max-width: 992px) {
+  .icon>svg {
+    max-height: 17px;
+  }
 }
 
 .button:hover {
@@ -26,8 +37,8 @@
 }
 
 .coolInfo {
-  color: #79809c;
-  background-color: #e9ebf3;
+  color: #79809C;
+  background-color: #E9EBF3;
 }
 
 .coolInfo:hover {
@@ -36,19 +47,18 @@
 }
 
 .coolWallet {
-  background-color: #e9ebf3;
-  color: #79809c;
+  background-color: #4965F0;
+  color: white;
   padding: 0px 12px 0px 12px;
 }
 
 .coolWallet:hover {
-  background-color: white;
-  color: black;
+  filter: brightness(110%);
 }
 
 .warnInfo {
-  color: #b6a9a7;
-  background-color: #fdf9f9;
+  color: #B6A9A7;
+  background-color: #FDF9F9;
 }
 
 .warnInfo:hover {
@@ -57,20 +67,19 @@
 }
 
 .warmWallet {
-  color: #b6a9a7;
-  background-color: #fdf9f9;
+  background-color: #D63C5E;
+  color: white;
   padding: 0px 12px 0px 12px;
 }
 
 .warmWallet:hover {
-  background-color: white;
-  color: black;
+  filter: brightness(110%);
 }
 
 .whiteInfo {
   background-color: white;
-  box-shadow: 0px 0px 0px 1px #e2e3e8;
-  color: #79809c;
+  box-shadow: 0px 0px 0px 1px #E2E3E8;
+  color: #79809C
 }
 
 .whiteInfo:hover {
@@ -78,33 +87,17 @@
 }
 
 .whiteActive {
-  background-color: #f4f4f8;
-  box-shadow: 0px 0px 0px 1px #e2e3e8;
+  background-color: #F4F4F8;
+  box-shadow: 0px 0px 0px 1px #E2E3E8;
   color: black;
 }
 
 .whiteActive .icon {
-  color: #d63c5e;
-}
-
-.whiteWallet {
-  background-color: white;
-  box-shadow: 0px 0px 0px 1px #e2e3e8;
-  color: #79809c;
-  padding: 0px 12px 0px 12px;
-}
-
-.whiteWallet:hover {
-  filter: brightness(100%);
-}
-
-.whiteWallet:hover {
-  background-color: #e2e3e8;
+  color: #D63C5E;
 }
 
 @media (max-width: 992px) {
-  .wrapper,
-  .button {
+  .wrapper, .button {
     height: 48px;
     font-size: 18px;
   }

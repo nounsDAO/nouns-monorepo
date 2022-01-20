@@ -150,7 +150,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
               ),
             )}
           >
-            Switch Wallet
+            Switch wallet
           </div>
 
           <div
@@ -183,7 +183,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
               {' '}
               <Davatar size={21} address={address} provider={provider} />
             </div>
-            <div>{ens ? ens : shortAddress}</div>
+            <div className={classes.address}>{ens ? ens : shortAddress}</div>
           </div>
         </div>
       </div>
@@ -197,10 +197,10 @@ const NavWallet: React.FC<NavWalletProps> = props => {
           className={classes.mobileSwitchWalletText}
           onClick={switchWalletHandler}
         >
-          Swtich
+          Switch
         </div>
         <div className={classes.disconnectText} onClick={disconectWalletHandler}>
-          Disconnect
+          Sign out
         </div>
       </div>
     </div>

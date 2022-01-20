@@ -2,8 +2,9 @@
   height: 40px;
   border-radius: 10px;
   font-size: 16px;
+  line-height: 16px;
   font-family: 'PT Root UI Bold';
-  padding: 0px 10px 0px 12px;
+  padding: 0px 0px 0px 14px;
   transition: all 0.125s ease-in-out;
   box-shadow: none;
 }
@@ -12,9 +13,40 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   height: 100%;
   width: 100%;
+  padding-right: 14px;
+}
+
+.icon {
+  min-width: 24px;
+}
+
+.address {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  min-height: 18px;
+  margin-top: 1px;
+}
+
+@media (max-width: 330px) {
+  .button {
+    width: 70px;
+  }
+}
+
+@media (max-width: 370px) {
+  .button {
+    width: 90px;
+  }
+}
+
+@media (min-width: 400px) {
+  .button {
+    width: auto;
+  }
 }
 
 .icon {
@@ -132,7 +164,7 @@
 .connectContentMobileText {
   font-family: 'PT Root UI Bold';
   font-size: 18px;
-  margin-right: 2.25rem;
+  margin-right: 1rem;
   margin-top: 1rem;
   height: 2rem;
 }
@@ -215,19 +247,21 @@
 }
 
 .dropDownTop {
-  border-radius: 12px 12px 0px 0px;
-  padding-top: 0.5rem;
-  padding-left: 1rem;
-  justify-content: flex-start;
-  width: 8.4rem;
-  padding-bottom: 0.25rem;
-}
-
-.dropDownBottom {
-  border-radius: 0px 0px 12px 12px;
+  border-radius: 10px 10px 0px 0px;
+  padding-top: 0.65rem;
   padding-bottom: 0.5rem;
   padding-left: 1rem;
   justify-content: flex-start;
+  margin-left: 4px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.dropDownBottom {
+  border-radius: 0px 0px 10px 10px;
+  padding-bottom: 0.65rem;
+  padding-top: 0.5rem;
+  padding-left: 1rem;
+  justify-content: flex-start;
   color: var(--brand-color-red);
-  width: 8.4rem;
+  margin-left: 4px;
 }

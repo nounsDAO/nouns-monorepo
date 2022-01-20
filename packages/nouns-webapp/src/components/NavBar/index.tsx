@@ -80,8 +80,13 @@ const NavBar = () => {
             </Nav.Item>
           </div>
           <Navbar.Toggle
+            style={{
+              borderRadius: '10px',
+              height: '44px',
+              padding: '0.25rem 0.5rem',
+              marginRight: '1.25rem',
+            }}
             className={classes.navBarToggle}
-            id="mobileNav"
             aria-controls="basic-navbar-nav"
           />
           <Navbar.Collapse className="justify-content-end">

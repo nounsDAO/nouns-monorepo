@@ -2,6 +2,7 @@ import Modal from '../Modal';
 import WalletButton from '../WalletButton';
 import { WALLET_TYPE } from '../WalletButton';
 import { useEthers } from '@usedapp/core';
+import clsx from 'clsx';
 import { InjectedConnector } from '@web3-react/injected-connector';
 import { WalletLinkConnector } from '@web3-react/walletlink-connector';
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
@@ -18,7 +19,7 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
   const supportedChainIds = [CHAIN_ID];
 
   const wallets = (
-    <>
+    <div className={classes.walletConnectModal}>
       <WalletButton
         onClick={() => {
           const injected = new InjectedConnector({
@@ -31,7 +32,7 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
       <WalletButton
         onClick={() => {
           const fortmatic = new FortmaticConnector({
-            apiKey: 'pk_live_60FAF077265B4CBA',
+            apiKey: 'pk_test_FB5E5C15F2EC5AE6',
             chainId: CHAIN_ID,
           });
           activate(fortmatic);
@@ -95,20 +96,15 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
         }}
         walletType={WALLET_TYPE.trezor}
       />
-      <div className={classes.clickable} onClick={() => setAdvancedOpen(!advancedOpen)}>
-        Advanced {advancedOpen ? '^' : 'v'}
+      <div
+        className={clsx(classes.clickable, classes.walletConnectData)}
+        onClick={() => {
+          console.log(localStorage.removeItem('walletconnect'));
+        }}
+      >
+        Clear WalletConnect Data
       </div>
-      {advancedOpen && (
-        <div
-          className={classes.clickable}
-          onClick={() => {
-            console.log(localStorage.removeItem('walletconnect'));
-          }}
-        >
-          Clear WalletConnect Data
-        </div>
-      )}
-    </>
+    </div>
   );
   return <Modal title="Connect your wallet" content={wallets} onDismiss={onDismiss} />;
 };

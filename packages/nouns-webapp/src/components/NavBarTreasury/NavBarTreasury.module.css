@@ -18,10 +18,10 @@
 }
 
 .treasuryHeader {
-  font-size: 14.5px;
+  font-size: 16px;
   margin-left: 0.25rem;
   margin-right: 0.4rem;
-  margin-bottom: -1px;
+  margin-top: 1px;
 }
 
 .warmInfo .icon {
@@ -30,12 +30,18 @@
 }
 
 .treasuryBalance {
-  font-size: 16px;
-  letter-spacing: 0.5px;
+  font-size: 16.5px;
+  letter-spacing: 0.3px;
   margin-left: 0.4rem;
   margin-right: 0.25rem;
 }
 
+@media (max-width: 370px) {
+  .treasuryHeader {
+    display: none;
+  }
+}
+ 
 .warmInfo .treasuryBalance {
   color: #221b1a;
 }

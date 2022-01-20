@@ -46,6 +46,7 @@
   padding: 0.3rem 0.3rem !important;
   color: var(--brand-black) !important;
 }
+
 .nounsNavLink:hover {
   color: var(--brand-dark-red) !important;
 }
