@@ -63,9 +63,9 @@ const Bid: React.FC<{
 
   const [showConnectModal, setShowConnectModal] = useState(false);
 
-  const showModalHandler = () => {
-    setShowConnectModal(true);
-  };
+  //  const showModalHandler = () => {
+  //    setShowConnectModal(true);
+  //  };
   const hideModalHandler = () => {
     setShowConnectModal(false);
   };
@@ -236,27 +236,29 @@ const Bid: React.FC<{
   const isDisabled =
     placeBidState.status === 'Mining' || settleAuctionState.status === 'Mining' || !activeAccount;
 
+  // const isDisconnected = !activeAccount
+  // const isMobile = window.innerWidth < 992;
+
+  const minBidCopy = `Ξ ${minBidEth(minBid)} or more`;
   const fomoNounsBtnOnClickHandler = () => {
     // Open Fomo Nouns in a new tab
-    window.open(
-      'https://fomonouns.wtf',
-      '_blank' 
-    )?.focus();
+    window.open('https://fomonouns.wtf', '_blank')?.focus();
   };
 
   const isWalletConnected = activeAccount !== undefined;
 
   return (
     <>
-      {!auctionEnded && (
-        <p className={classes.minBidCopy}>{`Minimum bid: ${minBidEth(minBid)} ETH`}</p>
+      {showConnectModal && activeAccount === undefined && (
+        <WalletConnectModal onDismiss={hideModalHandler} />
       )}
       <InputGroup>
         {!auctionEnded && (
           <>
+            <span className={classes.customPlaceholderBidAmt}>
+              {!auctionEnded && !bidInput ? minBidCopy : ''}
+            </span>
             <FormControl
-              aria-label="Example text with button addon"
-              aria-describedby="basic-addon1"
               className={classes.bidInput}
               type="number"
               min="0"
@@ -264,38 +266,31 @@ const Bid: React.FC<{
               ref={bidInputRef}
               value={bidInput}
             />
-            <span className={classes.customPlaceholder}>ETH</span>
           </>
         )}
-        {
-          !auctionEnded ? (
-              <Button
-                className={auctionEnded ? classes.bidBtnAuctionEnded : classes.bidBtn}
-                onClick={auctionEnded ? settleAuctionHandler : placeBidHandler}
-                disabled={isDisabled}
-              >
-                {bidButtonContent.loading ? <Spinner animation="border" /> : bidButtonContent.content}
-              </Button>
-          ) 
-          : (
-            <>
-              <Button
-                className={classes.bidBtnAuctionEnded}
-                onClick={fomoNounsBtnOnClickHandler}
-              >
-                Vote for the next Noun ⌐◧-◧
+        {!auctionEnded ? (
+          <Button
+            className={auctionEnded ? classes.bidBtnAuctionEnded : classes.bidBtn}
+            onClick={auctionEnded ? settleAuctionHandler : placeBidHandler}
+            disabled={isDisabled}
+          >
+            {bidButtonContent.loading ? <Spinner animation="border" /> : bidButtonContent.content}
+          </Button>
+        ) : (
+          <>
+            <Button className={classes.bidBtnAuctionEnded} onClick={fomoNounsBtnOnClickHandler}>
+              Vote for the next Noun ⌐◧-◧
             </Button>
             {/* Only show force settle button if wallet connected */}
-            {isWalletConnected &&  (<p className={classes.emergencySettleWrapper}>
-              <button onClick={settleAuctionHandler} className={
-                classes.emergencySettleButton
-              }>
-                Pay to settle manually
-              </button>
-            </p>)}
-            </>
-          )
-        }
+            {isWalletConnected && (
+              <p className={classes.emergencySettleWrapper}>
+                <button onClick={settleAuctionHandler} className={classes.emergencySettleButton}>
+                  Pay to settle manually
+                </button>
+              </p>
+            )}
+          </>
+        )}
       </InputGroup>
     </>
   );

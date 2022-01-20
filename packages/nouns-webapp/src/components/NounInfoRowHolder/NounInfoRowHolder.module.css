@@ -30,6 +30,10 @@
   height: 35px;
 }
 
+.nounHolderLoading {
+  opacity: 0.5;
+}
+
 .linkIconSpan {
   margin-left: 5px;
 }

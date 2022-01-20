@@ -17,7 +17,7 @@
   padding: 0.5rem 0.75rem;
   border-radius: 12px;
   border-bottom: 1px solid rgba(211, 211, 211, 0.322);
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   font-weight: bold;
   transition: all 0.2s ease-in-out;
 }
@@ -71,6 +71,10 @@
   color: var(--brand-cool-dark-text);
   font-family: 'PT Root UI Bold';
   font-size: 18px;
+}
+
+.bidder {
+  margin-top: 2px;
 }
 
 .bidDate {

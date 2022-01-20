@@ -4,8 +4,13 @@
   margin-bottom: 0;
 }
 
+.container {
+  max-width: 100%;
+}
+
 .timerWrapper {
   display: flex;
+  margin-top: 1px;
 }
 
 .timerSection span {
@@ -19,7 +24,7 @@
 }
 
 .timerSectionFinal {
-  margin-right: 0.5rem;
+  margin-right: 0rem;
 }
 
 .timerSectionFinal span {
@@ -43,7 +48,6 @@
 }
 
 .auctionTimerSection {
-  cursor: pointer;
   margin-top: 6px;
   margin-left: 6px;
 }
@@ -63,7 +67,7 @@
 
   .title {
     font-size: 18px;
-    margin-top: 1.25rem;
+    margin-top: 1.4rem;
   }
 
   .section {
@@ -72,7 +76,7 @@
 
   .wrapper {
     padding-left: 0.5rem;
-    padding-right: 2rem;
+    padding-right: 0rem;
   }
 
   .leftCol {

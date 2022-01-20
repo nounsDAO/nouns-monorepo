@@ -39,18 +39,18 @@ const Documentation = () => {
             <Accordion.Header className={classes.accordionHeader}>Summary</Accordion.Header>
             <Accordion.Body>
               <ul>
-                <li>nouns artwork is {publicDomainLink}</li>
-                <li>1 noun trustlessly auctioned every 24 hours, forever</li>
-                <li>100% of noun auction proceeds are trustlessly sent to Nouns DAO treasury</li>
-                <li>settlement of one auction kicks off the next</li>
-                <li>all nouns are members of Nouns DAO</li>
-                <li>Nouns DAO uses a fork of {compoundGovLink}</li>
-                <li>1 noun = 1 vote</li>
-                <li>treasury is controlled exclusively by nouns via governance</li>
-                <li>artwork is generative and stored directly on-chain (not IPFS)</li>
-                <li>no explicit rules for attribute scarcity, all nouns are equally rare</li>
+                <li>Nouns artwork is in the {publicDomainLink}.</li>
+                <li>One Noun is trustlessly auctioned every 24 hours, forever.</li>
+                <li>100% of Noun auction proceeds are trustlessly sent to the treasury.</li>
+                <li>Settlement of one auction kicks off the next.</li>
+                <li>All Nouns are members of Nouns DAO.</li>
+                <li>Nouns DAO uses a fork of {compoundGovLink}.</li>
+                <li>One Noun is equal to one vote.</li>
+                <li>The treasury is controlled exclusively by Nouns via governance.</li>
+                <li>Artwork is generative and stored directly on-chain (not IPFS).</li>
+                <li>No explicit rules exist for attribute scarcity; all Nouns are equally rare.</li>
                 <li>
-                  'Nounders' receive rewards in the form of nouns (10% of supply for first 5 years)
+                  Nounders receive rewards in the form of Nouns (10% of supply for first 5 years).
                 </li>
               </ul>
             </Accordion.Body>
@@ -60,19 +60,19 @@ const Documentation = () => {
             <Accordion.Header className={classes.accordionHeader}>Daily Auctions</Accordion.Header>
             <Accordion.Body>
               <p className={classes.aboutText}>
-                The Nouns Auction Contract will act as a self-sufficient noun generation and
-                distribution mechanism, auctioning one noun every 24 hours, forever. 100% of auction
+                The Nouns Auction Contract will act as a self-sufficient Noun generation and
+                distribution mechanism, auctioning one Noun every 24 hours, forever. 100% of auction
                 proceeds (ETH) are automatically deposited in the Nouns DAO treasury, where they are
-                governed by noun owners.
+                governed by Noun owners.
               </p>
 
               <p className={classes.aboutText}>
                 Each time an auction is settled, the settlement transaction will also cause a new
-                noun to be minted and a new 24 hour auction to begin.{' '}
+                Noun to be minted and a new 24 hour auction to begin.{' '}
               </p>
               <p>
                 While settlement is most heavily incentivized for the winning bidder, it can be
-                triggered by anyone, allowing the system to trustlessly auction nouns as long as
+                triggered by anyone, allowing the system to trustlessly auction Nouns as long as
                 Ethereum is operational and there are interested bidders.
               </p>
             </Accordion.Body>
@@ -81,11 +81,11 @@ const Documentation = () => {
             <Accordion.Header className={classes.accordionHeader}>Nouns DAO</Accordion.Header>
             <Accordion.Body>
               Nouns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the
-              Nouns ecosystem. The Nouns DAO treasury receives 100% of ETH proceeds from daily noun
-              auctions. Each noun is an irrevocable member of Nouns DAO and entitled to one vote in
-              all governance matters. Noun votes are non-transferable (if you sell your noun the
+              Nouns ecosystem. The Nouns DAO treasury receives 100% of ETH proceeds from daily Noun
+              auctions. Each Noun is an irrevocable member of Nouns DAO and entitled to one vote in
+              all governance matters. Noun votes are non-transferable (if you sell your Noun the
               vote goes with it) but delegatable, which means you can assign your vote to someone
-              else as long as you own your noun.
+              else as long as you own your Noun.
             </Accordion.Body>
           </Accordion.Item>
           <Accordion.Item eventKey="3" className={classes.accordionItem}>
@@ -96,12 +96,12 @@ const Documentation = () => {
               <p>
                 In addition to the precautions taken by Compound Governance, Nounders have given
                 themselves a special veto right to ensure that no malicious proposals can be passed
-                while the noun supply is low. This veto right will only be used if an obviously
+                while the Noun supply is low. This veto right will only be used if an obviously
                 harmful governance proposal has been passed, and is intended as a last resort.
               </p>
               <p>
                 Nounders will proveably revoke this veto right when they deem it safe to do so. This
-                decision will be based on a healthy noun distribution and a community that is
+                decision will be based on a healthy Noun distribution and a community that is
                 engaged in the governance process.
               </p>
             </Accordion.Body>
@@ -111,8 +111,8 @@ const Documentation = () => {
             <Accordion.Body>
               <p>
                 Nouns are generated randomly based Ethereum block hashes. There are no 'if'
-                statements or other rules governing noun trait scarcity, which makes all nouns
-                equally rare. As of this writing, nouns are made up of:
+                statements or other rules governing Noun trait scarcity, which makes all Nouns
+                equally rare. As of this writing, Nouns are made up of:
               </p>
               <ul>
                 <li>backgrounds (2) </li>
@@ -121,7 +121,7 @@ const Documentation = () => {
                 <li>heads (234) </li>
                 <li>glasses (21)</li>
               </ul>
-              You can experiment with off-chain noun generation at the {playgroundLink}.
+              You can experiment with off-chain Noun generation at the {playgroundLink}.
             </Accordion.Body>
           </Accordion.Item>
           <Accordion.Item eventKey="5" className={classes.accordionItem}>
@@ -131,7 +131,7 @@ const Documentation = () => {
             <Accordion.Body>
               <p>
                 Nouns are stored directly on Ethereum and do not utilize pointers to other networks
-                such as IPFS. This is possible because noun parts are compressed and stored on-chain
+                such as IPFS. This is possible because Noun parts are compressed and stored on-chain
                 using a custom run-length encoding (RLE), which is a form of lossless compression.
               </p>
 
@@ -216,16 +216,16 @@ const Documentation = () => {
                 </li>
               </ul>
               <p>
-                Because 100% of noun auction proceeds are sent to Nouns DAO, Nounders have chosen to
-                compensate themselves with nouns. Every 10th noun for the first 5 years of the
-                project (noun ids #0, #10, #20, #30 and so on) will be automatically sent to the
+                Because 100% of Noun auction proceeds are sent to Nouns DAO, Nounders have chosen to
+                compensate themselves with Nouns. Every 10th Noun for the first 5 years of the
+                project (Noun ids #0, #10, #20, #30 and so on) will be automatically sent to the
                 Nounder's multisig to be vested and shared among the founding members of the
                 project.
               </p>
               <p>
                 Nounder distributions don't interfere with the cadence of 24 hour auctions. Nouns
                 are sent directly to the Nounder's Multisig, and auctions continue on schedule with
-                the next available noun ID.
+                the next available Noun ID.
               </p>
             </Accordion.Body>
           </Accordion.Item>

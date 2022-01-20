@@ -24,7 +24,7 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
   const etherscanURL = buildEtherscanAddressLink(data && data.noun.owner.id);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <div className={classes.nounHolderInfoContainer}><span className={classes.nounHolderLoading}>Loading...</span></div>;
   } else if (error) {
     return <div>Failed to fetch noun info</div>;
   }

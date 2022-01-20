@@ -136,10 +136,15 @@
 
 @media (max-width: 992px) {
   .bidInput {
-    border-color: #c3c3c3;
+    border: none;
   }
+
   .customPlaceholder {
-    left: 44%;
+    left: 40%;
+  }
+  .customPlaceholderBidAmt {
+    left: 3.5%;
+    top: 16%;
   }
   .emergencySettleWrapper {
     text-align: center;

@@ -29,6 +29,7 @@
 .bidder {
   font-weight: bold;
   color: var(--brand-black);
+  padding-top: 4px !important;
 }
 
 .bidDate {

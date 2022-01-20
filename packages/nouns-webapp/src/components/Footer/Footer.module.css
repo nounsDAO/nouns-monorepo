@@ -12,12 +12,16 @@
   padding-bottom: 4rem;
   padding-top: 2rem;
   color: var(--brand-black) !important;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .footerSignature a {
   text-decoration: none;
   color: black;
-  margin: 0 14px;
+  margin: 8px 14px;
   transition: all 0.15s ease-in-out;
 }
 

@@ -30,34 +30,66 @@ h4 {
   justify-content: flex-start;
   align-items: center;
 }
+
 .modalTitleWrapper {
   color: var(--brand-black);
 }
+
 .modalTitleWrapper h1 {
   font-size: xx-large;
   margin-left: 2rem;
 }
+
 .modalHeader button {
   align-self: flex-start;
 }
+
 .modalHeaderNounImgWrapper {
   width: 150px;
   height: 150px;
 }
+
 .currentBidCol {
-  border-right: 1px solid var(--brand-black);
+  border-right: 1px solid #79809c49;
+  margin-left: 6px;
+  margin-top: 6px;
 }
+
 .auctionTimerCol {
-  padding-left: 3rem;
+  padding-left: 0.5rem;
+}
+
+.section h4 {
+  font-family: 'PT Root UI';
+  font-size: 18px;
+  line-height: 27px;
+  color: var(--brand-cool-light-text);
+}
+
+.section h2 {
+  font-family: 'PT Root UI Bold';
+  font-size: 32px;
+  color: var(--brand-cool-dark-text);
 }
 
 @media (max-width: 992px) {
+
+  h1 {
+    padding-top: 12px;
+  }
+
   .wrapper {
     padding: 1rem;
   }
+
   .auctionTimerCol {
-    padding-left: 15px;
+    padding-left: 8px;
   }
+
+  .currentBidCol {
+    border-right: 0px;
+  }
+
   .fomoNounsLink {
     text-align: center;
   }
@@ -70,18 +102,28 @@ h4 {
     align-items: center;
   }
 }
+
 .fomoNounsLink {
-  color: #8c8d92;
+  margin-top: 1.5rem;
+  transition: 0.2s ease-in-out;
 }
 
-.fomoNounsLink a,
-.fomoNounsLink:hover a .fomoNounsLink:active a {
-  color: #8c8d92;
+.fomoNounsLink svg {
+  opacity: 0.6;
+}
+
+.fomoNounsLink a, .fomoNounsLink:active a {
+  font-family: "PT Root UI", sans-serif;
+  font-weight: 500;
   padding-left: 0.5rem;
+  text-decoration: none;
+  opacity: 1;
+  color: rgb(95, 95, 95);
 }
 
 .fomoNounsLink:hover,
 .fomoNounsLink:hover a {
-  text-decoration: underline;
-  color: #8c8d9275;
+  text-decoration: none;
+  color: black;
+  opacity: 1;
 }

@@ -21,12 +21,13 @@
     padding-bottom: 2rem;
     padding-top: 2rem;
     padding-right: unset;
+    padding-left: 0;
   }
 
   .nounWrapper {
     width: 70%;
     margin-left: 15%;
     margin-right: 15%;
-    margin-top: -3rem;
+    margin-top: -1rem;
   }
 }

@@ -10,7 +10,9 @@
 }
 
 .bidRow {
-  font-weight: normal !important;
+  font-weight: 500;
+  font-size: 15.5px;
+  line-height: 21px;
 }
 
 .currentBidCol {
