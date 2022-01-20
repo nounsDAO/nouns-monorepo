@@ -177,7 +177,6 @@
 
 .disconnectText:hover {
   color: var(--brand-color-red);
-  background-color: white;
   transition: all 0.125s ease-in-out;
   cursor: pointer;
 }
