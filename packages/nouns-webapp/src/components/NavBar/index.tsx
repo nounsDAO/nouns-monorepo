@@ -49,11 +49,7 @@ const NavBar = () => {
         <Container>
           <div className={classes.brandAndTreasuryWrapper}>
             <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
-              <img
-                src={logo}
-                className={classes.navBarLogo}
-                alt="Nouns DAO logo"
-              />
+              <img src={logo} className={classes.navBarLogo} alt="Nouns DAO logo" />
             </Navbar.Brand>
             {Number(CHAIN_ID) !== 1 && (
               <Nav.Item>
@@ -77,16 +73,7 @@ const NavBar = () => {
               )}
             </Nav.Item>
           </div>
-          <Navbar.Toggle
-            style={{
-              borderRadius: '10px',
-              height: '44px',
-              padding: '0.25rem 0.5rem',
-              marginRight: '1.25rem',
-            }}
-            className={classes.navBarToggle}
-            aria-controls="basic-navbar-nav"
-          />
+          <Navbar.Toggle className={classes.navBarToggle} aria-controls="basic-navbar-nav" />
           <Navbar.Collapse className="justify-content-end">
             <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>
               <NavBarButton
