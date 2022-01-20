@@ -28,11 +28,12 @@
   border-radius: 10px;
   min-height: 44px;
   padding-top: 7px;
+  background-color: rgba(255,255,255,0.7);
 }
 
 .modal button:hover {
   color: black;
-  filter: brightness(110%);
+  background-color: rgba(255,255,255,1);
 }
 
 .modal h3 {
