@@ -37,6 +37,10 @@
 }
 
 @media (max-width: 370px) {
+  .wrapper {
+    margin-left: -0.5rem;
+    padding: 0px 7px 0px 6px;
+  }
   .treasuryHeader {
     display: none;
   }
