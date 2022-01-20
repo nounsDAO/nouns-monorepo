@@ -80,6 +80,14 @@
   color: black;
 }
 
-.whiteInfo .treasuryHeader {
-  opacity: 0.5;
+.whiteInfo {
+  background: white;
+}
+
+.treasuryHeader {
+  color: rgb(95,95,95);
+}
+
+.whiteInfo:hover {
+  background-color: #e2e3e8;
 }

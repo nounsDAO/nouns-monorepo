@@ -109,12 +109,13 @@
 
 .whiteInfo {
   background-color: white;
-  box-shadow: 0px 0px 0px 1px #e2e3e8;
-  color: #79809c;
+  border: 1px solid rgba(0,0,0,0.1);
+  color: rgb(95, 95, 95);
 }
 
 .whiteInfo:hover {
   background-color: #e2e3e8;
+  color: black;
 }
 
 .whiteActive {
