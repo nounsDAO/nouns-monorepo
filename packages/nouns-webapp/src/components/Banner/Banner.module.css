@@ -10,6 +10,11 @@
   .wrapper {
     padding: 2rem;
   }
+
+  .wrapper h1 {
+    font-size: 3rem;
+
+  }
 }
 
 @media (min-width: 992px) {
