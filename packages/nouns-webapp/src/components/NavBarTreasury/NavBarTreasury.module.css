@@ -1,0 +1,79 @@
+.wrapper {
+  height: 40px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-family: 'PT Root UI Bold';
+  padding: 0px 10px 0px 10px;
+  transition: all 0.125s ease-in-out;
+  box-shadow: none;
+}
+
+.button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.treasuryHeader {
+  font-size: 16px;
+  margin-left: 0.25rem;
+  margin-right: 0.4rem;
+  margin-top: 1px;
+}
+
+.warmInfo .icon {
+  color: #b6a9a7;
+  border-left: 1px solid #e1d7d5;
+}
+
+.treasuryBalance {
+  font-size: 16.5px;
+  letter-spacing: 0.3px;
+  margin-left: 0.4rem;
+  margin-right: 0.25rem;
+}
+
+@media (max-width: 370px) {
+  .wrapper {
+    margin-left: -0.5rem;
+    padding: 0px 7px 0px 6px;
+  }
+  .treasuryHeader {
+    display: none;
+  }
+}
+ 
+.warmInfo .treasuryBalance {
+  color: #221b1a;
+}
+
+.coolInfo .treasuryBalance {
+  color: #151c3b;
+}
+
+.button:hover {
+  cursor: pointer;
+}
+
+.coolInfo {
+  color: #79809c;
+  background-color: #e9ebf3;
+}
+
+.coolInfo:hover {
+  background-color: white;
+  color: black;
+}
+
+.warmInfo {
+  color: #b6a9a7;
+  background-color: #fdf9f9;
+}
+
+.warmInfo:hover {
+  background-color: white;
+  color: black;
+}

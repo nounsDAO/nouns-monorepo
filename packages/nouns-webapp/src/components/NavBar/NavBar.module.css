@@ -1,12 +1,31 @@
 .navBarBrand {
   position: relative;
   z-index: 2;
+  padding: 1rem 0rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.navBarBrand:hover {
+  transform: scale(0.95);
+}
+
+.navBarLogo {
+  width: 75px;
+  height: 75px;
+}
+
+@media (max-width: 992px) {
+  .navBarLogo {
+    width: 65px;
+    height: 65px;
+  }
 }
 
 /* connect button displays differently to default NavBarItems, thus the !importants */
 .connectBtn {
   cursor: pointer;
 }
+
 .connectBtn:hover,
 .connectBtn:active,
 .connectBtn:focus {
@@ -14,6 +33,7 @@
 }
 .disconnectBtn {
   cursor: pointer;
+  font-family: 'PT Root UI Bold';
 }
 .disconnectBtn:hover,
 .disconnectBtn:active,
@@ -33,10 +53,12 @@
 .nounsNavLink,
 .nounsNavLink:active,
 .nounsNavLink:visited {
+  font-family: 'PT Root UI Bold';
   font-size: 0.9rem;
-  padding: 0.5rem 0.8rem !important;
+  padding: 0.3rem 0.3rem !important;
   color: var(--brand-black) !important;
 }
+
 .nounsNavLink:hover {
   color: var(--brand-dark-red) !important;
 }
@@ -51,4 +73,18 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+.brandAndTreasuryWrapper {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.navBarToggle {
+  border-radius: 10px;
+  height: 44px;
+  padding: 0.25rem 0.5rem;
+  margin-right: 12px;
 }
