@@ -28,7 +28,8 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   min-height: 18px;
-  margin-top: 1px;
+  line-height: 20px;
+  color: black !important;
 }
 
 @media (max-width: 330px) {
@@ -87,12 +88,12 @@
   filter: brightness(110%);
 }
 
-.warnInfo {
+.warmInfo {
   color: #b6a9a7;
   background-color: #fdf9f9;
 }
 
-.warnInfo:hover {
+.warmInfo:hover {
   background-color: white;
   color: black;
 }
@@ -109,17 +110,18 @@
 
 .whiteInfo {
   background-color: white;
-  box-shadow: 0px 0px 0px 1px #e2e3e8;
-  color: #79809c;
+  border: 1px solid rgba(0,0,0,0.1);
+  color: rgb(95, 95, 95);
 }
 
 .whiteInfo:hover {
   background-color: #e2e3e8;
+  color: black;
 }
 
 .whiteActive {
   background-color: #f4f4f8;
-  box-shadow: 0px 0px 0px 1px #e2e3e8;
+  border: 1px solid rgba(0,0,0,0.1);
   color: black;
 }
 
@@ -175,7 +177,6 @@
 
 .disconnectText:hover {
   color: var(--brand-color-red);
-  background-color: white;
   transition: all 0.125s ease-in-out;
   cursor: pointer;
 }
@@ -198,7 +199,7 @@
 
 .whiteDropdown {
   background-color: white;
-  box-shadow: 0px 0px 0px 1px #e2e3e8;
+  border: 1px solid rgba(0,0,0,0.1);
 }
 
 .coolDropdown {
@@ -211,7 +212,7 @@
 
 .whiteInfoSelected {
   background-color: #f4f4f8;
-  box-shadow: 0px 0px 0px 1px #e2e3e8;
+  border: 1px solid rgba(0,0,0,0.1);
   color: #8c8d92;
 }
 
@@ -236,7 +237,7 @@
   background-color: #e9ebf3;
 }
 
-.warnInfoSelected {
+.warmInfoSelected {
   background-color: #fdf9f9;
   color: rgba(142, 129, 127, 1);
 }
@@ -254,6 +255,11 @@
   justify-content: flex-start;
   margin-left: 4px;
   border-bottom: 1px solid rgba(0,0,0,0.06);
+  transition: all 0.125s ease-in-out;
+}
+
+.dropDownTop:hover {
+  color: black;
 }
 
 .dropDownBottom {

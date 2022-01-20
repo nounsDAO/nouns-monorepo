@@ -2,7 +2,7 @@
   position: relative;
   z-index: 2;
   padding: 1rem 0rem;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.15s ease-in-out;
 }
 
 .navBarBrand:hover {
@@ -56,11 +56,7 @@
   font-family: 'PT Root UI Bold';
   font-size: 0.9rem;
   padding: 0.3rem 0.3rem !important;
-  color: var(--brand-black) !important;
-}
-
-.nounsNavLink:hover {
-  color: var(--brand-dark-red) !important;
+  color: black !important;
 }
 
 .testnetImg {
