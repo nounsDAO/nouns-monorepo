@@ -56,6 +56,14 @@
   color: #151c3b;
 }
 
+.treasuryHeader {
+  opacity: 0.5;
+}
+
+.coolInfo .treasuryHeader, .warmInfo .treasuryHeader {
+  opacity: 1;
+}
+
 .button:hover {
   cursor: pointer;
 }
@@ -82,10 +90,6 @@
 
 .whiteInfo {
   background: white;
-}
-
-.treasuryHeader {
-  color: rgb(95,95,95);
 }
 
 .whiteInfo:hover {

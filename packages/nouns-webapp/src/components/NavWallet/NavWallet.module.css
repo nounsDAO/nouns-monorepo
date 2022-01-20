@@ -28,7 +28,8 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   min-height: 18px;
-  margin-top: 1px;
+  line-height: 20px;
+  color: black !important;
 }
 
 @media (max-width: 330px) {

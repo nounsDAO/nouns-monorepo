@@ -118,7 +118,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
             {' '}
             <Davatar size={21} address={address} provider={provider} />
           </div>
-          <div>{ens ? ens : shortAddress}</div>
+          <div className={classes.address}>{ens ? ens : shortAddress}</div>
           <div className={buttonUp ? classes.arrowUp : classes.arrowDown}>
             <FontAwesomeIcon icon={buttonUp ? faSortUp : faSortDown} />{' '}
           </div>
@@ -145,7 +145,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
               usePickByState(
                 classes.whiteInfoSelectedTop,
                 classes.coolInfoSelected,
-                classes.warmInfoSelected,
+                classes.warnInfoSelected,
                 history,
               ),
             )}
@@ -161,7 +161,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
               usePickByState(
                 classes.whiteInfoSelectedBottom,
                 classes.coolInfoSelected,
-                classes.warmInfoSelected,
+                classes.warnInfoSelected,
                 history,
               ),
               classes.disconnectText,
