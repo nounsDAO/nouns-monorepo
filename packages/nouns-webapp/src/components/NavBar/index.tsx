@@ -51,9 +51,7 @@ const NavBar = () => {
             <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
               <img
                 src={logo}
-                width="75"
-                height="75"
-                className="d-inline-block align-middle"
+                className={classes.navBarLogo}
                 alt="Nouns DAO logo"
               />
             </Navbar.Brand>

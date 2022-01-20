@@ -9,6 +9,18 @@
   transform: scale(0.95);
 }
 
+.navBarLogo {
+  width: 75px;
+  height: 75px;
+}
+
+@media (max-width: 992px) {
+  .navBarLogo {
+    width: 65px;
+    height: 65px;
+  }
+}
+
 /* connect button displays differently to default NavBarItems, thus the !importants */
 .connectBtn {
   cursor: pointer;

@@ -10,12 +10,10 @@ import { TrezorConnector } from '@web3-react/trezor-connector';
 import { FortmaticConnector } from '@web3-react/fortmatic-connector';
 import config, { CHAIN_ID } from '../../config';
 import classes from './WalletConnectModal.module.css';
-import { useState } from 'react';
 
 const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
   const { onDismiss } = props;
   const { activate } = useEthers();
-  const [advancedOpen, setAdvancedOpen] = useState(false);
   const supportedChainIds = [CHAIN_ID];
 
   const wallets = (
