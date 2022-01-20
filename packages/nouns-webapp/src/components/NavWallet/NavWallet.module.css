@@ -120,7 +120,7 @@
 
 .whiteActive {
   background-color: #f4f4f8;
-  box-shadow: 0px 0px 0px 1px #e2e3e8;
+  border: 1px solid rgba(0,0,0,0.1);
   color: black;
 }
 
@@ -199,7 +199,7 @@
 
 .whiteDropdown {
   background-color: white;
-  box-shadow: 0px 0px 0px 1px #e2e3e8;
+  border: 1px solid rgba(0,0,0,0.1);
 }
 
 .coolDropdown {
@@ -212,7 +212,7 @@
 
 .whiteInfoSelected {
   background-color: #f4f4f8;
-  box-shadow: 0px 0px 0px 1px #e2e3e8;
+  border: 1px solid rgba(0,0,0,0.1);
   color: #8c8d92;
 }
 
