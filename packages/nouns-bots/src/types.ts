@@ -35,6 +35,7 @@ export interface IAuctionLifecycleHandler {
   handleAuctionEndingSoon(auctionId: number): Promise<void>;
   handleNewProposal(proposal: Proposal): Promise<void>;
   handleUpdatedProposalStatus(proposal: Proposal): Promise<void>;
+  handleProposalAtRiskOfExpiry(proposal: Proposal): Promise<void>;
   handleGovernanceVote(proposal: Proposal, vote: Vote): Promise<void>;
 }
 
