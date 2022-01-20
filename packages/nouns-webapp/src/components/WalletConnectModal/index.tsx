@@ -30,7 +30,7 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
       <WalletButton
         onClick={() => {
           const fortmatic = new FortmaticConnector({
-            apiKey: 'pk_test_FB5E5C15F2EC5AE6',
+            apiKey: 'pk_live_60FAF077265B4CBA',
             chainId: CHAIN_ID,
           });
           activate(fortmatic);
