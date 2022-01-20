@@ -69,7 +69,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
   const statePrimaryButtonClass = usePickByState(
     classes.whiteInfo,
     classes.coolInfo,
-    classes.warnInfo,
+    classes.warmInfo,
     history,
   );
 

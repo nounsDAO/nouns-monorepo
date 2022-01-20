@@ -6,7 +6,8 @@
   font-family: 'PT Root UI Bold';
   padding: 0px 12px 0px 12px;
   transition: all 0.125s ease-in-out;
-  box-shadow: none;
+  box-shadow: none !important;
+  border: 1px solid rgba(0,0,0,0.1);
 }
 
 .button {
@@ -76,14 +77,15 @@
   filter: brightness(110%);
 }
 
-.whiteInfo {
+.whiteInfo, .whiteWallet {
   background-color: white;
   box-shadow: 0px 0px 0px 1px #E2E3E8;
-  color: #79809C
+  color: rgb(95, 95, 95);
 }
 
-.whiteInfo:hover {
+.whiteInfo:hover, .whiteWallet:hover {
   background-color: #e2e3e8;
+  color: black;
 }
 
 .whiteActive {
