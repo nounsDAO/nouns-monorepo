@@ -9,7 +9,7 @@ import Section from '../../layout/Section';
 import { Button, Col, Form } from 'react-bootstrap';
 import VerifySignature from '../../components/VerifySignature';
 import * as R from 'ramda';
-import { useEthers } from '@usedapp/core';
+import { useWeb3Context } from '../../hooks/useWeb3';
 
 interface VerifyPageProp {}
 
@@ -18,7 +18,7 @@ const VerifyPage: React.FC<VerifyPageProp> = props => {
   const { data } = useQuery(nounsIndex());
   const [messageToSign, setMessageToSign] = useState<undefined | string>(undefined);
   const [signedMessage, setSignedMessage] = useState<undefined | object>(undefined);
-  const { library } = useEthers();
+  const { provider } = useWeb3Context();
 
   const extractOwnedNounIdsFromNounsIndex = (owner: string | undefined, nounsIndex: any) =>
     R.pipe(
@@ -71,7 +71,7 @@ const VerifyPage: React.FC<VerifyPageProp> = props => {
                 </Form.Group>
                 <Button
                   onClick={async () => {
-                    const signature = await library?.getSigner().signMessage(messageToSign);
+                    const signature = await provider?.getSigner().signMessage(messageToSign);
                     setSignedMessage({
                       message: messageToSign,
                       signer: activeAccount,

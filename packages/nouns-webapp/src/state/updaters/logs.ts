@@ -1,13 +1,14 @@
-import { useBlockNumber, useEthers } from '@usedapp/core';
+import { useBlockNumber } from '@usedapp/core';
 import { useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useWeb3Context } from '../../hooks/useWeb3';
 import { EventFilter, keyToFilter } from '../../utils/logParsing';
 import { fetchedLogs, fetchedLogsError, fetchingLogs } from '../slices/logs';
 
 const Updater = (): null => {
   const dispatch = useAppDispatch();
   const state = useAppSelector(state => state.logs);
-  const { library } = useEthers();
+  const { provider } = useWeb3Context();
 
   const blockNumber = useBlockNumber();
 
@@ -32,11 +33,11 @@ const Updater = (): null => {
   }, [blockNumber, state]);
 
   useEffect(() => {
-    if (!library || typeof blockNumber !== 'number' || filtersNeedFetch.length === 0) return;
+    if (!provider || typeof blockNumber !== 'number' || filtersNeedFetch.length === 0) return;
 
     dispatch(fetchingLogs({ filters: filtersNeedFetch, blockNumber }));
     filtersNeedFetch.forEach(filter => {
-      library
+      provider
         .getLogs({
           ...filter,
           fromBlock: 0,
@@ -60,7 +61,7 @@ const Updater = (): null => {
           );
         });
     });
-  }, [blockNumber, dispatch, filtersNeedFetch, library]);
+  }, [blockNumber, dispatch, filtersNeedFetch, provider]);
 
   return null;
 };

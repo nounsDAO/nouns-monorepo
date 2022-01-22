@@ -8,7 +8,7 @@ import { WalletLinkConnector } from '@web3-react/walletlink-connector';
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
 import { TrezorConnector } from '@web3-react/trezor-connector';
 import { FortmaticConnector } from '@web3-react/fortmatic-connector';
-import config, { CHAIN_ID } from '../../config';
+import config, { CHAIN_ID, FORTMATIC_KEY } from '../../config';
 import classes from './WalletConnectModal.module.css';
 
 const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
@@ -30,7 +30,7 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
       <WalletButton
         onClick={() => {
           const fortmatic = new FortmaticConnector({
-            apiKey: 'pk_test_FB5E5C15F2EC5AE6',
+            apiKey: FORTMATIC_KEY || '',
             chainId: CHAIN_ID,
           });
           activate(fortmatic);

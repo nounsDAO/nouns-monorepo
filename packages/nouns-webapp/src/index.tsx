@@ -42,6 +42,7 @@ import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { nounPath } from './utils/history';
 import { push } from 'connected-react-router';
+import { Web3ContextProvider } from './hooks/useWeb3';
 
 dotenv.config();
 
@@ -190,26 +191,28 @@ const PastAuctions: React.FC = () => {
 };
 
 ReactDOM.render(
-  <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <ChainSubscriber />
-      <React.StrictMode>
-        <Web3ReactProvider
-          getLibrary={
-            provider => new Web3Provider(provider) // this will vary according to whether you use e.g. ethers or web3.js
-          }
-        >
-          <ApolloProvider client={client}>
-            <PastAuctions />
-            <DAppProvider config={useDappConfig}>
-              <App />
-              <Updaters />
-            </DAppProvider>
-          </ApolloProvider>
-        </Web3ReactProvider>
-      </React.StrictMode>
-    </ConnectedRouter>
-  </Provider>,
+  <Web3ContextProvider>
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <ChainSubscriber />
+        <React.StrictMode>
+          <Web3ReactProvider
+            getLibrary={
+              provider => new Web3Provider(provider) // this will vary according to whether you use e.g. ethers or web3.js
+            }
+          >
+            <ApolloProvider client={client}>
+              <PastAuctions />
+              <DAppProvider config={useDappConfig}>
+                <App />
+                <Updaters />
+              </DAppProvider>
+            </ApolloProvider>
+          </Web3ReactProvider>
+        </React.StrictMode>
+      </ConnectedRouter>
+    </Provider>
+  </Web3ContextProvider>,
   document.getElementById('root'),
 );
 

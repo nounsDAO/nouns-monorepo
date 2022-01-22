@@ -1,18 +1,18 @@
-import { useEthers } from '@usedapp/core';
 import { useEffect, useState } from 'react';
+import { useWeb3Context } from '../hooks/useWeb3';
 
 export const useEnsAvatarLookup = (address: string) => {
-  const { library } = useEthers();
+  const { provider } = useWeb3Context();
   const [ensAvatar, setEnsAvatar] = useState<string>();
 
   useEffect(() => {
     let mounted = true;
-    if (address && library) {
-      library
+    if (address && provider) {
+      provider
         .lookupAddress(address)
         .then(name => {
           if (!name) return;
-          library.getResolver(name).then(resolver => {
+          provider.getResolver(name).then(resolver => {
             if (!resolver) return;
             resolver
               .getText('avatar')
@@ -35,7 +35,7 @@ export const useEnsAvatarLookup = (address: string) => {
       setEnsAvatar('');
       mounted = false;
     };
-  }, [address, library]);
+  }, [address, provider]);
 
   return ensAvatar;
 };

@@ -11,7 +11,6 @@ import {
 import { useUserVotes } from '../../wrappers/nounToken';
 import classes from './CreateProposal.module.css';
 import { Link } from 'react-router-dom';
-import { useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import ProposalEditor from '../../components/ProposalEditor';
 import CreateProposalButton from '../../components/CreateProposalButton';
@@ -20,9 +19,10 @@ import ProposalTransactionFormModal from '../../components/ProposalTransactionFo
 import { withStepProgress } from 'react-stepz';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch } from '../../hooks';
+import { useWeb3Context } from '../../hooks/useWeb3';
 
 const CreateProposalPage = () => {
-  const { account } = useEthers();
+  const { account } = useWeb3Context();
   const latestProposalId = useProposalCount();
   const latestProposal = useProposal(latestProposalId ?? 0);
   const availableVotes = useUserVotes();

@@ -6,6 +6,7 @@ import { useMemo } from 'react';
 import { useLogs } from '../hooks/useLogs';
 import * as R from 'ramda';
 import config from '../config';
+import { useWeb3Context } from '../hooks/useWeb3';
 
 export enum Vote {
   AGAINST = 0,
@@ -95,7 +96,7 @@ const proposalCreatedFilter = nounsDaoContract.filters?.ProposalCreated(
 );
 
 export const useHasVotedOnProposal = (proposalId: string | undefined): boolean => {
-  const { account } = useEthers();
+  const { account } = useWeb3Context();
 
   // Fetch a voting receipt for the passed proposal id
   const [receipt] =
