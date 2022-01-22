@@ -1,14 +1,14 @@
-import { useEthers } from '@usedapp/core';
 import { useEffect, useState } from 'react';
+import { useWeb3Context } from '../hooks/useWeb3';
 
 export const useReverseENSLookUp = (address: string) => {
-  const { library } = useEthers();
+  const { provider } = useWeb3Context();
   const [ens, setEns] = useState<string>();
 
   useEffect(() => {
     let mounted = true;
-    if (address && library) {
-      library
+    if (address && provider) {
+      provider
         .lookupAddress(address)
         .then(name => {
           if (!name) return;
@@ -25,7 +25,7 @@ export const useReverseENSLookUp = (address: string) => {
       setEns('');
       mounted = false;
     };
-  }, [address, library]);
+  }, [address, provider]);
 
   return ens;
 };

@@ -5,6 +5,7 @@ import { INounSeed, useNounSeed } from '../../wrappers/nounToken';
 import Noun from '../Noun';
 import { Link } from 'react-router-dom';
 import classes from './StandaloneNoun.module.css';
+import { useEffect } from 'react';
 
 interface StandaloneNounProps {
   nounId: EthersBN;
@@ -49,9 +50,15 @@ export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = (
 
   const seed = useNounSeed(nounId);
 
+  useEffect(() => {
+    if (onLoadSeed && seed) {
+      onLoadSeed(seed)
+    }
+  }, [onLoadSeed, seed])
+
   if (!seed || !nounId || !onLoadSeed) return <Noun imgPath="" alt="Noun" />;
 
-  onLoadSeed(seed);
+  
 
   const { image, description } = getNoun(nounId, seed);
 

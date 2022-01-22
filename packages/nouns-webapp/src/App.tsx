@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { useEthers } from '@usedapp/core';
 import { useAppDispatch, useAppSelector } from './hooks';
 import { setActiveAccount } from './state/slices/account';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
@@ -23,22 +22,25 @@ import VerifyPage from './pages/Verify';
 import ProfilePage from './pages/Profile';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import dayjs from 'dayjs';
+import { useWeb3Context } from './hooks/useWeb3';
 
 function App() {
-  const { account, chainId } = useEthers();
+  // const { account, chainId } = useWeb3Context();
+  const thing = useWeb3Context()
+  console.log("Context: ", thing)
   const dispatch = useAppDispatch();
   dayjs.extend(relativeTime);
 
   useEffect(() => {
     // Local account array updated
-    dispatch(setActiveAccount(account));
-  }, [account, dispatch]);
+    dispatch(setActiveAccount(thing?.account));
+  }, [thing, dispatch]);
 
   const alertModal = useAppSelector(state => state.application.alertModal);
 
   return (
     <div className={`${classes.wrapper}`}>
-      {Number(CHAIN_ID) !== chainId && <NetworkAlert />}
+      {Number(CHAIN_ID) !== thing?.chainId && <NetworkAlert />}
       {alertModal.show && (
         <AlertModal
           title={alertModal.title}

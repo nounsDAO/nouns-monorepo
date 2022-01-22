@@ -1,5 +1,5 @@
 import { Auction, AuctionHouseContractFunction } from '../../wrappers/nounsAuction';
-import { connectContractToSigner, useEthers, useContractFunction } from '@usedapp/core';
+import { useContractFunction } from '@usedapp/core';
 import { useAppSelector } from '../../hooks';
 import React, { useEffect, useState, useRef, ChangeEvent, useCallback } from 'react';
 import { utils, BigNumber as EthersBN } from 'ethers';
@@ -11,6 +11,7 @@ import { useAppDispatch } from '../../hooks';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import { NounsAuctionHouseFactory } from '@nouns/sdk';
 import config from '../../config';
+import { connectContractToSigner, useWeb3Context } from '../../hooks/useWeb3';
 
 const computeMinimumNextBid = (
   currentBid: BigNumber,
@@ -44,7 +45,7 @@ const Bid: React.FC<{
   auctionEnded: boolean;
 }> = props => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
-  const { library } = useEthers();
+  const { provider } = useWeb3Context();
   const { auction, auctionEnded } = props;
   const nounsAuctionHouseContract = new NounsAuctionHouseFactory().attach(
     config.addresses.nounsAuctionHouseProxy,
@@ -107,7 +108,7 @@ const Bid: React.FC<{
     }
 
     const value = utils.parseEther(bidInputRef.current.value.toString());
-    const contract = connectContractToSigner(nounsAuctionHouseContract, undefined, library);
+    const contract = connectContractToSigner(nounsAuctionHouseContract, provider);
     const gasLimit = await contract.estimateGas.createBid(auction.nounId, {
       value,
     });

@@ -1,5 +1,4 @@
 import Davatar from '@davatar/react';
-import { useEthers } from '@usedapp/core';
 import React, { useState } from 'react';
 import { useReverseENSLookUp } from '../../utils/ensLookup';
 import { getNavBarButtonVariant, NavBarButtonStyle } from '../NavBarButton';
@@ -8,7 +7,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSortDown } from '@fortawesome/free-solid-svg-icons';
 import { faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { Dropdown } from 'react-bootstrap';
-import WalletConnectModal from '../WalletConnectModal';
 import { useAppSelector } from '../../hooks';
 import clsx from 'clsx';
 import { useHistory } from 'react-router-dom';
@@ -16,6 +14,7 @@ import { useShortAddress } from '../ShortAddress';
 import { isMobileScreen } from '../../utils/isMobile';
 import { usePickByState } from '../../utils/colorResponsiveUIUtils';
 import WalletConnectButton from './WalletConnectButton';
+import { useWeb3Context } from '../../hooks/useWeb3';
 
 interface NavWalletProps {
   address: string;
@@ -38,32 +37,27 @@ type CustomMenuProps = {
 
 const NavWallet: React.FC<NavWalletProps> = props => {
   const { address, buttonStyle } = props;
+  const web3Context = useWeb3Context()
 
   const [buttonUp, setButtonUp] = useState(false);
-  const [showConnectModal, setShowConnectModal] = useState(false);
   const history = useHistory();
-  const { library: provider } = useEthers();
+  const { provider } = useWeb3Context();
   const activeAccount = useAppSelector(state => state.account.activeAccount);
-  const { deactivate } = useEthers();
   const ens = useReverseENSLookUp(address);
   const shortAddress = useShortAddress(address);
 
-  const setModalStateHandler = (state: boolean) => {
-    setShowConnectModal(state);
-  };
+  const connectHandler = () => {
+    web3Context?.connect()
+  }
 
   const switchWalletHandler = () => {
-    setShowConnectModal(false);
     setButtonUp(false);
-    deactivate();
-    setShowConnectModal(false);
-    setShowConnectModal(true);
+    web3Context?.disconnect()
   };
 
   const disconectWalletHandler = () => {
-    setShowConnectModal(false);
     setButtonUp(false);
-    deactivate();
+    web3Context?.disconnect()
   };
 
   const statePrimaryButtonClass = usePickByState(
@@ -154,7 +148,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
           </div>
 
           <div
-            onClick={disconectWalletHandler}
+            onClick={() => disconectWalletHandler()}
             className={clsx(
               classes.dropDownBottom,
               classes.button,
@@ -215,9 +209,6 @@ const NavWallet: React.FC<NavWalletProps> = props => {
 
   return (
     <>
-      {showConnectModal && activeAccount === undefined && (
-        <WalletConnectModal onDismiss={() => setModalStateHandler(false)} />
-      )}
       {activeAccount ? (
         isMobileScreen() ? (
           walletConnectedContentMobile
@@ -227,7 +218,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
       ) : (
         <WalletConnectButton
           className={clsx(classes.nounsNavLink, classes.connectBtn)}
-          onClickHandler={() => setModalStateHandler(true)}
+          onClickHandler={() => connectHandler()}
           buttonStyle={connectWalletButtonStyle}
         />
       )}

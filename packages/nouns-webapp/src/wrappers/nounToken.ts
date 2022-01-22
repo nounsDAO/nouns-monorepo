@@ -1,7 +1,8 @@
-import { useContractCall, useEthers } from '@usedapp/core';
+import { useContractCall } from '@usedapp/core';
 import { BigNumber as EthersBN, utils } from 'ethers';
 import { NounsTokenABI } from '@nouns/contracts';
 import config from '../config';
+import { useWeb3Context } from '../hooks/useWeb3';
 
 interface NounToken {
   name: string;
@@ -49,7 +50,7 @@ export const useNounSeed = (nounId: EthersBN) => {
 };
 
 export const useUserVotes = (): number | undefined => {
-  const { account } = useEthers();
+  const { account } = useWeb3Context();
   const [votes] =
     useContractCall<[EthersBN]>({
       abi,
@@ -61,7 +62,7 @@ export const useUserVotes = (): number | undefined => {
 };
 
 export const useUserDelegatee = (): string | undefined => {
-  const { account } = useEthers();
+  const { account } = useWeb3Context();
   const [delegate] =
     useContractCall<[string]>({
       abi,
@@ -73,7 +74,7 @@ export const useUserDelegatee = (): string | undefined => {
 };
 
 export const useUserVotesAsOfBlock = (block: number | undefined): number | undefined => {
-  const { account } = useEthers();
+  const { account } = useWeb3Context();
 
   // Check for available votes
   const [votes] =

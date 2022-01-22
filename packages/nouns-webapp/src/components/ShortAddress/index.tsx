@@ -1,7 +1,7 @@
 import { useReverseENSLookUp } from '../../utils/ensLookup';
-import { useEthers } from '@usedapp/core';
 import Davatar from '@davatar/react';
 import classes from './ShortAddress.module.css';
+import { useWeb3Context } from '../../hooks/useWeb3';
 
 export const useShortAddress = (address: string) => {
   return address && [address.substr(0, 4), address.substr(38, 4)].join('...');
@@ -9,7 +9,7 @@ export const useShortAddress = (address: string) => {
 
 const ShortAddress: React.FC<{ address: string; avatar?: boolean }> = props => {
   const { address, avatar } = props;
-  const { library: provider } = useEthers();
+  const { provider } = useWeb3Context();
 
   const ens = useReverseENSLookUp(address);
   const shortAddress = useShortAddress(address);
