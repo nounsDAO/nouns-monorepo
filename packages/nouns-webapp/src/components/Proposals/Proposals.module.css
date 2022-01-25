@@ -40,19 +40,19 @@
   font-weight: bold;
   margin-bottom: 0.5rem;
   border-radius: 12px;
-  background-color: #F4F4F8;
-  border: #F4F4F8;
-  color: #8C8D92;
-  border: 1px solid #E2E3E8;
+  background-color: #f4f4f8;
+  border: #f4f4f8;
+  color: #8c8d92;
+  border: 1px solid #e2e3e8;
 }
 .generateBtnDisabled:focus,
-.generateBtnDisabled:hover, 
+.generateBtnDisabled:hover,
 .generateBtnDisabled:active {
   cursor: not-allowed;
-  background-color: #F4F4F8 !important;
-  border: #F4F4F8 !important;
-  color: #8C8D92 !important;
-  border: 1px solid #E2E3E8 !important;
+  background-color: #f4f4f8 !important;
+  border: #f4f4f8 !important;
+  color: #8c8d92 !important;
+  border: 1px solid #e2e3e8 !important;
 }
 
 .proposalLink {
@@ -61,10 +61,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid #E2E3E8;
+  border: 1px solid #e2e3e8;
   box-sizing: border-box;
   border-radius: 16px;
-  background: #F4F4F8;
+  background: #f4f4f8;
   font-size: 22px;
   font-family: 'PT Root UI Bold';
 }
