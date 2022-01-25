@@ -3,6 +3,11 @@ import Section from '../../layout/Section';
 import { useAllProposals, useProposalThreshold } from '../../wrappers/nounsDao';
 import Proposals from '../../components/Proposals';
 import classes from './Governance.module.css';
+import useLidoBalance from '../../hooks/useLidoBalance';
+import { useEtherBalance } from '@usedapp/core';
+import config from "../../config";
+import { utils } from 'ethers/lib/ethers';
+import { useEffect, useState } from 'react';
 
 const GovernancePage = () => {
   const { data: proposals } = useAllProposals();
@@ -10,9 +15,39 @@ const GovernancePage = () => {
   const nounsRequired = threshold !== undefined ? threshold + 1 : '...';
   const nounThresholdCopy = `${nounsRequired} ${threshold === 0 ? 'Noun' : 'Nouns'}`;
 
+  // TODO make this its own hook
+  const ethBalance = useEtherBalance(config.addresses.nounsDaoExecutor);
+  const lidoBalanceAsETH = useLidoBalance();
+  const treasuryBalance = ethBalance && lidoBalanceAsETH && ethBalance.add(lidoBalanceAsETH);
+  const [treasuryBalanceUSD, setTreasuryBalanceUSD] = useState(0);
+  const [ethUSDConversionRate, setEthUSDConversionRate] = useState(0);
+
+  useEffect(() => {
+
+    async function getEthPriceInUSD() {
+      const response = await fetch('https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD');
+      const json = await response.json();
+      setEthUSDConversionRate(Number(json?.USD));
+    }
+
+    if (!treasuryBalance) {
+      return;
+    }
+    getEthPriceInUSD();
+
+    setTreasuryBalanceUSD(
+      Number(utils.formatEther(treasuryBalance)) * ethUSDConversionRate 
+    );
+
+  },[treasuryBalance, ethUSDConversionRate]);
+
+
   return (
-    <Section fullWidth={true}>
-      <Col lg={{ span: 8, offset: 2 }}>
+    <Section fullWidth={false} className={classes.section}>
+      <Col lg={{ span: 10}} style={{
+        marginLeft: 'auto',
+        marginRight: 'auto'
+      }}>
         <Row className={classes.headerRow}>
           <span>Governance</span>
           <h1>Nouns DAO</h1>
@@ -39,13 +74,17 @@ const GovernancePage = () => {
                   <span>Treasury</span>
                 </Row>
                 <Row>
-                    <Col className={classes.headerRow} lg={3} style={{
-                      borderRight: '1px solid #E2E3E8'
+                    <Col className={classes.headerRow} lg={4} style={{
+                      borderRight: '1px solid #E2E3E8',
+                      display: 'flex'
                     }}>
-                      <h1>Ξ 1234</h1>
+                      <h1 style={{fontFamily: 'PT Root UI', marginRight: '.5rem'}}>Ξ</h1><h1>{treasuryBalance && Number(Number(utils.formatEther(treasuryBalance)).toFixed(0)).toLocaleString('en-US')}</h1>
                     </Col>
                     <Col>
-                      <h1>$ 25,000,000</h1>
+                      <h1 style={{
+                        color: 'var(--brand-gray-light-text)',
+                        fontFamily: 'Londrina Solid'
+                      }}>$ {treasuryBalanceUSD && Number(treasuryBalanceUSD.toFixed(0)).toLocaleString('en-US')}</h1>
                     </Col>
                 </Row>
             </Col>
