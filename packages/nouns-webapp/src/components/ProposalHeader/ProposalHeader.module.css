@@ -75,3 +75,11 @@
 .submitBtnDisabled:hover {
   cursor: not-allowed;
 }
+
+.proposalTitleWrapper {
+  display: flex;
+}
+
+.proposalTitle {
+  margin-right: 0.5rem;
+}

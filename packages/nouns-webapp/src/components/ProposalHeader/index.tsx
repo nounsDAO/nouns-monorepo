@@ -23,15 +23,19 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
         </Link>
         <div className={classes.headerRow}>
           <span>Proposal {proposal.id}</span>
-          <h1>
-            {proposal.title}{' '}
-            <span className={classes.proposalStatus}>
-              <ProposalStatus
-                status={proposal?.status}
-                className={proposalStatusClasses.votePageProposalStatus}
-              />
-            </span>
-          </h1>
+          <div className={classes.proposalTitleWrapper}>
+            <div className={classes.proposalTitle}>
+              <h1>{proposal.title}{' '}</h1> 
+            </div>
+            <div>
+              <span className={classes.proposalStatus}>
+                <ProposalStatus
+                  status={proposal?.status}
+                  className={proposalStatusClasses.votePageProposalStatus}
+                />
+              </span>
+            </div>
+          </div>
         </div>
       </div>
       <div className="d-flex justify-content-end align-items-end">
