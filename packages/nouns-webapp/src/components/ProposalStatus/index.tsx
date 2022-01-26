@@ -1,7 +1,6 @@
 import classes from './ProposalStatus.module.css';
 import { ProposalState } from '../../wrappers/nounsDao';
 import React from 'react';
-import { Button } from 'react-bootstrap';
 
 const statusVariant = (status: ProposalState | undefined) => {
   switch (status) {
