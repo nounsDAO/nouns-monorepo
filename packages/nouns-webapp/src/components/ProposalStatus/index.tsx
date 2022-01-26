@@ -1,6 +1,7 @@
 import classes from './ProposalStatus.module.css';
 import { ProposalState } from '../../wrappers/nounsDao';
 import React from 'react';
+import clsx from 'clsx';
 
 const statusVariant = (status: ProposalState | undefined) => {
   switch (status) {
@@ -54,8 +55,8 @@ interface ProposalStateProps {
 const ProposalStatus: React.FC<ProposalStateProps> = props => {
   const { status, className } = props;
   return (
-    <div className={`${classes.status} ${statusVariant(status)} ${className}`}>
-      {statusText(status)}
+    <div className={clsx(statusVariant(status), classes.proposalStatus, className)}>
+       {statusText(status)}
     </div>
   );
 };

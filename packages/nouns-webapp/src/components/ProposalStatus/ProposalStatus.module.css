@@ -1,9 +1,8 @@
-.status {
+.proposalStatus {
   font-family: 'PT Root UI Bold';
   color: white;
   border-radius: 8px;
   font-size: 14px;
-  opacity: 100%;
   border: 0rem;
   padding-left: 0.65rem;
   padding-right: 0.65rem;
