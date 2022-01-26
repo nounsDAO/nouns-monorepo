@@ -16,31 +16,24 @@ const NounImageVoteTable: React.FC<NounImageVoteTableProps> = props => {
     .concat(Array(NOUNS_PER_VOTE_CARD).fill(<div className={classes.grayCircle} />))
     .slice(0, NOUNS_PER_VOTE_CARD);
 
-  return (
-    <table className={classes.wrapper}>
-      <tr>
-        <td>{paddedNounIds[0]}</td>
-        <td>{paddedNounIds[1]}</td>
-        <td>{paddedNounIds[2]}</td>
-        <td>{paddedNounIds[3]}</td>
-        <td>{paddedNounIds[4]}</td>
-      </tr>
-      <tr>
-        <td>{paddedNounIds[5]}</td>
-        <td>{paddedNounIds[6]}</td>
-        <td>{paddedNounIds[7]}</td>
-        <td>{paddedNounIds[8]}</td>
-        <td>{paddedNounIds[9]}</td>
-      </tr>
-      <tr>
-        <td>{paddedNounIds[10]}</td>
-        <td>{paddedNounIds[11]}</td>
-        <td>{paddedNounIds[12]}</td>
-        <td>{paddedNounIds[13]}</td>
-        <td>{paddedNounIds[14]}</td>
-      </tr>
-    </table>
-  );
+  const content = () => {
+    const rows = 3;
+    const rowLength = 5;
+
+    return Array(rows)
+      .fill(0)
+      .map((_, i) => (
+        <tr>
+          {Array(rowLength)
+            .fill(0)
+            .map((_, j) => (
+              <td>{paddedNounIds[i * rowLength + j]}</td>
+            ))}
+        </tr>
+      ));
+  };
+
+  return <table className={classes.wrapper}>{content()}</table>;
 };
 
 export default NounImageVoteTable;

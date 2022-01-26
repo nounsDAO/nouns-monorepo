@@ -1,13 +1,8 @@
+import { VoteCardVariant } from '../VoteCard';
 import classes from './VoteProgressBar.module.css';
 
-export enum ProgressBarVariant {
-  FOR,
-  AGINST,
-  ABSTAIN,
-}
-
 const VoteProgresBar: React.FC<{
-  variant: ProgressBarVariant;
+  variant: VoteCardVariant;
   percentage: number;
 }> = props => {
   const { variant, percentage } = props;
@@ -15,11 +10,11 @@ const VoteProgresBar: React.FC<{
   let progressBarColor;
   let backgroundColor;
   switch (variant) {
-    case ProgressBarVariant.FOR:
+    case VoteCardVariant.FOR:
       progressBarColor = 'var(--brand-color-green)';
       backgroundColor = 'var(--brand-color-green-translucent)';
       break;
-    case ProgressBarVariant.AGINST:
+    case VoteCardVariant.AGAINST:
       progressBarColor = 'var(--brand-color-red)';
       backgroundColor = 'var(--brand-color-red-translucent)';
       break;

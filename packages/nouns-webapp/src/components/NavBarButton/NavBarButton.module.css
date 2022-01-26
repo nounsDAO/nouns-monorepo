@@ -7,7 +7,7 @@
   padding: 0px 12px 0px 12px;
   transition: all 0.125s ease-in-out;
   box-shadow: none !important;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .button {
@@ -20,15 +20,15 @@
 }
 
 .icon {
-  margin-right: .4rem;
+  margin-right: 0.4rem;
 }
 
-.icon>svg {
+.icon > svg {
   max-height: 14px;
 }
 
 @media (max-width: 992px) {
-  .icon>svg {
+  .icon > svg {
     max-height: 17px;
   }
 }
@@ -38,8 +38,8 @@
 }
 
 .coolInfo {
-  color: #79809C;
-  background-color: #E9EBF3;
+  color: #79809c;
+  background-color: #e9ebf3;
 }
 
 .coolInfo:hover {
@@ -48,7 +48,7 @@
 }
 
 .coolWallet {
-  background-color: #4965F0;
+  background-color: #4965f0;
   color: white;
   padding: 0px 12px 0px 12px;
 }
@@ -58,8 +58,8 @@
 }
 
 .warmInfo {
-  color: #B6A9A7;
-  background-color: #FDF9F9;
+  color: #b6a9a7;
+  background-color: #fdf9f9;
 }
 
 .warmInfo:hover {
@@ -68,7 +68,7 @@
 }
 
 .warmWallet {
-  background-color: #D63C5E;
+  background-color: #d63c5e;
   color: white;
   padding: 0px 12px 0px 12px;
 }
@@ -77,28 +77,31 @@
   filter: brightness(110%);
 }
 
-.whiteInfo, .whiteWallet {
+.whiteInfo,
+.whiteWallet {
   background-color: white;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   color: rgb(95, 95, 95);
 }
 
-.whiteInfo:hover, .whiteWallet:hover {
+.whiteInfo:hover,
+.whiteWallet:hover {
   background-color: #e2e3e8;
   color: black;
 }
 
 .whiteActive {
-  background-color: #F4F4F8;
+  background-color: #f4f4f8;
   color: black;
 }
 
 .whiteActive .icon {
-  color: #D63C5E;
+  color: #d63c5e;
 }
 
 @media (max-width: 992px) {
-  .wrapper, .button {
+  .wrapper,
+  .button {
     height: 48px;
     font-size: 18px;
   }

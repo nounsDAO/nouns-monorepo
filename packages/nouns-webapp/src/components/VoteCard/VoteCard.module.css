@@ -1,0 +1,39 @@
+.voteCardHeaderText {
+  font-size: 24px;
+  font-family: 'Londrina Solid';
+}
+
+.voteCardVoteCount {
+  font-size: 22px;
+  font-family: 'PT Root UI Bold';
+}
+
+.for {
+  color: var(--brand-color-green);
+}
+
+.against {
+  color: var(--brand-color-red);
+}
+
+.abstain {
+  color: var(--brand-gray-light-text);
+}
+
+.voteCountCard {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  border-radius: 12px;
+  background-color: #f4f4f8;
+}
+
+.voteCountCard p {
+  display: flex;
+  justify-content: space-between;
+}
+
+.nounProfilePics {
+  margin-top: 0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.2rem;
+}

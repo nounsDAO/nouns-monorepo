@@ -15,22 +15,20 @@ import { RouteComponentProps } from 'react-router-dom';
 import { TransactionStatus, useBlockNumber } from '@usedapp/core';
 import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../utils/etherscan';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
-import ProposalStatus from '../../components/ProposalStatus';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
 import VoteModal from '../../components/VoteModal';
-import { Fragment, useCallback, useEffect, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 import { utils } from 'ethers';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { nounVotesForProposalQuery } from '../../wrappers/subgraph';
 import { useQuery } from '@apollo/client';
-import VoteProgresBar, { ProgressBarVariant } from '../../components/VoteProgressBar';
-import proposalStatusClasses from '../../components/ProposalStatus/ProposalStatus.module.css';
-import NounImageVoteTable from '../../components/NounImageVoteTable';
+import ProposalHeader from '../../components/ProposalHeader';
+import VoteCard, { VoteCardVariant } from '../../components/VoteCard';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -38,8 +36,13 @@ dayjs.extend(advanced);
 
 const AVERAGE_BLOCK_TIME_IN_SECS = 13;
 
-// Helper function to transform response from graph into flat list of nounIds that voted
-// supportDetailed for the given prop
+/**
+ * Helper function to transform response from graph into flat list of nounIds that voted supportDetailed for the given prop
+ *
+ * @param data - Graph response for noun vote query
+ * @param supportDetailed - The integer support value: against (0), for (1), or abstain (2)
+ * @returns - flat list of nounIds that voted supportDetailed for the given prop
+ */
 const getNounVotes = (data: any, supportDetailed: number) => {
   return data.proposals[0].votes
     .filter((vote: any) => vote.supportDetailed === supportDetailed)
@@ -224,11 +227,6 @@ const VotePage = ({
     [executeProposalState, onTransactionStateChange, setModal],
   );
 
-  const backButtonClickHandler = () => {
-    // eslint-disable-next-line no-restricted-globals
-    location.href = '/vote';
-  };
-
   const activeAccount = useAppSelector(state => state.account.activeAccount);
 
   const { loading, error, data } = useQuery(
@@ -283,42 +281,11 @@ const VotePage = ({
         vote={vote}
       />
       <Col lg={{ span: 10, offset: 1 }} className={classes.proposal}>
-        <div className="d-flex justify-content-between align-items-center">
-          <div className="d-flex justify-content-start align-items-start">
-            <button className={classes.leftArrowCool} onClick={backButtonClickHandler}>
-              ←
-            </button>
-            <div className={classes.headerRow}>
-              <span>Proposal {proposal.id}</span>
-              <h1>
-                {proposal.title}{' '}
-                <span className={classes.proposalStatus}>
-                  <ProposalStatus
-                    status={proposal?.status}
-                    className={proposalStatusClasses.votePageProposalStatus}
-                  />
-                </span>
-              </h1>
-            </div>
-          </div>
-          <div className="d-flex justify-content-end align-items-end">
-            {isActiveForVoting && (
-              <>
-                {isWalletConnected ? (
-                  <></>
-                ) : (
-                  <div className={classes.connectWalletText}>Connect a wallet to vote.</div>
-                )}
-                <Button
-                  className={isWalletConnected ? classes.submitBtn : classes.submitBtnDisabled}
-                  onClick={backButtonClickHandler}
-                >
-                  Submit vote
-                </Button>
-              </>
-            )}
-          </div>
-        </div>
+        <ProposalHeader
+          proposal={proposal}
+          isActiveForVoting={isActiveForVoting}
+          isWalletConnected={isWalletConnected}
+        />
         {proposal && proposalActive && (
           <>
             {showBlockRestriction && !hasVoted && (
@@ -391,58 +358,24 @@ const VotePage = ({
           </Row>
         )}
         <Row>
-          <Col lg={4}>
-            <Card className={classes.voteCountCard}>
-              <Card.Body className="p-2">
-                <Card.Text className="py-2 m-0">
-                  <span className={`${classes.voteCardHeaderText} ${classes.for}`}>For</span>
-                  <span className={classes.voteCardVoteCount}>{proposal?.forCount}</span>
-                </Card.Text>
-                <VoteProgresBar variant={ProgressBarVariant.FOR} percentage={forPercentage} />
-                <Row className={classes.nounProfilePics}>
-                  <NounImageVoteTable nounIds={forNouns} />
-                </Row>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col lg={4}>
-            <Card className={classes.voteCountCard}>
-              <Card.Body className="p-2">
-                <Card.Text className="py-2 m-0">
-                  <span className={`${classes.voteCardHeaderText} ${classes.against}`}>
-                    Against
-                  </span>
-                  <span className={classes.voteCardVoteCount}>{proposal?.againstCount}</span>
-                </Card.Text>
-                <VoteProgresBar
-                  variant={ProgressBarVariant.AGINST}
-                  percentage={againstPercentage}
-                />
-                <Row className={classes.nounProfilePics}>
-                  <NounImageVoteTable nounIds={againstNouns} />
-                </Row>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col lg={4}>
-            <Card className={classes.voteCountCard}>
-              <Card.Body className="p-2">
-                <Card.Text className="py-2 m-0">
-                  <span className={`${classes.voteCardHeaderText} ${classes.abstain}`}>
-                    Abstain
-                  </span>
-                  <span className={classes.voteCardVoteCount}>{proposal?.abstainCount}</span>
-                </Card.Text>
-                <VoteProgresBar
-                  variant={ProgressBarVariant.ABSTAIN}
-                  percentage={abstainPercentage}
-                />
-                <Row className={classes.nounProfilePics}>
-                  <NounImageVoteTable nounIds={abstainNouns} />
-                </Row>
-              </Card.Body>
-            </Card>
-          </Col>
+          <VoteCard
+            proposal={proposal}
+            percentage={forPercentage}
+            nounIds={forNouns}
+            variant={VoteCardVariant.FOR}
+          />
+          <VoteCard
+            proposal={proposal}
+            percentage={againstPercentage}
+            nounIds={againstNouns}
+            variant={VoteCardVariant.AGAINST}
+          />
+          <VoteCard
+            proposal={proposal}
+            percentage={abstainPercentage}
+            nounIds={abstainNouns}
+            variant={VoteCardVariant.ABSTAIN}
+          />
         </Row>
 
         <Row>
@@ -474,7 +407,7 @@ const VotePage = ({
                   </Col>
                   <Col className={classes.voteMetadataTime}>
                     <span>{startOrEndTimeTime() && startOrEndTimeTime()?.format('h:mm A z')}</span>
-                    <h3>{startOrEndTimeTime() && startOrEndTimeTime()?.format('MMMM D, YYYY')}</h3>
+                    <h3>{startOrEndTimeTime() && startOrEndTimeTime()?.format('MMM D, YYYY')}</h3>
                   </Col>
                 </Row>
               </Card.Body>
