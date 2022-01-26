@@ -402,7 +402,7 @@ const VotePage = ({
             <Card className={classes.voteInfoCard}>
               <Card.Body className="p-2">
                 <Row className={classes.voteMetadataRow}>
-                  <Col className={classes.voteMetadataRowTitle}>
+                  <Col className={classes.voteMetadataRowTitle} >
                     <h1>{startOrEndTimeCopy()}</h1>
                   </Col>
                   <Col className={classes.voteMetadataTime}>
@@ -420,7 +420,7 @@ const VotePage = ({
                   <Col className={classes.voteMetadataRowTitle}>
                     <h1>Snapshot</h1>
                   </Col>
-                  <Col>
+                  <Col className={classes.snapshotBlock}>
                     <span>Taken at block</span>
                     <h3>{proposal.createdBlock}</h3>
                   </Col>

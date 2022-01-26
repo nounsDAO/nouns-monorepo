@@ -25,6 +25,7 @@
   padding: 0.5rem;
   border-radius: 12px;
   background-color: #f4f4f8;
+  min-height: 18rem;
 }
 
 .voteCountCard p {
