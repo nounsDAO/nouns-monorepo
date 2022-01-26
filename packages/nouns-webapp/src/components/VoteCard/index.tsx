@@ -23,18 +23,22 @@ const VoteCard: React.FC<VoteCardProps> = props => {
 
   let titleClass;
   let titleCopy;
+  let voteCount;
   switch (variant) {
     case VoteCardVariant.FOR:
       titleClass = classes.for;
       titleCopy = 'For';
+      voteCount = proposal.forCount;
       break;
     case VoteCardVariant.AGAINST:
       titleClass = classes.against;
       titleCopy = 'Against';
+      voteCount = proposal.againstCount;
       break;
     default:
       titleClass = classes.abstain;
       titleCopy = 'Abstain';
+      voteCount = proposal.abstainCount;
       break;
   }
 
@@ -44,7 +48,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
         <Card.Body className="p-2">
           <Card.Text className="py-2 m-0">
             <span className={`${classes.voteCardHeaderText} ${titleClass}`}>{titleCopy}</span>
-            <span className={classes.voteCardVoteCount}>{proposal?.forCount}</span>
+            <span className={classes.voteCardVoteCount}>{voteCount}</span>
           </Card.Text>
           <VoteProgresBar variant={variant} percentage={percentage} />
           <Row className={classes.nounProfilePics}>

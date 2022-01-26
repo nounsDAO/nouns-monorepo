@@ -53,9 +53,9 @@ interface ProposalStateProps {
 const ProposalStatus: React.FC<ProposalStateProps> = props => {
   const { status, className } = props;
   return (
-    <button className={`${classes.status} ${statusVariant(status)} ${className}`} disabled={true}>
+    <div className={`${classes.status} ${statusVariant(status)} ${className}`}>
       {statusText(status)}
-    </button>
+    </div>
   );
 };
 
