@@ -53,6 +53,8 @@
   border: #f4f4f8 !important;
   color: #8c8d92 !important;
   border: 1px solid #e2e3e8 !important;
+  outline: none;
+  box-shadow: none;
 }
 
 .proposalLink {
@@ -71,6 +73,7 @@
 
 .proposalLink:hover {
   background: white;
+  cursor: pointer;
 }
 
 .markdown h1 {
@@ -92,4 +95,32 @@
 .markdown img {
   max-width: 100%;
   height: auto;
+}
+
+.nullStateCopy {
+  margin-top: 0.8rem;
+  margin-right: 1rem;
+  font-family: 'PT Root UI';
+  color: var(--brand-gray-light-text);
+  font-size: 16px;
+  line-height: 22.4px;
+}
+
+@media (max-width: 992px) {
+  .nullStateCopy {
+    margin-top: 0rem;
+  }
+}
+
+.nullBtnWrapper {
+  min-width: 10rem;
+}
+
+.proposalId {
+  color: #8c8d92;
+  margin-right: 0.5rem;
+}
+
+.proposalTitle {
+  width: 85%;
 }

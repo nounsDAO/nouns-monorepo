@@ -3,12 +3,10 @@ import Section from '../../layout/Section';
 import { useAllProposals, useProposalThreshold } from '../../wrappers/nounsDao';
 import Proposals from '../../components/Proposals';
 import classes from './Governance.module.css';
-import useLidoBalance from '../../hooks/useLidoBalance';
-import { useEtherBalance } from '@usedapp/core';
-import config from '../../config';
 import { utils } from 'ethers/lib/ethers';
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
+import { useTreasuryBalance } from '../../hooks/useTreasuryBalance';
 
 const GovernancePage = () => {
   const { data: proposals } = useAllProposals();
@@ -16,10 +14,7 @@ const GovernancePage = () => {
   const nounsRequired = threshold !== undefined ? threshold + 1 : '...';
   const nounThresholdCopy = `${nounsRequired} ${threshold === 0 ? 'Noun' : 'Nouns'}`;
 
-  // TODO make this its own hook
-  const ethBalance = useEtherBalance(config.addresses.nounsDaoExecutor);
-  const lidoBalanceAsETH = useLidoBalance();
-  const treasuryBalance = ethBalance && lidoBalanceAsETH && ethBalance.add(lidoBalanceAsETH);
+  const treasuryBalance = useTreasuryBalance();
   const [treasuryBalanceUSD, setTreasuryBalanceUSD] = useState(0);
   const [ethUSDConversionRate, setEthUSDConversionRate] = useState(0);
 
