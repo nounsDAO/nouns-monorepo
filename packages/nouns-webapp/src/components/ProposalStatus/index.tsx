@@ -1,5 +1,7 @@
 import classes from './ProposalStatus.module.css';
 import { ProposalState } from '../../wrappers/nounsDao';
+import React from 'react';
+import { Button } from 'react-bootstrap';
 
 const statusVariant = (status: ProposalState | undefined) => {
   switch (status) {
@@ -53,9 +55,9 @@ interface ProposalStateProps {
 const ProposalStatus: React.FC<ProposalStateProps> = props => {
   const { status, className } = props;
   return (
-    <button className={`${classes.status} ${statusVariant(status)} ${className}`} disabled={true}>
+    <Button className={`${classes.status} ${statusVariant(status)} ${className}`} disabled={true}>
       {statusText(status)}
-    </button>
+    </Button>
   );
 };
 
