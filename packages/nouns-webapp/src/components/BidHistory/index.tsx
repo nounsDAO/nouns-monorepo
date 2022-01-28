@@ -35,14 +35,14 @@ const bidItem = (bid: Bid, index: number, classes: any, isCool?: boolean) => {
           <div className={classes.bidAmount}>{bidAmount}</div>
           <div className={classes.linkSymbol}>
             <a href={txLink} target="_blank" rel="noreferrer">
-              <img src={link} width={24} />
+              <img src={link} width={24} alt="link symbol" />
             </a>
           </div>
         </div>
       </div>
     </li>
   );
-}
+};
 
 const BidHistory: React.FC<{ auctionId: string; max: number; classes?: any }> = props => {
   const { auctionId, max, classes = _classes } = props;
