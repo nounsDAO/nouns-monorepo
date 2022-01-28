@@ -6,6 +6,7 @@
   padding: 0px 10px 0px 10px;
   transition: all 0.125s ease-in-out;
   box-shadow: none;
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .button {
@@ -41,11 +42,12 @@
     margin-left: -0.5rem;
     padding: 0px 7px 0px 6px;
   }
+
   .treasuryHeader {
     display: none;
   }
 }
- 
+
 .warmInfo .treasuryBalance {
   color: var(--brand-warm-dark-text);
 }
@@ -81,4 +83,12 @@
   background-color: var(--brand-warm-accent);
   color: var(--brand-warm-dark-text);
   color: black;
+}
+
+.whiteInfo {
+  background: white;
+}
+
+.whiteInfo:hover {
+  background-color: #e2e3e8;
 }

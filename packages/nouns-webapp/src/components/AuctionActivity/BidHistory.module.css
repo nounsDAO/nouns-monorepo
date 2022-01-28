@@ -13,11 +13,11 @@
 }
 
 .bidRowCool {
-  background-color: var(--brand-cool-accent);
+  /* background-color: var(--brand-cool-accent); */
   font-family: 'PT Root UI', sans-serif;
-  padding: 0.35rem 0.75rem;
+  padding: 0.8rem;
   border-radius: 10px;
-  border-bottom: 1px solid rgba(211, 211, 211, 0.322);
+  border-bottom: 1px solid var(--brand-cool-border);
   font-size: 1.1rem;
   font-weight: bold;
   transition: all 0.2s ease-in-out;

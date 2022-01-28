@@ -57,7 +57,7 @@ const NavBar = () => {
               </Nav.Item>
             )}
             <Nav.Item>
-              {treasuryBalance && useStateBg && (
+              {treasuryBalance && (
                 <Nav.Link
                   href={daoEtherscanLink}
                   className={classes.nounsNavLink}
