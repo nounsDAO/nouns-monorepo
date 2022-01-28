@@ -47,11 +47,11 @@
 }
  
 .warmInfo .treasuryBalance {
-  color: #221b1a;
+  color: var(--brand-warm-dark-text);
 }
 
 .coolInfo .treasuryBalance {
-  color: #151c3b;
+  color: var(--brand-cool-dark-text);
 }
 
 .button:hover {
@@ -59,21 +59,26 @@
 }
 
 .coolInfo {
-  color: #79809c;
-  background-color: #e9ebf3;
+  border: 1px solid var(--brand-cool-border);
+  border-radius: 10px;
+  color: var(--brand-cool-dark-text);
 }
 
 .coolInfo:hover {
-  background-color: white;
+  background-color: var(--brand-cool-accent);
   color: black;
 }
 
 .warmInfo {
-  color: #b6a9a7;
-  background-color: #fdf9f9;
+  /* color: #B6A9A7; */
+  /* background-color: #FDF9F9; */
+  border: 1px solid var(--brand-warm-border);
+  border-radius: 10px;
+  color: var(--brand-warm-light-text);
 }
 
 .warmInfo:hover {
-  background-color: white;
+  background-color: var(--brand-warm-accent);
+  color: var(--brand-warm-dark-text);
   color: black;
 }

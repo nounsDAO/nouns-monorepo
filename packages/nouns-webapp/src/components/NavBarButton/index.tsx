@@ -25,7 +25,7 @@ export const getNavBarButtonVariant = (buttonStyle?: NavBarButtonStyle) => {
       return classes.coolWallet;
     }
     case NavBarButtonStyle.WARM_INFO: {
-      return classes.warnInfo;
+      return classes.warmInfo;
     }
     case NavBarButtonStyle.WARM_WALLET: {
       return classes.warmWallet;

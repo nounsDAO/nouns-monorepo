@@ -24,7 +24,8 @@
 
 .nounInfoRow {
   font-family: "PT Root UI Medium";
-  padding-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
   font-size: 18px;
   display: flex;
 }

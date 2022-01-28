@@ -8,7 +8,6 @@
 }
 
 .auctionActivityCol {
-  padding-top: 0.5rem;
   padding-right: 5rem;
   padding-bottom: 1rem;
   min-height: 520px;
@@ -17,7 +16,25 @@
 }
 
 @media (max-width: 992px) {
+  .nounWrapper {
+    width: 70%;
+    margin-left: 15%;
+    margin-right: 15%;
+  }
   .auctionActivityCol {
+    margin-left: 20%;
+    margin-right: 20%;
+    padding-right: unset;
+    padding-left: unset;
+    width: 60%;
+  }
+}
+
+@media (max-width: 568px) {
+  .auctionActivityCol {
+    width: 100%;
+    margin-left: unset;
+    margin-right: unset;
     padding-bottom: 2rem;
     padding-top: 2rem;
     padding-right: unset;
@@ -25,9 +42,9 @@
   }
 
   .nounWrapper {
-    width: 70%;
-    margin-left: 15%;
-    margin-right: 15%;
-    margin-top: -1rem;
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 2rem;
   }
 }

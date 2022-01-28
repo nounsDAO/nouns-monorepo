@@ -37,12 +37,13 @@
 }
 
 .coolInfo {
-  color: #79809C;
-  background-color: #E9EBF3;
+  border: 1px solid var(--brand-cool-border);
+  border-radius: 10px;
+  color: var(--brand-cool-dark-text);
 }
 
 .coolInfo:hover {
-  background-color: white;
+  background-color: var(--brand-cool-accent);
   color: black;
 }
 
@@ -56,23 +57,31 @@
   filter: brightness(110%);
 }
 
-.warnInfo {
-  color: #B6A9A7;
-  background-color: #FDF9F9;
+.warmInfo {
+  /* color: #B6A9A7; */
+  /* background-color: #FDF9F9; */
+  border: 1px solid var(--brand-warm-border);
+  border-radius: 10px;
+  color: var(--brand-warm-dark-text);
 }
 
-.warnInfo:hover {
-  background-color: white;
+.warmInfo:hover {
+  background-color: var(--brand-warm-accent);
   color: black;
 }
 
 .warmWallet {
-  background-color: #D63C5E;
-  color: white;
+  background-color: var(--brand-warm-accent);
+  border: 1px solid var(--brand-warm-border);
+  border-radius: 10px;
+  color: var(--brand-warm-dark-text);
   padding: 0px 12px 0px 12px;
+  transition: all 0.2s ease-in-out;
 }
 
 .warmWallet:hover {
+  background-color: var(--brand-color-red);
+  color: white;
   filter: brightness(110%);
 }
 

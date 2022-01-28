@@ -22,7 +22,6 @@ import NavWallet from '../NavWallet';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
-
   const stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
   const history = useHistory();
   const ethBalance = useEtherBalance(config.addresses.nounsDaoExecutor);
@@ -45,8 +44,8 @@ const NavBar = () => {
 
   return (
     <>
-      <Navbar expand="lg" style={{ backgroundColor: `${useStateBg ? stateBgColor : ''}` }}>
-        <Container>
+      <Navbar expand="lg" style={{ backgroundColor: `${useStateBg ? stateBgColor : ''}`}}>
+        <Container style={{maxWidth: "unset"}}>
           <div className={classes.brandAndTreasuryWrapper}>
             <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
               <img src={logo} className={classes.navBarLogo} alt="Nouns DAO logo" />

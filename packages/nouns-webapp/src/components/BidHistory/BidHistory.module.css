@@ -26,9 +26,16 @@
   flex-direction: column;
 }
 
+.bidRowWarm {
+  color: var(--brand-warm-light-text);
+}
+
+.bidRowCool {
+  color: var(--brand-cool-light-text);
+}
+
 .bidder {
   font-weight: bold;
-  color: var(--brand-black);
   padding-top: 4px !important;
 }
 

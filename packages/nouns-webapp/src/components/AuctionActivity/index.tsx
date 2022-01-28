@@ -115,6 +115,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
 
       <AuctionActivityWrapper>
         <div className={classes.informationRow}>
+          
           <Row className={classes.activityRow}>
             <AuctionTitleAndNavWrapper>
               {displayGraphDepComps && (
@@ -147,6 +148,16 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
             </Col>
           </Row>
         </div>
+        {!auctionEnded && (
+              <Row className={classes.activityRow}>
+                <Col lg={12} className={classes.fomoNounsLink}>
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  <a href={'https://fomonouns.wtf'} target={'_blank'} rel="noreferrer">
+                    Help mint the next Noun
+                  </a>
+                </Col>
+              </Row>
+            )}
         {isLastAuction && (
           <>
             <Row className={classes.activityRow}>
@@ -181,16 +192,6 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
               ) : (
                 <BidHistoryBtn onClick={openEtherscanBidHistory} />
               ))}
-              {!auctionEnded && (
-              <Row className={classes.activityRow}>
-                <Col lg={12} className={classes.fomoNounsLink}>
-                  <FontAwesomeIcon icon={faInfoCircle} />
-                  <a href={'https://fomonouns.wtf'} target={'_blank'} rel="noreferrer">
-                    Help mint the next Noun
-                  </a>
-                </Col>
-              </Row>
-            )}
           </Col>
         </Row>
       </AuctionActivityWrapper>

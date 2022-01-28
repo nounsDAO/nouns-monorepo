@@ -9,6 +9,7 @@
   row-gap: 0.5rem;
   padding: 0;
   margin-bottom: 8px;
+  margin-top: 1rem;
 }
 
 .bidRowCool {
@@ -23,11 +24,11 @@
 }
 
 .bidRowWarm {
-  background-color: var(--brand-warm-accent);
+  /* background-color: var(--brand-warm-accent); */
   font-family: 'PT Root UI', sans-serif;
-  padding: 0.5rem 0.75rem;
+  padding: 0.25rem 0.75rem 0.5rem 0.75rem;
   border-radius: 12px;
-  border-bottom: 1px solid rgba(211, 211, 211, 0.322);
+  border-bottom: 1px solid var(--brand-warm-border);
   font-size: 0.95rem;
   font-weight: bold;
   transition: all 0.2s ease-in-out;
@@ -49,7 +50,7 @@
 }
 
 .bidRowWarm a:hover, .bidRowCool a:hover {
-  filter: brightness(120%);
+  filter: brightness(110%);
 }
 
 .bidRowCool:hover, .bidRowWarm:hover {
@@ -68,9 +69,16 @@
 }
 
 .bidder>div>div {
-  color: var(--brand-cool-dark-text);
   font-family: 'PT Root UI Bold';
   font-size: 18px;
+}
+
+.bidRowCool .bidder>div>div {
+  color: var(--brand-cool-dark-text);
+}
+
+.bidRowWarm .bidder>div>div {
+  color: var(--brand-warm-dark-text);
 }
 
 .bidDate {
@@ -86,11 +94,18 @@
 }
 
 .bidAmount {
-  color: var(--brand-cool-dark-text);
   font-family: 'PT Root UI Bold';
   margin-right: 1rem;
   font-size: 18px;
   padding-top: 2px;
+}
+
+.bidRowCool .bidAmount {
+  color: var(--brand-cool-dark-text);
+}
+
+.bidRowWarm .bidAmount {
+  color: var(--brand-warm-dark-text);
 }
 
 .linkSymbol {

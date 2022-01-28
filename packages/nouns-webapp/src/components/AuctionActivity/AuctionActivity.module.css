@@ -5,11 +5,11 @@
 }
 
 .informationRow {
-  margin-bottom: 1.4rem;
+  margin-bottom: 0.5rem;
 }
 
 .activityRow {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0rem;
 }
 
 h1 {
@@ -61,15 +61,13 @@ h4 {
 
 .section h4 {
   font-family: 'PT Root UI';
-  font-size: 18px;
-  line-height: 27px;
-  color: var(--brand-cool-light-text);
+  font-size: 17px;
+  line-height: 25px;
 }
 
 .section h2 {
   font-family: 'PT Root UI Bold';
   font-size: 32px;
-  color: var(--brand-cool-dark-text);
 }
 
 @media (max-width: 992px) {
@@ -89,10 +87,10 @@ h4 {
   .currentBidCol {
     border-right: 0px;
   }
-
+/* 
   .fomoNounsLink {
     text-align: center;
-  }
+  } */
 }
 
 /* Fix Firefox navigation arrow alignment issues */
@@ -104,7 +102,8 @@ h4 {
 }
 
 .fomoNounsLink {
-  margin-top: 1.5rem;
+  margin-top: 0rem;
+  margin-bottom: 1rem;
   transition: 0.2s ease-in-out;
 }
 
