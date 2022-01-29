@@ -3,7 +3,7 @@ import { buildSVG } from '@nouns/sdk';
 import { BigNumber as EthersBN } from 'ethers';
 import { INounSeed, useNounSeed } from '../../wrappers/nounToken';
 import Noun from '../Noun';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import classes from './StandaloneNoun.module.css';
 import { useDispatch } from 'react-redux';
 import { setOnDisplayAuctionNounId } from '../../state/slices/onDisplayAuction';
@@ -38,11 +38,9 @@ const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProp
   const noun = seed && getNoun(nounId, seed);
 
   const dispatch = useDispatch();
-  const history = useHistory();
 
   const onClickHandler = () => {
     dispatch(setOnDisplayAuctionNounId(nounId.toNumber()));
-    history.push(`/noun/${nounId}`);
   };
 
   return (
@@ -62,7 +60,6 @@ export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = (
   const { nounId, onLoadSeed, shouldLinkToProfile } = props;
 
   const dispatch = useDispatch();
-  const history = useHistory();
   const seed = useNounSeed(nounId);
 
   if (!seed || !nounId || !onLoadSeed) return <Noun imgPath="" alt="Noun" />;
@@ -71,7 +68,6 @@ export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = (
 
   const onClickHandler = () => {
     dispatch(setOnDisplayAuctionNounId(nounId.toNumber()));
-    history.push(`/noun/${nounId}`);
   };
 
   const { image, description } = getNoun(nounId, seed);
