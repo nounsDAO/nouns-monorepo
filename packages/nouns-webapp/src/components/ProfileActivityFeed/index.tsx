@@ -46,9 +46,10 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
 
   const { data: proposals } = useAllProposals();
 
-  // TODO add a spinner here
   if (loading || !proposals || !proposals.length || proposalTimestampLoading) {
-    return <></>;
+    return (
+      <></>
+    );
   } else if (error || proposalTimestampError) {
     return <div>Failed to fetch noun activity history</div>;
   }
@@ -61,7 +62,6 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
     }, {});
 
   const filteredProposals = proposals.filter((p: Proposal, id: number) => {
-    // console.log("INNER: ", p.id, parseInt(proposalCreatedTimestamps.proposals[id].createdTimestamp), nounCanVoteTimestamp.toNumber());
     return (
       parseInt(proposalCreatedTimestamps.proposals[id].createdTimestamp) >
         nounCanVoteTimestamp.toNumber() ||
