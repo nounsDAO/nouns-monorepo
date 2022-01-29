@@ -9,31 +9,21 @@ import _BidsIcon from '../../assets/icons/Bids.svg';
 import NounInfoRowBirthday from '../NounInfoRowBirthday';
 import NounInfoRowHolder from '../NounInfoRowHolder';
 import NounInfoRowButton from '../NounInfoRowButton';
-import { useHistory } from 'react-router';
 import { useAppSelector } from '../../hooks';
 
 import config from '../../config';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import { setOnDisplayAuctionNounId } from '../../state/slices/onDisplayAuction';
-import { useDispatch } from 'react-redux';
 
 interface NounInfoCardProps {
   nounId: number;
-  bidHistoryOnClickHandler?: () => void;
+  bidHistoryOnClickHandler: () => void;
 }
 
 const NounInfoCard: React.FC<NounInfoCardProps> = props => {
   const { nounId, bidHistoryOnClickHandler } = props;
-  const history = useHistory();
-  const dispatch = useDispatch();
 
   const etherscanBaseURL = buildEtherscanAddressLink(config.addresses.nounsToken);
-  const bidHistoryButtonClickHandler = bidHistoryOnClickHandler
-    ? bidHistoryOnClickHandler
-    : () => {
-        dispatch(setOnDisplayAuctionNounId(nounId));
-        history.push(`/noun/${nounId}`);
-      };
+  
   // eslint-disable-next-line no-restricted-globals
   const etherscanButtonClickHandler = () => (location.href = `${etherscanBaseURL}/${nounId}`);
 
@@ -51,7 +41,7 @@ const NounInfoCard: React.FC<NounInfoCardProps> = props => {
         <NounInfoRowButton
           iconImgSource={_BidsIcon}
           btnText={lastAuctionNounId === nounId ? 'Bids' : 'Bid history'}
-          onClickHandler={bidHistoryButtonClickHandler}
+          onClickHandler={bidHistoryOnClickHandler}
         />
         <NounInfoRowButton
           iconImgSource={_AddressIcon}
