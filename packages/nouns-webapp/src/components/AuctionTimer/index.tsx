@@ -45,7 +45,7 @@ const AuctionTimer: React.FC<{
 
   const flooredMinutes = Math.floor(timerDuration.minutes());
   const flooredSeconds = Math.floor(timerDuration.seconds());
-  const isCool = useAppSelector(state => state.application.stateBackgroundColor) === '#d5d7e1';
+  const isCool = useAppSelector(state => state.application.isCoolBackground);
 
   if (!auction) return null;
 

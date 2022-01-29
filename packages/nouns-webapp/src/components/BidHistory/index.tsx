@@ -46,7 +46,7 @@ const bidItem = (bid: Bid, index: number, classes: any, isCool?: boolean) => {
 
 const BidHistory: React.FC<{ auctionId: string; max: number; classes?: any }> = props => {
   const { auctionId, max, classes = _classes } = props;
-  const isCool = useAppSelector(state => state.application.stateBackgroundColor) === '#d5d7e1';
+  const isCool = useAppSelector(state => state.application.isCoolBackground);
   const bids = useAuctionBids(EthersBN.from(auctionId));
   const bidContent =
     bids &&

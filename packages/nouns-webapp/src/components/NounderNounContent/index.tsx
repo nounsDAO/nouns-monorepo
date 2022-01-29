@@ -32,7 +32,7 @@ const NounderNounContent: React.FC<{
     onNextAuctionClick,
   } = props;
 
-  const isCool = useAppSelector(state => state.application.stateBackgroundColor) === '#d5d7e1';
+  const isCool = useAppSelector(state => state.application.isCoolBackground);
 
   return (
     <AuctionActivityWrapper>

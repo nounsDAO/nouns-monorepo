@@ -18,7 +18,7 @@ interface NounInfoRowHolderProps {
 
 const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
   const { nounId } = props;
-  const isCool = useAppSelector(state => state.application.stateBackgroundColor) === '#d5d7e1';
+  const isCool = useAppSelector(state => state.application.isCoolBackground);
   const { loading, error, data } = useQuery(nounQuery(nounId.toString()));
 
   const etherscanURL = buildEtherscanAddressLink(data && data.noun.owner.id);

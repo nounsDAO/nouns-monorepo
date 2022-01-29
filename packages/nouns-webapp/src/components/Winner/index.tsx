@@ -26,7 +26,7 @@ const Winner: React.FC<WinnerProps> = props => {
       <ShortAddress size={40} address={winner} avatar={true} />
     );
 
-  const isCool = useAppSelector(state => state.application.stateBackgroundColor) === '#d5d7e1';
+  const isCool = useAppSelector(state => state.application.isCoolBackground);
   const nounderNounContent = <h2>nounders.eth</h2>;
 
   return (

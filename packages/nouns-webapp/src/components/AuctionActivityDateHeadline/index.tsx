@@ -8,7 +8,7 @@ dayjs.extend(utc);
 
 const AuctionActivityDateHeadline: React.FC<{ startTime: BigNumber }> = props => {
   const { startTime } = props;
-  const isCool = useAppSelector(state => state.application.stateBackgroundColor) === "#d5d7e1";
+  const isCool = useAppSelector(state => state.application.isCoolBackground);
   const auctionStartTimeUTC = dayjs(startTime.toNumber() * 1000)
     .utc()
     .format('MMMM DD, YYYY');
