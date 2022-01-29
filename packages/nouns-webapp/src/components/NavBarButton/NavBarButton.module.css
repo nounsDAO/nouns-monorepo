@@ -25,7 +25,7 @@
 
 .icon>svg {
   max-height: 14px;
-  opacity: 50%;
+  opacity: 0.50;
 }
 
 @media (max-width: 992px) {
