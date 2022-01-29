@@ -13,10 +13,8 @@
 }
 
 .bidRowCool {
-  /* background-color: var(--brand-cool-accent); */
   font-family: 'PT Root UI', sans-serif;
   padding: 0.8rem;
-  border-radius: 10px;
   border-bottom: 1px solid var(--brand-cool-border);
   font-size: 1.1rem;
   font-weight: bold;
@@ -24,10 +22,8 @@
 }
 
 .bidRowWarm {
-  /* background-color: var(--brand-warm-accent); */
   font-family: 'PT Root UI', sans-serif;
   padding: 0.25rem 0.75rem 0.5rem 0.75rem;
-  border-radius: 12px;
   border-bottom: 1px solid var(--brand-warm-border);
   font-size: 0.95rem;
   font-weight: bold;
