@@ -60,10 +60,15 @@ export const useNounCanVoteTimestamp = (nounId: number) => {
 
   const pastAuctions = useAppSelector(state => state.pastAuctions.pastAuctions);
 
-  return EthersBN.from(
-    pastAuctions.find((auction: AuctionState, i: number) => {
-      const maybeNounId = auction.activeAuction?.nounId;
-      return maybeNounId ? EthersBN.from(maybeNounId).eq(EthersBN.from(nextNounIdForQuery)) : false;
-    })?.activeAuction?.startTime,
-  );
+  const maybeNounCanVoteTimestamp = pastAuctions.find((auction: AuctionState, i: number) => {
+    const maybeNounId = auction.activeAuction?.nounId;
+    return maybeNounId ? EthersBN.from(maybeNounId).eq(EthersBN.from(nextNounIdForQuery)) : false;
+  })?.activeAuction?.startTime;
+
+  if (!maybeNounCanVoteTimestamp) {
+    // This state only occurs during loading flashes
+    return EthersBN.from(0);
+  }
+
+  return EthersBN.from(maybeNounCanVoteTimestamp);
 };
