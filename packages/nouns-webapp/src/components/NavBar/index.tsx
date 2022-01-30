@@ -32,8 +32,8 @@ const NavBar = () => {
 
   const useStateBg =
     history.location.pathname === '/' ||
-    history.location.pathname.includes('/noun') ||
-    history.location.pathname.includes('/auction');
+    history.location.pathname.includes('/noun/') ||
+    history.location.pathname.includes('/auction/');
 
   const nonWalletButtonStyle = !useStateBg
     ? NavBarButtonStyle.WHITE_INFO
@@ -43,8 +43,8 @@ const NavBar = () => {
 
   return (
     <>
-      <Navbar expand="lg" style={{ backgroundColor: `${useStateBg ? stateBgColor : ''}`}}>
-        <Container style={{maxWidth: "unset"}}>
+      <Navbar expand="lg" style={{ backgroundColor: `${useStateBg ? stateBgColor : 'white'}` }}>
+        <Container style={{ maxWidth: 'unset' }}>
           <div className={classes.brandAndTreasuryWrapper}>
             <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
               <img src={logo} className={classes.navBarLogo} alt="Nouns DAO logo" />
