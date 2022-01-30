@@ -3,6 +3,8 @@
 }
 
 .leftArrowCool {
+  -webkit-appearance: none;
+  padding: 0;
   display: inline-block;
   width: 2rem;
   height: 2rem;
@@ -17,6 +19,8 @@
 }
 
 .rightArrowCool {
+  -webkit-appearance: none;
+  padding: 0;
   margin-left: 0.3rem;
   display: inline-block;
   width: 2rem;
@@ -32,6 +36,8 @@
 }
 
 .leftArrowWarm {
+  -webkit-appearance: none;
+  padding: 0;
   display: inline-block;
   width: 2rem;
   height: 2rem;
@@ -46,6 +52,8 @@
 }
 
 .rightArrowWarm {
+  -webkit-appearance: none;
+  padding: 0;
   margin-left: 0.3rem;
   display: inline-block;
   width: 2rem;
