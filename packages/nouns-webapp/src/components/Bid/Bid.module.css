@@ -135,6 +135,7 @@
 @media (max-width: 992px) {
   .bidInput {
     border: none;
+    border: 1px solid #8c8d9275;
   }
 
   .customPlaceholder {
