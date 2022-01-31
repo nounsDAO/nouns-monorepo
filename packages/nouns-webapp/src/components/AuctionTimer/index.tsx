@@ -16,10 +16,13 @@ const AuctionTimer: React.FC<{
   const { auction, auctionEnded } = props;
 
   const [auctionTimer, setAuctionTimer] = useState(0);
+  const [timerToggle, setTimerToggle] = useState(true);
+
   const auctionTimerRef = useRef(auctionTimer); // to access within setTimeout
   auctionTimerRef.current = auctionTimer;
 
   const timerDuration = dayjs.duration(auctionTimerRef.current, 's');
+  const endTime = dayjs().add(auctionTimerRef.current, 's').local();
 
   // timer logic
   useEffect(() => {
@@ -50,17 +53,21 @@ const AuctionTimer: React.FC<{
   if (!auction) return null;
 
   return (
-    <div className={classes.auctionTimerSection}>
+    <div onClick={() => setTimerToggle(!timerToggle)} className={classes.auctionTimerSection}>
       <Container className={clsx(classes.wrapper, classes.container)}>
         <Row className={classes.section}>
-          <Col xs={4} lg={12} className={classes.leftCol}>
+          <Col xs={timerToggle ? 4 : 'auto'} lg={12} className={classes.leftCol}>
             <h4
               className={classes.title}
               style={{
                 color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)',
               }}
             >
-              {window.innerWidth < 992 ? auctionContentShort : auctionContentLong}
+              {timerToggle
+                ? window.innerWidth < 992
+                  ? auctionContentShort
+                  : auctionContentLong
+                : `Ends on ${endTime.format('MMM Do')} at`}
             </h4>
           </Col>
           <Col xs="auto" lg={12}>
@@ -70,24 +77,32 @@ const AuctionTimer: React.FC<{
                 color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
               }}
             >
-              <div className={classes.timerSection}>
-                <span>
-                  {`${Math.floor(timerDuration.hours())}`}
-                  <span className={classes.small}>h</span>
-                </span>
-              </div>
-              <div className={classes.timerSection}>
-                <span>
-                  {`${flooredMinutes}`}
-                  <span className={classes.small}>m</span>
-                </span>
-              </div>
-              <div className={classes.timerSectionFinal}>
-                <span>
-                  {`${flooredSeconds}`}
-                  <span className={classes.small}>s</span>
-                </span>
-              </div>
+              {timerToggle ? (
+                <>
+                  <div className={classes.timerSection}>
+                    <span>
+                      {`${Math.floor(timerDuration.hours())}`}
+                      <span className={classes.small}>h</span>
+                    </span>
+                  </div>
+                  <div className={classes.timerSection}>
+                    <span>
+                      {`${flooredMinutes}`}
+                      <span className={classes.small}>m</span>
+                    </span>
+                  </div>
+                  <div className={classes.timerSectionFinal}>
+                    <span>
+                      {`${flooredSeconds}`}
+                      <span className={classes.small}>s</span>
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <div className={clsx(classes.timerSection, classes.clockSection)}>
+                  <span>{endTime.format('h:mm:ss a')}</span>
+                </div>
+              )}
             </h2>
           </Col>
         </Row>

@@ -82,7 +82,7 @@ h4 {
   .auctionTimerCol {
     margin-left: 6px;
     margin-top: 6px;
-    padding-left: 0px;
+    padding-left: 1px;
     padding-right: 16px;
   }
 
@@ -92,7 +92,7 @@ h4 {
   }
 
   .fomoNounsLink {
-    padding-left: 13px;
+    padding-left: 14px;
   }
 }
 
