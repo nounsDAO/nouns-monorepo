@@ -14,7 +14,10 @@ const AuctionActivityDateHeadline: React.FC<{ startTime: BigNumber }> = props =>
     .format('MMMM DD, YYYY');
   return (
     <div className={classes.wrapper}>
-      <h4 className={classes.date} style={{color: isCool ? "var(--brand-cool-light-text)" : "var(--brand-warm-light-text)"}}>{`${auctionStartTimeUTC}`}</h4>
+      <h4
+        className={classes.date}
+        style={{ color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)' }}
+      >{`${auctionStartTimeUTC}`}</h4>
     </div>
   );
 };

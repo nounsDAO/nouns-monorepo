@@ -63,9 +63,6 @@ const Bid: React.FC<{
 
   const [showConnectModal, setShowConnectModal] = useState(false);
 
-  //  const showModalHandler = () => {
-  //    setShowConnectModal(true);
-  //  };
   const hideModalHandler = () => {
     setShowConnectModal(false);
   };

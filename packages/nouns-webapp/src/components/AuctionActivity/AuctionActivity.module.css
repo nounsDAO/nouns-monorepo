@@ -71,7 +71,6 @@ h4 {
 }
 
 @media (max-width: 992px) {
-
   h1 {
     padding-top: 12px;
   }
@@ -87,7 +86,7 @@ h4 {
   .currentBidCol {
     border-right: 0px;
   }
-/* 
+  /* 
   .fomoNounsLink {
     text-align: center;
   } */
@@ -111,8 +110,9 @@ h4 {
   opacity: 0.6;
 }
 
-.fomoNounsLink a, .fomoNounsLink:active a {
-  font-family: "PT Root UI", sans-serif;
+.fomoNounsLink a,
+.fomoNounsLink:active a {
+  font-family: 'PT Root UI', sans-serif;
   font-weight: 500;
   padding-left: 0.5rem;
   text-decoration: none;

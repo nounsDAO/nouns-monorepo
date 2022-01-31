@@ -58,7 +58,9 @@
   transition: all 0.15s ease-in-out;
 }
 
-.nounButtonCool:hover, .nounButtonWarm:hover, .nounButton:hover {
+.nounButtonCool:hover,
+.nounButtonWarm:hover,
+.nounButton:hover {
   text-decoration: none;
   background-color: var(--brand-gray-hover);
 }

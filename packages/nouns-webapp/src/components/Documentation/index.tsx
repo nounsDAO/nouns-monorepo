@@ -30,7 +30,7 @@ const Documentation = () => {
             digital community and identity, Nouns attempt to bootstrap identity, community,
             governance, and a treasury that can be used by the community.
           </p>
-          <p className={classes.aboutText} style={{paddingBottom: "4rem"}}>
+          <p className={classes.aboutText} style={{ paddingBottom: '4rem' }}>
             Learn more below, or start creating Nouns off-chain using the {playgroundLink}.
           </p>
         </div>

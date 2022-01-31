@@ -52,7 +52,11 @@ export const useAuctionMinBidIncPercentage = () => {
   return new BigNumber(minBidIncrement[0]);
 };
 
-// Nouns can vote when the auction for the next noun starts
+/**
+ * Computes timestamp after which a Noun could vote
+ * @param nounId TokenId of Noun
+ * @returns Unix timestamp after which Noun could vote
+ */
 export const useNounCanVoteTimestamp = (nounId: number) => {
   const nextNounId = nounId + 1;
 

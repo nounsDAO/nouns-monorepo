@@ -15,7 +15,7 @@
   top: 30vh;
   left: 10%;
   z-index: 100;
-  background-color: rgba(255,255,255,0.6);
+  background-color: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(10px);
   padding: 3rem 2rem;
   text-align: center;
@@ -28,12 +28,12 @@
   border-radius: 10px;
   min-height: 44px;
   padding-top: 7px;
-  background-color: rgba(255,255,255,0.7);
+  background-color: rgba(255, 255, 255, 0.7);
 }
 
 .modal button:hover {
   color: black;
-  background-color: rgba(255,255,255,1);
+  background-color: rgba(255, 255, 255, 1);
 }
 
 .modal h3 {

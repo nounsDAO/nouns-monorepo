@@ -29,8 +29,7 @@
 
 .bidBtn:hover,
 .bidBtn:active,
-.bidBtn:focus
-.bidBtn:disabled {
+.bidBtn:focus .bidBtn:disabled {
   outline: none !important;
   box-shadow: none !important;
 }
@@ -66,7 +65,6 @@
 
 .bidInput:focus {
   box-shadow: inset 0px 0px 0px 1px var(--brand-cool-dark-text) !important;
-
 }
 
 .customPlaceholder {

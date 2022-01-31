@@ -71,7 +71,6 @@
 /* Disable hover on mobile because it was leading to
 buttons looking disabled when they were not */
 @media (min-width: 992px) {
-
   .leftArrowWarm:hover,
   .leftArrowCool:hover,
   .rightArrowWarm:hover,

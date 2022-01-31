@@ -5,7 +5,7 @@ import classes from './AuctionTimer.module.css';
 import { useState, useEffect, useRef } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useAppSelector } from '../../hooks';
-import clsx from 'clsx'
+import clsx from 'clsx';
 
 dayjs.extend(duration);
 

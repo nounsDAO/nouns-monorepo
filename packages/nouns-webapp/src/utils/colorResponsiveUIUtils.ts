@@ -19,7 +19,7 @@ export const shouldUseStateBg = (history: any) => {
  */
 export const usePickByState = (whiteState: any, coolState: any, warmState: any, history: any) => {
   const useStateBg = shouldUseStateBg(history);
-  const isCoolState = useAppSelector(state => state.application.isCoolBackground)
+  const isCoolState = useAppSelector(state => state.application.isCoolBackground);
 
   if (!useStateBg) {
     return whiteState;

@@ -45,11 +45,13 @@
   transition: all 0.2s ease-in-out;
 }
 
-.bidRowWarm a:hover, .bidRowCool a:hover {
+.bidRowWarm a:hover,
+.bidRowCool a:hover {
   filter: brightness(110%);
 }
 
-.bidRowCool:hover, .bidRowWarm:hover {
+.bidRowCool:hover,
+.bidRowWarm:hover {
   filter: brightness(105%);
 }
 
@@ -64,16 +66,16 @@
   flex-direction: column;
 }
 
-.bidder>div>div {
+.bidder > div > div {
   font-family: 'PT Root UI Bold';
   font-size: 18px;
 }
 
-.bidRowCool .bidder>div>div {
+.bidRowCool .bidder > div > div {
   color: var(--brand-cool-dark-text);
 }
 
-.bidRowWarm .bidder>div>div {
+.bidRowWarm .bidder > div > div {
   color: var(--brand-warm-dark-text);
 }
 

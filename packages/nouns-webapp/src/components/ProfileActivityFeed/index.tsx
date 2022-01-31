@@ -47,9 +47,7 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
   const { data: proposals } = useAllProposals();
 
   if (loading || !proposals || !proposals.length || proposalTimestampLoading) {
-    return (
-      <></>
-    );
+    return <></>;
   } else if (error || proposalTimestampError) {
     return <div>Failed to fetch noun activity history</div>;
   }
