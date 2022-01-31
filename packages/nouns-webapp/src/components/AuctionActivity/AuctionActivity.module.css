@@ -80,16 +80,20 @@ h4 {
   }
 
   .auctionTimerCol {
-    padding-left: 8px;
+    margin-left: 6px;
+    margin-top: 6px;
+    padding-left: 0px;
+    padding-right: 16px;
   }
 
   .currentBidCol {
     border-right: 0px;
+    padding-left: 0rem;
   }
-  /* 
+
   .fomoNounsLink {
-    text-align: center;
-  } */
+    padding-left: 13px;
+  }
 }
 
 /* Fix Firefox navigation arrow alignment issues */
