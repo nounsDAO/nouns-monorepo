@@ -32,17 +32,6 @@
 
 pragma solidity ^0.8.6;
 
-contract NounsDAOProxyStorage {
-    /// @notice Administrator for this contract
-    address public admin;
-
-    /// @notice Pending administrator for this contract
-    address public pendingAdmin;
-
-    /// @notice Active brains of Governor
-    address public implementation;
-}
-
 contract NounsDAOEvents {
     /// @notice An event emitted when a new proposal is created
     event ProposalCreated(
@@ -121,6 +110,17 @@ contract NounsDAOEvents {
 
     /// @notice Emitted when vetoer is changed
     event NewVetoer(address oldVetoer, address newVetoer);
+}
+
+contract NounsDAOProxyStorage {
+    /// @notice Administrator for this contract
+    address public admin;
+
+    /// @notice Pending administrator for this contract
+    address public pendingAdmin;
+
+    /// @notice Active brains of Governor
+    address public implementation;
 }
 
 /**
@@ -224,7 +224,11 @@ contract NounsDAOStorageV1 is NounsDAOProxyStorage {
 }
 
 /**
- * @title Storage adjustments to NounsDAOStorageV1.
+ * @title Naming adjustments to NounsDAOStorageV1.
+ * @notice This contract adjusts the following V1 storage key names for use in V2.
+ * No storage has been otherwise updated.
+ * - `quorumVotesBPS` has been renamed to `minQuorumVotesBPS`.
+ * - `Proposal.quorumVotes` has been renamed to `Proposal.minQuorumVotes`.
  */
 contract NounsDAOStorageV1Adjusted is NounsDAOProxyStorage {
     /// @notice Vetoer who has the ability to veto any proposal
@@ -256,15 +260,6 @@ contract NounsDAOStorageV1Adjusted is NounsDAOProxyStorage {
 
     /// @notice The latest proposal for each proposer
     mapping(address => uint256) public latestProposalIds;
-
-    struct StateCache {
-        /// @notice Total Noun supply at the time of proposal creation
-        uint256 totalSupply;
-        /// @notice Minimum quorum votes BPS at the time of proposal creation
-        uint256 minQuorumVotesBPS;
-        /// @notice Maximum quorum votes BPS at the time of proposal creation
-        uint256 maxQuorumVotesBPS;
-    }
 
     struct Proposal {
         /// @notice Unique id for looking up a proposal
@@ -301,8 +296,6 @@ contract NounsDAOStorageV1Adjusted is NounsDAOProxyStorage {
         bool vetoed;
         /// @notice Flag marking whether the proposal has been executed
         bool executed;
-        /// @notice Cached state at the time of proposal creation
-        StateCache cache;
         /// @notice Receipts of ballots for the entire set of voters
         mapping(address => Receipt) receipts;
     }
@@ -340,6 +333,18 @@ contract NounsDAOStorageV1Adjusted is NounsDAOProxyStorage {
 contract NounsDAOStorageV2 is NounsDAOStorageV1Adjusted {
     /// @notice The maximum basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed. *DIFFERS from GovernerBravo
     uint256 public maxQuorumVotesBPS;
+
+    /// @notice Proposal metadata - A small state snapshot that's taken at the time of proposal creation.
+    mapping(uint256 => ProposalMetadata) public proposalMetadata;
+
+    struct ProposalMetadata {
+        /// @notice Total Noun supply at the time of proposal creation
+        uint256 totalSupply;
+        /// @notice Minimum quorum votes BPS at the time of proposal creation
+        uint256 minQuorumVotesBPS;
+        /// @notice Maximum quorum votes BPS at the time of proposal creation
+        uint256 maxQuorumVotesBPS;
+    }
 }
 
 interface INounsDAOExecutor {

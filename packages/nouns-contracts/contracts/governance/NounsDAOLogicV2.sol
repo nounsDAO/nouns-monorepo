@@ -237,13 +237,14 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
         newProposal.canceled = false;
         newProposal.executed = false;
         newProposal.vetoed = false;
-        newProposal.cache = StateCache({
+
+        latestProposalIds[newProposal.proposer] = newProposal.id;
+
+        proposalMetadata[proposalCount] = ProposalMetadata({
             minQuorumVotesBPS: minQuorumVotesBPS,
             maxQuorumVotesBPS: maxQuorumVotesBPS,
             totalSupply: temp.totalSupply
         });
-
-        latestProposalIds[newProposal.proposer] = newProposal.id;
 
         /// @notice Maintains backwards compatibility with GovernorBravo events
         emit ProposalCreated(
@@ -699,14 +700,15 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
      */
     function quorumVotes(uint256 proposalId) public view returns (uint256) {
         Proposal storage proposal = proposals[proposalId];
-        if (proposal.cache.totalSupply == 0) {
+        ProposalMetadata memory metadata = proposalMetadata[proposalId];
+        if (metadata.totalSupply == 0) {
             return proposal.minQuorumVotes;
         }
 
         uint256 consensus = WAD - wdiv(proposal.forVotes, (proposal.forVotes + proposal.againstVotes));
-        uint256 maxAdjustment = proposal.cache.maxQuorumVotesBPS - proposal.cache.minQuorumVotesBPS;
-        uint256 quorumBPS = ((maxAdjustment * consensus) + (proposal.cache.minQuorumVotesBPS * WAD)) / WAD;
-        return bps2Uint(quorumBPS, proposal.cache.totalSupply);
+        uint256 maxAdjustment = metadata.maxQuorumVotesBPS - metadata.minQuorumVotesBPS;
+        uint256 quorumBPS = ((maxAdjustment * consensus) + (metadata.minQuorumVotesBPS * WAD)) / WAD;
+        return bps2Uint(quorumBPS, metadata.totalSupply);
     }
 
     /**
