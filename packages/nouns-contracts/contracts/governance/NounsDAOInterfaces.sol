@@ -25,9 +25,9 @@
 // Additional conditions of BSD-3-Clause can be found here: https://opensource.org/licenses/BSD-3-Clause
 //
 // MODIFICATIONS
-// NounsDAOEvents, NounsDAOProxyStorage, NounsDAOStorageV1 adds support for changes made by Nouns DAO to GovernorBravo.sol
+// NounsDAOEvents, NounsDAOProxyStorage, NounsDAOStorageV1 add support for changes made by Nouns DAO to GovernorBravo.sol
 // See NounsDAOLogicV1.sol for more details.
-// NounsDAOStorageV1Adjusted and NounsDAOStorageV2 adds support for a dynamic vote quorum.
+// NounsDAOStorageV1Adjusted and NounsDAOStorageV2 add support for a dynamic vote quorum.
 // See NounsDAOLogicV2.sol for more details.
 
 pragma solidity ^0.8.6;
