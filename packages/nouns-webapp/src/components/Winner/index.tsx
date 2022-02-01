@@ -42,7 +42,7 @@ const Winner: React.FC<WinnerProps> = props => {
             Winner
           </h4>
         </Col>
-        <Col xs="auto" lg={12}>
+        <Col xs="auto" lg={12} className={classes.winnerContent}>
           <h2
             style={{
               color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',

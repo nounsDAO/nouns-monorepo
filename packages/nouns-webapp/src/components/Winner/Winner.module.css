@@ -52,4 +52,8 @@
   .leftCol {
     padding-left: 0.75rem;
   }
+
+  .winnerContent {
+    margin-right: 0.5rem;
+  }
 }
