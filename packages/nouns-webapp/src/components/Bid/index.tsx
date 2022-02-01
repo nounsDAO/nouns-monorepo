@@ -233,9 +233,6 @@ const Bid: React.FC<{
   const isDisabled =
     placeBidState.status === 'Mining' || settleAuctionState.status === 'Mining' || !activeAccount;
 
-  // const isDisconnected = !activeAccount
-  // const isMobile = window.innerWidth < 992;
-
   const minBidCopy = `Ξ ${minBidEth(minBid)} or more`;
   const fomoNounsBtnOnClickHandler = () => {
     // Open Fomo Nouns in a new tab

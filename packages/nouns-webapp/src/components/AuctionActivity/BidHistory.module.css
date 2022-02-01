@@ -66,8 +66,12 @@
   flex-direction: column;
 }
 
-.bidder > div > div {
+.bidder {
   font-family: 'PT Root UI Bold';
+}
+
+.bidder > div > div {
+  font-family: 'pt root ui bold';
   font-size: 18px;
 }
 

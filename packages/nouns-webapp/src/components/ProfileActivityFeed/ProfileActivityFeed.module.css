@@ -36,7 +36,6 @@
 .aboveTheFoldEventsTable td {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   padding-top: 12px;
-  border-bottom: none !important;
 }
 
 .nullStateCopy {

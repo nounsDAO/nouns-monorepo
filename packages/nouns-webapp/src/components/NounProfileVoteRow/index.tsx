@@ -118,8 +118,10 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
           <span className={classes.proposalTitle}>{proposal.title}</span>
         </div>
       </td>
-      <td className={classes.voteStatusWrapper}>
-        <div className={classes.voteProposalStatus}>{selectProposalStatusIcon(proposal)}</div>
+      <td>
+        <div className={classes.voteStatusWrapper}>
+          <div className={classes.voteProposalStatus}>{selectProposalStatusIcon(proposal)}</div>
+        </div>
       </td>
     </tr>
   );
