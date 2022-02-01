@@ -18,7 +18,8 @@
     "ethers": "^5.4.7"
   },
   "devDependencies": {
-    "node-libpng": "^0.2.18"
+    "@types/pngjs": "^6.0.1",
+    "pngjs": "^6.0.0"
   },
   "peerDependencies": {
     "ethers": ">=5.0.0"
