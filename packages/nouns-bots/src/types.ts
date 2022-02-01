@@ -33,10 +33,10 @@ export interface IAuctionLifecycleHandler {
   handleNewAuction(auctionId: number): Promise<void>;
   handleNewBid(auctionId: number, bid: Bid): Promise<void>;
   handleAuctionEndingSoon(auctionId: number): Promise<void>;
-  handleNewProposal(proposal: Proposal): Promise<void>;
-  handleUpdatedProposalStatus(proposal: Proposal): Promise<void>;
-  handleProposalAtRiskOfExpiry(proposal: Proposal): Promise<void>;
-  handleGovernanceVote(proposal: Proposal, vote: Vote): Promise<void>;
+  handleNewProposal?(proposal: Proposal): Promise<void>;
+  handleUpdatedProposalStatus?(proposal: Proposal): Promise<void>;
+  handleProposalAtRiskOfExpiry?(proposal: Proposal): Promise<void>;
+  handleGovernanceVote?(proposal: Proposal, vote: Vote): Promise<void>;
 }
 
 export interface ProposalSubgraphResponse {

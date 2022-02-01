@@ -97,26 +97,26 @@ async function processGovernanceTick() {
 
     if (cachedProposal === null) {
       // New proposal
-      await Promise.all(auctionLifecycleHandlers.map(h => h.handleNewProposal(proposal)));
+      await Promise.all(auctionLifecycleHandlers.map(h => h.handleNewProposal?.(proposal)));
     } else {
       // Proposal has changed status
       if (cachedProposal.status !== proposal.status) {
         await Promise.all(
-          auctionLifecycleHandlers.map(h => h.handleUpdatedProposalStatus(proposal)),
+          auctionLifecycleHandlers.map(h => h.handleUpdatedProposalStatus?.(proposal)),
         );
       }
       const newVotes = extractNewVotes(cachedProposal, proposal);
       R.map(async newVote => {
         // New proposal votes
         await Promise.all(
-          auctionLifecycleHandlers.map(h => h.handleGovernanceVote(proposal, newVote)),
+          auctionLifecycleHandlers.map(h => h.handleGovernanceVote?.(proposal, newVote)),
         );
       }, newVotes);
 
       // Proposal is at-risk of expiry
       if (isAtRiskOfExpiry(proposal) && !(await hasWarnedOfExpiry(proposal.id))) {
         await Promise.all(
-          auctionLifecycleHandlers.map(h => h.handleProposalAtRiskOfExpiry(proposal)),
+          auctionLifecycleHandlers.map(h => h.handleProposalAtRiskOfExpiry?.(proposal)),
         );
         await setProposalExpiryWarningSent(proposal.id);
       }
