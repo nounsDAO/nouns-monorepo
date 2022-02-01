@@ -76,7 +76,7 @@
 
 .customPlaceholderBidAmt {
   position: absolute;
-  opacity: 30%;
+  opacity: 0.3;
   top: 15%;
   left: 3%;
   color: var(--brand-cool-light-text);
