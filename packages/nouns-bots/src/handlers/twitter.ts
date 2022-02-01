@@ -1,6 +1,6 @@
 import { getAuctionReplyTweetId, updateAuctionReplyTweetId } from '../cache';
+import { IAuctionLifecycleHandler, Bid } from '../types';
 import { twitter } from '../clients';
-import { IAuctionLifecycleHandler, Bid, Proposal, Vote } from '../types';
 import {
   getAuctionEndingSoonTweetText,
   formatAuctionStartedTweetText,
@@ -57,21 +57,5 @@ export class TwitterAuctionLifecycleHandler implements IAuctionLifecycleHandler 
     const tweet = await twitter.v1.reply(getAuctionEndingSoonTweetText(), tweetReplyId);
     await updateAuctionReplyTweetId(tweet.id_str);
     console.log(`processed twitter auction ending soon update for auction ${auctionId}`);
-  }
-
-  async handleNewProposal(proposal: Proposal) {
-    //TODO
-  }
-
-  async handleUpdatedProposalStatus(proposal: Proposal) {
-    //TODO
-  }
-
-  async handleProposalAtRiskOfExpiry(_proposal: Proposal) {
-    // noop, discord-only notification.
-  }
-
-  async handleGovernanceVote(proposal: Proposal, vote: Vote) {
-    //TODO
   }
 }
