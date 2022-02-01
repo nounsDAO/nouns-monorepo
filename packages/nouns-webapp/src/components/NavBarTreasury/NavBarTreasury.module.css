@@ -89,6 +89,10 @@
   background: white;
 }
 
+.whiteTreasuryHeader {
+  opacity: 0.5;
+}
+
 .whiteInfo:hover {
   background-color: #e2e3e8;
 }
