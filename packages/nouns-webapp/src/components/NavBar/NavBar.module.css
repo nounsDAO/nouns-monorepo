@@ -19,6 +19,11 @@
     width: 65px;
     height: 65px;
   }
+
+  .navBarMargin {
+    margin-bottom: -1px;
+    margin-right: -5px;
+  }
 }
 
 /* connect button displays differently to default NavBarItems, thus the !importants */

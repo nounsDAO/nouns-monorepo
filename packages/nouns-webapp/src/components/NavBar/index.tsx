@@ -43,7 +43,11 @@ const NavBar = () => {
 
   return (
     <>
-      <Navbar expand="lg" style={{ backgroundColor: `${useStateBg ? stateBgColor : 'white'}` }}>
+      <Navbar
+        expand="lg"
+        style={{ backgroundColor: `${useStateBg ? stateBgColor : 'white'}` }}
+        className={classes.navBarMargin}
+      >
         <Container style={{ maxWidth: 'unset' }}>
           <div className={classes.brandAndTreasuryWrapper}>
             <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>

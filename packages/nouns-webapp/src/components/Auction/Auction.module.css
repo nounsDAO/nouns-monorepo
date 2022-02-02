@@ -16,6 +16,10 @@
 }
 
 @media (max-width: 992px) {
+  .navBarMargin {
+    margin-bottom: -1px;
+  }
+
   .nounWrapper {
     width: 70%;
     margin-left: 15%;
