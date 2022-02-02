@@ -1,8 +1,9 @@
-import { Button, Row, Container, Col } from 'react-bootstrap';
+import { Button, Row, Col } from 'react-bootstrap';
 import { useAppSelector } from '../../hooks';
 import classes from './Winner.module.css';
 import ShortAddress from '../ShortAddress';
 import { Link } from 'react-router-dom';
+import clsx from 'clsx';
 
 interface WinnerProps {
   winner: string;
@@ -30,30 +31,29 @@ const Winner: React.FC<WinnerProps> = props => {
   const nounderNounContent = <h2>nounders.eth</h2>;
 
   return (
-    <Container className={classes.wrapper}>
-      <Row className={classes.section}>
-        <Col xs={1} lg={12} className={classes.leftCol}>
-          <h4
-            style={{
-              fontFamily: 'PT Root UI',
-              fontWeight: 'bold',
-              color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)',
-            }}
-          >
-            Winner
-          </h4>
-        </Col>
-        <Col xs="auto" lg={12} className={classes.winnerContent}>
-          <h2
-            style={{
-              color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
-            }}
-          >
-            {isNounders ? nounderNounContent : nonNounderNounContent}
-          </h2>
-        </Col>
-      </Row>
-    </Container>
+    <Row className={clsx(classes.wrapper, classes.section)}>
+      <Col xs={1} lg={12} className={classes.leftCol}>
+        <h4
+          style={{
+            fontFamily: 'PT Root UI',
+            fontWeight: 'bold',
+            color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)',
+          }}
+        >
+          Winner
+        </h4>
+      </Col>
+      <Col xs="auto" lg={12}>
+        <h2
+          className={classes.winnerContent}
+          style={{
+            color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
+          }}
+        >
+          {isNounders ? nounderNounContent : nonNounderNounContent}
+        </h2>
+      </Col>
+    </Row>
   );
 };
 

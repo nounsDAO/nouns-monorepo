@@ -22,11 +22,10 @@
     margin-right: 15%;
   }
   .auctionActivityCol {
-    margin-left: 20%;
-    margin-right: 20%;
-    padding-right: unset;
-    padding-left: unset;
-    width: 60%;
+    padding-top: 5%;
+    padding-right: 5%;
+    padding-left: 5%;
+    width: 100%;
     background-color: white;
   }
 }
