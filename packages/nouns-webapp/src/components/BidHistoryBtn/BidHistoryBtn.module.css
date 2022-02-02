@@ -30,7 +30,8 @@
 .bidHistory {
   margin-left: 0.5rem;
   color: var(--brand-color-cool);
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-weight: bold;
   font-size: 1rem;
   font-size: 16px;
 }
@@ -38,7 +39,8 @@
 .bidHistoryWarm {
   margin-left: 0.5rem;
   color: var(--brand-color-red);
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-weight: bold;
   font-size: 1rem;
   font-size: 16px;
 }
@@ -46,7 +48,8 @@
 .bidHistoryCool {
   margin-left: 0.5rem;
   color: var(--brand-color-blue);
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-weight: bold;
   font-size: 1rem;
   font-size: 16px;
 }

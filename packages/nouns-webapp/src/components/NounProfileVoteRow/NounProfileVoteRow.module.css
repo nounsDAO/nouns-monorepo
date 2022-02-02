@@ -17,7 +17,8 @@
 .proposalTitle {
   text-decoration: none;
   color: black;
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-weight: bold;
   margin-left: 5px;
 }
 

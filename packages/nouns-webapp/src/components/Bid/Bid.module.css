@@ -7,7 +7,7 @@
 }
 
 .bidBtn {
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
   border-radius: 12px !important;
   margin-left: 0.6rem !important;
   margin-top: 3px;
@@ -57,7 +57,8 @@
   background-color: white;
   outline: none !important;
   box-shadow: none !important;
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-weight: bold;
   font-size: 25px;
   transition: all 0.2s ease-in-out;
   border: none;
@@ -69,7 +70,8 @@
 
 .customPlaceholder {
   color: var(--brand-cool-light-text);
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-weight: bold;
   z-index: 3;
   user-select: none;
 }
@@ -80,7 +82,8 @@
   top: 15%;
   left: 3%;
   color: var(--brand-cool-light-text);
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-weight: bold;
   font-size: 25px;
   z-index: 1;
   pointer-events: none;

@@ -7,7 +7,8 @@
 }
 .footerSignature {
   margin: auto auto 0 auto;
-  font-family: 'PT Root UI Medium' !important;
+  font-family: 'PT Root UI' !important;
+  font-weight: 500;
   font-size: 18px;
   padding-bottom: 4rem;
   padding-top: 2rem;

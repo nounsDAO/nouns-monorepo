@@ -1,5 +1,6 @@
 .nounHolderEtherscanLinkCool {
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-weight: bold;
   color: var(--brand-color-blue);
   margin-left: 5px;
   text-decoration: none;
@@ -7,7 +8,8 @@
 }
 
 .nounHolderEtherscanLinkWarm {
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-weight: bold;
   color: var(--brand-color-red);
   margin-left: 5px;
   text-decoration: none;

@@ -10,7 +10,8 @@
 }
 
 .modal {
-  font-family: 'PT Root UI Bold', sans-serif;
+  font-family: 'PT Root UI', sans-serif;
+  font-weight: bold;
   position: fixed;
   top: 30vh;
   left: 10%;

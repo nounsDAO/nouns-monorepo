@@ -6,7 +6,8 @@
   margin-right: 10px;
   margin-top: 5px;
   margin-bottom: 5px;
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-weight: bold;
   cursor: pointer;
   vertical-align: middle;
   text-align: center;
@@ -26,7 +27,8 @@
   margin-right: 10px;
   margin-top: 5px;
   margin-bottom: 5px;
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-weight: bold;
   cursor: pointer;
   vertical-align: middle;
   text-align: center;
@@ -46,7 +48,8 @@
   margin-right: 10px;
   margin-top: 5px;
   margin-bottom: 5px;
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-weight: bold;
   cursor: pointer;
   vertical-align: middle;
   text-align: center;

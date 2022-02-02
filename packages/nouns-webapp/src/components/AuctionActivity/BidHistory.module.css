@@ -67,11 +67,13 @@
 }
 
 .bidder {
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-weight: bold;
 }
 
 .bidder > div > div {
-  font-family: 'pt root ui bold';
+  font-family: 'PT Root UI';
+  font-weight: bold;
   font-size: 18px;
 }
 
@@ -96,7 +98,8 @@
 }
 
 .bidAmount {
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-weight: bold;
   margin-right: 1rem;
   font-size: 18px;
   padding-top: 2px;

@@ -33,7 +33,14 @@ const NavBarTreasury: React.FC<NavBarTreasuryProps> = props => {
             paddingTop: '1px',
           }}
         >
-          <div className={clsx(classes.treasuryHeader, treasuryStyle === NavBarButtonStyle.WHITE_INFO ? classes.whiteTreasuryHeader : '')}>Treasury</div>
+          <div
+            className={clsx(
+              classes.treasuryHeader,
+              treasuryStyle === NavBarButtonStyle.WHITE_INFO ? classes.whiteTreasuryHeader : '',
+            )}
+          >
+            Treasury
+          </div>
           <div className={classes.treasuryBalance}>
             Ξ {Number(treasuryBalance).toLocaleString('en-US')}
           </div>

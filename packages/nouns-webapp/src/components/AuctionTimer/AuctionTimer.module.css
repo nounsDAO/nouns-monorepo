@@ -18,7 +18,7 @@
 }
 
 .timerSection span {
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
   font-weight: bold;
   font-size: 32px;
 }
@@ -32,7 +32,7 @@
 }
 
 .timerSectionFinal span {
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
   font-weight: bold;
   font-size: 32px;
 }
@@ -56,7 +56,7 @@
 }
 
 .leftCol h4 {
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
 }
 
 @media (max-width: 992px) {

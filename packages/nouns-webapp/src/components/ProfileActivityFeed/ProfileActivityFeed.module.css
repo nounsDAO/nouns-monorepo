@@ -22,7 +22,8 @@
 
 .expandCollapseCopy {
   color: var(--brand-cool-light-text);
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-weight: bold;
   font-size: 20px;
   text-align: center;
   cursor: pointer;
@@ -41,6 +42,7 @@
 .nullStateCopy {
   opacity: 50%;
   margin-left: 1rem;
-  font-family: 'PT Root UI Medium';
+  font-family: 'PT Root UI';
+  font-weight: 500;
   font-size: 18px;
 }
