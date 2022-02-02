@@ -57,6 +57,10 @@
   color: var(--brand-cool-dark-text);
 }
 
+.treasuryHeader {
+  opacity: 0.5;
+}
+
 .button:hover {
   cursor: pointer;
 }

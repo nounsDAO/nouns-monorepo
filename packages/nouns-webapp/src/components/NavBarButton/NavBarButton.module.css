@@ -66,8 +66,7 @@
 }
 
 .warmInfo {
-  /* color: #B6A9A7; */
-  /* background-color: #FDF9F9; */
+
   border: 1px solid var(--brand-warm-border);
   border-radius: 10px;
   color: var(--brand-warm-dark-text);
