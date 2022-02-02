@@ -110,7 +110,7 @@
 
 .whiteInfo {
   background-color: white;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   color: rgb(95, 95, 95);
 }
 
@@ -121,7 +121,7 @@
 
 .whiteActive {
   background-color: #f4f4f8;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   color: black;
 }
 
@@ -199,7 +199,7 @@
 
 .whiteDropdown {
   background-color: white;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .coolDropdown {
@@ -212,7 +212,7 @@
 
 .whiteInfoSelected {
   background-color: #f4f4f8;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   color: #8c8d92;
 }
 
@@ -254,7 +254,7 @@
   padding-left: 1rem;
   justify-content: flex-start;
   margin-left: 4px;
-  border-bottom: 1px solid rgba(0,0,0,0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   transition: all 0.125s ease-in-out;
 }
 

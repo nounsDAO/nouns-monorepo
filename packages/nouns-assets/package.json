@@ -16,9 +16,10 @@
   },
   "devDependencies": {
     "@nouns/sdk": "^0.1.4",
+    "@types/pngjs": "^6.0.1",
     "chai": "^4.2.0",
     "mocha": "^8.4.0",
-    "node-libpng": "^0.2.18"
+    "pngjs": "^6.0.0"
   },
   "dependencies": {
     "@ethersproject/bignumber": "^5.5.0",
