@@ -8,7 +8,6 @@
 }
 
 .bidHistoryWrapperCool {
-  /* background-color: var(--brand-cool-accent); */
   display: flex;
   border-radius: 10px !important;
   justify-content: center;
@@ -18,7 +17,6 @@
 }
 
 .bidHistoryWrapperWarm {
-  /* background-color: var(--brand-warm-accent); */
   display: flex;
   border-radius: 10px !important;
   justify-content: center;

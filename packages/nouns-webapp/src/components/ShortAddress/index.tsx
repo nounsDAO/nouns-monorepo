@@ -22,9 +22,7 @@ const ShortAddress: React.FC<{ address: string; avatar?: boolean; size?: number 
             <Davatar size={size} address={address} provider={provider} />
           </div>
         )}
-        <span style={{ letterSpacing: '0.2px', fontFamily: 'PT Root UI', fontWeight: 'bold' }}>
-          {ens ? ens : shortAddress}
-        </span>
+        <span>{ens ? ens : shortAddress}</span>
       </div>
     );
   }
