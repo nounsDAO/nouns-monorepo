@@ -70,13 +70,15 @@ const Winner: React.FC<WinnerProps> = props => {
           </h2>
         </Col>
       </Row>
-      {isMobile && (
-        <Row>
-          <Link to="/verify" className={classes.verifyLink}>
-            <Button className={classes.verifyButton}>Get Verified</Button>
-          </Link>
-        </Row>
-      )}
+      {activeAccount !== undefined &&
+        activeAccount.toLocaleLowerCase() === winner.toLocaleLowerCase() &&
+        isMobile && (
+          <Row>
+            <Link to="/verify" className={classes.verifyLink}>
+              <Button className={classes.verifyButton}>Get Verified</Button>
+            </Link>
+          </Row>
+        )}
     </>
   );
 };
