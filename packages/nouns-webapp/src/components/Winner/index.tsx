@@ -17,9 +17,12 @@ const Winner: React.FC<WinnerProps> = props => {
 
   const isCool = useAppSelector(state => state.application.isCoolBackground);
   const isMobile = isMobileScreen();
+
+  const isWinnerYou = activeAccount !== undefined &&
+  activeAccount.toLocaleLowerCase() === winner.toLocaleLowerCase(); 
+
   const nonNounderNounContent =
-    activeAccount !== undefined &&
-    activeAccount.toLocaleLowerCase() === winner.toLocaleLowerCase() ? (
+    isWinnerYou? (
       <Row className={classes.youSection}>
         <Col lg={4} className={classes.youCopy}>
           <h2
@@ -70,8 +73,7 @@ const Winner: React.FC<WinnerProps> = props => {
           </h2>
         </Col>
       </Row>
-      {activeAccount !== undefined &&
-        activeAccount.toLocaleLowerCase() === winner.toLocaleLowerCase() &&
+      { isWinnerYou &&
         isMobile && (
           <Row>
             <Link to="/verify" className={classes.verifyLink}>

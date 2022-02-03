@@ -83,8 +83,7 @@ h4 {
   .auctionTimerCol {
     margin-left: 6px;
     margin-top: 6px;
-    padding-left: 1px;
-    padding-right: 16px;
+    padding-left: 0rem;
   }
 
   .currentBidCol {
