@@ -46,7 +46,7 @@ const NavBar = () => {
       <Navbar
         expand="lg"
         style={{ backgroundColor: `${useStateBg ? stateBgColor : 'white'}` }}
-        className={classes.navBarMargin}
+        className={classes.navBarCustom}
       >
         <Container style={{ maxWidth: 'unset' }}>
           <div className={classes.brandAndTreasuryWrapper}>
