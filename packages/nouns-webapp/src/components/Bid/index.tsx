@@ -5,7 +5,7 @@ import React, { useEffect, useState, useRef, ChangeEvent, useCallback } from 're
 import { utils, BigNumber as EthersBN } from 'ethers';
 import BigNumber from 'bignumber.js';
 import classes from './Bid.module.css';
-import { Spinner, InputGroup, FormControl, Button } from 'react-bootstrap';
+import { Spinner, InputGroup, FormControl, Button, Col } from 'react-bootstrap';
 import { useAuctionMinBidIncPercentage } from '../../wrappers/nounsAuction';
 import { useAppDispatch } from '../../hooks';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
@@ -47,6 +47,7 @@ const Bid: React.FC<{
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { library } = useEthers();
   const { auction, auctionEnded } = props;
+
   const nounsAuctionHouseContract = new NounsAuctionHouseFactory().attach(
     config.addresses.nounsAuctionHouseProxy,
   );
@@ -272,16 +273,20 @@ const Bid: React.FC<{
           </Button>
         ) : (
           <>
-            <Button className={classes.bidBtnAuctionEnded} onClick={fomoNounsBtnOnClickHandler}>
-              Vote for the next Noun ⌐◧-◧
-            </Button>
+            <Col lg={12}>
+              <Button className={classes.bidBtnAuctionEnded} onClick={fomoNounsBtnOnClickHandler}>
+                Vote for the next Noun ⌐◧-◧
+              </Button>
+            </Col>
             {/* Only show force settle button if wallet connected */}
             {isWalletConnected && (
-              <p className={classes.emergencySettleWrapper}>
-                <button onClick={settleAuctionHandler} className={classes.emergencySettleButton}>
-                  Pay to settle manually
-                </button>
-              </p>
+              <Col lg={12}>
+                <p className={classes.emergencySettleWrapper}>
+                  <button onClick={settleAuctionHandler} className={classes.emergencySettleButton}>
+                    Pay to settle manually
+                  </button>
+                </p>
+              </Col>
             )}
           </>
         )}
