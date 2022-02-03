@@ -18,33 +18,32 @@ const Winner: React.FC<WinnerProps> = props => {
   const isCool = useAppSelector(state => state.application.isCoolBackground);
   const isMobile = isMobileScreen();
 
-  const isWinnerYou = activeAccount !== undefined &&
-  activeAccount.toLocaleLowerCase() === winner.toLocaleLowerCase(); 
+  const isWinnerYou =
+    activeAccount !== undefined && activeAccount.toLocaleLowerCase() === winner.toLocaleLowerCase();
 
-  const nonNounderNounContent =
-    isWinnerYou? (
-      <Row className={classes.youSection}>
-        <Col lg={4} className={classes.youCopy}>
-          <h2
-            className={classes.winnerContent}
-            style={{
-              color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
-            }}
-          >
-            You
-          </h2>
+  const nonNounderNounContent = isWinnerYou ? (
+    <Row className={classes.youSection}>
+      <Col lg={4} className={classes.youCopy}>
+        <h2
+          className={classes.winnerContent}
+          style={{
+            color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
+          }}
+        >
+          You
+        </h2>
+      </Col>
+      {!isMobile && (
+        <Col>
+          <Link to="/verify" className={classes.verifyLink}>
+            <Button className={classes.verifyButton}>Get Verified</Button>
+          </Link>
         </Col>
-        {!isMobile && (
-          <Col>
-            <Link to="/verify" className={classes.verifyLink}>
-              <Button className={classes.verifyButton}>Get Verified</Button>
-            </Link>
-          </Col>
-        )}
-      </Row>
-    ) : (
-      <ShortAddress size={40} address={winner} avatar={true} />
-    );
+      )}
+    </Row>
+  ) : (
+    <ShortAddress size={40} address={winner} avatar={true} />
+  );
 
   const nounderNounContent = <h2>nounders.eth</h2>;
 
@@ -73,14 +72,13 @@ const Winner: React.FC<WinnerProps> = props => {
           </h2>
         </Col>
       </Row>
-      { isWinnerYou &&
-        isMobile && (
-          <Row>
-            <Link to="/verify" className={classes.verifyLink}>
-              <Button className={classes.verifyButton}>Get Verified</Button>
-            </Link>
-          </Row>
-        )}
+      {isWinnerYou && isMobile && (
+        <Row>
+          <Link to="/verify" className={classes.verifyLink}>
+            <Button className={classes.verifyButton}>Get Verified</Button>
+          </Link>
+        </Row>
+      )}
     </>
   );
 };

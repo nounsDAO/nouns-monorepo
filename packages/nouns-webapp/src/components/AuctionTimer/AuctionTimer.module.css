@@ -22,7 +22,7 @@
   padding-left: 0rem;
   padding-right: 0rem;
   cursor: pointer;
-  margin-top: 0.25rem;
+  margin-top: 0.3rem;
 }
 
 .timerWrapper {
@@ -50,6 +50,10 @@
   font-size: 32px;
 }
 
+.leftCol {
+  margin-top: 1px;
+}
+
 @media (max-width: 992px) {
   .section h4 {
     font-size: 18px;
@@ -72,6 +76,7 @@
   }
 
   .leftCol {
+    margin-top: 0px;
     padding-left: 0.5rem;
   }
 
