@@ -40,6 +40,14 @@
   font-size: 32px;
 }
 
+.leftCol {
+  font-family: 'PT Root UI';
+}
+
+.leftCol h4 {
+  font-weight: bold;
+}
+
 @media (max-width: 992px) {
   .section h4 {
     font-size: 18px;
