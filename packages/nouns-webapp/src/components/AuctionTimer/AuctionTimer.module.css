@@ -1,16 +1,28 @@
-.title {
+.section span {
+  font-size: 3rem;
+  font-weight: bold;
+  font-family: 'Londrina Solid';
+}
+
+.section h4 {
   font-family: 'PT Root UI';
   font-weight: bold;
   font-size: 18px;
-  margin-bottom: 0;
 }
 
-.auctionTimerSection {
+.section h2 {
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 32px;
+  margin-bottom: 0px !important;
+  margin-top: 3px;
+}
+
+.wrapper {
+  padding-left: 0rem;
+  padding-right: 0rem;
   cursor: pointer;
-}
-
-.container {
-  max-width: 100%;
+  margin-top: 0.25rem;
 }
 
 .timerWrapper {
@@ -38,29 +50,31 @@
   font-size: 32px;
 }
 
-.small {
-  padding-left: 0.1rem;
-  font-size: 0.65em;
-}
-
-.timeSubtitle {
-  font-size: medium;
-}
-
-.clockSection {
-  margin-right: 0rem;
-}
-
-.auctionTimerSection {
-  margin-top: 6px;
-  margin-left: 6px;
-}
-
-.leftCol h4 {
-  font-family: 'PT Root UI';
-}
-
 @media (max-width: 992px) {
+  .section h4 {
+    font-size: 18px;
+    margin-bottom: 0px;
+    margin-top: 6px;
+  }
+
+  .section h2 {
+    font-size: 23px;
+  }
+
+  .section {
+    justify-content: space-between;
+  }
+
+  .wrapper {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .leftCol {
+    padding-left: 0.5rem;
+  }
+
   .timerSection span {
     font-size: 23px;
   }
@@ -74,20 +88,7 @@
     margin-top: 1.4rem;
   }
 
-  .section {
-    justify-content: space-between;
-  }
-
-  .wrapper {
-    padding-left: 12px;
-    padding-right: 1rem;
-  }
-
-  .leftCol {
-    padding-left: 0rem;
-  }
-
-  .timerSectionFinal {
-    margin-right: 0rem !important;
+  .timeLeft {
+    padding-right: 0.5rem;
   }
 }
