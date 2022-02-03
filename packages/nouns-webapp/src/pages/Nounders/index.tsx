@@ -117,7 +117,7 @@ const BioCards: React.FC<{ min: number; max: number }> = props => {
   return (
     <>
       {bios.slice(min, max).map(bio => (
-        <Col xs={5} md={3} lg={3} className={classes.bioGroup}>
+        <Col xs={6} md={3} lg={3} className={classes.bioGroup}>
           <BioCard {...bio} />
         </Col>
       ))}
