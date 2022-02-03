@@ -80,7 +80,7 @@ const Auction: React.FC<AuctionProps> = props => {
   );
 
   return (
-    <div style={{ backgroundColor: stateBgColor }}>
+    <div style={{ backgroundColor: stateBgColor }} className={classes.wrapper}>
       <Container fluid="xl">
         <Row>
           <Col lg={{ span: 6 }} className={classes.nounContentCol}>
