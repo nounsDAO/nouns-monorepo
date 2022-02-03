@@ -8,6 +8,10 @@
 .voteInfoContainer {
   display: inline-block;
   margin-top: 4px;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .voteProposalStatus {
@@ -20,10 +24,6 @@
   font-family: 'PT Root UI';
   font-weight: bold;
   margin-left: 5px;
-}
-
-.nullStateCopy {
-  opacity: 50%;
 }
 
 .voteInfoRow {
@@ -44,4 +44,8 @@
 
 .nullStateCopy:hover {
   background-color: rgba(0, 0, 0, 0) !important;
+}
+
+.voteInfoTableCell {
+  max-width: 50vw;
 }
