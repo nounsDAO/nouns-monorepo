@@ -40,7 +40,7 @@
 }
 
 .nullStateCopy {
-  opacity: 50%;
+  opacity: 0.5;
   margin-left: 1rem;
   font-family: 'PT Root UI';
   font-weight: 500;
