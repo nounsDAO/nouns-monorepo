@@ -17,7 +17,7 @@
 
 @media (max-width: 992px) {
   .wrapper {
-    margin-right: -5px;
+    /* margin-right: -5px; */
   }
 
   .nounWrapper {
