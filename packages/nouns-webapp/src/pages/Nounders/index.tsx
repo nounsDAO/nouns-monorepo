@@ -51,10 +51,10 @@ const bios = [
     handle: 'supergremplin',
   },
   {
-    name: 'solimader',
+    name: 'solimander',
     image: pfpSolimander,
     description: undefined,
-    handle: '',
+    handle: '_solimander_',
   },
   {
     name: 'devcarrot',
