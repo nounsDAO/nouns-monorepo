@@ -259,43 +259,49 @@ const Playground: React.FC = () => {
         </Row>
         <Row>
           <Col lg={3}>
-            <Button
-              onClick={() => {
-                generateNounSvg();
-              }}
-              className={classes.primaryBtn}
-            >
-              Generate Nouns
-            </Button>
-            {traits &&
-              traits.map((trait, index) => {
-                return (
-                  <Form className={classes.traitForm}>
-                    <FloatingLabel
-                      controlId="floatingSelect"
-                      label={capitalizeFirstLetter(trait.title)}
-                      key={index}
-                      className={classes.floatingLabel}
-                    >
-                      <Form.Select
-                        aria-label="Floating label select example"
-                        className={classes.traitFormBtn}
-                        value={trait.traitNames[selectIndexes?.[trait.title]] ?? -1}
-                        onChange={e => {
-                          let index = e.currentTarget.selectedIndex;
-                          traitButtonHandler(trait, index - 1); // - 1 to account for 'random'
-                          setSelectIndexes({
-                            ...selectIndexes,
-                            [trait.title]: index - 1,
-                          });
-                        }}
-                      >
-                        {traitOptions(trait)}
-                      </Form.Select>
-                    </FloatingLabel>
-                  </Form>
-                );
-              })}
+            <Col lg={12}>
+              <Button
+                onClick={() => {
+                  generateNounSvg();
+                }}
+                className={classes.primaryBtn}
+              >
+                Generate Nouns
+              </Button>
+            </Col>
+            <Row>
+              {traits &&
+                traits.map((trait, index) => {
+                  return (
+                    <Col lg={12} xs={6}>
+                      <Form className={classes.traitForm}>
+                        <FloatingLabel
+                          controlId="floatingSelect"
+                          label={capitalizeFirstLetter(trait.title)}
+                          key={index}
+                          className={classes.floatingLabel}
+                        >
+                          <Form.Select
+                            aria-label="Floating label select example"
+                            className={classes.traitFormBtn}
+                            value={trait.traitNames[selectIndexes?.[trait.title]] ?? -1}
+                            onChange={e => {
+                              let index = e.currentTarget.selectedIndex;
+                              traitButtonHandler(trait, index - 1); // - 1 to account for 'random'
+                              setSelectIndexes({
+                                ...selectIndexes,
+                                [trait.title]: index - 1,
+                              });
+                            }}
+                          >
+                            {traitOptions(trait)}
+                          </Form.Select>
+                        </FloatingLabel>
+                      </Form>
+                    </Col>
+                  );
+                })}
+            </Row>
             <label style={{ margin: '1rem 0 .25rem 0' }} htmlFor="custom-trait-upload">
               Upload Custom Trait
               <OverlayTrigger
