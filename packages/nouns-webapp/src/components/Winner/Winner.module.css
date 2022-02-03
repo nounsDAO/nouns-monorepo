@@ -2,12 +2,19 @@
   margin-left: 0.5rem;
 }
 
+.youCopy {
+  margin-top: 0.25rem;
+}
+
 .verifyButton {
   height: 3rem;
   color: white;
   border: transparent;
   background-color: var(--brand-black);
+  font-family: 'PT Root UI';
   font-weight: bold;
+  border-radius: 8px;
+  font-size: 16px;
 }
 
 .verifyButton:hover,
@@ -65,5 +72,10 @@
     width: 100%;
     margin-left: 0;
     margin-right: 0;
+  }
+
+  .verifyButton {
+    width: 100%;
+    font-size: 18px;
   }
 }
