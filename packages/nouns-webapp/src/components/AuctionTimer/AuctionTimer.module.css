@@ -19,7 +19,7 @@
 }
 
 .wrapper {
-  padding-left: 0rem;
+  padding-left: 2.5rem;
   padding-right: 0rem;
   cursor: pointer;
   margin-top: 0.3rem;
@@ -73,6 +73,7 @@
     width: 100%;
     margin-left: 0;
     margin-right: 0;
+    padding-left: 0;
   }
 
   .leftCol {
