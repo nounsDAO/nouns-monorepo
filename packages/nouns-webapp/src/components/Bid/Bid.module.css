@@ -32,6 +32,7 @@
 .bidBtn:focus .bidBtn:disabled {
   outline: none !important;
   box-shadow: none !important;
+  background-color: #2125298a;
 }
 
 .bidBtn:disabled {
