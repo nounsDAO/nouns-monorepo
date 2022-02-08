@@ -2,19 +2,49 @@
   align-self: flex-end;
   width: 100%;
 }
+
 .nounContentCol {
   display: flex;
 }
 
 .auctionActivityCol {
-  padding-top: 2rem;
-  align-self: start !important; /* maintains auction arrow buttons fixed from auction to auction  */
+  padding-right: 5rem;
+  padding-bottom: 1rem;
+  min-height: 520px;
+  align-self: start !important;
+  /* maintains auction arrow buttons fixed from auction to auction  */
 }
 
 @media (max-width: 992px) {
+  .nounWrapper {
+    width: 70%;
+    margin-left: 15%;
+    margin-right: 15%;
+  }
   .auctionActivityCol {
+    padding-top: 5%;
+    padding-right: 5%;
+    padding-left: 5%;
+    width: 100%;
     background-color: white;
-    border-bottom: 1px solid lightgray;
+  }
+}
+
+@media (max-width: 568px) {
+  .auctionActivityCol {
+    width: 100%;
+    margin-left: unset;
+    margin-right: unset;
     padding-bottom: 2rem;
+    padding-top: 2rem;
+    padding-right: unset;
+    padding-left: 0;
+  }
+
+  .nounWrapper {
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 2rem;
   }
 }

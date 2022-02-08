@@ -9,11 +9,13 @@ export interface AlertModal {
 
 interface ApplicationState {
   stateBackgroundColor: string;
+  isCoolBackground: boolean;
   alertModal: AlertModal;
 }
 
 const initialState: ApplicationState = {
   stateBackgroundColor: grey,
+  isCoolBackground: true,
   alertModal: {
     show: false,
   },
@@ -25,6 +27,7 @@ export const applicationSlice = createSlice({
   reducers: {
     setStateBackgroundColor: (state, action: PayloadAction<string>) => {
       state.stateBackgroundColor = action.payload;
+      state.isCoolBackground = action.payload === grey;
     },
     setAlertModal: (state, action: PayloadAction<AlertModal>) => {
       state.alertModal = action.payload;
