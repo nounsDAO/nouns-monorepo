@@ -1,5 +1,6 @@
 import classes from './NavBarTreasury.module.css';
 import { NavBarButtonStyle } from '../NavBarButton';
+import clsx from 'clsx';
 
 interface NavBarTreasuryProps {
   treasuryBalance: string;
@@ -32,7 +33,14 @@ const NavBarTreasury: React.FC<NavBarTreasuryProps> = props => {
             paddingTop: '1px',
           }}
         >
-          <div className={classes.treasuryHeader}>Treasury</div>
+          <div
+            className={clsx(
+              classes.treasuryHeader,
+              treasuryStyle === NavBarButtonStyle.WHITE_INFO ? classes.whiteTreasuryHeader : '',
+            )}
+          >
+            Treasury
+          </div>
           <div className={classes.treasuryBalance}>
             Ξ {Number(treasuryBalance).toLocaleString('en-US')}
           </div>
