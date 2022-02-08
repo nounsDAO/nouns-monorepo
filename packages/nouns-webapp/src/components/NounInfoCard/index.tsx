@@ -24,8 +24,7 @@ const NounInfoCard: React.FC<NounInfoCardProps> = props => {
 
   const etherscanBaseURL = buildEtherscanAddressLink(config.addresses.nounsToken);
 
-  // eslint-disable-next-line no-restricted-globals
-  const etherscanButtonClickHandler = () => (location.href = `${etherscanBaseURL}/${nounId}`);
+  const etherscanButtonClickHandler = () => window.open(`${etherscanBaseURL}/${nounId}`, '_blank');
 
   const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
 
