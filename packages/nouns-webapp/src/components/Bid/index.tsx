@@ -274,7 +274,7 @@ const Bid: React.FC<{
           </Button>
         ) : (
           <>
-            <Col lg={12}>
+            <Col lg={12} className={classes.voteForNextNounBtnWrapper}>
               <Button className={classes.bidBtnAuctionEnded} onClick={fomoNounsBtnOnClickHandler}>
                 Vote for the next Noun ⌐◧-◧
               </Button>

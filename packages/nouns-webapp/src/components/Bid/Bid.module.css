@@ -155,6 +155,10 @@
   .emergencySettleWrapper {
     text-align: center;
   }
+
+  .voteForNextNounBtnWrapper {
+    width: 100%;
+  }
 }
 
 .emergencySettleButton {
