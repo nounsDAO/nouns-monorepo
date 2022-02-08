@@ -10,17 +10,18 @@
 }
 
 .modal {
-  font-family: 'PT Root UI Bold', sans-serif;
+  font-family: 'PT Root UI', sans-serif;
+  font-weight: bold;
   position: fixed;
-  top: 25vh;
+  top: 30vh;
   left: 10%;
   z-index: 100;
-  background-color: rgba(255,255,255,0.6);
+  background-color: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(10px);
   padding: 3rem 2rem;
   text-align: center;
   border-radius: 15px;
-  left: calc(50% - 20rem);
+  left: calc(50% - 17.5rem);
   width: 35rem;
 }
 
@@ -28,12 +29,12 @@
   border-radius: 10px;
   min-height: 44px;
   padding-top: 7px;
-  background-color: rgba(255,255,255,0.7);
+  background-color: rgba(255, 255, 255, 0.7);
 }
 
 .modal button:hover {
   color: black;
-  background-color: rgba(255,255,255,1);
+  background-color: rgba(255, 255, 255, 1);
 }
 
 .modal h3 {

@@ -19,3 +19,30 @@
   padding-bottom: 1rem;
   font-size: 18px;
 }
+
+.expandCollapseCopy {
+  color: var(--brand-cool-light-text);
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 20px;
+  text-align: center;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.aboveTheFoldEventsTable {
+  margin-bottom: 0rem;
+}
+
+.aboveTheFoldEventsTable td {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding-top: 12px;
+}
+
+.nullStateCopy {
+  opacity: 0.5;
+  margin-left: 1rem;
+  font-family: 'PT Root UI';
+  font-weight: 500;
+  font-size: 18px;
+}

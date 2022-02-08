@@ -3,7 +3,8 @@
   border-radius: 10px;
   font-size: 16px;
   line-height: 16px;
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-weight: bold;
   padding: 0px 0px 0px 14px;
   transition: all 0.125s ease-in-out;
   box-shadow: none;
@@ -110,7 +111,7 @@
 
 .whiteInfo {
   background-color: white;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   color: rgb(95, 95, 95);
 }
 
@@ -121,7 +122,7 @@
 
 .whiteActive {
   background-color: #f4f4f8;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   color: black;
 }
 
@@ -140,7 +141,8 @@
 .nounsNavLink,
 .nounsNavLink:active,
 .nounsNavLink:visited {
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-weight: bold;
   font-size: 0.9rem;
   padding: 0.3rem 0.3rem !important;
   color: var(--brand-black) !important;
@@ -164,7 +166,8 @@
 }
 
 .connectContentMobileText {
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-weight: bold;
   font-size: 18px;
   margin-right: 1rem;
   margin-top: 1rem;
@@ -199,7 +202,7 @@
 
 .whiteDropdown {
   background-color: white;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .coolDropdown {
@@ -212,7 +215,7 @@
 
 .whiteInfoSelected {
   background-color: #f4f4f8;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   color: #8c8d92;
 }
 
@@ -254,7 +257,7 @@
   padding-left: 1rem;
   justify-content: flex-start;
   margin-left: 4px;
-  border-bottom: 1px solid rgba(0,0,0,0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   transition: all 0.125s ease-in-out;
 }
 

@@ -1,17 +1,11 @@
 import { useAppSelector } from '../hooks';
 
-export const greyBg = '#d5d7e1';
-
 export const shouldUseStateBg = (history: any) => {
   return (
     history.location.pathname === '/' ||
     history.location.pathname.includes('/noun') ||
     history.location.pathname.includes('/auction')
   );
-};
-
-export const useIsCoolState = () => {
-  return greyBg === useAppSelector(state => state.application.stateBackgroundColor);
 };
 
 /**
@@ -25,7 +19,7 @@ export const useIsCoolState = () => {
  */
 export const usePickByState = (whiteState: any, coolState: any, warmState: any, history: any) => {
   const useStateBg = shouldUseStateBg(history);
-  const isCoolState = useIsCoolState();
+  const isCoolState = useAppSelector(state => state.application.isCoolBackground);
 
   if (!useStateBg) {
     return whiteState;

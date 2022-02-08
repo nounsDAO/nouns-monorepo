@@ -1,6 +1,14 @@
 @media (max-width: 992px) {
   .emergencySettleWrapper {
     text-align: center;
+    margin-left: 0.5rem;
+  }
+}
+
+@media (max-width: 660px) {
+  .emergencySettleWrapper {
+    text-align: center;
+    margin-left: 0rem;
   }
 }
 

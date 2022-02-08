@@ -22,8 +22,8 @@ import NavWallet from '../NavWallet';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
-
   const stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
+  const isCool = useAppSelector(state => state.application.isCoolBackground);
   const history = useHistory();
   const ethBalance = useEtherBalance(config.addresses.nounsDaoExecutor);
   const lidoBalanceAsETH = useLidoBalance();
@@ -32,21 +32,23 @@ const NavBar = () => {
 
   const useStateBg =
     history.location.pathname === '/' ||
-    history.location.pathname.includes('/noun') ||
-    history.location.pathname.includes('/auction');
-
-  const greyBg = '#d5d7e1';
+    history.location.pathname.includes('/noun/') ||
+    history.location.pathname.includes('/auction/');
 
   const nonWalletButtonStyle = !useStateBg
     ? NavBarButtonStyle.WHITE_INFO
-    : stateBgColor === greyBg
+    : isCool
     ? NavBarButtonStyle.COOL_INFO
     : NavBarButtonStyle.WARM_INFO;
 
   return (
     <>
-      <Navbar expand="lg" style={{ backgroundColor: `${useStateBg ? stateBgColor : ''}` }}>
-        <Container>
+      <Navbar
+        expand="lg"
+        style={{ backgroundColor: `${useStateBg ? stateBgColor : 'white'}` }}
+        className={classes.navBarCustom}
+      >
+        <Container style={{ maxWidth: 'unset' }}>
           <div className={classes.brandAndTreasuryWrapper}>
             <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
               <img src={logo} className={classes.navBarLogo} alt="Nouns DAO logo" />

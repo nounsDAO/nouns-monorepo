@@ -14,10 +14,20 @@
   height: 75px;
 }
 
+.navBarCustom {
+  padding-bottom: 3rem;
+}
+
 @media (max-width: 992px) {
   .navBarLogo {
     width: 65px;
     height: 65px;
+  }
+
+  .navBarCustom {
+    margin-bottom: -1px;
+    margin-right: -5px;
+    padding-bottom: 0rem;
   }
 }
 
@@ -31,10 +41,13 @@
 .connectBtn:focus {
   cursor: pointer !important;
 }
+
 .disconnectBtn {
   cursor: pointer;
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-weight: bold;
 }
+
 .disconnectBtn:hover,
 .disconnectBtn:active,
 .disconnectBtn:focus {
@@ -42,18 +55,22 @@
 }
 
 .greenStatusCircle {
-  display: inline-block;
+  display: relative;
   width: 10px;
   height: 10px;
   background-color: #7fc59c;
   border-radius: 50%;
-  margin-right: 5px;
+  margin-right: -30px;
+  margin-left: 20px;
+  margin-top: -20px;
+  z-index: 3;
 }
 
 .nounsNavLink,
 .nounsNavLink:active,
 .nounsNavLink:visited {
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-weight: bold;
   font-size: 0.9rem;
   padding: 0.3rem 0.3rem !important;
   color: black !important;
