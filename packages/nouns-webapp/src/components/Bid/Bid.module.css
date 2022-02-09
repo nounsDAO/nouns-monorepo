@@ -32,6 +32,7 @@
 .bidBtn:focus .bidBtn:disabled {
   outline: none !important;
   box-shadow: none !important;
+  background-color: #2125298a;
 }
 
 .bidBtn:disabled {
@@ -153,6 +154,10 @@
   }
   .emergencySettleWrapper {
     text-align: center;
+  }
+
+  .voteForNextNounBtnWrapper {
+    width: 100%;
   }
 }
 
