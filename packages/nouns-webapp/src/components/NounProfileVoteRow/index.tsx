@@ -9,8 +9,6 @@ import { ProposalState } from '../../wrappers/nounsDao';
 import classes from './NounProfileVoteRow.module.css';
 
 import { useHistory } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
-import { highestNounIdMintedAtProposalTime } from '../../wrappers/subgraph';
 import VoteStatusPill from '../VoteStatusPill';
 
 import _PendingVoteIcon from '../../assets/icons/PendingVote.svg';
@@ -19,8 +17,6 @@ import { NounVoteHistory } from '../ProfileActivityFeed';
 
 interface NounProfileVoteRowProps {
   proposal: Proposal;
-  nounId: number;
-  latestProposalId: number;
   vote?: NounVoteHistory;
 }
 
@@ -108,39 +104,24 @@ const selectProposalText = (proposal: Proposal) => {
 };
 
 const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
-  const { proposal, vote, nounId, latestProposalId } = props;
+  const { proposal, vote } = props;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { loading, error, data } = useQuery(highestNounIdMintedAtProposalTime(proposal.startBlock));
   const history = useHistory();
-
-  if (loading) {
-    return <></>;
-  }
-
-  // In this case, noun was not yet minted at time of proposal
-  if (data && data.auctions.length > 0 && nounId > data.auctions[0].id) {
-    if (proposal.id === latestProposalId.toString()) {
-      return (
-        <tr className={classes.nullStateCopy}>This Noun has no activity yet. Check back soon!</tr>
-      );
-    }
-    return <></>;
-  }
-
   const proposalOnClickHandler = () => history.push(proposal.id ? `/vote/${proposal.id}` : '/vote');
 
   return (
     <tr onClick={proposalOnClickHandler} className={classes.voteInfoRow}>
       <td className={classes.voteIcon}>{selectIconForNounVoteActivityRow(proposal, vote)}</td>
-      <td>
+      <td className={classes.voteInfoTableCell}>
         <div className={classes.voteInfoContainer}>
           {selectVotingInfoText(proposal, vote)}
           <span className={classes.proposalTitle}>{proposal.title}</span>
         </div>
       </td>
-      <td className={classes.voteStatusWrapper}>
-        <div className={classes.voteProposalStatus}>{selectProposalStatusIcon(proposal)}</div>
+      <td>
+        <div className={classes.voteStatusWrapper}>
+          <div className={classes.voteProposalStatus}>{selectProposalStatusIcon(proposal)}</div>
+        </div>
       </td>
     </tr>
   );
