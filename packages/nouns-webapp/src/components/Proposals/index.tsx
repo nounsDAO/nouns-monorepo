@@ -13,15 +13,11 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
   const { account } = useEthers();
   const connectedAccountNounBalance = Number(useTokenBalance(config.addresses.nounsToken, account));
 
-  const threshold = useProposalThreshold();
-  const nounsRequired = threshold !== undefined ? threshold + 1 : '...';
-  const nounThresholdCopy = `${nounsRequired} ${threshold === 0 ? 'Noun' : 'Nouns'}`;
-
   const isMobile = isMobileScreen();
 
   const nullStateCopy = () => {
     if (account !== null) {
-      return `You must have at least ${nounThresholdCopy} to make a proposal.`;
+      return `You have no Nouns.`;
     }
     return 'Connect wallet to make a proposal.';
   };

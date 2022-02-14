@@ -68,7 +68,8 @@
   border-radius: 16px;
   background: #f4f4f8;
   font-size: 22px;
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-weight: bold;
 }
 
 .proposalLink:hover {
@@ -101,6 +102,7 @@
   margin-top: 0.8rem;
   margin-right: 1rem;
   font-family: 'PT Root UI';
+  font-weight: 500;
   color: var(--brand-gray-light-text);
   font-size: 16px;
   line-height: 22.4px;
