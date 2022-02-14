@@ -50,21 +50,23 @@ const GovernancePage = () => {
         </p>
 
         <Row className={classes.treasuryInfoCard}>
-          <Col lg={9} className={classes.treasuryAmtWrapper}>
+          <Col lg={8} className={classes.treasuryAmtWrapper}>
             <Row className={classes.headerRow}>
               <span>Treasury</span>
             </Row>
             <Row>
-              <Col className={clsx(classes.headerRow, classes.ethTreasuryAmt)} lg={4}>
-                <h1 className={classes.ethSymbol}>Ξ</h1>
-                <h1>
+              <Col className={clsx(classes.ethTreasuryAmt)} lg={3}>
+                <h1 style={{ marginBottom: '0px' }} className={classes.ethSymbol}>
+                  Ξ
+                </h1>
+                <h1 style={{ marginBottom: '0px' }}>
                   {treasuryBalance &&
                     Number(Number(utils.formatEther(treasuryBalance)).toFixed(0)).toLocaleString(
                       'en-US',
                     )}
                 </h1>
               </Col>
-              <Col>
+              <Col className={classes.usdTreasuryAmt}>
                 <h1 className={classes.usdBalance}>
                   ${' '}
                   {treasuryBalanceUSD &&

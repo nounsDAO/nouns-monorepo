@@ -19,6 +19,7 @@
 .subheading {
   color: var(--brand-dark-green);
   font-family: 'PT Root UI';
+  font-weight: 500;
   font-size: 1.2rem;
 }
 
@@ -55,8 +56,25 @@ p {
   padding-right: 2rem;
 }
 
+.usdTreasuryAmt {
+  padding-top: 0.2rem;
+}
+
 .ethTreasuryAmt {
   display: flex;
+  height: 3rem;
+  min-width: 9rem;
+  padding-top: 0.2rem;
+}
+
+.ethTreasuryAmt h1 {
+  font-size: 36px;
+  font-family: 'Londrina Solid';
+}
+
+.usdBalance {
+  font-size: 36px;
+  font-family: 'Londrina Solid';
 }
 
 .ethSymbol {
@@ -75,14 +93,15 @@ p {
   padding-left: 2rem;
   padding-right: 2rem;
   font-family: 'PT Root UI';
+  font-weight: 500;
 }
 
 @media (min-width: 992px) {
   .treasuryAmtWrapper {
-    border-right: 1px solid #e2e3e8;
+    border-right: 2px solid #e2e3e8;
   }
 
   .ethTreasuryAmt {
-    border-right: 1px solid #e2e3e8;
+    border-right: 2px solid #e2e3e8;
   }
 }
