@@ -1,4 +1,4 @@
-import { Proposal, useProposalThreshold } from '../../wrappers/nounsDao';
+import { Proposal } from '../../wrappers/nounsDao';
 import { Alert, Button } from 'react-bootstrap';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
