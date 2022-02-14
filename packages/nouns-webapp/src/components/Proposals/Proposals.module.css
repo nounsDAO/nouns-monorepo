@@ -11,22 +11,50 @@
 }
 
 .heading {
-  display: inline-block;
+  font-family: 'Londrina Solid';
   font-size: 2rem;
   margin: 0 !important;
 }
 
-.createProposalLink {
-  padding: 0.9rem 1.5rem;
-  border-radius: 5px;
-  border: 0 none;
-  font-size: large;
-  font-weight: normal;
-  cursor: default;
+.generateBtn {
+  max-width: 10rem;
+  height: 3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  background-color: var(--brand-dark-red);
+  border: var(--brand-dark-red);
+}
+.generateBtn:focus,
+.generateBtn:hover {
+  background-color: var(--brand-dark-red) !important;
+  box-shadow: 0 0 0 0.2rem rgb(214, 60, 94, 0.75);
+}
+.generateBtn:active {
+  background-color: var(--brand-dark-red) !important;
 }
 
-.createProposalLink:hover {
-  background-color: rgb(104, 104, 104);
+.generateBtnDisabled {
+  max-width: 10rem;
+  height: 3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  background-color: #f4f4f8;
+  border: #f4f4f8;
+  color: #8c8d92;
+  border: 1px solid #e2e3e8;
+}
+.generateBtnDisabled:focus,
+.generateBtnDisabled:hover,
+.generateBtnDisabled:active {
+  cursor: not-allowed;
+  background-color: #f4f4f8 !important;
+  border: #f4f4f8 !important;
+  color: #8c8d92 !important;
+  border: 1px solid #e2e3e8 !important;
+  outline: none;
+  box-shadow: none;
 }
 
 .proposalLink {
@@ -35,6 +63,17 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border: 1px solid #e2e3e8;
+  box-sizing: border-box;
+  border-radius: 16px;
+  background: #f4f4f8;
+  font-size: 22px;
+  font-family: 'PT Root UI Bold';
+}
+
+.proposalLink:hover {
+  background: white;
+  cursor: pointer;
 }
 
 .markdown h1 {
@@ -56,4 +95,32 @@
 .markdown img {
   max-width: 100%;
   height: auto;
+}
+
+.nullStateCopy {
+  margin-top: 0.8rem;
+  margin-right: 1rem;
+  font-family: 'PT Root UI';
+  color: var(--brand-gray-light-text);
+  font-size: 16px;
+  line-height: 22.4px;
+}
+
+@media (max-width: 992px) {
+  .nullStateCopy {
+    margin-top: 0rem;
+  }
+}
+
+.nullBtnWrapper {
+  min-width: 10rem;
+}
+
+.proposalId {
+  color: #8c8d92;
+  margin-right: 0.5rem;
+}
+
+.proposalTitle {
+  width: 85%;
 }
