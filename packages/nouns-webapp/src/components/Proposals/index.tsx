@@ -54,7 +54,10 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
                 <span className={classes.proposalTitle}>
                   <span className={classes.proposalId}>{p.id}</span> <span>{p.title}</span>
                 </span>
-                <ProposalStatus status={p.status}></ProposalStatus>
+                <div style={{ marginLeft: '.5rem' }}>
+                  <ProposalStatus status={p.status}></ProposalStatus>
+                </div>
+                {/* <ProposalStatus status={p.status}></ProposalStatus> */}
               </div>
             );
           })

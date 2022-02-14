@@ -12,7 +12,7 @@
 
 .heading {
   font-family: 'Londrina Solid';
-  font-size: 2rem;
+  font-size: 40px;
   margin: 0 !important;
 }
 
@@ -111,6 +111,12 @@
 @media (max-width: 992px) {
   .nullStateCopy {
     margin-top: 0rem;
+  }
+
+  .proposalTitle {
+    width: 65%;
+    word-wrap: break-word;
+    min-width: 65%;
   }
 }
 
