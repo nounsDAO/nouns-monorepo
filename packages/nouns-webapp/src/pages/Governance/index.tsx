@@ -56,10 +56,8 @@ const GovernancePage = () => {
             </Row>
             <Row>
               <Col className={clsx(classes.ethTreasuryAmt)} lg={3}>
-                <h1 style={{ marginBottom: '0px' }} className={classes.ethSymbol}>
-                  Ξ
-                </h1>
-                <h1 style={{ marginBottom: '0px' }}>
+                <h1 className={classes.ethSymbol}>Ξ</h1>
+                <h1>
                   {treasuryBalance &&
                     Number(Number(utils.formatEther(treasuryBalance)).toFixed(0)).toLocaleString(
                       'en-US',

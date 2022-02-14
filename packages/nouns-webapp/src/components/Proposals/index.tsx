@@ -17,7 +17,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
 
   const nullStateCopy = () => {
     if (account !== null) {
-      return `You have no Nouns.`;
+      return 'You have no Nouns.';
     }
     return 'Connect wallet to make a proposal.';
   };
@@ -54,10 +54,9 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
                 <span className={classes.proposalTitle}>
                   <span className={classes.proposalId}>{p.id}</span> <span>{p.title}</span>
                 </span>
-                <div style={{ marginLeft: '.5rem' }}>
+                <div className={classes.proposalStatusWrapper}>
                   <ProposalStatus status={p.status}></ProposalStatus>
                 </div>
-                {/* <ProposalStatus status={p.status}></ProposalStatus> */}
               </div>
             );
           })

@@ -132,3 +132,7 @@
 .proposalTitle {
   width: 85%;
 }
+
+.proposalStatusWrapper {
+  margin-left: 0.5rem;
+}
