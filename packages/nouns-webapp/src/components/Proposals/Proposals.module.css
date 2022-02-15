@@ -99,7 +99,7 @@
 }
 
 .nullStateCopy {
-  margin-top: 0.8rem;
+  margin-top: 0.9rem;
   margin-right: 1rem;
   font-family: 'PT Root UI';
   font-weight: 500;
@@ -135,4 +135,9 @@
 
 .proposalStatusWrapper {
   margin-left: 0.5rem;
+}
+
+.submitProposalButtonWrapper {
+  text-align: right;
+  padding-top: 0.8rem;
 }

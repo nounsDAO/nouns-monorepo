@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { useEthers, useTokenBalance } from '@usedapp/core';
 import config from '../../config';
 import { isMobileScreen } from '../../utils/isMobile';
+import clsx from 'clsx';
 
 const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
   const history = useHistory();
@@ -27,11 +28,13 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
       <div>
         <h3 className={classes.heading}>Proposals</h3>
         {account !== undefined && connectedAccountNounBalance > 0 ? (
-          <Button className={classes.generateBtn} onClick={() => history.push('create-proposal')}>
-            Submit Proposal
-          </Button>
+          <div className={classes.submitProposalButtonWrapper}>
+            <Button className={classes.generateBtn} onClick={() => history.push('create-proposal')}>
+              Submit Proposal
+            </Button>
+          </div>
         ) : (
-          <div className="d-flex">
+          <div className={clsx('d-flex', classes.submitProposalButtonWrapper)}>
             {!isMobile && <div className={classes.nullStateCopy}>{nullStateCopy()}</div>}
             <div className={classes.nullBtnWrapper}>
               <Button className={classes.generateBtnDisabled}>Submit Proposal</Button>
