@@ -4,9 +4,8 @@ import { useAllProposals, useProposalThreshold } from '../../wrappers/nounsDao';
 import Proposals from '../../components/Proposals';
 import classes from './Governance.module.css';
 import { utils } from 'ethers/lib/ethers';
-import { useEffect, useState } from 'react';
 import clsx from 'clsx';
-import { useTreasuryBalance } from '../../hooks/useTreasuryBalance';
+import { useTreasuryBalance, useTreasuryUSDValue } from '../../hooks/useTreasuryBalance';
 
 const GovernancePage = () => {
   const { data: proposals } = useAllProposals();
@@ -15,25 +14,7 @@ const GovernancePage = () => {
   const nounThresholdCopy = `${nounsRequired} ${threshold === 0 ? 'Noun' : 'Nouns'}`;
 
   const treasuryBalance = useTreasuryBalance();
-  const [treasuryBalanceUSD, setTreasuryBalanceUSD] = useState(0);
-  const [ethUSDConversionRate, setEthUSDConversionRate] = useState(0);
-
-  useEffect(() => {
-    async function getEthPriceInUSD() {
-      const response = await fetch(
-        'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD',
-      );
-      const json = await response.json();
-      setEthUSDConversionRate(Number(json?.USD));
-    }
-
-    if (!treasuryBalance) {
-      return;
-    }
-    getEthPriceInUSD();
-
-    setTreasuryBalanceUSD(Number(utils.formatEther(treasuryBalance)) * ethUSDConversionRate);
-  }, [treasuryBalance, ethUSDConversionRate]);
+  const treasuryBalanceUSD = useTreasuryUSDValue();
 
   return (
     <Section fullWidth={false} className={classes.section}>
