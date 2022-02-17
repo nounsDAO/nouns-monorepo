@@ -22,16 +22,16 @@
   font-weight: bold;
   margin-bottom: 0.5rem;
   border-radius: 12px;
-  background-color: var(--brand-dark-red);
-  border: var(--brand-dark-red);
+  background-color: var(--brand-color-green);
+  border: var(--brand-color-green);
 }
 .generateBtn:focus,
 .generateBtn:hover {
-  background-color: var(--brand-dark-red) !important;
-  box-shadow: 0 0 0 0.2rem rgb(214, 60, 94, 0.75);
+  background-color: var(--brand-color-green) !important;
+  box-shadow: 0 0 0 0.2rem rgb(67, 179, 105, 0.75);
 }
 .generateBtn:active {
-  background-color: var(--brand-dark-red) !important;
+  background-color: var(--brand-color-green) !important;
 }
 
 .generateBtnDisabled {
