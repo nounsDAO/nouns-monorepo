@@ -3,22 +3,22 @@ import { Alert, Button } from 'react-bootstrap';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
 import { useHistory } from 'react-router-dom';
-import { useEthers, useTokenBalance } from '@usedapp/core';
-import config from '../../config';
+import { useEthers } from '@usedapp/core';
 import { isMobileScreen } from '../../utils/isMobile';
 import clsx from 'clsx';
+import { useUserVotes } from '../../wrappers/nounToken';
 
 const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
   const history = useHistory();
 
   const { account } = useEthers();
-  const connectedAccountNounBalance = Number(useTokenBalance(config.addresses.nounsToken, account));
+  const connectedAccountNounVotes = useUserVotes() || 0;
 
   const isMobile = isMobileScreen();
 
   const nullStateCopy = () => {
     if (account !== null) {
-      return 'You have no Nouns.';
+      return 'You have no Votes.';
     }
     return 'Connect wallet to make a proposal.';
   };
@@ -27,7 +27,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
     <div className={classes.proposals}>
       <div>
         <h3 className={classes.heading}>Proposals</h3>
-        {account !== undefined && connectedAccountNounBalance > 0 ? (
+        {account !== undefined && connectedAccountNounVotes > 0 ? (
           <div className={classes.submitProposalButtonWrapper}>
             <Button className={classes.generateBtn} onClick={() => history.push('create-proposal')}>
               Submit Proposal
