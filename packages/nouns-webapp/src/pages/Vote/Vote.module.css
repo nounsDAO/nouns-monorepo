@@ -72,6 +72,12 @@
   border-top: 0px;
 }
 
+.spinner {
+  margin-left: auto;
+  margin-right: auto;
+  color: var(--brand-gray-light-text);
+}
+
 /* Info section stuff */
 .voteInfoCard {
   margin-top: 1rem;
@@ -94,4 +100,8 @@
 .voteMetadataRow h3 {
   font-size: 18px;
   font-family: 'PT Root UI Bold';
+}
+
+.voteMetadataRowTitle {
+  margin-top: 0.5rem;
 }
