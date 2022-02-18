@@ -40,16 +40,16 @@
   font-weight: bold;
   margin-bottom: 0.5rem;
   border-radius: 12px;
-  background-color: var(--brand-dark-red);
-  border: var(--brand-dark-red);
+  background-color: var(--brand-color-green);
+  border: var(--brand-color-green);
 }
 .submitBtn:focus,
 .submitBtn:hover {
-  background-color: var(--brand-dark-red) !important;
-  box-shadow: 0 0 0 0.2rem rgb(214, 60, 94, 0.75);
+  background-color: var(--brand-color-green) !important;
+  box-shadow: 0 0 0 0.2rem rgb(67, 179, 105, 0.75);
 }
 .submitBtn:active {
-  background-color: var(--brand-dark-red) !important;
+  background-color: var(--brand-color-green) !important;
 }
 .submitBtnDisabled {
   background-color: var(--brand-gray-light-text) !important;
@@ -61,11 +61,15 @@
   margin-bottom: 0.5rem;
   border-radius: 12px;
   border: var(--brand-dark-red);
-  opacity: 50%;
+  opacity: 0.5;
+  box-shadow: none !important;
 }
 
-.submitBtnDisabled:hover {
+.submitBtnDisabled:hover,
+.submitBtnDisabled:active,
+.submitBtn:focus {
   cursor: not-allowed;
+  box-shadow: none !important;
 }
 
 .proposalTitleWrapper {
@@ -75,4 +79,19 @@
 
 .proposalTitle {
   margin-right: 0.5rem;
+}
+
+.mobileSubmitProposalButton {
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+
+@media (max-width: 992px) {
+  .submitBtn {
+    max-width: 100%;
+  }
+
+  .submitBtnDisabled {
+    max-width: 100%;
+  }
 }
