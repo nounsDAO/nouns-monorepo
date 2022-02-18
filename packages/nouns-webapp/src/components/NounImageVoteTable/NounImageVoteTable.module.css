@@ -1,0 +1,12 @@
+.grayCircle {
+    height: 42px;
+    width: 42px;
+    border-radius: 50%;
+    background-color: #e0e0e7;
+    opacity: 0.50 !important;
+    margin-bottom: 0.5rem;
+  }
+  
+  .wrapper {
+    margin-top: 0.5rem;
+  }

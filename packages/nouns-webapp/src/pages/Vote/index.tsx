@@ -25,12 +25,30 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import clsx from 'clsx';
 import ProposalHeader from '../../components/ProposalHeader';
 import ProposalContent from '../../components/ProposalContent';
+import VoteCard, { VoteCardVariant } from '../../components/VoteCard';
+import { useQuery } from '@apollo/client';
+import { nounVotesForProposalQuery } from '../../wrappers/subgraph';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(advanced);
 
 const AVERAGE_BLOCK_TIME_IN_SECS = 13;
+
+/**
+ * Helper function to transform response from graph into flat list of nounIds that voted supportDetailed for the given prop
+ *
+ * @param data - Graph response for noun vote query
+ * @param supportDetailed - The integer support value: against (0), for (1), or abstain (2)
+ * @returns - flat list of nounIds that voted supportDetailed for the given prop
+ */
+ const getNounVotes = (data: any, supportDetailed: number) => {
+  return data.proposals[0].votes
+    .filter((vote: any) => vote.supportDetailed === supportDetailed)
+    .map((vote: any) => vote.nouns)
+    .flat(1)
+    .map((noun: any) => noun.id);
+};
 
 const VotePage = ({
   match: {
@@ -193,8 +211,27 @@ const VotePage = ({
   );
 
   const activeAccount = useAppSelector(state => state.account.activeAccount);
+  const { loading, error, data } = useQuery(
+    nounVotesForProposalQuery(proposal && proposal.id ? proposal?.id : '0'),
+  );
+  if (!proposal || loading || !data || data.proposals.length === 0) {
+    return (
+      <div className={classes.spinner}>
+        <Spinner animation="border" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return <>Failed to fetch</>;
+  }
+
   const isWalletConnected = !(activeAccount === undefined);
   const isActiveForVoting = startDate?.isBefore(now) && endDate?.isAfter(now);
+
+  const forNouns = getNounVotes(data, 1);
+  const againstNouns = getNounVotes(data, 0);
+  const abstainNouns = getNounVotes(data, 2);
 
   return (
     <Section fullWidth={false} className={classes.votePage}>
@@ -235,7 +272,7 @@ const VotePage = ({
             </Col>
           </Row>
         )}
-        <Row>
+        {/* <Row>
           <Col lg={4}>
             <Card className={classes.voteCountCard}>
               <Card.Body className="p-2">
@@ -269,6 +306,26 @@ const VotePage = ({
               </Card.Body>
             </Card>
           </Col>
+        </Row> */}
+         <Row>
+          <VoteCard
+            proposal={proposal}
+            percentage={forPercentage}
+            nounIds={forNouns}
+            variant={VoteCardVariant.FOR}
+          />
+          <VoteCard
+            proposal={proposal}
+            percentage={againstPercentage}
+            nounIds={againstNouns}
+            variant={VoteCardVariant.AGAINST}
+          />
+          <VoteCard
+            proposal={proposal}
+            percentage={abstainPercentage}
+            nounIds={abstainNouns}
+            variant={VoteCardVariant.ABSTAIN}
+          />
         </Row>
         <ProposalContent proposal={proposal} />
       </Col>
