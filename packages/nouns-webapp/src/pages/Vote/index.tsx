@@ -224,7 +224,9 @@ const VotePage = ({
         vote={vote}
       />
       <Col lg={{ span: 8, offset: 2 }}>
-        <Link to="/vote">← All Proposals</Link>
+        <Link to={'/vote'}>
+          <button className={classes.backButton}>←</button>
+        </Link>
       </Col>
       <Col lg={{ span: 8, offset: 2 }} className={classes.proposal}>
         <div className="d-flex justify-content-between align-items-center">
