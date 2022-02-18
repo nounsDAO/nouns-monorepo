@@ -71,3 +71,27 @@
 .transitionStateButtonSection {
   border-top: 0px;
 }
+
+/* Info section stuff */
+.voteInfoCard {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  border-radius: 12px;
+}
+
+.voteMetadataRow h1 {
+  font-size: 20px;
+  color: var(--brand-gray-light-text);
+  font-family: 'Londrina Solid';
+}
+
+.voteMetadataRow span {
+  font-size: 14px;
+  font-family: 'PT Root UI';
+  color: var(--brand-gray-light-text);
+}
+
+.voteMetadataRow h3 {
+  font-size: 18px;
+  font-family: 'PT Root UI Bold';
+}

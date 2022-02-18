@@ -42,7 +42,7 @@ const AVERAGE_BLOCK_TIME_IN_SECS = 13;
  * @param supportDetailed - The integer support value: against (0), for (1), or abstain (2)
  * @returns - flat list of nounIds that voted supportDetailed for the given prop
  */
- const getNounVotes = (data: any, supportDetailed: number) => {
+const getNounVotes = (data: any, supportDetailed: number) => {
   return data.proposals[0].votes
     .filter((vote: any) => vote.supportDetailed === supportDetailed)
     .map((vote: any) => vote.nouns)
@@ -128,6 +128,24 @@ const VotePage = ({
       return new Date() >= (proposal?.eta ?? Number.MAX_SAFE_INTEGER);
     }
     return false;
+  };
+
+  const startOrEndTimeCopy = () => {
+    if (startDate?.isBefore(now) && endDate?.isAfter(now)) {
+      return 'Ends';
+    } else if (endDate?.isBefore(now)) {
+      return 'Ended';
+    } else {
+      return 'Starts';
+    }
+  };
+
+  const startOrEndTimeTime = () => {
+    if (!startDate?.isBefore(now)) {
+      return startDate;
+    } else {
+      return endDate;
+    }
   };
 
   const { forCount = 0, againstCount = 0, quorumVotes = 0 } = proposal || {};
@@ -272,42 +290,7 @@ const VotePage = ({
             </Col>
           </Row>
         )}
-        {/* <Row>
-          <Col lg={4}>
-            <Card className={classes.voteCountCard}>
-              <Card.Body className="p-2">
-                <Card.Text className="py-2 m-0">
-                  <span>For</span>
-                  <span>{proposal?.forCount}</span>
-                </Card.Text>
-                <ProgressBar variant="success" now={forPercentage} />
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col lg={4}>
-            <Card className={classes.voteCountCard}>
-              <Card.Body className="p-2">
-                <Card.Text className="py-2 m-0">
-                  <span>Against</span>
-                  <span>{proposal?.againstCount}</span>
-                </Card.Text>
-                <ProgressBar variant="danger" now={againstPercentage} />
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col lg={4}>
-            <Card className={classes.voteCountCard}>
-              <Card.Body className="p-2">
-                <Card.Text className="py-2 m-0">
-                  <span>Abstain</span>
-                  <span>{proposal?.abstainCount}</span>
-                </Card.Text>
-                <ProgressBar variant="info" now={abstainPercentage} />
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row> */}
-         <Row>
+        <Row>
           <VoteCard
             proposal={proposal}
             percentage={forPercentage}
@@ -327,6 +310,60 @@ const VotePage = ({
             variant={VoteCardVariant.ABSTAIN}
           />
         </Row>
+
+        {/* TODO abstract this into a component  */}
+        <Row>
+          <Col lg={4}>
+            <Card className={classes.voteInfoCard}>
+              <Card.Body className="p-2">
+                <Row className={classes.voteMetadataRow}>
+                  <Col className={classes.voteMetadataRowTitle}>
+                    <h1>Threshold</h1>
+                  </Col>
+                  <Col>
+                    <span>Differential</span>
+                    <h3>{proposal.forCount - proposal.againstCount} votes</h3>
+                  </Col>
+                  <Col>
+                    <span>Quorum</span>
+                    <h3>{proposal.quorumVotes} votes</h3>
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col lg={4}>
+            <Card className={classes.voteInfoCard}>
+              <Card.Body className="p-2">
+                <Row className={classes.voteMetadataRow}>
+                  <Col className={classes.voteMetadataRowTitle}>
+                    <h1>{startOrEndTimeCopy()}</h1>
+                  </Col>
+                  <Col className={classes.voteMetadataTime}>
+                    <span>{startOrEndTimeTime() && startOrEndTimeTime()?.format('h:mm A z')}</span>
+                    <h3>{startOrEndTimeTime() && startOrEndTimeTime()?.format('MMM D, YYYY')}</h3>
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col lg={4}>
+            <Card className={classes.voteInfoCard}>
+              <Card.Body className="p-2">
+                <Row className={classes.voteMetadataRow}>
+                  <Col className={classes.voteMetadataRowTitle}>
+                    <h1>Snapshot</h1>
+                  </Col>
+                  <Col className={classes.snapshotBlock}>
+                    <span>Taken at block</span>
+                    <h3>{proposal.createdBlock}</h3>
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+
         <ProposalContent proposal={proposal} />
       </Col>
     </Section>
