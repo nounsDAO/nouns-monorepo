@@ -3,7 +3,9 @@ import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import ProposalStatus from '../ProposalStatus';
 import classes from './ProposalHeader.module.css';
+import navBarButtonClasses from '../NavBarButton/NavBarButton.module.css';
 import { Proposal } from '../../wrappers/nounsDao';
+import clsx from 'clsx';
 
 interface ProposalHeaderProps {
   proposal: Proposal;
@@ -18,7 +20,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
     <div className="d-flex justify-content-between align-items-center">
       <div className="d-flex justify-content-start align-items-start">
         <Link to={'/vote'}>
-          <button className={classes.backButton}>←</button>
+          <button className={clsx(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button>
         </Link>
         <div className={classes.headerRow}>
           <span>
