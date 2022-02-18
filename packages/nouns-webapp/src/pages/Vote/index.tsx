@@ -26,6 +26,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 import { utils } from 'ethers';
 import { useAppDispatch } from '../../hooks';
+import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -378,7 +379,7 @@ const VotePage = ({
             {proposal?.description && (
               <ReactMarkdown
                 className={classes.markdown}
-                children={proposal.description}
+                children={processProposalDescriptionText(proposal.description, proposal.title)}
                 remarkPlugins={[remarkBreaks]}
               />
             )}

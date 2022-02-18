@@ -35,6 +35,17 @@
   margin-top: 2rem;
 }
 
+.section h5 {
+  font-size: 1.7rem;
+  margin-top: 1rem;
+  font-family: 'Londrina Solid';
+}
+
+.markdown {
+  font-family: 'PT Root UI';
+  font-size: 1.1rem;
+}
+
 .markdown h1 {
   font-size: 1.7rem;
   margin-top: 1rem;
@@ -48,6 +59,7 @@
 }
 
 .markdown h3 {
+  font-weight: bold;
   font-size: 1.3rem;
 }
 
