@@ -239,57 +239,19 @@ const VotePage = ({
         )}
       </Col>
       <Col lg={10} className={clsx(classes.proposal, classes.wrapper)}>
-        {showVotingButtons ? (
-          <Row>
-            <Col lg={4} className="d-grid gap-2">
-              <Button
-                className={classes.votingButton}
-                onClick={() => {
-                  setVote(Vote.FOR);
-                  setShowVoteModal(true);
-                }}
-              >
-                Vote For
-              </Button>
-            </Col>
-            <Col lg={4} className="d-grid gap-2">
-              <Button
-                className={classes.votingButton}
-                onClick={() => {
-                  setVote(Vote.AGAINST);
-                  setShowVoteModal(true);
-                }}
-              >
-                Vote Against
-              </Button>
-            </Col>
-            <Col lg={4} className="d-grid gap-2">
-              <Button
-                className={classes.votingButton}
-                onClick={() => {
-                  setVote(Vote.ABSTAIN);
-                  setShowVoteModal(true);
-                }}
-              >
-                Abstain
-              </Button>
-            </Col>
-          </Row>
-        ) : (
-          ''
-        )}
         {isAwaitingStateChange() && (
-          <Row className={classes.section}>
+          <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
             <Col className="d-grid">
               <Button
                 onClick={moveStateAction}
                 disabled={isQueuePending || isExecutePending}
                 variant="dark"
+                className={classes.transitionStateButton}
               >
                 {isQueuePending || isExecutePending ? (
                   <Spinner animation="border" />
                 ) : (
-                  `${moveStateButtonAction} Proposal`
+                  `${moveStateButtonAction} Proposal ⌐◧-◧`
                 )}
               </Button>
             </Col>
