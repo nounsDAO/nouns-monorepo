@@ -94,3 +94,8 @@
 .backButton:hover {
   opacity: 0.5;
 }
+
+.wrapper {
+  margin-left: auto;
+  margin-right: auto;
+}

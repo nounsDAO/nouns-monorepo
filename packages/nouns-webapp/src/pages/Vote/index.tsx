@@ -27,6 +27,7 @@ import remarkBreaks from 'remark-breaks';
 import { utils } from 'ethers';
 import { useAppDispatch } from '../../hooks';
 import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
+import clsx from 'clsx';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -224,12 +225,12 @@ const VotePage = ({
         availableVotes={availableVotes}
         vote={vote}
       />
-      <Col lg={{ span: 8, offset: 2 }}>
+      <Col lg={10} className={classes.wrapper}>
         <Link to={'/vote'}>
           <button className={classes.backButton}>←</button>
         </Link>
       </Col>
-      <Col lg={{ span: 8, offset: 2 }} className={classes.proposal}>
+      <Col lg={10} className={clsx(classes.proposal, classes.wrapper)}>
         <div className="d-flex justify-content-between align-items-center">
           <h3 className={classes.proposalId}>Proposal {proposal?.id}</h3>
           <ProposalStatus status={proposal?.status}></ProposalStatus>
