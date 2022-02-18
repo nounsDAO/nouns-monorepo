@@ -3121,6 +3121,11 @@
     npmlog "^4.1.2"
     write-file-atomic "^2.3.0"
 
+"@metamask/detect-provider@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@metamask/detect-provider/-/detect-provider-1.2.0.tgz#3667a7531f2a682e3c3a43eaf3a1958bdb42a696"
+  integrity sha512-ocA76vt+8D0thgXZ7LxFPyqw3H7988qblgzddTDA6B8a/yU0uKV42QR/DhA+Jh11rJjxW0jKvwb5htA6krNZDQ==
+
 "@metamask/safe-event-emitter@2.0.0", "@metamask/safe-event-emitter@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-2.0.0.tgz#af577b477c683fad17c619a78208cede06f9605c"
@@ -4581,6 +4586,24 @@
   version "1.0.0-beta.27"
   resolved "https://registry.yarnpkg.com/@uniswap/token-lists/-/token-lists-1.0.0-beta.27.tgz#8b02a979b0b0024cc96f60e694a3f6db6b2ccab2"
   integrity sha512-x5hmIniQ9TGqOBCRqfWcmZi/U5kB0qrHMDQ9igs3nMbK0wwmYLraL4owbIwXFGR/co6/lJYJC4K/Gjn4wZY5mQ==
+
+"@usedapp/coingecko@^0.4.3":
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/@usedapp/coingecko/-/coingecko-0.4.3.tgz#0a0d778f5156deb12d324e29fc690d6a36c58f35"
+  integrity sha512-EiFygOoW3W9ELBth/fKWhujNTGn4zNnknYzrKnNfjmkhYf8ATRmhN22T2OX/1IC6P99hsq7krPiywMXsbwxl2g==
+  dependencies:
+    "@usedapp/core" "^0.11.0"
+
+"@usedapp/core@^0.11.0":
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/@usedapp/core/-/core-0.11.0.tgz#0df080d253468b421c6b712f1b0bbcc7bfec15e9"
+  integrity sha512-59M4FToZLdXLPf9R4eME7aOBHcwrqmf8+038Mq9Zcd3Ep+YvrN0vnIdNyzjAAJXXBa3bX139ueli0lKwrGYbUQ==
+  dependencies:
+    "@metamask/detect-provider" "^1.2.0"
+    "@uniswap/token-lists" "^1.0.0-beta.27"
+    ethers "5.5.1"
+    lodash.merge "^4.6.2"
+    nanoid "3.1.22"
 
 "@usedapp/core@^0.6.3":
   version "0.6.3"
