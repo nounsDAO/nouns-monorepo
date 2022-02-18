@@ -20,14 +20,11 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
 import VoteModal from '../../components/VoteModal';
-import React, { Fragment, useCallback, useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkBreaks from 'remark-breaks';
-import { utils } from 'ethers';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
 import clsx from 'clsx';
 import ProposalHeader from '../../components/ProposalHeader';
+import ProposalContent from '../../components/ProposalContent';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -96,25 +93,6 @@ const VotePage = ({
 
   // Only show voting if user has > 0 votes at proposal created block and proposal is active
   const showVotingButtons = availableVotes && !hasVoted && proposalActive;
-
-  const linkIfAddress = (content: string) => {
-    if (utils.isAddress(content)) {
-      return (
-        <a href={buildEtherscanAddressLink(content)} target="_blank" rel="noreferrer">
-          {content}
-        </a>
-      );
-    }
-    return <span>{content}</span>;
-  };
-
-  const transactionLink = (content: string) => {
-    return (
-      <a href={buildEtherscanTxLink(content)} target="_blank" rel="noreferrer">
-        {content.substring(0, 7)}
-      </a>
-    );
-  };
 
   const getVoteErrorMessage = (error: string | undefined) => {
     if (error?.match(/voter already voted/)) {
@@ -292,57 +270,7 @@ const VotePage = ({
             </Card>
           </Col>
         </Row>
-        <Row>
-          <Col className={classes.section}>
-            <h5>Description</h5>
-            {proposal?.description && (
-              <ReactMarkdown
-                className={classes.markdown}
-                children={processProposalDescriptionText(proposal.description, proposal.title)}
-                remarkPlugins={[remarkBreaks]}
-              />
-            )}
-          </Col>
-        </Row>
-        <Row>
-          <Col className={classes.section}>
-            <h5>Proposed Transactions</h5>
-            <ol>
-              {proposal?.details?.map((d, i) => {
-                return (
-                  <li key={i} className="m-0">
-                    {linkIfAddress(d.target)}.{d.functionSig}
-                    {d.value}(
-                    <br />
-                    {d.callData.split(',').map((content, i) => {
-                      return (
-                        <Fragment key={i}>
-                          <span key={i}>
-                            &emsp;
-                            {linkIfAddress(content)}
-                            {d.callData.split(',').length - 1 === i ? '' : ','}
-                          </span>
-                          <br />
-                        </Fragment>
-                      );
-                    })}
-                    )
-                  </li>
-                );
-              })}
-            </ol>
-          </Col>
-        </Row>
-        <Row>
-          <Col className={classes.section}>
-            <h5>Proposer</h5>
-            {proposal?.proposer && proposal?.transactionHash && (
-              <>
-                {linkIfAddress(proposal.proposer)} at {transactionLink(proposal.transactionHash)}
-              </>
-            )}
-          </Col>
-        </Row>
+        <ProposalContent proposal={proposal} />
       </Col>
     </Section>
   );
