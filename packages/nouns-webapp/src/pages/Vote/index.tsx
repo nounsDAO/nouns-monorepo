@@ -1,4 +1,4 @@
-import { Row, Col, Alert, Button, Card, ProgressBar, Spinner } from 'react-bootstrap';
+import { Row, Col, Button, Card, ProgressBar, Spinner } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import {
   ProposalState,
@@ -11,7 +11,7 @@ import {
 } from '../../wrappers/nounsDao';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Vote.module.css';
-import {  RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import { TransactionStatus, useBlockNumber } from '@usedapp/core';
 import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../utils/etherscan';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
@@ -239,15 +239,6 @@ const VotePage = ({
         )}
       </Col>
       <Col lg={10} className={clsx(classes.proposal, classes.wrapper)}>
-        {proposal && proposalActive && (
-          <>
-            {hasVoted && (
-              <Alert variant="success" className={classes.voterIneligibleAlert}>
-                Thank you for your vote!
-              </Alert>
-            )}
-          </>
-        )}
         {showVotingButtons ? (
           <Row>
             <Col lg={4} className="d-grid gap-2">

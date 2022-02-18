@@ -1,10 +1,10 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { Alert, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import ProposalStatus from '../ProposalStatus';
 import classes from './ProposalHeader.module.css';
 import navBarButtonClasses from '../NavBarButton/NavBarButton.module.css';
-import { Proposal } from '../../wrappers/nounsDao';
+import { Proposal, useHasVotedOnProposal, useProposalVote } from '../../wrappers/nounsDao';
 import clsx from 'clsx';
 import { isMobileScreen } from '../../utils/isMobile';
 
@@ -18,6 +18,8 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const { proposal, isActiveForVoting, isWalletConnected } = props;
 
   const isMobile = isMobileScreen();
+  const hasVoted = useHasVotedOnProposal(proposal?.id);
+  const proposalVote = useProposalVote(proposal?.id);
 
   return (
     <>
@@ -44,7 +46,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
         </div>
         {!isMobile && (
           <div className="d-flex justify-content-end align-items-end">
-            {isActiveForVoting && (
+            {!hasVoted && isActiveForVoting && (
               <>
                 {isWalletConnected ? (
                   <></>
@@ -65,7 +67,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
       </div>
 
       <div className={classes.mobileSubmitProposalButton}>
-        {isMobile && isActiveForVoting && (
+        {isMobile && isActiveForVoting && !hasVoted && (
           <>
             {isWalletConnected ? (
               <></>
@@ -82,6 +84,16 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
           </>
         )}
       </div>
+
+      {proposal && isActiveForVoting && (
+        <>
+          {hasVoted && (
+            <Alert variant="success" className={classes.voterIneligibleAlert}>
+              You voted <strong>{proposalVote}</strong> this proposal
+            </Alert>
+          )}
+        </>
+      )}
     </>
   );
 };

@@ -95,3 +95,12 @@
     max-width: 100%;
   }
 }
+
+.voterIneligibleAlert {
+  font-family: 'PT Root UI';
+  font-weight: 500;
+  background-color: #e2e3e8;
+  color: black;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  margin-top: 0.5rem;
+}
