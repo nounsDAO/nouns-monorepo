@@ -1,0 +1,87 @@
+.backButton {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--brand-cool-accent);
+  background-size: contain;
+  background-repeat: no-repeat;
+  font-size: large;
+  border-radius: 50%;
+  color: var(--brand-gray-light-text);
+  background-color: white;
+  font-weight: bold;
+  margin-right: 1rem;
+}
+
+.backButton:hover {
+  opacity: 0.5;
+}
+
+.headerRow span {
+  color: #8c8d92;
+  font-size: 24px;
+  font-family: 'Londrina Solid';
+}
+.headerRow h1 {
+  color: #14161b;
+  font-size: 42px;
+  font-family: 'Londrina Solid';
+}
+
+.proposalStatus {
+  margin-left: 0.75rem;
+  margin-top: 0.1rem;
+}
+
+.connectWalletText {
+  color: var(--brand-gray-light-text);
+  font-family: 'PT Root UI Bold';
+  font-size: 16px;
+  min-width: 12rem;
+  margin-bottom: 1.15rem;
+}
+
+.submitBtn {
+  width: 100%;
+  max-width: 8rem;
+  min-width: 8rem;
+  height: 3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  background-color: var(--brand-dark-red);
+  border: var(--brand-dark-red);
+}
+.submitBtn:focus,
+.submitBtn:hover {
+  background-color: var(--brand-dark-red) !important;
+  box-shadow: 0 0 0 0.2rem rgb(214, 60, 94, 0.75);
+}
+.submitBtn:active {
+  background-color: var(--brand-dark-red) !important;
+}
+.submitBtnDisabled {
+  background-color: var(--brand-gray-light-text) !important;
+  width: 100%;
+  max-width: 8rem;
+  min-width: 8rem;
+  height: 3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  border: var(--brand-dark-red);
+  opacity: 50%;
+}
+
+.submitBtnDisabled:hover {
+  cursor: not-allowed;
+}
+
+.proposalTitleWrapper {
+  display: flex;
+  padding-right: 2rem;
+}
+
+.proposalTitle {
+  margin-right: 0.5rem;
+}

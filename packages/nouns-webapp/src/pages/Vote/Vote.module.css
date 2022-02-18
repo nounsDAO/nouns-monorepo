@@ -76,25 +76,6 @@
   margin: 1rem 0 0 0;
 }
 
-.backButton {
-  display: inline-block;
-  width: 2rem;
-  height: 2rem;
-  border: 1px solid var(--brand-cool-accent);
-  background-size: contain;
-  background-repeat: no-repeat;
-  font-size: large;
-  border-radius: 50%;
-  color: var(--brand-gray-light-text);
-  background-color: white;
-  font-weight: bold;
-  margin-right: 1rem;
-}
-
-.backButton:hover {
-  opacity: 0.5;
-}
-
 .wrapper {
   margin-left: auto;
   margin-right: auto;

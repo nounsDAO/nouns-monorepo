@@ -11,23 +11,23 @@ import {
 } from '../../wrappers/nounsDao';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Vote.module.css';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import {  RouteComponentProps } from 'react-router-dom';
 import { TransactionStatus, useBlockNumber } from '@usedapp/core';
 import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../utils/etherscan';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
-import ProposalStatus from '../../components/ProposalStatus';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
 import VoteModal from '../../components/VoteModal';
-import { Fragment, useCallback, useEffect, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 import { utils } from 'ethers';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
 import clsx from 'clsx';
+import ProposalHeader from '../../components/ProposalHeader';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -214,6 +214,10 @@ const VotePage = ({
     [executeProposalState, onTransactionStateChange, setModal],
   );
 
+  const activeAccount = useAppSelector(state => state.account.activeAccount);
+  const isWalletConnected = !(activeAccount === undefined);
+  const isActiveForVoting = startDate?.isBefore(now) && endDate?.isAfter(now);
+
   return (
     <Section fullWidth={false} className={classes.votePage}>
       <VoteModal
@@ -226,56 +230,17 @@ const VotePage = ({
         vote={vote}
       />
       <Col lg={10} className={classes.wrapper}>
-        <Link to={'/vote'}>
-          <button className={classes.backButton}>←</button>
-        </Link>
+        {proposal && (
+          <ProposalHeader
+            proposal={proposal}
+            isActiveForVoting={isActiveForVoting}
+            isWalletConnected={isWalletConnected}
+          />
+        )}
       </Col>
       <Col lg={10} className={clsx(classes.proposal, classes.wrapper)}>
-        <div className="d-flex justify-content-between align-items-center">
-          <h3 className={classes.proposalId}>Proposal {proposal?.id}</h3>
-          <ProposalStatus status={proposal?.status}></ProposalStatus>
-        </div>
-        <div>
-          {startDate && startDate.isBefore(now) ? null : proposal ? (
-            <span>
-              Voting starts approximately {startDate?.format('MMMM D, YYYY h:mm A z')}{' '}
-              {startDate && `(${(startDate as any).fromNow()})`}{' '}
-            </span>
-          ) : (
-            ''
-          )}
-        </div>
-        <div>
-          {endDate && endDate.isBefore(now) ? (
-            <>
-              <div>Voting ended {endDate.format('MMMM D, YYYY h:mm A z')}</div>
-              <div>
-                This proposal has {quorumReached ? 'reached' : 'failed to reach'} quorum{' '}
-                {proposal?.quorumVotes !== undefined && `(${proposal.quorumVotes} votes)`}
-              </div>
-            </>
-          ) : proposal ? (
-            <>
-              <div>
-                Voting ends approximately {endDate?.format('MMMM D, YYYY h:mm A z')}{' '}
-                {endDate && `(${(endDate as any).fromNow()})`}{' '}
-              </div>
-              {proposal?.quorumVotes !== undefined && (
-                <div>A total of {proposal.quorumVotes} votes are required to reach quorum</div>
-              )}
-            </>
-          ) : (
-            ''
-          )}
-        </div>
         {proposal && proposalActive && (
           <>
-            {showBlockRestriction && !hasVoted && (
-              <Alert variant="secondary" className={classes.blockRestrictionAlert}>
-                Only NOUN votes that were self delegated or delegated to another address before
-                block {proposal.createdBlock} are eligible for voting.
-              </Alert>
-            )}
             {hasVoted && (
               <Alert variant="success" className={classes.voterIneligibleAlert}>
                 Thank you for your vote!
