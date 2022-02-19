@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Col, Row, Spinner } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
 import { Proposal } from '../../wrappers/nounsDao';
