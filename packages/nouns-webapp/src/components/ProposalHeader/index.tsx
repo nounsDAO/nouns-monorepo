@@ -13,10 +13,11 @@ interface ProposalHeaderProps {
   proposal: Proposal;
   isActiveForVoting?: boolean;
   isWalletConnected: boolean;
+  submitButtonClickHandler: () => void;
 }
 
 const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
-  const { proposal, isActiveForVoting, isWalletConnected } = props;
+  const { proposal, isActiveForVoting, isWalletConnected, submitButtonClickHandler } = props;
 
   const isMobile = isMobileScreen();
   const connectedAccountNounVotes = useUserVotes() || 0;
@@ -62,8 +63,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
                       ? classes.submitBtn
                       : classes.submitBtnDisabled
                   }
-                  // TODO make this actually do things
-                  onClick={() => console.log('VOTE')}
+                  onClick={submitButtonClickHandler}
                 >
                   Submit vote
                 </Button>
@@ -88,8 +88,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
                   ? classes.submitBtn
                   : classes.submitBtnDisabled
               }
-              // TODO make this actually do things
-              onClick={() => console.log('VOTE')}
+              onClick={submitButtonClickHandler}
             >
               Submit vote
             </Button>

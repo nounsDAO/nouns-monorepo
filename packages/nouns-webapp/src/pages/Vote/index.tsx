@@ -267,6 +267,7 @@ const VotePage = ({
             proposal={proposal}
             isActiveForVoting={isActiveForVoting}
             isWalletConnected={isWalletConnected}
+            submitButtonClickHandler={() => setShowVoteModal(true)}
           />
         )}
       </Col>
