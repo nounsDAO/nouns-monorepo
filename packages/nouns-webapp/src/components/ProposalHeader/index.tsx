@@ -56,7 +56,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
                   <div className={classes.connectWalletText}>Connect a wallet to vote.</div>
                 )}
                 {connectedAccountNounVotes === 0 && (
-                  <div className={classes.connectWalletText}>You have no votes.</div>
+                  <div className={classes.noVotesText}>You have no votes.</div>
                 )}
                 <Button
                   className={
@@ -82,7 +82,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
               <div className={classes.connectWalletText}>Connect a wallet to vote.</div>
             )}
             {isWalletConnected && connectedAccountNounVotes === 0 && (
-              <div className={classes.connectWalletText}>You have no votes.</div>
+              <div className={classes.noVotesText}>You have no votes.</div>
             )}
             <Button
               className={

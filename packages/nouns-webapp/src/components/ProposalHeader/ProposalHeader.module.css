@@ -26,10 +26,20 @@
 
 .connectWalletText {
   color: var(--brand-gray-light-text);
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-weight: 500;
   font-size: 16px;
   min-width: 12rem;
   margin-bottom: 1.15rem;
+}
+
+.noVotesText {
+  color: var(--brand-gray-light-text);
+  font-family: 'PT Root UI';
+  font-weight: 500;
+  font-size: 16px;
+  margin-bottom: 1.15rem;
+  min-width: 9.5rem;
 }
 
 .submitBtn {
