@@ -99,7 +99,8 @@
 
 .voteMetadataRow h3 {
   font-size: 18px;
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-weight: bold;
 }
 
 .voteMetadataRowTitle {

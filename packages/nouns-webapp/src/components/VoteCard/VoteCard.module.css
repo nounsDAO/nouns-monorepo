@@ -5,7 +5,8 @@
 
 .voteCardVoteCount {
   font-size: 22px;
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-weight: bold;
 }
 
 .for {
