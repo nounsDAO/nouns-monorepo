@@ -1,3 +1,4 @@
+// import { Props, ReactPropTypes } from 'react';
 import classes from './NavBarButton.module.css';
 
 export enum NavBarButtonStyle {

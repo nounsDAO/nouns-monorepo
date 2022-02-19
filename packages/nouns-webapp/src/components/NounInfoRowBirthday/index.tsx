@@ -30,7 +30,7 @@ const NounInfoRowBirthday: React.FC<NounInfoRowBirthdayProps> = props => {
     pastAuctions.find((auction: AuctionState, i: number) => {
       const maybeNounId = auction.activeAuction?.nounId;
       return maybeNounId ? BigNumber.from(maybeNounId).eq(BigNumber.from(nounIdForQuery)) : false;
-    })?.activeAuction?.startTime || 0,
+    })?.activeAuction?.startTime,
   );
 
   if (!startTime) {

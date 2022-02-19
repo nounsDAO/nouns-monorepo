@@ -36,7 +36,7 @@
 }
 
 .button:hover {
-  cursor: pointer;
+  cursor: pointer; 
 }
 
 .coolInfo {
@@ -46,12 +46,12 @@
 }
 
 .coolInfo:hover {
-  background-color: var(--brand-cool-accent);
+  background-color: var(--brand-color-green);
   color: black;
 }
 
 .coolWallet {
-  background-color: var(--brand-cool-accent);
+  background-color: var(--brand-bright-orange);
   border: 1px solid var(--brand-cool-border);
   border-radius: 10px;
   color: var(--brand-warm-dark-text);

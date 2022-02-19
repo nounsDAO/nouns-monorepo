@@ -1,14 +1,17 @@
 :root {
   --brand-bg-green: #edf2f0;
   --brand-dark-red: #d63c5e;
-  --brand-light-green: #6da886;
+  --brand-bright-orange: #f0874a;
+  --brand-color-orange: #e06620;
+  --brand-light-green: #5daf7f;
+  --brand-light-discord-blue: #4966cc;
   --brand-black: #212529;
   /* Colors from Figma  */
   --brand-cool-background: #d5d7e0;
-  --brand-cool-border: rgb(189, 192, 207);
+  --brand-cool-border: rgb(145, 147, 148);
   --brand-cool-dark-text: #151c3b;
-  --brand-cool-light-text: #79809c;
-  --brand-cool-accent: #e9ebf3;
+  --brand-cool-light-text: #aeb5d1;
+  --brand-cool-accent: #ffcbcb;
   --brand-warm-background: #d5d7e0;
   --brand-warm-border: rgb(207, 189, 186);
   --brand-warm-dark-text: #221b1a;

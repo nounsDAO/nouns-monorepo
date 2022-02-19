@@ -3,10 +3,13 @@
   flex: 1;
 }
 .container {
+  margin-right: 0;
   display: flex;
 }
 .footerSignature {
-  margin: auto auto 0 auto;
+  margin-left: auto;
+  margin-right: 0;
+  /* margin: auto auto 0 auto; */
   font-family: 'PT Root UI' !important;
   font-weight: 500;
   font-size: 18px;
