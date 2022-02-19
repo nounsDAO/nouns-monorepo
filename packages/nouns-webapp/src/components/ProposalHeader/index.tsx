@@ -50,12 +50,10 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
           <div className="d-flex justify-content-end align-items-end">
             {!hasVoted && isActiveForVoting && (
               <>
-                {isWalletConnected ? (
-                  <></>
-                ) : (
+                {!isWalletConnected && (
                   <div className={classes.connectWalletText}>Connect a wallet to vote.</div>
                 )}
-                {connectedAccountNounVotes === 0 && (
+                {isWalletConnected && connectedAccountNounVotes === 0 && (
                   <div className={classes.noVotesText}>You have no votes.</div>
                 )}
                 <Button
