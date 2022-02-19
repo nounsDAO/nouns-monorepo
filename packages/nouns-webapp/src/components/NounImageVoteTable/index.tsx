@@ -7,6 +7,8 @@ interface NounImageVoteTableProps {
 }
 const NOUNS_PER_VOTE_CARD = 15;
 
+const isXLScreen = window.innerWidth > 1200;
+
 const NounImageVoteTable: React.FC<NounImageVoteTableProps> = props => {
   const { nounIds } = props;
   const paddedNounIds = nounIds
@@ -22,7 +24,7 @@ const NounImageVoteTable: React.FC<NounImageVoteTableProps> = props => {
 
   const content = () => {
     const rows = 3;
-    const rowLength = 5;
+    const rowLength = isXLScreen ? 5 : 4;
 
     return Array(rows)
       .fill(0)
