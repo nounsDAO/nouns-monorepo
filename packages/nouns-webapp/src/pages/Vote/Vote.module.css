@@ -106,3 +106,18 @@
 .voteMetadataRowTitle {
   margin-top: 0.5rem;
 }
+
+.voteMetadataTime {
+  min-width: 11rem;
+  text-align: right;
+}
+
+.snapshotBlock {
+  text-align: right;
+}
+
+@media (max-width: 1200px) {
+  .thresholdInfo {
+    text-align: right;
+  }
+}
