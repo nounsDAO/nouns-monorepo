@@ -23,6 +23,8 @@
 .circularNounWrapper {
   height: 42px;
   width: 42px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 @media (max-width: 1200px) {
