@@ -8,7 +8,7 @@ const GovernancePage = () => {
   const { data: proposals } = useAllProposals();
   const threshold = useProposalThreshold();
   const nounsRequired = threshold !== undefined ? threshold + 1 : '...';
-  const nounThresholdCopy = `${nounsRequired} ${threshold === 0 ? 'Noun' : 'Nouns'}`;
+  const nounThresholdCopy = `${nounsRequired} ${threshold === 0 ? 'Chili' : 'Chilis'}`;
 
   return (
     <Section fullWidth={true}>
