@@ -72,7 +72,7 @@ export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
       <Noun
         imgPath={grayCircle ? getGrayBackgroundSVG() : noun ? noun.image : ''}
         alt={noun ? noun.description : 'Noun'}
-        wrapperClassName={nounClasses.small}
+        wrapperClassName={nounClasses.circularNounWrapper}
         className={nounClasses.circular}
       />
     </Link>

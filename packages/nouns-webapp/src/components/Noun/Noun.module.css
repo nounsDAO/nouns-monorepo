@@ -20,7 +20,14 @@
   border-radius: 50%;
 }
 
-.small {
+.circularNounWrapper {
   height: 42px;
   width: 42px;
+}
+
+@media (max-width: 1200px) {
+  .circularNounWrapper {
+    height: 70%;
+    width: 70%;
+  }
 }
