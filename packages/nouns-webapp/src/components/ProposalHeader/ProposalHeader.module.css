@@ -1,4 +1,6 @@
 .backButton {
+  -webkit-appearance: none;
+  padding: 0;
   display: inline-block;
   width: 2rem;
   height: 2rem;
