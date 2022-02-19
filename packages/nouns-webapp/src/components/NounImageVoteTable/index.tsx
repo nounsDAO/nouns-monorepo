@@ -11,9 +11,13 @@ const NounImageVoteTable: React.FC<NounImageVoteTableProps> = props => {
   const { nounIds } = props;
   const paddedNounIds = nounIds
     .map((nounId: string) => {
-      return <StandaloneNounCircular nounId={EthersBN.from(nounId)} />;
+      return <StandaloneNounCircular nounId={EthersBN.from(nounId)} grayCircle={false} />;
     })
-    .concat(Array(NOUNS_PER_VOTE_CARD).fill(<div className={classes.grayCircle} />))
+    .concat(
+      Array(NOUNS_PER_VOTE_CARD).fill(
+        <StandaloneNounCircular nounId={EthersBN.from(-1)} grayCircle={true} />,
+      ),
+    )
     .slice(0, NOUNS_PER_VOTE_CARD);
 
   const content = () => {

@@ -8,9 +8,14 @@ import classes from './StandaloneNoun.module.css';
 import { useDispatch } from 'react-redux';
 import { setOnDisplayAuctionNounId } from '../../state/slices/onDisplayAuction';
 import nounClasses from '../Noun/Noun.module.css';
+import { getGrayBackgroundSVG } from '../../utils/grayBackgroundSVG';
 
 interface StandaloneNounProps {
   nounId: EthersBN;
+}
+interface StandaloneCircularNounProps {
+  nounId: EthersBN;
+  grayCircle: boolean;
 }
 
 interface StandaloneNounWithSeedProps {
@@ -55,17 +60,17 @@ const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProp
   );
 };
 
-export const StandaloneNounCircular: React.FC<StandaloneNounProps> = (
-  props: StandaloneNounProps,
+export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
+  props: StandaloneCircularNounProps,
 ) => {
-  const { nounId } = props;
+  const { nounId, grayCircle } = props;
   const seed = useNounSeed(nounId);
   const noun = seed && getNoun(nounId, seed);
 
   return (
     <Link to={'/noun/' + nounId.toString()} className={classes.clickableNoun}>
       <Noun
-        imgPath={noun ? noun.image : ''}
+        imgPath={grayCircle ? getGrayBackgroundSVG() : noun ? noun.image : ''}
         alt={noun ? noun.description : 'Noun'}
         wrapperClassName={nounClasses.small}
         className={nounClasses.circular}
