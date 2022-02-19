@@ -74,14 +74,14 @@ const NounderNounContent: React.FC<{
                 ` ${nounContentClasses.bidRow}`
               }
             >
-              All Noun auction proceeds are sent to the{' '}
+              All Chiliagon auction proceeds are sent to the{' '}
               <Link to="/vote" className={nounContentClasses.link}>
-                Nouns DAO
+                Chiliagon DAO
               </Link>
-              . For this reason, we, the project's founders (‘Nounders’) have chosen to compensate
+              {/* . For this reason, we, the project's founders (‘Nounders’) have chosen to compensate
               ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be
               sent to our multisig (5/10), where it will be vested and distributed to individual
-              Nounders.
+              Nounders. */}
             </li>
           </ul>
           <div

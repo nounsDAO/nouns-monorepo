@@ -1,0 +1,6 @@
+
+.link,
+.link:hover,
+.link:active {
+  color: var(--brand-light-discord-blue);
+}
