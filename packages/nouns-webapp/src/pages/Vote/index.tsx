@@ -312,7 +312,7 @@ const VotePage = ({
 
         {/* TODO abstract this into a component  */}
         <Row>
-          <Col lg={4}>
+          <Col xl={4} lg={12}>
             <Card className={classes.voteInfoCard}>
               <Card.Body className="p-2">
                 <Row className={classes.voteMetadataRow}>
@@ -331,7 +331,7 @@ const VotePage = ({
               </Card.Body>
             </Card>
           </Col>
-          <Col lg={4}>
+          <Col xl={4} lg={12}>
             <Card className={classes.voteInfoCard}>
               <Card.Body className="p-2">
                 <Row className={classes.voteMetadataRow}>
@@ -346,7 +346,7 @@ const VotePage = ({
               </Card.Body>
             </Card>
           </Col>
-          <Col lg={4}>
+          <Col xl={4} lg={12}>
             <Card className={classes.voteInfoCard}>
               <Card.Body className="p-2">
                 <Row className={classes.voteMetadataRow}>
