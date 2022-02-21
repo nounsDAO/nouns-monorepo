@@ -15,24 +15,26 @@
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  *********************************/
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.12;
 
 import { INounsSeeder } from './INounsSeeder.sol';
+import { ISVGRenderer } from './ISVGRenderer.sol';
 
 interface INounsDescriptor {
     event PartsLocked();
 
-    event DataURIToggled(bool enabled);
+    event RendererUpdated(ISVGRenderer renderer);
 
-    event BaseURIUpdated(string baseURI);
+    enum PartType {
+        Body,
+        Accessory,
+        Head,
+        Glasses
+    }
 
     function arePartsLocked() external returns (bool);
 
-    function isDataURIEnabled() external returns (bool);
-
-    function baseURI() external returns (string memory);
-
-    function palettes(uint8 paletteIndex, uint256 colorIndex) external view returns (string memory);
+    function palettes(uint8 paletteIndex) external view returns (address);
 
     function backgrounds(uint256 index) external view returns (string memory);
 
@@ -54,8 +56,6 @@ interface INounsDescriptor {
 
     function glassesCount() external view returns (uint256);
 
-    function addManyColorsToPalette(uint8 paletteIndex, string[] calldata newColors) external;
-
     function addManyBackgrounds(string[] calldata backgrounds) external;
 
     function addManyBodies(bytes[] calldata bodies) external;
@@ -66,7 +66,7 @@ interface INounsDescriptor {
 
     function addManyGlasses(bytes[] calldata glasses) external;
 
-    function addColorToPalette(uint8 paletteIndex, string calldata color) external;
+    function setPalette(uint8 paletteIndex, bytes calldata palette) external;
 
     function addBackground(string calldata background) external;
 
@@ -80,10 +80,6 @@ interface INounsDescriptor {
 
     function lockParts() external;
 
-    function toggleDataURIEnabled() external;
-
-    function setBaseURI(string calldata baseURI) external;
-
     function tokenURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view returns (string memory);
 
     function dataURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view returns (string memory);
@@ -95,4 +91,6 @@ interface INounsDescriptor {
     ) external view returns (string memory);
 
     function generateSVGImage(INounsSeeder.Seed memory seed) external view returns (string memory);
+
+    // function mergeSVGParts(string[] memory svgParts) external view returns (string memory);
 }

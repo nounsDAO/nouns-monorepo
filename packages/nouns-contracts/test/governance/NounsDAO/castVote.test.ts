@@ -20,8 +20,8 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
   NounsDescriptor__factory,
-  NounsDaoLogicV1Harness,
-  NounsDaoLogicV1Harness__factory,
+  NounsDAOLogicV1Harness,
+  NounsDAOLogicV1Harness__factory,
 } from '../../../typechain';
 
 chai.use(solidity);
@@ -30,8 +30,8 @@ const { expect } = chai;
 async function deployGovernor(
   deployer: SignerWithAddress,
   tokenAddress: string,
-): Promise<NounsDaoLogicV1Harness> {
-  const { address: govDelegateAddress } = await new NounsDaoLogicV1Harness__factory(
+): Promise<NounsDAOLogicV1Harness> {
+  const { address: govDelegateAddress } = await new NounsDAOLogicV1Harness__factory(
     deployer,
   ).deploy();
   const params = [
@@ -50,7 +50,7 @@ async function deployGovernor(
     await ethers.getContractFactory('NounsDAOProxy', deployer)
   ).deploy(...params);
 
-  return NounsDaoLogicV1Harness__factory.connect(_govDelegatorAddress, deployer);
+  return NounsDAOLogicV1Harness__factory.connect(_govDelegatorAddress, deployer);
 }
 
 let snapshotId: number;
@@ -62,7 +62,7 @@ let account1: SignerWithAddress;
 let account2: SignerWithAddress;
 let signers: TestSigners;
 
-let gov: NounsDaoLogicV1Harness;
+let gov: NounsDAOLogicV1Harness;
 let targets: string[];
 let values: string[];
 let signatures: string[];

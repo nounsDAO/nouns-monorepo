@@ -7,8 +7,8 @@ import {
   NounsToken__factory,
   NounsSeeder,
   NounsSeeder__factory,
-  Weth,
-  Weth__factory,
+  WETH,
+  WETH__factory,
 } from '../typechain';
 import { bgcolors, partcolors, parts } from '../files/encoded-layers.json';
 import { Block } from '@ethersproject/abstract-provider';
@@ -73,8 +73,8 @@ export const deployNounsToken = async (
   );
 };
 
-export const deployWeth = async (deployer?: SignerWithAddress): Promise<Weth> => {
-  const factory = new Weth__factory(deployer || (await await getSigners()).deployer);
+export const deployWETH = async (deployer?: SignerWithAddress): Promise<WETH> => {
+  const factory = new WETH__factory(deployer || (await getSigners()).deployer);
 
   return factory.deploy();
 };

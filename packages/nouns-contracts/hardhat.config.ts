@@ -2,10 +2,9 @@
 import { HardhatUserConfig } from 'hardhat/config';
 import dotenv from 'dotenv';
 import '@nomiclabs/hardhat-waffle';
-import '@nomiclabs/hardhat-waffle';
 import '@nomiclabs/hardhat-etherscan';
 import '@float-capital/solidity-coverage';
-import 'hardhat-typechain';
+import '@typechain/hardhat';
 import 'hardhat-abi-exporter';
 import '@openzeppelin/hardhat-upgrades';
 import 'hardhat-gas-reporter';
@@ -15,7 +14,7 @@ dotenv.config();
 
 const config: HardhatUserConfig = {
   solidity: {
-    version: '0.8.6',
+    version: '0.8.12',
     settings: {
       optimizer: {
         enabled: true,
@@ -41,6 +40,10 @@ const config: HardhatUserConfig = {
   abiExporter: {
     path: './abi',
     clear: true,
+  },
+  typechain: {
+    outDir: 'typechain',
+    target: 'ethers-v5',
   },
   gasReporter: {
     enabled: !process.env.CI,

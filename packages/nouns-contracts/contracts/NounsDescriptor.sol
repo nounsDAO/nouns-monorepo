@@ -15,14 +15,17 @@
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  *********************************/
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.12;
 
 import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
 import { Strings } from '@openzeppelin/contracts/utils/Strings.sol';
 import { INounsDescriptor } from './interfaces/INounsDescriptor.sol';
 import { INounsSeeder } from './interfaces/INounsSeeder.sol';
+import { ISVGRenderer } from './interfaces/ISVGRenderer.sol';
 import { NFTDescriptor } from './libs/NFTDescriptor.sol';
-import { MultiPartRLEToSVG } from './libs/MultiPartRLEToSVG.sol';
+import { SSTORE2 } from './libs/SSTORE2.sol';
+
+// TODO: Create `NounsArt` contract?
 
 contract NounsDescriptor is INounsDescriptor, Ownable {
     using Strings for uint256;
@@ -31,17 +34,14 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     // https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt
     bytes32 constant COPYRIGHT_CC0_1_0_UNIVERSAL_LICENSE = 0xa2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499;
 
+    // The contract responsible for constructing SVGs
+    ISVGRenderer public renderer;
+
     // Whether or not new Noun parts can be added
     bool public override arePartsLocked;
 
-    // Whether or not `tokenURI` should be returned as a data URI (Default: true)
-    bool public override isDataURIEnabled = true;
-
-    // Base URI
-    string public override baseURI;
-
-    // Noun Color Palettes (Index => Hex Colors)
-    mapping(uint8 => string[]) public override palettes;
+    // Noun Color Palette Pointers (Palette Index => Pointer)
+    mapping(uint8 => address) public override palettes;
 
     // Noun Backgrounds (Hex Colors)
     string[] public override backgrounds;
@@ -64,6 +64,20 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     modifier whenPartsNotLocked() {
         require(!arePartsLocked, 'Parts are locked');
         _;
+    }
+
+    constructor(ISVGRenderer _renderer) {
+        renderer = _renderer; // TODO: Allow renderer to be locked?
+    }
+
+    /**
+     * @notice Set the token seeder.
+     * @dev Only callable by the owner when not locked.
+     */
+    function setRenderer(ISVGRenderer _renderer) external onlyOwner {
+        renderer = _renderer;
+
+        emit RendererUpdated(_renderer);
     }
 
     /**
@@ -99,17 +113,6 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
      */
     function glassesCount() external view override returns (uint256) {
         return glasses.length;
-    }
-
-    /**
-     * @notice Add colors to a color palette.
-     * @dev This function can only be called by the owner.
-     */
-    function addManyColorsToPalette(uint8 paletteIndex, string[] calldata newColors) external override onlyOwner {
-        require(palettes[paletteIndex].length + newColors.length <= 256, 'Palettes can only hold 256 colors');
-        for (uint256 i = 0; i < newColors.length; i++) {
-            _addColorToPalette(paletteIndex, newColors[i]);
-        }
     }
 
     /**
@@ -163,12 +166,12 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     }
 
     /**
-     * @notice Add a single color to a color palette.
+     * @notice Update a single color palette. This function can be used to add a new
+     * color palette or update an existing palette.
      * @dev This function can only be called by the owner.
      */
-    function addColorToPalette(uint8 _paletteIndex, string calldata _color) external override onlyOwner {
-        require(palettes[_paletteIndex].length <= 255, 'Palettes can only hold 256 colors');
-        _addColorToPalette(_paletteIndex, _color);
+    function setPalette(uint8 paletteIndex, bytes calldata palette) external override onlyOwner {
+        _setPalette(paletteIndex, palette);
     }
 
     /**
@@ -222,43 +225,18 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     }
 
     /**
-     * @notice Toggle a boolean value which determines if `tokenURI` returns a data URI
-     * or an HTTP URL.
-     * @dev This can only be called by the owner.
-     */
-    function toggleDataURIEnabled() external override onlyOwner {
-        bool enabled = !isDataURIEnabled;
-
-        isDataURIEnabled = enabled;
-        emit DataURIToggled(enabled);
-    }
-
-    /**
-     * @notice Set the base URI for all token IDs. It is automatically
-     * added as a prefix to the value returned in {tokenURI}, or to the
-     * token ID if {tokenURI} is empty.
-     * @dev This can only be called by the owner.
-     */
-    function setBaseURI(string calldata _baseURI) external override onlyOwner {
-        baseURI = _baseURI;
-
-        emit BaseURIUpdated(_baseURI);
-    }
-
-    /**
      * @notice Given a token ID and seed, construct a token URI for an official Nouns DAO noun.
      * @dev The returned value may be a base64 encoded data URI or an API URL.
      */
     function tokenURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view override returns (string memory) {
-        if (isDataURIEnabled) {
-            return dataURI(tokenId, seed);
-        }
-        return string(abi.encodePacked(baseURI, tokenId.toString()));
+        return dataURI(tokenId, seed);
     }
 
     /**
      * @notice Given a token ID and seed, construct a base64 encoded data URI for an official Nouns DAO noun.
+     * @dev This function exists for backwards compatibility.
      */
+    // TODO: Remove?
     function dataURI(uint256 tokenId, INounsSeeder.Seed memory seed) public view override returns (string memory) {
         string memory nounId = tokenId.toString();
         string memory name = string(abi.encodePacked('Noun ', nounId));
@@ -281,25 +259,30 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
             parts: _getPartsForSeed(seed),
             background: backgrounds[seed.background]
         });
-        return NFTDescriptor.constructTokenURI(params, palettes);
+        return NFTDescriptor.constructTokenURI(renderer, params);
     }
 
     /**
      * @notice Given a seed, construct a base64 encoded SVG image.
      */
     function generateSVGImage(INounsSeeder.Seed memory seed) external view override returns (string memory) {
-        MultiPartRLEToSVG.SVGParams memory params = MultiPartRLEToSVG.SVGParams({
+        ISVGRenderer.SVGParams memory params = ISVGRenderer.SVGParams({
             parts: _getPartsForSeed(seed),
             background: backgrounds[seed.background]
         });
-        return NFTDescriptor.generateSVGImage(params, palettes);
+        return NFTDescriptor.generateSVGImage(renderer, params);
     }
 
     /**
-     * @notice Add a single color to a color palette.
+     * @notice Update a single color palette. This function can be used to add a new
+     * color palette or update an existing palette.
      */
-    function _addColorToPalette(uint8 _paletteIndex, string calldata _color) internal {
-        palettes[_paletteIndex].push(_color);
+    function _setPalette(uint8 paletteIndex, bytes calldata _palette) internal {
+        require(_palette.length != 0, 'Empty palette');
+        require(_palette.length % 3 == 0 && _palette.length <= 768, 'Bad palette length');
+
+        address pointer = SSTORE2.write(_palette);
+        palettes[paletteIndex] = pointer;
     }
 
     /**
@@ -340,12 +323,24 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     /**
      * @notice Get all Noun parts for the passed `seed`.
      */
-    function _getPartsForSeed(INounsSeeder.Seed memory seed) internal view returns (bytes[] memory) {
-        bytes[] memory _parts = new bytes[](4);
-        _parts[0] = bodies[seed.body];
-        _parts[1] = accessories[seed.accessory];
-        _parts[2] = heads[seed.head];
-        _parts[3] = glasses[seed.glasses];
+    function _getPartsForSeed(INounsSeeder.Seed memory seed) internal view returns (ISVGRenderer.Part[] memory) {
+        bytes memory _body = bodies[seed.body];
+        bytes memory _accessory = accessories[seed.accessory];
+        bytes memory _head = heads[seed.head];
+        bytes memory _glasses = glasses[seed.glasses];
+
+        ISVGRenderer.Part[] memory _parts = new ISVGRenderer.Part[](4);
+        _parts[0] = ISVGRenderer.Part({ image: _body, palette: _getPalette(_body) });
+        _parts[1] = ISVGRenderer.Part({ image: _accessory, palette: _getPalette(_accessory) });
+        _parts[2] = ISVGRenderer.Part({ image: _head, palette: _getPalette(_head) });
+        _parts[3] = ISVGRenderer.Part({ image: _glasses, palette: _getPalette(_glasses) });
         return _parts;
+    }
+
+    /**
+     * @notice Get the color palette pointer for the passed part.
+     */
+    function _getPalette(bytes memory part) private view returns (address) {
+        return palettes[uint8(part[0])];
     }
 }

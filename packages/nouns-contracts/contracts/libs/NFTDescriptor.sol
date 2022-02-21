@@ -15,30 +15,30 @@
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  *********************************/
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.12;
 
 import { Base64 } from 'base64-sol/base64.sol';
-import { MultiPartRLEToSVG } from './MultiPartRLEToSVG.sol';
+import { ISVGRenderer } from '../interfaces/ISVGRenderer.sol';
 
 library NFTDescriptor {
     struct TokenURIParams {
         string name;
         string description;
-        bytes[] parts;
         string background;
+        ISVGRenderer.Part[] parts;
     }
 
     /**
      * @notice Construct an ERC721 token URI.
      */
-    function constructTokenURI(TokenURIParams memory params, mapping(uint8 => string[]) storage palettes)
+    function constructTokenURI(ISVGRenderer renderer, TokenURIParams memory params)
         public
         view
         returns (string memory)
     {
         string memory image = generateSVGImage(
-            MultiPartRLEToSVG.SVGParams({ parts: params.parts, background: params.background }),
-            palettes
+            renderer,
+            ISVGRenderer.SVGParams({ parts: params.parts, background: params.background })
         );
 
         // prettier-ignore
@@ -57,11 +57,11 @@ library NFTDescriptor {
     /**
      * @notice Generate an SVG image for use in the ERC721 token URI.
      */
-    function generateSVGImage(MultiPartRLEToSVG.SVGParams memory params, mapping(uint8 => string[]) storage palettes)
+    function generateSVGImage(ISVGRenderer renderer, ISVGRenderer.SVGParams memory params)
         public
         view
         returns (string memory svg)
     {
-        return Base64.encode(bytes(MultiPartRLEToSVG.generateSVG(params, palettes)));
+        return Base64.encode(bytes(renderer.generateSVG(params)));
     }
 }

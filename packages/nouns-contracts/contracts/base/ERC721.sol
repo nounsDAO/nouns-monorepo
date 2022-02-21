@@ -30,7 +30,7 @@
 // transfer from the `creator` to the `to` address. This enables correct
 // attribution on various NFT marketplaces.
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.12;
 
 import '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import '@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol';

@@ -28,7 +28,7 @@
 // NounsDAOExecutor.sol modifies Timelock to use Solidity 0.8.x receive(), fallback(), and built-in over/underflow protection
 // This contract acts as executor of Nouns DAO governance and its treasury, so it has been modified to accept ETH.
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.12;
 
 contract NounsDAOExecutor {
     event NewAdmin(address indexed newAdmin);

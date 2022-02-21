@@ -33,7 +33,7 @@
 // MODIFICATIONS
 // The fallback() and receive() functions of Proxy.sol have been used to allow Solidity > 0.6.0 compatibility
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.12;
 
 import './NounsDAOInterfaces.sol';
 

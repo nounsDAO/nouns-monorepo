@@ -8,9 +8,9 @@ import {
   NounsAuctionHouse,
   NounsDescriptor__factory,
   NounsToken,
-  Weth,
+  WETH,
 } from '../typechain';
-import { deployNounsToken, deployWeth, populateDescriptor } from './utils';
+import { deployNounsToken, deployWETH, populateDescriptor } from './utils';
 
 chai.use(solidity);
 const { expect } = chai;
@@ -18,7 +18,7 @@ const { expect } = chai;
 describe('NounsAuctionHouse', () => {
   let nounsAuctionHouse: NounsAuctionHouse;
   let nounsToken: NounsToken;
-  let weth: Weth;
+  let weth: WETH;
   let deployer: SignerWithAddress;
   let noundersDAO: SignerWithAddress;
   let bidderA: SignerWithAddress;
@@ -46,7 +46,7 @@ describe('NounsAuctionHouse', () => {
     [deployer, noundersDAO, bidderA, bidderB] = await ethers.getSigners();
 
     nounsToken = await deployNounsToken(deployer, noundersDAO.address, deployer.address);
-    weth = await deployWeth(deployer);
+    weth = await deployWETH(deployer);
     nounsAuctionHouse = await deploy(deployer);
 
     const descriptor = await nounsToken.descriptor();

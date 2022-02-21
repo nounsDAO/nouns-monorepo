@@ -28,7 +28,7 @@
 // NounsDAOEvents, NounsDAOProxyStorage, NounsDAOStorageV1 adds support for changes made by Nouns DAO to GovernorBravo.sol
 // See NounsDAOLogicV1.sol for more details.
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.12;
 
 contract NounsDAOEvents {
     /// @notice An event emitted when a new proposal is created

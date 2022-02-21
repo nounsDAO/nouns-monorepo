@@ -15,22 +15,19 @@
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  *********************************/
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.12;
 
+import { ISVGRenderer } from './interfaces/ISVGRenderer.sol';
 import { SSTORE2 } from './libs/SSTORE2.sol';
 
-contract MultiPartRLEToSVG {
+// TODO: Most functions params can be updated to accept type `calldata`
+
+contract SVGRenderer is ISVGRenderer {
     bytes16 private constant _HEX_SYMBOLS = '0123456789abcdef';
 
-    struct Part {
-        bytes image;
-        address palette;
-    }
-
-    struct SVGParams {
-        Part[] parts;
-        string background; // TODO: Optionalize?
-    }
+    // prettier-ignore
+    string private constant _SVG_START_TAG = '<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">';
+    string private constant _SVG_END_TAG = '</svg>';
 
     struct ContentBounds {
         uint8 top;
@@ -51,25 +48,45 @@ contract MultiPartRLEToSVG {
     }
 
     /**
-     * @notice Given RLE image parts and color palette pointers, merge to generate a single SVG image.
+     * @notice Given RLE image data and color palette pointers, merge to generate a single SVG image.
      */
-    function generateSVG(SVGParams memory params, address[] memory palettes) internal view returns (string memory svg) {
-        // prettier-ignore
-        return string(
-            abi.encodePacked(
-                '<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">',
-                '<rect width="100%" height="100%" fill="#', params.background, '" />',
-                _generateSVGRects(params, palettes),
-                '</svg>'
-            )
-        );
+    function generateSVG(SVGParams memory params) external view returns (string memory svg) {
+        if (bytes(params.background).length != 0) {
+            // prettier-ignore
+            return string(
+                abi.encodePacked(
+                    _SVG_START_TAG,
+                    '<rect width="100%" height="100%" fill="#', params.background, '" />',
+                    _generateSVGRects(params),
+                    _SVG_END_TAG
+                )
+            );
+        }
+        return string(abi.encodePacked(_SVG_START_TAG, _generateSVGRects(params), _SVG_END_TAG));
+    }
+
+    /**
+     * @notice Given RLE image data and a color palette pointer, merge to generate a partial SVG image.
+     */
+    function generateSVGPart(Part memory part) external view returns (string memory partialSVG) {
+        Part[] memory parts = new Part[](1);
+        parts[0] = part;
+
+        return _generateSVGRects(SVGParams({ parts: parts, background: '' }));
+    }
+
+    /**
+     * @notice Given RLE image data and color palette pointers, merge to generate a partial SVG image.
+     */
+    function generateSVGParts(Part[] memory parts) external view returns (string memory partialSVG) {
+        return _generateSVGRects(SVGParams({ parts: parts, background: '' }));
     }
 
     /**
      * @notice Given RLE image parts and color palettes, generate SVG rects.
      */
     // prettier-ignore
-    function _generateSVGRects(SVGParams memory params, address[] memory palettes)
+    function _generateSVGRects(SVGParams memory params)
         private
         view
         returns (string memory svg)
@@ -82,7 +99,7 @@ contract MultiPartRLEToSVG {
             '320'
         ];
         string memory rects;
-        string[][] memory cache = new string[][](palettes.length);
+        string[][] memory cache = new string[][](params.parts.length);
         for (uint8 p = 0; p < params.parts.length; p++) {
             DecodedImage memory image = _decodeRLEImage(params.parts[p].image);
             bytes memory palette = _getPalette(params.parts[p].palette); // TODO: Cache?
@@ -138,7 +155,7 @@ contract MultiPartRLEToSVG {
         uint256 currentX,
         uint8 drawLength,
         uint8 rightBound
-    ) internal pure returns (uint8) {
+    ) private pure returns (uint8) {
         uint8 remainingPixelsInLine = rightBound - uint8(currentX);
         return drawLength <= remainingPixelsInLine ? drawLength : remainingPixelsInLine;
     }
@@ -206,7 +223,7 @@ contract MultiPartRLEToSVG {
     /**
      * @dev Convert a `bytes3` to its 6 character ASCII `string` hexadecimal representation.
      */
-    function _toHexString(bytes3 b) internal pure returns (string memory) {
+    function _toHexString(bytes3 b) private pure returns (string memory) {
         uint24 value = uint24(b);
 
         bytes memory buffer = new bytes(6);

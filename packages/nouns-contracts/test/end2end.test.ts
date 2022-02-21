@@ -4,22 +4,22 @@ import { BigNumber as EthersBN } from 'ethers';
 import { solidity } from 'ethereum-waffle';
 
 import {
-  Weth,
+  WETH,
   NounsToken,
   NounsAuctionHouse,
   NounsAuctionHouse__factory,
   NounsDescriptor,
   NounsDescriptor__factory,
-  NounsDaoProxy__factory,
-  NounsDaoLogicV1,
-  NounsDaoLogicV1__factory,
-  NounsDaoExecutor,
-  NounsDaoExecutor__factory,
+  NounsDAOProxy__factory,
+  NounsDAOLogicV1,
+  NounsDAOLogicV1__factory,
+  NounsDAOExecutor,
+  NounsDAOExecutor__factory,
 } from '../typechain';
 
 import {
   deployNounsToken,
-  deployWeth,
+  deployWETH,
   populateDescriptor,
   address,
   encodeParameters,
@@ -36,9 +36,9 @@ const { expect } = chai;
 let nounsToken: NounsToken;
 let nounsAuctionHouse: NounsAuctionHouse;
 let descriptor: NounsDescriptor;
-let weth: Weth;
-let gov: NounsDaoLogicV1;
-let timelock: NounsDaoExecutor;
+let weth: WETH;
+let gov: NounsDAOLogicV1;
+let timelock: NounsDAOExecutor;
 
 let deployer: SignerWithAddress;
 let wethDeployer: SignerWithAddress;
@@ -71,7 +71,7 @@ async function deploy() {
 
   // Deployed by another account to simulate real network
 
-  weth = await deployWeth(wethDeployer);
+  weth = await deployWETH(wethDeployer);
 
   // nonce 2: Deploy AuctionHouse
   // nonce 3: Deploy nftDescriptorLibraryFactory
@@ -120,16 +120,16 @@ async function deploy() {
   });
 
   // 5b. DEPLOY NounsDAOExecutor with pre-computed Delegator address
-  timelock = await new NounsDaoExecutor__factory(deployer).deploy(
+  timelock = await new NounsDAOExecutor__factory(deployer).deploy(
     calculatedGovDelegatorAddress,
     TIME_LOCK_DELAY,
   );
 
   // 6. DEPLOY Delegate
-  const govDelegate = await new NounsDaoLogicV1__factory(deployer).deploy();
+  const govDelegate = await new NounsDAOLogicV1__factory(deployer).deploy();
 
   // 7a. DEPLOY Delegator
-  const nounsDAOProxy = await new NounsDaoProxy__factory(deployer).deploy(
+  const nounsDAOProxy = await new NounsDAOProxy__factory(deployer).deploy(
     timelock.address,
     nounsToken.address,
     noundersDAO.address, // NoundersDAO is vetoer
@@ -144,7 +144,7 @@ async function deploy() {
   expect(calculatedGovDelegatorAddress).to.equal(nounsDAOProxy.address);
 
   // 7b. CAST Delegator as Delegate
-  gov = NounsDaoLogicV1__factory.connect(nounsDAOProxy.address, deployer);
+  gov = NounsDAOLogicV1__factory.connect(nounsDAOProxy.address, deployer);
 
   // 8. SET Nouns owner to NounsDAOExecutor
   await nounsToken.transferOwnership(timelock.address);

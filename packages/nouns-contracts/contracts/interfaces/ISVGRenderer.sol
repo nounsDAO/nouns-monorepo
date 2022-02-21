@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title The Nouns DAO auction house proxy
+/// @title Interface for SVGRenderer
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -17,12 +17,23 @@
 
 pragma solidity ^0.8.12;
 
-import { TransparentUpgradeableProxy } from '@openzeppelin/contracts/proxy/transparent/TransparentUpgradeableProxy.sol';
+// TODO: Generalize to `IRenderer`?
+// May be a day when we drop SVG support.
 
-contract NounsAuctionHouseProxy is TransparentUpgradeableProxy {
-    constructor(
-        address logic,
-        address admin,
-        bytes memory data
-    ) TransparentUpgradeableProxy(logic, admin, data) {}
+interface ISVGRenderer {
+    struct Part {
+        bytes image;
+        address palette;
+    }
+
+    struct SVGParams {
+        Part[] parts;
+        string background;
+    }
+
+    function generateSVG(SVGParams memory params) external view returns (string memory svg);
+
+    function generateSVGPart(Part memory part) external view returns (string memory partialSVG);
+
+    function generateSVGParts(Part[] memory parts) external view returns (string memory partialSVG);
 }

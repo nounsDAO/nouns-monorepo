@@ -50,23 +50,7 @@ describe('NounsDescriptor', () => {
     await ethers.provider.send('evm_revert', [snapshotId]);
   });
 
-  it('should generate valid token uri metadata when data uris are disabled', async () => {
-    const BASE_URI = 'https://api.nouns.wtf/metadata/';
-
-    await nounsDescriptor.setBaseURI(BASE_URI);
-    await nounsDescriptor.toggleDataURIEnabled();
-
-    const tokenUri = await nounsDescriptor.tokenURI(0, {
-      background: 0,
-      body: longestBody.index,
-      accessory: longestAccessory.index,
-      head: longestHead.index,
-      glasses: longestGlasses.index,
-    });
-    expect(tokenUri).to.equal(`${BASE_URI}0`);
-  });
-
-  it('should generate valid token uri metadata when data uris are enabled', async () => {
+  it('should generate valid token uri metadata', async () => {
     const tokenUri = await nounsDescriptor.tokenURI(0, {
       background: 0,
       body: longestBody.index,
@@ -87,7 +71,7 @@ describe('NounsDescriptor', () => {
   // Unskip this test to validate the encoding of all parts. It ensures that no parts revert when building the token URI.
   // This test also outputs a parts.html file, which can be visually inspected.
   // Note that this test takes a long time to run. You must increase the mocha timeout to a large number.
-  it.skip('should generate valid token uri metadata for all supported parts when data uris are enabled', async () => {
+  it.skip('should generate valid token uri metadata for all supported parts', async () => {
     console.log('Running... this may take a little while...');
 
     const [bodies, accessories, heads, glasses] = parts;

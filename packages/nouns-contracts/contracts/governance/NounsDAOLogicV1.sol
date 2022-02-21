@@ -58,7 +58,7 @@
 //   implement `receive()` or `fallback()` functions.
 //
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.12;
 
 import './NounsDAOInterfaces.sol';
 
