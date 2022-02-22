@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title A library used to convert multi-part RLE compressed images to SVG
+/// @title A contract used to convert multi-part RLE compressed images to SVG
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -22,6 +22,7 @@ import { SSTORE2 } from './libs/SSTORE2.sol';
 
 contract SVGRenderer is ISVGRenderer {
     bytes16 private constant _HEX_SYMBOLS = '0123456789abcdef';
+    uint256 private constant _INDEX_TO_BYTES3_FACTOR = 3;
 
     // prettier-ignore
     string private constant _SVG_START_TAG = '<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">';
@@ -215,7 +216,7 @@ contract SVGRenderer is ISVGRenderer {
         string[] memory cache
     ) private pure returns (string memory) {
         if (bytes(cache[index]).length == 0) {
-            uint256 i = index * 3; // Array index x 3 byte hex color code
+            uint256 i = index * _INDEX_TO_BYTES3_FACTOR;
             cache[index] = _toHexString(abi.encodePacked(palette[i], palette[i + 1], palette[i + 2]));
         }
         return cache[index];
