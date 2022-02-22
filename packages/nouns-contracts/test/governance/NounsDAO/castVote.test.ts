@@ -19,9 +19,9 @@ import { mineBlock, address, encodeParameters } from '../../utils';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
-  NounsDescriptor__factory,
+  NounsDescriptor__factory as NounsDescriptorFactory,
   NounsDAOLogicV1Harness,
-  NounsDAOLogicV1Harness__factory,
+  NounsDAOLogicV1Harness__factory as NounsDAOLogicV1HarnessFactory,
 } from '../../../typechain';
 
 chai.use(solidity);
@@ -31,7 +31,7 @@ async function deployGovernor(
   deployer: SignerWithAddress,
   tokenAddress: string,
 ): Promise<NounsDAOLogicV1Harness> {
-  const { address: govDelegateAddress } = await new NounsDAOLogicV1Harness__factory(
+  const { address: govDelegateAddress } = await new NounsDAOLogicV1HarnessFactory(
     deployer,
   ).deploy();
   const params = [
@@ -50,7 +50,7 @@ async function deployGovernor(
     await ethers.getContractFactory('NounsDAOProxy', deployer)
   ).deploy(...params);
 
-  return NounsDAOLogicV1Harness__factory.connect(_govDelegatorAddress, deployer);
+  return NounsDAOLogicV1HarnessFactory.connect(_govDelegatorAddress, deployer);
 }
 
 let snapshotId: number;
@@ -78,7 +78,7 @@ async function reset() {
   token = await deployNounsToken(signers.deployer);
 
   await populateDescriptor(
-    NounsDescriptor__factory.connect(await token.descriptor(), signers.deployer),
+    NounsDescriptorFactory.connect(await token.descriptor(), signers.deployer),
   );
 
   await setTotalSupply(token, 10);

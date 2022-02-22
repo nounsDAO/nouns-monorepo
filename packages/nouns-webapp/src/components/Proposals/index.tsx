@@ -1,36 +1,66 @@
 import { Proposal } from '../../wrappers/nounsDao';
 import { Alert, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
+import { useHistory } from 'react-router-dom';
+import { useEthers } from '@usedapp/core';
+import { isMobileScreen } from '../../utils/isMobile';
+import clsx from 'clsx';
+import { useUserVotes } from '../../wrappers/nounToken';
 
 const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
+  const history = useHistory();
+
+  const { account } = useEthers();
+  const connectedAccountNounVotes = useUserVotes() || 0;
+
+  const isMobile = isMobileScreen();
+
+  const nullStateCopy = () => {
+    if (account !== null) {
+      return 'You have no Votes.';
+    }
+    return 'Connect wallet to make a proposal.';
+  };
+
   return (
     <div className={classes.proposals}>
       <div>
         <h3 className={classes.heading}>Proposals</h3>
-        <Button className={classes.createProposalLink} as={Link} to="/create-proposal">
-          Create Proposal
-        </Button>
+        {account !== undefined && connectedAccountNounVotes > 0 ? (
+          <div className={classes.submitProposalButtonWrapper}>
+            <Button className={classes.generateBtn} onClick={() => history.push('create-proposal')}>
+              Submit Proposal
+            </Button>
+          </div>
+        ) : (
+          <div className={clsx('d-flex', classes.submitProposalButtonWrapper)}>
+            {!isMobile && <div className={classes.nullStateCopy}>{nullStateCopy()}</div>}
+            <div className={classes.nullBtnWrapper}>
+              <Button className={classes.generateBtnDisabled}>Submit Proposal</Button>
+            </div>
+          </div>
+        )}
       </div>
+      {isMobile && <div className={classes.nullStateCopy}>{nullStateCopy()}</div>}
       {proposals?.length ? (
         proposals
           .slice(0)
           .reverse()
           .map((p, i) => {
             return (
-              <Button
+              <div
                 className={classes.proposalLink}
-                variant="dark"
-                as={Link}
-                to={`/vote/${p.id}`}
+                onClick={() => history.push(`/vote/${p.id}`)}
                 key={i}
               >
-                <span>
-                  <span>{p.id}.</span> <span>{p.title}</span>
+                <span className={classes.proposalTitle}>
+                  <span className={classes.proposalId}>{p.id}</span> <span>{p.title}</span>
                 </span>
-                <ProposalStatus status={p.status}></ProposalStatus>
-              </Button>
+                <div className={classes.proposalStatusWrapper}>
+                  <ProposalStatus status={p.status}></ProposalStatus>
+                </div>
+              </div>
             );
           })
       ) : (

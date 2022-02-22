@@ -33,6 +33,9 @@ const config: HardhatUserConfig = {
         ? { mnemonic: process.env.MNEMONIC }
         : [process.env.WALLET_PRIVATE_KEY!].filter(Boolean),
     },
+    hardhat: {
+      initialBaseFeePerGas: 0,
+    },
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,

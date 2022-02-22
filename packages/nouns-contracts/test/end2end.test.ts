@@ -7,14 +7,14 @@ import {
   WETH,
   NounsToken,
   NounsAuctionHouse,
-  NounsAuctionHouse__factory,
+  NounsAuctionHouse__factory as NounsAuctionHouseFactory,
   NounsDescriptor,
-  NounsDescriptor__factory,
-  NounsDAOProxy__factory,
+  NounsDescriptor__factory as NounsDescriptorFactory,
+  NounsDAOProxy__factory as NounsDAOProxyFactory,
   NounsDAOLogicV1,
-  NounsDAOLogicV1__factory,
+  NounsDAOLogicV1__factory as NounsDAOLogicV1Factory,
   NounsDAOExecutor,
-  NounsDAOExecutor__factory,
+  NounsDAOExecutor__factory as NounsDAOExecutorFactory,
 } from '../typechain';
 
 import {
@@ -103,13 +103,13 @@ async function deploy() {
   ]);
 
   // 2b. CAST proxy as AuctionHouse
-  nounsAuctionHouse = NounsAuctionHouse__factory.connect(nounsAuctionHouseProxy.address, deployer);
+  nounsAuctionHouse = NounsAuctionHouseFactory.connect(nounsAuctionHouseProxy.address, deployer);
 
   // 3. SET MINTER
   await nounsToken.setMinter(nounsAuctionHouse.address);
 
   // 4. POPULATE body parts
-  descriptor = NounsDescriptor__factory.connect(await nounsToken.descriptor(), deployer);
+  descriptor = NounsDescriptorFactory.connect(await nounsToken.descriptor(), deployer);
 
   await populateDescriptor(descriptor);
 
@@ -120,16 +120,16 @@ async function deploy() {
   });
 
   // 5b. DEPLOY NounsDAOExecutor with pre-computed Delegator address
-  timelock = await new NounsDAOExecutor__factory(deployer).deploy(
+  timelock = await new NounsDAOExecutorFactory(deployer).deploy(
     calculatedGovDelegatorAddress,
     TIME_LOCK_DELAY,
   );
 
   // 6. DEPLOY Delegate
-  const govDelegate = await new NounsDAOLogicV1__factory(deployer).deploy();
+  const govDelegate = await new NounsDAOLogicV1Factory(deployer).deploy();
 
   // 7a. DEPLOY Delegator
-  const nounsDAOProxy = await new NounsDAOProxy__factory(deployer).deploy(
+  const nounsDAOProxy = await new NounsDAOProxyFactory(deployer).deploy(
     timelock.address,
     nounsToken.address,
     noundersDAO.address, // NoundersDAO is vetoer
@@ -144,7 +144,7 @@ async function deploy() {
   expect(calculatedGovDelegatorAddress).to.equal(nounsDAOProxy.address);
 
   // 7b. CAST Delegator as Delegate
-  gov = NounsDAOLogicV1__factory.connect(nounsDAOProxy.address, deployer);
+  gov = NounsDAOLogicV1Factory.connect(nounsDAOProxy.address, deployer);
 
   // 8. SET Nouns owner to NounsDAOExecutor
   await nounsToken.transferOwnership(timelock.address);

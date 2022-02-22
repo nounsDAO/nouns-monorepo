@@ -1,9 +1,15 @@
 import { BigNumber } from 'ethers';
 import classes from './AuctionActivityNounTitle.module.css';
 
-const AuctionActivityNounTitle: React.FC<{ nounId: BigNumber }> = props => {
-  const { nounId } = props;
+const AuctionActivityNounTitle: React.FC<{ nounId: BigNumber; isCool?: boolean }> = props => {
+  const { nounId, isCool } = props;
   const nounIdContent = `Noun ${nounId.toString()}`;
-  return <h1 className={classes.nounTitle}>{nounIdContent}</h1>;
+  return (
+    <div className={classes.wrapper}>
+      <h1 style={{ color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)' }}>
+        {nounIdContent}
+      </h1>
+    </div>
+  );
 };
 export default AuctionActivityNounTitle;

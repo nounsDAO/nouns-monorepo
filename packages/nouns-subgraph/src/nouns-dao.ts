@@ -46,6 +46,7 @@ export function handleProposalCreatedWithRequirements(
   proposal.values = event.params.values;
   proposal.signatures = event.params.signatures;
   proposal.calldatas = event.params.calldatas;
+  proposal.createdTimestamp = event.block.timestamp;
   proposal.startBlock = event.params.startBlock;
   proposal.endBlock = event.params.endBlock;
   proposal.proposalThreshold = event.params.proposalThreshold;
@@ -120,6 +121,8 @@ export function handleVoteCast(event: VoteCast): void {
   vote.votesRaw = event.params.votes;
   vote.votes = event.params.votes;
   vote.support = event.params.support == 1;
+  vote.supportDetailed = event.params.support;
+  vote.nouns = voter.nounsRepresented;
 
   vote.save();
 

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import xIcon from '../../assets/x-icon.png';
 import React from 'react';
 
-const Backdrop: React.FC<{ onDismiss: () => void }> = props => {
+export const Backdrop: React.FC<{ onDismiss: () => void }> = props => {
   return <div className={classes.backdrop} onClick={props.onDismiss} />;
 };
 

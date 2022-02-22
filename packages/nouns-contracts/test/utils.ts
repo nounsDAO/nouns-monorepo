@@ -2,17 +2,17 @@ import { ethers, network } from 'hardhat';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsDescriptor,
-  NounsDescriptor__factory,
+  NounsDescriptor__factory as NounsDescriptorFactory,
   NounsToken,
-  NounsToken__factory,
+  NounsToken__factory as NounsTokenFactory,
   NounsSeeder,
-  NounsSeeder__factory,
+  NounsSeeder__factory as NounsSeederFactory,
   WETH,
-  WETH__factory,
-  SVGRenderer__factory,
-  NFTDescriptor__factory,
+  WETH__factory as WETHFactory,
+  NFTDescriptor__factory as NFTDescriptorFactory,
+  SVGRenderer__factory as SVGRendererFactory,
 } from '../typechain';
-import { bgcolors, partcolors, parts } from '../files/encoded-layers.json';
+import ImageData from '../files/image-data.json';
 import { Block } from '@ethersproject/abstract-provider';
 import { chunkArray } from '../utils';
 
@@ -37,11 +37,11 @@ export const deployNounsDescriptor = async (
   deployer?: SignerWithAddress,
 ): Promise<NounsDescriptor> => {
   const signer = deployer || (await getSigners()).deployer;
-  const nftDescriptorFactory = new NFTDescriptor__factory(signer);
-  const svgRendererFactory = new SVGRenderer__factory(signer);
+  const nftDescriptorFactory = new NFTDescriptorFactory(signer);
+  const svgRendererFactory = new SVGRendererFactory(signer);
 
   const nftDescriptorLibrary = await nftDescriptorFactory.deploy();
-  const nounsDescriptorFactory = new NounsDescriptor__factory(
+  const nounsDescriptorFactory = new NounsDescriptorFactory(
     {
       'contracts/libs/NFTDescriptor.sol:NFTDescriptor': nftDescriptorLibrary.address,
     },
@@ -53,7 +53,7 @@ export const deployNounsDescriptor = async (
 };
 
 export const deployNounsSeeder = async (deployer?: SignerWithAddress): Promise<NounsSeeder> => {
-  const factory = new NounsSeeder__factory(deployer || (await getSigners()).deployer);
+  const factory = new NounsSeederFactory(deployer || (await getSigners()).deployer);
 
   return factory.deploy();
 };
@@ -67,7 +67,7 @@ export const deployNounsToken = async (
   proxyRegistryAddress?: string,
 ): Promise<NounsToken> => {
   const signer = deployer || (await getSigners()).deployer;
-  const factory = new NounsToken__factory(signer);
+  const factory = new NounsTokenFactory(signer);
 
   return factory.deploy(
     noundersDAO || signer.address,
@@ -79,18 +79,19 @@ export const deployNounsToken = async (
 };
 
 export const deployWETH = async (deployer?: SignerWithAddress): Promise<WETH> => {
-  const factory = new WETH__factory(deployer || (await getSigners()).deployer);
+  const factory = new WETHFactory(deployer || (await getSigners()).deployer);
 
   return factory.deploy();
 };
 
 export const populateDescriptor = async (nounsDescriptor: NounsDescriptor): Promise<void> => {
-  const [bodies, accessories, heads, glasses] = parts;
+  const { bgcolors, palette, images } = ImageData;
+  const { bodies, accessories, heads, glasses } = images;
 
   // Split up head and accessory population due to high gas usage
   await Promise.all([
     nounsDescriptor.addManyBackgrounds(bgcolors),
-    nounsDescriptor.setPalette(0, `0x000000${partcolors.join('')}`),
+    nounsDescriptor.setPalette(0, `0x000000${palette.join('')}`),
     nounsDescriptor.addManyBodies(bodies.map(({ data }) => data)),
     chunkArray(accessories, 10).map(chunk =>
       nounsDescriptor.addManyAccessories(chunk.map(({ data }) => data)),

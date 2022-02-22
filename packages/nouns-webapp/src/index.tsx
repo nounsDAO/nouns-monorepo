@@ -27,17 +27,16 @@ import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
 import { useEffect } from 'react';
 import pastAuctions, { addPastAuctions } from './state/slices/pastAuctions';
 import LogsUpdater from './state/updaters/logs';
-import config, { CHAIN_ID, LOCAL_CHAIN_ID } from './config';
+import config, { CHAIN_ID, createNetworkHttpUrl } from './config';
 import { WebSocketProvider } from '@ethersproject/providers';
-import { BigNumber, BigNumberish, Contract } from 'ethers';
-import { NounsAuctionHouseABI } from '@nouns/contracts';
+import { BigNumber, BigNumberish } from 'ethers';
+import { NounsAuctionHouseFactory } from '@nouns/sdk';
 import dotenv from 'dotenv';
 import { useAppDispatch, useAppSelector } from './hooks';
 import { appendBid } from './state/slices/auction';
-import { Auction as IAuction } from './wrappers/nounsAuction';
 import { ConnectedRouter, connectRouter } from 'connected-react-router';
 import { createBrowserHistory, History } from 'history';
-import { applyMiddleware, createStore, combineReducers } from 'redux';
+import { applyMiddleware, createStore, combineReducers, PreloadedState } from 'redux';
 import { routerMiddleware } from 'connected-react-router';
 import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
@@ -59,7 +58,7 @@ const createRootReducer = (history: History) =>
     onDisplayAuction,
   });
 
-export default function configureStore(preloadedState: any) {
+export default function configureStore(preloadedState: PreloadedState<any>) {
   const store = createStore(
     createRootReducer(history), // root reducer with router state
     preloadedState,
@@ -83,13 +82,13 @@ export type AppDispatch = typeof store.dispatch;
 const useDappConfig = {
   readOnlyChainId: CHAIN_ID,
   readOnlyUrls: {
-    [ChainId.Rinkeby]: process.env.REACT_APP_RINKEBY_JSONRPC || `https://rinkeby.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
-    [ChainId.Mainnet]: process.env.REACT_APP_MAINNET_JSONRPC || `https://mainnet.infura.io/v3/${process.env.REACT_APP_INFURA_PROJECT_ID}`,
-    [LOCAL_CHAIN_ID]: "http://localhost:8545"
+    [ChainId.Rinkeby]: createNetworkHttpUrl('rinkeby'),
+    [ChainId.Mainnet]: createNetworkHttpUrl('mainnet'),
+    [ChainId.Hardhat]: 'http://localhost:8545',
   },
 };
 
-const client = clientFactory(config.subgraphApiUri);
+const client = clientFactory(config.app.subgraphApiUri);
 
 const Updaters = () => {
   return (
@@ -105,17 +104,16 @@ const ChainSubscriber: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const loadState = async () => {
-    const wsProvider = new WebSocketProvider(config.wsRpcUri);
-    const auctionContract = new Contract(
-      config.auctionProxyAddress,
-      NounsAuctionHouseABI,
+    const wsProvider = new WebSocketProvider(config.app.wsRpcUri);
+    const nounsAuctionHouseContract = NounsAuctionHouseFactory.connect(
+      config.addresses.nounsAuctionHouseProxy,
       wsProvider,
     );
 
-    const bidFilter = auctionContract.filters.AuctionBid();
-    const extendedFilter = auctionContract.filters.AuctionExtended();
-    const createdFilter = auctionContract.filters.AuctionCreated();
-    const settledFilter = auctionContract.filters.AuctionSettled();
+    const bidFilter = nounsAuctionHouseContract.filters.AuctionBid(null, null, null, null);
+    const extendedFilter = nounsAuctionHouseContract.filters.AuctionExtended(null, null);
+    const createdFilter = nounsAuctionHouseContract.filters.AuctionCreated(null, null, null);
+    const settledFilter = nounsAuctionHouseContract.filters.AuctionSettled(null, null, null);
     const processBidFilter = async (
       nounId: BigNumberish,
       sender: string,
@@ -150,22 +148,29 @@ const ChainSubscriber: React.FC = () => {
     };
 
     // Fetch the current auction
-    const currentAuction: IAuction = await auctionContract.auction();
+    const currentAuction = await nounsAuctionHouseContract.auction();
     dispatch(setFullAuction(reduxSafeAuction(currentAuction)));
     dispatch(setLastAuctionNounId(currentAuction.nounId.toNumber()));
 
     // Fetch the previous 24hours of  bids
-    const previousBids = await auctionContract.queryFilter(bidFilter, 0 - BLOCKS_PER_DAY);
+    const previousBids = await nounsAuctionHouseContract.queryFilter(bidFilter, 0 - BLOCKS_PER_DAY);
     for (let event of previousBids) {
       if (event.args === undefined) return;
-      //@ts-ignore
-      processBidFilter(...event.args, event);
+      processBidFilter(...(event.args as [BigNumber, string, BigNumber, boolean]), event);
     }
 
-    auctionContract.on(bidFilter, processBidFilter);
-    auctionContract.on(createdFilter, processAuctionCreated);
-    auctionContract.on(extendedFilter, processAuctionExtended);
-    auctionContract.on(settledFilter, processAuctionSettled);
+    nounsAuctionHouseContract.on(bidFilter, (nounId, sender, value, extended, event) =>
+      processBidFilter(nounId, sender, value, extended, event),
+    );
+    nounsAuctionHouseContract.on(createdFilter, (nounId, startTime, endTime) =>
+      processAuctionCreated(nounId, startTime, endTime),
+    );
+    nounsAuctionHouseContract.on(extendedFilter, (nounId, endTime) =>
+      processAuctionExtended(nounId, endTime),
+    );
+    nounsAuctionHouseContract.on(settledFilter, (nounId, winner, amount) =>
+      processAuctionSettled(nounId, winner, amount),
+    );
   };
   loadState();
 
@@ -174,7 +179,7 @@ const ChainSubscriber: React.FC = () => {
 
 const PastAuctions: React.FC = () => {
   const latestAuctionId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
-  const { data } = useQuery(latestAuctionsQuery(latestAuctionId));
+  const { data } = useQuery(latestAuctionsQuery());
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -191,7 +196,7 @@ ReactDOM.render(
       <React.StrictMode>
         <Web3ReactProvider
           getLibrary={
-            (provider, connector) => new Web3Provider(provider) // this will vary according to whether you use e.g. ethers or web3.js
+            provider => new Web3Provider(provider) // this will vary according to whether you use e.g. ethers or web3.js
           }
         >
           <ApolloProvider client={client}>

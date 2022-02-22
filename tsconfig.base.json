@@ -12,6 +12,7 @@
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
+    "composite": true,
     "lib": ["esnext"],
     "module": "CommonJS",
     "moduleResolution": "node",

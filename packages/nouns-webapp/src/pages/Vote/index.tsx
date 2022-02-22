@@ -4,6 +4,7 @@ import {
   ProposalState,
   useCastVote,
   useExecuteProposal,
+  useHasVotedOnProposal,
   useProposal,
   useQueueProposal,
   Vote,
@@ -15,13 +16,20 @@ import { TransactionStatus, useBlockNumber } from '@usedapp/core';
 import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../utils/etherscan';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import ProposalStatus from '../../components/ProposalStatus';
-import moment from 'moment-timezone';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import advanced from 'dayjs/plugin/advancedFormat';
 import VoteModal from '../../components/VoteModal';
-import { useCallback, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 import { utils } from 'ethers';
 import { useAppDispatch } from '../../hooks';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.extend(advanced);
 
 const AVERAGE_BLOCK_TIME_IN_SECS = 13;
 
@@ -52,7 +60,7 @@ const VotePage = ({
   const currentBlock = useBlockNumber();
   const startDate =
     proposal && timestamp && currentBlock
-      ? moment(timestamp).add(
+      ? dayjs(timestamp).add(
           AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
           'seconds',
         )
@@ -60,13 +68,12 @@ const VotePage = ({
 
   const endDate =
     proposal && timestamp && currentBlock
-      ? moment(timestamp).add(
+      ? dayjs(timestamp).add(
           AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
           'seconds',
         )
       : undefined;
-  const timezone = moment.tz(moment.tz.guess()).zoneAbbr();
-  const now = moment();
+  const now = dayjs();
 
   // Get total votes and format percentages for UI
   const totalVotes = proposal
@@ -76,11 +83,17 @@ const VotePage = ({
   const againstPercentage = proposal && totalVotes ? (proposal.againstCount * 100) / totalVotes : 0;
   const abstainPercentage = proposal && totalVotes ? (proposal.abstainCount * 100) / totalVotes : 0;
 
+  const proposalActive = proposal?.status === ProposalState.ACTIVE;
+
   // Only count available votes as of the proposal created block
   const availableVotes = useUserVotesAsOfBlock(proposal?.createdBlock ?? undefined);
 
+  const hasVoted = useHasVotedOnProposal(proposal?.id);
+
+  const showBlockRestriction = proposalActive;
+
   // Only show voting if user has > 0 votes at proposal created block and proposal is active
-  const showVotingButtons = availableVotes && proposal?.status === ProposalState.ACTIVE;
+  const showVotingButtons = availableVotes && !hasVoted && proposalActive;
 
   const linkIfAddress = (content: string) => {
     if (utils.isAddress(content)) {
@@ -200,7 +213,7 @@ const VotePage = ({
   );
 
   return (
-    <Section bgColor="transparent" fullWidth={false} className={classes.votePage}>
+    <Section fullWidth={false} className={classes.votePage}>
       <VoteModal
         show={showVoteModal}
         onHide={() => setShowVoteModal(false)}
@@ -221,7 +234,8 @@ const VotePage = ({
         <div>
           {startDate && startDate.isBefore(now) ? null : proposal ? (
             <span>
-              Voting starts approximately {startDate?.format('LLL')} {timezone}
+              Voting starts approximately {startDate?.format('MMMM D, YYYY h:mm A z')}{' '}
+              {startDate && `(${(startDate as any).fromNow()})`}{' '}
             </span>
           ) : (
             ''
@@ -230,9 +244,7 @@ const VotePage = ({
         <div>
           {endDate && endDate.isBefore(now) ? (
             <>
-              <div>
-                Voting ended {endDate.format('LLL')} {timezone}
-              </div>
+              <div>Voting ended {endDate.format('MMMM D, YYYY h:mm A z')}</div>
               <div>
                 This proposal has {quorumReached ? 'reached' : 'failed to reach'} quorum{' '}
                 {proposal?.quorumVotes !== undefined && `(${proposal.quorumVotes} votes)`}
@@ -241,7 +253,8 @@ const VotePage = ({
           ) : proposal ? (
             <>
               <div>
-                Voting ends approximately {endDate?.format('LLL')} {timezone}
+                Voting ends approximately {endDate?.format('MMMM D, YYYY h:mm A z')}{' '}
+                {endDate && `(${(endDate as any).fromNow()})`}{' '}
               </div>
               {proposal?.quorumVotes !== undefined && (
                 <div>A total of {proposal.quorumVotes} votes are required to reach quorum</div>
@@ -251,46 +264,52 @@ const VotePage = ({
             ''
           )}
         </div>
-        {proposal && proposal.status === ProposalState.ACTIVE && !showVotingButtons && (
-          <Alert variant="secondary" className={classes.voterIneligibleAlert}>
-            Only NOUN votes that were self delegated or delegated to another address before block{' '}
-            {proposal.createdBlock} are eligible for voting.
-          </Alert>
+        {proposal && proposalActive && (
+          <>
+            {showBlockRestriction && !hasVoted && (
+              <Alert variant="secondary" className={classes.blockRestrictionAlert}>
+                Only NOUN votes that were self delegated or delegated to another address before
+                block {proposal.createdBlock} are eligible for voting.
+              </Alert>
+            )}
+            {hasVoted && (
+              <Alert variant="success" className={classes.voterIneligibleAlert}>
+                Thank you for your vote!
+              </Alert>
+            )}
+          </>
         )}
         {showVotingButtons ? (
           <Row>
-            <Col lg={4}>
+            <Col lg={4} className="d-grid gap-2">
               <Button
                 className={classes.votingButton}
                 onClick={() => {
                   setVote(Vote.FOR);
                   setShowVoteModal(true);
                 }}
-                block
               >
                 Vote For
               </Button>
             </Col>
-            <Col lg={4}>
+            <Col lg={4} className="d-grid gap-2">
               <Button
                 className={classes.votingButton}
                 onClick={() => {
                   setVote(Vote.AGAINST);
                   setShowVoteModal(true);
                 }}
-                block
               >
                 Vote Against
               </Button>
             </Col>
-            <Col lg={4}>
+            <Col lg={4} className="d-grid gap-2">
               <Button
                 className={classes.votingButton}
                 onClick={() => {
                   setVote(Vote.ABSTAIN);
                   setShowVoteModal(true);
                 }}
-                block
               >
                 Abstain
               </Button>
@@ -301,12 +320,11 @@ const VotePage = ({
         )}
         {isAwaitingStateChange() && (
           <Row className={classes.section}>
-            <Col>
+            <Col className="d-grid">
               <Button
                 onClick={moveStateAction}
                 disabled={isQueuePending || isExecutePending}
                 variant="dark"
-                block
               >
                 {isQueuePending || isExecutePending ? (
                   <Spinner animation="border" />
@@ -367,22 +385,30 @@ const VotePage = ({
         <Row>
           <Col className={classes.section}>
             <h5>Proposed Transactions</h5>
-            {proposal?.details?.map((d, i) => {
-              return (
-                <p key={i} className="m-0">
-                  {i + 1}: {linkIfAddress(d.target)}.{d.functionSig}(
-                  {d.callData.split(',').map((content, i) => {
-                    return (
-                      <span key={i}>
-                        {linkIfAddress(content)}
-                        {d.callData.split(',').length - 1 === i ? '' : ','}
-                      </span>
-                    );
-                  })}
-                  )
-                </p>
-              );
-            })}
+            <ol>
+              {proposal?.details?.map((d, i) => {
+                return (
+                  <li key={i} className="m-0">
+                    {linkIfAddress(d.target)}.{d.functionSig}
+                    {d.value}(
+                    <br />
+                    {d.callData.split(',').map((content, i) => {
+                      return (
+                        <Fragment key={i}>
+                          <span key={i}>
+                            &emsp;
+                            {linkIfAddress(content)}
+                            {d.callData.split(',').length - 1 === i ? '' : ','}
+                          </span>
+                          <br />
+                        </Fragment>
+                      );
+                    })}
+                    )
+                  </li>
+                );
+              })}
+            </ol>
           </Col>
         </Row>
         <Row>

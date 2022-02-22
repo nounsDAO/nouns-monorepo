@@ -16,8 +16,8 @@ const ProposalTransactions = ({
 }) => {
   const getPopover = (tx: ProposalTransaction) => (
     <Popover className={classes.popover} id="transaction-details-popover">
-      <Popover.Title as="h3">Transaction Details</Popover.Title>
-      <Popover.Content>
+      <Popover.Header as="h3">Transaction Details</Popover.Header>
+      <Popover.Body>
         <Row>
           <Col sm="3">
             <b>Address</b>
@@ -46,7 +46,7 @@ const ProposalTransactions = ({
           </Col>
           <Col sm="9">{tx.calldata === '0x' ? 'None' : tx.calldata}</Col>
         </Row>
-      </Popover.Content>
+      </Popover.Body>
     </Popover>
   );
 

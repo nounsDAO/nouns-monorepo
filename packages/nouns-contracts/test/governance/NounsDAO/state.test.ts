@@ -27,11 +27,11 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 import {
   NounsToken,
-  NounsDescriptor__factory,
+  NounsDescriptor__factory as NounsDescriptorFactory,
   NounsDAOExecutorHarness,
-  NounsDAOExecutorHarness__factory,
+  NounsDAOExecutorHarness__factory as NounsDAOExecutorHarnessFactory,
   NounsDAOImmutable,
-  NounsDAOImmutable__factory,
+  NounsDAOImmutable__factory as NounsDAOImmutableFactory,
 } from '../../../typechain';
 
 chai.use(solidity);
@@ -82,9 +82,9 @@ async function makeProposal(
 
   delay = 4 * 24 * 60 * 60;
 
-  timelock = await new NounsDAOExecutorHarness__factory(deployer).deploy(deployer.address, delay);
+  timelock = await new NounsDAOExecutorHarnessFactory(deployer).deploy(deployer.address, delay);
 
-  gov = await new NounsDAOImmutable__factory(deployer).deploy(
+  gov = await new NounsDAOImmutableFactory(deployer).deploy(
     timelock.address,
     token.address,
     address(0),
@@ -122,7 +122,7 @@ describe('NounsDAO#state/1', () => {
     token = await deployNounsToken(signers.deployer);
 
     await populateDescriptor(
-      NounsDescriptor__factory.connect(await token.descriptor(), signers.deployer),
+      NounsDescriptorFactory.connect(await token.descriptor(), signers.deployer),
     );
   });
 

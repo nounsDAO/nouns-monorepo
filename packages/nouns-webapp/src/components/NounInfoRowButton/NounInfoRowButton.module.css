@@ -1,0 +1,83 @@
+.nounButtonCool {
+  height: 40px;
+  color: var(--brand-cool-dark-text);
+  background-color: var(--brand-cool-accent);
+  border-radius: 10px;
+  margin-right: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  cursor: pointer;
+  vertical-align: middle;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 10px;
+  transition: all 0.15s ease-in-out;
+}
+
+.nounButtonWarm {
+  height: 40px;
+  color: var(--brand-warm-dark-text);
+  background-color: var(--brand-warm-accent);
+  border-radius: 10px;
+  margin-right: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  cursor: pointer;
+  vertical-align: middle;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 10px;
+  transition: all 0.15s ease-in-out;
+}
+
+.nounButton {
+  height: 40px;
+  color: var(--brand-cool-dark-text);
+  background-color: var(--brand-cool-accent);
+  border-radius: 10px;
+  margin-right: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  cursor: pointer;
+  vertical-align: middle;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 10px;
+  transition: all 0.15s ease-in-out;
+}
+
+.nounButtonCool:hover,
+.nounButtonWarm:hover,
+.nounButton:hover {
+  text-decoration: none;
+  background-color: var(--brand-gray-hover);
+}
+
+.nounButton:active {
+  color: black;
+}
+
+.nounButtonContents {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.buttonIcon {
+  margin-right: 5px;
+}

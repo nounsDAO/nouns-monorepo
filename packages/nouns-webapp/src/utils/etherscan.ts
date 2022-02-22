@@ -22,6 +22,11 @@ export const buildEtherscanAddressLink = (address: string): string => {
   return new URL(path, BASE_URL).toString();
 };
 
+export const buildEtherscanHoldingsLink = (address: string): string => {
+  const path = `tokenholdings?a=${address}`;
+  return new URL(path, BASE_URL).toString();
+};
+
 const getApiBaseURL = (network: ChainId) => {
   switch (network) {
     case ChainId.Rinkeby:
@@ -36,7 +41,7 @@ const API_BASE_URL = getApiBaseURL(CHAIN_ID);
 export const buildEtherscanApiQuery = (
   address: string,
   module = 'contract',
-  action = 'getabi',
+  action = 'getsourcecode',
 ): string => {
   const params = new URLSearchParams({
     module,

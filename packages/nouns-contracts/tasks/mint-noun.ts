@@ -13,7 +13,7 @@ task('mint-noun', 'Mints a Noun')
 
     const receipt = await (await nftContract.mint()).wait();
     const nounCreated = receipt.events?.[1];
-    const { tokenId } = nounCreated?.args;
+    const tokenId = nounCreated?.args?.tokenId ?? 'Unknown';
 
     console.log(`Noun minted with ID: ${tokenId.toString()}.`);
   });

@@ -37,11 +37,11 @@ const VoteModal = ({
       <Modal.Header closeButton>
         <Modal.Title>{voteActionText(vote, proposalId)}</Modal.Title>
       </Modal.Header>
-      <Modal.Body className="text-center">
+      <Modal.Body className="text-center d-grid gap-2">
         <p className={classes.voteModalText}>
           {availableVotes && `${availableVotes} ${availableVotes > 1 ? 'Votes' : 'Vote'}`} Available
         </p>
-        <Button onClick={onVote} block>
+        <Button onClick={onVote}>
           {isLoading ? <Spinner animation="border" /> : voteActionText(vote, proposalId)}
         </Button>
       </Modal.Body>
