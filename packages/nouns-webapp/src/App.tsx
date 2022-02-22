@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useEthers } from '@usedapp/core';
 import { useAppDispatch, useAppSelector } from './hooks';
 import { setActiveAccount } from './state/slices/account';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { setAlertModal } from './state/slices/application';
 import classes from './App.module.css';
 import '../src/css/globals.css';
@@ -49,6 +49,7 @@ function App() {
         <NavBar />
         <Switch>
           <Route exact path="/" component={AuctionPage} />
+          <Redirect from="/auction/:id" to="/noun/:id" />
           <Route
             exact
             path="/noun/:id"
