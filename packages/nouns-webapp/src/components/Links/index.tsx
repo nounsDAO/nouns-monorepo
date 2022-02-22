@@ -1,12 +1,12 @@
 import classes from './Links.module.css';
 
-const Link: React.FC<{ buttonIcon:React.ReactNode;  url: string; leavesPage: boolean }> = props => {
+const Links: React.FC<{ buttonIcon:React.ReactNode;  url: string; leavesPage: boolean }> = props => {
   const { buttonIcon, url, leavesPage } = props;
   return (
    
      <a
       
-       className={classes.link}
+       className={classes.links}
        href={url}
        target={leavesPage ? '_blank' : '_self'}
        rel="noreferrer"
@@ -16,4 +16,4 @@ const Link: React.FC<{ buttonIcon:React.ReactNode;  url: string; leavesPage: boo
     
   );
 };
-export default Link;
+export default Links;
