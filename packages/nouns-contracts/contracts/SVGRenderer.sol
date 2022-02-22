@@ -20,8 +20,6 @@ pragma solidity ^0.8.12;
 import { ISVGRenderer } from './interfaces/ISVGRenderer.sol';
 import { SSTORE2 } from './libs/SSTORE2.sol';
 
-// TODO: Most functions params can be updated to accept type `calldata`
-
 contract SVGRenderer is ISVGRenderer {
     bytes16 private constant _HEX_SYMBOLS = '0123456789abcdef';
 
@@ -50,7 +48,7 @@ contract SVGRenderer is ISVGRenderer {
     /**
      * @notice Given RLE image data and color palette pointers, merge to generate a single SVG image.
      */
-    function generateSVG(SVGParams memory params) external view returns (string memory svg) {
+    function generateSVG(SVGParams calldata params) external view returns (string memory svg) {
         if (bytes(params.background).length != 0) {
             // prettier-ignore
             return string(
@@ -68,7 +66,7 @@ contract SVGRenderer is ISVGRenderer {
     /**
      * @notice Given RLE image data and a color palette pointer, merge to generate a partial SVG image.
      */
-    function generateSVGPart(Part memory part) external view returns (string memory partialSVG) {
+    function generateSVGPart(Part calldata part) external view returns (string memory partialSVG) {
         Part[] memory parts = new Part[](1);
         parts[0] = part;
 
@@ -78,7 +76,7 @@ contract SVGRenderer is ISVGRenderer {
     /**
      * @notice Given RLE image data and color palette pointers, merge to generate a partial SVG image.
      */
-    function generateSVGParts(Part[] memory parts) external view returns (string memory partialSVG) {
+    function generateSVGParts(Part[] calldata parts) external view returns (string memory partialSVG) {
         return _generateSVGRects(SVGParams({ parts: parts, background: '' }));
     }
 
@@ -104,7 +102,7 @@ contract SVGRenderer is ISVGRenderer {
             cache = new string[](256); // Initialize color cache
 
             DecodedImage memory image = _decodeRLEImage(params.parts[p].image);
-            bytes memory palette = _getPalette(params.parts[p].palette); // TODO: Cache?
+            bytes memory palette = _getPalette(params.parts[p].palette);
             uint256 currentX = image.bounds.left;
             uint256 currentY = image.bounds.top;
             uint256 cursor;
