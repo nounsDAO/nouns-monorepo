@@ -41,7 +41,6 @@ contract SVGRenderer is ISVGRenderer {
     }
 
     struct DecodedImage {
-        uint8 paletteIndex;
         ContentBounds bounds;
         Draw[] draws;
     }
@@ -182,7 +181,6 @@ contract SVGRenderer is ISVGRenderer {
      * @notice Decode a single RLE compressed image into a `DecodedImage`.
      */
     function _decodeRLEImage(bytes memory image) private pure returns (DecodedImage memory) {
-        uint8 paletteIndex = uint8(image[0]);
         ContentBounds memory bounds = ContentBounds({
             top: uint8(image[1]),
             right: uint8(image[2]),
@@ -196,7 +194,7 @@ contract SVGRenderer is ISVGRenderer {
             draws[cursor] = Draw({ length: uint8(image[i]), colorIndex: uint8(image[i + 1]) });
             cursor++;
         }
-        return DecodedImage({ paletteIndex: paletteIndex, bounds: bounds, draws: draws });
+        return DecodedImage({ bounds: bounds, draws: draws });
     }
 
     /**
@@ -223,7 +221,7 @@ contract SVGRenderer is ISVGRenderer {
     }
 
     /**
-     * @dev Convert a `bytes3` to its 6 character ASCII `string` hexadecimal representation.
+     * @dev Convert `bytes` to a 6 character ASCII `string` hexadecimal representation.
      */
     function _toHexString(bytes memory b) private pure returns (string memory) {
         uint24 value = uint24(bytes3(b));
