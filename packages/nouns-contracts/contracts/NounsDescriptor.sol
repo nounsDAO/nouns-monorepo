@@ -25,8 +25,6 @@ import { ISVGRenderer } from './interfaces/ISVGRenderer.sol';
 import { NFTDescriptor } from './libs/NFTDescriptor.sol';
 import { SSTORE2 } from './libs/SSTORE2.sol';
 
-// TODO: Create `NounsArt` contract?
-
 contract NounsDescriptor is INounsDescriptor, Ownable {
     using Strings for uint256;
 
@@ -67,7 +65,7 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     }
 
     constructor(ISVGRenderer _renderer) {
-        renderer = _renderer; // TODO: Allow renderer to be locked?
+        renderer = _renderer;
     }
 
     /**
@@ -236,7 +234,6 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
      * @notice Given a token ID and seed, construct a base64 encoded data URI for an official Nouns DAO noun.
      * @dev This function exists for backwards compatibility.
      */
-    // TODO: Remove?
     function dataURI(uint256 tokenId, INounsSeeder.Seed memory seed) public view override returns (string memory) {
         string memory nounId = tokenId.toString();
         string memory name = string(abi.encodePacked('Noun ', nounId));
@@ -256,7 +253,7 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         NFTDescriptor.TokenURIParams memory params = NFTDescriptor.TokenURIParams({
             name: name,
             description: description,
-            parts: _getPartsForSeed(seed),
+            parts: getPartsForSeed(seed),
             background: backgrounds[seed.background]
         });
         return NFTDescriptor.constructTokenURI(renderer, params);
@@ -267,10 +264,27 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
      */
     function generateSVGImage(INounsSeeder.Seed memory seed) external view override returns (string memory) {
         ISVGRenderer.SVGParams memory params = ISVGRenderer.SVGParams({
-            parts: _getPartsForSeed(seed),
+            parts: getPartsForSeed(seed),
             background: backgrounds[seed.background]
         });
         return NFTDescriptor.generateSVGImage(renderer, params);
+    }
+
+    /**
+     * @notice Get all Noun parts for the passed `seed`.
+     */
+    function getPartsForSeed(INounsSeeder.Seed memory seed) public view returns (ISVGRenderer.Part[] memory) {
+        bytes memory _body = bodies[seed.body];
+        bytes memory _accessory = accessories[seed.accessory];
+        bytes memory _head = heads[seed.head];
+        bytes memory _glasses = glasses[seed.glasses];
+
+        ISVGRenderer.Part[] memory _parts = new ISVGRenderer.Part[](4);
+        _parts[0] = ISVGRenderer.Part({ image: _body, palette: _getPalette(_body) });
+        _parts[1] = ISVGRenderer.Part({ image: _accessory, palette: _getPalette(_accessory) });
+        _parts[2] = ISVGRenderer.Part({ image: _head, palette: _getPalette(_head) });
+        _parts[3] = ISVGRenderer.Part({ image: _glasses, palette: _getPalette(_glasses) });
+        return _parts;
     }
 
     /**
@@ -318,23 +332,6 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
      */
     function _addGlasses(bytes calldata _glasses) internal {
         glasses.push(_glasses);
-    }
-
-    /**
-     * @notice Get all Noun parts for the passed `seed`.
-     */
-    function _getPartsForSeed(INounsSeeder.Seed memory seed) internal view returns (ISVGRenderer.Part[] memory) {
-        bytes memory _body = bodies[seed.body];
-        bytes memory _accessory = accessories[seed.accessory];
-        bytes memory _head = heads[seed.head];
-        bytes memory _glasses = glasses[seed.glasses];
-
-        ISVGRenderer.Part[] memory _parts = new ISVGRenderer.Part[](4);
-        _parts[0] = ISVGRenderer.Part({ image: _body, palette: _getPalette(_body) });
-        _parts[1] = ISVGRenderer.Part({ image: _accessory, palette: _getPalette(_accessory) });
-        _parts[2] = ISVGRenderer.Part({ image: _head, palette: _getPalette(_head) });
-        _parts[3] = ISVGRenderer.Part({ image: _glasses, palette: _getPalette(_glasses) });
-        return _parts;
     }
 
     /**

@@ -99,8 +99,10 @@ contract SVGRenderer is ISVGRenderer {
             '320'
         ];
         string memory rects;
-        string[][] memory cache = new string[][](params.parts.length);
+        string[] memory cache;
         for (uint8 p = 0; p < params.parts.length; p++) {
+            cache = new string[](256); // Initialize color cache
+
             DecodedImage memory image = _decodeRLEImage(params.parts[p].image);
             bytes memory palette = _getPalette(params.parts[p].palette); // TODO: Cache?
             uint256 currentX = image.bounds.left;
@@ -115,10 +117,10 @@ contract SVGRenderer is ISVGRenderer {
                 uint8 length = _getRectLength(currentX, draw.length, image.bounds.right);
                 while (length > 0) {
                     if (draw.colorIndex != 0) {
-                        buffer[cursor] = lookup[length];                                        // width
-                        buffer[cursor + 1] = lookup[currentX];                                  // x
-                        buffer[cursor + 2] = lookup[currentY];                                  // y
-                        buffer[cursor + 3] = _getColor(palette, draw.colorIndex * 3, cache[i]); // color
+                        buffer[cursor] = lookup[length];                                 // width
+                        buffer[cursor + 1] = lookup[currentX];                           // x
+                        buffer[cursor + 2] = lookup[currentY];                           // y
+                        buffer[cursor + 3] = _getColor(palette, draw.colorIndex, cache); // color
 
                         cursor += 4;
 
@@ -215,7 +217,8 @@ contract SVGRenderer is ISVGRenderer {
         string[] memory cache
     ) private pure returns (string memory) {
         if (bytes(cache[index]).length == 0) {
-            cache[index] = _toHexString(palette[index]);
+            uint256 i = index * 3; // Array index x 3 byte hex color code
+            cache[index] = _toHexString(abi.encodePacked(palette[i], palette[i + 1], palette[i + 2]));
         }
         return cache[index];
     }
@@ -223,8 +226,8 @@ contract SVGRenderer is ISVGRenderer {
     /**
      * @dev Convert a `bytes3` to its 6 character ASCII `string` hexadecimal representation.
      */
-    function _toHexString(bytes3 b) private pure returns (string memory) {
-        uint24 value = uint24(b);
+    function _toHexString(bytes memory b) private pure returns (string memory) {
+        uint24 value = uint24(bytes3(b));
 
         bytes memory buffer = new bytes(6);
         buffer[5] = _HEX_SYMBOLS[value & 0xf];

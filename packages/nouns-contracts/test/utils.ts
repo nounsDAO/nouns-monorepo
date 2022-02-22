@@ -9,6 +9,8 @@ import {
   NounsSeeder__factory,
   WETH,
   WETH__factory,
+  SVGRenderer__factory,
+  NFTDescriptor__factory,
 } from '../typechain';
 import { bgcolors, partcolors, parts } from '../files/encoded-layers.json';
 import { Block } from '@ethersproject/abstract-provider';
@@ -35,16 +37,19 @@ export const deployNounsDescriptor = async (
   deployer?: SignerWithAddress,
 ): Promise<NounsDescriptor> => {
   const signer = deployer || (await getSigners()).deployer;
-  const nftDescriptorLibraryFactory = await ethers.getContractFactory('NFTDescriptor', signer);
-  const nftDescriptorLibrary = await nftDescriptorLibraryFactory.deploy();
+  const nftDescriptorFactory = new NFTDescriptor__factory(signer);
+  const svgRendererFactory = new SVGRenderer__factory(signer);
+
+  const nftDescriptorLibrary = await nftDescriptorFactory.deploy();
   const nounsDescriptorFactory = new NounsDescriptor__factory(
     {
-      __$e1d8844a0810dc0e87a665b1f2b5fa7c69$__: nftDescriptorLibrary.address,
+      'contracts/libs/NFTDescriptor.sol:NFTDescriptor': nftDescriptorLibrary.address,
     },
     signer,
   );
 
-  return nounsDescriptorFactory.deploy();
+  const renderer = await svgRendererFactory.deploy();
+  return nounsDescriptorFactory.deploy(renderer.address);
 };
 
 export const deployNounsSeeder = async (deployer?: SignerWithAddress): Promise<NounsSeeder> => {
@@ -85,7 +90,7 @@ export const populateDescriptor = async (nounsDescriptor: NounsDescriptor): Prom
   // Split up head and accessory population due to high gas usage
   await Promise.all([
     nounsDescriptor.addManyBackgrounds(bgcolors),
-    nounsDescriptor.addManyColorsToPalette(0, partcolors),
+    nounsDescriptor.setPalette(0, `0x000000${partcolors.join('')}`),
     nounsDescriptor.addManyBodies(bodies.map(({ data }) => data)),
     chunkArray(accessories, 10).map(chunk =>
       nounsDescriptor.addManyAccessories(chunk.map(({ data }) => data)),
