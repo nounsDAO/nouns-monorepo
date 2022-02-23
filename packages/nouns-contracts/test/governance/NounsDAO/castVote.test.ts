@@ -4,7 +4,7 @@ import hardhat from 'hardhat';
 
 const { ethers } = hardhat;
 
-import { BigNumber as EthersBN } from 'ethers';
+import { BigNumber as EthersBN, ContractFactory } from 'ethers';
 
 import {
   deployNounsToken,
@@ -47,7 +47,7 @@ async function deployGovernor(
   ];
 
   const { address: _govDelegatorAddress } = await (
-    await ethers.getContractFactory('NounsDAOProxy', deployer)
+    (await ethers.getContractFactory('NounsDAOProxy', deployer)) as ContractFactory
   ).deploy(...params);
 
   return NounsDAOLogicV1HarnessFactory.connect(_govDelegatorAddress, deployer);

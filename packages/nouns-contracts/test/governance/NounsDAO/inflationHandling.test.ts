@@ -41,7 +41,7 @@ async function reset(): Promise<void> {
 
   const govDelegatorAddress = ethers.utils.getContractAddress({
     from: deployer.address,
-    nonce: (await deployer.getTransactionCount()) + 6,
+    nonce: (await deployer.getTransactionCount()) + 9,
   });
 
   // Deploy NounsDAOExecutor with pre-computed Delegator address

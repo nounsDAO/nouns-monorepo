@@ -11,10 +11,12 @@ import {
   WETH__factory as WETHFactory,
   NFTDescriptor__factory as NFTDescriptorFactory,
   SVGRenderer__factory as SVGRendererFactory,
+  NounsArt__factory as NounsArtFactory,
 } from '../typechain';
 import ImageData from '../files/image-data.json';
 import { Block } from '@ethersproject/abstract-provider';
 import { chunkArray } from '../utils';
+import { constants } from 'ethers';
 
 export type TestSigners = {
   deployer: SignerWithAddress;
@@ -37,6 +39,7 @@ export const deployNounsDescriptor = async (
   deployer?: SignerWithAddress,
 ): Promise<NounsDescriptor> => {
   const signer = deployer || (await getSigners()).deployer;
+  const nounsArtFactory = new NounsArtFactory(signer);
   const nftDescriptorFactory = new NFTDescriptorFactory(signer);
   const svgRendererFactory = new SVGRendererFactory(signer);
 
@@ -49,7 +52,13 @@ export const deployNounsDescriptor = async (
   );
 
   const renderer = await svgRendererFactory.deploy();
-  return nounsDescriptorFactory.deploy(renderer.address);
+  const descriptor = await nounsDescriptorFactory.deploy(constants.AddressZero, renderer.address);
+
+  // TODO: Clean up the intialization process
+  const art = await nounsArtFactory.deploy(descriptor.address);
+  await descriptor.setArt(art.address);
+
+  return descriptor;
 };
 
 export const deployNounsSeeder = async (deployer?: SignerWithAddress): Promise<NounsSeeder> => {
