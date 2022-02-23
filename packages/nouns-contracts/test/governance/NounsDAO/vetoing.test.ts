@@ -76,10 +76,7 @@ async function reset(): Promise<void> {
   });
 
   // Deploy NounsDAOExecutor with pre-computed Delegator address
-  timelock = await new NounsDAOExecutorFactory(deployer).deploy(
-    govDelegatorAddress,
-    timelockDelay,
-  );
+  timelock = await new NounsDAOExecutorFactory(deployer).deploy(govDelegatorAddress, timelockDelay);
   const timelockAddress = timelock.address;
 
   // Deploy Delegate

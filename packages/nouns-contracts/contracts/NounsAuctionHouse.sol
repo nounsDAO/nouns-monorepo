@@ -84,7 +84,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     /**
      * @notice Settle the current auction, mint a new Noun, and put it up for auction.
      */
-    function settleCurrentAndCreateNewAuction() external override nonReentrant whenNotPaused {
+    function settleCurrentAndCreateNewAuction() external nonReentrant whenNotPaused {
         _settleAuction();
         _createAuction();
     }
@@ -93,7 +93,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      * @notice Settle the current auction.
      * @dev This function can only be called when the contract is paused.
      */
-    function settleAuction() external override whenPaused nonReentrant {
+    function settleAuction() external whenPaused nonReentrant {
         _settleAuction();
     }
 
@@ -101,7 +101,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      * @notice Create a bid for a Noun, with a given amount.
      * @dev This contract only accepts payment in ETH.
      */
-    function createBid(uint256 nounId) external payable override nonReentrant {
+    function createBid(uint256 nounId) external payable nonReentrant {
         INounsAuctionHouse.Auction memory _auction = auction;
 
         require(_auction.nounId == nounId, 'Noun not up for auction');
@@ -141,7 +141,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      * contract is unpaused. While no new auctions can be started when paused,
      * anyone can settle an ongoing auction.
      */
-    function pause() external override onlyOwner {
+    function pause() external onlyOwner {
         _pause();
     }
 
@@ -150,7 +150,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      * @dev This function can only be called by the owner when the
      * contract is paused. If required, this function will start a new auction.
      */
-    function unpause() external override onlyOwner {
+    function unpause() external onlyOwner {
         _unpause();
 
         if (auction.startTime == 0 || auction.settled) {
@@ -162,7 +162,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      * @notice Set the auction time buffer.
      * @dev Only callable by the owner.
      */
-    function setTimeBuffer(uint256 _timeBuffer) external override onlyOwner {
+    function setTimeBuffer(uint256 _timeBuffer) external onlyOwner {
         timeBuffer = _timeBuffer;
 
         emit AuctionTimeBufferUpdated(_timeBuffer);
@@ -172,7 +172,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      * @notice Set the auction reserve price.
      * @dev Only callable by the owner.
      */
-    function setReservePrice(uint256 _reservePrice) external override onlyOwner {
+    function setReservePrice(uint256 _reservePrice) external onlyOwner {
         reservePrice = _reservePrice;
 
         emit AuctionReservePriceUpdated(_reservePrice);
@@ -182,7 +182,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      * @notice Set the auction minimum bid increment percentage.
      * @dev Only callable by the owner.
      */
-    function setMinBidIncrementPercentage(uint8 _minBidIncrementPercentage) external override onlyOwner {
+    function setMinBidIncrementPercentage(uint8 _minBidIncrementPercentage) external onlyOwner {
         minBidIncrementPercentage = _minBidIncrementPercentage;
 
         emit AuctionMinBidIncrementPercentageUpdated(_minBidIncrementPercentage);

@@ -28,7 +28,7 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and No
 
     // Chunk head and accessory population due to high gas usage
     await descriptorContract.addManyBackgrounds(bgcolors);
-    await descriptorContract.setPalette(0, `0x000000${palette.join('')}`),
+    await descriptorContract.setPalette(0, `0x000000${palette.join('')}`);
     await descriptorContract.addManyBodies(bodies.map(({ data }) => data));
 
     const accessoryChunk = chunkArray(accessories, 10);

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title Interface for NounsDescriptor
+/// @title Interface for NounsArt
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -17,26 +17,28 @@
 
 pragma solidity ^0.8.12;
 
-import { INounsSeeder } from './INounsSeeder.sol';
-import { ISVGRenderer } from './ISVGRenderer.sol';
-import { INounsArt } from './INounsArt.sol';
+interface INounsArt {
+    event DescriptorUpdated(address oldDescriptor, address newDescriptor);
 
-interface INounsDescriptor {
-    event PartsLocked();
+    function descriptor() external view returns (address);
 
-    event ArtUpdated(INounsArt art);
+    function pendingDescriptor() external view returns (address);
 
-    event RendererUpdated(ISVGRenderer renderer);
+    function setDescriptor(address pendingDescriptor) external;
 
-    function arePartsLocked() external returns (bool);
+    function confirmDescriptor() external;
 
-    function art() external returns (INounsArt);
+    function palettes(uint8 paletteIndex) external view returns (address);
 
-    function renderer() external returns (ISVGRenderer);
+    function backgrounds(uint256 index) external view returns (string memory);
 
-    function setArt(INounsArt art) external;
+    function bodies(uint256 index) external view returns (bytes memory);
 
-    function setRenderer(ISVGRenderer renderer) external;
+    function accessories(uint256 index) external view returns (bytes memory);
+
+    function heads(uint256 index) external view returns (bytes memory);
+
+    function glasses(uint256 index) external view returns (bytes memory);
 
     function backgroundCount() external view returns (uint256);
 
@@ -48,7 +50,7 @@ interface INounsDescriptor {
 
     function glassesCount() external view returns (uint256);
 
-    function setPalette(uint8 paletteIndex, bytes calldata palette) external;
+    function setPalette(uint8 paletteIndex, address palette) external;
 
     function addManyBackgrounds(string[] calldata backgrounds) external;
 
@@ -69,20 +71,4 @@ interface INounsDescriptor {
     function addHead(bytes calldata head) external;
 
     function addGlasses(bytes calldata glasses) external;
-
-    function lockParts() external;
-
-    function tokenURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view returns (string memory);
-
-    function dataURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view returns (string memory);
-
-    function genericDataURI(
-        string memory name,
-        string memory description,
-        INounsSeeder.Seed memory seed
-    ) external view returns (string memory);
-
-    function generateSVGImage(INounsSeeder.Seed memory seed) external view returns (string memory);
-
-    function getPartsForSeed(INounsSeeder.Seed memory seed) external view returns (ISVGRenderer.Part[] memory);
 }
