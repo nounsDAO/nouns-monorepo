@@ -1,8 +1,7 @@
 import { Button, Modal, Spinner } from 'react-bootstrap';
 import classes from './VoteModal.module.css';
 import { useCastVote, Vote } from '../../wrappers/nounsDao';
-import React, { useCallback, useEffect, useState } from 'react';
-import { TransactionStatus } from '@usedapp/core';
+import React, { useEffect, useState } from 'react';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import clsx from 'clsx';
 
