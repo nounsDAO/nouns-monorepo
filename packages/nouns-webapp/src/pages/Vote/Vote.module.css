@@ -115,8 +115,6 @@
   text-align: right;
 }
 
-@media (max-width: 1200px) {
-  .thresholdInfo {
-    text-align: right;
-  }
+.thresholdInfo {
+  text-align: right;
 }

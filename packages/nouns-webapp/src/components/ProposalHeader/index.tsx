@@ -7,6 +7,7 @@ import navBarButtonClasses from '../NavBarButton/NavBarButton.module.css';
 import { Proposal, useHasVotedOnProposal, useProposalVote } from '../../wrappers/nounsDao';
 import clsx from 'clsx';
 import { isMobileScreen } from '../../utils/isMobile';
+import { useUserVotes } from '../../wrappers/nounToken';
 
 interface ProposalHeaderProps {
   proposal: Proposal;
@@ -16,11 +17,13 @@ interface ProposalHeaderProps {
 }
 
 const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
-  const { proposal, isActiveForVoting, isWalletConnected, submitButtonClickHandler } = props;
+  let { proposal, isActiveForVoting, isWalletConnected, submitButtonClickHandler } = props;
 
+  isActiveForVoting = true;
   const isMobile = isMobileScreen();
   // TODO for testing!!
-  const connectedAccountNounVotes = 2; //useUserVotes() || 0;
+  // const connectedAccountNounVotes = 0; //useUserVotes() || 0;
+  const connectedAccountNounVotes = (useUserVotes() || 0) === 0 ? 2 : 0;
   const hasVoted = useHasVotedOnProposal(proposal?.id);
   const proposalVote = useProposalVote(proposal?.id);
 
@@ -54,9 +57,9 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
                 {!isWalletConnected && (
                   <div className={classes.connectWalletText}>Connect a wallet to vote.</div>
                 )}
-                {/* {isWalletConnected && connectedAccountNounVotes === 0 && (
+                {isWalletConnected && connectedAccountNounVotes === 0 && (
                   <div className={classes.noVotesText}>You have no votes.</div>
-                )} */}
+                )}
                 <Button
                   className={
                     isWalletConnected && connectedAccountNounVotes > 0
@@ -79,9 +82,9 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
             {!isWalletConnected && (
               <div className={classes.connectWalletText}>Connect a wallet to vote.</div>
             )}
-            {/* {isWalletConnected && connectedAccountNounVotes === 0 && (
+            {isWalletConnected && connectedAccountNounVotes === 0 && (
               <div className={classes.noVotesText}>You have no votes.</div>
-            )} */}
+            )}
             <Button
               className={
                 isWalletConnected && connectedAccountNounVotes > 0

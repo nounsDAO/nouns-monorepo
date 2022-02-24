@@ -290,10 +290,6 @@ const VotePage = ({
                     <h1>Threshold</h1>
                   </Col>
                   <Col className={classes.thresholdInfo}>
-                    <span>Differential</span>
-                    <h3>{proposal.forCount - proposal.againstCount} votes</h3>
-                  </Col>
-                  <Col className={classes.thresholdInfo}>
                     <span>Quorum</span>
                     <h3>{proposal.quorumVotes} votes</h3>
                   </Col>

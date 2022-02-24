@@ -1,10 +1,9 @@
-import { Button, Modal, Spinner, Image } from 'react-bootstrap';
+import { Button, Modal, Spinner } from 'react-bootstrap';
 import classes from './VoteModal.module.css';
 import { useCastVote, Vote } from '../../wrappers/nounsDao';
 import React, { useCallback, useEffect, useState } from 'react';
 import { TransactionStatus } from '@usedapp/core';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
-import _glasses from '../../assets/glasses.svg';
 import clsx from 'clsx';
 
 interface VoteModalProps {
@@ -14,21 +13,11 @@ interface VoteModalProps {
   availableVotes: number;
 }
 
-const voteActionText = (vote: Vote | undefined, proposalId: string | undefined) => {
-  switch (vote) {
-    case Vote.FOR:
-      return `Vote For Proposal ${proposalId}`;
-    case Vote.AGAINST:
-      return `Vote Against Proposal ${proposalId}`;
-    case Vote.ABSTAIN:
-      return `Vote to Abstain on Proposal ${proposalId}`;
-  }
-};
+const POST_SUCESSFUL_VOTE_MODAL_CLOSE_TIME_MS = 3000;
 
 const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps) => {
   const { castVote, castVoteState } = useCastVote();
   const [vote, setVote] = useState<Vote>();
-  const [transactionStateCopy, setTransactionStateCopy] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isVoteSucessful, setIsVoteSuccessful] = useState(false);
   const [isVoteFailed, setIsVoteFailed] = useState(false);
@@ -42,72 +31,41 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
     return error;
   };
 
-  const onTransactionStateChange = useCallback(
-    (
-      tx: TransactionStatus,
-      successMessage?: string,
-      setPending?: (isPending: boolean) => void,
-      getErrorMessage?: (error?: string) => string | undefined,
-      onFinalState?: () => void,
-    ) => {
-      switch (tx.status) {
-        case 'None':
-          setPending?.(false);
-          break;
-        case 'Mining':
-          setPending?.(true);
-          break;
-        case 'Success':
-          setPending?.(false);
-          onFinalState?.();
-          break;
-        case 'Fail':
-          setFailureCopy('Transaction Failed');
-          setErrorMessage(tx?.errorMessage || 'Please try again.');
-          setPending?.(false);
-          onFinalState?.();
-          break;
-        case 'Exception':
-          setFailureCopy('Error');
-          setErrorMessage(getErrorMessage?.(tx?.errorMessage) || 'Please try again.');
-          setPending?.(false);
-          onFinalState?.();
-          break;
-      }
-    },
-    [failureCopy, errorMessage],
-  );
-
-  useEffect(
-    () =>
-      onTransactionStateChange(
-        castVoteState,
-        'Vote Successful!',
-        setIsLoading,
-        getVoteErrorMessage,
-        // TODO make this a set timeout to close out the modal after k seconds
-        () => {
-          console.log('hello');
-        },
-      ),
-    [castVoteState, onTransactionStateChange],
-  );
-
-  // TODO just for testing
+  // Cast vote transaction state hook
   useEffect(() => {
-    if (isLoading) {
-      setTimeout(() => {
+    switch (castVoteState.status) {
+      case 'None':
+        setIsLoading(false);
+        break;
+      case 'Mining':
+        setIsLoading(true);
+        break;
+      case 'Success':
         setIsLoading(false);
         setIsVoteSuccessful(true);
-        // setIsVoteFailed(true);
-      }, 2000);
+        break;
+      case 'Fail':
+        setFailureCopy('Transaction Failed');
+        setErrorMessage(castVoteState?.errorMessage || 'Please try again.');
+        setIsLoading(false);
+        setIsVoteFailed(true);
+        break;
+      case 'Exception':
+        setFailureCopy('Error');
+        setErrorMessage(getVoteErrorMessage(castVoteState?.errorMessage) || 'Please try again.');
+        setIsLoading(false);
+        setIsVoteFailed(true);
+        break;
     }
+  }, [castVoteState]);
+
+  // Auto close the modal after a transaction completes succesfully
+  // Leave failed transaction up until user closes manually to allow for debugging
+  useEffect(() => {
     if (isVoteSucessful) {
-      setTimeout(() => {
-        onHide();
-      }, 3000);
+      setTimeout(onHide, POST_SUCESSFUL_VOTE_MODAL_CLOSE_TIME_MS);
     }
-  });
+  }, [isVoteSucessful, onHide]);
 
   return (
     <Modal show={show} onHide={onHide} dialogClassName={classes.voteModal} centered>
@@ -117,21 +75,15 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
       <Modal.Body>
         {isVoteSucessful && (
           <div className={classes.transactionStatus}>
-            <div className="d-flex flex-row justify-content-center">
-              <div style={{}}>
-                <Image src={_glasses} width={200} />
-              </div>
-              <h1
-                style={{
-                  fontFamily: 'Londrina Solid',
-                  fontSize: '56px',
-                  marginLeft: '1rem',
-                  marginTop: '0.25rem',
-                }}
-              >
-                Success!
-              </h1>
-            </div>
+            <h1
+              style={{
+                fontFamily: 'Londrina Solid',
+                fontSize: '56px',
+                marginTop: '1.15rem',
+              }}
+            >
+              Success!
+            </h1>
 
             <div style={{ marginTop: '1rem' }}>Thank you for voting.</div>
           </div>
