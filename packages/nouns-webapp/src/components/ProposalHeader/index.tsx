@@ -21,9 +21,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
 
   isActiveForVoting = true;
   const isMobile = isMobileScreen();
-  // TODO for testing!!
-  // const connectedAccountNounVotes = 0; //useUserVotes() || 0;
-  const connectedAccountNounVotes = (useUserVotes() || 0) === 0 ? 2 : 0;
+  const connectedAccountNounVotes = useUserVotes() || 0;
   const hasVoted = useHasVotedOnProposal(proposal?.id);
   const proposalVote = useProposalVote(proposal?.id);
 
