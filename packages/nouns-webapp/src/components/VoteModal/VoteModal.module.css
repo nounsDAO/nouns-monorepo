@@ -1,9 +1,82 @@
 .voteModal {
-  max-width: 380px;
+  font-family: 'PT Root UI';
 }
 
-.voteModalText {
-  font-size: 1.3rem;
+.propTitle {
+  font-family: 'Londrina Solid';
+  font-size: 32px;
+  margin-bottom: 5px;
+}
+
+.voteIcon {
+  width: 38px;
+  margin-right: 0px;
+  margin-bottom: 4px;
+  margin-left: 6px;
+}
+
+.submitBtn {
+  width: 100%;
+  min-width: 8rem;
+  height: 40px;
   font-weight: bold;
-  padding: 0;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  background-color: var(--brand-color-green);
+  border: var(--brand-color-green);
+}
+.submitBtn:focus,
+.submitBtn:hover {
+  background-color: var(--brand-color-green) !important;
+  box-shadow: 0 0 0 0.2rem rgb(67, 179, 105, 0.75);
+}
+.submitBtn:active {
+  background-color: var(--brand-color-green) !important;
+}
+
+.submitBtnDisabled {
+  background-color: var(--brand-gray-light-text) !important;
+  width: 100%;
+  min-width: 8rem;
+  height: 40px;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  border: var(--brand-dark-red);
+  opacity: 0.5;
+  box-shadow: none !important;
+}
+
+.submitBtnDisabled:hover,
+.submitBtnDisabled:active,
+.submitBtnDisabled:focus {
+  cursor: not-allowed;
+  box-shadow: none !important;
+}
+
+.header {
+  border-bottom: 0px;
+}
+
+.votingButtonsWrapper {
+  transition: all 0.125s ease-in-out;
+}
+
+.loadingSpinner {
+  font-size: 18px;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: var(--brand-gray-light-text);
+}
+
+.transactionStatus {
+  font-size: 18px;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+}
+
+.disabled {
+  opacity: 0.5;
 }

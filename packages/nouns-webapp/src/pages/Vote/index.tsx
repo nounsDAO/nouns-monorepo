@@ -2,12 +2,9 @@ import { Row, Col, Button, Card, Spinner } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import {
   ProposalState,
-  useCastVote,
   useExecuteProposal,
-  useHasVotedOnProposal,
   useProposal,
   useQueueProposal,
-  Vote,
 } from '../../wrappers/nounsDao';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Vote.module.css';
@@ -56,10 +53,7 @@ const VotePage = ({
 }: RouteComponentProps<{ id: string }>) => {
   const proposal = useProposal(id);
 
-  const [vote, setVote] = useState<Vote>();
-
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
-  const [isVotePending, setVotePending] = useState<boolean>(false);
 
   const [isQueuePending, setQueuePending] = useState<boolean>(false);
   const [isExecutePending, setExecutePending] = useState<boolean>(false);
@@ -67,7 +61,6 @@ const VotePage = ({
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
 
-  const { castVote, castVoteState } = useCastVote();
   const { queueProposal, queueProposalState } = useQueueProposal();
   const { executeProposal, executeProposalState } = useExecuteProposal();
 
@@ -99,24 +92,8 @@ const VotePage = ({
   const againstPercentage = proposal && totalVotes ? (proposal.againstCount * 100) / totalVotes : 0;
   const abstainPercentage = proposal && totalVotes ? (proposal.abstainCount * 100) / totalVotes : 0;
 
-  const proposalActive = proposal?.status === ProposalState.ACTIVE;
-
   // Only count available votes as of the proposal created block
   const availableVotes = useUserVotesAsOfBlock(proposal?.createdBlock ?? undefined);
-
-  const hasVoted = useHasVotedOnProposal(proposal?.id);
-
-  const showBlockRestriction = proposalActive;
-
-  // Only show voting if user has > 0 votes at proposal created block and proposal is active
-  const showVotingButtons = availableVotes && !hasVoted && proposalActive;
-
-  const getVoteErrorMessage = (error: string | undefined) => {
-    if (error?.match(/voter already voted/)) {
-      return 'User Already Voted';
-    }
-    return error;
-  };
 
   const hasSucceeded = proposal?.status === ProposalState.SUCCEEDED;
   const isAwaitingStateChange = () => {
@@ -146,9 +123,6 @@ const VotePage = ({
       return endDate;
     }
   };
-
-  const { forCount = 0, againstCount = 0, quorumVotes = 0 } = proposal || {};
-  const quorumReached = forCount > againstCount && forCount >= quorumVotes;
 
   const moveStateButtonAction = hasSucceeded ? 'Queue' : 'Execute';
   const moveStateAction = (() => {
@@ -206,18 +180,6 @@ const VotePage = ({
   );
 
   useEffect(
-    () =>
-      onTransactionStateChange(
-        castVoteState,
-        'Vote Successful!',
-        setVotePending,
-        getVoteErrorMessage,
-        () => setShowVoteModal(false),
-      ),
-    [castVoteState, onTransactionStateChange, setModal],
-  );
-
-  useEffect(
     () => onTransactionStateChange(queueProposalState, 'Proposal Queued!', setQueuePending),
     [queueProposalState, onTransactionStateChange, setModal],
   );
@@ -231,6 +193,16 @@ const VotePage = ({
   const { loading, error, data } = useQuery(
     nounVotesForProposalQuery(proposal && proposal.id ? proposal?.id : '0'),
   );
+
+  const [showToast, setShowToast] = useState(true);
+  useEffect(() => {
+    if (showToast) {
+      setTimeout(() => {
+        setShowToast(false);
+      }, 5000);
+    }
+  }, [showToast]);
+
   if (!proposal || loading || !data || data.proposals.length === 0) {
     return (
       <div className={classes.spinner}>
@@ -255,11 +227,8 @@ const VotePage = ({
       <VoteModal
         show={showVoteModal}
         onHide={() => setShowVoteModal(false)}
-        onVote={() => castVote(proposal?.id, vote)}
-        isLoading={isVotePending}
         proposalId={proposal?.id}
-        availableVotes={availableVotes}
-        vote={vote}
+        availableVotes={availableVotes || 0}
       />
       <Col lg={10} className={classes.wrapper}>
         {proposal && (
