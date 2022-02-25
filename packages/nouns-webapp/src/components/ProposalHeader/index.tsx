@@ -23,7 +23,6 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const connectedAccountNounVotes = useUserVotes() || 0;
   const hasVoted = useHasVotedOnProposal(proposal?.id);
   const proposalVote = useProposalVote(proposal?.id);
-  const canVote = isWalletConnected && !hasVoted && connectedAccountNounVotes > 0;
 
   const voteButton = (
     <>
@@ -73,12 +72,14 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
           </div>
         </div>
         {!isMobile && (
-          <div className="d-flex justify-content-end align-items-end">{canVote && voteButton}</div>
+          <div className="d-flex justify-content-end align-items-end">
+            {isActiveForVoting && voteButton}
+          </div>
         )}
       </div>
 
       {isMobile && (
-        <div className={classes.mobileSubmitProposalButton}>{canVote && voteButton}</div>
+        <div className={classes.mobileSubmitProposalButton}>{isActiveForVoting && voteButton}</div>
       )}
 
       {proposal && isActiveForVoting && hasVoted && (
