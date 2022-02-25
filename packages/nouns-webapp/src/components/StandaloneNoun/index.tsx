@@ -8,7 +8,6 @@ import classes from './StandaloneNoun.module.css';
 import { useDispatch } from 'react-redux';
 import { setOnDisplayAuctionNounId } from '../../state/slices/onDisplayAuction';
 import nounClasses from '../Noun/Noun.module.css';
-import { getGrayBackgroundSVG } from '../../utils/grayBackgroundSVG';
 
 interface StandaloneNounProps {
   nounId: EthersBN;
