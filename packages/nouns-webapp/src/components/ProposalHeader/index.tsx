@@ -17,13 +17,37 @@ interface ProposalHeaderProps {
 }
 
 const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
-  let { proposal, isActiveForVoting, isWalletConnected, submitButtonClickHandler } = props;
+  const { proposal, isActiveForVoting, isWalletConnected, submitButtonClickHandler } = props;
 
-  isActiveForVoting = true;
   const isMobile = isMobileScreen();
   const connectedAccountNounVotes = useUserVotes() || 0;
   const hasVoted = useHasVotedOnProposal(proposal?.id);
   const proposalVote = useProposalVote(proposal?.id);
+  const canVote = isWalletConnected && !hasVoted && connectedAccountNounVotes > 0;
+
+  const voteButton = (
+    <>
+      {isWalletConnected ? (
+        <>
+          {connectedAccountNounVotes === 0 && (
+            <div className={classes.noVotesText}>You have no votes.</div>
+          )}
+        </>
+      ) : (
+        <div className={classes.connectWalletText}>Connect a wallet to vote.</div>
+      )}
+      <Button
+        className={
+          isWalletConnected && connectedAccountNounVotes > 0
+            ? classes.submitBtn
+            : classes.submitBtnDisabled
+        }
+        onClick={submitButtonClickHandler}
+      >
+        Submit vote
+      </Button>
+    </>
+  );
 
   return (
     <>
@@ -49,62 +73,18 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
           </div>
         </div>
         {!isMobile && (
-          <div className="d-flex justify-content-end align-items-end">
-            {!hasVoted && isActiveForVoting && (
-              <>
-                {!isWalletConnected && (
-                  <div className={classes.connectWalletText}>Connect a wallet to vote.</div>
-                )}
-                {isWalletConnected && connectedAccountNounVotes === 0 && (
-                  <div className={classes.noVotesText}>You have no votes.</div>
-                )}
-                <Button
-                  className={
-                    isWalletConnected && connectedAccountNounVotes > 0
-                      ? classes.submitBtn
-                      : classes.submitBtnDisabled
-                  }
-                  onClick={submitButtonClickHandler}
-                >
-                  Submit vote
-                </Button>
-              </>
-            )}
-          </div>
+          <div className="d-flex justify-content-end align-items-end">{canVote && voteButton}</div>
         )}
       </div>
 
-      <div className={classes.mobileSubmitProposalButton}>
-        {isMobile && isActiveForVoting && !hasVoted && (
-          <>
-            {!isWalletConnected && (
-              <div className={classes.connectWalletText}>Connect a wallet to vote.</div>
-            )}
-            {isWalletConnected && connectedAccountNounVotes === 0 && (
-              <div className={classes.noVotesText}>You have no votes.</div>
-            )}
-            <Button
-              className={
-                isWalletConnected && connectedAccountNounVotes > 0
-                  ? classes.submitBtn
-                  : classes.submitBtnDisabled
-              }
-              onClick={submitButtonClickHandler}
-            >
-              Submit vote
-            </Button>
-          </>
-        )}
-      </div>
+      {isMobile && (
+        <div className={classes.mobileSubmitProposalButton}>{canVote && voteButton}</div>
+      )}
 
-      {proposal && isActiveForVoting && (
-        <>
-          {hasVoted && (
-            <Alert variant="success" className={classes.voterIneligibleAlert}>
-              You voted <strong>{proposalVote}</strong> this proposal
-            </Alert>
-          )}
-        </>
+      {proposal && isActiveForVoting && hasVoted && (
+        <Alert variant="success" className={classes.voterIneligibleAlert}>
+          You voted <strong>{proposalVote}</strong> this proposal
+        </Alert>
       )}
     </>
   );
