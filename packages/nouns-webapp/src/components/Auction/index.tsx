@@ -1,3 +1,4 @@
+import { useEffect, useCallback } from 'react';
 import { Col } from 'react-bootstrap';
 import { StandaloneNounWithSeed } from '../StandaloneNoun';
 import AuctionActivity from '../AuctionActivity';
@@ -41,6 +42,17 @@ const Auction: React.FC<AuctionProps> = props => {
     dispatch(setNextOnDisplayAuctionNounId());
     currentAuction && history.push(`/noun/${currentAuction.nounId.toNumber() + 1}`);
   };
+
+  const handleKeyPress = useCallback(event => {
+    if(event.code === "ArrowLeft") prevAuctionHandler();
+    else if(event.code === "ArrowRight") nextAuctionHandler();
+    else return;
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, [handleKeyPress]);
 
   const nounContent = currentAuction && (
     <div className={classes.nounWrapper}>
