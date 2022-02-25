@@ -1,6 +1,7 @@
 import { StandaloneNounCircular } from '../../components/StandaloneNoun';
 import { BigNumber as EthersBN } from 'ethers';
 import classes from './NounImageVoteTable.module.css';
+import { GrayCircle } from '../GrayCircle';
 
 interface NounImageVoteTableProps {
   nounIds: string[];
@@ -13,13 +14,9 @@ const NounImageVoteTable: React.FC<NounImageVoteTableProps> = props => {
   const { nounIds } = props;
   const paddedNounIds = nounIds
     .map((nounId: string) => {
-      return <StandaloneNounCircular nounId={EthersBN.from(nounId)} grayCircle={false} />;
+      return <StandaloneNounCircular nounId={EthersBN.from(nounId)} />;
     })
-    .concat(
-      Array(NOUNS_PER_VOTE_CARD).fill(
-        <StandaloneNounCircular nounId={EthersBN.from(-1)} grayCircle={true} />,
-      ),
-    )
+    .concat(Array(NOUNS_PER_VOTE_CARD).fill(<GrayCircle />))
     .slice(0, NOUNS_PER_VOTE_CARD);
 
   const content = () => {
