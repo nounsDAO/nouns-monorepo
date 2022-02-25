@@ -74,36 +74,16 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
       <Modal.Body>
         {isVoteSucessful && (
           <div className={classes.transactionStatus}>
-            <h1
-              style={{
-                fontFamily: 'Londrina Solid',
-                fontSize: '56px',
-                marginTop: '1.15rem',
-              }}
-            >
-              Success!
-            </h1>
+            <h1 className={classes.voteSuccessTitle}>Success!</h1>
 
-            <div style={{ marginTop: '1rem' }}>Thank you for voting.</div>
+            <div className={classes.voteSuccessBody}>Thank you for voting.</div>
           </div>
         )}
         {isVoteFailed && (
           <div className={classes.transactionStatus}>
-            <h1
-              style={{
-                fontFamily: 'Londrina Solid',
-                fontSize: '56px',
-                marginTop: '0.25rem',
-                width: '100%',
-              }}
-            >
-              Well this is awkward
-            </h1>
-            <div style={{ marginTop: '1rem', fontWeight: 'normal' }}>
-              {failureCopy}:{' '}
-              <span style={{ fontWeight: 'bold', color: 'var(--brand-color-red)' }}>
-                {errorMessage}
-              </span>
+            <h1 className={classes.voteFailureTitle}>Well this is awkward</h1>
+            <div className={classes.voteFailureBody}>
+              {failureCopy}: <span className={classes.voteFailureErrorMessage}>{errorMessage}</span>
             </div>
           </div>
         )}

@@ -80,3 +80,30 @@
 .disabled {
   opacity: 0.5;
 }
+
+.voteSuccessTitle {
+  font-family: 'Londrina Solid';
+  font-size: 56px;
+  margin-top: 1.15rem;
+}
+
+.voteSuccessBody {
+  margin-top: 1rem;
+}
+
+.voteFailureTitle {
+  font-family: 'Londrina Solid';
+  font-size: 56px;
+  margin-top: 0.25rem;
+  width: 100%;
+}
+
+.voteFailureBody {
+  margin-top: 1rem;
+  font-weight: normal;
+}
+
+.voteFailureErrorMessage {
+  font-weight: bold;
+  color: var(--brand-color-red);
+}
