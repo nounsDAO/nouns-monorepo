@@ -10,9 +10,9 @@ const Banner = () => {
       <Col lg={6}>
         <div className={classes.wrapper}>
           <h1>
-            Chiliagon
+            One Chili
             <br />
-            DAO
+            Anyday,
             <br />
             Everyday.
           </h1>
