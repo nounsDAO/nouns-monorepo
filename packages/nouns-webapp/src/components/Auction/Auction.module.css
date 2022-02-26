@@ -9,9 +9,10 @@
 
 .auctionActivityCol {
   padding-right: 5rem;
-  padding-bottom: 0rem;
+  padding-bottom: 1rem;
   min-height: 520px;
-  align-self: flex-end !important;
+  align-self: start !important;
+  /* maintains auction arrow buttons fixed from auction to auction  */
 }
 
 @media (max-width: 992px) {
@@ -45,9 +46,5 @@
     margin-left: 10%;
     margin-right: 10%;
     margin-top: 2rem;
-  }
-
-  .nounContentCol {
-    padding: 0rem;
   }
 }

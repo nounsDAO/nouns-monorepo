@@ -25,6 +25,7 @@ const Noun: React.FC<{
         src={imgPath ? imgPath : loadingNoun}
         alt={alt}
         fluid
+      
       />
     </div>
   );

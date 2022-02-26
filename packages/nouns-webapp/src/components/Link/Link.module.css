@@ -1,7 +1,7 @@
 .link,
 .link:hover,
 .link:active {
-  color: var(--brand-dark-red);
+  color: var(--brand-color-blue);
 }
 .link:hover {
   text-decoration: underline;

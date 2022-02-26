@@ -5,17 +5,17 @@ import Accordion from 'react-bootstrap/Accordion';
 import Link from '../Link';
 
 const Documentation = () => {
-  const cryptopunksLink = (
-    <Link text="CryptoPunks" url="https://www.larvalabs.com/cryptopunks" leavesPage={true} />
-  );
-  const playgroundLink = <Link text="Playground" url="/playground" leavesPage={false} />;
-  const publicDomainLink = (
-    <Link
-      text="public domain"
-      url="https://creativecommons.org/publicdomain/zero/1.0/"
-      leavesPage={true}
-    />
-  );
+  // const cryptopunksLink = (
+  //   <Link text="CryptoPunks" url="https://www.larvalabs.com/cryptopunks" leavesPage={true} />
+  // );
+  // const playgroundLink = <Link text="Playground" url="/playground" leavesPage={false} />;
+  // const publicDomainLink = (
+  //   <Link
+  //     text="public domain"
+  //     url="https://creativecommons.org/publicdomain/zero/1.0/"
+  //     leavesPage={true}
+  //   />
+  // );
   const compoundGovLink = (
     <Link text="Compound Governance" url="https://compound.finance/governance" leavesPage={true} />
   );
@@ -23,7 +23,7 @@ const Documentation = () => {
     <Section fullWidth={false}>
       <Col lg={{ span: 10, offset: 1 }}>
         <div className={classes.headerWrapper}>
-          <h1>WTF?</h1>
+          {/* <h1>WTF?</h1>
           <p className={classes.aboutText}>
             Nouns are an experimental attempt to improve the formation of on-chain avatar
             communities. While projects such as {cryptopunksLink} have attempted to bootstrap
@@ -32,32 +32,11 @@ const Documentation = () => {
           </p>
           <p className={classes.aboutText} style={{ paddingBottom: '4rem' }}>
             Learn more below, or start creating Nouns off-chain using the {playgroundLink}.
-          </p>
+          </p> */}
         </div>
         <Accordion flush>
           <Accordion.Item eventKey="0" className={classes.accordionItem}>
-            <Accordion.Header className={classes.accordionHeader}>Summary</Accordion.Header>
-            <Accordion.Body>
-              <ul>
-                <li>Nouns artwork is in the {publicDomainLink}.</li>
-                <li>One Noun is trustlessly auctioned every 24 hours, forever.</li>
-                <li>100% of Noun auction proceeds are trustlessly sent to the treasury.</li>
-                <li>Settlement of one auction kicks off the next.</li>
-                <li>All Nouns are members of Nouns DAO.</li>
-                <li>Nouns DAO uses a fork of {compoundGovLink}.</li>
-                <li>One Noun is equal to one vote.</li>
-                <li>The treasury is controlled exclusively by Nouns via governance.</li>
-                <li>Artwork is generative and stored directly on-chain (not IPFS).</li>
-                <li>No explicit rules exist for attribute scarcity; all Nouns are equally rare.</li>
-                <li>
-                  Nounders receive rewards in the form of Nouns (10% of supply for first 5 years).
-                </li>
-              </ul>
-            </Accordion.Body>
-          </Accordion.Item>
-
-          <Accordion.Item eventKey="1" className={classes.accordionItem}>
-            <Accordion.Header className={classes.accordionHeader}>Daily Auctions</Accordion.Header>
+            {/* <Accordion.Header className={classes.accordionHeader}>Daily Auctions</Accordion.Header>
             <Accordion.Body>
               <p className={classes.aboutText}>
                 The Nouns Auction Contract will act as a self-sufficient Noun generation and
@@ -75,39 +54,77 @@ const Documentation = () => {
                 triggered by anyone, allowing the system to trustlessly auction Nouns as long as
                 Ethereum is operational and there are interested bidders.
               </p>
-            </Accordion.Body>
+            </Accordion.Body> */}
           </Accordion.Item>
-          <Accordion.Item eventKey="2" className={classes.accordionItem}>
-            <Accordion.Header className={classes.accordionHeader}>Nouns DAO</Accordion.Header>
+          <Accordion.Item eventKey="1" className={classes.accordionItem}>
+            <Accordion.Header className={classes.accordionHeader}>Chiliagon DAO</Accordion.Header>
             <Accordion.Body>
-              Nouns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the
-              Nouns ecosystem. The Nouns DAO treasury receives 100% of ETH proceeds from daily Noun
-              auctions. Each Noun is an irrevocable member of Nouns DAO and entitled to one vote in
-              all governance matters. Noun votes are non-transferable (if you sell your Noun the
+              Chiliagon DAO utilizes a fork of {compoundGovLink} and is the main governing body of the
+              Chili ecosystem. The Chiliagon DAO treasury receives 100% of ETH proceeds from daily Chili
+              auctions. Each Chili is an irrevocable member of Chiliagon DAO and entitled to one vote in
+              all governance matters. Chili votes are non-transferable (if you sell your Chili the
               vote goes with it) but delegatable, which means you can assign your vote to someone
-              else as long as you own your Noun.
+              else as long as you own your Chili.
+            </Accordion.Body>
+            </Accordion.Item>
+            <Accordion.Item eventKey="2" className={classes.accordionItem}>
+            <Accordion.Header className={classes.accordionHeader}>Roles</Accordion.Header>
+            <Accordion.Body>
+              <ul>
+                <li>Teacher/Instructor/Mentor</li>
+               {/* Create proposals to conduct sessions which cover a preplanned set of topics in a specified duration. 
+               Preferably 10 x 2 hour sessions with a predefined Course Amount (CA).Teachers receive 5% of the CA (5% of the CA will be awarded  in terms of CDT tokens).
+               */}
+                <li>Student/Pupil/Novice</li>
+                {/* 1. Attend sessions conducted by teachers and receive POAP tokens.
+                2. Complete reading tasks and assignments to be rewarded with 0.01% of the CA in terms of CDT.
+                3. Complete mini project and capstone project - 0.5%  of the CA in terms of CDT */}
+                <li>Grant Project Contributors</li>
+                {/* Accomplish specific milestones in the grant project
+                Contributors receive 90% of the grant amount
+                10% goes to the DAO and contributors receive returns in CDT */}
+                <li>Hackathon Participants</li>
+                {/* Complete specific milestones in the hackathon project and make a successful submission - get 85% of bounty, if won
+                10% goes to the DAO and contributors receive returns in CDT */}
+                <li>Donations</li>
+                {/* Every donation to the DAO is eligible for a 5% return in CDT Tokens */}
+                <li>Business</li>
+                {/* Responsible for bringing new project proposals and grant opportunities to the community.
+                Each new grant that is created upon creation is eligible for 100 CDT
+                Upon grant getting passed 5% of grant value can be claimed by Business lead */}
+                <li>Legal Team</li>
+               {/* Provide legal advice and help the DAO understand regulations and regulatory changes
+               Contributors receive 85% of the grant amount for a legal support that we provide to other DAO's
+               10% goes to the DAO and contributors receive returns in CDT
+               Ensure compliance in the DAO operations */}
+                <li>Marketing Team</li>
+                {/* Develop and implement strategies to promote awareness about the DAO and its activities
+                Contributors receive 85% of the grant amount for marketing support that we provide to other DAO's
+                10% goes to the DAO and contributors receive returns in CDT
+                Manage social media outreach. */}
+              </ul>
+              <h5>*CDT token distribution is based on dollar value calculated at the time of disbursal</h5>
             </Accordion.Body>
           </Accordion.Item>
           <Accordion.Item eventKey="3" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              Governance ‘Slow Start’
+              Governance 
             </Accordion.Header>
             <Accordion.Body>
               <p>
-                In addition to the precautions taken by Compound Governance, Nounders have given
+                In addition to the precautions taken by Compound Governance, Chiliagons have given
                 themselves a special veto right to ensure that no malicious proposals can be passed
-                while the Noun supply is low. This veto right will only be used if an obviously
+                while the Chili supply is low. This veto right will only be used if an obviously
                 harmful governance proposal has been passed, and is intended as a last resort.
-              </p>
-              <p>
-                Nounders will proveably revoke this veto right when they deem it safe to do so. This
+                <br /><br />
+                Chiliagons will proveably revoke this veto right when they deem it safe to do so. This
                 decision will be based on a healthy Noun distribution and a community that is
                 engaged in the governance process.
               </p>
             </Accordion.Body>
           </Accordion.Item>
           <Accordion.Item eventKey="4" className={classes.accordionItem}>
-            <Accordion.Header className={classes.accordionHeader}>Noun Traits</Accordion.Header>
+            {/* <Accordion.Header className={classes.accordionHeader}>Noun Traits</Accordion.Header>
             <Accordion.Body>
               <p>
                 Nouns are generated randomly based Ethereum block hashes. There are no 'if'
@@ -122,7 +139,7 @@ const Documentation = () => {
                 <li>glasses (21)</li>
               </ul>
               You can experiment with off-chain Noun generation at the {playgroundLink}.
-            </Accordion.Body>
+            </Accordion.Body> */}
           </Accordion.Item>
           <Accordion.Item eventKey="5" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
@@ -130,12 +147,10 @@ const Documentation = () => {
             </Accordion.Header>
             <Accordion.Body>
               <p>
-                Nouns are stored directly on Ethereum and do not utilize pointers to other networks
-                such as IPFS. This is possible because Noun parts are compressed and stored on-chain
+                Chilis are stored directly on Ethereum and do not utilize pointers to other networks
+                such as IPFS. This is possible because Chilis parts are compressed and stored on-chain
                 using a custom run-length encoding (RLE), which is a form of lossless compression.
-              </p>
-
-              <p>
+                <br /><br />
                 The compressed parts are efficiently converted into a single base64 encoded SVG
                 image on-chain. To accomplish this, each part is decoded into an intermediate format
                 before being converted into a series of SVG rects using batched, on-chain string
@@ -144,7 +159,7 @@ const Documentation = () => {
             </Accordion.Body>
           </Accordion.Item>
           <Accordion.Item eventKey="6" className={classes.accordionItem}>
-            <Accordion.Header className={classes.accordionHeader}>
+            {/* <Accordion.Header className={classes.accordionHeader}>
               Noun Seeder Contract
             </Accordion.Header>
             <Accordion.Body>
@@ -156,16 +171,16 @@ const Documentation = () => {
                 generation:
               </p>
               <code>keccak256(abi.encodePacked(blockhash(block.number - 1), nounId))</code>
-              <br />
-              <br />
+              
+              
               <p>
                 Trait generation is not truly random. Traits can be predicted when minting a Noun on
                 the pending block.
               </p>
-            </Accordion.Body>
+            </Accordion.Body> */}
           </Accordion.Item>
           <Accordion.Item eventKey="7" className={classes.accordionItem}>
-            <Accordion.Header className={classes.accordionHeader}>
+            {/* <Accordion.Header className={classes.accordionHeader}>
               Nounder's Reward
             </Accordion.Header>
             <Accordion.Body>
@@ -226,8 +241,28 @@ const Documentation = () => {
                 Nounder distributions don't interfere with the cadence of 24 hour auctions. Nouns
                 are sent directly to the Nounder's Multisig, and auctions continue on schedule with
                 the next available Noun ID.
-              </p>
-            </Accordion.Body>
+              </p> */}
+            {/* </Accordion.Body> */}
+          </Accordion.Item>
+          <Accordion.Item eventKey="8" className={classes.accordionItem}>
+            {/* <Accordion.Header className={classes.accordionHeader}>Summary</Accordion.Header>
+            <Accordion.Body>
+              <ul>
+                <li>Nouns artwork is in the {publicDomainLink}.</li>
+                <li>One Noun is trustlessly auctioned every 24 hours, forever.</li>
+                <li>100% of Noun auction proceeds are trustlessly sent to the treasury.</li>
+                <li>Settlement of one auction kicks off the next.</li>
+                <li>All Nouns are members of Nouns DAO.</li>
+                <li>Nouns DAO uses a fork of {compoundGovLink}.</li>
+                <li>One Noun is equal to one vote.</li>
+                <li>The treasury is controlled exclusively by Nouns via governance.</li>
+                <li>Artwork is generative and stored directly on-chain (not IPFS).</li>
+                <li>No explicit rules exist for attribute scarcity; all Nouns are equally rare.</li>
+                <li>
+                  Nounders receive rewards in the form of Nouns (10% of supply for first 5 years).
+                </li>
+              </ul>
+            </Accordion.Body> */}
           </Accordion.Item>
         </Accordion>
       </Col>
@@ -235,3 +270,7 @@ const Documentation = () => {
   );
 };
 export default Documentation;
+
+
+
+

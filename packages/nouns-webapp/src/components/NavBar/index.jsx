@@ -13,12 +13,14 @@ import { ExternalURL, externalURL } from '../../utils/externalURL';
 import useLidoBalance from '../../hooks/useLidoBalance';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookOpen } from '@fortawesome/free-solid-svg-icons';
+import { faTwitter } from '@fortawesome/free-brands-svg-icons';
+import { faDiscord } from '@fortawesome/free-brands-svg-icons';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
-import { faComments } from '@fortawesome/free-solid-svg-icons';
-import { faPlay } from '@fortawesome/free-solid-svg-icons';
+// import { faComments } from '@fortawesome/free-solid-svg-icons';
+// import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import NavBarTreasury from '../NavBarTreasury';
 import NavWallet from '../NavWallet';
+// import { Component } from 'react';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
@@ -44,6 +46,7 @@ const NavBar = () => {
   return (
     <>
       <Navbar
+        bg="light"
         expand="lg"
         style={{ backgroundColor: `${useStateBg ? stateBgColor : 'white'}` }}
         className={classes.navBarCustom}
@@ -51,7 +54,7 @@ const NavBar = () => {
         <Container style={{ maxWidth: 'unset' }}>
           <div className={classes.brandAndTreasuryWrapper}>
             <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
-              <img src={logo} className={classes.navBarLogo} alt="Nouns DAO logo" />
+              <img src={logo} className={classes.navBarLogo} alt="Chiliagon DAO logo" />
             </Navbar.Brand>
             {Number(CHAIN_ID) !== 1 && (
               <Nav.Item>
@@ -78,13 +81,35 @@ const NavBar = () => {
           <Navbar.Toggle className={classes.navBarToggle} aria-controls="basic-navbar-nav" />
           <Navbar.Collapse className="justify-content-end">
             <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>
-              <NavBarButton
+              <NavBarButton 
                 buttonText={'DAO'}
                 buttonIcon={<FontAwesomeIcon icon={faUsers} />}
                 buttonStyle={nonWalletButtonStyle}
               />
             </Nav.Link>
             <Nav.Link
+              href={externalURL(ExternalURL.discord)}
+              className={classes.nounsNavLink}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <NavBarButton 
+                buttonText={'Discord'}
+                buttonIcon={<FontAwesomeIcon icon={faDiscord} />}
+                buttonStyle={nonWalletButtonStyle}/>
+            </Nav.Link>
+            <Nav.Link
+              href={externalURL(ExternalURL.twitter)}
+              className={classes.nounsNavLink}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <NavBarButton 
+                buttonText={'Twitter'}
+                buttonIcon={<FontAwesomeIcon icon={faTwitter} />}
+                buttonStyle={nonWalletButtonStyle} />
+            </Nav.Link>
+            {/* <Nav.Link
               href={externalURL(ExternalURL.notion)}
               className={classes.nounsNavLink}
               target="_blank"
@@ -107,14 +132,14 @@ const NavBar = () => {
                 buttonIcon={<FontAwesomeIcon icon={faComments} />}
                 buttonStyle={nonWalletButtonStyle}
               />
-            </Nav.Link>
-            <Nav.Link as={Link} to="/playground" className={classes.nounsNavLink}>
+            </Nav.Link> */}
+            {/* <Nav.Link as={Link} to="/playground" className={classes.nounsNavLink}>
               <NavBarButton
                 buttonText={'Playground'}
                 buttonIcon={<FontAwesomeIcon icon={faPlay} />}
                 buttonStyle={nonWalletButtonStyle}
               />
-            </Nav.Link>
+            </Nav.Link> */}
             <NavWallet address={activeAccount || '0'} buttonStyle={nonWalletButtonStyle} />{' '}
           </Navbar.Collapse>
         </Container>

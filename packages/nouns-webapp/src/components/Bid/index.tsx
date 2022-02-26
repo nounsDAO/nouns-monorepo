@@ -151,7 +151,7 @@ const Bid: React.FC<{
         message: `Bid was placed successfully!`,
         show: true,
       });
-      setBidButtonContent({ loading: false, content: 'Place bid' });
+      setBidButtonContent({ loading: false, content: 'Bid' });
       clearBidInput();
     }
   }, [auction, placeBidState, account, setModal]);
@@ -274,7 +274,7 @@ const Bid: React.FC<{
           </Button>
         ) : (
           <>
-            <Col lg={12} className={classes.voteForNextNounBtnWrapper}>
+            <Col lg={12}>
               <Button className={classes.bidBtnAuctionEnded} onClick={fomoNounsBtnOnClickHandler}>
                 Vote for the next Noun ⌐◧-◧
               </Button>
