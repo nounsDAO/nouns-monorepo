@@ -44,14 +44,14 @@ const Auction: React.FC<AuctionProps> = props => {
   };
 
   const handleKeyPress = useCallback(event => {
-    if(event.code === "ArrowLeft") prevAuctionHandler();
-    else if(event.code === "ArrowRight") nextAuctionHandler();
+    if (event.code === 'ArrowLeft') prevAuctionHandler();
+    else if (event.code === 'ArrowRight') nextAuctionHandler();
     else return;
   }, []);
 
   useEffect(() => {
-    window.addEventListener("keydown", handleKeyPress);
-    return () => window.removeEventListener("keydown", handleKeyPress);
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
   }, [handleKeyPress]);
 
   const nounContent = currentAuction && (
