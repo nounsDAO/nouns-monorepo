@@ -26,6 +26,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 import { utils } from 'ethers';
 import { useAppDispatch } from '../../hooks';
+import { useBlockTimestamp } from '../../hooks/useBlockTimestamp';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -54,6 +55,7 @@ const VotePage = ({
   const { castVote, castVoteState } = useCastVote();
   const { queueProposal, queueProposalState } = useQueueProposal();
   const { executeProposal, executeProposalState } = useExecuteProposal();
+  const proposalCreationTimestamp = useBlockTimestamp(proposal?.createdBlock);
 
   // Get and format date from data
   const timestamp = Date.now();
@@ -268,8 +270,8 @@ const VotePage = ({
           <>
             {showBlockRestriction && !hasVoted && (
               <Alert variant="secondary" className={classes.blockRestrictionAlert}>
-                Only NOUN votes that were self delegated or delegated to another address before
-                block {proposal.createdBlock} are eligible for voting.
+                Only Nouns in your wallet or delegated to you before{' '}
+                {dayjs(proposalCreationTimestamp).format('MMMM D, YYYY h:mm A z')} can vote.
               </Alert>
             )}
             {hasVoted && (
