@@ -255,7 +255,7 @@ describe('NounsAuctionHouse', () => {
 
     const { nounId } = await nounsAuctionHouse.auction();
 
-    expect(nounId).to.equal(1);
+    expect(nounId).to.equal(0);
   });
 
   it('should create a new auction if the auction house is paused and unpaused after an auction is settled', async () => {
@@ -302,14 +302,7 @@ describe('NounsAuctionHouse', () => {
     await ethers.provider.send('evm_increaseTime', [60 * 60 * 25]); // Add 25 hours
 
     const settleTx = nounsAuctionHouse.connect(bidderA).settleCurrentAndCreateNewAuction();
-
-    await expect(settleTx)
-      .to.emit(nounsAuctionHouse, 'AuctionSettled')
-      .withArgs(nounId, bidderA.address, RESERVE_PRICE);
-
-    const paused = await nounsAuctionHouse.paused();
-
-    expect(paused).to.equal(true);
+    await expect(settleTx).to.be.revertedWith('Sender is not the minter');
   });
 
   it('should burn a Noun on auction settlement if no bids are received', async () => {

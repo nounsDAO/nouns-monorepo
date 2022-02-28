@@ -36,6 +36,8 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     // The Nouns ERC721 token contract
     INounsToken public nouns;
 
+    uint256 auctionIndex;
+
     // The address of the WETH contract
     address public weth;
 
@@ -195,12 +197,12 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      * catch the revert and pause this contract.
      */
     function _createAuction() internal {
-        try nouns.mint() returns (uint256 nounId) {
+    //try nouns.mint() returns (uint256 nounId) {
             uint256 startTime = block.timestamp;
             uint256 endTime = startTime + duration;
 
             auction = Auction({
-                nounId: nounId,
+                nounId: auctionIndex,
                 amount: 0,
                 startTime: startTime,
                 endTime: endTime,
@@ -208,10 +210,12 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
                 settled: false
             });
 
-            emit AuctionCreated(nounId, startTime, endTime);
-        } catch Error(string memory) {
-            _pause();
-        }
+            auctionIndex = auctionIndex + 1;
+
+            emit AuctionCreated(auction.nounId, startTime, endTime);
+//        } catch Error(string memory) {
+//            _pause();
+//        }
     }
 
     /**
@@ -227,10 +231,9 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
 
         auction.settled = true;
 
-        if (_auction.bidder == address(0)) {
-            nouns.burn(_auction.nounId);
-        } else {
-            nouns.transferFrom(address(this), _auction.bidder, _auction.nounId);
+        if (_auction.bidder != address(0)) {
+            uint256 mintToken = nouns.mint();
+            nouns.transferFrom(address(this), _auction.bidder, mintToken);
         }
 
         if (_auction.amount > 0) {
