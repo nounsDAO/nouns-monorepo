@@ -184,7 +184,7 @@ describe('End to End test with deployment, auction, proposing, voting, executing
   });
 
   it('allows bidding, settling, and transferring ETH correctly', async () => {
-    await nounsAuctionHouse.connect(bidderA).createBid(0, { value: RESERVE_PRICE });
+    await nounsAuctionHouse.connect(bidderA).createBid(0, 0, { value: RESERVE_PRICE });
     await setNextBlockTimestamp(Number(await blockTimestamp('latest')) + DURATION);
     await nounsAuctionHouse.settleCurrentAndCreateNewAuction();
 

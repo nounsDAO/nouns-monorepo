@@ -88,7 +88,7 @@ describe('NounsAuctionHouse', () => {
     await (await nounsAuctionHouse.unpause()).wait();
 
     const { nounId } = await nounsAuctionHouse.auction();
-    const tx = nounsAuctionHouse.connect(bidderA).createBid(nounId.add(1), {
+    const tx = nounsAuctionHouse.connect(bidderA).createBid(0, nounId.add(1), {
       value: RESERVE_PRICE,
     });
 
@@ -101,7 +101,7 @@ describe('NounsAuctionHouse', () => {
     await ethers.provider.send('evm_increaseTime', [60 * 60 * 25]); // Add 25 hours
 
     const { nounId } = await nounsAuctionHouse.auction();
-    const tx = nounsAuctionHouse.connect(bidderA).createBid(nounId, {
+    const tx = nounsAuctionHouse.connect(bidderA).createBid(0,nounId, {
       value: RESERVE_PRICE,
     });
 
@@ -112,7 +112,7 @@ describe('NounsAuctionHouse', () => {
     await (await nounsAuctionHouse.unpause()).wait();
 
     const { nounId } = await nounsAuctionHouse.auction();
-    const tx = nounsAuctionHouse.connect(bidderA).createBid(nounId, {
+    const tx = nounsAuctionHouse.connect(bidderA).createBid(0,nounId, {
       value: RESERVE_PRICE - 1,
     });
 
@@ -123,10 +123,10 @@ describe('NounsAuctionHouse', () => {
     await (await nounsAuctionHouse.unpause()).wait();
 
     const { nounId } = await nounsAuctionHouse.auction();
-    await nounsAuctionHouse.connect(bidderA).createBid(nounId, {
+    await nounsAuctionHouse.connect(bidderA).createBid(0,nounId, {
       value: RESERVE_PRICE * 50,
     });
-    const tx = nounsAuctionHouse.connect(bidderB).createBid(nounId, {
+    const tx = nounsAuctionHouse.connect(bidderB).createBid(0,nounId, {
       value: RESERVE_PRICE * 51,
     });
 
@@ -139,12 +139,12 @@ describe('NounsAuctionHouse', () => {
     await (await nounsAuctionHouse.unpause()).wait();
 
     const { nounId } = await nounsAuctionHouse.auction();
-    await nounsAuctionHouse.connect(bidderA).createBid(nounId, {
+    await nounsAuctionHouse.connect(bidderA).createBid(0,nounId, {
       value: RESERVE_PRICE,
     });
 
     const bidderAPostBidBalance = await bidderA.getBalance();
-    await nounsAuctionHouse.connect(bidderB).createBid(nounId, {
+    await nounsAuctionHouse.connect(bidderB).createBid(0,nounId, {
       value: RESERVE_PRICE * 2,
     });
     const bidderAPostRefundBalance = await bidderA.getBalance();
@@ -167,7 +167,7 @@ describe('NounsAuctionHouse', () => {
       });
     await maliciousBid.wait();
 
-    const tx = await nounsAuctionHouse.connect(bidderB).createBid(nounId, {
+    const tx = await nounsAuctionHouse.connect(bidderB).createBid(0,nounId, {
       value: RESERVE_PRICE * 2,
       gasLimit: 1_000_000,
     });
@@ -181,7 +181,7 @@ describe('NounsAuctionHouse', () => {
     await (await nounsAuctionHouse.unpause()).wait();
 
     const { nounId } = await nounsAuctionHouse.auction();
-    const tx = nounsAuctionHouse.connect(bidderA).createBid(nounId, {
+    const tx = nounsAuctionHouse.connect(bidderA).createBid(0,nounId, {
       value: RESERVE_PRICE,
     });
 
@@ -197,7 +197,7 @@ describe('NounsAuctionHouse', () => {
 
     await ethers.provider.send('evm_setNextBlockTimestamp', [endTime.sub(60 * 5).toNumber()]); // Subtract 5 mins from current end time
 
-    const tx = nounsAuctionHouse.connect(bidderA).createBid(nounId, {
+    const tx = nounsAuctionHouse.connect(bidderA).createBid(0,nounId, {
       value: RESERVE_PRICE,
     });
 
@@ -211,7 +211,7 @@ describe('NounsAuctionHouse', () => {
 
     const { nounId } = await nounsAuctionHouse.auction();
 
-    await nounsAuctionHouse.connect(bidderA).createBid(nounId, {
+    await nounsAuctionHouse.connect(bidderA).createBid(0,nounId, {
       value: RESERVE_PRICE,
     });
     const tx = nounsAuctionHouse.connect(bidderA).settleCurrentAndCreateNewAuction();
@@ -224,7 +224,7 @@ describe('NounsAuctionHouse', () => {
 
     const { nounId } = await nounsAuctionHouse.auction();
 
-    await nounsAuctionHouse.connect(bidderA).createBid(nounId, {
+    await nounsAuctionHouse.connect(bidderA).createBid(0,nounId, {
       value: RESERVE_PRICE,
     });
 
@@ -263,7 +263,7 @@ describe('NounsAuctionHouse', () => {
 
     const { nounId } = await nounsAuctionHouse.auction();
 
-    await nounsAuctionHouse.connect(bidderA).createBid(nounId, {
+    await nounsAuctionHouse.connect(bidderA).createBid(0,nounId, {
       value: RESERVE_PRICE,
     });
 
@@ -293,7 +293,7 @@ describe('NounsAuctionHouse', () => {
 
     const { nounId } = await nounsAuctionHouse.auction();
 
-    await nounsAuctionHouse.connect(bidderA).createBid(nounId, {
+    await nounsAuctionHouse.connect(bidderA).createBid(0,nounId, {
       value: RESERVE_PRICE,
     });
 

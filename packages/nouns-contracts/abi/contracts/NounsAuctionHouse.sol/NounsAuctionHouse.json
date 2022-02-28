@@ -41,6 +41,37 @@
       },
       {
         "indexed": false,
+        "internalType": "address",
+        "name": "sender",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "extended",
+        "type": "bool"
+      }
+    ],
+    "name": "AuctionBidERC20",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "nounId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
         "internalType": "uint256",
         "name": "startTime",
         "type": "uint256"
@@ -184,6 +215,44 @@
     "type": "event"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_amountInETH",
+        "type": "uint256"
+      }
+    ],
+    "name": "_estimateERC20Amount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_amountInERC20",
+        "type": "uint256"
+      }
+    ],
+    "name": "_estimateETHAmount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "auction",
     "outputs": [
@@ -216,6 +285,11 @@
         "internalType": "bool",
         "name": "settled",
         "type": "bool"
+      },
+      {
+        "internalType": "uint8",
+        "name": "lastBidType",
+        "type": "uint8"
       }
     ],
     "stateMutability": "view",
@@ -223,6 +297,11 @@
   },
   {
     "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "useERC20",
+        "type": "uint256"
+      },
       {
         "internalType": "uint256",
         "name": "nounId",
@@ -300,10 +379,36 @@
   },
   {
     "inputs": [],
+    "name": "monaToken",
+    "outputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "nouns",
     "outputs": [
       {
         "internalType": "contract INounsToken",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "oracle",
+    "outputs": [
+      {
+        "internalType": "contract IDigitalaxMonaOracle",
         "name": "",
         "type": "address"
       }
@@ -446,6 +551,32 @@
   {
     "inputs": [],
     "name": "unpause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "_monaToken",
+        "type": "address"
+      }
+    ],
+    "name": "updateMonaToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IDigitalaxMonaOracle",
+        "name": "_oracle",
+        "type": "address"
+      }
+    ],
+    "name": "updateOracle",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
