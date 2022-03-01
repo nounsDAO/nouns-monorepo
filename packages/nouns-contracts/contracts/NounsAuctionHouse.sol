@@ -140,7 +140,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
                 _safeTransferETHWithFallback(lastBidder, _auction.amount);
             } else{
                 // This is erc20 transfer
-                monaToken.transfer(lastBidder, _estimateERC20Amount(_auction.amount));
+                monaToken.transfer(lastBidder, _auction.amount);
             }
         }
 
@@ -148,7 +148,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
             auction.amount = msg.value;
             auction.lastBidType = uint8(1);
         } else{
-            auction.amount = _estimateETHAmount(useERC20);
+            auction.amount = useERC20;
             auction.lastBidType = uint8(2);
         }
 
@@ -289,7 +289,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
             uint256 mintToken = nouns.mint();
             nouns.transferFrom(address(this), _auction.bidder, mintToken);
         }
-
+        // TODO ERC20 logic here!
         if (_auction.amount > 0) {
             _safeTransferETHWithFallback(owner(), _auction.amount);
         }

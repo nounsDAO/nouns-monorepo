@@ -1,7 +1,7 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
-import { constants } from 'ethers';
+import { BigNumber, constants } from 'ethers';
 import { ethers, upgrades } from 'hardhat';
 import {
   MaliciousBidder__factory as MaliciousBidderFactory,
@@ -9,8 +9,9 @@ import {
   NounsDescriptor__factory as NounsDescriptorFactory,
   NounsToken,
   Weth,
+  DigitalaxMonaOracle
 } from '../typechain';
-import { deployNounsToken, deployWeth, populateDescriptor } from './utils';
+import { deployNounsToken, deployWeth, deployOracle, populateDescriptor } from './utils';
 
 chai.use(solidity);
 const { expect } = chai;
@@ -19,6 +20,7 @@ describe('NounsAuctionHouse', () => {
   let nounsAuctionHouse: NounsAuctionHouse;
   let nounsToken: NounsToken;
   let weth: Weth;
+  let oracle: DigitalaxMonaOracle;
   let deployer: SignerWithAddress;
   let noundersDAO: SignerWithAddress;
   let bidderA: SignerWithAddress;
@@ -48,6 +50,9 @@ describe('NounsAuctionHouse', () => {
     nounsToken = await deployNounsToken(deployer, noundersDAO.address, deployer.address);
     weth = await deployWeth(deployer);
     nounsAuctionHouse = await deploy(deployer);
+    oracle = await deployOracle(deployer);
+    await (await oracle.addProvider(deployer.address)).wait();
+    await (await oracle.pushReport(BigNumber.from(1000000000000000))).wait();
 
     const descriptor = await nounsToken.descriptor();
 
@@ -227,6 +232,39 @@ describe('NounsAuctionHouse', () => {
     await nounsAuctionHouse.connect(bidderA).createBid(0,nounId, {
       value: RESERVE_PRICE,
     });
+
+    await ethers.provider.send('evm_increaseTime', [60 * 60 * 25]); // Add 25 hours
+    const tx = await nounsAuctionHouse.connect(bidderA).settleCurrentAndCreateNewAuction();
+
+    const receipt = await tx.wait();
+    const { timestamp } = await ethers.provider.getBlock(receipt.blockHash);
+
+    const settledEvent = receipt.events?.find(e => e.event === 'AuctionSettled');
+    const createdEvent = receipt.events?.find(e => e.event === 'AuctionCreated');
+
+    expect(settledEvent?.args?.nounId).to.equal(nounId);
+    expect(settledEvent?.args?.winner).to.equal(bidderA.address);
+    expect(settledEvent?.args?.amount).to.equal(RESERVE_PRICE);
+
+    expect(createdEvent?.args?.nounId).to.equal(nounId.add(1));
+    expect(createdEvent?.args?.startTime).to.equal(timestamp);
+    expect(createdEvent?.args?.endTime).to.equal(timestamp + DURATION);
+  });
+  it('should emit `AuctionSettled` and `AuctionCreated` events for erc20', async () => {
+    await (await nounsAuctionHouse.unpause()).wait();
+
+    await (await nounsAuctionHouse.updateMonaToken(weth.address)).wait();
+    await (await nounsAuctionHouse.updateOracle(oracle.address)).wait();
+
+    const { nounId } = await nounsAuctionHouse.auction();
+
+    // Change this to use the erc20 token...
+    // Need to mint weth
+    await weth.connect(bidderA).deposit({value: BigNumber.from(1000000000000000) });
+    await weth.connect(bidderA).approve(nounsAuctionHouse.address, BigNumber.from(1000000000000000) );
+
+    // Need to approve weth
+    await nounsAuctionHouse.connect(bidderA).createBid(10000, nounId);
 
     await ethers.provider.send('evm_increaseTime', [60 * 60 * 25]); // Add 25 hours
     const tx = await nounsAuctionHouse.connect(bidderA).settleCurrentAndCreateNewAuction();
