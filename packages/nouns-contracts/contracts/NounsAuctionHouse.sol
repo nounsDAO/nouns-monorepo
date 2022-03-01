@@ -163,7 +163,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
           if(useERC20 == 0){
             emit AuctionBid(_auction.nounId, msg.sender, msg.value, extended);
         } else{
-            emit AuctionBid(_auction.nounId, msg.sender, useERC20, extended);
+            emit AuctionBidERC20(_auction.nounId, msg.sender, useERC20, extended);
         }
 
         if (extended) {
