@@ -3,11 +3,17 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import classes from './AuctionActivityDateHeadline.module.css';
 import { useAppSelector } from '../../hooks';
+import { useLingui } from '@lingui/react';
+import { Trans } from '@lingui/macro';
+import React from 'react';
 
 dayjs.extend(utc);
 
 const AuctionActivityDateHeadline: React.FC<{ startTime: BigNumber }> = props => {
   const { startTime } = props;
+
+  const { i18n } = useLingui();
+
   const isCool = useAppSelector(state => state.application.isCoolBackground);
   const auctionStartTimeUTC = dayjs(startTime.toNumber() * 1000)
     .utc()
@@ -17,7 +23,9 @@ const AuctionActivityDateHeadline: React.FC<{ startTime: BigNumber }> = props =>
       <h4
         className={classes.date}
         style={{ color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)' }}
-      >{`${auctionStartTimeUTC}`}</h4>
+      >
+        <Trans>{`${i18n.date(auctionStartTimeUTC)}`}</Trans>
+      </h4>
     </div>
   );
 };

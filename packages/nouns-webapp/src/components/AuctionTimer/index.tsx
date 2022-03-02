@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { useAppSelector } from '../../hooks';
 import clsx from 'clsx';
+import { Trans } from '@lingui/macro';
 
 dayjs.extend(duration);
 
@@ -43,8 +44,16 @@ const AuctionTimer: React.FC<{
     }
   }, [auction, auctionTimer]);
 
-  const auctionContentLong = auctionEnded ? 'Auction ended' : 'Auction ends in';
-  const auctionContentShort = auctionEnded ? 'Auction ended' : 'Time left';
+  const auctionContentLong = auctionEnded ? (
+    <Trans>Auction ended</Trans>
+  ) : (
+    <Trans>Auction ends in</Trans>
+  );
+  const auctionContentShort = auctionEnded ? (
+    <Trans>Auction ended</Trans>
+  ) : (
+    <Trans>Time left</Trans>
+  );
 
   const flooredMinutes = Math.floor(timerDuration.minutes());
   const flooredSeconds = Math.floor(timerDuration.seconds());
@@ -63,11 +72,15 @@ const AuctionTimer: React.FC<{
             color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)',
           }}
         >
-          {timerToggle
-            ? window.innerWidth < 992
-              ? auctionContentShort
-              : auctionContentLong
-            : `Ends on ${endTime.format('MMM Do')} at`}
+          {timerToggle ? (
+            window.innerWidth < 992 ? (
+              auctionContentShort
+            ) : (
+              auctionContentLong
+            )
+          ) : (
+            <Trans>{`Ends on ${endTime.format('MMM Do')} at`}</Trans>
+          )}
         </h4>
       </Col>
       <Col xs="auto" lg={12}>

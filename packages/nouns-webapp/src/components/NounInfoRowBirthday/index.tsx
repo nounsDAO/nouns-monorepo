@@ -8,6 +8,7 @@ import _BirthdayIcon from '../../assets/icons/Birthday.svg';
 import { Image } from 'react-bootstrap';
 import { useAppSelector } from '../../hooks';
 import { AuctionState } from '../../state/slices/auction';
+import { Trans } from '@lingui/macro';
 
 interface NounInfoRowBirthdayProps {
   nounId: number;
@@ -34,7 +35,7 @@ const NounInfoRowBirthday: React.FC<NounInfoRowBirthdayProps> = props => {
   );
 
   if (!startTime) {
-    return <>Error fetching noun birthday</>;
+    return <Trans>Error fetching noun birthday</Trans>;
   }
 
   const monthNames = [
@@ -58,7 +59,7 @@ const NounInfoRowBirthday: React.FC<NounInfoRowBirthdayProps> = props => {
       <span>
         <Image src={_BirthdayIcon} className={classes.birthdayIcon} />
       </span>
-      Born
+      <Trans>Born</Trans>
       <span className={classes.nounInfoRowBirthday}>
         {monthNames[birthday.getUTCMonth()]} {birthday.getUTCDate()}, {birthday.getUTCFullYear()}
       </span>

@@ -5,12 +5,12 @@ import { useAppSelector } from '../../hooks';
 
 interface NounInfoRowButtonProps {
   iconImgSource: string;
-  btnText: string;
+  localizedBtnText: React.ReactNode;
   onClickHandler: () => void;
 }
 
 const NounInfoRowButton: React.FC<NounInfoRowButtonProps> = props => {
-  const { iconImgSource, btnText, onClickHandler } = props;
+  const { iconImgSource, localizedBtnText, onClickHandler } = props;
   const isCool = useAppSelector(state => state.application.isCoolBackground);
   return (
     <div
@@ -19,7 +19,7 @@ const NounInfoRowButton: React.FC<NounInfoRowButtonProps> = props => {
     >
       <div className={classes.nounButtonContents}>
         <Image src={iconImgSource} className={classes.buttonIcon} />
-        {btnText}
+        {localizedBtnText}
       </div>
     </div>
   );

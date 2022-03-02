@@ -16,6 +16,7 @@ import { useShortAddress } from '../ShortAddress';
 import { isMobileScreen } from '../../utils/isMobile';
 import { usePickByState } from '../../utils/colorResponsiveUIUtils';
 import WalletConnectButton from './WalletConnectButton';
+import { Trans } from '@lingui/macro';
 
 interface NavWalletProps {
   address: string;
@@ -150,7 +151,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
               ),
             )}
           >
-            Switch wallet
+            <Trans>Switch wallet</Trans>
           </div>
 
           <div
@@ -167,7 +168,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
               classes.disconnectText,
             )}
           >
-            Disconnect
+            <Trans>Disconnect</Trans>
           </div>
         </div>
       </div>
@@ -197,10 +198,10 @@ const NavWallet: React.FC<NavWalletProps> = props => {
           className={classes.mobileSwitchWalletText}
           onClick={switchWalletHandler}
         >
-          Switch
+          <Trans>Switch wallet</Trans>
         </div>
         <div className={classes.disconnectText} onClick={disconectWalletHandler}>
-          Sign out
+          <Trans>Sign out</Trans>
         </div>
       </div>
     </div>

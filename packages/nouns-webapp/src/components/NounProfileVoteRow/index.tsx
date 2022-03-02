@@ -14,6 +14,7 @@ import VoteStatusPill from '../VoteStatusPill';
 import _PendingVoteIcon from '../../assets/icons/PendingVote.svg';
 import { Vote } from '../../utils/vote';
 import { NounVoteHistory } from '../ProfileActivityFeed';
+import { Trans } from '@lingui/macro';
 
 interface NounProfileVoteRowProps {
   proposal: Proposal;
@@ -42,25 +43,28 @@ const selectIconForNounVoteActivityRow = (proposal: Proposal, vote?: NounVoteHis
 const selectVotingInfoText = (proposal: Proposal, vote?: NounVoteHistory) => {
   if (!vote) {
     if (proposal.status === ProposalState.PENDING || proposal.status === ProposalState.ACTIVE) {
-      return 'Waiting for';
+      return <Trans>Waiting for</Trans>;
     }
-    return 'Absent for';
+    return <Trans>Absent for</Trans>;
   } else if (vote.supportDetailed) {
     switch (vote.supportDetailed) {
       case Vote.FOR:
-        return 'Voted for';
+        return <Trans>Voted for</Trans>;
       case Vote.ABSTAIN:
       default:
-        return 'Abstained on';
+        return <Trans>Abstained on</Trans>;
     }
   } else {
-    return 'Voted aginst';
+    return <Trans>Voted aginst</Trans>;
   }
 };
 
 const selectProposalStatusIcon = (proposal: Proposal) => {
   return (
-    <VoteStatusPill status={selectProposalStatus(proposal)} text={selectProposalText(proposal)} />
+    <VoteStatusPill
+      status={selectProposalStatus(proposal)}
+      localizedText={selectProposalText(proposal)}
+    />
   );
 };
 
@@ -81,25 +85,25 @@ const selectProposalStatus = (proposal: Proposal) => {
 const selectProposalText = (proposal: Proposal) => {
   switch (proposal.status) {
     case ProposalState.PENDING:
-      return 'Pending';
+      return <Trans>Pending</Trans>;
     case ProposalState.ACTIVE:
-      return 'Active';
+      return <Trans>Active</Trans>;
     case ProposalState.SUCCEEDED:
-      return 'Succeeded';
+      return <Trans>Succeded</Trans>;
     case ProposalState.EXECUTED:
-      return 'Executed';
+      return <Trans>Executed</Trans>;
     case ProposalState.DEFEATED:
-      return 'Defeated';
+      return <Trans>Defeated</Trans>;
     case ProposalState.QUEUED:
-      return 'Queued';
+      return <Trans>Queued</Trans>;
     case ProposalState.CANCELED:
-      return 'Canceled';
+      return <Trans>Canceled</Trans>;
     case ProposalState.VETOED:
-      return 'Vetoed';
+      return <Trans>Vetoed</Trans>;
     case ProposalState.EXPIRED:
-      return 'Expired';
+      return <Trans>Expired</Trans>;
     default:
-      return 'Undetermined';
+      return <Trans>Undetermined</Trans>;
   }
 };
 
