@@ -64,8 +64,10 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
 
   const bidHistoryTitle = (
     <h1>
+      <Trans>
       Noun {auction && auction.nounId.toString()}
       <br /> Bid History
+      </Trans>
     </h1>
   );
 
