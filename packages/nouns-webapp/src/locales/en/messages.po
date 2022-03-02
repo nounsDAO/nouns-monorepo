@@ -13,6 +13,451 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#: src/components/Documentation/index.tsx:249
+msgid "'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:"
+msgstr "'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:"
+
+#: src/components/NounderNounContent/index.tsx:82
+msgid ". For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
+msgstr ". For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
+
+#: src/components/Documentation/index.tsx:58
+msgid "100% of Noun auction proceeds are trustlessly sent to the treasury."
+msgstr "100% of Noun auction proceeds are trustlessly sent to the treasury."
+
+#: src/components/SettleManuallyBtn/index.tsx:60
+msgid "<0/>You can settle manually in {0}"
+msgstr "<0/>You can settle manually in {0}"
+
+#: src/components/NounProfileVoteRow/index.tsx:48
+msgid "Absent for"
+msgstr "Absent for"
+
+#: src/components/NounProfileVoteRow/index.tsx:55
+msgid "Abstained on"
+msgstr "Abstained on"
+
+#: src/components/NounProfileVoteRow/index.tsx:90
+#: src/components/ProposalStatus/index.tsx:31
+msgid "Active"
+msgstr "Active"
+
+#: src/components/ProfileActivityFeed/index.tsx:80
+msgid "Activity"
+msgstr "Activity"
+
+#: src/components/NounderNounContent/index.tsx:78
+msgid "All Noun auction proceeds are sent to the"
+msgstr "All Noun auction proceeds are sent to the"
+
+#: src/components/Documentation/index.tsx:64
+msgid "All Nouns are members of Nouns DAO."
+msgstr "All Nouns are members of Nouns DAO."
+
+#: src/components/Documentation/index.tsx:76
+msgid "Artwork is generative and stored directly on-chain (not IPFS)."
+msgstr "Artwork is generative and stored directly on-chain (not IPFS)."
+
+#: src/components/AuctionTimer/index.tsx:48
+#: src/components/AuctionTimer/index.tsx:53
+msgid "Auction ended"
+msgstr "Auction ended"
+
+#: src/components/AuctionTimer/index.tsx:50
+msgid "Auction ends in"
+msgstr "Auction ends in"
+
+#: src/components/Documentation/index.tsx:297
+msgid "Because 100% of Noun auction proceeds are sent to Nouns DAO, Nounders have chosen to compensate themselves with Nouns. Every 10th Noun for the first 5 years of the project (Noun ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
+msgstr "Because 100% of Noun auction proceeds are sent to Nouns DAO, Nounders have chosen to compensate themselves with Nouns. Every 10th Noun for the first 5 years of the project (Noun ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
+
+#: src/components/Bid/index.tsx:178
+#: src/components/Bid/index.tsx:186
+msgid "Bid"
+msgstr "Bid"
+
+#: src/components/NounInfoCard/index.tsx:44
+msgid "Bid history"
+msgstr "Bid history"
+
+#: src/components/NounInfoCard/index.tsx:44
+msgid "Bids"
+msgstr "Bids"
+
+#: src/components/NounInfoRowBirthday/index.tsx:62
+msgid "Born"
+msgstr "Born"
+
+#: src/components/NounProfileVoteRow/index.tsx:100
+#: src/components/ProposalStatus/index.tsx:41
+msgid "Canceled"
+msgstr "Canceled"
+
+#: src/components/CurrentBid/index.tsx:23
+msgid "Current bid"
+msgstr "Current bid"
+
+#: src/components/NavBar/index.tsx:83
+msgid "DAO"
+msgstr "DAO"
+
+#: src/components/Documentation/index.tsx:94
+msgid "Daily Auctions"
+msgstr "Daily Auctions"
+
+#: src/components/NounProfileVoteRow/index.tsx:96
+#: src/components/ProposalStatus/index.tsx:37
+msgid "Defeated"
+msgstr "Defeated"
+
+#: src/components/NavWallet/index.tsx:171
+msgid "Disconnect"
+msgstr "Disconnect"
+
+#: src/components/Footer/index.tsx:19
+msgid "Discord"
+msgstr "Discord"
+
+#: src/components/Footer/index.tsx:22
+#: src/components/NavBar/index.tsx:107
+msgid "Discourse"
+msgstr "Discourse"
+
+#: src/components/NavBar/index.tsx:95
+msgid "Docs"
+msgstr "Docs"
+
+#: src/components/Banner/index.tsx:16
+msgid "EVERY DAY,"
+msgstr "EVERY DAY,"
+
+#: src/components/Documentation/index.tsx:107
+msgid "Each time an auction is settled, the settlement transaction will also cause a new Noun to be minted and a new 24 hour auction to begin."
+msgstr "Each time an auction is settled, the settlement transaction will also cause a new Noun to be minted and a new 24 hour auction to begin."
+
+#: src/components/AuctionTimer/index.tsx:82
+msgid "Ends on {0} at"
+msgstr "Ends on {0} at"
+
+#: src/components/NounInfoRowBirthday/index.tsx:38
+msgid "Error fetching noun birthday"
+msgstr "Error fetching noun birthday"
+
+#: src/components/Footer/index.tsx:21
+#: src/components/NounInfoCard/index.tsx:50
+msgid "Etherscan"
+msgstr "Etherscan"
+
+#: src/components/NounProfileVoteRow/index.tsx:94
+#: src/components/ProposalStatus/index.tsx:35
+msgid "Executed"
+msgstr "Executed"
+
+#: src/components/NounProfileVoteRow/index.tsx:104
+#: src/components/ProposalStatus/index.tsx:45
+msgid "Expired"
+msgstr "Expired"
+
+#: src/components/Banner/index.tsx:18
+msgid "FOREVER."
+msgstr "FOREVER."
+
+#: src/components/ProfileActivityFeed/index.tsx:55
+msgid "Failed to fetch noun activity history"
+msgstr "Failed to fetch noun activity history"
+
+#: src/components/NounInfoRowHolder/index.tsx:38
+msgid "Failed to fetch noun info"
+msgstr "Failed to fetch noun info"
+
+#: src/components/Winner/index.tsx:41
+#: src/components/Winner/index.tsx:80
+msgid "Get Verified"
+msgstr "Get Verified"
+
+#: src/components/Documentation/index.tsx:138
+msgid "Governance ‘Slow Start’"
+msgstr "Governance ‘Slow Start’"
+
+#: src/components/NounInfoRowHolder/index.tsx:51
+msgid "Held by"
+msgstr "Held by"
+
 #: src/components/AuctionActivity/index.tsx:157
-msgid "Help mint the next Nou"
-msgstr "Help mint the next Nou"
+#~ msgid "Help mint the next Nou"
+#~ msgstr "Help mint the next Nou"
+
+#: src/components/AuctionActivity/index.tsx:156
+msgid "Help mint the next Noun"
+msgstr "Help mint the next Noun"
+
+#: src/components/Documentation/index.tsx:142
+msgid "In addition to the precautions taken by Compound Governance, Nounders have given themselves a special veto right to ensure that no malicious proposals can be passed while the Noun supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort."
+msgstr "In addition to the precautions taken by Compound Governance, Nounders have given themselves a special veto right to ensure that no malicious proposals can be passed while the Noun supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort."
+
+#: src/components/NounderNounContent/index.tsx:99
+msgid "Learn more"
+msgstr "Learn more"
+
+#: src/components/Documentation/index.tsx:39
+msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
+msgstr "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
+
+#: src/components/NounInfoRowHolder/index.tsx:31
+msgid "Loading..."
+msgstr "Loading..."
+
+#: src/components/Documentation/index.tsx:79
+msgid "No explicit rules exist for attribute scarcity; all Nouns are equally rare."
+msgstr "No explicit rules exist for attribute scarcity; all Nouns are equally rare."
+
+#: src/components/Documentation/index.tsx:220
+msgid "Noun Seeder Contract"
+msgstr "Noun Seeder Contract"
+
+#: src/components/Documentation/index.tsx:161
+msgid "Noun Traits"
+msgstr "Noun Traits"
+
+#: src/components/Documentation/index.tsx:306
+msgid "Nounder distributions don't interfere with the cadence of 24 hour auctions. Nouns are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available Noun ID."
+msgstr "Nounder distributions don't interfere with the cadence of 24 hour auctions. Nouns are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available Noun ID."
+
+#: src/components/Documentation/index.tsx:245
+msgid "Nounder's Reward"
+msgstr "Nounder's Reward"
+
+#: src/components/Documentation/index.tsx:84
+msgid "Nounders receive rewards in the form of Nouns (10% of supply for first 5 years)."
+msgstr "Nounders receive rewards in the form of Nouns (10% of supply for first 5 years)."
+
+#: src/components/Documentation/index.tsx:151
+msgid "Nounders will proveably revoke this veto right when they deem it safe to do so. This decision will be based on a healthy Noun distribution and a community that is engaged in the governance process."
+msgstr "Nounders will proveably revoke this veto right when they deem it safe to do so. This decision will be based on a healthy Noun distribution and a community that is engaged in the governance process."
+
+#: src/components/NounInfoRowHolder/index.tsx:64
+msgid "Nouns Auction House"
+msgstr "Nouns Auction House"
+
+#: src/components/Documentation/index.tsx:123
+msgid "Nouns DAO"
+msgstr "Nouns DAO"
+
+#: src/components/Documentation/index.tsx:67
+msgid "Nouns DAO uses a fork of {compoundGovLink}."
+msgstr "Nouns DAO uses a fork of {compoundGovLink}."
+
+#: src/components/Documentation/index.tsx:126
+msgid "Nouns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the Nouns ecosystem. The Nouns DAO treasury receives 100% of ETH proceeds from daily Noun auctions. Each Noun is an irrevocable member of Nouns DAO and entitled to one vote in all governance matters. Noun votes are non-transferable (if you sell your Noun the vote goes with it) but delegatable, which means you can assign your vote to someone else as long as you own your Noun."
+msgstr "Nouns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the Nouns ecosystem. The Nouns DAO treasury receives 100% of ETH proceeds from daily Noun auctions. Each Noun is an irrevocable member of Nouns DAO and entitled to one vote in all governance matters. Noun votes are non-transferable (if you sell your Noun the vote goes with it) but delegatable, which means you can assign your vote to someone else as long as you own your Noun."
+
+#: src/components/Documentation/index.tsx:31
+msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community."
+msgstr "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community."
+
+#: src/components/Documentation/index.tsx:165
+msgid "Nouns are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules governing Noun trait scarcity, which makes all Nouns equally rare. As of this writing, Nouns are made up of:"
+msgstr "Nouns are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules governing Noun trait scarcity, which makes all Nouns equally rare. As of this writing, Nouns are made up of:"
+
+#: src/components/Documentation/index.tsx:199
+msgid "Nouns are stored directly on Ethereum and do not utilize pointers to other networks such as IPFS. This is possible because Noun parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression."
+msgstr "Nouns are stored directly on Ethereum and do not utilize pointers to other networks such as IPFS. This is possible because Noun parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression."
+
+#: src/components/Documentation/index.tsx:52
+msgid "Nouns artwork is in the {publicDomainLink}."
+msgstr "Nouns artwork is in the {publicDomainLink}."
+
+#: src/components/Banner/index.tsx:14
+msgid "ONE NOUN,"
+msgstr "ONE NOUN,"
+
+#: src/components/Documentation/index.tsx:195
+msgid "On-Chain Artwork"
+msgstr "On-Chain Artwork"
+
+#: src/components/Documentation/index.tsx:70
+msgid "One Noun is equal to one vote."
+msgstr "One Noun is equal to one vote."
+
+#: src/components/Documentation/index.tsx:55
+msgid "One Noun is trustlessly auctioned every 24 hours, forever."
+msgstr "One Noun is trustlessly auctioned every 24 hours, forever."
+
+#: src/components/NounProfileVoteRow/index.tsx:88
+#: src/components/ProposalStatus/index.tsx:29
+msgid "Pending"
+msgstr "Pending"
+
+#: src/components/Bid/index.tsx:64
+#: src/components/Bid/index.tsx:155
+#: src/components/Bid/index.tsx:166
+msgid "Place bid"
+msgstr "Place bid"
+
+#: src/components/NavBar/index.tsx:114
+msgid "Playground"
+msgstr "Playground"
+
+#: src/components/NounProfileVoteRow/index.tsx:98
+#: src/components/ProposalStatus/index.tsx:39
+msgid "Queued"
+msgstr "Queued"
+
+#: src/components/Bid/index.tsx:64
+msgid "Settle"
+msgstr "Settle"
+
+#: src/components/Bid/index.tsx:197
+#: src/components/Bid/index.tsx:209
+#: src/components/Bid/index.tsx:219
+#: src/components/Bid/index.tsx:229
+msgid "Settle Auction"
+msgstr "Settle Auction"
+
+#: src/components/SettleManuallyBtn/index.tsx:58
+msgid "Settle manually"
+msgstr "Settle manually"
+
+#: src/components/Documentation/index.tsx:61
+msgid "Settlement of one auction kicks off the next."
+msgstr "Settlement of one auction kicks off the next."
+
+#: src/components/ProfileActivityFeed/index.tsx:131
+msgid "Show all {0} events"
+msgstr "Show all {0} events"
+
+#: src/components/ProfileActivityFeed/index.tsx:139
+msgid "Show fewer"
+msgstr "Show fewer"
+
+#: src/components/NavWallet/index.tsx:204
+msgid "Sign out"
+msgstr "Sign out"
+
+#: src/components/NounProfileVoteRow/index.tsx:92
+#: src/components/ProposalStatus/index.tsx:33
+msgid "Succeded"
+msgstr "Succeded"
+
+#: src/components/Documentation/index.tsx:47
+msgid "Summary"
+msgstr "Summary"
+
+#: src/components/NavWallet/index.tsx:154
+#: src/components/NavWallet/index.tsx:201
+msgid "Switch wallet"
+msgstr "Switch wallet"
+
+#: src/components/Documentation/index.tsx:224
+msgid "The Noun Seeder contract is used to determine Noun traits during the minting process. The seeder contract can be replaced to allow for future trait generation algorithm upgrades. Additionally, it can be locked by the Nouns DAO to prevent any future updates. Currently, Noun traits are determined using pseudo-random number generation:"
+msgstr "The Noun Seeder contract is used to determine Noun traits during the minting process. The seeder contract can be replaced to allow for future trait generation algorithm upgrades. Additionally, it can be locked by the Nouns DAO to prevent any future updates. Currently, Noun traits are determined using pseudo-random number generation:"
+
+#: src/components/Documentation/index.tsx:98
+msgid "The Nouns Auction Contract will act as a self-sufficient Noun generation and distribution mechanism, auctioning one Noun every 24 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the Nouns DAO treasury, where they are governed by Noun owners."
+msgstr "The Nouns Auction Contract will act as a self-sufficient Noun generation and distribution mechanism, auctioning one Noun every 24 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the Nouns DAO treasury, where they are governed by Noun owners."
+
+#: src/components/Documentation/index.tsx:208
+msgid "The compressed parts are efficiently converted into a single base64 encoded SVG image on-chain. To accomplish this, each part is decoded into an intermediate format before being converted into a series of SVG rects using batched, on-chain string concatenation. Once the entire SVG has been generated, it is base64 encoded."
+msgstr "The compressed parts are efficiently converted into a single base64 encoded SVG image on-chain. To accomplish this, each part is decoded into an intermediate format before being converted into a series of SVG rects using batched, on-chain string concatenation. Once the entire SVG has been generated, it is base64 encoded."
+
+#: src/components/Documentation/index.tsx:73
+msgid "The treasury is controlled exclusively by Nouns via governance."
+msgstr "The treasury is controlled exclusively by Nouns via governance."
+
+#: src/components/ProfileActivityFeed/index.tsx:147
+msgid "This Noun has no activity, since it was just created. Check back soon!"
+msgstr "This Noun has no activity, since it was just created. Check back soon!"
+
+#: src/components/AuctionTimer/index.tsx:55
+msgid "Time left"
+msgstr "Time left"
+
+#: src/components/Documentation/index.tsx:236
+msgid "Trait generation is not truly random. Traits can be predicted when minting a Noun on the pending block."
+msgstr "Trait generation is not truly random. Traits can be predicted when minting a Noun on the pending block."
+
+#: src/components/NavBarTreasury/index.tsx:46
+msgid "Treasury"
+msgstr "Treasury"
+
+#: src/components/Footer/index.tsx:20
+msgid "Twitter"
+msgstr "Twitter"
+
+#: src/components/NounProfileVoteRow/index.tsx:106
+#: src/components/ProposalStatus/index.tsx:47
+msgid "Undetermined"
+msgstr "Undetermined"
+
+#: src/components/NounProfileVoteRow/index.tsx:102
+#: src/components/ProposalStatus/index.tsx:43
+msgid "Vetoed"
+msgstr "Vetoed"
+
+#: src/components/BidHistoryBtn/index.tsx:17
+msgid "View all bids"
+msgstr "View all bids"
+
+#: src/components/Bid/index.tsx:280
+msgid "Vote for the next Noun ⌐◧-◧"
+msgstr "Vote for the next Noun ⌐◧-◧"
+
+#: src/components/NounProfileVoteRow/index.tsx:58
+msgid "Voted aginst"
+msgstr "Voted aginst"
+
+#: src/components/NounProfileVoteRow/index.tsx:52
+msgid "Voted for"
+msgstr "Voted for"
+
+#: src/components/Documentation/index.tsx:28
+msgid "WTF?"
+msgstr "WTF?"
+
+#: src/components/NounProfileVoteRow/index.tsx:46
+msgid "Waiting for"
+msgstr "Waiting for"
+
+#: src/components/Documentation/index.tsx:113
+msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
+msgstr "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
+
+#: src/components/Winner/index.tsx:62
+msgid "Winner"
+msgstr "Winner"
+
+#: src/components/CurrentBid/index.tsx:23
+msgid "Winning bid"
+msgstr "Winning bid"
+
+#: src/components/Winner/index.tsx:34
+msgid "You"
+msgstr "You"
+
+#: src/components/Documentation/index.tsx:188
+msgid "You can experiment with off-chain Noun generation at the {playgroundLink}."
+msgstr "You can experiment with off-chain Noun generation at the {playgroundLink}."
+
+#: src/components/Documentation/index.tsx:179
+msgid "accessories (137)"
+msgstr "accessories (137)"
+
+#: src/components/Documentation/index.tsx:173
+msgid "backgrounds (2)"
+msgstr "backgrounds (2)"
+
+#: src/components/Documentation/index.tsx:176
+msgid "bodies (30)"
+msgstr "bodies (30)"
+
+#: src/components/Documentation/index.tsx:185
+msgid "glasses (21)"
+msgstr "glasses (21)"
+
+#: src/components/Documentation/index.tsx:182
+msgid "heads (234)"
+msgstr "heads (234)"
+
+#: src/components/AuctionActivityDateHeadline/index.tsx:27
+msgid "{0}"
+msgstr "{0}"
