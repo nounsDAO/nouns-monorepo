@@ -44,8 +44,7 @@ import { nounPath } from './utils/history';
 import { push } from 'connected-react-router';
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
-// @ts-ignore
-import messages from './locales/en/messages.po';
+import { messages } from './locales/en/messages';
 
 dotenv.config();
 
