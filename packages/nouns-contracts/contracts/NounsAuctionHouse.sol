@@ -23,7 +23,7 @@
 // With modifications by Nounders DAO.
 
 pragma solidity ^0.8.6;
-
+import "hardhat/console.sol";
 import { PausableUpgradeable } from '@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol';
 import { ReentrancyGuardUpgradeable } from '@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol';
 import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
@@ -136,7 +136,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
 
         // Refund the last bidder, if applicable
         if (lastBidder != address(0)) {
-            if(auction.lastBidType == uint8(1)) {
+            if(auction.lastBidType == 1) {
                 _safeTransferETHWithFallback(lastBidder, _auction.amount);
             } else{
                 // This is erc20 transfer
@@ -146,10 +146,12 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
 
         if(useERC20 == 0){
             auction.amount = msg.value;
-            auction.lastBidType = uint8(1);
+            auction.lastBidType = 1;
         } else{
             auction.amount = useERC20;
-            auction.lastBidType = uint8(2);
+            auction.lastBidType = 2;
+
+            monaToken.transferFrom(msg.sender, address(this), useERC20);
         }
 
         auction.bidder = payable(msg.sender);
@@ -160,7 +162,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
             auction.endTime = _auction.endTime = block.timestamp + timeBuffer;
         }
 
-          if(useERC20 == 0){
+        if(useERC20 == 0){
             emit AuctionBid(_auction.nounId, msg.sender, msg.value, extended);
         } else{
             emit AuctionBidERC20(_auction.nounId, msg.sender, useERC20, extended);
@@ -261,7 +263,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
                 endTime: endTime,
                 bidder: payable(0),
                 settled: false,
-                lastBidType: uint8(0)
+                lastBidType: 0
             });
 
             auctionIndex = auctionIndex + 1;
@@ -289,9 +291,18 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
             uint256 mintToken = nouns.mint();
             nouns.transferFrom(address(this), _auction.bidder, mintToken);
         }
+        console.log("The last bid is type %s", _auction.lastBidType);
         // TODO ERC20 logic here!
         if (_auction.amount > 0) {
-            _safeTransferETHWithFallback(owner(), _auction.amount);
+            if(_auction.lastBidType == 1){
+
+        console.log("routine 1 %s", _auction.lastBidType);
+                _safeTransferETHWithFallback(owner(), _auction.amount);
+            } else {
+        console.log("routine 2 %s", _auction.lastBidType);
+                monaToken.transfer(owner(), _auction.amount);
+                console.log("didnt reach", _auction.amount);
+            }
         }
 
         emit AuctionSettled(_auction.nounId, _auction.bidder, _auction.amount);

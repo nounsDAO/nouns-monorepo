@@ -32,8 +32,7 @@ interface INounsAuctionHouse {
         // Whether or not the auction has been settled
         bool settled;
         // What was last bid
-        uint8 lastBidType;
-
+        uint256 lastBidType;
 
     }
 

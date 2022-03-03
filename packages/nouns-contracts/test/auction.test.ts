@@ -258,15 +258,22 @@ describe('NounsAuctionHouse', () => {
 
     const { nounId } = await nounsAuctionHouse.auction();
 
+    await ethers.provider.send('evm_increaseTime', [60 * 60 * 1]); // Add 1 hours
     // Change this to use the erc20 token...
     // Need to mint weth
     await weth.connect(bidderA).deposit({value: BigNumber.from(1000000000000000) });
     await weth.connect(bidderA).approve(nounsAuctionHouse.address, BigNumber.from(1000000000000000) );
 
+    console.log('balance 1');
+    console.log(await weth.balanceOf(nounsAuctionHouse.address));
+    console.log(await weth.balanceOf(bidderA.address));
+
     // Need to approve weth
     await nounsAuctionHouse.connect(bidderA).createBid(10000, nounId);
 
     await ethers.provider.send('evm_increaseTime', [60 * 60 * 25]); // Add 25 hours
+    console.log('balance 2');
+    console.log(await weth.balanceOf(nounsAuctionHouse.address));
     const tx = await nounsAuctionHouse.connect(bidderA).settleCurrentAndCreateNewAuction();
 
     const receipt = await tx.wait();
@@ -277,7 +284,7 @@ describe('NounsAuctionHouse', () => {
 
     expect(settledEvent?.args?.nounId).to.equal(nounId);
     expect(settledEvent?.args?.winner).to.equal(bidderA.address);
-    expect(settledEvent?.args?.amount).to.equal(RESERVE_PRICE);
+    expect(settledEvent?.args?.amount).to.equal(10000);
 
     expect(createdEvent?.args?.nounId).to.equal(nounId.add(1));
     expect(createdEvent?.args?.startTime).to.equal(timestamp);

@@ -287,9 +287,9 @@
         "type": "bool"
       },
       {
-        "internalType": "uint8",
+        "internalType": "uint256",
         "name": "lastBidType",
-        "type": "uint8"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
