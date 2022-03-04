@@ -268,10 +268,10 @@ const VotePage = ({
         </div>
         {proposal && proposalActive && (
           <>
-            {showBlockRestriction && !hasVoted && (
+            {proposalCreationTimestamp && showBlockRestriction && !hasVoted && (
               <Alert variant="secondary" className={classes.blockRestrictionAlert}>
                 Only Nouns in your wallet or delegated to you before{' '}
-                {dayjs(proposalCreationTimestamp).format('MMMM D, YYYY h:mm A z')} can vote.
+                {dayjs(proposalCreationTimestamp*1000).format('MMMM D, YYYY h:mm A z')} can vote.
               </Alert>
             )}
             {hasVoted && (
