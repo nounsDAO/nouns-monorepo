@@ -5,15 +5,16 @@ export function useBlockTimestamp(blockno: number | undefined): number | undefin
   const { library } = useEthers();
   const [blockTimestamp, setBlockTimestamp] = useState<number | undefined>();
 
-  async function updateBlockTimestamp() {
-    if (!blockno) return;
-    const blockData = await library?.getBlock(blockno);
-    setBlockTimestamp(blockData?.timestamp || undefined);
-  }
-
   useEffect(() => {
+
+    async function updateBlockTimestamp() {
+      if (!blockno) return;
+      const blockData = await library?.getBlock(blockno);
+      setBlockTimestamp(blockData?.timestamp || undefined);
+    }
+    
     updateBlockTimestamp();
-  }, []);
+  }, [blockno, library]);
 
   return blockTimestamp;
 }
