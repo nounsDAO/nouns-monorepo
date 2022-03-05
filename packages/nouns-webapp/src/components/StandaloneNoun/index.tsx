@@ -125,7 +125,7 @@ export const StandaloneNounWithPreloadedSeed: React.FC<StandaloneNounWithPreload
   const nounDisplayWithoutSeed = shouldLinkToProfile ? nounWithLink : noun;
   const nounWithSeed = (
     <Container>
-      <Col className={ classes.headerRow }>
+      <Col className={classes.headerRow}>
         <h1>Noun {props.nounId.toString()}</h1>
       </Col>
       {nounDisplayWithoutSeed}
