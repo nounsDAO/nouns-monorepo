@@ -6,7 +6,7 @@ import { GrayCircle } from '../GrayCircle';
 interface NounImageVoteTableProps {
   nounIds: string[];
 }
-const NOUNS_PER_VOTE_CARD = 15;
+const NOUNS_PER_VOTE_CARD_DESKTOP = 15;
 
 const isXLScreen = window.innerWidth > 1200;
 
@@ -16,8 +16,8 @@ const NounImageVoteTable: React.FC<NounImageVoteTableProps> = props => {
     .map((nounId: string) => {
       return <StandaloneNounCircular nounId={EthersBN.from(nounId)} />;
     })
-    .concat(Array(NOUNS_PER_VOTE_CARD).fill(<GrayCircle />))
-    .slice(0, NOUNS_PER_VOTE_CARD);
+    .concat(Array(NOUNS_PER_VOTE_CARD_DESKTOP).fill(<GrayCircle />))
+    .slice(0, NOUNS_PER_VOTE_CARD_DESKTOP);
 
   const content = () => {
     const rows = 3;
