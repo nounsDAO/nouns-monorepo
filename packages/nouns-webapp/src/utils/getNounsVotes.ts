@@ -1,4 +1,3 @@
-
 /**
  * Helper function to transform response from graph into flat list of nounIds that voted supportDetailed for the given prop
  *
