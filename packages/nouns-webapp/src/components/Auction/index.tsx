@@ -43,16 +43,22 @@ const Auction: React.FC<AuctionProps> = props => {
     currentAuction && history.push(`/noun/${currentAuction.nounId.toNumber() + 1}`);
   };
 
-  const handleKeyPress = useCallback(event => {
-    if (event.code === 'ArrowLeft') prevAuctionHandler();
-    else if (event.code === 'ArrowRight') nextAuctionHandler();
-    else return;
-  }, []);
+  const handleKeyPress = (event: KeyboardEvent) => {
+    if (currentAuction && lastNounId) {
+      const isFirstAuction = currentAuction.nounId.eq(0);
+      const isLastAuction = currentAuction.nounId.eq(lastNounId);
+
+      if (event.code === 'ArrowLeft' && !isFirstAuction) prevAuctionHandler();
+      else if (event.code === 'ArrowRight' && !isLastAuction) nextAuctionHandler();
+      else return;
+    }
+    return;
+  };
 
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [handleKeyPress]);
+    document.addEventListener('keydown', handleKeyPress);
+    return () => document.removeEventListener('keydown', handleKeyPress);
+  }, [handleKeyPress, currentAuction]);
 
   const nounContent = currentAuction && (
     <div className={classes.nounWrapper}>
