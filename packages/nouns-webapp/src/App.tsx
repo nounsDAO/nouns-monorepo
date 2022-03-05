@@ -18,6 +18,7 @@ import VotePage from './pages/Vote';
 import NoundersPage from './pages/Nounders';
 import NotFoundPage from './pages/NotFound';
 import Playground from './pages/Playground';
+import HistoryPage from './pages/HistoricalNouns';
 import { CHAIN_ID } from './config';
 import VerifyPage from './pages/Verify';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -61,6 +62,7 @@ function App() {
           <Route exact path="/vote" component={GovernancePage} />
           <Route exact path="/vote/:id" component={VotePage} />
           <Route exact path="/playground" component={Playground} />
+          <Route exact path="/history" component={HistoryPage} />
           <Route component={NotFoundPage} />
         </Switch>
         <Footer />

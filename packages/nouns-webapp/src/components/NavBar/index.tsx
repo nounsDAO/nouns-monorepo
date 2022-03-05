@@ -13,7 +13,7 @@ import { ExternalURL, externalURL } from '../../utils/externalURL';
 import useLidoBalance from '../../hooks/useLidoBalance';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookOpen } from '@fortawesome/free-solid-svg-icons';
+import { faBookOpen, faHistory } from '@fortawesome/free-solid-svg-icons';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
@@ -112,6 +112,13 @@ const NavBar = () => {
               <NavBarButton
                 buttonText={'Playground'}
                 buttonIcon={<FontAwesomeIcon icon={faPlay} />}
+                buttonStyle={nonWalletButtonStyle}
+              />
+            </Nav.Link>
+            <Nav.Link as={Link} to="/history" className={classes.nounsNavLink}>
+              <NavBarButton
+                buttonText={'Noun History'}
+                buttonIcon={<FontAwesomeIcon icon={faHistory} />}
                 buttonStyle={nonWalletButtonStyle}
               />
             </Nav.Link>

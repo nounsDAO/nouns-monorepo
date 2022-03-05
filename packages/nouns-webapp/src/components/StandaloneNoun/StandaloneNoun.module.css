@@ -1,3 +1,9 @@
 .clickableNoun {
   cursor: pointer;
 }
+
+.headerRow h1 {
+  color: #434958;
+  font-size: 28px;
+  font-family: 'Londrina Solid';
+}

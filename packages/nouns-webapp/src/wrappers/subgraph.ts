@@ -77,7 +77,7 @@ export const nounQuery = (id: string) => gql`
 	noun(id:"${id}") {
 	  id
 	  seed {
-	  background
+	  	background
 		body
 		accessory
 		head
@@ -89,6 +89,24 @@ export const nounQuery = (id: string) => gql`
 	}
   }
  `;
+
+export const allNounQuery = () => gql`
+  query GetAllNouns($offset: Int, $limit: Int) {
+    auctions(orderBy: startTime, orderDirection: desc, first: $limit, skip: $offset) {
+      startTime
+      noun {
+        id
+        seed {
+          background
+          body
+          accessory
+          head
+          glasses
+        }
+      }
+    }
+  }
+`;
 
 export const nounsIndex = () => gql`
   {

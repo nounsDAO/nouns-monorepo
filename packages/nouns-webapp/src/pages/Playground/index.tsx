@@ -36,11 +36,18 @@ const nounsSDKLink = (
   />
 );
 
-const parseTraitName = (partName: string): string =>
+export const parseTraitName = (partName: string): string =>
   capitalizeFirstLetter(partName.substring(partName.indexOf('-') + 1));
 
-const capitalizeFirstLetter = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
+export const capitalizeFirstLetter = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 
+export const traitTitles = ['background', 'body', 'accessory', 'head', 'glasses'];
+export const traitNames = [
+  ['cool', 'warm'],
+  ...Object.values(ImageData.images).map(i => {
+    return i.map(imageData => imageData.filename);
+  }),
+];
 const Playground: React.FC = () => {
   const [nounSvgs, setNounSvgs] = useState<string[]>();
   const [traits, setTraits] = useState<Trait[]>();
@@ -64,13 +71,6 @@ const Playground: React.FC = () => {
   );
 
   useEffect(() => {
-    const traitTitles = ['background', 'body', 'accessory', 'head', 'glasses'];
-    const traitNames = [
-      ['cool', 'warm'],
-      ...Object.values(ImageData.images).map(i => {
-        return i.map(imageData => imageData.filename);
-      }),
-    ];
     setTraits(
       traitTitles.map((value, index) => {
         return {

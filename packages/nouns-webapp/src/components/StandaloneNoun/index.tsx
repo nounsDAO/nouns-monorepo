@@ -7,6 +7,9 @@ import { Link } from 'react-router-dom';
 import classes from './StandaloneNoun.module.css';
 import { useDispatch } from 'react-redux';
 import { setOnDisplayAuctionNounId } from '../../state/slices/onDisplayAuction';
+import NounSeed from '../Noun/NounSeed';
+import { Col, Container } from 'react-bootstrap';
+import { Tuple } from 'ramda';
 
 interface StandaloneNounProps {
   nounId: EthersBN;
@@ -16,6 +19,13 @@ interface StandaloneNounWithSeedProps {
   nounId: EthersBN;
   onLoadSeed?: (seed: INounSeed) => void;
   shouldLinkToProfile: boolean;
+}
+
+interface StandaloneNounWithPreloadedSeedProps {
+  nounId: EthersBN;
+  shouldLinkToProfile: boolean;
+  seed: INounSeed;
+  traitRarity?: Map<string, Tuple<number, number>>;
 }
 
 const getNoun = (nounId: string | EthersBN, seed: INounSeed) => {
@@ -85,4 +95,43 @@ export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = (
   return shouldLinkToProfile ? nounWithLink : noun;
 };
 
+export const StandaloneNounWithPreloadedSeed: React.FC<StandaloneNounWithPreloadedSeedProps> = (
+  props: StandaloneNounWithPreloadedSeedProps,
+) => {
+  const { nounId, shouldLinkToProfile, seed } = props;
+
+  const dispatch = useDispatch();
+
+  if (!seed || !nounId) return <Noun imgPath="" alt="Noun" />;
+
+  const onClickHandler = () => {
+    dispatch(setOnDisplayAuctionNounId(nounId.toNumber()));
+  };
+
+  const { image, description } = getNoun(nounId, seed);
+
+  const noun = <Noun imgPath={image} alt={description} />;
+  const seedComponent = <NounSeed seed={seed} traitRarity={props.traitRarity!} />;
+  const nounWithLink = (
+    <Link
+      to={'/noun/' + nounId.toString()}
+      className={classes.clickableNoun}
+      onClick={onClickHandler}
+    >
+      {noun}
+    </Link>
+  );
+
+  const nounDisplayWithoutSeed = shouldLinkToProfile ? nounWithLink : noun;
+  const nounWithSeed = (
+    <Container>
+      <Col className={ classes.headerRow }>
+        <h1>Noun {props.nounId.toString()}</h1>
+      </Col>
+      {nounDisplayWithoutSeed}
+      {seedComponent}
+    </Container>
+  );
+  return nounWithSeed;
+};
 export default StandaloneNoun;
