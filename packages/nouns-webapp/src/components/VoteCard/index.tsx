@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
+import { isMobileScreen } from '../../utils/isMobile';
 import { Proposal } from '../../wrappers/nounsDao';
 import NounImageVoteTable from '../NounImageVoteTable';
 import VoteProgresBar from '../VoteProgressBar';
@@ -20,6 +21,7 @@ interface VoteCardProps {
 
 const VoteCard: React.FC<VoteCardProps> = props => {
   const { proposal, percentage, nounIds, variant } = props;
+  const isMobile = isMobileScreen();
 
   let titleClass;
   let titleCopy;
@@ -51,9 +53,11 @@ const VoteCard: React.FC<VoteCardProps> = props => {
             <span className={classes.voteCardVoteCount}>{voteCount}</span>
           </Card.Text>
           <VoteProgresBar variant={variant} percentage={percentage} />
-          <Row className={classes.nounProfilePics}>
-            <NounImageVoteTable nounIds={nounIds} />
-          </Row>
+          {!isMobile && (
+            <Row className={classes.nounProfilePics}>
+              <NounImageVoteTable nounIds={nounIds} />
+            </Row>
+          )}
         </Card.Body>
       </Card>
     </Col>

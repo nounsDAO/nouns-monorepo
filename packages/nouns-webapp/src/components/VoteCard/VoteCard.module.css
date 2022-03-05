@@ -39,3 +39,9 @@
   padding-left: 0.5rem;
   padding-right: 0.5rem;
 }
+
+@media (max-width: 992px) {
+  .voteCountCard {
+    min-height: 0rem;
+  }
+}
