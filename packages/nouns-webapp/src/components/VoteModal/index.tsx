@@ -66,6 +66,14 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
     }
   }, [isVoteSucessful, onHide]);
 
+  // If show is false (i.e. on hide) reset failure related state variables
+  useEffect(() => {
+    if (show) {
+      return;
+    }
+    setIsVoteFailed(false);
+  }, [show]);
+
   return (
     <Modal show={show} onHide={onHide} dialogClassName={classes.voteModal} centered>
       <Modal.Header closeButton className={classes.header}>
