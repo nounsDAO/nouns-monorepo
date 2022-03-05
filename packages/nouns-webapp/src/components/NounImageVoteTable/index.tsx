@@ -2,17 +2,21 @@ import { StandaloneNounCircular } from '../../components/StandaloneNoun';
 import { BigNumber as EthersBN } from 'ethers';
 import classes from './NounImageVoteTable.module.css';
 import { GrayCircle } from '../GrayCircle';
+import { pseudoRandomPredictableShuffle } from '../../utils/pseudoRandomPredictableShuffle';
 
 interface NounImageVoteTableProps {
   nounIds: string[];
+  propId: number;
 }
 const NOUNS_PER_VOTE_CARD_DESKTOP = 15;
 
 const isXLScreen = window.innerWidth > 1200;
 
 const NounImageVoteTable: React.FC<NounImageVoteTableProps> = props => {
-  const { nounIds } = props;
-  const paddedNounIds = nounIds
+  const { nounIds, propId } = props;
+
+  const shuffledNounIds = pseudoRandomPredictableShuffle(nounIds, propId);
+  const paddedNounIds = shuffledNounIds
     .map((nounId: string) => {
       return <StandaloneNounCircular nounId={EthersBN.from(nounId)} />;
     })

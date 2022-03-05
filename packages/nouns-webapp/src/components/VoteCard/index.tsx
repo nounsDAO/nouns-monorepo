@@ -55,7 +55,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
           <VoteProgresBar variant={variant} percentage={percentage} />
           {!isMobile && (
             <Row className={classes.nounProfilePics}>
-              <NounImageVoteTable nounIds={nounIds} />
+              <NounImageVoteTable nounIds={nounIds} propId={parseInt(proposal.id || '0')} />
             </Row>
           )}
         </Card.Body>
