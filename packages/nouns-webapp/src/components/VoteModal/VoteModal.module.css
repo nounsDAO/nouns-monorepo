@@ -22,13 +22,15 @@
   font-weight: bold;
   margin-bottom: 0.5rem;
   border-radius: 12px;
-  background-color: var(--brand-color-green);
-  border: var(--brand-color-green);
+  background-color: var(--brand-color-green) !important;
+  border: var(--brand-color-green) !important;
+  color: white !important;
 }
 .submitBtn:focus,
 .submitBtn:hover {
   background-color: var(--brand-color-green) !important;
   box-shadow: 0 0 0 0.2rem rgb(67, 179, 105, 0.75);
+  border: var(--brand-color-green) !important;
 }
 .submitBtn:active {
   background-color: var(--brand-color-green) !important;
@@ -42,7 +44,7 @@
   font-weight: bold;
   margin-bottom: 0.5rem;
   border-radius: 12px;
-  border: var(--brand-dark-red);
+  border: var(--brand-gray-light-text);
   opacity: 0.5;
   box-shadow: none !important;
 }
@@ -52,6 +54,7 @@
 .submitBtnDisabled:focus {
   cursor: not-allowed;
   box-shadow: none !important;
+  color: white !important;
 }
 
 .header {
@@ -92,15 +95,14 @@
 }
 
 .voteFailureTitle {
-  font-family: 'Londrina Solid';
-  font-size: 48px;
+  font-weight: normal;
   margin-top: 0.25rem;
   width: 100%;
 }
 
 .voteFailureBody {
   margin-top: 1rem;
-  font-weight: normal;
+  font-weight: bold;
 }
 
 .voteFailureErrorMessage {

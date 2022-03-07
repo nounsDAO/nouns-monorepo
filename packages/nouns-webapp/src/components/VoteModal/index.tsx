@@ -1,4 +1,5 @@
-import { Button, Modal, Spinner } from 'react-bootstrap';
+import { Button, Spinner } from 'react-bootstrap';
+import Modal from '../Modal';
 import classes from './VoteModal.module.css';
 import { useCastVote, Vote } from '../../wrappers/nounsDao';
 import React, { useEffect, useState } from 'react';
@@ -74,86 +75,89 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
     setIsVoteFailed(false);
   }, [show]);
 
-  return (
-    <Modal show={show} onHide={onHide} dialogClassName={classes.voteModal} centered>
-      <Modal.Header closeButton className={classes.header}>
-        <Modal.Title className={classes.propTitle}>Vote on Prop {proposalId}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        {isVoteSucessful && (
-          <div className={classes.transactionStatus}>
-            <h1 className={classes.voteSuccessTitle}>Success!</h1>
+  const voteModalContent = (
+    <>
+      {isVoteSucessful && (
+        <div className={classes.transactionStatus}>
+          <h1 className={classes.voteSuccessTitle}>Success!</h1>
 
-            <div className={classes.voteSuccessBody}>Thank you for voting.</div>
+          <div className={classes.voteSuccessBody}>Thank you for voting.</div>
+        </div>
+      )}
+      {isVoteFailed && (
+        <div className={classes.transactionStatus}>
+          <p className={classes.voteFailureTitle}>There was an error voting for your account.</p>
+          <div className={classes.voteFailureBody}>
+            {failureCopy}: <span className={classes.voteFailureErrorMessage}>{errorMessage}</span>
           </div>
-        )}
-        {isVoteFailed && (
-          <div className={classes.transactionStatus}>
-            <h1 className={classes.voteFailureTitle}>Well this is awkward</h1>
-            <div className={classes.voteFailureBody}>
-              {failureCopy}: <span className={classes.voteFailureErrorMessage}>{errorMessage}</span>
-            </div>
-          </div>
-        )}
-        {!isVoteFailed && !isVoteSucessful && (
-          <div className={clsx(classes.votingButtonsWrapper, isLoading ? classes.disabled : '')}>
-            <div onClick={() => setVote(Vote.FOR)}>
-              <NavBarButton
-                buttonText={`Cast ${availableVotes} ${
-                  availableVotes > 1 ? 'votes' : 'vote'
-                } for Prop ${proposalId} `}
-                buttonIcon={<></>}
-                buttonStyle={
-                  vote === Vote.FOR
-                    ? NavBarButtonStyle.WHITE_ACTIVE_VOTE_SUBMIT
-                    : NavBarButtonStyle.WHITE_INFO
-                }
-              />
-            </div>
-            <br />
-            <div onClick={() => setVote(Vote.AGAINST)}>
-              <NavBarButton
-                buttonText={`Cast ${availableVotes} ${
-                  availableVotes > 1 ? 'votes' : 'vote'
-                } against Prop ${proposalId} `}
-                buttonIcon={<></>}
-                buttonStyle={
-                  vote === Vote.AGAINST
-                    ? NavBarButtonStyle.WHITE_ACTIVE_VOTE_SUBMIT
-                    : NavBarButtonStyle.WHITE_INFO
-                }
-              />
-            </div>
-            <br />
-            <div onClick={() => setVote(Vote.ABSTAIN)}>
-              <NavBarButton
-                buttonText={`Abstain from voting on Prop ${proposalId} `}
-                buttonIcon={<></>}
-                buttonStyle={
-                  vote === Vote.ABSTAIN
-                    ? NavBarButtonStyle.WHITE_ACTIVE_VOTE_SUBMIT
-                    : NavBarButtonStyle.WHITE_INFO
-                }
-              />
-            </div>
-            <br />
-            <Button
-              onClick={
-                vote === undefined
-                  ? () => {}
-                  : () => {
-                      setIsLoading(true);
-                      castVote(proposalId, vote);
-                    }
+        </div>
+      )}
+      {!isVoteFailed && !isVoteSucessful && (
+        <div className={clsx(classes.votingButtonsWrapper, isLoading ? classes.disabled : '')}>
+          <div onClick={() => setVote(Vote.FOR)}>
+            <NavBarButton
+              buttonText={`Cast ${availableVotes} ${
+                availableVotes > 1 ? 'votes' : 'vote'
+              } for Prop ${proposalId} `}
+              buttonIcon={<></>}
+              buttonStyle={
+                vote === Vote.FOR
+                  ? NavBarButtonStyle.WHITE_ACTIVE_VOTE_SUBMIT
+                  : NavBarButtonStyle.WHITE_INFO
               }
-              className={vote === undefined ? classes.submitBtnDisabled : classes.submitBtn}
-            >
-              {isLoading ? <Spinner animation="border" /> : 'Submit Vote'}
-            </Button>
+            />
           </div>
-        )}
-      </Modal.Body>
-    </Modal>
+          <br />
+          <div onClick={() => setVote(Vote.AGAINST)}>
+            <NavBarButton
+              buttonText={`Cast ${availableVotes} ${
+                availableVotes > 1 ? 'votes' : 'vote'
+              } against Prop ${proposalId} `}
+              buttonIcon={<></>}
+              buttonStyle={
+                vote === Vote.AGAINST
+                  ? NavBarButtonStyle.WHITE_ACTIVE_VOTE_SUBMIT
+                  : NavBarButtonStyle.WHITE_INFO
+              }
+            />
+          </div>
+          <br />
+          <div onClick={() => setVote(Vote.ABSTAIN)}>
+            <NavBarButton
+              buttonText={`Abstain from voting on Prop ${proposalId} `}
+              buttonIcon={<></>}
+              buttonStyle={
+                vote === Vote.ABSTAIN
+                  ? NavBarButtonStyle.WHITE_ACTIVE_VOTE_SUBMIT
+                  : NavBarButtonStyle.WHITE_INFO
+              }
+            />
+          </div>
+          <br />
+          <Button
+            onClick={
+              vote === undefined
+                ? () => {}
+                : () => {
+                    setIsLoading(true);
+                    castVote(proposalId, vote);
+                  }
+            }
+            className={vote === undefined ? classes.submitBtnDisabled : classes.submitBtn}
+          >
+            {isLoading ? <Spinner animation="border" /> : 'Submit Vote'}
+          </Button>
+        </div>
+      )}
+    </>
+  );
+
+  return (
+    <>
+      {true && (
+        <Modal onDismiss={onHide} title={`Vote on Prop ${proposalId}`} content={voteModalContent} />
+      )}
+    </>
   );
 };
 export default VoteModal;
