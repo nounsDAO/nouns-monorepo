@@ -489,25 +489,6 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "daoDailyUris",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
         "name": "tokenId",
         "type": "uint256"
       }
@@ -805,6 +786,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "nextDaoUri",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -1062,24 +1056,6 @@
   {
     "inputs": [
       {
-        "internalType": "string[]",
-        "name": "daoNFTdailyUriSet",
-        "type": "string[]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "selectDays",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "setDaoNFTDailyUris",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "contract INounsDescriptor",
         "name": "_descriptor",
         "type": "address"
@@ -1099,6 +1075,19 @@
       }
     ],
     "name": "setMinter",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_nextDaoUri",
+        "type": "string"
+      }
+    ],
+    "name": "setNextDaoNFTUri",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

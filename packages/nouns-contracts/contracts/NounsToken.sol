@@ -55,7 +55,7 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
 
     uint256 public startTime;
     mapping(uint256 => string) public dailyUris;
-    mapping(uint256 => string) public daoDailyUris;
+    string public nextDaoUri;
     mapping(uint256 => string) public customMintedUri;
 
     // The internal noun ID tracker
@@ -213,22 +213,19 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
      * @notice Set the nounders DAO.
      * @dev Only callable by the nounders DAO when not locked.
      */
-    function activateCustomUri(bool activate) external {
+    function activateCustomUri(bool activate) external onlyNoundersDAO {
         customUriActive = activate;
     }
 
-    function setDailyUris(string[] memory dailyUriSet, uint256[] memory selectDays) external {
+    function setDailyUris(string[] memory dailyUriSet, uint256[] memory selectDays) external onlyNoundersDAO {
         require(selectDays.length == dailyUriSet.length, "Lengths must match");
         for (uint256 i = 0; i < selectDays.length; i++) {
             dailyUris[selectDays[i]] = dailyUriSet[i];
         }
     }
 
-    function setDaoNFTDailyUris(string[] memory daoNFTdailyUriSet, uint256[] memory selectDays) external {
-        require(selectDays.length == daoNFTdailyUriSet.length, "Lengths must match");
-        for (uint256 i = 0; i < selectDays.length; i++) {
-            daoDailyUris[selectDays[i]] = daoNFTdailyUriSet[i];
-        }
+    function setNextDaoNFTUri(string calldata _nextDaoUri) external onlyNoundersDAO {
+        nextDaoUri = _nextDaoUri;
     }
 
     /**
@@ -303,7 +300,7 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
         // CUSTOM URI
         uint day = diffDays(startTime, block.timestamp);
         if(isDaoNFT){
-            customMintedUri[nounId] = daoDailyUris[day];
+            customMintedUri[nounId] = nextDaoUri;
         } else {
             customMintedUri[nounId] = dailyUris[day];
         }
