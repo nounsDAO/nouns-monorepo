@@ -99,7 +99,7 @@ const HistoryPage = () => {
           return <Col>{nounContent(noun)}</Col>;
         })}
         {isLoadingMore ? (
-          'loading...'
+          <Spinner animation='border'/>
         ) : (
           <Button variant="light" onClick={() => loadMore()}>
             Load More
