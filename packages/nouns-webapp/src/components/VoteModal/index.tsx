@@ -154,7 +154,7 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
 
   return (
     <>
-      {true && (
+      {show && (
         <Modal onDismiss={onHide} title={`Vote on Prop ${proposalId}`} content={voteModalContent} />
       )}
     </>
