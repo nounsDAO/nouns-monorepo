@@ -13,7 +13,8 @@ interface Noun {
   seed: INounSeed;
   traitRarity?: Map<string, Tuple<number, number>>;
 }
-const LIMIT = 1000;
+const LIMIT = 69;
+
 const HistoryPage = () => {
   const { loading, error, data, fetchMore } = useQuery(allNounQuery(), {
     variables: {
@@ -24,6 +25,7 @@ const HistoryPage = () => {
 
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
 
+  const shouldShowRarity = process.env.REACT_APP_SHOW_RARITY ?? false;
   const nounContent = (noun: Noun) => (
     <div className={classes.nounWrapper}>
       <StandaloneNounWithPreloadedSeed
@@ -39,7 +41,7 @@ const HistoryPage = () => {
     setIsLoadingMore(true);
     await fetchMore({
       variables: { offset: nounsWithRarity.length, limit: LIMIT },
-      updateQuery: (prev, { fetchMoreResult }) => {
+      updateQuery: (prev: any, { fetchMoreResult }: any) => {
         const mergedAuctions = prev.auctions.concat(fetchMoreResult.auctions);
         const newData = {
           ...prev,
@@ -54,6 +56,7 @@ const HistoryPage = () => {
   // assumes you have copmlete view of the nouns
   // doesnt work with pagination after len(nouns) > LIMIT
   // better to handle this in the subgraph probably
+  // disabled for this reason 
   const appendRarityToNoun = (nouns: Noun[]) => {
     return nouns.map(noun => {
       const rarity = new Map<string, any>();
@@ -81,7 +84,7 @@ const HistoryPage = () => {
     return <Container>Failed to load nouns</Container>;
   }
   const nouns = data.auctions.map((a: any) => a.noun);
-  const nounsWithRarity = appendRarityToNoun(nouns);
+  const nounsWithRarity = shouldShowRarity ? appendRarityToNoun(nouns) : nouns;
   return (
     <Container>
       <Row className={classes.headerRow}>
