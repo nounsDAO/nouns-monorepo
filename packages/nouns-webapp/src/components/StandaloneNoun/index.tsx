@@ -65,8 +65,17 @@ export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
   const seed = useNounSeed(nounId);
   const noun = seed && getNoun(nounId, seed);
 
+  const dispatch = useDispatch();
+  const onClickHandler = () => {
+    dispatch(setOnDisplayAuctionNounId(nounId.toNumber()));
+  };
+
   return (
-    <Link to={'/noun/' + nounId.toString()} className={classes.clickableNoun}>
+    <Link
+      to={'/noun/' + nounId.toString()}
+      className={classes.clickableNoun}
+      onClick={onClickHandler}
+    >
       <Noun
         imgPath={noun ? noun.image : ''}
         alt={noun ? noun.description : 'Noun'}
