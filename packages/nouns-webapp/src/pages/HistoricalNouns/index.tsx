@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 import { BigNumber } from 'ethers';
 import { Tuple } from 'ramda';
 import { useState } from 'react';
-import { Button, Col, Container, Row } from 'react-bootstrap';
+import { Button, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { StandaloneNounWithPreloadedSeed } from '../../components/StandaloneNoun';
 import { INounSeed } from '../../wrappers/nounToken';
 import { allNounQuery } from '../../wrappers/subgraph';
@@ -13,7 +13,7 @@ interface Noun {
   seed: INounSeed;
   traitRarity?: Map<string, Tuple<number, number>>;
 }
-const LIMIT = 69;
+const LIMIT = 1000;
 const HistoryPage = () => {
   const { loading, error, data, fetchMore } = useQuery(allNounQuery(), {
     variables: {
@@ -51,6 +51,9 @@ const HistoryPage = () => {
     setIsLoadingMore(false);
   };
 
+  // assumes you have copmlete view of the nouns
+  // doesnt work with pagination after len(nouns) > LIMIT
+  // better to handle this in the subgraph probably
   const appendRarityToNoun = (nouns: Noun[]) => {
     return nouns.map(noun => {
       const rarity = new Map<string, any>();
@@ -69,7 +72,11 @@ const HistoryPage = () => {
   };
 
   if (loading) {
-    return <Container>Loading nouns... </Container>;
+    return (
+      <Container>
+        <Spinner animation="border" />
+      </Container>
+    );
   } else if (error) {
     return <Container>Failed to load nouns</Container>;
   }
