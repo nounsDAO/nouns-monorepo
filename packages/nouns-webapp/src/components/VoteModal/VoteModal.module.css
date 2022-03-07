@@ -84,19 +84,12 @@
   opacity: 0.5;
 }
 
-.voteSuccessTitle {
-  font-family: 'Londrina Solid';
-  font-size: 56px;
-  margin-top: 1.15rem;
-}
-
 .voteSuccessBody {
   margin-top: 1rem;
 }
 
 .voteFailureTitle {
   font-weight: normal;
-  margin-top: 0.25rem;
   width: 100%;
 }
 

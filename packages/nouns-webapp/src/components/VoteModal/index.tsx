@@ -79,7 +79,7 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
     <>
       {isVoteSucessful && (
         <div className={classes.transactionStatus}>
-          <h1 className={classes.voteSuccessTitle}>Success!</h1>
+          <p>You've successfully voted on on prop {proposalId}</p>
 
           <div className={classes.voteSuccessBody}>Thank you for voting.</div>
         </div>
