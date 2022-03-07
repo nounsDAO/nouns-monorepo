@@ -289,6 +289,9 @@ describe('NounsAuctionHouse', () => {
     expect(createdEvent?.args?.nounId).to.equal(nounId.add(1));
     expect(createdEvent?.args?.startTime).to.equal(timestamp);
     expect(createdEvent?.args?.endTime).to.equal(timestamp + DURATION);
+
+    console.log("deployer balance now");
+    console.log(await weth.balanceOf(deployer.address));
   });
 
   it('should not create a new auction if the auction house is paused and unpaused while an auction is ongoing', async () => {

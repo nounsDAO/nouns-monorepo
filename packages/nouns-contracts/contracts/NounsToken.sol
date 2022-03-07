@@ -29,6 +29,8 @@ import { IProxyRegistry } from './external/opensea/IProxyRegistry.sol';
 contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     // The nounders DAO address (creators org)
     address public noundersDAO;
+    bool public customUriActive;
+    uint256 constant SECONDS_PER_DAY = 24 * 60 * 60;
 
     // An address who has permissions to mint Nouns
     address public minter;
@@ -50,6 +52,11 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
 
     // The noun seeds
     mapping(uint256 => INounsSeeder.Seed) public seeds;
+
+    uint256 public startTime;
+    mapping(uint256 => string) public dailyUris;
+    mapping(uint256 => string) public daoDailyUris;
+    mapping(uint256 => string) public customMintedUri;
 
     // The internal noun ID tracker
     uint256 private _currentNounId;
@@ -112,6 +119,7 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
         descriptor = _descriptor;
         seeder = _seeder;
         proxyRegistry = _proxyRegistry;
+        startTime = block.timestamp;
     }
 
     /**
@@ -148,9 +156,10 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
      */
     function mint() public override onlyMinter returns (uint256) {
         if (_currentNounId <= 1820 && _currentNounId % 15 == 0) {
-            _mintTo(noundersDAO, _currentNounId++);
+            _mintTo(noundersDAO, _currentNounId++, true);
         }
-        return _mintTo(minter, _currentNounId++);
+
+        return _mintTo(minter, _currentNounId++, false);
     }
 
     /**
@@ -160,6 +169,12 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
         _burn(nounId);
         emit NounBurned(nounId);
     }
+    // function to change where the token uri config to manual day settings
+    // Need timestamp first day
+    // Need day calculation button
+    // Need array of token id to mint
+    // Then need an array of tokens official minted token uri based on the day it is minted
+    // Only one token can be minted per day
 
     /**
      * @notice A distinct Uniform Resource Identifier (URI) for a given asset.
@@ -167,7 +182,11 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
      */
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
         require(_exists(tokenId), 'NounsToken: URI query for nonexistent token');
+        if(customUriActive){
+            return customMintedUri[tokenId];
+        } else {
         return descriptor.tokenURI(tokenId, seeds[tokenId]);
+        }
     }
 
     /**
@@ -187,6 +206,29 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
         noundersDAO = _noundersDAO;
 
         emit NoundersDAOUpdated(_noundersDAO);
+    }
+
+// TODO ******* unprotected functions
+    /**
+     * @notice Set the nounders DAO.
+     * @dev Only callable by the nounders DAO when not locked.
+     */
+    function activateCustomUri(bool activate) external {
+        customUriActive = activate;
+    }
+
+    function setDailyUris(string[] memory dailyUriSet, uint256[] memory selectDays) external {
+        require(selectDays.length == dailyUriSet.length, "Lengths must match");
+        for (uint256 i = 0; i < selectDays.length; i++) {
+            dailyUris[selectDays[i]] = dailyUriSet[i];
+        }
+    }
+
+    function setDaoNFTDailyUris(string[] memory daoNFTdailyUriSet, uint256[] memory selectDays) external {
+        require(selectDays.length == daoNFTdailyUriSet.length, "Lengths must match");
+        for (uint256 i = 0; i < selectDays.length; i++) {
+            daoDailyUris[selectDays[i]] = daoNFTdailyUriSet[i];
+        }
     }
 
     /**
@@ -252,12 +294,25 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     /**
      * @notice Mint a Noun with `nounId` to the provided `to` address.
      */
-    function _mintTo(address to, uint256 nounId) internal returns (uint256) {
+    function _mintTo(address to, uint256 nounId, bool isDaoNFT) internal returns (uint256) {
         INounsSeeder.Seed memory seed = seeds[nounId] = seeder.generateSeed(nounId, descriptor);
 
         _mint(owner(), to, nounId);
         emit NounCreated(nounId, seed);
 
+        // CUSTOM URI
+        uint day = diffDays(startTime, block.timestamp);
+        if(isDaoNFT){
+            customMintedUri[nounId] = daoDailyUris[day];
+        } else {
+            customMintedUri[nounId] = dailyUris[day];
+        }
+
         return nounId;
+    }
+
+    function diffDays(uint fromTimestamp, uint toTimestamp) internal pure returns (uint _days) {
+        require(fromTimestamp <= toTimestamp);
+        _days = (toTimestamp - fromTimestamp) / SECONDS_PER_DAY;
     }
 }
