@@ -44,14 +44,20 @@ const VoteCard: React.FC<VoteCardProps> = props => {
       break;
   }
 
+  console.log(isMobile);
   return (
-    <Col lg={4}>
+    <Col lg={4} className={classes.wrapper}>
       <Card className={classes.voteCountCard}>
         <Card.Body className="p-2">
           <Card.Text className="py-2 m-0">
             <span className={`${classes.voteCardHeaderText} ${titleClass}`}>{titleCopy}</span>
-            <span className={classes.voteCardVoteCount}>{voteCount}</span>
+            {!isMobile && <span className={classes.voteCardVoteCount}>{voteCount}</span>}
           </Card.Text>
+          {isMobile && (
+            <Card.Text className="py-2 m-0">
+              <span className={classes.voteCardVoteCount}>{voteCount}</span>
+            </Card.Text>
+          )}
           <VoteProgresBar variant={variant} percentage={percentage} />
           {!isMobile && (
             <Row className={classes.nounProfilePics}>

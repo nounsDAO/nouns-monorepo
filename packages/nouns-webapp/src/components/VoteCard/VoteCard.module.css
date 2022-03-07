@@ -7,6 +7,7 @@
   font-size: 22px;
   font-family: 'PT Root UI';
   font-weight: bold;
+  margin-top: 0.15rem;
 }
 
 .for {
@@ -43,5 +44,19 @@
 @media (max-width: 992px) {
   .voteCountCard {
     min-height: 0rem;
+  }
+
+  .voteCardVoteCount {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .wrapper {
+    width: 33%;
+  }
+
+  .voteCardHeaderText {
+    margin-left: auto;
+    margin-right: auto;
   }
 }
