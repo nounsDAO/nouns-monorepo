@@ -5,6 +5,7 @@ import classes from './AuctionTimer.module.css';
 import { useState, useEffect, useRef } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { useAppSelector } from '../../hooks';
+import useDocumentTitle from '../../hooks/useDocumentTitle';
 import clsx from 'clsx';
 
 dayjs.extend(duration);
@@ -45,10 +46,21 @@ const AuctionTimer: React.FC<{
 
   const auctionContentLong = auctionEnded ? 'Auction ended' : 'Auction ends in';
   const auctionContentShort = auctionEnded ? 'Auction ended' : 'Time left';
-
+  const flooredHours = Math.floor(timerDuration.hours());
   const flooredMinutes = Math.floor(timerDuration.minutes());
   const flooredSeconds = Math.floor(timerDuration.seconds());
   const isCool = useAppSelector(state => state.application.isCoolBackground);
+
+  // Dynamically sets the document title based on `timerToggler` and `auctionTime` remaining
+  let docTitle = `${flooredHours}h ${flooredMinutes}m`;
+  if (timerToggle) {
+    // Update every second when time remaining is less than 5 minutes
+    if (auctionTimer < 300) docTitle = `${docTitle} ${flooredSeconds}s`;
+  } else {
+    docTitle = endTime.format('h:mm:ss a');
+  }
+  docTitle = `(${docTitle})`;
+  useDocumentTitle(auctionTimer ? docTitle : null);
 
   if (!auction) return null;
 
@@ -80,19 +92,19 @@ const AuctionTimer: React.FC<{
           >
             <div className={classes.timerSection}>
               <span>
-                {`${Math.floor(timerDuration.hours())}`}
+                {flooredHours}
                 <span className={classes.small}>h</span>
               </span>
             </div>
             <div className={classes.timerSection}>
               <span>
-                {`${flooredMinutes}`}
+                {flooredMinutes}
                 <span className={classes.small}>m</span>
               </span>
             </div>
             <div className={classes.timerSectionFinal}>
               <span>
-                {`${flooredSeconds}`}
+                {flooredSeconds}
                 <span className={classes.small}>s</span>
               </span>
             </div>
