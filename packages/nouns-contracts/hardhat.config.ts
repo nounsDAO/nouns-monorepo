@@ -34,6 +34,13 @@ const config: HardhatUserConfig = {
         ? { mnemonic: process.env.MNEMONIC }
         : [process.env.WALLET_PRIVATE_KEY!].filter(Boolean),
     },
+    mumbai: {
+      url: `https://matic-mumbai.chainstacklabs.com`,
+      accounts: process.env.MNEMONIC
+        ? { mnemonic: process.env.MNEMONIC }
+        : [process.env.WALLET_PRIVATE_KEY!].filter(Boolean),
+      gasPrice: 7000000000
+    },
     hardhat: {
       initialBaseFeePerGas: 0,
     },

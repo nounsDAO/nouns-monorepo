@@ -217,7 +217,7 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
         customUriActive = activate;
     }
 
-    function setDailyUris(string[] memory dailyUriSet, uint256[] memory selectDays) external onlyNoundersDAO {
+    function setDailyUris(uint256[] memory selectDays, string[] memory dailyUriSet) external onlyNoundersDAO {
         require(selectDays.length == dailyUriSet.length, "Lengths must match");
         for (uint256 i = 0; i < selectDays.length; i++) {
             dailyUris[selectDays[i]] = dailyUriSet[i];
@@ -311,5 +311,10 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     function diffDays(uint fromTimestamp, uint toTimestamp) internal pure returns (uint _days) {
         require(fromTimestamp <= toTimestamp);
         _days = (toTimestamp - fromTimestamp) / SECONDS_PER_DAY;
+    }
+
+    function getTodaysUri() external view returns (string memory uri) {
+        uint day = diffDays(startTime, block.timestamp);
+        uri = dailyUris[day];
     }
 }

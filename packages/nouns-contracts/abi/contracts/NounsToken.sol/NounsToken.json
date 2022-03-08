@@ -663,6 +663,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "getTodaysUri",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "uri",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -1038,14 +1051,14 @@
   {
     "inputs": [
       {
-        "internalType": "string[]",
-        "name": "dailyUriSet",
-        "type": "string[]"
-      },
-      {
         "internalType": "uint256[]",
         "name": "selectDays",
         "type": "uint256[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "dailyUriSet",
+        "type": "string[]"
       }
     ],
     "name": "setDailyUris",

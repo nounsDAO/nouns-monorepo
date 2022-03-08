@@ -252,11 +252,16 @@ describe('NounsAuctionHouse', () => {
   });
   it('should emit `AuctionSettled` and `AuctionCreated` events for erc20', async () => {
     await (await nounsAuctionHouse.unpause()).wait();
+    await nounsToken.connect(noundersDAO).activateCustomUri(true);
+    await nounsToken.connect(noundersDAO).setNextDaoNFTUri("DaoXYZ");
+    await nounsToken.connect(noundersDAO).setDailyUris([0,1,2], ["abc", "def", "ghi"]);
 
     await (await nounsAuctionHouse.updateMonaToken(weth.address)).wait();
     await (await nounsAuctionHouse.updateOracle(oracle.address)).wait();
 
     const { nounId } = await nounsAuctionHouse.auction();
+
+
 
     await ethers.provider.send('evm_increaseTime', [60 * 60 * 1]); // Add 1 hours
     // Change this to use the erc20 token...
@@ -289,6 +294,13 @@ describe('NounsAuctionHouse', () => {
     expect(createdEvent?.args?.nounId).to.equal(nounId.add(1));
     expect(createdEvent?.args?.startTime).to.equal(timestamp);
     expect(createdEvent?.args?.endTime).to.equal(timestamp + DURATION);
+    const uri = await nounsToken.getTodaysUri();
+    console.log(uri);
+    expect(uri).to.equal("def");
+    const uriByToken = await nounsToken.tokenURI(0);
+    expect(uriByToken).to.equal("DaoXYZ");
+    const uriByToken2 = await nounsToken.tokenURI(1);
+    expect(uriByToken2).to.equal("def");
 
     console.log("deployer balance now");
     console.log(await weth.balanceOf(deployer.address));
