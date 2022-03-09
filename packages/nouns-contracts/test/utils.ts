@@ -9,6 +9,10 @@ import {
   NounsSeeder__factory as NounsSeederFactory,
   Weth,
   Weth__factory as WethFactory,
+  DigitalaxMonaOracle,
+  DigitalaxMonaOracle__factory as DigitalaxMonaOracleFactory,
+  DigitalaxAccessControls,
+  DigitalaxAccessControls__factory as DigitalaxAccessControlsFactory
 } from '../typechain';
 import ImageData from '../files/image-data.json';
 import { Block } from '@ethersproject/abstract-provider';
@@ -77,6 +81,15 @@ export const deployWeth = async (deployer?: SignerWithAddress): Promise<Weth> =>
   const factory = new WethFactory(deployer || (await await getSigners()).deployer);
 
   return factory.deploy();
+};
+
+export const deployOracle = async (deployer?: SignerWithAddress): Promise<DigitalaxMonaOracle> => {
+  const accessControlsFactory = new DigitalaxAccessControlsFactory(deployer || (await await getSigners()).deployer);
+  const accessControls = await accessControlsFactory.deploy();
+
+  const factory = new DigitalaxMonaOracleFactory(deployer || (await await getSigners()).deployer);
+
+  return factory.deploy(1000000, 0, 1, accessControls.address);
 };
 
 export const populateDescriptor = async (nounsDescriptor: NounsDescriptor): Promise<void> => {

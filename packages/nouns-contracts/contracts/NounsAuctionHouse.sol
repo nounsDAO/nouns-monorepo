@@ -23,7 +23,6 @@
 // With modifications by Nounders DAO.
 
 pragma solidity ^0.8.6;
-
 import { PausableUpgradeable } from '@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol';
 import { ReentrancyGuardUpgradeable } from '@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol';
 import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
@@ -32,9 +31,17 @@ import { INounsAuctionHouse } from './interfaces/INounsAuctionHouse.sol';
 import { INounsToken } from './interfaces/INounsToken.sol';
 import { IWETH } from './interfaces/IWETH.sol';
 
+interface IDigitalaxMonaOracle {
+    function getData() external returns (uint256, bool);
+}
+
 contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, ReentrancyGuardUpgradeable, OwnableUpgradeable {
     // The Nouns ERC721 token contract
     INounsToken public nouns;
+    IDigitalaxMonaOracle public oracle;
+    IERC20 public monaToken;
+
+    uint256 auctionIndex;
 
     // The address of the WETH contract
     address public weth;
@@ -101,25 +108,51 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      * @notice Create a bid for a Noun, with a given amount.
      * @dev This contract only accepts payment in ETH.
      */
-    function createBid(uint256 nounId) external payable override nonReentrant {
+    function createBid(uint256 useERC20, uint256 nounId) external payable override nonReentrant {
         INounsAuctionHouse.Auction memory _auction = auction;
 
         require(_auction.nounId == nounId, 'Noun not up for auction');
         require(block.timestamp < _auction.endTime, 'Auction expired');
-        require(msg.value >= reservePrice, 'Must send at least reservePrice');
-        require(
-            msg.value >= _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100),
-            'Must send more than last bid by minBidIncrementPercentage amount'
-        );
+        if(useERC20 == 0){
+            require(msg.value >= reservePrice, 'Must send at least reservePrice');
+            require(
+                msg.value >= _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100),
+                'Must send more than last bid by minBidIncrementPercentage amount'
+            );
+        } else {
+            uint256 minEthValue;
+            if(_auction.amount > reservePrice){
+                minEthValue = _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100);
+            } else{
+                minEthValue = reservePrice;
+            }
+            uint256 erc20Value = _estimateERC20Amount(minEthValue);
+            require(monaToken.balanceOf(msg.sender) >= erc20Value, "Insufficient balance");
+            require(monaToken.allowance(msg.sender, address(this)) >= erc20Value, "Insufficient allowance");
+        }
 
         address payable lastBidder = _auction.bidder;
 
         // Refund the last bidder, if applicable
         if (lastBidder != address(0)) {
-            _safeTransferETHWithFallback(lastBidder, _auction.amount);
+            if(auction.lastBidType == 1) {
+                _safeTransferETHWithFallback(lastBidder, _auction.amount);
+            } else{
+                // This is erc20 transfer
+                monaToken.transfer(lastBidder, _auction.amount);
+            }
         }
 
-        auction.amount = msg.value;
+        if(useERC20 == 0){
+            auction.amount = msg.value;
+            auction.lastBidType = 1;
+        } else{
+            auction.amount = useERC20;
+            auction.lastBidType = 2;
+
+            monaToken.transferFrom(msg.sender, address(this), useERC20);
+        }
+
         auction.bidder = payable(msg.sender);
 
         // Extend the auction if the bid was received within `timeBuffer` of the auction end time
@@ -128,7 +161,11 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
             auction.endTime = _auction.endTime = block.timestamp + timeBuffer;
         }
 
-        emit AuctionBid(_auction.nounId, msg.sender, msg.value, extended);
+        if(useERC20 == 0){
+            emit AuctionBid(_auction.nounId, msg.sender, msg.value, extended);
+        } else{
+            emit AuctionBidERC20(_auction.nounId, msg.sender, useERC20, extended);
+        }
 
         if (extended) {
             emit AuctionExtended(_auction.nounId, _auction.endTime);
@@ -144,6 +181,25 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     function pause() external override onlyOwner {
         _pause();
     }
+
+     /**
+     @notice Method for updating oracle
+     @dev Only admin
+     @param _oracle new oracle
+     */
+    function updateOracle(IDigitalaxMonaOracle _oracle) external onlyOwner {
+        oracle = _oracle;
+    }
+
+     /**
+     @notice Method for updating monaToken
+     @dev Only admin
+     @param _monaToken new monatoken
+     */
+    function updateMonaToken(IERC20 _monaToken) external onlyOwner {
+        monaToken = _monaToken;
+    }
+
 
     /**
      * @notice Unpause the Nouns auction house.
@@ -195,23 +251,26 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      * catch the revert and pause this contract.
      */
     function _createAuction() internal {
-        try nouns.mint() returns (uint256 nounId) {
+    //try nouns.mint() returns (uint256 nounId) {
             uint256 startTime = block.timestamp;
             uint256 endTime = startTime + duration;
 
             auction = Auction({
-                nounId: nounId,
+                nounId: auctionIndex,
                 amount: 0,
                 startTime: startTime,
                 endTime: endTime,
                 bidder: payable(0),
-                settled: false
+                settled: false,
+                lastBidType: 0
             });
 
-            emit AuctionCreated(nounId, startTime, endTime);
-        } catch Error(string memory) {
-            _pause();
-        }
+            auctionIndex = auctionIndex + 1;
+
+            emit AuctionCreated(auction.nounId, startTime, endTime);
+//        } catch Error(string memory) {
+//            _pause();
+//        }
     }
 
     /**
@@ -227,14 +286,17 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
 
         auction.settled = true;
 
-        if (_auction.bidder == address(0)) {
-            nouns.burn(_auction.nounId);
-        } else {
-            nouns.transferFrom(address(this), _auction.bidder, _auction.nounId);
+        if (_auction.bidder != address(0)) {
+            uint256 mintToken = nouns.mint();
+            nouns.transferFrom(address(this), _auction.bidder, mintToken);
         }
-
+        // TODO ERC20 logic here!
         if (_auction.amount > 0) {
-            _safeTransferETHWithFallback(owner(), _auction.amount);
+            if(_auction.lastBidType == 1){
+                _safeTransferETHWithFallback(owner(), _auction.amount);
+            } else {
+                monaToken.transfer(owner(), _auction.amount);
+            }
         }
 
         emit AuctionSettled(_auction.nounId, _auction.bidder, _auction.amount);
@@ -257,5 +319,26 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     function _safeTransferETH(address to, uint256 value) internal returns (bool) {
         (bool success, ) = to.call{ value: value, gas: 30_000 }(new bytes(0));
         return success;
+    }
+
+    /**
+     @notice Private method to estimate ETH for paying
+     @param _amountInETH amount in eth
+     */
+    function _estimateERC20Amount(uint256 _amountInETH) public returns (uint256) {
+        (uint256 exchangeRate, bool rateValid) = oracle.getData();
+        require(rateValid, "EstimateErc20Amount: Oracle data is invalid");
+
+        return (_amountInETH * 1e18) / (exchangeRate);
+    }
+    /**
+     @notice Private method to estimate ETH for paying
+     @param _amountInERC20 erc20 amount in wei
+     */
+    function _estimateETHAmount(uint256 _amountInERC20) public returns (uint256) {
+        (uint256 exchangeRate, bool rateValid) = oracle.getData();
+        require(rateValid, "EstimateEthAmount: Oracle data is invalid");
+
+        return (_amountInERC20 * exchangeRate) / (1e18);
     }
 }

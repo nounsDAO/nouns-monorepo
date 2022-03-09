@@ -332,6 +332,19 @@
   {
     "inputs": [
       {
+        "internalType": "bool",
+        "name": "activate",
+        "type": "bool"
+      }
+    ],
+    "name": "activateCustomUri",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "to",
         "type": "address"
@@ -411,6 +424,57 @@
   {
     "inputs": [],
     "name": "contractURI",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "customMintedUri",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "customUriActive",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "dailyUris",
     "outputs": [
       {
         "internalType": "string",
@@ -599,6 +663,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "getTodaysUri",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "uri",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -711,6 +788,19 @@
   {
     "inputs": [],
     "name": "name",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "nextDaoUri",
     "outputs": [
       {
         "internalType": "string",
@@ -961,6 +1051,24 @@
   {
     "inputs": [
       {
+        "internalType": "uint256[]",
+        "name": "selectDays",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "dailyUriSet",
+        "type": "string[]"
+      }
+    ],
+    "name": "setDailyUris",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "contract INounsDescriptor",
         "name": "_descriptor",
         "type": "address"
@@ -980,6 +1088,19 @@
       }
     ],
     "name": "setMinter",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_nextDaoUri",
+        "type": "string"
+      }
+    ],
+    "name": "setNextDaoNFTUri",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1008,6 +1129,19 @@
     "name": "setSeeder",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "startTime",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
