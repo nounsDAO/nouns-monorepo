@@ -6,7 +6,7 @@ import { ethers, upgrades } from 'hardhat';
 import {
   MaliciousBidder__factory as MaliciousBidderFactory,
   NounsAuctionHouse,
-  NounsDescriptor__factory as NounsDescriptorFactory,
+  // NounsDescriptor__factory as NounsDescriptorFactory,
   NounsToken,
   Weth,
   DigitalaxMonaOracle
@@ -54,9 +54,9 @@ describe('NounsAuctionHouse', () => {
     await (await oracle.addProvider(deployer.address)).wait();
     await (await oracle.pushReport(BigNumber.from(1000000000000000))).wait();
 
-    const descriptor = await nounsToken.descriptor();
-
-    await populateDescriptor(NounsDescriptorFactory.connect(descriptor, deployer));
+    // const descriptor = await nounsToken.descriptor();
+    //
+    // await populateDescriptor(NounsDescriptorFactory.connect(descriptor, deployer));
 
     await nounsToken.setMinter(nounsAuctionHouse.address);
   });
@@ -252,7 +252,7 @@ describe('NounsAuctionHouse', () => {
   });
   it('should emit `AuctionSettled` and `AuctionCreated` events for erc20', async () => {
     await (await nounsAuctionHouse.unpause()).wait();
-    await nounsToken.connect(noundersDAO).activateCustomUri(true);
+
     await nounsToken.connect(noundersDAO).setNextDaoNFTUri("DaoXYZ");
     await nounsToken.connect(noundersDAO).setDailyUris([0,1,2], ["abc", "def", "ghi"]);
 

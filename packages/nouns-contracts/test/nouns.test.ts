@@ -19,9 +19,9 @@ describe('NounsToken', () => {
     [deployer, noundersDAO] = await ethers.getSigners();
     nounsToken = await deployNounsToken(deployer, noundersDAO.address, deployer.address);
 
-    const descriptor = await nounsToken.descriptor();
-
-    await populateDescriptor(NounsDescriptorFactory.connect(descriptor, deployer));
+    // const descriptor = await nounsToken.descriptor();
+    //
+    // await populateDescriptor(NounsDescriptorFactory.connect(descriptor, deployer));
   });
 
   beforeEach(async () => {
@@ -40,22 +40,11 @@ describe('NounsToken', () => {
     expect(await nounsToken.ownerOf(0)).to.eq(noundersDAO.address);
     expect(noundersNounCreated?.event).to.eq('NounCreated');
     expect(noundersNounCreated?.args?.tokenId).to.eq(0);
-    expect(noundersNounCreated?.args?.seed.length).to.equal(5);
 
     expect(await nounsToken.ownerOf(1)).to.eq(deployer.address);
     expect(ownersNounCreated?.event).to.eq('NounCreated');
     expect(ownersNounCreated?.args?.tokenId).to.eq(1);
-    expect(ownersNounCreated?.args?.seed.length).to.equal(5);
 
-    noundersNounCreated?.args?.seed.forEach((item: EthersBN | number) => {
-      const value = typeof item !== 'number' ? item?.toNumber() : item;
-      expect(value).to.be.a('number');
-    });
-
-    ownersNounCreated?.args?.seed.forEach((item: EthersBN | number) => {
-      const value = typeof item !== 'number' ? item?.toNumber() : item;
-      expect(value).to.be.a('number');
-    });
   });
 
   it('should set symbol', async () => {
@@ -75,12 +64,6 @@ describe('NounsToken', () => {
     expect(await nounsToken.ownerOf(2)).to.eq(deployer.address);
     expect(nounCreated?.event).to.eq('NounCreated');
     expect(nounCreated?.args?.tokenId).to.eq(2);
-    expect(nounCreated?.args?.seed.length).to.equal(5);
-
-    nounCreated?.args?.seed.forEach((item: EthersBN | number) => {
-      const value = typeof item !== 'number' ? item?.toNumber() : item;
-      expect(value).to.be.a('number');
-    });
   });
 
   it('should emit two transfer logs on mint', async () => {
@@ -111,21 +94,21 @@ describe('NounsToken', () => {
     await expect(account0AsNounErc721Account.mint()).to.be.reverted;
   });
 
-  describe('contractURI', async () => {
-    it('should return correct contractURI', async () => {
-      expect(await nounsToken.contractURI()).to.eq(
-        'ipfs://QmZi1n79FqWt2tTLwCqiy6nLM6xLGRsEPQ5JmReJQKNNzX',
-      );
-    });
-    it('should allow owner to set contractURI', async () => {
-      await nounsToken.setContractURIHash('ABC123');
-      expect(await nounsToken.contractURI()).to.eq('ipfs://ABC123');
-    });
-    it('should not allow non owner to set contractURI', async () => {
-      const [, nonOwner] = await ethers.getSigners();
-      await expect(nounsToken.connect(nonOwner).setContractURIHash('BAD')).to.be.revertedWith(
-        'Ownable: caller is not the owner',
-      );
-    });
-  });
+  // describe('contractURI', async () => {
+  //   it('should return correct contractURI', async () => {
+  //     expect(await nounsToken.contractURI()).to.eq(
+  //       'ipfs://QmZi1n79FqWt2tTLwCqiy6nLM6xLGRsEPQ5JmReJQKNNzX',
+  //     );
+  //   });
+  //   it('should allow owner to set contractURI', async () => {
+  //     await nounsToken.setContractURIHash('ABC123');
+  //     expect(await nounsToken.contractURI()).to.eq('ipfs://ABC123');
+  //   });
+  //   it('should not allow non owner to set contractURI', async () => {
+  //     const [, nonOwner] = await ethers.getSigners();
+  //     await expect(nounsToken.connect(nonOwner).setContractURIHash('BAD')).to.be.revertedWith(
+  //       'Ownable: caller is not the owner',
+  //     );
+  //   });
+  // });
 });

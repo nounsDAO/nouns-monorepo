@@ -11,7 +11,7 @@ import {
   getSigners,
   TestSigners,
   setTotalSupply,
-  populateDescriptor,
+  // populateDescriptor,
 } from '../../utils';
 
 import {
@@ -25,7 +25,7 @@ import {
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
-  NounsDescriptor__factory as NounsDescriptorFactory,
+  // NounsDescriptor__factory as NounsDescriptorFactory,
   NounsDaoProxy__factory as NounsDaoProxyFactory,
   NounsDaoLogicV1,
   NounsDaoLogicV1__factory as NounsDaoLogicV1Factory,
@@ -72,7 +72,7 @@ async function reset(): Promise<void> {
 
   const govDelegatorAddress = ethers.utils.getContractAddress({
     from: deployer.address,
-    nonce: (await deployer.getTransactionCount()) + 6,
+    nonce: (await deployer.getTransactionCount()) + 4,
   });
 
   // Deploy NounsDAOExecutor with pre-computed Delegator address
@@ -101,7 +101,7 @@ async function reset(): Promise<void> {
   // Cast Delegator as Delegate
   gov = NounsDaoLogicV1Factory.connect(govDelegatorAddress, deployer);
 
-  await populateDescriptor(NounsDescriptorFactory.connect(await token.descriptor(), deployer));
+  // await populateDescriptor(NounsDescriptorFactory.connect(await token.descriptor(), deployer));
 
   snapshotId = await ethers.provider.send('evm_snapshot', []);
 }

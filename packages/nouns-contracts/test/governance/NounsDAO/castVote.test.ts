@@ -11,7 +11,7 @@ import {
   getSigners,
   TestSigners,
   setTotalSupply,
-  populateDescriptor,
+  // populateDescriptor,
 } from '../../utils';
 
 import { mineBlock, address, encodeParameters } from '../../utils';
@@ -19,7 +19,7 @@ import { mineBlock, address, encodeParameters } from '../../utils';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
-  NounsDescriptor__factory as NounsDescriptorFactory,
+  // NounsDescriptor__factory as NounsDescriptorFactory,
   NounsDaoLogicV1Harness,
   NounsDaoLogicV1Harness__factory as NounsDaoLogicV1HarnessFactory,
 } from '../../../typechain';
@@ -77,9 +77,9 @@ async function reset() {
   }
   token = await deployNounsToken(signers.deployer);
 
-  await populateDescriptor(
-    NounsDescriptorFactory.connect(await token.descriptor(), signers.deployer),
-  );
+  // await populateDescriptor(
+  //   NounsDescriptorFactory.connect(await token.descriptor(), signers.deployer),
+  // );
 
   await setTotalSupply(token, 10);
 
