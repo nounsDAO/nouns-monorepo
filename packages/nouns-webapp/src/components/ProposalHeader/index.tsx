@@ -8,6 +8,8 @@ import { Proposal, useHasVotedOnProposal, useProposalVote } from '../../wrappers
 import clsx from 'clsx';
 import { isMobileScreen } from '../../utils/isMobile';
 import { useUserVotes } from '../../wrappers/nounToken';
+import { useBlockTimestamp } from '../../hooks/useBlockTimestamp';
+import dayjs from 'dayjs';
 
 interface ProposalHeaderProps {
   proposal: Proposal;
@@ -23,6 +25,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const connectedAccountNounVotes = useUserVotes() || 0;
   const hasVoted = useHasVotedOnProposal(proposal?.id);
   const proposalVote = useProposalVote(proposal?.id);
+  const proposalCreationTimestamp = useBlockTimestamp(proposal?.createdBlock);
 
   const voteButton = (
     <>
@@ -87,6 +90,18 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
           You voted <strong>{proposalVote}</strong> this proposal
         </Alert>
       )}
+
+      {proposal &&
+        isActiveForVoting &&
+        !hasVoted &&
+        proposalCreationTimestamp &&
+        connectedAccountNounVotes > 0 && (
+          <Alert variant="success" className={classes.voterIneligibleAlert}>
+            Only Nouns you owned or were delegated to you before{' '}
+            {dayjs.unix(proposalCreationTimestamp).format('MMMM D, YYYY h:mm A z')} are eligible to
+            vote.
+          </Alert>
+        )}
     </>
   );
 };
