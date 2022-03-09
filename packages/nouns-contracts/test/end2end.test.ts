@@ -8,8 +8,8 @@ import {
   NounsToken,
   NounsAuctionHouse,
   NounsAuctionHouse__factory as NounsAuctionHouseFactory,
-  NounsDescriptor,
-  NounsDescriptor__factory as NounsDescriptorFactory,
+  // NounsDescriptor,
+  // NounsDescriptor__factory as NounsDescriptorFactory,
   NounsDaoProxy__factory as NounsDaoProxyFactory,
   NounsDaoLogicV1,
   NounsDaoLogicV1__factory as NounsDaoLogicV1Factory,
@@ -20,7 +20,7 @@ import {
 import {
   deployNounsToken,
   deployWeth,
-  populateDescriptor,
+  // populateDescriptor,
   address,
   encodeParameters,
   advanceBlocks,
@@ -35,7 +35,7 @@ const { expect } = chai;
 
 let nounsToken: NounsToken;
 let nounsAuctionHouse: NounsAuctionHouse;
-let descriptor: NounsDescriptor;
+// let descriptor: NounsDescriptor;
 let weth: Weth;
 let gov: NounsDaoLogicV1;
 let timelock: NounsDaoExecutor;
@@ -109,15 +109,16 @@ async function deploy() {
   await nounsToken.setMinter(nounsAuctionHouse.address);
 
   // 4. POPULATE body parts
-  descriptor = NounsDescriptorFactory.connect(await nounsToken.descriptor(), deployer);
-
-  await populateDescriptor(descriptor);
+  // descriptor = NounsDescriptorFactory.connect(await nounsToken.descriptor(), deployer);
+  //
+  // await populateDescriptor(descriptor);
 
   // 5a. CALCULATE Gov Delegate, takes place after 2 transactions
   const calculatedGovDelegatorAddress = ethers.utils.getContractAddress({
     from: deployer.address,
     nonce: (await deployer.getTransactionCount()) + 2,
   });
+
 
   // 5b. DEPLOY NounsDAOExecutor with pre-computed Delegator address
   timelock = await new NounsDaoExecutorFactory(deployer).deploy(
@@ -148,8 +149,8 @@ async function deploy() {
 
   // 8. SET Nouns owner to NounsDAOExecutor
   await nounsToken.transferOwnership(timelock.address);
-  // 9. SET Descriptor owner to NounsDAOExecutor
-  await descriptor.transferOwnership(timelock.address);
+  // // 9. SET Descriptor owner to NounsDAOExecutor
+  // await descriptor.transferOwnership(timelock.address);
 
   // 10. UNPAUSE auction and kick off first mint
   await nounsAuctionHouse.unpause();
@@ -163,7 +164,7 @@ describe('End to End test with deployment, auction, proposing, voting, executing
 
   it('sets all starting params correctly', async () => {
     expect(await nounsToken.owner()).to.equal(timelock.address);
-    expect(await descriptor.owner()).to.equal(timelock.address);
+    // expect(await descriptor.owner()).to.equal(timelock.address);
     expect(await nounsAuctionHouse.owner()).to.equal(timelock.address);
 
     expect(await nounsToken.minter()).to.equal(nounsAuctionHouse.address);

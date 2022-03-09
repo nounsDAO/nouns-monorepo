@@ -11,7 +11,7 @@ import {
   getSigners,
   TestSigners,
   setTotalSupply,
-  populateDescriptor,
+  // populateDescriptor,
 } from '../../utils';
 
 import { mineBlock, address, encodeParameters, advanceBlocks } from '../../utils';
@@ -19,7 +19,7 @@ import { mineBlock, address, encodeParameters, advanceBlocks } from '../../utils
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
-  NounsDescriptor__factory as NounsDescriptorFactory,
+  // NounsDescriptor__factory as NounsDescriptorFactory,
   NounsDaoProxy__factory as NounsDaoProxyFactory,
   NounsDaoLogicV1,
   NounsDaoLogicV1__factory as NounsDaoLogicV1Factory,
@@ -32,16 +32,16 @@ const { expect } = chai;
 async function reset(): Promise<void> {
   // nonce 0: Deploy NounsDAOExecutor
   // nonce 1: Deploy NounsDAOLogicV1
-  // nonce 2: Deploy nftDescriptorLibraryFactory
-  // nonce 3: Deploy NounsDescriptor
-  // nonce 4: Deploy NounsSeeder
+  // nonce 2: Deploy nftDescriptorLibraryFactory // no
+  // nonce 3: Deploy NounsDescriptor //no
+  // nonce 4: Deploy NounsSeeder //no
   // nonce 5: Deploy NounsToken
   // nonce 6: Deploy NounsDAOProxy
-  // nonce 7+: populate Descriptor
+  // nonce 7+: populate Descriptor //no
 
   const govDelegatorAddress = ethers.utils.getContractAddress({
     from: deployer.address,
-    nonce: (await deployer.getTransactionCount()) + 6,
+    nonce: (await deployer.getTransactionCount()) + 4,
   });
 
   // Deploy NounsDAOExecutor with pre-computed Delegator address
@@ -71,7 +71,7 @@ async function reset(): Promise<void> {
   // Cast Delegator as Delegate
   gov = NounsDaoLogicV1Factory.connect(govDelegatorAddress, deployer);
 
-  await populateDescriptor(NounsDescriptorFactory.connect(await token.descriptor(), deployer));
+  // await populateDescriptor(NounsDescriptorFactory.connect(await token.descriptor(), deployer));
 }
 
 async function propose(proposer: SignerWithAddress) {

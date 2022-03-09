@@ -8,7 +8,7 @@ import {
   getSigners,
   TestSigners,
   setTotalSupply,
-  populateDescriptor,
+  // populateDescriptor,
   minerStart,
   minerStop,
   mineBlock,
@@ -59,9 +59,9 @@ describe('Nouns Governance', () => {
 
     token = await deployNounsToken(signers.deployer);
 
-    await populateDescriptor(
-      NounsDescriptorFactory.connect(await token.descriptor(), signers.deployer),
-    );
+    // await populateDescriptor(
+    //   NounsDescriptorFactory.connect(await token.descriptor(), signers.deployer),
+    // );
 
     domain = Domain('Nouns', token.address, await chainId());
 

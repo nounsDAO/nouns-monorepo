@@ -68,13 +68,15 @@ export const deployNounsToken = async (
   const signer = deployer || (await getSigners()).deployer;
   const factory = new NounsTokenFactory(signer);
 
-  return factory.deploy(
+  const token =  await factory.deploy();
+  await token.initialize(
     noundersDAO || signer.address,
     minter || signer.address,
-    descriptor || (await deployNounsDescriptor(signer)).address,
-    seeder || (await deployNounsSeeder(signer)).address,
-    proxyRegistryAddress || address(0),
+    // descriptor || (await deployNounsDescriptor(signer)).address,
+    // seeder || (await deployNounsSeeder(signer)).address,
+    proxyRegistryAddress || address(0)
   );
+  return token;
 };
 
 export const deployWeth = async (deployer?: SignerWithAddress): Promise<Weth> => {

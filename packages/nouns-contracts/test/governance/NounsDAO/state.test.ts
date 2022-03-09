@@ -11,7 +11,7 @@ import {
   getSigners,
   TestSigners,
   setTotalSupply,
-  populateDescriptor,
+  // populateDescriptor,
 } from '../../utils';
 
 import {
@@ -27,7 +27,7 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 import {
   NounsToken,
-  NounsDescriptor__factory as NounsDescriptorFactory,
+  // NounsDescriptor__factory as NounsDescriptorFactory,
   NounsDaoExecutorHarness,
   NounsDaoExecutorHarness__factory as NounsDaoExecutorHarnessFactory,
   NounsDaoImmutable,
@@ -121,9 +121,9 @@ describe('NounsDAO#state/1', () => {
 
     token = await deployNounsToken(signers.deployer);
 
-    await populateDescriptor(
-      NounsDescriptorFactory.connect(await token.descriptor(), signers.deployer),
-    );
+    // await populateDescriptor(
+    //   NounsDescriptorFactory.connect(await token.descriptor(), signers.deployer),
+    // );
   });
 
   beforeEach(async () => {
