@@ -5,20 +5,12 @@ import {
   NounCreated,
   Transfer,
 } from './types/NounsToken/NounsToken';
-import { Noun, Seed } from './types/schema';
+import { Noun } from './types/schema';
 import { BIGINT_ONE, BIGINT_ZERO, ZERO_ADDRESS } from './utils/constants';
 import { getGovernanceEntity, getOrCreateDelegate, getOrCreateAccount } from './utils/helpers';
 
 export function handleNounCreated(event: NounCreated): void {
   let nounId = event.params.tokenId.toString();
-
-  let seed = new Seed(nounId);
-  seed.background = event.params.seed.background;
-  seed.body = event.params.seed.body;
-  seed.accessory = event.params.seed.accessory;
-  seed.head = event.params.seed.head;
-  seed.glasses = event.params.seed.glasses;
-  seed.save();
 
   let noun = Noun.load(nounId);
   if (noun == null) {
@@ -29,7 +21,6 @@ export function handleNounCreated(event: NounCreated): void {
     return;
   }
 
-  noun.seed = seed.id;
   noun.save();
 }
 
