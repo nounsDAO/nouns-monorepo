@@ -16,6 +16,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { faDiscord } from '@fortawesome/free-brands-svg-icons';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faTrophy } from '@fortawesome/free-solid-svg-icons';
 // import { faComments } from '@fortawesome/free-solid-svg-icons';
 // import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import NavBarTreasury from '../NavBarTreasury';
@@ -84,6 +85,13 @@ const NavBar = () => {
               <NavBarButton 
                 buttonText={'DAO'}
                 buttonIcon={<FontAwesomeIcon icon={faUsers} />}
+                buttonStyle={nonWalletButtonStyle}
+              />
+            </Nav.Link>
+            <Nav.Link as={Link} to="/feats" className={classes.nounsNavLink}>
+              <NavBarButton 
+                buttonText={'Feats'}
+                buttonIcon={<FontAwesomeIcon icon={faTrophy} />}
                 buttonStyle={nonWalletButtonStyle}
               />
             </Nav.Link>

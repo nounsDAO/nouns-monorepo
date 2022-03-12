@@ -16,6 +16,7 @@ import GovernancePage from './pages/Governance';
 import CreateProposalPage from './pages/CreateProposal';
 import VotePage from './pages/Vote';
 import NoundersPage from './pages/Nounders';
+import FeatsPage from './pages/Feats';
 import NotFoundPage from './pages/NotFound';
 import Playground from './pages/Playground';
 import { CHAIN_ID } from './config';
@@ -55,6 +56,7 @@ function App() {
             render={props => <AuctionPage initialAuctionId={Number(props.match.params.id)} />}
           />
           <Route exact path="/nounders" component={NoundersPage} />
+          <Route exact path="/feats" component={FeatsPage} />
           <Route exact path="/sign" component={VerifyPage} />
           <Route exact path="/verify" component={VerifyPage} />
           <Route exact path="/create-proposal" component={CreateProposalPage} />
