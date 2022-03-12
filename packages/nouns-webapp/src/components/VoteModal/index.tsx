@@ -152,18 +152,20 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
     </>
   );
 
+  // On modal dismiss, reset non-success state
+  const resetNonSuccessStateAndHideModal = () => {
+    setIsLoading(false);
+    setIsVoteFailed(false);
+    setErrorMessage('');
+    setFailureCopy('');
+    onHide();
+  };
+
   return (
     <>
       {show && (
         <Modal
-          onDismiss={() => {
-            // Reset everything other than success state on hide
-            setIsLoading(false);
-            setIsVoteFailed(false);
-            setErrorMessage('');
-            setFailureCopy('');
-            onHide();
-          }}
+          onDismiss={resetNonSuccessStateAndHideModal}
           title={`Vote on Prop ${proposalId}`}
           content={voteModalContent}
         />
