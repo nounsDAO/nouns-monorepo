@@ -6,7 +6,7 @@ import {
   ProposalExecuted,
   VoteCast,
   ProposalVetoed,
-} from './types/NounsDAO/NounsDAO';
+} from '../generated/NounsDAO/NounsDAO';
 import {
   getOrCreateDelegate,
   getOrCreateProposal,

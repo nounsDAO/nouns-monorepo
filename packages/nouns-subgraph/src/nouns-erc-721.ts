@@ -4,13 +4,16 @@ import {
   DelegateVotesChanged,
   NounCreated,
   Transfer,
-} from './types/NounsToken/NounsToken';
-import { Noun } from './types/schema';
+  NounsToken as NounsTokenContract
+} from '../generated/NounsToken/NounsToken';
+import { Noun } from '../generated/schema';
 import { BIGINT_ONE, BIGINT_ZERO, ZERO_ADDRESS } from './utils/constants';
 import { getGovernanceEntity, getOrCreateDelegate, getOrCreateAccount } from './utils/helpers';
 
 export function handleNounCreated(event: NounCreated): void {
   let nounId = event.params.tokenId.toString();
+  let contract = NounsTokenContract.bind(event.address);
+
 
   let noun = Noun.load(nounId);
   if (noun == null) {
@@ -20,6 +23,11 @@ export function handleNounCreated(event: NounCreated): void {
     ]);
     return;
   }
+
+ const uri = contract.try_tokenURI(event.params.tokenId);
+        if (!uri.reverted) {
+            noun.tokenUri = uri.value;
+        };
 
   noun.save();
 }
