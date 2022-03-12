@@ -155,7 +155,18 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
   return (
     <>
       {show && (
-        <Modal onDismiss={onHide} title={`Vote on Prop ${proposalId}`} content={voteModalContent} />
+        <Modal
+          onDismiss={() => {
+            // Reset everything other than success state on hide
+            setIsLoading(false);
+            setIsVoteFailed(false);
+            setErrorMessage('');
+            setFailureCopy('');
+            onHide();
+          }}
+          title={`Vote on Prop ${proposalId}`}
+          content={voteModalContent}
+        />
       )}
     </>
   );
