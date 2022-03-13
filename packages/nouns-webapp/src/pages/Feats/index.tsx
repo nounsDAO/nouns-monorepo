@@ -1,31 +1,123 @@
-import React from 'react';
-import classes from './Feats.module.css';
 import Section from '../../layout/Section';
-import { Col, Row } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
+import classes from './Feats.module.css';
+import Accordion from 'react-bootstrap/Accordion';
+import Link from 'D:/GitHub/nouns-monorepo/packages/nouns-webapp/src/components/Link';
 
-const FeatsPage = () => {
+const Documentation = () => {
+  // const cryptopunksLink = (
+  //   <Link text="CryptoPunks" url="https://www.larvalabs.com/cryptopunks" leavesPage={true} />
+  // );
+  // const playgroundLink = <Link text="Playground" url="/playground" leavesPage={false} />;
+  // const publicDomainLink = (
+  //   <Link
+  //     text="public domain"
+  //     url="https://creativecommons.org/publicdomain/zero/1.0/"
+  //     leavesPage={true}
+  //   />
+  // );
+  const compoundGovLink = (
+    <Link text="Compound Governance" url="https://compound.finance/governance" leavesPage={true} />
+  );
   return (
-    <Section fullWidth={true} className={classes.noundersPage}>
-      <Col lg={{ span: 6, offset: 3 }}>
-        <h2 style={{ marginBottom: '2rem' }}>The Chiliagons</h2>
-        <h3 style={{ marginBottom: '2rem' }}>3.5 artists, 6.5 technologists</h3>
-        
-        <h3>Nounders' Reward</h3>
-        <p style={{ textAlign: 'justify' }}>
-          All Noun auction proceeds are sent to the Nouns DAO. For this reason, we, the project's
-          founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th noun for
-          the first 5 years of the project will be sent to our multisig (5/10), where it will be
-          vested and distributed to individual Nounders.
-        </p>
-        <p style={{ textAlign: 'justify' }}>
-          The Nounders reward is intended as compensation for our pre and post-launch contributions
-          to the project, and to help us participate meaningfully in governance as the project
-          matures. Since there are 10 Nounders, after 5 years each Nounder could receive up to 1% of
-          the Noun supply.
-        </p>
+    <Section fullWidth={false}>
+      <Col lg={{ span: 10, offset: 1 }}>
+        <div className={classes.headerWrapper}>
+           <h2>Hackathons</h2>
+           <br />
+        </div>
+        <Accordion flush>
+          <Accordion.Item eventKey="0" className={classes.accordionItem}>
+            <Accordion.Header className={classes.accordionHeader}>GnuSwap</Accordion.Header>
+            <Accordion.Body>
+              Connext Network sponsor prize at ETHGlobal ScalingEthereum Hackathon, Connext Network Grant ($5k)
+            </Accordion.Body>
+            </Accordion.Item>
+            <Accordion.Item eventKey="1" className={classes.accordionItem}>
+            <Accordion.Header className={classes.accordionHeader}>Zoduid</Accordion.Header>
+            <Accordion.Body>
+              <ul>
+                <li>Teacher/Instructor/Mentor</li>
+               {/* Create proposals to conduct sessions which cover a preplanned set of topics in a specified duration. 
+               Preferably 10 x 2 hour sessions with a predefined Course Amount (CA).Teachers receive 5% of the CA (5% of the CA will be awarded  in terms of CDT tokens).
+               */}
+                <li>Student/Pupil/Novice</li>
+                {/* 1. Attend sessions conducted by teachers and receive POAP tokens.
+                2. Complete reading tasks and assignments to be rewarded with 0.01% of the CA in terms of CDT.
+                3. Complete mini project and capstone project - 0.5%  of the CA in terms of CDT */}
+                <li>Grant Project Contributors</li>
+                {/* Accomplish specific milestones in the grant project
+                Contributors receive 90% of the grant amount
+                10% goes to the DAO and contributors receive returns in CDT */}
+                <li>Hackathon Participants</li>
+                {/* Complete specific milestones in the hackathon project and make a successful submission - get 85% of bounty, if won
+                10% goes to the DAO and contributors receive returns in CDT */}
+                <li>Donations</li>
+                {/* Every donation to the DAO is eligible for a 5% return in CDT Tokens */}
+                <li>Business</li>
+                {/* Responsible for bringing new project proposals and grant opportunities to the community.
+                Each new grant that is created upon creation is eligible for 100 CDT
+                Upon grant getting passed 5% of grant value can be claimed by Business lead */}
+                <li>Legal Team</li>
+               {/* Provide legal advice and help the DAO understand regulations and regulatory changes
+               Contributors receive 85% of the grant amount for a legal support that we provide to other DAO's
+               10% goes to the DAO and contributors receive returns in CDT
+               Ensure compliance in the DAO operations */}
+                <li>Marketing Team</li>
+                {/* Develop and implement strategies to promote awareness about the DAO and its activities
+                Contributors receive 85% of the grant amount for marketing support that we provide to other DAO's
+                10% goes to the DAO and contributors receive returns in CDT
+                Manage social media outreach. */}
+              </ul>
+              <h5>*CDT token distribution is based on dollar value calculated at the time of disbursal</h5>
+            </Accordion.Body>
+          </Accordion.Item>
+          <Accordion.Item eventKey="2" className={classes.accordionItem}>
+            <Accordion.Header className={classes.accordionHeader}>
+              Skyfire DAO 
+            </Accordion.Header>
+            <Accordion.Body>
+              <p>
+                In addition to the precautions taken by Compound Governance, Chiliagons have given
+                themselves a special veto right to ensure that no malicious proposals can be passed
+                while the Chili supply is low. This veto right will only be used if an obviously
+                harmful governance proposal has been passed, and is intended as a last resort.
+                <br /><br />
+                Chiliagons will proveably revoke this veto right when they deem it safe to do so. This
+                decision will be based on a healthy Noun distribution and a community that is
+                engaged in the governance process.
+              </p>
+            </Accordion.Body>
+          </Accordion.Item>
+           <div className={classes.headerWrapper}>
+           <h2>Grants</h2>
+           <br />
+           
+           </div>
+          <Accordion.Item eventKey="3" className={classes.accordionItem}>
+            <Accordion.Header className={classes.accordionHeader}>
+              Connext
+            </Accordion.Header>
+            <Accordion.Body>
+              <p>
+                Chilis are stored directly on Ethereum and do not utilize pointers to other networks
+                such as IPFS. This is possible because Chilis parts are compressed and stored on-chain
+                using a custom run-length encoding (RLE), which is a form of lossless compression.
+                <br /><br />
+                The compressed parts are efficiently converted into a single base64 encoded SVG
+                image on-chain. To accomplish this, each part is decoded into an intermediate format
+                before being converted into a series of SVG rects using batched, on-chain string
+                concatenation. Once the entire SVG has been generated, it is base64 encoded.
+              </p>
+            </Accordion.Body>
+          </Accordion.Item>
+        </Accordion>
       </Col>
     </Section>
   );
 };
+export default Documentation;
 
-export default FeatsPage;
+
+
+

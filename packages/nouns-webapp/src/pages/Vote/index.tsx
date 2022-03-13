@@ -268,7 +268,7 @@ const VotePage = ({
           <>
             {showBlockRestriction && !hasVoted && (
               <Alert variant="secondary" className={classes.blockRestrictionAlert}>
-                Only NOUN votes that were self delegated or delegated to another address before
+                Only Chili votes that were self delegated or delegated to another address before
                 block {proposal.createdBlock} are eligible for voting.
               </Alert>
             )}

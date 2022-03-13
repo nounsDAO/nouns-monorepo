@@ -1,71 +1,78 @@
-.noundersPage h1,
-.noundersPage h2,
-.noundersPage h3 {
+.headerWrapper h2 {
   font-family: 'Londrina Solid';
+  font-size: 3rem;
 }
 
-.noundersPage h2 {
-  margin-bottom: 2rem;
+
+.headerWrapper p {
+  font-family: 'PT Root UI', sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.25px;
+  line-height: 28px;
+  margin: 3rem 0;
 }
 
-.noundersPage a {
-  color: var(--brand-black);
+.accordionItem {
+  font-family: 'PT Root UI', sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.25px;
+  line-height: 28px;
+  font-size: 1.2rem !important;
 }
 
-.noundersPage a:hover {
-  color: var(--brand-dark-red);
+@media (max-width: 992px) {
+  .headerWrapper {
+    padding: 1rem;
+  }
 }
 
-.bioGroup {
-  padding-right: 5px;
-  padding-left: 5px;
-}
-
-.bioGroup a {
-  font-size: 1rem;
-}
-
-.noundersPage img {
-  border-radius: 50%;
-  width: 50%;
-}
-
-.marginBottom {
-  margin-bottom: 0rem;
-}
-
-.bioGroup {
-  margin-bottom: 2rem;
-  text-align: center;
-}
-
-.bioGroup a:hover svg {
-  fill: var(--brand-dark-red);
-}
-
-.bioGroup img {
-  margin-bottom: 1rem;
-}
-
-.twitterIcon {
-  width: 20px;
-  color: #aaa;
-  margin-right: 5px;
-}
-
-.card {
+.accordionItem {
+  margin-bottom: 2.5rem;
   border: none;
 }
 
-.card,
+.aboutText {
+  margin: 0px !important;
+}
+
+.accordionItem,
 .headerWrapper {
   font-size: 1.3rem;
 }
 
-.cardHeader {
+.accordionHeader button:hover {
+  color: var(--brand-light-green) !important;
+}
+
+.accordionHeader button {
   border: none;
   background-color: transparent;
   font-family: 'Londrina Solid';
-  font-size: 2.5rem;
+  font-size: 2.5rem !important;
   cursor: pointer;
+  line-height: normal;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.accordionHeader button:not(.collapsed) {
+  color: #212529;
+  background-color: transparent;
+  box-shadow: none !important;
+}
+
+/* override bootstrap color */
+.accordionHeader button:not(.collapsed)::after {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23212529'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e") !important;
+}
+
+.accordionHeader button:focus {
+  color: var(--brand-bright-green) !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 992px) {
+  .accordionHeader button {
+    padding-left: 20px;
+  }
 }
