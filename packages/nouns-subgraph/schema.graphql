@@ -1,9 +1,27 @@
+type NounAttributes @entity {
+  id: ID!
+
+  trait: String
+
+  value: String
+}
+
 type Noun @entity {
   "The Noun's ERC721 token id"
   id: ID!
 
   "The token uri used to determine the Noun's traits"
   tokenUri: String
+
+  name: String
+
+  description: String
+
+  animation: String
+
+  image: String
+
+  attributes: [NounAttributes!]
 
   "The owner of the Noun"
   owner: Account!

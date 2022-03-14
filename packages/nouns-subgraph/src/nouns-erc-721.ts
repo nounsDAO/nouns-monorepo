@@ -1,19 +1,18 @@
-import { log } from '@graphprotocol/graph-ts';
+import { Bytes, ipfs, json, JSONValueKind, log } from '@graphprotocol/graph-ts';
 import {
   DelegateChanged,
   DelegateVotesChanged,
   NounCreated,
   Transfer,
-  NounsToken as NounsTokenContract
+  NounsToken as NounsTokenContract,
 } from '../generated/NounsToken/NounsToken';
-import { Noun } from '../generated/schema';
+import { Noun, NounAttributes } from '../generated/schema';
 import { BIGINT_ONE, BIGINT_ZERO, ZERO_ADDRESS } from './utils/constants';
 import { getGovernanceEntity, getOrCreateDelegate, getOrCreateAccount } from './utils/helpers';
 
 export function handleNounCreated(event: NounCreated): void {
   let nounId = event.params.tokenId.toString();
   let contract = NounsTokenContract.bind(event.address);
-
 
   let noun = Noun.load(nounId);
   if (noun == null) {
@@ -24,10 +23,56 @@ export function handleNounCreated(event: NounCreated): void {
     return;
   }
 
- const uri = contract.try_tokenURI(event.params.tokenId);
-        if (!uri.reverted) {
-            noun.tokenUri = uri.value;
-        };
+  const uri = contract.try_tokenURI(event.params.tokenId);
+  if (!uri.reverted) {
+    noun.tokenUri = uri.value;
+    if (noun.tokenUri.includes('ipfs/')) {
+      let tokenHash = noun.tokenUri.split('ipfs/')[1];
+      let tokenBytes = ipfs.cat(tokenHash);
+      if (tokenBytes) {
+        let data = json.try_fromBytes(tokenBytes as Bytes);
+        if (data.isOk) {
+          if (data.value.kind == JSONValueKind.OBJECT) {
+            let res = data.value.toObject();
+            if (res.get('image').kind == JSONValueKind.STRING) {
+              noun.image = res.get('image').toString();
+            }
+            if (res.get('animation_url').kind == JSONValueKind.STRING) {
+              noun.animation = res.get('animation_url').toString();
+            }
+            if (res.get('name').kind == JSONValueKind.STRING) {
+              noun.name = res.get('name').toString();
+            }
+            if (res.get('description').kind == JSONValueKind.STRING) {
+              noun.description = res.get('description').toString();
+            }
+            if (res.get('attributes').kind == JSONValueKind.ARRAY) {
+              let attributes = res.get('attributes').toArray();
+              for (let i = 0; i < attributes.length; i += 1) {
+                if (attributes[i].kind == JSONValueKind.OBJECT) {
+                  let attribute = attributes[i].toObject();
+                  let nounAttributes = new NounAttributes('noun-' + noun.id + i.toString());
+                  nounAttributes.trait = null;
+                  nounAttributes.value = null;
+
+                  if (attribute.get('trait_type').kind == JSONValueKind.STRING) {
+                    nounAttributes.trait = attribute.get('trait_type').toString();
+                  }
+                  if (attribute.get('value').kind == JSONValueKind.STRING) {
+                    nounAttributes.value = attribute.get('value').toString();
+                  }
+                  nounAttributes.save();
+                  let attrs = noun.attributes;
+                  attrs.push(nounAttributes.id);
+                  noun.attributes = attrs;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 
   noun.save();
 }
