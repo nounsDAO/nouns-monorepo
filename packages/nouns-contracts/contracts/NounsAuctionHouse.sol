@@ -752,6 +752,11 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
         _pause();
     }
 
+    function updateAuctionEndTime(uint256 endTime) external onlyOwner {
+        INounsAuctionHouse.Auction memory _auction = auction;
+        _auction.endTime = endTime;
+    }
+
      /**
      @notice Method for updating oracle
      @dev Only admin
