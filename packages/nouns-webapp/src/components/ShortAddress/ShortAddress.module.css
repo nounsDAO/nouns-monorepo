@@ -9,8 +9,12 @@
   padding-top: -2px;
 }
 
-.shortAddress span {
-  letter-spacing: 0.2px;
-  font-family: 'PT Root UI';
-  font-weight: bold;
-}
+/* .shortAddress span {
+  font-family: Armata;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 35px;
+  line-height: 44px;
+  display: flex;
+  align-items: center;
+} */

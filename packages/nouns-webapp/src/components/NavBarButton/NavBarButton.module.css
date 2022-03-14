@@ -35,6 +35,23 @@
   }
 }
 
+.linkStyle {
+  font-family: Armata;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 20px;
+  /* identical to box height */
+
+  text-decoration-line: underline;
+
+  color: #ffffff;
+}
+
+.linkStyle:hover {
+  opacity: 0.8;
+}
+
 .button:hover {
   cursor: pointer;
 }

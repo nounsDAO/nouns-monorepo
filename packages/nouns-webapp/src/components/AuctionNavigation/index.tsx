@@ -7,21 +7,28 @@ const AuctionNavigation: React.FC<{
   isLastAuction: boolean;
   onPrevAuctionClick: () => void;
   onNextAuctionClick: () => void;
+  isEthereum?: boolean;
 }> = props => {
-  const { isFirstAuction, isLastAuction, onPrevAuctionClick, onNextAuctionClick } = props;
-  const isCool = useAppSelector(state => state.application.stateBackgroundColor) === '#d5d7e1';
+  const {
+    isFirstAuction,
+    isLastAuction,
+    onPrevAuctionClick,
+    onNextAuctionClick,
+    isEthereum = false,
+  } = props;
+
   return (
     <div className={classes.navArrowsContainer}>
       <button
         onClick={() => onPrevAuctionClick()}
-        className={isCool ? classes.leftArrowCool : classes.leftArrowWarm}
+        className={isEthereum ? classes.leftArrowCool : classes.leftArrowWarm}
         disabled={isFirstAuction}
       >
         ←
       </button>
       <button
         onClick={() => onNextAuctionClick()}
-        className={isCool ? classes.rightArrowCool : classes.rightArrowWarm}
+        className={isEthereum ? classes.rightArrowCool : classes.rightArrowWarm}
         disabled={isLastAuction}
       >
         →

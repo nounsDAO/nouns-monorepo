@@ -1,14 +1,32 @@
+.wrapper {
+  background: black;
+  padding: 5rem;
+}
+
+.headerWrapper {
+  margin-bottom: 4rem;
+}
+
 .headerWrapper h1 {
-  font-family: 'Londrina Solid';
-  font-size: 4rem;
+  font-family: Armata;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 50px;
+  line-height: 62px;
+  display: flex;
+  align-items: center;
+
+  color: #ffffff;
 }
 
 .headerWrapper p {
-  font-family: 'PT Root UI', sans-serif;
-  font-weight: 500;
-  letter-spacing: -0.25px;
-  line-height: 28px;
-  margin: 3rem 0;
+  font-family: Armata;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 25px;
+  line-height: 31px;
+
+  color: #ffffff;
 }
 
 .accordionItem {

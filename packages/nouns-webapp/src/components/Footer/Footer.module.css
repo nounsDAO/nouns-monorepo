@@ -1,27 +1,58 @@
 .wrapper {
-  display: flex;
-  flex: 1;
+  background: black;
 }
 .container {
   display: flex;
+  flex-direction: column;
+  align-items: center;
 }
+
+.topBar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.logo {
+  font-family: Armata;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 80px;
+  line-height: 100px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #1ee4ff;
+}
+
+.description {
+  font-family: Armata;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 25px;
+  display: flex;
+  align-items: center;
+
+  color: #1ee4ff;
+}
+
 .footerSignature {
   margin: auto auto 0 auto;
-  font-family: 'PT Root UI' !important;
-  font-weight: 500;
-  font-size: 18px;
-  padding-bottom: 4rem;
-  padding-top: 2rem;
-  color: var(--brand-black) !important;
+  font-family: Armata;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 25px;
   display: flex;
-  flex-flow: row wrap;
   align-items: center;
-  justify-content: flex-start;
+  text-align: center;
+  padding: 1rem;
 }
 
 .footerSignature a {
   text-decoration: none;
-  color: black;
+  color: #1ee4ff;
   margin: 8px 14px;
   transition: all 0.15s ease-in-out;
 }
@@ -29,6 +60,9 @@
 .footerSignature a:hover {
   text-decoration: none;
   font-weight: bold;
+  color: #1ee4ff;
+
+  opacity: 0.8;
 }
 
 .footerSignature img {

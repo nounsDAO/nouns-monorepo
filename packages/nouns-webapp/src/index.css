@@ -34,3 +34,8 @@ code {
   src: url(./fonts/PT_Root_UI/PT-Root-UI_Bold.woff2) format('woff2'),
     url(./fonts/PT_Root_UI/PT-Root-UI_Bold.woff) format('woff');
 }
+
+@font-face {
+  font-family: 'Armata';
+  src: url(./fonts/Armata-Regular.ttf);
+}

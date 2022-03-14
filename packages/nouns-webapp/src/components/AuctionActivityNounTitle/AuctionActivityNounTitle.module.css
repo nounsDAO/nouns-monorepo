@@ -3,9 +3,13 @@
 }
 
 .wrapper h1 {
-  font-family: 'Londrina Solid';
-  font-size: 68px;
-  margin-bottom: 10px;
+  font-family: Armata;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 60px;
+  line-height: 75px;
+  display: flex;
+  align-items: center;
 }
 
 @media (max-width: 992px) {

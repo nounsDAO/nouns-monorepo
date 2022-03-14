@@ -15,22 +15,24 @@ import {
   setNextOnDisplayAuctionNounId,
   setPrevOnDisplayAuctionNounId,
 } from '../../state/slices/onDisplayAuction';
-import { beige, grey } from '../../utils/nounBgColors';
+import { beige, black, grey, primary } from '../../utils/nounBgColors';
+import { useEffect } from 'react';
 
 interface AuctionProps {
   auction?: IAuction;
+  title?: string;
+  isEthereum?: boolean;
 }
 
 const Auction: React.FC<AuctionProps> = props => {
-  const { auction: currentAuction } = props;
+  const { auction: currentAuction, title, isEthereum = false } = props;
 
   const history = useHistory();
   const dispatch = useAppDispatch();
-  let stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
   const lastNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
 
   const loadedNounHandler = (seed: INounSeed) => {
-    dispatch(setStateBackgroundColor(seed.background === 0 ? grey : beige));
+    dispatch(setStateBackgroundColor(black));
   };
 
   const prevAuctionHandler = () => {
@@ -45,6 +47,7 @@ const Auction: React.FC<AuctionProps> = props => {
   const nounContent = currentAuction && (
     <div className={classes.nounWrapper}>
       <StandaloneNounWithSeed
+        isEthereum={isEthereum}
         nounId={currentAuction.nounId}
         onLoadSeed={loadedNounHandler}
         shouldLinkToProfile={false}
@@ -60,6 +63,7 @@ const Auction: React.FC<AuctionProps> = props => {
 
   const currentAuctionActivityContent = currentAuction && lastNounId && (
     <AuctionActivity
+      isEthereum={isEthereum}
       auction={currentAuction}
       isFirstAuction={currentAuction.nounId.eq(0)}
       isLastAuction={currentAuction.nounId.eq(lastNounId)}
@@ -68,8 +72,9 @@ const Auction: React.FC<AuctionProps> = props => {
       displayGraphDepComps={true}
     />
   );
-  const nounderNounContent = currentAuction && lastNounId && (
+  const nounderNounContent = currentAuction && typeof lastNounId !== 'undefined' && (
     <NounderNounContent
+      isEthereum={isEthereum}
       mintTimestamp={currentAuction.startTime}
       nounId={currentAuction.nounId}
       isFirstAuction={currentAuction.nounId.eq(0)}
@@ -80,8 +85,14 @@ const Auction: React.FC<AuctionProps> = props => {
   );
 
   return (
-    <div style={{ backgroundColor: stateBgColor }} className={classes.wrapper}>
-      <Container fluid="xl">
+    <div style={{ backgroundColor: isEthereum ? black : primary }} className={classes.wrapper}>
+      <Container fluid="xxl">
+        {!!title && (
+          <h1 className={classes.title} style={{ color: isEthereum ? primary : black }}>
+            {' '}
+            {title}{' '}
+          </h1>
+        )}
         <Row>
           <Col lg={{ span: 6 }} className={classes.nounContentCol}>
             {currentAuction ? nounContent : loadingNoun}

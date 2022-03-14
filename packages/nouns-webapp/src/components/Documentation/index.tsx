@@ -1,5 +1,5 @@
 import Section from '../../layout/Section';
-import { Col } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
 import classes from './Documentation.module.css';
 import Accordion from 'react-bootstrap/Accordion';
 import Link from '../Link';
@@ -20,217 +20,109 @@ const Documentation = () => {
     <Link text="Compound Governance" url="https://compound.finance/governance" leavesPage={true} />
   );
   return (
-    <Section fullWidth={false}>
-      <Col lg={{ span: 10, offset: 1 }}>
-        <div className={classes.headerWrapper}>
-          <h1>WTF?</h1>
-          <p className={classes.aboutText}>
-            Nouns are an experimental attempt to improve the formation of on-chain avatar
-            communities. While projects such as {cryptopunksLink} have attempted to bootstrap
-            digital community and identity, Nouns attempt to bootstrap identity, community,
-            governance, and a treasury that can be used by the community.
-          </p>
-          <p className={classes.aboutText} style={{ paddingBottom: '4rem' }}>
-            Learn more below, or start creating Nouns off-chain using the {playgroundLink}.
-          </p>
-        </div>
-        <Accordion flush>
-          <Accordion.Item eventKey="0" className={classes.accordionItem}>
-            <Accordion.Header className={classes.accordionHeader}>Summary</Accordion.Header>
-            <Accordion.Body>
-              <ul>
-                <li>Nouns artwork is in the {publicDomainLink}.</li>
-                <li>One Noun is trustlessly auctioned every 24 hours, forever.</li>
-                <li>100% of Noun auction proceeds are trustlessly sent to the treasury.</li>
-                <li>Settlement of one auction kicks off the next.</li>
-                <li>All Nouns are members of Nouns DAO.</li>
-                <li>Nouns DAO uses a fork of {compoundGovLink}.</li>
-                <li>One Noun is equal to one vote.</li>
-                <li>The treasury is controlled exclusively by Nouns via governance.</li>
-                <li>Artwork is generative and stored directly on-chain (not IPFS).</li>
-                <li>No explicit rules exist for attribute scarcity; all Nouns are equally rare.</li>
-                <li>
-                  Nounders receive rewards in the form of Nouns (10% of supply for first 5 years).
-                </li>
-              </ul>
-            </Accordion.Body>
-          </Accordion.Item>
-
-          <Accordion.Item eventKey="1" className={classes.accordionItem}>
-            <Accordion.Header className={classes.accordionHeader}>Daily Auctions</Accordion.Header>
-            <Accordion.Body>
+    <Section fullWidth={false} className={classes.wrapper}>
+      <Container fluid={'xxl'}>
+        <Row>
+          <Col>
+            <div className={classes.headerWrapper}>
+              <h1>What is CC0 DAO?</h1>
               <p className={classes.aboutText}>
-                The Nouns Auction Contract will act as a self-sufficient Noun generation and
-                distribution mechanism, auctioning one Noun every 24 hours, forever. 100% of auction
-                proceeds (ETH) are automatically deposited in the Nouns DAO treasury, where they are
-                governed by Noun owners.
+                The Copyright Cartel: 0 (CC:0) DAO is a dedicated Web3 Creative Commons DAO,
+                focusing on indie fashion, art, music and other creative derivative markets for
+                cultivating well capitalised open source.
+                <br />
+                <br />
+                This DAO exists to accelerate the entire creative world to the long overdue, very
+                near future when control over creative works no longer ruins so many lives.
+                Ultimately, this is due to the abuses Copyright Cartels and the fake promise that a
+                certificate on paper of permission from them will mean any more than pennies for
+                original creators.
+                <br />
+                <br />
+                Ultimately, information wants to be free, and web3 allows for new models of
+                monetisation when creative people can do whatever the hell that they want with each
+                others ideas.
+                <br />
+                <br />
+                Finally backing our ideals with real profit.
               </p>
+            </div>
 
+            <div className={classes.headerWrapper}>
+              <h1>What are daily CC0 DAO Auctions?</h1>
               <p className={classes.aboutText}>
-                Each time an auction is settled, the settlement transaction will also cause a new
-                Noun to be minted and a new 24 hour auction to begin.{' '}
+                A cc0 content auction, every day, forever.
+                <br />
+                <br />
+                Every 24 hours a new cc0 NFT goes to public auction on Ethereum with a reserve and
+                can bid on to be owned by you. The cc0 NFTs placed on auction are curated by the DAO
+                and represent far more than just their content display. They are also access keys
+                into the DA0, representative of your voting weight within governance, curation and
+                staking settings.
               </p>
-              <p>
-                While settlement is most heavily incentivized for the winning bidder, it can be
-                triggered by anyone, allowing the system to trustlessly auction Nouns as long as
-                Ethereum is operational and there are interested bidders.
-              </p>
-            </Accordion.Body>
-          </Accordion.Item>
-          <Accordion.Item eventKey="2" className={classes.accordionItem}>
-            <Accordion.Header className={classes.accordionHeader}>Nouns DAO</Accordion.Header>
-            <Accordion.Body>
-              Nouns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the
-              Nouns ecosystem. The Nouns DAO treasury receives 100% of ETH proceeds from daily Noun
-              auctions. Each Noun is an irrevocable member of Nouns DAO and entitled to one vote in
-              all governance matters. Noun votes are non-transferable (if you sell your Noun the
-              vote goes with it) but delegatable, which means you can assign your vote to someone
-              else as long as you own your Noun.
-            </Accordion.Body>
-          </Accordion.Item>
-          <Accordion.Item eventKey="3" className={classes.accordionItem}>
-            <Accordion.Header className={classes.accordionHeader}>
-              Governance ‘Slow Start’
-            </Accordion.Header>
-            <Accordion.Body>
-              <p>
-                In addition to the precautions taken by Compound Governance, Nounders have given
-                themselves a special veto right to ensure that no malicious proposals can be passed
-                while the Noun supply is low. This veto right will only be used if an obviously
-                harmful governance proposal has been passed, and is intended as a last resort.
-              </p>
-              <p>
-                Nounders will proveably revoke this veto right when they deem it safe to do so. This
-                decision will be based on a healthy Noun distribution and a community that is
-                engaged in the governance process.
-              </p>
-            </Accordion.Body>
-          </Accordion.Item>
-          <Accordion.Item eventKey="4" className={classes.accordionItem}>
-            <Accordion.Header className={classes.accordionHeader}>Noun Traits</Accordion.Header>
-            <Accordion.Body>
-              <p>
-                Nouns are generated randomly based Ethereum block hashes. There are no 'if'
-                statements or other rules governing Noun trait scarcity, which makes all Nouns
-                equally rare. As of this writing, Nouns are made up of:
-              </p>
-              <ul>
-                <li>backgrounds (2) </li>
-                <li>bodies (30)</li>
-                <li>accessories (137) </li>
-                <li>heads (234) </li>
-                <li>glasses (21)</li>
-              </ul>
-              You can experiment with off-chain Noun generation at the {playgroundLink}.
-            </Accordion.Body>
-          </Accordion.Item>
-          <Accordion.Item eventKey="5" className={classes.accordionItem}>
-            <Accordion.Header className={classes.accordionHeader}>
-              On-Chain Artwork
-            </Accordion.Header>
-            <Accordion.Body>
-              <p>
-                Nouns are stored directly on Ethereum and do not utilize pointers to other networks
-                such as IPFS. This is possible because Noun parts are compressed and stored on-chain
-                using a custom run-length encoding (RLE), which is a form of lossless compression.
-              </p>
+            </div>
 
-              <p>
-                The compressed parts are efficiently converted into a single base64 encoded SVG
-                image on-chain. To accomplish this, each part is decoded into an intermediate format
-                before being converted into a series of SVG rects using batched, on-chain string
-                concatenation. Once the entire SVG has been generated, it is base64 encoded.
+            <div className={classes.headerWrapper}>
+              <h1>What is the difference between the public and DAO only auction? </h1>
+              <p className={classes.aboutText}>
+                If an auction reserve is not met for the public auction on Ethereum, this NFT put
+                for auction on Polygon Network in a DAO only bid setting. This means that you must
+                be a member of the DAO to bid and hold $CC0 token to bid with. $CC0 token is
+                distributed to members of the DAO.
+                <br />
+                <br />
+                This dual model exists to establish and reinforce the value of CC0 content,
+                particularly at a time when it is not yet wildly understood.
               </p>
-            </Accordion.Body>
-          </Accordion.Item>
-          <Accordion.Item eventKey="6" className={classes.accordionItem}>
-            <Accordion.Header className={classes.accordionHeader}>
-              Noun Seeder Contract
-            </Accordion.Header>
-            <Accordion.Body>
-              <p>
-                The Noun Seeder contract is used to determine Noun traits during the minting
-                process. The seeder contract can be replaced to allow for future trait generation
-                algorithm upgrades. Additionally, it can be locked by the Nouns DAO to prevent any
-                future updates. Currently, Noun traits are determined using pseudo-random number
-                generation:
+            </div>
+
+            <div className={classes.headerWrapper}>
+              <h1>Why have a reserve? </h1>
+              <p className={classes.aboutText}>
+                Unlike the conventional wisdom of the copyright cartel dominated old world, cc0
+                doesn’t mean no path to profit. In fact, it’s the exact opposite, but, if you’re
+                here you probably know that already. The reserve component of the interval auction
+                mechanism functions as a way to distinctly capture and convey a rising minimum value
+                of high quality content that has been fully unleashed to drive greater amounts of
+                source material, derivatives and hyper scale amplification of meaningful messages
+                and stories across the metaverse.
+                <br />
+                <br />
+                The auction reserves are determined through DAO governance.
               </p>
-              <code>keccak256(abi.encodePacked(blockhash(block.number - 1), nounId))</code>
-              <br />
-              <br />
-              <p>
-                Trait generation is not truly random. Traits can be predicted when minting a Noun on
-                the pending block.
+            </div>
+
+            <div className={classes.headerWrapper}>
+              <h1>What is $CCO? </h1>
+              <p className={classes.aboutText}>
+                This is the native token for the DAO and is distributed to members through staking,
+                direct contributions and other means.
               </p>
-            </Accordion.Body>
-          </Accordion.Item>
-          <Accordion.Item eventKey="7" className={classes.accordionItem}>
-            <Accordion.Header className={classes.accordionHeader}>
-              Nounder's Reward
-            </Accordion.Header>
-            <Accordion.Body>
-              <p>
-                'Nounders' are the group of ten builders that initiated Nouns. Here are the
-                Nounders:
+            </div>
+
+            <div className={classes.headerWrapper}>
+              <h1>What happens every 15 days? </h1>
+              <p className={classes.aboutText}>
+                Every 15 days the cc0 NFT on public auction is automatically transferred to the CC0
+                DAO treasury to serve as cornerstones of the CC0 DAO vault.
               </p>
-              <ul>
-                <li>
-                  <Link
-                    text="@cryptoseneca"
-                    url="https://twitter.com/cryptoseneca"
-                    leavesPage={true}
-                  />
-                </li>
-                <li>
-                  <Link
-                    text="@supergremplin"
-                    url="https://twitter.com/supergremplin"
-                    leavesPage={true}
-                  />
-                </li>
-                <li>
-                  <Link text="@punk4156" url="https://twitter.com/punk4156" leavesPage={true} />
-                </li>
-                <li>
-                  <Link text="@eboyarts" url="https://twitter.com/eBoyArts" leavesPage={true} />
-                </li>
-                <li>
-                  <Link text="@punk4464" url="https://twitter.com/punk4464" leavesPage={true} />
-                </li>
-                <li>solimander</li>
-                <li>
-                  <Link text="@dhof" url="https://twitter.com/dhof" leavesPage={true} />
-                </li>
-                <li>
-                  <Link text="@devcarrot" url="https://twitter.com/carrot_init" leavesPage={true} />
-                </li>
-                <li>
-                  <Link text="@TimpersHD" url="https://twitter.com/TimpersHD" leavesPage={true} />
-                </li>
-                <li>
-                  <Link
-                    text="@lastpunk9999"
-                    url="https://twitter.com/lastpunk9999"
-                    leavesPage={true}
-                  />
-                </li>
-              </ul>
-              <p>
-                Because 100% of Noun auction proceeds are sent to Nouns DAO, Nounders have chosen to
-                compensate themselves with Nouns. Every 10th Noun for the first 5 years of the
-                project (Noun ids #0, #10, #20, #30 and so on) will be automatically sent to the
-                Nounder's multisig to be vested and shared among the founding members of the
-                project.
+            </div>
+
+            <div className={classes.headerWrapper}>
+              <h1>How to Join the DAO? </h1>
+              <p className={classes.aboutText}>You can read all about that here.</p>
+            </div>
+
+            <div className={classes.headerWrapper}>
+              <h1>Is this code cc0? </h1>
+              <p className={classes.aboutText}>
+                Yes. And it’s been forked directly from NounsDAO with a few custom tweaks added.
+                You’re encouraged and welcomed to do the same before you pass it along.
               </p>
-              <p>
-                Nounder distributions don't interfere with the cadence of 24 hour auctions. Nouns
-                are sent directly to the Nounder's Multisig, and auctions continue on schedule with
-                the next available Noun ID.
-              </p>
-            </Accordion.Body>
-          </Accordion.Item>
-        </Accordion>
-      </Col>
+            </div>
+          </Col>
+        </Row>
+      </Container>
     </Section>
   );
 };

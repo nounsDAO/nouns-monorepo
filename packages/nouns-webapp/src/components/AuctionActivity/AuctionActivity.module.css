@@ -8,8 +8,19 @@
   margin-bottom: 0.5rem;
 }
 
+.ethModal .modal-content {
+  background-color: black !important;
+}
+
+.polyModal .modal-content {
+  background-color: #1ee4ff !important;
+}
+
 .activityRow {
-  margin-bottom: 0rem;
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 h1 {
@@ -26,13 +37,27 @@ h4 {
 }
 
 .modalHeader {
-  border-bottom: none;
-  justify-content: flex-start;
   align-items: center;
+  justify-content: center;
+}
+
+.modalHeader h1 {
+  text-align: center;
 }
 
 .modalTitleWrapper {
   color: var(--brand-black);
+  flex-grow: 1;
+  margin: auto;
+  font-family: Armata;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 21px;
+  line-height: 26px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
 }
 
 .modalTitleWrapper h1 {
@@ -50,9 +75,6 @@ h4 {
 }
 
 .currentBidCol {
-  border-right: 1px solid #79809c49;
-  margin-left: 6px;
-  margin-top: 6px;
 }
 
 .auctionTimerCol {
@@ -81,8 +103,6 @@ h4 {
   }
 
   .auctionTimerCol {
-    margin-left: 6px;
-    margin-top: 6px;
     padding-left: 0rem;
   }
 

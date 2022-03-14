@@ -1,10 +1,8 @@
 [
   {
-    "constant": true,
-    "inputs": [{ "name": "_account", "type": "address" }],
+    "inputs": [{ "internalType": "address", "name": "tokenOwner", "type": "address" }],
     "name": "balanceOf",
-    "outputs": [{ "name": "", "type": "uint256" }],
-    "payable": false,
+    "outputs": [{ "internalType": "uint256", "name": "balance", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   }

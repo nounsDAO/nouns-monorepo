@@ -21,7 +21,12 @@ function useLidoBalance(): BigNumber | undefined {
 
   useEffect(() => {
     if (!lidoContract || !addresses.nounsDaoExecutor) return;
-    lidoContract.balanceOf(addresses.nounsDaoExecutor).then(setBalance);
+    lidoContract
+      .balanceOf(addresses.nounsDaoExecutor)
+      .then(setBalance)
+      .catch((error: any) => {
+        console.log({ error });
+      });
   }, [lidoContract]);
 
   return balance;

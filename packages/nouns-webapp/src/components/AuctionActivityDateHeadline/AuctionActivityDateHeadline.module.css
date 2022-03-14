@@ -1,9 +1,12 @@
 .date {
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 17px;
-  line-height: 27px;
-  margin-top: 0.22rem;
+  font-family: Armata;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 25px;
+  line-height: 31px;
+  display: flex;
+  align-items: center;
+  text-align: center;
 }
 
 .wrapper {

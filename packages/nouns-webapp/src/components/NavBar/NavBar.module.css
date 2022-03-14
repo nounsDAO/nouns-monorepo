@@ -5,6 +5,19 @@
   transition: all 0.15s ease-in-out;
 }
 
+.logo {
+  font-family: Armata;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 80px;
+  line-height: 100px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+
+  color: #1ee4ff;
+}
+
 .navBarBrand:hover {
   transform: scale(0.95);
 }

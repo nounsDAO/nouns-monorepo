@@ -16,6 +16,7 @@ interface StandaloneNounWithSeedProps {
   nounId: EthersBN;
   onLoadSeed?: (seed: INounSeed) => void;
   shouldLinkToProfile: boolean;
+  isEthereum?: boolean;
 }
 
 const getNoun = (nounId: string | EthersBN, seed: INounSeed) => {
@@ -57,7 +58,7 @@ const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProp
 export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = (
   props: StandaloneNounWithSeedProps,
 ) => {
-  const { nounId, onLoadSeed, shouldLinkToProfile } = props;
+  const { nounId, onLoadSeed, shouldLinkToProfile, isEthereum = false } = props;
 
   const dispatch = useDispatch();
   const seed = useNounSeed(nounId);
@@ -72,7 +73,7 @@ export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = (
 
   const { image, description } = getNoun(nounId, seed);
 
-  const noun = <Noun imgPath={image} alt={description} />;
+  const noun = <Noun isEthereum={isEthereum} imgPath={image} alt={description} />;
   const nounWithLink = (
     <Link
       to={'/noun/' + nounId.toString()}

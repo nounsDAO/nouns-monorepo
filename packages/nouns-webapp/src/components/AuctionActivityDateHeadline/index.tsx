@@ -3,12 +3,15 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import classes from './AuctionActivityDateHeadline.module.css';
 import { useAppSelector } from '../../hooks';
+import { black, primary } from '../../utils/nounBgColors';
 
 dayjs.extend(utc);
 
-const AuctionActivityDateHeadline: React.FC<{ startTime: BigNumber }> = props => {
-  const { startTime } = props;
-  const isCool = useAppSelector(state => state.application.isCoolBackground);
+const AuctionActivityDateHeadline: React.FC<{
+  startTime: BigNumber;
+  isEthereum?: boolean;
+}> = props => {
+  const { startTime, isEthereum = false } = props;
   const auctionStartTimeUTC = dayjs(startTime.toNumber() * 1000)
     .utc()
     .format('MMMM DD, YYYY');
@@ -16,7 +19,7 @@ const AuctionActivityDateHeadline: React.FC<{ startTime: BigNumber }> = props =>
     <div className={classes.wrapper}>
       <h4
         className={classes.date}
-        style={{ color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)' }}
+        style={{ color: isEthereum ? primary : black }}
       >{`${auctionStartTimeUTC}`}</h4>
     </div>
   );

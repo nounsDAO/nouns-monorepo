@@ -13,8 +13,8 @@
   background-repeat: no-repeat;
   font-size: large;
   border-radius: 50%;
-  color: var(--brand-cool-dark-text);
-  background-color: var(--brand-cool-accent);
+  color: black;
+  background-color: #11808f;
   font-weight: bold;
 }
 
@@ -29,8 +29,8 @@
   background-size: contain;
   background-repeat: no-repeat;
   font-size: large;
-  color: var(--brand-cool-dark-text);
-  background-color: var(--brand-cool-accent);
+  color: black;
+  background-color: #11808f;
   border-radius: 50%;
   font-weight: bold;
 }
@@ -46,8 +46,8 @@
   background-repeat: no-repeat;
   font-size: large;
   border-radius: 50%;
-  color: var(--brand-warm-dark-text);
-  background-color: var(--brand-warm-accent);
+  color: #1ee4ff;
+  background-color: black;
   font-weight: bold;
 }
 
@@ -62,8 +62,8 @@
   background-size: contain;
   background-repeat: no-repeat;
   font-size: large;
-  color: var(--brand-warm-dark-text);
-  background-color: var(--brand-warm-accent);
+  color: #1ee4ff;
+  background-color: black;
   border-radius: 50%;
   font-weight: bold;
 }

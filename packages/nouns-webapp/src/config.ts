@@ -17,9 +17,14 @@ interface AppConfig {
   enableHistory: boolean;
 }
 
-type SupportedChains = ChainId.Rinkeby | ChainId.Mainnet | ChainId.Hardhat;
+type SupportedChains =
+  | ChainId.Rinkeby
+  | ChainId.Mainnet
+  | ChainId.Hardhat
+  | ChainId.Polygon
+  | ChainId.Mumbai;
 
-export const CHAIN_ID: SupportedChains = parseInt(process.env.REACT_APP_CHAIN_ID ?? '4');
+export const CHAIN_ID: SupportedChains = parseInt(process.env.REACT_APP_CHAIN_ID ?? '1');
 
 export const ETHERSCAN_API_KEY = process.env.REACT_APP_ETHERSCAN_API_KEY ?? '';
 
@@ -54,6 +59,18 @@ const app: Record<SupportedChains, AppConfig> = {
     subgraphApiUri: '',
     enableHistory: false,
   },
+  [ChainId.Mumbai]: {
+    jsonRpcUri: 'https://matic-mumbai.chainstacklabs.com/',
+    wsRpcUri: 'wss://ws-matic-mumbai.chainstacklabs.com',
+    subgraphApiUri: '',
+    enableHistory: true,
+  },
+  [ChainId.Polygon]: {
+    jsonRpcUri: '',
+    wsRpcUri: '',
+    subgraphApiUri: '',
+    enableHistory: true,
+  },
 };
 
 const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
@@ -66,13 +83,21 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
   [ChainId.Hardhat]: {
     lidoToken: undefined,
   },
+  [ChainId.Polygon]: {
+    lidoToken: '',
+  },
+  [ChainId.Mumbai]: {
+    lidoToken: '0xefd3d060ddcfed7903806503440db1089031af3a',
+  },
 };
 
 const getAddresses = (): ContractAddresses => {
   let nounsAddresses = {} as NounsContractAddresses;
   try {
     nounsAddresses = getContractAddressesForChainOrThrow(CHAIN_ID);
-  } catch {}
+  } catch (e) {
+    console.log({ e });
+  }
   return { ...nounsAddresses, ...externalAddresses[CHAIN_ID] };
 };
 

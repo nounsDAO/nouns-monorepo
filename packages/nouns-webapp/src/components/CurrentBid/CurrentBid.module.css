@@ -5,17 +5,23 @@
 }
 
 .section h4 {
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 18px;
+  font-family: Armata;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 19px;
+  display: flex;
+  align-items: center;
 }
 
 .section h2 {
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 32px;
-  margin-bottom: 0px !important;
-  margin-top: 3px;
+  font-family: Armata;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 35px;
+  line-height: 44px;
+  display: flex;
+  align-items: center;
 }
 
 .wrapper {

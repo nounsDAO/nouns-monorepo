@@ -85,6 +85,8 @@ const useDappConfig = {
     [ChainId.Rinkeby]: createNetworkHttpUrl('rinkeby'),
     [ChainId.Mainnet]: createNetworkHttpUrl('mainnet'),
     [ChainId.Hardhat]: 'http://localhost:8545',
+    [ChainId.Mumbai]: 'https://polygon-mumbai.g.alchemy.com/v2/ut-A8hy0NasKAOgsRwDbqgnaaay40zD6',
+    [ChainId.Polygon]: 'https://polygon-mainnet.g.alchemy.com/v2/l_-zZAI0v9EWjrG1dee494hg1XDh38A8'
   },
 };
 
@@ -149,6 +151,8 @@ const ChainSubscriber: React.FC = () => {
 
     // Fetch the current auction
     const currentAuction = await nounsAuctionHouseContract.auction();
+    const 
+    console.log({ currentAuction });
     dispatch(setFullAuction(reduxSafeAuction(currentAuction)));
     dispatch(setLastAuctionNounId(currentAuction.nounId.toNumber()));
 

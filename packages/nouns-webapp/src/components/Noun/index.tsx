@@ -14,14 +14,17 @@ export const LoadingNoun = () => {
 const Noun: React.FC<{
   imgPath: string;
   alt: string;
+  isEthereum?: boolean;
   className?: string;
   wrapperClassName?: string;
 }> = props => {
-  const { imgPath, alt, className, wrapperClassName } = props;
+  const { imgPath, alt, className, wrapperClassName, isEthereum = false } = props;
   return (
     <div className={`${classes.imgWrapper} ${wrapperClassName}`}>
       <Image
-        className={`${classes.img} ${className}`}
+        className={`${classes.img} ${
+          isEthereum ? classes.ethereumBorder : classes.polygonBorder
+        } ${className}`}
         src={imgPath ? imgPath : loadingNoun}
         alt={alt}
         fluid

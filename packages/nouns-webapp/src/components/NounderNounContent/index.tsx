@@ -14,6 +14,7 @@ import CurrentBid, { BID_N_A } from '../CurrentBid';
 import Winner from '../Winner';
 
 import { useAppSelector } from '../../hooks';
+import { black, primary } from '../../utils/nounBgColors';
 
 const NounderNounContent: React.FC<{
   mintTimestamp: BigNumber;
@@ -22,6 +23,7 @@ const NounderNounContent: React.FC<{
   isLastAuction: boolean;
   onPrevAuctionClick: () => void;
   onNextAuctionClick: () => void;
+  isEthereum?: boolean;
 }> = props => {
   const {
     mintTimestamp,
@@ -30,6 +32,7 @@ const NounderNounContent: React.FC<{
     isLastAuction,
     onPrevAuctionClick,
     onNextAuctionClick,
+    isEthereum = false,
   } = props;
 
   const isCool = useAppSelector(state => state.application.isCoolBackground);
@@ -38,29 +41,30 @@ const NounderNounContent: React.FC<{
     <AuctionActivityWrapper>
       <div className={auctionActivityClasses.informationRow}>
         <Row className={auctionActivityClasses.activityRow}>
+          <Col lg={12}>
+            <AuctionActivityNounTitle isEthereum={isEthereum} nounId={nounId} />
+          </Col>
           <AuctionTitleAndNavWrapper>
             <AuctionNavigation
+              isEthereum={isEthereum}
               isFirstAuction={isFirstAuction}
               isLastAuction={isLastAuction}
               onNextAuctionClick={onNextAuctionClick}
               onPrevAuctionClick={onPrevAuctionClick}
             />
-            <AuctionActivityDateHeadline startTime={mintTimestamp} />
+            <AuctionActivityDateHeadline isEthereum={isEthereum} startTime={mintTimestamp} />
           </AuctionTitleAndNavWrapper>
-          <Col lg={12}>
-            <AuctionActivityNounTitle nounId={nounId} />
-          </Col>
         </Row>
         <Row className={auctionActivityClasses.activityRow}>
           <Col lg={4} className={auctionActivityClasses.currentBidCol}>
-            <CurrentBid currentBid={BID_N_A} auctionEnded={true} />
+            <CurrentBid isEthereum={isEthereum} currentBid={BID_N_A} auctionEnded={true} />
           </Col>
           <Col
             lg={5}
             className={`${auctionActivityClasses.currentBidCol} ${nounContentClasses.currentBidCol} ${auctionActivityClasses.auctionTimerCol}`}
           >
             <div className={auctionActivityClasses.section}>
-              <Winner winner={''} isNounders={true} />
+              <Winner isEthereum={isEthereum} winner={''} isNounders={true} />
             </div>
           </Col>
         </Row>
@@ -68,12 +72,7 @@ const NounderNounContent: React.FC<{
       <Row className={auctionActivityClasses.activityRow}>
         <Col lg={12}>
           <ul className={auctionBidClasses.bidCollection}>
-            <li
-              className={
-                (isCool ? `${auctionBidClasses.bidRowCool}` : `${auctionBidClasses.bidRowWarm}`) +
-                ` ${nounContentClasses.bidRow}`
-              }
-            >
+            <li style={{ color: isEthereum ? primary : black }}>
               All Noun auction proceeds are sent to the{' '}
               <Link to="/vote" className={nounContentClasses.link}>
                 Nouns DAO
@@ -86,12 +85,12 @@ const NounderNounContent: React.FC<{
           </ul>
           <div
             className={
-              isCool ? bidBtnClasses.bidHistoryWrapperCool : bidBtnClasses.bidHistoryWrapperWarm
+              isEthereum ? bidBtnClasses.bidHistoryWrapperCool : bidBtnClasses.bidHistoryWrapperWarm
             }
           >
             <Link
               to="/nounders"
-              className={isCool ? bidBtnClasses.bidHistoryCool : bidBtnClasses.bidHistoryWarm}
+              className={isEthereum ? bidBtnClasses.bidHistoryCool : bidBtnClasses.bidHistoryWarm}
             >
               Learn more →
             </Link>

@@ -1,0 +1,21 @@
+.wrapper {
+  border-radius: 27px;
+  padding: 2rem;
+  font-family: Armata;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 25px;
+  display: flex;
+  align-items: center;
+}
+
+.wrapper p {
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}

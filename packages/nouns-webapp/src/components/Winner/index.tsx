@@ -5,14 +5,16 @@ import ShortAddress from '../ShortAddress';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { isMobileScreen } from '../../utils/isMobile';
+import { black, primary } from '../../utils/nounBgColors';
 
 interface WinnerProps {
   winner: string;
   isNounders?: boolean;
+  isEthereum?: boolean;
 }
 
 const Winner: React.FC<WinnerProps> = props => {
-  const { winner, isNounders } = props;
+  const { winner, isNounders, isEthereum = false } = props;
   const activeAccount = useAppSelector(state => state.account.activeAccount);
 
   const isCool = useAppSelector(state => state.application.isCoolBackground);
@@ -27,7 +29,7 @@ const Winner: React.FC<WinnerProps> = props => {
         <h2
           className={classes.winnerContent}
           style={{
-            color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
+            color: isEthereum ? primary : black,
           }}
         >
           You
@@ -50,20 +52,20 @@ const Winner: React.FC<WinnerProps> = props => {
   return (
     <>
       <Row className={clsx(classes.wrapper, classes.section)}>
-        <Col xs={1} lg={12} className={classes.leftCol}>
+        <Col lg={12} className={classes.leftCol}>
           <h4
             style={{
-              color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)',
+              color: isEthereum ? primary : black,
             }}
           >
             Winner
           </h4>
         </Col>
-        <Col xs="auto" lg={12}>
+        <Col lg={12}>
           <h2
             className={classes.winnerContent}
             style={{
-              color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
+              color: isEthereum ? primary : black,
             }}
           >
             {isNounders ? nounderNounContent : nonNounderNounContent}

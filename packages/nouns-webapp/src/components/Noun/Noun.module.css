@@ -7,6 +7,15 @@
   width: 100%;
   height: auto;
   vertical-align: middle;
+  border-radius: 85px;
+}
+
+.ethereumBorder {
+  border: 5px solid rgba(30, 228, 255, 0.56);
+}
+
+.polygonBorder {
+  border: 5px solid rgba(0, 0, 0, 0.56);
 }
 
 .imgWrapper {

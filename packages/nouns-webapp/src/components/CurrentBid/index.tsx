@@ -4,6 +4,7 @@ import TruncatedAmount from '../TruncatedAmount';
 import { Row, Col } from 'react-bootstrap';
 import { useAppSelector } from '../../hooks';
 import clsx from 'clsx';
+import { black, primary } from '../../utils/nounBgColors';
 
 /**
  * Passible to CurrentBid as `currentBid` prop to indicate that
@@ -16,9 +17,12 @@ export const BID_N_A = 'n/a';
  */
 type BidNa = typeof BID_N_A;
 
-const CurrentBid: React.FC<{ currentBid: BigNumber | BidNa; auctionEnded: boolean }> = props => {
-  const { currentBid, auctionEnded } = props;
-  const isCool = useAppSelector(state => state.application.isCoolBackground);
+const CurrentBid: React.FC<{
+  currentBid: BigNumber | BidNa;
+  isEthereum?: boolean;
+  auctionEnded: boolean;
+}> = props => {
+  const { currentBid, auctionEnded, isEthereum = false } = props;
   const titleContent = auctionEnded ? 'Winning bid' : 'Current bid';
 
   return (
@@ -26,17 +30,14 @@ const CurrentBid: React.FC<{ currentBid: BigNumber | BidNa; auctionEnded: boolea
       <Col xs={5} lg={12} className={classes.leftCol}>
         <h4
           style={{
-            color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)',
+            color: isEthereum ? primary : black,
           }}
         >
           {titleContent}
         </h4>
       </Col>
       <Col xs="auto" lg={12}>
-        <h2
-          className={classes.currentBid}
-          style={{ color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)' }}
-        >
+        <h2 className={classes.currentBid} style={{ color: isEthereum ? primary : black }}>
           {currentBid === BID_N_A ? BID_N_A : <TruncatedAmount amount={currentBid && currentBid} />}
         </h2>
       </Col>

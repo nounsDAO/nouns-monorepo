@@ -6,14 +6,16 @@ import { useState, useEffect, useRef } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { useAppSelector } from '../../hooks';
 import clsx from 'clsx';
+import { black, primary } from '../../utils/nounBgColors';
 
 dayjs.extend(duration);
 
 const AuctionTimer: React.FC<{
   auction: Auction;
   auctionEnded: boolean;
+  isEthereum?: boolean;
 }> = props => {
-  const { auction, auctionEnded } = props;
+  const { auction, auctionEnded, isEthereum = false } = props;
 
   const [auctionTimer, setAuctionTimer] = useState(0);
   const [timerToggle, setTimerToggle] = useState(true);
@@ -48,7 +50,6 @@ const AuctionTimer: React.FC<{
 
   const flooredMinutes = Math.floor(timerDuration.minutes());
   const flooredSeconds = Math.floor(timerDuration.seconds());
-  const isCool = useAppSelector(state => state.application.isCoolBackground);
 
   if (!auction) return null;
 
@@ -60,7 +61,7 @@ const AuctionTimer: React.FC<{
       <Col xs={timerToggle ? 4 : 6} lg={12} className={classes.leftCol}>
         <h4
           style={{
-            color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)',
+            color: isEthereum ? primary : black,
           }}
         >
           {timerToggle
@@ -75,7 +76,7 @@ const AuctionTimer: React.FC<{
           <h2
             className={clsx(classes.timerWrapper, classes.timeLeft)}
             style={{
-              color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
+              color: isEthereum ? primary : black,
             }}
           >
             <div className={classes.timerSection}>
@@ -101,7 +102,7 @@ const AuctionTimer: React.FC<{
           <h2
             className={classes.timerWrapper}
             style={{
-              color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
+              color: isEthereum ? primary : black,
             }}
           >
             <div className={clsx(classes.timerSection, classes.clockSection)}>

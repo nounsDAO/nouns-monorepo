@@ -19,6 +19,7 @@ import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import NavBarTreasury from '../NavBarTreasury';
 import NavWallet from '../NavWallet';
+import { black } from '../../utils/nounBgColors';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
@@ -31,9 +32,8 @@ const NavBar = () => {
   const daoEtherscanLink = buildEtherscanHoldingsLink(config.addresses.nounsDaoExecutor);
 
   const useStateBg =
-    history.location.pathname === '/' ||
-    history.location.pathname.includes('/noun/') ||
-    history.location.pathname.includes('/auction/');
+    // history.location.pathname === '/' ||
+    history.location.pathname.includes('/noun/') || history.location.pathname.includes('/auction/');
 
   const nonWalletButtonStyle = !useStateBg
     ? NavBarButtonStyle.WHITE_INFO
@@ -43,22 +43,18 @@ const NavBar = () => {
 
   return (
     <>
-      <Navbar
-        expand="lg"
-        style={{ backgroundColor: `${useStateBg ? stateBgColor : 'white'}` }}
-        className={classes.navBarCustom}
-      >
-        <Container style={{ maxWidth: 'unset' }}>
+      <Navbar expand="lg" style={{ backgroundColor: black }} className={classes.navBarCustom}>
+        <Container fluid={'xxl'}>
           <div className={classes.brandAndTreasuryWrapper}>
-            <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
-              <img src={logo} className={classes.navBarLogo} alt="Nouns DAO logo" />
+            <Navbar.Brand as={Link} to="/">
+              <h1 className={classes.logo}> CC:0 </h1>
             </Navbar.Brand>
-            {Number(CHAIN_ID) !== 1 && (
+            {/* {Number(CHAIN_ID) !== 1 && (
               <Nav.Item>
                 <img className={classes.testnetImg} src={testnetNoun} alt="testnet noun" />
                 TESTNET
               </Nav.Item>
-            )}
+            )} */}
             <Nav.Item>
               {treasuryBalance && (
                 <Nav.Link
@@ -79,9 +75,8 @@ const NavBar = () => {
           <Navbar.Collapse className="justify-content-end">
             <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>
               <NavBarButton
-                buttonText={'DAO'}
-                buttonIcon={<FontAwesomeIcon icon={faUsers} />}
-                buttonStyle={nonWalletButtonStyle}
+                buttonText={'Read the Documentation'}
+                buttonStyle={NavBarButtonStyle.LINK}
               />
             </Nav.Link>
             <Nav.Link
@@ -90,11 +85,7 @@ const NavBar = () => {
               target="_blank"
               rel="noreferrer"
             >
-              <NavBarButton
-                buttonText={'Docs'}
-                buttonIcon={<FontAwesomeIcon icon={faBookOpen} />}
-                buttonStyle={nonWalletButtonStyle}
-              />
+              <NavBarButton buttonText={'Contribute CC0'} buttonStyle={NavBarButtonStyle.LINK} />
             </Nav.Link>
             <Nav.Link
               href={externalURL(ExternalURL.discourse)}
@@ -102,19 +93,15 @@ const NavBar = () => {
               target="_blank"
               rel="noreferrer"
             >
-              <NavBarButton
-                buttonText={'Discourse'}
-                buttonIcon={<FontAwesomeIcon icon={faComments} />}
-                buttonStyle={nonWalletButtonStyle}
-              />
+              <NavBarButton buttonText={'Join the DAO'} buttonStyle={NavBarButtonStyle.LINK} />
             </Nav.Link>
-            <Nav.Link as={Link} to="/playground" className={classes.nounsNavLink}>
+            {/* <Nav.Link as={Link} to="/playground" className={classes.nounsNavLink}>
               <NavBarButton
                 buttonText={'Playground'}
                 buttonIcon={<FontAwesomeIcon icon={faPlay} />}
                 buttonStyle={nonWalletButtonStyle}
               />
-            </Nav.Link>
+            </Nav.Link> */}
             <NavWallet address={activeAccount || '0'} buttonStyle={nonWalletButtonStyle} />{' '}
           </Navbar.Collapse>
         </Container>

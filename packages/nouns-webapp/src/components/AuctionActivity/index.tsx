@@ -1,7 +1,7 @@
 import { Auction } from '../../wrappers/nounsAuction';
 import { useState, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Card } from 'react-bootstrap';
 import classes from './AuctionActivity.module.css';
 import bidHistoryClasses from './BidHistory.module.css';
 import Bid from '../Bid';
@@ -23,6 +23,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import NounInfoCard from '../NounInfoCard';
 import { useAppSelector } from '../../hooks';
+import { black, primary } from '../../utils/nounBgColors';
+import AuctionDescription from '../AuctionDescription';
 
 const openEtherscanBidHistory = () => {
   const url = buildEtherscanAddressLink(config.addresses.nounsAuctionHouseProxy);
@@ -36,6 +38,7 @@ interface AuctionActivityProps {
   onPrevAuctionClick: () => void;
   onNextAuctionClick: () => void;
   displayGraphDepComps: boolean;
+  isEthereum?: boolean;
 }
 
 const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityProps) => {
@@ -46,9 +49,8 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
     onPrevAuctionClick,
     onNextAuctionClick,
     displayGraphDepComps,
+    isEthereum = false,
   } = props;
-
-  const isCool = useAppSelector(state => state.application.isCoolBackground);
 
   const [auctionEnded, setAuctionEnded] = useState(false);
   const [auctionTimer, setAuctionTimer] = useState(false);
@@ -61,12 +63,9 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
     setShowBidHistoryModal(false);
   };
 
-  const bidHistoryTitle = (
-    <h1>
-      Noun {auction && auction.nounId.toString()}
-      <br /> Bid History
-    </h1>
-  );
+  console.log('this is inside auction activity');
+
+  // const bidHistoryTitle = <h1>Bid History</h1>;
 
   // timer logic - check auction status every 30 seconds, until five minutes remain, then check status every second
   useEffect(() => {
@@ -99,52 +98,76 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
         <Modal
           show={showBidHistoryModal}
           onHide={dismissBidModalHanlder}
-          dialogClassName="modal-90w"
+          dialogClassName={`modal-90w ${isEthereum ? classes.ethModal : classes.polyModal}`}
+          centered
         >
-          <Modal.Header closeButton className={classes.modalHeader}>
-            <div className={classes.modalHeaderNounImgWrapper}>
+          <Card style={{ background: isEthereum ? black : primary }}>
+            <Modal.Header closeButton className={classes.modalHeader}>
+              {/* <div className={classes.modalHeaderNounImgWrapper}>
               <StandaloneNoun nounId={auction && auction.nounId} />
-            </div>
-            <Modal.Title className={classes.modalTitleWrapper}>{bidHistoryTitle}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <BidHistory auctionId={auction.nounId.toString()} max={9999} />
-          </Modal.Body>
+            </div> */}
+              <Modal.Title className={classes.modalTitleWrapper}>Bid History</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <BidHistory auctionId={auction.nounId.toString()} max={9999} />
+            </Modal.Body>
+          </Card>
         </Modal>
       )}
 
       <AuctionActivityWrapper>
         <div className={classes.informationRow}>
           <Row className={classes.activityRow}>
+            <Col lg={12}>
+              <AuctionActivityNounTitle
+                isEthereum={isEthereum}
+                name={auction.name}
+                nounId={auction.nounId}
+              />
+            </Col>
             <AuctionTitleAndNavWrapper>
               {displayGraphDepComps && (
                 <AuctionNavigation
+                  isEthereum={isEthereum}
                   isFirstAuction={isFirstAuction}
                   isLastAuction={isLastAuction}
                   onNextAuctionClick={onNextAuctionClick}
                   onPrevAuctionClick={onPrevAuctionClick}
                 />
               )}
-              <AuctionActivityDateHeadline startTime={auction.startTime} />
+              <AuctionActivityDateHeadline isEthereum={isEthereum} startTime={auction.startTime} />
             </AuctionTitleAndNavWrapper>
-            <Col lg={12}>
-              <AuctionActivityNounTitle isCool={isCool} nounId={auction.nounId} />
-            </Col>
           </Row>
-          <Row className={classes.activityRow}>
-            <Col lg={4} className={classes.currentBidCol}>
+          <div
+            className={classes.activityRow}
+            style={{ borderBottom: `1px solid ${isEthereum ? primary : black}` }}
+          >
+            <div className={classes.currentBidCol}>
               <CurrentBid
+                isEthereum={isEthereum}
                 currentBid={new BigNumber(auction.amount.toString())}
                 auctionEnded={auctionEnded}
               />
-            </Col>
-            <Col lg={6} className={classes.auctionTimerCol}>
+            </div>
+            <div className={classes.auctionTimerCol}>
               {auctionEnded ? (
-                <Winner winner={auction.bidder} />
+                <Winner winner={auction.bidder} isEthereum={isEthereum} />
               ) : (
-                <AuctionTimer auction={auction} auctionEnded={auctionEnded} />
+                <AuctionTimer
+                  auction={auction}
+                  isEthereum={isEthereum}
+                  auctionEnded={auctionEnded}
+                />
               )}
-            </Col>
+            </div>
+          </div>
+          <Row className={classes.activityRow}>
+            <AuctionDescription
+              isEthereum={isEthereum}
+              description={
+                'This DAO exists to accelerate the entire creative world to the long overdue, very near future when control over creative works no longer ruin so many lives.'
+              }
+            />
           </Row>
         </div>
         {!auctionEnded && (
