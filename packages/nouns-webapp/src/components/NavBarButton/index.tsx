@@ -7,6 +7,7 @@ export enum NavBarButtonStyle {
   WARM_WALLET,
   WHITE_INFO,
   WHITE_ACTIVE,
+  WHITE_ACTIVE_VOTE_SUBMIT,
   WHITE_WALLET,
 }
 
@@ -35,6 +36,9 @@ export const getNavBarButtonVariant = (buttonStyle?: NavBarButtonStyle) => {
     }
     case NavBarButtonStyle.WHITE_ACTIVE: {
       return classes.whiteActive;
+    }
+    case NavBarButtonStyle.WHITE_ACTIVE_VOTE_SUBMIT: {
+      return classes.whiteActiveVoteSubmit;
     }
     case NavBarButtonStyle.WHITE_WALLET: {
       return classes.whiteWallet;

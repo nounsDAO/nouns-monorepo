@@ -1,29 +1,9 @@
-type Seed @entity {
-  "The Noun's ERC721 token id"
-  id: ID!
-
-  "The background index"
-  background: BigInt!
-
-  "The body index"
-  body: BigInt!
-
-  "The accessory index"
-  accessory: BigInt!
-
-  "The head index"
-  head: BigInt!
-
-  "The glasses index"
-  glasses: BigInt!
-}
-
 type Noun @entity {
   "The Noun's ERC721 token id"
   id: ID!
 
-  "The seed used to determine the Noun's traits"
-  seed: Seed
+  "The token uri used to determine the Noun's traits"
+  tokenUri: String
 
   "The owner of the Noun"
   owner: Account!

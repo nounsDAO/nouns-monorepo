@@ -4,8 +4,8 @@ import {
   AuctionCreated,
   AuctionExtended,
   AuctionSettled,
-} from './types/NounsAuctionHouse/NounsAuctionHouse';
-import { Auction, Noun, Bid } from './types/schema';
+} from '../generated/NounsAuctionHouse/NounsAuctionHouse';
+import { Auction, Noun, Bid } from '../generated/schema';
 import { getOrCreateAccount } from './utils/helpers';
 
 export function handleAuctionCreated(event: AuctionCreated): void {

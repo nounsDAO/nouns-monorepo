@@ -1,4 +1,4 @@
-import { Account, Delegate, Proposal, Governance, Vote } from '../types/schema';
+import { Account, Delegate, Proposal, Governance, Vote } from '../../generated/schema';
 import { ZERO_ADDRESS, BIGINT_ZERO, BIGINT_ONE } from './constants';
 
 export function getOrCreateAccount(

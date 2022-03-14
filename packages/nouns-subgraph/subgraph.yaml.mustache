@@ -55,7 +55,7 @@ dataSources:
         - name: NounsToken
           file: ../nouns-contracts/abi/contracts/NounsToken.sol/NounsToken.json
       eventHandlers:
-        - event: NounCreated(indexed uint256,(uint48,uint48,uint48,uint48,uint48))
+        - event: NounCreated(indexed uint256)
           handler: handleNounCreated
         - event: DelegateChanged(indexed address,indexed address,indexed address)
           handler: handleDelegateChanged
