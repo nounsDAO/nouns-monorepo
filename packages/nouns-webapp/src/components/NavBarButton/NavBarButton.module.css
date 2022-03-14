@@ -130,6 +130,11 @@
   color: #d63c5e;
 }
 
+.whiteActiveVoteSubmit {
+  background-color: #e2e3e8;
+  color: black;
+}
+
 @media (max-width: 992px) {
   .wrapper,
   .button {
