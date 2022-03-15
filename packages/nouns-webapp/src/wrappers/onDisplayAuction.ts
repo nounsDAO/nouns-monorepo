@@ -6,6 +6,10 @@ import { Auction } from './nounsAuction';
 
 const deserializeAuction = (reduxSafeAuction: Auction): Auction => {
   return {
+    name: reduxSafeAuction.name,
+    description: reduxSafeAuction.description,
+    image: reduxSafeAuction.image,
+    animation: reduxSafeAuction.animation,
     amount: BigNumber.from(reduxSafeAuction.amount),
     bidder: reduxSafeAuction.bidder,
     startTime: BigNumber.from(reduxSafeAuction.startTime),

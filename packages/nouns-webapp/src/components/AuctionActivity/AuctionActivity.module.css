@@ -12,6 +12,10 @@
   background-color: black !important;
 }
 
+.ethModal .btn-close {
+  filter: invert(1);
+}
+
 .polyModal .modal-content {
   background-color: #1ee4ff !important;
 }

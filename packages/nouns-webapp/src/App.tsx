@@ -41,6 +41,7 @@ function App() {
       {alertModal.show && (
         <AlertModal
           title={alertModal.title}
+          isEthereum={alertModal.isEthereum}
           content={<p>{alertModal.message}</p>}
           onDismiss={() => dispatch(setAlertModal({ ...alertModal, show: false }))}
         />

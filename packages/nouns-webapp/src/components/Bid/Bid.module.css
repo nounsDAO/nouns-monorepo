@@ -58,11 +58,11 @@
   background-color: white;
   outline: none !important;
   box-shadow: none !important;
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 25px;
-  transition: all 0.2s ease-in-out;
-  border: none;
+  font-family: 'Armata';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 25px;
 }
 
 .bidInput:focus {

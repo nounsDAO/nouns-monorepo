@@ -18,6 +18,9 @@ export enum AuctionHouseContractFunction {
 
 export interface Auction {
   name?: string;
+  description?: string;
+  image?: string;
+  animation?: string;
   amount: EthersBN;
   bidder: string;
   endTime: EthersBN;

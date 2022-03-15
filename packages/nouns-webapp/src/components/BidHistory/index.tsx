@@ -10,8 +10,9 @@ import { Bid } from '../../utils/types';
 import { BigNumber as EthersBN } from '@ethersproject/bignumber';
 import { useAuctionBids } from '../../wrappers/onDisplayAuction';
 import { useAppSelector } from '../../hooks';
+import { black, primary } from '../../utils/nounBgColors';
 
-const bidItem = (bid: Bid, index: number, classes: any, isCool?: boolean) => {
+const bidItem = (bid: Bid, index: number, classes: any, isEthereum?: boolean) => {
   const bidAmount = <TruncatedAmount amount={new BigNumber(EthersBN.from(bid.value).toString())} />;
   const date = `${dayjs(bid.timestamp.toNumber() * 1000).format('MMM DD')} at ${dayjs(
     bid.timestamp.toNumber() * 1000,
@@ -21,18 +22,30 @@ const bidItem = (bid: Bid, index: number, classes: any, isCool?: boolean) => {
   const isMobile = window.innerWidth < 992;
 
   return (
-    <li key={index} className={isCool ? classes.bidRowCool : classes.bidRowWarm}>
+    <li
+      key={index}
+      className={isEthereum ? classes.bidRowCool : classes.bidRowWarm}
+      style={{ borderBottom: `1px solid ${isEthereum ? primary : black}` }}
+    >
       <div className={classes.bidItem}>
         <div className={classes.leftSectionWrapper}>
           <div className={classes.bidder}>
             <div>
-              <ShortAddress address={bid.sender} avatar={isMobile ? false : true} />
+              <ShortAddress
+                isEthereum={isEthereum}
+                address={bid.sender}
+                avatar={isMobile ? false : true}
+              />
             </div>
           </div>
-          <div className={classes.bidDate}>{date}</div>
+          <div className={classes.bidDate} style={{ color: isEthereum ? primary : black }}>
+            {date}
+          </div>
         </div>
         <div className={classes.rightSectionWrapper}>
-          <div className={classes.bidAmount}>{bidAmount}</div>
+          <div className={classes.bidAmount} style={{ color: isEthereum ? primary : black }}>
+            {bidAmount}
+          </div>
           <div className={classes.linkSymbol}>
             <a href={txLink} target="_blank" rel="noreferrer">
               <img src={link} width={24} alt="link symbol" />
@@ -44,15 +57,19 @@ const bidItem = (bid: Bid, index: number, classes: any, isCool?: boolean) => {
   );
 };
 
-const BidHistory: React.FC<{ auctionId: string; max: number; classes?: any }> = props => {
-  const { auctionId, max, classes = _classes } = props;
-  const isCool = useAppSelector(state => state.application.isCoolBackground);
+const BidHistory: React.FC<{
+  auctionId: string;
+  max: number;
+  classes?: any;
+  isEthereum: boolean;
+}> = props => {
+  const { auctionId, max, classes = _classes, isEthereum } = props;
   const bids = useAuctionBids(EthersBN.from(auctionId));
   const bidContent =
     bids &&
     bids
       .map((bid: Bid, i: number) => {
-        return bidItem(bid, i, classes, isCool);
+        return bidItem(bid, i, classes, isEthereum);
       })
       .slice(0, max);
 

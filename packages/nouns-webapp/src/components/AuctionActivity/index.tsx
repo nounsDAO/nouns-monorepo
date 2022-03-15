@@ -63,8 +63,6 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
     setShowBidHistoryModal(false);
   };
 
-  console.log('this is inside auction activity');
-
   // const bidHistoryTitle = <h1>Bid History</h1>;
 
   // timer logic - check auction status every 30 seconds, until five minutes remain, then check status every second
@@ -106,10 +104,19 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
               {/* <div className={classes.modalHeaderNounImgWrapper}>
               <StandaloneNoun nounId={auction && auction.nounId} />
             </div> */}
-              <Modal.Title className={classes.modalTitleWrapper}>Bid History</Modal.Title>
+              <Modal.Title
+                className={classes.modalTitleWrapper}
+                style={{ color: isEthereum ? primary : black }}
+              >
+                Bid History
+              </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <BidHistory auctionId={auction.nounId.toString()} max={9999} />
+              <BidHistory
+                isEthereum={isEthereum}
+                auctionId={auction.nounId.toString()}
+                max={9999}
+              />
             </Modal.Body>
           </Card>
         </Modal>
@@ -162,12 +169,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
             </div>
           </div>
           <Row className={classes.activityRow}>
-            <AuctionDescription
-              isEthereum={isEthereum}
-              description={
-                'This DAO exists to accelerate the entire creative world to the long overdue, very near future when control over creative works no longer ruin so many lives.'
-              }
-            />
+            <AuctionDescription isEthereum={isEthereum} description={auction.description ?? ''} />
           </Row>
         </div>
         {!auctionEnded && (
@@ -184,7 +186,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
           <>
             <Row className={classes.activityRow}>
               <Col lg={12}>
-                <Bid auction={auction} auctionEnded={auctionEnded} />
+                <Bid auction={auction} isEthereum={isEthereum} auctionEnded={auctionEnded} />
               </Col>
             </Row>
           </>
@@ -199,6 +201,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
             ) : (
               displayGraphDepComps && (
                 <BidHistory
+                  isEthereum={isEthereum}
                   auctionId={auction.nounId.toString()}
                   max={3}
                   classes={bidHistoryClasses}

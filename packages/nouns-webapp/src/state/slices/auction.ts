@@ -19,6 +19,10 @@ const initialState: AuctionState = {
 };
 
 export const reduxSafeNewAuction = (auction: AuctionCreateEvent): IAuction => ({
+  name: '',
+  description: '',
+  image: '',
+  animation: '',
   amount: BigNumber.from(0).toJSON(),
   bidder: '',
   startTime: BigNumber.from(auction.startTime).toJSON(),
@@ -28,6 +32,10 @@ export const reduxSafeNewAuction = (auction: AuctionCreateEvent): IAuction => ({
 });
 
 export const reduxSafeAuction = (auction: IAuction): IAuction => ({
+  name: auction.name,
+  description: auction.description,
+  image: auction.image,
+  animation: auction.animation,
   amount: BigNumber.from(auction.amount).toJSON(),
   bidder: auction.bidder,
   startTime: BigNumber.from(auction.startTime).toJSON(),

@@ -31,28 +31,28 @@ export const auctionQuery = (auctionId: number) => gql`
 	  startTime
 	  endTime
 	  noun {
-		id
-		seed {
-		  id
-		  background
-		  body
-		  accessory
-		  head
-		  glasses
-		}
-		owner {
-		  id
-		}
+			id
+			name
+			description
+			image
+			animation
+			attributes {
+				trait
+				value
+			}
+			owner {
+				id
+			}
 	  }
 	  bids {
-		id
-		blockNumber
-		txIndex
-		amount
-	  }
-	}
+			id
+			blockNumber
+			txIndex
+			amount
+		}
   }
-  `;
+}
+`;
 
 export const bidsByAuctionQuery = (auctionId: string) => gql`
  {
@@ -114,6 +114,11 @@ export const latestAuctionsQuery = () => gql`
       endTime
       noun {
         id
+        name
+        description
+        image
+        animation
+        tokenUri
         owner {
           id
         }

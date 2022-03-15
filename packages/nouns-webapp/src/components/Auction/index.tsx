@@ -48,6 +48,7 @@ const Auction: React.FC<AuctionProps> = props => {
     <div className={classes.nounWrapper}>
       <StandaloneNounWithSeed
         isEthereum={isEthereum}
+        auction={currentAuction}
         nounId={currentAuction.nounId}
         onLoadSeed={loadedNounHandler}
         shouldLinkToProfile={false}

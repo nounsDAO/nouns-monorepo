@@ -1,8 +1,13 @@
 import { Auction, AuctionHouseContractFunction } from '../../wrappers/nounsAuction';
-import { connectContractToSigner, useEthers, useContractFunction } from '@usedapp/core';
+import {
+  connectContractToSigner,
+  useEthers,
+  useContractFunction,
+  useContractCall,
+} from '@usedapp/core';
 import { useAppSelector } from '../../hooks';
 import React, { useEffect, useState, useRef, ChangeEvent, useCallback } from 'react';
-import { utils, BigNumber as EthersBN } from 'ethers';
+import { utils, BigNumber as EthersBN, ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import classes from './Bid.module.css';
 import { Spinner, InputGroup, FormControl, Button, Col } from 'react-bootstrap';
@@ -13,6 +18,8 @@ import { NounsAuctionHouseFactory } from '@nouns/sdk';
 import config from '../../config';
 import WalletConnectModal from '../WalletConnectModal';
 import SettleManuallyBtn from '../SettleManuallyBtn';
+import ERC20ABI from '../../libs/abi/ERC20.json';
+import { black, primary, white } from '../../utils/nounBgColors';
 
 const computeMinimumNextBid = (
   currentBid: BigNumber,
@@ -43,11 +50,12 @@ const currentBid = (bidInputRef: React.RefObject<HTMLInputElement>) => {
 
 const Bid: React.FC<{
   auction: Auction;
+  isEthereum?: boolean;
   auctionEnded: boolean;
 }> = props => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { library } = useEthers();
-  let { auction, auctionEnded } = props;
+  let { auction, auctionEnded, isEthereum } = props;
 
   const nounsAuctionHouseContract = new NounsAuctionHouseFactory().attach(
     config.addresses.nounsAuctionHouseProxy,
@@ -87,6 +95,16 @@ const Bid: React.FC<{
     AuctionHouseContractFunction.settleCurrentAndCreateNewAuction,
   );
 
+  const { ethereum } = window;
+  const web3Provider = new ethers.providers.Web3Provider(ethereum);
+  const monaContract = new ethers.Contract(
+    config.addresses.lidoToken ?? '',
+    ERC20ABI,
+    web3Provider,
+  );
+
+  const { send: approve, state: approveState } = useContractFunction(monaContract, 'approve');
+
   const bidInputHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const input = event.target.value;
 
@@ -106,6 +124,7 @@ const Bid: React.FC<{
     if (currentBid(bidInputRef).isLessThan(minBid)) {
       setModal({
         show: true,
+        isEthereum,
         title: 'Insufficient bid amount 🤏',
         message: `Please place a bid higher than or equal to the minimum bid amount of ${minBidEth(
           minBid,
@@ -120,7 +139,15 @@ const Bid: React.FC<{
     const gasLimit = await contract.estimateGas.createBid(0, auction.nounId, {
       value,
     });
-    placeBid(auction.nounId, {
+    const approval: BigNumber = await monaContract.allowance(
+      account,
+      config.addresses.nounsAuctionHouseProxy,
+    );
+
+    if (utils.parseEther(approval.toString()) < utils.parseEther('1000000000'))
+      await approve(config.addresses.nounsAuctionHouseProxy, utils.parseEther('1000000000'));
+
+    placeBid(value, auction.nounId, {
       value,
       gasLimit: gasLimit.add(10_000), // A 10,000 gas pad is used to avoid 'Out of gas' errors
     });
@@ -148,6 +175,7 @@ const Bid: React.FC<{
       placeBidState.status = 'Success';
       setModal({
         title: 'Success',
+        isEthereum,
         message: `Bid was placed successfully!`,
         show: true,
       });
@@ -171,6 +199,7 @@ const Bid: React.FC<{
       case 'Fail':
         setModal({
           title: 'Transaction Failed',
+          isEthereum,
           message: placeBidState.errorMessage ? placeBidState.errorMessage : 'Please try again.',
           show: true,
         });
@@ -179,6 +208,7 @@ const Bid: React.FC<{
       case 'Exception':
         setModal({
           title: 'Error',
+          isEthereum,
           message: placeBidState.errorMessage ? placeBidState.errorMessage : 'Please try again.',
           show: true,
         });
@@ -202,6 +232,7 @@ const Bid: React.FC<{
       case 'Success':
         setModal({
           title: 'Success',
+          isEthereum,
           message: `Settled auction successfully!`,
           show: true,
         });
@@ -210,6 +241,7 @@ const Bid: React.FC<{
       case 'Fail':
         setModal({
           title: 'Transaction Failed',
+          isEthereum,
           message: settleAuctionState.errorMessage
             ? settleAuctionState.errorMessage
             : 'Please try again.',
@@ -220,6 +252,7 @@ const Bid: React.FC<{
       case 'Exception':
         setModal({
           title: 'Error',
+          isEthereum,
           message: settleAuctionState.errorMessage
             ? settleAuctionState.errorMessage
             : 'Please try again.',
@@ -256,6 +289,10 @@ const Bid: React.FC<{
             </span>
             <FormControl
               className={classes.bidInput}
+              style={{
+                backgroundColor: isEthereum ? 'rgba(30, 228, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+                color: isEthereum ? 'rgba(30, 228, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+              }}
               type="number"
               min="0"
               onChange={bidInputHandler}
@@ -266,6 +303,10 @@ const Bid: React.FC<{
         )}
         {!auctionEnded ? (
           <Button
+            style={{
+              backgroundColor: isEthereum ? primary : black,
+              color: isEthereum ? black : white,
+            }}
             className={auctionEnded ? classes.bidBtnAuctionEnded : classes.bidBtn}
             onClick={auctionEnded ? settleAuctionHandler : placeBidHandler}
             disabled={isDisabled}

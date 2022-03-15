@@ -4,6 +4,7 @@ import { grey } from '../../utils/nounBgColors';
 export interface AlertModal {
   show: boolean;
   title?: string;
+  isEthereum?: boolean;
   message?: string;
 }
 

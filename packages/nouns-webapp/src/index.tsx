@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
@@ -23,13 +23,13 @@ import onDisplayAuction, {
   setOnDisplayAuctionNounId,
 } from './state/slices/onDisplayAuction';
 import { ApolloProvider, useQuery } from '@apollo/client';
-import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
+import { auctionQuery, clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
 import { useEffect } from 'react';
 import pastAuctions, { addPastAuctions } from './state/slices/pastAuctions';
 import LogsUpdater from './state/updaters/logs';
 import config, { CHAIN_ID, createNetworkHttpUrl } from './config';
 import { WebSocketProvider } from '@ethersproject/providers';
-import { BigNumber, BigNumberish } from 'ethers';
+import { BigNumber, BigNumberish, ethers } from 'ethers';
 import { NounsAuctionHouseFactory } from '@nouns/sdk';
 import dotenv from 'dotenv';
 import { useAppDispatch, useAppSelector } from './hooks';
@@ -42,8 +42,16 @@ import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { nounPath } from './utils/history';
 import { push } from 'connected-react-router';
+import { Auction } from './wrappers/nounsAuction';
 
 dotenv.config();
+
+declare global {
+  interface Window {
+    web3: ethers.providers.Web3Provider;
+    ethereum: any;
+  }
+}
 
 export const history = createBrowserHistory();
 
@@ -104,14 +112,37 @@ const BLOCKS_PER_DAY = 6_500;
 
 const ChainSubscriber: React.FC = () => {
   const dispatch = useAppDispatch();
+  const wsProvider = new WebSocketProvider(config.app.wsRpcUri);
+  const nounsAuctionHouseContract = NounsAuctionHouseFactory.connect(
+    config.addresses.nounsAuctionHouseProxy,
+    wsProvider,
+  );
+  const [currentAuction, setCurrentAuction] = useState<Auction | undefined>();
+  const { data } = useQuery(auctionQuery(currentAuction?.nounId.toNumber() ?? 0), {
+    skip: !currentAuction?.nounId.toNumber(),
+  });
+
+  useEffect(() => {
+    if (data && currentAuction) {
+      dispatch(setFullAuction(reduxSafeAuction(currentAuction)));
+      dispatch(setLastAuctionNounId(currentAuction.nounId.toNumber()));
+      dispatch(
+        setFullAuction({
+          ...currentAuction,
+          name: data.auction.noun.name,
+          description: data.auction.noun.description,
+          image: data.auction.noun.image,
+          animation: data.auction.noun.animation,
+        }),
+      );
+    }
+  }, [data, currentAuction]);
+
+  useEffect(() => {
+    loadState();
+  }, []);
 
   const loadState = async () => {
-    const wsProvider = new WebSocketProvider(config.app.wsRpcUri);
-    const nounsAuctionHouseContract = NounsAuctionHouseFactory.connect(
-      config.addresses.nounsAuctionHouseProxy,
-      wsProvider,
-    );
-
     const bidFilter = nounsAuctionHouseContract.filters.AuctionBid(null, null, null, null);
     const extendedFilter = nounsAuctionHouseContract.filters.AuctionExtended(null, null);
     const createdFilter = nounsAuctionHouseContract.filters.AuctionCreated(null, null, null);
@@ -151,11 +182,7 @@ const ChainSubscriber: React.FC = () => {
 
     // Fetch the current auction
     const currentAuction = await nounsAuctionHouseContract.auction();
-    const 
-    console.log({ currentAuction });
-    dispatch(setFullAuction(reduxSafeAuction(currentAuction)));
-    dispatch(setLastAuctionNounId(currentAuction.nounId.toNumber()));
-
+    setCurrentAuction(currentAuction);
     // Fetch the previous 24hours of  bids
     const previousBids = await nounsAuctionHouseContract.queryFilter(bidFilter, 0 - BLOCKS_PER_DAY);
     for (let event of previousBids) {
@@ -176,7 +203,6 @@ const ChainSubscriber: React.FC = () => {
       processAuctionSettled(nounId, winner, amount),
     );
   };
-  loadState();
 
   return <></>;
 };
@@ -196,7 +222,6 @@ const PastAuctions: React.FC = () => {
 ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
-      <ChainSubscriber />
       <React.StrictMode>
         <Web3ReactProvider
           getLibrary={
@@ -204,6 +229,7 @@ ReactDOM.render(
           }
         >
           <ApolloProvider client={client}>
+            <ChainSubscriber />
             <PastAuctions />
             <DAppProvider config={useDappConfig}>
               <App />

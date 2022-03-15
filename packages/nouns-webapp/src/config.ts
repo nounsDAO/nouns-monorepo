@@ -62,7 +62,7 @@ const app: Record<SupportedChains, AppConfig> = {
   [ChainId.Mumbai]: {
     jsonRpcUri: 'https://matic-mumbai.chainstacklabs.com/',
     wsRpcUri: 'wss://ws-matic-mumbai.chainstacklabs.com',
-    subgraphApiUri: '',
+    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/digitalax/nouns-subgraph-mumbai',
     enableHistory: true,
   },
   [ChainId.Polygon]: {

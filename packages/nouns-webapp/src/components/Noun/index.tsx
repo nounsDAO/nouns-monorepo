@@ -13,22 +13,36 @@ export const LoadingNoun = () => {
 
 const Noun: React.FC<{
   imgPath: string;
-  alt: string;
+  alt?: string;
+  type?: 'animation' | 'image';
   isEthereum?: boolean;
   className?: string;
   wrapperClassName?: string;
 }> = props => {
-  const { imgPath, alt, className, wrapperClassName, isEthereum = false } = props;
+  const { imgPath, type, alt, className, wrapperClassName, isEthereum = false } = props;
   return (
     <div className={`${classes.imgWrapper} ${wrapperClassName}`}>
-      <Image
-        className={`${classes.img} ${
-          isEthereum ? classes.ethereumBorder : classes.polygonBorder
-        } ${className}`}
-        src={imgPath ? imgPath : loadingNoun}
-        alt={alt}
-        fluid
-      />
+      {type === 'image' ? (
+        <Image
+          className={`${classes.img} ${
+            isEthereum ? classes.ethereumBorder : classes.polygonBorder
+          } ${className}`}
+          src={imgPath ? imgPath : loadingNoun}
+          alt={alt}
+          fluid
+        />
+      ) : (
+        <video
+          autoPlay
+          loop
+          muted
+          className={`${classes.video} ${
+            isEthereum ? classes.ethereumBorder : classes.polygonBorder
+          } ${className}`}
+        >
+          <source src={imgPath} />
+        </video>
+      )}
     </div>
   );
 };
