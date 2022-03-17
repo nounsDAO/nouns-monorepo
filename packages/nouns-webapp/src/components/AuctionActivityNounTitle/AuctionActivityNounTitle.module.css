@@ -7,8 +7,8 @@
   font-family: Armata;
   font-style: normal;
   font-weight: bold;
-  font-size: 60px;
-  line-height: 75px;
+  font-size: 3vw;
+  line-height: 3.5vw;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -17,6 +17,7 @@
 
 @media (max-width: 992px) {
   .wrapper h1 {
-    font-size: 56px;
+    font-size: 3vw;
+    line-height: 3.5vw;
   }
 }

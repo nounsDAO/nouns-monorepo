@@ -12,16 +12,17 @@
   background-color: black !important;
 }
 
-.ethModal .btn-close {
-  filter: invert(1);
-}
-
-.polyModal .modal-content {
+/* .polyModal .modal-content {
   background-color: #1ee4ff !important;
+} */
+
+.modalClose {
+  background: transparent;
+  border: none;
 }
 
 .activityRow {
-  margin-top: 0.75rem;
+  margin-top: 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -43,6 +44,10 @@ h4 {
 .modalHeader {
   align-items: center;
   justify-content: center;
+  display: flex;
+  border-bottom: none !important;
+  padding: 2rem;
+  padding-bottom: 0;
 }
 
 .modalHeader h1 {
@@ -55,13 +60,17 @@ h4 {
   margin: auto;
   font-family: Armata;
   font-style: normal;
-  font-weight: normal;
+  font-weight: bold;
   font-size: 21px;
   line-height: 26px;
   display: flex;
   align-items: center;
   text-align: center;
   justify-content: center;
+}
+
+.modalBodyWrapper {
+  padding: 1rem;
 }
 
 .modalTitleWrapper h1 {

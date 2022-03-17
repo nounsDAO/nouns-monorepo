@@ -25,6 +25,8 @@ import NounInfoCard from '../NounInfoCard';
 import { useAppSelector } from '../../hooks';
 import { black, primary } from '../../utils/nounBgColors';
 import AuctionDescription from '../AuctionDescription';
+import BlueClose from '../../assets/blue-close.png';
+import BlackClose from '../../assets/black-close.png';
 
 const openEtherscanBidHistory = () => {
   const url = buildEtherscanAddressLink(config.addresses.nounsAuctionHouseProxy);
@@ -96,22 +98,22 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
         <Modal
           show={showBidHistoryModal}
           onHide={dismissBidModalHanlder}
-          dialogClassName={`modal-90w ${isEthereum ? classes.ethModal : classes.polyModal}`}
+          dialogClassName="modal-90w"
           centered
         >
           <Card style={{ background: isEthereum ? black : primary }}>
-            <Modal.Header closeButton className={classes.modalHeader}>
-              {/* <div className={classes.modalHeaderNounImgWrapper}>
-              <StandaloneNoun nounId={auction && auction.nounId} />
-            </div> */}
+            <Modal.Header className={classes.modalHeader}>
               <Modal.Title
                 className={classes.modalTitleWrapper}
                 style={{ color: isEthereum ? primary : black }}
               >
                 Bid History
               </Modal.Title>
+              <button type="button" onClick={dismissBidModalHanlder} className={classes.modalClose}>
+                <img src={isEthereum ? BlueClose : BlackClose} />
+              </button>
             </Modal.Header>
-            <Modal.Body>
+            <Modal.Body className={classes.modalBodyWrapper}>
               <BidHistory
                 isEthereum={isEthereum}
                 auctionId={auction.nounId.toString()}
@@ -172,16 +174,6 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
             <AuctionDescription isEthereum={isEthereum} description={auction.description ?? ''} />
           </Row>
         </div>
-        {!auctionEnded && (
-          <Row className={classes.activityRow}>
-            <Col lg={12} className={classes.fomoNounsLink}>
-              <FontAwesomeIcon icon={faInfoCircle} />
-              <a href={'https://fomonouns.wtf'} target={'_blank'} rel="noreferrer">
-                Help mint the next Noun
-              </a>
-            </Col>
-          </Row>
-        )}
         {isLastAuction && (
           <>
             <Row className={classes.activityRow}>

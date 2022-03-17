@@ -54,14 +54,15 @@
   height: 54px;
   color: black;
   border-radius: 12px !important;
-  box-shadow: inset 0px 0px 0px 1px #fff;
-  background-color: white;
+  /* box-shadow: inset 0px 0px 0px 1px #fff;
+  background-color: white; */
   outline: none !important;
   box-shadow: none !important;
   font-family: 'Armata';
   font-style: normal;
   font-weight: 400;
   font-size: 20px;
+  border: none !important;
   line-height: 25px;
 }
 

@@ -106,7 +106,6 @@ export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = (
   // };
 
   // const { image, description } = getNoun(nounId, seed);
-
   const noun = (
     <Noun
       isEthereum={isEthereum}

@@ -143,7 +143,7 @@ const ChainSubscriber: React.FC = () => {
   }, []);
 
   const loadState = async () => {
-    const bidFilter = nounsAuctionHouseContract.filters.AuctionBid(null, null, null, null);
+    const bidFilter = nounsAuctionHouseContract.filters.AuctionBidERC20(null, null, null, null);
     const extendedFilter = nounsAuctionHouseContract.filters.AuctionExtended(null, null);
     const createdFilter = nounsAuctionHouseContract.filters.AuctionCreated(null, null, null);
     const settledFilter = nounsAuctionHouseContract.filters.AuctionSettled(null, null, null);

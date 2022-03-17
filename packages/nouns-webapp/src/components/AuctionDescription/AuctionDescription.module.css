@@ -1,4 +1,6 @@
 .wrapper {
+  margin-left: 12px;
+  margin-right: 12px;
   border-radius: 27px;
   padding: 2rem;
   font-family: Armata;
@@ -8,6 +10,7 @@
   line-height: 25px;
   display: flex;
   align-items: center;
+  width: -webkit-fill-available;
 }
 
 .wrapper p {

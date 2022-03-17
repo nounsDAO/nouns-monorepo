@@ -2,30 +2,10 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "nounId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "sender",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "value",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "bool",
-        "name": "extended",
-        "type": "bool"
-      }
+      { "indexed": true, "internalType": "uint256", "name": "nounId", "type": "uint256" },
+      { "indexed": false, "internalType": "address", "name": "sender", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" },
+      { "indexed": false, "internalType": "bool", "name": "extended", "type": "bool" }
     ],
     "name": "AuctionBid",
     "type": "event"
@@ -33,30 +13,10 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "nounId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "sender",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "value",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "bool",
-        "name": "extended",
-        "type": "bool"
-      }
+      { "indexed": true, "internalType": "uint256", "name": "nounId", "type": "uint256" },
+      { "indexed": false, "internalType": "address", "name": "sender", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" },
+      { "indexed": false, "internalType": "bool", "name": "extended", "type": "bool" }
     ],
     "name": "AuctionBidERC20",
     "type": "event"
@@ -64,24 +24,9 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "nounId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "startTime",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "endTime",
-        "type": "uint256"
-      }
+      { "indexed": true, "internalType": "uint256", "name": "nounId", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "startTime", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "endTime", "type": "uint256" }
     ],
     "name": "AuctionCreated",
     "type": "event"
@@ -89,18 +34,8 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "nounId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "endTime",
-        "type": "uint256"
-      }
+      { "indexed": true, "internalType": "uint256", "name": "nounId", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "endTime", "type": "uint256" }
     ],
     "name": "AuctionExtended",
     "type": "event"
@@ -121,12 +56,7 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "reservePrice",
-        "type": "uint256"
-      }
+      { "indexed": false, "internalType": "uint256", "name": "reservePrice", "type": "uint256" }
     ],
     "name": "AuctionReservePriceUpdated",
     "type": "event"
@@ -134,24 +64,9 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "nounId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "winner",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
+      { "indexed": true, "internalType": "uint256", "name": "nounId", "type": "uint256" },
+      { "indexed": false, "internalType": "address", "name": "winner", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }
     ],
     "name": "AuctionSettled",
     "type": "event"
@@ -159,12 +74,7 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "timeBuffer",
-        "type": "uint256"
-      }
+      { "indexed": false, "internalType": "uint256", "name": "timeBuffer", "type": "uint256" }
     ],
     "name": "AuctionTimeBufferUpdated",
     "type": "event"
@@ -172,18 +82,8 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "previousOwner",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
+      { "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" },
+      { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }
     ],
     "name": "OwnershipTransferred",
     "type": "event"
@@ -191,12 +91,7 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
+      { "indexed": false, "internalType": "address", "name": "account", "type": "address" }
     ],
     "name": "Paused",
     "type": "event"
@@ -204,51 +99,22 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      }
+      { "indexed": false, "internalType": "address", "name": "account", "type": "address" }
     ],
     "name": "Unpaused",
     "type": "event"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_amountInETH",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "_amountInETH", "type": "uint256" }],
     "name": "_estimateERC20Amount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_amountInERC20",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "_amountInERC20", "type": "uint256" }],
     "name": "_estimateETHAmount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -256,57 +122,21 @@
     "inputs": [],
     "name": "auction",
     "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "nounId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "startTime",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "endTime",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address payable",
-        "name": "bidder",
-        "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "settled",
-        "type": "bool"
-      },
-      {
-        "internalType": "uint256",
-        "name": "lastBidType",
-        "type": "uint256"
-      }
+      { "internalType": "uint256", "name": "nounId", "type": "uint256" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" },
+      { "internalType": "uint256", "name": "startTime", "type": "uint256" },
+      { "internalType": "uint256", "name": "endTime", "type": "uint256" },
+      { "internalType": "address payable", "name": "bidder", "type": "address" },
+      { "internalType": "bool", "name": "settled", "type": "bool" },
+      { "internalType": "uint256", "name": "lastBidType", "type": "uint256" }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "useERC20",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "nounId",
-        "type": "uint256"
-      }
+      { "internalType": "uint256", "name": "useERC20", "type": "uint256" },
+      { "internalType": "uint256", "name": "nounId", "type": "uint256" }
     ],
     "name": "createBid",
     "outputs": [],
@@ -316,48 +146,18 @@
   {
     "inputs": [],
     "name": "duration",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "contract INounsToken",
-        "name": "_nouns",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_weth",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_timeBuffer",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_reservePrice",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint8",
-        "name": "_minBidIncrementPercentage",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_duration",
-        "type": "uint256"
-      }
+      { "internalType": "contract INounsToken", "name": "_nouns", "type": "address" },
+      { "internalType": "address", "name": "_weth", "type": "address" },
+      { "internalType": "uint256", "name": "_timeBuffer", "type": "uint256" },
+      { "internalType": "uint256", "name": "_reservePrice", "type": "uint256" },
+      { "internalType": "uint8", "name": "_minBidIncrementPercentage", "type": "uint8" },
+      { "internalType": "uint256", "name": "_duration", "type": "uint256" }
     ],
     "name": "initialize",
     "outputs": [],
@@ -367,65 +167,35 @@
   {
     "inputs": [],
     "name": "minBidIncrementPercentage",
-    "outputs": [
-      {
-        "internalType": "uint8",
-        "name": "",
-        "type": "uint8"
-      }
-    ],
+    "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "monaToken",
-    "outputs": [
-      {
-        "internalType": "contract IERC20",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "contract IERC20", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "nouns",
-    "outputs": [
-      {
-        "internalType": "contract INounsToken",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "contract INounsToken", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "oracle",
-    "outputs": [
-      {
-        "internalType": "contract IDigitalaxMonaOracle",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "contract IDigitalaxMonaOracle", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "owner",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -439,13 +209,7 @@
   {
     "inputs": [],
     "name": "paused",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -459,50 +223,26 @@
   {
     "inputs": [],
     "name": "reservePrice",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint8",
-        "name": "_minBidIncrementPercentage",
-        "type": "uint8"
-      }
-    ],
+    "inputs": [{ "internalType": "uint8", "name": "_minBidIncrementPercentage", "type": "uint8" }],
     "name": "setMinBidIncrementPercentage",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_reservePrice",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "_reservePrice", "type": "uint256" }],
     "name": "setReservePrice",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_timeBuffer",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "_timeBuffer", "type": "uint256" }],
     "name": "setTimeBuffer",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -525,24 +265,12 @@
   {
     "inputs": [],
     "name": "timeBuffer",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
+    "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
     "name": "transferOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -556,13 +284,14 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "contract IERC20",
-        "name": "_monaToken",
-        "type": "address"
-      }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "endTime", "type": "uint256" }],
+    "name": "updateAuctionEndTime",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "contract IERC20", "name": "_monaToken", "type": "address" }],
     "name": "updateMonaToken",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -570,11 +299,7 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "contract IDigitalaxMonaOracle",
-        "name": "_oracle",
-        "type": "address"
-      }
+      { "internalType": "contract IDigitalaxMonaOracle", "name": "_oracle", "type": "address" }
     ],
     "name": "updateOracle",
     "outputs": [],
@@ -584,13 +309,7 @@
   {
     "inputs": [],
     "name": "weth",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   }

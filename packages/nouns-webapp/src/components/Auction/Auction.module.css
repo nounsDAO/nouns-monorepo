@@ -3,8 +3,8 @@
 }
 
 .nounWrapper {
-  align-self: flex-end;
   width: 100%;
+  align-self: center;
 }
 
 .nounContentCol {

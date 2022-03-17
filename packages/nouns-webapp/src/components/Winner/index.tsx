@@ -44,7 +44,7 @@ const Winner: React.FC<WinnerProps> = props => {
       )}
     </Row>
   ) : (
-    <ShortAddress size={40} address={winner} avatar={true} />
+    <ShortAddress size={40} isEthereum={isEthereum} address={winner} avatar={true} />
   );
 
   const nounderNounContent = <h2>nounders.eth</h2>;

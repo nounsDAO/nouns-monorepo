@@ -147,10 +147,7 @@ const Bid: React.FC<{
     if (utils.parseEther(approval.toString()) < utils.parseEther('1000000000'))
       await approve(config.addresses.nounsAuctionHouseProxy, utils.parseEther('1000000000'));
 
-    placeBid(value, auction.nounId, {
-      value,
-      gasLimit: gasLimit.add(10_000), // A 10,000 gas pad is used to avoid 'Out of gas' errors
-    });
+    placeBid(value, auction.nounId);
   };
 
   const settleAuctionHandler = () => {
@@ -204,6 +201,15 @@ const Bid: React.FC<{
           show: true,
         });
         setBidButtonContent({ loading: false, content: 'Bid' });
+        break;
+      case 'Success':
+        setModal({
+          title: 'Success',
+          isEthereum,
+          message: `Bid was placed successfully!`,
+          show: true,
+        });
+        setBidButtonContent({ loading: false, content: 'Place bid' });
         break;
       case 'Exception':
         setModal({
@@ -284,7 +290,10 @@ const Bid: React.FC<{
       <InputGroup>
         {!auctionEnded && (
           <>
-            <span className={classes.customPlaceholderBidAmt}>
+            <span
+              style={{ color: isEthereum ? primary : black }}
+              className={classes.customPlaceholderBidAmt}
+            >
               {!auctionEnded && !bidInput ? minBidCopy : ''}
             </span>
             <FormControl
@@ -315,17 +324,17 @@ const Bid: React.FC<{
           </Button>
         ) : (
           <>
-            <Col lg={12} className={classes.voteForNextNounBtnWrapper}>
+            {/* <Col lg={12} className={classes.voteForNextNounBtnWrapper}>
               <Button className={classes.bidBtnAuctionEnded} onClick={fomoNounsBtnOnClickHandler}>
                 Vote for the next Noun ⌐◧-◧
               </Button>
-            </Col>
+            </Col> */}
             {/* Only show force settle button if wallet connected */}
-            {isWalletConnected && (
+            {/* {isWalletConnected && (
               <Col lg={12}>
                 <SettleManuallyBtn settleAuctionHandler={settleAuctionHandler} auction={auction} />
               </Col>
-            )}
+            )} */}
           </>
         )}
       </InputGroup>

@@ -43,7 +43,7 @@ const chainIdToAddresses: { [chainId: number]: ContractAddresses } = {
     nounsDescriptor: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0',
     nftDescriptor: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
     nounsAuctionHouse: '0xf7264d3eeb8af879f52ebe85ec10922144210c4d',
-    nounsAuctionHouseProxy: '0x9E187ef74a2603eCe94066eC7E9a6eAeF9147deD',
+    nounsAuctionHouseProxy: '0x6AAA153b30E632fa02c496b0524Be81e0422b10b',
     nounsAuctionHouseProxyAdmin: '0x0165878A594ca255338adfa4d48449f69242Eb8F',
     nounsDaoExecutor: '0x3b5fD0bbA92268Eb523a0DCA7D756e7ed493C597',
     nounsDAOProxy: '0x921df4d0812be9add7f084bea0148084b1f4efac',
