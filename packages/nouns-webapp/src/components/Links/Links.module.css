@@ -3,5 +3,5 @@
 .links:hover,
 .links:active {
   font-size: 0.5em;
-  color: var(--brand-light-discord-blue);
+  color: var(--brand-cool-border);
 }
