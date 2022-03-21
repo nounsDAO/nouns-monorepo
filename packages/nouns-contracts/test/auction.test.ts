@@ -258,6 +258,7 @@ describe('NounsAuctionHouse', () => {
 
     await (await nounsAuctionHouse.updateMonaToken(weth.address)).wait();
     await (await nounsAuctionHouse.updateOracle(oracle.address)).wait();
+    await (await nounsAuctionHouse.updateOraclePrice(1000000000000000)).wait();
 
     const { nounId } = await nounsAuctionHouse.auction();
 
