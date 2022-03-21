@@ -151,6 +151,32 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "freezeERC20Bid",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "freezeETHBid",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       { "internalType": "contract INounsToken", "name": "_nouns", "type": "address" },
       { "internalType": "address", "name": "_weth", "type": "address" },
@@ -189,6 +215,19 @@
     "inputs": [],
     "name": "oracle",
     "outputs": [{ "internalType": "contract IDigitalaxMonaOracle", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "oraclePrice",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -270,7 +309,27 @@
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
+    "inputs": [],
+    "name": "toggleFreezeERC20Bid",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "toggleFreezeETHBid",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
     "name": "transferOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -284,14 +343,26 @@
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "uint256", "name": "endTime", "type": "uint256" }],
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "endTime",
+        "type": "uint256"
+      }
+    ],
     "name": "updateAuctionEndTime",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "contract IERC20", "name": "_monaToken", "type": "address" }],
+    "inputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "_monaToken",
+        "type": "address"
+      }
+    ],
     "name": "updateMonaToken",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -302,6 +373,19 @@
       { "internalType": "contract IDigitalaxMonaOracle", "name": "_oracle", "type": "address" }
     ],
     "name": "updateOracle",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_price",
+        "type": "uint256"
+      }
+    ],
+    "name": "updateOraclePrice",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
