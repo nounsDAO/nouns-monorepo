@@ -631,6 +631,10 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     // The active auction
     INounsAuctionHouse.Auction public auction;
 
+    bool public freezeETHBid;
+    bool public freezeERC20Bid;
+    uint256 public oraclePrice;
+
     /**
      * @notice Initialize the auction house and base contracts,
      * populate configuration values, and pause the contract.
@@ -679,17 +683,19 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      * @dev This contract only accepts payment in ETH.
      */
     function createBid(uint256 useERC20, uint256 nounId) external payable override nonReentrant {
-        INounsAuctionHouse.Auction memory _auction = auction;
+        INounsAuctionHouse.Auction storage _auction = auction;
 
         require(_auction.nounId == nounId, 'Noun not up for auction');
         require(block.timestamp < _auction.endTime, 'Auction expired');
         if(useERC20 == 0){
+            require(!freezeETHBid, "ETH bids are currently frozen");
             require(msg.value >= reservePrice, 'Must send at least reservePrice');
             require(
                 msg.value >= _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100),
                 'Must send more than last bid by minBidIncrementPercentage amount'
             );
         } else {
+            require(!freezeERC20Bid, "ERC20 bids are currently frozen");
             uint256 minEthValue;
             if(_auction.amount > reservePrice){
                 minEthValue = _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100);
@@ -697,38 +703,35 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
                 minEthValue = reservePrice;
             }
             uint256 erc20Value = _estimateERC20Amount(minEthValue);
-            require(monaToken.balanceOf(msg.sender) >= erc20Value, "Insufficient balance");
             require(monaToken.allowance(msg.sender, address(this)) >= erc20Value, "Insufficient allowance");
+            require(monaToken.balanceOf(msg.sender) >= erc20Value, "Insufficient balance");
         }
 
-        address payable lastBidder = _auction.bidder;
-
-        // Refund the last bidder, if applicable
-        if (lastBidder != address(0)) {
-            if(auction.lastBidType == 1) {
-                _safeTransferETHWithFallback(lastBidder, _auction.amount);
-            } else{
-                // This is erc20 transfer
-                monaToken.transfer(lastBidder, _auction.amount);
+        if(_auction.lastBidType == 1) {
+            _safeTransferETHWithFallback(address(_auction.bidder), _auction.amount);
+        } else if(_auction.lastBidType == 2){
+            // This is erc20
+            if(_auction.amount > 0){
+                monaToken.transfer(address(_auction.bidder), _auction.amount);
             }
         }
 
         if(useERC20 == 0){
-            auction.amount = msg.value;
-            auction.lastBidType = 1;
+            _auction.amount = msg.value;
+            _auction.lastBidType = 1;
         } else{
-            auction.amount = useERC20;
-            auction.lastBidType = 2;
+            _auction.amount = useERC20;
+            _auction.lastBidType = 2;
 
             monaToken.transferFrom(msg.sender, address(this), useERC20);
         }
 
-        auction.bidder = payable(msg.sender);
+        _auction.bidder = payable(msg.sender);
 
         // Extend the auction if the bid was received within `timeBuffer` of the auction end time
         bool extended = _auction.endTime - block.timestamp < timeBuffer;
         if (extended) {
-            auction.endTime = _auction.endTime = block.timestamp + timeBuffer;
+            _auction.endTime = _auction.endTime = block.timestamp + timeBuffer;
         }
 
         if(useERC20 == 0){
@@ -753,7 +756,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     }
 
     function updateAuctionEndTime(uint256 endTime) external onlyOwner {
-        INounsAuctionHouse.Auction memory _auction = auction;
+        INounsAuctionHouse.Auction storage _auction = auction;
         _auction.endTime = endTime;
     }
 
@@ -773,6 +776,25 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      */
     function updateMonaToken(IERC20 _monaToken) external onlyOwner {
         monaToken = _monaToken;
+    }
+
+
+    function updateOraclePrice(uint256 _price) external onlyOwner {
+        oraclePrice = _price;
+    }
+
+     /**
+     @notice Method for updating whether to freeze eth as a payment
+     */
+    function toggleFreezeETHBid() external onlyOwner {
+        freezeETHBid = !freezeETHBid;
+    }
+
+     /**
+     @notice Method for updating whether to freeze eth as a payment
+     */
+    function toggleFreezeERC20Bid() external onlyOwner {
+        freezeERC20Bid = !freezeERC20Bid;
     }
 
 
@@ -853,7 +875,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      * @dev If there are no bids, the Noun is burned.
      */
     function _settleAuction() internal {
-        INounsAuctionHouse.Auction memory _auction = auction;
+        INounsAuctionHouse.Auction storage _auction = auction;
 
         require(_auction.startTime != 0, "Auction hasn't begun");
         require(!_auction.settled, 'Auction has already been settled');
@@ -865,7 +887,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
             uint256 mintToken = nouns.mint();
             nouns.transferFrom(address(this), _auction.bidder, mintToken);
         }
-        // TODO ERC20 logic here!
+
         if (_auction.amount > 0) {
             if(_auction.lastBidType == 1){
                 _safeTransferETHWithFallback(owner(), _auction.amount);
@@ -901,19 +923,14 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      @param _amountInETH amount in eth
      */
     function _estimateERC20Amount(uint256 _amountInETH) public returns (uint256) {
-        (uint256 exchangeRate, bool rateValid) = oracle.getData();
-        require(rateValid, "EstimateErc20Amount: Oracle data is invalid");
-
-        return (_amountInETH * 1e18) / (exchangeRate);
+        return (_amountInETH * 1e18) / (oraclePrice);
     }
+
     /**
      @notice Private method to estimate ETH for paying
      @param _amountInERC20 erc20 amount in wei
      */
     function _estimateETHAmount(uint256 _amountInERC20) public returns (uint256) {
-        (uint256 exchangeRate, bool rateValid) = oracle.getData();
-        require(rateValid, "EstimateEthAmount: Oracle data is invalid");
-
-        return (_amountInERC20 * exchangeRate) / (1e18);
+        return (_amountInERC20 * oraclePrice) / (1e18);
     }
 }
