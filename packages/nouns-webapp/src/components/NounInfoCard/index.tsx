@@ -17,10 +17,11 @@ import { buildEtherscanAddressLink } from '../../utils/etherscan';
 interface NounInfoCardProps {
   nounId: number;
   bidHistoryOnClickHandler: () => void;
+  isEthereum?: boolean;
 }
 
 const NounInfoCard: React.FC<NounInfoCardProps> = props => {
-  const { nounId, bidHistoryOnClickHandler } = props;
+  const { nounId, bidHistoryOnClickHandler, isEthereum } = props;
 
   const etherscanBaseURL = buildEtherscanAddressLink(config.addresses.nounsToken);
 
@@ -31,22 +32,17 @@ const NounInfoCard: React.FC<NounInfoCardProps> = props => {
   return (
     <>
       <Col lg={12} className={classes.nounInfoRow}>
-        <NounInfoRowBirthday nounId={nounId} />
-      </Col>
-      <Col lg={12} className={classes.nounInfoRow}>
-        <NounInfoRowHolder nounId={nounId} />
-      </Col>
-      <Col lg={12} className={classes.nounInfoRow}>
         <NounInfoRowButton
           iconImgSource={_BidsIcon}
+          isEthereum={isEthereum}
           btnText={lastAuctionNounId === nounId ? 'Bids' : 'Bid history'}
           onClickHandler={bidHistoryOnClickHandler}
         />
-        <NounInfoRowButton
+        {/* <NounInfoRowButton
           iconImgSource={_AddressIcon}
           btnText={'Etherscan'}
           onClickHandler={etherscanButtonClickHandler}
-        />
+        /> */}
       </Col>
     </>
   );

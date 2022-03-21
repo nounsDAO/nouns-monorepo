@@ -7,7 +7,7 @@
   width: 100%;
   height: auto;
   vertical-align: middle;
-  border-radius: 85px;
+  border-radius: 5rem;
 }
 
 .video {
@@ -20,7 +20,7 @@
   height: 100%;
   object-fit: cover;
   vertical-align: middle;
-  border-radius: 85px;
+  border-radius: 5rem;
 }
 
 .ethereumBorder {
@@ -53,5 +53,12 @@
   .circularNounWrapper {
     height: 70%;
     width: 70%;
+  }
+}
+
+@media (max-width: 992px) {
+  .img,
+  .video {
+    border-radius: 2rem;
   }
 }

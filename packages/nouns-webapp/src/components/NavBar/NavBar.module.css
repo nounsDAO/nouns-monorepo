@@ -32,6 +32,11 @@
 }
 
 @media (max-width: 992px) {
+  .logo {
+    font-size: 50px;
+    line-height: 60px;
+  }
+
   .navBarLogo {
     width: 65px;
     height: 65px;
@@ -113,4 +118,8 @@
   height: 44px;
   padding: 0.25rem 0.5rem;
   margin-right: 12px;
+}
+
+.navBarToggle span {
+  filter: invert(1);
 }

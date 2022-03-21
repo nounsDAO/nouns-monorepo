@@ -8,27 +8,27 @@ export const useEnsAvatarLookup = (address: string) => {
   useEffect(() => {
     let mounted = true;
     if (address && library) {
-      library
-        .lookupAddress(address)
-        .then(name => {
-          if (!name) return;
-          library.getResolver(name).then(resolver => {
-            if (!resolver) return;
-            resolver
-              .getText('avatar')
-              .then(avatar => {
-                if (mounted) {
-                  setEnsAvatar(avatar);
-                }
-              })
-              .catch(error => {
-                console.log(`error resolving ens avatar: `, error);
-              });
-          });
-        })
-        .catch(error => {
-          console.log(`error resolving reverse ens lookup: `, error);
-        });
+      // library
+      //   .lookupAddress(address)
+      //   .then(name => {
+      //     if (!name) return;
+      //     library.getResolver(name).then(resolver => {
+      //       if (!resolver) return;
+      //       resolver
+      //         .getText('avatar')
+      //         .then(avatar => {
+      //           if (mounted) {
+      //             setEnsAvatar(avatar);
+      //           }
+      //         })
+      //         .catch(error => {
+      //           console.log(`error resolving ens avatar: `, error);
+      //         });
+      //     });
+      //   })
+      //   .catch(error => {
+      //     console.log(`error resolving reverse ens lookup: `, error);
+      //   });
     }
 
     return () => {

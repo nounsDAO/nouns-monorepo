@@ -33,7 +33,7 @@ const ShortAddress: React.FC<{
     );
   }
 
-  return <>{ens ? ens : shortAddress}</>;
+  return <span style={{ color: isEthereum ? primary : black }}>{ens ? ens : shortAddress}</span>;
 };
 
 export default ShortAddress;

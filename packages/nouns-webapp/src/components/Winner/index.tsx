@@ -24,25 +24,7 @@ const Winner: React.FC<WinnerProps> = props => {
     activeAccount !== undefined && activeAccount.toLocaleLowerCase() === winner.toLocaleLowerCase();
 
   const nonNounderNounContent = isWinnerYou ? (
-    <Row className={classes.youSection}>
-      <Col lg={4} className={classes.youCopy}>
-        <h2
-          className={classes.winnerContent}
-          style={{
-            color: isEthereum ? primary : black,
-          }}
-        >
-          You
-        </h2>
-      </Col>
-      {!isMobile && (
-        <Col>
-          <Link to="/verify" className={classes.verifyLink}>
-            <Button className={classes.verifyButton}>Get Verified</Button>
-          </Link>
-        </Col>
-      )}
-    </Row>
+    <>You</>
   ) : (
     <ShortAddress size={40} isEthereum={isEthereum} address={winner} avatar={true} />
   );
@@ -51,8 +33,8 @@ const Winner: React.FC<WinnerProps> = props => {
 
   return (
     <>
-      <Row className={clsx(classes.wrapper, classes.section)}>
-        <Col lg={12} className={classes.leftCol}>
+      <div className={clsx(classes.wrapper, classes.section)}>
+        <div className={classes.leftCol}>
           <h4
             style={{
               color: isEthereum ? primary : black,
@@ -60,8 +42,8 @@ const Winner: React.FC<WinnerProps> = props => {
           >
             Winner
           </h4>
-        </Col>
-        <Col lg={12}>
+        </div>
+        <div>
           <h2
             className={classes.winnerContent}
             style={{
@@ -70,15 +52,15 @@ const Winner: React.FC<WinnerProps> = props => {
           >
             {isNounders ? nounderNounContent : nonNounderNounContent}
           </h2>
-        </Col>
-      </Row>
-      {isWinnerYou && isMobile && (
+        </div>
+      </div>
+      {/* {isWinnerYou && isMobile && (
         <Row>
           <Link to="/verify" className={classes.verifyLink}>
             <Button className={classes.verifyButton}>Get Verified</Button>
           </Link>
         </Row>
-      )}
+      )} */}
     </>
   );
 };

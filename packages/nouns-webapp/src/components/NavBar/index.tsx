@@ -49,27 +49,6 @@ const NavBar = () => {
             <Navbar.Brand as={Link} to="/">
               <h1 className={classes.logo}> CC:0 </h1>
             </Navbar.Brand>
-            {/* {Number(CHAIN_ID) !== 1 && (
-              <Nav.Item>
-                <img className={classes.testnetImg} src={testnetNoun} alt="testnet noun" />
-                TESTNET
-              </Nav.Item>
-            )} */}
-            <Nav.Item>
-              {treasuryBalance && (
-                <Nav.Link
-                  href={daoEtherscanLink}
-                  className={classes.nounsNavLink}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <NavBarTreasury
-                    treasuryBalance={Number(utils.formatEther(treasuryBalance)).toFixed(0)}
-                    treasuryStyle={nonWalletButtonStyle}
-                  />
-                </Nav.Link>
-              )}
-            </Nav.Item>
           </div>
           <Navbar.Toggle className={classes.navBarToggle} aria-controls="basic-navbar-nav" />
           <Navbar.Collapse className="justify-content-end">

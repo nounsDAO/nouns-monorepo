@@ -1,7 +1,6 @@
 .wrapper {
   padding: 5rem;
 }
-
 .nounWrapper {
   width: 100%;
   align-self: center;
@@ -23,8 +22,8 @@
   font-family: Armata;
   font-style: normal;
   font-weight: normal;
-  font-size: 80px;
-  line-height: 100px;
+  font-size: 5vw;
+  line-height: 5.5vw;
   display: flex;
   align-items: center;
 
@@ -32,6 +31,9 @@
 }
 
 @media (max-width: 992px) {
+  .wrapper {
+    padding: 1rem;
+  }
   .nounWrapper {
     width: 70%;
     margin-left: 15%;

@@ -23,6 +23,8 @@
 
 .activityRow {
   margin-top: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -88,10 +90,12 @@ h4 {
 }
 
 .currentBidCol {
+  flex-grow: 1;
 }
 
 .auctionTimerCol {
   padding-left: 0rem;
+  flex-grow: 1;
 }
 
 .section h4 {
@@ -126,6 +130,16 @@ h4 {
 
   .fomoNounsLink {
     padding-left: 14px;
+  }
+
+  .activityRow {
+    flex-direction: column;
+  }
+
+  .currentBidCol,
+  .auctionTimerCol {
+    width: 100%;
+    margin-bottom: 1rem;
   }
 }
 

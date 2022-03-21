@@ -2,8 +2,8 @@ import { Container, Col, Button, Row, FloatingLabel, Form } from 'react-bootstra
 import classes from './Playground.module.css';
 import React, { useEffect, useState } from 'react';
 import Link from '../../components/Link';
-import { ImageData, getNounData, getRandomNounSeed } from '@nouns/assets';
-import { buildSVG } from '@nouns/sdk';
+import { ImageData, getNounData, getRandomNounSeed } from '@digitalax/nouns-assets';
+import { buildSVG } from '@digitalax/nouns-sdk';
 import Noun from '../../components/Noun';
 import NounModal from './NounModal';
 

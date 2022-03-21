@@ -1,4 +1,7 @@
 .wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .youCopy {
@@ -29,15 +32,17 @@
   font-family: 'PT Root UI';
   font-size: 18px;
   line-height: 27px;
+  margin: 0;
 }
 
 .section h2 {
   font-family: Armata;
   font-style: normal;
   font-weight: normal;
-  font-size: 35px;
-  line-height: 44px;
+  font-size: 1.5vw;
+  line-height: 2vw;
   display: flex;
+  margin: 0;
   align-items: center;
 }
 
@@ -52,12 +57,17 @@
 }
 
 @media (max-width: 992px) {
+  .wrapper {
+    flex-direction: row;
+  }
+
   .section h4 {
     font-size: 18px;
   }
 
   .section h2 {
-    font-size: 23px;
+    font-size: 20px;
+    line-height: 25px;
   }
 
   .section {
@@ -65,7 +75,6 @@
   }
 
   .leftCol {
-    padding-left: 0.5rem;
   }
 
   .winnerContent {

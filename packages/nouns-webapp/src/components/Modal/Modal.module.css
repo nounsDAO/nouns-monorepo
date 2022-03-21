@@ -9,6 +9,23 @@
   backdrop-filter: blur(10px);
 }
 
+.confirm {
+  padding: 0.5rem 1rem !important;
+  width: 150px;
+  border-radius: 3rem !important;
+  font-family: 'Armata';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 25px;
+  /* identical to box height */
+  border: none;
+}
+
+.confirm:hover {
+  opacity: 0.8;
+}
+
 .modal {
   font-family: 'PT Root UI', sans-serif;
   font-weight: bold;

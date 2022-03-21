@@ -1,6 +1,5 @@
 import classes from './Modal.module.css';
 import ReactDOM from 'react-dom';
-import xIcon from '../../assets/x-icon.png';
 import BlackClose from '../../assets/black-close.png';
 import BlueClose from '../../assets/blue-close.png';
 import React from 'react';
@@ -14,9 +13,10 @@ const ModalOverlay: React.FC<{
   title?: string;
   isEthereum?: boolean;
   content?: React.ReactNode;
+  onSuccess?: () => void;
   onDismiss: () => void;
 }> = props => {
-  const { title, content, isEthereum, onDismiss } = props;
+  const { title, content, isEthereum, onDismiss, onSuccess } = props;
   return (
     <div className={classes.modal} style={{ background: isEthereum ? black : primary }}>
       <button className={classes.closeButton} onClick={onDismiss}>
@@ -26,6 +26,17 @@ const ModalOverlay: React.FC<{
       <div className={classes.content} style={{ color: isEthereum ? primary : black }}>
         {content}
       </div>
+      {!!onSuccess && (
+        <button
+          type="button"
+          className={classes.confirm}
+          style={{ background: isEthereum ? primary : black }}
+          onClick={onSuccess}
+        >
+          {' '}
+          Confirm{' '}
+        </button>
+      )}
     </div>
   );
 };
@@ -34,9 +45,10 @@ const Modal: React.FC<{
   title?: string;
   isEthereum?: boolean;
   content?: React.ReactNode;
+  onSuccess?: () => void;
   onDismiss: () => void;
 }> = props => {
-  const { title, content, isEthereum, onDismiss } = props;
+  const { title, content, isEthereum, onDismiss, onSuccess } = props;
   return (
     <>
       {ReactDOM.createPortal(
@@ -49,6 +61,7 @@ const Modal: React.FC<{
           isEthereum={isEthereum}
           content={content}
           onDismiss={onDismiss}
+          onSuccess={onSuccess}
         />,
         document.getElementById('overlay-root')!,
       )}

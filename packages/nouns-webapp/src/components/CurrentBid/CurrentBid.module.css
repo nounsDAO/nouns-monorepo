@@ -12,24 +12,33 @@
   line-height: 19px;
   display: flex;
   align-items: center;
+  margin: 0;
 }
 
 .section h2 {
   font-family: Armata;
   font-style: normal;
   font-weight: normal;
-  font-size: 2vw;
-  line-height: 2.5vw;
+  font-size: 1.5vw;
+  line-height: 2vw;
   display: flex;
+  margin: 0;
   align-items: center;
 }
 
 .wrapper {
   padding-left: 0rem;
   padding-right: 0rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 @media (max-width: 992px) {
+  .wrapper {
+    flex-direction: row;
+  }
+
   .section h4 {
     font-size: 18px;
     margin-bottom: 0px;
@@ -37,16 +46,17 @@
   }
 
   .section h2 {
-    font-size: 23px;
+    font-size: 20px;
+    line-height: 25px;
   }
 
   .section {
     justify-content: space-between;
   }
-
+  /* 
   .currentBid {
     margin-right: 0.5rem;
-  }
+  } */
 
   .wrapper {
     width: 100%;
@@ -55,6 +65,5 @@
   }
 
   .leftCol {
-    padding-left: 0.5rem;
   }
 }

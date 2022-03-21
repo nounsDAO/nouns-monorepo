@@ -1,6 +1,6 @@
 import { useContractCall, useEthers } from '@usedapp/core';
 import { BigNumber as EthersBN, utils } from 'ethers';
-import { NounsTokenABI } from '@nouns/contracts';
+import { NounsTokenABI } from '@digitalax/nouns-contracts';
 import config from '../config';
 
 interface NounToken {

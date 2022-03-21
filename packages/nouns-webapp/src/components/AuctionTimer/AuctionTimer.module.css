@@ -11,6 +11,7 @@
   font-size: 15px;
   line-height: 19px;
   display: flex;
+  margin: 0 !important;
   align-items: center;
 }
 
@@ -18,33 +19,36 @@
   font-family: Armata;
   font-style: normal;
   font-weight: normal;
-  font-size: 2vw;
-  line-height: 2.5vw;
+  font-size: 1.5vw;
+  line-height: 2vw;
   display: flex;
+  margin: 0 !important;
   align-items: center;
 }
 
 .wrapper {
   padding-right: 0rem;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: space-between;
 }
 
 .timerWrapper {
   display: flex;
+  margin: 0;
+  gap: 0.5rem;
 }
 
 .timerSection span {
   font-family: Armata;
   font-style: normal;
   font-weight: normal;
-  font-size: 2vw;
-  line-height: 2.5vw;
+  font-size: 1.5vw;
+  line-height: 2vw;
   display: flex;
   align-items: center;
-}
-
-.timerSection {
-  margin-right: 0.5rem;
 }
 
 .timerSectionFinal {
@@ -55,13 +59,18 @@
   font-family: Armata;
   font-style: normal;
   font-weight: normal;
-  font-size: 2vw;
-  line-height: 2.5vw;
+  font-size: 1.5vw;
+  line-height: 2vw;
   display: flex;
   align-items: center;
 }
 
 @media (max-width: 992px) {
+  .wrapper {
+    flex-direction: row;
+    align-items: center;
+  }
+
   .section h4 {
     font-size: 18px;
     margin-bottom: 0px;
@@ -85,7 +94,6 @@
 
   .leftCol {
     margin-top: 0px;
-    padding-left: 0.5rem;
   }
 
   .timerSection span {
@@ -99,9 +107,5 @@
   .title {
     font-size: 18px;
     margin-top: 1.4rem;
-  }
-
-  .timeLeft {
-    padding-right: 0.5rem;
   }
 }

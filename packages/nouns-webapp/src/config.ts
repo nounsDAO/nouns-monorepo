@@ -1,7 +1,7 @@
 import {
   ContractAddresses as NounsContractAddresses,
   getContractAddressesForChainOrThrow,
-} from '@nouns/sdk';
+} from '@digitalax/nouns-sdk';
 import { ChainId } from '@usedapp/core';
 
 interface ExternalContractAddresses {
@@ -29,6 +29,8 @@ export const CHAIN_ID: SupportedChains = parseInt(process.env.REACT_APP_CHAIN_ID
 export const ETHERSCAN_API_KEY = process.env.REACT_APP_ETHERSCAN_API_KEY ?? '';
 
 const INFURA_PROJECT_ID = process.env.REACT_APP_INFURA_PROJECT_ID;
+
+export const EXCHANGE_API = 'https://api.coingecko.com/api/v3';
 
 export const createNetworkHttpUrl = (network: string): string => {
   const custom = process.env[`REACT_APP_${network.toUpperCase()}_JSONRPC`];

@@ -17,6 +17,10 @@ const reduxSafePastAuctions = (data: any): AuctionState[] => {
     return {
       activeAuction: {
         amount: BigNumber.from(auction.amount).toJSON(),
+        description: auction.noun.description,
+        name: auction.noun.name,
+        image: auction.noun.image,
+        animation: auction.noun.animation,
         bidder: auction.bidder ? auction.bidder.id : '',
         startTime: BigNumber.from(auction.startTime).toJSON(),
         endTime: BigNumber.from(auction.endTime).toJSON(),

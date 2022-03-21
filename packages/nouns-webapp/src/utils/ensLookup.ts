@@ -8,17 +8,17 @@ export const useReverseENSLookUp = (address: string) => {
   useEffect(() => {
     let mounted = true;
     if (address && library) {
-      library
-        .lookupAddress(address)
-        .then(name => {
-          if (!name) return;
-          if (mounted) {
-            setEns(name);
-          }
-        })
-        .catch(error => {
-          console.log(`error resolving reverse ens lookup: `, error);
-        });
+      // library
+      //   .lookupAddress(address)
+      //   .then(name => {
+      //     if (!name) return;
+      //     if (mounted) {
+      //       setEns(name);
+      //     }
+      //   })
+      //   .catch(error => {
+      //     console.log(`error resolving reverse ens lookup: `, error);
+      //   });
     }
 
     return () => {

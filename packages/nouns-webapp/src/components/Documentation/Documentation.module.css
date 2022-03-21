@@ -11,8 +11,8 @@
   font-family: Armata;
   font-style: normal;
   font-weight: bold;
-  font-size: 50px;
-  line-height: 62px;
+  font-size: 4vw;
+  line-height: 5vw;
   display: flex;
   align-items: center;
 
@@ -23,8 +23,8 @@
   font-family: Armata;
   font-style: normal;
   font-weight: normal;
-  font-size: 25px;
-  line-height: 31px;
+  font-size: 2vw;
+  line-height: 3vw;
 
   color: #ffffff;
 }
@@ -35,12 +35,6 @@
   letter-spacing: -0.25px;
   line-height: 28px;
   font-size: 1.2rem !important;
-}
-
-@media (max-width: 992px) {
-  .headerWrapper {
-    padding: 1rem;
-  }
 }
 
 .accordionItem {
@@ -91,5 +85,19 @@
 @media (max-width: 992px) {
   .accordionHeader button {
     padding-left: 20px;
+  }
+
+  .wrapper {
+    padding: 1rem;
+  }
+
+  .headerWrapper h1 {
+    font-size: 25px;
+    line-height: 30px;
+  }
+
+  .headerWrapper p {
+    font-size: 16px;
+    line-height: 20px;
   }
 }

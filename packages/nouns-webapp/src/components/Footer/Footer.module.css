@@ -25,14 +25,24 @@
   color: #1ee4ff;
 }
 
+@media (max-width: 768px) {
+  .topBar {
+    flex-direction: column;
+  }
+
+  .logo {
+    font-size: 50px;
+    line-height: 60px;
+  }
+}
+
 .description {
   font-family: Armata;
   font-style: normal;
   font-weight: normal;
   font-size: 20px;
   line-height: 25px;
-  display: flex;
-  align-items: center;
+  text-align: center;
 
   color: #1ee4ff;
 }
@@ -46,8 +56,12 @@
   line-height: 25px;
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  padding: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 .footerSignature a {

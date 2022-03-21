@@ -174,7 +174,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
             <AuctionDescription isEthereum={isEthereum} description={auction.description ?? ''} />
           </Row>
         </div>
-        {isLastAuction && (
+        {isLastAuction && !auctionEnded && (
           <>
             <Row className={classes.activityRow}>
               <Col lg={12}>
@@ -188,6 +188,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
             {!isLastAuction ? (
               <NounInfoCard
                 nounId={auction.nounId.toNumber()}
+                isEthereum={isEthereum}
                 bidHistoryOnClickHandler={showBidModalHandler}
               />
             ) : (

@@ -7,7 +7,7 @@ import { ChainId, DAppProvider } from '@usedapp/core';
 import { Web3ReactProvider } from '@web3-react/core';
 import { Web3Provider } from '@ethersproject/providers';
 import account from './state/slices/account';
-import application from './state/slices/application';
+import application, { setPrices } from './state/slices/application';
 import logs from './state/slices/logs';
 import auction, {
   reduxSafeAuction,
@@ -27,10 +27,10 @@ import { auctionQuery, clientFactory, latestAuctionsQuery } from './wrappers/sub
 import { useEffect } from 'react';
 import pastAuctions, { addPastAuctions } from './state/slices/pastAuctions';
 import LogsUpdater from './state/updaters/logs';
-import config, { CHAIN_ID, createNetworkHttpUrl } from './config';
+import config, { CHAIN_ID, createNetworkHttpUrl, EXCHANGE_API } from './config';
 import { WebSocketProvider } from '@ethersproject/providers';
 import { BigNumber, BigNumberish, ethers } from 'ethers';
-import { NounsAuctionHouseFactory } from '@nouns/sdk';
+import { NounsAuctionHouseFactory } from '@digitalax/nouns-sdk';
 import dotenv from 'dotenv';
 import { useAppDispatch, useAppSelector } from './hooks';
 import { appendBid } from './state/slices/auction';
@@ -122,8 +122,18 @@ const ChainSubscriber: React.FC = () => {
     skip: !currentAuction?.nounId.toNumber(),
   });
 
+  const fetchPrices = async () => {
+    const eth = await fetch(`${EXCHANGE_API}/simple/price?ids=ethereum&vs_currencies=usd`).then(
+      res => res.json(),
+    );
+    const mona = await fetch(`${EXCHANGE_API}/simple/price?ids=monavale&vs_currencies=usd`).then(
+      res => res.json(),
+    );
+    dispatch(setPrices({ eth: eth.ethereum.usd, mona: mona.monavale.usd }));
+  };
+
   useEffect(() => {
-    if (data && currentAuction) {
+    if (data && data.auction && currentAuction) {
       dispatch(setFullAuction(reduxSafeAuction(currentAuction)));
       dispatch(setLastAuctionNounId(currentAuction.nounId.toNumber()));
       dispatch(
@@ -140,6 +150,7 @@ const ChainSubscriber: React.FC = () => {
 
   useEffect(() => {
     loadState();
+    fetchPrices();
   }, []);
 
   const loadState = async () => {

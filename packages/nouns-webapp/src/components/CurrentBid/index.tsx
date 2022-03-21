@@ -26,8 +26,8 @@ const CurrentBid: React.FC<{
   const titleContent = auctionEnded ? 'Winning bid' : 'Current bid';
 
   return (
-    <Row className={clsx(classes.wrapper, classes.container, classes.section)}>
-      <Col xs={5} lg={12} className={classes.leftCol}>
+    <div className={clsx(classes.wrapper, classes.container, classes.section)}>
+      <div className={classes.leftCol}>
         <h4
           style={{
             color: isEthereum ? primary : black,
@@ -35,13 +35,13 @@ const CurrentBid: React.FC<{
         >
           {titleContent}
         </h4>
-      </Col>
-      <Col xs="auto" lg={12}>
+      </div>
+      <div>
         <h2 className={classes.currentBid} style={{ color: isEthereum ? primary : black }}>
           {currentBid === BID_N_A ? BID_N_A : <TruncatedAmount amount={currentBid && currentBid} />}
         </h2>
-      </Col>
-    </Row>
+      </div>
+    </div>
   );
 };
 

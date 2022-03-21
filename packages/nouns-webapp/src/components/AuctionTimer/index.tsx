@@ -54,11 +54,11 @@ const AuctionTimer: React.FC<{
   if (!auction) return null;
 
   return (
-    <Row
+    <div
       className={clsx(classes.wrapper, classes.section)}
       onClick={() => setTimerToggle(!timerToggle)}
     >
-      <Col xs={timerToggle ? 4 : 6} lg={12} className={classes.leftCol}>
+      <div className={classes.leftCol}>
         <h4
           style={{
             color: isEthereum ? primary : black,
@@ -70,8 +70,8 @@ const AuctionTimer: React.FC<{
               : auctionContentLong
             : `Ends on ${endTime.format('MMM Do')} at`}
         </h4>
-      </Col>
-      <Col xs="auto" lg={12}>
+      </div>
+      <div>
         {timerToggle ? (
           <h2
             className={clsx(classes.timerWrapper, classes.timeLeft)}
@@ -110,8 +110,8 @@ const AuctionTimer: React.FC<{
             </div>
           </h2>
         )}
-      </Col>
-    </Row>
+      </div>
+    </div>
   );
 };
 

@@ -1,5 +1,5 @@
 {
-  "name": "@nouns/webapp",
+  "name": "@digitalax/nouns-webapp",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -9,8 +9,8 @@
     "@fortawesome/free-solid-svg-icons": "5.15.3",
     "@fortawesome/react-fontawesome": "0.1.14",
     "@netlify/functions": "^0.7.2",
-    "@nouns/assets": "^0.2.0",
-    "@nouns/sdk": "^0.1.4",
+    "@digitalax/nouns-assets": "^0.1.0",
+    "@digitalax/nouns-sdk": "^0.1.0",
     "@reduxjs/toolkit": "^1.6.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",

@@ -14,7 +14,7 @@ import { Spinner, InputGroup, FormControl, Button, Col } from 'react-bootstrap';
 import { useAuctionMinBidIncPercentage } from '../../wrappers/nounsAuction';
 import { useAppDispatch } from '../../hooks';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
-import { NounsAuctionHouseFactory } from '@nouns/sdk';
+import { NounsAuctionHouseFactory } from '@digitalax/nouns-sdk';
 import config from '../../config';
 import WalletConnectModal from '../WalletConnectModal';
 import SettleManuallyBtn from '../SettleManuallyBtn';
@@ -68,7 +68,7 @@ const Bid: React.FC<{
   const [bidInput, setBidInput] = useState('');
   const [bidButtonContent, setBidButtonContent] = useState({
     loading: false,
-    content: auctionEnded ? 'Settle' : 'Place bid',
+    content: auctionEnded ? 'Settle' : auction.bidder !== activeAccount ? 'Place bid' : 'Withdraw',
   });
 
   const [showConnectModal, setShowConnectModal] = useState(false);
@@ -116,7 +116,7 @@ const Bid: React.FC<{
     setBidInput(event.target.value);
   };
 
-  const placeBidHandler = async () => {
+  const confirmBid = async () => {
     if (!auction || !bidInputRef.current || !bidInputRef.current.value) {
       return;
     }
@@ -131,6 +131,21 @@ const Bid: React.FC<{
         )} ETH.`,
       });
       setBidInput(minBidEth(minBid));
+      return;
+    }
+
+    setModal({
+      show: true,
+      isEthereum,
+      title: 'Confirm Bid',
+      message:
+        'Are you sure you want to place this bid? The contract is decentralised and you will not be able to withdraw your bid after placing it. If someone bids higher than you then you will be immediately refunded. ',
+      onSuccess: handlePlaceBid,
+    });
+  };
+
+  const handlePlaceBid = async () => {
+    if (!auction || !bidInputRef.current || !bidInputRef.current.value) {
       return;
     }
 
@@ -239,10 +254,10 @@ const Bid: React.FC<{
         setModal({
           title: 'Success',
           isEthereum,
-          message: `Settled auction successfully!`,
+          message: `Success! Your bid was placed. You can withdraw your bid at anytime. If you are outbid your funds are sent back to your wallet. Good luck!`,
           show: true,
         });
-        setBidButtonContent({ loading: false, content: 'Settle Auction' });
+        setBidButtonContent({ loading: false, content: 'Withdraw' });
         break;
       case 'Fail':
         setModal({
@@ -274,7 +289,7 @@ const Bid: React.FC<{
   const isDisabled =
     placeBidState.status === 'Mining' || settleAuctionState.status === 'Mining' || !activeAccount;
 
-  const minBidCopy = `Ξ ${minBidEth(minBid)} or more`;
+  const minBidCopy = `${minBidEth(minBid)} MONA or more`;
   const fomoNounsBtnOnClickHandler = () => {
     // Open Fomo Nouns in a new tab
     window.open('https://fomonouns.wtf', '_blank')?.focus();
@@ -317,7 +332,7 @@ const Bid: React.FC<{
               color: isEthereum ? black : white,
             }}
             className={auctionEnded ? classes.bidBtnAuctionEnded : classes.bidBtn}
-            onClick={auctionEnded ? settleAuctionHandler : placeBidHandler}
+            onClick={auctionEnded ? settleAuctionHandler : confirmBid}
             disabled={isDisabled}
           >
             {bidButtonContent.loading ? <Spinner animation="border" /> : bidButtonContent.content}

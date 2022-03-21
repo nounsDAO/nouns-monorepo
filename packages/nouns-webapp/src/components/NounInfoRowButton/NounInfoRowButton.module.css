@@ -3,9 +3,6 @@
   color: var(--brand-cool-dark-text);
   background-color: var(--brand-cool-accent);
   border-radius: 10px;
-  margin-right: 10px;
-  margin-top: 5px;
-  margin-bottom: 5px;
   font-family: 'PT Root UI';
   font-weight: bold;
   cursor: pointer;

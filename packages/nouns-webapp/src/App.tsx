@@ -43,6 +43,14 @@ function App() {
           title={alertModal.title}
           isEthereum={alertModal.isEthereum}
           content={<p>{alertModal.message}</p>}
+          onSuccess={
+            !!alertModal.onSuccess
+              ? () => {
+                  dispatch(setAlertModal({ ...alertModal, show: false }));
+                  alertModal.onSuccess && alertModal.onSuccess();
+                }
+              : undefined
+          }
           onDismiss={() => dispatch(setAlertModal({ ...alertModal, show: false }))}
         />
       )}
