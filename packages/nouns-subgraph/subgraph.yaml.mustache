@@ -27,8 +27,8 @@ dataSources:
       eventHandlers:
         - event: AuctionCreated(indexed uint256,uint256,uint256)
           handler: handleAuctionCreated
-        - event: AuctionBid(indexed uint256,address,uint256,bool)
-          handler: handleAuctionBid
+        - event: AuctionBidERC20(indexed uint256,address,uint256,bool)
+          handler: handleAuctionBidERC20
         - event: AuctionExtended(indexed uint256,uint256)
           handler: handleAuctionExtended
         - event: AuctionSettled(indexed uint256,address,uint256)

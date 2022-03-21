@@ -1,8 +1,8 @@
 {
-  "name": "@nouns/sdk",
-  "version": "0.1.5",
+  "name": "@digitalax/nouns-sdk",
+  "version": "0.1.0",
   "description": "Useful tooling for interacting with the Nouns protocol",
-  "author": "Nounders",
+  "author": "haruto-digi",
   "homepage": "https://nouns.wtf",
   "license": "GPL-3.0",
   "main": "dist/index.js",
@@ -14,8 +14,10 @@
     "test": "mocha -r ts-node/register \"test/**/*.test.ts\""
   },
   "dependencies": {
-    "@nouns/contracts": "^0.1.3",
-    "ethers": "^5.4.7"
+    "@digitalax/nouns-contracts": "^0.1.0",
+    "ethers": "^5.4.7",
+    "tsc": "^2.0.4",
+    "typescript": "^4.6.2"
   },
   "devDependencies": {
     "@types/pngjs": "^6.0.1",

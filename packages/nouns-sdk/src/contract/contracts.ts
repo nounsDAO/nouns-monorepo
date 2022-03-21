@@ -4,7 +4,7 @@ import {
   NounsDescriptorFactory,
   NounsSeederFactory,
   NounsDaoLogicV1Factory,
-} from '@nouns/contracts';
+} from '@digitalax/nouns-contracts';
 import type { Signer } from 'ethers';
 import type { Provider } from '@ethersproject/providers';
 import { getContractAddressesForChainOrThrow } from './addresses';

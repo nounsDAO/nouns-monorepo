@@ -1,4 +1,4 @@
-import { PNGCollectionEncoder, PngImage } from '@nouns/sdk';
+import { PNGCollectionEncoder, PngImage } from '@digitalax/nouns-sdk';
 import { promises as fs } from 'fs';
 import { PNG } from 'pngjs';
 import path from 'path';

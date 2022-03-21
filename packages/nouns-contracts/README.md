@@ -1,4 +1,4 @@
-# @nouns/contracts
+# @digitalax/nouns-contracts
 
 ## Background
 

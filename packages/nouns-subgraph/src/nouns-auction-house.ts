@@ -29,7 +29,7 @@ export function handleAuctionCreated(event: AuctionCreated): void {
   auction.save();
 }
 
-export function handleAuctionBid(event: AuctionBid): void {
+export function handleAuctionBidERC20(event: AuctionBid): void {
   let nounId = event.params.nounId.toString();
   let bidderAddress = event.params.sender.toHex();
 

@@ -4,7 +4,7 @@ import {
   NounsDescriptorFactory,
   NounsSeederFactory,
   NounsDaoLogicV1Factory,
-} from '@nouns/contracts';
+} from '@digitalax/nouns-contracts';
 
 export interface ContractAddresses {
   nounsToken: string;

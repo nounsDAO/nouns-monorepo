@@ -1,6 +1,6 @@
 {
-  "name": "@nouns/assets",
-  "version": "0.2.0",
+  "name": "@digitalax/nouns-assets",
+  "version": "0.1.0",
   "description": "Nouns run-length encoded image data",
   "author": "Nounders",
   "homepage": "https://nouns.wtf",
@@ -15,7 +15,7 @@
     "test": "mocha -r ts-node/register \"test/**/*.test.ts\""
   },
   "devDependencies": {
-    "@nouns/sdk": "^0.1.4",
+    "@digitalax/nouns-sdk": "^0.1.0",
     "@types/pngjs": "^6.0.1",
     "chai": "^4.2.0",
     "mocha": "^8.4.0",
