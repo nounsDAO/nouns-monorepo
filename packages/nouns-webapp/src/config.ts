@@ -68,8 +68,8 @@ const app: Record<SupportedChains, AppConfig> = {
     enableHistory: true,
   },
   [ChainId.Polygon]: {
-    jsonRpcUri: '',
-    wsRpcUri: '',
+    jsonRpcUri: 'https://polygon-mainnet.g.alchemy.com/v2/l_-zZAI0v9EWjrG1dee494hg1XDh38A8',
+    wsRpcUri: 'wss://polygon-mainnet.g.alchemy.com/v2/l_-zZAI0v9EWjrG1dee494hg1XDh38A8',
     subgraphApiUri: '',
     enableHistory: true,
   },
@@ -86,7 +86,7 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     lidoToken: undefined,
   },
   [ChainId.Polygon]: {
-    lidoToken: '',
+    lidoToken: '0x6968105460f67c3BF751bE7C15f92F5286Fd0CE5',
   },
   [ChainId.Mumbai]: {
     lidoToken: '0xefd3d060ddcfed7903806503440db1089031af3a',

@@ -49,6 +49,18 @@ const chainIdToAddresses: { [chainId: number]: ContractAddresses } = {
     nounsDAOProxy: '0x921df4d0812be9add7f084bea0148084b1f4efac',
     nounsDAOLogicV1: '0x3F4F7BD9A8Ddc700e1622A1B40D7ADEabf62f423',
   },
+  [ChainId.Polygon]: {
+    nounsToken: '0x46ef874D5a7A56c8D3376438B1405322c6cB01E6',
+    nounsSeeder: '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9',
+    nounsDescriptor: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0',
+    nftDescriptor: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
+    nounsAuctionHouse: '0xC1AaAd06177D2eb3Ff3C88C312a5B1e53e96775a',
+    nounsAuctionHouseProxy: '0xC1AaAd06177D2eb3Ff3C88C312a5B1e53e96775a',
+    nounsAuctionHouseProxyAdmin: '0x0165878A594ca255338adfa4d48449f69242Eb8F',
+    nounsDaoExecutor: '0x869298e4FEbC446F5eCbBAceE02C4DD63F661aB7',
+    nounsDAOProxy: '0x5D72632b2082B225B1f27d5Cefc1E39c5C2aB39F',
+    nounsDAOLogicV1: '0x5D72632b2082B225B1f27d5Cefc1E39c5C2aB39F',
+  }
 };
 
 /**
