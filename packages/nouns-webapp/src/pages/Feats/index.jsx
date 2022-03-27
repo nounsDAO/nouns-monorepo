@@ -2,8 +2,8 @@ import Section from '../../layout/Section';
 import { Col } from 'react-bootstrap';
 import classes from './Feats.module.css';
 import Accordion from 'react-bootstrap/Accordion';
-import Links from 'D:/GitHub/nouns-monorepo/packages/nouns-webapp/src/components/Links';
-import { faCircleInfo } from '/node_modules/@fortawesome/free-solid-svg-icons';
+import Links from '../../components/Links';
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const FeatsPage = () => {
