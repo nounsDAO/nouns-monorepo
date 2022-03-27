@@ -3,7 +3,7 @@ import { Col } from 'react-bootstrap';
 import classes from './Feats.module.css';
 import Accordion from 'react-bootstrap/Accordion';
 import Links from '../../components/Links';
-import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons/faCircleInfo.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const FeatsPage = () => {
