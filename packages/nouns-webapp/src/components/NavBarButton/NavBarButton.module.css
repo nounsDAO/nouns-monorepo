@@ -3,7 +3,8 @@
   border-radius: 10px;
   font-size: 16px;
   line-height: 16px;
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-weight: bold;
   padding: 0px 12px 0px 12px;
   transition: all 0.125s ease-in-out;
   box-shadow: none !important;
@@ -25,6 +26,7 @@
 
 .icon > svg {
   max-height: 14px;
+  opacity: 0.5;
 }
 
 @media (max-width: 992px) {
@@ -38,42 +40,54 @@
 }
 
 .coolInfo {
-  color: #79809c;
-  background-color: #e9ebf3;
+  border: 1px solid var(--brand-cool-border);
+  border-radius: 10px;
+  color: var(--brand-cool-dark-text);
 }
 
 .coolInfo:hover {
-  background-color: white;
+  background-color: var(--brand-cool-accent);
   color: black;
 }
 
 .coolWallet {
-  background-color: #4965f0;
-  color: white;
+  background-color: var(--brand-cool-accent);
+  border: 1px solid var(--brand-cool-border);
+  border-radius: 10px;
+  color: var(--brand-warm-dark-text);
   padding: 0px 12px 0px 12px;
+  transition: all 0.2s ease-in-out;
 }
 
 .coolWallet:hover {
+  background-color: var(--brand-color-blue);
+  color: white;
   filter: brightness(110%);
 }
 
 .warmInfo {
-  color: #b6a9a7;
-  background-color: #fdf9f9;
+  border: 1px solid var(--brand-warm-border);
+  border-radius: 10px;
+  color: var(--brand-warm-dark-text);
 }
 
 .warmInfo:hover {
-  background-color: white;
+  background-color: var(--brand-warm-accent);
   color: black;
 }
 
 .warmWallet {
-  background-color: #d63c5e;
-  color: white;
+  background-color: var(--brand-warm-accent);
+  border: 1px solid var(--brand-warm-border);
+  border-radius: 10px;
+  color: var(--brand-warm-dark-text);
   padding: 0px 12px 0px 12px;
+  transition: all 0.2s ease-in-out;
 }
 
 .warmWallet:hover {
+  background-color: var(--brand-color-red);
+  color: white;
   filter: brightness(110%);
 }
 
@@ -97,6 +111,11 @@
 
 .whiteActive .icon {
   color: #d63c5e;
+}
+
+.whiteActiveVoteSubmit {
+  background-color: #e2e3e8;
+  color: black;
 }
 
 @media (max-width: 992px) {

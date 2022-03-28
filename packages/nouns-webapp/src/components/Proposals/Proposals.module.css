@@ -11,22 +11,50 @@
 }
 
 .heading {
-  display: inline-block;
-  font-size: 2rem;
+  font-family: 'Londrina Solid';
+  font-size: 40px;
   margin: 0 !important;
 }
 
-.createProposalLink {
-  padding: 0.9rem 1.5rem;
-  border-radius: 5px;
-  border: 0 none;
-  font-size: large;
-  font-weight: normal;
-  cursor: default;
+.generateBtn {
+  max-width: 10rem;
+  height: 3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  background-color: var(--brand-color-green);
+  border: var(--brand-color-green);
+}
+.generateBtn:focus,
+.generateBtn:hover {
+  background-color: var(--brand-color-green) !important;
+  box-shadow: 0 0 0 0.2rem rgb(67, 179, 105, 0.75);
+}
+.generateBtn:active {
+  background-color: var(--brand-color-green) !important;
 }
 
-.createProposalLink:hover {
-  background-color: rgb(104, 104, 104);
+.generateBtnDisabled {
+  max-width: 10rem;
+  height: 3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  background-color: #f4f4f8;
+  border: #f4f4f8;
+  color: #8c8d92;
+  border: 1px solid #e2e3e8;
+}
+.generateBtnDisabled:focus,
+.generateBtnDisabled:hover,
+.generateBtnDisabled:active {
+  cursor: not-allowed;
+  background-color: #f4f4f8 !important;
+  border: #f4f4f8 !important;
+  color: #8c8d92 !important;
+  border: 1px solid #e2e3e8 !important;
+  outline: none;
+  box-shadow: none;
 }
 
 .proposalLink {
@@ -35,6 +63,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border: 1px solid #e2e3e8;
+  box-sizing: border-box;
+  border-radius: 16px;
+  background: #f4f4f8;
+  font-size: 22px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+}
+
+.proposalLink:hover {
+  background: white;
+  cursor: pointer;
 }
 
 .markdown h1 {
@@ -56,4 +96,48 @@
 .markdown img {
   max-width: 100%;
   height: auto;
+}
+
+.nullStateCopy {
+  margin-top: 0.9rem;
+  margin-right: 1rem;
+  font-family: 'PT Root UI';
+  font-weight: 500;
+  color: var(--brand-gray-light-text);
+  font-size: 16px;
+  line-height: 22.4px;
+}
+
+@media (max-width: 992px) {
+  .nullStateCopy {
+    margin-top: 0rem;
+  }
+
+  .proposalTitle {
+    width: 65%;
+    word-wrap: break-word;
+    min-width: 65%;
+  }
+}
+
+.nullBtnWrapper {
+  min-width: 10rem;
+}
+
+.proposalId {
+  color: #8c8d92;
+  margin-right: 0.5rem;
+}
+
+.proposalTitle {
+  width: 85%;
+}
+
+.proposalStatusWrapper {
+  margin-left: 0.5rem;
+}
+
+.submitProposalButtonWrapper {
+  text-align: right;
+  padding-top: 0.8rem;
 }
