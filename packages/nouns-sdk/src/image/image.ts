@@ -104,13 +104,7 @@ export class Image {
       }
     }
 
-    const encodedBounds = this.getEncodedBounds(this._bounds);
-    const encodedImage = Object.values(this._rows).reduce((result, row) => {
-      result += this.getEncodedRow(row, this._bounds);
-      return result;
-    }, encodedBounds);
-
-    return encodedImage;
+    return this.getMultiRowRects();
   }
 
   /**
@@ -196,39 +190,65 @@ export class Image {
   }
 
   /**
-   * Get a single row encoded as a hex string
+   * Get the length and color indexes of all rectangles within a single row
    * @param row The row data
    * @param bounds The image bounds
    */
-  private getEncodedRow(row: ImageRow, bounds: ImageBounds) {
-    const rowBuffer = Buffer.from(
-      row.rects.flatMap(({ length, colorIndex }, i) => {
-        // Row only contains a single rect
-        if (i === 0 && i === row.rects.length - 1) {
-          return [bounds.right - bounds.left, colorIndex];
-        }
+  private getRow(row: ImageRow, bounds: ImageBounds) {
+    return row.rects.map(({ length, colorIndex }, i) => {
+      // Row only contains a single rect
+      if (i === 0 && i === row.rects.length - 1) {
+        return [bounds.right - bounds.left, colorIndex];
+      }
 
-        // Set left bound
-        if (i === 0) {
-          if (length > bounds.left) {
-            return [length - bounds.left, colorIndex];
-          } else if (length === bounds.left) {
-            return [];
-          }
+      // Set left bound
+      if (i === 0) {
+        if (length > bounds.left) {
+          return [length - bounds.left, colorIndex];
+        } else if (length === bounds.left) {
+          return [];
         }
+      }
 
-        // Set right bound
-        if (i === row.rects.length - 1) {
-          if (length > this._width - bounds.right) {
-            return [length - (this._width - bounds.right), colorIndex];
-          } else if (length === this._width - bounds.right) {
-            return [];
-          }
+      // Set right bound
+      if (i === row.rects.length - 1) {
+        if (length > this._width - bounds.right) {
+          return [length - (this._width - bounds.right), colorIndex];
+        } else if (length === this._width - bounds.right) {
+          return [];
         }
-        return [length, colorIndex];
-      }),
-    );
-    return rowBuffer.toString('hex');
+      }
+      return [length, colorIndex];
+    });
+  }
+
+  /**
+   * Convert the single-row rectangle information into multi-row representations
+   */
+  private getMultiRowRects() {
+    const rows = Object.values(this.rows)
+      .flatMap(row => this.getRow(row, this._bounds))
+      .filter(r => !!r.length);
+    const rects: number[][] = [];
+
+    let currentIndex = 0;
+    while (currentIndex < rows.length) {
+      let [adjustedLength] = rows[currentIndex];
+      const [, colorIndex] = rows[currentIndex];
+
+      let cursor = currentIndex + 1;
+      while (colorIndex === rows[cursor]?.[1]) {
+        adjustedLength += rows[cursor][0];
+        cursor++;
+      }
+      currentIndex = cursor;
+
+      rects.push([adjustedLength, colorIndex]);
+    }
+
+    return `${this.getEncodedBounds(this._bounds)}${Buffer.from(rects.flatMap(c => c)).toString(
+      'hex',
+    )}`;
   }
 
   /**
