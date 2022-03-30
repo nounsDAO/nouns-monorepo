@@ -14,6 +14,9 @@
 .headerRow p {
   color: #14161b;
 }
+.headerRow p:nth-of-type(2) {
+  padding-top: 0;
+}
 
 .primaryBtn {
   width: 100%;
