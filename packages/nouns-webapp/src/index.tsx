@@ -1,77 +1,37 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ChainId, DAppProvider } from '@usedapp/core';
 import { Web3ReactProvider } from '@web3-react/core';
-import { Web3Provider } from '@ethersproject/providers';
-import account from './state/slices/account';
-import application from './state/slices/application';
-import logs from './state/slices/logs';
-import auction, {
+import { Web3Provider, WebSocketProvider } from '@ethersproject/providers';
+import {
+  appendBid,
   reduxSafeAuction,
-  reduxSafeNewAuction,
   reduxSafeBid,
+  reduxSafeNewAuction,
   setActiveAuction,
   setAuctionExtended,
   setAuctionSettled,
   setFullAuction,
 } from './state/slices/auction';
-import onDisplayAuction, {
-  setLastAuctionNounId,
-  setOnDisplayAuctionNounId,
-} from './state/slices/onDisplayAuction';
+import { setLastAuctionNounId, setOnDisplayAuctionNounId } from './state/slices/onDisplayAuction';
 import { ApolloProvider, useQuery } from '@apollo/client';
 import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
-import { useEffect } from 'react';
-import pastAuctions, { addPastAuctions } from './state/slices/pastAuctions';
+import { addPastAuctions } from './state/slices/pastAuctions';
 import LogsUpdater from './state/updaters/logs';
 import config, { CHAIN_ID, createNetworkHttpUrl } from './config';
-import { WebSocketProvider } from '@ethersproject/providers';
 import { BigNumber, BigNumberish } from 'ethers';
 import { NounsAuctionHouseFactory } from '@nouns/sdk';
 import dotenv from 'dotenv';
 import { useAppDispatch, useAppSelector } from './hooks';
-import { appendBid } from './state/slices/auction';
-import { ConnectedRouter, connectRouter } from 'connected-react-router';
-import { createBrowserHistory, History } from 'history';
-import { applyMiddleware, createStore, combineReducers, PreloadedState } from 'redux';
-import { routerMiddleware } from 'connected-react-router';
+import { ConnectedRouter, push } from 'connected-react-router';
 import { Provider } from 'react-redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
 import { nounPath } from './utils/history';
-import { push } from 'connected-react-router';
+import configureStore, { history } from './store';
 
 dotenv.config();
-
-export const history = createBrowserHistory();
-
-const createRootReducer = (history: History) =>
-  combineReducers({
-    router: connectRouter(history),
-    account,
-    application,
-    auction,
-    logs,
-    pastAuctions,
-    onDisplayAuction,
-  });
-
-export default function configureStore(preloadedState: PreloadedState<any>) {
-  const store = createStore(
-    createRootReducer(history), // root reducer with router state
-    preloadedState,
-    composeWithDevTools(
-      applyMiddleware(
-        routerMiddleware(history), // for dispatching history actions
-        // ... other middlewares ...
-      ),
-    ),
-  );
-
-  return store;
-}
 
 const store = configureStore({});
 

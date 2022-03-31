@@ -82,5 +82,13 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(css|less|sass|scss)$": "identity-obj-proxy"
+    },
+    "transformIgnorePatterns": [
+      "../../node_modules/(?!(react-markdown|remark-breaks)/)"
+    ]
   }
 }
