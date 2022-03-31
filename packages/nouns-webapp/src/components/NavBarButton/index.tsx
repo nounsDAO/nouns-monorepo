@@ -17,6 +17,12 @@ interface NavBarButtonProps {
   buttonStyle?: NavBarButtonStyle;
 }
 
+interface NavBarComponentButtonProps {
+  children: React.ReactNode;
+  buttonIcon?: React.ReactNode;
+  buttonStyle?: NavBarButtonStyle;
+}
+
 export const getNavBarButtonVariant = (buttonStyle?: NavBarButtonStyle) => {
   switch (buttonStyle) {
     case NavBarButtonStyle.COOL_INFO: {
@@ -58,6 +64,21 @@ const NavBarButton: React.FC<NavBarButtonProps> = props => {
         <div className={classes.button}>
           {buttonIcon && <div className={classes.icon}>{buttonIcon}</div>}
           <div>{buttonText}</div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export const NavBarComponentButton: React.FC<NavBarComponentButtonProps> = props => {
+  const { children, buttonIcon, buttonStyle } = props;
+
+  return (
+    <>
+      <div className={`${classes.wrapper} ${getNavBarButtonVariant(buttonStyle)}`}>
+        <div className={classes.button}>
+          {buttonIcon && <div className={classes.icon}>{buttonIcon}</div>}
+          <div>{children}</div>
         </div>
       </div>
     </>

@@ -42,6 +42,9 @@ import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { nounPath } from './utils/history';
 import { push } from 'connected-react-router';
+import { i18n } from '@lingui/core';
+import { I18nProvider } from '@lingui/react';
+import { messages } from './locales/en/messages';
 
 dotenv.config();
 
@@ -189,6 +192,9 @@ const PastAuctions: React.FC = () => {
   return <></>;
 };
 
+i18n.load('en', messages);
+i18n.activate('en');
+
 ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
@@ -202,7 +208,9 @@ ReactDOM.render(
           <ApolloProvider client={client}>
             <PastAuctions />
             <DAppProvider config={useDappConfig}>
-              <App />
+              <I18nProvider i18n={i18n}>
+                <App />
+              </I18nProvider>
               <Updaters />
             </DAppProvider>
           </ApolloProvider>

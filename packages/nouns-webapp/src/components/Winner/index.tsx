@@ -5,6 +5,7 @@ import ShortAddress from '../ShortAddress';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { isMobileScreen } from '../../utils/isMobile';
+import { Trans } from '@lingui/macro';
 
 interface WinnerProps {
   winner: string;
@@ -30,13 +31,15 @@ const Winner: React.FC<WinnerProps> = props => {
             color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
           }}
         >
-          You
+          <Trans>You</Trans>
         </h2>
       </Col>
       {!isMobile && (
         <Col>
           <Link to="/verify" className={classes.verifyLink}>
-            <Button className={classes.verifyButton}>Get Verified</Button>
+            <Button className={classes.verifyButton}>
+              <Trans>Get Verified</Trans>
+            </Button>
           </Link>
         </Col>
       )}
@@ -56,7 +59,7 @@ const Winner: React.FC<WinnerProps> = props => {
               color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)',
             }}
           >
-            Winner
+            <Trans>Winner</Trans>
           </h4>
         </Col>
         <Col xs="auto" lg={12}>
@@ -73,7 +76,9 @@ const Winner: React.FC<WinnerProps> = props => {
       {isWinnerYou && isMobile && (
         <Row>
           <Link to="/verify" className={classes.verifyLink}>
-            <Button className={classes.verifyButton}>Get Verified</Button>
+            <Button className={classes.verifyButton}>
+              <Trans>Get Verified</Trans>
+            </Button>
           </Link>
         </Row>
       )}

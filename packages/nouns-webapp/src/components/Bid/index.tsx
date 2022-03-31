@@ -13,6 +13,7 @@ import { NounsAuctionHouseFactory } from '@nouns/sdk';
 import config from '../../config';
 import WalletConnectModal from '../WalletConnectModal';
 import SettleManuallyBtn from '../SettleManuallyBtn';
+import { Trans } from '@lingui/macro';
 
 const computeMinimumNextBid = (
   currentBid: BigNumber,
@@ -60,7 +61,7 @@ const Bid: React.FC<{
   const [bidInput, setBidInput] = useState('');
   const [bidButtonContent, setBidButtonContent] = useState({
     loading: false,
-    content: auctionEnded ? 'Settle' : 'Place bid',
+    content: auctionEnded ? <Trans>Settle</Trans> : <Trans>Place bid</Trans>,
   });
 
   const [showConnectModal, setShowConnectModal] = useState(false);
@@ -151,7 +152,7 @@ const Bid: React.FC<{
         message: `Bid was placed successfully!`,
         show: true,
       });
-      setBidButtonContent({ loading: false, content: 'Place bid' });
+      setBidButtonContent({ loading: false, content: <Trans>Place bid</Trans> });
       clearBidInput();
     }
   }, [auction, placeBidState, account, setModal]);
@@ -162,11 +163,11 @@ const Bid: React.FC<{
       case 'None':
         setBidButtonContent({
           loading: false,
-          content: 'Place bid',
+          content: <Trans>Place bid</Trans>,
         });
         break;
       case 'Mining':
-        setBidButtonContent({ loading: true, content: '' });
+        setBidButtonContent({ loading: true, content: <></> });
         break;
       case 'Fail':
         setModal({
@@ -174,7 +175,7 @@ const Bid: React.FC<{
           message: placeBidState.errorMessage ? placeBidState.errorMessage : 'Please try again.',
           show: true,
         });
-        setBidButtonContent({ loading: false, content: 'Bid' });
+        setBidButtonContent({ loading: false, content: <Trans>Bid</Trans> });
         break;
       case 'Exception':
         setModal({
@@ -182,7 +183,7 @@ const Bid: React.FC<{
           message: placeBidState.errorMessage ? placeBidState.errorMessage : 'Please try again.',
           show: true,
         });
-        setBidButtonContent({ loading: false, content: 'Bid' });
+        setBidButtonContent({ loading: false, content: <Trans>Bid</Trans> });
         break;
     }
   }, [placeBidState, auctionEnded, setModal]);
@@ -193,11 +194,11 @@ const Bid: React.FC<{
       case 'None':
         setBidButtonContent({
           loading: false,
-          content: 'Settle Auction',
+          content: <Trans>Settle Auction</Trans>,
         });
         break;
       case 'Mining':
-        setBidButtonContent({ loading: true, content: '' });
+        setBidButtonContent({ loading: true, content: <></> });
         break;
       case 'Success':
         setModal({
@@ -205,7 +206,7 @@ const Bid: React.FC<{
           message: `Settled auction successfully!`,
           show: true,
         });
-        setBidButtonContent({ loading: false, content: 'Settle Auction' });
+        setBidButtonContent({ loading: false, content: <Trans>Settle Auction</Trans> });
         break;
       case 'Fail':
         setModal({
@@ -215,7 +216,7 @@ const Bid: React.FC<{
             : 'Please try again.',
           show: true,
         });
-        setBidButtonContent({ loading: false, content: 'Settle Auction' });
+        setBidButtonContent({ loading: false, content: <Trans>Settle Auction</Trans> });
         break;
       case 'Exception':
         setModal({
@@ -225,7 +226,7 @@ const Bid: React.FC<{
             : 'Please try again.',
           show: true,
         });
-        setBidButtonContent({ loading: false, content: 'Settle Auction' });
+        setBidButtonContent({ loading: false, content: <Trans>Settle Auction</Trans> });
         break;
     }
   }, [settleAuctionState, auctionEnded, setModal]);
@@ -276,7 +277,7 @@ const Bid: React.FC<{
           <>
             <Col lg={12} className={classes.voteForNextNounBtnWrapper}>
               <Button className={classes.bidBtnAuctionEnded} onClick={fomoNounsBtnOnClickHandler}>
-                Vote for the next Noun ⌐◧-◧
+                <Trans>Vote for the next Noun ⌐◧-◧</Trans>
               </Button>
             </Col>
             {/* Only show force settle button if wallet connected */}

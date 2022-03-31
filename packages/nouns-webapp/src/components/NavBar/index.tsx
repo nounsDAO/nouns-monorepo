@@ -11,7 +11,7 @@ import { utils } from 'ethers';
 import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
 import { ExternalURL, externalURL } from '../../utils/externalURL';
 import useLidoBalance from '../../hooks/useLidoBalance';
-import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
+import { NavBarButtonStyle, NavBarComponentButton } from '../NavBarButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookOpen } from '@fortawesome/free-solid-svg-icons';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
@@ -19,6 +19,7 @@ import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import NavBarTreasury from '../NavBarTreasury';
 import NavWallet from '../NavWallet';
+import { Trans } from '@lingui/macro';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
@@ -78,8 +79,8 @@ const NavBar = () => {
           <Navbar.Toggle className={classes.navBarToggle} aria-controls="basic-navbar-nav" />
           <Navbar.Collapse className="justify-content-end">
             <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink}>
-              <NavBarButton
-                buttonText={'DAO'}
+              <NavBarComponentButton
+                children={<Trans>DAO</Trans>}
                 buttonIcon={<FontAwesomeIcon icon={faUsers} />}
                 buttonStyle={nonWalletButtonStyle}
               />
@@ -90,8 +91,8 @@ const NavBar = () => {
               target="_blank"
               rel="noreferrer"
             >
-              <NavBarButton
-                buttonText={'Docs'}
+              <NavBarComponentButton
+                children={<Trans>Docs</Trans>}
                 buttonIcon={<FontAwesomeIcon icon={faBookOpen} />}
                 buttonStyle={nonWalletButtonStyle}
               />
@@ -102,15 +103,15 @@ const NavBar = () => {
               target="_blank"
               rel="noreferrer"
             >
-              <NavBarButton
-                buttonText={'Discourse'}
+              <NavBarComponentButton
+                children={<Trans>Discourse</Trans>}
                 buttonIcon={<FontAwesomeIcon icon={faComments} />}
                 buttonStyle={nonWalletButtonStyle}
               />
             </Nav.Link>
             <Nav.Link as={Link} to="/playground" className={classes.nounsNavLink}>
-              <NavBarButton
-                buttonText={'Playground'}
+              <NavBarComponentButton
+                children={<Trans>Playground</Trans>}
                 buttonIcon={<FontAwesomeIcon icon={faPlay} />}
                 buttonStyle={nonWalletButtonStyle}
               />

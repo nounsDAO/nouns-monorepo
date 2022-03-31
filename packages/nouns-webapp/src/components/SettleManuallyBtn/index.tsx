@@ -4,6 +4,7 @@ import classes from './SettleManuallyBtn.module.css';
 import dayjs from 'dayjs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { Trans } from '@lingui/macro';
 
 const SettleManuallyBtn: React.FC<{
   settleAuctionHandler: () => void;
@@ -43,6 +44,7 @@ const SettleManuallyBtn: React.FC<{
   }, [auction, auctionTimer]);
 
   const mins = timerDuration.minutes();
+  // TODO need to do your plural stuff
   const minsContent = () => `${mins + 1} minute${mins !== 0 ? 's' : ''}`;
 
   return (
@@ -53,12 +55,12 @@ const SettleManuallyBtn: React.FC<{
         disabled={!settleEnabled}
       >
         {settleEnabled ? (
-          <>{` Settle manually`}</>
+          <Trans>{`Settle manually`}</Trans>
         ) : (
-          <>
+          <Trans>
             <FontAwesomeIcon icon={faInfoCircle} />
             {` You can settle manually in ${minsContent()}`}
-          </>
+          </Trans>
         )}
       </button>
     </p>
