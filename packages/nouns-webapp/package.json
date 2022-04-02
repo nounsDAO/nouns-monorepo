@@ -2,7 +2,6 @@
   "name": "@nouns/webapp",
   "version": "0.1.0",
   "private": true,
-  "homepage": "./",
   "dependencies": {
     "@apollo/client": "^3.3.21",
     "@davatar/react": "^1.8.1",

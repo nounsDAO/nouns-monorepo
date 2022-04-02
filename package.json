@@ -1,7 +1,6 @@
 {
   "name": "root",
   "private": true,
-  "homepage": "./",
   "scripts": {
     "lerna": "lerna",
     "build": "lerna run build",
