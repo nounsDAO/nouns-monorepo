@@ -3,6 +3,6 @@
    "image": "node:16",
    "command": "yarn && yarn workspace @nouns/webapp build",
    "publicDir": "public",
-   "baseDir": "./"
+   "baseDir": "package.json"
  }
 }
