@@ -4,5 +4,5 @@
    "command": "yarn && yarn workspace @nouns/webapp build",
    "publicDir": "public",
    "baseDir": "build"
- }n
+ }
 }
