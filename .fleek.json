@@ -1,6 +1,6 @@
 {
  "build": {
-   "image": "node:slim",
+   "image": "create-react-app:node-16",
    "command": "yarn && yarn workspace @nouns/webapp build",
    "publicDir": "public",
    "baseDir": "/packages/nouns-webapp"
