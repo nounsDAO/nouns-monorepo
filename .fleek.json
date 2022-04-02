@@ -2,7 +2,7 @@
  "build": {
    "image": "node:slim",
    "command": "yarn && yarn workspace @nouns/webapp build",
-   "publicDir": "build",
+   "publicDir": "public",
    "baseDir": "/packages/nouns-webapp"
  
  }
