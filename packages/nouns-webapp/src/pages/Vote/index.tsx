@@ -195,7 +195,7 @@ const VotePage = ({
   } = useQuery<DelegatesNouns>(
     delegateNounsAtBlockQuery(voterIds ?? [], proposal?.createdBlock ?? 0),
     {
-      skip: !voters,
+      skip: !voters?.votes?.length,
     },
   );
   const loading = votesLoading || delegatesLoading;
