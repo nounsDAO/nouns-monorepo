@@ -30,17 +30,21 @@ const NounImageVoteTable: React.FC<NounImageVoteTableProps> = props => {
     return Array(rows)
       .fill(0)
       .map((_, i) => (
-        <tr>
+        <tr key={i}>
           {Array(rowLength)
             .fill(0)
             .map((_, j) => (
-              <td>{paddedNounIds[i * rowLength + j]}</td>
+              <td key={j}>{paddedNounIds[i * rowLength + j]}</td>
             ))}
         </tr>
       ));
   };
 
-  return <table className={classes.wrapper}>{content()}</table>;
+  return (
+    <table className={classes.wrapper}>
+      <tbody>{content()}</tbody>
+    </table>
+  );
 };
 
 export default NounImageVoteTable;
