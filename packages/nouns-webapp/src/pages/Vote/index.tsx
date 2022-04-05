@@ -27,7 +27,7 @@ import {
   proposalVotesQuery,
   delegateNounsAtBlockQuery,
   ProposalVotes,
-  DelegatesNouns,
+  Delegates,
 } from '../../wrappers/subgraph';
 import { getNounVotes } from '../../utils/getNounsVotes';
 
@@ -192,12 +192,9 @@ const VotePage = ({
     loading: delegatesLoading,
     error: delegatesError,
     data: delegateSnapshot,
-  } = useQuery<DelegatesNouns>(
-    delegateNounsAtBlockQuery(voterIds ?? [], proposal?.createdBlock ?? 0),
-    {
-      skip: !voters?.votes?.length,
-    },
-  );
+  } = useQuery<Delegates>(delegateNounsAtBlockQuery(voterIds ?? [], proposal?.createdBlock ?? 0), {
+    skip: !voters?.votes?.length,
+  });
   const loading = votesLoading || delegatesLoading;
   const error = votesError || delegatesError;
 

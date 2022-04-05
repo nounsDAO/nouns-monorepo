@@ -30,15 +30,15 @@ export interface ProposalVotes {
   votes: ProposalVote[];
 }
 
-export interface DelegateNouns {
+export interface Delegate {
   id: string;
   nounsRepresented: {
     id: string;
   }[];
 }
 
-export interface DelegatesNouns {
-  delegates: DelegateNouns[];
+export interface Delegates {
+  delegates: Delegate[];
 }
 
 export const auctionQuery = (auctionId: number) => gql`
