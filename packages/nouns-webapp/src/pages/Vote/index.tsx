@@ -23,9 +23,13 @@ import ProposalHeader from '../../components/ProposalHeader';
 import ProposalContent from '../../components/ProposalContent';
 import VoteCard, { VoteCardVariant } from '../../components/VoteCard';
 import { useQuery } from '@apollo/client';
-import { nounVotesForProposalQuery } from '../../wrappers/subgraph';
+import {
+  proposalVotesQuery,
+  delegateNounsAtBlockQuery,
+  ProposalVotes,
+  Delegates,
+} from '../../wrappers/subgraph';
 import { getNounVotes } from '../../utils/getNounsVotes';
-
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -177,9 +181,33 @@ const VotePage = ({
   );
 
   const activeAccount = useAppSelector(state => state.account.activeAccount);
-  const { loading, error, data } = useQuery(
-    nounVotesForProposalQuery(proposal && proposal.id ? proposal?.id : '0'),
-  );
+  const {
+    loading: votesLoading,
+    error: votesError,
+    data: voters,
+  } = useQuery<ProposalVotes>(proposalVotesQuery(proposal?.id ?? '0'));
+
+  const voterIds = voters?.votes?.map(v => v.voter.id);
+  const {
+    loading: delegatesLoading,
+    error: delegatesError,
+    data: delegateSnapshot,
+  } = useQuery<Delegates>(delegateNounsAtBlockQuery(voterIds ?? [], proposal?.createdBlock ?? 0), {
+    skip: !voters?.votes?.length,
+  });
+  const loading = votesLoading || delegatesLoading;
+  const error = votesError || delegatesError;
+
+  const { delegates } = delegateSnapshot || {};
+  const delegateToNounIds = delegates?.reduce<Record<string, string[]>>((acc, curr) => {
+    acc[curr.id] = curr?.nounsRepresented?.map(nr => nr.id) ?? [];
+    return acc;
+  }, {});
+
+  const data = voters?.votes?.map(v => ({
+    supportDetailed: v.supportDetailed,
+    nounsRepresented: delegateToNounIds?.[v.voter.id] ?? [],
+  }));
 
   const [showToast, setShowToast] = useState(true);
   useEffect(() => {
@@ -190,7 +218,7 @@ const VotePage = ({
     }
   }, [showToast]);
 
-  if (!proposal || loading || !data || data.proposals.length === 0) {
+  if (!proposal || loading || !data) {
     return (
       <div className={classes.spinner}>
         <Spinner animation="border" />

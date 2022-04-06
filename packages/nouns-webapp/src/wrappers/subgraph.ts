@@ -19,6 +19,28 @@ export interface IBid {
   };
 }
 
+interface ProposalVote {
+  supportDetailed: 0 | 1 | 2;
+  voter: {
+    id: string;
+  };
+}
+
+export interface ProposalVotes {
+  votes: ProposalVote[];
+}
+
+export interface Delegate {
+  id: string;
+  nounsRepresented: {
+    id: string;
+  }[];
+}
+
+export interface Delegates {
+  delegates: Delegate[];
+}
+
 export const auctionQuery = (auctionId: number) => gql`
 {
 	auction(id: ${auctionId}) {
@@ -181,16 +203,25 @@ export const createTimestampAllProposals = () => gql`
   }
 `;
 
-export const nounVotesForProposalQuery = (proposalId: string) => gql`
-{
-	proposals(where: {id: ${proposalId}}) {
-    votes {
+export const proposalVotesQuery = (proposalId: string) => gql`
+  {
+    votes(where: { proposal: "${proposalId}", votesRaw_gt: 0 }) {
       supportDetailed
-      nouns {
+      voter {
         id
       }
+    }	
+  }
+`;
+
+export const delegateNounsAtBlockQuery = (delegates: string[], block: number) => gql`
+{
+  delegates(where: { id_in: ${JSON.stringify(delegates)} }, block: { number: ${block} }) {
+    id
+    nounsRepresented {
+      id
     }
-  }	
+  }
 }
 `;
 
