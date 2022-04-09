@@ -47,7 +47,7 @@
 }
 
 .modal .title h1 {
-  line-height: 0px;
+  line-height: 25px;
   height: 2rem;
   font-size: 42px;
 }
@@ -59,7 +59,6 @@
   border-radius: 16px;
   margin-top: 1rem;
 
-  /* This will change on mobile */
   height: 35vh;
   padding: 0.75rem;
 }
@@ -145,7 +144,6 @@
 
 @media (max-width: 992px) {
   .modal {
-    /* top: auto; */
     left: 0;
     bottom: 0;
     width: 100%;
@@ -179,9 +177,6 @@
 
   .modal .header h1 {
     color: white;
+    line-height: 0px;
   }
-
-  /* .closeBtn {
-    left: 85%;
-  } */
 }
