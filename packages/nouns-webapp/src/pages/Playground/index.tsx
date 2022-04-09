@@ -56,7 +56,7 @@ const nounsSDKLink = (
 
 const DEFAULT_TRAIT_TYPE = 'heads';
 
-const encoder = new PNGCollectionEncoder();
+const encoder = new PNGCollectionEncoder(ImageData.palette);
 
 const traitKeyToTitle: Record<string, string> = {
   heads: 'head',
