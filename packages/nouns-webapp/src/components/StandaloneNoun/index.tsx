@@ -86,6 +86,33 @@ export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
   );
 };
 
+export const StandaloneNounRoundedCorners: React.FC<StandaloneNounProps> = (
+  props: StandaloneNounProps,
+) => {
+  const { nounId } = props;
+  const seed = useNounSeed(nounId);
+  const noun = seed && getNoun(nounId, seed);
+
+  const dispatch = useDispatch();
+  const onClickHandler = () => {
+    dispatch(setOnDisplayAuctionNounId(nounId.toNumber()));
+  };
+
+  return (
+    <Link
+      to={'/noun/' + nounId.toString()}
+      className={classes.clickableNoun}
+      onClick={onClickHandler}
+    >
+      <Noun
+        imgPath={noun ? noun.image : ''}
+        alt={noun ? noun.description : 'Noun'}
+        className={nounClasses.rounded}
+      />
+    </Link>
+  );
+};
+
 export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = (
   props: StandaloneNounWithSeedProps,
 ) => {
