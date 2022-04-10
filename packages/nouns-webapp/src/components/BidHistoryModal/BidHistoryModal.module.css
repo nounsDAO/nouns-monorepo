@@ -12,7 +12,7 @@
 .content {
   padding: 1rem;
   max-height: 50vh;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 .modal {
