@@ -41,11 +41,13 @@ const BidHistoryModalOverlay: React.FC<{
             </div>
           </div>
           <div className={classes.bidWrapper}>
-            <ul>
+            {bids && bids.length > 0 ? (<ul>
               {bids?.map((bid: Bid, i: number) => {
                 return <BidHistoryModalRow index={i} bid={bid} />;
               })}
-            </ul>
+            </ul>) : (
+              <div className={classes.nullStateText}>Bids will appear here</div>
+            )}
           </div>
         </div>
       </div>
