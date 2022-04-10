@@ -1,6 +1,5 @@
 {
   "name": "root",
-  "homepage": ".",
   "private": true,
   "scripts": {
     "lerna": "lerna",
