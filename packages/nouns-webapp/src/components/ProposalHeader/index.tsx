@@ -26,6 +26,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const hasVoted = useHasVotedOnProposal(proposal?.id);
   const proposalVote = useProposalVote(proposal?.id);
   const proposalCreationTimestamp = useBlockTimestamp(proposal?.createdBlock);
+  const disableVoteButton = !isWalletConnected || !connectedAccountNounVotes || hasVoted;
 
   const voteButton = (
     <>
@@ -39,12 +40,8 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
         <div className={classes.connectWalletText}>Connect a wallet to vote.</div>
       )}
       <Button
-        className={
-          isWalletConnected && connectedAccountNounVotes > 0 && !hasVoted
-            ? classes.submitBtn
-            : classes.submitBtnDisabled
-        }
-        disabled={!isWalletConnected || !connectedAccountNounVotes || hasVoted}
+        className={disableVoteButton ? classes.submitBtnDisabled : classes.submitBtn}
+        disabled={disableVoteButton}
         onClick={submitButtonClickHandler}
       >
         Submit vote
