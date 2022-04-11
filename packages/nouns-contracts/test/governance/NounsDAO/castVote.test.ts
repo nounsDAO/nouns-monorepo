@@ -19,9 +19,9 @@ import { mineBlock, address, encodeParameters } from '../../utils';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
-  NounsDescriptorFactory,
+  NounsDescriptor__factory as NounsDescriptorFactory,
   NounsDaoLogicV1Harness,
-  NounsDaoLogicV1HarnessFactory,
+  NounsDaoLogicV1Harness__factory as NounsDaoLogicV1HarnessFactory,
 } from '../../../typechain';
 
 chai.use(solidity);

@@ -1,0 +1,62 @@
+.voteCardHeaderText {
+  font-size: 24px;
+  font-family: 'Londrina Solid';
+}
+
+.voteCardVoteCount {
+  font-size: 22px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  margin-top: 0.15rem;
+}
+
+.for {
+  color: var(--brand-color-green);
+}
+
+.against {
+  color: var(--brand-color-red);
+}
+
+.abstain {
+  color: var(--brand-gray-light-text);
+}
+
+.voteCountCard {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  border-radius: 12px;
+  background-color: #f4f4f8;
+  min-height: 18rem;
+}
+
+.voteCountCard p {
+  display: flex;
+  justify-content: space-between;
+}
+
+.nounProfilePics {
+  margin-top: 1.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+@media (max-width: 992px) {
+  .voteCountCard {
+    min-height: 0rem;
+  }
+
+  .voteCardVoteCount {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .wrapper {
+    width: 33%;
+  }
+
+  .voteCardHeaderText {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

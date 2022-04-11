@@ -1,31 +1,35 @@
-import { Row, Col, Alert, Button, Card, ProgressBar, Spinner } from 'react-bootstrap';
+import { Row, Col, Button, Card, Spinner } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import {
   ProposalState,
-  useCastVote,
   useExecuteProposal,
-  useHasVotedOnProposal,
   useProposal,
   useQueueProposal,
-  Vote,
 } from '../../wrappers/nounsDao';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Vote.module.css';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import { TransactionStatus, useBlockNumber } from '@usedapp/core';
-import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../utils/etherscan';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
-import ProposalStatus from '../../components/ProposalStatus';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
 import VoteModal from '../../components/VoteModal';
-import { useCallback, useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkBreaks from 'remark-breaks';
-import { utils } from 'ethers';
-import { useAppDispatch } from '../../hooks';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import clsx from 'clsx';
+import ProposalHeader from '../../components/ProposalHeader';
+import ProposalContent from '../../components/ProposalContent';
+import VoteCard, { VoteCardVariant } from '../../components/VoteCard';
+import { useQuery } from '@apollo/client';
+import {
+  proposalVotesQuery,
+  delegateNounsAtBlockQuery,
+  ProposalVotes,
+  Delegates,
+} from '../../wrappers/subgraph';
+import { getNounVotes } from '../../utils/getNounsVotes';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -40,10 +44,7 @@ const VotePage = ({
 }: RouteComponentProps<{ id: string }>) => {
   const proposal = useProposal(id);
 
-  const [vote, setVote] = useState<Vote>();
-
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
-  const [isVotePending, setVotePending] = useState<boolean>(false);
 
   const [isQueuePending, setQueuePending] = useState<boolean>(false);
   const [isExecutePending, setExecutePending] = useState<boolean>(false);
@@ -51,7 +52,6 @@ const VotePage = ({
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
 
-  const { castVote, castVoteState } = useCastVote();
   const { queueProposal, queueProposalState } = useQueueProposal();
   const { executeProposal, executeProposalState } = useExecuteProposal();
 
@@ -86,38 +86,6 @@ const VotePage = ({
   // Only count available votes as of the proposal created block
   const availableVotes = useUserVotesAsOfBlock(proposal?.createdBlock ?? undefined);
 
-  const hasVoted = useHasVotedOnProposal(proposal?.id);
-
-  // Only show voting if user has > 0 votes at proposal created block and proposal is active
-  const showVotingButtons =
-    availableVotes && !hasVoted && proposal?.status === ProposalState.ACTIVE;
-
-  const linkIfAddress = (content: string) => {
-    if (utils.isAddress(content)) {
-      return (
-        <a href={buildEtherscanAddressLink(content)} target="_blank" rel="noreferrer">
-          {content}
-        </a>
-      );
-    }
-    return <span>{content}</span>;
-  };
-
-  const transactionLink = (content: string) => {
-    return (
-      <a href={buildEtherscanTxLink(content)} target="_blank" rel="noreferrer">
-        {content.substring(0, 7)}
-      </a>
-    );
-  };
-
-  const getVoteErrorMessage = (error: string | undefined) => {
-    if (error?.match(/voter already voted/)) {
-      return 'User Already Voted';
-    }
-    return error;
-  };
-
   const hasSucceeded = proposal?.status === ProposalState.SUCCEEDED;
   const isAwaitingStateChange = () => {
     if (hasSucceeded) {
@@ -129,8 +97,23 @@ const VotePage = ({
     return false;
   };
 
-  const { forCount = 0, againstCount = 0, quorumVotes = 0 } = proposal || {};
-  const quorumReached = forCount > againstCount && forCount >= quorumVotes;
+  const startOrEndTimeCopy = () => {
+    if (startDate?.isBefore(now) && endDate?.isAfter(now)) {
+      return 'Ends';
+    } else if (endDate?.isBefore(now)) {
+      return 'Ended';
+    } else {
+      return 'Starts';
+    }
+  };
+
+  const startOrEndTimeTime = () => {
+    if (!startDate?.isBefore(now)) {
+      return startDate;
+    } else {
+      return endDate;
+    }
+  };
 
   const moveStateButtonAction = hasSucceeded ? 'Queue' : 'Execute';
   const moveStateAction = (() => {
@@ -188,18 +171,6 @@ const VotePage = ({
   );
 
   useEffect(
-    () =>
-      onTransactionStateChange(
-        castVoteState,
-        'Vote Successful!',
-        setVotePending,
-        getVoteErrorMessage,
-        () => setShowVoteModal(false),
-      ),
-    [castVoteState, onTransactionStateChange, setModal],
-  );
-
-  useEffect(
     () => onTransactionStateChange(queueProposalState, 'Proposal Queued!', setQueuePending),
     [queueProposalState, onTransactionStateChange, setModal],
   );
@@ -209,196 +180,171 @@ const VotePage = ({
     [executeProposalState, onTransactionStateChange, setModal],
   );
 
+  const activeAccount = useAppSelector(state => state.account.activeAccount);
+  const {
+    loading: votesLoading,
+    error: votesError,
+    data: voters,
+  } = useQuery<ProposalVotes>(proposalVotesQuery(proposal?.id ?? '0'));
+
+  const voterIds = voters?.votes?.map(v => v.voter.id);
+  const {
+    loading: delegatesLoading,
+    error: delegatesError,
+    data: delegateSnapshot,
+  } = useQuery<Delegates>(delegateNounsAtBlockQuery(voterIds ?? [], proposal?.createdBlock ?? 0), {
+    skip: !voters?.votes?.length,
+  });
+  const loading = votesLoading || delegatesLoading;
+  const error = votesError || delegatesError;
+
+  const { delegates } = delegateSnapshot || {};
+  const delegateToNounIds = delegates?.reduce<Record<string, string[]>>((acc, curr) => {
+    acc[curr.id] = curr?.nounsRepresented?.map(nr => nr.id) ?? [];
+    return acc;
+  }, {});
+
+  const data = voters?.votes?.map(v => ({
+    supportDetailed: v.supportDetailed,
+    nounsRepresented: delegateToNounIds?.[v.voter.id] ?? [],
+  }));
+
+  const [showToast, setShowToast] = useState(true);
+  useEffect(() => {
+    if (showToast) {
+      setTimeout(() => {
+        setShowToast(false);
+      }, 5000);
+    }
+  }, [showToast]);
+
+  if (!proposal || loading || !data) {
+    return (
+      <div className={classes.spinner}>
+        <Spinner animation="border" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return <>Failed to fetch</>;
+  }
+
+  const isWalletConnected = !(activeAccount === undefined);
+  const isActiveForVoting = startDate?.isBefore(now) && endDate?.isAfter(now);
+
+  const forNouns = getNounVotes(data, 1);
+  const againstNouns = getNounVotes(data, 0);
+  const abstainNouns = getNounVotes(data, 2);
+
   return (
     <Section fullWidth={false} className={classes.votePage}>
       <VoteModal
         show={showVoteModal}
         onHide={() => setShowVoteModal(false)}
-        onVote={() => castVote(proposal?.id, vote)}
-        isLoading={isVotePending}
         proposalId={proposal?.id}
-        availableVotes={availableVotes}
-        vote={vote}
+        availableVotes={availableVotes || 0}
       />
-      <Col lg={{ span: 8, offset: 2 }}>
-        <Link to="/vote">← All Proposals</Link>
+      <Col lg={10} className={classes.wrapper}>
+        {proposal && (
+          <ProposalHeader
+            proposal={proposal}
+            isActiveForVoting={isActiveForVoting}
+            isWalletConnected={isWalletConnected}
+            submitButtonClickHandler={() => setShowVoteModal(true)}
+          />
+        )}
       </Col>
-      <Col lg={{ span: 8, offset: 2 }} className={classes.proposal}>
-        <div className="d-flex justify-content-between align-items-center">
-          <h3 className={classes.proposalId}>Proposal {proposal?.id}</h3>
-          <ProposalStatus status={proposal?.status}></ProposalStatus>
-        </div>
-        <div>
-          {startDate && startDate.isBefore(now) ? null : proposal ? (
-            <span>Voting starts approximately {startDate?.format('MMMM D, YYYY h:mm A z')}</span>
-          ) : (
-            ''
-          )}
-        </div>
-        <div>
-          {endDate && endDate.isBefore(now) ? (
-            <>
-              <div>Voting ended {endDate.format('MMMM D, YYYY h:mm A z')}</div>
-              <div>
-                This proposal has {quorumReached ? 'reached' : 'failed to reach'} quorum{' '}
-                {proposal?.quorumVotes !== undefined && `(${proposal.quorumVotes} votes)`}
-              </div>
-            </>
-          ) : proposal ? (
-            <>
-              <div>Voting ends approximately {endDate?.format('MMMM D, YYYY h:mm A z')}</div>
-              {proposal?.quorumVotes !== undefined && (
-                <div>A total of {proposal.quorumVotes} votes are required to reach quorum</div>
-              )}
-            </>
-          ) : (
-            ''
-          )}
-        </div>
-        {proposal && proposal.status === ProposalState.ACTIVE && !showVotingButtons && (
-          <Alert
-            variant={hasVoted ? 'success' : 'secondary'}
-            className={classes.voterIneligibleAlert}
-          >
-            {hasVoted
-              ? 'Thank you for your vote!'
-              : `Only NOUN votes that were self delegated or delegated to another address before block ${proposal.createdBlock} are eligible for voting.`}
-          </Alert>
-        )}
-        {showVotingButtons ? (
-          <Row>
-            <Col lg={4} className="d-grid gap-2">
-              <Button
-                className={classes.votingButton}
-                onClick={() => {
-                  setVote(Vote.FOR);
-                  setShowVoteModal(true);
-                }}
-              >
-                Vote For
-              </Button>
-            </Col>
-            <Col lg={4} className="d-grid gap-2">
-              <Button
-                className={classes.votingButton}
-                onClick={() => {
-                  setVote(Vote.AGAINST);
-                  setShowVoteModal(true);
-                }}
-              >
-                Vote Against
-              </Button>
-            </Col>
-            <Col lg={4} className="d-grid gap-2">
-              <Button
-                className={classes.votingButton}
-                onClick={() => {
-                  setVote(Vote.ABSTAIN);
-                  setShowVoteModal(true);
-                }}
-              >
-                Abstain
-              </Button>
-            </Col>
-          </Row>
-        ) : (
-          ''
-        )}
+      <Col lg={10} className={clsx(classes.proposal, classes.wrapper)}>
         {isAwaitingStateChange() && (
-          <Row className={classes.section}>
+          <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
             <Col className="d-grid">
               <Button
                 onClick={moveStateAction}
                 disabled={isQueuePending || isExecutePending}
                 variant="dark"
+                className={classes.transitionStateButton}
               >
                 {isQueuePending || isExecutePending ? (
                   <Spinner animation="border" />
                 ) : (
-                  `${moveStateButtonAction} Proposal`
+                  `${moveStateButtonAction} Proposal ⌐◧-◧`
                 )}
               </Button>
             </Col>
           </Row>
         )}
         <Row>
-          <Col lg={4}>
-            <Card className={classes.voteCountCard}>
+          <VoteCard
+            proposal={proposal}
+            percentage={forPercentage}
+            nounIds={forNouns}
+            variant={VoteCardVariant.FOR}
+          />
+          <VoteCard
+            proposal={proposal}
+            percentage={againstPercentage}
+            nounIds={againstNouns}
+            variant={VoteCardVariant.AGAINST}
+          />
+          <VoteCard
+            proposal={proposal}
+            percentage={abstainPercentage}
+            nounIds={abstainNouns}
+            variant={VoteCardVariant.ABSTAIN}
+          />
+        </Row>
+
+        {/* TODO abstract this into a component  */}
+        <Row>
+          <Col xl={4} lg={12}>
+            <Card className={classes.voteInfoCard}>
               <Card.Body className="p-2">
-                <Card.Text className="py-2 m-0">
-                  <span>For</span>
-                  <span>{proposal?.forCount}</span>
-                </Card.Text>
-                <ProgressBar variant="success" now={forPercentage} />
+                <Row className={classes.voteMetadataRow}>
+                  <Col className={classes.voteMetadataRowTitle}>
+                    <h1>Threshold</h1>
+                  </Col>
+                  <Col className={classes.thresholdInfo}>
+                    <span>Quorum</span>
+                    <h3>{proposal.quorumVotes} votes</h3>
+                  </Col>
+                </Row>
               </Card.Body>
             </Card>
           </Col>
-          <Col lg={4}>
-            <Card className={classes.voteCountCard}>
+          <Col xl={4} lg={12}>
+            <Card className={classes.voteInfoCard}>
               <Card.Body className="p-2">
-                <Card.Text className="py-2 m-0">
-                  <span>Against</span>
-                  <span>{proposal?.againstCount}</span>
-                </Card.Text>
-                <ProgressBar variant="danger" now={againstPercentage} />
+                <Row className={classes.voteMetadataRow}>
+                  <Col className={classes.voteMetadataRowTitle}>
+                    <h1>{startOrEndTimeCopy()}</h1>
+                  </Col>
+                  <Col className={classes.voteMetadataTime}>
+                    <span>{startOrEndTimeTime() && startOrEndTimeTime()?.format('h:mm A z')}</span>
+                    <h3>{startOrEndTimeTime() && startOrEndTimeTime()?.format('MMM D, YYYY')}</h3>
+                  </Col>
+                </Row>
               </Card.Body>
             </Card>
           </Col>
-          <Col lg={4}>
-            <Card className={classes.voteCountCard}>
+          <Col xl={4} lg={12}>
+            <Card className={classes.voteInfoCard}>
               <Card.Body className="p-2">
-                <Card.Text className="py-2 m-0">
-                  <span>Abstain</span>
-                  <span>{proposal?.abstainCount}</span>
-                </Card.Text>
-                <ProgressBar variant="info" now={abstainPercentage} />
+                <Row className={classes.voteMetadataRow}>
+                  <Col className={classes.voteMetadataRowTitle}>
+                    <h1>Snapshot</h1>
+                  </Col>
+                  <Col className={classes.snapshotBlock}>
+                    <span>Taken at block</span>
+                    <h3>{proposal.createdBlock}</h3>
+                  </Col>
+                </Row>
               </Card.Body>
             </Card>
           </Col>
         </Row>
-        <Row>
-          <Col className={classes.section}>
-            <h5>Description</h5>
-            {proposal?.description && (
-              <ReactMarkdown
-                className={classes.markdown}
-                children={proposal.description}
-                remarkPlugins={[remarkBreaks]}
-              />
-            )}
-          </Col>
-        </Row>
-        <Row>
-          <Col className={classes.section}>
-            <h5>Proposed Transactions</h5>
-            {proposal?.details?.map((d, i) => {
-              return (
-                <p key={i} className="m-0">
-                  {i + 1}: {linkIfAddress(d.target)}.{d.functionSig}(
-                  {d.callData.split(',').map((content, i) => {
-                    return (
-                      <span key={i}>
-                        {linkIfAddress(content)}
-                        {d.callData.split(',').length - 1 === i ? '' : ','}
-                      </span>
-                    );
-                  })}
-                  )
-                </p>
-              );
-            })}
-          </Col>
-        </Row>
-        <Row>
-          <Col className={classes.section}>
-            <h5>Proposer</h5>
-            {proposal?.proposer && proposal?.transactionHash && (
-              <>
-                {linkIfAddress(proposal.proposer)} at {transactionLink(proposal.transactionHash)}
-              </>
-            )}
-          </Col>
-        </Row>
+
+        <ProposalContent proposal={proposal} />
       </Col>
     </Section>
   );

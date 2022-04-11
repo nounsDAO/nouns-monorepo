@@ -19,6 +19,28 @@ export interface IBid {
   };
 }
 
+interface ProposalVote {
+  supportDetailed: 0 | 1 | 2;
+  voter: {
+    id: string;
+  };
+}
+
+export interface ProposalVotes {
+  votes: ProposalVote[];
+}
+
+export interface Delegate {
+  id: string;
+  nounsRepresented: {
+    id: string;
+  }[];
+}
+
+export interface Delegates {
+  delegates: Delegate[];
+}
+
 export const auctionQuery = (auctionId: number) => gql`
 {
 	auction(id: ${auctionId}) {
@@ -103,7 +125,7 @@ export const nounsIndex = () => gql`
 
 export const latestAuctionsQuery = () => gql`
   {
-    auctions(orderBy: startTime, orderDirection: desc) {
+    auctions(orderBy: startTime, orderDirection: desc, first: 1000) {
       id
       amount
       settled
@@ -166,17 +188,42 @@ export const nounVotingHistoryQuery = (nounId: number) => gql`
 			id
 		}
 		support
+		supportDetailed
 		}
 	}
 }
 `;
 
-export const highestNounIdMintedAtProposalTime = (proposalStartBlock: number) => gql`
+export const createTimestampAllProposals = () => gql`
+  {
+    proposals(orderBy: createdTimestamp, orderDirection: asc, first: 1000) {
+      id
+      createdTimestamp
+    }
+  }
+`;
+
+export const proposalVotesQuery = (proposalId: string) => gql`
+  {
+    votes(where: { proposal: "${proposalId}", votesRaw_gt: 0 }) {
+      supportDetailed
+      voter {
+        id
+      }
+    }	
+  }
+`;
+
+export const delegateNounsAtBlockQuery = (delegates: string[], block: number) => gql`
 {
-	auctions(orderBy: endTime orderDirection: desc first: 1 block: { number: ${proposalStartBlock} }) {
-		id
-	}
-}`;
+  delegates(where: { id_in: ${JSON.stringify(delegates)} }, block: { number: ${block} }) {
+    id
+    nounsRepresented {
+      id
+    }
+  }
+}
+`;
 
 export const clientFactory = (uri: string) =>
   new ApolloClient({

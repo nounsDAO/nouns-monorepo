@@ -44,6 +44,7 @@ interface ProposalCallResult {
 
 interface ProposalDetail {
   target: string;
+  value: string;
   functionSig: string;
   callData: string;
 }
@@ -105,6 +106,31 @@ export const useHasVotedOnProposal = (proposalId: string | undefined): boolean =
       args: [proposalId, account],
     }) || [];
   return receipt?.hasVoted ?? false;
+};
+
+export const useProposalVote = (proposalId: string | undefined): string => {
+  const { account } = useEthers();
+
+  // Fetch a voting receipt for the passed proposal id
+  const [receipt] =
+    useContractCall<[any]>({
+      abi,
+      address: nounsDaoContract.address,
+      method: 'getReceipt',
+      args: [proposalId, account],
+    }) || [];
+  const voteStatus = receipt?.support ?? -1;
+  if (voteStatus === 0) {
+    return 'Against';
+  }
+  if (voteStatus === 1) {
+    return 'For';
+  }
+  if (voteStatus === 2) {
+    return 'Abstain';
+  }
+
+  return '';
 };
 
 export const useProposalCount = (): number | undefined => {
@@ -169,7 +195,8 @@ const useFormattedProposalCreatedLogs = () => {
           return {
             target,
             functionSig: name,
-            callData: decoded.join(', '),
+            callData: decoded.join(),
+            value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH }` : '',
           };
         }),
       };
