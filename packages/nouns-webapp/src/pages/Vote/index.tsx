@@ -100,19 +100,18 @@ const VotePage = ({
   const startOrEndTimeCopy = () => {
     if (startDate?.isBefore(now) && endDate?.isAfter(now)) {
       return 'Ends';
-    } else if (endDate?.isBefore(now)) {
-      return 'Ended';
-    } else {
-      return 'Starts';
     }
+    if (endDate?.isBefore(now)) {
+      return 'Ended';
+    }
+    return 'Starts';
   };
 
   const startOrEndTimeTime = () => {
     if (!startDate?.isBefore(now)) {
       return startDate;
-    } else {
-      return endDate;
     }
+    return endDate;
   };
 
   const moveStateButtonAction = hasSucceeded ? 'Queue' : 'Execute';

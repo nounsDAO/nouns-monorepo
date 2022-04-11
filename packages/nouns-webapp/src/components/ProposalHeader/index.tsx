@@ -40,11 +40,11 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
       )}
       <Button
         className={
-          isWalletConnected && connectedAccountNounVotes > 0
+          isWalletConnected && connectedAccountNounVotes > 0 && !hasVoted
             ? classes.submitBtn
             : classes.submitBtnDisabled
         }
-        disabled={!isWalletConnected || !connectedAccountNounVotes}
+        disabled={!isWalletConnected || !connectedAccountNounVotes || hasVoted}
         onClick={submitButtonClickHandler}
       >
         Submit vote
