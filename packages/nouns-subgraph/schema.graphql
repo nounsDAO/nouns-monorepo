@@ -204,6 +204,9 @@ type Vote @entity {
   "Amount of votes in favour or against expressed as a BigInt normalized value for the Nouns ERC721 Token"
   votes: BigInt!
 
+  "The optional vote reason"
+  reason: String
+
   "Delegate that emitted the vote"
   voter: Delegate!
 

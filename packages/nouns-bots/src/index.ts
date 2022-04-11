@@ -77,7 +77,9 @@ async function processAuctionTick() {
   const secondsUntilAuctionEnds = endTime - currentTimestamp;
   if (secondsUntilAuctionEnds < 20 * 60 && cachedAuctionEndingSoon < lastAuctionId) {
     await updateAuctionEndingSoonCache(lastAuctionId);
-    await Promise.all(auctionLifecycleHandlers.map(h => h.handleAuctionEndingSoon(lastAuctionId)));
+    await Promise.all(
+      auctionLifecycleHandlers.map(h => h.handleAuctionEndingSoon?.(lastAuctionId)),
+    );
   }
 }
 
