@@ -20,6 +20,13 @@ interface BidHistoryModalRowProps {
   index: number;
 }
 
+const shortENS = (ens: string) => {
+  if (ens.length < 15 || window.innerWidth > 480) {
+    return ens;
+  }
+  return [ens.substr(0, 4), ens.substr(ens.length - 8, 8)].join('...');
+};
+
 const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = props => {
   const { bid, index } = props;
   const txLink = buildEtherscanTxLink(bid.transactionHash);
@@ -34,44 +41,33 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = props => {
   const shortAddress = useShortAddress(bid.sender);
 
   return (
-    <li
-      className={clsx(auctionActivityClasses.bidRowCool, classes.bidRow)}
-    >
+    <li className={clsx(auctionActivityClasses.bidRowCool, classes.bidRow)}>
       <div className={auctionActivityClasses.bidItem}>
         <div className={auctionActivityClasses.leftSectionWrapper}>
           <div className={auctionActivityClasses.bidder}>
-            <div
-            className={classes.bidderInfoWrapper}
-            >
+            <div className={classes.bidderInfoWrapper}>
               <Davatar size={40} address={bid.sender} provider={provider} />
-              <div
-                className={classes.bidderInfoText}
-              >
+              <div className={classes.bidderInfoText}>
                 <span>
-                  {ens ? ens : shortAddress}
+                  {ens ? shortENS(ens) : shortAddress}
+                  {index === 0 && (
+                    <img src={_trophy} alt="Winning bidder" className={classes.trophy} />
+                  )}
                   <br />
-                  <div
-                    className={classes.bidDate}
-                  >
-                    {date}
-                  </div>
+                  <div className={classes.bidDate}>{date}</div>
                 </span>
               </div>
-
-              {index === 0 && (
-                <div className={classes.trophy}>
-                  <img src={_trophy} alt="Winning bidder" />
-                </div>
-              )}
             </div>
           </div>
         </div>
         <div className={auctionActivityClasses.rightSectionWrapper}>
-          <div className={auctionActivityClasses.bidAmount}>{bidAmount}</div>
+          <div className={clsx(classes.bidAmount, auctionActivityClasses.bidAmount)}>
+            {bidAmount}
+          </div>
           <div className={auctionActivityClasses.linkSymbol}>
             <a href={txLink} target="_blank" rel="noreferrer">
               <div className={classes.linkIcon}>
-                  <ExternalLinkIcon height={24} width={24}/>
+                <ExternalLinkIcon height={24} width={24} />
               </div>
             </a>
           </div>
