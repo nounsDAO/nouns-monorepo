@@ -52,25 +52,25 @@ const useOnDisplayAuction = (): Auction | undefined => {
   // current auction
   if (BigNumber.from(onDisplayAuctionNounId).eq(lastAuctionNounId)) {
     return deserializeAuction(currentAuction);
-  } else {
-    // nounder auction
-    if (isNounderNoun(BigNumber.from(onDisplayAuctionNounId))) {
-      const emptyNounderAuction = generateEmptyNounderAuction(
-        BigNumber.from(onDisplayAuctionNounId),
-        pastAuctions,
-      );
-
-      return deserializeAuction(emptyNounderAuction);
-    } else {
-      // past auction
-      const reduxSafeAuction: Auction | undefined = pastAuctions.find(auction => {
-        const nounId = auction.activeAuction && BigNumber.from(auction.activeAuction.nounId);
-        return nounId && nounId.toNumber() === onDisplayAuctionNounId;
-      })?.activeAuction;
-
-      return reduxSafeAuction ? deserializeAuction(reduxSafeAuction) : undefined;
-    }
   }
+
+  // nounder auction
+  if (isNounderNoun(BigNumber.from(onDisplayAuctionNounId))) {
+    const emptyNounderAuction = generateEmptyNounderAuction(
+      BigNumber.from(onDisplayAuctionNounId),
+      pastAuctions,
+    );
+
+    return deserializeAuction(emptyNounderAuction);
+  }
+
+  // past auction
+  const reduxSafeAuction: Auction | undefined = pastAuctions.find(auction => {
+    const nounId = auction.activeAuction && BigNumber.from(auction.activeAuction.nounId);
+    return nounId && nounId.toNumber() === onDisplayAuctionNounId;
+  })?.activeAuction;
+
+  return reduxSafeAuction ? deserializeAuction(reduxSafeAuction) : undefined;
 };
 
 export const useAuctionBids = (auctionNounId: BigNumber): Bid[] | undefined => {

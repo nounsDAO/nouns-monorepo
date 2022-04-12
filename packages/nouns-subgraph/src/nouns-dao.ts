@@ -124,6 +124,10 @@ export function handleVoteCast(event: VoteCast): void {
   vote.supportDetailed = event.params.support;
   vote.nouns = voter.nounsRepresented;
 
+  if (event.params.reason != '') {
+    vote.reason = event.params.reason;
+  }
+
   vote.save();
 
   if (proposal.status == STATUS_PENDING) {

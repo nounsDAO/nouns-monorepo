@@ -7,7 +7,7 @@ import navBarButtonClasses from '../NavBarButton/NavBarButton.module.css';
 import { Proposal, useHasVotedOnProposal, useProposalVote } from '../../wrappers/nounsDao';
 import clsx from 'clsx';
 import { isMobileScreen } from '../../utils/isMobile';
-import { useUserVotes } from '../../wrappers/nounToken';
+import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import { useBlockTimestamp } from '../../hooks/useBlockTimestamp';
 import dayjs from 'dayjs';
 
@@ -22,29 +22,22 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const { proposal, isActiveForVoting, isWalletConnected, submitButtonClickHandler } = props;
 
   const isMobile = isMobileScreen();
-  const connectedAccountNounVotes = useUserVotes() || 0;
+  const availableVotes = useUserVotesAsOfBlock(proposal?.createdBlock) ?? 0;
   const hasVoted = useHasVotedOnProposal(proposal?.id);
   const proposalVote = useProposalVote(proposal?.id);
   const proposalCreationTimestamp = useBlockTimestamp(proposal?.createdBlock);
+  const disableVoteButton = !isWalletConnected || !availableVotes || hasVoted;
 
   const voteButton = (
     <>
       {isWalletConnected ? (
-        <>
-          {connectedAccountNounVotes === 0 && (
-            <div className={classes.noVotesText}>You have no votes.</div>
-          )}
-        </>
+        <>{!availableVotes && <div className={classes.noVotesText}>You have no votes.</div>}</>
       ) : (
         <div className={classes.connectWalletText}>Connect a wallet to vote.</div>
       )}
       <Button
-        className={
-          isWalletConnected && connectedAccountNounVotes > 0
-            ? classes.submitBtn
-            : classes.submitBtnDisabled
-        }
-        disabled={!isWalletConnected || !connectedAccountNounVotes}
+        className={disableVoteButton ? classes.submitBtnDisabled : classes.submitBtn}
+        disabled={disableVoteButton}
         onClick={submitButtonClickHandler}
       >
         Submit vote
@@ -92,17 +85,13 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
         </Alert>
       )}
 
-      {proposal &&
-        isActiveForVoting &&
-        !hasVoted &&
-        proposalCreationTimestamp &&
-        connectedAccountNounVotes > 0 && (
-          <Alert variant="success" className={classes.voterIneligibleAlert}>
-            Only Nouns you owned or were delegated to you before{' '}
-            {dayjs.unix(proposalCreationTimestamp).format('MMMM D, YYYY h:mm A z')} are eligible to
-            vote.
-          </Alert>
-        )}
+      {proposal && isActiveForVoting && proposalCreationTimestamp && availableVotes && !hasVoted && (
+        <Alert variant="success" className={classes.voterIneligibleAlert}>
+          Only Nouns you owned or were delegated to you before{' '}
+          {dayjs.unix(proposalCreationTimestamp).format('MMMM D, YYYY h:mm A z')} are eligible to
+          vote.
+        </Alert>
+      )}
     </>
   );
 };

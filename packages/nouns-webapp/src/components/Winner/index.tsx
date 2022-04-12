@@ -2,7 +2,6 @@ import { Button, Row, Col } from 'react-bootstrap';
 import { useAppSelector } from '../../hooks';
 import classes from './Winner.module.css';
 import ShortAddress from '../ShortAddress';
-import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { isMobileScreen } from '../../utils/isMobile';
 
@@ -35,9 +34,14 @@ const Winner: React.FC<WinnerProps> = props => {
       </Col>
       {!isMobile && (
         <Col>
-          <Link to="/verify" className={classes.verifyLink}>
-            <Button className={classes.verifyButton}>Get Verified</Button>
-          </Link>
+          <a
+            href="https://nouns.center/nouners"
+            target="_blank"
+            rel="noreferrer noopener"
+            className={classes.verifyLink}
+          >
+            <Button className={classes.verifyButton}>What now?</Button>
+          </a>
         </Col>
       )}
     </Row>
@@ -72,9 +76,14 @@ const Winner: React.FC<WinnerProps> = props => {
       </Row>
       {isWinnerYou && isMobile && (
         <Row>
-          <Link to="/verify" className={classes.verifyLink}>
-            <Button className={classes.verifyButton}>Get Verified</Button>
-          </Link>
+          <a
+            href="https://nouns.center/nouners"
+            target="_blank"
+            rel="noreferrer noopener"
+            className={classes.verifyLink}
+          >
+            <Button className={classes.verifyButton}>What now?</Button>
+          </a>
         </Row>
       )}
     </>
