@@ -88,8 +88,4 @@ export class DiscordAuctionLifecycleHandler implements IAuctionLifecycleHandler 
     await Promise.all(this.discordClients.map(c => c.send(message)));
     console.log(`processed discord new vote for proposal ${proposal.id};${vote.id}`);
   }
-
-  async handleAuctionEndingSoon(_auctionId: number) {
-    return;
-  }
 }

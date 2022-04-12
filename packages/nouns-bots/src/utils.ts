@@ -76,7 +76,7 @@ export function formatProposalAtRiskOfExpiryText(proposal: Proposal) {
 export async function formatNewGovernanceVoteText(proposal: Proposal, vote: Vote) {
   return `${await resolveEnsOrFormatAddress(vote.voter.id)} has voted ${voteDirectionToText(
     vote.supportDetailed,
-  )} Proposal #${proposal.id}`;
+  )} Proposal #${proposal.id}${vote.reason ? `.\n\nReason: ${vote.reason}` : ''}`;
 }
 
 /**

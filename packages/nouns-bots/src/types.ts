@@ -32,7 +32,7 @@ export interface TokenMetadata {
 export interface IAuctionLifecycleHandler {
   handleNewAuction(auctionId: number): Promise<void>;
   handleNewBid(auctionId: number, bid: Bid): Promise<void>;
-  handleAuctionEndingSoon(auctionId: number): Promise<void>;
+  handleAuctionEndingSoon?(auctionId: number): Promise<void>;
   handleNewProposal?(proposal: Proposal): Promise<void>;
   handleUpdatedProposalStatus?(proposal: Proposal): Promise<void>;
   handleProposalAtRiskOfExpiry?(proposal: Proposal): Promise<void>;
@@ -79,4 +79,5 @@ export interface Vote {
   voter: Account;
   votes: number;
   supportDetailed: VoteDirection;
+  reason: string | null;
 }
