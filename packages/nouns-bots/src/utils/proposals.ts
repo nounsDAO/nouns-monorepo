@@ -45,7 +45,9 @@ export const parseVote = (vote: Vote): Vote => ({
  */
 export const extractNewVotes = (proposalBefore: Proposal, proposalAfter: Proposal): Vote[] => {
   const previousStateVoteIds = R.map(R.prop('id'), proposalBefore.votes);
-  return proposalAfter.votes.filter(vote => previousStateVoteIds.indexOf(vote.id) === -1);
+  return proposalAfter.votes.filter(
+    vote => previousStateVoteIds.indexOf(vote.id) === -1 && vote.votes > 0,
+  );
 };
 
 /**
