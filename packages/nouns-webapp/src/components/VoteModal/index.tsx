@@ -1,8 +1,9 @@
-import { Button, Spinner } from 'react-bootstrap';
+import { Button, FloatingLabel, FormControl, Spinner } from 'react-bootstrap';
 import Modal from '../Modal';
 import classes from './VoteModal.module.css';
-import { useCastVote, Vote } from '../../wrappers/nounsDao';
-import React, { useEffect, useState } from 'react';
+import { useCastVote, useCastVoteWithReason, Vote } from '../../wrappers/nounsDao';
+import { useCallback, useEffect, useState } from 'react';
+import { TransactionStatus } from '@usedapp/core';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import clsx from 'clsx';
 
@@ -17,7 +18,9 @@ const POST_SUCESSFUL_VOTE_MODAL_CLOSE_TIME_MS = 3000;
 
 const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps) => {
   const { castVote, castVoteState } = useCastVote();
+  const { castVoteWithReason, castVoteWithReasonState } = useCastVoteWithReason();
   const [vote, setVote] = useState<Vote>();
+  const [voteReason, setVoteReason] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isVoteSucessful, setIsVoteSuccessful] = useState(false);
   const [isVoteFailed, setIsVoteFailed] = useState(false);
@@ -31,9 +34,8 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
     return error;
   };
 
-  // Cast vote transaction state hook
-  useEffect(() => {
-    switch (castVoteState.status) {
+  const handleVoteStateChange = useCallback((state: TransactionStatus) => {
+    switch (state.status) {
       case 'None':
         setIsLoading(false);
         break;
@@ -46,18 +48,28 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
         break;
       case 'Fail':
         setFailureCopy('Transaction Failed');
-        setErrorMessage(castVoteState?.errorMessage || 'Please try again.');
+        setErrorMessage(state?.errorMessage || 'Please try again.');
         setIsLoading(false);
         setIsVoteFailed(true);
         break;
       case 'Exception':
         setFailureCopy('Error');
-        setErrorMessage(getVoteErrorMessage(castVoteState?.errorMessage) || 'Please try again.');
+        setErrorMessage(getVoteErrorMessage(state?.errorMessage) || 'Please try again.');
         setIsLoading(false);
         setIsVoteFailed(true);
         break;
     }
-  }, [castVoteState]);
+  }, []);
+
+  // Cast vote transaction state hook
+  useEffect(() => {
+    handleVoteStateChange(castVoteState);
+  }, [castVoteState, handleVoteStateChange]);
+
+  // Cast vote with reason transaction state hook
+  useEffect(() => {
+    handleVoteStateChange(castVoteWithReasonState);
+  }, [castVoteWithReasonState, handleVoteStateChange]);
 
   // Auto close the modal after a transaction completes succesfully
   // Leave failed transaction up until user closes manually to allow for debugging
@@ -134,15 +146,28 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
             />
           </div>
           <br />
+          <FloatingLabel controlId="reasonTextarea" label="Reason (Optional)">
+            <FormControl
+              as="textarea"
+              placeholder={`Reason for voting ${Vote[vote ?? Vote.FOR]}`}
+              value={voteReason}
+              onChange={e => setVoteReason(e.target.value)}
+              className={classes.voteReasonTextarea}
+            />
+          </FloatingLabel>
+          <br />
           <Button
-            onClick={
-              vote === undefined
-                ? () => {}
-                : () => {
-                    setIsLoading(true);
-                    castVote(proposalId, vote);
-                  }
-            }
+            onClick={() => {
+              if (vote === undefined || isLoading) {
+                return;
+              }
+              setIsLoading(true);
+              if (voteReason.trim() === '') {
+                castVote(proposalId, vote);
+              } else {
+                castVoteWithReason(proposalId, vote, voteReason);
+              }
+            }}
             className={vote === undefined ? classes.submitBtnDisabled : classes.submitBtn}
           >
             {isLoading ? <Spinner animation="border" /> : 'Submit Vote'}

@@ -311,6 +311,14 @@ export const useCastVote = () => {
   return { castVote, castVoteState };
 };
 
+export const useCastVoteWithReason = () => {
+  const { send: castVoteWithReason, state: castVoteWithReasonState } = useContractFunction(
+    nounsDaoContract,
+    'castVoteWithReason',
+  );
+  return { castVoteWithReason, castVoteWithReasonState };
+};
+
 export const usePropose = () => {
   const { send: propose, state: proposeState } = useContractFunction(nounsDaoContract, 'propose');
   return { propose, proposeState };
