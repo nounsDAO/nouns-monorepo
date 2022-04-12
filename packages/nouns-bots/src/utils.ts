@@ -66,17 +66,23 @@ export function formatNewGovernanceProposalText(proposal: Proposal) {
 }
 
 export function formatUpdatedGovernanceProposalStatusText(proposal: Proposal) {
-  return `The NounsDAO proposal has changed to status: ${proposal.status.toLocaleLowerCase()}`;
+  return `Nouns DAO proposal #${proposal.id} (${extractProposalTitle(
+    proposal,
+  )}) has changed to status: ${proposal.status.toLocaleLowerCase()}`;
 }
 
 export function formatProposalAtRiskOfExpiryText(proposal: Proposal) {
-  return `NounsDAO proposal #${proposal.id} expires in less than two days. Please execute it immediately!`;
+  return `Nouns DAO proposal #${proposal.id} (${extractProposalTitle(
+    proposal,
+  )}) expires in less than two days. Please execute it immediately!`;
 }
 
 export async function formatNewGovernanceVoteText(proposal: Proposal, vote: Vote) {
   return `${await resolveEnsOrFormatAddress(vote.voter.id)} has voted ${voteDirectionToText(
     vote.supportDetailed,
-  )} Proposal #${proposal.id}${vote.reason ? `.\n\nReason: ${vote.reason}` : ''}`;
+  )} Proposal #${proposal.id} (${extractProposalTitle(proposal)})${
+    vote.reason ? `\n\nReason: ${vote.reason}` : ''
+  }`;
 }
 
 /**
