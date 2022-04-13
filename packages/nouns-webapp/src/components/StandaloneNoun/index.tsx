@@ -93,8 +93,9 @@ export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = (
 
   const dispatch = useDispatch();
   const seed = useNounSeed(nounId);
+  const seedIsInvalid = Object.values(seed || {}).every(v => v === 0);
 
-  if (!seed || !nounId || !onLoadSeed) return <Noun imgPath="" alt="Noun" />;
+  if (!seed || seedIsInvalid || !nounId || !onLoadSeed) return <Noun imgPath="" alt="Noun" />;
 
   onLoadSeed(seed);
 
