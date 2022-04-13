@@ -85,7 +85,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
         </Alert>
       )}
 
-      {proposal && isActiveForVoting && proposalCreationTimestamp && availableVotes && !hasVoted && (
+      {proposal && isActiveForVoting && proposalCreationTimestamp && !!availableVotes && !hasVoted && (
         <Alert variant="success" className={classes.voterIneligibleAlert}>
           Only Nouns you owned or were delegated to you before{' '}
           {dayjs.unix(proposalCreationTimestamp).format('MMMM D, YYYY h:mm A z')} are eligible to
