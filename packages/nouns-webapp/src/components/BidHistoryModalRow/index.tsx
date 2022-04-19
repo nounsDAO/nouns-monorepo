@@ -51,7 +51,13 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = props => {
                 <span>
                   {ens ? shortENS(ens) : shortAddress}
                   {index === 0 && (
-                    <img src={_trophy} alt="Winning bidder" className={classes.trophy} height={16} width={16} />
+                    <img
+                      src={_trophy}
+                      alt="Winning bidder"
+                      className={classes.trophy}
+                      height={16}
+                      width={16}
+                    />
                   )}
                   <br />
                   <div className={classes.bidDate}>{date}</div>

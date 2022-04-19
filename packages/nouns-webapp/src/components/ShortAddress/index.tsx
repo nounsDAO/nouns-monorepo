@@ -13,7 +13,7 @@ const ShortAddress: React.FC<{ address: string; avatar?: boolean; size?: number 
   const { library: provider } = useEthers();
 
   const ens = useReverseENSLookUp(address);
-  const ensMatchesBlocklistRegex = containsBlockedText(ens || "", 'en');
+  const ensMatchesBlocklistRegex = containsBlockedText(ens || '', 'en');
   const shortAddress = useShortAddress(address);
 
   if (avatar) {
@@ -24,7 +24,7 @@ const ShortAddress: React.FC<{ address: string; avatar?: boolean; size?: number 
             <Davatar size={size} address={address} provider={provider} />
           </div>
         )}
-        <span>{ens  && !ensMatchesBlocklistRegex ? ens : shortAddress}</span>
+        <span>{ens && !ensMatchesBlocklistRegex ? ens : shortAddress}</span>
       </div>
     );
   }
