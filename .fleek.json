@@ -1,7 +1,0 @@
-{
- "build": {
-    "baseDir": "",
-    "publicDir": "static",
-    "rootDir": ""
- }
-}
