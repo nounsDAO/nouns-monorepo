@@ -2,7 +2,6 @@
  "build": {
    "image": "node:16",
    "command": "yarn && yarn workspace @nouns/webapp build",
-   "publicDir": "static",
-   "baseDir": "./"
+   "publicDir": "static"
  }
 }
