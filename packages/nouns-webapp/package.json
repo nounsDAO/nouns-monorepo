@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.3.21",
+    "bad-words": "^3.0.4",
     "@davatar/react": "^1.8.1",
     "@heroicons/react": "^1.0.6",
     "@fortawesome/fontawesome-svg-core": "1.2.35",
@@ -58,6 +59,7 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/react-router-dom": "^5.1.7",
+    "@types/bad-words": "^3.0.1",
     "dotenv": "^10.0.0"
   },
   "scripts": {

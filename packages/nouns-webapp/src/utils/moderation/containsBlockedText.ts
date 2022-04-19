@@ -1,4 +1,5 @@
 import moderationRegexes from './moderationRegexes.json';
+import Filter from 'bad-words';
 
 /**
  * Check if text matches a blocked phrase in a given langugae
@@ -12,14 +13,20 @@ export const containsBlockedText = (text: string, language: string) => {
   const regexesForLanguage = new Map(Object.entries(moderationRegexes)).get(language);
   // Default to letting the string through if the language is unsupprted
   if (regexesForLanguage === undefined) {
-    console.log(`Unsupported langugae ${language} requested`);
+    console.log(`Unsupported language ${language} requested`);
     return false;
   }
 
-  // Filter if we match at least one regex
+  // Filter based on bad-words profanity filters
+  const filter = new Filter();
+  if (filter.isProfane(text)) {
+    return true;
+  }
+
+  // Filter based on custom regexes
   return (
     regexesForLanguage
-      .map((entry: any) => {
+      .map((entry: { regex: string }) => {
         const regex = entry.regex;
         return text.match(regex) !== null;
       })
