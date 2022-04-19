@@ -14,6 +14,7 @@ import _trophy from '../../assets/icons/trophy.svg';
 import Davatar from '@davatar/react';
 import { useEthers } from '@usedapp/core';
 import { useReverseENSLookUp } from '../../utils/ensLookup';
+import { containsBlockedText } from '../../utils/moderation/containsBlockedText';
 
 interface BidHistoryModalRowProps {
   bid: Bid;
@@ -38,6 +39,7 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = props => {
   ).format('hh:mm a')}`;
 
   const ens = useReverseENSLookUp(bid.sender);
+  const ensMatchesBlocklistRegex = containsBlockedText(ens || '', 'en');
   const shortAddress = useShortAddress(bid.sender);
 
   return (
@@ -49,9 +51,15 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = props => {
               <Davatar size={40} address={bid.sender} provider={provider} />
               <div className={classes.bidderInfoText}>
                 <span>
-                  {ens ? shortENS(ens) : shortAddress}
+                  {ens && !ensMatchesBlocklistRegex ? shortENS(ens) : shortAddress}
                   {index === 0 && (
-                    <img src={_trophy} alt="Winning bidder" className={classes.trophy} height={16} width={16} />
+                    <img
+                      src={_trophy}
+                      alt="Winning bidder"
+                      className={classes.trophy}
+                      height={16}
+                      width={16}
+                    />
                   )}
                   <br />
                   <div className={classes.bidDate}>{date}</div>
