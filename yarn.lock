@@ -3241,7 +3241,7 @@
     jest-validate "^26.5.2"
     lodash.get "^4.4.2"
 
-"@lingui/core@*", "@lingui/core@^3.13.2", "@lingui/core@^3.9.0":
+"@lingui/core@^3.13.2", "@lingui/core@^3.9.0":
   version "3.13.2"
   resolved "https://registry.yarnpkg.com/@lingui/core/-/core-3.13.2.tgz#1c8b264c7eb5d7fa11c59916542bf5fc8e1b9309"
   integrity sha512-ic1uC+bS7hpfM4oVugHKel8UhlLAwykSv2TYw3oyeEQhvCS232nSzh+PFbP0BXK1hZ0UdHve7mODpgADuwHIQA==
@@ -4239,34 +4239,6 @@
     "@types/abstract-leveldown" "*"
     "@types/level-errors" "*"
     "@types/node" "*"
-
-"@types/lingui__core@*":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@types/lingui__core/-/lingui__core-3.0.0.tgz#2bc0d453348e415f72972620f54d3481e62127b9"
-  integrity sha512-bqnrxAI9GzQcG1fx8vmFB8hH1Pl53u2Jox4wzsqEPRDerqCbEkpd8mLOTFPMRAbbQZgWck2tIKYV4N/PSExCFg==
-  dependencies:
-    "@lingui/core" "*"
-
-"@types/lingui__core@^2.7.1":
-  version "2.7.1"
-  resolved "https://registry.yarnpkg.com/@types/lingui__core/-/lingui__core-2.7.1.tgz#b79473705882e569cc07caa87f8395449d77d620"
-  integrity sha512-zfJoKAfgYyk00s1xuMqyIbQdxw4OI0G5hFsc1ARU+zv+2WCPjlPh+CfPEu3iOm1GSdOjj3vpu7E+JTGjMW+fzA==
-
-"@types/lingui__macro@^2.7.4":
-  version "2.7.4"
-  resolved "https://registry.yarnpkg.com/@types/lingui__macro/-/lingui__macro-2.7.4.tgz#498f25afa1830a4c480a5295cdf2103adaddbb2a"
-  integrity sha512-psHhx3EFHbZ9NPA/Su2dI4jcnEHcU+wnDi8lU5g0QOMmZiCyY5Q1ntYXulh8/v0dHh2J9Us5T241voRSKAmZfA==
-  dependencies:
-    "@types/lingui__core" "*"
-    "@types/react" "*"
-
-"@types/lingui__react@^2.8.3":
-  version "2.8.3"
-  resolved "https://registry.yarnpkg.com/@types/lingui__react/-/lingui__react-2.8.3.tgz#0dbb380f502480b9fe1e2c4a0a9bf860364a10cf"
-  integrity sha512-MXkYBg0KrFqEBam5kthNVaVa56YhWwtFlpZIS3Xr/9CE1jGlFo8isMBzgX/2m6QzTr/x4rLQ2PdUgUMjNzdG5A==
-  dependencies:
-    "@types/lingui__core" "*"
-    "@types/react" "*"
 
 "@types/lodash@^4.14.159":
   version "4.14.177"

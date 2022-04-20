@@ -1,5 +1,9 @@
 {
-   "locales": ["en", "jp"],
+   "locales": ["en", "ja", "pseudo-LOCALE"],
+ "pseudoLocale": "pseudo-LOCALE",
+      "fallbackLocales": {
+         "pseudo-LOCALE": "en"
+      },
    "catalogs": [{
       "path": "src/locales/{locale}/messages",
       "include": ["src"]
