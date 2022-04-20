@@ -29,6 +29,22 @@ msgstr ""
 msgid "<0>{flooredSeconds}<1>s</1></0>"
 msgstr ""
 
+#: src/components/NounProfileVoteRow/index.tsx:48
+msgid "Absent for"
+msgstr ""
+
+#: src/components/NounProfileVoteRow/index.tsx:55
+msgid "Abstained on"
+msgstr ""
+
+#: src/components/NounProfileVoteRow/index.tsx:87
+msgid "Active"
+msgstr ""
+
+#: src/components/ProfileActivityFeed/index.tsx:75
+msgid "Activity"
+msgstr ""
+
 #: src/components/Documentation/index.tsx:51
 msgid "All Nouns are members of Nouns DAO."
 msgstr ""
@@ -50,12 +66,36 @@ msgstr ""
 msgid "Because 100% of Noun auction proceeds are sent to Nouns DAO, Nounders have chosen to compensate themselves with Nouns. Every 10th Noun for the first 5 years of the project (Noun ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
 msgstr ""
 
+#: src/components/Bid/index.tsx:65
+msgid "Bid"
+msgstr ""
+
+#: src/components/NounInfoCard/index.tsx:43
+msgid "Bid history"
+msgstr ""
+
+#: src/components/Bid/index.tsx:160
+msgid "Bid was placed successfully!"
+msgstr ""
+
+#: src/components/NounInfoCard/index.tsx:43
+msgid "Bids"
+msgstr ""
+
 #: src/components/BidHistoryModal/index.tsx:41
 msgid "Bids for"
 msgstr ""
 
 #: src/components/BidHistoryModal/index.tsx:59
 msgid "Bids will appear here"
+msgstr ""
+
+#: src/components/NounInfoRowBirthday/index.tsx:49
+msgid "Born"
+msgstr ""
+
+#: src/components/NounProfileVoteRow/index.tsx:97
+msgid "Canceled"
 msgstr ""
 
 #: src/components/Documentation/index.tsx:21
@@ -74,6 +114,10 @@ msgstr ""
 msgid "Daily Auctions"
 msgstr ""
 
+#: src/components/NounProfileVoteRow/index.tsx:93
+msgid "Defeated"
+msgstr ""
+
 #: src/components/Footer/index.tsx:19
 msgid "Discord"
 msgstr ""
@@ -90,12 +134,37 @@ msgstr ""
 msgid "Ends on"
 msgstr ""
 
+#: src/components/Bid/index.tsx:69
+msgid "Error"
+msgstr ""
+
+#: src/components/NounInfoRowBirthday/index.tsx:39
+msgid "Error fetching Noun birthday"
+msgstr ""
+
 #: src/components/Footer/index.tsx:21
+#: src/components/NounInfoCard/index.tsx:48
 msgid "Etherscan"
+msgstr ""
+
+#: src/components/NounProfileVoteRow/index.tsx:91
+msgid "Executed"
+msgstr ""
+
+#: src/components/NounProfileVoteRow/index.tsx:101
+msgid "Expired"
 msgstr ""
 
 #: src/components/Banner/index.tsx:22
 msgid "FOREVER."
+msgstr ""
+
+#: src/components/ProfileActivityFeed/index.tsx:53
+msgid "Failed to fetch Noun activity history"
+msgstr ""
+
+#: src/components/NounInfoRowHolder/index.tsx:34
+msgid "Failed to fetch Noun info"
 msgstr ""
 
 #: src/components/Footer/index.tsx:22
@@ -106,6 +175,10 @@ msgstr ""
 msgid "Governance ‘Slow Start’"
 msgstr ""
 
+#: src/components/NounInfoRowHolder/index.tsx:45
+msgid "Held by"
+msgstr ""
+
 #: src/components/AuctionActivity/index.tsx:134
 msgid "Help mint the next Noun"
 msgstr ""
@@ -114,12 +187,16 @@ msgstr ""
 msgid "In addition to the precautions taken by Compound Governance, Nounders have given themselves a special veto right to ensure that no malicious proposals can be passed while the Noun supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort."
 msgstr ""
 
-#: src/components/Bid/index.tsx:110
+#: src/components/Bid/index.tsx:120
 msgid "Insufficient bid amount 🤏"
 msgstr ""
 
 #: src/components/Documentation/index.tsx:37
 msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
+msgstr ""
+
+#: src/components/NounInfoRowHolder/index.tsx:30
+msgid "Loading..."
 msgstr ""
 
 #: src/components/Documentation/index.tsx:56
@@ -152,6 +229,10 @@ msgstr ""
 
 #: src/components/Documentation/index.tsx:115
 msgid "Nounders will proveably revoke this veto right when they deem it safe to do so. This decision will be based on a healthy Noun distribution and a community that is engaged in the governance process."
+msgstr ""
+
+#: src/components/NounInfoRowHolder/index.tsx:60
+msgid "Nouns Auction House"
 msgstr ""
 
 #: src/components/Documentation/index.tsx:90
@@ -202,7 +283,11 @@ msgstr ""
 msgid "One Noun is trustlessly auctioned every 24 hours, forever."
 msgstr ""
 
-#: src/components/Bid/index.tsx:64
+#: src/components/NounProfileVoteRow/index.tsx:85
+msgid "Pending"
+msgstr ""
+
+#: src/components/Bid/index.tsx:63
 msgid "Place bid"
 msgstr ""
 
@@ -210,20 +295,52 @@ msgstr ""
 msgid "Playground"
 msgstr ""
 
-#: src/components/Bid/index.tsx:111
+#: src/components/Bid/index.tsx:121
 msgid "Please place a bid higher than or equal to the minimum bid amount of {0} ETH"
+msgstr ""
+
+#: src/components/Bid/index.tsx:70
+msgid "Please try again."
+msgstr ""
+
+#: src/components/NounProfileVoteRow/index.tsx:95
+msgid "Queued"
 msgstr ""
 
 #: src/components/Bid/index.tsx:64
 msgid "Settle"
 msgstr ""
 
+#: src/components/Bid/index.tsx:66
+msgid "Settle Auction"
+msgstr ""
+
 #: src/components/SettleManuallyBtn/index.tsx:63
 msgid "Settle manually"
 msgstr ""
 
+#: src/components/Bid/index.tsx:214
+msgid "Settled auction successfully!"
+msgstr ""
+
 #: src/components/Documentation/index.tsx:50
 msgid "Settlement of one auction kicks off the next."
+msgstr ""
+
+#: src/components/ProfileActivityFeed/index.tsx:125
+msgid "Show all {0} events"
+msgstr ""
+
+#: src/components/ProfileActivityFeed/index.tsx:134
+msgid "Show fewer"
+msgstr ""
+
+#: src/components/NounProfileVoteRow/index.tsx:89
+msgid "Succeeded"
+msgstr ""
+
+#: src/components/Bid/index.tsx:67
+msgid "Success"
 msgstr ""
 
 #: src/components/Documentation/index.tsx:44
@@ -246,6 +363,10 @@ msgstr ""
 msgid "The treasury is controlled exclusively by Nouns via governance."
 msgstr ""
 
+#: src/components/ProfileActivityFeed/index.tsx:144
+msgid "This Noun has no activity, since it was just created. Check back soon!"
+msgstr ""
+
 #: src/components/AuctionTimer/index.tsx:49
 msgid "Time left"
 msgstr ""
@@ -254,28 +375,65 @@ msgstr ""
 msgid "Trait generation is not truly random. Traits can be predicted when minting a Noun on the pending block."
 msgstr ""
 
+#: src/components/Bid/index.tsx:68
+msgid "Transaction Failed"
+msgstr ""
+
 #: src/components/Footer/index.tsx:20
 msgid "Twitter"
+msgstr ""
+
+#: src/components/NounProfileVoteRow/index.tsx:103
+msgid "Undetermined"
+msgstr ""
+
+#: src/components/NounProfileVoteRow/index.tsx:99
+msgid "Vetoed"
 msgstr ""
 
 #: src/components/BidHistoryBtn/index.tsx:16
 msgid "View all bids"
 msgstr ""
 
-#: src/components/Bid/index.tsx:277
+#: src/components/Bid/index.tsx:287
 msgid "Vote for the next Noun ⌐◧-◧"
+msgstr ""
+
+#: src/components/NounProfileVoteRow/index.tsx:58
+msgid "Voted aginst"
+msgstr ""
+
+#: src/components/NounProfileVoteRow/index.tsx:52
+msgid "Voted for"
 msgstr ""
 
 #: src/components/Documentation/index.tsx:27
 msgid "WTF?"
 msgstr ""
 
+#: src/components/NounProfileVoteRow/index.tsx:46
+msgid "Waiting for"
+msgstr ""
+
+#: src/components/Winner/index.tsx:47
+#: src/components/Winner/index.tsx:95
+msgid "What now?"
+msgstr ""
+
 #: src/components/Documentation/index.tsx:82
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
 msgstr ""
 
+#: src/components/Winner/index.tsx:70
+msgid "Winner"
+msgstr ""
+
 #: src/components/CurrentBid/index.tsx:23
 msgid "Winning bid"
+msgstr ""
+
+#: src/components/Winner/index.tsx:33
+msgid "You"
 msgstr ""
 
 #: src/components/Documentation/index.tsx:143
@@ -314,7 +472,7 @@ msgstr ""
 msgid "heads (234)"
 msgstr ""
 
-#: src/components/Bid/index.tsx:253
+#: src/components/Bid/index.tsx:263
 msgid "or more"
 msgstr ""
 

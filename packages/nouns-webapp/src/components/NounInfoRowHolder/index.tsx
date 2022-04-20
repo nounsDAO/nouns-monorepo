@@ -11,6 +11,7 @@ import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import ShortAddress from '../ShortAddress';
 
 import { useAppSelector } from '../../hooks';
+import { Trans } from "@lingui/macro";
 
 interface NounInfoRowHolderProps {
   nounId: number;
@@ -26,11 +27,11 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
   if (loading) {
     return (
       <div className={classes.nounHolderInfoContainer}>
-        <span className={classes.nounHolderLoading}>Loading...</span>
+        <span className={classes.nounHolderLoading}><Trans>Loading...</Trans></span>
       </div>
     );
   } else if (error) {
-    return <div>Failed to fetch noun info</div>;
+    return <div><Trans>Failed to fetch Noun info</Trans></div>;
   }
 
   const shortAddressComponent = <ShortAddress address={data && data.noun.owner.id} />;
@@ -40,7 +41,11 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
       <span>
         <Image src={_HeartIcon} className={classes.heartIcon} />
       </span>
-      <span>Held by</span>
+      <span>
+        <Trans>
+        Held by
+        </Trans>
+      </span>
       <span>
         <a
           className={
@@ -52,7 +57,7 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
         >
           {data.noun.owner.id.toLowerCase() ===
           config.addresses.nounsAuctionHouseProxy.toLowerCase()
-            ? 'Nouns Auction House'
+            ? <Trans>Nouns Auction House</Trans> 
             : shortAddressComponent}
         </a>
       </span>
