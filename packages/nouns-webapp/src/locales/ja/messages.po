@@ -45,6 +45,10 @@ msgstr ""
 msgid "Abstain"
 msgstr ""
 
+#: src/components/VoteModal/index.tsx:166
+msgid "Abstain from voting on Prop {0}"
+msgstr ""
+
 #: src/components/NounProfileVoteRow/index.tsx:55
 msgid "Abstained on"
 msgstr ""
@@ -132,11 +136,27 @@ msgstr ""
 msgid "Canceled"
 msgstr ""
 
+#: src/components/VoteModal/index.tsx:151
+msgid "Cast 1 vote against Prop {0}"
+msgstr ""
+
+#: src/components/VoteModal/index.tsx:130
+msgid "Cast 1 vote for Prop {0}"
+msgstr ""
+
+#: src/components/VoteModal/index.tsx:146
+msgid "Cast {0} votes against Prop {1}"
+msgstr ""
+
+#: src/components/VoteModal/index.tsx:125
+msgid "Cast {0} votes for Prop {1}"
+msgstr ""
+
 #: src/components/Documentation/index.tsx:28
 msgid "Compound Governance"
 msgstr ""
 
-#: src/components/ProposalHeader/index.tsx:53
+#: src/components/ProposalHeader/index.tsx:66
 msgid "Connect a wallet to vote."
 msgstr ""
 
@@ -190,6 +210,7 @@ msgid "Ends on"
 msgstr ""
 
 #: src/components/Bid/index.tsx:69
+#: src/components/VoteModal/index.tsx:58
 msgid "Error"
 msgstr ""
 
@@ -398,7 +419,7 @@ msgstr ""
 msgid "Only 32x32 PNG images are accepted"
 msgstr ""
 
-#: src/components/ProposalHeader/index.tsx:114
+#: src/components/ProposalHeader/index.tsx:123
 msgid "Only Nons you owned or were delegated to you before {0} are eligible to vote."
 msgstr ""
 
@@ -421,10 +442,12 @@ msgid "Please place a bid higher than or equal to the minimum bid amount of {0} 
 msgstr ""
 
 #: src/components/Bid/index.tsx:70
+#: src/components/VoteModal/index.tsx:53
+#: src/components/VoteModal/index.tsx:60
 msgid "Please try again."
 msgstr ""
 
-#: src/components/ProposalHeader/index.tsx:81
+#: src/components/ProposalHeader/index.tsx:90
 msgid "Proposal {0}"
 msgstr ""
 
@@ -436,11 +459,11 @@ msgstr ""
 msgid "Proposals submitted by community members will appear here."
 msgstr ""
 
-#: src/components/ProposalContent/index.tsx:59
+#: src/components/ProposalContent/index.tsx:57
 msgid "Proposed Transactions"
 msgstr ""
 
-#: src/components/ProposalContent/index.tsx:92
+#: src/components/ProposalContent/index.tsx:88
 msgid "Proposer"
 msgstr ""
 
@@ -461,6 +484,10 @@ msgstr ""
 #: src/pages/Playground/index.tsx:151
 #~ msgid "Random"
 #~ msgstr ""
+
+#: src/components/VoteModal/index.tsx:179
+msgid "Reason (Optional)"
+msgstr ""
 
 #: src/components/Bid/index.tsx:64
 msgid "Settle"
@@ -490,7 +517,7 @@ msgstr ""
 msgid "Show fewer"
 msgstr ""
 
-#: src/pages/Vote/index.tsx:347
+#: src/pages/Vote/index.tsx:353
 msgid "Snapshot"
 msgstr ""
 
@@ -503,7 +530,11 @@ msgstr ""
 msgid "Submit Proposal"
 msgstr ""
 
-#: src/components/ProposalHeader/index.tsx:63
+#: src/components/VoteModal/index.tsx:205
+msgid "Submit Vote"
+msgstr ""
+
+#: src/components/ProposalHeader/index.tsx:74
 msgid "Submit vote"
 msgstr ""
 
@@ -520,8 +551,12 @@ msgstr ""
 msgid "Summary"
 msgstr ""
 
-#: src/pages/Vote/index.tsx:354
+#: src/pages/Vote/index.tsx:358
 msgid "Taken at block"
+msgstr ""
+
+#: src/components/VoteModal/index.tsx:105
+msgid "Thank you for voting."
 msgstr ""
 
 #: src/components/Documentation/index.tsx:234
@@ -552,6 +587,10 @@ msgstr ""
 msgid "The treasury is controlled exclusively by Nouns via governance."
 msgstr ""
 
+#: src/components/VoteModal/index.tsx:112
+msgid "There was an error voting for your account."
+msgstr ""
+
 #: src/components/ProfileActivityFeed/index.tsx:147
 msgid "This Noun has no activity, since it was just created. Check back soon!"
 msgstr ""
@@ -560,7 +599,7 @@ msgstr ""
 msgid "This treasury exists for <0>Nouns DAO</0> participants to allocate resources for the long-term growth and prosperity of the Nouns project."
 msgstr ""
 
-#: src/pages/Vote/index.tsx:308
+#: src/pages/Vote/index.tsx:307
 msgid "Threshold"
 msgstr ""
 
@@ -573,6 +612,7 @@ msgid "Trait generation is not truly random. Traits can be predicted when mintin
 msgstr ""
 
 #: src/components/Bid/index.tsx:68
+#: src/components/VoteModal/index.tsx:52
 msgid "Transaction Failed"
 msgstr ""
 
@@ -597,6 +637,10 @@ msgstr ""
 msgid "Upload Custom Trait"
 msgstr ""
 
+#: src/components/VoteModal/index.tsx:34
+msgid "User Already Voted"
+msgstr ""
+
 #: src/components/NounProfileVoteRow/index.tsx:99
 #: src/components/ProposalStatus/index.tsx:43
 msgid "Vetoed"
@@ -608,6 +652,10 @@ msgstr ""
 
 #: src/components/Bid/index.tsx:298
 msgid "Vote for the next Noun ⌐◧-◧"
+msgstr ""
+
+#: src/components/VoteModal/index.tsx:226
+msgid "Vote on Prop {0}"
 msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx:58
@@ -647,7 +695,7 @@ msgstr ""
 msgid "You"
 msgstr ""
 
-#: src/components/ProposalHeader/index.tsx:30
+#: src/components/ProposalHeader/index.tsx:38
 msgid "You <0>Abstained</0> from this proposal"
 msgstr ""
 
@@ -667,11 +715,11 @@ msgstr ""
 msgid "You have no Votes."
 msgstr ""
 
-#: src/components/ProposalHeader/index.tsx:47
+#: src/components/ProposalHeader/index.tsx:60
 msgid "You have no votes."
 msgstr ""
 
-#: src/components/ProposalHeader/index.tsx:28
+#: src/components/ProposalHeader/index.tsx:32
 msgid "You voted <0>Against</0>this proposal"
 msgstr ""
 
@@ -681,6 +729,10 @@ msgstr ""
 
 #: src/pages/Playground/index.tsx:376
 msgid "You've generated {0} years worth of Nouns"
+msgstr ""
+
+#: src/components/VoteModal/index.tsx:99
+msgid "You've successfully voted on on prop {0}"
 msgstr ""
 
 #: src/components/Documentation/index.tsx:189
@@ -715,7 +767,7 @@ msgstr ""
 msgid "public domain"
 msgstr ""
 
-#: src/pages/Vote/index.tsx:317
+#: src/pages/Vote/index.tsx:315
 msgid "{0} votes"
 msgstr ""
 
