@@ -8,7 +8,7 @@ export const Backdrop: React.FC<{ onDismiss: () => void }> = props => {
 };
 
 const ModalOverlay: React.FC<{
-  title?: string;
+  title?: React.ReactNode;
   content?: React.ReactNode;
   onDismiss: () => void;
 }> = props => {
@@ -25,7 +25,7 @@ const ModalOverlay: React.FC<{
 };
 
 const Modal: React.FC<{
-  title?: string;
+  title?: React.ReactNode;
   content?: React.ReactNode;
   onDismiss: () => void;
 }> = props => {

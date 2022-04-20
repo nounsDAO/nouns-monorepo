@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { CHAIN_ID } from '../../config';
+import { Trans } from '@lingui/macro';
 
 const SettleManuallyBtn: React.FC<{
   settleAuctionHandler: () => void;
@@ -50,7 +51,6 @@ const SettleManuallyBtn: React.FC<{
   }, [auction, auctionTimer]);
 
   const mins = timerDuration.minutes();
-  const minsContent = () => `${mins + 1} minute${mins !== 0 ? 's' : ''}`;
 
   return (
     <p className={classes.emergencySettleWrapper}>
@@ -60,11 +60,13 @@ const SettleManuallyBtn: React.FC<{
         disabled={!settleEnabled}
       >
         {settleEnabled ? (
-          <>{` Settle manually`}</>
+          <><Trans>Settle manually</Trans></>
         ) : (
           <>
             <FontAwesomeIcon icon={faInfoCircle} />
-            {` You can settle manually in ${minsContent()}`}
+            {
+              mins !== 0 ? <Trans>You can settle manually in {mins + 1} minutes</Trans> : <Trans>You can settle manually in 1 minute</Trans>
+            }
           </>
         )}
       </button>

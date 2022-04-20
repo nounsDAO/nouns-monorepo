@@ -4,7 +4,6 @@ import { ExternalLinkIcon } from '@heroicons/react/solid';
 import { useShortAddress } from '../ShortAddress';
 import { buildEtherscanTxLink } from '../../utils/etherscan';
 import TruncatedAmount from '../TruncatedAmount';
-import dayjs from 'dayjs';
 import BigNumber from 'bignumber.js';
 import { BigNumber as EthersBN } from '@ethersproject/bignumber';
 import { Bid } from '../../utils/types';
@@ -15,7 +14,7 @@ import Davatar from '@davatar/react';
 import { useEthers } from '@usedapp/core';
 import { useReverseENSLookUp } from '../../utils/ensLookup';
 import { containsBlockedText } from '../../utils/moderation/containsBlockedText';
-
+import {i18n} from "@lingui/core";
 interface BidHistoryModalRowProps {
   bid: Bid;
   index: number;
@@ -34,9 +33,6 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = props => {
   const { library: provider } = useEthers();
 
   const bidAmount = <TruncatedAmount amount={new BigNumber(EthersBN.from(bid.value).toString())} />;
-  const date = `${dayjs(bid.timestamp.toNumber() * 1000).format('MMM DD')} at ${dayjs(
-    bid.timestamp.toNumber() * 1000,
-  ).format('hh:mm a')}`;
 
   const ens = useReverseENSLookUp(bid.sender);
   const ensMatchesBlocklistRegex = containsBlockedText(ens || '', 'en');
@@ -62,7 +58,8 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = props => {
                     />
                   )}
                   <br />
-                  <div className={classes.bidDate}>{date}</div>
+                  <div className={classes.bidDate}>{i18n.date(new Date(bid.timestamp.toNumber()*1000), { dateStyle: "medium", timeStyle: "short"})
+}</div>
                 </span>
               </div>
             </div>
