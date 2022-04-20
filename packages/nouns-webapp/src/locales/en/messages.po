@@ -197,11 +197,11 @@ msgstr ""
 msgid "Each time an auction is settled, the settlement transaction will also cause a new Noun to be minted and a new 24 hour auction to begin."
 msgstr ""
 
-#: src/pages/Vote/index.tsx:107
+#: src/pages/Vote/index.tsx:108
 msgid "Ended"
 msgstr ""
 
-#: src/pages/Vote/index.tsx:104
+#: src/pages/Vote/index.tsx:105
 msgid "Ends"
 msgstr ""
 
@@ -211,6 +211,7 @@ msgstr ""
 
 #: src/components/Bid/index.tsx:69
 #: src/components/VoteModal/index.tsx:58
+#: src/pages/Vote/index.tsx:163
 msgid "Error"
 msgstr ""
 
@@ -223,7 +224,7 @@ msgstr ""
 msgid "Etherscan"
 msgstr ""
 
-#: src/pages/Vote/index.tsx:119
+#: src/pages/Vote/index.tsx:120
 msgid "Execute"
 msgstr ""
 
@@ -245,7 +246,7 @@ msgstr ""
 msgid "FOREVER."
 msgstr ""
 
-#: src/pages/Vote/index.tsx:231
+#: src/pages/Vote/index.tsx:232
 msgid "Failed to fetch"
 msgstr ""
 
@@ -444,7 +445,17 @@ msgstr ""
 #: src/components/Bid/index.tsx:70
 #: src/components/VoteModal/index.tsx:53
 #: src/components/VoteModal/index.tsx:60
+#: src/pages/Vote/index.tsx:155
+#: src/pages/Vote/index.tsx:164
 msgid "Please try again."
+msgstr ""
+
+#: src/pages/Vote/index.tsx:181
+msgid "Proposal Executed!"
+msgstr ""
+
+#: src/pages/Vote/index.tsx:176
+msgid "Proposal Queued!"
 msgstr ""
 
 #: src/components/ProposalHeader/index.tsx:90
@@ -467,7 +478,7 @@ msgstr ""
 msgid "Proposer"
 msgstr ""
 
-#: src/pages/Vote/index.tsx:119
+#: src/pages/Vote/index.tsx:120
 msgid "Queue"
 msgstr ""
 
@@ -476,7 +487,7 @@ msgstr ""
 msgid "Queued"
 msgstr ""
 
-#: src/pages/Vote/index.tsx:312
+#: src/pages/Vote/index.tsx:313
 msgid "Quorum"
 msgstr ""
 
@@ -517,11 +528,11 @@ msgstr ""
 msgid "Show fewer"
 msgstr ""
 
-#: src/pages/Vote/index.tsx:353
+#: src/pages/Vote/index.tsx:354
 msgid "Snapshot"
 msgstr ""
 
-#: src/pages/Vote/index.tsx:109
+#: src/pages/Vote/index.tsx:110
 msgid "Starts"
 msgstr ""
 
@@ -544,6 +555,7 @@ msgid "Succeeded"
 msgstr ""
 
 #: src/components/Bid/index.tsx:67
+#: src/pages/Vote/index.tsx:145
 msgid "Success"
 msgstr ""
 
@@ -551,7 +563,7 @@ msgstr ""
 msgid "Summary"
 msgstr ""
 
-#: src/pages/Vote/index.tsx:358
+#: src/pages/Vote/index.tsx:359
 msgid "Taken at block"
 msgstr ""
 
@@ -599,7 +611,7 @@ msgstr ""
 msgid "This treasury exists for <0>Nouns DAO</0> participants to allocate resources for the long-term growth and prosperity of the Nouns project."
 msgstr ""
 
-#: src/pages/Vote/index.tsx:307
+#: src/pages/Vote/index.tsx:308
 msgid "Threshold"
 msgstr ""
 
@@ -613,7 +625,12 @@ msgstr ""
 
 #: src/components/Bid/index.tsx:68
 #: src/components/VoteModal/index.tsx:52
+#: src/pages/Vote/index.tsx:154
 msgid "Transaction Failed"
+msgstr ""
+
+#: src/pages/Vote/index.tsx:146
+msgid "Transaction Successful!"
 msgstr ""
 
 #: src/pages/Governance/index.tsx:47
@@ -767,7 +784,7 @@ msgstr ""
 msgid "public domain"
 msgstr ""
 
-#: src/pages/Vote/index.tsx:315
+#: src/pages/Vote/index.tsx:316
 msgid "{0} votes"
 msgstr ""
 
@@ -775,7 +792,7 @@ msgstr ""
 msgid "{0}<0>h</0>"
 msgstr ""
 
-#: src/pages/Vote/index.tsx:272
+#: src/pages/Vote/index.tsx:273
 msgid "{moveStateButtonAction} Proposal ⌐◧-◧"
 msgstr ""
 

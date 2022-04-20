@@ -32,6 +32,7 @@ import {
 import { getNounVotes } from '../../utils/getNounsVotes';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
+import { ReactNode } from 'react-markdown/lib/react-markdown';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -127,9 +128,9 @@ const VotePage = ({
   const onTransactionStateChange = useCallback(
     (
       tx: TransactionStatus,
-      successMessage?: string,
+      successMessage?: ReactNode,
       setPending?: (isPending: boolean) => void,
-      getErrorMessage?: (error?: string) => string | undefined,
+      getErrorMessage?: (error?: string) => ReactNode | undefined,
       onFinalState?: () => void,
     ) => {
       switch (tx.status) {
@@ -141,8 +142,8 @@ const VotePage = ({
           break;
         case 'Success':
           setModal({
-            title: 'Success',
-            message: successMessage || 'Transaction Successful!',
+            title: <Trans>Success</Trans>,
+            message: successMessage || <Trans>Transaction Successful!</Trans>,
             show: true,
           });
           setPending?.(false);
@@ -150,8 +151,8 @@ const VotePage = ({
           break;
         case 'Fail':
           setModal({
-            title: 'Transaction Failed',
-            message: tx?.errorMessage || 'Please try again.',
+            title: <Trans>Transaction Failed</Trans>,
+            message: tx?.errorMessage || <Trans>Please try again.</Trans>,
             show: true,
           });
           setPending?.(false);
@@ -159,8 +160,8 @@ const VotePage = ({
           break;
         case 'Exception':
           setModal({
-            title: 'Error',
-            message: getErrorMessage?.(tx?.errorMessage) || 'Please try again.',
+            title: <Trans>Error</Trans>,
+            message: getErrorMessage?.(tx?.errorMessage) || <Trans>Please try again.</Trans>,
             show: true,
           });
           setPending?.(false);
@@ -172,12 +173,22 @@ const VotePage = ({
   );
 
   useEffect(
-    () => onTransactionStateChange(queueProposalState, 'Proposal Queued!', setQueuePending),
+    () =>
+      onTransactionStateChange(
+        queueProposalState,
+        <Trans>Proposal Queued!</Trans>,
+        setQueuePending,
+      ),
     [queueProposalState, onTransactionStateChange, setModal],
   );
 
   useEffect(
-    () => onTransactionStateChange(executeProposalState, 'Proposal Executed!', setExecutePending),
+    () =>
+      onTransactionStateChange(
+        executeProposalState,
+        <Trans>Proposal Executed!</Trans>,
+        setExecutePending,
+      ),
     [executeProposalState, onTransactionStateChange, setModal],
   );
 
