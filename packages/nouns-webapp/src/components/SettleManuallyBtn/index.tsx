@@ -60,13 +60,17 @@ const SettleManuallyBtn: React.FC<{
         disabled={!settleEnabled}
       >
         {settleEnabled ? (
-          <><Trans>Settle manually</Trans></>
+          <>
+            <Trans>Settle manually</Trans>
+          </>
         ) : (
           <>
             <FontAwesomeIcon icon={faInfoCircle} />
-            {
-              mins !== 0 ? <Trans>You can settle manually in {mins + 1} minutes</Trans> : <Trans>You can settle manually in 1 minute</Trans>
-            }
+            {mins !== 0 ? (
+              <Trans>You can settle manually in {mins + 1} minutes</Trans>
+            ) : (
+              <Trans>You can settle manually in 1 minute</Trans>
+            )}
           </>
         )}
       </button>

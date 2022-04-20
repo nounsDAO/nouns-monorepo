@@ -8,8 +8,8 @@ import _BirthdayIcon from '../../assets/icons/Birthday.svg';
 import { Image } from 'react-bootstrap';
 import { useAppSelector } from '../../hooks';
 import { AuctionState } from '../../state/slices/auction';
-import { Trans } from "@lingui/macro";
-import { i18n } from "@lingui/core";
+import { Trans } from '@lingui/macro';
+import { i18n } from '@lingui/core';
 
 interface NounInfoRowBirthdayProps {
   nounId: number;
@@ -46,12 +46,10 @@ const NounInfoRowBirthday: React.FC<NounInfoRowBirthdayProps> = props => {
       <span>
         <Image src={_BirthdayIcon} className={classes.birthdayIcon} />
       </span>
-      <Trans>
-      Born
-      </Trans>
+      <Trans>Born</Trans>
       <span className={classes.nounInfoRowBirthday}>
         {i18n.date(birthday, {
-          dateStyle: "medium"
+          dateStyle: 'medium',
         })}
       </span>
     </div>

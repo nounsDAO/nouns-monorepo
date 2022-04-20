@@ -4,7 +4,7 @@ import TruncatedAmount from '../TruncatedAmount';
 import { Row, Col } from 'react-bootstrap';
 import { useAppSelector } from '../../hooks';
 import clsx from 'clsx';
-import { Trans } from "@lingui/macro";
+import { Trans } from '@lingui/macro';
 
 /**
  * Passible to CurrentBid as `currentBid` prop to indicate that

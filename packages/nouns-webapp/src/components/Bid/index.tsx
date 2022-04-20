@@ -13,7 +13,7 @@ import { NounsAuctionHouseFactory } from '@nouns/sdk';
 import config from '../../config';
 import WalletConnectModal from '../WalletConnectModal';
 import SettleManuallyBtn from '../SettleManuallyBtn';
-import { Trans } from "@lingui/macro";
+import { Trans } from '@lingui/macro';
 
 const computeMinimumNextBid = (
   currentBid: BigNumber,
@@ -62,12 +62,12 @@ const Bid: React.FC<{
 
   const placeBidCopy = <Trans>Place bid</Trans>;
   const settleCopy = <Trans>Settle</Trans>;
-  const bidCopy= <Trans>Bid</Trans>;
+  const bidCopy = <Trans>Bid</Trans>;
   const settleAuctionCopy = <Trans>Settle Auction</Trans>;
   const successCopy = <Trans>Success</Trans>;
   const transactionFailedCopy = <Trans>Transaction Failed</Trans>;
   const errorCopy = <Trans>Error</Trans>;
-  const pleaseTryAgainCopy = <Trans>Please try again.</Trans>
+  const pleaseTryAgainCopy = <Trans>Please try again.</Trans>;
 
   const [bidButtonContent, setBidButtonContent] = useState({
     loading: false,
@@ -118,7 +118,12 @@ const Bid: React.FC<{
       setModal({
         show: true,
         title: <Trans>Insufficient bid amount 🤏</Trans>,
-        message: <Trans>Please place a bid higher than or equal to the minimum bid amount of {minBidEth(minBid)} ETH</Trans>
+        message: (
+          <Trans>
+            Please place a bid higher than or equal to the minimum bid amount of {minBidEth(minBid)}{' '}
+            ETH
+          </Trans>
+        ),
       });
       setBidInput(minBidEth(minBid));
       return;
@@ -260,7 +265,13 @@ const Bid: React.FC<{
         {!auctionEnded && (
           <>
             <span className={classes.customPlaceholderBidAmt}>
-              {!auctionEnded && !bidInput ? <>Ξ {minBidEth(minBid)} <Trans>or more</Trans></> : ''}
+              {!auctionEnded && !bidInput ? (
+                <>
+                  Ξ {minBidEth(minBid)} <Trans>or more</Trans>
+                </>
+              ) : (
+                ''
+              )}
             </span>
             <FormControl
               className={classes.bidInput}
@@ -284,9 +295,7 @@ const Bid: React.FC<{
           <>
             <Col lg={12} className={classes.voteForNextNounBtnWrapper}>
               <Button className={classes.bidBtnAuctionEnded} onClick={fomoNounsBtnOnClickHandler}>
-                <Trans>
-                Vote for the next Noun ⌐◧-◧
-                </Trans>
+                <Trans>Vote for the next Noun ⌐◧-◧</Trans>
               </Button>
             </Col>
             {/* Only show force settle button if wallet connected */}

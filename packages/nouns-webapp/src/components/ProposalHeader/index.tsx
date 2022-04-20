@@ -10,6 +10,8 @@ import { isMobileScreen } from '../../utils/isMobile';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import { useBlockTimestamp } from '../../hooks/useBlockTimestamp';
 import dayjs from 'dayjs';
+import { Trans } from '@lingui/macro';
+import { i18n } from '@lingui/core';
 
 interface ProposalHeaderProps {
   proposal: Proposal;
@@ -55,7 +57,9 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
           <div className={classes.headerRow}>
             <span>
               <div className="d-flex">
-                <div>Proposal {proposal.id}</div>
+                <div>
+                  <Trans>Proposal {i18n.number(parseInt(proposal.id || '0'))}</Trans>
+                </div>
                 <div>
                   <ProposalStatus status={proposal?.status} className={classes.proposalStatus} />
                 </div>

@@ -4,7 +4,7 @@ import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import { externalURL, ExternalURL } from '../../utils/externalURL';
 import config from '../../config';
 import Link from '../Link';
-import { Trans } from "@lingui/macro";
+import { Trans } from '@lingui/macro';
 
 const Footer = () => {
   const twitterURL = externalURL(ExternalURL.twitter);

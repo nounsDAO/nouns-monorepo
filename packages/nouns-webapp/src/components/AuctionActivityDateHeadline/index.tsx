@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import classes from './AuctionActivityDateHeadline.module.css';
 import { useAppSelector } from '../../hooks';
-import { i18n } from "@lingui/core";
+import { i18n } from '@lingui/core';
 
 dayjs.extend(utc);
 
@@ -18,7 +18,9 @@ const AuctionActivityDateHeadline: React.FC<{ startTime: BigNumber }> = props =>
       <h4
         className={classes.date}
         style={{ color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)' }}
-      >{i18n.date(auctionStartTimeUTC, { dateStyle: "medium" })}</h4>
+      >
+        {i18n.date(auctionStartTimeUTC, { dateStyle: 'medium' })}
+      </h4>
     </div>
   );
 };

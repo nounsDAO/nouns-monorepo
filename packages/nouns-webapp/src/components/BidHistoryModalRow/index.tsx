@@ -14,7 +14,7 @@ import Davatar from '@davatar/react';
 import { useEthers } from '@usedapp/core';
 import { useReverseENSLookUp } from '../../utils/ensLookup';
 import { containsBlockedText } from '../../utils/moderation/containsBlockedText';
-import {i18n} from "@lingui/core";
+import { i18n } from '@lingui/core';
 interface BidHistoryModalRowProps {
   bid: Bid;
   index: number;
@@ -58,8 +58,12 @@ const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = props => {
                     />
                   )}
                   <br />
-                  <div className={classes.bidDate}>{i18n.date(new Date(bid.timestamp.toNumber()*1000), { dateStyle: "medium", timeStyle: "short"})
-}</div>
+                  <div className={classes.bidDate}>
+                    {i18n.date(new Date(bid.timestamp.toNumber() * 1000), {
+                      dateStyle: 'medium',
+                      timeStyle: 'short',
+                    })}
+                  </div>
                 </span>
               </div>
             </div>

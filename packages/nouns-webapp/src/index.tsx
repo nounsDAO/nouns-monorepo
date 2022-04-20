@@ -46,7 +46,7 @@ import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
 import { messages as messagesEn } from './locales/en/messages';
 import { messages as messagesJa } from './locales/ja/messages';
-import { messages as messagesPl} from './locales/pseudo-LOCALE/messages';
+import { messages as messagesPl } from './locales/pseudo-LOCALE/messages';
 
 dotenv.config();
 
@@ -197,7 +197,7 @@ const PastAuctions: React.FC = () => {
 i18n.load({
   en: messagesEn,
   ja: messagesJa,
-  pl: messagesPl 
+  pl: messagesPl,
 });
 i18n.activate('pl');
 // i18n.activate('en');

@@ -13,7 +13,7 @@ import { useAppSelector } from '../../hooks';
 
 import config from '../../config';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import { Trans } from "@lingui/macro";
+import { Trans } from '@lingui/macro';
 
 interface NounInfoCardProps {
   nounId: number;

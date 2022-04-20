@@ -1,7 +1,7 @@
 import bidBtnClasses from './BidHistoryBtn.module.css';
 
 import { useAppSelector } from '../../hooks';
-import { Trans } from "@lingui/macro";
+import { Trans } from '@lingui/macro';
 
 const BidHistoryBtn: React.FC<{ onClick: () => void }> = props => {
   const { onClick } = props;
@@ -13,7 +13,9 @@ const BidHistoryBtn: React.FC<{ onClick: () => void }> = props => {
       className={isCool ? bidBtnClasses.bidHistoryWrapperCool : bidBtnClasses.bidHistoryWrapperWarm}
       onClick={onClick}
     >
-      <div className={bidBtnClasses.bidHistory}><Trans>View all bids</Trans></div>
+      <div className={bidBtnClasses.bidHistory}>
+        <Trans>View all bids</Trans>
+      </div>
     </div>
   );
 };

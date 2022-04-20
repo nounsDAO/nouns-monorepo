@@ -7,8 +7,8 @@ import { useEthers } from '@usedapp/core';
 import { isMobileScreen } from '../../utils/isMobile';
 import clsx from 'clsx';
 import { useUserVotes } from '../../wrappers/nounToken';
-import { Trans } from "@lingui/macro";
-import { i18n } from "@lingui/core";
+import { Trans } from '@lingui/macro';
+import { i18n } from '@lingui/core';
 
 const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
   const history = useHistory();
@@ -29,16 +29,12 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
     <div className={classes.proposals}>
       <div>
         <h3 className={classes.heading}>
-          <Trans>
-          Proposals
-          </Trans>
+          <Trans>Proposals</Trans>
         </h3>
         {account !== undefined && connectedAccountNounVotes > 0 ? (
           <div className={classes.submitProposalButtonWrapper}>
             <Button className={classes.generateBtn} onClick={() => history.push('create-proposal')}>
-              <Trans>
-              Submit Proposal
-              </Trans>
+              <Trans>Submit Proposal</Trans>
             </Button>
           </div>
         ) : (
@@ -46,9 +42,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
             {!isMobile && <div className={classes.nullStateCopy}>{nullStateCopy()}</div>}
             <div className={classes.nullBtnWrapper}>
               <Button className={classes.generateBtnDisabled}>
-                <Trans>
-                Submit Proposal
-                </Trans>
+                <Trans>Submit Proposal</Trans>
               </Button>
             </div>
           </div>
@@ -67,7 +61,8 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
                 key={i}
               >
                 <span className={classes.proposalTitle}>
-                  <span className={classes.proposalId}>{i18n.number(parseInt(p.id || "0"))}</span> <span>{p.title}</span>
+                  <span className={classes.proposalId}>{i18n.number(parseInt(p.id || '0'))}</span>{' '}
+                  <span>{p.title}</span>
                 </span>
                 <div className={classes.proposalStatusWrapper}>
                   <ProposalStatus status={p.status}></ProposalStatus>
@@ -77,11 +72,11 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
           })
       ) : (
         <Alert variant="secondary">
-          <Alert.Heading><Trans>No proposals found</Trans></Alert.Heading>
+          <Alert.Heading>
+            <Trans>No proposals found</Trans>
+          </Alert.Heading>
           <p>
-          <Trans>
-            Proposals submitted by community members will appear here.
-          </Trans>
+            <Trans>Proposals submitted by community members will appear here.</Trans>
           </p>
         </Alert>
       )}

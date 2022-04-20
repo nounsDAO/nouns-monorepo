@@ -7,7 +7,7 @@ import { StandaloneNounRoundedCorners } from '../StandaloneNoun';
 import { useAuctionBids } from '../../wrappers/onDisplayAuction';
 import { Bid } from '../../utils/types';
 import BidHistoryModalRow from '../BidHistoryModalRow';
-import { Trans } from "@lingui/macro";
+import { Trans } from '@lingui/macro';
 
 export const Backdrop: React.FC<{ onDismiss: () => void }> = props => {
   return <div className={classes.backdrop} onClick={props.onDismiss} />;
@@ -38,14 +38,11 @@ const BidHistoryModalOverlay: React.FC<{
 
             <div className={classes.title}>
               <h2>
-                <Trans>
-                Bids for
-                </Trans>
-                </h2>
+                <Trans>Bids for</Trans>
+              </h2>
               <h1>
-                <Trans>
-                Noun
-                </Trans> {auction && auction.nounId.toString()}</h1>
+                <Trans>Noun</Trans> {auction && auction.nounId.toString()}
+              </h1>
             </div>
           </div>
           <div className={classes.bidWrapper}>
@@ -56,7 +53,9 @@ const BidHistoryModalOverlay: React.FC<{
                 })}
               </ul>
             ) : (
-              <div className={classes.nullStateText}><Trans>Bids will appear here</Trans></div>
+              <div className={classes.nullStateText}>
+                <Trans>Bids will appear here</Trans>
+              </div>
             )}
           </div>
         </div>
