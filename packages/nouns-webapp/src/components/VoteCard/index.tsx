@@ -5,6 +5,8 @@ import { Proposal } from '../../wrappers/nounsDao';
 import NounImageVoteTable from '../NounImageVoteTable';
 import VoteProgresBar from '../VoteProgressBar';
 import classes from './VoteCard.module.css';
+import { Trans } from '@lingui/macro';
+import { i18n } from '@lingui/core';
 
 export enum VoteCardVariant {
   FOR,
@@ -29,17 +31,17 @@ const VoteCard: React.FC<VoteCardProps> = props => {
   switch (variant) {
     case VoteCardVariant.FOR:
       titleClass = classes.for;
-      titleCopy = 'For';
+      titleCopy = <Trans>For</Trans>;
       voteCount = proposal.forCount;
       break;
     case VoteCardVariant.AGAINST:
       titleClass = classes.against;
-      titleCopy = 'Against';
+      titleCopy = <Trans>Against</Trans>;
       voteCount = proposal.againstCount;
       break;
     default:
       titleClass = classes.abstain;
-      titleCopy = 'Abstain';
+      titleCopy = <Trans>Abstain</Trans>;
       voteCount = proposal.abstainCount;
       break;
   }
@@ -51,11 +53,13 @@ const VoteCard: React.FC<VoteCardProps> = props => {
         <Card.Body className="p-2">
           <Card.Text className="py-2 m-0">
             <span className={`${classes.voteCardHeaderText} ${titleClass}`}>{titleCopy}</span>
-            {!isMobile && <span className={classes.voteCardVoteCount}>{voteCount}</span>}
+            {!isMobile && (
+              <span className={classes.voteCardVoteCount}>{i18n.number(voteCount)}</span>
+            )}
           </Card.Text>
           {isMobile && (
             <Card.Text className="py-2 m-0">
-              <span className={classes.voteCardVoteCount}>{voteCount}</span>
+              <span className={classes.voteCardVoteCount}>{i18n.number(voteCount)}</span>
             </Card.Text>
           )}
           <VoteProgresBar variant={variant} percentage={percentage} />

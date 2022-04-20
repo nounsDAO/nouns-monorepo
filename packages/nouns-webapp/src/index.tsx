@@ -200,7 +200,7 @@ i18n.load({
   pl: messagesPl,
 });
 i18n.activate('pl');
-// i18n.activate('en');
+//i18n.activate('en');
 
 ReactDOM.render(
   <Provider store={store}>
