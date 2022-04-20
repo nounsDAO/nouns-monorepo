@@ -38,6 +38,7 @@ msgid "Abstained on"
 msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx:87
+#: src/components/ProposalStatus/index.tsx:31
 msgid "Active"
 msgstr ""
 
@@ -95,11 +96,16 @@ msgid "Born"
 msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx:97
+#: src/components/ProposalStatus/index.tsx:41
 msgid "Canceled"
 msgstr ""
 
 #: src/components/Documentation/index.tsx:21
 msgid "Compound Governance"
+msgstr ""
+
+#: src/components/Proposals/index.tsx:25
+msgid "Connect wallet to make a proposal."
 msgstr ""
 
 #: src/components/Documentation/index.tsx:10
@@ -115,6 +121,7 @@ msgid "Daily Auctions"
 msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx:93
+#: src/components/ProposalStatus/index.tsx:37
 msgid "Defeated"
 msgstr ""
 
@@ -148,10 +155,12 @@ msgid "Etherscan"
 msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx:91
+#: src/components/ProposalStatus/index.tsx:35
 msgid "Executed"
 msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx:101
+#: src/components/ProposalStatus/index.tsx:45
 msgid "Expired"
 msgstr ""
 
@@ -205,6 +214,10 @@ msgstr ""
 
 #: src/components/Documentation/index.tsx:56
 msgid "No explicit rules exist for attribute scarcity; all Nouns are equally rare."
+msgstr ""
+
+#: src/components/Proposals/index.tsx:80
+msgid "No proposals found"
 msgstr ""
 
 #: src/components/BidHistoryModal/index.tsx:46
@@ -298,6 +311,7 @@ msgid "One Noun is trustlessly auctioned every 24 hours, forever."
 msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx:85
+#: src/components/ProposalStatus/index.tsx:29
 msgid "Pending"
 msgstr ""
 
@@ -317,7 +331,16 @@ msgstr ""
 msgid "Please try again."
 msgstr ""
 
+#: src/components/Proposals/index.tsx:32
+msgid "Proposals"
+msgstr ""
+
+#: src/components/Proposals/index.tsx:82
+msgid "Proposals submitted by community members will appear here."
+msgstr ""
+
 #: src/components/NounProfileVoteRow/index.tsx:95
+#: src/components/ProposalStatus/index.tsx:39
 msgid "Queued"
 msgstr ""
 
@@ -349,7 +372,13 @@ msgstr ""
 msgid "Show fewer"
 msgstr ""
 
+#: src/components/Proposals/index.tsx:39
+#: src/components/Proposals/index.tsx:49
+msgid "Submit Proposal"
+msgstr ""
+
 #: src/components/NounProfileVoteRow/index.tsx:89
+#: src/components/ProposalStatus/index.tsx:33
 msgid "Succeeded"
 msgstr ""
 
@@ -406,10 +435,12 @@ msgid "Twitter"
 msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx:103
+#: src/components/ProposalStatus/index.tsx:47
 msgid "Undetermined"
 msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx:99
+#: src/components/ProposalStatus/index.tsx:43
 msgid "Vetoed"
 msgstr ""
 
@@ -468,6 +499,10 @@ msgstr ""
 
 #: src/components/SettleManuallyBtn/index.tsx:68
 msgid "You can settle manually in {0} minutes"
+msgstr ""
+
+#: src/components/Proposals/index.tsx:23
+msgid "You have no Votes."
 msgstr ""
 
 #: src/components/Documentation/index.tsx:139
