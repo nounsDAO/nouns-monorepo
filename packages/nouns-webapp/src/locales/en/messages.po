@@ -197,7 +197,7 @@ msgstr ""
 msgid "Connect wallet to make a proposal."
 msgstr ""
 
-#: src/components/CreateProposalButton/index.tsx:32
+#: src/components/CreateProposalButton/index.tsx:36
 #: src/pages/CreateProposal/index.tsx:149
 msgid "Create Proposal"
 msgstr ""
@@ -208,6 +208,10 @@ msgstr ""
 
 #: src/components/CurrentBid/index.tsx:23
 msgid "Current bid"
+msgstr ""
+
+#: src/components/NavBar/index.tsx:83
+msgid "DAO"
 msgstr ""
 
 #: src/components/Documentation/index.tsx:104
@@ -223,8 +227,20 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
+#: src/components/NavWallet/index.tsx:171
+msgid "Disconnect"
+msgstr ""
+
 #: src/components/Footer/index.tsx:19
 msgid "Discord"
+msgstr ""
+
+#: src/components/NavBar/index.tsx:107
+msgid "Discourse"
+msgstr ""
+
+#: src/components/NavBar/index.tsx:95
+msgid "Docs"
 msgstr ""
 
 #: src/components/Banner/index.tsx:16
@@ -495,6 +511,7 @@ msgid "Place bid"
 msgstr ""
 
 #: src/components/Documentation/index.tsx:17
+#: src/components/NavBar/index.tsx:114
 #: src/pages/Playground/index.tsx:269
 msgid "Playground"
 msgstr ""
@@ -513,7 +530,7 @@ msgstr ""
 msgid "Please try again."
 msgstr ""
 
-#: src/components/ProposalEditor/index.tsx:53
+#: src/components/ProposalEditor/index.tsx:51
 msgid "Preview:"
 msgstr ""
 
@@ -607,6 +624,10 @@ msgstr ""
 msgid "Show fewer"
 msgstr ""
 
+#: src/components/NavWallet/index.tsx:204
+msgid "Sign out"
+msgstr ""
+
 #: src/pages/Vote/index.tsx:364
 msgid "Snapshot"
 msgstr ""
@@ -641,6 +662,14 @@ msgstr ""
 
 #: src/components/Documentation/index.tsx:57
 msgid "Summary"
+msgstr ""
+
+#: src/components/NavWallet/index.tsx:201
+msgid "Switch"
+msgstr ""
+
+#: src/components/NavWallet/index.tsx:154
+msgid "Switch wallet"
 msgstr ""
 
 #: src/pages/Vote/index.tsx:369
@@ -718,6 +747,7 @@ msgstr ""
 msgid "Transaction Successful!"
 msgstr ""
 
+#: src/components/NavBarTreasury/index.tsx:44
 #: src/pages/Governance/index.tsx:47
 msgid "Treasury"
 msgstr ""
@@ -825,7 +855,7 @@ msgstr ""
 msgid "You can settle manually in {0} minutes"
 msgstr ""
 
-#: src/components/CreateProposalButton/index.tsx:30
+#: src/components/CreateProposalButton/index.tsx:34
 msgid "You don't have enough votes to submit a proposal"
 msgstr ""
 
@@ -837,7 +867,7 @@ msgstr ""
 msgid "You have no votes."
 msgstr ""
 
-#: src/components/CreateProposalButton/index.tsx:28
+#: src/components/CreateProposalButton/index.tsx:29
 msgid "You must have {0} votes to submit a proposal"
 msgstr ""
 
