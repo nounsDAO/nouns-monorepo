@@ -60,18 +60,9 @@ const Bid: React.FC<{
 
   const [bidInput, setBidInput] = useState('');
 
-  const placeBidCopy = <Trans>Place bid</Trans>;
-  const settleCopy = <Trans>Settle</Trans>;
-  const bidCopy = <Trans>Bid</Trans>;
-  const settleAuctionCopy = <Trans>Settle Auction</Trans>;
-  const successCopy = <Trans>Success</Trans>;
-  const transactionFailedCopy = <Trans>Transaction Failed</Trans>;
-  const errorCopy = <Trans>Error</Trans>;
-  const pleaseTryAgainCopy = <Trans>Please try again.</Trans>;
-
   const [bidButtonContent, setBidButtonContent] = useState({
     loading: false,
-    content: auctionEnded ? settleCopy : placeBidCopy,
+    content: auctionEnded ? <Trans>Settle</Trans> : <Trans>Place bid</Trans>,
   });
 
   const [showConnectModal, setShowConnectModal] = useState(false);
@@ -161,11 +152,11 @@ const Bid: React.FC<{
     if (isMiningUserTx && auction.bidder === account && isCorrectTx) {
       placeBidState.status = 'Success';
       setModal({
-        title: successCopy,
+        title: <Trans>Success</Trans>,
         message: <Trans>Bid was placed successfully!</Trans>,
         show: true,
       });
-      setBidButtonContent({ loading: false, content: placeBidCopy });
+      setBidButtonContent({ loading: false, content: <Trans>Place bid</Trans> });
       clearBidInput();
     }
   }, [auction, placeBidState, account, setModal]);
@@ -176,7 +167,7 @@ const Bid: React.FC<{
       case 'None':
         setBidButtonContent({
           loading: false,
-          content: placeBidCopy,
+          content: <Trans>Place bid</Trans>,
         });
         break;
       case 'Mining':
@@ -184,19 +175,19 @@ const Bid: React.FC<{
         break;
       case 'Fail':
         setModal({
-          title: transactionFailedCopy,
-          message: placeBidState.errorMessage ? placeBidState.errorMessage : pleaseTryAgainCopy,
+          title: <Trans>Transaction Failed</Trans>,
+          message: placeBidState.errorMessage ? placeBidState.errorMessage : <Trans>Please try again.</Trans>,
           show: true,
         });
-        setBidButtonContent({ loading: false, content: bidCopy });
+        setBidButtonContent({ loading: false, content: <Trans>Bid</Trans> });
         break;
       case 'Exception':
         setModal({
-          title: errorCopy,
-          message: placeBidState.errorMessage ? placeBidState.errorMessage : pleaseTryAgainCopy,
+          title: <Trans>Error</Trans>,
+          message: placeBidState.errorMessage ? placeBidState.errorMessage : <Trans>Please try again.</Trans>,
           show: true,
         });
-        setBidButtonContent({ loading: false, content: bidCopy });
+        setBidButtonContent({ loading: false, content: <Trans>Bid</Trans> });
         break;
     }
   }, [placeBidState, auctionEnded, setModal]);
@@ -207,7 +198,7 @@ const Bid: React.FC<{
       case 'None':
         setBidButtonContent({
           loading: false,
-          content: settleAuctionCopy,
+          content: <Trans>Settle Auction</Trans>,
         });
         break;
       case 'Mining':
@@ -215,31 +206,31 @@ const Bid: React.FC<{
         break;
       case 'Success':
         setModal({
-          title: successCopy,
+          title: <Trans>Success</Trans>,
           message: <Trans>Settled auction successfully!</Trans>,
           show: true,
         });
-        setBidButtonContent({ loading: false, content: settleAuctionCopy });
+        setBidButtonContent({ loading: false, content: <Trans>Settle Auction</Trans> });
         break;
       case 'Fail':
         setModal({
-          title: transactionFailedCopy,
+          title: <Trans>Transaction Failed</Trans>,
           message: settleAuctionState.errorMessage
             ? settleAuctionState.errorMessage
-            : pleaseTryAgainCopy,
+            : <Trans>Please try again.</Trans>,
           show: true,
         });
-        setBidButtonContent({ loading: false, content: settleAuctionCopy });
+        setBidButtonContent({ loading: false, content: <Trans>Settle Auction</Trans> });
         break;
       case 'Exception':
         setModal({
-          title: errorCopy,
+          title: <Trans>Error</Trans>,
           message: settleAuctionState.errorMessage
             ? settleAuctionState.errorMessage
-            : pleaseTryAgainCopy,
+            : <Trans>Please try again.</Trans>,
           show: true,
         });
-        setBidButtonContent({ loading: false, content: settleAuctionCopy });
+        setBidButtonContent({ loading: false, content: <Trans>Settle Auction</Trans> });
         break;
     }
   }, [settleAuctionState, auctionEnded, setModal]);
