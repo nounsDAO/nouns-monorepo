@@ -132,7 +132,8 @@ msgstr ""
 msgid "Because 100% of Noun auction proceeds are sent to Nouns DAO, Nounders have chosen to compensate themselves with Nouns. Every 10th Noun for the first 5 years of the project (Noun ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
 msgstr ""
 
-#: src/components/Bid/index.tsx:65
+#: src/components/Bid/index.tsx:186
+#: src/components/Bid/index.tsx:198
 msgid "Bid"
 msgstr ""
 
@@ -140,7 +141,7 @@ msgstr ""
 msgid "Bid history"
 msgstr ""
 
-#: src/components/Bid/index.tsx:165
+#: src/components/Bid/index.tsx:156
 msgid "Bid was placed successfully!"
 msgstr ""
 
@@ -185,8 +186,16 @@ msgstr ""
 msgid "Cast {0} votes for Prop {1}"
 msgstr ""
 
+#: src/components/WalletConnectModal/index.tsx:104
+msgid "Clear WalletConnect Data"
+msgstr ""
+
 #: src/components/Documentation/index.tsx:28
 msgid "Compound Governance"
+msgstr ""
+
+#: src/components/NavWallet/WalletConnectButton/index.tsx:16
+msgid "Connect"
 msgstr ""
 
 #: src/components/ProposalHeader/index.tsx:66
@@ -195,6 +204,10 @@ msgstr ""
 
 #: src/components/Proposals/index.tsx:25
 msgid "Connect wallet to make a proposal."
+msgstr ""
+
+#: src/components/WalletConnectModal/index.tsx:109
+msgid "Connect your wallet"
 msgstr ""
 
 #: src/components/CreateProposalButton/index.tsx:36
@@ -263,7 +276,8 @@ msgstr ""
 msgid "Ends on"
 msgstr ""
 
-#: src/components/Bid/index.tsx:69
+#: src/components/Bid/index.tsx:190
+#: src/components/Bid/index.tsx:237
 #: src/components/VoteModal/index.tsx:58
 #: src/pages/CreateProposal/index.tsx:126
 #: src/pages/Vote/index.tsx:163
@@ -361,7 +375,7 @@ msgstr ""
 msgid "In addition to the precautions taken by Compound Governance, Nounders have given themselves a special veto right to ensure that no malicious proposals can be passed while the Noun supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort."
 msgstr ""
 
-#: src/components/Bid/index.tsx:120
+#: src/components/Bid/index.tsx:111
 msgid "Insufficient bid amount 🤏"
 msgstr ""
 
@@ -506,7 +520,9 @@ msgstr ""
 msgid "Pending"
 msgstr ""
 
-#: src/components/Bid/index.tsx:63
+#: src/components/Bid/index.tsx:65
+#: src/components/Bid/index.tsx:159
+#: src/components/Bid/index.tsx:170
 msgid "Place bid"
 msgstr ""
 
@@ -516,11 +532,14 @@ msgstr ""
 msgid "Playground"
 msgstr ""
 
-#: src/components/Bid/index.tsx:122
+#: src/components/Bid/index.tsx:113
 msgid "Please place a bid higher than or equal to the minimum bid amount of {0} ETH"
 msgstr ""
 
-#: src/components/Bid/index.tsx:70
+#: src/components/Bid/index.tsx:182
+#: src/components/Bid/index.tsx:194
+#: src/components/Bid/index.tsx:229
+#: src/components/Bid/index.tsx:241
 #: src/components/VoteModal/index.tsx:53
 #: src/components/VoteModal/index.tsx:60
 #: src/pages/CreateProposal/index.tsx:119
@@ -596,11 +615,14 @@ msgstr ""
 #~ msgid "Select Contract Function"
 #~ msgstr ""
 
-#: src/components/Bid/index.tsx:64
+#: src/components/Bid/index.tsx:65
 msgid "Settle"
 msgstr ""
 
-#: src/components/Bid/index.tsx:66
+#: src/components/Bid/index.tsx:209
+#: src/components/Bid/index.tsx:221
+#: src/components/Bid/index.tsx:233
+#: src/components/Bid/index.tsx:245
 msgid "Settle Auction"
 msgstr ""
 
@@ -608,7 +630,7 @@ msgstr ""
 msgid "Settle manually"
 msgstr ""
 
-#: src/components/Bid/index.tsx:219
+#: src/components/Bid/index.tsx:218
 msgid "Settled auction successfully!"
 msgstr ""
 
@@ -654,7 +676,8 @@ msgstr ""
 msgid "Succeeded"
 msgstr ""
 
-#: src/components/Bid/index.tsx:67
+#: src/components/Bid/index.tsx:155
+#: src/components/Bid/index.tsx:217
 #: src/pages/CreateProposal/index.tsx:110
 #: src/pages/Vote/index.tsx:145
 msgid "Success"
@@ -736,7 +759,8 @@ msgstr ""
 msgid "Trait generation is not truly random. Traits can be predicted when minting a Noun on the pending block."
 msgstr ""
 
-#: src/components/Bid/index.tsx:68
+#: src/components/Bid/index.tsx:178
+#: src/components/Bid/index.tsx:225
 #: src/components/VoteModal/index.tsx:52
 #: src/pages/CreateProposal/index.tsx:118
 #: src/pages/Vote/index.tsx:154
@@ -790,7 +814,7 @@ msgstr ""
 msgid "View all bids"
 msgstr ""
 
-#: src/components/Bid/index.tsx:298
+#: src/components/Bid/index.tsx:301
 msgid "Vote for the next Noun ⌐◧-◧"
 msgstr ""
 
@@ -911,7 +935,7 @@ msgstr ""
 msgid "heads (234)"
 msgstr ""
 
-#: src/components/Bid/index.tsx:270
+#: src/components/Bid/index.tsx:273
 msgid "or more"
 msgstr ""
 
