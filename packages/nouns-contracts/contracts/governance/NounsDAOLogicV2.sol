@@ -240,7 +240,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
 
         latestProposalIds[newProposal.proposer] = newProposal.id;
 
-        proposalMetadata[proposalCount] = ProposalMetadata({
+        snapshot[proposalCount] = StateSnapshot({
             minQuorumVotesBPS: minQuorumVotesBPS,
             maxQuorumVotesBPS: maxQuorumVotesBPS,
             totalSupply: temp.totalSupply
@@ -700,15 +700,15 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
      */
     function quorumVotes(uint256 proposalId) public view returns (uint256) {
         Proposal storage proposal = proposals[proposalId];
-        ProposalMetadata memory metadata = proposalMetadata[proposalId];
-        if (metadata.totalSupply == 0) {
+        StateSnapshot memory snapshot = snapshot[proposalId];
+        if (snapshot.totalSupply == 0) {
             return proposal.minQuorumVotes;
         }
 
         uint256 consensus = WAD - wdiv(proposal.forVotes, (proposal.forVotes + proposal.againstVotes));
-        uint256 maxAdjustment = metadata.maxQuorumVotesBPS - metadata.minQuorumVotesBPS;
-        uint256 quorumBPS = ((maxAdjustment * consensus) + (metadata.minQuorumVotesBPS * WAD)) / WAD;
-        return bps2Uint(quorumBPS, metadata.totalSupply);
+        uint256 maxAdjustment = snapshot.maxQuorumVotesBPS - snapshot.minQuorumVotesBPS;
+        uint256 quorumBPS = ((maxAdjustment * consensus) + (snapshot.minQuorumVotesBPS * WAD)) / WAD;
+        return bps2Uint(quorumBPS, snapshot.totalSupply);
     }
 
     /**

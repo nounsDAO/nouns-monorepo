@@ -334,10 +334,10 @@ contract NounsDAOStorageV2 is NounsDAOStorageV1Adjusted {
     /// @notice The maximum basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed. *DIFFERS from GovernerBravo
     uint256 public maxQuorumVotesBPS;
 
-    /// @notice Proposal metadata - A small state snapshot that's taken at the time of proposal creation.
-    mapping(uint256 => ProposalMetadata) public proposalMetadata;
+    /// @notice A small state snapshot that's taken at the time of proposal creation.
+    mapping(uint256 => StateSnapshot) public snapshot;
 
-    struct ProposalMetadata {
+    struct StateSnapshot {
         /// @notice Total Noun supply at the time of proposal creation
         uint256 totalSupply;
         /// @notice Minimum quorum votes BPS at the time of proposal creation
