@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@lingui/detect-locale": "^3.13.2",
     "@apollo/client": "^3.3.21",
     "bad-words": "^3.0.4",
     "@davatar/react": "^1.8.1",

@@ -1,6 +1,6 @@
 import Davatar from '@davatar/react';
 import React, { useState } from 'react';
-import { getNavBarButtonVariant, NavBarButtonStyle } from '../NavBarButton';
+import NavBarButton, { getNavBarButtonVariant, NavBarButtonStyle } from '../NavBarButton';
 import classes from './NavLocalSwitcher.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSortDown } from '@fortawesome/free-solid-svg-icons';
@@ -11,7 +11,9 @@ import clsx from 'clsx';
 import { useHistory } from 'react-router-dom';
 import { isMobileScreen } from '../../utils/isMobile';
 import { usePickByState } from '../../utils/colorResponsiveUIUtils';
-import LocalSwitcherButton from './LocaleSwitcherButton';
+import Modal from '../Modal';
+import { detect, fromStorage, fromNavigator } from '@lingui/detect-locale';
+import NavBarSelect from '../NavBarSelect';
 
 interface NavLocalSwitcherProps {
   buttonStyle?: NavBarButtonStyle;
@@ -34,10 +36,18 @@ type CustomMenuProps = {
 const NavLocalSwitcher: React.FC<NavLocalSwitcherProps> = props => {
   const { buttonStyle } = props;
 
+  // can be a function with custom logic or just a string, `detect` method will handle it
+  const DEFAULT_FALLBACK = () => 'en';
+  const result = detect(fromStorage('lang'), fromNavigator(), DEFAULT_FALLBACK);
+  const setLocale = (locale: string) => localStorage.setItem('lang', locale);
+
+  console.log(result); // "en"
+
   const [buttonUp, setButtonUp] = useState(false);
   const history = useHistory();
+  const [showLanguagePickerModal, setShowLanguagePickerModal] = useState(false);
 
-   const statePrimaryButtonClass = usePickByState(
+  const statePrimaryButtonClass = usePickByState(
     classes.whiteInfo,
     classes.coolInfo,
     classes.warmInfo,
@@ -89,9 +99,7 @@ const NavLocalSwitcher: React.FC<NavLocalSwitcherProps> = props => {
             {' '}
             <Davatar size={21} address={address} provider={provider} />
           </div> */}
-          <div className={classes.address}>{
-            <FontAwesomeIcon icon={ faGlobe} />
-          }</div>
+          <div className={classes.address}>{<FontAwesomeIcon icon={faGlobe} />}</div>
           <div className={buttonUp ? classes.arrowUp : classes.arrowDown}>
             <FontAwesomeIcon icon={buttonUp ? faSortUp : faSortDown} />{' '}
           </div>
@@ -122,13 +130,25 @@ const NavLocalSwitcher: React.FC<NavLocalSwitcherProps> = props => {
                 history,
               ),
             )}
+            style={{
+              justifyContent: 'space-between',
+            }}
           >
-              <svg xmlns="http://www.w3.org/2000/svg" style={{
-                  height: '24px', width: '24px', marginRight: '0.5rem'
-              }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-</svg>
-             English 
+            English
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              style={{
+                height: '24px',
+                width: '24px',
+                marginLeft: '0.5rem',
+              }}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
           </div>
           <div
             // onClick={disconectLocalSwitcherHandler}
@@ -144,7 +164,7 @@ const NavLocalSwitcher: React.FC<NavLocalSwitcherProps> = props => {
               classes.disconnectText,
             )}
           >
-             Español 
+            Español
           </div>
 
           <div
@@ -160,49 +180,14 @@ const NavLocalSwitcher: React.FC<NavLocalSwitcherProps> = props => {
               ),
               classes.disconnectText,
             )}
+            onClick={() => setLocale('ja')}
           >
-              日本語
+            日本語
           </div>
         </div>
       </div>
     );
   });
-
-  const walletConnectedContentMobile = (
-    <div className="d-flex flex-row justify-content-between">
-      <div className={classes.connectContentMobileWrapper}>
-        <div className={clsx(classes.wrapper, getNavBarButtonVariant(buttonStyle))}>
-          <div className={classes.button}>
-            {/* <div className={classes.icon}>
-              {' '}
-              <Davatar size={21} address={address} provider={provider} />
-            </div> */}
-            <div className={classes.address}>{
-                <FontAwesomeIcon icon={faGlobe} />
-            }</div>
-          </div>
-        </div>
-      </div>
-
-      <div className={`d-flex flex-row ${classes.connectContentMobileText}`}>
-        <div
-          style={{
-            borderRight: `1px solid ${mobileBorderColor}`,
-            color: mobileTextColor,
-          }}
-          className={classes.mobileSwitchLocalSwitcherText}
-        //   onClick={switchLocalSwitcherHandler}
-        >
-          Switch
-        </div>
-        <div className={classes.disconnectText} 
-        // onClick={disconectLocalSwitcherHandler}
-        >
-          Sign out
-        </div>
-      </div>
-    </div>
-  );
 
   const walletConnectedContentDesktop = (
     <Dropdown className={classes.nounsNavLink} onToggle={() => setButtonUp(!buttonUp)}>
@@ -213,7 +198,48 @@ const NavLocalSwitcher: React.FC<NavLocalSwitcherProps> = props => {
 
   return (
     <>
-    {walletConnectedContentDesktop}
+      {showLanguagePickerModal && (
+        <Modal
+          title="Select Language"
+          content={
+            <div
+              style={{
+                maxHeight: '40vh',
+                overflowY: 'scroll',
+              }}
+            >
+                <div className={classes.languageButton} style={{
+                    display: 'flex',
+                    justifyContent: 'space-between'
+                }}>
+                    English
+                    <svg xmlns="http://www.w3.org/2000/svg" style={{height: '24px', width: '24px'}}fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+</svg>
+                </div>
+
+                <div className={classes.languageButton} style={{
+                    display: 'flex',
+                    justifyContent: 'space-between'
+                }}>
+                    Japanese 
+                </div>
+            </div>
+          }
+          onDismiss={() => setShowLanguagePickerModal(false)}
+        />
+      )}
+      {isMobileScreen() ? (
+        <div className={classes.nounsNavLink} onClick={() => setShowLanguagePickerModal(true)}>
+          <NavBarButton
+            buttonText={'Language'}
+            buttonIcon={<FontAwesomeIcon icon={faGlobe} />}
+            buttonStyle={buttonStyle}
+          />
+        </div>
+      ) : (
+        walletConnectedContentDesktop
+      )}
     </>
   );
 };

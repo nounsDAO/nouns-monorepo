@@ -16,6 +16,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookOpen } from '@fortawesome/free-solid-svg-icons';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
+import { faGlobe } from '@fortawesome/free-solid-svg-icons';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import NavBarTreasury from '../NavBarTreasury';
 import NavWallet from '../NavWallet';
@@ -116,11 +117,8 @@ const NavBar = () => {
                 buttonStyle={nonWalletButtonStyle}
               />
             </Nav.Link>
-            <NavWallet address={activeAccount || '0'} buttonStyle={nonWalletButtonStyle} />{' '}
             <NavLocaleSwitcher buttonStyle={nonWalletButtonStyle} />
-            {/* <NavBarButton buttonStyle={nonWalletButtonStyle} buttonText={
-              <FontAwesomeIcon icon={faGlobe}/>
-            } /> */}
+            <NavWallet address={activeAccount || '0'} buttonStyle={nonWalletButtonStyle} />{' '}
           </Navbar.Collapse>
         </Container>
       </Navbar>

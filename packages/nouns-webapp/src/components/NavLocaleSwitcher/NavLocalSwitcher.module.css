@@ -285,3 +285,38 @@
     /* color: var(--brand-color-red); */
     margin-left: 4px;
   }
+
+  .nounsNavLink,
+.nounsNavLink:active,
+.nounsNavLink:visited {
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 0.9rem;
+  padding: 0.3rem 0.3rem !important;
+  color: var(--brand-black) !important;
+  transition: all 0.125s ease-in-out;
+}
+
+.languageButton {
+    border: none;
+    margin: 5px;
+    padding: 5px 20px;
+    border-radius: 5px;
+    background-color: rgba(211, 211, 211, 0.664);
+    color: var(--brand-black);
+    border: none;
+  }
+  .languageButton img {
+    margin-right: 10px;
+    border-radius: 5px;
+  }
+  .languageButton:hover,
+  .languageButton:active,
+  .languageButton:focus,
+  .languageButton:disabled {
+    outline: none !important;
+    box-shadow: none !important;
+    background-color: lightgray !important;
+    color: var(--brand-dark-green);
+    color: white;
+  }
