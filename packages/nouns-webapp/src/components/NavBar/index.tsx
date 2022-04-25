@@ -19,6 +19,7 @@ import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import NavBarTreasury from '../NavBarTreasury';
 import NavWallet from '../NavWallet';
+import NavLocaleSwitcher from '../NavLocaleSwitcher';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
@@ -116,6 +117,10 @@ const NavBar = () => {
               />
             </Nav.Link>
             <NavWallet address={activeAccount || '0'} buttonStyle={nonWalletButtonStyle} />{' '}
+            <NavLocaleSwitcher buttonStyle={nonWalletButtonStyle} />
+            {/* <NavBarButton buttonStyle={nonWalletButtonStyle} buttonText={
+              <FontAwesomeIcon icon={faGlobe}/>
+            } /> */}
           </Navbar.Collapse>
         </Container>
       </Navbar>
