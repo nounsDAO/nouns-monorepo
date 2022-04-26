@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@lingui/detect-locale": "^3.13.2",
     "@lingui/cli": "^3.9.0",
     "@lingui/core": "^3.9.0",
     "@lingui/macro": "^3.9.0",
