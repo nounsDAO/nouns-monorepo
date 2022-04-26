@@ -15,6 +15,8 @@ msgstr ""
 "Project-Id-Version: nouns-test\n"
 "Language-Team: Japanese\n"
 "PO-Revision-Date: 2022-04-26 05:57\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
 
 #: src/components/Documentation/index.tsx:259
 msgid "'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:"
@@ -226,7 +228,7 @@ msgstr "クリプトパンクス"
 msgid "Current bid"
 msgstr "現在の入札額"
 
-#: src/components/NavBar/index.tsx:83
+#: src/components/NavBar/index.tsx:85
 msgid "DAO"
 msgstr "DAO"
 
@@ -251,11 +253,11 @@ msgstr "接続を解除"
 msgid "Discord"
 msgstr "Discord"
 
-#: src/components/NavBar/index.tsx:107
+#: src/components/NavBar/index.tsx:109
 msgid "Discourse"
 msgstr "Discourse"
 
-#: src/components/NavBar/index.tsx:95
+#: src/components/NavBar/index.tsx:97
 msgid "Docs"
 msgstr "ドキュメント"
 
@@ -382,6 +384,10 @@ msgstr "複合政府によって取られた予防措置に加えて、 Nounの�
 msgid "Insufficient bid amount 🤏"
 msgstr "入札額が不足しています🤏"
 
+#: src/components/NavLocaleSwitcher/index.tsx:162
+msgid "Language"
+msgstr ""
+
 #: src/components/Documentation/index.tsx:49
 msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
 msgstr "詳細は以下を参照してください。または、 {playgroundLink} を使用してオフチェーン名詞の作成を開始してください。"
@@ -424,6 +430,10 @@ msgstr "Noun Seedder 契約"
 #: src/components/Documentation/index.tsx:171
 msgid "Noun Traits"
 msgstr "名声の特徴"
+
+#: src/components/AuctionActivityNounTitle/index.tsx:10
+msgid "Noun {0}"
+msgstr ""
 
 #: src/components/Documentation/index.tsx:316
 msgid "Nounder distributions don't interfere with the cadence of 24 hour auctions. Nouns are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available Noun ID."
@@ -491,8 +501,8 @@ msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate th
 msgstr "Nounsは<0>Nouns DAO</0>を支配します。Nounsは提案に投票したり、投票を第三者に委任することができます。 提案を提出するには、最低<1>{nounThresholdCopy}</1>が必要です。"
 
 #: src/components/AuctionActivityNounTitle/index.tsx:10
-msgid "Nuon {0}"
-msgstr "Nuon {0}"
+#~ msgid "Nuon {0}"
+#~ msgstr "Nuon {0}"
 
 #: src/components/Banner/index.tsx:14
 msgid "ONE NOUN,"
@@ -530,7 +540,7 @@ msgid "Place bid"
 msgstr "Place bid"
 
 #: src/components/Documentation/index.tsx:17
-#: src/components/NavBar/index.tsx:114
+#: src/components/NavBar/index.tsx:116
 #: src/pages/Playground/index.tsx:269
 msgid "Playground"
 msgstr "Playground"
@@ -608,6 +618,10 @@ msgstr "Quorum"
 #: src/components/VoteModal/index.tsx:179
 msgid "Reason (Optional)"
 msgstr "理由（オプション）"
+
+#: src/components/LanguageSelectionModal/index.tsx:59
+msgid "Select Language"
+msgstr ""
 
 #: src/components/Bid/index.tsx:65
 msgid "Settle"
@@ -948,4 +962,3 @@ msgstr "{0}<0>h</0>キー"
 #: src/pages/Vote/index.tsx:283
 msgid "{moveStateButtonAction} Proposal ⌐◧-◧"
 msgstr "{moveStateButtonAction} 提案<unk> <unk>"
-

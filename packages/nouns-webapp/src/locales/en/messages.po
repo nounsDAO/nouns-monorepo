@@ -6,6 +6,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
 "Language: en\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
 
 #: src/components/Documentation/index.tsx:259
 msgid "'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:"
@@ -217,7 +223,7 @@ msgstr ""
 msgid "Current bid"
 msgstr ""
 
-#: src/components/NavBar/index.tsx:83
+#: src/components/NavBar/index.tsx:85
 msgid "DAO"
 msgstr ""
 
@@ -242,11 +248,11 @@ msgstr ""
 msgid "Discord"
 msgstr ""
 
-#: src/components/NavBar/index.tsx:107
+#: src/components/NavBar/index.tsx:109
 msgid "Discourse"
 msgstr ""
 
-#: src/components/NavBar/index.tsx:95
+#: src/components/NavBar/index.tsx:97
 msgid "Docs"
 msgstr ""
 
@@ -373,6 +379,10 @@ msgstr ""
 msgid "Insufficient bid amount 🤏"
 msgstr ""
 
+#: src/components/NavLocaleSwitcher/index.tsx:162
+msgid "Language"
+msgstr ""
+
 #: src/components/Documentation/index.tsx:49
 msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
 msgstr ""
@@ -414,6 +424,10 @@ msgstr ""
 
 #: src/components/Documentation/index.tsx:171
 msgid "Noun Traits"
+msgstr ""
+
+#: src/components/AuctionActivityNounTitle/index.tsx:10
+msgid "Noun {0}"
 msgstr ""
 
 #: src/components/Documentation/index.tsx:316
@@ -482,8 +496,8 @@ msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate th
 msgstr ""
 
 #: src/components/AuctionActivityNounTitle/index.tsx:10
-msgid "Nuon {0}"
-msgstr ""
+#~ msgid "Nuon {0}"
+#~ msgstr ""
 
 #: src/components/Banner/index.tsx:14
 msgid "ONE NOUN,"
@@ -521,7 +535,7 @@ msgid "Place bid"
 msgstr ""
 
 #: src/components/Documentation/index.tsx:17
-#: src/components/NavBar/index.tsx:114
+#: src/components/NavBar/index.tsx:116
 #: src/pages/Playground/index.tsx:269
 msgid "Playground"
 msgstr ""
@@ -598,6 +612,10 @@ msgstr ""
 
 #: src/components/VoteModal/index.tsx:179
 msgid "Reason (Optional)"
+msgstr ""
+
+#: src/components/LanguageSelectionModal/index.tsx:59
+msgid "Select Language"
 msgstr ""
 
 #: src/components/Bid/index.tsx:65

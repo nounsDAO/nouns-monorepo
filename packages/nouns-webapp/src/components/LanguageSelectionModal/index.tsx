@@ -6,6 +6,7 @@ import { getCurrentLocale } from '../../utils/i18n/getCurrentLocale';
 import { setLocale } from '../../utils/i18n/setLocale';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { Trans } from "@lingui/macro";
 
 interface LanguageSelectionModalProps {
   onDismiss: () => void;
@@ -21,14 +22,14 @@ export interface Locale {
  */
 const LanguageSelectionModal: React.FC<LanguageSelectionModalProps> = props => {
   const { onDismiss } = props;
-  const [modalLocale, setModalLocale] = useState(getCurrentLocale());
+  // const [modalLocale, setModalLocale] = useState(getCurrentLocale());
 
   // TODO is this actually doing anything for us?
-  useEffect(() => {
-    if (modalLocale !== getCurrentLocale()) {
-      setLocale(modalLocale);
-    }
-  }, [modalLocale]);
+  // useEffect(() => {
+  //   if (modalLocale !== getCurrentLocale()) {
+  //     setLocale(modalLocale);
+  //   }
+  // }, [modalLocale]);
 
   const modalContent = (
     <div className={classes.LanguageSelectionModal}>
@@ -37,15 +38,15 @@ const LanguageSelectionModal: React.FC<LanguageSelectionModalProps> = props => {
           <div
             className={classes.languageButton}
             key={locale.locale}
-            onClick={() => setModalLocale(locale.locale)}
+            onClick={() => setLocale(locale.locale)}
           >
             {locale.name}
-            {locale.locale === modalLocale && (
+            {locale.locale === getCurrentLocale() && (
               <FontAwesomeIcon
                 icon={faCheck}
                 height={24}
                 width={24}
-                style={{ marginTop: '.25rem' }}
+                className={classes.icon}
               />
             )}
           </div>
@@ -55,6 +56,6 @@ const LanguageSelectionModal: React.FC<LanguageSelectionModalProps> = props => {
   );
 
   console.log(getCurrentLocale());
-  return <Modal title="Select Language" content={modalContent} onDismiss={onDismiss} />;
+  return <Modal title={<Trans>Select Language</Trans>} content={modalContent} onDismiss={onDismiss} />;
 };
 export default LanguageSelectionModal;

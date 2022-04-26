@@ -25,3 +25,7 @@
     color: var(--brand-dark-green);
     color: white;
   }
+
+  .icon {
+    margin-top: 0.25rem;
+  }

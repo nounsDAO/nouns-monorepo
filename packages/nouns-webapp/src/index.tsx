@@ -201,7 +201,8 @@ i18n.load({
   pl: messagesPl,
 });
 
-i18n.activate(getCurrentLocale());
+// i18n.activate(getCurrentLocale());
+i18n.activate('pl');
 
 ReactDOM.render(
   <Provider store={store}>

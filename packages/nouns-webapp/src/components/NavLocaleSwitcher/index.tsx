@@ -13,6 +13,7 @@ import { usePickByState } from '../../utils/colorResponsiveUIUtils';
 import LanguageSelectionModal from '../LanguageSelectionModal';
 import { getCurrentLocale } from '../../utils/i18n/getCurrentLocale';
 import { setLocale } from '../../utils/i18n/setLocale';
+import { Trans } from "@lingui/macro";
 
 interface NavLocalSwitcherProps {
   buttonStyle?: NavBarButtonStyle;
@@ -134,8 +135,11 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
                 classes.warmInfoSelected,
                 history,
               ),
-              classes.disconnectText,
+              classes.switchWalletText,
             )}
+            style={{
+              justifyContent: 'space-between',
+            }}
             onClick={() => setLocale('ja')}
           >
             日本語
@@ -158,7 +162,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
       {isMobileScreen() ? (
         <div className={classes.nounsNavLink} onClick={() => setShowLanguagePickerModal(true)}>
           <NavBarButton
-            buttonText={'Language'}
+            buttonText={<Trans>Language</Trans>}
             buttonIcon={<FontAwesomeIcon icon={faGlobe} />}
             buttonStyle={buttonStyle}
           />
