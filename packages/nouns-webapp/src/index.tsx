@@ -199,7 +199,8 @@ i18n.load({
   ja: messagesJa,
   pl: messagesPl,
 });
-i18n.activate('pl');
+ i18n.activate('ja');
+// i18n.activate('pl');
 //i18n.activate('en');
 
 ReactDOM.render(

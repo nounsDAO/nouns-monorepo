@@ -2,273 +2,282 @@ msgid ""
 msgstr ""
 "POT-Creation-Date: 2022-04-20 17:49-0700\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
 "Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: nouns-test\n"
+"X-Crowdin-Project-ID: 512166\n"
+"X-Crowdin-Language: ja\n"
+"X-Crowdin-File: messages.po\n"
+"X-Crowdin-File-ID: 6\n"
+"Project-Id-Version: nouns-test\n"
+"Language-Team: Japanese\n"
+"PO-Revision-Date: 2022-04-26 05:57\n"
 
 #: src/components/Documentation/index.tsx:259
 msgid "'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:"
-msgstr ""
+msgstr "\"ナウンダーズ\"とはナウンズの創業に携わった十人の創業者のことであり、以下の人物で構成されています："
 
 #: src/components/Documentation/index.tsx:68
 msgid "100% of Noun auction proceeds are trustlessly sent to the treasury."
-msgstr ""
+msgstr "Nounオークションの売上は、第三者の介入無しで 100％トレジャリーに送られる仕組みになっています。"
 
 #: src/pages/Nounders/index.tsx:137
 msgid "3.5 artists, 6.5 technologists"
-msgstr ""
+msgstr "3.5アーティスト、6.5技術者"
 
 #: src/pages/NotFound/index.tsx:15
 msgid "404: This is not the person, place, or thing you're looking for..."
-msgstr ""
+msgstr "404: お探しの人、場所、物は見つかりませんでした。"
 
 #: src/components/AuctionTimer/index.tsx:107
 msgid "<0>{flooredMinutes}<1>m</1></0>"
-msgstr ""
+msgstr "<0>{flooredMinutes}<1>m</1></0>"
 
 #: src/components/AuctionTimer/index.tsx:115
 msgid "<0>{flooredSeconds}<1>s</1></0>"
-msgstr ""
+msgstr "<0>{flooredSeconds}<1>s</1></0>"
 
 #: src/components/NounProfileVoteRow/index.tsx:48
 msgid "Absent for"
-msgstr ""
+msgstr "不在："
 
 #: src/components/VoteCard/index.tsx:44
 msgid "Abstain"
-msgstr ""
+msgstr "放棄する"
 
 #: src/components/VoteModal/index.tsx:166
 msgid "Abstain from voting on Prop {0}"
-msgstr ""
+msgstr "Prop {0} への投票を中止する"
 
 #: src/components/NounProfileVoteRow/index.tsx:55
 msgid "Abstained on"
-msgstr ""
+msgstr "廃止日"
 
 #: src/pages/Playground/index.tsx:79
 msgid "Accessory"
-msgstr ""
+msgstr "アクセサリー"
 
 #: src/components/NounProfileVoteRow/index.tsx:87
 #: src/components/ProposalStatus/index.tsx:31
 msgid "Active"
-msgstr ""
+msgstr "アクティブ"
 
 #: src/components/ProfileActivityFeed/index.tsx:80
 msgid "Activity"
-msgstr ""
+msgstr "アクティビティ"
 
 #: src/components/ProposalTransactionFormModal/index.tsx:343
 #: src/pages/CreateProposal/index.tsx:168
 msgid "Add Transaction"
-msgstr ""
+msgstr "取引を追加"
 
 #: src/components/ProposalTransactionFormModal/index.tsx:204
 msgid "Add a Proposal Transaction"
-msgstr ""
+msgstr "提案取引を追加"
 
 #: src/pages/CreateProposal/index.tsx:156
 msgid "Add one or more transactions and describe your proposal for the community. The proposal cannot modified after submission, so please verify all information before submitting. The voting period will begin after 2 1/3 days and last for 3 days."
-msgstr ""
+msgstr "1つ以上の取引を追加し、あなたの提案をコミュニティに記述してください。 提出後に提案を変更することはできませんので、提出する前にすべての情報を確認してください。 投票期間は2/3日後に開始され、3日間続く予定です。"
 
 #: src/components/ProposalTransactionFormModal/index.tsx:281
 msgid "Address"
-msgstr ""
+msgstr "住所"
 
 #: src/components/ProposalTransactionFormModal/index.tsx:211
 msgid "Address (Callee or Recipient)"
-msgstr ""
+msgstr "住所（カリーまたは受信者）"
 
 #: src/components/VoteCard/index.tsx:39
 msgid "Against"
-msgstr ""
+msgstr "に対して"
 
 #: src/pages/Nounders/index.tsx:147
 msgid "All Noun auction proceeds are sent to the Nouns DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
-msgstr ""
+msgstr "Nounオークションの収益はすべてNouns DAOに送られます。そのため、私たちプロジェクトの創設者(Nounders) はNounsを補償することを選択しました。 プロジェクトの最初の5年間の10回目の名詞は、マルチシグ(5/10) に送信されます。 それは個々のNoundersに既得され、配布されます。"
 
 #: src/components/Documentation/index.tsx:74
 msgid "All Nouns are members of Nouns DAO."
-msgstr ""
+msgstr "名詞はすべてDAO名詞のメンバーです。"
 
 #: src/pages/CreateProposal/index.tsx:144
 msgid "All Proposals"
-msgstr ""
+msgstr "すべての提案"
 
 #: src/components/ProposalTransactionFormModal/index.tsx:311
 msgid "Arguments"
-msgstr ""
+msgstr "引数"
 
 #: src/components/Documentation/index.tsx:86
 msgid "Artwork is generative and stored directly on-chain (not IPFS)."
-msgstr ""
+msgstr "アートワークは生成され、直接チェーン上に保存されます(IPFSではありません)。"
 
 #: src/components/AuctionTimer/index.tsx:49
 #: src/components/AuctionTimer/index.tsx:54
 msgid "Auction ended"
-msgstr ""
+msgstr "オークションが終了しました"
 
 #: src/components/AuctionTimer/index.tsx:51
 msgid "Auction ends in"
-msgstr ""
+msgstr "オークション終了まで"
 
 #: src/components/ProposalTransactionFormModal/index.tsx:337
 msgid "Back"
-msgstr ""
+msgstr "戻る"
 
 #: src/pages/Playground/index.tsx:77
 msgid "Background"
-msgstr ""
+msgstr "背景"
 
 #: src/components/Documentation/index.tsx:307
 msgid "Because 100% of Noun auction proceeds are sent to Nouns DAO, Nounders have chosen to compensate themselves with Nouns. Every 10th Noun for the first 5 years of the project (Noun ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
-msgstr ""
+msgstr "Nounオークションの収益の100%がNouns DAOに送られるため、NoundersはNounsで自分自身を補償することを選択しました。 プロジェクトの最初の5年間の10番目の名詞(Noun ids#0, #10, #20) #30などが自動的にNounderのマルチシグに送信され、プロジェクトの創設メンバー間で既得権と共有されます。"
 
 #: src/components/Bid/index.tsx:186
 #: src/components/Bid/index.tsx:198
 msgid "Bid"
-msgstr ""
+msgstr "Bid"
 
 #: src/components/NounInfoCard/index.tsx:43
 msgid "Bid history"
-msgstr ""
+msgstr "入札履歴"
 
 #: src/components/Bid/index.tsx:156
 msgid "Bid was placed successfully!"
-msgstr ""
+msgstr "入札が正常に配置されました！"
 
 #: src/components/NounInfoCard/index.tsx:43
 msgid "Bids"
-msgstr ""
+msgstr "入札額"
 
 #: src/components/BidHistoryModal/index.tsx:41
 msgid "Bids for"
-msgstr ""
+msgstr "入札額"
 
 #: src/components/BidHistoryModal/index.tsx:57
 msgid "Bids will appear here"
-msgstr ""
+msgstr "入札額はここに表示されます"
 
 #: src/pages/Playground/index.tsx:78
 msgid "Body"
-msgstr ""
+msgstr "本文"
 
 #: src/components/NounInfoRowBirthday/index.tsx:49
 msgid "Born"
-msgstr ""
+msgstr "生まれ"
 
 #: src/components/NounProfileVoteRow/index.tsx:97
 #: src/components/ProposalStatus/index.tsx:41
 msgid "Canceled"
-msgstr ""
+msgstr "キャンセルしました"
 
 #: src/components/VoteModal/index.tsx:151
 msgid "Cast 1 vote against Prop {0}"
-msgstr ""
+msgstr "Prop {0} に対して1票を投じてください"
 
 #: src/components/VoteModal/index.tsx:130
 msgid "Cast 1 vote for Prop {0}"
-msgstr ""
+msgstr "Prop {0} に 1 票を投入する"
 
 #: src/components/VoteModal/index.tsx:146
 msgid "Cast {0} votes against Prop {1}"
-msgstr ""
+msgstr "Prop {0} に {1} 票を投入する"
 
 #: src/components/VoteModal/index.tsx:125
 msgid "Cast {0} votes for Prop {1}"
-msgstr ""
+msgstr "Prop {0} に {1} 票を投入する"
 
 #: src/components/WalletConnectModal/index.tsx:104
 msgid "Clear WalletConnect Data"
-msgstr ""
+msgstr "WalletConnect データをクリア"
 
 #: src/components/Documentation/index.tsx:28
 msgid "Compound Governance"
-msgstr ""
+msgstr "複合ガバナンス"
 
 #: src/components/NavWallet/WalletConnectButton/index.tsx:16
 msgid "Connect"
-msgstr ""
+msgstr "接続する"
 
 #: src/components/ProposalHeader/index.tsx:66
 msgid "Connect a wallet to vote."
-msgstr ""
+msgstr "投票するウォレットを接続します。"
 
 #: src/components/Proposals/index.tsx:25
 msgid "Connect wallet to make a proposal."
-msgstr ""
+msgstr "ウォレットに接続して提案してください。"
 
 #: src/components/WalletConnectModal/index.tsx:109
 msgid "Connect your wallet"
-msgstr ""
+msgstr "ウォレットに接続"
 
 #: src/components/CreateProposalButton/index.tsx:36
 #: src/pages/CreateProposal/index.tsx:149
 msgid "Create Proposal"
-msgstr ""
+msgstr "提案を作成"
 
 #: src/components/Documentation/index.tsx:11
 msgid "Cryptopunks"
-msgstr ""
+msgstr "クリプトパンクス"
 
 #: src/components/CurrentBid/index.tsx:23
 msgid "Current bid"
-msgstr ""
+msgstr "現在の入札額"
 
 #: src/components/NavBar/index.tsx:83
 msgid "DAO"
-msgstr ""
+msgstr "DAO"
 
 #: src/components/Documentation/index.tsx:104
 msgid "Daily Auctions"
-msgstr ""
+msgstr "デイリーオークション数"
 
 #: src/components/NounProfileVoteRow/index.tsx:93
 #: src/components/ProposalStatus/index.tsx:37
 msgid "Defeated"
-msgstr ""
+msgstr "破られた"
 
 #: src/components/ProposalContent/index.tsx:43
 msgid "Description"
-msgstr ""
+msgstr "説明"
 
 #: src/components/NavWallet/index.tsx:171
 msgid "Disconnect"
-msgstr ""
+msgstr "接続を解除"
 
 #: src/components/Footer/index.tsx:19
 msgid "Discord"
-msgstr ""
+msgstr "Discord"
 
 #: src/components/NavBar/index.tsx:107
 msgid "Discourse"
-msgstr ""
+msgstr "Discourse"
 
 #: src/components/NavBar/index.tsx:95
 msgid "Docs"
-msgstr ""
+msgstr "ドキュメント"
 
 #: src/components/Banner/index.tsx:16
 msgid "EVERY DAY,"
-msgstr ""
+msgstr "毎日"
 
 #: src/components/Documentation/index.tsx:117
 msgid "Each time an auction is settled, the settlement transaction will also cause a new Noun to be minted and a new 24 hour auction to begin."
-msgstr ""
+msgstr "オークションが決済されるたびに 決済取引により、新しい名詞が鋳造され、24時間オークションが開始されます。"
 
 #: src/pages/Vote/index.tsx:108
 msgid "Ended"
-msgstr ""
+msgstr "終了"
 
 #: src/pages/Vote/index.tsx:105
 msgid "Ends"
-msgstr ""
+msgstr "終了"
 
 #: src/components/AuctionTimer/index.tsx:84
 msgid "Ends on"
-msgstr ""
+msgstr "終了日時"
 
 #: src/components/Bid/index.tsx:190
 #: src/components/Bid/index.tsx:237
@@ -276,259 +285,259 @@ msgstr ""
 #: src/pages/CreateProposal/index.tsx:126
 #: src/pages/Vote/index.tsx:163
 msgid "Error"
-msgstr ""
+msgstr "エラー"
 
 #: src/components/NounInfoRowBirthday/index.tsx:39
 msgid "Error fetching Noun birthday"
-msgstr ""
+msgstr "Nounの誕生日を取得できませんでした"
 
 #: src/components/Footer/index.tsx:21
 #: src/components/NounInfoCard/index.tsx:48
 msgid "Etherscan"
-msgstr ""
+msgstr "Etherscan"
 
 #: src/pages/Vote/index.tsx:120
 msgid "Execute"
-msgstr ""
+msgstr "実行"
 
 #: src/components/NounProfileVoteRow/index.tsx:91
 #: src/components/ProposalStatus/index.tsx:35
 msgid "Executed"
-msgstr ""
+msgstr "遂行済み"
 
 #: src/components/NounProfileVoteRow/index.tsx:101
 #: src/components/ProposalStatus/index.tsx:45
 msgid "Expired"
-msgstr ""
+msgstr "期限切れ"
 
 #: src/pages/Playground/index.tsx:266
 msgid "Explore"
-msgstr ""
+msgstr "探索"
 
 #: src/components/Banner/index.tsx:18
 msgid "FOREVER."
-msgstr ""
+msgstr "忘れないで。"
 
 #: src/pages/Vote/index.tsx:242
 msgid "Failed to fetch"
-msgstr ""
+msgstr "取得に失敗しました"
 
 #: src/components/ProfileActivityFeed/index.tsx:55
 msgid "Failed to fetch Noun activity history"
-msgstr ""
+msgstr "Nounアクティビティ履歴の取得に失敗しました"
 
 #: src/components/NounInfoRowHolder/index.tsx:38
 msgid "Failed to fetch Noun info"
-msgstr ""
+msgstr "Noun情報の取得に失敗しました"
 
 #: src/components/VoteCard/index.tsx:34
 msgid "For"
-msgstr ""
+msgstr "対象："
 
 #: src/components/Footer/index.tsx:22
 msgid "Forums"
-msgstr ""
+msgstr "フォーラム"
 
 #: src/components/ProposalTransactionFormModal/index.tsx:301
 msgid "Function"
-msgstr ""
+msgstr "関数"
 
 #: src/components/ProposalTransactionFormModal/index.tsx:228
 msgid "Function (Optional)"
-msgstr ""
+msgstr "関数（任意）"
 
 #: src/pages/Playground/index.tsx:289
 msgid "Generate Nouns"
-msgstr ""
+msgstr "名詞を生成"
 
 #: src/pages/Playground/index.tsx:81
 msgid "Glasses"
-msgstr ""
+msgstr "ガラス"
 
 #: src/pages/Governance/index.tsx:28
 msgid "Governance"
-msgstr ""
+msgstr "Governance"
 
 #: src/components/Documentation/index.tsx:148
 msgid "Governance ‘Slow Start’"
-msgstr ""
+msgstr "ガバナンス 「スロースタート」"
 
 #: src/pages/Playground/index.tsx:80
 msgid "Head"
-msgstr ""
+msgstr "頭"
 
 #: src/components/NounInfoRowHolder/index.tsx:51
 msgid "Held by"
-msgstr ""
+msgstr "主催者："
 
 #: src/components/AuctionActivity/index.tsx:134
 msgid "Help mint the next Noun"
-msgstr ""
+msgstr "次の名詞を作るのを手伝ってください"
 
 #: src/components/Documentation/index.tsx:152
 msgid "In addition to the precautions taken by Compound Governance, Nounders have given themselves a special veto right to ensure that no malicious proposals can be passed while the Noun supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort."
-msgstr ""
+msgstr "複合政府によって取られた予防措置に加えて、 Nounの供給量が少ない間に悪意のある提案を渡すことができないことを確実にするためにNounersは彼ら自身に特別な拒否権を与えました。 この拒否権は明らかに有害なガバナンスの提案が渡された場合にのみ使用され、最後の手段として意図されています。"
 
 #: src/components/Bid/index.tsx:111
 msgid "Insufficient bid amount 🤏"
-msgstr ""
+msgstr "入札額が不足しています🤏"
 
 #: src/components/Documentation/index.tsx:49
 msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
-msgstr ""
+msgstr "詳細は以下を参照してください。または、 {playgroundLink} を使用してオフチェーン名詞の作成を開始してください。"
 
 #: src/components/NounInfoRowHolder/index.tsx:31
 msgid "Loading..."
-msgstr ""
+msgstr "読み込み中..."
 
 #: src/components/ProposalTransactionFormModal/index.tsx:341
 msgid "Next"
-msgstr ""
+msgstr "次へ"
 
 #: src/components/ProposalTransactionFormModal/index.tsx:274
 msgid "No arguments required"
-msgstr ""
+msgstr "引数は必要ありません"
 
 #: src/components/Documentation/index.tsx:89
 msgid "No explicit rules exist for attribute scarcity; all Nouns are equally rare."
-msgstr ""
+msgstr "属性希少性のための明示的なルールは存在しません。すべての名詞も同様に稀です。"
 
 #: src/components/Proposals/index.tsx:76
 msgid "No proposals found"
-msgstr ""
+msgstr "提案が見つかりませんでした"
 
 #: src/components/ProposalTransactionFormModal/index.tsx:296
 #: src/components/ProposalTransactionFormModal/index.tsx:305
 #: src/components/ProposalTransactionFormModal/index.tsx:317
 msgid "None"
-msgstr ""
+msgstr "なし"
 
 #: src/components/BidHistoryModal/index.tsx:44
 #: src/pages/Governance/index.tsx:17
 msgid "Noun"
-msgstr ""
+msgstr "Noun"
 
 #: src/components/Documentation/index.tsx:230
 msgid "Noun Seeder Contract"
-msgstr ""
+msgstr "Noun Seedder 契約"
 
 #: src/components/Documentation/index.tsx:171
 msgid "Noun Traits"
-msgstr ""
+msgstr "名声の特徴"
 
 #: src/components/Documentation/index.tsx:316
 msgid "Nounder distributions don't interfere with the cadence of 24 hour auctions. Nouns are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available Noun ID."
-msgstr ""
+msgstr "24時間オークションのリズムに影響を与えることはありません。 NounsはNounderのMultisigに直接送信され、オークションは次の利用可能なNoun IDでスケジュール通りに継続されます。"
 
 #: src/components/Documentation/index.tsx:255
 msgid "Nounder's Reward"
-msgstr ""
+msgstr "Nunder recompensa"
 
 #: src/components/Documentation/index.tsx:94
 msgid "Nounders receive rewards in the form of Nouns (10% of supply for first 5 years)."
-msgstr ""
+msgstr "Nounersの形で報酬を受け取る(最初の5年間の供給の10%)。"
 
 #: src/components/Documentation/index.tsx:161
 msgid "Nounders will proveably revoke this veto right when they deem it safe to do so. This decision will be based on a healthy Noun distribution and a community that is engaged in the governance process."
-msgstr ""
+msgstr "彼らがそうするためにそれが安全であると判断したときNounders は証明できる権利この拒否権を取り消す。 この決定は、健全な名詞分配とガバナンスプロセスに従事しているコミュニティに基づいて行われます。"
 
 #: src/pages/Nounders/index.tsx:144
 msgid "Nounders' Reward"
-msgstr ""
+msgstr "Nounders' Reward"
 
 #: src/pages/Governance/index.tsx:17
 msgid "Nouns"
-msgstr ""
+msgstr "Nouns"
 
 #: src/components/NounInfoRowHolder/index.tsx:64
 msgid "Nouns Auction House"
-msgstr ""
+msgstr "名詞オークションハウス"
 
 #: src/components/Documentation/index.tsx:133
 #: src/pages/Governance/index.tsx:31
 msgid "Nouns DAO"
-msgstr ""
+msgstr "名詞DAO"
 
 #: src/components/Documentation/index.tsx:77
 msgid "Nouns DAO uses a fork of {compoundGovLink}."
-msgstr ""
+msgstr "名詞DAOは {compoundGovLink}のフォークを使用しています。"
 
 #: src/components/Documentation/index.tsx:136
 msgid "Nouns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the Nouns ecosystem. The Nouns DAO treasury receives 100% of ETH proceeds from daily Noun auctions. Each Noun is an irrevocable member of Nouns DAO and entitled to one vote in all governance matters. Noun votes are non-transferable (if you sell your Noun the vote goes with it) but delegatable, which means you can assign your vote to someone else as long as you own your Noun."
-msgstr ""
+msgstr "Nouns DAOは {compoundGovLink} のフォークを利用しており、Nounsエコシステムの主要な統治機関です。 名詞DAOの財務省は、ETHの100%を毎日の名詞オークションから受け取ります。 各名詞は、取消せないDAOのメンバーであり、すべてのガバナンスの問題において1つの投票を受ける権利があります。 名詞票は譲渡できません(あなたが名詞を販売する場合、投票はそれに伴います)が、委任できます。 つまり、自分の名詞を所有している限り、自分の投票を他の誰かに割り当てることができます。"
 
 #: src/pages/Playground/index.tsx:37
 msgid "Nouns Protocol"
-msgstr ""
+msgstr "名詞プロトコル"
 
 #: src/components/Documentation/index.tsx:41
 msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community"
-msgstr ""
+msgstr "Nounsは、オンチェーンアバターコミュニティの形成を改善するための実験的な試みです。 {cryptopunksLink} のようなプロジェクトは、デジタルコミュニティとアイデンティティのブートストラップを試みています。 Nouns は、コミュニティ、ガバナンス、コミュニティで使用できる財務省のアイデンティティをブートストラップしようとします。"
 
 #: src/components/Documentation/index.tsx:175
 msgid "Nouns are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules governing Noun trait scarcity, which makes all Nouns equally rare. As of this writing, Nouns are made up of:"
-msgstr ""
+msgstr "名詞はランダムにベースのEthereumブロックハッシュを生成します。 すべての名詞を等しく稀にする名詞特性の乏しさを支配する'もし' 声明または他の規則がない。 この執筆時点では、名詞は以下で構成されています。"
 
 #: src/components/Documentation/index.tsx:209
 msgid "Nouns are stored directly on Ethereum and do not utilize pointers to other networks such as IPFS. This is possible because Noun parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression."
-msgstr ""
+msgstr "名詞はEthereumに直接保存され、IPFSなどの他のネットワークにはポインタを使用しません。 これは、Noun部品は、ロスレス圧縮の一形態であるカスタム実行長エンコーディング(RLE)を使用して、チェーン上で圧縮および保存されるために可能です。"
 
 #: src/components/Documentation/index.tsx:62
 msgid "Nouns artwork is in the {publicDomainLink}."
-msgstr ""
+msgstr "名詞のアートワークは {publicDomainLink} にあります。"
 
 #: src/pages/Governance/index.tsx:35
 msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounThresholdCopy}</1> is required to submit proposals."
-msgstr ""
+msgstr "Nounsは<0>Nouns DAO</0>を支配します。Nounsは提案に投票したり、投票を第三者に委任することができます。 提案を提出するには、最低<1>{nounThresholdCopy}</1>が必要です。"
 
 #: src/components/AuctionActivityNounTitle/index.tsx:10
 msgid "Nuon {0}"
-msgstr ""
+msgstr "Nuon {0}"
 
 #: src/components/Banner/index.tsx:14
 msgid "ONE NOUN,"
-msgstr ""
+msgstr "今すぐに"
 
 #: src/components/Documentation/index.tsx:205
 msgid "On-Chain Artwork"
-msgstr ""
+msgstr "チェーンアートワーク"
 
 #: src/components/Documentation/index.tsx:80
 msgid "One Noun is equal to one vote."
-msgstr ""
+msgstr "名詞は1票に等しい。"
 
 #: src/components/Documentation/index.tsx:65
 msgid "One Noun is trustlessly auctioned every 24 hours, forever."
-msgstr ""
+msgstr "1つの名詞は、24時間毎に永遠にオークションされます。"
 
 #: src/pages/Playground/index.tsx:333
 msgid "Only 32x32 PNG images are accepted"
-msgstr ""
+msgstr "32x32 PNG画像のみ受け付けています"
 
 #: src/components/ProposalHeader/index.tsx:123
 msgid "Only Nons you owned or were delegated to you before {0} are eligible to vote."
-msgstr ""
+msgstr "{0} 以前にあなたが所有または委任されたNonsのみが投票対象となります。"
 
 #: src/components/NounProfileVoteRow/index.tsx:85
 #: src/components/ProposalStatus/index.tsx:29
 msgid "Pending"
-msgstr ""
+msgstr "保留中"
 
 #: src/components/Bid/index.tsx:65
 #: src/components/Bid/index.tsx:159
 #: src/components/Bid/index.tsx:170
 msgid "Place bid"
-msgstr ""
+msgstr "Place bid"
 
 #: src/components/Documentation/index.tsx:17
 #: src/components/NavBar/index.tsx:114
 #: src/pages/Playground/index.tsx:269
 msgid "Playground"
-msgstr ""
+msgstr "Playground"
 
 #: src/components/Bid/index.tsx:113
 msgid "Please place a bid higher than or equal to the minimum bid amount of {0} ETH"
-msgstr ""
+msgstr "最低入札額の {0} ETH以上の入札額を設定してください"
 
 #: src/components/Bid/index.tsx:182
 #: src/components/Bid/index.tsx:194
@@ -541,172 +550,172 @@ msgstr ""
 #: src/pages/Vote/index.tsx:155
 #: src/pages/Vote/index.tsx:164
 msgid "Please try again."
-msgstr ""
+msgstr "もう一度やり直してください。"
 
 #: src/components/ProposalEditor/index.tsx:51
 msgid "Preview:"
-msgstr ""
+msgstr "プレビュー"
 
 #: src/components/ProposalEditor/index.tsx:31
 msgid "Proposal"
-msgstr ""
+msgstr "提案"
 
 #: src/pages/CreateProposal/index.tsx:111
 msgid "Proposal Created!"
-msgstr ""
+msgstr "提案を作成しました！"
 
 #: src/pages/Vote/index.tsx:189
 msgid "Proposal Executed!"
-msgstr ""
+msgstr "提案が実行されました！"
 
 #: src/pages/Vote/index.tsx:179
 msgid "Proposal Queued!"
-msgstr ""
+msgstr "提案が待機中です！"
 
 #: src/components/ProposalHeader/index.tsx:90
 msgid "Proposal {0}"
-msgstr ""
+msgstr "提案 {0}"
 
 #: src/components/Proposals/index.tsx:32
 msgid "Proposals"
-msgstr ""
+msgstr "提案"
 
 #: src/components/Proposals/index.tsx:79
 msgid "Proposals submitted by community members will appear here."
-msgstr ""
+msgstr "コミュニティメンバーが提出した提案はここに表示されます。"
 
 #: src/components/ProposalContent/index.tsx:57
 msgid "Proposed Transactions"
-msgstr ""
+msgstr "提案済み取引"
 
 #: src/components/ProposalContent/index.tsx:88
 msgid "Proposer"
-msgstr ""
+msgstr "提案"
 
 #: src/pages/Vote/index.tsx:120
 msgid "Queue"
-msgstr ""
+msgstr "キュー"
 
 #: src/components/NounProfileVoteRow/index.tsx:95
 #: src/components/ProposalStatus/index.tsx:39
 msgid "Queued"
-msgstr ""
+msgstr "キューに入りました"
 
 #: src/pages/Vote/index.tsx:323
 msgid "Quorum"
-msgstr ""
+msgstr "Quorum"
 
 #: src/components/VoteModal/index.tsx:179
 msgid "Reason (Optional)"
-msgstr ""
+msgstr "理由（オプション）"
 
 #: src/components/Bid/index.tsx:65
 msgid "Settle"
-msgstr ""
+msgstr "決済する"
 
 #: src/components/Bid/index.tsx:209
 #: src/components/Bid/index.tsx:221
 #: src/components/Bid/index.tsx:233
 #: src/components/Bid/index.tsx:245
 msgid "Settle Auction"
-msgstr ""
+msgstr "競売を決済する"
 
 #: src/components/SettleManuallyBtn/index.tsx:64
 msgid "Settle manually"
-msgstr ""
+msgstr "手動で決済する"
 
 #: src/components/Bid/index.tsx:218
 msgid "Settled auction successfully!"
-msgstr ""
+msgstr "正常に決済されたオークション!"
 
 #: src/components/Documentation/index.tsx:71
 msgid "Settlement of one auction kicks off the next."
-msgstr ""
+msgstr "1つのオークションの決済が次のオークションから始まります。"
 
 #: src/components/ProfileActivityFeed/index.tsx:131
 msgid "Show all {0} events"
-msgstr ""
+msgstr "すべての {0} イベントを表示"
 
 #: src/components/ProfileActivityFeed/index.tsx:139
 msgid "Show fewer"
-msgstr ""
+msgstr "少なく表示する"
 
 #: src/components/NavWallet/index.tsx:204
 msgid "Sign out"
-msgstr ""
+msgstr "サインアウト"
 
 #: src/pages/Vote/index.tsx:364
 msgid "Snapshot"
-msgstr ""
+msgstr "Snapshot"
 
 #: src/pages/Vote/index.tsx:110
 msgid "Starts"
-msgstr ""
+msgstr "開始"
 
 #: src/components/Proposals/index.tsx:37
 #: src/components/Proposals/index.tsx:45
 msgid "Submit Proposal"
-msgstr ""
+msgstr "提案を送信"
 
 #: src/components/VoteModal/index.tsx:205
 msgid "Submit Vote"
-msgstr ""
+msgstr "投票を送信"
 
 #: src/components/ProposalHeader/index.tsx:74
 msgid "Submit vote"
-msgstr ""
+msgstr "投票を送信"
 
 #: src/components/NounProfileVoteRow/index.tsx:89
 #: src/components/ProposalStatus/index.tsx:33
 msgid "Succeeded"
-msgstr ""
+msgstr "成功しました"
 
 #: src/components/Bid/index.tsx:155
 #: src/components/Bid/index.tsx:217
 #: src/pages/CreateProposal/index.tsx:110
 #: src/pages/Vote/index.tsx:145
 msgid "Success"
-msgstr ""
+msgstr "成功"
 
 #: src/components/Documentation/index.tsx:57
 msgid "Summary"
-msgstr ""
+msgstr "Summary"
 
 #: src/components/NavWallet/index.tsx:201
 msgid "Switch"
-msgstr ""
+msgstr "切り替え"
 
 #: src/components/NavWallet/index.tsx:154
 msgid "Switch wallet"
-msgstr ""
+msgstr "ウォレットを切り替える"
 
 #: src/pages/Vote/index.tsx:369
 msgid "Taken at block"
-msgstr ""
+msgstr "ブロックで撮影されました"
 
 #: src/components/VoteModal/index.tsx:105
 msgid "Thank you for voting."
-msgstr ""
+msgstr "投票ありがとうございます。"
 
 #: src/components/Documentation/index.tsx:234
 msgid "The Noun Seeder contract is used to determine Noun traits during the minting process. The seeder contract can be replaced to allow for future trait generation algorithm upgrades. Additionally, it can be locked by the Nouns DAO to prevent any future updates. Currently, Noun traits are determined using pseudo-random number generation:"
-msgstr ""
+msgstr "Noun Seeder契約は、鋳造プロセス中にNoun特性を決定するために使用されます。 シードコントラクトを置き換えて、将来の特性生成アルゴリズムのアップグレードを可能にすることができます。 さらに、将来の更新を防ぐために、Nouns DAOによってロックされることができます。現在、Nounの形質は擬似乱数生成を使用して決定されています。"
 
 #: src/pages/Nounders/index.tsx:134
 msgid "The Nounders"
-msgstr ""
+msgstr "なし者"
 
 #: src/pages/Nounders/index.tsx:155
 msgid "The Nounders reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures. Since there are 10 Nounders, after 5 years each Nounder could receive up to 1% of the Noun supply."
-msgstr ""
+msgstr "Nounders報酬は、プロジェクトへの当社の打ち上げ前と打ち上げ後の貢献に対する報酬として意図されています。 プロジェクトが成熟するにつれてガバナンスに参加するのを助けてくれます 10のNoundersがあるので、5年後、NounerはNoun供給の1%まで受け取ることができます。"
 
 #: src/components/Documentation/index.tsx:108
 msgid "The Nouns Auction Contract will act as a self-sufficient Noun generation and distribution mechanism, auctioning one Noun every 24 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the Nouns DAO treasury, where they are governed by Noun owners."
-msgstr ""
+msgstr "Nouns Auction Contractは、自給自足のNoun生成と流通メカニズムとして機能し、24時間ごとに1つのNounを永遠にオークションします。 オークション収益の100%(ETH)は、Nouns DAOの財務書に自動的に寄託され、Nounの所有者によって管理されます。"
 
 #: src/components/Documentation/index.tsx:218
 msgid "The compressed parts are efficiently converted into a single base64 encoded SVG image on-chain. To accomplish this, each part is decoded into an intermediate format before being converted into a series of SVG rects using batched, on-chain string concatenation. Once the entire SVG has been generated, it is base64 encoded."
-msgstr ""
+msgstr "圧縮された部品は効率的に単一の base64 エンコードされた SVG 画像チェーンに変換されます。 これを達成するために、各部品は中間フォーマットにデコードされ、バッチ処理されたオンチェーン文字列連結を使用して一連の SVG rects に変換されます。 SVG 全体が生成されると、base64 エンコードされます。"
 
 #: src/pages/Playground/index.tsx:272
 msgid "The playground was built using the {nounsProtocolLink}. Noun's traits are determined by the Noun Seed. The seed was generated using {nounsAssetsLink} and rendered using the {nounsSDKLink}."
@@ -714,35 +723,35 @@ msgstr ""
 
 #: src/components/Documentation/index.tsx:83
 msgid "The treasury is controlled exclusively by Nouns via governance."
-msgstr ""
+msgstr "財務省は、ガバナンスを通じて名詞によって独占的に管理されています。"
 
 #: src/components/VoteModal/index.tsx:112
 msgid "There was an error voting for your account."
-msgstr ""
+msgstr "アカウントの投票中にエラーが発生しました。"
 
 #: src/components/ProfileActivityFeed/index.tsx:147
 msgid "This Noun has no activity, since it was just created. Check back soon!"
-msgstr ""
+msgstr "この名詞はまだ作成されていません。すぐに確認してください！"
 
 #: src/pages/Governance/index.tsx:70
 msgid "This treasury exists for <0>Nouns DAO</0> participants to allocate resources for the long-term growth and prosperity of the Nouns project."
-msgstr ""
+msgstr "この財務省は、名詞プロジェクトの長期的な成長と繁栄のためにリソースを割り当てるために<0>名詞DAO</0>参加者のために存在します。"
 
 #: src/pages/Vote/index.tsx:318
 msgid "Threshold"
-msgstr ""
+msgstr "しきい値"
 
 #: src/components/AuctionTimer/index.tsx:56
 msgid "Time left"
-msgstr ""
+msgstr "残り時間"
 
 #: src/pages/CreateProposal/index.tsx:153
 msgid "Tip:"
-msgstr ""
+msgstr "コツ："
 
 #: src/components/Documentation/index.tsx:246
 msgid "Trait generation is not truly random. Traits can be predicted when minting a Noun on the pending block."
-msgstr ""
+msgstr "形質の生成は本当にランダムではありません。形質は、保留中のブロックに名詞を作るときに予測することができます。"
 
 #: src/components/Bid/index.tsx:178
 #: src/components/Bid/index.tsx:225
@@ -750,192 +759,193 @@ msgstr ""
 #: src/pages/CreateProposal/index.tsx:118
 #: src/pages/Vote/index.tsx:154
 msgid "Transaction Failed"
-msgstr ""
+msgstr "トランザクション失敗"
 
 #: src/pages/Vote/index.tsx:146
 msgid "Transaction Successful!"
-msgstr ""
+msgstr "取引に成功しました！"
 
 #: src/components/NavBarTreasury/index.tsx:44
 #: src/pages/Governance/index.tsx:47
 msgid "Treasury"
-msgstr ""
+msgstr "Treasury"
 
 #: src/components/Footer/index.tsx:20
 msgid "Twitter"
-msgstr ""
+msgstr "Twitter"
 
 #: src/components/NounProfileVoteRow/index.tsx:103
 #: src/components/ProposalStatus/index.tsx:47
 msgid "Undetermined"
-msgstr ""
+msgstr "未決定"
 
 #: src/pages/Playground/index.tsx:371
 msgid "Upload"
-msgstr ""
+msgstr "アップロード"
 
 #: src/pages/Playground/index.tsx:326
 msgid "Upload Custom Trait"
-msgstr ""
+msgstr "カスタム形質をアップロード"
 
 #: src/components/VoteModal/index.tsx:34
 msgid "User Already Voted"
-msgstr ""
+msgstr "ユーザーはすでに投票済みです"
 
 #: src/components/ProposalTransactionFormModal/index.tsx:293
 msgid "Value"
-msgstr ""
+msgstr "値"
 
 #: src/components/ProposalTransactionFormModal/index.tsx:222
 msgid "Value in ETH (Optional)"
-msgstr ""
+msgstr "ETH値（オプション）"
 
 #: src/components/NounProfileVoteRow/index.tsx:99
 #: src/components/ProposalStatus/index.tsx:43
 msgid "Vetoed"
-msgstr ""
+msgstr "Vetoed"
 
 #: src/components/BidHistoryBtn/index.tsx:17
 msgid "View all bids"
-msgstr ""
+msgstr "すべての入札額を表示"
 
 #: src/components/Bid/index.tsx:301
 msgid "Vote for the next Noun ⌐◧-◧"
-msgstr ""
+msgstr "次のNoun <unk> <unk> -<unk> に投票する"
 
 #: src/components/VoteModal/index.tsx:226
 msgid "Vote on Prop {0}"
-msgstr ""
+msgstr "プロップ {0}に投票"
 
 #: src/components/NounProfileVoteRow/index.tsx:58
 msgid "Voted aginst"
-msgstr ""
+msgstr "投票されたアギンスト"
 
 #: src/components/NounProfileVoteRow/index.tsx:52
 msgid "Voted for"
-msgstr ""
+msgstr "投票対象："
 
 #: src/components/Documentation/index.tsx:38
 msgid "WTF?"
-msgstr ""
+msgstr "WTF?"
 
 #: src/components/NounProfileVoteRow/index.tsx:46
 msgid "Waiting for"
-msgstr ""
+msgstr "待機中"
 
 #: src/components/Winner/index.tsx:45
 #: src/components/Winner/index.tsx:89
 msgid "What now?"
-msgstr ""
+msgstr "今は何ですか？"
 
 #: src/components/Documentation/index.tsx:123
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
-msgstr ""
+msgstr "決済は、勝利入札者のために最も多くのインセンティブを与えられていますが、それは誰によって引き起こされることができます。 Ethereumが動作していて、興味のある入札者がいる限り、システムがNounsを信頼なくオークションすることを可能にします。"
 
 #: src/components/Winner/index.tsx:66
 msgid "Winner"
-msgstr ""
+msgstr "入賞者"
 
 #: src/components/CurrentBid/index.tsx:23
 msgid "Winning bid"
-msgstr ""
+msgstr "入札を獲得中"
 
 #: src/components/Winner/index.tsx:33
 msgid "You"
-msgstr ""
+msgstr "あなたです"
 
 #: src/components/ProposalHeader/index.tsx:38
 msgid "You <0>Abstained</0> from this proposal"
-msgstr ""
+msgstr "この提案からあなた<0>棄権</0>しました"
 
 #: src/components/CreateProposalButton/index.tsx:24
 msgid "You already have an active or pending proposal"
-msgstr ""
+msgstr "すでに有効または保留中の提案があります"
 
 #: src/components/Documentation/index.tsx:198
 msgid "You can experiment with off-chain Noun generation at the {playgroundLink}."
-msgstr ""
+msgstr "{playgroundLink}でオフチェーンのNoun生成を試すことができます。"
 
 #: src/components/SettleManuallyBtn/index.tsx:72
 msgid "You can settle manually in 1 minute"
-msgstr ""
+msgstr "1分で手動で決済できます"
 
 #: src/components/SettleManuallyBtn/index.tsx:70
 msgid "You can settle manually in {0} minutes"
-msgstr ""
+msgstr "0分で手動で決済できます"
 
 #: src/components/CreateProposalButton/index.tsx:34
 msgid "You don't have enough votes to submit a proposal"
-msgstr ""
+msgstr "提案を提出するのに十分な投票権がありません"
 
 #: src/components/Proposals/index.tsx:23
 msgid "You have no Votes."
-msgstr ""
+msgstr "投票がありません。"
 
 #: src/components/ProposalHeader/index.tsx:60
 msgid "You have no votes."
-msgstr ""
+msgstr "投票権がありません。"
 
 #: src/components/CreateProposalButton/index.tsx:29
 msgid "You must have {0} votes to submit a proposal"
-msgstr ""
+msgstr "提案を提出するには {0} 票が必要です"
 
 #: src/components/ProposalHeader/index.tsx:32
 msgid "You voted <0>Against</0>this proposal"
-msgstr ""
+msgstr "<0>反対</0>この提案に投票しました"
 
 #: src/components/ProposalHeader/index.tsx:25
 msgid "You voted <0>For</0>this proposal"
-msgstr ""
+msgstr "<0>For</0>この提案に投票しました"
 
 #: src/pages/Playground/index.tsx:376
 msgid "You've generated {0} years worth of Nouns"
-msgstr ""
+msgstr "{0} 年分の名詞を生成しました"
 
 #: src/components/VoteModal/index.tsx:99
 msgid "You've successfully voted on on prop {0}"
-msgstr ""
+msgstr "prop {0} に投票しました。"
 
 #: src/components/Documentation/index.tsx:189
 msgid "accessories (137)"
-msgstr ""
+msgstr "アクセサリー (137)"
 
 #: src/components/AuctionTimer/index.tsx:85
 msgid "at"
-msgstr ""
+msgstr "に"
 
 #: src/components/Documentation/index.tsx:183
 msgid "backgrounds (2)"
-msgstr ""
+msgstr "背景 (2)"
 
 #: src/components/Documentation/index.tsx:186
 msgid "bodies (30)"
-msgstr ""
+msgstr "body(30)"
 
 #: src/components/Documentation/index.tsx:195
 msgid "glasses (21)"
-msgstr ""
+msgstr "メガネ（21）"
 
 #: src/components/Documentation/index.tsx:192
 msgid "heads (234)"
-msgstr ""
+msgstr "頭 (234)"
 
 #: src/components/Bid/index.tsx:273
 msgid "or more"
-msgstr ""
+msgstr "他"
 
 #: src/components/Documentation/index.tsx:21
 msgid "public domain"
-msgstr ""
+msgstr "パブリック ドメイン"
 
 #: src/pages/Vote/index.tsx:326
 msgid "{0} votes"
-msgstr ""
+msgstr "{0} 投票"
 
 #: src/components/AuctionTimer/index.tsx:100
 msgid "{0}<0>h</0>"
-msgstr ""
+msgstr "{0}<0>h</0>キー"
 
 #: src/pages/Vote/index.tsx:283
 msgid "{moveStateButtonAction} Proposal ⌐◧-◧"
-msgstr ""
+msgstr "{moveStateButtonAction} 提案<unk> <unk>"
+
