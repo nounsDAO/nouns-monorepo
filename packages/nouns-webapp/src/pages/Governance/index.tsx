@@ -13,12 +13,13 @@ const GovernancePage = () => {
   const { data: proposals } = useAllProposals();
   const threshold = useProposalThreshold();
   const nounsRequired = threshold !== undefined ? threshold + 1 : '...';
-  const nounThresholdCopy = `${nounsRequired} ${
-    threshold === 0 ? <Trans>Noun</Trans> : <Trans>Nouns</Trans>
-  }`;
 
   const treasuryBalance = useTreasuryBalance();
   const treasuryBalanceUSD = useTreasuryUSDValue();
+
+  // Note: We have to extract this copy out of the <span> otherwise the Lingui macro gets confused
+  const nounSingular = <Trans>Noun</Trans>;
+  const nounPlural = <Trans>Nouns</Trans>;
 
   return (
     <Section fullWidth={false} className={classes.section}>
@@ -35,8 +36,10 @@ const GovernancePage = () => {
           <Trans>
             Nouns govern <span className={classes.boldText}>Nouns DAO</span>. Nouns can vote on
             proposals or delegate their vote to a third party. A minimum of{' '}
-            <span className={classes.boldText}>{nounThresholdCopy}</span> is required to submit
-            proposals.
+            <span className={classes.boldText}>
+              {nounsRequired} {threshold === 0 ? nounSingular : nounPlural}
+            </span>{' '}
+            is required to submit proposals.
           </Trans>
         </p>
 

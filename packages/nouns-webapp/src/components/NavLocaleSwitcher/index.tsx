@@ -13,7 +13,7 @@ import { usePickByState } from '../../utils/colorResponsiveUIUtils';
 import LanguageSelectionModal from '../LanguageSelectionModal';
 import { getCurrentLocale } from '../../utils/i18n/getCurrentLocale';
 import { setLocale } from '../../utils/i18n/setLocale';
-import { Trans } from "@lingui/macro";
+import { Trans } from '@lingui/macro';
 
 interface NavLocalSwitcherProps {
   buttonStyle?: NavBarButtonStyle;
@@ -78,19 +78,19 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
 
   const check = (
     <svg
-    xmlns="http://www.w3.org/2000/svg"
-    style={{
-      height: '24px',
-      width: '24px',
-      marginLeft: '0.5rem',
-    }}
-    fill="none"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-    strokeWidth={2}
-  >
-    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-  </svg>
+      xmlns="http://www.w3.org/2000/svg"
+      style={{
+        height: '24px',
+        width: '24px',
+        marginLeft: '0.5rem',
+      }}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+    </svg>
   );
 
   const CustomMenu = React.forwardRef((props: CustomMenuProps, ref: React.Ref<HTMLDivElement>) => {
@@ -119,11 +119,10 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
             }}
             onClick={() => setLocale('en')}
           >
-            English {
-              getCurrentLocale() === 'en' && (
-                <FontAwesomeIcon icon={faCheck} height={24} width={24}/>
-              )
-            }
+            English{' '}
+            {getCurrentLocale() === 'en' && (
+              <FontAwesomeIcon icon={faCheck} height={24} width={24} />
+            )}
           </div>
           <div
             className={clsx(
@@ -143,11 +142,9 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
             onClick={() => setLocale('ja')}
           >
             日本語
-            {
-              getCurrentLocale() === 'ja' && (
-                <FontAwesomeIcon icon={faCheck} height={24} width={24}/>
-              )
-            }
+            {getCurrentLocale() === 'ja' && (
+              <FontAwesomeIcon icon={faCheck} height={24} width={24} />
+            )}
           </div>
         </div>
       </div>

@@ -6,7 +6,7 @@ import { getCurrentLocale } from '../../utils/i18n/getCurrentLocale';
 import { setLocale } from '../../utils/i18n/setLocale';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
-import { Trans } from "@lingui/macro";
+import { Trans } from '@lingui/macro';
 
 interface LanguageSelectionModalProps {
   onDismiss: () => void;
@@ -42,12 +42,7 @@ const LanguageSelectionModal: React.FC<LanguageSelectionModalProps> = props => {
           >
             {locale.name}
             {locale.locale === getCurrentLocale() && (
-              <FontAwesomeIcon
-                icon={faCheck}
-                height={24}
-                width={24}
-                className={classes.icon}
-              />
+              <FontAwesomeIcon icon={faCheck} height={24} width={24} className={classes.icon} />
             )}
           </div>
         );
@@ -56,6 +51,8 @@ const LanguageSelectionModal: React.FC<LanguageSelectionModalProps> = props => {
   );
 
   console.log(getCurrentLocale());
-  return <Modal title={<Trans>Select Language</Trans>} content={modalContent} onDismiss={onDismiss} />;
+  return (
+    <Modal title={<Trans>Select Language</Trans>} content={modalContent} onDismiss={onDismiss} />
+  );
 };
 export default LanguageSelectionModal;

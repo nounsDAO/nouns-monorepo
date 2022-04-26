@@ -384,7 +384,7 @@ msgstr "複合政府によって取られた予防措置に加えて、 Nounの�
 msgid "Insufficient bid amount 🤏"
 msgstr "入札額が不足しています🤏"
 
-#: src/components/NavLocaleSwitcher/index.tsx:162
+#: src/components/NavLocaleSwitcher/index.tsx:165
 msgid "Language"
 msgstr ""
 
@@ -419,7 +419,7 @@ msgid "None"
 msgstr "なし"
 
 #: src/components/BidHistoryModal/index.tsx:44
-#: src/pages/Governance/index.tsx:17
+#: src/pages/Governance/index.tsx:20
 msgid "Noun"
 msgstr "Noun"
 
@@ -455,7 +455,7 @@ msgstr "彼らがそうするためにそれが安全であると判断したと
 msgid "Nounders' Reward"
 msgstr "Nounders' Reward"
 
-#: src/pages/Governance/index.tsx:17
+#: src/pages/Governance/index.tsx:21
 msgid "Nouns"
 msgstr "Nouns"
 
@@ -497,8 +497,12 @@ msgid "Nouns artwork is in the {publicDomainLink}."
 msgstr "名詞のアートワークは {publicDomainLink} にあります。"
 
 #: src/pages/Governance/index.tsx:35
-msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounThresholdCopy}</1> is required to submit proposals."
-msgstr "Nounsは<0>Nouns DAO</0>を支配します。Nounsは提案に投票したり、投票を第三者に委任することができます。 提案を提出するには、最低<1>{nounThresholdCopy}</1>が必要です。"
+#~ msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounThresholdCopy}</1> is required to submit proposals."
+#~ msgstr "Nounsは<0>Nouns DAO</0>を支配します。Nounsは提案に投票したり、投票を第三者に委任することができます。 提案を提出するには、最低<1>{nounThresholdCopy}</1>が必要です。"
+
+#: src/pages/Governance/index.tsx:35
+msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
+msgstr ""
 
 #: src/components/AuctionActivityNounTitle/index.tsx:10
 #~ msgid "Nuon {0}"

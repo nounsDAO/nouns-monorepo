@@ -379,7 +379,7 @@ msgstr ""
 msgid "Insufficient bid amount 🤏"
 msgstr ""
 
-#: src/components/NavLocaleSwitcher/index.tsx:162
+#: src/components/NavLocaleSwitcher/index.tsx:165
 msgid "Language"
 msgstr ""
 
@@ -414,7 +414,7 @@ msgid "None"
 msgstr ""
 
 #: src/components/BidHistoryModal/index.tsx:44
-#: src/pages/Governance/index.tsx:17
+#: src/pages/Governance/index.tsx:20
 msgid "Noun"
 msgstr ""
 
@@ -450,7 +450,7 @@ msgstr ""
 msgid "Nounders' Reward"
 msgstr ""
 
-#: src/pages/Governance/index.tsx:17
+#: src/pages/Governance/index.tsx:21
 msgid "Nouns"
 msgstr ""
 
@@ -492,7 +492,11 @@ msgid "Nouns artwork is in the {publicDomainLink}."
 msgstr ""
 
 #: src/pages/Governance/index.tsx:35
-msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounThresholdCopy}</1> is required to submit proposals."
+#~ msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounThresholdCopy}</1> is required to submit proposals."
+#~ msgstr ""
+
+#: src/pages/Governance/index.tsx:35
+msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
 msgstr ""
 
 #: src/components/AuctionActivityNounTitle/index.tsx:10
