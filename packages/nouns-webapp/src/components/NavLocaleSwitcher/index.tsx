@@ -1,6 +1,5 @@
-import Davatar from '@davatar/react';
 import React, { useEffect, useState } from 'react';
-import NavBarButton, { getNavBarButtonVariant, NavBarButtonStyle } from '../NavBarButton';
+import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import classes from './NavLocalSwitcher.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSortDown } from '@fortawesome/free-solid-svg-icons';
@@ -13,7 +12,6 @@ import { isMobileScreen } from '../../utils/isMobile';
 import { usePickByState } from '../../utils/colorResponsiveUIUtils';
 import Modal from '../Modal';
 import { detect, fromStorage, fromNavigator } from '@lingui/detect-locale';
-import NavBarSelect from '../NavBarSelect';
 
 interface NavLocalSwitcherProps {
   buttonStyle?: NavBarButtonStyle;
@@ -34,41 +32,37 @@ type CustomMenuProps = {
 };
 
 const localeOptions = [
-    {
-        name: 'English',
-        locale: 'en'
-    },
-    {
-        name: 'Español',
-        locale: 'es'
-    },
-    {
-        name: "日本語",
-        locale: 'ja'
-    }
-]
+  {
+    name: 'English',
+    locale: 'en',
+  },
+  {
+    name: 'Español',
+    locale: 'es',
+  },
+  {
+    name: '日本語',
+    locale: 'ja',
+  },
+];
 
 const NavLocalSwitcher: React.FC<NavLocalSwitcherProps> = props => {
   const { buttonStyle } = props;
 
   // can be a function with custom logic or just a string, `detect` method will handle it
   const DEFAULT_FALLBACK = () => 'en';
-//   const result = detect(fromStorage('lang'), fromNavigator(), DEFAULT_FALLBACK);
-    const [result, setResult] = useState(
-        detect(fromStorage('lang'), fromNavigator(), DEFAULT_FALLBACK)
-    );
-  const [localLocale, setLocalLocale] = useState("")
+  const [result, setResult] = useState(
+    detect(fromStorage('lang'), fromNavigator(), DEFAULT_FALLBACK),
+  );
+  const [localLocale, setLocalLocale] = useState('');
   const setLocale = (locale: string) => {
-      localStorage.setItem('lang', locale);
-      setLocalLocale(localLocale);
-    };
+    localStorage.setItem('lang', locale);
+    setLocalLocale(localLocale);
+  };
 
   useEffect(() => {
-    setResult(
-        detect(fromStorage('lang'), fromNavigator(), DEFAULT_FALLBACK)
-    );
-
-  },[localLocale, result]);
+    setResult(detect(fromStorage('lang'), fromNavigator(), DEFAULT_FALLBACK));
+  }, [localLocale, result]);
 
   const [buttonUp, setButtonUp] = useState(false);
   const history = useHistory();
@@ -88,26 +82,6 @@ const NavLocalSwitcher: React.FC<NavLocalSwitcherProps> = props => {
     history,
   );
 
-  const mobileTextColor = usePickByState(
-    'rgba(140, 141, 146, 1)',
-    'rgba(121, 128, 156, 1)',
-    'rgba(142, 129, 127, 1)',
-    history,
-  );
-
-  const mobileBorderColor = usePickByState(
-    'rgba(140, 141, 146, .5)',
-    'rgba(121, 128, 156, .5)',
-    'rgba(142, 129, 127, .5)',
-    history,
-  );
-
-  const connectLocalSwitcherButtonStyle = usePickByState(
-    NavBarButtonStyle.WHITE_WALLET,
-    NavBarButtonStyle.COOL_WALLET,
-    NavBarButtonStyle.WARM_WALLET,
-    history,
-  );
 
   const customDropdownToggle = React.forwardRef<RefType, Props>(({ onClick, value }, ref) => (
     <>
@@ -122,10 +96,6 @@ const NavLocalSwitcher: React.FC<NavLocalSwitcherProps> = props => {
         }}
       >
         <div className={classes.button}>
-          {/* <div className={classes.icon}>
-            {' '}
-            <Davatar size={21} address={address} provider={provider} />
-          </div> */}
           <div className={classes.address}>{<FontAwesomeIcon icon={faGlobe} />}</div>
           <div className={buttonUp ? classes.arrowUp : classes.arrowDown}>
             <FontAwesomeIcon icon={buttonUp ? faSortUp : faSortDown} />{' '}
@@ -236,41 +206,56 @@ const NavLocalSwitcher: React.FC<NavLocalSwitcherProps> = props => {
                 overflowY: 'scroll',
               }}
             >
-                {
-                    localeOptions.sort((info1, info2) => {
-                        return (
-                            -1*(((info1.locale === result?.substring(0, result.indexOf('-'))  || info1.locale === result) ? 1 : 0) - ((info2.locale === result?.substring(0, result.indexOf('-'))  || info2.locale === result) ? 1: 0))
+              {localeOptions
+                .sort((info1, info2) => {
+                  return (
+                    -1 *
+                    ((info1.locale === result?.substring(0, result.indexOf('-')) ||
+                    info1.locale === result
+                      ? 1
+                      : 0) -
+                      (info2.locale === result?.substring(0, result.indexOf('-')) ||
+                      info2.locale === result
+                        ? 1
+                        : 0))
+                  );
+                })
+                .map(localeInfo => {
+                  return (
+                    <div
+                      className={classes.languageButton}
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                      }}
+                      key={localeInfo.locale}
+                      onClick={() => {
+                        console.log('SETTING LOCALE TO: ', localeInfo.locale);
+                        setLocale(localeInfo.locale);
+                      }}
+                    >
+                      {localeInfo.name}
+                      {
+                        // Include this string parsing so en-* => en (no diff between en-US, en-UK etc.)
+                        // Doesn't seem to be working
+                        // Make sure to set current at top .. otherwise do alpha order
+                        (localeInfo.locale === result?.substring(0, result.indexOf('-')) ||
+                          localeInfo.locale === result) && (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            style={{ height: '24px', width: '24px' }}
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                          </svg>
                         )
-                    }).map((localeInfo) => {
-                        return (
-                            <div className={classes.languageButton} style={{
-                                display: 'flex',
-                                justifyContent: 'space-between'
-                            }}
-                                key={localeInfo.locale}
-                                onClick={() => 
-                                    {
-                                        console.log("SETTING LOCALE TO: ", localeInfo.locale);
-                                        setLocale(localeInfo.locale);
-                                    }
-                                }
-                            >
-                                {localeInfo.name}
-                                {
-                                    // Include this string parsing so en-* => en (no diff between en-US, en-UK etc.)
-                                    // Doesn't seem to be working
-                                    // Make sure to set current at top .. otherwise do alpha order
-                                    (localeInfo.locale === result?.substring(0, result.indexOf('-'))  || localeInfo.locale === result) && (
-                    <svg xmlns="http://www.w3.org/2000/svg" style={{height: '24px', width: '24px'}}fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-</svg>
-                                    )
-                                }
-
-                            </div>
-                        );
-                    })
-                }
+                      }
+                    </div>
+                  );
+                })}
             </div>
           }
           onDismiss={() => setShowLanguagePickerModal(false)}
