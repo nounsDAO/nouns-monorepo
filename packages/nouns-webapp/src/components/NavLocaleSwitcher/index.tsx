@@ -1,5 +1,5 @@
 import Davatar from '@davatar/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import NavBarButton, { getNavBarButtonVariant, NavBarButtonStyle } from '../NavBarButton';
 import classes from './NavLocalSwitcher.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -33,15 +33,42 @@ type CustomMenuProps = {
   labeledBy?: string;
 };
 
+const localeOptions = [
+    {
+        name: 'English',
+        locale: 'en'
+    },
+    {
+        name: 'Español',
+        locale: 'es'
+    },
+    {
+        name: "日本語",
+        locale: 'ja'
+    }
+]
+
 const NavLocalSwitcher: React.FC<NavLocalSwitcherProps> = props => {
   const { buttonStyle } = props;
 
   // can be a function with custom logic or just a string, `detect` method will handle it
   const DEFAULT_FALLBACK = () => 'en';
-  const result = detect(fromStorage('lang'), fromNavigator(), DEFAULT_FALLBACK);
-  const setLocale = (locale: string) => localStorage.setItem('lang', locale);
+//   const result = detect(fromStorage('lang'), fromNavigator(), DEFAULT_FALLBACK);
+    const [result, setResult] = useState(
+        detect(fromStorage('lang'), fromNavigator(), DEFAULT_FALLBACK)
+    );
+  const [localLocale, setLocalLocale] = useState("")
+  const setLocale = (locale: string) => {
+      localStorage.setItem('lang', locale);
+      setLocalLocale(localLocale);
+    };
 
-  console.log(result); // "en"
+  useEffect(() => {
+    setResult(
+        detect(fromStorage('lang'), fromNavigator(), DEFAULT_FALLBACK)
+    );
+
+  },[localLocale, result]);
 
   const [buttonUp, setButtonUp] = useState(false);
   const history = useHistory();
@@ -196,6 +223,7 @@ const NavLocalSwitcher: React.FC<NavLocalSwitcherProps> = props => {
     </Dropdown>
   );
 
+  console.log(result);
   return (
     <>
       {showLanguagePickerModal && (
@@ -208,22 +236,41 @@ const NavLocalSwitcher: React.FC<NavLocalSwitcherProps> = props => {
                 overflowY: 'scroll',
               }}
             >
-                <div className={classes.languageButton} style={{
-                    display: 'flex',
-                    justifyContent: 'space-between'
-                }}>
-                    English
+                {
+                    localeOptions.sort((info1, info2) => {
+                        return (
+                            -1*(((info1.locale === result?.substring(0, result.indexOf('-'))  || info1.locale === result) ? 1 : 0) - ((info2.locale === result?.substring(0, result.indexOf('-'))  || info2.locale === result) ? 1: 0))
+                        )
+                    }).map((localeInfo) => {
+                        return (
+                            <div className={classes.languageButton} style={{
+                                display: 'flex',
+                                justifyContent: 'space-between'
+                            }}
+                                key={localeInfo.locale}
+                                onClick={() => 
+                                    {
+                                        console.log("SETTING LOCALE TO: ", localeInfo.locale);
+                                        setLocale(localeInfo.locale);
+                                    }
+                                }
+                            >
+                                {localeInfo.name}
+                                {
+                                    // Include this string parsing so en-* => en (no diff between en-US, en-UK etc.)
+                                    // Doesn't seem to be working
+                                    // Make sure to set current at top .. otherwise do alpha order
+                                    (localeInfo.locale === result?.substring(0, result.indexOf('-'))  || localeInfo.locale === result) && (
                     <svg xmlns="http://www.w3.org/2000/svg" style={{height: '24px', width: '24px'}}fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
 </svg>
-                </div>
+                                    )
+                                }
 
-                <div className={classes.languageButton} style={{
-                    display: 'flex',
-                    justifyContent: 'space-between'
-                }}>
-                    Japanese 
-                </div>
+                            </div>
+                        );
+                    })
+                }
             </div>
           }
           onDismiss={() => setShowLanguagePickerModal(false)}
