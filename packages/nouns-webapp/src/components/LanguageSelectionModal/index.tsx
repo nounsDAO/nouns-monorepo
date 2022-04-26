@@ -1,5 +1,5 @@
 import Modal from '../Modal';
-import { supportedLocales as locales } from '../../utils/i18n/supportedLocales';
+import { SupportedLocale, supportedLocales as locales } from '../../utils/i18n/supportedLocales';
 import classes from './LanguageSelectionModal.module.css';
 import { getCurrentLocale } from '../../utils/i18n/getCurrentLocale';
 import { setLocale } from '../../utils/i18n/setLocale';
@@ -11,11 +11,6 @@ interface LanguageSelectionModalProps {
   onDismiss: () => void;
 }
 
-export interface Locale {
-  name: string;
-  locale: string;
-}
-
 /**
  * Note: This is only used on mobile. On desktop, language is selected via a dropdown.
  */
@@ -24,7 +19,7 @@ const LanguageSelectionModal: React.FC<LanguageSelectionModalProps> = props => {
 
   const modalContent = (
     <div className={classes.LanguageSelectionModal}>
-      {locales.map((locale: Locale) => {
+      {locales.map((locale: SupportedLocale) => {
         return (
           <div
             className={classes.languageButton}
