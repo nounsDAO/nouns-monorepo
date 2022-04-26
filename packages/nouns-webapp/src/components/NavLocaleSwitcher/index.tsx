@@ -10,8 +10,8 @@ import clsx from 'clsx';
 import { useHistory } from 'react-router-dom';
 import { isMobileScreen } from '../../utils/isMobile';
 import { usePickByState } from '../../utils/colorResponsiveUIUtils';
-import Modal from '../Modal';
 import { detect, fromStorage, fromNavigator } from '@lingui/detect-locale';
+import LanguageSelectionModal from '../LanguageSelectionModal';
 
 interface NavLocalSwitcherProps {
   buttonStyle?: NavBarButtonStyle;
@@ -30,21 +30,6 @@ type CustomMenuProps = {
   className?: string;
   labeledBy?: string;
 };
-
-const localeOptions = [
-  {
-    name: 'English',
-    locale: 'en',
-  },
-  {
-    name: 'Español',
-    locale: 'es',
-  },
-  {
-    name: '日本語',
-    locale: 'ja',
-  },
-];
 
 const NavLocalSwitcher: React.FC<NavLocalSwitcherProps> = props => {
   const { buttonStyle } = props;
@@ -186,80 +171,11 @@ const NavLocalSwitcher: React.FC<NavLocalSwitcherProps> = props => {
     );
   });
 
-  const walletConnectedContentDesktop = (
-    <Dropdown className={classes.nounsNavLink} onToggle={() => setButtonUp(!buttonUp)}>
-      <Dropdown.Toggle as={customDropdownToggle} id="dropdown-custom-components" />
-      <Dropdown.Menu className={`${classes.desktopDropdown} `} as={CustomMenu} />
-    </Dropdown>
-  );
-
   console.log(result);
   return (
     <>
       {showLanguagePickerModal && (
-        <Modal
-          title="Select Language"
-          content={
-            <div
-              style={{
-                maxHeight: '40vh',
-                overflowY: 'scroll',
-              }}
-            >
-              {localeOptions
-                .sort((info1, info2) => {
-                  return (
-                    -1 *
-                    ((info1.locale === result?.substring(0, result.indexOf('-')) ||
-                    info1.locale === result
-                      ? 1
-                      : 0) -
-                      (info2.locale === result?.substring(0, result.indexOf('-')) ||
-                      info2.locale === result
-                        ? 1
-                        : 0))
-                  );
-                })
-                .map(localeInfo => {
-                  return (
-                    <div
-                      className={classes.languageButton}
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                      }}
-                      key={localeInfo.locale}
-                      onClick={() => {
-                        console.log('SETTING LOCALE TO: ', localeInfo.locale);
-                        setLocale(localeInfo.locale);
-                      }}
-                    >
-                      {localeInfo.name}
-                      {
-                        // Include this string parsing so en-* => en (no diff between en-US, en-UK etc.)
-                        // Doesn't seem to be working
-                        // Make sure to set current at top .. otherwise do alpha order
-                        (localeInfo.locale === result?.substring(0, result.indexOf('-')) ||
-                          localeInfo.locale === result) && (
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            style={{ height: '24px', width: '24px' }}
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                          >
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                          </svg>
-                        )
-                      }
-                    </div>
-                  );
-                })}
-            </div>
-          }
-          onDismiss={() => setShowLanguagePickerModal(false)}
-        />
+          <LanguageSelectionModal onDismiss={() => setShowLanguagePickerModal(false)} />
       )}
       {isMobileScreen() ? (
         <div className={classes.nounsNavLink} onClick={() => setShowLanguagePickerModal(true)}>
@@ -270,7 +186,10 @@ const NavLocalSwitcher: React.FC<NavLocalSwitcherProps> = props => {
           />
         </div>
       ) : (
-        walletConnectedContentDesktop
+        <Dropdown className={classes.nounsNavLink} onToggle={() => setButtonUp(!buttonUp)}>
+        <Dropdown.Toggle as={customDropdownToggle} id="dropdown-custom-components" />
+        <Dropdown.Menu className={`${classes.desktopDropdown} `} as={CustomMenu} />
+      </Dropdown>
       )}
     </>
   );
