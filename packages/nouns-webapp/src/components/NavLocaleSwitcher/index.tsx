@@ -67,7 +67,6 @@ const NavLocalSwitcher: React.FC<NavLocalSwitcherProps> = props => {
     history,
   );
 
-
   const customDropdownToggle = React.forwardRef<RefType, Props>(({ onClick, value }, ref) => (
     <>
       <div
@@ -175,7 +174,7 @@ const NavLocalSwitcher: React.FC<NavLocalSwitcherProps> = props => {
   return (
     <>
       {showLanguagePickerModal && (
-          <LanguageSelectionModal onDismiss={() => setShowLanguagePickerModal(false)} />
+        <LanguageSelectionModal onDismiss={() => setShowLanguagePickerModal(false)} />
       )}
       {isMobileScreen() ? (
         <div className={classes.nounsNavLink} onClick={() => setShowLanguagePickerModal(true)}>
@@ -187,9 +186,9 @@ const NavLocalSwitcher: React.FC<NavLocalSwitcherProps> = props => {
         </div>
       ) : (
         <Dropdown className={classes.nounsNavLink} onToggle={() => setButtonUp(!buttonUp)}>
-        <Dropdown.Toggle as={customDropdownToggle} id="dropdown-custom-components" />
-        <Dropdown.Menu className={`${classes.desktopDropdown} `} as={CustomMenu} />
-      </Dropdown>
+          <Dropdown.Toggle as={customDropdownToggle} id="dropdown-custom-components" />
+          <Dropdown.Menu className={`${classes.desktopDropdown} `} as={CustomMenu} />
+        </Dropdown>
       )}
     </>
   );
