@@ -1,3 +1,5 @@
+import { dynamicActivate } from "./dynamicActivate";
+
 /**
  * Sets locale in local storage
  *
@@ -7,4 +9,5 @@
  */
 export const setLocale = (locale: string) => {
   localStorage.setItem('lang', locale);
+  dynamicActivate(locale);
 };

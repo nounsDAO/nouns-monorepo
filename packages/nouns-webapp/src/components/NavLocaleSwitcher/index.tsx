@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import classes from './NavLocalSwitcher.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSortDown } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import { faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { faGlobe } from '@fortawesome/free-solid-svg-icons';
 import { Dropdown } from 'react-bootstrap';
@@ -75,6 +75,23 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
     </>
   ));
 
+  const check = (
+    <svg
+    xmlns="http://www.w3.org/2000/svg"
+    style={{
+      height: '24px',
+      width: '24px',
+      marginLeft: '0.5rem',
+    }}
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={2}
+  >
+    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+  </svg>
+  );
+
   const CustomMenu = React.forwardRef((props: CustomMenuProps, ref: React.Ref<HTMLDivElement>) => {
     return (
       <div
@@ -101,21 +118,11 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
             }}
             onClick={() => setLocale('en')}
           >
-            English
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              style={{
-                height: '24px',
-                width: '24px',
-                marginLeft: '0.5rem',
-              }}
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
+            English {
+              getCurrentLocale() === 'en' && (
+                <FontAwesomeIcon icon={faCheck} height={24} width={24}/>
+              )
+            }
           </div>
           <div
             className={clsx(
@@ -132,6 +139,11 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
             onClick={() => setLocale('ja')}
           >
             日本語
+            {
+              getCurrentLocale() === 'ja' && (
+                <FontAwesomeIcon icon={faCheck} height={24} width={24}/>
+              )
+            }
           </div>
         </div>
       </div>
