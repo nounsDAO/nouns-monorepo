@@ -20,10 +20,6 @@
   padding-right: 14px;
 }
 
-.icon {
-  min-width: 24px;
-}
-
 .address {
   overflow: hidden;
   white-space: nowrap;
@@ -49,10 +45,6 @@
   .button {
     width: auto;
   }
-}
-
-.icon {
-  margin-right: 0.5rem;
 }
 
 .arrowDown {
@@ -271,19 +263,24 @@
   padding-top: 0.5rem;
   padding-left: 1rem;
   justify-content: flex-start;
-  /* color: var(--brand-color-red); */
   margin-left: 4px;
 }
 
+.dropDownBottom:hover {
+  color: black;
+}
+
 .dropDownInterior {
-  /* border-radius: 0px 0px 10px 10px; */
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   padding-bottom: 0.65rem;
   padding-top: 0.5rem;
   padding-left: 1rem;
   justify-content: flex-start;
-  /* color: var(--brand-color-red); */
   margin-left: 4px;
+}
+
+.dropDownInterior:hover {
+  color: black;
 }
 
 .nounsNavLink,
