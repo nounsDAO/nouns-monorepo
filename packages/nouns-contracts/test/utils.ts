@@ -211,3 +211,17 @@ export const chainId = async (): Promise<number> => {
 export const address = (n: number): string => {
   return `0x${n.toString(16).padStart(40, '0')}`;
 };
+
+export const propStateToString = (stateInt: number): string => {
+  const states: string[] = [
+    'Pending',
+    'Active',
+    'Canceled',
+    'Defeated',
+    'Succeeded',
+    'Queued',
+    'Expired',
+    'Executed',
+  ];
+  return states[stateInt];
+};
