@@ -47,6 +47,7 @@ import { I18nProvider } from '@lingui/react';
 import { messages as messagesEn } from './locales/en/messages';
 import { messages as messagesJa } from './locales/ja/messages';
 import { messages as messagesPl } from './locales/pseudo-LOCALE/messages';
+import { getCurrentLocale } from './utils/i18n/getCurrentLocale';
 
 dotenv.config();
 
@@ -199,9 +200,8 @@ i18n.load({
   ja: messagesJa,
   pl: messagesPl,
 });
- i18n.activate('ja');
-// i18n.activate('pl');
-//i18n.activate('en');
+
+i18n.activate(getCurrentLocale());
 
 ReactDOM.render(
   <Provider store={store}>
