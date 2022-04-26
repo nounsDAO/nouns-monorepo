@@ -14,6 +14,7 @@ import LanguageSelectionModal from '../LanguageSelectionModal';
 import { getCurrentLocale } from '../../utils/i18n/getCurrentLocale';
 import { setLocale } from '../../utils/i18n/setLocale';
 import { Trans } from '@lingui/macro';
+import navWalletClasses from "../NavWallet/NavWallet.module.css";
 
 interface NavLocalSwitcherProps {
   buttonStyle?: NavBarButtonStyle;
@@ -41,16 +42,16 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
   const [showLanguagePickerModal, setShowLanguagePickerModal] = useState(false);
 
   const statePrimaryButtonClass = usePickByState(
-    classes.whiteInfo,
-    classes.coolInfo,
-    classes.warmInfo,
+    navWalletClasses.whiteInfo,
+    navWalletClasses.coolInfo,
+    navWalletClasses.warmInfo,
     history,
   );
 
   const stateSelectedDropdownClass = usePickByState(
-    classes.whiteInfoSelected,
-    classes.dropdownActive,
-    classes.dropdownActive,
+    navWalletClasses.whiteInfoSelected,
+    navWalletClasses.dropdownActive,
+    navWalletClasses.dropdownActive,
     history,
   );
 
@@ -58,7 +59,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
     <>
       <div
         className={clsx(
-          classes.wrapper,
+          navWalletClasses.wrapper,
           buttonUp ? stateSelectedDropdownClass : statePrimaryButtonClass,
         )}
         onClick={e => {
@@ -66,32 +67,15 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
           onClick(e);
         }}
       >
-        <div className={classes.button}>
-          <div className={classes.address}>{<FontAwesomeIcon icon={faGlobe} />}</div>
-          <div className={buttonUp ? classes.arrowUp : classes.arrowDown}>
+        <div className={navWalletClasses.button}>
+          <div className={navWalletClasses.address}>{<FontAwesomeIcon icon={faGlobe} />}</div>
+          <div className={buttonUp ? navWalletClasses.arrowUp : navWalletClasses.arrowDown}>
             <FontAwesomeIcon icon={buttonUp ? faSortUp : faSortDown} />{' '}
           </div>
         </div>
       </div>
     </>
   ));
-
-  const check = (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      style={{
-        height: '24px',
-        width: '24px',
-        marginLeft: '0.5rem',
-      }}
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth={2}
-    >
-      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-    </svg>
-  );
 
   const CustomMenu = React.forwardRef((props: CustomMenuProps, ref: React.Ref<HTMLDivElement>) => {
     return (
@@ -104,19 +88,17 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
         <div>
           <div
             className={clsx(
+              classes.desktopLanguageButton,
               classes.dropDownTop,
-              classes.button,
-              classes.switchWalletText,
+              navWalletClasses.button,
+              navWalletClasses.switchWalletText,
               usePickByState(
-                classes.whiteInfoSelectedTop,
-                classes.coolInfoSelected,
-                classes.warmInfoSelected,
+                navWalletClasses.whiteInfoSelectedTop,
+                navWalletClasses.coolInfoSelected,
+                navWalletClasses.warmInfoSelected,
                 history,
               ),
             )}
-            style={{
-              justifyContent: 'space-between',
-            }}
             onClick={() => setLocale('en')}
           >
             English{' '}
@@ -126,15 +108,16 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
           </div>
           <div
             className={clsx(
+              classes.desktopLanguageButton,
               classes.dropDownBottom,
-              classes.button,
+              navWalletClasses.button,
               usePickByState(
-                classes.whiteInfoSelectedBottom,
-                classes.coolInfoSelected,
-                classes.warmInfoSelected,
+                navWalletClasses.whiteInfoSelectedBottom,
+                navWalletClasses.coolInfoSelected,
+                navWalletClasses.warmInfoSelected,
                 history,
               ),
-              classes.switchWalletText,
+              navWalletClasses.switchWalletText,
             )}
             style={{
               justifyContent: 'space-between',
@@ -157,7 +140,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
         <LanguageSelectionModal onDismiss={() => setShowLanguagePickerModal(false)} />
       )}
       {isMobileScreen() ? (
-        <div className={classes.nounsNavLink} onClick={() => setShowLanguagePickerModal(true)}>
+        <div className={navWalletClasses.nounsNavLink} onClick={() => setShowLanguagePickerModal(true)}>
           <NavBarButton
             buttonText={<Trans>Language</Trans>}
             buttonIcon={<FontAwesomeIcon icon={faGlobe} />}
@@ -165,9 +148,9 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
           />
         </div>
       ) : (
-        <Dropdown className={classes.nounsNavLink} onToggle={() => setButtonUp(!buttonUp)}>
+        <Dropdown className={navWalletClasses.nounsNavLink} onToggle={() => setButtonUp(!buttonUp)}>
           <Dropdown.Toggle as={customDropdownToggle} id="dropdown-custom-components" />
-          <Dropdown.Menu className={`${classes.desktopDropdown} `} as={CustomMenu} />
+          <Dropdown.Menu className={`${navWalletClasses.desktopDropdown} `} as={CustomMenu} />
         </Dropdown>
       )}
     </>
