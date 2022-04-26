@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import classes from './NavLocalSwitcher.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,8 +10,9 @@ import clsx from 'clsx';
 import { useHistory } from 'react-router-dom';
 import { isMobileScreen } from '../../utils/isMobile';
 import { usePickByState } from '../../utils/colorResponsiveUIUtils';
-import { detect, fromStorage, fromNavigator } from '@lingui/detect-locale';
 import LanguageSelectionModal from '../LanguageSelectionModal';
+import { getCurrentLocale } from '../../utils/i18n/getCurrentLocale';
+import { setLocale } from '../../utils/i18n/setLocale';
 
 interface NavLocalSwitcherProps {
   buttonStyle?: NavBarButtonStyle;
@@ -33,21 +34,6 @@ type CustomMenuProps = {
 
 const NavLocalSwitcher: React.FC<NavLocalSwitcherProps> = props => {
   const { buttonStyle } = props;
-
-  // can be a function with custom logic or just a string, `detect` method will handle it
-  const DEFAULT_FALLBACK = () => 'en';
-  const [result, setResult] = useState(
-    detect(fromStorage('lang'), fromNavigator(), DEFAULT_FALLBACK),
-  );
-  const [localLocale, setLocalLocale] = useState('');
-  const setLocale = (locale: string) => {
-    localStorage.setItem('lang', locale);
-    setLocalLocale(localLocale);
-  };
-
-  useEffect(() => {
-    setResult(detect(fromStorage('lang'), fromNavigator(), DEFAULT_FALLBACK));
-  }, [localLocale, result]);
 
   const [buttonUp, setButtonUp] = useState(false);
   const history = useHistory();
@@ -99,7 +85,6 @@ const NavLocalSwitcher: React.FC<NavLocalSwitcherProps> = props => {
       >
         <div>
           <div
-            // onClick={switchLocalSwitcherHandler}
             className={clsx(
               classes.dropDownTop,
               classes.button,
@@ -114,6 +99,7 @@ const NavLocalSwitcher: React.FC<NavLocalSwitcherProps> = props => {
             style={{
               justifyContent: 'space-between',
             }}
+            onClick={() => setLocale('en')}
           >
             English
             <svg
@@ -132,24 +118,6 @@ const NavLocalSwitcher: React.FC<NavLocalSwitcherProps> = props => {
             </svg>
           </div>
           <div
-            // onClick={disconectLocalSwitcherHandler}
-            className={clsx(
-              classes.dropDownInterior,
-              classes.button,
-              usePickByState(
-                classes.whiteInfoSelectedBottom,
-                classes.coolInfoSelected,
-                classes.warmInfoSelected,
-                history,
-              ),
-              classes.disconnectText,
-            )}
-          >
-            Español
-          </div>
-
-          <div
-            // onClick={disconectLocalSwitcherHandler}
             className={clsx(
               classes.dropDownBottom,
               classes.button,
@@ -170,7 +138,6 @@ const NavLocalSwitcher: React.FC<NavLocalSwitcherProps> = props => {
     );
   });
 
-  console.log(result);
   return (
     <>
       {showLanguagePickerModal && (

@@ -23,6 +23,7 @@ const LanguageSelectionModal: React.FC<LanguageSelectionModalProps> = props => {
   const { onDismiss } = props;
   const [modalLocale, setModalLocale] = useState(getCurrentLocale());
 
+  // TODO is this actually doing anything for us?
   useEffect(() => {
     if (modalLocale !== getCurrentLocale()) {
       setLocale(modalLocale);
