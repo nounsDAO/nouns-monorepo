@@ -10,12 +10,12 @@ import clsx from 'clsx';
 import { useHistory } from 'react-router-dom';
 import { isMobileScreen } from '../../utils/isMobile';
 import { usePickByState } from '../../utils/colorResponsiveUIUtils';
-import LanguageSelectionModal, { Locale } from '../LanguageSelectionModal';
+import LanguageSelectionModal from '../LanguageSelectionModal';
 import { getCurrentLocale } from '../../utils/i18n/getCurrentLocale';
 import { setLocale } from '../../utils/i18n/setLocale';
 import { Trans } from '@lingui/macro';
 import navWalletClasses from '../NavWallet/NavWallet.module.css';
-import { supportedLocales as locales } from '../../utils/i18n/supportedLocales';
+import { SupportedLocale, supportedLocales as locales } from '../../utils/i18n/supportedLocales';
 
 interface NavLocalSwitcherProps {
   buttonStyle?: NavBarButtonStyle;
@@ -100,7 +100,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
         className={props.className}
         aria-labelledby={props.labeledBy}
       >
-        {locales.map((locale: Locale, index: number) => {
+        {locales.map((locale: SupportedLocale, index: number) => {
             let dropDownStyle;
             let buttonStyle;
 
