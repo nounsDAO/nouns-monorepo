@@ -10,11 +10,12 @@ import clsx from 'clsx';
 import { useHistory } from 'react-router-dom';
 import { isMobileScreen } from '../../utils/isMobile';
 import { usePickByState } from '../../utils/colorResponsiveUIUtils';
-import LanguageSelectionModal from '../LanguageSelectionModal';
+import LanguageSelectionModal, { Locale } from '../LanguageSelectionModal';
 import { getCurrentLocale } from '../../utils/i18n/getCurrentLocale';
 import { setLocale } from '../../utils/i18n/setLocale';
 import { Trans } from '@lingui/macro';
-import navWalletClasses from "../NavWallet/NavWallet.module.css";
+import navWalletClasses from '../NavWallet/NavWallet.module.css';
+import { supportedLocales as locales } from '../../utils/i18n/supportedLocales';
 
 interface NavLocalSwitcherProps {
   buttonStyle?: NavBarButtonStyle;
@@ -77,6 +78,20 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
     </>
   ));
 
+  const buttonStyleTop = usePickByState(
+    navWalletClasses.whiteInfoSelectedTop,
+    navWalletClasses.coolInfoSelected,
+    navWalletClasses.warmInfoSelected,
+    history,
+  );
+
+  const buttonStyleBottom = usePickByState(
+    navWalletClasses.whiteInfoSelectedBottom,
+    navWalletClasses.coolInfoSelected,
+    navWalletClasses.warmInfoSelected,
+    history,
+  ); 
+
   const CustomMenu = React.forwardRef((props: CustomMenuProps, ref: React.Ref<HTMLDivElement>) => {
     return (
       <div
@@ -85,51 +100,42 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
         className={props.className}
         aria-labelledby={props.labeledBy}
       >
-        <div>
-          <div
-            className={clsx(
-              classes.desktopLanguageButton,
-              classes.dropDownTop,
-              navWalletClasses.button,
-              navWalletClasses.switchWalletText,
-              usePickByState(
-                navWalletClasses.whiteInfoSelectedTop,
-                navWalletClasses.coolInfoSelected,
-                navWalletClasses.warmInfoSelected,
-                history,
-              ),
-            )}
-            onClick={() => setLocale('en')}
-          >
-            English{' '}
-            {getCurrentLocale() === 'en' && (
-              <FontAwesomeIcon icon={faCheck} height={24} width={24} />
-            )}
-          </div>
-          <div
-            className={clsx(
-              classes.desktopLanguageButton,
-              classes.dropDownBottom,
-              navWalletClasses.button,
-              usePickByState(
-                navWalletClasses.whiteInfoSelectedBottom,
-                navWalletClasses.coolInfoSelected,
-                navWalletClasses.warmInfoSelected,
-                history,
-              ),
-              navWalletClasses.switchWalletText,
-            )}
-            style={{
-              justifyContent: 'space-between',
-            }}
-            onClick={() => setLocale('ja')}
-          >
-            日本語
-            {getCurrentLocale() === 'ja' && (
-              <FontAwesomeIcon icon={faCheck} height={24} width={24} />
-            )}
-          </div>
-        </div>
+        {locales.map((locale: Locale, index: number) => {
+            let dropDownStyle;
+            let buttonStyle;
+
+            switch(index) {
+              case 0:
+                dropDownStyle = classes.dropDownTop;
+                buttonStyle = buttonStyleTop;
+                break;
+              case locales.length - 1:
+                dropDownStyle = classes.dropDownBottom;
+                buttonStyle = buttonStyleBottom;
+                break;
+              default:
+                dropDownStyle = classes.dropDownInterior
+                buttonStyle = buttonStyleBottom;
+            }
+
+            return (
+              <div
+                className={clsx(
+                  navWalletClasses.button,
+                  navWalletClasses.switchWalletText,
+                  buttonStyle,
+                  dropDownStyle,
+                  classes.desktopLanguageButton,
+                )}
+                onClick={() => setLocale(locale.locale)}
+              >
+                {locale.name}
+                {getCurrentLocale() === locale.locale && (
+                  <FontAwesomeIcon icon={faCheck} height={24} width={24} />
+                )}
+              </div>
+            );
+        })}
       </div>
     );
   });
@@ -140,7 +146,10 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
         <LanguageSelectionModal onDismiss={() => setShowLanguagePickerModal(false)} />
       )}
       {isMobileScreen() ? (
-        <div className={navWalletClasses.nounsNavLink} onClick={() => setShowLanguagePickerModal(true)}>
+        <div
+          className={navWalletClasses.nounsNavLink}
+          onClick={() => setShowLanguagePickerModal(true)}
+        >
           <NavBarButton
             buttonText={<Trans>Language</Trans>}
             buttonIcon={<FontAwesomeIcon icon={faGlobe} />}

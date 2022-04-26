@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import Modal from '../Modal';
 import { supportedLocales as locales } from '../../utils/i18n/supportedLocales';
 import classes from './LanguageSelectionModal.module.css';
@@ -22,14 +21,6 @@ export interface Locale {
  */
 const LanguageSelectionModal: React.FC<LanguageSelectionModalProps> = props => {
   const { onDismiss } = props;
-  // const [modalLocale, setModalLocale] = useState(getCurrentLocale());
-
-  // TODO is this actually doing anything for us?
-  // useEffect(() => {
-  //   if (modalLocale !== getCurrentLocale()) {
-  //     setLocale(modalLocale);
-  //   }
-  // }, [modalLocale]);
 
   const modalContent = (
     <div className={classes.LanguageSelectionModal}>
@@ -50,7 +41,6 @@ const LanguageSelectionModal: React.FC<LanguageSelectionModalProps> = props => {
     </div>
   );
 
-  console.log(getCurrentLocale());
   return (
     <Modal title={<Trans>Select Language</Trans>} content={modalContent} onDismiss={onDismiss} />
   );
