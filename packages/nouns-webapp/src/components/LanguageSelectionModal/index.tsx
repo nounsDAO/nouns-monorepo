@@ -25,7 +25,10 @@ const LanguageSelectionModal: React.FC<LanguageSelectionModalProps> = props => {
           <div
             className={classes.languageButton}
             key={locale}
-            onClick={() => setLocale(locale)}
+            onClick={() => {
+              setLocale(locale);
+              onDismiss();
+            }}
           >
             {LOCALE_LABEL[locale]}
             {locale === activeLocale && (
