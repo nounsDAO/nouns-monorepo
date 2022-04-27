@@ -12,8 +12,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const locale = useActiveLocale();
 
   const onActivate = useCallback((locale: SupportedLocale) => {
-    // dynamicActivate(locale);
-    dynamicActivate('pseudo');
+    dynamicActivate(locale);
   }, []);
 
   return (
