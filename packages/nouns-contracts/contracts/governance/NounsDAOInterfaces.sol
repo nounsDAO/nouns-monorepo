@@ -334,6 +334,10 @@ contract NounsDAOStorageV2 is NounsDAOStorageV1Adjusted {
     /// @notice The maximum basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed. *DIFFERS from GovernerBravo
     uint256 public maxQuorumVotesBPS;
 
+    /// @notice Polynomial coefficients for calculating a dynamic quorum based on the amount of against votes
+    /// @dev The coefficients are assumed to be WADs, i.e 0.2 is a uint256 = 0.2 * 1e18. There are 4 coefficients from x^0..x^3
+    uint256[4] quorumPolynomCoefs;
+
     /// @notice A small state snapshot that's taken at the time of proposal creation.
     mapping(uint256 => StateSnapshot) public snapshot;
 
@@ -344,6 +348,8 @@ contract NounsDAOStorageV2 is NounsDAOStorageV1Adjusted {
         uint256 minQuorumVotesBPS;
         /// @notice Maximum quorum votes BPS at the time of proposal creation
         uint256 maxQuorumVotesBPS;
+        /// @notice Quorum polynomial coefficients at the time of proposal creating
+        uint256[4] quorumPolynomCoefs;
     }
 }
 

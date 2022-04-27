@@ -114,7 +114,8 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
         uint256 votingDelay_,
         uint256 proposalThresholdBPS_,
         uint256 minQuorumVotesBPS_,
-        uint256 maxQuorumVotesBPS_
+        uint256 maxQuorumVotesBPS_,
+        uint256[4] calldata quorumPolynomCoefs_
     ) public virtual {
         require(address(timelock) == address(0), 'NounsDAO::initialize: can only initialize once');
         require(msg.sender == admin, 'NounsDAO::initialize: admin only');
@@ -156,6 +157,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
         proposalThresholdBPS = proposalThresholdBPS_;
         minQuorumVotesBPS = minQuorumVotesBPS_;
         maxQuorumVotesBPS = maxQuorumVotesBPS_;
+        quorumPolynomCoefs = quorumPolynomCoefs_;
     }
 
     struct ProposalTemp {
@@ -243,7 +245,8 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
         snapshot[proposalCount] = StateSnapshot({
             minQuorumVotesBPS: minQuorumVotesBPS,
             maxQuorumVotesBPS: maxQuorumVotesBPS,
-            totalSupply: temp.totalSupply
+            totalSupply: temp.totalSupply,
+            quorumPolynomCoefs: quorumPolynomCoefs
         });
 
         /// @notice Maintains backwards compatibility with GovernorBravo events
@@ -705,10 +708,22 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
             return proposal.minQuorumVotes;
         }
 
-        uint256 consensus = WAD - wdiv(proposal.forVotes, (proposal.forVotes + proposal.againstVotes));
-        uint256 maxAdjustment = snapshot.maxQuorumVotesBPS - snapshot.minQuorumVotesBPS;
-        uint256 quorumBPS = ((maxAdjustment * consensus) + (snapshot.minQuorumVotesBPS * WAD)) / WAD;
+        return dynamicQuorumVotes(proposal.againstVotes, snapshot);
+    }
+
+    function dynamicQuorumVotes(uint256 againstVotes, StateSnapshot memory snapshot) public pure returns (uint256) {
+        uint256 againstVotesBPS = (10000 * againstVotes) / snapshot.totalSupply;
+        uint256 polynomValueBPS = 0;
+        for (uint8 i = 0; i < 4; i++) {
+            polynomValueBPS += (snapshot.quorumPolynomCoefs[i] * againstVotesBPS**i) / WAD;
+        }
+        uint256 adjustedQuorumBPS = snapshot.minQuorumVotesBPS + polynomValueBPS;
+        uint256 quorumBPS = min(snapshot.maxQuorumVotesBPS, adjustedQuorumBPS);
         return bps2Uint(quorumBPS, snapshot.totalSupply);
+    }
+
+    function min(uint256 a, uint256 b) internal pure returns (uint256) {
+        return a < b ? a : b;
     }
 
     /**

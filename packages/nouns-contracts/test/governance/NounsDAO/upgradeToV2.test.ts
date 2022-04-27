@@ -76,6 +76,7 @@ async function deployGovernorV2(
     1,
     MIN_QUORUM_VOTES_BPS,
     MAX_QUORUM_VOTES_BPS,
+    [0, 0, 0, 0],
   );
 
   return govV2;
