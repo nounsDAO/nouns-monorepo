@@ -82,6 +82,9 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
     /// @notice The maximum setable quorum votes basis points
     uint256 public constant MAX_QUORUM_VOTES_BPS = 2_000; // 2,000 basis points or 20%
 
+    /// @notice The maximum setable quorum votes basis points offset for the quorum votes polynom function
+    uint256 public constant MAX_QUORUM_VOTES_BPS_OFFSET = 2_000; // 2,000 basis points or 20%
+
     /// @notice The maximum number of actions that can be included in a proposal
     uint256 public constant proposalMaxOperations = 10; // 10 actions
 
@@ -115,7 +118,8 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
         uint256 proposalThresholdBPS_,
         uint256 minQuorumVotesBPS_,
         uint256 maxQuorumVotesBPS_,
-        uint256[4] calldata quorumPolynomCoefs_
+        uint256[2] calldata quorumPolynomCoefs_,
+        uint256 quorumVotesBPSOffset_
     ) public virtual {
         require(address(timelock) == address(0), 'NounsDAO::initialize: can only initialize once');
         require(msg.sender == admin, 'NounsDAO::initialize: admin only');
@@ -142,6 +146,10 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
             maxQuorumVotesBPS_ >= minQuorumVotesBPS_ && maxQuorumVotesBPS_ <= MAX_QUORUM_VOTES_BPS_UPPER_BOUND,
             'NounsDAO::initialize: invalid max quorum votes bps'
         );
+        require(
+            quorumVotesBPSOffset_ <= MAX_QUORUM_VOTES_BPS_OFFSET,
+            'NounsDAO::initialize: invalid max quorum votes bps offset'
+        );
 
         emit VotingPeriodSet(votingPeriod, votingPeriod_);
         emit VotingDelaySet(votingDelay, votingDelay_);
@@ -158,6 +166,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
         minQuorumVotesBPS = minQuorumVotesBPS_;
         maxQuorumVotesBPS = maxQuorumVotesBPS_;
         quorumPolynomCoefs = quorumPolynomCoefs_;
+        quorumVotesBPSOffset = quorumVotesBPSOffset_;
     }
 
     struct ProposalTemp {
@@ -246,7 +255,8 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
             minQuorumVotesBPS: minQuorumVotesBPS,
             maxQuorumVotesBPS: maxQuorumVotesBPS,
             totalSupply: temp.totalSupply,
-            quorumPolynomCoefs: quorumPolynomCoefs
+            quorumPolynomCoefs: quorumPolynomCoefs,
+            quorumVotesBPSOffset: quorumVotesBPSOffset
         });
 
         /// @notice Maintains backwards compatibility with GovernorBravo events
@@ -714,8 +724,11 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
     function dynamicQuorumVotes(uint256 againstVotes, StateSnapshot memory snapshot) public pure returns (uint256) {
         uint256 againstVotesBPS = (10000 * againstVotes) / snapshot.totalSupply;
         uint256 polynomValueBPS = 0;
-        for (uint8 i = 0; i < 4; i++) {
-            polynomValueBPS += (snapshot.quorumPolynomCoefs[i] * againstVotesBPS**i) / WAD;
+        if (againstVotesBPS > snapshot.quorumVotesBPSOffset) {
+            uint256 polynomInput = againstVotesBPS - snapshot.quorumVotesBPSOffset;
+            for (uint8 i = 0; i < 2; i++) {
+                polynomValueBPS += (snapshot.quorumPolynomCoefs[i] * polynomInput**(i + 1)) / WAD;
+            }
         }
         uint256 adjustedQuorumBPS = snapshot.minQuorumVotesBPS + polynomValueBPS;
         uint256 quorumBPS = min(snapshot.maxQuorumVotesBPS, adjustedQuorumBPS);

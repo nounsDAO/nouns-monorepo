@@ -14,7 +14,8 @@ contract NounsDAOLogicV2Harness is NounsDAOLogicV2 {
         uint256 proposalThresholdBPS_,
         uint256 minQuorumVotesBPS_,
         uint256 maxQuorumVotesBPS_,
-        uint256[4] calldata quorumPolynomCoefs_
+        uint256[2] calldata quorumPolynomCoefs_,
+        uint256 quorumVotesBPSOffset_
     ) public override {
         require(msg.sender == admin, 'NounsDAO::initialize: admin only');
         require(address(timelock) == address(0), 'NounsDAO::initialize: can only initialize once');
@@ -28,5 +29,6 @@ contract NounsDAOLogicV2Harness is NounsDAOLogicV2 {
         minQuorumVotesBPS = minQuorumVotesBPS_;
         maxQuorumVotesBPS = maxQuorumVotesBPS_;
         quorumPolynomCoefs = quorumPolynomCoefs_;
+        quorumVotesBPSOffset = quorumVotesBPSOffset_;
     }
 }

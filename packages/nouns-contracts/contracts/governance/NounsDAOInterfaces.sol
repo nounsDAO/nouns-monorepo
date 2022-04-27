@@ -335,8 +335,11 @@ contract NounsDAOStorageV2 is NounsDAOStorageV1Adjusted {
     uint256 public maxQuorumVotesBPS;
 
     /// @notice Polynomial coefficients for calculating a dynamic quorum based on the amount of against votes
-    /// @dev The coefficients are assumed to be WADs, i.e 0.2 is a uint256 = 0.2 * 1e18. There are 4 coefficients from x^0..x^3
-    uint256[4] quorumPolynomCoefs;
+    /// @dev The coefficients are assumed to be WADs, i.e 0.2 is a uint256 = 0.2 * 1e18. There are 2 coefficients: x^1 and x^2
+    uint256[2] public quorumPolynomCoefs;
+
+    /// @notice The quorum votes polynom input offset which suppresses polynom contribution until againstVotes.div(totalSupply) reaches this value
+    uint256 public quorumVotesBPSOffset;
 
     /// @notice A small state snapshot that's taken at the time of proposal creation.
     mapping(uint256 => StateSnapshot) public snapshot;
@@ -348,8 +351,10 @@ contract NounsDAOStorageV2 is NounsDAOStorageV1Adjusted {
         uint256 minQuorumVotesBPS;
         /// @notice Maximum quorum votes BPS at the time of proposal creation
         uint256 maxQuorumVotesBPS;
-        /// @notice Quorum polynomial coefficients at the time of proposal creating
-        uint256[4] quorumPolynomCoefs;
+        /// @notice Quorum polynomial coefficients at the time of proposal creation
+        uint256[2] quorumPolynomCoefs;
+        /// @notice Quorum votes BPS offset at the time of proposal creation
+        uint256 quorumVotesBPSOffset;
     }
 }
 

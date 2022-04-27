@@ -4,22 +4,11 @@ import { solidity } from 'ethereum-waffle';
 import { parseUnits } from 'ethers/lib/utils';
 import hardhat from 'hardhat';
 import {
-  NounsToken,
-  NounsDescriptor__factory as NounsDescriptorFactory,
-  NounsDaoLogicV1Harness,
   NounsDaoLogicV1Harness__factory as NounsDaoLogicV1HarnessFactory,
   NounsDaoLogicV2Harness,
   NounsDaoLogicV2Harness__factory as NounsDaoLogicV2HarnessFactory,
-  NounsDaoProxy__factory as NounsDaoProxyFactory,
 } from '../../../typechain';
-import {
-  address,
-  deployNounsToken,
-  getSigners,
-  populateDescriptor,
-  setTotalSupply,
-  TestSigners,
-} from '../../utils';
+import { getSigners, TestSigners } from '../../utils';
 
 chai.use(solidity);
 const { expect } = chai;
@@ -46,19 +35,33 @@ describe('Dynamic Quorum', () => {
       totalSupply: 200,
       minQuorumVotesBPS: 1000,
       maxQuorumVotesBPS: 5000,
-      quorumPolynomCoefs: [0, 0, 0, 0],
+      quorumPolynomCoefs: [0, 0],
+      quorumVotesBPSOffset: 300,
     });
 
     expect(quorumVotes).to.equal(20);
   });
 
   describe('Linear function', async () => {
-    it('increases linearly', async () => {
-      const quorumVotes = await gov.dynamicQuorumVotes(12, {
+    it('stays flat before the offset value', async () => {
+      const quorumVotes = await gov.dynamicQuorumVotes(6, {
         totalSupply: 200,
         minQuorumVotesBPS: 1000,
         maxQuorumVotesBPS: 5000,
-        quorumPolynomCoefs: [0, parseUnits('1', 18), 0, 0],
+        quorumPolynomCoefs: [parseUnits('1', 18), 0],
+        quorumVotesBPSOffset: 300,
+      });
+
+      expect(quorumVotes).to.equal(20);
+    });
+
+    it('increases linearly past the offset value', async () => {
+      const quorumVotes = await gov.dynamicQuorumVotes(18, {
+        totalSupply: 200,
+        minQuorumVotesBPS: 1000,
+        maxQuorumVotesBPS: 5000,
+        quorumPolynomCoefs: [parseUnits('1', 18), 0],
+        quorumVotesBPSOffset: 300,
       });
 
       expect(quorumVotes).to.equal(32);
@@ -67,11 +70,12 @@ describe('Dynamic Quorum', () => {
 
   describe('Quadratic function', async () => {
     it('increases quadratically', async () => {
-      const quorumVotes = await gov.dynamicQuorumVotes(20, {
+      const quorumVotes = await gov.dynamicQuorumVotes(26, {
         totalSupply: 200,
         minQuorumVotesBPS: 1000,
         maxQuorumVotesBPS: 5000,
-        quorumPolynomCoefs: [0, 0, parseUnits('0.001'), 0],
+        quorumPolynomCoefs: [0, parseUnits('0.001')],
+        quorumVotesBPSOffset: 300,
       });
 
       ethers.utils.parseEther;
