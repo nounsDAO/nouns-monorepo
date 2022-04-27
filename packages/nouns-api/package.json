@@ -34,7 +34,7 @@
     "express-validator": "^6.12.0",
     "ioredis": "^4.27.6",
     "nft.storage": "^2.1.1",
-    "sharp": "^0.28.3",
+    "sharp": "^0.30.4",
     "ts-try": "^0.2.0"
   }
 }
