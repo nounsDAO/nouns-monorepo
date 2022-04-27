@@ -30,6 +30,9 @@ import {
   Delegates,
 } from '../../wrappers/subgraph';
 import { getNounVotes } from '../../utils/getNounsVotes';
+import { Trans } from '@lingui/macro';
+import { i18n } from '@lingui/core';
+import { ReactNode } from 'react-markdown/lib/react-markdown';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -99,12 +102,12 @@ const VotePage = ({
 
   const startOrEndTimeCopy = () => {
     if (startDate?.isBefore(now) && endDate?.isAfter(now)) {
-      return 'Ends';
+      return <Trans>Ends</Trans>;
     }
     if (endDate?.isBefore(now)) {
-      return 'Ended';
+      return <Trans>Ended</Trans>;
     }
-    return 'Starts';
+    return <Trans>Starts</Trans>;
   };
 
   const startOrEndTimeTime = () => {
@@ -114,7 +117,7 @@ const VotePage = ({
     return endDate;
   };
 
-  const moveStateButtonAction = hasSucceeded ? 'Queue' : 'Execute';
+  const moveStateButtonAction = hasSucceeded ? <Trans>Queue</Trans> : <Trans>Execute</Trans>;
   const moveStateAction = (() => {
     if (hasSucceeded) {
       return () => queueProposal(proposal?.id);
@@ -125,9 +128,9 @@ const VotePage = ({
   const onTransactionStateChange = useCallback(
     (
       tx: TransactionStatus,
-      successMessage?: string,
+      successMessage?: ReactNode,
       setPending?: (isPending: boolean) => void,
-      getErrorMessage?: (error?: string) => string | undefined,
+      getErrorMessage?: (error?: string) => ReactNode | undefined,
       onFinalState?: () => void,
     ) => {
       switch (tx.status) {
@@ -139,8 +142,8 @@ const VotePage = ({
           break;
         case 'Success':
           setModal({
-            title: 'Success',
-            message: successMessage || 'Transaction Successful!',
+            title: <Trans>Success</Trans>,
+            message: successMessage || <Trans>Transaction Successful!</Trans>,
             show: true,
           });
           setPending?.(false);
@@ -148,8 +151,8 @@ const VotePage = ({
           break;
         case 'Fail':
           setModal({
-            title: 'Transaction Failed',
-            message: tx?.errorMessage || 'Please try again.',
+            title: <Trans>Transaction Failed</Trans>,
+            message: tx?.errorMessage || <Trans>Please try again.</Trans>,
             show: true,
           });
           setPending?.(false);
@@ -157,8 +160,8 @@ const VotePage = ({
           break;
         case 'Exception':
           setModal({
-            title: 'Error',
-            message: getErrorMessage?.(tx?.errorMessage) || 'Please try again.',
+            title: <Trans>Error</Trans>,
+            message: getErrorMessage?.(tx?.errorMessage) || <Trans>Please try again.</Trans>,
             show: true,
           });
           setPending?.(false);
@@ -170,12 +173,22 @@ const VotePage = ({
   );
 
   useEffect(
-    () => onTransactionStateChange(queueProposalState, 'Proposal Queued!', setQueuePending),
+    () =>
+      onTransactionStateChange(
+        queueProposalState,
+        <Trans>Proposal Queued!</Trans>,
+        setQueuePending,
+      ),
     [queueProposalState, onTransactionStateChange, setModal],
   );
 
   useEffect(
-    () => onTransactionStateChange(executeProposalState, 'Proposal Executed!', setExecutePending),
+    () =>
+      onTransactionStateChange(
+        executeProposalState,
+        <Trans>Proposal Executed!</Trans>,
+        setExecutePending,
+      ),
     [executeProposalState, onTransactionStateChange, setModal],
   );
 
@@ -226,7 +239,7 @@ const VotePage = ({
   }
 
   if (error) {
-    return <>Failed to fetch</>;
+    return <Trans>Failed to fetch</Trans>;
   }
 
   const isWalletConnected = !(activeAccount === undefined);
@@ -267,7 +280,7 @@ const VotePage = ({
                 {isQueuePending || isExecutePending ? (
                   <Spinner animation="border" />
                 ) : (
-                  `${moveStateButtonAction} Proposal ⌐◧-◧`
+                  <Trans>{moveStateButtonAction} Proposal ⌐◧-◧</Trans>
                 )}
               </Button>
             </Col>
@@ -301,11 +314,17 @@ const VotePage = ({
               <Card.Body className="p-2">
                 <Row className={classes.voteMetadataRow}>
                   <Col className={classes.voteMetadataRowTitle}>
-                    <h1>Threshold</h1>
+                    <h1>
+                      <Trans>Threshold</Trans>
+                    </h1>
                   </Col>
                   <Col className={classes.thresholdInfo}>
-                    <span>Quorum</span>
-                    <h3>{proposal.quorumVotes} votes</h3>
+                    <span>
+                      <Trans>Quorum</Trans>
+                    </span>
+                    <h3>
+                      <Trans>{i18n.number(proposal.quorumVotes)} votes</Trans>
+                    </h3>
                   </Col>
                 </Row>
               </Card.Body>
@@ -319,8 +338,18 @@ const VotePage = ({
                     <h1>{startOrEndTimeCopy()}</h1>
                   </Col>
                   <Col className={classes.voteMetadataTime}>
-                    <span>{startOrEndTimeTime() && startOrEndTimeTime()?.format('h:mm A z')}</span>
-                    <h3>{startOrEndTimeTime() && startOrEndTimeTime()?.format('MMM D, YYYY')}</h3>
+                    <span>
+                      {startOrEndTimeTime() &&
+                        i18n.date(new Date(startOrEndTimeTime()?.toISOString() || 0), {
+                          timeStyle: 'long',
+                        })}
+                    </span>
+                    <h3>
+                      {startOrEndTimeTime() &&
+                        i18n.date(new Date(startOrEndTimeTime()?.toISOString() || 0), {
+                          dateStyle: 'long',
+                        })}
+                    </h3>
                   </Col>
                 </Row>
               </Card.Body>
@@ -331,10 +360,14 @@ const VotePage = ({
               <Card.Body className="p-2">
                 <Row className={classes.voteMetadataRow}>
                   <Col className={classes.voteMetadataRowTitle}>
-                    <h1>Snapshot</h1>
+                    <h1>
+                      <Trans>Snapshot</Trans>
+                    </h1>
                   </Col>
                   <Col className={classes.snapshotBlock}>
-                    <span>Taken at block</span>
+                    <span>
+                      <Trans>Taken at block</Trans>
+                    </span>
                     <h3>{proposal.createdBlock}</h3>
                   </Col>
                 </Row>
