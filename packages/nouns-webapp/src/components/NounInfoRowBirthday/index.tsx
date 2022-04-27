@@ -48,9 +48,7 @@ const NounInfoRowBirthday: React.FC<NounInfoRowBirthdayProps> = props => {
       </span>
       <Trans>Born</Trans>
       <span className={classes.nounInfoRowBirthday}>
-        {i18n.date(birthday, {
-          dateStyle: 'medium',
-        })}
+        {i18n.date(birthday, { month: 'long', year: 'numeric', day: '2-digit' })}
       </span>
     </div>
   );
