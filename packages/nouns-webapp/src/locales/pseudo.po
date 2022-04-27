@@ -6,6 +6,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
 "Language: pseudo\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
 
 #: src/components/Documentation/index.tsx
 msgid "'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:"
@@ -24,12 +30,12 @@ msgid "404: This is not the person, place, or thing you're looking for..."
 msgstr ""
 
 #: src/components/AuctionTimer/index.tsx
-msgid "<0>{flooredMinutes}<1>m</1></0>"
-msgstr ""
+#~ msgid "<0>{flooredMinutes}<1>m</1></0>"
+#~ msgstr ""
 
 #: src/components/AuctionTimer/index.tsx
-msgid "<0>{flooredSeconds}<1>s</1></0>"
-msgstr ""
+#~ msgid "<0>{flooredSeconds}<1>s</1></0>"
+#~ msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Absent for"
@@ -924,8 +930,16 @@ msgstr ""
 msgid "glasses (21)"
 msgstr ""
 
+#: src/components/AuctionTimer/index.tsx
+msgid "h"
+msgstr ""
+
 #: src/components/Documentation/index.tsx
 msgid "heads (234)"
+msgstr ""
+
+#: src/components/AuctionTimer/index.tsx
+msgid "m"
 msgstr ""
 
 #: src/components/Bid/index.tsx
@@ -936,13 +950,17 @@ msgstr ""
 msgid "public domain"
 msgstr ""
 
+#: src/components/AuctionTimer/index.tsx
+msgid "s"
+msgstr ""
+
 #: src/pages/Vote/index.tsx
 msgid "{0} votes"
 msgstr ""
 
 #: src/components/AuctionTimer/index.tsx
-msgid "{0}<0>h</0>"
-msgstr ""
+#~ msgid "{0}<0>h</0>"
+#~ msgstr ""
 
 #: src/pages/Vote/index.tsx
 msgid "{moveStateButtonAction} Proposal ⌐◧-◧"
