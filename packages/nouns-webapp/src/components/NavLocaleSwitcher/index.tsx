@@ -11,12 +11,11 @@ import { useHistory } from 'react-router-dom';
 import { isMobileScreen } from '../../utils/isMobile';
 import { usePickByState } from '../../utils/colorResponsiveUIUtils';
 import LanguageSelectionModal from '../LanguageSelectionModal';
-import { getCurrentLocale } from '../../i18n/getCurrentLocale';
 import { setLocale } from '../../i18n/setLocale';
 import { Trans } from '@lingui/macro';
 import navWalletClasses from '../NavWallet/NavWallet.module.css';
-// import { SupportedLocale, supportedLocales as locales } from '../../utils/i18n/supportedLocales';
 import { SUPPORTED_LOCALES, SupportedLocale, LOCALE_LABEL } from "../../i18n/locales";
+import { useActiveLocale } from '../../hooks/useActivateLocale';
 
 interface NavLocalSwitcherProps {
   buttonStyle?: NavBarButtonStyle;
@@ -42,6 +41,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
   const [buttonUp, setButtonUp] = useState(false);
   const history = useHistory();
   const [showLanguagePickerModal, setShowLanguagePickerModal] = useState(false);
+  const activeLocale = useActiveLocale();
 
   const statePrimaryButtonClass = usePickByState(
     navWalletClasses.whiteInfo,
@@ -131,7 +131,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
                 onClick={() => setLocale(locale)}
               >
                 {LOCALE_LABEL[locale]}
-                {getCurrentLocale() === locale && (
+                {activeLocale === locale && (
                   <FontAwesomeIcon icon={faCheck} height={24} width={24} />
                 )}
               </div>

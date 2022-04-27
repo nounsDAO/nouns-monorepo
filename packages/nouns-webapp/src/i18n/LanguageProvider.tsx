@@ -1,3 +1,6 @@
+/**
+ * LanguageProvider.tsx is a modified version of https://github.com/Uniswap/interface/blob/main/src/lib/i18n.tsx
+ */
 import { SupportedLocale } from './locales'
 import { initialLocale, useActiveLocale } from '../hooks/useActivateLocale'
 import { dynamicActivate, NounsI18nProvider } from './NounsI18nProvider'

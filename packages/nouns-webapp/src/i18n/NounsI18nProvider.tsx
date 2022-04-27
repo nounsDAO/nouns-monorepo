@@ -1,7 +1,5 @@
 /**
- * Copied with minor modifcations from: 
- * 
- * https://github.com/Uniswap/interface/blob/main/src/lib/i18n.tsx
+ * NounsI18nProvier.tsx is a modified version of https://github.com/Uniswap/interface/blob/main/src/lib/i18n.tsx
  */
 import { i18n } from '@lingui/core'
 import { I18nProvider } from '@lingui/react'
@@ -26,10 +24,9 @@ const plurals: LocalePlural = {
 export async function dynamicActivate(locale: SupportedLocale) {
   i18n.loadLocaleData(locale, { plurals: () => plurals[locale] })
   try {
-    const messages = await import(`../locales/${locale}/messages`);
-    // const catalog = await import(`${process.env.REACT_APP_LOCALES}/${locale}.js`)
+    const catalog = await import(`../locales/${locale}.js`)
     // Bundlers will either export it as default or as a named export named default.
-    i18n.load(locale, messages);
+    i18n.load(locale, catalog.messages || catalog.default.messages)
   } catch {}
   console.log("activating: ", locale);
   i18n.activate(locale);

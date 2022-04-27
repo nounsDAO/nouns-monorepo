@@ -1,11 +1,11 @@
 import Modal from '../Modal';
 import classes from './LanguageSelectionModal.module.css';
-import { getCurrentLocale } from '../../i18n/getCurrentLocale';
 import { setLocale } from '../../i18n/setLocale';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { Trans } from '@lingui/macro';
 import { SUPPORTED_LOCALES, SupportedLocale, LOCALE_LABEL } from "../../i18n/locales";
+import { useActiveLocale } from '../../hooks/useActivateLocale';
 
 interface LanguageSelectionModalProps {
   onDismiss: () => void;
@@ -16,6 +16,7 @@ interface LanguageSelectionModalProps {
  */
 const LanguageSelectionModal: React.FC<LanguageSelectionModalProps> = props => {
   const { onDismiss } = props;
+  const activeLocale = useActiveLocale();
 
   const modalContent = (
     <div className={classes.LanguageSelectionModal}>
@@ -27,7 +28,7 @@ const LanguageSelectionModal: React.FC<LanguageSelectionModalProps> = props => {
             onClick={() => setLocale(locale)}
           >
             {LOCALE_LABEL[locale]}
-            {locale === getCurrentLocale() && (
+            {locale === activeLocale && (
               <FontAwesomeIcon icon={faCheck} height={24} width={24} className={classes.icon} />
             )}
           </div>
