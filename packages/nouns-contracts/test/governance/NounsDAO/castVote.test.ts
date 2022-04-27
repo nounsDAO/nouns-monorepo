@@ -12,9 +12,10 @@ import {
   TestSigners,
   setTotalSupply,
   populateDescriptor,
+  propose,
 } from '../../utils';
 
-import { mineBlock, address, encodeParameters } from '../../utils';
+import { mineBlock, address } from '../../utils';
 
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
@@ -87,16 +88,6 @@ async function reset() {
   snapshotId = await ethers.provider.send('evm_snapshot', []);
 }
 
-async function propose(proposer: SignerWithAddress) {
-  targets = [account0.address];
-  values = ['0'];
-  signatures = ['getBalanceOf(address)'];
-  callDatas = [encodeParameters(['address'], [account0.address])];
-
-  await gov.connect(proposer).propose(targets, values, signatures, callDatas, 'do nothing');
-  proposalId = await gov.latestProposalIds(proposer.address);
-}
-
 describe('NounsDAO#castVote/2', () => {
   before(async () => {
     signers = await getSigners();
@@ -109,7 +100,7 @@ describe('NounsDAO#castVote/2', () => {
   describe('We must revert if:', () => {
     before(async () => {
       await reset();
-      await propose(deployer);
+      proposalId = await propose(gov, deployer);
     });
 
     it("There does not exist a proposal with matching proposal id where the current block number is between the proposal's start block (exclusive) and end block (inclusive)", async () => {
@@ -155,7 +146,7 @@ describe('NounsDAO#castVote/2', () => {
 
         await token.transferFrom(deployer.address, actor.address, 0);
         await token.transferFrom(deployer.address, actor.address, 1);
-        await propose(actor);
+        proposalId = await propose(gov, actor);
 
         const beforeFors = (await gov.proposals(proposalId)).forVotes;
         await mineBlock();
@@ -173,7 +164,7 @@ describe('NounsDAO#castVote/2', () => {
         await token.transferFrom(deployer.address, actor.address, 2);
         await token.transferFrom(deployer.address, actor.address, 3);
 
-        await propose(actor);
+        proposalId = await propose(gov, actor);
 
         const beforeAgainst = (await gov.proposals(proposalId)).againstVotes;
 

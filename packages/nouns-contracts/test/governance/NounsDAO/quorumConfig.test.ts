@@ -1,89 +1,31 @@
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import hardhat from 'hardhat';
-const { ethers } = hardhat;
 import {
   deployNounsToken,
   getSigners,
   TestSigners,
   setTotalSupply,
   populateDescriptor,
+  deployGovernorV2,
+  deployGovernorV1,
 } from '../../utils';
-import { address } from '../../utils';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
   NounsDescriptor__factory as NounsDescriptorFactory,
-  NounsDaoLogicV1Harness,
-  NounsDaoLogicV1Harness__factory as NounsDaoLogicV1HarnessFactory,
-  NounsDaoLogicV2Harness,
-  NounsDaoLogicV2Harness__factory as NounsDaoLogicV2HarnessFactory,
-  NounsDaoProxy__factory as NounsDaoProxyFactory,
+  NounsDaoLogicV2,
 } from '../../../typechain';
+import { MAX_QUORUM_VOTES_BPS, MIN_QUORUM_VOTES_BPS } from '../../constants';
 
 chai.use(solidity);
 const { expect } = chai;
-
-const MIN_QUORUM_VOTES_BPS = 200;
-const MAX_QUORUM_VOTES_BPS = 1900;
-
-async function deployGovernorV1(
-  deployer: SignerWithAddress,
-  tokenAddress: string,
-): Promise<NounsDaoLogicV1Harness> {
-  const { address: govDelegateAddress } = await new NounsDaoLogicV1HarnessFactory(
-    deployer,
-  ).deploy();
-  const params = [
-    address(0),
-    tokenAddress,
-    deployer.address,
-    deployer.address,
-    govDelegateAddress,
-    1728,
-    1,
-    1,
-    MIN_QUORUM_VOTES_BPS,
-  ];
-
-  const { address: _govDelegatorAddress } = await (
-    await ethers.getContractFactory('NounsDAOProxy', deployer)
-  ).deploy(...params);
-
-  return NounsDaoLogicV1HarnessFactory.connect(_govDelegatorAddress, deployer);
-}
-
-async function deployGovernorV2(
-  deployer: SignerWithAddress,
-  tokenAddress: string,
-  proxyAddress: string,
-): Promise<NounsDaoLogicV2Harness> {
-  const v2LogicContract = await new NounsDaoLogicV2HarnessFactory(deployer).deploy();
-  const proxy = NounsDaoProxyFactory.connect(proxyAddress, deployer);
-  await proxy._setImplementation(v2LogicContract.address);
-
-  const govV2 = NounsDaoLogicV2HarnessFactory.connect(proxyAddress, deployer);
-
-  await govV2.initialize(
-    address(0),
-    tokenAddress,
-    deployer.address,
-    1728,
-    1,
-    1,
-    MIN_QUORUM_VOTES_BPS,
-    MAX_QUORUM_VOTES_BPS,
-    [0, 0, 0, 0],
-  );
-
-  return govV2;
-}
 
 let token: NounsToken;
 let deployer: SignerWithAddress;
 let account0: SignerWithAddress;
 let signers: TestSigners;
-let gov: NounsDaoLogicV2Harness;
+let gov: NounsDaoLogicV2;
 
 async function setupWithV2() {
   token = await deployNounsToken(signers.deployer);
@@ -95,7 +37,7 @@ async function setupWithV2() {
   await setTotalSupply(token, 100);
 
   const { address: govProxyAddress } = await deployGovernorV1(deployer, token.address);
-  gov = await deployGovernorV2(deployer, token.address, govProxyAddress);
+  gov = await deployGovernorV2(deployer, govProxyAddress);
 }
 
 describe('NounsDAO#quorumConfig', () => {
@@ -115,19 +57,19 @@ describe('NounsDAO#quorumConfig', () => {
     });
 
     it('reverts given input below lower bound', async () => {
-      await expect(gov._setMinQuorumVotesBPS(1)).to.be.revertedWith(
+      await expect(gov._setMinQuorumVotesBPS(199)).to.be.revertedWith(
         'NounsDAO::_setMinQuorumVotesBPS: invalid min quorum votes bps',
       );
     });
 
     it('reverts given input above upper bound', async () => {
-      await expect(gov._setMinQuorumVotesBPS(2345)).to.be.revertedWith(
+      await expect(gov._setMinQuorumVotesBPS(2001)).to.be.revertedWith(
         'NounsDAO::_setMinQuorumVotesBPS: invalid min quorum votes bps',
       );
     });
 
     it('reverts given input above max BPs', async () => {
-      await expect(gov._setMinQuorumVotesBPS(MAX_QUORUM_VOTES_BPS + 12)).to.be.revertedWith(
+      await expect(gov._setMinQuorumVotesBPS(1901)).to.be.revertedWith(
         'NounsDAO::_setMinQuorumVotesBPS: min quorum votes bps greater than max',
       );
     });
@@ -148,13 +90,13 @@ describe('NounsDAO#quorumConfig', () => {
     });
 
     it('reverts when input below min quorum', async () => {
-      await expect(gov._setMaxQuorumVotesBPS(123)).to.be.revertedWith(
+      await expect(gov._setMaxQuorumVotesBPS(199)).to.be.revertedWith(
         'NounsDAO::_setMaxQuorumVotesBPS: invalid max quorum votes bps',
       );
     });
 
     it('reverts when input above upper bound', async () => {
-      await expect(gov._setMaxQuorumVotesBPS(4321)).to.be.revertedWith(
+      await expect(gov._setMaxQuorumVotesBPS(4001)).to.be.revertedWith(
         'NounsDAO::_setMaxQuorumVotesBPS: invalid max quorum votes bps',
       );
     });

@@ -9,10 +9,16 @@ import {
   NounsSeeder__factory as NounsSeederFactory,
   Weth,
   Weth__factory as WethFactory,
+  NounsDaoLogicV1,
+  NounsDaoLogicV1Harness__factory as NounsDaoLogicV1HarnessFactory,
+  NounsDaoLogicV2,
+  NounsDaoLogicV2__factory as NounsDaoLogicV2Factory,
+  NounsDaoProxy__factory as NounsDaoProxyFactory,
 } from '../typechain';
 import ImageData from '../files/image-data.json';
 import { Block } from '@ethersproject/abstract-provider';
 import { chunkArray } from '../utils';
+import { MAX_QUORUM_VOTES_BPS, MIN_QUORUM_VOTES_BPS } from './constants';
 
 export type TestSigners = {
   deployer: SignerWithAddress;
@@ -224,4 +230,60 @@ export const propStateToString = (stateInt: number): string => {
     'Executed',
   ];
   return states[stateInt];
+};
+
+export const deployGovernorV1 = async (
+  deployer: SignerWithAddress,
+  tokenAddress: string,
+  quorumVotesBPs: number = MIN_QUORUM_VOTES_BPS,
+): Promise<NounsDaoLogicV1> => {
+  const { address: govDelegateAddress } = await new NounsDaoLogicV1HarnessFactory(
+    deployer,
+  ).deploy();
+  const params = [
+    address(0),
+    tokenAddress,
+    deployer.address,
+    deployer.address,
+    govDelegateAddress,
+    1728,
+    1,
+    1,
+    quorumVotesBPs,
+  ];
+
+  const { address: _govDelegatorAddress } = await (
+    await ethers.getContractFactory('NounsDAOProxy', deployer)
+  ).deploy(...params);
+
+  return NounsDaoLogicV1HarnessFactory.connect(_govDelegatorAddress, deployer);
+};
+
+export const deployGovernorV2 = async (
+  deployer: SignerWithAddress,
+  proxyAddress: string,
+): Promise<NounsDaoLogicV2> => {
+  const v2LogicContract = await new NounsDaoLogicV2Factory(deployer).deploy();
+  const proxy = NounsDaoProxyFactory.connect(proxyAddress, deployer);
+  await proxy._setImplementation(v2LogicContract.address);
+
+  const govV2 = NounsDaoLogicV2Factory.connect(proxyAddress, deployer);
+  await govV2._setMaxQuorumVotesBPS(MAX_QUORUM_VOTES_BPS);
+  await govV2._setMinQuorumVotesBPS(MIN_QUORUM_VOTES_BPS);
+
+  return govV2;
+};
+
+export const propose = async (
+  gov: NounsDaoLogicV1 | NounsDaoLogicV2,
+  proposer: SignerWithAddress,
+  stubPropUserAddress: string = address(0),
+) => {
+  const targets = [stubPropUserAddress];
+  const values = ['0'];
+  const signatures = ['getBalanceOf(address)'];
+  const callDatas = [encodeParameters(['address'], [stubPropUserAddress])];
+
+  await gov.connect(proposer).propose(targets, values, signatures, callDatas, 'do nothing');
+  return await gov.latestProposalIds(proposer.address);
 };
