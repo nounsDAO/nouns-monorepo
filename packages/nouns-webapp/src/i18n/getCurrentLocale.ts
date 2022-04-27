@@ -11,6 +11,6 @@ import { detect, fromNavigator, fromStorage } from '@lingui/detect-locale';
  * @returns locale
  */
 export const getCurrentLocale = () => {
-  const DEFAULT_FALLBACK = () => 'en';
+  const DEFAULT_FALLBACK = () => 'en-US';
   return detect(fromStorage('lang'), fromNavigator(), DEFAULT_FALLBACK) || 'en';
 };

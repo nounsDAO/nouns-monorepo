@@ -26,11 +26,13 @@ const plurals: LocalePlural = {
 export async function dynamicActivate(locale: SupportedLocale) {
   i18n.loadLocaleData(locale, { plurals: () => plurals[locale] })
   try {
-    const catalog = await import(`${process.env.REACT_APP_LOCALES}/${locale}.js`)
+    const messages = await import(`../locales/${locale}/messages`);
+    // const catalog = await import(`${process.env.REACT_APP_LOCALES}/${locale}.js`)
     // Bundlers will either export it as default or as a named export named default.
-    i18n.load(locale, catalog.messages || catalog.default.messages)
+    i18n.load(locale, messages);
   } catch {}
-  i18n.activate(locale)
+  console.log("activating: ", locale);
+  i18n.activate(locale);
 }
 
 interface ProviderProps {
@@ -40,7 +42,7 @@ interface ProviderProps {
   children: ReactNode
 }
 
-export function Provider({ locale, forceRenderAfterLocaleChange = true, onActivate, children }: ProviderProps) {
+export function NounsI18nProvider({ locale, forceRenderAfterLocaleChange = true, onActivate, children }: ProviderProps) {
   useEffect(() => {
     dynamicActivate(locale)
       .then(() => onActivate?.(locale))
