@@ -6,8 +6,10 @@ import { useState, useEffect, useRef } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { useAppSelector } from '../../hooks';
 import clsx from 'clsx';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 dayjs.extend(duration);
+dayjs.extend(relativeTime);
 
 const AuctionTimer: React.FC<{
   auction: Auction;
@@ -91,10 +93,8 @@ const AuctionTimer: React.FC<{
               </span>
             </div>
             <div className={classes.timerSectionFinal}>
-              <span>
-                {`${flooredSeconds}`}
-                <span className={classes.small}>s</span>
-              </span>
+              <span>{`${flooredSeconds}`}</span>
+              <span className={classes.small}>s</span>
             </div>
           </h2>
         ) : (
