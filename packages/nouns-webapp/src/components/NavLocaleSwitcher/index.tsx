@@ -14,7 +14,7 @@ import LanguageSelectionModal from '../LanguageSelectionModal';
 import { setLocale } from '../../i18n/setLocale';
 import { Trans } from '@lingui/macro';
 import navWalletClasses from '../NavWallet/NavWallet.module.css';
-import { SUPPORTED_LOCALES, SupportedLocale, LOCALE_LABEL } from "../../i18n/locales";
+import { SUPPORTED_LOCALES, SupportedLocale, LOCALE_LABEL } from '../../i18n/locales';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 
 interface NavLocalSwitcherProps {
@@ -91,7 +91,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
     navWalletClasses.coolInfoSelected,
     navWalletClasses.warmInfoSelected,
     history,
-  ); 
+  );
 
   const CustomMenu = React.forwardRef((props: CustomMenuProps, ref: React.Ref<HTMLDivElement>) => {
     return (
@@ -102,40 +102,38 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
         aria-labelledby={props.labeledBy}
       >
         {SUPPORTED_LOCALES.map((locale: SupportedLocale, index: number) => {
-            let dropDownStyle;
-            let buttonStyle;
+          let dropDownStyle;
+          let buttonStyle;
 
-            switch(index) {
-              case 0:
-                dropDownStyle = classes.dropDownTop;
-                buttonStyle = buttonStyleTop;
-                break;
-              case SUPPORTED_LOCALES.length - 1:
-                dropDownStyle = classes.dropDownBottom;
-                buttonStyle = buttonStyleBottom;
-                break;
-              default:
-                dropDownStyle = classes.dropDownInterior
-                buttonStyle = buttonStyleBottom;
-            }
+          switch (index) {
+            case 0:
+              dropDownStyle = classes.dropDownTop;
+              buttonStyle = buttonStyleTop;
+              break;
+            case SUPPORTED_LOCALES.length - 1:
+              dropDownStyle = classes.dropDownBottom;
+              buttonStyle = buttonStyleBottom;
+              break;
+            default:
+              dropDownStyle = classes.dropDownInterior;
+              buttonStyle = buttonStyleBottom;
+          }
 
-            return (
-              <div
-                className={clsx(
-                  navWalletClasses.button,
-                  navWalletClasses.switchWalletText,
-                  buttonStyle,
-                  dropDownStyle,
-                  classes.desktopLanguageButton,
-                )}
-                onClick={() => setLocale(locale)}
-              >
-                {LOCALE_LABEL[locale]}
-                {activeLocale === locale && (
-                  <FontAwesomeIcon icon={faCheck} height={24} width={24} />
-                )}
-              </div>
-            );
+          return (
+            <div
+              className={clsx(
+                navWalletClasses.button,
+                navWalletClasses.switchWalletText,
+                buttonStyle,
+                dropDownStyle,
+                classes.desktopLanguageButton,
+              )}
+              onClick={() => setLocale(locale)}
+            >
+              {LOCALE_LABEL[locale]}
+              {activeLocale === locale && <FontAwesomeIcon icon={faCheck} height={24} width={24} />}
+            </div>
+          );
         })}
       </div>
     );

@@ -203,7 +203,7 @@ ReactDOM.render(
           <ApolloProvider client={client}>
             <PastAuctions />
             <DAppProvider config={useDappConfig}>
-              <LanguageProvider >
+              <LanguageProvider>
                 <App />
               </LanguageProvider>
               <Updaters />

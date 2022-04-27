@@ -1,4 +1,4 @@
-import { dynamicActivate } from "./NounsI18nProvider";
+import { dynamicActivate } from './NounsI18nProvider';
 
 /**
  * Sets locale in local storage

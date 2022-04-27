@@ -1,37 +1,39 @@
 /**
  * useActiveLocale.ts is a modified version of https://github.com/Uniswap/interface/blob/main/src/hooks/useActiveLocale.ts
  */
-import { DEFAULT_LOCALE, SUPPORTED_LOCALES, SupportedLocale } from '../i18n/locales'
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES, SupportedLocale } from '../i18n/locales';
 
 /**
  * Given a locale string (e.g. from user agent), return the best match for corresponding SupportedLocale
  * @param maybeSupportedLocale the fuzzy locale identifier
  */
 function parseLocale(maybeSupportedLocale: unknown): SupportedLocale | undefined {
-  if (typeof maybeSupportedLocale !== 'string') return undefined
-  const lowerMaybeSupportedLocale = maybeSupportedLocale.toLowerCase()
+  if (typeof maybeSupportedLocale !== 'string') return undefined;
+  const lowerMaybeSupportedLocale = maybeSupportedLocale.toLowerCase();
   return SUPPORTED_LOCALES.find(
-    (locale: string ) => locale.toLowerCase() === lowerMaybeSupportedLocale || locale.split('-')[0] === lowerMaybeSupportedLocale
-  )
+    (locale: string) =>
+      locale.toLowerCase() === lowerMaybeSupportedLocale ||
+      locale.split('-')[0] === lowerMaybeSupportedLocale,
+  );
 }
 
 /**
  * Returns the supported locale read from the user agent (navigator)
  */
 export function navigatorLocale(): SupportedLocale | undefined {
-  if (!navigator.language) return undefined
+  if (!navigator.language) return undefined;
 
-  const [language, region] = navigator.language.split('-')
+  const [language, region] = navigator.language.split('-');
 
   if (region) {
-    return parseLocale(`${language}-${region.toUpperCase()}`) ?? parseLocale(language)
+    return parseLocale(`${language}-${region.toUpperCase()}`) ?? parseLocale(language);
   }
 
-  return parseLocale(language)
+  return parseLocale(language);
 }
 
 function storeLocale(): SupportedLocale | undefined {
-  return localStorage.getItem("lang") ?? "en-US"; 
+  return localStorage.getItem('lang') ?? 'en-US';
 }
 
 export const initialLocale = parseLocale(storeLocale()) ?? navigatorLocale() ?? DEFAULT_LOCALE;
@@ -41,5 +43,5 @@ export const initialLocale = parseLocale(storeLocale()) ?? navigatorLocale() ?? 
  * Stores the query string locale in redux (if set) to persist across sessions
  */
 export function useActiveLocale(): SupportedLocale {
-    return storeLocale() ?? navigatorLocale() ?? DEFAULT_LOCALE;
+  return storeLocale() ?? navigatorLocale() ?? DEFAULT_LOCALE;
 }
