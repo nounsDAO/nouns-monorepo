@@ -354,7 +354,7 @@ contract NounsDAOStorageV2 is NounsDAOStorageV1Adjusted {
     /// @notice A checkpoint for storing dynamic quorum params from a given block
     struct DynamicQuorumParamsCheckpoint {
         /// @notice The block at which the new values were set
-        uint208 fromBlock;
+        uint32 fromBlock;
         /// @notice The parameter values of this checkpoint
         DynamicQuorumParams params;
     }

@@ -199,22 +199,14 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
             );
         }
 
-        DynamicQuorumParams memory dynamicQuorumParams = getDynamicQuorumParamsAt(block.number);
-
         temp.startBlock = block.number + votingDelay;
         temp.endBlock = temp.startBlock + votingPeriod;
 
         proposalCount++;
         Proposal storage newProposal = proposals[proposalCount];
-
         newProposal.id = proposalCount;
         newProposal.proposer = msg.sender;
         newProposal.proposalThreshold = temp.proposalThreshold;
-        // TODO we don't need to set this value in V2
-        // is it worth the gas cost to be backwards-compatible with ProposalCreatedWithRequirements?
-        // or would it work to let it be zero in the event?
-        // this value is no longer used since we're using checkpoints
-        newProposal.minQuorumVotes = bps2Uint(dynamicQuorumParams.minQuorumVotesBPS, temp.totalSupply);
         newProposal.eta = 0;
         newProposal.targets = targets;
         newProposal.values = values;
@@ -246,6 +238,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         );
 
         /// @notice Updated event with `proposalThreshold` and `minQuorumVotes`
+        /// @notice `minQuorumVotes` is always zero since V2 introduces dynamic quorum with checkpoints
         emit ProposalCreatedWithRequirements(
             newProposal.id,
             msg.sender,
@@ -569,7 +562,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     }
 
     function _setDynamicQuorumParams(DynamicQuorumParams calldata params) public {
-        uint208 blockNumber = safe208(block.number, 'NounsDAO::_setDynamicQuorumParams: block number exceeds 208 bits');
+        uint32 blockNumber = safe32(block.number, 'NounsDAO::_setDynamicQuorumParams: block number exceeds 208 bits');
         require(msg.sender == admin, 'NounsDAO::_setDynamicQuorumParams: admin only');
         require(
             params.minQuorumVotesBPS >= MIN_QUORUM_VOTES_BPS_LOWER_BOUND &&
@@ -709,10 +702,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     }
 
     function getDynamicQuorumParamsAt(uint256 blockNumber_) public view returns (DynamicQuorumParams memory) {
-        uint208 blockNumber = safe208(
-            blockNumber_,
-            'NounsDAO::getDynamicQuorumParamsAt: block number exceeds 208 bits'
-        );
+        uint32 blockNumber = safe32(blockNumber_, 'NounsDAO::getDynamicQuorumParamsAt: block number exceeds 208 bits');
         uint256 len = quorumParamsCheckpoints.length;
 
         if (len == 0) {
@@ -777,8 +767,8 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         return chainId;
     }
 
-    function safe208(uint256 n, string memory errorMessage) internal pure returns (uint208) {
-        require(n >= type(uint208).min && n <= type(uint208).max, errorMessage);
-        return uint208(n);
+    function safe32(uint256 n, string memory errorMessage) internal pure returns (uint32) {
+        require(n >= type(uint32).min && n <= type(uint32).max, errorMessage);
+        return uint32(n);
     }
 }
