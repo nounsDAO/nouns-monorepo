@@ -521,7 +521,7 @@ msgid "Only 32x32 PNG images are accepted"
 msgstr "32x32 PNG画像のみ受け付けています"
 
 #: src/components/ProposalHeader/index.tsx
-msgid "Only Nons you owned or were delegated to you before {0} are eligible to vote."
+msgid "Only Nouns you owned or were delegated to you before {0} are eligible to vote."
 msgstr "{0} 以前にあなたが所有または委任されたナウンズのみが投票対象となります。"
 
 #: src/components/NounProfileVoteRow/index.tsx
