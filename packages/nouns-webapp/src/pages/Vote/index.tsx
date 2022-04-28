@@ -361,7 +361,7 @@ const VotePage = ({
                 <Row className={classes.voteMetadataRow}>
                   <Col className={classes.voteMetadataRowTitle}>
                     <h1>
-                      <Trans>Snapshot</Trans>
+                      Snapshot
                     </h1>
                   </Col>
                   <Col className={classes.snapshotBlock}>

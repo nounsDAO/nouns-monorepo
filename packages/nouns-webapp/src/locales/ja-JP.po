@@ -655,10 +655,6 @@ msgid "Sign out"
 msgstr "サインアウト"
 
 #: src/pages/Vote/index.tsx
-msgid "Snapshot"
-msgstr "スナップショット"
-
-#: src/pages/Vote/index.tsx
 msgid "Starts"
 msgstr "開始"
 
