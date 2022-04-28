@@ -929,7 +929,7 @@ msgstr "ボディー(30)"
 
 #: src/components/Documentation/index.tsx
 msgid "glasses (21)"
-msgstr "メガネ\"(21)\""
+msgstr "メガネ (21)"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "h"
@@ -937,7 +937,7 @@ msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "heads (234)"
-msgstr "頭 \"(234)\""
+msgstr "頭 (234)"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "m"
@@ -957,7 +957,7 @@ msgstr ""
 
 #: src/pages/Vote/index.tsx
 msgid "{0} votes"
-msgstr "\"{0}\" 投票"
+msgstr "{0} 投票"
 
 #: src/components/AuctionTimer/index.tsx
 #~ msgid "{0}<0>h</0>"
