@@ -62,6 +62,7 @@ const Winner: React.FC<WinnerProps> = props => {
             style={{
               color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)',
             }}
+            className={classes.winnerCopy}
           >
             <Trans>Winner</Trans>
           </h4>
