@@ -4,44 +4,6 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "oldMaxQuorumVotesBPS",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "newMaxQuorumVotesBPS",
-        "type": "uint256"
-      }
-    ],
-    "name": "MaxQuorumVotesBPSSet",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "oldMinQuorumVotesBPS",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "newMinQuorumVotesBPS",
-        "type": "uint256"
-      }
-    ],
-    "name": "MinQuorumVotesBPSSet",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
         "internalType": "address",
         "name": "oldAdmin",
         "type": "address"

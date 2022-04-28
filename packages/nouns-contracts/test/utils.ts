@@ -14,6 +14,7 @@ import {
   NounsDaoLogicV2,
   NounsDaoLogicV2__factory as NounsDaoLogicV2Factory,
   NounsDaoProxy__factory as NounsDaoProxyFactory,
+  NounsDaoLogicV1Harness,
 } from '../typechain';
 import ImageData from '../files/image-data.json';
 import { Block } from '@ethersproject/abstract-provider';
@@ -236,7 +237,7 @@ export const deployGovernorV1 = async (
   deployer: SignerWithAddress,
   tokenAddress: string,
   quorumVotesBPs: number = MIN_QUORUM_VOTES_BPS,
-): Promise<NounsDaoLogicV1> => {
+): Promise<NounsDaoLogicV1Harness> => {
   const { address: govDelegateAddress } = await new NounsDaoLogicV1HarnessFactory(
     deployer,
   ).deploy();
@@ -268,8 +269,12 @@ export const deployGovernorV2 = async (
   await proxy._setImplementation(v2LogicContract.address);
 
   const govV2 = NounsDaoLogicV2Factory.connect(proxyAddress, deployer);
-  await govV2._setMaxQuorumVotesBPS(MAX_QUORUM_VOTES_BPS);
-  await govV2._setMinQuorumVotesBPS(MIN_QUORUM_VOTES_BPS);
+  await govV2._setDynamicQuorumParams({
+    minQuorumVotesBPS: MIN_QUORUM_VOTES_BPS,
+    maxQuorumVotesBPS: MAX_QUORUM_VOTES_BPS,
+    quorumVotesBPSOffset: 0,
+    quorumPolynomCoefs: [0, 0],
+  });
 
   return govV2;
 };

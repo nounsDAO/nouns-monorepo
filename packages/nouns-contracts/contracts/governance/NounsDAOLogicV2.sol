@@ -28,14 +28,13 @@
 // See NounsDAOLogicV1 for initial GovernorBravoDelegate modifications.
 
 // NounsDAOLogicV2 adds:
-// - `minQuorumVotesBPS` and `maxQuorumVotesBPS`, which are used as inputs when
-// calculating the dynamic quorum.
-// - `_setMinQuorumVotesBPS` and `_setMaxQuorumVotesBPS`, which allow the DAO
-// to update the `minQuorumVotesBPS` and `maxQuorumVotesBPS` values.
+// - `quorumParamsCheckpoints`, which store dynamic quorum parameters checkpoints
+// to be used when calculating the dynamic quorum.
+// - `_setDynamicQuorumParams`, which allows the DAO to update the dynamic
+// quorum parameters' values.
 // - `minQuorumVotes` and `maxQuorumVotes`, which returns the current min and
 // max quorum votes using the current Noun supply.
-// - 3 new `Proposal` struct members: `totalSupply`, `minQuorumVotesBPS`,
-// and `maxQuorumVotesBPS`, which are used in dynamic quorum calculation.
+// - A new `Proposal` struct member: `totalSupply`, which is used in dynamic quorum calculation.
 // - `quorumVotes(uint256 proposalId)`, which calculates and returns the dynamic
 // quorum for a specific proposal.
 //
@@ -48,7 +47,7 @@ pragma solidity ^0.8.6;
 
 import './NounsDAOInterfaces.sol';
 
-contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
+contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     /// @notice The name of this contract
     string public constant name = 'Nouns DAO';
 
@@ -82,9 +81,6 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
     /// @notice The maximum setable quorum votes basis points
     uint256 public constant MAX_QUORUM_VOTES_BPS = 2_000; // 2,000 basis points or 20%
 
-    /// @notice The maximum setable quorum votes basis points offset for the quorum votes polynom function
-    uint256 public constant MAX_QUORUM_VOTES_BPS_OFFSET = 2_000; // 2,000 basis points or 20%
-
     /// @notice The maximum number of actions that can be included in a proposal
     uint256 public constant proposalMaxOperations = 10; // 10 actions
 
@@ -106,8 +102,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
      * @param votingPeriod_ The initial voting period
      * @param votingDelay_ The initial voting delay
      * @param proposalThresholdBPS_ The initial proposal threshold in basis points
-     * @param minQuorumVotesBPS_ The initial minimum quorum votes threshold in basis points
-     * @param maxQuorumVotesBPS_ The initial maximum quorum votes threshold in basis points
+     * @param dynamicQuorumParams_ The initial dynamic quorum parameters
      */
     function initialize(
         address timelock_,
@@ -116,10 +111,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
         uint256 votingPeriod_,
         uint256 votingDelay_,
         uint256 proposalThresholdBPS_,
-        uint256 minQuorumVotesBPS_,
-        uint256 maxQuorumVotesBPS_,
-        uint256[2] calldata quorumPolynomCoefs_,
-        uint256 quorumVotesBPSOffset_
+        DynamicQuorumParams calldata dynamicQuorumParams_
     ) public virtual {
         require(address(timelock) == address(0), 'NounsDAO::initialize: can only initialize once');
         require(msg.sender == admin, 'NounsDAO::initialize: admin only');
@@ -137,25 +129,10 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
             proposalThresholdBPS_ >= MIN_PROPOSAL_THRESHOLD_BPS && proposalThresholdBPS_ <= MAX_PROPOSAL_THRESHOLD_BPS,
             'NounsDAO::initialize: invalid proposal threshold'
         );
-        // prettier-ignore
-        require(
-            minQuorumVotesBPS_ >= MIN_QUORUM_VOTES_BPS_LOWER_BOUND && minQuorumVotesBPS_ <= MIN_QUORUM_VOTES_BPS_UPPER_BOUND,
-            'NounsDAO::initialize: invalid min quorum votes bps'
-        );
-        require(
-            maxQuorumVotesBPS_ >= minQuorumVotesBPS_ && maxQuorumVotesBPS_ <= MAX_QUORUM_VOTES_BPS_UPPER_BOUND,
-            'NounsDAO::initialize: invalid max quorum votes bps'
-        );
-        require(
-            quorumVotesBPSOffset_ <= MAX_QUORUM_VOTES_BPS_OFFSET,
-            'NounsDAO::initialize: invalid max quorum votes bps offset'
-        );
 
         emit VotingPeriodSet(votingPeriod, votingPeriod_);
         emit VotingDelaySet(votingDelay, votingDelay_);
         emit ProposalThresholdBPSSet(proposalThresholdBPS, proposalThresholdBPS_);
-        emit MinQuorumVotesBPSSet(minQuorumVotesBPS, minQuorumVotesBPS_);
-        emit MaxQuorumVotesBPSSet(maxQuorumVotesBPS, maxQuorumVotesBPS_);
 
         timelock = INounsDAOExecutor(timelock_);
         nouns = NounsTokenLike(nouns_);
@@ -163,10 +140,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
         votingPeriod = votingPeriod_;
         votingDelay = votingDelay_;
         proposalThresholdBPS = proposalThresholdBPS_;
-        minQuorumVotesBPS = minQuorumVotesBPS_;
-        maxQuorumVotesBPS = maxQuorumVotesBPS_;
-        quorumPolynomCoefs = quorumPolynomCoefs_;
-        quorumVotesBPSOffset = quorumVotesBPSOffset_;
+        _setDynamicQuorumParams(dynamicQuorumParams_);
     }
 
     struct ProposalTemp {
@@ -225,6 +199,8 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
             );
         }
 
+        DynamicQuorumParams memory dynamicQuorumParams = getDynamicQuorumParamsAt(block.number);
+
         temp.startBlock = block.number + votingDelay;
         temp.endBlock = temp.startBlock + votingPeriod;
 
@@ -234,7 +210,11 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
         newProposal.id = proposalCount;
         newProposal.proposer = msg.sender;
         newProposal.proposalThreshold = temp.proposalThreshold;
-        newProposal.minQuorumVotes = bps2Uint(minQuorumVotesBPS, temp.totalSupply);
+        // TODO we don't need to set this value in V2
+        // is it worth the gas cost to be backwards-compatible with ProposalCreatedWithRequirements?
+        // or would it work to let it be zero in the event?
+        // this value is no longer used since we're using checkpoints
+        newProposal.minQuorumVotes = bps2Uint(dynamicQuorumParams.minQuorumVotesBPS, temp.totalSupply);
         newProposal.eta = 0;
         newProposal.targets = targets;
         newProposal.values = values;
@@ -248,16 +228,9 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
         newProposal.canceled = false;
         newProposal.executed = false;
         newProposal.vetoed = false;
+        newProposal.totalSupply = temp.totalSupply;
 
         latestProposalIds[newProposal.proposer] = newProposal.id;
-
-        snapshot[proposalCount] = StateSnapshot({
-            minQuorumVotesBPS: minQuorumVotesBPS,
-            maxQuorumVotesBPS: maxQuorumVotesBPS,
-            totalSupply: temp.totalSupply,
-            quorumPolynomCoefs: quorumPolynomCoefs,
-            quorumVotesBPSOffset: quorumVotesBPSOffset
-        });
 
         /// @notice Maintains backwards compatibility with GovernorBravo events
         emit ProposalCreated(
@@ -595,44 +568,36 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
         emit ProposalThresholdBPSSet(oldProposalThresholdBPS, proposalThresholdBPS);
     }
 
-    /**
-     * @notice Admin function for setting the minimum quorum votes basis points
-     * @dev newMinQuorumVotesBPS must be greater than the hardcoded min
-     * @param newMinQuorumVotesBPS new min quorum votes bps
-     */
-    function _setMinQuorumVotesBPS(uint256 newMinQuorumVotesBPS) external {
-        require(msg.sender == admin, 'NounsDAO::_setMinQuorumVotesBPS: admin only');
-        // prettier-ignore
+    function _setDynamicQuorumParams(DynamicQuorumParams calldata params) public {
+        uint208 blockNumber = safe208(block.number, 'NounsDAO::_setDynamicQuorumParams: block number exceeds 208 bits');
+        require(msg.sender == admin, 'NounsDAO::_setDynamicQuorumParams: admin only');
         require(
-            newMinQuorumVotesBPS >= MIN_QUORUM_VOTES_BPS_LOWER_BOUND && newMinQuorumVotesBPS <= MIN_QUORUM_VOTES_BPS_UPPER_BOUND,
-            'NounsDAO::_setMinQuorumVotesBPS: invalid min quorum votes bps'
+            params.minQuorumVotesBPS >= MIN_QUORUM_VOTES_BPS_LOWER_BOUND &&
+                params.minQuorumVotesBPS <= MIN_QUORUM_VOTES_BPS_UPPER_BOUND,
+            'NounsDAO::_setDynamicQuorumParams: invalid min quorum votes bps'
         );
         require(
-            newMinQuorumVotesBPS <= maxQuorumVotesBPS,
-            'NounsDAO::_setMinQuorumVotesBPS: min quorum votes bps greater than max'
+            params.maxQuorumVotesBPS <= MAX_QUORUM_VOTES_BPS_UPPER_BOUND,
+            'NounsDAO::_setDynamicQuorumParams: invalid max quorum votes bps'
         );
-
-        uint256 oldMinQuorumVotesBPS = minQuorumVotesBPS;
-        minQuorumVotesBPS = newMinQuorumVotesBPS;
-
-        emit MinQuorumVotesBPSSet(oldMinQuorumVotesBPS, minQuorumVotesBPS);
-    }
-
-    /**
-     * @notice Admin function for setting the maximum quorum votes basis points
-     * @dev newMaxQuorumVotesBPS must be less than the hardcoded max
-     * @param newMaxQuorumVotesBPS new max quorum votes bps
-     */
-    function _setMaxQuorumVotesBPS(uint256 newMaxQuorumVotesBPS) external {
-        require(msg.sender == admin, 'NounsDAO::_setMaxQuorumVotesBPS: admin only');
         require(
-            newMaxQuorumVotesBPS >= minQuorumVotesBPS && newMaxQuorumVotesBPS <= MAX_QUORUM_VOTES_BPS_UPPER_BOUND,
-            'NounsDAO::_setMaxQuorumVotesBPS: invalid max quorum votes bps'
+            params.minQuorumVotesBPS <= params.maxQuorumVotesBPS,
+            'NounsDAO::_setDynamicQuorumParams: min quorum votes bps greater than max'
         );
-        uint256 oldMaxQuorumVotesBPS = maxQuorumVotesBPS;
-        maxQuorumVotesBPS = newMaxQuorumVotesBPS;
 
-        emit MaxQuorumVotesBPSSet(oldMaxQuorumVotesBPS, maxQuorumVotesBPS);
+        uint256 pos = quorumParamsCheckpoints.length;
+        if (pos > 0 && quorumParamsCheckpoints[pos - 1].fromBlock == blockNumber) {
+            quorumParamsCheckpoints[pos - 1].params = params;
+        } else {
+            quorumParamsCheckpoints.push(DynamicQuorumParamsCheckpoint({ fromBlock: blockNumber, params: params }));
+        }
+
+        emit DynamicQuorumParamsSet(
+            params.minQuorumVotesBPS,
+            params.maxQuorumVotesBPS,
+            params.quorumVotesBPSOffset,
+            params.quorumPolynomCoefs
+        );
     }
 
     /**
@@ -713,26 +678,69 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
      */
     function quorumVotes(uint256 proposalId) public view returns (uint256) {
         Proposal storage proposal = proposals[proposalId];
-        StateSnapshot memory snapshot = snapshot[proposalId];
-        if (snapshot.totalSupply == 0) {
+        if (proposal.totalSupply == 0) {
             return proposal.minQuorumVotes;
         }
 
-        return dynamicQuorumVotes(proposal.againstVotes, snapshot);
+        return
+            dynamicQuorumVotes(
+                proposal.againstVotes,
+                proposal.totalSupply,
+                getDynamicQuorumParamsAt(proposal.startBlock - votingDelay)
+            );
     }
 
-    function dynamicQuorumVotes(uint256 againstVotes, StateSnapshot memory snapshot) public pure returns (uint256) {
-        uint256 againstVotesBPS = (10000 * againstVotes) / snapshot.totalSupply;
+    function dynamicQuorumVotes(
+        uint256 againstVotes,
+        uint256 totalSupply,
+        DynamicQuorumParams memory params
+    ) public pure returns (uint256) {
+        uint256 againstVotesBPS = (10000 * againstVotes) / totalSupply;
         uint256 polynomValueBPS = 0;
-        if (againstVotesBPS > snapshot.quorumVotesBPSOffset) {
-            uint256 polynomInput = againstVotesBPS - snapshot.quorumVotesBPSOffset;
+        if (againstVotesBPS > params.quorumVotesBPSOffset) {
+            uint256 polynomInput = againstVotesBPS - params.quorumVotesBPSOffset;
             for (uint8 i = 0; i < 2; i++) {
-                polynomValueBPS += (snapshot.quorumPolynomCoefs[i] * polynomInput**(i + 1)) / WAD;
+                polynomValueBPS += (params.quorumPolynomCoefs[i] * polynomInput**(i + 1)) / WAD;
             }
         }
-        uint256 adjustedQuorumBPS = snapshot.minQuorumVotesBPS + polynomValueBPS;
-        uint256 quorumBPS = min(snapshot.maxQuorumVotesBPS, adjustedQuorumBPS);
-        return bps2Uint(quorumBPS, snapshot.totalSupply);
+        uint256 adjustedQuorumBPS = params.minQuorumVotesBPS + polynomValueBPS;
+        uint256 quorumBPS = min(params.maxQuorumVotesBPS, adjustedQuorumBPS);
+        return bps2Uint(quorumBPS, totalSupply);
+    }
+
+    function getDynamicQuorumParamsAt(uint256 blockNumber_) public view returns (DynamicQuorumParams memory) {
+        uint208 blockNumber = safe208(
+            blockNumber_,
+            'NounsDAO::getDynamicQuorumParamsAt: block number exceeds 208 bits'
+        );
+        uint256 len = quorumParamsCheckpoints.length;
+
+        if (len == 0) {
+            return DynamicQuorumParams(0, 0, 0, [uint256(0), uint256(0)]);
+        }
+
+        if (quorumParamsCheckpoints[len - 1].fromBlock <= blockNumber) {
+            return quorumParamsCheckpoints[len - 1].params;
+        }
+
+        if (quorumParamsCheckpoints[0].fromBlock > blockNumber) {
+            return DynamicQuorumParams(0, 0, 0, [uint256(0), uint256(0)]);
+        }
+
+        uint256 lower = 0;
+        uint256 upper = len - 1;
+        while (upper > lower) {
+            uint256 center = upper - (upper - lower) / 2;
+            DynamicQuorumParamsCheckpoint memory cp = quorumParamsCheckpoints[center];
+            if (cp.fromBlock == blockNumber) {
+                return cp.params;
+            } else if (cp.fromBlock < blockNumber) {
+                lower = center;
+            } else {
+                upper = center - 1;
+            }
+        }
+        return quorumParamsCheckpoints[lower].params;
     }
 
     function min(uint256 a, uint256 b) internal pure returns (uint256) {
@@ -743,14 +751,14 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
      * @notice Current min quorum votes using Noun total supply
      */
     function minQuorumVotes() public view returns (uint256) {
-        return bps2Uint(minQuorumVotesBPS, nouns.totalSupply());
+        return bps2Uint(getDynamicQuorumParamsAt(block.number).minQuorumVotesBPS, nouns.totalSupply());
     }
 
     /**
      * @notice Current max quorum votes using Noun total supply
      */
     function maxQuorumVotes() public view returns (uint256) {
-        return bps2Uint(maxQuorumVotesBPS, nouns.totalSupply());
+        return bps2Uint(getDynamicQuorumParamsAt(block.number).maxQuorumVotesBPS, nouns.totalSupply());
     }
 
     function bps2Uint(uint256 bps, uint256 number) internal pure returns (uint256) {
@@ -767,5 +775,10 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEvents {
             chainId := chainid()
         }
         return chainId;
+    }
+
+    function safe208(uint256 n, string memory errorMessage) internal pure returns (uint208) {
+        require(n >= type(uint208).min && n <= type(uint208).max, errorMessage);
+        return uint208(n);
     }
 }

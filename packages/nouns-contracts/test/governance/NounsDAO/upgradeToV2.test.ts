@@ -13,6 +13,7 @@ import {
   deployGovernorV1,
   deployGovernorV2,
   propose,
+  blockNumber,
 } from '../../utils';
 import { mineBlock } from '../../utils';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
@@ -92,8 +93,10 @@ describe('NounsDAO upgrade to V2', () => {
   });
 
   it('and V2 config set', async () => {
-    expect(await govV2.minQuorumVotesBPS()).to.equal(MIN_QUORUM_VOTES_BPS);
-    expect(await govV2.maxQuorumVotesBPS()).to.equal(MAX_QUORUM_VOTES_BPS);
+    const quorumParams = await govV2.getDynamicQuorumParamsAt(await blockNumber());
+
+    expect(quorumParams.minQuorumVotesBPS).to.equal(MIN_QUORUM_VOTES_BPS);
+    expect(quorumParams.maxQuorumVotesBPS).to.equal(MAX_QUORUM_VOTES_BPS);
   });
 
   it('and V1 proposalCount stayed the same, meaning the storage slot below the rename is good', async () => {

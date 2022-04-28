@@ -31,8 +31,7 @@ describe('Dynamic Quorum', () => {
   });
 
   it('coefs all zeroes', async () => {
-    const quorumVotes = await gov.dynamicQuorumVotes(12, {
-      totalSupply: 200,
+    const quorumVotes = await gov.dynamicQuorumVotes(12, 200, {
       minQuorumVotesBPS: 1000,
       maxQuorumVotesBPS: 5000,
       quorumPolynomCoefs: [0, 0],
@@ -44,8 +43,7 @@ describe('Dynamic Quorum', () => {
 
   describe('Linear function', async () => {
     it('stays flat before the offset value', async () => {
-      const quorumVotes = await gov.dynamicQuorumVotes(6, {
-        totalSupply: 200,
+      const quorumVotes = await gov.dynamicQuorumVotes(6, 200, {
         minQuorumVotesBPS: 1000,
         maxQuorumVotesBPS: 5000,
         quorumPolynomCoefs: [parseUnits('1', 18), 0],
@@ -56,8 +54,7 @@ describe('Dynamic Quorum', () => {
     });
 
     it('increases linearly past the offset value', async () => {
-      const quorumVotes = await gov.dynamicQuorumVotes(18, {
-        totalSupply: 200,
+      const quorumVotes = await gov.dynamicQuorumVotes(18, 200, {
         minQuorumVotesBPS: 1000,
         maxQuorumVotesBPS: 5000,
         quorumPolynomCoefs: [parseUnits('1', 18), 0],
@@ -70,8 +67,7 @@ describe('Dynamic Quorum', () => {
 
   describe('Quadratic function', async () => {
     it('increases quadratically', async () => {
-      const quorumVotes = await gov.dynamicQuorumVotes(26, {
-        totalSupply: 200,
+      const quorumVotes = await gov.dynamicQuorumVotes(26, 200, {
         minQuorumVotesBPS: 1000,
         maxQuorumVotesBPS: 5000,
         quorumPolynomCoefs: [0, parseUnits('0.001')],

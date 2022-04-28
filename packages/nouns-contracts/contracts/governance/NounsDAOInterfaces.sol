@@ -96,12 +96,6 @@ contract NounsDAOEvents {
     /// @notice Emitted when quorum votes basis points is set
     event QuorumVotesBPSSet(uint256 oldQuorumVotesBPS, uint256 newQuorumVotesBPS);
 
-    /// @notice Emitted when minimum quorum votes basis points is set
-    event MinQuorumVotesBPSSet(uint256 oldMinQuorumVotesBPS, uint256 newMinQuorumVotesBPS);
-
-    /// @notice Emitted when maximum quorum votes basis points is set
-    event MaxQuorumVotesBPSSet(uint256 oldMaxQuorumVotesBPS, uint256 newMaxQuorumVotesBPS);
-
     /// @notice Emitted when pendingAdmin is changed
     event NewPendingAdmin(address oldPendingAdmin, address newPendingAdmin);
 
@@ -110,6 +104,16 @@ contract NounsDAOEvents {
 
     /// @notice Emitted when vetoer is changed
     event NewVetoer(address oldVetoer, address newVetoer);
+}
+
+contract NounsDAOEventsV2 is NounsDAOEvents {
+    /// @notice Emitted when dynamic quorum params are set
+    event DynamicQuorumParamsSet(
+        uint16 minQuorumVotesBPS,
+        uint16 maxQuorumVotesBPS,
+        uint16 quorumVotesBPSOffset,
+        uint256[2] quorumPolynomCoefs
+    );
 }
 
 contract NounsDAOProxyStorage {
@@ -298,6 +302,8 @@ contract NounsDAOStorageV1Adjusted is NounsDAOProxyStorage {
         bool executed;
         /// @notice Receipts of ballots for the entire set of voters
         mapping(address => Receipt) receipts;
+        /// @notice The total supply at the time of proposal creation
+        uint256 totalSupply;
     }
 
     /// @notice Ballot receipt record for a voter
@@ -331,30 +337,26 @@ contract NounsDAOStorageV1Adjusted is NounsDAOProxyStorage {
  * NounsDAOStorageVX.
  */
 contract NounsDAOStorageV2 is NounsDAOStorageV1Adjusted {
-    /// @notice The maximum basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed. *DIFFERS from GovernerBravo
-    uint256 public maxQuorumVotesBPS;
+    DynamicQuorumParamsCheckpoint[] public quorumParamsCheckpoints;
 
-    /// @notice Polynomial coefficients for calculating a dynamic quorum based on the amount of against votes
-    /// @dev The coefficients are assumed to be WADs, i.e 0.2 is a uint256 = 0.2 * 1e18. There are 2 coefficients: x^1 and x^2
-    uint256[2] public quorumPolynomCoefs;
-
-    /// @notice The quorum votes polynom input offset which suppresses polynom contribution until againstVotes.div(totalSupply) reaches this value
-    uint256 public quorumVotesBPSOffset;
-
-    /// @notice A small state snapshot that's taken at the time of proposal creation.
-    mapping(uint256 => StateSnapshot) public snapshot;
-
-    struct StateSnapshot {
-        /// @notice Total Noun supply at the time of proposal creation
-        uint256 totalSupply;
+    struct DynamicQuorumParams {
         /// @notice Minimum quorum votes BPS at the time of proposal creation
-        uint256 minQuorumVotesBPS;
-        /// @notice Maximum quorum votes BPS at the time of proposal creation
-        uint256 maxQuorumVotesBPS;
-        /// @notice Quorum polynomial coefficients at the time of proposal creation
+        uint16 minQuorumVotesBPS;
+        /// @notice The maximum basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed. *DIFFERS from GovernerBravo
+        uint16 maxQuorumVotesBPS;
+        /// @notice The quorum votes polynom input offset which suppresses polynom contribution until againstVotes.div(totalSupply) reaches this value
+        uint16 quorumVotesBPSOffset;
+        /// @notice Polynomial coefficients for calculating a dynamic quorum based on the amount of against votes
+        /// @dev The coefficients are assumed to be WADs, i.e 0.2 is a uint256 = 0.2 * 1e18. There are 2 coefficients: x^1 and x^2
         uint256[2] quorumPolynomCoefs;
-        /// @notice Quorum votes BPS offset at the time of proposal creation
-        uint256 quorumVotesBPSOffset;
+    }
+
+    /// @notice A checkpoint for storing dynamic quorum params from a given block
+    struct DynamicQuorumParamsCheckpoint {
+        /// @notice The block at which the new values were set
+        uint208 fromBlock;
+        /// @notice The parameter values of this checkpoint
+        DynamicQuorumParams params;
     }
 }
 
