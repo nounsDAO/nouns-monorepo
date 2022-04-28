@@ -156,7 +156,11 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
           />
         </div>
       ) : (
-        <Dropdown className={navWalletClasses.nounsNavLink} onToggle={() => setButtonUp(!buttonUp)} autoClose={true}>
+        <Dropdown
+          className={navWalletClasses.nounsNavLink}
+          onToggle={() => setButtonUp(!buttonUp)}
+          autoClose={true}
+        >
           <Dropdown.Toggle as={customDropdownToggle} id="dropdown-custom-components" />
           <Dropdown.Menu className={`${navWalletClasses.desktopDropdown} `} as={CustomMenu} />
         </Dropdown>

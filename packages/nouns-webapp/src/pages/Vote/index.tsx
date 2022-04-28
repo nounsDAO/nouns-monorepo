@@ -360,9 +360,7 @@ const VotePage = ({
               <Card.Body className="p-2">
                 <Row className={classes.voteMetadataRow}>
                   <Col className={classes.voteMetadataRowTitle}>
-                    <h1>
-                      Snapshot
-                    </h1>
+                    <h1>Snapshot</h1>
                   </Col>
                   <Col className={classes.snapshotBlock}>
                     <span>

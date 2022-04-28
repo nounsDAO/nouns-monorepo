@@ -3,10 +3,7 @@ import { useEthers } from '@usedapp/core';
 import Davatar from '@davatar/react';
 import classes from './ShortAddress.module.css';
 import { containsBlockedText } from '../../utils/moderation/containsBlockedText';
-
-export const useShortAddress = (address: string) => {
-  return address && [address.substr(0, 4), address.substr(38, 4)].join('...');
-};
+import { useShortAddress } from '../../utils/addressAndENSDisplayUtils';
 
 const ShortAddress: React.FC<{ address: string; avatar?: boolean; size?: number }> = props => {
   const { address, avatar, size = 24 } = props;

@@ -12,11 +12,17 @@ import WalletConnectModal from '../WalletConnectModal';
 import { useAppSelector } from '../../hooks';
 import clsx from 'clsx';
 import { useHistory } from 'react-router-dom';
-import { useShortAddress } from '../ShortAddress';
 import { isMobileScreen } from '../../utils/isMobile';
 import { usePickByState } from '../../utils/colorResponsiveUIUtils';
 import WalletConnectButton from './WalletConnectButton';
 import { Trans } from '@lingui/macro';
+import {
+  shortENS,
+  useShortAddress,
+  veryShortAddress,
+  veryShortENS,
+} from '../../utils/addressAndENSDisplayUtils';
+import { useActiveLocale } from '../../hooks/useActivateLocale';
 
 interface NavWalletProps {
   address: string;
@@ -48,6 +54,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
   const { deactivate } = useEthers();
   const ens = useReverseENSLookUp(address);
   const shortAddress = useShortAddress(address);
+  const activeLocale = useActiveLocale();
 
   const setModalStateHandler = (state: boolean) => {
     setShowConnectModal(state);
@@ -175,6 +182,20 @@ const NavWallet: React.FC<NavWalletProps> = props => {
     );
   });
 
+  const renderENS = (ens: string) => {
+    if (activeLocale === 'ja-JP') {
+      return veryShortENS(ens);
+    }
+    return shortENS(ens);
+  };
+
+  const renderAddress = (address: string) => {
+    if (activeLocale === 'ja-JP') {
+      return veryShortAddress(address);
+    }
+    return shortAddress;
+  };
+
   const walletConnectedContentMobile = (
     <div className="d-flex flex-row justify-content-between">
       <div className={classes.connectContentMobileWrapper}>
@@ -184,12 +205,17 @@ const NavWallet: React.FC<NavWalletProps> = props => {
               {' '}
               <Davatar size={21} address={address} provider={provider} />
             </div>
-            <div className={classes.address}>{ens ? ens : shortAddress}</div>
+            <div className={classes.address}>{ens ? renderENS(ens) : renderAddress(address)}</div>
           </div>
         </div>
       </div>
 
-      <div className={`d-flex flex-row ${classes.connectContentMobileText}`}>
+      <div
+        className={`d-flex flex-row ${classes.connectContentMobileText}`}
+        style={{
+          width: 'fit-content',
+        }}
+      >
         <div
           style={{
             borderRight: `1px solid ${mobileBorderColor}`,

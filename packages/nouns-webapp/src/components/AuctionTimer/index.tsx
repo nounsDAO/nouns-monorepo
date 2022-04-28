@@ -97,31 +97,27 @@ const AuctionTimer: React.FC<{
           >
             <div className={classes.timerSection}>
               <span>
-                  {`${Math.floor(timerDuration.hours())}`}
-                  <span className={classes.small}>
-                    <Trans>h</Trans>
-                  </span>
+                {`${Math.floor(timerDuration.hours())}`}
+                <span className={classes.small}>
+                  <Trans>h</Trans>
+                </span>
               </span>
             </div>
             <div className={classes.timerSection}>
-                <span>
-                  {`${flooredMinutes}`}
-                  <span className={classes.small}>
-                    <Trans>
-                      m
-                    </Trans>
-                  </span>
+              <span>
+                {`${flooredMinutes}`}
+                <span className={classes.small}>
+                  <Trans>m</Trans>
                 </span>
+              </span>
             </div>
             <div className={classes.timerSectionFinal}>
-                <span>
-                  {`${flooredSeconds}`}
-                  <span className={classes.small}>
-                    <Trans>
-                      s
-                    </Trans>
-                  </span>
+              <span>
+                {`${flooredSeconds}`}
+                <span className={classes.small}>
+                  <Trans>s</Trans>
                 </span>
+              </span>
             </div>
           </h2>
         ) : (

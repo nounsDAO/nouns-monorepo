@@ -1,7 +1,6 @@
 import classes from './BidHistoryModalRow.module.css';
 import React from 'react';
 import { ExternalLinkIcon } from '@heroicons/react/solid';
-import { useShortAddress } from '../ShortAddress';
 import { buildEtherscanTxLink } from '../../utils/etherscan';
 import TruncatedAmount from '../TruncatedAmount';
 import BigNumber from 'bignumber.js';
@@ -15,17 +14,11 @@ import { useEthers } from '@usedapp/core';
 import { useReverseENSLookUp } from '../../utils/ensLookup';
 import { containsBlockedText } from '../../utils/moderation/containsBlockedText';
 import { i18n } from '@lingui/core';
+import { shortENS, useShortAddress } from '../../utils/addressAndENSDisplayUtils';
 interface BidHistoryModalRowProps {
   bid: Bid;
   index: number;
 }
-
-const shortENS = (ens: string) => {
-  if (ens.length < 15 || window.innerWidth > 480) {
-    return ens;
-  }
-  return [ens.substr(0, 4), ens.substr(ens.length - 8, 8)].join('...');
-};
 
 const BidHistoryModalRow: React.FC<BidHistoryModalRowProps> = props => {
   const { bid, index } = props;
