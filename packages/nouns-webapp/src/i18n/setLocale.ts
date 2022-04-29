@@ -8,6 +8,9 @@ import { dynamicActivate } from './NounsI18nProvider';
  * @param locale Locale we wish to use for this user
  */
 export const setLocale = (locale: string) => {
-  localStorage.setItem('lang', locale);
-  dynamicActivate(locale);
+  if (localStorage.getItem('lang') !== locale) {
+    localStorage.setItem('lang', locale);
+    window.location.reload();
+    dynamicActivate(locale);
+  }
 };
