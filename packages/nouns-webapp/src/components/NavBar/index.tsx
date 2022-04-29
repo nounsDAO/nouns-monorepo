@@ -47,7 +47,7 @@ const NavBar = () => {
   return (
     <>
       <Navbar
-        expand="lg"
+        expand="xl"
         style={{ backgroundColor: `${useStateBg ? stateBgColor : 'white'}` }}
         className={classes.navBarCustom}
       >
