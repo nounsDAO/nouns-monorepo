@@ -1,26 +1,21 @@
-.nounButtonContents {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
 .nounButton {
   height: 28px;
-  border-radius: 10px;
+  border-radius: 8px;
   margin-top: 5px;
   margin-bottom: 5px;
-  font-family: 'PT Root UI Bold';
+  font-family: 'PT Root UI';
+  font-weight: bold;
   vertical-align: middle;
   text-align: center;
-
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 0px 10px;
+  padding: 0px 8px;
   color: rgb(67, 179, 105);
   background-color: rgba(67, 179, 105, 0.1);
   font-size: 14px;
+  width: fit-content;
 }
 
 .pass {

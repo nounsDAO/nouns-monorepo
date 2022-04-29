@@ -108,6 +108,31 @@ export const useHasVotedOnProposal = (proposalId: string | undefined): boolean =
   return receipt?.hasVoted ?? false;
 };
 
+export const useProposalVote = (proposalId: string | undefined): string => {
+  const { account } = useEthers();
+
+  // Fetch a voting receipt for the passed proposal id
+  const [receipt] =
+    useContractCall<[any]>({
+      abi,
+      address: nounsDaoContract.address,
+      method: 'getReceipt',
+      args: [proposalId, account],
+    }) || [];
+  const voteStatus = receipt?.support ?? -1;
+  if (voteStatus === 0) {
+    return 'Against';
+  }
+  if (voteStatus === 1) {
+    return 'For';
+  }
+  if (voteStatus === 2) {
+    return 'Abstain';
+  }
+
+  return '';
+};
+
 export const useProposalCount = (): number | undefined => {
   const [count] =
     useContractCall<[EthersBN]>({
@@ -284,6 +309,14 @@ export const useCastVote = () => {
     'castVote',
   );
   return { castVote, castVoteState };
+};
+
+export const useCastVoteWithReason = () => {
+  const { send: castVoteWithReason, state: castVoteWithReasonState } = useContractFunction(
+    nounsDaoContract,
+    'castVoteWithReason',
+  );
+  return { castVoteWithReason, castVoteWithReasonState };
 };
 
 export const usePropose = () => {
