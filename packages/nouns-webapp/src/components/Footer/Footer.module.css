@@ -45,6 +45,12 @@
   }
 }
 
+@media (max-width: 375px) {
+  .footerSignature a {
+    font-size: 12px;
+  }
+}
+
 @keyframes slidein {
   from {
     margin-left: 100%;
