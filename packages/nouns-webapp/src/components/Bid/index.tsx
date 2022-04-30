@@ -14,6 +14,8 @@ import config from '../../config';
 import WalletConnectModal from '../WalletConnectModal';
 import SettleManuallyBtn from '../SettleManuallyBtn';
 import { Trans } from '@lingui/macro';
+import { useActiveLocale } from '../../hooks/useActivateLocale';
+import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 
 const computeMinimumNextBid = (
   currentBid: BigNumber,
@@ -49,7 +51,7 @@ const Bid: React.FC<{
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const { library } = useEthers();
   let { auction, auctionEnded } = props;
-
+  const activeLocale = useActiveLocale();
   const nounsAuctionHouseContract = new NounsAuctionHouseFactory().attach(
     config.addresses.nounsAuctionHouseProxy,
   );
@@ -254,7 +256,14 @@ const Bid: React.FC<{
             <span className={classes.customPlaceholderBidAmt}>
               {!auctionEnded && !bidInput ? (
                 <>
-                  Ξ {minBidEth(minBid)} <Trans>or more</Trans>
+                  Ξ {minBidEth(minBid)}{' '}
+                  <span
+                    className={
+                      activeLocale === 'ja-JP' ? responsiveUiUtilsClasses.disableSmallScreens : ''
+                    }
+                  >
+                    <Trans>or more</Trans>
+                  </span>
                 </>
               ) : (
                 ''

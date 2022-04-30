@@ -54,16 +54,3 @@
 .voteInfoTableCell {
   max-width: 50vw;
 }
-.mobileOnly {
-  display: none;
-}
-
-@media (max-width: 1200px) {
-  .desktopOnly {
-    display: none;
-  }
-
-  .mobileOnly {
-    display: inherit;
-  }
-}

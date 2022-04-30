@@ -16,6 +16,7 @@ import { Vote } from '../../utils/vote';
 import { NounVoteHistory } from '../ProfileActivityFeed';
 import { Trans } from '@lingui/macro';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
+import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 
 interface NounProfileVoteRowProps {
   proposal: Proposal;
@@ -121,7 +122,7 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
           <span className={classes.proposalTitle}>{proposal.title}</span>
         </div>
       </td>
-      <td className={activeLocale === 'ja-JP' ? classes.desktopOnly : ""}>
+      <td className={activeLocale === 'ja-JP' ? responsiveUiUtilsClasses.desktopOnly : ''}>
         <div className={classes.voteStatusWrapper}>
           <div className={classes.voteProposalStatus}>{selectProposalStatusIcon(proposal)}</div>
         </div>

@@ -152,22 +152,3 @@
     width: auto;
   }
 }
-
-.mobileOnly {
-  display: none;
-}
-
-.desktopDropdown {
-  background-color: inherit !important;
-  border: 0px !important;
-}
-
-@media (max-width: 1200px) {
-  .desktopOnly {
-    display: none;
-  }
-
-  .mobileOnly {
-    display: inherit;
-  }
-}

@@ -13,6 +13,7 @@ import LanguageSelectionModal from '../LanguageSelectionModal';
 import { setLocale } from '../../i18n/setLocale';
 import { Trans } from '@lingui/macro';
 import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
+import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 import { SUPPORTED_LOCALES, SupportedLocale, LOCALE_LABEL } from '../../i18n/locales';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 
@@ -147,7 +148,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
       )}
 
       <div
-        className={clsx(navDropdownClasses.nounsNavLink, navDropdownClasses.mobileOnly)}
+        className={clsx(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.mobileOnly)}
         onClick={() => setShowLanguagePickerModal(true)}
       >
         <NavBarButton
@@ -158,7 +159,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
       </div>
 
       <Dropdown
-        className={clsx(navDropdownClasses.nounsNavLink, navDropdownClasses.desktopOnly)}
+        className={clsx(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.desktopOnly)}
         onToggle={() => setButtonUp(!buttonUp)}
         autoClose={true}
       >

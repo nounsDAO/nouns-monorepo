@@ -23,6 +23,7 @@ import {
   veryShortENS,
 } from '../../utils/addressAndENSDisplayUtils';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
+import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 
 interface NavWalletProps {
   address: string;
@@ -197,7 +198,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
   };
 
   const walletConnectedContentMobile = (
-    <div className={clsx(navDropdownClasses.nounsNavLink, navDropdownClasses.mobileOnly)}>
+    <div className={clsx(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.mobileOnly)}>
       <div className={'d-flex flex-row justify-content-between'}>
         <div className={navDropdownClasses.connectContentMobileWrapper}>
           <div className={clsx(navDropdownClasses.wrapper, getNavBarButtonVariant(buttonStyle))}>
@@ -239,7 +240,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
 
   const walletConnectedContentDesktop = (
     <Dropdown
-      className={clsx(navDropdownClasses.nounsNavLink, navDropdownClasses.desktopOnly)}
+      className={clsx(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.desktopOnly)}
       onToggle={() => setButtonUp(!buttonUp)}
     >
       <Dropdown.Toggle as={customDropdownToggle} id="dropdown-custom-components" />
