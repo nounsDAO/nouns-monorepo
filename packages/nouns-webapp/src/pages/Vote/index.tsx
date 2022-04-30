@@ -341,7 +341,9 @@ const VotePage = ({
                     <span>
                       {startOrEndTimeTime() &&
                         i18n.date(new Date(startOrEndTimeTime()?.toISOString() || 0), {
-                          timeStyle: 'long',
+                          hour: 'numeric',
+                          minute: '2-digit',
+                          timeZoneName: 'short'
                         })}
                     </span>
                     <h3>
