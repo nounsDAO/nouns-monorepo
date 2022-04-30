@@ -2,6 +2,18 @@
   justify-content: space-between;
 }
 
+.languageTextWhite {
+  color: #8c8d92;
+}
+
+.languageTextWarm {
+  color: rgba(142, 129, 127, 1);
+}
+
+.languageTextCool {
+  color: #79809c;
+}
+
 .dropdownActive {
   background-color: white;
   color: black;

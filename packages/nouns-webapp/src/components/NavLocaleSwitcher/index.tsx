@@ -12,7 +12,7 @@ import { usePickByState } from '../../utils/colorResponsiveUIUtils';
 import LanguageSelectionModal from '../LanguageSelectionModal';
 import { setLocale } from '../../i18n/setLocale';
 import { Trans } from '@lingui/macro';
-import navWalletClasses from '../NavWallet/NavWallet.module.css';
+import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
 import { SUPPORTED_LOCALES, SupportedLocale, LOCALE_LABEL } from '../../i18n/locales';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 
@@ -43,30 +43,30 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
   const activeLocale = useActiveLocale();
 
   const statePrimaryButtonClass = usePickByState(
-    navWalletClasses.whiteInfo,
-    navWalletClasses.coolInfo,
-    navWalletClasses.warmInfo,
+    navDropdownClasses.whiteInfo,
+    navDropdownClasses.coolInfo,
+    navDropdownClasses.warmInfo,
     history,
   );
 
   const stateSelectedDropdownClass = usePickByState(
-    navWalletClasses.whiteInfoSelected,
-    navWalletClasses.dropdownActive,
-    navWalletClasses.dropdownActive,
+    navDropdownClasses.whiteInfoSelected,
+    navDropdownClasses.dropdownActive,
+    navDropdownClasses.dropdownActive,
     history,
   );
 
   const buttonStyleTop = usePickByState(
-    navWalletClasses.whiteInfoSelectedTop,
-    navWalletClasses.coolInfoSelected,
-    navWalletClasses.warmInfoSelected,
+    navDropdownClasses.whiteInfoSelectedTop,
+    navDropdownClasses.coolInfoSelected,
+    navDropdownClasses.warmInfoSelected,
     history,
   );
 
   const buttonStyleBottom = usePickByState(
-    navWalletClasses.whiteInfoSelectedBottom,
-    navWalletClasses.coolInfoSelected,
-    navWalletClasses.warmInfoSelected,
+    clsx(navDropdownClasses.whiteInfoSelectedBottom, classes.languageText),
+    navDropdownClasses.coolInfoSelected,
+    navDropdownClasses.warmInfoSelected,
     history,
   );
 
@@ -74,7 +74,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
     <>
       <div
         className={clsx(
-          navWalletClasses.wrapper,
+          navDropdownClasses.wrapper,
           buttonUp ? stateSelectedDropdownClass : statePrimaryButtonClass,
         )}
         onClick={e => {
@@ -82,9 +82,11 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
           onClick(e);
         }}
       >
-        <div className={navWalletClasses.button}>
-          <div className={navWalletClasses.address}>{<FontAwesomeIcon icon={faGlobe} />}</div>
-          <div className={buttonUp ? navWalletClasses.arrowUp : navWalletClasses.arrowDown}>
+        <div className={navDropdownClasses.button}>
+          <div className={navDropdownClasses.dropdownBtnContent}>
+            {<FontAwesomeIcon icon={faGlobe} />}
+          </div>
+          <div className={buttonUp ? navDropdownClasses.arrowUp : navDropdownClasses.arrowDown}>
             <FontAwesomeIcon icon={buttonUp ? faSortUp : faSortDown} />{' '}
           </div>
         </div>
@@ -121,8 +123,8 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
           return (
             <div
               className={clsx(
-                navWalletClasses.button,
-                navWalletClasses.switchWalletText,
+                navDropdownClasses.button,
+                navDropdownClasses.dropdownPrimaryText,
                 buttonStyle,
                 dropDownStyle,
                 classes.desktopLanguageButton,
@@ -145,7 +147,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
       )}
 
       <div
-        className={clsx(navWalletClasses.nounsNavLink, navWalletClasses.mobileOnly)}
+        className={clsx(navDropdownClasses.nounsNavLink, navDropdownClasses.mobileOnly)}
         onClick={() => setShowLanguagePickerModal(true)}
       >
         <NavBarButton
@@ -156,12 +158,12 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
       </div>
 
       <Dropdown
-        className={clsx(navWalletClasses.nounsNavLink, navWalletClasses.desktopOnly)}
+        className={clsx(navDropdownClasses.nounsNavLink, navDropdownClasses.desktopOnly)}
         onToggle={() => setButtonUp(!buttonUp)}
         autoClose={true}
       >
         <Dropdown.Toggle as={customDropdownToggle} id="dropdown-custom-components" />
-        <Dropdown.Menu className={`${navWalletClasses.desktopDropdown} `} as={CustomMenu} />
+        <Dropdown.Menu className={`${navDropdownClasses.desktopDropdown} `} as={CustomMenu} />
       </Dropdown>
     </>
   );
