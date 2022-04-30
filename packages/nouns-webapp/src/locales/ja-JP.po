@@ -815,8 +815,12 @@ msgid "View all bids"
 msgstr "全ての入札額を表示"
 
 #: src/components/Bid/index.tsx
-msgid "Vote for the next Noun ⌐◧-◧"
-msgstr "次のナウンに投票する ⌐◧-◧"
+msgid "Vote for the next Noun"
+msgstr "次のナウンに投票する"
+
+#: src/components/Bid/index.tsx
+#~ msgid "Vote for the next Noun ⌐◧-◧"
+#~ msgstr "次のナウンに投票する ⌐◧-◧"
 
 #: src/components/VoteModal/index.tsx
 msgid "Vote on Prop {0}"

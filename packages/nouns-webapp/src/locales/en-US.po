@@ -516,8 +516,12 @@ msgid "Only 32x32 PNG images are accepted"
 msgstr "Only 32x32 PNG images are accepted"
 
 #: src/components/ProposalHeader/index.tsx
-msgid "Only Nons you owned or were delegated to you before {0} are eligible to vote."
-msgstr "Only Nons you owned or were delegated to you before {0} are eligible to vote."
+#~ msgid "Only Nons you owned or were delegated to you before {0} are eligible to vote."
+#~ msgstr "Only Nons you owned or were delegated to you before {0} are eligible to vote."
+
+#: src/components/ProposalHeader/index.tsx
+msgid "Only Nouns you owned or were delegated to you before {0} are eligible to vote."
+msgstr "Only Nouns you owned or were delegated to you before {0} are eligible to vote."
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
@@ -650,8 +654,8 @@ msgid "Sign out"
 msgstr "Sign out"
 
 #: src/pages/Vote/index.tsx
-msgid "Snapshot"
-msgstr "Snapshot"
+#~ msgid "Snapshot"
+#~ msgstr "Snapshot"
 
 #: src/pages/Vote/index.tsx
 msgid "Starts"
@@ -814,8 +818,12 @@ msgid "View all bids"
 msgstr "View all bids"
 
 #: src/components/Bid/index.tsx
-msgid "Vote for the next Noun ⌐◧-◧"
-msgstr "Vote for the next Noun ⌐◧-◧"
+msgid "Vote for the next Noun"
+msgstr "Vote for the next Noun"
+
+#: src/components/Bid/index.tsx
+#~ msgid "Vote for the next Noun ⌐◧-◧"
+#~ msgstr "Vote for the next Noun ⌐◧-◧"
 
 #: src/components/VoteModal/index.tsx
 msgid "Vote on Prop {0}"
