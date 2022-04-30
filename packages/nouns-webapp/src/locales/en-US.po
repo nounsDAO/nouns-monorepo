@@ -17,6 +17,10 @@ msgstr ""
 msgid "'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:"
 msgstr "'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:"
 
+#: src/pages/Governance/index.tsx
+#~ msgid ". Nouns can vote on proposals or delegate their vote to a third party. A minimum of"
+#~ msgstr ". Nouns can vote on proposals or delegate their vote to a third party. A minimum of"
+
 #: src/components/Documentation/index.tsx
 msgid "100% of Noun auction proceeds are trustlessly sent to the treasury."
 msgstr "100% of Noun auction proceeds are trustlessly sent to the treasury."
@@ -90,6 +94,10 @@ msgstr "Address (Callee or Recipient)"
 #: src/components/VoteCard/index.tsx
 msgid "Against"
 msgstr "Against"
+
+#: src/components/NounderNounContent/index.tsx
+msgid "All Noun auction proceeds are sent to the"
+msgstr "All Noun auction proceeds are sent to the"
 
 #: src/pages/Nounders/index.tsx
 msgid "All Noun auction proceeds are sent to the Nouns DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
@@ -331,6 +339,10 @@ msgstr "Failed to fetch Noun info"
 msgid "For"
 msgstr "For"
 
+#: src/components/NounderNounContent/index.tsx
+msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
+msgstr "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
+
 #: src/components/Footer/index.tsx
 msgid "Forums"
 msgstr "Forums"
@@ -382,6 +394,10 @@ msgstr "Insufficient bid amount 🤏"
 #: src/components/NavLocaleSwitcher/index.tsx
 msgid "Language"
 msgstr "Language"
+
+#: src/components/NounderNounContent/index.tsx
+msgid "Learn more"
+msgstr "Learn more"
 
 #: src/components/Documentation/index.tsx
 msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
@@ -459,6 +475,7 @@ msgid "Nouns Auction House"
 msgstr "Nouns Auction House"
 
 #: src/components/Documentation/index.tsx
+#: src/components/NounderNounContent/index.tsx
 #: src/pages/Governance/index.tsx
 msgid "Nouns DAO"
 msgstr "Nouns DAO"
@@ -490,6 +507,10 @@ msgstr "Nouns are stored directly on Ethereum and do not utilize pointers to oth
 #: src/components/Documentation/index.tsx
 msgid "Nouns artwork is in the {publicDomainLink}."
 msgstr "Nouns artwork is in the {publicDomainLink}."
+
+#: src/pages/Governance/index.tsx
+#~ msgid "Nouns govern"
+#~ msgstr "Nouns govern"
 
 #: src/pages/Governance/index.tsx
 msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
@@ -945,6 +966,10 @@ msgstr "h"
 #: src/components/Documentation/index.tsx
 msgid "heads (234)"
 msgstr "heads (234)"
+
+#: src/pages/Governance/index.tsx
+#~ msgid "is required to submit proposals."
+#~ msgstr "is required to submit proposals."
 
 #: src/components/AuctionTimer/index.tsx
 msgid "m"

@@ -65,7 +65,7 @@ msgstr "付属品"
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 msgid "Active"
-msgstr "アクティブ"
+msgstr "実行されました"
 
 #: src/components/ProfileActivityFeed/index.tsx
 msgid "Activity"
@@ -95,6 +95,10 @@ msgstr "アドレス\"(\"他のスマート契約であるカーリー、又はE
 #: src/components/VoteCard/index.tsx
 msgid "Against"
 msgstr "反対"
+
+#: src/components/NounderNounContent/index.tsx
+msgid "All Noun auction proceeds are sent to the"
+msgstr "名詞オークションの収益はすべて、"
 
 #: src/pages/Nounders/index.tsx
 msgid "All Noun auction proceeds are sent to the Nouns DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
@@ -263,7 +267,7 @@ msgstr "文書"
 
 #: src/components/Banner/index.tsx
 msgid "EVERY DAY,"
-msgstr "毎日"
+msgstr "毎日作られる永遠"
 
 #: src/components/Documentation/index.tsx
 msgid "Each time an auction is settled, the settlement transaction will also cause a new Noun to be minted and a new 24 hour auction to begin."
@@ -318,7 +322,7 @@ msgstr "探索"
 
 #: src/components/Banner/index.tsx
 msgid "FOREVER."
-msgstr "永遠に。"
+msgstr "永遠に"
 
 #: src/pages/Vote/index.tsx
 msgid "Failed to fetch"
@@ -335,6 +339,10 @@ msgstr "ナウン情報を取得できませんでした"
 #: src/components/VoteCard/index.tsx
 msgid "For"
 msgstr "賛成"
+
+#: src/components/NounderNounContent/index.tsx
+msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
+msgstr "その為、私達プロジェクトの創設者(「ナウンダーズ」) はナウンズで自分達自身を補償することを選択しました。 プロジェクトの最初の5年間の間、毎回10回目のナウンは、マルチシグ(5/10) に送られます。 これは個々のナウンダーズに与えられ、配布されます。"
 
 #: src/components/Footer/index.tsx
 msgid "Forums"
@@ -387,6 +395,10 @@ msgstr "入札額が不足しています🤏"
 #: src/components/NavLocaleSwitcher/index.tsx
 msgid "Language"
 msgstr "言語"
+
+#: src/components/NounderNounContent/index.tsx
+msgid "Learn more"
+msgstr "詳細はこちら"
 
 #: src/components/Documentation/index.tsx
 msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
@@ -464,6 +476,7 @@ msgid "Nouns Auction House"
 msgstr "ナウンズオークションハウス"
 
 #: src/components/Documentation/index.tsx
+#: src/components/NounderNounContent/index.tsx
 #: src/pages/Governance/index.tsx
 msgid "Nouns DAO"
 msgstr "ナウンズDAO"
@@ -498,11 +511,11 @@ msgstr "ナウンアートワークは {publicDomainLink} にあります。"
 
 #: src/pages/Governance/index.tsx
 msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
-msgstr "ナウンズは\"<0>\"ナウンズDAO\"</0>\"を運営しています。ナウンズは提案に投票したり、投票を第三者に委任することができます。 提案を提出するには、最低\"<1>\"{nounsRequired} {0}\"</1>\"が必要です。"
+msgstr "ナウンズは<0>ナウンズDAO</0>を運営しています。ナウンズは提案に投票したり、投票を第三者に委任することができます。 提案を提出するには、最低<1>{nounsRequired} {0}</1>が必要です。"
 
 #: src/components/Banner/index.tsx
 msgid "ONE NOUN,"
-msgstr "１つのナウン、"
+msgstr "ナウンが1個毎"
 
 #: src/components/Documentation/index.tsx
 msgid "On-Chain Artwork"
@@ -510,11 +523,11 @@ msgstr "チェーンアートワーク上で"
 
 #: src/components/Documentation/index.tsx
 msgid "One Noun is equal to one vote."
-msgstr "１つのナウンは１票に等しい。"
+msgstr "ナウン1個は1票と同じことです。"
 
 #: src/components/Documentation/index.tsx
 msgid "One Noun is trustlessly auctioned every 24 hours, forever."
-msgstr "1つのナウンは、24時間毎に信頼できないオークションに出されます、永遠に。"
+msgstr "ナウンが1個、24時間ごとに、永遠に、第3社機関に頼ることなくスマート契約を使ってオークションに出されます。"
 
 #: src/pages/Playground/index.tsx
 msgid "Only 32x32 PNG images are accepted"
@@ -609,7 +622,7 @@ msgstr "キューに入りました"
 
 #: src/pages/Vote/index.tsx
 msgid "Quorum"
-msgstr "定足数"
+msgstr "最低必要数"
 
 #: src/components/VoteModal/index.tsx
 msgid "Reason (Optional)"
@@ -640,7 +653,7 @@ msgstr "オークションが正常に決済されました！"
 
 #: src/components/Documentation/index.tsx
 msgid "Settlement of one auction kicks off the next."
-msgstr "1つのオークションの決済が次のオークションから始まります。"
+msgstr "オークションの決済が１つ終わる度に次が始まります。"
 
 #: src/components/ProfileActivityFeed/index.tsx
 msgid "Show all {0} events"
@@ -745,7 +758,7 @@ msgstr "この財務は、ナウンプロジェクトの長期的な成長と繁
 
 #: src/pages/Vote/index.tsx
 msgid "Threshold"
-msgstr "しきい値"
+msgstr "最低必要な賛成数"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "Time left"
@@ -791,7 +804,7 @@ msgstr "アップロード"
 
 #: src/pages/Playground/index.tsx
 msgid "Upload Custom Trait"
-msgstr "カスタム特徴をアップロード"
+msgstr "カスタムな特徴をアップロード"
 
 #: src/components/VoteModal/index.tsx
 msgid "User Already Voted"
@@ -808,7 +821,7 @@ msgstr "ETH値\"(任意)\""
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 msgid "Vetoed"
-msgstr "禁止された"
+msgstr "禁止されました"
 
 #: src/components/BidHistoryBtn/index.tsx
 msgid "View all bids"
@@ -937,7 +950,7 @@ msgstr "メガネ (21)"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "h"
-msgstr ""
+msgstr "時間"
 
 #: src/components/Documentation/index.tsx
 msgid "heads (234)"
@@ -945,7 +958,7 @@ msgstr "頭 (234)"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "m"
-msgstr ""
+msgstr "分"
 
 #: src/components/Bid/index.tsx
 msgid "or more"
@@ -957,7 +970,7 @@ msgstr "パブリックドメイン"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "s"
-msgstr ""
+msgstr "秒"
 
 #: src/pages/Vote/index.tsx
 msgid "{0} votes"

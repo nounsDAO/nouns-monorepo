@@ -17,6 +17,10 @@ msgstr ""
 msgid "'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:"
 msgstr ""
 
+#: src/pages/Governance/index.tsx
+#~ msgid ". Nouns can vote on proposals or delegate their vote to a third party. A minimum of"
+#~ msgstr ""
+
 #: src/components/Documentation/index.tsx
 msgid "100% of Noun auction proceeds are trustlessly sent to the treasury."
 msgstr ""
@@ -89,6 +93,10 @@ msgstr ""
 
 #: src/components/VoteCard/index.tsx
 msgid "Against"
+msgstr ""
+
+#: src/components/NounderNounContent/index.tsx
+msgid "All Noun auction proceeds are sent to the"
 msgstr ""
 
 #: src/pages/Nounders/index.tsx
@@ -331,6 +339,10 @@ msgstr ""
 msgid "For"
 msgstr ""
 
+#: src/components/NounderNounContent/index.tsx
+msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
+msgstr ""
+
 #: src/components/Footer/index.tsx
 msgid "Forums"
 msgstr ""
@@ -381,6 +393,10 @@ msgstr ""
 
 #: src/components/NavLocaleSwitcher/index.tsx
 msgid "Language"
+msgstr ""
+
+#: src/components/NounderNounContent/index.tsx
+msgid "Learn more"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
@@ -459,6 +475,7 @@ msgid "Nouns Auction House"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
+#: src/components/NounderNounContent/index.tsx
 #: src/pages/Governance/index.tsx
 msgid "Nouns DAO"
 msgstr ""
@@ -490,6 +507,10 @@ msgstr ""
 #: src/components/Documentation/index.tsx
 msgid "Nouns artwork is in the {publicDomainLink}."
 msgstr ""
+
+#: src/pages/Governance/index.tsx
+#~ msgid "Nouns govern"
+#~ msgstr ""
 
 #: src/pages/Governance/index.tsx
 msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
@@ -945,6 +966,10 @@ msgstr ""
 #: src/components/Documentation/index.tsx
 msgid "heads (234)"
 msgstr ""
+
+#: src/pages/Governance/index.tsx
+#~ msgid "is required to submit proposals."
+#~ msgstr ""
 
 #: src/components/AuctionTimer/index.tsx
 msgid "m"
