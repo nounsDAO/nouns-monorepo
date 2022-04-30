@@ -312,32 +312,32 @@ const VotePage = ({
           <Col xl={4} lg={12}>
             <Card className={classes.voteInfoCard}>
               <Card.Body className="p-2">
-                <Row className={classes.voteMetadataRow}>
-                  <Col className={classes.voteMetadataRowTitle}>
+                <div className={classes.voteMetadataRow}>
+                  <div className={classes.voteMetadataRowTitle}>
                     <h1>
                       <Trans>Threshold</Trans>
                     </h1>
-                  </Col>
-                  <Col className={classes.thresholdInfo}>
+                  </div>
+                  <div className={classes.thresholdInfo}>
                     <span>
                       <Trans>Quorum</Trans>
                     </span>
                     <h3>
                       <Trans>{i18n.number(proposal.quorumVotes)} votes</Trans>
                     </h3>
-                  </Col>
-                </Row>
+                  </div>
+                </div>
               </Card.Body>
             </Card>
           </Col>
           <Col xl={4} lg={12}>
             <Card className={classes.voteInfoCard}>
               <Card.Body className="p-2">
-                <Row className={classes.voteMetadataRow}>
-                  <Col className={classes.voteMetadataRowTitle}>
+                <div className={classes.voteMetadataRow}>
+                  <div className={classes.voteMetadataRowTitle} >
                     <h1>{startOrEndTimeCopy()}</h1>
-                  </Col>
-                  <Col className={classes.voteMetadataTime}>
+                  </div>
+                  <div className={classes.voteMetadataTime}>
                     <span>
                       {startOrEndTimeTime() &&
                         i18n.date(new Date(startOrEndTimeTime()?.toISOString() || 0), {
@@ -352,25 +352,25 @@ const VotePage = ({
                           dateStyle: 'long',
                         })}
                     </h3>
-                  </Col>
-                </Row>
+                  </div>
+                </div>
               </Card.Body>
             </Card>
           </Col>
           <Col xl={4} lg={12}>
             <Card className={classes.voteInfoCard}>
               <Card.Body className="p-2">
-                <Row className={classes.voteMetadataRow}>
-                  <Col className={classes.voteMetadataRowTitle}>
+                <div className={classes.voteMetadataRow}>
+                  <div className={classes.voteMetadataRowTitle}>
                     <h1>Snapshot</h1>
-                  </Col>
-                  <Col className={classes.snapshotBlock}>
+                  </div>
+                  <div className={classes.snapshotBlock}>
                     <span>
                       <Trans>Taken at block</Trans>
                     </span>
                     <h3>{proposal.createdBlock}</h3>
-                  </Col>
-                </Row>
+                  </div>
+                </div>
               </Card.Body>
             </Card>
           </Col>
