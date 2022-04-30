@@ -12,7 +12,6 @@ import WalletConnectModal from '../WalletConnectModal';
 import { useAppSelector } from '../../hooks';
 import clsx from 'clsx';
 import { useHistory } from 'react-router-dom';
-import { isMobileScreen } from '../../utils/isMobile';
 import { usePickByState } from '../../utils/colorResponsiveUIUtils';
 import WalletConnectButton from './WalletConnectButton';
 import { Trans } from '@lingui/macro';
@@ -197,44 +196,49 @@ const NavWallet: React.FC<NavWalletProps> = props => {
   };
 
   const walletConnectedContentMobile = (
-    <div className="d-flex flex-row justify-content-between">
-      <div className={classes.connectContentMobileWrapper}>
-        <div className={clsx(classes.wrapper, getNavBarButtonVariant(buttonStyle))}>
-          <div className={classes.button}>
-            <div className={classes.icon}>
-              {' '}
-              <Davatar size={21} address={address} provider={provider} />
+    <div className={classes.mobileOnly}>
+      <div className={'d-flex flex-row justify-content-between'}>
+        <div className={classes.connectContentMobileWrapper}>
+          <div className={clsx(classes.wrapper, getNavBarButtonVariant(buttonStyle))}>
+            <div className={classes.button}>
+              <div className={classes.icon}>
+                {' '}
+                <Davatar size={21} address={address} provider={provider} />
+              </div>
+              <div className={classes.address}>{ens ? renderENS(ens) : renderAddress(address)}</div>
             </div>
-            <div className={classes.address}>{ens ? renderENS(ens) : renderAddress(address)}</div>
           </div>
         </div>
-      </div>
 
-      <div
-        className={`d-flex flex-row ${classes.connectContentMobileText}`}
-        style={{
-          width: 'fit-content',
-        }}
-      >
         <div
+          className={`d-flex flex-row ${classes.connectContentMobileText}`}
           style={{
-            borderRight: `1px solid ${mobileBorderColor}`,
-            color: mobileTextColor,
+            width: 'fit-content',
           }}
-          className={classes.mobileSwitchWalletText}
-          onClick={switchWalletHandler}
         >
-          <Trans>Switch</Trans>
-        </div>
-        <div className={classes.disconnectText} onClick={disconectWalletHandler}>
-          <Trans>Sign out</Trans>
+          <div
+            style={{
+              borderRight: `1px solid ${mobileBorderColor}`,
+              color: mobileTextColor,
+            }}
+            className={classes.mobileSwitchWalletText}
+            onClick={switchWalletHandler}
+          >
+            <Trans>Switch</Trans>
+          </div>
+          <div className={classes.disconnectText} onClick={disconectWalletHandler}>
+            <Trans>Sign out</Trans>
+          </div>
         </div>
       </div>
     </div>
   );
 
   const walletConnectedContentDesktop = (
-    <Dropdown className={classes.nounsNavLink} onToggle={() => setButtonUp(!buttonUp)}>
+    <Dropdown
+      className={clsx(classes.nounsNavLink, classes.desktopOnly)}
+      onToggle={() => setButtonUp(!buttonUp)}
+    >
       <Dropdown.Toggle as={customDropdownToggle} id="dropdown-custom-components" />
       <Dropdown.Menu className={`${classes.desktopDropdown} `} as={CustomMenu} />
     </Dropdown>
@@ -246,11 +250,10 @@ const NavWallet: React.FC<NavWalletProps> = props => {
         <WalletConnectModal onDismiss={() => setModalStateHandler(false)} />
       )}
       {activeAccount ? (
-        isMobileScreen() ? (
-          walletConnectedContentMobile
-        ) : (
-          walletConnectedContentDesktop
-        )
+        <>
+          {walletConnectedContentDesktop}
+          {walletConnectedContentMobile}
+        </>
       ) : (
         <WalletConnectButton
           className={clsx(classes.nounsNavLink, classes.connectBtn)}

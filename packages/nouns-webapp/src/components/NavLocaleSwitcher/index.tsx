@@ -8,7 +8,6 @@ import { faGlobe } from '@fortawesome/free-solid-svg-icons';
 import { Dropdown } from 'react-bootstrap';
 import clsx from 'clsx';
 import { useHistory } from 'react-router-dom';
-import { isMobileScreen } from '../../utils/isMobile';
 import { usePickByState } from '../../utils/colorResponsiveUIUtils';
 import LanguageSelectionModal from '../LanguageSelectionModal';
 import { setLocale } from '../../i18n/setLocale';
@@ -144,27 +143,26 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
       {showLanguagePickerModal && (
         <LanguageSelectionModal onDismiss={() => setShowLanguagePickerModal(false)} />
       )}
-      {isMobileScreen() ? (
-        <div
-          className={navWalletClasses.nounsNavLink}
-          onClick={() => setShowLanguagePickerModal(true)}
-        >
-          <NavBarButton
-            buttonText={<Trans>Language</Trans>}
-            buttonIcon={<FontAwesomeIcon icon={faGlobe} />}
-            buttonStyle={buttonStyle}
-          />
-        </div>
-      ) : (
-        <Dropdown
-          className={navWalletClasses.nounsNavLink}
-          onToggle={() => setButtonUp(!buttonUp)}
-          autoClose={true}
-        >
-          <Dropdown.Toggle as={customDropdownToggle} id="dropdown-custom-components" />
-          <Dropdown.Menu className={`${navWalletClasses.desktopDropdown} `} as={CustomMenu} />
-        </Dropdown>
-      )}
+
+      <div
+        className={clsx(navWalletClasses.nounsNavLink, navWalletClasses.mobileOnly)}
+        onClick={() => setShowLanguagePickerModal(true)}
+      >
+        <NavBarButton
+          buttonText={<Trans>Language</Trans>}
+          buttonIcon={<FontAwesomeIcon icon={faGlobe} />}
+          buttonStyle={buttonStyle}
+        />
+      </div>
+
+      <Dropdown
+        className={clsx(navWalletClasses.nounsNavLink, navWalletClasses.desktopOnly)}
+        onToggle={() => setButtonUp(!buttonUp)}
+        autoClose={true}
+      >
+        <Dropdown.Toggle as={customDropdownToggle} id="dropdown-custom-components" />
+        <Dropdown.Menu className={`${navWalletClasses.desktopDropdown} `} as={CustomMenu} />
+      </Dropdown>
     </>
   );
 };

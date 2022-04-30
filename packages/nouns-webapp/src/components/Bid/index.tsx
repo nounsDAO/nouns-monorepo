@@ -176,7 +176,7 @@ const Bid: React.FC<{
       case 'Fail':
         setModal({
           title: <Trans>Transaction Failed</Trans>,
-          message: placeBidState?.errorMessage || <Trans>Please try again.</Trans>, 
+          message: placeBidState?.errorMessage || <Trans>Please try again.</Trans>,
           show: true,
         });
         setBidButtonContent({ loading: false, content: <Trans>Bid</Trans> });
@@ -184,7 +184,7 @@ const Bid: React.FC<{
       case 'Exception':
         setModal({
           title: <Trans>Error</Trans>,
-          message: placeBidState?.errorMessage || <Trans>Please try again.</Trans>, 
+          message: placeBidState?.errorMessage || <Trans>Please try again.</Trans>,
           show: true,
         });
         setBidButtonContent({ loading: false, content: <Trans>Bid</Trans> });
