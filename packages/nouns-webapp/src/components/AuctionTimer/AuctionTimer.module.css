@@ -23,6 +23,7 @@
   padding-right: 0rem;
   cursor: pointer;
   margin-top: 0.3rem;
+  width: max-content;
 }
 
 .timerWrapper {
@@ -70,7 +71,7 @@
   }
 
   .wrapper {
-    width: 100%;
+    width: auto;
     margin-left: 0;
     margin-right: 0;
     padding-left: 0;

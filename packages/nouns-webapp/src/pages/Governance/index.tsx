@@ -40,7 +40,7 @@ const GovernancePage = () => {
               {nounsRequired} {threshold === 0 ? nounSingular : nounPlural}
             </span>{' '}
             is required to submit proposals.
-            </Trans>
+          </Trans>
         </p>
 
         <Row className={classes.treasuryInfoCard}>
