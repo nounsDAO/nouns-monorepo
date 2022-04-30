@@ -127,6 +127,11 @@
   cursor: pointer;
 }
 
+.desktopDropdown {
+  background-color: inherit !important;
+  border: 0px !important;
+}
+
 @media (max-width: 992px) {
   .wrapper,
   .button {
