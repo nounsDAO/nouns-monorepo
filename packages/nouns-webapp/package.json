@@ -69,7 +69,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "yarn i18n:compile && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "i18n:extract": "lingui extract",
