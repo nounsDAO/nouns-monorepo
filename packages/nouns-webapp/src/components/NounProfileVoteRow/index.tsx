@@ -15,6 +15,7 @@ import _PendingVoteIcon from '../../assets/icons/PendingVote.svg';
 import { Vote } from '../../utils/vote';
 import { NounVoteHistory } from '../ProfileActivityFeed';
 import { Trans } from '@lingui/macro';
+import { useActiveLocale } from '../../hooks/useActivateLocale';
 
 interface NounProfileVoteRowProps {
   proposal: Proposal;
@@ -109,6 +110,7 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
 
   const history = useHistory();
   const proposalOnClickHandler = () => history.push(proposal.id ? `/vote/${proposal.id}` : '/vote');
+  const activeLocale = useActiveLocale();
 
   return (
     <tr onClick={proposalOnClickHandler} className={classes.voteInfoRow}>
@@ -119,7 +121,7 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
           <span className={classes.proposalTitle}>{proposal.title}</span>
         </div>
       </td>
-      <td>
+      <td className={activeLocale === 'ja-JP' ? classes.desktopOnly : ""}>
         <div className={classes.voteStatusWrapper}>
           <div className={classes.voteProposalStatus}>{selectProposalStatusIcon(proposal)}</div>
         </div>
