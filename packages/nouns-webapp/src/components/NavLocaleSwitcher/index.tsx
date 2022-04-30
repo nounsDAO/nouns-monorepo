@@ -64,7 +64,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
   );
 
   const buttonStyleBottom = usePickByState(
-    clsx(navDropdownClasses.whiteInfoSelectedBottom, classes.languageText),
+    navDropdownClasses.whiteInfoSelectedBottom,
     navDropdownClasses.coolInfoSelected,
     navDropdownClasses.warmInfoSelected,
     history,
