@@ -114,9 +114,8 @@
   }
 
   .proposalTitle {
-    width: 65%;
-    word-wrap: break-word;
-    min-width: 65%;
+    max-width: 65%;
+    overflow-wrap: break-word;
   }
 }
 
