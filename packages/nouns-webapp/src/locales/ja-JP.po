@@ -267,7 +267,7 @@ msgstr "文書"
 
 #: src/components/Banner/index.tsx
 msgid "EVERY DAY,"
-msgstr "毎日作られる永遠"
+msgstr "毎日"
 
 #: src/components/Documentation/index.tsx
 msgid "Each time an auction is settled, the settlement transaction will also cause a new Noun to be minted and a new 24 hour auction to begin."
@@ -322,7 +322,7 @@ msgstr "探索"
 
 #: src/components/Banner/index.tsx
 msgid "FOREVER."
-msgstr "永遠に"
+msgstr "永遠に。"
 
 #: src/pages/Vote/index.tsx
 msgid "Failed to fetch"
@@ -515,7 +515,7 @@ msgstr "ナウンズは<0>ナウンズDAO</0>を運営しています。ナウ�
 
 #: src/components/Banner/index.tsx
 msgid "ONE NOUN,"
-msgstr "ナウンが1個毎"
+msgstr "１つのナウン、"
 
 #: src/components/Documentation/index.tsx
 msgid "On-Chain Artwork"
