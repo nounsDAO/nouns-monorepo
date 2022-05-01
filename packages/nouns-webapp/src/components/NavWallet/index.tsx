@@ -199,7 +199,12 @@ const NavWallet: React.FC<NavWalletProps> = props => {
 
   const walletConnectedContentMobile = (
     <div className={clsx(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.mobileOnly)}>
-      <div className={'d-flex flex-row justify-content-between'}>
+      <div
+        className={'d-flex flex-row justify-content-between'}
+        style={{
+          justifyContent: 'space-between',
+        }}
+      >
         <div className={navDropdownClasses.connectContentMobileWrapper}>
           <div className={clsx(navDropdownClasses.wrapper, getNavBarButtonVariant(buttonStyle))}>
             <div className={navDropdownClasses.button}>
@@ -214,12 +219,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
           </div>
         </div>
 
-        <div
-          className={`d-flex flex-row ${classes.connectContentMobileText}`}
-          style={{
-            width: 'fit-content',
-          }}
-        >
+        <div className={`d-flex flex-row  ${classes.connectContentMobileText}`}>
           <div
             style={{
               borderRight: `1px solid ${mobileBorderColor}`,

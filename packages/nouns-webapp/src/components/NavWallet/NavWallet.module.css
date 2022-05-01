@@ -23,9 +23,9 @@
   font-family: 'PT Root UI';
   font-weight: bold;
   font-size: 18px;
-  margin-right: 1rem;
   margin-top: 1rem;
   height: 2rem;
+  width: fit-content;
 }
 
 .disconnectText {
@@ -66,13 +66,4 @@
   justify-content: flex-start;
   color: var(--brand-color-red);
   margin-left: 4px;
-}
-
-.connectContentMobileText {
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 18px;
-  margin-right: 1rem;
-  margin-top: 1rem;
-  height: 2rem;
 }

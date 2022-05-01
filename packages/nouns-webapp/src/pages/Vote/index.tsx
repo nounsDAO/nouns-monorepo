@@ -334,7 +334,7 @@ const VotePage = ({
             <Card className={classes.voteInfoCard}>
               <Card.Body className="p-2">
                 <div className={classes.voteMetadataRow}>
-                  <div className={classes.voteMetadataRowTitle} >
+                  <div className={classes.voteMetadataRowTitle}>
                     <h1>{startOrEndTimeCopy()}</h1>
                   </div>
                   <div className={classes.voteMetadataTime}>
@@ -343,7 +343,7 @@ const VotePage = ({
                         i18n.date(new Date(startOrEndTimeTime()?.toISOString() || 0), {
                           hour: 'numeric',
                           minute: '2-digit',
-                          timeZoneName: 'short'
+                          timeZoneName: 'short',
                         })}
                     </span>
                     <h3>
