@@ -10,7 +10,6 @@ import { dynamicActivate } from './NounsI18nProvider';
 export const setLocale = (locale: string) => {
   if (localStorage.getItem('lang') !== locale) {
     localStorage.setItem('lang', locale);
-    window.location.reload();
     dynamicActivate(locale);
   }
 };
