@@ -776,7 +776,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     }
 
     function safe32(uint256 n, string memory errorMessage) internal pure returns (uint32) {
-        require(n >= type(uint32).min && n <= type(uint32).max, errorMessage);
+        require(n <= type(uint32).max, errorMessage);
         return uint32(n);
     }
 }
