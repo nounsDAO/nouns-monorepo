@@ -77,4 +77,26 @@ describe('Dynamic Quorum', () => {
       expect(quorumVotes).to.equal(32);
     });
   });
+
+  describe('Max required quorum', async () => {
+    it('caps the quorum by the max value', async () => {
+      let quorumVotes = await gov.dynamicQuorumVotes(50, 200, {
+        minQuorumVotesBPS: 1000,
+        maxQuorumVotesBPS: 10000,
+        quorumPolynomCoefs: [parseUnits('0.3', 18), parseUnits('0.001', 18)],
+        quorumVotesBPSOffset: 500,
+      });
+
+      expect(quorumVotes).to.equal(112);
+
+      quorumVotes = await gov.dynamicQuorumVotes(50, 200, {
+        minQuorumVotesBPS: 1000,
+        maxQuorumVotesBPS: 4000,
+        quorumPolynomCoefs: [parseUnits('0.3', 18), parseUnits('0.001', 18)],
+        quorumVotesBPSOffset: 500,
+      });
+
+      expect(quorumVotes).to.equal(80);
+    });
+  });
 });
