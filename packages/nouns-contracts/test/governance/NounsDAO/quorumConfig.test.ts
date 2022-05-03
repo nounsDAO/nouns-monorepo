@@ -52,61 +52,63 @@ describe('NounsDAO#_setDynamicQuorumParams', () => {
     await setupWithV2();
   });
 
-  it('reverts when sender is not admin', async () => {
-    await expect(
-      gov.connect(account0)._setDynamicQuorumParams({
-        minQuorumVotesBPS: 0,
-        maxQuorumVotesBPS: 0,
-        quorumVotesBPSOffset: 0,
-        quorumPolynomCoefs: [0, 0],
-      }),
-    ).to.be.revertedWith('NounsDAO::_setDynamicQuorumParams: admin only');
-  });
+  describe('allowed values', async () => {
+    it('reverts when sender is not admin', async () => {
+      await expect(
+        gov.connect(account0)._setDynamicQuorumParams({
+          minQuorumVotesBPS: 0,
+          maxQuorumVotesBPS: 0,
+          quorumVotesBPSOffset: 0,
+          quorumPolynomCoefs: [0, 0],
+        }),
+      ).to.be.revertedWith('NounsDAO::_setDynamicQuorumParams: admin only');
+    });
 
-  it('reverts given minQuorum input below lower bound', async () => {
-    await expect(
-      gov._setDynamicQuorumParams({
-        minQuorumVotesBPS: 199,
-        maxQuorumVotesBPS: 0,
-        quorumVotesBPSOffset: 0,
-        quorumPolynomCoefs: [0, 0],
-      }),
-    ).to.be.revertedWith('NounsDAO::_setDynamicQuorumParams: invalid min quorum votes bps');
-  });
+    it('reverts given minQuorum input below lower bound', async () => {
+      await expect(
+        gov._setDynamicQuorumParams({
+          minQuorumVotesBPS: 199,
+          maxQuorumVotesBPS: 0,
+          quorumVotesBPSOffset: 0,
+          quorumPolynomCoefs: [0, 0],
+        }),
+      ).to.be.revertedWith('NounsDAO::_setDynamicQuorumParams: invalid min quorum votes bps');
+    });
 
-  it('reverts given minQuorum input above upper bound', async () => {
-    await expect(
-      gov._setDynamicQuorumParams({
-        minQuorumVotesBPS: 2001,
-        maxQuorumVotesBPS: 0,
-        quorumVotesBPSOffset: 0,
-        quorumPolynomCoefs: [0, 0],
-      }),
-    ).to.be.revertedWith('NounsDAO::_setDynamicQuorumParams: invalid min quorum votes bps');
-  });
+    it('reverts given minQuorum input above upper bound', async () => {
+      await expect(
+        gov._setDynamicQuorumParams({
+          minQuorumVotesBPS: 2001,
+          maxQuorumVotesBPS: 0,
+          quorumVotesBPSOffset: 0,
+          quorumPolynomCoefs: [0, 0],
+        }),
+      ).to.be.revertedWith('NounsDAO::_setDynamicQuorumParams: invalid min quorum votes bps');
+    });
 
-  it('reverts given minQuorum input above maxQuorum BPs', async () => {
-    await expect(
-      gov._setDynamicQuorumParams({
-        minQuorumVotesBPS: 202,
-        maxQuorumVotesBPS: 201,
-        quorumVotesBPSOffset: 0,
-        quorumPolynomCoefs: [0, 0],
-      }),
-    ).to.be.revertedWith(
-      'NounsDAO::_setDynamicQuorumParams: min quorum votes bps greater than max',
-    );
-  });
+    it('reverts given minQuorum input above maxQuorum BPs', async () => {
+      await expect(
+        gov._setDynamicQuorumParams({
+          minQuorumVotesBPS: 202,
+          maxQuorumVotesBPS: 201,
+          quorumVotesBPSOffset: 0,
+          quorumPolynomCoefs: [0, 0],
+        }),
+      ).to.be.revertedWith(
+        'NounsDAO::_setDynamicQuorumParams: min quorum votes bps greater than max',
+      );
+    });
 
-  it('reverts when maxQuorum input above upper bound', async () => {
-    await expect(
-      gov._setDynamicQuorumParams({
-        minQuorumVotesBPS: 200,
-        maxQuorumVotesBPS: 4001,
-        quorumVotesBPSOffset: 0,
-        quorumPolynomCoefs: [0, 0],
-      }),
-    ).to.be.revertedWith('NounsDAO::_setDynamicQuorumParams: invalid max quorum votes bps');
+    it('reverts when maxQuorum input above upper bound', async () => {
+      await expect(
+        gov._setDynamicQuorumParams({
+          minQuorumVotesBPS: 200,
+          maxQuorumVotesBPS: 4001,
+          quorumVotesBPSOffset: 0,
+          quorumPolynomCoefs: [0, 0],
+        }),
+      ).to.be.revertedWith('NounsDAO::_setDynamicQuorumParams: invalid max quorum votes bps');
+    });
   });
 
   it('sets value and emits event', async () => {
