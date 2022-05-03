@@ -34,14 +34,6 @@ msgstr "3.5アーティスト、6.5技術者"
 msgid "404: This is not the person, place, or thing you're looking for..."
 msgstr "404: お探しの人、場所、物は見つかりませんでした。"
 
-#: src/components/AuctionTimer/index.tsx
-#~ msgid "<0>{flooredMinutes}<1>m</1></0>"
-#~ msgstr "<0>{flooredMinutes}<1>m</1></0>"
-
-#: src/components/AuctionTimer/index.tsx
-#~ msgid "<0>{flooredSeconds}<1>s</1></0>"
-#~ msgstr "<0>{flooredSeconds}<1>s</1></0>"
-
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Absent for"
 msgstr "欠席する"
@@ -101,12 +93,12 @@ msgid "All Noun auction proceeds are sent to the"
 msgstr "名詞オークションの収益はすべて、"
 
 #: src/pages/Nounders/index.tsx
-msgid "All Noun auction proceeds are sent to the Nouns DAO. For this reason, we, the project's founders (「Nounders」) have chosen to compensate ourselves with Nouns. Every 10th noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
+msgid "All Noun auction proceeds are sent to the Nouns DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
 msgstr "Nounオークションの収益は全てNouns DAOに送られます。このため、我々、プロジェクトの創設者 ('Nounders') は、Nounsで補償することを選択しました。プロジェクトの最初の5年間、10個目のNounsはすべて私たちのマルチシグ (5/10) に送られ、そこで権利確定され、個々のNoundersに分配されることになります。"
 
 #: src/components/Documentation/index.tsx
 msgid "All Nouns are members of Nouns DAO."
-msgstr ""
+msgstr "Nounsは全てNouns DAOのメンバーです。"
 
 #: src/pages/CreateProposal/index.tsx
 msgid "All Proposals"
@@ -118,7 +110,7 @@ msgstr "引数"
 
 #: src/components/Documentation/index.tsx
 msgid "Artwork is generative and stored directly on-chain (not IPFS)."
-msgstr ""
+msgstr "生成されたアートワークは直接オンチェーンに保存されます(IPFSではありません)。"
 
 #: src/components/AuctionTimer/index.tsx
 #: src/components/AuctionTimer/index.tsx
@@ -309,7 +301,7 @@ msgstr "実行する"
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 msgid "Executed"
-msgstr "実行しました"
+msgstr "遂行済み"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
@@ -511,7 +503,7 @@ msgstr "ナウンアートワークは {publicDomainLink} にあります。"
 
 #: src/pages/Governance/index.tsx
 msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
-msgstr "ナウンズは<0>ナウンズDAO</0>を運営しています。ナウンズは提案に投票したり、投票を第三者に委任することができます。 提案を提出するには、最低<1>{nounsRequired} {0}</1>が必要です。"
+msgstr "Nounsが統治する<0>Nouns DAO</0>。Nounsは提案に投票したり、第三者に投票を委任することができます。提案の提出には<1>{nounThresholdCopy}</1>以上が必要です。"
 
 #: src/components/Banner/index.tsx
 msgid "ONE NOUN,"
@@ -589,7 +581,7 @@ msgstr "提案が実行されました！"
 
 #: src/pages/Vote/index.tsx
 msgid "Proposal Queued!"
-msgstr "提案が待機されました！"
+msgstr "提案の実行待ちです！"
 
 #: src/components/ProposalHeader/index.tsx
 msgid "Proposal {0}"
@@ -613,7 +605,7 @@ msgstr "提案者"
 
 #: src/pages/Vote/index.tsx
 msgid "Queue"
-msgstr "キュー"
+msgstr "待ち"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
@@ -754,7 +746,7 @@ msgstr "このナウンは作られたばかりなので動きがありません
 
 #: src/pages/Governance/index.tsx
 msgid "This treasury exists for <0>Nouns DAO</0> participants to allocate resources for the long-term growth and prosperity of the Nouns project."
-msgstr "この財務は、ナウンプロジェクトの長期的な成長と繁栄に<0>ナウンズDAO</0>の参加者がリソースを割り当てるために存在しています。"
+msgstr "このトレジャリーは、<0>Nouns DAO</0>の参加者がNounsプロジェクトの長期的な成長と繁栄に必要なリソースを配分するために設けられています。"
 
 #: src/pages/Vote/index.tsx
 msgid "Threshold"
@@ -821,7 +813,7 @@ msgstr "ETH値\"(任意)\""
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 msgid "Vetoed"
-msgstr "禁止されました"
+msgstr "拒否権"
 
 #: src/components/BidHistoryBtn/index.tsx
 msgid "View all bids"
@@ -830,10 +822,6 @@ msgstr "全ての入札額を表示"
 #: src/components/Bid/index.tsx
 msgid "Vote for the next Noun"
 msgstr "次のナウンに投票する"
-
-#: src/components/Bid/index.tsx
-#~ msgid "Vote for the next Noun ⌐◧-◧"
-#~ msgstr "次のナウンに投票する ⌐◧-◧"
 
 #: src/components/VoteModal/index.tsx
 msgid "Vote on Prop {0}"
@@ -975,10 +963,6 @@ msgstr "秒"
 #: src/pages/Vote/index.tsx
 msgid "{0} votes"
 msgstr "{0} 投票"
-
-#: src/components/AuctionTimer/index.tsx
-#~ msgid "{0}<0>h</0>"
-#~ msgstr "{0}<0>h</0>"
 
 #: src/pages/Vote/index.tsx
 msgid "{moveStateButtonAction} Proposal ⌐◧-◧"
