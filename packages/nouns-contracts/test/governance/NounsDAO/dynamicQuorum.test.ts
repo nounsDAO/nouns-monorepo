@@ -33,9 +33,9 @@ describe('Dynamic Quorum', () => {
   it('coefs all zeroes', async () => {
     const quorumVotes = await gov.dynamicQuorumVotes(12, 200, {
       minQuorumVotesBPS: 1000,
-      maxQuorumVotesBPS: 5000,
+      maxQuorumVotesBPS: 4000,
       quorumPolynomCoefs: [0, 0],
-      quorumVotesBPSOffset: 300,
+      quorumVotesBPSOffset: 500,
     });
 
     expect(quorumVotes).to.equal(20);
@@ -45,9 +45,9 @@ describe('Dynamic Quorum', () => {
     it('stays flat before the offset value', async () => {
       const quorumVotes = await gov.dynamicQuorumVotes(6, 200, {
         minQuorumVotesBPS: 1000,
-        maxQuorumVotesBPS: 5000,
+        maxQuorumVotesBPS: 4000,
         quorumPolynomCoefs: [parseUnits('1', 18), 0],
-        quorumVotesBPSOffset: 300,
+        quorumVotesBPSOffset: 500,
       });
 
       expect(quorumVotes).to.equal(20);
@@ -56,12 +56,12 @@ describe('Dynamic Quorum', () => {
     it('increases linearly past the offset value', async () => {
       const quorumVotes = await gov.dynamicQuorumVotes(18, 200, {
         minQuorumVotesBPS: 1000,
-        maxQuorumVotesBPS: 5000,
+        maxQuorumVotesBPS: 4000,
         quorumPolynomCoefs: [parseUnits('1', 18), 0],
-        quorumVotesBPSOffset: 300,
+        quorumVotesBPSOffset: 500,
       });
 
-      expect(quorumVotes).to.equal(32);
+      expect(quorumVotes).to.equal(28);
     });
   });
 
@@ -69,14 +69,12 @@ describe('Dynamic Quorum', () => {
     it('increases quadratically', async () => {
       const quorumVotes = await gov.dynamicQuorumVotes(26, 200, {
         minQuorumVotesBPS: 1000,
-        maxQuorumVotesBPS: 5000,
-        quorumPolynomCoefs: [0, parseUnits('0.001')],
-        quorumVotesBPSOffset: 300,
+        maxQuorumVotesBPS: 4000,
+        quorumPolynomCoefs: [0, parseUnits('0.001', 18)],
+        quorumVotesBPSOffset: 500,
       });
 
-      ethers.utils.parseEther;
-
-      expect(quorumVotes).to.equal(40);
+      expect(quorumVotes).to.equal(32);
     });
   });
 });
