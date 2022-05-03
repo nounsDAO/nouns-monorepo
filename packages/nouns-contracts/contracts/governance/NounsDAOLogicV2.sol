@@ -562,7 +562,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     }
 
     function _setDynamicQuorumParams(DynamicQuorumParams calldata params) public {
-        uint32 blockNumber = safe32(block.number, 'NounsDAO::_setDynamicQuorumParams: block number exceeds 208 bits');
+        uint32 blockNumber = safe32(block.number, 'NounsDAO::_setDynamicQuorumParams: block number exceeds 32 bits');
         require(msg.sender == admin, 'NounsDAO::_setDynamicQuorumParams: admin only');
         require(
             params.minQuorumVotesBPS >= MIN_QUORUM_VOTES_BPS_LOWER_BOUND &&
@@ -705,7 +705,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     }
 
     function getDynamicQuorumParamsAt(uint256 blockNumber_) public view returns (DynamicQuorumParams memory) {
-        uint32 blockNumber = safe32(blockNumber_, 'NounsDAO::getDynamicQuorumParamsAt: block number exceeds 208 bits');
+        uint32 blockNumber = safe32(blockNumber_, 'NounsDAO::getDynamicQuorumParamsAt: block number exceeds 32 bits');
         uint256 len = quorumParamsCheckpoints.length;
 
         if (len == 0) {
