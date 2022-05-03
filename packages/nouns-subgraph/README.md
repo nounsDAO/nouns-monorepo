@@ -37,3 +37,18 @@ yarn codegen
 ```sh
 yarn deploy:[network] # Supports rinkeby and mainnet
 ```
+
+## Running a local deployment
+
+Make sure you have Docker installed.
+Run your local graph node by running:
+
+```sh
+yarn graph-node
+```
+
+Then in a new terminal run:
+
+```sh
+yarn deploy:hardhat
+```
