@@ -61,7 +61,7 @@ describe('NounsToken', () => {
   });
 
   it('should set symbol', async () => {
-    expect(await nounsToken.symbol()).to.eq('Nouns');
+    expect(await nounsToken.symbol()).to.eq('NOUN');
   });
 
   it('should set name', async () => {

@@ -23,6 +23,7 @@ const config: HardhatUserConfig = {
       },
     },
   },
+  defaultNetwork: 'rinkeby',
   networks: {
     mainnet: {
       url: `https://mainnet.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
@@ -43,7 +44,7 @@ const config: HardhatUserConfig = {
     hardhat: {},
   },
   etherscan: {
-    apiKey: process.env.POLYGONSCAN_API_KEY,
+    apiKey: process.env.ETHERSCAN_API_KEY,
   },
   abiExporter: {
     path: './abi',

@@ -2,6 +2,7 @@ import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHo
 import { Interface } from 'ethers/lib/utils';
 import { task, types } from 'hardhat/config';
 import promptjs from 'prompt';
+import { BigNumber } from 'ethers';
 
 promptjs.colors = false;
 promptjs.message = '> ';
@@ -146,14 +147,14 @@ task('deploy', 'Deploys NounsDescriptor, NounsSeeder, and NounsToken')
         libraries: contract?.libraries?.(),
       });
 
-      const deploymentGas = await factory.signer.estimateGas(
-        factory.getDeployTransaction(
-          ...(contract.args?.map(a => (typeof a === 'function' ? a() : a)) ?? []),
-          {
-            gasPrice,
-          },
-        ),
-      );
+      const deploymentGas = (
+        await factory.signer.estimateGas(
+          factory.getDeployTransaction(
+            ...(contract.args?.map(a => (typeof a === 'function' ? a() : a)) ?? []),
+          ),
+        )
+      ).mul(BigNumber.from(2));
+
       const deploymentCost = deploymentGas.mul(gasPrice);
 
       console.log(
@@ -181,9 +182,12 @@ task('deploy', 'Deploys NounsDescriptor, NounsSeeder, and NounsToken')
 
       console.log('Deploying...');
 
-      // TODO: add eip1559 gas estimates? old gas estimate was not working
       const args = [...(contract.args?.map(a => (typeof a === 'function' ? a() : a)) ?? [])];
-      const deployedContract = await factory.deploy(...args);
+
+      const deployedContract = await factory.deploy(...args, {
+        gasLimit: deploymentGas,
+        gasPrice,
+      });
 
       if (contract.waitForConfirmation) {
         await deployedContract.deployed();

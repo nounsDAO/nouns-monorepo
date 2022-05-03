@@ -121,7 +121,7 @@ contract NounsToken is INounsToken, Ownable, ERC721URIStorage, ERC721Checkpointa
         INounsDescriptor _descriptor,
         INounsSeeder _seeder,
         IProxyRegistry _proxyRegistry
-    ) ERC721('Nouns', 'Nouns') {
+    ) ERC721('Nouns', 'NOUN') {
         noundersDAO = _noundersDAO;
         minter = _minter;
         uriUpdater = _uriUpdater;
