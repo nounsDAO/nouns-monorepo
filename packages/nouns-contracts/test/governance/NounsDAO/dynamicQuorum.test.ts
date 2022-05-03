@@ -1,6 +1,7 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
+import { BigNumberish } from 'ethers';
 import { parseUnits } from 'ethers/lib/utils';
 import hardhat from 'hardhat';
 import {
@@ -33,9 +34,9 @@ describe('Dynamic Quorum', () => {
   it('coefs all zeroes', async () => {
     const quorumVotes = await gov.dynamicQuorumVotes(12, 200, {
       minQuorumVotesBPS: 1000,
-      maxQuorumVotesBPS: 5000,
+      maxQuorumVotesBPS: 4000,
       quorumPolynomCoefs: [0, 0],
-      quorumVotesBPSOffset: 300,
+      quorumVotesBPSOffset: 500,
     });
 
     expect(quorumVotes).to.equal(20);
@@ -45,9 +46,9 @@ describe('Dynamic Quorum', () => {
     it('stays flat before the offset value', async () => {
       const quorumVotes = await gov.dynamicQuorumVotes(6, 200, {
         minQuorumVotesBPS: 1000,
-        maxQuorumVotesBPS: 5000,
-        quorumPolynomCoefs: [parseUnits('1', 18), 0],
-        quorumVotesBPSOffset: 300,
+        maxQuorumVotesBPS: 4000,
+        quorumPolynomCoefs: [parseUnits('1', 6), 0],
+        quorumVotesBPSOffset: 500,
       });
 
       expect(quorumVotes).to.equal(20);
@@ -56,12 +57,12 @@ describe('Dynamic Quorum', () => {
     it('increases linearly past the offset value', async () => {
       const quorumVotes = await gov.dynamicQuorumVotes(18, 200, {
         minQuorumVotesBPS: 1000,
-        maxQuorumVotesBPS: 5000,
-        quorumPolynomCoefs: [parseUnits('1', 18), 0],
-        quorumVotesBPSOffset: 300,
+        maxQuorumVotesBPS: 4000,
+        quorumPolynomCoefs: [parseUnits('1', 6), 0],
+        quorumVotesBPSOffset: 500,
       });
 
-      expect(quorumVotes).to.equal(32);
+      expect(quorumVotes).to.equal(28);
     });
   });
 
@@ -69,14 +70,51 @@ describe('Dynamic Quorum', () => {
     it('increases quadratically', async () => {
       const quorumVotes = await gov.dynamicQuorumVotes(26, 200, {
         minQuorumVotesBPS: 1000,
-        maxQuorumVotesBPS: 5000,
-        quorumPolynomCoefs: [0, parseUnits('0.001')],
-        quorumVotesBPSOffset: 300,
+        maxQuorumVotesBPS: 4000,
+        quorumPolynomCoefs: [0, parseUnits('0.001', 6)],
+        quorumVotesBPSOffset: 500,
       });
 
-      ethers.utils.parseEther;
+      expect(quorumVotes).to.equal(32);
+    });
 
-      expect(quorumVotes).to.equal(40);
+    it('uses both coefs', async () => {
+      const coefs: [BigNumberish, BigNumberish] = [parseUnits('0.3', 6), parseUnits('0.001', 6)];
+      const params = {
+        minQuorumVotesBPS: 1000,
+        maxQuorumVotesBPS: 4000,
+        quorumPolynomCoefs: coefs,
+        quorumVotesBPSOffset: 500,
+      };
+
+      expect(await gov.dynamicQuorumVotes(10, 200, params)).to.equal(20);
+      expect(await gov.dynamicQuorumVotes(20, 200, params)).to.equal(28);
+      expect(await gov.dynamicQuorumVotes(30, 200, params)).to.equal(46);
+      expect(await gov.dynamicQuorumVotes(40, 200, params)).to.equal(74);
+      expect(await gov.dynamicQuorumVotes(50, 200, params)).to.equal(80);
+      expect(await gov.dynamicQuorumVotes(80, 200, params)).to.equal(80);
+    });
+  });
+
+  describe('Max required quorum', async () => {
+    it('caps the quorum by the max value', async () => {
+      let quorumVotes = await gov.dynamicQuorumVotes(50, 200, {
+        minQuorumVotesBPS: 1000,
+        maxQuorumVotesBPS: 10000,
+        quorumPolynomCoefs: [parseUnits('0.3', 6), parseUnits('0.001', 6)],
+        quorumVotesBPSOffset: 500,
+      });
+
+      expect(quorumVotes).to.equal(112);
+
+      quorumVotes = await gov.dynamicQuorumVotes(50, 200, {
+        minQuorumVotesBPS: 1000,
+        maxQuorumVotesBPS: 4000,
+        quorumPolynomCoefs: [parseUnits('0.3', 6), parseUnits('0.001', 6)],
+        quorumVotesBPSOffset: 500,
+      });
+
+      expect(quorumVotes).to.equal(80);
     });
   });
 });

@@ -91,9 +91,6 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     /// @notice The EIP-712 typehash for the ballot struct used by the contract
     bytes32 public constant BALLOT_TYPEHASH = keccak256('Ballot(uint256 proposalId,uint8 support)');
 
-    /// @notice A fixed point integer with 18 decimal places
-    uint256 public constant WAD = 10**18;
-
     /**
      * @notice Used to initialize the contract during delegator contructor
      * @param timelock_ The address of the NounsDAOExecutor
@@ -562,7 +559,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     }
 
     function _setDynamicQuorumParams(DynamicQuorumParams calldata params) public {
-        uint32 blockNumber = safe32(block.number, 'NounsDAO::_setDynamicQuorumParams: block number exceeds 208 bits');
+        uint32 blockNumber = safe32(block.number, 'NounsDAO::_setDynamicQuorumParams: block number exceeds 32 bits');
         require(msg.sender == admin, 'NounsDAO::_setDynamicQuorumParams: admin only');
         require(
             params.minQuorumVotesBPS >= MIN_QUORUM_VOTES_BPS_LOWER_BOUND &&
@@ -683,30 +680,45 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
             );
     }
 
+    /**
+     * @notice Calculates the required quorum of for-votes based on the amount of against-votes
+     *     The more against-votes there are for a proposal, the higher the required quorum is.
+     *     The quorum BPS is between `params.minQuorumVotesBPS` and params.maxQuorumVotesBPS.
+     *     `params.quorumVotesBPSOffset` determines at which amount of against-votes does the
+     *       additional quorum calculate "kick in".
+     *     The additional quorum is calculated as: coefs[0] * againstVotesBPS + coefs[1] * againstVotesBPS^2
+     *       where coefs is `params.quorumPolynomCoefs`
+     * @param againstVotes Number of against-votes in the proposal
+     * @param totalSupply The total supply of Nouns at the time of proposal creation
+     * @return quorumVotes The required quorum
+     */
     function dynamicQuorumVotes(
         uint256 againstVotes,
         uint256 totalSupply,
         DynamicQuorumParams memory params
     ) public pure returns (uint256) {
         uint256 againstVotesBPS = (10000 * againstVotes) / totalSupply;
-        uint256 polynomValueBPS = 0;
-        if (againstVotesBPS > params.quorumVotesBPSOffset) {
-            uint256 polynomInput = againstVotesBPS - params.quorumVotesBPSOffset;
-            for (uint8 i = 0; i < 2; i++) {
-                polynomValueBPS += (params.quorumPolynomCoefs[i] * polynomInput**(i + 1)) / WAD;
-            }
+        if (againstVotesBPS <= params.quorumVotesBPSOffset) {
+            return bps2Uint(params.minQuorumVotesBPS, totalSupply);
         }
+
+        uint256 polynomInput = againstVotesBPS - params.quorumVotesBPSOffset;
+        uint256 polynomValueBPS = (params.quorumPolynomCoefs[0] *
+            polynomInput +
+            params.quorumPolynomCoefs[1] *
+            polynomInput**2) / 1e6;
+
         uint256 adjustedQuorumBPS = params.minQuorumVotesBPS + polynomValueBPS;
         uint256 quorumBPS = min(params.maxQuorumVotesBPS, adjustedQuorumBPS);
         return bps2Uint(quorumBPS, totalSupply);
     }
 
     function getDynamicQuorumParamsAt(uint256 blockNumber_) public view returns (DynamicQuorumParams memory) {
-        uint32 blockNumber = safe32(blockNumber_, 'NounsDAO::getDynamicQuorumParamsAt: block number exceeds 208 bits');
+        uint32 blockNumber = safe32(blockNumber_, 'NounsDAO::getDynamicQuorumParamsAt: block number exceeds 32 bits');
         uint256 len = quorumParamsCheckpoints.length;
 
         if (len == 0) {
-            return DynamicQuorumParams(0, 0, 0, [uint256(0), uint256(0)]);
+            return DynamicQuorumParams(0, 0, 0, [uint32(0), uint32(0)]);
         }
 
         if (quorumParamsCheckpoints[len - 1].fromBlock <= blockNumber) {
@@ -714,7 +726,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         }
 
         if (quorumParamsCheckpoints[0].fromBlock > blockNumber) {
-            return DynamicQuorumParams(0, 0, 0, [uint256(0), uint256(0)]);
+            return DynamicQuorumParams(0, 0, 0, [uint32(0), uint32(0)]);
         }
 
         uint256 lower = 0;
@@ -755,10 +767,6 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         return (number * bps) / 10000;
     }
 
-    function wdiv(uint256 x, uint256 y) internal pure returns (uint256 z) {
-        z = ((x * WAD) + (y / 2)) / y;
-    }
-
     function getChainIdInternal() internal view returns (uint256) {
         uint256 chainId;
         assembly {
@@ -768,7 +776,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     }
 
     function safe32(uint256 n, string memory errorMessage) internal pure returns (uint32) {
-        require(n >= type(uint32).min && n <= type(uint32).max, errorMessage);
+        require(n <= type(uint32).max, errorMessage);
         return uint32(n);
     }
 }
