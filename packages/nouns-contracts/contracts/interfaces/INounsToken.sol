@@ -2,19 +2,6 @@
 
 /// @title Interface for NounsToken
 
-/*********************************
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- * ░░░░░░█████████░░█████████░░░ *
- * ░░░░░░██░░░████░░██░░░████░░░ *
- * ░░██████░░░████████░░░████░░░ *
- * ░░██░░██░░░████░░██░░░████░░░ *
- * ░░██░░██░░░████░░██░░░████░░░ *
- * ░░░░░░█████████░░█████████░░░ *
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- *********************************/
-
 pragma solidity ^0.8.6;
 
 import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
@@ -32,6 +19,10 @@ interface INounsToken is IERC721 {
 
     event MinterLocked();
 
+    event UriUpdaterUpdated(address updater);
+
+    event UriUpdaterLocked();
+
     event DescriptorUpdated(INounsDescriptor descriptor);
 
     event DescriptorLocked();
@@ -40,17 +31,21 @@ interface INounsToken is IERC721 {
 
     event SeederLocked();
 
+    event TokenUriSet(uint256 indexed tokenId, string uri);
+
     function mint() external returns (uint256);
 
     function burn(uint256 tokenId) external;
-
-    function dataURI(uint256 tokenId) external returns (string memory);
 
     function setNoundersDAO(address noundersDAO) external;
 
     function setMinter(address minter) external;
 
     function lockMinter() external;
+
+    function setUriUpdater(address minter) external;
+
+    function lockUriUpdater() external;
 
     function setDescriptor(INounsDescriptor descriptor) external;
 

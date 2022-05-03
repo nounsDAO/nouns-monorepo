@@ -12,6 +12,11 @@
         "type": "address"
       },
       {
+        "internalType": "address",
+        "name": "_uriUpdater",
+        "type": "address"
+      },
+      {
         "internalType": "contract INounsDescriptor",
         "name": "_descriptor",
         "type": "address"
@@ -85,6 +90,100 @@
     "inputs": [
       {
         "indexed": true,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "NounBurned",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint8",
+            "name": "volumeCount",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "maxVolumeHeight",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "waterFeatureCount",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "grassFeatureCount",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "treeCount",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "bushCount",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "peopleCount",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "timeOfDay",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "season",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "greenRooftopP",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "siteEdgeOffset",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "orientation",
+            "type": "uint256"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct INounsSeeder.Seed",
+        "name": "seed",
+        "type": "tuple"
+      }
+    ],
+    "name": "NounCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
         "internalType": "address",
         "name": "delegator",
         "type": "address"
@@ -151,6 +250,19 @@
   },
   {
     "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "noundersDAO",
+        "type": "address"
+      }
+    ],
+    "name": "NoundersDAOUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
     "inputs": [],
     "name": "MinterLocked",
     "type": "event"
@@ -166,78 +278,6 @@
       }
     ],
     "name": "MinterUpdated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "NounBurned",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint48",
-            "name": "background",
-            "type": "uint48"
-          },
-          {
-            "internalType": "uint48",
-            "name": "body",
-            "type": "uint48"
-          },
-          {
-            "internalType": "uint48",
-            "name": "accessory",
-            "type": "uint48"
-          },
-          {
-            "internalType": "uint48",
-            "name": "head",
-            "type": "uint48"
-          },
-          {
-            "internalType": "uint48",
-            "name": "glasses",
-            "type": "uint48"
-          }
-        ],
-        "indexed": false,
-        "internalType": "struct INounsSeeder.Seed",
-        "name": "seed",
-        "type": "tuple"
-      }
-    ],
-    "name": "NounCreated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "noundersDAO",
-        "type": "address"
-      }
-    ],
-    "name": "NoundersDAOUpdated",
     "type": "event"
   },
   {
@@ -283,6 +323,25 @@
     "inputs": [
       {
         "indexed": true,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "uri",
+        "type": "string"
+      }
+    ],
+    "name": "TokenUriSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
         "internalType": "address",
         "name": "from",
         "type": "address"
@@ -301,6 +360,25 @@
       }
     ],
     "name": "Transfer",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "UriUpdaterLocked",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "updater",
+        "type": "address"
+      }
+    ],
+    "name": "UriUpdaterUpdated",
     "type": "event"
   },
   {
@@ -422,25 +500,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "dataURI",
-    "outputs": [
-      {
-        "internalType": "string",
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "decimals",
     "outputs": [
@@ -529,6 +588,19 @@
     "outputs": [
       {
         "internalType": "contract INounsDescriptor",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "noundersDAO",
+    "outputs": [
+      {
+        "internalType": "address",
         "name": "",
         "type": "address"
       }
@@ -663,6 +735,19 @@
   },
   {
     "inputs": [],
+    "name": "isUriUpdaterLocked",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "lockDescriptor",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -678,6 +763,13 @@
   {
     "inputs": [],
     "name": "lockSeeder",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "lockUriUpdater",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -735,19 +827,6 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "noundersDAO",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -899,29 +978,64 @@
     "name": "seeds",
     "outputs": [
       {
-        "internalType": "uint48",
-        "name": "background",
-        "type": "uint48"
+        "internalType": "uint8",
+        "name": "volumeCount",
+        "type": "uint8"
       },
       {
-        "internalType": "uint48",
-        "name": "body",
-        "type": "uint48"
+        "internalType": "uint8",
+        "name": "maxVolumeHeight",
+        "type": "uint8"
       },
       {
-        "internalType": "uint48",
-        "name": "accessory",
-        "type": "uint48"
+        "internalType": "uint8",
+        "name": "waterFeatureCount",
+        "type": "uint8"
       },
       {
-        "internalType": "uint48",
-        "name": "head",
-        "type": "uint48"
+        "internalType": "uint8",
+        "name": "grassFeatureCount",
+        "type": "uint8"
       },
       {
-        "internalType": "uint48",
-        "name": "glasses",
-        "type": "uint48"
+        "internalType": "uint8",
+        "name": "treeCount",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "bushCount",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "peopleCount",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "timeOfDay",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "season",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "greenRooftopP",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "siteEdgeOffset",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "orientation",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -975,11 +1089,11 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_minter",
+        "name": "_noundersDAO",
         "type": "address"
       }
     ],
-    "name": "setMinter",
+    "name": "setNoundersDAO",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -988,11 +1102,11 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_noundersDAO",
+        "name": "_minter",
         "type": "address"
       }
     ],
-    "name": "setNoundersDAO",
+    "name": "setMinter",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1006,6 +1120,37 @@
       }
     ],
     "name": "setSeeder",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "uri",
+        "type": "string"
+      }
+    ],
+    "name": "setTokenURI",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_updater",
+        "type": "address"
+      }
+    ],
+    "name": "setUriUpdater",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1151,6 +1296,19 @@
     "name": "transferOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "uriUpdater",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {

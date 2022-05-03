@@ -2,97 +2,53 @@
 
 /// @title Interface for NounsDescriptor
 
-/*********************************
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- * ░░░░░░█████████░░█████████░░░ *
- * ░░░░░░██░░░████░░██░░░████░░░ *
- * ░░██████░░░████████░░░████░░░ *
- * ░░██░░██░░░████░░██░░░████░░░ *
- * ░░██░░██░░░████░░██░░░████░░░ *
- * ░░░░░░█████████░░█████████░░░ *
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- *********************************/
-
 pragma solidity ^0.8.6;
 
-import { INounsSeeder } from './INounsSeeder.sol';
-
 interface INounsDescriptor {
+    struct AttributeRanges {
+        uint8[2] volumeCountRange;
+        uint8[2] maxVolumeHeightRange;
+        uint8[2] waterFeatureCountRange;
+        uint8[2] grassFeatureCountRange;
+        uint8[2] treeCountRange;
+        uint8[2] bushCountRange;
+        uint8[2] peopleCountRange;
+        uint8[2] timeOfDayRange;
+        uint8[2] seasonRange;
+        uint8[2] greenRooftopPRange;
+        uint256[2] siteEdgeOffsetRange;
+        uint256[2] orientationRange;
+    }
+
     event PartsLocked();
 
-    event DataURIToggled(bool enabled);
+    function getAttributeRanges() external view returns (AttributeRanges memory);
 
-    event BaseURIUpdated(string baseURI);
+    function getVolumeCountRange() external view returns (uint8[2] memory);
 
-    function arePartsLocked() external returns (bool);
+    function getMaxVolumeHeightRange() external view returns (uint8[2] memory);
 
-    function isDataURIEnabled() external returns (bool);
+    function getWaterFeatureCountRange() external view returns (uint8[2] memory);
 
-    function baseURI() external returns (string memory);
+    function getGrassFeatureCountRange() external view returns (uint8[2] memory);
 
-    function palettes(uint8 paletteIndex, uint256 colorIndex) external view returns (string memory);
+    function getTreeCountRange() external view returns (uint8[2] memory);
 
-    function backgrounds(uint256 index) external view returns (string memory);
+    function getBushCountRange() external view returns (uint8[2] memory);
 
-    function bodies(uint256 index) external view returns (bytes memory);
+    function getPeopleCountRange() external view returns (uint8[2] memory);
 
-    function accessories(uint256 index) external view returns (bytes memory);
+    function getTimeOfDayRange() external view returns (uint8[2] memory);
+    
+    function getSeasonRange() external view returns (uint8[2] memory);
 
-    function heads(uint256 index) external view returns (bytes memory);
+    function getGreenRooftopPRange() external view returns (uint8[2] memory);
 
-    function glasses(uint256 index) external view returns (bytes memory);
+    function getSiteEdgeOffsetRange() external view returns (uint256[2] memory);
 
-    function backgroundCount() external view returns (uint256);
+    function getOrientationRange() external view returns (uint256[2] memory);
 
-    function bodyCount() external view returns (uint256);
-
-    function accessoryCount() external view returns (uint256);
-
-    function headCount() external view returns (uint256);
-
-    function glassesCount() external view returns (uint256);
-
-    function addManyColorsToPalette(uint8 paletteIndex, string[] calldata newColors) external;
-
-    function addManyBackgrounds(string[] calldata backgrounds) external;
-
-    function addManyBodies(bytes[] calldata bodies) external;
-
-    function addManyAccessories(bytes[] calldata accessories) external;
-
-    function addManyHeads(bytes[] calldata heads) external;
-
-    function addManyGlasses(bytes[] calldata glasses) external;
-
-    function addColorToPalette(uint8 paletteIndex, string calldata color) external;
-
-    function addBackground(string calldata background) external;
-
-    function addBody(bytes calldata body) external;
-
-    function addAccessory(bytes calldata accessory) external;
-
-    function addHead(bytes calldata head) external;
-
-    function addGlasses(bytes calldata glasses) external;
+    function arePartsLocked() external view returns (bool);
 
     function lockParts() external;
-
-    function toggleDataURIEnabled() external;
-
-    function setBaseURI(string calldata baseURI) external;
-
-    function tokenURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view returns (string memory);
-
-    function dataURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view returns (string memory);
-
-    function genericDataURI(
-        string calldata name,
-        string calldata description,
-        INounsSeeder.Seed memory seed
-    ) external view returns (string memory);
-
-    function generateSVGImage(INounsSeeder.Seed memory seed) external view returns (string memory);
 }

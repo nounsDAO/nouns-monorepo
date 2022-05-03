@@ -6,13 +6,7 @@ const { ethers } = hardhat;
 
 import { BigNumber as EthersBN } from 'ethers';
 
-import {
-  deployNounsToken,
-  getSigners,
-  TestSigners,
-  setTotalSupply,
-  populateDescriptor,
-} from '../../utils';
+import { deployNounsToken, getSigners, TestSigners, setTotalSupply } from '../../utils';
 
 import { mineBlock, address, encodeParameters, advanceBlocks } from '../../utils';
 
@@ -20,28 +14,26 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
   NounsDescriptor__factory as NounsDescriptorFactory,
-  NounsDaoProxy__factory as NounsDaoProxyFactory,
-  NounsDaoLogicV1,
-  NounsDaoLogicV1__factory as NounsDaoLogicV1Factory,
-  NounsDaoExecutor__factory as NounsDaoExecutorFactory,
-} from '../../../typechain';
+  NounsDAOProxy__factory as NounsDaoProxyFactory,
+  NounsDAOLogicV1 as NounsDaoLogicV1,
+  NounsDAOLogicV1__factory as NounsDaoLogicV1Factory,
+  NounsDAOExecutor__factory as NounsDaoExecutorFactory,
+} from '../../../typechain-types';
 
 chai.use(solidity);
 const { expect } = chai;
 
 async function reset(): Promise<void> {
   // nonce 0: Deploy NounsDAOExecutor
-  // nonce 1: Deploy NounsDAOLogicV1
-  // nonce 2: Deploy nftDescriptorLibraryFactory
-  // nonce 3: Deploy NounsDescriptor
-  // nonce 4: Deploy NounsSeeder
-  // nonce 5: Deploy NounsToken
-  // nonce 6: Deploy NounsDAOProxy
-  // nonce 7+: populate Descriptor
+  // nonce 1: Deploy NounsDaoLogicV1
+  // nonce 2: Deploy NounsDescriptor
+  // nonce 3: Deploy NounsSeeder
+  // nonce 4: Deploy NounsToken
+  // nonce 5: Deploy NounsDAOProxy
 
   const govDelegatorAddress = ethers.utils.getContractAddress({
     from: deployer.address,
-    nonce: (await deployer.getTransactionCount()) + 6,
+    nonce: (await deployer.getTransactionCount()) + 5,
   });
 
   // Deploy NounsDAOExecutor with pre-computed Delegator address
@@ -70,8 +62,6 @@ async function reset(): Promise<void> {
 
   // Cast Delegator as Delegate
   gov = NounsDaoLogicV1Factory.connect(govDelegatorAddress, deployer);
-
-  await populateDescriptor(NounsDescriptorFactory.connect(await token.descriptor(), deployer));
 }
 
 async function propose(proposer: SignerWithAddress) {
@@ -124,7 +114,7 @@ describe('NounsDAO#inflationHandling', () => {
     expect(await gov.quorumVotesBPS()).to.equal(quorumVotesBPS);
   });
 
-  it('returns quorum votes and proposal threshold based on Noun total supply', async () => {
+  it('returns quorum votes and proposal threshold based on Nouns total supply', async () => {
     // Total Supply = 40
     await setTotalSupply(token, 40);
 

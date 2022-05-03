@@ -222,6 +222,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "nouns",
+    "outputs": [
+      {
+        "internalType": "contract INounsToken",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -293,19 +306,6 @@
         "internalType": "uint8",
         "name": "",
         "type": "uint8"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "nouns",
-    "outputs": [
-      {
-        "internalType": "contract INounsToken",
-        "name": "",
-        "type": "address"
       }
     ],
     "stateMutability": "view",

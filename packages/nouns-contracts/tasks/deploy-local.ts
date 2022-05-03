@@ -5,7 +5,6 @@ import { Contract as EthersContract } from 'ethers';
 
 type ContractName =
   | 'WETH'
-  | 'NFTDescriptor'
   | 'NounsDescriptor'
   | 'NounsSeeder'
   | 'NounsToken'
@@ -25,6 +24,7 @@ interface Contract {
 
 task('deploy-local', 'Deploy contracts to hardhat')
   .addOptionalParam('noundersdao', 'The nounders DAO contract address')
+  .addOptionalParam('tokenuriupdater', 'Address of user who will update the token URI')
   .addOptionalParam('auctionTimeBuffer', 'The auction time buffer (seconds)', 30, types.int) // Default: 30 seconds
   .addOptionalParam('auctionReservePrice', 'The auction reserve price (wei)', 1, types.int) // Default: 1 wei
   .addOptionalParam(
@@ -48,8 +48,8 @@ task('deploy-local', 'Deploy contracts to hardhat')
 
     const proxyRegistryAddress = '0xa5409ec958c83c3f309868babaca7c86dcb077c1';
 
-    const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 7;
-    const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 10;
+    const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 6;
+    const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 9;
 
     const [deployer] = await ethers.getSigners();
     const nonce = await deployer.getTransactionCount();
@@ -63,17 +63,13 @@ task('deploy-local', 'Deploy contracts to hardhat')
     });
     const contracts: Record<ContractName, Contract> = {
       WETH: {},
-      NFTDescriptor: {},
-      NounsDescriptor: {
-        libraries: () => ({
-          NFTDescriptor: contracts['NFTDescriptor'].instance?.address as string,
-        }),
-      },
+      NounsDescriptor: {},
       NounsSeeder: {},
       NounsToken: {
         args: [
           args.noundersdao || deployer.address,
           expectedAuctionHouseProxyAddress,
+          args.tokenuriupdater || deployer.address,
           () => contracts['NounsDescriptor'].instance?.address,
           () => contracts['NounsSeeder'].instance?.address,
           proxyRegistryAddress,

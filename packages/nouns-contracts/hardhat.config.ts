@@ -3,8 +3,9 @@ import { HardhatUserConfig } from 'hardhat/config';
 import dotenv from 'dotenv';
 import '@nomiclabs/hardhat-waffle';
 import '@nomiclabs/hardhat-etherscan';
+import '@nomiclabs/hardhat-ethers';
 import '@float-capital/solidity-coverage';
-import 'hardhat-typechain';
+import '@typechain/hardhat';
 import 'hardhat-abi-exporter';
 import '@openzeppelin/hardhat-upgrades';
 import 'hardhat-gas-reporter';
@@ -33,12 +34,16 @@ const config: HardhatUserConfig = {
         ? { mnemonic: process.env.MNEMONIC }
         : [process.env.WALLET_PRIVATE_KEY!].filter(Boolean),
     },
-    hardhat: {
-      initialBaseFeePerGas: 0,
+    mumbai: {
+      url: `https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_PROJECT_ID}`,
+      accounts: process.env.MNEMONIC
+        ? { mnemonic: process.env.MNEMONIC }
+        : [process.env.WALLET_PRIVATE_KEY!].filter(Boolean),
     },
+    hardhat: {},
   },
   etherscan: {
-    apiKey: process.env.ETHERSCAN_API_KEY,
+    apiKey: process.env.POLYGONSCAN_API_KEY,
   },
   abiExporter: {
     path: './abi',

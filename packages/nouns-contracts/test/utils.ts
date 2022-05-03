@@ -7,12 +7,10 @@ import {
   NounsToken__factory as NounsTokenFactory,
   NounsSeeder,
   NounsSeeder__factory as NounsSeederFactory,
-  Weth,
-  Weth__factory as WethFactory,
-} from '../typechain';
-import ImageData from '../files/image-data.json';
+  WETH as Weth,
+  WETH__factory as WethFactory,
+} from '../typechain-types';
 import { Block } from '@ethersproject/abstract-provider';
-import { chunkArray } from '../utils';
 
 export type TestSigners = {
   deployer: SignerWithAddress;
@@ -35,20 +33,14 @@ export const deployNounsDescriptor = async (
   deployer?: SignerWithAddress,
 ): Promise<NounsDescriptor> => {
   const signer = deployer || (await getSigners()).deployer;
-  const nftDescriptorLibraryFactory = await ethers.getContractFactory('NFTDescriptor', signer);
-  const nftDescriptorLibrary = await nftDescriptorLibraryFactory.deploy();
-  const nounsDescriptorFactory = new NounsDescriptorFactory(
-    {
-      __$e1d8844a0810dc0e87a665b1f2b5fa7c69$__: nftDescriptorLibrary.address,
-    },
-    signer,
-  );
+  const nounsDescriptorFactory = new NounsDescriptorFactory(signer);
 
   return nounsDescriptorFactory.deploy();
 };
 
 export const deployNounsSeeder = async (deployer?: SignerWithAddress): Promise<NounsSeeder> => {
-  const factory = new NounsSeederFactory(deployer || (await getSigners()).deployer);
+  const signer = deployer || (await getSigners()).deployer;
+  const factory = new NounsSeederFactory(signer);
 
   return factory.deploy();
 };
@@ -57,6 +49,7 @@ export const deployNounsToken = async (
   deployer?: SignerWithAddress,
   noundersDAO?: string,
   minter?: string,
+  uriUpdater?: string,
   descriptor?: string,
   seeder?: string,
   proxyRegistryAddress?: string,
@@ -67,6 +60,7 @@ export const deployNounsToken = async (
   return factory.deploy(
     noundersDAO || signer.address,
     minter || signer.address,
+    uriUpdater || signer.address,
     descriptor || (await deployNounsDescriptor(signer)).address,
     seeder || (await deployNounsSeeder(signer)).address,
     proxyRegistryAddress || address(0),
@@ -77,23 +71,6 @@ export const deployWeth = async (deployer?: SignerWithAddress): Promise<Weth> =>
   const factory = new WethFactory(deployer || (await await getSigners()).deployer);
 
   return factory.deploy();
-};
-
-export const populateDescriptor = async (nounsDescriptor: NounsDescriptor): Promise<void> => {
-  const { bgcolors, palette, images } = ImageData;
-  const { bodies, accessories, heads, glasses } = images;
-
-  // Split up head and accessory population due to high gas usage
-  await Promise.all([
-    nounsDescriptor.addManyBackgrounds(bgcolors),
-    nounsDescriptor.addManyColorsToPalette(0, palette),
-    nounsDescriptor.addManyBodies(bodies.map(({ data }) => data)),
-    chunkArray(accessories, 10).map(chunk =>
-      nounsDescriptor.addManyAccessories(chunk.map(({ data }) => data)),
-    ),
-    chunkArray(heads, 10).map(chunk => nounsDescriptor.addManyHeads(chunk.map(({ data }) => data))),
-    nounsDescriptor.addManyGlasses(glasses.map(({ data }) => data)),
-  ]);
 };
 
 /**

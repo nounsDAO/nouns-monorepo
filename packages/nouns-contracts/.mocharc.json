@@ -1,0 +1,7 @@
+{
+  "require": "ts-node/register/files",
+  "timeout": 20000,
+  "mochaExplorer.require": "ts-node/register",
+  "mochaExplorer.files": "test/**/*.ts",
+  "mochaExplorer.timeout": 0
+}

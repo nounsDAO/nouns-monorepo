@@ -1,7 +1,6 @@
 import { task } from 'hardhat/config';
 
 type ContractName =
-  | 'NFTDescriptor'
   | 'NounsDescriptor'
   | 'NounsSeeder'
   | 'NounsToken'
@@ -19,14 +18,8 @@ interface VerifyArgs {
 }
 
 const contracts: Record<ContractName, VerifyArgs> = {
-  NFTDescriptor: {
-    address: '0x0bbad8c947210ab6284699605ce2a61780958264',
-  },
   NounsDescriptor: {
     address: '0x0Cfdb3Ba1694c2bb2CFACB0339ad7b1Ae5932B63',
-    libraries: {
-      NFTDescriptor: '0x0bbad8c947210ab6284699605ce2a61780958264',
-    },
   },
   NounsSeeder: {
     address: '0xCC8a0FB5ab3C7132c1b2A0109142Fb112c4Ce515',
@@ -78,8 +71,68 @@ const contracts: Record<ContractName, VerifyArgs> = {
   },
 };
 
+const mumbaiContracts: Record<ContractName, VerifyArgs> = {
+  NounsDescriptor: {
+    address: '0x4E0F5EDE0f549EED428D61D0487E34bbDB776520',
+  },
+  NounsSeeder: {
+    address: '0xE8C16bF481bA4b2fF5f8463ea0367DB907F856a9',
+  },
+  NounsToken: {
+    address: '0x000e5e8F1F71052F514295960F4D9fE4378974ca',
+    constructorArguments: [
+      '0x747077E892A9d719D30F4D2c1Dad4Fa506Db3108',
+      '0xC9b0D2E57E249692BD2B9e7FC0DFB4D5DbFD5158',
+      '0x9348ae989088a779806CBCd67b85a7630f40CD05',
+      '0x4E0F5EDE0f549EED428D61D0487E34bbDB776520',
+      '0xE8C16bF481bA4b2fF5f8463ea0367DB907F856a9',
+      '0x58807baD0B376efc12F5AD86aAc70E78ed67deaE',
+    ],
+  },
+  NounsAuctionHouse: {
+    address: '0xB882D5Da7a3CEcC67B0cdF1aA745FB6B6aed31A8',
+  },
+  NounsAuctionHouseProxyAdmin: {
+    address: '0xe1322dFF1b5098484AB578DDA2929399981c711e',
+  },
+  NounsAuctionHouseProxy: {
+    address: '0xC9b0D2E57E249692BD2B9e7FC0DFB4D5DbFD5158',
+    constructorArguments: [
+      '0xB882D5Da7a3CEcC67B0cdF1aA745FB6B6aed31A8',
+      '0xe1322dFF1b5098484AB578DDA2929399981c711e',
+      '0x87f49f54000000000000000000000000000e5e8f1f71052f514295960f4d9fe4378974ca0000000000000000000000009c3c9283d3e44854697cd22d3faa240cfb032889000000000000000000000000000000000000000000000000000000000000012c000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000050000000000000000000000000000000000000000000000000000000000015180',
+    ],
+  },
+  NounsDAOExecutor: {
+    address: '0xF9842b376BC2978Ec48B76ba50dAd45eE1D0CdA7',
+    constructorArguments: ['0xd9A3F32Fd329Af93BbF4dd89Eb89Aa636b80FC4C', 172800],
+  },
+  NounsDAOLogicV1: {
+    address: '0xD0c31E41CBf3389572E8F786CD825A22fB15A02F',
+  },
+  NounsDAOProxy: {
+    address: '0xd9A3F32Fd329Af93BbF4dd89Eb89Aa636b80FC4C',
+    constructorArguments: [
+      '0xF9842b376BC2978Ec48B76ba50dAd45eE1D0CdA7',
+      '0x000e5e8F1F71052F514295960F4D9fE4378974ca',
+      '0x747077E892A9d719D30F4D2c1Dad4Fa506Db3108',
+      '0xF9842b376BC2978Ec48B76ba50dAd45eE1D0CdA7',
+      '0xD0c31E41CBf3389572E8F786CD825A22fB15A02F',
+      17280,
+      1,
+      500,
+      1000,
+    ],
+  },
+};
+
 task('verify-etherscan', 'Verify the Solidity contracts on Etherscan').setAction(async (_, hre) => {
-  for (const [name, args] of Object.entries(contracts)) {
+  const network = await hre.ethers.provider.getNetwork();
+
+  // TODO: update if you want to support another testnet
+  const _contracts = network.chainId === 1 ? contracts : mumbaiContracts;
+
+  for (const [name, args] of Object.entries(_contracts)) {
     console.log(`verifying ${name}...`);
     try {
       await hre.run('verify:verify', {

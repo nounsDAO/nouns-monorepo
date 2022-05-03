@@ -1,0 +1,16 @@
+{
+    "require": "ts-node/register/files",
+    "timeout": 20000,
+    "name": "mocha",
+    "type": "node",
+    "request": "launch",
+    "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+    "stopOnEntry": false,
+    "args": ["--no-timeouts", "--colors"],
+    "cwd": "${workspaceRoot}",
+    "runtimeExecutable": null,
+    "env": {
+      "NODE_ENV": "testing"
+    }
+  }
+  

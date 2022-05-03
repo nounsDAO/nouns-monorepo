@@ -4,14 +4,14 @@ parts.html
 #Hardhat files
 cache
 artifacts
-typechain/*.js
-typechain/*.ts
-typechain/factories/*
-!typechain/factories/NounsToken__factory.ts
-!typechain/factories/NounsAuctionHouse__factory.ts
-!typechain/factories/NounsDescriptor__factory.ts
-!typechain/factories/NounsSeeder__factory.ts
-!typechain/factories/NounsDaoLogicV1__factory.ts
+typechain-types/*.js
+typechain-types/*.ts
+typechain-types/factories/*
+!typechain-types/factories/NounsToken__factory.ts
+!typechain-types/factories/NounsAuctionHouse__factory.ts
+!typechain-types/factories/NounsDescriptor__factory.ts
+!typechain-types/factories/NounsSeeder__factory.ts
+!typechain-types/factories/NounsDAOLogicV1__factory.ts
 .openzeppelin
 
 # Script output
@@ -28,3 +28,5 @@ abi/contracts/governance
 abi/contracts/interfaces
 abi/contracts/proxies
 abi/contracts/test
+
+.env

@@ -1,0 +1,311 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "PartsLocked",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "arePartsLocked",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getAttributeRanges",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint8[2]",
+            "name": "volumeCountRange",
+            "type": "uint8[2]"
+          },
+          {
+            "internalType": "uint8[2]",
+            "name": "maxVolumeHeightRange",
+            "type": "uint8[2]"
+          },
+          {
+            "internalType": "uint8[2]",
+            "name": "waterFeatureCountRange",
+            "type": "uint8[2]"
+          },
+          {
+            "internalType": "uint8[2]",
+            "name": "grassFeatureCountRange",
+            "type": "uint8[2]"
+          },
+          {
+            "internalType": "uint8[2]",
+            "name": "treeCountRange",
+            "type": "uint8[2]"
+          },
+          {
+            "internalType": "uint8[2]",
+            "name": "bushCountRange",
+            "type": "uint8[2]"
+          },
+          {
+            "internalType": "uint8[2]",
+            "name": "peopleCountRange",
+            "type": "uint8[2]"
+          },
+          {
+            "internalType": "uint8[2]",
+            "name": "timeOfDayRange",
+            "type": "uint8[2]"
+          },
+          {
+            "internalType": "uint8[2]",
+            "name": "seasonRange",
+            "type": "uint8[2]"
+          },
+          {
+            "internalType": "uint8[2]",
+            "name": "greenRooftopPRange",
+            "type": "uint8[2]"
+          },
+          {
+            "internalType": "uint256[2]",
+            "name": "siteEdgeOffsetRange",
+            "type": "uint256[2]"
+          },
+          {
+            "internalType": "uint256[2]",
+            "name": "orientationRange",
+            "type": "uint256[2]"
+          }
+        ],
+        "internalType": "struct INounsDescriptor.AttributeRanges",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getBushCountRange",
+    "outputs": [
+      {
+        "internalType": "uint8[2]",
+        "name": "",
+        "type": "uint8[2]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getGrassFeatureCountRange",
+    "outputs": [
+      {
+        "internalType": "uint8[2]",
+        "name": "",
+        "type": "uint8[2]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getGreenRooftopPRange",
+    "outputs": [
+      {
+        "internalType": "uint8[2]",
+        "name": "",
+        "type": "uint8[2]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getMaxVolumeHeightRange",
+    "outputs": [
+      {
+        "internalType": "uint8[2]",
+        "name": "",
+        "type": "uint8[2]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getOrientationRange",
+    "outputs": [
+      {
+        "internalType": "uint256[2]",
+        "name": "",
+        "type": "uint256[2]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getPeopleCountRange",
+    "outputs": [
+      {
+        "internalType": "uint8[2]",
+        "name": "",
+        "type": "uint8[2]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getSeasonRange",
+    "outputs": [
+      {
+        "internalType": "uint8[2]",
+        "name": "",
+        "type": "uint8[2]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getSiteEdgeOffsetRange",
+    "outputs": [
+      {
+        "internalType": "uint256[2]",
+        "name": "",
+        "type": "uint256[2]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getTimeOfDayRange",
+    "outputs": [
+      {
+        "internalType": "uint8[2]",
+        "name": "",
+        "type": "uint8[2]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getTreeCountRange",
+    "outputs": [
+      {
+        "internalType": "uint8[2]",
+        "name": "",
+        "type": "uint8[2]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getVolumeCountRange",
+    "outputs": [
+      {
+        "internalType": "uint8[2]",
+        "name": "",
+        "type": "uint8[2]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getWaterFeatureCountRange",
+    "outputs": [
+      {
+        "internalType": "uint8[2]",
+        "name": "",
+        "type": "uint8[2]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "lockParts",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

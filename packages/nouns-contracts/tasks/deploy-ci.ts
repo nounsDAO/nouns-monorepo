@@ -22,7 +22,6 @@ task('deploy-ci', 'Deploy contracts (automated by CI)')
       'logs/deploy.json',
       JSON.stringify({
         contractAddresses: {
-          NFTDescriptor: contracts.NFTDescriptor.address,
           NounsDescriptor: contracts.NounsDescriptor.address,
           NounsSeeder: contracts.NounsSeeder.address,
           NounsToken: contracts.NounsToken.address,

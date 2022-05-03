@@ -1,14 +1,16 @@
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { ethers } from 'hardhat';
-import { NounsToken, NounsDescriptor__factory as NounsDescriptorFactory } from '../../typechain';
+import {
+  NounsToken,
+  NounsDescriptor__factory as NounsDescriptorFactory,
+} from '../../typechain-types';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   deployNounsToken,
   getSigners,
   TestSigners,
   setTotalSupply,
-  populateDescriptor,
   minerStart,
   minerStop,
   mineBlock,
@@ -58,10 +60,6 @@ describe('Nouns Governance', () => {
     deployer = signers.deployer;
 
     token = await deployNounsToken(signers.deployer);
-
-    await populateDescriptor(
-      NounsDescriptorFactory.connect(await token.descriptor(), signers.deployer),
-    );
 
     domain = Domain('Nouns', token.address, await chainId());
 

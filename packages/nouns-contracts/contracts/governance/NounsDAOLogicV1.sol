@@ -2,19 +2,6 @@
 
 /// @title The Nouns DAO logic version 1
 
-/*********************************
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- * ░░░░░░█████████░░█████████░░░ *
- * ░░░░░░██░░░████░░██░░░████░░░ *
- * ░░██████░░░████████░░░████░░░ *
- * ░░██░░██░░░████░░██░░░████░░░ *
- * ░░██░░██░░░████░░██░░░████░░░ *
- * ░░░░░░█████████░░█████████░░░ *
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
- *********************************/
-
 // LICENSE
 // NounsDAOLogicV1.sol is a modified version of Compound Lab's GovernorBravoDelegate.sol:
 // https://github.com/compound-finance/compound-protocol/blob/b9b14038612d846b83f8a009a82c38974ff2dcfe/contracts/Governance/GovernorBravoDelegate.sol
@@ -27,13 +14,13 @@
 // MODIFICATIONS
 // NounsDAOLogicV1 adds:
 // - Proposal Threshold basis points instead of fixed number
-//   due to the Noun token's increasing supply
+//   due to the Nouns token's increasing supply
 //
 // - Quorum Votes basis points instead of fixed number
-//   due to the Noun token's increasing supply
+//   due to the Nouns token's increasing supply
 //
 // - Per proposal storing of fixed `proposalThreshold`
-//   and `quorumVotes` calculated using the Noun token's total supply
+//   and `quorumVotes` calculated using the Nouns token's total supply
 //   at the block the proposal was created and the basis point parameters
 //
 // - `ProposalCreatedWithRequirements` event that emits `ProposalCreated` parameters with
@@ -103,7 +90,7 @@ contract NounsDAOLogicV1 is NounsDAOStorageV1, NounsDAOEvents {
     /**
      * @notice Used to initialize the contract during delegator contructor
      * @param timelock_ The address of the NounsDAOExecutor
-     * @param nouns_ The address of the NOUN tokens
+     * @param nouns_ The address of the Nouns tokens
      * @param vetoer_ The address allowed to unilaterally veto proposals
      * @param votingPeriod_ The initial voting period
      * @param votingDelay_ The initial voting delay
@@ -654,7 +641,7 @@ contract NounsDAOLogicV1 is NounsDAOStorageV1, NounsDAOEvents {
     }
 
     /**
-     * @notice Current proposal threshold using Noun Total Supply
+     * @notice Current proposal threshold using Nouns Total Supply
      * Differs from `GovernerBravo` which uses fixed amount
      */
     function proposalThreshold() public view returns (uint256) {
@@ -662,7 +649,7 @@ contract NounsDAOLogicV1 is NounsDAOStorageV1, NounsDAOEvents {
     }
 
     /**
-     * @notice Current quorum votes using Noun Total Supply
+     * @notice Current quorum votes using Nouns Total Supply
      * Differs from `GovernerBravo` which uses fixed amount
      */
     function quorumVotes() public view returns (uint256) {

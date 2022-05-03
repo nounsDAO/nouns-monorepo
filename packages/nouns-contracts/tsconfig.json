@@ -1,18 +1,15 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "./tsconfig.base.json",
   "include": [
     "utils.ts",
     "./tasks",
     "./src",
     "./test",
-    "./typechain",
+    "./typechain-types",
     "./abi/**/*.json",
     "./files/*.json"
   ],
   "files": ["./hardhat.config.ts"],
   "references": [
-    {
-      "path": "../nouns-assets/tsconfig.build.json"
-    }
   ]
 }

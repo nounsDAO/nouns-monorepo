@@ -4,23 +4,22 @@ import { BigNumber as EthersBN } from 'ethers';
 import { solidity } from 'ethereum-waffle';
 
 import {
-  Weth,
+  WETH as Weth,
   NounsToken,
   NounsAuctionHouse,
   NounsAuctionHouse__factory as NounsAuctionHouseFactory,
   NounsDescriptor,
   NounsDescriptor__factory as NounsDescriptorFactory,
-  NounsDaoProxy__factory as NounsDaoProxyFactory,
-  NounsDaoLogicV1,
-  NounsDaoLogicV1__factory as NounsDaoLogicV1Factory,
-  NounsDaoExecutor,
-  NounsDaoExecutor__factory as NounsDaoExecutorFactory,
-} from '../typechain';
+  NounsDAOProxy__factory as NounsDaoProxyFactory,
+  NounsDAOLogicV1 as NounsDaoLogicV1,
+  NounsDAOLogicV1__factory as NounsDaoLogicV1Factory,
+  NounsDAOExecutor as NounsDaoExecutor,
+  NounsDAOExecutor__factory as NounsDaoExecutorFactory,
+} from '../typechain-types';
 
 import {
   deployNounsToken,
   deployWeth,
-  populateDescriptor,
   address,
   encodeParameters,
   advanceBlocks,
@@ -74,12 +73,11 @@ async function deploy() {
   weth = await deployWeth(wethDeployer);
 
   // nonce 2: Deploy AuctionHouse
-  // nonce 3: Deploy nftDescriptorLibraryFactory
   // nonce 4: Deploy NounsDescriptor
   // nonce 5: Deploy NounsSeeder
   // nonce 6: Deploy NounsToken
   // nonce 0: Deploy NounsDAOExecutor
-  // nonce 1: Deploy NounsDAOLogicV1
+  // nonce 1: Deploy NounsDaoLogicV1
   // nonce 7: Deploy NounsDAOProxy
   // nonce ++: populate Descriptor
   // nonce ++: set ownable contracts owner to timelock
@@ -108,10 +106,8 @@ async function deploy() {
   // 3. SET MINTER
   await nounsToken.setMinter(nounsAuctionHouse.address);
 
-  // 4. POPULATE body parts
+  // 4. DEPLOY descriptor
   descriptor = NounsDescriptorFactory.connect(await nounsToken.descriptor(), deployer);
-
-  await populateDescriptor(descriptor);
 
   // 5a. CALCULATE Gov Delegate, takes place after 2 transactions
   const calculatedGovDelegatorAddress = ethers.utils.getContractAddress({

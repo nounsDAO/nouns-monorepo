@@ -8,9 +8,9 @@ import {
   NounsAuctionHouse,
   NounsDescriptor__factory as NounsDescriptorFactory,
   NounsToken,
-  Weth,
-} from '../typechain';
-import { deployNounsToken, deployWeth, populateDescriptor } from './utils';
+  WETH as Weth,
+} from '../typechain-types';
+import { deployNounsToken, deployWeth } from './utils';
 
 chai.use(solidity);
 const { expect } = chai;
@@ -48,10 +48,6 @@ describe('NounsAuctionHouse', () => {
     nounsToken = await deployNounsToken(deployer, noundersDAO.address, deployer.address);
     weth = await deployWeth(deployer);
     nounsAuctionHouse = await deploy(deployer);
-
-    const descriptor = await nounsToken.descriptor();
-
-    await populateDescriptor(NounsDescriptorFactory.connect(descriptor, deployer));
 
     await nounsToken.setMinter(nounsAuctionHouse.address);
   });
@@ -92,7 +88,7 @@ describe('NounsAuctionHouse', () => {
       value: RESERVE_PRICE,
     });
 
-    await expect(tx).to.be.revertedWith('Noun not up for auction');
+    await expect(tx).to.be.revertedWith('Nouns not up for auction');
   });
 
   it('should revert if a user creates a bid for an expired auction', async () => {

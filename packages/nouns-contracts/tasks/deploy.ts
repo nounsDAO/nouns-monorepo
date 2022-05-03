@@ -8,7 +8,6 @@ promptjs.message = '> ';
 promptjs.delimiter = '';
 
 type ContractName =
-  | 'NFTDescriptor'
   | 'NounsDescriptor'
   | 'NounsSeeder'
   | 'NounsToken'
@@ -26,9 +25,10 @@ interface Contract {
   waitForConfirmation?: boolean;
 }
 
-task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsToken')
+task('deploy', 'Deploys NounsDescriptor, NounsSeeder, and NounsToken')
   .addParam('noundersdao', 'The nounders DAO contract address', undefined, types.string)
   .addParam('weth', 'The WETH contract address', undefined, types.string)
+  .addParam('tokenuriupdater', 'Address of user who will update the token URI')
   .addOptionalParam('auctionTimeBuffer', 'The auction time buffer (seconds)', 5 * 60, types.int)
   .addOptionalParam('auctionReservePrice', 'The auction reserve price (wei)', 1, types.int)
   .addOptionalParam(
@@ -48,12 +48,17 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
     const proxyRegistryAddress =
       network.chainId === 1
         ? '0xa5409ec958c83c3f309868babaca7c86dcb077c1'
-        : '0xf57b2c51ded3a29e6891aba85459d600256cf317';
+        : network.chainId === 4
+        ? '0xf57b2c51ded3a29e6891aba85459d600256cf317'
+        : '0x58807baD0B376efc12F5AD86aAc70E78ed67deaE';
 
-    const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 6;
-    const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 9;
+    console.log('Network', network.name);
+
+    const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 5;
+    const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 8;
 
     const [deployer] = await ethers.getSigners();
+    console.log('Deployer:', deployer.address);
     const nonce = await deployer.getTransactionCount();
     const expectedAuctionHouseProxyAddress = ethers.utils.getContractAddress({
       from: deployer.address,
@@ -64,17 +69,13 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
       nonce: nonce + GOVERNOR_N_DELEGATOR_NONCE_OFFSET,
     });
     const contracts: Record<ContractName, Contract> = {
-      NFTDescriptor: {},
-      NounsDescriptor: {
-        libraries: () => ({
-          NFTDescriptor: contracts['NFTDescriptor'].address as string,
-        }),
-      },
+      NounsDescriptor: {},
       NounsSeeder: {},
       NounsToken: {
         args: [
           args.noundersdao,
           expectedAuctionHouseProxyAddress,
+          args.tokenuriupdater,
           () => contracts['NounsDescriptor'].address,
           () => contracts['NounsSeeder'].address,
           proxyRegistryAddress,
@@ -180,12 +181,9 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
 
       console.log('Deploying...');
 
-      const deployedContract = await factory.deploy(
-        ...(contract.args?.map(a => (typeof a === 'function' ? a() : a)) ?? []),
-        {
-          gasPrice,
-        },
-      );
+      // TODO: add eip1559 gas estimates? old gas estimate was not working
+      const args = [...(contract.args?.map(a => (typeof a === 'function' ? a() : a)) ?? [])];
+      const deployedContract = await factory.deploy(...args);
 
       if (contract.waitForConfirmation) {
         await deployedContract.deployed();
@@ -193,7 +191,11 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
 
       contracts[name as ContractName].address = deployedContract.address;
 
-      console.log(`${name} contract deployed to ${deployedContract.address}`);
+      console.log(
+        `${name} contract deployed to ${deployedContract.address}\n\nArgs: ${JSON.stringify(
+          args,
+        )}\n\n`,
+      );
     }
 
     return contracts;

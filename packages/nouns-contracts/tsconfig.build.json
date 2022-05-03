@@ -1,8 +1,8 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "rootDirs": ["src", "typechain", "abi/**/*.json"],
+    "rootDirs": ["src", "typechain-types", "abi/**/*.json"],
     "outDir": "dist"
   },
-  "include": ["src", "typechain", "abi/**/*.json"],
+  "include": ["src", "typechain-types", "abi/**/*.json"],
 }
