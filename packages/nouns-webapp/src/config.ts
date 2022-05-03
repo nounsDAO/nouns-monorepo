@@ -51,8 +51,8 @@ const app: Record<SupportedChains, AppConfig> = {
   [ChainId.Hardhat]: {
     jsonRpcUri: 'http://localhost:8545',
     wsRpcUri: 'ws://localhost:8545',
-    subgraphApiUri: '',
-    enableHistory: false,
+    subgraphApiUri: 'http://localhost:8000/subgraphs/name/nounsdao/nouns-subgraph',
+    enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
 };
 
