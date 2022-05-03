@@ -26,7 +26,7 @@ import {
 export function handleProposalCreatedWithRequirements(
   event: ProposalCreatedWithRequirements,
 ): void {
-  let proposal = getOrCreateProposal(event.params.id.toString());
+  const proposal = getOrCreateProposal(event.params.id.toString());
   let proposer = getOrCreateDelegate(event.params.proposer.toHexString(), false);
 
   // Check if the proposer was a delegate already accounted for, if not we should log an error
@@ -58,50 +58,50 @@ export function handleProposalCreatedWithRequirements(
 }
 
 export function handleProposalCanceled(event: ProposalCanceled): void {
-  let proposal = getOrCreateProposal(event.params.id.toString());
+  const proposal = getOrCreateProposal(event.params.id.toString());
 
   proposal.status = STATUS_CANCELLED;
   proposal.save();
 }
 
 export function handleProposalVetoed(event: ProposalVetoed): void {
-  let proposal = getOrCreateProposal(event.params.id.toString());
+  const proposal = getOrCreateProposal(event.params.id.toString());
 
   proposal.status = STATUS_VETOED;
   proposal.save();
 }
 
 export function handleProposalQueued(event: ProposalQueued): void {
-  let governance = getGovernanceEntity();
-  let proposal = getOrCreateProposal(event.params.id.toString());
+  const governance = getGovernanceEntity();
+  const proposal = getOrCreateProposal(event.params.id.toString());
 
   proposal.status = STATUS_QUEUED;
   proposal.executionETA = event.params.eta;
   proposal.save();
 
-  governance.proposalsQueued = governance.proposalsQueued + BIGINT_ONE;
+  governance.proposalsQueued = governance.proposalsQueued.plus(BIGINT_ONE);
   governance.save();
 }
 
 export function handleProposalExecuted(event: ProposalExecuted): void {
-  let governance = getGovernanceEntity();
-  let proposal = getOrCreateProposal(event.params.id.toString());
+  const governance = getGovernanceEntity();
+  const proposal = getOrCreateProposal(event.params.id.toString());
 
   proposal.status = STATUS_EXECUTED;
   proposal.executionETA = null;
   proposal.save();
 
-  governance.proposalsQueued = governance.proposalsQueued - BIGINT_ONE;
+  governance.proposalsQueued = governance.proposalsQueued.minus(BIGINT_ONE);
   governance.save();
 }
 
 export function handleVoteCast(event: VoteCast): void {
-  let proposal = getOrCreateProposal(event.params.proposalId.toString());
-  let voteId = event.params.voter
+  const proposal = getOrCreateProposal(event.params.proposalId.toString());
+  const voteId = event.params.voter
     .toHexString()
     .concat('-')
     .concat(event.params.proposalId.toString());
-  let vote = getOrCreateVote(voteId);
+  const vote = getOrCreateVote(voteId);
   let voter = getOrCreateDelegate(event.params.voter.toHexString(), false);
 
   // Check if the voter was a delegate already accounted for, if not we should log an error
@@ -123,10 +123,6 @@ export function handleVoteCast(event: VoteCast): void {
   vote.support = event.params.support == 1;
   vote.supportDetailed = event.params.support;
   vote.nouns = voter.nounsRepresented;
-
-  if (event.params.reason != '') {
-    vote.reason = event.params.reason;
-  }
 
   vote.save();
 

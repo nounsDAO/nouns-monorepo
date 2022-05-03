@@ -1,0 +1,15 @@
+{
+  "network": "mumbai",
+  "nounsToken": {
+    "address": "0x000e5e8F1F71052F514295960F4D9fE4378974ca",
+    "startBlock": 25803555
+  },
+  "nounsAuctionHouse": {
+    "address": "0xC9b0D2E57E249692BD2B9e7FC0DFB4D5DbFD5158",
+    "startBlock": 25803560
+  },
+  "nounsDAO": {
+    "address": "0xd9A3F32Fd329Af93BbF4dd89Eb89Aa636b80FC4C",
+    "startBlock": 25803565
+  }
+}

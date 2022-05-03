@@ -20,7 +20,7 @@ dataSources:
         - Account
         - Auction
         - Bid
-        - Noun
+        - Nouns
       abis:
         - name: NounsAuctionHouse
           file: ../nouns-contracts/abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json
@@ -46,7 +46,7 @@ dataSources:
       language: wasm/assemblyscript
       file: ./src/nouns-erc-721.ts
       entities:
-        - Noun
+        - Nouns
         - Seed
         - Account
         - Delegate
@@ -55,7 +55,7 @@ dataSources:
         - name: NounsToken
           file: ../nouns-contracts/abi/contracts/NounsToken.sol/NounsToken.json
       eventHandlers:
-        - event: NounCreated(indexed uint256,(uint48,uint48,uint48,uint48,uint48))
+        - event: NounCreated(indexed uint256,(uint8,uint8,uint8,uint8,uint8,uint8,uint8,uint8,uint8,uint8,uint256,uint256))
           handler: handleNounCreated
         - event: DelegateChanged(indexed address,indexed address,indexed address)
           handler: handleDelegateChanged
@@ -63,6 +63,8 @@ dataSources:
           handler: handleDelegateVotesChanged
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
+        - event: TokenUriSet(indexed uint256,string)
+          handler: handleTokenUriSet
   - kind: ethereum/contract
     name: NounsDAO
     network: {{network}}

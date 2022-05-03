@@ -1,11 +1,7 @@
 import { Account, Delegate, Proposal, Governance, Vote } from '../types/schema';
 import { ZERO_ADDRESS, BIGINT_ZERO, BIGINT_ONE } from './constants';
 
-export function getOrCreateAccount(
-  id: string,
-  createIfNotFound: boolean = true,
-  save: boolean = true,
-): Account {
+export function getOrCreateAccount(id: string, createIfNotFound = true, save = true): Account {
   let tokenHolder = Account.load(id);
 
   if (tokenHolder == null && createIfNotFound) {
@@ -24,11 +20,7 @@ export function getOrCreateAccount(
   return tokenHolder as Account;
 }
 
-export function getOrCreateDelegate(
-  id: string,
-  createIfNotFound: boolean = true,
-  save: boolean = true,
-): Delegate {
+export function getOrCreateDelegate(id: string, createIfNotFound = true, save = true): Delegate {
   let delegate = Delegate.load(id);
 
   if (delegate == null && createIfNotFound) {
@@ -39,7 +31,7 @@ export function getOrCreateDelegate(
     delegate.nounsRepresented = [];
 
     if (id != ZERO_ADDRESS) {
-      let governance = getGovernanceEntity();
+      const governance = getGovernanceEntity();
       governance.totalDelegates = governance.totalDelegates + BIGINT_ONE;
       governance.save();
     }
@@ -52,11 +44,7 @@ export function getOrCreateDelegate(
   return delegate as Delegate;
 }
 
-export function getOrCreateVote(
-  id: string,
-  createIfNotFound: boolean = true,
-  save: boolean = false,
-): Vote {
+export function getOrCreateVote(id: string, createIfNotFound = true, save = false): Vote {
   let vote = Vote.load(id);
 
   if (vote == null && createIfNotFound) {
@@ -70,17 +58,13 @@ export function getOrCreateVote(
   return vote as Vote;
 }
 
-export function getOrCreateProposal(
-  id: string,
-  createIfNotFound: boolean = true,
-  save: boolean = false,
-): Proposal {
+export function getOrCreateProposal(id: string, createIfNotFound = true, save = false): Proposal {
   let proposal = Proposal.load(id);
 
   if (proposal == null && createIfNotFound) {
     proposal = new Proposal(id);
 
-    let governance = getGovernanceEntity();
+    const governance = getGovernanceEntity();
 
     governance.proposals = governance.proposals + BIGINT_ONE;
     governance.save();

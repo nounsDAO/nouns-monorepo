@@ -1,3 +1,7 @@
+# TODO
+
+- Remove `abi` folder in favor of generated abis from contracts repo. This will be easier once monorepo.
+
 # @nouns/subgraph
 
 A subgraph that indexes nouns events.
@@ -23,7 +27,7 @@ yarn run graph auth https://api.thegraph.com/deploy/ $ACCESS_TOKEN
 ### Create subgraph.yaml from config template
 
 ```sh
-yarn prepare:[network] # Supports rinkeby and mainnet
+yarn prepare:[network] # Supports mumbai
 ```
 
 ### Generate types to use with Typescript
@@ -35,5 +39,5 @@ yarn codegen
 ### Compile and deploy to thegraph (must be authenticated)
 
 ```sh
-yarn deploy:[network] # Supports rinkeby and mainnet
+yarn deploy:[network] # Supports mumbai
 ```

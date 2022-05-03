@@ -1,21 +1,30 @@
 type Seed @entity {
-  "The Noun's ERC721 token id"
+  "The Nouns's ERC721 token id"
   id: ID!
 
-  "The background index"
-  background: BigInt!
+  volumeCount: Int!
 
-  "The body index"
-  body: BigInt!
+  maxVolumeHeight: Int!
 
-  "The accessory index"
-  accessory: BigInt!
+  waterFeatureCount: Int!
 
-  "The head index"
-  head: BigInt!
+  grassFeatureCount: Int!
 
-  "The glasses index"
-  glasses: BigInt!
+  treeCount: Int!
+
+  bushCount: Int!
+
+  peopleCount: Int!
+
+  timeOfDay: Int!
+
+  season: Int!
+
+  greenRooftopP: Int!
+
+  siteEdgeOffset: BigInt!
+
+  orientation: BigInt!
 }
 
 type Noun @entity {
@@ -30,6 +39,9 @@ type Noun @entity {
 
   "Historical votes for the Noun"
   votes: [Vote!]! @derivedFrom(field: "nouns")
+
+  "Token URI for token ID"
+  uri: String
 }
 
 type Bid @entity {
@@ -203,9 +215,6 @@ type Vote @entity {
 
   "Amount of votes in favour or against expressed as a BigInt normalized value for the Nouns ERC721 Token"
   votes: BigInt!
-
-  "The optional vote reason"
-  reason: String
 
   "Delegate that emitted the vote"
   voter: Delegate!
