@@ -91,9 +91,6 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     /// @notice The EIP-712 typehash for the ballot struct used by the contract
     bytes32 public constant BALLOT_TYPEHASH = keccak256('Ballot(uint256 proposalId,uint8 support)');
 
-    /// @notice A fixed point integer with 18 decimal places
-    uint256 public constant WAD = 10**18;
-
     /**
      * @notice Used to initialize the contract during delegator contructor
      * @param timelock_ The address of the NounsDAOExecutor
@@ -697,7 +694,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         uint256 polynomValueBPS = (params.quorumPolynomCoefs[0] *
             polynomInput +
             params.quorumPolynomCoefs[1] *
-            polynomInput**2) / WAD;
+            polynomInput**2) / 1e6;
 
         uint256 adjustedQuorumBPS = params.minQuorumVotesBPS + polynomValueBPS;
         uint256 quorumBPS = min(params.maxQuorumVotesBPS, adjustedQuorumBPS);
@@ -709,7 +706,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         uint256 len = quorumParamsCheckpoints.length;
 
         if (len == 0) {
-            return DynamicQuorumParams(0, 0, 0, [uint256(0), uint256(0)]);
+            return DynamicQuorumParams(0, 0, 0, [uint32(0), uint32(0)]);
         }
 
         if (quorumParamsCheckpoints[len - 1].fromBlock <= blockNumber) {
@@ -717,7 +714,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         }
 
         if (quorumParamsCheckpoints[0].fromBlock > blockNumber) {
-            return DynamicQuorumParams(0, 0, 0, [uint256(0), uint256(0)]);
+            return DynamicQuorumParams(0, 0, 0, [uint32(0), uint32(0)]);
         }
 
         uint256 lower = 0;
@@ -756,10 +753,6 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
 
     function bps2Uint(uint256 bps, uint256 number) internal pure returns (uint256) {
         return (number * bps) / 10000;
-    }
-
-    function wdiv(uint256 x, uint256 y) internal pure returns (uint256 z) {
-        z = ((x * WAD) + (y / 2)) / y;
     }
 
     function getChainIdInternal() internal view returns (uint256) {

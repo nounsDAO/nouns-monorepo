@@ -46,7 +46,7 @@ describe('Dynamic Quorum', () => {
       const quorumVotes = await gov.dynamicQuorumVotes(6, 200, {
         minQuorumVotesBPS: 1000,
         maxQuorumVotesBPS: 4000,
-        quorumPolynomCoefs: [parseUnits('1', 18), 0],
+        quorumPolynomCoefs: [parseUnits('1', 6), 0],
         quorumVotesBPSOffset: 500,
       });
 
@@ -57,7 +57,7 @@ describe('Dynamic Quorum', () => {
       const quorumVotes = await gov.dynamicQuorumVotes(18, 200, {
         minQuorumVotesBPS: 1000,
         maxQuorumVotesBPS: 4000,
-        quorumPolynomCoefs: [parseUnits('1', 18), 0],
+        quorumPolynomCoefs: [parseUnits('1', 6), 0],
         quorumVotesBPSOffset: 500,
       });
 
@@ -70,7 +70,7 @@ describe('Dynamic Quorum', () => {
       const quorumVotes = await gov.dynamicQuorumVotes(26, 200, {
         minQuorumVotesBPS: 1000,
         maxQuorumVotesBPS: 4000,
-        quorumPolynomCoefs: [0, parseUnits('0.001', 18)],
+        quorumPolynomCoefs: [0, parseUnits('0.001', 6)],
         quorumVotesBPSOffset: 500,
       });
 
@@ -83,7 +83,7 @@ describe('Dynamic Quorum', () => {
       let quorumVotes = await gov.dynamicQuorumVotes(50, 200, {
         minQuorumVotesBPS: 1000,
         maxQuorumVotesBPS: 10000,
-        quorumPolynomCoefs: [parseUnits('0.3', 18), parseUnits('0.001', 18)],
+        quorumPolynomCoefs: [parseUnits('0.3', 6), parseUnits('0.001', 6)],
         quorumVotesBPSOffset: 500,
       });
 
@@ -92,7 +92,7 @@ describe('Dynamic Quorum', () => {
       quorumVotes = await gov.dynamicQuorumVotes(50, 200, {
         minQuorumVotesBPS: 1000,
         maxQuorumVotesBPS: 4000,
-        quorumPolynomCoefs: [parseUnits('0.3', 18), parseUnits('0.001', 18)],
+        quorumPolynomCoefs: [parseUnits('0.3', 6), parseUnits('0.001', 6)],
         quorumVotesBPSOffset: 500,
       });
 
