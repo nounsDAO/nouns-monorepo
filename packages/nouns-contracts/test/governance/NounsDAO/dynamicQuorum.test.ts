@@ -1,6 +1,7 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
+import { BigNumberish } from 'ethers';
 import { parseUnits } from 'ethers/lib/utils';
 import hardhat from 'hardhat';
 import {
@@ -75,6 +76,23 @@ describe('Dynamic Quorum', () => {
       });
 
       expect(quorumVotes).to.equal(32);
+    });
+
+    it('uses both coefs', async () => {
+      const coefs: [BigNumberish, BigNumberish] = [parseUnits('0.3', 6), parseUnits('0.001', 6)];
+      const params = {
+        minQuorumVotesBPS: 1000,
+        maxQuorumVotesBPS: 4000,
+        quorumPolynomCoefs: coefs,
+        quorumVotesBPSOffset: 500,
+      };
+
+      expect(await gov.dynamicQuorumVotes(10, 200, params)).to.equal(20);
+      expect(await gov.dynamicQuorumVotes(20, 200, params)).to.equal(28);
+      expect(await gov.dynamicQuorumVotes(30, 200, params)).to.equal(46);
+      expect(await gov.dynamicQuorumVotes(40, 200, params)).to.equal(74);
+      expect(await gov.dynamicQuorumVotes(50, 200, params)).to.equal(80);
+      expect(await gov.dynamicQuorumVotes(80, 200, params)).to.equal(80);
     });
   });
 
