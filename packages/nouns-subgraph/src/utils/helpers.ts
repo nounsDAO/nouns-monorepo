@@ -29,27 +29,31 @@ export function getOrCreateDelegate(
   createIfNotFound: boolean = true,
   save: boolean = true,
 ): Delegate {
-  let delegate = Delegate.load(id);
+  return getOrCreateDelegateWithNullOption(id, createIfNotFound, save) as Delegate;
+}
 
+export function getOrCreateDelegateWithNullOption(
+  id: string,
+  createIfNotFound: boolean = true,
+  save: boolean = true,
+): Delegate | null {
+  let delegate = Delegate.load(id);
   if (delegate == null && createIfNotFound) {
     delegate = new Delegate(id);
     delegate.delegatedVotesRaw = BIGINT_ZERO;
     delegate.delegatedVotes = BIGINT_ZERO;
     delegate.tokenHoldersRepresentedAmount = 0;
     delegate.nounsRepresented = [];
-
     if (id != ZERO_ADDRESS) {
       let governance = getGovernanceEntity();
-      governance.totalDelegates = governance.totalDelegates + BIGINT_ONE;
+      governance.totalDelegates = governance.totalDelegates.plus(BIGINT_ONE);
       governance.save();
     }
-
     if (save) {
       delegate.save();
     }
   }
-
-  return delegate as Delegate;
+  return delegate;
 }
 
 export function getOrCreateVote(
