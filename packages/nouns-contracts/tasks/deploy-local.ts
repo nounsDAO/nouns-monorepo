@@ -13,8 +13,8 @@ type ContractName =
   | 'NounsAuctionHouseProxyAdmin'
   | 'NounsAuctionHouseProxy'
   | 'NounsDAOExecutor'
-  | 'NounsDAOLogicV1'
-  | 'NounsDAOProxy';
+  | 'NounsDAOLogicV2'
+  | 'NounsDAOProxyV2';
 
 interface Contract {
   args?: (string | number | (() => string | undefined))[];
@@ -38,7 +38,36 @@ task('deploy-local', 'Deploy contracts to hardhat')
   .addOptionalParam('votingPeriod', 'The voting period (blocks)', 4 * 60 * 24 * 3, types.int) // Default: 3 days
   .addOptionalParam('votingDelay', 'The voting delay (blocks)', 1, types.int) // Default: 1 block
   .addOptionalParam('proposalThresholdBps', 'The proposal threshold (basis points)', 500, types.int) // Default: 5%
-  .addOptionalParam('quorumVotesBps', 'Votes required for quorum (basis points)', 1_000, types.int) // Default: 10%
+  .addOptionalParam(
+    'minQuorumVotesBPS',
+    'Min basis points input for dynamic quorum',
+    1_000,
+    types.int,
+  ) // Default: 10%
+  .addOptionalParam(
+    'maxQuorumVotesBPS',
+    'Max basis points input for dynamic quorum',
+    4_000,
+    types.int,
+  ) // Default: 40%
+  .addOptionalParam(
+    'quorumVotesBPSOffset',
+    'Dynamic quorum kick-in offset (basis points)',
+    2_000,
+    types.int,
+  ) // Default: 20%
+  .addOptionalParam(
+    'quorumPolynomCoef0',
+    'Dynamic quorum polynom linear coefficient (float)',
+    1,
+    types.float,
+  ) // x^1 coefficient
+  .addOptionalParam(
+    'quorumPolynomCoef1',
+    'Dynamic quorum polynom quadratic coefficient (float)',
+    0,
+    types.float,
+  ) // x^2 coefficient
   .setAction(async (args, { ethers }) => {
     const network = await ethers.provider.getNetwork();
     if (network.chainId !== 31337) {
@@ -101,21 +130,27 @@ task('deploy-local', 'Deploy contracts to hardhat')
       NounsDAOExecutor: {
         args: [expectedNounsDAOProxyAddress, args.timelockDelay],
       },
-      NounsDAOLogicV1: {
+      NounsDAOLogicV2: {
         waitForConfirmation: true,
       },
-      NounsDAOProxy: {
+      NounsDAOProxyV2: {
         args: [
           () => contracts['NounsDAOExecutor'].instance?.address,
           () => contracts['NounsToken'].instance?.address,
           args.noundersdao || deployer.address,
           () => contracts['NounsDAOExecutor'].instance?.address,
-          () => contracts['NounsDAOLogicV1'].instance?.address,
+          () => contracts['NounsDAOLogicV2'].instance?.address,
           args.votingPeriod,
           args.votingDelay,
           args.proposalThresholdBps,
-          args.quorumVotesBps,
+          {
+            minQuorumVotesBPS: args.minQuorumVotesBPS,
+            maxQuorumVotesBPS: args.maxQuorumVotesBPS,
+            quorumVotesBPSOffset: args.quorumVotesBPSOffset,
+            quorumPolynomCoefs: [args.quorumPolynomCoef0, args.quorumPolynomCoef1],
+          },
         ],
+        waitForConfirmation: true,
       },
     };
 
