@@ -680,6 +680,18 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
             );
     }
 
+    /**
+     * @notice Calculates the required quorum of for-votes based on the amount of against-votes
+     *     The more against-votes there are for a proposal, the higher the required quorum is.
+     *     The quorum BPS is between `params.minQuorumVotesBPS` and params.maxQuorumVotesBPS.
+     *     `params.quorumVotesBPSOffset` determines at which amount of against-votes does the
+     *       additional quorum calculate "kick in".
+     *     The additional quorum is calculated as: coefs[0] * againstVotesBPS + coefs[1] * againstVotesBPS^2
+     *       where coefs is `params.quorumPolynomCoefs`
+     * @param againstVotes Number of against-votes in the proposal
+     * @param totalSupply The total supply of Nouns at the time of proposal creation
+     * @return quorumVotes The required quorum
+     */
     function dynamicQuorumVotes(
         uint256 againstVotes,
         uint256 totalSupply,
