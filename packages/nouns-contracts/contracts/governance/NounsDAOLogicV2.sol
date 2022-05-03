@@ -693,11 +693,12 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
             return bps2Uint(params.minQuorumVotesBPS, totalSupply);
         }
 
-        uint256 polynomValueBPS = 0;
         uint256 polynomInput = againstVotesBPS - params.quorumVotesBPSOffset;
-        for (uint8 i = 0; i < 2; i++) {
-            polynomValueBPS += (params.quorumPolynomCoefs[i] * polynomInput**(i + 1)) / WAD;
-        }
+        uint256 polynomValueBPS = (params.quorumPolynomCoefs[0] *
+            polynomInput +
+            params.quorumPolynomCoefs[1] *
+            polynomInput**2) / WAD;
+
         uint256 adjustedQuorumBPS = params.minQuorumVotesBPS + polynomValueBPS;
         uint256 quorumBPS = min(params.maxQuorumVotesBPS, adjustedQuorumBPS);
         return bps2Uint(quorumBPS, totalSupply);
