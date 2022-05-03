@@ -11,7 +11,7 @@ import {
   advanceBlocks,
   propStateToString,
   deployGovernorV1,
-  deployGovernorV2,
+  deployGovernorV2AndSetQuorumParams,
   propose,
   blockNumber,
 } from '../../utils';
@@ -89,7 +89,7 @@ describe('NounsDAO upgrade to V2', () => {
   });
 
   it('and upgrade to V2', async () => {
-    await deployGovernorV2(deployer, govProxyAddress);
+    await deployGovernorV2AndSetQuorumParams(deployer, govProxyAddress);
   });
 
   it('and V2 config set', async () => {

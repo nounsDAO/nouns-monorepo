@@ -269,6 +269,14 @@ export const deployGovernorV2 = async (
   await proxy._setImplementation(v2LogicContract.address);
 
   const govV2 = NounsDaoLogicV2Factory.connect(proxyAddress, deployer);
+  return govV2;
+};
+
+export const deployGovernorV2AndSetQuorumParams = async (
+  deployer: SignerWithAddress,
+  proxyAddress: string,
+): Promise<NounsDaoLogicV2> => {
+  const govV2 = await deployGovernorV2(deployer, proxyAddress);
   await govV2._setDynamicQuorumParams({
     minQuorumVotesBPS: MIN_QUORUM_VOTES_BPS,
     maxQuorumVotesBPS: MAX_QUORUM_VOTES_BPS,
