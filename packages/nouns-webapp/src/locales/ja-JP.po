@@ -787,7 +787,7 @@ msgstr "取引に成功しました！"
 #: src/components/NavBarTreasury/index.tsx
 #: src/pages/Governance/index.tsx
 msgid "Treasury"
-msgstr "財務"
+msgstr "トレジャリー"
 
 #: src/components/Footer/index.tsx
 msgid "Twitter"
