@@ -111,8 +111,8 @@ describe('NounsDAO#_setDynamicQuorumParams', () => {
 
   it('sets value and emits event', async () => {
     const quorumPolynomCoefs: [BigNumberish, BigNumberish] = [
-      parseUnits('1', 18),
-      parseUnits('0.001'),
+      parseUnits('1', 6),
+      parseUnits('0.001', 6),
     ];
     const tx = await gov._setDynamicQuorumParams({
       minQuorumVotesBPS: 200,
