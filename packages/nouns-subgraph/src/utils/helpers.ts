@@ -1,4 +1,11 @@
-import { Account, Delegate, Proposal, Governance, Vote } from '../types/schema';
+import {
+  Account,
+  Delegate,
+  Proposal,
+  Governance,
+  Vote,
+  DynamicQuorumParams,
+} from '../types/schema';
 import { ZERO_ADDRESS, BIGINT_ZERO, BIGINT_ONE } from './constants';
 
 export function getOrCreateAccount(
@@ -113,4 +120,14 @@ export function getGovernanceEntity(): Governance {
   }
 
   return governance as Governance;
+}
+
+export function getDynamicQuorumParams(): DynamicQuorumParams {
+  let params = DynamicQuorumParams.load('LATEST');
+
+  if (params == null) {
+    params = new DynamicQuorumParams('LATEST');
+  }
+
+  return params as DynamicQuorumParams;
 }

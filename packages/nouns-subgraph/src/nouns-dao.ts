@@ -6,6 +6,7 @@ import {
   ProposalExecuted,
   VoteCast,
   ProposalVetoed,
+  DynamicQuorumParamsSet,
 } from './types/NounsDAO/NounsDAO';
 import {
   getOrCreateDelegate,
@@ -13,6 +14,7 @@ import {
   getOrCreateVote,
   getGovernanceEntity,
   getOrCreateDelegateWithNullOption,
+  getDynamicQuorumParams,
 } from './utils/helpers';
 import {
   BIGINT_ONE,
@@ -24,6 +26,7 @@ import {
   STATUS_VETOED,
 } from './utils/constants';
 import { Delegate } from './types/schema';
+import { DynamicQuorumParams } from './types/schema';
 
 export function handleProposalCreatedWithRequirements(
   event: ProposalCreatedWithRequirements,
@@ -134,4 +137,15 @@ export function handleVoteCast(event: VoteCast): void {
     proposal.status = STATUS_ACTIVE;
     proposal.save();
   }
+}
+
+export function handleDynamicQuorumParamsSet(event: DynamicQuorumParamsSet): void {
+  const params = getDynamicQuorumParams();
+
+  params.minQuorumVotesBPS = event.params.minQuorumVotesBPS;
+  params.maxQuorumVotesBPS = event.params.maxQuorumVotesBPS;
+  params.quorumVotesBPSOffset = event.params.quorumVotesBPSOffset;
+  params.quorumPolynomCoefs = event.params.quorumPolynomCoefs;
+
+  params.save();
 }

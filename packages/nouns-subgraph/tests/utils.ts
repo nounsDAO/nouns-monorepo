@@ -1,5 +1,8 @@
 import { newMockEvent } from 'matchstick-as/assembly/index';
-import { ProposalCreatedWithRequirements } from '../src/types/NounsDAO/NounsDAO';
+import {
+  DynamicQuorumParamsSet,
+  ProposalCreatedWithRequirements,
+} from '../src/types/NounsDAO/NounsDAO';
 import { Address, ethereum, Bytes, BigInt } from '@graphprotocol/graph-ts';
 
 export class ProposalCreatedWithRequirementsEvent {
@@ -62,6 +65,37 @@ export function createProposalCreatedWithRequirementsEvent(
   );
 
   newEvent.block.number = input.eventBlockNumber;
+
+  return newEvent;
+}
+
+export function createDynamicQuorumParamsSetEvent(
+  minQuorumVotesBPS: i32,
+  maxQuorumVotesBPS: i32,
+  quorumVotesBPSOffset: i32,
+  quorumPolynomCoefs: Array<BigInt>,
+): DynamicQuorumParamsSet {
+  let newEvent = changetype<DynamicQuorumParamsSet>(newMockEvent());
+  newEvent.parameters = new Array();
+
+  newEvent.parameters.push(
+    new ethereum.EventParam('minQuorumVotesBPS', ethereum.Value.fromI32(minQuorumVotesBPS)),
+  );
+
+  newEvent.parameters.push(
+    new ethereum.EventParam('maxQuorumVotesBPS', ethereum.Value.fromI32(maxQuorumVotesBPS)),
+  );
+
+  newEvent.parameters.push(
+    new ethereum.EventParam('quorumVotesBPSOffset', ethereum.Value.fromI32(quorumVotesBPSOffset)),
+  );
+
+  newEvent.parameters.push(
+    new ethereum.EventParam(
+      'quorumPolynomCoefs',
+      ethereum.Value.fromUnsignedBigIntArray(quorumPolynomCoefs),
+    ),
+  );
 
   return newEvent;
 }

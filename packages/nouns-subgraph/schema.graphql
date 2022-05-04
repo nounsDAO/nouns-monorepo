@@ -245,3 +245,20 @@ type Governance @entity {
   "Number of proposals currently queued for execution"
   proposalsQueued: BigInt!
 }
+
+type DynamicQuorumParams @entity {
+  "Unique entity used to store the latest dymanic quorum params"
+  id: ID!
+
+  "Min quorum basis points"
+  minQuorumVotesBPS: Int!
+
+  "Max quorum basis points"
+  maxQuorumVotesBPS: Int!
+
+  "Offset for the dynamic quorum function (basis points)"
+  quorumVotesBPSOffset: Int!
+
+  "Coefficients for the dynamic quorum function"
+  quorumPolynomCoefs: [BigInt!]
+}
