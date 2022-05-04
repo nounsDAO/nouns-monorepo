@@ -12,6 +12,7 @@ import { useBlockTimestamp } from '../../hooks/useBlockTimestamp';
 import dayjs from 'dayjs';
 import ShortAddress from '../ShortAddress';
 import { transactionLink } from '../ProposalContent';
+import { buildEtherscanAddressLink } from '../../utils/etherscan';
 
 interface ProposalHeaderProps {
   proposal: Proposal;
@@ -78,19 +79,31 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
       </div>
 
       <div style={{
-        display: 'flex'
+        display: 'flex',
+        flexDirection: 'column'
       }}>
         <h3 style={{
             fontFamily: 'Londrina Solid',
             color: 'var(--brand-gray-light-text)',
             marginLeft: '3rem',
             fontSize: '24px'
-        }}>Proposed by:</h3> <h3 style={{
+        }}>Proposed by:</h3> 
+        
+        <div style={{
+          display: 'flex',
+          flexDirection: 'row',
+          marginLeft: '2.5rem'
+        }}>
+        <h3 style={{
           fontFamily: 'Londrina Solid',
           marginLeft: '0.5rem',
           fontSize: '24px'
         }}>
-          <ShortAddress address={proposal.proposer || ""} avatar={false}/>
+
+          <a href={buildEtherscanAddressLink(proposal.proposer || "")} target="_blank" rel="noreferrer">
+            <ShortAddress address={proposal.proposer || ""} avatar={false}/>
+          </a>
+
           <span style={{
             marginLeft: '0.33rem',
             marginRight: '0.5rem',
@@ -105,6 +118,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
             </span>
           </span> 
         </h3>
+        </div>
       </div>
 
       {isMobile && (

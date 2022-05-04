@@ -13,7 +13,7 @@ interface ProposalContentProps {
   proposal?: Proposal;
 }
 
-const linkIfAddress = (content: string) => {
+export const linkIfAddress = (content: string) => {
   if (utils.isAddress(content)) {
     return (
       <a href={buildEtherscanAddressLink(content)} target="_blank" rel="noreferrer">
@@ -75,16 +75,6 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
               );
             })}
           </ol>
-        </Col>
-      </Row>
-      <Row>
-        <Col className={classes.section}>
-          <h5>Proposer</h5>
-          {proposal?.proposer && proposal?.transactionHash && (
-            <>
-              {linkIfAddress(proposal.proposer)} at {transactionLink(proposal.transactionHash)}
-            </>
-          )}
         </Col>
       </Row>
     </>
