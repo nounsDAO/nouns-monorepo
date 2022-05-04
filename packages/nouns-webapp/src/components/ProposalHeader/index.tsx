@@ -78,42 +78,18 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
         )}
       </div>
 
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column'
-      }}>
-        <h3 style={{
-            fontFamily: 'Londrina Solid',
-            color: 'var(--brand-gray-light-text)',
-            marginLeft: '3rem',
-            fontSize: '24px'
-        }}>Proposed by:</h3> 
+      <div className={classes.byLineWrapper}>
+        <h3>Proposed by:</h3> 
         
-        <div style={{
-          display: 'flex',
-          flexDirection: 'row',
-          marginLeft: '2.5rem'
-        }}>
-        <h3 style={{
-          fontFamily: 'Londrina Solid',
-          marginLeft: '0.5rem',
-          fontSize: '24px'
-        }}>
+        <div className={classes.byLineContentWrapper}>
+        <h3>
 
           <a href={buildEtherscanAddressLink(proposal.proposer || "")} target="_blank" rel="noreferrer">
             <ShortAddress address={proposal.proposer || ""} avatar={false}/>
           </a>
 
-          <span style={{
-            marginLeft: '0.33rem',
-            marginRight: '0.5rem',
-            fontWeight: 'bold',
-            fontSize: '18px',
-            color: 'var(--brand-gray-light-text)'
-          }}>
-            at <span style={{
-              marginLeft: '0.2rem'
-            }}>
+          <span className={classes.propTransactionWrapper}>
+            at <span className={classes.propTransactionHash}>
               {transactionLink(proposal.transactionHash)}
             </span>
           </span> 
