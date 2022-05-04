@@ -126,11 +126,68 @@ const mumbaiContracts: Record<ContractName, VerifyArgs> = {
   },
 };
 
+const rinkebyContracts: Record<ContractName, VerifyArgs> = {
+  NounsDescriptor: {
+    address: '0x8Fa0E339e282606eBFB01618284d32Bd23c3F53F',
+  },
+  NounsSeeder: {
+    address: '0xFD2105b5F8A4Cec826a6bC8893089ac5a9D3a9B4',
+  },
+  NounsToken: {
+    address: '0x03Dc6C4241B64732f3Eb196850596cE4d1864750',
+    constructorArguments: [
+      '0x747077E892A9d719D30F4D2c1Dad4Fa506Db3108',
+      '0xB420FC1F7D971d3ba18fcDF7ceb566aa3a9f4C6F',
+      '0x9348ae989088a779806CBCd67b85a7630f40CD05',
+      '0x8Fa0E339e282606eBFB01618284d32Bd23c3F53F',
+      '0xFD2105b5F8A4Cec826a6bC8893089ac5a9D3a9B4',
+      '0xf57b2c51ded3a29e6891aba85459d600256cf317',
+    ],
+  },
+  NounsAuctionHouse: {
+    address: '0x05bE4B70A2B4A659b5c32a6f07c1fb8341eA09Df',
+  },
+  NounsAuctionHouseProxyAdmin: {
+    address: '0xE0e0372f49381ec343985BC2b288184bA09B6268',
+  },
+  NounsAuctionHouseProxy: {
+    address: '0xB420FC1F7D971d3ba18fcDF7ceb566aa3a9f4C6F',
+    constructorArguments: [
+      '0x05bE4B70A2B4A659b5c32a6f07c1fb8341eA09Df',
+      '0xE0e0372f49381ec343985BC2b288184bA09B6268',
+      '0x87f49f5400000000000000000000000003dc6c4241b64732f3eb196850596ce4d1864750000000000000000000000000c778417e063141139fce010982780140aa0cd5ab000000000000000000000000000000000000000000000000000000000000012c000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000050000000000000000000000000000000000000000000000000000000000015180',
+    ],
+  },
+  NounsDAOExecutor: {
+    address: '0x50A6A52AD349236576b46aEf2043ce4470b1C342',
+    constructorArguments: ['0x1a9731B6c429B47D2A82B5319c812081b11aEC80', 172800],
+  },
+  NounsDAOLogicV1: {
+    address: '0xf5C56394a6cEcA757BDeE47b4AE9880d5c712693',
+  },
+  NounsDAOProxy: {
+    address: '0x1a9731B6c429B47D2A82B5319c812081b11aEC80',
+    constructorArguments: [
+      '0x50A6A52AD349236576b46aEf2043ce4470b1C342',
+      '0x03Dc6C4241B64732f3Eb196850596cE4d1864750',
+      '0x747077E892A9d719D30F4D2c1Dad4Fa506Db3108',
+      '0x50A6A52AD349236576b46aEf2043ce4470b1C342',
+      '0xf5C56394a6cEcA757BDeE47b4AE9880d5c712693',
+      17280,
+      1,
+      500,
+      1000,
+    ],
+  },
+};
+
 task('verify-etherscan', 'Verify the Solidity contracts on Etherscan').setAction(async (_, hre) => {
   const network = await hre.ethers.provider.getNetwork();
 
-  // TODO: update if you want to support another testnet
-  const _contracts = network.chainId === 1 ? contracts : mumbaiContracts;
+  const _contracts =
+    network.chainId === 1 ? contracts : network.chainId === 4 ? rinkebyContracts : mumbaiContracts;
+
+  console.log(_contracts.NounsToken.address);
 
   for (const [name, args] of Object.entries(_contracts)) {
     console.log(`verifying ${name}...`);
@@ -143,3 +200,5 @@ task('verify-etherscan', 'Verify the Solidity contracts on Etherscan').setAction
     }
   }
 });
+
+export default rinkebyContracts.NounsAuctionHouseProxy.constructorArguments;

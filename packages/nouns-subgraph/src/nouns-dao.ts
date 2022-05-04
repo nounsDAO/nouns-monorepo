@@ -42,7 +42,7 @@ export function handleProposalCreatedWithRequirements(
   proposer = getOrCreateDelegate(event.params.proposer.toHexString());
 
   proposal.proposer = proposer.id;
-  proposal.targets = event.params.targets as Bytes[];
+  proposal.targets = changetype<Bytes[]>(event.params.targets);
   proposal.values = event.params.values;
   proposal.signatures = event.params.signatures;
   proposal.calldatas = event.params.calldatas;

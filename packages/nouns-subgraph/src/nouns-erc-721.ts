@@ -121,8 +121,9 @@ export function handleTransfer(event: Transfer): void {
     const fromHolderNouns = fromHolder.nouns; // Re-assignment required to update array
     fromHolder.nouns = fromHolderNouns.filter(n => n !== transferredNounId);
 
-    if (fromHolder.delegate != null) {
-      const fromHolderDelegate = getOrCreateDelegate(fromHolder.delegate);
+    const delegateId = fromHolder.delegate;
+    if (delegateId && delegateId != null) {
+      const fromHolderDelegate = getOrCreateDelegate(delegateId);
       const fromHolderNounsRepresented = fromHolderDelegate.nounsRepresented; // Re-assignment required to update array
       fromHolderDelegate.nounsRepresented = fromHolderNounsRepresented.filter(
         n => n !== transferredNounId,

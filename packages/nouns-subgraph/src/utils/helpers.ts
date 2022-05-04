@@ -1,7 +1,11 @@
 import { Account, Delegate, Proposal, Governance, Vote } from '../types/schema';
 import { ZERO_ADDRESS, BIGINT_ZERO, BIGINT_ONE } from './constants';
 
-export function getOrCreateAccount(id: string, createIfNotFound = true, save = true): Account {
+export function getOrCreateAccount(
+  id: string,
+  createIfNotFound: boolean = true,
+  save: boolean = true,
+): Account {
   let tokenHolder = Account.load(id);
 
   if (tokenHolder == null && createIfNotFound) {
@@ -20,7 +24,11 @@ export function getOrCreateAccount(id: string, createIfNotFound = true, save = t
   return tokenHolder as Account;
 }
 
-export function getOrCreateDelegate(id: string, createIfNotFound = true, save = true): Delegate {
+export function getOrCreateDelegate(
+  id: string,
+  createIfNotFound: boolean = true,
+  save: boolean = true,
+): Delegate {
   let delegate = Delegate.load(id);
 
   if (delegate == null && createIfNotFound) {
@@ -44,7 +52,11 @@ export function getOrCreateDelegate(id: string, createIfNotFound = true, save = 
   return delegate as Delegate;
 }
 
-export function getOrCreateVote(id: string, createIfNotFound = true, save = false): Vote {
+export function getOrCreateVote(
+  id: string,
+  createIfNotFound: boolean = true,
+  save: boolean = false,
+): Vote {
   let vote = Vote.load(id);
 
   if (vote == null && createIfNotFound) {
@@ -58,7 +70,11 @@ export function getOrCreateVote(id: string, createIfNotFound = true, save = fals
   return vote as Vote;
 }
 
-export function getOrCreateProposal(id: string, createIfNotFound = true, save = false): Proposal {
+export function getOrCreateProposal(
+  id: string,
+  createIfNotFound: boolean = true,
+  save: boolean = false,
+): Proposal {
   let proposal = Proposal.load(id);
 
   if (proposal == null && createIfNotFound) {

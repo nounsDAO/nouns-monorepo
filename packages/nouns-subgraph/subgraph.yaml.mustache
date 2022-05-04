@@ -1,4 +1,4 @@
-specVersion: 0.0.3
+specVersion: 0.0.4
 description: >-
   Randomly generated avatar NFTs auctioned daily.
 schema:
@@ -13,7 +13,7 @@ dataSources:
       startBlock: {{nounsAuctionHouse.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/nouns-auction-house.ts
       entities:
@@ -42,7 +42,7 @@ dataSources:
       startBlock: {{nounsToken.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/nouns-erc-721.ts
       entities:
@@ -74,7 +74,7 @@ dataSources:
       startBlock: {{nounsDAO.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/nouns-dao.ts
       entities:

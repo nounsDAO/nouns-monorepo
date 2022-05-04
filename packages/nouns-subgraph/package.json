@@ -17,13 +17,13 @@
     "prepare:rinkeby": "mustache config/rinkeby.json subgraph.yaml.mustache > subgraph.yaml",
     "prepare:mainnet": "mustache config/mainnet.json subgraph.yaml.mustache > subgraph.yaml",
     "prepare:mumbai": "mustache config/mumbai.json subgraph.yaml.mustache > subgraph.yaml",
-    "deploy:rinkeby": "yarn clean && yarn prepare:rinkeby && yarn codegen && yarn deploy nouns-dao/nouns-subgraph-rinkeby",
-    "deploy:mainnet": "yarn clean && yarn prepare:mainnet && yarn codegen && yarn deploy nouns-dao/nouns-subgraph",
-    "deploy:mumbai": "yarn clean && yarn prepare:mumbai && yarn codegen && yarn deploy:hosted nouns-dao/nouns-mumbai"
+    "deploy:rinkeby": "yarn clean && yarn prepare:rinkeby && yarn codegen && yarn deploy:hosted b01-dao/nouns-rinkeby",
+    "deploy:mainnet": "yarn clean && yarn prepare:mainnet && yarn codegen && yarn deploy b01-dao/nouns-subgraph",
+    "deploy:mumbai": "yarn clean && yarn prepare:mumbai && yarn codegen && yarn deploy:hosted b01-dao/nouns-mumbai"
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "^0.20.1",
-    "@graphprotocol/graph-ts": "^0.20.0",
+    "@graphprotocol/graph-cli": "0.26.0",
+    "@graphprotocol/graph-ts": "0.26.0",
     "mustache": "^4.2.0"
   }
 }
