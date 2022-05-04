@@ -7,6 +7,7 @@ import remarkBreaks from 'remark-breaks';
 import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../utils/etherscan';
 import { utils } from 'ethers';
 import classes from './ProposalContent.module.css';
+import EnsOrLongAddress from '../EnsOrLongAddress';
 
 interface ProposalContentProps {
   proposal?: Proposal;
@@ -16,14 +17,14 @@ const linkIfAddress = (content: string) => {
   if (utils.isAddress(content)) {
     return (
       <a href={buildEtherscanAddressLink(content)} target="_blank" rel="noreferrer">
-        {content}
+        <EnsOrLongAddress address={content} />
       </a>
     );
   }
   return <span>{content}</span>;
 };
 
-const transactionLink = (content: string) => {
+export const transactionLink = (content: string) => {
   return (
     <a href={buildEtherscanTxLink(content)} target="_blank" rel="noreferrer">
       {content.substring(0, 7)}
@@ -33,7 +34,6 @@ const transactionLink = (content: string) => {
 
 const ProposalContent: React.FC<ProposalContentProps> = props => {
   const { proposal } = props;
-
   return (
     <>
       <Row>

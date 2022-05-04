@@ -10,6 +10,8 @@ import { isMobileScreen } from '../../utils/isMobile';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import { useBlockTimestamp } from '../../hooks/useBlockTimestamp';
 import dayjs from 'dayjs';
+import ShortAddress from '../ShortAddress';
+import { transactionLink } from '../ProposalContent';
 
 interface ProposalHeaderProps {
   proposal: Proposal;
@@ -73,6 +75,36 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
             {isActiveForVoting && voteButton}
           </div>
         )}
+      </div>
+
+      <div style={{
+        display: 'flex'
+      }}>
+        <h3 style={{
+            fontFamily: 'Londrina Solid',
+            color: 'var(--brand-gray-light-text)',
+            marginLeft: '3rem',
+            fontSize: '24px'
+        }}>Proposed by:</h3> <h3 style={{
+          fontFamily: 'Londrina Solid',
+          marginLeft: '0.5rem',
+          fontSize: '24px'
+        }}>
+          <ShortAddress address={proposal.proposer || ""} avatar={false}/>
+          <span style={{
+            marginLeft: '0.33rem',
+            marginRight: '0.5rem',
+            fontWeight: 'bold',
+            fontSize: '18px',
+            color: 'var(--brand-gray-light-text)'
+          }}>
+            at <span style={{
+              marginLeft: '0.2rem'
+            }}>
+              {transactionLink(proposal.transactionHash)}
+            </span>
+          </span> 
+        </h3>
       </div>
 
       {isMobile && (
