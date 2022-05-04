@@ -2,8 +2,10 @@ import { newMockEvent } from 'matchstick-as/assembly/index';
 import {
   DynamicQuorumParamsSet,
   ProposalCreatedWithRequirements,
+  VoteCast,
 } from '../src/types/NounsDAO/NounsDAO';
-import { Address, ethereum, Bytes, BigInt } from '@graphprotocol/graph-ts';
+import { Address, ethereum, Bytes, BigInt, ByteArray } from '@graphprotocol/graph-ts';
+import { BIGINT_ONE } from '../src/utils/constants';
 
 export class ProposalCreatedWithRequirementsEvent {
   id: BigInt;
@@ -95,6 +97,47 @@ export function createDynamicQuorumParamsSetEvent(
       'quorumPolynomCoefs',
       ethereum.Value.fromUnsignedBigIntArray(quorumPolynomCoefs),
     ),
+  );
+
+  return newEvent;
+}
+
+export function stubProposalCreatedWithRequirementsEventInput(): ProposalCreatedWithRequirementsEvent {
+  return {
+    id: BigInt.fromI32(1),
+    proposer: Address.fromString('0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'),
+    targets: [Address.fromString('0x000000000000000000000000000000000000dEaD')],
+    values: [BigInt.fromI32(0)],
+    signatures: ['some signature'],
+    calldatas: [changetype<Bytes>(ByteArray.fromBigInt(BIGINT_ONE))],
+    startBlock: BigInt.fromI32(3),
+    endBlock: BigInt.fromI32(103),
+    proposalThreshold: BIGINT_ONE,
+    quorumVotes: BIGINT_ONE,
+    description: 'some description',
+    eventBlockNumber: BigInt.fromI32(4),
+  };
+}
+
+export function createVoteCastEvent(
+  voter: Address,
+  proposalId: BigInt,
+  support: i32,
+  votes: BigInt,
+): VoteCast {
+  let newEvent = changetype<VoteCast>(newMockEvent());
+  newEvent.parameters = new Array();
+
+  newEvent.parameters.push(new ethereum.EventParam('voter', ethereum.Value.fromAddress(voter)));
+  newEvent.parameters.push(
+    new ethereum.EventParam('proposalId', ethereum.Value.fromUnsignedBigInt(proposalId)),
+  );
+  newEvent.parameters.push(new ethereum.EventParam('support', ethereum.Value.fromI32(support)));
+  newEvent.parameters.push(
+    new ethereum.EventParam('votes', ethereum.Value.fromUnsignedBigInt(votes)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('reason', ethereum.Value.fromString('some reason')),
   );
 
   return newEvent;

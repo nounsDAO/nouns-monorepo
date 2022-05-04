@@ -31,12 +31,10 @@ export function getOrCreateAccount(
   return tokenHolder as Account;
 }
 
-export function getOrCreateDelegate(
-  id: string,
-  createIfNotFound: boolean = true,
-  save: boolean = true,
-): Delegate {
-  return getOrCreateDelegateWithNullOption(id, createIfNotFound, save) as Delegate;
+// These two functions are split up to minimize the extra code required
+// to handle return types with `Type | null`
+export function getOrCreateDelegate(id: string): Delegate {
+  return getOrCreateDelegateWithNullOption(id, true, true) as Delegate;
 }
 
 export function getOrCreateDelegateWithNullOption(
@@ -122,11 +120,17 @@ export function getGovernanceEntity(): Governance {
   return governance as Governance;
 }
 
-export function getDynamicQuorumParams(): DynamicQuorumParams {
+export function getOrCreateDynamicQuorumParams(): DynamicQuorumParams {
   let params = DynamicQuorumParams.load('LATEST');
 
   if (params == null) {
     params = new DynamicQuorumParams('LATEST');
+    params.minQuorumVotesBPS = 0;
+    params.maxQuorumVotesBPS = 0;
+    params.quorumVotesBPSOffset = 0;
+    params.quorumPolynomCoefs = [BIGINT_ZERO, BIGINT_ZERO];
+
+    params.save();
   }
 
   return params as DynamicQuorumParams;

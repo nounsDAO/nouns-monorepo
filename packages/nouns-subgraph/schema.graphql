@@ -186,6 +186,27 @@ type Proposal @entity {
 
   "Votes associated to this proposal"
   votes: [Vote!]! @derivedFrom(field: "proposal")
+
+  "True if this proposal was created with V2"
+  usingDynamicQuorum: Boolean!
+
+  "Caching the number of against votes on this proposal"
+  againstVotes: Int!
+
+  "Total supply when this proposal was created"
+  totalSupply: BigInt!
+
+  "Dynamic quorum param snapshot: min quorum basis points"
+  minQuorumVotesBPS: Int!
+
+  "Dynamic quorum param snapshot: max quorum basis points"
+  maxQuorumVotesBPS: Int!
+
+  "Dynamic quorum param snapshot: offset for the dynamic quorum function (basis points)"
+  quorumVotesBPSOffset: Int!
+
+  "Dynamic quorum param snapshot: coefficients for the dynamic quorum function"
+  quorumPolynomCoefs: [BigInt!]
 }
 
 type Vote @entity {
