@@ -164,7 +164,7 @@ msgstr "体"
 
 #: src/components/NounInfoRowBirthday/index.tsx
 msgid "Born"
-msgstr "誕生しました"
+msgstr "誕生"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
