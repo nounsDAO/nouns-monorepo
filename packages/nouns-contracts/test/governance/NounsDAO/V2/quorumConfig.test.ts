@@ -11,13 +11,13 @@ import {
   blockNumber,
   advanceBlocks,
   deployGovernorV2,
-} from '../../utils';
+} from '../../../utils';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
   NounsDescriptor__factory as NounsDescriptorFactory,
   NounsDaoLogicV2,
-} from '../../../typechain';
+} from '../../../../typechain';
 import { parseUnits } from 'ethers/lib/utils';
 import { BigNumberish } from 'ethers';
 
@@ -52,7 +52,7 @@ async function setupWithV2() {
   gov = await deployGovernorV2(deployer, govProxyAddress);
 }
 
-describe('NounsDAO#_setDynamicQuorumParams', () => {
+describe('NounsDAOV2#_setDynamicQuorumParams', () => {
   before(async () => {
     signers = await getSigners();
     deployer = signers.deployer;

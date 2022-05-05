@@ -5,16 +5,13 @@ import { BigNumberish } from 'ethers';
 import { parseUnits } from 'ethers/lib/utils';
 import hardhat from 'hardhat';
 import {
-  NounsDaoLogicV1Harness__factory as NounsDaoLogicV1HarnessFactory,
   NounsDaoLogicV2Harness,
   NounsDaoLogicV2Harness__factory as NounsDaoLogicV2HarnessFactory,
-} from '../../../typechain';
-import { getSigners, TestSigners } from '../../utils';
+} from '../../../../typechain';
+import { getSigners, TestSigners } from '../../../utils';
 
 chai.use(solidity);
 const { expect } = chai;
-
-const { ethers } = hardhat;
 
 let deployer: SignerWithAddress;
 let signers: TestSigners;

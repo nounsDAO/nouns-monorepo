@@ -231,6 +231,7 @@ export const propStateToString = (stateInt: number): string => {
     'Queued',
     'Expired',
     'Executed',
+    'Vetoed',
   ];
   return states[stateInt];
 };
@@ -268,7 +269,10 @@ export const deployGovernorV2WithV2Proxy = async (
   deployer: SignerWithAddress,
   tokenAddress: string,
   timelockAddress?: string,
+  vetoerAddress?: string,
   votingPeriod?: number,
+  votingDelay?: number,
+  proposalThresholdBPs?: number,
   dynamicQuorumParams?: DynamicQuorumParams,
 ): Promise<NounsDaoLogicV2> => {
   const v2LogicContract = await new NounsDaoLogicV2Factory(deployer).deploy();
@@ -276,12 +280,12 @@ export const deployGovernorV2WithV2Proxy = async (
   const proxy = await new NounsDaoProxyV2__factory(deployer).deploy(
     timelockAddress || deployer.address,
     tokenAddress,
-    deployer.address,
+    vetoerAddress || deployer.address,
     deployer.address,
     v2LogicContract.address,
     votingPeriod || 5760,
-    1,
-    1,
+    votingDelay || 1,
+    proposalThresholdBPs || 1,
     dynamicQuorumParams || {
       minQuorumVotesBPS: MIN_QUORUM_VOTES_BPS,
       maxQuorumVotesBPS: MAX_QUORUM_VOTES_BPS,

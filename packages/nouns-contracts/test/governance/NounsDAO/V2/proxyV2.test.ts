@@ -1,7 +1,5 @@
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
-import hardhat from 'hardhat';
-const { ethers } = hardhat;
 import {
   deployNounsToken,
   getSigners,
@@ -10,15 +8,15 @@ import {
   populateDescriptor,
   blockNumber,
   deployGovernorV2WithV2Proxy,
-} from '../../utils';
+} from '../../../utils';
 
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
   NounsDescriptor__factory as NounsDescriptorFactory,
   NounsDaoLogicV2,
-} from '../../../typechain';
-import { MAX_QUORUM_VOTES_BPS, MIN_QUORUM_VOTES_BPS } from '../../constants';
+} from '../../../../typechain';
+import { MAX_QUORUM_VOTES_BPS, MIN_QUORUM_VOTES_BPS } from '../../../constants';
 
 chai.use(solidity);
 const { expect } = chai;
@@ -48,12 +46,21 @@ describe('NounsDAOProxyV2', () => {
   });
 
   it('Deploys successfully', async () => {
-    govV2 = await deployGovernorV2WithV2Proxy(deployer, token.address, deployer.address, 5760, {
-      minQuorumVotesBPS: MIN_QUORUM_VOTES_BPS,
-      maxQuorumVotesBPS: MAX_QUORUM_VOTES_BPS,
-      quorumVotesBPSOffset: 1234,
-      quorumPolynomCoefs: [3, 0],
-    });
+    govV2 = await deployGovernorV2WithV2Proxy(
+      deployer,
+      token.address,
+      deployer.address,
+      deployer.address,
+      5760,
+      1,
+      1,
+      {
+        minQuorumVotesBPS: MIN_QUORUM_VOTES_BPS,
+        maxQuorumVotesBPS: MAX_QUORUM_VOTES_BPS,
+        quorumVotesBPSOffset: 1234,
+        quorumPolynomCoefs: [3, 0],
+      },
+    );
   });
 
   it('Sets some basic parameters as expected', async () => {

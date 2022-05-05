@@ -11,12 +11,12 @@ import {
   blockNumber,
   advanceBlocks,
   deployGovernorV2,
-} from '../../utils';
+} from '../../../utils';
 import {
   NounsToken,
   NounsDescriptor__factory as NounsDescriptorFactory,
   NounsDaoLogicV2,
-} from '../../../typechain';
+} from '../../../../typechain';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 chai.use(solidity);
@@ -50,7 +50,7 @@ async function setupWithV2() {
   gov = await deployGovernorV2(deployer, govProxyAddress);
 }
 
-describe('NounsDAO#_setVotingPeriod & _setVotingDelay', () => {
+describe('NounsDAOV2#_setVotingPeriod & _setVotingDelay', () => {
   before(async () => {
     signers = await getSigners();
     deployer = signers.deployer;

@@ -1,7 +1,5 @@
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
-import hardhat from 'hardhat';
-const { ethers } = hardhat;
 import {
   deployNounsToken,
   getSigners,
@@ -14,8 +12,8 @@ import {
   deployGovernorV2AndSetQuorumParams,
   propose,
   blockNumber,
-} from '../../utils';
-import { mineBlock } from '../../utils';
+} from '../../../utils';
+import { mineBlock } from '../../../utils';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
@@ -24,8 +22,8 @@ import {
   NounsDaoLogicV1__factory as NounsDaoLogicV1Factory,
   NounsDaoLogicV2,
   NounsDaoLogicV2__factory as NounsDaoLogicV2Factory,
-} from '../../../typechain';
-import { MAX_QUORUM_VOTES_BPS, MIN_QUORUM_VOTES_BPS } from '../../constants';
+} from '../../../../typechain';
+import { MAX_QUORUM_VOTES_BPS, MIN_QUORUM_VOTES_BPS } from '../../../constants';
 
 chai.use(solidity);
 const { expect } = chai;
