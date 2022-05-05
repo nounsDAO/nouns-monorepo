@@ -12,7 +12,6 @@ import proposalStatusClasses from '../ProposalStatus/ProposalStatus.module.css';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
-
 dayjs.extend(relativeTime);
 
 const getCountdownCopy = (proposal: Proposal, currentBlock: number) => {
@@ -33,7 +32,7 @@ const getCountdownCopy = (proposal: Proposal, currentBlock: number) => {
           'seconds',
         )
       : undefined;
-  
+
   const expiresDate = proposal && dayjs(proposal.eta).add(14, 'days');
 
   const now = dayjs();
@@ -88,9 +87,17 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
           .slice(0)
           .reverse()
           .map((p, i) => {
+            const isPropInStateToHaveCountDown =
+              p.status === ProposalState.PENDING ||
+              p.status === ProposalState.ACTIVE ||
+              p.status === ProposalState.SUCCEEDED ||
+              p.status === ProposalState.QUEUED;
             return (
               <div
-                className={classes.proposalLink}
+                className={clsx(
+                  classes.proposalLink,
+                  isPropInStateToHaveCountDown ? classes.proposalLinkWithCountdown : '',
+                )}
                 onClick={() => history.push(`/vote/${p.id}`)}
                 key={i}
               >
@@ -99,50 +106,29 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
                 </span>
 
                 <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    width: '100%',
-                    justifyContent: 'center',
-                    marginTop: '1rem',
-                    // backgroundColor: 'red'
-                  }}
+                  className={isPropInStateToHaveCountDown ? classes.proposalInfoPillsWrapper : ''}
                 >
-                  {
-                    (p.status === ProposalState.PENDING || p.status === ProposalState.ACTIVE || p.status === ProposalState.SUCCEEDED || p.status === ProposalState.QUEUED) && (
-                  <div className={classes.proposalStatusWrapper}>
-                    <div
-                      className={proposalStatusClasses.proposalStatus}
-                      style={{
-                        backgroundColor: 'var(--brand-gray-light-text-translucent)',
-                        color: '#00000080',
-                        width: 'fit-content',
-                      }}
-                    >
+                  {isPropInStateToHaveCountDown && (
+                    <div className={classes.proposalStatusWrapper}>
                       <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'row',
-                        }}
+                        className={clsx(proposalStatusClasses.proposalStatus, classes.countdownPill)}
+                        // className={clsx(classes.countdownPill, proposalStatusClasses.proposalStatus)}
                       >
-                        <span
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            marginTop: 'auto',
-                            marginBottom: 'auto',
-                          }}
+                        <div
+                        className={classes.countdownPillContentWrapper}
                         >
-                          <ClockIcon height={16} width={16} />
-                        </span>{' '}
-                        <span style={{ marginLeft: '0.25rem' }}>
-                          {getCountdownCopy(p, currentBlock || 0)}
-                        </span>
+                          <span
+                            className={classes.countdownPillClock}
+                          >
+                            <ClockIcon height={16} width={16} />
+                          </span>{' '}
+                          <span className={classes.countdownPillText}>
+                            {getCountdownCopy(p, currentBlock || 0)}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                    )
-                  }
+                  )}
 
                   <div className={classes.proposalStatusWrapper}>
                     <ProposalStatus status={p.status}></ProposalStatus>
