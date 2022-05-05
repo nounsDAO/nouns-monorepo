@@ -14,7 +14,7 @@ msgstr ""
 "X-Crowdin-File-ID: 4\n"
 "Project-Id-Version: nounswtf\n"
 "Language-Team: Japanese\n"
-"PO-Revision-Date: 2022-05-05 04:00\n"
+"PO-Revision-Date: 2022-05-05 04:36\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 
@@ -90,7 +90,7 @@ msgstr "反対"
 
 #: src/components/NounderNounContent/index.tsx
 msgid "All Noun auction proceeds are sent to the"
-msgstr "名詞オークションの収益はすべて、"
+msgstr "すべてのNounオークションの収益は、"
 
 #: src/pages/Nounders/index.tsx
 msgid "All Noun auction proceeds are sent to the Nouns DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
@@ -287,7 +287,7 @@ msgstr "エラー"
 
 #: src/components/NounInfoRowBirthday/index.tsx
 msgid "Error fetching Noun birthday"
-msgstr "ナウンの誕生日を取得できませんでした"
+msgstr "Nounの誕生日を取得できませんでした"
 
 #: src/components/Footer/index.tsx
 #: src/components/NounInfoCard/index.tsx
@@ -322,11 +322,11 @@ msgstr "取得できませんでした"
 
 #: src/components/ProfileActivityFeed/index.tsx
 msgid "Failed to fetch Noun activity history"
-msgstr "ナウンアクティビティ履歴を取得できませんでした"
+msgstr "Noun の活動履歴の取得に失敗しました。"
 
 #: src/components/NounInfoRowHolder/index.tsx
 msgid "Failed to fetch Noun info"
-msgstr "ナウン情報を取得できませんでした"
+msgstr "Nounに関する情報の取得に失敗しました"
 
 #: src/components/VoteCard/index.tsx
 msgid "For"
@@ -425,7 +425,7 @@ msgstr "なし"
 #: src/components/BidHistoryModal/index.tsx
 #: src/pages/Governance/index.tsx
 msgid "Noun"
-msgstr "ナウン"
+msgstr "Noun"
 
 #: src/components/Documentation/index.tsx
 msgid "Noun Seeder Contract"
@@ -487,8 +487,7 @@ msgstr "Nounsプロトコル"
 
 #: src/components/Documentation/index.tsx
 msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community"
-msgstr ""
-"Nouns は、オンチェーン・アバターコミュニティの形成を改善するための実験的な試みです。 \n"
+msgstr "Nouns は、オンチェーン・アバターコミュニティの形成を改善するための実験的な試みです。 \n"
 "{cryptopunksLink} などのプロジェクトがデジタルコミュニティとアイデンティティの構築を試みているのに対し、Nounsはアイデンティティ、コミュニティ、ガバナンス、そしてコミュニティが使用できるトレジャリーを構築することを試みています。"
 
 #: src/components/Documentation/index.tsx
@@ -529,7 +528,7 @@ msgstr "32x32 PNG画像のみ受け付けています"
 
 #: src/components/ProposalHeader/index.tsx
 msgid "Only Nouns you owned or were delegated to you before {0} are eligible to vote."
-msgstr "{0} 以前にあなたが所有または委任されたナウンズのみが投票対象となります。"
+msgstr "投票できるのは {0} 以前に所有していた、または委任されたNounsのみです。"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
@@ -744,7 +743,7 @@ msgstr "アカウントの投票中にエラーが発生しました。"
 
 #: src/components/ProfileActivityFeed/index.tsx
 msgid "This Noun has no activity, since it was just created. Check back soon!"
-msgstr "このナウンは作られたばかりなので動きがありません。またすぐに戻って確認してください！"
+msgstr "このNounは作成されたばかりで、動きがありません。また後ほどご確認ください！"
 
 #: src/pages/Governance/index.tsx
 msgid "This treasury exists for <0>Nouns DAO</0> participants to allocate resources for the long-term growth and prosperity of the Nouns project."
@@ -823,7 +822,7 @@ msgstr "すべての入札を表示"
 
 #: src/components/Bid/index.tsx
 msgid "Vote for the next Noun"
-msgstr "次のナウンに投票する"
+msgstr "次のNounに投票する"
 
 #: src/components/VoteModal/index.tsx
 msgid "Vote on Prop {0}"
@@ -848,7 +847,7 @@ msgstr "待機"
 #: src/components/Winner/index.tsx
 #: src/components/Winner/index.tsx
 msgid "What now?"
-msgstr "何ですか？"
+msgstr "これからどうする？"
 
 #: src/components/Documentation/index.tsx
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
@@ -856,11 +855,11 @@ msgstr "決済は落札者に最も大きなインセンティブが与えられ
 
 #: src/components/Winner/index.tsx
 msgid "Winner"
-msgstr "勝った人"
+msgstr "落札者"
 
 #: src/components/CurrentBid/index.tsx
 msgid "Winning bid"
-msgstr "勝利した入札"
+msgstr "落札"
 
 #: src/components/Winner/index.tsx
 msgid "You"
@@ -969,3 +968,4 @@ msgstr "{0} 票"
 #: src/pages/Vote/index.tsx
 msgid "{moveStateButtonAction} Proposal ⌐◧-◧"
 msgstr "{moveStateButtonAction} 提案の順番 ⌐◧-◧"
+
