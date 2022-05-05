@@ -200,7 +200,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         temp.endBlock = temp.startBlock + votingPeriod;
 
         proposalCount++;
-        Proposal storage newProposal = proposals[proposalCount];
+        Proposal storage newProposal = _proposals[proposalCount];
         newProposal.id = proposalCount;
         newProposal.proposer = msg.sender;
         newProposal.proposalThreshold = temp.proposalThreshold;
@@ -218,6 +218,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         newProposal.executed = false;
         newProposal.vetoed = false;
         newProposal.totalSupply = temp.totalSupply;
+        newProposal.creationBlock = block.number;
 
         latestProposalIds[newProposal.proposer] = newProposal.id;
 
@@ -262,7 +263,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
             state(proposalId) == ProposalState.Succeeded,
             'NounsDAO::queue: proposal can only be queued if it is succeeded'
         );
-        Proposal storage proposal = proposals[proposalId];
+        Proposal storage proposal = _proposals[proposalId];
         uint256 eta = block.timestamp + timelock.delay();
         for (uint256 i = 0; i < proposal.targets.length; i++) {
             queueOrRevertInternal(
@@ -300,7 +301,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
             state(proposalId) == ProposalState.Queued,
             'NounsDAO::execute: proposal can only be executed if it is queued'
         );
-        Proposal storage proposal = proposals[proposalId];
+        Proposal storage proposal = _proposals[proposalId];
         proposal.executed = true;
         for (uint256 i = 0; i < proposal.targets.length; i++) {
             timelock.executeTransaction(
@@ -321,7 +322,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     function cancel(uint256 proposalId) external {
         require(state(proposalId) != ProposalState.Executed, 'NounsDAO::cancel: cannot cancel executed proposal');
 
-        Proposal storage proposal = proposals[proposalId];
+        Proposal storage proposal = _proposals[proposalId];
         require(
             msg.sender == proposal.proposer ||
                 nouns.getPriorVotes(proposal.proposer, block.number - 1) < proposal.proposalThreshold,
@@ -351,7 +352,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         require(msg.sender == vetoer, 'NounsDAO::veto: only vetoer');
         require(state(proposalId) != ProposalState.Executed, 'NounsDAO::veto: cannot veto executed proposal');
 
-        Proposal storage proposal = proposals[proposalId];
+        Proposal storage proposal = _proposals[proposalId];
 
         proposal.vetoed = true;
         for (uint256 i = 0; i < proposal.targets.length; i++) {
@@ -385,7 +386,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
             bytes[] memory calldatas
         )
     {
-        Proposal storage p = proposals[proposalId];
+        Proposal storage p = _proposals[proposalId];
         return (p.targets, p.values, p.signatures, p.calldatas);
     }
 
@@ -396,7 +397,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
      * @return The voting receipt
      */
     function getReceipt(uint256 proposalId, address voter) external view returns (Receipt memory) {
-        return proposals[proposalId].receipts[voter];
+        return _proposals[proposalId].receipts[voter];
     }
 
     /**
@@ -406,7 +407,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
      */
     function state(uint256 proposalId) public view returns (ProposalState) {
         require(proposalCount >= proposalId, 'NounsDAO::state: invalid proposal id');
-        Proposal storage proposal = proposals[proposalId];
+        Proposal storage proposal = _proposals[proposalId];
         if (proposal.vetoed) {
             return ProposalState.Vetoed;
         } else if (proposal.canceled) {
@@ -426,6 +427,28 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         } else {
             return ProposalState.Queued;
         }
+    }
+
+    function proposals(uint256 proposalId) external view returns (ProposalCondensed memory) {
+        Proposal storage proposal = _proposals[proposalId];
+        return
+            ProposalCondensed({
+                id: proposal.id,
+                proposer: proposal.proposer,
+                proposalThreshold: proposal.proposalThreshold,
+                quorumVotes: quorumVotes(proposal.id),
+                eta: proposal.eta,
+                startBlock: proposal.startBlock,
+                endBlock: proposal.endBlock,
+                forVotes: proposal.forVotes,
+                againstVotes: proposal.againstVotes,
+                abstainVotes: proposal.abstainVotes,
+                canceled: proposal.canceled,
+                vetoed: proposal.vetoed,
+                executed: proposal.executed,
+                totalSupply: proposal.totalSupply,
+                creationBlock: proposal.creationBlock
+            });
     }
 
     /**
@@ -486,12 +509,12 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     ) internal returns (uint96) {
         require(state(proposalId) == ProposalState.Active, 'NounsDAO::castVoteInternal: voting is closed');
         require(support <= 2, 'NounsDAO::castVoteInternal: invalid vote type');
-        Proposal storage proposal = proposals[proposalId];
+        Proposal storage proposal = _proposals[proposalId];
         Receipt storage receipt = proposal.receipts[voter];
         require(receipt.hasVoted == false, 'NounsDAO::castVoteInternal: voter already voted');
 
         /// @notice: Unlike GovernerBravo, votes are considered from the block the proposal was created in order to normalize quorumVotes and proposalThreshold metrics
-        uint96 votes = nouns.getPriorVotes(voter, proposal.startBlock - votingDelay);
+        uint96 votes = nouns.getPriorVotes(voter, proposalCreationBlock(proposal));
 
         if (support == 0) {
             proposal.againstVotes = proposal.againstVotes + votes;
@@ -686,12 +709,19 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         return bps2Uint(proposalThresholdBPS, nouns.totalSupply());
     }
 
+    function proposalCreationBlock(Proposal storage proposal) internal view returns (uint256) {
+        if (proposal.creationBlock == 0) {
+            return proposal.startBlock - votingDelay;
+        }
+        return proposal.creationBlock;
+    }
+
     /**
      * @notice Quorum votes required for a specific proposal to succeed
      * Differs from `GovernerBravo` which uses fixed amount
      */
     function quorumVotes(uint256 proposalId) public view returns (uint256) {
-        Proposal storage proposal = proposals[proposalId];
+        Proposal storage proposal = _proposals[proposalId];
         if (proposal.totalSupply == 0) {
             return proposal.minQuorumVotes;
         }
@@ -700,7 +730,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
             dynamicQuorumVotes(
                 proposal.againstVotes,
                 proposal.totalSupply,
-                getDynamicQuorumParamsAt(proposal.startBlock - votingDelay)
+                getDynamicQuorumParamsAt(proposalCreationBlock(proposal))
             );
     }
 
