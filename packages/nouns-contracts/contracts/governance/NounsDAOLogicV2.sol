@@ -92,6 +92,12 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     /// @notice The EIP-712 typehash for the ballot struct used by the contract
     bytes32 public constant BALLOT_TYPEHASH = keccak256('Ballot(uint256 proposalId,uint8 support)');
 
+    error UnauthorizedAdminOnly();
+    error InvalidMinQuorumVotesBPS();
+    error InvalidMaxQuorumVotesBPS();
+    error InvalidMinQuorumAboveMaxQuorumVotesBPS();
+    error NoDynamicQuorumParamsFound();
+
     /**
      * @notice Used to initialize the contract during delegator contructor
      * @param timelock_ The address of the NounsDAOExecutor
@@ -617,11 +623,6 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         emit ProposalThresholdBPSSet(oldProposalThresholdBPS, proposalThresholdBPS);
     }
 
-    error UnauthorizedAdminOnly();
-    error InvalidMinQuorumVotesBPS();
-    error InvalidMaxQuorumVotesBPS();
-    error InvalidMinQuorumAboveMaxQuorumVotesBPS();
-
     function _setDynamicQuorumParams(DynamicQuorumParams calldata params) public {
         uint32 blockNumber = safe32(block.number, 'block number exceeds 32 bits');
         if (msg.sender != admin) {
@@ -784,7 +785,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         uint256 len = quorumParamsCheckpoints.length;
 
         if (len == 0) {
-            return DynamicQuorumParams(0, 0, 0, [uint32(0), uint32(0)]);
+            revert NoDynamicQuorumParamsFound();
         }
 
         if (quorumParamsCheckpoints[len - 1].fromBlock <= blockNumber) {
@@ -792,7 +793,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         }
 
         if (quorumParamsCheckpoints[0].fromBlock > blockNumber) {
-            return DynamicQuorumParams(0, 0, 0, [uint32(0), uint32(0)]);
+            revert NoDynamicQuorumParamsFound();
         }
 
         uint256 lower = 0;

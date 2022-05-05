@@ -69,7 +69,14 @@ describe('NounsDAO#_setDynamicQuorumParams', () => {
     await ethers.provider.send('evm_revert', [snapshotId]);
   });
 
-  describe('allowed values', async () => {
+  describe('allowed values', () => {
+    it('reverts given no config', async () => {
+      const block = await blockNumber();
+      await expect(gov.getDynamicQuorumParamsAt(block)).to.be.revertedWith(
+        'NoDynamicQuorumParamsFound()',
+      );
+    });
+
     it('reverts when sender is not admin', async () => {
       await expect(
         gov.connect(account0)._setDynamicQuorumParams({
@@ -150,7 +157,7 @@ describe('NounsDAO#_setDynamicQuorumParams', () => {
       .withArgs(200, 4000, 123, quorumPolynomCoefs);
   });
 
-  describe('quorum params checkpointing', async () => {
+  describe('quorum params checkpointing', () => {
     let blockNum1: number;
     let blockNum2: number;
     let blockNum3: number;
@@ -194,13 +201,10 @@ describe('NounsDAO#_setDynamicQuorumParams', () => {
       expectEqualParams(await gov.getDynamicQuorumParamsAt(blockNum3), params3);
     });
 
-    it('reads empty params if block number too low', async () => {
-      expectEqualParams(await gov.getDynamicQuorumParamsAt(blockNum1 - 1), {
-        minQuorumVotesBPS: 0,
-        maxQuorumVotesBPS: 0,
-        quorumVotesBPSOffset: 0,
-        quorumPolynomCoefs: [0, 0],
-      });
+    it('reverts if block number too low', async () => {
+      await expect(gov.getDynamicQuorumParamsAt(blockNum1 - 1)).to.be.revertedWith(
+        'NoDynamicQuorumParamsFound()',
+      );
     });
 
     it('reads correct values in between block numbers', async () => {
