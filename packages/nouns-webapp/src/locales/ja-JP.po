@@ -14,7 +14,7 @@ msgstr ""
 "X-Crowdin-File-ID: 4\n"
 "Project-Id-Version: nounswtf\n"
 "Language-Team: Japanese\n"
-"PO-Revision-Date: 2022-05-05 02:45\n"
+"PO-Revision-Date: 2022-05-05 04:00\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 
@@ -24,11 +24,11 @@ msgstr "「Nounders」とはNounsの創業に携わった10人の創業者のこ
 
 #: src/components/Documentation/index.tsx
 msgid "100% of Noun auction proceeds are trustlessly sent to the treasury."
-msgstr "ナウンオークションの売上は、第三者の介入無しで 100％財務に送られます。"
+msgstr "Nounオークションの売上は、第三者の介入無しで 100％トレジャリーに送られる仕組みになっています。"
 
 #: src/pages/Nounders/index.tsx
 msgid "3.5 artists, 6.5 technologists"
-msgstr "3.5人の芸術家と 6.5人の技術者がいます（1人は両方に携わっているので笑）"
+msgstr "3.5アーティスト、6.5技術者"
 
 #: src/pages/NotFound/index.tsx
 msgid "404: This is not the person, place, or thing you're looking for..."
@@ -40,7 +40,7 @@ msgstr "不参加"
 
 #: src/components/VoteCard/index.tsx
 msgid "Abstain"
-msgstr "棄権する"
+msgstr "棄権"
 
 #: src/components/VoteModal/index.tsx
 msgid "Abstain from voting on Prop {0}"
@@ -48,7 +48,7 @@ msgstr "Propへの投票を棄権する {0} "
 
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Abstained on"
-msgstr "棄権する日"
+msgstr "棄権しました。"
 
 #: src/pages/Playground/index.tsx
 msgid "Accessory"
@@ -82,7 +82,7 @@ msgstr "アドレス"
 
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "Address (Callee or Recipient)"
-msgstr "アドレス (他のスマート契約であるカーリー、又はETHを受け取る受信者)"
+msgstr "アドレス (他のスマート契約者であるカーリー、又はETHを受け取る受信者)"
 
 #: src/components/VoteCard/index.tsx
 msgid "Against"
@@ -94,7 +94,7 @@ msgstr "名詞オークションの収益はすべて、"
 
 #: src/pages/Nounders/index.tsx
 msgid "All Noun auction proceeds are sent to the Nouns DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
-msgstr "Nounオークションの収益は全て Nouns DAOに送られます。その為、我々、プロジェクトの創設者 (Nounders) はNounsで自らを補償することに決めました。 プロジェクトの最初の5年間の間は、10 Nounごとに、マルチシグ(5/10) に送られた後、個々のナウンダーズに与えられ、配布されます。"
+msgstr "Nounオークションの収益は全て Nouns DAOに送られます。その為、我々、プロジェクトの創設者 (Nounders) はNounsで自らを補償することに決めました。 プロジェクトの最初の5年間の間は、毎回10体目のNounがマルチシグ(5/10) に送られた後、個々のナウンダーズに与えられ、配布されます。"
 
 #: src/components/Documentation/index.tsx
 msgid "All Nouns are members of Nouns DAO."
@@ -110,7 +110,7 @@ msgstr "引数"
 
 #: src/components/Documentation/index.tsx
 msgid "Artwork is generative and stored directly on-chain (not IPFS)."
-msgstr "アートワークが作られて、直接チェーン上に保存されます(IPFSではありません)。"
+msgstr "生成されたアートワークは直接オンチェーンに保存されます(IPFSではありません)。"
 
 #: src/components/AuctionTimer/index.tsx
 #: src/components/AuctionTimer/index.tsx
@@ -173,7 +173,7 @@ msgstr "キャンセルしました"
 
 #: src/components/VoteModal/index.tsx
 msgid "Cast 1 vote against Prop {0}"
-msgstr "提案 {0} に反対する1票を投票してください"
+msgstr "Prop {0} に対しての反対票を1票投じてください"
 
 #: src/components/VoteModal/index.tsx
 msgid "Cast 1 vote for Prop {0}"
@@ -181,7 +181,7 @@ msgstr "提案 {0} に 対する1 票を投票してください"
 
 #: src/components/VoteModal/index.tsx
 msgid "Cast {0} votes against Prop {1}"
-msgstr "提案 \"{1}\" に反対する1票を投票\"{0}\"してください"
+msgstr "提案 {1} に対して {0} 反対票を投じてください"
 
 #: src/components/VoteModal/index.tsx
 msgid "Cast {0} votes for Prop {1}"
@@ -193,7 +193,7 @@ msgstr "WalletConnect データを消去"
 
 #: src/components/Documentation/index.tsx
 msgid "Compound Governance"
-msgstr "複合ガバナンス"
+msgstr "コンパウンドガバナンス"
 
 #: src/components/NavWallet/WalletConnectButton/index.tsx
 msgid "Connect"
@@ -251,15 +251,15 @@ msgstr "Discord"
 
 #: src/components/NavBar/index.tsx
 msgid "Discourse"
-msgstr "情報開示"
+msgstr "Discourse"
 
 #: src/components/NavBar/index.tsx
 msgid "Docs"
-msgstr "文書"
+msgstr "ドキュメント"
 
 #: src/components/Banner/index.tsx
 msgid "EVERY DAY,"
-msgstr "EVERYDAY"
+msgstr "毎日"
 
 #: src/components/Documentation/index.tsx
 msgid "Each time an auction is settled, the settlement transaction will also cause a new Noun to be minted and a new 24 hour auction to begin."
@@ -292,7 +292,7 @@ msgstr "ナウンの誕生日を取得できませんでした"
 #: src/components/Footer/index.tsx
 #: src/components/NounInfoCard/index.tsx
 msgid "Etherscan"
-msgstr "イーサスキャン"
+msgstr "Etherscan"
 
 #: src/pages/Vote/index.tsx
 msgid "Execute"
@@ -334,7 +334,7 @@ msgstr "賛成"
 
 #: src/components/NounderNounContent/index.tsx
 msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
-msgstr "その為、我々、プロジェクトの創設者 (Nounders) はNounsで自らを補償することに決めました。 プロジェクトの最初の5年間の間は、10 Nounごとに、マルチシグ(5/10) に送られた後、個々のナウンダーズに与えられ、配布されます。"
+msgstr "その為、我々、プロジェクトの創設者 (Nounders) はNounsで自らを補償することに決めました。 プロジェクトの最初の5年間の間は、毎回10体目のNounがマルチシグ(5/10) に送られた後、個々のナウンダーズに与えられ、配布されます。"
 
 #: src/components/Footer/index.tsx
 msgid "Forums"
@@ -346,7 +346,7 @@ msgstr "関数"
 
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "Function (Optional)"
-msgstr "関数\"(任意)\""
+msgstr "関数 (任意)"
 
 #: src/pages/Playground/index.tsx
 msgid "Generate Nouns"
@@ -374,7 +374,7 @@ msgstr "主催者："
 
 #: src/components/AuctionActivity/index.tsx
 msgid "Help mint the next Noun"
-msgstr "次のナウンを作るのを手伝ってください"
+msgstr "次にミントされるNounの投票をしてください"
 
 #: src/components/Documentation/index.tsx
 msgid "In addition to the precautions taken by Compound Governance, Nounders have given themselves a special veto right to ensure that no malicious proposals can be passed while the Noun supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort."
@@ -394,7 +394,7 @@ msgstr "詳細はこちら"
 
 #: src/components/Documentation/index.tsx
 msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
-msgstr "詳細は以下を参照してください。または、 {playgroundLink} を使ってオフチェーンのナウンを作り始めてください。"
+msgstr "詳しくは以下をご覧ください。また、{playgroundLink} を使いNounsのオフチェーンの作成をすることもできます。"
 
 #: src/components/NounInfoRowHolder/index.tsx
 msgid "Loading..."
@@ -429,7 +429,7 @@ msgstr "ナウン"
 
 #: src/components/Documentation/index.tsx
 msgid "Noun Seeder Contract"
-msgstr "Nounのseederコントラクト"
+msgstr "Nounシーダー契約"
 
 #: src/components/Documentation/index.tsx
 msgid "Noun Traits"
@@ -441,7 +441,7 @@ msgstr "Noun {0}"
 
 #: src/components/Documentation/index.tsx
 msgid "Nounder distributions don't interfere with the cadence of 24 hour auctions. Nouns are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available Noun ID."
-msgstr "Nounder配布により、24時間オークション頻度に影響が及ぶことはありません。 NounsはNounderのマルチシグに直接送られ、オークションは次の有効なNouns IDによって予定通り継続されます。"
+msgstr "Nounder配布により24時間オークションの頻度に影響が及ぶことはありません。 NounsはNounderのマルチシグに直接送られ、オークションは次の有効なNouns IDによって予定通り継続されます。"
 
 #: src/components/Documentation/index.tsx
 msgid "Nounder's Reward"
@@ -453,7 +453,7 @@ msgstr "Nounderには、Nounsという形で報酬が与えられます (最初�
 
 #: src/components/Documentation/index.tsx
 msgid "Nounders will proveably revoke this veto right when they deem it safe to do so. This decision will be based on a healthy Noun distribution and a community that is engaged in the governance process."
-msgstr "Noundersが安全であると判断した場合、この拒否権を取り消すことができます。この決定は、健全なNoun分配とガバナンスプロセスに参加しているコミュニティに基づいて行われます。"
+msgstr "Nounderは、安全であると判断した場合、この拒否権を無効にすることが出来ます。この決定は、健全なNounの分布と、ガバナンスプロセスに関与しているコミュニティに基づいて行われます。"
 
 #: src/pages/Nounders/index.tsx
 msgid "Nounders' Reward"
@@ -471,7 +471,7 @@ msgstr "Nounsオークションハウス"
 #: src/components/NounderNounContent/index.tsx
 #: src/pages/Governance/index.tsx
 msgid "Nouns DAO"
-msgstr "ナウンズDAO"
+msgstr "Nouns DAO"
 
 #: src/components/Documentation/index.tsx
 msgid "Nouns DAO uses a fork of {compoundGovLink}."
@@ -483,11 +483,13 @@ msgstr "Nouns DAOは {compoundGovLink} のフォークを利用しており、No
 
 #: src/pages/Playground/index.tsx
 msgid "Nouns Protocol"
-msgstr "Nouns ズプロトコル"
+msgstr "Nounsプロトコル"
 
 #: src/components/Documentation/index.tsx
 msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community"
-msgstr "Nouns (ナウンズ) は、オンチェーン・アバターコミュニティの形成を改善するための実験的な試みです。{cryptopunksLink} (クリプトパンクス) のようなプロジェクトがデジタルコミュニティとアイデンティティの構築を試みているのに対し、Nounsはアイデンティティ、コミュニティ、ガバナンス、コミュニティが使用できるトレジャリーを構築することを試みています。"
+msgstr ""
+"Nouns は、オンチェーン・アバターコミュニティの形成を改善するための実験的な試みです。 \n"
+"{cryptopunksLink} などのプロジェクトがデジタルコミュニティとアイデンティティの構築を試みているのに対し、Nounsはアイデンティティ、コミュニティ、ガバナンス、そしてコミュニティが使用できるトレジャリーを構築することを試みています。"
 
 #: src/components/Documentation/index.tsx
 msgid "Nouns are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules governing Noun trait scarcity, which makes all Nouns equally rare. As of this writing, Nouns are made up of:"
@@ -495,11 +497,11 @@ msgstr "Nounsは、イーサリアムのブロックハッシュに基づいて�
 
 #: src/components/Documentation/index.tsx
 msgid "Nouns are stored directly on Ethereum and do not utilize pointers to other networks such as IPFS. This is possible because Noun parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression."
-msgstr "NounsはEthereum上に直接保存され、IPFSのような他のネットワークへのポインタは使いません。これは、Nounのパーツが可逆圧縮の一種であるカスタム・ランレングス圧縮 (RLE) を使って、オンチェーンで圧縮・格納されることで可能になっています。"
+msgstr "NounはEthereum上に直接保存されるため、IPFSのような他のネットワークへのポインタを利用することはありません。これは、Nounのパーツが可逆圧縮の一種であるカスタムのランレングス圧縮 (RLE) を使用してオンチェーンで圧縮・保存されていることから実現したものです。"
 
 #: src/components/Documentation/index.tsx
 msgid "Nouns artwork is in the {publicDomainLink}."
-msgstr "ナウンアートワークは {publicDomainLink} にあります。"
+msgstr "Nounsのアートワークは {publicDomainLink} にあります。"
 
 #: src/pages/Governance/index.tsx
 msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
@@ -507,15 +509,15 @@ msgstr "Nounsが統治する <0>Nouns DAO</0> 。Nounsは提案に対して投�
 
 #: src/components/Banner/index.tsx
 msgid "ONE NOUN,"
-msgstr "１つのナウン、"
+msgstr "1つのNOUNを"
 
 #: src/components/Documentation/index.tsx
 msgid "On-Chain Artwork"
-msgstr "チェーンアートワーク上で"
+msgstr "オンチェーンアートワーク"
 
 #: src/components/Documentation/index.tsx
 msgid "One Noun is equal to one vote."
-msgstr "ナウン1個は1票と同じことです。"
+msgstr "1体のNounにつき、1票の投票件を得ることができます。"
 
 #: src/components/Documentation/index.tsx
 msgid "One Noun is trustlessly auctioned every 24 hours, forever."
@@ -714,19 +716,19 @@ msgstr "Nounシーダー契約は、ミントのプロセスでNounsの特徴を
 
 #: src/pages/Nounders/index.tsx
 msgid "The Nounders"
-msgstr "ナウンダーズ"
+msgstr "Nounders"
 
 #: src/pages/Nounders/index.tsx
 msgid "The Nounders reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures. Since there are 10 Nounders, after 5 years each Nounder could receive up to 1% of the Noun supply."
-msgstr "ナウンダーズ報酬は、プロジェクトへの当社の打ち上げ前と打ち上げ後の貢献に対する報酬として考えられています。 プロジェクトが成熟するにつれてガバナンスに参加するのを助けてくれます。10人のナウンダーズがいるので、5年後、各ナウンダーはナウン供給の1%まで受け取ることができます。"
+msgstr "Noundersの報酬は、プロジェクト開始前と開始後の貢献に対する対価として提供されるほか、プロジェクトが成熟するにつれ、ガバナンスに有意義に参加できるよう支援することも目的としています。Noundersは10人なので、5年後には各ナウンダーは最大でNounの供給量の1%を受け取ることができます。"
 
 #: src/components/Documentation/index.tsx
 msgid "The Nouns Auction Contract will act as a self-sufficient Noun generation and distribution mechanism, auctioning one Noun every 24 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the Nouns DAO treasury, where they are governed by Noun owners."
-msgstr "Nounsのオークションコントラクトは、Nounの生成・分配の自律的なメカニズムとして機能し、24時間毎に1つのNounを永遠にオークションします。オークションの収益の100％ (ETH) は、Nounsの所有者によって管理されるNouns DAOのトレジャリーに自動的に預けられます。"
+msgstr "Nounsオークション契約は、Noun生成・分配の自律的なメカニズムとして機能するため、24時間ごとに1体のNounを永遠にオークションにかけ続けます。オークションの収益 (ETH) は100%自動的にNounの所有者によって管理されている、Nouns DAO のトレジャリーに預けられます。"
 
 #: src/components/Documentation/index.tsx
 msgid "The compressed parts are efficiently converted into a single base64 encoded SVG image on-chain. To accomplish this, each part is decoded into an intermediate format before being converted into a series of SVG rects using batched, on-chain string concatenation. Once the entire SVG has been generated, it is base64 encoded."
-msgstr "圧縮されたパーツは、base64エンコードされた単一のSVG画像に、オンチェーンで効率的に変換されます。これを実現するために、各パーツは中間フォーマットにデコードされた後、バッチ処理されたオンチェーンの文字列連結によって一連のSVG矩形に変換されます。SVG全体が生成されると、base64エンコードされます。"
+msgstr "圧縮されたパーツは、オンチェインで効率よく1つのbase64エンコードされたSVG画像に変換されます。そのために、各パーツは中間フォーマットにデコードされた後、オンチェーンでの文字列連結により一連のSVG rectsに変換されます。SVG全体が生成されると、それはbase64でエンコードされます。"
 
 #: src/pages/Playground/index.tsx
 msgid "The playground was built using the {nounsProtocolLink}. Noun's traits are determined by the Noun Seed. The seed was generated using {nounsAssetsLink} and rendered using the {nounsSDKLink}."
@@ -734,7 +736,7 @@ msgstr "遊び場は{nounsProtocolLink} を使用して作られており、Noun
 
 #: src/components/Documentation/index.tsx
 msgid "The treasury is controlled exclusively by Nouns via governance."
-msgstr "財務は、ガバナンスを通じてナウンズによって独占的に制御されています。"
+msgstr "トレジャリーは、ガバナンスを通じてNounsが独占的に管理しています。"
 
 #: src/components/VoteModal/index.tsx
 msgid "There was an error voting for your account."
@@ -746,7 +748,7 @@ msgstr "このナウンは作られたばかりなので動きがありません
 
 #: src/pages/Governance/index.tsx
 msgid "This treasury exists for <0>Nouns DAO</0> participants to allocate resources for the long-term growth and prosperity of the Nouns project."
-msgstr "この財務は、ナウンプロジェクトの長期的な成長と繁栄に<0>ナウンズDAO</0>の参加者がリソースを割り当てるために存在しています。"
+msgstr "このトレジャリーは、<0>Nouns DAO</0>の参加者がNounsプロジェクトの長期的な成長と繁栄目的に、リソースを配分するために存在しています。"
 
 #: src/pages/Vote/index.tsx
 msgid "Threshold"
@@ -779,7 +781,7 @@ msgstr "取引に成功しました！"
 #: src/components/NavBarTreasury/index.tsx
 #: src/pages/Governance/index.tsx
 msgid "Treasury"
-msgstr "財務"
+msgstr "トレジャリー"
 
 #: src/components/Footer/index.tsx
 msgid "Twitter"
@@ -796,7 +798,7 @@ msgstr "アップロード"
 
 #: src/pages/Playground/index.tsx
 msgid "Upload Custom Trait"
-msgstr "カスタムのデザインをアップロード"
+msgstr "カスタムの特徴をアップロード"
 
 #: src/components/VoteModal/index.tsx
 msgid "User Already Voted"
@@ -808,7 +810,7 @@ msgstr "値"
 
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "Value in ETH (Optional)"
-msgstr "ETH値\"(任意)\""
+msgstr "ETHの価格 (任意)"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
@@ -817,7 +819,7 @@ msgstr "拒否"
 
 #: src/components/BidHistoryBtn/index.tsx
 msgid "View all bids"
-msgstr "全ての入札額を表示"
+msgstr "すべての入札を表示"
 
 #: src/components/Bid/index.tsx
 msgid "Vote for the next Noun"
@@ -837,7 +839,7 @@ msgstr "賛成に投票"
 
 #: src/components/Documentation/index.tsx
 msgid "WTF?"
-msgstr "どういうこと？"
+msgstr "WTF?"
 
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Waiting for"
@@ -850,7 +852,7 @@ msgstr "何ですか？"
 
 #: src/components/Documentation/index.tsx
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
-msgstr "決済トランザクションは、落札者に最もインセンティブがはたらきますが、誰にでも発動できます。 Ethereumが動作していて、興味のある入札者がいる限り、システムがNounsをトラストレスにオークションすることを可能にします。"
+msgstr "決済は落札者に最も大きなインセンティブが与えられるが、誰でも起動できるため、Ethereumが稼働し、関心のある入札者がいる限り、システムは第三者の介入無しでNounsをオークションにかけることができます。"
 
 #: src/components/Winner/index.tsx
 msgid "Winner"
@@ -866,7 +868,7 @@ msgstr "あなた"
 
 #: src/components/ProposalHeader/index.tsx
 msgid "You <0>Abstained</0> from this proposal"
-msgstr "この提案からあなたは<0>棄権</0>しました"
+msgstr "あなたはこの提案から<0>棄権</0>しました"
 
 #: src/components/CreateProposalButton/index.tsx
 msgid "You already have an active or pending proposal"
@@ -874,7 +876,7 @@ msgstr "すでに有効または保留中の提案があります"
 
 #: src/components/Documentation/index.tsx
 msgid "You can experiment with off-chain Noun generation at the {playgroundLink}."
-msgstr "{playgroundLink} でオフチェーンのNoun生成を試すことができます"
+msgstr "{playgroundLink} にてオフチェーンのNoun生成を試すことができます。"
 
 #: src/components/SettleManuallyBtn/index.tsx
 msgid "You can settle manually in 1 minute"
@@ -962,7 +964,7 @@ msgstr "秒"
 
 #: src/pages/Vote/index.tsx
 msgid "{0} votes"
-msgstr "{0} 投票"
+msgstr "{0} 票"
 
 #: src/pages/Vote/index.tsx
 msgid "{moveStateButtonAction} Proposal ⌐◧-◧"
