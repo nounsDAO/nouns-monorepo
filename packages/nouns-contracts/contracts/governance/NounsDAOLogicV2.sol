@@ -623,7 +623,31 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         emit ProposalThresholdBPSSet(oldProposalThresholdBPS, proposalThresholdBPS);
     }
 
-    function _setDynamicQuorumParams(DynamicQuorumParams calldata params) public {
+    function _setMinQuorumVotesBPS(uint16 newMinQuorumVotesBPS) external {
+        DynamicQuorumParams memory params = getDynamicQuorumParamsAt(block.number);
+        params.minQuorumVotesBPS = newMinQuorumVotesBPS;
+        _setDynamicQuorumParams(params);
+    }
+
+    function _setMaxQuorumVotesBPS(uint16 newMaxQuorumVotesBPS) external {
+        DynamicQuorumParams memory params = getDynamicQuorumParamsAt(block.number);
+        params.maxQuorumVotesBPS = newMaxQuorumVotesBPS;
+        _setDynamicQuorumParams(params);
+    }
+
+    function _setQuorumVotesBPSOffset(uint16 newQuorumVotesBPSOffset) external {
+        DynamicQuorumParams memory params = getDynamicQuorumParamsAt(block.number);
+        params.quorumVotesBPSOffset = newQuorumVotesBPSOffset;
+        _setDynamicQuorumParams(params);
+    }
+
+    function _setQuorumPolynomCoefs(uint32[2] calldata newQuorumPolynomCoefs) external {
+        DynamicQuorumParams memory params = getDynamicQuorumParamsAt(block.number);
+        params.quorumPolynomCoefs = newQuorumPolynomCoefs;
+        _setDynamicQuorumParams(params);
+    }
+
+    function _setDynamicQuorumParams(DynamicQuorumParams memory params) public {
         uint32 blockNumber = safe32(block.number, 'block number exceeds 32 bits');
         if (msg.sender != admin) {
             revert UnauthorizedAdminOnly();

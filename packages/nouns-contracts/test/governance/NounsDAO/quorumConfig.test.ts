@@ -217,6 +217,72 @@ describe('NounsDAO#_setDynamicQuorumParams', () => {
     });
   });
 
+  describe('individual setters', () => {
+    const baseParams: DynamicQuorumParams = {
+      minQuorumVotesBPS: 200,
+      maxQuorumVotesBPS: 3000,
+      quorumVotesBPSOffset: 300,
+      quorumPolynomCoefs: [1, 1],
+    };
+
+    beforeEach(async () => {
+      await gov._setDynamicQuorumParams(baseParams);
+    });
+
+    it('_setMinQuorumVotesBPS works', async () => {
+      await gov._setMinQuorumVotesBPS(222);
+      const params = await gov.getDynamicQuorumParamsAt(await blockNumber());
+
+      expect(params.minQuorumVotesBPS).to.equal(222);
+    });
+
+    it('_setMinQuorumVotesBPS reverts when sender is not admin', async () => {
+      await expect(gov.connect(account0)._setMinQuorumVotesBPS(222)).to.be.revertedWith(
+        'UnauthorizedAdminOnly()',
+      );
+    });
+
+    it('_setMaxQuorumVotesBPS works', async () => {
+      await gov._setMaxQuorumVotesBPS(3333);
+      const params = await gov.getDynamicQuorumParamsAt(await blockNumber());
+
+      expect(params.maxQuorumVotesBPS).to.equal(3333);
+    });
+
+    it('_setMaxQuorumVotesBPS reverts when sender is not admin', async () => {
+      await expect(gov.connect(account0)._setMaxQuorumVotesBPS(3333)).to.be.revertedWith(
+        'UnauthorizedAdminOnly()',
+      );
+    });
+
+    it('_setQuorumVotesBPSOffset works', async () => {
+      await gov._setQuorumVotesBPSOffset(321);
+      const params = await gov.getDynamicQuorumParamsAt(await blockNumber());
+
+      expect(params.quorumVotesBPSOffset).to.equal(321);
+    });
+
+    it('_setQuorumVotesBPSOffset reverts when sender is not admin', async () => {
+      await expect(gov.connect(account0)._setQuorumVotesBPSOffset(321)).to.be.revertedWith(
+        'UnauthorizedAdminOnly()',
+      );
+    });
+
+    it('_setQuorumPolynomCoefs works', async () => {
+      await gov._setQuorumPolynomCoefs([2, 3]);
+      const params = await gov.getDynamicQuorumParamsAt(await blockNumber());
+
+      expect(params.quorumPolynomCoefs[0]).to.equal(2);
+      expect(params.quorumPolynomCoefs[1]).to.equal(3);
+    });
+
+    it('_setQuorumPolynomCoefs reverts when sender is not admin', async () => {
+      await expect(gov.connect(account0)._setQuorumPolynomCoefs([2, 3])).to.be.revertedWith(
+        'UnauthorizedAdminOnly()',
+      );
+    });
+  });
+
   function expectEqualParams(p1: DynamicQuorumParams, p2: DynamicQuorumParams) {
     expect(p1.maxQuorumVotesBPS).to.equal(p2.maxQuorumVotesBPS);
     expect(p1.minQuorumVotesBPS).to.equal(p2.minQuorumVotesBPS);
