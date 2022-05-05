@@ -29,8 +29,6 @@ chai.use(solidity);
 const { expect } = chai;
 
 const V1_QUORUM_BPS = 100;
-const V1_VOTING_DELAY = 1;
-const V1_VOTING_PERIOD = 1728;
 
 let token: NounsToken;
 let deployer: SignerWithAddress;
@@ -52,13 +50,7 @@ async function setupWithV1() {
 
   await setTotalSupply(token, 100);
 
-  ({ address: govProxyAddress } = await deployGovernorV1(
-    deployer,
-    token.address,
-    V1_VOTING_PERIOD,
-    V1_VOTING_DELAY,
-    V1_QUORUM_BPS,
-  ));
+  ({ address: govProxyAddress } = await deployGovernorV1(deployer, token.address, V1_QUORUM_BPS));
 }
 
 describe('NounsDAO upgrade to V2', () => {

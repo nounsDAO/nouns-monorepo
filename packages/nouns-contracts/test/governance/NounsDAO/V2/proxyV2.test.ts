@@ -64,7 +64,7 @@ describe('NounsDAOProxyV2', () => {
   });
 
   it('Sets some basic parameters as expected', async () => {
-    expect(await govV2.getVotingPeriod()).to.equal(5760);
+    expect(await govV2.votingPeriod()).to.equal(5760);
     expect(await govV2.timelock()).to.equal(deployer.address);
   });
 

@@ -73,7 +73,7 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
     it('reverts given no config', async () => {
       const block = await blockNumber();
       await expect(gov.getDynamicQuorumParamsAt(block)).to.be.revertedWith(
-        'NoDynamicQuorumParamsFound()',
+        'NounsDAO::getDynamicQuorumParamsAt: no params found',
       );
     });
 
@@ -85,7 +85,7 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
           quorumVotesBPSOffset: 0,
           quorumPolynomCoefs: [0, 0],
         }),
-      ).to.be.revertedWith('UnauthorizedAdminOnly()');
+      ).to.be.revertedWith('NounsDAO::_setDynamicQuorumParams: admin only');
     });
 
     it('reverts given minQuorum input below lower bound', async () => {
@@ -96,7 +96,7 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
           quorumVotesBPSOffset: 0,
           quorumPolynomCoefs: [0, 0],
         }),
-      ).to.be.revertedWith('InvalidMinQuorumVotesBPS()');
+      ).to.be.revertedWith('NounsDAO::_setDynamicQuorumParams: invalid min quorum votes bps');
     });
 
     it('reverts given minQuorum input above upper bound', async () => {
@@ -107,7 +107,7 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
           quorumVotesBPSOffset: 0,
           quorumPolynomCoefs: [0, 0],
         }),
-      ).to.be.revertedWith('InvalidMinQuorumVotesBPS()');
+      ).to.be.revertedWith('NounsDAO::_setDynamicQuorumParams: invalid min quorum votes bps');
     });
 
     it('reverts given minQuorum input above maxQuorum BPs', async () => {
@@ -118,7 +118,9 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
           quorumVotesBPSOffset: 0,
           quorumPolynomCoefs: [0, 0],
         }),
-      ).to.be.revertedWith('InvalidMinQuorumAboveMaxQuorumVotesBPS()');
+      ).to.be.revertedWith(
+        'NounsDAO::_setDynamicQuorumParams: min quorum votes bps greater than max',
+      );
     });
 
     it('reverts when maxQuorum input above upper bound', async () => {
@@ -129,7 +131,7 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
           quorumVotesBPSOffset: 0,
           quorumPolynomCoefs: [0, 0],
         }),
-      ).to.be.revertedWith('InvalidMaxQuorumVotesBPS()');
+      ).to.be.revertedWith('NounsDAO::_setDynamicQuorumParams: invalid max quorum votes bps');
     });
   });
 
@@ -203,7 +205,7 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
 
     it('reverts if block number too low', async () => {
       await expect(gov.getDynamicQuorumParamsAt(blockNum1 - 1)).to.be.revertedWith(
-        'NoDynamicQuorumParamsFound()',
+        'NounsDAO::getDynamicQuorumParamsAt: no params found',
       );
     });
 
@@ -238,7 +240,7 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
 
     it('_setMinQuorumVotesBPS reverts when sender is not admin', async () => {
       await expect(gov.connect(account0)._setMinQuorumVotesBPS(222)).to.be.revertedWith(
-        'UnauthorizedAdminOnly()',
+        'NounsDAO::_setDynamicQuorumParams: admin only',
       );
     });
 
@@ -251,7 +253,7 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
 
     it('_setMaxQuorumVotesBPS reverts when sender is not admin', async () => {
       await expect(gov.connect(account0)._setMaxQuorumVotesBPS(3333)).to.be.revertedWith(
-        'UnauthorizedAdminOnly()',
+        'NounsDAO::_setDynamicQuorumParams: admin only',
       );
     });
 
@@ -264,7 +266,7 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
 
     it('_setQuorumVotesBPSOffset reverts when sender is not admin', async () => {
       await expect(gov.connect(account0)._setQuorumVotesBPSOffset(321)).to.be.revertedWith(
-        'UnauthorizedAdminOnly()',
+        'NounsDAO::_setDynamicQuorumParams: admin only',
       );
     });
 
@@ -278,7 +280,7 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
 
     it('_setQuorumPolynomCoefs reverts when sender is not admin', async () => {
       await expect(gov.connect(account0)._setQuorumPolynomCoefs([2, 3])).to.be.revertedWith(
-        'UnauthorizedAdminOnly()',
+        'NounsDAO::_setDynamicQuorumParams: admin only',
       );
     });
   });

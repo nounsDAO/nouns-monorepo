@@ -34,10 +34,9 @@
 // quorum parameters' values.
 // - `minQuorumVotes` and `maxQuorumVotes`, which returns the current min and
 // max quorum votes using the current Noun supply.
-// - A new `Proposal` struct member: `createdBlock`, which is used for calculating the startBlock & endBlock
+// - A new `Proposal` struct member: `totalSupply`, which is used in dynamic quorum calculation.
 // - `quorumVotes(uint256 proposalId)`, which calculates and returns the dynamic
 // quorum for a specific proposal.
-// - `extraData` which holds extra Proposal data, specifically `totalSupply`, used for calculating the quorum
 //
 // NounsDAOLogicV2 removes:
 // - `quorumVotesBPS` has been replaced by `minQuorumVotesBPS` and `maxQuorumVotesBPS`.
@@ -92,12 +91,6 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     /// @notice The EIP-712 typehash for the ballot struct used by the contract
     bytes32 public constant BALLOT_TYPEHASH = keccak256('Ballot(uint256 proposalId,uint8 support)');
 
-    error UnauthorizedAdminOnly();
-    error InvalidMinQuorumVotesBPS();
-    error InvalidMaxQuorumVotesBPS();
-    error InvalidMinQuorumAboveMaxQuorumVotesBPS();
-    error NoDynamicQuorumParamsFound();
-
     /**
      * @notice Used to initialize the contract during delegator contructor
      * @param timelock_ The address of the NounsDAOExecutor
@@ -112,8 +105,8 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         address timelock_,
         address nouns_,
         address vetoer_,
-        uint32 votingPeriod_,
-        uint32 votingDelay_,
+        uint256 votingPeriod_,
+        uint256 votingDelay_,
         uint256 proposalThresholdBPS_,
         DynamicQuorumParams calldata dynamicQuorumParams_
     ) public virtual {
@@ -122,17 +115,27 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         require(timelock_ != address(0), 'NounsDAO::initialize: invalid timelock address');
         require(nouns_ != address(0), 'NounsDAO::initialize: invalid nouns address');
         require(
+            votingPeriod_ >= MIN_VOTING_PERIOD && votingPeriod_ <= MAX_VOTING_PERIOD,
+            'NounsDAO::initialize: invalid voting period'
+        );
+        require(
+            votingDelay_ >= MIN_VOTING_DELAY && votingDelay_ <= MAX_VOTING_DELAY,
+            'NounsDAO::initialize: invalid voting delay'
+        );
+        require(
             proposalThresholdBPS_ >= MIN_PROPOSAL_THRESHOLD_BPS && proposalThresholdBPS_ <= MAX_PROPOSAL_THRESHOLD_BPS,
             'NounsDAO::initialize: invalid proposal threshold'
         );
 
+        emit VotingPeriodSet(votingPeriod, votingPeriod_);
+        emit VotingDelaySet(votingDelay, votingDelay_);
         emit ProposalThresholdBPSSet(proposalThresholdBPS, proposalThresholdBPS_);
 
         timelock = INounsDAOExecutor(timelock_);
         nouns = NounsTokenLike(nouns_);
         vetoer = vetoer_;
-        _setVotingPeriodInternal(votingPeriod_);
-        _setVotingDelayInternal(votingDelay_);
+        votingPeriod = votingPeriod_;
+        votingDelay = votingDelay_;
         proposalThresholdBPS = proposalThresholdBPS_;
         _setDynamicQuorumParams(dynamicQuorumParams_);
     }
@@ -193,7 +196,8 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
             );
         }
 
-        (temp.startBlock, temp.endBlock) = getProposalStartAndEndBlockFromCreatedBlock(block.number);
+        temp.startBlock = block.number + votingDelay;
+        temp.endBlock = temp.startBlock + votingPeriod;
 
         proposalCount++;
         Proposal storage newProposal = proposals[proposalCount];
@@ -205,15 +209,15 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         newProposal.values = values;
         newProposal.signatures = signatures;
         newProposal.calldatas = calldatas;
+        newProposal.startBlock = temp.startBlock;
+        newProposal.endBlock = temp.endBlock;
         newProposal.forVotes = 0;
         newProposal.againstVotes = 0;
         newProposal.abstainVotes = 0;
         newProposal.canceled = false;
         newProposal.executed = false;
         newProposal.vetoed = false;
-        newProposal.createdBlock = block.number;
-
-        extraData[proposalCount] = ProposalExtraData({ totalSupply: temp.totalSupply });
+        newProposal.totalSupply = temp.totalSupply;
 
         latestProposalIds[newProposal.proposer] = newProposal.id;
 
@@ -225,8 +229,8 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
             values,
             signatures,
             calldatas,
-            temp.startBlock,
-            temp.endBlock,
+            newProposal.startBlock,
+            newProposal.endBlock,
             description
         );
 
@@ -239,24 +243,14 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
             values,
             signatures,
             calldatas,
-            temp.startBlock,
-            temp.endBlock,
+            newProposal.startBlock,
+            newProposal.endBlock,
             newProposal.proposalThreshold,
             newProposal.minQuorumVotes,
             description
         );
 
         return newProposal.id;
-    }
-
-    function getProposalStartAndEndBlockFromCreatedBlock(uint256 proposalCreatedBlock)
-        public
-        view
-        returns (uint256 startBlock, uint256 endBlock)
-    {
-        VotingParams memory votingParams = getVotingParamsAt(proposalCreatedBlock);
-        startBlock = proposalCreatedBlock + votingParams.votingDelay;
-        endBlock = startBlock + votingParams.votingPeriod;
     }
 
     /**
@@ -405,18 +399,6 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         return proposals[proposalId].receipts[voter];
     }
 
-    function getProposalStartAndEndBlock(Proposal storage proposal)
-        internal
-        view
-        returns (uint256 startBlock, uint256 endBlock)
-    {
-        if (proposal.createdBlock == 0) {
-            return (proposal.startBlock, proposal.endBlock);
-        } else {
-            return getProposalStartAndEndBlockFromCreatedBlock(proposal.createdBlock);
-        }
-    }
-
     /**
      * @notice Gets the state of a proposal
      * @param proposalId The id of the proposal
@@ -425,17 +407,13 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     function state(uint256 proposalId) public view returns (ProposalState) {
         require(proposalCount >= proposalId, 'NounsDAO::state: invalid proposal id');
         Proposal storage proposal = proposals[proposalId];
-        uint256 startBlock;
-        uint256 endBlock;
-        (startBlock, endBlock) = getProposalStartAndEndBlock(proposal);
-
         if (proposal.vetoed) {
             return ProposalState.Vetoed;
         } else if (proposal.canceled) {
             return ProposalState.Canceled;
-        } else if (block.number <= startBlock) {
+        } else if (block.number <= proposal.startBlock) {
             return ProposalState.Pending;
-        } else if (block.number <= endBlock) {
+        } else if (block.number <= proposal.endBlock) {
             return ProposalState.Active;
         } else if (proposal.forVotes <= proposal.againstVotes || proposal.forVotes < quorumVotes(proposal.id)) {
             return ProposalState.Defeated;
@@ -513,7 +491,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         require(receipt.hasVoted == false, 'NounsDAO::castVoteInternal: voter already voted');
 
         /// @notice: Unlike GovernerBravo, votes are considered from the block the proposal was created in order to normalize quorumVotes and proposalThreshold metrics
-        uint96 votes = nouns.getPriorVotes(voter, getProposalCreatedBlock(proposal));
+        uint96 votes = nouns.getPriorVotes(voter, proposal.startBlock - votingDelay);
 
         if (support == 0) {
             proposal.againstVotes = proposal.againstVotes + votes;
@@ -530,79 +508,36 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         return votes;
     }
 
-    function getProposalCreatedBlock(Proposal storage proposal) internal view returns (uint256) {
-        // If Proposal was created in V1, fallback to using votingDelay
-        if (proposal.createdBlock == 0) {
-            return proposal.startBlock - votingDelay;
-        } else {
-            return proposal.createdBlock;
-        }
-    }
-
     /**
      * @notice Admin function for setting the voting delay
      * @param newVotingDelay new voting delay, in blocks
      */
-    function _setVotingDelay(uint32 newVotingDelay) external {
-        _setVotingDelayInternal(newVotingDelay);
-    }
-
-    function _setVotingDelayInternal(uint32 newVotingDelay) internal {
+    function _setVotingDelay(uint256 newVotingDelay) external {
         require(msg.sender == admin, 'NounsDAO::_setVotingDelay: admin only');
         require(
             newVotingDelay >= MIN_VOTING_DELAY && newVotingDelay <= MAX_VOTING_DELAY,
             'NounsDAO::_setVotingDelay: invalid voting delay'
         );
+        uint256 oldVotingDelay = votingDelay;
+        votingDelay = newVotingDelay;
 
-        VotingParams memory currentParams = getVotingParamsAt(block.number);
-        uint32 blockNumber = safe32(block.number, 'block number exceeds 32 bits');
-        uint256 pos = votingParamsCheckpoints.length;
-
-        if (pos > 0 && votingParamsCheckpoints[pos - 1].fromBlock == blockNumber) {
-            votingParamsCheckpoints[pos - 1].params.votingDelay = newVotingDelay;
-        } else {
-            votingParamsCheckpoints.push(
-                VotingParamsCheckpoint({
-                    fromBlock: blockNumber,
-                    params: VotingParams({ votingDelay: newVotingDelay, votingPeriod: currentParams.votingPeriod })
-                })
-            );
-        }
-
-        emit VotingDelaySet(currentParams.votingDelay, newVotingDelay);
+        emit VotingDelaySet(oldVotingDelay, votingDelay);
     }
 
     /**
      * @notice Admin function for setting the voting period
      * @param newVotingPeriod new voting period, in blocks
      */
-    function _setVotingPeriod(uint32 newVotingPeriod) external {
-        _setVotingPeriodInternal(newVotingPeriod);
-    }
-
-    function _setVotingPeriodInternal(uint32 newVotingPeriod) internal {
+    function _setVotingPeriod(uint256 newVotingPeriod) external {
         require(msg.sender == admin, 'NounsDAO::_setVotingPeriod: admin only');
         require(
             newVotingPeriod >= MIN_VOTING_PERIOD && newVotingPeriod <= MAX_VOTING_PERIOD,
             'NounsDAO::_setVotingPeriod: invalid voting period'
         );
+        uint256 oldVotingPeriod = votingPeriod;
+        votingPeriod = newVotingPeriod;
 
-        VotingParams memory currentParams = getVotingParamsAt(block.number);
-        uint32 blockNumber = safe32(block.number, 'block number exceeds 32 bits');
-        uint256 pos = votingParamsCheckpoints.length;
-
-        if (pos > 0 && votingParamsCheckpoints[pos - 1].fromBlock == blockNumber) {
-            votingParamsCheckpoints[pos - 1].params.votingPeriod = newVotingPeriod;
-        } else {
-            votingParamsCheckpoints.push(
-                VotingParamsCheckpoint({
-                    fromBlock: blockNumber,
-                    params: VotingParams({ votingDelay: currentParams.votingDelay, votingPeriod: newVotingPeriod })
-                })
-            );
-        }
-
-        emit VotingPeriodSet(currentParams.votingPeriod, newVotingPeriod);
+        emit VotingPeriodSet(oldVotingPeriod, votingPeriod);
     }
 
     /**
@@ -649,21 +584,20 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
 
     function _setDynamicQuorumParams(DynamicQuorumParams memory params) public {
         uint32 blockNumber = safe32(block.number, 'block number exceeds 32 bits');
-        if (msg.sender != admin) {
-            revert UnauthorizedAdminOnly();
-        }
-        if (
-            !(params.minQuorumVotesBPS >= MIN_QUORUM_VOTES_BPS_LOWER_BOUND &&
-                params.minQuorumVotesBPS <= MIN_QUORUM_VOTES_BPS_UPPER_BOUND)
-        ) {
-            revert InvalidMinQuorumVotesBPS();
-        }
-        if (!(params.maxQuorumVotesBPS <= MAX_QUORUM_VOTES_BPS_UPPER_BOUND)) {
-            revert InvalidMaxQuorumVotesBPS();
-        }
-        if (!(params.minQuorumVotesBPS <= params.maxQuorumVotesBPS)) {
-            revert InvalidMinQuorumAboveMaxQuorumVotesBPS();
-        }
+        require(msg.sender == admin, 'NounsDAO::_setDynamicQuorumParams: admin only');
+        require(
+            params.minQuorumVotesBPS >= MIN_QUORUM_VOTES_BPS_LOWER_BOUND &&
+                params.minQuorumVotesBPS <= MIN_QUORUM_VOTES_BPS_UPPER_BOUND,
+            'NounsDAO::_setDynamicQuorumParams: invalid min quorum votes bps'
+        );
+        require(
+            params.maxQuorumVotesBPS <= MAX_QUORUM_VOTES_BPS_UPPER_BOUND,
+            'NounsDAO::_setDynamicQuorumParams: invalid max quorum votes bps'
+        );
+        require(
+            params.minQuorumVotesBPS <= params.maxQuorumVotesBPS,
+            'NounsDAO::_setDynamicQuorumParams: min quorum votes bps greater than max'
+        );
 
         uint256 pos = quorumParamsCheckpoints.length;
         if (pos > 0 && quorumParamsCheckpoints[pos - 1].fromBlock == blockNumber) {
@@ -758,16 +692,15 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
      */
     function quorumVotes(uint256 proposalId) public view returns (uint256) {
         Proposal storage proposal = proposals[proposalId];
-        ProposalExtraData storage proposalExtraData = extraData[proposalId];
-        if (proposalExtraData.totalSupply == 0) {
+        if (proposal.totalSupply == 0) {
             return proposal.minQuorumVotes;
         }
 
         return
             dynamicQuorumVotes(
                 proposal.againstVotes,
-                proposalExtraData.totalSupply,
-                getDynamicQuorumParamsAt(getProposalCreatedBlock(proposal))
+                proposal.totalSupply,
+                getDynamicQuorumParamsAt(proposal.startBlock - votingDelay)
             );
     }
 
@@ -805,20 +738,18 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     }
 
     function getDynamicQuorumParamsAt(uint256 blockNumber_) public view returns (DynamicQuorumParams memory) {
-        uint32 blockNumber = safe32(blockNumber_, 'block number exceeds 32 bits');
+        uint32 blockNumber = safe32(blockNumber_, 'NounsDAO::getDynamicQuorumParamsAt: block number exceeds 32 bits');
         uint256 len = quorumParamsCheckpoints.length;
-
-        if (len == 0) {
-            revert NoDynamicQuorumParamsFound();
-        }
+        require(len > 0, 'NounsDAO::getDynamicQuorumParamsAt: no params found');
 
         if (quorumParamsCheckpoints[len - 1].fromBlock <= blockNumber) {
             return quorumParamsCheckpoints[len - 1].params;
         }
 
-        if (quorumParamsCheckpoints[0].fromBlock > blockNumber) {
-            revert NoDynamicQuorumParamsFound();
-        }
+        require(
+            quorumParamsCheckpoints[0].fromBlock <= blockNumber,
+            'NounsDAO::getDynamicQuorumParamsAt: no params found'
+        );
 
         uint256 lower = 0;
         uint256 upper = len - 1;
@@ -834,53 +765,6 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
             }
         }
         return quorumParamsCheckpoints[lower].params;
-    }
-
-    /**
-     * @notice Returns the current voting delay
-     */
-    function getVotingDelay() external view returns (uint32) {
-        return getVotingParamsAt(block.number).votingDelay;
-    }
-
-    /**
-     * @notice Returns the current voting period
-     */
-    function getVotingPeriod() external view returns (uint32) {
-        return getVotingParamsAt(block.number).votingPeriod;
-    }
-
-    function getVotingParamsAt(uint256 blockNumber_) public view returns (VotingParams memory) {
-        uint32 blockNumber = safe32(blockNumber_, 'block number exceeds 32 bits');
-        uint256 len = votingParamsCheckpoints.length;
-
-        // If no values are saved in checkpoint, return values from V1 storage
-        if (len == 0) {
-            return VotingParams({ votingDelay: uint32(votingDelay), votingPeriod: uint32(votingPeriod) });
-        }
-
-        if (votingParamsCheckpoints[len - 1].fromBlock <= blockNumber) {
-            return votingParamsCheckpoints[len - 1].params;
-        }
-
-        if (votingParamsCheckpoints[0].fromBlock > blockNumber) {
-            return VotingParams({ votingDelay: uint32(votingDelay), votingPeriod: uint32(votingPeriod) });
-        }
-
-        uint256 lower = 0;
-        uint256 upper = len - 1;
-        while (upper > lower) {
-            uint256 center = upper - (upper - lower) / 2;
-            VotingParamsCheckpoint memory cp = votingParamsCheckpoints[center];
-            if (cp.fromBlock == blockNumber) {
-                return cp.params;
-            } else if (cp.fromBlock < blockNumber) {
-                lower = center;
-            } else {
-                upper = center - 1;
-            }
-        }
-        return votingParamsCheckpoints[lower].params;
     }
 
     function min(uint256 a, uint256 b) internal pure returns (uint256) {

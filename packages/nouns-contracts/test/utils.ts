@@ -239,8 +239,6 @@ export const propStateToString = (stateInt: number): string => {
 export const deployGovernorV1 = async (
   deployer: SignerWithAddress,
   tokenAddress: string,
-  votingPeriod: number = 1728,
-  votingDelay: number = 1,
   quorumVotesBPs: number = MIN_QUORUM_VOTES_BPS,
 ): Promise<NounsDaoLogicV1Harness> => {
   const { address: govDelegateAddress } = await new NounsDaoLogicV1HarnessFactory(
@@ -252,8 +250,8 @@ export const deployGovernorV1 = async (
     deployer.address,
     deployer.address,
     govDelegateAddress,
-    votingPeriod,
-    votingDelay,
+    1728,
+    1,
     1,
     quorumVotesBPs,
   ];
