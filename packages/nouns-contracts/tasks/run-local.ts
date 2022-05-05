@@ -7,7 +7,10 @@ task(
 ).setAction(async (_, { ethers, run }) => {
   await run(TASK_COMPILE);
 
-  await Promise.race([run(TASK_NODE), new Promise(resolve => setTimeout(resolve, 2_000))]);
+  await Promise.race([
+    run(TASK_NODE, { hostname: '0.0.0.0' }),
+    new Promise(resolve => setTimeout(resolve, 2_000)),
+  ]);
 
   const contracts = await run('deploy-local');
 
@@ -23,7 +26,7 @@ task(
     });
 
   await run('create-proposal', {
-    nounsDaoProxy: contracts.NounsDAOProxy.instance.address,
+    nounsDaoProxy: contracts.NounsDAOProxyV2.instance.address,
   });
 
   const { chainId } = await ethers.provider.getNetwork();
@@ -46,7 +49,7 @@ task(
   console.log(`Auction House Proxy address: ${contracts.NounsAuctionHouseProxy.instance.address}`);
   console.log(`Nouns ERC721 address: ${contracts.NounsToken.instance.address}`);
   console.log(`Nouns DAO Executor address: ${contracts.NounsDAOExecutor.instance.address}`);
-  console.log(`Nouns DAO Proxy address: ${contracts.NounsDAOProxy.instance.address}`);
+  console.log(`Nouns DAO Proxy address: ${contracts.NounsDAOProxyV2.instance.address}`);
 
   await ethers.provider.send('evm_setIntervalMining', [12_000]);
 

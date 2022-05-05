@@ -15,11 +15,13 @@ import {
   NounsDaoLogicV2__factory as NounsDaoLogicV2Factory,
   NounsDaoProxy__factory as NounsDaoProxyFactory,
   NounsDaoLogicV1Harness,
+  NounsDaoProxyV2__factory,
 } from '../typechain';
 import ImageData from '../files/image-data.json';
 import { Block } from '@ethersproject/abstract-provider';
 import { chunkArray } from '../utils';
 import { MAX_QUORUM_VOTES_BPS, MIN_QUORUM_VOTES_BPS } from './constants';
+import { DynamicQuorumParams } from './types';
 
 export type TestSigners = {
   deployer: SignerWithAddress;
@@ -260,6 +262,35 @@ export const deployGovernorV1 = async (
   ).deploy(...params);
 
   return NounsDaoLogicV1HarnessFactory.connect(_govDelegatorAddress, deployer);
+};
+
+export const deployGovernorV2WithV2Proxy = async (
+  deployer: SignerWithAddress,
+  tokenAddress: string,
+  timelockAddress?: string,
+  votingPeriod?: number,
+  dynamicQuorumParams?: DynamicQuorumParams,
+): Promise<NounsDaoLogicV2> => {
+  const v2LogicContract = await new NounsDaoLogicV2Factory(deployer).deploy();
+
+  const proxy = await new NounsDaoProxyV2__factory(deployer).deploy(
+    timelockAddress || deployer.address,
+    tokenAddress,
+    deployer.address,
+    deployer.address,
+    v2LogicContract.address,
+    votingPeriod || 5760,
+    1,
+    1,
+    dynamicQuorumParams || {
+      minQuorumVotesBPS: MIN_QUORUM_VOTES_BPS,
+      maxQuorumVotesBPS: MAX_QUORUM_VOTES_BPS,
+      quorumVotesBPSOffset: 0,
+      quorumPolynomCoefs: [0, 0],
+    },
+  );
+
+  return NounsDaoLogicV2Factory.connect(proxy.address, deployer);
 };
 
 export const deployGovernorV2 = async (
