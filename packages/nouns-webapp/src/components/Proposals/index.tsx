@@ -1,18 +1,50 @@
-import { Proposal } from '../../wrappers/nounsDao';
+import { Proposal, ProposalState } from '../../wrappers/nounsDao';
 import { Alert, Button } from 'react-bootstrap';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
 import { useHistory } from 'react-router-dom';
-import { useEthers } from '@usedapp/core';
+import { useBlockNumber, useEthers } from '@usedapp/core';
 import { isMobileScreen } from '../../utils/isMobile';
 import clsx from 'clsx';
 import { useUserVotes } from '../../wrappers/nounToken';
 import { ClockIcon } from '@heroicons/react/solid';
 import proposalStatusClasses from '../ProposalStatus/ProposalStatus.module.css';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 
-const getTruncatedTimeLeft = (proposal: Proposal) => {
+dayjs.extend(relativeTime);
 
+const getCountdownCopy = (proposal: Proposal, currentBlock: number) => {
+  const AVERAGE_BLOCK_TIME_IN_SECS = 13;
+  const timestamp = Date.now();
+  const startDate =
+    proposal && timestamp && currentBlock
+      ? dayjs(timestamp).add(
+          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
+          'seconds',
+        )
+      : undefined;
+
+  const endDate =
+    proposal && timestamp && currentBlock
+      ? dayjs(timestamp).add(
+          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
+          'seconds',
+        )
+      : undefined;
+  
+  const expiresDate = proposal && dayjs(proposal.eta).add(14, 'days');
+
+  const now = dayjs();
+
+  if (startDate?.isBefore(now) && endDate?.isAfter(now)) {
+    return `Ends ${endDate.fromNow()}`;
+  }
+  if (endDate?.isBefore(now)) {
+    return `Expires ${expiresDate.fromNow()}`;
+  }
+  return `Starts ${dayjs(startDate).fromNow()} `;
 };
 
 const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
@@ -20,6 +52,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
 
   const { account } = useEthers();
   const connectedAccountNounVotes = useUserVotes() || 0;
+  const currentBlock = useBlockNumber();
 
   const isMobile = isMobileScreen();
 
@@ -65,37 +98,56 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
                   <span className={classes.proposalId}>{p.id}</span> <span>{p.title}</span>
                 </span>
 
-
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  width: '100%',
-                  justifyContent: 'center',
-                  marginTop: '1rem'
-                  // backgroundColor: 'red'
-
-                }}>
-
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '100%',
+                    justifyContent: 'center',
+                    marginTop: '1rem',
+                    // backgroundColor: 'red'
+                  }}
+                >
+                  {
+                    (p.status === ProposalState.PENDING || p.status === ProposalState.ACTIVE || p.status === ProposalState.SUCCEEDED || p.status === ProposalState.QUEUED) && (
                   <div className={classes.proposalStatusWrapper}>
                     <div
                       className={proposalStatusClasses.proposalStatus}
                       style={{
                         backgroundColor: 'var(--brand-gray-light-text-translucent)',
                         color: '#00000080',
-                        width: '9rem',
+                        width: 'fit-content',
                       }}
                     >
-                      <ClockIcon height={18} width={18} /> Ending in 1 hour
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'row',
+                        }}
+                      >
+                        <span
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            marginTop: 'auto',
+                            marginBottom: 'auto',
+                          }}
+                        >
+                          <ClockIcon height={16} width={16} />
+                        </span>{' '}
+                        <span style={{ marginLeft: '0.25rem' }}>
+                          {getCountdownCopy(p, currentBlock || 0)}
+                        </span>
+                      </div>
                     </div>
                   </div>
+                    )
+                  }
 
                   <div className={classes.proposalStatusWrapper}>
                     <ProposalStatus status={p.status}></ProposalStatus>
                   </div>
                 </div>
-
-
-
               </div>
             );
           })

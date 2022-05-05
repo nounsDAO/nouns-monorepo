@@ -166,6 +166,17 @@ const useVotingDelay = (nounsDao: string): number | undefined => {
   return blockDelay?.toNumber();
 };
 
+const useGracePeriod = (nounsDao: string): number | undefined => {
+  const [blockDelay] =
+    useContractCall<[EthersBN]>({
+      abi,
+      address: nounsDao,
+      method: 'votingDelay',
+      args: [],
+    }) || [];
+  return blockDelay?.toNumber();
+};
+
 const countToIndices = (count: number | undefined) => {
   return typeof count === 'number' ? new Array(count).fill(0).map((_, i) => [i + 1]) : [];
 };
