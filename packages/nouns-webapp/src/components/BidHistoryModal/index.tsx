@@ -41,7 +41,7 @@ const BidHistoryModalOverlay: React.FC<{
                 <Trans>Bids for</Trans>
               </h2>
               <h1>
-                <Trans>Noun</Trans> {auction && auction.nounId.toString()}
+                Noun {auction && auction.nounId.toString()}
               </h1>
             </div>
           </div>

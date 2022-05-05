@@ -935,7 +935,7 @@ msgstr "体 (30)"
 
 #: src/components/Documentation/index.tsx
 msgid "glasses (21)"
-msgstr "メガネ\"(21)\""
+msgstr "メガネ (21)"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "h"
@@ -943,7 +943,7 @@ msgstr "時間"
 
 #: src/components/Documentation/index.tsx
 msgid "heads (234)"
-msgstr "頭 \"(234)\""
+msgstr "頭 (234)"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "m"

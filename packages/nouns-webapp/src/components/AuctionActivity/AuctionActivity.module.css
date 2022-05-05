@@ -96,6 +96,12 @@ h4 {
   }
 }
 
+@media (max-width: 400px) {
+ .fomoNounsLink {
+   font-size: 14px;
+ } 
+}
+
 /* Fix Firefox navigation arrow alignment issues */
 @-moz-document url-prefix() {
   .colAlignCenter {
