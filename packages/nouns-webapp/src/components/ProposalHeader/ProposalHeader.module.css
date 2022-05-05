@@ -151,7 +151,6 @@
 }
 
 @media (max-width: 450px) {
-  
   .byLineWrapper {
     flex-direction: column;
   }

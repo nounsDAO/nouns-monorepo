@@ -7,6 +7,13 @@ import { useEthers } from '@usedapp/core';
 import { isMobileScreen } from '../../utils/isMobile';
 import clsx from 'clsx';
 import { useUserVotes } from '../../wrappers/nounToken';
+import { ClockIcon } from '@heroicons/react/solid';
+import proposalStatusClasses from '../ProposalStatus/ProposalStatus.module.css';
+
+
+const getTruncatedTimeLeft = (proposal: Proposal) => {
+
+};
 
 const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
   const history = useHistory();
@@ -57,9 +64,38 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
                 <span className={classes.proposalTitle}>
                   <span className={classes.proposalId}>{p.id}</span> <span>{p.title}</span>
                 </span>
-                <div className={classes.proposalStatusWrapper}>
-                  <ProposalStatus status={p.status}></ProposalStatus>
+
+
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  width: '100%',
+                  justifyContent: 'center',
+                  marginTop: '1rem'
+                  // backgroundColor: 'red'
+
+                }}>
+
+                  <div className={classes.proposalStatusWrapper}>
+                    <div
+                      className={proposalStatusClasses.proposalStatus}
+                      style={{
+                        backgroundColor: 'var(--brand-gray-light-text-translucent)',
+                        color: '#00000080',
+                        width: '9rem',
+                      }}
+                    >
+                      <ClockIcon height={18} width={18} /> Ending in 1 hour
+                    </div>
+                  </div>
+
+                  <div className={classes.proposalStatusWrapper}>
+                    <ProposalStatus status={p.status}></ProposalStatus>
+                  </div>
                 </div>
+
+
+
               </div>
             );
           })

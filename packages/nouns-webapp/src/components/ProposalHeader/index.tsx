@@ -79,21 +79,25 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
       </div>
 
       <div className={classes.byLineWrapper}>
-        <h3>Proposed by:</h3> 
-        
+        <h3>Proposed by:</h3>
+
         <div className={classes.byLineContentWrapper}>
-        <h3>
+          <h3>
+            <a
+              href={buildEtherscanAddressLink(proposal.proposer || '')}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <ShortAddress address={proposal.proposer || ''} avatar={false} />
+            </a>
 
-          <a href={buildEtherscanAddressLink(proposal.proposer || "")} target="_blank" rel="noreferrer">
-            <ShortAddress address={proposal.proposer || ""} avatar={false}/>
-          </a>
-
-          <span className={classes.propTransactionWrapper}>
-            at <span className={classes.propTransactionHash}>
-              {transactionLink(proposal.transactionHash)}
+            <span className={classes.propTransactionWrapper}>
+              at{' '}
+              <span className={classes.propTransactionHash}>
+                {transactionLink(proposal.transactionHash)}
+              </span>
             </span>
-          </span> 
-        </h3>
+          </h3>
         </div>
       </div>
 
