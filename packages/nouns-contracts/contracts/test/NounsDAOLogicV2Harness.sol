@@ -9,8 +9,8 @@ contract NounsDAOLogicV2Harness is NounsDAOLogicV2 {
         address timelock_,
         address nouns_,
         address vetoer_,
-        uint256 votingPeriod_,
-        uint256 votingDelay_,
+        uint32 votingPeriod_,
+        uint32 votingDelay_,
         uint256 proposalThresholdBPS_,
         DynamicQuorumParams calldata dynamicQuorumParams_
     ) public override {
@@ -20,9 +20,9 @@ contract NounsDAOLogicV2Harness is NounsDAOLogicV2 {
         timelock = INounsDAOExecutor(timelock_);
         nouns = NounsTokenLike(nouns_);
         vetoer = vetoer_;
-        votingPeriod = votingPeriod_;
-        votingDelay = votingDelay_;
         proposalThresholdBPS = proposalThresholdBPS_;
+        _setVotingPeriodInternal(votingPeriod_);
+        _setVotingDelayInternal(votingDelay_);
         _setDynamicQuorumParams(dynamicQuorumParams_);
     }
 }

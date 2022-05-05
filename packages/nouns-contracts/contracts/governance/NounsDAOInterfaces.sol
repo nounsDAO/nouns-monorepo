@@ -228,26 +228,29 @@ contract NounsDAOStorageV1 is NounsDAOProxyStorage {
 }
 
 /**
- * @title Naming adjustments to NounsDAOStorageV1.
+ * @title Naming adjustments to NounsDAOStorageV1 and added struct members to `Proposal`
  * @notice This contract adjusts the following V1 storage key names for use in V2.
- * No storage has been otherwise updated.
  * - `quorumVotesBPS` has been renamed to `minQuorumVotesBPS`.
  * - `Proposal.quorumVotes` has been renamed to `Proposal.minQuorumVotes`.
+ * - `Proposal.createdBlock` has been added.
  */
 contract NounsDAOStorageV1Adjusted is NounsDAOProxyStorage {
     /// @notice Vetoer who has the ability to veto any proposal
     address public vetoer;
 
     /// @notice The delay before voting on a proposal may take place, once proposed, in blocks
+    /// @notice DEPRECATED: this value is only valid for V1 proposals. New proposals rely on `votingParamsCheckpoints`
     uint256 public votingDelay;
 
     /// @notice The duration of voting on a proposal, in blocks
+    /// @notice DEPRECATED: this value is only valid for V1 proposals. New proposals rely on `votingParamsCheckpoints`
     uint256 public votingPeriod;
 
     /// @notice The basis point number of votes required in order for a voter to become a proposer. *DIFFERS from GovernerBravo
     uint256 public proposalThresholdBPS;
 
     /// @notice The minimum basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed. *DIFFERS from GovernerBravo
+    /// @notice DEPRECATED: this value is only valid for V1 proposals. New proposals rely on `quorumParamsCheckpoints`
     uint256 public minQuorumVotesBPS;
 
     /// @notice The total number of proposals
@@ -285,8 +288,10 @@ contract NounsDAOStorageV1Adjusted is NounsDAOProxyStorage {
         /// @notice The ordered list of calldata to be passed to each call
         bytes[] calldatas;
         /// @notice The block at which voting begins: holders must delegate their votes prior to this block
+        /// @notice DEPRECATED: this value is only valid for V1 proposals. New proposals rely on `proposal.createdBlock` and `votingParamsCheckpoints`
         uint256 startBlock;
         /// @notice The block at which voting ends: votes must be cast prior to this block
+        /// @notice DEPRECATED: this value is only valid for V1 proposals. New proposals rely on `proposal.createdBlock` and `votingParamsCheckpoints`
         uint256 endBlock;
         /// @notice Current number of votes in favor of this proposal
         uint256 forVotes;
@@ -302,8 +307,8 @@ contract NounsDAOStorageV1Adjusted is NounsDAOProxyStorage {
         bool executed;
         /// @notice Receipts of ballots for the entire set of voters
         mapping(address => Receipt) receipts;
-        /// @notice The total supply at the time of proposal creation
-        uint256 totalSupply;
+        /// @notice The block at which the proposal was created
+        uint256 createdBlock;
     }
 
     /// @notice Ballot receipt record for a voter
@@ -337,7 +342,14 @@ contract NounsDAOStorageV1Adjusted is NounsDAOProxyStorage {
  * NounsDAOStorageVX.
  */
 contract NounsDAOStorageV2 is NounsDAOStorageV1Adjusted {
+    /// @notice DynamicQuorumParams values checkpointed by block number
     DynamicQuorumParamsCheckpoint[] public quorumParamsCheckpoints;
+    /// @notice VotingParams values checkpointed by block number
+    VotingParamsCheckpoint[] public votingParamsCheckpoints;
+
+    /// @notice Extra data saved at the time of proposal creation.
+    /// @dev This is extracted out of the `Proposal` struct because of stack-too-deep
+    mapping(uint256 => ProposalExtraData) public extraData;
 
     struct DynamicQuorumParams {
         /// @notice Minimum quorum votes BPS at the time of proposal creation
@@ -351,12 +363,31 @@ contract NounsDAOStorageV2 is NounsDAOStorageV1Adjusted {
         uint32[2] quorumPolynomCoefs;
     }
 
+    struct VotingParams {
+        /// @notice The delay before voting on a proposal may take place, once proposed, in blocks
+        uint32 votingDelay;
+        /// @notice The duration of voting on a proposal, in blocks
+        uint32 votingPeriod;
+    }
+
     /// @notice A checkpoint for storing dynamic quorum params from a given block
     struct DynamicQuorumParamsCheckpoint {
         /// @notice The block at which the new values were set
         uint32 fromBlock;
         /// @notice The parameter values of this checkpoint
         DynamicQuorumParams params;
+    }
+
+    struct VotingParamsCheckpoint {
+        /// @notice The block at which the new values were set
+        uint32 fromBlock;
+        /// @notice The parameter values of this checkpoint
+        VotingParams params;
+    }
+
+    struct ProposalExtraData {
+        /// @notice The total supply at the time of proposal creation
+        uint256 totalSupply;
     }
 }
 

@@ -78,7 +78,7 @@ describe('NounsDAO#_setDynamicQuorumParams', () => {
           quorumVotesBPSOffset: 0,
           quorumPolynomCoefs: [0, 0],
         }),
-      ).to.be.revertedWith('NounsDAO::_setDynamicQuorumParams: admin only');
+      ).to.be.revertedWith('UnauthorizedAdminOnly()');
     });
 
     it('reverts given minQuorum input below lower bound', async () => {
@@ -89,7 +89,7 @@ describe('NounsDAO#_setDynamicQuorumParams', () => {
           quorumVotesBPSOffset: 0,
           quorumPolynomCoefs: [0, 0],
         }),
-      ).to.be.revertedWith('NounsDAO::_setDynamicQuorumParams: invalid min quorum votes bps');
+      ).to.be.revertedWith('InvalidMinQuorumVotesBPS()');
     });
 
     it('reverts given minQuorum input above upper bound', async () => {
@@ -100,7 +100,7 @@ describe('NounsDAO#_setDynamicQuorumParams', () => {
           quorumVotesBPSOffset: 0,
           quorumPolynomCoefs: [0, 0],
         }),
-      ).to.be.revertedWith('NounsDAO::_setDynamicQuorumParams: invalid min quorum votes bps');
+      ).to.be.revertedWith('InvalidMinQuorumVotesBPS()');
     });
 
     it('reverts given minQuorum input above maxQuorum BPs', async () => {
@@ -111,9 +111,7 @@ describe('NounsDAO#_setDynamicQuorumParams', () => {
           quorumVotesBPSOffset: 0,
           quorumPolynomCoefs: [0, 0],
         }),
-      ).to.be.revertedWith(
-        'NounsDAO::_setDynamicQuorumParams: min quorum votes bps greater than max',
-      );
+      ).to.be.revertedWith('InvalidMinQuorumAboveMaxQuorumVotesBPS()');
     });
 
     it('reverts when maxQuorum input above upper bound', async () => {
@@ -124,7 +122,7 @@ describe('NounsDAO#_setDynamicQuorumParams', () => {
           quorumVotesBPSOffset: 0,
           quorumPolynomCoefs: [0, 0],
         }),
-      ).to.be.revertedWith('NounsDAO::_setDynamicQuorumParams: invalid max quorum votes bps');
+      ).to.be.revertedWith('InvalidMaxQuorumVotesBPS()');
     });
   });
 
