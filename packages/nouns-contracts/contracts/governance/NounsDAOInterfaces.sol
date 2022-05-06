@@ -228,11 +228,13 @@ contract NounsDAOStorageV1 is NounsDAOProxyStorage {
 }
 
 /**
- * @title Naming adjustments to NounsDAOStorageV1.
+ * @title Naming adjustments to NounsDAOStorageV1 and added fields to `Proposal`
  * @notice This contract adjusts the following V1 storage key names for use in V2.
- * No storage has been otherwise updated.
  * - `quorumVotesBPS` has been renamed to `minQuorumVotesBPS`.
  * - `Proposal.quorumVotes` has been renamed to `Proposal.minQuorumVotes`.
+ * @notice The following fields were added to the `Proposal` struct:
+ * - `Proposal.totalSupply`
+ * - `Proposal.creationBlock`
  */
 contract NounsDAOStorageV1Adjusted is NounsDAOProxyStorage {
     /// @notice Vetoer who has the ability to veto any proposal
