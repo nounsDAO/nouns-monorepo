@@ -330,6 +330,36 @@ contract NounsDAOStorageV1Adjusted is NounsDAOProxyStorage {
         Executed,
         Vetoed
     }
+}
+
+/**
+ * @title Storage for Governor Bravo Delegate
+ * @notice For future upgrades, do not change NounsDAOStorageV2. Create a new
+ * contract which implements NounsDAOStorageV2 and following the naming convention
+ * NounsDAOStorageVX.
+ */
+contract NounsDAOStorageV2 is NounsDAOStorageV1Adjusted {
+    DynamicQuorumParamsCheckpoint[] public quorumParamsCheckpoints;
+
+    struct DynamicQuorumParams {
+        /// @notice Minimum quorum votes BPS at the time of proposal creation
+        uint16 minQuorumVotesBPS;
+        /// @notice The maximum basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed. *DIFFERS from GovernerBravo
+        uint16 maxQuorumVotesBPS;
+        /// @notice The quorum votes polynom input offset which suppresses polynom contribution until againstVotes.div(totalSupply) reaches this value
+        uint16 quorumVotesBPSOffset;
+        /// @notice Polynomial coefficients for calculating a dynamic quorum based on the amount of against votes
+        /// @dev The coefficients are assumed to be fixed point integer with 6 decimals, i.e 0.2 is represented as 0.2 * 1e6 = 200000. There are 2 coefficients: x^1 and x^2
+        uint32[2] quorumPolynomCoefs;
+    }
+
+    /// @notice A checkpoint for storing dynamic quorum params from a given block
+    struct DynamicQuorumParamsCheckpoint {
+        /// @notice The block at which the new values were set
+        uint32 fromBlock;
+        /// @notice The parameter values of this checkpoint
+        DynamicQuorumParams params;
+    }
 
     struct ProposalCondensed {
         /// @notice Unique id for looking up a proposal
@@ -362,36 +392,6 @@ contract NounsDAOStorageV1Adjusted is NounsDAOProxyStorage {
         uint256 totalSupply;
         /// @notice The block at which this proposal was created
         uint256 creationBlock;
-    }
-}
-
-/**
- * @title Storage for Governor Bravo Delegate
- * @notice For future upgrades, do not change NounsDAOStorageV2. Create a new
- * contract which implements NounsDAOStorageV2 and following the naming convention
- * NounsDAOStorageVX.
- */
-contract NounsDAOStorageV2 is NounsDAOStorageV1Adjusted {
-    DynamicQuorumParamsCheckpoint[] public quorumParamsCheckpoints;
-
-    struct DynamicQuorumParams {
-        /// @notice Minimum quorum votes BPS at the time of proposal creation
-        uint16 minQuorumVotesBPS;
-        /// @notice The maximum basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed. *DIFFERS from GovernerBravo
-        uint16 maxQuorumVotesBPS;
-        /// @notice The quorum votes polynom input offset which suppresses polynom contribution until againstVotes.div(totalSupply) reaches this value
-        uint16 quorumVotesBPSOffset;
-        /// @notice Polynomial coefficients for calculating a dynamic quorum based on the amount of against votes
-        /// @dev The coefficients are assumed to be fixed point integer with 6 decimals, i.e 0.2 is represented as 0.2 * 1e6 = 200000. There are 2 coefficients: x^1 and x^2
-        uint32[2] quorumPolynomCoefs;
-    }
-
-    /// @notice A checkpoint for storing dynamic quorum params from a given block
-    struct DynamicQuorumParamsCheckpoint {
-        /// @notice The block at which the new values were set
-        uint32 fromBlock;
-        /// @notice The parameter values of this checkpoint
-        DynamicQuorumParams params;
     }
 }
 
