@@ -3,8 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@lingui/detect-locale": "^3.13.2",
+    "@lingui/cli": "^3.9.0",
+    "@lingui/core": "^3.9.0",
+    "@lingui/macro": "^3.9.0",
+    "@lingui/react": "^3.9.0",
     "@apollo/client": "^3.3.21",
+    "bad-words": "^3.0.4",
     "@davatar/react": "^1.8.1",
+    "@heroicons/react": "^1.0.6",
     "@fortawesome/fontawesome-svg-core": "1.2.35",
     "@fortawesome/free-solid-svg-icons": "5.15.3",
     "@fortawesome/react-fontawesome": "0.1.14",
@@ -57,13 +64,18 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/react-router-dom": "^5.1.7",
+    "@types/bad-words": "^3.0.1",
     "dotenv": "^10.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "yarn i18n:compile && react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prepare": "yarn i18n:compile",
+    "i18n:extract": "lingui extract",
+    "i18n:compile": "lingui compile",
+    "i18n:pseudo": "lingui extract --locale pseudo && lingui compile"
   },
   "eslintConfig": {
     "extends": [

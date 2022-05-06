@@ -4,6 +4,8 @@ import classes from './Winner.module.css';
 import ShortAddress from '../ShortAddress';
 import clsx from 'clsx';
 import { isMobileScreen } from '../../utils/isMobile';
+import { Trans } from '@lingui/macro';
+import { useActiveLocale } from '../../hooks/useActivateLocale';
 
 interface WinnerProps {
   winner: string;
@@ -20,16 +22,18 @@ const Winner: React.FC<WinnerProps> = props => {
   const isWinnerYou =
     activeAccount !== undefined && activeAccount.toLocaleLowerCase() === winner.toLocaleLowerCase();
 
+  const activeLocale = useActiveLocale();
+
   const nonNounderNounContent = isWinnerYou ? (
     <Row className={classes.youSection}>
-      <Col lg={4} className={classes.youCopy}>
+      <Col lg={activeLocale === 'ja-JP' ? 8 : 4} className={classes.youCopy}>
         <h2
           className={classes.winnerContent}
           style={{
             color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
           }}
         >
-          You
+          <Trans>You</Trans>
         </h2>
       </Col>
       {!isMobile && (
@@ -40,7 +44,9 @@ const Winner: React.FC<WinnerProps> = props => {
             rel="noreferrer noopener"
             className={classes.verifyLink}
           >
-            <Button className={classes.verifyButton}>What now?</Button>
+            <Button className={classes.verifyButton}>
+              <Trans>What now?</Trans>
+            </Button>
           </a>
         </Col>
       )}
@@ -59,8 +65,9 @@ const Winner: React.FC<WinnerProps> = props => {
             style={{
               color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)',
             }}
+            className={classes.winnerCopy}
           >
-            Winner
+            <Trans>Winner</Trans>
           </h4>
         </Col>
         <Col xs="auto" lg={12}>
@@ -82,7 +89,9 @@ const Winner: React.FC<WinnerProps> = props => {
             rel="noreferrer noopener"
             className={classes.verifyLink}
           >
-            <Button className={classes.verifyButton}>What now?</Button>
+            <Button className={classes.verifyButton}>
+              <Trans>What now?</Trans>
+            </Button>
           </a>
         </Row>
       )}

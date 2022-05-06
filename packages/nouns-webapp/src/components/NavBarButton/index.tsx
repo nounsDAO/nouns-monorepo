@@ -12,7 +12,7 @@ export enum NavBarButtonStyle {
 }
 
 interface NavBarButtonProps {
-  buttonText: string;
+  buttonText: React.ReactNode;
   buttonIcon?: React.ReactNode;
   buttonStyle?: NavBarButtonStyle;
 }

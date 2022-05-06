@@ -1,5 +1,5 @@
 .voteCardHeaderText {
-  font-size: 24px;
+  font-size: 16px;
   font-family: 'Londrina Solid';
 }
 
@@ -58,5 +58,6 @@
   .voteCardHeaderText {
     margin-left: auto;
     margin-right: auto;
+    font-size: 16px;
   }
 }
