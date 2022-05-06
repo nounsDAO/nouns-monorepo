@@ -114,9 +114,8 @@
   }
 
   .proposalTitle {
-    width: 65%;
-    word-wrap: break-word;
-    min-width: 65%;
+    max-width: 65%;
+    overflow-wrap: break-word;
   }
 }
 
@@ -130,11 +129,12 @@
 }
 
 .proposalTitle {
-  width: 85%;
+  width: 80%;
 }
 
 .proposalStatusWrapper {
   margin-left: 0.5rem;
+  min-width: max-content;
 }
 
 .submitProposalButtonWrapper {

@@ -42,6 +42,7 @@ import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { nounPath } from './utils/history';
 import { push } from 'connected-react-router';
+import { LanguageProvider } from './i18n/LanguageProvider';
 
 dotenv.config();
 
@@ -202,7 +203,9 @@ ReactDOM.render(
           <ApolloProvider client={client}>
             <PastAuctions />
             <DAppProvider config={useDappConfig}>
-              <App />
+              <LanguageProvider>
+                <App />
+              </LanguageProvider>
               <Updaters />
             </DAppProvider>
           </ApolloProvider>

@@ -2,9 +2,11 @@
   display: flex;
   flex: 1;
 }
+
 .container {
   display: flex;
 }
+
 .footerSignature {
   margin: auto auto 0 auto;
   font-family: 'PT Root UI' !important;
@@ -38,7 +40,7 @@
 }
 
 @media (max-width: 992px) {
-  .footerSignature {
+  .footerSignature a {
     font-size: 16px;
   }
 }
