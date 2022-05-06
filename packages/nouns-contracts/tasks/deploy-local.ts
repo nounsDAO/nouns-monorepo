@@ -14,7 +14,8 @@ type ContractName =
   | 'NounsAuctionHouseProxy'
   | 'NounsDAOExecutor'
   | 'NounsDAOLogicV2'
-  | 'NounsDAOProxyV2';
+  | 'NounsDAOProxyV2'
+  | 'Multicall2';
 
 interface Contract {
   args?: (string | number | (() => string | undefined))[];
@@ -152,6 +153,7 @@ task('deploy-local', 'Deploy contracts to hardhat')
         ],
         waitForConfirmation: true,
       },
+      Multicall2: {},
     };
 
     for (const [name, contract] of Object.entries(contracts)) {

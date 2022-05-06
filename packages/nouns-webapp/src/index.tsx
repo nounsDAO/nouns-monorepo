@@ -27,7 +27,7 @@ import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
 import { useEffect } from 'react';
 import pastAuctions, { addPastAuctions } from './state/slices/pastAuctions';
 import LogsUpdater from './state/updaters/logs';
-import config, { CHAIN_ID, createNetworkHttpUrl } from './config';
+import config, { CHAIN_ID, createNetworkHttpUrl, multicallOnLocalhost } from './config';
 import { WebSocketProvider } from '@ethersproject/providers';
 import { BigNumber, BigNumberish } from 'ethers';
 import { NounsAuctionHouseFactory } from '@nouns/sdk';
@@ -86,6 +86,9 @@ const useDappConfig = {
     [ChainId.Mainnet]: createNetworkHttpUrl('mainnet'),
     [ChainId.Hardhat]: 'http://localhost:8545',
   },
+  multicallAddresses: {
+    [ChainId.Hardhat]: multicallOnLocalhost,
+  }
 };
 
 const client = clientFactory(config.app.subgraphApiUri);
