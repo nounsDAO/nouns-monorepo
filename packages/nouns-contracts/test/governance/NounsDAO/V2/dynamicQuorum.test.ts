@@ -5,8 +5,8 @@ import { BigNumberish } from 'ethers';
 import { parseUnits } from 'ethers/lib/utils';
 import hardhat from 'hardhat';
 import {
-  NounsDaoLogicV2Harness,
-  NounsDaoLogicV2Harness__factory as NounsDaoLogicV2HarnessFactory,
+  NounsDaoLogicV2,
+  NounsDaoLogicV2__factory as NounsDaoLogicV2Factory,
 } from '../../../../typechain';
 import { getSigners, TestSigners } from '../../../utils';
 
@@ -15,10 +15,10 @@ const { expect } = chai;
 
 let deployer: SignerWithAddress;
 let signers: TestSigners;
-let gov: NounsDaoLogicV2Harness;
+let gov: NounsDaoLogicV2;
 
-async function deployGovernorV2(deployer: SignerWithAddress): Promise<NounsDaoLogicV2Harness> {
-  return await new NounsDaoLogicV2HarnessFactory(deployer).deploy();
+async function deployGovernorV2(deployer: SignerWithAddress): Promise<NounsDaoLogicV2> {
+  return await new NounsDaoLogicV2Factory(deployer).deploy();
 }
 
 describe('Dynamic Quorum', () => {
