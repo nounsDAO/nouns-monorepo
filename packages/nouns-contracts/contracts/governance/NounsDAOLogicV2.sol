@@ -742,6 +742,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
      *       additional quorum calculate "kick in".
      *     The additional quorum is calculated as: coefs[0] * againstVotesBPS + coefs[1] * againstVotesBPS^2
      *       where coefs is `params.quorumPolynomCoefs`
+     * @dev Note that the quorumPolynomCoefs are fixed point integers with 6 decimals
      * @param againstVotes Number of against-votes in the proposal
      * @param totalSupply The total supply of Nouns at the time of proposal creation
      * @return quorumVotes The required quorum
