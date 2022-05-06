@@ -32,7 +32,7 @@ const NavBarTreasury: React.FC<NavBarTreasuryProps> = props => {
         <div
           className="d-flex flex-row justify-content-around"
           style={{
-            paddingTop: '1px'
+            paddingTop: '1px',
           }}
         >
           <div

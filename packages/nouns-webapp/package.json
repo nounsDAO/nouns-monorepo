@@ -72,6 +72,7 @@
     "build": "yarn i18n:compile && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "prepare": "yarn i18n:compile",
     "i18n:extract": "lingui extract",
     "i18n:compile": "lingui compile",
     "i18n:pseudo": "lingui extract --locale pseudo && lingui compile"
