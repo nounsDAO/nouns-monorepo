@@ -58,7 +58,8 @@ describe('NounsDAOProxyV2', () => {
         minQuorumVotesBPS: MIN_QUORUM_VOTES_BPS,
         maxQuorumVotesBPS: MAX_QUORUM_VOTES_BPS,
         quorumVotesBPSOffset: 1234,
-        quorumPolynomCoefs: [3, 0],
+        quorumLinearCoef: 3,
+        quorumQuadraticCoef: 0,
       },
     );
   });
@@ -70,7 +71,7 @@ describe('NounsDAOProxyV2', () => {
 
   it('Sets quorum params as expected', async () => {
     const params = await govV2.getDynamicQuorumParamsAt(await blockNumber());
-    expect(params.quorumPolynomCoefs[0]).to.equal(3);
+    expect(params.quorumLinearCoef).to.equal(3);
     expect(params.quorumVotesBPSOffset).to.equal(1234);
   });
 });

@@ -112,7 +112,8 @@ contract NounsDAOEventsV2 is NounsDAOEvents {
         uint16 minQuorumVotesBPS,
         uint16 maxQuorumVotesBPS,
         uint16 quorumVotesBPSOffset,
-        uint32[2] quorumPolynomCoefs
+        uint32 quorumLinearCoef,
+        uint32 quorumQuadraticCoef
     );
 }
 
@@ -350,9 +351,12 @@ contract NounsDAOStorageV2 is NounsDAOStorageV1Adjusted {
         uint16 maxQuorumVotesBPS;
         /// @notice The quorum votes polynom input offset which suppresses polynom contribution until againstVotes.div(totalSupply) reaches this value
         uint16 quorumVotesBPSOffset;
-        /// @notice Polynomial coefficients for calculating a dynamic quorum based on the amount of against votes
-        /// @dev The coefficients are assumed to be fixed point integer with 6 decimals, i.e 0.2 is represented as 0.2 * 1e6 = 200000. There are 2 coefficients: x^1 and x^2
-        uint32[2] quorumPolynomCoefs;
+        /// @notice The linear component coefficient (x^1) for the dynamic quorum polynomial
+        /// @dev The coefficients are assumed to be fixed point integer with 6 decimals, i.e 0.2 is represented as 0.2 * 1e6 = 200000
+        uint32 quorumLinearCoef;
+        /// @notice The quadratic component coefficient (x^2) for the dynamic quorum polynomial
+        /// @dev The coefficients are assumed to be fixed point integer with 6 decimals, i.e 0.2 is represented as 0.2 * 1e6 = 200000
+        uint32 quorumQuadraticCoef;
     }
 
     /// @notice A checkpoint for storing dynamic quorum params from a given block

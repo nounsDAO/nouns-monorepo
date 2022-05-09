@@ -599,9 +599,15 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         _setDynamicQuorumParams(params);
     }
 
-    function _setQuorumPolynomCoefs(uint32[2] calldata newQuorumPolynomCoefs) external {
+    function _setQuorumLinearCoef(uint32 newQuorumLinearCoef) external {
         DynamicQuorumParams memory params = getDynamicQuorumParamsAt(block.number);
-        params.quorumPolynomCoefs = newQuorumPolynomCoefs;
+        params.quorumLinearCoef = newQuorumLinearCoef;
+        _setDynamicQuorumParams(params);
+    }
+
+    function _setQuorumQuadraticCoef(uint32 newQuorumQuadraticCoef) external {
+        DynamicQuorumParams memory params = getDynamicQuorumParamsAt(block.number);
+        params.quorumQuadraticCoef = newQuorumQuadraticCoef;
         _setDynamicQuorumParams(params);
     }
 
@@ -633,7 +639,8 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
             params.minQuorumVotesBPS,
             params.maxQuorumVotesBPS,
             params.quorumVotesBPSOffset,
-            params.quorumPolynomCoefs
+            params.quorumLinearCoef,
+            params.quorumQuadraticCoef
         );
     }
 
@@ -758,9 +765,9 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         }
 
         uint256 polynomInput = againstVotesBPS - params.quorumVotesBPSOffset;
-        uint256 polynomValueBPS = (params.quorumPolynomCoefs[0] *
+        uint256 polynomValueBPS = (params.quorumLinearCoef *
             polynomInput +
-            params.quorumPolynomCoefs[1] *
+            params.quorumQuadraticCoef *
             polynomInput**2) / 1e6;
 
         uint256 adjustedQuorumBPS = params.minQuorumVotesBPS + polynomValueBPS;

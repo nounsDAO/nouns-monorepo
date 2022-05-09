@@ -69,7 +69,8 @@ let daoLogicV2: NounsDaoLogicV2;
 const minQuorumVotesBPS = 1000; // 10%
 const maxQuorumVotesBPS = 4000; // 40%
 const quorumVotesBPSOffset = 0;
-const quorumPolynomCoefs = [parseUnits('0.3', 6), parseUnits('0.001', 6)];
+const quorumLinearCoef = parseUnits('0.3', 6);
+const quorumQuadraticCoef = parseUnits('0.001', 6);
 
 // Auction House Config
 const TIME_BUFFER = 15 * 60;
@@ -198,11 +199,17 @@ async function createUpgradeToV2AndSetDynamicQuorumProposal(proposer: SignerWith
 
   targets.push(gov.address);
   values.push(0);
-  signatures.push('_setDynamicQuorumParams((uint16,uint16,uint16,uint32[2]))');
+  signatures.push('_setDynamicQuorumParams((uint16,uint16,uint16,uint32,uint32))');
   callDatas.push(
     encodeParameters(
-      ['uint16', 'uint16', 'uint16', 'uint32[2]'],
-      [minQuorumVotesBPS, maxQuorumVotesBPS, quorumVotesBPSOffset, quorumPolynomCoefs],
+      ['uint16', 'uint16', 'uint16', 'uint32', 'uint32'],
+      [
+        minQuorumVotesBPS,
+        maxQuorumVotesBPS,
+        quorumVotesBPSOffset,
+        quorumLinearCoef,
+        quorumQuadraticCoef,
+      ],
     ),
   );
 
@@ -213,15 +220,22 @@ async function createUpgradeToV2AndSetDynamicQuorumProposal(proposer: SignerWith
 
 async function createSetDynamicQuorumParamsProposal(
   proposer: SignerWithAddress,
-  quorumPolynomCoefs: BigNumberish[],
+  quorumLinearCoef: BigNumberish,
+  quorumQuadraticCoef: BigNumberish,
 ) {
   const targets = [gov.address];
   const values = [0];
-  const signatures = ['_setDynamicQuorumParams((uint16,uint16,uint16,uint32[2]))'];
+  const signatures = ['_setDynamicQuorumParams((uint16,uint16,uint16,uint32,uint32))'];
   const callDatas = [
     encodeParameters(
-      ['uint16', 'uint16', 'uint16', 'uint32[2]'],
-      [minQuorumVotesBPS, maxQuorumVotesBPS, quorumVotesBPSOffset, quorumPolynomCoefs],
+      ['uint16', 'uint16', 'uint16', 'uint32', 'uint32'],
+      [
+        minQuorumVotesBPS,
+        maxQuorumVotesBPS,
+        quorumVotesBPSOffset,
+        quorumLinearCoef,
+        quorumQuadraticCoef,
+      ],
     ),
   ];
 
@@ -324,8 +338,8 @@ describe('V2 end to end tests', async () => {
       expect(params.minQuorumVotesBPS).to.equal(minQuorumVotesBPS);
       expect(params.maxQuorumVotesBPS).to.equal(maxQuorumVotesBPS);
       expect(params.quorumVotesBPSOffset).to.equal(quorumVotesBPSOffset);
-      expect(params.quorumPolynomCoefs[0]).to.equal(quorumPolynomCoefs[0]);
-      expect(params.quorumPolynomCoefs[1]).to.equal(quorumPolynomCoefs[1]);
+      expect(params.quorumLinearCoef).to.equal(quorumLinearCoef);
+      expect(params.quorumQuadraticCoef).to.equal(quorumQuadraticCoef);
     });
   });
 
@@ -427,10 +441,11 @@ describe('V2 end to end tests', async () => {
     let proposalId5: BigNumberish;
 
     before(async () => {
-      proposalId4 = await createSetDynamicQuorumParamsProposal(bidders[2], [
+      proposalId4 = await createSetDynamicQuorumParamsProposal(
+        bidders[2],
         parseUnits('1', 6),
         parseUnits('0.001', 6),
-      ]);
+      );
     });
 
     beforeEach(async () => {
