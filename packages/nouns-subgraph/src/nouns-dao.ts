@@ -27,7 +27,6 @@ import {
   BIGINT_ZERO,
 } from './utils/constants';
 import { dynamicQuorumVotes } from './utils/dynamicQuorum';
-import { DynamicQuorumParams } from './types/schema';
 
 export function handleProposalCreatedWithRequirements(
   event: ProposalCreatedWithRequirements,
@@ -149,7 +148,7 @@ export function handleVoteCast(event: VoteCast): void {
 
   let shouldSaveProp = false;
 
-  if (vote.support == 0) {
+  if (event.params.support == 0) {
     shouldSaveProp = true;
     proposal.againstVotes = proposal.againstVotes + event.params.votes.toI32();
   }
