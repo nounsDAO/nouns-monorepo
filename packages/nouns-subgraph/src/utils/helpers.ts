@@ -91,7 +91,7 @@ export function getOrCreateProposal(
 
     let governance = getGovernanceEntity();
 
-    governance.proposals = governance.proposals + BIGINT_ONE;
+    governance.proposals = governance.proposals.plus(BIGINT_ONE);
     governance.save();
 
     if (save) {
