@@ -1,6 +1,6 @@
 import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json';
 import { task, types } from 'hardhat/config';
-import { Interface } from 'ethers/lib/utils';
+import { Interface, parseUnits } from 'ethers/lib/utils';
 import { Contract as EthersContract } from 'ethers';
 
 type ContractName =
@@ -148,7 +148,10 @@ task('deploy-local', 'Deploy contracts to hardhat')
             minQuorumVotesBPS: args.minQuorumVotesBPS,
             maxQuorumVotesBPS: args.maxQuorumVotesBPS,
             quorumVotesBPSOffset: args.quorumVotesBPSOffset,
-            quorumPolynomCoefs: [args.quorumPolynomCoef0, args.quorumPolynomCoef1],
+            quorumPolynomCoefs: [
+              parseUnits(args.quorumPolynomCoef0.toString(), 6),
+              parseUnits(args.quorumPolynomCoef1.toString(), 6),
+            ],
           },
         ],
         waitForConfirmation: true,
