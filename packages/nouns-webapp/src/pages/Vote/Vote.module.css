@@ -84,6 +84,11 @@
   border-radius: 12px;
 }
 
+.voteMetadataRow {
+  display: flex;
+  justify-content: space-between;
+}
+
 .voteMetadataRow h1 {
   font-size: 20px;
   color: var(--brand-gray-light-text);
@@ -104,10 +109,11 @@
 
 .voteMetadataRowTitle {
   margin-top: 0.5rem;
+  width: max-content;
 }
 
 .voteMetadataTime {
-  min-width: 11rem;
+  min-width: fit-content;
   text-align: right;
 }
 

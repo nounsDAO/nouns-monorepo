@@ -20,6 +20,7 @@
 
 .voteProposalStatus {
   text-align: right;
+  width: max-content;
 }
 
 .proposalTitle {

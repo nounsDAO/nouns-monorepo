@@ -24,3 +24,9 @@ yarn-error.log*
 
 .env
 .vercel
+
+# i18n 
+/src/locales/**/*.js
+/src/locales/**/en-US.po
+/src/locales/**/pseudo.po
+

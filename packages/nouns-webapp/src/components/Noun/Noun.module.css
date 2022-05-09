@@ -20,6 +20,10 @@
   border-radius: 50%;
 }
 
+.rounded {
+  border-radius: 15px;
+}
+
 .circularNounWrapper {
   height: 42px;
   width: 42px;

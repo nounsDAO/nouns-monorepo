@@ -2,7 +2,7 @@ import classes from './VoteStatusPill.module.css';
 
 interface VoteStatusPillProps {
   status: string;
-  text: string;
+  text: React.ReactNode;
 }
 
 const VoteStatusPill: React.FC<VoteStatusPillProps> = props => {
