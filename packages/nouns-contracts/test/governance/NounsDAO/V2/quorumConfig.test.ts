@@ -225,76 +225,123 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
       maxQuorumVotesBPS: 3000,
       quorumVotesBPSOffset: 300,
       quorumLinearCoef: 1,
-      quorumQuadraticCoef: 1,
+      quorumQuadraticCoef: 2,
     };
 
     beforeEach(async () => {
       await gov._setDynamicQuorumParams(baseParams);
     });
 
-    it('_setMinQuorumVotesBPS works', async () => {
-      await gov._setMinQuorumVotesBPS(222);
-      const params = await gov.getDynamicQuorumParamsAt(await blockNumber());
+    describe('_setMinQuorumVotesBPS', () => {
+      it('works and emits', async () => {
+        const tx = await gov._setMinQuorumVotesBPS(222);
+        const params = await gov.getDynamicQuorumParamsAt(await blockNumber());
 
-      expect(params.minQuorumVotesBPS).to.equal(222);
+        expect(params.minQuorumVotesBPS).to.equal(222);
+        await expect(tx).to.emit(gov, 'MinQuorumVotesBPSSet').withArgs(200, 222);
+      });
+
+      it('reverts when sender is not admin', async () => {
+        await expect(gov.connect(account0)._setMinQuorumVotesBPS(222)).to.be.revertedWith(
+          'NounsDAO::_setMinQuorumVotesBPS: admin only',
+        );
+      });
+
+      it('reverts given input below lower bound', async () => {
+        await expect(gov._setMinQuorumVotesBPS(199)).to.be.revertedWith(
+          'NounsDAO::_setMinQuorumVotesBPS: invalid min quorum votes bps',
+        );
+      });
+
+      it('reverts given input above upper bound', async () => {
+        await expect(gov._setMinQuorumVotesBPS(2001)).to.be.revertedWith(
+          'NounsDAO::_setMinQuorumVotesBPS: invalid min quorum votes bps',
+        );
+      });
+
+      it('reverts given input above max value', async () => {
+        await gov._setMaxQuorumVotesBPS(1998);
+
+        await expect(gov._setMinQuorumVotesBPS(1999)).to.be.revertedWith(
+          'NounsDAO::_setMinQuorumVotesBPS: min quorum votes bps greater than max',
+        );
+      });
     });
 
-    it('_setMinQuorumVotesBPS reverts when sender is not admin', async () => {
-      await expect(gov.connect(account0)._setMinQuorumVotesBPS(222)).to.be.revertedWith(
-        'NounsDAO::_setDynamicQuorumParams: admin only',
-      );
+    describe('_setMaxQuorumVotesBPS', () => {
+      it('works and emits', async () => {
+        const tx = await gov._setMaxQuorumVotesBPS(3333);
+        const params = await gov.getDynamicQuorumParamsAt(await blockNumber());
+
+        expect(params.maxQuorumVotesBPS).to.equal(3333);
+        await expect(tx).to.emit(gov, 'MaxQuorumVotesBPSSet').withArgs(3000, 3333);
+      });
+
+      it('reverts when sender is not admin', async () => {
+        await expect(gov.connect(account0)._setMaxQuorumVotesBPS(3333)).to.be.revertedWith(
+          'NounsDAO::_setMaxQuorumVotesBPS: admin only',
+        );
+      });
+
+      it('reverts given input above upper bound', async () => {
+        await expect(gov._setMaxQuorumVotesBPS(4001)).to.be.revertedWith(
+          'NounsDAO::_setMaxQuorumVotesBPS: invalid max quorum votes bps',
+        );
+      });
+
+      it('reverts given input less than min param', async () => {
+        await expect(gov._setMaxQuorumVotesBPS(199)).to.be.revertedWith(
+          'NounsDAO::_setMaxQuorumVotesBPS: min quorum votes bps greater than max',
+        );
+      });
     });
 
-    it('_setMaxQuorumVotesBPS works', async () => {
-      await gov._setMaxQuorumVotesBPS(3333);
-      const params = await gov.getDynamicQuorumParamsAt(await blockNumber());
+    describe('_setQuorumVotesBPSOffset', () => {
+      it('works and emits', async () => {
+        const tx = await gov._setQuorumVotesBPSOffset(321);
+        const params = await gov.getDynamicQuorumParamsAt(await blockNumber());
 
-      expect(params.maxQuorumVotesBPS).to.equal(3333);
+        expect(params.quorumVotesBPSOffset).to.equal(321);
+        await expect(tx).to.emit(gov, 'QuorumVotesBPSOffsetSet').withArgs(300, 321);
+      });
+
+      it('reverts when sender is not admin', async () => {
+        await expect(gov.connect(account0)._setQuorumVotesBPSOffset(321)).to.be.revertedWith(
+          'NounsDAO::_setQuorumVotesBPSOffset: admin only',
+        );
+      });
     });
 
-    it('_setMaxQuorumVotesBPS reverts when sender is not admin', async () => {
-      await expect(gov.connect(account0)._setMaxQuorumVotesBPS(3333)).to.be.revertedWith(
-        'NounsDAO::_setDynamicQuorumParams: admin only',
-      );
+    describe('_setQuorumLinearCoef', () => {
+      it('works and emits', async () => {
+        const tx = await gov._setQuorumLinearCoef(111);
+        const params = await gov.getDynamicQuorumParamsAt(await blockNumber());
+
+        expect(params.quorumLinearCoef).to.equal(111);
+        await expect(tx).to.emit(gov, 'QuorumLinearCoefSet').withArgs(1, 111);
+      });
+
+      it('reverts when sender is not admin', async () => {
+        await expect(gov.connect(account0)._setQuorumLinearCoef(111)).to.be.revertedWith(
+          'NounsDAO::_setQuorumLinearCoef: admin only',
+        );
+      });
     });
 
-    it('_setQuorumVotesBPSOffset works', async () => {
-      await gov._setQuorumVotesBPSOffset(321);
-      const params = await gov.getDynamicQuorumParamsAt(await blockNumber());
+    describe('_setQuorumQuadraticCoef', () => {
+      it('works and emits', async () => {
+        const tx = await gov._setQuorumQuadraticCoef(222);
+        const params = await gov.getDynamicQuorumParamsAt(await blockNumber());
 
-      expect(params.quorumVotesBPSOffset).to.equal(321);
-    });
+        expect(params.quorumQuadraticCoef).to.equal(222);
+        await expect(tx).to.emit(gov, 'QuorumQuadraticCoefSet').withArgs(2, 222);
+      });
 
-    it('_setQuorumVotesBPSOffset reverts when sender is not admin', async () => {
-      await expect(gov.connect(account0)._setQuorumVotesBPSOffset(321)).to.be.revertedWith(
-        'NounsDAO::_setDynamicQuorumParams: admin only',
-      );
-    });
-
-    it('_setQuorumLinearCoef works', async () => {
-      await gov._setQuorumLinearCoef(111);
-      const params = await gov.getDynamicQuorumParamsAt(await blockNumber());
-
-      expect(params.quorumLinearCoef).to.equal(111);
-    });
-
-    it('_setQuorumLinearCoef reverts when sender is not admin', async () => {
-      await expect(gov.connect(account0)._setQuorumLinearCoef(111)).to.be.revertedWith(
-        'NounsDAO::_setDynamicQuorumParams: admin only',
-      );
-    });
-
-    it('_setQuorumQuadraticCoef works', async () => {
-      await gov._setQuorumQuadraticCoef(222);
-      const params = await gov.getDynamicQuorumParamsAt(await blockNumber());
-
-      expect(params.quorumQuadraticCoef).to.equal(222);
-    });
-
-    it('_setQuorumQuadraticCoef reverts when sender is not admin', async () => {
-      await expect(gov.connect(account0)._setQuorumQuadraticCoef(222)).to.be.revertedWith(
-        'NounsDAO::_setDynamicQuorumParams: admin only',
-      );
+      it('reverts when sender is not admin', async () => {
+        await expect(gov.connect(account0)._setQuorumQuadraticCoef(222)).to.be.revertedWith(
+          'NounsDAO::_setQuorumQuadraticCoef: admin only',
+        );
+      });
     });
   });
 

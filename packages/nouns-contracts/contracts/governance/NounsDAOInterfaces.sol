@@ -115,6 +115,21 @@ contract NounsDAOEventsV2 is NounsDAOEvents {
         uint32 quorumLinearCoef,
         uint32 quorumQuadraticCoef
     );
+
+    /// @notice Emitted when minQuorumVotesBPS is set
+    event MinQuorumVotesBPSSet(uint16 oldMinQuorumVotesBPS, uint16 newMinQuorumVotesBPS);
+
+    /// @notice Emitted when maxQuorumVotesBPS is set
+    event MaxQuorumVotesBPSSet(uint16 oldMaxQuorumVotesBPS, uint16 newMaxQuorumVotesBPS);
+
+    /// @notice Emitted when quorumVotesBPSOffset is set
+    event QuorumVotesBPSOffsetSet(uint16 oldQuorumVotesBPSOffset, uint16 newQuorumVotesBPSOffset);
+
+    /// @notice Emitted when quorumLinearCoef is set
+    event QuorumLinearCoefSet(uint32 oldQuorumLinearCoef, uint32 newQuorumLinearCoef);
+
+    /// @notice Emitted when quorumQuadraticCoef is set
+    event QuorumQuadraticCoefSet(uint32 oldQuorumQuadraticCoef, uint32 newQuorumQuadraticCoef);
 }
 
 contract NounsDAOProxyStorage {
