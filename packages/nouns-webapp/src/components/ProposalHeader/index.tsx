@@ -104,29 +104,34 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
             </div>
           </div>
         </div>
-        <div className={classes.byLineWrapper}>
-        <h3>Proposed by:</h3> 
-
-        <div className={classes.byLineContentWrapper}>
-        <h3>
-
-          <a href={buildEtherscanAddressLink(proposal.proposer || "")} target="_blank" rel="noreferrer">
-            <ShortAddress address={proposal.proposer || ""} avatar={false}/>
-          </a>
-
-          <span className={classes.propTransactionWrapper}>
-            at <span className={classes.propTransactionHash}>
-              {transactionLink(proposal.transactionHash)}
-            </span>
-          </span> 
-        </h3>
-        </div>
-      </div>
         {!isMobile && (
           <div className="d-flex justify-content-end align-items-end">
             {isActiveForVoting && voteButton}
           </div>
         )}
+      </div>
+
+      <div className={classes.byLineWrapper}>
+        <h3>Proposed by:</h3>
+
+        <div className={classes.byLineContentWrapper}>
+          <h3>
+            <a
+              href={buildEtherscanAddressLink(proposal.proposer || '')}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <ShortAddress address={proposal.proposer || ''} avatar={false} />
+            </a>
+
+            <span className={classes.propTransactionWrapper}>
+              at{' '}
+              <span className={classes.propTransactionHash}>
+                {transactionLink(proposal.transactionHash)}
+              </span>
+            </span>
+          </h3>
+        </div>
       </div>
 
       {isMobile && (
