@@ -422,7 +422,6 @@ msgstr "提案が見つかりません"
 msgid "None"
 msgstr "なし"
 
-#: src/components/BidHistoryModal/index.tsx
 #: src/pages/Governance/index.tsx
 msgid "Noun"
 msgstr "Noun"
@@ -487,7 +486,8 @@ msgstr "Nounsプロトコル"
 
 #: src/components/Documentation/index.tsx
 msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community"
-msgstr "Nouns は、オンチェーン・アバターコミュニティの形成を改善するための実験的な試みです。 \n"
+msgstr ""
+"Nouns は、オンチェーン・アバターコミュニティの形成を改善するための実験的な試みです。 \n"
 "{cryptopunksLink} などのプロジェクトがデジタルコミュニティとアイデンティティの構築を試みているのに対し、Nounsはアイデンティティ、コミュニティ、ガバナンス、そしてコミュニティが使用できるトレジャリーを構築することを試みています。"
 
 #: src/components/Documentation/index.tsx
@@ -968,4 +968,3 @@ msgstr "{0} 票"
 #: src/pages/Vote/index.tsx
 msgid "{moveStateButtonAction} Proposal ⌐◧-◧"
 msgstr "{moveStateButtonAction} 提案の順番 ⌐◧-◧"
-

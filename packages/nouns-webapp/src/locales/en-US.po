@@ -429,7 +429,6 @@ msgstr "No proposals found"
 msgid "None"
 msgstr "None"
 
-#: src/components/BidHistoryModal/index.tsx
 #: src/pages/Governance/index.tsx
 msgid "Noun"
 msgstr "Noun"
