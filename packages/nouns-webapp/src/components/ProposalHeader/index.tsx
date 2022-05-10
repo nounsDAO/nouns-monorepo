@@ -15,6 +15,7 @@ import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import { transactionLink } from '../ProposalContent';
 import ShortAddress from '../ShortAddress';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
+import { Locales } from '../../i18n/locales';
 
 interface ProposalHeaderProps {
   proposal: Proposal;
@@ -81,6 +82,26 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
     </>
   );
 
+  const proposer = (
+    <a
+      href={buildEtherscanAddressLink(proposal.proposer || '')}
+      target="_blank"
+      rel="noreferrer"
+      className={classes.proposerLinkJp}
+    >
+      <ShortAddress address={proposal.proposer || ''} avatar={false} />
+    </a>
+  );
+
+  const proposedAtTransactionHash = (
+    <>
+      at{' '}
+      <span className={classes.propTransactionHash}>
+        {transactionLink(proposal.transactionHash)}
+      </span>
+    </>
+  );
+
   return (
     <>
       <div className="d-flex justify-content-between align-items-center">
@@ -114,24 +135,12 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
       </div>
 
       <div className={classes.byLineWrapper}>
-        {activeLocale === 'ja-JP' ? (
+        {activeLocale === Locales.ja_JP ? (
           <div className={classes.proposalByLineWrapperJp}>
             <Trans>
               <span className={classes.proposedByJp}>Proposed by: </span>
-              <a
-                href={buildEtherscanAddressLink(proposal.proposer || '')}
-                target="_blank"
-                rel="noreferrer"
-                className={classes.proposerLinkJp}
-              >
-                <ShortAddress address={proposal.proposer || ''} avatar={false} />
-              </a>
-              <span className={classes.propTransactionWrapperJp}>
-                at{' '}
-                <span className={classes.propTransactionHash}>
-                  {transactionLink(proposal.transactionHash)}
-                </span>
-              </span>
+              {proposer}
+              <span className={classes.propTransactionWrapperJp}>{proposedAtTransactionHash}</span>
             </Trans>
           </div>
         ) : (
@@ -140,20 +149,8 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
 
             <div className={classes.byLineContentWrapper}>
               <h3>
-                <a
-                  href={buildEtherscanAddressLink(proposal.proposer || '')}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <ShortAddress address={proposal.proposer || ''} avatar={false} />
-                </a>
-
-                <span className={classes.propTransactionWrapper}>
-                  at{' '}
-                  <span className={classes.propTransactionHash}>
-                    {transactionLink(proposal.transactionHash)}
-                  </span>
-                </span>
+                {proposer}
+                <span className={classes.propTransactionWrapper}>{proposedAtTransactionHash}</span>
               </h3>
             </div>
           </>

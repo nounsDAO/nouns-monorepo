@@ -12,3 +12,8 @@ export const LOCALE_LABEL: { [locale in SupportedLocale]: string } = {
   'ja-JP': '日本語',
   pseudo: 'ƥƨèúδô',
 };
+
+export enum Locales {
+  en_US = 'en-US',
+  ja_JP = 'ja-JP',
+}
