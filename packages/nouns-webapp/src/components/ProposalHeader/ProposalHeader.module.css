@@ -117,7 +117,6 @@
   margin-top: 0.5rem;
 }
 
-
 .byLineWrapper {
   display: flex;
   flex-direction: row;
@@ -142,6 +141,23 @@
   font-size: 18px;
   color: var(--brand-gray-light-text);
 }
+.propTransactionWrapperJp {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+  color: var(--brand-gray-light-text);
+}
+
+.proposedByJp {
+  color: var(--brand-gray-light-text);
+}
+
+.proposerLinkJp {
+  margin-right: 0.25rem;
+}
+
+.proposalByLineWrapperJp {
+  margin-left: 2.6rem;
+}
 
 .propTransactionHash {
   margin-left: 0.2rem;
@@ -152,7 +168,6 @@
 }
 
 @media (max-width: 450px) {
-
   .byLineWrapper {
     flex-direction: column;
   }

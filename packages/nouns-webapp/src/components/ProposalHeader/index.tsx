@@ -14,6 +14,7 @@ import { i18n } from '@lingui/core';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import { transactionLink } from '../ProposalContent';
 import ShortAddress from '../ShortAddress';
+import { useActiveLocale } from '../../hooks/useActivateLocale';
 
 interface ProposalHeaderProps {
   proposal: Proposal;
@@ -53,6 +54,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const proposalVote = useProposalVote(proposal?.id);
   const proposalCreationTimestamp = useBlockTimestamp(proposal?.createdBlock);
   const disableVoteButton = !isWalletConnected || !availableVotes || hasVoted;
+  const activeLocale = useActiveLocale();
 
   const voteButton = (
     <>
@@ -112,26 +114,50 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
       </div>
 
       <div className={classes.byLineWrapper}>
-        <h3>Proposed by:</h3>
-
-        <div className={classes.byLineContentWrapper}>
-          <h3>
-            <a
-              href={buildEtherscanAddressLink(proposal.proposer || '')}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <ShortAddress address={proposal.proposer || ''} avatar={false} />
-            </a>
-
-            <span className={classes.propTransactionWrapper}>
-              at{' '}
-              <span className={classes.propTransactionHash}>
-                {transactionLink(proposal.transactionHash)}
+        {activeLocale === 'ja-JP' ? (
+          <div className={classes.proposalByLineWrapperJp}>
+            <Trans>
+              <span className={classes.proposedByJp}>Proposed by: </span>
+              <a
+                href={buildEtherscanAddressLink(proposal.proposer || '')}
+                target="_blank"
+                rel="noreferrer"
+                className={classes.proposerLinkJp}
+              >
+                <ShortAddress address={proposal.proposer || ''} avatar={false} />
+              </a>
+              <span className={classes.propTransactionWrapperJp}>
+                at{' '}
+                <span className={classes.propTransactionHash}>
+                  {transactionLink(proposal.transactionHash)}
+                </span>
               </span>
-            </span>
-          </h3>
-        </div>
+            </Trans>
+          </div>
+        ) : (
+          <>
+            <h3>Proposed by:</h3>
+
+            <div className={classes.byLineContentWrapper}>
+              <h3>
+                <a
+                  href={buildEtherscanAddressLink(proposal.proposer || '')}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <ShortAddress address={proposal.proposer || ''} avatar={false} />
+                </a>
+
+                <span className={classes.propTransactionWrapper}>
+                  at{' '}
+                  <span className={classes.propTransactionHash}>
+                    {transactionLink(proposal.transactionHash)}
+                  </span>
+                </span>
+              </h3>
+            </div>
+          </>
+        )}
       </div>
 
       {isMobile && (

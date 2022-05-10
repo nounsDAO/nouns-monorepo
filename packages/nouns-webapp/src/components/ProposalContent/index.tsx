@@ -18,7 +18,7 @@ export const linkIfAddress = (content: string) => {
   if (utils.isAddress(content)) {
     return (
       <a href={buildEtherscanAddressLink(content)} target="_blank" rel="noreferrer">
-            <EnsOrLongAddress address={content} />
+        <EnsOrLongAddress address={content} />
       </a>
     );
   }
