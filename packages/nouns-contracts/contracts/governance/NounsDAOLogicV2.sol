@@ -247,7 +247,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
             newProposal.startBlock,
             newProposal.endBlock,
             newProposal.proposalThreshold,
-            newProposal.minQuorumVotes,
+            quorumVotes(newProposal.id),
             description
         );
 
