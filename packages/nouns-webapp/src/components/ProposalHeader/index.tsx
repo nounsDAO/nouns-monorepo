@@ -94,12 +94,12 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   );
 
   const proposedAtTransactionHash = (
-    <>
+    <Trans>
       at{' '}
       <span className={classes.propTransactionHash}>
         {transactionLink(proposal.transactionHash)}
       </span>
-    </>
+    </Trans>
   );
 
   return (
@@ -139,7 +139,9 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
           <div className={classes.proposalByLineWrapperJp}>
             <Trans>
               <span className={classes.proposedByJp}>Proposed by: </span>
+              <span className={classes.proposerJp}>
               {proposer}
+              </span>
               <span className={classes.propTransactionWrapperJp}>{proposedAtTransactionHash}</span>
             </Trans>
           </div>

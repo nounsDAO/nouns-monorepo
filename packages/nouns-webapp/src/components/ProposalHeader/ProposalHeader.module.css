@@ -145,6 +145,7 @@
   margin-left: 0.25rem;
   margin-right: 0.25rem;
   color: var(--brand-gray-light-text);
+  font-weight: 500;
 }
 
 .proposedByJp {
@@ -156,8 +157,10 @@
 }
 
 .proposalByLineWrapperJp {
-  margin-left: 2.6rem;
+  font-weight: 500;
+  margin-left: 2.5rem;
 }
+
 
 .propTransactionHash {
   margin-left: 0.2rem;
@@ -174,5 +177,22 @@
 
   .byLineContentWrapper {
     margin-left: 2.5rem;
+  }
+
+  .proposalByLineWrapperJp {
+    flex-direction: column;
+    display: flex;
+  }
+
+  .proposerJp {
+    margin-left: 0.5rem;
+  }
+
+  .proposedByJp {
+    margin-left: 0.5rem;
+  }
+
+  .propTransactionWrapperJp {
+    margin-left: 0.25rem;
   }
 }
