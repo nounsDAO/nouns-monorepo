@@ -146,7 +146,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 700px) {
   .proposalLinkWithCountdown {
     display: flex;
     flex-direction: column;
@@ -155,9 +155,16 @@
   .proposalInfoPillsWrapper {
     width: 100%;
     margin-top: 1rem;
-    justify-content: flex-start;
     margin-left: 3rem;
+    display: flex;
+    flex-direction: column;
   }
+
+  .proposalStatusWrapper {
+    margin-top: 0.5rem;
+    max-width: fit-content;
+  }
+
 }
 
 .nullBtnWrapper {

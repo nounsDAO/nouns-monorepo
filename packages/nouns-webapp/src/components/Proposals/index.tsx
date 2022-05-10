@@ -8,15 +8,16 @@ import { isMobileScreen } from '../../utils/isMobile';
 import clsx from 'clsx';
 import { useUserVotes } from '../../wrappers/nounToken';
 import { Trans } from '@lingui/macro';
-import { i18n } from '@lingui/core';
 import { ClockIcon } from '@heroicons/react/solid';
 import proposalStatusClasses from '../ProposalStatus/ProposalStatus.module.css';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { useActiveLocale } from '../../hooks/useActivateLocale';
+import { LOCALE_DAYJS, SupportedLocale } from '../../i18n/locales';
 
 dayjs.extend(relativeTime);
 
-const getCountdownCopy = (proposal: Proposal, currentBlock: number) => {
+const getCountdownCopy = (proposal: Proposal, currentBlock: number, locale: SupportedLocale) => {
   const AVERAGE_BLOCK_TIME_IN_SECS = 13;
   const timestamp = Date.now();
   const startDate =
@@ -40,12 +41,18 @@ const getCountdownCopy = (proposal: Proposal, currentBlock: number) => {
   const now = dayjs();
 
   if (startDate?.isBefore(now) && endDate?.isAfter(now)) {
-    return `Ends ${endDate.fromNow()}`;
+    return <Trans>
+        Ends {endDate.locale(LOCALE_DAYJS[locale]).fromNow()}
+    </Trans>;
   }
   if (endDate?.isBefore(now)) {
-    return `Expires ${expiresDate.fromNow()}`;
+    return <Trans>
+      Expires {expiresDate.locale(LOCALE_DAYJS[locale]).fromNow()}
+    </Trans>;
   }
-  return `Starts ${dayjs(startDate).fromNow()} `;
+  return <Trans>
+  Starts {dayjs(startDate).locale(LOCALE_DAYJS[locale]).fromNow()}
+  </Trans>;
 };
 
 const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
@@ -55,6 +62,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
   const connectedAccountNounVotes = useUserVotes() || 0;
   const currentBlock = useBlockNumber();
   const isMobile = isMobileScreen();
+  const activeLocale = useActiveLocale();
 
   const nullStateCopy = () => {
     if (account !== null) {
@@ -126,7 +134,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
                             <ClockIcon height={16} width={16} />
                           </span>{' '}
                           <span className={classes.countdownPillText}>
-                            {getCountdownCopy(p, currentBlock || 0)}
+                            {getCountdownCopy(p, currentBlock || 0, activeLocale)}
                           </span>
                         </div>
                       </div>

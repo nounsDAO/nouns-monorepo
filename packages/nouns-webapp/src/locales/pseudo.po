@@ -280,8 +280,16 @@ msgstr ""
 msgid "Ends"
 msgstr ""
 
+#: src/components/Proposals/index.tsx
+#~ msgid "Ends ${0}"
+#~ msgstr ""
+
 #: src/components/AuctionTimer/index.tsx
 msgid "Ends on"
+msgstr ""
+
+#: src/components/Proposals/index.tsx
+msgid "Ends {0}"
 msgstr ""
 
 #: src/components/Bid/index.tsx
@@ -313,6 +321,14 @@ msgstr ""
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 msgid "Expired"
+msgstr ""
+
+#: src/components/Proposals/index.tsx
+#~ msgid "Expires ${0}"
+#~ msgstr ""
+
+#: src/components/Proposals/index.tsx
+msgid "Expires {0}"
 msgstr ""
 
 #: src/pages/Playground/index.tsx
@@ -429,7 +445,6 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-#: src/components/BidHistoryModal/index.tsx
 #: src/pages/Governance/index.tsx
 msgid "Noun"
 msgstr ""
@@ -680,6 +695,14 @@ msgstr ""
 
 #: src/pages/Vote/index.tsx
 msgid "Starts"
+msgstr ""
+
+#: src/components/Proposals/index.tsx
+#~ msgid "Starts ${0}"
+#~ msgstr ""
+
+#: src/components/Proposals/index.tsx
+msgid "Starts {0}"
 msgstr ""
 
 #: src/components/Proposals/index.tsx
