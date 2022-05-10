@@ -142,10 +142,9 @@
   color: var(--brand-gray-light-text);
 }
 .propTransactionWrapperJp {
-  margin-left: 0.25rem;
+  margin-left: 0.3rem;
   margin-right: 0.25rem;
   color: var(--brand-gray-light-text);
-  font-weight: 500;
 }
 
 .proposedByJp {
@@ -190,9 +189,5 @@
 
   .proposedByJp {
     margin-left: 0.5rem;
-  }
-
-  .propTransactionWrapperJp {
-    margin-left: 0.25rem;
   }
 }
