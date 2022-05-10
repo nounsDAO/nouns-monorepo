@@ -58,13 +58,13 @@ task('deploy-local', 'Deploy contracts to hardhat')
     types.int,
   ) // Default: 20%
   .addOptionalParam(
-    'quorumPolynomCoef0',
+    'quorumLinearCoef',
     'Dynamic quorum polynom linear coefficient (float)',
     1,
     types.float,
   ) // x^1 coefficient
   .addOptionalParam(
-    'quorumPolynomCoef1',
+    'quorumQuadraticCoef',
     'Dynamic quorum polynom quadratic coefficient (float)',
     0,
     types.float,
@@ -148,10 +148,8 @@ task('deploy-local', 'Deploy contracts to hardhat')
             minQuorumVotesBPS: args.minQuorumVotesBPS,
             maxQuorumVotesBPS: args.maxQuorumVotesBPS,
             quorumVotesBPSOffset: args.quorumVotesBPSOffset,
-            quorumPolynomCoefs: [
-              parseUnits(args.quorumPolynomCoef0.toString(), 6),
-              parseUnits(args.quorumPolynomCoef1.toString(), 6),
-            ],
+            quorumLinearCoef: parseUnits(args.quorumLinearCoef.toString(), 6),
+            quorumQuadraticCoef: parseUnits(args.quorumQuadraticCoef.toString(), 6),
           },
         ],
         waitForConfirmation: true,
