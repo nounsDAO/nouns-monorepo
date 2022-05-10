@@ -1,6 +1,5 @@
 import React from 'react';
 import ShortAddress from '../ShortAddress';
-import _classes from './BidHistory.module.css';
 import dayjs from 'dayjs';
 import link from '../../assets/icons/Link.svg';
 import { buildEtherscanTxLink } from '../../utils/etherscan';
@@ -45,7 +44,7 @@ const bidItem = (bid: Bid, index: number, classes: any, isCool?: boolean) => {
 };
 
 const BidHistory: React.FC<{ auctionId: string; max: number; classes?: any }> = props => {
-  const { auctionId, max, classes = _classes } = props;
+  const { auctionId, max, classes } = props;
   const isCool = useAppSelector(state => state.application.isCoolBackground);
   const bids = useAuctionBids(EthersBN.from(auctionId));
   const bidContent =

@@ -8,6 +8,10 @@
   margin-top: 0.25rem;
 }
 
+.winnerCopy {
+  min-width: 250px;
+}
+
 .verifyButton {
   height: 3rem;
   color: white;
@@ -98,6 +102,6 @@
   }
 
   .youCopy {
-    padding-right: .25rem;
+    padding-right: 0.25rem;
   }
 }
