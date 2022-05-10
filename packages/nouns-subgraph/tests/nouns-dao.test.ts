@@ -5,14 +5,30 @@ import {
   handleDynamicQuorumParamsSet,
   handleProposalCreatedWithRequirements,
   handleVoteCast,
+  handleMinQuorumVotesBPSSet,
+  handleMaxQuorumVotesBPSSet,
+  handleQuorumVotesBPSOffsetSet,
+  handleQuorumLinearCoefSet,
+  handleQuorumQuadraticCoefSet,
 } from '../src/nouns-dao';
 import {
   createDynamicQuorumParamsSetEvent,
   createProposalCreatedWithRequirementsEvent,
   createVoteCastEvent,
   stubProposalCreatedWithRequirementsEventInput,
+  createMinQuorumVotesBPSSetEvent,
+  createMaxQuorumVotesBPSSetEvent,
+  createQuorumVotesBPSOffsetSetEvent,
+  createQuorumLinearCoefSetEvent,
+  createQuorumQuadraticCoefSetEvent,
 } from './utils';
-import { BIGINT_ONE, BIGINT_ZERO, STATUS_ACTIVE, STATUS_PENDING } from '../src/utils/constants';
+import {
+  BIGINT_10K,
+  BIGINT_ONE,
+  BIGINT_ZERO,
+  STATUS_ACTIVE,
+  STATUS_PENDING,
+} from '../src/utils/constants';
 import {
   getOrCreateDynamicQuorumParams,
   getGovernanceEntity,
@@ -276,6 +292,66 @@ test('handleVoteCast: uses quorum params from prop creation time, not newer para
   const savedProp = Proposal.load(propId.toString());
 
   assert.bigIntEquals(BigInt.fromI32(80), savedProp!.quorumVotes);
+
+  clearStore();
+});
+
+test('handleMinQuorumVotesBPSSet: saves incoming values', () => {
+  const event1 = createMinQuorumVotesBPSSetEvent(0, 1);
+  handleMinQuorumVotesBPSSet(event1);
+  assert.i32Equals(1, getOrCreateDynamicQuorumParams().minQuorumVotesBPS);
+
+  const event2 = createMinQuorumVotesBPSSetEvent(1, 2);
+  handleMinQuorumVotesBPSSet(event2);
+  assert.i32Equals(2, getOrCreateDynamicQuorumParams().minQuorumVotesBPS);
+
+  clearStore();
+});
+
+test('handleMaxQuorumVotesBPSSet: saves incoming values', () => {
+  const event1 = createMaxQuorumVotesBPSSetEvent(0, 1000);
+  handleMaxQuorumVotesBPSSet(event1);
+  assert.i32Equals(1000, getOrCreateDynamicQuorumParams().maxQuorumVotesBPS);
+
+  const event2 = createMaxQuorumVotesBPSSetEvent(1000, 2000);
+  handleMaxQuorumVotesBPSSet(event2);
+  assert.i32Equals(2000, getOrCreateDynamicQuorumParams().maxQuorumVotesBPS);
+
+  clearStore();
+});
+
+test('handleQuorumVotesBPSOffsetSet: saves incoming values', () => {
+  const event1 = createQuorumVotesBPSOffsetSetEvent(0, 100);
+  handleQuorumVotesBPSOffsetSet(event1);
+  assert.i32Equals(100, getOrCreateDynamicQuorumParams().quorumVotesBPSOffset);
+
+  const event2 = createQuorumVotesBPSOffsetSetEvent(100, 200);
+  handleQuorumVotesBPSOffsetSet(event2);
+  assert.i32Equals(200, getOrCreateDynamicQuorumParams().quorumVotesBPSOffset);
+
+  clearStore();
+});
+
+test('handleQuorumLinearCoefSet: saves incoming values', () => {
+  const event1 = createQuorumLinearCoefSetEvent(BIGINT_ZERO, BIGINT_ONE);
+  handleQuorumLinearCoefSet(event1);
+  assert.bigIntEquals(BIGINT_ONE, getOrCreateDynamicQuorumParams().quorumLinearCoef);
+
+  const event2 = createQuorumLinearCoefSetEvent(BIGINT_ONE, BIGINT_10K);
+  handleQuorumLinearCoefSet(event2);
+  assert.bigIntEquals(BIGINT_10K, getOrCreateDynamicQuorumParams().quorumLinearCoef);
+
+  clearStore();
+});
+
+test('handleQuorumQuadraticCoefSet: saves incoming values', () => {
+  const event1 = createQuorumQuadraticCoefSetEvent(BIGINT_ZERO, BIGINT_ONE);
+  handleQuorumQuadraticCoefSet(event1);
+  assert.bigIntEquals(BIGINT_ONE, getOrCreateDynamicQuorumParams().quorumQuadraticCoef);
+
+  const event2 = createQuorumQuadraticCoefSetEvent(BIGINT_ONE, BIGINT_10K);
+  handleQuorumQuadraticCoefSet(event2);
+  assert.bigIntEquals(BIGINT_10K, getOrCreateDynamicQuorumParams().quorumQuadraticCoef);
 
   clearStore();
 });

@@ -7,6 +7,11 @@ import {
   VoteCast,
   ProposalVetoed,
   DynamicQuorumParamsSet,
+  MinQuorumVotesBPSSet,
+  MaxQuorumVotesBPSSet,
+  QuorumVotesBPSOffsetSet,
+  QuorumLinearCoefSet,
+  QuorumQuadraticCoefSet,
 } from './types/NounsDAO/NounsDAO';
 import {
   getOrCreateDelegate,
@@ -187,5 +192,35 @@ export function handleDynamicQuorumParamsSet(event: DynamicQuorumParamsSet): voi
   params.quorumLinearCoef = event.params.quorumLinearCoef;
   params.quorumQuadraticCoef = event.params.quorumQuadraticCoef;
 
+  params.save();
+}
+
+export function handleMinQuorumVotesBPSSet(event: MinQuorumVotesBPSSet): void {
+  const params = getOrCreateDynamicQuorumParams();
+  params.minQuorumVotesBPS = event.params.newMinQuorumVotesBPS;
+  params.save();
+}
+
+export function handleMaxQuorumVotesBPSSet(event: MaxQuorumVotesBPSSet): void {
+  const params = getOrCreateDynamicQuorumParams();
+  params.maxQuorumVotesBPS = event.params.newMaxQuorumVotesBPS;
+  params.save();
+}
+
+export function handleQuorumVotesBPSOffsetSet(event: QuorumVotesBPSOffsetSet): void {
+  const params = getOrCreateDynamicQuorumParams();
+  params.quorumVotesBPSOffset = event.params.newQuorumVotesBPSOffset;
+  params.save();
+}
+
+export function handleQuorumLinearCoefSet(event: QuorumLinearCoefSet): void {
+  const params = getOrCreateDynamicQuorumParams();
+  params.quorumLinearCoef = event.params.newQuorumLinearCoef;
+  params.save();
+}
+
+export function handleQuorumQuadraticCoefSet(event: QuorumQuadraticCoefSet): void {
+  const params = getOrCreateDynamicQuorumParams();
+  params.quorumQuadraticCoef = event.params.newQuorumQuadraticCoef;
   params.save();
 }
