@@ -205,8 +205,11 @@ type Proposal @entity {
   "Dynamic quorum param snapshot: offset for the dynamic quorum function (basis points)"
   quorumVotesBPSOffset: Int!
 
-  "Dynamic quorum param snapshot: coefficients for the dynamic quorum function"
-  quorumPolynomCoefs: [BigInt!]
+  "Dynamic quorum param snapshot: linear coefficient for the dynamic quorum function"
+  quorumLinearCoef: BigInt!
+
+  "Dynamic quorum param snapshot: quadratic coefficient for the dynamic quorum function"
+  quorumQuadraticCoef: BigInt!
 }
 
 type Vote @entity {
@@ -280,6 +283,9 @@ type DynamicQuorumParams @entity {
   "Offset for the dynamic quorum function (basis points)"
   quorumVotesBPSOffset: Int!
 
-  "Coefficients for the dynamic quorum function"
-  quorumPolynomCoefs: [BigInt!]
+  "Linear coefficient for the dynamic quorum function"
+  quorumLinearCoef: BigInt!
+
+  "Quadratic coefficient for the dynamic quorum function"
+  quorumQuadraticCoef: BigInt!
 }

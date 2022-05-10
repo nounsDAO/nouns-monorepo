@@ -75,7 +75,8 @@ export function createDynamicQuorumParamsSetEvent(
   minQuorumVotesBPS: i32,
   maxQuorumVotesBPS: i32,
   quorumVotesBPSOffset: i32,
-  quorumPolynomCoefs: Array<BigInt>,
+  quorumLinearCoef: BigInt,
+  quorumQuadraticCoef: BigInt,
 ): DynamicQuorumParamsSet {
   let newEvent = changetype<DynamicQuorumParamsSet>(newMockEvent());
   newEvent.parameters = new Array();
@@ -94,8 +95,15 @@ export function createDynamicQuorumParamsSetEvent(
 
   newEvent.parameters.push(
     new ethereum.EventParam(
-      'quorumPolynomCoefs',
-      ethereum.Value.fromUnsignedBigIntArray(quorumPolynomCoefs),
+      'quorumLinearCoef',
+      ethereum.Value.fromUnsignedBigInt(quorumLinearCoef),
+    ),
+  );
+
+  newEvent.parameters.push(
+    new ethereum.EventParam(
+      'quorumQuadraticCoef',
+      ethereum.Value.fromUnsignedBigInt(quorumQuadraticCoef),
     ),
   );
 

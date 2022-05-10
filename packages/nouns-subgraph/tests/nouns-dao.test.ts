@@ -143,8 +143,9 @@ test('handleProposalCreatedWithRequirements: sets againstVotes to zero and total
 });
 
 test('handleDynamicQuorumParamsSet: saves incoming values for the first time', () => {
-  const coefs = [BigInt.fromI32(1), BigInt.fromI32(2)];
-  const newEvent = createDynamicQuorumParamsSetEvent(500, 2000, 700, coefs);
+  const linearCoef = BigInt.fromI32(1);
+  const quadraticCoef = BigInt.fromI32(2);
+  const newEvent = createDynamicQuorumParamsSetEvent(500, 2000, 700, linearCoef, quadraticCoef);
 
   handleDynamicQuorumParamsSet(newEvent);
 
@@ -154,21 +155,21 @@ test('handleDynamicQuorumParamsSet: saves incoming values for the first time', (
   assert.i32Equals(savedParams.maxQuorumVotesBPS, 2000);
   assert.i32Equals(savedParams.quorumVotesBPSOffset, 700);
 
-  // have to do this cast due to compliation issues when trying to use the value directly
-  const savedCoefs = savedParams.quorumPolynomCoefs as Array<BigInt>;
-  assert.bigIntEquals(savedCoefs[0], coefs[0]);
-  assert.bigIntEquals(savedCoefs[1], coefs[1]);
+  assert.bigIntEquals(linearCoef, savedParams.quorumLinearCoef);
+  assert.bigIntEquals(quadraticCoef, savedParams.quorumQuadraticCoef);
 
   clearStore();
 });
 
 test('handleDynamicQuorumParamsSet: saves incoming values on top of previous values', () => {
-  let coefs = [BigInt.fromI32(1), BigInt.fromI32(2)];
-  const firstEvent = createDynamicQuorumParamsSetEvent(500, 2000, 700, coefs);
+  let linearCoef = BigInt.fromI32(1);
+  let quadraticCoef = BigInt.fromI32(2);
+  const firstEvent = createDynamicQuorumParamsSetEvent(500, 2000, 700, linearCoef, quadraticCoef);
   handleDynamicQuorumParamsSet(firstEvent);
 
-  coefs = [BigInt.fromI32(3), BigInt.fromI32(4)];
-  const secondEvent = createDynamicQuorumParamsSetEvent(555, 2222, 777, coefs);
+  linearCoef = BigInt.fromI32(3);
+  quadraticCoef = BigInt.fromI32(4);
+  const secondEvent = createDynamicQuorumParamsSetEvent(555, 2222, 777, linearCoef, quadraticCoef);
   handleDynamicQuorumParamsSet(secondEvent);
 
   const savedParams = getOrCreateDynamicQuorumParams();
@@ -177,9 +178,8 @@ test('handleDynamicQuorumParamsSet: saves incoming values on top of previous val
   assert.i32Equals(savedParams.maxQuorumVotesBPS, 2222);
   assert.i32Equals(savedParams.quorumVotesBPSOffset, 777);
 
-  const savedCoefs = savedParams.quorumPolynomCoefs as Array<BigInt>;
-  assert.bigIntEquals(savedCoefs[0], coefs[0]);
-  assert.bigIntEquals(savedCoefs[1], coefs[1]);
+  assert.bigIntEquals(linearCoef, savedParams.quorumLinearCoef);
+  assert.bigIntEquals(quadraticCoef, savedParams.quorumQuadraticCoef);
 
   clearStore();
 });
@@ -194,8 +194,15 @@ test('handleVoteCast: updates quorumVotes using dynamic quorum math', () => {
   governance.save();
 
   // Save dynamic quorum params
-  const coefs = [BigInt.fromI32(300000), BigInt.fromI32(1000)];
-  const quorumParamsEvent = createDynamicQuorumParamsSetEvent(1000, 4000, 500, coefs);
+  const linearCoef = BigInt.fromI32(300000);
+  const quadraticCoef = BigInt.fromI32(1000);
+  const quorumParamsEvent = createDynamicQuorumParamsSetEvent(
+    1000,
+    4000,
+    500,
+    linearCoef,
+    quadraticCoef,
+  );
   handleDynamicQuorumParamsSet(quorumParamsEvent);
 
   // Create prop with state we need for quorum inputs
@@ -229,8 +236,15 @@ test('handleVoteCast: uses quorum params from prop creation time, not newer para
   governance.save();
 
   // Save dynamic quorum params
-  const coefs = [BigInt.fromI32(300000), BigInt.fromI32(1000)];
-  const quorumParamsEvent = createDynamicQuorumParamsSetEvent(1000, 4000, 500, coefs);
+  const linearCoef = BigInt.fromI32(300000);
+  const quadraticCoef = BigInt.fromI32(1000);
+  const quorumParamsEvent = createDynamicQuorumParamsSetEvent(
+    1000,
+    4000,
+    500,
+    linearCoef,
+    quadraticCoef,
+  );
   handleDynamicQuorumParamsSet(quorumParamsEvent);
 
   // Create prop with state we need for quorum inputs
@@ -240,8 +254,15 @@ test('handleVoteCast: uses quorum params from prop creation time, not newer para
   handleProposalCreatedWithRequirements(newPropEvent);
 
   // Update dynamic quorum params
-  const higherCoefs = [BigInt.fromI32(600000), BigInt.fromI32(20000)];
-  const higherQuorumParamsEvent = createDynamicQuorumParamsSetEvent(500, 6000, 0, higherCoefs);
+  const greaterLinearCoef = BigInt.fromI32(600000);
+  const greaterQuadraticCoef = BigInt.fromI32(20000);
+  const higherQuorumParamsEvent = createDynamicQuorumParamsSetEvent(
+    500,
+    6000,
+    0,
+    greaterLinearCoef,
+    greaterQuadraticCoef,
+  );
   handleDynamicQuorumParamsSet(higherQuorumParamsEvent);
 
   const voter = Address.fromString(SOME_ADDRESS);

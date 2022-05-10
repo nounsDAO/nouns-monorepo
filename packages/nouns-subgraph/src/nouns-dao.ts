@@ -68,7 +68,8 @@ export function handleProposalCreatedWithRequirements(
   proposal.minQuorumVotesBPS = dynamicQuorum.minQuorumVotesBPS;
   proposal.maxQuorumVotesBPS = dynamicQuorum.maxQuorumVotesBPS;
   proposal.quorumVotesBPSOffset = dynamicQuorum.quorumVotesBPSOffset;
-  proposal.quorumPolynomCoefs = dynamicQuorum.quorumPolynomCoefs;
+  proposal.quorumLinearCoef = dynamicQuorum.quorumLinearCoef;
+  proposal.quorumQuadraticCoef = dynamicQuorum.quorumQuadraticCoef;
 
   proposal.save();
 }
@@ -162,7 +163,8 @@ export function handleVoteCast(event: VoteCast): void {
       proposal.minQuorumVotesBPS,
       proposal.maxQuorumVotesBPS,
       proposal.quorumVotesBPSOffset,
-      proposal.quorumPolynomCoefs as Array<BigInt>,
+      proposal.quorumLinearCoef,
+      proposal.quorumQuadraticCoef,
     );
   }
 
@@ -182,7 +184,8 @@ export function handleDynamicQuorumParamsSet(event: DynamicQuorumParamsSet): voi
   params.minQuorumVotesBPS = event.params.minQuorumVotesBPS;
   params.maxQuorumVotesBPS = event.params.maxQuorumVotesBPS;
   params.quorumVotesBPSOffset = event.params.quorumVotesBPSOffset;
-  params.quorumPolynomCoefs = event.params.quorumPolynomCoefs;
+  params.quorumLinearCoef = event.params.quorumLinearCoef;
+  params.quorumQuadraticCoef = event.params.quorumQuadraticCoef;
 
   params.save();
 }
