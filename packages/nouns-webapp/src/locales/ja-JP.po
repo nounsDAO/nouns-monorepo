@@ -604,14 +604,6 @@ msgstr "コミュニティメンバーが提出した提案はここに表示さ
 msgid "Proposed Transactions"
 msgstr "提案中のトランザクション"
 
-#: src/components/ProposalHeader/index.tsx
-#~ msgid "Proposed by: <0><1/></0><2>at <3>{0}</3></2>"
-#~ msgstr "<2><3>{0}</3>で <0><1/></0></2> が提案したものです"
-
-#: src/components/ProposalContent/index.tsx
-#~ msgid "Proposer"
-#~ msgstr "提案者"
-
 #: src/pages/Vote/index.tsx
 msgid "Queue"
 msgstr "キュー"
