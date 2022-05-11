@@ -6,7 +6,6 @@ import {
   ProposalExecuted,
   VoteCast,
   ProposalVetoed,
-  DynamicQuorumParamsSet,
   MinQuorumVotesBPSSet,
   MaxQuorumVotesBPSSet,
   QuorumVotesBPSOffsetSet,
@@ -181,18 +180,6 @@ export function handleVoteCast(event: VoteCast): void {
   if (shouldSaveProp) {
     proposal.save();
   }
-}
-
-export function handleDynamicQuorumParamsSet(event: DynamicQuorumParamsSet): void {
-  const params = getOrCreateDynamicQuorumParams();
-
-  params.minQuorumVotesBPS = event.params.minQuorumVotesBPS;
-  params.maxQuorumVotesBPS = event.params.maxQuorumVotesBPS;
-  params.quorumVotesBPSOffset = event.params.quorumVotesBPSOffset;
-  params.quorumLinearCoefficient = event.params.quorumLinearCoefficient;
-  params.quorumQuadraticCoefficient = event.params.quorumQuadraticCoefficient;
-
-  params.save();
 }
 
 export function handleMinQuorumVotesBPSSet(event: MinQuorumVotesBPSSet): void {

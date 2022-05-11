@@ -100,6 +100,12 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     /// @notice The EIP-712 typehash for the ballot struct used by the contract
     bytes32 public constant BALLOT_TYPEHASH = keccak256('Ballot(uint256 proposalId,uint8 support)');
 
+    /// @dev Introduced these errors to reduce contract size, to avoid deployment failure
+    error AdminOnly();
+    error InvalidMinQuorumVotesBPS();
+    error InvalidMaxQuorumVotesBPS();
+    error MinQuorumBPSGreaterThanMaxQuorumBPS();
+
     /**
      * @notice Used to initialize the contract during delegator contructor
      * @param timelock_ The address of the NounsDAOExecutor
@@ -705,30 +711,42 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
      * @param params the new params, see struct definition for more details about each struct member
      */
     function _setDynamicQuorumParams(DynamicQuorumParams memory params) public {
-        require(msg.sender == admin, 'NounsDAO::_setDynamicQuorumParams: admin only');
-        require(
-            params.minQuorumVotesBPS >= MIN_QUORUM_VOTES_BPS_LOWER_BOUND &&
-                params.minQuorumVotesBPS <= MIN_QUORUM_VOTES_BPS_UPPER_BOUND,
-            'NounsDAO::_setDynamicQuorumParams: invalid min quorum votes bps'
-        );
-        require(
-            params.maxQuorumVotesBPS <= MAX_QUORUM_VOTES_BPS_UPPER_BOUND,
-            'NounsDAO::_setDynamicQuorumParams: invalid max quorum votes bps'
-        );
-        require(
-            params.minQuorumVotesBPS <= params.maxQuorumVotesBPS,
-            'NounsDAO::_setDynamicQuorumParams: min quorum votes bps greater than max'
-        );
+        if (msg.sender != admin) {
+            revert AdminOnly();
+        }
+        if (
+            params.minQuorumVotesBPS < MIN_QUORUM_VOTES_BPS_LOWER_BOUND ||
+            params.minQuorumVotesBPS > MIN_QUORUM_VOTES_BPS_UPPER_BOUND
+        ) {
+            revert InvalidMinQuorumVotesBPS();
+        }
+        if (params.maxQuorumVotesBPS > MAX_QUORUM_VOTES_BPS_UPPER_BOUND) {
+            revert InvalidMaxQuorumVotesBPS();
+        }
+        if (params.minQuorumVotesBPS > params.maxQuorumVotesBPS) {
+            revert MinQuorumBPSGreaterThanMaxQuorumBPS();
+        }
+
+        DynamicQuorumParams memory oldParams;
+        if (quorumParamsCheckpoints.length > 0) {
+            oldParams = getDynamicQuorumParamsAt(block.number);
+        } else {
+            oldParams = DynamicQuorumParams({
+                minQuorumVotesBPS: 0,
+                maxQuorumVotesBPS: 0,
+                quorumVotesBPSOffset: 0,
+                quorumLinearCoefficient: 0,
+                quorumQuadraticCoefficient: 0
+            });
+        }
 
         _writeQuorumParamsCheckpoint(params);
 
-        emit DynamicQuorumParamsSet(
-            params.minQuorumVotesBPS,
-            params.maxQuorumVotesBPS,
-            params.quorumVotesBPSOffset,
-            params.quorumLinearCoefficient,
-            params.quorumQuadraticCoefficient
-        );
+        emit MinQuorumVotesBPSSet(oldParams.minQuorumVotesBPS, params.minQuorumVotesBPS);
+        emit MaxQuorumVotesBPSSet(oldParams.maxQuorumVotesBPS, params.maxQuorumVotesBPS);
+        emit QuorumVotesBPSOffsetSet(oldParams.quorumVotesBPSOffset, params.quorumVotesBPSOffset);
+        emit QuorumLinearCoefficientSet(oldParams.quorumLinearCoefficient, params.quorumLinearCoefficient);
+        emit QuorumQuadraticCoefficientSet(oldParams.quorumQuadraticCoefficient, params.quorumQuadraticCoefficient);
     }
 
     /**

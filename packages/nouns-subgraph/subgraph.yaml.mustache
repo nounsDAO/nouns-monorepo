@@ -97,8 +97,6 @@ dataSources:
           handler: handleProposalExecuted
         - event: VoteCast(indexed address,uint256,uint8,uint256,string)
           handler: handleVoteCast
-        - event: DynamicQuorumParamsSet(uint16,uint16,uint16,uint32,uint32)
-          handler: handleDynamicQuorumParamsSet
         - event: MinQuorumVotesBPSSet(uint16,uint16)
           handler: handleMinQuorumVotesBPSSet
         - event: MaxQuorumVotesBPSSet(uint16,uint16)

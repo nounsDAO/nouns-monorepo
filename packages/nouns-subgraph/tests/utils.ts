@@ -1,6 +1,5 @@
 import { newMockEvent } from 'matchstick-as/assembly/index';
 import {
-  DynamicQuorumParamsSet,
   ProposalCreatedWithRequirements,
   VoteCast,
   MinQuorumVotesBPSSet,
@@ -9,8 +8,15 @@ import {
   QuorumLinearCoefficientSet,
   QuorumQuadraticCoefficientSet,
 } from '../src/types/NounsDAO/NounsDAO';
+import {
+  handleMinQuorumVotesBPSSet,
+  handleMaxQuorumVotesBPSSet,
+  handleQuorumVotesBPSOffsetSet,
+  handleQuorumLinearCoefficientSet,
+  handleQuorumQuadraticCoefficientSet,
+} from '../src/nouns-dao';
 import { Address, ethereum, Bytes, BigInt, ByteArray } from '@graphprotocol/graph-ts';
-import { BIGINT_ONE } from '../src/utils/constants';
+import { BIGINT_ONE, BIGINT_ZERO } from '../src/utils/constants';
 
 export class ProposalCreatedWithRequirementsEvent {
   id: BigInt;
@@ -72,45 +78,6 @@ export function createProposalCreatedWithRequirementsEvent(
   );
 
   newEvent.block.number = input.eventBlockNumber;
-
-  return newEvent;
-}
-
-export function createDynamicQuorumParamsSetEvent(
-  minQuorumVotesBPS: i32,
-  maxQuorumVotesBPS: i32,
-  quorumVotesBPSOffset: i32,
-  quorumLinearCoefficient: BigInt,
-  quorumQuadraticCoefficient: BigInt,
-): DynamicQuorumParamsSet {
-  let newEvent = changetype<DynamicQuorumParamsSet>(newMockEvent());
-  newEvent.parameters = new Array();
-
-  newEvent.parameters.push(
-    new ethereum.EventParam('minQuorumVotesBPS', ethereum.Value.fromI32(minQuorumVotesBPS)),
-  );
-
-  newEvent.parameters.push(
-    new ethereum.EventParam('maxQuorumVotesBPS', ethereum.Value.fromI32(maxQuorumVotesBPS)),
-  );
-
-  newEvent.parameters.push(
-    new ethereum.EventParam('quorumVotesBPSOffset', ethereum.Value.fromI32(quorumVotesBPSOffset)),
-  );
-
-  newEvent.parameters.push(
-    new ethereum.EventParam(
-      'quorumLinearCoefficient',
-      ethereum.Value.fromUnsignedBigInt(quorumLinearCoefficient),
-    ),
-  );
-
-  newEvent.parameters.push(
-    new ethereum.EventParam(
-      'quorumQuadraticCoefficient',
-      ethereum.Value.fromUnsignedBigInt(quorumQuadraticCoefficient),
-    ),
-  );
 
   return newEvent;
 }
@@ -262,4 +229,22 @@ export function createQuorumQuadraticCoefficientSetEvent(
   );
 
   return newEvent;
+}
+
+export function handleAllQuorumParamEvents(
+  newMinQuorumVotesBPS: i32,
+  newMaxQuorumVotesBPS: i32,
+  newQuorumVotesBPSOffset: i32,
+  newLinearCoefficient: BigInt,
+  newQuadraticCoefficient: BigInt,
+): void {
+  handleMinQuorumVotesBPSSet(createMinQuorumVotesBPSSetEvent(0, newMinQuorumVotesBPS));
+  handleMaxQuorumVotesBPSSet(createMaxQuorumVotesBPSSetEvent(0, newMaxQuorumVotesBPS));
+  handleQuorumVotesBPSOffsetSet(createQuorumVotesBPSOffsetSetEvent(0, newQuorumVotesBPSOffset));
+  handleQuorumLinearCoefficientSet(
+    createQuorumLinearCoefficientSetEvent(BIGINT_ZERO, newLinearCoefficient),
+  );
+  handleQuorumQuadraticCoefficientSet(
+    createQuorumQuadraticCoefficientSetEvent(BIGINT_ZERO, newQuadraticCoefficient),
+  );
 }

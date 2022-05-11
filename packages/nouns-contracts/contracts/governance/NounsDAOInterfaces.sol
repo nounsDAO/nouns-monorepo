@@ -107,15 +107,6 @@ contract NounsDAOEvents {
 }
 
 contract NounsDAOEventsV2 is NounsDAOEvents {
-    /// @notice Emitted when dynamic quorum params are set
-    event DynamicQuorumParamsSet(
-        uint16 minQuorumVotesBPS,
-        uint16 maxQuorumVotesBPS,
-        uint16 quorumVotesBPSOffset,
-        uint32 quorumLinearCoefficient,
-        uint32 quorumQuadraticCoefficient
-    );
-
     /// @notice Emitted when minQuorumVotesBPS is set
     event MinQuorumVotesBPSSet(uint16 oldMinQuorumVotesBPS, uint16 newMinQuorumVotesBPS);
 

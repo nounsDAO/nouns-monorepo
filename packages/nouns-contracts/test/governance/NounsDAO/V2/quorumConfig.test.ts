@@ -63,7 +63,7 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
   });
 
   describe('allowed values', () => {
-    it('reverts given no config', async () => {
+    it('getDynamicQuorumParamsAt reverts given no config', async () => {
       const block = await blockNumber();
       await expect(gov.getDynamicQuorumParamsAt(block)).to.be.revertedWith(
         'NounsDAO::getDynamicQuorumParamsAt: no params found',
@@ -79,7 +79,7 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
           quorumLinearCoefficient: 0,
           quorumQuadraticCoefficient: 0,
         }),
-      ).to.be.revertedWith('NounsDAO::_setDynamicQuorumParams: admin only');
+      ).to.be.revertedWith('AdminOnly()');
     });
 
     it('reverts given minQuorum input below lower bound', async () => {
@@ -91,7 +91,7 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
           quorumLinearCoefficient: 0,
           quorumQuadraticCoefficient: 0,
         }),
-      ).to.be.revertedWith('NounsDAO::_setDynamicQuorumParams: invalid min quorum votes bps');
+      ).to.be.revertedWith('InvalidMinQuorumVotesBPS()');
     });
 
     it('reverts given minQuorum input above upper bound', async () => {
@@ -103,7 +103,7 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
           quorumLinearCoefficient: 0,
           quorumQuadraticCoefficient: 0,
         }),
-      ).to.be.revertedWith('NounsDAO::_setDynamicQuorumParams: invalid min quorum votes bps');
+      ).to.be.revertedWith('InvalidMinQuorumVotesBPS()');
     });
 
     it('reverts given minQuorum input above maxQuorum BPs', async () => {
@@ -115,9 +115,7 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
           quorumLinearCoefficient: 0,
           quorumQuadraticCoefficient: 0,
         }),
-      ).to.be.revertedWith(
-        'NounsDAO::_setDynamicQuorumParams: min quorum votes bps greater than max',
-      );
+      ).to.be.revertedWith('MinQuorumBPSGreaterThanMaxQuorumBPS()');
     });
 
     it('reverts when maxQuorum input above upper bound', async () => {
@@ -129,11 +127,53 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
           quorumLinearCoefficient: 0,
           quorumQuadraticCoefficient: 0,
         }),
-      ).to.be.revertedWith('NounsDAO::_setDynamicQuorumParams: invalid max quorum votes bps');
+      ).to.be.revertedWith('InvalidMaxQuorumVotesBPS()');
     });
   });
 
-  it('sets value and emits event', async () => {
+  it('given existing prior config, sets value and emits event', async () => {
+    await gov._setDynamicQuorumParams({
+      minQuorumVotesBPS: 200,
+      maxQuorumVotesBPS: 2000,
+      quorumVotesBPSOffset: 300,
+      quorumLinearCoefficient: parseUnits('1', 6),
+      quorumQuadraticCoefficient: parseUnits('2', 6),
+    });
+
+    const quorumLinearCoefficient = parseUnits('11', 6);
+    const quorumQuadraticCoefficient = parseUnits('22', 6);
+
+    const tx = await gov._setDynamicQuorumParams({
+      minQuorumVotesBPS: 222,
+      maxQuorumVotesBPS: 2222,
+      quorumVotesBPSOffset: 333,
+      quorumLinearCoefficient,
+      quorumQuadraticCoefficient,
+    });
+
+    const actualParams = await gov.getDynamicQuorumParamsAt(await blockNumber());
+    expect(actualParams.minQuorumVotesBPS).to.equal(222);
+    expect(actualParams.maxQuorumVotesBPS).to.equal(2222);
+    expect(actualParams.quorumVotesBPSOffset).to.equal(333);
+    expect(actualParams.quorumLinearCoefficient).to.equal(quorumLinearCoefficient);
+    expect(actualParams.quorumQuadraticCoefficient).to.equal(quorumQuadraticCoefficient);
+
+    await expect(tx).to.emit(gov, 'MinQuorumVotesBPSSet').withArgs(200, 222);
+    await expect(tx).to.emit(gov, 'MaxQuorumVotesBPSSet').withArgs(2000, 2222);
+    await expect(tx).to.emit(gov, 'QuorumVotesBPSOffsetSet').withArgs(300, 333);
+    await expect(tx)
+      .to.emit(gov, 'QuorumLinearCoefficientSet')
+      .withArgs(parseUnits('1', 6), quorumLinearCoefficient);
+    await expect(tx)
+      .to.emit(gov, 'QuorumQuadraticCoefficientSet')
+      .withArgs(parseUnits('2', 6), quorumQuadraticCoefficient);
+  });
+
+  it('given no prior config, sets value and emits event', async () => {
+    await expect(gov.getDynamicQuorumParamsAt(await blockNumber())).to.be.revertedWith(
+      'NounsDAO::getDynamicQuorumParamsAt: no params found',
+    );
+
     const quorumLinearCoefficient = parseUnits('1', 6);
     const quorumQuadraticCoefficient = parseUnits('0.001', 6);
     const tx = await gov._setDynamicQuorumParams({
@@ -151,9 +191,15 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
     expect(actualParams.quorumLinearCoefficient).to.equal(quorumLinearCoefficient);
     expect(actualParams.quorumQuadraticCoefficient).to.equal(quorumQuadraticCoefficient);
 
+    await expect(tx).to.emit(gov, 'MinQuorumVotesBPSSet').withArgs(0, 200);
+    await expect(tx).to.emit(gov, 'MaxQuorumVotesBPSSet').withArgs(0, 4000);
+    await expect(tx).to.emit(gov, 'QuorumVotesBPSOffsetSet').withArgs(0, 123);
     await expect(tx)
-      .to.emit(gov, 'DynamicQuorumParamsSet')
-      .withArgs(200, 4000, 123, quorumLinearCoefficient, quorumQuadraticCoefficient);
+      .to.emit(gov, 'QuorumLinearCoefficientSet')
+      .withArgs(0, quorumLinearCoefficient);
+    await expect(tx)
+      .to.emit(gov, 'QuorumQuadraticCoefficientSet')
+      .withArgs(0, quorumQuadraticCoefficient);
   });
 
   describe('quorum params checkpointing', () => {
