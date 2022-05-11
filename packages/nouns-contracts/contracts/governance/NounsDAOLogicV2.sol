@@ -30,17 +30,26 @@
 // NounsDAOLogicV2 adds:
 // - `quorumParamsCheckpoints`, which store dynamic quorum parameters checkpoints
 // to be used when calculating the dynamic quorum.
-// - `_setDynamicQuorumParams`, which allows the DAO to update the dynamic
-// quorum parameters' values.
+// - `_setDynamicQuorumParams(DynamicQuorumParams memory params)`, which allows the
+// DAO to update the dynamic quorum parameters' values.
+// - `getDynamicQuorumParamsAt(uint256 blockNumber_)`
+// - Individual setters of the DynamicQuorumParams members:
+//    - `_setMinQuorumVotesBPS(uint16 newMinQuorumVotesBPS)`
+//    - `_setMaxQuorumVotesBPS(uint16 newMaxQuorumVotesBPS)`
+//    - `_setQuorumVotesBPSOffset(uint16 newQuorumVotesBPSOffset)`
+//    - `_setQuorumLinearCoefficient(uint32 newQuorumLinearCoefficient)`
+//    - `_setQuorumQuadraticCoefficient(uint32 newQuorumQuadraticCoefficient)`
 // - `minQuorumVotes` and `maxQuorumVotes`, which returns the current min and
 // max quorum votes using the current Noun supply.
-// - A new `Proposal` struct member: `totalSupply`, which is used in dynamic quorum calculation.
+// - New `Proposal` struct member:
+//    - `totalSupply` used in dynamic quorum calculation.
+//    - `creationBlock` used for retrieving checkpoints of votes and dynamic quorum params. This now
+// allows changing `votingDelay` without affecting the checkpoints lookup.
 // - `quorumVotes(uint256 proposalId)`, which calculates and returns the dynamic
 // quorum for a specific proposal.
+// - `proposals(uint256 proposalId)` instead of the implicit getter, to avoid stack-too-deep error
 //
 // NounsDAOLogicV2 removes:
-// - `quorumVotesBPS` has been replaced by `minQuorumVotesBPS` and `maxQuorumVotesBPS`.
-// - `Proposal.quorumVotes` has been renamed to `Proposal.minQuorumVotes`.
 // - `quorumVotes()` has been replaced by `quorumVotes(uint256 proposalId)`.
 
 pragma solidity ^0.8.6;
@@ -429,6 +438,12 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         }
     }
 
+    /**
+     * @notice Returns the proposal details given a proposal id.
+     *     The `quorumVotes` member holds the *current* quorum, given the current votes.
+     * @param proposalId the proposal id to get the data for
+     * @return A `ProposalCondensed` struct with the proposal data
+     */
     function proposals(uint256 proposalId) external view returns (ProposalCondensed memory) {
         Proposal storage proposal = _proposals[proposalId];
         return
@@ -581,6 +596,12 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         emit ProposalThresholdBPSSet(oldProposalThresholdBPS, proposalThresholdBPS);
     }
 
+    /**
+     * @notice Admin function for setting the minimum quorum votes bps
+     * @param newMinQuorumVotesBPS minimum quorum votes bps
+     *     Must be between `MIN_QUORUM_VOTES_BPS_LOWER_BOUND` and `MIN_QUORUM_VOTES_BPS_UPPER_BOUND`
+     *     Must be lower than or equal to maxQuorumVotesBPS
+     */
     function _setMinQuorumVotesBPS(uint16 newMinQuorumVotesBPS) external {
         require(msg.sender == admin, 'NounsDAO::_setMinQuorumVotesBPS: admin only');
         DynamicQuorumParams memory params = getDynamicQuorumParamsAt(block.number);
@@ -603,6 +624,12 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         emit MinQuorumVotesBPSSet(oldMinQuorumVotesBPS, newMinQuorumVotesBPS);
     }
 
+    /**
+     * @notice Admin function for setting the maximum quorum votes bps
+     * @param newMaxQuorumVotesBPS maximum quorum votes bps
+     *     Must be lower than `MAX_QUORUM_VOTES_BPS_UPPER_BOUND`
+     *     Must be higher than or equal to minQuorumVotesBPS
+     */
     function _setMaxQuorumVotesBPS(uint16 newMaxQuorumVotesBPS) external {
         require(msg.sender == admin, 'NounsDAO::_setMaxQuorumVotesBPS: admin only');
         DynamicQuorumParams memory params = getDynamicQuorumParamsAt(block.number);
@@ -624,6 +651,11 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         emit MaxQuorumVotesBPSSet(oldMaxQuorumVotesBPS, newMaxQuorumVotesBPS);
     }
 
+    /**
+     * @notice Admin function for setting the dynamic quorum offset in bps
+     *     This is the value that the against-votes bps needs to reach for the quorum to be adjusted
+     * @param newQuorumVotesBPSOffset new quorum votes offset, in bps
+     */
     function _setQuorumVotesBPSOffset(uint16 newQuorumVotesBPSOffset) external {
         require(msg.sender == admin, 'NounsDAO::_setQuorumVotesBPSOffset: admin only');
         DynamicQuorumParams memory params = getDynamicQuorumParamsAt(block.number);
@@ -636,6 +668,10 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         emit QuorumVotesBPSOffsetSet(oldQuorumVotesBPSOffset, newQuorumVotesBPSOffset);
     }
 
+    /**
+     * @notice Admin function for setting the dynamic quorum linear coefficient
+     * @param newQuorumLinearCoefficient the new linear coefficient, as a fixed point integer with 6 decimals
+     */
     function _setQuorumLinearCoefficient(uint32 newQuorumLinearCoefficient) external {
         require(msg.sender == admin, 'NounsDAO::_setQuorumLinearCoefficient: admin only');
         DynamicQuorumParams memory params = getDynamicQuorumParamsAt(block.number);
@@ -648,6 +684,10 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         emit QuorumLinearCoefficientSet(oldQuorumLinearCoefficient, newQuorumLinearCoefficient);
     }
 
+    /**
+     * @notice Admin function for setting the dynamic quorum quadratic coefficient
+     * @param newQuorumQuadraticCoefficient the new quadratic coefficient, as a fixed point integer with 6 decimals
+     */
     function _setQuorumQuadraticCoefficient(uint32 newQuorumQuadraticCoefficient) external {
         require(msg.sender == admin, 'NounsDAO::_setQuorumQuadraticCoefficient: admin only');
         DynamicQuorumParams memory params = getDynamicQuorumParamsAt(block.number);
@@ -660,6 +700,10 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         emit QuorumQuadraticCoefficientSet(oldQuorumQuadraticCoefficient, newQuorumQuadraticCoefficient);
     }
 
+    /**
+     * @notice Admin function for setting all the dynamic quorum parameters
+     * @param params the new params, see struct definition for more details about each struct member
+     */
     function _setDynamicQuorumParams(DynamicQuorumParams memory params) public {
         require(msg.sender == admin, 'NounsDAO::_setDynamicQuorumParams: admin only');
         require(
@@ -820,6 +864,13 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         return bps2Uint(quorumBPS, totalSupply);
     }
 
+    /**
+     * @notice returns the dynamic quorum parameters values at a certain block number
+     * @dev The checkpoints array must not be empty, and the block number must be higher than or equal to
+     *     the block of the first checkpoint
+     * @param blockNumber_ the block number to get the params at
+     * @return The dynamic quorum parameters that were set at the given block number
+     */
     function getDynamicQuorumParamsAt(uint256 blockNumber_) public view returns (DynamicQuorumParams memory) {
         uint32 blockNumber = safe32(blockNumber_, 'NounsDAO::getDynamicQuorumParamsAt: block number exceeds 32 bits');
         uint256 len = quorumParamsCheckpoints.length;
