@@ -69,8 +69,8 @@ let daoLogicV2: NounsDaoLogicV2;
 const minQuorumVotesBPS = 1000; // 10%
 const maxQuorumVotesBPS = 4000; // 40%
 const quorumVotesBPSOffset = 0;
-const quorumLinearCoef = parseUnits('0.3', 6);
-const quorumQuadraticCoef = parseUnits('0.001', 6);
+const quorumLinearCoefficient = parseUnits('0.3', 6);
+const quorumQuadraticCoefficient = parseUnits('0.001', 6);
 
 // Auction House Config
 const TIME_BUFFER = 15 * 60;
@@ -207,8 +207,8 @@ async function createUpgradeToV2AndSetDynamicQuorumProposal(proposer: SignerWith
         minQuorumVotesBPS,
         maxQuorumVotesBPS,
         quorumVotesBPSOffset,
-        quorumLinearCoef,
-        quorumQuadraticCoef,
+        quorumLinearCoefficient,
+        quorumQuadraticCoefficient,
       ],
     ),
   );
@@ -220,8 +220,8 @@ async function createUpgradeToV2AndSetDynamicQuorumProposal(proposer: SignerWith
 
 async function createSetDynamicQuorumParamsProposal(
   proposer: SignerWithAddress,
-  quorumLinearCoef: BigNumberish,
-  quorumQuadraticCoef: BigNumberish,
+  quorumLinearCoefficient: BigNumberish,
+  quorumQuadraticCoefficient: BigNumberish,
 ) {
   const targets = [gov.address];
   const values = [0];
@@ -233,8 +233,8 @@ async function createSetDynamicQuorumParamsProposal(
         minQuorumVotesBPS,
         maxQuorumVotesBPS,
         quorumVotesBPSOffset,
-        quorumLinearCoef,
-        quorumQuadraticCoef,
+        quorumLinearCoefficient,
+        quorumQuadraticCoefficient,
       ],
     ),
   ];
@@ -338,8 +338,8 @@ describe('V2 end to end tests', async () => {
       expect(params.minQuorumVotesBPS).to.equal(minQuorumVotesBPS);
       expect(params.maxQuorumVotesBPS).to.equal(maxQuorumVotesBPS);
       expect(params.quorumVotesBPSOffset).to.equal(quorumVotesBPSOffset);
-      expect(params.quorumLinearCoef).to.equal(quorumLinearCoef);
-      expect(params.quorumQuadraticCoef).to.equal(quorumQuadraticCoef);
+      expect(params.quorumLinearCoefficient).to.equal(quorumLinearCoefficient);
+      expect(params.quorumQuadraticCoefficient).to.equal(quorumQuadraticCoefficient);
     });
   });
 

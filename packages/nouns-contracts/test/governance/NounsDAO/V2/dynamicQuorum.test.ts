@@ -32,8 +32,8 @@ describe('Dynamic Quorum', () => {
       minQuorumVotesBPS: 1000,
       maxQuorumVotesBPS: 4000,
       quorumVotesBPSOffset: 500,
-      quorumLinearCoef: 0,
-      quorumQuadraticCoef: 0,
+      quorumLinearCoefficient: 0,
+      quorumQuadraticCoefficient: 0,
     });
 
     expect(quorumVotes).to.equal(20);
@@ -45,8 +45,8 @@ describe('Dynamic Quorum', () => {
         minQuorumVotesBPS: 1000,
         maxQuorumVotesBPS: 4000,
         quorumVotesBPSOffset: 500,
-        quorumLinearCoef: parseUnits('1', 6),
-        quorumQuadraticCoef: 0,
+        quorumLinearCoefficient: parseUnits('1', 6),
+        quorumQuadraticCoefficient: 0,
       });
 
       expect(quorumVotes).to.equal(20);
@@ -57,8 +57,8 @@ describe('Dynamic Quorum', () => {
         minQuorumVotesBPS: 1000,
         maxQuorumVotesBPS: 4000,
         quorumVotesBPSOffset: 500,
-        quorumLinearCoef: parseUnits('1', 6),
-        quorumQuadraticCoef: 0,
+        quorumLinearCoefficient: parseUnits('1', 6),
+        quorumQuadraticCoefficient: 0,
       });
 
       expect(quorumVotes).to.equal(28);
@@ -71,8 +71,8 @@ describe('Dynamic Quorum', () => {
         minQuorumVotesBPS: 1000,
         maxQuorumVotesBPS: 4000,
         quorumVotesBPSOffset: 500,
-        quorumLinearCoef: 0,
-        quorumQuadraticCoef: parseUnits('0.001', 6),
+        quorumLinearCoefficient: 0,
+        quorumQuadraticCoefficient: parseUnits('0.001', 6),
       });
 
       expect(quorumVotes).to.equal(32);
@@ -83,8 +83,8 @@ describe('Dynamic Quorum', () => {
         minQuorumVotesBPS: 1000,
         maxQuorumVotesBPS: 4000,
         quorumVotesBPSOffset: 500,
-        quorumLinearCoef: parseUnits('0.3', 6),
-        quorumQuadraticCoef: parseUnits('0.001', 6),
+        quorumLinearCoefficient: parseUnits('0.3', 6),
+        quorumQuadraticCoefficient: parseUnits('0.001', 6),
       };
 
       expect(await gov.dynamicQuorumVotes(10, 200, params)).to.equal(20);
@@ -102,8 +102,8 @@ describe('Dynamic Quorum', () => {
         minQuorumVotesBPS: 1000,
         maxQuorumVotesBPS: 10000,
         quorumVotesBPSOffset: 500,
-        quorumLinearCoef: parseUnits('0.3', 6),
-        quorumQuadraticCoef: parseUnits('0.001', 6),
+        quorumLinearCoefficient: parseUnits('0.3', 6),
+        quorumQuadraticCoefficient: parseUnits('0.001', 6),
       });
 
       expect(quorumVotes).to.equal(112);
@@ -112,8 +112,8 @@ describe('Dynamic Quorum', () => {
         minQuorumVotesBPS: 1000,
         maxQuorumVotesBPS: 4000,
         quorumVotesBPSOffset: 500,
-        quorumLinearCoef: parseUnits('0.3', 6),
-        quorumQuadraticCoef: parseUnits('0.001', 6),
+        quorumLinearCoefficient: parseUnits('0.3', 6),
+        quorumQuadraticCoefficient: parseUnits('0.001', 6),
       });
 
       expect(quorumVotes).to.equal(80);

@@ -6,8 +6,8 @@ import {
   MinQuorumVotesBPSSet,
   MaxQuorumVotesBPSSet,
   QuorumVotesBPSOffsetSet,
-  QuorumLinearCoefSet,
-  QuorumQuadraticCoefSet,
+  QuorumLinearCoefficientSet,
+  QuorumQuadraticCoefficientSet,
 } from '../src/types/NounsDAO/NounsDAO';
 import { Address, ethereum, Bytes, BigInt, ByteArray } from '@graphprotocol/graph-ts';
 import { BIGINT_ONE } from '../src/utils/constants';
@@ -80,8 +80,8 @@ export function createDynamicQuorumParamsSetEvent(
   minQuorumVotesBPS: i32,
   maxQuorumVotesBPS: i32,
   quorumVotesBPSOffset: i32,
-  quorumLinearCoef: BigInt,
-  quorumQuadraticCoef: BigInt,
+  quorumLinearCoefficient: BigInt,
+  quorumQuadraticCoefficient: BigInt,
 ): DynamicQuorumParamsSet {
   let newEvent = changetype<DynamicQuorumParamsSet>(newMockEvent());
   newEvent.parameters = new Array();
@@ -100,15 +100,15 @@ export function createDynamicQuorumParamsSetEvent(
 
   newEvent.parameters.push(
     new ethereum.EventParam(
-      'quorumLinearCoef',
-      ethereum.Value.fromUnsignedBigInt(quorumLinearCoef),
+      'quorumLinearCoefficient',
+      ethereum.Value.fromUnsignedBigInt(quorumLinearCoefficient),
     ),
   );
 
   newEvent.parameters.push(
     new ethereum.EventParam(
-      'quorumQuadraticCoef',
-      ethereum.Value.fromUnsignedBigInt(quorumQuadraticCoef),
+      'quorumQuadraticCoefficient',
+      ethereum.Value.fromUnsignedBigInt(quorumQuadraticCoefficient),
     ),
   );
 
@@ -216,48 +216,48 @@ export function createQuorumVotesBPSOffsetSetEvent(
   return newEvent;
 }
 
-export function createQuorumLinearCoefSetEvent(
-  oldQuorumLinearCoef: BigInt,
-  newQuorumLinearCoef: BigInt,
-): QuorumLinearCoefSet {
-  let newEvent = changetype<QuorumLinearCoefSet>(newMockEvent());
+export function createQuorumLinearCoefficientSetEvent(
+  oldQuorumLinearCoefficient: BigInt,
+  newQuorumLinearCoefficient: BigInt,
+): QuorumLinearCoefficientSet {
+  let newEvent = changetype<QuorumLinearCoefficientSet>(newMockEvent());
   newEvent.parameters = new Array();
 
   newEvent.parameters.push(
     new ethereum.EventParam(
-      'oldQuorumLinearCoef',
-      ethereum.Value.fromUnsignedBigInt(oldQuorumLinearCoef),
+      'oldQuorumLinearCoefficient',
+      ethereum.Value.fromUnsignedBigInt(oldQuorumLinearCoefficient),
     ),
   );
 
   newEvent.parameters.push(
     new ethereum.EventParam(
-      'newQuorumLinearCoef',
-      ethereum.Value.fromUnsignedBigInt(newQuorumLinearCoef),
+      'newQuorumLinearCoefficient',
+      ethereum.Value.fromUnsignedBigInt(newQuorumLinearCoefficient),
     ),
   );
 
   return newEvent;
 }
 
-export function createQuorumQuadraticCoefSetEvent(
-  oldQuorumQuadraticCoef: BigInt,
-  newQuorumQuadraticCoef: BigInt,
-): QuorumQuadraticCoefSet {
-  let newEvent = changetype<QuorumQuadraticCoefSet>(newMockEvent());
+export function createQuorumQuadraticCoefficientSetEvent(
+  oldQuorumQuadraticCoefficient: BigInt,
+  newQuorumQuadraticCoefficient: BigInt,
+): QuorumQuadraticCoefficientSet {
+  let newEvent = changetype<QuorumQuadraticCoefficientSet>(newMockEvent());
   newEvent.parameters = new Array();
 
   newEvent.parameters.push(
     new ethereum.EventParam(
-      'oldQuorumQuadraticCoef',
-      ethereum.Value.fromUnsignedBigInt(oldQuorumQuadraticCoef),
+      'oldQuorumQuadraticCoefficient',
+      ethereum.Value.fromUnsignedBigInt(oldQuorumQuadraticCoefficient),
     ),
   );
 
   newEvent.parameters.push(
     new ethereum.EventParam(
-      'newQuorumQuadraticCoef',
-      ethereum.Value.fromUnsignedBigInt(newQuorumQuadraticCoef),
+      'newQuorumQuadraticCoefficient',
+      ethereum.Value.fromUnsignedBigInt(newQuorumQuadraticCoefficient),
     ),
   );
 

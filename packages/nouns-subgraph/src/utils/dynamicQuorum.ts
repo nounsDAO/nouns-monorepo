@@ -7,8 +7,8 @@ export function dynamicQuorumVotes(
   minQuorumVotesBPS: i32,
   maxQuorumVotesBPS: i32,
   quorumVotesBPSOffset: i32,
-  quorumLinearCoef: BigInt,
-  quorumQuadraticCoef: BigInt,
+  quorumLinearCoefficient: BigInt,
+  quorumQuadraticCoefficient: BigInt,
 ): BigInt {
   const againstVotesBPS = (againstVotes * 10000) / totalSupply.toI32();
   if (againstVotesBPS <= quorumVotesBPSOffset) {
@@ -18,7 +18,7 @@ export function dynamicQuorumVotes(
   const polynomInput = againstVotesBPS - quorumVotesBPSOffset;
   const polynomValueBPS = quorumLinearCoef
     .times(BigInt.fromI32(polynomInput))
-    .plus(quorumQuadraticCoef.times(BigInt.fromI32(polynomInput ** 2)))
+    .plus(quorumQuadraticCoefficient.times(BigInt.fromI32(polynomInput ** 2)))
     .div(BigInt.fromI32(<i32>1e6));
   const adjustedQuorumBPS = polynomValueBPS.plus(BigInt.fromI32(minQuorumVotesBPS));
   const quorumBPS = <i32>Math.min(maxQuorumVotesBPS, adjustedQuorumBPS.toI32());

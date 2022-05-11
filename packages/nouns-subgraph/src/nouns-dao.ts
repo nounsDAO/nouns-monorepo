@@ -10,8 +10,8 @@ import {
   MinQuorumVotesBPSSet,
   MaxQuorumVotesBPSSet,
   QuorumVotesBPSOffsetSet,
-  QuorumLinearCoefSet,
-  QuorumQuadraticCoefSet,
+  QuorumLinearCoefficientSet,
+  QuorumQuadraticCoefficientSet,
 } from './types/NounsDAO/NounsDAO';
 import {
   getOrCreateDelegate,
@@ -73,8 +73,8 @@ export function handleProposalCreatedWithRequirements(
   proposal.minQuorumVotesBPS = dynamicQuorum.minQuorumVotesBPS;
   proposal.maxQuorumVotesBPS = dynamicQuorum.maxQuorumVotesBPS;
   proposal.quorumVotesBPSOffset = dynamicQuorum.quorumVotesBPSOffset;
-  proposal.quorumLinearCoef = dynamicQuorum.quorumLinearCoef;
-  proposal.quorumQuadraticCoef = dynamicQuorum.quorumQuadraticCoef;
+  proposal.quorumLinearCoefficient = dynamicQuorum.quorumLinearCoefficient;
+  proposal.quorumQuadraticCoefficient = dynamicQuorum.quorumQuadraticCoefficient;
 
   proposal.save();
 }
@@ -168,8 +168,8 @@ export function handleVoteCast(event: VoteCast): void {
       proposal.minQuorumVotesBPS,
       proposal.maxQuorumVotesBPS,
       proposal.quorumVotesBPSOffset,
-      proposal.quorumLinearCoef,
-      proposal.quorumQuadraticCoef,
+      proposal.quorumLinearCoefficient,
+      proposal.quorumQuadraticCoefficient,
     );
   }
 
@@ -189,8 +189,8 @@ export function handleDynamicQuorumParamsSet(event: DynamicQuorumParamsSet): voi
   params.minQuorumVotesBPS = event.params.minQuorumVotesBPS;
   params.maxQuorumVotesBPS = event.params.maxQuorumVotesBPS;
   params.quorumVotesBPSOffset = event.params.quorumVotesBPSOffset;
-  params.quorumLinearCoef = event.params.quorumLinearCoef;
-  params.quorumQuadraticCoef = event.params.quorumQuadraticCoef;
+  params.quorumLinearCoefficient = event.params.quorumLinearCoefficient;
+  params.quorumQuadraticCoefficient = event.params.quorumQuadraticCoefficient;
 
   params.save();
 }
@@ -213,14 +213,14 @@ export function handleQuorumVotesBPSOffsetSet(event: QuorumVotesBPSOffsetSet): v
   params.save();
 }
 
-export function handleQuorumLinearCoefSet(event: QuorumLinearCoefSet): void {
+export function handleQuorumLinearCoefficientSet(event: QuorumLinearCoefficientSet): void {
   const params = getOrCreateDynamicQuorumParams();
-  params.quorumLinearCoef = event.params.newQuorumLinearCoef;
+  params.quorumLinearCoefficient = event.params.newQuorumLinearCoefficient;
   params.save();
 }
 
-export function handleQuorumQuadraticCoefSet(event: QuorumQuadraticCoefSet): void {
+export function handleQuorumQuadraticCoefficientSet(event: QuorumQuadraticCoefficientSet): void {
   const params = getOrCreateDynamicQuorumParams();
-  params.quorumQuadraticCoef = event.params.newQuorumQuadraticCoef;
+  params.quorumQuadraticCoefficient = event.params.newQuorumQuadraticCoefficient;
   params.save();
 }

@@ -636,28 +636,28 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         emit QuorumVotesBPSOffsetSet(oldQuorumVotesBPSOffset, newQuorumVotesBPSOffset);
     }
 
-    function _setQuorumLinearCoef(uint32 newQuorumLinearCoef) external {
-        require(msg.sender == admin, 'NounsDAO::_setQuorumLinearCoef: admin only');
+    function _setQuorumLinearCoefficient(uint32 newQuorumLinearCoefficient) external {
+        require(msg.sender == admin, 'NounsDAO::_setQuorumLinearCoefficient: admin only');
         DynamicQuorumParams memory params = getDynamicQuorumParamsAt(block.number);
 
-        uint32 oldQuorumLinearCoef = params.quorumLinearCoef;
-        params.quorumLinearCoef = newQuorumLinearCoef;
+        uint32 oldQuorumLinearCoefficient = params.quorumLinearCoefficient;
+        params.quorumLinearCoefficient = newQuorumLinearCoefficient;
 
         _writeQuorumParamsCheckpoint(params);
 
-        emit QuorumLinearCoefSet(oldQuorumLinearCoef, newQuorumLinearCoef);
+        emit QuorumLinearCoefficientSet(oldQuorumLinearCoefficient, newQuorumLinearCoefficient);
     }
 
-    function _setQuorumQuadraticCoef(uint32 newQuorumQuadraticCoef) external {
-        require(msg.sender == admin, 'NounsDAO::_setQuorumQuadraticCoef: admin only');
+    function _setQuorumQuadraticCoefficient(uint32 newQuorumQuadraticCoefficient) external {
+        require(msg.sender == admin, 'NounsDAO::_setQuorumQuadraticCoefficient: admin only');
         DynamicQuorumParams memory params = getDynamicQuorumParamsAt(block.number);
 
-        uint32 oldQuorumQuadraticCoef = params.quorumQuadraticCoef;
-        params.quorumQuadraticCoef = newQuorumQuadraticCoef;
+        uint32 oldQuorumQuadraticCoefficient = params.quorumQuadraticCoefficient;
+        params.quorumQuadraticCoefficient = newQuorumQuadraticCoefficient;
 
         _writeQuorumParamsCheckpoint(params);
 
-        emit QuorumQuadraticCoefSet(oldQuorumQuadraticCoef, newQuorumQuadraticCoef);
+        emit QuorumQuadraticCoefficientSet(oldQuorumQuadraticCoefficient, newQuorumQuadraticCoefficient);
     }
 
     function _setDynamicQuorumParams(DynamicQuorumParams memory params) public {
@@ -682,8 +682,8 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
             params.minQuorumVotesBPS,
             params.maxQuorumVotesBPS,
             params.quorumVotesBPSOffset,
-            params.quorumLinearCoef,
-            params.quorumQuadraticCoef
+            params.quorumLinearCoefficient,
+            params.quorumQuadraticCoefficient
         );
     }
 
@@ -808,9 +808,9 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         }
 
         uint256 polynomInput = againstVotesBPS - params.quorumVotesBPSOffset;
-        uint256 polynomValueBPS = (params.quorumLinearCoef *
+        uint256 polynomValueBPS = (params.quorumLinearCoefficient *
             polynomInput +
-            params.quorumQuadraticCoef *
+            params.quorumQuadraticCoefficient *
             polynomInput**2) / 1e6;
 
         uint256 adjustedQuorumBPS = params.minQuorumVotesBPS + polynomValueBPS;

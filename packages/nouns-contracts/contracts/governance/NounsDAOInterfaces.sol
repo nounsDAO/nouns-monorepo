@@ -112,8 +112,8 @@ contract NounsDAOEventsV2 is NounsDAOEvents {
         uint16 minQuorumVotesBPS,
         uint16 maxQuorumVotesBPS,
         uint16 quorumVotesBPSOffset,
-        uint32 quorumLinearCoef,
-        uint32 quorumQuadraticCoef
+        uint32 quorumLinearCoefficient,
+        uint32 quorumQuadraticCoefficient
     );
 
     /// @notice Emitted when minQuorumVotesBPS is set
@@ -125,11 +125,11 @@ contract NounsDAOEventsV2 is NounsDAOEvents {
     /// @notice Emitted when quorumVotesBPSOffset is set
     event QuorumVotesBPSOffsetSet(uint16 oldQuorumVotesBPSOffset, uint16 newQuorumVotesBPSOffset);
 
-    /// @notice Emitted when quorumLinearCoef is set
-    event QuorumLinearCoefSet(uint32 oldQuorumLinearCoef, uint32 newQuorumLinearCoef);
+    /// @notice Emitted when quorumLinearCoefficient is set
+    event QuorumLinearCoefficientSet(uint32 oldQuorumLinearCoefficient, uint32 newQuorumLinearCoefficient);
 
-    /// @notice Emitted when quorumQuadraticCoef is set
-    event QuorumQuadraticCoefSet(uint32 oldQuorumQuadraticCoef, uint32 newQuorumQuadraticCoef);
+    /// @notice Emitted when quorumQuadraticCoefficient is set
+    event QuorumQuadraticCoefficientSet(uint32 oldQuorumQuadraticCoefficient, uint32 newQuorumQuadraticCoefficient);
 }
 
 contract NounsDAOProxyStorage {
@@ -368,10 +368,10 @@ contract NounsDAOStorageV2 is NounsDAOStorageV1Adjusted {
         uint16 quorumVotesBPSOffset;
         /// @notice The linear component coefficient (x^1) for the dynamic quorum polynomial
         /// @dev The coefficients are assumed to be fixed point integer with 6 decimals, i.e 0.2 is represented as 0.2 * 1e6 = 200000
-        uint32 quorumLinearCoef;
+        uint32 quorumLinearCoefficient;
         /// @notice The quadratic component coefficient (x^2) for the dynamic quorum polynomial
         /// @dev The coefficients are assumed to be fixed point integer with 6 decimals, i.e 0.2 is represented as 0.2 * 1e6 = 200000
-        uint32 quorumQuadraticCoef;
+        uint32 quorumQuadraticCoefficient;
     }
 
     /// @notice A checkpoint for storing dynamic quorum params from a given block

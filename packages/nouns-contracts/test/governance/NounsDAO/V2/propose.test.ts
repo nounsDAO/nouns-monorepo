@@ -58,8 +58,8 @@ describe('NounsDAOV2#propose', async () => {
         minQuorumVotesBPS: MIN_QUORUM_VOTES_BPS,
         maxQuorumVotesBPS: MAX_QUORUM_VOTES_BPS,
         quorumVotesBPSOffset: 0,
-        quorumLinearCoef: 0,
-        quorumQuadraticCoef: 0,
+        quorumLinearCoefficient: 0,
+        quorumQuadraticCoefficient: 0,
       },
     );
   });
