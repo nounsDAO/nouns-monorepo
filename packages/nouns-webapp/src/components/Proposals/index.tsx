@@ -41,18 +41,12 @@ const getCountdownCopy = (proposal: Proposal, currentBlock: number, locale: Supp
   const now = dayjs();
 
   if (startDate?.isBefore(now) && endDate?.isAfter(now)) {
-    return <Trans>
-        Ends {endDate.locale(LOCALE_DAYJS[locale]).fromNow()}
-    </Trans>;
+    return <Trans>Ends {endDate.locale(LOCALE_DAYJS[locale]).fromNow()}</Trans>;
   }
   if (endDate?.isBefore(now)) {
-    return <Trans>
-      Expires {expiresDate.locale(LOCALE_DAYJS[locale]).fromNow()}
-    </Trans>;
+    return <Trans>Expires {expiresDate.locale(LOCALE_DAYJS[locale]).fromNow()}</Trans>;
   }
-  return <Trans>
-  Starts {dayjs(startDate).locale(LOCALE_DAYJS[locale]).fromNow()}
-  </Trans>;
+  return <Trans>Starts {dayjs(startDate).locale(LOCALE_DAYJS[locale]).fromNow()}</Trans>;
 };
 
 const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
@@ -103,14 +97,10 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
             const isPropInStateToHaveCountDown =
               p.status === ProposalState.PENDING ||
               p.status === ProposalState.ACTIVE ||
-              p.status === ProposalState.SUCCEEDED ||
               p.status === ProposalState.QUEUED;
             return (
               <div
-                className={clsx(
-                  classes.proposalLink,
-                  isPropInStateToHaveCountDown ? classes.proposalLinkWithCountdown : '',
-                )}
+                className={clsx(classes.proposalLink, classes.proposalLinkWithCountdown)}
                 onClick={() => history.push(`/vote/${p.id}`)}
                 key={i}
               >
@@ -118,9 +108,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
                   <span className={classes.proposalId}>{p.id}</span> <span>{p.title}</span>
                 </span>
 
-                <div
-                  className={isPropInStateToHaveCountDown ? classes.proposalInfoPillsWrapper : ''}
-                >
+                <div className={classes.proposalInfoPillsWrapper}>
                   {isPropInStateToHaveCountDown && (
                     <div className={classes.proposalStatusWrapper}>
                       <div

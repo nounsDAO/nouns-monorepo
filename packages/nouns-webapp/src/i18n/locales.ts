@@ -16,7 +16,7 @@ export const LOCALE_LABEL: { [locale in SupportedLocale]: string } = {
   pseudo: 'ƥƨèúδô',
 };
 
-export const LOCALE_DAYJS: {[locale in SupportedLocale]: DaysJSLocale} = {
+export const LOCALE_DAYJS: { [locale in SupportedLocale]: DaysJSLocale } = {
   'en-US': en,
   'ja-JP': ja,
   pseudo: en,

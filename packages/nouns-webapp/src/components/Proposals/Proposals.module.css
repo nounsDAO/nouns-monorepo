@@ -141,7 +141,6 @@
 
   .proposalTitle {
     max-width: 100%;
-    width: 100%;
     overflow-wrap: break-word;
   }
 }
@@ -157,7 +156,6 @@
     margin-top: 1rem;
     margin-left: 3rem;
     display: flex;
-    flex-direction: column;
   }
 
   .proposalStatusWrapper {
@@ -165,6 +163,10 @@
     max-width: fit-content;
   }
 
+  .proposalLink {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
 .nullBtnWrapper {
