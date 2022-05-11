@@ -9,7 +9,7 @@ import {
   advanceBlocks,
   propStateToString,
   deployGovernorV1,
-  deployGovernorV2AndSetQuorumParams,
+  deployGovernorV2,
   propose,
   blockNumber,
 } from '../../../utils';
@@ -87,10 +87,28 @@ describe('NounsDAO upgrade to V2', () => {
   });
 
   it('and upgrade to V2', async () => {
-    await deployGovernorV2AndSetQuorumParams(deployer, govProxyAddress);
+    await deployGovernorV2(deployer, govProxyAddress);
+  });
+
+  it('and V2 returns default quorum params with V1 value', async () => {
+    const quorumParams = await govV2.getDynamicQuorumParamsAt(await blockNumber());
+
+    expect(quorumParams.minQuorumVotesBPS).to.equal(V1_QUORUM_BPS);
+    expect(quorumParams.maxQuorumVotesBPS).to.equal(V1_QUORUM_BPS);
+    expect(quorumParams.quorumVotesBPSOffset).to.equal(0);
+    expect(quorumParams.quorumLinearCoefficient).to.equal(0);
+    expect(quorumParams.quorumQuadraticCoefficient).to.equal(0);
   });
 
   it('and V2 config set', async () => {
+    await govV2._setDynamicQuorumParams({
+      minQuorumVotesBPS: MIN_QUORUM_VOTES_BPS,
+      maxQuorumVotesBPS: MAX_QUORUM_VOTES_BPS,
+      quorumVotesBPSOffset: 0,
+      quorumLinearCoefficient: 0,
+      quorumQuadraticCoefficient: 0,
+    });
+
     const quorumParams = await govV2.getDynamicQuorumParamsAt(await blockNumber());
 
     expect(quorumParams.minQuorumVotesBPS).to.equal(MIN_QUORUM_VOTES_BPS);

@@ -105,6 +105,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     error InvalidMinQuorumVotesBPS();
     error InvalidMaxQuorumVotesBPS();
     error MinQuorumBPSGreaterThanMaxQuorumBPS();
+    error UnsafeUint16Cast();
 
     /**
      * @notice Used to initialize the contract during delegator contructor
@@ -727,18 +728,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
             revert MinQuorumBPSGreaterThanMaxQuorumBPS();
         }
 
-        DynamicQuorumParams memory oldParams;
-        if (quorumParamsCheckpoints.length > 0) {
-            oldParams = getDynamicQuorumParamsAt(block.number);
-        } else {
-            oldParams = DynamicQuorumParams({
-                minQuorumVotesBPS: 0,
-                maxQuorumVotesBPS: 0,
-                quorumVotesBPSOffset: 0,
-                quorumLinearCoefficient: 0,
-                quorumQuadraticCoefficient: 0
-            });
-        }
+        DynamicQuorumParams memory oldParams = getDynamicQuorumParamsAt(block.number);
 
         _writeQuorumParamsCheckpoint(params);
 
@@ -892,16 +882,32 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     function getDynamicQuorumParamsAt(uint256 blockNumber_) public view returns (DynamicQuorumParams memory) {
         uint32 blockNumber = safe32(blockNumber_, 'NounsDAO::getDynamicQuorumParamsAt: block number exceeds 32 bits');
         uint256 len = quorumParamsCheckpoints.length;
-        require(len > 0, 'NounsDAO::getDynamicQuorumParamsAt: no params found');
+
+        if (len == 0) {
+            return
+                DynamicQuorumParams({
+                    minQuorumVotesBPS: safe16(quorumVotesBPS),
+                    maxQuorumVotesBPS: safe16(quorumVotesBPS),
+                    quorumVotesBPSOffset: 0,
+                    quorumLinearCoefficient: 0,
+                    quorumQuadraticCoefficient: 0
+                });
+        }
 
         if (quorumParamsCheckpoints[len - 1].fromBlock <= blockNumber) {
             return quorumParamsCheckpoints[len - 1].params;
         }
 
-        require(
-            quorumParamsCheckpoints[0].fromBlock <= blockNumber,
-            'NounsDAO::getDynamicQuorumParamsAt: no params found'
-        );
+        if (quorumParamsCheckpoints[0].fromBlock > blockNumber) {
+            return
+                DynamicQuorumParams({
+                    minQuorumVotesBPS: safe16(quorumVotesBPS),
+                    maxQuorumVotesBPS: safe16(quorumVotesBPS),
+                    quorumVotesBPSOffset: 0,
+                    quorumLinearCoefficient: 0,
+                    quorumQuadraticCoefficient: 0
+                });
+        }
 
         uint256 lower = 0;
         uint256 upper = len - 1;
@@ -962,5 +968,12 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     function safe32(uint256 n, string memory errorMessage) internal pure returns (uint32) {
         require(n <= type(uint32).max, errorMessage);
         return uint32(n);
+    }
+
+    function safe16(uint256 n) internal pure returns (uint16) {
+        if (n > type(uint16).max) {
+            revert UnsafeUint16Cast();
+        }
+        return uint16(n);
     }
 }
