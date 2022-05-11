@@ -158,6 +158,10 @@
   .proposalInfoPillsWrapper {
     display: none;
   }
+
+  .proposalStatusWrapper {
+    margin-top: 0.5rem;
+  }
 }
 
 @media (max-width: 700px) {
@@ -173,7 +177,6 @@
   }
 
   .proposalStatusWrapper {
-    margin-top: 0.5rem;
     max-width: fit-content;
   }
 
