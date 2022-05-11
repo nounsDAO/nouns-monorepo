@@ -791,7 +791,8 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
      *     `params.quorumVotesBPSOffset` determines at which amount of against-votes does the
      *     additional quorum calculate "kick in".
      *     The additional quorum is calculated as:
-     *       linearCoefficient * againstVotesBPS + quadraticCoefficient * againstVotesBPS^2
+     *       linearCoefficient * x + quadraticCoefficient * x^2
+     *       where x = (againstVotesBPS - params.quorumVotesBPSOffset)
      * @dev Note that the coefficients are fixed point integers with 6 decimals
      * @param againstVotes Number of against-votes in the proposal
      * @param totalSupply The total supply of Nouns at the time of proposal creation
@@ -808,13 +809,13 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
             return bps2Uint(params.minQuorumVotesBPS, totalSupply);
         }
 
-        uint256 polynomInput = againstVotesBPS - params.quorumVotesBPSOffset;
-        uint256 polynomValueBPS = (params.quorumLinearCoefficient *
-            polynomInput +
+        uint256 adjustedAgainstVotesBPS = againstVotesBPS - params.quorumVotesBPSOffset;
+        uint256 quorumAdjustmentBPS = (params.quorumLinearCoefficient *
+            adjustedAgainstVotesBPS +
             params.quorumQuadraticCoefficient *
-            polynomInput**2) / 1e6;
+            adjustedAgainstVotesBPS**2) / 1e6;
 
-        uint256 adjustedQuorumBPS = params.minQuorumVotesBPS + polynomValueBPS;
+        uint256 adjustedQuorumBPS = params.minQuorumVotesBPS + quorumAdjustmentBPS;
         uint256 quorumBPS = min(params.maxQuorumVotesBPS, adjustedQuorumBPS);
         return bps2Uint(quorumBPS, totalSupply);
     }
