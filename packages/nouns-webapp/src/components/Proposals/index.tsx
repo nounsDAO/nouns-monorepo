@@ -108,6 +108,32 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
               p.status === ProposalState.PENDING ||
               p.status === ProposalState.ACTIVE ||
               p.status === ProposalState.QUEUED;
+
+            const infoPills = (
+              <>
+                {isPropInStateToHaveCountDown && (
+                  <div className={classes.proposalStatusWrapper}>
+                    <div
+                      className={clsx(proposalStatusClasses.proposalStatus, classes.countdownPill)}
+                    >
+                      <div className={classes.countdownPillContentWrapper}>
+                        <span className={classes.countdownPillClock}>
+                          <ClockIcon height={16} width={16} />
+                        </span>{' '}
+                        <span className={classes.countdownPillText}>
+                          {getCountdownCopy(p, currentBlock || 0, activeLocale)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className={classes.proposalStatusWrapper}>
+                  <ProposalStatus status={p.status}></ProposalStatus>
+                </div>
+              </>
+            );
+
             return (
               <div
                 className={clsx(classes.proposalLink, classes.proposalLinkWithCountdown)}
@@ -116,58 +142,10 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
               >
                 <span className={classes.proposalTitle}>
                   <span className={classes.proposalId}>{p.id}</span> <span>{p.title}</span>
-                  <div className={classes.proposalInfoPillsWrapperMobile}>
-                    {isPropInStateToHaveCountDown && (
-                      <div className={classes.proposalStatusWrapper}>
-                        <div
-                          className={clsx(
-                            proposalStatusClasses.proposalStatus,
-                            classes.countdownPill,
-                          )}
-                        >
-                          <div className={classes.countdownPillContentWrapper}>
-                            <span className={classes.countdownPillClock}>
-                              <ClockIcon height={16} width={16} />
-                            </span>{' '}
-                            <span className={classes.countdownPillText}>
-                              {getCountdownCopy(p, currentBlock || 0, activeLocale)}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    <div className={classes.proposalStatusWrapper}>
-                      <ProposalStatus status={p.status}></ProposalStatus>
-                    </div>
-                  </div>
+                  <div className={classes.proposalInfoPillsWrapperMobile}>{infoPills}</div>
                 </span>
 
-                <div className={classes.proposalInfoPillsWrapper}>
-                  {isPropInStateToHaveCountDown && (
-                    <div className={classes.proposalStatusWrapper}>
-                      <div
-                        className={clsx(
-                          proposalStatusClasses.proposalStatus,
-                          classes.countdownPill,
-                        )}
-                      >
-                        <div className={classes.countdownPillContentWrapper}>
-                          <span className={classes.countdownPillClock}>
-                            <ClockIcon height={16} width={16} />
-                          </span>{' '}
-                          <span className={classes.countdownPillText}>
-                            {getCountdownCopy(p, currentBlock || 0, activeLocale)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  <div className={classes.proposalStatusWrapper}>
-                    <ProposalStatus status={p.status}></ProposalStatus>
-                  </div>
-                </div>
+                <div className={classes.proposalInfoPillsWrapper}>{infoPills}</div>
               </div>
             );
           })
