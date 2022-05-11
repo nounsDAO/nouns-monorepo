@@ -134,6 +134,10 @@
   margin-left: 0.25rem;
 }
 
+.proposalInfoPillsWrapperMobile {
+  display: none;
+}
+
 @media (max-width: 992px) {
   .nullStateCopy {
     margin-top: 0rem;
@@ -143,6 +147,17 @@
     max-width: 100%;
     overflow-wrap: break-word;
   }
+
+  .proposalInfoPillsWrapperMobile {
+    display: flex;
+    flex-direction: row;
+    min-width: fit-content;
+    margin-left: -0.5rem;
+  }
+
+  .proposalInfoPillsWrapper {
+    display: none;
+  }
 }
 
 @media (max-width: 700px) {
@@ -151,10 +166,9 @@
     flex-direction: column;
   }
 
-  .proposalInfoPillsWrapper {
+  .proposalInfoPillsWrapperMobile {
     width: 100%;
-    margin-top: 1rem;
-    margin-left: 3rem;
+    margin-top: 0.25rem;
     display: flex;
   }
 

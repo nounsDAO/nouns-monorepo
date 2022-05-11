@@ -41,12 +41,22 @@ const getCountdownCopy = (proposal: Proposal, currentBlock: number, locale: Supp
   const now = dayjs();
 
   if (startDate?.isBefore(now) && endDate?.isAfter(now)) {
-    return <Trans>Ends {endDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale]).fromNow()}</Trans>;
+    return (
+      <Trans>Ends {endDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale]).fromNow()}</Trans>
+    );
   }
   if (endDate?.isBefore(now)) {
-    return <Trans>Expires {expiresDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale]).fromNow()}</Trans>;
+    return (
+      <Trans>
+        Expires {expiresDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale]).fromNow()}
+      </Trans>
+    );
   }
-  return <Trans>Starts {dayjs(startDate).locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale]).fromNow()}</Trans>;
+  return (
+    <Trans>
+      Starts {dayjs(startDate).locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale]).fromNow()}
+    </Trans>
+  );
 };
 
 const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
@@ -106,6 +116,31 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
               >
                 <span className={classes.proposalTitle}>
                   <span className={classes.proposalId}>{p.id}</span> <span>{p.title}</span>
+                  <div className={classes.proposalInfoPillsWrapperMobile}>
+                    {isPropInStateToHaveCountDown && (
+                      <div className={classes.proposalStatusWrapper}>
+                        <div
+                          className={clsx(
+                            proposalStatusClasses.proposalStatus,
+                            classes.countdownPill,
+                          )}
+                        >
+                          <div className={classes.countdownPillContentWrapper}>
+                            <span className={classes.countdownPillClock}>
+                              <ClockIcon height={16} width={16} />
+                            </span>{' '}
+                            <span className={classes.countdownPillText}>
+                              {getCountdownCopy(p, currentBlock || 0, activeLocale)}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className={classes.proposalStatusWrapper}>
+                      <ProposalStatus status={p.status}></ProposalStatus>
+                    </div>
+                  </div>
                 </span>
 
                 <div className={classes.proposalInfoPillsWrapper}>
