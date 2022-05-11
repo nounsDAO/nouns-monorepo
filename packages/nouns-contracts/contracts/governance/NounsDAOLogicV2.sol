@@ -124,7 +124,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         );
         require(
             proposalThresholdBPS_ >= MIN_PROPOSAL_THRESHOLD_BPS && proposalThresholdBPS_ <= MAX_PROPOSAL_THRESHOLD_BPS,
-            'NounsDAO::initialize: invalid proposal threshold'
+            'NounsDAO::initialize: invalid proposal threshold bps'
         );
 
         emit VotingPeriodSet(votingPeriod, votingPeriod_);
@@ -573,7 +573,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         require(
             newProposalThresholdBPS >= MIN_PROPOSAL_THRESHOLD_BPS &&
                 newProposalThresholdBPS <= MAX_PROPOSAL_THRESHOLD_BPS,
-            'NounsDAO::_setProposalThreshold: invalid proposal threshold'
+            'NounsDAO::_setProposalThreshold: invalid proposal threshold bps'
         );
         uint256 oldProposalThresholdBPS = proposalThresholdBPS;
         proposalThresholdBPS = newProposalThresholdBPS;
