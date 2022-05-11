@@ -780,7 +780,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
             dynamicQuorumVotes(
                 proposal.againstVotes,
                 proposal.totalSupply,
-                getDynamicQuorumParamsAt(proposalCreationBlock(proposal))
+                getDynamicQuorumParamsAt(proposal.creationBlock)
             );
     }
 
