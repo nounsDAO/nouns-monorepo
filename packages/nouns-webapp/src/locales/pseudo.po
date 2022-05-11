@@ -280,10 +280,6 @@ msgstr ""
 msgid "Ends"
 msgstr ""
 
-#: src/components/Proposals/index.tsx
-#~ msgid "Ends ${0}"
-#~ msgstr ""
-
 #: src/components/AuctionTimer/index.tsx
 msgid "Ends on"
 msgstr ""
@@ -322,10 +318,6 @@ msgstr ""
 #: src/components/ProposalStatus/index.tsx
 msgid "Expired"
 msgstr ""
-
-#: src/components/Proposals/index.tsx
-#~ msgid "Expires ${0}"
-#~ msgstr ""
 
 #: src/components/Proposals/index.tsx
 msgid "Expires {0}"
@@ -690,16 +682,9 @@ msgid "Sign out"
 msgstr ""
 
 #: src/pages/Vote/index.tsx
-#~ msgid "Snapshot"
-#~ msgstr ""
-
-#: src/pages/Vote/index.tsx
 msgid "Starts"
 msgstr ""
 
-#: src/components/Proposals/index.tsx
-#~ msgid "Starts ${0}"
-#~ msgstr ""
 
 #: src/components/Proposals/index.tsx
 msgid "Starts {0}"
