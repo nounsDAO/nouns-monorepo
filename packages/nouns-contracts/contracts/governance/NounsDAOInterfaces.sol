@@ -357,9 +357,9 @@ contract NounsDAOStorageV2 is NounsDAOStorageV1Adjusted {
     DynamicQuorumParamsCheckpoint[] public quorumParamsCheckpoints;
 
     struct DynamicQuorumParams {
-        /// @notice Minimum quorum votes BPS at the time of proposal creation
+        /// @notice The minimum basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed.
         uint16 minQuorumVotesBPS;
-        /// @notice The maximum basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed. *DIFFERS from GovernerBravo
+        /// @notice The maximum basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed.
         uint16 maxQuorumVotesBPS;
         /// @notice The quorum votes polynom input offset which suppresses polynom contribution until againstVotes.div(totalSupply) reaches this value
         uint16 quorumVotesBPSOffset;
