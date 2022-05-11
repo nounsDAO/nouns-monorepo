@@ -16,7 +16,7 @@ export function dynamicQuorumVotes(
   }
 
   const polynomInput = againstVotesBPS - quorumVotesBPSOffset;
-  const polynomValueBPS = quorumLinearCoef
+  const polynomValueBPS = quorumLinearCoefficient
     .times(BigInt.fromI32(polynomInput))
     .plus(quorumQuadraticCoefficient.times(BigInt.fromI32(polynomInput ** 2)))
     .div(BigInt.fromI32(<i32>1e6));
