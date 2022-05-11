@@ -47,6 +47,12 @@ Run your local graph node by running:
 yarn graph-node
 ```
 
+Make sure your local chain is running: in a new terminal go to the `nouns-contracts` package and run:
+
+```sh
+yarn task:run-local
+```
+
 Then in a new terminal run:
 
 ```sh
