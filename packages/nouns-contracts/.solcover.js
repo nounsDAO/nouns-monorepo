@@ -3,4 +3,5 @@ module.exports = {
     // WETH is for testing purposes only
     'test/WETH.sol',
   ],
+  configureYulOptimizer: true
 };
