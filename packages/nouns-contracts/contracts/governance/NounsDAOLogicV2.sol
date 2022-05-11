@@ -773,7 +773,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     function quorumVotes(uint256 proposalId) public view returns (uint256) {
         Proposal storage proposal = _proposals[proposalId];
         if (proposal.totalSupply == 0) {
-            return proposal.minQuorumVotes;
+            return proposal.quorumVotes;
         }
 
         return

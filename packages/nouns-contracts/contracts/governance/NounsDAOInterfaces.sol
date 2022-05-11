@@ -244,10 +244,7 @@ contract NounsDAOStorageV1 is NounsDAOProxyStorage {
 }
 
 /**
- * @title Naming adjustments to NounsDAOStorageV1 and added fields to `Proposal`
- * @notice This contract adjusts the following V1 storage key names for use in V2.
- * - `quorumVotesBPS` has been renamed to `minQuorumVotesBPS`.
- * - `Proposal.quorumVotes` has been renamed to `Proposal.minQuorumVotes`.
+ * @title Extra fields added to the `Proposal` struct from NounsDAOStorageV1
  * @notice The following fields were added to the `Proposal` struct:
  * - `Proposal.totalSupply`
  * - `Proposal.creationBlock`
@@ -265,8 +262,8 @@ contract NounsDAOStorageV1Adjusted is NounsDAOProxyStorage {
     /// @notice The basis point number of votes required in order for a voter to become a proposer. *DIFFERS from GovernerBravo
     uint256 public proposalThresholdBPS;
 
-    /// @notice The minimum basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed. *DIFFERS from GovernerBravo
-    uint256 public minQuorumVotesBPS;
+    /// @notice The basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed. *DIFFERS from GovernerBravo
+    uint256 public quorumVotesBPS;
 
     /// @notice The total number of proposals
     uint256 public proposalCount;
@@ -290,8 +287,8 @@ contract NounsDAOStorageV1Adjusted is NounsDAOProxyStorage {
         address proposer;
         /// @notice The number of votes needed to create a proposal at the time of proposal creation. *DIFFERS from GovernerBravo
         uint256 proposalThreshold;
-        /// @notice The minimum number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed at the time of proposal creation. *DIFFERS from GovernerBravo
-        uint256 minQuorumVotes;
+        /// @notice The number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed at the time of proposal creation. *DIFFERS from GovernerBravo
+        uint256 quorumVotes;
         /// @notice The timestamp that the proposal will be available for execution, set once the vote succeeds
         uint256 eta;
         /// @notice the ordered list of target addresses for calls to be made
