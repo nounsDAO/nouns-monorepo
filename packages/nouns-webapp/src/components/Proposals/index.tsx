@@ -13,7 +13,7 @@ import proposalStatusClasses from '../ProposalStatus/ProposalStatus.module.css';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
-import { LOCALE_DAYJS, SupportedLocale } from '../../i18n/locales';
+import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '../../i18n/locales';
 
 dayjs.extend(relativeTime);
 
@@ -41,12 +41,12 @@ const getCountdownCopy = (proposal: Proposal, currentBlock: number, locale: Supp
   const now = dayjs();
 
   if (startDate?.isBefore(now) && endDate?.isAfter(now)) {
-    return <Trans>Ends {endDate.locale(LOCALE_DAYJS[locale]).fromNow()}</Trans>;
+    return <Trans>Ends {endDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale]).fromNow()}</Trans>;
   }
   if (endDate?.isBefore(now)) {
-    return <Trans>Expires {expiresDate.locale(LOCALE_DAYJS[locale]).fromNow()}</Trans>;
+    return <Trans>Expires {expiresDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale]).fromNow()}</Trans>;
   }
-  return <Trans>Starts {dayjs(startDate).locale(LOCALE_DAYJS[locale]).fromNow()}</Trans>;
+  return <Trans>Starts {dayjs(startDate).locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale]).fromNow()}</Trans>;
 };
 
 const Proposals = ({ proposals }: { proposals: Proposal[] }) => {

@@ -16,7 +16,8 @@ export const LOCALE_LABEL: { [locale in SupportedLocale]: string } = {
   pseudo: 'ƥƨèúδô',
 };
 
-export const LOCALE_DAYJS: { [locale in SupportedLocale]: DaysJSLocale } = {
+// Map SupportedLocale string to DaysJS locale object (used for locale aware time formatting)
+export const SUPPORTED_LOCALE_TO_DAYSJS_LOCALE: { [locale in SupportedLocale]: DaysJSLocale } = {
   'en-US': en,
   'ja-JP': ja,
   pseudo: en,
