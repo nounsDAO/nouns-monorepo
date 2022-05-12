@@ -5,7 +5,7 @@ import { useAppSelector } from '../../hooks';
 
 interface NounInfoRowButtonProps {
   iconImgSource: string;
-  btnText: string;
+  btnText: React.ReactNode;
   onClickHandler: () => void;
 }
 

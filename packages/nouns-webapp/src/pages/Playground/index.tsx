@@ -10,7 +10,7 @@ import {
   Popover,
 } from 'react-bootstrap';
 import classes from './Playground.module.css';
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react';
 import Link from '../../components/Link';
 import { ImageData, getNounData, getRandomNounSeed } from '@nouns/assets';
 import { buildSVG, EncodedImage, PNGCollectionEncoder } from '@nouns/sdk';
@@ -18,6 +18,8 @@ import InfoIcon from '../../assets/icons/Info.svg';
 import Noun from '../../components/Noun';
 import NounModal from './NounModal';
 import { PNG } from 'pngjs';
+import { Trans } from '@lingui/macro';
+import { i18n } from '@lingui/core';
 
 interface Trait {
   title: string;
@@ -32,7 +34,7 @@ interface PendingCustomTrait {
 
 const nounsProtocolLink = (
   <Link
-    text="Nouns Protocol"
+    text={<Trans>Nouns Protocol</Trans>}
     url="https://www.notion.so/Noun-Protocol-32e4f0bf74fe433e927e2ea35e52a507"
     leavesPage={true}
   />
@@ -69,6 +71,18 @@ const parseTraitName = (partName: string): string =>
   capitalizeFirstLetter(partName.substring(partName.indexOf('-') + 1));
 
 const capitalizeFirstLetter = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
+
+const traitKeyToLocalizedTraitKeyFirstLetterCapitalized = (s: string): ReactNode => {
+  const traitMap = new Map([
+    ['background', <Trans>Background</Trans>],
+    ['body', <Trans>Body</Trans>],
+    ['accessory', <Trans>Accessory</Trans>],
+    ['head', <Trans>Head</Trans>],
+    ['glasses', <Trans>Glasses</Trans>],
+  ]);
+
+  return traitMap.get(s);
+};
 
 const Playground: React.FC = () => {
   const [nounSvgs, setNounSvgs] = useState<string[]>();
@@ -248,12 +262,18 @@ const Playground: React.FC = () => {
       <Container fluid="lg">
         <Row>
           <Col lg={10} className={classes.headerRow}>
-            <span>Explore</span>
-            <h1>Playground</h1>
+            <span>
+              <Trans>Explore</Trans>
+            </span>
+            <h1>
+              <Trans>Playground</Trans>
+            </h1>
             <p>
-              The playground was built using the {nounsProtocolLink}. Noun's traits are determined
-              by the Noun Seed. The seed was generated using {nounsAssetsLink} and rendered using
-              the {nounsSDKLink}.
+              <Trans>
+                The playground was built using the {nounsProtocolLink}. Noun's traits are determined
+                by the Noun Seed. The seed was generated using {nounsAssetsLink} and rendered using
+                the {nounsSDKLink}.
+              </Trans>
             </p>
           </Col>
         </Row>
@@ -266,7 +286,7 @@ const Playground: React.FC = () => {
                 }}
                 className={classes.primaryBtn}
               >
-                Generate Nouns
+                <Trans>Generate Nouns</Trans>
               </Button>
             </Col>
             <Row>
@@ -277,7 +297,7 @@ const Playground: React.FC = () => {
                       <Form className={classes.traitForm}>
                         <FloatingLabel
                           controlId="floatingSelect"
-                          label={capitalizeFirstLetter(trait.title)}
+                          label={traitKeyToLocalizedTraitKeyFirstLetterCapitalized(trait.title)}
                           key={index}
                           className={classes.floatingLabel}
                         >
@@ -303,13 +323,15 @@ const Playground: React.FC = () => {
                 })}
             </Row>
             <label style={{ margin: '1rem 0 .25rem 0' }} htmlFor="custom-trait-upload">
-              Upload Custom Trait
+              <Trans>Upload Custom Trait</Trans>
               <OverlayTrigger
                 trigger="hover"
                 placement="top"
                 overlay={
                   <Popover>
-                    <div style={{ padding: '0.25rem' }}>Only 32x32 PNG images are accepted</div>
+                    <div style={{ padding: '0.25rem' }}>
+                      <Trans>Only 32x32 PNG images are accepted</Trans>
+                    </div>
                   </Popover>
                 }
               >
@@ -346,13 +368,16 @@ const Playground: React.FC = () => {
                   </Form.Select>
                 </FloatingLabel>
                 <Button onClick={() => uploadCustomTrait()} className={classes.primaryBtn}>
-                  Upload
+                  <Trans>Upload</Trans>
                 </Button>
               </>
             )}
             <p className={classes.nounYearsFooter}>
-              You've generated {nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'} years worth of
-              Nouns
+              <Trans>
+                You've generated{' '}
+                {i18n.number(parseInt(nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'))} years
+                worth of Nouns
+              </Trans>
             </p>
           </Col>
           <Col lg={9}>
