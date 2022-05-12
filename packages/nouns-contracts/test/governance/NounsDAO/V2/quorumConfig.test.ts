@@ -81,7 +81,7 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
       });
     });
 
-    it('reverts when sender is not admin', async () => {
+    it('reverts when sender is not admin [ @skip-on-coverage ]', async () => {
       await expect(
         gov.connect(account0)._setDynamicQuorumParams({
           minQuorumVotesBPS: 0,
@@ -93,7 +93,7 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
       ).to.be.revertedWith('AdminOnly()');
     });
 
-    it('reverts given minQuorum input below lower bound', async () => {
+    it('reverts given minQuorum input below lower bound [ @skip-on-coverage ]', async () => {
       await expect(
         gov._setDynamicQuorumParams({
           minQuorumVotesBPS: 199,
@@ -105,7 +105,7 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
       ).to.be.revertedWith('InvalidMinQuorumVotesBPS()');
     });
 
-    it('reverts given minQuorum input above upper bound', async () => {
+    it('reverts given minQuorum input above upper bound [ @skip-on-coverage ]', async () => {
       await expect(
         gov._setDynamicQuorumParams({
           minQuorumVotesBPS: 2001,
@@ -117,7 +117,7 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
       ).to.be.revertedWith('InvalidMinQuorumVotesBPS()');
     });
 
-    it('reverts given minQuorum input above maxQuorum BPs', async () => {
+    it('reverts given minQuorum input above maxQuorum BPs [ @skip-on-coverage ]', async () => {
       await expect(
         gov._setDynamicQuorumParams({
           minQuorumVotesBPS: 202,
@@ -129,7 +129,7 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
       ).to.be.revertedWith('MinQuorumBPSGreaterThanMaxQuorumBPS()');
     });
 
-    it('reverts when maxQuorum input above upper bound', async () => {
+    it('reverts when maxQuorum input above upper bound [ @skip-on-coverage ]', async () => {
       await expect(
         gov._setDynamicQuorumParams({
           minQuorumVotesBPS: 200,
