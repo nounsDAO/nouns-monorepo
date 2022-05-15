@@ -30,6 +30,13 @@ const Documentation = () => {
       leavesPage={true}
     />
   );
+  const vetoTxLink = (
+    <Link
+      text={<Trans>Nounders to the Nouns Foundation</Trans>}
+      url="https://etherscan.io/tx/0x95cbb2c6741f0675c4ace4593155397bddb259e7cf7e3f8f1d2b3786e8269033/advanced#eventlog"
+      leavesPage={true}
+    />
+  );
   return (
     <Section fullWidth={false}>
       <Col lg={{ span: 10, offset: 1 }}>
@@ -162,6 +169,11 @@ const Documentation = () => {
                   Nounders will proveably revoke this veto right when they deem it safe to do so.
                   This decision will be based on a healthy Noun distribution and a community that is
                   engaged in the governance process.
+                </Trans>
+              </p>
+              <p>
+                <Trans>
+                  <i>The veto was transferred from {vetoTxLink} on 12/31/21.</i>
                 </Trans>
               </p>
             </Accordion.Body>
