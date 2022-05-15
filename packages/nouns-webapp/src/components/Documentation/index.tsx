@@ -30,13 +30,6 @@ const Documentation = () => {
       leavesPage={true}
     />
   );
-  const vetoTxLink = (
-    <Link
-      text={<Trans>Nounders to the Nouns Foundation</Trans>}
-      url="https://etherscan.io/tx/0x95cbb2c6741f0675c4ace4593155397bddb259e7cf7e3f8f1d2b3786e8269033/advanced#eventlog"
-      leavesPage={true}
-    />
-  );
   return (
     <Section fullWidth={false}>
       <Col lg={{ span: 10, offset: 1 }}>
@@ -152,28 +145,22 @@ const Documentation = () => {
           </Accordion.Item>
           <Accordion.Item eventKey="3" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>Governance ‘Slow Start’</Trans>
+              <Trans>Governance</Trans>
             </Accordion.Header>
             <Accordion.Body>
               <p>
                 <Trans>
-                  In addition to the precautions taken by Compound Governance, Nounders have given
-                  themselves a special veto right to ensure that no malicious proposals can be
-                  passed while the Noun supply is low. This veto right will only be used if an
-                  obviously harmful governance proposal has been passed, and is intended as a last
-                  resort.
+                  In addition to the precautions taken by Compound Governance, the Nouns Foundation
+                  holds a special veto right to ensure that no malicious proposals can be executed.
+                  This veto right will only be used if an obviously harmful governance proposal has
+                  been passed, and is intended as a last resort.
                 </Trans>
               </p>
               <p>
                 <Trans>
-                  Nounders will proveably revoke this veto right when they deem it safe to do so.
-                  This decision will be based on a healthy Noun distribution and a community that is
-                  engaged in the governance process.
-                </Trans>
-              </p>
-              <p>
-                <Trans>
-                  <i>The veto was transferred from {vetoTxLink} on 12/31/21.</i>
+                  The Nouns Founadtion will proveably revoke this veto right when they deem it safe
+                  to do so. This decision will be based on a healthy Noun distribution and a
+                  community that is engaged in the governance process.
                 </Trans>
               </p>
             </Accordion.Body>
