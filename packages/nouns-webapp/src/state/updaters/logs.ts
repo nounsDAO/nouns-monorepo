@@ -10,6 +10,7 @@ const Updater = (): null => {
   const { library } = useEthers();
 
   const blockNumber = useBlockNumber();
+  const BLOCKS_PER_CHUNK = 14000000;
 
   const filtersNeedFetch: EventFilter[] = useMemo(() => {
     if (typeof blockNumber !== 'number') return [];
@@ -36,12 +37,24 @@ const Updater = (): null => {
 
     dispatch(fetchingLogs({ filters: filtersNeedFetch, blockNumber }));
     filtersNeedFetch.forEach(filter => {
-      library
-        .getLogs({
-          ...filter,
-          fromBlock: 0,
-          toBlock: blockNumber,
-        })
+      const chunks = Array.from(
+        { length: Math.ceil(blockNumber / BLOCKS_PER_CHUNK) },
+        (_, i) => i,
+      ).map((val: number) => [
+        val * BLOCKS_PER_CHUNK,
+        Math.min(blockNumber, (val + 1) * BLOCKS_PER_CHUNK),
+      ]);
+
+      Promise.all(
+        chunks.map((chunkBoundary: Array<number>) =>
+          library.getLogs({
+            ...filter,
+            fromBlock: chunkBoundary[0],
+            toBlock: chunkBoundary[1],
+          }),
+        ),
+      )
+        .then(nestedLogs => nestedLogs.flat())
         .then(logs => {
           dispatch(
             fetchedLogs({
