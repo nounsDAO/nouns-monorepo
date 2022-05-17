@@ -1,9 +1,31 @@
 import classes from './DynamicQuorumInfoModal.module.css';
 import ReactDOM from 'react-dom';
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { XIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/macro';
 import { Proposal } from '../../wrappers/nounsDao';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+  } from 'chart.js';
+  import { Line } from 'react-chartjs-2';
+
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+  );
+
 
 export const Backdrop: React.FC<{ onDismiss: () => void }> = props => {
   return <div className={classes.backdrop} onClick={props.onDismiss} />;
@@ -21,6 +43,31 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
   onDismiss: () => void;
 }> = props => {
   const { onDismiss, proposal } = props;
+  const labels = ['0%','10%','20%','30%','100%'];
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: 'Chart.js Line Chart',
+      },
+    },
+  };
+
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: 'Dataset 1',
+        data: [20,20,20,30,50],
+        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      },
+    ],
+  };
 
   return (
     <>
@@ -55,72 +102,8 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
           </p>
 
           {/* Main curve content area */}
-          <div>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                width: '80%',
-                height: '20rem',
-                // backgroundColor: 'red',
-              }}
-            >
-              <div
-                style={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  color: 'var(--brand-gray-light-text)',
-                  fontWeight: 'normal',
-                  opacity: '50%'
-                }}
-              >
-                <span>100%</span>
-                <span>70%</span>
-                <span>50%</span>
-                <span>20%</span>
-                <span>0%</span>
-              </div>
-
-              {/* graph wrapper */}
-              <div
-                style={{
-                  width: '100%',
-                  border: '2px solid rgba(225,225,225,0.5)',
-                  borderRadius: '14px',
-                  height: '100%',
-                  padding: '1rem',
-                  marginLeft: '0.5rem'
-                }}
-              >
-                  <canvas ref={ref}/>
-              </div>
-            </div>
-            {/* lower axis */}
-            <div
-              style={{
-                width: '80%',
-                display: 'flex',
-                justifyContent: 'space-around',
-                opacity: '50%',
-                color: 'var(--brand-gray-light-text)',
-                fontWeight: 'normal',
-                marginLeft: '1rem'
-              }}
-            >
-              <p>0%</p>
-              <p>10%</p>
-              <p>20%</p>
-              <p>30%</p>
-              <p>40%</p>
-              <p>50%</p>
-              <p>60%</p>
-              <p>70%</p>
-              <p>80%</p>
-              <p>90%</p>
-              <p>100%</p>
-            </div>
+          <div> 
+            <Line options={options} data={data} />
           </div>
 
           <p style={{ opacity: '50%', fontSize: '14px', fontWeight: 'normal' }}>
