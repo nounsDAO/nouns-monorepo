@@ -85,7 +85,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     uint256 public constant MIN_QUORUM_VOTES_BPS_UPPER_BOUND = 2_000; // 2,000 basis points or 20%
 
     /// @notice The upper bound of maximum quorum votes basis points
-    uint256 public constant MAX_QUORUM_VOTES_BPS_UPPER_BOUND = 4_000; // 4,000 basis points or 40%
+    uint256 public constant MAX_QUORUM_VOTES_BPS_UPPER_BOUND = 6_000; // 4,000 basis points or 60%
 
     /// @notice The maximum setable quorum votes basis points
     uint256 public constant MAX_QUORUM_VOTES_BPS = 2_000; // 2,000 basis points or 20%

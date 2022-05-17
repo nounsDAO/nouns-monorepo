@@ -133,7 +133,7 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
       await expect(
         gov._setDynamicQuorumParams({
           minQuorumVotesBPS: 200,
-          maxQuorumVotesBPS: 4001,
+          maxQuorumVotesBPS: 6001,
           quorumVotesBPSOffset: 0,
           quorumLinearCoefficient: 0,
           quorumQuadraticCoefficient: 0,
@@ -343,7 +343,7 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
       });
 
       it('reverts given input above upper bound', async () => {
-        await expect(gov._setMaxQuorumVotesBPS(4001)).to.be.revertedWith(
+        await expect(gov._setMaxQuorumVotesBPS(6001)).to.be.revertedWith(
           'NounsDAO::_setMaxQuorumVotesBPS: invalid max quorum votes bps',
         );
       });
