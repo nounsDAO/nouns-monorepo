@@ -33,6 +33,8 @@ import { getNounVotes } from '../../utils/getNounsVotes';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
+import { InformationCircleIcon } from "@heroicons/react/solid";
+import DynamicQuorumInfoModal from '../../components/DynamicQuorumInfoModal';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -48,6 +50,7 @@ const VotePage = ({
   const proposal = useProposal(id);
 
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
+  const [showDQInfoModal, setShowDQInfoModal] = useState<boolean>(false);
 
   const [isQueuePending, setQueuePending] = useState<boolean>(false);
   const [isExecutePending, setExecutePending] = useState<boolean>(false);
@@ -250,6 +253,10 @@ const VotePage = ({
   const abstainNouns = getNounVotes(data, 2);
 
   return (
+    <>
+    {
+      showDQInfoModal && <DynamicQuorumInfoModal proposal={proposal} onDismiss={() => setShowDQInfoModal(false)} />
+    }
     <Section fullWidth={false} className={classes.votePage}>
       <VoteModal
         show={showVoteModal}
@@ -319,8 +326,17 @@ const VotePage = ({
                     </h1>
                   </div>
                   <div className={classes.thresholdInfo}>
-                    <span>
+                    <span onClick={() => setShowDQInfoModal(true)}>
                       <Trans>Quorum</Trans>
+                      <InformationCircleIcon style={{
+                        height: '.8rem',
+                        width: '.8rem',
+                        marginBottom: '.05rem',
+                        marginLeft: '0.1rem',
+                        color: 'var(--brand-gray-light-text)',
+                        opacity: '50%',
+                        cursor: 'pointer'
+                      }}/>
                     </span>
                     <h3>
                       <Trans>{i18n.number(proposal.quorumVotes)} votes</Trans>
@@ -379,6 +395,7 @@ const VotePage = ({
         <ProposalContent proposal={proposal} />
       </Col>
     </Section>
+    </>
   );
 };
 
