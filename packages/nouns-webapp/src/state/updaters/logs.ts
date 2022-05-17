@@ -4,6 +4,8 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { EventFilter, keyToFilter } from '../../utils/logParsing';
 import { fetchedLogs, fetchedLogsError, fetchingLogs } from '../slices/logs';
 
+const MAX_BLOCKS_PER_CALL = 1_000_000;
+
 const Updater = (): null => {
   const dispatch = useAppDispatch();
   const state = useAppSelector(state => state.logs);
@@ -36,17 +38,30 @@ const Updater = (): null => {
 
     dispatch(fetchingLogs({ filters: filtersNeedFetch, blockNumber }));
     filtersNeedFetch.forEach(filter => {
-      library
-        .getLogs({
-          ...filter,
-          fromBlock: 0,
-          toBlock: blockNumber,
-        })
+      const ranges: { fromBlock: number; toBlock: number }[] = [];
+
+      let fromBlock = filter.fromBlock ?? 0;
+      while (fromBlock <= blockNumber) {
+        ranges.push({
+          fromBlock: fromBlock,
+          toBlock: Math.min(fromBlock + MAX_BLOCKS_PER_CALL, blockNumber),
+        });
+        fromBlock += MAX_BLOCKS_PER_CALL;
+      }
+
+      Promise.all(
+        ranges.map(range =>
+          library.getLogs({
+            ...filter,
+            ...range,
+          }),
+        ),
+      )
         .then(logs => {
           dispatch(
             fetchedLogs({
               filter,
-              results: { logs, blockNumber },
+              results: { logs: logs.flat(), blockNumber },
             }),
           );
         })
