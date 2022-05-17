@@ -255,7 +255,15 @@ const VotePage = ({
   return (
     <>
     {
-      showDQInfoModal && <DynamicQuorumInfoModal proposal={proposal} onDismiss={() => setShowDQInfoModal(false)} />
+      showDQInfoModal && <DynamicQuorumInfoModal 
+      againstVotesAbs={30}
+      againstVotesBps={1000}
+      minQuorumBps={1000}
+      maxQuorumBps={2000}
+      quadraticCoefficent={.0005}
+      linearCoefficent={.01}
+      offsetBps={250}
+      proposal={proposal} onDismiss={() => setShowDQInfoModal(false)} />
     }
     <Section fullWidth={false} className={classes.votePage}>
       <VoteModal

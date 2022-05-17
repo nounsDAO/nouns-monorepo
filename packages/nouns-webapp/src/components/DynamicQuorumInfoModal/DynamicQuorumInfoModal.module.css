@@ -22,12 +22,12 @@
     top: 15vh;
     left: 10%;
     z-index: 100;
-    background-color: rgba(244, 244, 248, 1);
+    background-color: white;
     box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.05);
     padding: 1rem;
     border-radius: 24px;
-    left: calc(50% - 20rem);
-    width: 40rem;
+    left: calc(50% - 30rem);
+    width: 60rem;
   }
   
   .modal .header {
