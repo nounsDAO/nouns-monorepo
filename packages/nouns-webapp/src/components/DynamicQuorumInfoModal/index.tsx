@@ -149,6 +149,11 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
     3433];
   const options = {
     responsive: true,
+        elements: {
+            point:{
+                radius: 0
+            }
+        },
     plugins: {
       legend: {
         position: 'top' as const,
