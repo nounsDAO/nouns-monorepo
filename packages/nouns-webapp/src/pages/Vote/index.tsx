@@ -33,7 +33,7 @@ import { getNounVotes } from '../../utils/getNounsVotes';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
-import { InformationCircleIcon } from "@heroicons/react/solid";
+import { InformationCircleIcon } from '@heroicons/react/solid';
 import DynamicQuorumInfoModal from '../../components/DynamicQuorumInfoModal';
 
 dayjs.extend(utc);
@@ -254,155 +254,159 @@ const VotePage = ({
 
   return (
     <>
-    {
-      showDQInfoModal && <DynamicQuorumInfoModal 
-      againstVotesAbs={30}
-      againstVotesBps={1000}
-      minQuorumBps={1000}
-      maxQuorumBps={2000}
-      quadraticCoefficent={.0005}
-      linearCoefficent={.01}
-      offsetBps={250}
-      proposal={proposal} onDismiss={() => setShowDQInfoModal(false)} />
-    }
-    <Section fullWidth={false} className={classes.votePage}>
-      <VoteModal
-        show={showVoteModal}
-        onHide={() => setShowVoteModal(false)}
-        proposalId={proposal?.id}
-        availableVotes={availableVotes || 0}
-      />
-      <Col lg={10} className={classes.wrapper}>
-        {proposal && (
-          <ProposalHeader
-            proposal={proposal}
-            isActiveForVoting={isActiveForVoting}
-            isWalletConnected={isWalletConnected}
-            submitButtonClickHandler={() => setShowVoteModal(true)}
-          />
-        )}
-      </Col>
-      <Col lg={10} className={clsx(classes.proposal, classes.wrapper)}>
-        {isAwaitingStateChange() && (
-          <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
-            <Col className="d-grid">
-              <Button
-                onClick={moveStateAction}
-                disabled={isQueuePending || isExecutePending}
-                variant="dark"
-                className={classes.transitionStateButton}
-              >
-                {isQueuePending || isExecutePending ? (
-                  <Spinner animation="border" />
-                ) : (
-                  <Trans>{moveStateButtonAction} Proposal ⌐◧-◧</Trans>
-                )}
-              </Button>
+      {showDQInfoModal && (
+        <DynamicQuorumInfoModal
+          againstVotesAbs={30}
+          againstVotesBps={1000}
+          minQuorumBps={1000}
+          maxQuorumBps={2000}
+          quadraticCoefficent={0.0005}
+          linearCoefficent={0.01}
+          offsetBps={250}
+          proposal={proposal}
+          onDismiss={() => setShowDQInfoModal(false)}
+        />
+      )}
+      <Section fullWidth={false} className={classes.votePage}>
+        <VoteModal
+          show={showVoteModal}
+          onHide={() => setShowVoteModal(false)}
+          proposalId={proposal?.id}
+          availableVotes={availableVotes || 0}
+        />
+        <Col lg={10} className={classes.wrapper}>
+          {proposal && (
+            <ProposalHeader
+              proposal={proposal}
+              isActiveForVoting={isActiveForVoting}
+              isWalletConnected={isWalletConnected}
+              submitButtonClickHandler={() => setShowVoteModal(true)}
+            />
+          )}
+        </Col>
+        <Col lg={10} className={clsx(classes.proposal, classes.wrapper)}>
+          {isAwaitingStateChange() && (
+            <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
+              <Col className="d-grid">
+                <Button
+                  onClick={moveStateAction}
+                  disabled={isQueuePending || isExecutePending}
+                  variant="dark"
+                  className={classes.transitionStateButton}
+                >
+                  {isQueuePending || isExecutePending ? (
+                    <Spinner animation="border" />
+                  ) : (
+                    <Trans>{moveStateButtonAction} Proposal ⌐◧-◧</Trans>
+                  )}
+                </Button>
+              </Col>
+            </Row>
+          )}
+          <Row>
+            <VoteCard
+              proposal={proposal}
+              percentage={forPercentage}
+              nounIds={forNouns}
+              variant={VoteCardVariant.FOR}
+            />
+            <VoteCard
+              proposal={proposal}
+              percentage={againstPercentage}
+              nounIds={againstNouns}
+              variant={VoteCardVariant.AGAINST}
+            />
+            <VoteCard
+              proposal={proposal}
+              percentage={abstainPercentage}
+              nounIds={abstainNouns}
+              variant={VoteCardVariant.ABSTAIN}
+            />
+          </Row>
+
+          {/* TODO abstract this into a component  */}
+          <Row>
+            <Col xl={4} lg={12}>
+              <Card className={classes.voteInfoCard}>
+                <Card.Body className="p-2">
+                  <div className={classes.voteMetadataRow}>
+                    <div className={classes.voteMetadataRowTitle}>
+                      <h1>
+                        <Trans>Threshold</Trans>
+                      </h1>
+                    </div>
+                    <div className={classes.thresholdInfo}>
+                      <span onClick={() => setShowDQInfoModal(true)}>
+                        <Trans>Quorum</Trans>
+                        <InformationCircleIcon
+                          style={{
+                            height: '.8rem',
+                            width: '.8rem',
+                            marginBottom: '.05rem',
+                            marginLeft: '0.1rem',
+                            color: 'var(--brand-gray-light-text)',
+                            opacity: '50%',
+                            cursor: 'pointer',
+                          }}
+                        />
+                      </span>
+                      <h3>
+                        <Trans>{i18n.number(proposal.quorumVotes)} votes</Trans>
+                      </h3>
+                    </div>
+                  </div>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col xl={4} lg={12}>
+              <Card className={classes.voteInfoCard}>
+                <Card.Body className="p-2">
+                  <div className={classes.voteMetadataRow}>
+                    <div className={classes.voteMetadataRowTitle}>
+                      <h1>{startOrEndTimeCopy()}</h1>
+                    </div>
+                    <div className={classes.voteMetadataTime}>
+                      <span>
+                        {startOrEndTimeTime() &&
+                          i18n.date(new Date(startOrEndTimeTime()?.toISOString() || 0), {
+                            hour: 'numeric',
+                            minute: '2-digit',
+                            timeZoneName: 'short',
+                          })}
+                      </span>
+                      <h3>
+                        {startOrEndTimeTime() &&
+                          i18n.date(new Date(startOrEndTimeTime()?.toISOString() || 0), {
+                            dateStyle: 'long',
+                          })}
+                      </h3>
+                    </div>
+                  </div>
+                </Card.Body>
+              </Card>
+            </Col>
+            <Col xl={4} lg={12}>
+              <Card className={classes.voteInfoCard}>
+                <Card.Body className="p-2">
+                  <div className={classes.voteMetadataRow}>
+                    <div className={classes.voteMetadataRowTitle}>
+                      <h1>Snapshot</h1>
+                    </div>
+                    <div className={classes.snapshotBlock}>
+                      <span>
+                        <Trans>Taken at block</Trans>
+                      </span>
+                      <h3>{proposal.createdBlock}</h3>
+                    </div>
+                  </div>
+                </Card.Body>
+              </Card>
             </Col>
           </Row>
-        )}
-        <Row>
-          <VoteCard
-            proposal={proposal}
-            percentage={forPercentage}
-            nounIds={forNouns}
-            variant={VoteCardVariant.FOR}
-          />
-          <VoteCard
-            proposal={proposal}
-            percentage={againstPercentage}
-            nounIds={againstNouns}
-            variant={VoteCardVariant.AGAINST}
-          />
-          <VoteCard
-            proposal={proposal}
-            percentage={abstainPercentage}
-            nounIds={abstainNouns}
-            variant={VoteCardVariant.ABSTAIN}
-          />
-        </Row>
 
-        {/* TODO abstract this into a component  */}
-        <Row>
-          <Col xl={4} lg={12}>
-            <Card className={classes.voteInfoCard}>
-              <Card.Body className="p-2">
-                <div className={classes.voteMetadataRow}>
-                  <div className={classes.voteMetadataRowTitle}>
-                    <h1>
-                      <Trans>Threshold</Trans>
-                    </h1>
-                  </div>
-                  <div className={classes.thresholdInfo}>
-                    <span onClick={() => setShowDQInfoModal(true)}>
-                      <Trans>Quorum</Trans>
-                      <InformationCircleIcon style={{
-                        height: '.8rem',
-                        width: '.8rem',
-                        marginBottom: '.05rem',
-                        marginLeft: '0.1rem',
-                        color: 'var(--brand-gray-light-text)',
-                        opacity: '50%',
-                        cursor: 'pointer'
-                      }}/>
-                    </span>
-                    <h3>
-                      <Trans>{i18n.number(proposal.quorumVotes)} votes</Trans>
-                    </h3>
-                  </div>
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col xl={4} lg={12}>
-            <Card className={classes.voteInfoCard}>
-              <Card.Body className="p-2">
-                <div className={classes.voteMetadataRow}>
-                  <div className={classes.voteMetadataRowTitle}>
-                    <h1>{startOrEndTimeCopy()}</h1>
-                  </div>
-                  <div className={classes.voteMetadataTime}>
-                    <span>
-                      {startOrEndTimeTime() &&
-                        i18n.date(new Date(startOrEndTimeTime()?.toISOString() || 0), {
-                          hour: 'numeric',
-                          minute: '2-digit',
-                          timeZoneName: 'short',
-                        })}
-                    </span>
-                    <h3>
-                      {startOrEndTimeTime() &&
-                        i18n.date(new Date(startOrEndTimeTime()?.toISOString() || 0), {
-                          dateStyle: 'long',
-                        })}
-                    </h3>
-                  </div>
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col xl={4} lg={12}>
-            <Card className={classes.voteInfoCard}>
-              <Card.Body className="p-2">
-                <div className={classes.voteMetadataRow}>
-                  <div className={classes.voteMetadataRowTitle}>
-                    <h1>Snapshot</h1>
-                  </div>
-                  <div className={classes.snapshotBlock}>
-                    <span>
-                      <Trans>Taken at block</Trans>
-                    </span>
-                    <h3>{proposal.createdBlock}</h3>
-                  </div>
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-
-        <ProposalContent proposal={proposal} />
-      </Col>
-    </Section>
+          <ProposalContent proposal={proposal} />
+        </Col>
+      </Section>
     </>
   );
 };
