@@ -43,5 +43,5 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and No
 
     await descriptorContract.addManyGlasses(glasses.map(({ data }) => data));
 
-    console.log('Descriptor populated with palettes and parts');
+    console.log('Descriptor populated with palettes and parts.');
   });
