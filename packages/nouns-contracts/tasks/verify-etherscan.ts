@@ -1,17 +1,6 @@
 import { Contract } from 'ethers';
 import { task, types } from 'hardhat/config';
-
-type ContractName =
-  | 'NFTDescriptor'
-  | 'NounsDescriptor'
-  | 'NounsSeeder'
-  | 'NounsToken'
-  | 'NounsAuctionHouse'
-  | 'NounsAuctionHouseProxyAdmin'
-  | 'NounsAuctionHouseProxy'
-  | 'NounsDAOExecutor'
-  | 'NounsDAOLogicV1'
-  | 'NounsDAOProxy';
+import { ContractName } from './types';
 
 interface VerifyArgs {
   address: string;

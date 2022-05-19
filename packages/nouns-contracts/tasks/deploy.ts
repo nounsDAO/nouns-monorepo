@@ -1,37 +1,12 @@
 import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json';
+import { ChainId, ContractDeployment, ContractName, DeployedContract } from './types';
 import { Interface } from 'ethers/lib/utils';
 import { task, types } from 'hardhat/config';
-import { Contract as EthersContract } from 'ethers';
 import promptjs from 'prompt';
 
 promptjs.colors = false;
 promptjs.message = '> ';
 promptjs.delimiter = '';
-
-// prettier-ignore
-type ContractName = 'NFTDescriptor' | 'NounsDescriptor' | 'NounsSeeder' | 'NounsToken' | 'NounsAuctionHouse' | 'NounsAuctionHouseProxyAdmin' | 'NounsAuctionHouseProxy' | 'NounsDAOExecutor' | 'NounsDAOLogicV1' | 'NounsDAOProxy';
-
-interface Contract {
-  args?: (string | number | (() => string))[];
-  libraries?: () => Record<string, string>;
-  waitForConfirmation?: boolean;
-  validateDeployment?: () => void;
-}
-
-interface DeployedContract {
-  name: string;
-  address: string;
-  instance: EthersContract;
-  constructorArguments: (string | number)[];
-  libraries: Record<string, string>;
-}
-
-export enum ChainId {
-  Mainnet = 1,
-  Ropsten = 3,
-  Rinkeby = 4,
-  Kovan = 42,
-}
 
 const proxyRegistries: Record<number, string> = {
   [ChainId.Mainnet]: '0xa5409ec958c83c3f309868babaca7c86dcb077c1',
@@ -141,7 +116,7 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
       ContractName,
       DeployedContract
     >;
-    const contracts: Record<ContractName, Contract> = {
+    const contracts: Record<ContractName, ContractDeployment> = {
       NFTDescriptor: {},
       NounsDescriptor: {
         libraries: () => ({

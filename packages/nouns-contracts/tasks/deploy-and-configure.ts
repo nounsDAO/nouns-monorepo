@@ -1,13 +1,5 @@
-import { Contract } from 'ethers';
 import { task } from 'hardhat/config';
-
-interface DeployedContract {
-  name: string;
-  address: string;
-  instance: Contract;
-  constructorArguments: (string | number)[];
-  libraries: Record<string, string>;
-}
+import { DeployedContract } from './types';
 
 interface ContractRow {
   Address: string;
