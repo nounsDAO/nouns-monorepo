@@ -8,6 +8,7 @@ import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../utils/eth
 import { utils } from 'ethers';
 import classes from './ProposalContent.module.css';
 import { Trans } from '@lingui/macro';
+import remarkGfm from "remark-gfm";
 
 interface ProposalContentProps {
   proposal?: Proposal;
@@ -46,7 +47,7 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
             <ReactMarkdown
               className={classes.markdown}
               children={processProposalDescriptionText(proposal.description, proposal.title)}
-              remarkPlugins={[remarkBreaks]}
+              remarkPlugins={[remarkBreaks, remarkGfm]}
             />
           )}
         </Col>
