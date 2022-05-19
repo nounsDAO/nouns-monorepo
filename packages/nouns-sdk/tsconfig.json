@@ -4,6 +4,7 @@
     "rootDirs": ["src", "test"],
     "outDir": "dist"
   },
+  "include": ["./src/contract/addresses.json"],
   "references": [
     {
       "path": "../nouns-contracts/tsconfig.build.json"

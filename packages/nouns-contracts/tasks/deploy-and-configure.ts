@@ -9,6 +9,7 @@ interface ContractRow {
 task('deploy-and-configure', 'Deploy and configure all contracts')
   .addFlag('startAuction', 'Start the first auction upon deployment completion')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
+  .addFlag('updateConfigs', 'Write the deployed addresses to the SDK and subgraph configs')
   .addOptionalParam('weth', 'The WETH contract address')
   .addOptionalParam('noundersdao', 'The nounders DAO contract address')
   .addOptionalParam('auctionTimeBuffer', 'The auction time buffer (seconds)')
@@ -61,6 +62,13 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
       console.log(
         'Started the first auction and transferred ownership of the auction house to the executor.',
       );
+    }
+
+    // Optionally write the deployed addresses to the SDK and subgraph configs.
+    if (args.updateConfigs) {
+      await run('update-configs', {
+        contracts,
+      });
     }
 
     console.table(
