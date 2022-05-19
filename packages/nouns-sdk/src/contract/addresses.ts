@@ -8,10 +8,11 @@ import addresses from './addresses.json';
  * @param chainId The desired chainId
  */
 export const getContractAddressesForChainOrThrow = (chainId: number): ContractAddresses => {
-  if (!addresses[chainId]) {
+  const _addresses: Record<string, ContractAddresses> = addresses;
+  if (!_addresses[chainId]) {
     throw new Error(
       `Unknown chain id (${chainId}). No known contracts have been deployed on this chain.`,
     );
   }
-  return addresses[chainId];
+  return _addresses[chainId];
 };
