@@ -48,13 +48,15 @@ Copy `.env.example` to `.env` and fill in fields
 # Compile Solidity
 yarn build:sol
 
+# Command Help
+yarn task:[task-name] --help
+
 # Deploy & Configure for Local Development (Hardhat)
 yarn task:run-local
 
 # Deploy & Configure (Testnet/Mainnet)
-# This task deploys and verifies the contracts, populates the descriptor, and transfers ownership of the contracts
-# Use the `--auto-deploy` flag to automate gas price estimation
-# Use the `--start-auction` flag to kick off the first auction and transfer ownership of the auction house
+# This task deploys and verifies the contracts, populates the descriptor, and transfers contract ownership.
+# For parameter and flag information, run `yarn task:deploy-and-configure --help`.
 yarn task:deploy-and-configure --network [network] --update-configs
 ```
 
