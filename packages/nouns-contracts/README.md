@@ -45,16 +45,17 @@ Copy `.env.example` to `.env` and fill in fields
 ### Commands
 
 ```sh
-# compiling
-npx hardhat compile
+# Compile Solidity
+yarn build:sol
 
-# deploying
-npx hardhat run --network rinkeby scripts/deploy.js
+# Deploy & Configure for Local Development (Hardhat)
+yarn task:run-local
 
-# verifying on etherscan
-npx hardhat verify --network rinkeby {DEPLOYED_ADDRESS}
-
-# replace `rinkeby` with `mainnet` to productionize
+# Deploy & Configure (Testnet/Mainnet)
+# This task deploys and verifies the contracts, populates the descriptor, and transfers ownership of the contracts
+# Use the `--auto-deploy` flag to automate gas price estimation
+# Use the `--start-auction` flag to kick off the first auction and transfer ownership of the auction house
+yarn task:deploy-and-configure --network [network] --update-configs
 ```
 
 ### Automated Testnet Deployments
