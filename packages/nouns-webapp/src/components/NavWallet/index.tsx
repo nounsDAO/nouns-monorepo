@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useReverseENSLookUp } from '../../utils/ensLookup';
 import { getNavBarButtonVariant, NavBarButtonStyle } from '../NavBarButton';
 import classes from './NavWallet.module.css';
+import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSortDown } from '@fortawesome/free-solid-svg-icons';
 import { faSortUp } from '@fortawesome/free-solid-svg-icons';
@@ -12,10 +13,17 @@ import WalletConnectModal from '../WalletConnectModal';
 import { useAppSelector } from '../../hooks';
 import clsx from 'clsx';
 import { useHistory } from 'react-router-dom';
-import { useShortAddress } from '../ShortAddress';
-import { isMobileScreen } from '../../utils/isMobile';
 import { usePickByState } from '../../utils/colorResponsiveUIUtils';
 import WalletConnectButton from './WalletConnectButton';
+import { Trans } from '@lingui/macro';
+import {
+  shortENS,
+  useShortAddress,
+  veryShortAddress,
+  veryShortENS,
+} from '../../utils/addressAndENSDisplayUtils';
+import { useActiveLocale } from '../../hooks/useActivateLocale';
+import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 
 interface NavWalletProps {
   address: string;
@@ -47,6 +55,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
   const { deactivate } = useEthers();
   const ens = useReverseENSLookUp(address);
   const shortAddress = useShortAddress(address);
+  const activeLocale = useActiveLocale();
 
   const setModalStateHandler = (state: boolean) => {
     setShowConnectModal(state);
@@ -67,16 +76,16 @@ const NavWallet: React.FC<NavWalletProps> = props => {
   };
 
   const statePrimaryButtonClass = usePickByState(
-    classes.whiteInfo,
-    classes.coolInfo,
-    classes.warmInfo,
+    navDropdownClasses.whiteInfo,
+    navDropdownClasses.coolInfo,
+    navDropdownClasses.warmInfo,
     history,
   );
 
   const stateSelectedDropdownClass = usePickByState(
-    classes.whiteInfoSelected,
-    classes.dropdownActive,
-    classes.dropdownActive,
+    navDropdownClasses.whiteInfoSelected,
+    navDropdownClasses.dropdownActive,
+    navDropdownClasses.dropdownActive,
     history,
   );
 
@@ -105,7 +114,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
     <>
       <div
         className={clsx(
-          classes.wrapper,
+          navDropdownClasses.wrapper,
           buttonUp ? stateSelectedDropdownClass : statePrimaryButtonClass,
         )}
         onClick={e => {
@@ -113,13 +122,13 @@ const NavWallet: React.FC<NavWalletProps> = props => {
           onClick(e);
         }}
       >
-        <div className={classes.button}>
+        <div className={navDropdownClasses.button}>
           <div className={classes.icon}>
             {' '}
             <Davatar size={21} address={address} provider={provider} />
           </div>
-          <div className={classes.address}>{ens ? ens : shortAddress}</div>
-          <div className={buttonUp ? classes.arrowUp : classes.arrowDown}>
+          <div className={navDropdownClasses.dropdownBtnContent}>{ens ? ens : shortAddress}</div>
+          <div className={buttonUp ? navDropdownClasses.arrowUp : navDropdownClasses.arrowDown}>
             <FontAwesomeIcon icon={buttonUp ? faSortUp : faSortDown} />{' '}
           </div>
         </div>
@@ -140,76 +149,102 @@ const NavWallet: React.FC<NavWalletProps> = props => {
             onClick={switchWalletHandler}
             className={clsx(
               classes.dropDownTop,
-              classes.button,
-              classes.switchWalletText,
+              navDropdownClasses.button,
+              navDropdownClasses.dropdownPrimaryText,
               usePickByState(
-                classes.whiteInfoSelectedTop,
-                classes.coolInfoSelected,
-                classes.warmInfoSelected,
+                navDropdownClasses.whiteInfoSelectedTop,
+                navDropdownClasses.coolInfoSelected,
+                navDropdownClasses.warmInfoSelected,
                 history,
               ),
             )}
           >
-            Switch wallet
+            <Trans>Switch wallet</Trans>
           </div>
 
           <div
             onClick={disconectWalletHandler}
             className={clsx(
               classes.dropDownBottom,
-              classes.button,
+              navDropdownClasses.button,
               usePickByState(
-                classes.whiteInfoSelectedBottom,
-                classes.coolInfoSelected,
-                classes.warmInfoSelected,
+                navDropdownClasses.whiteInfoSelectedBottom,
+                navDropdownClasses.coolInfoSelected,
+                navDropdownClasses.warmInfoSelected,
                 history,
               ),
               classes.disconnectText,
             )}
           >
-            Disconnect
+            <Trans>Disconnect</Trans>
           </div>
         </div>
       </div>
     );
   });
 
+  const renderENS = (ens: string) => {
+    if (activeLocale === 'ja-JP') {
+      return veryShortENS(ens);
+    }
+    return shortENS(ens);
+  };
+
+  const renderAddress = (address: string) => {
+    if (activeLocale === 'ja-JP') {
+      return veryShortAddress(address);
+    }
+    return shortAddress;
+  };
+
   const walletConnectedContentMobile = (
-    <div className="d-flex flex-row justify-content-between">
-      <div className={classes.connectContentMobileWrapper}>
-        <div className={clsx(classes.wrapper, getNavBarButtonVariant(buttonStyle))}>
-          <div className={classes.button}>
-            <div className={classes.icon}>
-              {' '}
-              <Davatar size={21} address={address} provider={provider} />
+    <div className={clsx(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.mobileOnly)}>
+      <div
+        className={'d-flex flex-row justify-content-between'}
+        style={{
+          justifyContent: 'space-between',
+        }}
+      >
+        <div className={navDropdownClasses.connectContentMobileWrapper}>
+          <div className={clsx(navDropdownClasses.wrapper, getNavBarButtonVariant(buttonStyle))}>
+            <div className={navDropdownClasses.button}>
+              <div className={classes.icon}>
+                {' '}
+                <Davatar size={21} address={address} provider={provider} />
+              </div>
+              <div className={navDropdownClasses.dropdownBtnContent}>
+                {ens ? renderENS(ens) : renderAddress(address)}
+              </div>
             </div>
-            <div className={classes.address}>{ens ? ens : shortAddress}</div>
           </div>
         </div>
-      </div>
 
-      <div className={`d-flex flex-row ${classes.connectContentMobileText}`}>
-        <div
-          style={{
-            borderRight: `1px solid ${mobileBorderColor}`,
-            color: mobileTextColor,
-          }}
-          className={classes.mobileSwitchWalletText}
-          onClick={switchWalletHandler}
-        >
-          Switch
-        </div>
-        <div className={classes.disconnectText} onClick={disconectWalletHandler}>
-          Sign out
+        <div className={`d-flex flex-row  ${classes.connectContentMobileText}`}>
+          <div
+            style={{
+              borderRight: `1px solid ${mobileBorderColor}`,
+              color: mobileTextColor,
+            }}
+            className={classes.mobileSwitchWalletText}
+            onClick={switchWalletHandler}
+          >
+            <Trans>Switch</Trans>
+          </div>
+          <div className={classes.disconnectText} onClick={disconectWalletHandler}>
+            <Trans>Sign out</Trans>
+          </div>
         </div>
       </div>
     </div>
   );
 
   const walletConnectedContentDesktop = (
-    <Dropdown className={classes.nounsNavLink} onToggle={() => setButtonUp(!buttonUp)}>
+    <Dropdown
+      className={clsx(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.desktopOnly)}
+      onToggle={() => setButtonUp(!buttonUp)}
+    >
       <Dropdown.Toggle as={customDropdownToggle} id="dropdown-custom-components" />
-      <Dropdown.Menu className={`${classes.desktopDropdown} `} as={CustomMenu} />
+      <Dropdown.Menu className={`${navDropdownClasses.desktopDropdown} `} as={CustomMenu} />
     </Dropdown>
   );
 
@@ -219,14 +254,13 @@ const NavWallet: React.FC<NavWalletProps> = props => {
         <WalletConnectModal onDismiss={() => setModalStateHandler(false)} />
       )}
       {activeAccount ? (
-        isMobileScreen() ? (
-          walletConnectedContentMobile
-        ) : (
-          walletConnectedContentDesktop
-        )
+        <>
+          {walletConnectedContentDesktop}
+          {walletConnectedContentMobile}
+        </>
       ) : (
         <WalletConnectButton
-          className={clsx(classes.nounsNavLink, classes.connectBtn)}
+          className={clsx(navDropdownClasses.nounsNavLink, navDropdownClasses.connectBtn)}
           onClickHandler={() => setModalStateHandler(true)}
           buttonStyle={connectWalletButtonStyle}
         />

@@ -1,11 +1,17 @@
 import { NounsDAOABI, NounsDaoLogicV1Factory } from '@nouns/sdk';
-import { useContractCall, useContractCalls, useContractFunction, useEthers } from '@usedapp/core';
+import {
+  ChainId,
+  useContractCall,
+  useContractCalls,
+  useContractFunction,
+  useEthers,
+} from '@usedapp/core';
 import { utils, BigNumber as EthersBN } from 'ethers';
 import { defaultAbiCoder } from 'ethers/lib/utils';
 import { useMemo } from 'react';
 import { useLogs } from '../hooks/useLogs';
 import * as R from 'ramda';
-import config from '../config';
+import config, { CHAIN_ID } from '../config';
 
 export enum Vote {
   AGAINST = 0,
@@ -82,17 +88,23 @@ export interface ProposalTransaction {
 
 const abi = new utils.Interface(NounsDAOABI);
 const nounsDaoContract = new NounsDaoLogicV1Factory().attach(config.addresses.nounsDAOProxy);
-const proposalCreatedFilter = nounsDaoContract.filters?.ProposalCreated(
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-  null,
-);
+
+// Start the log search at the mainnet deployment block to speed up log queries
+const fromBlock = CHAIN_ID === ChainId.Mainnet ? 12985453 : 0;
+const proposalCreatedFilter = {
+  ...nounsDaoContract.filters?.ProposalCreated(
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+  ),
+  fromBlock,
+};
 
 export const useHasVotedOnProposal = (proposalId: string | undefined): boolean => {
   const { account } = useEthers();
@@ -106,6 +118,31 @@ export const useHasVotedOnProposal = (proposalId: string | undefined): boolean =
       args: [proposalId, account],
     }) || [];
   return receipt?.hasVoted ?? false;
+};
+
+export const useProposalVote = (proposalId: string | undefined): string => {
+  const { account } = useEthers();
+
+  // Fetch a voting receipt for the passed proposal id
+  const [receipt] =
+    useContractCall<[any]>({
+      abi,
+      address: nounsDaoContract.address,
+      method: 'getReceipt',
+      args: [proposalId, account],
+    }) || [];
+  const voteStatus = receipt?.support ?? -1;
+  if (voteStatus === 0) {
+    return 'Against';
+  }
+  if (voteStatus === 1) {
+    return 'For';
+  }
+  if (voteStatus === 2) {
+    return 'Abstain';
+  }
+
+  return '';
 };
 
 export const useProposalCount = (): number | undefined => {
@@ -284,6 +321,14 @@ export const useCastVote = () => {
     'castVote',
   );
   return { castVote, castVoteState };
+};
+
+export const useCastVoteWithReason = () => {
+  const { send: castVoteWithReason, state: castVoteWithReasonState } = useContractFunction(
+    nounsDaoContract,
+    'castVoteWithReason',
+  );
+  return { castVoteWithReason, castVoteWithReasonState };
 };
 
 export const usePropose = () => {

@@ -4,6 +4,8 @@ import classes from './SettleManuallyBtn.module.css';
 import dayjs from 'dayjs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { CHAIN_ID } from '../../config';
+import { Trans } from '@lingui/macro';
 
 const SettleManuallyBtn: React.FC<{
   settleAuctionHandler: () => void;
@@ -22,9 +24,15 @@ const SettleManuallyBtn: React.FC<{
 
   // timer logic
   useEffect(() => {
-    const timeLeft =
-      MINS_TO_ENABLE_MANUAL_SETTLEMENT * 60 -
-      (dayjs().unix() - (auction && Number(auction.endTime)));
+    // Allow immediate manual settlement when testing
+    if (CHAIN_ID !== 1) {
+      setSettleEnabled(true);
+      setAuctionTimer(0);
+      return;
+    }
+
+    // prettier-ignore
+    const timeLeft = MINS_TO_ENABLE_MANUAL_SETTLEMENT * 60 - (dayjs().unix() - (auction && Number(auction.endTime)));
 
     setAuctionTimer(auction && timeLeft);
 
@@ -34,7 +42,7 @@ const SettleManuallyBtn: React.FC<{
     } else {
       const timer = setTimeout(() => {
         setAuctionTimer(auctionTimerRef.current - 1);
-      }, 1000);
+      }, 1_000);
 
       return () => {
         clearTimeout(timer);
@@ -43,7 +51,6 @@ const SettleManuallyBtn: React.FC<{
   }, [auction, auctionTimer]);
 
   const mins = timerDuration.minutes();
-  const minsContent = () => `${mins + 1} minute${mins !== 0 ? 's' : ''}`;
 
   return (
     <p className={classes.emergencySettleWrapper}>
@@ -53,11 +60,17 @@ const SettleManuallyBtn: React.FC<{
         disabled={!settleEnabled}
       >
         {settleEnabled ? (
-          <>{` Settle manually`}</>
+          <>
+            <Trans>Settle manually</Trans>
+          </>
         ) : (
           <>
             <FontAwesomeIcon icon={faInfoCircle} />
-            {` You can settle manually in ${minsContent()}`}
+            {mins !== 0 ? (
+              <Trans>You can settle manually in {mins + 1} minutes</Trans>
+            ) : (
+              <Trans>You can settle manually in 1 minute</Trans>
+            )}
           </>
         )}
       </button>

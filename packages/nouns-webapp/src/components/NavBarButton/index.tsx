@@ -7,11 +7,12 @@ export enum NavBarButtonStyle {
   WARM_WALLET,
   WHITE_INFO,
   WHITE_ACTIVE,
+  WHITE_ACTIVE_VOTE_SUBMIT,
   WHITE_WALLET,
 }
 
 interface NavBarButtonProps {
-  buttonText: string;
+  buttonText: React.ReactNode;
   buttonIcon?: React.ReactNode;
   buttonStyle?: NavBarButtonStyle;
 }
@@ -35,6 +36,9 @@ export const getNavBarButtonVariant = (buttonStyle?: NavBarButtonStyle) => {
     }
     case NavBarButtonStyle.WHITE_ACTIVE: {
       return classes.whiteActive;
+    }
+    case NavBarButtonStyle.WHITE_ACTIVE_VOTE_SUBMIT: {
+      return classes.whiteActiveVoteSubmit;
     }
     case NavBarButtonStyle.WHITE_WALLET: {
       return classes.whiteWallet;
