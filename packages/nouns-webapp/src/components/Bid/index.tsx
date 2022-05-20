@@ -21,9 +21,12 @@ const computeMinimumNextBid = (
   currentBid: BigNumber,
   minBidIncPercentage: BigNumber | undefined,
 ): BigNumber => {
-  return !minBidIncPercentage
-    ? new BigNumber(0)
-    : currentBid.times(minBidIncPercentage.div(100).plus(1));
+  if (!minBidIncPercentage) {
+    return new BigNumber(0);
+  }
+  return currentBid
+    .times(minBidIncPercentage.div(100).plus(1))
+    .decimalPlaces(0, BigNumber.ROUND_UP);
 };
 
 const minBidEth = (minBid: BigNumber): string => {
