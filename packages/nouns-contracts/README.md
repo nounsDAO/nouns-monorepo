@@ -45,16 +45,19 @@ Copy `.env.example` to `.env` and fill in fields
 ### Commands
 
 ```sh
-# compiling
-npx hardhat compile
+# Compile Solidity
+yarn build:sol
 
-# deploying
-npx hardhat run --network rinkeby scripts/deploy.js
+# Command Help
+yarn task:[task-name] --help
 
-# verifying on etherscan
-npx hardhat verify --network rinkeby {DEPLOYED_ADDRESS}
+# Deploy & Configure for Local Development (Hardhat)
+yarn task:run-local
 
-# replace `rinkeby` with `mainnet` to productionize
+# Deploy & Configure (Testnet/Mainnet)
+# This task deploys and verifies the contracts, populates the descriptor, and transfers contract ownership.
+# For parameter and flag information, run `yarn task:deploy-and-configure --help`.
+yarn task:deploy-and-configure --network [network] --update-configs
 ```
 
 ### Automated Testnet Deployments
