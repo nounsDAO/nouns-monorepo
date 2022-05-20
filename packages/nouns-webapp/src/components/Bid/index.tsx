@@ -34,10 +34,8 @@ const minBidEth = (minBid: BigNumber): string => {
     return '0.01';
   }
 
-  const eth = Number(utils.formatEther(EthersBN.from(minBid.toString())));
-  const roundedEth = Math.ceil(eth * 100) / 100;
-
-  return roundedEth.toString();
+  const eth = utils.formatEther(EthersBN.from(minBid.toString()));
+  return new BigNumber(eth).toFixed(2, BigNumber.ROUND_CEIL);
 };
 
 const currentBid = (bidInputRef: React.RefObject<HTMLInputElement>) => {
