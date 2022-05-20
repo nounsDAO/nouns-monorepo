@@ -21,9 +21,12 @@ const computeMinimumNextBid = (
   currentBid: BigNumber,
   minBidIncPercentage: BigNumber | undefined,
 ): BigNumber => {
-  return !minBidIncPercentage
-    ? new BigNumber(0)
-    : currentBid.times(minBidIncPercentage.div(100).plus(1));
+  if (!minBidIncPercentage) {
+    return new BigNumber(0);
+  }
+  return currentBid
+    .times(minBidIncPercentage.div(100).plus(1))
+    .decimalPlaces(0, BigNumber.ROUND_UP);
 };
 
 const minBidEth = (minBid: BigNumber): string => {
@@ -31,10 +34,8 @@ const minBidEth = (minBid: BigNumber): string => {
     return '0.01';
   }
 
-  const eth = Number(utils.formatEther(EthersBN.from(minBid.toString())));
-  const roundedEth = Math.ceil(eth * 100) / 100;
-
-  return roundedEth.toString();
+  const eth = utils.formatEther(EthersBN.from(minBid.toString()));
+  return new BigNumber(eth).toFixed(2, BigNumber.ROUND_CEIL);
 };
 
 const currentBid = (bidInputRef: React.RefObject<HTMLInputElement>) => {
