@@ -15,6 +15,9 @@ import {
     Legend,
   } from 'chart.js';
   import { Line } from 'react-chartjs-2';
+  import annotationPlugin from "chartjs-plugin-annotation";
+
+
 
   ChartJS.register(
     CategoryScale,
@@ -23,7 +26,8 @@ import {
     LineElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    annotationPlugin 
   );
 
 
@@ -43,6 +47,21 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
   onDismiss: () => void;
 }> = props => {
   const { onDismiss, proposal } = props;
+
+
+  const annotation1 = {
+    type: 'line',
+    scaleID: 'x',
+    borderWidth: 3,
+    borderColor: 'black',
+    value: 0.5,
+    label: {
+      content: 'Line annotation at x=0.5',
+      enabled: true
+    },
+  };
+
+
   const labels = [0,
     33,
     67,
@@ -146,25 +165,42 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
     3333,
     3367,
     3400,
-    3433];
+    3433].map((val: number) => val/100);
   const options = {
     responsive: true,
-        elements: {
-            point:{
-                radius: 0
-            }
+    elements: {
+        point:{
+            radius: 0
+        }
+    },
+    scales: {
+        x: {
+          grid: {
+            display: false
+          }
         },
+        y: {
+          grid: {
+            display: false
+          }
+        }
+      },
     plugins: {
       legend: {
-        position: 'top' as const,
+          display: false
       },
       title: {
         display: false,
       },
+    //   annotation: {
+    //     annotations: {
+    //       annotation1
+    //     }
+    //   }
     },
   };
 
-  const data = {
+   const data = {
     labels,
     datasets: [
       {
@@ -274,10 +310,10 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
             2000.00,
             2000.00,
             2000.00,
-        ],
+        ].map((val: number) => val/100),
         borderColor: 'var(--brand-gray-light-text-translucen)',
         backgroundColor: 'var(--brand-gray-light-text)',
-        tension: 0.2
+        tension: 0.3
         // backgroundColor: 'rgba(255, 99, 132, 0.5)',
       },
     ],
@@ -292,20 +328,22 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
       </div>
       <div className={classes.modal}>
         <div className={classes.content}>
-          <h1 className={classes.title}>Dynamic Quorum</h1>
+          <h1 className={classes.title} style={{
+              marginBottom: '-1rem'
+          }}>Dynamic Quorum</h1>
 
           <p
             style={{
               fontWeight: '500',
               color: 'var(--brand-gray-light-text)',
-              marginBottom: '-0.25rem',
+              marginBottom: '0.5rem',
             }}
           >
             <Trans>
               The <span style={{ fontWeight: 'bold' }}>Quorum</span> is the number of yes votes
               required to pass a propsal. This number is set as a function of the % of Nouns¹ voting{' '}
               <span style={{ fontWeight: 'bold' }}>Against</span> a given proposal. A higher % of
-              Nouns voting no means a higher % of Nouns must vote{' '}
+              Nouns voting <span style={{fontWeight: 'bold'}}>Against</span> means a higher % of Nouns must vote{' '}
               <span style={{ fontWeight: 'bold' }}>For</span> a proposal for it to pass.
             </Trans>
           </p>
@@ -316,11 +354,34 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
           </p>
 
           {/* Main curve content area */}
-          <div> 
-            <Line options={options} data={data} />
+          <div style={{
+              maxWidth: '96%',
+              overflowX: 'hidden'
+          }}> 
+            <div style={{
+                display: 'flex',
+            }}>
+                <div style={{
+                    display: 'flex', 
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                }}>
+                    <p style={{ 
+                        opacity: '50%',
+                        fontSize: '14px',
+                        fontWeight: 'bold',
+                    }}>
+                        % of Nouns For 
+                    </p>
+                </div>
+                <Line options={options} data={data} />
+            </div>
+            <p style={{ opacity: '50%', fontSize: '14px', fontWeight: 'bold', marginLeft: '2.5rem', textAlign: 'center' }}>
+                % of Nouns Against
+            </p>
           </div>
 
-          <p style={{ opacity: '50%', fontSize: '14px', fontWeight: 'normal' }}>
+          <p style={{ opacity: '50%', fontSize: '14px', fontWeight: 'normal', marginLeft: '0rem' }}>
             ¹ The % of Nouns is not the current number of Nouns, but the number of Nouns eligible to
             vote as of <span style={{ fontWeight: '500' }}>block {proposal.startBlock}</span>
           </p>

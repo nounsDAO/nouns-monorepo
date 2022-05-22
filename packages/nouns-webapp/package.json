@@ -5,6 +5,7 @@
   "dependencies": {
     "react-chartjs-2": "^4.1.0",
     "chart.js": "^3.0.0",
+    "chartjs-plugin-annotation": "^1.4.0",
     "@lingui/detect-locale": "^3.13.2",
     "@lingui/cli": "^3.9.0",
     "@lingui/core": "^3.9.0",
