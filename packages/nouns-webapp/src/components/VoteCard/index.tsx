@@ -3,7 +3,7 @@ import { Card, Col, Row } from 'react-bootstrap';
 import { isMobileScreen } from '../../utils/isMobile';
 import { Proposal } from '../../wrappers/nounsDao';
 import NounImageVoteTable from '../NounImageVoteTable';
-import VoteProgresBar from '../VoteProgressBar';
+import VoteProgressBar from '../VoteProgressBar';
 import classes from './VoteCard.module.css';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
@@ -46,7 +46,6 @@ const VoteCard: React.FC<VoteCardProps> = props => {
       break;
   }
 
-  console.log(isMobile);
   return (
     <Col lg={4} className={classes.wrapper}>
       <Card className={classes.voteCountCard}>
@@ -62,7 +61,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
               <span className={classes.voteCardVoteCount}>{i18n.number(voteCount)}</span>
             </Card.Text>
           )}
-          <VoteProgresBar variant={variant} percentage={percentage} />
+          <VoteProgressBar variant={variant} percentage={percentage} />
           {!isMobile && (
             <Row className={classes.nounProfilePics}>
               <NounImageVoteTable nounIds={nounIds} propId={parseInt(proposal.id || '0')} />
