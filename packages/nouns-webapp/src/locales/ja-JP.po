@@ -674,7 +674,7 @@ msgstr "開始"
 
 #: src/components/Proposals/index.tsx
 msgid "Starts {0}"
-msgstr ""
+msgstr "あと{0}で始まります"
 
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx

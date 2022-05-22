@@ -685,7 +685,6 @@ msgstr ""
 msgid "Starts"
 msgstr ""
 
-
 #: src/components/Proposals/index.tsx
 msgid "Starts {0}"
 msgstr ""
