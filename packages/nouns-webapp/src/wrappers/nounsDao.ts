@@ -1,6 +1,8 @@
 import { NounsDAOABI, NounsDaoLogicV1Factory } from '@nouns/sdk';
 import {
   ChainId,
+  useBlockMeta,
+  useBlockNumber,
   useContractCall,
   useContractCalls,
   useContractFunction,
@@ -14,6 +16,7 @@ import * as R from 'ramda';
 import config, { CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
 import { proposalsQuery } from './subgraph';
+import BigNumber from 'bignumber.js';
 
 export enum Vote {
   AGAINST = 0,
@@ -294,8 +297,46 @@ const useFormattedProposalCreatedLogs = (fromBlock?: number) => {
   }, [useLogsResult]);
 };
 
+const getProposalState = (
+  blockNumber: number | undefined,
+  blockTimestamp: Date | undefined,
+  proposal: ProposalSubgraphEntity,
+) => {
+  if (!blockNumber || !blockTimestamp) {
+    return;
+  }
+
+  const status = ProposalState[proposal.status];
+  switch (status) {
+    case ProposalState.ACTIVE: {
+      if (blockNumber > parseInt(proposal.endBlock)) {
+        const forVotes = new BigNumber(proposal.forVotes);
+        if (forVotes.lte(proposal.againstVotes) || forVotes.lt(proposal.quorumVotes)) {
+          return ProposalState.DEFEATED;
+        }
+        if (!proposal.executionETA) {
+          return ProposalState.SUCCEEDED;
+        }
+      }
+      break;
+    }
+    case ProposalState.QUEUED: {
+      const GRACE_PERIOD = 14 * 60 * 60 * 24;
+      // prettier-ignore
+      if (blockTimestamp.getTime() / 1_000 >= parseInt(proposal.executionETA || '0') + GRACE_PERIOD) {
+        return ProposalState.EXPIRED;
+      }
+      break;
+    }
+    default:
+      return status;
+  }
+};
+
 export const useAllSubgraphProposals = (): ProposalData => {
   const { loading, data } = useQuery(proposalsQuery());
+  const blockNumber = useBlockNumber();
+  const { timestamp } = useBlockMeta();
   return {
     loading,
     data:
@@ -306,7 +347,7 @@ export const useAllSubgraphProposals = (): ProposalData => {
           title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
           description: description ?? 'No description.',
           proposer: proposal.proposer.id,
-          status: ProposalState[proposal.status],
+          status: getProposalState(blockNumber, timestamp, proposal),
           proposalThreshold: parseInt(proposal.proposalThreshold),
           quorumVotes: parseInt(proposal.quorumVotes),
           forCount: parseInt(proposal.forVotes),
