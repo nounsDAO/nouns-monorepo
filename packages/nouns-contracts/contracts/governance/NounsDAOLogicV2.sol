@@ -153,7 +153,13 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         votingPeriod = votingPeriod_;
         votingDelay = votingDelay_;
         proposalThresholdBPS = proposalThresholdBPS_;
-        _setDynamicQuorumParams(dynamicQuorumParams_);
+        _setDynamicQuorumParams(
+            dynamicQuorumParams_.minQuorumVotesBPS,
+            dynamicQuorumParams_.maxQuorumVotesBPS,
+            dynamicQuorumParams_.quorumVotesBPSOffset,
+            dynamicQuorumParams_.quorumLinearCoefficient,
+            dynamicQuorumParams_.quorumQuadraticCoefficient
+        );
     }
 
     struct ProposalTemp {
@@ -709,27 +715,48 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
 
     /**
      * @notice Admin function for setting all the dynamic quorum parameters
-     * @param params the new params, see struct definition for more details about each struct member
+     * @param newMinQuorumVotesBPS minimum quorum votes bps
+     *     Must be between `MIN_QUORUM_VOTES_BPS_LOWER_BOUND` and `MIN_QUORUM_VOTES_BPS_UPPER_BOUND`
+     *     Must be lower than or equal to maxQuorumVotesBPS
+     * @param newMaxQuorumVotesBPS maximum quorum votes bps
+     *     Must be lower than `MAX_QUORUM_VOTES_BPS_UPPER_BOUND`
+     *     Must be higher than or equal to minQuorumVotesBPS
+     * @param newQuorumVotesBPSOffset new quorum votes offset, in bps
+     * @param newQuorumLinearCoefficient the new linear coefficient, as a fixed point integer with 6 decimals
+     * @param newQuorumQuadraticCoefficient the new quadratic coefficient, as a fixed point integer with 6 decimals
      */
-    function _setDynamicQuorumParams(DynamicQuorumParams memory params) public {
+    function _setDynamicQuorumParams(
+        uint16 newMinQuorumVotesBPS,
+        uint16 newMaxQuorumVotesBPS,
+        uint16 newQuorumVotesBPSOffset,
+        uint32 newQuorumLinearCoefficient,
+        uint32 newQuorumQuadraticCoefficient
+    ) public {
         if (msg.sender != admin) {
             revert AdminOnly();
         }
         if (
-            params.minQuorumVotesBPS < MIN_QUORUM_VOTES_BPS_LOWER_BOUND ||
-            params.minQuorumVotesBPS > MIN_QUORUM_VOTES_BPS_UPPER_BOUND
+            newMinQuorumVotesBPS < MIN_QUORUM_VOTES_BPS_LOWER_BOUND ||
+            newMinQuorumVotesBPS > MIN_QUORUM_VOTES_BPS_UPPER_BOUND
         ) {
             revert InvalidMinQuorumVotesBPS();
         }
-        if (params.maxQuorumVotesBPS > MAX_QUORUM_VOTES_BPS_UPPER_BOUND) {
+        if (newMaxQuorumVotesBPS > MAX_QUORUM_VOTES_BPS_UPPER_BOUND) {
             revert InvalidMaxQuorumVotesBPS();
         }
-        if (params.minQuorumVotesBPS > params.maxQuorumVotesBPS) {
+        if (newMinQuorumVotesBPS > newMaxQuorumVotesBPS) {
             revert MinQuorumBPSGreaterThanMaxQuorumBPS();
         }
 
         DynamicQuorumParams memory oldParams = getDynamicQuorumParamsAt(block.number);
 
+        DynamicQuorumParams memory params = DynamicQuorumParams({
+            minQuorumVotesBPS: newMinQuorumVotesBPS,
+            maxQuorumVotesBPS: newMaxQuorumVotesBPS,
+            quorumVotesBPSOffset: newQuorumVotesBPSOffset,
+            quorumLinearCoefficient: newQuorumLinearCoefficient,
+            quorumQuadraticCoefficient: newQuorumQuadraticCoefficient
+        });
         _writeQuorumParamsCheckpoint(params);
 
         emit MinQuorumVotesBPSSet(oldParams.minQuorumVotesBPS, params.minQuorumVotesBPS);

@@ -82,85 +82,49 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
     });
 
     it('reverts when sender is not admin [ @skip-on-coverage ]', async () => {
-      await expect(
-        gov.connect(account0)._setDynamicQuorumParams({
-          minQuorumVotesBPS: 0,
-          maxQuorumVotesBPS: 0,
-          quorumVotesBPSOffset: 0,
-          quorumLinearCoefficient: 0,
-          quorumQuadraticCoefficient: 0,
-        }),
-      ).to.be.revertedWith('AdminOnly()');
+      await expect(gov.connect(account0)._setDynamicQuorumParams(0, 0, 0, 0, 0)).to.be.revertedWith(
+        'AdminOnly()',
+      );
     });
 
     it('reverts given minQuorum input below lower bound [ @skip-on-coverage ]', async () => {
-      await expect(
-        gov._setDynamicQuorumParams({
-          minQuorumVotesBPS: 199,
-          maxQuorumVotesBPS: 0,
-          quorumVotesBPSOffset: 0,
-          quorumLinearCoefficient: 0,
-          quorumQuadraticCoefficient: 0,
-        }),
-      ).to.be.revertedWith('InvalidMinQuorumVotesBPS()');
+      await expect(gov._setDynamicQuorumParams(199, 0, 0, 0, 0)).to.be.revertedWith(
+        'InvalidMinQuorumVotesBPS()',
+      );
     });
 
     it('reverts given minQuorum input above upper bound [ @skip-on-coverage ]', async () => {
-      await expect(
-        gov._setDynamicQuorumParams({
-          minQuorumVotesBPS: 2001,
-          maxQuorumVotesBPS: 0,
-          quorumVotesBPSOffset: 0,
-          quorumLinearCoefficient: 0,
-          quorumQuadraticCoefficient: 0,
-        }),
-      ).to.be.revertedWith('InvalidMinQuorumVotesBPS()');
+      await expect(gov._setDynamicQuorumParams(2001, 0, 0, 0, 0)).to.be.revertedWith(
+        'InvalidMinQuorumVotesBPS()',
+      );
     });
 
     it('reverts given minQuorum input above maxQuorum BPs [ @skip-on-coverage ]', async () => {
-      await expect(
-        gov._setDynamicQuorumParams({
-          minQuorumVotesBPS: 202,
-          maxQuorumVotesBPS: 201,
-          quorumVotesBPSOffset: 0,
-          quorumLinearCoefficient: 0,
-          quorumQuadraticCoefficient: 0,
-        }),
-      ).to.be.revertedWith('MinQuorumBPSGreaterThanMaxQuorumBPS()');
+      await expect(gov._setDynamicQuorumParams(202, 201, 0, 0, 0)).to.be.revertedWith(
+        'MinQuorumBPSGreaterThanMaxQuorumBPS()',
+      );
     });
 
     it('reverts when maxQuorum input above upper bound [ @skip-on-coverage ]', async () => {
-      await expect(
-        gov._setDynamicQuorumParams({
-          minQuorumVotesBPS: 200,
-          maxQuorumVotesBPS: 6001,
-          quorumVotesBPSOffset: 0,
-          quorumLinearCoefficient: 0,
-          quorumQuadraticCoefficient: 0,
-        }),
-      ).to.be.revertedWith('InvalidMaxQuorumVotesBPS()');
+      await expect(gov._setDynamicQuorumParams(200, 6001, 0, 0, 0)).to.be.revertedWith(
+        'InvalidMaxQuorumVotesBPS()',
+      );
     });
   });
 
   it('given existing prior config, sets value and emits event', async () => {
-    await gov._setDynamicQuorumParams({
-      minQuorumVotesBPS: 200,
-      maxQuorumVotesBPS: 2000,
-      quorumVotesBPSOffset: 300,
-      quorumLinearCoefficient: parseUnits('1', 6),
-      quorumQuadraticCoefficient: parseUnits('2', 6),
-    });
+    await gov._setDynamicQuorumParams(200, 2000, 300, parseUnits('1', 6), parseUnits('2', 6));
 
     const quorumLinearCoefficient = parseUnits('11', 6);
     const quorumQuadraticCoefficient = parseUnits('22', 6);
 
-    const tx = await gov._setDynamicQuorumParams({
-      minQuorumVotesBPS: 222,
-      maxQuorumVotesBPS: 2222,
-      quorumVotesBPSOffset: 333,
+    const tx = await gov._setDynamicQuorumParams(
+      222,
+      2222,
+      333,
       quorumLinearCoefficient,
       quorumQuadraticCoefficient,
-    });
+    );
 
     const actualParams = await gov.getDynamicQuorumParamsAt(await blockNumber());
     expect(actualParams.minQuorumVotesBPS).to.equal(222);
@@ -183,13 +147,13 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
   it('given no prior config, sets value and emits event', async () => {
     const quorumLinearCoefficient = parseUnits('1', 6);
     const quorumQuadraticCoefficient = parseUnits('0.001', 6);
-    const tx = await gov._setDynamicQuorumParams({
-      minQuorumVotesBPS: 200,
-      maxQuorumVotesBPS: 4000,
-      quorumVotesBPSOffset: 123,
+    const tx = await gov._setDynamicQuorumParams(
+      200,
+      4000,
+      123,
       quorumLinearCoefficient,
       quorumQuadraticCoefficient,
-    });
+    );
 
     const actualParams = await gov.getDynamicQuorumParamsAt(await blockNumber());
     expect(actualParams.minQuorumVotesBPS).to.equal(200);
@@ -238,15 +202,33 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
 
     before(async () => {
       await advanceBlocks(10);
-      await gov._setDynamicQuorumParams(params1);
+      await gov._setDynamicQuorumParams(
+        params1.minQuorumVotesBPS,
+        params1.maxQuorumVotesBPS,
+        params1.quorumVotesBPSOffset,
+        params1.quorumLinearCoefficient,
+        params1.quorumQuadraticCoefficient,
+      );
       blockNum1 = await blockNumber();
 
       await advanceBlocks(10);
-      await gov._setDynamicQuorumParams(params2);
+      await gov._setDynamicQuorumParams(
+        params2.minQuorumVotesBPS,
+        params2.maxQuorumVotesBPS,
+        params2.quorumVotesBPSOffset,
+        params2.quorumLinearCoefficient,
+        params2.quorumQuadraticCoefficient,
+      );
       blockNum2 = await blockNumber();
 
       await advanceBlocks(10);
-      await gov._setDynamicQuorumParams(params3);
+      await gov._setDynamicQuorumParams(
+        params3.minQuorumVotesBPS,
+        params3.maxQuorumVotesBPS,
+        params3.quorumVotesBPSOffset,
+        params3.quorumLinearCoefficient,
+        params3.quorumQuadraticCoefficient,
+      );
       blockNum3 = await blockNumber();
     });
 
@@ -288,7 +270,13 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
     };
 
     beforeEach(async () => {
-      await gov._setDynamicQuorumParams(baseParams);
+      await gov._setDynamicQuorumParams(
+        baseParams.minQuorumVotesBPS,
+        baseParams.maxQuorumVotesBPS,
+        baseParams.quorumVotesBPSOffset,
+        baseParams.quorumLinearCoefficient,
+        baseParams.quorumQuadraticCoefficient,
+      );
     });
 
     describe('_setMinQuorumVotesBPS', () => {

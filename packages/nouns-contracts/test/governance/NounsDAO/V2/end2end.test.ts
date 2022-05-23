@@ -199,7 +199,7 @@ async function createUpgradeToV2AndSetDynamicQuorumProposal(proposer: SignerWith
 
   targets.push(gov.address);
   values.push(0);
-  signatures.push('_setDynamicQuorumParams((uint16,uint16,uint16,uint32,uint32))');
+  signatures.push('_setDynamicQuorumParams(uint16,uint16,uint16,uint32,uint32)');
   callDatas.push(
     encodeParameters(
       ['uint16', 'uint16', 'uint16', 'uint32', 'uint32'],
@@ -225,7 +225,7 @@ async function createSetDynamicQuorumParamsProposal(
 ) {
   const targets = [gov.address];
   const values = [0];
-  const signatures = ['_setDynamicQuorumParams((uint16,uint16,uint16,uint32,uint32))'];
+  const signatures = ['_setDynamicQuorumParams(uint16,uint16,uint16,uint32,uint32)'];
   const callDatas = [
     encodeParameters(
       ['uint16', 'uint16', 'uint16', 'uint32', 'uint32'],
