@@ -16,7 +16,7 @@ const statusVariant = (status: ProposalState | undefined) => {
     case ProposalState.VETOED:
       return classes.danger;
     case ProposalState.QUEUED:
-    case ProposalState.CANCELED:
+    case ProposalState.CANCELLED:
     case ProposalState.EXPIRED:
     default:
       return classes.secondary;
@@ -37,7 +37,7 @@ const statusText = (status: ProposalState | undefined) => {
       return <Trans>Defeated</Trans>;
     case ProposalState.QUEUED:
       return <Trans>Queued</Trans>;
-    case ProposalState.CANCELED:
+    case ProposalState.CANCELLED:
       return <Trans>Canceled</Trans>;
     case ProposalState.VETOED:
       return <Trans>Vetoed</Trans>;

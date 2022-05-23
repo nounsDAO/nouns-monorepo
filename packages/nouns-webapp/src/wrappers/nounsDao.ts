@@ -25,7 +25,7 @@ export enum ProposalState {
   UNDETERMINED = -1,
   PENDING,
   ACTIVE,
-  CANCELED,
+  CANCELLED,
   DEFEATED,
   SUCCEEDED,
   QUEUED,
@@ -404,7 +404,7 @@ export const useAllProposals = (): ProposalData => {
         const [state] = proposalStates[i] ?? [ProposalState.UNDETERMINED];
         if (
           [
-            ProposalState.CANCELED,
+            ProposalState.CANCELLED,
             ProposalState.DEFEATED,
             ProposalState.EXPIRED,
             ProposalState.EXECUTED,
