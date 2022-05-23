@@ -33,6 +33,7 @@ import { getNounVotes } from '../../utils/getNounsVotes';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
+import DynamicQuorumInfoModal from '../../components/DynamicQuorumInfoModal';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -48,6 +49,8 @@ const VotePage = ({
   const proposal = useProposal(id);
 
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
+  // TODO
+  const [showDQInfoModal, setShowDQInfoModal] = useState<boolean>(true);
 
   const [isQueuePending, setQueuePending] = useState<boolean>(false);
   const [isExecutePending, setExecutePending] = useState<boolean>(false);
@@ -251,6 +254,20 @@ const VotePage = ({
 
   return (
     <Section fullWidth={false} className={classes.votePage}>
+      {showDQInfoModal && (
+        <DynamicQuorumInfoModal
+          againstVotesAbs={30}
+          againstVotesBps={1000}
+          minQuorumBps={1000}
+          maxQuorumBps={2000}
+          quadraticCoefficent={0.0005}
+          linearCoefficent={0.01}
+          offsetBps={250}
+          proposal={proposal}
+          onDismiss={() => setShowDQInfoModal(false)}
+        />
+      )}
+
       <VoteModal
         show={showVoteModal}
         onHide={() => setShowVoteModal(false)}
