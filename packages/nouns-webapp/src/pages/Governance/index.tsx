@@ -1,6 +1,6 @@
 import { Col, Row } from 'react-bootstrap';
 import Section from '../../layout/Section';
-import { useAllProposals, useProposalThreshold } from '../../wrappers/nounsDao';
+import { useAllSubgraphProposals, useProposalThreshold } from '../../wrappers/nounsDao';
 import Proposals from '../../components/Proposals';
 import classes from './Governance.module.css';
 import { utils } from 'ethers/lib/ethers';
@@ -10,7 +10,7 @@ import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
 
 const GovernancePage = () => {
-  const { data: proposals } = useAllProposals();
+  const { data: proposals } = useAllSubgraphProposals();
   const threshold = useProposalThreshold();
   const nounsRequired = threshold !== undefined ? threshold + 1 : '...';
 

@@ -1,7 +1,9 @@
 import { useContractCall, useEthers } from '@usedapp/core';
 import { BigNumber as EthersBN, utils } from 'ethers';
 import { NounsTokenABI } from '@nouns/contracts';
-import config from '../config';
+import config, { CHAIN_ID } from '../config';
+import { useQuery } from '@apollo/client';
+import { seedsQuery } from './subgraph';
 
 interface NounToken {
   name: string;
@@ -18,6 +20,7 @@ export interface INounSeed {
 }
 
 const abi = new utils.Interface(NounsTokenABI);
+const seedCacheKey = `seeds-${CHAIN_ID}-${config.addresses.nounsToken}`;
 
 export const useNounToken = (nounId: EthersBN) => {
   const [noun] =
@@ -38,13 +41,62 @@ export const useNounToken = (nounId: EthersBN) => {
   return json;
 };
 
+const seedArrayToObject = (seeds: (INounSeed & { id: string })[]) => {
+  return seeds.reduce<Record<string, INounSeed>>((acc, seed) => {
+    acc[seed.id] = {
+      background: Number(seed.background),
+      body: Number(seed.body),
+      accessory: Number(seed.accessory),
+      head: Number(seed.head),
+      glasses: Number(seed.glasses),
+    };
+    return acc;
+  }, {});
+};
+
+const useNounSeeds = () => {
+  const seedCache = localStorage.getItem(seedCacheKey);
+  const { data } = useQuery(seedsQuery(), {
+    skip: !!seedCache,
+  });
+  if (!seedCache && data) {
+    localStorage.setItem(seedCacheKey, JSON.stringify(seedArrayToObject(data.seeds)));
+  }
+  if (seedCache) {
+    return JSON.parse(seedCache);
+  }
+};
+
 export const useNounSeed = (nounId: EthersBN) => {
-  const seed = useContractCall<INounSeed>({
+  const seeds = useNounSeeds();
+  const seed = seeds?.[nounId.toString()];
+  // prettier-ignore
+  const request = seed ? false : {
     abi,
     address: config.addresses.nounsToken,
     method: 'seeds',
     args: [nounId],
-  });
+  };
+  const response = useContractCall<INounSeed>(request);
+  if (response) {
+    const seeds = localStorage.getItem(seedCacheKey);
+    if (seeds) {
+      localStorage.setItem(
+        seedCacheKey,
+        JSON.stringify({
+          ...JSON.parse(seeds),
+          [nounId.toString()]: {
+            accessory: response.accessory,
+            background: response.background,
+            body: response.body,
+            glasses: response.glasses,
+            head: response.head,
+          },
+        }),
+      );
+    }
+    return response;
+  }
   return seed;
 };
 

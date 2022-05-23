@@ -12,6 +12,8 @@ import { useMemo } from 'react';
 import { useLogs } from '../hooks/useLogs';
 import * as R from 'ramda';
 import config, { CHAIN_ID } from '../config';
+import { useQuery } from '@apollo/client';
+import { proposalsQuery } from './subgraph';
 
 export enum Vote {
   AGAINST = 0,
@@ -74,6 +76,27 @@ export interface Proposal {
   transactionHash: string;
 }
 
+export interface ProposalSubgraphEntity {
+  id: string;
+  description: string;
+  status: keyof typeof ProposalState;
+  forVotes: string;
+  againstVotes: string;
+  abstainVotes: string;
+  createdBlock: string;
+  createdTransactionHash: string;
+  startBlock: string;
+  endBlock: string;
+  executionETA: string | null;
+  proposer: { id: string };
+  proposalThreshold: string;
+  quorumVotes: string;
+  targets: string[];
+  values: string[];
+  signatures: string[];
+  calldatas: string[];
+}
+
 interface ProposalData {
   data: Proposal[];
   loading: boolean;
@@ -105,6 +128,54 @@ const proposalCreatedFilter = {
   ),
   fromBlock,
 };
+
+const hydrateProposal = (proposal: any) => {
+  const hydratedProposal = { ...proposal };
+  const bignumberKeys = [
+    'abstainVotes',
+    'againstVotes',
+    'forVotes',
+    'startBlock',
+    'endBlock',
+    'eta',
+    'proposalThreshold',
+    'quorumVotes',
+  ];
+  bignumberKeys.forEach(key => (hydratedProposal[key] = EthersBN.from(proposal[key])));
+  return hydratedProposal;
+};
+
+const hashRegex = /^\s*#{1,6}\s+([^\n]+)/;
+const equalTitleRegex = /^\s*([^\n]+)\n(={3,25}|-{3,25})/;
+
+/**
+ * Extract a markdown title from a proposal body that uses the `# Title` format
+ * Returns null if no title found.
+ */
+const extractHashTitle = (body: string) => body.match(hashRegex);
+/**
+ * Extract a markdown title from a proposal body that uses the `Title\n===` format.
+ * Returns null if no title found.
+ */
+const extractEqualTitle = (body: string) => body.match(equalTitleRegex);
+
+/**
+ * Extract title from a proposal's body/description. Returns null if no title found in the first line.
+ * @param body proposal body
+ */
+const extractTitle = (body: string | undefined): string | null => {
+  if (!body) return null;
+  const hashResult = extractHashTitle(body);
+  const equalResult = extractEqualTitle(body);
+  return hashResult ? hashResult[1] : equalResult ? equalResult[1] : null;
+};
+
+const removeBold = (text: string | null): string | null =>
+  text ? text.replace(/\*\*/g, '') : text;
+const removeItalics = (text: string | null): string | null =>
+  text ? text.replace(/__/g, '') : text;
+
+const removeMarkdownStyle = R.compose(removeBold, removeItalics);
 
 export const useHasVotedOnProposal = (proposalId: string | undefined): boolean => {
   const { account } = useEthers();
@@ -182,8 +253,15 @@ const countToIndices = (count: number | undefined) => {
   return typeof count === 'number' ? new Array(count).fill(0).map((_, i) => [i + 1]) : [];
 };
 
-const useFormattedProposalCreatedLogs = () => {
-  const useLogsResult = useLogs(proposalCreatedFilter);
+const useFormattedProposalCreatedLogs = (fromBlock?: number) => {
+  const filter = useMemo(
+    () => ({
+      ...proposalCreatedFilter,
+      ...(fromBlock ? { fromBlock } : {}),
+    }),
+    [fromBlock],
+  );
+  const useLogsResult = useLogs(filter);
 
   return useMemo(() => {
     return useLogsResult?.logs?.map(log => {
@@ -216,16 +294,65 @@ const useFormattedProposalCreatedLogs = () => {
   }, [useLogsResult]);
 };
 
+export const useAllSubgraphProposals = (): ProposalData => {
+  const { loading, data } = useQuery(proposalsQuery());
+  return {
+    loading,
+    data:
+      data?.proposals?.map((proposal: ProposalSubgraphEntity) => {
+        const description = proposal.description?.replace(/\\n/g, '\n');
+        return {
+          id: proposal.id,
+          title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
+          description: description ?? 'No description.',
+          proposer: proposal.proposer.id,
+          status: ProposalState[proposal.status],
+          proposalThreshold: parseInt(proposal.proposalThreshold),
+          quorumVotes: parseInt(proposal.quorumVotes),
+          forCount: parseInt(proposal.forVotes),
+          againstCount: parseInt(proposal.againstVotes),
+          abstainCount: parseInt(proposal.abstainVotes),
+          createdBlock: parseInt(proposal.createdBlock),
+          startBlock: parseInt(proposal.startBlock),
+          endBlock: parseInt(proposal.endBlock),
+          eta: proposal.executionETA ? new Date(Number(proposal.executionETA) * 1000) : undefined,
+          details: proposal.targets.map((target, i) => ({
+            target,
+            value: proposal.values[i],
+            functionSig: proposal.signatures[i],
+            callData: proposal.calldatas[i],
+          })),
+          transactionHash: proposal.createdTransactionHash,
+        };
+      }) ?? [],
+  };
+};
+
 export const useAllProposals = (): ProposalData => {
   const proposalCount = useProposalCount();
   const votingDelay = useVotingDelay(nounsDaoContract.address);
 
-  const govProposalIndexes = useMemo(() => {
+  const allGovProposalIndexes = useMemo(() => {
     return countToIndices(proposalCount);
   }, [proposalCount]);
 
-  const proposals = useContractCalls<ProposalCallResult>(
-    govProposalIndexes.map(index => ({
+  const key = `proposals-${CHAIN_ID}-${config.addresses.nounsDAOProxy}`;
+  const cachedProposals = JSON.parse(localStorage.getItem(key) ?? '{}');
+
+  const uncachedGovProposalIndexes = useMemo(() => {
+    const govProposalIndexes: number[][] = [];
+    for (const prop of allGovProposalIndexes) {
+      const [pId] = prop;
+      if (cachedProposals[pId]) {
+        continue;
+      }
+      govProposalIndexes.push(prop);
+    }
+    return govProposalIndexes;
+  }, [allGovProposalIndexes, cachedProposals]);
+
+  const uncachedProposals = useContractCalls<ProposalCallResult>(
+    uncachedGovProposalIndexes.map(index => ({
       abi,
       address: nounsDaoContract.address,
       method: 'proposals',
@@ -233,8 +360,9 @@ export const useAllProposals = (): ProposalData => {
     })),
   );
 
+  // TODO: Cache states
   const proposalStates = useContractCalls<[ProposalState]>(
-    govProposalIndexes.map(index => ({
+    allGovProposalIndexes.map(index => ({
       abi,
       address: nounsDaoContract.address,
       method: 'state',
@@ -242,46 +370,56 @@ export const useAllProposals = (): ProposalData => {
     })),
   );
 
-  const formattedLogs = useFormattedProposalCreatedLogs();
+  const startBlock = uncachedProposals[uncachedProposals.length - 1]?.startBlock;
+  const fromBlock = startBlock && votingDelay ? startBlock.toNumber() - votingDelay : undefined;
+  const formattedLogs = useFormattedProposalCreatedLogs(fromBlock);
 
-  // Early return until events are fetched
   return useMemo(() => {
+    const proposals: ProposalCallResult[] = [
+      ...uncachedProposals,
+      ...Object.values(cachedProposals).map(proposal => hydrateProposal(proposal)),
+    ].sort((a, b) => (EthersBN.from(a.id).toNumber() > EthersBN.from(b.id).toNumber() ? 1 : -1));
+
     const logs = formattedLogs ?? [];
+    if (uncachedProposals && proposalStates) {
+      const cp = JSON.parse(localStorage.getItem(key) ?? '{}');
+      const updatedCache = proposals.reduce((acc, proposal, i) => {
+        if (!proposal) {
+          return acc;
+        }
+        const [state] = proposalStates[i] ?? [ProposalState.UNDETERMINED];
+        if (
+          [
+            ProposalState.CANCELED,
+            ProposalState.DEFEATED,
+            ProposalState.EXPIRED,
+            ProposalState.EXECUTED,
+            ProposalState.VETOED,
+          ].includes(state)
+        ) {
+          acc[proposal.id.toString()] = {
+            id: proposal.id.toString(),
+            abstainVotes: proposal.abstainVotes.toString(),
+            againstVotes: proposal.againstVotes.toString(),
+            forVotes: proposal.forVotes.toString(),
+            canceled: proposal.canceled,
+            vetoed: proposal.vetoed,
+            executed: proposal.executed,
+            startBlock: proposal.startBlock.toString(),
+            endBlock: proposal.endBlock.toString(),
+            eta: proposal.eta.toString(),
+            proposalThreshold: proposal.proposalThreshold.toString(),
+            proposer: proposal.proposer,
+            quorumVotes: proposal.quorumVotes.toString(),
+          };
+        }
+        return acc;
+      }, cp);
+      localStorage.setItem(key, JSON.stringify(updatedCache));
+    }
     if (proposals.length && !logs.length) {
       return { data: [], loading: true };
     }
-
-    const hashRegex = /^\s*#{1,6}\s+([^\n]+)/;
-    const equalTitleRegex = /^\s*([^\n]+)\n(={3,25}|-{3,25})/;
-
-    /**
-     * Extract a markdown title from a proposal body that uses the `# Title` format
-     * Returns null if no title found.
-     */
-    const extractHashTitle = (body: string) => body.match(hashRegex);
-    /**
-     * Extract a markdown title from a proposal body that uses the `Title\n===` format.
-     * Returns null if no title found.
-     */
-    const extractEqualTitle = (body: string) => body.match(equalTitleRegex);
-
-    /**
-     * Extract title from a proposal's body/description. Returns null if no title found in the first line.
-     * @param body proposal body
-     */
-    const extractTitle = (body: string | undefined): string | null => {
-      if (!body) return null;
-      const hashResult = extractHashTitle(body);
-      const equalResult = extractEqualTitle(body);
-      return hashResult ? hashResult[1] : equalResult ? equalResult[1] : null;
-    };
-
-    const removeBold = (text: string | null): string | null =>
-      text ? text.replace(/\*\*/g, '') : text;
-    const removeItalics = (text: string | null): string | null =>
-      text ? text.replace(/__/g, '') : text;
-
-    const removeMarkdownStyle = R.compose(removeBold, removeItalics);
 
     return {
       data: proposals.map((proposal, i) => {
@@ -307,11 +445,11 @@ export const useAllProposals = (): ProposalData => {
       }),
       loading: false,
     };
-  }, [formattedLogs, proposalStates, proposals, votingDelay]);
+  }, [cachedProposals, formattedLogs, key, uncachedProposals, proposalStates, votingDelay]);
 };
 
 export const useProposal = (id: string | number): Proposal | undefined => {
-  const { data } = useAllProposals();
+  const { data } = useAllSubgraphProposals();
   return data?.find(p => p.id === id.toString());
 };
 
