@@ -7,6 +7,7 @@ import { Proposal } from '../../wrappers/nounsDao';
 import clsx from 'clsx';
 import { min } from 'ramda';
 import { ChartBounds, makeSmoothSVGChart } from '../../utils/svgChartingUtilts';
+import { pointsPositionsCalc } from "../../utils/svgChartingUtilts";
 
 export const Backdrop: React.FC<{ onDismiss: () => void }> = props => {
   return <div className={classes.backdrop} onClick={props.onDismiss} />;
@@ -36,7 +37,7 @@ const solveForPositiveRootDQM = (linearCoeffient: number, quadraticCoefficent: n
  * @param quadraticCoefficent 
  * @param numPoints 
  */
-const generatePointsForSVGChart = (minQuorumBps: number, maxQuorumBps: number, height: number, width: number, linearCoefficent: number, quadraticCoefficent: number, offsetBps: number, numPoints: number, totalSupply: number) => {
+const generatePointsForSVGChart = (minQuorumBps: number, maxQuorumBps: number, height: number, width: number, linearCoefficent: number, quadraticCoefficent: number, offsetBps: number, numPoints: number) => {
 
     const positiveRootDQMPolynomial = solveForPositiveRootDQM(linearCoefficent, quadraticCoefficent, minQuorumBps - maxQuorumBps);
     // Space x points equally in [0, posDQMPolynomialRoot]
@@ -71,9 +72,48 @@ const generatePointsForSVGChart = (minQuorumBps: number, maxQuorumBps: number, h
             yMin: 0.87*minQuorumBps
         } as ChartBounds
     );
-    console.log(res);
+    // console.log(res);
     return res;
 };
+
+//  const generateVerticalLineForLabel = (minQuorumBps: number, maxQuorumBps: number, height: number, width: number, linearCoefficent: number, quadraticCoefficent: number, offsetBps: number, numPoints: number, totalSupply: number) => {
+
+//     const positiveRootDQMPolynomial = solveForPositiveRootDQM(linearCoefficent, quadraticCoefficent, minQuorumBps - maxQuorumBps);
+//     // Space x points equally in [0, posDQMPolynomialRoot]
+//     // We do this to get a dense sample of the function in the range it's most interesting
+//     let xPoints = Array.from({length: numPoints}, (_, i) => Math.round(i*(Math.ceil(positiveRootDQMPolynomial)/numPoints)));
+//     for (let i = 0; i < 500; i++) {
+//         xPoints.push(positiveRootDQMPolynomial + i);
+//     }
+//     xPoints.push(positiveRootDQMPolynomial*2);
+//     xPoints.push(positiveRootDQMPolynomial*2.5);
+
+
+//     const yPoints = xPoints.map((againstVotesBPS: number) => {
+//         const adjustedAgainstVotesBps =  againstVotesBPS  > offsetBps ? (againstVotesBPS - offsetBps) : 0
+//         const quorumAdjustementBps = quadraticCoefficent * Math.pow(adjustedAgainstVotesBps, 2) + linearCoefficent * adjustedAgainstVotesBps;
+//         return min(minQuorumBps + quorumAdjustementBps, maxQuorumBps);
+//     });
+//     console.log(yPoints);
+
+
+//     const points = xPoints.map((x:number, i:number) => { return [x, yPoints[i]]});
+//     console.log("POINTS: ", points);
+
+//     const res =  makeSmoothSVGChart(
+//         points,
+//         2.5*width,
+//         height,
+//         {
+//             xMax: Math.ceil(2.5*positiveRootDQMPolynomial),
+//             xMin: 0,
+//             yMax: 1.06*maxQuorumBps,
+//             yMin: 0.87*minQuorumBps
+//         } as ChartBounds
+//     );
+//     console.log(res);
+//     return res;
+// };
 
 const DynamicQuorumInfoModalOverlay: React.FC<{
   proposal: Proposal;
@@ -89,6 +129,38 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
   const { onDismiss, proposal, againstVotesAbs, againstVotesBps, minQuorumBps, maxQuorumBps, quadraticCoefficent, linearCoefficent, offsetBps } = props;
 
 
+  const positiveRootDQMPolynomial = solveForPositiveRootDQM(linearCoefficent, quadraticCoefficent, minQuorumBps - maxQuorumBps);
+  const options = {
+
+            xMax: Math.ceil(2.5*positiveRootDQMPolynomial),
+            xMin: 0,
+            yMax: 1.06*maxQuorumBps,
+            yMin: 0.87*minQuorumBps
+  };
+
+
+  const dqmFunction = (bps: number) => {
+    const adjustedAgainstVotesBps =  bps  > offsetBps ? (bps - offsetBps) : 0
+    const quorumAdjustementBps = quadraticCoefficent * Math.pow(adjustedAgainstVotesBps, 2) + linearCoefficent * adjustedAgainstVotesBps;
+    return min(minQuorumBps + quorumAdjustementBps, maxQuorumBps);
+  };
+
+
+  const againstVotesLabelLineStart = pointsPositionsCalc(
+      [[againstVotesBps,0]],
+      320*2.5*1.25,
+      320,
+      options
+  );
+
+  console.log("START: ", againstVotesLabelLineStart);
+
+  const againstVotesLabelLineEnd = pointsPositionsCalc(
+      [[againstVotesBps, dqmFunction(againstVotesBps)]],
+      320*2.5*1.25,
+      320,
+      options
+  );
 
   return (
     <>
@@ -160,13 +232,47 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                           quadraticCoefficent,
                           offsetBps,
                           100,
-                          270 // TODO make real
                       )
                   } />
                     </g>
 
+
+                  {/* Vertical Line indicating against BPS */}
+                  <line 
+                    x1={againstVotesLabelLineStart[0][0]}
+                    y1={320} y2={againstVotesLabelLineEnd[0][1]}
+                    x2={againstVotesLabelLineStart[0][0]}
+                    stroke="var(--brand-color-red)"
+                    stroke-width="4" 
+                   />
+
+                  {/* Horizontal Line Indicating Required For BPS */}
+                  <line 
+                    x1={0}
+                    y1={againstVotesLabelLineEnd[0][1]}
+                    y2={againstVotesLabelLineEnd[0][1]}
+                    x2={againstVotesLabelLineStart[0][0]}
+                    stroke="var(--brand-color-green)"
+                    stroke-width="4" 
+                   />
+
+                    <circle cx={
+                        againstVotesLabelLineEnd[0][0]
+                    } cy={
+                        againstVotesLabelLineEnd[0][1]
+                    } r="7"
+                    fill='var(--brand-gray-light-text)'
+                    />
+
                     <text x="20" y="24">Max Quorum: 14 Nouns (20% of Nouns)</text>
-                    <text x="20" y="280">Min Quorum: 14 Nouns (20% of Nouns)</text>
+                    {
+                       Math.abs((againstVotesLabelLineEnd[0][1] - 10) - 288) > 100 ? (
+                        <text x="20" y="280">Min Quorum: 14 Nouns (20% of Nouns)</text>
+                       ) :  (
+                            <text x="550" y="280">Min Quorum: 14 Nouns (20% of Nouns)</text>
+                       )
+                    }
+                    <text x={againstVotesLabelLineEnd[0][0] + 10} y={againstVotesLabelLineEnd[0][1] - 10}>18 Nouns Against → 20 Nouns For </text>
 
                   Sorry, your browser does not support inline SVG.
                 </svg>
@@ -209,7 +315,7 @@ const DynamicQuorumInfoModal: React.FC<{
       {ReactDOM.createPortal(
         <DynamicQuorumInfoModalOverlay
           againstVotesAbs={30}
-          againstVotesBps={1000}
+          againstVotesBps={3000} // TODO tack on 50 BPS when at 0 to make it visualize nicer -- switch side after certain point --- max X scale
           minQuorumBps={1000}
           maxQuorumBps={2000}
           quadraticCoefficent={0.0005}
