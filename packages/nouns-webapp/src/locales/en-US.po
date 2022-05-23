@@ -500,8 +500,8 @@ msgid "Nouns Protocol"
 msgstr "Nouns Protocol"
 
 #: src/components/Documentation/index.tsx
-msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community"
-msgstr "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community"
+msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community."
+msgstr "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community."
 
 #: src/components/Documentation/index.tsx
 msgid "Nouns are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules governing Noun trait scarcity, which makes all Nouns equally rare. As of this writing, Nouns are made up of:"
@@ -931,12 +931,12 @@ msgid "You must have {0} votes to submit a proposal"
 msgstr "You must have {0} votes to submit a proposal"
 
 #: src/components/ProposalHeader/index.tsx
-msgid "You voted <0>Against</0>this proposal"
-msgstr "You voted <0>Against</0>this proposal"
+msgid "You voted <0>Against</0> this proposal"
+msgstr "You voted <0>Against</0> this proposal"
 
 #: src/components/ProposalHeader/index.tsx
-msgid "You voted <0>For</0>this proposal"
-msgstr "You voted <0>For</0>this proposal"
+msgid "You voted <0>For</0> this proposal"
+msgstr "You voted <0>For</0> this proposal"
 
 #: src/pages/Playground/index.tsx
 msgid "You've generated {0} years worth of Nouns"
