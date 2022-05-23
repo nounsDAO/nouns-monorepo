@@ -302,35 +302,33 @@ const getProposalState = (
   blockTimestamp: Date | undefined,
   proposal: ProposalSubgraphEntity,
 ) => {
-  if (!blockNumber || !blockTimestamp) {
-    return;
-  }
-
   const status = ProposalState[proposal.status];
-  switch (status) {
-    case ProposalState.ACTIVE: {
-      if (blockNumber > parseInt(proposal.endBlock)) {
-        const forVotes = new BigNumber(proposal.forVotes);
-        if (forVotes.lte(proposal.againstVotes) || forVotes.lt(proposal.quorumVotes)) {
-          return ProposalState.DEFEATED;
-        }
-        if (!proposal.executionETA) {
-          return ProposalState.SUCCEEDED;
-        }
-      }
-      return status;
+  if (status === ProposalState.ACTIVE) {
+    if (!blockNumber) {
+      return ProposalState.UNDETERMINED;
     }
-    case ProposalState.QUEUED: {
-      const GRACE_PERIOD = 14 * 60 * 60 * 24;
-      // prettier-ignore
-      if (blockTimestamp.getTime() / 1_000 >= parseInt(proposal.executionETA || '0') + GRACE_PERIOD) {
-        return ProposalState.EXPIRED;
+    if (blockNumber > parseInt(proposal.endBlock)) {
+      const forVotes = new BigNumber(proposal.forVotes);
+      if (forVotes.lte(proposal.againstVotes) || forVotes.lt(proposal.quorumVotes)) {
+        return ProposalState.DEFEATED;
       }
-      return status;
+      if (!proposal.executionETA) {
+        return ProposalState.SUCCEEDED;
+      }
     }
-    default:
-      return status;
+    return status;
   }
+  if (status === ProposalState.QUEUED) {
+    if (!blockTimestamp || !proposal.executionETA) {
+      return ProposalState.UNDETERMINED;
+    }
+    const GRACE_PERIOD = 14 * 60 * 60 * 24;
+    if (blockTimestamp.getTime() / 1_000 >= parseInt(proposal.executionETA) + GRACE_PERIOD) {
+      return ProposalState.EXPIRED;
+    }
+    return status;
+  }
+  return status;
 };
 
 export const useAllSubgraphProposals = (): ProposalData => {
