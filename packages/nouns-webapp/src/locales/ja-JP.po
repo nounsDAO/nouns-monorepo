@@ -277,6 +277,10 @@ msgstr "終了日"
 msgid "Ends on"
 msgstr "終了日時"
 
+#: src/components/Proposals/index.tsx
+msgid "Ends {0}"
+msgstr "残り{0} で終了します"
+
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 #: src/components/VoteModal/index.tsx
@@ -307,6 +311,10 @@ msgstr "実行しました"
 #: src/components/ProposalStatus/index.tsx
 msgid "Expired"
 msgstr "期限切れです"
+
+#: src/components/Proposals/index.tsx
+msgid "Expires {0}"
+msgstr "残り {0} で期限切れになります"
 
 #: src/pages/Playground/index.tsx
 msgid "Explore"
@@ -661,6 +669,10 @@ msgstr "サインアウト"
 #: src/pages/Vote/index.tsx
 msgid "Starts"
 msgstr "開始"
+
+#: src/components/Proposals/index.tsx
+msgid "Starts {0}"
+msgstr "あと{0}で始まります"
 
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx

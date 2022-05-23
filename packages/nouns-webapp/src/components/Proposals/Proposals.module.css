@@ -60,7 +60,6 @@
 .proposalLink {
   padding: 1rem;
   margin-top: 0.4rem;
-  display: flex;
   align-items: center;
   justify-content: space-between;
   border: 1px solid #e2e3e8;
@@ -107,6 +106,37 @@
   font-size: 16px;
   line-height: 22.4px;
 }
+.proposalInfoPillsWrapper {
+  display: flex;
+  flex-direction: row;
+  min-width: fit-content;
+}
+
+.countdownPill {
+  background-color: var(--brand-gray-light-text-translucent);
+  color: #00000080;
+  width: fit-content;
+}
+
+.countdownPillContentWrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.countdownPillClock {
+  display: flex;
+  flex-direction: column;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.countdownPillText {
+  margin-left: 0.25rem;
+}
+
+.proposalInfoPillsWrapperMobile {
+  display: none;
+}
 
 @media (max-width: 992px) {
   .nullStateCopy {
@@ -114,8 +144,45 @@
   }
 
   .proposalTitle {
-    max-width: 65%;
+    max-width: 100%;
     overflow-wrap: break-word;
+  }
+
+  .proposalInfoPillsWrapperMobile {
+    display: flex;
+    flex-direction: row;
+    min-width: fit-content;
+    margin-left: -0.5rem;
+  }
+
+  .proposalInfoPillsWrapper {
+    display: none;
+  }
+
+  .proposalStatusWrapper {
+    margin-top: 0.5rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .proposalLinkWithCountdown {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .proposalInfoPillsWrapperMobile {
+    width: 100%;
+    margin-top: 0.25rem;
+    display: flex;
+  }
+
+  .proposalStatusWrapper {
+    max-width: fit-content;
+  }
+
+  .proposalLink {
+    padding-left: 0;
+    padding-right: 0;
   }
 }
 

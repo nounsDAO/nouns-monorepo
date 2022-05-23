@@ -284,6 +284,10 @@ msgstr ""
 msgid "Ends on"
 msgstr ""
 
+#: src/components/Proposals/index.tsx
+msgid "Ends {0}"
+msgstr ""
+
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 #: src/components/VoteModal/index.tsx
@@ -313,6 +317,10 @@ msgstr ""
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 msgid "Expired"
+msgstr ""
+
+#: src/components/Proposals/index.tsx
+msgid "Expires {0}"
 msgstr ""
 
 #: src/pages/Playground/index.tsx
@@ -674,11 +682,11 @@ msgid "Sign out"
 msgstr ""
 
 #: src/pages/Vote/index.tsx
-#~ msgid "Snapshot"
-#~ msgstr ""
-
-#: src/pages/Vote/index.tsx
 msgid "Starts"
+msgstr ""
+
+#: src/components/Proposals/index.tsx
+msgid "Starts {0}"
 msgstr ""
 
 #: src/components/Proposals/index.tsx
