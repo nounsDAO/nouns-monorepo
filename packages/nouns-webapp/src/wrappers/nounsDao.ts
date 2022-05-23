@@ -318,7 +318,7 @@ const getProposalState = (
           return ProposalState.SUCCEEDED;
         }
       }
-      break;
+      return status;
     }
     case ProposalState.QUEUED: {
       const GRACE_PERIOD = 14 * 60 * 60 * 24;
@@ -326,7 +326,7 @@ const getProposalState = (
       if (blockTimestamp.getTime() / 1_000 >= parseInt(proposal.executionETA || '0') + GRACE_PERIOD) {
         return ProposalState.EXPIRED;
       }
-      break;
+      return status;
     }
     default:
       return status;
