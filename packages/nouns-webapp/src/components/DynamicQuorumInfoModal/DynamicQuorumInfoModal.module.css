@@ -158,7 +158,10 @@
 
 .outterGraphContainer {
   background-color: rgba(244, 244, 248, 1);
-  padding: 2rem;
+  padding-left: 1rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  padding-right: 3rem;
   margin-top: 2rem;
 }
 
@@ -171,9 +174,5 @@
   padding-right: 0;
   overflow-y: hidden;
   padding-bottom: 0;
-}
-
-.graphLabel {
-  background-color: white;
-  border: 1px solid var(--brand-gray-light-text);
+  margin-top: 1rem;
 }
