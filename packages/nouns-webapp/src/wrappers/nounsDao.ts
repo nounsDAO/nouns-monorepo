@@ -316,12 +316,26 @@ export const useAllSubgraphProposals = (): ProposalData => {
           startBlock: parseInt(proposal.startBlock),
           endBlock: parseInt(proposal.endBlock),
           eta: proposal.executionETA ? new Date(Number(proposal.executionETA) * 1000) : undefined,
-          details: proposal.targets.map((target, i) => ({
-            target,
-            value: proposal.values[i],
-            functionSig: proposal.signatures[i],
-            callData: proposal.calldatas[i],
-          })),
+          details: proposal.targets.map((target: string, i: number) => {
+            const signature = proposal.signatures[i];
+            const value = EthersBN.from(proposal.values[i] ?? 0);
+            const [name, types] = signature.substr(0, signature.length - 1)?.split('(');
+            if (!name || !types) {
+              return {
+                target,
+                functionSig: name === '' ? 'transfer' : name === undefined ? 'unknown' : name,
+                callData: types ? types : value ? `${utils.formatEther(value)} ETH` : '',
+              };
+            }
+            const calldata = proposal.calldatas[i];
+            const decoded = defaultAbiCoder.decode(types.split(','), calldata);
+            return {
+              target,
+              functionSig: name,
+              callData: decoded.join(),
+              value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH }` : '',
+            };
+          }),
           transactionHash: proposal.createdTransactionHash,
         };
       }) ?? [],
