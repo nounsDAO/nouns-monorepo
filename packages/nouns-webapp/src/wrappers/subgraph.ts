@@ -231,7 +231,7 @@ export const totalNounSupplyAtPropSnapshot = (block: number) => gql`
     first: 1, 
     orderBy: startTime, 
     orderDirection: desc,
-    block: { number: ${block}) {
+    block: { number: ${block}}) {
       id
     }
 }
