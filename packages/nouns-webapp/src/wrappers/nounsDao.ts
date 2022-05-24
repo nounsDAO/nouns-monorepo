@@ -9,7 +9,7 @@ import {
   useEthers,
 } from '@usedapp/core';
 import { utils, BigNumber as EthersBN } from 'ethers';
-import { defaultAbiCoder } from 'ethers/lib/utils';
+import { defaultAbiCoder, Result } from 'ethers/lib/utils';
 import { useMemo } from 'react';
 import { useLogs } from '../hooks/useLogs';
 import * as R from 'ramda';
@@ -55,7 +55,7 @@ interface ProposalCallResult {
 
 interface ProposalDetail {
   target: string;
-  value: string;
+  value?: string;
   functionSig: string;
   callData: string;
 }
@@ -79,7 +79,14 @@ export interface Proposal {
   transactionHash: string;
 }
 
-export interface ProposalSubgraphEntity {
+interface ProposalTransactionDetails {
+  targets: string[];
+  values: string[];
+  signatures: string[];
+  calldatas: string[];
+}
+
+export interface ProposalSubgraphEntity extends ProposalTransactionDetails {
   id: string;
   description: string;
   status: keyof typeof ProposalState;
@@ -94,10 +101,6 @@ export interface ProposalSubgraphEntity {
   proposer: { id: string };
   proposalThreshold: string;
   quorumVotes: string;
-  targets: string[];
-  values: string[];
-  signatures: string[];
-  calldatas: string[];
 }
 
 interface ProposalData {
@@ -241,6 +244,32 @@ const countToIndices = (count: number | undefined) => {
   return typeof count === 'number' ? new Array(count).fill(0).map((_, i) => [i + 1]) : [];
 };
 
+const formatProposalTransactionDetails = (details: ProposalTransactionDetails | Result) => {
+  return details.targets.map((target: string, i: number) => {
+    const signature = details.signatures[i];
+    const value = EthersBN.from(
+      // Handle both logs and subgraph responses
+      (details as ProposalTransactionDetails).values?.[i] ?? (details as Result)?.[3]?.[i] ?? 0,
+    );
+    const [name, types] = signature.substring(0, signature.length - 1)?.split('(');
+    if (!name || !types) {
+      return {
+        target,
+        functionSig: name === '' ? 'transfer' : name === undefined ? 'unknown' : name,
+        callData: types ? types : value ? `${utils.formatEther(value)} ETH` : '',
+      };
+    }
+    const calldata = details.calldatas[i];
+    const decoded = defaultAbiCoder.decode(types.split(','), calldata);
+    return {
+      target,
+      functionSig: name,
+      callData: decoded.join(),
+      value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH }` : '',
+    };
+  });
+};
+
 const useFormattedProposalCreatedLogs = (skip: boolean, fromBlock?: number) => {
   const filter = useMemo(
     () => ({
@@ -257,26 +286,7 @@ const useFormattedProposalCreatedLogs = (skip: boolean, fromBlock?: number) => {
       return {
         description: parsed.description,
         transactionHash: log.transactionHash,
-        details: parsed.targets.map((target: string, i: number) => {
-          const signature = parsed.signatures[i];
-          const value = parsed[3][i];
-          const [name, types] = signature.substr(0, signature.length - 1)?.split('(');
-          if (!name || !types) {
-            return {
-              target,
-              functionSig: name === '' ? 'transfer' : name === undefined ? 'unknown' : name,
-              callData: types ? types : value ? `${utils.formatEther(value)} ETH` : '',
-            };
-          }
-          const calldata = parsed.calldatas[i];
-          const decoded = defaultAbiCoder.decode(types.split(','), calldata);
-          return {
-            target,
-            functionSig: name,
-            callData: decoded.join(),
-            value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH }` : '',
-          };
-        }),
+        details: formatProposalTransactionDetails(parsed),
       };
     });
   }, [useLogsResult]);
@@ -338,26 +348,7 @@ export const useAllProposalsViaSubgraph = (): ProposalData => {
       startBlock: parseInt(proposal.startBlock),
       endBlock: parseInt(proposal.endBlock),
       eta: proposal.executionETA ? new Date(Number(proposal.executionETA) * 1000) : undefined,
-      details: proposal.targets.map((target: string, i: number) => {
-        const signature = proposal.signatures[i];
-        const value = EthersBN.from(proposal.values[i] ?? 0);
-        const [name, types] = signature.substring(0, signature.length - 1)?.split('(');
-        if (!name || !types) {
-          return {
-            target,
-            functionSig: name === '' ? 'transfer' : name === undefined ? 'unknown' : name,
-            callData: types ? types : value ? `${utils.formatEther(value)} ETH` : '',
-          };
-        }
-        const calldata = proposal.calldatas[i];
-        const decoded = defaultAbiCoder.decode(types.split(','), calldata);
-        return {
-          target,
-          functionSig: name,
-          callData: decoded.join(),
-          value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH }` : '',
-        };
-      }),
+      details: formatProposalTransactionDetails(proposal),
       transactionHash: proposal.createdTransactionHash,
     };
   });
