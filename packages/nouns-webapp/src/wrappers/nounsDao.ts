@@ -369,7 +369,7 @@ export const useAllProposalsViaSubgraph = (): ProposalData => {
   };
 };
 
-export const useAllProposalsViaChain = (skip: boolean): ProposalData => {
+export const useAllProposalsViaChain = (skip = false): ProposalData => {
   const proposalCount = useProposalCount();
   const votingDelay = useVotingDelay(nounsDaoContract.address);
 
@@ -428,7 +428,7 @@ export const useAllProposalsViaChain = (skip: boolean): ProposalData => {
 
 export const useAllProposals = (): ProposalData => {
   const subgraph = useAllProposalsViaSubgraph();
-  const onchain = useAllProposalsViaChain(!!subgraph.error);
+  const onchain = useAllProposalsViaChain(!subgraph.error);
   return subgraph?.error ? onchain : subgraph;
 };
 
