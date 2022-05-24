@@ -38,6 +38,55 @@
   font-family: 'Londrina Solid';
   display: flex;
   flex-direction: column;
+  margin-bottom: -1rem;
+}
+
+.modal .mainCopy {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.modal .moreDetailsCopy {
+  opacity: 50%;
+  font-size: 14px;
+  font-weight: normal;
+  margin-left: 0rem;
+}
+
+.underline {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.graphWrapper {
+  display: flex;
+}
+
+.yAxisText {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  display: flex;
+  justify-content: center;
+}
+
+.xAxisText {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 992px) {
+  .modal .title {
+    color: white;
+  }
+
+  .modal .mainCopy {
+    color: white;
+  }
+
+  .modal .moreDetailsCopy {
+    color: white;
+  }
 }
 
 .modal .title h2 {

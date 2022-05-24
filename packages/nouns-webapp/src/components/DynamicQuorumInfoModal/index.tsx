@@ -16,7 +16,7 @@ import classes from './DynamicQuorumInfoModal.module.css';
 import { XIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/macro';
 import clsx from 'clsx';
-// import { pointsPositionsCalc } from "../../utils/svgChartingUtilts";
+import { pointsPositionsCalc } from '../../utils/svgChartingUtils';
 
 const DynamicQuorumInfoModalOverlay: React.FC<{
   proposal: Proposal;
@@ -47,21 +47,11 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
       </div>
       <div className={classes.modal}>
         <div className={classes.content}>
-          <h1
-            className={classes.title}
-            style={{
-              marginBottom: '-1rem',
-            }}
-          >
-            Dynamic Quorum
+          <h1 className={classes.title}>
+            <Trans>Dynamic Quorum</Trans>
           </h1>
 
-          <p
-            style={{
-              fontWeight: '500',
-              marginBottom: '0.5rem',
-            }}
-          >
+          <p className={classes.mainCopy}>
             <Trans>
               The Quorum (minimum number of For votes required to pass a proposal) is set as a
               function of the number of Against votes a proposal has recieved. The number of For
@@ -71,35 +61,28 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
 
           {/* Outter container */}
           <div className={clsx(classes.graphContainer, classes.outterGraphContainer)}>
-            <div
-              style={{
-                display: 'flex',
-              }}
-            >
+            <div className={classes.graphWrapper}>
               {/* Y-Axis label */}
-              <div
-                style={{
-                  writingMode: 'vertical-rl',
-                  textOrientation: 'mixed',
-                  display: 'flex',
-                  justifyContent: 'center',
-                }}
-              >
+              <div className={classes.yAxisText}>
                 <Trans>Required % of Nouns to Pass</Trans>
               </div>
 
               {/* Inner graph container */}
-              <div className={clsx(classes.graphContainer, classes.innerGraphContainer)}></div>
+              <div className={clsx(classes.graphContainer, classes.innerGraphContainer)}>
+                {/* SVG GOES HERE */}
+              </div>
             </div>
 
-            <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'center' }}>
+            <div className={classes.xAxisText}>
               <Trans>% of Nouns Currently Against</Trans>
             </div>
           </div>
 
-          <p style={{ opacity: '50%', fontSize: '14px', fontWeight: 'normal', marginLeft: '0rem' }}>
-            More details on how dynamic quorum works can be found{' '}
-            <span style={{ textDecoration: 'underline' }}>here</span>.
+          <p className={classes.moreDetailsCopy}>
+            <Trans>
+              More details on how dynamic quorum works can be found{' '}
+              <span className={classes.underline}>here</span>.
+            </Trans>
           </p>
         </div>
       </div>
