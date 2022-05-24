@@ -12,6 +12,11 @@ import {
 } from '../../wrappers/nounsDao';
 import { totalNounSupplyAtPropSnapshot } from '../../wrappers/subgraph';
 import { Backdrop } from '../Modal';
+import classes from './DynamicQuorumInfoModal.module.css';
+import { XIcon } from '@heroicons/react/solid';
+import { Trans } from '@lingui/macro';
+import clsx from 'clsx';
+// import { pointsPositionsCalc } from "../../utils/svgChartingUtilts";
 
 const DynamicQuorumInfoModalOverlay: React.FC<{
   proposal: Proposal;
@@ -23,7 +28,83 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
   offsetBps: number;
   onDismiss: () => void;
 }> = props => {
-  return <></>;
+  const {
+    onDismiss,
+    proposal,
+    againstVotesBps,
+    minQuorumBps,
+    maxQuorumBps,
+    quadraticCoefficent,
+    linearCoefficent,
+    offsetBps,
+  } = props;
+  return (
+    <>
+      <div className={classes.closeBtnWrapper}>
+        <button onClick={onDismiss} className={classes.closeBtn}>
+          <XIcon className={classes.icon} />
+        </button>
+      </div>
+      <div className={classes.modal}>
+        <div className={classes.content}>
+          <h1
+            className={classes.title}
+            style={{
+              marginBottom: '-1rem',
+            }}
+          >
+            Dynamic Quorum
+          </h1>
+
+          <p
+            style={{
+              fontWeight: '500',
+              marginBottom: '0.5rem',
+            }}
+          >
+            <Trans>
+              The Quorum (minimum number of For votes required to pass a proposal) is set as a
+              function of the number of Against votes a proposal has recieved. The number of For
+              votes required to pass Proposal {proposal.id} is given by the following curve:
+            </Trans>
+          </p>
+
+          {/* Outter container */}
+          <div className={clsx(classes.graphContainer, classes.outterGraphContainer)}>
+            <div
+              style={{
+                display: 'flex',
+              }}
+            >
+              {/* Y-Axis label */}
+              <div
+                style={{
+                  writingMode: 'vertical-rl',
+                  textOrientation: 'mixed',
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}
+              >
+                <Trans>Required % of Nouns to Pass</Trans>
+              </div>
+
+              {/* Inner graph container */}
+              <div className={clsx(classes.graphContainer, classes.innerGraphContainer)}></div>
+            </div>
+
+            <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'center' }}>
+              <Trans>% of Nouns Currently Against</Trans>
+            </div>
+          </div>
+
+          <p style={{ opacity: '50%', fontSize: '14px', fontWeight: 'normal', marginLeft: '0rem' }}>
+            More details on how dynamic quorum works can be found{' '}
+            <span style={{ textDecoration: 'underline' }}>here</span>.
+          </p>
+        </div>
+      </div>
+    </>
+  );
 };
 
 const DynamicQuorumInfoModal: React.FC<{
