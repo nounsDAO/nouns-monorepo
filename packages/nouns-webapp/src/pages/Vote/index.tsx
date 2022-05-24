@@ -34,6 +34,7 @@ import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
 import DynamicQuorumInfoModal from '../../components/DynamicQuorumInfoModal';
+import { InformationCircleIcon } from '@heroicons/react/solid';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -330,6 +331,10 @@ const VotePage = ({
                   <div className={classes.thresholdInfo}>
                     <span>
                       <Trans>Quorum</Trans>
+                      <InformationCircleIcon
+                        className={classes.quorumInfoCircle}
+                        onClick={() => setShowDynamicQuorumInfoModal(true)}
+                      />
                     </span>
                     <h3>
                       <Trans>{i18n.number(proposal.quorumVotes)} votes</Trans>

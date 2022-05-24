@@ -124,3 +124,13 @@
 .thresholdInfo {
   text-align: right;
 }
+
+.quorumInfoCircle {
+  height: 0.8rem;
+  width: 0.8rem;
+  margin-bottom: 0.05rem;
+  margin-left: 0.1rem;
+  color: var(--brand-gray-light-text);
+  opacity: 50%;
+  cursor: pointer;
+}
