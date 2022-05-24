@@ -288,6 +288,10 @@ msgstr "Ends"
 msgid "Ends on"
 msgstr "Ends on"
 
+#: src/components/Proposals/index.tsx
+msgid "Ends {0}"
+msgstr "Ends {0}"
+
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 #: src/components/VoteModal/index.tsx
@@ -318,6 +322,10 @@ msgstr "Executed"
 #: src/components/ProposalStatus/index.tsx
 msgid "Expired"
 msgstr "Expired"
+
+#: src/components/Proposals/index.tsx
+msgid "Expires {0}"
+msgstr "Expires {0}"
 
 #: src/pages/Playground/index.tsx
 msgid "Explore"
@@ -496,8 +504,8 @@ msgid "Nouns Protocol"
 msgstr "Nouns Protocol"
 
 #: src/components/Documentation/index.tsx
-msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community"
-msgstr "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community"
+msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community."
+msgstr "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community."
 
 #: src/components/Documentation/index.tsx
 msgid "Nouns are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules governing Noun trait scarcity, which makes all Nouns equally rare. As of this writing, Nouns are made up of:"
@@ -674,12 +682,12 @@ msgid "Sign out"
 msgstr "Sign out"
 
 #: src/pages/Vote/index.tsx
-#~ msgid "Snapshot"
-#~ msgstr "Snapshot"
-
-#: src/pages/Vote/index.tsx
 msgid "Starts"
 msgstr "Starts"
+
+#: src/components/Proposals/index.tsx
+msgid "Starts {0}"
+msgstr "Starts {0}"
 
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
@@ -923,12 +931,12 @@ msgid "You must have {0} votes to submit a proposal"
 msgstr "You must have {0} votes to submit a proposal"
 
 #: src/components/ProposalHeader/index.tsx
-msgid "You voted <0>Against</0>this proposal"
-msgstr "You voted <0>Against</0>this proposal"
+msgid "You voted <0>Against</0> this proposal"
+msgstr "You voted <0>Against</0> this proposal"
 
 #: src/components/ProposalHeader/index.tsx
-msgid "You voted <0>For</0>this proposal"
-msgstr "You voted <0>For</0>this proposal"
+msgid "You voted <0>For</0> this proposal"
+msgstr "You voted <0>For</0> this proposal"
 
 #: src/pages/Playground/index.tsx
 msgid "You've generated {0} years worth of Nouns"

@@ -281,6 +281,10 @@ msgstr "終了日"
 msgid "Ends on"
 msgstr "終了日時"
 
+#: src/components/Proposals/index.tsx
+msgid "Ends {0}"
+msgstr "残り{0} で終了します"
+
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 #: src/components/VoteModal/index.tsx
@@ -311,6 +315,10 @@ msgstr "実行しました"
 #: src/components/ProposalStatus/index.tsx
 msgid "Expired"
 msgstr "期限切れです"
+
+#: src/components/Proposals/index.tsx
+msgid "Expires {0}"
+msgstr "残り {0} で期限切れになります"
 
 #: src/pages/Playground/index.tsx
 msgid "Explore"
@@ -489,10 +497,8 @@ msgid "Nouns Protocol"
 msgstr "Nounsプロトコル"
 
 #: src/components/Documentation/index.tsx
-msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community"
-msgstr ""
-"Nouns は、オンチェーン・アバターコミュニティの形成を改善するための実験的な試みです。 \n"
-"{cryptopunksLink} などのプロジェクトがデジタルコミュニティとアイデンティティの構築を試みているのに対し、Nounsはアイデンティティ、コミュニティ、ガバナンス、そしてコミュニティが使用できるトレジャリーを構築することを試みています。"
+msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community."
+msgstr "Nouns は、オンチェーン・アバターコミュニティの形成を改善するための実験的な試みです。{cryptopunksLink} などのプロジェクトがデジタルコミュニティとアイデンティティの構築を試みているのに対し、Nounsはアイデンティティ、コミュニティ、ガバナンス、そしてコミュニティが使用できるトレジャリーを構築することを試みています。"
 
 #: src/components/Documentation/index.tsx
 msgid "Nouns are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules governing Noun trait scarcity, which makes all Nouns equally rare. As of this writing, Nouns are made up of:"
@@ -663,6 +669,10 @@ msgstr "サインアウト"
 #: src/pages/Vote/index.tsx
 msgid "Starts"
 msgstr "開始"
+
+#: src/components/Proposals/index.tsx
+msgid "Starts {0}"
+msgstr "あと{0}で始まります"
 
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
@@ -902,11 +912,11 @@ msgid "You must have {0} votes to submit a proposal"
 msgstr "提案を提出するには {0} 票が必要です"
 
 #: src/components/ProposalHeader/index.tsx
-msgid "You voted <0>Against</0>this proposal"
+msgid "You voted <0>Against</0> this proposal"
 msgstr "あなたはこの提案に<0>反対</0>を投票しました"
 
 #: src/components/ProposalHeader/index.tsx
-msgid "You voted <0>For</0>this proposal"
+msgid "You voted <0>For</0> this proposal"
 msgstr "あなたはこの提案<0>に</0>投票しました"
 
 #: src/pages/Playground/index.tsx

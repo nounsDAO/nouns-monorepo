@@ -28,14 +28,14 @@ const getTranslatedVoteCopyFromString = (proposalVote: string) => {
   if (proposalVote === 'For') {
     return (
       <Trans>
-        You voted <strong>For</strong>this proposal
+        You voted <strong>For</strong> this proposal
       </Trans>
     );
   }
   if (proposalVote === 'Against') {
     return (
       <Trans>
-        You voted <strong>Against</strong>this proposal
+        You voted <strong>Against</strong> this proposal
       </Trans>
     );
   }
