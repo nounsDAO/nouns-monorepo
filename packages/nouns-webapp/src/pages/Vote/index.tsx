@@ -251,16 +251,15 @@ const VotePage = ({
   const againstNouns = getNounVotes(data, 0);
   const abstainNouns = getNounVotes(data, 2);
 
-
   return (
     <Section fullWidth={false} className={classes.votePage}>
-      {
-        showDynamicQuorumInfoModal && (<DynamicQuorumInfoModal
+      {showDynamicQuorumInfoModal && (
+        <DynamicQuorumInfoModal
           proposal={proposal}
           againstVotesAbsolute={againstNouns.length}
           onDismiss={() => setShowDynamicQuorumInfoModal(false)}
-        />)
-      }
+        />
+      )}
       <VoteModal
         show={showVoteModal}
         onHide={() => setShowVoteModal(false)}

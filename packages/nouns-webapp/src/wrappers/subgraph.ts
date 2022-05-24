@@ -235,8 +235,7 @@ export const totalNounSupplyAtPropSnapshot = (block: number) => gql`
       id
     }
 }
-`; 
-
+`;
 
 export const clientFactory = (uri: string) =>
   new ApolloClient({
