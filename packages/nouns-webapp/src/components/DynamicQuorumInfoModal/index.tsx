@@ -162,6 +162,9 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
       options
   );
 
+   // TODO
+  const totalNounSupply = 316;
+
   return (
     <>
       <div className={classes.closeBtnWrapper}>
@@ -264,15 +267,19 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                     fill='var(--brand-gray-light-text)'
                     />
 
-                    <text x="20" y="24">Max Quorum: 14 Nouns (20% of Nouns)</text>
+                    <text x="20" y="24">Max Quorum: {Math.round((maxQuorumBps*totalNounSupply)/10_000)} Nouns ({maxQuorumBps/100}% of Nouns)</text>
                     {
                        Math.abs((againstVotesLabelLineEnd[0][1] - 10) - 288) > 100 ? (
-                        <text x="20" y="280">Min Quorum: 14 Nouns (20% of Nouns)</text>
+                        <text x="20" y="280">Min Quorum: {Math.round((minQuorumBps*totalNounSupply)/10_000)} Nouns ({minQuorumBps/100}% of Nouns)</text>
                        ) :  (
-                            <text x="550" y="280">Min Quorum: 14 Nouns (20% of Nouns)</text>
+                            <text x="550" y="280">Min Quorum: {Math.round((minQuorumBps*totalNounSupply)/10_000)} Nouns ({minQuorumBps/100}% of Nouns)</text>
                        )
                     }
-                    <text x={againstVotesLabelLineEnd[0][0] + 10} y={againstVotesLabelLineEnd[0][1] - 10}>18 Nouns Against → 20 Nouns For </text>
+                    <text x={againstVotesLabelLineEnd[0][0] + 10} y={againstVotesLabelLineEnd[0][1] - 10}>{againstVotesAbs} Nouns Against ({Math.round(againstVotesBps/100)}%) → {Math.round((
+                        (Math.min(maxQuorumBps, dqmFunction(againstVotesBps))*totalNounSupply)/10_000
+                    ))} Nouns For ({
+                        Math.round(Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) / 100)
+                    }%) </text>
 
                   Sorry, your browser does not support inline SVG.
                 </svg>
@@ -314,8 +321,8 @@ const DynamicQuorumInfoModal: React.FC<{
       )}
       {ReactDOM.createPortal(
         <DynamicQuorumInfoModalOverlay
-          againstVotesAbs={30}
-          againstVotesBps={3000} // TODO tack on 50 BPS when at 0 to make it visualize nicer -- switch side after certain point --- max X scale
+          againstVotesAbs={40}
+          againstVotesBps={1266} // TODO tack on 50 BPS when at 0 to make it visualize nicer -- switch side after certain point --- max X scale
           minQuorumBps={1000}
           maxQuorumBps={2000}
           quadraticCoefficent={0.0005}
