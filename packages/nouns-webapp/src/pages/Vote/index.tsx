@@ -249,6 +249,7 @@ const VotePage = ({
   const againstNouns = getNounVotes(data, 0);
   const abstainNouns = getNounVotes(data, 2);
 
+
   return (
     <Section fullWidth={false} className={classes.votePage}>
       <VoteModal

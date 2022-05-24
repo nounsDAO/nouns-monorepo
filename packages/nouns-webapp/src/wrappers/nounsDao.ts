@@ -178,6 +178,34 @@ const useVotingDelay = (nounsDao: string): number | undefined => {
   return blockDelay?.toNumber();
 };
 
+export const useMinQuorumVotesBPS = (nounsDao: string): number | undefined => {
+  // TODO implement contract call logic once contract is deployed
+  return 1000;
+};
+
+
+export const useMaxQuorumVotesBPS = (nounsDao: string): number | undefined => {
+  // TODO implement contract call logic once contract is deployed
+  return 2000;
+};
+
+export const useQuorumVotesBPSOffset = (nounsDao: string): number | undefined => {
+  // TODO implement contract call logic once contract is deployed
+  return 250;
+};
+
+
+export const useQuorumLinearCoefficent = (nounsDao: string): number | undefined => {
+  // TODO implement contract call logic once contract is deployed
+  return .01;
+};
+
+
+export const useQuorumQuadraticCoefficient = (nounsDao: string): number | undefined => {
+  // TODO implement contract call logic once contract is deployed
+  return .0005;
+};
+
 const countToIndices = (count: number | undefined) => {
   return typeof count === 'number' ? new Array(count).fill(0).map((_, i) => [i + 1]) : [];
 };
