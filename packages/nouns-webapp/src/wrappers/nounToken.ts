@@ -1,9 +1,10 @@
 import { useContractCall, useEthers } from '@usedapp/core';
 import { BigNumber as EthersBN, utils } from 'ethers';
 import { NounsTokenABI } from '@nouns/contracts';
-import config, { CHAIN_ID } from '../config';
+import config, { cache, cacheKey, CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
 import { seedsQuery } from './subgraph';
+import { useEffect } from 'react';
 
 interface NounToken {
   name: string;
@@ -20,7 +21,7 @@ export interface INounSeed {
 }
 
 const abi = new utils.Interface(NounsTokenABI);
-const seedCacheKey = `seeds-${CHAIN_ID}-${config.addresses.nounsToken}`;
+const seedCacheKey = cacheKey(cache.seed, CHAIN_ID, config.addresses.nounsToken);
 
 export const useNounToken = (nounId: EthersBN) => {
   const [noun] =
@@ -55,16 +56,19 @@ const seedArrayToObject = (seeds: (INounSeed & { id: string })[]) => {
 };
 
 const useNounSeeds = () => {
-  const seedCache = localStorage.getItem(seedCacheKey);
+  const cache = localStorage.getItem(seedCacheKey);
+  const cachedSeeds = cache ? JSON.parse(cache) : undefined;
   const { data } = useQuery(seedsQuery(), {
-    skip: !!seedCache,
+    skip: !!cachedSeeds,
   });
-  if (!seedCache && data) {
-    localStorage.setItem(seedCacheKey, JSON.stringify(seedArrayToObject(data.seeds)));
-  }
-  if (seedCache) {
-    return JSON.parse(seedCache);
-  }
+
+  useEffect(() => {
+    if (!cachedSeeds && data?.seeds?.length) {
+      localStorage.setItem(seedCacheKey, JSON.stringify(seedArrayToObject(data.seeds)));
+    }
+  }, [data, cachedSeeds]);
+
+  return cachedSeeds;
 };
 
 export const useNounSeed = (nounId: EthersBN) => {
@@ -79,21 +83,19 @@ export const useNounSeed = (nounId: EthersBN) => {
   };
   const response = useContractCall<INounSeed>(request);
   if (response) {
-    const seeds = localStorage.getItem(seedCacheKey);
-    if (seeds) {
-      localStorage.setItem(
-        seedCacheKey,
-        JSON.stringify({
-          ...JSON.parse(seeds),
-          [nounId.toString()]: {
-            accessory: response.accessory,
-            background: response.background,
-            body: response.body,
-            glasses: response.glasses,
-            head: response.head,
-          },
-        }),
-      );
+    const seedCache = localStorage.getItem(seedCacheKey);
+    if (seedCache) {
+      const updatedSeedCache = JSON.stringify({
+        ...JSON.parse(seedCache),
+        [nounId.toString()]: {
+          accessory: response.accessory,
+          background: response.background,
+          body: response.body,
+          glasses: response.glasses,
+          head: response.head,
+        },
+      });
+      localStorage.setItem(seedCacheKey, updatedSeedCache);
     }
     return response;
   }

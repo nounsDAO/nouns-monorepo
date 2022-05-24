@@ -4,7 +4,7 @@ import Section from '../../layout/Section';
 import classes from './ProfileActivityFeed.module.css';
 
 import { useQuery } from '@apollo/client';
-import { Proposal, useAllSubgraphProposals } from '../../wrappers/nounsDao';
+import { Proposal, useAllProposals } from '../../wrappers/nounsDao';
 import { createTimestampAllProposals, nounVotingHistoryQuery } from '../../wrappers/subgraph';
 import NounProfileVoteRow from '../NounProfileVoteRow';
 import { LoadingNoun } from '../Noun';
@@ -45,7 +45,7 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
 
   const nounCanVoteTimestamp = useNounCanVoteTimestamp(nounId);
 
-  const { data: proposals } = useAllSubgraphProposals();
+  const { data: proposals } = useAllProposals();
 
   if (loading || !proposals || !proposals.length || proposalTimestampLoading) {
     return <></>;

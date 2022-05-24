@@ -102,6 +102,7 @@ export interface ProposalSubgraphEntity {
 
 interface ProposalData {
   data: Proposal[];
+  error?: Error;
   loading: boolean;
 }
 
@@ -130,22 +131,6 @@ const proposalCreatedFilter = {
     null,
   ),
   fromBlock,
-};
-
-const hydrateProposal = (proposal: any) => {
-  const hydratedProposal = { ...proposal };
-  const bignumberKeys = [
-    'abstainVotes',
-    'againstVotes',
-    'forVotes',
-    'startBlock',
-    'endBlock',
-    'eta',
-    'proposalThreshold',
-    'quorumVotes',
-  ];
-  bignumberKeys.forEach(key => (hydratedProposal[key] = EthersBN.from(proposal[key])));
-  return hydratedProposal;
 };
 
 const hashRegex = /^\s*#{1,6}\s+([^\n]+)/;
@@ -256,7 +241,7 @@ const countToIndices = (count: number | undefined) => {
   return typeof count === 'number' ? new Array(count).fill(0).map((_, i) => [i + 1]) : [];
 };
 
-const useFormattedProposalCreatedLogs = (fromBlock?: number) => {
+const useFormattedProposalCreatedLogs = (skip: boolean, fromBlock?: number) => {
   const filter = useMemo(
     () => ({
       ...proposalCreatedFilter,
@@ -264,7 +249,7 @@ const useFormattedProposalCreatedLogs = (fromBlock?: number) => {
     }),
     [fromBlock],
   );
-  const useLogsResult = useLogs(filter);
+  const useLogsResult = useLogs(!skip ? filter : undefined);
 
   return useMemo(() => {
     return useLogsResult?.logs?.map(log => {
@@ -331,145 +316,85 @@ const getProposalState = (
   return status;
 };
 
-export const useAllSubgraphProposals = (): ProposalData => {
-  const { loading, data } = useQuery(proposalsQuery());
+export const useAllProposalsViaSubgraph = (): ProposalData => {
+  const { loading, data, error } = useQuery(proposalsQuery());
   const blockNumber = useBlockNumber();
   const { timestamp } = useBlockMeta();
+
+  const proposals = data?.proposals?.map((proposal: ProposalSubgraphEntity) => {
+    const description = proposal.description?.replace(/\\n/g, '\n');
+    return {
+      id: proposal.id,
+      title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
+      description: description ?? 'No description.',
+      proposer: proposal.proposer.id,
+      status: getProposalState(blockNumber, timestamp, proposal),
+      proposalThreshold: parseInt(proposal.proposalThreshold),
+      quorumVotes: parseInt(proposal.quorumVotes),
+      forCount: parseInt(proposal.forVotes),
+      againstCount: parseInt(proposal.againstVotes),
+      abstainCount: parseInt(proposal.abstainVotes),
+      createdBlock: parseInt(proposal.createdBlock),
+      startBlock: parseInt(proposal.startBlock),
+      endBlock: parseInt(proposal.endBlock),
+      eta: proposal.executionETA ? new Date(Number(proposal.executionETA) * 1000) : undefined,
+      details: proposal.targets.map((target: string, i: number) => {
+        const signature = proposal.signatures[i];
+        const value = EthersBN.from(proposal.values[i] ?? 0);
+        const [name, types] = signature.substring(0, signature.length - 1)?.split('(');
+        if (!name || !types) {
+          return {
+            target,
+            functionSig: name === '' ? 'transfer' : name === undefined ? 'unknown' : name,
+            callData: types ? types : value ? `${utils.formatEther(value)} ETH` : '',
+          };
+        }
+        const calldata = proposal.calldatas[i];
+        const decoded = defaultAbiCoder.decode(types.split(','), calldata);
+        return {
+          target,
+          functionSig: name,
+          callData: decoded.join(),
+          value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH }` : '',
+        };
+      }),
+      transactionHash: proposal.createdTransactionHash,
+    };
+  });
+
   return {
     loading,
-    data:
-      data?.proposals?.map((proposal: ProposalSubgraphEntity) => {
-        const description = proposal.description?.replace(/\\n/g, '\n');
-        return {
-          id: proposal.id,
-          title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
-          description: description ?? 'No description.',
-          proposer: proposal.proposer.id,
-          status: getProposalState(blockNumber, timestamp, proposal),
-          proposalThreshold: parseInt(proposal.proposalThreshold),
-          quorumVotes: parseInt(proposal.quorumVotes),
-          forCount: parseInt(proposal.forVotes),
-          againstCount: parseInt(proposal.againstVotes),
-          abstainCount: parseInt(proposal.abstainVotes),
-          createdBlock: parseInt(proposal.createdBlock),
-          startBlock: parseInt(proposal.startBlock),
-          endBlock: parseInt(proposal.endBlock),
-          eta: proposal.executionETA ? new Date(Number(proposal.executionETA) * 1000) : undefined,
-          details: proposal.targets.map((target: string, i: number) => {
-            const signature = proposal.signatures[i];
-            const value = EthersBN.from(proposal.values[i] ?? 0);
-            const [name, types] = signature.substr(0, signature.length - 1)?.split('(');
-            if (!name || !types) {
-              return {
-                target,
-                functionSig: name === '' ? 'transfer' : name === undefined ? 'unknown' : name,
-                callData: types ? types : value ? `${utils.formatEther(value)} ETH` : '',
-              };
-            }
-            const calldata = proposal.calldatas[i];
-            const decoded = defaultAbiCoder.decode(types.split(','), calldata);
-            return {
-              target,
-              functionSig: name,
-              callData: decoded.join(),
-              value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH }` : '',
-            };
-          }),
-          transactionHash: proposal.createdTransactionHash,
-        };
-      }) ?? [],
+    error,
+    data: proposals ?? [],
   };
 };
 
-export const useAllProposals = (): ProposalData => {
+export const useAllProposalsViaChain = (skip: boolean): ProposalData => {
   const proposalCount = useProposalCount();
   const votingDelay = useVotingDelay(nounsDaoContract.address);
 
-  const allGovProposalIndexes = useMemo(() => {
+  const govProposalIndexes = useMemo(() => {
     return countToIndices(proposalCount);
   }, [proposalCount]);
 
-  const key = `proposals-${CHAIN_ID}-${config.addresses.nounsDAOProxy}`;
-  const cachedProposals = JSON.parse(localStorage.getItem(key) ?? '{}');
-
-  const uncachedGovProposalIndexes = useMemo(() => {
-    const govProposalIndexes: number[][] = [];
-    for (const prop of allGovProposalIndexes) {
-      const [pId] = prop;
-      if (cachedProposals[pId]) {
-        continue;
-      }
-      govProposalIndexes.push(prop);
-    }
-    return govProposalIndexes;
-  }, [allGovProposalIndexes, cachedProposals]);
-
-  const uncachedProposals = useContractCalls<ProposalCallResult>(
-    uncachedGovProposalIndexes.map(index => ({
+  const requests = (method: string) => {
+    if (skip) return [false];
+    return govProposalIndexes.map(index => ({
       abi,
+      method,
       address: nounsDaoContract.address,
-      method: 'proposals',
       args: [index],
-    })),
-  );
+    }));
+  };
 
-  // TODO: Cache states
-  const proposalStates = useContractCalls<[ProposalState]>(
-    allGovProposalIndexes.map(index => ({
-      abi,
-      address: nounsDaoContract.address,
-      method: 'state',
-      args: [index],
-    })),
-  );
+  const proposals = useContractCalls<ProposalCallResult>(requests('proposals'));
+  const proposalStates = useContractCalls<[ProposalState]>(requests('state'));
 
-  const startBlock = uncachedProposals[uncachedProposals.length - 1]?.startBlock;
-  const fromBlock = startBlock && votingDelay ? startBlock.toNumber() - votingDelay : undefined;
-  const formattedLogs = useFormattedProposalCreatedLogs(fromBlock);
+  const formattedLogs = useFormattedProposalCreatedLogs(skip);
 
+  // Early return until events are fetched
   return useMemo(() => {
-    const proposals: ProposalCallResult[] = [
-      ...uncachedProposals,
-      ...Object.values(cachedProposals).map(proposal => hydrateProposal(proposal)),
-    ].sort((a, b) => (EthersBN.from(a.id).toNumber() > EthersBN.from(b.id).toNumber() ? 1 : -1));
-
     const logs = formattedLogs ?? [];
-    if (uncachedProposals && proposalStates) {
-      const cp = JSON.parse(localStorage.getItem(key) ?? '{}');
-      const updatedCache = proposals.reduce((acc, proposal, i) => {
-        if (!proposal) {
-          return acc;
-        }
-        const [state] = proposalStates[i] ?? [ProposalState.UNDETERMINED];
-        if (
-          [
-            ProposalState.CANCELLED,
-            ProposalState.DEFEATED,
-            ProposalState.EXPIRED,
-            ProposalState.EXECUTED,
-            ProposalState.VETOED,
-          ].includes(state)
-        ) {
-          acc[proposal.id.toString()] = {
-            id: proposal.id.toString(),
-            abstainVotes: proposal.abstainVotes.toString(),
-            againstVotes: proposal.againstVotes.toString(),
-            forVotes: proposal.forVotes.toString(),
-            canceled: proposal.canceled,
-            vetoed: proposal.vetoed,
-            executed: proposal.executed,
-            startBlock: proposal.startBlock.toString(),
-            endBlock: proposal.endBlock.toString(),
-            eta: proposal.eta.toString(),
-            proposalThreshold: proposal.proposalThreshold.toString(),
-            proposer: proposal.proposer,
-            quorumVotes: proposal.quorumVotes.toString(),
-          };
-        }
-        return acc;
-      }, cp);
-      localStorage.setItem(key, JSON.stringify(updatedCache));
-    }
     if (proposals.length && !logs.length) {
       return { data: [], loading: true };
     }
@@ -498,11 +423,17 @@ export const useAllProposals = (): ProposalData => {
       }),
       loading: false,
     };
-  }, [cachedProposals, formattedLogs, key, uncachedProposals, proposalStates, votingDelay]);
+  }, [formattedLogs, proposalStates, proposals, votingDelay]);
+};
+
+export const useAllProposals = (): ProposalData => {
+  const subgraph = useAllProposalsViaSubgraph();
+  const onchain = useAllProposalsViaChain(!!subgraph.error);
+  return subgraph?.error ? onchain : subgraph;
 };
 
 export const useProposal = (id: string | number): Proposal | undefined => {
-  const { data } = useAllSubgraphProposals();
+  const { data } = useAllProposals();
   return data?.find(p => p.id === id.toString());
 };
 
