@@ -267,19 +267,38 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                     fill='var(--brand-gray-light-text)'
                     />
 
-                    <text x="20" y="24">Max Quorum: {Math.round((maxQuorumBps*totalNounSupply)/10_000)} Nouns ({maxQuorumBps/100}% of Nouns)</text>
+                    {/* <text x="20" y="24">Max Quorum: {Math.round((maxQuorumBps*totalNounSupply)/10_000)} Nouns ({maxQuorumBps/100}% of Nouns)</text> */}
+                    <text x="20" y="24">Max Quorum: {Math.round((maxQuorumBps*totalNounSupply)/10_000)} Nouns</text>
+                    <text x="195" y="24" fill="var(--brand-gray-light-text)">({maxQuorumBps/100}% of Nouns)</text>
+
                     {
+
                        Math.abs((againstVotesLabelLineEnd[0][1] - 10) - 288) > 100 ? (
-                        <text x="20" y="280">Min Quorum: {Math.round((minQuorumBps*totalNounSupply)/10_000)} Nouns ({minQuorumBps/100}% of Nouns)</text>
+                           <>
+                        <text x="20" y="280">Min Quorum: {Math.round((minQuorumBps*totalNounSupply)/10_000)} Nouns</text>
+                        <text x="195" y="280" fill="var(--brand-gray-light-text)">({minQuorumBps/100}% of Nouns)</text>
+                        </>
                        ) :  (
                             <text x="550" y="280">Min Quorum: {Math.round((minQuorumBps*totalNounSupply)/10_000)} Nouns ({minQuorumBps/100}% of Nouns)</text>
                        )
                     }
-                    <text x={againstVotesLabelLineEnd[0][0] + 10} y={againstVotesLabelLineEnd[0][1] - 10}>{againstVotesAbs} Nouns Against ({Math.round(againstVotesBps/100)}%) → {Math.round((
+
+
+                    <text x={10} y={againstVotesLabelLineEnd[0][1] - 10} fill="var(--brand-gray-light-text)">
+                        {
+                            Math.round(Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) / 100)
+                        }% of Nouns required to pass 
+                    </text>
+
+                    <text x={againstVotesLabelLineEnd[0][0] + 10} y={againstVotesLabelLineEnd[0][1] - 10}>Nouns Currently Against: {againstVotesAbs} → Current Quorum: {Math.round((
                         (Math.min(maxQuorumBps, dqmFunction(againstVotesBps))*totalNounSupply)/10_000
-                    ))} Nouns For ({
-                        Math.round(Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) / 100)
-                    }%) </text>
+                    ))} 
+                     </text>
+
+
+                     <text x={againstVotesLabelLineEnd[0][0] + 10} y={310} fill="var(--brand-gray-light-text)">
+                        {Math.round(againstVotesBps/100)}% of Nouns currently Against 
+                     </text>
 
                   Sorry, your browser does not support inline SVG.
                 </svg>
