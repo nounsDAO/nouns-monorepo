@@ -147,7 +147,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
           </div>
         ) : (
           <>
-            <h3>Proposed by:</h3>
+            <h3>Proposed by</h3>
 
             <div className={classes.byLineContentWrapper}>
               <h3>
