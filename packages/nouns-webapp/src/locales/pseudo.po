@@ -33,6 +33,10 @@ msgstr ""
 msgid "404: This is not the person, place, or thing you're looking for..."
 msgstr ""
 
+#: src/components/ProposalHeader/index.tsx
+msgid "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
+msgstr ""
+
 #: src/components/AuctionTimer/index.tsx
 #~ msgid "<0>{flooredMinutes}<1>m</1></0>"
 #~ msgstr ""
@@ -621,10 +625,6 @@ msgstr ""
 msgid "Proposed Transactions"
 msgstr ""
 
-#: src/components/ProposalContent/index.tsx
-msgid "Proposer"
-msgstr ""
-
 #: src/pages/Vote/index.tsx
 msgid "Queue"
 msgstr ""
@@ -952,6 +952,10 @@ msgstr ""
 
 #: src/components/AuctionTimer/index.tsx
 msgid "at"
+msgstr ""
+
+#: src/components/ProposalHeader/index.tsx
+msgid "at <0>{0}</0>"
 msgstr ""
 
 #: src/components/Documentation/index.tsx

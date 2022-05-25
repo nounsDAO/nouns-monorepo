@@ -33,6 +33,10 @@ msgstr "3.5 artists, 6.5 technologists"
 msgid "404: This is not the person, place, or thing you're looking for..."
 msgstr "404: This is not the person, place, or thing you're looking for..."
 
+#: src/components/ProposalHeader/index.tsx
+msgid "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
+msgstr "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
+
 #: src/components/AuctionTimer/index.tsx
 #~ msgid "<0>{flooredMinutes}<1>m</1></0>"
 #~ msgstr "<0>{flooredMinutes}<1>m</1></0>"
@@ -621,10 +625,6 @@ msgstr "Proposals submitted by community members will appear here."
 msgid "Proposed Transactions"
 msgstr "Proposed Transactions"
 
-#: src/components/ProposalContent/index.tsx
-msgid "Proposer"
-msgstr "Proposer"
-
 #: src/pages/Vote/index.tsx
 msgid "Queue"
 msgstr "Queue"
@@ -953,6 +953,10 @@ msgstr "accessories (137)"
 #: src/components/AuctionTimer/index.tsx
 msgid "at"
 msgstr "at"
+
+#: src/components/ProposalHeader/index.tsx
+msgid "at <0>{0}</0>"
+msgstr "at <0>{0}</0>"
 
 #: src/components/Documentation/index.tsx
 msgid "backgrounds (2)"

@@ -11,6 +11,11 @@ import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import { useBlockTimestamp } from '../../hooks/useBlockTimestamp';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
+import { buildEtherscanAddressLink } from '../../utils/etherscan';
+import { transactionLink } from '../ProposalContent';
+import ShortAddress from '../ShortAddress';
+import { useActiveLocale } from '../../hooks/useActivateLocale';
+import { Locales } from '../../i18n/locales';
 
 interface ProposalHeaderProps {
   proposal: Proposal;
@@ -50,6 +55,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const proposalVote = useProposalVote(proposal?.id);
   const proposalCreationTimestamp = useBlockTimestamp(proposal?.createdBlock);
   const disableVoteButton = !isWalletConnected || !availableVotes || hasVoted;
+  const activeLocale = useActiveLocale();
 
   const voteButton = (
     <>
@@ -74,6 +80,26 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
         <Trans>Submit vote</Trans>
       </Button>
     </>
+  );
+
+  const proposer = (
+    <a
+      href={buildEtherscanAddressLink(proposal.proposer || '')}
+      target="_blank"
+      rel="noreferrer"
+      className={classes.proposerLinkJp}
+    >
+      <ShortAddress address={proposal.proposer || ''} avatar={false} />
+    </a>
+  );
+
+  const proposedAtTransactionHash = (
+    <Trans>
+      at{' '}
+      <span className={classes.propTransactionHash}>
+        {transactionLink(proposal.transactionHash)}
+      </span>
+    </Trans>
   );
 
   return (
@@ -105,6 +131,31 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
           <div className="d-flex justify-content-end align-items-end">
             {isActiveForVoting && voteButton}
           </div>
+        )}
+      </div>
+
+      <div className={classes.byLineWrapper}>
+        {activeLocale === Locales.ja_JP ? (
+          <div className={classes.proposalByLineWrapperJp}>
+            <Trans>
+              <span className={classes.proposedByJp}>Proposed by: </span>
+              <span className={classes.proposerJp}>
+              {proposer}
+              </span>
+              <span className={classes.propTransactionWrapperJp}>{proposedAtTransactionHash}</span>
+            </Trans>
+          </div>
+        ) : (
+          <>
+            <h3>Proposed by</h3>
+
+            <div className={classes.byLineContentWrapper}>
+              <h3>
+                {proposer}
+                <span className={classes.propTransactionWrapper}>{proposedAtTransactionHash}</span>
+              </h3>
+            </div>
+          </>
         )}
       </div>
 

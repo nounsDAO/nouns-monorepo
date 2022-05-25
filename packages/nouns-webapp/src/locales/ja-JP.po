@@ -34,6 +34,10 @@ msgstr "3.5アーティスト、6.5技術者"
 msgid "404: This is not the person, place, or thing you're looking for..."
 msgstr "404: お探しの人、場所、物は見つかりませんでした。"
 
+#: src/components/ProposalHeader/index.tsx
+msgid "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
+msgstr "<2>{proposedAtTransactionHash}</2> <1>{proposer}</1> <0>が提案したものです</0>"
+
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Absent for"
 msgstr "不参加"
@@ -606,10 +610,6 @@ msgstr "コミュニティメンバーが提出した提案はここに表示さ
 msgid "Proposed Transactions"
 msgstr "提案中のトランザクション"
 
-#: src/components/ProposalContent/index.tsx
-msgid "Proposer"
-msgstr "提案者"
-
 #: src/pages/Vote/index.tsx
 msgid "Queue"
 msgstr "キュー"
@@ -934,6 +934,10 @@ msgstr "付属品(137)"
 #: src/components/AuctionTimer/index.tsx
 msgid "at"
 msgstr "の"
+
+#: src/components/ProposalHeader/index.tsx
+msgid "at <0>{0}</0>"
+msgstr "<0>{0}</0> で"
 
 #: src/components/Documentation/index.tsx
 msgid "backgrounds (2)"
