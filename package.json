@@ -11,11 +11,11 @@
     "format": "prettier --write 'packages/**/*.{ts(x)?,sol,md,css,json}' '!**/typechain/**'"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.15",
     "@types/mocha": "^8.2.2",
     "@types/node": "^14.14.34",
     "@typescript-eslint/eslint-plugin": "^4.26.0",
     "@typescript-eslint/parser": "^4.26.0",
-    "@types/chai": "^4.2.15",
     "chai": "^4.2.0",
     "eslint": "^7.28.0",
     "eslint-config-prettier": "^8.3.0",
