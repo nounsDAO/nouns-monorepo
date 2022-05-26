@@ -184,6 +184,20 @@
     padding-left: 0;
     padding-right: 0;
   }
+
+  .headerWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .heading {
+    width: 100%;
+  }
+
+  .nounInWalletBtnWrapper {
+    width: 100%;
+  }
 }
 
 .nullBtnWrapper {
@@ -206,5 +220,35 @@
 
 .submitProposalButtonWrapper {
   text-align: right;
-  padding-top: 0.8rem;
+}
+
+.nounInWalletBtnWrapper {
+  display: flex;
+  padding-top: 0.8rem; 
+}
+
+.delegateBtnWrapper {
+  padding-left: 0.5rem;
+}
+
+.changeDelegateBtn {
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: rgb(95, 95, 95);
+  max-width: 10rem;
+  height: 3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+}
+
+.changeDelegateBtn:focus,
+.changeDelegateBtn:hover {
+  background-color: #e2e3e8;
+  color: black;
+  box-shadow: none;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.changeDelegateBtn:active {
+  background-color: #e2e3e8 !important;
 }

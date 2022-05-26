@@ -14,6 +14,8 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '../../i18n/locales';
+import React, { useState } from 'react';
+import DelegateNounsModal from '../DelegateNounsModal';
 
 dayjs.extend(relativeTime);
 
@@ -67,6 +69,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
   const currentBlock = useBlockNumber();
   const isMobile = isMobileScreen();
   const activeLocale = useActiveLocale();
+  const [showDelegateModal, setShowDelegateModal] = useState(false);
 
   const nullStateCopy = () => {
     if (account !== null) {
@@ -77,15 +80,29 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
 
   return (
     <div className={classes.proposals}>
-      <div>
+      {
+        showDelegateModal && (
+          <DelegateNounsModal />
+        )
+      }
+      <div className={classes.headerWrapper}>
         <h3 className={classes.heading}>
           <Trans>Proposals</Trans>
         </h3>
-        {account !== undefined && connectedAccountNounVotes > 0 ? (
-          <div className={classes.submitProposalButtonWrapper}>
+        {/* {account !== undefined && connectedAccountNounVotes > 0 ? ( */}
+        {true ? (
+          <div className={classes.nounInWalletBtnWrapper}>
+            <div className={classes.submitProposalButtonWrapper}>
             <Button className={classes.generateBtn} onClick={() => history.push('create-proposal')}>
               <Trans>Submit Proposal</Trans>
             </Button>
+            </div>
+
+            <div className={classes.delegateBtnWrapper}>
+              <Button className={classes.changeDelegateBtn} onClick={() => setShowDelegateModal(true)}>
+                <Trans>Change Delegate</Trans>
+              </Button>
+            </div>
           </div>
         ) : (
           <div className={clsx('d-flex', classes.submitProposalButtonWrapper)}>
