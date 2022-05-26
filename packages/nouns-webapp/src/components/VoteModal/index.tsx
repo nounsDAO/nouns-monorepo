@@ -190,7 +190,7 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
           <br />
           <Button
             onClick={() => {
-              if (vote === undefined || isLoading) {
+              if (vote === undefined || !proposalId || isLoading) {
                 return;
               }
               setIsLoading(true);
