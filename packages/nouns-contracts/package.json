@@ -9,7 +9,7 @@
   "types": "dist/src/index.d.ts",
   "scripts": {
     "clean": "rimraf dist tsconfig.build.tsbuildinfo",
-    "build": "yarn build:sol && yarn build:ts && yarn build:declarations",
+    "build": "yarn build:sol --force && yarn build:ts && yarn build:declarations",
     "build:ts": "tsc -p tsconfig.build.json",
     "build:sol": "npx hardhat compile",
     "build:declarations": "shx cp typechain/*.d.ts dist/typechain",
