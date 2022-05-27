@@ -147,3 +147,14 @@
 .delegatePrimary:hover {
   filter: brightness(200%);
 }
+
+.delegateSecondary {
+  background-color: var(--brand-color-blue);
+  color: white;
+  width: 315px;
+  border: none;
+}
+
+.delegateSecondary:hover {
+  filter: brightness(200%);
+}

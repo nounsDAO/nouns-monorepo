@@ -54,7 +54,7 @@ export const getNavBarButtonVariant = (buttonStyle?: NavBarButtonStyle) => {
       return classes.delegatePrimary;
     }
     case NavBarButtonStyle.DELEGATE_SECONDARY: {
-      return classes.whiteWallet;
+      return classes.delegateSecondary;
     }
     default: {
       return classes.info;

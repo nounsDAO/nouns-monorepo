@@ -32,3 +32,9 @@
 .invalid {
   border: 2px solid var(--brand-color-red);
 }
+
+.buttonWrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+}

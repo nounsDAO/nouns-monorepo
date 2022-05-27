@@ -1,10 +1,11 @@
-import { useContractCall, useEthers } from '@usedapp/core';
+import { useContractCall, useContractFunction, useEthers } from '@usedapp/core';
 import { BigNumber as EthersBN, utils } from 'ethers';
-import { NounsTokenABI } from '@nouns/contracts';
+import { NounsTokenABI, NounsTokenFactory } from '@nouns/contracts';
 import config, { cache, cacheKey, CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
 import { seedsQuery } from './subgraph';
 import { useEffect } from 'react';
+import { ContractFunctionNames } from '@usedapp/core/dist/esm/src/model/types';
 
 interface NounToken {
   name: string;
@@ -104,6 +105,10 @@ export const useNounSeed = (nounId: EthersBN) => {
 
 export const useUserVotes = (): number | undefined => {
   const { account } = useEthers();
+  return useAccountVotes(account);
+};
+
+export const useAccountVotes = (account?: string): number | undefined => {
   const [votes] =
     useContractCall<[EthersBN]>({
       abi,
@@ -138,4 +143,18 @@ export const useUserVotesAsOfBlock = (block: number | undefined): number | undef
       args: [account, block],
     }) || [];
   return votes?.toNumber();
+};
+
+export const useDelegateVotes = (delagee: string) => {
+  const nounsToken = new NounsTokenFactory().attach(
+    config.addresses.nounsToken,
+  );
+
+  const { send, state } = useContractFunction(
+    nounsToken,
+    // 'votesToDelegate' 
+    'votesToDelegate' as ContractFunctionNames<NounsToken>
+  ); 
+
+  return {send, state}
 };
