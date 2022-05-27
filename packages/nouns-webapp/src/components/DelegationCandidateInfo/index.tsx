@@ -28,9 +28,14 @@ const DelegationCandidateInfoProps: React.FC<DelegationCandidateInfoProps> = pro
 
   if (loading) {
     return (
-      <Spinner animation="border" role="status">
-        <span className="visually-hidden">Loading...</span>
-      </Spinner>
+        <div style={{
+            display: 'flex',
+            justifyContent: 'center'
+        }}>
+            <Spinner animation="border" role="status">
+                <span className="visually-hidden">Loading...</span>
+            </Spinner>
+        </div>
     );
   }
 

@@ -45,8 +45,8 @@ const ChangeDelegatePannel = () => {
 
   const [currentBlockNumber, setCurrentBlockNumber] = useState(0);
   const [delegateAddress, setDelegateAddress] = useState('');
+  const [delegateInputText, setDelegateInputText] = useState('');
   const [delegateInputClass, setDelegateInputClass] = useState<string>('');
-  const [delegatedNounCount, setDelegatedNounCount] = useState(0);
 
   useEffect(() => {
     const getCurrentBlockNumber = async () => {
@@ -55,6 +55,18 @@ const ChangeDelegatePannel = () => {
 
     getCurrentBlockNumber();
   }, [library]);
+
+
+  useEffect(() => {
+    const checkIsValidENS = async () => {
+      const reverseENSResult = await library?.resolveName(delegateAddress);
+      if (reverseENSResult) {
+        setDelegateAddress(reverseENSResult);
+      }
+    }
+
+    checkIsValidENS();
+  }, [delegateAddress, library])
 
   useEffect(() => {
     if (delegateAddress.length === 0) {
@@ -85,8 +97,12 @@ const ChangeDelegatePannel = () => {
       <FormControl
         className={clsx(classes.bidInput, delegateInputClass)}
         type="string"
-        onChange={e => setDelegateAddress(e.target.value)}
-        value={delegateAddress}
+        onChange={e => {
+          setDelegateAddress(e.target.value);
+          setDelegateInputText(e.target.value);
+        }
+        }
+        value={delegateInputText}
         placeholder={'0x... or ...eth'}
       />
 
