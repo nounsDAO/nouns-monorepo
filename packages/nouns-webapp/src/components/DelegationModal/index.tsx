@@ -29,9 +29,6 @@ const DelegationModalOverlay: React.FC<{
       </div>
 
       <div className={classes.modal}>
-        {/* <div className={classes.title}>
-            <h1>Delegation</h1>
-          </div> */}
         {isChangingDelegation ? (
           <ChangeDelegatePannel />
         ) : (

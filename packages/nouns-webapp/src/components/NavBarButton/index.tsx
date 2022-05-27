@@ -9,12 +9,16 @@ export enum NavBarButtonStyle {
   WHITE_ACTIVE,
   WHITE_ACTIVE_VOTE_SUBMIT,
   WHITE_WALLET,
+  DELEGATE_BACK,
+  DELEGATE_PRIMARY,
+  DELEGATE_SECONDARY,
 }
 
 interface NavBarButtonProps {
   buttonText: React.ReactNode;
   buttonIcon?: React.ReactNode;
   buttonStyle?: NavBarButtonStyle;
+  onClick?: (e?: any) => void;
 }
 
 export const getNavBarButtonVariant = (buttonStyle?: NavBarButtonStyle) => {
@@ -43,6 +47,15 @@ export const getNavBarButtonVariant = (buttonStyle?: NavBarButtonStyle) => {
     case NavBarButtonStyle.WHITE_WALLET: {
       return classes.whiteWallet;
     }
+    case NavBarButtonStyle.DELEGATE_BACK: {
+      return classes.delegateBack;
+    }
+    case NavBarButtonStyle.DELEGATE_PRIMARY: {
+      return classes.delegatePrimary;
+    }
+    case NavBarButtonStyle.DELEGATE_SECONDARY: {
+      return classes.whiteWallet;
+    }
     default: {
       return classes.info;
     }
@@ -50,11 +63,14 @@ export const getNavBarButtonVariant = (buttonStyle?: NavBarButtonStyle) => {
 };
 
 const NavBarButton: React.FC<NavBarButtonProps> = props => {
-  const { buttonText, buttonIcon, buttonStyle } = props;
+  const { buttonText, buttonIcon, buttonStyle, onClick } = props;
 
   return (
     <>
-      <div className={`${classes.wrapper} ${getNavBarButtonVariant(buttonStyle)}`}>
+      <div
+        className={`${classes.wrapper} ${getNavBarButtonVariant(buttonStyle)}`}
+        onClick={onClick}
+      >
         <div className={classes.button}>
           {buttonIcon && <div className={classes.icon}>{buttonIcon}</div>}
           <div>{buttonText}</div>
