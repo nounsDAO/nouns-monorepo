@@ -15,7 +15,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '../../i18n/locales';
 import React, { useState } from 'react';
-import DelegateNounsModal from '../DelegateNounsModal';
+import DelegationModal from '../DelegationModal';
 
 dayjs.extend(relativeTime);
 
@@ -80,11 +80,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
 
   return (
     <div className={classes.proposals}>
-      {
-        showDelegateModal && (
-          <DelegateNounsModal />
-        )
-      }
+      {showDelegateModal && <DelegationModal onDismiss={() => setShowDelegateModal(false)} />}
       <div className={classes.headerWrapper}>
         <h3 className={classes.heading}>
           <Trans>Proposals</Trans>
@@ -93,14 +89,20 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
         {true ? (
           <div className={classes.nounInWalletBtnWrapper}>
             <div className={classes.submitProposalButtonWrapper}>
-            <Button className={classes.generateBtn} onClick={() => history.push('create-proposal')}>
-              <Trans>Submit Proposal</Trans>
-            </Button>
+              <Button
+                className={classes.generateBtn}
+                onClick={() => history.push('create-proposal')}
+              >
+                <Trans>Submit Proposal</Trans>
+              </Button>
             </div>
 
             <div className={classes.delegateBtnWrapper}>
-              <Button className={classes.changeDelegateBtn} onClick={() => setShowDelegateModal(true)}>
-                <Trans>Change Delegate</Trans>
+              <Button
+                className={classes.changeDelegateBtn}
+                onClick={() => setShowDelegateModal(true)}
+              >
+                <Trans>Delegation</Trans>
               </Button>
             </div>
           </div>
