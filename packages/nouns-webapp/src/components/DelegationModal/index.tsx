@@ -16,8 +16,6 @@ const DelegationModalOverlay: React.FC<{
 }> = props => {
   const { onDismiss } = props;
 
-  const { account } = useEthers();
-  const [modalTitleState, setModalTitleState] = useState('');
   const [isChangingDelegation, setIsChangingDelegation] = useState(false);
 
   return (
