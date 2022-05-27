@@ -75,11 +75,11 @@ const NounderNounContent: React.FC<{
                 ` ${nounContentClasses.bidRow}`
               }
             >
-              <Trans>All Noun auction proceeds are sent to the </Trans>
+              <Trans>All Noun auction proceeds are sent to the</Trans>{' '}
               <Link to="/vote" className={nounContentClasses.link}>
                 <Trans>Nouns DAO</Trans>
               </Link>
-              .
+              .{' '}
               <Trans>
                 For this reason, we, the project's founders (‘Nounders’) have chosen to compensate
                 ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be

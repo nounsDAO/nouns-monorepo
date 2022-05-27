@@ -33,6 +33,10 @@ msgstr ""
 msgid "404: This is not the person, place, or thing you're looking for..."
 msgstr ""
 
+#: src/components/ProposalHeader/index.tsx
+msgid "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
+msgstr ""
+
 #: src/components/AuctionTimer/index.tsx
 #~ msgid "<0>{flooredMinutes}<1>m</1></0>"
 #~ msgstr ""
@@ -284,6 +288,10 @@ msgstr ""
 msgid "Ends on"
 msgstr ""
 
+#: src/components/Proposals/index.tsx
+msgid "Ends {0}"
+msgstr ""
+
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 #: src/components/VoteModal/index.tsx
@@ -313,6 +321,10 @@ msgstr ""
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 msgid "Expired"
+msgstr ""
+
+#: src/components/Proposals/index.tsx
+msgid "Expires {0}"
 msgstr ""
 
 #: src/pages/Playground/index.tsx
@@ -429,7 +441,6 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-#: src/components/BidHistoryModal/index.tsx
 #: src/pages/Governance/index.tsx
 msgid "Noun"
 msgstr ""
@@ -493,7 +504,7 @@ msgid "Nouns Protocol"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community"
+msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community."
 msgstr ""
 
 #: src/components/Documentation/index.tsx
@@ -614,10 +625,6 @@ msgstr ""
 msgid "Proposed Transactions"
 msgstr ""
 
-#: src/components/ProposalContent/index.tsx
-msgid "Proposer"
-msgstr ""
-
 #: src/pages/Vote/index.tsx
 msgid "Queue"
 msgstr ""
@@ -675,11 +682,11 @@ msgid "Sign out"
 msgstr ""
 
 #: src/pages/Vote/index.tsx
-#~ msgid "Snapshot"
-#~ msgstr ""
-
-#: src/pages/Vote/index.tsx
 msgid "Starts"
+msgstr ""
+
+#: src/components/Proposals/index.tsx
+msgid "Starts {0}"
 msgstr ""
 
 #: src/components/Proposals/index.tsx
@@ -924,11 +931,11 @@ msgid "You must have {0} votes to submit a proposal"
 msgstr ""
 
 #: src/components/ProposalHeader/index.tsx
-msgid "You voted <0>Against</0>this proposal"
+msgid "You voted <0>Against</0> this proposal"
 msgstr ""
 
 #: src/components/ProposalHeader/index.tsx
-msgid "You voted <0>For</0>this proposal"
+msgid "You voted <0>For</0> this proposal"
 msgstr ""
 
 #: src/pages/Playground/index.tsx
@@ -945,6 +952,10 @@ msgstr ""
 
 #: src/components/AuctionTimer/index.tsx
 msgid "at"
+msgstr ""
+
+#: src/components/ProposalHeader/index.tsx
+msgid "at <0>{0}</0>"
 msgstr ""
 
 #: src/components/Documentation/index.tsx

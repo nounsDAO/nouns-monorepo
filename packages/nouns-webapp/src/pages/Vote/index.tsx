@@ -16,7 +16,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
 import VoteModal from '../../components/VoteModal';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import clsx from 'clsx';
 import ProposalHeader from '../../components/ProposalHeader';
@@ -120,9 +120,17 @@ const VotePage = ({
   const moveStateButtonAction = hasSucceeded ? <Trans>Queue</Trans> : <Trans>Execute</Trans>;
   const moveStateAction = (() => {
     if (hasSucceeded) {
-      return () => queueProposal(proposal?.id);
+      return () => {
+        if (proposal?.id) {
+          return queueProposal(proposal.id);
+        }
+      };
     }
-    return () => executeProposal(proposal?.id);
+    return () => {
+      if (proposal?.id) {
+        return executeProposal(proposal.id);
+      }
+    };
   })();
 
   const onTransactionStateChange = useCallback(
@@ -194,21 +202,20 @@ const VotePage = ({
 
   const activeAccount = useAppSelector(state => state.account.activeAccount);
   const {
-    loading: votesLoading,
-    error: votesError,
+    loading,
+    error,
     data: voters,
-  } = useQuery<ProposalVotes>(proposalVotesQuery(proposal?.id ?? '0'));
+  } = useQuery<ProposalVotes>(proposalVotesQuery(proposal?.id ?? '0'), {
+    skip: !proposal,
+  });
 
   const voterIds = voters?.votes?.map(v => v.voter.id);
-  const {
-    loading: delegatesLoading,
-    error: delegatesError,
-    data: delegateSnapshot,
-  } = useQuery<Delegates>(delegateNounsAtBlockQuery(voterIds ?? [], proposal?.createdBlock ?? 0), {
-    skip: !voters?.votes?.length,
-  });
-  const loading = votesLoading || delegatesLoading;
-  const error = votesError || delegatesError;
+  const { data: delegateSnapshot } = useQuery<Delegates>(
+    delegateNounsAtBlockQuery(voterIds ?? [], proposal?.createdBlock ?? 0),
+    {
+      skip: !voters?.votes?.length,
+    },
+  );
 
   const { delegates } = delegateSnapshot || {};
   const delegateToNounIds = delegates?.reduce<Record<string, string[]>>((acc, curr) => {

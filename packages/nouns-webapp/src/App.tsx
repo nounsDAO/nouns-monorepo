@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useEthers } from '@usedapp/core';
+import { ChainId, useEthers } from '@usedapp/core';
 import { useAppDispatch, useAppSelector } from './hooks';
 import { setActiveAccount } from './state/slices/account';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
@@ -20,10 +20,11 @@ import NotFoundPage from './pages/NotFound';
 import Playground from './pages/Playground';
 import { CHAIN_ID } from './config';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { AvatarProvider } from '@davatar/react';
 import dayjs from 'dayjs';
 
 function App() {
-  const { account, chainId } = useEthers();
+  const { account, chainId, library } = useEthers();
   const dispatch = useAppDispatch();
   dayjs.extend(relativeTime);
 
@@ -45,23 +46,28 @@ function App() {
         />
       )}
       <BrowserRouter>
-        <NavBar />
-        <Switch>
-          <Route exact path="/" component={AuctionPage} />
-          <Redirect from="/auction/:id" to="/noun/:id" />
-          <Route
-            exact
-            path="/noun/:id"
-            render={props => <AuctionPage initialAuctionId={Number(props.match.params.id)} />}
-          />
-          <Route exact path="/nounders" component={NoundersPage} />
-          <Route exact path="/create-proposal" component={CreateProposalPage} />
-          <Route exact path="/vote" component={GovernancePage} />
-          <Route exact path="/vote/:id" component={VotePage} />
-          <Route exact path="/playground" component={Playground} />
-          <Route component={NotFoundPage} />
-        </Switch>
-        <Footer />
+        <AvatarProvider
+          provider={chainId === ChainId.Mainnet ? library : undefined}
+          batchLookups={true}
+        >
+          <NavBar />
+          <Switch>
+            <Route exact path="/" component={AuctionPage} />
+            <Redirect from="/auction/:id" to="/noun/:id" />
+            <Route
+              exact
+              path="/noun/:id"
+              render={props => <AuctionPage initialAuctionId={Number(props.match.params.id)} />}
+            />
+            <Route exact path="/nounders" component={NoundersPage} />
+            <Route exact path="/create-proposal" component={CreateProposalPage} />
+            <Route exact path="/vote" component={GovernancePage} />
+            <Route exact path="/vote/:id" component={VotePage} />
+            <Route exact path="/playground" component={Playground} />
+            <Route component={NotFoundPage} />
+          </Switch>
+          <Footer />
+        </AvatarProvider>
       </BrowserRouter>
     </div>
   );

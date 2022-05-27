@@ -33,6 +33,10 @@ msgstr "3.5 artists, 6.5 technologists"
 msgid "404: This is not the person, place, or thing you're looking for..."
 msgstr "404: This is not the person, place, or thing you're looking for..."
 
+#: src/components/ProposalHeader/index.tsx
+msgid "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
+msgstr "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
+
 #: src/components/AuctionTimer/index.tsx
 #~ msgid "<0>{flooredMinutes}<1>m</1></0>"
 #~ msgstr "<0>{flooredMinutes}<1>m</1></0>"
@@ -284,6 +288,10 @@ msgstr "Ends"
 msgid "Ends on"
 msgstr "Ends on"
 
+#: src/components/Proposals/index.tsx
+msgid "Ends {0}"
+msgstr "Ends {0}"
+
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 #: src/components/VoteModal/index.tsx
@@ -314,6 +322,10 @@ msgstr "Executed"
 #: src/components/ProposalStatus/index.tsx
 msgid "Expired"
 msgstr "Expired"
+
+#: src/components/Proposals/index.tsx
+msgid "Expires {0}"
+msgstr "Expires {0}"
 
 #: src/pages/Playground/index.tsx
 msgid "Explore"
@@ -429,7 +441,6 @@ msgstr "No proposals found"
 msgid "None"
 msgstr "None"
 
-#: src/components/BidHistoryModal/index.tsx
 #: src/pages/Governance/index.tsx
 msgid "Noun"
 msgstr "Noun"
@@ -493,8 +504,8 @@ msgid "Nouns Protocol"
 msgstr "Nouns Protocol"
 
 #: src/components/Documentation/index.tsx
-msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community"
-msgstr "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community"
+msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community."
+msgstr "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community."
 
 #: src/components/Documentation/index.tsx
 msgid "Nouns are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules governing Noun trait scarcity, which makes all Nouns equally rare. As of this writing, Nouns are made up of:"
@@ -614,10 +625,6 @@ msgstr "Proposals submitted by community members will appear here."
 msgid "Proposed Transactions"
 msgstr "Proposed Transactions"
 
-#: src/components/ProposalContent/index.tsx
-msgid "Proposer"
-msgstr "Proposer"
-
 #: src/pages/Vote/index.tsx
 msgid "Queue"
 msgstr "Queue"
@@ -675,12 +682,12 @@ msgid "Sign out"
 msgstr "Sign out"
 
 #: src/pages/Vote/index.tsx
-#~ msgid "Snapshot"
-#~ msgstr "Snapshot"
-
-#: src/pages/Vote/index.tsx
 msgid "Starts"
 msgstr "Starts"
+
+#: src/components/Proposals/index.tsx
+msgid "Starts {0}"
+msgstr "Starts {0}"
 
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
@@ -924,12 +931,12 @@ msgid "You must have {0} votes to submit a proposal"
 msgstr "You must have {0} votes to submit a proposal"
 
 #: src/components/ProposalHeader/index.tsx
-msgid "You voted <0>Against</0>this proposal"
-msgstr "You voted <0>Against</0>this proposal"
+msgid "You voted <0>Against</0> this proposal"
+msgstr "You voted <0>Against</0> this proposal"
 
 #: src/components/ProposalHeader/index.tsx
-msgid "You voted <0>For</0>this proposal"
-msgstr "You voted <0>For</0>this proposal"
+msgid "You voted <0>For</0> this proposal"
+msgstr "You voted <0>For</0> this proposal"
 
 #: src/pages/Playground/index.tsx
 msgid "You've generated {0} years worth of Nouns"
@@ -946,6 +953,10 @@ msgstr "accessories (137)"
 #: src/components/AuctionTimer/index.tsx
 msgid "at"
 msgstr "at"
+
+#: src/components/ProposalHeader/index.tsx
+msgid "at <0>{0}</0>"
+msgstr "at <0>{0}</0>"
 
 #: src/components/Documentation/index.tsx
 msgid "backgrounds (2)"

@@ -19,6 +19,22 @@ interface AppConfig {
 
 type SupportedChains = ChainId.Rinkeby | ChainId.Mainnet | ChainId.Hardhat;
 
+interface CacheBucket {
+  name: string;
+  version: string;
+}
+
+export const cache: Record<string, CacheBucket> = {
+  seed: {
+    name: 'seed',
+    version: 'v1',
+  },
+};
+
+export const cacheKey = (bucket: CacheBucket, ...parts: (string | number)[]) => {
+  return [bucket.name, bucket.version, ...parts].join('-').toLowerCase();
+};
+
 export const CHAIN_ID: SupportedChains = parseInt(process.env.REACT_APP_CHAIN_ID ?? '4');
 
 export const ETHERSCAN_API_KEY = process.env.REACT_APP_ETHERSCAN_API_KEY ?? '';
