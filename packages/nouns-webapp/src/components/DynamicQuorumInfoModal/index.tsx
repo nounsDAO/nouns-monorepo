@@ -4,11 +4,7 @@ import ReactDOM from 'react-dom';
 import config from '../../config';
 import {
   Proposal,
-  useMaxQuorumVotesBPS,
-  useMinQuorumVotesBPS,
-  useQuorumLinearCoefficent,
-  useQuorumQuadraticCoefficient,
-  useQuorumVotesBPSOffset,
+  useDynamicQuorumProps,
 } from '../../wrappers/nounsDao';
 import { totalNounSupplyAtPropSnapshot } from '../../wrappers/subgraph';
 import { Backdrop } from '../Modal';
@@ -98,11 +94,12 @@ const DynamicQuorumInfoModal: React.FC<{
   const { onDismiss, proposal, againstVotesAbsolute } = props;
 
   const { data, loading, error } = useQuery(totalNounSupplyAtPropSnapshot(proposal.startBlock));
-  const minQuorumBps = useMinQuorumVotesBPS(config.addresses.nounsDAOProxy);
-  const maxQuorumBps = useMaxQuorumVotesBPS(config.addresses.nounsDAOProxy);
-  const offsetBps = useQuorumVotesBPSOffset(config.addresses.nounsDAOProxy);
-  const linearCoefficent = useQuorumLinearCoefficent(config.addresses.nounsDAOProxy);
-  const quadraticCoefficent = useQuorumQuadraticCoefficient(config.addresses.nounsDAOProxy);
+  const dynamicQuorumProps = useDynamicQuorumProps(
+    config.addresses.nounsDAOProxy, 
+    proposal.startBlock
+  );
+
+  console.log(dynamicQuorumProps);
 
   if (error) {
     return <>Failed to fetch dynamic quorum info</>;
@@ -120,13 +117,12 @@ const DynamicQuorumInfoModal: React.FC<{
       )}
       {ReactDOM.createPortal(
         <DynamicQuorumInfoModalOverlay
-          // TODO IS THIS CORRECT? -- can we get this from the contract
           againstVotesBps={Math.round(againstVotesAbsolute / data.id / 10_000)}
-          minQuorumBps={minQuorumBps ?? 0}
-          maxQuorumBps={maxQuorumBps ?? 0}
-          quadraticCoefficent={quadraticCoefficent ?? 0}
-          linearCoefficent={linearCoefficent ?? 0}
-          offsetBps={offsetBps ?? 0}
+          minQuorumBps={dynamicQuorumProps?.minQuorumVotesBPS ?? 0}
+          maxQuorumBps={dynamicQuorumProps?.maxQuorumVotesBPS ?? 0}
+          quadraticCoefficent={dynamicQuorumProps?.quorumQuadraticCoefficient ?? 0}
+          linearCoefficent={dynamicQuorumProps?.quorumLinearCoefficient ?? 0}
+          offsetBps={dynamicQuorumProps?.quorumVotesBPSOffset ?? 0}
           onDismiss={onDismiss}
           proposal={proposal}
         />,

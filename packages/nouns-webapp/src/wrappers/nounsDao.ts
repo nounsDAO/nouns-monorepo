@@ -12,6 +12,7 @@ import { useMemo } from 'react';
 import { useLogs } from '../hooks/useLogs';
 import * as R from 'ramda';
 import config, { CHAIN_ID } from '../config';
+import NounsDAOLogicV2ABI from "./nounsDaoLogicV2ABI.json";
 
 export enum Vote {
   AGAINST = 0,
@@ -86,7 +87,17 @@ export interface ProposalTransaction {
   calldata: string;
 }
 
+export interface DynamicQuorumParams {
+  minQuorumVotesBPS: number;
+  maxQuorumVotesBPS: number;
+  quorumVotesBPSOffset: number;
+  quorumLinearCoefficient: number;
+  quorumQuadraticCoefficient: number;
+}
+
+
 const abi = new utils.Interface(NounsDAOABI);
+const abiV2 = new utils.Interface(NounsDAOLogicV2ABI);
 const nounsDaoContract = new NounsDaoLogicV1Factory().attach(config.addresses.nounsDAOProxy);
 
 // Start the log search at the mainnet deployment block to speed up log queries
@@ -178,30 +189,18 @@ const useVotingDelay = (nounsDao: string): number | undefined => {
   return blockDelay?.toNumber();
 };
 
-export const useMinQuorumVotesBPS = (nounsDao: string): number | undefined => {
-  // TODO implement contract call logic once contract is deployed
-  return 1000;
-};
+export const useDynamicQuorumProps = (nounsDao: string, block: number): DynamicQuorumParams | undefined => {
+  const [params] =
+    useContractCall<[DynamicQuorumParams]>({
+      abi: abiV2,
+       address: nounsDao,
+      method: 'getDynamicQuorumParamsAt',
+      args: [block],
+    }) || [];
 
-export const useMaxQuorumVotesBPS = (nounsDao: string): number | undefined => {
-  // TODO implement contract call logic once contract is deployed
-  return 2000;
-};
+  return params;
+}
 
-export const useQuorumVotesBPSOffset = (nounsDao: string): number | undefined => {
-  // TODO implement contract call logic once contract is deployed
-  return 250;
-};
-
-export const useQuorumLinearCoefficent = (nounsDao: string): number | undefined => {
-  // TODO implement contract call logic once contract is deployed
-  return 0.01;
-};
-
-export const useQuorumQuadraticCoefficient = (nounsDao: string): number | undefined => {
-  // TODO implement contract call logic once contract is deployed
-  return 0.0005;
-};
 
 const countToIndices = (count: number | undefined) => {
   return typeof count === 'number' ? new Array(count).fill(0).map((_, i) => [i + 1]) : [];
