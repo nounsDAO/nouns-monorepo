@@ -43,7 +43,7 @@ const generatePointsForSVGChart = (minQuorumBps: number, maxQuorumBps: number, h
     const positiveRootDQMPolynomial = solveForPositiveRootDQM(linearCoefficent, quadraticCoefficent, minQuorumBps - maxQuorumBps);
     // Space x points equally in [0, posDQMPolynomialRoot]
     // We do this to get a dense sample of the function in the range it's most interesting
-    let xPoints = Array.from({length: numPoints}, (_, i) => Math.round(i*(Math.ceil(positiveRootDQMPolynomial)/numPoints)));
+    let xPoints = Array.from({length: numPoints}, (_, i) => Math.floor(i*(Math.ceil(positiveRootDQMPolynomial)/numPoints)));
     for (let i = 0; i < 500; i++) {
         xPoints.push(positiveRootDQMPolynomial + i);
     }
@@ -129,7 +129,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
       options
   );
 
-  const againstVotesAbs = Math.round((againstVotesBps/10_000)*totalNounSupply);
+  const againstVotesAbs = Math.floor((againstVotesBps/10_000)*totalNounSupply);
 
   return (
     <>
@@ -213,19 +213,19 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                     fill='var(--brand-gray-light-text)'
                     />
 
-                    <text x="20" y="24">Max Quorum: {Math.round((maxQuorumBps*totalNounSupply)/10_000)} Nouns</text>
+                    <text x="20" y="24">Max Quorum: {Math.floor((maxQuorumBps*totalNounSupply)/10_000)} Nouns</text>
                     <text x="195" y="24" fill="var(--brand-gray-light-text)">({maxQuorumBps/100}% of Nouns)</text>
 
                     {
 
                        Math.abs((againstVotesLabelLineEnd[0][1] - 10) - 288) > 100 ? (
                            <>
-                        <text x="20" y="280">Min Quorum: {Math.round((minQuorumBps*totalNounSupply)/10_000)} Nouns</text>
+                        <text x="20" y="280">Min Quorum: {Math.floor((minQuorumBps*totalNounSupply)/10_000)} Nouns</text>
                         <text x="195" y="280" fill="var(--brand-gray-light-text)">({minQuorumBps/100}% of Nouns)</text>
                         </>
                        ) :  (
                            <>
-                            <text x="550" y="280">Min Quorum: {Math.round((minQuorumBps*totalNounSupply)/10_000)} Nouns</text>
+                            <text x="550" y="280">Min Quorum: {Math.floor((minQuorumBps*totalNounSupply)/10_000)} Nouns</text>
                             <text x="720" y="280" fill="var(--brand-gray-light-text)">({minQuorumBps/100}% of Nouns)</text>
                             </>
                        )
@@ -235,20 +235,20 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                         againstVotesBps >= 400 && (
                     <text x={10} y={againstVotesLabelLineEnd[0][1] - 10} fill="var(--brand-gray-light-text)">
                         {
-                            Math.round(Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) / 100)
+                            Math.floor(Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) / 100)
                         }% of Nouns 
                             </text>
                         )
                     }
 
-                    <text x={againstVotesLabelLineEnd[0][0] + 10} y={againstVotesLabelLineEnd[0][1] - 10}>Nouns Currently Against: {againstVotesAbs} → Current Quorum: {Math.round((
+                    <text x={againstVotesLabelLineEnd[0][0] + 10} y={againstVotesLabelLineEnd[0][1] - 10}>Nouns Currently Against: {againstVotesAbs} → Current Quorum: {Math.floor((
                         (Math.min(maxQuorumBps, dqmFunction(againstVotesBps))*totalNounSupply)/10_000
                     ))} 
                      </text>
 
 
                      <text x={againstVotesLabelLineEnd[0][0] + 10} y={310} fill="var(--brand-gray-light-text)">
-                        {Math.round(againstVotesBps/100)}% of Nouns  
+                        {Math.floor(againstVotesBps/100)}% of Nouns  
                      </text>
 
                   Sorry, your browser does not support inline SVG.
@@ -305,7 +305,7 @@ const DynamicQuorumInfoModal: React.FC<{
       )}
       {ReactDOM.createPortal(
         <DynamicQuorumInfoModalOverlay
-          againstVotesBps={Math.round((againstVotesAbsolute / data.auctions[0].id) * 10_000)}
+          againstVotesBps={Math.floor((againstVotesAbsolute / data.auctions[0].id) * 10_000)}
           minQuorumBps={dynamicQuorumProps?.minQuorumVotesBPS ?? 0}
           maxQuorumBps={dynamicQuorumProps?.maxQuorumVotesBPS ?? 0}
           quadraticCoefficent={dynamicQuorumProps?.quorumQuadraticCoefficient ? dynamicQuorumProps?.quorumQuadraticCoefficient/scalingFactor :  0}
