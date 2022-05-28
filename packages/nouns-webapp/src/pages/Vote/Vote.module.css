@@ -131,6 +131,6 @@
   margin-bottom: 0.05rem;
   margin-left: 0.1rem;
   color: var(--brand-gray-light-text);
-  opacity: 50%;
+  opacity: 0.5;
   cursor: pointer;
 }
