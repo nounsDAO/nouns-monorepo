@@ -35,6 +35,8 @@ import { i18n } from '@lingui/core';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
 import DynamicQuorumInfoModal from '../../components/DynamicQuorumInfoModal';
 import { InformationCircleIcon } from '@heroicons/react/solid';
+import { resolveConfigFile } from 'prettier';
+import { GOV_V2_UPGRADE_BLOCK } from '../../config';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -332,7 +334,7 @@ const VotePage = ({
                     <span>
                       <Trans>Quorum</Trans>
                       {
-                        proposal.status !== ProposalState.PENDING &&
+                        proposal.status !== ProposalState.PENDING  && proposal.startBlock > GOV_V2_UPGRADE_BLOCK &&
                         <InformationCircleIcon
                           className={classes.quorumInfoCircle}
                           onClick={() => setShowDynamicQuorumInfoModal(true)}
