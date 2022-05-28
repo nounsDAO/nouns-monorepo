@@ -35,7 +35,6 @@ import { i18n } from '@lingui/core';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
 import DynamicQuorumInfoModal from '../../components/DynamicQuorumInfoModal';
 import { InformationCircleIcon } from '@heroicons/react/solid';
-import { resolveConfigFile } from 'prettier';
 import { GOV_V2_UPGRADE_BLOCK } from '../../config';
 
 dayjs.extend(utc);
