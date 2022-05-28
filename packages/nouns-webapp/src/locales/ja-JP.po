@@ -18,6 +18,10 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "% of Nouns Currently Against"
+msgstr ""
+
 #: src/components/Documentation/index.tsx
 msgid "'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:"
 msgstr "「Nounders」とはNounsの創業に携わった10人の創業者のことであり、以下の人物で構成されています："
@@ -257,6 +261,10 @@ msgstr "Discourse"
 msgid "Docs"
 msgstr "ドキュメント"
 
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "Dynamic Quorum"
+msgstr ""
+
 #: src/components/Banner/index.tsx
 msgid "EVERY DAY,"
 msgstr "毎日"
@@ -400,6 +408,10 @@ msgstr "詳しくは以下をご覧ください。また、{playgroundLink} を�
 msgid "Loading..."
 msgstr "ロード中..."
 
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "More details on how dynamic quorum works can be found <0>here</0>."
+msgstr ""
+
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "Next"
 msgstr "次へ"
@@ -422,7 +434,6 @@ msgstr "提案が見つかりません"
 msgid "None"
 msgstr "なし"
 
-#: src/components/BidHistoryModal/index.tsx
 #: src/pages/Governance/index.tsx
 msgid "Noun"
 msgstr "Noun"
@@ -487,7 +498,8 @@ msgstr "Nounsプロトコル"
 
 #: src/components/Documentation/index.tsx
 msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community"
-msgstr "Nouns は、オンチェーン・アバターコミュニティの形成を改善するための実験的な試みです。 \n"
+msgstr ""
+"Nouns は、オンチェーン・アバターコミュニティの形成を改善するための実験的な試みです。 \n"
 "{cryptopunksLink} などのプロジェクトがデジタルコミュニティとアイデンティティの構築を試みているのに対し、Nounsはアイデンティティ、コミュニティ、ガバナンス、そしてコミュニティが使用できるトレジャリーを構築することを試みています。"
 
 #: src/components/Documentation/index.tsx
@@ -621,6 +633,10 @@ msgstr "定足数"
 msgid "Reason (Optional)"
 msgstr "理由\"(任意)\""
 
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "Required % of Nouns to Pass"
+msgstr ""
+
 #: src/components/LanguageSelectionModal/index.tsx
 msgid "Select Language"
 msgstr "言語を選択"
@@ -724,6 +740,10 @@ msgstr "Noundersの報酬は、プロジェクト開始前と開始後の貢献�
 #: src/components/Documentation/index.tsx
 msgid "The Nouns Auction Contract will act as a self-sufficient Noun generation and distribution mechanism, auctioning one Noun every 24 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the Nouns DAO treasury, where they are governed by Noun owners."
 msgstr "Nounsオークション契約は、Noun生成・分配の自律的なメカニズムとして機能するため、24時間ごとに1体のNounを永遠にオークションにかけ続けます。オークションの収益 (ETH) は100%自動的にNounの所有者によって管理されている、Nouns DAO のトレジャリーに預けられます。"
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "The Quorum (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. The number of For votes required to pass Proposal {0} is given by the following curve:"
+msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "The compressed parts are efficiently converted into a single base64 encoded SVG image on-chain. To accomplish this, each part is decoded into an intermediate format before being converted into a series of SVG rects using batched, on-chain string concatenation. Once the entire SVG has been generated, it is base64 encoded."
@@ -968,4 +988,3 @@ msgstr "{0} 票"
 #: src/pages/Vote/index.tsx
 msgid "{moveStateButtonAction} Proposal ⌐◧-◧"
 msgstr "{moveStateButtonAction} 提案の順番 ⌐◧-◧"
-
