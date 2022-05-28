@@ -82,6 +82,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
   quadraticCoefficent: number;
   linearCoefficent: number;
   offsetBps: number;
+  totalNounSupply: number;
   onDismiss: () => void;
 }> = props => {
   const {
@@ -93,6 +94,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
     quadraticCoefficent,
     linearCoefficent,
     offsetBps,
+    totalNounSupply
   } = props;
 
 
@@ -120,7 +122,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
       options
   );
 
-  console.log("START: ", againstVotesLabelLineStart);
+  console.log("START: ", dqmFunction(0));
 
   const againstVotesLabelLineEnd = pointsPositionsCalc(
       [[againstVotesBps, dqmFunction(againstVotesBps)]],
@@ -130,9 +132,13 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
   );
 
    // TODO --- FIX THIS WITH SUBGRAOH
-  const totalNounSupply = 45; // TODO get from chain at time of Prop snapshot
+  // const totalNounSupply = 34; // TODO get from chain at time of Prop snapshot
 
   const againstVotesAbs = Math.round((againstVotesBps/10_000)*totalNounSupply); // TODO get from chain
+
+  console.log("MIN Q:", minQuorumBps);
+  console.log("MAX Q:", maxQuorumBps);
+
 
   return (
     <>
@@ -290,8 +296,6 @@ const DynamicQuorumInfoModal: React.FC<{
     proposal.startBlock
   );
 
-  console.log(dynamicQuorumProps);
-
   if (error) {
     return <>Failed to fetch dynamic quorum info</>;
   }
@@ -308,7 +312,7 @@ const DynamicQuorumInfoModal: React.FC<{
       )}
       {ReactDOM.createPortal(
         <DynamicQuorumInfoModalOverlay
-          againstVotesBps={Math.round(againstVotesAbsolute / data.id / 10_000)}
+          againstVotesBps={Math.round((againstVotesAbsolute / data.auctions[0].id) * 10_000)}
           minQuorumBps={dynamicQuorumProps?.minQuorumVotesBPS ?? 0}
           maxQuorumBps={dynamicQuorumProps?.maxQuorumVotesBPS ?? 0}
           quadraticCoefficent={dynamicQuorumProps?.quorumQuadraticCoefficient ?? 0}
@@ -316,6 +320,7 @@ const DynamicQuorumInfoModal: React.FC<{
           offsetBps={dynamicQuorumProps?.quorumVotesBPSOffset ?? 0}
           onDismiss={onDismiss}
           proposal={proposal}
+          totalNounSupply={data.auctions[0].id}
         />,
         document.getElementById('overlay-root')!,
       )}

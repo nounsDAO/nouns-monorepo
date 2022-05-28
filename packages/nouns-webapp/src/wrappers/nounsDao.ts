@@ -195,9 +195,10 @@ export const useDynamicQuorumProps = (nounsDao: string, block: number): DynamicQ
       abi: abiV2,
        address: nounsDao,
       method: 'getDynamicQuorumParamsAt',
-      args: [block],
+      // args: [block],
+      args: [10748354],
     }) || [];
-
+   console.log("PARAMS", params);
   return params;
 }
 
