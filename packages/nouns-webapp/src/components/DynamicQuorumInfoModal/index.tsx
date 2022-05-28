@@ -294,6 +294,9 @@ const DynamicQuorumInfoModal: React.FC<{
     return <></>;
   }
 
+  // Polynomial coeffients are represented as fixed point number multiplied by 1e6, thus we need to divide by this number to rescale them
+  const scalingFactor = 1_000_000;
+
   return (
     <>
       {ReactDOM.createPortal(
@@ -305,8 +308,8 @@ const DynamicQuorumInfoModal: React.FC<{
           againstVotesBps={Math.round((againstVotesAbsolute / data.auctions[0].id) * 10_000)}
           minQuorumBps={dynamicQuorumProps?.minQuorumVotesBPS ?? 0}
           maxQuorumBps={dynamicQuorumProps?.maxQuorumVotesBPS ?? 0}
-          quadraticCoefficent={dynamicQuorumProps?.quorumQuadraticCoefficient ?? 0}
-          linearCoefficent={dynamicQuorumProps?.quorumLinearCoefficient ?? 0}
+          quadraticCoefficent={dynamicQuorumProps?.quorumQuadraticCoefficient ? dynamicQuorumProps?.quorumQuadraticCoefficient/scalingFactor :  0}
+          linearCoefficent={dynamicQuorumProps?.quorumLinearCoefficient ? dynamicQuorumProps?.quorumLinearCoefficient/scalingFactor : 0}
           offsetBps={dynamicQuorumProps?.quorumVotesBPSOffset ?? 0}
           onDismiss={onDismiss}
           proposal={proposal}
