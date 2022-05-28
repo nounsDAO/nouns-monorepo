@@ -122,8 +122,6 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
       options
   );
 
-  console.log("START: ", dqmFunction(0));
-
   const againstVotesLabelLineEnd = pointsPositionsCalc(
       [[againstVotesBps, dqmFunction(againstVotesBps)]],
       320*2.5*1.25,
@@ -131,14 +129,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
       options
   );
 
-   // TODO --- FIX THIS WITH SUBGRAOH
-  // const totalNounSupply = 34; // TODO get from chain at time of Prop snapshot
-
-  const againstVotesAbs = Math.round((againstVotesBps/10_000)*totalNounSupply); // TODO get from chain
-
-  console.log("MIN Q:", minQuorumBps);
-  console.log("MAX Q:", maxQuorumBps);
-
+  const againstVotesAbs = Math.round((againstVotesBps/10_000)*totalNounSupply);
 
   return (
     <>
@@ -222,7 +213,6 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                     fill='var(--brand-gray-light-text)'
                     />
 
-                    {/* <text x="20" y="24">Max Quorum: {Math.round((maxQuorumBps*totalNounSupply)/10_000)} Nouns ({maxQuorumBps/100}% of Nouns)</text> */}
                     <text x="20" y="24">Max Quorum: {Math.round((maxQuorumBps*totalNounSupply)/10_000)} Nouns</text>
                     <text x="195" y="24" fill="var(--brand-gray-light-text)">({maxQuorumBps/100}% of Nouns)</text>
 
