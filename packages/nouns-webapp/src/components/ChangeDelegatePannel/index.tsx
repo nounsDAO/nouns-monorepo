@@ -1,18 +1,14 @@
-import { useQuery } from '@apollo/client';
 import { Trans } from '@lingui/macro';
-import { useContractFunction, useEthers } from '@usedapp/core';
+import { useEthers } from '@usedapp/core';
 import clsx from 'clsx';
 import { isAddress } from 'ethers/lib/utils';
 import React, { useEffect, useState } from 'react';
 import { Collapse, FormControl } from 'react-bootstrap';
-import account from '../../state/slices/account';
 import currentDelegatePannelClasses from '../CurrentDelegatePannel/CurrentDelegatePannel.module.css';
 import DelegationCandidateInfo from '../DelegationCandidateInfo';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import ShortAddress from '../ShortAddress';
 import classes from './ChangeDelegatePannel.module.css';
-import { NounsTokenFactory } from '@nouns/sdk';
-import config from '../../config';
 import { useDelegateVotes, useUserVotes } from '../../wrappers/nounToken';
 
 enum ChangeDelegateState {
@@ -51,7 +47,24 @@ const ChangeDelegatePannel = () => {
   const [delegateInputText, setDelegateInputText] = useState('');
   const [delegateInputClass, setDelegateInputClass] = useState<string>('');
   const availableVotes = useUserVotes() ?? 0;
-  const {send, state: delageeState} = useDelegateVotes(delegateAddress);
+  const {send: delegateVotes, state: delageeState} = useDelegateVotes(delegateAddress);
+
+
+
+  useEffect(() => {
+    if (delageeState.status === 'Success') {
+      setChangeDelegateState(ChangeDelegateState.CHANGE_SUCCESS);
+    }
+
+    if (delageeState.status === 'Exception' || delageeState.status === 'Fail') {
+      setChangeDelegateState(ChangeDelegateState.CHANGE_FAILURE);
+    }
+
+    if (delageeState.status === 'Mining') {
+      setChangeDelegateState(ChangeDelegateState.CHANGING);
+    }
+
+  }, [delageeState]);
 
 
   useEffect(() => {
@@ -120,7 +133,7 @@ const ChangeDelegatePannel = () => {
           {isAddress(delegateAddress) && (
             <DelegationCandidateInfo
               address={delegateAddress || ''}
-              currentBlockNumber={currentBlockNumber}
+              isChanging={changeDelegateState === ChangeDelegateState.CHANGING}
             />
           )}
         </div>
@@ -155,8 +168,7 @@ const ChangeDelegatePannel = () => {
           }
           buttonStyle={NavBarButtonStyle.DELEGATE_SECONDARY}
           onClick={() => {
-            send(delegateAddress);
-            setChangeDelegateState(ChangeDelegateState.CHANGE_SUCCESS)
+            delegateVotes(delegateAddress);
           }}
         />
       </div>

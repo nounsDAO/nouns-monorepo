@@ -6,6 +6,7 @@ import { useQuery } from '@apollo/client';
 import { seedsQuery } from './subgraph';
 import { useEffect } from 'react';
 import { ContractFunctionNames } from '@usedapp/core/dist/esm/src/model/types';
+import { NounsToken } from '@nouns/contracts/typechain/NounsToken';
 
 interface NounToken {
   name: string;
@@ -19,6 +20,10 @@ export interface INounSeed {
   body: number;
   glasses: number;
   head: number;
+}
+
+export enum NounsTokenContractFunction {
+  delegateVotes='votesToDelegate',
 }
 
 const abi = new utils.Interface(NounsTokenABI);
@@ -152,8 +157,7 @@ export const useDelegateVotes = (delagee: string) => {
 
   const { send, state } = useContractFunction(
     nounsToken,
-    // 'votesToDelegate' 
-    'votesToDelegate' as ContractFunctionNames<NounsToken>
+    'delegate'
   ); 
 
   return {send, state}
