@@ -12,7 +12,7 @@ import { useMemo } from 'react';
 import { useLogs } from '../hooks/useLogs';
 import * as R from 'ramda';
 import config, { CHAIN_ID } from '../config';
-import NounsDAOLogicV2ABI from "./nounsDaoLogicV2ABI.json";
+import NounsDAOLogicV2ABI from './nounsDaoLogicV2ABI.json';
 
 export enum Vote {
   AGAINST = 0,
@@ -94,7 +94,6 @@ export interface DynamicQuorumParams {
   quorumLinearCoefficient: number;
   quorumQuadraticCoefficient: number;
 }
-
 
 const abi = new utils.Interface(NounsDAOABI);
 const abiV2 = new utils.Interface(NounsDAOLogicV2ABI);
@@ -189,18 +188,20 @@ const useVotingDelay = (nounsDao: string): number | undefined => {
   return blockDelay?.toNumber();
 };
 
-export const useDynamicQuorumProps = (nounsDao: string, block: number): DynamicQuorumParams | undefined => {
+export const useDynamicQuorumProps = (
+  nounsDao: string,
+  block: number,
+): DynamicQuorumParams | undefined => {
   const [params] =
     useContractCall<[DynamicQuorumParams]>({
       abi: abiV2,
-       address: nounsDao,
+      address: nounsDao,
       method: 'getDynamicQuorumParamsAt',
       args: [block],
     }) || [];
-   console.log("PARAMS", params);
+  console.log('PARAMS', params);
   return params;
-}
-
+};
 
 const countToIndices = (count: number | undefined) => {
   return typeof count === 'number' ? new Array(count).fill(0).map((_, i) => [i + 1]) : [];

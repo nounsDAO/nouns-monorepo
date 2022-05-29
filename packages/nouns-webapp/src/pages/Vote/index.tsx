@@ -332,13 +332,13 @@ const VotePage = ({
                   <div className={classes.thresholdInfo}>
                     <span>
                       <Trans>Quorum</Trans>
-                      {
-                        proposal.status !== ProposalState.PENDING  && proposal.startBlock > GOV_V2_UPGRADE_BLOCK &&
-                        <InformationCircleIcon
-                          className={classes.quorumInfoCircle}
-                          onClick={() => setShowDynamicQuorumInfoModal(true)}
-                        />
-                      }
+                      {proposal.status !== ProposalState.PENDING &&
+                        proposal.startBlock > GOV_V2_UPGRADE_BLOCK && (
+                          <InformationCircleIcon
+                            className={classes.quorumInfoCircle}
+                            onClick={() => setShowDynamicQuorumInfoModal(true)}
+                          />
+                        )}
                     </span>
                     <h3>
                       <Trans>{i18n.number(proposal.quorumVotes)} votes</Trans>

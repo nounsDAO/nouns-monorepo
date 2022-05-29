@@ -214,6 +214,29 @@
   margin-top: 2rem;
 }
 
+@media (max-width: 1200px) {
+  .outterGraphContainer {
+    display: none;
+  }
+}
+
+.mobileQuorumInfo {
+  display: flex;
+  justify-content: space-between;
+  font-size: large;
+  color: white;
+  font-weight: 500;
+}
+
+.mobileQuorumInfo span {
+  font-size: x-large;
+  font-weight: bold;
+}
+
+.mobileQuorumWrapper {
+  margin-top: 3rem;
+}
+
 .innerGraphContainer {
   background-color: white;
   box-shadow: none;
