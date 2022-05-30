@@ -1,8 +1,6 @@
 import { Trans } from '@lingui/macro';
 import React from 'react';
-import { Spinner } from 'react-bootstrap';
 import BrandSpinner from '../BrandSpinner';
-import classes from './DelegationCandidateVoteCountInfoProps.module.css';
 
 interface DelegationCandidateVoteCountInfoProps {
   text: React.ReactNode;
@@ -15,11 +13,11 @@ const DelegationCandidateVoteCountInfo: React.FC<DelegationCandidateVoteCountInf
 
   return (
     <div style={{ display: 'flex' }}>
-      {isLoading &&
-        <div style={{marginRight: '0.5rem'}}>
+      {isLoading && (
+        <div style={{ marginRight: '0.5rem' }}>
           <BrandSpinner />
         </div>
-      }
+      )}
       <div
         style={{
           display: 'flex',
