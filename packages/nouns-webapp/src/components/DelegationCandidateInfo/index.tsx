@@ -1,29 +1,58 @@
-import { useQuery } from '@apollo/client';
 import Avatar from '@davatar/react';
 import { Trans } from '@lingui/macro';
 import React from 'react';
 import { Spinner } from 'react-bootstrap';
 import { useShortAddress } from '../../utils/addressAndENSDisplayUtils';
 import ShortAddress from '../ShortAddress';
-import { union } from 'lodash';
 import { useAccountVotes } from '../../wrappers/nounToken';
 import { useEthers } from '@usedapp/core/dist/cjs/src';
+import { ChangeDelegateState } from '../ChangeDelegatePannel';
+import { usePickByState } from '../../utils/pickByState';
+import DelegationCandidateVoteCountInfo from '../DelegationCandidateVoteCountInfo';
 
 interface DelegationCandidateInfoProps {
   address: string;
-  isChanging: boolean;
+  changeModalState: ChangeDelegateState;
 }
 
 const DelegationCandidateInfoProps: React.FC<DelegationCandidateInfoProps> = props => {
-  const { address, isChanging } = props;
+  const { address, changeModalState } = props;
 
   const shortAddress = useShortAddress(address);
-  const {account} = useEthers();
+  const { account } = useEthers();
 
   const votes = useAccountVotes(address);
-  const votesToAdd = useAccountVotes(account);
+  const votesToAdd = useAccountVotes(account) || 0;
 
   const countDelegatedNouns = votes ?? 0;
+
+  const changeDelegateInfo = usePickByState(
+    changeModalState,
+    [
+      ChangeDelegateState.ENTRY_DELEGEE,
+      ChangeDelegateState.CHANGING,
+      ChangeDelegateState.CHANGE_SUCCESS,
+    ],
+    [
+      <DelegationCandidateVoteCountInfo
+        text={countDelegatedNouns > 0 ? <Trans>Already has</Trans> : <Trans>Has</Trans>}
+        voteCount={countDelegatedNouns}
+        isLoading={false}
+      />,
+      <DelegationCandidateVoteCountInfo
+        text={<Trans>Will have</Trans>}
+        voteCount={countDelegatedNouns + votesToAdd}
+        isLoading={true}
+      />,
+      <DelegationCandidateVoteCountInfo
+        text={<Trans>Now has</Trans>}
+        // TODO confirm this is correct
+        voteCount={countDelegatedNouns + votesToAdd}
+        isLoading={false}
+      />,
+    ],
+  );
+
   if (votes === null) {
     return (
       <div
@@ -48,7 +77,8 @@ const DelegationCandidateInfoProps: React.FC<DelegationCandidateInfoProps> = pro
           flexDirection: 'row',
           marginTop: '0.75rem',
           justifyContent: 'space-between',
-          backgroundColor: 'red',
+          paddingLeft: '0.5rem',
+          paddingRight: '0.5rem',
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
@@ -78,51 +108,7 @@ const DelegationCandidateInfoProps: React.FC<DelegationCandidateInfoProps> = pro
         </div>
 
         {/* Current Delegation Info */}
-        {
-          isChanging ? (
-              <>
-              <div style={{display: 'flex'}}>
-                <Spinner animation="border"/>
-               <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                }}
-              >
-                <div>
-                  <Trans>Will have</Trans>
-                </div>
-                <div>
-                  <Trans>{countDelegatedNouns + (votesToAdd ?? 0)} Votes</Trans>
-                </div>
-              </div>
-              </div>
-              </>
-          ) : (
-            <div>
-            {countDelegatedNouns > 0 ? (
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                }}
-              >
-                <div>
-                  <Trans>Already has</Trans>
-                </div>
-                <div>
-                  <Trans>{countDelegatedNouns} Votes</Trans>
-                </div>
-              </div>
-            ) : (
-              <div>
-                <Trans>No Nouns Delegates</Trans>
-              </div>
-            )}
-          </div>
-          )
-        }
-        
+        {changeDelegateInfo}
       </div>
     </>
   );

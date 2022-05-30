@@ -7,11 +7,10 @@ import { Collapse, FormControl } from 'react-bootstrap';
 import currentDelegatePannelClasses from '../CurrentDelegatePannel/CurrentDelegatePannel.module.css';
 import DelegationCandidateInfo from '../DelegationCandidateInfo';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
-import ShortAddress from '../ShortAddress';
 import classes from './ChangeDelegatePannel.module.css';
 import { useDelegateVotes, useUserVotes } from '../../wrappers/nounToken';
 
-enum ChangeDelegateState {
+export enum ChangeDelegateState {
   ENTRY_DELEGEE,
   CHANGING,
   CHANGE_SUCCESS,
@@ -47,9 +46,7 @@ const ChangeDelegatePannel = () => {
   const [delegateInputText, setDelegateInputText] = useState('');
   const [delegateInputClass, setDelegateInputClass] = useState<string>('');
   const availableVotes = useUserVotes() ?? 0;
-  const {send: delegateVotes, state: delageeState} = useDelegateVotes(delegateAddress);
-
-
+  const { send: delegateVotes, state: delageeState } = useDelegateVotes(delegateAddress);
 
   useEffect(() => {
     if (delageeState.status === 'Success') {
@@ -63,9 +60,7 @@ const ChangeDelegatePannel = () => {
     if (delageeState.status === 'Mining') {
       setChangeDelegateState(ChangeDelegateState.CHANGING);
     }
-
   }, [delageeState]);
-
 
   useEffect(() => {
     const getCurrentBlockNumber = async () => {
@@ -133,7 +128,7 @@ const ChangeDelegatePannel = () => {
           {isAddress(delegateAddress) && (
             <DelegationCandidateInfo
               address={delegateAddress || ''}
-              isChanging={changeDelegateState === ChangeDelegateState.CHANGING}
+              changeModalState={changeDelegateState}
             />
           )}
         </div>
@@ -146,24 +141,26 @@ const ChangeDelegatePannel = () => {
           buttonStyle={NavBarButtonStyle.DELEGATE_BACK}
           onClick={() => console.log('close')}
         />
+        {changeDelegateState === ChangeDelegateState.ENTRY_DELEGEE && (
+          <div
+            className={clsx(
+              classes.customButtonHighlighter,
+              isAddress(delegateAddress) && classes.extened,
+            )}
+          />
+        )}
         <NavBarButton
           // TODO make button color and style state dependant
           buttonText={
-            <span>
-              Delegate{' '}
-              <span
-                style={{
-                  borderRadius: '50%',
-                  height: '25px',
-                  width: '25px',
-                  display: 'inline-block',
-                  alignItems: 'center',
-                  backgroundColor: 'rgba(255,255,255,.25)',
-                }}
-              >
-                {availableVotes}
-              </span>{' '}
-              Votes
+            <span style={{ zIndex: '101' }}>
+              <Trans>
+                Delegate{' '}
+                <span style={{ marginLeft: '0.2rem', marginRight: '0.2rem' }}>
+                  {' '}
+                  {availableVotes}{' '}
+                </span>{' '}
+                votes
+              </Trans>
             </span>
           }
           buttonStyle={NavBarButtonStyle.DELEGATE_SECONDARY}

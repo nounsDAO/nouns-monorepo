@@ -23,7 +23,7 @@ export interface INounSeed {
 }
 
 export enum NounsTokenContractFunction {
-  delegateVotes='votesToDelegate',
+  delegateVotes = 'votesToDelegate',
 }
 
 const abi = new utils.Interface(NounsTokenABI);
@@ -151,14 +151,9 @@ export const useUserVotesAsOfBlock = (block: number | undefined): number | undef
 };
 
 export const useDelegateVotes = (delagee: string) => {
-  const nounsToken = new NounsTokenFactory().attach(
-    config.addresses.nounsToken,
-  );
+  const nounsToken = new NounsTokenFactory().attach(config.addresses.nounsToken);
 
-  const { send, state } = useContractFunction(
-    nounsToken,
-    'delegate'
-  ); 
+  const { send, state } = useContractFunction(nounsToken, 'delegate');
 
-  return {send, state}
+  return { send, state };
 };
