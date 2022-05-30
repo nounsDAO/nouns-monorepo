@@ -158,3 +158,11 @@
 .delegateSecondary:hover {
   filter: brightness(200%);
 }
+
+.delegateDisabled {
+  background-color: var(--brand-color-blue);
+  opacity: 0.5;
+  color: white;
+  width: 315px;
+  border: none;
+}

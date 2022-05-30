@@ -9,6 +9,12 @@ import DelegationCandidateInfo from '../DelegationCandidateInfo';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import classes from './ChangeDelegatePannel.module.css';
 import { useDelegateVotes, useUserVotes } from '../../wrappers/nounToken';
+import { usePickByState } from '../../utils/pickByState';
+import { buildEtherscanTxLink } from '../../utils/etherscan';
+
+interface ChangeDelegatePannelProps {
+  onDismiss: () => void;
+}
 
 export enum ChangeDelegateState {
   ENTRY_DELEGEE,
@@ -34,7 +40,9 @@ const getTitleFromState = (state: ChangeDelegateState) => {
   }
 };
 
-const ChangeDelegatePannel = () => {
+const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
+  const { onDismiss } = props;
+
   const [changeDelegateState, setChangeDelegateState] = useState<ChangeDelegateState>(
     ChangeDelegateState.ENTRY_DELEGEE,
   );
@@ -93,18 +101,95 @@ const ChangeDelegatePannel = () => {
     }
   }, [delegateAddress]);
 
+  const etherscanTxLink = buildEtherscanTxLink(delageeState.transaction?.hash ?? '');
+
+  const primaryButton = usePickByState(
+    changeDelegateState,
+    [
+      ChangeDelegateState.ENTRY_DELEGEE,
+      ChangeDelegateState.CHANGING,
+      ChangeDelegateState.CHANGE_SUCCESS,
+      ChangeDelegateState.CHANGE_FAILURE,
+    ],
+    [
+      <NavBarButton
+        // TODO make button color and style state dependant
+        buttonText={
+          <span style={{ zIndex: '101' }}>
+            <Trans>
+              Delegate{' '}
+              <span style={{ marginLeft: '0.2rem', marginRight: '0.2rem' }}>
+                {' '}
+                {availableVotes}{' '}
+              </span>{' '}
+              votes
+            </Trans>
+          </span>
+        }
+        buttonStyle={
+          isAddress(delegateAddress)
+            ? NavBarButtonStyle.DELEGATE_SECONDARY
+            : NavBarButtonStyle.DELEGATE_DISABLED
+        }
+        onClick={() => {
+          delegateVotes(delegateAddress);
+        }}
+        disabled={
+          changeDelegateState === ChangeDelegateState.ENTRY_DELEGEE && !isAddress(delegateAddress)
+        }
+      />,
+      <NavBarButton
+        // TODO make button color and style state dependant
+        buttonText={<Trans>View on Etherscan</Trans>}
+        buttonStyle={NavBarButtonStyle.DELEGATE_PRIMARY}
+        onClick={() => {
+          window.open(etherscanTxLink, '_blank')?.focus();
+        }}
+        disabled={false}
+      />,
+      <NavBarButton
+        buttonText={<Trans>Close</Trans>}
+        buttonStyle={NavBarButtonStyle.DELEGATE_SECONDARY}
+        onClick={onDismiss}
+      />,
+      <></>,
+    ],
+  );
+
+  const primaryCopy = usePickByState(
+    changeDelegateState,
+    [
+      ChangeDelegateState.ENTRY_DELEGEE,
+      ChangeDelegateState.CHANGING,
+      ChangeDelegateState.CHANGE_SUCCESS,
+      ChangeDelegateState.CHANGE_FAILURE,
+    ],
+    // eslint-disable-next-line no-sparse-arrays
+    [
+      <Trans>
+        Enter the Ethereum address or ENS name of the account you would like to delegate your votes
+        to.
+      </Trans>,
+      <Trans>
+        Your <span style={{ fontWeight: 'bold' }}>{availableVotes}</span> votes are being delegated
+        to a new account.
+      </Trans>,
+      <Trans>
+        Your <span style={{ fontWeight: 'bold' }}>{availableVotes}</span> votes have been delegated
+        to a new account.
+      </Trans>,
+      ,
+      <>{delageeState.errorMessage}</>,
+    ],
+  );
+
   return (
     <>
       <div className={currentDelegatePannelClasses.wrapper}>
         <h1 className={currentDelegatePannelClasses.title}>
           {getTitleFromState(changeDelegateState)}
         </h1>
-        <p className={currentDelegatePannelClasses.copy}>
-          <Trans>
-            Enter the Ethereum address or ENS name of the account you would like to delegate your
-            votes to.
-          </Trans>
-        </p>
+        <p className={currentDelegatePannelClasses.copy}>{primaryCopy}</p>
       </div>
 
       <FormControl
@@ -137,9 +222,23 @@ const ChangeDelegatePannel = () => {
       {/* Button section */}
       <div className={classes.buttonWrapper}>
         <NavBarButton
-          buttonText={<Trans>Close</Trans>}
+          buttonText={
+            changeDelegateState === ChangeDelegateState.CHANGE_SUCCESS ? (
+              <Trans>Change</Trans>
+            ) : (
+              <Trans>Close</Trans>
+            )
+          }
           buttonStyle={NavBarButtonStyle.DELEGATE_BACK}
-          onClick={() => console.log('close')}
+          onClick={
+            changeDelegateState === ChangeDelegateState.CHANGE_SUCCESS
+              ? () => {
+                  setDelegateAddress('');
+                  setDelegateInputText('');
+                  setChangeDelegateState(ChangeDelegateState.ENTRY_DELEGEE);
+                }
+              : onDismiss
+          }
         />
         {changeDelegateState === ChangeDelegateState.ENTRY_DELEGEE && (
           <div
@@ -149,25 +248,7 @@ const ChangeDelegatePannel = () => {
             )}
           />
         )}
-        <NavBarButton
-          // TODO make button color and style state dependant
-          buttonText={
-            <span style={{ zIndex: '101' }}>
-              <Trans>
-                Delegate{' '}
-                <span style={{ marginLeft: '0.2rem', marginRight: '0.2rem' }}>
-                  {' '}
-                  {availableVotes}{' '}
-                </span>{' '}
-                votes
-              </Trans>
-            </span>
-          }
-          buttonStyle={NavBarButtonStyle.DELEGATE_SECONDARY}
-          onClick={() => {
-            delegateVotes(delegateAddress);
-          }}
-        />
+        {primaryButton}
       </div>
     </>
   );

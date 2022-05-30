@@ -28,7 +28,7 @@ const DelegationModalOverlay: React.FC<{
 
       <div className={classes.modal}>
         {isChangingDelegation ? (
-          <ChangeDelegatePannel />
+          <ChangeDelegatePannel onDismiss={onDismiss} />
         ) : (
           <CurrentDelegatePannel
             onPrimaryBtnClick={() => setIsChangingDelegation(true)}

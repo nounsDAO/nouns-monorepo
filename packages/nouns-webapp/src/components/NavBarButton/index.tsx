@@ -12,6 +12,7 @@ export enum NavBarButtonStyle {
   DELEGATE_BACK,
   DELEGATE_PRIMARY,
   DELEGATE_SECONDARY,
+  DELEGATE_DISABLED,
 }
 
 interface NavBarButtonProps {
@@ -19,6 +20,7 @@ interface NavBarButtonProps {
   buttonIcon?: React.ReactNode;
   buttonStyle?: NavBarButtonStyle;
   onClick?: (e?: any) => void;
+  disabled?: boolean;
 }
 
 export const getNavBarButtonVariant = (buttonStyle?: NavBarButtonStyle) => {
@@ -56,6 +58,9 @@ export const getNavBarButtonVariant = (buttonStyle?: NavBarButtonStyle) => {
     case NavBarButtonStyle.DELEGATE_SECONDARY: {
       return classes.delegateSecondary;
     }
+    case NavBarButtonStyle.DELEGATE_DISABLED: {
+      return classes.delegateDisabled;
+    }
     default: {
       return classes.info;
     }
@@ -63,15 +68,22 @@ export const getNavBarButtonVariant = (buttonStyle?: NavBarButtonStyle) => {
 };
 
 const NavBarButton: React.FC<NavBarButtonProps> = props => {
-  const { buttonText, buttonIcon, buttonStyle, onClick } = props;
+  const { buttonText, buttonIcon, buttonStyle, onClick, disabled } = props;
+
+  let isDisabled = disabled ?? false;
 
   return (
     <>
       <div
         className={`${classes.wrapper} ${getNavBarButtonVariant(buttonStyle)}`}
-        onClick={onClick}
+        onClick={isDisabled ? () => {} : onClick}
       >
-        <div className={classes.button}>
+        <div
+          className={classes.button}
+          style={{
+            cursor: isDisabled ? 'not-allowed' : 'pointer',
+          }}
+        >
           {buttonIcon && <div className={classes.icon}>{buttonIcon}</div>}
           <div>{buttonText}</div>
         </div>
