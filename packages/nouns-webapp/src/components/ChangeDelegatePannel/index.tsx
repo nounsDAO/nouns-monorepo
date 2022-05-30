@@ -107,12 +107,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
         buttonText={
           <span className={classes.delegateKVotesBtn}>
             <Trans>
-              Delegate{' '}
-              <span>
-                {' '}
-                {availableVotes}{' '}
-              </span>{' '}
-              votes
+              Delegate <span> {availableVotes} </span> votes
             </Trans>
           </span>
         }
@@ -125,7 +120,8 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
           delegateVotes(delegateAddress);
         }}
         disabled={
-          changeDelegateState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS && !isAddress(delegateAddress)
+          changeDelegateState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS &&
+          !isAddress(delegateAddress)
         }
       />,
       <NavBarButton
@@ -183,7 +179,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
 
       {!(changeDelegateState === ChangeDelegateState.CHANGE_FAILURE) && (
         <FormControl
-          className={clsx(classes.bidInput, delegateInputClass)}
+          className={clsx(classes.delegateInput, delegateInputClass)}
           type="string"
           onChange={e => {
             setDelegateAddress(e.target.value);
@@ -200,9 +196,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
           !(changeDelegateState === ChangeDelegateState.CHANGE_FAILURE)
         }
       >
-        <div
-          className={classes.delegateCandidateInfoWrapper}
-        >
+        <div className={classes.delegateCandidateInfoWrapper}>
           {isAddress(delegateAddress) && (
             <DelegationCandidateInfo
               address={delegateAddress || ''}

@@ -1,4 +1,4 @@
-.bidInput {
+.delegateInput {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -16,9 +16,8 @@
   transition: all 0.2s ease-in-out;
 }
 
-.bidInput:focus {
+.delegateInput:focus {
   box-shadow: none !important;
-  /* box-shadow: inset 0px 0px 0px 1px var(--brand-cool-dark-text) !important; */
 }
 
 .empty {
