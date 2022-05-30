@@ -17,7 +17,7 @@ interface ChangeDelegatePannelProps {
 }
 
 export enum ChangeDelegateState {
-  ENTRY_DELEGEE,
+  ENTER_DELEGATE_ADDRESS,
   CHANGING,
   CHANGE_SUCCESS,
   CHANGE_FAILURE,
@@ -44,7 +44,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
   const { onDismiss } = props;
 
   const [changeDelegateState, setChangeDelegateState] = useState<ChangeDelegateState>(
-    ChangeDelegateState.ENTRY_DELEGEE,
+    ChangeDelegateState.ENTER_DELEGATE_ADDRESS,
   );
 
   const { library } = useEthers();
@@ -97,19 +97,18 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
   const primaryButton = usePickByState(
     changeDelegateState,
     [
-      ChangeDelegateState.ENTRY_DELEGEE,
+      ChangeDelegateState.ENTER_DELEGATE_ADDRESS,
       ChangeDelegateState.CHANGING,
       ChangeDelegateState.CHANGE_SUCCESS,
       ChangeDelegateState.CHANGE_FAILURE,
     ],
     [
       <NavBarButton
-        // TODO make button color and style state dependant
         buttonText={
-          <span style={{ zIndex: '101' }}>
+          <span className={classes.delegateKVotesBtn}>
             <Trans>
               Delegate{' '}
-              <span style={{ marginLeft: '0.2rem', marginRight: '0.2rem' }}>
+              <span>
                 {' '}
                 {availableVotes}{' '}
               </span>{' '}
@@ -126,11 +125,10 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
           delegateVotes(delegateAddress);
         }}
         disabled={
-          changeDelegateState === ChangeDelegateState.ENTRY_DELEGEE && !isAddress(delegateAddress)
+          changeDelegateState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS && !isAddress(delegateAddress)
         }
       />,
       <NavBarButton
-        // TODO make button color and style state dependant
         buttonText={<Trans>View on Etherscan</Trans>}
         buttonStyle={NavBarButtonStyle.DELEGATE_PRIMARY}
         onClick={() => {
@@ -150,7 +148,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
   const primaryCopy = usePickByState(
     changeDelegateState,
     [
-      ChangeDelegateState.ENTRY_DELEGEE,
+      ChangeDelegateState.ENTER_DELEGATE_ADDRESS,
       ChangeDelegateState.CHANGING,
       ChangeDelegateState.CHANGE_SUCCESS,
       ChangeDelegateState.CHANGE_FAILURE,
@@ -203,10 +201,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
         }
       >
         <div
-          style={{
-            padding: '0rem 0.25rem 0rem',
-            marginTop: '0.5rem',
-          }}
+          className={classes.delegateCandidateInfoWrapper}
         >
           {isAddress(delegateAddress) && (
             <DelegationCandidateInfo
@@ -217,7 +212,6 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
         </div>
       </Collapse>
 
-      {/* Button section */}
       <div className={classes.buttonWrapper}>
         <NavBarButton
           buttonText={
@@ -233,12 +227,12 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
               ? () => {
                   setDelegateAddress('');
                   setDelegateInputText('');
-                  setChangeDelegateState(ChangeDelegateState.ENTRY_DELEGEE);
+                  setChangeDelegateState(ChangeDelegateState.ENTER_DELEGATE_ADDRESS);
                 }
               : onDismiss
           }
         />
-        {changeDelegateState === ChangeDelegateState.ENTRY_DELEGEE && (
+        {changeDelegateState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS && (
           <div
             className={clsx(
               classes.customButtonHighlighter,

@@ -55,6 +55,20 @@
   top: 85.15%;
 }
 
+.delegateKVotesBtn {
+  z-index: 101;
+}
+
+.delegateKVotesBtn span {
+  margin-left: 0.2rem;
+  margin-right: 0.2rem;
+}
+
+.delegateCandidateInfoWrapper {
+  padding: 0rem 0.25rem 0.25rem 0rem;
+  margin-top: 0.5rem;
+}
+
 @media (max-width: 992px) {
   .customButtonHighlighter {
     top: 24.15%;

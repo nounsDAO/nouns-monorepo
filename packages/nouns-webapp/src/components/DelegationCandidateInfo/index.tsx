@@ -29,7 +29,7 @@ const DelegationCandidateInfo: React.FC<DelegationCandidateInfoProps> = props =>
   const changeDelegateInfo = usePickByState(
     changeModalState,
     [
-      ChangeDelegateState.ENTRY_DELEGEE,
+      ChangeDelegateState.ENTER_DELEGATE_ADDRESS,
       ChangeDelegateState.CHANGING,
       ChangeDelegateState.CHANGE_SUCCESS,
     ],
