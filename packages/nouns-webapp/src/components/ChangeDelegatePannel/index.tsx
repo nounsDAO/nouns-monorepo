@@ -192,7 +192,10 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
         <p className={currentDelegatePannelClasses.copy}>{primaryCopy}</p>
       </div>
 
-      <FormControl
+      {
+        
+        !(changeDelegateState === ChangeDelegateState.CHANGE_FAILURE)  &&
+        <FormControl
         className={clsx(classes.bidInput, delegateInputClass)}
         type="string"
         onChange={e => {
@@ -202,8 +205,9 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
         value={delegateInputText}
         placeholder={'0x... or ...eth'}
       />
-
-      <Collapse in={isAddress(delegateAddress)}>
+      }
+      
+      <Collapse in={isAddress(delegateAddress) && !(changeDelegateState === ChangeDelegateState.CHANGE_FAILURE)}>
         <div
           style={{
             padding: '0rem 0.25rem 0rem',
