@@ -5,8 +5,6 @@ import config, { cache, cacheKey, CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
 import { seedsQuery } from './subgraph';
 import { useEffect } from 'react';
-import { ContractFunctionNames } from '@usedapp/core/dist/esm/src/model/types';
-import { NounsToken } from '@nouns/contracts/typechain/NounsToken';
 
 interface NounToken {
   name: string;

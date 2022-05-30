@@ -15,7 +15,7 @@ interface DelegationCandidateInfoProps {
   changeModalState: ChangeDelegateState;
 }
 
-const DelegationCandidateInfoProps: React.FC<DelegationCandidateInfoProps> = props => {
+const DelegationCandidateInfo: React.FC<DelegationCandidateInfoProps> = props => {
   const { address, changeModalState } = props;
 
   const shortAddress = useShortAddress(address);
@@ -114,4 +114,4 @@ const DelegationCandidateInfoProps: React.FC<DelegationCandidateInfoProps> = pro
   );
 };
 
-export default DelegationCandidateInfoProps;
+export default DelegationCandidateInfo;

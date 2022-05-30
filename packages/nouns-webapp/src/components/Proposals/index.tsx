@@ -85,8 +85,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
         <h3 className={classes.heading}>
           <Trans>Proposals</Trans>
         </h3>
-        {/* {account !== undefined && connectedAccountNounVotes > 0 ? ( */}
-        {true ? (
+        {account !== undefined && connectedAccountNounVotes > 0 ? (
           <div className={classes.nounInWalletBtnWrapper}>
             <div className={classes.submitProposalButtonWrapper}>
               <Button

@@ -1,9 +1,7 @@
 import { Trans } from '@lingui/macro';
 import { useEthers } from '@usedapp/core';
 import React from 'react';
-import account from '../../state/slices/account';
 import { useShortAddress } from '../../utils/addressAndENSDisplayUtils';
-import delegationModalClasses from '../DelegationModal/DelegationModal.module.css';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import ShortAddress from '../ShortAddress';
 import classes from './CurrentDelegatePannel.module.css';

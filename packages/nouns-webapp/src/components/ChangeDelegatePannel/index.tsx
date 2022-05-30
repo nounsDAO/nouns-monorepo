@@ -49,7 +49,6 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
 
   const { library } = useEthers();
 
-  const [currentBlockNumber, setCurrentBlockNumber] = useState(0);
   const [delegateAddress, setDelegateAddress] = useState('');
   const [delegateInputText, setDelegateInputText] = useState('');
   const [delegateInputClass, setDelegateInputClass] = useState<string>('');
@@ -69,14 +68,6 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
       setChangeDelegateState(ChangeDelegateState.CHANGING);
     }
   }, [delageeState]);
-
-  useEffect(() => {
-    const getCurrentBlockNumber = async () => {
-      setCurrentBlockNumber((await library?.getBlockNumber()) ?? 0);
-    };
-
-    getCurrentBlockNumber();
-  }, [library]);
 
   useEffect(() => {
     const checkIsValidENS = async () => {
