@@ -1,3 +1,4 @@
+import classes from './DelegationCandidateVoteCountInfo.module.css';
 import { Trans } from '@lingui/macro';
 import React from 'react';
 import BrandSpinner from '../BrandSpinner';
@@ -12,23 +13,15 @@ const DelegationCandidateVoteCountInfo: React.FC<DelegationCandidateVoteCountInf
   const { text, voteCount, isLoading } = props;
 
   return (
-    <div style={{ display: 'flex' }}>
+    <div className={classes.wrapper}>
       {isLoading && (
-        <div style={{ marginRight: '0.5rem' }}>
+        <div className={classes.spinner}>
           <BrandSpinner />
         </div>
       )}
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          fontWeight: 'normal',
-          color: 'var(--grand-gray-ligh-text)',
-          textAlign: 'right',
-        }}
-      >
+      <div className={classes.voteInfoWrapper}>
         <div>{text}</div>
-        <div style={{ color: 'black', fontWeight: 'bold' }}>
+        <div className={classes.voteCount}>
           {voteCount === 1 ? <Trans>{voteCount} Vote</Trans> : <Trans>{voteCount} Votes</Trans>}
         </div>
       </div>
