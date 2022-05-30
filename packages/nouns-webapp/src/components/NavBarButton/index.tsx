@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import classes from './NavBarButton.module.css';
 
 export enum NavBarButtonStyle {
@@ -79,10 +80,7 @@ const NavBarButton: React.FC<NavBarButtonProps> = props => {
         onClick={isDisabled ? () => {} : onClick}
       >
         <div
-          className={classes.button}
-          style={{
-            cursor: isDisabled ? 'not-allowed' : 'pointer',
-          }}
+          className={clsx(classes.button, isDisabled ? classes.btnDisabled : classes.btnEnabled)}
         >
           {buttonIcon && <div className={classes.icon}>{buttonIcon}</div>}
           <div>{buttonText}</div>
