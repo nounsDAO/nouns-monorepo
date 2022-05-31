@@ -225,15 +225,11 @@ export const delegateNounsAtBlockQuery = (delegates: string[], block: number) =>
 }
 `;
 
-export const totalNounSupplyAtPropSnapshot = (block: number) => gql`
+export const totalNounSupplyAtPropSnapshot = (proposalId: string) => gql`
 {
-  auctions(
-    first: 1, 
-    orderBy: startTime, 
-    orderDirection: desc,
-    block: { number: ${block}}) {
-      id
-    }
+  proposals(where: {id: ${proposalId}}) {
+    totalSupply
+  }
 }
 `;
 

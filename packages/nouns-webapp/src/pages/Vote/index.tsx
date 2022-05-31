@@ -2,7 +2,7 @@ import { Row, Col, Button, Card, Spinner } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import {
   ProposalState,
-  useDynamicQuorumProps,
+  useCurrentQuorum,
   useExecuteProposal,
   useProposal,
   useQueueProposal,
@@ -29,7 +29,6 @@ import {
   delegateNounsAtBlockQuery,
   ProposalVotes,
   Delegates,
-  totalNounSupplyAtPropSnapshot,
 } from '../../wrappers/subgraph';
 import { getNounVotes } from '../../utils/getNounsVotes';
 import { Trans } from '@lingui/macro';
@@ -38,7 +37,6 @@ import { ReactNode } from 'react-markdown/lib/react-markdown';
 import DynamicQuorumInfoModal from '../../components/DynamicQuorumInfoModal';
 import { InformationCircleIcon } from '@heroicons/react/solid';
 import config, { GOV_V2_UPGRADE_BLOCK } from '../../config';
-import { calcCurrentQuorum } from '../../utils/calcCurrentQuorum';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -237,17 +235,12 @@ const VotePage = ({
     }
   }, [showToast]);
 
-  const {
-    data: nounSupplyData,
-    loading: loadingNounCount,
-    error: nounCountError,
-  } = useQuery(totalNounSupplyAtPropSnapshot(proposal ? proposal.startBlock : 0));
-  const dynamicQuorumProps = useDynamicQuorumProps(
-    config.addresses.nounsDAOProxy,
-    proposal ? proposal.startBlock : 0,
-  );
 
-  if (!proposal || loading || !data || loadingNounCount || nounCountError) {
+  const currentQuorum = useCurrentQuorum(
+    config.addresses.nounsDAOProxy,
+    proposal && proposal.id ? parseInt(proposal.id) : 0);
+
+  if (!proposal || loading || !data ) {
     return (
       <div className={classes.spinner}>
         <Spinner animation="border" />
@@ -265,13 +258,6 @@ const VotePage = ({
   const forNouns = getNounVotes(data, 1);
   const againstNouns = getNounVotes(data, 0);
   const abstainNouns = getNounVotes(data, 2);
-
-  const totalNounSupplyAtProp =
-    nounSupplyData && nounSupplyData.auctions.length > 0 ? nounSupplyData.auctions[0].id : 1;
-  const againstVoteBps = Math.floor((againstNouns.length / totalNounSupplyAtProp) * 10_000);
-  const currentQuorum = Math.floor(
-    (totalNounSupplyAtProp * calcCurrentQuorum(againstVoteBps, dynamicQuorumProps)) / 10_000,
-  );
 
   return (
     <Section fullWidth={false} className={classes.votePage}>
@@ -360,7 +346,7 @@ const VotePage = ({
                         )}
                     </span>
                     <h3>
-                      <Trans>{i18n.number(currentQuorum)} votes</Trans>
+                      <Trans>{i18n.number(currentQuorum ?? 0)} votes</Trans>
                     </h3>
                   </div>
                 </div>

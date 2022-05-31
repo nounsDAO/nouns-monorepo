@@ -188,6 +188,17 @@ const useVotingDelay = (nounsDao: string): number | undefined => {
   return blockDelay?.toNumber();
 };
 
+export const useCurrentQuorum = (nounsDao: string, proposalId: number): number | undefined => {
+  const [quorum] =
+    useContractCall<[EthersBN]>({
+      abi: abiV2,
+      address: nounsDao,
+      method: 'quorumVotes',
+      args: [proposalId],
+    }) || [];
+  return quorum?.toNumber();
+};
+
 export const useDynamicQuorumProps = (
   nounsDao: string,
   block: number,

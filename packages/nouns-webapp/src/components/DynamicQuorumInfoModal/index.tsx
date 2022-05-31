@@ -369,7 +369,10 @@ const DynamicQuorumInfoModal: React.FC<{
 }> = props => {
   const { onDismiss, proposal, againstVotesAbsolute } = props;
 
-  const { data, loading, error } = useQuery(totalNounSupplyAtPropSnapshot(proposal.startBlock));
+  const { data, loading, error } = useQuery(totalNounSupplyAtPropSnapshot(
+    proposal && proposal.id ? proposal.id : "0"
+  ));
+
   const dynamicQuorumProps = useDynamicQuorumProps(
     config.addresses.nounsDAOProxy,
     proposal.startBlock,
@@ -394,7 +397,7 @@ const DynamicQuorumInfoModal: React.FC<{
       )}
       {ReactDOM.createPortal(
         <DynamicQuorumInfoModalOverlay
-          againstVotesBps={Math.floor((againstVotesAbsolute / data.auctions[0].id) * 10_000)}
+          againstVotesBps={Math.floor((againstVotesAbsolute / data.proposals[0].totalSupply) * 10_000)}
           minQuorumBps={dynamicQuorumProps?.minQuorumVotesBPS ?? 0}
           maxQuorumBps={dynamicQuorumProps?.maxQuorumVotesBPS ?? 0}
           quadraticCoefficent={
@@ -410,7 +413,7 @@ const DynamicQuorumInfoModal: React.FC<{
           offsetBps={dynamicQuorumProps?.quorumVotesBPSOffset ?? 0}
           onDismiss={onDismiss}
           proposal={proposal}
-          totalNounSupply={data.auctions[0].id}
+          totalNounSupply={data.proposals[0].totalSupply}
         />,
         document.getElementById('overlay-root')!,
       )}
