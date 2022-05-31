@@ -340,6 +340,24 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                   >
                     {Math.floor(againstVotesBps / 100)}% of Nouns
                   </text>
+
+
+                  <text
+                    x={4}
+                    y={310}
+                    fill="var(--brand-gray-light-text)"
+                  >
+                    0%
+                  </text>
+
+                  <text
+                    x={905}
+                    y={310}
+                    fill="var(--brand-gray-light-text)"
+                  >
+                    100%
+                  </text>
+
                   Sorry, your browser does not support inline SVG.
                 </svg>
               </div>
