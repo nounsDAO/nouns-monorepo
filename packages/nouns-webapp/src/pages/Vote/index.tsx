@@ -338,7 +338,6 @@ const VotePage = ({
           />
         </Row>
 
-        {/* TODO abstract this into a component  */}
         <Row>
           <Col xl={4} lg={12}>
             <Card className={classes.voteInfoCard}>
