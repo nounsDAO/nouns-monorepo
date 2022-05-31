@@ -108,19 +108,13 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
           <div className={classes.delegateKVotesBtn}>
             Delegate{' '}
             <span
+              className={classes.highlightCircle}
               style={{
-                borderRadius: '50%',
-                width: '22px',
-                height: '22px',
-                backgroundColor: '#ffffff80',
-                textAlign: 'center',
-                paddingLeft: '8px',
-                paddingRight: '8px',
                 paddingTop: `${4 * Math.floor(Math.log10(availableVotes))}px`,
                 paddingBottom: `${4 * Math.floor(Math.log10(availableVotes))}px`,
               }}
             >
-              <span style={{ margin: 'auto' }}>{availableVotes}</span>
+              <span className={classes.highlightCircleVoteCount}>{availableVotes}</span>
             </span>
             {availableVotes === 1 ? <Trans>Vote</Trans> : <Trans>Votes</Trans>}
           </div>

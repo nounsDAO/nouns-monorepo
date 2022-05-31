@@ -38,44 +38,32 @@
   margin-top: 0.5rem;
 }
 
-/* .customButtonHighlighter {
-  position: absolute;
-  opacity: 0.3;
-  top: 80.4%;
-  left: 61.6%;
-  height: 25px;
-  width: 25px;
-  background-color: white;
-  border-radius: 100%;
-  z-index: 100;
-} */
-
 .btnVoteCount {
   align-items: center;
   margin: auto;
-}
-
-.svgWrapper {
-  display: block;
-}
-
-.extened {
-  top: 85.15%;
 }
 
 .delegateKVotesBtn {
   z-index: 101;
 }
 
-.center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
 
 .delegateKVotesBtn span {
   margin-right: 0.3rem;
+}
+
+.highlightCircle {
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  background-color: #ffffff80;
+  text-align: center;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.highlightCircleVoteCount {
+  margin: auto;
 }
 
 .delegateCandidateInfoWrapper {
