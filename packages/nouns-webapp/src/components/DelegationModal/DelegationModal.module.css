@@ -88,23 +88,13 @@
   }
 
   .modal {
-    top: 5vh;
+    top: 50vh;
     left: 0;
     bottom: 0;
     width: 100%;
     max-height: 100%;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    background-color: transparent;
     box-shadow: none;
-  }
-
-  .modal .header h2 {
-    color: rgba(140, 141, 146, 1);
-  }
-
-  .modal .header h1 {
-    color: white;
-    line-height: 0px;
   }
 }
