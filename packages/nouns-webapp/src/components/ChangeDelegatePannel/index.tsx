@@ -105,11 +105,25 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
     [
       <NavBarButton
         buttonText={
-          <span className={classes.delegateKVotesBtn}>
-            <Trans>
-              Delegate <span> {availableVotes} </span> votes
-            </Trans>
-          </span>
+          <div className={classes.delegateKVotesBtn}>
+            Delegate{' '}
+            <span
+              style={{
+                borderRadius: '50%',
+                width: '22px',
+                height: '22px',
+                backgroundColor: '#ffffff80',
+                textAlign: 'center',
+                paddingLeft: '8px',
+                paddingRight: '8px',
+                paddingTop: `${4 * Math.floor(Math.log10(availableVotes))}px`,
+                paddingBottom: `${4 * Math.floor(Math.log10(availableVotes))}px`,
+              }}
+            >
+              <span style={{ margin: 'auto' }}>{availableVotes}</span>
+            </span>
+            {availableVotes === 1 ? <Trans>Vote</Trans> : <Trans>Votes</Trans>}
+          </div>
         }
         buttonStyle={
           isAddress(delegateAddress)
