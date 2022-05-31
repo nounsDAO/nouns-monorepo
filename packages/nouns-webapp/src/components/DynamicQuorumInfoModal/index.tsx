@@ -93,6 +93,7 @@ const generatePointsForSVGChart = (
 const DynamicQuorumInfoModalOverlay: React.FC<{
   proposal: Proposal;
   againstVotesBps: number;
+  againstVotesAbs: number;
   minQuorumBps: number;
   maxQuorumBps: number;
   quadraticCoefficent: number;
@@ -104,6 +105,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
   const {
     onDismiss,
     proposal,
+    againstVotesAbs,
     againstVotesBps,
     minQuorumBps,
     maxQuorumBps,
@@ -146,8 +148,6 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
     320,
     options,
   );
-
-  const againstVotesAbs = Math.floor((againstVotesBps / 10_000) * totalNounSupply);
 
   return (
     <>
@@ -416,6 +416,7 @@ const DynamicQuorumInfoModal: React.FC<{
       {ReactDOM.createPortal(
         <DynamicQuorumInfoModalOverlay
           againstVotesBps={Math.floor((againstVotesAbsolute / data.proposals[0].totalSupply) * 10_000)}
+          againstVotesAbs={againstVotesAbsolute}
           minQuorumBps={dynamicQuorumProps?.minQuorumVotesBPS ?? 0}
           maxQuorumBps={dynamicQuorumProps?.maxQuorumVotesBPS ?? 0}
           quadraticCoefficent={
