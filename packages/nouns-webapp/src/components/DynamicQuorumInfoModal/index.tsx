@@ -81,19 +81,12 @@ const generatePointsForSVGChart = (
     return [x, yPoints[i]];
   });
 
-  const res = makeSmoothSVGChart(
-    points,
-    // 1.3*width,
-    width,
-    height,
-    {
-      // xMax: Math.ceil(2.5*positiveRootDQMPolynomial),
-      xMax: 10_000,
-      xMin: 0,
-      yMax: 1.06 * maxQuorumBps,
-      yMin: 0.87 * minQuorumBps,
-    } as ChartBounds,
-  );
+  const res = makeSmoothSVGChart(points, width, height, {
+    xMax: 10_000,
+    xMin: 0,
+    yMax: 1.06 * maxQuorumBps,
+    yMin: 0.87 * minQuorumBps,
+  } as ChartBounds);
   return res;
 };
 

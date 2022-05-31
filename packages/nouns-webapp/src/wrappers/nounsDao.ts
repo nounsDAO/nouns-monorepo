@@ -199,7 +199,6 @@ export const useDynamicQuorumProps = (
       method: 'getDynamicQuorumParamsAt',
       args: [block],
     }) || [];
-  console.log('PARAMS', params);
   return params;
 };
 
