@@ -8,28 +8,8 @@
   margin-top: 0.25rem;
 }
 
-.winnerCopy {
+.holderCopy {
   min-width: 250px;
-}
-
-.verifyButton {
-  height: 3rem;
-  color: white;
-  border: transparent;
-  background-color: var(--brand-black);
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  border-radius: 8px;
-  font-size: 16px;
-}
-
-.verifyButton:hover,
-.verifyButton:active,
-.verifyButton:focus,
-.verifyButton:disabled {
-  background-color: gray !important;
-  outline: none !important;
-  box-shadow: none !important;
 }
 
 .section h4 {
@@ -78,7 +58,7 @@
     padding-left: 0.5rem;
   }
 
-  .winnerContent {
+  .holderContent {
     margin-right: 0.5rem;
   }
 
@@ -86,22 +66,5 @@
     width: 100%;
     margin-left: 0;
     margin-right: 0;
-  }
-
-  .verifyButton {
-    width: 100%;
-    height: 3rem;
-    border-radius: 10px;
-    font-weight: bold;
-    font-size: 18px;
-  }
-
-  .verifyLink {
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
-  }
-
-  .youCopy {
-    padding-right: 0.25rem;
   }
 }
