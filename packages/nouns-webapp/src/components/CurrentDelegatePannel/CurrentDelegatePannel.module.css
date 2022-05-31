@@ -1,5 +1,5 @@
 .wrapper {
-  padding: 1rem 1rem 0rem 1rem;
+  padding: 1rem 0.75rem 0rem 0.75rem;
 }
 
 .title {
@@ -9,11 +9,13 @@
   line-height: 42px;
   height: 2rem;
   font-size: 42px;
+  color: var(--brand-cool-dark-text);
 }
 
 .copy {
   font-weight: 500;
   font-family: 'PT Root UI';
+  color: var(--brand-cool-dark-text);
 }
 
 .copy .emph {
@@ -29,9 +31,10 @@
 }
 
 .current {
-  color: var(--brand-gray-light-text);
+  color: var(--brand-cool-light-text);
   font-size: 18px;
   margin-top: 1rem;
+  font-weight: 500;
 }
 
 .delegateInfoWrapper {
@@ -43,6 +46,7 @@
   display: flex;
   flex-direction: row;
   font-size: 26px;
+  color: var(--brand-cool-dark-text);
 }
 
 .shortAddress {
