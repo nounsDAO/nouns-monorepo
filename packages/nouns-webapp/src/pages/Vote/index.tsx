@@ -58,6 +58,10 @@ const VotePage = ({
   const { queueProposal, queueProposalState } = useQueueProposal();
   const { executeProposal, executeProposalState } = useExecuteProposal();
 
+
+  // Toggle between Noun centric view and delegate view
+  const [isDelegateView, setIsDelegateView] = useState(false);
+
   // Get and format date from data
   const timestamp = Date.now();
   const currentBlock = useBlockNumber();
@@ -293,6 +297,13 @@ const VotePage = ({
             </Col>
           </Row>
         )}
+        <p 
+        onClick={() => setIsDelegateView(!isDelegateView)}
+        className={classes.toggleDelegateVoteView}>
+          {
+            isDelegateView ? <Trans>Switch to Noun view</Trans> : <Trans>Switch to delegate view</Trans>
+          }
+        </p>
         <Row>
           <VoteCard
             proposal={proposal}
