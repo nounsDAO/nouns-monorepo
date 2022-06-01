@@ -1,0 +1,4 @@
+[default]
+src = 'contracts'
+libs = ['lib', '../../node_modules']
+

@@ -3,6 +3,7 @@ parts.html
 
 #Hardhat files
 cache
+hh-cache
 artifacts
 typechain
 .openzeppelin
