@@ -20,7 +20,6 @@ const CurrentDelegatePannel: React.FC<CurrentDelegatePannelProps> = props => {
 
   return (
     <div className={classes.wrapper}>
-
       <div>
         <div className={classes.header}>
           <h1 className={classes.title}>
@@ -30,8 +29,8 @@ const CurrentDelegatePannel: React.FC<CurrentDelegatePannelProps> = props => {
           <p className={classes.copy}>
             <Trans>
               Noun votes are not transferable, but are{' '}
-              <span className={classes.emph}>delegatable</span>, which means you can assign your vote
-              to someone else as long as you own your Noun.
+              <span className={classes.emph}>delegatable</span>, which means you can assign your
+              vote to someone else as long as you own your Noun.
             </Trans>
           </p>
         </div>

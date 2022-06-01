@@ -47,7 +47,6 @@
   z-index: 101;
 }
 
-
 .delegateKVotesBtn span {
   margin-right: 0.3rem;
 }
@@ -57,14 +56,13 @@
   line-height: 22px;
   border-radius: 50%;
   text-align: center;
-  background-image: radial-gradient(#ffffff70 15%,rgba(0, 0, 0, 0) 75%) ;
+  background-image: radial-gradient(#ffffff70 15%, rgba(0, 0, 0, 0) 75%);
   padding-top: 6px;
   padding-bottom: 6px;
   padding-left: 8px;
   padding-right: 8px;
   font-size: 20px;
 }
-
 
 .delegateCandidateInfoWrapper {
   padding: 0rem 0.25rem 0.25rem 0rem;

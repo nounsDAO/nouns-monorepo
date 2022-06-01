@@ -4,7 +4,6 @@ import React from 'react';
 import { useShortAddress } from '../../utils/addressAndENSDisplayUtils';
 import ShortAddress from '../ShortAddress';
 import { useAccountVotes } from '../../wrappers/nounToken';
-import { useEthers } from '@usedapp/core/dist/cjs/src';
 import { ChangeDelegateState } from '../ChangeDelegatePannel';
 import { usePickByState } from '../../utils/pickByState';
 import DelegationCandidateVoteCountInfo from '../DelegationCandidateVoteCountInfo';
@@ -14,16 +13,15 @@ import classes from './DelegationCandidateInfo.module.css';
 interface DelegationCandidateInfoProps {
   address: string;
   changeModalState: ChangeDelegateState;
+  votesToAdd: number;
 }
 
 const DelegationCandidateInfo: React.FC<DelegationCandidateInfoProps> = props => {
-  const { address, changeModalState } = props;
+  const { address, changeModalState, votesToAdd } = props;
 
   const shortAddress = useShortAddress(address);
-  const { account } = useEthers();
 
   const votes = useAccountVotes(address);
-  const votesToAdd = useAccountVotes(account) || 0;
 
   const countDelegatedNouns = votes ?? 0;
 
@@ -47,8 +45,7 @@ const DelegationCandidateInfo: React.FC<DelegationCandidateInfoProps> = props =>
       />,
       <DelegationCandidateVoteCountInfo
         text={<Trans>Now has</Trans>}
-        // TODO confirm this is correct
-        voteCount={countDelegatedNouns + votesToAdd}
+        voteCount={countDelegatedNouns}
         isLoading={false}
       />,
     ],

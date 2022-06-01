@@ -8,7 +8,7 @@ import currentDelegatePannelClasses from '../CurrentDelegatePannel/CurrentDelega
 import DelegationCandidateInfo from '../DelegationCandidateInfo';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import classes from './ChangeDelegatePannel.module.css';
-import { useDelegateVotes, useUserVotes } from '../../wrappers/nounToken';
+import { useDelegateVotes, useNounTokenBalance } from '../../wrappers/nounToken';
 import { usePickByState } from '../../utils/pickByState';
 import { buildEtherscanTxLink } from '../../utils/etherscan';
 
@@ -47,12 +47,12 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
     ChangeDelegateState.ENTER_DELEGATE_ADDRESS,
   );
 
-  const { library } = useEthers();
+  const { library, account } = useEthers();
 
   const [delegateAddress, setDelegateAddress] = useState('');
   const [delegateInputText, setDelegateInputText] = useState('');
   const [delegateInputClass, setDelegateInputClass] = useState<string>('');
-  const availableVotes = useUserVotes() ?? 0;
+  const availableVotes = useNounTokenBalance(account ?? '') ?? 0;
   const { send: delegateVotes, state: delageeState } = useDelegateVotes(delegateAddress);
 
   useEffect(() => {
@@ -106,12 +106,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
       <NavBarButton
         buttonText={
           <div className={classes.delegateKVotesBtn}>
-            Delegate{' '}
-            <span
-              className={classes.highlightCircle}
-            >
-              {availableVotes}
-            </span>
+            Delegate <span className={classes.highlightCircle}>{availableVotes}</span>
             {availableVotes === 1 ? <Trans>Vote</Trans> : <Trans>Votes</Trans>}
           </div>
         }
@@ -204,6 +199,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
           {isAddress(delegateAddress) && (
             <DelegationCandidateInfo
               address={delegateAddress || ''}
+              votesToAdd={availableVotes}
               changeModalState={changeDelegateState}
             />
           )}

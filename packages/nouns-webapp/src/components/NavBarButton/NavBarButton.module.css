@@ -171,7 +171,7 @@
   border: none;
 }
 
-@media(max-width: 992px) {
+@media (max-width: 992px) {
   .delegatePrimary {
     width: 210px;
   }
@@ -179,7 +179,7 @@
   .delegateSecondary {
     width: 210px;
   }
- 
+
   .delegateDisabled {
     width: 210px;
   }

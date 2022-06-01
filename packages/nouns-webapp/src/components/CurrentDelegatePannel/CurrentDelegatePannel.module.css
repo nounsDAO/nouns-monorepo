@@ -62,15 +62,15 @@
   margin-top: 0.5rem;
 }
 
-@media(max-width: 992px) {
-    .wrapper {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
+@media (max-width: 992px) {
+  .wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
 
-    .buttonWrapper {
-        margin-bottom: 1rem;
-    }
+  .buttonWrapper {
+    margin-bottom: 1rem;
+  }
 }

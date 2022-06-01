@@ -155,3 +155,14 @@ export const useDelegateVotes = (delagee: string) => {
 
   return { send, state };
 };
+
+export const useNounTokenBalance = (address: string): number | undefined => {
+  const [tokenBalance] =
+    useContractCall<[EthersBN]>({
+      abi,
+      address: config.addresses.nounsToken,
+      method: 'balanceOf',
+      args: [address],
+    }) || [];
+  return tokenBalance?.toNumber();
+};
