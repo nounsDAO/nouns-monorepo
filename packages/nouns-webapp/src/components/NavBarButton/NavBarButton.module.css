@@ -179,4 +179,8 @@
   .delegateSecondary {
     width: 210px;
   }
+ 
+  .delegateDisabled {
+    width: 210px;
+  }
 }
