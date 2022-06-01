@@ -30,13 +30,13 @@ export enum ChangeDelegateState {
 const getTitleFromState = (state: ChangeDelegateState) => {
   switch (state) {
     case ChangeDelegateState.CHANGING:
-      return <Trans>Changing...</Trans>;
+      return <Trans>Updating...</Trans>;
     case ChangeDelegateState.CHANGE_SUCCESS:
-      return <Trans>Delegate Changed!</Trans>;
+      return <Trans>Delegate Updated!</Trans>;
     case ChangeDelegateState.CHANGE_FAILURE:
-      return <Trans>Delegate Change Failed</Trans>;
+      return <Trans>Delegate Update Failed</Trans>;
     default:
-      return <Trans>Change Delegate</Trans>;
+      return <Trans>Update Delegate</Trans>;
   }
 };
 
