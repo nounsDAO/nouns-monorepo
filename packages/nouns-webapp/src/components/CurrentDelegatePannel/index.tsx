@@ -36,8 +36,9 @@ const CurrentDelegatePannel: React.FC<CurrentDelegatePannelProps> = props => {
         </div>
 
         <div className={classes.contentWrapper}>
-          <div className={classes.current}>Current</div>
-
+          <div className={classes.current}>
+            <Trans>Current Delegate</Trans>
+          </div>
           <div className={classes.delegateInfoWrapper}>
             <div className={classes.ens}>
               <ShortAddress address={account} avatar={true} size={39} />
@@ -54,7 +55,7 @@ const CurrentDelegatePannel: React.FC<CurrentDelegatePannelProps> = props => {
           onClick={onSecondaryBtnClick}
         />
         <NavBarButton
-          buttonText={<Trans>Change Delegate</Trans>}
+          buttonText={<Trans>Update Delegate</Trans>}
           buttonStyle={NavBarButtonStyle.DELEGATE_PRIMARY}
           onClick={onPrimaryBtnClick}
         />

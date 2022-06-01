@@ -101,7 +101,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
                 className={classes.changeDelegateBtn}
                 onClick={() => setShowDelegateModal(true)}
               >
-                <Trans>Delegation</Trans>
+                <Trans>Delegate</Trans>
               </Button>
             </div>
           </div>

@@ -11,6 +11,7 @@ import classes from './ChangeDelegatePannel.module.css';
 import { useDelegateVotes, useNounTokenBalance } from '../../wrappers/nounToken';
 import { usePickByState } from '../../utils/pickByState';
 import { buildEtherscanTxLink } from '../../utils/etherscan';
+import { useActiveLocale } from '../../hooks/useActivateLocale';
 
 interface ChangeDelegatePannelProps {
   onDismiss: () => void;
@@ -54,6 +55,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
   const [delegateInputClass, setDelegateInputClass] = useState<string>('');
   const availableVotes = useNounTokenBalance(account ?? '') ?? 0;
   const { send: delegateVotes, state: delageeState } = useDelegateVotes(delegateAddress);
+  const locale = useActiveLocale();
 
   useEffect(() => {
     if (delageeState.status === 'Success') {
@@ -94,6 +96,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
 
   const etherscanTxLink = buildEtherscanTxLink(delageeState.transaction?.hash ?? '');
 
+
   const primaryButton = usePickByState(
     changeDelegateState,
     [
@@ -106,8 +109,12 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
       <NavBarButton
         buttonText={
           <div className={classes.delegateKVotesBtn}>
+            {
+              locale === 'en-US ' ? <>
             Delegate <span className={classes.highlightCircle}>{availableVotes}</span>
-            {availableVotes === 1 ? <Trans>Vote</Trans> : <Trans>Votes</Trans>}
+            {availableVotes === 1 ? <>Votes</> : <>Votes</>}
+              </>  : <>{availableVotes === 1 ? <Trans>Delegate {availableVotes} Vote</Trans> : <Trans>Delegate {availableVotes} Votes</Trans>}</>
+            }
           </div>
         }
         buttonStyle={
@@ -170,7 +177,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
   return (
     <>
       <div className={currentDelegatePannelClasses.wrapper}>
-        <h1 className={currentDelegatePannelClasses.title}>
+        <h1 className={clsx(currentDelegatePannelClasses.title, locale !== 'en-US' ? classes.nonEnBottomMargin : '')}>
           {getTitleFromState(changeDelegateState)}
         </h1>
         <p className={currentDelegatePannelClasses.copy}>{primaryCopy}</p>
@@ -185,7 +192,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
             setDelegateInputText(e.target.value);
           }}
           value={delegateInputText}
-          placeholder={'0x... or ...eth'}
+          placeholder={ locale === 'en-US' ? '0x... or ...eth' : '0x... / ...eth'}
         />
       )}
 

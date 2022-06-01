@@ -20,6 +20,17 @@
   box-shadow: none !important;
 }
 
+.nonEnBottomMargin {
+  margin-bottom: 2.5rem;
+}
+
+@media (max-width: 992px) {
+  
+.nonEnBottomMargin {
+  margin-bottom: 3.5rem;
+}
+}
+
 .empty {
   border: none;
 }
