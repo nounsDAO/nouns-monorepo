@@ -60,8 +60,9 @@
   background-image: radial-gradient(#ffffff70 15%,rgba(0, 0, 0, 0) 75%) ;
   padding-top: 6px;
   padding-bottom: 6px;
-   padding-left: 8px;
+  padding-left: 8px;
   padding-right: 8px;
+  font-size: 20px;
 }
 
 
