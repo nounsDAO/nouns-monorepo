@@ -16,6 +16,7 @@ import { transactionLink } from '../ProposalContent';
 import ShortAddress from '../ShortAddress';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import { Locales } from '../../i18n/locales';
+import HoverCard from '../HoverCard';
 
 interface ProposalHeaderProps {
   proposal: Proposal;
@@ -148,10 +149,15 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
             <h3>Proposed by</h3>
 
             <div className={classes.byLineContentWrapper}>
-              <h3>
-                {proposer}
-                <span className={classes.propTransactionWrapper}>{proposedAtTransactionHash}</span>
-              </h3>
+              <HoverCard
+                hoverCardContent={(tip: string) => <>I hold {tip} Nouns</>}
+                tip={proposal.proposer || ""}
+              >
+                <h3>
+                  {proposer}
+                  <span className={classes.propTransactionWrapper}>{proposedAtTransactionHash}</span>
+                </h3>
+              </HoverCard>
             </div>
           </>
         )}
