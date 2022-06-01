@@ -139,9 +139,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
           <div className={classes.proposalByLineWrapperJp}>
             <Trans>
               <span className={classes.proposedByJp}>Proposed by: </span>
-              <span className={classes.proposerJp}>
-              {proposer}
-              </span>
+              <span className={classes.proposerJp}>{proposer}</span>
               <span className={classes.propTransactionWrapperJp}>{proposedAtTransactionHash}</span>
             </Trans>
           </div>

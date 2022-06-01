@@ -82,9 +82,13 @@ const NavBar = () => {
               )}
             </Nav.Item>
           </div>
-          <Navbar.Toggle className={classes.navBarToggle} aria-controls="basic-navbar-nav" onClick={() => setIsNavExpanded(!isNavExpanded)} />
+          <Navbar.Toggle
+            className={classes.navBarToggle}
+            aria-controls="basic-navbar-nav"
+            onClick={() => setIsNavExpanded(!isNavExpanded)}
+          />
           <Navbar.Collapse className="justify-content-end">
-            <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink} onClick={closeNav} >
+            <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink} onClick={closeNav}>
               <NavBarButton
                 buttonText={<Trans>DAO</Trans>}
                 buttonIcon={<FontAwesomeIcon icon={faUsers} />}
@@ -117,7 +121,12 @@ const NavBar = () => {
                 buttonStyle={nonWalletButtonStyle}
               />
             </Nav.Link>
-            <Nav.Link as={Link} to="/playground" className={classes.nounsNavLink}  onClick={closeNav}>
+            <Nav.Link
+              as={Link}
+              to="/playground"
+              className={classes.nounsNavLink}
+              onClick={closeNav}
+            >
               <NavBarButton
                 buttonText={<Trans>Playground</Trans>}
                 buttonIcon={<FontAwesomeIcon icon={faPlay} />}
