@@ -1,0 +1,10 @@
+.wrapper {
+    display: flex;
+    position: relative;
+}
+
+.nounWrapper {
+    width: 42px;
+    height: 42px;
+    position: absolute;
+}

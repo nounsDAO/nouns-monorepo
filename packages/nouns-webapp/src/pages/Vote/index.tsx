@@ -33,6 +33,7 @@ import { getNounVotes } from '../../utils/getNounsVotes';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
+import StackedCircleNouns from '../../components/StackedCircleNouns';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
