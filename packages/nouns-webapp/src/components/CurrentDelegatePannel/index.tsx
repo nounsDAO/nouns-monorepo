@@ -19,29 +19,32 @@ const CurrentDelegatePannel: React.FC<CurrentDelegatePannelProps> = props => {
   const shortAccount = useShortAddress(account);
 
   return (
-    <>
-      <div className={classes.wrapper}>
-        <h1 className={classes.title}>
-          <Trans>Delegation</Trans>
-        </h1>
+    <div className={classes.wrapper}>
 
-        <p className={classes.copy}>
-          <Trans>
-            Noun votes are not transferable, but are{' '}
-            <span className={classes.emph}>delegatable</span>, which means you can assign your vote
-            to someone else as long as you own your Noun.
-          </Trans>
-        </p>
-      </div>
+      <div>
+        <div className={classes.header}>
+          <h1 className={classes.title}>
+            <Trans>Delegation</Trans>
+          </h1>
 
-      <div className={classes.contentWrapper}>
-        <div className={classes.current}>Current</div>
+          <p className={classes.copy}>
+            <Trans>
+              Noun votes are not transferable, but are{' '}
+              <span className={classes.emph}>delegatable</span>, which means you can assign your vote
+              to someone else as long as you own your Noun.
+            </Trans>
+          </p>
+        </div>
 
-        <div className={classes.delegateInfoWrapper}>
-          <div className={classes.ens}>
-            <ShortAddress address={account} avatar={true} size={39} />
+        <div className={classes.contentWrapper}>
+          <div className={classes.current}>Current</div>
+
+          <div className={classes.delegateInfoWrapper}>
+            <div className={classes.ens}>
+              <ShortAddress address={account} avatar={true} size={39} />
+            </div>
+            <div className={classes.shortAddress}>{shortAccount}</div>
           </div>
-          <div className={classes.shortAddress}>{shortAccount}</div>
         </div>
       </div>
 
@@ -57,7 +60,7 @@ const CurrentDelegatePannel: React.FC<CurrentDelegatePannelProps> = props => {
           onClick={onPrimaryBtnClick}
         />
       </div>
-    </>
+    </div>
   );
 };
 
