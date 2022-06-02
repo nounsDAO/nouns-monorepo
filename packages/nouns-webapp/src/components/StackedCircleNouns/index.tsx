@@ -19,9 +19,10 @@ const StackedCircleNouns: React.FC<StackedCircleNounsProps> = props => {
                 nounIds.slice(0, tightStack ? 3 : 10).map((nounId: number, i: number) => {
                     return (
                         <div 
+                        key={nounId.toString()}
                         style={{
-                            top:  tightStack ? `${3*i}px` : '0px',
-                            left: tightStack ? `${-2*i}px`: `${-25*i}px`
+                            top:  tightStack ? `${-5 + 3*i}px` : '0px',
+                            left: tightStack ? `${10 + -2*i}px`: `${-25*i}px`
                         }}
                         className={classes.nounWrapper}>
                             <StandaloneNounCircular nounId={BigNumber.from(nounId)} border={true}/>
