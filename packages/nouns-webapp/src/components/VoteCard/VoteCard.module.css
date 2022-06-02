@@ -5,10 +5,13 @@
 }
 
 @keyframes pulse {
-  from {filter: brightness(110%);}
-  to {filter: brightness(100%);}
+  from {
+    filter: brightness(110%);
+  }
+  to {
+    filter: brightness(100%);
+  }
 }
-
 
 .voteCardHeaderText {
   font-size: 16px;
@@ -53,7 +56,7 @@
   padding-right: 0.5rem;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 1200px) {
   .voteCountCard {
     min-height: 0rem;
   }

@@ -1,37 +1,62 @@
-import { StandaloneNounCircular } from '../StandaloneNoun';
-import classes from './StackedCircleNouns.module.css';
-import {BigNumber} from "ethers";
+import { getNoun } from '../StandaloneNoun';
+import { BigNumber } from 'ethers';
+import { useNounSeeds } from '../../wrappers/nounToken';
 
 interface StackedCircleNounsProps {
-    nounIds: Array<number>;
-    tightStack?: boolean;
+  nounIds: Array<number>;
 }
 
-const StackedCircleNouns: React.FC<StackedCircleNounsProps> = props => {
+// TODO
+const MAX_NOUNS_PER_STACK = 3;
 
-    const {nounIds, tightStack } = props;
+const TightStackedCircleNouns: React.FC<StackedCircleNounsProps> = props => {
+  const { nounIds } = props;
 
-    return (
-        <div
-            className={classes.wrapper}
-        >
-            {
-                nounIds.slice(0, tightStack ? 3 : 10).map((nounId: number, i: number) => {
-                    return (
-                        <div 
-                        key={nounId.toString()}
-                        style={{
-                            top:  tightStack ? `${-5 + 3*i}px` : '0px',
-                            left: tightStack ? `${10 + -2*i}px`: `${-25*i}px`
-                        }}
-                        className={classes.nounWrapper}>
-                            <StandaloneNounCircular nounId={BigNumber.from(nounId)} border={true}/>
-                        </div>
-                    );
-                })
-            }
-        </div>
-    );
-}
+  // TODO not sure if this will be an issue for new nouns or something?
+  const seeds = useNounSeeds();
 
-export default StackedCircleNouns;
+  const svgs = nounIds.slice(0, MAX_NOUNS_PER_STACK).map((nounId: number) => {
+    const nounData = getNoun(BigNumber.from(nounId), seeds[nounId]);
+    return nounData.image;
+  });
+
+  const shift = 3;
+
+  return (
+    <svg width="50" height="50">
+      {svgs
+        .map((dataURI: string, i: number) => {
+          return (
+            <g>
+              <clipPath id={`clipCircleNoun${nounIds[i]}`}>
+                <circle
+                  id={`${nounIds[i]}`}
+                  r="16"
+                  cx={25 + i * shift}
+                  cy={25 - i * shift}
+                  style={{
+                    fill: 'none',
+                    stroke: 'white',
+                    strokeWidth: '2',
+                  }}
+                />
+              </clipPath>
+
+              <use xlinkHref={`#${nounIds[i]}`} />
+              <image
+                clip-path={`url(#clipCircleNoun${nounIds[i]})`}
+                x={9 + i * shift}
+                y={9 - i * shift}
+                width="32"
+                height="32"
+                href={dataURI}
+              ></image>
+            </g>
+          );
+        })
+        .reverse()}
+    </svg>
+  );
+};
+
+export default TightStackedCircleNouns;

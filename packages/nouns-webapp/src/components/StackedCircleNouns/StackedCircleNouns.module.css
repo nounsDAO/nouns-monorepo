@@ -1,12 +1,12 @@
 .wrapper {
-    display: flex;
-    position: relative;
-    height: fit-content;
-    width: fit-content;
+  /* display: flex; */
+  position: relative;
+  height: fit-content;
+  /* width: fit-content; */
 }
 
 .nounWrapper {
-    width: 42px;
-    height: 42px;
-    position: absolute;
+  width: 32px;
+  height: 32px;
+  position: absolute;
 }

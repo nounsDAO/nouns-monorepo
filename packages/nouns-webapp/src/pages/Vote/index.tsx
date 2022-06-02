@@ -58,7 +58,6 @@ const VotePage = ({
   const { queueProposal, queueProposalState } = useQueueProposal();
   const { executeProposal, executeProposalState } = useExecuteProposal();
 
-
   // Toggle between Noun centric view and delegate view
   const [isDelegateView, setIsDelegateView] = useState(false);
 
@@ -184,7 +183,6 @@ const VotePage = ({
     [setModal],
   );
 
-
   useEffect(
     () =>
       onTransactionStateChange(
@@ -299,12 +297,15 @@ const VotePage = ({
             </Col>
           </Row>
         )}
-        <p 
-        onClick={() => setIsDelegateView(!isDelegateView)}
-        className={classes.toggleDelegateVoteView}>
-          {
-            isDelegateView ? <Trans>Switch to Noun view</Trans> : <Trans>Switch to delegate view</Trans>
-          }
+        <p
+          onClick={() => setIsDelegateView(!isDelegateView)}
+          className={classes.toggleDelegateVoteView}
+        >
+          {isDelegateView ? (
+            <Trans>Switch to Noun view</Trans>
+          ) : (
+            <Trans>Switch to delegate view</Trans>
+          )}
         </p>
         <Row>
           <VoteCard
