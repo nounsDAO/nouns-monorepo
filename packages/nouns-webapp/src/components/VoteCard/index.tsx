@@ -7,6 +7,7 @@ import VoteProgressBar from '../VoteProgressBar';
 import classes from './VoteCard.module.css';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
+import DelegateGroupedNounImageVoteTable from '../DelegateGroupedNounImageVoteTable';
 
 export enum VoteCardVariant {
   FOR,
@@ -19,30 +20,36 @@ interface VoteCardProps {
   percentage: number;
   nounIds: Array<string>;
   variant: VoteCardVariant;
+  delegateView?: boolean;
+  delegateGroupedVoteData: {delegate: string, supportDetailed: 0 | 1 | 2, nounsRepresented: string[]}[] | undefined
 }
 
 const VoteCard: React.FC<VoteCardProps> = props => {
-  const { proposal, percentage, nounIds, variant } = props;
+  const { proposal, percentage, nounIds, variant, delegateView, delegateGroupedVoteData } = props;
   const isMobile = isMobileScreen();
 
   let titleClass;
   let titleCopy;
   let voteCount;
+  let supportDetailedValue: 0 | 1 | 2; 
   switch (variant) {
     case VoteCardVariant.FOR:
       titleClass = classes.for;
       titleCopy = <Trans>For</Trans>;
       voteCount = proposal.forCount;
+      supportDetailedValue = 1; 
       break;
     case VoteCardVariant.AGAINST:
       titleClass = classes.against;
       titleCopy = <Trans>Against</Trans>;
       voteCount = proposal.againstCount;
+      supportDetailedValue = 0; 
       break;
     default:
       titleClass = classes.abstain;
       titleCopy = <Trans>Abstain</Trans>;
       voteCount = proposal.abstainCount;
+      supportDetailedValue = 2; 
       break;
   }
 
@@ -64,7 +71,14 @@ const VoteCard: React.FC<VoteCardProps> = props => {
           <VoteProgressBar variant={variant} percentage={percentage} />
           {!isMobile && (
             <Row className={classes.nounProfilePics}>
-              <NounImageVoteTable nounIds={nounIds} propId={parseInt(proposal.id || '0')} />
+              {
+                delegateView ? <DelegateGroupedNounImageVoteTable nounIds={nounIds} delegatedNouns={
+                 delegateGroupedVoteData ? delegateGroupedVoteData.filter(v => 
+                  v.supportDetailed === supportDetailedValue
+                ) : []
+                } propId={parseInt(proposal.id || '0')} /> : 
+                <NounImageVoteTable nounIds={nounIds} propId={parseInt(proposal.id || '0')} />
+              }
             </Row>
           )}
         </Card.Body>

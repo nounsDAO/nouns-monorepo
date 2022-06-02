@@ -33,7 +33,6 @@ import { getNounVotes } from '../../utils/getNounsVotes';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
-import StackedCircleNouns from '../../components/StackedCircleNouns';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -185,6 +184,7 @@ const VotePage = ({
     [setModal],
   );
 
+
   useEffect(
     () =>
       onTransactionStateChange(
@@ -229,6 +229,7 @@ const VotePage = ({
   }, {});
 
   const data = voters?.votes?.map(v => ({
+    delegate: v.voter.id,
     supportDetailed: v.supportDetailed,
     nounsRepresented: delegateToNounIds?.[v.voter.id] ?? [],
   }));
@@ -311,18 +312,24 @@ const VotePage = ({
             percentage={forPercentage}
             nounIds={forNouns}
             variant={VoteCardVariant.FOR}
+            delegateView={isDelegateView}
+            delegateGroupedVoteData={data}
           />
           <VoteCard
             proposal={proposal}
             percentage={againstPercentage}
             nounIds={againstNouns}
             variant={VoteCardVariant.AGAINST}
+            delegateView={isDelegateView}
+            delegateGroupedVoteData={data}
           />
           <VoteCard
             proposal={proposal}
             percentage={abstainPercentage}
             nounIds={abstainNouns}
             variant={VoteCardVariant.ABSTAIN}
+            delegateView={isDelegateView}
+            delegateGroupedVoteData={data}
           />
         </Row>
 

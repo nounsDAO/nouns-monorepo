@@ -1,3 +1,15 @@
+.voteCardLoading {
+  animation-name: pulse;
+  animation-duration: 1s;
+  transition: ease-in-out 125ms;
+}
+
+@keyframes pulse {
+  from {filter: brightness(110%);}
+  to {filter: brightness(100%);}
+}
+
+
 .voteCardHeaderText {
   font-size: 16px;
   font-family: 'Londrina Solid';
