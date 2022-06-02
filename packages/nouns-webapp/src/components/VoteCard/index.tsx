@@ -72,7 +72,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
           {!isMobile && (
             <Row className={classes.nounProfilePics}>
               {
-                delegateView ? <DelegateGroupedNounImageVoteTable nounIds={nounIds} delegatedNouns={
+                delegateView ? <DelegateGroupedNounImageVoteTable filteredDelegateGroupedVoteData={
                  delegateGroupedVoteData ? delegateGroupedVoteData.filter(v => 
                   v.supportDetailed === supportDetailedValue
                 ) : []

@@ -2,14 +2,11 @@ import React from "react";
 import { pseudoRandomPredictableShuffle } from "../../utils/pseudoRandomPredictableShuffle";
 import { GrayCircle } from "../GrayCircle";
 import HoverCard from "../HoverCard";
-import { StandaloneNounCircular } from "../StandaloneNoun";
 import classes from "./DelegateGroupedNounImageVoteTable.module.css";
-import {BigNumber as EthersBN } from "ethers";
 import StackedCircleNouns from "../StackedCircleNouns";
 
 interface DelegateGruopedNounImageVoteTableProps {
-    nounIds: string[];
-    delegatedNouns: any[];
+    filteredDelegateGroupedVoteData: {delegate: string, supportDetailed: 0 | 1 | 2, nounsRepresented: string[]}[] | undefined
     propId: number;
 };
 const NOUNS_PER_VOTE_CARD_DESKTOP = 15;
@@ -18,18 +15,20 @@ const isXLScreen = window.innerWidth > 1200;
 
 const DelegateGroupedNounImageVoteTable: React.FC<DelegateGruopedNounImageVoteTableProps> = props => {
 
-    const {nounIds, delegatedNouns, propId} = props;
+  const {filteredDelegateGroupedVoteData, propId} = props;
 
-  const shuffledNounIds = pseudoRandomPredictableShuffle(nounIds, propId);
+  const shuffledFilteredDelegateGroupedVoteData = pseudoRandomPredictableShuffle(filteredDelegateGroupedVoteData, propId);
 
-  console.log("DELEGATED NOUNS", delegatedNouns);
+  console.log(shuffledFilteredDelegateGroupedVoteData);
 
 
-  const paddedNounIds = shuffledNounIds
-    .map((nounId: string) => {
+  const paddedNounIds = shuffledFilteredDelegateGroupedVoteData 
+    .map((data: {
+        delegate: string, supportDetailed: 0 | 1 | 2, nounsRepresented: string[]
+    }) => {
       return (
-        <HoverCard hoverCardContent={(dataTip: string) => <>{dataTip} is cool</>} tip={nounId}>
-          {/* <StandaloneNounCircular nounId={EthersBN.from(nounId)} /> */}
+        <HoverCard hoverCardContent={(dataTip: string) => <>{dataTip} is cool</>} tip={data.delegate}>
+          <StackedCircleNouns nounIds={data.nounsRepresented.map((nounId: string) => parseInt(nounId))} tightStack={true}/>
         </HoverCard>
       );
     })
