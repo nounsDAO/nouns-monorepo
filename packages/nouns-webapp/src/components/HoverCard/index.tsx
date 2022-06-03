@@ -5,22 +5,24 @@ import classes from './HoverCard.module.css';
 interface HoverCardProps {
   hoverCardContent: (dataTip: string) => React.ReactNode;
   tip: string;
+  id: string;
 }
 
 const HoverCard: React.FC<HoverCardProps> = props => {
-  const { hoverCardContent, tip } = props;
+  const { hoverCardContent, tip, id } = props;
 
   return (
     <>
       <ReactTooltip
-        id="hover-card"
+        // id="hover-card"
+        id={id}
         arrowColor={'rgba(0,0,0,0)'}
         className={classes.hover}
         getContent={dataTip => {
           return hoverCardContent(dataTip);
         }}
       />
-      <div data-tip={tip} data-for="hover-card">
+      <div data-tip={tip} data-for={id}>
         {props.children}
       </div>
     </>

@@ -150,17 +150,18 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
             <h3>Proposed by</h3>
 
             <div className={classes.byLineContentWrapper}>
-              <HoverCard
+              {/* <HoverCard
+                id={"ByLineHoverCard"}
                 hoverCardContent={(tip: string) => <PropByLineHoverCard delegateAddress={tip} />}
                 tip={proposal.proposer || ''}
-              >
+              > */}
                 <h3>
                   {proposer}
                   <span className={classes.propTransactionWrapper}>
                     {proposedAtTransactionHash}
                   </span>
                 </h3>
-              </HoverCard>
+              {/* </HoverCard> */}
             </div>
           </>
         )}

@@ -4,6 +4,8 @@ import classes from './NounImageVoteTable.module.css';
 import { GrayCircle } from '../GrayCircle';
 import { pseudoRandomPredictableShuffle } from '../../utils/pseudoRandomPredictableShuffle';
 import HoverCard from '../HoverCard';
+import React from 'react';
+import NounHoverCard from '../NounHoverCard';
 
 interface NounImageVoteTableProps {
   nounIds: string[];
@@ -20,9 +22,12 @@ const NounImageVoteTable: React.FC<NounImageVoteTableProps> = props => {
   const paddedNounIds = shuffledNounIds
     .map((nounId: string) => {
       return (
-        // <HoverCard hoverCardContent={(dataTip: string) => <>{dataTip} is cool</>} tip={nounId}>
-        <StandaloneNounCircular nounId={EthersBN.from(nounId)} />
-        // </HoverCard>
+        <HoverCard id={"NounHoverCard"} hoverCardContent={(dataTip: string) => <NounHoverCard nounId={dataTip}/>} tip={
+          // TODO will this actualy interfear w anything????
+          `${nounId}`
+        }>
+          <StandaloneNounCircular nounId={EthersBN.from(nounId)} />
+        </HoverCard>
       );
     })
     .concat(Array(NOUNS_PER_VOTE_CARD_DESKTOP).fill(<GrayCircle />))
