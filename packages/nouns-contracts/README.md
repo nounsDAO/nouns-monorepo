@@ -38,7 +38,7 @@ yarn build
 yarn test
 ```
 
-### Install forge depdendencies
+### Install forge dependencies
 
 ```sh
 forge install
