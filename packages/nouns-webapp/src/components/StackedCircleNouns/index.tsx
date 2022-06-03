@@ -22,8 +22,10 @@ const TightStackedCircleNouns: React.FC<StackedCircleNounsProps> = props => {
 
   const shift = 3;
 
+  const square = 55;
+
   return (
-    <svg width="50" height="50">
+    <svg width={square} height={square}>
       {svgs
         .map((dataURI: string, i: number) => {
           return (
@@ -31,9 +33,9 @@ const TightStackedCircleNouns: React.FC<StackedCircleNounsProps> = props => {
               <clipPath id={`clipCircleNoun${nounIds[i]}`}>
                 <circle
                   id={`${nounIds[i]}`}
-                  r="16"
-                  cx={25 + i * shift}
-                  cy={25 - i * shift}
+                  r="20"
+                  cx={28 + i * shift}
+                  cy={(square - 21) - i * shift}
                   style={{
                     fill: 'none',
                     stroke: 'white',
@@ -45,10 +47,10 @@ const TightStackedCircleNouns: React.FC<StackedCircleNounsProps> = props => {
               <use xlinkHref={`#${nounIds[i]}`} />
               <image
                 clip-path={`url(#clipCircleNoun${nounIds[i]})`}
-                x={9 + i * shift}
-                y={9 - i * shift}
-                width="32"
-                height="32"
+                x={8 + i * shift}
+                y={14 - i * shift}
+                width="40"
+                height="40"
                 href={dataURI}
               ></image>
             </g>

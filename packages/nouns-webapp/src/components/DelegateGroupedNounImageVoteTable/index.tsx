@@ -12,9 +12,7 @@ interface DelegateGruopedNounImageVoteTableProps {
     | undefined;
   propId: number;
 }
-const NOUNS_PER_VOTE_CARD_DESKTOP = 15;
-
-const isXLScreen = window.innerWidth > 1200;
+const NOUNS_PER_VOTE_CARD_DESKTOP = 12;
 
 const DelegateGroupedNounImageVoteTable: React.FC<
   DelegateGruopedNounImageVoteTableProps
@@ -42,12 +40,12 @@ const DelegateGroupedNounImageVoteTable: React.FC<
         </HoverCard>
       );
     })
-    .concat(Array(NOUNS_PER_VOTE_CARD_DESKTOP).fill(<GrayCircle small={true} />))
+    .concat(Array(NOUNS_PER_VOTE_CARD_DESKTOP).fill(<GrayCircle isDelegateView={true} />))
     .slice(0, NOUNS_PER_VOTE_CARD_DESKTOP);
 
   const content = () => {
     const rows = 3;
-    const rowLength = isXLScreen ? 5 : 4;
+    const rowLength = 4;
 
     return Array(rows)
       .fill(0)
@@ -56,7 +54,9 @@ const DelegateGroupedNounImageVoteTable: React.FC<
           {Array(rowLength)
             .fill(0)
             .map((_, j) => (
-              <td className={classes.nounCell} key={j}>
+              <td className={classes.nounCell}
+              key={j}
+              >
                 {paddedNounIds[i * rowLength + j]}
               </td>
             ))}
