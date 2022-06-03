@@ -383,7 +383,7 @@ msgstr "頭"
 
 #: src/components/Holder/index.tsx
 msgid "Held by"
-msgstr "主催者："
+msgstr "主催者"
 
 #: src/components/AuctionActivity/index.tsx
 msgid "Help mint the next Noun"
