@@ -204,17 +204,26 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
         }
       >
         <div className={classes.delegateCandidateInfoWrapper}>
-          {isAddress(delegateAddress) && (currentDelegate !== delegateAddress) ? (
-            <DelegationCandidateInfo
-              address={delegateAddress || ''}
-              votesToAdd={availableVotes}
-              changeModalState={changeDelegateState}
-            />
-          ) : (
-            <span
-              className={classes.alreadyDelegatedCopy}
-            ><Trans>You've already delegated to this address</Trans></span>
-          )}
+          {
+            changeDelegateState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS && delegateAddress === currentDelegate 
+            ? (
+              <span className={classes.alreadyDelegatedCopy}>
+                <Trans>You've already delegated to this address</Trans>
+              </span>
+            ) : (
+              <>
+              {isAddress(delegateAddress) && 
+                <DelegationCandidateInfo
+                  address={delegateAddress || ''}
+                  votesToAdd={availableVotes}
+                  changeModalState={changeDelegateState}
+                />
+              }
+              </>
+            )
+          }
+
+         
         </div>
       </Collapse>
 

@@ -1,6 +1,6 @@
 import Avatar from '@davatar/react';
 import { Trans } from '@lingui/macro';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useShortAddress } from '../../utils/addressAndENSDisplayUtils';
 import ShortAddress from '../ShortAddress';
 import { useAccountVotes } from '../../wrappers/nounToken';
@@ -19,11 +19,26 @@ interface DelegationCandidateInfoProps {
 const DelegationCandidateInfo: React.FC<DelegationCandidateInfoProps> = props => {
   const { address, changeModalState, votesToAdd } = props;
 
+  const [willHaveVoteCount, setWillHaveVoteCount] = useState(0);
+
   const shortAddress = useShortAddress(address);
 
   const votes = useAccountVotes(address);
 
   const countDelegatedNouns = votes ?? 0;
+
+  // Do this so that in the lag between the delegation happening on chain and the UI updating
+  // we don't show that we've added the delegated votes twice
+  useEffect(() => {
+    if (changeModalState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS) {
+      setWillHaveVoteCount(0);
+    }
+
+    if (willHaveVoteCount > 0) {
+      return;
+    }
+    setWillHaveVoteCount(countDelegatedNouns + votesToAdd);
+  }, [willHaveVoteCount, countDelegatedNouns, votesToAdd, changeModalState]);
 
   const changeDelegateInfo = usePickByState(
     changeModalState,
@@ -40,7 +55,7 @@ const DelegationCandidateInfo: React.FC<DelegationCandidateInfoProps> = props =>
       />,
       <DelegationCandidateVoteCountInfo
         text={<Trans>Will have</Trans>}
-        voteCount={countDelegatedNouns + votesToAdd}
+        voteCount={willHaveVoteCount}
         isLoading={true}
       />,
       <DelegationCandidateVoteCountInfo
