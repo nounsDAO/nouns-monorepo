@@ -45,7 +45,7 @@ const Holder: React.FC<HolderProps> = props => {
             }}
             className={classes.holderCopy}
           >
-            <Trans>Holder</Trans>
+            <Trans>Held by</Trans>
           </h4>
         </Col>
         <Col xs="auto" lg={12}>

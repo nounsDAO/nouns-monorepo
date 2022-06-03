@@ -343,6 +343,7 @@ msgstr ""
 msgid "Failed to fetch Noun activity history"
 msgstr ""
 
+#: src/components/Holder/index.tsx
 #: src/components/NounInfoRowHolder/index.tsx
 msgid "Failed to fetch Noun info"
 msgstr ""
@@ -387,13 +388,17 @@ msgstr ""
 msgid "Head"
 msgstr ""
 
-#: src/components/NounInfoRowHolder/index.tsx
+#: src/components/Holder/index.tsx
 msgid "Held by"
 msgstr ""
 
 #: src/components/AuctionActivity/index.tsx
 msgid "Help mint the next Noun"
 msgstr ""
+
+#: src/components/Holder/index.tsx
+#~ msgid "Holder"
+#~ msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "In addition to the precautions taken by Compound Governance, Nounders have given themselves a special veto right to ensure that no malicious proposals can be passed while the Noun supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort."
@@ -882,6 +887,7 @@ msgstr ""
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
 msgstr ""
 
+#: src/components/NounInfoRowHolder/index.tsx
 #: src/components/Winner/index.tsx
 msgid "Winner"
 msgstr ""
