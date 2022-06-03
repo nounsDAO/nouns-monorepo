@@ -24,8 +24,6 @@ const DelegateGroupedNounImageVoteTable: React.FC<
     propId,
   );
 
-  console.log(shuffledFilteredDelegateGroupedVoteData);
-
   const paddedNounIds = shuffledFilteredDelegateGroupedVoteData
     .map((data: { delegate: string; supportDetailed: 0 | 1 | 2; nounsRepresented: string[] }) => {
       return (
