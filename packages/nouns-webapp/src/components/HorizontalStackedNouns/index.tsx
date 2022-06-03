@@ -1,5 +1,6 @@
 import { BigNumber } from 'ethers';
 import React from 'react';
+import { GrayCircle } from '../GrayCircle';
 import { StandaloneNounCircular } from '../StandaloneNoun';
 import classes from './HorizontalStackedNouns.module.css';
 

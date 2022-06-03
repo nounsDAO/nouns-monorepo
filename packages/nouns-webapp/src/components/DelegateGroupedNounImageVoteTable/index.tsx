@@ -6,6 +6,8 @@ import classes from './DelegateGroupedNounImageVoteTable.module.css';
 import TightStackedCircleNouns from '../StackedCircleNouns';
 import DelegateViewVoteHoverCard from '../DelegateViewVoteHoverCard';
 import { useEthers } from '@usedapp/core';
+import { useNounSeeds } from '../../wrappers/nounToken';
+import { getNoun } from '../StandaloneNoun';
 
 interface DelegateGruopedNounImageVoteTableProps {
   filteredDelegateGroupedVoteData:
@@ -26,7 +28,9 @@ const DelegateGroupedNounImageVoteTable: React.FC<
   );
 
   const { library } = useEthers();
+  const seeds = useNounSeeds();
   const [ensCached, setEnsCached] = useState(false);
+  const [seedsCached, setSeedsCached] = useState(false);
   // Cache ENS with 30min TTL to make loading more seamless
   useEffect(() => {
     if (!filteredDelegateGroupedVoteData || !library || ensCached) {
@@ -54,6 +58,32 @@ const DelegateGroupedNounImageVoteTable: React.FC<
     setEnsCached(true);
 
   }, [library, ensCached, filteredDelegateGroupedVoteData]);
+
+  useEffect(() => {
+    // if (seedsCached || !seeds || !seeds.length) {
+    //   return;
+    // }
+    
+    if (seedsCached) {
+      return;
+    }
+
+    let nounIds = new Array<string>();
+    filteredDelegateGroupedVoteData?.forEach((d) => {
+      d.nounsRepresented.forEach((noun) => nounIds.push(noun));
+    });
+
+    console.log("NOUN IDS:", nounIds);
+    nounIds.forEach((nounId) => {
+      const nounInfo = getNoun(nounId, seeds[parseInt(nounId)]);
+      localStorage.setItem(`noun_${nounId}_image`, nounInfo.image);
+    });
+
+    setSeedsCached(true);
+  },[filteredDelegateGroupedVoteData, seeds, seedsCached]);
+
+
+
 
   const paddedNounIds = shuffledFilteredDelegateGroupedVoteData
     .map((data: { delegate: string; supportDetailed: 0 | 1 | 2; nounsRepresented: string[] }) => {

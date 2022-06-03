@@ -1,10 +1,12 @@
 import { useQuery } from '@apollo/client';
 import { Trans } from '@lingui/macro';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Spinner } from 'react-bootstrap';
 import { voteInfoById } from '../../wrappers/subgraph';
 import ShortAddress from '../ShortAddress';
 import HorizontalStackedNouns from '../HorizontalStackedNouns';
+import StandaloneNoun, { StandaloneNounWithSeed } from '../StandaloneNoun';
+import { BigNumber } from 'ethers';
 
 interface DelegateViewVoteHoverCardProps {
   voteId: string;
@@ -14,12 +16,12 @@ const DelegateViewVoteHoverCard: React.FC<DelegateViewVoteHoverCardProps> = prop
   const { voteId } = props;
 
   const rawData = localStorage.getItem(voteId);
+  const data = JSON.parse(rawData ?? "{}");
+
 
   if (!rawData) {
      return <>Error fetching Vote info</>;
   }
-
-  const data = JSON.parse(rawData);
 
 
   return (
@@ -36,9 +38,22 @@ const DelegateViewVoteHoverCard: React.FC<DelegateViewVoteHoverCardProps> = prop
           display: 'flex',
         }}
       >
+
         {/* <HorizontalStackedNouns
-          nounIds={data.nounsRepresented}
-        /> */}
+        nounIds={data.nounsRepresented ?? []}
+      /> */}
+      {
+          data.nounsRepresented.map((nounId: string) => {
+            const imageData = localStorage.getItem(`noun_${nounId}_image`);
+            return <img src={imageData ?? ""} alt="" height={42} width={42} 
+            style={{
+                clipPath: 'circle(21px at center)',
+                marginLeft: '-21px'
+            }}
+            />
+          })
+      }
+
       </div>
 
       <div

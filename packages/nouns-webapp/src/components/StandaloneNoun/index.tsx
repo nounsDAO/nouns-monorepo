@@ -71,6 +71,8 @@ export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
     dispatch(setOnDisplayAuctionNounId(nounId.toNumber()));
   };
 
+  if (!seed || !nounId ) return <Noun imgPath="" alt="Noun" />
+
   return (
     <Link
       to={'/noun/' + nounId.toString()}
