@@ -17,6 +17,7 @@ import ShortAddress from '../ShortAddress';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import { Locales } from '../../i18n/locales';
 import HoverCard from '../HoverCard';
+import PropByLineHoverCard from '../PropByLineHoverCard';
 
 interface ProposalHeaderProps {
   proposal: Proposal;
@@ -150,7 +151,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
 
             <div className={classes.byLineContentWrapper}>
               <HoverCard
-                hoverCardContent={(tip: string) => <>I hold {tip} Nouns</>}
+                hoverCardContent={(tip: string) => <PropByLineHoverCard delegateAddress={tip} />}
                 tip={proposal.proposer || ''}
               >
                 <h3>

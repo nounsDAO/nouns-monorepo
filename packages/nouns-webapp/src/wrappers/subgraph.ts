@@ -265,6 +265,17 @@ export const delegateNounsAtBlockQuery = (delegates: string[], block: number) =>
 }
 `;
 
+export const currentlyDelegatedNouns = (delegate: string) => gql`
+{
+  delegates(where: { id: "${delegate}"} ) {
+    id
+    nounsRepresented {
+      id
+    }
+  }
+}
+`;
+
 export const voteInfoById = (voteId: string) => gql`
 {
   votes(
@@ -277,7 +288,6 @@ export const voteInfoById = (voteId: string) => gql`
     }
   }
 }
-
 `;
 
 export const clientFactory = (uri: string) =>

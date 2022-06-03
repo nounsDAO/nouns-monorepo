@@ -20,9 +20,9 @@ const NounImageVoteTable: React.FC<NounImageVoteTableProps> = props => {
   const paddedNounIds = shuffledNounIds
     .map((nounId: string) => {
       return (
-        <HoverCard hoverCardContent={(dataTip: string) => <>{dataTip} is cool</>} tip={nounId}>
-          <StandaloneNounCircular nounId={EthersBN.from(nounId)} />
-        </HoverCard>
+        // <HoverCard hoverCardContent={(dataTip: string) => <>{dataTip} is cool</>} tip={nounId}>
+        <StandaloneNounCircular nounId={EthersBN.from(nounId)} />
+        // </HoverCard>
       );
     })
     .concat(Array(NOUNS_PER_VOTE_CARD_DESKTOP).fill(<GrayCircle />))
