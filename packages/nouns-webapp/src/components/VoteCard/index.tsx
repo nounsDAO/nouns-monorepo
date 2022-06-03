@@ -7,6 +7,7 @@ import classes from './VoteCard.module.css';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
 import DelegateGroupedNounImageVoteTable from '../DelegateGroupedNounImageVoteTable';
+import HorizontalStackedNouns from '../HorizontalStackedNouns';
 
 export enum VoteCardVariant {
   FOR,

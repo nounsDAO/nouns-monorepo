@@ -1,8 +1,6 @@
 .wrapper {
-  /* display: flex; */
   position: relative;
   height: fit-content;
-  /* width: fit-content; */
 }
 
 .nounWrapper {

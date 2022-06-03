@@ -265,6 +265,21 @@ export const delegateNounsAtBlockQuery = (delegates: string[], block: number) =>
 }
 `;
 
+export const voteInfoById = (voteId: string) => gql`
+{
+  votes(
+  where:  {id: "${voteId}"}) {
+    voter {
+      id
+    }
+    nouns {
+      id
+    }
+  }
+}
+
+`;
+
 export const clientFactory = (uri: string) =>
   new ApolloClient({
     uri,

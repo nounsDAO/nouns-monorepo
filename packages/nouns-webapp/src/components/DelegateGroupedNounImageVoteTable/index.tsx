@@ -4,6 +4,7 @@ import { GrayCircle } from '../GrayCircle';
 import HoverCard from '../HoverCard';
 import classes from './DelegateGroupedNounImageVoteTable.module.css';
 import TightStackedCircleNouns from '../StackedCircleNouns';
+import DelegateViewVoteHoverCard from '../DelegateViewVoteHoverCard';
 
 interface DelegateGruopedNounImageVoteTableProps {
   filteredDelegateGroupedVoteData:
@@ -31,8 +32,8 @@ const DelegateGroupedNounImageVoteTable: React.FC<
     .map((data: { delegate: string; supportDetailed: 0 | 1 | 2; nounsRepresented: string[] }) => {
       return (
         <HoverCard
-          hoverCardContent={(dataTip: string) => <>{dataTip} is cool</>}
-          tip={data.delegate}
+          hoverCardContent={(dataTip: string) => <DelegateViewVoteHoverCard voteId={dataTip} />}
+          tip={`${data.delegate}-${propId}`}
         >
           <TightStackedCircleNouns
             nounIds={data.nounsRepresented.map((nounId: string) => parseInt(nounId))}
