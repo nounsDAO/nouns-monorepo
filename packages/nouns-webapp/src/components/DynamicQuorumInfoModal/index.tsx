@@ -312,8 +312,12 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                         (againstVotesBps > 0.9 * positiveRootDQMPolynomial ? 20 : -10)
                       }
                     >
-                      Nouns Currently Against: {againstVotesAbs} → Current Quorum:{' '}
+                      {/* Nouns Currently Against: {againstVotesAbs} → Current Quorum:{' '}
                       {Math.floor(
+                        (Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) * totalNounSupply) /
+                          10_000,
+                      )} */}
+                      Current Quorum: {Math.floor(
                         (Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) * totalNounSupply) /
                           10_000,
                       )}
@@ -326,13 +330,39 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                         (againstVotesBps > 0.9 * positiveRootDQMPolynomial ? 20 : -10)
                       }
                     >
-                      Nouns Currently Against: {againstVotesAbs} → Current Quorum:{' '}
+                      {/* Nouns Currently Against: {againstVotesAbs} → Current Quorum:{' '}
                       {Math.floor(
                         (Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) * totalNounSupply) /
                           10_000,
-                      )}
+                      )} */}
+                        Current Quorum: {Math.floor(
+                        (Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) * totalNounSupply) /
+                          10_000,
+                      )} 
                     </text>
                   )}
+
+                  {
+                    againstVotesBps > 4000 ? (
+                      <text 
+                      x={againstVotesLabelLineEnd[0][0] - 390 + 145}
+                      y={
+                        againstVotesLabelLineEnd[0][1] +
+                        (againstVotesBps > 0.9 * positiveRootDQMPolynomial ? 20 : -10)
+                      }
+                      fill="var(--brand-gray-light-text)" 
+                     >({againstVotesAbs} Nouns Currently Against)</text>
+                    ) : (
+                      <text 
+                      x={againstVotesLabelLineEnd[0][0] + 10 + 145}
+                      y={
+                        againstVotesLabelLineEnd[0][1] +
+                        (againstVotesBps > 0.9 * positiveRootDQMPolynomial ? 20 : -10)
+                      }
+                      fill="var(--brand-gray-light-text)"
+                      >({againstVotesAbs} Nouns Currently Against)</text>
+                    )
+                  }
                   <text
                     x={againstVotesLabelLineEnd[0][0] + 10}
                     y={310}
