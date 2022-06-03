@@ -1002,6 +1002,10 @@ msgstr "あなたはこの提案に<0>反対</0>を投票しました"
 msgid "You voted <0>For</0> this proposal"
 msgstr "あなたはこの提案<0>に</0>投票しました"
 
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "You've already delegated to this address"
+msgstr "あなたはすでにこのアドレスに委任しています"
+
 #: src/pages/Playground/index.tsx
 msgid "You've generated {0} years worth of Nouns"
 msgstr "{0} 年分のナウンを生成しました"

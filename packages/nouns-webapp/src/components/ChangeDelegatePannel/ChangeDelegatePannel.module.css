@@ -86,3 +86,8 @@
     left: 81.115%;
   }
 }
+
+.alreadyDelegatedCopy {
+  margin-left: 0.25rem;
+  color: var(--brand-cool-light-text);
+}

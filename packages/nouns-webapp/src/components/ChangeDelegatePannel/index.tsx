@@ -8,7 +8,7 @@ import currentDelegatePannelClasses from '../CurrentDelegatePannel/CurrentDelega
 import DelegationCandidateInfo from '../DelegationCandidateInfo';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import classes from './ChangeDelegatePannel.module.css';
-import { useDelegateVotes, useNounTokenBalance } from '../../wrappers/nounToken';
+import { useDelegateVotes, useNounTokenBalance, useUserDelegatee } from '../../wrappers/nounToken';
 import { usePickByState } from '../../utils/pickByState';
 import { buildEtherscanTxLink } from '../../utils/etherscan';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
@@ -56,6 +56,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
   const availableVotes = useNounTokenBalance(account ?? '') ?? 0;
   const { send: delegateVotes, state: delageeState } = useDelegateVotes(delegateAddress);
   const locale = useActiveLocale();
+  const currentDelegate = useUserDelegatee();
 
   useEffect(() => {
     if (delageeState.status === 'Success') {
@@ -118,7 +119,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
           </div>
         }
         buttonStyle={
-          isAddress(delegateAddress)
+          (isAddress(delegateAddress) && delegateAddress !== currentDelegate)
             ? NavBarButtonStyle.DELEGATE_SECONDARY
             : NavBarButtonStyle.DELEGATE_DISABLED
         }
@@ -203,12 +204,16 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
         }
       >
         <div className={classes.delegateCandidateInfoWrapper}>
-          {isAddress(delegateAddress) && (
+          {isAddress(delegateAddress) && (currentDelegate !== delegateAddress) ? (
             <DelegationCandidateInfo
               address={delegateAddress || ''}
               votesToAdd={availableVotes}
               changeModalState={changeDelegateState}
             />
+          ) : (
+            <span
+              className={classes.alreadyDelegatedCopy}
+            ><Trans>You've already delegated to this address</Trans></span>
           )}
         </div>
       </Collapse>

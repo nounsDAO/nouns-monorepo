@@ -1029,6 +1029,10 @@ msgstr ""
 msgid "You voted <0>For</0> this proposal"
 msgstr ""
 
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "You've already delegated to this address"
+msgstr ""
+
 #: src/pages/Playground/index.tsx
 msgid "You've generated {0} years worth of Nouns"
 msgstr ""
