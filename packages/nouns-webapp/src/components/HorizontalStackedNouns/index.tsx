@@ -12,7 +12,7 @@ const HorizontalStackedNouns: React.FC<HorizontalStackedNounsProps> = props => {
   return (
     <div className={classes.wrapper}>
       {nounIds
-        .slice(0, 10)
+        .slice(0, 6)
         .map((nounId: string, i: number) => {
           return (
             <div
