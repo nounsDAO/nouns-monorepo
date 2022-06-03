@@ -13,14 +13,14 @@ interface DelegateViewVoteHoverCardProps {
 const DelegateViewVoteHoverCard: React.FC<DelegateViewVoteHoverCardProps> = props => {
   const { voteId } = props;
 
-  const { data, loading, error } = useQuery(voteInfoById(voteId));
+  const rawData = localStorage.getItem(voteId);
 
-  if (loading || (data && data.votes.length === 0)) {
-    return <Spinner animation="border" />;
+  if (!rawData) {
+     return <>Error fetching Vote info</>;
   }
-  if (error) {
-    return <>Error fetching Vote info</>;
-  }
+
+  const data = JSON.parse(rawData);
+
 
   return (
     <div
@@ -36,9 +36,9 @@ const DelegateViewVoteHoverCard: React.FC<DelegateViewVoteHoverCardProps> = prop
           display: 'flex',
         }}
       >
-        <HorizontalStackedNouns
-          nounIds={data.votes[0].nouns.map((noun: { id: string }) => noun.id)}
-        />
+        {/* <HorizontalStackedNouns
+          nounIds={data.nounsRepresented}
+        /> */}
       </div>
 
       <div
@@ -49,7 +49,7 @@ const DelegateViewVoteHoverCard: React.FC<DelegateViewVoteHoverCardProps> = prop
           textAlign: 'left',
         }}
       >
-        <ShortAddress address={data ? data.votes[0].voter.id : ''} />
+        <ShortAddress address={data.delegate} />
       </div>
 
       <div
@@ -87,7 +87,7 @@ const DelegateViewVoteHoverCard: React.FC<DelegateViewVoteHoverCardProps> = prop
         >
           <Trans>
             Voted with{' '}
-            <span style={{ fontWeight: 'bold' }}>{data.votes[0].nouns.length} Nouns</span>
+            <span style={{ fontWeight: 'bold' }}>{data.nounsRepresented.length} Nouns</span>
           </Trans>
         </div>
       </div>

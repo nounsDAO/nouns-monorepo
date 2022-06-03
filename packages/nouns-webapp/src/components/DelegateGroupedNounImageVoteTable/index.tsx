@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { pseudoRandomPredictableShuffle } from '../../utils/pseudoRandomPredictableShuffle';
 import { GrayCircle } from '../GrayCircle';
 import HoverCard from '../HoverCard';
 import classes from './DelegateGroupedNounImageVoteTable.module.css';
 import TightStackedCircleNouns from '../StackedCircleNouns';
 import DelegateViewVoteHoverCard from '../DelegateViewVoteHoverCard';
+import { useEthers } from '@usedapp/core';
 
 interface DelegateGruopedNounImageVoteTableProps {
   filteredDelegateGroupedVoteData:
@@ -24,8 +25,40 @@ const DelegateGroupedNounImageVoteTable: React.FC<
     propId,
   );
 
+  const { library } = useEthers();
+  const [ensCached, setEnsCached] = useState(false);
+  // Cache ENS with 30min TTL to make loading more seamless
+  useEffect(() => {
+    if (!filteredDelegateGroupedVoteData || !library || ensCached) {
+      return;
+    }
+
+    filteredDelegateGroupedVoteData.forEach((
+      delegateInfo: {delegate: string}
+    ) => {
+        library
+          .lookupAddress(delegateInfo.delegate)
+          .then(name => {
+            // Store data as mapping of address_Expiration => address or ENS
+            if (name) {
+              localStorage.setItem(`${delegateInfo.delegate}`, JSON.stringify({
+                name, 
+                expires: Date.now()/1000 + 30*60
+              }));
+            } 
+          })
+          .catch(error => {
+            console.log(`error resolving reverse ens lookup: `, error);
+          });
+    });
+    setEnsCached(true);
+
+  }, [library, ensCached, filteredDelegateGroupedVoteData]);
+
   const paddedNounIds = shuffledFilteredDelegateGroupedVoteData
     .map((data: { delegate: string; supportDetailed: 0 | 1 | 2; nounsRepresented: string[] }) => {
+
+      localStorage.setItem(`${data.delegate}-${propId}`, JSON.stringify(data));
       return (
         <HoverCard
           id={"DeleateViewVoteHoverCard"}
