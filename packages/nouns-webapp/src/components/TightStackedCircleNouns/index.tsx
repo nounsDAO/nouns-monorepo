@@ -35,7 +35,7 @@ const TightStackedCircleNouns: React.FC<StackedCircleNounsProps> = props => {
                   id={`${nounIds[i]}`}
                   r="20"
                   cx={28 + i * shift}
-                  cy={(square - 21) - i * shift}
+                  cy={square - 21 - i * shift}
                   style={{
                     fill: 'none',
                     stroke: 'white',
