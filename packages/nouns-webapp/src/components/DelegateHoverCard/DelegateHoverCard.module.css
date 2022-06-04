@@ -64,31 +64,3 @@
   margin-bottom: 5px;
   margin-right: 6px;
 }
-
-/* .spinnerWrapper {
-    color: var(--brand-gray-light-text);
-    width: 100%;
-    height: 185px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  
-  .spinner {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-  }
-
-  .wrapper {
-    width: max-content;
-  }
-
-  .icon {
-    margin-bottom: 5px;
-    margin-right: 6px;
-  }
-
-  .bold {
-    font-weight: bold;
-} */
