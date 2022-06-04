@@ -21,6 +21,10 @@ msgstr "'Nounders' are the group of ten builders that initiated Nouns. Here are 
 #~ msgid ". Nouns can vote on proposals or delegate their vote to a third party. A minimum of"
 #~ msgstr ". Nouns can vote on proposals or delegate their vote to a third party. A minimum of"
 
+#: src/components/ByLineHoverCard/index.tsx
+msgid "... and {0} more"
+msgstr "... and {0} more"
+
 #: src/components/Documentation/index.tsx
 msgid "100% of Noun auction proceeds are trustlessly sent to the treasury."
 msgstr "100% of Noun auction proceeds are trustlessly sent to the treasury."
@@ -32,6 +36,14 @@ msgstr "3.5 artists, 6.5 technologists"
 #: src/pages/NotFound/index.tsx
 msgid "404: This is not the person, place, or thing you're looking for..."
 msgstr "404: This is not the person, place, or thing you're looking for..."
+
+#: src/components/ByLineHoverCard/index.tsx
+msgid "<0>Delegated Noun: </0>"
+msgstr "<0>Delegated Noun: </0>"
+
+#: src/components/ByLineHoverCard/index.tsx
+msgid "<0>Delegated Nouns: </0>"
+msgstr "<0>Delegated Nouns: </0>"
 
 #: src/components/ProposalHeader/index.tsx
 msgid "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
@@ -301,7 +313,6 @@ msgstr "Ends {0}"
 msgid "Error"
 msgstr "Error"
 
-#: src/components/NounHoverCard/index.tsx
 #: src/components/NounInfoRowBirthday/index.tsx
 msgid "Error fetching Noun birthday"
 msgstr "Error fetching Noun birthday"

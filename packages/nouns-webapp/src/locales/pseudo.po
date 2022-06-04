@@ -21,6 +21,10 @@ msgstr ""
 #~ msgid ". Nouns can vote on proposals or delegate their vote to a third party. A minimum of"
 #~ msgstr ""
 
+#: src/components/ByLineHoverCard/index.tsx
+msgid "... and {0} more"
+msgstr ""
+
 #: src/components/Documentation/index.tsx
 msgid "100% of Noun auction proceeds are trustlessly sent to the treasury."
 msgstr ""
@@ -31,6 +35,14 @@ msgstr ""
 
 #: src/pages/NotFound/index.tsx
 msgid "404: This is not the person, place, or thing you're looking for..."
+msgstr ""
+
+#: src/components/ByLineHoverCard/index.tsx
+msgid "<0>Delegated Noun: </0>"
+msgstr ""
+
+#: src/components/ByLineHoverCard/index.tsx
+msgid "<0>Delegated Nouns: </0>"
 msgstr ""
 
 #: src/components/ProposalHeader/index.tsx
@@ -301,7 +313,6 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-#: src/components/NounHoverCard/index.tsx
 #: src/components/NounInfoRowBirthday/index.tsx
 msgid "Error fetching Noun birthday"
 msgstr ""

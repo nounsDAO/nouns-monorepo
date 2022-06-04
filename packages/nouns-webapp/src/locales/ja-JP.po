@@ -22,6 +22,10 @@ msgstr ""
 msgid "'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:"
 msgstr "「Nounders」とはNounsの創業に携わった10人の創業者のことであり、以下の人物で構成されています："
 
+#: src/components/ByLineHoverCard/index.tsx
+msgid "... and {0} more"
+msgstr "...そしてさらに3つ"
+
 #: src/components/Documentation/index.tsx
 msgid "100% of Noun auction proceeds are trustlessly sent to the treasury."
 msgstr "Nounオークションの売上は、第三者の介入無しで 100％トレジャリーに送られる仕組みになっています。"
@@ -33,6 +37,14 @@ msgstr "3.5アーティスト、6.5技術者"
 #: src/pages/NotFound/index.tsx
 msgid "404: This is not the person, place, or thing you're looking for..."
 msgstr "404: お探しの人、場所、物は見つかりませんでした。"
+
+#: src/components/ByLineHoverCard/index.tsx
+msgid "<0>Delegated Noun: </0>"
+msgstr "委任Noun: "
+
+#: src/components/ByLineHoverCard/index.tsx
+msgid "<0>Delegated Nouns: </0>"
+msgstr "委任Noun: "
 
 #: src/components/ProposalHeader/index.tsx
 msgid "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
@@ -294,7 +306,6 @@ msgstr "残り{0} で終了します"
 msgid "Error"
 msgstr "エラー"
 
-#: src/components/NounHoverCard/index.tsx
 #: src/components/NounInfoRowBirthday/index.tsx
 msgid "Error fetching Noun birthday"
 msgstr "Nounの誕生日を取得できませんでした"

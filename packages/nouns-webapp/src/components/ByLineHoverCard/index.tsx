@@ -21,11 +21,11 @@ const ByLineHoverCard: React.FC<ByLineHoverCardProps> = props => {
 
   if (loading || (data && data.delegates.length === 0)) {
     return (
-        <div style={{
-            height: '190px'
-        }}>
-            <Spinner animation="border" />
+        <div className={classes.spinnerWrapper}>
+        <div className={classes.spinner}>
+          <Spinner animation="border" />
         </div>
+      </div>
     );
   }
   if (error) {
@@ -87,13 +87,17 @@ const ByLineHoverCard: React.FC<ByLineHoverCardProps> = props => {
             return (
               <span className={classes.bold}>
                 {nounId}
-                {i !== MAX_NOUN_IDS_SHOWN- 1 && ', '}{' '}
+                {i !== Math.min(MAX_NOUN_IDS_SHOWN, sortedNounIds.length) - 1 && ', '}{' '}
               </span>
             );
           })}
           {
               sortedNounIds.length > MAX_NOUN_IDS_SHOWN && (
-                  <span>... and {sortedNounIds.length - MAX_NOUN_IDS_SHOWN} more</span>
+                  <span>
+                      <Trans>
+                      ... and {sortedNounIds.length - MAX_NOUN_IDS_SHOWN} more
+                      </Trans>
+                </span>
               )
           }
         </div>
