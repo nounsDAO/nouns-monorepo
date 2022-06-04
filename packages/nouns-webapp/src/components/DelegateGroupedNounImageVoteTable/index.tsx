@@ -1,6 +1,7 @@
 import React from 'react';
 import { pseudoRandomPredictableShuffle } from '../../utils/pseudoRandomPredictableShuffle';
 import { GrayCircle } from '../GrayCircle';
+import HoverCard from '../HoverCard';
 import TightStackedCircleNouns from '../TightStackedCircleNouns';
 import classes from './DelegateGroupedNounImageVoteTable.module.css';
 
@@ -26,9 +27,15 @@ const DelegateGruopedNounImageVoteTable: React.FC<
   const paddedNounIds = shuffledDelegatedGroupedNouns
     .map((data: { delegate: string; supportDetailed: 0 | 1 | 2; nounsRepresented: string[] }) => {
       return (
-        <TightStackedCircleNouns
-          nounIds={data.nounsRepresented.map((nounId: string) => parseInt(nounId))}
-        />
+        <HoverCard
+          hoverCardContent={(tip: string) => <>{tip}</>}
+          tip={`${data.delegate}-${propId}`}
+          id="delegateVoteHoverCard"
+        >
+          <TightStackedCircleNouns
+            nounIds={data.nounsRepresented.map((nounId: string) => parseInt(nounId))}
+          />
+        </HoverCard>
       );
     })
     .concat(Array(NOUNS_PER_VOTE_CARD_DESKTOP).fill(<GrayCircle isDelegateView={true} />))
