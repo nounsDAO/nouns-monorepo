@@ -173,6 +173,7 @@ msgstr ""
 msgid "Body"
 msgstr ""
 
+#: src/components/NounHoverCard/index.tsx
 #: src/components/NounInfoRowBirthday/index.tsx
 msgid "Born"
 msgstr ""
@@ -300,6 +301,7 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
+#: src/components/NounHoverCard/index.tsx
 #: src/components/NounInfoRowBirthday/index.tsx
 msgid "Error fetching Noun birthday"
 msgstr ""
@@ -387,6 +389,7 @@ msgstr ""
 msgid "Head"
 msgstr ""
 
+#: src/components/NounHoverCard/index.tsx
 #: src/components/NounInfoRowHolder/index.tsx
 msgid "Held by"
 msgstr ""
@@ -722,6 +725,14 @@ msgstr ""
 msgid "Switch"
 msgstr ""
 
+#: src/pages/Vote/index.tsx
+msgid "Switch to Noun view"
+msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "Switch to delegate view"
+msgstr ""
+
 #: src/components/NavWallet/index.tsx
 msgid "Switch wallet"
 msgstr ""
@@ -839,6 +850,10 @@ msgstr ""
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 msgid "Vetoed"
+msgstr ""
+
+#: src/components/NounHoverCard/index.tsx
+msgid "View Noun Profile"
 msgstr ""
 
 #: src/components/BidHistoryBtn/index.tsx

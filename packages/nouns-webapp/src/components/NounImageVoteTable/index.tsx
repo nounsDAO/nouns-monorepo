@@ -4,6 +4,7 @@ import classes from './NounImageVoteTable.module.css';
 import { GrayCircle } from '../GrayCircle';
 import { pseudoRandomPredictableShuffle } from '../../utils/pseudoRandomPredictableShuffle';
 import HoverCard from '../HoverCard';
+import NounHoverCard from '../NounHoverCard';
 
 interface NounImageVoteTableProps {
   nounIds: string[];
@@ -21,7 +22,10 @@ const NounImageVoteTable: React.FC<NounImageVoteTableProps> = props => {
     .map((nounId: string) => {
       return (
         <HoverCard
-          hoverCardContent={(tip: string) => <>{tip}</>}
+          // hoverCardContent={(tip: string) => <>{tip}</>}
+          hoverCardContent={
+            (tip: string) => <NounHoverCard nounId={tip}/>
+          }
           tip={nounId.toString()}
           id="nounHoverCard"
         >

@@ -1,6 +1,7 @@
 .hover {
   box-sizing: border-box;
-  width: 217px;
+  min-width: 217px;
+  width: max-content;
   height: fit-content;
   left: 301px;
   top: 396px;

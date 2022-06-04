@@ -173,6 +173,7 @@ msgstr "Bids will appear here"
 msgid "Body"
 msgstr "Body"
 
+#: src/components/NounHoverCard/index.tsx
 #: src/components/NounInfoRowBirthday/index.tsx
 msgid "Born"
 msgstr "Born"
@@ -300,6 +301,7 @@ msgstr "Ends {0}"
 msgid "Error"
 msgstr "Error"
 
+#: src/components/NounHoverCard/index.tsx
 #: src/components/NounInfoRowBirthday/index.tsx
 msgid "Error fetching Noun birthday"
 msgstr "Error fetching Noun birthday"
@@ -387,6 +389,7 @@ msgstr "Governance ‘Slow Start’"
 msgid "Head"
 msgstr "Head"
 
+#: src/components/NounHoverCard/index.tsx
 #: src/components/NounInfoRowHolder/index.tsx
 msgid "Held by"
 msgstr "Held by"
@@ -722,6 +725,14 @@ msgstr "Summary"
 msgid "Switch"
 msgstr "Switch"
 
+#: src/pages/Vote/index.tsx
+msgid "Switch to Noun view"
+msgstr "Switch to Noun view"
+
+#: src/pages/Vote/index.tsx
+msgid "Switch to delegate view"
+msgstr "Switch to delegate view"
+
 #: src/components/NavWallet/index.tsx
 msgid "Switch wallet"
 msgstr "Switch wallet"
@@ -840,6 +851,10 @@ msgstr "Value in ETH (Optional)"
 #: src/components/ProposalStatus/index.tsx
 msgid "Vetoed"
 msgstr "Vetoed"
+
+#: src/components/NounHoverCard/index.tsx
+msgid "View Noun Profile"
+msgstr "View Noun Profile"
 
 #: src/components/BidHistoryBtn/index.tsx
 msgid "View all bids"

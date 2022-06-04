@@ -166,6 +166,7 @@ msgstr "入札はここに表示されます"
 msgid "Body"
 msgstr "体"
 
+#: src/components/NounHoverCard/index.tsx
 #: src/components/NounInfoRowBirthday/index.tsx
 msgid "Born"
 msgstr "誕生"
@@ -293,6 +294,7 @@ msgstr "残り{0} で終了します"
 msgid "Error"
 msgstr "エラー"
 
+#: src/components/NounHoverCard/index.tsx
 #: src/components/NounInfoRowBirthday/index.tsx
 msgid "Error fetching Noun birthday"
 msgstr "Nounの誕生日を取得できませんでした"
@@ -380,6 +382,7 @@ msgstr "ガバナンス「スロースタート」"
 msgid "Head"
 msgstr "頭"
 
+#: src/components/NounHoverCard/index.tsx
 #: src/components/NounInfoRowHolder/index.tsx
 msgid "Held by"
 msgstr "主催者："
@@ -707,6 +710,14 @@ msgstr "まとめ"
 msgid "Switch"
 msgstr "切り替え"
 
+#: src/pages/Vote/index.tsx
+msgid "Switch to Noun view"
+msgstr "Nounビューに切り替えます"
+
+#: src/pages/Vote/index.tsx
+msgid "Switch to delegate view"
+msgstr "ビューを委任するように切り替えます"
+
 #: src/components/NavWallet/index.tsx
 msgid "Switch wallet"
 msgstr "ウォレットを切り替える"
@@ -825,6 +836,10 @@ msgstr "ETHの価格 (任意)"
 #: src/components/ProposalStatus/index.tsx
 msgid "Vetoed"
 msgstr "拒否"
+
+#: src/components/NounHoverCard/index.tsx
+msgid "View Noun Profile"
+msgstr "Nounプロファイルを表示"
 
 #: src/components/BidHistoryBtn/index.tsx
 msgid "View all bids"
