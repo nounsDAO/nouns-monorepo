@@ -75,7 +75,7 @@ const NounHoverCard: React.FC<NounHoverCardProps> = props => {
 
             {/* Noun birthday */}
             <div className={classes.nounInfoWrapper}>
-                <CakeIcon height={20} width={20} className={classes.cakeIcon}/>
+                <CakeIcon height={20} width={20} className={classes.icon}/>
                 <Trans>Born</Trans> <span className={classes.bold}>
                     {i18n.date(birthday)}
                 </span>
@@ -84,7 +84,7 @@ const NounHoverCard: React.FC<NounHoverCardProps> = props => {
 
             {/* Current holder */}
             <div className={classes.nounInfoWrapper}>
-                <HeartIcon height={20} width={20} className={classes.heartIcon}/>
+                <HeartIcon height={20} width={20} className={classes.icon}/>
                 <span>
                 <Trans>Held by</Trans> 
                 </span>
