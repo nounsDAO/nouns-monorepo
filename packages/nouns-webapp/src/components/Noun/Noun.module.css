@@ -20,13 +20,32 @@
   border-radius: 50%;
 }
 
+.smallCircular {
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  margin-top: 9px;
+}
+
+.circleWithBorder {
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+}
+
 .rounded {
   border-radius: 15px;
 }
 
 .circularNounWrapper {
-  height: 42px;
   width: 42px;
+  height: 42px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.smallerCircularNounWrapper {
+  width: 34px;
+  height: 34px;
   margin-left: auto;
   margin-right: auto;
 }

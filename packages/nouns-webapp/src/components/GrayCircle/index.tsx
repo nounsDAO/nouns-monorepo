@@ -2,13 +2,20 @@ import { getGrayBackgroundSVG } from '../../utils/grayBackgroundSVG';
 import nounClasses from '../Noun/Noun.module.css';
 import Noun from '../Noun';
 
-export const GrayCircle = () => {
+interface GrayCircleProps {
+  small?: boolean;
+}
+
+export const GrayCircle: React.FC<GrayCircleProps> = props => {
+  const { small } = props;
   return (
     <Noun
       imgPath={getGrayBackgroundSVG()}
       alt={''}
-      wrapperClassName={nounClasses.circularNounWrapper}
-      className={nounClasses.circular}
+      wrapperClassName={
+        small ? nounClasses.smallerCircularNounWrapper : nounClasses.circularNounWrapper
+      }
+      className={small ? nounClasses.smallCircular : nounClasses.circular}
     />
   );
 };
