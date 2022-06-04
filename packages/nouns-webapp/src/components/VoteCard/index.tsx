@@ -19,10 +19,14 @@ interface VoteCardProps {
   percentage: number;
   nounIds: Array<string>;
   variant: VoteCardVariant;
+  delegateView: boolean;
+  delegateGroupedVoteData:
+  | { delegate: string; supportDetailed: 0 | 1 | 2; nounsRepresented: string[] }[]
+  | undefined;
 }
 
 const VoteCard: React.FC<VoteCardProps> = props => {
-  const { proposal, percentage, nounIds, variant } = props;
+  const { proposal, percentage, nounIds, variant, delegateView, delegateGroupedVoteData } = props;
   const isMobile = isMobileScreen();
 
   let titleClass;
