@@ -138,18 +138,20 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
 
       <div className={classes.byLineWrapper}>
         {activeLocale === Locales.ja_JP ? (
-           <HoverCard
-           hoverCardContent={(tip: string) => <ByLineHoverCard proposerAddress={tip} />}
-           tip={proposal && proposal.proposer ? proposal.proposer : ''}
-           id="byLineHoverCard"
-         >
-          <div className={classes.proposalByLineWrapperJp}>
-            <Trans>
-              <span className={classes.proposedByJp}>Proposed by: </span>
-              <span className={classes.proposerJp}>{proposer}</span>
-              <span className={classes.propTransactionWrapperJp}>{proposedAtTransactionHash}</span>
-            </Trans>
-          </div>
+          <HoverCard
+            hoverCardContent={(tip: string) => <ByLineHoverCard proposerAddress={tip} />}
+            tip={proposal && proposal.proposer ? proposal.proposer : ''}
+            id="byLineHoverCard"
+          >
+            <div className={classes.proposalByLineWrapperJp}>
+              <Trans>
+                <span className={classes.proposedByJp}>Proposed by: </span>
+                <span className={classes.proposerJp}>{proposer}</span>
+                <span className={classes.propTransactionWrapperJp}>
+                  {proposedAtTransactionHash}
+                </span>
+              </Trans>
+            </div>
           </HoverCard>
         ) : (
           <>
