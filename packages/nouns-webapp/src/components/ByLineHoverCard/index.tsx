@@ -6,10 +6,13 @@ import { currentlyDelegatedNouns } from "../../wrappers/subgraph";
 import HorizontalStackedNouns from "../HorizontalStackedNouns";
 import ShortAddress from "../ShortAddress";
 import classes from "./ByLineHoverCard.module.css";
+import { ScaleIcon } from "@heroicons/react/solid";
 
 interface ByLineHoverCardProps {
   proposerAddress: string;
 }
+
+const MAX_NOUN_IDS_SHOWN = 12;
 
 const ByLineHoverCard: React.FC<ByLineHoverCardProps> = props => {
     const { proposerAddress } = props;
@@ -19,7 +22,7 @@ const ByLineHoverCard: React.FC<ByLineHoverCardProps> = props => {
   if (loading || (data && data.delegates.length === 0)) {
     return (
         <div style={{
-            height: '100px'
+            height: '190px'
         }}>
             <Spinner animation="border" />
         </div>
@@ -63,17 +66,36 @@ const ByLineHoverCard: React.FC<ByLineHoverCardProps> = props => {
 
         <div
         >
-          <Trans>
-            <span className={classes.bold}>Representing Noun(s):</span>
-          </Trans>{' '}
-          {sortedNounIds.map((nounId: number, i: number) => {
+
+          <ScaleIcon height={15} width={15}  style={{
+              marginBottom: '5px',
+              marginRight: '6px'
+          }}/>
+        {
+            sortedNounIds.length === 1 ?
+            <Trans>
+            <span>Delegated Noun: </span>
+          </Trans> :
+
+           <Trans>
+           <span>Delegated Nouns: </span>
+         </Trans> 
+        }
+
+
+          {sortedNounIds.slice(0, MAX_NOUN_IDS_SHOWN).map((nounId: number, i: number) => {
             return (
-              <span>
+              <span className={classes.bold}>
                 {nounId}
-                {i !== sortedNounIds.length - 1 && ', '}{' '}
+                {i !== MAX_NOUN_IDS_SHOWN- 1 && ', '}{' '}
               </span>
             );
           })}
+          {
+              sortedNounIds.length > MAX_NOUN_IDS_SHOWN && (
+                  <span>... and {sortedNounIds.length - MAX_NOUN_IDS_SHOWN} more</span>
+              )
+          }
         </div>
       </div>
     </div>

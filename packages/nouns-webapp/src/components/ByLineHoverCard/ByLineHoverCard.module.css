@@ -1,7 +1,7 @@
 .wrapper {
     display: flex;
     flex-direction: column;
-    max-width: 20rem;
+    max-width: 11rem;
 }
 
 .stackedNounWrapper {
