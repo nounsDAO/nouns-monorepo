@@ -250,6 +250,7 @@ export const proposalVotesQuery = (proposalId: string) => gql`
       voter {
         id
       }
+
     }	
   }
 `;
@@ -270,6 +271,19 @@ export const currentlyDelegatedNouns = (delegate: string) => gql`
   delegates(where: { id: "${delegate}"} ) {
     id
     nounsRepresented {
+      id
+    }
+  }
+}
+`;
+
+export const voteInfoByVoteID = (voteId: string) => gql`
+{
+  votes(where: {id: "${voteId}"}) {
+    voter {
+      id
+    }
+    nouns {
       id
     }
   }

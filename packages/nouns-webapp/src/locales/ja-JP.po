@@ -872,6 +872,14 @@ msgstr "反対に投票"
 msgid "Voted for"
 msgstr "賛成に投票"
 
+#: src/components/DelegateHoverCard/index.tsx
+msgid "Voted with<0>{numVotesForProp}</0>Noun"
+msgstr "<0>{numVotesForProp}</0>のNounで投票"
+
+#: src/components/DelegateHoverCard/index.tsx
+msgid "Voted with<0>{numVotesForProp}</0>Nouns"
+msgstr "<0>{numVotesForProp}</0>のNounで投票"
+
 #: src/components/Documentation/index.tsx
 msgid "WTF?"
 msgstr "WTF?"

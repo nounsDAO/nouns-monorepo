@@ -891,6 +891,14 @@ msgstr ""
 msgid "Voted for"
 msgstr ""
 
+#: src/components/DelegateHoverCard/index.tsx
+msgid "Voted with<0>{numVotesForProp}</0>Noun"
+msgstr ""
+
+#: src/components/DelegateHoverCard/index.tsx
+msgid "Voted with<0>{numVotesForProp}</0>Nouns"
+msgstr ""
+
 #: src/components/Documentation/index.tsx
 msgid "WTF?"
 msgstr ""

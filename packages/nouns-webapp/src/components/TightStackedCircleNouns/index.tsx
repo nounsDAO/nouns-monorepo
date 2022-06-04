@@ -29,7 +29,7 @@ const TightStackedCircleNouns: React.FC<StackedCircleNounsProps> = props => {
       {svgs
         .map((dataURI: string, i: number) => {
           return (
-            <g>
+            <g key={i}>
               <clipPath id={`clipCircleNoun${nounIds[i]}`}>
                 <circle
                   id={`${nounIds[i]}`}
