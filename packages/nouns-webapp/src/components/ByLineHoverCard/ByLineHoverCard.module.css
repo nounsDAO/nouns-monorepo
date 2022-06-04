@@ -1,0 +1,28 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    max-width: 20rem;
+}
+
+.stackedNounWrapper {
+    display: flex;
+}
+
+.address {
+    font-family: 'Londrina Solid';
+    font-size: 24px;
+    width: 100%;
+    text-align: left;
+}
+
+.nounsRepresented {
+    color: var(--brand-gray-dark-text);
+    display: flex;
+    margin-top: 0.25rem;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.bold {
+    font-weight: bold;
+}
