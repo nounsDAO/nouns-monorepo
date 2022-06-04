@@ -4,13 +4,13 @@
   --brand-light-green: #6da886;
   --brand-black: #212529;
   /* Colors from Figma  */
-  --brand-cool-background: #d5d7e0;
-  --brand-cool-border: rgb(189, 192, 207);
+  --brand-cool-background: #fed32f;
+  --brand-cool-border: rgb(254, 211, 37);
   --brand-cool-dark-text: #151c3b;
   --brand-cool-light-text: #79809c;
   --brand-cool-accent: #e9ebf3;
-  --brand-warm-background: #d5d7e0;
-  --brand-warm-border: rgb(207, 189, 186);
+  --brand-warm-background: #fed32f;
+  --brand-warm-border: rgb(254, 211, 37);
   --brand-warm-dark-text: #221b1a;
   --brand-warm-light-text: #8f7e7c;
   --brand-warm-accent: #f9f1f1;
