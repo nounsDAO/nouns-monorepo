@@ -21,8 +21,8 @@ interface VoteCardProps {
   variant: VoteCardVariant;
   delegateView: boolean;
   delegateGroupedVoteData:
-  | { delegate: string; supportDetailed: 0 | 1 | 2; nounsRepresented: string[] }[]
-  | undefined;
+    | { delegate: string; supportDetailed: 0 | 1 | 2; nounsRepresented: string[] }[]
+    | undefined;
 }
 
 const VoteCard: React.FC<VoteCardProps> = props => {
