@@ -31,7 +31,7 @@ const DelegateGruopedNounImageVoteTable: React.FC<
         />
       );
     })
-    .concat(Array(NOUNS_PER_VOTE_CARD_DESKTOP).fill(<GrayCircle small={true} />))
+    .concat(Array(NOUNS_PER_VOTE_CARD_DESKTOP).fill(<GrayCircle isDelegateView={true} />))
     .slice(0, NOUNS_PER_VOTE_CARD_DESKTOP);
 
   const content = () => {
