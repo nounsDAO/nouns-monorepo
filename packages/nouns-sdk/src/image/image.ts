@@ -154,7 +154,7 @@ export class Image {
         if (this._bounds.bottom === 0) {
           this._bounds.bottom = y - 1;
         }
-      } else if (y === 31) {
+      } else if (y === this._height - 1) {
         this._bounds.bottom = y;
       } else {
         this._bounds.bottom = 0;
