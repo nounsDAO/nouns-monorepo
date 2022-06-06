@@ -9,6 +9,8 @@ import {
   NounsSeeder__factory as NounsSeederFactory,
   WETH,
   WETH__factory as WethFactory,
+  NounsDescriptorWithProperties__factory,
+  NounsDescriptorWithProperties,
 } from '../typechain';
 import ImageData from '../files/image-data.json';
 import { Block } from '@ethersproject/abstract-provider';
@@ -45,6 +47,23 @@ export const deployNounsDescriptor = async (
   );
 
   return nounsDescriptorFactory.deploy();
+};
+
+export const deployNounsDescriptorProperties = async (
+  originalAddress: string,
+  deployer?: SignerWithAddress,
+): Promise<NounsDescriptorWithProperties> => {
+  const signer = deployer || (await getSigners()).deployer;
+  const nftDescriptorLibraryFactory = await ethers.getContractFactory('NFTDescriptorProperties', signer);
+  const nftDescriptorLibrary = await nftDescriptorLibraryFactory.deploy();
+  const nounsDescriptorFactory = new NounsDescriptorWithProperties__factory(
+    {
+      'contracts/libs/NFTDescriptorProperties.sol:NFTDescriptorProperties': nftDescriptorLibrary.address,
+    },
+    signer,
+  );
+
+  return nounsDescriptorFactory.deploy(originalAddress);
 };
 
 export const deployNounsSeeder = async (deployer?: SignerWithAddress): Promise<NounsSeeder> => {
