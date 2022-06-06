@@ -84,7 +84,8 @@ export const useNounSeed = (nounId: EthersBN) => {
   const response = useContractCall<INounSeed>(request);
   if (response) {
     const seedCache = localStorage.getItem(seedCacheKey);
-    if (seedCache) {
+    const seedIsValid = Object.values(response || {}).some(v => v !== 0);
+    if (seedCache && seedIsValid) {
       const updatedSeedCache = JSON.stringify({
         ...JSON.parse(seedCache),
         [nounId.toString()]: {
