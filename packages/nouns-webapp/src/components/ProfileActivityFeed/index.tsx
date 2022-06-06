@@ -65,15 +65,22 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
     }, {});
 
   const filteredProposals = proposals.filter((p: Proposal, id: number) => {
-    return (
-      // Filter props from before the Noun was born
-      (parseInt(proposalCreatedTimestamps.proposals[id].createdTimestamp) >
-        nounCanVoteTimestamp.toNumber() ||
-        (p.id && nounVotes[p.id])) &&
-      // Filter props which were cancelled and got 0 votes of any kind
-      // This a hack to filter props that were cancelled before going live
-      !(p.status === ProposalState.CANCELLED && p.forCount + p.abstainCount + p.againstCount === 0)
+    const proposalCreationTimestamp = parseInt(
+      proposalCreatedTimestamps.proposals[id].createdTimestamp,
     );
+
+    // Filter props from before the Noun was born
+    if (nounCanVoteTimestamp.gt(proposalCreationTimestamp)) {
+      return false;
+    }
+    // Filter props which were cancelled and got 0 votes of any kind
+    if (
+      p.status === ProposalState.CANCELLED &&
+      p.forCount + p.abstainCount + p.againstCount === 0
+    ) {
+      return false;
+    }
+    return true;
   });
 
   return (
