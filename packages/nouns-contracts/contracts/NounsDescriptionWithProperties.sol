@@ -24,6 +24,7 @@ import { INounsSeeder } from './interfaces/INounsSeeder.sol';
 import { INounsDescriptorWithProperties } from './interfaces/INounsDescriptorWithProperties.sol';
 import { NFTDescriptorProperties } from './libs/NFTDescriptorProperties.sol';
 import { MultiPartRLEToSVGProperties } from './libs/MultiPartRLEToSVGProperties.sol';
+import 'hardhat/console.sol';
 
 contract NounsDescriptorWithProperties is Ownable, INounsDescriptorWithProperties {
     using Strings for uint256;
@@ -61,14 +62,42 @@ contract NounsDescriptorWithProperties is Ownable, INounsDescriptorWithPropertie
         _transferOwnership(pendingOwner);
     }
 
+    function reclaimOriginalOwnership() public onlyOwner {
+        Ownable(address(previousDescriptor)).transferOwnership(owner());
+    }
+
     function addNames(INounsDescriptorWithProperties.NameElementData[] calldata newNames) external override onlyOwner {
+        ElementTypeValues memory elTypes = elementTypeValues;
         for (uint256 i = 0; i < newNames.length; ) {
+            if (newNames[i].elementId >= getSize(newNames[i].elType, elTypes)) {
+                revert WrongIndex();
+            }
             _addName(newNames[i]);
 
             unchecked {
                 ++i;
             }
         }
+    }
+
+    function getSize(uint8 elementType, ElementTypeValues memory elTypes) internal returns (uint256 count) {
+        bytes4 selector;
+        if (elementType == elTypes.BODY) {
+            selector = INounsDescriptor.bodyCount.selector;
+        } else if (elementType == elTypes.ACCESSORY) {
+            selector = INounsDescriptor.accessoryCount.selector;
+        } else if (elementType == elTypes.HEAD) {
+            selector = INounsDescriptor.headCount.selector;
+        } else if (elementType == elTypes.GLASSES) {
+            selector = INounsDescriptor.glassesCount.selector;
+        } else if (elementType == elTypes.BACKGROUND) {
+            selector = INounsDescriptor.backgroundCount.selector;
+        } else {
+            revert TypeNotRecognized();
+        }
+        (bool ok, bytes memory data) = address(previousDescriptor).call(abi.encodeWithSelector(selector));
+        require(ok, 'TXN failed');
+        (count) = abi.decode(data, (uint256));
     }
 
     function addElementsWithName(INounsDescriptorWithProperties.NameElementData[] calldata newElements)
@@ -79,7 +108,11 @@ contract NounsDescriptorWithProperties is Ownable, INounsDescriptorWithPropertie
         ElementTypeValues memory elTypes = elementTypeValues;
         for (uint256 i = 0; i < newElements.length; ) {
             NameElementData calldata newElement = newElements[i];
+            if (newElement.elementId != 0) {
+                revert WrongIndex();
+            }
             _addName(newElement);
+
             if (newElement.elType == elTypes.BODY) {
                 previousDescriptor.addBody(newElement.elementData);
             } else if (newElement.elType == elTypes.ACCESSORY) {
@@ -101,12 +134,13 @@ contract NounsDescriptorWithProperties is Ownable, INounsDescriptorWithPropertie
     }
 
     function _addName(NameElementData calldata element) public onlyOwner {
-        if (bytes(names[element.elType][element.elementId]).length > 0) {
+        uint256 elementId = element.elementId == 0 ? getSize(element.elType, elementTypeValues) : element.elementId;
+        if (bytes(names[element.elType][elementId]).length > 0) {
             revert CannotRename();
         }
 
-        names[element.elType][element.elementId] = element.name;
-        emit NamedElement(element.elType, element.elementId, element.name);
+        names[element.elType][elementId] = element.name;
+        emit NamedElement(element.elType, elementId, element.name);
     }
 
     /**

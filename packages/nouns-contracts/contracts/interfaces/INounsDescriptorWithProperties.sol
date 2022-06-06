@@ -24,6 +24,7 @@ interface INounsDescriptorWithProperties {
     error OwnershipNeedsToBeAcceptedByNewOwner();
     error CannotRename();
     error TypeNotRecognized();
+    error WrongIndex();
 
     function addNames(NameElementData[] calldata newNames) external;
 

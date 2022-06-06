@@ -1,11 +1,16 @@
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
-import { NounsDescriptor, NounsDescriptorWithProperties } from '../typechain';
+import {
+  NounsDescriptor,
+  NounsDescriptorWithProperties,
+  NounsDescriptor__factory,
+} from '../typechain';
 import ImageData from '../files/image-data.json';
 import { LongestPart } from './types';
 import {
   deployNounsDescriptor,
   deployNounsDescriptorProperties,
+  getSigners,
   populateDescriptor,
 } from './utils';
 import { ethers } from 'hardhat';
@@ -92,6 +97,39 @@ describe('NounsDescriptor', () => {
         },
       ]),
     ).to.be.revertedWith('CannotRename');
+  });
+
+  it('should proxy back created nouns information', async () => {
+    const signer = (await getSigners()).deployer;
+    const enumValues = await nounsDescriptorProperties.elementTypeValues();
+    await nounsDescriptor.connect(signer).transferOwnership(nounsDescriptorProperties.address);
+    await expect(
+      nounsDescriptorProperties.addElementsWithName([
+        {
+          elType: enumValues.ACCESSORY,
+          name: 'Testing Accessory',
+          elementId: longest.accessories.index + 1,
+          elementData: '0xfabcaa',
+        },
+      ]),
+    ).to.be.revertedWith('WrongIndex');
+    const originalAbiNewCode = NounsDescriptor__factory.connect(
+      nounsDescriptorProperties.address,
+      signer,
+    );
+    await nounsDescriptorProperties.addElementsWithName([
+      {
+        elType: enumValues.ACCESSORY,
+        name: 'Testing Accessory',
+        elementId: 0,
+        elementData: '0xfabcaa',
+      },
+    ]);
+    const accessoryCount = await originalAbiNewCode.accessoryCount();
+    const data = await originalAbiNewCode.accessories(accessoryCount.toNumber() - 1);
+    expect(data).to.be.equal('0xfabcaa');
+    const data2 = await nounsDescriptor.accessories(accessoryCount.toNumber() - 1);
+    expect(data2).to.be.equal('0xfabcaa');
   });
 
   it('should generate valid token uri metadata when data uris are enabled', async () => {
