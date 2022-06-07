@@ -38,8 +38,12 @@ export class PNGCollectionEncoder implements IEncoder {
    * @param folder An optional containing folder name
    */
   public encodeImage(name: string, png: PngImage, folder?: string): string {
-    const image = new Image(png.width, png.height);
-    const rle = image.toRLE((x, y) => png.rgbaAt(x, y), this._colors);
+    const ltrImage = new Image(png.width, png.height);
+    const leftToRightRLE = ltrImage.toRLE((x, y) => png.rgbaAt(x, y), this._colors);
+
+    const ttbImage = new Image(png.height, png.width);
+    const topToBottomRLE = ttbImage.toRLE((y, x) => png.rgbaAt(x, y), this._colors);
+    const rle = leftToRightRLE.length <= topToBottomRLE.length ? leftToRightRLE : topToBottomRLE;
 
     this._images.set(name, rle);
 
