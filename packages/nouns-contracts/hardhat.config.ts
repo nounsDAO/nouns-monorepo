@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import '@nomiclabs/hardhat-waffle';
 import '@nomiclabs/hardhat-etherscan';
 import '@float-capital/solidity-coverage';
-import 'hardhat-typechain';
+import '@typechain/hardhat';
 import 'hardhat-abi-exporter';
 import '@openzeppelin/hardhat-upgrades';
 import 'hardhat-gas-reporter';
@@ -43,6 +43,9 @@ const config: HardhatUserConfig = {
   abiExporter: {
     path: './abi',
     clear: true,
+  },
+  typechain: {
+    outDir: './typechain',
   },
   gasReporter: {
     enabled: !process.env.CI,

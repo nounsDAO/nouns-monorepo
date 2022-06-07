@@ -79,13 +79,17 @@ const store = configureStore({});
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
+const supportedChainURLs = {
+  [ChainId.Mainnet]: createNetworkHttpUrl('mainnet'),
+  [ChainId.Rinkeby]: createNetworkHttpUrl('rinkeby'),
+  [ChainId.Hardhat]: 'http://localhost:8545',
+};
+
 // prettier-ignore
 const useDappConfig = {
   readOnlyChainId: CHAIN_ID,
   readOnlyUrls: {
-    [ChainId.Rinkeby]: createNetworkHttpUrl('rinkeby'),
-    [ChainId.Mainnet]: createNetworkHttpUrl('mainnet'),
-    [ChainId.Hardhat]: 'http://localhost:8545',
+    [CHAIN_ID]: supportedChainURLs[CHAIN_ID],
   },
 };
 

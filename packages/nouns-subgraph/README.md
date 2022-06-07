@@ -27,7 +27,7 @@ yarn run graph auth https://api.thegraph.com/deploy/ $ACCESS_TOKEN
 yarn prepare:[network] # Supports rinkeby and mainnet
 
 # Fork
-yarn mustache config/[network]-fork.json subgraph.yaml.mustache > subgraph.yaml
+yarn --silent mustache config/[network]-fork.json subgraph.yaml.mustache > subgraph.yaml
 ```
 
 ### Generate types to use with Typescript

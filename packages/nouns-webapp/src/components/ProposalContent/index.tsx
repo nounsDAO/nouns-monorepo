@@ -8,23 +8,24 @@ import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../utils/eth
 import { utils } from 'ethers';
 import classes from './ProposalContent.module.css';
 import { Trans } from '@lingui/macro';
+import EnsOrLongAddress from '../EnsOrLongAddress';
 
 interface ProposalContentProps {
   proposal?: Proposal;
 }
 
-const linkIfAddress = (content: string) => {
+export const linkIfAddress = (content: string) => {
   if (utils.isAddress(content)) {
     return (
       <a href={buildEtherscanAddressLink(content)} target="_blank" rel="noreferrer">
-        {content}
+        <EnsOrLongAddress address={content} />
       </a>
     );
   }
   return <span>{content}</span>;
 };
 
-const transactionLink = (content: string) => {
+export const transactionLink = (content: string) => {
   return (
     <a href={buildEtherscanTxLink(content)} target="_blank" rel="noreferrer">
       {content.substring(0, 7)}
@@ -80,18 +81,6 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
               );
             })}
           </ol>
-        </Col>
-      </Row>
-      <Row>
-        <Col className={classes.section}>
-          <h5>
-            <Trans>Proposer</Trans>
-          </h5>
-          {proposal?.proposer && proposal?.transactionHash && (
-            <>
-              {linkIfAddress(proposal.proposer)} at {transactionLink(proposal.transactionHash)}
-            </>
-          )}
         </Col>
       </Row>
     </>

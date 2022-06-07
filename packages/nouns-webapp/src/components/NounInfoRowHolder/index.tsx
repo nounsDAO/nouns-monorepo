@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 import React from 'react';
 import { Image } from 'react-bootstrap';
 import _LinkIcon from '../../assets/icons/Link.svg';
-import { nounQuery } from '../../wrappers/subgraph';
+import { auctionQuery } from '../../wrappers/subgraph';
 import _HeartIcon from '../../assets/icons/Heart.svg';
 import classes from './NounInfoRowHolder.module.css';
 
@@ -20,11 +20,11 @@ interface NounInfoRowHolderProps {
 const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
   const { nounId } = props;
   const isCool = useAppSelector(state => state.application.isCoolBackground);
-  const { loading, error, data } = useQuery(nounQuery(nounId.toString()));
+  const { loading, error, data } = useQuery(auctionQuery(nounId));
 
-  const etherscanURL = buildEtherscanAddressLink(data && data.noun.owner.id);
+  const winner = data && data.auction.bidder.id;
 
-  if (loading) {
+  if (loading || !winner) {
     return (
       <div className={classes.nounHolderInfoContainer}>
         <span className={classes.nounHolderLoading}>
@@ -40,7 +40,8 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
     );
   }
 
-  const shortAddressComponent = <ShortAddress address={data && data.noun.owner.id} />;
+  const etherscanURL = buildEtherscanAddressLink(winner);
+  const shortAddressComponent = <ShortAddress address={winner} />;
 
   return (
     <div className={classes.nounHolderInfoContainer}>
@@ -48,7 +49,7 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
         <Image src={_HeartIcon} className={classes.heartIcon} />
       </span>
       <span>
-        <Trans>Held by</Trans>
+        <Trans>Winner</Trans>
       </span>
       <span>
         <a
@@ -59,8 +60,7 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
           target={'_blank'}
           rel="noreferrer"
         >
-          {data.noun.owner.id.toLowerCase() ===
-          config.addresses.nounsAuctionHouseProxy.toLowerCase() ? (
+          {winner.toLowerCase() === config.addresses.nounsAuctionHouseProxy.toLowerCase() ? (
             <Trans>Nouns Auction House</Trans>
           ) : (
             shortAddressComponent
