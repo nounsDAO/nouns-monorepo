@@ -396,10 +396,6 @@ msgstr ""
 msgid "Help mint the next Noun"
 msgstr ""
 
-#: src/components/Holder/index.tsx
-#~ msgid "Holder"
-#~ msgstr ""
-
 #: src/components/Documentation/index.tsx
 msgid "In addition to the precautions taken by Compound Governance, Nounders have given themselves a special veto right to ensure that no malicious proposals can be passed while the Noun supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort."
 msgstr ""
