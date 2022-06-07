@@ -265,6 +265,14 @@ export const delegateNounsAtBlockQuery = (delegates: string[], block: number) =>
 }
 `;
 
+export const totalNounSupplyAtPropSnapshot = (proposalId: string) => gql`
+{
+  proposals(where: {id: ${proposalId}}) {
+    totalSupply
+  }
+}
+`;
+
 export const clientFactory = (uri: string) =>
   new ApolloClient({
     uri,

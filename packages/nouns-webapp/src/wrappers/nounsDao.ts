@@ -14,6 +14,7 @@ import { useMemo } from 'react';
 import { useLogs } from '../hooks/useLogs';
 import * as R from 'ramda';
 import config, { CHAIN_ID } from '../config';
+import NounsDAOLogicV2ABI from './nounsDaoLogicV2ABI.json';
 import { useQuery } from '@apollo/client';
 import { proposalsQuery } from './subgraph';
 import BigNumber from 'bignumber.js';
@@ -116,7 +117,16 @@ export interface ProposalTransaction {
   calldata: string;
 }
 
+export interface DynamicQuorumParams {
+  minQuorumVotesBPS: number;
+  maxQuorumVotesBPS: number;
+  quorumVotesBPSOffset: number;
+  quorumLinearCoefficient: number;
+  quorumQuadraticCoefficient: number;
+}
+
 const abi = new utils.Interface(NounsDAOABI);
+const abiV2 = new utils.Interface(NounsDAOLogicV2ABI);
 const nounsDaoContract = new NounsDaoLogicV1Factory().attach(config.addresses.nounsDAOProxy);
 
 // Start the log search at the mainnet deployment block to speed up log queries
@@ -238,6 +248,31 @@ const useVotingDelay = (nounsDao: string): number | undefined => {
       args: [],
     }) || [];
   return blockDelay?.toNumber();
+};
+
+export const useCurrentQuorum = (nounsDao: string, proposalId: number): number | undefined => {
+  const [quorum] =
+    useContractCall<[EthersBN]>({
+      abi: abiV2,
+      address: nounsDao,
+      method: 'quorumVotes',
+      args: [proposalId],
+    }) || [];
+  return quorum?.toNumber();
+};
+
+export const useDynamicQuorumProps = (
+  nounsDao: string,
+  block: number,
+): DynamicQuorumParams | undefined => {
+  const [params] =
+    useContractCall<[DynamicQuorumParams]>({
+      abi: abiV2,
+      address: nounsDao,
+      method: 'getDynamicQuorumParamsAt',
+      args: [block],
+    }) || [];
+  return params;
 };
 
 const countToIndices = (count: number | undefined) => {

@@ -2,6 +2,7 @@ import { Row, Col, Button, Card, Spinner } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import {
   ProposalState,
+  useCurrentQuorum,
   useExecuteProposal,
   useProposal,
   useQueueProposal,
@@ -33,6 +34,9 @@ import { getNounVotes } from '../../utils/getNounsVotes';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
+import DynamicQuorumInfoModal from '../../components/DynamicQuorumInfoModal';
+import { InformationCircleIcon } from '@heroicons/react/solid';
+import config, { GOV_V2_UPGRADE_BLOCK } from '../../config';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -48,6 +52,7 @@ const VotePage = ({
   const proposal = useProposal(id);
 
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
+  const [showDynamicQuorumInfoModal, setShowDynamicQuorumInfoModal] = useState<boolean>(false);
 
   const [isQueuePending, setQueuePending] = useState<boolean>(false);
   const [isExecutePending, setExecutePending] = useState<boolean>(false);
@@ -237,7 +242,12 @@ const VotePage = ({
     }
   }, [showToast]);
 
-  if (!proposal || loading || !data) {
+
+  const currentQuorum = useCurrentQuorum(
+    config.addresses.nounsDAOProxy,
+    proposal && proposal.id ? parseInt(proposal.id) : 0);
+
+  if (!proposal || loading || !data ) {
     return (
       <div className={classes.spinner}>
         <Spinner animation="border" />
@@ -258,6 +268,13 @@ const VotePage = ({
 
   return (
     <Section fullWidth={false} className={classes.votePage}>
+      {showDynamicQuorumInfoModal && (
+        <DynamicQuorumInfoModal
+          proposal={proposal}
+          againstVotesAbsolute={againstNouns.length}
+          onDismiss={() => setShowDynamicQuorumInfoModal(false)}
+        />
+      )}
       <VoteModal
         show={showVoteModal}
         onHide={() => setShowVoteModal(false)}
@@ -314,7 +331,6 @@ const VotePage = ({
           />
         </Row>
 
-        {/* TODO abstract this into a component  */}
         <Row>
           <Col xl={4} lg={12}>
             <Card className={classes.voteInfoCard}>
@@ -328,9 +344,16 @@ const VotePage = ({
                   <div className={classes.thresholdInfo}>
                     <span>
                       <Trans>Quorum</Trans>
+                      {proposal.status !== ProposalState.PENDING &&
+                        proposal.startBlock > GOV_V2_UPGRADE_BLOCK && (
+                          <InformationCircleIcon
+                            className={classes.quorumInfoCircle}
+                            onClick={() => setShowDynamicQuorumInfoModal(true)}
+                          />
+                        )}
                     </span>
                     <h3>
-                      <Trans>{i18n.number(proposal.quorumVotes)} votes</Trans>
+                      <Trans>{i18n.number(currentQuorum ?? 0)} votes</Trans>
                     </h3>
                   </div>
                 </div>
