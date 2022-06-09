@@ -4,16 +4,12 @@ import {
   VoteCast,
   MinQuorumVotesBPSSet,
   MaxQuorumVotesBPSSet,
-  QuorumVotesBPSOffsetSet,
-  QuorumLinearCoefficientSet,
-  QuorumQuadraticCoefficientSet,
+  QuorumCoefficientSet,
 } from '../src/types/NounsDAO/NounsDAO';
 import {
   handleMinQuorumVotesBPSSet,
   handleMaxQuorumVotesBPSSet,
-  handleQuorumVotesBPSOffsetSet,
-  handleQuorumLinearCoefficientSet,
-  handleQuorumQuadraticCoefficientSet,
+  handleQuorumCoefficientSet,
 } from '../src/nouns-dao';
 import { Address, ethereum, Bytes, BigInt, ByteArray } from '@graphprotocol/graph-ts';
 import { BIGINT_ONE, BIGINT_ZERO } from '../src/utils/constants';
@@ -159,72 +155,24 @@ export function createMaxQuorumVotesBPSSetEvent(
   return newEvent;
 }
 
-export function createQuorumVotesBPSOffsetSetEvent(
-  oldQuorumVotesBPSOffset: i32,
-  newQuorumVotesBPSOffset: i32,
-): QuorumVotesBPSOffsetSet {
-  let newEvent = changetype<QuorumVotesBPSOffsetSet>(newMockEvent());
+export function createQuorumCoefficientSetEvent(
+  oldQuorumCoefficient: BigInt,
+  newQuorumCoefficient: BigInt,
+): QuorumCoefficientSet {
+  let newEvent = changetype<QuorumCoefficientSet>(newMockEvent());
   newEvent.parameters = new Array();
 
   newEvent.parameters.push(
     new ethereum.EventParam(
-      'oldQuorumVotesBPSOffset',
-      ethereum.Value.fromI32(oldQuorumVotesBPSOffset),
+      'oldQuorumCoefficient',
+      ethereum.Value.fromUnsignedBigInt(oldQuorumCoefficient),
     ),
   );
 
   newEvent.parameters.push(
     new ethereum.EventParam(
-      'newQuorumVotesBPSOffset',
-      ethereum.Value.fromI32(newQuorumVotesBPSOffset),
-    ),
-  );
-
-  return newEvent;
-}
-
-export function createQuorumLinearCoefficientSetEvent(
-  oldQuorumLinearCoefficient: BigInt,
-  newQuorumLinearCoefficient: BigInt,
-): QuorumLinearCoefficientSet {
-  let newEvent = changetype<QuorumLinearCoefficientSet>(newMockEvent());
-  newEvent.parameters = new Array();
-
-  newEvent.parameters.push(
-    new ethereum.EventParam(
-      'oldQuorumLinearCoefficient',
-      ethereum.Value.fromUnsignedBigInt(oldQuorumLinearCoefficient),
-    ),
-  );
-
-  newEvent.parameters.push(
-    new ethereum.EventParam(
-      'newQuorumLinearCoefficient',
-      ethereum.Value.fromUnsignedBigInt(newQuorumLinearCoefficient),
-    ),
-  );
-
-  return newEvent;
-}
-
-export function createQuorumQuadraticCoefficientSetEvent(
-  oldQuorumQuadraticCoefficient: BigInt,
-  newQuorumQuadraticCoefficient: BigInt,
-): QuorumQuadraticCoefficientSet {
-  let newEvent = changetype<QuorumQuadraticCoefficientSet>(newMockEvent());
-  newEvent.parameters = new Array();
-
-  newEvent.parameters.push(
-    new ethereum.EventParam(
-      'oldQuorumQuadraticCoefficient',
-      ethereum.Value.fromUnsignedBigInt(oldQuorumQuadraticCoefficient),
-    ),
-  );
-
-  newEvent.parameters.push(
-    new ethereum.EventParam(
-      'newQuorumQuadraticCoefficient',
-      ethereum.Value.fromUnsignedBigInt(newQuorumQuadraticCoefficient),
+      'newQuorumCoefficient',
+      ethereum.Value.fromUnsignedBigInt(newQuorumCoefficient),
     ),
   );
 
@@ -234,17 +182,9 @@ export function createQuorumQuadraticCoefficientSetEvent(
 export function handleAllQuorumParamEvents(
   newMinQuorumVotesBPS: i32,
   newMaxQuorumVotesBPS: i32,
-  newQuorumVotesBPSOffset: i32,
-  newLinearCoefficient: BigInt,
-  newQuadraticCoefficient: BigInt,
+  newCoefficient: BigInt,
 ): void {
   handleMinQuorumVotesBPSSet(createMinQuorumVotesBPSSetEvent(0, newMinQuorumVotesBPS));
   handleMaxQuorumVotesBPSSet(createMaxQuorumVotesBPSSetEvent(0, newMaxQuorumVotesBPS));
-  handleQuorumVotesBPSOffsetSet(createQuorumVotesBPSOffsetSetEvent(0, newQuorumVotesBPSOffset));
-  handleQuorumLinearCoefficientSet(
-    createQuorumLinearCoefficientSetEvent(BIGINT_ZERO, newLinearCoefficient),
-  );
-  handleQuorumQuadraticCoefficientSet(
-    createQuorumQuadraticCoefficientSetEvent(BIGINT_ZERO, newQuadraticCoefficient),
-  );
+  handleQuorumCoefficientSet(createQuorumCoefficientSetEvent(BIGINT_ZERO, newCoefficient));
 }

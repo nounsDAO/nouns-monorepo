@@ -287,9 +287,7 @@ export const deployGovernorV2WithV2Proxy = async (
     dynamicQuorumParams || {
       minQuorumVotesBPS: MIN_QUORUM_VOTES_BPS,
       maxQuorumVotesBPS: MAX_QUORUM_VOTES_BPS,
-      quorumVotesBPSOffset: 0,
-      quorumLinearCoefficient: 0,
-      quorumQuadraticCoefficient: 0,
+      quorumCoefficient: 0,
     },
   );
 
@@ -313,7 +311,7 @@ export const deployGovernorV2AndSetQuorumParams = async (
   proxyAddress: string,
 ): Promise<NounsDaoLogicV2> => {
   const govV2 = await deployGovernorV2(deployer, proxyAddress);
-  await govV2._setDynamicQuorumParams(MIN_QUORUM_VOTES_BPS, MAX_QUORUM_VOTES_BPS, 0, 0, 0);
+  await govV2._setDynamicQuorumParams(MIN_QUORUM_VOTES_BPS, MAX_QUORUM_VOTES_BPS, 0);
 
   return govV2;
 };

@@ -8,9 +8,7 @@ import {
   ProposalVetoed,
   MinQuorumVotesBPSSet,
   MaxQuorumVotesBPSSet,
-  QuorumVotesBPSOffsetSet,
-  QuorumLinearCoefficientSet,
-  QuorumQuadraticCoefficientSet,
+  QuorumCoefficientSet,
 } from './types/NounsDAO/NounsDAO';
 import {
   getOrCreateDelegate,
@@ -71,9 +69,7 @@ export function handleProposalCreatedWithRequirements(
   const dynamicQuorum = getOrCreateDynamicQuorumParams();
   proposal.minQuorumVotesBPS = dynamicQuorum.minQuorumVotesBPS;
   proposal.maxQuorumVotesBPS = dynamicQuorum.maxQuorumVotesBPS;
-  proposal.quorumVotesBPSOffset = dynamicQuorum.quorumVotesBPSOffset;
-  proposal.quorumLinearCoefficient = dynamicQuorum.quorumLinearCoefficient;
-  proposal.quorumQuadraticCoefficient = dynamicQuorum.quorumQuadraticCoefficient;
+  proposal.quorumCoefficient = dynamicQuorum.quorumCoefficient;
 
   proposal.save();
 }
@@ -166,9 +162,7 @@ export function handleVoteCast(event: VoteCast): void {
       proposal.totalSupply,
       proposal.minQuorumVotesBPS,
       proposal.maxQuorumVotesBPS,
-      proposal.quorumVotesBPSOffset,
-      proposal.quorumLinearCoefficient,
-      proposal.quorumQuadraticCoefficient,
+      proposal.quorumCoefficient,
     );
   }
 
@@ -194,20 +188,8 @@ export function handleMaxQuorumVotesBPSSet(event: MaxQuorumVotesBPSSet): void {
   params.save();
 }
 
-export function handleQuorumVotesBPSOffsetSet(event: QuorumVotesBPSOffsetSet): void {
+export function handleQuorumCoefficientSet(event: QuorumCoefficientSet): void {
   const params = getOrCreateDynamicQuorumParams();
-  params.quorumVotesBPSOffset = event.params.newQuorumVotesBPSOffset;
-  params.save();
-}
-
-export function handleQuorumLinearCoefficientSet(event: QuorumLinearCoefficientSet): void {
-  const params = getOrCreateDynamicQuorumParams();
-  params.quorumLinearCoefficient = event.params.newQuorumLinearCoefficient;
-  params.save();
-}
-
-export function handleQuorumQuadraticCoefficientSet(event: QuorumQuadraticCoefficientSet): void {
-  const params = getOrCreateDynamicQuorumParams();
-  params.quorumQuadraticCoefficient = event.params.newQuorumQuadraticCoefficient;
+  params.quorumCoefficient = event.params.newQuorumCoefficient;
   params.save();
 }

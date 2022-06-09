@@ -127,9 +127,7 @@ export function getOrCreateDynamicQuorumParams(): DynamicQuorumParams {
     params = new DynamicQuorumParams('LATEST');
     params.minQuorumVotesBPS = 0;
     params.maxQuorumVotesBPS = 0;
-    params.quorumVotesBPSOffset = 0;
-    params.quorumLinearCoefficient = BIGINT_ZERO;
-    params.quorumQuadraticCoefficient = BIGINT_ZERO;
+    params.quorumCoefficient = BIGINT_ZERO;
 
     params.save();
   }

@@ -1,7 +1,7 @@
 import chai from 'chai';
 import { ethers, upgrades } from 'hardhat';
 import { solidity } from 'ethereum-waffle';
-import { BigNumber as EthersBN, BigNumberish, Signer } from 'ethers';
+import { BigNumber as EthersBN, BigNumberish } from 'ethers';
 import {
   Weth,
   NounsToken,
@@ -15,7 +15,6 @@ import {
   NounsDaoExecutor,
   NounsDaoExecutor__factory as NounsDaoExecutorFactory,
   NounsDaoLogicV2__factory as NounsDaoLogicV2Factory,
-  NounsDaoProxy,
   NounsDaoLogicV2,
 } from '../../../../typechain';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
@@ -68,9 +67,7 @@ let daoLogicV2: NounsDaoLogicV2;
 //Dynamic quorum config
 const minQuorumVotesBPS = 1000; // 10%
 const maxQuorumVotesBPS = 4000; // 40%
-const quorumVotesBPSOffset = 0;
-const quorumLinearCoefficient = parseUnits('0.3', 6);
-const quorumQuadraticCoefficient = parseUnits('0.001', 6);
+const quorumCoefficient = parseUnits('1.5', 6);
 
 // Auction House Config
 const TIME_BUFFER = 15 * 60;
@@ -199,17 +196,11 @@ async function createUpgradeToV2AndSetDynamicQuorumProposal(proposer: SignerWith
 
   targets.push(gov.address);
   values.push(0);
-  signatures.push('_setDynamicQuorumParams(uint16,uint16,uint16,uint32,uint32)');
+  signatures.push('_setDynamicQuorumParams(uint16,uint16,uint32)');
   callDatas.push(
     encodeParameters(
-      ['uint16', 'uint16', 'uint16', 'uint32', 'uint32'],
-      [
-        minQuorumVotesBPS,
-        maxQuorumVotesBPS,
-        quorumVotesBPSOffset,
-        quorumLinearCoefficient,
-        quorumQuadraticCoefficient,
-      ],
+      ['uint16', 'uint16', 'uint32'],
+      [minQuorumVotesBPS, maxQuorumVotesBPS, quorumCoefficient],
     ),
   );
 
@@ -220,22 +211,15 @@ async function createUpgradeToV2AndSetDynamicQuorumProposal(proposer: SignerWith
 
 async function createSetDynamicQuorumParamsProposal(
   proposer: SignerWithAddress,
-  quorumLinearCoefficient: BigNumberish,
-  quorumQuadraticCoefficient: BigNumberish,
+  quorumCoefficient: BigNumberish,
 ) {
   const targets = [gov.address];
   const values = [0];
-  const signatures = ['_setDynamicQuorumParams(uint16,uint16,uint16,uint32,uint32)'];
+  const signatures = ['_setDynamicQuorumParams(uint16,uint16,uint32)'];
   const callDatas = [
     encodeParameters(
-      ['uint16', 'uint16', 'uint16', 'uint32', 'uint32'],
-      [
-        minQuorumVotesBPS,
-        maxQuorumVotesBPS,
-        quorumVotesBPSOffset,
-        quorumLinearCoefficient,
-        quorumQuadraticCoefficient,
-      ],
+      ['uint16', 'uint16', 'uint32'],
+      [minQuorumVotesBPS, maxQuorumVotesBPS, quorumCoefficient],
     ),
   ];
 
@@ -337,9 +321,7 @@ describe('V2 end to end tests', async () => {
       const params = await govV2.getDynamicQuorumParamsAt(await blockNumber());
       expect(params.minQuorumVotesBPS).to.equal(minQuorumVotesBPS);
       expect(params.maxQuorumVotesBPS).to.equal(maxQuorumVotesBPS);
-      expect(params.quorumVotesBPSOffset).to.equal(quorumVotesBPSOffset);
-      expect(params.quorumLinearCoefficient).to.equal(quorumLinearCoefficient);
-      expect(params.quorumQuadraticCoefficient).to.equal(quorumQuadraticCoefficient);
+      expect(params.quorumCoefficient).to.equal(quorumCoefficient);
     });
   });
 
@@ -441,11 +423,7 @@ describe('V2 end to end tests', async () => {
     let proposalId5: BigNumberish;
 
     before(async () => {
-      proposalId4 = await createSetDynamicQuorumParamsProposal(
-        bidders[2],
-        parseUnits('1', 6),
-        parseUnits('0.001', 6),
-      );
+      proposalId4 = await createSetDynamicQuorumParamsProposal(bidders[2], parseUnits('2.5', 6));
     });
 
     beforeEach(async () => {
@@ -490,10 +468,11 @@ describe('V2 end to end tests', async () => {
       await gov.connect(bidders[0]).castVote(proposalId4, 1);
       await gov.connect(bidders[1]).castVote(proposalId4, 1);
 
-      // 2 votes are enough to win 1 against vote for proposal before the update
+      // 3 votes are enough to win 1 against vote for proposal before the update
       await gov.connect(bidders[0]).castVote(proposalId5, 0);
       await gov.connect(bidders[1]).castVote(proposalId5, 1);
       await gov.connect(bidders[2]).castVote(proposalId5, 1);
+      await gov.connect(bidders[3]).castVote(proposalId5, 1);
 
       await advanceBlocks(VOTING_PERIOD);
 

@@ -36,9 +36,7 @@
 // - Individual setters of the DynamicQuorumParams members:
 //    - `_setMinQuorumVotesBPS(uint16 newMinQuorumVotesBPS)`
 //    - `_setMaxQuorumVotesBPS(uint16 newMaxQuorumVotesBPS)`
-//    - `_setQuorumVotesBPSOffset(uint16 newQuorumVotesBPSOffset)`
-//    - `_setQuorumLinearCoefficient(uint32 newQuorumLinearCoefficient)`
-//    - `_setQuorumQuadraticCoefficient(uint32 newQuorumQuadraticCoefficient)`
+//    - `_setQuorumCoefficient(uint32 newQuorumCoefficient)`
 // - `minQuorumVotes` and `maxQuorumVotes`, which returns the current min and
 // max quorum votes using the current Noun supply.
 // - New `Proposal` struct member:
@@ -156,9 +154,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         _setDynamicQuorumParams(
             dynamicQuorumParams_.minQuorumVotesBPS,
             dynamicQuorumParams_.maxQuorumVotesBPS,
-            dynamicQuorumParams_.quorumVotesBPSOffset,
-            dynamicQuorumParams_.quorumLinearCoefficient,
-            dynamicQuorumParams_.quorumQuadraticCoefficient
+            dynamicQuorumParams_.quorumCoefficient
         );
     }
 
@@ -665,52 +661,19 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     }
 
     /**
-     * @notice Admin function for setting the dynamic quorum offset in bps
-     *     This is the value that the against-votes bps needs to reach for the quorum to be adjusted
-     * @param newQuorumVotesBPSOffset new quorum votes offset, in bps
+     * @notice Admin function for setting the dynamic quorum coefficient
+     * @param newQuorumCoefficient the new coefficient, as a fixed point integer with 6 decimals
      */
-    function _setQuorumVotesBPSOffset(uint16 newQuorumVotesBPSOffset) external {
-        require(msg.sender == admin, 'NounsDAO::_setQuorumVotesBPSOffset: admin only');
+    function _setQuorumCoefficient(uint32 newQuorumCoefficient) external {
+        require(msg.sender == admin, 'NounsDAO::_setQuorumCoefficient: admin only');
         DynamicQuorumParams memory params = getDynamicQuorumParamsAt(block.number);
 
-        uint16 oldQuorumVotesBPSOffset = params.quorumVotesBPSOffset;
-        params.quorumVotesBPSOffset = newQuorumVotesBPSOffset;
+        uint32 oldQuorumCoefficient = params.quorumCoefficient;
+        params.quorumCoefficient = newQuorumCoefficient;
 
         _writeQuorumParamsCheckpoint(params);
 
-        emit QuorumVotesBPSOffsetSet(oldQuorumVotesBPSOffset, newQuorumVotesBPSOffset);
-    }
-
-    /**
-     * @notice Admin function for setting the dynamic quorum linear coefficient
-     * @param newQuorumLinearCoefficient the new linear coefficient, as a fixed point integer with 6 decimals
-     */
-    function _setQuorumLinearCoefficient(uint32 newQuorumLinearCoefficient) external {
-        require(msg.sender == admin, 'NounsDAO::_setQuorumLinearCoefficient: admin only');
-        DynamicQuorumParams memory params = getDynamicQuorumParamsAt(block.number);
-
-        uint32 oldQuorumLinearCoefficient = params.quorumLinearCoefficient;
-        params.quorumLinearCoefficient = newQuorumLinearCoefficient;
-
-        _writeQuorumParamsCheckpoint(params);
-
-        emit QuorumLinearCoefficientSet(oldQuorumLinearCoefficient, newQuorumLinearCoefficient);
-    }
-
-    /**
-     * @notice Admin function for setting the dynamic quorum quadratic coefficient
-     * @param newQuorumQuadraticCoefficient the new quadratic coefficient, as a fixed point integer with 6 decimals
-     */
-    function _setQuorumQuadraticCoefficient(uint32 newQuorumQuadraticCoefficient) external {
-        require(msg.sender == admin, 'NounsDAO::_setQuorumQuadraticCoefficient: admin only');
-        DynamicQuorumParams memory params = getDynamicQuorumParamsAt(block.number);
-
-        uint32 oldQuorumQuadraticCoefficient = params.quorumQuadraticCoefficient;
-        params.quorumQuadraticCoefficient = newQuorumQuadraticCoefficient;
-
-        _writeQuorumParamsCheckpoint(params);
-
-        emit QuorumQuadraticCoefficientSet(oldQuorumQuadraticCoefficient, newQuorumQuadraticCoefficient);
+        emit QuorumCoefficientSet(oldQuorumCoefficient, newQuorumCoefficient);
     }
 
     /**
@@ -721,16 +684,12 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
      * @param newMaxQuorumVotesBPS maximum quorum votes bps
      *     Must be lower than `MAX_QUORUM_VOTES_BPS_UPPER_BOUND`
      *     Must be higher than or equal to minQuorumVotesBPS
-     * @param newQuorumVotesBPSOffset new quorum votes offset, in bps
-     * @param newQuorumLinearCoefficient the new linear coefficient, as a fixed point integer with 6 decimals
-     * @param newQuorumQuadraticCoefficient the new quadratic coefficient, as a fixed point integer with 6 decimals
+     * @param newQuorumCoefficient the new coefficient, as a fixed point integer with 6 decimals
      */
     function _setDynamicQuorumParams(
         uint16 newMinQuorumVotesBPS,
         uint16 newMaxQuorumVotesBPS,
-        uint16 newQuorumVotesBPSOffset,
-        uint32 newQuorumLinearCoefficient,
-        uint32 newQuorumQuadraticCoefficient
+        uint32 newQuorumCoefficient
     ) public {
         if (msg.sender != admin) {
             revert AdminOnly();
@@ -753,17 +712,13 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         DynamicQuorumParams memory params = DynamicQuorumParams({
             minQuorumVotesBPS: newMinQuorumVotesBPS,
             maxQuorumVotesBPS: newMaxQuorumVotesBPS,
-            quorumVotesBPSOffset: newQuorumVotesBPSOffset,
-            quorumLinearCoefficient: newQuorumLinearCoefficient,
-            quorumQuadraticCoefficient: newQuorumQuadraticCoefficient
+            quorumCoefficient: newQuorumCoefficient
         });
         _writeQuorumParamsCheckpoint(params);
 
         emit MinQuorumVotesBPSSet(oldParams.minQuorumVotesBPS, params.minQuorumVotesBPS);
         emit MaxQuorumVotesBPSSet(oldParams.maxQuorumVotesBPS, params.maxQuorumVotesBPS);
-        emit QuorumVotesBPSOffsetSet(oldParams.quorumVotesBPSOffset, params.quorumVotesBPSOffset);
-        emit QuorumLinearCoefficientSet(oldParams.quorumLinearCoefficient, params.quorumLinearCoefficient);
-        emit QuorumQuadraticCoefficientSet(oldParams.quorumQuadraticCoefficient, params.quorumQuadraticCoefficient);
+        emit QuorumCoefficientSet(oldParams.quorumCoefficient, params.quorumCoefficient);
     }
 
     /**
@@ -867,12 +822,9 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
      * @notice Calculates the required quorum of for-votes based on the amount of against-votes
      *     The more against-votes there are for a proposal, the higher the required quorum is.
      *     The quorum BPS is between `params.minQuorumVotesBPS` and params.maxQuorumVotesBPS.
-     *     `params.quorumVotesBPSOffset` determines at which amount of against-votes does the
-     *     additional quorum calculate "kick in".
      *     The additional quorum is calculated as:
-     *       linearCoefficient * x + quadraticCoefficient * x^2
-     *       where x = (againstVotesBPS - params.quorumVotesBPSOffset)
-     * @dev Note that the coefficients are fixed point integers with 6 decimals
+     *       quorumCoefficient * againstVotesBPS
+     * @dev Note the coefficient is a fixed point integer with 6 decimals
      * @param againstVotes Number of against-votes in the proposal
      * @param totalSupply The total supply of Nouns at the time of proposal creation
      * @param params Configurable parameters for calculating the quorum based on againstVotes. See `DynamicQuorumParams` definition for additional details.
@@ -884,16 +836,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         DynamicQuorumParams memory params
     ) public pure returns (uint256) {
         uint256 againstVotesBPS = (10000 * againstVotes) / totalSupply;
-        if (againstVotesBPS <= params.quorumVotesBPSOffset) {
-            return bps2Uint(params.minQuorumVotesBPS, totalSupply);
-        }
-
-        uint256 adjustedAgainstVotesBPS = againstVotesBPS - params.quorumVotesBPSOffset;
-        uint256 quorumAdjustmentBPS = (params.quorumLinearCoefficient *
-            adjustedAgainstVotesBPS +
-            params.quorumQuadraticCoefficient *
-            adjustedAgainstVotesBPS**2) / 1e6;
-
+        uint256 quorumAdjustmentBPS = (params.quorumCoefficient * againstVotesBPS) / 1e6;
         uint256 adjustedQuorumBPS = params.minQuorumVotesBPS + quorumAdjustmentBPS;
         uint256 quorumBPS = min(params.maxQuorumVotesBPS, adjustedQuorumBPS);
         return bps2Uint(quorumBPS, totalSupply);
@@ -915,9 +858,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
                 DynamicQuorumParams({
                     minQuorumVotesBPS: safe16(quorumVotesBPS),
                     maxQuorumVotesBPS: safe16(quorumVotesBPS),
-                    quorumVotesBPSOffset: 0,
-                    quorumLinearCoefficient: 0,
-                    quorumQuadraticCoefficient: 0
+                    quorumCoefficient: 0
                 });
         }
 
@@ -930,9 +871,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
                 DynamicQuorumParams({
                     minQuorumVotesBPS: safe16(quorumVotesBPS),
                     maxQuorumVotesBPS: safe16(quorumVotesBPS),
-                    quorumVotesBPSOffset: 0,
-                    quorumLinearCoefficient: 0,
-                    quorumQuadraticCoefficient: 0
+                    quorumCoefficient: 0
                 });
         }
 

@@ -51,24 +51,7 @@ task('deploy-local', 'Deploy contracts to hardhat')
     4_000,
     types.int,
   ) // Default: 40%
-  .addOptionalParam(
-    'quorumVotesBPSOffset',
-    'Dynamic quorum kick-in offset (basis points)',
-    2_000,
-    types.int,
-  ) // Default: 20%
-  .addOptionalParam(
-    'quorumLinearCoefficient',
-    'Dynamic quorum polynom linear coefficient (float)',
-    1,
-    types.float,
-  ) // x^1 coefficient
-  .addOptionalParam(
-    'quorumQuadraticCoefficient',
-    'Dynamic quorum polynom quadratic coefficient (float)',
-    0,
-    types.float,
-  ) // x^2 coefficient
+  .addOptionalParam('quorumCoefficient', 'Dynamic quorum coefficient (float)', 1, types.float)
   .setAction(async (args, { ethers }) => {
     const network = await ethers.provider.getNetwork();
     if (network.chainId !== 31337) {
@@ -147,9 +130,7 @@ task('deploy-local', 'Deploy contracts to hardhat')
           {
             minQuorumVotesBPS: args.minQuorumVotesBPS,
             maxQuorumVotesBPS: args.maxQuorumVotesBPS,
-            quorumVotesBPSOffset: args.quorumVotesBPSOffset,
-            quorumLinearCoefficient: parseUnits(args.quorumLinearCoefficient.toString(), 6),
-            quorumQuadraticCoefficient: parseUnits(args.quorumQuadraticCoefficient.toString(), 6),
+            quorumCoefficient: parseUnits(args.quorumCoefficient.toString(), 6),
           },
         ],
         waitForConfirmation: true,

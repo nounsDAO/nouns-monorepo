@@ -95,13 +95,11 @@ describe('NounsDAO upgrade to V2', () => {
 
     expect(quorumParams.minQuorumVotesBPS).to.equal(V1_QUORUM_BPS);
     expect(quorumParams.maxQuorumVotesBPS).to.equal(V1_QUORUM_BPS);
-    expect(quorumParams.quorumVotesBPSOffset).to.equal(0);
-    expect(quorumParams.quorumLinearCoefficient).to.equal(0);
-    expect(quorumParams.quorumQuadraticCoefficient).to.equal(0);
+    expect(quorumParams.quorumCoefficient).to.equal(0);
   });
 
   it('and V2 config set', async () => {
-    await govV2._setDynamicQuorumParams(MIN_QUORUM_VOTES_BPS, MAX_QUORUM_VOTES_BPS, 0, 0, 0);
+    await govV2._setDynamicQuorumParams(MIN_QUORUM_VOTES_BPS, MAX_QUORUM_VOTES_BPS, 0);
 
     const quorumParams = await govV2.getDynamicQuorumParamsAt(await blockNumber());
 

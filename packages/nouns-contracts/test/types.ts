@@ -8,7 +8,5 @@ export interface LongestPart {
 export type DynamicQuorumParams = {
   minQuorumVotesBPS: BigNumberish;
   maxQuorumVotesBPS: BigNumberish;
-  quorumVotesBPSOffset: BigNumberish;
-  quorumLinearCoefficient: BigNumberish;
-  quorumQuadraticCoefficient: BigNumberish;
+  quorumCoefficient: BigNumberish;
 };

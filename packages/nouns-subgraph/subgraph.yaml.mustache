@@ -100,10 +100,6 @@ dataSources:
         - event: MinQuorumVotesBPSSet(uint16,uint16)
           handler: handleMinQuorumVotesBPSSet
         - event: MaxQuorumVotesBPSSet(uint16,uint16)
-          handler: handleMaxQuorumVotesBPSSet
-        - event: QuorumVotesBPSOffsetSet(uint16,uint16)
-          handler: handleQuorumVotesBPSOffsetSet
-        - event: QuorumLinearCoefficientSet(uint32,uint32)
-          handler: handleQuorumLinearCoefficientSet
-        - event: QuorumQuadraticCoefficientSet(uint32,uint32)
-          handler: handleQuorumQuadraticCoefficientSet
+          handler: handleMaxQuorumVotesBPSSet        
+        - event: QuorumCoefficientSet(uint32,uint32)
+          handler: handleQuorumCoefficientSet

@@ -68,9 +68,7 @@ async function reset(): Promise<void> {
     {
       minQuorumVotesBPS: minQuorumVotesBPS,
       maxQuorumVotesBPS: MAX_QUORUM_VOTES_BPS,
-      quorumVotesBPSOffset: 0,
-      quorumLinearCoefficient: 0,
-      quorumQuadraticCoefficient: 0,
+      quorumCoefficient: 0,
     },
   );
 

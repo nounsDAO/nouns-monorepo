@@ -58,7 +58,7 @@ contract NounsDAOProxyV2 is NounsDAOStorageV2, NounsDAOEvents {
         delegateTo(
             implementation_,
             abi.encodeWithSignature(
-                'initialize(address,address,address,uint256,uint256,uint256,(uint16,uint16,uint16,uint32,uint32))',
+                'initialize(address,address,address,uint256,uint256,uint256,(uint16,uint16,uint32))',
                 timelock_,
                 nouns_,
                 vetoer_,

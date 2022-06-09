@@ -202,14 +202,8 @@ type Proposal @entity {
   "Dynamic quorum param snapshot: max quorum basis points"
   maxQuorumVotesBPS: Int!
 
-  "Dynamic quorum param snapshot: offset for the dynamic quorum function (basis points)"
-  quorumVotesBPSOffset: Int!
-
-  "Dynamic quorum param snapshot: linear coefficient for the dynamic quorum function"
-  quorumLinearCoefficient: BigInt!
-
-  "Dynamic quorum param snapshot: quadratic coefficient for the dynamic quorum function"
-  quorumQuadraticCoefficient: BigInt!
+  "Dynamic quorum param snapshot: the dynamic quorum coefficient"
+  quorumCoefficient: BigInt!
 }
 
 type Vote @entity {
@@ -280,12 +274,6 @@ type DynamicQuorumParams @entity {
   "Max quorum basis points"
   maxQuorumVotesBPS: Int!
 
-  "Offset for the dynamic quorum function (basis points)"
-  quorumVotesBPSOffset: Int!
-
-  "Linear coefficient for the dynamic quorum function"
-  quorumLinearCoefficient: BigInt!
-
-  "Quadratic coefficient for the dynamic quorum function"
-  quorumQuadraticCoefficient: BigInt!
+  "The dynamic quorum coefficient"
+  quorumCoefficient: BigInt!
 }

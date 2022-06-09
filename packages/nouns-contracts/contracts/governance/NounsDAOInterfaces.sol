@@ -113,14 +113,8 @@ contract NounsDAOEventsV2 is NounsDAOEvents {
     /// @notice Emitted when maxQuorumVotesBPS is set
     event MaxQuorumVotesBPSSet(uint16 oldMaxQuorumVotesBPS, uint16 newMaxQuorumVotesBPS);
 
-    /// @notice Emitted when quorumVotesBPSOffset is set
-    event QuorumVotesBPSOffsetSet(uint16 oldQuorumVotesBPSOffset, uint16 newQuorumVotesBPSOffset);
-
-    /// @notice Emitted when quorumLinearCoefficient is set
-    event QuorumLinearCoefficientSet(uint32 oldQuorumLinearCoefficient, uint32 newQuorumLinearCoefficient);
-
-    /// @notice Emitted when quorumQuadraticCoefficient is set
-    event QuorumQuadraticCoefficientSet(uint32 oldQuorumQuadraticCoefficient, uint32 newQuorumQuadraticCoefficient);
+    /// @notice Emitted when quorumCoefficient is set
+    event QuorumCoefficientSet(uint32 oldQuorumCoefficient, uint32 newQuorumCoefficient);
 }
 
 contract NounsDAOProxyStorage {
@@ -352,14 +346,9 @@ contract NounsDAOStorageV2 is NounsDAOStorageV1Adjusted {
         uint16 minQuorumVotesBPS;
         /// @notice The maximum basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed.
         uint16 maxQuorumVotesBPS;
-        /// @notice The quorum votes polynom input offset which suppresses polynom contribution until againstVotes.div(totalSupply) reaches this value
-        uint16 quorumVotesBPSOffset;
-        /// @notice The linear component coefficient (x^1) for the dynamic quorum polynomial
-        /// @dev The coefficients are assumed to be fixed point integer with 6 decimals, i.e 0.2 is represented as 0.2 * 1e6 = 200000
-        uint32 quorumLinearCoefficient;
-        /// @notice The quadratic component coefficient (x^2) for the dynamic quorum polynomial
-        /// @dev The coefficients are assumed to be fixed point integer with 6 decimals, i.e 0.2 is represented as 0.2 * 1e6 = 200000
-        uint32 quorumQuadraticCoefficient;
+        /// @notice The dynamic quorum coefficient
+        /// @dev Assumed to be fixed point integer with 6 decimals, i.e 0.2 is represented as 0.2 * 1e6 = 200000
+        uint32 quorumCoefficient;
     }
 
     /// @notice A checkpoint for storing dynamic quorum params from a given block
