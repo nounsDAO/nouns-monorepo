@@ -16,6 +16,7 @@
  *********************************/
 
 // NounsDAOProxyV2.sol is a modified version of NounsDAOProxy.sol, tailored for the DAO's V2.
+// Its main purpose is to support people wishing to deploy V2 directly, without having to deploy V1 first and then upgrade.
 
 // LICENSE
 // NounsDAOProxy.sol is a modified version of Compound Lab's GovernorBravoDelegator.sol:
