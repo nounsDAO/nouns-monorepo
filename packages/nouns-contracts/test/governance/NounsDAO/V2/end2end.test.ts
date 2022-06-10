@@ -3,19 +3,19 @@ import { ethers, upgrades } from 'hardhat';
 import { solidity } from 'ethereum-waffle';
 import { BigNumber as EthersBN, BigNumberish } from 'ethers';
 import {
-  Weth,
+  WETH,
   NounsToken,
   NounsAuctionHouse,
   NounsAuctionHouse__factory as NounsAuctionHouseFactory,
   NounsDescriptor,
   NounsDescriptor__factory as NounsDescriptorFactory,
-  NounsDaoProxy__factory as NounsDaoProxyFactory,
-  NounsDaoLogicV1,
-  NounsDaoLogicV1__factory as NounsDaoLogicV1Factory,
-  NounsDaoExecutor,
-  NounsDaoExecutor__factory as NounsDaoExecutorFactory,
-  NounsDaoLogicV2__factory as NounsDaoLogicV2Factory,
-  NounsDaoLogicV2,
+  NounsDAOProxy__factory as NounsDaoProxyFactory,
+  NounsDAOLogicV1,
+  NounsDAOLogicV1__factory as NounsDaoLogicV1Factory,
+  NounsDAOExecutor,
+  NounsDAOExecutor__factory as NounsDaoExecutorFactory,
+  NounsDAOLogicV2__factory as NounsDaoLogicV2Factory,
+  NounsDAOLogicV2,
 } from '../../../../typechain';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
@@ -37,9 +37,9 @@ const { expect } = chai;
 let nounsToken: NounsToken;
 let nounsAuctionHouse: NounsAuctionHouse;
 let descriptor: NounsDescriptor;
-let weth: Weth;
-let gov: NounsDaoLogicV1;
-let timelock: NounsDaoExecutor;
+let weth: WETH;
+let gov: NounsDAOLogicV1;
+let timelock: NounsDAOExecutor;
 
 let deployer: SignerWithAddress;
 let wethDeployer: SignerWithAddress;
@@ -62,7 +62,7 @@ const callDatas: string[] = [];
 let proposalId1: BigNumberish;
 let proposalId2: BigNumberish;
 let snapshotId: number;
-let daoLogicV2: NounsDaoLogicV2;
+let daoLogicV2: NounsDAOLogicV2;
 
 //Dynamic quorum config
 const minQuorumVotesBPS = 1000; // 10%

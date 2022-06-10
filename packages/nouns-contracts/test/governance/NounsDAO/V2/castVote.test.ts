@@ -21,7 +21,7 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
   NounsDescriptor__factory as NounsDescriptorFactory,
-  NounsDaoLogicV2,
+  NounsDAOLogicV2,
 } from '../../../../typechain';
 
 chai.use(solidity);
@@ -36,7 +36,7 @@ let account1: SignerWithAddress;
 let account2: SignerWithAddress;
 let signers: TestSigners;
 
-let gov: NounsDaoLogicV2;
+let gov: NounsDAOLogicV2;
 let proposalId: EthersBN;
 
 async function reset() {

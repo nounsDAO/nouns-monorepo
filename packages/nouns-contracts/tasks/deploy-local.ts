@@ -2,20 +2,9 @@ import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHo
 import { task, types } from 'hardhat/config';
 import { Interface, parseUnits } from 'ethers/lib/utils';
 import { Contract as EthersContract } from 'ethers';
+import { ContractName } from './types';
 
-type ContractName =
-  | 'WETH'
-  | 'NFTDescriptor'
-  | 'NounsDescriptor'
-  | 'NounsSeeder'
-  | 'NounsToken'
-  | 'NounsAuctionHouse'
-  | 'NounsAuctionHouseProxyAdmin'
-  | 'NounsAuctionHouseProxy'
-  | 'NounsDAOExecutor'
-  | 'NounsDAOLogicV2'
-  | 'NounsDAOProxyV2'
-  | 'Multicall2';
+type LocalContractName = Exclude<ContractName, 'NounsDAOLogicV1' | 'NounsDAOProxy'> | 'NounsDAOLogicV2' | 'NounsDAOProxyV2' | 'WETH' | 'Multicall2';
 
 interface Contract {
   args?: (string | number | (() => string | undefined))[];
@@ -74,12 +63,12 @@ task('deploy-local', 'Deploy contracts to hardhat')
       from: deployer.address,
       nonce: nonce + AUCTION_HOUSE_PROXY_NONCE_OFFSET,
     });
-    const contracts: Record<ContractName, Contract> = {
+    const contracts: Record<LocalContractName, Contract> = {
       WETH: {},
       NFTDescriptor: {},
       NounsDescriptor: {
         libraries: () => ({
-          NFTDescriptor: contracts['NFTDescriptor'].instance?.address as string,
+          NFTDescriptor: contracts.NFTDescriptor.instance?.address as string,
         }),
       },
       NounsSeeder: {},
@@ -87,8 +76,8 @@ task('deploy-local', 'Deploy contracts to hardhat')
         args: [
           args.noundersdao || deployer.address,
           expectedAuctionHouseProxyAddress,
-          () => contracts['NounsDescriptor'].instance?.address,
-          () => contracts['NounsSeeder'].instance?.address,
+          () => contracts.NounsDescriptor.instance?.address,
+          () => contracts.NounsSeeder.instance?.address,
           proxyRegistryAddress,
         ],
       },
@@ -98,12 +87,12 @@ task('deploy-local', 'Deploy contracts to hardhat')
       NounsAuctionHouseProxyAdmin: {},
       NounsAuctionHouseProxy: {
         args: [
-          () => contracts['NounsAuctionHouse'].instance?.address,
-          () => contracts['NounsAuctionHouseProxyAdmin'].instance?.address,
+          () => contracts.NounsAuctionHouse.instance?.address,
+          () => contracts.NounsAuctionHouseProxyAdmin.instance?.address,
           () =>
             new Interface(NounsAuctionHouseABI).encodeFunctionData('initialize', [
-              contracts['NounsToken'].instance?.address,
-              contracts['WETH'].instance?.address,
+              contracts.NounsToken.instance?.address,
+              contracts.WETH.instance?.address,
               args.auctionTimeBuffer,
               args.auctionReservePrice,
               args.auctionMinIncrementBidPercentage,
@@ -119,11 +108,11 @@ task('deploy-local', 'Deploy contracts to hardhat')
       },
       NounsDAOProxyV2: {
         args: [
-          () => contracts['NounsDAOExecutor'].instance?.address,
-          () => contracts['NounsToken'].instance?.address,
+          () => contracts.NounsDAOExecutor.instance?.address,
+          () => contracts.NounsToken.instance?.address,
           args.noundersdao || deployer.address,
-          () => contracts['NounsDAOExecutor'].instance?.address,
-          () => contracts['NounsDAOLogicV2'].instance?.address,
+          () => contracts.NounsDAOExecutor.instance?.address,
+          () => contracts.NounsDAOLogicV2.instance?.address,
           args.votingPeriod,
           args.votingDelay,
           args.proposalThresholdBps,
@@ -151,7 +140,7 @@ task('deploy-local', 'Deploy contracts to hardhat')
         await deployedContract.deployed();
       }
 
-      contracts[name as ContractName].instance = deployedContract;
+      contracts[name as LocalContractName].instance = deployedContract;
 
       console.log(`${name} contract deployed to ${deployedContract.address}`);
     }

@@ -22,7 +22,8 @@
     "deploy:localnode": "graph deploy --debug --node http://localhost:8020/ --ipfs http://localhost:5001/",
     "deploy:hardhat": "yarn clean && yarn prepare:hardhat && yarn codegen && yarn create:localnode nounsdao/nouns-subgraph && yarn deploy:localnode nounsdao/nouns-subgraph",
     "deploy:rinkeby": "yarn clean && yarn prepare:rinkeby && yarn codegen && yarn deploy nounsdao/nouns-subgraph-rinkeby",
-    "deploy:mainnet": "yarn clean && yarn prepare:mainnet && yarn codegen && yarn deploy nounsdao/nouns-subgraph"
+    "deploy:mainnet": "yarn clean && yarn prepare:mainnet && yarn codegen && yarn deploy nounsdao/nouns-subgraph",
+    "mustache": "mustache"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.26.0",

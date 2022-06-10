@@ -163,6 +163,12 @@ type Proposal @entity {
   "The proposal creation timestamp"
   createdTimestamp: BigInt!
 
+  "The proposal creation block"
+  createdBlock: BigInt!
+
+  "The proposal creation transaction hash"
+  createdTransactionHash: Bytes!
+
   "Block number from where the voting starts"
   startBlock: BigInt!
 
@@ -174,6 +180,15 @@ type Proposal @entity {
 
   "The required number of votes for quorum at the time of proposal creation"
   quorumVotes: BigInt!
+
+  "The number of votes in favor of the proposal"
+  forVotes: BigInt!
+
+  "The number of votes against of the proposal"
+  againstVotes: BigInt!
+
+  "The number of votes to abstain on the proposal"
+  abstainVotes: BigInt!
 
   "String description of the change"
   description: String!

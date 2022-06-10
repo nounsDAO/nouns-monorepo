@@ -28,9 +28,9 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
   NounsDescriptor__factory as NounsDescriptorFactory,
-  NounsDaoExecutor,
-  NounsDaoExecutor__factory as NounsDaoExecutorFactory,
-  NounsDaoLogicV2,
+  NounsDAOExecutor,
+  NounsDAOExecutor__factory as NounsDaoExecutorFactory,
+  NounsDAOLogicV2,
 } from '../../../../typechain';
 import { MAX_QUORUM_VOTES_BPS } from '../../../constants';
 
@@ -119,8 +119,8 @@ let account1: SignerWithAddress;
 let account2: SignerWithAddress;
 let signers: TestSigners;
 
-let gov: NounsDaoLogicV2;
-let timelock: NounsDaoExecutor;
+let gov: NounsDAOLogicV2;
+let timelock: NounsDAOExecutor;
 const timelockDelay = 172800; // 2 days
 
 const proposalThresholdBPS = 500; // 5%

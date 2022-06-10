@@ -16,10 +16,10 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
   NounsDescriptor__factory as NounsDescriptorFactory,
-  NounsDaoLogicV1,
-  NounsDaoLogicV1__factory as NounsDaoLogicV1Factory,
-  NounsDaoLogicV2,
-  NounsDaoLogicV2__factory as NounsDaoLogicV2Factory,
+  NounsDAOLogicV1,
+  NounsDAOLogicV1__factory as NounsDaoLogicV1Factory,
+  NounsDAOLogicV2,
+  NounsDAOLogicV2__factory as NounsDaoLogicV2Factory,
 } from '../../../../typechain';
 
 chai.use(solidity);
@@ -34,8 +34,8 @@ let account1: SignerWithAddress;
 let signers: TestSigners;
 
 let govProxyAddress: string;
-let govV1: NounsDaoLogicV1;
-let govV2: NounsDaoLogicV2;
+let govV1: NounsDAOLogicV1;
+let govV2: NounsDAOLogicV2;
 
 async function setupWithV1() {
   token = await deployNounsToken(signers.deployer);
@@ -50,7 +50,7 @@ async function setupWithV1() {
 }
 
 async function createPropEditVotingDelayFlow(
-  gov: NounsDaoLogicV1 | NounsDaoLogicV2,
+  gov: NounsDAOLogicV1 | NounsDAOLogicV2,
   user: SignerWithAddress,
   tokenId: number,
 ) {

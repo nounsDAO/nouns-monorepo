@@ -16,17 +16,14 @@ import {
   blockNumber,
 } from '../../../utils';
 
-import { mineBlock, address, encodeParameters, advanceBlocks } from '../../../utils';
+import { mineBlock, encodeParameters, advanceBlocks } from '../../../utils';
 
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
   NounsDescriptor__factory as NounsDescriptorFactory,
-  NounsDaoProxy__factory as NounsDaoProxyFactory,
-  NounsDaoLogicV1,
-  NounsDaoLogicV1__factory as NounsDaoLogicV1Factory,
-  NounsDaoExecutor__factory as NounsDaoExecutorFactory,
-  NounsDaoLogicV2,
+  NounsDAOExecutor__factory as NounsDaoExecutorFactory,
+  NounsDAOLogicV2,
 } from '../../../../typechain';
 import { MAX_QUORUM_VOTES_BPS } from '../../../constants';
 
@@ -92,7 +89,7 @@ let account1: SignerWithAddress;
 let account2: SignerWithAddress;
 let signers: TestSigners;
 
-let gov: NounsDaoLogicV2;
+let gov: NounsDAOLogicV2;
 const timelockDelay = 172800; // 2 days
 
 const proposalThresholdBPS = 678; // 6.78%

@@ -1,9 +1,8 @@
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
-import hardhat from 'hardhat';
 import {
-  NounsDaoLogicV2,
+  NounsDAOLogicV2,
   NounsToken,
   NounsDescriptor__factory as NounsDescriptorFactory,
 } from '../../../../typechain';
@@ -19,14 +18,12 @@ import {
   TestSigners,
 } from '../../../utils';
 
-const { ethers } = hardhat;
-
 chai.use(solidity);
 const { expect } = chai;
 
 let token: NounsToken;
 let deployer: SignerWithAddress;
-let gov: NounsDaoLogicV2;
+let gov: NounsDAOLogicV2;
 let signers: TestSigners;
 
 const votingDelay = 5;

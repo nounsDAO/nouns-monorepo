@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { VoteCardVariant } from '../VoteCard';
 import classes from './VoteProgressBar.module.css';
 
-const VoteProgresBar: React.FC<{
+const VoteProgressBar: React.FC<{
   variant: VoteCardVariant;
   percentage: number;
 }> = props => {
@@ -37,4 +37,4 @@ const VoteProgresBar: React.FC<{
   );
 };
 
-export default VoteProgresBar;
+export default VoteProgressBar;

@@ -29,9 +29,9 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
   NounsDescriptor__factory as NounsDescriptorFactory,
-  NounsDaoExecutorHarness,
-  NounsDaoExecutorHarness__factory as NounsDaoExecutorHarnessFactory,
-  NounsDaoLogicV2,
+  NounsDAOExecutorHarness,
+  NounsDAOExecutorHarness__factory as NounsDaoExecutorHarnessFactory,
+  NounsDAOLogicV2,
 } from '../../../../typechain';
 
 chai.use(solidity);
@@ -45,8 +45,8 @@ let account0: SignerWithAddress;
 let account1: SignerWithAddress;
 let signers: TestSigners;
 
-let gov: NounsDaoLogicV2;
-let timelock: NounsDaoExecutorHarness;
+let gov: NounsDAOLogicV2;
+let timelock: NounsDAOExecutorHarness;
 let delay: number;
 
 let targets: string[];

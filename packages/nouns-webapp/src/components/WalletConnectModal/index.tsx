@@ -97,9 +97,7 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
       />
       <div
         className={clsx(classes.clickable, classes.walletConnectData)}
-        onClick={() => {
-          console.log(localStorage.removeItem('walletconnect'));
-        }}
+        onClick={() => localStorage.removeItem('walletconnect')}
       >
         <Trans>Clear WalletConnect Data</Trans>
       </div>

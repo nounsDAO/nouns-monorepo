@@ -3,8 +3,8 @@ import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { parseUnits } from 'ethers/lib/utils';
 import {
-  NounsDaoLogicV2,
-  NounsDaoLogicV2__factory as NounsDaoLogicV2Factory,
+  NounsDAOLogicV2,
+  NounsDAOLogicV2__factory as NounsDaoLogicV2Factory,
 } from '../../../../typechain';
 import { getSigners, TestSigners } from '../../../utils';
 
@@ -13,9 +13,9 @@ const { expect } = chai;
 
 let deployer: SignerWithAddress;
 let signers: TestSigners;
-let gov: NounsDaoLogicV2;
+let gov: NounsDAOLogicV2;
 
-async function deployGovernorV2(deployer: SignerWithAddress): Promise<NounsDaoLogicV2> {
+async function deployGovernorV2(deployer: SignerWithAddress): Promise<NounsDAOLogicV2> {
   return await new NounsDaoLogicV2Factory(deployer).deploy();
 }
 
