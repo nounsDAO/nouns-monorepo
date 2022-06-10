@@ -131,7 +131,6 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
 
   it('given no prior config, sets value and emits event', async () => {
     const quorumCoefficient = parseUnits('1', 6);
-    const quorumQuadraticCoefficient = parseUnits('0.001', 6);
     const tx = await gov._setDynamicQuorumParams(200, 4000, quorumCoefficient);
 
     const actualParams = await gov.getDynamicQuorumParamsAt(await blockNumber());
