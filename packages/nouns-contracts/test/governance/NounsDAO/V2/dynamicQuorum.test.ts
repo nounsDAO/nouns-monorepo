@@ -37,13 +37,55 @@ describe('Dynamic Quorum', () => {
   });
 
   it('increases linearly', async () => {
-    const quorumVotes = await gov.dynamicQuorumVotes(18, 200, {
-      minQuorumVotesBPS: 1000,
-      maxQuorumVotesBPS: 4000,
-      quorumCoefficient: parseUnits('1', 6),
-    });
+    expect(
+      await gov.dynamicQuorumVotes(18, 200, {
+        minQuorumVotesBPS: 1000,
+        maxQuorumVotesBPS: 4000,
+        quorumCoefficient: parseUnits('1', 6),
+      }),
+    ).to.equal(38);
 
-    expect(quorumVotes).to.equal(38);
+    expect(
+      await gov.dynamicQuorumVotes(22, 200, {
+        minQuorumVotesBPS: 1000,
+        maxQuorumVotesBPS: 4000,
+        quorumCoefficient: parseUnits('1', 6),
+      }),
+    ).to.equal(42);
+
+    expect(
+      await gov.dynamicQuorumVotes(45, 200, {
+        minQuorumVotesBPS: 1000,
+        maxQuorumVotesBPS: 4000,
+        quorumCoefficient: parseUnits('1', 6),
+      }),
+    ).to.equal(65);
+  });
+
+  it('works with different coefficients', async () => {
+    expect(
+      await gov.dynamicQuorumVotes(30, 200, {
+        minQuorumVotesBPS: 1000,
+        maxQuorumVotesBPS: 4000,
+        quorumCoefficient: parseUnits('0.1', 6),
+      }),
+    ).to.equal(23);
+
+    expect(
+      await gov.dynamicQuorumVotes(30, 200, {
+        minQuorumVotesBPS: 1000,
+        maxQuorumVotesBPS: 4000,
+        quorumCoefficient: parseUnits('0.5', 6),
+      }),
+    ).to.equal(35);
+
+    expect(
+      await gov.dynamicQuorumVotes(30, 200, {
+        minQuorumVotesBPS: 1000,
+        maxQuorumVotesBPS: 4000,
+        quorumCoefficient: parseUnits('1.5', 6),
+      }),
+    ).to.equal(65);
   });
 
   it('caps the quorum by the max value', async () => {
