@@ -1,0 +1,33 @@
+.wrapper {
+  border-radius: 6px;
+  height: 1rem;
+}
+
+.progressBar {
+  height: 100%;
+  border-radius: 6px;
+}
+
+.forWrapper {
+  background-color: var(--brand-color-green-translucent);
+}
+
+.forProgressBar {
+  background-color: var(--brand-color-green);
+}
+
+.againstWrapper {
+  background-color: var(--brand-color-red-translucent);
+}
+
+.againstProgressBar {
+  background-color: var(--brand-color-red);
+}
+
+.abstainWrapper {
+  background-color: var(--brand-gray-light-text-translucent);
+}
+
+.abstainProgressBar {
+  background-color: var(--brand-gray-light-text);
+}

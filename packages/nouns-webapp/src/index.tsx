@@ -42,6 +42,7 @@ import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { nounPath } from './utils/history';
 import { push } from 'connected-react-router';
+import { LanguageProvider } from './i18n/LanguageProvider';
 
 dotenv.config();
 
@@ -78,13 +79,17 @@ const store = configureStore({});
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
+const supportedChainURLs = {
+  [ChainId.Mainnet]: createNetworkHttpUrl('mainnet'),
+  [ChainId.Rinkeby]: createNetworkHttpUrl('rinkeby'),
+  [ChainId.Hardhat]: 'http://localhost:8545',
+};
+
 // prettier-ignore
 const useDappConfig = {
   readOnlyChainId: CHAIN_ID,
   readOnlyUrls: {
-    [ChainId.Rinkeby]: createNetworkHttpUrl('rinkeby'),
-    [ChainId.Mainnet]: createNetworkHttpUrl('mainnet'),
-    [ChainId.Hardhat]: 'http://localhost:8545',
+    [CHAIN_ID]: supportedChainURLs[CHAIN_ID],
   },
 };
 
@@ -202,7 +207,9 @@ ReactDOM.render(
           <ApolloProvider client={client}>
             <PastAuctions />
             <DAppProvider config={useDappConfig}>
-              <App />
+              <LanguageProvider>
+                <App />
+              </LanguageProvider>
               <Updaters />
             </DAppProvider>
           </ApolloProvider>

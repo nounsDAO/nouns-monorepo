@@ -12,6 +12,7 @@ import pfpSolimander from '../../assets/nounder-pfps/solimander.png';
 import pfpGremplin from '../../assets/nounder-pfps/gremplin.png';
 import pfpTimpers from '../../assets/nounder-pfps/timpers.png';
 import pfpVapeape from '../../assets/nounder-pfps/vapeape.png';
+import { Trans } from '@lingui/macro';
 
 const bios = [
   {
@@ -48,13 +49,13 @@ const bios = [
     name: 'gremplin',
     image: pfpGremplin,
     description: undefined,
-    handle: 'supergremplin',
+    handle: 'gremplin',
   },
   {
-    name: 'solimader',
+    name: 'solimander',
     image: pfpSolimander,
     description: undefined,
-    handle: '',
+    handle: '_solimander_',
   },
   {
     name: 'devcarrot',
@@ -117,7 +118,7 @@ const BioCards: React.FC<{ min: number; max: number }> = props => {
   return (
     <>
       {bios.slice(min, max).map(bio => (
-        <Col xs={5} md={3} lg={3} className={classes.bioGroup}>
+        <Col xs={6} md={3} lg={3} className={classes.bioGroup}>
           <BioCard {...bio} />
         </Col>
       ))}
@@ -129,24 +130,34 @@ const NoundersPage = () => {
   return (
     <Section fullWidth={true} className={classes.noundersPage}>
       <Col lg={{ span: 6, offset: 3 }}>
-        <h2 style={{ marginBottom: '2rem' }}>The Nounders</h2>
-        <h3 style={{ marginBottom: '2rem' }}>3.5 artists, 6.5 technologists</h3>
+        <h2 style={{ marginBottom: '2rem' }}>
+          <Trans>The Nounders</Trans>
+        </h2>
+        <h3 style={{ marginBottom: '2rem' }}>
+          <Trans>3.5 artists, 6.5 technologists</Trans>
+        </h3>
         <Row style={{ marginBottom: '0rem' }}>
           <BioCards min={0} max={5} />
           <BioCards min={5} max={10} />
         </Row>
-        <h3>Nounders' Reward</h3>
+        <h3>
+          <Trans>Nounders' Reward</Trans>
+        </h3>
         <p style={{ textAlign: 'justify' }}>
-          All Noun auction proceeds are sent to the Nouns DAO. For this reason, we, the project's
-          founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th noun for
-          the first 5 years of the project will be sent to our multisig (5/10), where it will be
-          vested and distributed to individual Nounders.
+          <Trans>
+            All Noun auction proceeds are sent to the Nouns DAO. For this reason, we, the project's
+            founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th noun
+            for the first 5 years of the project will be sent to our multisig (5/10), where it will
+            be vested and distributed to individual Nounders.
+          </Trans>
         </p>
         <p style={{ textAlign: 'justify' }}>
-          The Nounders reward is intended as compensation for our pre and post-launch contributions
-          to the project, and to help us participate meaningfully in governance as the project
-          matures. Since there are 10 Nounders, after 5 years each Nounder could receive up to 1% of
-          the Noun supply.
+          <Trans>
+            The Nounders reward is intended as compensation for our pre and post-launch
+            contributions to the project, and to help us participate meaningfully in governance as
+            the project matures. Since there are 10 Nounders, after 5 years each Nounder could
+            receive up to 1% of the Noun supply.
+          </Trans>
         </p>
       </Col>
     </Section>

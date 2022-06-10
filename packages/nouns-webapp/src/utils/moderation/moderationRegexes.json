@@ -1,0 +1,11 @@
+{
+  "en": [
+    {
+      "regex": "kill.{0,3}all.{0,3}jew"
+    },
+    {
+      "regex": "hate.{0,3}jew"
+    }
+  ],
+  "jp": []
+}

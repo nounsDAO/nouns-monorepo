@@ -1,18 +1,24 @@
 import { buildCounterName } from './utils';
 import { internalDiscordWebhook, incrementCounter, publicDiscordWebhook } from './clients';
-import { getLastAuctionBids } from './subgraph';
+import { getAllProposals, getLastAuctionBids } from './subgraph';
 import {
   getAuctionCache,
   getAuctionEndingSoonCache,
   getBidCache,
+  getProposalCache,
+  hasWarnedOfExpiry,
+  setProposalExpiryWarningSent,
   updateAuctionCache,
   updateAuctionEndingSoonCache,
   updateBidCache,
+  updateProposalCache,
 } from './cache';
 import { IAuctionLifecycleHandler } from './types';
 import { config } from './config';
 import { TwitterAuctionLifecycleHandler } from './handlers/twitter';
 import { DiscordAuctionLifecycleHandler } from './handlers/discord';
+import { extractNewVotes, isAtRiskOfExpiry } from './utils/proposals';
+import R from 'ramda';
 
 /**
  * Create configured `IAuctionLifecycleHandler`s
@@ -25,6 +31,15 @@ if (config.discordEnabled) {
   auctionLifecycleHandlers.push(
     new DiscordAuctionLifecycleHandler([internalDiscordWebhook, publicDiscordWebhook]),
   );
+}
+
+/**
+ * Seed cache the current auction id
+ */
+async function setupAuction() {
+  const lastAuctionBids = await getLastAuctionBids();
+  const lastAuctionId = lastAuctionBids.id;
+  await updateAuctionCache(lastAuctionId);
 }
 
 /**
@@ -62,9 +77,57 @@ async function processAuctionTick() {
   const secondsUntilAuctionEnds = endTime - currentTimestamp;
   if (secondsUntilAuctionEnds < 20 * 60 && cachedAuctionEndingSoon < lastAuctionId) {
     await updateAuctionEndingSoonCache(lastAuctionId);
-    await Promise.all(auctionLifecycleHandlers.map(h => h.handleAuctionEndingSoon(lastAuctionId)));
+    await Promise.all(
+      auctionLifecycleHandlers.map(h => h.handleAuctionEndingSoon?.(lastAuctionId)),
+    );
   }
 }
 
+/**
+ * Seed cache with current proposals
+ */
+async function setupGovernance() {
+  const proposals = await getAllProposals();
+  await Promise.all(proposals.map(p => updateProposalCache(p)));
+}
+
+async function processGovernanceTick() {
+  const proposals = await getAllProposals();
+  console.log(`processGovernanceTick: all proposal ids(${proposals.map(p => p.id).join(',')})`);
+  R.map(async proposal => {
+    const cachedProposal = await getProposalCache(proposal.id);
+
+    if (cachedProposal === null) {
+      // New proposal
+      await Promise.all(auctionLifecycleHandlers.map(h => h.handleNewProposal?.(proposal)));
+    } else {
+      // Proposal has changed status
+      if (cachedProposal.status !== proposal.status) {
+        await Promise.all(
+          auctionLifecycleHandlers.map(h => h.handleUpdatedProposalStatus?.(proposal)),
+        );
+      }
+      const newVotes = extractNewVotes(cachedProposal, proposal);
+      R.map(async newVote => {
+        // New proposal votes
+        await Promise.all(
+          auctionLifecycleHandlers.map(h => h.handleGovernanceVote?.(proposal, newVote)),
+        );
+      }, newVotes);
+
+      // Proposal is at-risk of expiry
+      if (isAtRiskOfExpiry(proposal) && !(await hasWarnedOfExpiry(proposal.id))) {
+        await Promise.all(
+          auctionLifecycleHandlers.map(h => h.handleProposalAtRiskOfExpiry?.(proposal)),
+        );
+        await setProposalExpiryWarningSent(proposal.id);
+      }
+    }
+    await updateProposalCache(proposal);
+  }, proposals);
+}
+
 setInterval(async () => processAuctionTick(), 30000);
-processAuctionTick().then(() => 'processAuctionTick');
+setInterval(async () => processGovernanceTick(), 60000);
+setupAuction().then(() => 'setupAuction');
+setupGovernance().then(() => 'setupGovernance');

@@ -8,6 +8,8 @@ import _BirthdayIcon from '../../assets/icons/Birthday.svg';
 import { Image } from 'react-bootstrap';
 import { useAppSelector } from '../../hooks';
 import { AuctionState } from '../../state/slices/auction';
+import { Trans } from '@lingui/macro';
+import { i18n } from '@lingui/core';
 
 interface NounInfoRowBirthdayProps {
   nounId: number;
@@ -30,27 +32,13 @@ const NounInfoRowBirthday: React.FC<NounInfoRowBirthdayProps> = props => {
     pastAuctions.find((auction: AuctionState, i: number) => {
       const maybeNounId = auction.activeAuction?.nounId;
       return maybeNounId ? BigNumber.from(maybeNounId).eq(BigNumber.from(nounIdForQuery)) : false;
-    })?.activeAuction?.startTime,
+    })?.activeAuction?.startTime || 0,
   );
 
   if (!startTime) {
-    return <>Error fetching noun birthday</>;
+    return <Trans>Error fetching Noun birthday</Trans>;
   }
 
-  const monthNames = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
   const birthday = new Date(Number(startTime._hex) * 1000);
 
   return (
@@ -58,9 +46,9 @@ const NounInfoRowBirthday: React.FC<NounInfoRowBirthdayProps> = props => {
       <span>
         <Image src={_BirthdayIcon} className={classes.birthdayIcon} />
       </span>
-      Born
+      <Trans>Born</Trans>
       <span className={classes.nounInfoRowBirthday}>
-        {monthNames[birthday.getUTCMonth()]} {birthday.getUTCDate()}, {birthday.getUTCFullYear()}
+        {i18n.date(birthday, { month: 'long', year: 'numeric', day: '2-digit' })}
       </span>
     </div>
   );

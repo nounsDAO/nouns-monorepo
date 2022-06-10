@@ -2,7 +2,7 @@
 
 ## Background
 
-Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as Cryptopunks have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance and a treasury that can be used by the community for the creation of long-term value.
+Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as CryptoPunks have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance and a treasury that can be used by the community for the creation of long-term value.
 
 One Noun is generated and auctioned every day, forever. All Noun artwork is stored and rendered on-chain. See more information at [nouns.wtf](https://nouns.wtf/).
 
@@ -45,16 +45,19 @@ Copy `.env.example` to `.env` and fill in fields
 ### Commands
 
 ```sh
-# compiling
-npx hardhat compile
+# Compile Solidity
+yarn build:sol
 
-# deploying
-npx hardhat run --network rinkeby scripts/deploy.js
+# Command Help
+yarn task:[task-name] --help
 
-# verifying on etherscan
-npx hardhat verify --network rinkeby {DEPLOYED_ADDRESS}
+# Deploy & Configure for Local Development (Hardhat)
+yarn task:run-local
 
-# replace `rinkeby` with `mainnet` to productionize
+# Deploy & Configure (Testnet/Mainnet)
+# This task deploys and verifies the contracts, populates the descriptor, and transfers contract ownership.
+# For parameter and flag information, run `yarn task:deploy-and-configure --help`.
+yarn task:deploy-and-configure --network [network] --update-configs
 ```
 
 ### Automated Testnet Deployments

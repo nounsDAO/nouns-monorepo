@@ -9,3 +9,28 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+
+/* Load custom fonts */
+@font-face {
+  font-family: 'Londrina Solid';
+  src: url(./fonts/Londrina_Solid/LondrinaSolid-Black.ttf);
+  src: url(./fonts/Londrina_Solid/LondrinaSolid-Regular.ttf);
+}
+@font-face {
+  font-family: 'PT Root UI';
+  src: url(./fonts/PT_Root_UI/PT-Root-UI_Regular.woff2) format('woff2'),
+    url(./fonts/PT_Root_UI/PT-Root-UI_Regular.woff) format('woff');
+}
+@font-face {
+  font-family: 'PT Root UI';
+  font-weight: 500;
+  src: url(./fonts/PT_Root_UI/PT-Root-UI_Medium.woff2) format('woff2'),
+    url(./fonts/PT_Root_UI/PT-Root-UI_Medium.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  src: url(./fonts/PT_Root_UI/PT-Root-UI_Bold.woff2) format('woff2'),
+    url(./fonts/PT_Root_UI/PT-Root-UI_Bold.woff) format('woff');
+}
