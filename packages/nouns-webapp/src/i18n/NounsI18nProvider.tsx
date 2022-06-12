@@ -4,7 +4,7 @@
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
 import { DEFAULT_LOCALE, SupportedLocale } from './locales';
-import { en, ja } from 'make-plural/plurals';
+import { en, ja, pt } from 'make-plural/plurals';
 import { PluralCategory } from 'make-plural/plurals';
 import { ReactNode, useEffect } from 'react';
 
@@ -15,6 +15,7 @@ type LocalePlural = {
 const plurals: LocalePlural = {
   'en-US': en,
   'ja-JP': ja,
+  'pt-BR': pt,
   pseudo: en,
 };
 
