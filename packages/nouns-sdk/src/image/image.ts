@@ -10,7 +10,7 @@ export class Image {
   private _width: number;
   private _height: number;
   private _rows: ImageRows = {};
-  private _bounds: ImageBounds = { top: 0, bottom: 0, left: 0, right: 0 };
+  private _bounds: ImageBounds = { top: -1, bottom: 0, left: 0, right: 0 };
   private _rle: string | undefined;
 
   /**
@@ -51,13 +51,15 @@ export class Image {
    * and color palette values.
    * @param getRgbaAt A function used to fetch the RGBA values at specific x-y coordinates
    * @param colors The color palette map
+   * @param isFullSizeImage Image with no margins on the left and right
    */
   public toRLE(
     getRgbaAt: (x: number, y: number) => RGBAColor,
     colors: Map<string, number>,
+    isFullSizeImage?: boolean,
   ): string {
     if (!this._rle) {
-      this._rle = this.encode(getRgbaAt, colors);
+      this._rle = this.encode(getRgbaAt, colors, isFullSizeImage || false);
     }
     return this._rle;
   }
@@ -66,10 +68,12 @@ export class Image {
    * Using the image pixel inforation, run-length encode an image.
    * @param getRgbaAt A function used to fetch the RGBA values at specific x-y coordinates
    * @param colors The color palette map
+   * @param isFullSizeImage Image with no margins on the left and right
    */
   private encode(
     getRgbaAt: (x: number, y: number) => RGBAColor,
     colors: Map<string, number>,
+    isFullSizeImage?: boolean,
   ): string {
     for (let y = 0; y < this._height; y++) {
       for (let x = 0; x < this._width; x++) {
@@ -86,7 +90,7 @@ export class Image {
 
         this.appendPixelToRect(colorIndex, y);
       }
-      this.updateImageBounds(y);
+      this.updateImageBounds(y, isFullSizeImage || false);
     }
 
     this.deleteEmptyRows();
@@ -138,16 +142,16 @@ export class Image {
   /**
    * Update the bounds of the provided image
    * @param y The current `y` coordinate
+   * @param isFullSizeImage Image with no margins on the left and right
    */
-  private updateImageBounds(y: number): void {
+  private updateImageBounds(y: number, isFullSizeImage: boolean): void {
     const { rects } = this._rows[y];
-
     // Shift top bound to `y` if row is not empty and top bound is 0
-    if (!this.isEmptyRow(rects[0]) && this._bounds.top === 0) {
+    if (!this.isEmptyRow(rects[0]) && this._bounds.top === -1) {
       this._bounds.top = y;
     }
 
-    if (this._bounds.top !== 0) {
+    if (this._bounds.top !== -1) {
       // Set bottom bound to `y` if row is empty or we're on the last row.
       // Otherwise, reset the bottom bound
       if (this.isEmptyRow(rects[0])) {
@@ -161,10 +165,17 @@ export class Image {
       }
     }
 
-    this._rows[y].bounds = {
-      left: rects[0].length,
-      right: this._width - rects[rects.length - 1].length,
-    };
+    if (isFullSizeImage) {
+      this._rows[y].bounds = {
+        left: 0,
+        right: this._width - 1,
+      };
+    } else {
+      this._rows[y].bounds = {
+        left: rects[0].length,
+        right: this._width - rects[rects.length - 1].length,
+      };
+    }
   }
 
   /**
