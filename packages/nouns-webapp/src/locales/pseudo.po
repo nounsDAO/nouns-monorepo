@@ -356,6 +356,7 @@ msgstr ""
 msgid "Failed to fetch Noun activity history"
 msgstr ""
 
+#: src/components/Holder/index.tsx
 #: src/components/NounInfoRowHolder/index.tsx
 msgid "Failed to fetch Noun info"
 msgstr ""
@@ -402,6 +403,7 @@ msgstr ""
 
 #: src/components/NounHoverCard/index.tsx
 #: src/components/NounInfoRowHolder/index.tsx
+#: src/components/Holder/index.tsx
 msgid "Held by"
 msgstr ""
 
@@ -916,6 +918,7 @@ msgstr ""
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
 msgstr ""
 
+#: src/components/NounInfoRowHolder/index.tsx
 #: src/components/Winner/index.tsx
 msgid "Winner"
 msgstr ""

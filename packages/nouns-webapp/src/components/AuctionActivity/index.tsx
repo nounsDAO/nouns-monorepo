@@ -1,5 +1,5 @@
 import { Auction } from '../../wrappers/nounsAuction';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
 import { Row, Col } from 'react-bootstrap';
 import classes from './AuctionActivity.module.css';
@@ -23,6 +23,7 @@ import NounInfoCard from '../NounInfoCard';
 import { useAppSelector } from '../../hooks';
 import BidHistoryModal from '../BidHistoryModal';
 import { Trans } from '@lingui/macro';
+import Holder from '../Holder';
 
 const openEtherscanBidHistory = () => {
   const url = buildEtherscanAddressLink(config.addresses.nounsAuctionHouseProxy);
@@ -119,7 +120,11 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
             </Col>
             <Col lg={6} className={classes.auctionTimerCol}>
               {auctionEnded ? (
-                <Winner winner={auction.bidder} />
+                isLastAuction ? (
+                  <Winner winner={auction.bidder} />
+                ) : (
+                  <Holder nounId={auction.nounId.toNumber()} />
+                )
               ) : (
                 <AuctionTimer auction={auction} auctionEnded={auctionEnded} />
               )}

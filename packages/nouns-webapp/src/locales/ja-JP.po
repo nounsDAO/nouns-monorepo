@@ -349,6 +349,7 @@ msgstr "取得できませんでした"
 msgid "Failed to fetch Noun activity history"
 msgstr "Noun の活動履歴の取得に失敗しました。"
 
+#: src/components/Holder/index.tsx
 #: src/components/NounInfoRowHolder/index.tsx
 msgid "Failed to fetch Noun info"
 msgstr "Nounに関する情報の取得に失敗しました"
@@ -393,10 +394,12 @@ msgstr "ガバナンス「スロースタート」"
 msgid "Head"
 msgstr "頭"
 
+
 #: src/components/NounHoverCard/index.tsx
 #: src/components/NounInfoRowHolder/index.tsx
+#: src/components/Holder/index.tsx
 msgid "Held by"
-msgstr "主催者："
+msgstr "主催者"
 
 #: src/components/AuctionActivity/index.tsx
 msgid "Help mint the next Noun"
@@ -897,6 +900,7 @@ msgstr "これからどうする？"
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
 msgstr "決済は落札者に最も大きなインセンティブが与えられるが、誰でも起動できるため、Ethereumが稼働し、関心のある入札者がいる限り、システムは第三者の介入無しでNounsをオークションにかけることができます。"
 
+#: src/components/NounInfoRowHolder/index.tsx
 #: src/components/Winner/index.tsx
 msgid "Winner"
 msgstr "落札者"

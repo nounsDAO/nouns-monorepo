@@ -23,6 +23,13 @@ export interface INounSeed {
 const abi = new utils.Interface(NounsTokenABI);
 const seedCacheKey = cacheKey(cache.seed, CHAIN_ID, config.addresses.nounsToken);
 
+const isSeedValid = (seed: Record<string, any> | undefined) => {
+  const expectedKeys = ['background', 'body', 'accessory', 'head', 'glasses'];
+  const hasExpectedKeys = expectedKeys.every(key => (seed || {}).hasOwnProperty(key));
+  const hasValidValues = Object.values(seed || {}).some(v => v !== 0);
+  return hasExpectedKeys && hasValidValues;
+};
+
 export const useNounToken = (nounId: EthersBN) => {
   const [noun] =
     useContractCall<[string]>({
@@ -84,7 +91,7 @@ export const useNounSeed = (nounId: EthersBN) => {
   const response = useContractCall<INounSeed>(request);
   if (response) {
     const seedCache = localStorage.getItem(seedCacheKey);
-    if (seedCache) {
+    if (seedCache && isSeedValid(response)) {
       const updatedSeedCache = JSON.stringify({
         ...JSON.parse(seedCache),
         [nounId.toString()]: {
