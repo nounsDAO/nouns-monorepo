@@ -2,10 +2,9 @@ import { useEthers } from '@usedapp/core';
 import { useEffect, useState } from 'react';
 import { cache, cacheKey, CHAIN_ID } from '../config';
 
-
 export const ensCacheKey = (address: string) => {
-   return cacheKey(cache.ens, CHAIN_ID, address);
-}
+  return cacheKey(cache.ens, CHAIN_ID, address);
+};
 
 export const useReverseENSLookUp = (address: string) => {
   const { library } = useEthers();

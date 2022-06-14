@@ -118,6 +118,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
                   ) ?? []
                 }
                 propId={parseInt(proposal.id || '0')}
+                proposalCreationBlock={proposal.createdBlock}
               />
             ) : (
               <NounImageVoteTable nounIds={nounIds} propId={parseInt(proposal.id || '0')} />

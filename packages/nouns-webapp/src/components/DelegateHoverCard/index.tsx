@@ -3,21 +3,26 @@ import { ScaleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/macro';
 import React from 'react';
 import { Spinner } from 'react-bootstrap';
-import { voteInfoByVoteID } from '../../wrappers/subgraph';
+import { delegateNounsAtBlockQuery } from '../../wrappers/subgraph';
 import HorizontalStackedNouns from '../HorizontalStackedNouns';
 import ShortAddress from '../ShortAddress';
 import classes from './DelegateHoverCard.module.css';
 
 interface DelegateHoverCardProps {
-  voteId: string;
+  delegateId: string;
+  proposalCreationBlock: number;
 }
 
 const DelegateHoverCard: React.FC<DelegateHoverCardProps> = props => {
-  const { voteId } = props;
+  const { delegateId, proposalCreationBlock } = props;
 
-  const { data, loading, error } = useQuery(voteInfoByVoteID(voteId));
+  const unwrappedDelegateId = delegateId ? delegateId.replace('delegate-', '') : '';
 
-  if (loading || !data || data === undefined || data.votes.length === 0) {
+  const { data, loading, error } = useQuery(
+    delegateNounsAtBlockQuery([unwrappedDelegateId], proposalCreationBlock),
+  );
+
+  if (loading || !data || data === undefined || data.delegates.length === 0) {
     return (
       <div className={classes.spinnerWrapper}>
         <div className={classes.spinner}>
@@ -31,18 +36,18 @@ const DelegateHoverCard: React.FC<DelegateHoverCardProps> = props => {
     return <>Error fetching Vote info</>;
   }
 
-  const numVotesForProp = data.votes[0].nouns.length;
+  const numVotesForProp = data.delegates[0].nounsRepresented.length;
 
   return (
     <div className={classes.wrapper}>
       <div className={classes.stackedNounWrapper}>
         <HorizontalStackedNouns
-          nounIds={data.votes[0].nouns.map((noun: { id: string }) => noun.id)}
+          nounIds={data.delegates[0].nounsRepresented.map((noun: { id: string }) => noun.id)}
         />
       </div>
 
       <div className={classes.address}>
-        <ShortAddress address={data ? data.votes[0].voter.id : ''} />
+        <ShortAddress address={data ? data.delegates[0].id : ''} />
       </div>
 
       <div className={classes.nounInfoWrapper}>

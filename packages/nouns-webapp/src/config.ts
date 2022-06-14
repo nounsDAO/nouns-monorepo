@@ -31,8 +31,8 @@ export const cache: Record<string, CacheBucket> = {
   },
   ens: {
     name: 'ens',
-    version: 'v1'
-  }
+    version: 'v1',
+  },
 };
 
 export const cacheKey = (bucket: CacheBucket, ...parts: (string | number)[]) => {

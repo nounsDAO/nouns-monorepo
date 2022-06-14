@@ -277,19 +277,6 @@ export const currentlyDelegatedNouns = (delegate: string) => gql`
 }
 `;
 
-export const voteInfoByVoteID = (voteId: string) => gql`
-{
-  votes(where: {id: "${voteId}"}) {
-    voter {
-      id
-    }
-    nouns {
-      id
-    }
-  }
-}
-`;
-
 export const clientFactory = (uri: string) =>
   new ApolloClient({
     uri,
