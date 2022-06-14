@@ -22,7 +22,6 @@ const NounImageVoteTable: React.FC<NounImageVoteTableProps> = props => {
     .map((nounId: string) => {
       return (
         <HoverCard
-          // hoverCardContent={(tip: string) => <>{tip}</>}
           hoverCardContent={(tip: string) => <NounHoverCard nounId={tip} />}
           tip={nounId.toString()}
           id="nounHoverCard"

@@ -17,8 +17,11 @@ export const useReverseENSLookUp = (address: string) => {
         } else {
           localStorage.removeItem(address);
         }
-      } else {
-        // If address not in local storage, attempt to resolve via RPC call
+      }
+
+      // If address not in local storage, attempt to resolve via RPC call.
+      // At this stage if the item is in local storage we know it isn't expired.
+      if (!localStorage.getItem(address)) {
         library
           .lookupAddress(address)
           .then(name => {

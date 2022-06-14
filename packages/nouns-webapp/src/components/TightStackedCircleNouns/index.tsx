@@ -6,19 +6,19 @@ interface StackedCircleNounsProps {
   nounIds: Array<number>;
 }
 
-// TODO
 const MAX_NOUNS_PER_STACK = 3;
 
 const TightStackedCircleNouns: React.FC<StackedCircleNounsProps> = props => {
   const { nounIds } = props;
 
-  // TODO not sure if this will be an issue for new nouns or something?
   const seeds = useNounSeeds();
 
-  const svgs = nounIds.slice(0, MAX_NOUNS_PER_STACK).map((nounId: number) => {
-    const nounData = getNoun(BigNumber.from(nounId), seeds[nounId]);
-    return nounData.image;
-  });
+  const svgs = seeds
+    ? nounIds.slice(0, MAX_NOUNS_PER_STACK).map((nounId: number) => {
+        const nounData = getNoun(BigNumber.from(nounId), seeds[nounId]);
+        return nounData.image;
+      })
+    : [];
 
   const shift = 3;
 
@@ -46,7 +46,7 @@ const TightStackedCircleNouns: React.FC<StackedCircleNounsProps> = props => {
 
               <use xlinkHref={`#${nounIds[i]}`} />
               <image
-                clip-path={`url(#clipCircleNoun${nounIds[i]})`}
+                clipPath={`url(#clipCircleNoun${nounIds[i]})`}
                 x={8 + i * shift}
                 y={14 - i * shift}
                 width="40"

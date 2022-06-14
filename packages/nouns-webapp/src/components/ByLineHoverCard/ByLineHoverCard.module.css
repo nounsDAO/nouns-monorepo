@@ -1,7 +1,6 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  max-width: 11rem;
 }
 
 .stackedNounWrapper {
@@ -21,6 +20,7 @@
   margin-top: 0.25rem;
   font-weight: 500;
   font-size: 15px;
+  max-width: 11rem;
 }
 
 .bold {

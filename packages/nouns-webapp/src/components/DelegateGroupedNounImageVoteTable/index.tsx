@@ -29,7 +29,6 @@ const DelegateGruopedNounImageVoteTable: React.FC<
     .map((data: { delegate: string; supportDetailed: 0 | 1 | 2; nounsRepresented: string[] }) => {
       return (
         <HoverCard
-          // hoverCardContent={(tip: string) => <>{tip}</>}
           hoverCardContent={(tip: string) => <DelegateHoverCard voteId={tip} />}
           tip={`${data.delegate}-${propId}`}
           id="delegateVoteHoverCard"

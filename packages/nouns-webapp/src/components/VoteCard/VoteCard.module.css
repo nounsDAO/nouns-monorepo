@@ -41,9 +41,17 @@
   padding-right: 0.5rem;
 }
 
-@media (max-width: 992px) {
+.mobileVoteCountWrapper {
+  display: none !important;
+}
+
+@media (max-width: 1200px) {
   .voteCountCard {
     min-height: 0rem;
+  }
+
+  .mobileVoteCountWrapper {
+    display: flex !important;
   }
 
   .voteCardVoteCount {
@@ -59,5 +67,9 @@
     margin-left: auto;
     margin-right: auto;
     font-size: 16px;
+  }
+
+  .nounProfilePics {
+    display: none;
   }
 }

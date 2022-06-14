@@ -8,6 +8,8 @@ import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
 import DelegateGroupedNounImageVoteTable from '../DelegateGroupedNounImageVoteTable';
 import { useEthers } from '@usedapp/core';
+import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
+import clsx from 'clsx';
 
 export enum VoteCardVariant {
   FOR,
@@ -28,7 +30,6 @@ interface VoteCardProps {
 
 const VoteCard: React.FC<VoteCardProps> = props => {
   const { proposal, percentage, nounIds, variant, delegateView, delegateGroupedVoteData } = props;
-  const isMobile = window.innerWidth < 1200;
 
   let titleClass;
   let titleCopy;
@@ -66,6 +67,10 @@ const VoteCard: React.FC<VoteCardProps> = props => {
     }
 
     delegateGroupedVoteData.forEach((delegateInfo: { delegate: string }) => {
+      if (localStorage.getItem(`${delegateInfo.delegate}`)) {
+        return;
+      }
+
       library
         .lookupAddress(delegateInfo.delegate)
         .then(name => {
@@ -93,34 +98,30 @@ const VoteCard: React.FC<VoteCardProps> = props => {
         <Card.Body className="p-2">
           <Card.Text className="py-2 m-0">
             <span className={`${classes.voteCardHeaderText} ${titleClass}`}>{titleCopy}</span>
-            {!isMobile && (
-              <span className={classes.voteCardVoteCount}>{i18n.number(voteCount)}</span>
-            )}
+            <span className={clsx(classes.voteCardVoteCount, responsiveUiUtilsClasses.desktopOnly)}>
+              {i18n.number(voteCount)}
+            </span>
           </Card.Text>
-          {isMobile && (
-            <Card.Text className="py-2 m-0">
-              <span className={classes.voteCardVoteCount}>{i18n.number(voteCount)}</span>
-            </Card.Text>
-          )}
+
+          <Card.Text className={clsx('py-2 m-0', classes.mobileVoteCountWrapper)}>
+            <span className={classes.voteCardVoteCount}>{i18n.number(voteCount)}</span>
+          </Card.Text>
+
           <VoteProgressBar variant={variant} percentage={percentage} />
-          {!isMobile && (
-            <Row className={classes.nounProfilePics}>
-              {delegateView ? (
-                <DelegateGroupedNounImageVoteTable
-                  filteredDelegateGroupedVoteData={
-                    delegateGroupedVoteData
-                      ? delegateGroupedVoteData.filter(
-                          v => v.supportDetailed === supportDetailedValue,
-                        )
-                      : []
-                  }
-                  propId={parseInt(proposal.id || '0')}
-                />
-              ) : (
-                <NounImageVoteTable nounIds={nounIds} propId={parseInt(proposal.id || '0')} />
-              )}
-            </Row>
-          )}
+          <Row className={classes.nounProfilePics}>
+            {delegateView ? (
+              <DelegateGroupedNounImageVoteTable
+                filteredDelegateGroupedVoteData={
+                  delegateGroupedVoteData?.filter(
+                    v => v.supportDetailed === supportDetailedValue,
+                  ) ?? []
+                }
+                propId={parseInt(proposal.id || '0')}
+              />
+            ) : (
+              <NounImageVoteTable nounIds={nounIds} propId={parseInt(proposal.id || '0')} />
+            )}
+          </Row>
         </Card.Body>
       </Card>
     </Col>
