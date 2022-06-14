@@ -10,6 +10,7 @@ import DelegateGroupedNounImageVoteTable from '../DelegateGroupedNounImageVoteTa
 import { useEthers } from '@usedapp/core';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 import clsx from 'clsx';
+import { ensCacheKey } from '../../utils/ensLookup';
 
 export enum VoteCardVariant {
   FOR,
@@ -67,7 +68,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
     }
 
     delegateGroupedVoteData.forEach((delegateInfo: { delegate: string }) => {
-      if (localStorage.getItem(`${delegateInfo.delegate}`)) {
+      if (localStorage.getItem(ensCacheKey(delegateInfo.delegate))) {
         return;
       }
 
@@ -77,7 +78,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
           // Store data as mapping of address_Expiration => address or ENS
           if (name) {
             localStorage.setItem(
-              `${delegateInfo.delegate}`,
+              ensCacheKey(delegateInfo.delegate),
               JSON.stringify({
                 name,
                 expires: Date.now() / 1000 + 30 * 60,
