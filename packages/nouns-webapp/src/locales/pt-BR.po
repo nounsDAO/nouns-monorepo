@@ -33,11 +33,11 @@ msgstr ""
 
 #: src/components/VoteCard/index.tsx
 msgid "Abstain"
-msgstr ""
+msgstr "Abstenções"
 
 #: src/components/VoteModal/index.tsx
 msgid "Abstain from voting on Prop {0}"
-msgstr ""
+msgstr "Abster-se de votar no Prop {0} "
 
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Abstained on"
@@ -166,19 +166,19 @@ msgstr "Cancelado"
 
 #: src/components/VoteModal/index.tsx
 msgid "Cast 1 vote against Prop {0}"
-msgstr ""
+msgstr "Dê 1 voto contra Prop {0}"
 
 #: src/components/VoteModal/index.tsx
 msgid "Cast 1 vote for Prop {0}"
-msgstr ""
+msgstr "Dê 1 voto a favor de Prop {0}"
 
 #: src/components/VoteModal/index.tsx
 msgid "Cast {0} votes against Prop {1}"
-msgstr ""
+msgstr "Dê {0} votos contra Prop {1}"
 
 #: src/components/VoteModal/index.tsx
 msgid "Cast {0} votes for Prop {1}"
-msgstr ""
+msgstr "Dê {0} votos a favor de Prop {1}"
 
 #: src/components/WalletConnectModal/index.tsx
 msgid "Clear WalletConnect Data"
@@ -264,7 +264,7 @@ msgstr ""
 
 #: src/pages/Vote/index.tsx
 msgid "Ends"
-msgstr ""
+msgstr "Termina"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "Ends on"
@@ -332,7 +332,7 @@ msgstr ""
 
 #: src/components/VoteCard/index.tsx
 msgid "For"
-msgstr ""
+msgstr "A Favor"
 
 #: src/components/NounderNounContent/index.tsx
 msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
@@ -528,7 +528,7 @@ msgstr "Apenas imagens PNG 32x32 são aceitas"
 
 #: src/components/ProposalHeader/index.tsx
 msgid "Only Nouns you owned or were delegated to you before {0} are eligible to vote."
-msgstr ""
+msgstr "Apenas Nouns que você possuía ou foram delegados a você antes de {0} são elegíveis para votar."
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
@@ -615,7 +615,7 @@ msgstr ""
 
 #: src/components/VoteModal/index.tsx
 msgid "Reason (Optional)"
-msgstr ""
+msgstr "Razão (Opcional)"
 
 #: src/components/LanguageSelectionModal/index.tsx
 msgid "Select Language"
@@ -751,7 +751,7 @@ msgstr "Este tesouro existe para os participantes do <0>Nouns DAO</0> alocarem r
 
 #: src/pages/Vote/index.tsx
 msgid "Threshold"
-msgstr ""
+msgstr "Limite"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "Time left"
@@ -826,7 +826,7 @@ msgstr "Vote para o próximo Noun"
 
 #: src/components/VoteModal/index.tsx
 msgid "Vote on Prop {0}"
-msgstr ""
+msgstr "Votar na Prop {0}"
 
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Voted aginst"
@@ -864,15 +864,15 @@ msgstr "Lance ganhador"
 
 #: src/components/Winner/index.tsx
 msgid "You"
-msgstr ""
+msgstr "Você"
 
 #: src/components/ProposalHeader/index.tsx
 msgid "You <0>Abstained</0> from this proposal"
-msgstr ""
+msgstr "Você <0>Absteve-se</0> dessa proposta"
 
 #: src/components/CreateProposalButton/index.tsx
 msgid "You already have an active or pending proposal"
-msgstr ""
+msgstr "Você ainda tem uma proposta ativa ou pendente"
 
 #: src/components/Documentation/index.tsx
 msgid "You can experiment with off-chain Noun generation at the {playgroundLink}."
@@ -888,7 +888,7 @@ msgstr ""
 
 #: src/components/CreateProposalButton/index.tsx
 msgid "You don't have enough votes to submit a proposal"
-msgstr ""
+msgstr "Você não tem votos suficientes para submeter uma proposta"
 
 #: src/components/Proposals/index.tsx
 msgid "You have no Votes."
@@ -904,11 +904,11 @@ msgstr ""
 
 #: src/components/ProposalHeader/index.tsx
 msgid "You voted <0>Against</0> this proposal"
-msgstr ""
+msgstr "Você votou <0>Contra</0> esta proposta"
 
 #: src/components/ProposalHeader/index.tsx
 msgid "You voted <0>For</0> this proposal"
-msgstr ""
+msgstr "Você votou <0>A Favor</0> desta proposta"
 
 #: src/pages/Playground/index.tsx
 msgid "You've generated {0} years worth of Nouns"
@@ -916,7 +916,7 @@ msgstr "Você gerou {0} anos de Nouns"
 
 #: src/components/VoteModal/index.tsx
 msgid "You've successfully voted on on prop {0}"
-msgstr ""
+msgstr "Você votou com sucesso na prop {0}"
 
 #: src/components/Documentation/index.tsx
 msgid "accessories (137)"
