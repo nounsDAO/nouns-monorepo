@@ -1,11 +1,12 @@
 .wrapper {
   width: max-content;
+  height: fit-content;
 }
 
 .spinnerWrapper {
   color: var(--brand-gray-light-text);
   width: 100%;
-  height: 185px;
+  height: 125px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -72,4 +73,8 @@
   display: flex;
   align-items: center;
   font-feature-settings: 'tnum' on, 'lnum' on, 'ss06' on, 'ss01' on, 'liga' off;
+}
+
+.currentHolder {
+  margin-bottom: 1rem;
 }

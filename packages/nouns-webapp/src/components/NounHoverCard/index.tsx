@@ -12,6 +12,7 @@ import { isNounderNoun } from '../../utils/nounderNoun';
 import { useAppSelector } from '../../hooks';
 import { i18n } from '@lingui/core';
 import { getNounBirthday } from '../NounInfoRowBirthday';
+import clsx from 'clsx';
 
 interface NounHoverCardProps {
   nounId: string;
@@ -66,7 +67,7 @@ const NounHoverCard: React.FC<NounHoverCardProps> = props => {
       </div>
 
       {/* Current holder */}
-      <div className={classes.nounInfoWrapper}>
+      <div className={clsx(classes.nounInfoWrapper, classes.currentHolder)}>
         <HeartIcon height={20} width={20} className={classes.icon} />
         <span>
           <Trans>Held by</Trans>
@@ -75,10 +76,6 @@ const NounHoverCard: React.FC<NounHoverCardProps> = props => {
           <ShortAddress address={data.noun.owner.id} />
         </span>
       </div>
-
-      <p className={classes.cta}>
-        <Trans>View Noun Profile</Trans>→
-      </p>
     </div>
   );
 };

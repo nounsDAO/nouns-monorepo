@@ -67,7 +67,7 @@ const ByLineHoverCard: React.FC<ByLineHoverCardProps> = props => {
 
           {sortedNounIds.slice(0, MAX_NOUN_IDS_SHOWN).map((nounId: number, i: number) => {
             return (
-              <span className={classes.bold}>
+              <span className={classes.bold} key={nounId.toString()}>
                 {nounId}
                 {i !== Math.min(MAX_NOUN_IDS_SHOWN, sortedNounIds.length) - 1 && ', '}{' '}
               </span>

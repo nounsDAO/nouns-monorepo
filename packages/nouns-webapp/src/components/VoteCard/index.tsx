@@ -11,6 +11,7 @@ import { useEthers } from '@usedapp/core';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 import clsx from 'clsx';
 import { ensCacheKey } from '../../utils/ensLookup';
+import { useActiveLocale } from '../../hooks/useActivateLocale';
 
 export enum VoteCardVariant {
   FOR,
@@ -59,6 +60,9 @@ const VoteCard: React.FC<VoteCardProps> = props => {
 
   const { library } = useEthers();
   const [ensCached, setEnsCached] = useState(false);
+  const locale = useActiveLocale();
+  const filteredDelegateGroupedVoteData =
+    delegateGroupedVoteData?.filter(v => v.supportDetailed === supportDetailedValue) ?? [];
 
   // Pre-fetch ENS  of delegates (with 30min TTL)
   // This makes hover cards load more smoothly
@@ -93,30 +97,62 @@ const VoteCard: React.FC<VoteCardProps> = props => {
     setEnsCached(true);
   }, [library, ensCached, delegateGroupedVoteData]);
 
+  const isEnUS = locale === 'en-US';
   return (
     <Col lg={4} className={classes.wrapper}>
       <Card className={classes.voteCountCard}>
         <Card.Body className="p-2">
           <Card.Text className="py-2 m-0">
-            <span className={`${classes.voteCardHeaderText} ${titleClass}`}>{titleCopy}</span>
-            <span className={clsx(classes.voteCardVoteCount, responsiveUiUtilsClasses.desktopOnly)}>
-              {i18n.number(voteCount)}
+            <span
+              className={`${
+                isEnUS ? classes.voteCardHeaderTextEn : classes.voteCardHeaderTextNonEn
+              } ${titleClass}`}
+            >
+              {titleCopy}
+            </span>
+            <span
+              className={clsx(
+                classes.voteCardVoteCount,
+                responsiveUiUtilsClasses.desktopOnly,
+                !delegateView && !isEnUS ? classes.smallerVoteCountText : '',
+              )}
+            >
+              {delegateView ? (
+                <Trans>
+                  {i18n.number(filteredDelegateGroupedVoteData.length)}{' '}
+                  <span className={isEnUS ? classes.unitTextEn : classes.unitTextNonEn}>
+                    Addresses
+                  </span>
+                </Trans>
+              ) : (
+                <Trans>
+                  {i18n.number(voteCount)} <span className={classes.unitTextEn}>Nouns</span>
+                </Trans>
+              )}
             </span>
           </Card.Text>
 
           <Card.Text className={clsx('py-2 m-0', classes.mobileVoteCountWrapper)}>
-            <span className={classes.voteCardVoteCount}>{i18n.number(voteCount)}</span>
+            <span className={classes.voteCardVoteCount}>
+              {delegateView
+                ? i18n.number(filteredDelegateGroupedVoteData.length)
+                : i18n.number(voteCount)}
+            </span>
+            <span
+              className={clsx(
+                classes.voteCardVoteCount,
+                isEnUS ? classes.unitTextEn : classes.unitTextNonEn,
+              )}
+            >
+              {delegateView ? <Trans>Addresses</Trans> : <>Nouns</>}
+            </span>
           </Card.Text>
 
           <VoteProgressBar variant={variant} percentage={percentage} />
           <Row className={classes.nounProfilePics}>
             {delegateView ? (
               <DelegateGroupedNounImageVoteTable
-                filteredDelegateGroupedVoteData={
-                  delegateGroupedVoteData?.filter(
-                    v => v.supportDetailed === supportDetailedValue,
-                  ) ?? []
-                }
+                filteredDelegateGroupedVoteData={filteredDelegateGroupedVoteData}
                 propId={parseInt(proposal.id || '0')}
                 proposalCreationBlock={proposal.createdBlock}
               />

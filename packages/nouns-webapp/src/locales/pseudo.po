@@ -108,6 +108,10 @@ msgid "Address (Callee or Recipient)"
 msgstr ""
 
 #: src/components/VoteCard/index.tsx
+msgid "Addresses"
+msgstr ""
+
+#: src/components/VoteCard/index.tsx
 msgid "Against"
 msgstr ""
 
@@ -401,9 +405,8 @@ msgstr ""
 msgid "Head"
 msgstr ""
 
-#: src/components/NounHoverCard/index.tsx
-#: src/components/NounInfoRowHolder/index.tsx
 #: src/components/Holder/index.tsx
+#: src/components/NounHoverCard/index.tsx
 msgid "Held by"
 msgstr ""
 
@@ -866,8 +869,8 @@ msgid "Vetoed"
 msgstr ""
 
 #: src/components/NounHoverCard/index.tsx
-msgid "View Noun Profile"
-msgstr ""
+#~ msgid "View Noun Profile"
+#~ msgstr ""
 
 #: src/components/BidHistoryBtn/index.tsx
 msgid "View all bids"
@@ -1033,6 +1036,18 @@ msgstr ""
 
 #: src/components/AuctionTimer/index.tsx
 msgid "s"
+msgstr ""
+
+#: src/components/VoteCard/index.tsx
+msgid "{0} <0>Addresses</0>"
+msgstr ""
+
+#: src/components/VoteCard/index.tsx
+#~ msgid "{0} <0>Delegates</0>"
+#~ msgstr ""
+
+#: src/components/VoteCard/index.tsx
+msgid "{0} <0>Nouns</0>"
 msgstr ""
 
 #: src/pages/Vote/index.tsx

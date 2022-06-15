@@ -101,6 +101,10 @@ msgid "Address (Callee or Recipient)"
 msgstr "アドレス (他のスマート契約者であるカーリー、又はETHを受け取る受信者)"
 
 #: src/components/VoteCard/index.tsx
+msgid "Addresses"
+msgstr "イーサリアムアドレス"
+
+#: src/components/VoteCard/index.tsx
 msgid "Against"
 msgstr "反対"
 
@@ -394,10 +398,8 @@ msgstr "ガバナンス「スロースタート」"
 msgid "Head"
 msgstr "頭"
 
-
-#: src/components/NounHoverCard/index.tsx
-#: src/components/NounInfoRowHolder/index.tsx
 #: src/components/Holder/index.tsx
+#: src/components/NounHoverCard/index.tsx
 msgid "Held by"
 msgstr "主催者"
 
@@ -852,8 +854,8 @@ msgid "Vetoed"
 msgstr "拒否"
 
 #: src/components/NounHoverCard/index.tsx
-msgid "View Noun Profile"
-msgstr "Nounプロファイルを表示"
+#~ msgid "View Noun Profile"
+#~ msgstr "Nounプロファイルを表示"
 
 #: src/components/BidHistoryBtn/index.tsx
 msgid "View all bids"
@@ -1012,6 +1014,14 @@ msgstr "パブリックドメイン"
 #: src/components/AuctionTimer/index.tsx
 msgid "s"
 msgstr "秒"
+
+#: src/components/VoteCard/index.tsx
+msgid "{0} <0>Addresses</0>"
+msgstr "{0}<0>イーサリアムアドレス</0>"
+
+#: src/components/VoteCard/index.tsx
+msgid "{0} <0>Nouns</0>"
+msgstr "{0} <0>Nouns</0>"
 
 #: src/pages/Vote/index.tsx
 msgid "{0} votes"
