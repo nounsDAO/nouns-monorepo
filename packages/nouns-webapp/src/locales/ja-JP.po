@@ -22,6 +22,10 @@ msgstr ""
 msgid "'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:"
 msgstr "「Nounders」とはNounsの創業に携わった10人の創業者のことであり、以下の人物で構成されています："
 
+#: src/components/ByLineHoverCard/index.tsx
+msgid "... and {0} more"
+msgstr "...そしてさらに3つ"
+
 #: src/components/Documentation/index.tsx
 msgid "100% of Noun auction proceeds are trustlessly sent to the treasury."
 msgstr "Nounオークションの売上は、第三者の介入無しで 100％トレジャリーに送られる仕組みになっています。"
@@ -33,6 +37,14 @@ msgstr "3.5アーティスト、6.5技術者"
 #: src/pages/NotFound/index.tsx
 msgid "404: This is not the person, place, or thing you're looking for..."
 msgstr "404: お探しの人、場所、物は見つかりませんでした。"
+
+#: src/components/ByLineHoverCard/index.tsx
+msgid "<0>Delegated Noun: </0>"
+msgstr "委任Noun: "
+
+#: src/components/ByLineHoverCard/index.tsx
+msgid "<0>Delegated Nouns: </0>"
+msgstr "委任Noun: "
 
 #: src/components/ProposalHeader/index.tsx
 msgid "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
@@ -87,6 +99,10 @@ msgstr "アドレス"
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "Address (Callee or Recipient)"
 msgstr "アドレス (他のスマート契約者であるカーリー、又はETHを受け取る受信者)"
+
+#: src/components/VoteCard/index.tsx
+msgid "Addresses"
+msgstr "イーサリアムアドレス"
 
 #: src/components/VoteCard/index.tsx
 msgid "Against"
@@ -166,6 +182,7 @@ msgstr "入札はここに表示されます"
 msgid "Body"
 msgstr "体"
 
+#: src/components/NounHoverCard/index.tsx
 #: src/components/NounInfoRowBirthday/index.tsx
 msgid "Born"
 msgstr "誕生"
@@ -382,6 +399,7 @@ msgid "Head"
 msgstr "頭"
 
 #: src/components/Holder/index.tsx
+#: src/components/NounHoverCard/index.tsx
 msgid "Held by"
 msgstr "主催者"
 
@@ -708,6 +726,14 @@ msgstr "まとめ"
 msgid "Switch"
 msgstr "切り替え"
 
+#: src/pages/Vote/index.tsx
+msgid "Switch to Noun view"
+msgstr "Nounビューに切り替えます"
+
+#: src/pages/Vote/index.tsx
+msgid "Switch to delegate view"
+msgstr "ビューを委任するように切り替えます"
+
 #: src/components/NavWallet/index.tsx
 msgid "Switch wallet"
 msgstr "ウォレットを切り替える"
@@ -827,6 +853,10 @@ msgstr "ETHの価格 (任意)"
 msgid "Vetoed"
 msgstr "拒否"
 
+#: src/components/NounHoverCard/index.tsx
+#~ msgid "View Noun Profile"
+#~ msgstr "Nounプロファイルを表示"
+
 #: src/components/BidHistoryBtn/index.tsx
 msgid "View all bids"
 msgstr "すべての入札を表示"
@@ -846,6 +876,14 @@ msgstr "反対に投票"
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Voted for"
 msgstr "賛成に投票"
+
+#: src/components/DelegateHoverCard/index.tsx
+msgid "Voted with<0>{numVotesForProp}</0>Noun"
+msgstr "<0>{numVotesForProp}</0>のNounで投票"
+
+#: src/components/DelegateHoverCard/index.tsx
+msgid "Voted with<0>{numVotesForProp}</0>Nouns"
+msgstr "<0>{numVotesForProp}</0>のNounで投票"
 
 #: src/components/Documentation/index.tsx
 msgid "WTF?"
@@ -976,6 +1014,14 @@ msgstr "パブリックドメイン"
 #: src/components/AuctionTimer/index.tsx
 msgid "s"
 msgstr "秒"
+
+#: src/components/VoteCard/index.tsx
+msgid "{0} <0>Addresses</0>"
+msgstr "{0}<0>イーサリアムアドレス</0>"
+
+#: src/components/VoteCard/index.tsx
+msgid "{0} <0>Nouns</0>"
+msgstr "{0} <0>Nouns</0>"
 
 #: src/pages/Vote/index.tsx
 msgid "{0} votes"

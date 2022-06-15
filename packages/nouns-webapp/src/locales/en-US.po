@@ -21,6 +21,10 @@ msgstr "'Nounders' are the group of ten builders that initiated Nouns. Here are 
 #~ msgid ". Nouns can vote on proposals or delegate their vote to a third party. A minimum of"
 #~ msgstr ". Nouns can vote on proposals or delegate their vote to a third party. A minimum of"
 
+#: src/components/ByLineHoverCard/index.tsx
+msgid "... and {0} more"
+msgstr "... and {0} more"
+
 #: src/components/Documentation/index.tsx
 msgid "100% of Noun auction proceeds are trustlessly sent to the treasury."
 msgstr "100% of Noun auction proceeds are trustlessly sent to the treasury."
@@ -32,6 +36,14 @@ msgstr "3.5 artists, 6.5 technologists"
 #: src/pages/NotFound/index.tsx
 msgid "404: This is not the person, place, or thing you're looking for..."
 msgstr "404: This is not the person, place, or thing you're looking for..."
+
+#: src/components/ByLineHoverCard/index.tsx
+msgid "<0>Delegated Noun: </0>"
+msgstr "<0>Delegated Noun: </0>"
+
+#: src/components/ByLineHoverCard/index.tsx
+msgid "<0>Delegated Nouns: </0>"
+msgstr "<0>Delegated Nouns: </0>"
 
 #: src/components/ProposalHeader/index.tsx
 msgid "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
@@ -94,6 +106,10 @@ msgstr "Address"
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "Address (Callee or Recipient)"
 msgstr "Address (Callee or Recipient)"
+
+#: src/components/VoteCard/index.tsx
+msgid "Addresses"
+msgstr "Addresses"
 
 #: src/components/VoteCard/index.tsx
 msgid "Against"
@@ -173,6 +189,7 @@ msgstr "Bids will appear here"
 msgid "Body"
 msgstr "Body"
 
+#: src/components/NounHoverCard/index.tsx
 #: src/components/NounInfoRowBirthday/index.tsx
 msgid "Born"
 msgstr "Born"
@@ -389,6 +406,7 @@ msgid "Head"
 msgstr "Head"
 
 #: src/components/Holder/index.tsx
+#: src/components/NounHoverCard/index.tsx
 msgid "Held by"
 msgstr "Held by"
 
@@ -723,6 +741,14 @@ msgstr "Summary"
 msgid "Switch"
 msgstr "Switch"
 
+#: src/pages/Vote/index.tsx
+msgid "Switch to Noun view"
+msgstr "Switch to Noun view"
+
+#: src/pages/Vote/index.tsx
+msgid "Switch to delegate view"
+msgstr "Switch to delegate view"
+
 #: src/components/NavWallet/index.tsx
 msgid "Switch wallet"
 msgstr "Switch wallet"
@@ -842,6 +868,10 @@ msgstr "Value in ETH (Optional)"
 msgid "Vetoed"
 msgstr "Vetoed"
 
+#: src/components/NounHoverCard/index.tsx
+#~ msgid "View Noun Profile"
+#~ msgstr "View Noun Profile"
+
 #: src/components/BidHistoryBtn/index.tsx
 msgid "View all bids"
 msgstr "View all bids"
@@ -865,6 +895,14 @@ msgstr "Voted aginst"
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Voted for"
 msgstr "Voted for"
+
+#: src/components/DelegateHoverCard/index.tsx
+msgid "Voted with<0>{numVotesForProp}</0>Noun"
+msgstr "Voted with<0>{numVotesForProp}</0>Noun"
+
+#: src/components/DelegateHoverCard/index.tsx
+msgid "Voted with<0>{numVotesForProp}</0>Nouns"
+msgstr "Voted with<0>{numVotesForProp}</0>Nouns"
 
 #: src/components/Documentation/index.tsx
 msgid "WTF?"
@@ -999,6 +1037,18 @@ msgstr "public domain"
 #: src/components/AuctionTimer/index.tsx
 msgid "s"
 msgstr "s"
+
+#: src/components/VoteCard/index.tsx
+msgid "{0} <0>Addresses</0>"
+msgstr "{0} <0>Addresses</0>"
+
+#: src/components/VoteCard/index.tsx
+#~ msgid "{0} <0>Delegates</0>"
+#~ msgstr "{0} <0>Delegates</0>"
+
+#: src/components/VoteCard/index.tsx
+msgid "{0} <0>Nouns</0>"
+msgstr "{0} <0>Nouns</0>"
 
 #: src/pages/Vote/index.tsx
 msgid "{0} votes"
