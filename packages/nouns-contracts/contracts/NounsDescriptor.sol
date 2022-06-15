@@ -286,27 +286,23 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     }
 
     function retireBackground(uint256 virtualIndex) external onlyOwner {
-        backgroundsVirtualIndexToStorageIndex[virtualIndex] = backgroundsVirtualIndexToStorageIndex[
-            backgroundsVirtualIndexToStorageIndex.length - 1
-        ];
-
-        backgroundsVirtualIndexToStorageIndex.pop();
+        retireStorageIndexByVirtualIndex(backgroundsVirtualIndexToStorageIndex, virtualIndex);
     }
 
     function retireBody(uint256 virtualIndex) external onlyOwner {
-        retireTraitImage(_bodies, virtualIndex);
+        retireStorageIndexByVirtualIndex(_bodies.virtualIndexToStorageIndex, virtualIndex);
     }
 
     function retireAccessory(uint256 virtualIndex) external onlyOwner {
-        retireTraitImage(_accessories, virtualIndex);
+        retireStorageIndexByVirtualIndex(_accessories.virtualIndexToStorageIndex, virtualIndex);
     }
 
     function retireHead(uint256 virtualIndex) external onlyOwner {
-        retireTraitImage(_heads, virtualIndex);
+        retireStorageIndexByVirtualIndex(_heads.virtualIndexToStorageIndex, virtualIndex);
     }
 
     function retireGlasses(uint256 virtualIndex) external onlyOwner {
-        retireTraitImage(_glasses, virtualIndex);
+        retireStorageIndexByVirtualIndex(_glasses.virtualIndexToStorageIndex, virtualIndex);
     }
 
     function backgroundStorageIndex(uint256 virtualIndex) external view returns (uint256) {
@@ -554,11 +550,8 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         trait.storedImagesCount += imageCount;
     }
 
-    function retireTraitImage(Trait storage trait, uint256 virtualIndex) internal {
-        trait.virtualIndexToStorageIndex[virtualIndex] = trait.virtualIndexToStorageIndex[
-            trait.virtualIndexToStorageIndex.length - 1
-        ];
-
-        trait.virtualIndexToStorageIndex.pop();
+    function retireStorageIndexByVirtualIndex(uint256[] storage virtualToStorageArray, uint256 virtualIndex) internal {
+        virtualToStorageArray[virtualIndex] = virtualToStorageArray[virtualToStorageArray.length - 1];
+        virtualToStorageArray.pop();
     }
 }
