@@ -325,6 +325,56 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         return traitStorageIndex(_glasses, virtualIndex);
     }
 
+    /**
+     * @notice Get a background's virtual index from its storage index. Useful for image retirement, where virtual index is the
+     * input, and you might be holding the storage index.
+     * @param storageIndex the storage index to look up.
+     * @return uint256 virtual index.
+     */
+    function backgroundVirtualIndex(uint256 storageIndex) external view returns (uint256) {
+        return storageIndexToVirtualIndex(backgroundsVirtualIndexToStorageIndex, storageIndex);
+    }
+
+    /**
+     * @notice Get a body's virtual index from its storage index. Useful for image retirement, where virtual index is the
+     * input, and you might be holding the storage index.
+     * @param storageIndex the storage index to look up.
+     * @return uint256 virtual index.
+     */
+    function bodyVirtualIndex(uint256 storageIndex) external view returns (uint256) {
+        return storageIndexToVirtualIndex(_bodies.virtualIndexToStorageIndex, storageIndex);
+    }
+
+    /**
+     * @notice Get an accessory's virtual index from its storage index. Useful for image retirement, where virtual index is the
+     * input, and you might be holding the storage index.
+     * @param storageIndex the storage index to look up.
+     * @return uint256 virtual index.
+     */
+    function accessoryVirtualIndex(uint256 storageIndex) external view returns (uint256) {
+        return storageIndexToVirtualIndex(_accessories.virtualIndexToStorageIndex, storageIndex);
+    }
+
+    /**
+     * @notice Get a head's virtual index from its storage index. Useful for image retirement, where virtual index is the
+     * input, and you might be holding the storage index.
+     * @param storageIndex the storage index to look up.
+     * @return uint256 virtual index.
+     */
+    function headVirtualIndex(uint256 storageIndex) external view returns (uint256) {
+        return storageIndexToVirtualIndex(_heads.virtualIndexToStorageIndex, storageIndex);
+    }
+
+    /**
+     * @notice Get a glasses' virtual index from its storage index. Useful for image retirement, where virtual index is the
+     * input, and you might be holding the storage index.
+     * @param storageIndex the storage index to look up.
+     * @return uint256 virtual index.
+     */
+    function glassesVirtualIndex(uint256 storageIndex) external view returns (uint256) {
+        return storageIndexToVirtualIndex(_glasses.virtualIndexToStorageIndex, storageIndex);
+    }
+
     function traitStorageIndex(Trait storage trait, uint256 virtualIndex) internal view returns (uint256) {
         return trait.virtualIndexToStorageIndex[virtualIndex];
     }
@@ -553,5 +603,20 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     function retireStorageIndexByVirtualIndex(uint256[] storage virtualToStorageArray, uint256 virtualIndex) internal {
         virtualToStorageArray[virtualIndex] = virtualToStorageArray[virtualToStorageArray.length - 1];
         virtualToStorageArray.pop();
+    }
+
+    function storageIndexToVirtualIndex(uint256[] storage mappingArray, uint256 storageIndex)
+        internal
+        view
+        returns (uint256)
+    {
+        uint256 len = mappingArray.length;
+        for (uint256 virtualIndex = 0; virtualIndex < len; virtualIndex++) {
+            if (mappingArray[virtualIndex] == storageIndex) {
+                return virtualIndex;
+            }
+        }
+
+        revert IndexNotFound();
     }
 }

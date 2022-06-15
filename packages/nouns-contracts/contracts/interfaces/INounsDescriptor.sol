@@ -33,6 +33,7 @@ interface INounsDescriptor {
     error BadPaletteLength();
     error NoPages();
     error ImageNotFound();
+    error IndexNotFound();
 
     struct NounArtStoragePage {
         uint16 imageCount;
@@ -223,6 +224,46 @@ interface INounsDescriptor {
     function headStorageIndex(uint256 virtualIndex) external view returns (uint256);
 
     function glassesStorageIndex(uint256 virtualIndex) external view returns (uint256);
+
+    /**
+     * @notice Get a background's virtual index from its storage index. Useful for image retirement, where virtual index is the
+     * input, and you might be holding the storage index.
+     * @param storageIndex the storage index to look up.
+     * @return uint256 virtual index.
+     */
+    function backgroundVirtualIndex(uint256 storageIndex) external view returns (uint256);
+
+    /**
+     * @notice Get a body's virtual index from its storage index. Useful for image retirement, where virtual index is the
+     * input, and you might be holding the storage index.
+     * @param storageIndex the storage index to look up.
+     * @return uint256 virtual index.
+     */
+    function bodyVirtualIndex(uint256 storageIndex) external view returns (uint256);
+
+    /**
+     * @notice Get an accessory's virtual index from its storage index. Useful for image retirement, where virtual index is the
+     * input, and you might be holding the storage index.
+     * @param storageIndex the storage index to look up.
+     * @return uint256 virtual index.
+     */
+    function accessoryVirtualIndex(uint256 storageIndex) external view returns (uint256);
+
+    /**
+     * @notice Get a head's virtual index from its storage index. Useful for image retirement, where virtual index is the
+     * input, and you might be holding the storage index.
+     * @param storageIndex the storage index to look up.
+     * @return uint256 virtual index.
+     */
+    function headVirtualIndex(uint256 storageIndex) external view returns (uint256);
+
+    /**
+     * @notice Get a glasses' virtual index from its storage index. Useful for image retirement, where virtual index is the
+     * input, and you might be holding the storage index.
+     * @param storageIndex the storage index to look up.
+     * @return uint256 virtual index.
+     */
+    function glassesVirtualIndex(uint256 storageIndex) external view returns (uint256);
 
     function lockParts() external;
 
