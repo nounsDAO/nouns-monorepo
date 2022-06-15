@@ -50,9 +50,13 @@ interface Trait {
 type Traits = Record<TraitType, Trait>;
 
 interface PendingCustomTrait {
-  type: TraitType;
   data: string;
   filename: string;
+}
+
+interface PendingCustomTraits {
+  type: TraitType;
+  traits: PendingCustomTrait[];
 }
 
 const nounsProtocolLink = (
@@ -109,8 +113,8 @@ const Playground: React.FC = () => {
   const [selectIndexes, setSelectIndexes] = useState<Record<string, number>>({});
   const [proposedTraits, setProposedTraits] = useState<Traits>();
   const [includeProposedTraits, setIncludeProposedTraits] = useState(false); // TODO: Save user preference in localstorage
-  const [pendingTrait, setPendingTrait] = useState<PendingCustomTrait>();
-  const [isPendingTraitValid, setPendingTraitValid] = useState<boolean>();
+  const [pendingTraits, setPendingTraits] = useState<PendingCustomTraits>();
+  const [arePendingTraitsValid, setPendingTraitsValid] = useState<boolean>();
   const [encoder, setEncoder] = useState(new PNGCollectionEncoder(ImageData.palette));
 
   const customTraitFileRef = useRef<HTMLInputElement>(null);
@@ -179,7 +183,7 @@ const Playground: React.FC = () => {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [pendingTrait, traits, modSeed],
+    [pendingTraits, traits, modSeed],
   );
 
   useEffect(() => {
@@ -325,86 +329,111 @@ const Playground: React.FC = () => {
   };
 
   let pendingTraitErrorTimeout: NodeJS.Timeout;
-  const setPendingTraitInvalid = () => {
-    setPendingTraitValid(false);
+  const setPendingTraitsInvalid = () => {
+    setPendingTraitsValid(false);
     resetTraitFileUpload();
     pendingTraitErrorTimeout = setTimeout(() => {
-      setPendingTraitValid(undefined);
+      setPendingTraitsValid(undefined);
     }, 5_000);
   };
 
-  const validateAndSetCustomTrait = (file: File | undefined) => {
+  const validateAndSetCustomTraits = async (files: FileList | null) => {
     if (pendingTraitErrorTimeout) {
       clearTimeout(pendingTraitErrorTimeout);
     }
-    if (!file) {
+    if (!files?.length) {
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = e => {
-      try {
-        const buffer = Buffer.from(e?.target?.result!);
-        const png = PNG.sync.read(buffer);
-        if (png.width !== 32 || png.height !== 32) {
-          throw new Error('Image must be 32x32');
-        }
-        const filename = file.name?.replace('.png', '') || 'custom';
-        const data = encoder.encodeImage(filename, {
-          width: png.width,
-          height: png.height,
-          rgbaAt: (x: number, y: number) => {
-            const idx = (png.width * y + x) << 2;
-            const [r, g, b, a] = [
-              png.data[idx],
-              png.data[idx + 1],
-              png.data[idx + 2],
-              png.data[idx + 3],
-            ];
-            return {
-              r,
-              g,
-              b,
-              a,
+    try {
+      const traits = await Promise.all<PendingCustomTrait>(
+        Array.from(files).map(file => {
+          return new Promise(resolve => {
+            const reader = new FileReader();
+            reader.onload = e => {
+              const buffer = Buffer.from(e?.target?.result!);
+              const png = PNG.sync.read(buffer);
+              if (png.width !== 32 || png.height !== 32) {
+                throw new Error('Image must be 32x32');
+              }
+              const filename = file.name?.replace('.png', '') || 'custom';
+              const data = encoder.encodeImage(filename, {
+                width: png.width,
+                height: png.height,
+                rgbaAt: (x: number, y: number) => {
+                  const idx = (png.width * y + x) << 2;
+                  const [r, g, b, a] = [
+                    png.data[idx],
+                    png.data[idx + 1],
+                    png.data[idx + 2],
+                    png.data[idx + 3],
+                  ];
+                  return {
+                    r,
+                    g,
+                    b,
+                    a,
+                  };
+                },
+              });
+              resolve({
+                data,
+                filename,
+              });
             };
-          },
-        });
-        setPendingTrait({
-          data,
-          filename,
-          type: TraitType.HEAD,
-        });
-        setPendingTraitValid(true);
-      } catch (error) {
-        setPendingTraitInvalid();
-      }
-    };
-    reader.readAsArrayBuffer(file);
+            reader.readAsArrayBuffer(file);
+          });
+        }),
+      );
+      setPendingTraits({
+        traits,
+        type: TraitType.HEAD,
+      });
+      setPendingTraitsValid(true);
+    } catch (error) {
+      setPendingTraitsInvalid();
+    }
   };
 
-  const uploadCustomTrait = () => {
-    const { type, data, filename } = pendingTrait || {};
-    if (type && data && filename) {
-      const title = traitTypeToTitle[type];
-      const trait = traits?.[type];
+  const uploadCustomTraits = () => {
+    const additions = pendingTraits?.traits
+      ?.map(pendingTrait => {
+        const { type } = pendingTraits;
+        const { data, filename } = pendingTrait || {};
+        if (!type || !data || !filename) {
+          return null;
+        }
 
-      trait?.values.unshift({
-        stage: Stage.CUSTOM,
-        name: filename,
-        data,
-      });
+        const title = traitTypeToTitle[type];
+        const trait = traits?.[type];
 
-      setTraits(traits);
+        trait?.values.unshift({
+          stage: Stage.CUSTOM,
+          name: filename,
+          data,
+        });
 
-      resetTraitFileUpload();
-      setPendingTrait(undefined);
-      setPendingTraitValid(undefined);
-      traitButtonHandler(trait!, 0);
+        return {
+          title,
+          trait,
+        };
+      })
+      .filter(Boolean);
+
+    const lastAddition = additions?.[additions.length - 1];
+    if (lastAddition?.trait && lastAddition?.title) {
+      traitButtonHandler(lastAddition.trait, 0);
       setSelectIndexes({
         ...selectIndexes,
-        [title]: 0,
+        [lastAddition.title]: 0,
       });
     }
+
+    setTraits(traits);
+
+    resetTraitFileUpload();
+    setPendingTraits(undefined);
+    setPendingTraitsValid(undefined);
   };
 
   return (
@@ -506,24 +535,28 @@ const Playground: React.FC = () => {
             </label>
             <Form.Control
               type="file"
+              multiple
               id="custom-trait-upload"
               accept="image/PNG"
-              isValid={isPendingTraitValid}
-              isInvalid={isPendingTraitValid === false}
+              isValid={arePendingTraitsValid}
+              isInvalid={arePendingTraitsValid === false}
               ref={customTraitFileRef}
               className={classes.fileUpload}
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                validateAndSetCustomTrait(e.target.files?.[0])
+                validateAndSetCustomTraits(e.target.files)
               }
             />
-            {pendingTrait && (
+            {!!pendingTraits && (
               <>
                 <FloatingLabel label="Custom Trait Type" className={classes.floatingLabel}>
                   <Form.Select
                     aria-label="Custom Trait Type"
                     className={classes.traitFormBtn}
                     onChange={e =>
-                      setPendingTrait({ ...pendingTrait, type: e.target.value as TraitType })
+                      setPendingTraits({
+                        type: e.target.value as TraitType,
+                        traits: pendingTraits.traits,
+                      })
                     }
                   >
                     {Object.entries(traitTypeToTitle).map(([key, title]) => (
@@ -531,7 +564,7 @@ const Playground: React.FC = () => {
                     ))}
                   </Form.Select>
                 </FloatingLabel>
-                <Button onClick={() => uploadCustomTrait()} className={classes.primaryBtn}>
+                <Button onClick={() => uploadCustomTraits()} className={classes.primaryBtn}>
                   Upload
                 </Button>
               </>
