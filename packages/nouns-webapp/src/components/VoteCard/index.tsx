@@ -114,7 +114,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
               className={clsx(
                 classes.voteCardVoteCount,
                 responsiveUiUtilsClasses.desktopOnly,
-                !delegateView && !isEnUS ? classes.smallerVoteCountText : '',
+                !isEnUS ? classes.smallerVoteCountText : '',
               )}
             >
               {delegateView ? (
@@ -126,7 +126,8 @@ const VoteCard: React.FC<VoteCardProps> = props => {
                 </Trans>
               ) : (
                 <Trans>
-                  {i18n.number(voteCount)} <span className={classes.unitTextEn}>Nouns</span>
+                  {i18n.number(voteCount)}{' '}
+                  <span className={isEnUS ? classes.unitTextEn : classes.unitTextNonEn}>Nouns</span>
                 </Trans>
               )}
             </span>
