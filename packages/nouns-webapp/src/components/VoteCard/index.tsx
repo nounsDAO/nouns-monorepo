@@ -63,6 +63,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
   const locale = useActiveLocale();
   const filteredDelegateGroupedVoteData =
     delegateGroupedVoteData?.filter(v => v.supportDetailed === supportDetailedValue) ?? [];
+  const isEnUS = locale === 'en-US';
 
   // Pre-fetch ENS  of delegates (with 30min TTL)
   // This makes hover cards load more smoothly
@@ -97,7 +98,6 @@ const VoteCard: React.FC<VoteCardProps> = props => {
     setEnsCached(true);
   }, [library, ensCached, delegateGroupedVoteData]);
 
-  const isEnUS = locale === 'en-US';
   return (
     <Col lg={4} className={classes.wrapper}>
       <Card className={classes.voteCountCard}>
