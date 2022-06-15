@@ -51,6 +51,7 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
 
     // Noun Backgrounds (Hex Colors)
     string[] public override backgrounds;
+    uint256[] private backgroundsVirtualIndexToStorageIndex;
 
     // Noun Bodies (Custom RLE)
     Trait private _bodies;
@@ -90,7 +91,7 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
      * @notice Get the number of available Noun `backgrounds`.
      */
     function backgroundCount() external view override returns (uint256) {
-        return backgrounds.length;
+        return backgroundsVirtualIndexToStorageIndex.length;
     }
 
     /**
@@ -143,6 +144,7 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
      * @notice Add a Noun background.
      */
     function _addBackground(string calldata _background) internal {
+        backgroundsVirtualIndexToStorageIndex.push(backgrounds.length);
         backgrounds.push(_background);
     }
 
@@ -193,6 +195,14 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         addToTrait(_glasses, encodedCompressed, decompressedLength, imageCount);
     }
 
+    function retireBackground(uint256 virtualIndex) external onlyOwner {
+        backgroundsVirtualIndexToStorageIndex[virtualIndex] = backgroundsVirtualIndexToStorageIndex[
+            backgroundsVirtualIndexToStorageIndex.length - 1
+        ];
+
+        backgroundsVirtualIndexToStorageIndex.pop();
+    }
+
     function retireBody(uint256 virtualIndex) external onlyOwner {
         retireTraitImage(_bodies, virtualIndex);
     }
@@ -207,6 +217,10 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
 
     function retireGlasses(uint256 virtualIndex) external onlyOwner {
         retireTraitImage(_glasses, virtualIndex);
+    }
+
+    function backgroundStorageIndex(uint256 virtualIndex) external view returns (uint256) {
+        return backgroundsVirtualIndexToStorageIndex[virtualIndex];
     }
 
     function bodyStorageIndex(uint256 virtualIndex) external view returns (uint256) {

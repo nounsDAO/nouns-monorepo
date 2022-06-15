@@ -38,7 +38,7 @@ contract NounsSeeder is INounsSeeder {
 
         return Seed({
             background: uint48(
-                uint48(pseudorandomness) % backgroundCount
+                descriptor.backgroundStorageIndex(uint48(pseudorandomness) % backgroundCount)
             ),
             body: uint48(
                 descriptor.bodyStorageIndex(uint48(pseudorandomness >> 48) % bodyCount)

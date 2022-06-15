@@ -120,6 +120,8 @@ interface INounsDescriptor {
         uint16 imageCount
     ) external;
 
+    function retireBackground(uint256 virtualIndex) external;
+
     function retireBody(uint256 virtualIndex) external;
 
     function retireAccessory(uint256 virtualIndex) external;
@@ -127,6 +129,8 @@ interface INounsDescriptor {
     function retireHead(uint256 virtualIndex) external;
 
     function retireGlasses(uint256 virtualIndex) external;
+
+    function backgroundStorageIndex(uint256 virtualIndex) external view returns (uint256);
 
     function bodyStorageIndex(uint256 virtualIndex) external view returns (uint256);
 
