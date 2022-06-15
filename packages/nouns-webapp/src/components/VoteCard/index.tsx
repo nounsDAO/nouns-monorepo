@@ -125,10 +125,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
                   </span>
                 </Trans>
               ) : (
-                <Trans>
-                  {i18n.number(voteCount)}{' '}
-                  <span className={isEnUS ? classes.unitTextEn : classes.unitTextNonEn}>Nouns</span>
-                </Trans>
+                  i18n.number(voteCount)
               )}
             </span>
           </Card.Text>
@@ -145,7 +142,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
                 isEnUS ? classes.unitTextEn : classes.unitTextNonEn,
               )}
             >
-              {delegateView ? <Trans>Addresses</Trans> : <>Nouns</>}
+              {delegateView && <Trans>Addresses</Trans>}
             </span>
           </Card.Text>
 
