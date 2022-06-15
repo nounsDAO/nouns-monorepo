@@ -1,6 +1,8 @@
 import { task, types } from 'hardhat/config';
 import ImageData from '../files/image-data.json';
 import { chunkArray } from '../utils';
+import { deflateRawSync } from 'zlib';
+import { ethers } from 'ethers';
 
 task('populate-descriptor', 'Populates the descriptor with color palettes and Noun parts')
   .addOptionalParam(
@@ -26,22 +28,59 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and No
     const { bgcolors, palette, images } = ImageData;
     const { bodies, accessories, heads, glasses } = images;
 
+    const {
+      encodedCompressed: bodiesCompressed,
+      originalLength: bodiesLength,
+      itemCount: bodiesCount,
+    } = dataToDescriptorInput(bodies.map(({ data }) => data));
+    const {
+      encodedCompressed: accessoriesCompressed,
+      originalLength: accessoriesLength,
+      itemCount: accessoriesCount,
+    } = dataToDescriptorInput(accessories.map(({ data }) => data));
+    const {
+      encodedCompressed: headsCompressed,
+      originalLength: headsLength,
+      itemCount: headsCount,
+    } = dataToDescriptorInput(heads.map(({ data }) => data));
+    const {
+      encodedCompressed: glassesCompressed,
+      originalLength: glassesLength,
+      itemCount: glassesCount,
+    } = dataToDescriptorInput(glasses.map(({ data }) => data));
+
     // Chunk head and accessory population due to high gas usage
     await descriptorContract.addManyBackgrounds(bgcolors);
-    await descriptorContract.addManyColorsToPalette(0, palette);
-    await descriptorContract.addManyBodies(bodies.map(({ data }) => data));
+    await descriptorContract.setPalette(0, `0x000000${palette.join('')}`);
 
-    const accessoryChunk = chunkArray(accessories, 10);
-    for (const chunk of accessoryChunk) {
-      await descriptorContract.addManyAccessories(chunk.map(({ data }) => data));
-    }
-
-    const headChunk = chunkArray(heads, 10);
-    for (const chunk of headChunk) {
-      await descriptorContract.addManyHeads(chunk.map(({ data }) => data));
-    }
-
-    await descriptorContract.addManyGlasses(glasses.map(({ data }) => data));
+    await descriptorContract.addBodies(bodiesCompressed, bodiesLength, bodiesCount);
+    await descriptorContract.addAccessories(
+      accessoriesCompressed,
+      accessoriesLength,
+      accessoriesCount,
+    );
+    await descriptorContract.addHeads(headsCompressed, headsLength, headsCount);
+    await descriptorContract.addGlasses(glassesCompressed, glassesLength, glassesCount);
 
     console.log('Descriptor populated with palettes and parts.');
   });
+
+function dataToDescriptorInput(data: string[]): {
+  encodedCompressed: string;
+  originalLength: number;
+  itemCount: number;
+} {
+  const abiEncoded = ethers.utils.defaultAbiCoder.encode(['bytes[]'], [data]);
+  const encodedCompressed = `0x${deflateRawSync(
+    Buffer.from(abiEncoded.substring(2), 'hex'),
+  ).toString('hex')}`;
+
+  const originalLength = abiEncoded.substring(2).length / 2;
+  const itemCount = data.length;
+
+  return {
+    encodedCompressed,
+    originalLength,
+    itemCount,
+  };
+}

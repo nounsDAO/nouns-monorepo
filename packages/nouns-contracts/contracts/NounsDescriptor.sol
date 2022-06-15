@@ -15,13 +15,16 @@
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  *********************************/
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.12;
 
 import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
 import { Strings } from '@openzeppelin/contracts/utils/Strings.sol';
 import { INounsDescriptor } from './interfaces/INounsDescriptor.sol';
 import { INounsSeeder } from './interfaces/INounsSeeder.sol';
 import { NFTDescriptor } from './libs/NFTDescriptor.sol';
+import { ISVGRenderer } from './interfaces/ISVGRenderer.sol';
+import { SSTORE2 } from './libs/SSTORE2.sol';
+import { Inflate } from './libs/Inflate.sol';
 import { MultiPartRLEToSVG } from './libs/MultiPartRLEToSVG.sol';
 
 contract NounsDescriptor is INounsDescriptor, Ownable {
@@ -30,6 +33,9 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     // prettier-ignore
     // https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt
     bytes32 constant COPYRIGHT_CC0_1_0_UNIVERSAL_LICENSE = 0xa2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499;
+
+    // The contract responsible for constructing SVGs
+    ISVGRenderer public renderer;
 
     // Whether or not new Noun parts can be added
     bool public override arePartsLocked;
@@ -41,22 +47,22 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     string public override baseURI;
 
     // Noun Color Palettes (Index => Hex Colors)
-    mapping(uint8 => string[]) public override palettes;
+    mapping(uint8 => address) public override palettes;
 
     // Noun Backgrounds (Hex Colors)
     string[] public override backgrounds;
 
     // Noun Bodies (Custom RLE)
-    bytes[] public override bodies;
+    Trait private _bodies;
 
     // Noun Accessories (Custom RLE)
-    bytes[] public override accessories;
+    Trait private _accessories;
 
     // Noun Heads (Custom RLE)
-    bytes[] public override heads;
+    Trait private _heads;
 
     // Noun Glasses (Custom RLE)
-    bytes[] public override glasses;
+    Trait private _glasses;
 
     /**
      * @notice Require that the parts have not been locked.
@@ -64,6 +70,20 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     modifier whenPartsNotLocked() {
         require(!arePartsLocked, 'Parts are locked');
         _;
+    }
+
+    constructor(ISVGRenderer _renderer) {
+        renderer = _renderer;
+    }
+
+    /**
+     * @notice Set the SVG renderer.
+     * @dev Only callable by the owner.
+     */
+    function setRenderer(ISVGRenderer _renderer) external onlyOwner {
+        renderer = _renderer;
+
+        emit RendererUpdated(_renderer);
     }
 
     /**
@@ -77,39 +97,28 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
      * @notice Get the number of available Noun `bodies`.
      */
     function bodyCount() external view override returns (uint256) {
-        return bodies.length;
+        return _bodies.virtualIndexToStorageIndex.length;
     }
 
     /**
      * @notice Get the number of available Noun `accessories`.
      */
     function accessoryCount() external view override returns (uint256) {
-        return accessories.length;
+        return _accessories.virtualIndexToStorageIndex.length;
     }
 
     /**
      * @notice Get the number of available Noun `heads`.
      */
     function headCount() external view override returns (uint256) {
-        return heads.length;
+        return _heads.virtualIndexToStorageIndex.length;
     }
 
     /**
      * @notice Get the number of available Noun `glasses`.
      */
     function glassesCount() external view override returns (uint256) {
-        return glasses.length;
-    }
-
-    /**
-     * @notice Add colors to a color palette.
-     * @dev This function can only be called by the owner.
-     */
-    function addManyColorsToPalette(uint8 paletteIndex, string[] calldata newColors) external override onlyOwner {
-        require(palettes[paletteIndex].length + newColors.length <= 256, 'Palettes can only hold 256 colors');
-        for (uint256 i = 0; i < newColors.length; i++) {
-            _addColorToPalette(paletteIndex, newColors[i]);
-        }
+        return _glasses.virtualIndexToStorageIndex.length;
     }
 
     /**
@@ -123,55 +132,6 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     }
 
     /**
-     * @notice Batch add Noun bodies.
-     * @dev This function can only be called by the owner when not locked.
-     */
-    function addManyBodies(bytes[] calldata _bodies) external override onlyOwner whenPartsNotLocked {
-        for (uint256 i = 0; i < _bodies.length; i++) {
-            _addBody(_bodies[i]);
-        }
-    }
-
-    /**
-     * @notice Batch add Noun accessories.
-     * @dev This function can only be called by the owner when not locked.
-     */
-    function addManyAccessories(bytes[] calldata _accessories) external override onlyOwner whenPartsNotLocked {
-        for (uint256 i = 0; i < _accessories.length; i++) {
-            _addAccessory(_accessories[i]);
-        }
-    }
-
-    /**
-     * @notice Batch add Noun heads.
-     * @dev This function can only be called by the owner when not locked.
-     */
-    function addManyHeads(bytes[] calldata _heads) external override onlyOwner whenPartsNotLocked {
-        for (uint256 i = 0; i < _heads.length; i++) {
-            _addHead(_heads[i]);
-        }
-    }
-
-    /**
-     * @notice Batch add Noun glasses.
-     * @dev This function can only be called by the owner when not locked.
-     */
-    function addManyGlasses(bytes[] calldata _glasses) external override onlyOwner whenPartsNotLocked {
-        for (uint256 i = 0; i < _glasses.length; i++) {
-            _addGlasses(_glasses[i]);
-        }
-    }
-
-    /**
-     * @notice Add a single color to a color palette.
-     * @dev This function can only be called by the owner.
-     */
-    function addColorToPalette(uint8 _paletteIndex, string calldata _color) external override onlyOwner {
-        require(palettes[_paletteIndex].length <= 255, 'Palettes can only hold 256 colors');
-        _addColorToPalette(_paletteIndex, _color);
-    }
-
-    /**
      * @notice Add a Noun background.
      * @dev This function can only be called by the owner when not locked.
      */
@@ -180,35 +140,141 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     }
 
     /**
-     * @notice Add a Noun body.
-     * @dev This function can only be called by the owner when not locked.
+     * @notice Add a Noun background.
      */
-    function addBody(bytes calldata _body) external override onlyOwner whenPartsNotLocked {
-        _addBody(_body);
+    function _addBackground(string calldata _background) internal {
+        backgrounds.push(_background);
     }
 
     /**
-     * @notice Add a Noun accessory.
-     * @dev This function can only be called by the owner when not locked.
+     * @notice Update a single color palette. This function can be used to
+     * add a new color palette or update an existing palette.
+     * @dev This function can only be called by the descriptor.
      */
-    function addAccessory(bytes calldata _accessory) external override onlyOwner whenPartsNotLocked {
-        _addAccessory(_accessory);
+    function setPalette(uint8 paletteIndex, bytes calldata palette) external onlyOwner {
+        if (palette.length == 0) {
+            revert EmptyPalette();
+        }
+        if (palette.length % 3 != 0 || palette.length > 768) {
+            revert BadPaletteLength();
+        }
+        palettes[paletteIndex] = SSTORE2.write(palette);
     }
 
-    /**
-     * @notice Add a Noun head.
-     * @dev This function can only be called by the owner when not locked.
-     */
-    function addHead(bytes calldata _head) external override onlyOwner whenPartsNotLocked {
-        _addHead(_head);
+    function addBodies(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external onlyOwner {
+        addToTrait(_bodies, encodedCompressed, decompressedLength, imageCount);
     }
 
-    /**
-     * @notice Add Noun glasses.
-     * @dev This function can only be called by the owner when not locked.
-     */
-    function addGlasses(bytes calldata _glasses) external override onlyOwner whenPartsNotLocked {
-        _addGlasses(_glasses);
+    function addAccessories(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external onlyOwner {
+        addToTrait(_accessories, encodedCompressed, decompressedLength, imageCount);
+    }
+
+    function addHeads(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external onlyOwner {
+        addToTrait(_heads, encodedCompressed, decompressedLength, imageCount);
+    }
+
+    function addGlasses(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external onlyOwner {
+        addToTrait(_glasses, encodedCompressed, decompressedLength, imageCount);
+    }
+
+    function retireBody(uint256 virtualIndex) external onlyOwner {
+        retireTraitImage(_bodies, virtualIndex);
+    }
+
+    function retireAccessory(uint256 virtualIndex) external onlyOwner {
+        retireTraitImage(_accessories, virtualIndex);
+    }
+
+    function retireHead(uint256 virtualIndex) external onlyOwner {
+        retireTraitImage(_heads, virtualIndex);
+    }
+
+    function retireGlasses(uint256 virtualIndex) external onlyOwner {
+        retireTraitImage(_glasses, virtualIndex);
+    }
+
+    function bodyStorageIndex(uint256 virtualIndex) external view returns (uint256) {
+        return traitStorageIndex(_bodies, virtualIndex);
+    }
+
+    function accessoryStorageIndex(uint256 virtualIndex) external view returns (uint256) {
+        return traitStorageIndex(_accessories, virtualIndex);
+    }
+
+    function headStorageIndex(uint256 virtualIndex) external view returns (uint256) {
+        return traitStorageIndex(_heads, virtualIndex);
+    }
+
+    function glassesStorageIndex(uint256 virtualIndex) external view returns (uint256) {
+        return traitStorageIndex(_glasses, virtualIndex);
+    }
+
+    function traitStorageIndex(Trait storage trait, uint256 virtualIndex) internal view returns (uint256) {
+        return trait.virtualIndexToStorageIndex[virtualIndex];
+    }
+
+    function headsPageCount() public view returns (uint256) {
+        return _heads.storagePages.length;
+    }
+
+    function bodiesPageCount() public view returns (uint256) {
+        return _bodies.storagePages.length;
+    }
+
+    function accessoriesPageCount() public view returns (uint256) {
+        return _accessories.storagePages.length;
+    }
+
+    function glassesPageCount() public view returns (uint256) {
+        return _glasses.storagePages.length;
+    }
+
+    function headsPage(uint256 pageIndex) public view returns (NounArtStoragePage memory) {
+        return _heads.storagePages[pageIndex];
+    }
+
+    function bodiesPage(uint256 pageIndex) public view returns (NounArtStoragePage memory) {
+        return _bodies.storagePages[pageIndex];
+    }
+
+    function accessoriesPage(uint256 pageIndex) public view returns (NounArtStoragePage memory) {
+        return _accessories.storagePages[pageIndex];
+    }
+
+    function glassesPage(uint256 pageIndex) public view returns (NounArtStoragePage memory) {
+        return _glasses.storagePages[pageIndex];
+    }
+
+    function heads(uint256 storageIndex) public view returns (bytes memory) {
+        return imageByStorageIndex(_heads, storageIndex);
+    }
+
+    function bodies(uint256 storageIndex) public view returns (bytes memory) {
+        return imageByStorageIndex(_bodies, storageIndex);
+    }
+
+    function accessories(uint256 storageIndex) public view returns (bytes memory) {
+        return imageByStorageIndex(_accessories, storageIndex);
+    }
+
+    function glasses(uint256 storageIndex) public view returns (bytes memory) {
+        return imageByStorageIndex(_glasses, storageIndex);
     }
 
     /**
@@ -278,74 +344,111 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         NFTDescriptor.TokenURIParams memory params = NFTDescriptor.TokenURIParams({
             name: name,
             description: description,
-            parts: _getPartsForSeed(seed),
+            parts: getPartsForSeed(seed),
             background: backgrounds[seed.background]
         });
-        return NFTDescriptor.constructTokenURI(params, palettes);
+        return NFTDescriptor.constructTokenURI(renderer, params);
     }
 
     /**
      * @notice Given a seed, construct a base64 encoded SVG image.
      */
     function generateSVGImage(INounsSeeder.Seed memory seed) external view override returns (string memory) {
-        MultiPartRLEToSVG.SVGParams memory params = MultiPartRLEToSVG.SVGParams({
-            parts: _getPartsForSeed(seed),
+        ISVGRenderer.SVGParams memory params = ISVGRenderer.SVGParams({
+            parts: getPartsForSeed(seed),
             background: backgrounds[seed.background]
         });
-        return NFTDescriptor.generateSVGImage(params, palettes);
-    }
-
-    /**
-     * @notice Add a single color to a color palette.
-     */
-    function _addColorToPalette(uint8 _paletteIndex, string calldata _color) internal {
-        palettes[_paletteIndex].push(_color);
-    }
-
-    /**
-     * @notice Add a Noun background.
-     */
-    function _addBackground(string calldata _background) internal {
-        backgrounds.push(_background);
-    }
-
-    /**
-     * @notice Add a Noun body.
-     */
-    function _addBody(bytes calldata _body) internal {
-        bodies.push(_body);
-    }
-
-    /**
-     * @notice Add a Noun accessory.
-     */
-    function _addAccessory(bytes calldata _accessory) internal {
-        accessories.push(_accessory);
-    }
-
-    /**
-     * @notice Add a Noun head.
-     */
-    function _addHead(bytes calldata _head) internal {
-        heads.push(_head);
-    }
-
-    /**
-     * @notice Add Noun glasses.
-     */
-    function _addGlasses(bytes calldata _glasses) internal {
-        glasses.push(_glasses);
+        return NFTDescriptor.generateSVGImage(renderer, params);
     }
 
     /**
      * @notice Get all Noun parts for the passed `seed`.
      */
-    function _getPartsForSeed(INounsSeeder.Seed memory seed) internal view returns (bytes[] memory) {
-        bytes[] memory _parts = new bytes[](4);
-        _parts[0] = bodies[seed.body];
-        _parts[1] = accessories[seed.accessory];
-        _parts[2] = heads[seed.head];
-        _parts[3] = glasses[seed.glasses];
+    function getPartsForSeed(INounsSeeder.Seed memory seed) public view returns (ISVGRenderer.Part[] memory) {
+        bytes memory _body = bodies(seed.body);
+        bytes memory _accessory = accessories(seed.accessory);
+        bytes memory _head = heads(seed.head);
+        bytes memory _glassesBytes = glasses(seed.glasses);
+
+        ISVGRenderer.Part[] memory _parts = new ISVGRenderer.Part[](4);
+        _parts[0] = ISVGRenderer.Part({ image: _body, palette: _getPalette(_body) });
+        _parts[1] = ISVGRenderer.Part({ image: _accessory, palette: _getPalette(_accessory) });
+        _parts[2] = ISVGRenderer.Part({ image: _head, palette: _getPalette(_head) });
+        _parts[3] = ISVGRenderer.Part({ image: _glassesBytes, palette: _getPalette(_glassesBytes) });
         return _parts;
+    }
+
+    /**
+     * @notice Get the color palette pointer for the passed part.
+     */
+    function _getPalette(bytes memory part) private view returns (address) {
+        return palettes[uint8(part[0])];
+    }
+
+    function imageByStorageIndex(Trait storage trait, uint256 storageIndex) internal view returns (bytes memory) {
+        (NounArtStoragePage storage page, uint256 pageFirstImageIndex) = getPage(trait.storagePages, storageIndex);
+        bytes[] memory decompressedImages = decompressAndDecode(page);
+        return decompressedImages[storageIndex - pageFirstImageIndex];
+    }
+
+    function getPage(NounArtStoragePage[] storage pages, uint256 storageIndex)
+        internal
+        view
+        returns (NounArtStoragePage storage, uint256)
+    {
+        uint256 len = pages.length;
+        if (len == 0) {
+            revert NoPages();
+        }
+
+        uint256 pageFirstImageIndex = 0;
+        for (uint256 i = 0; i < len; i++) {
+            NounArtStoragePage storage page = pages[i];
+
+            if (storageIndex < pageFirstImageIndex + page.imageCount) {
+                return (page, pageFirstImageIndex);
+            }
+
+            pageFirstImageIndex += page.imageCount;
+        }
+
+        revert ImageNotFound();
+    }
+
+    function decompressAndDecode(NounArtStoragePage storage page) internal view returns (bytes[] memory) {
+        bytes memory compressedData = SSTORE2.read(page.pointer);
+        (, bytes memory decompressedData) = Inflate.puff(compressedData, page.decompressedLength);
+        return abi.decode(decompressedData, (bytes[]));
+    }
+
+    function addToTrait(
+        Trait storage trait,
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) internal {
+        trait.storagePages.push(
+            NounArtStoragePage({
+                pointer: SSTORE2.write(encodedCompressed),
+                decompressedLength: decompressedLength,
+                imageCount: imageCount
+            })
+        );
+
+        uint256 storedImageCount = trait.storedImagesCount;
+
+        for (uint256 i = 0; i < imageCount; i++) {
+            trait.virtualIndexToStorageIndex.push(storedImageCount + i);
+        }
+
+        trait.storedImagesCount += imageCount;
+    }
+
+    function retireTraitImage(Trait storage trait, uint256 virtualIndex) internal {
+        trait.virtualIndexToStorageIndex[virtualIndex] = trait.virtualIndexToStorageIndex[
+            trait.virtualIndexToStorageIndex.length - 1
+        ];
+
+        trait.virtualIndexToStorageIndex.pop();
     }
 }

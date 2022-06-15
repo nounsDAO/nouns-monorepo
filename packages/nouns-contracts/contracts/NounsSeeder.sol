@@ -15,7 +15,7 @@
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  *********************************/
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.12;
 
 import { INounsSeeder } from './interfaces/INounsSeeder.sol';
 import { INounsDescriptor } from './interfaces/INounsDescriptor.sol';
@@ -41,16 +41,16 @@ contract NounsSeeder is INounsSeeder {
                 uint48(pseudorandomness) % backgroundCount
             ),
             body: uint48(
-                uint48(pseudorandomness >> 48) % bodyCount
+                descriptor.bodyStorageIndex(uint48(pseudorandomness >> 48) % bodyCount)
             ),
             accessory: uint48(
-                uint48(pseudorandomness >> 96) % accessoryCount
+                descriptor.accessoryStorageIndex(uint48(pseudorandomness >> 96) % accessoryCount)
             ),
             head: uint48(
-                uint48(pseudorandomness >> 144) % headCount
+                descriptor.headStorageIndex(uint48(pseudorandomness >> 144) % headCount)
             ),
             glasses: uint48(
-                uint48(pseudorandomness >> 192) % glassesCount
+                descriptor.glassesStorageIndex(uint48(pseudorandomness >> 192) % glassesCount)
             )
         });
     }

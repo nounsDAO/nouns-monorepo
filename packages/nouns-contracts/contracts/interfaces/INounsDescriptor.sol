@@ -18,6 +18,7 @@
 pragma solidity ^0.8.6;
 
 import { INounsSeeder } from './INounsSeeder.sol';
+import { ISVGRenderer } from './ISVGRenderer.sol';
 
 interface INounsDescriptor {
     event PartsLocked();
@@ -26,13 +27,32 @@ interface INounsDescriptor {
 
     event BaseURIUpdated(string baseURI);
 
+    event RendererUpdated(ISVGRenderer renderer);
+
+    error EmptyPalette();
+    error BadPaletteLength();
+    error NoPages();
+    error ImageNotFound();
+
+    struct NounArtStoragePage {
+        uint16 imageCount;
+        uint80 decompressedLength;
+        address pointer;
+    }
+
+    struct Trait {
+        NounArtStoragePage[] storagePages;
+        uint256[] virtualIndexToStorageIndex;
+        uint256 storedImagesCount;
+    }
+
     function arePartsLocked() external returns (bool);
 
     function isDataURIEnabled() external returns (bool);
 
     function baseURI() external returns (string memory);
 
-    function palettes(uint8 paletteIndex, uint256 colorIndex) external view returns (string memory);
+    function palettes(uint8 paletteIndex) external view returns (address);
 
     function backgrounds(uint256 index) external view returns (string memory);
 
@@ -54,29 +74,67 @@ interface INounsDescriptor {
 
     function glassesCount() external view returns (uint256);
 
-    function addManyColorsToPalette(uint8 paletteIndex, string[] calldata newColors) external;
+    function headsPageCount() external view returns (uint256);
+
+    function bodiesPageCount() external view returns (uint256);
+
+    function accessoriesPageCount() external view returns (uint256);
+
+    function glassesPageCount() external view returns (uint256);
+
+    function headsPage(uint256 pageIndex) external view returns (NounArtStoragePage memory);
+
+    function bodiesPage(uint256 pageIndex) external view returns (NounArtStoragePage memory);
+
+    function accessoriesPage(uint256 pageIndex) external view returns (NounArtStoragePage memory);
+
+    function glassesPage(uint256 pageIndex) external view returns (NounArtStoragePage memory);
 
     function addManyBackgrounds(string[] calldata backgrounds) external;
 
-    function addManyBodies(bytes[] calldata bodies) external;
-
-    function addManyAccessories(bytes[] calldata accessories) external;
-
-    function addManyHeads(bytes[] calldata heads) external;
-
-    function addManyGlasses(bytes[] calldata glasses) external;
-
-    function addColorToPalette(uint8 paletteIndex, string calldata color) external;
-
     function addBackground(string calldata background) external;
 
-    function addBody(bytes calldata body) external;
+    function setPalette(uint8 paletteIndex, bytes calldata palette) external;
 
-    function addAccessory(bytes calldata accessory) external;
+    function addBodies(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
 
-    function addHead(bytes calldata head) external;
+    function addAccessories(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
 
-    function addGlasses(bytes calldata glasses) external;
+    function addHeads(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function addGlasses(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function retireBody(uint256 virtualIndex) external;
+
+    function retireAccessory(uint256 virtualIndex) external;
+
+    function retireHead(uint256 virtualIndex) external;
+
+    function retireGlasses(uint256 virtualIndex) external;
+
+    function bodyStorageIndex(uint256 virtualIndex) external view returns (uint256);
+
+    function accessoryStorageIndex(uint256 virtualIndex) external view returns (uint256);
+
+    function headStorageIndex(uint256 virtualIndex) external view returns (uint256);
+
+    function glassesStorageIndex(uint256 virtualIndex) external view returns (uint256);
 
     function lockParts() external;
 
