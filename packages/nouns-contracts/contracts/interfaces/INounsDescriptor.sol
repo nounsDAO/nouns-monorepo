@@ -19,6 +19,7 @@ pragma solidity ^0.8.6;
 
 import { INounsSeeder } from './INounsSeeder.sol';
 import { ISVGRenderer } from './ISVGRenderer.sol';
+import { INounsArt } from './INounsArt.sol';
 
 interface INounsDescriptor {
     event PartsLocked();
@@ -27,25 +28,13 @@ interface INounsDescriptor {
 
     event BaseURIUpdated(string baseURI);
 
+    event ArtUpdated(INounsArt art);
+
     event RendererUpdated(ISVGRenderer renderer);
 
     error EmptyPalette();
     error BadPaletteLength();
-    error NoPages();
-    error ImageNotFound();
     error IndexNotFound();
-
-    struct NounArtStoragePage {
-        uint16 imageCount;
-        uint80 decompressedLength;
-        address pointer;
-    }
-
-    struct Trait {
-        NounArtStoragePage[] storagePages;
-        uint256[] virtualIndexToStorageIndex;
-        uint256 storedImagesCount;
-    }
 
     function arePartsLocked() external returns (bool);
 
@@ -74,22 +63,6 @@ interface INounsDescriptor {
     function headCount() external view returns (uint256);
 
     function glassesCount() external view returns (uint256);
-
-    function headsPageCount() external view returns (uint256);
-
-    function bodiesPageCount() external view returns (uint256);
-
-    function accessoriesPageCount() external view returns (uint256);
-
-    function glassesPageCount() external view returns (uint256);
-
-    function headsPage(uint256 pageIndex) external view returns (NounArtStoragePage memory);
-
-    function bodiesPage(uint256 pageIndex) external view returns (NounArtStoragePage memory);
-
-    function accessoriesPage(uint256 pageIndex) external view returns (NounArtStoragePage memory);
-
-    function glassesPage(uint256 pageIndex) external view returns (NounArtStoragePage memory);
 
     function addManyBackgrounds(string[] calldata backgrounds) external;
 
