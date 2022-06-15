@@ -386,9 +386,9 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     }
 
     function imageByStorageIndex(Trait storage trait, uint256 storageIndex) internal view returns (bytes memory) {
-        (NounArtStoragePage storage page, uint256 pageFirstImageIndex) = getPage(trait.storagePages, storageIndex);
+        (NounArtStoragePage storage page, uint256 indexInPage) = getPage(trait.storagePages, storageIndex);
         bytes[] memory decompressedImages = decompressAndDecode(page);
-        return decompressedImages[storageIndex - pageFirstImageIndex];
+        return decompressedImages[indexInPage];
     }
 
     function getPage(NounArtStoragePage[] storage pages, uint256 storageIndex)
@@ -406,7 +406,7 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
             NounArtStoragePage storage page = pages[i];
 
             if (storageIndex < pageFirstImageIndex + page.imageCount) {
-                return (page, pageFirstImageIndex);
+                return (page, storageIndex - pageFirstImageIndex);
             }
 
             pageFirstImageIndex += page.imageCount;
