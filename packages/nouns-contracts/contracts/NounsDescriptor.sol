@@ -50,19 +50,19 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
 
     // Noun Backgrounds (Hex Colors)
     string[] public override backgrounds;
-    uint256[] private backgroundsVirtualIndexToStorageIndex;
+    uint256[] public backgroundsVirtualIndexToStorageIndex;
 
     // Noun Bodies (Custom RLE)
-    Trait private _bodies;
+    Trait public _bodies;
 
     // Noun Accessories (Custom RLE)
-    Trait private _accessories;
+    Trait public _accessories;
 
     // Noun Heads (Custom RLE)
-    Trait private _heads;
+    Trait public _heads;
 
     // Noun Glasses (Custom RLE)
-    Trait private _glasses;
+    Trait public _glasses;
 
     /**
      * @notice Require that the parts have not been locked.
