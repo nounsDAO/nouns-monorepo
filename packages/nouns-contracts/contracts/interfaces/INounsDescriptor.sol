@@ -120,6 +120,30 @@ interface INounsDescriptor {
         uint16 imageCount
     ) external;
 
+    function addBodiesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function addAccessoriesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function addHeadsFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function addGlassesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
     function retireBackground(uint256 virtualIndex) external;
 
     function retireBody(uint256 virtualIndex) external;

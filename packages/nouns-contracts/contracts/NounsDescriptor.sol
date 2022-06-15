@@ -167,7 +167,7 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external onlyOwner {
-        addToTrait(_bodies, encodedCompressed, decompressedLength, imageCount);
+        addToTraitFromBytes(_bodies, encodedCompressed, decompressedLength, imageCount);
     }
 
     function addAccessories(
@@ -175,7 +175,7 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external onlyOwner {
-        addToTrait(_accessories, encodedCompressed, decompressedLength, imageCount);
+        addToTraitFromBytes(_accessories, encodedCompressed, decompressedLength, imageCount);
     }
 
     function addHeads(
@@ -183,7 +183,7 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external onlyOwner {
-        addToTrait(_heads, encodedCompressed, decompressedLength, imageCount);
+        addToTraitFromBytes(_heads, encodedCompressed, decompressedLength, imageCount);
     }
 
     function addGlasses(
@@ -191,7 +191,39 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external onlyOwner {
-        addToTrait(_glasses, encodedCompressed, decompressedLength, imageCount);
+        addToTraitFromBytes(_glasses, encodedCompressed, decompressedLength, imageCount);
+    }
+
+    function addBodiesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external onlyOwner {
+        addToTraitFromPointer(_bodies, pointer, decompressedLength, imageCount);
+    }
+
+    function addAccessoriesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external onlyOwner {
+        addToTraitFromPointer(_accessories, pointer, decompressedLength, imageCount);
+    }
+
+    function addHeadsFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external onlyOwner {
+        addToTraitFromPointer(_heads, pointer, decompressedLength, imageCount);
+    }
+
+    function addGlassesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external onlyOwner {
+        addToTraitFromPointer(_glasses, pointer, decompressedLength, imageCount);
     }
 
     function retireBackground(uint256 virtualIndex) external onlyOwner {
@@ -434,18 +466,24 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         return abi.decode(decompressedData, (bytes[]));
     }
 
-    function addToTrait(
+    function addToTraitFromBytes(
         Trait storage trait,
         bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
     ) internal {
+        address pointer = SSTORE2.write(encodedCompressed);
+        addToTraitFromPointer(trait, pointer, decompressedLength, imageCount);
+    }
+
+    function addToTraitFromPointer(
+        Trait storage trait,
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) internal {
         trait.storagePages.push(
-            NounArtStoragePage({
-                pointer: SSTORE2.write(encodedCompressed),
-                decompressedLength: decompressedLength,
-                imageCount: imageCount
-            })
+            NounArtStoragePage({ pointer: pointer, decompressedLength: decompressedLength, imageCount: imageCount })
         );
 
         uint256 storedImageCount = trait.storedImagesCount;
