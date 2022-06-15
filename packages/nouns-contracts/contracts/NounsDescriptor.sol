@@ -25,7 +25,6 @@ import { NFTDescriptor } from './libs/NFTDescriptor.sol';
 import { ISVGRenderer } from './interfaces/ISVGRenderer.sol';
 import { SSTORE2 } from './libs/SSTORE2.sol';
 import { Inflate } from './libs/Inflate.sol';
-import { MultiPartRLEToSVG } from './libs/MultiPartRLEToSVG.sol';
 
 contract NounsDescriptor is INounsDescriptor, Ownable {
     using Strings for uint256;
