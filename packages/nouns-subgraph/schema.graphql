@@ -205,9 +205,6 @@ type Proposal @entity {
   "True if this proposal was created with V2"
   usingDynamicQuorum: Boolean!
 
-  "Caching the number of against votes on this proposal"
-  againstVotes: Int!
-
   "Total supply when this proposal was created"
   totalSupply: BigInt!
 

@@ -69,7 +69,6 @@ export function handleProposalCreatedWithRequirements(
   // Doing these for V1 props as well to avoid making these fields optional + avoid missing required field warnings
   const governance = getGovernanceEntity();
   proposal.totalSupply = governance.totalTokenHolders;
-  proposal.againstVotes = 0;
 
   const dynamicQuorum = getOrCreateDynamicQuorumParams();
   proposal.minQuorumVotesBPS = dynamicQuorum.minQuorumVotesBPS;
@@ -153,7 +152,7 @@ export function handleVoteCast(event: VoteCast): void {
   vote.save();
 
   if (event.params.support == 0) {
-    proposal.againstVotes = proposal.againstVotes + event.params.votes.toI32();
+    proposal.againstVotes = proposal.againstVotes.plus(event.params.votes);
   }
 
   if (proposal.usingDynamicQuorum) {

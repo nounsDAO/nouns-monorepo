@@ -126,7 +126,7 @@ test('handleProposalCreatedWithRequirements: marks prop as using dynamic quorum 
   const savedProp = Proposal.load(newEvent.params.id.toString());
 
   assert.booleanEquals(savedProp!.usingDynamicQuorum, true);
-  assert.i32Equals(0, savedProp!.againstVotes);
+  assert.bigIntEquals(BIGINT_ZERO, savedProp!.againstVotes);
 
   clearStore();
 });
@@ -147,7 +147,7 @@ test('handleProposalCreatedWithRequirements: sets againstVotes to zero and total
 
   const savedProp = Proposal.load(newEvent.params.id.toString());
 
-  assert.i32Equals(0, savedProp!.againstVotes);
+  assert.bigIntEquals(BIGINT_ZERO, savedProp!.againstVotes);
   assert.bigIntEquals(totalSupply, savedProp!.totalSupply);
 
   clearStore();
