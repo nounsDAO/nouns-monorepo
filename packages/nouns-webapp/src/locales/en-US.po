@@ -223,9 +223,6 @@ msgstr "Cast {0} votes for Prop {1}"
 msgid "Change"
 msgstr "Change"
 
-#: src/components/CurrentDelegatePannel/index.tsx
-#~ msgid "Change Delegate"
-#~ msgstr "Change Delegate"
 
 #: src/components/WalletConnectModal/index.tsx
 msgid "Clear WalletConnect Data"
@@ -265,10 +262,6 @@ msgstr "Create Proposal"
 #: src/components/Documentation/index.tsx
 msgid "Cryptopunks"
 msgstr "Cryptopunks"
-
-#: src/components/CurrentDelegatePannel/index.tsx
-#~ msgid "Current"
-#~ msgstr "Current"
 
 #: src/components/CurrentDelegatePannel/index.tsx
 msgid "Current Delegate"
@@ -955,10 +948,6 @@ msgstr "View all bids"
 msgid "View on Etherscan"
 msgstr "View on Etherscan"
 
-#: src/components/ChangeDelegatePannel/index.tsx
-#~ msgid "Vote"
-#~ msgstr "Vote"
-
 #: src/components/Bid/index.tsx
 msgid "Vote for the next Noun"
 msgstr "Vote for the next Noun"
@@ -979,10 +968,6 @@ msgstr "Voted aginst"
 msgid "Voted for"
 msgstr "Voted for"
 
-#: src/components/ChangeDelegatePannel/index.tsx
-#~ msgid "Votes"
-#~ msgstr "Votes"
-
 #: src/components/DelegateHoverCard/index.tsx
 msgid "Voted with<0>{numVotesForProp}</0>Noun"
 msgstr "Voted with<0>{numVotesForProp}</0>Noun"
@@ -990,6 +975,7 @@ msgstr "Voted with<0>{numVotesForProp}</0>Noun"
 #: src/components/DelegateHoverCard/index.tsx
 msgid "Voted with<0>{numVotesForProp}</0>Nouns"
 msgstr "Voted with<0>{numVotesForProp}</0>Nouns"
+
 
 #: src/components/Documentation/index.tsx
 msgid "WTF?"
@@ -1150,8 +1136,8 @@ msgstr "{0} <0>Addresses</0>"
 #~ msgstr "{0} <0>Delegates</0>"
 
 #: src/components/VoteCard/index.tsx
-msgid "{0} <0>Nouns</0>"
-msgstr "{0} <0>Nouns</0>"
+#~ msgid "{0} <0>Nouns</0>"
+#~ msgstr "{0} <0>Nouns</0>"
 
 #: src/pages/Vote/index.tsx
 msgid "{0} votes"

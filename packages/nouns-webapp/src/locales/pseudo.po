@@ -223,9 +223,6 @@ msgstr ""
 msgid "Change"
 msgstr ""
 
-#: src/components/CurrentDelegatePannel/index.tsx
-#~ msgid "Change Delegate"
-#~ msgstr ""
 
 #: src/components/WalletConnectModal/index.tsx
 msgid "Clear WalletConnect Data"
@@ -266,9 +263,6 @@ msgstr ""
 msgid "Cryptopunks"
 msgstr ""
 
-#: src/components/CurrentDelegatePannel/index.tsx
-#~ msgid "Current"
-#~ msgstr ""
 
 #: src/components/CurrentDelegatePannel/index.tsx
 msgid "Current Delegate"
@@ -979,11 +973,6 @@ msgstr ""
 msgid "Voted for"
 msgstr ""
 
-
-#: src/components/ChangeDelegatePannel/index.tsx
-#~ msgid "Votes"
-#~ msgstr ""
-
 #: src/components/DelegateHoverCard/index.tsx
 msgid "Voted with<0>{numVotesForProp}</0>Noun"
 msgstr ""
@@ -991,6 +980,7 @@ msgstr ""
 #: src/components/DelegateHoverCard/index.tsx
 msgid "Voted with<0>{numVotesForProp}</0>Nouns"
 msgstr ""
+
 
 #: src/components/Documentation/index.tsx
 msgid "WTF?"
@@ -1009,11 +999,9 @@ msgstr ""
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
 msgstr ""
 
-
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Will have"
 msgstr ""
-
 
 #: src/components/NounInfoRowHolder/index.tsx
 #: src/components/Winner/index.tsx
@@ -1153,8 +1141,8 @@ msgstr ""
 #~ msgstr ""
 
 #: src/components/VoteCard/index.tsx
-msgid "{0} <0>Nouns</0>"
-msgstr ""
+#~ msgid "{0} <0>Nouns</0>"
+#~ msgstr ""
 
 #: src/pages/Vote/index.tsx
 msgid "{0} votes"

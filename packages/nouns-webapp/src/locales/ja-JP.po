@@ -932,9 +932,6 @@ msgstr "すべての入札を表示"
 msgid "View on Etherscan"
 msgstr "イーサスキャンで見る"
 
-#: src/components/ChangeDelegatePannel/index.tsx
-#~ msgid "Vote"
-#~ msgstr "投票"
 
 #: src/components/Bid/index.tsx
 msgid "Vote for the next Noun"
@@ -951,11 +948,6 @@ msgstr "反対に投票"
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Voted for"
 msgstr "賛成に投票"
-
-
-#: src/components/ChangeDelegatePannel/index.tsx
-#~ msgid "Votes"
-#~ msgstr "票"
 
 #: src/components/DelegateHoverCard/index.tsx
 msgid "Voted with<0>{numVotesForProp}</0>Noun"
@@ -983,11 +975,9 @@ msgstr "これからどうする？"
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
 msgstr "決済は落札者に最も大きなインセンティブが与えられるが、誰でも起動できるため、Ethereumが稼働し、関心のある入札者がいる限り、システムは第三者の介入無しでNounsをオークションにかけることができます。"
 
-
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Will have"
 msgstr "票になります"
-
 
 #: src/components/NounInfoRowHolder/index.tsx
 #: src/components/Winner/index.tsx
@@ -1119,8 +1109,8 @@ msgid "{0} <0>Addresses</0>"
 msgstr "{0}<0>イーサリアムアドレス</0>"
 
 #: src/components/VoteCard/index.tsx
-msgid "{0} <0>Nouns</0>"
-msgstr "{0} <0>Nouns</0>"
+#~ msgid "{0} <0>Nouns</0>"
+#~ msgstr "{0} <0>Nouns</0>"
 
 #: src/pages/Vote/index.tsx
 msgid "{0} votes"
