@@ -79,14 +79,15 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
     return <Trans>Connect wallet to make a proposal.</Trans>;
   };
 
+  const hasNouns = account !== undefined && connectedAccountNounVotes > 0;
   return (
     <div className={classes.proposals}>
       {showDelegateModal && <DelegationModal onDismiss={() => setShowDelegateModal(false)} />}
-      <div className={classes.headerWrapper}>
+      <div className={clsx(classes.headerWrapper, !hasNouns ? classes.forceFlexRow : '')}>
         <h3 className={classes.heading}>
           <Trans>Proposals</Trans>
         </h3>
-        {account !== undefined && connectedAccountNounVotes > 0 ? (
+        {hasNouns ? (
           <div className={classes.nounInWalletBtnWrapper}>
             <div className={classes.submitProposalButtonWrapper}>
               <Button
@@ -107,7 +108,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
             </div>
           </div>
         ) : (
-          <div className={clsx('d-flex', classes.submitProposalButtonWrapper)}>
+          <div className={clsx('d-flex', classes.nullStateSubmitProposalBtnWrapper)}>
             {!isMobile && <div className={classes.nullStateCopy}>{nullStateCopy()}</div>}
             <div className={classes.nullBtnWrapper}>
               <Button className={classes.generateBtnDisabled}>
@@ -155,17 +156,17 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
                     <span>{p.title}</span>
                   </span>
 
-                  <div className={classes.desktopCountdownWrapper}>
-                    {isPropInStateToHaveCountDown && coundownPill}
-                  </div>
+                  {isPropInStateToHaveCountDown && (
+                    <div className={classes.desktopCountdownWrapper}>{coundownPill}</div>
+                  )}
                   <div className={clsx(classes.proposalStatusWrapper, classes.votePillWrapper)}>
                     <ProposalStatus status={p.status}></ProposalStatus>
                   </div>
                 </div>
 
-                <div className={classes.mobileCountdownWrapper}>
-                  {isPropInStateToHaveCountDown && coundownPill}
-                </div>
+                {isPropInStateToHaveCountDown && (
+                  <div className={classes.mobileCountdownWrapper}>{coundownPill}</div>
+                )}
               </div>
             );
           })

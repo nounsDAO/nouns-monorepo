@@ -158,8 +158,16 @@
     align-items: flex-start;
   }
 
+  .forceFlexRow {
+    flex-direction: row;
+  }
+
   .heading {
     width: 100%;
+  }
+
+  .nullStateSubmitProposalBtnWrapper {
+    text-align: right;
   }
 }
 
@@ -182,6 +190,10 @@
 }
 
 .submitProposalButtonWrapper {
+  text-align: right;
+}
+
+.nullStateSubmitProposalBtnWrapper {
   text-align: right;
 }
 
