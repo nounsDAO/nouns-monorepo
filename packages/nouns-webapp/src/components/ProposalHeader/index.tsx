@@ -16,6 +16,8 @@ import { transactionLink } from '../ProposalContent';
 import ShortAddress from '../ShortAddress';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import { Locales } from '../../i18n/locales';
+import HoverCard from '../HoverCard';
+import ByLineHoverCard from '../ByLineHoverCard';
 
 interface ProposalHeaderProps {
   proposal: Proposal;
@@ -136,22 +138,39 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
 
       <div className={classes.byLineWrapper}>
         {activeLocale === Locales.ja_JP ? (
-          <div className={classes.proposalByLineWrapperJp}>
-            <Trans>
-              <span className={classes.proposedByJp}>Proposed by: </span>
-              <span className={classes.proposerJp}>{proposer}</span>
-              <span className={classes.propTransactionWrapperJp}>{proposedAtTransactionHash}</span>
-            </Trans>
-          </div>
+
+          <HoverCard
+            hoverCardContent={(tip: string) => <ByLineHoverCard proposerAddress={tip} />}
+            tip={proposal && proposal.proposer ? proposal.proposer : ''}
+            id="byLineHoverCard"
+          >
+            <div className={classes.proposalByLineWrapperJp}>
+              <Trans>
+                <span className={classes.proposedByJp}>Proposed by: </span>
+                <span className={classes.proposerJp}>{proposer}</span>
+                <span className={classes.propTransactionWrapperJp}>
+                  {proposedAtTransactionHash}
+                </span>
+              </Trans>
+            </div>
+          </HoverCard>
         ) : (
           <>
             <h3>Proposed by</h3>
 
             <div className={classes.byLineContentWrapper}>
-              <h3>
-                {proposer}
-                <span className={classes.propTransactionWrapper}>{proposedAtTransactionHash}</span>
-              </h3>
+              <HoverCard
+                hoverCardContent={(tip: string) => <ByLineHoverCard proposerAddress={tip} />}
+                tip={proposal && proposal.proposer ? proposal.proposer : ''}
+                id="byLineHoverCard"
+              >
+                <h3>
+                  {proposer}
+                  <span className={classes.propTransactionWrapper}>
+                    {proposedAtTransactionHash}
+                  </span>
+                </h3>
+              </HoverCard>
             </div>
           </>
         )}
