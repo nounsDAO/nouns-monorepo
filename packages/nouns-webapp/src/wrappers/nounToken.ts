@@ -1,5 +1,5 @@
 import { useContractCall, useContractFunction, useEthers } from '@usedapp/core';
-import { BigNumber as EthersBN, utils } from 'ethers';
+import { BigNumber as EthersBN, ethers, utils } from 'ethers';
 import { NounsTokenABI, NounsTokenFactory } from '@nouns/contracts';
 import config, { cache, cacheKey, CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
@@ -115,7 +115,7 @@ export const useNounSeed = (nounId: EthersBN) => {
 
 export const useUserVotes = (): number | undefined => {
   const { account } = useEthers();
-  return useAccountVotes(account);
+  return useAccountVotes(account ?? ethers.constants.AddressZero);
 };
 
 export const useAccountVotes = (account?: string): number | undefined => {
