@@ -16,6 +16,7 @@ import { useActiveLocale } from '../../hooks/useActivateLocale';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '../../i18n/locales';
 import React, { useState } from 'react';
 import DelegationModal from '../DelegationModal';
+import { i18n } from '@lingui/core';
 
 dayjs.extend(relativeTime);
 
@@ -127,29 +128,19 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
               p.status === ProposalState.ACTIVE ||
               p.status === ProposalState.QUEUED;
 
-            const infoPills = (
-              <>
-                {isPropInStateToHaveCountDown && (
-                  <div className={classes.proposalStatusWrapper}>
-                    <div
-                      className={clsx(proposalStatusClasses.proposalStatus, classes.countdownPill)}
-                    >
-                      <div className={classes.countdownPillContentWrapper}>
-                        <span className={classes.countdownPillClock}>
-                          <ClockIcon height={16} width={16} />
-                        </span>{' '}
-                        <span className={classes.countdownPillText}>
-                          {getCountdownCopy(p, currentBlock || 0, activeLocale)}
-                        </span>
-                      </div>
-                    </div>
+            const coundownPill = (
+              <div className={classes.proposalStatusWrapper}>
+                <div className={clsx(proposalStatusClasses.proposalStatus, classes.countdownPill)}>
+                  <div className={classes.countdownPillContentWrapper}>
+                    <span className={classes.countdownPillClock}>
+                      <ClockIcon height={16} width={16} />
+                    </span>{' '}
+                    <span className={classes.countdownPillText}>
+                      {getCountdownCopy(p, currentBlock || 0, activeLocale)}
+                    </span>
                   </div>
-                )}
-
-                <div className={classes.proposalStatusWrapper}>
-                  <ProposalStatus status={p.status}></ProposalStatus>
                 </div>
-              </>
+              </div>
             );
 
             return (
@@ -158,12 +149,23 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
                 onClick={() => history.push(`/vote/${p.id}`)}
                 key={i}
               >
-                <span className={classes.proposalTitle}>
-                  <span className={classes.proposalId}>{p.id}</span> <span>{p.title}</span>
-                  <div className={classes.proposalInfoPillsWrapperMobile}>{infoPills}</div>
-                </span>
+                <div className={classes.proposalInfoWrapper}>
+                  <span className={classes.proposalTitle}>
+                    <span className={classes.proposalId}>{i18n.number(parseInt(p.id || '0'))}</span>{' '}
+                    <span>{p.title}</span>
+                  </span>
 
-                <div className={classes.proposalInfoPillsWrapper}>{infoPills}</div>
+                  <div className={classes.desktopCountdownWrapper}>
+                    {isPropInStateToHaveCountDown && coundownPill}
+                  </div>
+                  <div className={clsx(classes.proposalStatusWrapper, classes.votePillWrapper)}>
+                    <ProposalStatus status={p.status}></ProposalStatus>
+                  </div>
+                </div>
+
+                <div className={classes.mobileCountdownWrapper}>
+                  {isPropInStateToHaveCountDown && coundownPill}
+                </div>
               </div>
             );
           })

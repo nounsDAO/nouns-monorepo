@@ -60,8 +60,8 @@
 .proposalLink {
   padding: 1rem;
   margin-top: 0.4rem;
-  align-items: center;
-  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
   border: 1px solid #e2e3e8;
   box-sizing: border-box;
   border-radius: 16px;
@@ -69,6 +69,14 @@
   font-size: 22px;
   font-family: 'PT Root UI';
   font-weight: bold;
+}
+
+.proposalInfoWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .proposalLink:hover {
@@ -106,83 +114,42 @@
   font-size: 16px;
   line-height: 22.4px;
 }
-.proposalInfoPillsWrapper {
-  display: flex;
-  flex-direction: row;
-  min-width: fit-content;
-}
 
-.countdownPill {
-  background-color: var(--brand-gray-light-text-translucent);
-  color: #00000080;
-  width: fit-content;
-}
-
-.countdownPillContentWrapper {
-  display: flex;
-  flex-direction: row;
-}
-
-.countdownPillClock {
-  display: flex;
-  flex-direction: column;
-  margin-top: auto;
-  margin-bottom: auto;
-}
-
-.countdownPillText {
-  margin-left: 0.25rem;
-}
-
-.proposalInfoPillsWrapperMobile {
+.mobileCountdownWrapper {
   display: none;
 }
 
+.desktopCountdownWrapper {
+  display: flex;
+}
+
+.nounInWalletBtnWrapper {
+  display: flex;
+  padding-top: 0.8rem;
+}
+
 @media (max-width: 992px) {
+  .desktopCountdownWrapper {
+    display: none;
+  }
+
+  .mobileCountdownWrapper {
+    display: flex;
+    width: 100%;
+    margin-top: 1rem;
+  }
+
   .nullStateCopy {
     margin-top: 0rem;
   }
 
   .proposalTitle {
-    max-width: 100%;
+    max-width: 65%;
     overflow-wrap: break-word;
   }
 
-  .proposalInfoPillsWrapperMobile {
-    display: flex;
-    flex-direction: row;
-    min-width: fit-content;
-    margin-left: -0.5rem;
-  }
-
-  .proposalInfoPillsWrapper {
-    display: none;
-  }
-
-  .proposalStatusWrapper {
-    margin-top: 0.5rem;
-  }
-}
-
-@media (max-width: 700px) {
-  .proposalLinkWithCountdown {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .proposalInfoPillsWrapperMobile {
+  .nounInWalletBtnWrapper {
     width: 100%;
-    margin-top: 0.25rem;
-    display: flex;
-  }
-
-  .proposalStatusWrapper {
-    max-width: fit-content;
-  }
-
-  .proposalLink {
-    padding-left: 0;
-    padding-right: 0;
   }
 
   .headerWrapper {
@@ -192,10 +159,6 @@
   }
 
   .heading {
-    width: 100%;
-  }
-
-  .nounInWalletBtnWrapper {
     width: 100%;
   }
 }
@@ -222,9 +185,31 @@
   text-align: right;
 }
 
-.nounInWalletBtnWrapper {
+.votePillWrapper {
+  max-width: 5rem;
+}
+
+.countdownPill {
+  background-color: var(--brand-gray-light-text-translucent);
+  color: #00000080;
+  width: fit-content;
+  margin-left: -0.5rem;
+}
+
+.countdownPillContentWrapper {
   display: flex;
-  padding-top: 0.8rem;
+  flex-direction: row;
+}
+
+.countdownPillClock {
+  display: flex;
+  flex-direction: column;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.countdownPillText {
+  margin-left: 0.25rem;
 }
 
 .delegateBtnWrapper {

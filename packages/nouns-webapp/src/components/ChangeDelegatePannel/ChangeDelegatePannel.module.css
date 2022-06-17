@@ -25,10 +25,9 @@
 }
 
 @media (max-width: 992px) {
-  
-.nonEnBottomMargin {
-  margin-bottom: 3.5rem;
-}
+  .nonEnBottomMargin {
+    margin-bottom: 3.5rem;
+  }
 }
 
 .empty {

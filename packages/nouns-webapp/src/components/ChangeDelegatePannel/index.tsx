@@ -97,7 +97,6 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
 
   const etherscanTxLink = buildEtherscanTxLink(delageeState.transaction?.hash ?? '');
 
-
   const primaryButton = usePickByState(
     changeDelegateState,
     [
@@ -110,16 +109,24 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
       <NavBarButton
         buttonText={
           <div className={classes.delegateKVotesBtn}>
-            {
-              locale === 'en-US ' ? <>
-            Delegate <span className={classes.highlightCircle}>{availableVotes}</span>
-            {availableVotes === 1 ? <>Votes</> : <>Votes</>}
-              </>  : <>{availableVotes === 1 ? <Trans>Delegate {availableVotes} Vote</Trans> : <Trans>Delegate {availableVotes} Votes</Trans>}</>
-            }
+            {locale === 'en-US ' ? (
+              <>
+                Delegate <span className={classes.highlightCircle}>{availableVotes}</span>
+                {availableVotes === 1 ? <>Votes</> : <>Votes</>}
+              </>
+            ) : (
+              <>
+                {availableVotes === 1 ? (
+                  <Trans>Delegate {availableVotes} Vote</Trans>
+                ) : (
+                  <Trans>Delegate {availableVotes} Votes</Trans>
+                )}
+              </>
+            )}
           </div>
         }
         buttonStyle={
-          (isAddress(delegateAddress) && delegateAddress !== currentDelegate)
+          isAddress(delegateAddress) && delegateAddress !== currentDelegate
             ? NavBarButtonStyle.DELEGATE_SECONDARY
             : NavBarButtonStyle.DELEGATE_DISABLED
         }
@@ -178,7 +185,12 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
   return (
     <>
       <div className={currentDelegatePannelClasses.wrapper}>
-        <h1 className={clsx(currentDelegatePannelClasses.title, locale !== 'en-US' ? classes.nonEnBottomMargin : '')}>
+        <h1
+          className={clsx(
+            currentDelegatePannelClasses.title,
+            locale !== 'en-US' ? classes.nonEnBottomMargin : '',
+          )}
+        >
           {getTitleFromState(changeDelegateState)}
         </h1>
         <p className={currentDelegatePannelClasses.copy}>{primaryCopy}</p>
@@ -193,7 +205,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
             setDelegateInputText(e.target.value);
           }}
           value={delegateInputText}
-          placeholder={ locale === 'en-US' ? '0x... or ...eth' : '0x... / ...eth'}
+          placeholder={locale === 'en-US' ? '0x... or ...eth' : '0x... / ...eth'}
         />
       )}
 
@@ -204,26 +216,22 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
         }
       >
         <div className={classes.delegateCandidateInfoWrapper}>
-          {
-            changeDelegateState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS && delegateAddress === currentDelegate 
-            ? (
-              <span className={classes.alreadyDelegatedCopy}>
-                <Trans>You've already delegated to this address</Trans>
-              </span>
-            ) : (
-              <>
-              {isAddress(delegateAddress) && 
+          {changeDelegateState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS &&
+          delegateAddress === currentDelegate ? (
+            <span className={classes.alreadyDelegatedCopy}>
+              <Trans>You've already delegated to this address</Trans>
+            </span>
+          ) : (
+            <>
+              {isAddress(delegateAddress) && (
                 <DelegationCandidateInfo
                   address={delegateAddress || ''}
                   votesToAdd={availableVotes}
                   changeModalState={changeDelegateState}
                 />
-              }
-              </>
-            )
-          }
-
-         
+              )}
+            </>
+          )}
         </div>
       </Collapse>
 

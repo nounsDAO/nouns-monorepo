@@ -138,7 +138,6 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
 
       <div className={classes.byLineWrapper}>
         {activeLocale === Locales.ja_JP ? (
-
           <HoverCard
             hoverCardContent={(tip: string) => <ByLineHoverCard proposerAddress={tip} />}
             tip={proposal && proposal.proposer ? proposal.proposer : ''}
