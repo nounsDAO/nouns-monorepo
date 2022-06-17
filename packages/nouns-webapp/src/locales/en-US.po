@@ -17,10 +17,6 @@ msgstr ""
 msgid "'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:"
 msgstr "'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:"
 
-#: src/pages/Governance/index.tsx
-#~ msgid ". Nouns can vote on proposals or delegate their vote to a third party. A minimum of"
-#~ msgstr ". Nouns can vote on proposals or delegate their vote to a third party. A minimum of"
-
 #: src/components/ByLineHoverCard/index.tsx
 msgid "... and {0} more"
 msgstr "... and {0} more"
@@ -48,14 +44,6 @@ msgstr "<0>Delegated Nouns: </0>"
 #: src/components/ProposalHeader/index.tsx
 msgid "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
 msgstr "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
-
-#: src/components/AuctionTimer/index.tsx
-#~ msgid "<0>{flooredMinutes}<1>m</1></0>"
-#~ msgstr "<0>{flooredMinutes}<1>m</1></0>"
-
-#: src/components/AuctionTimer/index.tsx
-#~ msgid "<0>{flooredSeconds}<1>s</1></0>"
-#~ msgstr "<0>{flooredSeconds}<1>s</1></0>"
 
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Absent for"
@@ -222,7 +210,6 @@ msgstr "Cast {0} votes for Prop {1}"
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Change"
 msgstr "Change"
-
 
 #: src/components/WalletConnectModal/index.tsx
 msgid "Clear WalletConnect Data"
@@ -594,10 +581,6 @@ msgid "Nouns artwork is in the {publicDomainLink}."
 msgstr "Nouns artwork is in the {publicDomainLink}."
 
 #: src/pages/Governance/index.tsx
-#~ msgid "Nouns govern"
-#~ msgstr "Nouns govern"
-
-#: src/pages/Governance/index.tsx
 msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
 msgstr "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
 
@@ -624,10 +607,6 @@ msgstr "One Noun is trustlessly auctioned every 24 hours, forever."
 #: src/pages/Playground/index.tsx
 msgid "Only 32x32 PNG images are accepted"
 msgstr "Only 32x32 PNG images are accepted"
-
-#: src/components/ProposalHeader/index.tsx
-#~ msgid "Only Nons you owned or were delegated to you before {0} are eligible to vote."
-#~ msgstr "Only Nons you owned or were delegated to you before {0} are eligible to vote."
 
 #: src/components/ProposalHeader/index.tsx
 msgid "Only Nouns you owned or were delegated to you before {0} are eligible to vote."
@@ -936,10 +915,6 @@ msgstr "Value in ETH (Optional)"
 msgid "Vetoed"
 msgstr "Vetoed"
 
-#: src/components/NounHoverCard/index.tsx
-#~ msgid "View Noun Profile"
-#~ msgstr "View Noun Profile"
-
 #: src/components/BidHistoryBtn/index.tsx
 msgid "View all bids"
 msgstr "View all bids"
@@ -951,10 +926,6 @@ msgstr "View on Etherscan"
 #: src/components/Bid/index.tsx
 msgid "Vote for the next Noun"
 msgstr "Vote for the next Noun"
-
-#: src/components/Bid/index.tsx
-#~ msgid "Vote for the next Noun ⌐◧-◧"
-#~ msgstr "Vote for the next Noun ⌐◧-◧"
 
 #: src/components/VoteModal/index.tsx
 msgid "Vote on Prop {0}"
@@ -975,7 +946,6 @@ msgstr "Voted with<0>{numVotesForProp}</0>Noun"
 #: src/components/DelegateHoverCard/index.tsx
 msgid "Voted with<0>{numVotesForProp}</0>Nouns"
 msgstr "Voted with<0>{numVotesForProp}</0>Nouns"
-
 
 #: src/components/Documentation/index.tsx
 msgid "WTF?"
@@ -1107,10 +1077,6 @@ msgstr "h"
 msgid "heads (234)"
 msgstr "heads (234)"
 
-#: src/pages/Governance/index.tsx
-#~ msgid "is required to submit proposals."
-#~ msgstr "is required to submit proposals."
-
 #: src/components/AuctionTimer/index.tsx
 msgid "m"
 msgstr "m"
@@ -1131,21 +1097,9 @@ msgstr "s"
 msgid "{0} <0>Addresses</0>"
 msgstr "{0} <0>Addresses</0>"
 
-#: src/components/VoteCard/index.tsx
-#~ msgid "{0} <0>Delegates</0>"
-#~ msgstr "{0} <0>Delegates</0>"
-
-#: src/components/VoteCard/index.tsx
-#~ msgid "{0} <0>Nouns</0>"
-#~ msgstr "{0} <0>Nouns</0>"
-
 #: src/pages/Vote/index.tsx
 msgid "{0} votes"
 msgstr "{0} votes"
-
-#: src/components/AuctionTimer/index.tsx
-#~ msgid "{0}<0>h</0>"
-#~ msgstr "{0}<0>h</0>"
 
 #: src/pages/Vote/index.tsx
 msgid "{moveStateButtonAction} Proposal ⌐◧-◧"

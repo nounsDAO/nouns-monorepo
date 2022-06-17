@@ -920,10 +920,6 @@ msgstr "ETHの価格 (任意)"
 msgid "Vetoed"
 msgstr "拒否"
 
-#: src/components/NounHoverCard/index.tsx
-#~ msgid "View Noun Profile"
-#~ msgstr "Nounプロファイルを表示"
-
 #: src/components/BidHistoryBtn/index.tsx
 msgid "View all bids"
 msgstr "すべての入札を表示"
@@ -931,7 +927,6 @@ msgstr "すべての入札を表示"
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "View on Etherscan"
 msgstr "イーサスキャンで見る"
-
 
 #: src/components/Bid/index.tsx
 msgid "Vote for the next Noun"
@@ -956,7 +951,6 @@ msgstr "<0>{numVotesForProp}</0>のNounで投票"
 #: src/components/DelegateHoverCard/index.tsx
 msgid "Voted with<0>{numVotesForProp}</0>Nouns"
 msgstr "<0>{numVotesForProp}</0>のNounで投票"
-
 
 #: src/components/Documentation/index.tsx
 msgid "WTF?"
@@ -1107,10 +1101,6 @@ msgstr "秒"
 #: src/components/VoteCard/index.tsx
 msgid "{0} <0>Addresses</0>"
 msgstr "{0}<0>イーサリアムアドレス</0>"
-
-#: src/components/VoteCard/index.tsx
-#~ msgid "{0} <0>Nouns</0>"
-#~ msgstr "{0} <0>Nouns</0>"
 
 #: src/pages/Vote/index.tsx
 msgid "{0} votes"
