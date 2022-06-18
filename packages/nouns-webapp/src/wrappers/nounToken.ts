@@ -155,7 +155,7 @@ export const useUserVotesAsOfBlock = (block: number | undefined): number | undef
   return votes?.toNumber();
 };
 
-export const useDelegateVotes = (delagee: string) => {
+export const useDelegateVotes = () => {
   const nounsToken = new NounsTokenFactory().attach(config.addresses.nounsToken);
 
   const { send, state } = useContractFunction(nounsToken, 'delegate');

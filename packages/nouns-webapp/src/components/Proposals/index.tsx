@@ -129,7 +129,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
               p.status === ProposalState.ACTIVE ||
               p.status === ProposalState.QUEUED;
 
-            const coundownPill = (
+            const countdownPill = (
               <div className={classes.proposalStatusWrapper}>
                 <div className={clsx(proposalStatusClasses.proposalStatus, classes.countdownPill)}>
                   <div className={classes.countdownPillContentWrapper}>
@@ -157,7 +157,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
                   </span>
 
                   {isPropInStateToHaveCountDown && (
-                    <div className={classes.desktopCountdownWrapper}>{coundownPill}</div>
+                    <div className={classes.desktopCountdownWrapper}>{countdownPill}</div>
                   )}
                   <div className={clsx(classes.proposalStatusWrapper, classes.votePillWrapper)}>
                     <ProposalStatus status={p.status}></ProposalStatus>
@@ -165,7 +165,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
                 </div>
 
                 {isPropInStateToHaveCountDown && (
-                  <div className={classes.mobileCountdownWrapper}>{coundownPill}</div>
+                  <div className={classes.mobileCountdownWrapper}>{countdownPill}</div>
                 )}
               </div>
             );

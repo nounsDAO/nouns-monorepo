@@ -54,23 +54,23 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
   const [delegateInputText, setDelegateInputText] = useState('');
   const [delegateInputClass, setDelegateInputClass] = useState<string>('');
   const availableVotes = useNounTokenBalance(account ?? '') ?? 0;
-  const { send: delegateVotes, state: delageeState } = useDelegateVotes(delegateAddress);
+  const { send: delegateVotes, state: delegateState } = useDelegateVotes();
   const locale = useActiveLocale();
   const currentDelegate = useUserDelegatee();
 
   useEffect(() => {
-    if (delageeState.status === 'Success') {
+    if (delegateState.status === 'Success') {
       setChangeDelegateState(ChangeDelegateState.CHANGE_SUCCESS);
     }
 
-    if (delageeState.status === 'Exception' || delageeState.status === 'Fail') {
+    if (delegateState.status === 'Exception' || delegateState.status === 'Fail') {
       setChangeDelegateState(ChangeDelegateState.CHANGE_FAILURE);
     }
 
-    if (delageeState.status === 'Mining') {
+    if (delegateState.status === 'Mining') {
       setChangeDelegateState(ChangeDelegateState.CHANGING);
     }
-  }, [delageeState]);
+  }, [delegateState]);
 
   useEffect(() => {
     const checkIsValidENS = async () => {
@@ -95,7 +95,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
     }
   }, [delegateAddress]);
 
-  const etherscanTxLink = buildEtherscanTxLink(delageeState.transaction?.hash ?? '');
+  const etherscanTxLink = buildEtherscanTxLink(delegateState.transaction?.hash ?? '');
 
   const primaryButton = usePickByState(
     changeDelegateState,
@@ -112,7 +112,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
             {locale === 'en-US ' ? (
               <>
                 Delegate <span className={classes.highlightCircle}>{availableVotes}</span>
-                {availableVotes === 1 ? <>Votes</> : <>Votes</>}
+                {availableVotes === 1 ? <>Vote</> : <>Votes</>}
               </>
             ) : (
               <>
@@ -177,8 +177,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
         Your <span style={{ fontWeight: 'bold' }}>{availableVotes}</span> votes have been delegated
         to a new account.
       </Trans>,
-      ,
-      <>{delageeState.errorMessage}</>,
+      <>{delegateState.errorMessage}</>,
     ],
   );
 
