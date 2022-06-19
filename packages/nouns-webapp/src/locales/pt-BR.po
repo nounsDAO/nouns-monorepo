@@ -33,15 +33,15 @@ msgstr ""
 
 #: src/components/VoteCard/index.tsx
 msgid "Abstain"
-msgstr "Abstenções"
+msgstr "Abster-se"
 
 #: src/components/VoteModal/index.tsx
 msgid "Abstain from voting on Prop {0}"
-msgstr "Abster-se de votar no Prop {0} "
+msgstr "Abster-se de votar na Prop {0}"
 
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Abstained on"
-msgstr ""
+msgstr "Absteve-se em"
 
 #: src/pages/Playground/index.tsx
 msgid "Accessory"
@@ -50,7 +50,7 @@ msgstr "Acessório"
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 msgid "Active"
-msgstr ""
+msgstr "Ativo"
 
 #: src/components/ProfileActivityFeed/index.tsx
 msgid "Activity"
@@ -63,7 +63,7 @@ msgstr "Adicionar Transação"
 
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "Add a Proposal Transaction"
-msgstr ""
+msgstr "Adicionar uma Proposta de Transação"
 
 #: src/pages/CreateProposal/index.tsx
 msgid "Add one or more transactions and describe your proposal for the community. The proposal cannot modified after submission, so please verify all information before submitting. The voting period will begin after 2 1/3 days and last for 3 days."
@@ -75,7 +75,7 @@ msgstr "Endereço"
 
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "Address (Callee or Recipient)"
-msgstr ""
+msgstr "Endereço (Chamado ou Reecipiente)"
 
 #: src/components/VoteCard/index.tsx
 msgid "Against"
@@ -99,7 +99,7 @@ msgstr "Todas as Propostas"
 
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "Arguments"
-msgstr ""
+msgstr "Argumentos"
 
 #: src/components/Documentation/index.tsx
 msgid "Artwork is generative and stored directly on-chain (not IPFS)."
@@ -108,7 +108,7 @@ msgstr "As obras de arte são generativas e armazenadas diretamente on-chain (N�
 #: src/components/AuctionTimer/index.tsx
 #: src/components/AuctionTimer/index.tsx
 msgid "Auction ended"
-msgstr ""
+msgstr "Leilão terminou"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "Auction ends in"
@@ -116,7 +116,7 @@ msgstr "Leilão termina em"
 
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "Back"
-msgstr ""
+msgstr "Voltar"
 
 #: src/pages/Playground/index.tsx
 msgid "Background"
@@ -129,7 +129,7 @@ msgstr "Como 100% dos lucros do leilão de Nouns são enviados para o Nouns DAO,
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 msgid "Bid"
-msgstr ""
+msgstr "Lance"
 
 #: src/components/NounInfoCard/index.tsx
 msgid "Bid history"
@@ -157,7 +157,7 @@ msgstr "Corpo"
 
 #: src/components/NounInfoRowBirthday/index.tsx
 msgid "Born"
-msgstr ""
+msgstr "Nascido"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
@@ -182,7 +182,7 @@ msgstr "Dê {0} votos a favor de Prop {1}"
 
 #: src/components/WalletConnectModal/index.tsx
 msgid "Clear WalletConnect Data"
-msgstr ""
+msgstr "Limpar dados da WalletConnect"
 
 #: src/components/Documentation/index.tsx
 msgid "Compound Governance"
@@ -211,7 +211,7 @@ msgstr "Criar Proposta"
 
 #: src/components/Documentation/index.tsx
 msgid "Cryptopunks"
-msgstr ""
+msgstr "Cryptopunks"
 
 #: src/components/CurrentBid/index.tsx
 msgid "Current bid"
@@ -219,7 +219,7 @@ msgstr "Lance corrente"
 
 #: src/components/NavBar/index.tsx
 msgid "DAO"
-msgstr ""
+msgstr "DAO"
 
 #: src/components/Documentation/index.tsx
 msgid "Daily Auctions"
@@ -228,7 +228,7 @@ msgstr "Leilões Diários"
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 msgid "Defeated"
-msgstr ""
+msgstr "Perdeu"
 
 #: src/components/ProposalContent/index.tsx
 msgid "Description"
@@ -240,15 +240,15 @@ msgstr "Desconectar"
 
 #: src/components/Footer/index.tsx
 msgid "Discord"
-msgstr ""
+msgstr "Discord"
 
 #: src/components/NavBar/index.tsx
 msgid "Discourse"
-msgstr ""
+msgstr "Discourse"
 
 #: src/components/NavBar/index.tsx
 msgid "Docs"
-msgstr ""
+msgstr "Docs"
 
 #: src/components/Banner/index.tsx
 msgid "EVERY DAY,"
@@ -260,7 +260,7 @@ msgstr "Cada vez que um leilão é liquidado, a transação de liquidação tamb
 
 #: src/pages/Vote/index.tsx
 msgid "Ended"
-msgstr ""
+msgstr "Terminou"
 
 #: src/pages/Vote/index.tsx
 msgid "Ends"
@@ -268,11 +268,11 @@ msgstr "Termina"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "Ends on"
-msgstr ""
+msgstr "Termina em"
 
 #: src/components/Proposals/index.tsx
 msgid "Ends {0}"
-msgstr ""
+msgstr "Termina {0}"
 
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
@@ -280,7 +280,7 @@ msgstr ""
 #: src/pages/CreateProposal/index.tsx
 #: src/pages/Vote/index.tsx
 msgid "Error"
-msgstr ""
+msgstr "Erro"
 
 #: src/components/NounInfoRowBirthday/index.tsx
 msgid "Error fetching Noun birthday"
@@ -289,29 +289,29 @@ msgstr ""
 #: src/components/Footer/index.tsx
 #: src/components/NounInfoCard/index.tsx
 msgid "Etherscan"
-msgstr ""
+msgstr "Etherscan"
 
 #: src/pages/Vote/index.tsx
 msgid "Execute"
-msgstr ""
+msgstr "Execute"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 msgid "Executed"
-msgstr ""
+msgstr "Executado"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 msgid "Expired"
-msgstr ""
+msgstr "Expirou"
 
 #: src/components/Proposals/index.tsx
 msgid "Expires {0}"
-msgstr ""
+msgstr "Expira {0}"
 
 #: src/pages/Playground/index.tsx
 msgid "Explore"
-msgstr ""
+msgstr "Explore"
 
 #: src/components/Banner/index.tsx
 msgid "FOREVER."
@@ -332,7 +332,7 @@ msgstr ""
 
 #: src/components/VoteCard/index.tsx
 msgid "For"
-msgstr "A Favor"
+msgstr "A favor"
 
 #: src/components/NounderNounContent/index.tsx
 msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
@@ -340,11 +340,11 @@ msgstr "Por esta razão, nós, os (‘Nounders’) fundadores do projeto, optamo
 
 #: src/components/Footer/index.tsx
 msgid "Forums"
-msgstr ""
+msgstr "Forums"
 
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "Function"
-msgstr "Funcão"
+msgstr "Função"
 
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "Function (Optional)"
@@ -372,7 +372,7 @@ msgstr "Cabeça"
 
 #: src/components/Holder/index.tsx
 msgid "Held by"
-msgstr ""
+msgstr "Mantido por"
 
 #: src/components/AuctionActivity/index.tsx
 msgid "Help mint the next Noun"
@@ -408,7 +408,7 @@ msgstr "Próximo"
 
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "No arguments required"
-msgstr ""
+msgstr "Nenhum argumento requerido"
 
 #: src/components/Documentation/index.tsx
 msgid "No explicit rules exist for attribute scarcity; all Nouns are equally rare."
@@ -422,7 +422,7 @@ msgstr "Nenhuma proposta encontrada"
 #: src/components/ProposalTransactionFormModal/index.tsx
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "None"
-msgstr ""
+msgstr "Nenhum"
 
 #: src/pages/Governance/index.tsx
 msgid "Noun"
@@ -438,7 +438,7 @@ msgstr "Características do Noun"
 
 #: src/components/AuctionActivityNounTitle/index.tsx
 msgid "Noun {0}"
-msgstr ""
+msgstr "Noun {0}"
 
 #: src/components/Documentation/index.tsx
 msgid "Nounder distributions don't interfere with the cadence of 24 hour auctions. Nouns are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available Noun ID."
@@ -462,7 +462,7 @@ msgstr "Recompensa dos Nounders"
 
 #: src/pages/Governance/index.tsx
 msgid "Nouns"
-msgstr ""
+msgstr "Nouns"
 
 #: src/components/NounInfoRowHolder/index.tsx
 msgid "Nouns Auction House"
@@ -472,7 +472,7 @@ msgstr ""
 #: src/components/NounderNounContent/index.tsx
 #: src/pages/Governance/index.tsx
 msgid "Nouns DAO"
-msgstr ""
+msgstr "Nouns DAO"
 
 #: src/components/Documentation/index.tsx
 msgid "Nouns DAO uses a fork of {compoundGovLink}."
@@ -484,7 +484,7 @@ msgstr "Nouns DAO utiliza um fork do {compoundGovLink} e é o principal mecanism
 
 #: src/pages/Playground/index.tsx
 msgid "Nouns Protocol"
-msgstr ""
+msgstr "Protocolo Nouns"
 
 #: src/components/Documentation/index.tsx
 msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community."
@@ -545,7 +545,7 @@ msgstr "Efetue um lance"
 #: src/components/NavBar/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Playground"
-msgstr ""
+msgstr "Playground"
 
 #: src/components/Bid/index.tsx
 msgid "Please place a bid higher than or equal to the minimum bid amount of {0} ETH"
@@ -566,7 +566,7 @@ msgstr "Por favor tente novamente."
 
 #: src/components/ProposalEditor/index.tsx
 msgid "Preview:"
-msgstr ""
+msgstr "Prévia"
 
 #: src/components/ProposalEditor/index.tsx
 msgid "Proposal"
@@ -582,7 +582,7 @@ msgstr "Proposta Executada!"
 
 #: src/pages/Vote/index.tsx
 msgid "Proposal Queued!"
-msgstr ""
+msgstr "Proposta Enfileirada!"
 
 #: src/components/ProposalHeader/index.tsx
 msgid "Proposal {0}"
@@ -602,16 +602,16 @@ msgstr "Transações Propostas"
 
 #: src/pages/Vote/index.tsx
 msgid "Queue"
-msgstr ""
+msgstr "Fila"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 msgid "Queued"
-msgstr ""
+msgstr "Enfileirada"
 
 #: src/pages/Vote/index.tsx
 msgid "Quorum"
-msgstr ""
+msgstr "Quórum"
 
 #: src/components/VoteModal/index.tsx
 msgid "Reason (Optional)"
@@ -654,7 +654,7 @@ msgstr "Mostrar menos"
 
 #: src/components/NavWallet/index.tsx
 msgid "Sign out"
-msgstr ""
+msgstr "Deslogar"
 
 #: src/pages/Vote/index.tsx
 msgid "Starts"
@@ -680,7 +680,7 @@ msgstr "Enviar voto"
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 msgid "Succeeded"
-msgstr ""
+msgstr "Bem-sucedido"
 
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
@@ -739,11 +739,11 @@ msgstr "O tesouro é controlado exclusivamente pelos Nouns via governança."
 
 #: src/components/VoteModal/index.tsx
 msgid "There was an error voting for your account."
-msgstr ""
+msgstr "Houve um erro votando para a sua conta."
 
 #: src/components/ProfileActivityFeed/index.tsx
 msgid "This Noun has no activity, since it was just created. Check back soon!"
-msgstr ""
+msgstr "Este Noun não tem atividade, pois acabou de ser criado. Volte a verificar em breve!"
 
 #: src/pages/Governance/index.tsx
 msgid "This treasury exists for <0>Nouns DAO</0> participants to allocate resources for the long-term growth and prosperity of the Nouns project."
@@ -784,12 +784,12 @@ msgstr "Tesouro"
 
 #: src/components/Footer/index.tsx
 msgid "Twitter"
-msgstr ""
+msgstr "Twitter"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 msgid "Undetermined"
-msgstr ""
+msgstr "Indeterminado"
 
 #: src/pages/Playground/index.tsx
 msgid "Upload"
@@ -801,20 +801,20 @@ msgstr "Upload de Característica Customizada"
 
 #: src/components/VoteModal/index.tsx
 msgid "User Already Voted"
-msgstr ""
+msgstr "Usuário Já Votou"
 
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "Value"
-msgstr ""
+msgstr "Valor"
 
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "Value in ETH (Optional)"
-msgstr ""
+msgstr "Valor em ETH (Opcional)"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 msgid "Vetoed"
-msgstr ""
+msgstr "Vetado"
 
 #: src/components/BidHistoryBtn/index.tsx
 msgid "View all bids"
@@ -829,12 +829,12 @@ msgid "Vote on Prop {0}"
 msgstr "Votar na Prop {0}"
 
 #: src/components/NounProfileVoteRow/index.tsx
-msgid "Voted aginst"
-msgstr ""
+msgid "Voted against"
+msgstr "Votou contra"
 
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Voted for"
-msgstr ""
+msgstr "Votou a favor"
 
 #: src/components/Documentation/index.tsx
 msgid "WTF?"
@@ -842,12 +842,12 @@ msgstr "ÉOQ?"
 
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Waiting for"
-msgstr ""
+msgstr "Esperando por"
 
 #: src/components/Winner/index.tsx
 #: src/components/Winner/index.tsx
 msgid "What now?"
-msgstr ""
+msgstr "E agora?"
 
 #: src/components/Documentation/index.tsx
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
@@ -868,11 +868,11 @@ msgstr "Você"
 
 #: src/components/ProposalHeader/index.tsx
 msgid "You <0>Abstained</0> from this proposal"
-msgstr "Você <0>Absteve-se</0> dessa proposta"
+msgstr "Você <0>Absteve-se</0> desta proposta"
 
 #: src/components/CreateProposalButton/index.tsx
 msgid "You already have an active or pending proposal"
-msgstr "Você ainda tem uma proposta ativa ou pendente"
+msgstr "Você já tem uma proposta ativa ou pendente"
 
 #: src/components/Documentation/index.tsx
 msgid "You can experiment with off-chain Noun generation at the {playgroundLink}."
@@ -880,11 +880,11 @@ msgstr "Você pode experimentar a geração 'off-chain' de Nouns  no {playground
 
 #: src/components/SettleManuallyBtn/index.tsx
 msgid "You can settle manually in 1 minute"
-msgstr ""
+msgstr "você pode liquidar manualmente em 1 minuto"
 
 #: src/components/SettleManuallyBtn/index.tsx
 msgid "You can settle manually in {0} minutes"
-msgstr ""
+msgstr "Você pode liquidar manualmente em {0} minutos"
 
 #: src/components/CreateProposalButton/index.tsx
 msgid "You don't have enough votes to submit a proposal"
@@ -892,15 +892,15 @@ msgstr "Você não tem votos suficientes para submeter uma proposta"
 
 #: src/components/Proposals/index.tsx
 msgid "You have no Votes."
-msgstr ""
+msgstr "Você não tem Votos."
 
 #: src/components/ProposalHeader/index.tsx
 msgid "You have no votes."
-msgstr ""
+msgstr "Você não tem votos."
 
 #: src/components/CreateProposalButton/index.tsx
 msgid "You must have {0} votes to submit a proposal"
-msgstr ""
+msgstr "Você deve ter {0} votos para submeter uma proposta"
 
 #: src/components/ProposalHeader/index.tsx
 msgid "You voted <0>Against</0> this proposal"
@@ -916,7 +916,7 @@ msgstr "Você gerou {0} anos de Nouns"
 
 #: src/components/VoteModal/index.tsx
 msgid "You've successfully voted on on prop {0}"
-msgstr "Você votou com sucesso na prop {0}"
+msgstr "Você votou com sucesso na prop {0} "
 
 #: src/components/Documentation/index.tsx
 msgid "accessories (137)"
@@ -960,7 +960,7 @@ msgstr "ou mais"
 
 #: src/components/Documentation/index.tsx
 msgid "public domain"
-msgstr ""
+msgstr "domínio público"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "s"
