@@ -125,7 +125,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
                   </span>
                 </Trans>
               ) : (
-                  i18n.number(voteCount)
+                i18n.number(voteCount)
               )}
             </span>
           </Card.Text>
