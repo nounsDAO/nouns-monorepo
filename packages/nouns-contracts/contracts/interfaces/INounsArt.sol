@@ -55,7 +55,7 @@ interface INounsArt {
 
     function addBackground(string calldata _background) external;
 
-    function palettes(uint8 paletteIndex) external view returns (address);
+    function palettes(uint8 paletteIndex) external view returns (bytes memory);
 
     function setPalette(uint8 paletteIndex, bytes calldata palette) external;
 

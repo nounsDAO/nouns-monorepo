@@ -32,7 +32,7 @@ contract NounsArt is INounsArt {
     string[] public backgrounds;
 
     // Noun Color Palettes (Index => Hex Colors)
-    mapping(uint8 => address) public override palettes;
+    mapping(uint8 => address) public palettesPointers;
 
     // Noun Bodies (Custom RLE)
     Trait public _bodies;
@@ -118,7 +118,7 @@ contract NounsArt is INounsArt {
         if (palette.length % 3 != 0 || palette.length > 768) {
             revert BadPaletteLength();
         }
-        palettes[paletteIndex] = SSTORE2.write(palette);
+        palettesPointers[paletteIndex] = SSTORE2.write(palette);
     }
 
     function addBodies(
@@ -235,6 +235,10 @@ contract NounsArt is INounsArt {
 
     function glasses(uint256 storageIndex) public view override returns (bytes memory) {
         return imageByStorageIndex(_glasses, storageIndex);
+    }
+
+    function palettes(uint8 paletteIndex) public view override returns (bytes memory) {
+        return SSTORE2.read(palettesPointers[paletteIndex]);
     }
 
     function addToTraitFromBytes(

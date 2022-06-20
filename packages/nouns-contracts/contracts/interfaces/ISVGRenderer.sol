@@ -23,7 +23,7 @@ pragma solidity ^0.8.12;
 interface ISVGRenderer {
     struct Part {
         bytes image;
-        address palette;
+        bytes palette;
     }
 
     struct SVGParams {

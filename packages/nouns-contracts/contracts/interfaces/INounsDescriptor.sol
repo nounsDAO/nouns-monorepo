@@ -42,7 +42,7 @@ interface INounsDescriptor {
 
     function baseURI() external returns (string memory);
 
-    function palettes(uint8 paletteIndex) external view returns (address);
+    function palettes(uint8 paletteIndex) external view returns (bytes memory);
 
     function backgrounds(uint256 index) external view returns (string memory);
 

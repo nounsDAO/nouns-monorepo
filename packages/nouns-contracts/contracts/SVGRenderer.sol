@@ -18,7 +18,6 @@
 pragma solidity ^0.8.12;
 
 import { ISVGRenderer } from './interfaces/ISVGRenderer.sol';
-import { SSTORE2 } from './libs/SSTORE2.sol';
 
 contract SVGRenderer is ISVGRenderer {
     bytes16 private constant _HEX_SYMBOLS = '0123456789abcdef';
@@ -48,7 +47,7 @@ contract SVGRenderer is ISVGRenderer {
     /**
      * @notice Given RLE image data and color palette pointers, merge to generate a single SVG image.
      */
-    function generateSVG(SVGParams calldata params) external view returns (string memory svg) {
+    function generateSVG(SVGParams calldata params) external pure returns (string memory svg) {
         if (bytes(params.background).length != 0) {
             // prettier-ignore
             return string(
@@ -66,7 +65,7 @@ contract SVGRenderer is ISVGRenderer {
     /**
      * @notice Given RLE image data and a color palette pointer, merge to generate a partial SVG image.
      */
-    function generateSVGPart(Part calldata part) external view returns (string memory partialSVG) {
+    function generateSVGPart(Part calldata part) external pure returns (string memory partialSVG) {
         Part[] memory parts = new Part[](1);
         parts[0] = part;
 
@@ -76,7 +75,7 @@ contract SVGRenderer is ISVGRenderer {
     /**
      * @notice Given RLE image data and color palette pointers, merge to generate a partial SVG image.
      */
-    function generateSVGParts(Part[] calldata parts) external view returns (string memory partialSVG) {
+    function generateSVGParts(Part[] calldata parts) external pure returns (string memory partialSVG) {
         return _generateSVGRects(SVGParams({ parts: parts, background: '' }));
     }
 
@@ -86,7 +85,7 @@ contract SVGRenderer is ISVGRenderer {
     // prettier-ignore
     function _generateSVGRects(SVGParams memory params)
         private
-        view
+        pure
         returns (string memory svg)
     {
         string[33] memory lookup = [
@@ -102,7 +101,7 @@ contract SVGRenderer is ISVGRenderer {
             cache = new string[](256); // Initialize color cache
 
             DecodedImage memory image = _decodeRLEImage(params.parts[p].image);
-            bytes memory palette = _getPalette(params.parts[p].palette);
+            bytes memory palette = params.parts[p].palette;
             uint256 currentX = image.bounds.left;
             uint256 currentY = image.bounds.top;
             uint256 cursor;
@@ -195,13 +194,6 @@ contract SVGRenderer is ISVGRenderer {
             cursor++;
         }
         return DecodedImage({ bounds: bounds, draws: draws });
-    }
-
-    /**
-     * @notice Fetch the color palette stored at the provided `pointer`.
-     */
-    function _getPalette(address pointer) private view returns (bytes memory palette) {
-        palette = SSTORE2.read(pointer);
     }
 
     /**

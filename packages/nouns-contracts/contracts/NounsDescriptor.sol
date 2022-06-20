@@ -403,7 +403,7 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         return art.glasses(storageIndex);
     }
 
-    function palettes(uint8 paletteIndex) public view override returns (address) {
+    function palettes(uint8 paletteIndex) public view override returns (bytes memory) {
         return art.palettes(paletteIndex);
     }
 
@@ -511,7 +511,7 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     /**
      * @notice Get the color palette pointer for the passed part.
      */
-    function _getPalette(bytes memory part) private view returns (address) {
+    function _getPalette(bytes memory part) private view returns (bytes memory) {
         return art.palettes(uint8(part[0]));
     }
 
