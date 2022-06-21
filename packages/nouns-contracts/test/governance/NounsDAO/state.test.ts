@@ -28,10 +28,10 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
   NounsDescriptor__factory as NounsDescriptorFactory,
-  NounsDaoExecutorHarness,
-  NounsDaoExecutorHarness__factory as NounsDaoExecutorHarnessFactory,
-  NounsDaoImmutable,
-  NounsDaoImmutable__factory as NounsDaoImmutableFactory,
+  NounsDAOExecutorHarness,
+  NounsDAOExecutorHarness__factory as NounsDaoExecutorHarnessFactory,
+  NounsDAOImmutable,
+  NounsDAOImmutable__factory as NounsDaoImmutableFactory,
 } from '../../../typechain';
 
 chai.use(solidity);
@@ -54,8 +54,8 @@ let account0: SignerWithAddress;
 let account1: SignerWithAddress;
 let signers: TestSigners;
 
-let gov: NounsDaoImmutable;
-let timelock: NounsDaoExecutorHarness;
+let gov: NounsDAOImmutable;
+let timelock: NounsDAOExecutorHarness;
 let delay: number;
 
 let targets: string[];
@@ -141,18 +141,18 @@ describe('NounsDAO#state/1', () => {
 
   it('Pending', async () => {
     await makeProposal();
-    expectState(proposalId, 'Pending');
+    await expectState(proposalId, 'Pending');
   });
 
   it('Active', async () => {
     await makeProposal();
-    expectState(proposalId, 'Pending');
+    await expectState(proposalId, 'Pending');
 
     // mine blocks passed voting delay; voting delay is 1 block, have to wait 2 blocks
     await mineBlock();
     await mineBlock();
 
-    expectState(proposalId, 'Active');
+    await expectState(proposalId, 'Active');
   });
 
   it('Canceled', async () => {
@@ -168,7 +168,7 @@ describe('NounsDAO#state/1', () => {
 
     await gov.cancel(proposalId);
 
-    expectState(proposalId, 'Canceled');
+    await expectState(proposalId, 'Canceled');
   });
 
   it('Defeated by running out of time', async () => {
@@ -176,7 +176,7 @@ describe('NounsDAO#state/1', () => {
     // travel to end block
     await advanceBlocks(2000);
 
-    expectState(proposalId, 'Defeated');
+    await expectState(proposalId, 'Defeated');
   });
 
   it('Defeated by voting against', async () => {
@@ -193,7 +193,7 @@ describe('NounsDAO#state/1', () => {
 
     // travel to end block
     await advanceBlocks(2000);
-    expectState(proposalId, 'Defeated');
+    await expectState(proposalId, 'Defeated');
   });
 
   it('Succeeded', async () => {
@@ -209,14 +209,14 @@ describe('NounsDAO#state/1', () => {
 
     await advanceBlocks(2000);
 
-    expectState(proposalId, 'Succeeded');
+    await expectState(proposalId, 'Succeeded');
   });
 
   it('Cannot queue if defeated', async () => {
     await makeProposal();
     await advanceBlocks(2000);
 
-    expectState(proposalId, 'Defeated');
+    await expectState(proposalId, 'Defeated');
 
     await expect(gov.queue(proposalId)).revertedWith(
       'queue: proposal can only be queued if it is succeeded',
@@ -227,7 +227,7 @@ describe('NounsDAO#state/1', () => {
     await makeProposal();
     await gov.cancel(proposalId);
 
-    expectState(proposalId, 'Canceled');
+    await expectState(proposalId, 'Canceled');
 
     await expect(gov.queue(proposalId)).revertedWith(
       'queue: proposal can only be queued if it is succeeded',
@@ -249,7 +249,7 @@ describe('NounsDAO#state/1', () => {
     // anyone can queue
     await gov.connect(account0).queue(proposalId);
 
-    expectState(proposalId, 'Queued');
+    await expectState(proposalId, 'Queued');
   });
 
   it('Expired', async () => {
@@ -267,12 +267,12 @@ describe('NounsDAO#state/1', () => {
     // 1 second before grace period, still Queued
     await setNextBlockTimestamp(eta.add(gracePeriod).sub(1).toNumber());
 
-    expectState(proposalId, 'Queued');
+    await expectState(proposalId, 'Queued');
 
     // Mining at graceperiod
     await setNextBlockTimestamp(eta.add(gracePeriod).toNumber());
 
-    expectState(proposalId, 'Expired');
+    await expectState(proposalId, 'Expired');
   });
 
   it('Executed, only after queued', async () => {
@@ -298,18 +298,18 @@ describe('NounsDAO#state/1', () => {
 
     await setNextBlockTimestamp(eta.add(gracePeriod).sub(2).toNumber());
 
-    expectState(proposalId, 'Queued');
+    await expectState(proposalId, 'Queued');
 
     // the execute call can happen 1 second before the grace period expires
     await setNextBlockTimestamp(eta.add(gracePeriod).sub(1).toNumber(), false);
 
     await gov.connect(account1).execute(proposalId);
 
-    expectState(proposalId, 'Executed');
+    await expectState(proposalId, 'Executed');
 
     // still executed even though would be expired
     await setNextBlockTimestamp(eta.add(gracePeriod).toNumber());
 
-    expectState(proposalId, 'Executed');
+    await expectState(proposalId, 'Executed');
   });
 });

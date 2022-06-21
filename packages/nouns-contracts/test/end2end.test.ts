@@ -4,17 +4,17 @@ import { BigNumber as EthersBN } from 'ethers';
 import { solidity } from 'ethereum-waffle';
 
 import {
-  Weth,
+  WETH,
   NounsToken,
   NounsAuctionHouse,
   NounsAuctionHouse__factory as NounsAuctionHouseFactory,
   NounsDescriptor,
   NounsDescriptor__factory as NounsDescriptorFactory,
-  NounsDaoProxy__factory as NounsDaoProxyFactory,
-  NounsDaoLogicV1,
-  NounsDaoLogicV1__factory as NounsDaoLogicV1Factory,
-  NounsDaoExecutor,
-  NounsDaoExecutor__factory as NounsDaoExecutorFactory,
+  NounsDAOProxy__factory as NounsDaoProxyFactory,
+  NounsDAOLogicV1,
+  NounsDAOLogicV1__factory as NounsDaoLogicV1Factory,
+  NounsDAOExecutor,
+  NounsDAOExecutor__factory as NounsDaoExecutorFactory,
 } from '../typechain';
 
 import {
@@ -36,9 +36,9 @@ const { expect } = chai;
 let nounsToken: NounsToken;
 let nounsAuctionHouse: NounsAuctionHouse;
 let descriptor: NounsDescriptor;
-let weth: Weth;
-let gov: NounsDaoLogicV1;
-let timelock: NounsDaoExecutor;
+let weth: WETH;
+let gov: NounsDAOLogicV1;
+let timelock: NounsDAOExecutor;
 
 let deployer: SignerWithAddress;
 let wethDeployer: SignerWithAddress;

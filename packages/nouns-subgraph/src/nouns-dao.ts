@@ -21,6 +21,7 @@ import {
   STATUS_EXECUTED,
   STATUS_CANCELLED,
   STATUS_VETOED,
+  BIGINT_ZERO,
 } from './utils/constants';
 
 export function handleProposalCreatedWithRequirements(
@@ -47,10 +48,15 @@ export function handleProposalCreatedWithRequirements(
   proposal.signatures = event.params.signatures;
   proposal.calldatas = event.params.calldatas;
   proposal.createdTimestamp = event.block.timestamp;
+  proposal.createdBlock = event.block.number;
+  proposal.createdTransactionHash = event.transaction.hash;
   proposal.startBlock = event.params.startBlock;
   proposal.endBlock = event.params.endBlock;
   proposal.proposalThreshold = event.params.proposalThreshold;
   proposal.quorumVotes = event.params.quorumVotes;
+  proposal.forVotes = BIGINT_ZERO;
+  proposal.againstVotes = BIGINT_ZERO;
+  proposal.abstainVotes = BIGINT_ZERO;
   proposal.description = event.params.description.split('\\n').join('\n'); // The Graph's AssemblyScript version does not support string.replace
   proposal.status = event.block.number >= proposal.startBlock ? STATUS_ACTIVE : STATUS_PENDING;
 
@@ -130,8 +136,16 @@ export function handleVoteCast(event: VoteCast): void {
 
   vote.save();
 
+  if (event.params.support == 0) {
+    proposal.againstVotes = proposal.againstVotes.plus(event.params.votes);
+  } else if (event.params.support == 1) {
+    proposal.forVotes = proposal.forVotes.plus(event.params.votes);
+  } else if (event.params.support == 2) {
+    proposal.abstainVotes = proposal.abstainVotes.plus(event.params.votes);
+  }
+
   if (proposal.status == STATUS_PENDING) {
     proposal.status = STATUS_ACTIVE;
-    proposal.save();
   }
+  proposal.save();
 }

@@ -41,6 +41,46 @@ export interface Delegates {
   delegates: Delegate[];
 }
 
+export const seedsQuery = (first = 1_000) => gql`
+{
+  seeds(first: ${first}) {
+    id
+    background
+    body
+    accessory
+    head
+    glasses
+  }
+}
+`;
+
+export const proposalsQuery = (first = 1_000) => gql`
+{
+  proposals(first: ${first}, orderBy: createdBlock, orderDirection: asc) {
+    id
+    description
+    status
+    proposalThreshold
+    quorumVotes
+    forVotes
+    againstVotes
+    abstainVotes
+    createdTransactionHash
+    createdBlock
+    startBlock
+    endBlock
+    executionETA
+    targets
+    values
+    signatures
+    calldatas
+    proposer {
+      id
+    }
+  }
+}
+`;
+
 export const auctionQuery = (auctionId: number) => gql`
 {
 	auction(id: ${auctionId}) {
@@ -73,8 +113,8 @@ export const auctionQuery = (auctionId: number) => gql`
 		amount
 	  }
 	}
-  }
-  `;
+}
+`;
 
 export const bidsByAuctionQuery = (auctionId: string) => gql`
  {
@@ -210,6 +250,7 @@ export const proposalVotesQuery = (proposalId: string) => gql`
       voter {
         id
       }
+
     }	
   }
 `;
@@ -217,6 +258,17 @@ export const proposalVotesQuery = (proposalId: string) => gql`
 export const delegateNounsAtBlockQuery = (delegates: string[], block: number) => gql`
 {
   delegates(where: { id_in: ${JSON.stringify(delegates)} }, block: { number: ${block} }) {
+    id
+    nounsRepresented {
+      id
+    }
+  }
+}
+`;
+
+export const currentlyDelegatedNouns = (delegate: string) => gql`
+{
+  delegates(where: { id: "${delegate}"} ) {
     id
     nounsRepresented {
       id

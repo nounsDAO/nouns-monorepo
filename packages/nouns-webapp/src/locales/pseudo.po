@@ -17,9 +17,9 @@ msgstr ""
 msgid "'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:"
 msgstr ""
 
-#: src/pages/Governance/index.tsx
-#~ msgid ". Nouns can vote on proposals or delegate their vote to a third party. A minimum of"
-#~ msgstr ""
+#: src/components/ByLineHoverCard/index.tsx
+msgid "... and {0} more"
+msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "100% of Noun auction proceeds are trustlessly sent to the treasury."
@@ -33,13 +33,17 @@ msgstr ""
 msgid "404: This is not the person, place, or thing you're looking for..."
 msgstr ""
 
-#: src/components/AuctionTimer/index.tsx
-#~ msgid "<0>{flooredMinutes}<1>m</1></0>"
-#~ msgstr ""
+#: src/components/ByLineHoverCard/index.tsx
+msgid "<0>Delegated Noun: </0>"
+msgstr ""
 
-#: src/components/AuctionTimer/index.tsx
-#~ msgid "<0>{flooredSeconds}<1>s</1></0>"
-#~ msgstr ""
+#: src/components/ByLineHoverCard/index.tsx
+msgid "<0>Delegated Nouns: </0>"
+msgstr ""
+
+#: src/components/ProposalHeader/index.tsx
+msgid "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
+msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Absent for"
@@ -92,6 +96,10 @@ msgid "Address (Callee or Recipient)"
 msgstr ""
 
 #: src/components/VoteCard/index.tsx
+msgid "Addresses"
+msgstr ""
+
+#: src/components/VoteCard/index.tsx
 msgid "Against"
 msgstr ""
 
@@ -109,6 +117,10 @@ msgstr ""
 
 #: src/pages/CreateProposal/index.tsx
 msgid "All Proposals"
+msgstr ""
+
+#: src/components/DelegationCandidateInfo/index.tsx
+msgid "Already has"
 msgstr ""
 
 #: src/components/ProposalTransactionFormModal/index.tsx
@@ -169,6 +181,7 @@ msgstr ""
 msgid "Body"
 msgstr ""
 
+#: src/components/NounHoverCard/index.tsx
 #: src/components/NounInfoRowBirthday/index.tsx
 msgid "Born"
 msgstr ""
@@ -194,8 +207,18 @@ msgstr ""
 msgid "Cast {0} votes for Prop {1}"
 msgstr ""
 
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Change"
+msgstr ""
+
 #: src/components/WalletConnectModal/index.tsx
 msgid "Clear WalletConnect Data"
+msgstr ""
+
+#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/CurrentDelegatePannel/index.tsx
+msgid "Close"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
@@ -227,6 +250,10 @@ msgstr ""
 msgid "Cryptopunks"
 msgstr ""
 
+#: src/components/CurrentDelegatePannel/index.tsx
+msgid "Current Delegate"
+msgstr ""
+
 #: src/components/CurrentBid/index.tsx
 msgid "Current bid"
 msgstr ""
@@ -242,6 +269,30 @@ msgstr ""
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 msgid "Defeated"
+msgstr ""
+
+#: src/components/Proposals/index.tsx
+msgid "Delegate"
+msgstr ""
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Delegate Update Failed"
+msgstr ""
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Delegate Updated!"
+msgstr ""
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Delegate {availableVotes} Vote"
+msgstr ""
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Delegate {availableVotes} Votes"
+msgstr ""
+
+#: src/components/CurrentDelegatePannel/index.tsx
+msgid "Delegation"
 msgstr ""
 
 #: src/components/ProposalContent/index.tsx
@@ -284,6 +335,14 @@ msgstr ""
 msgid "Ends on"
 msgstr ""
 
+#: src/components/Proposals/index.tsx
+msgid "Ends {0}"
+msgstr ""
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Enter the Ethereum address or ENS name of the account you would like to delegate your votes to."
+msgstr ""
+
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 #: src/components/VoteModal/index.tsx
@@ -315,6 +374,10 @@ msgstr ""
 msgid "Expired"
 msgstr ""
 
+#: src/components/Proposals/index.tsx
+msgid "Expires {0}"
+msgstr ""
+
 #: src/pages/Playground/index.tsx
 msgid "Explore"
 msgstr ""
@@ -331,6 +394,7 @@ msgstr ""
 msgid "Failed to fetch Noun activity history"
 msgstr ""
 
+#: src/components/Holder/index.tsx
 #: src/components/NounInfoRowHolder/index.tsx
 msgid "Failed to fetch Noun info"
 msgstr ""
@@ -371,11 +435,16 @@ msgstr ""
 msgid "Governance ‘Slow Start’"
 msgstr ""
 
+#: src/components/DelegationCandidateInfo/index.tsx
+msgid "Has"
+msgstr ""
+
 #: src/pages/Playground/index.tsx
 msgid "Head"
 msgstr ""
 
-#: src/components/NounInfoRowHolder/index.tsx
+#: src/components/Holder/index.tsx
+#: src/components/NounHoverCard/index.tsx
 msgid "Held by"
 msgstr ""
 
@@ -429,7 +498,6 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-#: src/components/BidHistoryModal/index.tsx
 #: src/pages/Governance/index.tsx
 msgid "Noun"
 msgstr ""
@@ -440,6 +508,10 @@ msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "Noun Traits"
+msgstr ""
+
+#: src/components/CurrentDelegatePannel/index.tsx
+msgid "Noun votes are not transferable, but are <0>delegatable</0>, which means you can assign your vote to someone else as long as you own your Noun."
 msgstr ""
 
 #: src/components/AuctionActivityNounTitle/index.tsx
@@ -493,7 +565,7 @@ msgid "Nouns Protocol"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community"
+msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community."
 msgstr ""
 
 #: src/components/Documentation/index.tsx
@@ -509,11 +581,11 @@ msgid "Nouns artwork is in the {publicDomainLink}."
 msgstr ""
 
 #: src/pages/Governance/index.tsx
-#~ msgid "Nouns govern"
-#~ msgstr ""
-
-#: src/pages/Governance/index.tsx
 msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
+msgstr ""
+
+#: src/components/DelegationCandidateInfo/index.tsx
+msgid "Now has"
 msgstr ""
 
 #: src/components/Banner/index.tsx
@@ -535,10 +607,6 @@ msgstr ""
 #: src/pages/Playground/index.tsx
 msgid "Only 32x32 PNG images are accepted"
 msgstr ""
-
-#: src/components/ProposalHeader/index.tsx
-#~ msgid "Only Nons you owned or were delegated to you before {0} are eligible to vote."
-#~ msgstr ""
 
 #: src/components/ProposalHeader/index.tsx
 msgid "Only Nouns you owned or were delegated to you before {0} are eligible to vote."
@@ -614,10 +682,6 @@ msgstr ""
 msgid "Proposed Transactions"
 msgstr ""
 
-#: src/components/ProposalContent/index.tsx
-msgid "Proposer"
-msgstr ""
-
 #: src/pages/Vote/index.tsx
 msgid "Queue"
 msgstr ""
@@ -675,11 +739,11 @@ msgid "Sign out"
 msgstr ""
 
 #: src/pages/Vote/index.tsx
-#~ msgid "Snapshot"
-#~ msgstr ""
-
-#: src/pages/Vote/index.tsx
 msgid "Starts"
+msgstr ""
+
+#: src/components/Proposals/index.tsx
+msgid "Starts {0}"
 msgstr ""
 
 #: src/components/Proposals/index.tsx
@@ -713,6 +777,14 @@ msgstr ""
 
 #: src/components/NavWallet/index.tsx
 msgid "Switch"
+msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "Switch to Noun view"
+msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "Switch to delegate view"
 msgstr ""
 
 #: src/components/NavWallet/index.tsx
@@ -809,6 +881,15 @@ msgstr ""
 msgid "Undetermined"
 msgstr ""
 
+#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/CurrentDelegatePannel/index.tsx
+msgid "Update Delegate"
+msgstr ""
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Updating..."
+msgstr ""
+
 #: src/pages/Playground/index.tsx
 msgid "Upload"
 msgstr ""
@@ -838,13 +919,13 @@ msgstr ""
 msgid "View all bids"
 msgstr ""
 
-#: src/components/Bid/index.tsx
-msgid "Vote for the next Noun"
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "View on Etherscan"
 msgstr ""
 
 #: src/components/Bid/index.tsx
-#~ msgid "Vote for the next Noun ⌐◧-◧"
-#~ msgstr ""
+msgid "Vote for the next Noun"
+msgstr ""
 
 #: src/components/VoteModal/index.tsx
 msgid "Vote on Prop {0}"
@@ -856,6 +937,14 @@ msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Voted for"
+msgstr ""
+
+#: src/components/DelegateHoverCard/index.tsx
+msgid "Voted with<0>{numVotesForProp}</0>Noun"
+msgstr ""
+
+#: src/components/DelegateHoverCard/index.tsx
+msgid "Voted with<0>{numVotesForProp}</0>Nouns"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
@@ -875,6 +964,11 @@ msgstr ""
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
 msgstr ""
 
+#: src/components/DelegationCandidateInfo/index.tsx
+msgid "Will have"
+msgstr ""
+
+#: src/components/NounInfoRowHolder/index.tsx
 #: src/components/Winner/index.tsx
 msgid "Winner"
 msgstr ""
@@ -924,11 +1018,15 @@ msgid "You must have {0} votes to submit a proposal"
 msgstr ""
 
 #: src/components/ProposalHeader/index.tsx
-msgid "You voted <0>Against</0>this proposal"
+msgid "You voted <0>Against</0> this proposal"
 msgstr ""
 
 #: src/components/ProposalHeader/index.tsx
-msgid "You voted <0>For</0>this proposal"
+msgid "You voted <0>For</0> this proposal"
+msgstr ""
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "You've already delegated to this address"
 msgstr ""
 
 #: src/pages/Playground/index.tsx
@@ -939,12 +1037,24 @@ msgstr ""
 msgid "You've successfully voted on on prop {0}"
 msgstr ""
 
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Your <0>{availableVotes}</0> votes are being delegated to a new account."
+msgstr ""
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Your <0>{availableVotes}</0> votes have been delegated to a new account."
+msgstr ""
+
 #: src/components/Documentation/index.tsx
 msgid "accessories (137)"
 msgstr ""
 
 #: src/components/AuctionTimer/index.tsx
 msgid "at"
+msgstr ""
+
+#: src/components/ProposalHeader/index.tsx
+msgid "at <0>{0}</0>"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
@@ -967,10 +1077,6 @@ msgstr ""
 msgid "heads (234)"
 msgstr ""
 
-#: src/pages/Governance/index.tsx
-#~ msgid "is required to submit proposals."
-#~ msgstr ""
-
 #: src/components/AuctionTimer/index.tsx
 msgid "m"
 msgstr ""
@@ -987,14 +1093,22 @@ msgstr ""
 msgid "s"
 msgstr ""
 
+#: src/components/VoteCard/index.tsx
+msgid "{0} <0>Addresses</0>"
+msgstr ""
+
 #: src/pages/Vote/index.tsx
 msgid "{0} votes"
 msgstr ""
 
-#: src/components/AuctionTimer/index.tsx
-#~ msgid "{0}<0>h</0>"
-#~ msgstr ""
-
 #: src/pages/Vote/index.tsx
 msgid "{moveStateButtonAction} Proposal ⌐◧-◧"
+msgstr ""
+
+#: src/components/DelegationCandidateVoteCountInfo/index.tsx
+msgid "{voteCount} Vote"
+msgstr ""
+
+#: src/components/DelegationCandidateVoteCountInfo/index.tsx
+msgid "{voteCount} Votes"
 msgstr ""

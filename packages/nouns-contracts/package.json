@@ -9,13 +9,14 @@
   "types": "dist/src/index.d.ts",
   "scripts": {
     "clean": "rimraf dist tsconfig.build.tsbuildinfo",
-    "build": "yarn build:sol && yarn build:ts && yarn build:declarations",
+    "build": "yarn build:sol --force && yarn build:ts && yarn build:declarations",
     "build:ts": "tsc -p tsconfig.build.json",
     "build:sol": "npx hardhat compile",
     "build:declarations": "shx cp typechain/*.d.ts dist/typechain",
     "hardhat": "npx hardhat",
     "task:accounts": "npx hardhat accounts",
     "task:deploy": "npx hardhat deploy",
+    "task:deploy-and-configure": "npx hardhat deploy-and-configure",
     "task:mint-noun": "npx hardhat mint-noun",
     "task:populate-descriptor": "npx hardhat populate-descriptor",
     "task:run-local": "npx hardhat run-local",
@@ -25,28 +26,29 @@
   },
   "devDependencies": {
     "@float-capital/solidity-coverage": "^0.7.17",
-    "@nomiclabs/hardhat-ethers": "^2.0.2",
-    "@nomiclabs/hardhat-etherscan": "^2.1.2",
-    "@nomiclabs/hardhat-waffle": "^2.0.1",
+    "@nomiclabs/hardhat-ethers": "^2.0.6",
+    "@nomiclabs/hardhat-etherscan": "^3.0.3",
+    "@nomiclabs/hardhat-waffle": "^2.0.3",
     "@openzeppelin/contracts": "^4.1.0",
     "@openzeppelin/contracts-upgradeable": "^4.1.0",
     "@openzeppelin/hardhat-upgrades": "^1.8.2",
-    "@typechain/ethers-v5": "^6.0.1",
+    "@typechain/ethers-v5": "^10.0.0",
+    "@typechain/hardhat": "^6.0.0",
     "@types/express": "^4.17.11",
     "@types/prompt": "^1.1.0",
     "base64-sol": "^1.0.1",
     "dotenv": "^10.0.0",
-    "ethereum-waffle": "^3.3.0",
-    "hardhat": "^2.1.1",
-    "hardhat-abi-exporter": "^2.2.1",
-    "hardhat-gas-reporter": "^1.0.4",
-    "hardhat-typechain": "^0.3.5",
+    "ethereum-waffle": "^3.4.4",
+    "hardhat": "^2.9.6",
+    "hardhat-abi-exporter": "^2.9.0",
+    "hardhat-gas-reporter": "^1.0.8",
     "prettier-plugin-solidity": "^1.0.0-beta.12",
     "prompt": "^1.1.0",
     "shx": "^0.3.3",
-    "ts-node": "^10.0.0"
+    "ts-node": "^10.0.0",
+    "typechain": "^8.0.0"
   },
   "dependencies": {
-    "ethers": "^5.4.7"
+    "ethers": "^5.6.8"
   }
 }

@@ -1,4 +1,9 @@
-.voteCardHeaderText {
+.voteCardHeaderTextEn {
+  font-size: 22px;
+  font-family: 'Londrina Solid';
+}
+
+.voteCardHeaderTextNonEn {
   font-size: 16px;
   font-family: 'Londrina Solid';
 }
@@ -41,9 +46,42 @@
   padding-right: 0.5rem;
 }
 
-@media (max-width: 992px) {
+.mobileVoteCountWrapper {
+  display: none !important;
+}
+
+.unitTextEn {
+  opacity: 0.5;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.unitTextNonEn {
+  opacity: 0.5;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.smallerVoteCountText {
+  font-size: 16px;
+}
+
+@media (max-width: 1200px) {
   .voteCountCard {
     min-height: 0rem;
+  }
+
+  .unitTextEn {
+    font-size: 16px;
+  }
+
+  .unitTextNonEn {
+    font-size: 13px;
+  }
+
+  .mobileVoteCountWrapper {
+    display: flex !important;
+    flex-direction: column;
   }
 
   .voteCardVoteCount {
@@ -55,9 +93,18 @@
     width: 33%;
   }
 
-  .voteCardHeaderText {
+  .voteCardHeaderTextEn {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .voteCardHeaderTextNonEn {
     margin-left: auto;
     margin-right: auto;
     font-size: 16px;
+  }
+
+  .nounProfilePics {
+    display: none;
   }
 }

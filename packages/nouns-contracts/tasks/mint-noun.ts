@@ -1,3 +1,4 @@
+import { Result } from 'ethers/lib/utils';
 import { task, types } from 'hardhat/config';
 
 task('mint-noun', 'Mints a Noun')
@@ -13,7 +14,7 @@ task('mint-noun', 'Mints a Noun')
 
     const receipt = await (await nftContract.mint()).wait();
     const nounCreated = receipt.events?.[1];
-    const { tokenId } = nounCreated?.args;
+    const { tokenId } = nounCreated?.args as Result;
 
     console.log(`Noun minted with ID: ${tokenId.toString()}.`);
   });

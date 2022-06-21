@@ -95,7 +95,7 @@ const selectProposalText = (proposal: Proposal) => {
       return <Trans>Defeated</Trans>;
     case ProposalState.QUEUED:
       return <Trans>Queued</Trans>;
-    case ProposalState.CANCELED:
+    case ProposalState.CANCELLED:
       return <Trans>Canceled</Trans>;
     case ProposalState.VETOED:
       return <Trans>Vetoed</Trans>;

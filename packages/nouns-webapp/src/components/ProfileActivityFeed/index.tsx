@@ -4,7 +4,7 @@ import Section from '../../layout/Section';
 import classes from './ProfileActivityFeed.module.css';
 
 import { useQuery } from '@apollo/client';
-import { Proposal, useAllProposals } from '../../wrappers/nounsDao';
+import { Proposal, ProposalState, useAllProposals } from '../../wrappers/nounsDao';
 import { createTimestampAllProposals, nounVotingHistoryQuery } from '../../wrappers/subgraph';
 import NounProfileVoteRow from '../NounProfileVoteRow';
 import { LoadingNoun } from '../Noun';
@@ -65,11 +65,22 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
     }, {});
 
   const filteredProposals = proposals.filter((p: Proposal, id: number) => {
-    return (
-      parseInt(proposalCreatedTimestamps.proposals[id].createdTimestamp) >
-        nounCanVoteTimestamp.toNumber() ||
-      (p.id && nounVotes[p.id])
+    const proposalCreationTimestamp = parseInt(
+      proposalCreatedTimestamps.proposals[id].createdTimestamp,
     );
+
+    // Filter props from before the Noun was born
+    if (nounCanVoteTimestamp.gt(proposalCreationTimestamp)) {
+      return false;
+    }
+    // Filter props which were cancelled and got 0 votes of any kind
+    if (
+      p.status === ProposalState.CANCELLED &&
+      p.forCount + p.abstainCount + p.againstCount === 0
+    ) {
+      return false;
+    }
+    return true;
   });
 
   return (
