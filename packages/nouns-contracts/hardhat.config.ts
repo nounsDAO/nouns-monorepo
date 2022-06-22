@@ -57,7 +57,5 @@ const config: HardhatUserConfig = {
   mocha: {
     timeout: 60_000,
   },
-  // Avoid foundry cache conflict.
-  paths: { cache: 'hh-cache' },
 };
 export default config;

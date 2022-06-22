@@ -3,7 +3,6 @@ parts.html
 
 #Hardhat files
 cache
-hh-cache
 artifacts
 typechain
 .openzeppelin
@@ -22,3 +21,7 @@ abi/contracts/governance
 abi/contracts/interfaces
 abi/contracts/proxies
 abi/contracts/test
+
+# Foundry
+foundry-out
+foundry-cache
