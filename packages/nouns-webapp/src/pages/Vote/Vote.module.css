@@ -133,6 +133,7 @@
   cursor: pointer;
   transition: ease-in-out 125ms;
   width: fit-content;
+  margin-left: 0.1rem;
 }
 
 .toggleDelegateVoteView:hover {

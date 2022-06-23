@@ -1099,6 +1099,10 @@ msgid "s"
 msgstr "秒"
 
 #: src/components/VoteCard/index.tsx
+msgid "{0} <0>Address </0>"
+msgstr "{0}<0>イーサリアムアドレス</0>"
+
+#: src/components/VoteCard/index.tsx
 msgid "{0} <0>Addresses</0>"
 msgstr "{0}<0>イーサリアムアドレス</0>"
 
