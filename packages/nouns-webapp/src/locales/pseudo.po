@@ -1094,7 +1094,11 @@ msgid "s"
 msgstr ""
 
 #: src/components/VoteCard/index.tsx
-msgid "{0} <0>Address </0>"
+#~ msgid "{0} <0>Address </0>"
+#~ msgstr ""
+
+#: src/components/VoteCard/index.tsx
+msgid "{0} <0>Address</0>"
 msgstr ""
 
 #: src/components/VoteCard/index.tsx
