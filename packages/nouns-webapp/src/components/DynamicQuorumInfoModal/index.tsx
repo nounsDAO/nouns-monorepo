@@ -12,69 +12,35 @@ import clsx from 'clsx';
 import { ChartBounds, makeSmoothSVGChart, pointsPositionsCalc } from '../../utils/svgChartingUtils';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 
-/**
- * Solves for 1st quadrent root of this DQM quadratic
- * @param linearCoeffient
- * @param quadraticCoefficent
- */
-const solveForPositiveRootDQM = (
-  linearCoeffient: number,
-  quadraticCoefficent: number,
-  constantTerm: number,
-) => {
-  const root =
-    (-linearCoeffient +
-      Math.sqrt(Math.pow(linearCoeffient, 2) - 4 * quadraticCoefficent * constantTerm)) /
-    (2 * quadraticCoefficent);
-  console.log(root);
-  return root;
-};
-
-/**
- * Helper function to generate points (in SVG space) that represent our dynamic quorum curve
- * @param minQuorumBps
- * @param maxQuorumBps
- * @param height
- * @param width
- * @param linearCoefficent
- * @param quadraticCoefficent
- * @param numPoints
- */
 const generatePointsForSVGChart = (
   minQuorumBps: number,
   maxQuorumBps: number,
   height: number,
   width: number,
-  linearCoefficent: number,
-  quadraticCoefficent: number,
-  offsetBps: number,
+  quorumCoefficent: number,
   numPoints: number,
 ) => {
-  const positiveRootDQMPolynomial = solveForPositiveRootDQM(
-    linearCoefficent,
-    quadraticCoefficent,
-    minQuorumBps - maxQuorumBps,
-  );
+  const linearToConstantCrossoverBPS = (maxQuorumBps - minQuorumBps) / quorumCoefficent; 
   // Space x points equally in [0, posDQMPolynomialRoot]
   // We do this to get a dense sample of the function in the range it's most interesting
   let xPoints = Array.from({ length: numPoints }, (_, i) =>
-    Math.floor(i * (Math.ceil(positiveRootDQMPolynomial) / numPoints)),
+    Math.floor(i * (Math.ceil(linearToConstantCrossoverBPS) / numPoints)),
   );
   for (let i = 0; i < 500; i++) {
-    xPoints.push(positiveRootDQMPolynomial + i);
+    xPoints.push(linearToConstantCrossoverBPS + i);
   }
-  xPoints.push(positiveRootDQMPolynomial * 2);
-  xPoints.push(positiveRootDQMPolynomial * 2.5);
+  xPoints.push(linearToConstantCrossoverBPS * 2);
+  xPoints.push(linearToConstantCrossoverBPS * 2.5);
   xPoints.push(5000);
   xPoints.push(10_000);
   xPoints.push(8_000);
 
+  const dqmFunction = (bps: number) => {
+    return Math.min(minQuorumBps + quorumCoefficent * bps, maxQuorumBps);
+  };
+
   const yPoints = xPoints.map((againstVotesBPS: number) => {
-    const adjustedAgainstVotesBps = againstVotesBPS > offsetBps ? againstVotesBPS - offsetBps : 0;
-    const quorumAdjustementBps =
-      quadraticCoefficent * Math.pow(adjustedAgainstVotesBps, 2) +
-      linearCoefficent * adjustedAgainstVotesBps;
-    return Math.min(minQuorumBps + quorumAdjustementBps, maxQuorumBps);
+    return dqmFunction(againstVotesBPS);
   });
 
   const points = xPoints.map((x: number, i: number) => {
@@ -96,9 +62,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
   againstVotesAbs: number;
   minQuorumBps: number;
   maxQuorumBps: number;
-  quadraticCoefficent: number;
-  linearCoefficent: number;
-  offsetBps: number;
+  quorumCoefficent: number;
   totalNounSupply: number;
   onDismiss: () => void;
 }> = props => {
@@ -107,32 +71,23 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
     proposal,
     againstVotesAbs,
     againstVotesBps,
+    quorumCoefficent,
     minQuorumBps,
     maxQuorumBps,
-    quadraticCoefficent,
-    linearCoefficent,
-    offsetBps,
     totalNounSupply,
   } = props;
 
-  const positiveRootDQMPolynomial = solveForPositiveRootDQM(
-    linearCoefficent,
-    quadraticCoefficent,
-    minQuorumBps - maxQuorumBps,
-  );
+  const linearToConstantCrossoverBPS = (maxQuorumBps - minQuorumBps) / quorumCoefficent; 
+
+  const dqmFunction = (bps: number) => {
+    return Math.min(minQuorumBps + quorumCoefficent * bps, maxQuorumBps);
+  };
+
   const options = {
     xMax: 10_000,
     xMin: 0,
     yMax: 1.06 * maxQuorumBps,
     yMin: 0.87 * minQuorumBps,
-  };
-
-  const dqmFunction = (bps: number) => {
-    const adjustedAgainstVotesBps = bps > offsetBps ? bps - offsetBps : 0;
-    const quorumAdjustementBps =
-      quadraticCoefficent * Math.pow(adjustedAgainstVotesBps, 2) +
-      linearCoefficent * adjustedAgainstVotesBps;
-    return Math.min(minQuorumBps + quorumAdjustementBps, maxQuorumBps);
   };
 
   const againstVotesLabelLineStart = pointsPositionsCalc(
@@ -149,6 +104,8 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
     options,
   );
 
+
+  console.log("DQM FUNCITON: ", dqmFunction(againstVotesBps));
   return (
     <>
       <div className={classes.closeBtnWrapper}>
@@ -208,9 +165,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
 
               {/* Inner graph container */}
               <div className={clsx(classes.graphContainer, classes.innerGraphContainer)}>
-                {/* SVG GOES HERE */}
-                {/* <svg width="100%" height="320"> */}
-                <svg width="950" height="320">
+              <svg width="950" height="320">
                   <line
                     x1="0"
                     y1={0.9 * 320}
@@ -236,9 +191,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                         maxQuorumBps,
                         320,
                         950, // TODO
-                        linearCoefficent,
-                        quadraticCoefficent,
-                        offsetBps,
+                        quorumCoefficent,
                         100,
                       )}
                     />
@@ -272,9 +225,11 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                   <text x="20" y="24">
                     Max Quorum: {Math.floor((maxQuorumBps * totalNounSupply) / 10_000)} Nouns
                   </text>
+
                   <text x="195" y="24" fill="var(--brand-gray-light-text)">
                     ({maxQuorumBps / 100}% of Nouns)
                   </text>
+
                   {Math.abs(againstVotesLabelLineEnd[0][1] - 10 - 288) > 100 ? (
                     <>
                       <text x="20" y="280">
@@ -309,14 +264,9 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                       x={againstVotesLabelLineEnd[0][0] - 390}
                       y={
                         againstVotesLabelLineEnd[0][1] +
-                        (againstVotesBps > 0.9 * positiveRootDQMPolynomial ? 20 : -10)
+                        (againstVotesBps > 0.9 * linearToConstantCrossoverBPS ? 20 : -10)
                       }
                     >
-                      {/* Nouns Currently Against: {againstVotesAbs} → Current Quorum:{' '}
-                      {Math.floor(
-                        (Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) * totalNounSupply) /
-                          10_000,
-                      )} */}
                       Current Quorum: {Math.floor(
                         (Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) * totalNounSupply) /
                           10_000,
@@ -327,14 +277,9 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                       x={againstVotesLabelLineEnd[0][0] + 10}
                       y={
                         againstVotesLabelLineEnd[0][1] +
-                        (againstVotesBps > 0.9 * positiveRootDQMPolynomial ? 20 : -10)
+                        (againstVotesBps > 0.9 * linearToConstantCrossoverBPS ? 20 : -10)
                       }
                     >
-                      {/* Nouns Currently Against: {againstVotesAbs} → Current Quorum:{' '}
-                      {Math.floor(
-                        (Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) * totalNounSupply) /
-                          10_000,
-                      )} */}
                         Current Quorum: {Math.floor(
                         (Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) * totalNounSupply) /
                           10_000,
@@ -345,10 +290,10 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                   {
                     againstVotesBps > 4000 ? (
                       <text 
-                      x={againstVotesLabelLineEnd[0][0] - 390 + 145}
+                      x={againstVotesLabelLineEnd[0][0] - 390 + 155}
                       y={
                         againstVotesLabelLineEnd[0][1] +
-                        (againstVotesBps > 0.9 * positiveRootDQMPolynomial ? 20 : -10)
+                        (againstVotesBps > 0.9 * linearToConstantCrossoverBPS ? 20 : -10)
                       }
                       fill="var(--brand-gray-light-text)" 
                      >({againstVotesAbs} Nouns Currently Against)</text>
@@ -357,12 +302,15 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                       x={againstVotesLabelLineEnd[0][0] + 10 + 145}
                       y={
                         againstVotesLabelLineEnd[0][1] +
-                        (againstVotesBps > 0.9 * positiveRootDQMPolynomial ? 20 : -10)
+                        (againstVotesBps > 0.9 * linearToConstantCrossoverBPS ? 20 : -10)
                       }
                       fill="var(--brand-gray-light-text)"
                       >({againstVotesAbs} Nouns Currently Against)</text>
                     )
                   }
+
+                  {
+                    againstVotesAbs > 0 && (
                   <text
                     x={againstVotesLabelLineEnd[0][0] + 10}
                     y={310}
@@ -370,16 +318,19 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                   >
                     {Math.floor(againstVotesBps / 100)}% of Nouns
                   </text>
-
-
-                  <text
+                    )
+                  }
+                  {
+                    againstVotesBps >= .1*maxQuorumBps && (
+                      <text
                     x={4}
                     y={310}
                     fill="var(--brand-gray-light-text)"
                   >
                     0%
-                  </text>
-
+                  </text> 
+                    )
+                  }
                   <text
                     x={905}
                     y={310}
@@ -434,7 +385,7 @@ const DynamicQuorumInfoModal: React.FC<{
     return <></>;
   }
 
-  // Polynomial coeffients are represented as fixed point number multiplied by 1e6, thus we need to divide by this number to rescale them
+  // coeffient is represented as fixed point number multiplied by 1e6, thus we need to divide by this number to rescale it 
   const scalingFactor = 1_000_000;
 
   return (
@@ -445,21 +396,15 @@ const DynamicQuorumInfoModal: React.FC<{
       )}
       {ReactDOM.createPortal(
         <DynamicQuorumInfoModalOverlay
-          againstVotesBps={Math.floor((againstVotesAbsolute / data.proposals[0].totalSupply) * 10_000)}
+          againstVotesBps={Math.floor((againstVotesAbsolute / data.proposals[0].totalSupply ) * 10_000)}
           againstVotesAbs={againstVotesAbsolute}
           minQuorumBps={dynamicQuorumProps?.minQuorumVotesBPS ?? 0}
           maxQuorumBps={dynamicQuorumProps?.maxQuorumVotesBPS ?? 0}
-          quadraticCoefficent={
-            dynamicQuorumProps?.quorumQuadraticCoefficient
-              ? dynamicQuorumProps?.quorumQuadraticCoefficient / scalingFactor
+          quorumCoefficent={
+            dynamicQuorumProps?.quorumCoefficient
+              ? dynamicQuorumProps?.quorumCoefficient / scalingFactor
               : 0
           }
-          linearCoefficent={
-            dynamicQuorumProps?.quorumLinearCoefficient
-              ? dynamicQuorumProps?.quorumLinearCoefficient / scalingFactor
-              : 0
-          }
-          offsetBps={dynamicQuorumProps?.quorumVotesBPSOffset ?? 0}
           onDismiss={onDismiss}
           proposal={proposal}
           totalNounSupply={data.proposals[0].totalSupply}

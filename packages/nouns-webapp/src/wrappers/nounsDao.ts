@@ -120,9 +120,7 @@ export interface ProposalTransaction {
 export interface DynamicQuorumParams {
   minQuorumVotesBPS: number;
   maxQuorumVotesBPS: number;
-  quorumVotesBPSOffset: number;
-  quorumLinearCoefficient: number;
-  quorumQuadraticCoefficient: number;
+  quorumCoefficient: number;
 }
 
 const abi = new utils.Interface(NounsDAOABI);
@@ -265,6 +263,7 @@ export const useDynamicQuorumProps = (
   nounsDao: string,
   block: number,
 ): DynamicQuorumParams | undefined => {
+  console.log("DAO ADDR: ", nounsDao);
   const [params] =
     useContractCall<[DynamicQuorumParams]>({
       abi: abiV2,
@@ -272,6 +271,8 @@ export const useDynamicQuorumProps = (
       method: 'getDynamicQuorumParamsAt',
       args: [block],
     }) || [];
+
+  console.log("inner params", params);
   return params;
 };
 
@@ -333,6 +334,16 @@ const getProposalState = (
   proposal: ProposalSubgraphEntity,
 ) => {
   const status = ProposalState[proposal.status];
+  if (status === ProposalState.PENDING) {
+    if (!blockNumber) {
+      return ProposalState.UNDETERMINED;
+    }
+    if (blockNumber <= parseInt(proposal.startBlock)) {
+      return ProposalState.PENDING;
+    }
+    return ProposalState.ACTIVE;
+  }
+
   if (status === ProposalState.ACTIVE) {
     if (!blockNumber) {
       return ProposalState.UNDETERMINED;

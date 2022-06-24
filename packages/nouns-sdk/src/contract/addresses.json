@@ -21,7 +21,7 @@
     "nounsAuctionHouseProxyAdmin": "0x16F2c5Ed7dd7Ee6572837808600C7D1E5f402020",
     "nounsDaoExecutor": "0x2a852c4c228bC4BAbaDd9b9E4578213f93366970",
     "nounsDAOProxy": "0xdA9980515FEaEB06E2770D5DeccBD050AA02fFF4",
-    "nounsDAOLogicV1": "0xe86Af04fb311D5917cDf6C5cD463a849AC2Fed00"
+    "nounsDAOLogicV1": "0x5D24DA2edf5e90dB97521de276Ff9AEaAFB9628e"
   },
   "31337": {
     "nounsToken": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
