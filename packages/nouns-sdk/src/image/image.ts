@@ -142,28 +142,23 @@ export class Image {
   private updateImageBounds(y: number): void {
     const { rects } = this._rows[y];
 
-    // Shift top bound to `y` if row is not empty and top bound is 0
-    if (!this.isEmptyRow(rects[0]) && this._bounds.top === 0) {
-      this._bounds.top = y;
+    // If this row is empty and currently the top, push top one row down
+    if (this.isEmptyRow(rects[0]) && this._bounds.top === y) {
+      this._bounds.top = y + 1;
     }
 
-    if (this._bounds.top !== 0) {
-      // Set bottom bound to `y` if row is empty or we're on the last row.
-      // Otherwise, reset the bottom bound
-      if (this.isEmptyRow(rects[0])) {
-        if (this._bounds.bottom === 0) {
-          this._bounds.bottom = y - 1;
-        }
-      } else if (y === 31) {
-        this._bounds.bottom = y;
-      } else {
-        this._bounds.bottom = 0;
-      }
+    // If this row isn't empty, set it as the bottom (assumes going through rows from top to bottom)
+    if (!this.isEmptyRow(rects[0])) {
+      this._bounds.bottom = y;
     }
 
+    const lastRect = rects[rects.length - 1];
     this._rows[y].bounds = {
-      left: rects[0].length,
-      right: this._width - rects[rects.length - 1].length,
+      // if first rect is transparent, next one is not (weak assumption!), otherwise start from 0
+      left: rects[0].colorIndex === 0 ? rects[0].length : 0,
+
+      // if last rect is transparent, prev one is not (week assumption), otherwise it's this._width -1
+      right: lastRect.colorIndex === 0 ? this._width - lastRect.length : this._width,
     };
   }
 

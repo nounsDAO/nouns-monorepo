@@ -1,5 +1,8 @@
 {
-  "bgcolors": ["d5d7e1", "e1d7d5"],
+  "bgcolors": [
+    "d5d7e1",
+    "e1d7d5"
+  ],
   "palette": [
     "",
     "ffffff",
@@ -648,7 +651,7 @@
       },
       {
         "filename": "accessory-none",
-        "data": "0x0000000000"
+        "data": "0x0020000000"
       },
       {
         "filename": "accessory-oldshirt",
