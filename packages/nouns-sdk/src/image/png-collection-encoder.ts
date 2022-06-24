@@ -33,13 +33,12 @@ export class PNGCollectionEncoder implements IEncoder {
 
   /**
    * Decode a PNG image and re-encode using a custom run-length encoding
-   * @param image The image name
+   * @param name The image name
    * @param png The png image data
    * @param folder An optional containing folder name
    */
   public encodeImage(name: string, png: PngImage, folder?: string): string {
-    const image = new Image(png.width, png.height);
-    const rle = image.toRLE((x, y) => png.rgbaAt(x, y), this._colors);
+    const rle = new Image().toRLE(png.data, (x, y) => png.rgbaAt(x, y), this._colors);
 
     this._images.set(name, rle);
 

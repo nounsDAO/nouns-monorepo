@@ -50,7 +50,6 @@ export interface ImageData {
 }
 
 export interface PngImage {
-  width: number;
-  height: number;
+  data: Buffer;
   rgbaAt(x: number, y: number): RGBAColor;
 }
