@@ -38,7 +38,7 @@ export class PNGCollectionEncoder implements IEncoder {
    * @param folder An optional containing folder name
    */
   public encodeImage(name: string, png: PngImage, folder?: string): string {
-    const rle = new Image().toRLE(png.data, (x, y) => png.rgbaAt(x, y), this._colors);
+    const rle = Image.toRLE(png.data, (x, y) => png.rgbaAt(x, y), this._colors);
 
     this._images.set(name, rle);
 

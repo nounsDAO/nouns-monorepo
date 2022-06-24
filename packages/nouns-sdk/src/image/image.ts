@@ -8,34 +8,14 @@ import { rgbToHex, toPaddedHex } from './utils';
  * Palette Index, Bounds [Top (Y), Right (X), Bottom (Y), Left (X)] (4 Bytes), [Pixel Length (1 Byte), Color Index (1 Byte)][].
  */
 export class Image {
-  private _rle: string | undefined;
-
   /**
-   * Convert an image to a run-length encoded string using the provided RGBA
+   * Convert a PNG image to a run-length encoded string using the provided RGBA
    * and color palette values.
    * @param png The PNG image data
    * @param getRgbaAt A function used to fetch the RGBA values at specific x-y coordinates
    * @param colors The color palette map
    */
-  public toRLE(
-    png: Buffer,
-    getRgbaAt: (x: number, y: number) => RGBAColor,
-    colors: Map<string, number>,
-  ): string {
-    if (!this._rle) {
-      this._rle = this.encode(png, getRgbaAt, colors);
-    }
-    return this._rle;
-  }
-
-  /**
-   * Using the image pixel inforation, run-length encode an image.
-   * @param png The PNG image data
-   * @param png A function used to fetch the RGBA values at specific x-y coordinates
-   * @param getRgbaAt A function used to fetch the RGBA values at specific x-y coordinates
-   * @param colors The color palette map
-   */
-  private encode(
+  public static toRLE(
     png: Buffer,
     getRgbaAt: (x: number, y: number) => RGBAColor,
     colors: Map<string, number>,
@@ -58,35 +38,43 @@ export class Image {
       }
     }
 
-    console.log(indexes);
-
-    const encode = (data: number[]) => {
-      const encoding: string[] = [];
-      let previous = data[0];
-      let count = 1;
-    
-      for (let i = 1; i < data.length; i++) {
-        if (data[i] !== previous) {
-          encoding.push(toPaddedHex(count), toPaddedHex(previous));
-          count = 1;
-          previous = data[i];
-        } else {
-          count++;
-        }
-      }
-      return encoding.join('');
-    }
-
-    const paletteIndex = toPaddedHex(0, 2);
-    const top = toPaddedHex(bounds.y, 2);
-    const right = toPaddedHex(bounds.x + bounds.width, 2);
-    const bottom = toPaddedHex(bounds.y + bounds.height, 2);
-    const left = toPaddedHex(bounds.x, 2);
-
-    return `0x${paletteIndex}${top}${right}${bottom}${left}${encode(indexes)}`
+    // [palette_index, top, right, bottom, left]
+    const metadata = [0, bounds.y, bounds.x + bounds.width, bounds.y + bounds.height, bounds.x].map(
+      v => toPaddedHex(v),
+    );
+    return `0x${metadata.join('')}${this.encode(indexes)}`;
   }
 
-  private getContentBounds(buffer: Buffer) {
+  /**
+   * Given a numeric array, return a string of padded hex run-length encoded values
+   * @param data The numeric array to run-length encode
+   */
+  private static encode(data: number[]) {
+    const encoding: string[] = [];
+    let previous = data[0];
+    let count = 1;
+
+    for (let i = 1; i < data.length; i++) {
+      if (data[i] !== previous) {
+        encoding.push(toPaddedHex(count), toPaddedHex(previous));
+        count = 1;
+        previous = data[i];
+      } else {
+        count++;
+      }
+    }
+
+    if (previous !== undefined) {
+      encoding.push(toPaddedHex(count), toPaddedHex(previous));
+    }
+    return encoding.join('');
+  }
+
+  /**
+   * Get the bounds of the content in a PNG
+   * @param buffer The PNG image data
+   */
+  private static getContentBounds(buffer: Buffer) {
     const png = PNG.sync.read(buffer);
     const { width, height, data } = png;
     const bound = {
@@ -131,7 +119,6 @@ export class Image {
           });
         }
       }
-
       return borders;
     };
 
@@ -156,7 +143,6 @@ export class Image {
     } else if (v[0].transparent) {
       bound.height = 0;
     }
-
     return bound;
   }
 }
