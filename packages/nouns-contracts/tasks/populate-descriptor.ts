@@ -18,9 +18,9 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and No
     types.string,
   )
   .setAction(async ({ nftDescriptor, nounsDescriptor }, { ethers }) => {
-    const descriptorFactory = await ethers.getContractFactory('NounsDescriptor', {
+    const descriptorFactory = await ethers.getContractFactory('NounsDescriptorV2', {
       libraries: {
-        NFTDescriptor: nftDescriptor,
+        NFTDescriptorV2: nftDescriptor,
       },
     });
     const descriptorContract = descriptorFactory.attach(nounsDescriptor);
@@ -49,18 +49,24 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and No
       itemCount: glassesCount,
     } = dataToDescriptorInput(glasses.map(({ data }) => data));
 
-    // Chunk head and accessory population due to high gas usage
     await descriptorContract.addManyBackgrounds(bgcolors);
     await descriptorContract.setPalette(0, `0x000000${palette.join('')}`);
 
-    await descriptorContract.addBodies(bodiesCompressed, bodiesLength, bodiesCount);
+    await descriptorContract.addBodies(bodiesCompressed, bodiesLength, bodiesCount, {
+      gasLimit: 30_000_000,
+    });
+    await descriptorContract.addHeads(headsCompressed, headsLength, headsCount, {
+      gasLimit: 30_000_000,
+    });
+    await descriptorContract.addGlasses(glassesCompressed, glassesLength, glassesCount, {
+      gasLimit: 30_000_000,
+    });
     await descriptorContract.addAccessories(
       accessoriesCompressed,
       accessoriesLength,
       accessoriesCount,
+      { gasLimit: 30_000_000 },
     );
-    await descriptorContract.addHeads(headsCompressed, headsLength, headsCount);
-    await descriptorContract.addGlasses(glassesCompressed, glassesLength, glassesCount);
 
     console.log('Descriptor populated with palettes and parts.');
   });

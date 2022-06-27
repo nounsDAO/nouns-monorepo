@@ -17,8 +17,8 @@ task('update-configs', 'Write the deployed addresses to the SDK and subgraph con
       addresses[chainId] = {
         nounsToken: contracts.NounsToken.address,
         nounsSeeder: contracts.NounsSeeder.address,
-        nounsDescriptor: contracts.NounsDescriptor.address,
-        nftDescriptor: contracts.NFTDescriptor.address,
+        nounsDescriptor: contracts.NounsDescriptorV2.address,
+        nftDescriptor: contracts.NFTDescriptorV2.address,
         nounsAuctionHouse: contracts.NounsAuctionHouse.address,
         nounsAuctionHouseProxy: contracts.NounsAuctionHouseProxy.address,
         nounsAuctionHouseProxyAdmin: contracts.NounsAuctionHouseProxyAdmin.address,

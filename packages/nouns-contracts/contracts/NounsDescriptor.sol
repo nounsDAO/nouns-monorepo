@@ -22,8 +22,7 @@ import { Strings } from '@openzeppelin/contracts/utils/Strings.sol';
 import { INounsDescriptor } from './interfaces/INounsDescriptor.sol';
 import { INounsSeeder } from './interfaces/INounsSeeder.sol';
 import { NFTDescriptor } from './libs/NFTDescriptor.sol';
-import { ISVGRenderer } from './interfaces/ISVGRenderer.sol';
-import { INounsArt } from './interfaces/INounsArt.sol';
+import { MultiPartRLEToSVG } from './libs/MultiPartRLEToSVG.sol';
 
 contract NounsDescriptor is INounsDescriptor, Ownable {
     using Strings for uint256;
@@ -31,12 +30,6 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     // prettier-ignore
     // https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt
     bytes32 constant COPYRIGHT_CC0_1_0_UNIVERSAL_LICENSE = 0xa2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499;
-
-    // The contract responsible for holding compressed Noun art
-    INounsArt public art;
-
-    // The contract responsible for constructing SVGs
-    ISVGRenderer public renderer;
 
     // Whether or not new Noun parts can be added
     bool public override arePartsLocked;
@@ -47,6 +40,24 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     // Base URI
     string public override baseURI;
 
+    // Noun Color Palettes (Index => Hex Colors)
+    mapping(uint8 => string[]) public override palettes;
+
+    // Noun Backgrounds (Hex Colors)
+    string[] public override backgrounds;
+
+    // Noun Bodies (Custom RLE)
+    bytes[] public override bodies;
+
+    // Noun Accessories (Custom RLE)
+    bytes[] public override accessories;
+
+    // Noun Heads (Custom RLE)
+    bytes[] public override heads;
+
+    // Noun Glasses (Custom RLE)
+    bytes[] public override glasses;
+
     /**
      * @notice Require that the parts have not been locked.
      */
@@ -55,64 +66,50 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         _;
     }
 
-    constructor(INounsArt _art, ISVGRenderer _renderer) {
-        art = _art;
-        renderer = _renderer;
-    }
-
-    /**
-     * @notice Set the Noun's art contract.
-     * Only callable by the owner when not locked.
-     */
-    function setArt(INounsArt _art) external onlyOwner whenPartsNotLocked {
-        art = _art;
-
-        emit ArtUpdated(_art);
-    }
-
-    /**
-     * @notice Set the SVG renderer.
-     * @dev Only callable by the owner.
-     */
-    function setRenderer(ISVGRenderer _renderer) external onlyOwner {
-        renderer = _renderer;
-
-        emit RendererUpdated(_renderer);
-    }
-
     /**
      * @notice Get the number of available Noun `backgrounds`.
      */
     function backgroundCount() external view override returns (uint256) {
-        return art.backgroundsCount();
+        return backgrounds.length;
     }
 
     /**
      * @notice Get the number of available Noun `bodies`.
      */
     function bodyCount() external view override returns (uint256) {
-        return art.bodiesTrait().storedImagesCount;
+        return bodies.length;
     }
 
     /**
      * @notice Get the number of available Noun `accessories`.
      */
     function accessoryCount() external view override returns (uint256) {
-        return art.accessoriesTrait().storedImagesCount;
+        return accessories.length;
     }
 
     /**
      * @notice Get the number of available Noun `heads`.
      */
     function headCount() external view override returns (uint256) {
-        return art.headsTrait().storedImagesCount;
+        return heads.length;
     }
 
     /**
      * @notice Get the number of available Noun `glasses`.
      */
     function glassesCount() external view override returns (uint256) {
-        return art.glassesTrait().storedImagesCount;
+        return glasses.length;
+    }
+
+    /**
+     * @notice Add colors to a color palette.
+     * @dev This function can only be called by the owner.
+     */
+    function addManyColorsToPalette(uint8 paletteIndex, string[] calldata newColors) external override onlyOwner {
+        require(palettes[paletteIndex].length + newColors.length <= 256, 'Palettes can only hold 256 colors');
+        for (uint256 i = 0; i < newColors.length; i++) {
+            _addColorToPalette(paletteIndex, newColors[i]);
+        }
     }
 
     /**
@@ -120,7 +117,58 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
      * @dev This function can only be called by the owner when not locked.
      */
     function addManyBackgrounds(string[] calldata _backgrounds) external override onlyOwner whenPartsNotLocked {
-        art.addManyBackgrounds(_backgrounds);
+        for (uint256 i = 0; i < _backgrounds.length; i++) {
+            _addBackground(_backgrounds[i]);
+        }
+    }
+
+    /**
+     * @notice Batch add Noun bodies.
+     * @dev This function can only be called by the owner when not locked.
+     */
+    function addManyBodies(bytes[] calldata _bodies) external override onlyOwner whenPartsNotLocked {
+        for (uint256 i = 0; i < _bodies.length; i++) {
+            _addBody(_bodies[i]);
+        }
+    }
+
+    /**
+     * @notice Batch add Noun accessories.
+     * @dev This function can only be called by the owner when not locked.
+     */
+    function addManyAccessories(bytes[] calldata _accessories) external override onlyOwner whenPartsNotLocked {
+        for (uint256 i = 0; i < _accessories.length; i++) {
+            _addAccessory(_accessories[i]);
+        }
+    }
+
+    /**
+     * @notice Batch add Noun heads.
+     * @dev This function can only be called by the owner when not locked.
+     */
+    function addManyHeads(bytes[] calldata _heads) external override onlyOwner whenPartsNotLocked {
+        for (uint256 i = 0; i < _heads.length; i++) {
+            _addHead(_heads[i]);
+        }
+    }
+
+    /**
+     * @notice Batch add Noun glasses.
+     * @dev This function can only be called by the owner when not locked.
+     */
+    function addManyGlasses(bytes[] calldata _glasses) external override onlyOwner whenPartsNotLocked {
+        for (uint256 i = 0; i < _glasses.length; i++) {
+            _addGlasses(_glasses[i]);
+        }
+    }
+
+    /**
+     * @notice Add a single color to a color palette.
+     * @dev This function can only be called by the owner.
+     */
+    function addColorToPalette(uint8 _paletteIndex, string calldata _color) external override onlyOwner {
+        require(palettes[_paletteIndex].length <= 255, 'Palettes can only hold 256 colors');
+        _addColorToPalette(_paletteIndex, _color);
     }
 
     /**
@@ -128,193 +176,39 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
      * @dev This function can only be called by the owner when not locked.
      */
     function addBackground(string calldata _background) external override onlyOwner whenPartsNotLocked {
-        art.addBackground(_background);
+        _addBackground(_background);
     }
 
     /**
-     * @notice Update a single color palette. This function can be used to
-     * add a new color palette or update an existing palette.
+     * @notice Add a Noun body.
+     * @dev This function can only be called by the owner when not locked.
      */
-    function setPalette(uint8 paletteIndex, bytes calldata palette) external override onlyOwner {
-        art.setPalette(paletteIndex, palette);
+    function addBody(bytes calldata _body) external override onlyOwner whenPartsNotLocked {
+        _addBody(_body);
     }
 
     /**
-     * @notice Add a batch of body images.
-     * @param encodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
-     * and finally compressing it using deflate.
-     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
-     * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @notice Add a Noun accessory.
+     * @dev This function can only be called by the owner when not locked.
      */
-    function addBodies(
-        bytes calldata encodedCompressed,
-        uint80 decompressedLength,
-        uint16 imageCount
-    ) external override onlyOwner {
-        art.addBodies(encodedCompressed, decompressedLength, imageCount);
+    function addAccessory(bytes calldata _accessory) external override onlyOwner whenPartsNotLocked {
+        _addAccessory(_accessory);
     }
 
     /**
-     * @notice Add a batch of accessory images.
-     * @param encodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
-     * and finally compressing it using deflate.
-     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
-     * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @notice Add a Noun head.
+     * @dev This function can only be called by the owner when not locked.
      */
-    function addAccessories(
-        bytes calldata encodedCompressed,
-        uint80 decompressedLength,
-        uint16 imageCount
-    ) external override onlyOwner {
-        art.addAccessories(encodedCompressed, decompressedLength, imageCount);
+    function addHead(bytes calldata _head) external override onlyOwner whenPartsNotLocked {
+        _addHead(_head);
     }
 
     /**
-     * @notice Add a batch of head images.
-     * @param encodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
-     * and finally compressing it using deflate.
-     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
-     * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @notice Add Noun glasses.
+     * @dev This function can only be called by the owner when not locked.
      */
-    function addHeads(
-        bytes calldata encodedCompressed,
-        uint80 decompressedLength,
-        uint16 imageCount
-    ) external override onlyOwner {
-        art.addHeads(encodedCompressed, decompressedLength, imageCount);
-    }
-
-    /**
-     * @notice Add a batch of glasses images.
-     * @param encodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
-     * and finally compressing it using deflate.
-     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
-     * @param imageCount the number of images in this batch; used when searching for images among batches.
-     */
-    function addGlasses(
-        bytes calldata encodedCompressed,
-        uint80 decompressedLength,
-        uint16 imageCount
-    ) external override onlyOwner {
-        art.addGlasses(encodedCompressed, decompressedLength, imageCount);
-    }
-
-    /**
-     * @notice Add a batch of body images from an existing storage contract.
-     * @param pointer the address of a contract where the image batch was stored using SSTORE2. The data
-     * format is expected to be like {encodedCompressed}: bytes created by taking a string array of
-     * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
-     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
-     * @param imageCount the number of images in this batch; used when searching for images among batches.
-     */
-    function addBodiesFromPointer(
-        address pointer,
-        uint80 decompressedLength,
-        uint16 imageCount
-    ) external override onlyOwner {
-        art.addBodiesFromPointer(pointer, decompressedLength, imageCount);
-    }
-
-    /**
-     * @notice Add a batch of accessory images from an existing storage contract.
-     * @param pointer the address of a contract where the image batch was stored using SSTORE2. The data
-     * format is expected to be like {encodedCompressed}: bytes created by taking a string array of
-     * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
-     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
-     * @param imageCount the number of images in this batch; used when searching for images among batches.
-     */
-    function addAccessoriesFromPointer(
-        address pointer,
-        uint80 decompressedLength,
-        uint16 imageCount
-    ) external override onlyOwner {
-        art.addAccessoriesFromPointer(pointer, decompressedLength, imageCount);
-    }
-
-    /**
-     * @notice Add a batch of head images from an existing storage contract.
-     * @param pointer the address of a contract where the image batch was stored using SSTORE2. The data
-     * format is expected to be like {encodedCompressed}: bytes created by taking a string array of
-     * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
-     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
-     * @param imageCount the number of images in this batch; used when searching for images among batches.
-     */
-    function addHeadsFromPointer(
-        address pointer,
-        uint80 decompressedLength,
-        uint16 imageCount
-    ) external override onlyOwner {
-        art.addHeadsFromPointer(pointer, decompressedLength, imageCount);
-    }
-
-    /**
-     * @notice Add a batch of glasses images from an existing storage contract.
-     * @param pointer the address of a contract where the image batch was stored using SSTORE2. The data
-     * format is expected to be like {encodedCompressed}: bytes created by taking a string array of
-     * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
-     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
-     * @param imageCount the number of images in this batch; used when searching for images among batches.
-     */
-    function addGlassesFromPointer(
-        address pointer,
-        uint80 decompressedLength,
-        uint16 imageCount
-    ) external override onlyOwner {
-        art.addGlassesFromPointer(pointer, decompressedLength, imageCount);
-    }
-
-    /**
-     * @notice Get a background color by ID.
-     * @param index the index of the background.
-     * @return string the RGB hex value of the background.
-     */
-    function backgrounds(uint256 index) public view override returns (string memory) {
-        return art.backgrounds(index);
-    }
-
-    /**
-     * @notice Get a head image by ID.
-     * @param index the index of the head.
-     * @return bytes the RLE-encoded bytes of the image.
-     */
-    function heads(uint256 index) public view override returns (bytes memory) {
-        return art.heads(index);
-    }
-
-    /**
-     * @notice Get a body image by ID.
-     * @param index the index of the body.
-     * @return bytes the RLE-encoded bytes of the image.
-     */
-    function bodies(uint256 index) public view override returns (bytes memory) {
-        return art.bodies(index);
-    }
-
-    /**
-     * @notice Get an accessory image by ID.
-     * @param index the index of the accessory.
-     * @return bytes the RLE-encoded bytes of the image.
-     */
-    function accessories(uint256 index) public view override returns (bytes memory) {
-        return art.accessories(index);
-    }
-
-    /**
-     * @notice Get a glasses image by ID.
-     * @param index the index of the glasses.
-     * @return bytes the RLE-encoded bytes of the image.
-     */
-    function glasses(uint256 index) public view override returns (bytes memory) {
-        return art.glasses(index);
-    }
-
-    /**
-     * @notice Get a color palette by ID.
-     * @param index the index of the palette.
-     * @return bytes the palette bytes, where every 3 consecutive bytes represent a color in RGB format.
-     */
-    function palettes(uint8 index) public view override returns (bytes memory) {
-        return art.palettes(index);
+    function addGlasses(bytes calldata _glasses) external override onlyOwner whenPartsNotLocked {
+        _addGlasses(_glasses);
     }
 
     /**
@@ -384,44 +278,74 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         NFTDescriptor.TokenURIParams memory params = NFTDescriptor.TokenURIParams({
             name: name,
             description: description,
-            parts: getPartsForSeed(seed),
-            background: art.backgrounds(seed.background)
+            parts: _getPartsForSeed(seed),
+            background: backgrounds[seed.background]
         });
-        return NFTDescriptor.constructTokenURI(renderer, params);
+        return NFTDescriptor.constructTokenURI(params, palettes);
     }
 
     /**
      * @notice Given a seed, construct a base64 encoded SVG image.
      */
     function generateSVGImage(INounsSeeder.Seed memory seed) external view override returns (string memory) {
-        ISVGRenderer.SVGParams memory params = ISVGRenderer.SVGParams({
-            parts: getPartsForSeed(seed),
-            background: art.backgrounds(seed.background)
+        MultiPartRLEToSVG.SVGParams memory params = MultiPartRLEToSVG.SVGParams({
+            parts: _getPartsForSeed(seed),
+            background: backgrounds[seed.background]
         });
-        return NFTDescriptor.generateSVGImage(renderer, params);
+        return NFTDescriptor.generateSVGImage(params, palettes);
+    }
+
+    /**
+     * @notice Add a single color to a color palette.
+     */
+    function _addColorToPalette(uint8 _paletteIndex, string calldata _color) internal {
+        palettes[_paletteIndex].push(_color);
+    }
+
+    /**
+     * @notice Add a Noun background.
+     */
+    function _addBackground(string calldata _background) internal {
+        backgrounds.push(_background);
+    }
+
+    /**
+     * @notice Add a Noun body.
+     */
+    function _addBody(bytes calldata _body) internal {
+        bodies.push(_body);
+    }
+
+    /**
+     * @notice Add a Noun accessory.
+     */
+    function _addAccessory(bytes calldata _accessory) internal {
+        accessories.push(_accessory);
+    }
+
+    /**
+     * @notice Add a Noun head.
+     */
+    function _addHead(bytes calldata _head) internal {
+        heads.push(_head);
+    }
+
+    /**
+     * @notice Add Noun glasses.
+     */
+    function _addGlasses(bytes calldata _glasses) internal {
+        glasses.push(_glasses);
     }
 
     /**
      * @notice Get all Noun parts for the passed `seed`.
      */
-    function getPartsForSeed(INounsSeeder.Seed memory seed) public view returns (ISVGRenderer.Part[] memory) {
-        bytes memory _body = art.bodies(seed.body);
-        bytes memory _accessory = art.accessories(seed.accessory);
-        bytes memory _head = art.heads(seed.head);
-        bytes memory _glassesBytes = art.glasses(seed.glasses);
-
-        ISVGRenderer.Part[] memory _parts = new ISVGRenderer.Part[](4);
-        _parts[0] = ISVGRenderer.Part({ image: _body, palette: _getPalette(_body) });
-        _parts[1] = ISVGRenderer.Part({ image: _accessory, palette: _getPalette(_accessory) });
-        _parts[2] = ISVGRenderer.Part({ image: _head, palette: _getPalette(_head) });
-        _parts[3] = ISVGRenderer.Part({ image: _glassesBytes, palette: _getPalette(_glassesBytes) });
+    function _getPartsForSeed(INounsSeeder.Seed memory seed) internal view returns (bytes[] memory) {
+        bytes[] memory _parts = new bytes[](4);
+        _parts[0] = bodies[seed.body];
+        _parts[1] = accessories[seed.accessory];
+        _parts[2] = heads[seed.head];
+        _parts[3] = glasses[seed.glasses];
         return _parts;
-    }
-
-    /**
-     * @notice Get the color palette pointer for the passed part.
-     */
-    function _getPalette(bytes memory part) private view returns (bytes memory) {
-        return art.palettes(uint8(part[0]));
     }
 }

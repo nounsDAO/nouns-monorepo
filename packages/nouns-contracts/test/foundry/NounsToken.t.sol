@@ -3,7 +3,7 @@ pragma solidity ^0.8.6;
 
 import 'forge-std/Test.sol';
 import { NounsToken } from '../../contracts/NounsToken.sol';
-import { NounsDescriptor } from '../../contracts/NounsDescriptor.sol';
+import { NounsDescriptorV2 } from '../../contracts/NounsDescriptorV2.sol';
 import { NounsSeeder } from '../../contracts/NounsSeeder.sol';
 import { IProxyRegistry } from '../../contracts/external/opensea/IProxyRegistry.sol';
 import { SVGRenderer } from '../../contracts/SVGRenderer.sol';
@@ -12,7 +12,7 @@ import { INounsArt } from '../../contracts/interfaces/INounsArt.sol';
 
 contract NounsTokenTest is Test {
     NounsToken nounsToken;
-    NounsDescriptor descriptor;
+    NounsDescriptorV2 descriptor;
     NounsSeeder seeder;
     IProxyRegistry proxyRegistry = IProxyRegistry(address(0));
     address noundersDAO = address(1);
@@ -20,7 +20,7 @@ contract NounsTokenTest is Test {
 
     function setUp() public {
         SVGRenderer renderer = new SVGRenderer();
-        descriptor = new NounsDescriptor(INounsArt(address(0)), renderer);
+        descriptor = new NounsDescriptorV2(INounsArt(address(0)), renderer);
         NounsArt art = new NounsArt(address(descriptor));
         descriptor.setArt(art);
 

@@ -3,6 +3,8 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsDescriptor,
   NounsDescriptor__factory as NounsDescriptorFactory,
+  NounsDescriptorV2,
+  NounsDescriptorV2__factory as NounsDescriptorV2Factory,
   NounsToken,
   NounsToken__factory as NounsTokenFactory,
   NounsSeeder,
@@ -19,8 +21,8 @@ import {
 } from '../typechain';
 import ImageData from '../files/image-data.json';
 import { Block } from '@ethersproject/abstract-provider';
-import { chunkArray } from '../utils';
 import { deflateRawSync } from 'zlib';
+import { chunkArray } from '../utils';
 
 export type TestSigners = {
   deployer: SignerWithAddress;
@@ -48,6 +50,22 @@ export const deployNounsDescriptor = async (
   const nounsDescriptorFactory = new NounsDescriptorFactory(
     {
       'contracts/libs/NFTDescriptor.sol:NFTDescriptor': nftDescriptorLibrary.address,
+    },
+    signer,
+  );
+
+  return nounsDescriptorFactory.deploy();
+};
+
+export const deployNounsDescriptorV2 = async (
+  deployer?: SignerWithAddress,
+): Promise<NounsDescriptorV2> => {
+  const signer = deployer || (await getSigners()).deployer;
+  const nftDescriptorLibraryFactory = await ethers.getContractFactory('NFTDescriptorV2', signer);
+  const nftDescriptorLibrary = await nftDescriptorLibraryFactory.deploy();
+  const nounsDescriptorFactory = new NounsDescriptorV2Factory(
+    {
+      'contracts/libs/NFTDescriptorV2.sol:NFTDescriptorV2': nftDescriptorLibrary.address,
     },
     signer,
   );
@@ -84,7 +102,7 @@ export const deployNounsToken = async (
   return factory.deploy(
     noundersDAO || signer.address,
     minter || signer.address,
-    descriptor || (await deployNounsDescriptor(signer)).address,
+    descriptor || (await deployNounsDescriptorV2(signer)).address,
     seeder || (await deployNounsSeeder(signer)).address,
     proxyRegistryAddress || address(0),
   );
@@ -97,6 +115,23 @@ export const deployWeth = async (deployer?: SignerWithAddress): Promise<WETH> =>
 };
 
 export const populateDescriptor = async (nounsDescriptor: NounsDescriptor): Promise<void> => {
+  const { bgcolors, palette, images } = ImageData;
+  const { bodies, accessories, heads, glasses } = images;
+
+  // Split up head and accessory population due to high gas usage
+  await Promise.all([
+    nounsDescriptor.addManyBackgrounds(bgcolors),
+    nounsDescriptor.addManyColorsToPalette(0, palette),
+    nounsDescriptor.addManyBodies(bodies.map(({ data }) => data)),
+    chunkArray(accessories, 10).map(chunk =>
+      nounsDescriptor.addManyAccessories(chunk.map(({ data }) => data)),
+    ),
+    chunkArray(heads, 10).map(chunk => nounsDescriptor.addManyHeads(chunk.map(({ data }) => data))),
+    nounsDescriptor.addManyGlasses(glasses.map(({ data }) => data)),
+  ]);
+};
+
+export const populateDescriptorV2 = async (nounsDescriptor: NounsDescriptorV2): Promise<void> => {
   const { bgcolors, palette, images } = ImageData;
   const { bodies, accessories, heads, glasses } = images;
 
@@ -183,7 +218,7 @@ export const deployGovAndToken = async (
   // Cast Delegator as Delegate
   const gov = NounsDaoLogicV1Factory.connect(govDelegatorAddress, deployer);
 
-  await populateDescriptor(NounsDescriptorFactory.connect(await token.descriptor(), deployer));
+  await populateDescriptorV2(NounsDescriptorV2Factory.connect(await token.descriptor(), deployer));
 
   return { token, gov, timelock };
 };

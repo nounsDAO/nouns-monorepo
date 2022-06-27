@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title Interface for NounsDescriptor
+/// @title Interface for NounsDescriptorV2
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -18,14 +18,24 @@
 pragma solidity ^0.8.6;
 
 import { INounsSeeder } from './INounsSeeder.sol';
+import { ISVGRenderer } from './ISVGRenderer.sol';
+import { INounsArt } from './INounsArt.sol';
 import { INounsDescriptorMinimal } from './INounsDescriptorMinimal.sol';
 
-interface INounsDescriptor is INounsDescriptorMinimal {
+interface INounsDescriptorV2 is INounsDescriptorMinimal {
     event PartsLocked();
 
     event DataURIToggled(bool enabled);
 
     event BaseURIUpdated(string baseURI);
+
+    event ArtUpdated(INounsArt art);
+
+    event RendererUpdated(ISVGRenderer renderer);
+
+    error EmptyPalette();
+    error BadPaletteLength();
+    error IndexNotFound();
 
     function arePartsLocked() external returns (bool);
 
@@ -33,7 +43,7 @@ interface INounsDescriptor is INounsDescriptorMinimal {
 
     function baseURI() external returns (string memory);
 
-    function palettes(uint8 paletteIndex, uint256 colorIndex) external view returns (string memory);
+    function palettes(uint8 paletteIndex) external view returns (bytes memory);
 
     function backgrounds(uint256 index) external view returns (string memory);
 
@@ -55,29 +65,59 @@ interface INounsDescriptor is INounsDescriptorMinimal {
 
     function glassesCount() external view override returns (uint256);
 
-    function addManyColorsToPalette(uint8 paletteIndex, string[] calldata newColors) external;
-
     function addManyBackgrounds(string[] calldata backgrounds) external;
-
-    function addManyBodies(bytes[] calldata bodies) external;
-
-    function addManyAccessories(bytes[] calldata accessories) external;
-
-    function addManyHeads(bytes[] calldata heads) external;
-
-    function addManyGlasses(bytes[] calldata glasses) external;
-
-    function addColorToPalette(uint8 paletteIndex, string calldata color) external;
 
     function addBackground(string calldata background) external;
 
-    function addBody(bytes calldata body) external;
+    function setPalette(uint8 paletteIndex, bytes calldata palette) external;
 
-    function addAccessory(bytes calldata accessory) external;
+    function addBodies(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
 
-    function addHead(bytes calldata head) external;
+    function addAccessories(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
 
-    function addGlasses(bytes calldata glasses) external;
+    function addHeads(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function addGlasses(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function addBodiesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function addAccessoriesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function addHeadsFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+
+    function addGlassesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
 
     function lockParts() external;
 

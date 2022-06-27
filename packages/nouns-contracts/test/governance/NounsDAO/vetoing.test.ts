@@ -11,7 +11,7 @@ import {
   getSigners,
   TestSigners,
   setTotalSupply,
-  populateDescriptor,
+  populateDescriptorV2,
   deployGovAndToken,
 } from '../../utils';
 

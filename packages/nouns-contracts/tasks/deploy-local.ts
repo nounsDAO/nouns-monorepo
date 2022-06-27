@@ -38,11 +38,16 @@ task('deploy-local', 'Deploy contracts to hardhat')
 
     const proxyRegistryAddress = '0xa5409ec958c83c3f309868babaca7c86dcb077c1';
 
-    const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 7;
-    const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 10;
+    const NOUNS_ART_NONCE_OFFSET = 4;
+    const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 9;
+    const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 12;
 
     const [deployer] = await ethers.getSigners();
     const nonce = await deployer.getTransactionCount();
+    const expectedNounsArtAddress = ethers.utils.getContractAddress({
+      from: deployer.address,
+      nonce: nonce + NOUNS_ART_NONCE_OFFSET,
+    });
     const expectedNounsDAOProxyAddress = ethers.utils.getContractAddress({
       from: deployer.address,
       nonce: nonce + GOVERNOR_N_DELEGATOR_NONCE_OFFSET,
@@ -53,18 +58,23 @@ task('deploy-local', 'Deploy contracts to hardhat')
     });
     const contracts: Record<LocalContractName, Contract> = {
       WETH: {},
-      NFTDescriptor: {},
-      NounsDescriptor: {
+      NFTDescriptorV2: {},
+      SVGRenderer: {},
+      NounsDescriptorV2: {
+        args: [expectedNounsArtAddress, () => contracts.SVGRenderer.instance?.address],
         libraries: () => ({
-          NFTDescriptor: contracts.NFTDescriptor.instance?.address as string,
+          NFTDescriptorV2: contracts.NFTDescriptorV2.instance?.address as string,
         }),
+      },
+      NounsArt: {
+        args: [() => contracts.NounsDescriptorV2.instance?.address],
       },
       NounsSeeder: {},
       NounsToken: {
         args: [
           args.noundersdao || deployer.address,
           expectedAuctionHouseProxyAddress,
-          () => contracts.NounsDescriptor.instance?.address,
+          () => contracts.NounsDescriptorV2.instance?.address,
           () => contracts.NounsSeeder.instance?.address,
           proxyRegistryAddress,
         ],
