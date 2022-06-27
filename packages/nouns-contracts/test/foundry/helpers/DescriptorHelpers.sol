@@ -43,6 +43,10 @@ abstract contract DescriptorHelpers is Utils, Constants {
         descriptor.addManyColorsToPalette(0, paletteColors);
     }
 
+    /**
+     * @dev the hard-coded values below were copied from running the hardhat task `descriptor-art-to-console` with
+     * the parameter `slice` set to 1.
+     */
     function _populateDescriptorV2(NounsDescriptorV2 descriptorV2) internal {
         descriptorV2.addBackground('d5d7e1');
         descriptorV2.addAccessories(
