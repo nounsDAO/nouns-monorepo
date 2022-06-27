@@ -8,7 +8,6 @@ import { NounsSeeder } from '../../contracts/NounsSeeder.sol';
 import { IProxyRegistry } from '../../contracts/external/opensea/IProxyRegistry.sol';
 import { SVGRenderer } from '../../contracts/SVGRenderer.sol';
 import { NounsArt } from '../../contracts/NounsArt.sol';
-import { INounsArt } from '../../contracts/interfaces/INounsArt.sol';
 import { DescriptorHelpers } from './helpers/DescriptorHelpers.sol';
 
 contract NounsTokenTest is Test, DescriptorHelpers {
