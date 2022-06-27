@@ -15,7 +15,7 @@
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  *********************************/
 
-pragma solidity ^0.8.12;
+pragma solidity ^0.8.6;
 
 import { ISVGRenderer } from './interfaces/ISVGRenderer.sol';
 
@@ -47,7 +47,7 @@ contract SVGRenderer is ISVGRenderer {
     /**
      * @notice Given RLE image data and color palette pointers, merge to generate a single SVG image.
      */
-    function generateSVG(SVGParams calldata params) external pure returns (string memory svg) {
+    function generateSVG(SVGParams calldata params) external pure override returns (string memory svg) {
         if (bytes(params.background).length != 0) {
             // prettier-ignore
             return string(
@@ -65,7 +65,7 @@ contract SVGRenderer is ISVGRenderer {
     /**
      * @notice Given RLE image data and a color palette pointer, merge to generate a partial SVG image.
      */
-    function generateSVGPart(Part calldata part) external pure returns (string memory partialSVG) {
+    function generateSVGPart(Part calldata part) external pure override returns (string memory partialSVG) {
         Part[] memory parts = new Part[](1);
         parts[0] = part;
 
@@ -75,7 +75,7 @@ contract SVGRenderer is ISVGRenderer {
     /**
      * @notice Given RLE image data and color palette pointers, merge to generate a partial SVG image.
      */
-    function generateSVGParts(Part[] calldata parts) external pure returns (string memory partialSVG) {
+    function generateSVGParts(Part[] calldata parts) external pure override returns (string memory partialSVG) {
         return _generateSVGRects(SVGParams({ parts: parts, background: '' }));
     }
 

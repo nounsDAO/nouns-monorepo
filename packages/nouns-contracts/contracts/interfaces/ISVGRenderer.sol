@@ -15,7 +15,7 @@
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  *********************************/
 
-pragma solidity ^0.8.12;
+pragma solidity ^0.8.6;
 
 // TODO: Generalize to `IRenderer`?
 // May be a day when we drop SVG support.

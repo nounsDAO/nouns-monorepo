@@ -15,7 +15,7 @@
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  *********************************/
 
-pragma solidity ^0.8.12;
+pragma solidity ^0.8.6;
 
 import { INounsSeeder } from './interfaces/INounsSeeder.sol';
 import { INounsDescriptor } from './interfaces/INounsDescriptor.sol';

@@ -15,7 +15,7 @@
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  *********************************/
 
-pragma solidity ^0.8.12;
+pragma solidity ^0.8.6;
 
 interface INounsArt {
     error SenderIsNotDescriptor();

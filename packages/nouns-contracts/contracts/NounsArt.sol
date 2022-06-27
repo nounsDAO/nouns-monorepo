@@ -15,7 +15,7 @@
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  *********************************/
 
-pragma solidity ^0.8.12;
+pragma solidity ^0.8.6;
 
 import { INounsArt } from './interfaces/INounsArt.sol';
 import { Inflate } from './libs/Inflate.sol';
@@ -23,13 +23,13 @@ import { SSTORE2 } from './libs/SSTORE2.sol';
 
 contract NounsArt is INounsArt {
     // Current Nouns Descriptor address
-    address public descriptor;
+    address public override descriptor;
 
     // Pending Nouns Descriptor address
-    address public pendingDescriptor;
+    address public override pendingDescriptor;
 
     // Noun Backgrounds (Hex Colors)
-    string[] public backgrounds;
+    string[] public override backgrounds;
 
     // Noun Color Palettes (Index => Hex Colors)
     mapping(uint8 => address) public palettesPointers;
@@ -65,7 +65,7 @@ contract NounsArt is INounsArt {
      * by calling `confirmDescriptor`.
      * @dev This function can only be called by the current descriptor.
      */
-    function setDescriptor(address _pendingDescriptor) external onlyDescriptor {
+    function setDescriptor(address _pendingDescriptor) external override onlyDescriptor {
         pendingDescriptor = _pendingDescriptor;
     }
 
@@ -73,7 +73,7 @@ contract NounsArt is INounsArt {
      * @notice Confirm the pending descriptor.
      * @dev This function can only be called by the pending descriptor.
      */
-    function confirmDescriptor() external {
+    function confirmDescriptor() external override {
         if (msg.sender != pendingDescriptor) {
             revert SenderIsNotPendingDescriptor();
         }
@@ -89,7 +89,7 @@ contract NounsArt is INounsArt {
      * @notice Get the Trait struct for bodies.
      * @return Trait the struct, including a total image count, and an array of storage pages.
      */
-    function bodiesTrait() external view returns (Trait memory) {
+    function bodiesTrait() external view override returns (Trait memory) {
         return _bodies;
     }
 
@@ -97,7 +97,7 @@ contract NounsArt is INounsArt {
      * @notice Get the Trait struct for accessories.
      * @return Trait the struct, including a total image count, and an array of storage pages.
      */
-    function accessoriesTrait() external view returns (Trait memory) {
+    function accessoriesTrait() external view override returns (Trait memory) {
         return _accessories;
     }
 
@@ -105,7 +105,7 @@ contract NounsArt is INounsArt {
      * @notice Get the Trait struct for heads.
      * @return Trait the struct, including a total image count, and an array of storage pages.
      */
-    function headsTrait() external view returns (Trait memory) {
+    function headsTrait() external view override returns (Trait memory) {
         return _heads;
     }
 
@@ -113,7 +113,7 @@ contract NounsArt is INounsArt {
      * @notice Get the Trait struct for glasses.
      * @return Trait the struct, including a total image count, and an array of storage pages.
      */
-    function glassesTrait() external view returns (Trait memory) {
+    function glassesTrait() external view override returns (Trait memory) {
         return _glasses;
     }
 

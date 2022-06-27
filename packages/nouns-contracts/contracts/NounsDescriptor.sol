@@ -15,7 +15,7 @@
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  *********************************/
 
-pragma solidity ^0.8.12;
+pragma solidity ^0.8.6;
 
 import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
 import { Strings } from '@openzeppelin/contracts/utils/Strings.sol';
@@ -165,7 +165,7 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
-    ) external onlyOwner {
+    ) external override onlyOwner {
         art.addAccessories(encodedCompressed, decompressedLength, imageCount);
     }
 
@@ -180,7 +180,7 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
-    ) external onlyOwner {
+    ) external override onlyOwner {
         art.addHeads(encodedCompressed, decompressedLength, imageCount);
     }
 
@@ -195,7 +195,7 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
-    ) external onlyOwner {
+    ) external override onlyOwner {
         art.addGlasses(encodedCompressed, decompressedLength, imageCount);
     }
 
@@ -211,7 +211,7 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         address pointer,
         uint80 decompressedLength,
         uint16 imageCount
-    ) external onlyOwner {
+    ) external override onlyOwner {
         art.addBodiesFromPointer(pointer, decompressedLength, imageCount);
     }
 
@@ -227,7 +227,7 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         address pointer,
         uint80 decompressedLength,
         uint16 imageCount
-    ) external onlyOwner {
+    ) external override onlyOwner {
         art.addAccessoriesFromPointer(pointer, decompressedLength, imageCount);
     }
 
@@ -243,7 +243,7 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         address pointer,
         uint80 decompressedLength,
         uint16 imageCount
-    ) external onlyOwner {
+    ) external override onlyOwner {
         art.addHeadsFromPointer(pointer, decompressedLength, imageCount);
     }
 
@@ -259,7 +259,7 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         address pointer,
         uint80 decompressedLength,
         uint16 imageCount
-    ) external onlyOwner {
+    ) external override onlyOwner {
         art.addGlassesFromPointer(pointer, decompressedLength, imageCount);
     }
 
