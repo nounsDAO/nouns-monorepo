@@ -127,13 +127,13 @@ interface INounsArt {
 
     function backgrounds(uint256 index) external view returns (string memory);
 
-    function heads(uint256 storageIndex) external view returns (bytes memory);
+    function heads(uint256 index) external view returns (bytes memory);
 
-    function bodies(uint256 storageIndex) external view returns (bytes memory);
+    function bodies(uint256 index) external view returns (bytes memory);
 
-    function accessories(uint256 storageIndex) external view returns (bytes memory);
+    function accessories(uint256 index) external view returns (bytes memory);
 
-    function glasses(uint256 storageIndex) external view returns (bytes memory);
+    function glasses(uint256 index) external view returns (bytes memory);
 
     function bodiesTrait() external view returns (Trait memory);
 

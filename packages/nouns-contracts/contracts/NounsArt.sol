@@ -85,36 +85,61 @@ contract NounsArt is INounsArt {
         emit DescriptorUpdated(oldDescriptor, descriptor);
     }
 
+    /**
+     * @notice Get the Trait struct for bodies.
+     * @return Trait the struct, including a total image count, and an array of storage pages.
+     */
     function bodiesTrait() external view returns (Trait memory) {
         return _bodies;
     }
 
+    /**
+     * @notice Get the Trait struct for accessories.
+     * @return Trait the struct, including a total image count, and an array of storage pages.
+     */
     function accessoriesTrait() external view returns (Trait memory) {
         return _accessories;
     }
 
+    /**
+     * @notice Get the Trait struct for heads.
+     * @return Trait the struct, including a total image count, and an array of storage pages.
+     */
     function headsTrait() external view returns (Trait memory) {
         return _heads;
     }
 
+    /**
+     * @notice Get the Trait struct for glasses.
+     * @return Trait the struct, including a total image count, and an array of storage pages.
+     */
     function glassesTrait() external view returns (Trait memory) {
         return _glasses;
     }
 
+    /**
+     * @notice Batch add Noun backgrounds.
+     * @dev This function can only be called by the descriptor.
+     */
     function addManyBackgrounds(string[] calldata _backgrounds) external override onlyDescriptor {
         for (uint256 i = 0; i < _backgrounds.length; i++) {
             _addBackground(_backgrounds[i]);
         }
     }
 
+    /**
+     * @notice Add a Noun background.
+     * @dev This function can only be called by the descriptor.
+     */
     function addBackground(string calldata _background) external override onlyDescriptor {
         _addBackground(_background);
     }
 
-    function _addBackground(string calldata _background) internal {
-        backgrounds.push(_background);
-    }
-
+    /**
+     * @notice Update a single color palette. This function can be used to
+     * add a new color palette or update an existing palette.
+     * @dev This function can only be called by the descriptor.
+     */
     function setPalette(uint8 paletteIndex, bytes calldata palette) external override onlyDescriptor {
         if (palette.length == 0) {
             revert EmptyPalette();
@@ -125,6 +150,14 @@ contract NounsArt is INounsArt {
         palettesPointers[paletteIndex] = SSTORE2.write(palette);
     }
 
+    /**
+     * @notice Add a batch of body images.
+     * @param encodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
+     * and finally compressing it using deflate.
+     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
+     * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the descriptor.
+     */
     function addBodies(
         bytes calldata encodedCompressed,
         uint80 decompressedLength,
@@ -133,6 +166,14 @@ contract NounsArt is INounsArt {
         addToTraitFromBytes(_bodies, encodedCompressed, decompressedLength, imageCount);
     }
 
+    /**
+     * @notice Add a batch of accessory images.
+     * @param encodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
+     * and finally compressing it using deflate.
+     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
+     * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the descriptor.
+     */
     function addAccessories(
         bytes calldata encodedCompressed,
         uint80 decompressedLength,
@@ -141,6 +182,14 @@ contract NounsArt is INounsArt {
         addToTraitFromBytes(_accessories, encodedCompressed, decompressedLength, imageCount);
     }
 
+    /**
+     * @notice Add a batch of head images.
+     * @param encodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
+     * and finally compressing it using deflate.
+     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
+     * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the descriptor.
+     */
     function addHeads(
         bytes calldata encodedCompressed,
         uint80 decompressedLength,
@@ -149,6 +198,14 @@ contract NounsArt is INounsArt {
         addToTraitFromBytes(_heads, encodedCompressed, decompressedLength, imageCount);
     }
 
+    /**
+     * @notice Add a batch of glasses images.
+     * @param encodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
+     * and finally compressing it using deflate.
+     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
+     * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the descriptor.
+     */
     function addGlasses(
         bytes calldata encodedCompressed,
         uint80 decompressedLength,
@@ -157,6 +214,15 @@ contract NounsArt is INounsArt {
         addToTraitFromBytes(_glasses, encodedCompressed, decompressedLength, imageCount);
     }
 
+    /**
+     * @notice Add a batch of body images from an existing storage contract.
+     * @param pointer the address of a contract where the image batch was stored using SSTORE2. The data
+     * format is expected to be like {encodedCompressed}: bytes created by taking a string array of
+     * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
+     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
+     * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the descriptor.
+     */
     function addBodiesFromPointer(
         address pointer,
         uint80 decompressedLength,
@@ -165,6 +231,15 @@ contract NounsArt is INounsArt {
         addToTraitFromPointer(_bodies, pointer, decompressedLength, imageCount);
     }
 
+    /**
+     * @notice Add a batch of accessory images from an existing storage contract.
+     * @param pointer the address of a contract where the image batch was stored using SSTORE2. The data
+     * format is expected to be like {encodedCompressed}: bytes created by taking a string array of
+     * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
+     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
+     * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the descriptor.
+     */
     function addAccessoriesFromPointer(
         address pointer,
         uint80 decompressedLength,
@@ -173,6 +248,15 @@ contract NounsArt is INounsArt {
         addToTraitFromPointer(_accessories, pointer, decompressedLength, imageCount);
     }
 
+    /**
+     * @notice Add a batch of head images from an existing storage contract.
+     * @param pointer the address of a contract where the image batch was stored using SSTORE2. The data
+     * format is expected to be like {encodedCompressed}: bytes created by taking a string array of
+     * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
+     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
+     * @param imageCount the number of images in this batch; used when searching for images among batches
+     * @dev This function can only be called by the descriptor..
+     */
     function addHeadsFromPointer(
         address pointer,
         uint80 decompressedLength,
@@ -181,6 +265,15 @@ contract NounsArt is INounsArt {
         addToTraitFromPointer(_heads, pointer, decompressedLength, imageCount);
     }
 
+    /**
+     * @notice Add a batch of glasses images from an existing storage contract.
+     * @param pointer the address of a contract where the image batch was stored using SSTORE2. The data
+     * format is expected to be like {encodedCompressed}: bytes created by taking a string array of
+     * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
+     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
+     * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the descriptor.
+     */
     function addGlassesFromPointer(
         address pointer,
         uint80 decompressedLength,
@@ -189,60 +282,106 @@ contract NounsArt is INounsArt {
         addToTraitFromPointer(_glasses, pointer, decompressedLength, imageCount);
     }
 
+    /**
+     * @notice Get the number of available Noun `backgrounds`.
+     */
     function backgroundsCount() public view override returns (uint256) {
         return backgrounds.length;
     }
 
+    /**
+     * @notice Get the number of heads storage pages.
+     */
     function headsPageCount() public view override returns (uint256) {
         return _heads.storagePages.length;
     }
 
+    /**
+     * @notice Get the number of bodies storage pages.
+     */
     function bodiesPageCount() public view override returns (uint256) {
         return _bodies.storagePages.length;
     }
 
+    /**
+     * @notice Get the number of accessories storage pages.
+     */
     function accessoriesPageCount() public view override returns (uint256) {
         return _accessories.storagePages.length;
     }
 
+    /**
+     * @notice Get the number of glasses storage pages.
+     */
     function glassesPageCount() public view override returns (uint256) {
         return _glasses.storagePages.length;
     }
 
+    /**
+     * @notice Get a storage page of head images.
+     */
     function headsPage(uint256 pageIndex) public view override returns (INounsArt.NounArtStoragePage memory) {
         return _heads.storagePages[pageIndex];
     }
 
+    /**
+     * @notice Get a storage page of body images.
+     */
     function bodiesPage(uint256 pageIndex) public view override returns (INounsArt.NounArtStoragePage memory) {
         return _bodies.storagePages[pageIndex];
     }
 
+    /**
+     * @notice Get a storage page of accessory images.
+     */
     function accessoriesPage(uint256 pageIndex) public view override returns (INounsArt.NounArtStoragePage memory) {
         return _accessories.storagePages[pageIndex];
     }
 
+    /**
+     * @notice Get a storage page of glasses images.
+     */
     function glassesPage(uint256 pageIndex) public view override returns (INounsArt.NounArtStoragePage memory) {
         return _glasses.storagePages[pageIndex];
     }
 
-    function heads(uint256 storageIndex) public view override returns (bytes memory) {
-        return imageByStorageIndex(_heads, storageIndex);
+    /**
+     * @notice Get a head image bytes (RLE-encoded).
+     */
+    function heads(uint256 index) public view override returns (bytes memory) {
+        return imageByIndex(_heads, index);
     }
 
-    function bodies(uint256 storageIndex) public view override returns (bytes memory) {
-        return imageByStorageIndex(_bodies, storageIndex);
+    /**
+     * @notice Get a body image bytes (RLE-encoded).
+     */
+    function bodies(uint256 index) public view override returns (bytes memory) {
+        return imageByIndex(_bodies, index);
     }
 
-    function accessories(uint256 storageIndex) public view override returns (bytes memory) {
-        return imageByStorageIndex(_accessories, storageIndex);
+    /**
+     * @notice Get a accessory image bytes (RLE-encoded).
+     */
+    function accessories(uint256 index) public view override returns (bytes memory) {
+        return imageByIndex(_accessories, index);
     }
 
-    function glasses(uint256 storageIndex) public view override returns (bytes memory) {
-        return imageByStorageIndex(_glasses, storageIndex);
+    /**
+     * @notice Get a glasses image bytes (RLE-encoded).
+     */
+    function glasses(uint256 index) public view override returns (bytes memory) {
+        return imageByIndex(_glasses, index);
     }
 
+    /**
+     * @notice Get a color palette bytes.
+     */
     function palettes(uint8 paletteIndex) public view override returns (bytes memory) {
         return SSTORE2.read(palettesPointers[paletteIndex]);
+    }
+
+    function _addBackground(string calldata _background) internal {
+        backgrounds.push(_background);
     }
 
     function addToTraitFromBytes(
@@ -267,17 +406,13 @@ contract NounsArt is INounsArt {
         trait.storedImagesCount += imageCount;
     }
 
-    function imageByStorageIndex(INounsArt.Trait storage trait, uint256 storageIndex)
-        internal
-        view
-        returns (bytes memory)
-    {
-        (INounsArt.NounArtStoragePage storage page, uint256 indexInPage) = getPage(trait.storagePages, storageIndex);
+    function imageByIndex(INounsArt.Trait storage trait, uint256 index) internal view returns (bytes memory) {
+        (INounsArt.NounArtStoragePage storage page, uint256 indexInPage) = getPage(trait.storagePages, index);
         bytes[] memory decompressedImages = decompressAndDecode(page);
         return decompressedImages[indexInPage];
     }
 
-    function getPage(INounsArt.NounArtStoragePage[] storage pages, uint256 storageIndex)
+    function getPage(INounsArt.NounArtStoragePage[] storage pages, uint256 index)
         internal
         view
         returns (INounsArt.NounArtStoragePage storage, uint256)
@@ -291,8 +426,8 @@ contract NounsArt is INounsArt {
         for (uint256 i = 0; i < len; i++) {
             INounsArt.NounArtStoragePage storage page = pages[i];
 
-            if (storageIndex < pageFirstImageIndex + page.imageCount) {
-                return (page, storageIndex - pageFirstImageIndex);
+            if (index < pageFirstImageIndex + page.imageCount) {
+                return (page, index - pageFirstImageIndex);
             }
 
             pageFirstImageIndex += page.imageCount;
