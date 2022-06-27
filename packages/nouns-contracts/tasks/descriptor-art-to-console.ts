@@ -8,20 +8,23 @@ task(
   'Prints the descriptor art config in the final format, to be used in foundry / manual tests.',
 )
   .addOptionalParam(
-    'slice',
-    'How many items to take from each of the image arrays',
+    'count',
+    'The length of the image slice to take from each of the image arrays',
     undefined,
     types.int,
   )
-  .setAction(async ({ slice }, { ethers }) => {
+  .addOptionalParam('start', 'The index at which to start the image slice', undefined, types.int)
+  .setAction(async ({ count, start }, { ethers }) => {
     const { bgcolors, palette, images } = ImageData;
     let { bodies, accessories, heads, glasses } = images;
 
-    if (slice !== undefined) {
-      bodies = bodies.slice(0, slice);
-      accessories = accessories.slice(0, slice);
-      heads = heads.slice(0, slice);
-      glasses = glasses.slice(0, slice);
+    if (count !== undefined) {
+      start = start === undefined ? 0 : start;
+
+      bodies = bodies.slice(start, count + start);
+      accessories = accessories.slice(start, count + start);
+      heads = heads.slice(start, count + start);
+      glasses = glasses.slice(start, count + start);
     }
 
     const {
