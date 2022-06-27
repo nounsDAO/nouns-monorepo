@@ -23,8 +23,6 @@ import { INounsDescriptor } from './interfaces/INounsDescriptor.sol';
 import { INounsSeeder } from './interfaces/INounsSeeder.sol';
 import { NFTDescriptor } from './libs/NFTDescriptor.sol';
 import { ISVGRenderer } from './interfaces/ISVGRenderer.sol';
-import { SSTORE2 } from './libs/SSTORE2.sol';
-import { Inflate } from './libs/Inflate.sol';
 import { INounsArt } from './interfaces/INounsArt.sol';
 
 contract NounsDescriptor is INounsDescriptor, Ownable {
@@ -48,12 +46,6 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
 
     // Base URI
     string public override baseURI;
-
-    uint256[] public backgroundsVirtualIndexToStorageIndex;
-    uint256[] public bodiesVirtualIndexToStorageIndex;
-    uint256[] public accessoriesVirtualIndexToStorageIndex;
-    uint256[] public headsVirtualIndexToStorageIndex;
-    uint256[] public glassesVirtualIndexToStorageIndex;
 
     /**
      * @notice Require that the parts have not been locked.
@@ -92,35 +84,35 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
      * @notice Get the number of available Noun `backgrounds`.
      */
     function backgroundCount() external view override returns (uint256) {
-        return backgroundsVirtualIndexToStorageIndex.length;
+        return art.backgroundsCount();
     }
 
     /**
      * @notice Get the number of available Noun `bodies`.
      */
     function bodyCount() external view override returns (uint256) {
-        return bodiesVirtualIndexToStorageIndex.length;
+        return art.bodiesTrait().storedImagesCount;
     }
 
     /**
      * @notice Get the number of available Noun `accessories`.
      */
     function accessoryCount() external view override returns (uint256) {
-        return accessoriesVirtualIndexToStorageIndex.length;
+        return art.accessoriesTrait().storedImagesCount;
     }
 
     /**
      * @notice Get the number of available Noun `heads`.
      */
     function headCount() external view override returns (uint256) {
-        return headsVirtualIndexToStorageIndex.length;
+        return art.headsTrait().storedImagesCount;
     }
 
     /**
      * @notice Get the number of available Noun `glasses`.
      */
     function glassesCount() external view override returns (uint256) {
-        return glassesVirtualIndexToStorageIndex.length;
+        return art.glassesTrait().storedImagesCount;
     }
 
     /**
@@ -128,11 +120,6 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
      * @dev This function can only be called by the owner when not locked.
      */
     function addManyBackgrounds(string[] calldata _backgrounds) external override onlyOwner whenPartsNotLocked {
-        appendToVirtualIndexArray(
-            backgroundsVirtualIndexToStorageIndex,
-            uint16(_backgrounds.length),
-            art.backgroundsCount()
-        );
         art.addManyBackgrounds(_backgrounds);
     }
 
@@ -141,7 +128,6 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
      * @dev This function can only be called by the owner when not locked.
      */
     function addBackground(string calldata _background) external override onlyOwner whenPartsNotLocked {
-        appendToVirtualIndexArray(backgroundsVirtualIndexToStorageIndex, 1, art.backgroundsCount());
         art.addBackground(_background);
     }
 
@@ -165,7 +151,6 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyOwner {
-        appendToVirtualIndexArray(bodiesVirtualIndexToStorageIndex, imageCount, art.bodiesTrait().storedImagesCount);
         art.addBodies(encodedCompressed, decompressedLength, imageCount);
     }
 
@@ -181,11 +166,6 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external onlyOwner {
-        appendToVirtualIndexArray(
-            accessoriesVirtualIndexToStorageIndex,
-            imageCount,
-            art.accessoriesTrait().storedImagesCount
-        );
         art.addAccessories(encodedCompressed, decompressedLength, imageCount);
     }
 
@@ -201,7 +181,6 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external onlyOwner {
-        appendToVirtualIndexArray(headsVirtualIndexToStorageIndex, imageCount, art.headsTrait().storedImagesCount);
         art.addHeads(encodedCompressed, decompressedLength, imageCount);
     }
 
@@ -217,7 +196,6 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external onlyOwner {
-        appendToVirtualIndexArray(glassesVirtualIndexToStorageIndex, imageCount, art.glassesTrait().storedImagesCount);
         art.addGlasses(encodedCompressed, decompressedLength, imageCount);
     }
 
@@ -234,7 +212,6 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external onlyOwner {
-        appendToVirtualIndexArray(bodiesVirtualIndexToStorageIndex, imageCount, art.bodiesTrait().storedImagesCount);
         art.addBodiesFromPointer(pointer, decompressedLength, imageCount);
     }
 
@@ -251,11 +228,6 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external onlyOwner {
-        appendToVirtualIndexArray(
-            accessoriesVirtualIndexToStorageIndex,
-            imageCount,
-            art.accessoriesTrait().storedImagesCount
-        );
         art.addAccessoriesFromPointer(pointer, decompressedLength, imageCount);
     }
 
@@ -272,7 +244,6 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external onlyOwner {
-        appendToVirtualIndexArray(headsVirtualIndexToStorageIndex, imageCount, art.headsTrait().storedImagesCount);
         art.addHeadsFromPointer(pointer, decompressedLength, imageCount);
     }
 
@@ -289,122 +260,61 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
         uint80 decompressedLength,
         uint16 imageCount
     ) external onlyOwner {
-        appendToVirtualIndexArray(glassesVirtualIndexToStorageIndex, imageCount, art.glassesTrait().storedImagesCount);
         art.addGlassesFromPointer(pointer, decompressedLength, imageCount);
     }
 
-    function retireBackground(uint256 virtualIndex) external onlyOwner {
-        retireStorageIndexByVirtualIndex(backgroundsVirtualIndexToStorageIndex, virtualIndex);
-    }
-
-    function retireBody(uint256 virtualIndex) external onlyOwner {
-        retireStorageIndexByVirtualIndex(bodiesVirtualIndexToStorageIndex, virtualIndex);
-    }
-
-    function retireAccessory(uint256 virtualIndex) external onlyOwner {
-        retireStorageIndexByVirtualIndex(accessoriesVirtualIndexToStorageIndex, virtualIndex);
-    }
-
-    function retireHead(uint256 virtualIndex) external onlyOwner {
-        retireStorageIndexByVirtualIndex(headsVirtualIndexToStorageIndex, virtualIndex);
-    }
-
-    function retireGlasses(uint256 virtualIndex) external onlyOwner {
-        retireStorageIndexByVirtualIndex(glassesVirtualIndexToStorageIndex, virtualIndex);
-    }
-
-    function backgroundStorageIndex(uint256 virtualIndex) external view returns (uint256) {
-        return backgroundsVirtualIndexToStorageIndex[virtualIndex];
-    }
-
-    function bodyStorageIndex(uint256 virtualIndex) external view returns (uint256) {
-        return bodiesVirtualIndexToStorageIndex[virtualIndex];
-    }
-
-    function accessoryStorageIndex(uint256 virtualIndex) external view returns (uint256) {
-        return accessoriesVirtualIndexToStorageIndex[virtualIndex];
-    }
-
-    function headStorageIndex(uint256 virtualIndex) external view returns (uint256) {
-        return headsVirtualIndexToStorageIndex[virtualIndex];
-    }
-
-    function glassesStorageIndex(uint256 virtualIndex) external view returns (uint256) {
-        return glassesVirtualIndexToStorageIndex[virtualIndex];
-    }
-
     /**
-     * @notice Get a background's virtual index from its storage index. Useful for image retirement, where virtual index is the
-     * input, and you might be holding the storage index.
-     * @param storageIndex the storage index to look up.
-     * @return uint256 virtual index.
+     * @notice Get a background color by ID.
+     * @param index the index of the background.
+     * @return string the RGB hex value of the background.
      */
-    function backgroundVirtualIndex(uint256 storageIndex) external view returns (uint256) {
-        return storageIndexToVirtualIndex(backgroundsVirtualIndexToStorageIndex, storageIndex);
-    }
-
-    /**
-     * @notice Get a body's virtual index from its storage index. Useful for image retirement, where virtual index is the
-     * input, and you might be holding the storage index.
-     * @param storageIndex the storage index to look up.
-     * @return uint256 virtual index.
-     */
-    function bodyVirtualIndex(uint256 storageIndex) external view returns (uint256) {
-        return storageIndexToVirtualIndex(bodiesVirtualIndexToStorageIndex, storageIndex);
-    }
-
-    /**
-     * @notice Get an accessory's virtual index from its storage index. Useful for image retirement, where virtual index is the
-     * input, and you might be holding the storage index.
-     * @param storageIndex the storage index to look up.
-     * @return uint256 virtual index.
-     */
-    function accessoryVirtualIndex(uint256 storageIndex) external view returns (uint256) {
-        return storageIndexToVirtualIndex(accessoriesVirtualIndexToStorageIndex, storageIndex);
-    }
-
-    /**
-     * @notice Get a head's virtual index from its storage index. Useful for image retirement, where virtual index is the
-     * input, and you might be holding the storage index.
-     * @param storageIndex the storage index to look up.
-     * @return uint256 virtual index.
-     */
-    function headVirtualIndex(uint256 storageIndex) external view returns (uint256) {
-        return storageIndexToVirtualIndex(headsVirtualIndexToStorageIndex, storageIndex);
-    }
-
-    /**
-     * @notice Get a glasses' virtual index from its storage index. Useful for image retirement, where virtual index is the
-     * input, and you might be holding the storage index.
-     * @param storageIndex the storage index to look up.
-     * @return uint256 virtual index.
-     */
-    function glassesVirtualIndex(uint256 storageIndex) external view returns (uint256) {
-        return storageIndexToVirtualIndex(glassesVirtualIndexToStorageIndex, storageIndex);
-    }
-
     function backgrounds(uint256 index) public view override returns (string memory) {
         return art.backgrounds(index);
     }
 
-    function heads(uint256 storageIndex) public view override returns (bytes memory) {
-        return art.heads(storageIndex);
+    /**
+     * @notice Get a head image by ID.
+     * @param index the index of the head.
+     * @return bytes the RLE-encoded bytes of the image.
+     */
+    function heads(uint256 index) public view override returns (bytes memory) {
+        return art.heads(index);
     }
 
-    function bodies(uint256 storageIndex) public view override returns (bytes memory) {
-        return art.bodies(storageIndex);
+    /**
+     * @notice Get a body image by ID.
+     * @param index the index of the body.
+     * @return bytes the RLE-encoded bytes of the image.
+     */
+    function bodies(uint256 index) public view override returns (bytes memory) {
+        return art.bodies(index);
     }
 
-    function accessories(uint256 storageIndex) public view override returns (bytes memory) {
-        return art.accessories(storageIndex);
+    /**
+     * @notice Get an accessory image by ID.
+     * @param index the index of the accessory.
+     * @return bytes the RLE-encoded bytes of the image.
+     */
+    function accessories(uint256 index) public view override returns (bytes memory) {
+        return art.accessories(index);
     }
 
-    function glasses(uint256 storageIndex) public view override returns (bytes memory) {
-        return art.glasses(storageIndex);
+    /**
+     * @notice Get a glasses image by ID.
+     * @param index the index of the glasses.
+     * @return bytes the RLE-encoded bytes of the image.
+     */
+    function glasses(uint256 index) public view override returns (bytes memory) {
+        return art.glasses(index);
     }
 
-    function palettes(uint8 paletteIndex) public view override returns (bytes memory) {
-        return art.palettes(paletteIndex);
+    /**
+     * @notice Get a color palette by ID.
+     * @param index the index of the palette.
+     * @return bytes the palette bytes, where every 3 consecutive bytes represent a color in RGB format.
+     */
+    function palettes(uint8 index) public view override returns (bytes memory) {
+        return art.palettes(index);
     }
 
     /**
@@ -513,35 +423,5 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
      */
     function _getPalette(bytes memory part) private view returns (bytes memory) {
         return art.palettes(uint8(part[0]));
-    }
-
-    function retireStorageIndexByVirtualIndex(uint256[] storage virtualToStorageArray, uint256 virtualIndex) internal {
-        virtualToStorageArray[virtualIndex] = virtualToStorageArray[virtualToStorageArray.length - 1];
-        virtualToStorageArray.pop();
-    }
-
-    function storageIndexToVirtualIndex(uint256[] storage mappingArray, uint256 storageIndex)
-        internal
-        view
-        returns (uint256)
-    {
-        uint256 len = mappingArray.length;
-        for (uint256 virtualIndex = 0; virtualIndex < len; virtualIndex++) {
-            if (mappingArray[virtualIndex] == storageIndex) {
-                return virtualIndex;
-            }
-        }
-
-        revert IndexNotFound();
-    }
-
-    function appendToVirtualIndexArray(
-        uint256[] storage mappingArray,
-        uint16 imageCount,
-        uint256 storedImageCount
-    ) internal {
-        for (uint256 i = 0; i < imageCount; i++) {
-            mappingArray.push(storedImageCount + i);
-        }
     }
 }

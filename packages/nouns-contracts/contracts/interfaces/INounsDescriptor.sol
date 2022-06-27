@@ -70,173 +70,53 @@ interface INounsDescriptor {
 
     function setPalette(uint8 paletteIndex, bytes calldata palette) external;
 
-    /**
-     * @notice Add a batch of body images.
-     * @param encodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
-     * and finally compressing it using deflate.
-     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
-     * @param imageCount the number of images in this batch; used when searching for images among batches.
-     */
     function addBodies(
         bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
     ) external;
 
-    /**
-     * @notice Add a batch of accessory images.
-     * @param encodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
-     * and finally compressing it using deflate.
-     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
-     * @param imageCount the number of images in this batch; used when searching for images among batches.
-     */
     function addAccessories(
         bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
     ) external;
 
-    /**
-     * @notice Add a batch of head images.
-     * @param encodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
-     * and finally compressing it using deflate.
-     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
-     * @param imageCount the number of images in this batch; used when searching for images among batches.
-     */
     function addHeads(
         bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
     ) external;
 
-    /**
-     * @notice Add a batch of glasses images.
-     * @param encodedCompressed bytes created by taking a string array of RLE-encoded images, abi encoding it as a bytes array,
-     * and finally compressing it using deflate.
-     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
-     * @param imageCount the number of images in this batch; used when searching for images among batches.
-     */
     function addGlasses(
         bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
     ) external;
 
-    /**
-     * @notice Add a batch of body images from an existing storage contract.
-     * @param pointer the address of a contract where the image batch was stored using SSTORE2. The data
-     * format is expected to be like {encodedCompressed}: bytes created by taking a string array of
-     * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
-     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
-     * @param imageCount the number of images in this batch; used when searching for images among batches.
-     */
     function addBodiesFromPointer(
         address pointer,
         uint80 decompressedLength,
         uint16 imageCount
     ) external;
 
-    /**
-     * @notice Add a batch of accessory images from an existing storage contract.
-     * @param pointer the address of a contract where the image batch was stored using SSTORE2. The data
-     * format is expected to be like {encodedCompressed}: bytes created by taking a string array of
-     * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
-     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
-     * @param imageCount the number of images in this batch; used when searching for images among batches.
-     */
     function addAccessoriesFromPointer(
         address pointer,
         uint80 decompressedLength,
         uint16 imageCount
     ) external;
 
-    /**
-     * @notice Add a batch of head images from an existing storage contract.
-     * @param pointer the address of a contract where the image batch was stored using SSTORE2. The data
-     * format is expected to be like {encodedCompressed}: bytes created by taking a string array of
-     * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
-     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
-     * @param imageCount the number of images in this batch; used when searching for images among batches.
-     */
     function addHeadsFromPointer(
         address pointer,
         uint80 decompressedLength,
         uint16 imageCount
     ) external;
 
-    /**
-     * @notice Add a batch of glasses images from an existing storage contract.
-     * @param pointer the address of a contract where the image batch was stored using SSTORE2. The data
-     * format is expected to be like {encodedCompressed}: bytes created by taking a string array of
-     * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
-     * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
-     * @param imageCount the number of images in this batch; used when searching for images among batches.
-     */
     function addGlassesFromPointer(
         address pointer,
         uint80 decompressedLength,
         uint16 imageCount
     ) external;
-
-    function retireBackground(uint256 virtualIndex) external;
-
-    function retireBody(uint256 virtualIndex) external;
-
-    function retireAccessory(uint256 virtualIndex) external;
-
-    function retireHead(uint256 virtualIndex) external;
-
-    function retireGlasses(uint256 virtualIndex) external;
-
-    function backgroundStorageIndex(uint256 virtualIndex) external view returns (uint256);
-
-    function bodyStorageIndex(uint256 virtualIndex) external view returns (uint256);
-
-    function accessoryStorageIndex(uint256 virtualIndex) external view returns (uint256);
-
-    function headStorageIndex(uint256 virtualIndex) external view returns (uint256);
-
-    function glassesStorageIndex(uint256 virtualIndex) external view returns (uint256);
-
-    /**
-     * @notice Get a background's virtual index from its storage index. Useful for image retirement, where virtual index is the
-     * input, and you might be holding the storage index.
-     * @param storageIndex the storage index to look up.
-     * @return uint256 virtual index.
-     */
-    function backgroundVirtualIndex(uint256 storageIndex) external view returns (uint256);
-
-    /**
-     * @notice Get a body's virtual index from its storage index. Useful for image retirement, where virtual index is the
-     * input, and you might be holding the storage index.
-     * @param storageIndex the storage index to look up.
-     * @return uint256 virtual index.
-     */
-    function bodyVirtualIndex(uint256 storageIndex) external view returns (uint256);
-
-    /**
-     * @notice Get an accessory's virtual index from its storage index. Useful for image retirement, where virtual index is the
-     * input, and you might be holding the storage index.
-     * @param storageIndex the storage index to look up.
-     * @return uint256 virtual index.
-     */
-    function accessoryVirtualIndex(uint256 storageIndex) external view returns (uint256);
-
-    /**
-     * @notice Get a head's virtual index from its storage index. Useful for image retirement, where virtual index is the
-     * input, and you might be holding the storage index.
-     * @param storageIndex the storage index to look up.
-     * @return uint256 virtual index.
-     */
-    function headVirtualIndex(uint256 storageIndex) external view returns (uint256);
-
-    /**
-     * @notice Get a glasses' virtual index from its storage index. Useful for image retirement, where virtual index is the
-     * input, and you might be holding the storage index.
-     * @param storageIndex the storage index to look up.
-     * @return uint256 virtual index.
-     */
-    function glassesVirtualIndex(uint256 storageIndex) external view returns (uint256);
 
     function lockParts() external;
 
