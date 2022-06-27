@@ -56,6 +56,10 @@ contract NounsArt is INounsArt {
         _;
     }
 
+    constructor(address _descriptor) {
+        descriptor = _descriptor;
+    }
+
     /**
      * @notice Set the pending descriptor, which can be confirmed
      * by calling `confirmDescriptor`.

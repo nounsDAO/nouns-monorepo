@@ -67,13 +67,17 @@ describe('NounsDescriptor', () => {
   });
 
   it('should generate valid token uri metadata when data uris are enabled', async () => {
-    const tokenUri = await nounsDescriptor.tokenURI(0, {
-      background: 0,
-      body: longest.bodies.index,
-      accessory: longest.accessories.index,
-      head: longest.heads.index,
-      glasses: longest.glasses.index,
-    });
+    const tokenUri = await nounsDescriptor.tokenURI(
+      0,
+      {
+        background: 0,
+        body: longest.bodies.index,
+        accessory: longest.accessories.index,
+        head: longest.heads.index,
+        glasses: longest.glasses.index,
+      },
+      { gasLimit: 200_000_000 },
+    );
     const { name, description, image } = JSON.parse(
       Buffer.from(tokenUri.replace('data:application/json;base64,', ''), 'base64').toString(
         'ascii',
@@ -82,7 +86,7 @@ describe('NounsDescriptor', () => {
     expect(name).to.equal('Noun 0');
     expect(description).to.equal('Noun 0 is a member of the Nouns DAO');
     expect(image).to.not.be.undefined;
-  });
+  }).timeout(100_000);
 
   // Unskip this test to validate the encoding of all parts. It ensures that no parts revert when building the token URI.
   // This test also outputs a parts.html file, which can be visually inspected.

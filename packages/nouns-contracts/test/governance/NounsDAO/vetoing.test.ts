@@ -12,6 +12,7 @@ import {
   TestSigners,
   setTotalSupply,
   populateDescriptor,
+  deployGovAndToken,
 } from '../../utils';
 
 import {
@@ -59,49 +60,15 @@ async function reset(): Promise<void> {
     return;
   }
 
-  // nonce 0: Deploy NounsDAOExecutor
-  // nonce 1: Deploy NounsDAOLogicV1
-  // nonce 2: Deploy nftDescriptorLibraryFactory
-  // nonce 3: Deploy NounsDescriptor
-  // nonce 4: Deploy NounsSeeder
-  // nonce 5: Deploy NounsToken
-  // nonce 6: Deploy NounsDAOProxy
-  // nonce 7+: populate Descriptor
-
   vetoer = deployer;
 
-  const govDelegatorAddress = ethers.utils.getContractAddress({
-    from: deployer.address,
-    nonce: (await deployer.getTransactionCount()) + 6,
-  });
-
-  // Deploy NounsDAOExecutor with pre-computed Delegator address
-  timelock = await new NounsDaoExecutorFactory(deployer).deploy(govDelegatorAddress, timelockDelay);
-  const timelockAddress = timelock.address;
-
-  // Deploy Delegate
-  const { address: govDelegateAddress } = await new NounsDaoLogicV1Factory(deployer).deploy();
-
-  // Deploy Nouns token
-  token = await deployNounsToken(deployer);
-
-  // Deploy Delegator
-  await new NounsDaoProxyFactory(deployer).deploy(
-    timelockAddress,
-    token.address,
-    vetoer.address,
-    timelockAddress,
-    govDelegateAddress,
-    5760,
-    1,
+  ({ token, gov, timelock } = await deployGovAndToken(
+    deployer,
+    timelockDelay,
     proposalThresholdBPS,
     quorumVotesBPS,
-  );
-
-  // Cast Delegator as Delegate
-  gov = NounsDaoLogicV1Factory.connect(govDelegatorAddress, deployer);
-
-  await populateDescriptor(NounsDescriptorFactory.connect(await token.descriptor(), deployer));
+    vetoer.address,
+  ));
 
   snapshotId = await ethers.provider.send('evm_snapshot', []);
 }
