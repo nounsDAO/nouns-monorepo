@@ -20,15 +20,29 @@
   border-radius: 50%;
 }
 
+.delegateViewCircular {
+  border-radius: 50%;
+  margin-top: 13px;
+}
+
+.circleWithBorder {
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+}
+
 .rounded {
   border-radius: 15px;
 }
 
 .circularNounWrapper {
-  height: 42px;
   width: 42px;
-  margin-left: auto;
-  margin-right: auto;
+  height: 42px;
+}
+
+.delegateViewCircularNounWrapper {
+  width: 42px;
+  height: 42px;
+  margin-left: 12px;
 }
 
 @media (max-width: 1200px) {

@@ -1,0 +1,66 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 11rem;
+}
+
+.stackedNounWrapper {
+  display: flex;
+}
+
+.address {
+  font-family: 'Londrina Solid';
+  font-size: 24px;
+  width: 100%;
+  text-align: left;
+}
+
+.nounsRepresented {
+  color: var(--brand-gray-dark-text);
+  display: flex;
+  margin-top: 0.25rem;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.bold {
+  font-weight: bold;
+  margin-right: 0.25rem;
+  margin-left: 0.25rem;
+}
+
+.spinnerWrapper {
+  color: var(--brand-gray-light-text);
+  width: 100%;
+  height: 185px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.spinner {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.nounInfoWrapper {
+  margin-top: 0.25rem;
+  margin-bottom: 0.75rem;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 140%;
+  /* identical to box height, or 21px */
+
+  display: flex;
+  align-items: center;
+  font-feature-settings: 'tnum' on, 'lnum' on, 'ss06' on, 'ss01' on, 'liga' off;
+
+  color: var(--brand-gray-dark-text);
+}
+
+.icon {
+  margin-bottom: 5px;
+  margin-right: 6px;
+}

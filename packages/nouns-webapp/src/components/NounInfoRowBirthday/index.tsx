@@ -15,6 +15,15 @@ interface NounInfoRowBirthdayProps {
   nounId: number;
 }
 
+export const getNounBirthday = (nounId: number, pastAuctions: AuctionState[]) => {
+  return BigNumber.from(
+    pastAuctions.find((auction: AuctionState, i: number) => {
+      const maybeNounId = auction.activeAuction?.nounId;
+      return maybeNounId ? BigNumber.from(maybeNounId).eq(BigNumber.from(nounId)) : false;
+    })?.activeAuction?.startTime || 0,
+  );
+};
+
 const NounInfoRowBirthday: React.FC<NounInfoRowBirthdayProps> = props => {
   const { nounId } = props;
 
@@ -28,13 +37,7 @@ const NounInfoRowBirthday: React.FC<NounInfoRowBirthdayProps> = props => {
     return <></>;
   }
 
-  const startTime = BigNumber.from(
-    pastAuctions.find((auction: AuctionState, i: number) => {
-      const maybeNounId = auction.activeAuction?.nounId;
-      return maybeNounId ? BigNumber.from(maybeNounId).eq(BigNumber.from(nounIdForQuery)) : false;
-    })?.activeAuction?.startTime || 0,
-  );
-
+  const startTime = getNounBirthday(nounIdForQuery, pastAuctions);
   if (!startTime) {
     return <Trans>Error fetching Noun birthday</Trans>;
   }

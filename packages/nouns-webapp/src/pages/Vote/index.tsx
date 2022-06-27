@@ -48,6 +48,8 @@ const VotePage = ({
   const proposal = useProposal(id);
 
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
+  // Toggle between Noun centric view and delegate view
+  const [isDelegateView, setIsDelegateView] = useState(false);
 
   const [isQueuePending, setQueuePending] = useState<boolean>(false);
   const [isExecutePending, setExecutePending] = useState<boolean>(false);
@@ -224,6 +226,7 @@ const VotePage = ({
   }, {});
 
   const data = voters?.votes?.map(v => ({
+    delegate: v.voter.id,
     supportDetailed: v.supportDetailed,
     nounsRepresented: delegateToNounIds?.[v.voter.id] ?? [],
   }));
@@ -293,24 +296,41 @@ const VotePage = ({
             </Col>
           </Row>
         )}
+
+        <p
+          onClick={() => setIsDelegateView(!isDelegateView)}
+          className={classes.toggleDelegateVoteView}
+        >
+          {isDelegateView ? (
+            <Trans>Switch to Noun view</Trans>
+          ) : (
+            <Trans>Switch to delegate view</Trans>
+          )}
+        </p>
         <Row>
           <VoteCard
             proposal={proposal}
             percentage={forPercentage}
             nounIds={forNouns}
             variant={VoteCardVariant.FOR}
+            delegateView={isDelegateView}
+            delegateGroupedVoteData={data}
           />
           <VoteCard
             proposal={proposal}
             percentage={againstPercentage}
             nounIds={againstNouns}
             variant={VoteCardVariant.AGAINST}
+            delegateView={isDelegateView}
+            delegateGroupedVoteData={data}
           />
           <VoteCard
             proposal={proposal}
             percentage={abstainPercentage}
             nounIds={abstainNouns}
             variant={VoteCardVariant.ABSTAIN}
+            delegateView={isDelegateView}
+            delegateGroupedVoteData={data}
           />
         </Row>
 
