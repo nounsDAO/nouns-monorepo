@@ -390,6 +390,9 @@ contract NounsArt is INounsArt {
         uint80 decompressedLength,
         uint16 imageCount
     ) internal {
+        if (encodedCompressed.length == 0) {
+            revert EmptyBytes();
+        }
         address pointer = SSTORE2.write(encodedCompressed);
         addToTraitFromPointer(trait, pointer, decompressedLength, imageCount);
     }
@@ -400,6 +403,12 @@ contract NounsArt is INounsArt {
         uint80 decompressedLength,
         uint16 imageCount
     ) internal {
+        if (decompressedLength == 0) {
+            revert BadDecompressedLength();
+        }
+        if (imageCount == 0) {
+            revert BadImageCount();
+        }
         trait.storagePages.push(
             NounArtStoragePage({ pointer: pointer, decompressedLength: decompressedLength, imageCount: imageCount })
         );

@@ -26,6 +26,12 @@ interface INounsArt {
 
     error BadPaletteLength();
 
+    error EmptyBytes();
+
+    error BadDecompressedLength();
+
+    error BadImageCount();
+
     error NoPages();
 
     error ImageNotFound();
