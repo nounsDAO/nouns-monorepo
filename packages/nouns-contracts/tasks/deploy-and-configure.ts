@@ -40,14 +40,14 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
 
     // Populate the on-chain art
     await run('populate-descriptor', {
-      nftDescriptor: contracts.NFTDescriptor.address,
-      nounsDescriptor: contracts.NounsDescriptor.address,
+      nftDescriptor: contracts.NFTDescriptorV2.address,
+      nounsDescriptor: contracts.NounsDescriptorV2.address,
     });
 
     // Transfer ownership of all contract except for the auction house.
     // We must maintain ownership of the auction house to kick off the first auction.
     const executorAddress = contracts.NounsDAOExecutor.address;
-    await contracts.NounsDescriptor.instance.transferOwnership(executorAddress);
+    await contracts.NounsDescriptorV2.instance.transferOwnership(executorAddress);
     await contracts.NounsToken.instance.transferOwnership(executorAddress);
     await contracts.NounsAuctionHouseProxyAdmin.instance.transferOwnership(executorAddress);
     console.log(
