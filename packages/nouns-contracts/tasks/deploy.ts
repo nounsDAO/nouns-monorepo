@@ -125,6 +125,7 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
       NFTDescriptorV2: {},
       SVGRenderer: {},
       NounsDescriptorV2: {
+        args: [expectedNounsArtAddress, () => deployment.SVGRenderer.address],
         libraries: () => ({
           NFTDescriptorV2: deployment.NFTDescriptorV2.address,
         }),
