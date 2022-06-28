@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import classes from './NavBarButton.module.css';
 
 export enum NavBarButtonStyle {
@@ -9,12 +10,18 @@ export enum NavBarButtonStyle {
   WHITE_ACTIVE,
   WHITE_ACTIVE_VOTE_SUBMIT,
   WHITE_WALLET,
+  DELEGATE_BACK,
+  DELEGATE_PRIMARY,
+  DELEGATE_SECONDARY,
+  DELEGATE_DISABLED,
 }
 
 interface NavBarButtonProps {
   buttonText: React.ReactNode;
   buttonIcon?: React.ReactNode;
   buttonStyle?: NavBarButtonStyle;
+  onClick?: (e?: any) => void;
+  disabled?: boolean;
 }
 
 export const getNavBarButtonVariant = (buttonStyle?: NavBarButtonStyle) => {
@@ -43,6 +50,18 @@ export const getNavBarButtonVariant = (buttonStyle?: NavBarButtonStyle) => {
     case NavBarButtonStyle.WHITE_WALLET: {
       return classes.whiteWallet;
     }
+    case NavBarButtonStyle.DELEGATE_BACK: {
+      return classes.delegateBack;
+    }
+    case NavBarButtonStyle.DELEGATE_PRIMARY: {
+      return classes.delegatePrimary;
+    }
+    case NavBarButtonStyle.DELEGATE_SECONDARY: {
+      return classes.delegateSecondary;
+    }
+    case NavBarButtonStyle.DELEGATE_DISABLED: {
+      return classes.delegateDisabled;
+    }
     default: {
       return classes.info;
     }
@@ -50,12 +69,19 @@ export const getNavBarButtonVariant = (buttonStyle?: NavBarButtonStyle) => {
 };
 
 const NavBarButton: React.FC<NavBarButtonProps> = props => {
-  const { buttonText, buttonIcon, buttonStyle } = props;
+  const { buttonText, buttonIcon, buttonStyle, onClick, disabled } = props;
+
+  let isDisabled = disabled ?? false;
 
   return (
     <>
-      <div className={`${classes.wrapper} ${getNavBarButtonVariant(buttonStyle)}`}>
-        <div className={classes.button}>
+      <div
+        className={`${classes.wrapper} ${getNavBarButtonVariant(buttonStyle)}`}
+        onClick={isDisabled ? () => {} : onClick}
+      >
+        <div
+          className={clsx(classes.button, isDisabled ? classes.btnDisabled : classes.btnEnabled)}
+        >
           {buttonIcon && <div className={classes.icon}>{buttonIcon}</div>}
           <div>{buttonText}</div>
         </div>

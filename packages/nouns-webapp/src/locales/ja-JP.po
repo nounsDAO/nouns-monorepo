@@ -22,6 +22,10 @@ msgstr ""
 msgid "'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:"
 msgstr "「Nounders」とはNounsの創業に携わった10人の創業者のことであり、以下の人物で構成されています："
 
+#: src/components/ByLineHoverCard/index.tsx
+msgid "... and {0} more"
+msgstr "...そしてさらに3つ"
+
 #: src/components/Documentation/index.tsx
 msgid "100% of Noun auction proceeds are trustlessly sent to the treasury."
 msgstr "Nounオークションの売上は、第三者の介入無しで 100％トレジャリーに送られる仕組みになっています。"
@@ -33,6 +37,18 @@ msgstr "3.5アーティスト、6.5技術者"
 #: src/pages/NotFound/index.tsx
 msgid "404: This is not the person, place, or thing you're looking for..."
 msgstr "404: お探しの人、場所、物は見つかりませんでした。"
+
+#: src/components/ByLineHoverCard/index.tsx
+msgid "<0>Delegated Noun: </0>"
+msgstr "委任Noun: "
+
+#: src/components/ByLineHoverCard/index.tsx
+msgid "<0>Delegated Nouns: </0>"
+msgstr "委任Noun: "
+
+#: src/components/ProposalHeader/index.tsx
+msgid "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
+msgstr "<2>{proposedAtTransactionHash}</2> <1>{proposer}</1> <0>が提案したものです</0>"
 
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Absent for"
@@ -85,6 +101,10 @@ msgid "Address (Callee or Recipient)"
 msgstr "アドレス (他のスマート契約者であるカーリー、又はETHを受け取る受信者)"
 
 #: src/components/VoteCard/index.tsx
+msgid "Addresses"
+msgstr "イーサリアムアドレス"
+
+#: src/components/VoteCard/index.tsx
 msgid "Against"
 msgstr "反対"
 
@@ -103,6 +123,10 @@ msgstr "Nounsは全員Nouns DAOの会員です。"
 #: src/pages/CreateProposal/index.tsx
 msgid "All Proposals"
 msgstr "全ての提案"
+
+#: src/components/DelegationCandidateInfo/index.tsx
+msgid "Already has"
+msgstr "すでに持っています"
 
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "Arguments"
@@ -162,6 +186,7 @@ msgstr "入札はここに表示されます"
 msgid "Body"
 msgstr "体"
 
+#: src/components/NounHoverCard/index.tsx
 #: src/components/NounInfoRowBirthday/index.tsx
 msgid "Born"
 msgstr "誕生"
@@ -187,9 +212,19 @@ msgstr "提案 {1} に対して {0} 反対票を投じてください"
 msgid "Cast {0} votes for Prop {1}"
 msgstr "提案 \"{1}\" にする1票を投票\"{0}\"してください"
 
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Change"
+msgstr "代理人を変更する"
+
 #: src/components/WalletConnectModal/index.tsx
 msgid "Clear WalletConnect Data"
 msgstr "WalletConnect データを消去"
+
+#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/CurrentDelegatePannel/index.tsx
+msgid "Close"
+msgstr "近い"
 
 #: src/components/Documentation/index.tsx
 msgid "Compound Governance"
@@ -220,6 +255,10 @@ msgstr "提案を作成"
 msgid "Cryptopunks"
 msgstr "クリプトパンクス"
 
+#: src/components/CurrentDelegatePannel/index.tsx
+msgid "Current Delegate"
+msgstr "現在の代表者"
+
 #: src/components/CurrentBid/index.tsx
 msgid "Current bid"
 msgstr "現在の入札額"
@@ -236,6 +275,30 @@ msgstr "デイリーオークション"
 #: src/components/ProposalStatus/index.tsx
 msgid "Defeated"
 msgstr "却下"
+
+#: src/components/Proposals/index.tsx
+msgid "Delegate"
+msgstr "投票を委任する"
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Delegate Update Failed"
+msgstr "委任された更新に失敗しました"
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Delegate Updated!"
+msgstr "デリゲートが更新されました"
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Delegate {availableVotes} Vote"
+msgstr "{availableVotes}票を委任する"
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Delegate {availableVotes} Votes"
+msgstr "{availableVotes}票を委任する"
+
+#: src/components/CurrentDelegatePannel/index.tsx
+msgid "Delegation"
+msgstr "デリゲーション"
 
 #: src/components/ProposalContent/index.tsx
 msgid "Description"
@@ -277,6 +340,14 @@ msgstr "終了日"
 msgid "Ends on"
 msgstr "終了日時"
 
+#: src/components/Proposals/index.tsx
+msgid "Ends {0}"
+msgstr "残り{0} で終了します"
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Enter the Ethereum address or ENS name of the account you would like to delegate your votes to."
+msgstr "投票を委任するアカウントのイーサリアムアドレスまたはENS名を入力します。"
+
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 #: src/components/VoteModal/index.tsx
@@ -308,6 +379,10 @@ msgstr "実行しました"
 msgid "Expired"
 msgstr "期限切れです"
 
+#: src/components/Proposals/index.tsx
+msgid "Expires {0}"
+msgstr "残り {0} で期限切れになります"
+
 #: src/pages/Playground/index.tsx
 msgid "Explore"
 msgstr "探索"
@@ -324,6 +399,7 @@ msgstr "取得できませんでした"
 msgid "Failed to fetch Noun activity history"
 msgstr "Noun の活動履歴の取得に失敗しました。"
 
+#: src/components/Holder/index.tsx
 #: src/components/NounInfoRowHolder/index.tsx
 msgid "Failed to fetch Noun info"
 msgstr "Nounに関する情報の取得に失敗しました"
@@ -364,13 +440,18 @@ msgstr "ガバナンス"
 msgid "Governance ‘Slow Start’"
 msgstr "ガバナンス「スロースタート」"
 
+#: src/components/DelegationCandidateInfo/index.tsx
+msgid "Has"
+msgstr "票あり"
+
 #: src/pages/Playground/index.tsx
 msgid "Head"
 msgstr "頭"
 
-#: src/components/NounInfoRowHolder/index.tsx
+#: src/components/Holder/index.tsx
+#: src/components/NounHoverCard/index.tsx
 msgid "Held by"
-msgstr "主催者："
+msgstr "主催者"
 
 #: src/components/AuctionActivity/index.tsx
 msgid "Help mint the next Noun"
@@ -422,7 +503,6 @@ msgstr "提案が見つかりません"
 msgid "None"
 msgstr "なし"
 
-#: src/components/BidHistoryModal/index.tsx
 #: src/pages/Governance/index.tsx
 msgid "Noun"
 msgstr "Noun"
@@ -434,6 +514,10 @@ msgstr "Nounシーダー契約"
 #: src/components/Documentation/index.tsx
 msgid "Noun Traits"
 msgstr "Nounsの特徴"
+
+#: src/components/CurrentDelegatePannel/index.tsx
+msgid "Noun votes are not transferable, but are <0>delegatable</0>, which means you can assign your vote to someone else as long as you own your Noun."
+msgstr "Nounの票は譲渡できませんが (Nounの売却にはそれに応じて票も移ります)、委任することができます。"
 
 #: src/components/AuctionActivityNounTitle/index.tsx
 msgid "Noun {0}"
@@ -486,9 +570,8 @@ msgid "Nouns Protocol"
 msgstr "Nounsプロトコル"
 
 #: src/components/Documentation/index.tsx
-msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community"
-msgstr "Nouns は、オンチェーン・アバターコミュニティの形成を改善するための実験的な試みです。 \n"
-"{cryptopunksLink} などのプロジェクトがデジタルコミュニティとアイデンティティの構築を試みているのに対し、Nounsはアイデンティティ、コミュニティ、ガバナンス、そしてコミュニティが使用できるトレジャリーを構築することを試みています。"
+msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community."
+msgstr "Nouns は、オンチェーン・アバターコミュニティの形成を改善するための実験的な試みです。{cryptopunksLink} などのプロジェクトがデジタルコミュニティとアイデンティティの構築を試みているのに対し、Nounsはアイデンティティ、コミュニティ、ガバナンス、そしてコミュニティが使用できるトレジャリーを構築することを試みています。"
 
 #: src/components/Documentation/index.tsx
 msgid "Nouns are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules governing Noun trait scarcity, which makes all Nouns equally rare. As of this writing, Nouns are made up of:"
@@ -505,6 +588,10 @@ msgstr "Nounsのアートワークは {publicDomainLink} にあります。"
 #: src/pages/Governance/index.tsx
 msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
 msgstr "Nounsが統治する <0>Nouns DAO</0> 。Nounsは提案に対して投票したり、第三者に投票を委任することができますが、提案の提出には最低でも <1>{nounsRequired} {0}</1> 以上が必要です。"
+
+#: src/components/DelegationCandidateInfo/index.tsx
+msgid "Now has"
+msgstr "今持っています"
 
 #: src/components/Banner/index.tsx
 msgid "ONE NOUN,"
@@ -600,10 +687,6 @@ msgstr "コミュニティメンバーが提出した提案はここに表示さ
 msgid "Proposed Transactions"
 msgstr "提案中のトランザクション"
 
-#: src/components/ProposalContent/index.tsx
-msgid "Proposer"
-msgstr "提案者"
-
 #: src/pages/Vote/index.tsx
 msgid "Queue"
 msgstr "キュー"
@@ -665,6 +748,10 @@ msgid "Starts"
 msgstr "開始"
 
 #: src/components/Proposals/index.tsx
+msgid "Starts {0}"
+msgstr "あと{0}で始まります"
+
+#: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
 msgid "Submit Proposal"
 msgstr "提案を提出"
@@ -696,6 +783,14 @@ msgstr "まとめ"
 #: src/components/NavWallet/index.tsx
 msgid "Switch"
 msgstr "切り替え"
+
+#: src/pages/Vote/index.tsx
+msgid "Switch to Noun view"
+msgstr "Nounビューに切り替えます"
+
+#: src/pages/Vote/index.tsx
+msgid "Switch to delegate view"
+msgstr "ビューを委任するように切り替えます"
 
 #: src/components/NavWallet/index.tsx
 msgid "Switch wallet"
@@ -791,6 +886,15 @@ msgstr "Twitter"
 msgid "Undetermined"
 msgstr "未決定"
 
+#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/CurrentDelegatePannel/index.tsx
+msgid "Update Delegate"
+msgstr "デリゲートを更新"
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Updating..."
+msgstr "更新"
+
 #: src/pages/Playground/index.tsx
 msgid "Upload"
 msgstr "アップロード"
@@ -820,6 +924,10 @@ msgstr "拒否"
 msgid "View all bids"
 msgstr "すべての入札を表示"
 
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "View on Etherscan"
+msgstr "イーサスキャンで見る"
+
 #: src/components/Bid/index.tsx
 msgid "Vote for the next Noun"
 msgstr "次のNounに投票する"
@@ -835,6 +943,14 @@ msgstr "反対に投票"
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Voted for"
 msgstr "賛成に投票"
+
+#: src/components/DelegateHoverCard/index.tsx
+msgid "Voted with<0>{numVotesForProp}</0>Noun"
+msgstr "<0>{numVotesForProp}</0>のNounで投票"
+
+#: src/components/DelegateHoverCard/index.tsx
+msgid "Voted with<0>{numVotesForProp}</0>Nouns"
+msgstr "<0>{numVotesForProp}</0>のNounで投票"
 
 #: src/components/Documentation/index.tsx
 msgid "WTF?"
@@ -853,6 +969,11 @@ msgstr "これからどうする？"
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
 msgstr "決済は落札者に最も大きなインセンティブが与えられるが、誰でも起動できるため、Ethereumが稼働し、関心のある入札者がいる限り、システムは第三者の介入無しでNounsをオークションにかけることができます。"
 
+#: src/components/DelegationCandidateInfo/index.tsx
+msgid "Will have"
+msgstr "票になります"
+
+#: src/components/NounInfoRowHolder/index.tsx
 #: src/components/Winner/index.tsx
 msgid "Winner"
 msgstr "落札者"
@@ -902,12 +1023,16 @@ msgid "You must have {0} votes to submit a proposal"
 msgstr "提案を提出するには {0} 票が必要です"
 
 #: src/components/ProposalHeader/index.tsx
-msgid "You voted <0>Against</0>this proposal"
+msgid "You voted <0>Against</0> this proposal"
 msgstr "あなたはこの提案に<0>反対</0>を投票しました"
 
 #: src/components/ProposalHeader/index.tsx
-msgid "You voted <0>For</0>this proposal"
+msgid "You voted <0>For</0> this proposal"
 msgstr "あなたはこの提案<0>に</0>投票しました"
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "You've already delegated to this address"
+msgstr "あなたはすでにこのアドレスに委任しています"
 
 #: src/pages/Playground/index.tsx
 msgid "You've generated {0} years worth of Nouns"
@@ -917,6 +1042,14 @@ msgstr "{0} 年分のナウンを生成しました"
 msgid "You've successfully voted on on prop {0}"
 msgstr "あなたは提案 {0} に投票することに成功しました。"
 
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Your <0>{availableVotes}</0> votes are being delegated to a new account."
+msgstr "あなたは<0>{availableVotes}</0>アカウントに委任されています"
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Your <0>{availableVotes}</0> votes have been delegated to a new account."
+msgstr "あなたの<0>{availableVotes}</0>票が新しいアカウントに委任されました"
+
 #: src/components/Documentation/index.tsx
 msgid "accessories (137)"
 msgstr "付属品(137)"
@@ -924,6 +1057,10 @@ msgstr "付属品(137)"
 #: src/components/AuctionTimer/index.tsx
 msgid "at"
 msgstr "の"
+
+#: src/components/ProposalHeader/index.tsx
+msgid "at <0>{0}</0>"
+msgstr "<0>{0}</0> で"
 
 #: src/components/Documentation/index.tsx
 msgid "backgrounds (2)"
@@ -961,6 +1098,18 @@ msgstr "パブリックドメイン"
 msgid "s"
 msgstr "秒"
 
+#: src/components/VoteCard/index.tsx
+#~ msgid "{0} <0>Address </0>"
+#~ msgstr "{0}<0>イーサリアムアドレス</0>"
+
+#: src/components/VoteCard/index.tsx
+msgid "{0} <0>Address</0>"
+msgstr "{0}<0>イーサリアムアドレス</0>"
+
+#: src/components/VoteCard/index.tsx
+msgid "{0} <0>Addresses</0>"
+msgstr "{0}<0>イーサリアムアドレス</0>"
+
 #: src/pages/Vote/index.tsx
 msgid "{0} votes"
 msgstr "{0} 票"
@@ -969,3 +1118,10 @@ msgstr "{0} 票"
 msgid "{moveStateButtonAction} Proposal ⌐◧-◧"
 msgstr "{moveStateButtonAction} 提案の順番 ⌐◧-◧"
 
+#: src/components/DelegationCandidateVoteCountInfo/index.tsx
+msgid "{voteCount} Vote"
+msgstr "{voteCount}票"
+
+#: src/components/DelegationCandidateVoteCountInfo/index.tsx
+msgid "{voteCount} Votes"
+msgstr "{voteCount}票"

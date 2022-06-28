@@ -42,7 +42,7 @@ const Documentation = () => {
               Nouns are an experimental attempt to improve the formation of on-chain avatar
               communities. While projects such as {cryptopunksLink} have attempted to bootstrap
               digital community and identity, Nouns attempt to bootstrap identity, community,
-              governance, and a treasury that can be used by the community
+              governance, and a treasury that can be used by the community.
             </Trans>
           </p>
           <p className={classes.aboutText} style={{ paddingBottom: '4rem' }}>
@@ -271,8 +271,8 @@ const Documentation = () => {
                 </li>
                 <li>
                   <Link
-                    text="@supergremplin"
-                    url="https://twitter.com/supergremplin"
+                    text="@gremplin"
+                    url="https://twitter.com/gremplin"
                     leavesPage={true}
                   />
                 </li>

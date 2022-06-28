@@ -4,14 +4,7 @@ parts.html
 #Hardhat files
 cache
 artifacts
-typechain/*.js
-typechain/*.ts
-typechain/factories/*
-!typechain/factories/NounsToken__factory.ts
-!typechain/factories/NounsAuctionHouse__factory.ts
-!typechain/factories/NounsDescriptor__factory.ts
-!typechain/factories/NounsSeeder__factory.ts
-!typechain/factories/NounsDaoLogicV1__factory.ts
+typechain
 .openzeppelin
 
 # Script output

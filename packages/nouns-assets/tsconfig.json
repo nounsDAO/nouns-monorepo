@@ -9,9 +9,5 @@
       "path": "../nouns-sdk/tsconfig.build.json"
     }
   ],
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.json",
-    "scripts"
-  ]
+  "include": ["src/**/*.ts", "src/**/*.json", "scripts"]
 }

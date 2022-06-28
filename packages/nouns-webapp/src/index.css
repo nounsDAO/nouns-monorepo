@@ -10,6 +10,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+.__react_component_tooltip.show {
+  opacity: 1 !important;
+}
+
 /* Load custom fonts */
 @font-face {
   font-family: 'Londrina Solid';

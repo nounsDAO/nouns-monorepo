@@ -116,3 +116,77 @@
   border: 1px solid rgba(0, 0, 0, 0.1);
   margin-top: 0.5rem;
 }
+
+.byLineWrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.byLineWrapper h3 {
+  font-family: 'Londrina Solid';
+  color: var(--brand-gray-light-text);
+  margin-left: 3rem;
+  font-size: 24px;
+}
+
+.byLineContentWrapper {
+  display: flex;
+  flex-direction: row;
+  margin-left: 0;
+}
+
+.propTransactionWrapper {
+  margin-left: 0.33rem;
+  margin-right: 0.5rem;
+  font-size: 18px;
+  color: var(--brand-gray-light-text);
+}
+.propTransactionWrapperJp {
+  margin-left: 0.37rem;
+  margin-right: 0.25rem;
+  color: var(--brand-gray-light-text);
+}
+
+.proposedByJp {
+  color: var(--brand-gray-light-text);
+}
+
+.proposerLinkJp {
+  margin-right: 0.25rem;
+}
+
+.proposalByLineWrapperJp {
+  font-weight: 500;
+  margin-left: 2.5rem;
+}
+
+.propTransactionHash {
+  margin-left: 0.2rem;
+}
+
+.byLineContentWrapper h3 {
+  margin-left: 0.5rem;
+}
+
+@media (max-width: 450px) {
+  .byLineWrapper {
+    flex-direction: column;
+  }
+
+  .byLineContentWrapper {
+    margin-left: 2.5rem;
+  }
+
+  .proposalByLineWrapperJp {
+    flex-direction: column;
+    display: flex;
+  }
+
+  .proposerJp {
+    margin-left: 0.5rem;
+  }
+
+  .proposedByJp {
+    margin-left: 0.5rem;
+  }
+}
