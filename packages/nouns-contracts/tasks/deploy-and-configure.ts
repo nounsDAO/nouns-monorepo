@@ -1,4 +1,4 @@
-import { task } from 'hardhat/config';
+import { task, types } from 'hardhat/config';
 import { DeployedContract } from './types';
 
 interface ContractRow {
@@ -12,16 +12,21 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
   .addFlag('updateConfigs', 'Write the deployed addresses to the SDK and subgraph configs')
   .addOptionalParam('weth', 'The WETH contract address')
   .addOptionalParam('noundersdao', 'The nounders DAO contract address')
-  .addOptionalParam('auctionTimeBuffer', 'The auction time buffer (seconds)')
+  .addOptionalParam(
+    'auctionTimeBuffer',
+    'The auction time buffer (seconds)',
+    5 * 60 /* 5 minutes */,
+    types.int,
+  )
   .addOptionalParam('auctionReservePrice', 'The auction reserve price (wei)')
   .addOptionalParam(
     'auctionMinIncrementBidPercentage',
     'The auction min increment bid percentage (out of 100)',
   )
-  .addOptionalParam('auctionDuration', 'The auction duration (seconds)')
+  .addOptionalParam('auctionDuration', 'The auction duration (seconds)', 600, types.int)
   .addOptionalParam('timelockDelay', 'The timelock delay (seconds)')
-  .addOptionalParam('votingPeriod', 'The voting period (blocks)')
-  .addOptionalParam('votingDelay', 'The voting delay (blocks)')
+  .addOptionalParam('votingPeriod', 'The voting period (blocks)', 5760, types.int)
+  .addOptionalParam('votingDelay', 'The voting delay (blocks)', 1, types.int)
   .addOptionalParam('proposalThresholdBps', 'The proposal threshold (basis points)')
   .addOptionalParam('quorumVotesBps', 'Votes required for quorum (basis points)')
   .setAction(async (args, { run }) => {
