@@ -26,6 +26,9 @@
   },
   "devDependencies": {
     "@float-capital/solidity-coverage": "^0.7.17",
+    "@gnosis.pm/safe-contracts": "1.3.0",
+    "@gnosis.pm/safe-core-sdk": "^1.1.1",
+    "@gnosis.pm/zodiac": "^1.0.3",
     "@nomiclabs/hardhat-ethers": "^2.0.6",
     "@nomiclabs/hardhat-etherscan": "^3.0.3",
     "@nomiclabs/hardhat-waffle": "^2.0.3",
