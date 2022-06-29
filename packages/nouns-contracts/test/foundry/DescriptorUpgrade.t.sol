@@ -2,14 +2,14 @@
 pragma solidity ^0.8.6;
 
 import 'forge-std/Test.sol';
-import { DescriptorHelpers } from './helpers/DescriptorHelpers.sol';
+import { DeployUtils } from './helpers/DeployUtils.sol';
 import { NounsToken } from '../../contracts/NounsToken.sol';
 import { NounsDescriptor } from '../../contracts/NounsDescriptor.sol';
 import { NounsDescriptorV2 } from '../../contracts/NounsDescriptorV2.sol';
 import { NounsSeeder } from '../../contracts/NounsSeeder.sol';
 import { IProxyRegistry } from '../../contracts/external/opensea/IProxyRegistry.sol';
 
-contract DescriptorUpgradeTest is Test, DescriptorHelpers {
+contract DescriptorUpgradeTest is Test, DeployUtils {
     NounsToken nounsToken;
 
     function setUp() public {
@@ -28,7 +28,7 @@ contract DescriptorUpgradeTest is Test, DescriptorHelpers {
     function testUpgradeToV2MaintainsTokenURI() public {
         string memory tokenURIwithV1 = nounsToken.tokenURI(1);
 
-        NounsDescriptorV2 descriptorV2 = _deployV2();
+        NounsDescriptorV2 descriptorV2 = _deployAndPopulateV2();
         _populateDescriptorV2(descriptorV2);
         nounsToken.setDescriptor(descriptorV2);
 

@@ -8,15 +8,15 @@ import { NounsSeeder } from '../../contracts/NounsSeeder.sol';
 import { IProxyRegistry } from '../../contracts/external/opensea/IProxyRegistry.sol';
 import { SVGRenderer } from '../../contracts/SVGRenderer.sol';
 import { NounsArt } from '../../contracts/NounsArt.sol';
-import { DescriptorHelpers } from './helpers/DescriptorHelpers.sol';
+import { DeployUtils } from './helpers/DeployUtils.sol';
 
-contract NounsTokenTest is Test, DescriptorHelpers {
+contract NounsTokenTest is Test, DeployUtils {
     NounsToken nounsToken;
     address noundersDAO = address(1);
     address minter = address(2);
 
     function setUp() public {
-        NounsDescriptorV2 descriptor = _deployV2();
+        NounsDescriptorV2 descriptor = _deployAndPopulateV2();
         _populateDescriptorV2(descriptor);
 
         nounsToken = new NounsToken(noundersDAO, minter, descriptor, new NounsSeeder(), IProxyRegistry(address(0)));

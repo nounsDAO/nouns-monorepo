@@ -3,21 +3,10 @@ pragma solidity ^0.8.6;
 
 import { NounsDescriptor } from '../../../contracts/NounsDescriptor.sol';
 import { NounsDescriptorV2 } from '../../../contracts/NounsDescriptorV2.sol';
-import { SVGRenderer } from '../../../contracts/SVGRenderer.sol';
-import { NounsArt } from '../../../contracts/NounsArt.sol';
 import { Utils } from './Utils.sol';
 import { Constants } from './Constants.sol';
 
 abstract contract DescriptorHelpers is Utils, Constants {
-    function _deployV2() internal returns (NounsDescriptorV2) {
-        SVGRenderer renderer = new SVGRenderer();
-        NounsDescriptorV2 descriptorV2 = new NounsDescriptorV2(NounsArt(address(0)), renderer);
-        NounsArt art = new NounsArt(address(descriptorV2));
-        descriptorV2.setArt(art);
-        _populateDescriptorV2(descriptorV2);
-        return descriptorV2;
-    }
-
     function _populateDescriptor(NounsDescriptor descriptor) internal {
         descriptor.addBackground('d5d7e1');
         descriptor.addAccessory(
