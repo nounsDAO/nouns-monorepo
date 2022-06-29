@@ -135,7 +135,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
      * @notice Update a single color palette. This function can be used to
      * add a new color palette or update an existing palette.
      */
-    function setPalette(uint8 paletteIndex, bytes calldata palette) external override onlyOwner {
+    function setPalette(uint8 paletteIndex, bytes calldata palette) external override onlyOwner whenPartsNotLocked {
         art.setPalette(paletteIndex, palette);
     }
 
@@ -150,7 +150,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
         bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
-    ) external override onlyOwner {
+    ) external override onlyOwner whenPartsNotLocked {
         art.addBodies(encodedCompressed, decompressedLength, imageCount);
     }
 
@@ -165,7 +165,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
         bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
-    ) external override onlyOwner {
+    ) external override onlyOwner whenPartsNotLocked {
         art.addAccessories(encodedCompressed, decompressedLength, imageCount);
     }
 
@@ -180,7 +180,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
         bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
-    ) external override onlyOwner {
+    ) external override onlyOwner whenPartsNotLocked {
         art.addHeads(encodedCompressed, decompressedLength, imageCount);
     }
 
@@ -195,7 +195,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
         bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
-    ) external override onlyOwner {
+    ) external override onlyOwner whenPartsNotLocked {
         art.addGlasses(encodedCompressed, decompressedLength, imageCount);
     }
 
@@ -211,7 +211,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
         address pointer,
         uint80 decompressedLength,
         uint16 imageCount
-    ) external override onlyOwner {
+    ) external override onlyOwner whenPartsNotLocked {
         art.addBodiesFromPointer(pointer, decompressedLength, imageCount);
     }
 
@@ -227,7 +227,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
         address pointer,
         uint80 decompressedLength,
         uint16 imageCount
-    ) external override onlyOwner {
+    ) external override onlyOwner whenPartsNotLocked {
         art.addAccessoriesFromPointer(pointer, decompressedLength, imageCount);
     }
 
@@ -243,7 +243,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
         address pointer,
         uint80 decompressedLength,
         uint16 imageCount
-    ) external override onlyOwner {
+    ) external override onlyOwner whenPartsNotLocked {
         art.addHeadsFromPointer(pointer, decompressedLength, imageCount);
     }
 
@@ -259,7 +259,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
         address pointer,
         uint80 decompressedLength,
         uint16 imageCount
-    ) external override onlyOwner {
+    ) external override onlyOwner whenPartsNotLocked {
         art.addGlassesFromPointer(pointer, decompressedLength, imageCount);
     }
 
