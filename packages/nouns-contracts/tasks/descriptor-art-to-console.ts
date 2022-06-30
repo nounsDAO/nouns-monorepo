@@ -1,7 +1,6 @@
 import { task, types } from 'hardhat/config';
 import ImageData from '../files/image-data.json';
-import { deflateRawSync } from 'zlib';
-import { ethers } from 'ethers';
+import { dataToDescriptorInput } from './utils';
 
 task(
   'descriptor-art-to-console',
@@ -27,65 +26,28 @@ task(
       glasses = glasses.slice(start, count + start);
     }
 
-    const {
-      encodedCompressed: bodiesCompressed,
-      originalLength: bodiesLength,
-      itemCount: bodiesCount,
-    } = dataToDescriptorInput(bodies.map(({ data }) => data));
-    const {
-      encodedCompressed: accessoriesCompressed,
-      originalLength: accessoriesLength,
-      itemCount: accessoriesCount,
-    } = dataToDescriptorInput(accessories.map(({ data }) => data));
-    const {
-      encodedCompressed: headsCompressed,
-      originalLength: headsLength,
-      itemCount: headsCount,
-    } = dataToDescriptorInput(heads.map(({ data }) => data));
-    const {
-      encodedCompressed: glassesCompressed,
-      originalLength: glassesLength,
-      itemCount: glassesCount,
-    } = dataToDescriptorInput(glasses.map(({ data }) => data));
-
+    const bodiesPage = dataToDescriptorInput(bodies.map(({ data }) => data));
+    const accessoriesPage = dataToDescriptorInput(accessories.map(({ data }) => data));
+    const headsPage = dataToDescriptorInput(heads.map(({ data }) => data));
+    const glassesPage = dataToDescriptorInput(glasses.map(({ data }) => data));
     const paletteValue = `0x000000${palette.join('')}`;
 
     console.log('=== PALETTE ===\n');
     console.log(`paletteValue: '${paletteValue}'\n`);
 
     console.log('=== BODIES ===\n');
-    console.log(`bodiesCompressed: '${bodiesCompressed}'\n`);
-    console.log(`bodiesLength: ${bodiesLength}\n`);
+    console.log(`bodiesCompressed: '${bodiesPage.encodedCompressed}'\n`);
+    console.log(`bodiesLength: ${bodiesPage.originalLength}\n`);
 
     console.log('=== ACCESSORIES ===\n');
-    console.log(`accessoriesCompressed: '${accessoriesCompressed}'\n`);
-    console.log(`accessoriesLength: ${accessoriesLength}\n`);
+    console.log(`accessoriesCompressed: '${accessoriesPage.encodedCompressed}'\n`);
+    console.log(`accessoriesLength: ${accessoriesPage.originalLength}\n`);
 
     console.log('=== HEADS ===\n');
-    console.log(`headsCompressed: '${headsCompressed}'\n`);
-    console.log(`headsLength: ${headsLength}\n`);
+    console.log(`headsCompressed: '${headsPage.encodedCompressed}'\n`);
+    console.log(`headsLength: ${headsPage.originalLength}\n`);
 
     console.log('=== GLASSES ===\n');
-    console.log(`glassesCompressed: '${glassesCompressed}'\n`);
-    console.log(`glassesLength: ${glassesLength}\n`);
+    console.log(`glassesCompressed: '${glassesPage.encodedCompressed}'\n`);
+    console.log(`glassesLength: ${glassesPage.originalLength}\n`);
   });
-
-function dataToDescriptorInput(data: string[]): {
-  encodedCompressed: string;
-  originalLength: number;
-  itemCount: number;
-} {
-  const abiEncoded = ethers.utils.defaultAbiCoder.encode(['bytes[]'], [data]);
-  const encodedCompressed = `0x${deflateRawSync(
-    Buffer.from(abiEncoded.substring(2), 'hex'),
-  ).toString('hex')}`;
-
-  const originalLength = abiEncoded.substring(2).length / 2;
-  const itemCount = data.length;
-
-  return {
-    encodedCompressed,
-    originalLength,
-    itemCount,
-  };
-}
