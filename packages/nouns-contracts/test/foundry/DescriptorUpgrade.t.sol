@@ -29,7 +29,6 @@ contract DescriptorUpgradeTest is Test, DeployUtils {
         string memory tokenURIwithV1 = nounsToken.tokenURI(1);
 
         NounsDescriptorV2 descriptorV2 = _deployAndPopulateV2();
-        _populateDescriptorV2(descriptorV2);
         nounsToken.setDescriptor(descriptorV2);
 
         string memory tokenURIwithV2 = nounsToken.tokenURI(1);
