@@ -17,6 +17,8 @@
 
 pragma solidity ^0.8.6;
 
+import { Inflate } from '../libs/Inflate.sol';
+
 interface INounsArt {
     error SenderIsNotDescriptor();
 
@@ -130,4 +132,6 @@ interface INounsArt {
     function headsTrait() external view returns (Trait memory);
 
     function glassesTrait() external view returns (Trait memory);
+
+    function puff(bytes memory source, uint256 destlen) external pure returns (Inflate.ErrorCode, bytes memory);
 }
