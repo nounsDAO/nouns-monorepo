@@ -163,7 +163,7 @@ contract NounsArt is INounsArt {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyDescriptor {
-        addToTraitFromBytes(_bodies, encodedCompressed, decompressedLength, imageCount);
+        addPage(_bodies, encodedCompressed, decompressedLength, imageCount);
     }
 
     /**
@@ -179,7 +179,7 @@ contract NounsArt is INounsArt {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyDescriptor {
-        addToTraitFromBytes(_accessories, encodedCompressed, decompressedLength, imageCount);
+        addPage(_accessories, encodedCompressed, decompressedLength, imageCount);
     }
 
     /**
@@ -195,7 +195,7 @@ contract NounsArt is INounsArt {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyDescriptor {
-        addToTraitFromBytes(_heads, encodedCompressed, decompressedLength, imageCount);
+        addPage(_heads, encodedCompressed, decompressedLength, imageCount);
     }
 
     /**
@@ -211,7 +211,7 @@ contract NounsArt is INounsArt {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyDescriptor {
-        addToTraitFromBytes(_glasses, encodedCompressed, decompressedLength, imageCount);
+        addPage(_glasses, encodedCompressed, decompressedLength, imageCount);
     }
 
     /**
@@ -228,7 +228,7 @@ contract NounsArt is INounsArt {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyDescriptor {
-        addToTraitFromPointer(_bodies, pointer, decompressedLength, imageCount);
+        addPage(_bodies, pointer, decompressedLength, imageCount);
     }
 
     /**
@@ -245,7 +245,7 @@ contract NounsArt is INounsArt {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyDescriptor {
-        addToTraitFromPointer(_accessories, pointer, decompressedLength, imageCount);
+        addPage(_accessories, pointer, decompressedLength, imageCount);
     }
 
     /**
@@ -262,7 +262,7 @@ contract NounsArt is INounsArt {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyDescriptor {
-        addToTraitFromPointer(_heads, pointer, decompressedLength, imageCount);
+        addPage(_heads, pointer, decompressedLength, imageCount);
     }
 
     /**
@@ -279,7 +279,7 @@ contract NounsArt is INounsArt {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyDescriptor {
-        addToTraitFromPointer(_glasses, pointer, decompressedLength, imageCount);
+        addPage(_glasses, pointer, decompressedLength, imageCount);
     }
 
     /**
@@ -328,7 +328,7 @@ contract NounsArt is INounsArt {
         backgrounds.push(_background);
     }
 
-    function addToTraitFromBytes(
+    function addPage(
         Trait storage trait,
         bytes calldata encodedCompressed,
         uint80 decompressedLength,
@@ -338,10 +338,10 @@ contract NounsArt is INounsArt {
             revert EmptyBytes();
         }
         address pointer = SSTORE2.write(encodedCompressed);
-        addToTraitFromPointer(trait, pointer, decompressedLength, imageCount);
+        addPage(trait, pointer, decompressedLength, imageCount);
     }
 
-    function addToTraitFromPointer(
+    function addPage(
         Trait storage trait,
         address pointer,
         uint80 decompressedLength,
@@ -365,16 +365,20 @@ contract NounsArt is INounsArt {
         return decompressedImages[indexInPage];
     }
 
+    /**
+     * @dev Given an image index, this function finds the storage page the image is in, and the relative index
+     * inside the page, so the image can be read from storage.
+     * Example: if you have 2 pages with 100 images each, and you want to get image 150, this function would return
+     * the 2nd page, and the 50th index.
+     * @return INounsArt.NounArtStoragePage the page containing the image at index
+     * @return uint256 the index of the image in the page
+     */
     function getPage(INounsArt.NounArtStoragePage[] storage pages, uint256 index)
         internal
         view
         returns (INounsArt.NounArtStoragePage storage, uint256)
     {
         uint256 len = pages.length;
-        if (len == 0) {
-            revert NoPages();
-        }
-
         uint256 pageFirstImageIndex = 0;
         for (uint256 i = 0; i < len; i++) {
             INounsArt.NounArtStoragePage storage page = pages[i];

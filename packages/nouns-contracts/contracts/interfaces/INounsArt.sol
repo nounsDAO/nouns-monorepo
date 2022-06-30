@@ -32,8 +32,6 @@ interface INounsArt {
 
     error BadImageCount();
 
-    error NoPages();
-
     error ImageNotFound();
 
     event DescriptorUpdated(address oldDescriptor, address newDescriptor);
