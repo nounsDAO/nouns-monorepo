@@ -4,10 +4,9 @@ pragma solidity ^0.8.6;
 import 'forge-std/Test.sol';
 import { NounsArt } from '../../contracts/NounsArt.sol';
 import { INounsArt } from '../../contracts/interfaces/INounsArt.sol';
-import { Utils } from './helpers/Utils.sol';
 import { SSTORE2 } from '../../contracts/libs/SSTORE2.sol';
 
-contract NounsArtTest is Test, Utils {
+contract NounsArtTest is Test {
     NounsArt art;
     address descriptor = address(1);
 
@@ -100,12 +99,12 @@ contract NounsArtTest is Test, Utils {
 
     function testSetPaletteRevertsIfSenderNotDescriptor() public {
         vm.expectRevert(INounsArt.SenderIsNotDescriptor.selector);
-        art.setPalette(0, fromHex('ffffff'));
+        art.setPalette(0, hex'ffffff');
     }
 
     function testSetPaletteWorks() public {
-        bytes memory palette0 = fromHex('ffffffc5b9a1');
-        bytes memory palette1 = fromHex('cfc2ab63a0f9');
+        bytes memory palette0 = hex'ffffffc5b9a1';
+        bytes memory palette1 = hex'cfc2ab63a0f9';
         vm.startPrank(descriptor);
         art.setPalette(0, palette0);
         art.setPalette(1, palette1);
@@ -119,8 +118,8 @@ contract NounsArtTest is Test, Utils {
     }
 
     function testSetPaletteUpdatesAnExistingPalette() public {
-        bytes memory paletteV1 = fromHex('ffffffc5b9a1');
-        bytes memory paletteV2 = fromHex('cfc2ab63a0f9');
+        bytes memory paletteV1 = hex'ffffffc5b9a1';
+        bytes memory paletteV2 = hex'cfc2ab63a0f9';
 
         vm.prank(descriptor);
         art.setPalette(0, paletteV1);
@@ -178,7 +177,7 @@ contract NounsArtTest is Test, Utils {
 
     function testAddBodiesRevertsIfSenderNotDescriptor() public {
         vm.expectRevert(INounsArt.SenderIsNotDescriptor.selector);
-        art.addBodies(fromHex('123456'), uint80(12), uint16(1));
+        art.addBodies(hex'123456', uint80(12), uint16(1));
     }
 
     function testCannotAddBodiesWithNoBytes() public {
@@ -190,35 +189,35 @@ contract NounsArtTest is Test, Utils {
     function testCannotAddBodiesWithZeroDecompressedLength() public {
         vm.prank(descriptor);
         vm.expectRevert(INounsArt.BadDecompressedLength.selector);
-        art.addBodies(fromHex(FIRST_TWO_IMAGES_COMPRESSED), 0, 0);
+        art.addBodies(FIRST_TWO_IMAGES_COMPRESSED, 0, 0);
     }
 
     function testCannotAddBodiesWithZeroImageCount() public {
         vm.prank(descriptor);
         vm.expectRevert(INounsArt.BadImageCount.selector);
-        art.addBodies(fromHex(FIRST_TWO_IMAGES_COMPRESSED), FIRST_TWO_IMAGES_DEFLATED_LENGTH, 0);
+        art.addBodies(FIRST_TWO_IMAGES_COMPRESSED, FIRST_TWO_IMAGES_DEFLATED_LENGTH, 0);
     }
 
     function testAddBodiesWorksWithMultiplePages() public {
         assertEq(art.bodiesTrait().storedImagesCount, 0);
 
         vm.startPrank(descriptor);
-        art.addBodies(fromHex(FIRST_TWO_IMAGES_COMPRESSED), FIRST_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
-        art.addBodies(fromHex(NEXT_TWO_IMAGES_COMPRESSED), NEXT_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
+        art.addBodies(FIRST_TWO_IMAGES_COMPRESSED, FIRST_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
+        art.addBodies(NEXT_TWO_IMAGES_COMPRESSED, NEXT_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
         vm.stopPrank();
 
         _assertBodiesStoredOK();
     }
 
     function testCannotAddBodiesFromPointerWithZeroDecompressedLength() public {
-        address pointer = SSTORE2.write(fromHex(FIRST_TWO_IMAGES_COMPRESSED));
+        address pointer = SSTORE2.write(FIRST_TWO_IMAGES_COMPRESSED);
         vm.prank(descriptor);
         vm.expectRevert(INounsArt.BadDecompressedLength.selector);
         art.addBodiesFromPointer(pointer, 0, 0);
     }
 
     function testCannotAddBodiesFromPointerWithZeroImageCount() public {
-        address pointer = SSTORE2.write(fromHex(FIRST_TWO_IMAGES_COMPRESSED));
+        address pointer = SSTORE2.write(FIRST_TWO_IMAGES_COMPRESSED);
         vm.prank(descriptor);
         vm.expectRevert(INounsArt.BadImageCount.selector);
         art.addBodiesFromPointer(pointer, FIRST_TWO_IMAGES_DEFLATED_LENGTH, 0);
@@ -229,15 +228,11 @@ contract NounsArtTest is Test, Utils {
 
         vm.startPrank(descriptor);
         art.addBodiesFromPointer(
-            SSTORE2.write(fromHex(FIRST_TWO_IMAGES_COMPRESSED)),
+            SSTORE2.write(FIRST_TWO_IMAGES_COMPRESSED),
             FIRST_TWO_IMAGES_DEFLATED_LENGTH,
             uint16(2)
         );
-        art.addBodiesFromPointer(
-            SSTORE2.write(fromHex(NEXT_TWO_IMAGES_COMPRESSED)),
-            NEXT_TWO_IMAGES_DEFLATED_LENGTH,
-            uint16(2)
-        );
+        art.addBodiesFromPointer(SSTORE2.write(NEXT_TWO_IMAGES_COMPRESSED), NEXT_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
         vm.stopPrank();
 
         _assertBodiesStoredOK();
@@ -249,7 +244,7 @@ contract NounsArtTest is Test, Utils {
 
     function testAddAccessoriesRevertsIfSenderNotDescriptor() public {
         vm.expectRevert(INounsArt.SenderIsNotDescriptor.selector);
-        art.addAccessories(fromHex('123456'), uint80(12), uint16(1));
+        art.addAccessories(hex'123456', uint80(12), uint16(1));
     }
 
     function testCannotAddAccessoriesWithNoBytes() public {
@@ -261,35 +256,35 @@ contract NounsArtTest is Test, Utils {
     function testCannotAddAccessoriesWithZeroDecompressedLength() public {
         vm.prank(descriptor);
         vm.expectRevert(INounsArt.BadDecompressedLength.selector);
-        art.addAccessories(fromHex(FIRST_TWO_IMAGES_COMPRESSED), 0, 0);
+        art.addAccessories(FIRST_TWO_IMAGES_COMPRESSED, 0, 0);
     }
 
     function testCannotAddAccessoriesWithZeroImageCount() public {
         vm.prank(descriptor);
         vm.expectRevert(INounsArt.BadImageCount.selector);
-        art.addAccessories(fromHex(FIRST_TWO_IMAGES_COMPRESSED), FIRST_TWO_IMAGES_DEFLATED_LENGTH, 0);
+        art.addAccessories(FIRST_TWO_IMAGES_COMPRESSED, FIRST_TWO_IMAGES_DEFLATED_LENGTH, 0);
     }
 
     function testAddAccessoriesWorksWithMultiplePages() public {
         assertEq(art.accessoriesTrait().storedImagesCount, 0);
 
         vm.startPrank(descriptor);
-        art.addAccessories(fromHex(FIRST_TWO_IMAGES_COMPRESSED), FIRST_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
-        art.addAccessories(fromHex(NEXT_TWO_IMAGES_COMPRESSED), NEXT_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
+        art.addAccessories(FIRST_TWO_IMAGES_COMPRESSED, FIRST_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
+        art.addAccessories(NEXT_TWO_IMAGES_COMPRESSED, NEXT_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
         vm.stopPrank();
 
         _assertAccessoriesStoredOK();
     }
 
     function testCannotAddAccessoriesFromPointerWithZeroDecompressedLength() public {
-        address pointer = SSTORE2.write(fromHex(FIRST_TWO_IMAGES_COMPRESSED));
+        address pointer = SSTORE2.write(FIRST_TWO_IMAGES_COMPRESSED);
         vm.prank(descriptor);
         vm.expectRevert(INounsArt.BadDecompressedLength.selector);
         art.addAccessoriesFromPointer(pointer, 0, 0);
     }
 
     function testCannotAddAccessoriesFromPointerWithZeroImageCount() public {
-        address pointer = SSTORE2.write(fromHex(FIRST_TWO_IMAGES_COMPRESSED));
+        address pointer = SSTORE2.write(FIRST_TWO_IMAGES_COMPRESSED);
         vm.prank(descriptor);
         vm.expectRevert(INounsArt.BadImageCount.selector);
         art.addAccessoriesFromPointer(pointer, FIRST_TWO_IMAGES_DEFLATED_LENGTH, 0);
@@ -300,12 +295,12 @@ contract NounsArtTest is Test, Utils {
 
         vm.startPrank(descriptor);
         art.addAccessoriesFromPointer(
-            SSTORE2.write(fromHex(FIRST_TWO_IMAGES_COMPRESSED)),
+            SSTORE2.write(FIRST_TWO_IMAGES_COMPRESSED),
             FIRST_TWO_IMAGES_DEFLATED_LENGTH,
             uint16(2)
         );
         art.addAccessoriesFromPointer(
-            SSTORE2.write(fromHex(NEXT_TWO_IMAGES_COMPRESSED)),
+            SSTORE2.write(NEXT_TWO_IMAGES_COMPRESSED),
             NEXT_TWO_IMAGES_DEFLATED_LENGTH,
             uint16(2)
         );
@@ -320,7 +315,7 @@ contract NounsArtTest is Test, Utils {
 
     function testAddHeadsRevertsIfSenderNotDescriptor() public {
         vm.expectRevert(INounsArt.SenderIsNotDescriptor.selector);
-        art.addHeads(fromHex('123456'), uint80(12), uint16(1));
+        art.addHeads(hex'123456', uint80(12), uint16(1));
     }
 
     function testCannotAddHeadsWithNoBytes() public {
@@ -332,35 +327,35 @@ contract NounsArtTest is Test, Utils {
     function testCannotAddHeadsWithZeroDecompressedLength() public {
         vm.prank(descriptor);
         vm.expectRevert(INounsArt.BadDecompressedLength.selector);
-        art.addHeads(fromHex(FIRST_TWO_IMAGES_COMPRESSED), 0, 0);
+        art.addHeads(FIRST_TWO_IMAGES_COMPRESSED, 0, 0);
     }
 
     function testCannotAddHeadsWithZeroImageCount() public {
         vm.prank(descriptor);
         vm.expectRevert(INounsArt.BadImageCount.selector);
-        art.addHeads(fromHex(FIRST_TWO_IMAGES_COMPRESSED), FIRST_TWO_IMAGES_DEFLATED_LENGTH, 0);
+        art.addHeads(FIRST_TWO_IMAGES_COMPRESSED, FIRST_TWO_IMAGES_DEFLATED_LENGTH, 0);
     }
 
     function testAddHeadsWorksWithMultiplePages() public {
         assertEq(art.headsTrait().storedImagesCount, 0);
 
         vm.startPrank(descriptor);
-        art.addHeads(fromHex(FIRST_TWO_IMAGES_COMPRESSED), FIRST_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
-        art.addHeads(fromHex(NEXT_TWO_IMAGES_COMPRESSED), NEXT_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
+        art.addHeads(FIRST_TWO_IMAGES_COMPRESSED, FIRST_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
+        art.addHeads(NEXT_TWO_IMAGES_COMPRESSED, NEXT_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
         vm.stopPrank();
 
         _assertHeadsStoredOK();
     }
 
     function testCannotAddHeadsFromPointerWithZeroDecompressedLength() public {
-        address pointer = SSTORE2.write(fromHex(FIRST_TWO_IMAGES_COMPRESSED));
+        address pointer = SSTORE2.write(FIRST_TWO_IMAGES_COMPRESSED);
         vm.prank(descriptor);
         vm.expectRevert(INounsArt.BadDecompressedLength.selector);
         art.addHeadsFromPointer(pointer, 0, 0);
     }
 
     function testCannotAddHeadsFromPointerWithZeroImageCount() public {
-        address pointer = SSTORE2.write(fromHex(FIRST_TWO_IMAGES_COMPRESSED));
+        address pointer = SSTORE2.write(FIRST_TWO_IMAGES_COMPRESSED);
         vm.prank(descriptor);
         vm.expectRevert(INounsArt.BadImageCount.selector);
         art.addHeadsFromPointer(pointer, FIRST_TWO_IMAGES_DEFLATED_LENGTH, 0);
@@ -371,15 +366,11 @@ contract NounsArtTest is Test, Utils {
 
         vm.startPrank(descriptor);
         art.addHeadsFromPointer(
-            SSTORE2.write(fromHex(FIRST_TWO_IMAGES_COMPRESSED)),
+            SSTORE2.write(FIRST_TWO_IMAGES_COMPRESSED),
             FIRST_TWO_IMAGES_DEFLATED_LENGTH,
             uint16(2)
         );
-        art.addHeadsFromPointer(
-            SSTORE2.write(fromHex(NEXT_TWO_IMAGES_COMPRESSED)),
-            NEXT_TWO_IMAGES_DEFLATED_LENGTH,
-            uint16(2)
-        );
+        art.addHeadsFromPointer(SSTORE2.write(NEXT_TWO_IMAGES_COMPRESSED), NEXT_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
         vm.stopPrank();
 
         _assertHeadsStoredOK();
@@ -391,7 +382,7 @@ contract NounsArtTest is Test, Utils {
 
     function testAddGlassesRevertsIfSenderNotDescriptor() public {
         vm.expectRevert(INounsArt.SenderIsNotDescriptor.selector);
-        art.addGlasses(fromHex('123456'), uint80(12), uint16(1));
+        art.addGlasses(hex'123456', uint80(12), uint16(1));
     }
 
     function testCannotAddGlassesWithNoBytes() public {
@@ -403,35 +394,35 @@ contract NounsArtTest is Test, Utils {
     function testCannotAddGlassesWithZeroDecompressedLength() public {
         vm.prank(descriptor);
         vm.expectRevert(INounsArt.BadDecompressedLength.selector);
-        art.addGlasses(fromHex(FIRST_TWO_IMAGES_COMPRESSED), 0, 0);
+        art.addGlasses(FIRST_TWO_IMAGES_COMPRESSED, 0, 0);
     }
 
     function testCannotAddGlassesWithZeroImageCount() public {
         vm.prank(descriptor);
         vm.expectRevert(INounsArt.BadImageCount.selector);
-        art.addGlasses(fromHex(FIRST_TWO_IMAGES_COMPRESSED), FIRST_TWO_IMAGES_DEFLATED_LENGTH, 0);
+        art.addGlasses(FIRST_TWO_IMAGES_COMPRESSED, FIRST_TWO_IMAGES_DEFLATED_LENGTH, 0);
     }
 
     function testAddGlassesWorksWithMultiplePages() public {
         assertEq(art.glassesTrait().storedImagesCount, 0);
 
         vm.startPrank(descriptor);
-        art.addGlasses(fromHex(FIRST_TWO_IMAGES_COMPRESSED), FIRST_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
-        art.addGlasses(fromHex(NEXT_TWO_IMAGES_COMPRESSED), NEXT_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
+        art.addGlasses(FIRST_TWO_IMAGES_COMPRESSED, FIRST_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
+        art.addGlasses(NEXT_TWO_IMAGES_COMPRESSED, NEXT_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
         vm.stopPrank();
 
         _assertGlassesStoredOK();
     }
 
     function testCannotAddGlassesFromPointerWithZeroDecompressedLength() public {
-        address pointer = SSTORE2.write(fromHex(FIRST_TWO_IMAGES_COMPRESSED));
+        address pointer = SSTORE2.write(FIRST_TWO_IMAGES_COMPRESSED);
         vm.prank(descriptor);
         vm.expectRevert(INounsArt.BadDecompressedLength.selector);
         art.addGlassesFromPointer(pointer, 0, 0);
     }
 
     function testCannotAddGlassesFromPointerWithZeroImageCount() public {
-        address pointer = SSTORE2.write(fromHex(FIRST_TWO_IMAGES_COMPRESSED));
+        address pointer = SSTORE2.write(FIRST_TWO_IMAGES_COMPRESSED);
         vm.prank(descriptor);
         vm.expectRevert(INounsArt.BadImageCount.selector);
         art.addGlassesFromPointer(pointer, FIRST_TWO_IMAGES_DEFLATED_LENGTH, 0);
@@ -442,12 +433,12 @@ contract NounsArtTest is Test, Utils {
 
         vm.startPrank(descriptor);
         art.addGlassesFromPointer(
-            SSTORE2.write(fromHex(FIRST_TWO_IMAGES_COMPRESSED)),
+            SSTORE2.write(FIRST_TWO_IMAGES_COMPRESSED),
             FIRST_TWO_IMAGES_DEFLATED_LENGTH,
             uint16(2)
         );
         art.addGlassesFromPointer(
-            SSTORE2.write(fromHex(NEXT_TWO_IMAGES_COMPRESSED)),
+            SSTORE2.write(NEXT_TWO_IMAGES_COMPRESSED),
             NEXT_TWO_IMAGES_DEFLATED_LENGTH,
             uint16(2)
         );
@@ -464,68 +455,68 @@ contract NounsArtTest is Test, Utils {
         assertEq(art.bodiesTrait().storedImagesCount, 4);
 
         // These hard-coded values are copied from image-data.json -> images -> BODIES -> the first items
-        assertEq(art.bodies(0), fromHex(IMAGE_0));
-        assertEq(art.bodies(1), fromHex(IMAGE_1));
+        assertEq(art.bodies(0), IMAGE_0);
+        assertEq(art.bodies(1), IMAGE_1);
 
         // These hard-coded values are copied from image-data.json -> images -> HEADS -> the first items
-        assertEq(art.bodies(2), fromHex(IMAGE_2));
-        assertEq(art.bodies(3), fromHex(IMAGE_3));
+        assertEq(art.bodies(2), IMAGE_2);
+        assertEq(art.bodies(3), IMAGE_3);
     }
 
     function _assertAccessoriesStoredOK() internal {
         assertEq(art.accessoriesTrait().storedImagesCount, 4);
 
         // These hard-coded values are copied from image-data.json -> images -> BODIES -> the first items
-        assertEq(art.accessories(0), fromHex(IMAGE_0));
-        assertEq(art.accessories(1), fromHex(IMAGE_1));
+        assertEq(art.accessories(0), IMAGE_0);
+        assertEq(art.accessories(1), IMAGE_1);
 
         // These hard-coded values are copied from image-data.json -> images -> HEADS -> the first items
-        assertEq(art.accessories(2), fromHex(IMAGE_2));
-        assertEq(art.accessories(3), fromHex(IMAGE_3));
+        assertEq(art.accessories(2), IMAGE_2);
+        assertEq(art.accessories(3), IMAGE_3);
     }
 
     function _assertHeadsStoredOK() internal {
         assertEq(art.headsTrait().storedImagesCount, 4);
 
         // These hard-coded values are copied from image-data.json -> images -> BODIES -> the first items
-        assertEq(art.heads(0), fromHex(IMAGE_0));
-        assertEq(art.heads(1), fromHex(IMAGE_1));
+        assertEq(art.heads(0), IMAGE_0);
+        assertEq(art.heads(1), IMAGE_1);
 
         // These hard-coded values are copied from image-data.json -> images -> HEADS -> the first items
-        assertEq(art.heads(2), fromHex(IMAGE_2));
-        assertEq(art.heads(3), fromHex(IMAGE_3));
+        assertEq(art.heads(2), IMAGE_2);
+        assertEq(art.heads(3), IMAGE_3);
     }
 
     function _assertGlassesStoredOK() internal {
         assertEq(art.glassesTrait().storedImagesCount, 4);
 
         // These hard-coded values are copied from image-data.json -> images -> BODIES -> the first items
-        assertEq(art.glasses(0), fromHex(IMAGE_0));
-        assertEq(art.glasses(1), fromHex(IMAGE_1));
+        assertEq(art.glasses(0), IMAGE_0);
+        assertEq(art.glasses(1), IMAGE_1);
 
         // These hard-coded values are copied from image-data.json -> images -> HEADS -> the first items
-        assertEq(art.glasses(2), fromHex(IMAGE_2));
-        assertEq(art.glasses(3), fromHex(IMAGE_3));
+        assertEq(art.glasses(2), IMAGE_2);
+        assertEq(art.glasses(3), IMAGE_3);
     }
 
     // the value below was copied from running the hardhat task `descriptor-art-to-console` with
     // the parameter `count` set to 2, and taking the bodies values.
-    string constant FIRST_TWO_IMAGES_COMPRESSED =
-        '6360c00b14f04b33301190772020bf8080bc3983a8b83c271f130432313132701345123016dd7c6608646206ea258a841b0000';
+    bytes constant FIRST_TWO_IMAGES_COMPRESSED =
+        hex'6360c00b14f04b33301190772020bf8080bc3983a8b83c271f130432313132701345123016dd7c6608646206ea258a841b0000';
     uint80 constant FIRST_TWO_IMAGES_DEFLATED_LENGTH = 320;
 
     // the value below was copied from running the hardhat task `descriptor-art-to-console` with
     // the parameter `count` set to 2 and `start` set to 2, and taking the heads values.
-    string constant NEXT_TWO_IMAGES_COMPRESSED =
-        '858f410a02310c4593b4d38ee0548551145cb8ea21baf24e82eb8c77f23e1ec5df0e232a3a0dfcfcd7fc4253a2d93acdc72495fc5cc91f95fc42cda17786ac2ef1d6425b620a6ac12b15f01a7de4a9b386e1bf9bd25979605d0d5cc86877636db4c34c68a395953eea4ee6d81b4721353476ec9602647e1236f160483ce7ad3c4749d6bb6831e388337e955da2f31692d7acc5ad76e4b4cb9eb2b6dfe44b3a39ed21efcd351416cab3b77a02';
+    bytes constant NEXT_TWO_IMAGES_COMPRESSED =
+        hex'858f410a02310c4593b4d38ee0548551145cb8ea21baf24e82eb8c77f23e1ec5df0e232a3a0dfcfcd7fc4253a2d93acdc72495fc5cc91f95fc42cda17786ac2ef1d6425b620a6ac12b15f01a7de4a9b386e1bf9bd25979605d0d5cc86877636db4c34c68a395953eea4ee6d81b4721353476ec9602647e1236f160483ce7ad3c4749d6bb6831e388337e955da2f31692d7acc5ad76e4b4cb9eb2b6dfe44b3a39ed21efcd351416cab3b77a02';
     uint80 constant NEXT_TWO_IMAGES_DEFLATED_LENGTH = 512;
 
-    string constant IMAGE_0 =
-        '0015171f090e020e020e020e02020201000b02020201000b02020201000b02020201000b02020201000b02020201000b02020201000b02';
-    string constant IMAGE_1 =
-        '0015171f090e030e030e030e03020301000b03020301000b03020301000b03020301000b03020301000b03020301000b03020301000b03';
-    string constant IMAGE_2 =
-        '0005191406030004800c0002000980080001000e80040002000f80020001001080020002000f80020002000f800200020001800e810200020001800e810200020001800e810200020001800e81020003800e8102000180018101800f8101000180018103800d82018005800d81018002001180';
-    string constant IMAGE_3 =
-        '00031c140306000e3a050006000e3a05000400023a0e00023a03000400023a0e00023a03000400023a0e00023a030002000207023a0e07023a02070100020001070126023a040706260407023a01260107010001000126010702260607042606070226010701000100012608070626080701000100013a16070100013a0100013a15070100013a0100013a15070100013a0107013a1607013a0107013a1607010018070100070703760e0701001807020016070100';
+    bytes constant IMAGE_0 =
+        hex'0015171f090e020e020e020e02020201000b02020201000b02020201000b02020201000b02020201000b02020201000b02020201000b02';
+    bytes constant IMAGE_1 =
+        hex'0015171f090e030e030e030e03020301000b03020301000b03020301000b03020301000b03020301000b03020301000b03020301000b03';
+    bytes constant IMAGE_2 =
+        hex'0005191406030004800c0002000980080001000e80040002000f80020001001080020002000f80020002000f800200020001800e810200020001800e810200020001800e810200020001800e81020003800e8102000180018101800f8101000180018103800d82018005800d81018002001180';
+    bytes constant IMAGE_3 =
+        hex'00031c140306000e3a050006000e3a05000400023a0e00023a03000400023a0e00023a03000400023a0e00023a030002000207023a0e07023a02070100020001070126023a040706260407023a01260107010001000126010702260607042606070226010701000100012608070626080701000100013a16070100013a0100013a15070100013a0100013a15070100013a0107013a1607013a0107013a1607010018070100070703760e0701001807020016070100';
 }
