@@ -3,7 +3,7 @@ import { HardhatUserConfig } from 'hardhat/config';
 import dotenv from 'dotenv';
 import '@nomiclabs/hardhat-waffle';
 import '@nomiclabs/hardhat-etherscan';
-import '@float-capital/solidity-coverage';
+import 'solidity-coverage';
 import '@typechain/hardhat';
 import 'hardhat-abi-exporter';
 import '@openzeppelin/hardhat-upgrades';
