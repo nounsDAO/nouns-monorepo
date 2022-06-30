@@ -173,7 +173,7 @@ contract NounsArtTest is Test, Utils {
     }
 
     ///
-    /// addBodies, addBodiesFromPointer, bodiesPageCount, bodiesPage, bodies, bodiesTrait
+    /// addBodies, addBodiesFromPointer, bodies, bodiesTrait
     ///
 
     function testAddBodiesRevertsIfSenderNotDescriptor() public {
@@ -201,7 +201,6 @@ contract NounsArtTest is Test, Utils {
 
     function testAddBodiesWorksWithMultiplePages() public {
         assertEq(art.bodiesTrait().storedImagesCount, 0);
-        assertEq(art.bodiesPageCount(), 0);
 
         vm.startPrank(descriptor);
         art.addBodies(fromHex(FIRST_TWO_IMAGES_COMPRESSED), FIRST_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
@@ -227,7 +226,6 @@ contract NounsArtTest is Test, Utils {
 
     function testAddBodiesFromPointerWorksWithMultiplePages() public {
         assertEq(art.bodiesTrait().storedImagesCount, 0);
-        assertEq(art.bodiesPageCount(), 0);
 
         vm.startPrank(descriptor);
         art.addBodiesFromPointer(
@@ -246,7 +244,7 @@ contract NounsArtTest is Test, Utils {
     }
 
     ///
-    /// addAccessories, addAccessoriesFromPointer, accessoriesPageCount, accessoriesPage, accessories, accessoriesTrait
+    /// addAccessories, addAccessoriesFromPointer, accessories, accessoriesTrait
     ///
 
     function testAddAccessoriesRevertsIfSenderNotDescriptor() public {
@@ -274,7 +272,6 @@ contract NounsArtTest is Test, Utils {
 
     function testAddAccessoriesWorksWithMultiplePages() public {
         assertEq(art.accessoriesTrait().storedImagesCount, 0);
-        assertEq(art.accessoriesPageCount(), 0);
 
         vm.startPrank(descriptor);
         art.addAccessories(fromHex(FIRST_TWO_IMAGES_COMPRESSED), FIRST_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
@@ -300,7 +297,6 @@ contract NounsArtTest is Test, Utils {
 
     function testAddAccessoriesFromPointerWorksWithMultiplePages() public {
         assertEq(art.accessoriesTrait().storedImagesCount, 0);
-        assertEq(art.accessoriesPageCount(), 0);
 
         vm.startPrank(descriptor);
         art.addAccessoriesFromPointer(
@@ -319,7 +315,7 @@ contract NounsArtTest is Test, Utils {
     }
 
     ///
-    /// addHeads, addHeadsFromPointer, headsPageCount, headsPage, heads, headsTrait
+    /// addHeads, addHeadsFromPointer, heads, headsTrait
     ///
 
     function testAddHeadsRevertsIfSenderNotDescriptor() public {
@@ -347,7 +343,6 @@ contract NounsArtTest is Test, Utils {
 
     function testAddHeadsWorksWithMultiplePages() public {
         assertEq(art.headsTrait().storedImagesCount, 0);
-        assertEq(art.headsPageCount(), 0);
 
         vm.startPrank(descriptor);
         art.addHeads(fromHex(FIRST_TWO_IMAGES_COMPRESSED), FIRST_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
@@ -373,7 +368,6 @@ contract NounsArtTest is Test, Utils {
 
     function testAddHeadsFromPointerWorksWithMultiplePages() public {
         assertEq(art.headsTrait().storedImagesCount, 0);
-        assertEq(art.headsPageCount(), 0);
 
         vm.startPrank(descriptor);
         art.addHeadsFromPointer(
@@ -392,7 +386,7 @@ contract NounsArtTest is Test, Utils {
     }
 
     ///
-    /// addGlasses, addGlassesFromPointer, glassesPageCount, glassesPage, glasses, glassesTrait
+    /// addGlasses, addGlassesFromPointer, glasses, glassesTrait
     ///
 
     function testAddGlassesRevertsIfSenderNotDescriptor() public {
@@ -420,7 +414,6 @@ contract NounsArtTest is Test, Utils {
 
     function testAddGlassesWorksWithMultiplePages() public {
         assertEq(art.glassesTrait().storedImagesCount, 0);
-        assertEq(art.glassesPageCount(), 0);
 
         vm.startPrank(descriptor);
         art.addGlasses(fromHex(FIRST_TWO_IMAGES_COMPRESSED), FIRST_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
@@ -446,7 +439,6 @@ contract NounsArtTest is Test, Utils {
 
     function testAddGlassesFromPointerWorksWithMultiplePages() public {
         assertEq(art.headsTrait().storedImagesCount, 0);
-        assertEq(art.glassesPageCount(), 0);
 
         vm.startPrank(descriptor);
         art.addGlassesFromPointer(
@@ -469,18 +461,6 @@ contract NounsArtTest is Test, Utils {
     ///
 
     function _assertBodiesStoredOK() internal {
-        assertEq(art.bodiesPageCount(), 2);
-
-        INounsArt.NounArtStoragePage memory page = art.bodiesPage(0);
-        assertEq(page.imageCount, 2);
-        assertEq(page.decompressedLength, FIRST_TWO_IMAGES_DEFLATED_LENGTH);
-        assertEq(SSTORE2.read(page.pointer), fromHex(FIRST_TWO_IMAGES_COMPRESSED));
-
-        page = art.bodiesPage(1);
-        assertEq(page.imageCount, 2);
-        assertEq(page.decompressedLength, NEXT_TWO_IMAGES_DEFLATED_LENGTH);
-        assertEq(SSTORE2.read(page.pointer), fromHex(NEXT_TWO_IMAGES_COMPRESSED));
-
         assertEq(art.bodiesTrait().storedImagesCount, 4);
 
         // These hard-coded values are copied from image-data.json -> images -> BODIES -> the first items
@@ -493,18 +473,6 @@ contract NounsArtTest is Test, Utils {
     }
 
     function _assertAccessoriesStoredOK() internal {
-        assertEq(art.accessoriesPageCount(), 2);
-
-        INounsArt.NounArtStoragePage memory page = art.accessoriesPage(0);
-        assertEq(page.imageCount, 2);
-        assertEq(page.decompressedLength, FIRST_TWO_IMAGES_DEFLATED_LENGTH);
-        assertEq(SSTORE2.read(page.pointer), fromHex(FIRST_TWO_IMAGES_COMPRESSED));
-
-        page = art.accessoriesPage(1);
-        assertEq(page.imageCount, 2);
-        assertEq(page.decompressedLength, NEXT_TWO_IMAGES_DEFLATED_LENGTH);
-        assertEq(SSTORE2.read(page.pointer), fromHex(NEXT_TWO_IMAGES_COMPRESSED));
-
         assertEq(art.accessoriesTrait().storedImagesCount, 4);
 
         // These hard-coded values are copied from image-data.json -> images -> BODIES -> the first items
@@ -517,18 +485,6 @@ contract NounsArtTest is Test, Utils {
     }
 
     function _assertHeadsStoredOK() internal {
-        assertEq(art.headsPageCount(), 2);
-
-        INounsArt.NounArtStoragePage memory page = art.headsPage(0);
-        assertEq(page.imageCount, 2);
-        assertEq(page.decompressedLength, FIRST_TWO_IMAGES_DEFLATED_LENGTH);
-        assertEq(SSTORE2.read(page.pointer), fromHex(FIRST_TWO_IMAGES_COMPRESSED));
-
-        page = art.headsPage(1);
-        assertEq(page.imageCount, 2);
-        assertEq(page.decompressedLength, NEXT_TWO_IMAGES_DEFLATED_LENGTH);
-        assertEq(SSTORE2.read(page.pointer), fromHex(NEXT_TWO_IMAGES_COMPRESSED));
-
         assertEq(art.headsTrait().storedImagesCount, 4);
 
         // These hard-coded values are copied from image-data.json -> images -> BODIES -> the first items
@@ -541,18 +497,6 @@ contract NounsArtTest is Test, Utils {
     }
 
     function _assertGlassesStoredOK() internal {
-        assertEq(art.glassesPageCount(), 2);
-
-        INounsArt.NounArtStoragePage memory page = art.glassesPage(0);
-        assertEq(page.imageCount, 2);
-        assertEq(page.decompressedLength, FIRST_TWO_IMAGES_DEFLATED_LENGTH);
-        assertEq(SSTORE2.read(page.pointer), fromHex(FIRST_TWO_IMAGES_COMPRESSED));
-
-        page = art.glassesPage(1);
-        assertEq(page.imageCount, 2);
-        assertEq(page.decompressedLength, NEXT_TWO_IMAGES_DEFLATED_LENGTH);
-        assertEq(SSTORE2.read(page.pointer), fromHex(NEXT_TWO_IMAGES_COMPRESSED));
-
         assertEq(art.glassesTrait().storedImagesCount, 4);
 
         // These hard-coded values are copied from image-data.json -> images -> BODIES -> the first items

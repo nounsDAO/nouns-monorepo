@@ -115,22 +115,6 @@ interface INounsArt {
 
     function backgroundsCount() external view returns (uint256);
 
-    function headsPageCount() external view returns (uint256);
-
-    function bodiesPageCount() external view returns (uint256);
-
-    function accessoriesPageCount() external view returns (uint256);
-
-    function glassesPageCount() external view returns (uint256);
-
-    function headsPage(uint256 pageIndex) external view returns (INounsArt.NounArtStoragePage memory);
-
-    function bodiesPage(uint256 pageIndex) external view returns (INounsArt.NounArtStoragePage memory);
-
-    function accessoriesPage(uint256 pageIndex) external view returns (INounsArt.NounArtStoragePage memory);
-
-    function glassesPage(uint256 pageIndex) external view returns (INounsArt.NounArtStoragePage memory);
-
     function backgrounds(uint256 index) external view returns (string memory);
 
     function heads(uint256 index) external view returns (bytes memory);

@@ -290,62 +290,6 @@ contract NounsArt is INounsArt {
     }
 
     /**
-     * @notice Get the number of heads storage pages.
-     */
-    function headsPageCount() public view override returns (uint256) {
-        return _heads.storagePages.length;
-    }
-
-    /**
-     * @notice Get the number of bodies storage pages.
-     */
-    function bodiesPageCount() public view override returns (uint256) {
-        return _bodies.storagePages.length;
-    }
-
-    /**
-     * @notice Get the number of accessories storage pages.
-     */
-    function accessoriesPageCount() public view override returns (uint256) {
-        return _accessories.storagePages.length;
-    }
-
-    /**
-     * @notice Get the number of glasses storage pages.
-     */
-    function glassesPageCount() public view override returns (uint256) {
-        return _glasses.storagePages.length;
-    }
-
-    /**
-     * @notice Get a storage page of head images.
-     */
-    function headsPage(uint256 pageIndex) public view override returns (INounsArt.NounArtStoragePage memory) {
-        return _heads.storagePages[pageIndex];
-    }
-
-    /**
-     * @notice Get a storage page of body images.
-     */
-    function bodiesPage(uint256 pageIndex) public view override returns (INounsArt.NounArtStoragePage memory) {
-        return _bodies.storagePages[pageIndex];
-    }
-
-    /**
-     * @notice Get a storage page of accessory images.
-     */
-    function accessoriesPage(uint256 pageIndex) public view override returns (INounsArt.NounArtStoragePage memory) {
-        return _accessories.storagePages[pageIndex];
-    }
-
-    /**
-     * @notice Get a storage page of glasses images.
-     */
-    function glassesPage(uint256 pageIndex) public view override returns (INounsArt.NounArtStoragePage memory) {
-        return _glasses.storagePages[pageIndex];
-    }
-
-    /**
      * @notice Get a head image bytes (RLE-encoded).
      */
     function heads(uint256 index) public view override returns (bytes memory) {
