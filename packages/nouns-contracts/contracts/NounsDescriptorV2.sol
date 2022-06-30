@@ -410,12 +410,12 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
         bytes memory head = art.heads(seed.head);
         bytes memory glassesBytes = art.glasses(seed.glasses);
 
-        ISVGRenderer.Part[] memory _parts = new ISVGRenderer.Part[](4);
-        _parts[0] = ISVGRenderer.Part({ image: body, palette: _getPalette(body) });
-        _parts[1] = ISVGRenderer.Part({ image: accessory, palette: _getPalette(accessory) });
-        _parts[2] = ISVGRenderer.Part({ image: head, palette: _getPalette(head) });
-        _parts[3] = ISVGRenderer.Part({ image: glassesBytes, palette: _getPalette(glassesBytes) });
-        return _parts;
+        ISVGRenderer.Part[] memory parts = new ISVGRenderer.Part[](4);
+        parts[0] = ISVGRenderer.Part({ image: body, palette: _getPalette(body) });
+        parts[1] = ISVGRenderer.Part({ image: accessory, palette: _getPalette(accessory) });
+        parts[2] = ISVGRenderer.Part({ image: head, palette: _getPalette(head) });
+        parts[3] = ISVGRenderer.Part({ image: glassesBytes, palette: _getPalette(glassesBytes) });
+        return parts;
     }
 
     /**
