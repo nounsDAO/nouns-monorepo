@@ -27,6 +27,15 @@ const decodeImage = (image: string): DecodedImage => {
 };
 
 /**
+ * @notice Given an x-coordinate, draw length, and right bound, return the draw
+ * length for a single SVG rectangle.
+ */
+const getRectLength = (currentX: number, drawLength: number, rightBound: number): number => {
+  const remainingPixelsInLine = rightBound - currentX;
+  return drawLength <= remainingPixelsInLine ? drawLength : remainingPixelsInLine;
+};
+
+/**
  * Given RLE parts, palette colors, and a background color, build an SVG image.
  * @param parts The RLE part datas
  * @param paletteColors The hex palette colors
@@ -44,23 +53,29 @@ export const buildSVG = (
     let currentX = bounds.left;
     let currentY = bounds.top;
 
-    rects.forEach(rect => {
-      const [length, colorIndex] = rect;
+    rects.forEach(draw => {
+      let [drawLength, colorIndex] = draw;
       const hexColor = paletteColors[colorIndex];
 
-      // Do not push rect if transparent
-      if (colorIndex !== 0) {
-        svgRects.push(
-          `<rect width="${length * 10}" height="10" x="${currentX * 10}" y="${
-            currentY * 10
-          }" fill="#${hexColor}" />`,
-        );
-      }
+      let length = getRectLength(currentX, drawLength, bounds.right);
+      while (length > 0) {
+        // Do not push rect if transparent
+        if (colorIndex !== 0) {
+          svgRects.push(
+            `<rect width="${length * 10}" height="10" x="${currentX * 10}" y="${
+              currentY * 10
+            }" fill="#${hexColor}" />`,
+          );
+        }
 
-      currentX += length;
-      if (currentX === bounds.right) {
-        currentX = bounds.left;
-        currentY++;
+        currentX += length;
+        if (currentX === bounds.right) {
+          currentX = bounds.left;
+          currentY++;
+        }
+
+        drawLength -= length;
+        length = getRectLength(currentX, drawLength, bounds.right);
       }
     });
     result += svgRects.join('');
