@@ -22,28 +22,28 @@ import { Inflate } from './libs/Inflate.sol';
 import { SSTORE2 } from './libs/SSTORE2.sol';
 
 contract NounsArt is INounsArt {
-    // Current Nouns Descriptor address
+    /// @notice Current Nouns Descriptor address
     address public override descriptor;
 
-    // Pending Nouns Descriptor address
+    /// @notice Pending Nouns Descriptor address
     address public override pendingDescriptor;
 
-    // Noun Backgrounds (Hex Colors)
+    /// @notice Noun Backgrounds (Hex Colors)
     string[] public override backgrounds;
 
-    // Noun Color Palettes (Index => Hex Colors)
+    /// @notice Noun Color Palettes (Index => Hex Colors, stored as a contract using SSTORE2)
     mapping(uint8 => address) public palettesPointers;
 
-    // Noun Bodies (Custom RLE)
+    /// @notice Noun Bodies Trait
     Trait public _bodies;
 
-    // Noun Accessories (Custom RLE)
+    /// @notice Noun Accessories Trait
     Trait public _accessories;
 
-    // Noun Heads (Custom RLE)
+    /// @notice Noun Heads Trait
     Trait public _heads;
 
-    // Noun Glasses (Custom RLE)
+    /// @notice Noun Glasses Trait
     Trait public _glasses;
 
     /**

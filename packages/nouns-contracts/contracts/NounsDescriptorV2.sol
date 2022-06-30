@@ -32,19 +32,19 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     // https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt
     bytes32 constant COPYRIGHT_CC0_1_0_UNIVERSAL_LICENSE = 0xa2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499;
 
-    // The contract responsible for holding compressed Noun art
+    /// @notice The contract responsible for holding compressed Noun art
     INounsArt public art;
 
-    // The contract responsible for constructing SVGs
+    /// @notice The contract responsible for constructing SVGs
     ISVGRenderer public renderer;
 
-    // Whether or not new Noun parts can be added
+    /// @notice Whether or not new Noun parts can be added
     bool public override arePartsLocked;
 
-    // Whether or not `tokenURI` should be returned as a data URI (Default: true)
+    /// @notice Whether or not `tokenURI` should be returned as a data URI (Default: true)
     bool public override isDataURIEnabled = true;
 
-    // Base URI
+    /// @notice Base URI, used when isDataURIEnabled is false
     string public override baseURI;
 
     /**
