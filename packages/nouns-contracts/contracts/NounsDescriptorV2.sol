@@ -405,16 +405,16 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
      * @notice Get all Noun parts for the passed `seed`.
      */
     function getPartsForSeed(INounsSeeder.Seed memory seed) public view returns (ISVGRenderer.Part[] memory) {
-        bytes memory _body = art.bodies(seed.body);
-        bytes memory _accessory = art.accessories(seed.accessory);
-        bytes memory _head = art.heads(seed.head);
-        bytes memory _glassesBytes = art.glasses(seed.glasses);
+        bytes memory body = art.bodies(seed.body);
+        bytes memory accessory = art.accessories(seed.accessory);
+        bytes memory head = art.heads(seed.head);
+        bytes memory glassesBytes = art.glasses(seed.glasses);
 
         ISVGRenderer.Part[] memory _parts = new ISVGRenderer.Part[](4);
-        _parts[0] = ISVGRenderer.Part({ image: _body, palette: _getPalette(_body) });
-        _parts[1] = ISVGRenderer.Part({ image: _accessory, palette: _getPalette(_accessory) });
-        _parts[2] = ISVGRenderer.Part({ image: _head, palette: _getPalette(_head) });
-        _parts[3] = ISVGRenderer.Part({ image: _glassesBytes, palette: _getPalette(_glassesBytes) });
+        _parts[0] = ISVGRenderer.Part({ image: body, palette: _getPalette(body) });
+        _parts[1] = ISVGRenderer.Part({ image: accessory, palette: _getPalette(accessory) });
+        _parts[2] = ISVGRenderer.Part({ image: head, palette: _getPalette(head) });
+        _parts[3] = ISVGRenderer.Part({ image: glassesBytes, palette: _getPalette(glassesBytes) });
         return _parts;
     }
 
