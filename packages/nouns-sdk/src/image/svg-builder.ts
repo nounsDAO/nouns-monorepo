@@ -4,7 +4,7 @@ import { DecodedImage } from './types';
  * Decode the RLE image data into a format that's easier to consume in `buildSVG`.
  * @param image The RLE image data
  */
-const decodeImage = (image: string): DecodedImage => {
+export const decodeImage = (image: string): DecodedImage => {
   const data = image.replace(/^0x/, '');
   const paletteIndex = parseInt(data.substring(0, 2), 16);
   const bounds = {
