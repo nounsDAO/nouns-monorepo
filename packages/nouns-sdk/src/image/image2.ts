@@ -102,7 +102,7 @@ export class Image2 {
     }
 
     let right = this.width - 1;
-    while (right > 0 && this._isTransparentColumn(right)) {
+    while (right >= 0 && this._isTransparentColumn(right)) {
       right--;
     }
 
