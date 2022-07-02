@@ -53,6 +53,16 @@ describe('Image2', () => {
         expect(svg1).to.be.equal(svg2);
       }
     });
+
+    it('builds empty image correctly', async () => {
+      const { rle: rle2, colors: colors2 } = await encodeMultiLineRLE(
+        join(__dirname, './lib/images/empty.png'),
+      );
+      const svg2 = buildSVG([{ data: rle2 }], Array.from(colors2.keys()), 'ffffff');
+      expect(svg2).to.eq(
+        '<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="#ffffff" /></svg>',
+      );
+    });
   });
 
   describe('Multiline RLE encoding', async () => {

@@ -91,24 +91,24 @@ export class Image2 {
   }
 
   calcBounds(): ImageBounds {
-    let top = 0;
-    while (top < this.height - 1 && this._isTransparentRow(top)) {
-      top++;
-    }
-
     let bottom = this.height - 1;
     while (bottom > 0 && this._isTransparentRow(bottom)) {
       bottom--;
     }
 
-    let left = 0;
-    while (left < this.width - 1 && this._isTransparentColumn(left)) {
-      left++;
+    let top = 0;
+    while (top < bottom && this._isTransparentRow(top)) {
+      top++;
     }
 
     let right = this.width - 1;
     while (right > 0 && this._isTransparentColumn(right)) {
       right--;
+    }
+
+    let left = 0;
+    while (left < right && this._isTransparentColumn(left)) {
+      left++;
     }
 
     return {

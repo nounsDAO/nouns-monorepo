@@ -3,7 +3,7 @@ import { promises as fs } from 'fs';
 import { PNG } from 'pngjs';
 import path from 'path';
 
-const DESTINATION = path.join(__dirname, '../src/image-data.json');
+const DESTINATION = path.join(__dirname, '../src/image-data_v2.json');
 
 /**
  * Read a PNG image file and return a `PngImage` object.
