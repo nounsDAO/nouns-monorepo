@@ -10,3 +10,4 @@ export * from './run-local';
 export * from './verify-etherscan';
 export * from './update-configs';
 export * from './descriptor-art-to-console';
+export * from './descriptor-v1-export-abi';

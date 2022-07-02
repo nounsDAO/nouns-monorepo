@@ -50,4 +50,4 @@ jobs:
       - name: Run Forge tests
         run: |
           cd packages/nouns-contracts
-          forge test -vvv
+          forge test -vvv --ffi
