@@ -58,6 +58,11 @@ contract NounsArtTest is Test {
     /// addBackground, addManyBackgrounds, backgroundsCount, backgrounds
     ///
 
+    function testBackgroundsRevertsGivenNoArt() public {
+        vm.expectRevert();
+        art.backgrounds(0);
+    }
+
     function testAddBackgroundRevertsIfSenderNotDescriptor() public {
         vm.expectRevert(INounsArt.SenderIsNotDescriptor.selector);
         art.addBackground('ffffff');
@@ -96,6 +101,11 @@ contract NounsArtTest is Test {
     ///
     /// setPalette, palettes, palettesPointers
     ///
+
+    function testPalettesRevertsGivenNoArt() public {
+        vm.expectRevert(INounsArt.PaletteNotFound.selector);
+        art.palettes(0);
+    }
 
     function testSetPaletteRevertsIfSenderNotDescriptor() public {
         vm.expectRevert(INounsArt.SenderIsNotDescriptor.selector);
@@ -175,6 +185,11 @@ contract NounsArtTest is Test {
     /// addBodies, addBodiesFromPointer, bodies, bodiesTrait
     ///
 
+    function testBodiesRevertsGivenNoArt() public {
+        vm.expectRevert(INounsArt.ImageNotFound.selector);
+        art.bodies(0);
+    }
+
     function testAddBodiesRevertsIfSenderNotDescriptor() public {
         vm.expectRevert(INounsArt.SenderIsNotDescriptor.selector);
         art.addBodies(hex'123456', uint80(12), uint16(1));
@@ -241,6 +256,11 @@ contract NounsArtTest is Test {
     ///
     /// addAccessories, addAccessoriesFromPointer, accessories, accessoriesTrait
     ///
+
+    function testAccessoriesRevertsGivenNoArt() public {
+        vm.expectRevert(INounsArt.ImageNotFound.selector);
+        art.accessories(0);
+    }
 
     function testAddAccessoriesRevertsIfSenderNotDescriptor() public {
         vm.expectRevert(INounsArt.SenderIsNotDescriptor.selector);
@@ -313,6 +333,11 @@ contract NounsArtTest is Test {
     /// addHeads, addHeadsFromPointer, heads, headsTrait
     ///
 
+    function testHeadsRevertsGivenNoArt() public {
+        vm.expectRevert(INounsArt.ImageNotFound.selector);
+        art.heads(0);
+    }
+
     function testAddHeadsRevertsIfSenderNotDescriptor() public {
         vm.expectRevert(INounsArt.SenderIsNotDescriptor.selector);
         art.addHeads(hex'123456', uint80(12), uint16(1));
@@ -379,6 +404,11 @@ contract NounsArtTest is Test {
     ///
     /// addGlasses, addGlassesFromPointer, glasses, glassesTrait
     ///
+
+    function testGlassesRevertsGivenNoArt() public {
+        vm.expectRevert(INounsArt.ImageNotFound.selector);
+        art.glasses(0);
+    }
 
     function testAddGlassesRevertsIfSenderNotDescriptor() public {
         vm.expectRevert(INounsArt.SenderIsNotDescriptor.selector);

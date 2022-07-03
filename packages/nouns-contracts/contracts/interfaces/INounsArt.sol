@@ -36,6 +36,8 @@ interface INounsArt {
 
     error ImageNotFound();
 
+    error PaletteNotFound();
+
     event DescriptorUpdated(address oldDescriptor, address newDescriptor);
 
     struct NounArtStoragePage {

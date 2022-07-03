@@ -321,6 +321,10 @@ contract NounsArt is INounsArt {
      * @notice Get a color palette bytes.
      */
     function palettes(uint8 paletteIndex) public view override returns (bytes memory) {
+        address pointer = palettesPointers[paletteIndex];
+        if (pointer == address(0)) {
+            revert PaletteNotFound();
+        }
         return SSTORE2.read(palettesPointers[paletteIndex]);
     }
 
