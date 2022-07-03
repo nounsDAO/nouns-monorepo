@@ -80,7 +80,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
     return <Trans>Connect wallet to make a proposal.</Trans>;
   };
 
-  const hasNouns = account !== undefined && connectedAccountNounVotes > 0;
+  const hasNounVotes = account !== undefined && connectedAccountNounVotes > 0;
   const hasNounBalance =
     (useNounTokenBalance(
       account !== null && account !== undefined ? account : ethers.constants.AddressZero,
@@ -88,11 +88,11 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
   return (
     <div className={classes.proposals}>
       {showDelegateModal && <DelegationModal onDismiss={() => setShowDelegateModal(false)} />}
-      <div className={clsx(classes.headerWrapper, !hasNouns ? classes.forceFlexRow : '')}>
+      <div className={clsx(classes.headerWrapper, !hasNounVotes ? classes.forceFlexRow : '')}>
         <h3 className={classes.heading}>
           <Trans>Proposals</Trans>
         </h3>
-        {hasNouns ? (
+        {hasNounVotes ? (
           <div className={classes.nounInWalletBtnWrapper}>
             <div className={classes.submitProposalButtonWrapper}>
               <Button
@@ -122,6 +122,16 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
                 <Trans>Submit Proposal</Trans>
               </Button>
             </div>
+            {hasNounBalance && (
+              <div className={classes.delegateBtnWrapper}>
+                <Button
+                  className={classes.changeDelegateBtn}
+                  onClick={() => setShowDelegateModal(true)}
+                >
+                  <Trans>Delegate</Trans>
+                </Button>
+              </div>
+            )}
           </div>
         )}
       </div>
