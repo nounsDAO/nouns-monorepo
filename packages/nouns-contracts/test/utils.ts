@@ -20,6 +20,7 @@ import {
   NounsDAOExecutor,
 } from '../typechain';
 import ImageData from '../files/image-data.json';
+import ImageDataV2 from '../files/image-data_v2.json';
 import { Block } from '@ethersproject/abstract-provider';
 import { deflateRawSync } from 'zlib';
 import { chunkArray } from '../utils';
@@ -132,7 +133,7 @@ export const populateDescriptor = async (nounsDescriptor: NounsDescriptor): Prom
 };
 
 export const populateDescriptorV2 = async (nounsDescriptor: NounsDescriptorV2): Promise<void> => {
-  const { bgcolors, palette, images } = ImageData;
+  const { bgcolors, palette, images } = ImageDataV2;
   const { bodies, accessories, heads, glasses } = images;
 
   const {
@@ -156,15 +157,12 @@ export const populateDescriptorV2 = async (nounsDescriptor: NounsDescriptorV2): 
     itemCount: glassesCount,
   } = dataToDescriptorInput(glasses.map(({ data }) => data));
 
-  // Split up head and accessory population due to high gas usage
-  await Promise.all([
-    nounsDescriptor.addManyBackgrounds(bgcolors),
-    nounsDescriptor.setPalette(0, `0x000000${palette.join('')}`),
-    nounsDescriptor.addBodies(bodiesCompressed, bodiesLength, bodiesCount),
-    nounsDescriptor.addAccessories(accessoriesCompressed, accessoriesLength, accessoriesCount),
-    nounsDescriptor.addHeads(headsCompressed, headsLength, headsCount),
-    nounsDescriptor.addGlasses(glassesCompressed, glassesLength, glassesCount),
-  ]);
+  await nounsDescriptor.addManyBackgrounds(bgcolors);
+  await nounsDescriptor.setPalette(0, `0x000000${palette.join('')}`);
+  await nounsDescriptor.addBodies(bodiesCompressed, bodiesLength, bodiesCount);
+  await nounsDescriptor.addAccessories(accessoriesCompressed, accessoriesLength, accessoriesCount);
+  await nounsDescriptor.addHeads(headsCompressed, headsLength, headsCount);
+  await nounsDescriptor.addGlasses(glassesCompressed, glassesLength, glassesCount);
 };
 
 export const deployGovAndToken = async (
