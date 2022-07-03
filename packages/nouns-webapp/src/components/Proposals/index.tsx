@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { useBlockNumber, useEthers } from '@usedapp/core';
 import { isMobileScreen } from '../../utils/isMobile';
 import clsx from 'clsx';
-import { useUserVotes } from '../../wrappers/nounToken';
+import { useNounTokenBalance, useUserVotes } from '../../wrappers/nounToken';
 import { Trans } from '@lingui/macro';
 import { ClockIcon } from '@heroicons/react/solid';
 import proposalStatusClasses from '../ProposalStatus/ProposalStatus.module.css';
@@ -17,6 +17,7 @@ import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '../../i18n/l
 import React, { useState } from 'react';
 import DelegationModal from '../DelegationModal';
 import { i18n } from '@lingui/core';
+import { ethers } from 'ethers';
 
 dayjs.extend(relativeTime);
 
@@ -80,6 +81,10 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
   };
 
   const hasNouns = account !== undefined && connectedAccountNounVotes > 0;
+  const hasNounBalance =
+    (useNounTokenBalance(
+      account !== null && account !== undefined ? account : ethers.constants.AddressZero,
+    ) ?? 0) > 0;
   return (
     <div className={classes.proposals}>
       {showDelegateModal && <DelegationModal onDismiss={() => setShowDelegateModal(false)} />}
@@ -98,14 +103,16 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
               </Button>
             </div>
 
-            <div className={classes.delegateBtnWrapper}>
-              <Button
-                className={classes.changeDelegateBtn}
-                onClick={() => setShowDelegateModal(true)}
-              >
-                <Trans>Delegate</Trans>
-              </Button>
-            </div>
+            {hasNounBalance && (
+              <div className={classes.delegateBtnWrapper}>
+                <Button
+                  className={classes.changeDelegateBtn}
+                  onClick={() => setShowDelegateModal(true)}
+                >
+                  <Trans>Delegate</Trans>
+                </Button>
+              </div>
+            )}
           </div>
         ) : (
           <div className={clsx('d-flex', classes.nullStateSubmitProposalBtnWrapper)}>
