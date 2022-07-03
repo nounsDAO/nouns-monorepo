@@ -12,15 +12,15 @@
 }
 
 .primary {
-  background-color: var(--brand-color-blue);
+  background-color: #1973b5;
 }
 
 .success {
-  background-color: var(--brand-color-green);
+  background-color: #27a679;
 }
 
 .danger {
-  background-color: var(--brand-color-red);
+  background-color: #f24900;
 }
 
 .secondary {
