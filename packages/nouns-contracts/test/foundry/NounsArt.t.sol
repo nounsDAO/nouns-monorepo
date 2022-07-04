@@ -5,8 +5,9 @@ import 'forge-std/Test.sol';
 import { NounsArt } from '../../contracts/NounsArt.sol';
 import { INounsArt } from '../../contracts/interfaces/INounsArt.sol';
 import { SSTORE2 } from '../../contracts/libs/SSTORE2.sol';
+import { DescriptorHelpers } from './helpers/DescriptorHelpers.sol';
 
-contract NounsArtTest is Test {
+contract NounsArtTest is Test, DescriptorHelpers {
     event BackgroundsAdded(uint256 count);
 
     event PaletteSet(uint8 paletteIndex);
@@ -532,6 +533,26 @@ contract NounsArtTest is Test {
         vm.stopPrank();
 
         _assertGlassesStoredOK();
+    }
+
+    function testAddGlassesWorksWithSeveralPages() public {
+        uint256 pageCount = 5;
+        (bytes memory glasses, uint80 glassesLength, uint16 glassesCount) = getGlassesPage();
+        vm.startPrank(descriptor);
+        for (uint256 i = 0; i < pageCount; i++) {
+            art.addGlasses(glasses, glassesLength, glassesCount);
+        }
+        vm.stopPrank();
+
+        assertEq(art.getGlassesTrait().storagePages.length, 5);
+
+        for (uint256 i = 0; i < glassesCount; i++) {
+            bytes memory glassesPage0 = art.glasses(i);
+            for (uint256 j = 1; j < pageCount; j++) {
+                bytes memory sameGlassesDifferentPage = art.glasses(i + glassesCount * j);
+                assertEq(sameGlassesDifferentPage, glassesPage0);
+            }
+        }
     }
 
     ///

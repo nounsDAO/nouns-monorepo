@@ -66,4 +66,15 @@ abstract contract DescriptorHelpers is Test, Constants {
         inputs[1] = filepath;
         output = vm.ffi(inputs);
     }
+
+    function getGlassesPage()
+        public
+        returns (
+            bytes memory glasses,
+            uint80 glassesLength,
+            uint16 glassesCount
+        )
+    {
+        return abi.decode(readFile('./test/foundry/files/descriptor_v2/glassesPage.abi'), (bytes, uint80, uint16));
+    }
 }
