@@ -114,7 +114,7 @@ contract NounsDescriptorV2Test is Test {
     function testBodyCountUsesArt() public {
         vm.mockCall(
             address(art),
-            abi.encodeWithSelector(NounsArt.bodiesTrait.selector),
+            abi.encodeWithSelector(NounsArt.getBodiesTrait.selector),
             abi.encode(INounsArt.Trait({ storedImagesCount: 42, storagePages: new INounsArt.NounArtStoragePage[](0) }))
         );
         assertEq(descriptor.bodyCount(), 42);
@@ -124,7 +124,7 @@ contract NounsDescriptorV2Test is Test {
     function testAccessoryCountUsesArt() public {
         vm.mockCall(
             address(art),
-            abi.encodeWithSelector(NounsArt.accessoriesTrait.selector),
+            abi.encodeWithSelector(NounsArt.getAccessoriesTrait.selector),
             abi.encode(INounsArt.Trait({ storedImagesCount: 42, storagePages: new INounsArt.NounArtStoragePage[](0) }))
         );
         assertEq(descriptor.accessoryCount(), 42);
@@ -134,7 +134,7 @@ contract NounsDescriptorV2Test is Test {
     function testHeadCountUsesArt() public {
         vm.mockCall(
             address(art),
-            abi.encodeWithSelector(NounsArt.headsTrait.selector),
+            abi.encodeWithSelector(NounsArt.getHeadsTrait.selector),
             abi.encode(INounsArt.Trait({ storedImagesCount: 42, storagePages: new INounsArt.NounArtStoragePage[](0) }))
         );
         assertEq(descriptor.headCount(), 42);
@@ -144,7 +144,7 @@ contract NounsDescriptorV2Test is Test {
     function testGlassesCountUsesArt() public {
         vm.mockCall(
             address(art),
-            abi.encodeWithSelector(NounsArt.glassesTrait.selector),
+            abi.encodeWithSelector(NounsArt.getGlassesTrait.selector),
             abi.encode(INounsArt.Trait({ storedImagesCount: 42, storagePages: new INounsArt.NounArtStoragePage[](0) }))
         );
         assertEq(descriptor.glassesCount(), 42);

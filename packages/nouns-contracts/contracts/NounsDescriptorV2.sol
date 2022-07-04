@@ -91,28 +91,28 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
      * @notice Get the number of available Noun `bodies`.
      */
     function bodyCount() external view override returns (uint256) {
-        return art.bodiesTrait().storedImagesCount;
+        return art.getBodiesTrait().storedImagesCount;
     }
 
     /**
      * @notice Get the number of available Noun `accessories`.
      */
     function accessoryCount() external view override returns (uint256) {
-        return art.accessoriesTrait().storedImagesCount;
+        return art.getAccessoriesTrait().storedImagesCount;
     }
 
     /**
      * @notice Get the number of available Noun `heads`.
      */
     function headCount() external view override returns (uint256) {
-        return art.headsTrait().storedImagesCount;
+        return art.getHeadsTrait().storedImagesCount;
     }
 
     /**
      * @notice Get the number of available Noun `glasses`.
      */
     function glassesCount() external view override returns (uint256) {
-        return art.glassesTrait().storedImagesCount;
+        return art.getGlassesTrait().storedImagesCount;
     }
 
     /**

@@ -127,13 +127,13 @@ interface INounsArt {
 
     function glasses(uint256 index) external view returns (bytes memory);
 
-    function bodiesTrait() external view returns (Trait memory);
+    function getBodiesTrait() external view returns (Trait memory);
 
-    function accessoriesTrait() external view returns (Trait memory);
+    function getAccessoriesTrait() external view returns (Trait memory);
 
-    function headsTrait() external view returns (Trait memory);
+    function getHeadsTrait() external view returns (Trait memory);
 
-    function glassesTrait() external view returns (Trait memory);
+    function getGlassesTrait() external view returns (Trait memory);
 
     function puff(bytes memory source, uint256 destlen) external pure returns (Inflate.ErrorCode, bytes memory);
 }

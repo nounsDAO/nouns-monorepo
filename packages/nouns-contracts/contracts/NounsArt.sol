@@ -35,16 +35,16 @@ contract NounsArt is INounsArt {
     mapping(uint8 => address) public palettesPointers;
 
     /// @notice Noun Bodies Trait
-    Trait public _bodies;
+    Trait public bodiesTrait;
 
     /// @notice Noun Accessories Trait
-    Trait public _accessories;
+    Trait public accessoriesTrait;
 
     /// @notice Noun Heads Trait
-    Trait public _heads;
+    Trait public headsTrait;
 
     /// @notice Noun Glasses Trait
-    Trait public _glasses;
+    Trait public glassesTrait;
 
     /**
      * @notice Require that the sender is the descriptor.
@@ -87,34 +87,42 @@ contract NounsArt is INounsArt {
 
     /**
      * @notice Get the Trait struct for bodies.
+     * @dev This explicit getter is needed because implicit getters for structs aren't fully supported yet:
+     * https://github.com/ethereum/solidity/issues/11826
      * @return Trait the struct, including a total image count, and an array of storage pages.
      */
-    function bodiesTrait() external view override returns (Trait memory) {
-        return _bodies;
+    function getBodiesTrait() external view override returns (Trait memory) {
+        return bodiesTrait;
     }
 
     /**
      * @notice Get the Trait struct for accessories.
+     * @dev This explicit getter is needed because implicit getters for structs aren't fully supported yet:
+     * https://github.com/ethereum/solidity/issues/11826
      * @return Trait the struct, including a total image count, and an array of storage pages.
      */
-    function accessoriesTrait() external view override returns (Trait memory) {
-        return _accessories;
+    function getAccessoriesTrait() external view override returns (Trait memory) {
+        return accessoriesTrait;
     }
 
     /**
      * @notice Get the Trait struct for heads.
+     * @dev This explicit getter is needed because implicit getters for structs aren't fully supported yet:
+     * https://github.com/ethereum/solidity/issues/11826
      * @return Trait the struct, including a total image count, and an array of storage pages.
      */
-    function headsTrait() external view override returns (Trait memory) {
-        return _heads;
+    function getHeadsTrait() external view override returns (Trait memory) {
+        return headsTrait;
     }
 
     /**
      * @notice Get the Trait struct for glasses.
+     * @dev This explicit getter is needed because implicit getters for structs aren't fully supported yet:
+     * https://github.com/ethereum/solidity/issues/11826
      * @return Trait the struct, including a total image count, and an array of storage pages.
      */
-    function glassesTrait() external view override returns (Trait memory) {
-        return _glasses;
+    function getGlassesTrait() external view override returns (Trait memory) {
+        return glassesTrait;
     }
 
     /**
@@ -163,7 +171,7 @@ contract NounsArt is INounsArt {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyDescriptor {
-        addPage(_bodies, encodedCompressed, decompressedLength, imageCount);
+        addPage(bodiesTrait, encodedCompressed, decompressedLength, imageCount);
     }
 
     /**
@@ -179,7 +187,7 @@ contract NounsArt is INounsArt {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyDescriptor {
-        addPage(_accessories, encodedCompressed, decompressedLength, imageCount);
+        addPage(accessoriesTrait, encodedCompressed, decompressedLength, imageCount);
     }
 
     /**
@@ -195,7 +203,7 @@ contract NounsArt is INounsArt {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyDescriptor {
-        addPage(_heads, encodedCompressed, decompressedLength, imageCount);
+        addPage(headsTrait, encodedCompressed, decompressedLength, imageCount);
     }
 
     /**
@@ -211,7 +219,7 @@ contract NounsArt is INounsArt {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyDescriptor {
-        addPage(_glasses, encodedCompressed, decompressedLength, imageCount);
+        addPage(glassesTrait, encodedCompressed, decompressedLength, imageCount);
     }
 
     /**
@@ -228,7 +236,7 @@ contract NounsArt is INounsArt {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyDescriptor {
-        addPage(_bodies, pointer, decompressedLength, imageCount);
+        addPage(bodiesTrait, pointer, decompressedLength, imageCount);
     }
 
     /**
@@ -245,7 +253,7 @@ contract NounsArt is INounsArt {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyDescriptor {
-        addPage(_accessories, pointer, decompressedLength, imageCount);
+        addPage(accessoriesTrait, pointer, decompressedLength, imageCount);
     }
 
     /**
@@ -262,7 +270,7 @@ contract NounsArt is INounsArt {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyDescriptor {
-        addPage(_heads, pointer, decompressedLength, imageCount);
+        addPage(headsTrait, pointer, decompressedLength, imageCount);
     }
 
     /**
@@ -279,7 +287,7 @@ contract NounsArt is INounsArt {
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyDescriptor {
-        addPage(_glasses, pointer, decompressedLength, imageCount);
+        addPage(glassesTrait, pointer, decompressedLength, imageCount);
     }
 
     /**
@@ -293,28 +301,28 @@ contract NounsArt is INounsArt {
      * @notice Get a head image bytes (RLE-encoded).
      */
     function heads(uint256 index) public view override returns (bytes memory) {
-        return imageByIndex(_heads, index);
+        return imageByIndex(headsTrait, index);
     }
 
     /**
      * @notice Get a body image bytes (RLE-encoded).
      */
     function bodies(uint256 index) public view override returns (bytes memory) {
-        return imageByIndex(_bodies, index);
+        return imageByIndex(bodiesTrait, index);
     }
 
     /**
      * @notice Get a accessory image bytes (RLE-encoded).
      */
     function accessories(uint256 index) public view override returns (bytes memory) {
-        return imageByIndex(_accessories, index);
+        return imageByIndex(accessoriesTrait, index);
     }
 
     /**
      * @notice Get a glasses image bytes (RLE-encoded).
      */
     function glasses(uint256 index) public view override returns (bytes memory) {
-        return imageByIndex(_glasses, index);
+        return imageByIndex(glassesTrait, index);
     }
 
     /**

@@ -182,7 +182,7 @@ contract NounsArtTest is Test {
     }
 
     ///
-    /// addBodies, addBodiesFromPointer, bodies, bodiesTrait
+    /// addBodies, addBodiesFromPointer, bodies, getBodiesTrait
     ///
 
     function testBodiesRevertsGivenNoArt() public {
@@ -214,7 +214,7 @@ contract NounsArtTest is Test {
     }
 
     function testAddBodiesWorksWithMultiplePages() public {
-        assertEq(art.bodiesTrait().storedImagesCount, 0);
+        assertEq(art.getBodiesTrait().storedImagesCount, 0);
 
         vm.startPrank(descriptor);
         art.addBodies(FIRST_TWO_IMAGES_COMPRESSED, FIRST_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
@@ -239,7 +239,7 @@ contract NounsArtTest is Test {
     }
 
     function testAddBodiesFromPointerWorksWithMultiplePages() public {
-        assertEq(art.bodiesTrait().storedImagesCount, 0);
+        assertEq(art.getBodiesTrait().storedImagesCount, 0);
 
         vm.startPrank(descriptor);
         art.addBodiesFromPointer(
@@ -254,7 +254,7 @@ contract NounsArtTest is Test {
     }
 
     ///
-    /// addAccessories, addAccessoriesFromPointer, accessories, accessoriesTrait
+    /// addAccessories, addAccessoriesFromPointer, accessories, getAccessoriesTrait
     ///
 
     function testAccessoriesRevertsGivenNoArt() public {
@@ -286,7 +286,7 @@ contract NounsArtTest is Test {
     }
 
     function testAddAccessoriesWorksWithMultiplePages() public {
-        assertEq(art.accessoriesTrait().storedImagesCount, 0);
+        assertEq(art.getAccessoriesTrait().storedImagesCount, 0);
 
         vm.startPrank(descriptor);
         art.addAccessories(FIRST_TWO_IMAGES_COMPRESSED, FIRST_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
@@ -311,7 +311,7 @@ contract NounsArtTest is Test {
     }
 
     function testAddAccessoriesFromPointerWorksWithMultiplePages() public {
-        assertEq(art.accessoriesTrait().storedImagesCount, 0);
+        assertEq(art.getAccessoriesTrait().storedImagesCount, 0);
 
         vm.startPrank(descriptor);
         art.addAccessoriesFromPointer(
@@ -330,7 +330,7 @@ contract NounsArtTest is Test {
     }
 
     ///
-    /// addHeads, addHeadsFromPointer, heads, headsTrait
+    /// addHeads, addHeadsFromPointer, heads, getHeadsTrait
     ///
 
     function testHeadsRevertsGivenNoArt() public {
@@ -362,7 +362,7 @@ contract NounsArtTest is Test {
     }
 
     function testAddHeadsWorksWithMultiplePages() public {
-        assertEq(art.headsTrait().storedImagesCount, 0);
+        assertEq(art.getHeadsTrait().storedImagesCount, 0);
 
         vm.startPrank(descriptor);
         art.addHeads(FIRST_TWO_IMAGES_COMPRESSED, FIRST_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
@@ -387,7 +387,7 @@ contract NounsArtTest is Test {
     }
 
     function testAddHeadsFromPointerWorksWithMultiplePages() public {
-        assertEq(art.headsTrait().storedImagesCount, 0);
+        assertEq(art.getHeadsTrait().storedImagesCount, 0);
 
         vm.startPrank(descriptor);
         art.addHeadsFromPointer(
@@ -402,7 +402,7 @@ contract NounsArtTest is Test {
     }
 
     ///
-    /// addGlasses, addGlassesFromPointer, glasses, glassesTrait
+    /// addGlasses, addGlassesFromPointer, glasses, getGlassesTrait
     ///
 
     function testGlassesRevertsGivenNoArt() public {
@@ -434,7 +434,7 @@ contract NounsArtTest is Test {
     }
 
     function testAddGlassesWorksWithMultiplePages() public {
-        assertEq(art.glassesTrait().storedImagesCount, 0);
+        assertEq(art.getGlassesTrait().storedImagesCount, 0);
 
         vm.startPrank(descriptor);
         art.addGlasses(FIRST_TWO_IMAGES_COMPRESSED, FIRST_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
@@ -459,7 +459,7 @@ contract NounsArtTest is Test {
     }
 
     function testAddGlassesFromPointerWorksWithMultiplePages() public {
-        assertEq(art.headsTrait().storedImagesCount, 0);
+        assertEq(art.getHeadsTrait().storedImagesCount, 0);
 
         vm.startPrank(descriptor);
         art.addGlassesFromPointer(
@@ -482,7 +482,7 @@ contract NounsArtTest is Test {
     ///
 
     function _assertBodiesStoredOK() internal {
-        assertEq(art.bodiesTrait().storedImagesCount, 4);
+        assertEq(art.getBodiesTrait().storedImagesCount, 4);
 
         // These hard-coded values are copied from image-data.json -> images -> BODIES -> the first items
         assertEq(art.bodies(0), IMAGE_0);
@@ -494,7 +494,7 @@ contract NounsArtTest is Test {
     }
 
     function _assertAccessoriesStoredOK() internal {
-        assertEq(art.accessoriesTrait().storedImagesCount, 4);
+        assertEq(art.getAccessoriesTrait().storedImagesCount, 4);
 
         // These hard-coded values are copied from image-data.json -> images -> BODIES -> the first items
         assertEq(art.accessories(0), IMAGE_0);
@@ -506,7 +506,7 @@ contract NounsArtTest is Test {
     }
 
     function _assertHeadsStoredOK() internal {
-        assertEq(art.headsTrait().storedImagesCount, 4);
+        assertEq(art.getHeadsTrait().storedImagesCount, 4);
 
         // These hard-coded values are copied from image-data.json -> images -> BODIES -> the first items
         assertEq(art.heads(0), IMAGE_0);
@@ -518,7 +518,7 @@ contract NounsArtTest is Test {
     }
 
     function _assertGlassesStoredOK() internal {
-        assertEq(art.glassesTrait().storedImagesCount, 4);
+        assertEq(art.getGlassesTrait().storedImagesCount, 4);
 
         // These hard-coded values are copied from image-data.json -> images -> BODIES -> the first items
         assertEq(art.glasses(0), IMAGE_0);
