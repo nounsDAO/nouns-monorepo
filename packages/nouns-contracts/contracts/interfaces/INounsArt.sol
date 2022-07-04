@@ -134,6 +134,4 @@ interface INounsArt {
     function getHeadsTrait() external view returns (Trait memory);
 
     function getGlassesTrait() external view returns (Trait memory);
-
-    function puff(bytes memory source, uint256 destlen) external pure returns (Inflate.ErrorCode, bytes memory);
 }

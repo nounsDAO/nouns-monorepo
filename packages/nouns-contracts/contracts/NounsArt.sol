@@ -344,7 +344,7 @@ contract NounsArt is INounsArt {
      * @return Inflate.ErrorCode 0 if successful, otherwise an error code specifying the reason for failure.
      * @return bytes the decompressed bytes.
      */
-    function puff(bytes memory source, uint256 destlen) public pure override returns (Inflate.ErrorCode, bytes memory) {
+    function puff(bytes memory source, uint256 destlen) public pure returns (Inflate.ErrorCode, bytes memory) {
         return Inflate.puff(source, destlen);
     }
 
