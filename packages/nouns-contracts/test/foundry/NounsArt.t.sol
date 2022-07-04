@@ -7,6 +7,18 @@ import { INounsArt } from '../../contracts/interfaces/INounsArt.sol';
 import { SSTORE2 } from '../../contracts/libs/SSTORE2.sol';
 
 contract NounsArtTest is Test {
+    event BackgroundsAdded(uint256 count);
+
+    event PaletteSet(uint8 paletteIndex);
+
+    event BodiesAdded(uint16 count);
+
+    event AccessoriesAdded(uint16 count);
+
+    event HeadsAdded(uint16 count);
+
+    event GlassesAdded(uint16 count);
+
     NounsArt art;
     address descriptor = address(1);
 
@@ -70,6 +82,9 @@ contract NounsArtTest is Test {
 
     function testAddBackgroundWorks() public {
         vm.prank(descriptor);
+        vm.expectEmit(true, true, true, true);
+        emit BackgroundsAdded(1);
+
         art.addBackground('ffffff');
 
         assertEq(art.backgroundsCount(), 1);
@@ -89,6 +104,9 @@ contract NounsArtTest is Test {
         string[] memory bgs = new string[](2);
         bgs[0] = 'ffffff';
         bgs[1] = '000000';
+
+        vm.expectEmit(true, true, true, true);
+        emit BackgroundsAdded(2);
 
         vm.prank(descriptor);
         art.addManyBackgrounds(bgs);
@@ -113,6 +131,11 @@ contract NounsArtTest is Test {
     }
 
     function testSetPaletteWorks() public {
+        vm.expectEmit(true, true, true, true);
+        emit PaletteSet(0);
+        vm.expectEmit(true, true, true, true);
+        emit PaletteSet(1);
+
         bytes memory palette0 = hex'ffffffc5b9a1';
         bytes memory palette1 = hex'cfc2ab63a0f9';
         vm.startPrank(descriptor);
@@ -131,11 +154,15 @@ contract NounsArtTest is Test {
         bytes memory paletteV1 = hex'ffffffc5b9a1';
         bytes memory paletteV2 = hex'cfc2ab63a0f9';
 
+        vm.expectEmit(true, true, true, true);
+        emit PaletteSet(0);
         vm.prank(descriptor);
         art.setPalette(0, paletteV1);
         assertEq(art.palettes(0), paletteV1);
         assertEq(SSTORE2.read(art.palettesPointers(0)), paletteV1);
 
+        vm.expectEmit(true, true, true, true);
+        emit PaletteSet(0);
         vm.prank(descriptor);
         art.setPalette(0, paletteV2);
         assertEq(art.palettes(0), paletteV2);
@@ -215,6 +242,10 @@ contract NounsArtTest is Test {
 
     function testAddBodiesWorksWithMultiplePages() public {
         assertEq(art.getBodiesTrait().storedImagesCount, 0);
+        vm.expectEmit(true, true, true, true);
+        emit BodiesAdded(2);
+        vm.expectEmit(true, true, true, true);
+        emit BodiesAdded(2);
 
         vm.startPrank(descriptor);
         art.addBodies(FIRST_TWO_IMAGES_COMPRESSED, FIRST_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
@@ -240,6 +271,10 @@ contract NounsArtTest is Test {
 
     function testAddBodiesFromPointerWorksWithMultiplePages() public {
         assertEq(art.getBodiesTrait().storedImagesCount, 0);
+        vm.expectEmit(true, true, true, true);
+        emit BodiesAdded(2);
+        vm.expectEmit(true, true, true, true);
+        emit BodiesAdded(2);
 
         vm.startPrank(descriptor);
         art.addBodiesFromPointer(
@@ -287,6 +322,10 @@ contract NounsArtTest is Test {
 
     function testAddAccessoriesWorksWithMultiplePages() public {
         assertEq(art.getAccessoriesTrait().storedImagesCount, 0);
+        vm.expectEmit(true, true, true, true);
+        emit AccessoriesAdded(2);
+        vm.expectEmit(true, true, true, true);
+        emit AccessoriesAdded(2);
 
         vm.startPrank(descriptor);
         art.addAccessories(FIRST_TWO_IMAGES_COMPRESSED, FIRST_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
@@ -312,6 +351,10 @@ contract NounsArtTest is Test {
 
     function testAddAccessoriesFromPointerWorksWithMultiplePages() public {
         assertEq(art.getAccessoriesTrait().storedImagesCount, 0);
+        vm.expectEmit(true, true, true, true);
+        emit AccessoriesAdded(2);
+        vm.expectEmit(true, true, true, true);
+        emit AccessoriesAdded(2);
 
         vm.startPrank(descriptor);
         art.addAccessoriesFromPointer(
@@ -363,6 +406,10 @@ contract NounsArtTest is Test {
 
     function testAddHeadsWorksWithMultiplePages() public {
         assertEq(art.getHeadsTrait().storedImagesCount, 0);
+        vm.expectEmit(true, true, true, true);
+        emit HeadsAdded(2);
+        vm.expectEmit(true, true, true, true);
+        emit HeadsAdded(2);
 
         vm.startPrank(descriptor);
         art.addHeads(FIRST_TWO_IMAGES_COMPRESSED, FIRST_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
@@ -388,6 +435,10 @@ contract NounsArtTest is Test {
 
     function testAddHeadsFromPointerWorksWithMultiplePages() public {
         assertEq(art.getHeadsTrait().storedImagesCount, 0);
+        vm.expectEmit(true, true, true, true);
+        emit HeadsAdded(2);
+        vm.expectEmit(true, true, true, true);
+        emit HeadsAdded(2);
 
         vm.startPrank(descriptor);
         art.addHeadsFromPointer(
@@ -435,6 +486,10 @@ contract NounsArtTest is Test {
 
     function testAddGlassesWorksWithMultiplePages() public {
         assertEq(art.getGlassesTrait().storedImagesCount, 0);
+        vm.expectEmit(true, true, true, true);
+        emit GlassesAdded(2);
+        vm.expectEmit(true, true, true, true);
+        emit GlassesAdded(2);
 
         vm.startPrank(descriptor);
         art.addGlasses(FIRST_TWO_IMAGES_COMPRESSED, FIRST_TWO_IMAGES_DEFLATED_LENGTH, uint16(2));
@@ -460,6 +515,8 @@ contract NounsArtTest is Test {
 
     function testAddGlassesFromPointerWorksWithMultiplePages() public {
         assertEq(art.getHeadsTrait().storedImagesCount, 0);
+        vm.expectEmit(true, true, true, true);
+        emit GlassesAdded(2);
 
         vm.startPrank(descriptor);
         art.addGlassesFromPointer(

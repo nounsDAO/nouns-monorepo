@@ -40,6 +40,18 @@ interface INounsArt {
 
     event DescriptorUpdated(address oldDescriptor, address newDescriptor);
 
+    event BackgroundsAdded(uint256 count);
+
+    event PaletteSet(uint8 paletteIndex);
+
+    event BodiesAdded(uint16 count);
+
+    event AccessoriesAdded(uint16 count);
+
+    event HeadsAdded(uint16 count);
+
+    event GlassesAdded(uint16 count);
+
     struct NounArtStoragePage {
         uint16 imageCount;
         uint80 decompressedLength;

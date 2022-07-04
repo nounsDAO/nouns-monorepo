@@ -133,6 +133,8 @@ contract NounsArt is INounsArt {
         for (uint256 i = 0; i < _backgrounds.length; i++) {
             _addBackground(_backgrounds[i]);
         }
+
+        emit BackgroundsAdded(_backgrounds.length);
     }
 
     /**
@@ -141,6 +143,8 @@ contract NounsArt is INounsArt {
      */
     function addBackground(string calldata _background) external override onlyDescriptor {
         _addBackground(_background);
+
+        emit BackgroundsAdded(1);
     }
 
     /**
@@ -156,6 +160,8 @@ contract NounsArt is INounsArt {
             revert BadPaletteLength();
         }
         palettesPointers[paletteIndex] = SSTORE2.write(palette);
+
+        emit PaletteSet(paletteIndex);
     }
 
     /**
@@ -172,6 +178,8 @@ contract NounsArt is INounsArt {
         uint16 imageCount
     ) external override onlyDescriptor {
         addPage(bodiesTrait, encodedCompressed, decompressedLength, imageCount);
+
+        emit BodiesAdded(imageCount);
     }
 
     /**
@@ -188,6 +196,8 @@ contract NounsArt is INounsArt {
         uint16 imageCount
     ) external override onlyDescriptor {
         addPage(accessoriesTrait, encodedCompressed, decompressedLength, imageCount);
+
+        emit AccessoriesAdded(imageCount);
     }
 
     /**
@@ -204,6 +214,8 @@ contract NounsArt is INounsArt {
         uint16 imageCount
     ) external override onlyDescriptor {
         addPage(headsTrait, encodedCompressed, decompressedLength, imageCount);
+
+        emit HeadsAdded(imageCount);
     }
 
     /**
@@ -220,6 +232,8 @@ contract NounsArt is INounsArt {
         uint16 imageCount
     ) external override onlyDescriptor {
         addPage(glassesTrait, encodedCompressed, decompressedLength, imageCount);
+
+        emit GlassesAdded(imageCount);
     }
 
     /**
@@ -237,6 +251,8 @@ contract NounsArt is INounsArt {
         uint16 imageCount
     ) external override onlyDescriptor {
         addPage(bodiesTrait, pointer, decompressedLength, imageCount);
+
+        emit BodiesAdded(imageCount);
     }
 
     /**
@@ -254,6 +270,8 @@ contract NounsArt is INounsArt {
         uint16 imageCount
     ) external override onlyDescriptor {
         addPage(accessoriesTrait, pointer, decompressedLength, imageCount);
+
+        emit AccessoriesAdded(imageCount);
     }
 
     /**
@@ -271,6 +289,8 @@ contract NounsArt is INounsArt {
         uint16 imageCount
     ) external override onlyDescriptor {
         addPage(headsTrait, pointer, decompressedLength, imageCount);
+
+        emit HeadsAdded(imageCount);
     }
 
     /**
@@ -288,6 +308,8 @@ contract NounsArt is INounsArt {
         uint16 imageCount
     ) external override onlyDescriptor {
         addPage(glassesTrait, pointer, decompressedLength, imageCount);
+
+        emit GlassesAdded(imageCount);
     }
 
     /**
