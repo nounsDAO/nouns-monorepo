@@ -150,6 +150,8 @@ contract NounsArt is INounsArt {
     /**
      * @notice Update a single color palette. This function can be used to
      * add a new color palette or update an existing palette.
+     * @param paletteIndex the identifier of this palette
+     * @param palette byte array of colors. every 3 bytes represent an RGB color. max length: 256 * 3 = 768
      * @dev This function can only be called by the descriptor.
      */
     function setPalette(uint8 paletteIndex, bytes calldata palette) external override onlyDescriptor {

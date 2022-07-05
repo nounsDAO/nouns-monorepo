@@ -62,7 +62,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
 
     /**
      * @notice Set the Noun's art contract.
-     * Only callable by the owner when not locked.
+     * @dev Only callable by the owner when not locked.
      */
     function setArt(INounsArt _art) external onlyOwner whenPartsNotLocked {
         art = _art;
@@ -134,6 +134,8 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     /**
      * @notice Update a single color palette. This function can be used to
      * add a new color palette or update an existing palette.
+     * @param paletteIndex the identifier of this palette
+     * @param palette byte array of colors. every 3 bytes represent an RGB color. max length: 256 * 3 = 768
      */
     function setPalette(uint8 paletteIndex, bytes calldata palette) external override onlyOwner whenPartsNotLocked {
         art.setPalette(paletteIndex, palette);
