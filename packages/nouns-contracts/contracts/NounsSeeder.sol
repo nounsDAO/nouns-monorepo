@@ -37,11 +37,21 @@ contract NounsSeeder is INounsSeeder {
         uint256 glassesCount = descriptor.glassesCount();
 
         return Seed({
-            background: uint48(uint48(pseudorandomness) % backgroundCount),
-            body: uint48(uint48(pseudorandomness >> 48) % bodyCount),
-            accessory: uint48(uint48(pseudorandomness >> 96) % accessoryCount),
-            head: uint48(uint48(pseudorandomness >> 144) % headCount),
-            glasses: uint48(uint48(pseudorandomness >> 192) % glassesCount)
+            background: uint48(
+                uint48(pseudorandomness) % backgroundCount
+            ),
+            body: uint48(
+                uint48(pseudorandomness >> 48) % bodyCount
+            ),
+            accessory: uint48(
+                uint48(pseudorandomness >> 96) % accessoryCount
+            ),
+            head: uint48(
+                uint48(pseudorandomness >> 144) % headCount
+            ),
+            glasses: uint48(
+                uint48(pseudorandomness >> 192) % glassesCount
+            )
         });
     }
 }
