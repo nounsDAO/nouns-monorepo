@@ -86,7 +86,7 @@ describe('NounsDescriptorV2', () => {
     expect(name).to.equal('Noun 0');
     expect(description).to.equal('Noun 0 is a member of the Nouns DAO');
     expect(image).to.not.be.undefined;
-  }).timeout(100_000);
+  }).timeout(500_000);
 
   // Unskip this test to validate the encoding of all parts. It ensures that no parts revert when building the token URI.
   // This test also outputs a parts.html file, which can be visually inspected.
