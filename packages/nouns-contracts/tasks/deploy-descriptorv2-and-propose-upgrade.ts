@@ -1,11 +1,4 @@
 import { task } from 'hardhat/config';
-import {
-  NFTDescriptorV2__factory,
-  NounsArt__factory,
-  NounsDAOLogicV1__factory,
-  NounsDescriptorV2__factory,
-  SVGRenderer__factory,
-} from '../typechain';
 import { ContractName, DeployedContract } from './types';
 import { printContractsTable } from './utils';
 
@@ -31,7 +24,7 @@ task(
     });
 
     console.log('Deploying contracts...');
-    const library = await new NFTDescriptorV2__factory(deployer).deploy();
+    const library = await (await ethers.getContractFactory('NFTDescriptorV2', deployer)).deploy();
     contracts.NFTDescriptorV2 = {
       name: 'NFTDescriptorV2',
       address: library.address,
@@ -40,7 +33,7 @@ task(
       libraries: {},
     };
 
-    const renderer = await new SVGRenderer__factory(deployer).deploy();
+    const renderer = await (await ethers.getContractFactory('SVGRenderer', deployer)).deploy();
     contracts.SVGRenderer = {
       name: 'SVGRenderer',
       address: renderer.address,
@@ -49,12 +42,11 @@ task(
       libraries: {},
     };
 
-    const nounsDescriptorFactory = new NounsDescriptorV2__factory(
-      {
-        'contracts/libs/NFTDescriptorV2.sol:NFTDescriptorV2': library.address,
+    const nounsDescriptorFactory = await ethers.getContractFactory('NounsDescriptorV2', {
+      libraries: {
+        NFTDescriptorV2: library.address,
       },
-      deployer,
-    );
+    });
     const nounsDescriptor = await nounsDescriptorFactory.deploy(
       expectedNounsArtAddress,
       renderer.address,
@@ -69,7 +61,9 @@ task(
       },
     };
 
-    const art = await new NounsArt__factory(deployer).deploy(nounsDescriptor.address);
+    const art = await (
+      await ethers.getContractFactory('NounsArt', deployer)
+    ).deploy(nounsDescriptor.address);
     console.log(`actual art address: ${art.address}`);
     contracts.NounsArt = {
       name: 'NounsArt',
@@ -100,7 +94,7 @@ task(
     console.log('Transfer complete.');
 
     console.log('Submitting the upgrade proposal to the DAO...');
-    const dao = NounsDAOLogicV1__factory.connect(daoAddress, deployer);
+    const dao = (await ethers.getContractFactory('NounsDAOLogicV1', deployer)).attach(daoAddress);
     const propTx = await dao.propose(
       [tokenAddress],
       [0],
