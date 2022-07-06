@@ -6,10 +6,13 @@ on:
       - master
   pull_request:
     paths:
-      - "packages/nouns-contracts/**"
-      - "packages/nouns-subgraph/**"
+      - 'packages/nouns-contracts/**'
+      - 'packages/nouns-subgraph/**'
     branches:
-      - "**"
+      - '**'
+
+env:
+  NODE_OPTIONS: --max_old_space_size=4096
 
 jobs:
   build_and_test:
