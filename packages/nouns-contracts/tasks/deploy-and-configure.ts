@@ -1,11 +1,6 @@
 import { task, types } from 'hardhat/config';
 import { printContractsTable } from './utils';
 
-interface ContractRow {
-  Address: string;
-  'Deployment Hash'?: string;
-}
-
 task('deploy-and-configure', 'Deploy and configure all contracts')
   .addFlag('startAuction', 'Start the first auction upon deployment completion')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
