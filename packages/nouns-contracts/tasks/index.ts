@@ -14,3 +14,4 @@ export * from './descriptor-v1-export-abi';
 export * from './deploy-descriptorv2-and-propose-upgrade';
 export * from './deploy-short-times';
 export * from './deploy-and-configure-short-times';
+export * from './populate-descriptor-via-proposal';
