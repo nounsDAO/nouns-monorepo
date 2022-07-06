@@ -15,6 +15,7 @@ interface VerifyArgs {
 const nameToFullyQualifiedName: Record<string, string> = {
   NounsAuctionHouseProxy: 'contracts/proxies/NounsAuctionHouseProxy.sol:NounsAuctionHouseProxy',
   NounsAuctionHouseProxyAdmin: 'contracts/proxies/NounsAuctionHouseProxyAdmin.sol:NounsAuctionHouseProxyAdmin',
+  NounsDAOLogicV1Harness: 'contracts/test/NounsDAOLogicV1Harness.sol:NounsDAOLogicV1Harness'
 };
 
 task('verify-etherscan', 'Verify the Solidity contracts on Etherscan')
