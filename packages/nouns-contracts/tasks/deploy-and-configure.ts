@@ -1,5 +1,5 @@
 import { task, types } from 'hardhat/config';
-import { DeployedContract } from './types';
+import { printContractsTable } from './utils';
 
 interface ContractRow {
   Address: string;
@@ -76,19 +76,6 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
       });
     }
 
-    console.table(
-      Object.values<DeployedContract>(contracts).reduce(
-        (acc: Record<string, ContractRow>, contract: DeployedContract) => {
-          acc[contract.name] = {
-            Address: contract.address,
-          };
-          if (contract.instance?.deployTransaction) {
-            acc[contract.name]['Deployment Hash'] = contract.instance.deployTransaction.hash;
-          }
-          return acc;
-        },
-        {},
-      ),
-    );
+    printContractsTable(contracts);
     console.log('Deployment Complete.');
   });

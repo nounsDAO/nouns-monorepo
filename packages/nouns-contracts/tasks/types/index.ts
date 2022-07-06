@@ -24,3 +24,8 @@ export interface DeployedContract {
   constructorArguments: (string | number)[];
   libraries: Record<string, string>;
 }
+
+export interface ContractRow {
+  Address: string;
+  'Deployment Hash'?: string;
+}

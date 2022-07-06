@@ -1,5 +1,6 @@
 import { ethers } from 'ethers';
 import { deflateRawSync } from 'zlib';
+import { ContractName, ContractRow, DeployedContract } from '../types';
 
 export function dataToDescriptorInput(data: string[]): {
   encodedCompressed: string;
@@ -19,4 +20,21 @@ export function dataToDescriptorInput(data: string[]): {
     originalLength,
     itemCount,
   };
+}
+
+export function printContractsTable(contracts: Record<ContractName, DeployedContract>) {
+  console.table(
+    Object.values<DeployedContract>(contracts).reduce(
+      (acc: Record<string, ContractRow>, contract: DeployedContract) => {
+        acc[contract.name] = {
+          Address: contract.address,
+        };
+        if (contract.instance?.deployTransaction) {
+          acc[contract.name]['Deployment Hash'] = contract.instance.deployTransaction.hash;
+        }
+        return acc;
+      },
+      {},
+    ),
+  );
 }
