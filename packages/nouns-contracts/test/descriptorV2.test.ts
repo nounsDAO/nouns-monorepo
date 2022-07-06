@@ -66,8 +66,7 @@ describe('NounsDescriptorV2', () => {
     expect(tokenUri).to.equal(`${BASE_URI}0`);
   });
 
-  // Skipping until we resolve the CI memory issue
-  it.skip('should generate valid token uri metadata when data uris are enabled', async () => {
+  it('should generate valid token uri metadata when data uris are enabled', async () => {
     const tokenUri = await nounsDescriptor.tokenURI(
       0,
       {
