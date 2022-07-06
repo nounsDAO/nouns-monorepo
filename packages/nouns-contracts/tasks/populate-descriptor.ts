@@ -2,6 +2,9 @@ import { task, types } from 'hardhat/config';
 import ImageData from '../files/image-data_v2.json';
 import { dataToDescriptorInput } from './utils';
 
+// sometimes block limits are below 30M, taking a safety buffer to avoid the exceeding gas limit error
+const maxGas = { gasLimit: 29_000_000 };
+
 task('populate-descriptor', 'Populates the descriptor with color palettes and Noun parts')
   .addOptionalParam(
     'nftDescriptor',
@@ -38,25 +41,25 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and No
       bodiesPage.encodedCompressed,
       bodiesPage.originalLength,
       bodiesPage.itemCount,
-      { gasLimit: 30_000_000 },
+      maxGas,
     );
     await descriptorContract.addHeads(
       headsPage.encodedCompressed,
       headsPage.originalLength,
       headsPage.itemCount,
-      { gasLimit: 30_000_000 },
+      maxGas,
     );
     await descriptorContract.addGlasses(
       glassesPage.encodedCompressed,
       glassesPage.originalLength,
       glassesPage.itemCount,
-      { gasLimit: 30_000_000 },
+      maxGas,
     );
     await descriptorContract.addAccessories(
       accessoriesPage.encodedCompressed,
       accessoriesPage.originalLength,
       accessoriesPage.itemCount,
-      { gasLimit: 30_000_000 },
+      maxGas,
     );
 
     console.log('Descriptor populated with palettes and parts.');
