@@ -135,8 +135,8 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
           <Row className={classes.activityRow}>
             <Col lg={12} className={classes.fomoNounsLink}>
               <FontAwesomeIcon icon={faInfoCircle} />
-              <a href={'https://fomonouns.wtf'} target={'_blank'} rel="noreferrer">
-                <Trans>Help mint the next Noun</Trans>
+              <a href={'https://fomomeouns.wtf'} target={'_blank'} rel="noreferrer">
+                <Trans>Help mint the next Meoun</Trans>
               </a>
             </Col>
           </Row>
