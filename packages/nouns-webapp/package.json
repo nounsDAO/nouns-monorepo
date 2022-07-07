@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "react-tooltip": "^4.2.21",
     "@lingui/detect-locale": "^3.13.2",
     "@lingui/cli": "^3.9.0",
     "@lingui/core": "^3.9.0",

@@ -124,3 +124,24 @@
 .thresholdInfo {
   text-align: right;
 }
+
+.toggleDelegateVoteView {
+  margin-top: 0.1rem;
+  margin-bottom: 0.1rem;
+  opacity: 0.5;
+  font-size: 14px;
+  cursor: pointer;
+  transition: ease-in-out 125ms;
+  width: fit-content;
+  margin-left: 0.1rem;
+}
+
+.toggleDelegateVoteView:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1200px) {
+  .toggleDelegateVoteView {
+    display: none;
+  }
+}

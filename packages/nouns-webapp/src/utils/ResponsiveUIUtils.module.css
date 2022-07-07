@@ -1,5 +1,5 @@
 .mobileOnly {
-  display: none;
+  display: none !important;
 }
 
 @media (max-width: 1200px) {
@@ -8,7 +8,7 @@
   }
 
   .mobileOnly {
-    display: inherit;
+    display: inherit !important;
   }
 }
 

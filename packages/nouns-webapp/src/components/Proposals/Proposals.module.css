@@ -60,8 +60,8 @@
 .proposalLink {
   padding: 1rem;
   margin-top: 0.4rem;
-  align-items: center;
-  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
   border: 1px solid #e2e3e8;
   box-sizing: border-box;
   border-radius: 16px;
@@ -69,6 +69,14 @@
   font-size: 22px;
   font-family: 'PT Root UI';
   font-weight: bold;
+}
+
+.proposalInfoWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .proposalLink:hover {
@@ -106,83 +114,60 @@
   font-size: 16px;
   line-height: 22.4px;
 }
-.proposalInfoPillsWrapper {
-  display: flex;
-  flex-direction: row;
-  min-width: fit-content;
-}
 
-.countdownPill {
-  background-color: var(--brand-gray-light-text-translucent);
-  color: #00000080;
-  width: fit-content;
-}
-
-.countdownPillContentWrapper {
-  display: flex;
-  flex-direction: row;
-}
-
-.countdownPillClock {
-  display: flex;
-  flex-direction: column;
-  margin-top: auto;
-  margin-bottom: auto;
-}
-
-.countdownPillText {
-  margin-left: 0.25rem;
-}
-
-.proposalInfoPillsWrapperMobile {
+.mobileCountdownWrapper {
   display: none;
 }
 
+.desktopCountdownWrapper {
+  display: flex;
+}
+
+.nounInWalletBtnWrapper {
+  display: flex;
+  padding-top: 0.8rem;
+}
+
 @media (max-width: 992px) {
+  .desktopCountdownWrapper {
+    display: none;
+  }
+
+  .mobileCountdownWrapper {
+    display: flex;
+    width: 100%;
+    margin-top: 1rem;
+  }
+
   .nullStateCopy {
     margin-top: 0rem;
   }
 
   .proposalTitle {
-    max-width: 100%;
+    max-width: 65%;
     overflow-wrap: break-word;
   }
 
-  .proposalInfoPillsWrapperMobile {
-    display: flex;
-    flex-direction: row;
-    min-width: fit-content;
-    margin-left: -0.5rem;
+  .nounInWalletBtnWrapper {
+    width: 100%;
   }
 
-  .proposalInfoPillsWrapper {
-    display: none;
-  }
-
-  .proposalStatusWrapper {
-    margin-top: 0.5rem;
-  }
-}
-
-@media (max-width: 700px) {
-  .proposalLinkWithCountdown {
+  .headerWrapper {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
   }
 
-  .proposalInfoPillsWrapperMobile {
+  .forceFlexRow {
+    flex-direction: row;
+  }
+
+  .heading {
     width: 100%;
-    margin-top: 0.25rem;
-    display: flex;
   }
 
-  .proposalStatusWrapper {
-    max-width: fit-content;
-  }
-
-  .proposalLink {
-    padding-left: 0;
-    padding-right: 0;
+  .nullStateSubmitProposalBtnWrapper {
+    text-align: right;
   }
 }
 
@@ -206,5 +191,61 @@
 
 .submitProposalButtonWrapper {
   text-align: right;
-  padding-top: 0.8rem;
+}
+
+.nullStateSubmitProposalBtnWrapper {
+  text-align: right;
+}
+
+.votePillWrapper {
+  max-width: 5rem;
+}
+
+.countdownPill {
+  background-color: var(--brand-gray-light-text-translucent);
+  color: #00000080;
+  width: fit-content;
+  margin-left: -0.5rem;
+}
+
+.countdownPillContentWrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.countdownPillClock {
+  display: flex;
+  flex-direction: column;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.countdownPillText {
+  margin-left: 0.25rem;
+}
+
+.delegateBtnWrapper {
+  padding-left: 0.5rem;
+}
+
+.changeDelegateBtn {
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: rgb(95, 95, 95);
+  max-width: 10rem;
+  height: 3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+}
+
+.changeDelegateBtn:focus,
+.changeDelegateBtn:hover {
+  background-color: #e2e3e8;
+  color: black;
+  box-shadow: none;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.changeDelegateBtn:active {
+  background-color: #e2e3e8 !important;
 }

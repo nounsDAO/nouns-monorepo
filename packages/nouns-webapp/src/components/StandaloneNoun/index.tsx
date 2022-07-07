@@ -14,6 +14,7 @@ interface StandaloneNounProps {
 }
 interface StandaloneCircularNounProps {
   nounId: EthersBN;
+  border?: boolean;
 }
 
 interface StandaloneNounWithSeedProps {
@@ -22,7 +23,7 @@ interface StandaloneNounWithSeedProps {
   shouldLinkToProfile: boolean;
 }
 
-const getNoun = (nounId: string | EthersBN, seed: INounSeed) => {
+export const getNoun = (nounId: string | EthersBN, seed: INounSeed) => {
   const id = nounId.toString();
   const name = `Noun ${id}`;
   const description = `Noun ${id} is a member of the Nouns DAO`;
@@ -61,7 +62,7 @@ const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProp
 export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
   props: StandaloneCircularNounProps,
 ) => {
-  const { nounId } = props;
+  const { nounId, border } = props;
   const seed = useNounSeed(nounId);
   const noun = seed && getNoun(nounId, seed);
 
@@ -69,6 +70,8 @@ export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
   const onClickHandler = () => {
     dispatch(setOnDisplayAuctionNounId(nounId.toNumber()));
   };
+
+  if (!seed || !nounId) return <Noun imgPath="" alt="Noun" />;
 
   return (
     <Link
@@ -80,7 +83,7 @@ export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
         imgPath={noun ? noun.image : ''}
         alt={noun ? noun.description : 'Noun'}
         wrapperClassName={nounClasses.circularNounWrapper}
-        className={nounClasses.circular}
+        className={border ? nounClasses.circleWithBorder : nounClasses.circular}
       />
     </Link>
   );

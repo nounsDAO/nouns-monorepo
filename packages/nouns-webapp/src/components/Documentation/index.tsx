@@ -271,8 +271,8 @@ const Documentation = () => {
                 </li>
                 <li>
                   <Link
-                    text="@supergremplin"
-                    url="https://twitter.com/supergremplin"
+                    text="@gremplin"
+                    url="https://twitter.com/gremplin"
                     leavesPage={true}
                   />
                 </li>
