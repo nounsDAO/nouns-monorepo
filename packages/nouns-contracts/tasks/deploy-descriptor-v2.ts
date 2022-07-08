@@ -2,14 +2,12 @@ import { task } from 'hardhat/config';
 import { ContractName, DeployedContract } from './types';
 import { printContractsTable } from './utils';
 
-task(
-  'deploy-descriptorv2-and-propose-upgrade',
-  'Deploy NounsDescriptorV2, populate it with art and submit an upgrade proposal to the DAO',
-)
-  .addParam('tokenAddress', 'The NounsToken address, used in the descriptor upgrade proposal')
-  .addParam('daoAddress', 'The DAO proxy address, where the upgrade proposal is submitted')
-  .addParam('executorAddress', "The DAO's deployed timelock address")
-  .setAction(async ({ executorAddress, daoAddress, tokenAddress }, { ethers, run }) => {
+async function delay(seconds: number) {
+  return new Promise(resolve => setTimeout(resolve, 1000 * seconds));
+}
+
+task('deploy-descriptor-v2', 'Deploy NounsDescriptorV2 & populate it with art').setAction(
+  async ({}, { ethers, run, network }) => {
     const contracts: Record<ContractName, DeployedContract> = {} as Record<
       ContractName,
       DeployedContract
@@ -73,14 +71,15 @@ task(
       libraries: {},
     };
 
+    console.log('Waiting for contracts to be deployed');
+    for (const c of Object.values<DeployedContract>(contracts)) {
+      console.log(`Waiting for ${c.name} to be deployed`);
+      await c.instance.deployTransaction.wait();
+      console.log('Done');
+    }
+
     console.log('Deployment complete:');
     printContractsTable(contracts);
-
-    console.log('Verifying contracts on Etherscan...');
-    await run('verify-etherscan', {
-      contracts,
-    });
-    console.log('Verify complete.');
 
     console.log('Populating Descriptor...');
     await run('populate-descriptor', {
@@ -89,19 +88,15 @@ task(
     });
     console.log('Population complete.');
 
-    console.log('Transferring ownership of the descriptor to the executor...');
-    await contracts.NounsDescriptorV2.instance!.transferOwnership(executorAddress);
-    console.log('Transfer complete.');
+    if (network.name !== 'localhost') {
+      console.log('Waiting 1 minute before verifying contracts on Etherscan');
+      await delay(60);
 
-    console.log('Submitting the upgrade proposal to the DAO...');
-    const dao = (await ethers.getContractFactory('NounsDAOLogicV1', deployer)).attach(daoAddress);
-    const propTx = await dao.propose(
-      [tokenAddress],
-      [0],
-      ['setDescriptor(address)'],
-      [contracts.NounsDescriptorV2.address],
-      'Upgrade NounsToken to use DescriptorV2.',
-    );
-    await propTx.wait();
-    console.log('Submission complete.');
-  });
+      console.log('Verifying contracts on Etherscan...');
+      await run('verify-etherscan', {
+        contracts,
+      });
+      console.log('Verify complete.');
+    }
+  },
+);
