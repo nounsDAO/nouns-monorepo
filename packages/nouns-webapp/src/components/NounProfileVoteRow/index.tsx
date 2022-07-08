@@ -1,5 +1,5 @@
 import { Proposal } from '../../wrappers/nounsDao';
-import { Image } from 'react-bootstrap';
+import { Image, Spinner } from 'react-bootstrap';
 import _YesVoteIcon from '../../assets/icons/YesVote.svg';
 import _NoVoteIcon from '../../assets/icons/NoVote.svg';
 import _AbsentVoteIcon from '../../assets/icons/AbsentVote.svg';
@@ -17,6 +17,11 @@ import { NounVoteHistory } from '../ProfileActivityFeed';
 import { Trans } from '@lingui/macro';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
+import ShortAddress from '../ShortAddress';
+import HoverCard from '../HoverCard';
+import { useShortAddress } from '../../utils/addressAndENSDisplayUtils';
+import React from 'react';
+import ReactTooltip from 'react-tooltip';
 
 interface NounProfileVoteRowProps {
   proposal: Proposal;
@@ -113,6 +118,7 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
   const proposalOnClickHandler = () => history.push(proposal.id ? `/vote/${proposal.id}` : '/vote');
   const activeLocale = useActiveLocale();
 
+
   return (
     <tr onClick={proposalOnClickHandler} className={classes.voteInfoRow}>
       <td className={classes.voteIcon}>{selectIconForNounVoteActivityRow(proposal, vote)}</td>
@@ -123,9 +129,65 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
         </div>
       </td>
       <td className={activeLocale === 'ja-JP' ? responsiveUiUtilsClasses.desktopOnly : ''}>
+
+      <div style={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-end'
+      }}>
+        {
+          vote && vote.voter &&  (
+
+        <div className={classes.voteStatusWrapper} style={{
+          marginRight: '0.5rem'
+        }}>
+
+    <ReactTooltip
+        id={"noun-profile-delegate"}
+        effect={'solid'}
+        className={classes.delegateHover}
+        getContent={dataTip => {
+          return <div>
+            {dataTip}
+          </div>
+        }}
+      />
+                <div 
+                data-tip={`Delegate for Proposal ${vote.proposal.id}`}
+                data-for="noun-profile-delegate"
+                style={{
+            borderRadius: '8px',
+            padding: '0.36rem 0.65rem 0.36rem 0.65rem',
+            backgroundColor: 'var(--brand-gray-light-text-translucent)',
+            color: 'var(--brand-gray-light-text)',
+            fontWeight: 'bold',
+            fontSize: '14px',
+            display: 'flex'
+          }}>
+            <svg xmlns="http://www.w3.org/2000/svg" 
+            style={{
+              height: '16px',
+              width: '16px',
+              marginRight: '0.3rem',
+              marginTop: '0.12rem'
+            }}
+            fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+  <path strokeLinecap="round" strokeLinejoin="round" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+</svg>
+            <ShortAddress address={vote.voter.id}/>
+          </div>
+
+
+
+
+        </div>
+          )
+        }
         <div className={classes.voteStatusWrapper}>
           <div className={classes.voteProposalStatus}>{selectProposalStatusIcon(proposal)}</div>
         </div>
+      </div>
+
       </td>
     </tr>
   );
