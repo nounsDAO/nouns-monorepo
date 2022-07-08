@@ -12,23 +12,23 @@
   justify-content: center;
   align-items: center;
   padding: 0px 8px;
-  color: rgb(67, 179, 105);
-  background-color: rgba(67, 179, 105, 0.1);
+  color: rgb(39, 166, 121);
+  background-color: rgb(39, 166, 121, 0.1);
   font-size: 14px;
   width: fit-content;
 }
 
 .pass {
-  color: rgb(67, 179, 105);
-  background-color: rgba(67, 179, 105, 0.1);
+  color: rgb(39, 166, 121);
+  background-color: rgb(39, 166, 121, 0.1);
 }
 
 .fail {
-  color: rgba(214, 60, 94);
-  background-color: rgba(214, 60, 94, 0.1);
+  color: rgb(242, 73, 0);
+  background-color: rgb(242, 73, 0, 0.1);
 }
 
 .pending {
-  color: #4965f0;
-  background-color: rgb(73, 101, 240, 0.1);
+  color: rgb(25, 115, 181);
+  background-color: rgb(25, 115, 181, 0.1);
 }

@@ -52,16 +52,16 @@
   font-weight: bold;
   margin-bottom: 0.5rem;
   border-radius: 12px;
-  background-color: var(--brand-color-green);
-  border: var(--brand-color-green);
+  background-color: rgb(39, 166, 121);
+  border:rgb(39, 166, 121); 
 }
 .submitBtn:focus,
 .submitBtn:hover {
-  background-color: var(--brand-color-green) !important;
-  box-shadow: 0 0 0 0.2rem rgb(67, 179, 105, 0.75);
+  background-color: rgb(39, 166, 121) !important;
+  box-shadow: 0 0 0 0.2rem rgb(39, 166, 121, 0.75);
 }
 .submitBtn:active {
-  background-color: var(--brand-color-green) !important;
+  background-color: rgb(39, 166, 121) !important;
 }
 .submitBtnDisabled {
   background-color: var(--brand-gray-light-text) !important;
@@ -72,7 +72,7 @@
   font-weight: bold;
   margin-bottom: 0.5rem;
   border-radius: 12px;
-  border: var(--brand-dark-red);
+  border: #f24900;
   opacity: 0.5;
   box-shadow: none !important;
 }
