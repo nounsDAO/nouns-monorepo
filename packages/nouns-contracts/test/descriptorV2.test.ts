@@ -67,7 +67,7 @@ describe('NounsDescriptorV2', () => {
   });
 
   // Skipping until we resolve the CI memory issue
-  it.skip('should generate valid token uri metadata when data uris are enabled', async () => {
+  it('should generate valid token uri metadata when data uris are enabled [ @skip-on-coverage ]', async () => {
     const tokenUri = await nounsDescriptor.tokenURI(
       0,
       {
