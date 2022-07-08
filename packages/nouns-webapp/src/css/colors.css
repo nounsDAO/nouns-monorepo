@@ -20,10 +20,10 @@
   --brand-gray-light-text: #8c8d92;
   --brand-gray-light-text-translucent: rgb(140, 141, 146, 0.1);
   --brand-gray-hover: #fafafb;
-  --brand-color-red: #e40536;
-  --brand-color-blue: #4965f0;
-  --brand-color-green: #43b369;
-  --brand-color-red-translucent: rgba(214, 60, 94, 0.1);
-  --brand-color-blue-translucent: rgba(73, 101, 240, 0.1);
-  --brand-color-green-translucent: rgba(67, 179, 105, 0.1);
+  --brand-color-red: rgb(242, 73, 0);
+  --brand-color-blue: rgb(25, 115, 181);
+  --brand-color-green: rgb(39, 166, 121);
+  --brand-color-red-translucent: rgba(242, 73, 0, 0.1);
+  --brand-color-blue-translucent: rgba(25, 115, 181, 0.1);
+  --brand-color-green-translucent: rgba(39, 166, 121, 0.1);
 }
