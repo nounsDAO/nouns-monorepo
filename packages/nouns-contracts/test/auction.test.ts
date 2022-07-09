@@ -28,7 +28,7 @@ describe('NounsAuctionHouse', () => {
   const TIME_BUFFER = 15 * 60;
   const RESERVE_PRICE = 2;
   const MIN_INCREMENT_BID_PERCENTAGE = 5;
-  const DURATION = 60 * 60 * 24;
+  const DURATION = 60 * 69;
 
   async function deploy(deployer?: SignerWithAddress) {
     const auctionHouseFactory = await ethers.getContractFactory('NounsAuctionHouse', deployer);
