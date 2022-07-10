@@ -65,22 +65,9 @@ contract NounsArt is INounsArt {
      * by calling `confirmDescriptor`.
      * @dev This function can only be called by the current descriptor.
      */
-    function setDescriptor(address _pendingDescriptor) external override onlyDescriptor {
-        pendingDescriptor = _pendingDescriptor;
-    }
-
-    /**
-     * @notice Confirm the pending descriptor.
-     * @dev This function can only be called by the pending descriptor.
-     */
-    function confirmDescriptor() external override {
-        if (msg.sender != pendingDescriptor) {
-            revert SenderIsNotPendingDescriptor();
-        }
-
+    function setDescriptor(address _descriptor) external override onlyDescriptor {
         address oldDescriptor = descriptor;
-        descriptor = pendingDescriptor;
-        delete pendingDescriptor;
+        descriptor = _descriptor;
 
         emit DescriptorUpdated(oldDescriptor, descriptor);
     }

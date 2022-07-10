@@ -22,8 +22,6 @@ import { Inflate } from '../libs/Inflate.sol';
 interface INounsArt {
     error SenderIsNotDescriptor();
 
-    error SenderIsNotPendingDescriptor();
-
     error EmptyPalette();
 
     error BadPaletteLength();
@@ -67,9 +65,7 @@ interface INounsArt {
 
     function pendingDescriptor() external view returns (address);
 
-    function setDescriptor(address pendingDescriptor) external;
-
-    function confirmDescriptor() external;
+    function setDescriptor(address descriptor) external;
 
     function addManyBackgrounds(string[] calldata _backgrounds) external;
 

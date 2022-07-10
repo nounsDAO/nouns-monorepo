@@ -20,6 +20,8 @@ contract NounsArtTest is Test, DescriptorHelpers {
 
     event GlassesAdded(uint16 count);
 
+    event DescriptorUpdated(address oldDescriptor, address newDescriptor);
+
     NounsArt art;
     address descriptor = address(1);
 
@@ -28,7 +30,7 @@ contract NounsArtTest is Test, DescriptorHelpers {
     }
 
     ///
-    /// setDescriptor and confirmDescriptor
+    /// setDescriptor
     ///
 
     function testSetDescriptorRevertsIfSenderNotDescriptor() public {
@@ -36,33 +38,14 @@ contract NounsArtTest is Test, DescriptorHelpers {
         art.setDescriptor(address(2));
     }
 
-    function testSetDescriptorDoesntSetYet() public {
+    function testSetDescriptorWorks() public {
         address newDescriptor = address(2);
+
+        vm.expectEmit(true, true, true, true);
+        emit DescriptorUpdated(descriptor, newDescriptor);
 
         vm.prank(descriptor);
         art.setDescriptor(newDescriptor);
-
-        assertEq(art.descriptor(), descriptor);
-    }
-
-    function testConfirmDescriptorRevertsIfSenderNotPendingDescriptor() public {
-        address newDescriptor = address(2);
-
-        vm.prank(descriptor);
-        art.setDescriptor(newDescriptor);
-
-        vm.expectRevert(INounsArt.SenderIsNotPendingDescriptor.selector);
-        art.confirmDescriptor();
-    }
-
-    function testConfirmDescriptorSetsDescriptor() public {
-        address newDescriptor = address(2);
-
-        vm.prank(descriptor);
-        art.setDescriptor(newDescriptor);
-
-        vm.prank(newDescriptor);
-        art.confirmDescriptor();
 
         assertEq(art.descriptor(), newDescriptor);
     }
