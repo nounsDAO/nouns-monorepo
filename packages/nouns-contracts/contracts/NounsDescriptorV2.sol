@@ -136,6 +136,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
      * add a new color palette or update an existing palette.
      * @param paletteIndex the identifier of this palette
      * @param palette byte array of colors. every 3 bytes represent an RGB color. max length: 256 * 3 = 768
+     * @dev This function can only be called by the owner when not locked.
      */
     function setPalette(uint8 paletteIndex, bytes calldata palette) external override onlyOwner whenPartsNotLocked {
         art.setPalette(paletteIndex, palette);
@@ -147,6 +148,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
      * and finally compressing it using deflate.
      * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
      * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the owner when not locked.
      */
     function addBodies(
         bytes calldata encodedCompressed,
@@ -162,6 +164,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
      * and finally compressing it using deflate.
      * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
      * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the owner when not locked.
      */
     function addAccessories(
         bytes calldata encodedCompressed,
@@ -177,6 +180,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
      * and finally compressing it using deflate.
      * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
      * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the owner when not locked.
      */
     function addHeads(
         bytes calldata encodedCompressed,
@@ -192,6 +196,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
      * and finally compressing it using deflate.
      * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
      * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the owner when not locked.
      */
     function addGlasses(
         bytes calldata encodedCompressed,
@@ -221,6 +226,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
      * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
      * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
      * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the owner when not locked.
      */
     function addBodiesFromPointer(
         address pointer,
@@ -237,6 +243,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
      * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
      * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
      * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the owner when not locked.
      */
     function addAccessoriesFromPointer(
         address pointer,
@@ -253,6 +260,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
      * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
      * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
      * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the owner when not locked.
      */
     function addHeadsFromPointer(
         address pointer,
@@ -269,6 +277,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
      * RLE-encoded images, abi encoding it as a bytes array, and finally compressing it using deflate.
      * @param decompressedLength the size in bytes the images bytes were prior to compression; required input for Inflate.
      * @param imageCount the number of images in this batch; used when searching for images among batches.
+     * @dev This function can only be called by the owner when not locked.
      */
     function addGlassesFromPointer(
         address pointer,
