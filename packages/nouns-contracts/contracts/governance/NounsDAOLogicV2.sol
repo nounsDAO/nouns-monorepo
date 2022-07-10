@@ -91,6 +91,15 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     /// @notice The maximum number of actions that can be included in a proposal
     uint256 public constant proposalMaxOperations = 10; // 10 actions
 
+    /// @notice The maximum priority fee used to cap gas refunds in `castRefundableVote`
+    uint256 public constant MAX_REFUND_PRIORITY_FEE = 20 gwei;
+
+    /// @notice The vote refund ETH transfer gas cost
+    uint256 public constant REFUND_TRANSFER_GAS = 7000;
+
+    /// @notice The vote refund catch-all transaction overhead gas
+    uint256 public constant REFUND_OVERHEAD_GAS = 29000;
+
     /// @notice The EIP-712 typehash for the contract's domain
     bytes32 public constant DOMAIN_TYPEHASH =
         keccak256('EIP712Domain(string name,uint256 chainId,address verifyingContract)');
@@ -482,6 +491,32 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
      */
     function castVote(uint256 proposalId, uint8 support) external {
         emit VoteCast(msg.sender, proposalId, support, castVoteInternal(msg.sender, proposalId, support), '');
+    }
+
+    /**
+     * @notice Cast a vote for a proposal, asking the DAO to refund gas costs.
+     * Users with > 0 votes receive refunds. Refunds are partial when using a gas priority fee higher than the DAO's cap.
+     * Refunds are partial when the DAO's balance is insufficient.
+     * No refund is sent when the DAO's balance is empty. No refund is sent to users with no votes.
+     * Voting takes place regardless of refund success.
+     * @param proposalId The id of the proposal to vote on
+     * @param support The support value for the vote. 0=against, 1=for, 2=abstain
+     */
+    function castRefundableVote(uint256 proposalId, uint8 support) external {
+        // TODO reentrancy guard
+
+        uint256 startGas = gasleft();
+
+        uint96 votes = castVoteInternal(msg.sender, proposalId, support);
+        emit VoteCast(msg.sender, proposalId, support, votes, '');
+
+        if (votes > 0) {
+            uint256 gasPrice = min(tx.gasprice, block.basefee + MAX_REFUND_PRIORITY_FEE);
+            uint256 gasUsed = startGas - gasleft() + REFUND_TRANSFER_GAS + REFUND_OVERHEAD_GAS;
+            uint256 refundAmount = min(gasPrice * gasUsed, address(this).balance);
+            (bool refundSent, ) = msg.sender.call{ value: refundAmount }('');
+            emit RefundableVote(msg.sender, refundAmount, refundSent);
+        }
     }
 
     /**
@@ -942,4 +977,6 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         }
         return uint16(n);
     }
+
+    receive() external payable {}
 }
