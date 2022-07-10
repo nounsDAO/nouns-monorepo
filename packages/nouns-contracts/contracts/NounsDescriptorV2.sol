@@ -81,6 +81,15 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     }
 
     /**
+     * @notice Set the art contract's `pendingDescriptor`.
+     * @param pendingDescriptor the address to set.
+     * @dev Only callable by the owner.
+     */
+    function setArtDescriptor(address pendingDescriptor) external onlyOwner {
+        art.setDescriptor(pendingDescriptor);
+    }
+
+    /**
      * @notice Get the number of available Noun `backgrounds`.
      */
     function backgroundCount() external view override returns (uint256) {

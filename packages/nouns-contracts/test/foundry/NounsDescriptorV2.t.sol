@@ -56,6 +56,17 @@ contract NounsDescriptorV2Test is Test {
         assertEq(address(descriptor.renderer()), address(2));
     }
 
+    function testCannotSetArtDescriptorIfNotOwner() public {
+        vm.prank(address(1));
+        vm.expectRevert(bytes('Ownable: caller is not the owner'));
+        descriptor.setArtDescriptor(address(2));
+    }
+
+    function testSetArtDescriptorUsesArt() public {
+        vm.expectCall(address(art), abi.encodeCall(art.setDescriptor, address(42)));
+        descriptor.setArtDescriptor(address(42));
+    }
+
     function testDataURIEnabledByDefault() public {
         assertEq(descriptor.isDataURIEnabled(), true);
     }
