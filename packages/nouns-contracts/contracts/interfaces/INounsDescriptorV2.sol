@@ -95,6 +95,8 @@ interface INounsDescriptorV2 is INounsDescriptorMinimal {
         uint16 imageCount
     ) external;
 
+    function setPalettePointer(uint8 paletteIndex, address pointer) external;
+
     function addBodiesFromPointer(
         address pointer,
         uint80 decompressedLength,

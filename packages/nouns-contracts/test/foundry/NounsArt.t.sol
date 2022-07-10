@@ -118,7 +118,7 @@ contract NounsArtTest is Test, DescriptorHelpers {
     }
 
     ///
-    /// setPalette, palettes, palettesPointers
+    /// setPalette, palettes, palettesPointers, setPalettePointer
     ///
 
     function testPalettesRevertsGivenNoArt() public {
@@ -129,6 +129,12 @@ contract NounsArtTest is Test, DescriptorHelpers {
     function testSetPaletteRevertsIfSenderNotDescriptor() public {
         vm.expectRevert(INounsArt.SenderIsNotDescriptor.selector);
         art.setPalette(0, hex'ffffff');
+    }
+
+    function testSetPalettePointerRevertsIfSenderNotDescriptor() public {
+        address pointer = SSTORE2.write(hex'ffffff000000');
+        vm.expectRevert(INounsArt.SenderIsNotDescriptor.selector);
+        art.setPalettePointer(0, pointer);
     }
 
     function testSetPaletteWorks() public {
@@ -151,6 +157,26 @@ contract NounsArtTest is Test, DescriptorHelpers {
         assertEq(SSTORE2.read(art.palettesPointers(1)), palette1);
     }
 
+    function testSetPalettePointerWorks() public {
+        vm.expectEmit(true, true, true, true);
+        emit PaletteSet(0);
+        vm.expectEmit(true, true, true, true);
+        emit PaletteSet(1);
+
+        address pointer0 = SSTORE2.write(hex'ffffffc5b9a1');
+        address pointer1 = SSTORE2.write(hex'cfc2ab63a0f9');
+        vm.startPrank(descriptor);
+        art.setPalettePointer(0, pointer0);
+        art.setPalettePointer(1, pointer1);
+        vm.stopPrank();
+
+        assertEq(art.palettes(0), hex'ffffffc5b9a1');
+        assertEq(art.palettes(1), hex'cfc2ab63a0f9');
+
+        assertEq(art.palettesPointers(0), pointer0);
+        assertEq(art.palettesPointers(1), pointer1);
+    }
+
     function testSetPaletteUpdatesAnExistingPalette() public {
         bytes memory paletteV1 = hex'ffffffc5b9a1';
         bytes memory paletteV2 = hex'cfc2ab63a0f9';
@@ -168,6 +194,25 @@ contract NounsArtTest is Test, DescriptorHelpers {
         art.setPalette(0, paletteV2);
         assertEq(art.palettes(0), paletteV2);
         assertEq(SSTORE2.read(art.palettesPointers(0)), paletteV2);
+    }
+
+    function testSetPalettePointerUpdatesAnExistingPalette() public {
+        address paletteV1Pointer = SSTORE2.write(hex'ffffffc5b9a1');
+        address paletteV2Pointer = SSTORE2.write(hex'cfc2ab63a0f9');
+
+        vm.expectEmit(true, true, true, true);
+        emit PaletteSet(0);
+        vm.prank(descriptor);
+        art.setPalettePointer(0, paletteV1Pointer);
+        assertEq(art.palettes(0), hex'ffffffc5b9a1');
+        assertEq(art.palettesPointers(0), paletteV1Pointer);
+
+        vm.expectEmit(true, true, true, true);
+        emit PaletteSet(0);
+        vm.prank(descriptor);
+        art.setPalettePointer(0, paletteV2Pointer);
+        assertEq(art.palettes(0), hex'cfc2ab63a0f9');
+        assertEq(art.palettesPointers(0), paletteV2Pointer);
     }
 
     function testCannotSetEmptyPalette() public {

@@ -109,6 +109,8 @@ interface INounsArt {
         uint16 imageCount
     ) external;
 
+    function setPalettePointer(uint8 paletteIndex, address pointer) external;
+
     function addAccessoriesFromPointer(
         address pointer,
         uint80 decompressedLength,

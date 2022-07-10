@@ -202,6 +202,19 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     }
 
     /**
+     * @notice Update a single color palette. This function can be used to
+     * add a new color palette or update an existing palette. This function does not check for data length validity
+     * (len <= 768, len % 3 == 0).
+     * @param paletteIndex the identifier of this palette
+     * @param pointer the address of the contract holding the palette bytes. every 3 bytes represent an RGB color.
+     * max length: 256 * 3 = 768.
+     * @dev This function can only be called by the owner when not locked.
+     */
+    function setPalettePointer(uint8 paletteIndex, address pointer) external override onlyOwner whenPartsNotLocked {
+        art.setPalettePointer(paletteIndex, pointer);
+    }
+
+    /**
      * @notice Add a batch of body images from an existing storage contract.
      * @param pointer the address of a contract where the image batch was stored using SSTORE2. The data
      * format is expected to be like {encodedCompressed}: bytes created by taking a string array of

@@ -185,10 +185,30 @@ contract NounsDescriptorV2Test is Test {
         descriptor.setPalette(1, '654321');
     }
 
+    function testSetPalettePointerUsesArt() public {
+        vm.expectCall(address(art), abi.encodeCall(art.setPalettePointer, (0, address(42))));
+        descriptor.setPalettePointer(0, address(42));
+
+        vm.expectCall(address(art), abi.encodeCall(art.setPalettePointer, (1, address(1337))));
+        descriptor.setPalettePointer(1, address(1337));
+    }
+
     function testCannotSetPaletteWhenPartsLocked() public {
         descriptor.lockParts();
         vm.expectRevert(bytes('Parts are locked'));
         descriptor.setPalette(0, '000000');
+    }
+
+    function testCannotSetPalettePointerWhenPartsLocked() public {
+        descriptor.lockParts();
+        vm.expectRevert(bytes('Parts are locked'));
+        descriptor.setPalettePointer(0, address(42));
+    }
+
+    function testCannotSetPalettePointerIfNotOwner() public {
+        vm.prank(address(1));
+        vm.expectRevert(bytes('Ownable: caller is not the owner'));
+        descriptor.setPalettePointer(0, address(42));
     }
 
     function testAddBodiesUsesArt() public {
