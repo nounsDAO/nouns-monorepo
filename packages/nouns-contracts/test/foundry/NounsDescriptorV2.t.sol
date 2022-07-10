@@ -225,6 +225,12 @@ contract NounsDescriptorV2Test is Test {
         descriptor.addBodies('00', 1, 1);
     }
 
+    function testCannotAddBodiesIfNotOwner() public {
+        vm.prank(address(1));
+        vm.expectRevert(bytes('Ownable: caller is not the owner'));
+        descriptor.addBodies('00', 1, 1);
+    }
+
     function testAddAccessoriesUsesArt() public {
         bytes memory someBytes = 'some bytes';
         uint80 decompressedLen = 123;
@@ -236,6 +242,12 @@ contract NounsDescriptorV2Test is Test {
     function testCannotAddAccessoriesWhenPartsLocked() public {
         descriptor.lockParts();
         vm.expectRevert(bytes('Parts are locked'));
+        descriptor.addAccessories('00', 1, 1);
+    }
+
+    function testCannotAddAccessoriesIfNotOwner() public {
+        vm.prank(address(1));
+        vm.expectRevert(bytes('Ownable: caller is not the owner'));
         descriptor.addAccessories('00', 1, 1);
     }
 
@@ -253,6 +265,12 @@ contract NounsDescriptorV2Test is Test {
         descriptor.addHeads('00', 1, 1);
     }
 
+    function testCannotAddHeadsIfNotOwner() public {
+        vm.prank(address(1));
+        vm.expectRevert(bytes('Ownable: caller is not the owner'));
+        descriptor.addHeads('00', 1, 1);
+    }
+
     function testAddGlassesUsesArt() public {
         bytes memory someBytes = 'some bytes';
         uint80 decompressedLen = 123;
@@ -264,6 +282,12 @@ contract NounsDescriptorV2Test is Test {
     function testCannotAddGlassesWhenPartsLocked() public {
         descriptor.lockParts();
         vm.expectRevert(bytes('Parts are locked'));
+        descriptor.addGlasses('00', 1, 1);
+    }
+
+    function testCannotAddGlassesIfNotOwner() public {
+        vm.prank(address(1));
+        vm.expectRevert(bytes('Ownable: caller is not the owner'));
         descriptor.addGlasses('00', 1, 1);
     }
 
@@ -284,6 +308,12 @@ contract NounsDescriptorV2Test is Test {
         descriptor.addBodiesFromPointer(address(1337), 1, 1);
     }
 
+    function testCannotAddBodiesFromPointerIfNotOwner() public {
+        vm.prank(address(1));
+        vm.expectRevert(bytes('Ownable: caller is not the owner'));
+        descriptor.addBodiesFromPointer(address(1337), 1, 1);
+    }
+
     function testAddAccessoriesFromPointerUsesArt() public {
         address somePointer = address(1337);
         uint80 decompressedLen = 123;
@@ -298,6 +328,12 @@ contract NounsDescriptorV2Test is Test {
     function testCannotAddAccessoriesFromPointerWhenPartsLocked() public {
         descriptor.lockParts();
         vm.expectRevert(bytes('Parts are locked'));
+        descriptor.addAccessoriesFromPointer(address(1337), 1, 1);
+    }
+
+    function testCannotAddAccessoriesFromPointerIfNotOwner() public {
+        vm.prank(address(1));
+        vm.expectRevert(bytes('Ownable: caller is not the owner'));
         descriptor.addAccessoriesFromPointer(address(1337), 1, 1);
     }
 
@@ -318,6 +354,12 @@ contract NounsDescriptorV2Test is Test {
         descriptor.addHeadsFromPointer(address(1337), 1, 1);
     }
 
+    function testCannotAddHeadsFromPointerIfNotOwner() public {
+        vm.prank(address(1));
+        vm.expectRevert(bytes('Ownable: caller is not the owner'));
+        descriptor.addHeadsFromPointer(address(1337), 1, 1);
+    }
+
     function testAddGlassesFromPointerUsesArt() public {
         address somePointer = address(1337);
         uint80 decompressedLen = 123;
@@ -332,6 +374,12 @@ contract NounsDescriptorV2Test is Test {
     function testCannotAddGlassesFromPointerWhenPartsLocked() public {
         descriptor.lockParts();
         vm.expectRevert(bytes('Parts are locked'));
+        descriptor.addGlassesFromPointer(address(1337), 1, 1);
+    }
+
+    function testCannotAddGlassesFromPointerIfNotOwner() public {
+        vm.prank(address(1));
+        vm.expectRevert(bytes('Ownable: caller is not the owner'));
         descriptor.addGlassesFromPointer(address(1337), 1, 1);
     }
 
