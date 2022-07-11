@@ -56,11 +56,11 @@ task('deploy-short-times-descriptorv1', 'Deploy all Nouns contracts with NounsDe
     60 * 2 /* 2 minutes */,
     types.int,
   )
-  .addOptionalParam('timelockDelay', 'The timelock delay (seconds)', 3600 /* 1 hour */, types.int)
+  .addOptionalParam('timelockDelay', 'The timelock delay (seconds)', 60 /* 1 min */, types.int)
   .addOptionalParam(
     'votingPeriod',
     'The voting period (blocks)',
-    240 /* 1 hour (15s blocks) */,
+    80 /* 20 min (15s blocks) */,
     types.int,
   )
   .addOptionalParam('votingDelay', 'The voting delay (blocks)', 1, types.int)
