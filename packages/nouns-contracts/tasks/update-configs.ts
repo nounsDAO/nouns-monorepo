@@ -1,5 +1,5 @@
 import { task, types } from 'hardhat/config';
-import { ContractName, DeployedContract } from './types';
+import { ContractName, ContractNameDescriptorV1, DeployedContract } from './types';
 import { readFileSync, writeFileSync } from 'fs';
 import { execSync } from 'child_process';
 import { join } from 'path';
@@ -7,7 +7,12 @@ import { join } from 'path';
 task('update-configs', 'Write the deployed addresses to the SDK and subgraph configs')
   .addParam('contracts', 'Contract objects from the deployment', undefined, types.json)
   .setAction(
-    async ({ contracts }: { contracts: Record<ContractName, DeployedContract> }, { ethers }) => {
+    async (
+      {
+        contracts,
+      }: { contracts: Record<ContractName | ContractNameDescriptorV1, DeployedContract> },
+      { ethers },
+    ) => {
       const { name: network, chainId } = await ethers.provider.getNetwork();
 
       // Update SDK addresses
@@ -17,8 +22,12 @@ task('update-configs', 'Write the deployed addresses to the SDK and subgraph con
       addresses[chainId] = {
         nounsToken: contracts.NounsToken.address,
         nounsSeeder: contracts.NounsSeeder.address,
-        nounsDescriptor: contracts.NounsDescriptorV2.address,
-        nftDescriptor: contracts.NFTDescriptorV2.address,
+        nounsDescriptor: contracts.NounsDescriptorV2
+          ? contracts.NounsDescriptorV2.address
+          : contracts.NounsDescriptor.address,
+        nftDescriptor: contracts.NFTDescriptorV2
+          ? contracts.NFTDescriptorV2.address
+          : contracts.NFTDescriptor.address,
         nounsAuctionHouse: contracts.NounsAuctionHouse.address,
         nounsAuctionHouseProxy: contracts.NounsAuctionHouseProxy.address,
         nounsAuctionHouseProxyAdmin: contracts.NounsAuctionHouseProxyAdmin.address,

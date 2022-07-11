@@ -1,7 +1,7 @@
 import { task, types } from 'hardhat/config';
 import { printContractsTable } from './utils';
 
-task('deploy-and-configure-short-times', 'Deploy and configure all contracts')
+task('deploy-and-configure-short-times-descriptorv1', 'Deploy and configure all contracts')
   .addFlag('startAuction', 'Start the first auction upon deployment completion')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
   .addFlag('updateConfigs', 'Write the deployed addresses to the SDK and subgraph configs')
@@ -10,23 +10,50 @@ task('deploy-and-configure-short-times', 'Deploy and configure all contracts')
   .addOptionalParam(
     'auctionTimeBuffer',
     'The auction time buffer (seconds)',
-    5 * 60 /* 5 minutes */,
+    30 /* 30 seconds */,
     types.int,
   )
-  .addOptionalParam('auctionReservePrice', 'The auction reserve price (wei)')
+  .addOptionalParam(
+    'auctionReservePrice',
+    'The auction reserve price (wei)',
+    1 /* 1 wei */,
+    types.int,
+  )
   .addOptionalParam(
     'auctionMinIncrementBidPercentage',
     'The auction min increment bid percentage (out of 100)',
+    2 /* 2% */,
+    types.int,
   )
-  .addOptionalParam('auctionDuration', 'The auction duration (seconds)', 600, types.int)
-  .addOptionalParam('timelockDelay', 'The timelock delay (seconds)')
-  .addOptionalParam('votingPeriod', 'The voting period (blocks)', 5760, types.int)
+  .addOptionalParam(
+    'auctionDuration',
+    'The auction duration (seconds)',
+    60 * 2 /* 2 minutes */,
+    types.int,
+  )
+  .addOptionalParam('timelockDelay', 'The timelock delay (seconds)', 3600 /* 1 hour */, types.int)
+  .addOptionalParam(
+    'votingPeriod',
+    'The voting period (blocks)',
+    240 /* 1 hour (15s blocks) */,
+    types.int,
+  )
   .addOptionalParam('votingDelay', 'The voting delay (blocks)', 1, types.int)
-  .addOptionalParam('proposalThresholdBps', 'The proposal threshold (basis points)')
-  .addOptionalParam('quorumVotesBps', 'Votes required for quorum (basis points)')
+  .addOptionalParam(
+    'proposalThresholdBps',
+    'The proposal threshold (basis points)',
+    100 /* 1% */,
+    types.int,
+  )
+  .addOptionalParam(
+    'quorumVotesBps',
+    'Votes required for quorum (basis points)',
+    1_000 /* 10% */,
+    types.int,
+  )
   .setAction(async (args, { run }) => {
     // Deploy the Nouns DAO contracts and return deployment information
-    const contracts = await run('deploy-short-times', args);
+    const contracts = await run('deploy-short-times-descriptorv1', args);
 
     // Verify the contracts on Etherscan
     await run('verify-etherscan', {
@@ -34,15 +61,15 @@ task('deploy-and-configure-short-times', 'Deploy and configure all contracts')
     });
 
     // Populate the on-chain art
-    await run('populate-descriptor', {
-      nftDescriptor: contracts.NFTDescriptorV2.address,
-      nounsDescriptor: contracts.NounsDescriptorV2.address,
+    await run('populate-descriptor-v1', {
+      nftDescriptor: contracts.NFTDescriptor.address,
+      nounsDescriptor: contracts.NounsDescriptor.address,
     });
 
     // Transfer ownership of all contract except for the auction house.
     // We must maintain ownership of the auction house to kick off the first auction.
     const executorAddress = contracts.NounsDAOExecutor.address;
-    await contracts.NounsDescriptorV2.instance.transferOwnership(executorAddress);
+    await contracts.NounsDescriptor.instance.transferOwnership(executorAddress);
     await contracts.NounsToken.instance.transferOwnership(executorAddress);
     await contracts.NounsAuctionHouseProxyAdmin.instance.transferOwnership(executorAddress);
     console.log(

@@ -1,5 +1,11 @@
 import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json';
-import { ChainId, ContractDeployment, ContractName, DeployedContract } from './types';
+import {
+  ChainId,
+  ContractDeployment,
+  ContractName,
+  ContractNameDescriptorV1,
+  DeployedContract,
+} from './types';
 import { Interface } from 'ethers/lib/utils';
 import { task, types } from 'hardhat/config';
 import promptjs from 'prompt';
@@ -19,11 +25,10 @@ const wethContracts: Record<number, string> = {
   [ChainId.Kovan]: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
 };
 
-const NOUNS_ART_NONCE_OFFSET = 3;
-const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 8;
-const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 11;
+const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 6;
+const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 9;
 
-task('deploy-short-times', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsToken')
+task('deploy-short-times-descriptorv1', 'Deploy all Nouns contracts with NounsDescriptor v1')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
   .addOptionalParam('weth', 'The WETH contract address', undefined, types.string)
   .addOptionalParam('noundersdao', 'The nounders DAO contract address', undefined, types.string)
@@ -95,10 +100,6 @@ task('deploy-short-times', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder,
     }
 
     const nonce = await deployer.getTransactionCount();
-    const expectedNounsArtAddress = ethers.utils.getContractAddress({
-      from: deployer.address,
-      nonce: nonce + NOUNS_ART_NONCE_OFFSET,
-    });
     const expectedAuctionHouseProxyAddress = ethers.utils.getContractAddress({
       from: deployer.address,
       nonce: nonce + AUCTION_HOUSE_PROXY_NONCE_OFFSET,
@@ -107,28 +108,23 @@ task('deploy-short-times', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder,
       from: deployer.address,
       nonce: nonce + GOVERNOR_N_DELEGATOR_NONCE_OFFSET,
     });
-    const deployment: Record<ContractName, DeployedContract> = {} as Record<
-      ContractName,
+    const deployment: Record<ContractNameDescriptorV1, DeployedContract> = {} as Record<
+      ContractNameDescriptorV1,
       DeployedContract
     >;
-    const contracts: Record<ContractName, ContractDeployment> = {
-      NFTDescriptorV2: {},
-      SVGRenderer: {},
-      NounsDescriptorV2: {
-        args: [expectedNounsArtAddress, () => deployment.SVGRenderer.address],
+    const contracts: Record<ContractNameDescriptorV1, ContractDeployment> = {
+      NFTDescriptor: {},
+      NounsDescriptor: {
         libraries: () => ({
-          NFTDescriptorV2: deployment.NFTDescriptorV2.address,
+          NFTDescriptor: deployment.NFTDescriptor.address,
         }),
-      },
-      NounsArt: {
-        args: [() => deployment.NounsDescriptorV2.address],
       },
       NounsSeeder: {},
       NounsToken: {
         args: [
           args.noundersdao,
           expectedAuctionHouseProxyAddress,
-          () => deployment.NounsDescriptorV2.address,
+          () => deployment.NounsDescriptor.address,
           () => deployment.NounsSeeder.address,
           proxyRegistryAddress,
         ],
@@ -283,7 +279,7 @@ task('deploy-short-times', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder,
         await deployedContract.deployed();
       }
 
-      deployment[name as ContractName] = {
+      deployment[name as ContractNameDescriptorV1] = {
         name: nameForFactory,
         instance: deployedContract,
         address: deployedContract.address,
