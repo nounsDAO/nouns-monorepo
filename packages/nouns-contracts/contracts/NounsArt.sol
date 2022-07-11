@@ -25,9 +25,6 @@ contract NounsArt is INounsArt {
     /// @notice Current Nouns Descriptor address
     address public override descriptor;
 
-    /// @notice Pending Nouns Descriptor address
-    address public override pendingDescriptor;
-
     /// @notice Noun Backgrounds (Hex Colors)
     string[] public override backgrounds;
 

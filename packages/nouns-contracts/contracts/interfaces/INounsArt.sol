@@ -63,8 +63,6 @@ interface INounsArt {
 
     function descriptor() external view returns (address);
 
-    function pendingDescriptor() external view returns (address);
-
     function setDescriptor(address descriptor) external;
 
     function addManyBackgrounds(string[] calldata _backgrounds) external;
