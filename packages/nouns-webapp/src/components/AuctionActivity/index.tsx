@@ -85,11 +85,20 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
     }
   }, [auctionTimer, auction]);
 
-   // Page through Nouns via keyboard
+  // Page through Nouns via keyboard
   // handle what happens on key press
-  const handleKeyPress = useCallback((event) => {
-    console.log(`Key pressed: ${event.key}`);
-  }, []);
+  const handleKeyPress = useCallback(
+    event => {
+      console.log(event);
+      if (event.key === 'ArrowLeft') {
+        onPrevAuctionClick();
+      }
+      if (event.key === 'ArrowRight') {
+        onNextAuctionClick();
+      }
+    },
+    [onNextAuctionClick, onPrevAuctionClick],
+  );
 
   useEffect(() => {
     // attach the event listener
