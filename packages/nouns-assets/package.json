@@ -9,6 +9,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "encode": "ts-node scripts/encode.ts",
+    "encode-more": "ts-node scripts/encode-more.ts",
     "clean": "rimraf dist tsconfig.build.tsbuildinfo",
     "build": "tsc -p tsconfig.build.json",
     "prepare": "yarn build",
