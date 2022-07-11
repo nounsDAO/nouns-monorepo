@@ -29,9 +29,24 @@ describe('PNGCollectionEncoder', () => {
     expect(rle).to.equal(headCone.data);
   });
 
+  it('should run-length encode an image with an odd height', async () => {
+    const name = 'odd-height';
+    const [, , oddHeight] = expected.images.root;
+    const image = await readPngImage(join(__dirname, `./lib/images/${name}.png`));
+
+    // Encode the previous png so that the palette indexes match
+    encoder.encodeImage(
+      'head-cone',
+      await readPngImage(join(__dirname, `./lib/images/head-cone.png`)),
+    );
+
+    const rle = encoder.encodeImage(name, image);
+    expect(rle).to.equal(oddHeight.data);
+  });
+
   it('should write RLE image data to a file', async () => {
     const filename = 'test-data.json';
-    const names = ['empty', 'head-cone'];
+    const names = ['empty', 'head-cone', 'odd-height'];
     for (const name of names) {
       const image = await readPngImage(join(__dirname, `./lib/images/${name}.png`));
       encoder.encodeImage(name, image);
