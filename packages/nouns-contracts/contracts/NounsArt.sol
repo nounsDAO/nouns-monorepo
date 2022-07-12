@@ -18,12 +18,15 @@
 pragma solidity ^0.8.6;
 
 import { INounsArt } from './interfaces/INounsArt.sol';
-import { Inflate } from './libs/Inflate.sol';
 import { SSTORE2 } from './libs/SSTORE2.sol';
+import { IInflator } from './interfaces/IInflator.sol';
 
 contract NounsArt is INounsArt {
     /// @notice Current Nouns Descriptor address
     address public override descriptor;
+
+    /// @notice Current inflator address
+    IInflator public override inflator;
 
     /// @notice Noun Backgrounds (Hex Colors)
     string[] public override backgrounds;
@@ -53,8 +56,9 @@ contract NounsArt is INounsArt {
         _;
     }
 
-    constructor(address _descriptor) {
+    constructor(address _descriptor, IInflator _inflator) {
         descriptor = _descriptor;
+        inflator = _inflator;
     }
 
     /**
@@ -359,18 +363,6 @@ contract NounsArt is INounsArt {
         return SSTORE2.read(palettesPointers[paletteIndex]);
     }
 
-    /**
-     * @notice Decompresses Deflated bytes using the Puff algorithm
-     * based on Based on https://github.com/adlerjohn/inflate-sol.
-     * @param source the bytes to decompress.
-     * @param destlen the length of the original decompressed bytes.
-     * @return Inflate.ErrorCode 0 if successful, otherwise an error code specifying the reason for failure.
-     * @return bytes the decompressed bytes.
-     */
-    function puff(bytes memory source, uint256 destlen) public pure returns (Inflate.ErrorCode, bytes memory) {
-        return Inflate.puff(source, destlen);
-    }
-
     function _addBackground(string calldata _background) internal {
         backgrounds.push(_background);
     }
@@ -442,7 +434,7 @@ contract NounsArt is INounsArt {
 
     function decompressAndDecode(INounsArt.NounArtStoragePage storage page) internal view returns (bytes[] memory) {
         bytes memory compressedData = SSTORE2.read(page.pointer);
-        (, bytes memory decompressedData) = Inflate.puff(compressedData, page.decompressedLength);
+        (, bytes memory decompressedData) = inflator.puff(compressedData, page.decompressedLength);
         return abi.decode(decompressedData, (bytes[]));
     }
 }

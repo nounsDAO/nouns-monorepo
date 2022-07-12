@@ -18,6 +18,7 @@ import {
   NounsDAOProxy__factory as NounsDaoProxyFactory,
   NounsDAOLogicV1,
   NounsDAOExecutor,
+  Inflator__factory,
 } from '../typechain';
 import ImageData from '../files/image-data.json';
 import ImageDataV2 from '../files/image-data_v2.json';
@@ -77,7 +78,9 @@ export const deployNounsDescriptorV2 = async (
     renderer.address,
   );
 
-  const art = await new NounsArtFactory(signer).deploy(descriptor.address);
+  const inflator = await new Inflator__factory(signer).deploy();
+
+  const art = await new NounsArtFactory(signer).deploy(descriptor.address, inflator.address);
   await descriptor.setArt(art.address);
 
   return descriptor;
@@ -177,16 +180,17 @@ export const deployGovAndToken = async (
   // nonce 2: Deploy nftDescriptorLibraryFactory
   // nonce 3: Deploy SVGRenderer
   // nonce 4: Deploy NounsDescriptor
-  // nonce 5: Deploy NounsArt
-  // nonce 6: NounsDescriptor.setArt
-  // nonce 7: Deploy NounsSeeder
-  // nonce 8: Deploy NounsToken
-  // nonce 9: Deploy NounsDAOProxy
-  // nonce 10+: populate Descriptor
+  // nonce 5: Deploy Inflator
+  // nonce 6: Deploy NounsArt
+  // nonce 7: NounsDescriptor.setArt
+  // nonce 8: Deploy NounsSeeder
+  // nonce 9: Deploy NounsToken
+  // nonce 10: Deploy NounsDAOProxy
+  // nonce 11+: populate Descriptor
 
   const govDelegatorAddress = ethers.utils.getContractAddress({
     from: deployer.address,
-    nonce: (await deployer.getTransactionCount()) + 9,
+    nonce: (await deployer.getTransactionCount()) + 10,
   });
 
   // Deploy NounsDAOExecutor with pre-computed Delegator address

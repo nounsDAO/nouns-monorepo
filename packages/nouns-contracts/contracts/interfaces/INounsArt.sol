@@ -18,6 +18,7 @@
 pragma solidity ^0.8.6;
 
 import { Inflate } from '../libs/Inflate.sol';
+import { IInflator } from './IInflator.sol';
 
 interface INounsArt {
     error SenderIsNotDescriptor();
@@ -62,6 +63,8 @@ interface INounsArt {
     }
 
     function descriptor() external view returns (address);
+
+    function inflator() external view returns (IInflator);
 
     function setDescriptor(address descriptor) external;
 

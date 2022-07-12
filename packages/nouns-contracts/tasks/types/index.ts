@@ -10,7 +10,7 @@ export enum ChainId {
 // prettier-ignore
 export type DescriptorV1ContractNames = 'NFTDescriptor' | 'NounsDescriptor';
 // prettier-ignore
-export type DescriptorV2ContractNames = 'NFTDescriptorV2' | 'NounsDescriptorV2' | 'SVGRenderer' | 'NounsArt';
+export type DescriptorV2ContractNames = 'NFTDescriptorV2' | 'NounsDescriptorV2' | 'SVGRenderer' | 'NounsArt' | 'Inflator';
 // prettier-ignore
 export type ContractName = DescriptorV2ContractNames | 'NounsSeeder' | 'NounsToken' | 'NounsAuctionHouse' | 'NounsAuctionHouseProxyAdmin' | 'NounsAuctionHouseProxy' | 'NounsDAOExecutor' | 'NounsDAOLogicV1' | 'NounsDAOProxy';
 // prettier-ignore

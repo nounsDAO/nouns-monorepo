@@ -38,9 +38,9 @@ task('deploy-local', 'Deploy contracts to hardhat')
 
     const proxyRegistryAddress = '0xa5409ec958c83c3f309868babaca7c86dcb077c1';
 
-    const NOUNS_ART_NONCE_OFFSET = 4;
-    const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 9;
-    const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 12;
+    const NOUNS_ART_NONCE_OFFSET = 5;
+    const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 10;
+    const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 13;
 
     const [deployer] = await ethers.getSigners();
     const nonce = await deployer.getTransactionCount();
@@ -66,8 +66,12 @@ task('deploy-local', 'Deploy contracts to hardhat')
           NFTDescriptorV2: contracts.NFTDescriptorV2.instance?.address as string,
         }),
       },
+      Inflator: {},
       NounsArt: {
-        args: [() => contracts.NounsDescriptorV2.instance?.address],
+        args: [
+          () => contracts.NounsDescriptorV2.instance?.address,
+          () => contracts.Inflator.instance?.address,
+        ],
       },
       NounsSeeder: {},
       NounsToken: {

@@ -7,7 +7,6 @@ const { ethers } = hardhat;
 import { BigNumber as EthersBN } from 'ethers';
 
 import {
-  deployNounsToken,
   getSigners,
   TestSigners,
   setTotalSupply,

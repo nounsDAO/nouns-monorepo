@@ -19,9 +19,9 @@ const wethContracts: Record<number, string> = {
   [ChainId.Kovan]: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
 };
 
-const NOUNS_ART_NONCE_OFFSET = 3;
-const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 8;
-const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 11;
+const NOUNS_ART_NONCE_OFFSET = 4;
+const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 9;
+const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 12;
 
 task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsToken')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
@@ -130,8 +130,9 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
           NFTDescriptorV2: deployment.NFTDescriptorV2.address,
         }),
       },
+      Inflator: {},
       NounsArt: {
-        args: [() => deployment.NounsDescriptorV2.address],
+        args: [() => deployment.NounsDescriptorV2.address, () => deployment.Inflator.address],
       },
       NounsSeeder: {},
       NounsToken: {

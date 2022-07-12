@@ -6,6 +6,7 @@ import { NounsArt } from '../../contracts/NounsArt.sol';
 import { INounsArt } from '../../contracts/interfaces/INounsArt.sol';
 import { SSTORE2 } from '../../contracts/libs/SSTORE2.sol';
 import { DescriptorHelpers } from './helpers/DescriptorHelpers.sol';
+import { Inflator } from '../../contracts/Inflator.sol';
 
 contract NounsArtTest is Test, DescriptorHelpers {
     event BackgroundsAdded(uint256 count);
@@ -26,7 +27,7 @@ contract NounsArtTest is Test, DescriptorHelpers {
     address descriptor = address(1);
 
     function setUp() public {
-        art = new NounsArt(descriptor);
+        art = new NounsArt(descriptor, new Inflator());
     }
 
     ///

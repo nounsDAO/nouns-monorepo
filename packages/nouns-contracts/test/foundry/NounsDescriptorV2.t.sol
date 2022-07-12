@@ -9,6 +9,7 @@ import { INounsSeeder } from '../../contracts/interfaces/INounsSeeder.sol';
 import { NounsArt } from '../../contracts/NounsArt.sol';
 import { INounsArt } from '../../contracts/interfaces/INounsArt.sol';
 import { Base64 } from 'base64-sol/base64.sol';
+import { Inflator } from '../../contracts/Inflator.sol';
 
 contract NounsDescriptorV2Test is Test {
     NounsDescriptorV2 descriptor;
@@ -18,7 +19,7 @@ contract NounsDescriptorV2Test is Test {
     function setUp() public {
         renderer = new SVGRenderer();
         descriptor = new NounsDescriptorV2(INounsArt(address(0)), renderer);
-        art = new NounsArt(address(descriptor));
+        art = new NounsArt(address(descriptor), new Inflator());
         descriptor.setArt(art);
     }
 

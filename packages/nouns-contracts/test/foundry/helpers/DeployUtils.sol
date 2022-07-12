@@ -13,6 +13,7 @@ import { NounsDescriptor } from '../../../contracts/NounsDescriptor.sol';
 import { NounsSeeder } from '../../../contracts/NounsSeeder.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { NounsDAOProxy } from '../../../contracts/governance/NounsDAOProxy.sol';
+import { Inflator } from '../../../contracts/Inflator.sol';
 
 abstract contract DeployUtils is Test, DescriptorHelpers {
     uint256 constant TIMELOCK_DELAY = 2 days;
@@ -29,8 +30,9 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
 
     function _deployDescriptorV2() internal returns (NounsDescriptorV2) {
         SVGRenderer renderer = new SVGRenderer();
+        Inflator inflator = new Inflator();
         NounsDescriptorV2 descriptorV2 = new NounsDescriptorV2(NounsArt(address(0)), renderer);
-        NounsArt art = new NounsArt(address(descriptorV2));
+        NounsArt art = new NounsArt(address(descriptorV2), inflator);
         descriptorV2.setArt(art);
         return descriptorV2;
     }
