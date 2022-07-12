@@ -84,7 +84,7 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
     const network = await ethers.provider.getNetwork();
     const [deployer] = await ethers.getSigners();
 
-    // prettier-ignore
+    // prettier-ignore:123
     const proxyRegistryAddress = proxyRegistries[network.chainId] ?? proxyRegistries[ChainId.Rinkeby];
 
     if (!args.noundersdao) {
