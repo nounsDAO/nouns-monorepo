@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title A contract used to convert multi-part RLE compressed images to SVG
+/// @title A contract used to decompress data compressed using the Deflate algorithm.
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
