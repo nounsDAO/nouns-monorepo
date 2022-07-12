@@ -6,8 +6,12 @@ async function delay(seconds: number) {
   return new Promise(resolve => setTimeout(resolve, 1000 * seconds));
 }
 
-task('deploy-descriptor-v2', 'Deploy NounsDescriptorV2 & populate it with art').setAction(
-  async ({}, { ethers, run, network }) => {
+task('deploy-descriptor-v2', 'Deploy NounsDescriptorV2 & populate it with art')
+  .addParam(
+    'daoExecutor',
+    'The address of the NounsDAOExecutor that should be the owner of the descriptor.',
+  )
+  .setAction(async ({ daoExecutor }, { ethers, run, network }) => {
     const contracts: Record<ContractName, DeployedContract> = {} as Record<
       ContractName,
       DeployedContract
@@ -18,7 +22,7 @@ task('deploy-descriptor-v2', 'Deploy NounsDescriptorV2 & populate it with art').
     const nonce = await deployer.getTransactionCount();
     const expectedNounsArtAddress = ethers.utils.getContractAddress({
       from: deployer.address,
-      nonce: nonce + 3,
+      nonce: nonce + 4,
     });
 
     console.log('Deploying contracts...');
@@ -97,6 +101,10 @@ task('deploy-descriptor-v2', 'Deploy NounsDescriptorV2 & populate it with art').
     });
     console.log('Population complete.');
 
+    console.log('Transfering ownership to DAO Executor...');
+    await nounsDescriptor.transferOwnership(daoExecutor);
+    console.log('Transfer complete.');
+
     if (network.name !== 'localhost') {
       console.log('Waiting 1 minute before verifying contracts on Etherscan');
       await delay(60);
@@ -107,5 +115,4 @@ task('deploy-descriptor-v2', 'Deploy NounsDescriptorV2 & populate it with art').
       });
       console.log('Verify complete.');
     }
-  },
-);
+  });
