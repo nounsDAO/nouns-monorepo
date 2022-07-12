@@ -39,6 +39,8 @@ interface INounsArt {
 
     event DescriptorUpdated(address oldDescriptor, address newDescriptor);
 
+    event InflatorUpdated(address oldInflator, address newInflator);
+
     event BackgroundsAdded(uint256 count);
 
     event PaletteSet(uint8 paletteIndex);
@@ -67,6 +69,8 @@ interface INounsArt {
     function inflator() external view returns (IInflator);
 
     function setDescriptor(address descriptor) external;
+
+    function setInflator(IInflator inflator) external;
 
     function addManyBackgrounds(string[] calldata _backgrounds) external;
 

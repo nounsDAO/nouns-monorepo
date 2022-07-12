@@ -7,6 +7,7 @@ import { INounsArt } from '../../contracts/interfaces/INounsArt.sol';
 import { SSTORE2 } from '../../contracts/libs/SSTORE2.sol';
 import { DescriptorHelpers } from './helpers/DescriptorHelpers.sol';
 import { Inflator } from '../../contracts/Inflator.sol';
+import { IInflator } from '../../contracts/interfaces/IInflator.sol';
 
 contract NounsArtTest is Test, DescriptorHelpers {
     event BackgroundsAdded(uint256 count);
@@ -23,11 +24,15 @@ contract NounsArtTest is Test, DescriptorHelpers {
 
     event DescriptorUpdated(address oldDescriptor, address newDescriptor);
 
+    event InflatorUpdated(address oldInflator, address newInflator);
+
     NounsArt art;
     address descriptor = address(1);
+    IInflator inflator;
 
     function setUp() public {
-        art = new NounsArt(descriptor, new Inflator());
+        inflator = new Inflator();
+        art = new NounsArt(descriptor, inflator);
     }
 
     ///
@@ -49,6 +54,27 @@ contract NounsArtTest is Test, DescriptorHelpers {
         art.setDescriptor(newDescriptor);
 
         assertEq(art.descriptor(), newDescriptor);
+    }
+
+    ///
+    /// setInflator
+    ///
+
+    function testSetInflatorRevertsIfSenderNotDescriptor() public {
+        vm.expectRevert(INounsArt.SenderIsNotDescriptor.selector);
+        art.setInflator(IInflator(address(2)));
+    }
+
+    function testSetInflatorWorks() public {
+        IInflator newInflator = IInflator(address(2));
+
+        vm.expectEmit(true, true, true, true);
+        emit InflatorUpdated(address(inflator), address(newInflator));
+
+        vm.prank(descriptor);
+        art.setInflator(newInflator);
+
+        assertEq(address(art.inflator()), address(newInflator));
     }
 
     ///

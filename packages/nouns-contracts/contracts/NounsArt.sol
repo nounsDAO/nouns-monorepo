@@ -62,8 +62,7 @@ contract NounsArt is INounsArt {
     }
 
     /**
-     * @notice Set the pending descriptor, which can be confirmed
-     * by calling `confirmDescriptor`.
+     * @notice Set the descriptor.
      * @dev This function can only be called by the current descriptor.
      */
     function setDescriptor(address _descriptor) external override onlyDescriptor {
@@ -71,6 +70,17 @@ contract NounsArt is INounsArt {
         descriptor = _descriptor;
 
         emit DescriptorUpdated(oldDescriptor, descriptor);
+    }
+
+    /**
+     * @notice Set the inflator.
+     * @dev This function can only be called by the descriptor.
+     */
+    function setInflator(IInflator _inflator) external override onlyDescriptor {
+        address oldInflator = address(inflator);
+        inflator = _inflator;
+
+        emit InflatorUpdated(oldInflator, address(_inflator));
     }
 
     /**

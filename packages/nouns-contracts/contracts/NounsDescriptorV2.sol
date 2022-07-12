@@ -24,6 +24,7 @@ import { INounsSeeder } from './interfaces/INounsSeeder.sol';
 import { NFTDescriptorV2 } from './libs/NFTDescriptorV2.sol';
 import { ISVGRenderer } from './interfaces/ISVGRenderer.sol';
 import { INounsArt } from './interfaces/INounsArt.sol';
+import { IInflator } from './interfaces/IInflator.sol';
 
 contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     using Strings for uint256;
@@ -81,12 +82,21 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     }
 
     /**
-     * @notice Set the art contract's `pendingDescriptor`.
-     * @param pendingDescriptor the address to set.
+     * @notice Set the art contract's `descriptor`.
+     * @param descriptor the address to set.
      * @dev Only callable by the owner.
      */
-    function setArtDescriptor(address pendingDescriptor) external onlyOwner {
-        art.setDescriptor(pendingDescriptor);
+    function setArtDescriptor(address descriptor) external onlyOwner {
+        art.setDescriptor(descriptor);
+    }
+
+    /**
+     * @notice Set the art contract's `inflator`.
+     * @param inflator the address to set.
+     * @dev Only callable by the owner.
+     */
+    function setArtInflator(IInflator inflator) external onlyOwner {
+        art.setInflator(inflator);
     }
 
     /**

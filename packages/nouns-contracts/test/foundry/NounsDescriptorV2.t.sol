@@ -10,6 +10,7 @@ import { NounsArt } from '../../contracts/NounsArt.sol';
 import { INounsArt } from '../../contracts/interfaces/INounsArt.sol';
 import { Base64 } from 'base64-sol/base64.sol';
 import { Inflator } from '../../contracts/Inflator.sol';
+import { IInflator } from '../../contracts/interfaces/IInflator.sol';
 
 contract NounsDescriptorV2Test is Test {
     NounsDescriptorV2 descriptor;
@@ -66,6 +67,17 @@ contract NounsDescriptorV2Test is Test {
     function testSetArtDescriptorUsesArt() public {
         vm.expectCall(address(art), abi.encodeCall(art.setDescriptor, address(42)));
         descriptor.setArtDescriptor(address(42));
+    }
+
+    function testCannotSetArtInflatorIfNotOwner() public {
+        vm.prank(address(1));
+        vm.expectRevert(bytes('Ownable: caller is not the owner'));
+        descriptor.setArtInflator(IInflator(address(2)));
+    }
+
+    function testSetArtInflatorUsesArt() public {
+        vm.expectCall(address(art), abi.encodeCall(art.setInflator, IInflator(address(42))));
+        descriptor.setArtInflator(IInflator(address(42)));
     }
 
     function testDataURIEnabledByDefault() public {
