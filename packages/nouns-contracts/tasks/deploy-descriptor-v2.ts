@@ -79,7 +79,7 @@ task('deploy-descriptor-v2', 'Deploy NounsDescriptorV2 & populate it with art')
     contracts.NounsArt = {
       name: 'NounsArt',
       address: art.address,
-      constructorArguments: [nounsDescriptor.address],
+      constructorArguments: [nounsDescriptor.address, inflator.address],
       instance: art,
       libraries: {},
     };
