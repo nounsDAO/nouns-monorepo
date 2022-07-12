@@ -18,6 +18,7 @@ import React, { useState } from 'react';
 import DelegationModal from '../DelegationModal';
 import { i18n } from '@lingui/core';
 import { ethers } from 'ethers';
+import en from 'dayjs/locale/en';
 
 dayjs.extend(relativeTime);
 
@@ -46,19 +47,19 @@ const getCountdownCopy = (proposal: Proposal, currentBlock: number, locale: Supp
 
   if (startDate?.isBefore(now) && endDate?.isAfter(now)) {
     return (
-      <Trans>Ends {endDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale]).fromNow()}</Trans>
+      <Trans>Ends {endDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()}</Trans>
     );
   }
   if (endDate?.isBefore(now)) {
     return (
       <Trans>
-        Expires {expiresDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale]).fromNow()}
+        Expires {expiresDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()}
       </Trans>
     );
   }
   return (
     <Trans>
-      Starts {dayjs(startDate).locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale]).fromNow()}
+      Starts {dayjs(startDate).locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()}
     </Trans>
   );
 };
