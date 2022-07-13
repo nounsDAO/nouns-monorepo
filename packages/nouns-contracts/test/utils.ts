@@ -20,8 +20,8 @@ import {
   NounsDAOExecutor,
   Inflator__factory,
 } from '../typechain';
-import ImageData from '../files/image-data.json';
-import ImageDataV2 from '../files/image-data_v2.json';
+import ImageData from '../files/image-data-v1.json';
+import ImageDataV2 from '../files/image-data-v2.json';
 import { Block } from '@ethersproject/abstract-provider';
 import { deflateRawSync } from 'zlib';
 import { chunkArray } from '../utils';

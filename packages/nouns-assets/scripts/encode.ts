@@ -3,7 +3,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { readPngImage } from './utils';
 
-const DESTINATION = path.join(__dirname, '../src/image-data_v2.json');
+const DESTINATION = path.join(__dirname, '../src/image-data.json');
 
 const encode = async () => {
   const encoder = new PNGCollectionEncoder();

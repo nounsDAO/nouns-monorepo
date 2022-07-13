@@ -1,7 +1,7 @@
 import { writeFileSync } from 'fs';
 import { task, types } from 'hardhat/config';
 import path from 'path';
-import ImageData from '../files/image-data.json';
+import ImageData from '../files/image-data-v1.json';
 
 task(
   'descriptor-v1-export-abi',

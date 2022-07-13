@@ -1,6 +1,6 @@
 import { writeFileSync } from 'fs';
 import { task, types } from 'hardhat/config';
-import ImageData from '../files/image-data_v2.json';
+import ImageData from '../files/image-data-v2.json';
 import { dataToDescriptorInput } from './utils';
 import path from 'path';
 import { ethers } from 'ethers';
