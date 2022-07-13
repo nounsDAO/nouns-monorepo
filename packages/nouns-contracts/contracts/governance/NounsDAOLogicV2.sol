@@ -773,6 +773,17 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         emit QuorumCoefficientSet(oldParams.quorumCoefficient, params.quorumCoefficient);
     }
 
+    function _withdraw() external {
+        if (msg.sender != admin) {
+            revert AdminOnly();
+        }
+
+        uint256 amount = address(this).balance;
+        (bool sent, ) = msg.sender.call{ value: amount }('');
+
+        emit Withdraw(amount, sent);
+    }
+
     /**
      * @notice Begins transfer of admin rights. The newPendingAdmin must call `_acceptAdmin` to finalize the transfer.
      * @dev Admin function to begin change of admin. The newPendingAdmin must call `_acceptAdmin` to finalize the transfer.
