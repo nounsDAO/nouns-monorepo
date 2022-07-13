@@ -35,7 +35,6 @@ const config: HardhatUserConfig = {
     },
     hardhat: {
       initialBaseFeePerGas: 0,
-      allowUnlimitedContractSize: true,
     },
   },
   etherscan: {
