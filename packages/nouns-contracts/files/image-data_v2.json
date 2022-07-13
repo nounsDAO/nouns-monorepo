@@ -650,7 +650,7 @@
       },
       {
         "filename": "accessory-none",
-        "data": "0x00000100000100"
+        "data": "0x0000000000"
       },
       {
         "filename": "accessory-oldshirt",
