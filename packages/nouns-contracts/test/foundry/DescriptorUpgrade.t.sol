@@ -36,6 +36,20 @@ contract DescriptorUpgradeTest is Test, DeployUtils {
         }
 
         for (uint256 i = 0; i < tokensToMint; i++) {
+            (, uint48 body, , uint48 head, uint48 glasses) = nounsToken.seeds(i);
+            if (
+                body == 8 ||
+                head == 11 ||
+                head == 154 ||
+                glasses == 8 ||
+                glasses == 14 ||
+                glasses == 18 ||
+                glasses == 19
+            ) {
+                // these images were fixed prior to v2 deployment so not comparing these
+                continue;
+            }
+
             nounsToken.setDescriptor(descriptor);
             string memory tokenURIwithV1 = nounsToken.tokenURI(i);
 
