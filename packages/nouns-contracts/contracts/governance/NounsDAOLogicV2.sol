@@ -506,16 +506,35 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         // TODO reentrancy guard
 
         uint256 startGas = gasleft();
-
         uint96 votes = castVoteInternal(msg.sender, proposalId, support);
         emit VoteCast(msg.sender, proposalId, support, votes, '');
-
         if (votes > 0) {
-            uint256 gasPrice = min(tx.gasprice, block.basefee + MAX_REFUND_PRIORITY_FEE);
-            uint256 gasUsed = startGas - gasleft() + REFUND_TRANSFER_GAS + REFUND_OVERHEAD_GAS;
-            uint256 refundAmount = min(gasPrice * gasUsed, address(this).balance);
-            (bool refundSent, ) = msg.sender.call{ value: refundAmount }('');
-            emit RefundableVote(msg.sender, refundAmount, refundSent);
+            _refundGas(startGas);
+        }
+    }
+
+    /**
+     * @notice Cast a vote for a proposal, asking the DAO to refund gas costs.
+     * Users with > 0 votes receive refunds. Refunds are partial when using a gas priority fee higher than the DAO's cap.
+     * Refunds are partial when the DAO's balance is insufficient.
+     * No refund is sent when the DAO's balance is empty. No refund is sent to users with no votes.
+     * Voting takes place regardless of refund success.
+     * @param proposalId The id of the proposal to vote on
+     * @param support The support value for the vote. 0=against, 1=for, 2=abstain
+     * @param reason The reason given for the vote by the voter
+     */
+    function castRefundableVoteWithReason(
+        uint256 proposalId,
+        uint8 support,
+        string calldata reason
+    ) external {
+        // TODO reentrancy guard
+
+        uint256 startGas = gasleft();
+        uint96 votes = castVoteInternal(msg.sender, proposalId, support);
+        emit VoteCast(msg.sender, proposalId, support, votes, reason);
+        if (votes > 0) {
+            _refundGas(startGas);
         }
     }
 
@@ -934,6 +953,14 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         } else {
             quorumParamsCheckpoints.push(DynamicQuorumParamsCheckpoint({ fromBlock: blockNumber, params: params }));
         }
+    }
+
+    function _refundGas(uint256 startGas) internal {
+        uint256 gasPrice = min(tx.gasprice, block.basefee + MAX_REFUND_PRIORITY_FEE);
+        uint256 gasUsed = startGas - gasleft() + REFUND_TRANSFER_GAS + REFUND_OVERHEAD_GAS;
+        uint256 refundAmount = min(gasPrice * gasUsed, address(this).balance);
+        (bool refundSent, ) = msg.sender.call{ value: refundAmount }('');
+        emit RefundableVote(msg.sender, refundAmount, refundSent);
     }
 
     function min(uint256 a, uint256 b) internal pure returns (uint256) {
