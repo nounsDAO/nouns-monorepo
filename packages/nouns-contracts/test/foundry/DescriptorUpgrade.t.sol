@@ -29,20 +29,19 @@ contract DescriptorUpgradeTest is Test, DeployUtils {
     }
 
     function testUpgradeToV2MaintainsTokenURI() public {
-        for (uint256 i = 0; i < 10; i++) {
+        uint256 tokensToMint = 10;
+        for (uint256 i = 0; i < tokensToMint; i++) {
             vm.prank(minter);
             nounsToken.mint();
         }
 
-        for (uint256 i = 0; i < 10; i++) {
+        for (uint256 i = 0; i < tokensToMint; i++) {
             nounsToken.setDescriptor(descriptor);
-            string memory tokenURIwithV1 = nounsToken.tokenURI(1);
+            string memory tokenURIwithV1 = nounsToken.tokenURI(i);
 
             nounsToken.setDescriptor(descriptorV2);
-            string memory tokenURIwithV2 = nounsToken.tokenURI(1);
+            string memory tokenURIwithV2 = nounsToken.tokenURI(i);
 
-            // both _populateDescriptor and _populateDescriptorV2 are hard-coded to populate
-            // with the first item of each type found in image-data.json.
             assertEq(tokenURIwithV2, tokenURIwithV1);
         }
     }

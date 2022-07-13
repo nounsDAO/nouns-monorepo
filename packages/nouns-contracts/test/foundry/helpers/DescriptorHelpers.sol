@@ -8,6 +8,7 @@ import { Constants } from './Constants.sol';
 
 abstract contract DescriptorHelpers is Test, Constants {
     function _populateDescriptor(NounsDescriptor descriptor) internal {
+        // created with `npx hardhat descriptor-v1-export-abi`
         string memory filename = './test/foundry/files/descriptor_v1/image-data.abi';
         bytes memory content = readFile(filename);
         (
@@ -28,6 +29,7 @@ abstract contract DescriptorHelpers is Test, Constants {
     }
 
     function _populateDescriptorV2(NounsDescriptorV2 descriptor) internal {
+        // created with `npx hardhat descriptor-art-to-console`
         (bytes memory palette, string[] memory backgrounds) = abi.decode(
             readFile('./test/foundry/files/descriptor_v2/paletteAndBackgrounds.abi'),
             (bytes, string[])
