@@ -28,9 +28,10 @@ let user2: SignerWithAddress;
 let signers: TestSigners;
 let gov: NounsDAOLogicV2;
 let token: NounsToken;
+let snapshotId: number;
 
 describe('Vote Refund', () => {
-  beforeEach(async () => {
+  before(async () => {
     signers = await getSigners();
     deployer = signers.deployer;
     user = signers.account0;
@@ -61,76 +62,92 @@ describe('Vote Refund', () => {
     await advanceBlocks(2);
   });
 
-  it('castRefundableVote refunds users with votes', async () => {
-    await fundGov();
-    const balanceBefore = await user.getBalance();
-    const tx = await gov.connect(user).castRefundableVote(1, 1, { gasPrice: GAS_PRICE });
-    const r = await tx.wait();
-    const balanceDiff = balanceBefore.sub(await user.getBalance());
-
-    expect(r.gasUsed).to.be.gt(0);
-    expect(balanceDiff).to.be.closeTo(BigNumber.from(0), REFUND_ERROR_MARGIN);
-
-    await expect(tx).to.emit(gov, 'RefundableVote');
+  beforeEach(async () => {
+    snapshotId = await ethers.provider.send('evm_snapshot', []);
   });
 
-  it('castRefundableVote does not refund users with no votes', async () => {
-    await fundGov();
-    const balanceBefore = await user2.getBalance();
-
-    const tx = await gov.connect(user2).castRefundableVote(1, 1, { gasPrice: GAS_PRICE });
-    const r = await tx.wait();
-
-    expect(r.gasUsed).to.be.gt(0);
-    const balanceDiff = balanceBefore.sub(await user2.getBalance());
-    const expectedDiff = r.gasUsed.mul(GAS_PRICE);
-    expect(balanceDiff).to.be.eq(expectedDiff);
+  afterEach(async () => {
+    await ethers.provider.send('evm_revert', [snapshotId]);
   });
 
-  it.only('castRefundableVote caps refund', async () => {
-    await fundGov();
-    const balanceBefore = await user.getBalance();
+  describe('castRefundableVote', () => {
+    it('refunds users with votes', async () => {
+      await fundGov();
+      const balanceBefore = await user.getBalance();
+      const tx = await gov.connect(user).castRefundableVote(1, 1, { gasPrice: GAS_PRICE });
+      const r = await tx.wait();
+      const expectedCost = r.gasUsed.mul(GAS_PRICE);
+      const balanceDiff = balanceBefore.sub(await user.getBalance());
 
-    const tx = await gov.connect(user).castRefundableVote(1, 1, {
-      maxPriorityFeePerGas: ethers.utils.parseUnits('80', 'gwei'),
+      expect(r.gasUsed).to.be.gt(0);
+      expect(balanceDiff).to.be.closeTo(BigNumber.from(0), REFUND_ERROR_MARGIN);
+
+      // Not using expect emit because it doesn't support the `closeTo` matcher
+      const refundEvent = r.events!.find(e => e.event! === 'RefundableVote');
+      expect(refundEvent).to.not.be.undefined;
+      expect(refundEvent!.args!.voter).to.equal(user.address);
+      expect(refundEvent!.args!.refundSent).to.be.true;
+      expect(refundEvent!.args!.refundAmount).to.be.closeTo(expectedCost, REFUND_ERROR_MARGIN);
     });
-    const r = await tx.wait();
-    const block = await ethers.provider.getBlock('latest');
-    const cappedGasPrice = block.baseFeePerGas!.add(MAX_PRIORITY_FEE_CAP);
-    const expectedRefund = r.gasUsed.mul(cappedGasPrice);
-    const txGrossCost = r.gasUsed.mul(r.effectiveGasPrice);
-    const expectedDiff = txGrossCost.sub(expectedRefund);
 
-    expect(r.gasUsed).to.be.gt(0);
-    const balanceDiff = balanceBefore.sub(await user.getBalance());
-    expect(balanceDiff).to.be.closeTo(expectedDiff, REFUND_ERROR_MARGIN);
-  });
+    it('does not refund users with no votes', async () => {
+      await fundGov();
+      const balanceBefore = await user2.getBalance();
 
-  it('castRefundableVote does not refund when DAO balance is zero', async () => {
-    expect(await ethers.provider.getBalance(gov.address)).to.eq(0);
-    const balanceBefore = await user.getBalance();
-    const tx = await gov.connect(user).castRefundableVote(1, 1, { gasPrice: GAS_PRICE });
-    const r = await tx.wait();
+      const tx = await gov.connect(user2).castRefundableVote(1, 1, { gasPrice: GAS_PRICE });
+      const r = await tx.wait();
 
-    expect(r.gasUsed).to.be.gt(0);
-    const balanceDiff = balanceBefore.sub(await user.getBalance());
-    const expectedDiff = r.gasUsed.mul(GAS_PRICE);
-    expect(balanceDiff).to.be.eq(expectedDiff);
-  });
+      expect(r.gasUsed).to.be.gt(0);
+      const balanceDiff = balanceBefore.sub(await user2.getBalance());
+      const expectedDiff = r.gasUsed.mul(GAS_PRICE);
+      expect(balanceDiff).to.be.eq(expectedDiff);
+    });
 
-  it('castRefundableVote provides partial refund given insufficient balance', async () => {
-    await fundGov('0.00001');
-    const govBalance = ethers.utils.parseEther('0.00001');
-    expect(await ethers.provider.getBalance(gov.address)).to.eq(govBalance);
-    const balanceBefore = await user.getBalance();
+    it('caps refund', async () => {
+      await fundGov();
+      const balanceBefore = await user.getBalance();
 
-    const tx = await gov.connect(user).castRefundableVote(1, 1, { gasPrice: GAS_PRICE });
-    const r = await tx.wait();
+      const tx = await gov.connect(user).castRefundableVote(1, 1, {
+        maxPriorityFeePerGas: ethers.utils.parseUnits('80', 'gwei'),
+      });
+      const r = await tx.wait();
+      const block = await ethers.provider.getBlock('latest');
+      const cappedGasPrice = block.baseFeePerGas!.add(MAX_PRIORITY_FEE_CAP);
+      const expectedRefund = r.gasUsed.mul(cappedGasPrice);
+      const txGrossCost = r.gasUsed.mul(r.effectiveGasPrice);
+      const expectedDiff = txGrossCost.sub(expectedRefund);
 
-    expect(r.gasUsed).to.be.gt(0);
-    const expectedDiff = r.gasUsed.mul(GAS_PRICE).sub(govBalance);
-    const balanceDiff = balanceBefore.sub(await user.getBalance());
-    expect(balanceDiff).to.eq(expectedDiff);
+      expect(r.gasUsed).to.be.gt(0);
+      const balanceDiff = balanceBefore.sub(await user.getBalance());
+      expect(balanceDiff).to.be.closeTo(expectedDiff, REFUND_ERROR_MARGIN);
+    });
+
+    it('does not refund when DAO balance is zero', async () => {
+      expect(await ethers.provider.getBalance(gov.address)).to.eq(0);
+      const balanceBefore = await user.getBalance();
+      const tx = await gov.connect(user).castRefundableVote(1, 1, { gasPrice: GAS_PRICE });
+      const r = await tx.wait();
+
+      expect(r.gasUsed).to.be.gt(0);
+      const balanceDiff = balanceBefore.sub(await user.getBalance());
+      const expectedDiff = r.gasUsed.mul(GAS_PRICE);
+      expect(balanceDiff).to.be.eq(expectedDiff);
+    });
+
+    it('provides partial refund given insufficient balance', async () => {
+      await fundGov('0.00001');
+      const govBalance = ethers.utils.parseEther('0.00001');
+      expect(await ethers.provider.getBalance(gov.address)).to.eq(govBalance);
+      const balanceBefore = await user.getBalance();
+
+      const tx = await gov.connect(user).castRefundableVote(1, 1, { gasPrice: GAS_PRICE });
+      const r = await tx.wait();
+
+      expect(r.gasUsed).to.be.gt(0);
+      const expectedDiff = r.gasUsed.mul(GAS_PRICE).sub(govBalance);
+      const balanceDiff = balanceBefore.sub(await user.getBalance());
+      expect(balanceDiff).to.eq(expectedDiff);
+    });
   });
 
   async function fundGov(ethAmount: string = '100') {
