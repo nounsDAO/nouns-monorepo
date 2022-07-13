@@ -4,6 +4,7 @@ import { solidity } from 'ethereum-waffle';
 import { BigNumber, ContractReceipt } from 'ethers';
 import { ethers } from 'hardhat';
 import { NounsDAOLogicV2, NounsDescriptor__factory, NounsToken } from '../../../../typechain';
+import { MaliciousVoter__factory } from '../../../../typechain/factories/contracts/test/MaliciousVoter__factory';
 import {
   address,
   advanceBlocks,
@@ -48,18 +49,7 @@ describe('Vote Refund', () => {
     await advanceBlocks(1);
 
     gov = await deployGovernorV2WithV2Proxy(deployer, token.address);
-
-    await gov
-      .connect(user)
-      .propose(
-        [address(0)],
-        ['0'],
-        ['getBalanceOf(address)'],
-        [encodeParameters(['address'], [address(0)])],
-        '',
-      );
-
-    await advanceBlocks(2);
+    await submitProposal(user);
   });
 
   beforeEach(async () => {
@@ -141,6 +131,20 @@ describe('Vote Refund', () => {
       const expectedDiff = r.gasUsed.mul(GAS_PRICE).sub(govBalance);
       const balanceDiff = balanceBefore.sub(await user.getBalance());
       expect(balanceDiff).to.eq(expectedDiff);
+    });
+
+    it('malicious voter trying reentrance does not get refunded', async () => {
+      const voter = await new MaliciousVoter__factory(deployer).deploy(gov.address, 2, 1, false);
+      await token.connect(user).transferFrom(user.address, voter.address, 0);
+      await token.connect(user).transferFrom(user.address, user2.address, 1);
+      await advanceBlocks(1);
+      await submitProposal(user2);
+      const balanceBefore = await user.getBalance();
+
+      const r = await (await voter.connect(user).castVote({ gasPrice: GAS_PRICE })).wait();
+
+      const balanceDiff = balanceBefore.sub(await user.getBalance());
+      expect(balanceDiff).to.be.eq(r.gasUsed.mul(GAS_PRICE));
     });
   });
 
@@ -227,6 +231,20 @@ describe('Vote Refund', () => {
       const balanceDiff = balanceBefore.sub(await user.getBalance());
       expect(balanceDiff).to.eq(expectedDiff);
     });
+
+    it('malicious voter trying reentrance does not get refunded', async () => {
+      const voter = await new MaliciousVoter__factory(deployer).deploy(gov.address, 2, 1, true);
+      await token.connect(user).transferFrom(user.address, voter.address, 0);
+      await token.connect(user).transferFrom(user.address, user2.address, 1);
+      await advanceBlocks(1);
+      await submitProposal(user2);
+      const balanceBefore = await user.getBalance();
+
+      const r = await (await voter.connect(user).castVote({ gasPrice: GAS_PRICE })).wait();
+
+      const balanceDiff = balanceBefore.sub(await user.getBalance());
+      expect(balanceDiff).to.be.eq(r.gasUsed.mul(GAS_PRICE));
+    });
   });
 
   async function fundGov(ethAmount: string = '100') {
@@ -240,5 +258,19 @@ describe('Vote Refund', () => {
     expect(refundEvent!.args!.voter).to.equal(u.address);
     expect(refundEvent!.args!.refundSent).to.be.true;
     expect(refundEvent!.args!.refundAmount).to.be.closeTo(expectedCost, REFUND_ERROR_MARGIN);
+  }
+
+  async function submitProposal(u: SignerWithAddress) {
+    await gov
+      .connect(u)
+      .propose(
+        [address(0)],
+        ['0'],
+        ['getBalanceOf(address)'],
+        [encodeParameters(['address'], [address(0)])],
+        '',
+      );
+
+    await advanceBlocks(2);
   }
 });

@@ -503,8 +503,6 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
      * @param support The support value for the vote. 0=against, 1=for, 2=abstain
      */
     function castRefundableVote(uint256 proposalId, uint8 support) external {
-        // TODO reentrancy guard
-
         uint256 startGas = gasleft();
         uint96 votes = castVoteInternal(msg.sender, proposalId, support);
         emit VoteCast(msg.sender, proposalId, support, votes, '');
@@ -528,8 +526,6 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         uint8 support,
         string calldata reason
     ) external {
-        // TODO reentrancy guard
-
         uint256 startGas = gasleft();
         uint96 votes = castVoteInternal(msg.sender, proposalId, support);
         emit VoteCast(msg.sender, proposalId, support, votes, reason);
