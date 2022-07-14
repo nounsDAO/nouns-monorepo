@@ -9,3 +9,4 @@ dist
 .DS_Store
 *.tsbuildinfo
 *.log
+packages/nouns-sdk/src/images

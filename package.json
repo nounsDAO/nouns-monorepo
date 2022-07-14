@@ -45,5 +45,6 @@
       "yarn lint",
       "yarn format"
     ]
-  }
+  },
+  "dependencies": {}
 }
