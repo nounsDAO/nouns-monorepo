@@ -60,7 +60,7 @@ describe('Vote Refund', () => {
     await ethers.provider.send('evm_revert', [snapshotId]);
   });
 
-  describe.only('withdraw', () => {
+  describe('withdraw', () => {
     it('reverts for non-owners [ @skip-on-coverage ]', async () => {
       await fundGov();
       await expect(gov.connect(user)._withdraw()).to.be.revertedWith('AdminOnly()');
