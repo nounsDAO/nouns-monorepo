@@ -102,6 +102,7 @@ describe('Vote Refund', () => {
       const balanceDiff = balanceBefore.sub(await user2.getBalance());
       const expectedDiff = r.gasUsed.mul(GAS_PRICE);
       expect(balanceDiff).to.be.eq(expectedDiff);
+      await expect(tx).to.changeEtherBalance(gov, 0);
     });
 
     it('caps refund', async () => {
@@ -158,10 +159,12 @@ describe('Vote Refund', () => {
       await submitProposal(user2);
       const balanceBefore = await user.getBalance();
 
-      const r = await (await voter.connect(user).castVote({ gasPrice: GAS_PRICE })).wait();
+      const tx = await voter.connect(user).castVote({ gasPrice: GAS_PRICE });
+      const r = await tx.wait();
 
       const balanceDiff = balanceBefore.sub(await user.getBalance());
       expect(balanceDiff).to.be.eq(r.gasUsed.mul(GAS_PRICE));
+      await expect(tx).to.changeEtherBalance(gov, 0);
     });
   });
 
@@ -197,6 +200,7 @@ describe('Vote Refund', () => {
       const balanceDiff = balanceBefore.sub(await user2.getBalance());
       const expectedDiff = r.gasUsed.mul(GAS_PRICE);
       expect(balanceDiff).to.be.eq(expectedDiff);
+      await expect(tx).to.changeEtherBalance(gov, 0);
     });
 
     it('caps refund', async () => {
@@ -257,10 +261,12 @@ describe('Vote Refund', () => {
       await submitProposal(user2);
       const balanceBefore = await user.getBalance();
 
-      const r = await (await voter.connect(user).castVote({ gasPrice: GAS_PRICE })).wait();
+      const tx = await voter.connect(user).castVote({ gasPrice: GAS_PRICE });
+      const r = await tx.wait();
 
       const balanceDiff = balanceBefore.sub(await user.getBalance());
       expect(balanceDiff).to.be.eq(r.gasUsed.mul(GAS_PRICE));
+      await expect(tx).to.changeEtherBalance(gov, 0);
     });
   });
 
