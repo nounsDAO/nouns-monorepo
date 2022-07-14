@@ -16,7 +16,7 @@ task('upgrade-descriptor-via-proposal', 'Upgrade NounsToken to use Descriptor V2
       values,
       signatures,
       calldatas,
-      `Setting NounToken's descriptor to NounsDescriptorV2.`,
+      `# Upgrade NounsToken descriptor to V2\nThis proposal calls a function on NounsToken to set its descriptor to V2.`,
     );
     await propTx.wait();
 

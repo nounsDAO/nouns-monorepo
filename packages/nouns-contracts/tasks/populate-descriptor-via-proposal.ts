@@ -117,7 +117,7 @@ task(
       values,
       signatures,
       calldatas,
-      'Adding art to NounsDescriptorV2.',
+      '# Add 8/8 Nouniversary Art\nThis proposal adds the art the community designed and voted on to NounsToken.',
     );
     await propTx.wait();
 
