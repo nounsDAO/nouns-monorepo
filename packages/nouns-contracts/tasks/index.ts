@@ -15,6 +15,6 @@ export * from './deploy-descriptor-v2';
 export * from './deploy-short-times-descriptorv1';
 export * from './deploy-and-configure-short-times-descriptorv1';
 export * from './populate-descriptor-via-proposal';
-export * from './deploy-test-minter';
+export * from './deploy-test-token';
 export * from './populate-descriptor-v1';
 export * from './upgrade-descriptor-via-proposal';
