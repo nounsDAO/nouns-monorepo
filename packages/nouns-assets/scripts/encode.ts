@@ -11,6 +11,7 @@ const DESTINATION = path.join(__dirname, '../src/image-data.json');
  */
 const readPngImage = async (path: string): Promise<PngImage> => {
   const buffer = await fs.readFile(path);
+  console.log({path})
   const png = PNG.sync.read(buffer);
 
   return {
