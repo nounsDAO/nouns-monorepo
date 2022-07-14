@@ -94,11 +94,8 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     /// @notice The maximum priority fee used to cap gas refunds in `castRefundableVote`
     uint256 public constant MAX_REFUND_PRIORITY_FEE = 20 gwei;
 
-    /// @notice The vote refund ETH transfer gas cost
-    uint256 public constant REFUND_TRANSFER_GAS = 7000;
-
-    /// @notice The vote refund catch-all transaction overhead gas
-    uint256 public constant REFUND_OVERHEAD_GAS = 29000;
+    /// @notice The vote refund gas overhead, including 7K for ETH transfer and 29K for general transaction overhead
+    uint256 public constant REFUND_BASE_GAS = 36000;
 
     /// @notice The EIP-712 typehash for the contract's domain
     bytes32 public constant DOMAIN_TYPEHASH =
@@ -966,7 +963,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
 
     function _refundGas(uint256 startGas) internal {
         uint256 gasPrice = min(tx.gasprice, block.basefee + MAX_REFUND_PRIORITY_FEE);
-        uint256 gasUsed = startGas - gasleft() + REFUND_TRANSFER_GAS + REFUND_OVERHEAD_GAS;
+        uint256 gasUsed = startGas - gasleft() + REFUND_BASE_GAS;
         uint256 refundAmount = min(gasPrice * gasUsed, address(this).balance);
         (bool refundSent, ) = msg.sender.call{ value: refundAmount }('');
         emit RefundableVote(msg.sender, refundAmount, refundSent);
