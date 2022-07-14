@@ -118,12 +118,23 @@ const VoteCard: React.FC<VoteCardProps> = props => {
               )}
             >
               {delegateView ? (
-                <Trans>
-                  {i18n.number(filteredDelegateGroupedVoteData.length)}{' '}
-                  <span className={isEnUS ? classes.unitTextEn : classes.unitTextNonEn}>
-                    Addresses
-                  </span>
-                </Trans>
+                <>
+                  {filteredDelegateGroupedVoteData.length === 1 ? (
+                    <Trans>
+                      {i18n.number(filteredDelegateGroupedVoteData.length)}{' '}
+                      <span className={isEnUS ? classes.unitTextEn : classes.unitTextNonEn}>
+                        Address
+                      </span>
+                    </Trans>
+                  ) : (
+                    <Trans>
+                      {i18n.number(filteredDelegateGroupedVoteData.length)}{' '}
+                      <span className={isEnUS ? classes.unitTextEn : classes.unitTextNonEn}>
+                        Addresses
+                      </span>
+                    </Trans>
+                  )}
+                </>
               ) : (
                 i18n.number(voteCount)
               )}
