@@ -501,12 +501,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
      * @dev Reentrancy is defended against in `castVoteInternal` at the `receipt.hasVoted == false` require statement.
      */
     function castRefundableVote(uint256 proposalId, uint8 support) external {
-        uint256 startGas = gasleft();
-        uint96 votes = castVoteInternal(msg.sender, proposalId, support);
-        emit VoteCast(msg.sender, proposalId, support, votes, '');
-        if (votes > 0) {
-            _refundGas(startGas);
-        }
+        castRefundableVoteInternal(proposalId, support, '');
     }
 
     /**
@@ -525,6 +520,21 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         uint8 support,
         string calldata reason
     ) external {
+        castRefundableVoteInternal(proposalId, support, reason);
+    }
+
+    /**
+     * @notice Internal function that carries out refundable voting logic
+     * @param proposalId The id of the proposal to vote on
+     * @param support The support value for the vote. 0=against, 1=for, 2=abstain
+     * @param reason The reason given for the vote by the voter
+     * @dev Reentrancy is defended against in `castVoteInternal` at the `receipt.hasVoted == false` require statement.
+     */
+    function castRefundableVoteInternal(
+        uint256 proposalId,
+        uint8 support,
+        string memory reason
+    ) internal {
         uint256 startGas = gasleft();
         uint96 votes = castVoteInternal(msg.sender, proposalId, support);
         emit VoteCast(msg.sender, proposalId, support, votes, reason);
