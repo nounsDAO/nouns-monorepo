@@ -82,7 +82,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
   };
 
   const hasNounVotes = account !== undefined && connectedAccountNounVotes > 0;
-  const hasNounBalance = 
+  const hasNounBalance =
     (useNounTokenBalance(
       account !== null && account !== undefined ? account : ethers.constants.AddressZero,
     ) ?? 0) > 0;
@@ -137,16 +137,13 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
         )}
       </div>
       {isMobile && <div className={classes.nullStateCopy}>{nullStateCopy()}</div>}
-      {
-        isMobile && hasNounBalance &&  <div>
-        <Button
-          className={classes.changeDelegateBtn}
-          onClick={() => setShowDelegateModal(true)}
-        >
-          <Trans>Delegate</Trans>
-        </Button>
-      </div>
-      }
+      {isMobile && hasNounBalance && (
+        <div>
+          <Button className={classes.changeDelegateBtn} onClick={() => setShowDelegateModal(true)}>
+            <Trans>Delegate</Trans>
+          </Button>
+        </div>
+      )}
       {proposals?.length ? (
         proposals
           .slice(0)
