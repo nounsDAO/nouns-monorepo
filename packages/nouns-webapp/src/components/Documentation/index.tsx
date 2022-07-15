@@ -6,10 +6,10 @@ import Link from '../Link';
 import { Trans } from '@lingui/macro';
 
 const Documentation = () => {
-  const cryptopunksLink = (
+  const nounsLink = (
     <Link
-      text={<Trans>Cryptopunks</Trans>}
-      url="https://www.larvalabs.com/cryptopunks"
+      text={<Trans>Nouns DAO</Trans>}
+      url="https://www.nouns.wtf"
       leavesPage={true}
     />
   );
@@ -39,10 +39,7 @@ const Documentation = () => {
           </h1>
           <p className={classes.aboutText}>
             <Trans>
-              Nouns are an experimental attempt to improve the formation of on-chain avatar
-              communities. While projects such as {cryptopunksLink} have attempted to bootstrap
-              digital community and identity, Nouns attempt to bootstrap identity, community,
-              governance, and a treasury that can be used by the community.
+             Nouns for the Public Good. {nounsLink} has proven to be a strong mechanism for continuous funding alongside simple, yet effective governance. Public Nouns is a fork with a focus on funding public goods.
             </Trans>
           </p>
           <p className={classes.aboutText} style={{ paddingBottom: '4rem' }}>
@@ -59,28 +56,28 @@ const Documentation = () => {
             <Accordion.Body>
               <ul>
                 <li>
-                  <Trans>Nouns artwork is in the {publicDomainLink}.</Trans>
+                  <Trans>℗NOUNS artwork is in the {publicDomainLink}.</Trans>
                 </li>
                 <li>
-                  <Trans>One Noun is trustlessly auctioned every 24 hours, forever.</Trans>
+                  <Trans>One ℗NOUN is trustlessly auctioned every 12 hours, forever.</Trans>
                 </li>
                 <li>
-                  <Trans>100% of Noun auction proceeds are trustlessly sent to the treasury.</Trans>
+                  <Trans>100% of ℗NOUN auction proceeds are trustlessly sent to the treasury.</Trans>
                 </li>
                 <li>
                   <Trans>Settlement of one auction kicks off the next.</Trans>
                 </li>
                 <li>
-                  <Trans>All Nouns are members of Nouns DAO.</Trans>
+                  <Trans>All ℗NOUN are members of Public Nouns DAO.</Trans>
                 </li>
                 <li>
-                  <Trans>Nouns DAO uses a fork of {compoundGovLink}.</Trans>
+                  <Trans>Public Nouns DAO uses a fork of {compoundGovLink}.</Trans>
                 </li>
                 <li>
-                  <Trans>One Noun is equal to one vote.</Trans>
+                  <Trans>One Public Noun is equal to one vote.</Trans>
                 </li>
                 <li>
-                  <Trans>The treasury is controlled exclusively by Nouns via governance.</Trans>
+                  <Trans>The treasury is controlled exclusively by ℗NOUNs via governance.</Trans>
                 </li>
                 <li>
                   <Trans>Artwork is generative and stored directly on-chain (not IPFS).</Trans>
@@ -92,7 +89,7 @@ const Documentation = () => {
                 </li>
                 <li>
                   <Trans>
-                    Nounders receive rewards in the form of Nouns (10% of supply for first 5 years).
+                    Pounders receive rewards in the form of ℗NOUNs (10% of supply for first 5 years).
                   </Trans>
                 </li>
               </ul>
@@ -107,22 +104,22 @@ const Documentation = () => {
               <p className={classes.aboutText}>
                 <Trans>
                   The Nouns Auction Contract will act as a self-sufficient Noun generation and
-                  distribution mechanism, auctioning one Noun every 24 hours, forever. 100% of
-                  auction proceeds (ETH) are automatically deposited in the Nouns DAO treasury,
-                  where they are governed by Noun owners.
+                  distribution mechanism, auctioning one ℗Noun every 12 hours, forever. 100% of
+                  auction proceeds (ETH) are automatically deposited in the Public Nouns DAO treasury,
+                  where they are governed by ℗NOUN owners.
                 </Trans>
               </p>
 
               <p className={classes.aboutText}>
                 <Trans>
                   Each time an auction is settled, the settlement transaction will also cause a new
-                  Noun to be minted and a new 24 hour auction to begin.{' '}
+                  Noun to be minted and a new 12 hour auction to begin.{' '}
                 </Trans>
               </p>
               <p>
                 <Trans>
                   While settlement is most heavily incentivized for the winning bidder, it can be
-                  triggered by anyone, allowing the system to trustlessly auction Nouns as long as
+                  triggered by anyone, allowing the system to trustlessly auction ℗NOUNs as long as
                   Ethereum is operational and there are interested bidders.
                 </Trans>
               </p>
@@ -130,15 +127,14 @@ const Documentation = () => {
           </Accordion.Item>
           <Accordion.Item eventKey="2" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>Nouns DAO</Trans>
+              <Trans>Public Nouns DAO</Trans>
             </Accordion.Header>
             <Accordion.Body>
               <Trans>
-                Nouns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the
-                Nouns ecosystem. The Nouns DAO treasury receives 100% of ETH proceeds from daily
-                Noun auctions. Each Noun is an irrevocable member of Nouns DAO and entitled to one
-                vote in all governance matters. Noun votes are non-transferable (if you sell your
-                Noun the vote goes with it) but delegatable, which means you can assign your vote to
+                Public Nouns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the
+                ℗NOUNs ecosystem. The Public Nouns DAO treasury receives 100% of ETH proceeds from daily
+                ℗NOUNs auctions. Each Noun is an irrevocable member of Public Nouns DAO and entitled to one
+                vote in all governance matters. ℗NOUN votes are non-transferable (if you sell your ℗NOUN the vote goes with it) but delegatable, which means you can assign your vote to
                 someone else as long as you own your Noun.
               </Trans>
             </Accordion.Body>
@@ -150,16 +146,16 @@ const Documentation = () => {
             <Accordion.Body>
               <p>
                 <Trans>
-                  In addition to the precautions taken by Compound Governance, Nounders have given
+                  In addition to the precautions taken by Compound Governance, Pounders have given
                   themselves a special veto right to ensure that no malicious proposals can be
-                  passed while the Noun supply is low. This veto right will only be used if an
+                  passed while the ℗NOUNs supply is low. This veto right will only be used if an
                   obviously harmful governance proposal has been passed, and is intended as a last
                   resort.
                 </Trans>
               </p>
               <p>
                 <Trans>
-                  Nounders will proveably revoke this veto right when they deem it safe to do so.
+                  Pounders will proveably revoke this veto right when they deem it safe to do so.
                   This decision will be based on a healthy Noun distribution and a community that is
                   engaged in the governance process.
                 </Trans>
@@ -168,12 +164,12 @@ const Documentation = () => {
           </Accordion.Item>
           <Accordion.Item eventKey="4" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>Noun Traits</Trans>
+              <Trans>℗Noun Traits</Trans>
             </Accordion.Header>
             <Accordion.Body>
               <p>
                 <Trans>
-                  Nouns are generated randomly based Ethereum block hashes. There are no 'if'
+                  ℗Nouns are generated randomly based Ethereum block hashes. There are no 'if'
                   statements or other rules governing Noun trait scarcity, which makes all Nouns
                   equally rare. As of this writing, Nouns are made up of:
                 </Trans>
@@ -189,7 +185,7 @@ const Documentation = () => {
                   <Trans>accessories (137) </Trans>
                 </li>
                 <li>
-                  <Trans>heads (234) </Trans>
+                  <Trans>heads (50) </Trans>
                 </li>
                 <li>
                   <Trans>glasses (21)</Trans>
@@ -252,71 +248,55 @@ const Documentation = () => {
           </Accordion.Item>
           <Accordion.Item eventKey="7" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>Nounder's Reward</Trans>
+              <Trans>Public Noun Rewards</Trans>
             </Accordion.Header>
             <Accordion.Body>
               <p>
                 <Trans>
-                  'Nounders' are the group of ten builders that initiated Nouns. Here are the
-                  Nounders:
+                  'Pounders' are the group of communities that initiated Public Nouns. Here are the
+                  Pounders:
                 </Trans>
               </p>
               <ul>
                 <li>
                   <Link
-                    text="@cryptoseneca"
-                    url="https://twitter.com/cryptoseneca"
+                    text="MetaCartel"
+                    url="https://metacartel.org"
                     leavesPage={true}
                   />
                 </li>
                 <li>
                   <Link
-                    text="@gremplin"
-                    url="https://twitter.com/gremplin"
-                    leavesPage={true}
-                  />
-                </li>
-                <li>
-                  <Link text="@punk4156" url="https://twitter.com/punk4156" leavesPage={true} />
-                </li>
-                <li>
-                  <Link text="@eboyarts" url="https://twitter.com/eBoyArts" leavesPage={true} />
-                </li>
-                <li>
-                  <Link text="@punk4464" url="https://twitter.com/punk4464" leavesPage={true} />
-                </li>
-                <li>solimander</li>
-                <li>
-                  <Link text="@dhof" url="https://twitter.com/dhof" leavesPage={true} />
-                </li>
-                <li>
-                  <Link text="@devcarrot" url="https://twitter.com/carrot_init" leavesPage={true} />
-                </li>
-                <li>
-                  <Link text="@TimpersHD" url="https://twitter.com/TimpersHD" leavesPage={true} />
-                </li>
-                <li>
-                  <Link
-                    text="@lastpunk9999"
-                    url="https://twitter.com/lastpunk9999"
+                    text="gitcoin"
+                    url="https://gitcoin.co"
                     leavesPage={true}
                   />
                 </li>
               </ul>
               <p>
                 <Trans>
-                  Because 100% of Noun auction proceeds are sent to Nouns DAO, Nounders have chosen
-                  to compensate themselves with Nouns. Every 10th Noun for the first 5 years of the
-                  project (Noun ids #0, #10, #20, #30 and so on) will be automatically sent to the
-                  Nounder's multisig to be vested and shared among the founding members of the
-                  project.
+                  Because 100% of ℗NOUN auction proceeds are sent to Public Nouns DAO, Pounders have chosen
+                  to compensate themselves with ℗NOUNs. Every 30th ℗NOUN for the first 5 years of the
+                  project (℗NOUN ids #0, #10, #20, #30 and so on) will be automatically sent to the
+                  Pounders, Nouns DAO, and Public Nouns DAO.
                 </Trans>
+                <ul>
+                  <li>Pounders receive the first iteration to help bootstrap governance.
+                  (℗NOUN ids #0, #30, #60, and so on)
+                  </li>
+                  <li>NounsDAO will receive the second iteration to kick back for supporting our fork.
+                  (℗NOUN ids #10, #40, #70, and so on)
+                  </li>
+                  <li>Public Nouns DAO will receive the final iteration to use however they wish.
+                  (℗NOUN ids #20, #50, #80, and so on)
+                  </li>
+                </ul>
               </p>
               <p>
                 <Trans>
-                  Nounder distributions don't interfere with the cadence of 24 hour auctions. Nouns
-                  are sent directly to the Nounder's Multisig, and auctions continue on schedule
-                  with the next available Noun ID.
+                  Pounder distributions don't interfere with the cadence of 24 hour auctions. ℗Nouns
+                  are sent directly to the Pounder's Multisig, and auctions continue on schedule
+                  with the next available ℗Noun ID.
                 </Trans>
               </p>
             </Accordion.Body>
