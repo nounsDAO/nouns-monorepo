@@ -959,7 +959,7 @@ msgid "Vote on Prop {0}"
 msgstr "提案 {0} に投票"
 
 #: src/components/NounProfileVoteRow/index.tsx
-msgid "Voted aginst"
+msgid "Voted against"
 msgstr "反対に投票"
 
 #: src/components/NounProfileVoteRow/index.tsx
