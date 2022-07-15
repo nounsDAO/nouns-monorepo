@@ -954,8 +954,12 @@ msgid "Vote on Prop {0}"
 msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx
-msgid "Voted aginst"
+msgid "Voted against"
 msgstr ""
+
+#: src/components/NounProfileVoteRow/index.tsx
+#~ msgid "Voted aginst"
+#~ msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Voted for"
