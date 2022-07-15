@@ -38,6 +38,18 @@ yarn build
 yarn test
 ```
 
+### Install forge dependencies
+
+```sh
+forge install
+```
+
+### Run forge tests
+
+```sh
+forge test -vvv
+```
+
 ### Environment Setup
 
 Copy `.env.example` to `.env` and fill in fields
