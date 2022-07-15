@@ -47,7 +47,9 @@ const getCountdownCopy = (proposal: Proposal, currentBlock: number, locale: Supp
 
   if (startDate?.isBefore(now) && endDate?.isAfter(now)) {
     return (
-      <Trans>Ends {endDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()}</Trans>
+      <Trans>
+        Ends {endDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()}
+      </Trans>
     );
   }
   if (endDate?.isBefore(now)) {
@@ -59,7 +61,10 @@ const getCountdownCopy = (proposal: Proposal, currentBlock: number, locale: Supp
   }
   return (
     <Trans>
-      Starts {dayjs(startDate).locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()}
+      Starts{' '}
+      {dayjs(startDate)
+        .locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en)
+        .fromNow()}
     </Trans>
   );
 };
