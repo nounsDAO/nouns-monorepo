@@ -47,7 +47,9 @@ const getCountdownCopy = (proposal: Proposal, currentBlock: number, locale: Supp
 
   if (startDate?.isBefore(now) && endDate?.isAfter(now)) {
     return (
-      <Trans>Ends {endDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()}</Trans>
+      <Trans>
+        Ends {endDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()}
+      </Trans>
     );
   }
   if (endDate?.isBefore(now)) {
@@ -59,7 +61,10 @@ const getCountdownCopy = (proposal: Proposal, currentBlock: number, locale: Supp
   }
   return (
     <Trans>
-      Starts {dayjs(startDate).locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()}
+      Starts{' '}
+      {dayjs(startDate)
+        .locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en)
+        .fromNow()}
     </Trans>
   );
 };
@@ -82,7 +87,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
   };
 
   const hasNounVotes = account !== undefined && connectedAccountNounVotes > 0;
-  const hasNounBalance = 
+  const hasNounBalance =
     (useNounTokenBalance(
       account !== null && account !== undefined ? account : ethers.constants.AddressZero,
     ) ?? 0) > 0;
@@ -137,16 +142,13 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
         )}
       </div>
       {isMobile && <div className={classes.nullStateCopy}>{nullStateCopy()}</div>}
-      {
-        isMobile && hasNounBalance &&  <div>
-        <Button
-          className={classes.changeDelegateBtn}
-          onClick={() => setShowDelegateModal(true)}
-        >
-          <Trans>Delegate</Trans>
-        </Button>
-      </div>
-      }
+      {isMobile && hasNounBalance && (
+        <div>
+          <Button className={classes.changeDelegateBtn} onClick={() => setShowDelegateModal(true)}>
+            <Trans>Delegate</Trans>
+          </Button>
+        </div>
+      )}
       {proposals?.length ? (
         proposals
           .slice(0)
