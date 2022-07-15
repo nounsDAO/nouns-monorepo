@@ -173,3 +173,16 @@ export const useNounTokenBalance = (address: string): number | undefined => {
     }) || [];
   return tokenBalance?.toNumber();
 };
+
+export const useUserNounTokenBalance = (): number | undefined => {
+  const { account } = useEthers();
+
+  const [tokenBalance] =
+    useContractCall<[EthersBN]>({
+      abi,
+      address: config.addresses.nounsToken,
+      method: 'balanceOf',
+      args: [account],
+    }) || [];
+  return tokenBalance?.toNumber();
+};

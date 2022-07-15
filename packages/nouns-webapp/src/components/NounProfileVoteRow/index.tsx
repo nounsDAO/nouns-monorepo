@@ -57,7 +57,7 @@ const selectVotingInfoText = (proposal: Proposal, vote?: NounVoteHistory) => {
         return <Trans>Abstained on</Trans>;
     }
   } else {
-    return <Trans>Voted aginst</Trans>;
+    return <Trans>Voted against</Trans>;
   }
 };
 

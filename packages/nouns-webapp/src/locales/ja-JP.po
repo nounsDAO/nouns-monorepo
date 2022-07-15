@@ -246,6 +246,10 @@ msgstr "提案するためにはウォレットに接続してください。"
 msgid "Connect your wallet"
 msgstr "ウォレットに接続してください"
 
+#: src/components/Documentation/index.tsx
+msgid "Consequently, the Nouns Foundation anticipates being the steward of the veto power until Nouns DAO is ready to implement an alternative, and therefore wishes to clarify the conditions under which it would exercise this power."
+msgstr ""
+
 #: src/components/CreateProposalButton/index.tsx
 #: src/pages/CreateProposal/index.tsx
 msgid "Create Proposal"
@@ -276,6 +280,8 @@ msgstr "デイリーオークション"
 msgid "Defeated"
 msgstr "却下"
 
+#: src/components/Proposals/index.tsx
+#: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
 msgid "Delegate"
 msgstr "投票を委任する"
@@ -458,8 +464,8 @@ msgid "Help mint the next Noun"
 msgstr "次にミントされるNounの投票をしてください"
 
 #: src/components/Documentation/index.tsx
-msgid "In addition to the precautions taken by Compound Governance, Nounders have given themselves a special veto right to ensure that no malicious proposals can be passed while the Noun supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort."
-msgstr "コンパウンドガバナンスによる予防措置に加えて、Nounの供給量が少ない間に悪意のある議案が通らないように、Noundersは特別な拒否権を保有しています。この拒否権は、明らかに有害なガバナンスの提案が可決された場合にのみ行使され、最後の手段として使用されます。"
+#~ msgid "In addition to the precautions taken by Compound Governance, Nounders have given themselves a special veto right to ensure that no malicious proposals can be passed while the Noun supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort."
+#~ msgstr "コンパウンドガバナンスによる予防措置に加えて、Nounの供給量が少ない間に悪意のある議案が通らないように、Noundersは特別な拒否権を保有しています。この拒否権は、明らかに有害なガバナンスの提案が可決された場合にのみ行使され、最後の手段として使用されます。"
 
 #: src/components/Bid/index.tsx
 msgid "Insufficient bid amount 🤏"
@@ -536,8 +542,8 @@ msgid "Nounders receive rewards in the form of Nouns (10% of supply for first 5 
 msgstr "Nounderには、Nounsという形で報酬が与えられます (最初の5年間は供給量の10％)。"
 
 #: src/components/Documentation/index.tsx
-msgid "Nounders will proveably revoke this veto right when they deem it safe to do so. This decision will be based on a healthy Noun distribution and a community that is engaged in the governance process."
-msgstr "Nounderは、安全であると判断した場合、この拒否権を無効にすることが出来ます。この決定は、健全なNounの分布と、ガバナンスプロセスに関与しているコミュニティに基づいて行われます。"
+#~ msgid "Nounders will proveably revoke this veto right when they deem it safe to do so. This decision will be based on a healthy Noun distribution and a community that is engaged in the governance process."
+#~ msgstr "Nounderは、安全であると判断した場合、この拒否権を無効にすることが出来ます。この決定は、健全なNounの分布と、ガバナンスプロセスに関与しているコミュニティに基づいて行われます。"
 
 #: src/pages/Nounders/index.tsx
 msgid "Nounders' Reward"
@@ -821,6 +827,14 @@ msgid "The Nouns Auction Contract will act as a self-sufficient Noun generation 
 msgstr "Nounsオークション契約は、Noun生成・分配の自律的なメカニズムとして機能するため、24時間ごとに1体のNounを永遠にオークションにかけ続けます。オークションの収益 (ETH) は100%自動的にNounの所有者によって管理されている、Nouns DAO のトレジャリーに預けられます。"
 
 #: src/components/Documentation/index.tsx
+msgid "The Nouns Foundation considers the veto an emergency power that should not be exercised in the normal course of business. The Nouns Foundation will veto proposals that introduce non-trivial legal or existential risks to the Nouns DAO or the Nouns Foundation, including (but not necessarily limited to) proposals that:"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "The Nouns community has undertaken a preliminary exploration of proposal veto alternatives (‘rage quit’ etc.), but it is now clear that this is a difficult problem that will require significantly more research, development and testing before a satisfactory solution can be implemented."
+msgstr ""
+
+#: src/components/Documentation/index.tsx
 msgid "The compressed parts are efficiently converted into a single base64 encoded SVG image on-chain. To accomplish this, each part is decoded into an intermediate format before being converted into a series of SVG rects using batched, on-chain string concatenation. Once the entire SVG has been generated, it is base64 encoded."
 msgstr "圧縮されたパーツは、オンチェインで効率よく1つのbase64エンコードされたSVG画像に変換されます。そのために、各パーツは中間フォーマットにデコードされた後、オンチェーンでの文字列連結により一連のSVG rectsに変換されます。SVG全体が生成されると、それはbase64でエンコードされます。"
 
@@ -829,8 +843,16 @@ msgid "The playground was built using the {nounsProtocolLink}. Noun's traits are
 msgstr "遊び場は{nounsProtocolLink} を使用して作られており、Nounの特徴は、Nounシードによって決まります。{nounsAssetsLink} でシードを生成し、{nounsSDKLink} でレンダリングされています。"
 
 #: src/components/Documentation/index.tsx
+msgid "The proposal veto right was initially envisioned as a temporary solution to the problem of ‘51% attacks’ on the Nouns DAO treasury. While Nounders initially believed that a healthy distribution of Nouns would be sufficient protection for the DAO, a more complete understanding of the incentives and risks has led to general consensus within the Nounders, the Nouns Foundation, and the wider community that a more robust game-theoretic solution should be implemented before the right is removed."
+msgstr ""
+
+#: src/components/Documentation/index.tsx
 msgid "The treasury is controlled exclusively by Nouns via governance."
 msgstr "トレジャリーは、ガバナンスを通じてNounsが独占的に管理しています。"
+
+#: src/components/Documentation/index.tsx
+msgid "There are unfortunately no algorithmic solutions for making these determinations in advance (if there were, the veto would not be required), and proposals must be considered on a case by case basis."
+msgstr ""
 
 #: src/components/VoteModal/index.tsx
 msgid "There was an error voting for your account."
@@ -937,7 +959,7 @@ msgid "Vote on Prop {0}"
 msgstr "提案 {0} に投票"
 
 #: src/components/NounProfileVoteRow/index.tsx
-msgid "Voted aginst"
+msgid "Voted against"
 msgstr "反対に投票"
 
 #: src/components/NounProfileVoteRow/index.tsx
