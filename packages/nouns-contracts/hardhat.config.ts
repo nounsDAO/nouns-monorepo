@@ -28,7 +28,8 @@ const config: HardhatUserConfig = {
       accounts: [process.env.WALLET_PRIVATE_KEY!].filter(Boolean),
     },
     rinkeby: {
-      url: `https://rinkeby.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
+      url: `https://eth-rinkeby.alchemyapi.io/v2/_HT4f3zypsY1CqJ5YOSOXOeR6qYk2U44`,
+      // url: `https://rinkeby.infura.io/v3/cc7ca25d68f246f393d7630842360c47`,
       accounts: process.env.MNEMONIC
         ? { mnemonic: process.env.MNEMONIC }
         : [process.env.WALLET_PRIVATE_KEY!].filter(Boolean),
