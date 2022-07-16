@@ -77,10 +77,12 @@ export const useNounSeeds = () => {
     if (!cachedSeeds && data?.seeds?.length) {
       // localStorage.setItem(seedCacheKey, JSON.stringify(seedArrayToObject(data.seeds)));
       // TODO pub nouns subgraph
+      const tmp = seedArrayToObject(data.seeds);
+      console.log({ tmp });
     }
   }, [data, cachedSeeds]);
 
-  console.log({cachedSeeds})
+  console.log({ cachedSeeds });
   return cachedSeeds;
 };
 
@@ -89,12 +91,14 @@ export const useNounSeed = (nounId: EthersBN) => {
   const seed = seeds?.[nounId.toString()];
   // prettier-ignore
   console.log({config, nounId, seed})
-  const request = seed ? false : {
-    abi,
-    address: config.addresses.nounsToken,
-    method: 'seeds',
-    args: [nounId],
-  };
+  const request = seed
+    ? false
+    : {
+        abi,
+        address: config.addresses.nounsToken,
+        method: 'seeds',
+        args: [nounId],
+      };
   const response = useContractCall<INounSeed>(request);
   if (response) {
     const seedCache = localStorage.getItem(seedCacheKey);
@@ -113,7 +117,7 @@ export const useNounSeed = (nounId: EthersBN) => {
     }
     return response;
   }
-  console.log({seed})
+  console.log({ seed });
   return seed;
 };
 
