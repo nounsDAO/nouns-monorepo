@@ -118,7 +118,7 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
         INounsDescriptor _descriptor,
         INounsSeeder _seeder,
         IProxyRegistry _proxyRegistry
-    ) ERC721('Public Nouns', unicode'NOUN℗') {
+    ) ERC721('Public Nouns', unicode'℗NOUN') {
         noundersDAO = _noundersDAO;
         daoTreasury = _daoTreasury;
         nounsDAOTreasury = _nounsDAOTreasury;

@@ -14,7 +14,9 @@ interface Contract {
 }
 
 task('deploy-local', 'Deploy contracts to hardhat')
-  .addOptionalParam('noundersdao', 'The nounders DAO contract address')
+  .addOptionalParam('noundersdao', 'The pounders DAO contract address')
+  .addOptionalParam('daotreasury', 'The treasury of the public nouns DAO', undefined, types.string)
+  .addOptionalParam('nounsdaotreasury', 'The treasury of the OG nouns DAO', undefined, types.string)
   .addOptionalParam('auctionTimeBuffer', 'The auction time buffer (seconds)', 30, types.int) // Default: 30 seconds
   .addOptionalParam('auctionReservePrice', 'The auction reserve price (wei)', 1, types.int) // Default: 1 wei
   .addOptionalParam(
@@ -63,6 +65,8 @@ task('deploy-local', 'Deploy contracts to hardhat')
       NounsToken: {
         args: [
           args.noundersdao || deployer.address,
+          args.daotreasury || deployer.address,
+          args.nounsdaotreasury || deployer.address,
           expectedAuctionHouseProxyAddress,
           () => contracts.NounsDescriptor.instance?.address,
           () => contracts.NounsSeeder.instance?.address,
