@@ -75,10 +75,12 @@ export const useNounSeeds = () => {
 
   useEffect(() => {
     if (!cachedSeeds && data?.seeds?.length) {
-      localStorage.setItem(seedCacheKey, JSON.stringify(seedArrayToObject(data.seeds)));
+      // localStorage.setItem(seedCacheKey, JSON.stringify(seedArrayToObject(data.seeds)));
+      // TODO pub nouns subgraph
     }
   }, [data, cachedSeeds]);
 
+  console.log({cachedSeeds})
   return cachedSeeds;
 };
 
@@ -86,6 +88,7 @@ export const useNounSeed = (nounId: EthersBN) => {
   const seeds = useNounSeeds();
   const seed = seeds?.[nounId.toString()];
   // prettier-ignore
+  console.log({config, nounId, seed})
   const request = seed ? false : {
     abi,
     address: config.addresses.nounsToken,
@@ -110,6 +113,7 @@ export const useNounSeed = (nounId: EthersBN) => {
     }
     return response;
   }
+  console.log({seed})
   return seed;
 };
 
