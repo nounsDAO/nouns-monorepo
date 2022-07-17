@@ -1,4 +1,4 @@
-import { expected, readPngImage } from './lib';
+import { expected, expectedFull, readPngImage } from './lib';
 import { PNGCollectionEncoder } from '../src';
 import { promises as fs } from 'fs';
 import { join } from 'path';
@@ -42,6 +42,23 @@ describe('PNGCollectionEncoder', () => {
     const data = JSON.parse(fileJSON);
 
     expect(data).to.deep.equal(expected);
+
+    await fs.unlink(filename);
+  });
+  
+  it('should include all pixel data if isFullSizeImage set true', async () => {
+    const filename = 'test-data-full.json';
+    const names = ['bg-koushi'];
+    for (const name of names) {
+      const image = await readPngImage(join(__dirname, `./lib/images/${name}.png`));
+      encoder.encodeImage(name, image, undefined, true);
+    }
+    await encoder.writeToFile(filename);
+
+    const fileJSON = await fs.readFile(filename, 'utf8');
+    const data = JSON.parse(fileJSON);
+
+    expect(data).to.deep.equal(expectedFull);
 
     await fs.unlink(filename);
   });

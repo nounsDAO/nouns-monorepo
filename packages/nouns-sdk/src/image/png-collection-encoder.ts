@@ -36,10 +36,11 @@ export class PNGCollectionEncoder implements IEncoder {
    * @param image The image name
    * @param png The png image data
    * @param folder An optional containing folder name
+   * @param isFullSizeImage Image with no margins on the left and right
    */
-  public encodeImage(name: string, png: PngImage, folder?: string): string {
+  public encodeImage(name: string, png: PngImage, folder?: string, isFullSizeImage?: boolean): string {
     const image = new Image(png.width, png.height);
-    const rle = image.toRLE((x, y) => png.rgbaAt(x, y), this._colors);
+    const rle = image.toRLE((x, y) => png.rgbaAt(x, y), this._colors, isFullSizeImage || false);
 
     this._images.set(name, rle);
 
