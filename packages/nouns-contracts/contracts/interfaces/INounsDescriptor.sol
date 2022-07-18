@@ -26,11 +26,11 @@ interface INounsDescriptor {
 
     event BaseURIUpdated(string baseURI);
 
-    function arePartsLocked() external returns (bool);
+    function arePartsLocked() external view returns (bool);
 
-    function isDataURIEnabled() external returns (bool);
+    function isDataURIEnabled() external view returns (bool);
 
-    function baseURI() external returns (string memory);
+    function baseURI() external view returns (string memory);
 
     function palettes(uint8 paletteIndex, uint256 colorIndex) external view returns (string memory);
 
