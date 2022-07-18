@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs';
 import { EncodedImage, IEncoder, ImageData, PngImage } from './types';
-import { Image2 } from './image2';
+import { Image } from './image';
 
 /**
  * A class used to convert PNG images into the following RLE format:
@@ -38,7 +38,7 @@ export class PNGCollectionEncoder implements IEncoder {
    * @param folder An optional containing folder name
    */
   public encodeImage(name: string, png: PngImage, folder?: string): string {
-    const image = new Image2(png.width, png.height, png.rgbaAt);
+    const image = new Image(png.width, png.height, png.rgbaAt);
     const rle = image.toRLE(this._colors);
 
     this._images.set(name, rle);

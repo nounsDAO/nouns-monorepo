@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { join } from 'path';
-import { Image2 } from '../src/image/image2';
 import { Image } from '../src/image/image';
+import { Image as Image1 } from './image';
 import { readPngImage } from './lib';
 import { buildSVG, RGBAColor } from '../src';
 import { glob } from 'glob';
@@ -11,7 +11,7 @@ async function encodeSingleLineRLE(filepath: string) {
   const transparent: [string, number] = ['', 0];
   const colors: Map<string, number> = new Map([transparent]);
   const pngImage = await readPngImage(filepath);
-  const image = new Image(pngImage.width, pngImage.height);
+  const image = new Image1(pngImage.width, pngImage.height);
   const rle = image.toRLE(pngImage.rgbaAt, colors);
   return { rle, colors };
 }
@@ -20,12 +20,12 @@ async function encodeMultiLineRLE(filepath: string) {
   const transparent: [string, number] = ['', 0];
   const colors: Map<string, number> = new Map([transparent]);
   const pngImage = await readPngImage(filepath);
-  const image = new Image2(pngImage.width, pngImage.height, pngImage.rgbaAt);
+  const image = new Image(pngImage.width, pngImage.height, pngImage.rgbaAt);
   const rle = image.toRLE(colors);
   return { rle, colors };
 }
 
-describe('Image2', () => {
+describe('Image', () => {
   describe('Comparing single line RLE to multiline RLE encoding', async () => {
     it('builds the same svg with both encoders', async () => {
       const filepath = join(__dirname, `./lib/images/head-cone.png`);
@@ -77,7 +77,7 @@ describe('Image2', () => {
     });
 
     const encodePixels = (pixels: RGBAColor[][], colors: Map<string, number>) => {
-      const rle = new Image2(pixels[0].length, pixels.length, (x, y) => pixels[y][x]).toRLE(colors);
+      const rle = new Image(pixels[0].length, pixels.length, (x, y) => pixels[y][x]).toRLE(colors);
       const decoded = decodeImage(rle);
       const colorsArray = Array.from(colors.keys());
       return { decoded, colorsArray };
