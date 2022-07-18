@@ -8,7 +8,6 @@ import { promises as fs } from 'fs';
 const merge = async (baseFile: string, newFile: string, destinationFile: string) => {
   const baseData: ImageData = JSON.parse((await fs.readFile(baseFile)).toString());
   const newData: ImageData = JSON.parse((await fs.readFile(newFile)).toString());
-  // console.log(newData);
 
   for (const [k, v] of Object.entries(newData.images)) {
     baseData.images[k].push(...v);

@@ -8,7 +8,7 @@ import { palette } from '../src/image-data.json';
  * @notice creates an additional art json file. it assumes it's not the first one.
  *   it also assumes the existing palette from the first one has all the needed colors.
  * @sourceFolder a folder containing subfolders with the names: ['1-bodies', '2-accessories', '3-heads', '4-glasses']
- * @destinationFilepath wher to save the new json file
+ * @destinationFilepath where to save the new json file
  */
 const encode = async (sourceFolder: string, destinationFilepath: string) => {
   const encoder = new PNGCollectionEncoder(palette);
