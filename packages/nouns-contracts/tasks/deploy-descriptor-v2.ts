@@ -75,7 +75,6 @@ task('deploy-descriptor-v2', 'Deploy NounsDescriptorV2 & populate it with art')
     const art = await (
       await ethers.getContractFactory('NounsArt', deployer)
     ).deploy(nounsDescriptor.address, inflator.address);
-    console.log(`actual art address: ${art.address}`);
     contracts.NounsArt = {
       name: 'NounsArt',
       address: art.address,
