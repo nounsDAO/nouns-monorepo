@@ -6,6 +6,9 @@ import clsx from 'clsx';
 import { Trans } from '@lingui/macro';
 import { useQuery } from '@apollo/client';
 import { nounQuery } from '../../wrappers/subgraph';
+import { buildEtherscanAddressLink } from '../../utils/etherscan';
+import React from 'react';
+import Tooltip from '../Tooltip';
 
 interface HolderProps {
   nounId: number;
@@ -31,7 +34,24 @@ const Holder: React.FC<HolderProps> = props => {
 
   const holder = data && data.noun.owner.id;
 
-  const nonNounderNounContent = <ShortAddress size={40} address={holder} avatar={true} />;
+  const nonNounderNounContent = (
+    <a
+      href={buildEtherscanAddressLink(holder)}
+      target={'_blank'}
+      rel="noreferrer"
+      className={classes.link}
+    >
+      <Tooltip
+        tip="View on Etherscan"
+        hoverCardContent={(tip: string) => {
+          return <div>{tip}</div>;
+        }}
+        id="holder-etherscan-tooltip"
+      >
+        <ShortAddress size={40} address={holder} avatar={true} />
+      </Tooltip>
+    </a>
+  );
 
   const nounderNounContent = 'nounders.eth';
 
