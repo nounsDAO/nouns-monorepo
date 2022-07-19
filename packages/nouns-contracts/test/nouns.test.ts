@@ -2,8 +2,8 @@ import chai from 'chai';
 import { ethers } from 'hardhat';
 import { BigNumber as EthersBN, constants } from 'ethers';
 import { solidity } from 'ethereum-waffle';
-import { NounsDescriptor__factory as NounsDescriptorFactory, NounsToken } from '../typechain';
-import { deployNounsToken, populateDescriptor } from './utils';
+import { NounsDescriptorV2__factory as NounsDescriptorV2Factory, NounsToken } from '../typechain';
+import { deployNounsToken, populateDescriptorV2 } from './utils';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 chai.use(solidity);
@@ -21,7 +21,7 @@ describe('NounsToken', () => {
 
     const descriptor = await nounsToken.descriptor();
 
-    await populateDescriptor(NounsDescriptorFactory.connect(descriptor, deployer));
+    await populateDescriptorV2(NounsDescriptorV2Factory.connect(descriptor, deployer));
   });
 
   beforeEach(async () => {
