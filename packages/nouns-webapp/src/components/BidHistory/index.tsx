@@ -50,6 +50,7 @@ const BidHistory: React.FC<{ auctionId: string; max: number; classes?: any }> = 
   const bidContent =
     bids &&
     bids
+      .sort((bid1: Bid, bid2: Bid) => -1*(bid1.timestamp.toNumber() - bid2.timestamp.toNumber()))
       .map((bid: Bid, i: number) => {
         return bidItem(bid, i, classes, isCool);
       })
