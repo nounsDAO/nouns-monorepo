@@ -18,10 +18,10 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
     'auctionMinIncrementBidPercentage',
     'The auction min increment bid percentage (out of 100)',
   )
-  .addOptionalParam('auctionDuration', 'The auction duration (seconds)', 600, types.int)
+  .addOptionalParam('auctionDuration', 'The auction duration (seconds)')
   .addOptionalParam('timelockDelay', 'The timelock delay (seconds)')
-  .addOptionalParam('votingPeriod', 'The voting period (blocks)', 5760, types.int)
-  .addOptionalParam('votingDelay', 'The voting delay (blocks)', 1, types.int)
+  .addOptionalParam('votingPeriod', 'The voting period (blocks)')
+  .addOptionalParam('votingDelay', 'The voting delay (blocks)')
   .addOptionalParam('proposalThresholdBps', 'The proposal threshold (basis points)')
   .addOptionalParam('quorumVotesBps', 'Votes required for quorum (basis points)')
   .setAction(async (args, { run }) => {
