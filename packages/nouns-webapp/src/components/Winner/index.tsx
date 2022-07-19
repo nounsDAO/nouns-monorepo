@@ -67,7 +67,7 @@ const Winner: React.FC<WinnerProps> = props => {
     >
       <Tooltip
         tip="View on Etherscan"
-        hoverCardContent={(tip: string) => {
+        tooltipContent={(tip: string) => {
           return <div>{tip}</div>;
         }}
         id="holder-etherscan-tooltip"

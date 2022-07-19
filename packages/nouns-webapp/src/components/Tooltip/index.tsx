@@ -3,22 +3,21 @@ import ReactTooltip from 'react-tooltip';
 import classes from './Tooltip.module.css';
 
 interface TooltipProps {
-  hoverCardContent: (dataTip: string) => React.ReactNode;
+  tooltipContent: (dataTip: string) => React.ReactNode;
   tip: string;
   id: string;
 }
 
 const Tooltip: React.FC<TooltipProps> = props => {
-  const { hoverCardContent, tip, id } = props;
+  const { tooltipContent, tip, id } = props;
 
   return (
     <>
       <ReactTooltip
         id={id}
         className={classes.hover}
-        // effect={'solid'}
         getContent={dataTip => {
-          return hoverCardContent(dataTip);
+          return tooltipContent(dataTip);
         }}
       />
       <div data-tip={tip} data-for={id}>
