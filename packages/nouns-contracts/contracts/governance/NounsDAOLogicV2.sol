@@ -92,7 +92,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     uint256 public constant proposalMaxOperations = 10; // 10 actions
 
     /// @notice The maximum priority fee used to cap gas refunds in `castRefundableVote`
-    uint256 public constant MAX_REFUND_PRIORITY_FEE = 20 gwei;
+    uint256 public constant MAX_REFUND_PRIORITY_FEE = 2 gwei;
 
     /// @notice The vote refund gas overhead, including 7K for ETH transfer and 29K for general transaction overhead
     uint256 public constant REFUND_BASE_GAS = 36000;
