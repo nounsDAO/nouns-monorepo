@@ -7,13 +7,11 @@ const { ethers } = hardhat;
 import { BigNumber as EthersBN } from 'ethers';
 
 import {
-  deployNounsToken,
   getSigners,
   TestSigners,
   setTotalSupply,
-  populateDescriptor,
-  deployGovernorV2WithV2Proxy,
   propStateToString,
+  deployGovV2AndToken,
 } from '../../../utils';
 
 import {
@@ -27,7 +25,7 @@ import {
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
-  NounsDescriptor__factory as NounsDescriptorFactory,
+  NounsDescriptorV2__factory as NounsDescriptorV2Factory,
   NounsDAOExecutor,
   NounsDAOExecutor__factory as NounsDaoExecutorFactory,
   NounsDAOLogicV2,
@@ -49,45 +47,19 @@ async function reset(): Promise<void> {
     return;
   }
 
-  // nonce 0: Deploy NounsDAOExecutor
-  // nonce 1: Deploy NounsDAOLogicV1
-  // nonce 2: Deploy nftDescriptorLibraryFactory
-  // nonce 3: Deploy NounsDescriptor
-  // nonce 4: Deploy NounsSeeder
-  // nonce 5: Deploy NounsToken
-  // nonce 6: Deploy NounsDAOProxy
-  // nonce 7+: populate Descriptor
-
   vetoer = deployer;
 
-  const govDelegatorAddress = ethers.utils.getContractAddress({
-    from: deployer.address,
-    nonce: (await deployer.getTransactionCount()) + 6,
-  });
-
-  // Deploy NounsDAOExecutor with pre-computed Delegator address
-  timelock = await new NounsDaoExecutorFactory(deployer).deploy(govDelegatorAddress, timelockDelay);
-  const timelockAddress = timelock.address;
-
-  // Deploy Nouns token
-  token = await deployNounsToken(deployer);
-
-  gov = await deployGovernorV2WithV2Proxy(
+  ({ token, gov, timelock } = await deployGovV2AndToken(
     deployer,
-    token.address,
-    timelockAddress,
-    vetoer.address,
-    5760,
-    1,
+    timelockDelay,
     proposalThresholdBPS,
     {
       minQuorumVotesBPS: quorumVotesBPS,
       maxQuorumVotesBPS: MAX_QUORUM_VOTES_BPS,
       quorumCoefficient: 0,
     },
-  );
-
-  await populateDescriptor(NounsDescriptorFactory.connect(await token.descriptor(), deployer));
+    vetoer.address,
+  ));
 
   snapshotId = await ethers.provider.send('evm_snapshot', []);
 }

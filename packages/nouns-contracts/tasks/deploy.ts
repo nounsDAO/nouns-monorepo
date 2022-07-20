@@ -19,8 +19,9 @@ const wethContracts: Record<number, string> = {
   [ChainId.Kovan]: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
 };
 
-const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 6;
-const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 9;
+const NOUNS_ART_NONCE_OFFSET = 4;
+const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 9;
+const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 12;
 
 task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsToken')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
@@ -104,6 +105,10 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
     }
 
     const nonce = await deployer.getTransactionCount();
+    const expectedNounsArtAddress = ethers.utils.getContractAddress({
+      from: deployer.address,
+      nonce: nonce + NOUNS_ART_NONCE_OFFSET,
+    });
     const expectedAuctionHouseProxyAddress = ethers.utils.getContractAddress({
       from: deployer.address,
       nonce: nonce + AUCTION_HOUSE_PROXY_NONCE_OFFSET,
@@ -117,18 +122,24 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
       DeployedContract
     >;
     const contracts: Record<ContractName, ContractDeployment> = {
-      NFTDescriptor: {},
-      NounsDescriptor: {
+      NFTDescriptorV2: {},
+      SVGRenderer: {},
+      NounsDescriptorV2: {
+        args: [expectedNounsArtAddress, () => deployment.SVGRenderer.address],
         libraries: () => ({
-          NFTDescriptor: deployment.NFTDescriptor.address,
+          NFTDescriptorV2: deployment.NFTDescriptorV2.address,
         }),
+      },
+      Inflator: {},
+      NounsArt: {
+        args: [() => deployment.NounsDescriptorV2.address, () => deployment.Inflator.address],
       },
       NounsSeeder: {},
       NounsToken: {
         args: [
           args.noundersdao,
           expectedAuctionHouseProxyAddress,
-          () => deployment.NounsDescriptor.address,
+          () => deployment.NounsDescriptorV2.address,
           () => deployment.NounsSeeder.address,
           proxyRegistryAddress,
         ],

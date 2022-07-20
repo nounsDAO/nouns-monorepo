@@ -11,16 +11,16 @@ import {
   getSigners,
   TestSigners,
   setTotalSupply,
-  populateDescriptor,
   propose,
   deployGovernorV2WithV2Proxy,
+  populateDescriptorV2,
 } from '../../../utils';
 
 import { mineBlock } from '../../../utils';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
-  NounsDescriptor__factory as NounsDescriptorFactory,
+  NounsDescriptorV2__factory as NounsDescriptorV2Factory,
   NounsDAOLogicV2,
 } from '../../../../typechain';
 
@@ -47,13 +47,12 @@ async function reset() {
   }
   token = await deployNounsToken(signers.deployer);
 
-  await populateDescriptor(
-    NounsDescriptorFactory.connect(await token.descriptor(), signers.deployer),
+  await populateDescriptorV2(
+    NounsDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
   );
 
   await setTotalSupply(token, 10);
 
-  // gov = await deployGovernor(deployer, token.address);
   gov = await deployGovernorV2WithV2Proxy(deployer, token.address);
   snapshotId = await ethers.provider.send('evm_snapshot', []);
 }

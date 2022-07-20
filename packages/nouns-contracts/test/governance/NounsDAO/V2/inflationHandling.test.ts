@@ -2,18 +2,14 @@ import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import hardhat from 'hardhat';
 
-const { ethers } = hardhat;
-
 import { BigNumber as EthersBN } from 'ethers';
 
 import {
-  deployNounsToken,
   getSigners,
   TestSigners,
   setTotalSupply,
-  populateDescriptor,
-  deployGovernorV2WithV2Proxy,
   blockNumber,
+  deployGovV2AndToken,
 } from '../../../utils';
 
 import { mineBlock, encodeParameters, advanceBlocks } from '../../../utils';
@@ -21,7 +17,7 @@ import { mineBlock, encodeParameters, advanceBlocks } from '../../../utils';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
-  NounsDescriptor__factory as NounsDescriptorFactory,
+  NounsDescriptorV2__factory as NounsDescriptorV2Factory,
   NounsDAOExecutor__factory as NounsDaoExecutorFactory,
   NounsDAOLogicV2,
 } from '../../../../typechain';
@@ -29,48 +25,6 @@ import { MAX_QUORUM_VOTES_BPS } from '../../../constants';
 
 chai.use(solidity);
 const { expect } = chai;
-
-async function reset(): Promise<void> {
-  // nonce 0: Deploy NounsDAOExecutor
-  // nonce 1: Deploy NounsDAOLogicV1
-  // nonce 2: Deploy nftDescriptorLibraryFactory
-  // nonce 3: Deploy NounsDescriptor
-  // nonce 4: Deploy NounsSeeder
-  // nonce 5: Deploy NounsToken
-  // nonce 6: Deploy NounsDAOProxy
-  // nonce 7+: populate Descriptor
-
-  const govDelegatorAddress = ethers.utils.getContractAddress({
-    from: deployer.address,
-    nonce: (await deployer.getTransactionCount()) + 6,
-  });
-
-  // Deploy NounsDAOExecutor with pre-computed Delegator address
-  const { address: timelockAddress } = await new NounsDaoExecutorFactory(deployer).deploy(
-    govDelegatorAddress,
-    timelockDelay,
-  );
-
-  // Deploy Nouns token
-  token = await deployNounsToken(deployer);
-
-  gov = await deployGovernorV2WithV2Proxy(
-    deployer,
-    token.address,
-    timelockAddress,
-    deployer.address,
-    5760,
-    1,
-    proposalThresholdBPS,
-    {
-      minQuorumVotesBPS: minQuorumVotesBPS,
-      maxQuorumVotesBPS: MAX_QUORUM_VOTES_BPS,
-      quorumCoefficient: 0,
-    },
-  );
-
-  await populateDescriptor(NounsDescriptorFactory.connect(await token.descriptor(), deployer));
-}
 
 async function propose(proposer: SignerWithAddress) {
   targets = [account0.address];
@@ -114,7 +68,11 @@ describe('NounsDAOV2#inflationHandling', () => {
     signatures = ['getBalanceOf(address)'];
     callDatas = [encodeParameters(['address'], [account0.address])];
 
-    await reset();
+    ({ token, gov } = await deployGovV2AndToken(deployer, timelockDelay, proposalThresholdBPS, {
+      minQuorumVotesBPS: minQuorumVotesBPS,
+      maxQuorumVotesBPS: MAX_QUORUM_VOTES_BPS,
+      quorumCoefficient: 0,
+    }));
   });
 
   it('set parameters correctly', async () => {

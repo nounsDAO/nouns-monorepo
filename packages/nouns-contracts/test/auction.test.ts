@@ -6,11 +6,11 @@ import { ethers, upgrades } from 'hardhat';
 import {
   MaliciousBidder__factory as MaliciousBidderFactory,
   NounsAuctionHouse,
-  NounsDescriptor__factory as NounsDescriptorFactory,
+  NounsDescriptorV2__factory as NounsDescriptorV2Factory,
   NounsToken,
   WETH,
 } from '../typechain';
-import { deployNounsToken, deployWeth, populateDescriptor } from './utils';
+import { deployNounsToken, deployWeth, populateDescriptorV2 } from './utils';
 
 chai.use(solidity);
 const { expect } = chai;
@@ -51,7 +51,7 @@ describe('NounsAuctionHouse', () => {
 
     const descriptor = await nounsToken.descriptor();
 
-    await populateDescriptor(NounsDescriptorFactory.connect(descriptor, deployer));
+    await populateDescriptorV2(NounsDescriptorV2Factory.connect(descriptor, deployer));
 
     await nounsToken.setMinter(nounsAuctionHouse.address);
   });
