@@ -27,6 +27,10 @@ import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import { IProxyRegistry } from './external/opensea/IProxyRegistry.sol';
 
 error InvalidIndex();
+error Bound();
+error Unbound();
+error OnlyBinderCanUnbind();
+error OnlyOwnerCanBind();
 
 contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     // The nouns DAO address
@@ -60,6 +64,8 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
 
     // The noun seeds
     mapping(uint256 => INounsSeeder.Seed) public seeds;
+
+    mapping(uint256 => address) public bindings;
 
     // The internal noun ID tracker
     uint256 private _currentNounId;
@@ -192,6 +198,18 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
         emit NounBurned(nounId);
     }
 
+    function bind(uint256 nounId, address binder) public {
+        if (ownerOf(nounId) != msg.sender) revert OnlyOwnerCanBind();
+        if (bindings[nounId] != address(0)) revert Bound();
+        bindings[nounId] = binder;
+    }
+
+    function unbind(uint256 nounId) public {
+        if (bindings[nounId] == address(0)) revert Unbound();
+        if (bindings[nounId] != msg.sender) revert OnlyBinderCanUnbind();
+        bindings[nounId] = address(0);
+    }
+
     /**
      * @notice A distinct Uniform Resource Identifier (URI) for a given asset.
      * @dev See {IERC721Metadata-tokenURI}.
@@ -290,5 +308,14 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
         emit NounCreated(nounId, seed);
 
         return nounId;
+    }
+
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId
+    ) internal override(ERC721Checkpointable) {
+        super._beforeTokenTransfer(from, to, tokenId);
+        if (bindings[tokenId] != address(0)) revert Bound();
     }
 }

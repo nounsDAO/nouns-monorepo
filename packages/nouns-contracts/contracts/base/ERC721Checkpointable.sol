@@ -98,7 +98,7 @@ abstract contract ERC721Checkpointable is ERC721Enumerable {
         address from,
         address to,
         uint256 tokenId
-    ) internal override {
+    ) internal virtual override {
         super._beforeTokenTransfer(from, to, tokenId);
 
         /// @notice Differs from `_transferTokens()` to use `delegates` override method to simulate auto-delegation

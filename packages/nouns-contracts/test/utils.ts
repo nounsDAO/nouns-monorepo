@@ -66,6 +66,8 @@ export const deployNounsToken = async (
 
   return factory.deploy(
     noundersDAO || signer.address,
+    noundersDAO || signer.address,
+    noundersDAO || signer.address,
     minter || signer.address,
     descriptor || (await deployNounsDescriptor(signer)).address,
     seeder || (await deployNounsSeeder(signer)).address,
