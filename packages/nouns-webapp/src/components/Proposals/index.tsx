@@ -87,6 +87,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
   };
 
   const hasNounVotes = account !== undefined && connectedAccountNounVotes > 0;
+<<<<<<< HEAD
   const hasNounBalance = (useUserNounTokenBalance() ?? 0) > 0;
 
   // Key press handlers to meta key
@@ -116,6 +117,12 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
 
 
 
+=======
+  const hasNounBalance =
+    (useNounTokenBalance(
+      account !== null && account !== undefined ? account : ethers.constants.AddressZero,
+    ) ?? 0) > 0;
+>>>>>>> brianj_add_keyboard_shortcut
   return (
     <div className={classes.proposals}>
       {showDelegateModal && <DelegationModal onDismiss={() => setShowDelegateModal(false)} />}
