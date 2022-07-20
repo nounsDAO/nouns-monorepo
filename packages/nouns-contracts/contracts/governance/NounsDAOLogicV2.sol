@@ -972,9 +972,13 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     }
 
     function _refundGas(uint256 startGas) internal {
+        uint256 balance = address(this).balance;
+        if (balance == 0) {
+            return;
+        }
         uint256 gasPrice = min(tx.gasprice, block.basefee + MAX_REFUND_PRIORITY_FEE);
         uint256 gasUsed = startGas - gasleft() + REFUND_BASE_GAS;
-        uint256 refundAmount = min(gasPrice * gasUsed, address(this).balance);
+        uint256 refundAmount = min(gasPrice * gasUsed, balance);
         (bool refundSent, ) = msg.sender.call{ value: refundAmount }('');
         emit RefundableVote(msg.sender, refundAmount, refundSent);
     }
