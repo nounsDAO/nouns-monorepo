@@ -3,7 +3,7 @@ import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { BigNumber, ContractReceipt } from 'ethers';
 import { ethers } from 'hardhat';
-import { NounsDAOLogicV2, NounsDescriptor__factory, NounsToken } from '../../../../typechain';
+import { NounsDAOLogicV2, NounsDescriptorV2__factory, NounsToken } from '../../../../typechain';
 import { MaliciousVoter__factory } from '../../../../typechain/factories/contracts/test/MaliciousVoter__factory';
 import {
   address,
@@ -12,7 +12,7 @@ import {
   deployNounsToken,
   encodeParameters,
   getSigners,
-  populateDescriptor,
+  populateDescriptorV2,
   TestSigners,
 } from '../../../utils';
 
@@ -39,8 +39,8 @@ describe('Vote Refund', () => {
     user2 = signers.account1;
 
     token = await deployNounsToken(deployer);
-    const descriptor = NounsDescriptor__factory.connect(await token.descriptor(), deployer);
-    await populateDescriptor(descriptor);
+    const descriptor = NounsDescriptorV2__factory.connect(await token.descriptor(), deployer);
+    await populateDescriptorV2(descriptor);
 
     await token.connect(deployer).mint();
     await token.connect(deployer).transferFrom(deployer.address, user.address, 0);
