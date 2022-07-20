@@ -2,6 +2,7 @@ import { Trans } from '@lingui/macro';
 import { useEthers } from '@usedapp/core';
 import React from 'react';
 import { useShortAddress } from '../../utils/addressAndENSDisplayUtils';
+import { useUserDelegatee } from '../../wrappers/nounToken';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import ShortAddress from '../ShortAddress';
 import classes from './CurrentDelegatePannel.module.css';
@@ -15,7 +16,8 @@ const CurrentDelegatePannel: React.FC<CurrentDelegatePannelProps> = props => {
   const { onPrimaryBtnClick, onSecondaryBtnClick } = props;
 
   const { account: maybeAccount } = useEthers();
-  const account = maybeAccount ?? '';
+  const delegate = useUserDelegatee();
+  const account = delegate ?? maybeAccount ?? '';
   const shortAccount = useShortAddress(account);
 
   return (

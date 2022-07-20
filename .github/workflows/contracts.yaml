@@ -6,10 +6,13 @@ on:
       - master
   pull_request:
     paths:
-      - "packages/nouns-contracts/**"
-      - "packages/nouns-subgraph/**"
+      - 'packages/nouns-contracts/**'
+      - 'packages/nouns-subgraph/**'
     branches:
-      - "**"
+      - '**'
+
+env:
+  NODE_OPTIONS: --max_old_space_size=5120
 
 jobs:
   build_and_test:
@@ -50,4 +53,4 @@ jobs:
       - name: Run Forge tests
         run: |
           cd packages/nouns-contracts
-          forge test -vvv
+          forge test -vvv --ffi

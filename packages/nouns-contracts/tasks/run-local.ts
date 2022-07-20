@@ -15,8 +15,8 @@ task(
   const contracts = await run('deploy-local');
 
   await run('populate-descriptor', {
-    nftDescriptor: contracts.NFTDescriptor.instance.address,
-    nounsDescriptor: contracts.NounsDescriptor.instance.address,
+    nftDescriptor: contracts.NFTDescriptorV2.instance.address,
+    nounsDescriptor: contracts.NounsDescriptorV2.instance.address,
   });
 
   await contracts.NounsAuctionHouse.instance
@@ -25,9 +25,21 @@ task(
       gasLimit: 1_000_000,
     });
 
-  await run('create-proposal', {
-    nounsDaoProxy: contracts.NounsDAOProxyV2.instance.address,
-  });
+  // Transfer ownership
+  const executorAddress = contracts.NounsDAOExecutor.instance.address;
+  await contracts.NounsDescriptorV2.instance.transferOwnership(executorAddress);
+  await contracts.NounsToken.instance.transferOwnership(executorAddress);
+  await contracts.NounsAuctionHouseProxyAdmin.instance.transferOwnership(executorAddress);
+  await contracts.NounsAuctionHouse.instance
+    .attach(contracts.NounsAuctionHouseProxy.instance.address)
+    .transferOwnership(executorAddress);
+  console.log(
+    'Transferred ownership of the descriptor, token, and proxy admin contracts to the executor.',
+  );
+
+  // await run('create-proposal', {
+  //   nounsDaoProxy: contracts.NounsDAOProxyV2.instance.address,
+  // });
 
   const { chainId } = await ethers.provider.getNetwork();
 

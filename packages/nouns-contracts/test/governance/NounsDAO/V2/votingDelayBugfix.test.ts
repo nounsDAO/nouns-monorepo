@@ -5,17 +5,17 @@ import {
   getSigners,
   TestSigners,
   setTotalSupply,
-  populateDescriptor,
   advanceBlocks,
   deployGovernorV1,
   deployGovernorV2AndSetQuorumParams,
   propose,
+  populateDescriptorV2,
 } from '../../../utils';
 import { mineBlock } from '../../../utils';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
-  NounsDescriptor__factory as NounsDescriptorFactory,
+  NounsDescriptorV2__factory as NounsDescriptorV2Factory,
   NounsDAOLogicV1,
   NounsDAOLogicV1__factory as NounsDaoLogicV1Factory,
   NounsDAOLogicV2,
@@ -40,8 +40,8 @@ let govV2: NounsDAOLogicV2;
 async function setupWithV1() {
   token = await deployNounsToken(signers.deployer);
 
-  await populateDescriptor(
-    NounsDescriptorFactory.connect(await token.descriptor(), signers.deployer),
+  await populateDescriptorV2(
+    NounsDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
   );
 
   await setTotalSupply(token, 100);

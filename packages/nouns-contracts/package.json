@@ -25,6 +25,7 @@
     "prepare": "yarn build"
   },
   "devDependencies": {
+    "solidity-coverage": "0.7.21",
     "@nomiclabs/hardhat-ethers": "^2.0.6",
     "@nomiclabs/hardhat-etherscan": "^3.0.3",
     "@nomiclabs/hardhat-waffle": "^2.0.3",
@@ -44,7 +45,6 @@
     "prettier-plugin-solidity": "^1.0.0-beta.12",
     "prompt": "^1.1.0",
     "shx": "^0.3.3",
-    "solidity-coverage": "0.7.21",
     "ts-node": "^10.0.0",
     "typechain": "^8.0.0"
   },

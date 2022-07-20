@@ -18,7 +18,7 @@
 pragma solidity ^0.8.6;
 
 import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
-import { INounsDescriptor } from './INounsDescriptor.sol';
+import { INounsDescriptorMinimal } from './INounsDescriptorMinimal.sol';
 import { INounsSeeder } from './INounsSeeder.sol';
 
 interface INounsToken is IERC721 {
@@ -32,7 +32,7 @@ interface INounsToken is IERC721 {
 
     event MinterLocked();
 
-    event DescriptorUpdated(INounsDescriptor descriptor);
+    event DescriptorUpdated(INounsDescriptorMinimal descriptor);
 
     event DescriptorLocked();
 
@@ -52,7 +52,7 @@ interface INounsToken is IERC721 {
 
     function lockMinter() external;
 
-    function setDescriptor(INounsDescriptor descriptor) external;
+    function setDescriptor(INounsDescriptorMinimal descriptor) external;
 
     function lockDescriptor() external;
 

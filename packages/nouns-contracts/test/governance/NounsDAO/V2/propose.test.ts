@@ -4,7 +4,7 @@ import { solidity } from 'ethereum-waffle';
 import {
   NounsDAOLogicV2,
   NounsToken,
-  NounsDescriptor__factory as NounsDescriptorFactory,
+  NounsDescriptorV2__factory as NounsDescriptorV2Factory,
 } from '../../../../typechain';
 import {
   address,
@@ -13,7 +13,7 @@ import {
   deployNounsToken,
   encodeParameters,
   getSigners,
-  populateDescriptor,
+  populateDescriptorV2,
   setTotalSupply,
   TestSigners,
 } from '../../../utils';
@@ -38,8 +38,8 @@ describe('NounsDAOV2#propose', async () => {
     deployer = signers.deployer;
     token = await deployNounsToken(signers.deployer);
 
-    await populateDescriptor(
-      NounsDescriptorFactory.connect(await token.descriptor(), signers.deployer),
+    await populateDescriptorV2(
+      NounsDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
     );
 
     await setTotalSupply(token, 10);

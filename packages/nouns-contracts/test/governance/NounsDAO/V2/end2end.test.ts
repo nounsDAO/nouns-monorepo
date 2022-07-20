@@ -7,8 +7,8 @@ import {
   NounsToken,
   NounsAuctionHouse,
   NounsAuctionHouse__factory as NounsAuctionHouseFactory,
-  NounsDescriptor,
-  NounsDescriptor__factory as NounsDescriptorFactory,
+  NounsDescriptorV2,
+  NounsDescriptorV2__factory as NounsDescriptorV2Factory,
   NounsDAOProxy__factory as NounsDaoProxyFactory,
   NounsDAOLogicV1,
   NounsDAOLogicV1__factory as NounsDaoLogicV1Factory,
@@ -21,13 +21,13 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   deployNounsToken,
   deployWeth,
-  populateDescriptor,
   address,
   encodeParameters,
   advanceBlocks,
   blockTimestamp,
   setNextBlockTimestamp,
   blockNumber,
+  populateDescriptorV2,
 } from '../../../utils';
 import { parseUnits } from 'ethers/lib/utils';
 
@@ -36,7 +36,7 @@ const { expect } = chai;
 
 let nounsToken: NounsToken;
 let nounsAuctionHouse: NounsAuctionHouse;
-let descriptor: NounsDescriptor;
+let descriptor: NounsDescriptorV2;
 let weth: WETH;
 let gov: NounsDAOLogicV1;
 let timelock: NounsDAOExecutor;
@@ -118,9 +118,9 @@ async function deployV1() {
   await nounsToken.setMinter(nounsAuctionHouse.address);
 
   // 4. POPULATE body parts
-  descriptor = NounsDescriptorFactory.connect(await nounsToken.descriptor(), deployer);
+  descriptor = NounsDescriptorV2Factory.connect(await nounsToken.descriptor(), deployer);
 
-  await populateDescriptor(descriptor);
+  await populateDescriptorV2(descriptor);
 
   // 5a. CALCULATE Gov Delegate, takes place after 2 transactions
   const calculatedGovDelegatorAddress = ethers.utils.getContractAddress({
