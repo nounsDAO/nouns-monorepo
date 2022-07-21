@@ -23,8 +23,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14.x
-      - name: Install Postgres
-        run: sudo apt install -y postgresql
+      - name: Install libpq
+        run: sudo apt-get install libpq-dev
       - name: Install Yarn
         run: npm install -g yarn
       - run: yarn
