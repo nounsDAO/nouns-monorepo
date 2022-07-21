@@ -1,0 +1,44 @@
+name: Subgraph CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    paths:
+      - 'packages/nouns-contracts/abi/contracts/**'
+      - 'packages/nouns-subgraph/**'
+    branches:
+      - '**'
+
+jobs:
+  build_and_test:
+    name: Build and Test
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: Install Yarn
+        run: npm install -g yarn
+      - run: yarn
+      - run: yarn build
+      - name: Prepare subgraph yaml
+        run: |
+          cd packages/nouns-subgraph
+          yarn prepare:rinkeby
+      - name: Generate code
+        run: |
+          cd packages/nouns-subgraph
+          yarn codegen
+      - name: Run tests
+        run: |
+          cd packages/nouns-subgraph
+          yarn test
+      - name: Uninstall Yarn
+        if: always()
+        run: npm uninstall -g yarn
