@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: 14.x
       - name: Install Postgres
-        run: sudo apt install postgresql
+        run: sudo apt install -y postgresql
       - name: Install Yarn
         run: npm install -g yarn
       - run: yarn
