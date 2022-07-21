@@ -87,7 +87,7 @@ describe('Vote Refund', () => {
 
       expect(r.gasUsed).to.be.gt(0);
       expect(balanceDiff).to.be.closeTo(BigNumber.from(0), REFUND_ERROR_MARGIN);
-      expectRefundEvent(r, user, r.gasUsed.mul(await latestBasePlusMaxPriority()));
+      expectRefundEvent(r, user, await txCostInEth(r));
       await expect(tx).to.emit(gov, 'VoteCast').withArgs(user.address, BigNumber.from(1), 1, 2, '');
     });
 
@@ -100,8 +100,7 @@ describe('Vote Refund', () => {
 
       expect(r.gasUsed).to.be.gt(0);
       const balanceDiff = balanceBefore.sub(await user2.getBalance());
-      const expectedDiff = r.gasUsed.mul(await latestBasePlusMaxPriority());
-      expect(balanceDiff).to.be.eq(expectedDiff);
+      expect(balanceDiff).to.be.eq(await txCostInEth(r));
       await expect(tx).to.changeEtherBalance(gov, 0);
     });
 
@@ -113,15 +112,10 @@ describe('Vote Refund', () => {
         maxPriorityFeePerGas: ethers.utils.parseUnits('80', 'gwei'),
       });
       const r = await tx.wait();
-      const block = await ethers.provider.getBlock('latest');
-      const cappedGasPrice = block.baseFeePerGas!.add(MAX_PRIORITY_FEE_CAP);
-      const expectedRefund = r.gasUsed.mul(cappedGasPrice);
-      const txGrossCost = r.gasUsed.mul(r.effectiveGasPrice);
-      const expectedDiff = txGrossCost.sub(expectedRefund);
 
       expect(r.gasUsed).to.be.gt(0);
       const balanceDiff = balanceBefore.sub(await user.getBalance());
-      expect(balanceDiff).to.be.closeTo(expectedDiff, REFUND_ERROR_MARGIN);
+      expect(balanceDiff).to.be.closeTo(await expectedCappedDiff(r), REFUND_ERROR_MARGIN);
     });
 
     it('does not refund when DAO balance is zero', async () => {
@@ -132,8 +126,7 @@ describe('Vote Refund', () => {
 
       expect(r.gasUsed).to.be.gt(0);
       const balanceDiff = balanceBefore.sub(await user.getBalance());
-      const expectedDiff = r.gasUsed.mul(await latestBasePlusMaxPriority());
-      expect(balanceDiff).to.be.eq(expectedDiff);
+      expect(balanceDiff).to.be.eq(await txCostInEth(r));
     });
 
     it('provides partial refund given insufficient balance', async () => {
@@ -146,7 +139,7 @@ describe('Vote Refund', () => {
       const r = await tx.wait();
 
       expect(r.gasUsed).to.be.gt(0);
-      const expectedDiff = r.gasUsed.mul(await latestBasePlusMaxPriority()).sub(govBalance);
+      const expectedDiff = (await txCostInEth(r)).sub(govBalance);
       const balanceDiff = balanceBefore.sub(await user.getBalance());
       expect(balanceDiff).to.eq(expectedDiff);
     });
@@ -163,7 +156,7 @@ describe('Vote Refund', () => {
       const r = await tx.wait();
 
       const balanceDiff = balanceBefore.sub(await user.getBalance());
-      expect(balanceDiff).to.be.eq(r.gasUsed.mul(await latestBasePlusMaxPriority()));
+      expect(balanceDiff).to.be.eq(await txCostInEth(r));
       await expect(tx).to.changeEtherBalance(gov, 0);
     });
   });
@@ -181,7 +174,7 @@ describe('Vote Refund', () => {
       expect(r.gasUsed).to.be.gt(0);
       expect(balanceDiff).to.be.closeTo(BigNumber.from(0), REFUND_ERROR_MARGIN);
 
-      expectRefundEvent(r, user, r.gasUsed.mul(await latestBasePlusMaxPriority()));
+      expectRefundEvent(r, user, await txCostInEth(r));
       await expect(tx)
         .to.emit(gov, 'VoteCast')
         .withArgs(user.address, BigNumber.from(1), 1, 2, 'some reason');
@@ -198,8 +191,7 @@ describe('Vote Refund', () => {
 
       expect(r.gasUsed).to.be.gt(0);
       const balanceDiff = balanceBefore.sub(await user2.getBalance());
-      const expectedDiff = r.gasUsed.mul(await latestBasePlusMaxPriority());
-      expect(balanceDiff).to.be.eq(expectedDiff);
+      expect(balanceDiff).to.be.eq(await txCostInEth(r));
       await expect(tx).to.changeEtherBalance(gov, 0);
     });
 
@@ -211,15 +203,10 @@ describe('Vote Refund', () => {
         maxPriorityFeePerGas: ethers.utils.parseUnits('80', 'gwei'),
       });
       const r = await tx.wait();
-      const block = await ethers.provider.getBlock('latest');
-      const cappedGasPrice = block.baseFeePerGas!.add(MAX_PRIORITY_FEE_CAP);
-      const expectedRefund = r.gasUsed.mul(cappedGasPrice);
-      const txGrossCost = r.gasUsed.mul(r.effectiveGasPrice);
-      const expectedDiff = txGrossCost.sub(expectedRefund);
 
       expect(r.gasUsed).to.be.gt(0);
       const balanceDiff = balanceBefore.sub(await user.getBalance());
-      expect(balanceDiff).to.be.closeTo(expectedDiff, REFUND_ERROR_MARGIN);
+      expect(balanceDiff).to.be.closeTo(await expectedCappedDiff(r), REFUND_ERROR_MARGIN);
     });
 
     it('does not refund when DAO balance is zero', async () => {
@@ -232,8 +219,7 @@ describe('Vote Refund', () => {
 
       expect(r.gasUsed).to.be.gt(0);
       const balanceDiff = balanceBefore.sub(await user.getBalance());
-      const expectedDiff = r.gasUsed.mul(await latestBasePlusMaxPriority());
-      expect(balanceDiff).to.be.eq(expectedDiff);
+      expect(balanceDiff).to.be.eq(await txCostInEth(r));
     });
 
     it('provides partial refund given insufficient balance', async () => {
@@ -248,7 +234,7 @@ describe('Vote Refund', () => {
       const r = await tx.wait();
 
       expect(r.gasUsed).to.be.gt(0);
-      const expectedDiff = r.gasUsed.mul(await latestBasePlusMaxPriority()).sub(govBalance);
+      const expectedDiff = (await txCostInEth(r)).sub(govBalance);
       const balanceDiff = balanceBefore.sub(await user.getBalance());
       expect(balanceDiff).to.eq(expectedDiff);
     });
@@ -265,10 +251,20 @@ describe('Vote Refund', () => {
       const r = await tx.wait();
 
       const balanceDiff = balanceBefore.sub(await user.getBalance());
-      expect(balanceDiff).to.be.eq(r.gasUsed.mul(await latestBasePlusMaxPriority()));
+      expect(balanceDiff).to.be.eq(await txCostInEth(r));
       await expect(tx).to.changeEtherBalance(gov, 0);
     });
   });
+
+  async function expectedCappedDiff(r: ContractReceipt): Promise<BigNumber> {
+    const expectedRefund = await txCostInEth(r);
+    const txGrossCost = r.gasUsed.mul(r.effectiveGasPrice);
+    return txGrossCost.sub(expectedRefund);
+  }
+
+  async function txCostInEth(r: ContractReceipt): Promise<BigNumber> {
+    return r.gasUsed.mul(await latestBasePlusMaxPriority());
+  }
 
   async function latestBasePlusMaxPriority(): Promise<BigNumber> {
     const block = await ethers.provider.getBlock('latest');
