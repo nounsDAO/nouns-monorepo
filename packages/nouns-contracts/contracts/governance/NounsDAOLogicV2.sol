@@ -91,6 +91,12 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     /// @notice The maximum number of actions that can be included in a proposal
     uint256 public constant proposalMaxOperations = 10; // 10 actions
 
+    /// @notice The maximum priority fee used to cap gas refunds in `castRefundableVote`
+    uint256 public constant MAX_REFUND_PRIORITY_FEE = 2 gwei;
+
+    /// @notice The vote refund gas overhead, including 7K for ETH transfer and 29K for general transaction overhead
+    uint256 public constant REFUND_BASE_GAS = 36000;
+
     /// @notice The EIP-712 typehash for the contract's domain
     bytes32 public constant DOMAIN_TYPEHASH =
         keccak256('EIP712Domain(string name,uint256 chainId,address verifyingContract)');
@@ -485,6 +491,59 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     }
 
     /**
+     * @notice Cast a vote for a proposal, asking the DAO to refund gas costs.
+     * Users with > 0 votes receive refunds. Refunds are partial when using a gas priority fee higher than the DAO's cap.
+     * Refunds are partial when the DAO's balance is insufficient.
+     * No refund is sent when the DAO's balance is empty. No refund is sent to users with no votes.
+     * Voting takes place regardless of refund success.
+     * @param proposalId The id of the proposal to vote on
+     * @param support The support value for the vote. 0=against, 1=for, 2=abstain
+     * @dev Reentrancy is defended against in `castVoteInternal` at the `receipt.hasVoted == false` require statement.
+     */
+    function castRefundableVote(uint256 proposalId, uint8 support) external {
+        castRefundableVoteInternal(proposalId, support, '');
+    }
+
+    /**
+     * @notice Cast a vote for a proposal, asking the DAO to refund gas costs.
+     * Users with > 0 votes receive refunds. Refunds are partial when using a gas priority fee higher than the DAO's cap.
+     * Refunds are partial when the DAO's balance is insufficient.
+     * No refund is sent when the DAO's balance is empty. No refund is sent to users with no votes.
+     * Voting takes place regardless of refund success.
+     * @param proposalId The id of the proposal to vote on
+     * @param support The support value for the vote. 0=against, 1=for, 2=abstain
+     * @param reason The reason given for the vote by the voter
+     * @dev Reentrancy is defended against in `castVoteInternal` at the `receipt.hasVoted == false` require statement.
+     */
+    function castRefundableVoteWithReason(
+        uint256 proposalId,
+        uint8 support,
+        string calldata reason
+    ) external {
+        castRefundableVoteInternal(proposalId, support, reason);
+    }
+
+    /**
+     * @notice Internal function that carries out refundable voting logic
+     * @param proposalId The id of the proposal to vote on
+     * @param support The support value for the vote. 0=against, 1=for, 2=abstain
+     * @param reason The reason given for the vote by the voter
+     * @dev Reentrancy is defended against in `castVoteInternal` at the `receipt.hasVoted == false` require statement.
+     */
+    function castRefundableVoteInternal(
+        uint256 proposalId,
+        uint8 support,
+        string memory reason
+    ) internal {
+        uint256 startGas = gasleft();
+        uint96 votes = castVoteInternal(msg.sender, proposalId, support);
+        emit VoteCast(msg.sender, proposalId, support, votes, reason);
+        if (votes > 0) {
+            _refundGas(startGas);
+        }
+    }
+
+    /**
      * @notice Cast a vote for a proposal with a reason
      * @param proposalId The id of the proposal to vote on
      * @param support The support value for the vote. 0=against, 1=for, 2=abstain
@@ -721,6 +780,17 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         emit QuorumCoefficientSet(oldParams.quorumCoefficient, params.quorumCoefficient);
     }
 
+    function _withdraw() external {
+        if (msg.sender != admin) {
+            revert AdminOnly();
+        }
+
+        uint256 amount = address(this).balance;
+        (bool sent, ) = msg.sender.call{ value: amount }('');
+
+        emit Withdraw(amount, sent);
+    }
+
     /**
      * @notice Begins transfer of admin rights. The newPendingAdmin must call `_acceptAdmin` to finalize the transfer.
      * @dev Admin function to begin change of admin. The newPendingAdmin must call `_acceptAdmin` to finalize the transfer.
@@ -901,6 +971,20 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         }
     }
 
+    function _refundGas(uint256 startGas) internal {
+        unchecked {
+            uint256 balance = address(this).balance;
+            if (balance == 0) {
+                return;
+            }
+            uint256 gasPrice = min(tx.gasprice, block.basefee + MAX_REFUND_PRIORITY_FEE);
+            uint256 gasUsed = startGas - gasleft() + REFUND_BASE_GAS;
+            uint256 refundAmount = min(gasPrice * gasUsed, balance);
+            (bool refundSent, ) = msg.sender.call{ value: refundAmount }('');
+            emit RefundableVote(msg.sender, refundAmount, refundSent);
+        }
+    }
+
     function min(uint256 a, uint256 b) internal pure returns (uint256) {
         return a < b ? a : b;
     }
@@ -942,4 +1026,6 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         }
         return uint16(n);
     }
+
+    receive() external payable {}
 }

@@ -1,7 +1,7 @@
 import { task, types } from 'hardhat/config';
 import { printContractsTable } from './utils';
 
-task('deploy-and-configure-short-times-descriptorv1', 'Deploy and configure all contracts')
+task('deploy-and-configure-short-times', 'Deploy and configure all contracts')
   .addFlag('startAuction', 'Start the first auction upon deployment completion')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
   .addFlag('updateConfigs', 'Write the deployed addresses to the SDK and subgraph configs')
@@ -46,30 +46,37 @@ task('deploy-and-configure-short-times-descriptorv1', 'Deploy and configure all 
     types.int,
   )
   .addOptionalParam(
-    'quorumVotesBps',
-    'Votes required for quorum (basis points)',
-    1_000 /* 10% */,
+    'minQuorumVotesBPS',
+    'Min basis points input for dynamic quorum',
+    1_000,
     types.int,
-  )
+  ) // Default: 10%
+  .addOptionalParam(
+    'maxQuorumVotesBPS',
+    'Max basis points input for dynamic quorum',
+    4_000,
+    types.int,
+  ) // Default: 40%
+  .addOptionalParam('quorumCoefficient', 'Dynamic quorum coefficient (float)', 1, types.float)
   .setAction(async (args, { run }) => {
     // Deploy the Nouns DAO contracts and return deployment information
-    const contracts = await run('deploy-short-times-descriptorv1', args);
+    const contracts = await run('deploy-short-times', args);
 
     // Verify the contracts on Etherscan
-    await run('verify-etherscan', {
+    await run('verify-etherscan-daov2', {
       contracts,
     });
 
     // Populate the on-chain art
-    await run('populate-descriptor-v1', {
-      nftDescriptor: contracts.NFTDescriptor.address,
-      nounsDescriptor: contracts.NounsDescriptor.address,
+    await run('populate-descriptor', {
+      nftDescriptor: contracts.NFTDescriptorV2.address,
+      nounsDescriptor: contracts.NounsDescriptorV2.address,
     });
 
     // Transfer ownership of all contract except for the auction house.
     // We must maintain ownership of the auction house to kick off the first auction.
     const executorAddress = contracts.NounsDAOExecutor.address;
-    await contracts.NounsDescriptor.instance.transferOwnership(executorAddress);
+    await contracts.NounsDescriptorV2.instance.transferOwnership(executorAddress);
     await contracts.NounsToken.instance.transferOwnership(executorAddress);
     await contracts.NounsAuctionHouseProxyAdmin.instance.transferOwnership(executorAddress);
     console.log(
@@ -93,7 +100,7 @@ task('deploy-and-configure-short-times-descriptorv1', 'Deploy and configure all 
 
     // Optionally write the deployed addresses to the SDK and subgraph configs.
     if (args.updateConfigs) {
-      await run('update-configs', {
+      await run('update-configs-daov2', {
         contracts,
       });
     }

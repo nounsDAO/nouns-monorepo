@@ -115,6 +115,12 @@ contract NounsDAOEventsV2 is NounsDAOEvents {
 
     /// @notice Emitted when quorumCoefficient is set
     event QuorumCoefficientSet(uint32 oldQuorumCoefficient, uint32 newQuorumCoefficient);
+
+    /// @notice Emitted when a voter cast a vote requesting a gas refund.
+    event RefundableVote(address indexed voter, uint256 refundAmount, bool refundSent);
+
+    /// @notice Emitted when admin withdraws the DAO's balance.
+    event Withdraw(uint256 amount, bool sent);
 }
 
 contract NounsDAOProxyStorage {
