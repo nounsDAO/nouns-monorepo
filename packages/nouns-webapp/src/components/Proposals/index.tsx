@@ -91,27 +91,26 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
 
   // Key press handlers to meta key
   // These allow us to support the mac meta+click to open in a new behavior
-  const metaKeyDownHandler = (event: {key: string}) => {
-    if (event.key === "Meta") {
+  const metaKeyDownHandler = (event: { key: string }) => {
+    if (event.key === 'Meta') {
       setIsMetaKeyPressed(true);
     }
   };
 
-  const metaKeyUpHandler = (event: {key: string}) => {
-    if (event.key === "Meta") {
+  const metaKeyUpHandler = (event: { key: string }) => {
+    if (event.key === 'Meta') {
       setIsMetaKeyPressed(false);
     }
   };
 
   useEffect(() => {
-    window.addEventListener("keydown", metaKeyDownHandler);
-    window.addEventListener("keyup", metaKeyUpHandler);
+    window.addEventListener('keydown', metaKeyDownHandler);
+    window.addEventListener('keyup', metaKeyUpHandler);
     return () => {
-      window.removeEventListener("keydown", metaKeyDownHandler);
-      window.removeEventListener("keyup", metaKeyUpHandler);
+      window.removeEventListener('keydown', metaKeyDownHandler);
+      window.removeEventListener('keyup', metaKeyUpHandler);
     };
-  }, []); 
-
+  }, []);
 
   return (
     <div className={classes.proposals}>
@@ -200,12 +199,12 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
               <div
                 className={clsx(classes.proposalLink, classes.proposalLinkWithCountdown)}
                 onClick={() => {
-                  if (isMetaKeyPressed){
+                  if (isMetaKeyPressed) {
                     window.open(`${window.location.origin}/vote/${p.id}`, '_blank');
                   } else {
-                    history.push(`/vote/${p.id}`)};
+                    history.push(`/vote/${p.id}`);
                   }
-                }
+                }}
                 key={i}
               >
                 <div className={classes.proposalInfoWrapper}>
