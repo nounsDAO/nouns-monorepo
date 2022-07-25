@@ -16,15 +16,23 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
 import VoteModal from '../../components/VoteModal';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import clsx from 'clsx';
 import ProposalHeader from '../../components/ProposalHeader';
 import ProposalContent from '../../components/ProposalContent';
 import VoteCard, { VoteCardVariant } from '../../components/VoteCard';
 import { useQuery } from '@apollo/client';
-import { nounVotesForProposalQuery } from '../../wrappers/subgraph';
+import {
+  proposalVotesQuery,
+  delegateNounsAtBlockQuery,
+  ProposalVotes,
+  Delegates,
+} from '../../wrappers/subgraph';
 import { getNounVotes } from '../../utils/getNounsVotes';
+import { Trans } from '@lingui/macro';
+import { i18n } from '@lingui/core';
+import { ReactNode } from 'react-markdown/lib/react-markdown';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -40,6 +48,8 @@ const VotePage = ({
   const proposal = useProposal(id);
 
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
+  // Toggle between Noun centric view and delegate view
+  const [isDelegateView, setIsDelegateView] = useState(false);
 
   const [isQueuePending, setQueuePending] = useState<boolean>(false);
   const [isExecutePending, setExecutePending] = useState<boolean>(false);
@@ -94,36 +104,43 @@ const VotePage = ({
 
   const startOrEndTimeCopy = () => {
     if (startDate?.isBefore(now) && endDate?.isAfter(now)) {
-      return 'Ends';
-    } else if (endDate?.isBefore(now)) {
-      return 'Ended';
-    } else {
-      return 'Starts';
+      return <Trans>Ends</Trans>;
     }
+    if (endDate?.isBefore(now)) {
+      return <Trans>Ended</Trans>;
+    }
+    return <Trans>Starts</Trans>;
   };
 
   const startOrEndTimeTime = () => {
     if (!startDate?.isBefore(now)) {
       return startDate;
-    } else {
-      return endDate;
     }
+    return endDate;
   };
 
-  const moveStateButtonAction = hasSucceeded ? 'Queue' : 'Execute';
+  const moveStateButtonAction = hasSucceeded ? <Trans>Queue</Trans> : <Trans>Execute</Trans>;
   const moveStateAction = (() => {
     if (hasSucceeded) {
-      return () => queueProposal(proposal?.id);
+      return () => {
+        if (proposal?.id) {
+          return queueProposal(proposal.id);
+        }
+      };
     }
-    return () => executeProposal(proposal?.id);
+    return () => {
+      if (proposal?.id) {
+        return executeProposal(proposal.id);
+      }
+    };
   })();
 
   const onTransactionStateChange = useCallback(
     (
       tx: TransactionStatus,
-      successMessage?: string,
+      successMessage?: ReactNode,
       setPending?: (isPending: boolean) => void,
-      getErrorMessage?: (error?: string) => string | undefined,
+      getErrorMessage?: (error?: string) => ReactNode | undefined,
       onFinalState?: () => void,
     ) => {
       switch (tx.status) {
@@ -135,8 +152,8 @@ const VotePage = ({
           break;
         case 'Success':
           setModal({
-            title: 'Success',
-            message: successMessage || 'Transaction Successful!',
+            title: <Trans>Success</Trans>,
+            message: successMessage || <Trans>Transaction Successful!</Trans>,
             show: true,
           });
           setPending?.(false);
@@ -144,8 +161,8 @@ const VotePage = ({
           break;
         case 'Fail':
           setModal({
-            title: 'Transaction Failed',
-            message: tx?.errorMessage || 'Please try again.',
+            title: <Trans>Transaction Failed</Trans>,
+            message: tx?.errorMessage || <Trans>Please try again.</Trans>,
             show: true,
           });
           setPending?.(false);
@@ -153,8 +170,8 @@ const VotePage = ({
           break;
         case 'Exception':
           setModal({
-            title: 'Error',
-            message: getErrorMessage?.(tx?.errorMessage) || 'Please try again.',
+            title: <Trans>Error</Trans>,
+            message: getErrorMessage?.(tx?.errorMessage) || <Trans>Please try again.</Trans>,
             show: true,
           });
           setPending?.(false);
@@ -166,19 +183,53 @@ const VotePage = ({
   );
 
   useEffect(
-    () => onTransactionStateChange(queueProposalState, 'Proposal Queued!', setQueuePending),
+    () =>
+      onTransactionStateChange(
+        queueProposalState,
+        <Trans>Proposal Queued!</Trans>,
+        setQueuePending,
+      ),
     [queueProposalState, onTransactionStateChange, setModal],
   );
 
   useEffect(
-    () => onTransactionStateChange(executeProposalState, 'Proposal Executed!', setExecutePending),
+    () =>
+      onTransactionStateChange(
+        executeProposalState,
+        <Trans>Proposal Executed!</Trans>,
+        setExecutePending,
+      ),
     [executeProposalState, onTransactionStateChange, setModal],
   );
 
   const activeAccount = useAppSelector(state => state.account.activeAccount);
-  const { loading, error, data } = useQuery(
-    nounVotesForProposalQuery(proposal && proposal.id ? proposal?.id : '0'),
+  const {
+    loading,
+    error,
+    data: voters,
+  } = useQuery<ProposalVotes>(proposalVotesQuery(proposal?.id ?? '0'), {
+    skip: !proposal,
+  });
+
+  const voterIds = voters?.votes?.map(v => v.voter.id);
+  const { data: delegateSnapshot } = useQuery<Delegates>(
+    delegateNounsAtBlockQuery(voterIds ?? [], proposal?.createdBlock ?? 0),
+    {
+      skip: !voters?.votes?.length,
+    },
   );
+
+  const { delegates } = delegateSnapshot || {};
+  const delegateToNounIds = delegates?.reduce<Record<string, string[]>>((acc, curr) => {
+    acc[curr.id] = curr?.nounsRepresented?.map(nr => nr.id) ?? [];
+    return acc;
+  }, {});
+
+  const data = voters?.votes?.map(v => ({
+    delegate: v.voter.id,
+    supportDetailed: v.supportDetailed,
+    nounsRepresented: delegateToNounIds?.[v.voter.id] ?? [],
+  }));
 
   const [showToast, setShowToast] = useState(true);
   useEffect(() => {
@@ -189,7 +240,7 @@ const VotePage = ({
     }
   }, [showToast]);
 
-  if (!proposal || loading || !data || data.proposals.length === 0) {
+  if (!proposal || loading || !data) {
     return (
       <div className={classes.spinner}>
         <Spinner animation="border" />
@@ -198,7 +249,7 @@ const VotePage = ({
   }
 
   if (error) {
-    return <>Failed to fetch</>;
+    return <Trans>Failed to fetch</Trans>;
   }
 
   const isWalletConnected = !(activeAccount === undefined);
@@ -239,30 +290,47 @@ const VotePage = ({
                 {isQueuePending || isExecutePending ? (
                   <Spinner animation="border" />
                 ) : (
-                  `${moveStateButtonAction} Proposal ⌐◧-◧`
+                  <Trans>{moveStateButtonAction} Proposal ⌐◧-◧</Trans>
                 )}
               </Button>
             </Col>
           </Row>
         )}
+
+        <p
+          onClick={() => setIsDelegateView(!isDelegateView)}
+          className={classes.toggleDelegateVoteView}
+        >
+          {isDelegateView ? (
+            <Trans>Switch to Noun view</Trans>
+          ) : (
+            <Trans>Switch to delegate view</Trans>
+          )}
+        </p>
         <Row>
           <VoteCard
             proposal={proposal}
             percentage={forPercentage}
             nounIds={forNouns}
             variant={VoteCardVariant.FOR}
+            delegateView={isDelegateView}
+            delegateGroupedVoteData={data}
           />
           <VoteCard
             proposal={proposal}
             percentage={againstPercentage}
             nounIds={againstNouns}
             variant={VoteCardVariant.AGAINST}
+            delegateView={isDelegateView}
+            delegateGroupedVoteData={data}
           />
           <VoteCard
             proposal={proposal}
             percentage={abstainPercentage}
             nounIds={abstainNouns}
             variant={VoteCardVariant.ABSTAIN}
+            delegateView={isDelegateView}
+            delegateGroupedVoteData={data}
           />
         </Row>
 
@@ -271,45 +339,65 @@ const VotePage = ({
           <Col xl={4} lg={12}>
             <Card className={classes.voteInfoCard}>
               <Card.Body className="p-2">
-                <Row className={classes.voteMetadataRow}>
-                  <Col className={classes.voteMetadataRowTitle}>
-                    <h1>Threshold</h1>
-                  </Col>
-                  <Col className={classes.thresholdInfo}>
-                    <span>Quorum</span>
-                    <h3>{proposal.quorumVotes} votes</h3>
-                  </Col>
-                </Row>
+                <div className={classes.voteMetadataRow}>
+                  <div className={classes.voteMetadataRowTitle}>
+                    <h1>
+                      <Trans>Threshold</Trans>
+                    </h1>
+                  </div>
+                  <div className={classes.thresholdInfo}>
+                    <span>
+                      <Trans>Quorum</Trans>
+                    </span>
+                    <h3>
+                      <Trans>{i18n.number(proposal.quorumVotes)} votes</Trans>
+                    </h3>
+                  </div>
+                </div>
               </Card.Body>
             </Card>
           </Col>
           <Col xl={4} lg={12}>
             <Card className={classes.voteInfoCard}>
               <Card.Body className="p-2">
-                <Row className={classes.voteMetadataRow}>
-                  <Col className={classes.voteMetadataRowTitle}>
+                <div className={classes.voteMetadataRow}>
+                  <div className={classes.voteMetadataRowTitle}>
                     <h1>{startOrEndTimeCopy()}</h1>
-                  </Col>
-                  <Col className={classes.voteMetadataTime}>
-                    <span>{startOrEndTimeTime() && startOrEndTimeTime()?.format('h:mm A z')}</span>
-                    <h3>{startOrEndTimeTime() && startOrEndTimeTime()?.format('MMM D, YYYY')}</h3>
-                  </Col>
-                </Row>
+                  </div>
+                  <div className={classes.voteMetadataTime}>
+                    <span>
+                      {startOrEndTimeTime() &&
+                        i18n.date(new Date(startOrEndTimeTime()?.toISOString() || 0), {
+                          hour: 'numeric',
+                          minute: '2-digit',
+                          timeZoneName: 'short',
+                        })}
+                    </span>
+                    <h3>
+                      {startOrEndTimeTime() &&
+                        i18n.date(new Date(startOrEndTimeTime()?.toISOString() || 0), {
+                          dateStyle: 'long',
+                        })}
+                    </h3>
+                  </div>
+                </div>
               </Card.Body>
             </Card>
           </Col>
           <Col xl={4} lg={12}>
             <Card className={classes.voteInfoCard}>
               <Card.Body className="p-2">
-                <Row className={classes.voteMetadataRow}>
-                  <Col className={classes.voteMetadataRowTitle}>
+                <div className={classes.voteMetadataRow}>
+                  <div className={classes.voteMetadataRowTitle}>
                     <h1>Snapshot</h1>
-                  </Col>
-                  <Col className={classes.snapshotBlock}>
-                    <span>Taken at block</span>
+                  </div>
+                  <div className={classes.snapshotBlock}>
+                    <span>
+                      <Trans>Taken at block</Trans>
+                    </span>
                     <h3>{proposal.createdBlock}</h3>
-                  </Col>
-                </Row>
+                  </div>
+                </div>
               </Card.Body>
             </Card>
           </Col>

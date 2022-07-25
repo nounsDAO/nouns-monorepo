@@ -19,6 +19,26 @@ interface AppConfig {
 
 type SupportedChains = ChainId.Rinkeby | ChainId.Mainnet | ChainId.Hardhat;
 
+interface CacheBucket {
+  name: string;
+  version: string;
+}
+
+export const cache: Record<string, CacheBucket> = {
+  seed: {
+    name: 'seed',
+    version: 'v1',
+  },
+  ens: {
+    name: 'ens',
+    version: 'v1',
+  },
+};
+
+export const cacheKey = (bucket: CacheBucket, ...parts: (string | number)[]) => {
+  return [bucket.name, bucket.version, ...parts].join('-').toLowerCase();
+};
+
 export const CHAIN_ID: SupportedChains = parseInt(process.env.REACT_APP_CHAIN_ID ?? '4');
 
 export const ETHERSCAN_API_KEY = process.env.REACT_APP_ETHERSCAN_API_KEY ?? '';
@@ -42,7 +62,7 @@ const app: Record<SupportedChains, AppConfig> = {
   [ChainId.Rinkeby]: {
     jsonRpcUri: createNetworkHttpUrl('rinkeby'),
     wsRpcUri: createNetworkWsUrl('rinkeby'),
-    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph-rinkeby-v4',
+    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph-rinkeby-v5',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   [ChainId.Mainnet]: {

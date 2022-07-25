@@ -1,6 +1,6 @@
 import { getAuctionReplyTweetId, updateAuctionReplyTweetId } from '../cache';
-import { twitter } from '../clients';
 import { IAuctionLifecycleHandler, Bid } from '../types';
+import { twitter } from '../clients';
 import {
   getAuctionEndingSoonTweetText,
   formatAuctionStartedTweetText,

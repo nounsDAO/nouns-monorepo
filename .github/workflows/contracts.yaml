@@ -6,10 +6,13 @@ on:
       - master
   pull_request:
     paths:
-      - "packages/nouns-contracts/**"
-      - "packages/nouns-subgraph/**"
+      - 'packages/nouns-contracts/**'
+      - 'packages/nouns-subgraph/**'
     branches:
-      - "**"
+      - '**'
+
+env:
+  NODE_OPTIONS: --max_old_space_size=5120
 
 jobs:
   build_and_test:
@@ -17,13 +20,15 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: recursive
       - name: Use Node.js 14.x
         uses: actions/setup-node@v1
         with:
           node-version: 14.x
       - name: Install Yarn
         run: npm install -g yarn
-      - run: yarn 
+      - run: yarn
       - run: yarn build
       - name: Run contract tests
         run: |
@@ -36,3 +41,16 @@ jobs:
       - name: Uninstall Yarn
         if: always()
         run: npm uninstall -g yarn
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+      - name: Run Forge build
+        run: |
+          cd packages/nouns-contracts
+          forge --version
+          forge build --sizes
+      - name: Run Forge tests
+        run: |
+          cd packages/nouns-contracts
+          forge test -vvv --ffi

@@ -7,23 +7,25 @@ import remarkBreaks from 'remark-breaks';
 import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../utils/etherscan';
 import { utils } from 'ethers';
 import classes from './ProposalContent.module.css';
+import { Trans } from '@lingui/macro';
+import EnsOrLongAddress from '../EnsOrLongAddress';
 
 interface ProposalContentProps {
   proposal?: Proposal;
 }
 
-const linkIfAddress = (content: string) => {
+export const linkIfAddress = (content: string) => {
   if (utils.isAddress(content)) {
     return (
       <a href={buildEtherscanAddressLink(content)} target="_blank" rel="noreferrer">
-        {content}
+        <EnsOrLongAddress address={content} />
       </a>
     );
   }
   return <span>{content}</span>;
 };
 
-const transactionLink = (content: string) => {
+export const transactionLink = (content: string) => {
   return (
     <a href={buildEtherscanTxLink(content)} target="_blank" rel="noreferrer">
       {content.substring(0, 7)}
@@ -38,7 +40,9 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
     <>
       <Row>
         <Col className={classes.section}>
-          <h5>Description</h5>
+          <h5>
+            <Trans>Description</Trans>
+          </h5>
           {proposal?.description && (
             <ReactMarkdown
               className={classes.markdown}
@@ -50,7 +54,9 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
       </Row>
       <Row>
         <Col className={classes.section}>
-          <h5>Proposed Transactions</h5>
+          <h5>
+            <Trans>Proposed Transactions</Trans>
+          </h5>
           <ol>
             {proposal?.details?.map((d, i) => {
               return (
@@ -75,16 +81,6 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
               );
             })}
           </ol>
-        </Col>
-      </Row>
-      <Row>
-        <Col className={classes.section}>
-          <h5>Proposer</h5>
-          {proposal?.proposer && proposal?.transactionHash && (
-            <>
-              {linkIfAddress(proposal.proposer)} at {transactionLink(proposal.transactionHash)}
-            </>
-          )}
         </Col>
       </Row>
     </>

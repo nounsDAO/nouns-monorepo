@@ -10,6 +10,7 @@ import { TrezorConnector } from '@web3-react/trezor-connector';
 import { FortmaticConnector } from '@web3-react/fortmatic-connector';
 import config, { CHAIN_ID } from '../../config';
 import classes from './WalletConnectModal.module.css';
+import { Trans } from '@lingui/macro';
 
 const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
   const { onDismiss } = props;
@@ -96,14 +97,14 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
       />
       <div
         className={clsx(classes.clickable, classes.walletConnectData)}
-        onClick={() => {
-          console.log(localStorage.removeItem('walletconnect'));
-        }}
+        onClick={() => localStorage.removeItem('walletconnect')}
       >
-        Clear WalletConnect Data
+        <Trans>Clear WalletConnect Data</Trans>
       </div>
     </div>
   );
-  return <Modal title="Connect your wallet" content={wallets} onDismiss={onDismiss} />;
+  return (
+    <Modal title={<Trans>Connect your wallet</Trans>} content={wallets} onDismiss={onDismiss} />
+  );
 };
 export default WalletConnectModal;

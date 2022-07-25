@@ -19,6 +19,68 @@ export interface IBid {
   };
 }
 
+interface ProposalVote {
+  supportDetailed: 0 | 1 | 2;
+  voter: {
+    id: string;
+  };
+}
+
+export interface ProposalVotes {
+  votes: ProposalVote[];
+}
+
+export interface Delegate {
+  id: string;
+  nounsRepresented: {
+    id: string;
+  }[];
+}
+
+export interface Delegates {
+  delegates: Delegate[];
+}
+
+export const seedsQuery = (first = 1_000) => gql`
+{
+  seeds(first: ${first}) {
+    id
+    background
+    body
+    accessory
+    head
+    glasses
+  }
+}
+`;
+
+export const proposalsQuery = (first = 1_000) => gql`
+{
+  proposals(first: ${first}, orderBy: createdBlock, orderDirection: asc) {
+    id
+    description
+    status
+    proposalThreshold
+    quorumVotes
+    forVotes
+    againstVotes
+    abstainVotes
+    createdTransactionHash
+    createdBlock
+    startBlock
+    endBlock
+    executionETA
+    targets
+    values
+    signatures
+    calldatas
+    proposer {
+      id
+    }
+  }
+}
+`;
+
 export const auctionQuery = (auctionId: number) => gql`
 {
 	auction(id: ${auctionId}) {
@@ -51,8 +113,8 @@ export const auctionQuery = (auctionId: number) => gql`
 		amount
 	  }
 	}
-  }
-  `;
+}
+`;
 
 export const bidsByAuctionQuery = (auctionId: string) => gql`
  {
@@ -181,16 +243,37 @@ export const createTimestampAllProposals = () => gql`
   }
 `;
 
-export const nounVotesForProposalQuery = (proposalId: string) => gql`
-{
-	proposals(where: {id: ${proposalId}}) {
-    votes {
+export const proposalVotesQuery = (proposalId: string) => gql`
+  {
+    votes(where: { proposal: "${proposalId}", votesRaw_gt: 0 }) {
       supportDetailed
-      nouns {
+      voter {
         id
       }
+
+    }	
+  }
+`;
+
+export const delegateNounsAtBlockQuery = (delegates: string[], block: number) => gql`
+{
+  delegates(where: { id_in: ${JSON.stringify(delegates)} }, block: { number: ${block} }) {
+    id
+    nounsRepresented {
+      id
     }
-  }	
+  }
+}
+`;
+
+export const currentlyDelegatedNouns = (delegate: string) => gql`
+{
+  delegates(where: { id: "${delegate}"} ) {
+    id
+    nounsRepresented {
+      id
+    }
+  }
 }
 `;
 

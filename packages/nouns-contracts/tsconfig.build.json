@@ -4,5 +4,5 @@
     "rootDirs": ["src", "typechain", "abi/**/*.json"],
     "outDir": "dist"
   },
-  "include": ["src", "typechain", "abi/**/*.json"],
+  "include": ["src", "typechain", "abi/**/*.json"]
 }

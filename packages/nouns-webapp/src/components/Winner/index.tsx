@@ -2,9 +2,10 @@ import { Button, Row, Col } from 'react-bootstrap';
 import { useAppSelector } from '../../hooks';
 import classes from './Winner.module.css';
 import ShortAddress from '../ShortAddress';
-import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { isMobileScreen } from '../../utils/isMobile';
+import { Trans } from '@lingui/macro';
+import { useActiveLocale } from '../../hooks/useActivateLocale';
 
 interface WinnerProps {
   winner: string;
@@ -21,23 +22,32 @@ const Winner: React.FC<WinnerProps> = props => {
   const isWinnerYou =
     activeAccount !== undefined && activeAccount.toLocaleLowerCase() === winner.toLocaleLowerCase();
 
+  const activeLocale = useActiveLocale();
+
   const nonNounderNounContent = isWinnerYou ? (
     <Row className={classes.youSection}>
-      <Col lg={4} className={classes.youCopy}>
+      <Col lg={activeLocale === 'ja-JP' ? 8 : 4} className={classes.youCopy}>
         <h2
           className={classes.winnerContent}
           style={{
             color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
           }}
         >
-          You
+          <Trans>You</Trans>
         </h2>
       </Col>
       {!isMobile && (
         <Col>
-          <Link to="/verify" className={classes.verifyLink}>
-            <Button className={classes.verifyButton}>Get Verified</Button>
-          </Link>
+          <a
+            href="https://nouns.center/nouners"
+            target="_blank"
+            rel="noreferrer noopener"
+            className={classes.verifyLink}
+          >
+            <Button className={classes.verifyButton}>
+              <Trans>What now?</Trans>
+            </Button>
+          </a>
         </Col>
       )}
     </Row>
@@ -45,7 +55,7 @@ const Winner: React.FC<WinnerProps> = props => {
     <ShortAddress size={40} address={winner} avatar={true} />
   );
 
-  const nounderNounContent = <h2>nounders.eth</h2>;
+  const nounderNounContent = 'nounders.eth';
 
   return (
     <>
@@ -55,8 +65,9 @@ const Winner: React.FC<WinnerProps> = props => {
             style={{
               color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)',
             }}
+            className={classes.winnerCopy}
           >
-            Winner
+            <Trans>Winner</Trans>
           </h4>
         </Col>
         <Col xs="auto" lg={12}>
@@ -72,9 +83,16 @@ const Winner: React.FC<WinnerProps> = props => {
       </Row>
       {isWinnerYou && isMobile && (
         <Row>
-          <Link to="/verify" className={classes.verifyLink}>
-            <Button className={classes.verifyButton}>Get Verified</Button>
-          </Link>
+          <a
+            href="https://nouns.center/nouners"
+            target="_blank"
+            rel="noreferrer noopener"
+            className={classes.verifyLink}
+          >
+            <Button className={classes.verifyButton}>
+              <Trans>What now?</Trans>
+            </Button>
+          </a>
         </Row>
       )}
     </>

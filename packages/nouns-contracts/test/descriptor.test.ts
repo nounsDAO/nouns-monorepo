@@ -1,7 +1,7 @@
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { NounsDescriptor } from '../typechain';
-import ImageData from '../files/image-data.json';
+import ImageData from '../files/image-data-v1.json';
 import { LongestPart } from './types';
 import { deployNounsDescriptor, populateDescriptor } from './utils';
 import { ethers } from 'hardhat';

@@ -3,6 +3,8 @@ import { BigNumber as EthersBN } from 'ethers';
 import classes from './NounImageVoteTable.module.css';
 import { GrayCircle } from '../GrayCircle';
 import { pseudoRandomPredictableShuffle } from '../../utils/pseudoRandomPredictableShuffle';
+import HoverCard from '../HoverCard';
+import NounHoverCard from '../NounHoverCard';
 
 interface NounImageVoteTableProps {
   nounIds: string[];
@@ -18,7 +20,15 @@ const NounImageVoteTable: React.FC<NounImageVoteTableProps> = props => {
   const shuffledNounIds = pseudoRandomPredictableShuffle(nounIds, propId);
   const paddedNounIds = shuffledNounIds
     .map((nounId: string) => {
-      return <StandaloneNounCircular nounId={EthersBN.from(nounId)} />;
+      return (
+        <HoverCard
+          hoverCardContent={(tip: string) => <NounHoverCard nounId={tip} />}
+          tip={nounId.toString()}
+          id="nounHoverCard"
+        >
+          <StandaloneNounCircular nounId={EthersBN.from(nounId)} />
+        </HoverCard>
+      );
     })
     .concat(Array(NOUNS_PER_VOTE_CARD_DESKTOP).fill(<GrayCircle />))
     .slice(0, NOUNS_PER_VOTE_CARD_DESKTOP);
@@ -30,17 +40,21 @@ const NounImageVoteTable: React.FC<NounImageVoteTableProps> = props => {
     return Array(rows)
       .fill(0)
       .map((_, i) => (
-        <tr>
+        <tr key={i}>
           {Array(rowLength)
             .fill(0)
             .map((_, j) => (
-              <td>{paddedNounIds[i * rowLength + j]}</td>
+              <td key={j}>{paddedNounIds[i * rowLength + j]}</td>
             ))}
         </tr>
       ));
   };
 
-  return <table className={classes.wrapper}>{content()}</table>;
+  return (
+    <table className={classes.wrapper}>
+      <tbody>{content()}</tbody>
+    </table>
+  );
 };
 
 export default NounImageVoteTable;

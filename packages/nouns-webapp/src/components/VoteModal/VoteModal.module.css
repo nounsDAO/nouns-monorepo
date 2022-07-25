@@ -102,3 +102,16 @@
   font-weight: bold;
   color: var(--brand-color-red);
 }
+
+.voteReasonTextarea {
+  padding-top: 2rem !important;
+  height: 6.5rem !important;
+  border-radius: 10px;
+  border: none;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.voteReasonTextarea:focus {
+  box-shadow: none;
+}

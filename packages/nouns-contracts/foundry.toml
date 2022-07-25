@@ -1,0 +1,6 @@
+[default]
+src = 'contracts'
+libs = ['lib', '../../node_modules']
+cache_path = 'foundry-cache'
+out = 'foundry-out'
+solc_version = '0.8.15'

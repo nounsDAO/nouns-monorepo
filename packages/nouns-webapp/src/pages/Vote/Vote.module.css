@@ -84,6 +84,11 @@
   border-radius: 12px;
 }
 
+.voteMetadataRow {
+  display: flex;
+  justify-content: space-between;
+}
+
 .voteMetadataRow h1 {
   font-size: 20px;
   color: var(--brand-gray-light-text);
@@ -104,10 +109,11 @@
 
 .voteMetadataRowTitle {
   margin-top: 0.5rem;
+  width: max-content;
 }
 
 .voteMetadataTime {
-  min-width: 11rem;
+  min-width: fit-content;
   text-align: right;
 }
 
@@ -117,4 +123,25 @@
 
 .thresholdInfo {
   text-align: right;
+}
+
+.toggleDelegateVoteView {
+  margin-top: 0.1rem;
+  margin-bottom: 0.1rem;
+  opacity: 0.5;
+  font-size: 14px;
+  cursor: pointer;
+  transition: ease-in-out 125ms;
+  width: fit-content;
+  margin-left: 0.1rem;
+}
+
+.toggleDelegateVoteView:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1200px) {
+  .toggleDelegateVoteView {
+    display: none;
+  }
 }

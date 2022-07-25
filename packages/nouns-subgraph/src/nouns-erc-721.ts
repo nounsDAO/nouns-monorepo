@@ -95,13 +95,13 @@ export function handleTransfer(event: Transfer): void {
     fromHolder.tokenBalanceRaw = fromHolder.tokenBalanceRaw - BIGINT_ONE;
     fromHolder.tokenBalance = fromHolder.tokenBalanceRaw;
     let fromHolderNouns = fromHolder.nouns; // Re-assignment required to update array
-    fromHolder.nouns = fromHolderNouns.filter(n => n !== transferredNounId);
+    fromHolder.nouns = fromHolderNouns.filter(n => n != transferredNounId);
 
     if (fromHolder.delegate != null) {
       let fromHolderDelegate = getOrCreateDelegate(fromHolder.delegate);
       let fromHolderNounsRepresented = fromHolderDelegate.nounsRepresented; // Re-assignment required to update array
       fromHolderDelegate.nounsRepresented = fromHolderNounsRepresented.filter(
-        n => n !== transferredNounId,
+        n => n != transferredNounId,
       );
       fromHolderDelegate.save();
     }

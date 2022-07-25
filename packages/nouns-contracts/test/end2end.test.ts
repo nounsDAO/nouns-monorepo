@@ -4,23 +4,23 @@ import { BigNumber as EthersBN } from 'ethers';
 import { solidity } from 'ethereum-waffle';
 
 import {
-  Weth,
+  WETH,
   NounsToken,
   NounsAuctionHouse,
   NounsAuctionHouse__factory as NounsAuctionHouseFactory,
-  NounsDescriptor,
-  NounsDescriptor__factory as NounsDescriptorFactory,
-  NounsDaoProxy__factory as NounsDaoProxyFactory,
-  NounsDaoLogicV1,
-  NounsDaoLogicV1__factory as NounsDaoLogicV1Factory,
-  NounsDaoExecutor,
-  NounsDaoExecutor__factory as NounsDaoExecutorFactory,
+  NounsDescriptorV2,
+  NounsDescriptorV2__factory as NounsDescriptorV2Factory,
+  NounsDAOProxy__factory as NounsDaoProxyFactory,
+  NounsDAOLogicV1,
+  NounsDAOLogicV1__factory as NounsDaoLogicV1Factory,
+  NounsDAOExecutor,
+  NounsDAOExecutor__factory as NounsDaoExecutorFactory,
 } from '../typechain';
 
 import {
   deployNounsToken,
   deployWeth,
-  populateDescriptor,
+  populateDescriptorV2,
   address,
   encodeParameters,
   advanceBlocks,
@@ -35,10 +35,10 @@ const { expect } = chai;
 
 let nounsToken: NounsToken;
 let nounsAuctionHouse: NounsAuctionHouse;
-let descriptor: NounsDescriptor;
-let weth: Weth;
-let gov: NounsDaoLogicV1;
-let timelock: NounsDaoExecutor;
+let descriptor: NounsDescriptorV2;
+let weth: WETH;
+let gov: NounsDAOLogicV1;
+let timelock: NounsDAOExecutor;
 
 let deployer: SignerWithAddress;
 let wethDeployer: SignerWithAddress;
@@ -109,9 +109,9 @@ async function deploy() {
   await nounsToken.setMinter(nounsAuctionHouse.address);
 
   // 4. POPULATE body parts
-  descriptor = NounsDescriptorFactory.connect(await nounsToken.descriptor(), deployer);
+  descriptor = NounsDescriptorV2Factory.connect(await nounsToken.descriptor(), deployer);
 
-  await populateDescriptor(descriptor);
+  await populateDescriptorV2(descriptor);
 
   // 5a. CALCULATE Gov Delegate, takes place after 2 transactions
   const calculatedGovDelegatorAddress = ethers.utils.getContractAddress({

@@ -1,0 +1,159 @@
+.wrapper {
+  height: 40px;
+  border-radius: 10px;
+  font-size: 16px;
+  line-height: 16px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  padding: 0px 0px 0px 14px;
+  transition: all 0.125s ease-in-out;
+  box-shadow: none;
+}
+
+.whiteInfo {
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: rgb(95, 95, 95);
+}
+
+.whiteInfo:hover {
+  background-color: #e2e3e8;
+  color: black;
+}
+
+.coolInfo {
+  color: #79809c;
+  background-color: #e9ebf3;
+}
+
+.coolInfo:hover {
+  background-color: white;
+  color: black;
+}
+
+.warmInfo {
+  color: #b6a9a7;
+  background-color: #fdf9f9;
+}
+
+.warmInfo:hover {
+  background-color: white;
+  color: black;
+}
+
+.whiteInfoSelected {
+  background-color: #f4f4f8;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #8c8d92;
+}
+
+.whiteInfoSelectedTop {
+  background-color: #f4f4f8;
+  border-top: 1.5px solid #e2e3e8;
+  border-right: 1.5px solid #e2e3e8;
+  border-left: 1.5px solid #e2e3e8;
+  color: #8c8d92;
+}
+
+.whiteInfoSelectedBottom {
+  background-color: #f4f4f8;
+  border-bottom: 1.5px solid #e2e3e8;
+  border-right: 1.5px solid #e2e3e8;
+  border-left: 1.5px solid #e2e3e8;
+  color: #8c8d92;
+}
+
+.dropdownActive {
+  background-color: white;
+  color: black;
+}
+.coolInfoSelected {
+  color: #79809c;
+  background-color: #e9ebf3;
+}
+
+.warmInfoSelected {
+  background-color: #fdf9f9;
+  color: rgba(142, 129, 127, 1);
+}
+
+.button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;
+  width: 100%;
+  padding-right: 14px;
+}
+
+.dropdownBtnContent {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  min-height: 18px;
+  line-height: 20px;
+  color: black !important;
+}
+
+.arrowDown {
+  margin-bottom: 0.25rem;
+  margin-left: 0.5rem;
+}
+
+.arrowUp {
+  margin-left: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.button:hover {
+  cursor: pointer;
+}
+
+.nounsNavLink,
+.nounsNavLink:active,
+.nounsNavLink:visited {
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 0.9rem;
+  padding: 0.3rem 0.3rem !important;
+  color: var(--brand-black) !important;
+  transition: all 0.125s ease-in-out;
+}
+
+.dropdownPrimaryText:hover {
+  background-color: white;
+  transition: all 0.125s ease-in-out;
+  cursor: pointer;
+}
+
+.desktopDropdown {
+  background-color: inherit !important;
+  border: 0px !important;
+}
+
+@media (max-width: 992px) {
+  .wrapper,
+  .button {
+    height: 48px;
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 330px) {
+  .button {
+    width: 70px;
+  }
+}
+
+@media (max-width: 370px) {
+  .button {
+    width: 90px;
+  }
+}
+
+@media (min-width: 400px) {
+  .button {
+    width: auto;
+  }
+}

@@ -1,6 +1,7 @@
 export interface EventFilter {
   address?: string;
   topics?: Array<string | Array<string> | null>;
+  fromBlock?: number;
 }
 
 export interface Log {
