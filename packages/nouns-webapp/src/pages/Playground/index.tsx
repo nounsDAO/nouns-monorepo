@@ -112,7 +112,7 @@ const Playground: React.FC = () => {
   const [indexOfNounToDisplay, setIndexOfNounToDisplay] = useState<number>();
   const [selectIndexes, setSelectIndexes] = useState<Record<string, number>>({});
   const [proposedTraits, setProposedTraits] = useState<Traits>();
-  const [includeProposedTraits, setIncludeProposedTraits] = useState(false); // TODO: Save user preference in localstorage
+  const [includeProposedTraits, setIncludeProposedTraits] = useState(true); // TODO: Save user preference in localstorage
   const [pendingTraits, setPendingTraits] = useState<PendingCustomTraits>();
   const [arePendingTraitsValid, setPendingTraitsValid] = useState<boolean>();
   const [encoder, setEncoder] = useState(new PNGCollectionEncoder(ImageData.palette));
