@@ -1,3 +1,12 @@
+.delegateHover {
+  border-radius: 8px !important;
+  background-color: var(--brand-gray-dark-text) !important;
+  color: white;
+  opacity: 0.75 !important;
+  font-weight: 500;
+  transition: ease-in-out 125ms;
+}
+
 .voteIcon {
   width: 38px;
   margin-right: 0px;
