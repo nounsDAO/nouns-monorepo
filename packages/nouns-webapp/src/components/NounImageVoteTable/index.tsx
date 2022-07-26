@@ -56,25 +56,30 @@ const NounImageVoteTable: React.FC<NounImageVoteTableProps> = props => {
 
   return (
     <>
-      <table className={classes.wrapper}>
+       <table className={classes.wrapper}>
         <tbody>{content(page)}</tbody>
-      </table>
+      </table> 
+     
+
       {/* Dots */}
       <div style={{
         fontSize: '24px',
         fontWeight: 'bold',
-        textAlign: 'center'
+        textAlign: 'center',
+        color: 'var(--brand-gray-light-text)'
       }}>
       {
         Array.from(Array(Math.floor(nounIds.length / NOUNS_PER_VOTE_CARD_DESKTOP) + 1).keys()).map((n: number) => {
           if (n === page) {
           return (<span 
-          style={{
-            color: 'red'
-          }}
           >• </span>);
           }
-          return (<span>• </span>);
+          return (<span 
+            style={{
+              opacity: '0.5',
+            }}
+            
+          >• </span>);
         })
       }
       </div>
@@ -96,7 +101,8 @@ const NounImageVoteTable: React.FC<NounImageVoteTableProps> = props => {
         style={{
           height: '28px',
           width: '28px',
-          color: 'var(--brand-gray-light-text)'
+          color: 'var(--brand-gray-light-text)',
+          opacity: page === 0 ? '0.5' : '1'
         }}
         />
         </button>
@@ -111,7 +117,8 @@ const NounImageVoteTable: React.FC<NounImageVoteTableProps> = props => {
           style={{
             height: '28px',
             width: '28px',
-            color: 'var(--brand-gray-light-text)'
+            color: 'var(--brand-gray-light-text)',
+            opacity: (page + 1)*NOUNS_PER_VOTE_CARD_DESKTOP > nounIds.length ? '0.5' : '1'
           }}
           />
         </button>
