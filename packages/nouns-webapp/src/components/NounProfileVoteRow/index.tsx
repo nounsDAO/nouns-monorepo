@@ -1,5 +1,5 @@
 import { Proposal } from '../../wrappers/nounsDao';
-import { Image, Spinner } from 'react-bootstrap';
+import { Image } from 'react-bootstrap';
 import _YesVoteIcon from '../../assets/icons/YesVote.svg';
 import _NoVoteIcon from '../../assets/icons/NoVote.svg';
 import _AbsentVoteIcon from '../../assets/icons/AbsentVote.svg';
@@ -18,8 +18,6 @@ import { Trans } from '@lingui/macro';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 import ShortAddress from '../ShortAddress';
-import HoverCard from '../HoverCard';
-import { useShortAddress } from '../../utils/addressAndENSDisplayUtils';
 import React from 'react';
 import ReactTooltip from 'react-tooltip';
 
