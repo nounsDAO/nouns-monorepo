@@ -178,7 +178,7 @@ export function handleTransfer(event: Transfer): void {
     : toHolder.id.toString();
   delegateChangedEvent.save();
 
-  let toHolderDelegate = getOrCreateDelegate(toHolder.id);
+  let toHolderDelegate = getOrCreateDelegate(toHolder.delegate ? toHolder.delegate: toHolder.id);
   let toHolderNounsRepresented = toHolderDelegate.nounsRepresented; // Re-assignment required to update array
   toHolderNounsRepresented.push(transferredNounId);
   toHolderDelegate.nounsRepresented = toHolderNounsRepresented;
