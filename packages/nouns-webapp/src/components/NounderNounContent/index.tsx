@@ -15,6 +15,7 @@ import Winner from '../Winner';
 import { Trans } from '@lingui/macro';
 
 import { useAppSelector } from '../../hooks';
+import { useCallback, useEffect } from 'react';
 
 const NounderNounContent: React.FC<{
   mintTimestamp: BigNumber;
@@ -34,6 +35,31 @@ const NounderNounContent: React.FC<{
   } = props;
 
   const isCool = useAppSelector(state => state.application.isCoolBackground);
+
+  // Page through Nouns via keyboard
+  // handle what happens on key press
+  const handleKeyPress = useCallback(
+    event => {
+      console.log(event);
+      if (event.key === 'ArrowLeft') {
+        onPrevAuctionClick();
+      }
+      if (event.key === 'ArrowRight') {
+        onNextAuctionClick();
+      }
+    },
+    [onNextAuctionClick, onPrevAuctionClick],
+  );
+
+  useEffect(() => {
+    // attach the event listener
+    document.addEventListener('keydown', handleKeyPress);
+
+    // remove the event listener
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [handleKeyPress]);
 
   return (
     <AuctionActivityWrapper>

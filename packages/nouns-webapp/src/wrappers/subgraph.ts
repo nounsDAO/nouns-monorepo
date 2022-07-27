@@ -224,11 +224,14 @@ export const nounVotingHistoryQuery = (nounId: number) => gql`
 	noun(id: ${nounId}) {
 		id
 		votes {
-		proposal {
-			id
-		}
-		support
-		supportDetailed
+      proposal {
+        id
+      }
+      support
+      supportDetailed
+      voter {
+        id
+      }
 		}
 	}
 }

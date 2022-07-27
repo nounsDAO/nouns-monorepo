@@ -1,5 +1,5 @@
 import { Auction } from '../../wrappers/nounsAuction';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import BigNumber from 'bignumber.js';
 import { Row, Col } from 'react-bootstrap';
 import classes from './AuctionActivity.module.css';
@@ -84,6 +84,31 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
       };
     }
   }, [auctionTimer, auction]);
+
+  // Page through Nouns via keyboard
+  // handle what happens on key press
+  const handleKeyPress = useCallback(
+    event => {
+      console.log(event);
+      if (event.key === 'ArrowLeft') {
+        onPrevAuctionClick();
+      }
+      if (event.key === 'ArrowRight') {
+        onNextAuctionClick();
+      }
+    },
+    [onNextAuctionClick, onPrevAuctionClick],
+  );
+
+  useEffect(() => {
+    // attach the event listener
+    document.addEventListener('keydown', handleKeyPress);
+
+    // remove the event listener
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [handleKeyPress]);
 
   if (!auction) return null;
 
