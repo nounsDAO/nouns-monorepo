@@ -50,10 +50,27 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
   // TODO change verbeage to events vs proposals
   const [truncateProposals, setTruncateProposals] = useState(true);
 
-  const { loading, error, data } = useNounProfileEvents(nounId);
+  const { loading, error, data } =  useNounProfileEvents(nounId);
 
   if (loading) {
-    return <Spinner animation="border" />;
+   return   (<Section fullWidth={false}>
+   <Col lg={{ span: 10, offset: 1 }}>
+     <div className={classes.headerWrapper}>
+       <h1>
+         <Trans>Activity</Trans>
+       </h1>
+       <div style={{
+         display: 'flex',
+         justifyContent: 'center',
+         marginTop: '3rem',
+         color: 'var(--brand-gray-light-text)'
+
+       }}>
+         <Spinner animation="border"/>
+       </div>
+       </div>
+       </Col>
+      </Section>);
   }
 
   if (error) {
