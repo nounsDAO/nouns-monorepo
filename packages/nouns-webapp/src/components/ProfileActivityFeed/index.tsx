@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Col, Collapse, Table } from 'react-bootstrap';
+import { Col, Collapse, Spinner, Table } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import classes from './ProfileActivityFeed.module.css';
 
@@ -14,6 +14,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { Trans } from '@lingui/macro';
+import {
+  NounProfileEvent,
+  NounProfileEventType,
+  useNounProfileEvents,
+} from '../../wrappers/nounProfileActivityFeed';
+import NounActivityFeedRow from '../NounActivityFeedRow';
+import { ExternalLinkIcon, ScaleIcon, SwitchHorizontalIcon } from '@heroicons/react/solid';
+import ShortAddress from '../ShortAddress';
+import { ethers } from 'ethers';
+import ReactTooltip from 'react-tooltip';
+import { buildEtherscanTxLink } from '../../utils/etherscan';
 
 interface ProfileActivityFeedProps {
   nounId: number;
@@ -27,7 +38,8 @@ export interface NounVoteHistory {
   proposal: ProposalInfo;
   support: boolean;
   supportDetailed: number;
-  voter: {id: string};
+  voter: { id: string };
+  blockNumber: number;
 }
 
 const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
@@ -35,54 +47,23 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
 
   const MAX_EVENTS_SHOW_ABOVE_FOLD = 5;
 
+  // TODO change verbeage to events vs proposals
   const [truncateProposals, setTruncateProposals] = useState(true);
 
-  const { loading, error, data } = useQuery(nounVotingHistoryQuery(nounId));
-  const {
-    loading: proposalTimestampLoading,
-    error: proposalTimestampError,
-    data: proposalCreatedTimestamps,
-  } = useQuery(createTimestampAllProposals());
+  const { loading, error, data } = useNounProfileEvents(nounId);
 
-  const nounCanVoteTimestamp = useNounCanVoteTimestamp(nounId);
+  if (loading) {
+    return <Spinner animation="border" />;
+  }
 
-  const { data: proposals } = useAllProposals();
-
-  if (loading || !proposals || !proposals.length || proposalTimestampLoading) {
-    return <></>;
-  } else if (error || proposalTimestampError) {
+  if (error) {
+    console.log(data);
     return (
       <div>
         <Trans>Failed to fetch Noun activity history</Trans>
       </div>
     );
   }
-
-  const nounVotes: { [key: string]: NounVoteHistory } = data.noun.votes
-    .slice(0)
-    .reduce((acc: any, h: NounVoteHistory, i: number) => {
-      acc[h.proposal.id] = h;
-      return acc;
-    }, {});
-
-  const filteredProposals = proposals.filter((p: Proposal, id: number) => {
-    const proposalCreationTimestamp = parseInt(
-      proposalCreatedTimestamps.proposals[id].createdTimestamp,
-    );
-
-    // Filter props from before the Noun was born
-    if (nounCanVoteTimestamp.gt(proposalCreationTimestamp)) {
-      return false;
-    }
-    // Filter props which were cancelled and got 0 votes of any kind
-    if (
-      p.status === ProposalState.CANCELLED &&
-      p.forCount + p.abstainCount + p.againstCount === 0
-    ) {
-      return false;
-    }
-    return true;
-  });
 
   return (
     <Section fullWidth={false}>
@@ -92,18 +73,198 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
             <Trans>Activity</Trans>
           </h1>
         </div>
-        {filteredProposals && filteredProposals.length ? (
+        {data && data.length ? (
           <>
             <Table responsive hover className={classes.aboveTheFoldEventsTable}>
               <tbody className={classes.nounInfoPadding}>
-                {filteredProposals?.length ? (
-                  filteredProposals
+                {data?.length ? (
+                  data
                     .slice(0)
-                    .reverse()
                     .slice(0, MAX_EVENTS_SHOW_ABOVE_FOLD)
-                    .map((p: Proposal, i: number) => {
-                      const vote = p.id ? nounVotes[p.id] : undefined;
-                      return <NounProfileVoteRow proposal={p} vote={vote} key={i} />;
+                    .map((event: NounProfileEvent, i: number) => {
+                      if (event.eventType === NounProfileEventType.VOTE) {
+                        return (
+                          <NounProfileVoteRow
+                            proposalId={event.data.proposal.id}
+                            vote={event.data}
+                          />
+                        );
+                      }
+
+                      if (event.eventType === NounProfileEventType.DELEGATION) {
+                        return (
+                          <NounActivityFeedRow
+                            // TODO
+                            // onClick={() => window.open('https://etherscan.io', '_blank')}
+                            onClick={() => window.open(buildEtherscanTxLink(event.data.id.subString(0, event.data.id.indexOf("_"))), '_blank')}
+                            icon={
+                              <div
+                                style={{
+                                  display: 'flex',
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                  backgroundColor: 'var(--brand-gray-light-text-translucent)',
+                                  color: 'var(--brand-gray-light-text)',
+                                  borderRadius: '100%',
+                                  // padding: '1rem',
+                                  height: '38px',
+                                  width: '38px',
+                                  marginLeft: '0.4rem',
+                                }}
+                              >
+                                <ScaleIcon
+                                  style={{
+                                    height: '22px',
+                                    width: '22px',
+                                  }}
+                                />
+                              </div>
+                            }
+                            primaryContent={
+                              <>
+                               Delegate changed from
+                                <span
+                                  style={{
+                                    fontWeight: 'bold',
+                                  }}
+                                > <ShortAddress address={event.data.previousDelegate.id} />
+                                </span>{' '}
+                                to{' '}
+                                <span
+                                  style={{
+                                    fontWeight: 'bold',
+                                  }}
+                                >
+                                  <ShortAddress address={event.data.newDelegate.id} />
+                                </span>
+                              </>
+                            }
+                            secondaryContent={
+                              <>
+                                <ReactTooltip
+                                  id={'view-on-etherscan-tooltip'}
+                                  effect={'solid'}
+                                  className={classes.delegateHover}
+                                  getContent={dataTip => {
+                                    return <div>{dataTip}</div>;
+                                  }}
+                                />
+                                <div
+                                  data-tip={`View on Etherscan`}
+                                  data-for="view-on-etherscan-tooltip"
+                                  style={{
+                                    borderRadius: '8px',
+                                    padding: '0.36rem 0.65rem 0.36rem 0.65rem',
+                                    backgroundColor: 'var(--brand-gray-light-text-translucent)',
+                                    color: 'var(--brand-gray-light-text)',
+                                    fontWeight: 'bold',
+                                    fontSize: '14px',
+                                    display: 'flex',
+                                    marginLeft: 'auto'
+                                  }}
+                                >
+                                  <ExternalLinkIcon
+                                    style={{
+                                      height: '16px',
+                                      width: '16px',
+                                      marginRight: '0.3rem',
+                                      marginTop: '0.18rem',
+                                    }}
+                                  />
+                                                              {event.data.id.substring(0, 15) + "..."}
+                                </div>
+                              </>
+                            }
+                          />
+                        );
+                      }
+
+                      if (event.eventType === NounProfileEventType.TRANSFER) {
+                        return (
+                          <NounActivityFeedRow
+                            // TODO
+                            onClick={() => window.open(buildEtherscanTxLink(event.data.id), '_blank')}
+                            icon={
+                              <div
+                                style={{
+                                  display: 'flex',
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                  backgroundColor: 'var(--brand-gray-light-text-translucent)',
+                                  color: 'var(--brand-gray-light-text)',
+                                  borderRadius: '100%',
+                                  // padding: '1rem',
+                                  height: '38px',
+                                  width: '38px',
+                                  marginLeft: '0.4rem',
+                                }}
+                              >
+                                <SwitchHorizontalIcon
+                                  style={{
+                                    height: '22px',
+                                    width: '22px',
+                                  }}
+                                />
+                              </div>
+                            }
+                            primaryContent={
+                              <>
+                                <span
+                                  style={{
+                                    fontWeight: 'bold',
+                                  }}
+                                >
+                                  <ShortAddress address={event.data.previousHolder.id} />
+                                </span>{' '}
+                                transfered Noun {nounId} to{' '}
+                                <span
+                                  style={{
+                                    fontWeight: 'bold',
+                                  }}
+                                >
+                                  <ShortAddress address={event.data.newHolder.id} />
+                                </span>
+                              </>
+                            }
+                            secondaryContent={
+                              <>
+                                <ReactTooltip
+                                  id={'view-on-etherscan-tooltip'}
+                                  effect={'solid'}
+                                  className={classes.delegateHover}
+                                  getContent={dataTip => {
+                                    return <div>{dataTip}</div>;
+                                  }}
+                                />
+                                <div
+                                  data-tip={`View on Etherscan`}
+                                  data-for="view-on-etherscan-tooltip"
+                                  style={{
+                                    borderRadius: '8px',
+                                    padding: '0.36rem 0.65rem 0.36rem 0.65rem',
+                                    backgroundColor: 'var(--brand-gray-light-text-translucent)',
+                                    color: 'var(--brand-gray-light-text)',
+                                    fontWeight: 'bold',
+                                    fontSize: '14px',
+                                    display: 'flex',
+                                    marginLeft: 'auto'
+                                  }}
+                                >
+                                  <ExternalLinkIcon
+                                    style={{
+                                      height: '16px',
+                                      width: '16px',
+                                      marginRight: '0.3rem',
+                                      marginTop: '0.18rem',
+                                    }}
+                                  />
+                                  {event.data.id.substring(0, 15) + '...'}
+                                </div>
+                              </>
+                            }
+                          />
+                        );
+                      }
                     })
                 ) : (
                   <LoadingNoun />
@@ -114,14 +275,122 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
               <div>
                 <Table responsive hover>
                   <tbody className={classes.nounInfoPadding}>
-                    {filteredProposals?.length ? (
-                      filteredProposals
+                    {data?.length ? (
+                      data
                         .slice(0)
-                        .reverse()
-                        .slice(MAX_EVENTS_SHOW_ABOVE_FOLD, filteredProposals.length)
-                        .map((p: Proposal, i: number) => {
-                          const vote = p.id ? nounVotes[p.id] : undefined;
-                          return <NounProfileVoteRow proposal={p} vote={vote} key={i} />;
+                        // .reverse()
+                        .slice(MAX_EVENTS_SHOW_ABOVE_FOLD, data.length)
+                        .map((event: NounProfileEvent, i: number) => {
+                          if (event.eventType === NounProfileEventType.VOTE) {
+                            return (
+                              <NounProfileVoteRow
+                                proposalId={event.data.proposal.id}
+                                vote={event.data}
+                              />
+                            );
+                          }
+
+                          if (event.eventType === NounProfileEventType.DELEGATION) {
+                            return (
+                              <NounActivityFeedRow
+                                // TODO
+                                onClick={() => window.open('https://etherscan.io', '_blank')}
+                                icon={
+                                  <div
+                                    style={{
+                                      display: 'flex',
+                                      justifyContent: 'center',
+                                      alignItems: 'center',
+                                      backgroundColor: 'var(--brand-gray-light-text-translucent)',
+                                      color: 'var(--brand-gray-light-text)',
+                                      borderRadius: '100%',
+                                      // padding: '1rem',
+                                      height: '38px',
+                                      width: '38px',
+                                      marginLeft: '0.4rem',
+                                    }}
+                                  >
+                                    <ScaleIcon
+                                      style={{
+                                        height: '22px',
+                                        width: '22px',
+                                      }}
+                                    />
+                                  </div>
+                                }
+                                primaryContent={
+                                  <>
+                                    <span
+                                      style={{
+                                        fontWeight: 'bold',
+                                      }}
+                                    >
+                                      <ShortAddress address={event.data.previousDelegate.id} />
+                                    </span>{' '}
+                                    delegated to{' '}
+                                    <span
+                                      style={{
+                                        fontWeight: 'bold',
+                                      }}
+                                    >
+                                      <ShortAddress address={event.data.newDelegate.id} />
+                                    </span>
+                                  </>
+                                }
+                              />
+                            );
+                          }
+
+                          if (event.eventType === NounProfileEventType.TRANSFER) {
+                            return (
+                              <NounActivityFeedRow
+                                // TODO
+                                onClick={() => window.open('https://etherscan.io', '_blank')}
+                                icon={
+                                  <div
+                                    style={{
+                                      display: 'flex',
+                                      justifyContent: 'center',
+                                      alignItems: 'center',
+                                      backgroundColor: 'var(--brand-gray-light-text-translucent)',
+                                      color: 'var(--brand-gray-light-text)',
+                                      borderRadius: '100%',
+                                      // padding: '1rem',
+                                      height: '38px',
+                                      width: '38px',
+                                      marginLeft: '0.4rem',
+                                    }}
+                                  >
+                                    <SwitchHorizontalIcon
+                                      style={{
+                                        height: '22px',
+                                        width: '22px',
+                                      }}
+                                    />
+                                  </div>
+                                }
+                                primaryContent={
+                                  <>
+                                    <span
+                                      style={{
+                                        fontWeight: 'bold',
+                                      }}
+                                    >
+                                      <ShortAddress address={event.data.previousHolder.id} />
+                                    </span>{' '}
+                                    transfered Noun {nounId} to{' '}
+                                    <span
+                                      style={{
+                                        fontWeight: 'bold',
+                                      }}
+                                    >
+                                      <ShortAddress address={event.data.previousHolder.id} />
+                                    </span>
+                                  </>
+                                }
+                              />
+                            );
+                          }
                         })
                     ) : (
                       <LoadingNoun />
@@ -131,7 +400,7 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
               </div>
             </Collapse>
 
-            {filteredProposals.length <= MAX_EVENTS_SHOW_ABOVE_FOLD ? (
+            {data.length <= MAX_EVENTS_SHOW_ABOVE_FOLD ? (
               <></>
             ) : (
               <>
@@ -140,7 +409,7 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
                     className={classes.expandCollapseCopy}
                     onClick={() => setTruncateProposals(false)}
                   >
-                    <Trans>Show all {filteredProposals.length} events </Trans>{' '}
+                    <Trans>Show all {data.length} events </Trans>{' '}
                     <FontAwesomeIcon icon={faChevronDown} />
                   </div>
                 ) : (

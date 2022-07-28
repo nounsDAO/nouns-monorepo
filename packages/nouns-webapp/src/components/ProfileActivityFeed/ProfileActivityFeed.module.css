@@ -46,3 +46,19 @@
   font-weight: 500;
   font-size: 18px;
 }
+.delegateHover {
+  border-radius: 8px !important;
+  background-color: var(--brand-gray-dark-text) !important;
+  color: white;
+  opacity: 0.75 !important;
+  font-weight: 500;
+  transition: ease-in-out 125ms;
+}
+
+/* .etherscanHover {
+  transition: ease-in-out 125;
+}
+
+.etherscanHover:hover {
+  filter: brightness(150%);
+} */
