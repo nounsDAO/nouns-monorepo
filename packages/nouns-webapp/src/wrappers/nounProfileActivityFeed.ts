@@ -77,32 +77,34 @@ export function useNounVoteHistory({ nounId }: UseNounVoteHistoryConfig): NounVo
       return acc;
     }, {});
 
-  const filteredProposals = proposals
-    .filter((p: Proposal, id: number) => {
-      if (!p.id) {
-        return false;
-      }
+  const filteredProposals = proposals.filter((p: Proposal, id: number) => {
+    if (!p.id) {
+      return false;
+    }
 
-      const proposalCreationTimestamp = parseInt(
-        proposalCreatedTimestamps.proposals[id].createdTimestamp,
-      );
+    const proposalCreationTimestamp = parseInt(
+      proposalCreatedTimestamps.proposals[id].createdTimestamp,
+    );
 
-      // Filter props from before the Noun was born
-      if (nounCanVoteTimestamp.gt(proposalCreationTimestamp)) {
-        return false;
-      }
-      // Filter props which were cancelled and got 0 votes of any kind
-      if (
-        p.status === ProposalState.CANCELLED &&
-        p.forCount + p.abstainCount + p.againstCount === 0
-      ) {
-        return false;
-      }
-      return true;
-    })
-    .map((proposal: Proposal) => proposal.id) as string[];
+    // Filter props from before the Noun was born
+    if (nounCanVoteTimestamp.gt(proposalCreationTimestamp)) {
+      return false;
+    }
+    // Filter props which were cancelled and got 0 votes of any kind
+    if (
+      p.status === ProposalState.CANCELLED &&
+      p.forCount + p.abstainCount + p.againstCount === 0
+    ) {
+      return false;
+    }
+    return true;
+  });
 
-  const fileteredProposalsWithVotes = filteredProposals
+  const filteredProposalIds = filteredProposals.map(
+    (proposal: Proposal) => proposal.id,
+  ) as string[];
+
+  const fileteredProposalsWithVotes = filteredProposalIds
     .map((proposalId: string) => {
       return nounVotes[proposalId];
     })
@@ -110,15 +112,35 @@ export function useNounVoteHistory({ nounId }: UseNounVoteHistoryConfig): NounVo
     .map((vote: NounVoteHistory) => {
       return {
         eventBlockNumber: parseInt(vote.blockNumber.toString()),
-        eventType: NounProfileEventType.VOTE,
+        eventType: NounProfileEventType.VOTE, // TODO maybe we should change this verbeage
         data: vote,
       };
     }) as NounProfileEvent[];
 
+  const proposalIdsWithVotes = fileteredProposalsWithVotes.map((event: NounProfileEvent) => {
+    console.log(event);
+    return event.data.proposal.id;
+  });
+
+  const proposalsWithoutVotes = filteredProposals.filter((proposal: Proposal) => {
+    return !proposalIdsWithVotes.includes(proposal.id);
+  });
+
   return {
     loading: false,
     error: false,
-    data: fileteredProposalsWithVotes,
+    data: fileteredProposalsWithVotes.concat(
+      proposalsWithoutVotes.map((proposal: Proposal) => {
+        return {
+          eventBlockNumber: proposal.endBlock,
+          eventType: NounProfileEventType.VOTE,
+          data: {
+            proposal,
+            supportDetailed: undefined,
+          },
+        };
+      }),
+    ),
   };
 }
 

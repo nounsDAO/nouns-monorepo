@@ -28,7 +28,7 @@ interface NounProfileVoteRowProps {
 }
 
 const selectIconForNounVoteActivityRow = (proposal: Proposal, vote?: NounVoteHistory) => {
-  if (!vote) {
+  if (!vote || vote.supportDetailed === undefined) {
     if (proposal.status === ProposalState.PENDING || proposal.status === ProposalState.ACTIVE) {
       return <Image src={_PendingVoteIcon} className={classes.voteIcon} />;
     }
@@ -47,7 +47,7 @@ const selectIconForNounVoteActivityRow = (proposal: Proposal, vote?: NounVoteHis
 };
 
 const selectVotingInfoText = (proposal: Proposal, vote?: NounVoteHistory) => {
-  if (!vote) {
+  if (!vote || vote.supportDetailed === undefined) {
     if (proposal.status === ProposalState.PENDING || proposal.status === ProposalState.ACTIVE) {
       return <Trans>Waiting for</Trans>;
     }

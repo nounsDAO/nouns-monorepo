@@ -37,7 +37,7 @@ interface ProposalInfo {
 export interface NounVoteHistory {
   proposal: ProposalInfo;
   support: boolean;
-  supportDetailed: number;
+  supportDetailed: number | undefined;
   voter: { id: string };
   blockNumber: number;
 }
@@ -96,7 +96,14 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
                           <NounActivityFeedRow
                             // TODO
                             // onClick={() => window.open('https://etherscan.io', '_blank')}
-                            onClick={() => window.open(buildEtherscanTxLink(event.data.id.subString(0, event.data.id.indexOf("_"))), '_blank')}
+                            onClick={() =>
+                              window.open(
+                                buildEtherscanTxLink(
+                                  event.data.id.subString(0, event.data.id.indexOf('_')),
+                                ),
+                                '_blank',
+                              )
+                            }
                             icon={
                               <div
                                 style={{
@@ -122,12 +129,14 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
                             }
                             primaryContent={
                               <>
-                               Delegate changed from
+                                Delegate changed from
                                 <span
                                   style={{
                                     fontWeight: 'bold',
                                   }}
-                                > <ShortAddress address={event.data.previousDelegate.id} />
+                                >
+                                  {' '}
+                                  <ShortAddress address={event.data.previousDelegate.id} />
                                 </span>{' '}
                                 to{' '}
                                 <span
@@ -160,7 +169,7 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
                                     fontWeight: 'bold',
                                     fontSize: '14px',
                                     display: 'flex',
-                                    marginLeft: 'auto'
+                                    marginLeft: 'auto',
                                   }}
                                 >
                                   <ExternalLinkIcon
@@ -171,7 +180,7 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
                                       marginTop: '0.18rem',
                                     }}
                                   />
-                                                              {event.data.id.substring(0, 15) + "..."}
+                                  {event.data.id.substring(0, 15) + '...'}
                                 </div>
                               </>
                             }
@@ -183,7 +192,9 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
                         return (
                           <NounActivityFeedRow
                             // TODO
-                            onClick={() => window.open(buildEtherscanTxLink(event.data.id), '_blank')}
+                            onClick={() =>
+                              window.open(buildEtherscanTxLink(event.data.id), '_blank')
+                            }
                             icon={
                               <div
                                 style={{
@@ -247,7 +258,7 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
                                     fontWeight: 'bold',
                                     fontSize: '14px',
                                     display: 'flex',
-                                    marginLeft: 'auto'
+                                    marginLeft: 'auto',
                                   }}
                                 >
                                   <ExternalLinkIcon
@@ -320,14 +331,16 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
                                 }
                                 primaryContent={
                                   <>
+                                    Delegate changed from
                                     <span
                                       style={{
                                         fontWeight: 'bold',
                                       }}
                                     >
+                                      {' '}
                                       <ShortAddress address={event.data.previousDelegate.id} />
                                     </span>{' '}
-                                    delegated to{' '}
+                                    to{' '}
                                     <span
                                       style={{
                                         fontWeight: 'bold',
@@ -335,6 +348,42 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
                                     >
                                       <ShortAddress address={event.data.newDelegate.id} />
                                     </span>
+                                  </>
+                                }
+                                secondaryContent={
+                                  <>
+                                    <ReactTooltip
+                                      id={'view-on-etherscan-tooltip'}
+                                      effect={'solid'}
+                                      className={classes.delegateHover}
+                                      getContent={dataTip => {
+                                        return <div>{dataTip}</div>;
+                                      }}
+                                    />
+                                    <div
+                                      data-tip={`View on Etherscan`}
+                                      data-for="view-on-etherscan-tooltip"
+                                      style={{
+                                        borderRadius: '8px',
+                                        padding: '0.36rem 0.65rem 0.36rem 0.65rem',
+                                        backgroundColor: 'var(--brand-gray-light-text-translucent)',
+                                        color: 'var(--brand-gray-light-text)',
+                                        fontWeight: 'bold',
+                                        fontSize: '14px',
+                                        display: 'flex',
+                                        marginLeft: 'auto',
+                                      }}
+                                    >
+                                      <ExternalLinkIcon
+                                        style={{
+                                          height: '16px',
+                                          width: '16px',
+                                          marginRight: '0.3rem',
+                                          marginTop: '0.18rem',
+                                        }}
+                                      />
+                                      {event.data.id.substring(0, 15) + '...'}
+                                    </div>
                                   </>
                                 }
                               />
@@ -384,8 +433,44 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
                                         fontWeight: 'bold',
                                       }}
                                     >
-                                      <ShortAddress address={event.data.previousHolder.id} />
+                                      <ShortAddress address={event.data.newHolder.id} />
                                     </span>
+                                  </>
+                                }
+                                secondaryContent={
+                                  <>
+                                    <ReactTooltip
+                                      id={'view-on-etherscan-tooltip'}
+                                      effect={'solid'}
+                                      className={classes.delegateHover}
+                                      getContent={dataTip => {
+                                        return <div>{dataTip}</div>;
+                                      }}
+                                    />
+                                    <div
+                                      data-tip={`View on Etherscan`}
+                                      data-for="view-on-etherscan-tooltip"
+                                      style={{
+                                        borderRadius: '8px',
+                                        padding: '0.36rem 0.65rem 0.36rem 0.65rem',
+                                        backgroundColor: 'var(--brand-gray-light-text-translucent)',
+                                        color: 'var(--brand-gray-light-text)',
+                                        fontWeight: 'bold',
+                                        fontSize: '14px',
+                                        display: 'flex',
+                                        marginLeft: 'auto',
+                                      }}
+                                    >
+                                      <ExternalLinkIcon
+                                        style={{
+                                          height: '16px',
+                                          width: '16px',
+                                          marginRight: '0.3rem',
+                                          marginTop: '0.18rem',
+                                        }}
+                                      />
+                                      {event.data.id.substring(0, 15) + '...'}
+                                    </div>
                                   </>
                                 }
                               />

@@ -21,19 +21,23 @@ const NounActivityFeedRow: React.FC<NounActivityFeedRowProps> = props => {
       <td className={classes.activityTableCell}>
         <div className={classes.infoContainer}>{primaryContent}</div>
       </td>
-      <td className={activeLocale === 'ja-JP' ? responsiveUiUtilsClasses.desktopOnly : ''}  >
-      <div style={{
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'flex-end'
-      }}>
-          <div style={{
+      <td className={activeLocale === 'ja-JP' ? responsiveUiUtilsClasses.desktopOnly : ''}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+          }}
+        >
+          <div
+            style={{
               textAlign: 'right',
-              width: 'max-content'
-          }}>
+              width: 'max-content',
+            }}
+          >
             {secondaryContent}
           </div>
-          </div>
+        </div>
       </td>
     </tr>
   );
