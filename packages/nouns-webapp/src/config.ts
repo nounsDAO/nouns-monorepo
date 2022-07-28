@@ -71,8 +71,8 @@ const app: Record<SupportedChains, AppConfig> = {
   [ChainId.Hardhat]: {
     jsonRpcUri: 'http://localhost:8545',
     wsRpcUri: 'ws://localhost:8545',
-    subgraphApiUri: '',
-    enableHistory: false,
+    subgraphApiUri: 'http://localhost:8000/subgraphs/name/nounsdao/nouns-subgraph',
+    enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
 };
 
@@ -102,3 +102,5 @@ const config = {
 };
 
 export default config;
+
+export const multicallOnLocalhost = '0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e';

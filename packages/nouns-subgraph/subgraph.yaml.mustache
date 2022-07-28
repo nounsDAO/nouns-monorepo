@@ -13,7 +13,7 @@ dataSources:
       startBlock: {{nounsAuctionHouse.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/nouns-auction-house.ts
       entities:
@@ -42,7 +42,7 @@ dataSources:
       startBlock: {{nounsToken.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/nouns-erc-721.ts
       entities:
@@ -72,7 +72,7 @@ dataSources:
       startBlock: {{nounsDAO.startBlock}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ./src/nouns-dao.ts
       entities:
@@ -83,7 +83,7 @@ dataSources:
         - Governance
       abis:
         - name: NounsDAO
-          file: ../nouns-contracts/abi/contracts/governance/NounsDAOLogicV1.sol/NounsDAOLogicV1.json
+          file: ../nouns-contracts/abi/contracts/governance/NounsDAOLogicV2.sol/NounsDAOLogicV2.json
       eventHandlers:
         - event: ProposalCreatedWithRequirements(uint256,address,address[],uint256[],string[],bytes[],uint256,uint256,uint256,uint256,string)
           handler: handleProposalCreatedWithRequirements
@@ -97,3 +97,9 @@ dataSources:
           handler: handleProposalExecuted
         - event: VoteCast(indexed address,uint256,uint8,uint256,string)
           handler: handleVoteCast
+        - event: MinQuorumVotesBPSSet(uint16,uint16)
+          handler: handleMinQuorumVotesBPSSet
+        - event: MaxQuorumVotesBPSSet(uint16,uint16)
+          handler: handleMaxQuorumVotesBPSSet        
+        - event: QuorumCoefficientSet(uint32,uint32)
+          handler: handleQuorumCoefficientSet

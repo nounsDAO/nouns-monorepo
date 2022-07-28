@@ -4,9 +4,10 @@ import {
   ContractDeployment,
   ContractName,
   ContractNameDescriptorV1,
+  ContractNamesDAOV2,
   DeployedContract,
 } from './types';
-import { Interface } from 'ethers/lib/utils';
+import { Interface, parseUnits } from 'ethers/lib/utils';
 import { task, types } from 'hardhat/config';
 import promptjs from 'prompt';
 
@@ -25,10 +26,11 @@ const wethContracts: Record<number, string> = {
   [ChainId.Kovan]: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
 };
 
-const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 6;
-const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 9;
+const NOUNS_ART_NONCE_OFFSET = 4;
+const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 9;
+const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 12;
 
-task('deploy-short-times-descriptorv1', 'Deploy all Nouns contracts with NounsDescriptor v1')
+task('deploy-short-times', 'Deploy all Nouns contracts with shorter voting and execution times.')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
   .addOptionalParam('weth', 'The WETH contract address', undefined, types.string)
   .addOptionalParam('noundersdao', 'The nounders DAO contract address', undefined, types.string)
@@ -71,11 +73,18 @@ task('deploy-short-times-descriptorv1', 'Deploy all Nouns contracts with NounsDe
     types.int,
   )
   .addOptionalParam(
-    'quorumVotesBps',
-    'Votes required for quorum (basis points)',
-    1_000 /* 10% */,
+    'minQuorumVotesBPS',
+    'Min basis points input for dynamic quorum',
+    1_000,
     types.int,
-  )
+  ) // Default: 10%
+  .addOptionalParam(
+    'maxQuorumVotesBPS',
+    'Max basis points input for dynamic quorum',
+    4_000,
+    types.int,
+  ) // Default: 40%
+  .addOptionalParam('quorumCoefficient', 'Dynamic quorum coefficient (float)', 1, types.float)
   .setAction(async (args, { ethers }) => {
     const network = await ethers.provider.getNetwork();
     const [deployer] = await ethers.getSigners();
@@ -100,6 +109,10 @@ task('deploy-short-times-descriptorv1', 'Deploy all Nouns contracts with NounsDe
     }
 
     const nonce = await deployer.getTransactionCount();
+    const expectedNounsArtAddress = ethers.utils.getContractAddress({
+      from: deployer.address,
+      nonce: nonce + NOUNS_ART_NONCE_OFFSET,
+    });
     const expectedAuctionHouseProxyAddress = ethers.utils.getContractAddress({
       from: deployer.address,
       nonce: nonce + AUCTION_HOUSE_PROXY_NONCE_OFFSET,
@@ -108,23 +121,29 @@ task('deploy-short-times-descriptorv1', 'Deploy all Nouns contracts with NounsDe
       from: deployer.address,
       nonce: nonce + GOVERNOR_N_DELEGATOR_NONCE_OFFSET,
     });
-    const deployment: Record<ContractNameDescriptorV1, DeployedContract> = {} as Record<
-      ContractNameDescriptorV1,
+    const deployment: Record<ContractNamesDAOV2, DeployedContract> = {} as Record<
+      ContractNamesDAOV2,
       DeployedContract
     >;
-    const contracts: Record<ContractNameDescriptorV1, ContractDeployment> = {
-      NFTDescriptor: {},
-      NounsDescriptor: {
+    const contracts: Record<ContractNamesDAOV2, ContractDeployment> = {
+      NFTDescriptorV2: {},
+      SVGRenderer: {},
+      NounsDescriptorV2: {
+        args: [expectedNounsArtAddress, () => deployment.SVGRenderer.address],
         libraries: () => ({
-          NFTDescriptor: deployment.NFTDescriptor.address,
+          NFTDescriptorV2: deployment.NFTDescriptorV2.address,
         }),
+      },
+      Inflator: {},
+      NounsArt: {
+        args: [() => deployment.NounsDescriptorV2.address, () => deployment.Inflator.address],
       },
       NounsSeeder: {},
       NounsToken: {
         args: [
           args.noundersdao,
           expectedAuctionHouseProxyAddress,
-          () => deployment.NounsDescriptor.address,
+          () => deployment.NounsDescriptorV2.address,
           () => deployment.NounsSeeder.address,
           proxyRegistryAddress,
         ],
@@ -161,25 +180,29 @@ task('deploy-short-times-descriptorv1', 'Deploy all Nouns contracts with NounsDe
       NounsDAOExecutor: {
         args: [expectedNounsDAOProxyAddress, args.timelockDelay],
       },
-      NounsDAOLogicV1: {
+      NounsDAOLogicV2: {
         waitForConfirmation: true,
       },
-      NounsDAOProxy: {
+      NounsDAOProxyV2: {
         args: [
           () => deployment.NounsDAOExecutor.address,
           () => deployment.NounsToken.address,
           args.noundersdao,
           () => deployment.NounsDAOExecutor.address,
-          () => deployment.NounsDAOLogicV1.address,
+          () => deployment.NounsDAOLogicV2.address,
           args.votingPeriod,
           args.votingDelay,
           args.proposalThresholdBps,
-          args.quorumVotesBps,
+          {
+            minQuorumVotesBPS: args.minQuorumVotesBPS,
+            maxQuorumVotesBPS: args.maxQuorumVotesBPS,
+            quorumCoefficient: parseUnits(args.quorumCoefficient.toString(), 6),
+          },
         ],
         waitForConfirmation: true,
         validateDeployment: () => {
           const expected = expectedNounsDAOProxyAddress.toLowerCase();
-          const actual = deployment.NounsDAOProxy.address.toLowerCase();
+          const actual = deployment.NounsDAOProxyV2.address.toLowerCase();
           if (expected !== actual) {
             throw new Error(
               `Unexpected Nouns DAO proxy address. Expected: ${expected}. Actual: ${actual}.`,
@@ -216,8 +239,8 @@ task('deploy-short-times-descriptorv1', 'Deploy all Nouns contracts with NounsDe
         case 'NounsDAOExecutor':
           nameForFactory = 'NounsDAOExecutorTest';
           break;
-        case 'NounsDAOLogicV1':
-          nameForFactory = 'NounsDAOLogicV1Harness';
+        case 'NounsDAOLogicV2':
+          nameForFactory = 'NounsDAOLogicV2Harness';
           break;
         default:
           nameForFactory = name;
@@ -279,7 +302,7 @@ task('deploy-short-times-descriptorv1', 'Deploy all Nouns contracts with NounsDe
         await deployedContract.deployed();
       }
 
-      deployment[name as ContractNameDescriptorV1] = {
+      deployment[name as ContractNamesDAOV2] = {
         name: nameForFactory,
         instance: deployedContract,
         address: deployedContract.address,

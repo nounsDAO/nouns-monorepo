@@ -62,19 +62,19 @@ export function handleDelegateChanged(event: DelegateChanged): void {
 export function handleDelegateVotesChanged(event: DelegateVotesChanged): void {
   let governance = getGovernanceEntity();
   let delegate = getOrCreateDelegate(event.params.delegate.toHexString());
-  let votesDifference = event.params.newBalance - event.params.previousBalance;
+  let votesDifference = event.params.newBalance.minus(event.params.previousBalance);
 
   delegate.delegatedVotesRaw = event.params.newBalance;
   delegate.delegatedVotes = event.params.newBalance;
   delegate.save();
 
   if (event.params.previousBalance == BIGINT_ZERO && event.params.newBalance > BIGINT_ZERO) {
-    governance.currentDelegates = governance.currentDelegates + BIGINT_ONE;
+    governance.currentDelegates = governance.currentDelegates.plus(BIGINT_ONE);
   }
   if (event.params.newBalance == BIGINT_ZERO) {
-    governance.currentDelegates = governance.currentDelegates - BIGINT_ONE;
+    governance.currentDelegates = governance.currentDelegates.minus(BIGINT_ONE);
   }
-  governance.delegatedVotesRaw = governance.delegatedVotesRaw + votesDifference;
+  governance.delegatedVotesRaw = governance.delegatedVotesRaw.plus(votesDifference);
   governance.delegatedVotes = governance.delegatedVotesRaw;
   governance.save();
 }
@@ -88,17 +88,17 @@ export function handleTransfer(event: Transfer): void {
 
   // fromHolder
   if (event.params.from.toHexString() == ZERO_ADDRESS) {
-    governance.totalTokenHolders = governance.totalTokenHolders + BIGINT_ONE;
+    governance.totalTokenHolders = governance.totalTokenHolders.plus(BIGINT_ONE);
     governance.save();
   } else {
     let fromHolderPreviousBalance = fromHolder.tokenBalanceRaw;
-    fromHolder.tokenBalanceRaw = fromHolder.tokenBalanceRaw - BIGINT_ONE;
+    fromHolder.tokenBalanceRaw = fromHolder.tokenBalanceRaw.minus(BIGINT_ONE);
     fromHolder.tokenBalance = fromHolder.tokenBalanceRaw;
     let fromHolderNouns = fromHolder.nouns; // Re-assignment required to update array
     fromHolder.nouns = fromHolderNouns.filter(n => n != transferredNounId);
 
     if (fromHolder.delegate != null) {
-      let fromHolderDelegate = getOrCreateDelegate(fromHolder.delegate);
+      let fromHolderDelegate = getOrCreateDelegate(fromHolder.delegate as string);
       let fromHolderNounsRepresented = fromHolderDelegate.nounsRepresented; // Re-assignment required to update array
       fromHolderDelegate.nounsRepresented = fromHolderNounsRepresented.filter(
         n => n != transferredNounId,
@@ -114,7 +114,7 @@ export function handleTransfer(event: Transfer): void {
     }
 
     if (fromHolder.tokenBalanceRaw == BIGINT_ZERO && fromHolderPreviousBalance > BIGINT_ZERO) {
-      governance.currentTokenHolders = governance.currentTokenHolders - BIGINT_ONE;
+      governance.currentTokenHolders = governance.currentTokenHolders.minus(BIGINT_ONE);
       governance.save();
 
       fromHolder.delegate = null;
@@ -122,7 +122,7 @@ export function handleTransfer(event: Transfer): void {
       fromHolder.tokenBalanceRaw > BIGINT_ZERO &&
       fromHolderPreviousBalance == BIGINT_ZERO
     ) {
-      governance.currentTokenHolders = governance.currentTokenHolders + BIGINT_ONE;
+      governance.currentTokenHolders = governance.currentTokenHolders.plus(BIGINT_ONE);
       governance.save();
     }
 
@@ -131,7 +131,7 @@ export function handleTransfer(event: Transfer): void {
 
   // toHolder
   if (event.params.to.toHexString() == ZERO_ADDRESS) {
-    governance.totalTokenHolders = governance.totalTokenHolders - BIGINT_ONE;
+    governance.totalTokenHolders = governance.totalTokenHolders.minus(BIGINT_ONE);
     governance.save();
   }
 
@@ -142,19 +142,19 @@ export function handleTransfer(event: Transfer): void {
   toHolderDelegate.save();
 
   let toHolderPreviousBalance = toHolder.tokenBalanceRaw;
-  toHolder.tokenBalanceRaw = toHolder.tokenBalanceRaw + BIGINT_ONE;
+  toHolder.tokenBalanceRaw = toHolder.tokenBalanceRaw.plus(BIGINT_ONE);
   toHolder.tokenBalance = toHolder.tokenBalanceRaw;
-  toHolder.totalTokensHeldRaw = toHolder.totalTokensHeldRaw + BIGINT_ONE;
+  toHolder.totalTokensHeldRaw = toHolder.totalTokensHeldRaw.plus(BIGINT_ONE);
   toHolder.totalTokensHeld = toHolder.totalTokensHeldRaw;
   let toHolderNouns = toHolder.nouns; // Re-assignment required to update array
   toHolderNouns.push(event.params.tokenId.toString());
   toHolder.nouns = toHolderNouns;
 
   if (toHolder.tokenBalanceRaw == BIGINT_ZERO && toHolderPreviousBalance > BIGINT_ZERO) {
-    governance.currentTokenHolders = governance.currentTokenHolders - BIGINT_ONE;
+    governance.currentTokenHolders = governance.currentTokenHolders.minus(BIGINT_ONE);
     governance.save();
   } else if (toHolder.tokenBalanceRaw > BIGINT_ZERO && toHolderPreviousBalance == BIGINT_ZERO) {
-    governance.currentTokenHolders = governance.currentTokenHolders + BIGINT_ONE;
+    governance.currentTokenHolders = governance.currentTokenHolders.plus(BIGINT_ONE);
     governance.save();
 
     toHolder.delegate = toHolder.id;

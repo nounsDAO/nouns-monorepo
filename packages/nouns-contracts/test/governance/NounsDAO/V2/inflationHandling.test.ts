@@ -1,14 +1,27 @@
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
+import hardhat from 'hardhat';
 
 import { BigNumber as EthersBN } from 'ethers';
 
-import { getSigners, TestSigners, setTotalSupply, deployGovAndToken } from '../../utils';
+import {
+  getSigners,
+  TestSigners,
+  setTotalSupply,
+  blockNumber,
+  deployGovV2AndToken,
+} from '../../../utils';
 
-import { mineBlock, address, encodeParameters, advanceBlocks } from '../../utils';
+import { mineBlock, encodeParameters, advanceBlocks } from '../../../utils';
 
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { NounsToken, NounsDAOLogicV1 } from '../../../typechain';
+import {
+  NounsToken,
+  NounsDescriptorV2__factory as NounsDescriptorV2Factory,
+  NounsDAOExecutor__factory as NounsDaoExecutorFactory,
+  NounsDAOLogicV2,
+} from '../../../../typechain';
+import { MAX_QUORUM_VOTES_BPS } from '../../../constants';
 
 chai.use(solidity);
 const { expect } = chai;
@@ -30,11 +43,11 @@ let account1: SignerWithAddress;
 let account2: SignerWithAddress;
 let signers: TestSigners;
 
-let gov: NounsDAOLogicV1;
+let gov: NounsDAOLogicV2;
 const timelockDelay = 172800; // 2 days
 
 const proposalThresholdBPS = 678; // 6.78%
-const quorumVotesBPS = 1100; // 11%
+const minQuorumVotesBPS = 1100; // 11%
 
 let targets: string[];
 let values: string[];
@@ -42,7 +55,7 @@ let signatures: string[];
 let callDatas: string[];
 let proposalId: EthersBN;
 
-describe('NounsDAO#inflationHandling', () => {
+describe('NounsDAOV2#inflationHandling', () => {
   before(async () => {
     signers = await getSigners();
     deployer = signers.deployer;
@@ -55,17 +68,20 @@ describe('NounsDAO#inflationHandling', () => {
     signatures = ['getBalanceOf(address)'];
     callDatas = [encodeParameters(['address'], [account0.address])];
 
-    ({ token, gov } = await deployGovAndToken(
-      deployer,
-      timelockDelay,
-      proposalThresholdBPS,
-      quorumVotesBPS,
-    ));
+    ({ token, gov } = await deployGovV2AndToken(deployer, timelockDelay, proposalThresholdBPS, {
+      minQuorumVotesBPS: minQuorumVotesBPS,
+      maxQuorumVotesBPS: MAX_QUORUM_VOTES_BPS,
+      quorumCoefficient: 0,
+    }));
   });
 
   it('set parameters correctly', async () => {
     expect(await gov.proposalThresholdBPS()).to.equal(proposalThresholdBPS);
-    expect(await gov.quorumVotesBPS()).to.equal(quorumVotesBPS);
+    expect(
+      await (
+        await gov.getDynamicQuorumParamsAt(await blockNumber())
+      ).minQuorumVotesBPS,
+    ).to.equal(minQuorumVotesBPS);
   });
 
   it('returns quorum votes and proposal threshold based on Noun total supply', async () => {
@@ -77,7 +93,7 @@ describe('NounsDAO#inflationHandling', () => {
     // 6.78% of 40 = 2.712, floored to 2
     expect(await gov.proposalThreshold()).to.equal(2);
     // 11% of 40 = 4.4, floored to 4
-    expect(await gov.quorumVotes()).to.equal(4);
+    expect(await gov.minQuorumVotes()).to.equal(4);
   });
 
   it('rejects if proposing below threshold', async () => {
@@ -112,7 +128,7 @@ describe('NounsDAO#inflationHandling', () => {
   it('sets proposal attributes correctly', async () => {
     const proposal = await gov.proposals(proposalId);
     expect(proposal.proposalThreshold).to.equal(2);
-    expect(proposal.quorumVotes).to.equal(4);
+    expect(await gov.quorumVotes(proposal.id)).to.equal(4);
   });
 
   it('returns updated quorum votes and proposal threshold when total supply changes', async () => {
@@ -122,7 +138,7 @@ describe('NounsDAO#inflationHandling', () => {
     // 6.78% of 80 = 5.424, floored to 5
     expect(await gov.proposalThreshold()).to.equal(5);
     // 11% of 80 = 8.88, floored to 8
-    expect(await gov.quorumVotes()).to.equal(8);
+    expect(await gov.minQuorumVotes()).to.equal(8);
   });
 
   it('rejects proposals that were previously above proposal threshold, but due to increasing supply are now below', async () => {
@@ -135,7 +151,7 @@ describe('NounsDAO#inflationHandling', () => {
   it('does not change previous proposal attributes when total supply changes', async () => {
     const proposal = await gov.proposals(proposalId);
     expect(proposal.proposalThreshold).to.equal(2);
-    expect(proposal.quorumVotes).to.equal(4);
+    expect(await gov.quorumVotes(proposal.id)).to.equal(4);
   });
 
   it('updates for/against votes correctly', async () => {

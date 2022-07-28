@@ -11,49 +11,21 @@ import {
   getSigners,
   TestSigners,
   setTotalSupply,
-  populateDescriptorV2,
   propose,
-} from '../../utils';
+  deployGovernorV2WithV2Proxy,
+  populateDescriptorV2,
+} from '../../../utils';
 
-import { mineBlock, address } from '../../utils';
-
+import { mineBlock } from '../../../utils';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NounsToken,
   NounsDescriptorV2__factory as NounsDescriptorV2Factory,
-  NounsDAOLogicV1Harness,
-  NounsDAOLogicV1Harness__factory as NounsDaoLogicV1HarnessFactory,
-  NounsDAOProxy__factory as NounsDaoProxyFactory,
-} from '../../../typechain';
+  NounsDAOLogicV2,
+} from '../../../../typechain';
 
 chai.use(solidity);
 const { expect } = chai;
-
-async function deployGovernor(
-  deployer: SignerWithAddress,
-  tokenAddress: string,
-): Promise<NounsDAOLogicV1Harness> {
-  const { address: govDelegateAddress } = await new NounsDaoLogicV1HarnessFactory(
-    deployer,
-  ).deploy();
-  const params: Parameters<NounsDaoProxyFactory['deploy']> = [
-    address(0),
-    tokenAddress,
-    deployer.address,
-    address(0),
-    govDelegateAddress,
-    17280,
-    1,
-    1,
-    1,
-  ];
-
-  const { address: _govDelegatorAddress } = await (
-    await ethers.getContractFactory('NounsDAOProxy', deployer)
-  ).deploy(...params);
-
-  return NounsDaoLogicV1HarnessFactory.connect(_govDelegatorAddress, deployer);
-}
 
 let snapshotId: number;
 
@@ -64,11 +36,7 @@ let account1: SignerWithAddress;
 let account2: SignerWithAddress;
 let signers: TestSigners;
 
-let gov: NounsDAOLogicV1Harness;
-let targets: string[];
-let values: string[];
-let signatures: string[];
-let callDatas: string[];
+let gov: NounsDAOLogicV2;
 let proposalId: EthersBN;
 
 async function reset() {
@@ -85,11 +53,11 @@ async function reset() {
 
   await setTotalSupply(token, 10);
 
-  gov = await deployGovernor(deployer, token.address);
+  gov = await deployGovernorV2WithV2Proxy(deployer, token.address);
   snapshotId = await ethers.provider.send('evm_snapshot', []);
 }
 
-describe('NounsDAO#castVote/2', () => {
+describe('NounsDAOV2#castVote/2', () => {
   before(async () => {
     signers = await getSigners();
     deployer = signers.deployer;

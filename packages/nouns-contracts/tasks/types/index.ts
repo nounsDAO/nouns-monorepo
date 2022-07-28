@@ -15,6 +15,8 @@ export type DescriptorV2ContractNames = 'NFTDescriptorV2' | 'NounsDescriptorV2' 
 export type ContractName = DescriptorV2ContractNames | 'NounsSeeder' | 'NounsToken' | 'NounsAuctionHouse' | 'NounsAuctionHouseProxyAdmin' | 'NounsAuctionHouseProxy' | 'NounsDAOExecutor' | 'NounsDAOLogicV1' | 'NounsDAOProxy';
 // prettier-ignore
 export type ContractNameDescriptorV1 = DescriptorV1ContractNames | 'NounsSeeder' | 'NounsToken' | 'NounsAuctionHouse' | 'NounsAuctionHouseProxyAdmin' | 'NounsAuctionHouseProxy' | 'NounsDAOExecutor' | 'NounsDAOLogicV1' | 'NounsDAOProxy';
+// prettier-ignore
+export type ContractNamesDAOV2 = Exclude<ContractName, 'NounsDAOLogicV1' | 'NounsDAOProxy'> | 'NounsDAOLogicV2' | 'NounsDAOProxyV2';
 
 export interface ContractDeployment {
   args?: (string | number | (() => string))[];
