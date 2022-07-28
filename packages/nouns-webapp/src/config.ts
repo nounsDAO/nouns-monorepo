@@ -45,6 +45,9 @@ export const ETHERSCAN_API_KEY = process.env.REACT_APP_ETHERSCAN_API_KEY ?? '';
 
 const INFURA_PROJECT_ID = process.env.REACT_APP_INFURA_PROJECT_ID;
 
+// prettier-ignore
+export const NOUNDRY_TRAIT_URL = 'https://raw.githubusercontent.com/nounsDAO/noundry/8-8-trait-candidates/image-data.json';
+
 export const createNetworkHttpUrl = (network: string): string => {
   const custom = process.env[`REACT_APP_${network.toUpperCase()}_JSONRPC`];
   return custom || `https://${network}.infura.io/v3/${INFURA_PROJECT_ID}`;
