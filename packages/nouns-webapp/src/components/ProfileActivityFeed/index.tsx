@@ -25,6 +25,7 @@ import ShortAddress from '../ShortAddress';
 import { ethers } from 'ethers';
 import ReactTooltip from 'react-tooltip';
 import { buildEtherscanTxLink } from '../../utils/etherscan';
+import MobileNounProfileVoteRow from '../MobileNounProfileVoteRow';
 
 interface ProfileActivityFeedProps {
   nounId: number;
@@ -50,27 +51,31 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
   // TODO change verbeage to events vs proposals
   const [truncateProposals, setTruncateProposals] = useState(true);
 
-  const { loading, error, data } =  useNounProfileEvents(nounId);
+  const { loading, error, data } = useNounProfileEvents(nounId);
 
-  if (loading) {
-   return   (<Section fullWidth={false}>
-   <Col lg={{ span: 10, offset: 1 }}>
-     <div className={classes.headerWrapper}>
-       <h1>
-         <Trans>Activity</Trans>
-       </h1>
-       <div style={{
-         display: 'flex',
-         justifyContent: 'center',
-         marginTop: '3rem',
-         color: 'var(--brand-gray-light-text)'
-
-       }}>
-         <Spinner animation="border"/>
-       </div>
-       </div>
-       </Col>
-      </Section>);
+  // TODO this introduces a bug ... new nouns will always spin
+  if (loading || !data || data === undefined || data.length === 0) {
+    return (
+      <Section fullWidth={false}>
+        <Col lg={{ span: 10, offset: 1 }}>
+          <div className={classes.headerWrapper}>
+            <h1>
+              <Trans>Activity</Trans>
+            </h1>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                marginTop: '3rem',
+                color: 'var(--brand-gray-light-text)',
+              }}
+            >
+              <Spinner animation="border" />
+            </div>
+          </div>
+        </Col>
+      </Section>
+    );
   }
 
   if (error) {
@@ -90,7 +95,24 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
             <Trans>Activity</Trans>
           </h1>
         </div>
-        {data && data.length ? (
+        {data?.length ? (
+          data
+            .slice(0)
+            // .slice(0, MAX_EVENTS_SHOW_ABOVE_FOLD)
+            .map((event: NounProfileEvent, i: number) => {
+              if (event.eventType === NounProfileEventType.VOTE) {
+                return (
+                  <MobileNounProfileVoteRow proposalId={event.data.proposal.id} vote={event.data} />
+                );
+              } else {
+                return <></>;
+              }
+            })
+        ) : (
+          <>you have no data lul</>
+        )}
+      </Col>
+      {/* {data && data.length ? (
           <>
             <Table responsive hover className={classes.aboveTheFoldEventsTable}>
               <tbody className={classes.nounInfoPadding}>
@@ -530,7 +552,7 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
             <Trans>This Noun has no activity, since it was just created. Check back soon!</Trans>
           </div>
         )}
-      </Col>
+      </Col> */}
     </Section>
   );
 };

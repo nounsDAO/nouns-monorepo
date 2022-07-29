@@ -27,7 +27,7 @@ interface NounProfileVoteRowProps {
   vote?: NounVoteHistory;
 }
 
-const selectIconForNounVoteActivityRow = (proposal: Proposal, vote?: NounVoteHistory) => {
+export const selectIconForNounVoteActivityRow = (proposal: Proposal, vote?: NounVoteHistory) => {
   if (!vote || vote.supportDetailed === undefined) {
     if (proposal.status === ProposalState.PENDING || proposal.status === ProposalState.ACTIVE) {
       return <Image src={_PendingVoteIcon} className={classes.voteIcon} />;
@@ -46,7 +46,7 @@ const selectIconForNounVoteActivityRow = (proposal: Proposal, vote?: NounVoteHis
   }
 };
 
-const selectVotingInfoText = (proposal: Proposal, vote?: NounVoteHistory) => {
+export const selectVotingInfoText = (proposal: Proposal, vote?: NounVoteHistory) => {
   if (!vote || vote.supportDetailed === undefined) {
     if (proposal.status === ProposalState.PENDING || proposal.status === ProposalState.ACTIVE) {
       return <Trans>Waiting for</Trans>;
@@ -65,13 +65,13 @@ const selectVotingInfoText = (proposal: Proposal, vote?: NounVoteHistory) => {
   }
 };
 
-const selectProposalStatusIcon = (proposal: Proposal) => {
+export const selectProposalStatusIcon = (proposal: Proposal) => {
   return (
     <VoteStatusPill status={selectProposalStatus(proposal)} text={selectProposalText(proposal)} />
   );
 };
 
-const selectProposalStatus = (proposal: Proposal) => {
+export const selectProposalStatus = (proposal: Proposal) => {
   switch (proposal.status) {
     case ProposalState.SUCCEEDED:
     case ProposalState.EXECUTED:
@@ -85,7 +85,7 @@ const selectProposalStatus = (proposal: Proposal) => {
   }
 };
 
-const selectProposalText = (proposal: Proposal) => {
+export const selectProposalText = (proposal: Proposal) => {
   switch (proposal.status) {
     case ProposalState.PENDING:
       return <Trans>Pending</Trans>;
