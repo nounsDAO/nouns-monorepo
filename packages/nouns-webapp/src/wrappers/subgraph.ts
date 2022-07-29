@@ -237,6 +237,36 @@ export const nounVotingHistoryQuery = (nounId: number) => gql`
 }
 `;
 
+export const nounTransferHistoryQuery = (nounId: number) => gql`
+{
+  transferEvents(where: {noun: "${nounId}"}) {
+    id
+    previousHolder {
+      id
+    }
+    newHolder {
+      id
+    }
+    blockNumber
+  }
+}
+`;
+
+export const nounDelegationHistoryQuery = (nounId: number) => gql`
+{
+  delegationEvents(where: {noun: "${nounId}"}) {
+    id
+    previousDelegate {
+      id
+    }
+    newDelegate {
+      id
+    }
+    blockNumber
+  }
+}
+`;
+
 export const createTimestampAllProposals = () => gql`
   {
     proposals(orderBy: createdTimestamp, orderDirection: asc, first: 1000) {

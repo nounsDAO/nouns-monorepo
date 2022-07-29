@@ -24,6 +24,7 @@ interface ProposalInfo {
 }
 
 export interface NounVoteHistory {
+  blockNumber: number;
   proposal: ProposalInfo;
   support: boolean;
   supportDetailed: number;
