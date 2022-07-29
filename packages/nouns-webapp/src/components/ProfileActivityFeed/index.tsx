@@ -27,7 +27,7 @@ export interface NounVoteHistory {
   proposal: ProposalInfo;
   support: boolean;
   supportDetailed: number;
-  voter: {id: string};
+  voter: { id: string };
 }
 
 const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
