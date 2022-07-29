@@ -16,12 +16,8 @@
 }
 
 .content {
-  margin-left: 0.5rem;
+  margin-left: 1.5rem;
   display: flex;
   justify-content: center;
   flex-direction: column;
-}
-
-.primaryContent {
-  margin-left: 1rem;
 }
