@@ -46,6 +46,7 @@ msgid "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
 msgstr "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
 
 #: src/components/NounProfileVoteRow/index.tsx
+#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Absent for"
 msgstr "Absent for"
 
@@ -58,6 +59,7 @@ msgid "Abstain from voting on Prop {0}"
 msgstr "Abstain from voting on Prop {0}"
 
 #: src/components/NounProfileVoteRow/index.tsx
+#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Abstained on"
 msgstr "Abstained on"
 
@@ -67,9 +69,11 @@ msgstr "Accessory"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Active"
 msgstr "Active"
 
+#: src/components/ProfileActivityFeed/index.tsx
 #: src/components/ProfileActivityFeed/index.tsx
 msgid "Activity"
 msgstr "Activity"
@@ -188,6 +192,7 @@ msgstr "Born"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Canceled"
 msgstr "Canceled"
 
@@ -272,6 +277,7 @@ msgstr "Daily Auctions"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Defeated"
 msgstr "Defeated"
 
@@ -372,11 +378,13 @@ msgstr "Execute"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Executed"
 msgstr "Executed"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Expired"
 msgstr "Expired"
 
@@ -620,6 +628,7 @@ msgstr "Only Nouns you owned or were delegated to you before {0} are eligible to
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Pending"
 msgstr "Pending"
 
@@ -694,6 +703,7 @@ msgstr "Queue"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Queued"
 msgstr "Queued"
 
@@ -733,10 +743,14 @@ msgid "Settlement of one auction kicks off the next."
 msgstr "Settlement of one auction kicks off the next."
 
 #: src/components/ProfileActivityFeed/index.tsx
-msgid "Show all {0} events"
-msgstr "Show all {0} events"
+#~ msgid "Show all {0} events"
+#~ msgstr "Show all {0} events"
 
-#: src/components/ProfileActivityFeed/index.tsx
+#: src/components/ProfileActivityFeedToggle/index.tsx
+msgid "Show all {numEvents} events"
+msgstr "Show all {numEvents} events"
+
+#: src/components/ProfileActivityFeedToggle/index.tsx
 msgid "Show fewer"
 msgstr "Show fewer"
 
@@ -767,6 +781,7 @@ msgstr "Submit vote"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Succeeded"
 msgstr "Succeeded"
 
@@ -900,6 +915,7 @@ msgstr "Twitter"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Undetermined"
 msgstr "Undetermined"
 
@@ -934,6 +950,7 @@ msgstr "Value in ETH (Optional)"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Vetoed"
 msgstr "Vetoed"
 
@@ -954,6 +971,7 @@ msgid "Vote on Prop {0}"
 msgstr "Vote on Prop {0}"
 
 #: src/components/NounProfileVoteRow/index.tsx
+#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Voted against"
 msgstr "Voted against"
 
@@ -962,6 +980,7 @@ msgstr "Voted against"
 #~ msgstr "Voted aginst"
 
 #: src/components/NounProfileVoteRow/index.tsx
+#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Voted for"
 msgstr "Voted for"
 
@@ -978,6 +997,7 @@ msgid "WTF?"
 msgstr "WTF?"
 
 #: src/components/NounProfileVoteRow/index.tsx
+#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Waiting for"
 msgstr "Waiting for"
 

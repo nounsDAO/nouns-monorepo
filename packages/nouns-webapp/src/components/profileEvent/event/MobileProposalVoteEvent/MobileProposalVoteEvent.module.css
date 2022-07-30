@@ -1,0 +1,13 @@
+.voteIcon {
+  width: 38px;
+  margin-right: 0px;
+  margin-bottom: 4px;
+  margin-left: 6px;
+}
+
+.proposalTitle {
+  text-decoration: none;
+  color: black;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+}

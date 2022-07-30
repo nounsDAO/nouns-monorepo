@@ -12,7 +12,7 @@ import NounInfoRowButton from '../NounInfoRowButton';
 import { useAppSelector } from '../../hooks';
 
 import config from '../../config';
-import { buildEtherscanAddressLink } from '../../utils/etherscan';
+import { buildEtherscanTokenLink } from '../../utils/etherscan';
 import { Trans } from '@lingui/macro';
 
 interface NounInfoCardProps {
@@ -23,9 +23,8 @@ interface NounInfoCardProps {
 const NounInfoCard: React.FC<NounInfoCardProps> = props => {
   const { nounId, bidHistoryOnClickHandler } = props;
 
-  const etherscanBaseURL = buildEtherscanAddressLink(config.addresses.nounsToken);
-
-  const etherscanButtonClickHandler = () => window.open(`${etherscanBaseURL}/${nounId}`, '_blank');
+  const etherscanButtonClickHandler = () =>
+    window.open(buildEtherscanTokenLink(config.addresses.nounsToken, nounId));
 
   const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
 

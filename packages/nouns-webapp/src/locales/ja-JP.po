@@ -51,6 +51,7 @@ msgid "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
 msgstr "<2>{proposedAtTransactionHash}</2> <1>{proposer}</1> <0>が提案したものです</0>"
 
 #: src/components/NounProfileVoteRow/index.tsx
+#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Absent for"
 msgstr "不参加"
 
@@ -63,6 +64,7 @@ msgid "Abstain from voting on Prop {0}"
 msgstr "Propへの投票を棄権する {0} "
 
 #: src/components/NounProfileVoteRow/index.tsx
+#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Abstained on"
 msgstr "棄権しました。"
 
@@ -72,9 +74,11 @@ msgstr "付属品"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Active"
 msgstr "実行されました"
 
+#: src/components/ProfileActivityFeed/index.tsx
 #: src/components/ProfileActivityFeed/index.tsx
 msgid "Activity"
 msgstr "アクティビティ"
@@ -193,6 +197,7 @@ msgstr "誕生"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Canceled"
 msgstr "キャンセルしました"
 
@@ -277,6 +282,7 @@ msgstr "デイリーオークション"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Defeated"
 msgstr "却下"
 
@@ -377,11 +383,13 @@ msgstr "実行する"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Executed"
 msgstr "実行しました"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Expired"
 msgstr "期限切れです"
 
@@ -625,6 +633,7 @@ msgstr "投票できるのは {0} 以前に所有していた、または委任�
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Pending"
 msgstr "保留中"
 
@@ -699,6 +708,7 @@ msgstr "キュー"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Queued"
 msgstr "キューに入りました"
 
@@ -738,10 +748,14 @@ msgid "Settlement of one auction kicks off the next."
 msgstr "オークションの決済が１つ終わる度に次が始まります。"
 
 #: src/components/ProfileActivityFeed/index.tsx
-msgid "Show all {0} events"
-msgstr "すべての {0} イベントを表示"
+#~ msgid "Show all {0} events"
+#~ msgstr "すべての {0} イベントを表示"
 
-#: src/components/ProfileActivityFeed/index.tsx
+#: src/components/ProfileActivityFeedToggle/index.tsx
+msgid "Show all {numEvents} events"
+msgstr ""
+
+#: src/components/ProfileActivityFeedToggle/index.tsx
 msgid "Show fewer"
 msgstr "少なく表示する"
 
@@ -772,6 +786,7 @@ msgstr "投票を提出"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Succeeded"
 msgstr "成功しました"
 
@@ -905,6 +920,7 @@ msgstr "Twitter"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Undetermined"
 msgstr "未決定"
 
@@ -939,6 +955,7 @@ msgstr "ETHの価格 (任意)"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Vetoed"
 msgstr "拒否"
 
@@ -959,10 +976,12 @@ msgid "Vote on Prop {0}"
 msgstr "提案 {0} に投票"
 
 #: src/components/NounProfileVoteRow/index.tsx
+#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Voted against"
 msgstr "反対に投票"
 
 #: src/components/NounProfileVoteRow/index.tsx
+#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Voted for"
 msgstr "賛成に投票"
 
@@ -979,6 +998,7 @@ msgid "WTF?"
 msgstr "WTF?"
 
 #: src/components/NounProfileVoteRow/index.tsx
+#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Waiting for"
 msgstr "待機"
 
