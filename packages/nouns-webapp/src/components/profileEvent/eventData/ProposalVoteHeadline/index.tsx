@@ -1,13 +1,15 @@
 import { Trans } from '@lingui/macro';
 import { Proposal, ProposalState, Vote } from '../../../../wrappers/nounsDao';
+import ShortAddress from '../../../ShortAddress';
 
 interface ProposalVoteHeadlineProps {
   proposal: Proposal;
   supportDetailed: Vote | undefined;
+  voter: string | undefined;
 }
 
 const ProposalVoteHeadline: React.FC<ProposalVoteHeadlineProps> = props => {
-  const { proposal, supportDetailed } = props;
+  const { proposal, supportDetailed, voter } = props;
 
   if (supportDetailed === undefined) {
     if (proposal.status === ProposalState.PENDING || proposal.status === ProposalState.ACTIVE) {
@@ -16,13 +18,19 @@ const ProposalVoteHeadline: React.FC<ProposalVoteHeadlineProps> = props => {
     return <Trans>Absent for</Trans>;
   }
 
+  const voterComponent = (
+    <span style={{ fontWeight: 'bold' }}>
+      <ShortAddress address={voter ?? ''} />
+    </span>
+  );
+
   switch (supportDetailed) {
     case Vote.FOR:
-      return <Trans>Voted for</Trans>;
+      return <Trans>{voterComponent} voted for</Trans>;
     case Vote.ABSTAIN:
-      return <Trans>Abstained on</Trans>;
+      return <Trans>{voterComponent} abstained on</Trans>;
     default:
-      return <Trans>Voted against</Trans>;
+      return <Trans>{voterComponent} voted against</Trans>;
   }
 };
 
