@@ -31,7 +31,6 @@ export type TransferEvent = {
 };
 
 export type DelegationEvent = {
-  holder: string;
   previousDelegate: string;
   newDelegate: string;
   transactionHash: string;
@@ -116,7 +115,7 @@ const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherRespo
     return {
       // If no vote was cast, for indexing / sorting purposes declear the block number of this event
       // to be the end block of the voting period
-      blockNumber: didVote ? vote.blockNumber : proposal.endBlock,
+      blockNumber: didVote ? parseInt(vote.blockNumber.toString()) : proposal.endBlock,
       eventType: NounEventType.PROPOSAL_VOTE,
       payload: {
         proposal,
@@ -158,13 +157,24 @@ const useNounTransferEvents = (nounId: number): NounProfileEventFetcherResponse 
   return {
     loading: false,
     error: false,
-    data: data.transferEvents.map((event: { blockNumber: string }) => {
-      return {
-        blockNumber: parseInt(event.blockNumber),
-        eventType: NounEventType.TRANSFER,
-        payload: event,
-      };
-    }),
+    data: data.transferEvents.map(
+      (event: {
+        blockNumber: string;
+        previousHolder: { id: any };
+        newHolder: { id: any };
+        id: any;
+      }) => {
+        return {
+          blockNumber: parseInt(event.blockNumber),
+          eventType: NounEventType.TRANSFER,
+          payload: {
+            from: event.previousHolder.id,
+            to: event.newHolder.id,
+            transactionHash: event.id,
+          } as TransferEvent,
+        } as NounProfileEvent;
+      },
+    ),
   };
 };
 
@@ -191,13 +201,24 @@ const useDelegationEvents = (nounId: number): NounProfileEventFetcherResponse =>
   return {
     loading: false,
     error: false,
-    data: data.transferEvents.map((event: { blockNumber: string }) => {
-      return {
-        blockNumber: parseInt(event.blockNumber),
-        eventType: NounEventType.DELEGATION,
-        payload: event,
-      };
-    }),
+    data: data.delegationEvents.map(
+      (event: {
+        blockNumber: string;
+        previousDelegate: { id: any };
+        newDelegate: { id: any };
+        id: string;
+      }) => {
+        return {
+          blockNumber: parseInt(event.blockNumber),
+          eventType: NounEventType.DELEGATION,
+          payload: {
+            previousDelegate: event.previousDelegate.id,
+            newDelegate: event.newDelegate.id,
+            transactionHash: event.id.substring(0, event.id.indexOf('_')),
+          } as DelegationEvent,
+        } as NounProfileEvent;
+      },
+    ),
   };
 };
 
@@ -247,12 +268,21 @@ export const useNounActivity = (nounId: number): NounProfileEventFetcherResponse
     };
   }
 
+  const events = votesData
+    ?.concat(nounTransferData)
+    .concat(delegationEventsData)
+    .sort((a: NounProfileEvent, b: NounProfileEvent) => a.blockNumber - b.blockNumber)
+    .reverse();
+
+  console.log(events);
+
   return {
     loading: false,
     error: false,
     data: votesData
       ?.concat(nounTransferData)
       .concat(delegationEventsData)
-      .sort((a: NounProfileEvent, b: NounProfileEvent) => -1 * (a.blockNumber - b.blockNumber)),
+      .sort((a: NounProfileEvent, b: NounProfileEvent) => a.blockNumber - b.blockNumber)
+      .reverse(),
   };
 };

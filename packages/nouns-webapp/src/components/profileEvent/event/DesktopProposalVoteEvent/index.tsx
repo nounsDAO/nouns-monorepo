@@ -28,10 +28,13 @@ const DesktopProposalVoteEvent: React.FC<DesktopProposalVoteEventProps> = props 
         />
       }
       primaryContent={
-        <ProposalVoteHeadline
-          proposal={event.proposal}
-          supportDetailed={event.vote.supportDetailed}
-        />
+        <>
+          <ProposalVoteHeadline
+            proposal={event.proposal}
+            supportDetailed={event.vote.supportDetailed}
+          />{' '}
+          <span className={classes.proposalTitle}>{event.proposal.title}</span>
+        </>
       }
       secondaryContent={
         <ProposalVoteInfoPillsContainer proposal={event.proposal} voter={event.vote.voter} />

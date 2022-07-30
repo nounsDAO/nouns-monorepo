@@ -1,10 +1,3 @@
-.wrapper {
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: flex-end;
-  align-items: center;
-}
-
 .delegateHover {
   border-radius: 8px !important;
   background-color: var(--brand-gray-dark-text) !important;
@@ -14,7 +7,34 @@
   transition: ease-in-out 125ms;
 }
 
-.pill {
+.switchIconWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--brand-gray-light-text-translucent);
+  color: var(--brand-gray-light-text);
+  border-radius: 100%;
+  height: 38px;
+  width: 38px;
+  margin-left: 0.4rem;
+}
+
+.switchIcon {
+  height: 22px;
+  width: 22px;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.externalLinkIcon {
+  height: 16px;
+  width: 16px;
+  margin-right: 0.3rem;
+}
+
+.transactionHashWrapper {
   background-color: var(--brand-gray-light-text-translucent);
   color: var(--brand-gray-light-text);
   height: 28px;
@@ -32,12 +52,4 @@
   padding: 0px 8px;
   font-size: 14px;
   width: fit-content;
-}
-
-.icon {
-  height: 16px;
-  width: 16px;
-  margin-right: 0.3rem;
-  margin-left: 0.3rem;
-  margin-top: 0.05rem;
 }

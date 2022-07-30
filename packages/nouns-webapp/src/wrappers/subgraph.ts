@@ -224,6 +224,7 @@ export const nounVotingHistoryQuery = (nounId: number) => gql`
 	noun(id: ${nounId}) {
 		id
 		votes {
+      blockNumber
       proposal {
         id
       }

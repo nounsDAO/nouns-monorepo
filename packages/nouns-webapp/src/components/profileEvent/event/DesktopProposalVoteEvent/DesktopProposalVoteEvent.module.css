@@ -4,3 +4,10 @@
   margin-bottom: 4px;
   margin-left: 6px;
 }
+
+.proposalTitle {
+  text-decoration: none;
+  color: black;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+}

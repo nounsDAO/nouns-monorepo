@@ -9,4 +9,5 @@
   flex-flow: row nowrap;
   justify-content: flex-end;
   align-items: center;
+  margin-left: 0.5rem;
 }
