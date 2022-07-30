@@ -33,6 +33,11 @@
   font-size: 14px;
   width: fit-content;
   margin-right: 0.5rem;
+  transition: all 0.15s ease-in-out;
+}
+
+.pill:hover {
+  transform: scale(0.95);
 }
 
 .icon {

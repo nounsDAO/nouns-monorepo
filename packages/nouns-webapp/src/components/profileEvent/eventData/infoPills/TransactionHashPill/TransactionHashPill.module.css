@@ -16,7 +16,12 @@
   padding: 0px 8px;
   font-size: 14px;
   width: fit-content;
+  transition: all 0.15s ease-in-out;
 }
+.transactionHashWrapper:hover {
+  transform: scale(0.95);
+}
+
 .externalLinkIcon {
   height: 16px;
   width: 16px;
