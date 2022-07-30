@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Col } from 'react-bootstrap';
 import { StandaloneNounWithSeed } from '../StandaloneNoun';
 import AuctionActivity from '../AuctionActivity';
@@ -41,6 +42,23 @@ const Auction: React.FC<AuctionProps> = props => {
     dispatch(setNextOnDisplayAuctionNounId());
     currentAuction && history.push(`/noun/${currentAuction.nounId.toNumber() + 1}`);
   };
+
+  const handleKeyPress = (event: KeyboardEvent) => {
+    if (currentAuction && lastNounId) {
+      const isFirstAuction = currentAuction.nounId.eq(0);
+      const isLastAuction = currentAuction.nounId.eq(lastNounId);
+
+      if (event.code === 'ArrowLeft' && !isFirstAuction) prevAuctionHandler();
+      else if (event.code === 'ArrowRight' && !isLastAuction) nextAuctionHandler();
+      else return;
+    }
+    return;
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyPress);
+    return () => document.removeEventListener('keydown', handleKeyPress);
+  }, [handleKeyPress, currentAuction]);
 
   const nounContent = currentAuction && (
     <div className={classes.nounWrapper}>
