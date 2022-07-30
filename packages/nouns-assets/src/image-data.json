@@ -901,19 +901,19 @@
         "data": "0x0018121b0e060e024c020e064c"
       },
       {
-        "filename": "body-bege",
+        "filename": "accessory-bege",
         "data": "0x0015171f093a0101000d0101000d0101000d0101000d0101000d0101000d0101000b01"
       },
       {
-        "filename": "body-gray-scale-1",
+        "filename": "accessory-gray-scale-1",
         "data": "0x0015171f093a0c01000d0c01000d0c01000d0c01000d0c01000d0c01000d0c01000b0c"
       },
       {
-        "filename": "body-gray-scale-9",
+        "filename": "accessory-gray-scale-9",
         "data": "0x0015171f093a0f01000d0f01000d0f01000d0f01000d0f01000d0f01000d0f01000b0f"
       },
       {
-        "filename": "body-ice-cold",
+        "filename": "accessory-ice-cold",
         "data": "0x0015171f093a0601000d0601000d0601000d0601000d0601000d0601000d0601000b06"
       }
     ],
