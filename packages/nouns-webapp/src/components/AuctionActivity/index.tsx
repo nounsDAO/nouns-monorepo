@@ -89,7 +89,6 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
   // handle what happens on key press
   const handleKeyPress = useCallback(
     event => {
-      console.log(event);
       if (event.key === 'ArrowLeft') {
         onPrevAuctionClick();
       }

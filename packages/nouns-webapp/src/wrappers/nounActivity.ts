@@ -170,7 +170,7 @@ const useNounTransferEvents = (nounId: number): NounProfileEventFetcherResponse 
           payload: {
             from: event.previousHolder.id,
             to: event.newHolder.id,
-            transactionHash: event.id.substring(0, event.id.indexOf("_")),
+            transactionHash: event.id.substring(0, event.id.indexOf('_')),
           } as TransferEvent,
         } as NounProfileEvent;
       },
@@ -267,14 +267,6 @@ export const useNounActivity = (nounId: number): NounProfileEventFetcherResponse
       error: false,
     };
   }
-
-  const events = votesData
-    ?.concat(nounTransferData)
-    .concat(delegationEventsData)
-    .sort((a: NounProfileEvent, b: NounProfileEvent) => a.blockNumber - b.blockNumber)
-    .reverse();
-
-  console.log(events);
 
   return {
     loading: false,

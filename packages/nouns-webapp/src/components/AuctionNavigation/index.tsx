@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import classes from './AuctionNavigation.module.css';
 import { useAppSelector } from '../../hooks';
 
@@ -10,6 +10,35 @@ const AuctionNavigation: React.FC<{
 }> = props => {
   const { isFirstAuction, isLastAuction, onPrevAuctionClick, onNextAuctionClick } = props;
   const isCool = useAppSelector(state => state.application.stateBackgroundColor) === '#d5d7e1';
+
+  // Page through Nouns via keyboard
+  // handle what happens on key press
+  const handleKeyPress = useCallback(
+    event => {
+      if (event.key === 'ArrowLeft') {
+        if (!isFirstAuction) {
+          onPrevAuctionClick();
+        }
+      }
+      if (event.key === 'ArrowRight') {
+        if (!isLastAuction) {
+          onNextAuctionClick();
+        }
+      }
+    },
+    [isFirstAuction, isLastAuction, onNextAuctionClick, onPrevAuctionClick],
+  );
+
+  useEffect(() => {
+    // attach the event listener
+    document.addEventListener('keydown', handleKeyPress);
+
+    // remove the event listener
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [handleKeyPress]);
+
   return (
     <div className={classes.navArrowsContainer}>
       <button
