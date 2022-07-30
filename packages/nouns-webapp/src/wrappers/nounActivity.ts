@@ -170,7 +170,7 @@ const useNounTransferEvents = (nounId: number): NounProfileEventFetcherResponse 
           payload: {
             from: event.previousHolder.id,
             to: event.newHolder.id,
-            transactionHash: event.id,
+            transactionHash: event.id.substring(0, event.id.indexOf("_")),
           } as TransferEvent,
         } as NounProfileEvent;
       },
