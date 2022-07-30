@@ -107,7 +107,8 @@ export function handleTransfer(event: Transfer): void {
   let governance = getGovernanceEntity();
   transferredNounId = event.params.tokenId.toString();
 
-  let transferEvent = new TransferEvent(event.transaction.hash.toHexString());
+
+  let transferEvent = new TransferEvent(event.transaction.hash.toHexString() + "_" + transferredNounId);
   transferEvent.blockNumber = event.block.number;
   transferEvent.blockTimestamp = event.block.timestamp;
   transferEvent.noun = event.params.tokenId.toString();
