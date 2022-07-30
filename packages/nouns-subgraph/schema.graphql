@@ -1,3 +1,23 @@
+type NounTransfer @entity {
+  "Txn hash of this transfer event"
+  id: ID!
+  from: Account!;
+  to: Account!;
+  noun: Noun!;
+  blockNumber: Int!;
+  blockTimestamp: Int!;
+}
+
+type NounDelegateChanged @entity {
+  "Txn hash of this event + delegated Noun Id"
+  id: ID!
+  from: Account!;
+  to: Account!;
+  noun: Noun!;
+  blockNumber: Int!;
+  blockTimestamp: Int!;
+}
+
 type Seed @entity {
   "The Noun's ERC721 token id"
   id: ID!

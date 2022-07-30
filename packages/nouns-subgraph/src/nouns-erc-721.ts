@@ -5,7 +5,7 @@ import {
   NounCreated,
   Transfer,
 } from './types/NounsToken/NounsToken';
-import { Noun, Seed } from './types/schema';
+import { Noun, Seed, NounTransfer, NounDelegateChanged } from './types/schema';
 import { BIGINT_ONE, BIGINT_ZERO, ZERO_ADDRESS } from './utils/constants';
 import { getGovernanceEntity, getOrCreateDelegate, getOrCreateAccount } from './utils/helpers';
 
@@ -57,6 +57,19 @@ export function handleDelegateChanged(event: DelegateChanged): void {
   newDelegate.nounsRepresented = newNounsRepresented;
   previousDelegate.save();
   newDelegate.save();
+
+
+  // Emit a delegate changed for each Noun delegated to previous account
+  accountNouns.forEach((nounId: string) => {
+    let nounDelegateChanged = new NounDelegateChanged(event.transaction.hash.toHex() + '-' + nounId);
+    nounDelegateChanged.from = previousDelegate.id;
+    nounDelegateChanged.to = newDelegate.id;
+    nounDelegateChanged.noun = nounId;
+    nounDelegateChanged.blockNumber = event.block.number;
+    nounDelegateChanged.blockTimestamp = event.block.timestamp;
+    nounDelegateChanged.save();
+  });
+
 }
 
 export function handleDelegateVotesChanged(event: DelegateVotesChanged): void {
@@ -127,6 +140,17 @@ export function handleTransfer(event: Transfer): void {
     }
 
     fromHolder.save();
+
+
+    // Add to the historical transfer info log
+    let nounTransfer = new NounTransfer(event.transaction.hash.toHex());
+    nounTransfer.from = fromHolder.id;
+    nounTransfer.to = toHolder.id;
+    nounTransfer.noun = transferredNounId;
+    nounTransfer.blockNumber = event.block.number;
+    nounTransfer.blockTimestamp = event.block.timestamp;
+    nounTransfer.save();
+
   }
 
   // toHolder
