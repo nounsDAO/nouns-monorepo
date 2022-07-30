@@ -8,6 +8,7 @@ import { useNounActivity } from '../../wrappers/nounActivity';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 import ProfileActivityFeedToggle from '../ProfileActivityFeedToggle';
 import DesktopProfileActivityFeed from '../DesktopProfileActivityFeed';
+import MobileProfileActivityFeed from '../MobileProfileActivityFeed';
 
 interface ProfileActivityFeedProps {
   nounId: number;
@@ -80,7 +81,13 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
                 aboveFoldEventCount={MAX_EVENTS_SHOW_ABOVE_FOLD}
               />
             </div>
-            <div className={responsiveUiUtilsClasses.mobileOnly}></div>
+            <div className={responsiveUiUtilsClasses.mobileOnly}>
+              <MobileProfileActivityFeed
+                events={data}
+                isExpanded={isExpanded}
+                aboveFoldEventCount={MAX_EVENTS_SHOW_ABOVE_FOLD}
+              />
+            </div>
 
             {data.length > MAX_EVENTS_SHOW_ABOVE_FOLD && (
               <ProfileActivityFeedToggle

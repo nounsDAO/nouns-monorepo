@@ -1,22 +1,21 @@
 import React from 'react';
 import { buildEtherscanTxLink } from '../../../../utils/etherscan';
 import { DelegationEvent } from '../../../../wrappers/nounActivity';
-import classes from './DesktopDelegationEvent.module.css';
-import DesktopNounActivityRow from '../../activityRow/DesktopNounActivityRow';
+import classes from './MobileDelegationEvent.module.css';
+import MobileNounActivityRow from '../../activityRow/MobileNounActivityRow';
 import { ScaleIcon } from '@heroicons/react/solid';
-import ReactTooltip from 'react-tooltip';
 import ShortAddress from '../../../ShortAddress';
 import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
 
-interface DesktopDelegationEventProps {
+interface MobileDelegationEventProps {
   event: DelegationEvent;
 }
 
-const DesktopDelegationEvent: React.FC<DesktopDelegationEventProps> = props => {
+const MobileDelegationEvent: React.FC<MobileDelegationEventProps> = props => {
   const { event } = props;
 
   return (
-    <DesktopNounActivityRow
+    <MobileNounActivityRow
       onClick={() => window.open(buildEtherscanTxLink(event.transactionHash), '_blank')}
       icon={
         <div className={classes.scaleIconWrapper}>
@@ -38,21 +37,11 @@ const DesktopDelegationEvent: React.FC<DesktopDelegationEventProps> = props => {
       }
       secondaryContent={
         <>
-          <ReactTooltip
-            id={'view-on-etherscan-tooltip'}
-            effect={'solid'}
-            className={classes.delegateHover}
-            getContent={dataTip => {
-              return <div>{dataTip}</div>;
-            }}
-          />
-          <div data-tip={`View on Etherscan`} data-for="view-on-etherscan-tooltip">
-            <TransactionHashPill transactionHash={event.transactionHash} />
-          </div>
+          <TransactionHashPill transactionHash={event.transactionHash} />
         </>
       }
     />
   );
 };
 
-export default DesktopDelegationEvent;
+export default MobileDelegationEvent;

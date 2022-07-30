@@ -1,20 +1,4 @@
-.wrapper {
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.delegateHover {
-  border-radius: 8px !important;
-  background-color: var(--brand-gray-dark-text) !important;
-  color: white;
-  opacity: 0.75 !important;
-  font-weight: 500;
-  transition: ease-in-out 125ms;
-}
-
-.pill {
+.transactionHashWrapper {
   background-color: var(--brand-gray-light-text-translucent);
   color: var(--brand-gray-light-text);
   height: 28px;
@@ -32,20 +16,15 @@
   padding: 0px 8px;
   font-size: 14px;
   width: fit-content;
-  margin-right: 0.5rem;
 }
-
-.icon {
+.externalLinkIcon {
   height: 16px;
   width: 16px;
   margin-right: 0.3rem;
-  margin-left: 0.1rem;
-  margin-top: 0.05rem;
 }
 
 @media (max-width: 992px) {
-  .icon {
-    margin-top: 0;
-    margin-bottom: 0.12rem;
+  .externalLinkIcon {
+    margin-bottom: 0.135rem;
   }
 }

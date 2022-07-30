@@ -1,22 +1,21 @@
 import React from 'react';
 import { buildEtherscanTxLink } from '../../../../utils/etherscan';
 import { TransferEvent } from '../../../../wrappers/nounActivity';
-import classes from './DesktopTransferEvent.module.css';
-import DesktopNounActivityRow from '../../activityRow/DesktopNounActivityRow';
+import classes from './MobileTransferEvent.module.css';
+import MobileNounActivityRow from '../../activityRow/MobileNounActivityRow';
 import { SwitchHorizontalIcon } from '@heroicons/react/solid';
-import ReactTooltip from 'react-tooltip';
 import ShortAddress from '../../../ShortAddress';
 import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
 
-interface DesktopTransferEventProps {
+interface MobileTransferEventProps {
   event: TransferEvent;
 }
 
-const DesktopTransferEvent: React.FC<DesktopTransferEventProps> = props => {
+const MobileTransferEvent: React.FC<MobileTransferEventProps> = props => {
   const { event } = props;
 
   return (
-    <DesktopNounActivityRow
+    <MobileNounActivityRow
       onClick={() => window.open(buildEtherscanTxLink(event.transactionHash), '_blank')}
       icon={
         <div className={classes.switchIconWrapper}>
@@ -38,21 +37,11 @@ const DesktopTransferEvent: React.FC<DesktopTransferEventProps> = props => {
       }
       secondaryContent={
         <>
-          <ReactTooltip
-            id={'view-on-etherscan-tooltip'}
-            effect={'solid'}
-            className={classes.delegateHover}
-            getContent={dataTip => {
-              return <div>{dataTip}</div>;
-            }}
-          />
-          <div data-tip={`View on Etherscan`} data-for="view-on-etherscan-tooltip">
-            <TransactionHashPill transactionHash={event.transactionHash} />
-          </div>
+          <TransactionHashPill transactionHash={event.transactionHash} />
         </>
       }
     />
   );
 };
 
-export default DesktopTransferEvent;
+export default MobileTransferEvent;

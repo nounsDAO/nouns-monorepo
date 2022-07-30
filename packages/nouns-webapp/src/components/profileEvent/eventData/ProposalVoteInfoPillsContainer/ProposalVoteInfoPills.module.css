@@ -4,10 +4,15 @@
   justify-content: flex-end;
 }
 
+@media (max-width: 992px) {
+  .wrapper {
+    justify-content: flex-start;
+  }
+}
+
 .voteStatusWrapper {
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-end;
   align-items: center;
-  margin-left: 0.5rem;
 }
