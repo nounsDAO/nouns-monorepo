@@ -17,6 +17,8 @@
     "prepare:mainnet": "mustache config/mainnet.json subgraph.yaml.mustache > subgraph.yaml",
     "deploy:rinkeby": "yarn clean && yarn prepare:rinkeby && yarn codegen && yarn deploy nounsdao/nouns-subgraph-rinkeby",
     "deploy:mainnet": "yarn clean && yarn prepare:mainnet && yarn codegen && yarn deploy nounsdao/nouns-subgraph",
+    "prepare:rinkeby-fork": "mustache config/rinkeby-fork.json subgraph.yaml.mustache > subgraph.yaml",
+    "deploy:rinkeby-fork": "yarn clean && yarn prepare:rinkeby-fork && yarn codegen && yarn deploy davidbrai/nouns-rinkeby",
     "mustache": "mustache"
   },
   "devDependencies": {
