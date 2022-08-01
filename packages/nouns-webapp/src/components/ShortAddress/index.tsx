@@ -28,7 +28,7 @@ const ShortAddress: React.FC<{ address: string; avatar?: boolean; size?: number 
     );
   }
 
-  return <>{ens ? ens : shortAddress}</>;
+  return <>{ens && !ensMatchesBlocklistRegex ? ens : shortAddress}</>;
 };
 
 export default ShortAddress;
