@@ -59,7 +59,6 @@ msgid "Abstain from voting on Prop {0}"
 msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx
-#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Abstained on"
 msgstr ""
 
@@ -971,7 +970,6 @@ msgid "Vote on Prop {0}"
 msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx
-#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Voted against"
 msgstr ""
 
@@ -980,7 +978,6 @@ msgstr ""
 #~ msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx
-#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Voted for"
 msgstr ""
 
@@ -1165,4 +1162,16 @@ msgstr ""
 
 #: src/components/DelegationCandidateVoteCountInfo/index.tsx
 msgid "{voteCount} Votes"
+msgstr ""
+
+#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
+msgid "{voterComponent} abstained on"
+msgstr ""
+
+#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
+msgid "{voterComponent} voted against"
+msgstr ""
+
+#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
+msgid "{voterComponent} voted for"
 msgstr ""

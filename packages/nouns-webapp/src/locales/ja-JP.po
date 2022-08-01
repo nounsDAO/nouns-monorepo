@@ -64,7 +64,6 @@ msgid "Abstain from voting on Prop {0}"
 msgstr "Propへの投票を棄権する {0} "
 
 #: src/components/NounProfileVoteRow/index.tsx
-#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Abstained on"
 msgstr "棄権しました。"
 
@@ -976,12 +975,10 @@ msgid "Vote on Prop {0}"
 msgstr "提案 {0} に投票"
 
 #: src/components/NounProfileVoteRow/index.tsx
-#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Voted against"
 msgstr "反対に投票"
 
 #: src/components/NounProfileVoteRow/index.tsx
-#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Voted for"
 msgstr "賛成に投票"
 
@@ -1167,3 +1164,15 @@ msgstr "{voteCount}票"
 #: src/components/DelegationCandidateVoteCountInfo/index.tsx
 msgid "{voteCount} Votes"
 msgstr "{voteCount}票"
+
+#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
+msgid "{voterComponent} abstained on"
+msgstr ""
+
+#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
+msgid "{voterComponent} voted against"
+msgstr ""
+
+#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
+msgid "{voterComponent} voted for"
+msgstr ""
