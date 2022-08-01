@@ -89,29 +89,6 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
   const hasNounVotes = account !== undefined && connectedAccountNounVotes > 0;
   const hasNounBalance = (useUserNounTokenBalance() ?? 0) > 0;
 
-  // Key press handlers to meta key
-  // These allow us to support the mac meta+click to open in a new behavior
-  const metaKeyDownHandler = (event: { key: string }) => {
-    if (event.key === 'Meta') {
-      setIsMetaKeyPressed(true);
-    }
-  };
-
-  const metaKeyUpHandler = (event: { key: string }) => {
-    if (event.key === 'Meta') {
-      setIsMetaKeyPressed(false);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener('keydown', metaKeyDownHandler);
-    window.addEventListener('keyup', metaKeyUpHandler);
-    return () => {
-      window.removeEventListener('keydown', metaKeyDownHandler);
-      window.removeEventListener('keyup', metaKeyUpHandler);
-    };
-  }, []);
-
   return (
     <div className={classes.proposals}>
       {showDelegateModal && <DelegationModal onDismiss={() => setShowDelegateModal(false)} />}

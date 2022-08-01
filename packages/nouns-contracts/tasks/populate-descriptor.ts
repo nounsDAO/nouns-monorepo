@@ -5,13 +5,13 @@ import { dataToDescriptorInput } from './utils';
 task('populate-descriptor', 'Populates the descriptor with color palettes and Noun parts')
   .addOptionalParam(
     'nftDescriptor',
-    'The `NFTDescriptor` contract address',
+    'The `NFTDescriptorV2` contract address',
     '0x5FbDB2315678afecb367f032d93F642f64180aa3',
     types.string,
   )
   .addOptionalParam(
     'nounsDescriptor',
-    'The `NounsDescriptor` contract address',
+    'The `NounsDescriptorV2` contract address',
     '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
     types.string,
   )
