@@ -79,6 +79,29 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
   const [showDelegateModal, setShowDelegateModal] = useState(false);
   const [isMetaKeyPressed, setIsMetaKeyPressed] = useState(false);
 
+  // Key press handlers to meta key
+  // These allow us to support the mac meta+click to open in a new behavior
+  const metaKeyDownHandler = (event: { key: string }) => {
+    if (event.key === 'Meta') {
+      setIsMetaKeyPressed(true);
+    }
+  };
+
+  const metaKeyUpHandler = (event: { key: string }) => {
+    if (event.key === 'Meta') {
+      setIsMetaKeyPressed(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', metaKeyDownHandler);
+    window.addEventListener('keyup', metaKeyUpHandler);
+    return () => {
+      window.removeEventListener('keydown', metaKeyDownHandler);
+      window.removeEventListener('keyup', metaKeyUpHandler);
+    };
+  }, []);
+
   const nullStateCopy = () => {
     if (account !== null) {
       return <Trans>You have no Votes.</Trans>;
