@@ -18,10 +18,23 @@ const encode = async (sourceFolder: string, destinationFilepath: string) => {
     const folderpath = path.join(sourceFolder, folder);
     const files = await fs.readdir(folderpath);
     for (const file of files) {
+      if (file === '.gitkeep') {
+        continue;
+      }
       const image = await readPngImage(path.join(folderpath, file));
       encoder.encodeImage(file.replace(/\.png$/, ''), image, folder.replace(/^\d-/, ''));
     }
   }
+
+  if (JSON.stringify(encoder.data.palette) !== JSON.stringify(palette)) {
+    console.log('Palette changed! Aborting');
+
+    await fs.writeFile('original_palette.json', JSON.stringify(palette, null, 2));
+    await fs.writeFile('new_palette.json', JSON.stringify(encoder.data.palette, null, 2));
+
+    throw new Error(`Palette changed, expected to stay the same`);
+  }
+
   await fs.writeFile(
     destinationFilepath,
     JSON.stringify(
