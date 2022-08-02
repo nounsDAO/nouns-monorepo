@@ -24,8 +24,9 @@
   width: 22px;
 }
 
-.bold {
+.address {
   font-weight: bold;
+  cursor: pointer;
 }
 
 .externalLinkIcon {

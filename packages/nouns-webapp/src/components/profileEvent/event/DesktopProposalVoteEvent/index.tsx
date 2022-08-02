@@ -7,6 +7,7 @@ import React from 'react';
 import { getProposalVoteIcon } from '../../../../utils/nounActivity/getProposalVoteIcon';
 import ProposalVoteHeadline from '../../eventData/ProposalVoteHeadline';
 import DesktopNounActivityRow from '../../activityRow/DesktopNounActivityRow';
+import ReactTooltip from 'react-tooltip';
 
 interface DesktopProposalVoteEventProps {
   event: ProposalVoteEvent;
@@ -20,7 +21,6 @@ const DesktopProposalVoteEvent: React.FC<DesktopProposalVoteEventProps> = props 
 
   return (
     <DesktopNounActivityRow
-      onClick={proposalOnClickHandler}
       icon={
         <Image
           src={getProposalVoteIcon(event.proposal, event.vote.supportDetailed)}
@@ -29,12 +29,27 @@ const DesktopProposalVoteEvent: React.FC<DesktopProposalVoteEventProps> = props 
       }
       primaryContent={
         <>
+          <ReactTooltip
+            id={'view-prop-tooltip'}
+            effect={'solid'}
+            className={classes.delegateHover}
+            getContent={dataTip => {
+              return <div>{dataTip}</div>;
+            }}
+          />
           <ProposalVoteHeadline
             proposal={event.proposal}
             voter={event.vote.voter}
             supportDetailed={event.vote.supportDetailed}
           />{' '}
-          <span className={classes.proposalTitle}>{event.proposal.title}</span>
+          <span
+            data-tip={`View Proposal`}
+            data-for="view-prop-tooltip"
+            onClick={proposalOnClickHandler}
+            className={classes.proposalTitle}
+          >
+            {event.proposal.title}
+          </span>
         </>
       }
       secondaryContent={<ProposalVoteInfoPillsContainer proposal={event.proposal} />}

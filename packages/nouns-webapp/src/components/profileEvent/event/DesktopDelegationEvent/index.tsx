@@ -1,5 +1,5 @@
 import React from 'react';
-import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../../../utils/etherscan';
+import { buildEtherscanAddressLink } from '../../../../utils/etherscan';
 import { DelegationEvent } from '../../../../wrappers/nounActivity';
 import classes from './DesktopDelegationEvent.module.css';
 import DesktopNounActivityRow from '../../activityRow/DesktopNounActivityRow';
@@ -17,7 +17,6 @@ const DesktopDelegationEvent: React.FC<DesktopDelegationEventProps> = props => {
 
   return (
     <DesktopNounActivityRow
-      onClick={() => window.open(buildEtherscanTxLink(event.transactionHash), '_blank')}
       icon={
         <div className={classes.scaleIconWrapper}>
           <ScaleIcon className={classes.scaleIcon} />
@@ -38,7 +37,7 @@ const DesktopDelegationEvent: React.FC<DesktopDelegationEventProps> = props => {
             data-tip={`View on Etherscan`}
             onClick={() => window.open(buildEtherscanAddressLink(event.previousDelegate), '_blank')}
             data-for="view-on-etherscan-tooltip"
-            className={classes.bold}
+            className={classes.address}
           >
             {' '}
             <ShortAddress address={event.previousDelegate} />
@@ -48,7 +47,7 @@ const DesktopDelegationEvent: React.FC<DesktopDelegationEventProps> = props => {
             data-tip={`View on Etherscan`}
             data-for="view-on-etherscan-tooltip"
             onClick={() => window.open(buildEtherscanAddressLink(event.newDelegate), '_blank')}
-            className={classes.bold}
+            className={classes.address}
           >
             <ShortAddress address={event.newDelegate} />
           </span>
@@ -57,14 +56,14 @@ const DesktopDelegationEvent: React.FC<DesktopDelegationEventProps> = props => {
       secondaryContent={
         <>
           <ReactTooltip
-            id={'view-on-etherscan-tooltip'}
+            id={'view-on-etherscan-txn-delegate-tooltip'}
             effect={'solid'}
             className={classes.delegateHover}
             getContent={dataTip => {
               return <div>{dataTip}</div>;
             }}
           />
-          <div data-tip={`View on Etherscan`} data-for="view-on-etherscan-tooltip">
+          <div data-tip={`View on Etherscan`} data-for="view-on-etherscan-txn-delegate-tooltip">
             <TransactionHashPill transactionHash={event.transactionHash} />
           </div>
         </>

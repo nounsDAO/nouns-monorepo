@@ -1,6 +1,9 @@
 .wrapper {
-  cursor: pointer;
   transition: all 0.2s ease-in-out;
+}
+
+.pointer {
+  cursor: pointer;
 }
 
 .wrapper:hover {

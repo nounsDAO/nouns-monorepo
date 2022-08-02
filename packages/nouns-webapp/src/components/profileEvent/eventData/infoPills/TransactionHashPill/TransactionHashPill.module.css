@@ -17,6 +17,7 @@
   font-size: 14px;
   width: fit-content;
   transition: all 0.15s ease-in-out;
+  cursor: pointer;
 }
 .transactionHashWrapper:hover {
   transform: scale(0.95);

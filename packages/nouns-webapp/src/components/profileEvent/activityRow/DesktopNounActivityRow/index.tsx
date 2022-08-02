@@ -4,19 +4,18 @@ import responsiveUiUtilsClasses from '../../../../utils/ResponsiveUIUtils.module
 import { useActiveLocale } from '../../../../hooks/useActivateLocale';
 
 interface DesktopNounActivityRowProps {
-  onClick: () => void;
   icon: ReactNode;
   primaryContent: ReactNode;
   secondaryContent?: ReactNode;
 }
 
 const DesktopNounActivityRow: React.FC<DesktopNounActivityRowProps> = props => {
-  const { onClick, icon, primaryContent, secondaryContent } = props;
+  const { icon, primaryContent, secondaryContent } = props;
 
   const activeLocale = useActiveLocale();
 
   return (
-    <tr onClick={onClick} className={classes.wrapper}>
+    <tr className={classes.wrapper}>
       <td className={classes.icon}>{icon}</td>
       <td className={classes.activityTableCell}>
         <div className={classes.infoContainer}>{primaryContent}</div>

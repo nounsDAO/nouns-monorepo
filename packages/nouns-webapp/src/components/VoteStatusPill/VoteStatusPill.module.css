@@ -19,8 +19,8 @@
 }
 
 .pass {
-  color: var(--brand-color-green);
-  background-color: var(--brand-color-green-translucent);
+  color: var(--brand-color-blue);
+  background-color: var(--brand-color-blue-translucent);
 }
 
 .fail {
@@ -29,6 +29,6 @@
 }
 
 .pending {
-  color: var(--brand-color-blue);
-  background-color: var(--brand-color-blue-translucent);
+  color: var(--brand-color-green);
+  background-color: var(--brand-color-green-translucent);
 }

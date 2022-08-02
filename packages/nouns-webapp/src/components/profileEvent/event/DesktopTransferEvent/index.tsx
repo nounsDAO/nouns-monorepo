@@ -17,7 +17,6 @@ const DesktopTransferEvent: React.FC<DesktopTransferEventProps> = props => {
 
   return (
     <DesktopNounActivityRow
-      onClick={() => {}}
       icon={
         <div className={classes.switchIconWrapper}>
           <SwitchHorizontalIcon className={classes.switchIcon} />
@@ -38,7 +37,7 @@ const DesktopTransferEvent: React.FC<DesktopTransferEventProps> = props => {
             data-tip={`View on Etherscan`}
             onClick={() => window.open(buildEtherscanAddressLink(event.from), '_blank')}
             data-for="view-on-etherscan-tooltip"
-            className={classes.bold}
+            className={classes.address}
           >
             {' '}
             <ShortAddress address={event.from} />
@@ -48,7 +47,7 @@ const DesktopTransferEvent: React.FC<DesktopTransferEventProps> = props => {
             data-tip={`View on Etherscan`}
             data-for="view-on-etherscan-tooltip"
             onClick={() => window.open(buildEtherscanAddressLink(event.to), '_blank')}
-            className={classes.bold}
+            className={classes.address}
           >
             <ShortAddress address={event.to} />
           </span>
@@ -57,7 +56,7 @@ const DesktopTransferEvent: React.FC<DesktopTransferEventProps> = props => {
       secondaryContent={
         <>
           <ReactTooltip
-            id={'view-on-etherscan-tooltip'}
+            id={'view-on-etherscan-txn-tooltip'}
             effect={'solid'}
             className={classes.delegateHover}
             getContent={dataTip => {
@@ -67,7 +66,7 @@ const DesktopTransferEvent: React.FC<DesktopTransferEventProps> = props => {
           <div
             onClick={() => window.open(buildEtherscanTxLink(event.transactionHash), '_blank')}
             data-tip={`View on Etherscan`}
-            data-for="view-on-etherscan-tooltip"
+            data-for="view-on-etherscan-txn-tooltip"
           >
             <TransactionHashPill transactionHash={event.transactionHash} />
           </div>
