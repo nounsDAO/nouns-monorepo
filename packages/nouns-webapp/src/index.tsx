@@ -91,6 +91,9 @@ const useDappConfig = {
   readOnlyUrls: {
     [CHAIN_ID]: supportedChainURLs[CHAIN_ID],
   },
+  multicallAddresses: {
+    [ChainId.Hardhat]: '0x9A676e781A523b5d0C0e43731313A708CB607508',
+  },
 };
 
 const client = clientFactory(config.app.subgraphApiUri);

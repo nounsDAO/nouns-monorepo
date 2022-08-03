@@ -4,7 +4,7 @@ import { Interface } from 'ethers/lib/utils';
 import { Contract as EthersContract } from 'ethers';
 import { ContractName } from './types';
 
-type LocalContractName = ContractName | 'WETH';
+type LocalContractName = ContractName | 'WETH' | 'Multicall2';
 
 interface Contract {
   args?: (string | number | (() => string | undefined))[];
@@ -121,6 +121,7 @@ task('deploy-local', 'Deploy contracts to hardhat')
           args.quorumVotesBps,
         ],
       },
+      Multicall2: {},
     };
 
     for (const [name, contract] of Object.entries(contracts)) {

@@ -36,6 +36,9 @@ const config: HardhatUserConfig = {
     hardhat: {
       initialBaseFeePerGas: 0,
     },
+    anvil: {
+      url: 'http://localhost:8545',
+    },
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,

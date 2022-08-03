@@ -7,8 +7,6 @@ task(
 ).setAction(async (_, { ethers, run }) => {
   await run(TASK_COMPILE);
 
-  await Promise.race([run(TASK_NODE), new Promise(resolve => setTimeout(resolve, 2_000))]);
-
   const contracts = await run('deploy-local');
 
   await run('populate-descriptor', {
