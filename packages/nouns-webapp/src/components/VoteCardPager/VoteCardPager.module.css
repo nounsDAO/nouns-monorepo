@@ -28,3 +28,7 @@
   width: 28px;
   color: var(--brand-gray-light-text);
 }
+
+.disabled {
+  opacity: 25%;
+}

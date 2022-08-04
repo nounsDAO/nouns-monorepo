@@ -1,6 +1,7 @@
 import classes from './VoteCardPager.module.css';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 import React from 'react';
+import clsx from 'clsx';
 
 interface VoteCardPagerProps {
   onRightArrowClick: () => void;
@@ -20,26 +21,29 @@ const VoteCardPager: React.FC<VoteCardPagerProps> = props => {
     numPages,
     currentPage,
   } = props;
+
+  const isOnePage = numPages === 1;
+
   return (
     <>
       {/* Dots */}
-      <div className={classes.pageDots}>
+      <div className={clsx(classes.pageDots, isOnePage ? classes.disabled : '')}>
         {Array.from(Array(numPages).keys()).map((n: number) => {
           return <span className={n === currentPage ? '' : classes.disabledPageDot}>•</span>;
         })}
       </div>
       {/* Arrows */}
-      <div className={classes.paginationArrowsWrapper}>
+      <div className={clsx(classes.paginationArrowsWrapper, isOnePage ? classes.disabled : '')}>
         <button
           className={classes.paginationArrowBtnWrapper}
-          disabled={isLeftArrowDisabled}
+          disabled={isLeftArrowDisabled || isOnePage}
           onClick={onLeftArrowClick}
         >
           <ChevronLeftIcon className={classes.paginationArrow} />
         </button>
 
         <button
-          disabled={isRightArrowDisabled}
+          disabled={isRightArrowDisabled || isOnePage}
           onClick={onRightArrowClick}
           className={classes.paginationArrowBtnWrapper}
         >
