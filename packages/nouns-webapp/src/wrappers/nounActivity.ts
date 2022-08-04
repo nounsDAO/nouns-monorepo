@@ -13,6 +13,7 @@ export enum NounEventType {
   PROPOSAL_VOTE,
   DELEGATION,
   TRANSFER,
+  AUCTION_WIN,
 }
 
 export type ProposalVoteEvent = {
@@ -41,7 +42,13 @@ export type DelegationEvent = {
 export type NounProfileEvent = {
   blockNumber: number;
   eventType: NounEventType;
-  payload: ProposalVoteEvent | DelegationEvent | TransferEvent;
+  payload: ProposalVoteEvent | DelegationEvent | TransferEvent | NounWinEvent;
+};
+
+export type NounWinEvent = {
+  nounId: string | number;
+  winner: string;
+  transactionHash: string;
 };
 
 export type NounProfileEventFetcherResponse = {
@@ -268,13 +275,37 @@ export const useNounActivity = (nounId: number): NounProfileEventFetcherResponse
     };
   }
 
+  const events = votesData
+    ?.concat(nounTransferData)
+    .concat(delegationEventsData)
+    .sort((a: NounProfileEvent, b: NounProfileEvent) => a.blockNumber - b.blockNumber)
+    .reverse();
+
+  // Parse noun birth + win events into a single event
+  const nounTransferFromAuctionHouse = nounTransferData.sort(
+    (a: NounProfileEvent, b: NounProfileEvent) => a.blockNumber - b.blockNumber,
+  )[1].payload as TransferEvent;
+  const nounTransferFromAuctionHouseBlockNumber = nounTransferData.sort(
+    (a: NounProfileEvent, b: NounProfileEvent) => a.blockNumber - b.blockNumber,
+  )[1].blockNumber;
+
+  const nounWinEvent = {
+    nounId: nounId,
+    winner: nounTransferFromAuctionHouse.to,
+    transactionHash: nounTransferFromAuctionHouse.transactionHash,
+  } as NounWinEvent;
+
+  const postProcessedEvents = events.slice(0, events.length - 4);
+
+  postProcessedEvents.push({
+    eventType: NounEventType.AUCTION_WIN,
+    blockNumber: nounTransferFromAuctionHouseBlockNumber,
+    payload: nounWinEvent,
+  } as NounProfileEvent);
+
   return {
     loading: false,
     error: false,
-    data: votesData
-      ?.concat(nounTransferData)
-      .concat(delegationEventsData)
-      .sort((a: NounProfileEvent, b: NounProfileEvent) => a.blockNumber - b.blockNumber)
-      .reverse(),
+    data: postProcessedEvents,
   };
 };

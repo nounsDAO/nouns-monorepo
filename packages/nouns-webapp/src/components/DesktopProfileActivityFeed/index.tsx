@@ -4,11 +4,13 @@ import {
   DelegationEvent,
   NounEventType,
   NounProfileEvent,
+  NounWinEvent,
   ProposalVoteEvent,
   TransferEvent,
 } from '../../wrappers/nounActivity';
 import BrandSpinner from '../BrandSpinner';
 import DesktopDelegationEvent from '../profileEvent/event/DesktopDelegationEvent';
+import DesktopNounWinEvent from '../profileEvent/event/DesktopNounWinEvent';
 import DesktopProposalVoteEvent from '../profileEvent/event/DesktopProposalVoteEvent';
 import DesktopTransferEvent from '../profileEvent/event/DesktopTransferEvent';
 import classes from './DesktopProfileActivityFeed.module.css';
@@ -30,6 +32,10 @@ const getComponentFromEvent = (event: NounProfileEvent, key: number) => {
 
   if (event.eventType === NounEventType.TRANSFER) {
     return <DesktopTransferEvent event={event.payload as TransferEvent} key={key} />;
+  }
+
+  if (event.eventType === NounEventType.AUCTION_WIN) {
+    return <DesktopNounWinEvent event={event.payload as NounWinEvent} key={key} />;
   }
 };
 

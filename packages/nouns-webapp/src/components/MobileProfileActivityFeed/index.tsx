@@ -4,10 +4,12 @@ import {
   DelegationEvent,
   NounEventType,
   NounProfileEvent,
+  NounWinEvent,
   ProposalVoteEvent,
   TransferEvent,
 } from '../../wrappers/nounActivity';
 import MobileDelegationEvent from '../profileEvent/event/MobileDelegationEvent';
+import MobileNounWinEvent from '../profileEvent/event/MobileNounWinEvent';
 import MobileProposalVoteEvent from '../profileEvent/event/MobileProposalVoteEvent';
 import MobileTransferEvent from '../profileEvent/event/MobileTransferEvent';
 
@@ -28,6 +30,10 @@ const getComponentFromEvent = (event: NounProfileEvent, key: number) => {
 
   if (event.eventType === NounEventType.TRANSFER) {
     return <MobileTransferEvent event={event.payload as TransferEvent} key={key} />;
+  }
+
+  if (event.eventType === NounEventType.AUCTION_WIN) {
+    return <MobileNounWinEvent event={event.payload as NounWinEvent} key={key} />;
   }
 };
 
