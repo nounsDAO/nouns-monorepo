@@ -60,10 +60,6 @@ export function handleDelegateChanged(event: DelegateChanged): void {
   previousDelegate.save();
   newDelegate.save();
 
-  if (accountNouns.includes('309')) {
-    log.error('New delegate {}', [newDelegate.id.toString()]);
-  }
-
   // Log a transfer event for each Noun
   for (let i = 0; i < accountNouns.length; i++) {
     let delegateChangedEvent = new DelegationEvent(
