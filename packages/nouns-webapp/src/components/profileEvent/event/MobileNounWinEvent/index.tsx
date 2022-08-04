@@ -25,7 +25,7 @@ const MobileNounWinEvent: React.FC<MobileNounWinEventProps> = props => {
       primaryContent={
         <>
           <span className={classes.bold}> Noun {event.nounId} </span> won by
-          <span className={classes.address}>
+          <span className={classes.bold}>
             {' '}
             <ShortAddress address={event.winner} />
           </span>{' '}
