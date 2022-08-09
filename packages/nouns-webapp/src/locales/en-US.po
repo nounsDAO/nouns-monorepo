@@ -33,6 +33,23 @@ msgstr "3.5 artists, 6.5 technologists"
 msgid "404: This is not the person, place, or thing you're looking for..."
 msgstr "404: This is not the person, place, or thing you're looking for..."
 
+#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
+msgid "<0/>Holder changed from<1><2/></1> to <3><4/></3>"
+msgstr "<0/>Holder changed from<1><2/></1> to <3><4/></3>"
+
+#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
+msgid "<0> Noun {0} </0>  won by <1><2/></1>"
+msgstr "<0> Noun {0} </0>  won by <1><2/></1>"
+
+#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
+#: src/components/profileEvent/event/MobileNounWinEvent/index.tsx
+msgid "<0> Noun {0} </0> sent to <1><2/></1>"
+msgstr "<0> Noun {0} </0> sent to <1><2/></1>"
+
+#: src/components/profileEvent/event/MobileNounWinEvent/index.tsx
+msgid "<0> Noun {0} </0> won by <1><2/></1>"
+msgstr "<0> Noun {0} </0> won by <1><2/></1>"
+
 #: src/components/ByLineHoverCard/index.tsx
 msgid "<0>Delegated Noun: </0>"
 msgstr "<0>Delegated Noun: </0>"
@@ -464,6 +481,10 @@ msgstr "Held by"
 #: src/components/AuctionActivity/index.tsx
 msgid "Help mint the next Noun"
 msgstr "Help mint the next Noun"
+
+#: src/components/profileEvent/event/MobileTransferEvent/index.tsx
+msgid "Holder changed from<0><1/></0> to <2><3/></2>"
+msgstr "Holder changed from<0><1/></0> to <2><3/></2>"
 
 #: src/components/Documentation/index.tsx
 #~ msgid "In addition to the precautions taken by Compound Governance, Nounders have given themselves a special veto right to ensure that no malicious proposals can be passed while the Noun supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort."

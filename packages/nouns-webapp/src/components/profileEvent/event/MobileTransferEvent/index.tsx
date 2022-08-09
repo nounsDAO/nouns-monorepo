@@ -6,6 +6,7 @@ import MobileNounActivityRow from '../../activityRow/MobileNounActivityRow';
 import { SwitchHorizontalIcon } from '@heroicons/react/solid';
 import ShortAddress from '../../../ShortAddress';
 import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
+import { Trans } from '@lingui/macro';
 
 interface MobileTransferEventProps {
   event: TransferEvent;
@@ -24,6 +25,7 @@ const MobileTransferEvent: React.FC<MobileTransferEventProps> = props => {
       }
       primaryContent={
         <>
+        <Trans>
           Holder changed from
           <span className={classes.bold}>
             {' '}
@@ -33,6 +35,7 @@ const MobileTransferEvent: React.FC<MobileTransferEventProps> = props => {
           <span className={classes.bold}>
             <ShortAddress address={event.to} />
           </span>
+        </Trans>
         </>
       }
       secondaryContent={

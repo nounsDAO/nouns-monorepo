@@ -7,6 +7,7 @@ import { SwitchHorizontalIcon } from '@heroicons/react/solid';
 import ReactTooltip from 'react-tooltip';
 import ShortAddress from '../../../ShortAddress';
 import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
+import { Trans } from '@lingui/macro';
 
 interface DesktopTransferEventProps {
   event: TransferEvent;
@@ -24,6 +25,7 @@ const DesktopTransferEvent: React.FC<DesktopTransferEventProps> = props => {
       }
       primaryContent={
         <>
+        <Trans>
           <ReactTooltip
             id={'view-on-etherscan-tooltip-primary'}
             effect={'solid'}
@@ -51,6 +53,7 @@ const DesktopTransferEvent: React.FC<DesktopTransferEventProps> = props => {
           >
             <ShortAddress address={event.to} />
           </span>
+        </Trans>
         </>
       }
       secondaryContent={
