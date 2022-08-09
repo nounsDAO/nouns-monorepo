@@ -14,7 +14,7 @@ type DelegationEvent @entity {
  "Block number of the bid"
   blockNumber: BigInt!
 
-  "The timestamp of the block the bid is in"
+  "The timestamp of the block the event is in"
   blockTimestamp: BigInt!
 
 }
@@ -36,7 +36,7 @@ type TransferEvent @entity {
   "Block number of the bid"
   blockNumber: BigInt!
 
-  "The timestamp of the block the bid is in"
+  "The timestamp of the block the event is in"
   blockTimestamp: BigInt!
 }
 
