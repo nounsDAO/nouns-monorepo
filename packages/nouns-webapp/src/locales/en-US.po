@@ -34,8 +34,8 @@ msgid "404: This is not the person, place, or thing you're looking for..."
 msgstr "404: This is not the person, place, or thing you're looking for..."
 
 #: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
-msgid "<0/>Holder changed from<1><2/></1> to <3><4/></3>"
-msgstr "<0/>Holder changed from<1><2/></1> to <3><4/></3>"
+#~ msgid "<0/>Holder changed from<1><2/></1> to <3><4/></3>"
+#~ msgstr "<0/>Holder changed from<1><2/></1> to <3><4/></3>"
 
 #: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
 msgid "<0> Noun {0} </0>  won by <1><2/></1>"
@@ -482,6 +482,7 @@ msgstr "Held by"
 msgid "Help mint the next Noun"
 msgstr "Help mint the next Noun"
 
+#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
 #: src/components/profileEvent/event/MobileTransferEvent/index.tsx
 msgid "Holder changed from<0><1/></0> to <2><3/></2>"
 msgstr "Holder changed from<0><1/></0> to <2><3/></2>"
@@ -979,6 +980,8 @@ msgid "View all bids"
 msgstr "View all bids"
 
 #: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
+#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
 msgid "View on Etherscan"
 msgstr "View on Etherscan"
 

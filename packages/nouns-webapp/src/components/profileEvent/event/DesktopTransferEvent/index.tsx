@@ -25,15 +25,17 @@ const DesktopTransferEvent: React.FC<DesktopTransferEventProps> = props => {
       }
       primaryContent={
         <>
-        <Trans>
           <ReactTooltip
             id={'view-on-etherscan-tooltip-primary'}
             effect={'solid'}
             className={classes.delegateHover}
             getContent={dataTip => {
-              return <div>{dataTip}</div>;
+              return (
+                  <Trans>View on Etherscan</Trans>
+              )
             }}
           />
+        <Trans>
           Holder changed from
           <span
             data-tip={`View on Etherscan`}
@@ -46,7 +48,6 @@ const DesktopTransferEvent: React.FC<DesktopTransferEventProps> = props => {
           </span>{' '}
           to{' '}
           <span
-            data-tip={`View on Etherscan`}
             data-for="view-on-etherscan-tooltip"
             onClick={() => window.open(buildEtherscanAddressLink(event.to), '_blank')}
             className={classes.address}
@@ -63,7 +64,7 @@ const DesktopTransferEvent: React.FC<DesktopTransferEventProps> = props => {
             effect={'solid'}
             className={classes.delegateHover}
             getContent={dataTip => {
-              return <div>{dataTip}</div>;
+              return <Trans>View on Etherscan</Trans>
             }}
           />
           <div
