@@ -7,6 +7,7 @@ import { ScaleIcon } from '@heroicons/react/solid';
 import ReactTooltip from 'react-tooltip';
 import ShortAddress from '../../../ShortAddress';
 import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
+import { Trans } from '@lingui/macro';
 
 interface DesktopDelegationEventProps {
   event: DelegationEvent;
@@ -29,7 +30,7 @@ const DesktopDelegationEvent: React.FC<DesktopDelegationEventProps> = props => {
             effect={'solid'}
             className={classes.delegateHover}
             getContent={dataTip => {
-              return <div>{dataTip}</div>;
+              return <Trans>View on Etherscan</Trans>
             }}
           />
           Delegate changed from
@@ -60,7 +61,7 @@ const DesktopDelegationEvent: React.FC<DesktopDelegationEventProps> = props => {
             effect={'solid'}
             className={classes.delegateHover}
             getContent={dataTip => {
-              return <div>{dataTip}</div>;
+              return <Trans>View on Etherscan</Trans>
             }}
           />
           <div data-tip={`View on Etherscan`} data-for="view-on-etherscan-txn-delegate-tooltip">
