@@ -6,6 +6,7 @@ import MobileNounActivityRow from '../../activityRow/MobileNounActivityRow';
 import { ScaleIcon } from '@heroicons/react/solid';
 import ShortAddress from '../../../ShortAddress';
 import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
+import { Trans } from '@lingui/macro';
 
 interface MobileDelegationEventProps {
   event: DelegationEvent;
@@ -23,7 +24,7 @@ const MobileDelegationEvent: React.FC<MobileDelegationEventProps> = props => {
         </div>
       }
       primaryContent={
-        <>
+        <Trans>
           Delegate changed from
           <span className={classes.bold}>
             {' '}
@@ -33,7 +34,7 @@ const MobileDelegationEvent: React.FC<MobileDelegationEventProps> = props => {
           <span className={classes.bold}>
             <ShortAddress address={event.newDelegate} />
           </span>
-        </>
+        </Trans>
       }
       secondaryContent={
         <>

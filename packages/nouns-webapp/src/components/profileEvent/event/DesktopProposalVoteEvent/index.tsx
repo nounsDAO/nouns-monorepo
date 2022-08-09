@@ -8,6 +8,7 @@ import { getProposalVoteIcon } from '../../../../utils/nounActivity/getProposalV
 import ProposalVoteHeadline from '../../eventData/ProposalVoteHeadline';
 import DesktopNounActivityRow from '../../activityRow/DesktopNounActivityRow';
 import ReactTooltip from 'react-tooltip';
+import { Trans } from '@lingui/macro';
 
 interface DesktopProposalVoteEventProps {
   event: ProposalVoteEvent;
@@ -34,7 +35,7 @@ const DesktopProposalVoteEvent: React.FC<DesktopProposalVoteEventProps> = props 
             effect={'solid'}
             className={classes.delegateHover}
             getContent={dataTip => {
-              return <div>{dataTip}</div>;
+              return <Trans>View on Etherscan</Trans>
             }}
           />
           <ProposalVoteHeadline

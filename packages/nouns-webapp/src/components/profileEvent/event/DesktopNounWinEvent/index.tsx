@@ -31,7 +31,7 @@ const DesktopNounWinEvent: React.FC<DesktopNounWinEventProps> = props => {
             effect={'solid'}
             className={classes.delegateHover}
             getContent={dataTip => {
-              return <div>{dataTip}</div>;
+              return <Trans>View on Etherscan</Trans>
             }}
           />
           {
@@ -68,7 +68,7 @@ const DesktopNounWinEvent: React.FC<DesktopNounWinEventProps> = props => {
             effect={'solid'}
             className={classes.delegateHover}
             getContent={dataTip => {
-              return <div>{dataTip}</div>;
+              return <Trans>View on Etherscan</Trans>
             }}
           />
           <div

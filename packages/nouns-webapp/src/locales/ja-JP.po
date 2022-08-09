@@ -316,6 +316,10 @@ msgstr "委任された更新に失敗しました"
 msgid "Delegate Updated!"
 msgstr "デリゲートが更新されました"
 
+#: src/components/profileEvent/event/MobileDelegationEvent/index.tsx
+msgid "Delegate changed from<0><1/></0> to <2><3/></2>"
+msgstr ""
+
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Delegate {availableVotes} Vote"
 msgstr "{availableVotes}票を委任する"
@@ -990,6 +994,9 @@ msgstr "すべての入札を表示"
 #: src/components/Winner/index.tsx
 #: src/components/profileEvent/event/DesktopDelegationEvent/index.tsx
 #: src/components/profileEvent/event/DesktopDelegationEvent/index.tsx
+#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
+#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
+#: src/components/profileEvent/event/DesktopProposalVoteEvent/index.tsx
 #: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
 #: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
 msgid "View on Etherscan"

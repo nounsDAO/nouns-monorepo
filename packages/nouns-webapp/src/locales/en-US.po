@@ -311,6 +311,10 @@ msgstr "Delegate Update Failed"
 msgid "Delegate Updated!"
 msgstr "Delegate Updated!"
 
+#: src/components/profileEvent/event/MobileDelegationEvent/index.tsx
+msgid "Delegate changed from<0><1/></0> to <2><3/></2>"
+msgstr "Delegate changed from<0><1/></0> to <2><3/></2>"
+
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Delegate {availableVotes} Vote"
 msgstr "Delegate {availableVotes} Vote"
@@ -985,6 +989,9 @@ msgstr "View all bids"
 #: src/components/Winner/index.tsx
 #: src/components/profileEvent/event/DesktopDelegationEvent/index.tsx
 #: src/components/profileEvent/event/DesktopDelegationEvent/index.tsx
+#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
+#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
+#: src/components/profileEvent/event/DesktopProposalVoteEvent/index.tsx
 #: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
 #: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
 msgid "View on Etherscan"
