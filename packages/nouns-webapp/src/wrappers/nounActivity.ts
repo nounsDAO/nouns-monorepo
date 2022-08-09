@@ -284,10 +284,10 @@ export const useNounActivity = (nounId: number): NounProfileEventFetcherResponse
   // Parse noun birth + win events into a single event
   const nounTransferFromAuctionHouse = nounTransferData.sort(
     (a: NounProfileEvent, b: NounProfileEvent) => a.blockNumber - b.blockNumber,
-  )[1].payload as TransferEvent;
+  )[nounId % 10 === 0 ? 0 : 1].payload as TransferEvent;
   const nounTransferFromAuctionHouseBlockNumber = nounTransferData.sort(
     (a: NounProfileEvent, b: NounProfileEvent) => a.blockNumber - b.blockNumber,
-  )[1].blockNumber;
+  )[nounId % 10 === 0 ? 0 : 1].blockNumber;
 
   const nounWinEvent = {
     nounId: nounId,
@@ -295,7 +295,7 @@ export const useNounActivity = (nounId: number): NounProfileEventFetcherResponse
     transactionHash: nounTransferFromAuctionHouse.transactionHash,
   } as NounWinEvent;
 
-  const postProcessedEvents = events.slice(0, events.length - 4);
+  const postProcessedEvents = events.slice(0, events.length - (nounId % 10 === 0 ? 2 : 4));
 
   postProcessedEvents.push({
     eventType: NounEventType.AUCTION_WIN,

@@ -7,6 +7,7 @@ import { CakeIcon } from '@heroicons/react/solid';
 import ReactTooltip from 'react-tooltip';
 import ShortAddress from '../../../ShortAddress';
 import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
+import { Trans } from '@lingui/macro';
 
 interface DesktopNounWinEventProps {
   event: NounWinEvent;
@@ -15,6 +16,7 @@ interface DesktopNounWinEventProps {
 const DesktopNounWinEvent: React.FC<DesktopNounWinEventProps> = props => {
   const { event } = props;
 
+  const isNounderNoun = parseInt(event.nounId as string) % 10 === 0;
   return (
     <DesktopNounActivityRow
       icon={
@@ -32,8 +34,10 @@ const DesktopNounWinEvent: React.FC<DesktopNounWinEventProps> = props => {
               return <div>{dataTip}</div>;
             }}
           />
-          <span className={classes.bold}> Noun {event.nounId} </span> won by
-          <span
+          {
+            isNounderNoun ? (
+          <Trans>
+          <span className={classes.bold}> Noun {event.nounId} </span> sent to <span
             data-tip={`View on Etherscan`}
             onClick={() => window.open(buildEtherscanAddressLink(event.winner), '_blank')}
             data-for="view-on-etherscan-tooltip"
@@ -42,6 +46,19 @@ const DesktopNounWinEvent: React.FC<DesktopNounWinEventProps> = props => {
             {' '}
             <ShortAddress address={event.winner} />
           </span>{' '}
+          </Trans>
+            ) : (
+          <Trans>
+          <span className={classes.bold}> Noun {event.nounId} </span>  won by <span
+            data-tip={`View on Etherscan`}
+            onClick={() => window.open(buildEtherscanAddressLink(event.winner), '_blank')}
+            data-for="view-on-etherscan-tooltip"
+            className={classes.address}
+          >
+            {' '}
+            <ShortAddress address={event.winner} />
+          </span>{' '}
+          </Trans>)}
         </>
       }
       secondaryContent={
