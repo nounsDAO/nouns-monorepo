@@ -44,7 +44,7 @@ const Holder: React.FC<HolderProps> = props => {
       <Tooltip
         tip="View on Etherscan"
         tooltipContent={(tip: string) => {
-          return <div>{tip}</div>;
+          return <Trans>View on Etherscan</Trans>
         }}
         id="holder-etherscan-tooltip"
       >

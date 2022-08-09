@@ -980,6 +980,7 @@ msgid "View all bids"
 msgstr ""
 
 #: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/Holder/index.tsx
 #: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
 #: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
 msgid "View on Etherscan"
