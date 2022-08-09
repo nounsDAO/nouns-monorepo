@@ -11,7 +11,7 @@ type DelegationEvent @entity {
   "New delegate address"
   newDelegate: Delegate! 
 
- "Block number of the bid"
+ "Block number of the event"
   blockNumber: BigInt!
 
   "The timestamp of the block the event is in"
@@ -33,7 +33,7 @@ type TransferEvent @entity {
   "New holder address"
   newHolder: Account!
 
-  "Block number of the bid"
+  "Block number of the event"
   blockNumber: BigInt!
 
   "The timestamp of the block the event is in"
