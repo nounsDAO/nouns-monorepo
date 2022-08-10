@@ -26,24 +26,23 @@ const MobileNounWinEvent: React.FC<MobileNounWinEventProps> = props => {
       }
       primaryContent={
         <>
-        {
-          isNounderNoun ? 
-          (
+          {isNounderNoun ? (
             <Trans>
-          <span className={classes.bold}> Noun {event.nounId} </span> sent to <span className={classes.bold}>
-            {' '}
-            <ShortAddress address={event.winner} />
-          </span>{' '}
+              <span className={classes.bold}> Noun {event.nounId} </span> sent to{' '}
+              <span className={classes.bold}>
+                {' '}
+                <ShortAddress address={event.winner} />
+              </span>{' '}
             </Trans>
           ) : (
             <Trans>
-          <span className={classes.bold}> Noun {event.nounId} </span> won by <span className={classes.bold}>
-            {' '}
-            <ShortAddress address={event.winner} />
-          </span>{' '}
+              <span className={classes.bold}> Noun {event.nounId} </span> won by{' '}
+              <span className={classes.bold}>
+                {' '}
+                <ShortAddress address={event.winner} />
+              </span>{' '}
             </Trans>
-          )
-        }
+          )}
         </>
       }
       secondaryContent={

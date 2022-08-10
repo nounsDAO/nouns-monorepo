@@ -1,4 +1,4 @@
-import { Proposal, ProposalState } from '../../wrappers/nounsDao';
+import { Proposal, ProposalState, useProposalThreshold } from '../../wrappers/nounsDao';
 import { Alert, Button } from 'react-bootstrap';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
@@ -102,24 +102,33 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
     };
   }, []);
 
+  const threshold = (useProposalThreshold() ?? 0) + 1;
+  const hasEnoughVotesToPropose = account !== undefined && connectedAccountNounVotes >= threshold;
+  const hasNounBalance = (useUserNounTokenBalance() ?? 0) > 0;
+
   const nullStateCopy = () => {
     if (account !== null) {
+      if (connectedAccountNounVotes > 0) {
+        return <Trans>Making a proposal requires {threshold} votes</Trans>;
+      }
       return <Trans>You have no Votes.</Trans>;
     }
     return <Trans>Connect wallet to make a proposal.</Trans>;
   };
 
-  const hasNounVotes = account !== undefined && connectedAccountNounVotes > 0;
-  const hasNounBalance = (useUserNounTokenBalance() ?? 0) > 0;
-
   return (
     <div className={classes.proposals}>
       {showDelegateModal && <DelegationModal onDismiss={() => setShowDelegateModal(false)} />}
-      <div className={clsx(classes.headerWrapper, !hasNounVotes ? classes.forceFlexRow : '')}>
+      <div
+        className={clsx(
+          classes.headerWrapper,
+          !hasEnoughVotesToPropose ? classes.forceFlexRow : '',
+        )}
+      >
         <h3 className={classes.heading}>
           <Trans>Proposals</Trans>
         </h3>
-        {hasNounVotes ? (
+        {hasEnoughVotesToPropose ? (
           <div className={classes.nounInWalletBtnWrapper}>
             <div className={classes.submitProposalButtonWrapper}>
               <Button

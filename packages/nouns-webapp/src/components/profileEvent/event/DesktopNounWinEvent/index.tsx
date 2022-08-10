@@ -31,34 +31,36 @@ const DesktopNounWinEvent: React.FC<DesktopNounWinEventProps> = props => {
             effect={'solid'}
             className={classes.delegateHover}
             getContent={dataTip => {
-              return <Trans>View on Etherscan</Trans>
+              return <Trans>View on Etherscan</Trans>;
             }}
           />
-          {
-            isNounderNoun ? (
-          <Trans>
-          <span className={classes.bold}> Noun {event.nounId} </span> sent to <span
-            data-tip={`View on Etherscan`}
-            onClick={() => window.open(buildEtherscanAddressLink(event.winner), '_blank')}
-            data-for="view-on-etherscan-tooltip"
-            className={classes.address}
-          >
-            {' '}
-            <ShortAddress address={event.winner} />
-          </span>{' '}
-          </Trans>
-            ) : (
-          <Trans>
-          <span className={classes.bold}> Noun {event.nounId} </span>  won by <span
-            data-tip={`View on Etherscan`}
-            onClick={() => window.open(buildEtherscanAddressLink(event.winner), '_blank')}
-            data-for="view-on-etherscan-tooltip"
-            className={classes.address}
-          >
-            {' '}
-            <ShortAddress address={event.winner} />
-          </span>{' '}
-          </Trans>)}
+          {isNounderNoun ? (
+            <Trans>
+              <span className={classes.bold}> Noun {event.nounId} </span> sent to{' '}
+              <span
+                data-tip={`View on Etherscan`}
+                onClick={() => window.open(buildEtherscanAddressLink(event.winner), '_blank')}
+                data-for="view-on-etherscan-tooltip"
+                className={classes.address}
+              >
+                {' '}
+                <ShortAddress address={event.winner} />
+              </span>{' '}
+            </Trans>
+          ) : (
+            <Trans>
+              <span className={classes.bold}> Noun {event.nounId} </span> won by{' '}
+              <span
+                data-tip={`View on Etherscan`}
+                onClick={() => window.open(buildEtherscanAddressLink(event.winner), '_blank')}
+                data-for="view-on-etherscan-tooltip"
+                className={classes.address}
+              >
+                {' '}
+                <ShortAddress address={event.winner} />
+              </span>{' '}
+            </Trans>
+          )}
         </>
       }
       secondaryContent={
@@ -68,7 +70,7 @@ const DesktopNounWinEvent: React.FC<DesktopNounWinEventProps> = props => {
             effect={'solid'}
             className={classes.delegateHover}
             getContent={dataTip => {
-              return <Trans>View on Etherscan</Trans>
+              return <Trans>View on Etherscan</Trans>;
             }}
           />
           <div

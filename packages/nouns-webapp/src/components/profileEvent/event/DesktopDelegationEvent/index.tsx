@@ -30,7 +30,7 @@ const DesktopDelegationEvent: React.FC<DesktopDelegationEventProps> = props => {
             effect={'solid'}
             className={classes.delegateHover}
             getContent={dataTip => {
-              return <Trans>View on Etherscan</Trans>
+              return <Trans>View on Etherscan</Trans>;
             }}
           />
           Delegate changed from
@@ -61,7 +61,7 @@ const DesktopDelegationEvent: React.FC<DesktopDelegationEventProps> = props => {
             effect={'solid'}
             className={classes.delegateHover}
             getContent={dataTip => {
-              return <Trans>View on Etherscan</Trans>
+              return <Trans>View on Etherscan</Trans>;
             }}
           />
           <div data-tip={`View on Etherscan`} data-for="view-on-etherscan-txn-delegate-tooltip">

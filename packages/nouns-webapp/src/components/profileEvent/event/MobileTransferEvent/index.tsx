@@ -25,17 +25,17 @@ const MobileTransferEvent: React.FC<MobileTransferEventProps> = props => {
       }
       primaryContent={
         <>
-        <Trans>
-          Holder changed from
-          <span className={classes.bold}>
-            {' '}
-            <ShortAddress address={event.from} />
-          </span>{' '}
-          to{' '}
-          <span className={classes.bold}>
-            <ShortAddress address={event.to} />
-          </span>
-        </Trans>
+          <Trans>
+            Holder changed from
+            <span className={classes.bold}>
+              {' '}
+              <ShortAddress address={event.from} />
+            </span>{' '}
+            to{' '}
+            <span className={classes.bold}>
+              <ShortAddress address={event.to} />
+            </span>
+          </Trans>
         </>
       }
       secondaryContent={

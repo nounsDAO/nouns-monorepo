@@ -30,31 +30,29 @@ const DesktopTransferEvent: React.FC<DesktopTransferEventProps> = props => {
             effect={'solid'}
             className={classes.delegateHover}
             getContent={dataTip => {
-              return (
-                  <Trans>View on Etherscan</Trans>
-              )
+              return <Trans>View on Etherscan</Trans>;
             }}
           />
-        <Trans>
-          Holder changed from
-          <span
-            data-tip={`View on Etherscan`}
-            onClick={() => window.open(buildEtherscanAddressLink(event.from), '_blank')}
-            data-for="view-on-etherscan-tooltip"
-            className={classes.address}
-          >
-            {' '}
-            <ShortAddress address={event.from} />
-          </span>{' '}
-          to{' '}
-          <span
-            data-for="view-on-etherscan-tooltip"
-            onClick={() => window.open(buildEtherscanAddressLink(event.to), '_blank')}
-            className={classes.address}
-          >
-            <ShortAddress address={event.to} />
-          </span>
-        </Trans>
+          <Trans>
+            Holder changed from
+            <span
+              data-tip={`View on Etherscan`}
+              onClick={() => window.open(buildEtherscanAddressLink(event.from), '_blank')}
+              data-for="view-on-etherscan-tooltip"
+              className={classes.address}
+            >
+              {' '}
+              <ShortAddress address={event.from} />
+            </span>{' '}
+            to{' '}
+            <span
+              data-for="view-on-etherscan-tooltip"
+              onClick={() => window.open(buildEtherscanAddressLink(event.to), '_blank')}
+              className={classes.address}
+            >
+              <ShortAddress address={event.to} />
+            </span>
+          </Trans>
         </>
       }
       secondaryContent={
@@ -64,7 +62,7 @@ const DesktopTransferEvent: React.FC<DesktopTransferEventProps> = props => {
             effect={'solid'}
             className={classes.delegateHover}
             getContent={dataTip => {
-              return <Trans>View on Etherscan</Trans>
+              return <Trans>View on Etherscan</Trans>;
             }}
           />
           <div

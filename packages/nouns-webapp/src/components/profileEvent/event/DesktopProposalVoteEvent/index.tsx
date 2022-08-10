@@ -35,7 +35,7 @@ const DesktopProposalVoteEvent: React.FC<DesktopProposalVoteEventProps> = props 
             effect={'solid'}
             className={classes.delegateHover}
             getContent={dataTip => {
-              return <Trans>View on Etherscan</Trans>
+              return <Trans>View on Etherscan</Trans>;
             }}
           />
           <ProposalVoteHeadline
