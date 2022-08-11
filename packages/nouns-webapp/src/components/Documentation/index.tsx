@@ -221,13 +221,13 @@ const Documentation = () => {
                   <Trans>bodies (30)</Trans>
                 </li>
                 <li>
-                  <Trans>accessories (137) </Trans>
+                  <Trans>accessories (140) </Trans>
                 </li>
                 <li>
-                  <Trans>heads (234) </Trans>
+                  <Trans>heads (242) </Trans>
                 </li>
                 <li>
-                  <Trans>glasses (21)</Trans>
+                  <Trans>glasses (23)</Trans>
                 </li>
               </ul>
               <Trans>
