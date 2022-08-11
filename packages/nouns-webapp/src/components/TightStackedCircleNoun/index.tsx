@@ -15,7 +15,7 @@ const TightStackedCircleNoun: React.FC<TightStackedCircleNounProps> = props => {
   const seed = useNounSeed(BigNumber.from(nounId));
 
   if (!seed) {
-      return <LoadingNoun/>;
+    return <LoadingNoun />;
   }
 
   const nounData = getNoun(BigNumber.from(nounId), seed);

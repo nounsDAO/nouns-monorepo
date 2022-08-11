@@ -1,0 +1,20 @@
+.iconWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--brand-gray-light-text-translucent);
+  color: var(--brand-gray-light-text);
+  border-radius: 100%;
+  height: 38px;
+  width: 38px;
+  margin-left: 0.4rem;
+}
+
+.switchIcon {
+  height: 22px;
+  width: 22px;
+}
+
+.bold {
+  font-weight: bold;
+}

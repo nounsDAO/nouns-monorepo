@@ -1,0 +1,34 @@
+.pageDots {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  color: var(--brand-gray-light-text);
+}
+
+.disabledPageDot {
+  opacity: 0.5;
+}
+
+.paginationArrowsWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.paginationArrowBtnWrapper {
+  border: none;
+  background-color: transparent;
+}
+
+.paginationArrowBtnWrapper:disabled {
+  opacity: 0.5;
+}
+
+.paginationArrow {
+  height: 28px;
+  width: 28px;
+  color: var(--brand-gray-light-text);
+}
+
+.disabled {
+  opacity: 0.25;
+}
