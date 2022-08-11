@@ -43,14 +43,15 @@ msgstr "404: お探しの人、場所、物は見つかりませんでした。"
 #~ msgstr ""
 
 #: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
-msgid "<0> Noun {0} </0>  won by <1><2/></1>"
-msgstr ""
+#~ msgid "<0> Noun {0} </0>  won by <1><2/></1>"
+#~ msgstr ""
 
 #: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
 #: src/components/profileEvent/event/MobileNounWinEvent/index.tsx
 msgid "<0> Noun {0} </0> sent to <1><2/></1>"
 msgstr ""
 
+#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
 #: src/components/profileEvent/event/MobileNounWinEvent/index.tsx
 msgid "<0> Noun {0} </0> won by <1><2/></1>"
 msgstr ""
@@ -109,8 +110,12 @@ msgid "Add a Proposal Transaction"
 msgstr "提案するトランザクションを追加する"
 
 #: src/pages/CreateProposal/index.tsx
-msgid "Add one or more transactions and describe your proposal for the community. The proposal cannot modified after submission, so please verify all information before submitting. The voting period will begin after 2 1/3 days and last for 3 days."
-msgstr "トランザクション を１つ以上追加し、提案をコミュニティに説明してください。 提案は提出後に変更することが出来ませんので、事前に全ての情報を確認してください。 投票期間は56時間後に始まり、3日間続く予定です。"
+msgid "Add one or more transactions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 2 1/3 days and last for 3 days."
+msgstr ""
+
+#: src/pages/CreateProposal/index.tsx
+#~ msgid "Add one or more transactions and describe your proposal for the community. The proposal cannot modified after submission, so please verify all information before submitting. The voting period will begin after 2 1/3 days and last for 3 days."
+#~ msgstr "トランザクション を１つ以上追加し、提案をコミュニティに説明してください。 提案は提出後に変更することが出来ませんので、事前に全ての情報を確認してください。 投票期間は56時間後に始まり、3日間続く予定です。"
 
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "Address"
@@ -519,6 +524,10 @@ msgstr "詳しくは以下をご覧ください。また、{playgroundLink} を�
 #: src/components/NounInfoRowHolder/index.tsx
 msgid "Loading..."
 msgstr "ロード中..."
+
+#: src/components/Proposals/index.tsx
+msgid "Making a proposal requires {threshold} votes"
+msgstr ""
 
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "Next"
