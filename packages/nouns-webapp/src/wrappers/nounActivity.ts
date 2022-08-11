@@ -281,27 +281,34 @@ export const useNounActivity = (nounId: number): NounProfileEventFetcherResponse
     .sort((a: NounProfileEvent, b: NounProfileEvent) => a.blockNumber - b.blockNumber)
     .reverse();
 
-  // Parse noun birth + win events into a single event
-  const nounTransferFromAuctionHouse = nounTransferData.sort(
-    (a: NounProfileEvent, b: NounProfileEvent) => a.blockNumber - b.blockNumber,
-  )[nounId % 10 === 0 ? 0 : 1].payload as TransferEvent;
-  const nounTransferFromAuctionHouseBlockNumber = nounTransferData.sort(
-    (a: NounProfileEvent, b: NounProfileEvent) => a.blockNumber - b.blockNumber,
-  )[nounId % 10 === 0 ? 0 : 1].blockNumber;
-
-  const nounWinEvent = {
-    nounId: nounId,
-    winner: nounTransferFromAuctionHouse.to,
-    transactionHash: nounTransferFromAuctionHouse.transactionHash,
-  } as NounWinEvent;
-
   const postProcessedEvents = events.slice(0, events.length - (nounId % 10 === 0 ? 2 : 4));
 
-  postProcessedEvents.push({
-    eventType: NounEventType.AUCTION_WIN,
-    blockNumber: nounTransferFromAuctionHouseBlockNumber,
-    payload: nounWinEvent,
-  } as NounProfileEvent);
+  // Wrap this line in a try-catch to prevent edge case
+  // where excessive spamming to left / right keys can cause transfer
+  // and delegation data to be empty which leads to errors
+  try {
+    // Parse noun birth + win events into a single event
+    const nounTransferFromAuctionHouse = nounTransferData.sort(
+      (a: NounProfileEvent, b: NounProfileEvent) => a.blockNumber - b.blockNumber,
+    )[nounId % 10 === 0 ? 0 : 1].payload as TransferEvent;
+    const nounTransferFromAuctionHouseBlockNumber = nounTransferData.sort(
+      (a: NounProfileEvent, b: NounProfileEvent) => a.blockNumber - b.blockNumber,
+    )[nounId % 10 === 0 ? 0 : 1].blockNumber;
+
+    const nounWinEvent = {
+      nounId: nounId,
+      winner: nounTransferFromAuctionHouse.to,
+      transactionHash: nounTransferFromAuctionHouse.transactionHash,
+    } as NounWinEvent;
+
+    postProcessedEvents.push({
+      eventType: NounEventType.AUCTION_WIN,
+      blockNumber: nounTransferFromAuctionHouseBlockNumber,
+      payload: nounWinEvent,
+    } as NounProfileEvent);
+  } catch (e) {
+    console.log(e);
+  }
 
   return {
     loading: false,
