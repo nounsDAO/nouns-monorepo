@@ -12,11 +12,11 @@
 }
 
 .primary {
-  background-color: var(--brand-color-blue);
+  background-color: var(--brand-color-green);
 }
 
 .success {
-  background-color: var(--brand-color-green);
+  background-color: var(--brand-color-blue);
 }
 
 .danger {

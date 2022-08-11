@@ -27,7 +27,7 @@ const CreateProposalButton = ({
       if (proposalThreshold) {
         return (
           <Trans>
-            You must have {i18n.number(proposalThreshold || 0 + 1)} votes to submit a proposal
+            You must have {i18n.number((proposalThreshold || 0) + 1)} votes to submit a proposal
           </Trans>
         );
       }
