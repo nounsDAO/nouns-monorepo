@@ -1134,8 +1134,8 @@ msgid "Your <0>{availableVotes}</0> votes have been delegated to a new account."
 msgstr "Your <0>{availableVotes}</0> votes have been delegated to a new account."
 
 #: src/components/Documentation/index.tsx
-msgid "accessories (137)"
-msgstr "accessories (137)"
+msgid "accessories (140)"
+msgstr "accessories (140)"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "at"
@@ -1154,16 +1154,16 @@ msgid "bodies (30)"
 msgstr "bodies (30)"
 
 #: src/components/Documentation/index.tsx
-msgid "glasses (21)"
-msgstr "glasses (21)"
+msgid "glasses (23)"
+msgstr "glasses (23)"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "h"
 msgstr "h"
 
 #: src/components/Documentation/index.tsx
-msgid "heads (234)"
-msgstr "heads (234)"
+msgid "heads (242)"
+msgstr "heads (242)"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "m"

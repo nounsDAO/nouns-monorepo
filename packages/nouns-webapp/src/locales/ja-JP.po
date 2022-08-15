@@ -1135,8 +1135,8 @@ msgid "Your <0>{availableVotes}</0> votes have been delegated to a new account."
 msgstr "あなたの<0>{availableVotes}</0>票が新しいアカウントに委任されました"
 
 #: src/components/Documentation/index.tsx
-msgid "accessories (137)"
-msgstr "付属品(137)"
+msgid "accessories (140)"
+msgstr "付属品(140)"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "at"
@@ -1155,16 +1155,16 @@ msgid "bodies (30)"
 msgstr "体 (30)"
 
 #: src/components/Documentation/index.tsx
-msgid "glasses (21)"
-msgstr "メガネ (21)"
+msgid "glasses (23)"
+msgstr "メガネ (23)"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "h"
 msgstr "時間"
 
 #: src/components/Documentation/index.tsx
-msgid "heads (234)"
-msgstr "頭 (234)"
+msgid "heads (242)"
+msgstr "頭 (242)"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "m"
