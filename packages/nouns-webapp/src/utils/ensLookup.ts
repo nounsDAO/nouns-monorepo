@@ -58,6 +58,12 @@ export const useReverseENSLookUp = (address: string) => {
   return ens;
 };
 
+/**
+ * Look up either NNS or ENS (using NNS contract to resovle NNS with ENS fallback)
+ * @param library provider 
+ * @param address  Address to resolve
+ * @returns  NNS or ENS or null (if neither resolve)
+ */
 export async function lookupAddress(library: Web3Provider, address: string): Promise<string | null> {
   try {
     // Call resolver contract
