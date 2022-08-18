@@ -34,7 +34,7 @@ const DesktopTransferEvent: React.FC<DesktopTransferEventProps> = props => {
             }}
           />
           <Trans>
-            Holder changed from
+            Holder changed from{' '}
             <span
               data-tip={`View on Etherscan`}
               onClick={() => window.open(buildEtherscanAddressLink(event.from), '_blank')}
