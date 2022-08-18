@@ -12,6 +12,7 @@ import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 import clsx from 'clsx';
 import { ensCacheKey } from '../../utils/ensLookup';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
+import { lookupNNSOrENS } from '../../utils/lookupNNSOrENS';
 
 export enum VoteCardVariant {
   FOR,
@@ -77,8 +78,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
         return;
       }
 
-      library
-        .lookupAddress(delegateInfo.delegate)
+      lookupNNSOrENS(library, delegateInfo.delegate)
         .then(name => {
           // Store data as mapping of address_Expiration => address or ENS
           if (name) {
