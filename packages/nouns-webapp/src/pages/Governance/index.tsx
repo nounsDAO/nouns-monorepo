@@ -39,7 +39,9 @@ const GovernancePage = () => {
             <span className={classes.boldText}>
               {nounsRequired} {threshold === 0 ? nounSingular : nounPlural}
             </span>{' '}
-            is required to submit proposals.
+            {threshold === 0 ? 
+            <Trans>is required to submit proposals.</Trans> : <Trans>are required to submit proposals.</Trans>
+            }
           </Trans>
         </p>
 
