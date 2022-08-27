@@ -68,7 +68,7 @@ const getCountdownCopy = (proposal: Proposal, currentBlock: number, locale: Supp
   );
 };
 
-const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
+const Proposals = ({ proposals, delegateTo }: { proposals: Proposal[]; delegateTo?: string }) => {
   const history = useHistory();
 
   const { account } = useEthers();
@@ -76,7 +76,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
   const currentBlock = useBlockNumber();
   const isMobile = isMobileScreen();
   const activeLocale = useActiveLocale();
-  const [showDelegateModal, setShowDelegateModal] = useState(false);
+  const [showDelegateModal, setShowDelegateModal] = useState(delegateTo !== undefined);
   const [isMetaKeyPressed, setIsMetaKeyPressed] = useState(false);
 
   // Key press handlers to meta key
@@ -118,7 +118,9 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
 
   return (
     <div className={classes.proposals}>
-      {showDelegateModal && <DelegationModal onDismiss={() => setShowDelegateModal(false)} />}
+      {showDelegateModal && (
+        <DelegationModal onDismiss={() => setShowDelegateModal(false)} delegateTo={delegateTo} />
+      )}
       <div
         className={clsx(
           classes.headerWrapper,

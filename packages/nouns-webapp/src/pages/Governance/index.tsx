@@ -8,6 +8,8 @@ import clsx from 'clsx';
 import { useTreasuryBalance, useTreasuryUSDValue } from '../../hooks/useTreasuryBalance';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
+import { useLocation } from 'react-router-dom';
+import { getAddressFromQueryParams } from '../../utils/getAddressFromQueryParams';
 
 const GovernancePage = () => {
   const { data: proposals } = useAllProposals();
@@ -20,6 +22,9 @@ const GovernancePage = () => {
   // Note: We have to extract this copy out of the <span> otherwise the Lingui macro gets confused
   const nounSingular = <Trans>Noun</Trans>;
   const nounPlural = <Trans>Nouns</Trans>;
+
+  const { search } = useLocation();
+  const delegateTo = getAddressFromQueryParams('to', search);
 
   return (
     <Section fullWidth={false} className={classes.section}>
@@ -39,9 +44,9 @@ const GovernancePage = () => {
             <span className={classes.boldText}>
               {nounsRequired} {threshold === 0 ? nounSingular : nounPlural}
             </span>{' '}
-            {threshold === 0 ? 
+            {/* {threshold === 0 ? 
             <Trans>is required to submit proposals.</Trans> : <Trans>are required to submit proposals.</Trans>
-            }
+            } */}
           </Trans>
         </p>
 
@@ -79,7 +84,7 @@ const GovernancePage = () => {
             </Trans>
           </Col>
         </Row>
-        <Proposals proposals={proposals} />
+        <Proposals proposals={proposals} delegateTo={delegateTo} />
       </Col>
     </Section>
   );

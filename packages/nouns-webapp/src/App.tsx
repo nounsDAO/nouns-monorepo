@@ -64,6 +64,7 @@ function App() {
             <Route exact path="/vote" component={GovernancePage} />
             <Route exact path="/vote/:id" component={VotePage} />
             <Route exact path="/playground" component={Playground} />
+            <Route exact path="/delegate" component={GovernancePage} />
             <Route component={NotFoundPage} />
           </Switch>
           <Footer />
