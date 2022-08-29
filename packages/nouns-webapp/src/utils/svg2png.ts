@@ -48,8 +48,8 @@ export const svg2png = (
 
 /**
  * Determine if the image can be scaled without creating a pixel gap.
- * This will occur if the `desired` pixel length is not close enough to
- * a multiple or a factor of the `current` pixel length.
+ * This will occur if the `desired` pixel length divided by the `current`
+ * pixel length has more than one decimal place.
  * @param current The current pixel length
  * @param desired The desired pixel length
  */
