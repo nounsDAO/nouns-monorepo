@@ -121,6 +121,9 @@ contract NounsDAOEventsV2 is NounsDAOEvents {
 
     /// @notice Emitted when admin withdraws the DAO's balance.
     event Withdraw(uint256 amount, bool sent);
+
+    /// @notice Emitted when pendingVetoer is changed
+    event NewPendingVetoer(address oldPendingVetoer, address newPendingVetoer);
 }
 
 contract NounsDAOProxyStorage {
@@ -346,6 +349,9 @@ contract NounsDAOStorageV1Adjusted is NounsDAOProxyStorage {
  */
 contract NounsDAOStorageV2 is NounsDAOStorageV1Adjusted {
     DynamicQuorumParamsCheckpoint[] public quorumParamsCheckpoints;
+
+    /// @notice Pending new vetoer
+    address public pendingVetoer;
 
     struct DynamicQuorumParams {
         /// @notice The minimum basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed.

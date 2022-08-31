@@ -110,6 +110,8 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     error InvalidMaxQuorumVotesBPS();
     error MinQuorumBPSGreaterThanMaxQuorumBPS();
     error UnsafeUint16Cast();
+    error VetoerOnly();
+    error PendingVetoerOnly();
 
     /**
      * @notice Used to initialize the contract during delegator contructor
@@ -833,15 +835,31 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     }
 
     /**
-     * @notice Changes vetoer address
-     * @dev Vetoer function for updating vetoer address
+     * @notice Begins transition of vetoer. The newPendingVetoer must call _acceptVetoer to finalize the transfer.
+     * @param newPendingVetoer New Pending Vetoer
      */
-    function _setVetoer(address newVetoer) public {
-        require(msg.sender == vetoer, 'NounsDAO::_setVetoer: vetoer only');
+    function _setPendingVetoer(address newPendingVetoer) public {
+        if (msg.sender != vetoer) {
+            revert VetoerOnly();
+        }
 
-        emit NewVetoer(vetoer, newVetoer);
+        emit NewPendingVetoer(pendingVetoer, newPendingVetoer);
 
-        vetoer = newVetoer;
+        pendingVetoer = newPendingVetoer;
+    }
+
+    function _acceptVetoer() external {
+        if (msg.sender != pendingVetoer || pendingVetoer == address(0)) {
+            revert PendingVetoerOnly();
+        }
+
+        // Update vetoer
+        emit NewVetoer(vetoer, pendingVetoer);
+        vetoer = pendingVetoer;
+
+        // Clear the pending value
+        emit NewPendingVetoer(pendingVetoer, address(0));
+        pendingVetoer = address(0);
     }
 
     /**
@@ -849,10 +867,11 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
      * @dev Vetoer function destroying veto power forever
      */
     function _burnVetoPower() public {
-        // Check caller is pendingAdmin and pendingAdmin ≠ address(0)
+        // Check caller is vetoer
         require(msg.sender == vetoer, 'NounsDAO::_burnVetoPower: vetoer only');
 
-        _setVetoer(address(0));
+        emit NewVetoer(vetoer, address(0));
+        vetoer = address(0);
     }
 
     /**
