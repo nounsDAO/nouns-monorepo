@@ -112,6 +112,9 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     error UnsafeUint16Cast();
     error VetoerOnly();
     error PendingVetoerOnly();
+    error VetoerBurned();
+    error CantVetoExecutedProposal();
+    error CantCancelExecutedProposal();
 
     /**
      * @notice Used to initialize the contract during delegator contructor
@@ -133,7 +136,9 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         DynamicQuorumParams calldata dynamicQuorumParams_
     ) public virtual {
         require(address(timelock) == address(0), 'NounsDAO::initialize: can only initialize once');
-        require(msg.sender == admin, 'NounsDAO::initialize: admin only');
+        if (msg.sender != admin) {
+            revert AdminOnly();
+        }
         require(timelock_ != address(0), 'NounsDAO::initialize: invalid timelock address');
         require(nouns_ != address(0), 'NounsDAO::initialize: invalid nouns address');
         require(
@@ -346,7 +351,9 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
      * @param proposalId The id of the proposal to cancel
      */
     function cancel(uint256 proposalId) external {
-        require(state(proposalId) != ProposalState.Executed, 'NounsDAO::cancel: cannot cancel executed proposal');
+        if (state(proposalId) == ProposalState.Executed) {
+            revert CantCancelExecutedProposal();
+        }
 
         Proposal storage proposal = _proposals[proposalId];
         require(
@@ -374,9 +381,17 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
      * @param proposalId The id of the proposal to veto
      */
     function veto(uint256 proposalId) external {
-        require(vetoer != address(0), 'NounsDAO::veto: veto power burned');
-        require(msg.sender == vetoer, 'NounsDAO::veto: only vetoer');
-        require(state(proposalId) != ProposalState.Executed, 'NounsDAO::veto: cannot veto executed proposal');
+        if (vetoer == address(0)) {
+            revert VetoerBurned();
+        }
+
+        if (msg.sender != vetoer) {
+            revert VetoerOnly();
+        }
+
+        if (state(proposalId) == ProposalState.Executed) {
+            revert CantVetoExecutedProposal();
+        }
 
         Proposal storage proposal = _proposals[proposalId];
 
@@ -621,7 +636,9 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
      * @param newVotingDelay new voting delay, in blocks
      */
     function _setVotingDelay(uint256 newVotingDelay) external {
-        require(msg.sender == admin, 'NounsDAO::_setVotingDelay: admin only');
+        if (msg.sender != admin) {
+            revert AdminOnly();
+        }
         require(
             newVotingDelay >= MIN_VOTING_DELAY && newVotingDelay <= MAX_VOTING_DELAY,
             'NounsDAO::_setVotingDelay: invalid voting delay'
@@ -637,7 +654,9 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
      * @param newVotingPeriod new voting period, in blocks
      */
     function _setVotingPeriod(uint256 newVotingPeriod) external {
-        require(msg.sender == admin, 'NounsDAO::_setVotingPeriod: admin only');
+        if (msg.sender != admin) {
+            revert AdminOnly();
+        }
         require(
             newVotingPeriod >= MIN_VOTING_PERIOD && newVotingPeriod <= MAX_VOTING_PERIOD,
             'NounsDAO::_setVotingPeriod: invalid voting period'
@@ -654,7 +673,9 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
      * @param newProposalThresholdBPS new proposal threshold
      */
     function _setProposalThresholdBPS(uint256 newProposalThresholdBPS) external {
-        require(msg.sender == admin, 'NounsDAO::_setProposalThresholdBPS: admin only');
+        if (msg.sender != admin) {
+            revert AdminOnly();
+        }
         require(
             newProposalThresholdBPS >= MIN_PROPOSAL_THRESHOLD_BPS &&
                 newProposalThresholdBPS <= MAX_PROPOSAL_THRESHOLD_BPS,
@@ -673,7 +694,9 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
      *     Must be lower than or equal to maxQuorumVotesBPS
      */
     function _setMinQuorumVotesBPS(uint16 newMinQuorumVotesBPS) external {
-        require(msg.sender == admin, 'NounsDAO::_setMinQuorumVotesBPS: admin only');
+        if (msg.sender != admin) {
+            revert AdminOnly();
+        }
         DynamicQuorumParams memory params = getDynamicQuorumParamsAt(block.number);
 
         require(
@@ -701,7 +724,9 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
      *     Must be higher than or equal to minQuorumVotesBPS
      */
     function _setMaxQuorumVotesBPS(uint16 newMaxQuorumVotesBPS) external {
-        require(msg.sender == admin, 'NounsDAO::_setMaxQuorumVotesBPS: admin only');
+        if (msg.sender != admin) {
+            revert AdminOnly();
+        }
         DynamicQuorumParams memory params = getDynamicQuorumParamsAt(block.number);
 
         require(
@@ -726,7 +751,9 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
      * @param newQuorumCoefficient the new coefficient, as a fixed point integer with 6 decimals
      */
     function _setQuorumCoefficient(uint32 newQuorumCoefficient) external {
-        require(msg.sender == admin, 'NounsDAO::_setQuorumCoefficient: admin only');
+        if (msg.sender != admin) {
+            revert AdminOnly();
+        }
         DynamicQuorumParams memory params = getDynamicQuorumParamsAt(block.number);
 
         uint32 oldQuorumCoefficient = params.quorumCoefficient;
