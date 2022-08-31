@@ -17,6 +17,9 @@ contract NounsDAOLogicV2Test is Test {
     uint256 votingDelay = 1;
     uint256 proposalThresholdBPS = 200;
 
+    event NewPendingVetoer(address oldPendingVetoer, address newPendingVetoer);
+    event NewVetoer(address oldVetoer, address newVetoer);
+
     function setUp() public {
         daoLogic = new NounsDAOLogicV2();
 
@@ -41,15 +44,12 @@ contract NounsDAOLogicV2Test is Test {
         );
     }
 
-    function test_updateVetoer_failsIfNotCurrentVetoer() public {
+    function test_setPendingVetoer_failsIfNotCurrentVetoer() public {
         vm.expectRevert(NounsDAOLogicV2.VetoerOnly.selector);
         daoProxy._setPendingVetoer(address(0x1234));
     }
 
-    event NewPendingVetoer(address oldPendingVetoer, address newPendingVetoer);
-    event NewVetoer(address oldVetoer, address newVetoer);
-
-    function test_updateVetoer_updatePendingVetoer() public {
+    function test_setPendingVetoer_updatePendingVetoer() public {
         assertEq(daoProxy.pendingVetoer(), address(0));
 
         address pendingVetoer = address(0x3333);
@@ -62,7 +62,7 @@ contract NounsDAOLogicV2Test is Test {
         assertEq(daoProxy.pendingVetoer(), pendingVetoer);
     }
 
-    function test_updateVetoer_onlyPendingVetoerCanAcceptNewVetoer() public {
+    function test_onlyPendingVetoerCanAcceptNewVetoer() public {
         address pendingVetoer = address(0x3333);
 
         vm.prank(vetoer);
@@ -77,6 +77,7 @@ contract NounsDAOLogicV2Test is Test {
         daoProxy._acceptVetoer();
 
         assertEq(daoProxy.vetoer(), pendingVetoer);
+        assertEq(daoProxy.pendingVetoer(), address(0x0));
     }
 
     function test_burnVetoPower_failsIfNotVetoer() public {
