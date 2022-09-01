@@ -124,34 +124,21 @@ describe('NounsDAOV2#vetoing', () => {
     expect(await gov.vetoer()).to.equal(vetoer.address);
   });
 
-  it('rejects setting a new vetoer when sender is not vetoer', async () => {
-    await expect(gov.connect(account0)._setVetoer(account1.address)).revertedWith(
-      'NounsDAO::_setVetoer: vetoer only',
-    );
-  });
-
-  it('allows setting a new vetoer when sender is vetoer', async () => {
-    const oldVetoer = vetoer;
-    vetoer = account2;
-    await gov.connect(oldVetoer)._setVetoer(vetoer.address);
-    expect(await gov.vetoer()).to.equal(vetoer.address);
-  });
-
-  it('only vetoer can veto', async () => {
+  it('only vetoer can veto [ @skip-on-coverage ]', async () => {
     await propose(account0);
-    await expect(gov.veto(proposalId)).revertedWith('NounsDAO::veto: only vetoer');
+    await expect(gov.connect(account0).veto(proposalId)).revertedWith('VetoerOnly()');
   });
 
-  it('burns veto power correctly', async () => {
+  it('burns veto power correctly [ @skip-on-coverage ]', async () => {
     // vetoer is still set
     expect(await gov.vetoer()).to.equal(vetoer.address);
-    await expect(gov._burnVetoPower()).revertedWith('NounsDAO::_burnVetoPower: vetoer only');
+    await expect(gov.connect(account0)._burnVetoPower()).revertedWith(
+      'NounsDAO::_burnVetoPower: vetoer only',
+    );
     // burn
     await gov.connect(vetoer)._burnVetoPower();
     expect(await gov.vetoer()).to.equal(address(0));
-    await expect(gov.connect(vetoer).veto(proposalId)).revertedWith(
-      'NounsDAO::veto: veto power burned',
-    );
+    await expect(gov.connect(vetoer).veto(proposalId)).revertedWith('VetoerBurned()');
   });
 
   describe('vetoing works correctly for proposal state', async () => {
@@ -253,7 +240,7 @@ describe('NounsDAOV2#vetoing', () => {
       await gov.veto(proposalId);
       await expectState(proposalId, 'Vetoed');
     });
-    it('Executed', async () => {
+    it('Executed [ @skip-on-coverage ]', async () => {
       await propose(account0);
       await mineBlock();
       await mineBlock();
@@ -265,9 +252,7 @@ describe('NounsDAOV2#vetoing', () => {
       await setNextBlockTimestamp(proposal.eta.toNumber() + 1);
       await gov.execute(proposalId);
       await expectState(proposalId, 'Executed');
-      await expect(gov.veto(proposalId)).revertedWith(
-        'NounsDAO::veto: cannot veto executed proposal',
-      );
+      await expect(gov.veto(proposalId)).revertedWith('CantVetoExecutedProposal()');
     });
     it('Vetoed', async () => {
       await propose(account0);
