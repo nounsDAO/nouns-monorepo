@@ -4,15 +4,24 @@ pragma solidity ^0.8.15;
 import 'forge-std/Test.sol';
 import { NounsDAOLogicV2 } from '../../contracts/governance/NounsDAOLogicV2.sol';
 import { NounsDAOProxyV2 } from '../../contracts/governance/NounsDAOProxyV2.sol';
-import { NounsDAOStorageV2 } from '../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsDAOStorageV2, NounsDAOStorageV1Adjusted } from '../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsDescriptorV2 } from '../../contracts/NounsDescriptorV2.sol';
+import { DeployUtils } from './helpers/DeployUtils.sol';
+import { NounsToken } from '../../contracts/NounsToken.sol';
+import { NounsSeeder } from '../../contracts/NounsSeeder.sol';
+import { IProxyRegistry } from '../../contracts/external/opensea/IProxyRegistry.sol';
+import { NounsDAOExecutor } from '../../contracts/governance/NounsDAOExecutor.sol';
 
-contract NounsDAOLogicV2Test is Test {
+contract NounsDAOLogicV2Test is Test, DeployUtils {
     NounsDAOLogicV2 daoLogic;
     NounsDAOLogicV2 daoProxy;
-    address timelock = address(0x1);
-    address nouns = address(0x2);
+    NounsToken nounsToken;
+    NounsDAOExecutor timelock = new NounsDAOExecutor(address(1), TIMELOCK_DELAY);
     address vetoer = address(0x3);
     address admin = address(0x4);
+    address noundersDAO = address(0x5);
+    address minter = address(0x6);
+    address proposer = address(0x7);
     uint256 votingPeriod = 6000;
     uint256 votingDelay = 1;
     uint256 proposalThresholdBPS = 200;
@@ -20,14 +29,18 @@ contract NounsDAOLogicV2Test is Test {
     event NewPendingVetoer(address oldPendingVetoer, address newPendingVetoer);
     event NewVetoer(address oldVetoer, address newVetoer);
 
-    function setUp() public {
+    function setUp() public virtual {
         daoLogic = new NounsDAOLogicV2();
+
+        NounsDescriptorV2 descriptor = _deployAndPopulateV2();
+
+        nounsToken = new NounsToken(noundersDAO, minter, descriptor, new NounsSeeder(), IProxyRegistry(address(0)));
 
         daoProxy = NounsDAOLogicV2(
             payable(
                 new NounsDAOProxyV2(
-                    timelock,
-                    nouns,
+                    address(timelock),
+                    address(nounsToken),
                     vetoer,
                     admin,
                     address(daoLogic),
@@ -42,6 +55,17 @@ contract NounsDAOLogicV2Test is Test {
                 )
             )
         );
+
+        vm.prank(address(timelock));
+        timelock.setPendingAdmin(address(daoProxy));
+        vm.prank(address(daoProxy));
+        timelock.acceptAdmin();
+    }
+}
+
+contract UpdateVetoerTest is NounsDAOLogicV2Test {
+    function setUp() public override {
+        super.setUp();
     }
 
     function test_setPendingVetoer_failsIfNotCurrentVetoer() public {
@@ -92,5 +116,57 @@ contract NounsDAOLogicV2Test is Test {
         daoProxy._burnVetoPower();
 
         assertEq(daoProxy.vetoer(), address(0));
+    }
+}
+
+contract CancelProposalTest is NounsDAOLogicV2Test {
+    uint256 proposalId;
+
+    function setUp() public override {
+        super.setUp();
+
+        vm.prank(minter);
+        nounsToken.mint();
+
+        vm.prank(minter);
+        nounsToken.transferFrom(minter, proposer, 1);
+
+        vm.roll(block.number + 1);
+
+        vm.prank(proposer);
+        address[] memory targets = new address[](1);
+        targets[0] = address(0x1234);
+        uint256[] memory values = new uint256[](1);
+        values[0] = 100;
+        string[] memory signatures = new string[](1);
+        signatures[0] = '';
+        bytes[] memory calldatas = new bytes[](1);
+        calldatas[0] = '';
+        proposalId = daoProxy.propose(targets, values, signatures, calldatas, 'my proposal');
+    }
+
+    function testProposerCanCancelProposal() public {
+        vm.prank(proposer);
+        daoProxy.cancel(proposalId);
+
+        assertEq(uint256(daoProxy.state(proposalId)), uint256(NounsDAOStorageV1Adjusted.ProposalState.Canceled));
+    }
+
+    function testNonProposerCantCancel() public {
+        vm.expectRevert('NounsDAO::cancel: proposer above threshold');
+        daoProxy.cancel(proposalId);
+
+        assertEq(uint256(daoProxy.state(proposalId)), uint256(NounsDAOStorageV1Adjusted.ProposalState.Pending));
+    }
+
+    function testAnyoneCanCancelIfProposerVotesBelowThreshold() public {
+        vm.prank(proposer);
+        nounsToken.transferFrom(proposer, address(0x9999), 1);
+
+        vm.roll(block.number + 1);
+
+        daoProxy.cancel(proposalId);
+
+        assertEq(uint256(daoProxy.state(proposalId)), uint256(NounsDAOStorageV1Adjusted.ProposalState.Canceled));
     }
 }
