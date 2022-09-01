@@ -8,6 +8,7 @@ import classes from './StandaloneNoun.module.css';
 import { useDispatch } from 'react-redux';
 import { setOnDisplayAuctionNounId } from '../../state/slices/onDisplayAuction';
 import nounClasses from '../Noun/Noun.module.css';
+import Image from 'react-bootstrap/Image';
 
 interface StandaloneNounProps {
   nounId: EthersBN;
@@ -35,6 +36,31 @@ export const getNoun = (nounId: string | EthersBN, seed: INounSeed) => {
     description,
     image,
   };
+};
+
+export const StandaloneNounImage: React.FC<StandaloneNounProps> = (props: StandaloneNounProps) => {
+  const { nounId } = props;
+  const seed = useNounSeed(nounId);
+  const noun = seed && getNoun(nounId, seed);
+
+  const dispatch = useDispatch();
+
+  const onClickHandler = () => {
+    dispatch(setOnDisplayAuctionNounId(nounId.toNumber()));
+  };
+
+  return (
+    <>
+      <Image
+          // className={`${classes.img} ${className}`}
+          src={noun ? noun.image : ''}
+          // alt={alt}
+          fluid
+        />
+      {/* <Noun imgPath={noun ? noun.image : ''} alt={noun ? noun.description : 'Noun'} /> */}
+    </>
+      
+  );
 };
 
 const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProps) => {
