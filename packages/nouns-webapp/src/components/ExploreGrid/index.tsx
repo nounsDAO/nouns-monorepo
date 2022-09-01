@@ -41,7 +41,7 @@ function useKeyPress(targetKey: string): boolean {
 }
 
 const ExploreGrid: React.FC<ExploreGridProps> = props => {
-    const nounCount = 427;
+    const nounCount = 429;
     // const gridOptions = [2.5, 5, 12.5];
     const [isFullView] = useState<boolean>(false);
     const [isSidebarVisible, setIsSidebarVisible] = useState<boolean>(false);

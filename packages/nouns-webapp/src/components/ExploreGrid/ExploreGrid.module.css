@@ -1,6 +1,7 @@
 .contentWrap {
     display: flex;
     flex: 1 1;
+    position: relative;
 }
 .gridWrap.sidebarVisible {
     /* display: flex; */
@@ -42,13 +43,13 @@
 }
 
 .small li {
-    width: 2.5%;
-}
-.medium li {
     width: 5%;
 }
+.medium li {
+    width: 10%;
+}
 .large li {
-    width: 12.5%;
+    width: 14.28%;
 }
 .exploreGrid li a > div {
     width: 100%;
