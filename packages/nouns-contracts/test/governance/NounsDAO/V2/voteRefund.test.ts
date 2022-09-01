@@ -66,23 +66,6 @@ describe('Vote Refund', () => {
     await ethers.provider.send('evm_revert', [snapshotId]);
   });
 
-  describe('withdraw', () => {
-    it('reverts for non-owners [ @skip-on-coverage ]', async () => {
-      await fundGov();
-      await expect(gov.connect(user)._withdraw()).to.be.revertedWith('AdminOnly()');
-    });
-
-    it('sends balance to admin', async () => {
-      await fundGov('123');
-      const amount = ethers.utils.parseEther('123');
-
-      const tx = await gov.connect(deployer)._withdraw();
-
-      await expect(tx).to.changeEtherBalance(deployer, amount);
-      await expect(tx).to.emit(gov, 'Withdraw').withArgs(amount, true);
-    });
-  });
-
   describe('castRefundableVote', () => {
     it('refunds users with votes', async () => {
       await fundGov();

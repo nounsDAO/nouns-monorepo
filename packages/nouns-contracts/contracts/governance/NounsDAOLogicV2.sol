@@ -815,7 +815,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         emit QuorumCoefficientSet(oldParams.quorumCoefficient, params.quorumCoefficient);
     }
 
-    function _withdraw() external {
+    function _withdraw() external returns (uint256, bool) {
         if (msg.sender != admin) {
             revert AdminOnly();
         }
@@ -824,6 +824,8 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         (bool sent, ) = msg.sender.call{ value: amount }('');
 
         emit Withdraw(amount, sent);
+
+        return (amount, sent);
     }
 
     /**
