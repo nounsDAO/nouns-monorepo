@@ -1,0 +1,91 @@
+.contentWrap {
+    display: flex;
+    flex: 1 1;
+}
+.gridWrap.sidebarVisible {
+    /* display: flex; */
+    width: 66%;
+    transition: width 1s ease-in-out;
+}
+.exploreGrid {
+    display: flex;
+    flex: 1 1;
+}
+.exploreGrid ul {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+.exploreGrid li {
+    animation-name: animateIn;
+    animation-duration: 100ms;
+    animation-delay: calc(var(--animation-order) * 10ms);
+    animation-fill-mode: both;
+    animation-timing-function: ease-in-out;
+    /* width: 100%; */
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 10%;
+    transition: width 0.5s ease-in-out;
+    border: transparent 2px solid;
+}
+.exploreGrid button {
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+.exploreGrid li a {
+    display: block;
+}
+
+.small li {
+    width: 2.5%;
+}
+.medium li {
+    width: 5%;
+}
+.large li {
+    width: 12.5%;
+}
+.exploreGrid li a > div {
+    width: 100%;
+    padding: 0;
+    height: auto;
+    position: relative;
+}
+.exploreGrid li a > div img {
+}
+
+.exploreGrid a {
+    /* display: block; */
+    /* width: 5%; */
+}
+
+.fullViewGrid {
+
+}
+
+.exploreGrid.fullViewGrid li {
+    width: 3%;
+}
+
+.nav {
+    justify-content: right;
+    display: flex;
+    grid-gap: 10px;
+    margin-bottom: 10px;
+}
+
+@keyframes animateIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.6) translateY(-8px);
+    }
+    
+    100% {
+      opacity: 1;
+    }
+  }
