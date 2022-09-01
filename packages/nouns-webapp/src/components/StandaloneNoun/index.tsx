@@ -43,23 +43,13 @@ export const StandaloneNounImage: React.FC<StandaloneNounProps> = (props: Standa
   const seed = useNounSeed(nounId);
   const noun = seed && getNoun(nounId, seed);
 
-  const dispatch = useDispatch();
-
-  const onClickHandler = () => {
-    dispatch(setOnDisplayAuctionNounId(nounId.toNumber()));
-  };
-
   return (
     <>
       <Image
-          // className={`${classes.img} ${className}`}
           src={noun ? noun.image : ''}
-          // alt={alt}
           fluid
         />
-      {/* <Noun imgPath={noun ? noun.image : ''} alt={noun ? noun.description : 'Noun'} /> */}
     </>
-      
   );
 };
 

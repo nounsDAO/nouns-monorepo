@@ -1,16 +1,10 @@
-import React, { ReactNode, useState, useRef, useEffect } from 'react';
-import { useReverseENSLookUp } from '../../utils/ensLookup';
-import { containsBlockedText } from '../../utils/moderation/containsBlockedText';
+import React, { ReactNode } from 'react';
 import { useNounSeed } from '../../wrappers/nounToken';
 import { BigNumber } from 'ethers';
 import { StandaloneNounImage } from '../../components/StandaloneNoun';
-import { getNoun } from '../../components/StandaloneNoun';
 import classes from './ExploreNounDetail.module.css';
-import Image from 'react-bootstrap/Image';
-import cx from 'classnames';
 import { ImageData } from '@nouns/assets';
 import { Trans } from '@lingui/macro';
-
 // import {AnimatePresence, motion} from 'framer-motion/dist/framer-motion';
 
 interface ExploreNounDetailProps {
