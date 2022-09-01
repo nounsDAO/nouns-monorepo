@@ -1,0 +1,6 @@
+.sidebar {
+    width: 33%;
+    transition: width 1s ease-in-out;
+    display: flex;
+    flex-direction: column;
+}
