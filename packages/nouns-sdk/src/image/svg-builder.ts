@@ -84,7 +84,7 @@ export const buildSVG = (
     });
     result += svgRects.join('');
     return result;
-  }, `<svg width=${width} height=${height} viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="#${bgColor}" />`);
+  }, `<svg width="${width}" height="${height}" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="#${bgColor}" />`);
 
   return `${svgWithoutEndTag}</svg>`;
 };
