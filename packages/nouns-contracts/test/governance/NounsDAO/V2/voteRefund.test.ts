@@ -13,6 +13,7 @@ import {
   encodeParameters,
   getSigners,
   populateDescriptorV2,
+  setNextBlockBaseFee,
   TestSigners,
 } from '../../../utils';
 
@@ -26,6 +27,7 @@ const REFUND_ERROR_MARGIN = ethers.utils.parseEther('0.0001');
 const MAX_PRIORITY_FEE_CAP = ethers.utils.parseUnits('2', 'gwei');
 const DEFAULT_GAS_OPTIONS = { maxPriorityFeePerGas: MAX_PRIORITY_FEE_CAP };
 const MAX_REFUND_GAS_USED = BigNumber.from(200_000);
+const MAX_REFUND_BASE_FEE = ethers.utils.parseUnits('50', 'gwei');
 
 let deployer: SignerWithAddress;
 let user: SignerWithAddress;
@@ -237,6 +239,25 @@ describe('Vote Refund', () => {
         .withArgs(user.address, BigNumber.from(1), 1, 2, LONG_REASON);
     });
 
+    it('caps basefee', async () => {
+      await fundGov();
+      await setNextBlockBaseFee(MAX_REFUND_BASE_FEE.mul(2));
+      const balanceBefore = await user.getBalance();
+      const tx = await gov
+        .connect(user)
+        .castRefundableVoteWithReason(1, 1, 'some reason', DEFAULT_GAS_OPTIONS);
+      const r = await tx.wait();
+      const balanceDiff = balanceBefore.sub(await user.getBalance());
+
+      expect(r.gasUsed).to.be.gt(0);
+      expect(balanceDiff).to.be.closeTo(await expectedBaseFeeCappedDiff(r), REFUND_ERROR_MARGIN);
+
+      expectRefundEvent(r, user, r.gasUsed.mul(MAX_REFUND_BASE_FEE.add(MAX_PRIORITY_FEE_CAP)));
+      await expect(tx)
+        .to.emit(gov, 'VoteCast')
+        .withArgs(user.address, BigNumber.from(1), 1, 2, 'some reason');
+    });
+
     it('does not refund when DAO balance is zero', async () => {
       expect(await ethers.provider.getBalance(gov.address)).to.eq(0);
       const balanceBefore = await user.getBalance();
@@ -294,6 +315,12 @@ describe('Vote Refund', () => {
     const gasPrice = await latestBasePlusMaxPriority();
     const expectedRefund = MAX_REFUND_GAS_USED.mul(gasPrice);
     const txGrossCost = r.gasUsed.mul(gasPrice);
+    return txGrossCost.sub(expectedRefund);
+  }
+
+  async function expectedBaseFeeCappedDiff(r: ContractReceipt): Promise<BigNumber> {
+    const expectedRefund = r.gasUsed.mul(MAX_REFUND_BASE_FEE.add(MAX_PRIORITY_FEE_CAP));
+    const txGrossCost = r.gasUsed.mul(await latestBasePlusMaxPriority());
     return txGrossCost.sub(expectedRefund);
   }
 
