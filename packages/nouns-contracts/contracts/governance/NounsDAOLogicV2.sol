@@ -884,7 +884,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     }
 
     function _acceptVetoer() external {
-        if (msg.sender != pendingVetoer || pendingVetoer == address(0)) {
+        if (msg.sender != pendingVetoer) {
             revert PendingVetoerOnly();
         }
 
@@ -905,8 +905,13 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         // Check caller is vetoer
         require(msg.sender == vetoer, 'NounsDAO::_burnVetoPower: vetoer only');
 
+        // Update vetoer to 0x0
         emit NewVetoer(vetoer, address(0));
         vetoer = address(0);
+
+        // Clear the pending value
+        emit NewPendingVetoer(pendingVetoer, address(0));
+        pendingVetoer = address(0);
     }
 
     /**
