@@ -93,4 +93,22 @@ contract NounsDAOLogicV2Test is Test {
 
         assertEq(daoProxy.vetoer(), address(0));
     }
+
+    function test_burnVetoPower_setsPendingVetoerToZero() public {
+        address pendingVetoer = address(0x3333);
+
+        vm.prank(vetoer);
+        daoProxy._setPendingVetoer(pendingVetoer);
+
+        vm.prank(vetoer);
+        vm.expectEmit(true, true, true, true);
+        emit NewPendingVetoer(pendingVetoer, address(0));
+        daoProxy._burnVetoPower();
+
+        vm.prank(pendingVetoer);
+        vm.expectRevert(NounsDAOLogicV2.PendingVetoerOnly.selector);
+        daoProxy._acceptVetoer();
+
+        assertEq(daoProxy.pendingVetoer(), address(0));
+    }
 }
