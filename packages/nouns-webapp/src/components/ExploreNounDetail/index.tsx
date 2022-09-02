@@ -37,6 +37,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
     ];
 
     const seed = useNounSeed(BigNumber.from(props.nounId));
+    console.log(ImageData);
 
     const nounTraits = {
         background: parseTraitName(traitNames[0][seed.background]),
