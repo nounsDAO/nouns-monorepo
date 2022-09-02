@@ -33,11 +33,21 @@
     transition: width 0.5s ease-in-out;
     border: transparent 2px solid;
 }
+.exploreGrid li img {
+    max-width: none;
+    width: 100%;
+}
 .exploreGrid button {
     border: none;
     margin: 0;
     padding: 0;
+    width: 100%;
 }
+.exploreGrid button:focus {
+    border: 2px solid green;
+    outline: none;
+}
+
 .exploreGrid li a {
     display: block;
 }
