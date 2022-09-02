@@ -11,7 +11,6 @@ interface ExploreGridProps {
 
 // Custom hook
 function useKeyPress(targetKey: string) {
-    // console.log("useKeyPress");
     // State for keeping track of whether key is pressed
     const [keyPressed, setKeyPressed] = useState(false);
   
@@ -63,6 +62,11 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     const keyboardUp: boolean = useKeyPress("ArrowUp");
     const keyboardDown: boolean = useKeyPress("ArrowDown");
 
+    const buttonsRef = useRef<(HTMLButtonElement | null)[]>([])
+    const focusNoun = (index: number | undefined) => {
+        index && buttonsRef.current[index]?.focus()
+    };
+
     useEffect(() => {
         if (keyboardPrev) {
             focusNoun(activeNoun && activeNoun - 1);
@@ -92,12 +96,10 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                 focusNoun(activeNoun && activeNoun + 7);
             }
         }
-    }, [keyboardPrev, keyboardNext, keyboardUp, keyboardDown, activeNoun, activeSizeOption]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [keyboardPrev, keyboardNext, keyboardUp, keyboardDown]);
 
-    const buttonsRef = useRef<(HTMLButtonElement | null)[]>([])
-    const focusNoun = (index: number | undefined) => {
-        index && buttonsRef.current[index]?.focus()
-    };
+    
 
     return (
         <div className={classes.contentWrap}>
@@ -107,10 +109,12 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                     {sizeOptions.map((option, i) => {
                         return (
                             <button 
-                            style={{
-                                border: activeSizeOption === option ? '2px solid green' : 'none'
-                            }}
-                            key={option} onClick={() => setSizeOption(option)}>
+                                style={{
+                                    border: activeSizeOption === option ? '2px solid green' : 'none'
+                                }}
+                                key={option} 
+                                onClick={() => setSizeOption(option)}
+                            >
                                 {option}
                             </button>
                         )
