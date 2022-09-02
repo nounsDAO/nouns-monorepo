@@ -876,7 +876,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     }
 
     function _acceptVetoer() external {
-        if (msg.sender != pendingVetoer || pendingVetoer == address(0)) {
+        if (msg.sender != pendingVetoer) {
             revert PendingVetoerOnly();
         }
 
