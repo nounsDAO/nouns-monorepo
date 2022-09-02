@@ -37,7 +37,6 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
     ];
 
     const seed = useNounSeed(BigNumber.from(props.nounId));
-    console.log(ImageData);
 
     const nounTraits = {
         background: parseTraitName(traitNames[0][seed.background]),
@@ -48,6 +47,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
     }
     const traitKeys = Object.keys(nounTraits);
     const traitValues = Object.values(nounTraits);
+    console.log(traitKeys, traitValues, seed, nounTraits);
 
     
     return (
@@ -59,7 +59,8 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                 {Object.keys(traitValues).map((val,index) => {
                     return (
                         <li>
-                            {traitKeyToLocalizedTraitKeyFirstLetterCapitalized(traitKeys[index])}: <Trans>{traitValues[index]}</Trans>
+                            {traitKeyToLocalizedTraitKeyFirstLetterCapitalized(traitKeys[index])}: 
+                            {traitValues[index]}
                         </li>
                     )
                 })}
