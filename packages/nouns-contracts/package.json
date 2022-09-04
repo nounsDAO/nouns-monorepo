@@ -25,7 +25,7 @@
     "prepare": "yarn build"
   },
   "devDependencies": {
-    "@float-capital/solidity-coverage": "^0.7.17",
+    "solidity-coverage": "0.7.21",
     "@nomiclabs/hardhat-ethers": "^2.0.6",
     "@nomiclabs/hardhat-etherscan": "^3.0.3",
     "@nomiclabs/hardhat-waffle": "^2.0.3",

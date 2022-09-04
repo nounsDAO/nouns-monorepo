@@ -1,3 +1,46 @@
+type DelegationEvent @entity {
+  "The txn hash of this event + nounId"
+  id: ID!
+
+  "The Noun being delegated"
+  noun: Noun!
+
+  "Previous delegate address"
+  previousDelegate: Delegate! 
+
+  "New delegate address"
+  newDelegate: Delegate! 
+
+ "Block number of the event"
+  blockNumber: BigInt!
+
+  "The timestamp of the block the event is in"
+  blockTimestamp: BigInt!
+
+}
+
+
+type TransferEvent @entity {
+  "The txn hash of this event"
+  id: ID!
+
+  "The Noun being transfered"
+  noun: Noun!
+
+  "Previous holder address"
+  previousHolder: Account!
+
+  "New holder address"
+  newHolder: Account!
+
+  "Block number of the event"
+  blockNumber: BigInt!
+
+  "The timestamp of the block the event is in"
+  blockTimestamp: BigInt!
+}
+
+
 type Seed @entity {
   "The Noun's ERC721 token id"
   id: ID!
@@ -230,6 +273,9 @@ type Vote @entity {
 
   "Proposal that is being voted on"
   proposal: Proposal!
+
+  "Block number of vote"
+  blockNumber: BigInt!
 }
 
 type Governance @entity {

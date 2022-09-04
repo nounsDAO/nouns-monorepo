@@ -3,31 +3,23 @@ pragma solidity ^0.8.6;
 
 import 'forge-std/Test.sol';
 import { NounsToken } from '../../contracts/NounsToken.sol';
-import { NounsDescriptor } from '../../contracts/NounsDescriptor.sol';
+import { NounsDescriptorV2 } from '../../contracts/NounsDescriptorV2.sol';
 import { NounsSeeder } from '../../contracts/NounsSeeder.sol';
 import { IProxyRegistry } from '../../contracts/external/opensea/IProxyRegistry.sol';
+import { SVGRenderer } from '../../contracts/SVGRenderer.sol';
+import { NounsArt } from '../../contracts/NounsArt.sol';
+import { DeployUtils } from './helpers/DeployUtils.sol';
 
-contract NounsTokenTest is Test {
+contract NounsTokenTest is Test, DeployUtils {
     NounsToken nounsToken;
-    NounsDescriptor descriptor;
-    NounsSeeder seeder;
-    IProxyRegistry proxyRegistry = IProxyRegistry(address(0));
     address noundersDAO = address(1);
     address minter = address(2);
 
     function setUp() public {
-        descriptor = new NounsDescriptor();
-        _populateDescriptor();
-        seeder = new NounsSeeder();
-        nounsToken = new NounsToken(noundersDAO, minter, descriptor, seeder, proxyRegistry);
-    }
+        NounsDescriptorV2 descriptor = _deployAndPopulateV2();
+        _populateDescriptorV2(descriptor);
 
-    function _populateDescriptor() internal {
-        descriptor.addBackground('#000000');
-        descriptor.addAccessory('aaa');
-        descriptor.addBody('bbb');
-        descriptor.addGlasses('ggg');
-        descriptor.addHead('hhh');
+        nounsToken = new NounsToken(noundersDAO, minter, descriptor, new NounsSeeder(), IProxyRegistry(address(0)));
     }
 
     function testSymbol() public {

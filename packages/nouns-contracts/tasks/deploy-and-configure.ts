@@ -1,10 +1,5 @@
-import { task } from 'hardhat/config';
-import { DeployedContract } from './types';
-
-interface ContractRow {
-  Address: string;
-  'Deployment Hash'?: string;
-}
+import { task, types } from 'hardhat/config';
+import { printContractsTable } from './utils';
 
 task('deploy-and-configure', 'Deploy and configure all contracts')
   .addFlag('startAuction', 'Start the first auction upon deployment completion')
@@ -12,7 +7,12 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
   .addFlag('updateConfigs', 'Write the deployed addresses to the SDK and subgraph configs')
   .addOptionalParam('weth', 'The WETH contract address')
   .addOptionalParam('noundersdao', 'The nounders DAO contract address')
-  .addOptionalParam('auctionTimeBuffer', 'The auction time buffer (seconds)')
+  .addOptionalParam(
+    'auctionTimeBuffer',
+    'The auction time buffer (seconds)',
+    5 * 60 /* 5 minutes */,
+    types.int,
+  )
   .addOptionalParam('auctionReservePrice', 'The auction reserve price (wei)')
   .addOptionalParam(
     'auctionMinIncrementBidPercentage',
@@ -35,14 +35,14 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
 
     // Populate the on-chain art
     await run('populate-descriptor', {
-      nftDescriptor: contracts.NFTDescriptor.address,
-      nounsDescriptor: contracts.NounsDescriptor.address,
+      nftDescriptor: contracts.NFTDescriptorV2.address,
+      nounsDescriptor: contracts.NounsDescriptorV2.address,
     });
 
     // Transfer ownership of all contract except for the auction house.
     // We must maintain ownership of the auction house to kick off the first auction.
     const executorAddress = contracts.NounsDAOExecutor.address;
-    await contracts.NounsDescriptor.instance.transferOwnership(executorAddress);
+    await contracts.NounsDescriptorV2.instance.transferOwnership(executorAddress);
     await contracts.NounsToken.instance.transferOwnership(executorAddress);
     await contracts.NounsAuctionHouseProxyAdmin.instance.transferOwnership(executorAddress);
     console.log(
@@ -71,19 +71,6 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
       });
     }
 
-    console.table(
-      Object.values<DeployedContract>(contracts).reduce(
-        (acc: Record<string, ContractRow>, contract: DeployedContract) => {
-          acc[contract.name] = {
-            Address: contract.address,
-          };
-          if (contract.instance?.deployTransaction) {
-            acc[contract.name]['Deployment Hash'] = contract.instance.deployTransaction.hash;
-          }
-          return acc;
-        },
-        {},
-      ),
-    );
+    printContractsTable(contracts);
     console.log('Deployment Complete.');
   });

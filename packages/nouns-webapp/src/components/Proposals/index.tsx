@@ -1,4 +1,4 @@
-import { Proposal, ProposalState } from '../../wrappers/nounsDao';
+import { Proposal, ProposalState, useProposalThreshold } from '../../wrappers/nounsDao';
 import { Alert, Button } from 'react-bootstrap';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { useBlockNumber, useEthers } from '@usedapp/core';
 import { isMobileScreen } from '../../utils/isMobile';
 import clsx from 'clsx';
-import { useNounTokenBalance, useUserVotes } from '../../wrappers/nounToken';
+import { useUserNounTokenBalance, useUserVotes } from '../../wrappers/nounToken';
 import { Trans } from '@lingui/macro';
 import { ClockIcon } from '@heroicons/react/solid';
 import proposalStatusClasses from '../ProposalStatus/ProposalStatus.module.css';
@@ -14,10 +14,10 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '../../i18n/locales';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DelegationModal from '../DelegationModal';
 import { i18n } from '@lingui/core';
-import { ethers } from 'ethers';
+import en from 'dayjs/locale/en';
 
 dayjs.extend(relativeTime);
 
@@ -46,19 +46,24 @@ const getCountdownCopy = (proposal: Proposal, currentBlock: number, locale: Supp
 
   if (startDate?.isBefore(now) && endDate?.isAfter(now)) {
     return (
-      <Trans>Ends {endDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale]).fromNow()}</Trans>
+      <Trans>
+        Ends {endDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()}
+      </Trans>
     );
   }
   if (endDate?.isBefore(now)) {
     return (
       <Trans>
-        Expires {expiresDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale]).fromNow()}
+        Expires {expiresDate.locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en).fromNow()}
       </Trans>
     );
   }
   return (
     <Trans>
-      Starts {dayjs(startDate).locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale]).fromNow()}
+      Starts{' '}
+      {dayjs(startDate)
+        .locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en)
+        .fromNow()}
     </Trans>
   );
 };
@@ -72,27 +77,58 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
   const isMobile = isMobileScreen();
   const activeLocale = useActiveLocale();
   const [showDelegateModal, setShowDelegateModal] = useState(false);
+  const [isMetaKeyPressed, setIsMetaKeyPressed] = useState(false);
+
+  // Key press handlers to meta key
+  // These allow us to support the mac meta+click to open in a new behavior
+  const metaKeyDownHandler = (event: { key: string }) => {
+    if (event.key === 'Meta') {
+      setIsMetaKeyPressed(true);
+    }
+  };
+
+  const metaKeyUpHandler = (event: { key: string }) => {
+    if (event.key === 'Meta') {
+      setIsMetaKeyPressed(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', metaKeyDownHandler);
+    window.addEventListener('keyup', metaKeyUpHandler);
+    return () => {
+      window.removeEventListener('keydown', metaKeyDownHandler);
+      window.removeEventListener('keyup', metaKeyUpHandler);
+    };
+  }, []);
+
+  const threshold = (useProposalThreshold() ?? 0) + 1;
+  const hasEnoughVotesToPropose = account !== undefined && connectedAccountNounVotes >= threshold;
+  const hasNounBalance = (useUserNounTokenBalance() ?? 0) > 0;
 
   const nullStateCopy = () => {
     if (account !== null) {
+      if (connectedAccountNounVotes > 0) {
+        return <Trans>Making a proposal requires {threshold} votes</Trans>;
+      }
       return <Trans>You have no Votes.</Trans>;
     }
     return <Trans>Connect wallet to make a proposal.</Trans>;
   };
 
-  const hasNounVotes = account !== undefined && connectedAccountNounVotes > 0;
-  const hasNounBalance = 
-    (useNounTokenBalance(
-      account !== null && account !== undefined ? account : ethers.constants.AddressZero,
-    ) ?? 0) > 0;
   return (
     <div className={classes.proposals}>
       {showDelegateModal && <DelegationModal onDismiss={() => setShowDelegateModal(false)} />}
-      <div className={clsx(classes.headerWrapper, !hasNounVotes ? classes.forceFlexRow : '')}>
+      <div
+        className={clsx(
+          classes.headerWrapper,
+          !hasEnoughVotesToPropose ? classes.forceFlexRow : '',
+        )}
+      >
         <h3 className={classes.heading}>
           <Trans>Proposals</Trans>
         </h3>
-        {hasNounVotes ? (
+        {hasEnoughVotesToPropose ? (
           <div className={classes.nounInWalletBtnWrapper}>
             <div className={classes.submitProposalButtonWrapper}>
               <Button
@@ -136,16 +172,13 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
         )}
       </div>
       {isMobile && <div className={classes.nullStateCopy}>{nullStateCopy()}</div>}
-      {
-        isMobile && hasNounBalance &&  <div>
-        <Button
-          className={classes.changeDelegateBtn}
-          onClick={() => setShowDelegateModal(true)}
-        >
-          <Trans>Delegate</Trans>
-        </Button>
-      </div>
-      }
+      {isMobile && hasNounBalance && (
+        <div>
+          <Button className={classes.changeDelegateBtn} onClick={() => setShowDelegateModal(true)}>
+            <Trans>Delegate</Trans>
+          </Button>
+        </div>
+      )}
       {proposals?.length ? (
         proposals
           .slice(0)
@@ -174,7 +207,13 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
             return (
               <div
                 className={clsx(classes.proposalLink, classes.proposalLinkWithCountdown)}
-                onClick={() => history.push(`/vote/${p.id}`)}
+                onClick={() => {
+                  if (isMetaKeyPressed) {
+                    window.open(`${window.location.origin}/vote/${p.id}`, '_blank');
+                  } else {
+                    history.push(`/vote/${p.id}`);
+                  }
+                }}
                 key={i}
               >
                 <div className={classes.proposalInfoWrapper}>

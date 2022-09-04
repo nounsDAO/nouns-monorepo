@@ -66,7 +66,7 @@ const seedArrayToObject = (seeds: (INounSeed & { id: string })[]) => {
   }, {});
 };
 
-export const useNounSeeds = () => {
+const useNounSeeds = () => {
   const cache = localStorage.getItem(seedCacheKey);
   const cachedSeeds = cache ? JSON.parse(cache) : undefined;
   const { data } = useQuery(seedsQuery(), {
@@ -170,6 +170,19 @@ export const useNounTokenBalance = (address: string): number | undefined => {
       address: config.addresses.nounsToken,
       method: 'balanceOf',
       args: [address],
+    }) || [];
+  return tokenBalance?.toNumber();
+};
+
+export const useUserNounTokenBalance = (): number | undefined => {
+  const { account } = useEthers();
+
+  const [tokenBalance] =
+    useContractCall<[EthersBN]>({
+      abi,
+      address: config.addresses.nounsToken,
+      method: 'balanceOf',
+      args: [account],
     }) || [];
   return tokenBalance?.toNumber();
 };
