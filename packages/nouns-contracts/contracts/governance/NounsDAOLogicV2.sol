@@ -101,7 +101,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     uint256 public constant MAX_REFUND_GAS_USED = 200_000;
 
     /// @notice The maximum basefee the DAO will refund voters on
-    uint256 public constant MAX_REFUND_BASE_FEE = 50 gwei;
+    uint256 public constant MAX_REFUND_BASE_FEE = 200 gwei;
 
     /// @notice The EIP-712 typehash for the contract's domain
     bytes32 public constant DOMAIN_TYPEHASH =
