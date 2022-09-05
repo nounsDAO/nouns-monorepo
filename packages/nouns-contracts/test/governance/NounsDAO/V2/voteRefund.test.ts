@@ -222,7 +222,7 @@ describe('Vote Refund', () => {
         .withArgs(user.address, BigNumber.from(1), 1, 2, LONG_REASON);
     });
 
-    it('caps basefee', async () => {
+    it('caps basefee [ @skip-on-coverage ]', async () => {
       await fundGov();
       await setNextBlockBaseFee(MAX_REFUND_BASE_FEE.mul(2));
       const balanceBefore = await user.getBalance();
