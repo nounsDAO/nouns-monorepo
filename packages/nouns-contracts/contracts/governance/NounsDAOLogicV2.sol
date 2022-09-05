@@ -97,7 +97,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     /// @notice The vote refund gas overhead, including 7K for ETH transfer and 29K for general transaction overhead
     uint256 public constant REFUND_BASE_GAS = 36000;
 
-    /// @notice The maximum gas units the DAO will refund voters on
+    /// @notice The maximum gas units the DAO will refund voters on; supports about 9,190 characters
     uint256 public constant MAX_REFUND_GAS_USED = 200_000;
 
     /// @notice The maximum basefee the DAO will refund voters on
