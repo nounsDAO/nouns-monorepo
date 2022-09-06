@@ -97,6 +97,12 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     /// @notice The vote refund gas overhead, including 7K for ETH transfer and 29K for general transaction overhead
     uint256 public constant REFUND_BASE_GAS = 36000;
 
+    /// @notice The maximum gas units the DAO will refund voters on; supports about 9,190 characters
+    uint256 public constant MAX_REFUND_GAS_USED = 200_000;
+
+    /// @notice The maximum basefee the DAO will refund voters on
+    uint256 public constant MAX_REFUND_BASE_FEE = 200 gwei;
+
     /// @notice The EIP-712 typehash for the contract's domain
     bytes32 public constant DOMAIN_TYPEHASH =
         keccak256('EIP712Domain(string name,uint256 chainId,address verifyingContract)');
@@ -809,7 +815,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         emit QuorumCoefficientSet(oldParams.quorumCoefficient, params.quorumCoefficient);
     }
 
-    function _withdraw() external {
+    function _withdraw() external returns (uint256, bool) {
         if (msg.sender != admin) {
             revert AdminOnly();
         }
@@ -818,6 +824,8 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         (bool sent, ) = msg.sender.call{ value: amount }('');
 
         emit Withdraw(amount, sent);
+
+        return (amount, sent);
     }
 
     /**
@@ -1028,8 +1036,9 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
             if (balance == 0) {
                 return;
             }
-            uint256 gasPrice = min(tx.gasprice, block.basefee + MAX_REFUND_PRIORITY_FEE);
-            uint256 gasUsed = startGas - gasleft() + REFUND_BASE_GAS;
+            uint256 basefee = min(block.basefee, MAX_REFUND_BASE_FEE);
+            uint256 gasPrice = min(tx.gasprice, basefee + MAX_REFUND_PRIORITY_FEE);
+            uint256 gasUsed = min(startGas - gasleft() + REFUND_BASE_GAS, MAX_REFUND_GAS_USED);
             uint256 refundAmount = min(gasPrice * gasUsed, balance);
             (bool refundSent, ) = msg.sender.call{ value: refundAmount }('');
             emit RefundableVote(msg.sender, refundAmount, refundSent);

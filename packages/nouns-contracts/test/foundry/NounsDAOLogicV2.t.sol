@@ -28,6 +28,7 @@ contract NounsDAOLogicV2Test is Test, DeployUtils {
 
     event NewPendingVetoer(address oldPendingVetoer, address newPendingVetoer);
     event NewVetoer(address oldVetoer, address newVetoer);
+    event Withdraw(uint256 amount, bool sent);
 
     function setUp() public virtual {
         daoLogic = new NounsDAOLogicV2();
@@ -186,5 +187,31 @@ contract CancelProposalTest is NounsDAOLogicV2Test {
         daoProxy.cancel(proposalId);
 
         assertEq(uint256(daoProxy.state(proposalId)), uint256(NounsDAOStorageV1Adjusted.ProposalState.Canceled));
+    }
+}
+
+contract WithdrawTest is NounsDAOLogicV2Test {
+    function setUp() public override {
+        super.setUp();
+    }
+
+    function test_withdraw_worksForAdmin() public {
+        vm.deal(address(daoProxy), 100 ether);
+        uint256 balanceBefore = admin.balance;
+
+        vm.expectEmit(true, true, true, true);
+        emit Withdraw(100 ether, true);
+
+        vm.prank(admin);
+        (uint256 amount, bool sent) = daoProxy._withdraw();
+
+        assertEq(amount, 100 ether);
+        assertTrue(sent);
+        assertEq(admin.balance - balanceBefore, 100 ether);
+    }
+
+    function test_withdraw_revertsForNonAdmin() public {
+        vm.expectRevert(NounsDAOLogicV2.AdminOnly.selector);
+        daoProxy._withdraw();
     }
 }
