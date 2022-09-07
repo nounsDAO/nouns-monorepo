@@ -186,18 +186,22 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
         </Alert>
       )}
 
-      {proposal && isActiveForVoting && proposalCreationTimestamp && (votesAtCurrentBlock > 0) && !hasVoted && (
-        <Alert variant="success" className={classes.voterIneligibleAlert}>
-          <Trans>
-            Only Nouns you owned or were delegated to you before{' '}
-            {i18n.date(new Date(proposalCreationTimestamp * 1000), {
-              dateStyle: 'long',
-              timeStyle: 'long',
-            })}{' '}
-            are eligible to vote.
-          </Trans>
-        </Alert>
-      )}
+      {proposal &&
+        isActiveForVoting &&
+        proposalCreationTimestamp &&
+        votesAtCurrentBlock > 0 &&
+        !hasVoted && (
+          <Alert variant="success" className={classes.voterIneligibleAlert}>
+            <Trans>
+              Only Nouns you owned or were delegated to you before{' '}
+              {i18n.date(new Date(proposalCreationTimestamp * 1000), {
+                dateStyle: 'long',
+                timeStyle: 'long',
+              })}{' '}
+              are eligible to vote.
+            </Trans>
+          </Alert>
+        )}
     </>
   );
 };
