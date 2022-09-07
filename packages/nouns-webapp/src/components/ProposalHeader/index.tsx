@@ -7,7 +7,7 @@ import navBarButtonClasses from '../NavBarButton/NavBarButton.module.css';
 import { Proposal, useHasVotedOnProposal, useProposalVote } from '../../wrappers/nounsDao';
 import clsx from 'clsx';
 import { isMobileScreen } from '../../utils/isMobile';
-import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
+import { useUserVotes, useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import { useBlockTimestamp } from '../../hooks/useBlockTimestamp';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
@@ -53,6 +53,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
 
   const isMobile = isMobileScreen();
   const availableVotes = useUserVotesAsOfBlock(proposal?.createdBlock) ?? 0;
+  const votesAtCurrentBlock = useUserVotes() ?? 0;
   const hasVoted = useHasVotedOnProposal(proposal?.id);
   const proposalVote = useProposalVote(proposal?.id);
   const proposalCreationTimestamp = useBlockTimestamp(proposal?.createdBlock);
@@ -185,7 +186,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
         </Alert>
       )}
 
-      {proposal && isActiveForVoting && proposalCreationTimestamp && !!availableVotes && !hasVoted && (
+      {proposal && isActiveForVoting && proposalCreationTimestamp && (votesAtCurrentBlock > 0) && !hasVoted && (
         <Alert variant="success" className={classes.voterIneligibleAlert}>
           <Trans>
             Only Nouns you owned or were delegated to you before{' '}
