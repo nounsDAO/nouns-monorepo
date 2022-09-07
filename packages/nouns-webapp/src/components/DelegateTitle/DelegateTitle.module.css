@@ -1,0 +1,62 @@
+.nounStackWrapper {
+  margin-top: -1rem;
+  margin-right: -0.25rem;
+  display: flex;
+}
+
+.nounWrapper {
+  margin-left: -1rem;
+  position: relative;
+  object-fit: cover;
+  transition: all;
+  transition-timing-function: ease-in-out;
+  transition-duration: 125ms;
+}
+
+.nounWrapper:hover {
+  transform: translateY(-1rem);
+}
+
+@media (max-width: 992px) {
+  .nounStackWrapper {
+    display: none;
+  }
+}
+
+.backButton {
+  -webkit-appearance: none;
+  padding: 0;
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  font-weight: bold;
+  margin-right: 1rem;
+  margin-top: 0.1rem;
+}
+
+.headerRow span {
+  color: #8c8d92;
+  font-size: 24px;
+  font-family: 'Londrina Solid';
+}
+.headerRow h1 {
+  color: #14161b;
+  font-size: 42px;
+  font-family: 'Londrina Solid';
+}
+
+.proposalStatus {
+  margin-left: 0.75rem;
+  margin-top: 0.1rem;
+}
+
+.proposalTitleWrapper {
+  display: flex;
+  padding-right: 2rem;
+  margin-top: -0.5rem;
+}
+
+.proposalTitle {
+  margin-right: 0.5rem;
+}

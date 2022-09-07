@@ -38,6 +38,7 @@ const MobileProposalVoteEvent: React.FC<MobileProposalVoteEventProps> = props =>
         </>
       }
       secondaryContent={<ProposalVoteInfoPillsContainer proposal={event.proposal} />}
+      tertiaryContent={<div className={classes.voteReason}>{event.vote.voteReason}</div>}
     />
   );
 };

@@ -311,6 +311,37 @@ export const currentlyDelegatedNouns = (delegate: string) => gql`
 }
 `;
 
+export const richDelegateInfo = (delegate: string) => gql`
+{
+  delegate(id: "${delegate}") {
+    nounsRepresented {
+      id
+    }
+    votes {
+      id
+      supportDetailed
+      reason
+      votes
+      proposal {
+        id
+        description
+      }
+      blockNumber
+      voter {
+        id
+      }
+    }
+  }
+}`;
+
+export const getProposalsByProposer = (proposer: string) => gql`
+{
+  proposals(where: {proposer: "${proposer}"}) {
+    id
+  }
+}
+`;
+
 export const clientFactory = (uri: string) =>
   new ApolloClient({
     uri,

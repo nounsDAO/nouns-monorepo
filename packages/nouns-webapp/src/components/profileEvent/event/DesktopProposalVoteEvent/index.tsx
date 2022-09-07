@@ -28,6 +28,9 @@ const DesktopProposalVoteEvent: React.FC<DesktopProposalVoteEventProps> = props 
           className={classes.voteIcon}
         />
       }
+      tertiaryContent={
+        event.vote.voteReason && <div className={classes.voteReason}>{event.vote.voteReason}</div>
+      }
       primaryContent={
         <>
           <ReactTooltip

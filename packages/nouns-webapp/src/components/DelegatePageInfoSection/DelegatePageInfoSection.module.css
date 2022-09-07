@@ -1,0 +1,30 @@
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  width: 22rem;
+  margin-right: 0.5rem;
+}
+
+.lastCard {
+  margin-right: 0rem;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 3rem;
+}
+
+@media (max-width: 992px) {
+  .wrapper {
+    flex-direction: column;
+    padding-left: 0rem;
+  }
+}

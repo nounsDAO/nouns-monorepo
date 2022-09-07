@@ -21,3 +21,8 @@
   font-weight: 500;
   transition: ease-in-out 125ms;
 }
+
+.voteReason {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}

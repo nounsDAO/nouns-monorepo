@@ -7,10 +7,11 @@ interface DesktopNounActivityRowProps {
   icon: ReactNode;
   primaryContent: ReactNode;
   secondaryContent?: ReactNode;
+  tertiaryContent?: ReactNode;
 }
 
 const DesktopNounActivityRow: React.FC<DesktopNounActivityRowProps> = props => {
-  const { icon, primaryContent, secondaryContent } = props;
+  const { icon, primaryContent, secondaryContent, tertiaryContent } = props;
 
   const activeLocale = useActiveLocale();
 
@@ -19,6 +20,7 @@ const DesktopNounActivityRow: React.FC<DesktopNounActivityRowProps> = props => {
       <td className={classes.icon}>{icon}</td>
       <td className={classes.activityTableCell}>
         <div className={classes.infoContainer}>{primaryContent}</div>
+        {tertiaryContent}
       </td>
       <td className={activeLocale === 'ja-JP' ? responsiveUiUtilsClasses.desktopOnly : ''}>
         <div className={classes.secondaryContentWrapper}>

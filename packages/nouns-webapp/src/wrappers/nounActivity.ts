@@ -22,6 +22,7 @@ export type ProposalVoteEvent = {
     // Delegate (possibly holder in case of self-delegation) ETH address (undefined in the case of no vote cast)
     voter: string | undefined;
     supportDetailed: 0 | 1 | 2 | undefined;
+    voteReason?: string;
   };
 };
 
