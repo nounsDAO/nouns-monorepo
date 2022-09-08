@@ -13,6 +13,10 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#: src/components/DelegatePageInfoSection/index.tsx
+msgid "% of voting power"
+msgstr ""
+
 #: src/components/Documentation/index.tsx
 msgid "'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:"
 msgstr ""
@@ -69,12 +73,13 @@ msgid "Absent for"
 msgstr ""
 
 #: src/components/VoteCard/index.tsx
+#: src/components/VoteModal/index.tsx
 msgid "Abstain"
 msgstr ""
 
 #: src/components/VoteModal/index.tsx
-msgid "Abstain from voting on Prop {0}"
-msgstr ""
+#~ msgid "Abstain from voting on Prop {0}"
+#~ msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Abstained on"
@@ -90,6 +95,7 @@ msgstr ""
 msgid "Active"
 msgstr ""
 
+#: src/components/DelegateActivityFeed/index.tsx
 #: src/components/ProfileActivityFeed/index.tsx
 #: src/components/ProfileActivityFeed/index.tsx
 msgid "Activity"
@@ -125,6 +131,7 @@ msgid "Addresses"
 msgstr ""
 
 #: src/components/VoteCard/index.tsx
+#: src/components/VoteModal/index.tsx
 msgid "Against"
 msgstr ""
 
@@ -218,20 +225,20 @@ msgid "Canceled"
 msgstr ""
 
 #: src/components/VoteModal/index.tsx
-msgid "Cast 1 vote against Prop {0}"
-msgstr ""
+#~ msgid "Cast 1 vote against Prop {0}"
+#~ msgstr ""
 
 #: src/components/VoteModal/index.tsx
-msgid "Cast 1 vote for Prop {0}"
-msgstr ""
+#~ msgid "Cast 1 vote for Prop {0}"
+#~ msgstr ""
 
 #: src/components/VoteModal/index.tsx
-msgid "Cast {0} votes against Prop {1}"
-msgstr ""
+#~ msgid "Cast {0} votes against Prop {1}"
+#~ msgstr ""
 
 #: src/components/VoteModal/index.tsx
-msgid "Cast {0} votes for Prop {1}"
-msgstr ""
+#~ msgid "Cast {0} votes for Prop {1}"
+#~ msgstr ""
 
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Change"
@@ -302,6 +309,7 @@ msgstr ""
 msgid "Defeated"
 msgstr ""
 
+#: src/components/DelegateTitle/index.tsx
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
@@ -439,6 +447,7 @@ msgid "Failed to fetch Noun info"
 msgstr ""
 
 #: src/components/VoteCard/index.tsx
+#: src/components/VoteModal/index.tsx
 msgid "For"
 msgstr ""
 
@@ -632,12 +641,16 @@ msgid "Nouns artwork is in the {publicDomainLink}."
 msgstr ""
 
 #: src/pages/Governance/index.tsx
+msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1>"
+msgstr ""
+
+#: src/pages/Governance/index.tsx
 #~ msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
 #~ msgstr ""
 
 #: src/pages/Governance/index.tsx
-msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> {1}"
-msgstr ""
+#~ msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> {1}"
+#~ msgstr ""
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Now has"
@@ -736,6 +749,10 @@ msgstr ""
 
 #: src/components/ProposalContent/index.tsx
 msgid "Proposed Transactions"
+msgstr ""
+
+#: src/components/DelegatePageInfoSection/index.tsx
+msgid "Props created"
 msgstr ""
 
 #: src/pages/Vote/index.tsx
@@ -909,6 +926,10 @@ msgstr ""
 msgid "There was an error voting for your account."
 msgstr ""
 
+#: src/components/DelegateActivityFeed/index.tsx
+msgid "This Delegate has no activity. Check back soon!"
+msgstr ""
+
 #: src/components/ProfileActivityFeed/index.tsx
 msgid "This Noun has no activity, since it was just created. Check back soon!"
 msgstr ""
@@ -1039,6 +1060,18 @@ msgstr ""
 
 #: src/components/DelegateHoverCard/index.tsx
 msgid "Voted with<0>{numVotesForProp}</0>Nouns"
+msgstr ""
+
+#: src/components/DelegatePageInfoSection/index.tsx
+msgid "Votes"
+msgstr ""
+
+#: src/components/VoteModal/index.tsx
+msgid "Voting with <0>{0}</0> Noun"
+msgstr ""
+
+#: src/components/VoteModal/index.tsx
+msgid "Voting with <0>{0}</0> Nouns"
 msgstr ""
 
 #: src/components/Documentation/index.tsx

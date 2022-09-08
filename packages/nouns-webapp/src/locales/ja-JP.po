@@ -18,6 +18,10 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 
+#: src/components/DelegatePageInfoSection/index.tsx
+msgid "% of voting power"
+msgstr ""
+
 #: src/components/Documentation/index.tsx
 msgid "'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:"
 msgstr "「Nounders」とはNounsの創業に携わった10人の創業者のことであり、以下の人物で構成されています："
@@ -74,12 +78,13 @@ msgid "Absent for"
 msgstr "不参加"
 
 #: src/components/VoteCard/index.tsx
+#: src/components/VoteModal/index.tsx
 msgid "Abstain"
 msgstr "棄権"
 
 #: src/components/VoteModal/index.tsx
-msgid "Abstain from voting on Prop {0}"
-msgstr "Propへの投票を棄権する {0} "
+#~ msgid "Abstain from voting on Prop {0}"
+#~ msgstr "Propへの投票を棄権する {0} "
 
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Abstained on"
@@ -95,6 +100,7 @@ msgstr "付属品"
 msgid "Active"
 msgstr "実行されました"
 
+#: src/components/DelegateActivityFeed/index.tsx
 #: src/components/ProfileActivityFeed/index.tsx
 #: src/components/ProfileActivityFeed/index.tsx
 msgid "Activity"
@@ -130,6 +136,7 @@ msgid "Addresses"
 msgstr "イーサリアムアドレス"
 
 #: src/components/VoteCard/index.tsx
+#: src/components/VoteModal/index.tsx
 msgid "Against"
 msgstr "反対"
 
@@ -223,20 +230,20 @@ msgid "Canceled"
 msgstr "キャンセルしました"
 
 #: src/components/VoteModal/index.tsx
-msgid "Cast 1 vote against Prop {0}"
-msgstr "Prop {0} に対しての反対票を1票投じてください"
+#~ msgid "Cast 1 vote against Prop {0}"
+#~ msgstr "Prop {0} に対しての反対票を1票投じてください"
 
 #: src/components/VoteModal/index.tsx
-msgid "Cast 1 vote for Prop {0}"
-msgstr "提案 {0} に 対する1 票を投票してください"
+#~ msgid "Cast 1 vote for Prop {0}"
+#~ msgstr "提案 {0} に 対する1 票を投票してください"
 
 #: src/components/VoteModal/index.tsx
-msgid "Cast {0} votes against Prop {1}"
-msgstr "提案 {1} に対して {0} 反対票を投じてください"
+#~ msgid "Cast {0} votes against Prop {1}"
+#~ msgstr "提案 {1} に対して {0} 反対票を投じてください"
 
 #: src/components/VoteModal/index.tsx
-msgid "Cast {0} votes for Prop {1}"
-msgstr "提案 \"{1}\" にする1票を投票\"{0}\"してください"
+#~ msgid "Cast {0} votes for Prop {1}"
+#~ msgstr "提案 \"{1}\" にする1票を投票\"{0}\"してください"
 
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Change"
@@ -307,6 +314,7 @@ msgstr "デイリーオークション"
 msgid "Defeated"
 msgstr "却下"
 
+#: src/components/DelegateTitle/index.tsx
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
@@ -444,6 +452,7 @@ msgid "Failed to fetch Noun info"
 msgstr "Nounに関する情報の取得に失敗しました"
 
 #: src/components/VoteCard/index.tsx
+#: src/components/VoteModal/index.tsx
 msgid "For"
 msgstr "賛成"
 
@@ -637,12 +646,16 @@ msgid "Nouns artwork is in the {publicDomainLink}."
 msgstr "Nounsのアートワークは {publicDomainLink} にあります。"
 
 #: src/pages/Governance/index.tsx
+msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1>"
+msgstr ""
+
+#: src/pages/Governance/index.tsx
 #~ msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
 #~ msgstr "Nounsが統治する <0>Nouns DAO</0> 。Nounsは提案に対して投票したり、第三者に投票を委任することができますが、提案の提出には最低でも <1>{nounsRequired} {0}</1> 以上が必要です。"
 
 #: src/pages/Governance/index.tsx
-msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> {1}"
-msgstr ""
+#~ msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> {1}"
+#~ msgstr ""
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Now has"
@@ -742,6 +755,10 @@ msgstr "コミュニティメンバーが提出した提案はここに表示さ
 #: src/components/ProposalContent/index.tsx
 msgid "Proposed Transactions"
 msgstr "提案中のトランザクション"
+
+#: src/components/DelegatePageInfoSection/index.tsx
+msgid "Props created"
+msgstr ""
 
 #: src/pages/Vote/index.tsx
 msgid "Queue"
@@ -914,6 +931,10 @@ msgstr ""
 msgid "There was an error voting for your account."
 msgstr "アカウントの投票中にエラーが発生しました。"
 
+#: src/components/DelegateActivityFeed/index.tsx
+msgid "This Delegate has no activity. Check back soon!"
+msgstr ""
+
 #: src/components/ProfileActivityFeed/index.tsx
 msgid "This Noun has no activity, since it was just created. Check back soon!"
 msgstr "このNounは作成されたばかりで、動きがありません。また後ほどご確認ください！"
@@ -1041,6 +1062,18 @@ msgstr "<0>{numVotesForProp}</0>のNounで投票"
 #: src/components/DelegateHoverCard/index.tsx
 msgid "Voted with<0>{numVotesForProp}</0>Nouns"
 msgstr "<0>{numVotesForProp}</0>のNounで投票"
+
+#: src/components/DelegatePageInfoSection/index.tsx
+msgid "Votes"
+msgstr ""
+
+#: src/components/VoteModal/index.tsx
+msgid "Voting with <0>{0}</0> Noun"
+msgstr ""
+
+#: src/components/VoteModal/index.tsx
+msgid "Voting with <0>{0}</0> Nouns"
+msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "WTF?"

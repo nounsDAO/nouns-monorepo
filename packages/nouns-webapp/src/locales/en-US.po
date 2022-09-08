@@ -13,6 +13,10 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#: src/components/DelegatePageInfoSection/index.tsx
+msgid "% of voting power"
+msgstr "% of voting power"
+
 #: src/components/Documentation/index.tsx
 msgid "'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:"
 msgstr "'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:"
@@ -69,12 +73,13 @@ msgid "Absent for"
 msgstr "Absent for"
 
 #: src/components/VoteCard/index.tsx
+#: src/components/VoteModal/index.tsx
 msgid "Abstain"
 msgstr "Abstain"
 
 #: src/components/VoteModal/index.tsx
-msgid "Abstain from voting on Prop {0}"
-msgstr "Abstain from voting on Prop {0}"
+#~ msgid "Abstain from voting on Prop {0}"
+#~ msgstr "Abstain from voting on Prop {0}"
 
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Abstained on"
@@ -90,6 +95,7 @@ msgstr "Accessory"
 msgid "Active"
 msgstr "Active"
 
+#: src/components/DelegateActivityFeed/index.tsx
 #: src/components/ProfileActivityFeed/index.tsx
 #: src/components/ProfileActivityFeed/index.tsx
 msgid "Activity"
@@ -125,6 +131,7 @@ msgid "Addresses"
 msgstr "Addresses"
 
 #: src/components/VoteCard/index.tsx
+#: src/components/VoteModal/index.tsx
 msgid "Against"
 msgstr "Against"
 
@@ -218,20 +225,20 @@ msgid "Canceled"
 msgstr "Canceled"
 
 #: src/components/VoteModal/index.tsx
-msgid "Cast 1 vote against Prop {0}"
-msgstr "Cast 1 vote against Prop {0}"
+#~ msgid "Cast 1 vote against Prop {0}"
+#~ msgstr "Cast 1 vote against Prop {0}"
 
 #: src/components/VoteModal/index.tsx
-msgid "Cast 1 vote for Prop {0}"
-msgstr "Cast 1 vote for Prop {0}"
+#~ msgid "Cast 1 vote for Prop {0}"
+#~ msgstr "Cast 1 vote for Prop {0}"
 
 #: src/components/VoteModal/index.tsx
-msgid "Cast {0} votes against Prop {1}"
-msgstr "Cast {0} votes against Prop {1}"
+#~ msgid "Cast {0} votes against Prop {1}"
+#~ msgstr "Cast {0} votes against Prop {1}"
 
 #: src/components/VoteModal/index.tsx
-msgid "Cast {0} votes for Prop {1}"
-msgstr "Cast {0} votes for Prop {1}"
+#~ msgid "Cast {0} votes for Prop {1}"
+#~ msgstr "Cast {0} votes for Prop {1}"
 
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Change"
@@ -302,6 +309,7 @@ msgstr "Daily Auctions"
 msgid "Defeated"
 msgstr "Defeated"
 
+#: src/components/DelegateTitle/index.tsx
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
@@ -439,6 +447,7 @@ msgid "Failed to fetch Noun info"
 msgstr "Failed to fetch Noun info"
 
 #: src/components/VoteCard/index.tsx
+#: src/components/VoteModal/index.tsx
 msgid "For"
 msgstr "For"
 
@@ -632,12 +641,16 @@ msgid "Nouns artwork is in the {publicDomainLink}."
 msgstr "Nouns artwork is in the {publicDomainLink}."
 
 #: src/pages/Governance/index.tsx
+msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1>"
+msgstr "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1>"
+
+#: src/pages/Governance/index.tsx
 #~ msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
 #~ msgstr "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
 
 #: src/pages/Governance/index.tsx
-msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> {1}"
-msgstr "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> {1}"
+#~ msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> {1}"
+#~ msgstr "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> {1}"
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Now has"
@@ -737,6 +750,10 @@ msgstr "Proposals submitted by community members will appear here."
 #: src/components/ProposalContent/index.tsx
 msgid "Proposed Transactions"
 msgstr "Proposed Transactions"
+
+#: src/components/DelegatePageInfoSection/index.tsx
+msgid "Props created"
+msgstr "Props created"
 
 #: src/pages/Vote/index.tsx
 msgid "Queue"
@@ -909,6 +926,10 @@ msgstr "There are unfortunately no algorithmic solutions for making these determ
 msgid "There was an error voting for your account."
 msgstr "There was an error voting for your account."
 
+#: src/components/DelegateActivityFeed/index.tsx
+msgid "This Delegate has no activity. Check back soon!"
+msgstr "This Delegate has no activity. Check back soon!"
+
 #: src/components/ProfileActivityFeed/index.tsx
 msgid "This Noun has no activity, since it was just created. Check back soon!"
 msgstr "This Noun has no activity, since it was just created. Check back soon!"
@@ -1040,6 +1061,18 @@ msgstr "Voted with<0>{numVotesForProp}</0>Noun"
 #: src/components/DelegateHoverCard/index.tsx
 msgid "Voted with<0>{numVotesForProp}</0>Nouns"
 msgstr "Voted with<0>{numVotesForProp}</0>Nouns"
+
+#: src/components/DelegatePageInfoSection/index.tsx
+msgid "Votes"
+msgstr "Votes"
+
+#: src/components/VoteModal/index.tsx
+msgid "Voting with <0>{0}</0> Noun"
+msgstr "Voting with <0>{0}</0> Noun"
+
+#: src/components/VoteModal/index.tsx
+msgid "Voting with <0>{0}</0> Nouns"
+msgstr "Voting with <0>{0}</0> Nouns"
 
 #: src/components/Documentation/index.tsx
 msgid "WTF?"
