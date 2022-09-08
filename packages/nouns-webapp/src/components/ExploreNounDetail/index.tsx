@@ -51,20 +51,22 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
 
     
     return (
-        <div className={classes.sidebar}>
-            <button onClick={() => props.handleNounDetail('close')}>close</button>
-            <StandaloneNounImage nounId={BigNumber.from(props.nounId)} />
-            <p>Noun: {props.nounId}</p>
-            <ul>
-                {Object.keys(traitValues).map((val,index) => {
-                    return (
-                        <li>
-                            {traitKeyToLocalizedTraitKeyFirstLetterCapitalized(traitKeys[index])}: 
-                            {traitValues[index]}
-                        </li>
-                    )
-                })}
-            </ul>
+        <div className={classes.detailWrap}>
+            <div className={classes.sidebar}>
+                <button onClick={() => props.handleNounDetail('close')}>close</button>
+                <StandaloneNounImage nounId={BigNumber.from(props.nounId)} />
+                <h2>Noun: {props.nounId}</h2>
+                <ul>
+                    {Object.keys(traitValues).map((val,index) => {
+                        return (
+                            <li>
+                                {traitKeyToLocalizedTraitKeyFirstLetterCapitalized(traitKeys[index])}: 
+                                {traitValues[index]}
+                            </li>
+                        )
+                    })}
+                </ul>
+            </div>
         </div>
     )
 }

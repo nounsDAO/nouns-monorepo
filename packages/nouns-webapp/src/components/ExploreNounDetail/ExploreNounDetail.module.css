@@ -7,4 +7,28 @@
     top: 0;
     right: 0;
     align-self: flex-start;
+    background: #fff;
+}
+
+.sidebar h2 {
+    font-family: 'Londrina Solid';
+}
+
+/* Treat more like a modal on mobile */
+@media (max-width: 992px) {
+    .sidebar {
+        width: 100%;
+        padding: 2% 3% 0;
+        z-index: 1;
+        position: absolute;
+    }       
+    .detailWrap {
+        width: 100%;
+        height: 100%;
+        background: rgba(255,255,255,0.5);
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 0;
+    }
 }

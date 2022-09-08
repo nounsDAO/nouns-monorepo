@@ -1,13 +1,16 @@
-.contentWrap {
-    display: flex;
-    flex: 1 1;
-    position: relative;
+@media (min-width: 992px) {
+    .contentWrap {
+        display: flex;
+        flex: 1 1;
+        position: relative;
+    }
+    .gridWrap.sidebarVisible {
+        width: 66%;
+        transition: width 1s ease-in-out;
+    }
 }
-.gridWrap.sidebarVisible {
-    /* display: flex; */
-    width: 66%;
-    transition: width 1s ease-in-out;
-}
+
+
 .exploreGrid {
     display: flex;
     flex: 1 1;
