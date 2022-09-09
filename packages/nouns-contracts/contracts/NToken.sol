@@ -20,7 +20,7 @@ pragma solidity ^0.8.6;
 import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
 import { ERC721Checkpointable } from './base/ERC721Checkpointable.sol';
 import { INounsDescriptorMinimal } from './interfaces/INounsDescriptorMinimal.sol';
-import { INounsSeeder } from './interfaces/INounsSeeder.sol';
+import { ISeeder } from './interfaces/ISeeder.sol';
 import { INounsToken } from './interfaces/INounsToken.sol';
 import { ERC721 } from './base/ERC721.sol';
 import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
@@ -37,7 +37,7 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     INounsDescriptorMinimal public descriptor;
 
     // The Nouns token seeder
-    INounsSeeder public seeder;
+    ISeeder public seeder;
 
     // Whether the minter can be updated
     bool public isMinterLocked;
@@ -49,7 +49,7 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     bool public isSeederLocked;
 
     // The noun seeds
-    mapping(uint256 => INounsSeeder.Seed) public seeds;
+    mapping(uint256 => ISeeder.Seed) public seeds;
 
     // The internal noun ID tracker
     uint256 private _currentNounId;
@@ -252,12 +252,19 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     /**
      * @notice Mint a Noun with `nounId` to the provided `to` address.
      */
-    function _mintTo(address to, uint256 nounId) internal returns (uint256) {
-        INounsSeeder.Seed memory seed = seeds[nounId] = seeder.generateSeed(nounId, descriptor);
+    function _mintTo(address to, uint256 tokenId) internal returns (uint256) {
+        NSeeder.Seed memory seed = seeder.generateSeed(tokenId);
+        
+        bytes32 seedHash;
+        assembly {
+            let accLen := mload(seed)
+            seedHash := keccak256(seed, add(0x60, mul(accLen, 0x40)))
+        }
+        seedHashes[seedHash] = 1;
 
-        _mint(owner(), to, nounId);
-        emit NounCreated(nounId, seed);
+        _mint(owner(), to, tokenId);
+        emit NounCreated(tokenId, seed);
 
-        return nounId;
+        return tokenId;
     }
 }
