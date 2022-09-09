@@ -16,6 +16,13 @@
   transition: all 0.2s ease-in-out;
 }
 
+.delegteDeepLinkSpinner {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
 .delegateInput:focus {
   box-shadow: none !important;
 }

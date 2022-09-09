@@ -1,0 +1,16 @@
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.primaryText {
+  font-family: 'Londrina Solid';
+  color: var(--brand-gray-light-text);
+  font-size: 20px;
+}
+
+.secondaryText {
+  font-weight: bold;
+  font-size: 18px;
+}

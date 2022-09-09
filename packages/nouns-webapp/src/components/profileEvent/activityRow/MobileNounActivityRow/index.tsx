@@ -6,10 +6,11 @@ interface MobileNounActivityRowProps {
   icon: ReactNode;
   primaryContent: ReactNode;
   secondaryContent?: ReactNode;
+  tertiaryContent?: ReactNode;
 }
 
 const MobileNounActivityRow: React.FC<MobileNounActivityRowProps> = props => {
-  const { onClick, icon, primaryContent, secondaryContent } = props;
+  const { onClick, icon, primaryContent, secondaryContent, tertiaryContent } = props;
 
   return (
     <div className={classes.wrapper} onClick={onClick}>
@@ -18,6 +19,7 @@ const MobileNounActivityRow: React.FC<MobileNounActivityRowProps> = props => {
       <div className={classes.content}>
         <div>{primaryContent}</div>
         <div>{secondaryContent}</div>
+        <div>{tertiaryContent}</div>
       </div>
     </div>
   );

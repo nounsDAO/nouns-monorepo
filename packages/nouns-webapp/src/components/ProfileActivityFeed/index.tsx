@@ -24,6 +24,7 @@ export interface NounVoteHistory {
   support: boolean;
   supportDetailed: number;
   voter: { id: string };
+  reason: string | undefined;
 }
 
 const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {

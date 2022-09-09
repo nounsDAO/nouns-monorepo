@@ -1,3 +1,20 @@
+.voteModalTitle {
+  text-align: center;
+  font-family: 'Londrina Solid';
+  font-size: 36px;
+}
+
+.voteModalSubtitle {
+  margin-bottom: 1rem;
+  text-align: center;
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.bold {
+  font-weight: bold;
+}
+
 .voteModal {
   font-family: 'PT Root UI';
 }

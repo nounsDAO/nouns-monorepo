@@ -1,5 +1,4 @@
 import { Button, FloatingLabel, FormControl, Spinner } from 'react-bootstrap';
-import Modal from '../Modal';
 import classes from './VoteModal.module.css';
 import { useCastVote, useCastVoteWithReason, Vote } from '../../wrappers/nounsDao';
 import { ReactNode, useCallback, useEffect, useState } from 'react';
@@ -8,6 +7,7 @@ import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import clsx from 'clsx';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
+import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
 
 interface VoteModalProps {
   show: boolean;
@@ -93,6 +93,20 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
 
   const voteModalContent = (
     <>
+      <div className={classes.voteModalTitle}>
+        <Trans>Vote on Prop {i18n.number(parseInt(proposalId || '0'))}</Trans>
+      </div>
+      <div className={classes.voteModalSubtitle}>
+        {availableVotes === 1 ? (
+          <Trans>
+            Voting with <span className={classes.bold}>{i18n.number(availableVotes)}</span> Noun
+          </Trans>
+        ) : (
+          <Trans>
+            Voting with <span className={classes.bold}>{i18n.number(availableVotes)}</span> Nouns
+          </Trans>
+        )}
+      </div>
       {isVoteSucessful && (
         <div className={classes.transactionStatus}>
           <p>
@@ -120,16 +134,7 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
         <div className={clsx(classes.votingButtonsWrapper, isLoading ? classes.disabled : '')}>
           <div onClick={() => setVote(Vote.FOR)}>
             <NavBarButton
-              buttonText={
-                availableVotes > 1 ? (
-                  <Trans>
-                    Cast {i18n.number(availableVotes)} votes for Prop{' '}
-                    {i18n.number(parseInt(proposalId || '0'))}
-                  </Trans>
-                ) : (
-                  <Trans>Cast 1 vote for Prop {i18n.number(parseInt(proposalId || '0'))}</Trans>
-                )
-              }
+              buttonText={<Trans>For</Trans>}
               buttonIcon={<></>}
               buttonStyle={
                 vote === Vote.FOR
@@ -141,16 +146,7 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
           <br />
           <div onClick={() => setVote(Vote.AGAINST)}>
             <NavBarButton
-              buttonText={
-                availableVotes > 1 ? (
-                  <Trans>
-                    Cast {i18n.number(availableVotes)} votes against Prop{' '}
-                    {i18n.number(parseInt(proposalId || '0'))}
-                  </Trans>
-                ) : (
-                  <Trans>Cast 1 vote against Prop {i18n.number(parseInt(proposalId || '0'))}</Trans>
-                )
-              }
+              buttonText={<Trans>Against</Trans>}
               buttonIcon={<></>}
               buttonStyle={
                 vote === Vote.AGAINST
@@ -162,11 +158,7 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
           <br />
           <div onClick={() => setVote(Vote.ABSTAIN)}>
             <NavBarButton
-              buttonText={
-                <Trans>
-                  Abstain from voting on Prop {i18n.number(parseInt(proposalId || '0'))}
-                </Trans>
-              }
+              buttonText={<Trans>Abstain</Trans>}
               buttonIcon={<></>}
               buttonStyle={
                 vote === Vote.ABSTAIN
@@ -221,9 +213,9 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
   return (
     <>
       {show && (
-        <Modal
+        <SolidColorBackgroundModal
           onDismiss={resetNonSuccessStateAndHideModal}
-          title={<Trans>Vote on Prop {i18n.number(parseInt(proposalId || '0'))}</Trans>}
+          // title={<Trans>Vote on Prop {i18n.number(parseInt(proposalId || '0'))}</Trans>}
           content={voteModalContent}
         />
       )}

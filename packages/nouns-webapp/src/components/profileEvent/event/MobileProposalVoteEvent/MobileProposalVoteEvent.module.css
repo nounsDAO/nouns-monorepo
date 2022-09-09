@@ -11,3 +11,9 @@
   font-family: 'PT Root UI';
   font-weight: bold;
 }
+
+.voteReason {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  word-break: break-word;
+}

@@ -15,6 +15,8 @@ interface StandaloneNounProps {
 interface StandaloneCircularNounProps {
   nounId: EthersBN;
   border?: boolean;
+  height?: number;
+  width?: number;
 }
 
 interface StandaloneNounWithSeedProps {
@@ -62,7 +64,7 @@ const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProp
 export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
   props: StandaloneCircularNounProps,
 ) => {
-  const { nounId, border } = props;
+  const { nounId, border, height = 42, width = 42 } = props;
   const seed = useNounSeed(nounId);
   const noun = seed && getNoun(nounId, seed);
 
@@ -82,8 +84,9 @@ export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
       <Noun
         imgPath={noun ? noun.image : ''}
         alt={noun ? noun.description : 'Noun'}
-        wrapperClassName={nounClasses.circularNounWrapper}
         className={border ? nounClasses.circleWithBorder : nounClasses.circular}
+        height={height}
+        width={width}
       />
     </Link>
   );

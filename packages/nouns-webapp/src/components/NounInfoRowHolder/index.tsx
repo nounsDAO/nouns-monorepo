@@ -73,10 +73,10 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
             ) : (
               shortAddressComponent
             )}
+            <span className={classes.linkIconSpan}>
+              <Image src={_LinkIcon} className={classes.linkIcon} />
+            </span>
           </a>
-        </span>
-        <span className={classes.linkIconSpan}>
-          <Image src={_LinkIcon} className={classes.linkIcon} />
         </span>
       </div>
     </Tooltip>

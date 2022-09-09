@@ -16,8 +16,30 @@ const Noun: React.FC<{
   alt: string;
   className?: string;
   wrapperClassName?: string;
+  height?: number;
+  width?: number;
 }> = props => {
-  const { imgPath, alt, className, wrapperClassName } = props;
+  const { imgPath, alt, className, wrapperClassName, height, width } = props;
+
+  if (width && height) {
+    return (
+      <div
+        style={{
+          height: height,
+          width: width,
+        }}
+        className={`${classes.imgWrapper} ${wrapperClassName}`}
+      >
+        <Image
+          className={`${classes.img} ${className}`}
+          src={imgPath ? imgPath : loadingNoun}
+          alt={alt}
+          fluid
+        />
+      </div>
+    );
+  }
+
   return (
     <div className={`${classes.imgWrapper} ${wrapperClassName}`}>
       <Image
