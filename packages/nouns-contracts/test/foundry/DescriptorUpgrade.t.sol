@@ -6,9 +6,9 @@ import { DeployUtils } from './helpers/DeployUtils.sol';
 import { NounsToken } from '../../contracts/NounsToken.sol';
 import { NounsDescriptor } from '../../contracts/NounsDescriptor.sol';
 import { NounsDescriptorV2 } from '../../contracts/NounsDescriptorV2.sol';
-import { NounsSeeder } from '../../contracts/NounsSeeder.sol';
+import { NSeeder } from '../../contracts/NSeeder.sol';
 import { IProxyRegistry } from '../../contracts/external/opensea/IProxyRegistry.sol';
-import { INounsSeeder } from '../../contracts/interfaces/INounsSeeder.sol';
+import { ISeeder } from '../../contracts/interfaces/ISeeder.sol';
 import { Base64 } from 'base64-sol/base64.sol';
 
 contract DescriptorUpgradeTest is Test, DeployUtils {

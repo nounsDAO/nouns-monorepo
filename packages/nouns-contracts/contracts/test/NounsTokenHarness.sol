@@ -4,7 +4,7 @@ pragma solidity ^0.8.15;
 
 import { NounsToken } from '../NounsToken.sol';
 import { INounsDescriptorMinimal } from '../interfaces/INounsDescriptorMinimal.sol';
-import { INounsSeeder } from '../interfaces/INounsSeeder.sol';
+import { ISeeder } from '../interfaces/ISeeder.sol';
 import { IProxyRegistry } from '../external/opensea/IProxyRegistry.sol';
 
 contract NounsTokenHarness is NounsToken {

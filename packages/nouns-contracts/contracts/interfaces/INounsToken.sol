@@ -19,7 +19,7 @@ pragma solidity ^0.8.6;
 
 import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import { INounsDescriptorMinimal } from './INounsDescriptorMinimal.sol';
-import { INounsSeeder } from './INounsSeeder.sol';
+import { ISeeder } from './ISeeder.sol';
 
 interface INounsToken is IERC721 {
     event NounCreated(uint256 indexed tokenId, INounsSeeder.Seed seed);

@@ -4,7 +4,7 @@ pragma solidity ^0.8.6;
 import 'forge-std/Test.sol';
 import { NounsToken } from '../../contracts/NounsToken.sol';
 import { NounsDescriptorV2 } from '../../contracts/NounsDescriptorV2.sol';
-import { NounsSeeder } from '../../contracts/NounsSeeder.sol';
+import { NSeeder } from '../../contracts/NSeeder.sol';
 import { IProxyRegistry } from '../../contracts/external/opensea/IProxyRegistry.sol';
 import { SVGRenderer } from '../../contracts/SVGRenderer.sol';
 import { NounsArt } from '../../contracts/NounsArt.sol';

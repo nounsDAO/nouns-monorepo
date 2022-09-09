@@ -17,7 +17,7 @@
 
 pragma solidity ^0.8.6;
 
-import { INounsSeeder } from './INounsSeeder.sol';
+import { ISeeder } from './ISeeder.sol';
 import { ISVGRenderer } from './ISVGRenderer.sol';
 import { INounsArt } from './INounsArt.sol';
 import { INounsDescriptorMinimal } from './INounsDescriptorMinimal.sol';

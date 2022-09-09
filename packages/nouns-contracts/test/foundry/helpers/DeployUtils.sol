@@ -10,7 +10,7 @@ import { NounsDAOExecutor } from '../../../contracts/governance/NounsDAOExecutor
 import { NounsDAOLogicV1 } from '../../../contracts/governance/NounsDAOLogicV1.sol';
 import { IProxyRegistry } from '../../../contracts/external/opensea/IProxyRegistry.sol';
 import { NounsDescriptor } from '../../../contracts/NounsDescriptor.sol';
-import { NounsSeeder } from '../../../contracts/NounsSeeder.sol';
+import { NSeeder } from '../../../contracts/NSeeder.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { NounsDAOProxy } from '../../../contracts/governance/NounsDAOProxy.sol';
 import { Inflator } from '../../../contracts/Inflator.sol';

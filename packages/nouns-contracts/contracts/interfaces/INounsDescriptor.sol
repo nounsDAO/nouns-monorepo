@@ -17,7 +17,7 @@
 
 pragma solidity ^0.8.6;
 
-import { INounsSeeder } from './INounsSeeder.sol';
+import { NSeeder } from './NSeeder.sol';
 import { INounsDescriptorMinimal } from './INounsDescriptorMinimal.sol';
 
 interface INounsDescriptor is INounsDescriptorMinimal {

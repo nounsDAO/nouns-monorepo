@@ -20,7 +20,7 @@ pragma solidity ^0.8.6;
 import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
 import { Strings } from '@openzeppelin/contracts/utils/Strings.sol';
 import { INounsDescriptorV2 } from './interfaces/INounsDescriptorV2.sol';
-import { INounsSeeder } from './interfaces/INounsSeeder.sol';
+import { ISeeder } from './interfaces/ISeeder.sol';
 import { NFTDescriptorV2 } from './libs/NFTDescriptorV2.sol';
 import { ISVGRenderer } from './interfaces/ISVGRenderer.sol';
 import { INounsArt } from './interfaces/INounsArt.sol';
