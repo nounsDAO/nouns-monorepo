@@ -8,6 +8,12 @@ const DelegatePage = () => {
 
   const history = useHistory();
 
+  if (!delegateTo || delegateTo.length === 0) {
+    return <>
+      <DelegationModal onDismiss={() => history.push('/vote')} />
+    </>
+  }
+
   return (
     <>
       <DelegationModal onDismiss={() => history.push('/vote')} delegateTo={delegateTo} />
