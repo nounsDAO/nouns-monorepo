@@ -140,6 +140,9 @@ abstract contract ERC721Checkpointable is ERC721Enumerable {
         require(signatory != address(0), 'ERC721Checkpointable::delegateBySig: invalid signature');
         require(nonce == nonces[signatory]++, 'ERC721Checkpointable::delegateBySig: invalid nonce');
         require(block.timestamp <= expiry, 'ERC721Checkpointable::delegateBySig: signature expired');
+
+        /// @notice delegating to address(0) self-delegates, similar to delegate(address)
+        if (delegatee == address(0)) delegatee = signatory;
         return _delegate(signatory, delegatee);
     }
 
