@@ -53,15 +53,33 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
 
     const seed = useNounSeed(BigNumber.from(props.nounId));
 
-    const nounTraits = {
-        background: parseTraitName(traitNames[0][seed.background]),
-        body: parseTraitName(traitNames[1][seed.body]),
-        accessory: parseTraitName(traitNames[2][seed.accessory]),
-        head: parseTraitName(traitNames[3][seed.head]),
-        glasses: parseTraitName(traitNames[4][seed.glasses]),
-    }
-    const traitKeys = Object.keys(nounTraits);
-    const traitValues = Object.values(nounTraits);
+    const nounTraitsOrdered = [
+        { 
+            partType: 'head',
+            partName: parseTraitName(traitNames[3][seed.head]),
+            partIndex: seed.head,
+        },
+        { 
+            partType: 'glasses',
+            partName: parseTraitName(traitNames[4][seed.glasses]),
+            partIndex: seed.glasses,
+        },
+        { 
+            partType: 'accessory',
+            partName: parseTraitName(traitNames[2][seed.accessory]),
+            partIndex: seed.accessory,
+        },
+        { 
+            partType: 'body',
+            partName: parseTraitName(traitNames[1][seed.body]),
+            partIndex: seed.body,
+        },
+        { 
+            partType: 'background',
+            partName: parseTraitName(traitNames[0][seed.background]),
+            partIndex: seed.background,
+        },   
+    ]
 
     return (
         <div className={classes.detailWrap}>
@@ -70,12 +88,12 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                 <StandaloneNounImage nounId={BigNumber.from(props.nounId)} />
                 <h2>Noun: {props.nounId}</h2>
                 <ul>
-                    {Object.values(seed).map((val,index) => {    
-                        const traitType = traitTypeKeys(traitKeys[index]);
+                    {Object.values(nounTraitsOrdered).map((part,index) => {    
+                        const partType = traitTypeKeys(nounTraitsOrdered[index].partType);
                         return (
                             <li>
-                                <StandalonePart partType={traitType} partIndex={val} />
-                                {traitKeyToLocalizedTraitKeyFirstLetterCapitalized(traitKeys[index])}: {traitValues[index]}
+                                <StandalonePart partType={partType} partIndex={part.partIndex} />
+                                {traitKeyToLocalizedTraitKeyFirstLetterCapitalized(nounTraitsOrdered[index].partType)}: {nounTraitsOrdered[index].partName}
                             </li>
                         )
                     })}
