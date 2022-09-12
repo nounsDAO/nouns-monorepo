@@ -82,7 +82,7 @@ const useNounSeeds = () => {
   return cachedSeeds;
 };
 
-export const useNounSeed = (nounId: EthersBN) => {
+export const useNounSeed = (nounId: EthersBN): INounSeed => {
   const seeds = useNounSeeds();
   const seed = seeds?.[nounId.toString()];
   // prettier-ignore
