@@ -81,19 +81,33 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
         },   
     ]
 
+    const bgcolors = ["#d5d7e1", "#e1d7d5"];
+    const backgroundColor = bgcolors[seed.background];
+    console.log(backgroundColor);
+
     return (
         <div className={classes.detailWrap}>
             <div className={classes.sidebar}>
                 <button onClick={() => props.handleNounDetail('close')}>close</button>
                 <StandaloneNounImage nounId={BigNumber.from(props.nounId)} />
                 <h2>Noun: {props.nounId}</h2>
-                <ul>
+                <ul className={classes.traitsList}>
                     {Object.values(nounTraitsOrdered).map((part,index) => {    
                         const partType = traitTypeKeys(nounTraitsOrdered[index].partType);
                         return (
                             <li>
-                                <StandalonePart partType={partType} partIndex={part.partIndex} />
-                                {traitKeyToLocalizedTraitKeyFirstLetterCapitalized(nounTraitsOrdered[index].partType)}: {nounTraitsOrdered[index].partName}
+                                <div 
+                                    className={classes.thumbnail}
+                                    style={{
+                                        backgroundColor: backgroundColor ? backgroundColor : 'transparent',
+                                    }}
+                                >
+                                    <StandalonePart partType={partType} partIndex={part.partIndex} />
+                                </div>
+                                <div className={classes.description}>
+                                    <p className='small'><span>{traitKeyToLocalizedTraitKeyFirstLetterCapitalized(nounTraitsOrdered[index].partType)}</span></p>
+                                    <p><strong>{nounTraitsOrdered[index].partName}</strong></p>
+                                </div>
                             </li>
                         )
                     })}

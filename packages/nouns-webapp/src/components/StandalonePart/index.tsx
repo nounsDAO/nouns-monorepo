@@ -1,6 +1,8 @@
 import { ImageData as data, getPartData } from '@nouns/assets';
 import { buildPartSVG } from '@nouns/sdk';
 import Image from 'react-bootstrap/Image';
+import classes from './StandalonePart.module.css';
+import cx from 'classnames';
 
 interface StandalonePartProps {
     partType: string;
@@ -35,6 +37,7 @@ export const StandalonePart: React.FC<StandalonePartProps> = (props: StandaloneP
       <Image
           src={part.image ? part.image : ''}
           fluid
+          className={cx(classes.thumbnail)}
         />
     </>
   );

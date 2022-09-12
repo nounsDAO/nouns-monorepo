@@ -1,5 +1,20 @@
-.sidebar {
+.detailWrap {
     width: 33%;
+    transition: width 1s ease-in-out;
+    position: sticky;
+    top: 0;
+    right: 0;
+    background: rgba(255,255,255,0.5);
+    padding: 30px;
+    height: 100%;
+}
+.sidebar {
+    /* height: 100%; */
+    overflow: scroll;
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    /* width: 33%;
     transition: width 1s ease-in-out;
     display: flex;
     flex-direction: column;
@@ -8,6 +23,37 @@
     right: 0;
     align-self: flex-start;
     background: #fff;
+    height: 100%;
+    overflow: scroll; */
+}
+
+.traitsList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.traitsList li {
+    display: flex;
+    grid-gap: 10px;
+    padding: 10px 0;
+    align-items: center;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+.traitsList li:last-child {
+    border: none;
+}
+
+.traitsList p {
+    padding: 0;
+    margin: 0;
+}
+
+.traitsList span {
+    color: var(--brand-cool-light-text);
+}
+.traitsList .thumbnail {
+    border-radius: 10%;
 }
 
 .sidebar h2 {
