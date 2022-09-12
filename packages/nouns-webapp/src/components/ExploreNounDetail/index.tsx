@@ -2,11 +2,10 @@ import React, { ReactNode } from 'react';
 import { useNounSeed } from '../../wrappers/nounToken';
 import { BigNumber } from 'ethers';
 import { StandaloneNounImage } from '../../components/StandaloneNoun';
+import { StandalonePart } from '../StandalonePart';
 import classes from './ExploreNounDetail.module.css';
 import { ImageData } from '@nouns/assets';
 import { Trans } from '@lingui/macro';
-// import {AnimatePresence, motion} from 'framer-motion/dist/framer-motion';
-
 interface ExploreNounDetailProps {
     nounId: number | undefined;
     handleNounDetail: Function;
@@ -29,6 +28,22 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
         return traitMap.get(s);
       };
 
+    const traitTypeKeys = (s: string) => {
+        const traitMap = new Map([
+          ['background', 'backgrounds'],
+          ['body', 'bodies'],
+          ['accessory', 'accessories'],
+          ['head', 'heads'],
+          ['glasses', 'glasses'],
+        ]);
+        const result = traitMap.get(s);
+        if (result) {
+            return result;
+        } else {
+            throw new Error(`Trait key for ${s} not found`);
+        }
+      };
+
     const traitNames = [
       ['cool', 'warm'],
       ...Object.values(ImageData.images).map(i => {
@@ -47,9 +62,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
     }
     const traitKeys = Object.keys(nounTraits);
     const traitValues = Object.values(nounTraits);
-    console.log(traitKeys, traitValues, seed, nounTraits);
 
-    
     return (
         <div className={classes.detailWrap}>
             <div className={classes.sidebar}>
@@ -57,13 +70,22 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                 <StandaloneNounImage nounId={BigNumber.from(props.nounId)} />
                 <h2>Noun: {props.nounId}</h2>
                 <ul>
-                    {Object.keys(traitValues).map((val,index) => {
-                        return (
-                            <li>
-                                {traitKeyToLocalizedTraitKeyFirstLetterCapitalized(traitKeys[index])}: 
-                                {traitValues[index]}
-                            </li>
-                        )
+                    {Object.values(seed).map((val,index) => {    
+                        const traitType = traitTypeKeys(traitKeys[index]);
+                        if (traitType === "backgrounds") {
+                            return (
+                                <li>
+                                    {traitKeyToLocalizedTraitKeyFirstLetterCapitalized(traitKeys[index])}: {traitValues[index]}
+                                </li>
+                            )
+                        } else {
+                            return (
+                                <li>
+                                    <StandalonePart partType={traitType} partIndex={val} />
+                                    {traitKeyToLocalizedTraitKeyFirstLetterCapitalized(traitKeys[index])}: {traitValues[index]}
+                                </li>
+                            )
+                        }
                     })}
                 </ul>
             </div>
