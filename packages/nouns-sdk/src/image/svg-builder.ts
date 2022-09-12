@@ -54,6 +54,7 @@ export const buildSVG = (
     let currentY = bounds.top;
 
     rects.forEach(draw => {
+      // eslint-disable-next-line prefer-const
       let [drawLength, colorIndex] = draw;
       const hexColor = paletteColors[colorIndex];
 
@@ -83,4 +84,49 @@ export const buildSVG = (
   }, `<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="#${bgColor}" />`);
 
   return `${svgWithoutEndTag}</svg>`;
+};
+
+/**
+ * Given the RLE data of an individual part, palette colors, and a background color, build an SVG image.
+ * @param partData The RLE part datas
+ * @param paletteColors The hex palette colors
+ */
+export const buildPartSVG = (
+  partData: string,
+  paletteColors: string[],
+): string => {
+  const svgRects: string[] = [];
+    const { bounds, rects } = decodeImage(partData);
+
+    let currentX = bounds.left;
+    let currentY = bounds.top;
+
+    rects.forEach(draw => {
+      // eslint-disable-next-line prefer-const
+      let [drawLength, colorIndex] = draw;
+      const hexColor = paletteColors[colorIndex];
+
+      let length = getRectLength(currentX, drawLength, bounds.right);
+      while (length > 0) {
+        // Do not push rect if transparent
+        if (colorIndex !== 0) {
+          svgRects.push(
+            `<rect width="${length * 10}" height="10" x="${currentX * 10}" y="${
+              currentY * 10
+            }" fill="#${hexColor}" />`,
+          );
+        }
+
+        currentX += length;
+        if (currentX === bounds.right) {
+          currentX = bounds.left;
+          currentY++;
+        }
+
+        drawLength -= length;
+        length = getRectLength(currentX, drawLength, bounds.right);
+      }
+    });
+    const svg = `<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="transparent" />${svgRects.join('')}</svg>`
+    return svg;
 };
