@@ -338,7 +338,7 @@ contract NounsDAOLogicV1 is NounsDAOStorageV1, NounsDAOEvents {
         Proposal storage proposal = proposals[proposalId];
         require(
             msg.sender == proposal.proposer ||
-                nouns.getPriorVotes(proposal.proposer, block.number - 1) < proposal.proposalThreshold,
+                nouns.getPriorVotes(proposal.proposer, block.number - 1) <= proposal.proposalThreshold,
             'NounsDAO::cancel: proposer above threshold'
         );
 
