@@ -72,20 +72,12 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                 <ul>
                     {Object.values(seed).map((val,index) => {    
                         const traitType = traitTypeKeys(traitKeys[index]);
-                        if (traitType === "backgrounds") {
-                            return (
-                                <li>
-                                    {traitKeyToLocalizedTraitKeyFirstLetterCapitalized(traitKeys[index])}: {traitValues[index]}
-                                </li>
-                            )
-                        } else {
-                            return (
-                                <li>
-                                    <StandalonePart partType={traitType} partIndex={val} />
-                                    {traitKeyToLocalizedTraitKeyFirstLetterCapitalized(traitKeys[index])}: {traitValues[index]}
-                                </li>
-                            )
-                        }
+                        return (
+                            <li>
+                                <StandalonePart partType={traitType} partIndex={val} />
+                                {traitKeyToLocalizedTraitKeyFirstLetterCapitalized(traitKeys[index])}: {traitValues[index]}
+                            </li>
+                        )
                     })}
                 </ul>
             </div>
