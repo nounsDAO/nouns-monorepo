@@ -18,9 +18,9 @@
 pragma solidity ^0.8.6;
 
 import { ISeeder } from './interfaces/ISeeder.sol';
-import { INounsDescriptorMinimal } from './interfaces/INounsDescriptorMinimal.sol';
+import { INounsDescriptorMinimal } from './interfaces/IDescriptorMinimal.sol';
 
-contract NounsSeeder is INounsSeeder {
+contract NounsSeeder is ISeeder {
     /**
      * @notice Generate a pseudo-random Noun seed using the previous blockhash and noun ID.
      */

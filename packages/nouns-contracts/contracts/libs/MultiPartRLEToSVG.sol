@@ -21,7 +21,7 @@ pragma solidity ^0.8.6;
 library MultiPartRLEToSVG {
     struct SVGParams {
         bytes[] parts;
-        string background;
+//        string background;
     }
 
     struct ContentBounds {
@@ -54,7 +54,7 @@ library MultiPartRLEToSVG {
         return string(
             abi.encodePacked(
                 '<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">',
-                '<rect width="100%" height="100%" fill="#', params.background, '" />',
+//                '<rect width="100%" height="100%" fill="#', params.background, '" />',
                 _generateSVGRects(params, palettes),
                 '</svg>'
             )
