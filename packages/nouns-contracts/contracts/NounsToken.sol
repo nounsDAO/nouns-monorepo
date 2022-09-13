@@ -26,12 +26,20 @@ import { ERC721 } from './base/ERC721.sol';
 import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import { IProxyRegistry } from './external/opensea/IProxyRegistry.sol';
 
+error InvalidIndex();
+
 contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
-    // The nounders DAO address (creators org)
+    // The nouns DAO address
+    address public nounsDAOTreasury;
+
+    // The pounders DAO address (public nouns creator org)
     address public noundersDAO;
 
     // An address who has permissions to mint Nouns
     address public minter;
+
+    // Counter to track where to send the next 10th Noun
+    uint256 public titheIndex;
 
     // The Nouns token URI descriptor
     INounsDescriptorMinimal public descriptor;
@@ -102,12 +110,14 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
 
     constructor(
         address _noundersDAO,
+        address _nounsDAOTreasury,
         address _minter,
         INounsDescriptorMinimal _descriptor,
         INounsSeeder _seeder,
         IProxyRegistry _proxyRegistry
-    ) ERC721('Nouns', 'NOUN') {
+    ) ERC721('Public Nouns', unicode'℗NOUN') {
         noundersDAO = _noundersDAO;
+        nounsDAOTreasury = _nounsDAOTreasury;
         minter = _minter;
         descriptor = _descriptor;
         seeder = _seeder;
@@ -148,9 +158,26 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
      */
     function mint() public override onlyMinter returns (uint256) {
         if (_currentNounId <= 1820 && _currentNounId % 10 == 0) {
-            _mintTo(noundersDAO, _currentNounId++);
+            _tithe();
         }
         return _mintTo(minter, _currentNounId++);
+    }
+
+    function _tithe() internal {
+        address _destination;
+        if (titheIndex == 0) {
+            _destination = noundersDAO;
+            titheIndex++;
+        } else if (titheIndex == 1) {
+            _destination = owner(); // Owner is the Public Nouns treasury
+            titheIndex++;
+        } else if (titheIndex == 2) {
+            _destination = nounsDAOTreasury;
+            titheIndex = 0;
+        } else {
+            revert InvalidIndex();
+        }
+        _mintTo(_destination, _currentNounId++);
     }
 
     /**
@@ -187,6 +214,16 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
         noundersDAO = _noundersDAO;
 
         emit NoundersDAOUpdated(_noundersDAO);
+    }
+
+    /**
+     * @notice Set the nouns DAO treasury.
+     * @dev Only callable by the owner
+     */
+    function setNounsDAOTreasury(address _nounsDAOTreasury) external override onlyOwner {
+        nounsDAOTreasury = _nounsDAOTreasury;
+
+        emit NounsDAOTreasuryUpdated(_nounsDAOTreasury);
     }
 
     /**

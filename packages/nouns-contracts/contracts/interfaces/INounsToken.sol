@@ -28,6 +28,8 @@ interface INounsToken is IERC721 {
 
     event NoundersDAOUpdated(address noundersDAO);
 
+    event NounsDAOTreasuryUpdated(address nounsDAOTreasury);
+
     event MinterUpdated(address minter);
 
     event MinterLocked();
@@ -47,6 +49,8 @@ interface INounsToken is IERC721 {
     function dataURI(uint256 tokenId) external returns (string memory);
 
     function setNoundersDAO(address noundersDAO) external;
+
+    function setNounsDAOTreasury(address _nounsDAOTreasury) external;
 
     function setMinter(address minter) external;
 

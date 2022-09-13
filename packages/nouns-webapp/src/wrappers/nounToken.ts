@@ -75,7 +75,8 @@ const useNounSeeds = () => {
 
   useEffect(() => {
     if (!cachedSeeds && data?.seeds?.length) {
-      localStorage.setItem(seedCacheKey, JSON.stringify(seedArrayToObject(data.seeds)));
+      console.log({data})
+      localStorage.removeItem(seedCacheKey);
     }
   }, [data, cachedSeeds]);
 
@@ -86,13 +87,21 @@ export const useNounSeed = (nounId: EthersBN) => {
   const seeds = useNounSeeds();
   const seed = seeds?.[nounId.toString()];
   // prettier-ignore
-  const request = seed ? false : {
+  const request = {
     abi,
     address: config.addresses.nounsToken,
     method: 'seeds',
     args: [nounId],
   };
+  // const request = seed ? false : {
+  //   abi,
+  //   address: config.addresses.nounsToken,
+  //   method: 'seeds',
+  //   args: [nounId],
+  // };
   const response = useContractCall<INounSeed>(request);
+  console.log({request, response, nounId, config})
+      localStorage.removeItem(seedCacheKey);
   if (response) {
     const seedCache = localStorage.getItem(seedCacheKey);
     if (seedCache && isSeedValid(response)) {
@@ -106,6 +115,7 @@ export const useNounSeed = (nounId: EthersBN) => {
           head: response.head,
         },
       });
+      console.log({updatedSeedCache})
       localStorage.setItem(seedCacheKey, updatedSeedCache);
     }
     return response;

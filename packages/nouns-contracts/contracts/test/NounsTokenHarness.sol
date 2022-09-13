@@ -12,11 +12,12 @@ contract NounsTokenHarness is NounsToken {
 
     constructor(
         address noundersDAO,
+        address nounsDAOTreasury,
         address minter,
         INounsDescriptorMinimal descriptor,
         INounsSeeder seeder,
         IProxyRegistry proxyRegistry
-    ) NounsToken(noundersDAO, minter, descriptor, seeder, proxyRegistry) {}
+    ) NounsToken(noundersDAO, nounsDAOTreasury, minter, descriptor, seeder, proxyRegistry) {}
 
     function mintTo(address to) public {
         _mintTo(to, currentNounId++);
