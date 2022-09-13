@@ -53,18 +53,18 @@ export const useNounToken = (nounId: EthersBN) => {
   return json;
 };
 
-const seedArrayToObject = (seeds: (INounSeed & { id: string })[]) => {
-  return seeds.reduce<Record<string, INounSeed>>((acc, seed) => {
-    acc[seed.id] = {
-      background: Number(seed.background),
-      body: Number(seed.body),
-      accessory: Number(seed.accessory),
-      head: Number(seed.head),
-      glasses: Number(seed.glasses),
-    };
-    return acc;
-  }, {});
-};
+// const seedArrayToObject = (seeds: (INounSeed & { id: string })[]) => {
+//   return seeds.reduce<Record<string, INounSeed>>((acc, seed) => {
+//     acc[seed.id] = {
+//       background: Number(seed.background),
+//       body: Number(seed.body),
+//       accessory: Number(seed.accessory),
+//       head: Number(seed.head),
+//       glasses: Number(seed.glasses),
+//     };
+//     return acc;
+//   }, {});
+// };
 
 const useNounSeeds = () => {
   const cache = localStorage.getItem(seedCacheKey);
