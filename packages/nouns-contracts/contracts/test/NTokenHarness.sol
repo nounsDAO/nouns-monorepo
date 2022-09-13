@@ -2,24 +2,24 @@
 
 pragma solidity ^0.8.15;
 
-import { NounsToken } from '../NounsToken.sol';
-import { INounsDescriptorMinimal } from '../interfaces/INounsDescriptorMinimal.sol';
+import { NToken } from '../NToken.sol';
+import { INDescriptorMinimal } from '../interfaces/IDescriptorMinimal.sol';
 import { ISeeder } from '../interfaces/ISeeder.sol';
 import { IProxyRegistry } from '../external/opensea/IProxyRegistry.sol';
 
-contract NounsTokenHarness is NounsToken {
-    uint256 public currentNounId;
+contract NTokenHarness is NToken {
+    uint256 public currentPunkId;
 
     constructor(
-        address noundersDAO,
+        address punkerDAO,
         address minter,
-        INounsDescriptorMinimal descriptor,
-        INounsSeeder seeder,
+        IDescriptorMinimal descriptor,
+        ISeeder seeder,
         IProxyRegistry proxyRegistry
-    ) NounsToken(noundersDAO, minter, descriptor, seeder, proxyRegistry) {}
+    ) NToken(punkerDAO, minter, descriptor, seeder, proxyRegistry) {}
 
     function mintTo(address to) public {
-        _mintTo(to, currentNounId++);
+        _mintTo(to, currentPunkId++);
     }
 
     function mintMany(address to, uint256 amount) public {
@@ -36,7 +36,7 @@ contract NounsTokenHarness is NounsToken {
         uint48 head,
         uint48 glasses
     ) public {
-        seeds[currentNounId] = INounsSeeder.Seed({
+        seeds[currentPunkId] = ISeeder.Seed({
             background: background,
             body: body,
             accessory: accessory,
@@ -44,6 +44,6 @@ contract NounsTokenHarness is NounsToken {
             glasses: glasses
         });
 
-        _mint(owner(), to, currentNounId++);
+        _mint(owner(), to, currentPunkId++);
     }
 }

@@ -24,7 +24,7 @@ library NFTDescriptorV2 {
     struct TokenURIParams {
         string name;
         string description;
-        string background;
+//        string background;
         ISVGRenderer.Part[] parts;
     }
 
@@ -38,7 +38,7 @@ library NFTDescriptorV2 {
     {
         string memory image = generateSVGImage(
             renderer,
-            ISVGRenderer.SVGParams({ parts: params.parts, background: params.background })
+            ISVGRenderer.SVGParams({ parts: params.parts/*, background: params.background */})
         );
 
         // prettier-ignore

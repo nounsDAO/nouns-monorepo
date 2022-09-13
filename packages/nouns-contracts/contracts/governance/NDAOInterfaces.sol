@@ -16,7 +16,7 @@
  *********************************/
 
 // LICENSE
-// NounsDAOInterfaces.sol is a modified version of Compound Lab's GovernorBravoInterfaces.sol:
+// NDAOInterfaces.sol is a modified version of Compound Lab's GovernorBravoInterfaces.sol:
 // https://github.com/compound-finance/compound-protocol/blob/b9b14038612d846b83f8a009a82c38974ff2dcfe/contracts/Governance/GovernorBravoInterfaces.sol
 //
 // GovernorBravoInterfaces.sol source code Copyright 2020 Compound Labs, Inc. licensed under the BSD-3-Clause license.
@@ -25,12 +25,12 @@
 // Additional conditions of BSD-3-Clause can be found here: https://opensource.org/licenses/BSD-3-Clause
 //
 // MODIFICATIONS
-// NounsDAOEvents, NounsDAOProxyStorage, NounsDAOStorageV1 adds support for changes made by Nouns DAO to GovernorBravo.sol
-// See NounsDAOLogicV1.sol for more details.
+// NDAOEvents, NDAOProxyStorage, NDAOStorageV1 adds support for changes made by NDAO to GovernorBravo.sol
+// See NDAOLogicV1.sol for more details.
 
 pragma solidity ^0.8.6;
 
-contract NounsDAOEvents {
+contract NDAOEvents {
     /// @notice An event emitted when a new proposal is created
     event ProposalCreated(
         uint256 id,
@@ -69,10 +69,10 @@ contract NounsDAOEvents {
     /// @notice An event emitted when a proposal has been canceled
     event ProposalCanceled(uint256 id);
 
-    /// @notice An event emitted when a proposal has been queued in the NounsDAOExecutor
+    /// @notice An event emitted when a proposal has been queued in the NDAOExecutor
     event ProposalQueued(uint256 id, uint256 eta);
 
-    /// @notice An event emitted when a proposal has been executed in the NounsDAOExecutor
+    /// @notice An event emitted when a proposal has been executed in the NDAOExecutor
     event ProposalExecuted(uint256 id);
 
     /// @notice An event emitted when a proposal has been vetoed by vetoAddress
@@ -103,7 +103,7 @@ contract NounsDAOEvents {
     event NewVetoer(address oldVetoer, address newVetoer);
 }
 
-contract NounsDAOProxyStorage {
+contract NDAOProxyStorage {
     /// @notice Administrator for this contract
     address public admin;
 
@@ -116,11 +116,11 @@ contract NounsDAOProxyStorage {
 
 /**
  * @title Storage for Governor Bravo Delegate
- * @notice For future upgrades, do not change NounsDAOStorageV1. Create a new
- * contract which implements NounsDAOStorageV1 and following the naming convention
- * NounsDAOStorageVX.
+ * @notice For future upgrades, do not change NDAOStorageV1. Create a new
+ * contract which implements DAOStorageV1 and following the naming convention
+ * NDAOStorageVX.
  */
-contract NounsDAOStorageV1 is NounsDAOProxyStorage {
+contract NDAOStorageV1 is NDAOProxyStorage {
     /// @notice Vetoer who has the ability to veto any proposal
     address public vetoer;
 
@@ -139,11 +139,11 @@ contract NounsDAOStorageV1 is NounsDAOProxyStorage {
     /// @notice The total number of proposals
     uint256 public proposalCount;
 
-    /// @notice The address of the Nouns DAO Executor NounsDAOExecutor
-    INounsDAOExecutor public timelock;
+    /// @notice The address of the NDAO Executor NDAOExecutor
+    IDAOExecutor public timelock;
 
-    /// @notice The address of the Nouns tokens
-    NounsTokenLike public nouns;
+    /// @notice The address of the Punk2 tokens
+    NTokenLike public npunks;
 
     /// @notice The official record of all proposals ever proposed
     mapping(uint256 => Proposal) public proposals;
@@ -214,7 +214,7 @@ contract NounsDAOStorageV1 is NounsDAOProxyStorage {
     }
 }
 
-interface INounsDAOExecutor {
+interface IDAOExecutor {
     function delay() external view returns (uint256);
 
     function GRACE_PERIOD() external view returns (uint256);
@@ -248,7 +248,7 @@ interface INounsDAOExecutor {
     ) external payable returns (bytes memory);
 }
 
-interface NounsTokenLike {
+interface NTokenLike {
     function getPriorVotes(address account, uint256 blockNumber) external view returns (uint96);
 
     function totalSupply() external view returns (uint96);

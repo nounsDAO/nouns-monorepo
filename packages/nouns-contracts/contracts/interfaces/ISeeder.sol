@@ -17,9 +17,9 @@
 
 pragma solidity ^0.8.6;
 
-import { INounsDescriptorMinimal } from './INounsDescriptorMinimal.sol';
+import { IDescriptorMinimal } from './IDescriptorMinimal.sol';
 
-interface INounsSeeder {
+interface ISeeder {
     struct Accessory {
         uint16 accType;
         uint16 accId;
@@ -30,7 +30,5 @@ interface INounsSeeder {
         Accessory[] accessories;
     }
 
-    function generateSeed(uint256 punkId) external view returns (Seed memory);
-
-    // function generateSeed(uint256 nounId, INounsDescriptorMinimal descriptor) external view returns (Seed memory);
+    function generateSeed(uint256 punkId, IDescriptorMinimal descriptor) external view returns (Seed memory);
 }
