@@ -80,6 +80,7 @@ describe('Nouns Governance', () => {
     afterEach(async () => {
       await ethers.provider.send('evm_revert', [snapshotId]);
     });
+
     it('reverts if the signatory is invalid', async () => {
       const delegatee = account1.address,
         nonce = 0,
@@ -125,6 +126,38 @@ describe('Nouns Governance', () => {
 
       expect(tx.gasUsed.toNumber() < 80000);
       expect(await token.delegates(account0.address)).to.equal(account1.address);
+    });
+
+    async function delegateBySig(signatory: SignerWithAddress, delegatee: string, nonce: number) {
+      const expiry = 10e9;
+      const signature = await signatory._signTypedData(domain, Types, { delegatee, nonce, expiry });
+      const { v, r, s } = ethers.utils.splitSignature(signature);
+      const tx = await (
+        await token.delegateBySig(delegatee, nonce, expiry, v, r, s, { gasLimit: 200_000 })
+      ).wait();
+    }
+
+    it('never delegates to address(0)', async () => {
+      let nonce = 0;
+      await setTotalSupply(token, 1);
+
+      // Delegate from Deployer -> Account1
+      await delegateBySig(deployer, account1.address, nonce++);
+      await mineBlock();
+      await mineBlock();
+
+      expect(await token.getCurrentVotes(address(0))).to.equal(0);
+      expect(await token.getCurrentVotes(deployer.address)).to.equal(0);
+      expect(await token.getCurrentVotes(account1.address)).to.equal(ONE);
+
+      //Delegate from Deployer -> Address(0), which should assign back to deployer
+      await delegateBySig(deployer, address(0), nonce++);
+      await mineBlock();
+      await mineBlock();
+
+      expect(await token.getCurrentVotes(address(0))).to.equal(0);
+      expect(await token.getCurrentVotes(deployer.address)).to.equal(ONE);
+      expect(await token.getCurrentVotes(account1.address)).to.equal(0);
     });
   });
 
@@ -297,6 +330,7 @@ describe('Nouns Governance', () => {
       expect(await token.getPriorVotes(account1.address, t4.blockNumber)).to.equal(TWO);
       expect(await token.getPriorVotes(account1.address, t4.blockNumber + 1)).to.equal(TWO);
     });
+
     it('never delegates to address(0)', async () => {
       await setTotalSupply(token, 1);
 
