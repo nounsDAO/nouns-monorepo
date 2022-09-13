@@ -17,7 +17,7 @@ interface AppConfig {
   enableHistory: boolean;
 }
 
-type SupportedChains = ChainId.Rinkeby | ChainId.Mainnet | ChainId.Hardhat;
+type SupportedChains = ChainId.Rinkeby | ChainId.Mainnet | ChainId.Hardhat | ChainId.Goerli;
 
 interface CacheBucket {
   name: string;
@@ -68,6 +68,12 @@ const app: Record<SupportedChains, AppConfig> = {
     subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
+  [ChainId.Goerli]: {
+    jsonRpcUri: createNetworkHttpUrl('goerli'),
+    wsRpcUri: createNetworkWsUrl('goerli'),
+    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph',
+    enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
+  },
   [ChainId.Hardhat]: {
     jsonRpcUri: 'http://localhost:8545',
     wsRpcUri: 'ws://localhost:8545',
@@ -82,6 +88,9 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
   },
   [ChainId.Mainnet]: {
     lidoToken: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
+  },
+  [ChainId.Goerli]: {
+    lidoToken: '0x2DD6530F136D2B56330792D46aF959D9EA62E276',
   },
   [ChainId.Hardhat]: {
     lidoToken: undefined,
