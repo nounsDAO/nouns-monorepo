@@ -6,10 +6,10 @@ import Link from '../Link';
 import { Trans } from '@lingui/macro';
 
 const Documentation = () => {
-  const cryptopunksLink = (
+  const nounsDaoLink = (
     <Link
-      text={<Trans>Cryptopunks</Trans>}
-      url="https://www.larvalabs.com/cryptopunks"
+      text={<Trans>Nouns</Trans>}
+      url="https://nouns.wtf"
       leavesPage={true}
     />
   );
@@ -39,12 +39,15 @@ const Documentation = () => {
           </h1>
           <p className={classes.aboutText}>
             <Trans>
-              Nouns are an experimental attempt to improve the formation of on-chain avatar
-              communities. While projects such as {cryptopunksLink} have attempted to bootstrap
-              digital community and identity, Nouns attempt to bootstrap identity, community,
-              governance, and a treasury that can be used by the community.
+              {nounsDaoLink} has proven to be a strong mechanism for continuous funding alongside a simple yet effective governance framework. Public Goods are necessary, and have historically been difficult to fund. We have forked Nouns and replaced all heads with 'mascots' of public goods in order to generate continuous public goods funding.
             </Trans>
           </p>
+          <p>The mission of Public Nouns DAO is threefold:</p>
+          <ol>
+            <li>experiment with new methods of public goods funding, starting with Public Nouns itself.</li>
+            <li>fund public goods</li>
+            <li>advocate for public goods</li>
+          </ol>
           <p className={classes.aboutText} style={{ paddingBottom: '4rem' }}>
             <Trans>
               Learn more below, or start creating Nouns off-chain using the {playgroundLink}.

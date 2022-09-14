@@ -10,10 +10,10 @@ const Banner = () => {
     <Section fullWidth={false} className={classes.bannerSection}>
       <Col lg={6}>
         <div className={classes.wrapper}>
-          <h1>
-            <Trans>ONE NOUN,</Trans>
+          <h1 style={{fontSize: '90px'}}>
+            <Trans>1 PUBLIC NOUN,</Trans>
             <br />
-            <Trans>EVERY DAY,</Trans>
+            <Trans>EVERY 12 HRS,</Trans>
             <br />
             <Trans>FOREVER.</Trans>
           </h1>
