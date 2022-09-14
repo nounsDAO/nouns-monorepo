@@ -6,13 +6,13 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and No
   .addOptionalParam(
     'nftDescriptor',
     'The `NFTDescriptorV2` contract address',
-    '0x5FbDB2315678afecb367f032d93F642f64180aa3',
+    '0x826363C98065E2b6b6fcbf908a1f05d0BB847168',
     types.string,
   )
   .addOptionalParam(
     'nounsDescriptor',
     'The `NounsDescriptorV2` contract address',
-    '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
+    '0xa1c4512d981324c46a609bbd9627921fe70f202b',
     types.string,
   )
   .setAction(async ({ nftDescriptor, nounsDescriptor }, { ethers, network }) => {
@@ -33,15 +33,15 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and No
     const glassesPage = dataToDescriptorInput(glasses.map(({ data }) => data));
     const accessoriesPage = dataToDescriptorInput(accessories.map(({ data }) => data));
 
-    await descriptorContract.addManyBackgrounds(bgcolors);
-    await descriptorContract.setPalette(0, `0x000000${palette.join('')}`);
+    // await descriptorContract.addManyBackgrounds(bgcolors);
+    // await descriptorContract.setPalette(0, `0x000000${palette.join('')}`);
 
-    await descriptorContract.addBodies(
-      bodiesPage.encodedCompressed,
-      bodiesPage.originalLength,
-      bodiesPage.itemCount,
-      options,
-    );
+    // await descriptorContract.addBodies(
+    //   bodiesPage.encodedCompressed,
+    //   bodiesPage.originalLength,
+    //   bodiesPage.itemCount,
+    //   options,
+    // );
     await descriptorContract.addHeads(
       headsPage.encodedCompressed,
       headsPage.originalLength,

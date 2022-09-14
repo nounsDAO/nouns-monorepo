@@ -6,6 +6,7 @@ import { readPngImage } from './utils';
 const DESTINATION = path.join(__dirname, '../src/image-data.json');
 
 const encode = async () => {
+  console.log('encoding')
   const encoder = new PNGCollectionEncoder();
 
   const partfolders = ['1-bodies', '2-accessories', '3-heads', '4-glasses'];
