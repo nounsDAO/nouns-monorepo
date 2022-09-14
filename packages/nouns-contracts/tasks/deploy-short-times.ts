@@ -128,6 +128,7 @@ task('deploy-short-times', 'Deploy all Nouns contracts with short gov times for 
       NounsToken: {
         args: [
           args.noundersdao,
+          args.noundersdao,
           expectedAuctionHouseProxyAddress,
           () => deployment.NounsDescriptorV2.address,
           () => deployment.NounsSeeder.address,
