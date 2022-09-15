@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort } from '@fortawesome/free-solid-svg-icons';
 import { Auction as IAuction } from '../../wrappers/nounsAuction';
 import { useAppSelector } from '../../hooks';
+import { Trans } from '@lingui/macro';
 
 interface ExploreGridProps {
 }
@@ -167,7 +168,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                 >
                     <div className={classes.nav}>
                         <button className={classes.iconTextButton}><FontAwesomeIcon icon={faSort} />Auction date</button>
-                        <h3>explore all {nounCount} Nouns</h3>
+                        <h3><Trans>explore all {nounCount} Nouns</Trans></h3>
                         <div className={classes.sizing}>
                             {sizeOptions.map((option, i) => {
                                 return (

@@ -47,7 +47,7 @@
     fill: #000;
 }
 
-h2 {
+.nounBirthday {
     margin: 0 30px;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
@@ -55,8 +55,15 @@ h2 {
     background: rgba(255,255,255,0.2);
     position: relative;
     z-index: 1;
-    font-size: 24px;
     text-align: center;
+}
+.nounBirthday > div {
+    opacity: 0.6;
+}
+
+h2 {
+    font-size: 24px;
+    margin: 0;
 }
 
 .traitsList {

@@ -8,6 +8,7 @@ import { ImageData } from '@nouns/assets';
 import { Trans } from '@lingui/macro';
 import {AnimatePresence, motion} from 'framer-motion/dist/framer-motion';
 import { XIcon } from '@heroicons/react/solid';
+import NounInfoRowBirthday from '../NounInfoRowBirthday';
 
 interface ExploreNounDetailProps {
     nounId: number | undefined;
@@ -231,7 +232,8 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                     </motion.div>
                                     
                                     <motion.div className={classes.nounDetails}>
-                                        <motion.h2
+                                        <motion.div
+                                            className={classes.nounBirthday}
                                             initial={{
                                                 opacity: 0
                                             }}
@@ -239,8 +241,10 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                                 opacity: 1
                                             }}
                                         >
-                                            Noun {props.nounId}
-                                        </motion.h2>
+                                            <h2>Noun {props.nounId}</h2>
+                                            <NounInfoRowBirthday nounId={props.nounId} />    
+                                        </motion.div>
+                                        
                                         <motion.ul 
                                             className={classes.traitsList}
                                             variants={list}
