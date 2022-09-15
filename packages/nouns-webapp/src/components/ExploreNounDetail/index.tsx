@@ -74,7 +74,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
     ];
 
     const seed = useNounSeed(BigNumber.from(props.nounId));
-
+    console.log("seed", seed);
     const nounTraitsOrdered = [
         { 
             partType: 'head',
@@ -218,7 +218,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                             <XIcon className={classes.icon} />
                         </button>
                         <AnimatePresence exitBeforeEnter>
-                            {props.isVisible && props.nounId && (
+                            {(props.nounId || props.nounId === 0) && (
                                 <motion.div
                                     variants={detailsVariants}
                                     initial="initial"
@@ -259,6 +259,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                                 return (
                                                     <motion.li
                                                         variants={item}
+                                                        key={index}
                                                     >
                                                         <div 
                                                             className={classes.thumbnail}
