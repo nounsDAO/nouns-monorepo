@@ -14,6 +14,7 @@ interface ExploreNounDetailProps {
     nounId: number | undefined;
     handleNounDetail: Function;
     isVisible: boolean;
+    handleScrollTo: Function;
 }
 
 const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
@@ -227,6 +228,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                 >
                                     <motion.div
                                         className={classes.detailNounImage}
+                                        onClick={() => props.handleScrollTo(props.nounId)}
                                     >
                                         <StandaloneNounImage nounId={BigNumber.from(props.nounId)} />
                                     </motion.div>
@@ -250,6 +252,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                             variants={list}
                                             initial="hidden"
                                             animate="visible"
+                                            layout
                                         >
                                             {Object.values(nounTraitsOrdered).map((part,index) => {    
                                                 const partType = traitTypeKeys(nounTraitsOrdered[index].partType);
