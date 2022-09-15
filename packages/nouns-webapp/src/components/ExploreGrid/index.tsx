@@ -7,6 +7,8 @@ import ExploreNounDetail from '../ExploreNounDetail';
 import {AnimatePresence, motion} from 'framer-motion/dist/framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort } from '@fortawesome/free-solid-svg-icons';
+import { Auction as IAuction } from '../../wrappers/nounsAuction';
+import { useAppSelector } from '../../hooks';
 
 interface ExploreGridProps {
 }
@@ -48,6 +50,9 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     const [width, setWidth] = useState<number>(window.innerWidth);
     const isMobile: boolean = width <= 991;
 
+    const currentAuction: IAuction | undefined = useAppSelector(state => state.auction.activeAuction);
+    const nounCount = BigNumber.from(currentAuction?.nounId).toNumber();
+
     const handleWindowSizeChange = () => {
         setWidth(window.innerWidth);
     };
@@ -60,7 +65,6 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         };
     }, []);
 
-    const nounCount = 400;
     // const gridOptions = [2.5, 5, 12.5];
     const [isFullView] = useState<boolean>(false);
     const [isSidebarVisible, setIsSidebarVisible] = useState<boolean>(false);
@@ -163,6 +167,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                 >
                     <div className={classes.nav}>
                         <button className={classes.iconTextButton}><FontAwesomeIcon icon={faSort} />Auction date</button>
+                        <h3>explore all {nounCount} Nouns</h3>
                         <div className={classes.sizing}>
                             {sizeOptions.map((option, i) => {
                                 return (
