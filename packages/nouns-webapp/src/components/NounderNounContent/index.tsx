@@ -107,10 +107,10 @@ const NounderNounContent: React.FC<{
               </Link>
               .{' '}
               <Trans>
-                For this reason, we, the project's founders (‘Nounders’) have chosen to compensate
-                ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be
+                For this reason, we, the project's founders (‘pNounders’) have chosen to compensate
+                ourselves with Public ouns. Every 10th Noun for the first 5 years of the project will be
                 sent to our multisig (5/10), where it will be vested and distributed to individual
-                Nounders.
+                Pnounders.
               </Trans>
             </li>
           </ul>
