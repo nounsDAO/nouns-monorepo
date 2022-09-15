@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { useNounSeed } from '../../wrappers/nounToken';
 import { BigNumber } from 'ethers';
 import { StandaloneNounImage } from '../../components/StandaloneNoun';
@@ -16,6 +16,22 @@ interface ExploreNounDetailProps {
 }
 
 const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
+    // borrowed from /src/pages/Playground/NounModal/index.tsx
+    const [width, setWidth] = useState<number>(window.innerWidth);
+    const isMobile: boolean = width <= 991;
+
+    const handleWindowSizeChange = () => {
+        setWidth(window.innerWidth);
+    };
+
+    useEffect(() => {
+        window.addEventListener('resize', handleWindowSizeChange);
+
+        return () => {
+            window.removeEventListener('resize', handleWindowSizeChange);
+        };
+    }, []);
+
     // Modified from playground function to remove dashes in filenames
     const parseTraitName = (partName: string): string =>
         capitalizeFirstLetter(partName.substring(partName.indexOf('-') + 1).replace(/-/g, ' '));
@@ -148,29 +164,37 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
 
     const sidebarVariants = {
         closed: {
-            width: 0,
-            x: 100,
+            width: isMobile ? "inherit" : 0,
+            x: isMobile ? 0 : 100,
+            y: isMobile ? "100%" : 0,
         },
         open: {
-            width: "33%",
+            width: isMobile ? "inherit" : "33%",
             x: 0,
+            y: 0,
             transition: {
                 duration: 0.15,
                 delayChildren: 0.2,
             }
         },
         exit: {
-            width: 0,
-            x: 100,
+            width: isMobile ? "inherit" : 0,
+            x: isMobile ? 0 : 100,
+            y: isMobile ? "100%" : 0,
             transition: {
                 duration: 0.15,
                 when: "afterChildren",
             },
         }
-    }
+    }    
 
     return (
         <>  
+            <AnimatePresence>
+                {isMobile && (
+                    <motion.div className={classes.backdrop} initial={{opacity: 0}} animate={{opacity: 1}}></motion.div>
+                )}
+            </AnimatePresence>
             <motion.div 
                 className={classes.detailWrap}
                 variants={sidebarVariants}
@@ -178,14 +202,16 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                 animate="open"
                 exit="exit"
                 layout
-                style={{
-                    background: backgroundColor,
-                }}
                 >
                 <motion.div 
                     variants={sidebarInnerVariants}
                     >
-                    <motion.div className={classes.detail}>
+                    <motion.div 
+                        className={classes.detail}
+                        style={{
+                            background: backgroundColor,
+                        }}
+                    >
                         <button className={classes.close} onClick={() => props.handleNounDetail('close')}>
                             <XIcon className={classes.icon} />
                         </button>
