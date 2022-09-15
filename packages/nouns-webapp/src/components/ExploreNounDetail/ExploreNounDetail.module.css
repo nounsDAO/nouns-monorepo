@@ -1,36 +1,69 @@
 .detailWrap {
-    width: 33%;
-    transition: width 1s ease-in-out;
-    position: sticky;
-    top: 0;
+    position: absolute;
+    top: -30px;
     right: 0;
-    background: rgba(255,255,255,0.5);
-    padding: 30px;
+    box-shadow: 0px 10px 24px rgba(0, 0, 0, 0.17);
+    height: 100%;
+    transition: background-color 0.25s ease-in-out;
+    border-radius: 8px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.detailWrap > div{
     height: 100%;
 }
-.sidebar {
-    /* height: 100%; */
+
+.detail {
     overflow: scroll;
     display: flex;
     flex-direction: column;
     align-self: flex-start;
-    /* width: 33%;
-    transition: width 1s ease-in-out;
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 0;
-    right: 0;
-    align-self: flex-start;
-    background: #fff;
-    height: 100%;
-    overflow: scroll; */
+    transition: background-color 0.25s ease-in-out;
+    position: sticky;
+    top: 15px;
+    padding: 30px 15px;
+}
+.detailNounImage {
+    text-align: center;
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 3;
+    width: auto;
+    height: auto;
+    background: transparent;
+    border: transparent;
+}
+
+.close svg {
+    width: 24px;
+}
+
+h2 {
+    margin: 0 30px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    padding: 7px 15px;
+    background: rgba(255,255,255,0.2);
+    position: relative;
+    z-index: 1;
+    font-size: 24px;
+    text-align: center;
 }
 
 .traitsList {
+    position: relative;
+    z-index: 2;
     list-style: none;
-    margin: 0;
-    padding: 0;
+    background: #fff;
+    margin: 0 15px 15px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
 }
 
 .traitsList li {
@@ -38,10 +71,17 @@
     grid-gap: 10px;
     padding: 10px 0;
     align-items: center;
-    border-bottom: 1px solid rgba(0,0,0,0.2);
+    /* border-bottom: 1px solid rgba(0,0,0,0.2); */
+    border-bottom: 1px solid var(--brand-cool-border);
 }
+
+.traitsList li:first-child {
+    padding-top: 0;
+}
+
 .traitsList li:last-child {
     border: none;
+    padding-bottom: 0;
 }
 
 .traitsList p {
@@ -56,13 +96,13 @@
     border-radius: 10%;
 }
 
-.sidebar h2 {
+.detail h2 {
     font-family: 'Londrina Solid';
 }
 
 /* Treat more like a modal on mobile */
 @media (max-width: 992px) {
-    .sidebar {
+    .detail {
         width: 100%;
         padding: 2% 3% 0;
         z-index: 1;

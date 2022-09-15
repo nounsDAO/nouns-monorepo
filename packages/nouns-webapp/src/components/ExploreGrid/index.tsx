@@ -4,7 +4,9 @@ import { StandaloneNounImage } from '../../components/StandaloneNoun';
 import classes from './ExploreGrid.module.css';
 import cx from 'classnames';
 import ExploreNounDetail from '../ExploreNounDetail';
-// import {AnimatePresence, motion} from 'framer-motion/dist/framer-motion';
+import {AnimatePresence, motion} from 'framer-motion/dist/framer-motion';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSort } from '@fortawesome/free-solid-svg-icons';
 
 interface ExploreGridProps {
 }
@@ -42,12 +44,12 @@ function useKeyPress(targetKey: string) {
   }
 
 const ExploreGrid: React.FC<ExploreGridProps> = props => {
-    const nounCount = 429;
+    const nounCount = 400;
     // const gridOptions = [2.5, 5, 12.5];
     const [isFullView] = useState<boolean>(false);
     const [isSidebarVisible, setIsSidebarVisible] = useState<boolean>(false);
-    const [activeSizeOption, setSizeOption] = useState<string>("medium");
-    const sizeOptions = ["small", "medium", "large"];
+    const [activeSizeOption, setSizeOption] = useState<string>("large");
+    const sizeOptions = ["small", "large"];
 
     const [activeNoun, setActiveNoun] = useState<number | undefined>();
     
@@ -66,6 +68,27 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     const focusNoun = (index: number | undefined) => {
         index && buttonsRef.current[index]?.focus()
     };
+
+
+    const gridVariants = {
+        closed: { 
+            width: "100%", 
+        },
+        open: { 
+            width: "66%",
+            transition: { 
+                delay: .35,
+            }
+        },
+    }
+    const gridItemVariants = {
+        small: { 
+            width: "5%", 
+        },
+        standard: { 
+            width: "14.28%",
+        },
+    }
 
     useEffect(() => {
         if (keyboardPrev) {
@@ -99,54 +122,97 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [keyboardPrev, keyboardNext, keyboardUp, keyboardDown]);
 
-    
+    console.log(isSidebarVisible);
+
+    const iconLargeGrid = <><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#000" d="M0 2.571A2.571 2.571 0 0 1 2.571 0h5.143a2.571 2.571 0 0 1 2.572 2.571v5.143a2.571 2.571 0 0 1-2.572 2.572H2.571A2.571 2.571 0 0 1 0 7.714V2.571Zm13.714 0A2.572 2.572 0 0 1 16.286 0h5.143A2.571 2.571 0 0 1 24 2.571v5.143a2.571 2.571 0 0 1-2.571 2.572h-5.143a2.572 2.572 0 0 1-2.572-2.572V2.571ZM0 16.286a2.572 2.572 0 0 1 2.571-2.572h5.143a2.572 2.572 0 0 1 2.572 2.572v5.143A2.571 2.571 0 0 1 7.714 24H2.571A2.571 2.571 0 0 1 0 21.429v-5.143Zm13.714 0a2.572 2.572 0 0 1 2.572-2.572h5.143A2.571 2.571 0 0 1 24 16.286v5.143A2.57 2.57 0 0 1 21.429 24h-5.143a2.571 2.571 0 0 1-2.572-2.571v-5.143Z"/></svg></>;
+    const iconSmallGrid = <><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#000" d="M0 1.714A1.714 1.714 0 0 1 1.714 0h3.429a1.714 1.714 0 0 1 1.714 1.714v3.429a1.714 1.714 0 0 1-1.714 1.714H1.714A1.714 1.714 0 0 1 0 5.143V1.714Zm8.571 0A1.714 1.714 0 0 1 10.286 0h3.428a1.714 1.714 0 0 1 1.715 1.714v3.429a1.714 1.714 0 0 1-1.715 1.714h-3.428A1.714 1.714 0 0 1 8.57 5.143V1.714Zm8.572 0A1.714 1.714 0 0 1 18.857 0h3.429A1.714 1.714 0 0 1 24 1.714v3.429a1.714 1.714 0 0 1-1.714 1.714h-3.429a1.714 1.714 0 0 1-1.714-1.714V1.714ZM0 10.286A1.714 1.714 0 0 1 1.714 8.57h3.429a1.714 1.714 0 0 1 1.714 1.715v3.428a1.714 1.714 0 0 1-1.714 1.715H1.714A1.714 1.714 0 0 1 0 13.714v-3.428Zm8.571 0a1.714 1.714 0 0 1 1.715-1.715h3.428a1.714 1.714 0 0 1 1.715 1.715v3.428a1.714 1.714 0 0 1-1.715 1.715h-3.428a1.714 1.714 0 0 1-1.715-1.715v-3.428Zm8.572 0a1.714 1.714 0 0 1 1.714-1.715h3.429A1.714 1.714 0 0 1 24 10.286v3.428a1.714 1.714 0 0 1-1.714 1.715h-3.429a1.714 1.714 0 0 1-1.714-1.715v-3.428ZM0 18.857a1.714 1.714 0 0 1 1.714-1.714h3.429a1.714 1.714 0 0 1 1.714 1.714v3.429A1.714 1.714 0 0 1 5.143 24H1.714A1.714 1.714 0 0 1 0 22.286v-3.429Zm8.571 0a1.714 1.714 0 0 1 1.715-1.714h3.428a1.714 1.714 0 0 1 1.715 1.714v3.429A1.714 1.714 0 0 1 13.714 24h-3.428a1.714 1.714 0 0 1-1.715-1.714v-3.429Zm8.572 0a1.714 1.714 0 0 1 1.714-1.714h3.429A1.714 1.714 0 0 1 24 18.857v3.429A1.714 1.714 0 0 1 22.286 24h-3.429a1.714 1.714 0 0 1-1.714-1.714v-3.429Z"/></svg></>;  
+
 
     return (
-        <div className={classes.contentWrap}>
-            {/* Todo: move wrapper into parent component */}
-            <div className={cx(classes.gridWrap, isSidebarVisible && classes.sidebarVisible)}>
-                <div className={classes.nav}>
-                    {sizeOptions.map((option, i) => {
-                        return (
-                            <button 
-                                style={{
-                                    border: activeSizeOption === option ? '2px solid green' : 'none'
-                                }}
-                                key={option} 
-                                onClick={() => setSizeOption(option)}
-                            >
-                                {option}
-                            </button>
-                        )
-                    })}
-                </div>
-                <div 
-                    className={cx(classes.exploreGrid, isFullView && classes.fullViewGrid, classes[activeSizeOption])}
+        <div className={classes.exploreWrap}>
+            
+                <div className={classes.contentWrap}>
+                {/* Todo: move wrapper into parent component */}
+                <motion.div 
+                    className={cx(classes.gridWrap, isSidebarVisible && classes.sidebarVisible)}
+                    layout            
+                    variants={gridVariants}
+                    initial={!isSidebarVisible && "closed"}
+                    animate={isSidebarVisible ? "open" : "closed"}
+                    transition={{
+                        delay: .05,
+                    }}
                 >
-                    <ul>
-                        {[...Array(nounCount)].map((x, i) =>
-                            <li 
-                                style={{ 
-                                    "--animation-order": i, 
-                                    borderColor: i === activeNoun ? "green" : "transparent",
-                                } as React.CSSProperties
-                                }
-                                key={i}
-                            >
-                                <button 
-                                    ref={el => buttonsRef.current[i] = el} 
-                                    onFocus={() => handleNounDetail(i, i === activeNoun ? 'close' : 'visible')}
-                                    onClick={event => focusNoun(i)}
-                                    >
-                                    <StandaloneNounImage nounId={BigNumber.from(i)} />
-                                </button>
-                            </li>
+                    <div className={classes.nav}>
+                        <button className={classes.iconTextButton}><FontAwesomeIcon icon={faSort} />Auction date</button>
+                        <div className={classes.sizing}>
+                            {sizeOptions.map((option, i) => {
+                                return (
+                                    <button 
+                                        key={option} 
+                                        onClick={() => setSizeOption(option)}
+                                        className={cx(activeSizeOption === option && classes.activeLayout)}
+                                    >   
+                                        {i === 0 ? (
+                                            iconSmallGrid
+                                        ) : (
+                                            iconLargeGrid
+                                        )}
+                                    </button>
+                                )
+                            })}
+                        </div>
+                    </div>   
+                    <motion.div 
+                        className={cx(classes.exploreGrid, isFullView && classes.fullViewGrid, classes[activeSizeOption])}
+                    >
+                        <motion.ul
+                            layout
+                        >
+                            {[...Array(nounCount)].map((x, i) =>
+                                <motion.li 
+                                    style={{ 
+                                        "--animation-order": i, 
+                                    } as React.CSSProperties
+                                    }
+                                    className={i === activeNoun ? classes.activeNoun : ''} 
+                                    key={i}
+                                    layout
+                                    variants={gridItemVariants}
+                                    initial="large"
+                                    animate={activeSizeOption === "small" ? "small" : "standard"}
+                                    transition={{ 
+                                        stiffness: '50',
+                                    }}
+                                >   
+                                    <button 
+                                        ref={el => buttonsRef.current[i] = el} 
+                                        onFocus={() => handleNounDetail(i, i === activeNoun ? 'close' : 'visible')}
+                                        onClick={event => focusNoun(i)}
+                                        >
+                                        <StandaloneNounImage nounId={BigNumber.from(i)} />
+                                    </button>
+                                </motion.li>
+                            )}
+                        </motion.ul>
+                    </motion.div>
+                    </motion.div>
+                    <AnimatePresence>
+                        {isSidebarVisible && (
+                            <motion.div 
+                                className={cx(classes.detailBlock, isSidebarVisible && classes.sidebarVisible)}
+                            />
                         )}
-                    </ul>
-                </div>
-                </div>
-            {isSidebarVisible && <ExploreNounDetail handleNounDetail={handleNounDetail} nounId={activeNoun}/>}
+                    </AnimatePresence>
+                    <AnimatePresence>
+                        {isSidebarVisible && (
+                            <ExploreNounDetail handleNounDetail={handleNounDetail} nounId={activeNoun} isVisible={isSidebarVisible} />
+                                
+                        )}
+                    </AnimatePresence>
+            </div>
         </div>
+        
     );
 };
 

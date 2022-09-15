@@ -1,15 +1,22 @@
 @media (min-width: 992px) {
     .contentWrap {
         display: flex;
-        flex: 1 1;
+        /* flex: 1 1; */
         position: relative;
+        grid-gap: 1em;
     }
     .gridWrap.sidebarVisible {
-        width: 66%;
-        transition: width 1s ease-in-out;
     }
 }
 
+@keyframes cubic {
+    0%, 10% { width: 100%; }
+    90%, 100% { width: 66%; }
+}
+
+.exploreWrap {
+    background: var(--brand-gray-background);
+}
 
 .exploreGrid {
     display: flex;
@@ -23,63 +30,73 @@
     flex-wrap: wrap;
 }
 .exploreGrid li {
-    animation-name: animateIn;
-    animation-duration: 100ms;
-    animation-delay: calc(var(--animation-order) * 10ms);
-    animation-fill-mode: both;
-    animation-timing-function: ease-in-out;
-    /* width: 100%; */
+    position: relative;
     list-style-type: none;
     margin: 0;
     padding: 0;
     width: 10%;
-    transition: width 0.5s ease-in-out;
-    border: transparent 2px solid;
+    transition: border 0.5s ease-in-out;
+    border: transparent 3px solid;
 }
+
+.exploreGrid li:hover img {
+    transform: scale(0.9);
+    border-radius: 3%;
+    transition: transform 0.15s ease-in-out;
+}
+
 .exploreGrid li img {
     max-width: none;
+    margin: 0 auto;
     width: 100%;
+    transition: transform 0.15s ease-in-out;
 }
-.exploreGrid button {
+.exploreGrid li button {
     border: none;
     margin: 0;
     padding: 0;
     width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    background-color: #fff;
 }
 .exploreGrid button:focus {
-    border: 2px solid green;
-    outline: none;
+    border: none;
 }
 
 .exploreGrid li a {
     display: block;
 }
 
-.small li {
-    width: 5%;
+.activeNoun {
+    border: 10px solid transparent;
 }
-.medium li {
-    width: 10%;
+li.activeNoun img, li.activeNoun:hover img {
+    transform: scale(0.6);
+    border-radius: 10%;
+    transition: transform 0.15s ease-in-out;
 }
-.large li {
-    width: 14.28%;
+
+.detailWrap {
+    position: absolute;
+    top: -30px;
+    right: 0;
+    box-shadow: 0px 10px 24px rgba(0, 0, 0, 0.17);
+    height: 100%;
+    background: var(--brand-cool-background);
+    border-radius: 10px;
 }
+
+.detailWrap > div{
+    height: 100%;
+}
+
 .exploreGrid li a > div {
     width: 100%;
     padding: 0;
     height: auto;
     position: relative;
-}
-.exploreGrid li a > div img {
-}
-
-.exploreGrid a {
-    /* display: block; */
-    /* width: 5%; */
-}
-
-.fullViewGrid {
-
 }
 
 .exploreGrid.fullViewGrid li {
@@ -87,10 +104,71 @@
 }
 
 .nav {
-    justify-content: right;
+    justify-content: space-between;
     display: flex;
     grid-gap: 10px;
     margin-bottom: 10px;
+    padding: 15px 1em 0;
+}
+
+.nav .sizing {
+    display: flex;
+    grid-gap: 1em;
+}
+
+.nav svg {
+    width: 24px;
+    opacity: 0.5;
+}
+
+.nav .iconTextButton svg {
+    margin-right: 0.4rem;
+}
+
+.nav .iconTextButton:hover {
+    color: black;
+    background-color: var(--brand-cool-accent);
+}
+
+.nav button {
+    border: 1px solid var(--brand-cool-border);
+    border-radius: 10px;
+    padding: .5rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: transparent;
+    font-family: 'PT Root UI';
+    font-size: 16px;
+    line-height: 16px;
+    font-family: 'PT Root UI';
+    font-weight: bold;
+}
+
+.nav button .icon {
+    margin-right: 0.4rem;
+}
+
+.nav button:hover svg {
+    opacity: 0.5;
+}
+
+.nav button:hover {
+    background-color: var(--brand-cool-accent);
+}
+
+.nav button:hover svg {
+    opacity: 0.8;
+}
+
+.nav button.activeLayout {
+    border: 1px solid rgba(0, 0, 0, 0.25)
+}
+
+.nav button.activeLayout svg {
+    opacity: 0.8;
+}
+
+.nav button.activeLayout svg path {
+    fill: rgba(0, 0, 0, 0.8);
 }
 
 @keyframes animateIn {
@@ -102,4 +180,4 @@
     100% {
       opacity: 1;
     }
-  }
+}

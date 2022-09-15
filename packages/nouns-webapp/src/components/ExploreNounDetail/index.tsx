@@ -6,9 +6,13 @@ import { StandalonePart } from '../StandalonePart';
 import classes from './ExploreNounDetail.module.css';
 import { ImageData } from '@nouns/assets';
 import { Trans } from '@lingui/macro';
+import {AnimatePresence, motion} from 'framer-motion/dist/framer-motion';
+import { XIcon } from '@heroicons/react/solid';
+
 interface ExploreNounDetailProps {
     nounId: number | undefined;
     handleNounDetail: Function;
+    isVisible: boolean;
 }
 
 const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
@@ -83,37 +87,170 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
 
     const bgcolors = ["#d5d7e1", "#e1d7d5"];
     const backgroundColor = bgcolors[seed.background];
-    console.log(backgroundColor);
+
+    const list = {
+        visible: { 
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.06,
+                when: "beforeChildren",
+            },
+        },
+        hidden: { 
+            opacity: 0,
+            transition: {
+                when: "afterChildren",
+              },
+        },
+      }
+      
+      const item = {
+        visible: { opacity: 1, y: 0 },
+        hidden: { opacity: 0, y: -50 },
+      }
+
+      const detailsVariants = {
+        initial: {
+            opacity: 0
+        },
+        animate: {
+            opacity: 1,
+        },
+        exit: {
+            y: 200,
+            opacity: 0,
+            transition: {
+                duration: 0.1
+            }
+        }
+      }
+
+    const sidebarInnerVariants = {
+        closed: { 
+            opacity: 0, 
+        },
+        open: { 
+            opacity: 1,
+            y: 0,
+            transition: {
+                delay: 0.1,
+                duration: 0.1
+            }
+        },
+        exit: {
+            y: 100,
+            opacity: 0,
+            transition: {
+                duration: 0.1
+            }
+        }
+    }
+
+    const sidebarVariants = {
+        closed: {
+            width: 0,
+            x: 100,
+        },
+        open: {
+            width: "33%",
+            x: 0,
+            transition: {
+                duration: 0.15,
+                delayChildren: 0.2,
+            }
+        },
+        exit: {
+            width: 0,
+            x: 100,
+            transition: {
+                duration: 0.15,
+                when: "afterChildren",
+            },
+        }
+    }
 
     return (
-        <div className={classes.detailWrap}>
-            <div className={classes.sidebar}>
-                <button onClick={() => props.handleNounDetail('close')}>close</button>
-                <StandaloneNounImage nounId={BigNumber.from(props.nounId)} />
-                <h2>Noun: {props.nounId}</h2>
-                <ul className={classes.traitsList}>
-                    {Object.values(nounTraitsOrdered).map((part,index) => {    
-                        const partType = traitTypeKeys(nounTraitsOrdered[index].partType);
-                        return (
-                            <li>
-                                <div 
-                                    className={classes.thumbnail}
-                                    style={{
-                                        backgroundColor: backgroundColor ? backgroundColor : 'transparent',
-                                    }}
+        <>  
+            <motion.div 
+                className={classes.detailWrap}
+                variants={sidebarVariants}
+                initial="closed"
+                animate="open"
+                exit="exit"
+                layout
+                style={{
+                    background: backgroundColor,
+                }}
+                >
+                <motion.div 
+                    variants={sidebarInnerVariants}
+                    >
+                    <motion.div className={classes.detail}>
+                        <button className={classes.close} onClick={() => props.handleNounDetail('close')}>
+                            <XIcon className={classes.icon} />
+                        </button>
+                        <AnimatePresence exitBeforeEnter>
+                            {props.isVisible && props.nounId && (
+                                <motion.div
+                                    variants={detailsVariants}
+                                    initial="initial"
+                                    animate="animate"
+                                    exit="exit"
+                                    key={props.nounId}
                                 >
-                                    <StandalonePart partType={partType} partIndex={part.partIndex} />
-                                </div>
-                                <div className={classes.description}>
-                                    <p className='small'><span>{traitKeyToLocalizedTraitKeyFirstLetterCapitalized(nounTraitsOrdered[index].partType)}</span></p>
-                                    <p><strong>{nounTraitsOrdered[index].partName}</strong></p>
-                                </div>
-                            </li>
-                        )
-                    })}
-                </ul>
-            </div>
-        </div>
+                                    <motion.div
+                                        className={classes.detailNounImage}
+                                    >
+                                        <StandaloneNounImage nounId={BigNumber.from(props.nounId)} />
+                                    </motion.div>
+                                    
+                                    <motion.div className={classes.nounDetails}>
+                                        <motion.h2
+                                            initial={{
+                                                opacity: 0
+                                            }}
+                                            animate={{
+                                                opacity: 1
+                                            }}
+                                        >
+                                            Noun {props.nounId}
+                                        </motion.h2>
+                                        <motion.ul 
+                                            className={classes.traitsList}
+                                            variants={list}
+                                            initial="hidden"
+                                            animate="visible"
+                                        >
+                                            {Object.values(nounTraitsOrdered).map((part,index) => {    
+                                                const partType = traitTypeKeys(nounTraitsOrdered[index].partType);
+                                                return (
+                                                    <motion.li
+                                                        variants={item}
+                                                    >
+                                                        <div 
+                                                            className={classes.thumbnail}
+                                                            style={{
+                                                                backgroundColor: backgroundColor ? backgroundColor : 'transparent',
+                                                            }}
+                                                        >
+                                                            <StandalonePart partType={partType} partIndex={part.partIndex} />
+                                                        </div>
+                                                        <div className={classes.description}>
+                                                            <p className='small'><span>{traitKeyToLocalizedTraitKeyFirstLetterCapitalized(nounTraitsOrdered[index].partType)}</span></p>
+                                                            <p><strong>{nounTraitsOrdered[index].partName}</strong></p>
+                                                        </div>
+                                                    </motion.li>
+                                                )
+                                            })}
+                                        </motion.ul>
+                                    </motion.div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </motion.div>
+                </motion.div>
+            </motion.div>
+        </>
     )
 }
 

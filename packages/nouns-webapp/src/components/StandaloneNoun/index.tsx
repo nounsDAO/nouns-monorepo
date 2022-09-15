@@ -45,10 +45,10 @@ export const StandaloneNounImage: React.FC<StandaloneNounProps> = (props: Standa
 
   return (
     <>
-      <Image
+        <Image
           src={noun ? noun.image : ''}
           fluid
-        />
+        />      
     </>
   );
 };
