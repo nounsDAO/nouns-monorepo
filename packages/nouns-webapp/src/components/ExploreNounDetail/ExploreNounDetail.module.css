@@ -59,6 +59,16 @@
 }
 .nounBirthday > div {
     opacity: 0.6;
+    font-size: 0.8rem;
+    font-family: 'PT Root UI';
+    font-weight: bold;
+    /* override fixed dimensions for use on auction page */
+    width: auto;
+    height: auto;
+    display: block;
+}
+.nounBirthday > div img {
+    display: none;
 }
 
 h2 {

@@ -52,7 +52,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     const isMobile: boolean = width <= 991;
 
     const currentAuction: IAuction | undefined = useAppSelector(state => state.auction.activeAuction);
-    const nounCount = BigNumber.from(currentAuction?.nounId).toNumber();
+    const nounCount = currentAuction ? BigNumber.from(currentAuction?.nounId).toNumber() + 1 : 400;
 
     const handleWindowSizeChange = () => {
         setWidth(window.innerWidth);
@@ -167,9 +167,9 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                     }}
                 >
                     <div className={classes.nav}>
-                        <button className={classes.iconTextButton}><FontAwesomeIcon icon={faSort} />Auction date</button>
-                        <h3><Trans>explore all {nounCount} Nouns</Trans></h3>
+                        <h3><Trans>explore all <strong>{nounCount}</strong> Nouns</Trans></h3>
                         <div className={classes.sizing}>
+                            <button className={classes.iconTextButton}><FontAwesomeIcon icon={faSort} />Auction date</button>
                             {sizeOptions.map((option, i) => {
                                 return (
                                     <button 
