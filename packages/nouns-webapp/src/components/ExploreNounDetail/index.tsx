@@ -243,7 +243,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                         
                                         <div className={classes.infoWrap}>
                                             <button
-                                                onClick={() => props.handleNounDetail(props.nounId && props.nounId - 1, 'visible')}
+                                                onClick={() => props.handleNounDetail(props.nounId !== undefined && props.nounId - 1, 'visible')}
                                                 className={classes.arrow}
                                                 // className={isCool ? classes.leftArrowCool : classes.leftArrowWarm}
                                                 disabled={props.isFirstAuction}
@@ -263,7 +263,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                                 <NounInfoRowBirthday nounId={props.nounId} />    
                                             </motion.div>
                                             <button
-                                                onClick={() => props.handleNounDetail(props.nounId && props.nounId + 1, 'visible')}
+                                                onClick={() => props.handleNounDetail(props.nounId !== undefined && props.nounId + 1, 'visible')}
                                                 className={classes.arrow}
                                                 disabled={props.isLastAuction}
                                             >
