@@ -31,6 +31,7 @@
 
 .detailNounImage {
     text-align: center;
+    margin-top: 10vh;
 }
 
 .close {
@@ -220,5 +221,8 @@ h2 {
         position: fixed;
         top: 15px;
         right: 15px;
+    }
+    .detailNounImage {
+        margin-top: 15px;
     }
 }
