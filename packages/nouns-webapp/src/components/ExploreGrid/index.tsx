@@ -84,6 +84,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     const keyboardNext: boolean = useKeyPress("ArrowRight");
     const keyboardUp: boolean = useKeyPress("ArrowUp");
     const keyboardDown: boolean = useKeyPress("ArrowDown");
+    const keyboardEsc: boolean = useKeyPress("Escape");
 
     const buttonsRef = useRef<(HTMLButtonElement | null)[]>([])
     const focusNoun = (index: number | undefined) => {
@@ -91,7 +92,6 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     };
 
     const handleScrollTo = (nounId: number) => {
-        // ref.current?.scrollIntoView({behavior: 'smooth'});
         nounId && buttonsRef.current[nounId]?.scrollIntoView({behavior: 'smooth'});
     };
 
@@ -124,6 +124,10 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     }
     
     useEffect(() => {
+        if (keyboardEsc) {
+            setIsSidebarVisible(false);
+            setActiveNoun(undefined)
+        }
         if (isSortReversed) {
             if (keyboardPrev) {
                 focusNoun(activeNoun && activeNoun + 1);
@@ -172,7 +176,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
             }
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [keyboardPrev, keyboardNext, keyboardUp, keyboardDown]);
+    }, [keyboardPrev, keyboardNext, keyboardUp, keyboardDown, keyboardEsc]);
 
     const iconLargeGrid = <><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#000" d="M0 2.571A2.571 2.571 0 0 1 2.571 0h5.143a2.571 2.571 0 0 1 2.572 2.571v5.143a2.571 2.571 0 0 1-2.572 2.572H2.571A2.571 2.571 0 0 1 0 7.714V2.571Zm13.714 0A2.572 2.572 0 0 1 16.286 0h5.143A2.571 2.571 0 0 1 24 2.571v5.143a2.571 2.571 0 0 1-2.571 2.572h-5.143a2.572 2.572 0 0 1-2.572-2.572V2.571ZM0 16.286a2.572 2.572 0 0 1 2.571-2.572h5.143a2.572 2.572 0 0 1 2.572 2.572v5.143A2.571 2.571 0 0 1 7.714 24H2.571A2.571 2.571 0 0 1 0 21.429v-5.143Zm13.714 0a2.572 2.572 0 0 1 2.572-2.572h5.143A2.571 2.571 0 0 1 24 16.286v5.143A2.57 2.57 0 0 1 21.429 24h-5.143a2.571 2.571 0 0 1-2.572-2.571v-5.143Z"/></svg></>;
     const iconSmallGrid = <><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#000" d="M0 1.714A1.714 1.714 0 0 1 1.714 0h3.429a1.714 1.714 0 0 1 1.714 1.714v3.429a1.714 1.714 0 0 1-1.714 1.714H1.714A1.714 1.714 0 0 1 0 5.143V1.714Zm8.571 0A1.714 1.714 0 0 1 10.286 0h3.428a1.714 1.714 0 0 1 1.715 1.714v3.429a1.714 1.714 0 0 1-1.715 1.714h-3.428A1.714 1.714 0 0 1 8.57 5.143V1.714Zm8.572 0A1.714 1.714 0 0 1 18.857 0h3.429A1.714 1.714 0 0 1 24 1.714v3.429a1.714 1.714 0 0 1-1.714 1.714h-3.429a1.714 1.714 0 0 1-1.714-1.714V1.714ZM0 10.286A1.714 1.714 0 0 1 1.714 8.57h3.429a1.714 1.714 0 0 1 1.714 1.715v3.428a1.714 1.714 0 0 1-1.714 1.715H1.714A1.714 1.714 0 0 1 0 13.714v-3.428Zm8.571 0a1.714 1.714 0 0 1 1.715-1.715h3.428a1.714 1.714 0 0 1 1.715 1.715v3.428a1.714 1.714 0 0 1-1.715 1.715h-3.428a1.714 1.714 0 0 1-1.715-1.715v-3.428Zm8.572 0a1.714 1.714 0 0 1 1.714-1.715h3.429A1.714 1.714 0 0 1 24 10.286v3.428a1.714 1.714 0 0 1-1.714 1.715h-3.429a1.714 1.714 0 0 1-1.714-1.715v-3.428ZM0 18.857a1.714 1.714 0 0 1 1.714-1.714h3.429a1.714 1.714 0 0 1 1.714 1.714v3.429A1.714 1.714 0 0 1 5.143 24H1.714A1.714 1.714 0 0 1 0 22.286v-3.429Zm8.571 0a1.714 1.714 0 0 1 1.715-1.714h3.428a1.714 1.714 0 0 1 1.715 1.714v3.429A1.714 1.714 0 0 1 13.714 24h-3.428a1.714 1.714 0 0 1-1.715-1.714v-3.429Zm8.572 0a1.714 1.714 0 0 1 1.714-1.714h3.429A1.714 1.714 0 0 1 24 18.857v3.429A1.714 1.714 0 0 1 22.286 24h-3.429a1.714 1.714 0 0 1-1.714-1.714v-3.429Z"/></svg></>;  
@@ -201,7 +205,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                     }}
                 >
                     <div className={classes.nav}>
-                        <h3><Trans>explore all <strong>{nounCount}</strong> Nouns</Trans></h3>
+                        <h3><Trans>explore all</Trans> <strong>{nounCount}</strong> Nouns</h3>
                         <div className={classes.sizing}>
                             <button 
                                 className={classes.iconTextButton}

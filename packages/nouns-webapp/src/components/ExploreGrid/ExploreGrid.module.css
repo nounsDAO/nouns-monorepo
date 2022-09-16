@@ -120,6 +120,7 @@ li.activeNoun img, li.activeNoun:hover img {
 }
 
 .nav button {
+    color: var(--brand-cool-light-text);
     border: 1px solid var(--brand-cool-border);
     border-radius: 10px;
     padding: .5rem;
@@ -142,6 +143,7 @@ li.activeNoun img, li.activeNoun:hover img {
 
 .nav button:hover {
     background-color: var(--brand-cool-accent);
+    color: var(--brand-cool-dark-text);
 }
 
 .nav button:hover svg {
