@@ -21,6 +21,11 @@
     width: 10%;
     transition: border 0.5s ease-in-out;
     border: transparent 3px solid;
+    animation-name: animateIn;
+    animation-duration: 150ms;
+    animation-delay: calc(var(--animation-order) * 50ms);
+    animation-fill-mode: both;
+    animation-timing-function: ease-in-out;
 }
 
 .exploreGrid li:hover img {
@@ -60,11 +65,6 @@ li.activeNoun img, li.activeNoun:hover img {
     transform: scale(0.6);
     border-radius: 10%;
     transition: transform 0.15s ease-in-out;
-}
-.infoWrap {
-    display: flex;
-    justify-content: center;
-    align-content: space-between;
 }
 
 .detailWrap {
@@ -174,11 +174,12 @@ li.activeNoun img, li.activeNoun:hover img {
 @keyframes animateIn {
     0% {
       opacity: 0;
-      transform: scale(0.6) translateY(-8px);
+      transform: translateY(25px);
     }
     
     100% {
       opacity: 1;
+      transform: translateY(0px);
     }
 }
 

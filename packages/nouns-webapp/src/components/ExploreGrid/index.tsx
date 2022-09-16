@@ -4,7 +4,7 @@ import { StandaloneNounImage } from '../../components/StandaloneNoun';
 import classes from './ExploreGrid.module.css';
 import cx from 'classnames';
 import ExploreNounDetail from '../ExploreNounDetail';
-import {AnimatePresence, motion} from 'framer-motion/dist/framer-motion';
+import {AnimatePresence, motion, useInView} from 'framer-motion/dist/framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSort } from '@fortawesome/free-solid-svg-icons';
 import { Auction as IAuction } from '../../wrappers/nounsAuction';
@@ -107,41 +107,68 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         },
     }
     const gridItemVariants = {
+        initial: {
+            opacity: 0,
+            // y: 50,
+        },
         small: { 
             width: "5%", 
+            opacity: 1,
+            y: 0,
         },
         standard: { 
             width: "14.28%",
+            opacity: 1,
+            // y: 0,
         },
     }
-
+    
     useEffect(() => {
-        if (keyboardPrev) {
-            focusNoun(activeNoun && activeNoun - 1);
-        }
-        if (keyboardNext) {
-            focusNoun(activeNoun && activeNoun + 1);
-        }
-        if (keyboardUp) {
-            if (activeSizeOption === "small") {
-                focusNoun(activeNoun && activeNoun - 20);
+        if (isSortReversed) {
+            if (keyboardPrev) {
+                focusNoun(activeNoun && activeNoun + 1);
             }
-            if (activeSizeOption === "medium") {
-                focusNoun(activeNoun && activeNoun - 10);
+            if (keyboardNext) {
+                focusNoun(activeNoun && activeNoun - 1);
             }
-            if (activeSizeOption === "large") {
-                focusNoun(activeNoun && activeNoun - 7);
+            if (keyboardUp) {
+                if (activeSizeOption === "small") {
+                    focusNoun(activeNoun && activeNoun + 20);
+                }
+                if (activeSizeOption === "large") {
+                    focusNoun(activeNoun && activeNoun + 7);
+                }
             }
-        }
-        if (keyboardDown) {
-            if (activeSizeOption === "small") {
-                focusNoun(activeNoun && activeNoun + 20);
+            if (keyboardDown) {
+                if (activeSizeOption === "small") {
+                    focusNoun(activeNoun && activeNoun - 20);
+                }
+                if (activeSizeOption === "large") {
+                    focusNoun(activeNoun && activeNoun - 7);
+                }
             }
-            if (activeSizeOption === "medium") {
-                focusNoun(activeNoun && activeNoun + 10);
+        } else {
+            if (keyboardPrev) {
+                focusNoun(activeNoun && activeNoun - 1);
             }
-            if (activeSizeOption === "large") {
-                focusNoun(activeNoun && activeNoun + 7);
+            if (keyboardNext) {
+                focusNoun(activeNoun && activeNoun + 1);
+            }
+            if (keyboardUp) {
+                if (activeSizeOption === "small") {
+                    focusNoun(activeNoun && activeNoun - 20);
+                }
+                if (activeSizeOption === "large") {
+                    focusNoun(activeNoun && activeNoun - 7);
+                }
+            }
+            if (keyboardDown) {
+                if (activeSizeOption === "small") {
+                    focusNoun(activeNoun && activeNoun + 20);
+                }
+                if (activeSizeOption === "large") {
+                    focusNoun(activeNoun && activeNoun + 7);
+                }
             }
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -149,9 +176,12 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
 
     const iconLargeGrid = <><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#000" d="M0 2.571A2.571 2.571 0 0 1 2.571 0h5.143a2.571 2.571 0 0 1 2.572 2.571v5.143a2.571 2.571 0 0 1-2.572 2.572H2.571A2.571 2.571 0 0 1 0 7.714V2.571Zm13.714 0A2.572 2.572 0 0 1 16.286 0h5.143A2.571 2.571 0 0 1 24 2.571v5.143a2.571 2.571 0 0 1-2.571 2.572h-5.143a2.572 2.572 0 0 1-2.572-2.572V2.571ZM0 16.286a2.572 2.572 0 0 1 2.571-2.572h5.143a2.572 2.572 0 0 1 2.572 2.572v5.143A2.571 2.571 0 0 1 7.714 24H2.571A2.571 2.571 0 0 1 0 21.429v-5.143Zm13.714 0a2.572 2.572 0 0 1 2.572-2.572h5.143A2.571 2.571 0 0 1 24 16.286v5.143A2.57 2.57 0 0 1 21.429 24h-5.143a2.571 2.571 0 0 1-2.572-2.571v-5.143Z"/></svg></>;
     const iconSmallGrid = <><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#000" d="M0 1.714A1.714 1.714 0 0 1 1.714 0h3.429a1.714 1.714 0 0 1 1.714 1.714v3.429a1.714 1.714 0 0 1-1.714 1.714H1.714A1.714 1.714 0 0 1 0 5.143V1.714Zm8.571 0A1.714 1.714 0 0 1 10.286 0h3.428a1.714 1.714 0 0 1 1.715 1.714v3.429a1.714 1.714 0 0 1-1.715 1.714h-3.428A1.714 1.714 0 0 1 8.57 5.143V1.714Zm8.572 0A1.714 1.714 0 0 1 18.857 0h3.429A1.714 1.714 0 0 1 24 1.714v3.429a1.714 1.714 0 0 1-1.714 1.714h-3.429a1.714 1.714 0 0 1-1.714-1.714V1.714ZM0 10.286A1.714 1.714 0 0 1 1.714 8.57h3.429a1.714 1.714 0 0 1 1.714 1.715v3.428a1.714 1.714 0 0 1-1.714 1.715H1.714A1.714 1.714 0 0 1 0 13.714v-3.428Zm8.571 0a1.714 1.714 0 0 1 1.715-1.715h3.428a1.714 1.714 0 0 1 1.715 1.715v3.428a1.714 1.714 0 0 1-1.715 1.715h-3.428a1.714 1.714 0 0 1-1.715-1.715v-3.428Zm8.572 0a1.714 1.714 0 0 1 1.714-1.715h3.429A1.714 1.714 0 0 1 24 10.286v3.428a1.714 1.714 0 0 1-1.714 1.715h-3.429a1.714 1.714 0 0 1-1.714-1.715v-3.428ZM0 18.857a1.714 1.714 0 0 1 1.714-1.714h3.429a1.714 1.714 0 0 1 1.714 1.714v3.429A1.714 1.714 0 0 1 5.143 24H1.714A1.714 1.714 0 0 1 0 22.286v-3.429Zm8.571 0a1.714 1.714 0 0 1 1.715-1.714h3.428a1.714 1.714 0 0 1 1.715 1.714v3.429A1.714 1.714 0 0 1 13.714 24h-3.428a1.714 1.714 0 0 1-1.715-1.714v-3.429Zm8.572 0a1.714 1.714 0 0 1 1.714-1.714h3.429A1.714 1.714 0 0 1 24 18.857v3.429A1.714 1.714 0 0 1 22.286 24h-3.429a1.714 1.714 0 0 1-1.714-1.714v-3.429Z"/></svg></>;  
+    const containerRef = useRef(null)
+    const isInView = useInView(containerRef)
+    const [isSortReversed, setIsSortReversed] = useState<boolean>(false);
 
     return (
-        <div className={classes.exploreWrap}>
+        <div className={classes.exploreWrap} ref={containerRef}>
             <div 
                 className={classes.contentWrap}
                 style={{
@@ -173,7 +203,13 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                     <div className={classes.nav}>
                         <h3><Trans>explore all <strong>{nounCount}</strong> Nouns</Trans></h3>
                         <div className={classes.sizing}>
-                            <button className={classes.iconTextButton}><FontAwesomeIcon icon={faSort} />Auction date</button>
+                            <button 
+                                className={classes.iconTextButton}
+                                onClick={() => setIsSortReversed(!isSortReversed)}
+                            >
+                                <FontAwesomeIcon icon={faSort} />
+                                Auction date
+                            </button>
                             {sizeOptions.map((option, i) => {
                                 return (
                                     <button 
@@ -193,9 +229,46 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                     </div>   
                     <motion.div 
                         className={cx(classes.exploreGrid, isFullView && classes.fullViewGrid, classes[activeSizeOption])}
-                    >
-                        <motion.ul
+                    >   <AnimatePresence exitBeforeEnter>
+                        {isSortReversed ? (
+                            <motion.ul
+                                layout
+                                exit={{
+                                    opacity: 0
+                                }}
+                            >
+                                {[...Array(nounCount)].map((x, i) =>
+                                    <motion.li 
+                                        style={{ 
+                                            "--animation-order": Math.abs(i - nounCount), 
+                                        } as React.CSSProperties
+                                        }
+                                        className={i === activeNoun ? classes.activeNoun : ''} 
+                                        key={i}
+                                        layout
+                                        variants={gridItemVariants}
+                                        initial="standard"
+                                        animate={isInView && (activeSizeOption === "small") ? "small" : "standard"}
+                                        transition={{ 
+                                            stiffness: '50',
+                                        }}
+                                    >
+                                        <button 
+                                            ref={el => buttonsRef.current[i] = el} 
+                                            onFocus={() => handleNounDetail(i, i === activeNoun ? 'close' : 'visible')}
+                                            onClick={event => focusNoun(i)}
+                                            >
+                                            <StandaloneNounImage nounId={BigNumber.from(i)} />
+                                        </button>
+                                    </motion.li>
+                                ).reverse()}      
+                        </motion.ul>
+                    ) : (
+                        <motion.ul 
                             layout
+                            exit={{
+                                opacity: 0
+                            }}
                         >
                             {[...Array(nounCount)].map((x, i) =>
                                 <motion.li 
@@ -207,12 +280,12 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                     key={i}
                                     layout
                                     variants={gridItemVariants}
-                                    initial="large"
-                                    animate={activeSizeOption === "small" ? "small" : "standard"}
+                                    initial="standard"
+                                    animate={isInView && (activeSizeOption === "small") ? "small" : "standard"}
                                     transition={{ 
                                         stiffness: '50',
                                     }}
-                                >   
+                                >
                                     <button 
                                         ref={el => buttonsRef.current[i] = el} 
                                         onFocus={() => handleNounDetail(i, i === activeNoun ? 'close' : 'visible')}
@@ -222,7 +295,11 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                     </button>
                                 </motion.li>
                             )}
-                        </motion.ul>
+                            </motion.ul>
+                        )}
+                        </AnimatePresence>
+                    
+                    
                     </motion.div>
                     </motion.div>
                     <AnimatePresence>

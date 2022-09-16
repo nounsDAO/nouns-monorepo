@@ -76,7 +76,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
     ];
 
     const seed = useNounSeed(BigNumber.from(props.nounId));
-    console.log("seed", seed);
+
     const nounTraitsOrdered = [
         { 
             partType: 'head',
@@ -191,8 +191,6 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
             },
         }
     }    
-
-    console.log(props.isFirstAuction)
 
     return (
         <>  
