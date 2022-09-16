@@ -15,6 +15,8 @@ interface ExploreNounDetailProps {
     handleNounDetail: Function;
     isVisible: boolean;
     handleScrollTo: Function;
+    isLastAuction: boolean;
+    isFirstAuction: boolean;
 }
 
 const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
@@ -190,6 +192,8 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
         }
     }    
 
+    console.log(props.isFirstAuction)
+
     return (
         <>  
             <AnimatePresence>
@@ -234,18 +238,40 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                     </motion.div>
                                     
                                     <motion.div className={classes.nounDetails}>
-                                        <motion.div
-                                            className={classes.nounBirthday}
-                                            initial={{
-                                                opacity: 0
-                                            }}
-                                            animate={{
-                                                opacity: 1
-                                            }}
-                                        >
-                                            <h2>Noun {props.nounId}</h2>
-                                            <NounInfoRowBirthday nounId={props.nounId} />    
-                                        </motion.div>
+                                    <div className={classes.navArrowsContainer}>
+                                        
+                                        
+                                    </div>
+                                        
+                                        <div className={classes.infoWrap}>
+                                            <button
+                                                onClick={() => props.handleNounDetail(props.nounId && props.nounId - 1, 'visible')}
+                                                className={classes.arrow}
+                                                // className={isCool ? classes.leftArrowCool : classes.leftArrowWarm}
+                                                disabled={props.isFirstAuction}
+                                                >
+                                                ←
+                                            </button>
+                                            <motion.div
+                                                className={classes.nounBirthday}
+                                                initial={{
+                                                    opacity: 0
+                                                }}
+                                                animate={{
+                                                    opacity: 1
+                                                }}
+                                            >
+                                                <h2>Noun {props.nounId}</h2>
+                                                <NounInfoRowBirthday nounId={props.nounId} />    
+                                            </motion.div>
+                                            <button
+                                                onClick={() => props.handleNounDetail(props.nounId && props.nounId + 1, 'visible')}
+                                                className={classes.arrow}
+                                                disabled={props.isLastAuction}
+                                            >
+                                                →
+                                            </button>
+                                        </div>
                                         
                                         <motion.ul 
                                             className={classes.traitsList}

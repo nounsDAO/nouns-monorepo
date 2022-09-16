@@ -17,12 +17,18 @@
     transition: background-color 0.25s ease-in-out;
     position: sticky;
     top: -5px;
-    padding: 30px 15px;
+    /* padding: 30px 15px; */
     box-shadow: 0px 10px 24px rgba(0, 0, 0, 0.17);
     border-radius: 8px;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 }
+
+.detail > div {
+    height: 101vh;
+    overflow-y: scroll;
+}
+
 .detailNounImage {
     text-align: center;
 }
@@ -47,15 +53,40 @@
     fill: #000;
 }
 
-.nounBirthday {
+.infoWrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin: 0 30px;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
-    padding: 7px 15px;
+    padding: 7px;
     background: rgba(255,255,255,0.2);
+    text-align: center;
+}
+.infoWrap .arrow {
+    -webkit-appearance: none;
+    padding: 0;
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    border: none;
+    background-size: contain;
+    background-repeat: no-repeat;
+    font-size: large;
+    border-radius: 50%;
+    color: var(--brand-cool-dark-text);
+    background-color: var(--brand-warm-accent);
+    font-weight: bold;
+}
+
+.infoWrap .arrow:disabled {
+    opacity: 0.3;
+}
+
+.nounBirthday {
     position: relative;
     z-index: 1;
-    text-align: center;
 }
 .nounBirthday > div {
     opacity: 0.6;
@@ -75,6 +106,7 @@ h2 {
     font-size: 24px;
     margin: 0;
 }
+
 
 .traitsList {
     position: relative;
@@ -116,10 +148,17 @@ h2 {
 }
 .traitsList .thumbnail {
     border-radius: 10%;
+    overflow: hidden;
 }
 
 .detail h2 {
     font-family: 'Londrina Solid';
+}
+
+.detailNounImage img {
+    max-height: 40vh;
+    height: 100%;
+    cursor: pointer;
 }
 
 /* Treat more like a modal on mobile */
@@ -163,6 +202,10 @@ h2 {
         /* z-index: 1; */
         /* position: absolute; */
     }  
+    .detail > div {
+        height: auto;
+        overflow-y: visible;
+    }
     .backdrop {
         position: fixed;
         -webkit-backdrop-filter: blur(10px);
@@ -177,10 +220,5 @@ h2 {
         position: fixed;
         top: 15px;
         right: 15px;
-    }
-    .detailNounImage img {
-        max-height: 40vh;
-        height: 100%;
-        cursor: pointer;
     }
 }

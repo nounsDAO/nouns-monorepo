@@ -234,7 +234,14 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                     </AnimatePresence>
                     <AnimatePresence>
                         {isSidebarVisible && (
-                            <ExploreNounDetail handleNounDetail={handleNounDetail} nounId={activeNoun} isVisible={isSidebarVisible} handleScrollTo={handleScrollTo} />
+                            <ExploreNounDetail 
+                                handleNounDetail={handleNounDetail} 
+                                nounId={activeNoun} 
+                                isVisible={isSidebarVisible} 
+                                handleScrollTo={handleScrollTo} 
+                                isFirstAuction={activeNoun === 0}
+                                isLastAuction={activeNoun === nounCount - 1}
+                            />
                                 
                         )}
                     </AnimatePresence>

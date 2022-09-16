@@ -61,6 +61,11 @@ li.activeNoun img, li.activeNoun:hover img {
     border-radius: 10%;
     transition: transform 0.15s ease-in-out;
 }
+.infoWrap {
+    display: flex;
+    justify-content: center;
+    align-content: space-between;
+}
 
 .detailWrap {
     position: absolute;
