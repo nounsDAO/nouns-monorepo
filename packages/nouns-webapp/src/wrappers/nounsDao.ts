@@ -341,7 +341,7 @@ export const useAllProposalsViaSubgraph = (): ProposalData => {
   const { timestamp } = useBlockMeta();
 
   const proposals = data?.proposals?.map((proposal: ProposalSubgraphEntity) => {
-    const description = proposal.description?.replace(/\\n/g, '\n');
+    const description = proposal.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, '');
     return {
       id: proposal.id,
       title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
