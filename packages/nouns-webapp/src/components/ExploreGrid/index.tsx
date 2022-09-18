@@ -212,7 +212,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                 onClick={() => setIsSortReversed(!isSortReversed)}
                             >
                                 <FontAwesomeIcon icon={faSort} />
-                                Auction date
+                                Noun ID
                             </button>
                             {sizeOptions.map((option, i) => {
                                 return (
