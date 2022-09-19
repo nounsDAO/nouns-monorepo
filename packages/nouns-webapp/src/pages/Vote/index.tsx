@@ -33,12 +33,12 @@ import { getNounVotes } from '../../utils/getNounsVotes';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
+import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(advanced);
 
-const AVERAGE_BLOCK_TIME_IN_SECS = 13;
 
 const VotePage = ({
   match: {
