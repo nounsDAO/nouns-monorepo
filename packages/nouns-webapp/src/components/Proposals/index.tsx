@@ -22,7 +22,7 @@ import en from 'dayjs/locale/en';
 dayjs.extend(relativeTime);
 
 const getCountdownCopy = (proposal: Proposal, currentBlock: number, locale: SupportedLocale) => {
-  const AVERAGE_BLOCK_TIME_IN_SECS = 13;
+  const AVERAGE_BLOCK_TIME_IN_SECS = 12;
   const timestamp = Date.now();
   const startDate =
     proposal && timestamp && currentBlock
