@@ -108,42 +108,42 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
     const bgcolors = ["#d5d7e1", "#e1d7d5"];
     const backgroundColor = bgcolors[seed.background];
 
-    const list = {
-        visible: { 
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.06,
-                when: "beforeChildren",
-            },
-        },
-        hidden: { 
-            opacity: 0,
-            transition: {
-                when: "afterChildren",
-              },
-        },
-      }
+    // const list = {
+    //     visible: { 
+    //         opacity: 1,
+    //         transition: {
+    //             staggerChildren: 0.02,
+    //             when: "beforeChildren",
+    //         },
+    //     },
+    //     hidden: { 
+    //         opacity: 0,
+    //         transition: {
+    //             when: "afterChildren",
+    //           },
+    //     },
+    //   }
       
-      const item = {
-        visible: { opacity: 1, y: 0 },
-        hidden: { opacity: 0, y: -50 },
-      }
+    //   const item = {
+    //     visible: { opacity: 1, y: 0 },
+    //     hidden: { opacity: 0, y: -50 },
+    //   }
 
-      const detailsVariants = {
-        initial: {
-            opacity: 0
-        },
-        animate: {
-            opacity: 1,
-        },
-        exit: {
-            y: 200,
-            opacity: 0,
-            transition: {
-                duration: 0.1
-            }
-        }
-      }
+    //   const detailsVariants = {
+    //     initial: {
+    //         opacity: 0
+    //     },
+    //     animate: {
+    //         opacity: 1,
+    //     },
+    //     exit: {
+    //         y: 200,
+    //         opacity: 0,
+    //         transition: {
+    //             duration: 0.1
+    //         }
+    //     }
+    //   }
 
     const sidebarInnerVariants = {
         closed: { 
@@ -152,17 +152,17 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
         open: { 
             opacity: 1,
             y: 0,
-            transition: {
-                delay: 0.1,
-                duration: 0.1
-            }
+            // transition: {
+            //     delay: 0.05,
+            //     duration: 0.05
+            // }
         },
         exit: {
             y: 100,
             opacity: 0,
-            transition: {
-                duration: 0.1
-            }
+            // transition: {
+            //     duration: 0.05
+            // }
         }
     }
 
@@ -177,8 +177,8 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
             x: 0,
             y: 0,
             transition: {
-                duration: 0.15,
-                delayChildren: 0.2,
+                duration: 0.1,
+                delayChildren: 0.05,
             }
         },
         exit: {
@@ -186,7 +186,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
             x: isMobile ? 0 : 100,
             y: isMobile ? "100%" : 0,
             transition: {
-                duration: 0.15,
+                duration: 0.1,
                 when: "afterChildren",
             },
         }
@@ -222,10 +222,10 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                         <AnimatePresence exitBeforeEnter>
                             {(props.nounId || props.nounId === 0) && (
                                 <motion.div
-                                    variants={detailsVariants}
-                                    initial="initial"
-                                    animate="animate"
-                                    exit="exit"
+                                    // variants={detailsVariants}
+                                    // initial="initial"
+                                    // animate="animate"
+                                    // exit="exit"
                                     key={props.nounId}
                                 >
                                     <motion.div
@@ -252,12 +252,12 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                             </button>
                                             <motion.div
                                                 className={classes.nounBirthday}
-                                                initial={{
-                                                    opacity: 0
-                                                }}
-                                                animate={{
-                                                    opacity: 1
-                                                }}
+                                                // initial={{
+                                                //     opacity: 0
+                                                // }}
+                                                // animate={{
+                                                //     opacity: 1
+                                                // }}
                                             >
                                                 <h2>Noun {props.nounId}</h2>
                                                 <NounInfoRowBirthday nounId={props.nounId} />    
@@ -273,16 +273,16 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                         
                                         <motion.ul 
                                             className={classes.traitsList}
-                                            variants={list}
-                                            initial="hidden"
-                                            animate="visible"
+                                            // variants={list}
+                                            // initial="hidden"
+                                            // animate="visible"
                                             layout
                                         >
                                             {Object.values(nounTraitsOrdered).map((part,index) => {    
                                                 const partType = traitTypeKeys(nounTraitsOrdered[index].partType);
                                                 return (
                                                     <motion.li
-                                                        variants={item}
+                                                        // variants={item}
                                                         key={index}
                                                     >
                                                         <div 

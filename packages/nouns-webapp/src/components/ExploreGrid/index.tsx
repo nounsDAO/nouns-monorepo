@@ -44,6 +44,7 @@ function useKeyPress(targetKey: string) {
     return keyPressed;
   }
 
+
 const ExploreGrid: React.FC<ExploreGridProps> = props => {
     // borrowed from /src/pages/Playground/NounModal/index.tsx
     const [width, setWidth] = useState<number>(window.innerWidth);
@@ -70,12 +71,14 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     const [activeSizeOption, setSizeOption] = useState<string>("large");
     const sizeOptions = ["small", "large"];
 
-    const [activeNoun, setActiveNoun] = useState<number | undefined>();
+    const [selectedNoun, setSelectedNoun] = useState<number | undefined>();
+    const [activeNoun, setActiveNoun] = useState<number | undefined>(selectedNoun);
+    
     
     const handleNounDetail = (nounId: number, sidebarVisibility: string) => {
-        nounId > -1 && nounId < nounCount && setActiveNoun(nounId);
+        nounId > -1 && nounId < nounCount && setSelectedNoun(nounId);
         sidebarVisibility === "visible" ? setIsSidebarVisible(true) : setIsSidebarVisible(false);
-        sidebarVisibility !== "visible" && setActiveNoun(undefined);
+        sidebarVisibility !== "visible" && setSelectedNoun(undefined);
     }
 
     const keyboardPrev: boolean = useKeyPress("ArrowLeft");
@@ -124,52 +127,52 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     useEffect(() => {
         if (keyboardEsc) {
             setIsSidebarVisible(false);
-            setActiveNoun(undefined)
+            setSelectedNoun(undefined)
         }
         if (sortOrder === "date-descending") {
             if (keyboardPrev) {
-                focusNoun(activeNoun && activeNoun + 1);
+                focusNoun(selectedNoun && selectedNoun + 1);
             }
             if (keyboardNext) {
-                focusNoun(activeNoun && activeNoun - 1);
+                focusNoun(selectedNoun && selectedNoun - 1);
             }
             if (keyboardUp) {
                 if (activeSizeOption === "small") {
-                    focusNoun(activeNoun && activeNoun + 20);
+                    focusNoun(selectedNoun && selectedNoun + 20);
                 }
                 if (activeSizeOption === "large") {
-                    focusNoun(activeNoun && activeNoun + 7);
+                    focusNoun(selectedNoun && selectedNoun + 7);
                 }
             }
             if (keyboardDown) {
                 if (activeSizeOption === "small") {
-                    focusNoun(activeNoun && activeNoun - 20);
+                    focusNoun(selectedNoun && selectedNoun - 20);
                 }
                 if (activeSizeOption === "large") {
-                    focusNoun(activeNoun && activeNoun - 7);
+                    focusNoun(selectedNoun && selectedNoun - 7);
                 }
             }
         } else {
             if (keyboardPrev) {
-                focusNoun(activeNoun && activeNoun - 1);
+                focusNoun(selectedNoun && selectedNoun - 1);
             }
             if (keyboardNext) {
-                focusNoun(activeNoun && activeNoun + 1);
+                focusNoun(selectedNoun && selectedNoun + 1);
             }
             if (keyboardUp) {
                 if (activeSizeOption === "small") {
-                    focusNoun(activeNoun && activeNoun - 20);
+                    focusNoun(selectedNoun && selectedNoun - 20);
                 }
                 if (activeSizeOption === "large") {
-                    focusNoun(activeNoun && activeNoun - 7);
+                    focusNoun(selectedNoun && selectedNoun - 7);
                 }
             }
             if (keyboardDown) {
                 if (activeSizeOption === "small") {
-                    focusNoun(activeNoun && activeNoun + 20);
+                    focusNoun(selectedNoun && selectedNoun + 20);
                 }
                 if (activeSizeOption === "large") {
-                    focusNoun(activeNoun && activeNoun + 7);
+                    focusNoun(selectedNoun && selectedNoun + 7);
                 }
             }
         }
@@ -280,7 +283,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                 "--animation-order": Math.abs(i - nounCount), 
                                             } as React.CSSProperties
                                             }
-                                            className={i === activeNoun ? classes.activeNoun : ''} 
+                                            className={i === selectedNoun ? classes.activeNoun : ''} 
                                             key={i}
                                             layout
                                             variants={gridItemVariants}
@@ -292,8 +295,9 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                         >
                                             <button 
                                                 ref={el => buttonsRef.current[i] = el} 
-                                                onFocus={() => handleNounDetail(i, i === activeNoun ? 'close' : 'visible')}
+                                                onFocus={() => handleNounDetail(i, i === selectedNoun ? 'close' : 'visible')}
                                                 onClick={event => focusNoun(i)}
+                                                onMouseOver={() => setActiveNoun(i)} 
                                                 >
                                                 <StandaloneNounImage nounId={BigNumber.from(i)} />
                                                 {/* <p>Noun {i}</p> */}
@@ -315,7 +319,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                         "--animation-order": i, 
                                     } as React.CSSProperties
                                     }
-                                    className={i === activeNoun ? classes.activeNoun : ''} 
+                                    className={i === selectedNoun ? classes.activeNoun : ''} 
                                     key={i}
                                     layout
                                     variants={gridItemVariants}
@@ -329,6 +333,8 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                         ref={el => buttonsRef.current[i] = el} 
                                         onFocus={() => handleNounDetail(i, i === activeNoun ? 'close' : 'visible')}
                                         onClick={event => focusNoun(i)}
+                                        onMouseOver={() => setActiveNoun(i)} 
+                                        // onMouseOut={() => setActiveNoun(selectedNoun)}
                                         >
                                         <StandaloneNounImage nounId={BigNumber.from(i)} />
                                     </button>
@@ -352,7 +358,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                         {isSidebarVisible && (
                             <ExploreNounDetail 
                                 handleNounDetail={handleNounDetail} 
-                                nounId={activeNoun} 
+                                nounId={activeNoun || 0} 
                                 isVisible={isSidebarVisible} 
                                 handleScrollTo={handleScrollTo} 
                                 isFirstAuction={activeNoun === 0}
