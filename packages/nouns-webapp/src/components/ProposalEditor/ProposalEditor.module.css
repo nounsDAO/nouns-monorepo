@@ -21,6 +21,16 @@
   font-size: 1.25rem;
 }
 
+.propTitle {
+  font-family: 'Londrina Solid';
+}
+
+.previewArea h3 {
+  font-weight: 400;
+  font-size: 14px;
+  color: rgb(108, 117, 125);
+}
+
 .bodyInput {
   min-height: 340px !important;
 }
