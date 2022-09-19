@@ -119,6 +119,39 @@ li.activeNoun img, li.activeNoun:hover img {
     background-color: var(--brand-cool-accent);
 }
 
+.nav .sort {
+    display: flex;
+    grid-gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+}
+.nav .sort p {
+    display: inline;
+    opacity: 0.75;
+}
+
+.nav .selectWrap {
+    color: var(--brand-cool-light-text);
+    border: 1px solid var(--brand-cool-border);
+    border-radius: 10px;
+    padding: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: transparent;
+    font-size: 16px;
+    line-height: 16px;
+    font-family: 'PT Root UI';
+    font-weight: bold;
+}
+.nav .selectWrap select:hover {
+    cursor: pointer;
+}
+.nav .selectWrap select {
+    background: transparent;
+    border: 0;
+    padding: .5rem;
+    border-right: solid .5rem transparent;
+}
+
 .nav button {
     color: var(--brand-cool-light-text);
     border: 1px solid var(--brand-cool-border);
