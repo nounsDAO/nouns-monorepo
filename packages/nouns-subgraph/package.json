@@ -16,7 +16,7 @@
     "prepare:rinkeby": "mustache config/rinkeby.json subgraph.yaml.mustache > subgraph.yaml",
     "prepare:mainnet": "mustache config/mainnet.json subgraph.yaml.mustache > subgraph.yaml",
     "codegen": "graph codegen --output-dir src/types/",
-    "test": "graph test",
+    "test": "graph test tests/**",
     "create:localnode": "graph create --node http://localhost:8020/",
     "deploy": "graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/",
     "deploy:localnode": "graph deploy --debug --node http://localhost:8020/ --ipfs http://localhost:5001/",
