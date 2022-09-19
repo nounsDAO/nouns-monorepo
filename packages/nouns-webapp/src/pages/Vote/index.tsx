@@ -38,7 +38,7 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(advanced);
 
-const AVERAGE_BLOCK_TIME_IN_SECS = 13;
+const AVERAGE_BLOCK_TIME_IN_SECS = 12;
 
 const VotePage = ({
   match: {
