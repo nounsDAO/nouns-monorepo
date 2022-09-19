@@ -5,8 +5,6 @@ import classes from './ExploreGrid.module.css';
 import cx from 'classnames';
 import ExploreNounDetail from '../ExploreNounDetail';
 import {AnimatePresence, motion, useInView} from 'framer-motion/dist/framer-motion';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSort } from '@fortawesome/free-solid-svg-icons';
 import { Auction as IAuction } from '../../wrappers/nounsAuction';
 import { useAppSelector } from '../../hooks';
 import { Trans } from '@lingui/macro';
@@ -180,15 +178,14 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
 
     const iconLargeGrid = <><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#000" d="M0 2.571A2.571 2.571 0 0 1 2.571 0h5.143a2.571 2.571 0 0 1 2.572 2.571v5.143a2.571 2.571 0 0 1-2.572 2.572H2.571A2.571 2.571 0 0 1 0 7.714V2.571Zm13.714 0A2.572 2.572 0 0 1 16.286 0h5.143A2.571 2.571 0 0 1 24 2.571v5.143a2.571 2.571 0 0 1-2.571 2.572h-5.143a2.572 2.572 0 0 1-2.572-2.572V2.571ZM0 16.286a2.572 2.572 0 0 1 2.571-2.572h5.143a2.572 2.572 0 0 1 2.572 2.572v5.143A2.571 2.571 0 0 1 7.714 24H2.571A2.571 2.571 0 0 1 0 21.429v-5.143Zm13.714 0a2.572 2.572 0 0 1 2.572-2.572h5.143A2.571 2.571 0 0 1 24 16.286v5.143A2.57 2.57 0 0 1 21.429 24h-5.143a2.571 2.571 0 0 1-2.572-2.571v-5.143Z"/></svg></>;
     const iconSmallGrid = <><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#000" d="M0 1.714A1.714 1.714 0 0 1 1.714 0h3.429a1.714 1.714 0 0 1 1.714 1.714v3.429a1.714 1.714 0 0 1-1.714 1.714H1.714A1.714 1.714 0 0 1 0 5.143V1.714Zm8.571 0A1.714 1.714 0 0 1 10.286 0h3.428a1.714 1.714 0 0 1 1.715 1.714v3.429a1.714 1.714 0 0 1-1.715 1.714h-3.428A1.714 1.714 0 0 1 8.57 5.143V1.714Zm8.572 0A1.714 1.714 0 0 1 18.857 0h3.429A1.714 1.714 0 0 1 24 1.714v3.429a1.714 1.714 0 0 1-1.714 1.714h-3.429a1.714 1.714 0 0 1-1.714-1.714V1.714ZM0 10.286A1.714 1.714 0 0 1 1.714 8.57h3.429a1.714 1.714 0 0 1 1.714 1.715v3.428a1.714 1.714 0 0 1-1.714 1.715H1.714A1.714 1.714 0 0 1 0 13.714v-3.428Zm8.571 0a1.714 1.714 0 0 1 1.715-1.715h3.428a1.714 1.714 0 0 1 1.715 1.715v3.428a1.714 1.714 0 0 1-1.715 1.715h-3.428a1.714 1.714 0 0 1-1.715-1.715v-3.428Zm8.572 0a1.714 1.714 0 0 1 1.714-1.715h3.429A1.714 1.714 0 0 1 24 10.286v3.428a1.714 1.714 0 0 1-1.714 1.715h-3.429a1.714 1.714 0 0 1-1.714-1.715v-3.428ZM0 18.857a1.714 1.714 0 0 1 1.714-1.714h3.429a1.714 1.714 0 0 1 1.714 1.714v3.429A1.714 1.714 0 0 1 5.143 24H1.714A1.714 1.714 0 0 1 0 22.286v-3.429Zm8.571 0a1.714 1.714 0 0 1 1.715-1.714h3.428a1.714 1.714 0 0 1 1.715 1.714v3.429A1.714 1.714 0 0 1 13.714 24h-3.428a1.714 1.714 0 0 1-1.715-1.714v-3.429Zm8.572 0a1.714 1.714 0 0 1 1.714-1.714h3.429A1.714 1.714 0 0 1 24 18.857v3.429A1.714 1.714 0 0 1 22.286 24h-3.429a1.714 1.714 0 0 1-1.714-1.714v-3.429Z"/></svg></>;  
-    const sortIcon = <>
-        <svg xmlns="http://www.w3.org/2000/svg" width="29" height="24" fill="none" viewBox="0 0 29 24">
-            <path fill="#000" d="M25.286 13.714h-12v1.714h12v-1.714Zm3.429-10.286h-15.43v1.715h15.43V3.428ZM27 8.571H13.286v1.715H27V8.57Zm-13.714 12h8.572v-1.714h-8.572v1.714Z"/>
-            <path fill="#000" d="m5.57 24 5.573-5.571-1.212-1.212-3.503 3.502V0H4.714v20.719l-3.502-3.503L0 18.428 5.57 24Z"/>
-        </svg>
-    </>;  
+    // const sortIcon = <>
+    //     <svg xmlns="http://www.w3.org/2000/svg" width="29" height="24" fill="none" viewBox="0 0 29 24">
+    //         <path fill="#000" d="M25.286 13.714h-12v1.714h12v-1.714Zm3.429-10.286h-15.43v1.715h15.43V3.428ZM27 8.571H13.286v1.715H27V8.57Zm-13.714 12h8.572v-1.714h-8.572v1.714Z"/>
+    //         <path fill="#000" d="m5.57 24 5.573-5.571-1.212-1.212-3.503 3.502V0H4.714v20.719l-3.502-3.503L0 18.428 5.57 24Z"/>
+    //     </svg>
+    // </>;  
     const containerRef = useRef(null)
     const isInView = useInView(containerRef)
-    const [isSortReversed, setIsSortReversed] = useState<boolean>(false);
     const sortOptions = [
         {
             label: "Latest Nouns", value: "date-descending"
@@ -299,6 +296,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                 onClick={event => focusNoun(i)}
                                                 >
                                                 <StandaloneNounImage nounId={BigNumber.from(i)} />
+                                                {/* <p>Noun {i}</p> */}
                                             </button>
                                         </motion.li>
                                     ).reverse()
