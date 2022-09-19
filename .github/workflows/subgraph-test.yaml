@@ -35,6 +35,10 @@ jobs:
         run: |
           cd packages/nouns-subgraph
           yarn codegen
+      - name: Generate config
+        run: |
+          cd packages/nouns-subgraph
+          yarn test:configgen
       - name: Run tests
         run: |
           cd packages/nouns-subgraph
