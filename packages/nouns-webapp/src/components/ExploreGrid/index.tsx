@@ -4,7 +4,9 @@ import { StandaloneNounImage } from '../../components/StandaloneNoun';
 import classes from './ExploreGrid.module.css';
 import cx from 'classnames';
 import ExploreNounDetail from '../ExploreNounDetail';
-import {AnimatePresence, motion, useInView} from 'framer-motion/dist/framer-motion';
+import {AnimatePresence, motion, 
+    // useInView
+} from 'framer-motion/dist/framer-motion';
 import { Auction as IAuction } from '../../wrappers/nounsAuction';
 import { useAppSelector } from '../../hooks';
 import { Trans } from '@lingui/macro';
@@ -14,36 +16,36 @@ interface ExploreGridProps {
 }
 
 // Custom hook
-function useKeyPress(targetKey: string) {
-    // State for keeping track of whether key is pressed
-    const [keyPressed, setKeyPressed] = useState(false);
+// function useKeyPress(targetKey: string) {
+//     // State for keeping track of whether key is pressed
+//     const [keyPressed, setKeyPressed] = useState(false);
   
-    // Add event listeners
-    useEffect(() => {
-      // If pressed key is our target key then set to true
-      function downHandler({ key }: KeyboardEvent) {
-        if (key === targetKey) {
-          setKeyPressed(true);
-        }
-      }
-      // If released key is our target key then set to false
-      const upHandler = ({ key }: KeyboardEvent) => {
-        if (key === targetKey) {
-          setKeyPressed(false);
-        }
-      };
+//     // Add event listeners
+//     useEffect(() => {
+//       // If pressed key is our target key then set to true
+//       function downHandler({ key }: KeyboardEvent) {
+//         if (key === targetKey) {
+//           setKeyPressed(true);
+//         }
+//       }
+//       // If released key is our target key then set to false
+//       const upHandler = ({ key }: KeyboardEvent) => {
+//         if (key === targetKey) {
+//           setKeyPressed(false);
+//         }
+//       };
   
-      window.addEventListener('keydown', downHandler);
-      window.addEventListener('keyup', upHandler);
-      // Remove event listeners on cleanup
-      return () => {
-        window.removeEventListener('keydown', downHandler);
-        window.removeEventListener('keyup', upHandler);
-      };
-    }, [targetKey]); // rerun the effect if the targetKey changes
+//       window.addEventListener('keydown', downHandler);
+//       window.addEventListener('keyup', upHandler);
+//       // Remove event listeners on cleanup
+//       return () => {
+//         window.removeEventListener('keydown', downHandler);
+//         window.removeEventListener('keyup', upHandler);
+//       };
+//     }, [targetKey]); // rerun the effect if the targetKey changes
   
-    return keyPressed;
-  }
+//     return keyPressed;
+//   }
 
 
 const ExploreGrid: React.FC<ExploreGridProps> = props => {
@@ -82,11 +84,11 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         sidebarVisibility !== "visible" && setSelectedNoun(undefined);
     }
 
-    const keyboardPrev: boolean = useKeyPress("ArrowLeft");
-    const keyboardNext: boolean = useKeyPress("ArrowRight");
-    const keyboardUp: boolean = useKeyPress("ArrowUp");
-    const keyboardDown: boolean = useKeyPress("ArrowDown");
-    const keyboardEsc: boolean = useKeyPress("Escape");
+    // const keyboardPrev: boolean = useKeyPress("ArrowLeft");
+    // const keyboardNext: boolean = useKeyPress("ArrowRight");
+    // const keyboardUp: boolean = useKeyPress("ArrowUp");
+    // const keyboardDown: boolean = useKeyPress("ArrowDown");
+    // const keyboardEsc: boolean = useKeyPress("Escape");
 
     const buttonsRef = useRef<(HTMLButtonElement | null)[]>([])
     // const focusNoun = (index: number | undefined) => {
@@ -108,22 +110,22 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
             }
         },
     }
-    const gridItemVariants = {
-        initial: {
-            opacity: 0,
-            // y: 50,
-        },
-        small: { 
-            width: "5%", 
-            opacity: 1,
-            y: 0,
-        },
-        standard: { 
-            width: "14.28%",
-            opacity: 1,
-            // y: 0,
-        },
-    }
+    // const gridItemVariants = {
+    //     initial: {
+    //         opacity: 0,
+    //         // y: 50,
+    //     },
+    //     small: { 
+    //         width: "5%", 
+    //         opacity: 1,
+    //         y: 0,
+    //     },
+    //     standard: { 
+    //         width: "14.28%",
+    //         opacity: 1,
+    //         // y: 0,
+    //     },
+    // }
     
     // useEffect(() => {
     //     if (keyboardEsc) {
@@ -189,7 +191,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     //     </svg>
     // </>;  
     const containerRef = useRef(null)
-    const isInView = useInView(containerRef)
+    // const isInView = useInView(containerRef)
     const sortOptions = [
         {
             label: "Latest Nouns", value: "date-descending"
