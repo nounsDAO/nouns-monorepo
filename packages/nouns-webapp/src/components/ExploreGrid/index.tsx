@@ -316,7 +316,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                 opacity: 0
                             }}
                         >
-                            {[...Array(100)].map((x, i) =>
+                            {[...Array(nounCount)].map((x, i) =>
                                 <motion.li 
                                     style={{ 
                                         "--animation-order": i, 
