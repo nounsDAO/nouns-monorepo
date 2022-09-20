@@ -8,7 +8,8 @@ import {AnimatePresence, motion, useInView} from 'framer-motion/dist/framer-moti
 import { Auction as IAuction } from '../../wrappers/nounsAuction';
 import { useAppSelector } from '../../hooks';
 import { Trans } from '@lingui/macro';
-
+import dotenv from 'dotenv';
+dotenv.config();
 interface ExploreGridProps {
 }
 
@@ -271,13 +272,13 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                     >   <AnimatePresence exitBeforeEnter>
                         {sortOrder === "date-descending" ? (
                             <motion.ul
-                                layout
-                                exit={{
-                                    opacity: 0
-                                }}
+                                // layout
+                                // exit={{
+                                //     opacity: 0
+                                // }}
                             >  
                                 {nounCount >= 0 && 
-                                    [...Array(nounCount)].map((x, i) => 
+                                    [...Array(100)].map((x, i) => 
                                         <motion.li 
                                             style={{ 
                                                 "--animation-order": Math.abs(i - nounCount), 
@@ -285,13 +286,13 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                             }
                                             className={i === selectedNoun ? classes.activeNoun : ''} 
                                             key={i}
-                                            layout
-                                            variants={gridItemVariants}
-                                            initial="standard"
-                                            animate={isInView && (activeSizeOption === "small") ? "small" : "standard"}
-                                            transition={{ 
-                                                stiffness: '50',
-                                            }}
+                                            // layout
+                                            // variants={gridItemVariants}
+                                            // initial="standard"
+                                            // animate={isInView && (activeSizeOption === "small") ? "small" : "standard"}
+                                            // transition={{ 
+                                            //     stiffness: '50',
+                                            // }}
                                         >
                                             <button 
                                                 ref={el => buttonsRef.current[i] = el} 
@@ -300,7 +301,8 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                 onMouseOver={() => setActiveNoun(i)} 
                                                 onMouseOut={() => setActiveNoun(selectedNoun)}
                                                 >
-                                                <StandaloneNounImage nounId={BigNumber.from(i)} />
+                                                <img src={process.env.PUBLIC_URL + `/nouns/noun${i}.svg`} alt="" />
+                                                {/* <StandaloneNounImage nounId={BigNumber.from(i)} /> */}
                                                 {/* <p>Noun {i}</p> */}
                                             </button>
                                         </motion.li>
@@ -314,7 +316,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                 opacity: 0
                             }}
                         >
-                            {[...Array(nounCount)].map((x, i) =>
+                            {[...Array(100)].map((x, i) =>
                                 <motion.li 
                                     style={{ 
                                         "--animation-order": i, 
@@ -338,6 +340,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                         onMouseOut={() => setActiveNoun(selectedNoun)}
                                         >
                                         <StandaloneNounImage nounId={BigNumber.from(i)} />
+                                        {/* <img src={process.env.PUBLIC_URL + `/nouns/noun${i}.svg`} alt="" /> */}
                                     </button>
                                 </motion.li>
                             )}

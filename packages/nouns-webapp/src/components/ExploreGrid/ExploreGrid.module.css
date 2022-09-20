@@ -22,8 +22,8 @@
     transition: border 0.5s ease-in-out;
     border: transparent 3px solid;
     animation-name: animateIn;
-    animation-duration: 150ms;
-    animation-delay: calc(var(--animation-order) * 50ms);
+    animation-duration: 50ms;
+    animation-delay: calc(var(--animation-order) * 10ms);
     animation-fill-mode: both;
     animation-timing-function: ease-in-out;
 }
@@ -31,7 +31,7 @@
 .exploreGrid li:hover img {
     transform: scale(0.9);
     border-radius: 3%;
-    transition: transform 0.15s ease-in-out;
+    /* transition: transform 0.15s ease-in-out; */
 }
 
 .exploreGrid li img {

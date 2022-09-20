@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import { useNounSeed } from '../../wrappers/nounToken';
 import { BigNumber } from 'ethers';
-import { StandaloneNounImage } from '../../components/StandaloneNoun';
+// import { StandaloneNounImage } from '../../components/StandaloneNoun';
 import { StandalonePart } from '../StandalonePart';
 import classes from './ExploreNounDetail.module.css';
 import { ImageData } from '@nouns/assets';
@@ -9,7 +9,8 @@ import { Trans } from '@lingui/macro';
 import {AnimatePresence, motion} from 'framer-motion/dist/framer-motion';
 import { XIcon } from '@heroicons/react/solid';
 import NounInfoRowBirthday from '../NounInfoRowBirthday';
-
+import dotenv from 'dotenv';
+dotenv.config();
 interface ExploreNounDetailProps {
     nounId: number | undefined;
     handleNounDetail: Function;
@@ -231,8 +232,10 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                     <motion.div
                                         className={classes.detailNounImage}
                                         onClick={() => props.handleScrollTo(props.nounId)}
-                                    >
-                                        <StandaloneNounImage nounId={BigNumber.from(props.nounId)} />
+                                    >   
+
+                                        {/* <StandaloneNounImage nounId={BigNumber.from(props.nounId)} /> */}
+                                        <img src={process.env.PUBLIC_URL + `/nouns/noun${props.nounId}.svg`} alt="" />
                                     </motion.div>
                                     
                                     <motion.div className={classes.nounDetails}>
