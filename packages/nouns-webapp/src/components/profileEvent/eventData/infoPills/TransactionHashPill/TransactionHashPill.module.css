@@ -1,0 +1,36 @@
+.transactionHashWrapper {
+  background-color: var(--brand-gray-light-text-translucent);
+  color: var(--brand-gray-light-text);
+  height: 28px;
+  border-radius: 8px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  vertical-align: middle;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 8px;
+  font-size: 14px;
+  width: fit-content;
+  transition: all 0.15s ease-in-out;
+  cursor: pointer;
+}
+.transactionHashWrapper:hover {
+  transform: scale(0.95);
+}
+
+.externalLinkIcon {
+  height: 16px;
+  width: 16px;
+  margin-right: 0.3rem;
+}
+
+@media (max-width: 992px) {
+  .externalLinkIcon {
+    margin-bottom: 0.135rem;
+  }
+}

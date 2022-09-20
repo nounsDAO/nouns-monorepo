@@ -155,7 +155,7 @@ const CreateProposalPage = () => {
           :
           <Trans>
             Add one or more transactions and describe your proposal for the community. The proposal
-            cannot modified after submission, so please verify all information before submitting.
+            cannot be modified after submission, so please verify all information before submitting.
             The voting period will begin after 2 1/3 days and last for 3 days.
           </Trans>
         </Alert>

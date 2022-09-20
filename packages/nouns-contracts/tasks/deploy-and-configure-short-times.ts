@@ -1,7 +1,10 @@
 import { task, types } from 'hardhat/config';
 import { printContractsTable } from './utils';
 
-task('deploy-and-configure-short-times', 'Deploy and configure all contracts')
+task(
+  'deploy-and-configure-short-times',
+  'Deploy and configure all contracts with short gov times for testing',
+)
   .addFlag('startAuction', 'Start the first auction upon deployment completion')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
   .addFlag('updateConfigs', 'Write the deployed addresses to the SDK and subgraph configs')

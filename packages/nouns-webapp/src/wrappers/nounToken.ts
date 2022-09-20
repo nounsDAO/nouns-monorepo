@@ -66,7 +66,7 @@ const seedArrayToObject = (seeds: (INounSeed & { id: string })[]) => {
   }, {});
 };
 
-export const useNounSeeds = () => {
+const useNounSeeds = () => {
   const cache = localStorage.getItem(seedCacheKey);
   const cachedSeeds = cache ? JSON.parse(cache) : undefined;
   const { data } = useQuery(seedsQuery(), {

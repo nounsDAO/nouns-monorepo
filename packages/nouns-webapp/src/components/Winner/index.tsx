@@ -6,6 +6,9 @@ import clsx from 'clsx';
 import { isMobileScreen } from '../../utils/isMobile';
 import { Trans } from '@lingui/macro';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
+import React from 'react';
+import { buildEtherscanAddressLink } from '../../utils/etherscan';
+import Tooltip from '../Tooltip';
 
 interface WinnerProps {
   winner: string;
@@ -55,7 +58,24 @@ const Winner: React.FC<WinnerProps> = props => {
     <ShortAddress size={40} address={winner} avatar={true} />
   );
 
-  const nounderNounContent = 'nounders.eth';
+  const nounderNounContent = (
+    <a
+      href={buildEtherscanAddressLink('nounders.eth')}
+      target={'_blank'}
+      rel="noreferrer"
+      className={classes.link}
+    >
+      <Tooltip
+        tip="View on Etherscan"
+        tooltipContent={(tip: string) => {
+          return <Trans>View on Etherscan</Trans>;
+        }}
+        id="holder-etherscan-tooltip"
+      >
+        nounders.eth
+      </Tooltip>
+    </a>
+  );
 
   return (
     <>

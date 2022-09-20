@@ -224,13 +224,47 @@ export const nounVotingHistoryQuery = (nounId: number) => gql`
 	noun(id: ${nounId}) {
 		id
 		votes {
-		proposal {
-			id
-		}
-		support
-		supportDetailed
+      blockNumber
+      proposal {
+        id
+      }
+      support
+      supportDetailed
+      voter {
+        id
+      }
 		}
 	}
+}
+`;
+
+export const nounTransferHistoryQuery = (nounId: number) => gql`
+{
+  transferEvents(where: {noun: "${nounId}"}) {
+    id
+    previousHolder {
+      id
+    }
+    newHolder {
+      id
+    }
+    blockNumber
+  }
+}
+`;
+
+export const nounDelegationHistoryQuery = (nounId: number) => gql`
+{
+  delegationEvents(where: {noun: "${nounId}"}) {
+    id
+    previousDelegate {
+      id
+    }
+    newDelegate {
+      id
+    }
+    blockNumber
+  }
 }
 `;
 
