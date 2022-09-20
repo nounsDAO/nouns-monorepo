@@ -38,7 +38,7 @@
     max-width: none;
     margin: 0 auto;
     width: 100%;
-    transition: transform 0.15s ease-in-out;
+    /* transition: transform 0.15s ease-in-out; */
 }
 .exploreGrid li button {
     border: none;
