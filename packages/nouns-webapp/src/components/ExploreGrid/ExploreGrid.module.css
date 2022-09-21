@@ -68,6 +68,7 @@
     align-items: center;
     background-color: #fff;
     flex-direction: column;
+    position: relative;
 }
 .exploreGrid button:focus {
     border: none;
@@ -76,6 +77,19 @@
 .exploreGrid li a {
     display: block;
 }
+.exploreGrid li .currentAuction {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: rgba(255,255,255,0.8);
+    color: #000;
+    font-size: 0.5em;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0;
+    padding: 2px 3px 1px;
+}
+
 .exploreGrid li .label {
     text-align: center;
     font-family: 'Londrina Solid';

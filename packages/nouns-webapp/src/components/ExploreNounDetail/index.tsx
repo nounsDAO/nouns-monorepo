@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import { useNounSeed } from '../../wrappers/nounToken';
 import { BigNumber } from 'ethers';
-import { StandaloneNounImage } from '../../components/StandaloneNoun';
+// import { StandaloneNounImage } from '../../components/StandaloneNoun';
 import { StandalonePart } from '../StandalonePart';
 import classes from './ExploreNounDetail.module.css';
 import { ImageData } from '@nouns/assets';
@@ -78,39 +78,54 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
       }),
     ];
     
+    const getOrderedTraits = (seed: { head: number; glasses: number; accessory: number; body: number; background: number; }) => {
+        let nounTraitsOrdered;
+        if (seed) {
+            nounTraitsOrdered = [
+                { 
+                    partType: 'head',
+                    partName: parseTraitName(traitNames[3][seed.head]),
+                    partIndex: seed.head,
+                },
+                { 
+                    partType: 'glasses',
+                    partName: parseTraitName(traitNames[4][seed.glasses]),
+                    partIndex: seed.glasses,
+                },
+                { 
+                    partType: 'accessory',
+                    partName: parseTraitName(traitNames[2][seed.accessory]),
+                    partIndex: seed.accessory,
+                },
+                { 
+                    partType: 'body',
+                    partName: parseTraitName(traitNames[1][seed.body]),
+                    partIndex: seed.body,
+                },
+                { 
+                    partType: 'background',
+                    partName: parseTraitName(traitNames[0][seed.background]),
+                    partIndex: seed.background,
+                },   
+            ];
+        }
+        
+        if (nounTraitsOrdered) {
+            console.log('all traits', nounTraitsOrdered)
+            return nounTraitsOrdered;
+        } else {
+            console.log('error', nounTraitsOrdered)
+        }
+    }
+
     const seedId = props.nounId >= 0 ? BigNumber.from(props.nounId) : BigNumber.from(0);
     const seed = useNounSeed(seedId);
-
-    const nounTraitsOrdered = [
-        { 
-            partType: 'head',
-            partName: parseTraitName(traitNames[3][seed.head]),
-            partIndex: seed.head,
-        },
-        { 
-            partType: 'glasses',
-            partName: parseTraitName(traitNames[4][seed.glasses]),
-            partIndex: seed.glasses,
-        },
-        { 
-            partType: 'accessory',
-            partName: parseTraitName(traitNames[2][seed.accessory]),
-            partIndex: seed.accessory,
-        },
-        { 
-            partType: 'body',
-            partName: parseTraitName(traitNames[1][seed.body]),
-            partIndex: seed.body,
-        },
-        { 
-            partType: 'background',
-            partName: parseTraitName(traitNames[0][seed.background]),
-            partIndex: seed.background,
-        },   
-    ]
-
     const bgcolors = ["#d5d7e1", "#e1d7d5"];
-    const backgroundColor = bgcolors[seed.background];
+    const backgroundColor = seed ? bgcolors[seed.background] : bgcolors[0];
+    const nounTraitsOrdered =  getOrderedTraits(seed);
+
+    
+
 
     // const list = {
     //     visible: { 
@@ -237,8 +252,14 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                         onClick={() => props.handleScrollTo(props.nounId)}
                                     >   
 
-                                        <StandaloneNounImage nounId={BigNumber.from(props.nounId)} />
-                                        {/* <img src={process.env.PUBLIC_URL + `/nouns/noun${props.nounId}.svg`} alt="" /> */}
+                                        {/* <StandaloneNounImage nounId={BigNumber.from(props.nounId)} /> */}
+                                        <img src={process.env.PUBLIC_URL + `/nouns/noun${props.nounId}.svg`} alt="" />    
+                                        {/* {seed ? (
+                                            <img src={process.env.PUBLIC_URL + `/nouns/noun${props.nounId}.svg`} alt="" />    
+                                        ) : (
+                                            <img style={{ opacity: 0.4 }} src={loadingNoun} alt="loading" />
+                                        )} */}
+                                        
                                     </motion.div>
                                     
                                     <motion.div className={classes.nounDetails}>
@@ -284,7 +305,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                             // animate="visible"
                                             layout
                                         >
-                                            {Object.values(nounTraitsOrdered).map((part,index) => {    
+                                            {nounTraitsOrdered && Object.values(nounTraitsOrdered).map((part,index) => {    
                                                 const partType = traitTypeKeys(nounTraitsOrdered[index].partType);
                                                 return (
                                                     <motion.li

@@ -87,8 +87,8 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         console.log('currentAuction', currentAuction);
         if (currentAuction?.nounId) {
             // console.log('currentAuction.nounId', currentAuction?.nounId);
-            setSelectedNoun(BigNumber.from(currentAuction?.nounId).toNumber());
-            setActiveNoun(BigNumber.from(currentAuction?.nounId).toNumber());
+            // setSelectedNoun(BigNumber.from(currentAuction?.nounId).toNumber());
+            // setActiveNoun(BigNumber.from(currentAuction?.nounId).toNumber());
         }
         
     }, [currentAuction]);
@@ -319,12 +319,15 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                     // onClick={event => focusNoun(i)}
                                                     onClick={() => handleNounDetail(i, i === selectedNoun ? 'close' : 'visible')}
                                                     onMouseOver={() => setActiveNoun(i)} 
-                                                    // onMouseOut={() => selectedNoun && setActiveNoun(selectedNoun)}
+                                                    onMouseOut={() => selectedNoun && setActiveNoun(selectedNoun)}
                                                     >
                                                     <img src={process.env.PUBLIC_URL + `/nouns/noun${i}.svg`} alt="" />
                                                     {/* <p className={classes.label}>Noun {i}</p> */}
                                                     {/* <StandaloneNounImage nounId={BigNumber.from(i)} /> */}
                                                     {/* <p>Noun {i}</p> */}
+                                                    {i === nounCount - 1 && (
+                                                        <p className={classes.currentAuction}>current auction</p>
+                                                    )}
                                                 </button>
                                             </motion.li>
                                         ).reverse()

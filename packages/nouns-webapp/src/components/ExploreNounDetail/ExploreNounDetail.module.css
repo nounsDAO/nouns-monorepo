@@ -34,6 +34,11 @@
 .detailNounImage {
     text-align: center;
     margin-top: 5vh;
+    max-height: 40vh;
+    /* height: 100%; */
+    /* cursor: pointer; */
+    width: 100%;
+    aspect-ratio: 1;
 }
 
 .close {
@@ -161,9 +166,9 @@ h2 {
 }
 
 .detailNounImage img {
-    max-height: 40vh;
+    /* max-height: 40vh;
     height: 100%;
-    cursor: pointer;
+    cursor: pointer; */
     width: 100%;
 }
 
