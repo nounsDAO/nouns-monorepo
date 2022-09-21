@@ -396,16 +396,62 @@ contract NDescriptor is IDescriptor, Ownable {
     function _addEyes(bytes calldata _eyes) internal {
         eyeses.push(_eyes);
     }
+    function _addGlasses(bytes calldata _glasses) internal {
+        glasseses.push(_glasses);
+    }
+    function _addMouth(bytes calldata _mouth) internal {
+        mouths.push(_mouth);
+    }
+    function _addTeeth(bytes calldata _teeth) internal {
+        teeths.push(_teeth);
+    }
+    function _addLips(bytes calldata _lips) internal {
+        lipses.push(_lips);
+    }
+    function _addNeck(bytes calldata _neck) internal {
+        necks.push(_neck);
+    }
+    function _addEmotion(bytes calldata _emotion) internal {
+        emotions.push(_emotion);
+    }
+    function _addFace(bytes calldata _face) internal {
+        faces.push(_face);
+    }
+    function _addEars(bytes calldata _ears) internal {
+        earses.push(_ears);
+    }
+    function _addNos(bytes calldata _nose) internal {
+        noses.push(_nose);
+    }
+    function _addCheeks(bytes calldata _cheeks) internal {
+        cheekses.push(_cheeks);
+    }
 
     /**
      * @notice Get all Noun parts for the passed `seed`.
      */
     function _getPartsForSeed(ISeeder.Seed memory seed) internal view returns (bytes[] memory) {
-        bytes[] memory _parts = new bytes[](4);
-        _parts[0] = bodies[seed.body];
-        _parts[1] = accessories[seed.accessory];
-        _parts[2] = heads[seed.head];
-        _parts[3] = glasses[seed.glasses];
+        bytes[] memory _parts = new bytes[](14);
+        for(uint i = 0; i < seed.accessories.length; i ++) {
+            uint accType = seed.accessories[i].accType;
+            uint accId = seed.accessories[i].accId;
+            bytes[] memory accArr;
+            if(accType == 0) accArr = hats;
+            else if(accType == 1) accArr = hairs;
+            else if(accType == 2) accArr = beards;
+            else if(accType == 3) accArr = eyeses;
+            else if(accType == 4) accArr = glasseses;
+            else if(accType == 5) accArr = mouths;
+            else if(accType == 6) accArr = teeths;
+            else if(accType == 7) accArr = lipses;
+            else if(accType == 8) accArr = necks;
+            else if(accType == 9) accArr = emotions;
+            else if(accType == 10) accArr = faces;
+            else if(accType == 11) accArr = earses;
+            else if(accType == 12) accArr = noses;
+            else if(accType == 13) accArr = cheekses;
+            _parts[accType] = accArr[accId];
+        }
         return _parts;
     }
 }

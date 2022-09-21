@@ -1,0 +1,233 @@
+---
+  types:
+    - male
+    - female
+    - alien
+    - ape
+    - zombie
+  skins:
+    - albino
+    - light
+    - mid
+    - dark
+    - green
+    - brown
+    - blue
+  acc_types:
+    neck: 0
+    cheeks: 0
+    face: 0
+    beard: 4
+    mouth: 0
+    ears: 0
+    hat: 6
+    hair: 6
+    teeth: 1
+    lips: 1
+    emotion: 0
+    eyes: 3
+    glasses: 3
+    nose: 0
+  exclusive_groups:
+    - ["hair", "hat"]
+    - ["glasses", "eyes"]
+    - ["lips", "emotion", "teeth"]
+    - ["face", "cheeks"]
+  probabilities:
+    male:
+      probability: 60.15
+      skin: [ 10, 30, 30, 30, 0, 0, 0 ]
+      accessories:
+        - hair
+        - hat
+        - glasses
+        - eyes
+        - mouth
+        - neck
+        - ears
+        - lips
+        - emotion
+        - face
+        - cheeks
+        - nose
+    female:
+      probability: 38.5
+      skin: [ 10, 30, 30, 30, 0, 0, 0 ]
+      accessories:
+        - hair
+        - hat
+        - glasses
+        - eyes
+        - mouth
+        - neck
+        - ears
+        - beard
+        - teeth
+        - emotion
+        - face
+        - cheeks
+        - nose
+    zombie:
+      probability: 1
+      skin: [ 0, 0, 0, 0, 100, 0, 0 ]
+      accessories:
+        - hair
+        - hat
+        - glasses
+        - eyes
+        - mouth
+        - neck
+        - ears
+        - beard
+        - face
+    ape:
+      probability: 0.25
+      skin: [ 0, 0, 0, 0, 0, 100, 0 ]
+      accessories:
+        - hat
+        - glasses
+        - mouth
+        - neck
+        - ears
+    alien:
+      probability: 0.1
+      skin: [ 0, 0, 0, 0, 0, 0, 100 ]
+      accessories:
+        - hat
+        - glasses
+        - mouth
+        - neck
+        - ears
+  accessory_count_probabbilities:
+    - 0.08
+    - 3.33
+    - 35.6
+    - 45.01
+    - 14.2
+    - 1.66
+    - 0.11
+    - 0.01
+    - 0.00
+  accessory_types:
+    12: "cheeks"
+    13: "beard"
+    14: "hair"
+    15: "hair"
+    16: "hat"
+    17: "beard"
+    18: "nose"
+    19: "mouth"
+    20: "glasses"
+    21: "glasses"
+    22: "hat"
+    23: "beard"
+    24: "emotion"
+    25: "hat"
+    26: "beard"
+    27: "face"
+    28: "hair"
+    29: "glasses"
+    30: "hair"
+    31: "glasses"
+    32: "mouth"
+    33: "neck"
+    34: "emotion"
+    35: "glasses"
+    36: "hair"
+    37: "hat"
+    38: "hat"
+    39: "eyes"
+    40: "beard"
+    41: "mouth"
+    42: "beard"
+    43: "glasses"
+    44: "glasses"
+    45: "hair"
+    46: "hat"
+    47: "hat"
+    48: "beard"
+    49: "hair"
+    50: "hair"
+    51: "hat"
+    52: "teeth"
+    53: "hat"
+    54: "beard"
+    55: "face"
+    56: "beard"
+    57: "hair"
+    58: "hair"
+    59: "beard"
+    60: "hat"
+    61: "ears"
+    62: "glasses"
+    63: "hat"
+    64: "mouth"
+    65: "hair"
+    66: "beard"
+    67: "hat"
+    68: "neck"
+    69: "beard"
+    70: "hair"
+    71: "glasses"
+    72: "glasses"
+    73: "eyes"
+    74: "hair"
+    75: "hat"
+    76: "hat"
+    77: "lips"
+    78: "eyes"
+    79: "hair"
+    80: "neck"
+    81: "hair"
+    82: "glasses"
+    83: "hair"
+    84: "glasses"
+    85: "face"
+    86: "hair"
+    87: "face"
+    88: "hair"
+    89: "glasses"
+    90: "hat"
+    91: "hair"
+    92: "hair"
+    93: "hair"
+    94: "eyes"
+    95: "mouth"
+    96: "hair"
+    97: "eyes"
+    98: "hair"
+    99: "hair"
+    100: "glasses"
+    101: "hair"
+    102: "glasses"
+    103: "glasses"
+    104: "hair"
+    105: "hat"
+    106: "mouth"
+    107: "hat"
+    108: "lips"
+    109: "nose"
+    110: "hair"
+    111: "hair"
+    112: "hair"
+    113: "hat"
+    114: "eyes"
+    115: "mouth"
+    116: "glasses"
+    117: "hair"
+    118: "neck"
+    119: "glasses"
+    120: "mouth"
+    121: "hair"
+    122: "hair"
+    123: "hair"
+    124: "glasses"
+    125: "ears"
+    126: "eyes"
+    127: "hair"
+    128: "cheeks"
+    129: "hair"
+    130: "hair"
+    131: "lips"
+    132: "glasses"
+    133: "neck"

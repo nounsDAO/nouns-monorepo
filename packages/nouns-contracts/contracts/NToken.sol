@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title The Nouns ERC-721 token
+/// @title The Punks ERC-721 token
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -19,25 +19,26 @@ pragma solidity ^0.8.6;
 
 import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
 import { ERC721Checkpointable } from './base/ERC721Checkpointable.sol';
-import { INounsDescriptorMinimal } from './interfaces/INounsDescriptorMinimal.sol';
+import { IDescriptorMinimal } from './interfaces/IDescriptorMinimal.sol';
 import { ISeeder } from './interfaces/ISeeder.sol';
-import { INounsToken } from './interfaces/INounsToken.sol';
+import { IToken } from './interfaces/IToken.sol';
 import { ERC721 } from './base/ERC721.sol';
 import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import { IProxyRegistry } from './external/opensea/IProxyRegistry.sol';
 
-contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
-    // The nounders DAO address (creators org)
-    address public noundersDAO;
+contract NToken is IToken, Ownable, ERC721Checkpointable {
+    // The punkers DAO address (creators org)
+    address public punkersDAO;
 
-    // An address who has permissions to mint Nouns
+    // An address who has permissions to mint Punks
     address public minter;
 
-    // The Nouns token URI descriptor
-    INounsDescriptorMinimal public descriptor;
+    // The Punks token URI descriptor
+    IDescriptorMinimal public descriptor;
 
-    // The Nouns token seeder
+    // The Punks token seeder
     ISeeder public seeder;
+    mapping(bytes32 => uint) seedHashes;
 
     // Whether the minter can be updated
     bool public isMinterLocked;
@@ -48,11 +49,11 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     // Whether the seeder can be updated
     bool public isSeederLocked;
 
-    // The noun seeds
+    // The punk seeds
     mapping(uint256 => ISeeder.Seed) public seeds;
 
-    // The internal noun ID tracker
-    uint256 private _currentNounId;
+    // The internal punk ID tracker
+    uint256 private _currentPunkId;
 
     // IPFS content hash of contract-level metadata
     string private _contractURIHash = 'QmZi1n79FqWt2tTLwCqiy6nLM6xLGRsEPQ5JmReJQKNNzX';
@@ -85,10 +86,10 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     }
 
     /**
-     * @notice Require that the sender is the nounders DAO.
+     * @notice Require that the sender is the punkers DAO.
      */
-    modifier onlyNoundersDAO() {
-        require(msg.sender == noundersDAO, 'Sender is not the nounders DAO');
+    modifier onlyPunkersDAO() {
+        require(msg.sender == punkersDAO, 'Sender is not the punkers DAO');
         _;
     }
 
@@ -101,13 +102,13 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     }
 
     constructor(
-        address _noundersDAO,
+        address _punkersDAO,
         address _minter,
-        INounsDescriptorMinimal _descriptor,
-        INounsSeeder _seeder,
+        IDescriptorMinimal _descriptor,
+        ISeeder _seeder,
         IProxyRegistry _proxyRegistry
-    ) ERC721('Nouns', 'NOUN') {
-        noundersDAO = _noundersDAO;
+    ) ERC721('Punk2', 'PUNK2') {
+        punkersDAO = _punkersDAO;
         minter = _minter;
         descriptor = _descriptor;
         seeder = _seeder;
@@ -141,24 +142,24 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     }
 
     /**
-     * @notice Mint a Noun to the minter, along with a possible nounders reward
-     * Noun. Nounders reward Nouns are minted every 10 Nouns, starting at 0,
-     * until 183 nounder Nouns have been minted (5 years w/ 24 hour auctions).
+     * @notice Mint a Punk to the minter, along with a possible Punkers reward
+     * Punks. Punkers reward Punks are minted every 10 Punks, starting at 0,
+     * until 183 punkers Punks have been minted (5 years w/ 24 hour auctions).
      * @dev Call _mintTo with the to address(es).
      */
     function mint() public override onlyMinter returns (uint256) {
-        if (_currentNounId <= 1820 && _currentNounId % 10 == 0) {
-            _mintTo(noundersDAO, _currentNounId++);
+        if (_currentPunkId <= 1820 && _currentPunkId % 10 == 0) {
+            _mintTo(punkersDAO, _currentPunkId++);
         }
-        return _mintTo(minter, _currentNounId++);
+        return _mintTo(minter, _currentPunkId++);
     }
 
     /**
-     * @notice Burn a noun.
+     * @notice Burn a punk.
      */
-    function burn(uint256 nounId) public override onlyMinter {
-        _burn(nounId);
-        emit NounBurned(nounId);
+    function burn(uint256 punkId) public override onlyMinter {
+        _burn(punkId);
+        emit PunkBurned(punkId);
     }
 
     /**
@@ -166,7 +167,7 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
      * @dev See {IERC721Metadata-tokenURI}.
      */
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
-        require(_exists(tokenId), 'NounsToken: URI query for nonexistent token');
+        require(_exists(tokenId), 'PunkToken: URI query for nonexistent token');
         return descriptor.tokenURI(tokenId, seeds[tokenId]);
     }
 
@@ -175,18 +176,18 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
      * with the JSON contents directly inlined.
      */
     function dataURI(uint256 tokenId) public view override returns (string memory) {
-        require(_exists(tokenId), 'NounsToken: URI query for nonexistent token');
+        require(_exists(tokenId), 'PunkToken: URI query for nonexistent token');
         return descriptor.dataURI(tokenId, seeds[tokenId]);
     }
 
     /**
-     * @notice Set the nounders DAO.
-     * @dev Only callable by the nounders DAO when not locked.
+     * @notice Set the punkers DAO.
+     * @dev Only callable by the punkers DAO when not locked.
      */
-    function setNoundersDAO(address _noundersDAO) external override onlyNoundersDAO {
-        noundersDAO = _noundersDAO;
+    function setPunkersDAO(address _punkersDAO) external override onlyPunkersDAO {
+        punkersDAO = _punkersDAO;
 
-        emit NoundersDAOUpdated(_noundersDAO);
+        emit PunkersDAOUpdated(_punkersDAO);
     }
 
     /**
@@ -213,7 +214,7 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
      * @notice Set the token URI descriptor.
      * @dev Only callable by the owner when not locked.
      */
-    function setDescriptor(INounsDescriptorMinimal _descriptor) external override onlyOwner whenDescriptorNotLocked {
+    function setDescriptor(IDescriptorMinimal _descriptor) external override onlyOwner whenDescriptorNotLocked {
         descriptor = _descriptor;
 
         emit DescriptorUpdated(_descriptor);
@@ -233,7 +234,7 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
      * @notice Set the token seeder.
      * @dev Only callable by the owner when not locked.
      */
-    function setSeeder(INounsSeeder _seeder) external override onlyOwner whenSeederNotLocked {
+    function setSeeder(ISeeder _seeder) external override onlyOwner whenSeederNotLocked {
         seeder = _seeder;
 
         emit SeederUpdated(_seeder);
@@ -250,10 +251,10 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     }
 
     /**
-     * @notice Mint a Noun with `nounId` to the provided `to` address.
+     * @notice Mint a Punk with `punkId` to the provided `to` address.
      */
-    function _mintTo(address to, uint256 tokenId) internal returns (uint256) {
-        NSeeder.Seed memory seed = seeder.generateSeed(tokenId);
+    function _mintTo(address to, uint256 punkId) internal returns (uint256) {
+        ISeeder.Seed memory seed = seeder.generateSeed(punkId);
         
         bytes32 seedHash;
         assembly {
@@ -262,9 +263,9 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
         }
         seedHashes[seedHash] = 1;
 
-        _mint(owner(), to, tokenId);
-        emit NounCreated(tokenId, seed);
+        _mint(owner(), to, punkId);
+        emit PunkCreated(punkId, seed);
 
-        return tokenId;
+        return punkId;
     }
 }

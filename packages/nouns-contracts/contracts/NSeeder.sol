@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title The NounsToken pseudo-random seed generator
+/// @title The NToken pseudo-random seed generator
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -18,11 +18,11 @@
 pragma solidity ^0.8.6;
 
 import { ISeeder } from './interfaces/ISeeder.sol';
-import { INounsDescriptorMinimal } from './interfaces/IDescriptorMinimal.sol';
+import { IDescriptorMinimal } from './interfaces/IDescriptorMinimal.sol';
 
-contract NounsSeeder is ISeeder {
+contract NSeeder is ISeeder {
     /**
-     * @notice Generate a pseudo-random Noun seed using the previous blockhash and noun ID.
+     * @notice Generate a pseudo-random Punk seed using the previous blockhash and punk ID.
      */
     // prettier-ignore
     uint24[] public cTypeProbability;
@@ -36,9 +36,9 @@ contract NounsSeeder is ISeeder {
     uint256[] accCountByType;
     uint256[] typeOrderSortedByCount; // [sorted_index] = real_group_id
 
-    function generateSeed(uint256 nounId, INounsDescriptorMinimal descriptor) external view override returns (Seed memory) {
+    function generateSeed(uint256 punkId, IDescriptorMinimal descriptor) external view override returns (Seed memory) {
         uint256 pseudorandomness = uint256(
-            keccak256(abi.encodePacked(blockhash(block.number - 1), nounId))
+            keccak256(abi.encodePacked(blockhash(block.number - 1), punkId))
         );
 
         Seed memory seed;
@@ -122,8 +122,14 @@ contract NounsSeeder is ISeeder {
             });
         }
 
-        return seed;
+        for()
+        return sortedSeed(seed);
     }
+
+    function sortedSeed(Seed calldata seed) internal returns (Seed memory) {
+
+    }
+
     function setTypeProbability(uint256[] calldata probabilities) external onlyOwner {
         delete cTypeProbability;
         _setProbability(cTypeProbability, probabilities);

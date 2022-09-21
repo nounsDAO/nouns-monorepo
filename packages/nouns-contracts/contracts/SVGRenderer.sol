@@ -24,7 +24,7 @@ contract SVGRenderer is ISVGRenderer {
     uint256 private constant _INDEX_TO_BYTES3_FACTOR = 3;
 
     // prettier-ignore
-    string private constant _SVG_START_TAG = '<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">';
+    string private constant _SVG_START_TAG = '<svg width="96" height="96" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">';
     string private constant _SVG_END_TAG = '</svg>';
 
     struct ContentBounds {
@@ -48,17 +48,17 @@ contract SVGRenderer is ISVGRenderer {
      * @notice Given RLE image data and color palette pointers, merge to generate a single SVG image.
      */
     function generateSVG(SVGParams calldata params) external pure override returns (string memory svg) {
-        if (bytes(params.background).length != 0) {
-            // prettier-ignore
-            return string(
-                abi.encodePacked(
-                    _SVG_START_TAG,
-                    '<rect width="100%" height="100%" fill="#', params.background, '" />',
-                    _generateSVGRects(params),
-                    _SVG_END_TAG
-                )
-            );
-        }
+        // if (bytes(params.background).length != 0) {
+        //     // prettier-ignore
+        //     return string(
+        //         abi.encodePacked(
+        //             _SVG_START_TAG,
+        //             '<rect width="100%" height="100%" fill="#', params.background, '" />',
+        //             _generateSVGRects(params),
+        //             _SVG_END_TAG
+        //         )
+        //     );
+        // }
         return string(abi.encodePacked(_SVG_START_TAG, _generateSVGRects(params), _SVG_END_TAG));
     }
 
@@ -69,14 +69,14 @@ contract SVGRenderer is ISVGRenderer {
         Part[] memory parts = new Part[](1);
         parts[0] = part;
 
-        return _generateSVGRects(SVGParams({ parts: parts, background: '' }));
+        return _generateSVGRects(SVGParams({ parts: parts/*, background: '' */}));
     }
 
     /**
      * @notice Given RLE image data and color palette pointers, merge to generate a partial SVG image.
      */
     function generateSVGParts(Part[] calldata parts) external pure override returns (string memory partialSVG) {
-        return _generateSVGRects(SVGParams({ parts: parts, background: '' }));
+        return _generateSVGRects(SVGParams({ parts: parts/*, background: '' */}));
     }
 
     /**
@@ -88,12 +88,11 @@ contract SVGRenderer is ISVGRenderer {
         pure
         returns (string memory svg)
     {
-        string[33] memory lookup = [
-            '0', '10', '20', '30', '40', '50', '60', '70', 
-            '80', '90', '100', '110', '120', '130', '140', '150', 
-            '160', '170', '180', '190', '200', '210', '220', '230', 
-            '240', '250', '260', '270', '280', '290', '300', '310',
-            '320'
+        string[25] memory lookup = [
+            '0', '4', '8', '12', '16', '20', '24', '28', 
+            '32', '36', '40', '44', '48', '52', '56', '60', 
+            '64', '68', '72', '76', '80', '84', '88', '92', 
+            '96'
         ];
         string memory rects;
         string[] memory cache;
