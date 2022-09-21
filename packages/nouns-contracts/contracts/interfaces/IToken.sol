@@ -22,11 +22,11 @@ import { IDescriptorMinimal } from './IDescriptorMinimal.sol';
 import { ISeeder } from './ISeeder.sol';
 
 interface IToken is IERC721 {
-    event TokenCreated(uint256 indexed tokenId, ISeeder.Seed seed);
+    event PunkCreated(uint256 indexed tokenId, ISeeder.Seed seed);
 
-    event TokenBurned(uint256 indexed tokenId);
+    event PunkBurned(uint256 indexed tokenId);
 
-    event PunkerDAOUpdated(address punkerDAO);
+    event PunkersDAOUpdated(address punkersDAO);
 
     event MinterUpdated(address minter);
 
