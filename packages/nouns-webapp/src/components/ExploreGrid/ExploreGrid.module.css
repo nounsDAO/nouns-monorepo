@@ -1,5 +1,21 @@
 .exploreWrap {
     background: var(--brand-gray-background);
+    padding-left: 1em;
+}
+
+.gridWrap {
+    /* width: 100%; */
+    width: fit-content;
+}
+
+.detailBlock {
+    /* width: 33%; */
+    max-width: 500px;
+    flex: 0 0 33%;    
+}
+
+.contentWrap {
+    justify-content: space-between;
 }
 
 .exploreGrid {
@@ -20,12 +36,14 @@
     padding: 0;
     width: 10%;
     transition: border 0.5s ease-in-out;
-    border: transparent 3px solid;
+    border: transparent 5px solid;
     animation-name: animateIn;
     animation-duration: 50ms;
     animation-delay: calc(var(--animation-order) * 10ms);
     animation-fill-mode: both;
     animation-timing-function: ease-in-out;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .exploreGrid li:hover img {
@@ -49,6 +67,7 @@
     display: flex;
     align-items: center;
     background-color: #fff;
+    flex-direction: column;
 }
 .exploreGrid button:focus {
     border: none;
@@ -56,6 +75,12 @@
 
 .exploreGrid li a {
     display: block;
+}
+.exploreGrid li .label {
+    text-align: center;
+    font-family: 'Londrina Solid';
+    margin: 0;
+    padding: 0;
 }
 
 .activeNoun {
@@ -126,8 +151,8 @@ li.activeNoun img, li.activeNoun:hover img {
     align-items: center;
 }
 .nav .sort p {
-    display: inline;
-    opacity: 0.75;
+    /* display: inline;
+    opacity: 0.75; */
 }
 
 .nav .selectWrap {

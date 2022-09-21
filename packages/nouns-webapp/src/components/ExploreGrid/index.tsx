@@ -4,7 +4,9 @@ import { StandaloneNounImage } from '../../components/StandaloneNoun';
 import classes from './ExploreGrid.module.css';
 import cx from 'classnames';
 import ExploreNounDetail from '../ExploreNounDetail';
-import {AnimatePresence, motion, 
+import {
+    // AnimatePresence, 
+    motion, 
     // useInView
 } from 'framer-motion/dist/framer-motion';
 import { Auction as IAuction } from '../../wrappers/nounsAuction';
@@ -68,15 +70,29 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         };
     }, []);
 
+    
+    
+
     // const gridOptions = [2.5, 5, 12.5];
     const [isFullView] = useState<boolean>(false);
-    const [isSidebarVisible, setIsSidebarVisible] = useState<boolean>(false);
+    const [isSidebarVisible, setIsSidebarVisible] = useState<boolean>(true);
     const [activeSizeOption, setSizeOption] = useState<string>("large");
     const sizeOptions = ["small", "large"];
 
-    const [selectedNoun, setSelectedNoun] = useState<number | undefined>();
-    const [activeNoun, setActiveNoun] = useState<number | undefined>(selectedNoun);
-    
+    const [selectedNoun, setSelectedNoun] = useState<number | undefined>(undefined);
+    const [activeNoun, setActiveNoun] = useState<number>(-1);
+
+    // get latest noun id, then replace loading sidebar state with latest noun
+    useEffect(() => {
+        console.log('currentAuction', currentAuction);
+        if (currentAuction?.nounId) {
+            // console.log('currentAuction.nounId', currentAuction?.nounId);
+            setSelectedNoun(BigNumber.from(currentAuction?.nounId).toNumber());
+            setActiveNoun(BigNumber.from(currentAuction?.nounId).toNumber());
+        }
+        
+    }, [currentAuction]);
+    console.log("activeNoun", activeNoun)
     
     const handleNounDetail = (nounId: number, sidebarVisibility: string) => {
         nounId > -1 && nounId < nounCount && setSelectedNoun(nounId);
@@ -99,17 +115,17 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         nounId && buttonsRef.current[nounId]?.scrollIntoView({behavior: 'smooth'});
     };
 
-    const gridVariants = {
-        closed: { 
-            width: "100%", 
-        },
-        open: { 
-            width: isMobile ? "100%" : "66%",
-            transition: { 
-                delay: .35,
-            }
-        },
-    }
+    // const gridVariants = {
+    //     closed: { 
+    //         width: "100%", 
+    //     },
+    //     open: { 
+    //         width: isMobile ? "100%" : "66%",
+    //         transition: { 
+    //             delay: .35,
+    //         }
+    //     },
+    // }
     // const gridItemVariants = {
     //     initial: {
     //         opacity: 0,
@@ -204,7 +220,6 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     const [sortOrder, setSortOrder] = useState(sortOptions[0].value);
 
     const handleSortOrderChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-        console.log(event.target.value);
         setSortOrder(event.target.value);
     };
 
@@ -218,23 +233,24 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
 
                 >
                 {/* Todo: move wrapper into parent component */}
-                <motion.div 
+                <div 
                     className={cx(classes.gridWrap, isSidebarVisible && classes.sidebarVisible)}
-                    layout            
-                    variants={gridVariants}
-                    initial={!isSidebarVisible && "closed"}
-                    animate={isSidebarVisible ? "open" : "closed"}
-                    transition={{
-                        delay: .05,
-                    }}
+                    // layout            
+                    // variants={gridVariants}
+                    // initial={!isSidebarVisible && "closed"}
+                    // animate={isSidebarVisible ? "open" : "closed"}
+                    // transition={{
+                    //     delay: .05,
+                    // }}
                 >
                     <div className={classes.nav}>
-                        <h3>{nounCount >= 0 && (
+                        
+                        <h3><span><Trans>Explore</Trans></span> {nounCount >= 0 && (
                             <motion.span 
                                 initial={{opacity: 0}}
                                 animate={{opacity: 1}}
                             >
-                                <Trans>explore all</Trans> <strong>{nounCount}</strong> Nouns
+                                <strong>{nounCount}</strong> Nouns
                             </motion.span>
                         )}
                         </h3>
@@ -271,102 +287,105 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                     </div>   
                     <motion.div 
                         className={cx(classes.exploreGrid, isFullView && classes.fullViewGrid, classes[activeSizeOption])}
-                    >   <AnimatePresence exitBeforeEnter>
-                        {sortOrder === "date-descending" ? (
-                            <motion.ul
+                    >   
+                        {/* <AnimatePresence exitBeforeEnter> */}
+                            {sortOrder === "date-descending" ? (
+                                <motion.ul
+                                    // layout
+                                    // exit={{
+                                    //     opacity: 0
+                                    // }}
+                                >  
+                                    {nounCount >= 0 && 
+                                        [...Array(nounCount)].map((x, i) => 
+                                            <motion.li 
+                                                style={{ 
+                                                    "--animation-order": Math.abs(i - nounCount), 
+                                                } as React.CSSProperties
+                                                }
+                                                className={i === selectedNoun ? classes.activeNoun : ''} 
+                                                key={i}
+                                                // layout
+                                                // variants={gridItemVariants}
+                                                // initial="standard"
+                                                // animate={isInView && (activeSizeOption === "small") ? "small" : "standard"}
+                                                // transition={{ 
+                                                //     stiffness: '50',
+                                                // }}
+                                            >
+                                                <button 
+                                                    // ref={el => buttonsRef.current[i] = el} 
+                                                    // onFocus={() => handleNounDetail(i, i === selectedNoun ? 'close' : 'visible')}
+                                                    // onClick={event => focusNoun(i)}
+                                                    onClick={() => handleNounDetail(i, i === selectedNoun ? 'close' : 'visible')}
+                                                    onMouseOver={() => setActiveNoun(i)} 
+                                                    // onMouseOut={() => selectedNoun && setActiveNoun(selectedNoun)}
+                                                    >
+                                                    <img src={process.env.PUBLIC_URL + `/nouns/noun${i}.svg`} alt="" />
+                                                    {/* <p className={classes.label}>Noun {i}</p> */}
+                                                    {/* <StandaloneNounImage nounId={BigNumber.from(i)} /> */}
+                                                    {/* <p>Noun {i}</p> */}
+                                                </button>
+                                            </motion.li>
+                                        ).reverse()
+                                    } 
+                            </motion.ul>
+                        ) : (
+                            <motion.ul 
                                 // layout
                                 // exit={{
                                 //     opacity: 0
                                 // }}
-                            >  
-                                {nounCount >= 0 && 
-                                    [...Array(nounCount)].map((x, i) => 
-                                        <motion.li 
-                                            style={{ 
-                                                "--animation-order": Math.abs(i - nounCount), 
-                                            } as React.CSSProperties
-                                            }
-                                            className={i === selectedNoun ? classes.activeNoun : ''} 
-                                            key={i}
-                                            // layout
-                                            // variants={gridItemVariants}
-                                            // initial="standard"
-                                            // animate={isInView && (activeSizeOption === "small") ? "small" : "standard"}
-                                            // transition={{ 
-                                            //     stiffness: '50',
-                                            // }}
-                                        >
-                                            <button 
-                                                // ref={el => buttonsRef.current[i] = el} 
-                                                // onFocus={() => handleNounDetail(i, i === selectedNoun ? 'close' : 'visible')}
-                                                // onClick={event => focusNoun(i)}
-                                                onClick={() => handleNounDetail(i, i === selectedNoun ? 'close' : 'visible')}
-                                                onMouseOver={() => setActiveNoun(i)} 
-                                                onMouseOut={() => setActiveNoun(selectedNoun)}
-                                                >
-                                                <img src={process.env.PUBLIC_URL + `/nouns/noun${i}.svg`} alt="" />
-                                                {/* <StandaloneNounImage nounId={BigNumber.from(i)} /> */}
-                                                {/* <p>Noun {i}</p> */}
-                                            </button>
-                                        </motion.li>
-                                    ).reverse()
-                                } 
-                        </motion.ul>
-                    ) : (
-                        <motion.ul 
-                            layout
-                            exit={{
-                                opacity: 0
-                            }}
-                        >
-                            {[...Array(nounCount)].map((x, i) =>
-                                <motion.li 
-                                    style={{ 
-                                        "--animation-order": i, 
-                                    } as React.CSSProperties
-                                    }
-                                    className={i === selectedNoun ? classes.activeNoun : ''} 
-                                    key={i}
-                                    layout
-                                    // variants={gridItemVariants}
-                                    // initial="standard"
-                                    // animate={isInView && (activeSizeOption === "small") ? "small" : "standard"}
-                                    // transition={{ 
-                                    //     stiffness: '50',
-                                    // }}
-                                >
-                                    <button 
-                                        // ref={el => buttonsRef.current[i] = el} 
-                                        // onFocus={() => handleNounDetail(i, i === activeNoun ? 'close' : 'visible')}
-                                        // onClick={event => focusNoun(i)}
-                                        onClick={() => handleNounDetail(i, i === selectedNoun ? 'close' : 'visible')}
-                                        onMouseOver={() => setActiveNoun(i)} 
-                                        // onMouseOut={() => setActiveNoun(selectedNoun)}
-                                        >
-                                        <StandaloneNounImage nounId={BigNumber.from(i)} />
-                                        {/* <img src={process.env.PUBLIC_URL + `/nouns/noun${i}.svg`} alt="" /> */}
-                                    </button>
-                                </motion.li>
+                            >
+                                {[...Array(nounCount)].map((x, i) =>
+                                    <motion.li 
+                                        style={{ 
+                                            "--animation-order": i, 
+                                        } as React.CSSProperties
+                                        }
+                                        className={i === selectedNoun ? classes.activeNoun : ''} 
+                                        key={i}
+                                        layout
+                                        // variants={gridItemVariants}
+                                        // initial="standard"
+                                        // animate={isInView && (activeSizeOption === "small") ? "small" : "standard"}
+                                        // transition={{ 
+                                        //     stiffness: '50',
+                                        // }}
+                                    >
+                                        <button 
+                                            // ref={el => buttonsRef.current[i] = el} 
+                                            // onFocus={() => handleNounDetail(i, i === activeNoun ? 'close' : 'visible')}
+                                            // onClick={event => focusNoun(i)}
+                                            onClick={() => handleNounDetail(i, i === selectedNoun ? 'close' : 'visible')}
+                                            onMouseOver={() => setActiveNoun(i)} 
+                                            // onMouseOut={() => setActiveNoun(selectedNoun)}
+                                            >
+                                            <StandaloneNounImage nounId={BigNumber.from(i)} />
+                                            {/* <img src={process.env.PUBLIC_URL + `/nouns/noun${i}.svg`} alt="" /> */}
+                                            <div className={classes.label}><p>Noun {i}</p></div>
+                                        </button>
+                                    </motion.li>
+                                )}
+                                </motion.ul>
                             )}
-                            </motion.ul>
-                        )}
-                        </AnimatePresence>
-                    
-                    
-                    </motion.div>
-                    </motion.div>
-                    <AnimatePresence>
-                        {isSidebarVisible && (
+                            {/* </AnimatePresence> */}
+                        
+                        
+                        </motion.div>
+                    </div>
+                    {/* <AnimatePresence>
+                        {isSidebarVisible && ( */}
                             <motion.div 
                                 className={cx(classes.detailBlock, isSidebarVisible && classes.sidebarVisible)}
                             />
-                        )}
-                    </AnimatePresence>
-                    <AnimatePresence>
+                        {/* )}
+                    </AnimatePresence> */}
+                    {/* <AnimatePresence> */}
                         {isSidebarVisible && (
                             <ExploreNounDetail 
                                 handleNounDetail={handleNounDetail} 
-                                nounId={activeNoun || 0} 
+                                nounId={activeNoun} 
                                 isVisible={isSidebarVisible} 
                                 handleScrollTo={handleScrollTo} 
                                 isFirstAuction={activeNoun === 0}
@@ -374,7 +393,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                             />
                                 
                         )}
-                    </AnimatePresence>
+                    {/* </AnimatePresence> */}
             </div>
         </div>
         

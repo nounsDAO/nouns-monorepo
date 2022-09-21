@@ -3,6 +3,8 @@
     top: -30px;
     right: 0;
     height: 100%;
+    max-width: 500px;
+    width: 33%;
 }
 
 .detailWrap > div{
@@ -14,7 +16,7 @@
     display: flex;
     flex-direction: column;
     align-self: flex-start;
-    transition: background-color 0.25s ease-in-out;
+    /* transition: background-color 0.05s ease-in-out; */
     position: sticky;
     top: -5px;
     /* padding: 30px 15px; */
@@ -31,7 +33,7 @@
 
 .detailNounImage {
     text-align: center;
-    margin-top: 10vh;
+    margin-top: 5vh;
 }
 
 .close {
@@ -88,6 +90,7 @@
 .nounBirthday {
     position: relative;
     z-index: 1;
+    width: 100%;
 }
 .nounBirthday > div {
     opacity: 0.6;
@@ -161,6 +164,7 @@ h2 {
     max-height: 40vh;
     height: 100%;
     cursor: pointer;
+    width: 100%;
 }
 
 /* Treat more like a modal on mobile */
@@ -180,6 +184,7 @@ h2 {
         contain: content;
         background: transparent;
         padding-bottom: 15px;
+        max-width: none;
         /* position: fixed; 
    overflow-y: scroll;
    top: 0; right: 0; bottom: 0; left: 0;  */
