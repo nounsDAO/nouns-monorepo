@@ -21,6 +21,7 @@
 
 .contentWrap {
     justify-content: space-between;
+    flex-direction: row-reverse;
     /* height: 100vh;
     overflow: auto !important; */
 }

@@ -6,7 +6,7 @@
     /* height: 100%; */
     max-width: 500px;
     width: 33%;
-    border-left: 1px solid rgba(0,0,0,0.1); 
+    border-right: 1px solid rgba(0,0,0,0.1); 
     padding: 15px;
     position: sticky;
     top: 0;
@@ -94,6 +94,7 @@
     color: var(--brand-cool-dark-text);
     background-color: var(--brand-warm-accent);
     font-weight: bold;
+    aspect-ratio: 1;
 }
 
 .infoWrap .arrow:disabled {
