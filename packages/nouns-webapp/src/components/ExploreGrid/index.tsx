@@ -322,7 +322,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                     onMouseOut={() => selectedNoun && setActiveNoun(selectedNoun)}
                                                     >
                                                     <img src={process.env.PUBLIC_URL + `/nouns/noun${i}.svg`} alt="" />
-                                                    {/* <p className={classes.label}>Noun {i}</p> */}
+                                                    <p className={classes.label}>Noun {i}</p>
                                                     {/* <StandaloneNounImage nounId={BigNumber.from(i)} /> */}
                                                     {/* <p>Noun {i}</p> */}
                                                     {i === nounCount - 1 && (
