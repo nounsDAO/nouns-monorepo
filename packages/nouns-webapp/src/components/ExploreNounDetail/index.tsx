@@ -16,10 +16,13 @@ dotenv.config();
 interface ExploreNounDetailProps {
     nounId: number;
     handleNounDetail: Function;
+    handleNounNavigation: Function;
     isVisible: boolean;
     handleScrollTo: Function;
-    isLastAuction: boolean;
-    isFirstAuction: boolean;
+    // isLastAuction: boolean;
+    // isFirstAuction: boolean;
+    disablePrev: boolean;
+    disableNext: boolean;
 }
 
 const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
@@ -273,10 +276,11 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                         
                                         <div className={classes.infoWrap}>
                                             <button
-                                                onClick={() => props.handleNounDetail(props.nounId !== undefined && props.nounId - 1, 'visible')}
+                                                // onClick={() => props.handleNounDetail(props.nounId !== undefined && props.nounId - 1, 'visible')}
+                                                onClick={() => props.handleNounNavigation('prev')}
                                                 className={classes.arrow}
                                                 // className={isCool ? classes.leftArrowCool : classes.leftArrowWarm}
-                                                disabled={props.isFirstAuction}
+                                                disabled={props.disablePrev}
                                                 >
                                                 ←
                                             </button>
@@ -293,9 +297,10 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                                 <NounInfoRowBirthday nounId={props.nounId} />    
                                             </motion.div>
                                             <button
-                                                onClick={() => props.handleNounDetail(props.nounId !== undefined && props.nounId + 1, 'visible')}
+                                                // onClick={() => props.handleNounDetail(props.nounId !== undefined && props.nounId + 1, 'visible')}
+                                                onClick={() => props.handleNounNavigation('next')}
                                                 className={classes.arrow}
-                                                disabled={props.isLastAuction}
+                                                disabled={props.disableNext}
                                             >
                                                 →
                                             </button>

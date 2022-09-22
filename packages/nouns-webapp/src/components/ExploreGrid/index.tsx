@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { BigNumber } from 'ethers';
-import { StandaloneNounImage } from '../../components/StandaloneNoun';
+// import { StandaloneNounImage } from '../../components/StandaloneNoun';
 import classes from './ExploreGrid.module.css';
 import cx from 'classnames';
 import ExploreNounDetail from '../ExploreNounDetail';
@@ -92,12 +92,26 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         }
         
     }, [currentAuction]);
+
     console.log("activeNoun", activeNoun)
     
     const handleNounDetail = (nounId: number, sidebarVisibility: string) => {
         nounId > -1 && nounId < nounCount && setSelectedNoun(nounId);
         sidebarVisibility === "visible" ? setIsSidebarVisible(true) : setIsSidebarVisible(false);
         sidebarVisibility !== "visible" && setSelectedNoun(undefined);
+    }
+
+    const handleNounNavigation = (direction: string) => {
+        if ((sortOrder === "date-ascending" && direction === 'next') || (sortOrder === "date-descending" && direction === 'prev')) {
+            setActiveNoun(activeNoun + 1);
+            setSelectedNoun(activeNoun + 1);
+        } else {
+            setActiveNoun(activeNoun - 1);
+            setSelectedNoun(activeNoun - 1);
+        }
+        // nounId > -1 && nounId < nounCount && setSelectedNoun(nounId);
+        // sidebarVisibility === "visible" ? setIsSidebarVisible(true) : setIsSidebarVisible(false);
+        // sidebarVisibility !== "visible" && setSelectedNoun(undefined);
     }
 
     // const keyboardPrev: boolean = useKeyPress("ArrowLeft");
@@ -364,9 +378,9 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                             onMouseOver={() => setActiveNoun(i)} 
                                             onMouseOut={() => selectedNoun && setActiveNoun(selectedNoun)}
                                             >
-                                            <StandaloneNounImage nounId={BigNumber.from(i)} />
-                                            {/* <img src={process.env.PUBLIC_URL + `/nouns/noun${i}.svg`} alt="" /> */}
-                                            <div className={classes.label}><p>Noun {i}</p></div>
+                                            {/* <StandaloneNounImage nounId={BigNumber.from(i)} /> */}
+                                            <img src={process.env.PUBLIC_URL + `/nouns/noun${i}.svg`} alt="" />
+                                            {/* <div className={classes.label}><p>Noun {i}</p></div> */}
                                         </button>
                                     </motion.li>
                                 )}
@@ -388,11 +402,14 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                         {isSidebarVisible && (
                             <ExploreNounDetail 
                                 handleNounDetail={handleNounDetail} 
+                                handleNounNavigation={handleNounNavigation} 
                                 nounId={activeNoun} 
                                 isVisible={isSidebarVisible} 
                                 handleScrollTo={handleScrollTo} 
-                                isFirstAuction={activeNoun === 0}
-                                isLastAuction={activeNoun === nounCount - 1}
+                                disablePrev={((sortOrder === "date-ascending" && activeNoun === 0) || (sortOrder === "date-descending" && activeNoun === nounCount - 1)) ? true : false}
+                                disableNext={((sortOrder === "date-ascending" && activeNoun === nounCount - 1) || (sortOrder === "date-descending" && activeNoun === 0)) ? true : false}
+                                // isFirstAuction={(sortOrder === "date-ascending" && activeNoun === 0) || (sortOrder === "date-descending" && activeNoun === nounCount -1)}
+                                // isLastAuction={(sortOrder === "date-descending" && activeNoun === 0) || (sortOrder === "date-ascending" && activeNoun === nounCount -1)}
                             />
                                 
                         )}

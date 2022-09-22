@@ -49,8 +49,8 @@
     transition: border 0.05s ease-in-out;
     border: transparent 1px solid;
     animation-name: animateIn;
-    animation-duration: 100ms;
-    animation-delay: calc(var(--animation-order) * 35ms);
+    animation-duration: 60ms;
+    animation-delay: calc(var(--animation-order) * 25ms);
     animation-fill-mode: both;
     animation-timing-function: ease-in-out;
     border-radius: 10px;
