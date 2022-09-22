@@ -1,6 +1,11 @@
 .exploreWrap {
-    background: var(--brand-gray-background);
-    padding-left: 1em;
+    /* background: var(--brand-gray-background);
+    padding-left: 1em; */
+    padding: 0;
+    border: 1px solid rgba(0,0,0,0.1);
+    margin: 0 1em;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .gridWrap {
@@ -23,7 +28,7 @@
     flex: 1 1;
 }
 .exploreGrid ul {
-    padding: 0;
+    padding: 15px;
     margin: 0;
     width: 100%;
     display: flex;
@@ -47,8 +52,8 @@
 }
 
 .exploreGrid li:hover img {
-    transform: scale(0.7);
-    top: -4px;
+    transform: scale(0.9);
+    /* top: -4px; */
     border-radius: 3%;
     /* transition: transform 0.15s ease-in-out; */
 }
@@ -112,8 +117,8 @@
     border: 10px solid transparent;
 }
 li.activeNoun img, li.activeNoun:hover img {
-    transform: scale(0.6);
-    border-radius: 10%;
+    /* transform: scale(0.9); */
+    border-radius: 0 !important;
     transition: transform 0.15s ease-in-out;
 }
 
@@ -146,8 +151,10 @@ li.activeNoun img, li.activeNoun:hover img {
     justify-content: space-between;
     display: flex;
     grid-gap: 10px;
-    margin-bottom: 10px;
-    padding: 15px 1em 0;
+    /* margin-bottom: 10px; */
+    /* padding: 15px 1em 0; */
+    padding: 15px;
+    border-bottom: rgba(0,0,0,0.1) 1px solid;
 }
 
 .nav .sizing {
@@ -273,7 +280,7 @@ li.activeNoun img, li.activeNoun:hover img {
         display: flex;
         /* flex: 1 1; */
         position: relative;
-        grid-gap: 1em;
+        /* grid-gap: 1em; */
     }
     .gridWrap.sidebarVisible {
     }

@@ -322,12 +322,12 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                     onMouseOut={() => selectedNoun && setActiveNoun(selectedNoun)}
                                                     >
                                                     <img src={process.env.PUBLIC_URL + `/nouns/noun${i}.svg`} alt="" />
-                                                    <p className={classes.label}>Noun {i}</p>
+                                                    {/* <p className={classes.label}>Noun {i}</p> */}
                                                     {/* <StandaloneNounImage nounId={BigNumber.from(i)} /> */}
                                                     {/* <p>Noun {i}</p> */}
-                                                    {i === nounCount - 1 && (
+                                                    {/* {i === nounCount - 1 && (
                                                         <p className={classes.currentAuction}>current auction</p>
-                                                    )}
+                                                    )} */}
                                                 </button>
                                             </motion.li>
                                         ).reverse()
@@ -379,9 +379,9 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                     </div>
                     {/* <AnimatePresence>
                         {isSidebarVisible && ( */}
-                            <motion.div 
+                            {/* <motion.div 
                                 className={cx(classes.detailBlock, isSidebarVisible && classes.sidebarVisible)}
-                            />
+                            /> */}
                         {/* )}
                     </AnimatePresence> */}
                     {/* <AnimatePresence> */}

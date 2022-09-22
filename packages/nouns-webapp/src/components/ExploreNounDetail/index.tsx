@@ -232,7 +232,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                     <motion.div 
                         className={classes.detail}
                         style={{
-                            background: backgroundColor,
+                            // background: backgroundColor,
                         }}
                     >
                         {/* <button className={classes.close} onClick={() => props.handleNounDetail('close')}>
