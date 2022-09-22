@@ -203,6 +203,12 @@ li.activeNoun img, li.activeNoun:hover img {
     font-family: 'PT Root UI';
     font-weight: bold;
 }
+
+.nav .selectWrap:hover {
+    background-color: #e2e3e8;
+    color: black;
+    transition: all 0.2s ease-in-out;
+}
 .nav .selectWrap select:hover {
     cursor: pointer;
 }
@@ -210,7 +216,9 @@ li.activeNoun img, li.activeNoun:hover img {
     background: transparent;
     border: 0;
     padding: .5rem;
-    border-left: solid .5rem transparent;
+    color: rgb(95, 95, 95);
+    font-weight: bold;
+    border-right: 5px solid transparent;
 }
 
 .nav button {
@@ -236,8 +244,9 @@ li.activeNoun img, li.activeNoun:hover img {
 }
 
 .nav button:hover {
-    background-color: var(--brand-cool-accent);
-    color: var(--brand-cool-dark-text);
+    background-color: #e2e3e8;
+    color: black;
+    transition: all 0.2s ease-in-out;
 }
 
 .nav button:hover svg {
