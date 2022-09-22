@@ -5,7 +5,7 @@
     border: 1px solid rgba(0,0,0,0.1);
     margin: 0 1em;
     border-radius: 10px;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .gridWrap {
@@ -21,6 +21,8 @@
 
 .contentWrap {
     justify-content: space-between;
+    /* height: 100vh;
+    overflow: auto !important; */
 }
 
 .exploreGrid {
@@ -31,17 +33,21 @@
     padding: 15px;
     margin: 0;
     width: 100%;
-    display: flex;
+    /* display: flex; */
     flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 15px;
 }
+
 .exploreGrid li {
     position: relative;
     list-style-type: none;
     margin: 0;
     padding: 0;
-    width: 10%;
-    transition: border 0.5s ease-in-out;
-    border: transparent 5px solid;
+    /* width: 10%; */
+    transition: border 0.05s ease-in-out;
+    border: transparent 1px solid;
     animation-name: animateIn;
     animation-duration: 50ms;
     animation-delay: calc(var(--animation-order) * 10ms);
@@ -51,11 +57,15 @@
     overflow: hidden;
 }
 
+.exploreGrid li:hover {
+    /* border: 1px solid rgba(0,0,0,0.2) !important; */
+}
+
 .exploreGrid li:hover img {
     transform: scale(0.9);
     /* top: -4px; */
-    border-radius: 3%;
-    /* transition: transform 0.15s ease-in-out; */
+    /* border-radius: 3%; */
+    transition: transform 0.05s ease-in-out;
 }
 
 .exploreGrid li img {
@@ -63,7 +73,8 @@
     margin: 0 auto;
     width: 100%;
     position: relative;
-    /* transition: transform 0.15s ease-in-out; */
+    border-radius: 10px;
+    transition: transform 0.1s ease-in-out;
 }
 .exploreGrid li button {
     border: none;
@@ -114,26 +125,17 @@
 }
 
 .activeNoun {
-    border: 10px solid transparent;
+    /* border: 10px solid transparent; */
+    border: 1px solid rgba(0,0,0,0.2) !important;
 }
 li.activeNoun img, li.activeNoun:hover img {
-    /* transform: scale(0.9); */
-    border-radius: 0 !important;
+    transform: scale(0.9);
+    /* border-radius: 0 !important; */
     transition: transform 0.15s ease-in-out;
 }
 
-.detailWrap {
-    position: absolute;
-    top: -30px;
-    right: 0;
-    box-shadow: 0px 10px 24px rgba(0, 0, 0, 0.17);
-    height: 100%;
-    background: var(--brand-cool-background);
-    border-radius: 10px;
-}
-
 .detailWrap > div{
-    height: 100%;
+    /* height: 100%; */
 }
 
 .exploreGrid li a > div {

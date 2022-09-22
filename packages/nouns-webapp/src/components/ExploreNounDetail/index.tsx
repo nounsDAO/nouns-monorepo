@@ -164,26 +164,26 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
         }
       }
 
-    const sidebarInnerVariants = {
-        closed: { 
-            opacity: 0, 
-        },
-        open: { 
-            opacity: 1,
-            y: 0,
-            // transition: {
-            //     delay: 0.05,
-            //     duration: 0.05
-            // }
-        },
-        exit: {
-            y: 100,
-            opacity: 0,
-            // transition: {
-            //     duration: 0.05
-            // }
-        }
-    }
+    // const sidebarInnerVariants = {
+    //     closed: { 
+    //         opacity: 0, 
+    //     },
+    //     open: { 
+    //         opacity: 1,
+    //         y: 0,
+    //         // transition: {
+    //         //     delay: 0.05,
+    //         //     duration: 0.05
+    //         // }
+    //     },
+    //     exit: {
+    //         y: 100,
+    //         opacity: 0,
+    //         // transition: {
+    //         //     duration: 0.05
+    //         // }
+    //     }
+    // }
 
     // const sidebarVariants = {
     //     closed: {
@@ -226,9 +226,9 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                 // exit="exit"
                 // layout
                 >
-                <motion.div 
+                {/* <motion.div 
                     variants={sidebarInnerVariants}
-                    >
+                    > */}
                     <motion.div 
                         className={classes.detail}
                         style={{
@@ -240,13 +240,14 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                         </button> */}
                         <AnimatePresence exitBeforeEnter>
                             {props.nounId >= 0 ? (
-                                <motion.div
+                                <>
+                                {/* <motion.div
                                     // variants={detailsVariants}
                                     // initial="initial"
                                     // animate="animate"
                                     // exit="exit"
                                     key={props.nounId}
-                                >
+                                > */}
                                     <motion.div
                                         className={classes.detailNounImage}
                                         onClick={() => props.handleScrollTo(props.nounId)}
@@ -329,7 +330,8 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                             })}
                                         </motion.ul>
                                     </motion.div>
-                                </motion.div>
+                                {/* </motion.div> */}
+                                </>
                             ) : (
                                 <motion.div
                                     variants={detailsVariants}
@@ -418,7 +420,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                             )}
                         </AnimatePresence>
                     </motion.div>
-                </motion.div>
+                {/* </motion.div> */}
             </div>
         </>
     )
