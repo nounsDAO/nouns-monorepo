@@ -148,23 +148,23 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
     //     hidden: { opacity: 0, y: -50 },
     //   }
 
-      const detailsVariants = {
-        initial: {
-            // opacity: 0
-            opacity: 0
-        },
-        animate: {
-            opacity: 1,
-        },
-        exit: {
-            // y: 200,
-            // opacity: 0,
-            opacity: 0,
-            // transition: {
-            //     duration: 0.1
-            // }
-        }
-      }
+    //   const detailsVariants = {
+    //     initial: {
+    //         // opacity: 0
+    //         opacity: 0
+    //     },
+    //     animate: {
+    //         opacity: 1,
+    //     },
+    //     exit: {
+    //         // y: 200,
+    //         // opacity: 0,
+    //         opacity: 0,
+    //         // transition: {
+    //         //     duration: 0.1
+    //         // }
+    //     }
+    //   }
 
     // const sidebarInnerVariants = {
     //     closed: { 
