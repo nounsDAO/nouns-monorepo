@@ -125,18 +125,18 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         nounId && buttonsRef.current[nounId]?.scrollIntoView({behavior: 'smooth'});
     };
 
-    const gridVariants = {
-        closed: { 
-            width: "100%", 
-        },
-        open: { 
-            // width: isMobile ? "100%" : "auto",
-            width: "100%",
-            transition: { 
-                delay: .35,
-            }
-        },
-    }
+    // const gridVariants = {
+    //     closed: { 
+    //         width: "100%", 
+    //     },
+    //     open: { 
+    //         // width: isMobile ? "100%" : "auto",
+    //         width: "100%",
+    //         transition: { 
+    //             // delay: .35,
+    //         }
+    //     },
+    // }
     // const gridItemVariants = {
     //     initial: {
     //         opacity: 0,
@@ -243,11 +243,11 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                 <motion.div 
                     className={cx(classes.gridWrap, isSidebarVisible && classes.sidebarVisible)}
                     // layout            
-                    variants={gridVariants}
-                    initial={!isSidebarVisible && "closed"}
-                    animate={isSidebarVisible ? "open" : "closed"}
+                    // variants={gridVariants}
+                    // initial={!isSidebarVisible && "closed"}
+                    // animate={isSidebarVisible ? "open" : "closed"}
                     transition={{
-                        delay: .05,
+                        // delay: .05,
                     }}
                 >
                      <div className={classes.nav}>

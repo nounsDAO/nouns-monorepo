@@ -184,7 +184,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
     const sidebarVariants = {
         closed: {
             width: isMobile ? "inherit" : 0,
-            x: isMobile ? 0 : 100,
+            x: isMobile ? 0 : 0,
             y: isMobile ? "100%" : 0,
         },
         open: {
@@ -194,7 +194,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
         },
         exit: {
             width: isMobile ? "inherit" : 0,
-            x: isMobile ? 0 : 100,
+            x: isMobile ? 0 : 0,
             y: isMobile ? "100%" : 0,
             transition: {
                 duration: 0.1,
@@ -221,7 +221,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                     <div 
                         className={classes.detail}
                         style={{
-                            // background: backgroundColor,
+                            background: backgroundColor,
                         }}
                     >
                         <button className={classes.close} onClick={() => props.handleNounDetail('close')}>

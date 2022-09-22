@@ -6,8 +6,8 @@
     /* height: 100%; */
     max-width: 500px;
     width: 33%;
-    border-left: 1px solid rgba(0,0,0,0.1); 
-    padding: 15px;
+    /* border-left: 1px solid rgba(0,0,0,0.1);  */
+    /* padding: 15px; */
     position: sticky;
     top: 0;
     align-self: flex-start;
@@ -23,6 +23,8 @@
     width: 100%;
     flex-direction: column;
     height: 101vh;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
     /* align-self: flex-start; */
     /* transition: background-color 0.05s ease-in-out; */
     /* position: sticky;
@@ -73,10 +75,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 0 auto;
+    margin: 0 15px;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
-    padding: 7px;
+    padding: 7px 15px;
     background: rgba(255,255,255,0.2);
     text-align: center;
     gap: 10px;
@@ -124,6 +126,10 @@
 h2 {
     font-size: 32px;
     margin: 0;
+}
+
+.nounDetails {
+    margin: 0 15px;
 }
 
 
