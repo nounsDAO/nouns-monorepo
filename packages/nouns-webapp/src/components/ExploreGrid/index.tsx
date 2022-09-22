@@ -260,7 +260,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                             </motion.span>
                         )}
                         </h3>
-                        <div className={classes.sizing}>
+                        <div className={classes.buttons}>
                             <div className={classes.sort}>
                                 <div className={classes.selectWrap}>
                                     <select value={sortOrder} onChange={handleSortOrderChange}>
@@ -272,21 +272,23 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                     </select>
                                 </div>
                             </div>
-                            {sizeOptions.map((option, i) => {
-                                return (
-                                    <button 
-                                        key={option} 
-                                        onClick={() => setSizeOption(option)}
-                                        className={cx(activeSizeOption === option && classes.activeLayout)}
-                                    >   
-                                        {i === 0 ? (
-                                            iconSmallGrid
-                                        ) : (
-                                            iconLargeGrid
-                                        )}
-                                    </button>
-                                )
-                            })}
+                            <div className={classes.sizing}>
+                                {sizeOptions.map((option, i) => {
+                                    return (
+                                        <button 
+                                            key={option} 
+                                            onClick={() => setSizeOption(option)}
+                                            className={cx(activeSizeOption === option && classes.activeLayout)}
+                                        >   
+                                            {i === 0 ? (
+                                                iconSmallGrid
+                                            ) : (
+                                                iconLargeGrid
+                                            )}
+                                        </button>
+                                    )
+                                })}
+                            </div>
                         </div>
                     </div>  
                     <motion.div 
