@@ -7,7 +7,7 @@ import classes from './ExploreNounDetail.module.css';
 import { ImageData } from '@nouns/assets';
 import { Trans } from '@lingui/macro';
 import {AnimatePresence, motion} from 'framer-motion/dist/framer-motion';
-// import { XIcon } from '@heroicons/react/solid';
+import { XIcon } from '@heroicons/react/solid';
 import NounInfoRowBirthday from '../NounInfoRowBirthday';
 import loadingNoun from '../../assets/loading-skull-noun.gif';
 
@@ -19,8 +19,6 @@ interface ExploreNounDetailProps {
     handleNounNavigation: Function;
     isVisible: boolean;
     handleScrollTo: Function;
-    // isLastAuction: boolean;
-    // isFirstAuction: boolean;
     disablePrev: boolean;
     disableNext: boolean;
 }
@@ -80,9 +78,38 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
         return i.map(imageData => imageData.filename);
       }),
     ];
+
+    
     
     const getOrderedTraits = (seed: { head: number; glasses: number; accessory: number; body: number; background: number; }) => {
         let nounTraitsOrdered;
+        const loadingNounTraits = [
+            { 
+                partType: 'head',
+                partName: 'Skull',
+                partIndex: -1,
+            },
+            { 
+                partType: 'glasses',
+                partName: 'Processing',
+                partIndex: -1,
+            },
+            { 
+                partType: 'accessory',
+                partName: 'Loading',
+                partIndex: -1,
+            },
+            { 
+                partType: 'body',
+                partName: 'Placeholder',
+                partIndex: -1,
+            },
+            { 
+                partType: 'background',
+                partName: 'cool',
+                partIndex: -1,
+            },   
+        ];
         if (seed) {
             nounTraitsOrdered = [
                 { 
@@ -118,6 +145,8 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
             return nounTraitsOrdered;
         } else {
             console.log('error', nounTraitsOrdered)
+            return loadingNounTraits;
+            
         }
     }
 
@@ -134,7 +163,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
     //     visible: { 
     //         opacity: 1,
     //         transition: {
-    //             staggerChildren: 0.02,
+    //             staggerChildren: 0.01,
     //             when: "beforeChildren",
     //         },
     //     },
@@ -151,70 +180,28 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
     //     hidden: { opacity: 0, y: -50 },
     //   }
 
-    //   const detailsVariants = {
-    //     initial: {
-    //         // opacity: 0
-    //         opacity: 0
-    //     },
-    //     animate: {
-    //         opacity: 1,
-    //     },
-    //     exit: {
-    //         // y: 200,
-    //         // opacity: 0,
-    //         opacity: 0,
-    //         // transition: {
-    //         //     duration: 0.1
-    //         // }
-    //     }
-    //   }
 
-    // const sidebarInnerVariants = {
-    //     closed: { 
-    //         opacity: 0, 
-    //     },
-    //     open: { 
-    //         opacity: 1,
-    //         y: 0,
-    //         // transition: {
-    //         //     delay: 0.05,
-    //         //     duration: 0.05
-    //         // }
-    //     },
-    //     exit: {
-    //         y: 100,
-    //         opacity: 0,
-    //         // transition: {
-    //         //     duration: 0.05
-    //         // }
-    //     }
-    // }
-
-    // const sidebarVariants = {
-    //     closed: {
-    //         width: isMobile ? "inherit" : 0,
-    //         x: isMobile ? 0 : 100,
-    //         y: isMobile ? "100%" : 0,
-    //     },
-    //     open: {
-    //         width: isMobile ? "inherit" : "33%",
-    //         x: 0,
-    //         y: 0,
-    //         transition: {
-    //             duration: 0.1,
-    //             delayChildren: 0.05,
-    //         }
-    //     },
-    //     exit: {
-    //         width: isMobile ? "inherit" : 0,
-    //         x: isMobile ? 0 : 100,
-    //         y: isMobile ? "100%" : 0,
-    //         transition: {
-    //             duration: 0.1,
-    //             when: "afterChildren",
-    //         },
-    //     }
-    // }    
+    const sidebarVariants = {
+        closed: {
+            width: isMobile ? "inherit" : 0,
+            x: isMobile ? 0 : 100,
+            y: isMobile ? "100%" : 0,
+        },
+        open: {
+            width: isMobile ? "inherit" : "33%",
+            x: 0,
+            y: 0,
+        },
+        exit: {
+            width: isMobile ? "inherit" : 0,
+            x: isMobile ? 0 : 100,
+            y: isMobile ? "100%" : 0,
+            transition: {
+                duration: 0.1,
+                when: "afterChildren",
+            },
+        }
+    }    
 
     return (
         <>  
@@ -223,81 +210,57 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                     <motion.div className={classes.backdrop} initial={{opacity: 0}} animate={{opacity: 1}}></motion.div>
                 )}
             </AnimatePresence>
-            <div 
+            <motion.div 
                 className={classes.detailWrap}
-                // variants={sidebarVariants}
-                // initial="closed"
-                // animate="open"
-                // exit="exit"
+                variants={sidebarVariants}
+                initial="closed"
+                animate="open"
+                exit="exit"
                 // layout
                 >
-                {/* <motion.div 
-                    variants={sidebarInnerVariants}
-                    > */}
-                    <motion.div 
+                    <div 
                         className={classes.detail}
                         style={{
                             // background: backgroundColor,
                         }}
                     >
-                        {/* <button className={classes.close} onClick={() => props.handleNounDetail('close')}>
+                        <button className={classes.close} onClick={() => props.handleNounDetail('close')}>
                             <XIcon className={classes.icon} />
-                        </button> */}
+                        </button>
                         <AnimatePresence exitBeforeEnter>
-                            {props.nounId >= 0 ? (
-                                <>
-                                {/* <motion.div
-                                    // variants={detailsVariants}
-                                    // initial="initial"
-                                    // animate="animate"
-                                    // exit="exit"
-                                    key={props.nounId}
-                                > */}
-                                    <motion.div
+
+                                    <div
                                         className={classes.detailNounImage}
                                         onClick={() => props.handleScrollTo(props.nounId)}
                                     >   
-
                                         {/* <StandaloneNounImage nounId={BigNumber.from(props.nounId)} /> */}
-                                        <img src={process.env.PUBLIC_URL + `/nouns/noun${props.nounId}.svg`} alt="" />    
-                                        {/* {seed ? (
-                                            <img src={process.env.PUBLIC_URL + `/nouns/noun${props.nounId}.svg`} alt="" />    
+                                        {props.nounId >= 0 ? (
+                                            <img src={process.env.PUBLIC_URL + `/nouns/noun${props.nounId}.svg`} alt={`Noun ${props.nounId}`} />
                                         ) : (
-                                            <img style={{ opacity: 0.4 }} src={loadingNoun} alt="loading" />
-                                        )} */}
-                                        
-                                    </motion.div>
-                                    
-                                    <motion.div className={classes.nounDetails}>
-                                    <div className={classes.navArrowsContainer}>
-                                        
-                                        
+                                            <img src={loadingNoun} alt="Loading nouns" />
+                                        )}
                                     </div>
-                                        
+                                    
+                                    <div className={classes.nounDetails}>
                                         <div className={classes.infoWrap}>
                                             <button
-                                                // onClick={() => props.handleNounDetail(props.nounId !== undefined && props.nounId - 1, 'visible')}
                                                 onClick={() => props.handleNounNavigation('prev')}
                                                 className={classes.arrow}
-                                                // className={isCool ? classes.leftArrowCool : classes.leftArrowWarm}
                                                 disabled={props.disablePrev}
                                                 >
                                                 ←
                                             </button>
-                                            <motion.div
-                                                className={classes.nounBirthday}
-                                                // initial={{
-                                                //     opacity: 0
-                                                // }}
-                                                // animate={{
-                                                //     opacity: 1
-                                                // }}
-                                            >
-                                                <h2>Noun {props.nounId}</h2>
-                                                <NounInfoRowBirthday nounId={props.nounId} />    
-                                            </motion.div>
+                                            <div className={classes.nounBirthday}>
+                                                {props.nounId >= 0 ? (
+                                                    <>
+                                                        <h2>Noun {props.nounId}</h2>
+                                                        <NounInfoRowBirthday nounId={props.nounId} />    
+                                                    </>
+                                                ): (
+                                                    <h2>Loading Nouns</h2>
+                                                )}
+                                            </div>
                                             <button
-                                                // onClick={() => props.handleNounDetail(props.nounId !== undefined && props.nounId + 1, 'visible')}
                                                 onClick={() => props.handleNounNavigation('next')}
                                                 className={classes.arrow}
                                                 disabled={props.disableNext}
@@ -311,14 +274,14 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                             // variants={list}
                                             // initial="hidden"
                                             // animate="visible"
-                                            layout
+                                            // layout
                                         >
                                             {nounTraitsOrdered && Object.values(nounTraitsOrdered).map((part,index) => {    
                                                 const partType = traitTypeKeys(nounTraitsOrdered[index].partType);
                                                 return (
                                                     <motion.li
                                                         // variants={item}
-                                                        key={index}
+                                                        key={nounTraitsOrdered[index].partName}
                                                     >
                                                         <div 
                                                             className={classes.thumbnail}
@@ -326,7 +289,11 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                                                 backgroundColor: backgroundColor ? backgroundColor : 'transparent',
                                                             }}
                                                         >
-                                                            <StandalonePart partType={partType} partIndex={part.partIndex} />
+                                                            {props.nounId >= 0 ? (
+                                                                <StandalonePart partType={partType} partIndex={part.partIndex} />
+                                                            ): (
+                                                                <img src="" alt={`${partType} icon`} />
+                                                            )}
                                                         </div>
                                                         <div className={classes.description}>
                                                             <p className='small'><span>{traitKeyToLocalizedTraitKeyFirstLetterCapitalized(nounTraitsOrdered[index].partType)}</span></p>
@@ -336,99 +303,10 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                                 )
                                             })}
                                         </motion.ul>
-                                    </motion.div>
-                                {/* </motion.div> */}
-                                </>
-                            ) : (
-                                <motion.div
-                                    // variants={detailsVariants}
-                                    // initial="initial"
-                                    // animate="animate"
-                                    // exit="exit"
-                                    // key={props.nounId}
-                                >
-                                    <motion.div
-                                        className={classes.detailNounImage}
-                                        onClick={() => props.handleScrollTo(props.nounId)}
-                                    >   
-                                        <img src={loadingNoun} alt="loading" />
-                                        {/* <StandaloneNounImage nounId={BigNumber.from(props.nounId)} /> */}
-                                        {/* <img src={process.env.PUBLIC_URL + `/nouns/noun${props.nounId}.svg`} alt="" /> */}
-                                    </motion.div>
-                                    
-                                    <motion.div className={classes.nounDetails}>
-                                    {/* <div className={classes.navArrowsContainer}>
-                                        
-                                        
-                                    </div> */}
-                                        
-                                        <div className={classes.infoWrap}>
-                                            {/* <button
-                                                onClick={() => props.handleNounDetail(props.nounId !== undefined && props.nounId - 1, 'visible')}
-                                                className={classes.arrow}
-                                                // className={isCool ? classes.leftArrowCool : classes.leftArrowWarm}
-                                                disabled={props.isFirstAuction}
-                                                >
-                                                ←
-                                            </button> */}
-                                            <motion.div
-                                                className={classes.nounBirthday}
-                                                // initial={{
-                                                //     opacity: 0
-                                                // }}
-                                                // animate={{
-                                                //     opacity: 1
-                                                // }}
-                                            >
-                                                <h2>Loading Nouns</h2>
-                                                {/* <NounInfoRowBirthday nounId={props.nounId} />     */}
-                                            </motion.div>
-                                            {/* <button
-                                                onClick={() => props.handleNounDetail(props.nounId !== undefined && props.nounId + 1, 'visible')}
-                                                className={classes.arrow}
-                                                disabled={props.isLastAuction}
-                                            >
-                                                →
-                                            </button> */}
-                                        </div>
-                                        
-                                        <motion.ul 
-                                            className={classes.traitsList}
-                                            // variants={list}
-                                            // initial="hidden"
-                                            // animate="visible"
-                                            layout
-                                        >
-                                            {/* {Object.values(nounTraitsOrdered).map((part,index) => {    
-                                                const partType = traitTypeKeys(nounTraitsOrdered[index].partType);
-                                                return (
-                                                    <motion.li
-                                                        // variants={item}
-                                                        key={index}
-                                                    >
-                                                        <div 
-                                                            className={classes.thumbnail}
-                                                            style={{
-                                                                backgroundColor: backgroundColor ? backgroundColor : 'transparent',
-                                                            }}
-                                                        >
-                                                            <StandalonePart partType={partType} partIndex={part.partIndex} />
-                                                        </div>
-                                                        <div className={classes.description}>
-                                                            <p className='small'><span>{traitKeyToLocalizedTraitKeyFirstLetterCapitalized(nounTraitsOrdered[index].partType)}</span></p>
-                                                            <p><strong>{nounTraitsOrdered[index].partName}</strong></p>
-                                                        </div>
-                                                    </motion.li>
-                                                )
-                                            })} */}
-                                        </motion.ul>
-                                    </motion.div>
-                                </motion.div>
-                            )}
+                                    </div>
                         </AnimatePresence>
-                    </motion.div>
-                {/* </motion.div> */}
-            </div>
+                    </div>
+            </motion.div>
         </>
     )
 }

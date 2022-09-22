@@ -79,6 +79,7 @@
     padding: 7px;
     background: rgba(255,255,255,0.2);
     text-align: center;
+    gap: 10px;
 }
 .infoWrap .arrow {
     -webkit-appearance: none;
