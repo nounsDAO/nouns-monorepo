@@ -2,6 +2,7 @@ import { Row, Col, Button, Card, Spinner } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import {
   ProposalState,
+  useCancelProposal,
   useExecuteProposal,
   useProposal,
   useQueueProposal,
@@ -9,7 +10,7 @@ import {
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Vote.module.css';
 import { RouteComponentProps } from 'react-router-dom';
-import { TransactionStatus, useBlockNumber } from '@usedapp/core';
+import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -45,6 +46,7 @@ const VotePage = ({
   },
 }: RouteComponentProps<{ id: string }>) => {
   const proposal = useProposal(id);
+  const { account } = useEthers();
 
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
   // Toggle between Noun centric view and delegate view
@@ -52,12 +54,14 @@ const VotePage = ({
 
   const [isQueuePending, setQueuePending] = useState<boolean>(false);
   const [isExecutePending, setExecutePending] = useState<boolean>(false);
+  const [isCancelPending, setCancelPending] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
 
   const { queueProposal, queueProposalState } = useQueueProposal();
   const { executeProposal, executeProposalState } = useExecuteProposal();
+  const { cancelProposal, cancelProposalState } = useCancelProposal();
 
   // Get and format date from data
   const timestamp = Date.now();
@@ -91,12 +95,26 @@ const VotePage = ({
   const availableVotes = useUserVotesAsOfBlock(proposal?.createdBlock ?? undefined);
 
   const hasSucceeded = proposal?.status === ProposalState.SUCCEEDED;
+  const isQueued = proposal?.status === ProposalState.QUEUED;
+  const isActive = proposal?.status === ProposalState.ACTIVE;
+  const isPending = proposal?.status === ProposalState.PENDING;
+  const isCancellable =
+    (isQueued || isActive || isPending) &&
+    proposal?.proposer?.toLowerCase() === account?.toLowerCase();
+
   const isAwaitingStateChange = () => {
     if (hasSucceeded) {
       return true;
     }
     if (proposal?.status === ProposalState.QUEUED) {
       return new Date() >= (proposal?.eta ?? Number.MAX_SAFE_INTEGER);
+    }
+    return false;
+  };
+
+  const isAwaitingDesctructiveStateChange = () => {
+    if (isCancellable) {
+      return true;
     }
     return false;
   };
@@ -132,6 +150,17 @@ const VotePage = ({
         return executeProposal(proposal.id);
       }
     };
+  })();
+
+  const desctructiveStateButtonAction = isCancellable ? <Trans>Cancel</Trans> : '';
+  const desctructiveStateAction = (() => {
+    if (isCancellable) {
+      return () => {
+        if (proposal?.id) {
+          return cancelProposal(proposal.id);
+        }
+      };
+    }
   })();
 
   const onTransactionStateChange = useCallback(
@@ -199,6 +228,11 @@ const VotePage = ({
         setExecutePending,
       ),
     [executeProposalState, onTransactionStateChange, setModal],
+  );
+
+  useEffect(
+    () => onTransactionStateChange(cancelProposalState, 'Proposal Canceled!', setCancelPending),
+    [cancelProposalState, onTransactionStateChange, setModal],
   );
 
   const activeAccount = useAppSelector(state => state.account.activeAccount);
@@ -277,21 +311,38 @@ const VotePage = ({
         )}
       </Col>
       <Col lg={10} className={clsx(classes.proposal, classes.wrapper)}>
-        {isAwaitingStateChange() && (
+        {(isAwaitingStateChange() || isAwaitingDesctructiveStateChange()) && (
           <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
-            <Col className="d-grid">
-              <Button
-                onClick={moveStateAction}
-                disabled={isQueuePending || isExecutePending}
-                variant="dark"
-                className={classes.transitionStateButton}
-              >
-                {isQueuePending || isExecutePending ? (
-                  <Spinner animation="border" />
-                ) : (
-                  <Trans>{moveStateButtonAction} Proposal ⌐◧-◧</Trans>
-                )}
-              </Button>
+            <Col className="d-grid gap-4">
+              {isAwaitingStateChange() && (
+                <Button
+                  onClick={moveStateAction}
+                  disabled={isQueuePending || isExecutePending}
+                  variant="dark"
+                  className={classes.transitionStateButton}
+                >
+                  {isQueuePending || isExecutePending ? (
+                    <Spinner animation="border" />
+                  ) : (
+                    <Trans>{moveStateButtonAction} Proposal ⌐◧-◧</Trans>
+                  )}
+                </Button>
+              )}
+
+              {isAwaitingDesctructiveStateChange() && (
+                <Button
+                  onClick={desctructiveStateAction}
+                  disabled={isCancelPending}
+                  variant="danger"
+                  className={classes.desturctiveTransitionStateButton}
+                >
+                  {isCancelPending ? (
+                    <Spinner animation="border" />
+                  ) : (
+                    <Trans>{desctructiveStateButtonAction} Proposal ⌐◧-◧</Trans>
+                  )}
+                </Button>
+              )}
             </Col>
           </Row>
         )}

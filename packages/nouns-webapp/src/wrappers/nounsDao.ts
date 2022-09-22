@@ -466,6 +466,14 @@ export const useQueueProposal = () => {
   return { queueProposal, queueProposalState };
 };
 
+export const useCancelProposal = () => {
+  const { send: cancelProposal, state: cancelProposalState } = useContractFunction(
+    nounsDaoContract,
+    'cancel',
+  );
+  return { cancelProposal, cancelProposalState };
+};
+
 export const useExecuteProposal = () => {
   const { send: executeProposal, state: executeProposalState } = useContractFunction(
     nounsDaoContract,
