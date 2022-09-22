@@ -315,6 +315,7 @@ contract NounsDAOStorageV1Adjusted is NounsDAOProxyStorage {
         uint256 totalSupply;
         /// @notice The block at which this proposal was created
         uint256 creationBlock;
+        uint256 objectionPeriodEndBlock;
     }
 
     /// @notice Ballot receipt record for a voter
@@ -337,7 +338,8 @@ contract NounsDAOStorageV1Adjusted is NounsDAOProxyStorage {
         Queued,
         Expired,
         Executed,
-        Vetoed
+        Vetoed,
+        ObjectionPeriod
     }
 }
 
@@ -352,6 +354,9 @@ contract NounsDAOStorageV2 is NounsDAOStorageV1Adjusted {
 
     /// @notice Pending new vetoer
     address public pendingVetoer;
+
+    uint256 public lastMinuteWindowInBlocks;
+    uint256 public objectionPeriodDurationInBlocks;
 
     struct DynamicQuorumParams {
         /// @notice The minimum basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed.

@@ -175,6 +175,10 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
             dynamicQuorumParams_.maxQuorumVotesBPS,
             dynamicQuorumParams_.quorumCoefficient
         );
+
+        // TODO make this configurable
+        lastMinuteWindowInBlocks = 7200; // 7200 blocks = 1 days
+        objectionPeriodDurationInBlocks = 14400; // 14400 blocks = 2 days
     }
 
     struct ProposalTemp {
@@ -463,7 +467,9 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
             return ProposalState.Pending;
         } else if (block.number <= proposal.endBlock) {
             return ProposalState.Active;
-        } else if (proposal.forVotes <= proposal.againstVotes || proposal.forVotes < quorumVotes(proposal.id)) {
+        } else if (block.number <= proposal.objectionPeriodEndBlock) {
+            return ProposalState.ObjectionPeriod;
+        } else if (isDefeated(proposal)) {
             return ProposalState.Defeated;
         } else if (proposal.eta == 0) {
             return ProposalState.Succeeded;
@@ -613,6 +619,23 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         uint256 proposalId,
         uint8 support
     ) internal returns (uint96) {
+        ProposalState proposalState = state(proposalId);
+
+        if (proposalState == ProposalState.Active) {
+            return castVoteDuringVotingPeriodInternal(voter, proposalId, support);
+        } else if (proposalState == ProposalState.ObjectionPeriod) {
+            require(support == 0, 'can only object with an against vote');
+            return castObjectionInternal(voter, proposalId);
+        }
+
+        revert('NounsDAO::castVoteInternal: voting is closed');
+    }
+
+    function castVoteDuringVotingPeriodInternal(
+        address voter,
+        uint256 proposalId,
+        uint8 support
+    ) internal returns (uint96) {
         require(state(proposalId) == ProposalState.Active, 'NounsDAO::castVoteInternal: voting is closed');
         require(support <= 2, 'NounsDAO::castVoteInternal: invalid vote type');
         Proposal storage proposal = _proposals[proposalId];
@@ -622,6 +645,8 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         /// @notice: Unlike GovernerBravo, votes are considered from the block the proposal was created in order to normalize quorumVotes and proposalThreshold metrics
         uint96 votes = nouns.getPriorVotes(voter, proposalCreationBlock(proposal));
 
+        bool isDefeatedBefore = isDefeated(proposal);
+
         if (support == 0) {
             proposal.againstVotes = proposal.againstVotes + votes;
         } else if (support == 1) {
@@ -630,11 +655,53 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
             proposal.abstainVotes = proposal.abstainVotes + votes;
         }
 
+        if (
+            // haven't turn on objection yet
+            proposal.objectionPeriodEndBlock == 0 &&
+            // only for votes can trigger an objection period
+            support == 1 &&
+            // this vote flips the proposal
+            isDefeatedBefore &&
+            !isDefeated(proposal) &&
+            // we're in the last minute window
+            (proposal.endBlock - block.number < lastMinuteWindowInBlocks)
+        ) {
+            proposal.objectionPeriodEndBlock = proposal.endBlock + objectionPeriodDurationInBlocks;
+        }
+
         receipt.hasVoted = true;
         receipt.support = support;
         receipt.votes = votes;
 
         return votes;
+    }
+
+    function castObjectionInternal(address voter, uint256 proposalId) internal returns (uint96) {
+        require(state(proposalId) == ProposalState.ObjectionPeriod, 'not in objection period');
+        Proposal storage proposal = _proposals[proposalId];
+        Receipt storage receipt = proposal.receipts[voter];
+        require(!(receipt.hasVoted && receipt.support == 0), 'already voted against');
+
+        uint96 votes;
+        if (receipt.hasVoted) {
+            votes = receipt.votes;
+            if (receipt.support == 1) {
+                proposal.forVotes = proposal.forVotes - votes;
+            } else {
+                proposal.abstainVotes = proposal.abstainVotes - votes;
+            }
+        } else {
+            votes = receipt.votes = nouns.getPriorVotes(voter, proposalCreationBlock(proposal));
+            receipt.hasVoted = true;
+        }
+        receipt.support = 0;
+        proposal.againstVotes = proposal.againstVotes + votes;
+
+        return votes;
+    }
+
+    function isDefeated(Proposal storage proposal) internal view returns (bool) {
+        return proposal.forVotes <= proposal.againstVotes || proposal.forVotes < quorumVotes(proposal.id);
     }
 
     /**
