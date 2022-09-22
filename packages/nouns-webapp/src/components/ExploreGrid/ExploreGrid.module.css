@@ -21,7 +21,7 @@
 
 .contentWrap {
     justify-content: space-between;
-    flex-direction: row-reverse;
+    /* flex-direction: row-reverse; */
     /* height: 100vh;
     overflow: auto !important; */
 }
@@ -158,6 +158,7 @@ li.activeNoun img, li.activeNoun:hover img {
     /* padding: 15px 1em 0; */
     padding: 15px;
     border-bottom: rgba(0,0,0,0.1) 1px solid;
+    width: 100%;
 }
 
 .nav .sizing {
@@ -209,7 +210,7 @@ li.activeNoun img, li.activeNoun:hover img {
     background: transparent;
     border: 0;
     padding: .5rem;
-    border-right: solid .5rem transparent;
+    border-left: solid .5rem transparent;
 }
 
 .nav button {
