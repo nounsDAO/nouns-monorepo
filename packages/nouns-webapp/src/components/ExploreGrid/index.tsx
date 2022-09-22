@@ -239,47 +239,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
 
     return (
         <div className={classes.exploreWrap} ref={containerRef}>
-            <div className={classes.nav}>
-                <h3><span><Trans>Explore</Trans></span> {nounCount >= 0 && (
-                    <motion.span 
-                        initial={{opacity: 0}}
-                        animate={{opacity: 1}}
-                    >
-                        <strong>{nounCount}</strong> Nouns
-                    </motion.span>
-                )}
-                </h3>
-                <div className={classes.sizing}>
-                    <div className={classes.sort}>
-                        {/* <p className="small">Sort</p> */}
-                        <div className={classes.selectWrap}>
-                            {/* {sortIcon} */}
-                            <select value={sortOrder} onChange={handleSortOrderChange}>
-                                {sortOptions.map(option => (
-                                    <option key={option.label} value={option.value}>
-                                        {option.label}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
-                    {sizeOptions.map((option, i) => {
-                        return (
-                            <button 
-                                key={option} 
-                                onClick={() => setSizeOption(option)}
-                                className={cx(activeSizeOption === option && classes.activeLayout)}
-                            >   
-                                {i === 0 ? (
-                                    iconSmallGrid
-                                ) : (
-                                    iconLargeGrid
-                                )}
-                            </button>
-                        )
-                    })}
-                </div>
-            </div>  
+            
             <div 
                 className={classes.contentWrap}
                 style={{
@@ -298,7 +258,47 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                     //     delay: .05,
                     // }}
                 >
-                     
+                     <div className={classes.nav}>
+                        <h3><span><Trans>Explore</Trans></span> {nounCount >= 0 && (
+                            <motion.span 
+                                initial={{opacity: 0}}
+                                animate={{opacity: 1}}
+                            >
+                                <strong>{nounCount}</strong> Nouns
+                            </motion.span>
+                        )}
+                        </h3>
+                        <div className={classes.sizing}>
+                            <div className={classes.sort}>
+                                {/* <p className="small">Sort</p> */}
+                                <div className={classes.selectWrap}>
+                                    {/* {sortIcon} */}
+                                    <select value={sortOrder} onChange={handleSortOrderChange}>
+                                        {sortOptions.map(option => (
+                                            <option key={option.label} value={option.value}>
+                                                {option.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+                            {sizeOptions.map((option, i) => {
+                                return (
+                                    <button 
+                                        key={option} 
+                                        onClick={() => setSizeOption(option)}
+                                        className={cx(activeSizeOption === option && classes.activeLayout)}
+                                    >   
+                                        {i === 0 ? (
+                                            iconSmallGrid
+                                        ) : (
+                                            iconLargeGrid
+                                        )}
+                                    </button>
+                                )
+                            })}
+                        </div>
+                    </div>  
                     <motion.div 
                         className={cx(classes.exploreGrid, isFullView && classes.fullViewGrid, classes[activeSizeOption])}
                     >   
