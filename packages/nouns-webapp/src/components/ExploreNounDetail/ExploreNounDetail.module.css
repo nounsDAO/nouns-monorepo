@@ -6,7 +6,7 @@
     /* height: 100%; */
     max-width: 500px;
     width: 33%;
-    border-right: 1px solid rgba(0,0,0,0.1); 
+    border-left: 1px solid rgba(0,0,0,0.1); 
     padding: 15px;
     position: sticky;
     top: 0;
