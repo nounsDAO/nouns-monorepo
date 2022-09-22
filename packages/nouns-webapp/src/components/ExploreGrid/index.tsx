@@ -362,7 +362,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                             // onClick={event => focusNoun(i)}
                                             onClick={() => handleNounDetail(i, i === selectedNoun ? 'close' : 'visible')}
                                             onMouseOver={() => setActiveNoun(i)} 
-                                            // onMouseOut={() => setActiveNoun(selectedNoun)}
+                                            onMouseOut={() => selectedNoun && setActiveNoun(selectedNoun)}
                                             >
                                             <StandaloneNounImage nounId={BigNumber.from(i)} />
                                             {/* <img src={process.env.PUBLIC_URL + `/nouns/noun${i}.svg`} alt="" /> */}

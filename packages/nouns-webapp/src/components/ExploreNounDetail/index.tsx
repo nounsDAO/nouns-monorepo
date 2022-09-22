@@ -150,17 +150,19 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
 
       const detailsVariants = {
         initial: {
+            // opacity: 0
             opacity: 0
         },
         animate: {
             opacity: 1,
         },
         exit: {
-            y: 200,
+            // y: 200,
+            // opacity: 0,
             opacity: 0,
-            transition: {
-                duration: 0.1
-            }
+            // transition: {
+            //     duration: 0.1
+            // }
         }
       }
 
@@ -334,11 +336,11 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                 </>
                             ) : (
                                 <motion.div
-                                    variants={detailsVariants}
-                                    initial="initial"
-                                    animate="animate"
-                                    exit="exit"
-                                    key={props.nounId}
+                                    // variants={detailsVariants}
+                                    // initial="initial"
+                                    // animate="animate"
+                                    // exit="exit"
+                                    // key={props.nounId}
                                 >
                                     <motion.div
                                         className={classes.detailNounImage}
