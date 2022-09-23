@@ -79,8 +79,8 @@ describe('NounsDescriptor', () => {
         'ascii',
       ),
     );
-    expect(name).to.equal('Noun 0');
-    expect(description).to.equal('Noun 0 is a member of the Nouns DAO');
+    expect(name).to.equal('Public Noun 0');
+    expect(description).to.equal('Public Noun 0 is a member of the Public Nouns DAO');
     expect(image).to.not.be.undefined;
   });
 

@@ -33,15 +33,15 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and No
     const glassesPage = dataToDescriptorInput(glasses.map(({ data }) => data));
     const accessoriesPage = dataToDescriptorInput(accessories.map(({ data }) => data));
 
-    // await descriptorContract.addManyBackgrounds(bgcolors);
-    // await descriptorContract.setPalette(0, `0x000000${palette.join('')}`);
+    await descriptorContract.addManyBackgrounds(bgcolors);
+    await descriptorContract.setPalette(0, `0x000000${palette.join('')}`);
 
-    // await descriptorContract.addBodies(
-    //   bodiesPage.encodedCompressed,
-    //   bodiesPage.originalLength,
-    //   bodiesPage.itemCount,
-    //   options,
-    // );
+    await descriptorContract.addBodies(
+      bodiesPage.encodedCompressed,
+      bodiesPage.originalLength,
+      bodiesPage.itemCount,
+      options,
+    );
     await descriptorContract.addHeads(
       headsPage.encodedCompressed,
       headsPage.originalLength,
