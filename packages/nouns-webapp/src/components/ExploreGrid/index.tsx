@@ -299,10 +299,10 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                     {nounCount >= 0 && 
                                         [...Array(nounCount)].map((x, i) => 
                                             <motion.li 
-                                                style={ { 
-                                                    "--animation-order": Math.abs(i - nounCount), 
-                                                } as React.CSSProperties
-                                                }
+                                                // style={ { 
+                                                //     "--animation-order": Math.abs(i - nounCount), 
+                                                // } as React.CSSProperties
+                                                // }
                                                 className={i === selectedNoun ? classes.activeNoun : ''} 
                                                 key={i}
                                             >
@@ -337,10 +337,10 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                     {nounCount >= 0 && 
                                         [...Array(nounCount)].map((x, i) => 
                                             <motion.li 
-                                                style={{ 
-                                                    "--animation-order": i, 
-                                                } as React.CSSProperties
-                                                }
+                                                // style={{ 
+                                                //     "--animation-order": i, 
+                                                // } as React.CSSProperties
+                                                // }
                                                 className={i === selectedNoun ? classes.activeNoun : ''} 
                                                 key={i}
                                             >
@@ -356,7 +356,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                         src={process.env.PUBLIC_URL + `/nouns/noun${i}.svg`} 
                                                         alt=""
                                                         style={{ 
-                                                            "--animation-order": Math.abs(i - nounCount), 
+                                                            "--animation-order": i, 
                                                         } as React.CSSProperties
                                                         }
                                                      />

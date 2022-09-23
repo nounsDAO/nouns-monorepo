@@ -316,7 +316,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                                 ←
                                             </button>
                                             <div className={classes.nounBirthday}>
-                                                {props.nounId && seed ? (
+                                                {props.nounId >= 0 && seed ? (
                                                     <>
                                                         <h2>Noun {props.nounId}</h2>
                                                         <NounInfoRowBirthday nounId={props.nounId} />    
@@ -356,7 +356,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                                             }}
                                                         >
                                                             <AnimatePresence>
-                                                                {seed && (
+                                                                {props.nounId >= 0 && seed && (
                                                                     <StandalonePart partType={partType} partIndex={part.partIndex} />
                                                                 )}
                                                             </AnimatePresence>
