@@ -13,29 +13,29 @@ task(
 
   await run('populate-descriptor', {
     nftDescriptor: contracts.NFTDescriptorV2.instance.address,
-    nounsDescriptor: contracts.NounsDescriptorV2.instance.address,
+    nDescriptor: contracts.NDescriptorV2.instance.address,
   });
 
-  await contracts.NounsAuctionHouse.instance
-    .attach(contracts.NounsAuctionHouseProxy.instance.address)
+  await contracts.NAuctionHouse.instance
+    .attach(contracts.NAuctionHouseProxy.instance.address)
     .unpause({
       gasLimit: 1_000_000,
     });
 
   // Transfer ownership
-  const executorAddress = contracts.NounsDAOExecutor.instance.address;
-  await contracts.NounsDescriptorV2.instance.transferOwnership(executorAddress);
-  await contracts.NounsToken.instance.transferOwnership(executorAddress);
-  await contracts.NounsAuctionHouseProxyAdmin.instance.transferOwnership(executorAddress);
-  await contracts.NounsAuctionHouse.instance
-    .attach(contracts.NounsAuctionHouseProxy.instance.address)
+  const executorAddress = contracts.NDAOExecutor.instance.address;
+  await contracts.NDescriptorV2.instance.transferOwnership(executorAddress);
+  await contracts.NToken.instance.transferOwnership(executorAddress);
+  await contracts.NAuctionHouseProxyAdmin.instance.transferOwnership(executorAddress);
+  await contracts.NAuctionHouse.instance
+    .attach(contracts.NAuctionHouseProxy.instance.address)
     .transferOwnership(executorAddress);
   console.log(
     'Transferred ownership of the descriptor, token, and proxy admin contracts to the executor.',
   );
 
   // await run('create-proposal', {
-  //   nounsDaoProxy: contracts.NounsDAOProxy.instance.address,
+  //   nDaoProxy: contracts.NDAOProxy.instance.address,
   // });
 
   const { chainId } = await ethers.provider.getNetwork();
@@ -53,12 +53,12 @@ task(
 
   console.table(accounts);
   console.log(
-    `Noun contracts deployed to local node at http://localhost:8545 (Chain ID: ${chainId})`,
+    `Punk contracts deployed to local node at http://localhost:8545 (Chain ID: ${chainId})`,
   );
-  console.log(`Auction House Proxy address: ${contracts.NounsAuctionHouseProxy.instance.address}`);
-  console.log(`Nouns ERC721 address: ${contracts.NounsToken.instance.address}`);
-  console.log(`Nouns DAO Executor address: ${contracts.NounsDAOExecutor.instance.address}`);
-  console.log(`Nouns DAO Proxy address: ${contracts.NounsDAOProxy.instance.address}`);
+  console.log(`Auction House Proxy address: ${contracts.NAuctionHouseProxy.instance.address}`);
+  console.log(`Punk ERC721 address: ${contracts.NToken.instance.address}`);
+  console.log(`Punk DAO Executor address: ${contracts.NDAOExecutor.instance.address}`);
+  console.log(`Punk DAO Proxy address: ${contracts.NDAOProxy.instance.address}`);
 
   await ethers.provider.send('evm_setIntervalMining', [12_000]);
 

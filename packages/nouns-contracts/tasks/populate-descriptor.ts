@@ -2,7 +2,7 @@ import { task, types } from 'hardhat/config';
 import ImageData from '../files/image-data-v2.json';
 import { dataToDescriptorInput } from './utils';
 
-task('populate-descriptor', 'Populates the descriptor with color palettes and Noun parts')
+task('populate-descriptor', 'Populates the descriptor with color palettes and Punk parts')
   .addOptionalParam(
     'nftDescriptor',
     'The `NFTDescriptorV2` contract address',
@@ -10,20 +10,20 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and No
     types.string,
   )
   .addOptionalParam(
-    'nounsDescriptor',
-    'The `NounsDescriptorV2` contract address',
+    'nDescriptor',
+    'The `NDescriptorV2` contract address',
     '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
     types.string,
   )
-  .setAction(async ({ nftDescriptor, nounsDescriptor }, { ethers, network }) => {
+  .setAction(async ({ nftDescriptor, nDescriptor }, { ethers, network }) => {
     const options = { gasLimit: network.name === 'hardhat' ? 30000000 : undefined };
 
-    const descriptorFactory = await ethers.getContractFactory('NounsDescriptorV2', {
+    const descriptorFactory = await ethers.getContractFactory('NDescriptorV2', {
       libraries: {
         NFTDescriptorV2: nftDescriptor,
       },
     });
-    const descriptorContract = descriptorFactory.attach(nounsDescriptor);
+    const descriptorContract = descriptorFactory.attach(nDescriptor);
 
     const { bgcolors, palette, images } = ImageData;
     const { bodies, accessories, heads, glasses } = images;

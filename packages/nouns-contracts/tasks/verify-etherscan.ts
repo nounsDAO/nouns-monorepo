@@ -5,9 +5,9 @@ import { ContractName, DeployedContract } from './types';
 // These contracts require a fully qualified name to be passed because
 // they share bytecode with the underlying contract.
 const nameToFullyQualifiedName: Record<string, string> = {
-  NounsAuctionHouseProxy: 'contracts/proxies/NounsAuctionHouseProxy.sol:NounsAuctionHouseProxy',
-  NounsAuctionHouseProxyAdmin: 'contracts/proxies/NounsAuctionHouseProxyAdmin.sol:NounsAuctionHouseProxyAdmin',
-  NounsDAOLogicV1Harness: 'contracts/test/NounsDAOLogicV1Harness.sol:NounsDAOLogicV1Harness'
+  NAuctionHouseProxy: 'contracts/proxies/NAuctionHouseProxy.sol:NAuctionHouseProxy',
+  NAuctionHouseProxyAdmin: 'contracts/proxies/NAuctionHouseProxyAdmin.sol:NAuctionHouseProxyAdmin',
+  NDAOLogicV1Harness: 'contracts/test/NDAOLogicV1Harness.sol:NDAOLogicV1Harness'
 };
 
 task('verify-etherscan', 'Verify the Solidity contracts on Etherscan')

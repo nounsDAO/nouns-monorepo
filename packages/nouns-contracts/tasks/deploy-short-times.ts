@@ -1,4 +1,4 @@
-import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json';
+import { default as NAuctionHouseABI } from '../abi/contracts/NAuctionHouse.sol/NAuctionHouse.json';
 import { ChainId, ContractDeployment, ContractName, DeployedContract } from './types';
 import { Interface } from 'ethers/lib/utils';
 import { task, types } from 'hardhat/config';
@@ -19,14 +19,14 @@ const wethContracts: Record<number, string> = {
   [ChainId.Kovan]: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
 };
 
-const NOUNS_ART_NONCE_OFFSET = 4;
+const N_ART_NONCE_OFFSET = 4;
 const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 9;
 const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 12;
 
-task('deploy-short-times', 'Deploy all Nouns contracts with short gov times for testing')
+task('deploy-short-times', 'Deploy all Punks contracts with short gov times for testing')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
   .addOptionalParam('weth', 'The WETH contract address', undefined, types.string)
-  .addOptionalParam('noundersdao', 'The nounders DAO contract address', undefined, types.string)
+  .addOptionalParam('punkersdao', 'The punkers DAO contract address', undefined, types.string)
   .addOptionalParam(
     'auctionTimeBuffer',
     'The auction time buffer (seconds)',
@@ -78,11 +78,11 @@ task('deploy-short-times', 'Deploy all Nouns contracts with short gov times for 
     // prettier-ignore
     const proxyRegistryAddress = proxyRegistries[network.chainId] ?? proxyRegistries[ChainId.Rinkeby];
 
-    if (!args.noundersdao) {
+    if (!args.punkersdao) {
       console.log(
-        `Nounders DAO address not provided. Setting to deployer (${deployer.address})...`,
+        `Punkers DAO address not provided. Setting to deployer (${deployer.address})...`,
       );
-      args.noundersdao = deployer.address;
+      args.punkersdao = deployer.address;
     }
     if (!args.weth) {
       const deployedWETHContract = wethContracts[network.chainId];
@@ -95,15 +95,15 @@ task('deploy-short-times', 'Deploy all Nouns contracts with short gov times for 
     }
 
     const nonce = await deployer.getTransactionCount();
-    const expectedNounsArtAddress = ethers.utils.getContractAddress({
+    const expectedNArtAddress = ethers.utils.getContractAddress({
       from: deployer.address,
-      nonce: nonce + NOUNS_ART_NONCE_OFFSET,
+      nonce: nonce + N_ART_NONCE_OFFSET,
     });
     const expectedAuctionHouseProxyAddress = ethers.utils.getContractAddress({
       from: deployer.address,
       nonce: nonce + AUCTION_HOUSE_PROXY_NONCE_OFFSET,
     });
-    const expectedNounsDAOProxyAddress = ethers.utils.getContractAddress({
+    const expectedNDAOProxyAddress = ethers.utils.getContractAddress({
       from: deployer.address,
       nonce: nonce + GOVERNOR_N_DELEGATOR_NONCE_OFFSET,
     });
@@ -114,37 +114,37 @@ task('deploy-short-times', 'Deploy all Nouns contracts with short gov times for 
     const contracts: Record<ContractName, ContractDeployment> = {
       NFTDescriptorV2: {},
       SVGRenderer: {},
-      NounsDescriptorV2: {
-        args: [expectedNounsArtAddress, () => deployment.SVGRenderer.address],
+      NDescriptorV2: {
+        args: [expectedNArtAddress, () => deployment.SVGRenderer.address],
         libraries: () => ({
           NFTDescriptorV2: deployment.NFTDescriptorV2.address,
         }),
       },
       Inflator: {},
-      NounsArt: {
-        args: [() => deployment.NounsDescriptorV2.address, () => deployment.Inflator.address],
+      NArt: {
+        args: [() => deployment.NDescriptorV2.address, () => deployment.Inflator.address],
       },
-      NounsSeeder: {},
-      NounsToken: {
+      NSeeder: {},
+      NToken: {
         args: [
-          args.noundersdao,
+          args.punkersdao,
           expectedAuctionHouseProxyAddress,
-          () => deployment.NounsDescriptorV2.address,
-          () => deployment.NounsSeeder.address,
+          () => deployment.NDescriptorV2.address,
+          () => deployment.NSeeder.address,
           proxyRegistryAddress,
         ],
       },
-      NounsAuctionHouse: {
+      NAuctionHouse: {
         waitForConfirmation: true,
       },
-      NounsAuctionHouseProxyAdmin: {},
-      NounsAuctionHouseProxy: {
+      NAuctionHouseProxyAdmin: {},
+      NAuctionHouseProxy: {
         args: [
-          () => deployment.NounsAuctionHouse.address,
-          () => deployment.NounsAuctionHouseProxyAdmin.address,
+          () => deployment.NAuctionHouse.address,
+          () => deployment.NAuctionHouseProxyAdmin.address,
           () =>
-            new Interface(NounsAuctionHouseABI).encodeFunctionData('initialize', [
-              deployment.NounsToken.address,
+            new Interface(NAuctionHouseABI).encodeFunctionData('initialize', [
+              deployment.NToken.address,
               args.weth,
               args.auctionTimeBuffer,
               args.auctionReservePrice,
@@ -155,7 +155,7 @@ task('deploy-short-times', 'Deploy all Nouns contracts with short gov times for 
         waitForConfirmation: true,
         validateDeployment: () => {
           const expected = expectedAuctionHouseProxyAddress.toLowerCase();
-          const actual = deployment.NounsAuctionHouseProxy.address.toLowerCase();
+          const actual = deployment.NAuctionHouseProxy.address.toLowerCase();
           if (expected !== actual) {
             throw new Error(
               `Unexpected auction house proxy address. Expected: ${expected}. Actual: ${actual}.`,
@@ -163,19 +163,19 @@ task('deploy-short-times', 'Deploy all Nouns contracts with short gov times for 
           }
         },
       },
-      NounsDAOExecutor: {
-        args: [expectedNounsDAOProxyAddress, args.timelockDelay],
+      NDAOExecutor: {
+        args: [expectedNDAOProxyAddress, args.timelockDelay],
       },
-      NounsDAOLogicV1: {
+      NDAOLogicV1: {
         waitForConfirmation: true,
       },
-      NounsDAOProxy: {
+      NDAOProxy: {
         args: [
-          () => deployment.NounsDAOExecutor.address,
-          () => deployment.NounsToken.address,
-          args.noundersdao,
-          () => deployment.NounsDAOExecutor.address,
-          () => deployment.NounsDAOLogicV1.address,
+          () => deployment.NDAOExecutor.address,
+          () => deployment.NToken.address,
+          args.punkersdao,
+          () => deployment.NDAOExecutor.address,
+          () => deployment.NDAOLogicV1.address,
           args.votingPeriod,
           args.votingDelay,
           args.proposalThresholdBps,
@@ -183,11 +183,11 @@ task('deploy-short-times', 'Deploy all Nouns contracts with short gov times for 
         ],
         waitForConfirmation: true,
         validateDeployment: () => {
-          const expected = expectedNounsDAOProxyAddress.toLowerCase();
-          const actual = deployment.NounsDAOProxy.address.toLowerCase();
+          const expected = expectedNDAOProxyAddress.toLowerCase();
+          const actual = deployment.NDAOProxy.address.toLowerCase();
           if (expected !== actual) {
             throw new Error(
-              `Unexpected Nouns DAO proxy address. Expected: ${expected}. Actual: ${actual}.`,
+              `Unexpected NDAO proxy address. Expected: ${expected}. Actual: ${actual}.`,
             );
           }
         },
@@ -218,11 +218,11 @@ task('deploy-short-times', 'Deploy all Nouns contracts with short gov times for 
 
       let nameForFactory: string;
       switch (name) {
-        case 'NounsDAOExecutor':
-          nameForFactory = 'NounsDAOExecutorTest';
+        case 'NDAOExecutor':
+          nameForFactory = 'NDAOExecutorTest';
           break;
-        case 'NounsDAOLogicV1':
-          nameForFactory = 'NounsDAOLogicV1Harness';
+        case 'NDAOLogicV1':
+          nameForFactory = 'NDAOLogicV1Harness';
           break;
         default:
           nameForFactory = name;

@@ -1,4 +1,4 @@
-import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json';
+import { default as NAuctionHouseABI } from '../abi/contracts/NAuctionHouse.sol/NAuctionHouse.json';
 import { task, types } from 'hardhat/config';
 import { Interface } from 'ethers/lib/utils';
 import { Contract as EthersContract } from 'ethers';
@@ -14,7 +14,7 @@ interface Contract {
 }
 
 task('deploy-local', 'Deploy contracts to hardhat')
-  .addOptionalParam('noundersdao', 'The nounders DAO contract address')
+  .addOptionalParam('punkersdao', 'The punkers DAO contract address')
   .addOptionalParam('auctionTimeBuffer', 'The auction time buffer (seconds)', 30, types.int) // Default: 30 seconds
   .addOptionalParam('auctionReservePrice', 'The auction reserve price (wei)', 1, types.int) // Default: 1 wei
   .addOptionalParam(
@@ -38,17 +38,17 @@ task('deploy-local', 'Deploy contracts to hardhat')
 
     const proxyRegistryAddress = '0xa5409ec958c83c3f309868babaca7c86dcb077c1';
 
-    const NOUNS_ART_NONCE_OFFSET = 5;
+    const N_ART_NONCE_OFFSET = 5;
     const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 10;
     const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 13;
 
     const [deployer] = await ethers.getSigners();
     const nonce = await deployer.getTransactionCount();
-    const expectedNounsArtAddress = ethers.utils.getContractAddress({
+    const expectedNArtAddress = ethers.utils.getContractAddress({
       from: deployer.address,
-      nonce: nonce + NOUNS_ART_NONCE_OFFSET,
+      nonce: nonce + N_ART_NONCE_OFFSET,
     });
-    const expectedNounsDAOProxyAddress = ethers.utils.getContractAddress({
+    const expectedNDAOProxyAddress = ethers.utils.getContractAddress({
       from: deployer.address,
       nonce: nonce + GOVERNOR_N_DELEGATOR_NONCE_OFFSET,
     });
@@ -60,40 +60,40 @@ task('deploy-local', 'Deploy contracts to hardhat')
       WETH: {},
       NFTDescriptorV2: {},
       SVGRenderer: {},
-      NounsDescriptorV2: {
-        args: [expectedNounsArtAddress, () => contracts.SVGRenderer.instance?.address],
+      NDescriptorV2: {
+        args: [expectedNArtAddress, () => contracts.SVGRenderer.instance?.address],
         libraries: () => ({
           NFTDescriptorV2: contracts.NFTDescriptorV2.instance?.address as string,
         }),
       },
       Inflator: {},
-      NounsArt: {
+      NArt: {
         args: [
-          () => contracts.NounsDescriptorV2.instance?.address,
+          () => contracts.NDescriptorV2.instance?.address,
           () => contracts.Inflator.instance?.address,
         ],
       },
-      NounsSeeder: {},
-      NounsToken: {
+      NSeeder: {},
+      NToken: {
         args: [
-          args.noundersdao || deployer.address,
+          args.punkersdao || deployer.address,
           expectedAuctionHouseProxyAddress,
-          () => contracts.NounsDescriptorV2.instance?.address,
-          () => contracts.NounsSeeder.instance?.address,
+          () => contracts.NDescriptorV2.instance?.address,
+          () => contracts.NSeeder.instance?.address,
           proxyRegistryAddress,
         ],
       },
-      NounsAuctionHouse: {
+      NAuctionHouse: {
         waitForConfirmation: true,
       },
-      NounsAuctionHouseProxyAdmin: {},
-      NounsAuctionHouseProxy: {
+      NAuctionHouseProxyAdmin: {},
+      NAuctionHouseProxy: {
         args: [
-          () => contracts.NounsAuctionHouse.instance?.address,
-          () => contracts.NounsAuctionHouseProxyAdmin.instance?.address,
+          () => contracts.NAuctionHouse.instance?.address,
+          () => contracts.NAuctionHouseProxyAdmin.instance?.address,
           () =>
-            new Interface(NounsAuctionHouseABI).encodeFunctionData('initialize', [
-              contracts.NounsToken.instance?.address,
+            new Interface(NAuctionHouseABI).encodeFunctionData('initialize', [
+              contracts.NToken.instance?.address,
               contracts.WETH.instance?.address,
               args.auctionTimeBuffer,
               args.auctionReservePrice,
@@ -102,19 +102,19 @@ task('deploy-local', 'Deploy contracts to hardhat')
             ]),
         ],
       },
-      NounsDAOExecutor: {
-        args: [expectedNounsDAOProxyAddress, args.timelockDelay],
+      NDAOExecutor: {
+        args: [expectedNDAOProxyAddress, args.timelockDelay],
       },
-      NounsDAOLogicV1: {
+      NDAOLogicV1: {
         waitForConfirmation: true,
       },
-      NounsDAOProxy: {
+      NDAOProxy: {
         args: [
-          () => contracts.NounsDAOExecutor.instance?.address,
-          () => contracts.NounsToken.instance?.address,
-          args.noundersdao || deployer.address,
-          () => contracts.NounsDAOExecutor.instance?.address,
-          () => contracts.NounsDAOLogicV1.instance?.address,
+          () => contracts.NDAOExecutor.instance?.address,
+          () => contracts.NToken.instance?.address,
+          args.punkersdao || deployer.address,
+          () => contracts.NDAOExecutor.instance?.address,
+          () => contracts.NDAOLogicV1.instance?.address,
           args.votingPeriod,
           args.votingDelay,
           args.proposalThresholdBps,

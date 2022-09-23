@@ -20,20 +20,20 @@ task('update-configs', 'Write the deployed addresses to the SDK and subgraph con
       const addressesPath = join(sdkPath, 'src/contract/addresses.json');
       const addresses = JSON.parse(readFileSync(addressesPath, 'utf8'));
       addresses[chainId] = {
-        nounsToken: contracts.NounsToken.address,
-        nounsSeeder: contracts.NounsSeeder.address,
-        nounsDescriptor: contracts.NounsDescriptorV2
-          ? contracts.NounsDescriptorV2.address
-          : contracts.NounsDescriptor.address,
+        nToken: contracts.NToken.address,
+        nSeeder: contracts.NSeeder.address,
+        nDescriptor: contracts.NDescriptorV2
+          ? contracts.NDescriptorV2.address
+          : contracts.NDescriptor.address,
         nftDescriptor: contracts.NFTDescriptorV2
           ? contracts.NFTDescriptorV2.address
           : contracts.NFTDescriptor.address,
-        nounsAuctionHouse: contracts.NounsAuctionHouse.address,
-        nounsAuctionHouseProxy: contracts.NounsAuctionHouseProxy.address,
-        nounsAuctionHouseProxyAdmin: contracts.NounsAuctionHouseProxyAdmin.address,
-        nounsDaoExecutor: contracts.NounsDAOExecutor.address,
-        nounsDAOProxy: contracts.NounsDAOProxy.address,
-        nounsDAOLogicV1: contracts.NounsDAOLogicV1.address,
+        nAuctionHouse: contracts.NAuctionHouse.address,
+        nAuctionHouseProxy: contracts.NAuctionHouseProxy.address,
+        nAuctionHouseProxyAdmin: contracts.NAuctionHouseProxyAdmin.address,
+        nDaoExecutor: contracts.NDAOExecutor.address,
+        nDAOProxy: contracts.NDAOProxy.address,
+        nDAOLogicV1: contracts.NDAOLogicV1.address,
       };
       writeFileSync(addressesPath, JSON.stringify(addresses, null, 2));
       try {
@@ -50,17 +50,17 @@ task('update-configs', 'Write the deployed addresses to the SDK and subgraph con
       const subgraphConfigPath = join(__dirname, `../../nouns-subgraph/config/${configName}.json`);
       const subgraphConfig = {
         network,
-        nounsToken: {
-          address: contracts.NounsToken.address,
-          startBlock: contracts.NounsToken.instance.deployTransaction.blockNumber,
+        nToken: {
+          address: contracts.NToken.address,
+          startBlock: contracts.NToken.instance.deployTransaction.blockNumber,
         },
-        nounsAuctionHouse: {
-          address: contracts.NounsAuctionHouseProxy.address,
-          startBlock: contracts.NounsAuctionHouseProxy.instance.deployTransaction.blockNumber,
+        nAuctionHouse: {
+          address: contracts.NAuctionHouseProxy.address,
+          startBlock: contracts.NAuctionHouseProxy.instance.deployTransaction.blockNumber,
         },
-        nounsDAO: {
-          address: contracts.NounsDAOProxy.address,
-          startBlock: contracts.NounsDAOProxy.instance.deployTransaction.blockNumber,
+        nDAO: {
+          address: contracts.NDAOProxy.address,
+          startBlock: contracts.NDAOProxy.instance.deployTransaction.blockNumber,
         },
       };
       writeFileSync(subgraphConfigPath, JSON.stringify(subgraphConfig, null, 2));
