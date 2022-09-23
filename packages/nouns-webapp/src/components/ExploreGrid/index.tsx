@@ -299,7 +299,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                     {nounCount >= 0 && 
                                         [...Array(nounCount)].map((x, i) => 
                                             <motion.li 
-                                                style={{ 
+                                                style={ { 
                                                     "--animation-order": Math.abs(i - nounCount), 
                                                 } as React.CSSProperties
                                                 }
@@ -312,8 +312,16 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                     onClick={() => handleNounDetail(i, i === selectedNoun ? 'close' : 'visible')}
                                                     onMouseOver={() => setActiveNoun(i)} 
                                                     onMouseOut={() => selectedNoun && setActiveNoun(selectedNoun)}
+                                                    
                                                     >
-                                                    <img src={process.env.PUBLIC_URL + `/nouns/noun${i}.svg`} alt="" />
+                                                    <img 
+                                                        src={process.env.PUBLIC_URL + `/nouns/noun${i}.svg`} 
+                                                        alt=""
+                                                        style={{ 
+                                                            "--animation-order": Math.abs(i - nounCount), 
+                                                        } as React.CSSProperties
+                                                        }
+                                                     />
                                                     {/* <p className={classes.label}>Noun {i}</p> */}
                                                     {/* <StandaloneNounImage nounId={BigNumber.from(i)} /> */}
                                                     {/* {i === nounCount - 1 && (
@@ -342,8 +350,16 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                     onClick={() => handleNounDetail(i, i === selectedNoun ? 'close' : 'visible')}
                                                     onMouseOver={() => setActiveNoun(i)} 
                                                     onMouseOut={() => selectedNoun && setActiveNoun(selectedNoun)}
+                                                    
                                                     >
-                                                    <img src={process.env.PUBLIC_URL + `/nouns/noun${i}.svg`} alt="" />
+                                                    <img 
+                                                        src={process.env.PUBLIC_URL + `/nouns/noun${i}.svg`} 
+                                                        alt=""
+                                                        style={{ 
+                                                            "--animation-order": Math.abs(i - nounCount), 
+                                                        } as React.CSSProperties
+                                                        }
+                                                     />
                                                     {/* <p className={classes.label}>Noun {i}</p> */}
                                                     {/* <StandaloneNounImage nounId={BigNumber.from(i)} /> */}
                                                     {/* {i === nounCount - 1 && (

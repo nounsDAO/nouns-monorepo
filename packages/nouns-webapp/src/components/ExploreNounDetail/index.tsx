@@ -10,6 +10,8 @@ import {AnimatePresence, motion} from 'framer-motion/dist/framer-motion';
 import { XIcon } from '@heroicons/react/solid';
 import NounInfoRowBirthday from '../NounInfoRowBirthday';
 import loadingNoun from '../../assets/loading-skull-noun.gif';
+import Placeholder from 'react-bootstrap/Placeholder';
+import Image from 'react-bootstrap/Image'
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -22,6 +24,70 @@ interface ExploreNounDetailProps {
     disablePrev: boolean;
     disableNext: boolean;
 }
+
+// interface ExploreNounDetailTraitsProps {
+//     partType: string;
+//     part: (parameter) part: {
+//         partType: string;
+//         partName: string;
+//         partIndex: number;
+//     };
+//     nounId: number;
+//     backgroundColor: string;
+//     isNounImageLoaded: boolean;
+// }
+// const ExploreNounDetailTrait: React.FC<ExploreNounDetailTraitsProps> = props => {
+//     return (
+//         <li
+//             key={props.partType}
+//             id={props.partType}
+//         >
+//             <div 
+//                 className={classes.thumbnail}
+//                 style={{
+//                     backgroundColor: props.backgroundColor ? props.backgroundColor : 'transparent',
+//                 }}
+//             >
+//                 <AnimatePresence>
+//                     {props.nounId >= 0 && (
+//                         <StandalonePart partType={props.partType} partIndex={part.partIndex} />
+//                     )}
+//                 </AnimatePresence>
+//             </div>
+            
+//             <div className={classes.description}>
+//                 <p className='small'>
+//                     <AnimatePresence>
+//                         {props.nounId >= 0 ? (
+//                             <motion.span>
+//                                 {traitKeyToLocalizedTraitKeyFirstLetterCapitalized(nounTraitsOrdered[index].partType)}
+//                             </motion.span>
+//                         ) : (
+//                             <motion.span>
+//                                 <Placeholder as="span" animation="glow">
+//                                     <Placeholder xs={8} />
+//                                 </Placeholder>
+//                             </motion.span>
+//                         )}
+//                     </AnimatePresence>
+                        
+//                 </p>
+//                 <p>
+//                     <strong>
+//                     <AnimatePresence>
+//                         {props.nounId >= 0 ? (
+//                             <>{nounTraitsOrdered[index].partName}</>
+//                         ) : (
+//                             <Placeholder xs={12} animation="glow" />
+//                         )}
+//                     </AnimatePresence>
+                        
+//                     </strong>
+//                 </p>
+//             </div>
+//         </li>
+//     )
+// }
 
 const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
     // borrowed from /src/pages/Playground/NounModal/index.tsx
@@ -194,6 +260,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
         },
         exit: {
             width: isMobile ? "100%" : 0,
+            opacity: 0,
             x: isMobile ? 0 : 0,
             y: isMobile ? "100%" : 0,
             transition: {
@@ -212,10 +279,10 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
             </AnimatePresence>
             <motion.div 
                 className={classes.detailWrap}
-                variants={sidebarVariants}
-                initial="closed"
-                animate="open"
-                exit="exit"
+                // variants={sidebarVariants}
+                // initial="open"
+                // animate="open"
+                // exit="exit"
                 // layout
                 >
                     <div 
@@ -227,17 +294,15 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                         <button className={classes.close} onClick={() => props.handleNounDetail('close')}>
                             <XIcon className={classes.icon} />
                         </button>
-                        <AnimatePresence exitBeforeEnter>
-
                                     <div
                                         className={classes.detailNounImage}
                                         onClick={() => props.handleScrollTo(props.nounId)}
                                     >   
                                         {/* <StandaloneNounImage nounId={BigNumber.from(props.nounId)} /> */}
                                         {props.nounId >= 0 ? (
-                                            <img src={process.env.PUBLIC_URL + `/nouns/noun${props.nounId}.svg`} alt={`Noun ${props.nounId}`} />
+                                            <Image src={process.env.PUBLIC_URL + `/nouns/noun${props.nounId}.svg`} alt={`Noun ${props.nounId}`} />
                                         ) : (
-                                            <img src={loadingNoun} alt="Loading nouns" />
+                                            <Image src={loadingNoun} alt="Loading nouns" />
                                         )}
                                     </div>
                                     
@@ -281,7 +346,8 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                                 return (
                                                     <motion.li
                                                         // variants={item}
-                                                        key={nounTraitsOrdered[index].partName}
+                                                        key={partType}
+                                                        id={partType}
                                                     >
                                                         <div 
                                                             className={classes.thumbnail}
@@ -289,24 +355,49 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                                                 backgroundColor: backgroundColor ? backgroundColor : 'transparent',
                                                             }}
                                                         >
-                                                            {props.nounId >= 0 ? (
-                                                                <StandalonePart partType={partType} partIndex={part.partIndex} />
-                                                            ): (
-                                                                <></>
-                                                            )}
+                                                            <AnimatePresence>
+                                                                {props.nounId >= 0 && (
+                                                                    <StandalonePart partType={partType} partIndex={part.partIndex} />
+                                                                )}
+                                                            </AnimatePresence>
                                                         </div>
-                                                        {props.nounId >= 0 && (
-                                                            <div className={classes.description}>
-                                                                <p className='small'><span>{traitKeyToLocalizedTraitKeyFirstLetterCapitalized(nounTraitsOrdered[index].partType)}</span></p>
-                                                                <p><strong>{nounTraitsOrdered[index].partName}</strong></p>
-                                                            </div>
-                                                        )}
+                                                        
+                                                        <div className={classes.description}>
+                                                            <p className='small'>
+                                                                <AnimatePresence>
+                                                                    {props.nounId >= 0 ? (
+                                                                        <motion.span>
+                                                                            {traitKeyToLocalizedTraitKeyFirstLetterCapitalized(nounTraitsOrdered[index].partType)}
+                                                                        </motion.span>
+                                                                    ) : (
+                                                                        <motion.span>
+                                                                            <Placeholder as="span" animation="glow">
+                                                                                <Placeholder xs={8} />
+                                                                            </Placeholder>
+                                                                        </motion.span>
+                                                                    )}
+                                                                </AnimatePresence>
+                                                                    
+                                                            </p>
+                                                            <p>
+                                                                <strong>
+                                                                <AnimatePresence>
+                                                                    {props.nounId >= 0 ? (
+                                                                        <>{nounTraitsOrdered[index].partName}</>
+                                                                    ) : (
+                                                                        <Placeholder xs={12} animation="glow" />
+                                                                    )}
+                                                                </AnimatePresence>
+                                                                    
+                                                                </strong>
+                                                            </p>
+                                                        </div>
                                                     </motion.li>
                                                 )
                                             })}
                                         </motion.ul>
+                                        <p className={classes.activityLink}><a href={`/noun/${props.nounId}`}><Trans>Vote history</Trans></a></p>
                                     </div>
-                        </AnimatePresence>
                     </div>
             </motion.div>
         </>

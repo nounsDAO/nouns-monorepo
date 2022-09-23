@@ -6,8 +6,8 @@
 }
 
 .gridWrap {
-    /* width: 100%; */
-    width: fit-content;
+    width: 100%;
+    /* width: fit-content; */
 }
 
 .detailBlock {
@@ -28,6 +28,7 @@
 .exploreGrid {
     display: flex;
     flex: 1 1;
+    width: 100%;
 }
 .exploreGrid ul {
     padding: 15px;
@@ -60,7 +61,7 @@
     transition: width 0.2s ease-in-out;
     border: transparent 1px solid;
     animation-name: animateIn;
-    animation-duration: 60ms;
+    animation-duration: 25ms;
     animation-delay: calc(var(--animation-order) * 25ms);
     animation-fill-mode: both;
     animation-timing-function: ease-in-out;
@@ -79,11 +80,11 @@
     /* border: 1px solid rgba(0,0,0,0.2) !important; */
 }
 
-.exploreGrid li:hover img {
-    transform: scale(0.9);
+.exploreGrid li:hover button {
+    transform: scale(1.1);
     /* top: -4px; */
     /* border-radius: 3%; */
-    transition: transform 0.05s ease-in-out;
+    transition: transform 0.1s ease-in-out;
 }
 
 .exploreGrid li img {
@@ -93,6 +94,11 @@
     position: relative;
     border-radius: 10px;
     transition: transform 0.1s ease-in-out;
+    animation-name: animateIn;
+    animation-duration: 60ms;
+    animation-delay: calc(var(--animation-order) * 25ms);
+    animation-fill-mode: both;
+    animation-timing-function: ease-in-out;
 }
 .exploreGrid li button {
     border: none;
@@ -102,9 +108,12 @@
     height: 100%;
     display: flex;
     align-items: center;
-    background-color: #fff;
     flex-direction: column;
     position: relative;
+    background: #d5d7e1;
+    width: 100%;
+    aspect-ratio: 1;
+    transition: transform 0.05s ease-in-out;
 }
 .exploreGrid button:focus {
     border: none;
@@ -144,12 +153,17 @@
 
 .activeNoun {
     /* border: 10px solid transparent; */
-    border: 1px solid rgba(0,0,0,0.2) !important;
+    /* border: 1px solid rgba(0,0,0,0.2) !important; */
+    /* border: 5px solid rgb(214, 60, 94) !important; */
+    background: rgba(214, 60, 94, 1);
 }
-li.activeNoun img, li.activeNoun:hover img {
+.activeNoun button {
     transform: scale(0.9);
-    /* border-radius: 0 !important; */
-    transition: transform 0.15s ease-in-out;
+    border-radius: 5px;
+}
+li.activeNoun button, li.activeNoun:hover button {
+    transform: scale(0.9);
+    transition: transform 0.05s ease-in-out;
 }
 
 .detailWrap > div{

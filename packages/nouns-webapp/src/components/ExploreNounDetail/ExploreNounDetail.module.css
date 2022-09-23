@@ -115,6 +115,7 @@
     font-size: 0.8rem;
     font-family: 'PT Root UI';
     font-weight: bold;
+    line-height: 1;
     /* override fixed dimensions for use on auction page */
     width: auto;
     height: auto;
@@ -132,6 +133,15 @@ h2 {
 .nounDetails {
     margin: 0 15px;
 }
+.activityLink {
+    text-align: center;
+    font-size: 1rem;
+    font-family: 'PT Root UI';
+    font-weight: bold;
+}
+.activityLink a {
+    color: var(--brand-dark-red);
+}
 
 
 .traitsList {
@@ -139,7 +149,7 @@ h2 {
     z-index: 2;
     list-style: none;
     background: #fff;
-    /* margin: 0 15px 15px; */
+    margin-bottom: 0;
     padding: 15px;
     border-radius: 8px;
     /* box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15); */
@@ -176,6 +186,9 @@ h2 {
 .traitsList .thumbnail {
     border-radius: 10%;
     overflow: hidden;
+    aspect-ratio: 1;
+    max-width: 60px;
+    width: 100%;
 }
 
 .detail h2 {
