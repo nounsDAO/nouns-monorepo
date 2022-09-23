@@ -1,7 +1,7 @@
 import classes from './Banner.module.css';
 import Section from '../../layout/Section';
 import { Col } from 'react-bootstrap';
-import calendar_noun from '../../assets/calendar_noun.png';
+import calendar_noun from '../../assets/pNouns_grid.png';
 import Noun from '../Noun';
 import { Trans } from '@lingui/macro';
 
@@ -10,10 +10,10 @@ const Banner = () => {
     <Section fullWidth={false} className={classes.bannerSection}>
       <Col lg={6}>
         <div className={classes.wrapper}>
-          <h1>
-            <Trans>ONE NOUN,</Trans>
+          <h1 style={{fontSize: '90px'}}>
+            <Trans>1 PUBLIC NOUN,</Trans>
             <br />
-            <Trans>EVERY DAY,</Trans>
+            <Trans>EVERY 12 HRS,</Trans>
             <br />
             <Trans>FOREVER.</Trans>
           </h1>

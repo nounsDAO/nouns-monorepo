@@ -252,7 +252,7 @@ const Bid: React.FC<{
       {showConnectModal && activeAccount === undefined && (
         <WalletConnectModal onDismiss={hideModalHandler} />
       )}
-      <InputGroup>
+      <InputGroup style={{marginTop: '25px'}}>
         {!auctionEnded && (
           <>
             <span className={classes.customPlaceholderBidAmt}>
@@ -291,11 +291,6 @@ const Bid: React.FC<{
           </Button>
         ) : (
           <>
-            <Col lg={12} className={classes.voteForNextNounBtnWrapper}>
-              <Button className={classes.bidBtnAuctionEnded} onClick={fomoNounsBtnOnClickHandler}>
-                <Trans>Vote for the next Noun</Trans> ⌐◧-◧
-              </Button>
-            </Col>
             {/* Only show force settle button if wallet connected */}
             {isWalletConnected && (
               <Col lg={12}>

@@ -1,19 +1,16 @@
 export enum ExternalURL {
   discord,
   twitter,
-  notion,
   discourse,
 }
 
 export const externalURL = (externalURL: ExternalURL) => {
   switch (externalURL) {
     case ExternalURL.discord:
-      return 'http://discord.gg/nouns';
+      return 'https://discord.gg/DJ8BHRWh';
     case ExternalURL.twitter:
-      return 'https://twitter.com/nounsdao';
-    case ExternalURL.notion:
-      return 'https://nouns.notion.site/Explore-Nouns-a2a9dceeb1d54e10b9cbf3f931c2266f';
+      return 'https://twitter.com/publicnouns';
     case ExternalURL.discourse:
-      return 'https://discourse.nouns.wtf/';
+      return 'http://pnouns.discourse.group/';
   }
 };
