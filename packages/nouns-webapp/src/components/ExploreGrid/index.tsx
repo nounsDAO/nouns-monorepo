@@ -71,7 +71,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
 
     // const gridOptions = [2.5, 5, 12.5];
     const [isFullView] = useState<boolean>(false);
-    const [isSidebarVisible, setIsSidebarVisible] = useState<boolean>(true);
+    const [isSidebarVisible, setIsSidebarVisible] = useState<boolean>(!isMobile && true);
     const [activeSizeOption, setSizeOption] = useState<string>("large");
     const sizeOptions = ["small", "large"];
 

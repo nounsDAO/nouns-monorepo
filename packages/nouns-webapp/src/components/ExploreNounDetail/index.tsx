@@ -183,17 +183,17 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
 
     const sidebarVariants = {
         closed: {
-            width: isMobile ? "inherit" : 0,
+            width: isMobile ? "100%" : 0,
             x: isMobile ? 0 : 0,
             y: isMobile ? "100%" : 0,
         },
         open: {
-            width: isMobile ? "inherit" : "33%",
+            width: isMobile ? "100%" : "33%",
             x: 0,
             y: 0,
         },
         exit: {
-            width: isMobile ? "inherit" : 0,
+            width: isMobile ? "100%" : 0,
             x: isMobile ? 0 : 0,
             y: isMobile ? "100%" : 0,
             transition: {

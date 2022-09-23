@@ -312,7 +312,7 @@ li.activeNoun img, li.activeNoun:hover img {
     }
     .nav {
         border: 0;
-        padding: 0 0 7px 0;
+        padding: 0 0 15px 0;
     }
     .nav .sizing {
         display: none;
