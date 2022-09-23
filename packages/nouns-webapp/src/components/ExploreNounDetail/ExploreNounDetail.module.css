@@ -96,9 +96,13 @@
     font-size: large;
     border-radius: 50%;
     color: var(--brand-cool-dark-text);
-    background-color: var(--brand-warm-accent);
+    background-color: var(--brand-cool-accent);
     font-weight: bold;
     aspect-ratio: 1;
+}
+.infoWrap .arrowWarm {
+    color: var(--brand-warm-dark-text);
+    background-color: var(--brand-warm-accent);
 }
 
 .infoWrap .arrow:disabled {
@@ -138,6 +142,9 @@ h2 {
     font-size: 1rem;
     font-family: 'PT Root UI';
     font-weight: bold;
+}
+.activityLink a:hover {
+    text-decoration: none;
 }
 .activityLink a {
     color: var(--brand-dark-red);
@@ -200,6 +207,7 @@ h2 {
     height: 100%;
     cursor: pointer; */
     width: 100%;
+    margin-top: 2vh;
 }
 
 /* Treat more like a modal on mobile */

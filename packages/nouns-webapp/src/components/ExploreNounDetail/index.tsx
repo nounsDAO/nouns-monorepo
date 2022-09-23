@@ -12,6 +12,7 @@ import NounInfoRowBirthday from '../NounInfoRowBirthday';
 import loadingNoun from '../../assets/loading-skull-noun.gif';
 import Placeholder from 'react-bootstrap/Placeholder';
 import Image from 'react-bootstrap/Image'
+import cx from 'classnames';
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -207,12 +208,11 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
         }
         
         if (nounTraitsOrdered) {
-            console.log('all traits', nounTraitsOrdered)
+            // console.log('all traits', nounTraitsOrdered)
             return nounTraitsOrdered;
         } else {
-            console.log('error', nounTraitsOrdered)
+            // console.log('error', nounTraitsOrdered)
             return loadingNounTraits;
-            
         }
     }
 
@@ -299,7 +299,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                         onClick={() => props.handleScrollTo(props.nounId)}
                                     >   
                                         {/* <StandaloneNounImage nounId={BigNumber.from(props.nounId)} /> */}
-                                        {props.nounId >= 0 ? (
+                                        {props.nounId >= 0 && seed ? (
                                             <Image src={process.env.PUBLIC_URL + `/nouns/noun${props.nounId}.svg`} alt={`Noun ${props.nounId}`} />
                                         ) : (
                                             <Image src={loadingNoun} alt="Loading nouns" />
@@ -310,24 +310,24 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                         <div className={classes.infoWrap}>
                                             <button
                                                 onClick={() => props.handleNounNavigation('prev')}
-                                                className={classes.arrow}
+                                                className={cx(classes.arrow, backgroundColor === bgcolors[0] ? classes.arrowCool : classes.arrowWarm)}
                                                 disabled={props.disablePrev}
                                                 >
                                                 ←
                                             </button>
                                             <div className={classes.nounBirthday}>
-                                                {props.nounId >= 0 ? (
+                                                {props.nounId && seed ? (
                                                     <>
                                                         <h2>Noun {props.nounId}</h2>
                                                         <NounInfoRowBirthday nounId={props.nounId} />    
                                                     </>
                                                 ): (
-                                                    <h2>Loading Nouns</h2>
+                                                    <h2>Loading</h2>
                                                 )}
                                             </div>
                                             <button
                                                 onClick={() => props.handleNounNavigation('next')}
-                                                className={classes.arrow}
+                                                className={cx(classes.arrow, backgroundColor === bgcolors[0] ? classes.arrowCool : classes.arrowWarm)}
                                                 disabled={props.disableNext}
                                             >
                                                 →
@@ -356,7 +356,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                                             }}
                                                         >
                                                             <AnimatePresence>
-                                                                {props.nounId >= 0 && (
+                                                                {seed && (
                                                                     <StandalonePart partType={partType} partIndex={part.partIndex} />
                                                                 )}
                                                             </AnimatePresence>
@@ -365,7 +365,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                                         <div className={classes.description}>
                                                             <p className='small'>
                                                                 <AnimatePresence>
-                                                                    {props.nounId >= 0 ? (
+                                                                    {props.nounId >= 0 && seed ? (
                                                                         <motion.span>
                                                                             {traitKeyToLocalizedTraitKeyFirstLetterCapitalized(nounTraitsOrdered[index].partType)}
                                                                         </motion.span>
@@ -382,7 +382,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                                             <p>
                                                                 <strong>
                                                                 <AnimatePresence>
-                                                                    {props.nounId >= 0 ? (
+                                                                    {props.nounId >= 0 && seed ? (
                                                                         <>{nounTraitsOrdered[index].partName}</>
                                                                     ) : (
                                                                         <Placeholder xs={12} animation="glow" />

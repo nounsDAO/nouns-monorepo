@@ -80,7 +80,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
 
     // get latest noun id, then replace loading sidebar state with latest noun
     useEffect(() => {
-        console.log('currentAuction', currentAuction);
+        // console.log('currentAuction', currentAuction);
         if (currentAuction?.nounId) {
             // console.log('currentAuction.nounId', currentAuction?.nounId);
             setSelectedNoun(BigNumber.from(currentAuction?.nounId).toNumber());
@@ -89,7 +89,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         
     }, [currentAuction]);
 
-    console.log("activeNoun", activeNoun)
+    // console.log("activeNoun", activeNoun)
     
     const handleNounDetail = (nounId: number, sidebarVisibility: string) => {
         nounId > -1 && nounId < nounCount && setSelectedNoun(nounId);
