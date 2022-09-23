@@ -292,13 +292,15 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                                             {props.nounId >= 0 ? (
                                                                 <StandalonePart partType={partType} partIndex={part.partIndex} />
                                                             ): (
-                                                                <img src="" alt={`${partType} icon`} />
+                                                                <></>
                                                             )}
                                                         </div>
-                                                        <div className={classes.description}>
-                                                            <p className='small'><span>{traitKeyToLocalizedTraitKeyFirstLetterCapitalized(nounTraitsOrdered[index].partType)}</span></p>
-                                                            <p><strong>{nounTraitsOrdered[index].partName}</strong></p>
-                                                        </div>
+                                                        {props.nounId >= 0 && (
+                                                            <div className={classes.description}>
+                                                                <p className='small'><span>{traitKeyToLocalizedTraitKeyFirstLetterCapitalized(nounTraitsOrdered[index].partType)}</span></p>
+                                                                <p><strong>{nounTraitsOrdered[index].partName}</strong></p>
+                                                            </div>
+                                                        )}
                                                     </motion.li>
                                                 )
                                             })}
