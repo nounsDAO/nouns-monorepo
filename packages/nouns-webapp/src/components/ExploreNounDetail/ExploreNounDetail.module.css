@@ -6,10 +6,10 @@
     /* height: 100%; */
     max-width: 500px;
     width: 33%;
-    /* border-left: 1px solid rgba(0,0,0,0.1);  */
+    border-left: 1px solid rgba(0,0,0,0.1); 
     /* padding: 15px; */
     position: sticky;
-    top: 0;
+    top: -8px;
     align-self: flex-start;
 }
 
@@ -25,6 +25,7 @@
     height: 101vh;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
+    padding-top: 8px;
     /* align-self: flex-start; */
     /* transition: background-color 0.05s ease-in-out; */
     /* position: sticky;
@@ -43,7 +44,7 @@
 
 .detailNounImage {
     text-align: center;
-    /* margin-top: 5vh; */
+    margin-top: 6vh;
     /* max-height: 40vh; */
     /* height: 100%; */
     /* cursor: pointer; */
