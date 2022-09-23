@@ -18,8 +18,8 @@ const GovernancePage = () => {
   const treasuryBalanceUSD = useTreasuryUSDValue();
 
   // Note: We have to extract this copy out of the <span> otherwise the Lingui macro gets confused
-  const nounSingular = <Trans>Noun</Trans>;
-  const nounPlural = <Trans>Nouns</Trans>;
+  const nounSingular = <Trans>Public Noun</Trans>;
+  const nounPlural = <Trans>Public Nouns</Trans>;
 
   return (
     <Section fullWidth={false} className={classes.section}>
@@ -29,12 +29,12 @@ const GovernancePage = () => {
             <Trans>Governance</Trans>
           </span>
           <h1>
-            <Trans>Nouns DAO</Trans>
+            <Trans>Public Nouns DAO</Trans>
           </h1>
         </Row>
         <p className={classes.subheading}>
           <Trans>
-            Nouns govern <span className={classes.boldText}>Nouns DAO</span>. Nouns can vote on
+            Public Nouns govern <span className={classes.boldText}>Public Nouns DAO</span>. Public Nouns can vote on
             proposals or delegate their vote to a third party. A minimum of{' '}
             <span className={classes.boldText}>
               {nounsRequired} {threshold === 0 ? nounSingular : nounPlural}
@@ -71,9 +71,8 @@ const GovernancePage = () => {
           </Col>
           <Col className={classes.treasuryInfoText}>
             <Trans>
-              This treasury exists for <span className={classes.boldText}>Nouns DAO</span>{' '}
-              participants to allocate resources for the long-term growth and prosperity of the
-              Nouns project.
+              This treasury exists for <span className={classes.boldText}>Public Nouns DAO</span>{' '}
+              to allocate resources to support public goods, as well as propagate itself.
             </Trans>
           </Col>
         </Row>

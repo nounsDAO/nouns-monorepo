@@ -41,8 +41,8 @@ const Documentation = () => {
               {nounsDaoLink} has proven to be a strong mechanism for continuous funding alongside a simple yet effective governance framework. Public Goods are necessary, and often detached from value capture. Public Nouns is an experiment at bending the incentive toward continuous public goods funding. 
           </p>
           <p>
-            Since all heads have been replaced with 'mascots' of public goods, each Public Noun represents a Public Good.
-            Grab a Public Noun during an auction to get immediate voice in Public Nouns DAO.
+            All heads have been replaced with 'mascots' of public goods, making each Public Noun a memetic representation of a public good.
+            Grab a Public Noun during an auction to get voice in Public Nouns DAO.
           </p>
           <p>The mission of Public Nouns DAO is threefold:
           <ol>
@@ -96,7 +96,7 @@ const Documentation = () => {
                 <li>
                   <Trans>
                     <ul>
-                      <li>Pnounders, Public Nouns DAO, and Nouns DAO receive rewards in the form of Public Nouns (10% of supply for first 5 years).</li>
+                      <li>pNounders, Public Nouns DAO, and Nouns DAO receive rewards in the form of Public Nouns (10% of supply for first year).</li>
                     </ul>
                   </Trans>
                 </li>
@@ -143,7 +143,7 @@ const Documentation = () => {
                Public Nouns ecosystem. The Public Nouns DAO treasury receives 100% of ETH proceeds from daily
                Public Noun auctions. Each Public Noun is an irrevocable member of Public Nouns DAO and entitled to one
                 vote in all governance matters. Public Noun votes are non-transferable (if you sell your
-                Noun the vote goes with it) but delegatable, which means you can assign your vote to
+                pNoun the vote goes with it) but delegatable, which means you can assign your vote to
                 someone else as long as you own your Public Noun.
               </Trans>
             </Accordion.Body>
@@ -156,27 +156,27 @@ const Documentation = () => {
               <p>
                 <Trans>
                   The proposal veto right was initially envisioned as a temporary solution to the
-                  problem of ‘51% attacks’ on the Nouns DAO treasury. While Nounders initially
+                  problem of ‘51% attacks’ on the Nouns DAO treasury. While pNounders initially
                   believed that a healthy distribution of Nouns would be sufficient protection for
                   the DAO, a more complete understanding of the incentives and risks has led to
-                  general consensus within the Nounders and the wider
+                  general consensus within the pNounders and the wider
                   community that a more robust game-theoretic solution should be implemented before
                   the right is removed.
                 </Trans>
               </p>
               <p>
                 <Trans>
-                  Consequently, the Pnounders anticipates being the steward of the veto power
+                  Consequently, the pNounders anticipates being the steward of the veto power
                   until Public Nouns DAO is ready to implement an alternative, and therefore wishes to
                   clarify the conditions under which it would exercise this power.
                 </Trans>
               </p>
               <p>
                 <Trans>
-                  The Pnounders considers the veto an emergency power that should not be
-                  exercised in the normal course of business. The Pnounders will veto
+                  The pNounders considers the veto an emergency power that should not be
+                  exercised in the normal course of business. The pNounders will veto
                   proposals that introduce non-trivial legal or existential risks to the Public Nouns DAO
-                  or the Pnounders, including (but not necessarily limited to) proposals
+                  or the pNounders, including (but not necessarily limited to) proposals
                   that:
                 </Trans>
               </p>
@@ -289,14 +289,14 @@ const Documentation = () => {
             <Accordion.Body>
               <p>
                 <Trans>
-                  'Pnounders' is the coalition of public goods that formed to launch Public Nouns together, and help steward early governance. Here are the
-                  Pnounders:
+                  'pNounders' is the coalition of public goods that formed to launch Public Nouns together, and help steward early governance. Here are the
+                  pNounders:
                 </Trans>
               </p>
               <ul>
                 <li>
                   <Link
-                    text="@metacartel"
+                    text="MetaCartel"
                     url="https://twitter.com/meta_cartel"
                     leavesPage={true}
                   />
@@ -322,17 +322,17 @@ const Documentation = () => {
               </ul>
               <p>
                 <Trans>
-                  Because 100% of Noun auction proceeds are sent to Nouns DAO, Nounders have chosen to compensate themselves with Nouns. 
-                  Every 30th Public Noun for the first 5 years of the project (Public Noun ids #0, #30, #60, and so on) will be automatically sent to the Pnounder's multisig to be vested and shared among the coalition.
-                  Every 30th Public Noun for the first 5 years of the project (Public Noun ids #10, #40, #70, and so on) will be automatically sent to the
+                  Rewards: 
+                  Every 30th Public Noun for the first year of the project (Public Noun ids #0, #30, #60, and so on) will be automatically sent to the pNounder's multisig to be vested and shared among the coalition.
+                  Every 30th Public Noun for the first year of the project (Public Noun ids #10, #40, #70, and so on) will be automatically sent to the
                   NounsDAO, for building such an amazing base that we could fork.
-                  Every 30th Public Noun for the first 5 years of the project (Public Noun ids #20, #50, #80, and so on) will be automatically sent to the
+                  Every 30th Public Noun for the first year of the project (Public Noun ids #20, #50, #80, and so on) will be automatically sent to the
                   PublicNounsDAO, for rewards.
                 </Trans>
               </p>
               <p>
                 <Trans>
-                  Pnounder distributions don't interfere with the cadence of 12 hour auctions. Nouns
+                  These distributions don't interfere with the cadence of 12 hour auctions. Public Nouns
                   are sent directly to the Pnounder's Multisig, and auctions continue on schedule
                   with the next available Public Noun ID.
                 </Trans>

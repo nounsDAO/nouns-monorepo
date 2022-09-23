@@ -101,16 +101,15 @@ const NounderNounContent: React.FC<{
                 ` ${nounContentClasses.bidRow}`
               }
             >
-              <Trans>All Noun auction proceeds are sent to the</Trans>{' '}
+              <Trans>All Public Noun auction proceeds are sent to the</Trans>{' '}
               <Link to="/vote" className={nounContentClasses.link}>
-                <Trans>Nouns DAO</Trans>
+                <Trans>Public Nouns DAO</Trans>
               </Link>
               .{' '}
               <Trans>
-                For this reason, we, the project's founders (‘pNounders’) have chosen to compensate
-                ourselves with Public ouns. Every 10th Noun for the first 5 years of the project will be
-                sent to our multisig (5/10), where it will be vested and distributed to individual
-                Pnounders.
+                To help bootstrap governance, every 30th Noun for the first year of the project will be
+                sent to pNounders.eth, the founding coalition (‘pNounders’), where it will be vested and distributed to individual
+                pNounders.
               </Trans>
             </li>
           </ul>
