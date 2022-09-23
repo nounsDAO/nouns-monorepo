@@ -19,6 +19,7 @@ pragma solidity ^0.8.6;
 
 import { ISeeder } from './interfaces/ISeeder.sol';
 import { IDescriptorMinimal } from './interfaces/IDescriptorMinimal.sol';
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract NSeeder is ISeeder {
     /**
@@ -122,13 +123,18 @@ contract NSeeder is ISeeder {
             });
         }
 
-        for()
-        return sortedSeed(seed);
+        //return sortedSeed(seed);
+        return seed;
     }
 
-    function sortedSeed(Seed calldata seed) internal returns (Seed memory) {
-
-    }
+    // function sortedSeed(Seed calldata seed) internal returns (Seed memory) {
+    //     for(uint i  = 0; i < seed.accessories.length; i ++)
+    //         if(seed.accessories[i].accType == 3) {
+    //             if(seed.accessories[i].accId == 2 || ) {
+                    
+    //             }
+    //         }
+    // }
 
     function setTypeProbability(uint256[] calldata probabilities) external onlyOwner {
         delete cTypeProbability;

@@ -107,7 +107,7 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
         IDescriptorMinimal _descriptor,
         ISeeder _seeder,
         IProxyRegistry _proxyRegistry
-    ) ERC721('Punk2', 'PUNK2') {
+    ) ERC721('Cryptopunks', 'PUNK') {
         punkersDAO = _punkersDAO;
         minter = _minter;
         descriptor = _descriptor;

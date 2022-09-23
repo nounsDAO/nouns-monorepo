@@ -37,7 +37,7 @@ library NFTDescriptor {
         returns (string memory)
     {
         string memory image = generateSVGImage(
-//            MultiPartRLEToSVG.SVGParams({ parts: params.parts, background: params.background }),
+            MultiPartRLEToSVG.SVGParams({ parts: params.parts/*, background: params.background */}),
             palettes
         );
 
