@@ -247,28 +247,28 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
     //   }
 
 
-    const sidebarVariants = {
-        closed: {
-            width: isMobile ? "100%" : 0,
-            x: isMobile ? 0 : 0,
-            y: isMobile ? "100%" : 0,
-        },
-        open: {
-            width: isMobile ? "100%" : "33%",
-            x: 0,
-            y: 0,
-        },
-        exit: {
-            width: isMobile ? "100%" : 0,
-            opacity: 0,
-            x: isMobile ? 0 : 0,
-            y: isMobile ? "100%" : 0,
-            transition: {
-                duration: 0.1,
-                when: "afterChildren",
-            },
-        }
-    }    
+    // const sidebarVariants = {
+    //     closed: {
+    //         width: isMobile ? "100%" : 0,
+    //         x: isMobile ? 0 : 0,
+    //         y: isMobile ? "100%" : 0,
+    //     },
+    //     open: {
+    //         width: isMobile ? "100%" : "33%",
+    //         x: 0,
+    //         y: 0,
+    //     },
+    //     exit: {
+    //         width: isMobile ? "100%" : 0,
+    //         opacity: 0,
+    //         x: isMobile ? 0 : 0,
+    //         y: isMobile ? "100%" : 0,
+    //         transition: {
+    //             duration: 0.1,
+    //             when: "afterChildren",
+    //         },
+    //     }
+    // }    
 
     return (
         <>  
