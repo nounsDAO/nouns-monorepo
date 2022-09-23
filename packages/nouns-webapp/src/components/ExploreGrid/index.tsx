@@ -92,6 +92,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     // console.log("activeNoun", activeNoun)
     
     const handleNounDetail = (nounId: number, sidebarVisibility: string) => {
+        nounId > -1 && nounId < nounCount && setActiveNoun(nounId);
         nounId > -1 && nounId < nounCount && setSelectedNoun(nounId);
         sidebarVisibility === "visible" ? setIsSidebarVisible(true) : setIsSidebarVisible(false);
         sidebarVisibility !== "visible" && setSelectedNoun(undefined);
@@ -307,8 +308,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                 key={i}
                                             >
                                                 <button 
-                                                    // ref={el => buttonsRef.current[i] = el} 
-                                                    // onFocus={() => handleNounDetail(i, i === selectedNoun ? 'close' : 'visible')}
+                                                    onFocus={() => handleNounDetail(i, i === selectedNoun ? 'close' : 'visible')}
                                                     onClick={() => handleNounDetail(i, i === selectedNoun ? 'close' : 'visible')}
                                                     onMouseOver={() => setActiveNoun(i)} 
                                                     onMouseOut={() => selectedNoun && setActiveNoun(selectedNoun)}
@@ -322,11 +322,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                         } as React.CSSProperties
                                                         }
                                                      />
-                                                    {/* <p className={classes.label}>Noun {i}</p> */}
                                                     {/* <StandaloneNounImage nounId={BigNumber.from(i)} /> */}
-                                                    {/* {i === nounCount - 1 && (
-                                                        <p className={classes.currentAuction}>current auction</p>
-                                                    )} */}
                                                 </button>
                                             </motion.li>
                                         ).reverse()
@@ -345,12 +341,10 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                 key={i}
                                             >
                                                 <button 
-                                                    // ref={el => buttonsRef.current[i] = el} 
-                                                    // onFocus={() => handleNounDetail(i, i === selectedNoun ? 'close' : 'visible')}
+                                                    onFocus={() => handleNounDetail(i, i === selectedNoun ? 'close' : 'visible')}
                                                     onClick={() => handleNounDetail(i, i === selectedNoun ? 'close' : 'visible')}
                                                     onMouseOver={() => setActiveNoun(i)} 
                                                     onMouseOut={() => selectedNoun && setActiveNoun(selectedNoun)}
-                                                    
                                                     >
                                                     <img 
                                                         src={process.env.PUBLIC_URL + `/nouns/noun${i}.svg`} 
@@ -360,11 +354,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                         } as React.CSSProperties
                                                         }
                                                      />
-                                                    {/* <p className={classes.label}>Noun {i}</p> */}
                                                     {/* <StandaloneNounImage nounId={BigNumber.from(i)} /> */}
-                                                    {/* {i === nounCount - 1 && (
-                                                        <p className={classes.currentAuction}>current auction</p>
-                                                    )} */}
                                                 </button>
                                             </motion.li>
                                         )
