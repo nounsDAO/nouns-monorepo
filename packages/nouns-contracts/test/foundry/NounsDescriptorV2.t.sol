@@ -11,6 +11,8 @@ import { INounsArt } from '../../contracts/interfaces/INounsArt.sol';
 import { Base64 } from 'base64-sol/base64.sol';
 import { Inflator } from '../../contracts/Inflator.sol';
 import { IInflator } from '../../contracts/interfaces/IInflator.sol';
+import { DeployUtils } from './helpers/DeployUtils.sol';
+import { strings } from './lib/strings.sol';
 
 contract NounsDescriptorV2Test is Test {
     NounsDescriptorV2 descriptor;
@@ -481,5 +483,90 @@ contract NounsDescriptorV2Test is Test {
         vm.mockCall(address(art), abi.encodeWithSelector(INounsArt.heads.selector), abi.encode('return value'));
         vm.mockCall(address(art), abi.encodeWithSelector(INounsArt.glasses.selector), abi.encode('return value'));
         vm.mockCall(address(art), abi.encodeWithSelector(INounsArt.palettes.selector), abi.encode('return value'));
+    }
+}
+
+contract NounsDescriptorV2WithRealArtTest is DeployUtils {
+    using strings for *;
+
+    NounsDescriptorV2 descriptor;
+
+    // these indexes were computed once and hard-coded to speed up test runtime
+    // searching for the longest items each run is too slow
+    uint48 longestBodyIndex = 0;
+    uint48 longestAccessoryIndex = 64;
+    uint48 longestHeadIndex = 211;
+    uint48 longestGlassesIndex = 8;
+
+    function setUp() public {
+        descriptor = _deployAndPopulateV2();
+    }
+
+    function testGeneratesValidTokenURI() public {
+        string memory uri = descriptor.tokenURI(
+            0,
+            INounsSeeder.Seed({
+                background: 0,
+                body: longestBodyIndex,
+                accessory: longestAccessoryIndex,
+                head: longestHeadIndex,
+                glasses: longestGlassesIndex
+            })
+        );
+
+        (
+            string memory nameKeyValue,
+            string memory descriptionKeyValue,
+            string memory imageBase64Value
+        ) = decodeAndSplitTokenURI(uri);
+        string memory imageDecoded = string(Base64.decode(imageBase64Value));
+        strings.slice memory imageSlice = imageDecoded.toSlice();
+
+        assertEq(nameKeyValue, '"name":"Noun 0"');
+        assertEq(descriptionKeyValue, '"description":"Noun 0 is a member of the Nouns DAO"');
+        assertEq(bytes(imageDecoded).length, 20931);
+        assertTrue(
+            imageSlice.startsWith(
+                '<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">'
+                    .toSlice()
+            )
+        );
+        assertTrue(
+            imageSlice.endsWith('<rect width="60" height="10" x="170" y="160" fill="#257ced" /></svg>'.toSlice())
+        );
+    }
+
+    function decodeAndSplitTokenURI(string memory uri)
+        internal
+        pure
+        returns (
+            string memory nameKeyValue,
+            string memory descriptionKeyValue,
+            string memory imageBase64Value
+        )
+    {
+        // remove the data type prefix `data:application/json;base64,`
+        // modifies the slice to start after the prefix so we can decode
+        strings.slice memory uriSlice = uri.toSlice();
+        uriSlice.split(','.toSlice());
+        string memory decoded = string(Base64.decode(uriSlice.toString()));
+        strings.slice memory decodedSlice = decoded.toSlice();
+
+        // returns a slice left of the comma, and modifies the input slice
+        // to start after the comma
+        // given an input that starts like: {"name":"Noun 0", "description":"Noun 0 is
+        // the return value is: {"name":"Noun 0"
+        // beyond '{' gets rid of that first character
+        // name = "name":"Noun 0"
+        strings.slice memory nameSlice = decodedSlice.split(','.toSlice());
+        nameKeyValue = nameSlice.beyond('{'.toSlice()).toString();
+
+        // description = "description":"Noun 0 is a member of the Nouns DAO"
+        strings.slice memory descSlice = strings.split(decodedSlice, strings.toSlice(','));
+        descriptionKeyValue = descSlice.beyond(' '.toSlice()).toString();
+
+        // skipping the image data prefix: ' "image": "data:image/svg+xml;base64,'
+        decodedSlice.split(','.toSlice());
+        imageBase64Value = decodedSlice.until('"}'.toSlice()).toString();
     }
 }
