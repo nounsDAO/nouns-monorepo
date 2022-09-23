@@ -292,7 +292,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                         </div>
                     </div>  
                     <motion.div 
-                        className={cx(classes.exploreGrid, isFullView && classes.fullViewGrid, classes[activeSizeOption])}
+                        className={cx(classes.exploreGrid, isFullView && classes.fullViewGrid, !isMobile && classes[activeSizeOption])}
                     >   
                             {sortOrder === "date-descending" ? (
                                 <ul>  

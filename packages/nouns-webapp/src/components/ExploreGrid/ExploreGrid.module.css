@@ -33,16 +33,21 @@
     padding: 15px;
     margin: 0;
     width: 100%;
-    /* display: flex; */
+    display: flex;
     flex-wrap: wrap;
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    gap: 15px;
+    /* display: grid; */
+    /* grid-template-columns: repeat(10, 1fr); */
+    
+    transition: all 0.15s ease-in-out;
+    --gap: 15px;
+    --columns: 10;
+    gap: var(--gap);
 }
 
 .exploreGrid.small ul {
-    grid-template-columns: repeat(20, 1fr);
-    gap: 7px;
+    --gap: 7px;
+    --columns: 20;
+    gap: var(--gap);
 }
 
 .exploreGrid li {
@@ -50,8 +55,9 @@
     list-style-type: none;
     margin: 0;
     padding: 0;
-    /* width: 10%; */
-    transition: border 0.05s ease-in-out;
+    width: 10%;
+    /* transition: border 0.05s ease-in-out; */
+    transition: width 0.2s ease-in-out;
     border: transparent 1px solid;
     animation-name: animateIn;
     animation-duration: 60ms;
@@ -60,6 +66,13 @@
     animation-timing-function: ease-in-out;
     border-radius: 10px;
     overflow: hidden;
+    width: calc((100% / var(--columns)) - var(--gap) + (var(--gap) / var(--columns)));
+
+}
+
+.exploreGrid.small li {
+    width: calc((100% / var(--columns)) - var(--gap) + (var(--gap) / var(--columns)));
+    /* border-radius: 5px; */
 }
 
 .exploreGrid li:hover {
@@ -165,13 +178,9 @@ li.activeNoun img, li.activeNoun:hover img {
     width: 100%;
 }
 
-.nav .buttons {
+.nav .buttons, .nav .sizing {
     display: flex;
-    grid-gap: 1em;
-}
-
-.nav .sizing {
-    
+    gap: 1em;
 }
 
 .nav svg {
@@ -302,8 +311,8 @@ li.activeNoun img, li.activeNoun:hover img {
         padding: 0;
     }
     .exploreGrid ul {   
-        grid-template-columns: repeat(8, 1fr) !important;
-        gap: 5px;
+        --gap: 5px;
+        --columns: 8;
         padding: 0;
     }
 
@@ -320,7 +329,11 @@ li.activeNoun img, li.activeNoun:hover img {
 }
 
 @media (max-width: 400px) {
-    .exploreGrid ul {   
-        grid-template-columns: repeat(5, 1fr) !important;
+    .exploreGrid ul {
+        --gap: 5px;
+        --columns: 5;
+    }
+    .exploreGrid ul li {   
+        width: calc((100% / var(--columns)) - var(--gap) + (var(--gap) / var(--columns)));
     }
 }
