@@ -2,6 +2,7 @@ import { Row, Col, Button, Card, Spinner } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import {
   ProposalState,
+  useCurrentQuorum,
   useExecuteProposal,
   useProposal,
   useQueueProposal,
@@ -36,6 +37,8 @@ import { ReactNode } from 'react-markdown/lib/react-markdown';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
 import { SearchIcon } from '@heroicons/react/solid';
 import ReactTooltip from 'react-tooltip';
+import DynamicQuorumInfoModal from '../../components/DynamicQuorumInfoModal';
+import config from '../../config';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -49,6 +52,7 @@ const VotePage = ({
   const proposal = useProposal(id);
 
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
+  const [showDynamicQuorumInfoModal, setShowDynamicQuorumInfoModal] = useState<boolean>(false);
   // Toggle between Noun centric view and delegate view
   const [isDelegateView, setIsDelegateView] = useState(false);
 
@@ -241,6 +245,11 @@ const VotePage = ({
     }
   }, [showToast]);
 
+  const currentQuorum = useCurrentQuorum(
+    config.addresses.nounsDAOProxy,
+    proposal && proposal.id ? parseInt(proposal.id) : 0,
+  );
+
   if (!proposal || loading || !data) {
     return (
       <div className={classes.spinner}>
@@ -262,6 +271,13 @@ const VotePage = ({
 
   return (
     <Section fullWidth={false} className={classes.votePage}>
+      {showDynamicQuorumInfoModal && (
+        <DynamicQuorumInfoModal
+          proposal={proposal}
+          againstVotesAbsolute={againstNouns.length}
+          onDismiss={() => setShowDynamicQuorumInfoModal(false)}
+        />
+      )}
       <VoteModal
         show={showVoteModal}
         onHide={() => setShowVoteModal(false)}
@@ -362,7 +378,14 @@ const VotePage = ({
                       <Trans>Current Quorum</Trans>
                     </span>
                     <h3>
-                      <Trans>{i18n.number(proposal.quorumVotes)} votes</Trans>
+                      <Trans>
+                        {i18n.number(
+                          // TODO(brianj) implement logic to only use new value for v2 props
+                          // proposal.quorumVotes
+                          currentQuorum ?? 0,
+                        )}{' '}
+                        votes
+                      </Trans>
                       <SearchIcon className={classes.dqIcon} />
                     </h3>
                   </div>
