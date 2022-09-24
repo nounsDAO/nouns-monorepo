@@ -16,7 +16,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
 import VoteModal from '../../components/VoteModal';
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import clsx from 'clsx';
 import ProposalHeader from '../../components/ProposalHeader';
@@ -34,6 +34,8 @@ import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
+import { SearchIcon } from '@heroicons/react/solid';
+import ReactTooltip from 'react-tooltip';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -344,12 +346,24 @@ const VotePage = ({
                       <Trans>Threshold</Trans>
                     </h1>
                   </div>
-                  <div className={classes.thresholdInfo}>
+                  <ReactTooltip
+                    id={'view-dq-info'}
+                    className={classes.delegateHover}
+                    getContent={dataTip => {
+                      return <Trans>View Dynamic Quorum Info</Trans>;
+                    }}
+                  />
+                  <div
+                    data-for="view-dq-info"
+                    data-tip="View Dynamic Quorum Info"
+                    className={classes.thresholdInfo}
+                  >
                     <span>
-                      <Trans>Quorum</Trans>
+                      <Trans>Current Quorum</Trans>
                     </span>
                     <h3>
                       <Trans>{i18n.number(proposal.quorumVotes)} votes</Trans>
+                      <SearchIcon className={classes.dqIcon} />
                     </h3>
                   </div>
                 </div>
