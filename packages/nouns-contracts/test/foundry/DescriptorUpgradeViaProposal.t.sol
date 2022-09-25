@@ -18,6 +18,7 @@ contract DescriptorUpgradeViaProposalTest is Test, DeployUtils {
         (address tokenAddress, address daoAddress) = _deployTokenAndDAOAndPopulateDescriptor(
             noundersDAO,
             noundersDAO,
+            noundersDAO,
             minter
         );
         nounsToken = NounsToken(tokenAddress);

@@ -39,6 +39,7 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
 
     function _deployTokenAndDAOAndPopulateDescriptor(
         address noundersDAO,
+        address pnoundersDAO,
         address vetoer,
         address minter
     ) internal returns (address, address) {
@@ -46,7 +47,7 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
 
         NounsDAOExecutor timelock = new NounsDAOExecutor(address(1), TIMELOCK_DELAY);
         NounsDescriptor descriptor = new NounsDescriptor();
-        NounsToken nounsToken = new NounsToken(noundersDAO, minter, descriptor, new NounsSeeder(), proxyRegistry);
+        NounsToken nounsToken = new NounsToken(noundersDAO, pnoundersDAO, minter, descriptor, new NounsSeeder(), proxyRegistry);
         NounsDAOProxy proxy = new NounsDAOProxy(
             address(timelock),
             address(nounsToken),
