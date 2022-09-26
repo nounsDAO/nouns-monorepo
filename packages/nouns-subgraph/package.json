@@ -18,7 +18,7 @@
     "prepare:mainnet": "mustache config/mainnet.json subgraph.yaml.mustache > subgraph.yaml",
     "deploy:rinkeby": "yarn clean && yarn prepare:rinkeby && yarn codegen && yarn deploy ipatka/publicnouns",
     "deploy:goerli": "yarn clean && yarn prepare:goerli && yarn codegen && yarn deploy publicnouns/nouns-monorepo",
-    "deploy:mainnet": "yarn clean && yarn prepare:mainnet && yarn codegen && yarn deploy nounsdao/nouns-subgraph",
+    "deploy:mainnet": "yarn clean && yarn prepare:mainnet && yarn codegen && yarn deploy ipatka/publicnouns-mainnet",
     "mustache": "mustache"
   },
   "devDependencies": {

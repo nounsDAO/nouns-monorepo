@@ -40,7 +40,7 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
 
     // Counter to track where to send the next 10th Noun
     uint256 public rewardIndex;
-    
+
     // Max ID to compare with when deciding to reward or not
     uint256 public maxRewardNoun;
 
@@ -52,6 +52,9 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
 
     // Whether the minter can be updated
     bool public isMinterLocked;
+
+    // Whether max reward can be updated
+    bool public isMaxRewardLocked;
 
     // Whether the descriptor can be updated
     bool public isDescriptorLocked;
@@ -76,6 +79,14 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
      */
     modifier whenMinterNotLocked() {
         require(!isMinterLocked, 'Minter is locked');
+        _;
+    }
+
+    /**
+     * @notice Require that the max reward has not been locked
+     */
+    modifier whenMaxRewardNotLocked() {
+        require(!isMaxRewardLocked, 'Max reward is locked');
         _;
     }
 
@@ -234,10 +245,20 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
      * @notice Set the max reward noun
      * @dev Only callable by the owner
      */
-    function setMaxRewardNoun(uint256 _maxRewardNoun) external onlyOwner {
+    function setMaxRewardNoun(uint256 _maxRewardNoun) external onlyOwner whenMaxRewardNotLocked {
         maxRewardNoun = _maxRewardNoun;
 
         emit MaxRewardNounUpdated(maxRewardNoun);
+    }
+
+    /**
+     * @notice Lock the max reward noun.
+     * @dev This cannot be reversed and is only callable by the owner when not locked.
+     */
+    function lockMaxRewardNoun() external onlyOwner whenMaxRewardNotLocked {
+        isMaxRewardLocked = true;
+
+        emit MaxRewardLocked();
     }
 
     /**

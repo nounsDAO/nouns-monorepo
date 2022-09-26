@@ -36,6 +36,8 @@ interface INounsToken is IERC721 {
 
     event MinterLocked();
 
+    event MaxRewardLocked();
+
     event DescriptorUpdated(INounsDescriptorMinimal descriptor);
 
     event DescriptorLocked();

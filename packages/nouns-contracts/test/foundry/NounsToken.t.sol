@@ -91,6 +91,16 @@ contract NounsTokenTest is Test, DeployUtils {
 
     }
     
+    function testLockMaxReward() public {
+        address owner = nounsToken.owner();
+        vm.startPrank(owner);
+        
+        nounsToken.lockMaxRewardNoun();
+
+        vm.expectRevert('Max reward is locked');
+        nounsToken.setMaxRewardNoun(800);
+    }
+    
     function testOwnerCanSetMaxReward() public {
         address owner = nounsToken.owner();
         vm.startPrank(owner);

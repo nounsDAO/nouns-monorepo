@@ -1,0 +1,17 @@
+┌─────────────────────────────┬──────────────────────────────────────────────┬──────────────────────────────────────────────────────────────────────┐
+│           (index)           │                   Address                    │                           Deployment Hash                            │
+├─────────────────────────────┼──────────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────┤
+│       NFTDescriptorV2       │ '0x8EC3F43F71e5873C5816114c9b4Ae81D951D62F1' │ '0x25790cf14b9818f5416ab7f4bca8f6329b8dc71a4e143707991c6679fc749210' │
+│         SVGRenderer         │ '0x6C13d3837492Ef4c62600b4A3Ccd47DD18ba6E59' │ '0x1992501d7bc292761adcd6a32a7895787a758c1f277a7592a3e061250a3fccff' │
+│      NounsDescriptorV2      │ '0xdb6025750C3c7aC35B9ed465459d1284d0d8116b' │ '0x6ed1e38773d5f2c863975421a8ac6a30d86f97d067b62c111cea19b0a80475a5' │
+│          Inflator           │ '0x311f8067044A92d39645e05d0519586EF323cF9A' │ '0x54fe57ea0de2337b7a3da99b302f5105f43f316bef16261db836a49620209b7f' │
+│          NounsArt           │ '0xafDff3E5133305215dF90D2aA4Bed0b4b94D0fcA' │ '0x2d6ebb1e606140a8f69af3177d04afdd5afc2dc18b1623f15f2c8f6320e69cca' │
+│         NounsSeeder         │ '0x18eB230775167eccED408817f47158Da61A7AAE6' │ '0x04658a1ace817ce067c2c8070c05a2c57cfa5a095841702eb2de52fa85b1f7c0' │
+│         NounsToken          │ '0x93ecac71499147627DFEc6d0E494d50fCFFf10EE' │ '0xebed6023438c6c55057f7196b19f6fc57c4a7de8411707913eca4fa5e5182a39' │
+│      NounsAuctionHouse      │ '0x5De4D6Fe756A9A1b0FBb2C3404411230d53Aa689' │ '0x1bc963da87c7ade6033a7b0981612a25fc6e91ea75fa0fd8e3c57b36bd263fd1' │
+│ NounsAuctionHouseProxyAdmin │ '0xA9D99aA042DD0c3B74120849a784C2A0AF7Fa038' │ '0x7a55fef26474788cb4ccef055c12f884bdb9b5a63504921487c77156cdaaf9d4' │
+│   NounsAuctionHouseProxy    │ '0x5fd95a5af4E60B9B796Cca6FEB44273359929ea8' │ '0xe52bb975941467ff0fcb91b598f9059d30120c9a423308ea8c4af51beedf5ccc' │
+│      NounsDAOExecutor       │ '0x553826Cb0D0Ee63155920F42b4E60aaE6607DFCB' │ '0xa86ddd904470522e0f1ec9cb44869151c11e1530c67e1eb68d64e8308fd0f993' │
+│       NounsDAOLogicV1       │ '0x65519993deD435233d8E9EdE178d5604De6c6eb2' │ '0xb1220cd024a02d7cc1e1c7e3333699ac16821519f0f164fa00bc208b497e9792' │
+│        NounsDAOProxy        │ '0x2BbEbFECA0fEbde8C70EF8501C991f3AB2095862' │ '0xb34657a39521116e6085ec2d7f62684dbc0d6c2bbc0da61bb05879eca0a3f02a' │
+└─────────────────────────────┴──────────────────────────────────────────────┴──────────────────────────────────────────────────────────────────────┘
