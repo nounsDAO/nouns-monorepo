@@ -183,13 +183,6 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
             return (
               <a
                 className={clsx(classes.proposalLink, classes.proposalLinkWithCountdown)}
-                // onClick={() => {
-                //   if (isMetaKeyPressed) {
-                //     window.open(`${window.location.origin}/vote/${p.id}`, '_blank');
-                //   } else {
-                //     history.push(`/vote/${p.id}`);
-                //   }
-                // }}
                 href={`/vote/${p.id}`}
                 key={i}
               >
