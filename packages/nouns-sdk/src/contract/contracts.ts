@@ -1,9 +1,9 @@
 import {
-  NounsTokenFactory,
-  NounsAuctionHouseFactory,
-  NounsDescriptorFactory,
-  NounsSeederFactory,
-  NounsDaoLogicV1Factory,
+  NTokenFactory,
+  NAuctionHouseFactory,
+  NDescriptorFactory,
+  NSeederFactory,
+  NDaoLogicV1Factory,
 } from '@nouns/contracts';
 import type { Signer } from 'ethers';
 import type { Provider } from '@ethersproject/providers';
@@ -24,24 +24,24 @@ export const getContractsForChainOrThrow = (
   const addresses = getContractAddressesForChainOrThrow(chainId);
 
   return {
-    nounsTokenContract: NounsTokenFactory.connect(
-      addresses.nounsToken,
+    nTokenContract: NTokenFactory.connect(
+      addresses.nToken,
       signerOrProvider as Signer | Provider,
     ),
-    nounsAuctionHouseContract: NounsAuctionHouseFactory.connect(
-      addresses.nounsAuctionHouseProxy,
+    nAuctionHouseContract: NAuctionHouseFactory.connect(
+      addresses.nAuctionHouseProxy,
       signerOrProvider as Signer | Provider,
     ),
-    nounsDescriptorContract: NounsDescriptorFactory.connect(
-      addresses.nounsDescriptor,
+    nDescriptorContract: NDescriptorFactory.connect(
+      addresses.nDescriptor,
       signerOrProvider as Signer | Provider,
     ),
-    nounsSeederContract: NounsSeederFactory.connect(
-      addresses.nounsSeeder,
+    nSeederContract: NSeederFactory.connect(
+      addresses.nSeeder,
       signerOrProvider as Signer | Provider,
     ),
-    nounsDaoContract: NounsDaoLogicV1Factory.connect(
-      addresses.nounsDAOProxy,
+    nDaoContract: NDaoLogicV1Factory.connect(
+      addresses.nDAOProxy,
       signerOrProvider as Signer | Provider,
     ),
   };

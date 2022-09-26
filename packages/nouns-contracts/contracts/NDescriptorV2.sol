@@ -109,6 +109,9 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
     /**
      * @notice Get the number of available Punk `bodies`.
      */
+    function punkTypeCount() external view override returns (uint256) {
+        return art.getPunkTypesTrait().storedImagesCount;
+    }
     function hatCount() external view override returns (uint256) {
         return art.getHatsTrait().storedImagesCount;
     }
@@ -187,6 +190,13 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
      * @param imageCount the number of images in this batch; used when searching for images among batches.
      * @dev This function can only be called by the owner when not locked.
      */
+    function addPunkTypes(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyOwner whenPartsNotLocked {
+        art.addPunkTypes(encodedCompressed, decompressedLength, imageCount);
+    }
     function addHats(
         bytes calldata encodedCompressed,
         uint80 decompressedLength,
@@ -308,6 +318,13 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
      * @param imageCount the number of images in this batch; used when searching for images among batches.
      * @dev This function can only be called by the owner when not locked.
      */
+    function addPunkTypesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyOwner whenPartsNotLocked {
+        art.addPunkTypesFromPointer(pointer, decompressedLength, imageCount);
+    }
     function addHatsFromPointer(
         address pointer,
         uint80 decompressedLength,
@@ -315,12 +332,12 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
     ) external override onlyOwner whenPartsNotLocked {
         art.addHatsFromPointer(pointer, decompressedLength, imageCount);
     }
-    function adHairsFromPointer(
+    function addHairsFromPointer(
         address pointer,
         uint80 decompressedLength,
         uint16 imageCount
     ) external override onlyOwner whenPartsNotLocked {
-        art.adHairsFromPointer(pointer, decompressedLength, imageCount);
+        art.addHairsFromPointer(pointer, decompressedLength, imageCount);
     }
     function addBeardsFromPointer(
         address pointer,
@@ -421,6 +438,9 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
      * @param index the index of the head.
      * @return bytes the RLE-encoded bytes of the image.
      */
+    function punkTypes(uint256 index) public view override returns (bytes memory) {
+        return art.punkTypes(index);
+    }
     function hats(uint256 index) public view override returns (bytes memory) {
         return art.hats(index);
     }
@@ -561,30 +581,26 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
      * @notice Get all Punk parts for the passed `seed`.
      */
     function getPartsForSeed(ISeeder.Seed memory seed) public view returns (ISVGRenderer.Part[] memory) {
-        bytes memory body = art.bodies(seed.body);
-        bytes memory accessory = art.accessories(seed.accessory);
-        bytes memory head = art.heads(seed.head);
-        bytes memory glasses_ = art.glasses(seed.glasses);
-
-        ISVGRenderer.Part[] memory parts = new ISVGRenderer.Part[](14);
+        ISVGRenderer.Part[] memory parts = new ISVGRenderer.Part[](15);
         for(uint i = 0; i < seed.accessories.length; i ++) {
             uint accType = seed.accessories[i].accType;
             uint accId = seed.accessories[i].accId;
             bytes memory accBuffer;
-            if(accType == 0) accBuffer = art.hats(accId);
-            else if(accType == 1) accBuffer = art.hairs(accId);
-            else if(accType == 2) accBuffer = art.beards(accId);
-            else if(accType == 3) accBuffer = art.eyeses(accId);
-            else if(accType == 4) accBuffer = art.glasseses(accId);
-            else if(accType == 5) accBuffer = art.mouths(accId);
-            else if(accType == 6) accBuffer = art.teeths(accId);
-            else if(accType == 7) accBuffer = art.lipses(accId);
-            else if(accType == 8) accBuffer = art.necks(accId);
-            else if(accType == 9) accBuffer = art.emotions(accId);
-            else if(accType == 10) accBuffer = art.faces(accId);
-            else if(accType == 11) accBuffer = art.earses(accId);
-            else if(accType == 12) accBuffer = art.noses(accId);
-            else if(accType == 13) accBuffer = art.cheekses(accId);
+            if(accType == 0) accBuffer = art.punkTypes(accId);
+            else if(accType == 1) accBuffer = art.hats(accId);
+            else if(accType == 2) accBuffer = art.hairs(accId);
+            else if(accType == 3) accBuffer = art.beards(accId);
+            else if(accType == 4) accBuffer = art.eyeses(accId);
+            else if(accType == 5) accBuffer = art.glasseses(accId);
+            else if(accType == 6) accBuffer = art.mouths(accId);
+            else if(accType == 7) accBuffer = art.teeths(accId);
+            else if(accType == 8) accBuffer = art.lipses(accId);
+            else if(accType == 9) accBuffer = art.necks(accId);
+            else if(accType == 10) accBuffer = art.emotions(accId);
+            else if(accType == 11) accBuffer = art.faces(accId);
+            else if(accType == 12) accBuffer = art.earses(accId);
+            else if(accType == 13) accBuffer = art.noses(accId);
+            else if(accType == 14) accBuffer = art.cheekses(accId);
             parts[accType] = ISVGRenderer.Part({ image: accBuffer, palette: _getPalette(accBuffer) });
         }
         return parts;

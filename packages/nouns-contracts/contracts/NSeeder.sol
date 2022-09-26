@@ -21,7 +21,7 @@ import { ISeeder } from './interfaces/ISeeder.sol';
 import { IDescriptorMinimal } from './interfaces/IDescriptorMinimal.sol';
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract NSeeder is ISeeder {
+contract NSeeder is ISeeder, Ownable {
     /**
      * @notice Generate a pseudo-random Punk seed using the previous blockhash and punk ID.
      */
@@ -37,7 +37,7 @@ contract NSeeder is ISeeder {
     uint256[] accCountByType;
     uint256[] typeOrderSortedByCount; // [sorted_index] = real_group_id
 
-    function generateSeed(uint256 punkId, IDescriptorMinimal descriptor) external view override returns (Seed memory) {
+    function generateSeed(uint256 punkId) external view override returns (ISeeder.Seed memory) {
         uint256 pseudorandomness = uint256(
             keccak256(abi.encodePacked(blockhash(block.number - 1), punkId))
         );

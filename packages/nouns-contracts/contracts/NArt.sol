@@ -34,6 +34,7 @@ contract NArt is IArt {
     /// @notice Punk Color Palettes (Index => Hex Colors, stored as a contract using SSTORE2)
     mapping(uint8 => address) public palettesPointers;
 
+    Trait public punkTypesTrait;
     Trait public hatsTrait;
     Trait public hairsTrait;
     Trait public beardsTrait;
@@ -92,6 +93,9 @@ contract NArt is IArt {
      * https://github.com/ethereum/solidity/issues/11826
      * @return Trait the struct, including a total image count, and an array of storage pages.
      */
+    function getPunkTypesTrait() external view override returns (Trait memory) {
+        return punkTypesTrait;
+    }
     function getHatsTrait() external view override returns (Trait memory) {
         return hatsTrait;
     }
@@ -184,6 +188,15 @@ contract NArt is IArt {
      * @param imageCount the number of images in this batch; used when searching for images among batches.
      * @dev This function can only be called by the descriptor.
      */
+    function addPunkTypes(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyDescriptor {
+        addPage(punkTypesTrait, encodedCompressed, decompressedLength, imageCount);
+
+        emit PunkTypesAdded(imageCount);
+    }
     function addHats(
         bytes calldata encodedCompressed,
         uint80 decompressedLength,
@@ -335,6 +348,15 @@ contract NArt is IArt {
      * @param imageCount the number of images in this batch; used when searching for images among batches.
      * @dev This function can only be called by the descriptor.
      */
+    function addPunkTypesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyDescriptor {
+        addPage(punkTypesTrait, pointer, decompressedLength, imageCount);
+
+        emit PunkTypesAdded(imageCount);
+    }
     function addHatsFromPointer(
         address pointer,
         uint80 decompressedLength,
@@ -472,6 +494,9 @@ contract NArt is IArt {
     /**
      * @notice Get a head image bytes (RLE-encoded).
      */
+    function punkTypes(uint256 index) public view override returns (bytes memory) {
+        return imageByIndex(punkTypesTrait, index);
+    }
     function hats(uint256 index) public view override returns (bytes memory) {
         return imageByIndex(hatsTrait, index);
     }
