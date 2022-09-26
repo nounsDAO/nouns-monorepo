@@ -4,7 +4,7 @@ import {
   DelegateVotesChanged,
   NounCreated,
   Transfer,
-} from './types/NounsToken/NounsToken';
+} from './types/NToken/NToken';
 import { Noun, Seed, DelegationEvent, TransferEvent } from './types/schema';
 import { BIGINT_ONE, BIGINT_ZERO, ZERO_ADDRESS } from './utils/constants';
 import { getGovernanceEntity, getOrCreateDelegate, getOrCreateAccount } from './utils/helpers';

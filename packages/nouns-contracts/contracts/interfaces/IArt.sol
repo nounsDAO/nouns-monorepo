@@ -43,6 +43,7 @@ interface IArt {
 
     event PaletteSet(uint8 paletteIndex);
 
+    event PunkTypesAdded(uint16 count);
     event HatsAdded(uint16 count);
     event HairsAdded(uint16 count);
     event BeardsAdded(uint16 count);
@@ -81,6 +82,11 @@ interface IArt {
 
     function setPalette(uint8 paletteIndex, bytes calldata palette) external;
 
+    function addPunkTypes(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
     function addHats(
         bytes calldata encodedCompressed,
         uint80 decompressedLength,
@@ -154,6 +160,11 @@ interface IArt {
 
     function setPalettePointer(uint8 paletteIndex, address pointer) external;
 
+    function addPunkTypesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
     function addHatsFromPointer(
         address pointer,
         uint80 decompressedLength,
@@ -226,6 +237,7 @@ interface IArt {
     ) external;
 
 
+    function punkTypes(uint256 index) external view returns (bytes memory);
     function hats(uint256 index) external view returns (bytes memory);
     function hairs(uint256 index) external view returns (bytes memory);
     function beards(uint256 index) external view returns (bytes memory);
@@ -241,7 +253,7 @@ interface IArt {
     function noses(uint256 index) external view returns (bytes memory);
     function cheekses(uint256 index) external view returns (bytes memory);
 
-
+    function getPunkTypesTrait() external view returns (Trait memory);
     function getHatsTrait() external view returns (Trait memory);
     function getHairsTrait() external view returns (Trait memory);
     function getBeardsTrait() external view returns (Trait memory);

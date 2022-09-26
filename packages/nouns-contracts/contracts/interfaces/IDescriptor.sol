@@ -36,20 +36,21 @@ interface IDescriptor is IDescriptorMinimal {
     function palettes(uint8 paletteIndex, uint256 colorIndex) external view returns (string memory);
 
 
+    function punkTypes(uint256 index) external view returns (bytes memory);
     function hats(uint256 index) external view returns (bytes memory);
     function hairs(uint256 index) external view returns (bytes memory);
     function beards(uint256 index) external view returns (bytes memory);
-    function eyes(uint256 index) external view returns (bytes memory);
-    function glasses(uint256 index) external view returns (bytes memory);
+    function eyeses(uint256 index) external view returns (bytes memory);
+    function glasseses(uint256 index) external view returns (bytes memory);
     function mouths(uint256 index) external view returns (bytes memory);
     function teeths(uint256 index) external view returns (bytes memory);
-    function lips(uint256 index) external view returns (bytes memory);
+    function lipses(uint256 index) external view returns (bytes memory);
     function necks(uint256 index) external view returns (bytes memory);
     function emotions(uint256 index) external view returns (bytes memory);
     function faces(uint256 index) external view returns (bytes memory);
-    function ears(uint256 index) external view returns (bytes memory);
+    function earses(uint256 index) external view returns (bytes memory);
     function noses(uint256 index) external view returns (bytes memory);
-    function cheeks(uint256 index) external view returns (bytes memory);
+    function cheekses(uint256 index) external view returns (bytes memory);
 
 
 
@@ -72,6 +73,7 @@ interface IDescriptor is IDescriptorMinimal {
     function addManyColorsToPalette(uint8 paletteIndex, string[] calldata newColors) external;
 
 
+    function addManyPunkTypes(bytes[] calldata punkTypes) external;
     function addManyHats(bytes[] calldata hats) external;
     function addManyHairs(bytes[] calldata hairs) external;
     function addManyBeards(bytes[] calldata beards) external;
@@ -91,6 +93,7 @@ interface IDescriptor is IDescriptorMinimal {
     function addColorToPalette(uint8 paletteIndex, string calldata color) external;
 
 
+    function addPunkType(bytes calldata punkType) external;
     function addHat(bytes calldata hat) external;
     function addHair(bytes calldata hair) external;
     function addBeard(bytes calldata beard) external;
@@ -113,9 +116,9 @@ interface IDescriptor is IDescriptorMinimal {
 
     function setBaseURI(string calldata baseURI) external;
 
-    function tokenURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view override returns (string memory);
+    function tokenURI(uint256 tokenId, ISeeder.Seed memory seed) external view override returns (string memory);
 
-    function dataURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view override returns (string memory);
+    function dataURI(uint256 tokenId, ISeeder.Seed memory seed) external view override returns (string memory);
 
     function genericDataURI(
         string calldata name,

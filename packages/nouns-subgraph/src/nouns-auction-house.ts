@@ -4,23 +4,23 @@ import {
   AuctionCreated,
   AuctionExtended,
   AuctionSettled,
-} from './types/NounsAuctionHouse/NounsAuctionHouse';
+} from './types/NAuctionHouse/NAuctionHouse';
 import { Auction, Noun, Bid } from './types/schema';
 import { getOrCreateAccount } from './utils/helpers';
 
 export function handleAuctionCreated(event: AuctionCreated): void {
-  let nounId = event.params.nounId.toString();
+  let punkId = event.params.nounId.toString();
 
-  let noun = Noun.load(nounId);
+  let noun = Noun.load(punkId);
   if (noun == null) {
     log.error('[handleAuctionCreated] Noun #{} not found. Hash: {}', [
-      nounId,
+      punkId,
       event.transaction.hash.toHex(),
     ]);
     return;
   }
 
-  let auction = new Auction(nounId);
+  let auction = new Auction(punkId);
   auction.noun = noun.id;
   auction.amount = BigInt.fromI32(0);
   auction.startTime = event.params.startTime;

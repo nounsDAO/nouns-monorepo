@@ -47,6 +47,7 @@ contract NDescriptor is IDescriptor, Ownable {
 //  string[] public override backgrounds;
 
     // Punk Bodies (Custom RLE)
+    bytes[] public override punkTypes;
     bytes[] public override hats;
     bytes[] public override hairs;
     bytes[] public override beards;
@@ -80,6 +81,9 @@ contract NDescriptor is IDescriptor, Ownable {
     /**
      * @notice Get the number of available Punk `bodies`.
      */
+    function punkTypeCount() external view override returns (uint256) {
+        return punkTypes.length;
+    }
     function hatCount() external view override returns (uint256) {
         return hats.length;
     }
@@ -148,6 +152,11 @@ contract NDescriptor is IDescriptor, Ownable {
      * @notice Batch add Punk bodies.
      * @dev This function can only be called by the owner when not locked.
      */
+    function addManyPunkTypes(bytes[] calldata _punkTypes) external override onlyOwner whenPartsNotLocked {
+        for (uint256 i = 0; i < _punkTypes.length; i++) {
+            _addPunkType(_punkTypes[i]);
+        }
+    }
     function addManyHats(bytes[] calldata _hats) external override onlyOwner whenPartsNotLocked {
         for (uint256 i = 0; i < _hats.length; i++) {
             _addHat(_hats[i]);
@@ -240,6 +249,9 @@ contract NDescriptor is IDescriptor, Ownable {
      * @notice Add a Noun body.
      * @dev This function can only be called by the owner when not locked.
      */
+    function addPunkType(bytes calldata _punkType) external override onlyOwner whenPartsNotLocked {
+        _addPunkType(_punkType);
+    }
     function addHat(bytes calldata _hat) external override onlyOwner whenPartsNotLocked {
         _addHat(_hat);
     }
@@ -384,6 +396,9 @@ contract NDescriptor is IDescriptor, Ownable {
     /**
      * @notice Add a Punk body.
      */
+    function _addPunkType(bytes calldata _punkType) internal {
+        punkTypes.push(_punkType);
+    }
     function _addHat(bytes calldata _hat) internal {
         hats.push(_hat);
     }
@@ -420,7 +435,7 @@ contract NDescriptor is IDescriptor, Ownable {
     function _addEars(bytes calldata _ears) internal {
         earses.push(_ears);
     }
-    function _addNos(bytes calldata _nose) internal {
+    function _addNose(bytes calldata _nose) internal {
         noses.push(_nose);
     }
     function _addCheeks(bytes calldata _cheeks) internal {
@@ -431,25 +446,26 @@ contract NDescriptor is IDescriptor, Ownable {
      * @notice Get all Noun parts for the passed `seed`.
      */
     function _getPartsForSeed(ISeeder.Seed memory seed) internal view returns (bytes[] memory) {
-        bytes[] memory _parts = new bytes[](14);
+        bytes[] memory _parts = new bytes[](15);
         for(uint i = 0; i < seed.accessories.length; i ++) {
             uint accType = seed.accessories[i].accType;
             uint accId = seed.accessories[i].accId;
             bytes[] memory accArr;
-            if(accType == 0) accArr = hats;
-            else if(accType == 1) accArr = hairs;
-            else if(accType == 2) accArr = beards;
-            else if(accType == 3) accArr = eyeses;
-            else if(accType == 4) accArr = glasseses;
-            else if(accType == 5) accArr = mouths;
-            else if(accType == 6) accArr = teeths;
-            else if(accType == 7) accArr = lipses;
-            else if(accType == 8) accArr = necks;
-            else if(accType == 9) accArr = emotions;
-            else if(accType == 10) accArr = faces;
-            else if(accType == 11) accArr = earses;
-            else if(accType == 12) accArr = noses;
-            else if(accType == 13) accArr = cheekses;
+            if(accType == 0) accArr = punkTypes;
+            else if(accType == 1) accArr = hats;
+            else if(accType == 2) accArr = hairs;
+            else if(accType == 3) accArr = beards;
+            else if(accType == 4) accArr = eyeses;
+            else if(accType == 5) accArr = glasseses;
+            else if(accType == 6) accArr = mouths;
+            else if(accType == 7) accArr = teeths;
+            else if(accType == 8) accArr = lipses;
+            else if(accType == 9) accArr = necks;
+            else if(accType == 10) accArr = emotions;
+            else if(accType == 11) accArr = faces;
+            else if(accType == 12) accArr = earses;
+            else if(accType == 13) accArr = noses;
+            else if(accType == 14) accArr = cheekses;
             _parts[accType] = accArr[accId];
         }
         return _parts;

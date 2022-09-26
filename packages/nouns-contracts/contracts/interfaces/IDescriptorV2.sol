@@ -46,7 +46,8 @@ interface IDescriptorV2 is IDescriptorMinimal {
     function palettes(uint8 paletteIndex) external view returns (bytes memory);
 
 
-    function hats(uint256 index) external view returns (string memory);
+    function punkTypes(uint256 index) external view returns (bytes memory);
+    function hats(uint256 index) external view returns (bytes memory);
     function hairs(uint256 index) external view returns (bytes memory);
     function beards(uint256 index) external view returns (bytes memory);
     function eyeses(uint256 index) external view returns (bytes memory);
@@ -61,6 +62,7 @@ interface IDescriptorV2 is IDescriptorMinimal {
     function noses(uint256 index) external view returns (bytes memory);
     function cheekses(uint256 index) external view returns (bytes memory);
 
+    function punkTypeCount() external view override returns (uint256);
     function hatCount() external view override returns (uint256);
     function hairCount() external view override returns (uint256);
     function beardCount() external view override returns (uint256);
@@ -78,7 +80,12 @@ interface IDescriptorV2 is IDescriptorMinimal {
 
     function setPalette(uint8 paletteIndex, bytes calldata palette) external;
 
-function addHats(
+    function addPunkTypes(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+    function addHats(
         bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
@@ -151,6 +158,11 @@ function addHats(
 
     function setPalettePointer(uint8 paletteIndex, address pointer) external;
 
+    function addPunkTypesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
     function addHatsFromPointer(
         address pointer,
         uint80 decompressedLength,
@@ -228,15 +240,15 @@ function addHats(
 
     function setBaseURI(string calldata baseURI) external;
 
-    function tokenURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view override returns (string memory);
+    function tokenURI(uint256 tokenId, ISeeder.Seed memory seed) external view override returns (string memory);
 
-    function dataURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view override returns (string memory);
+    function dataURI(uint256 tokenId, ISeeder.Seed memory seed) external view override returns (string memory);
 
     function genericDataURI(
         string calldata name,
         string calldata description,
-        INounsSeeder.Seed memory seed
+        ISeeder.Seed memory seed
     ) external view returns (string memory);
 
-    function generateSVGImage(INounsSeeder.Seed memory seed) external view returns (string memory);
+    function generateSVGImage(ISeeder.Seed memory seed) external view returns (string memory);
 }
