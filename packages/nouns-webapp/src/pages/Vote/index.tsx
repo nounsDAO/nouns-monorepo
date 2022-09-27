@@ -350,7 +350,7 @@ const VotePage = ({
                       <Trans>Quorum</Trans>
                     </span>
                     <h3>
-                      <Trans>{i18n.number(proposal.quorumVotes)} votes</Trans>
+                      {i18n.number(proposal.quorumVotes)} votes
                     </h3>
                   </div>
                 </div>
