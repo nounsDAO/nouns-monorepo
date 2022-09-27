@@ -61,7 +61,7 @@ export const getPseudorandomPart = (
   pseudorandomness: string,
   partCount: number,
   shiftAmount: number,
-  uintSize: number = 48,
+  uintSize = 48,
 ): number => {
   const hex = shiftRightAndCast(pseudorandomness, shiftAmount, uintSize);
   return BigNumber.from(hex).mod(partCount).toNumber();

@@ -17,7 +17,7 @@ export async function getGasPriceWithPrompt(
 
   promptjs.start();
 
-  let result = await promptjs.get([
+  const result = await promptjs.get([
     {
       properties: {
         gasPrice: {

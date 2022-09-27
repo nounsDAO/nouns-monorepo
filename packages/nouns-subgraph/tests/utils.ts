@@ -32,8 +32,8 @@ export class ProposalCreatedWithRequirementsEvent {
 export function createProposalCreatedWithRequirementsEvent(
   input: ProposalCreatedWithRequirementsEvent,
 ): ProposalCreatedWithRequirements {
-  let newEvent = changetype<ProposalCreatedWithRequirements>(newMockEvent());
-  newEvent.parameters = new Array();
+  const newEvent = changetype<ProposalCreatedWithRequirements>(newMockEvent());
+  newEvent.parameters = [];
 
   newEvent.parameters.push(
     new ethereum.EventParam('id', ethereum.Value.fromUnsignedBigInt(input.id)),
@@ -101,8 +101,8 @@ export function createVoteCastEvent(
   support: i32,
   votes: BigInt,
 ): VoteCast {
-  let newEvent = changetype<VoteCast>(newMockEvent());
-  newEvent.parameters = new Array();
+  const newEvent = changetype<VoteCast>(newMockEvent());
+  newEvent.parameters = [];
 
   newEvent.parameters.push(new ethereum.EventParam('voter', ethereum.Value.fromAddress(voter)));
   newEvent.parameters.push(
@@ -123,8 +123,8 @@ export function createMinQuorumVotesBPSSetEvent(
   oldMinQuorumVotesBPS: i32,
   newMinQuorumVotesBPS: i32,
 ): MinQuorumVotesBPSSet {
-  let newEvent = changetype<MinQuorumVotesBPSSet>(newMockEvent());
-  newEvent.parameters = new Array();
+  const newEvent = changetype<MinQuorumVotesBPSSet>(newMockEvent());
+  newEvent.parameters = [];
 
   newEvent.parameters.push(
     new ethereum.EventParam('oldMinQuorumVotesBPS', ethereum.Value.fromI32(oldMinQuorumVotesBPS)),
@@ -141,8 +141,8 @@ export function createMaxQuorumVotesBPSSetEvent(
   oldMaxQuorumVotesBPS: i32,
   newMaxQuorumVotesBPS: i32,
 ): MaxQuorumVotesBPSSet {
-  let newEvent = changetype<MaxQuorumVotesBPSSet>(newMockEvent());
-  newEvent.parameters = new Array();
+  const newEvent = changetype<MaxQuorumVotesBPSSet>(newMockEvent());
+  newEvent.parameters = [];
 
   newEvent.parameters.push(
     new ethereum.EventParam('oldMaxQuorumVotesBPS', ethereum.Value.fromI32(oldMaxQuorumVotesBPS)),
@@ -159,8 +159,8 @@ export function createQuorumCoefficientSetEvent(
   oldQuorumCoefficient: BigInt,
   newQuorumCoefficient: BigInt,
 ): QuorumCoefficientSet {
-  let newEvent = changetype<QuorumCoefficientSet>(newMockEvent());
-  newEvent.parameters = new Array();
+  const newEvent = changetype<QuorumCoefficientSet>(newMockEvent());
+  newEvent.parameters = [];
 
   newEvent.parameters.push(
     new ethereum.EventParam(
