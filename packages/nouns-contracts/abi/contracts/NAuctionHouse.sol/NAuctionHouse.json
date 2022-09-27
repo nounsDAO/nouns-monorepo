@@ -5,7 +5,7 @@
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "nounId",
+        "name": "tokenId",
         "type": "uint256"
       },
       {
@@ -36,7 +36,7 @@
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "nounId",
+        "name": "tokenId",
         "type": "uint256"
       },
       {
@@ -61,7 +61,7 @@
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "nounId",
+        "name": "tokenId",
         "type": "uint256"
       },
       {
@@ -106,7 +106,7 @@
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "nounId",
+        "name": "tokenId",
         "type": "uint256"
       },
       {
@@ -189,7 +189,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "nounId",
+        "name": "tokenId",
         "type": "uint256"
       },
       {
@@ -225,7 +225,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "nounId",
+        "name": "tokenId",
         "type": "uint256"
       }
     ],
@@ -250,8 +250,8 @@
   {
     "inputs": [
       {
-        "internalType": "contract INounsToken",
-        "name": "_nouns",
+        "internalType": "contract IToken",
+        "name": "_punks",
         "type": "address"
       },
       {
@@ -300,19 +300,6 @@
   },
   {
     "inputs": [],
-    "name": "nouns",
-    "outputs": [
-      {
-        "internalType": "contract INounsToken",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "owner",
     "outputs": [
       {
@@ -339,6 +326,19 @@
         "internalType": "bool",
         "name": "",
         "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "punks",
+    "outputs": [
+      {
+        "internalType": "contract IToken",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",

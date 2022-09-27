@@ -3,7 +3,7 @@
 pragma solidity ^0.8.15;
 
 import { NToken } from '../NToken.sol';
-import { INDescriptorMinimal } from '../interfaces/IDescriptorMinimal.sol';
+import { IDescriptorMinimal } from '../interfaces/IDescriptorMinimal.sol';
 import { ISeeder } from '../interfaces/ISeeder.sol';
 import { IProxyRegistry } from '../external/opensea/IProxyRegistry.sol';
 
@@ -28,22 +28,22 @@ contract NTokenHarness is NToken {
         }
     }
 
-    function mintSeed(
-        address to,
-        uint48 background,
-        uint48 body,
-        uint48 accessory,
-        uint48 head,
-        uint48 glasses
-    ) public {
-        seeds[currentPunkId] = ISeeder.Seed({
-            background: background,
-            body: body,
-            accessory: accessory,
-            head: head,
-            glasses: glasses
-        });
+    // function mintSeed(
+    //     address to,
+    //     uint48 background,
+    //     uint48 body,
+    //     uint48 accessory,
+    //     uint48 head,
+    //     uint48 glasses
+    // ) public {
+    //     seeds[currentPunkId] = ISeeder.Seed({
+    //         background: background,
+    //         body: body,
+    //         accessory: accessory,
+    //         head: head,
+    //         glasses: glasses
+    //     });
 
-        _mint(owner(), to, currentPunkId++);
-    }
+    //     _mint(owner(), to, currentPunkId++);
+    // }
 }

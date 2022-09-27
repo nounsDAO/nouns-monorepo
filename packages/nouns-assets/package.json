@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@ethersproject/bignumber": "^5.5.0",
-    "@ethersproject/solidity": "^5.5.0"
+    "@ethersproject/solidity": "^5.5.0",
+    "ts-node": "^10.9.1"
   }
 }

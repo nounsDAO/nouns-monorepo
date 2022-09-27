@@ -1,0 +1,1784 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "contract IArt",
+        "name": "_art",
+        "type": "address"
+      },
+      {
+        "internalType": "contract ISVGRenderer",
+        "name": "_renderer",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "BadPaletteLength",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EmptyPalette",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "IndexNotFound",
+    "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "contract IArt",
+        "name": "art",
+        "type": "address"
+      }
+    ],
+    "name": "ArtUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "baseURI",
+        "type": "string"
+      }
+    ],
+    "name": "BaseURIUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "enabled",
+        "type": "bool"
+      }
+    ],
+    "name": "DataURIToggled",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "PartsLocked",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "contract ISVGRenderer",
+        "name": "renderer",
+        "type": "address"
+      }
+    ],
+    "name": "RendererUpdated",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "encodedCompressed",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addBeards",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "pointer",
+        "type": "address"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addBeardsFromPointer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "encodedCompressed",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addCheekses",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "pointer",
+        "type": "address"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addCheeksesFromPointer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "encodedCompressed",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addEarses",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "pointer",
+        "type": "address"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addEarsesFromPointer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "encodedCompressed",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addEmotions",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "pointer",
+        "type": "address"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addEmotionsFromPointer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "encodedCompressed",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addEyeses",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "pointer",
+        "type": "address"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addEyesesFromPointer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "encodedCompressed",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addFaces",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "pointer",
+        "type": "address"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addFacesFromPointer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "encodedCompressed",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addGlasseses",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "pointer",
+        "type": "address"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addGlassesesFromPointer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "encodedCompressed",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addHairs",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "pointer",
+        "type": "address"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addHairsFromPointer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "encodedCompressed",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addHats",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "pointer",
+        "type": "address"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addHatsFromPointer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "encodedCompressed",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addLipses",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "pointer",
+        "type": "address"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addLipsesFromPointer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "encodedCompressed",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addMouths",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "pointer",
+        "type": "address"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addMouthsFromPointer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "encodedCompressed",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addNecks",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "pointer",
+        "type": "address"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addNecksFromPointer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "encodedCompressed",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addNoses",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "pointer",
+        "type": "address"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addNosesFromPointer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "encodedCompressed",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addPunkTypes",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "pointer",
+        "type": "address"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addPunkTypesFromPointer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "encodedCompressed",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addTeeths",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "pointer",
+        "type": "address"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addTeethsFromPointer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "arePartsLocked",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "art",
+    "outputs": [
+      {
+        "internalType": "contract IArt",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "baseURI",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "beardCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "beards",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "cheeksCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "cheekses",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint8",
+            "name": "punkType",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "skinTone",
+            "type": "uint8"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "accType",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "accId",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct ISeeder.Accessory[]",
+            "name": "accessories",
+            "type": "tuple[]"
+          }
+        ],
+        "internalType": "struct ISeeder.Seed",
+        "name": "seed",
+        "type": "tuple"
+      }
+    ],
+    "name": "dataURI",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "earsCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "earses",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "emotionCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "emotions",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "eyesCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "eyeses",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "faceCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "faces",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint8",
+            "name": "punkType",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "skinTone",
+            "type": "uint8"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "accType",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "accId",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct ISeeder.Accessory[]",
+            "name": "accessories",
+            "type": "tuple[]"
+          }
+        ],
+        "internalType": "struct ISeeder.Seed",
+        "name": "seed",
+        "type": "tuple"
+      }
+    ],
+    "name": "generateSVGImage",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "description",
+        "type": "string"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint8",
+            "name": "punkType",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "skinTone",
+            "type": "uint8"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "accType",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "accId",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct ISeeder.Accessory[]",
+            "name": "accessories",
+            "type": "tuple[]"
+          }
+        ],
+        "internalType": "struct ISeeder.Seed",
+        "name": "seed",
+        "type": "tuple"
+      }
+    ],
+    "name": "genericDataURI",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint8",
+            "name": "punkType",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "skinTone",
+            "type": "uint8"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "accType",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "accId",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct ISeeder.Accessory[]",
+            "name": "accessories",
+            "type": "tuple[]"
+          }
+        ],
+        "internalType": "struct ISeeder.Seed",
+        "name": "seed",
+        "type": "tuple"
+      }
+    ],
+    "name": "getPartsForSeed",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "bytes",
+            "name": "image",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "palette",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct ISVGRenderer.Part[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "glassesCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "glasseses",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "hairCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "hairs",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "hatCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "hats",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "isDataURIEnabled",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "lipsCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "lipses",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "lockParts",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "mouthCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "mouths",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "neckCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "necks",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "noseCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "noses",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint8",
+        "name": "index",
+        "type": "uint8"
+      }
+    ],
+    "name": "palettes",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "punkTypeCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "punkTypes",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renderer",
+    "outputs": [
+      {
+        "internalType": "contract ISVGRenderer",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IArt",
+        "name": "_art",
+        "type": "address"
+      }
+    ],
+    "name": "setArt",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "descriptor",
+        "type": "address"
+      }
+    ],
+    "name": "setArtDescriptor",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IInflator",
+        "name": "inflator",
+        "type": "address"
+      }
+    ],
+    "name": "setArtInflator",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_baseURI",
+        "type": "string"
+      }
+    ],
+    "name": "setBaseURI",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint8",
+        "name": "paletteIndex",
+        "type": "uint8"
+      },
+      {
+        "internalType": "bytes",
+        "name": "palette",
+        "type": "bytes"
+      }
+    ],
+    "name": "setPalette",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint8",
+        "name": "paletteIndex",
+        "type": "uint8"
+      },
+      {
+        "internalType": "address",
+        "name": "pointer",
+        "type": "address"
+      }
+    ],
+    "name": "setPalettePointer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract ISVGRenderer",
+        "name": "_renderer",
+        "type": "address"
+      }
+    ],
+    "name": "setRenderer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "teethCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "teeths",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "toggleDataURIEnabled",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint8",
+            "name": "punkType",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "skinTone",
+            "type": "uint8"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "accType",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "accId",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct ISeeder.Accessory[]",
+            "name": "accessories",
+            "type": "tuple[]"
+          }
+        ],
+        "internalType": "struct ISeeder.Seed",
+        "name": "seed",
+        "type": "tuple"
+      }
+    ],
+    "name": "tokenURI",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

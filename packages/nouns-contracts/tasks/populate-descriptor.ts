@@ -25,7 +25,7 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and Pu
     });
     const descriptorContract = descriptorFactory.attach(nDescriptor);
 
-    const { bgcolors, palette, images } = ImageData;
+    const { /*bgcolors, */palette, images } = ImageData;
     const { types, necks, cheekses, faces, beards, mouths, earses, hats, hairs, teeths, lipses, emotions, eyeses, glasseses, noses } = images;
 
     const typesPage = dataToDescriptorInput(types.map(({ data }) => data));
@@ -44,7 +44,7 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and Pu
     const glassesesPage = dataToDescriptorInput(glasseses.map(({ data }) => data));
     const nosesPage = dataToDescriptorInput(noses.map(({ data }) => data));
 
-    await descriptorContract.addManyBackgrounds(bgcolors);
+//    await descriptorContract.addManyBackgrounds(bgcolors);
     await descriptorContract.setPalette(0, `0x000000${palette.join('')}`);
 
     await descriptorContract.addPunkTypes(
@@ -137,6 +137,8 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and Pu
       nosesPage.itemCount,
       options,
     );
+
+    
 
     console.log('Descriptor populated with palettes and parts.');
   });
