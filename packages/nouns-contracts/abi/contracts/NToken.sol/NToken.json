@@ -3,7 +3,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_noundersDAO",
+        "name": "_punkersDAO",
         "type": "address"
       },
       {
@@ -12,12 +12,12 @@
         "type": "address"
       },
       {
-        "internalType": "contract INounsDescriptor",
+        "internalType": "contract IDescriptorMinimal",
         "name": "_descriptor",
         "type": "address"
       },
       {
-        "internalType": "contract INounsSeeder",
+        "internalType": "contract ISeeder",
         "name": "_seeder",
         "type": "address"
       },
@@ -141,7 +141,7 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "contract INounsDescriptor",
+        "internalType": "contract IDescriptorMinimal",
         "name": "descriptor",
         "type": "address"
       }
@@ -173,78 +173,6 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      }
-    ],
-    "name": "NounBurned",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint48",
-            "name": "background",
-            "type": "uint48"
-          },
-          {
-            "internalType": "uint48",
-            "name": "body",
-            "type": "uint48"
-          },
-          {
-            "internalType": "uint48",
-            "name": "accessory",
-            "type": "uint48"
-          },
-          {
-            "internalType": "uint48",
-            "name": "head",
-            "type": "uint48"
-          },
-          {
-            "internalType": "uint48",
-            "name": "glasses",
-            "type": "uint48"
-          }
-        ],
-        "indexed": false,
-        "internalType": "struct INounsSeeder.Seed",
-        "name": "seed",
-        "type": "tuple"
-      }
-    ],
-    "name": "NounCreated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "noundersDAO",
-        "type": "address"
-      }
-    ],
-    "name": "NoundersDAOUpdated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
         "internalType": "address",
         "name": "previousOwner",
         "type": "address"
@@ -261,6 +189,80 @@
   },
   {
     "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "PunkBurned",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint8",
+            "name": "punkType",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "skinTone",
+            "type": "uint8"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "accType",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "accId",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct ISeeder.Accessory[]",
+            "name": "accessories",
+            "type": "tuple[]"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct ISeeder.Seed",
+        "name": "seed",
+        "type": "tuple"
+      }
+    ],
+    "name": "PunkCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "punkersDAO",
+        "type": "address"
+      }
+    ],
+    "name": "PunkersDAOUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
     "inputs": [],
     "name": "SeederLocked",
     "type": "event"
@@ -270,7 +272,7 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "contract INounsSeeder",
+        "internalType": "contract ISeeder",
         "name": "seeder",
         "type": "address"
       }
@@ -370,7 +372,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "nounId",
+        "name": "punkId",
         "type": "uint256"
       }
     ],
@@ -528,7 +530,7 @@
     "name": "descriptor",
     "outputs": [
       {
-        "internalType": "contract INounsDescriptor",
+        "internalType": "contract IDescriptorMinimal",
         "name": "",
         "type": "address"
       }
@@ -741,19 +743,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "noundersDAO",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -810,6 +799,19 @@
     "outputs": [
       {
         "internalType": "contract IProxyRegistry",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "punkersDAO",
+    "outputs": [
+      {
+        "internalType": "address",
         "name": "",
         "type": "address"
       }
@@ -880,7 +882,7 @@
     "name": "seeder",
     "outputs": [
       {
-        "internalType": "contract INounsSeeder",
+        "internalType": "contract ISeeder",
         "name": "",
         "type": "address"
       }
@@ -899,29 +901,14 @@
     "name": "seeds",
     "outputs": [
       {
-        "internalType": "uint48",
-        "name": "background",
-        "type": "uint48"
+        "internalType": "uint8",
+        "name": "punkType",
+        "type": "uint8"
       },
       {
-        "internalType": "uint48",
-        "name": "body",
-        "type": "uint48"
-      },
-      {
-        "internalType": "uint48",
-        "name": "accessory",
-        "type": "uint48"
-      },
-      {
-        "internalType": "uint48",
-        "name": "head",
-        "type": "uint48"
-      },
-      {
-        "internalType": "uint48",
-        "name": "glasses",
-        "type": "uint48"
+        "internalType": "uint8",
+        "name": "skinTone",
+        "type": "uint8"
       }
     ],
     "stateMutability": "view",
@@ -961,7 +948,7 @@
   {
     "inputs": [
       {
-        "internalType": "contract INounsDescriptor",
+        "internalType": "contract IDescriptorMinimal",
         "name": "_descriptor",
         "type": "address"
       }
@@ -988,11 +975,11 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_noundersDAO",
+        "name": "_punkersDAO",
         "type": "address"
       }
     ],
-    "name": "setNoundersDAO",
+    "name": "setPunkersDAO",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1000,7 +987,7 @@
   {
     "inputs": [
       {
-        "internalType": "contract INounsSeeder",
+        "internalType": "contract ISeeder",
         "name": "_seeder",
         "type": "address"
       }

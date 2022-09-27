@@ -7,6 +7,7 @@ import { PNG } from 'pngjs';
  * @param path The path to the PNG file
  */
 export const readPngImage = async (path: string): Promise<PngImage> => {
+  console.log(path)
   const buffer = await fs.readFile(path);
   const png = PNG.sync.read(buffer);
 

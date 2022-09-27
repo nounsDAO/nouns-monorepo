@@ -39,6 +39,13 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
       nDescriptor: contracts.NDescriptorV2.address,
     });
 
+    // Populate the on-chain seeder
+    const probDoc = await run("get-prob-doc")
+    await run('populate-seeder', { ...contracts, probDoc });
+
+    // Register OG punk hashes to make sure they will not be minted.
+    await run('register-og-punks', contracts);
+
     // Transfer ownership of all contract except for the auction house.
     // We must maintain ownership of the auction house to kick off the first auction.
     const executorAddress = contracts.NDAOExecutor.address;

@@ -1,0 +1,31 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "source",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint256",
+        "name": "destlen",
+        "type": "uint256"
+      }
+    ],
+    "name": "puff",
+    "outputs": [
+      {
+        "internalType": "enum Inflate.ErrorCode",
+        "name": "",
+        "type": "uint8"
+      },
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  }
+]
