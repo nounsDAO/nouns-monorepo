@@ -1,7 +1,7 @@
 import classes from './Banner.module.css';
 import Section from '../../layout/Section';
 import { Col } from 'react-bootstrap';
-import pNounsGrid from '../../assets/pNouns_grid-4x2.png';
+import pNounsGrid from '../../assets/pNouns_grid-4x4.png';
 import Noun from '../Noun';
 import { Trans } from '@lingui/macro';
 
@@ -20,7 +20,7 @@ const Banner = () => {
         </div>
       </Col>
       <Col lg={6} className={classes.wrapper} style={{height: '100%'}}>
-        <div style={{ padding: '2rem' }}>
+        <div style={{ padding: '2rem' }} className={classes.centerCol}>
           <Noun imgPath={pNounsGrid} alt="noun" />
         </div>
       </Col>

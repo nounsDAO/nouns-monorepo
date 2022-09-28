@@ -1,3 +1,9 @@
+.centerCol {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
 .wrapper h1 {
   font-family: 'Work Sans';
   font-style: italic;
