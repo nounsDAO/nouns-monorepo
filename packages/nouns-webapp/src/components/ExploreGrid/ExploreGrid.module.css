@@ -36,14 +36,15 @@
     width: 100%;
     display: flex;
     flex-wrap: wrap;
-    /* display: grid; */
-    /* grid-template-columns: repeat(10, 1fr); */
-    
     transition: all 0.15s ease-in-out;
-    --gap: 15px;
+    --gap: 0.8vw;
     --columns: 10;
     gap: var(--gap);
 }
+
+/* .gridWrap.sidebarVisible .exploreGrid ul {
+    --columns: 8;
+} */
 
 .exploreGrid.small ul {
     --gap: 7px;
@@ -124,20 +125,18 @@
 .exploreGrid .nounIdOverlay {
     margin: 0;
     position: absolute;
-    bottom: 6px;
+    /* bottom: 6px; */
+    bottom: clamp(1px, 0.6vw, 8px);
     opacity: 0;
     /* Make match noun bg color */
     background: rgba(255,255,255,0.9); 
     border-radius: 6px;
     padding: 4px 6px;
     line-height: 1;
-    font-family: 0.8rem;
     box-shadow: 0px 0px 10px rgb(0 0 0 / 25%);
     font-family: 'Londrina Solid';
+    font-size: clamp(12px, 0.8vw, 24px);
     transition: all .05s ease-in-out;
-    @media (max-width: 991px) {
-        display: none;
-    }
 }
 
 .exploreGrid li:hover .nounIdOverlay, 
@@ -157,7 +156,8 @@
 .exploreGrid li.activeNoun .nounIdOverlay, 
 .exploreGrid li.activeNoun:focus .nounIdOverlay, 
 .exploreGrid li.activeNoun:hover .nounIdOverlay {
-    bottom: 14px;
+    /* bottom: 14px; */
+    bottom: clamp(4px, 0.7vw, 12px);
 }
 
 
@@ -371,15 +371,21 @@ li.activeNoun button img, li.activeNoun:hover button img {
       transform: translateY(0px);
     }
 }
+@media (max-width: 1439px) {
+    .exploreGrid ul {   
+        --columns: 8;
+    }
+}
+
 
 @media (max-width: 991px) {
     .exploreWrap {
         border: 0;
-        padding: 0;
+        margin: 0 .5rem;
     }
     .exploreGrid ul {   
-        --gap: 5px;
-        --columns: 8;
+        --gap: 10px;
+        --columns: 5;
         padding: 0;
     }
 
@@ -393,7 +399,7 @@ li.activeNoun button img, li.activeNoun:hover button img {
     .nav .sizing {
         display: none;
     }
-    .exploreGrid .nounIdOverlay { 
+    .exploreGrid .activeNoun.nounIdOverlay { 
         display: none;
     }
 }
@@ -401,7 +407,7 @@ li.activeNoun button img, li.activeNoun:hover button img {
 @media (max-width: 400px) {
     .exploreGrid ul {
         --gap: 5px;
-        --columns: 5;
+        --columns: 3;
     }
     .exploreGrid ul li {   
         width: calc((100% / var(--columns)) - var(--gap) + (var(--gap) / var(--columns)));
