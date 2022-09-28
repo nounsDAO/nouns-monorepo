@@ -42,7 +42,7 @@ const Winner: React.FC<WinnerProps> = props => {
       {!isMobile && (
         <Col>
           <a
-            href="https://nouns.center/nouners"
+            href="https://docs.publicnouns.wtf"
             target="_blank"
             rel="noreferrer noopener"
             className={classes.verifyLink}
@@ -60,7 +60,7 @@ const Winner: React.FC<WinnerProps> = props => {
 
   const nounderNounContent = (
     <a
-      href={buildEtherscanAddressLink('nounders.eth')}
+      href={buildEtherscanAddressLink('pnounders.eth')}
       target={'_blank'}
       rel="noreferrer"
       className={classes.link}
@@ -104,7 +104,7 @@ const Winner: React.FC<WinnerProps> = props => {
       {isWinnerYou && isMobile && (
         <Row>
           <a
-            href="https://nouns.center/nouners"
+            href="https://docs.publicnouns.wtf"
             target="_blank"
             rel="noreferrer noopener"
             className={classes.verifyLink}

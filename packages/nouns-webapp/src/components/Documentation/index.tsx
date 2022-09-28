@@ -3,6 +3,7 @@ import { Col } from 'react-bootstrap';
 import classes from './Documentation.module.css';
 import Accordion from 'react-bootstrap/Accordion';
 import Link from '../Link';
+import { Trans } from '@lingui/macro';
 
 const Documentation = () => {
   const nounsDaoLink = (
@@ -41,15 +42,15 @@ const Documentation = () => {
           </p>
           <p>
             All heads have been replaced with 'mascots' of public goods, making each Public Noun a memetic representation of a public good.
-            Grab a Public Noun during an auction to get voice in Public Nouns DAO.
           </p>
-          <p>The mission of Public Nouns DAO is threefold:
+          <p>The mission of Public Nouns DAO is to support public goods by:
           <ol>
-            <li>spread awareness of public goods</li>
-            <li>fund public goods, and public goods mechanisms</li>
-            <li>experiment with new methods of public goods funding, starting with Public Nouns itself.</li>
+            <li>spreading awareness of public goods</li>
+            <li>funding public goods, and public goods mechanisms</li>
+            <li>experimenting with new methods of public goods funding, starting with Public Nouns itself.</li>
           </ol>
           </p>
+          <p>Grab a Public Noun during an auction to get voice in Public Nouns DAO.</p>
           <p className={classes.aboutText} style={{ paddingBottom: '4rem' }}>
             
               Play around making Public Nouns off-chain using the {playgroundLink}.
@@ -105,46 +106,41 @@ const Documentation = () => {
 
           <Accordion.Item eventKey="1" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              Daily Auctions
+              <Trans>Two Auctions Daily</Trans>
             </Accordion.Header>
             <Accordion.Body>
               <p className={classes.aboutText}>
-                
-                  The Public Nouns Auction Contract will act as a self-sufficient Noun generation and
-                  distribution mechanism, auctioning one Noun every 12 hours, forever. 100% of
+                <Trans>
+                  The Public Nouns Auction Contract will act as a self-sufficient Public Noun generation and
+                  distribution mechanism, auctioning one Public Noun every 12 hours, forever. 100% of
+
                   auction proceeds (ETH) are automatically deposited in the Public Nouns DAO treasury,
                   where they are governed by Public Noun owners.
-                
+                  </Trans>
               </p>
-
               <p className={classes.aboutText}>
-                
-                  Each time an auction is settled, the settlement transaction will also cause a new
-                  Noun to be minted and a new 12 hour auction to begin.{' '}
-                
+                <Trans>
+                  Each time an auction is settled, the settlement transaction will also cause a new Public Noun to be minted and a new 12 hour auction to begin.{' '}
+                </Trans>
               </p>
               <p>
-                
                   While settlement is most heavily incentivized for the winning bidder, it can be
                   triggered by anyone, allowing the system to trustlessly auction Public Nouns as long as
                   Ethereum is operational and there are interested bidders.
-                
               </p>
             </Accordion.Body>
           </Accordion.Item>
           <Accordion.Item eventKey="2" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              Nouns DAO
+              <Trans>Public Nouns DAO</Trans>
             </Accordion.Header>
             <Accordion.Body>
-              
                Public Nouns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the
                Public Nouns ecosystem. The Public Nouns DAO treasury receives 100% of ETH proceeds from daily
                Public Noun auctions. Each Public Noun is an irrevocable member of Public Nouns DAO and entitled to one
                 vote in all governance matters. Public Noun votes are non-transferable (if you sell your
                 pNoun the vote goes with it) but delegatable, which means you can assign your vote to
                 someone else as long as you own your Public Noun.
-              
             </Accordion.Body>
           </Accordion.Item>
           <Accordion.Item eventKey="3" className={classes.accordionItem}>
@@ -153,7 +149,6 @@ const Documentation = () => {
             </Accordion.Header>
             <Accordion.Body>
               <p>
-                
                   The proposal veto right was initially envisioned as a temporary solution to the
                   problem of ‘51% attacks’ on the Nouns DAO treasury. While pNounders initially
                   believed that a healthy distribution of Nouns would be sufficient protection for
@@ -161,23 +156,18 @@ const Documentation = () => {
                   general consensus within the pNounders and the wider
                   community that a more robust game-theoretic solution should be implemented before
                   the right is removed.
-                
               </p>
               <p>
-                
                   Consequently, the pNounders anticipates being the steward of the veto power
                   until Public Nouns DAO is ready to implement an alternative, and therefore wishes to
                   clarify the conditions under which it would exercise this power.
-                
               </p>
               <p>
-                
                   The pNounders considers the veto an emergency power that should not be
                   exercised in the normal course of business. The pNounders will veto
                   proposals that introduce non-trivial legal or existential risks to the Public Nouns DAO
                   or the pNounders, including (but not necessarily limited to) proposals
                   that:
-                
               </p>
               <ul>
                 <li>unequally withdraw the treasury for personal gain</li>
@@ -189,11 +179,9 @@ const Documentation = () => {
                 <li>make upgrades to critical smart contracts without undergoing an audit</li>
               </ul>
               <p>
-                
                   There are unfortunately no algorithmic solutions for making these determinations
                   in advance (if there were, the veto would not be required), and proposals must be
                   considered on a case by case basis.
-                
               </p>
             </Accordion.Body>
           </Accordion.Item>
@@ -203,27 +191,25 @@ const Documentation = () => {
             </Accordion.Header>
             <Accordion.Body>
               <p>
-                
                   Public Nouns are generated randomly based Ethereum block hashes. There are no 'if'
                   statements or other rules governing Noun trait scarcity, which makes all Public Nouns
                   equally rare. As of this writing, Public Nouns are made up of:
-                
               </p>
               <ul>
                 <li>
-                  backgrounds (4) 
+                  <Trans>backgrounds (2) </Trans>
                 </li>
                 <li>
-                  bodies (30)
+                  <Trans>bodies (31)</Trans>
                 </li>
                 <li>
-                  accessories (140) 
+                  <Trans>accessories (139) </Trans>
                 </li>
                 <li>
                   heads (21) 
                 </li>
                 <li>
-                  glasses (23)
+                  <Trans>glasses (24)</Trans>
                 </li>
               </ul>
                 You can experiment with off-chain Public Noun generation at the {playgroundLink}.
@@ -235,22 +221,17 @@ const Documentation = () => {
             </Accordion.Header>
             <Accordion.Body>
               <p>
-                
                   Public Nouns are stored directly on Ethereum and do not utilize pointers to other
                   networks such as IPFS. This is possible because Public Noun parts are compressed and
                   stored on-chain using a custom run-length encoding (RLE), which is a form of
-                  lossless compression.
-                
+                  lossless compression. 
               </p>
-
               <p>
-                
                   The compressed parts are efficiently converted into a single base64 encoded SVG
                   image on-chain. To accomplish this, each part is decoded into an intermediate
                   format before being converted into a series of SVG rects using batched, on-chain
                   string concatenation. Once the entire SVG has been generated, it is base64
                   encoded.
-                
               </p>
             </Accordion.Body>
           </Accordion.Item>
@@ -260,22 +241,18 @@ const Documentation = () => {
             </Accordion.Header>
             <Accordion.Body>
               <p>
-                
                   The Public Noun Seeder contract is used to determine Noun traits during the minting
                   process. The seeder contract can be replaced to allow for future trait generation
                   algorithm upgrades. Additionally, it can be locked by the Nouns DAO to prevent any
                   future updates. Currently, Noun traits are determined using pseudo-random number
                   generation:
-                
               </p>
               <code>keccak256(abi.encodePacked(blockhash(block.number - 1), nounId))</code>
               <br />
               <br />
               <p>
-                
                   Trait generation is not truly random. Traits can be predicted when minting a Noun
                   on the pending block.
-                
               </p>
             </Accordion.Body>
           </Accordion.Item>
@@ -285,10 +262,9 @@ const Documentation = () => {
             </Accordion.Header>
             <Accordion.Body>
               <p>
-                
-                  'pNounders' is the coalition of public goods that formed to launch Public Nouns together, and help steward early governance. Here are the
-                  pNounders:
-                
+                <Trans>
+                  'pNounders' is the coalition of public good enjoyers from the following orgs that formed to launch Public Nouns together, and help steward early governance.
+                </Trans>
               </p>
               <ul>
                 <li>
@@ -318,21 +294,31 @@ const Documentation = () => {
                 </li>
               </ul>
               <p>
-                
+                <Trans>
                   Rewards: 
-                  Every 30th Public Noun for the first year of the project (Public Noun ids #0, #30, #60, and so on) will be automatically sent to the pNounder's multisig to be vested and shared among the coalition.
-                  Every 30th Public Noun for the first year of the project (Public Noun ids #10, #40, #70, and so on) will be automatically sent to the
-                  NounsDAO, for building such an amazing base that we could fork.
-                  Every 30th Public Noun for the first year of the project (Public Noun ids #20, #50, #80, and so on) will be automatically sent to the
-                  PublicNounsDAO, for rewards.
-                
+                </Trans>
               </p>
               <p>
-                
-                  These distributions don't interfere with the cadence of 12 hour auctions. Public Nouns
-                  are sent directly to the Pnounder's Multisig, and auctions continue on schedule
+                <Trans>Every 30th Public Noun for the first year of the project (Public Noun ids #0, #30, #60, and so on) will be automatically sent to the pNounder's multisig to be vested and shared among the coalition to help steward early governance.</Trans>
+              </p>
+              <p>
+                <Trans>
+                  Every 30th Public Noun for the first year of the project (Public Noun ids #10, #40, #70, and so on) will be automatically sent to the
+                  NounsDAO, for building such an amazing foundation that we could fork.
+                </Trans>
+              </p>
+              <p>
+                <Trans>
+                  Every 30th Public Noun for the first year of the project (Public Noun ids #20, #50, #80, and so on) will be automatically sent to the
+                  Public Nouns DAO, for rewards.
+                </Trans>
+              </p>
+              <p>
+                <Trans>
+                  These distributions don't interfere with the cadence of the 12 hour auctions. Public Nouns
+                  are sent directly to the pNounder's Multisig, and auctions continue on schedule
                   with the next available Public Noun ID.
-                
+                </Trans>
               </p>
             </Accordion.Body>
           </Accordion.Item>
