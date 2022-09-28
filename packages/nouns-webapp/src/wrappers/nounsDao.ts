@@ -1,4 +1,5 @@
 import { NounsDAOABI, NounsDaoLogicV1Factory } from '@nouns/sdk';
+import { NounsDAOV2ABI } from '@nouns/contracts';
 import {
   ChainId,
   useBlockMeta,
@@ -17,7 +18,6 @@ import config, { CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
 import { proposalsQuery } from './subgraph';
 import BigNumber from 'bignumber.js';
-import NounsDAOLogicV2ABI from './nounsDaoLogicV2ABI.json';
 
 export interface DynamicQuorumParams {
   minQuorumVotesBPS: number;
@@ -123,8 +123,8 @@ export interface ProposalTransaction {
   calldata: string;
 }
 
-const abi = new utils.Interface(NounsDAOABI);
-const abiV2 = new utils.Interface(NounsDAOLogicV2ABI);
+const nounsDAOV1ABI = new utils.Interface(NounsDAOABI);
+const nounsDAOV2ABI = new utils.Interface(NounsDAOV2ABI);
 const nounsDaoContract = new NounsDaoLogicV1Factory().attach(config.addresses.nounsDAOProxy);
 
 // Start the log search at the mainnet deployment block to speed up log queries
@@ -182,7 +182,7 @@ export const useHasVotedOnProposal = (proposalId: string | undefined): boolean =
   // Fetch a voting receipt for the passed proposal id
   const [receipt] =
     useContractCall<[any]>({
-      abi,
+      abi: nounsDAOV1ABI,
       address: nounsDaoContract.address,
       method: 'getReceipt',
       args: [proposalId, account],
@@ -196,7 +196,7 @@ export const useProposalVote = (proposalId: string | undefined): string => {
   // Fetch a voting receipt for the passed proposal id
   const [receipt] =
     useContractCall<[any]>({
-      abi,
+      abi: nounsDAOV1ABI,
       address: nounsDaoContract.address,
       method: 'getReceipt',
       args: [proposalId, account],
@@ -218,7 +218,7 @@ export const useProposalVote = (proposalId: string | undefined): string => {
 export const useProposalCount = (): number | undefined => {
   const [count] =
     useContractCall<[EthersBN]>({
-      abi,
+      abi: nounsDAOV1ABI,
       address: nounsDaoContract.address,
       method: 'proposalCount',
       args: [],
@@ -229,7 +229,7 @@ export const useProposalCount = (): number | undefined => {
 export const useProposalThreshold = (): number | undefined => {
   const [count] =
     useContractCall<[EthersBN]>({
-      abi,
+      abi: nounsDAOV1ABI,
       address: nounsDaoContract.address,
       method: 'proposalThreshold',
       args: [],
@@ -240,7 +240,7 @@ export const useProposalThreshold = (): number | undefined => {
 const useVotingDelay = (nounsDao: string): number | undefined => {
   const [blockDelay] =
     useContractCall<[EthersBN]>({
-      abi,
+      abi: nounsDAOV1ABI,
       address: nounsDao,
       method: 'votingDelay',
       args: [],
@@ -251,13 +251,24 @@ const useVotingDelay = (nounsDao: string): number | undefined => {
 export const useCurrentQuorum = (nounsDao: string, proposalId: number): number | undefined => {
   const [quorum] =
     useContractCall<[EthersBN]>({
-      abi: abiV2,
-      // abi,
+      abi: nounsDAOV2ABI,
       address: nounsDao,
       method: 'quorumVotes',
       args: [proposalId],
     }) || [];
   return quorum?.toNumber();
+};
+
+export const useIsPropCreatedWithV2DAOContract = (nounsDao: string, proposalId: number): boolean  => {
+  const [totalSupply] =
+    useContractCall<[EthersBN]>({
+      abi: nounsDAOV2ABI,
+      address: nounsDao,
+      method: 'totalSupply',
+      args: [proposalId],
+    }) || [];
+
+  return (totalSupply?.toNumber() !== undefined);
 };
 
 export const useDynamicQuorumProps = (
@@ -267,7 +278,7 @@ export const useDynamicQuorumProps = (
   console.log('DAO ADDR: ', nounsDao);
   const [params] =
     useContractCall<[DynamicQuorumParams]>({
-      abi: abiV2,
+      abi: nounsDAOV2ABI,
       address: nounsDao,
       method: 'getDynamicQuorumParamsAt',
       args: [block],
@@ -319,7 +330,7 @@ const useFormattedProposalCreatedLogs = (skip: boolean, fromBlock?: number) => {
 
   return useMemo(() => {
     return useLogsResult?.logs?.map(log => {
-      const { args: parsed } = abi.parseLog(log);
+      const { args: parsed } = nounsDAOV1ABI.parseLog(log);
       return {
         description: parsed.description,
         transactionHash: log.transactionHash,
@@ -417,7 +428,7 @@ export const useAllProposalsViaChain = (skip = false): ProposalData => {
   const requests = (method: string) => {
     if (skip) return [false];
     return govProposalIndexes.map(index => ({
-      abi,
+      abi: nounsDAOV1ABI,
       method,
       address: nounsDaoContract.address,
       args: [index],

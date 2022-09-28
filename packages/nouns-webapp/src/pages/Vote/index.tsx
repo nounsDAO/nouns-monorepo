@@ -4,6 +4,7 @@ import {
   ProposalState,
   useCurrentQuorum,
   useExecuteProposal,
+  useIsPropCreatedWithV2DAOContract,
   useProposal,
   useQueueProposal,
 } from '../../wrappers/nounsDao';
@@ -61,6 +62,9 @@ const VotePage = ({
 
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
+
+
+  const isV2Prop = useIsPropCreatedWithV2DAOContract(config.addresses.nounsDAOProxy, parseInt(id));
 
   const { queueProposal, queueProposalState } = useQueueProposal();
   const { executeProposal, executeProposalState } = useExecuteProposal();
@@ -362,6 +366,8 @@ const VotePage = ({
                       <Trans>Threshold</Trans>
                     </h1>
                   </div>
+                  {
+                    isV2Prop && 
                   <ReactTooltip
                     id={'view-dq-info'}
                     className={classes.delegateHover}
@@ -369,25 +375,33 @@ const VotePage = ({
                       return <Trans>View Dynamic Quorum Info</Trans>;
                     }}
                   />
+                  }
                   <div
                     data-for="view-dq-info"
                     data-tip="View Dynamic Quorum Info"
-                    onClick={() => setShowDynamicQuorumInfoModal(true)}
+                    onClick={() => setShowDynamicQuorumInfoModal(true && isV2Prop)}
                     className={classes.thresholdInfo}
                   >
                     <span>
-                      <Trans>Current Quorum</Trans>
+                      {
+                        isV2Prop ? 
+                      <Trans>Current Quorum</Trans> :
+
+                      <Trans>Quorum</Trans>
+                      }
                     </span>
                     <h3>
                       <Trans>
-                        {i18n.number(
+                        {isV2Prop ? i18n.number(
                           // TODO(brianj) implement logic to only use new value for v2 props
                           // proposal.quorumVotes
                           currentQuorum ?? 0,
-                        )}{' '}
+                        ) : proposal.quorumVotes}{' '}
                         votes
                       </Trans>
-                      <SearchIcon className={classes.dqIcon} />
+                      {
+                        isV2Prop && <SearchIcon className={classes.dqIcon} />
+                      }
                     </h3>
                   </div>
                 </div>
