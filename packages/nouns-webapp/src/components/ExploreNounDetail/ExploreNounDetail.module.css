@@ -11,6 +11,22 @@
     position: sticky;
     top: -8px;
     align-self: flex-start;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.detailWrap .detail::-webkit-scrollbar-track {
+}
+.detailWrap .detail::-webkit-scrollbar {
+    width: 0.5em;
+}
+.detailWrap .detail  {
+    scrollbar-color: rgba(0,0,0,0.15) transparent;
+}
+
+.detailWrap .detail::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.15);
+    border-radius: 30px;
 }
 
 .detailWrap > div{
@@ -26,6 +42,7 @@
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     padding-top: 8px;
+    /* padding: 8px 2%; */
     /* align-self: flex-start; */
     /* transition: background-color 0.05s ease-in-out; */
     /* position: sticky;
@@ -131,7 +148,8 @@
 
 h2 {
     font-size: 32px;
-    margin: 0;
+    line-height: 1;
+    margin: 0 0 4px;
 }
 
 .nounDetails {

@@ -8,7 +8,11 @@ import { AnimatePresence, motion } from 'framer-motion/dist/framer-motion';
 import { Auction as IAuction } from '../../wrappers/nounsAuction';
 import { useAppSelector } from '../../hooks';
 import { Trans } from '@lingui/macro';
+import { Dropdown } from 'react-bootstrap';
 import dotenv from 'dotenv';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSortDown } from '@fortawesome/free-solid-svg-icons';
+
 dotenv.config();
 interface ExploreGridProps {
 }
@@ -288,7 +292,16 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                         </h3>
                         <div className={classes.buttons}>
                             <div className={classes.sort}>
+                                {/* <Dropdown
+                                    // className={clsx(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.desktopOnly)}
+                                    onToggle={() => setButtonUp(!buttonUp)}
+                                    >
+                                    <Dropdown.Toggle as={customDropdownToggle} id="dropdown-custom-components" />
+                                    <Dropdown.Menu className={`${navDropdownClasses.desktopDropdown} `} as={CustomMenu} />
+                                </Dropdown> */}
                                 <div className={classes.selectWrap}>
+                                    
+
                                     <select value={sortOrder} onChange={handleSortOrderChange}>
                                         {sortOptions.map(option => (
                                             <option key={option.label} value={option.value}>
@@ -296,6 +309,9 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                             </option>
                                         ))}
                                     </select>
+                                    <span>
+                                        <FontAwesomeIcon icon={faSortDown} />
+                                    </span>
                                 </div>
                             </div>
                             {/* <div className={classes.sizing}>

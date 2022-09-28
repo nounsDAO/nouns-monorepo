@@ -252,7 +252,7 @@ li.activeNoun button img, li.activeNoun:hover button img {
 
 .nav svg {
     width: 24px;
-    opacity: 0.5;
+    opacity: 0.8;
 }
 
 .nav .iconTextButton svg {
@@ -279,19 +279,66 @@ li.activeNoun button img, li.activeNoun:hover button img {
     color: var(--brand-cool-light-text);
     border: 1px solid var(--brand-cool-border);
     border-radius: 10px;
-    padding: 0;
+    /* padding: 0; */
     border: 1px solid rgba(0, 0, 0, 0.1);
-    background: transparent;
+    background: #fff;
     font-size: 16px;
-    line-height: 16px;
+    line-height: 1;
     font-family: 'PT Root UI';
     font-weight: bold;
+    position: relative;
+
+    /* width: 100%;
+    min-width: 15ch;
+    max-width: 30ch;
+    border: 1px solid var(--select-border);
+    border-radius: 0.25em;
+    padding: 0.25em 0.5em;
+    font-size: 1.25rem;
+    cursor: pointer;
+    line-height: 1.1;
+    background-color: #fff; */
+    /* background-image: linear-gradient(to top, #f9f9f9, #fff 33%); */
+    display: grid;
+    grid-template-areas: "select";
+    align-items: center;
+}
+.nav select,
+.nav .selectWrap:after {
+  grid-area: select;
 }
 
 .nav .selectWrap:hover {
     background-color: #e2e3e8;
     color: black;
     transition: all 0.2s ease-in-out;
+    cursor:  crosshair !important;
+}
+.nav .selectWrap:hover {
+    
+}
+
+
+.nav .selectWrap span {
+    position: absolute;
+    right: 10px;
+    margin-top: -5px;
+    pointer-events: none; 
+
+}
+/* :root {
+    --select-arrow: rgba(0,0,0,0.5);
+} */
+.nav .selectWrap::after {
+  /* content: "";
+  width: 0.8em;
+  height: 0.5em;
+  background-color: var(--select-arrow);
+  clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+  justify-self: end;
+  margin-right: .5rem; */
+  /* position: relative;
+  right: .5rem; */
 }
 .nav .selectWrap select:hover {
     cursor: pointer;
@@ -299,10 +346,11 @@ li.activeNoun button img, li.activeNoun:hover button img {
 .nav .selectWrap select {
     background: transparent;
     border: 0;
-    padding: .5rem;
+    padding: .8rem 1.8rem .8rem .8rem;
     color: rgb(95, 95, 95);
     font-weight: bold;
-    border-right: 5px solid transparent;
+    position: relative;
+    appearance: none;
 }
 
 .nav button {
@@ -411,5 +459,12 @@ li.activeNoun button img, li.activeNoun:hover button img {
     }
     .exploreGrid ul li {   
         width: calc((100% / var(--columns)) - var(--gap) + (var(--gap) / var(--columns)));
+    }
+}
+
+@media (hover: none) {
+    /* Hide overlay on tap */
+    .exploreGrid .nounIdOverlay {
+        display: none;
     }
 }

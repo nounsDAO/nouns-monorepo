@@ -285,6 +285,9 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                 // animate="open"
                 // exit="exit"
                 // layout
+                style={{
+                    background: backgroundColor,
+                }}
                 >
                     <div 
                         className={classes.detail}
