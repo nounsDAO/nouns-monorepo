@@ -400,7 +400,9 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                                 )
                                             })}
                                         </motion.ul>
-                                        <p className={classes.activityLink}><a href={`/noun/${props.nounId}`}><Trans>Vote history</Trans></a></p>
+                                        {props.nounId >= 0 && seed && (
+                                            <p className={classes.activityLink}><a href={`/noun/${props.nounId}`}><Trans>Vote history</Trans></a></p>
+                                        )}
                                     </div>
                     </div>
             </motion.div>
