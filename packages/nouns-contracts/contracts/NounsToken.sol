@@ -39,7 +39,10 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     address public minter;
 
     // Counter to track where to send the next 10th Noun
-    uint256 public titheIndex;
+    uint256 public rewardIndex;
+
+    // Max ID to compare with when deciding to reward or not
+    uint256 public maxRewardNoun;
 
     // The Nouns token URI descriptor
     INounsDescriptorMinimal public descriptor;
@@ -49,6 +52,9 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
 
     // Whether the minter can be updated
     bool public isMinterLocked;
+
+    // Whether max reward can be updated
+    bool public isMaxRewardLocked;
 
     // Whether the descriptor can be updated
     bool public isDescriptorLocked;
@@ -73,6 +79,14 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
      */
     modifier whenMinterNotLocked() {
         require(!isMinterLocked, 'Minter is locked');
+        _;
+    }
+
+    /**
+     * @notice Require that the max reward has not been locked
+     */
+    modifier whenMaxRewardNotLocked() {
+        require(!isMaxRewardLocked, 'Max reward is locked');
         _;
     }
 
@@ -122,6 +136,7 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
         descriptor = _descriptor;
         seeder = _seeder;
         proxyRegistry = _proxyRegistry;
+        maxRewardNoun = 730; // Send every 10th noun
     }
 
     /**
@@ -157,23 +172,23 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
      * @dev Call _mintTo with the to address(es).
      */
     function mint() public override onlyMinter returns (uint256) {
-        if (_currentNounId <= 1820 && _currentNounId % 10 == 0) {
-            _tithe();
+        if (_currentNounId <= maxRewardNoun && _currentNounId % 10 == 0) {
+            _reward();
         }
         return _mintTo(minter, _currentNounId++);
     }
 
-    function _tithe() internal {
+    function _reward() internal {
         address _destination;
-        if (titheIndex == 0) {
-            _destination = noundersDAO;
-            titheIndex++;
-        } else if (titheIndex == 1) {
+        if (rewardIndex == 0) {
+            _destination = noundersDAO; // Public Nounders DAO
+            rewardIndex++;
+        } else if (rewardIndex == 1) {
             _destination = owner(); // Owner is the Public Nouns treasury
-            titheIndex++;
-        } else if (titheIndex == 2) {
-            _destination = nounsDAOTreasury;
-            titheIndex = 0;
+            rewardIndex++;
+        } else if (rewardIndex == 2) {
+            _destination = nounsDAOTreasury; // OG Nouns DAO treasury
+            rewardIndex = 0;
         } else {
             revert InvalidIndex();
         }
@@ -224,6 +239,26 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
         nounsDAOTreasury = _nounsDAOTreasury;
 
         emit NounsDAOTreasuryUpdated(_nounsDAOTreasury);
+    }
+
+    /**
+     * @notice Set the max reward noun
+     * @dev Only callable by the owner
+     */
+    function setMaxRewardNoun(uint256 _maxRewardNoun) external onlyOwner whenMaxRewardNotLocked {
+        maxRewardNoun = _maxRewardNoun;
+
+        emit MaxRewardNounUpdated(maxRewardNoun);
+    }
+
+    /**
+     * @notice Lock the max reward noun.
+     * @dev This cannot be reversed and is only callable by the owner when not locked.
+     */
+    function lockMaxRewardNoun() external onlyOwner whenMaxRewardNotLocked {
+        isMaxRewardLocked = true;
+
+        emit MaxRewardLocked();
     }
 
     /**

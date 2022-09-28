@@ -30,9 +30,13 @@ interface INounsToken is IERC721 {
 
     event NounsDAOTreasuryUpdated(address nounsDAOTreasury);
 
+    event MaxRewardNounUpdated(uint256 maxRewardNoun);
+
     event MinterUpdated(address minter);
 
     event MinterLocked();
+
+    event MaxRewardLocked();
 
     event DescriptorUpdated(INounsDescriptorMinimal descriptor);
 

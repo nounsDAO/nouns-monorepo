@@ -12,12 +12,13 @@ const { expect } = chai;
 describe('NounsToken', () => {
   let nounsToken: NounsToken;
   let deployer: SignerWithAddress;
-  let noundersDAO: SignerWithAddress;
+  let nounsDAOTreasury: SignerWithAddress;
+  let pnoundersDAO: SignerWithAddress;
   let snapshotId: number;
 
   before(async () => {
-    [deployer, noundersDAO] = await ethers.getSigners();
-    nounsToken = await deployNounsToken(deployer, noundersDAO.address, deployer.address);
+    [deployer, nounsDAOTreasury, pnoundersDAO] = await ethers.getSigners();
+    nounsToken = await deployNounsToken(deployer, pnoundersDAO.address, nounsDAOTreasury.address, deployer.address);
 
     const descriptor = await nounsToken.descriptor();
 
@@ -32,12 +33,12 @@ describe('NounsToken', () => {
     await ethers.provider.send('evm_revert', [snapshotId]);
   });
 
-  it('should allow the minter to mint a noun to itself and a reward noun to the noundersDAO', async () => {
+  it.only('should allow the minter to mint a noun to itself and a reward noun to the noundersDAO', async () => {
     const receipt = await (await nounsToken.mint()).wait();
 
     const [, , , noundersNounCreated, , , , ownersNounCreated] = receipt.events || [];
 
-    expect(await nounsToken.ownerOf(0)).to.eq(noundersDAO.address);
+    expect(await nounsToken.ownerOf(0)).to.eq(pnoundersDAO.address);
     expect(noundersNounCreated?.event).to.eq('NounCreated');
     expect(noundersNounCreated?.args?.tokenId).to.eq(0);
     expect(noundersNounCreated?.args?.seed.length).to.equal(5);
@@ -58,12 +59,84 @@ describe('NounsToken', () => {
     });
   });
 
+  it('should rotate the reward recipient every 10 nouns', async () => {
+    let receipt = await (await nounsToken.mint()).wait();
+    const owner = await nounsToken.owner()
+
+    let [, , , noundersNounCreated, , , , ownersNounCreated] = receipt.events || [];
+
+    expect(await nounsToken.ownerOf(0)).to.eq(pnoundersDAO.address);
+    expect(noundersNounCreated?.event).to.eq('NounCreated');
+    expect(noundersNounCreated?.args?.tokenId).to.eq(0);
+    expect(noundersNounCreated?.args?.seed.length).to.equal(5);
+
+    expect(await nounsToken.ownerOf(1)).to.eq(deployer.address);
+    expect(ownersNounCreated?.event).to.eq('NounCreated');
+    expect(ownersNounCreated?.args?.tokenId).to.eq(1);
+    expect(ownersNounCreated?.args?.seed.length).to.equal(5);
+    
+    for (let index = 0; index < 8; index++) {
+      await nounsToken.mint()
+    }
+
+    receipt = await (await nounsToken.mint()).wait();
+
+    [, , , noundersNounCreated, , , , ownersNounCreated] = receipt.events || [];
+
+    expect(await nounsToken.ownerOf(10)).to.eq(owner);
+    expect(noundersNounCreated?.event).to.eq('NounCreated');
+    expect(noundersNounCreated?.args?.tokenId).to.eq(10);
+    expect(noundersNounCreated?.args?.seed.length).to.equal(5);
+
+    expect(await nounsToken.ownerOf(11)).to.eq(deployer.address);
+    expect(ownersNounCreated?.event).to.eq('NounCreated');
+    expect(ownersNounCreated?.args?.tokenId).to.eq(11);
+    expect(ownersNounCreated?.args?.seed.length).to.equal(5);
+
+    for (let index = 0; index < 8; index++) {
+      await nounsToken.mint()
+    }
+
+    receipt = await (await nounsToken.mint()).wait();
+
+    [, , , noundersNounCreated, , , , ownersNounCreated] = receipt.events || [];
+
+    expect(await nounsToken.ownerOf(20)).to.eq(nounsDAOTreasury.address);
+    expect(noundersNounCreated?.event).to.eq('NounCreated');
+    expect(noundersNounCreated?.args?.tokenId).to.eq(20);
+    expect(noundersNounCreated?.args?.seed.length).to.equal(5);
+
+    expect(await nounsToken.ownerOf(21)).to.eq(deployer.address);
+    expect(ownersNounCreated?.event).to.eq('NounCreated');
+    expect(ownersNounCreated?.args?.tokenId).to.eq(21);
+    expect(ownersNounCreated?.args?.seed.length).to.equal(5);
+
+    for (let index = 0; index < 8; index++) {
+      await nounsToken.mint()
+    }
+
+    receipt = await (await nounsToken.mint()).wait();
+
+    [, , , noundersNounCreated, , , , ownersNounCreated] = receipt.events || [];
+
+    expect(await nounsToken.ownerOf(30)).to.eq(pnoundersDAO.address);
+    expect(noundersNounCreated?.event).to.eq('NounCreated');
+    expect(noundersNounCreated?.args?.tokenId).to.eq(30);
+    expect(noundersNounCreated?.args?.seed.length).to.equal(5);
+
+    expect(await nounsToken.ownerOf(31)).to.eq(deployer.address);
+    expect(ownersNounCreated?.event).to.eq('NounCreated');
+    expect(ownersNounCreated?.args?.tokenId).to.eq(31);
+    expect(ownersNounCreated?.args?.seed.length).to.equal(5);
+
+  });
+
   it('should set symbol', async () => {
-    expect(await nounsToken.symbol()).to.eq('NOUN');
+    expect(await nounsToken.symbol()).to.eq('℗NOUN');
   });
 
   it('should set name', async () => {
-    expect(await nounsToken.name()).to.eq('Nouns');
+    expect(await nounsToken.name()).to.eq('Public Nouns');
   });
 
   it('should allow minter to mint a noun to itself', async () => {
@@ -107,7 +180,7 @@ describe('NounsToken', () => {
   });
 
   it('should revert on non-minter mint', async () => {
-    const account0AsNounErc721Account = nounsToken.connect(noundersDAO);
+    const account0AsNounErc721Account = nounsToken.connect(nounsDAOTreasury);
     await expect(account0AsNounErc721Account.mint()).to.be.reverted;
   });
 

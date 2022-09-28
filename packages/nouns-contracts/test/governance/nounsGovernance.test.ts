@@ -66,7 +66,7 @@ describe('Nouns Governance', () => {
       NounsDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
     );
 
-    domain = Domain('Nouns', token.address, await chainId());
+    domain = Domain('Public Nouns', token.address, await chainId());
 
     tokenCallFromGuy = token.connect(signers.account0);
     tokenCallFromDeployer = token;

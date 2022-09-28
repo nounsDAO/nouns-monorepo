@@ -3,6 +3,7 @@ import { ChainId, ContractDeployment, ContractName, DeployedContract } from './t
 import { Interface } from 'ethers/lib/utils';
 import { task, types } from 'hardhat/config';
 import promptjs from 'prompt';
+import { BigNumber } from 'ethers';
 
 promptjs.colors = false;
 promptjs.message = '> ';
@@ -19,6 +20,14 @@ const wethContracts: Record<number, string> = {
   [ChainId.Rinkeby]: '0xc778417e063141139fce010982780140aa0cd5ab',
   [ChainId.Goerli]: '0xb4fbf271143f4fbf7b91a5ded31805e42b2208d6',
   [ChainId.Kovan]: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
+};
+const nounsExecutors: Record<number, string> = {
+  [ChainId.Mainnet]: '0x0BC3807Ec262cB779b38D65b38158acC3bfedE10',
+  [ChainId.Rinkeby]: '0x68136BF5dB4407DD599960585dA9b7746eCF567F',
+};
+const noundersSafe: Record<number, string> = {
+  [ChainId.Mainnet]: '0x3808429E985F0B06878c74089831865E5d82A584',
+  [ChainId.Rinkeby]: '0x68136BF5dB4407DD599960585dA9b7746eCF567F',
 };
 
 const NOUNS_ART_NONCE_OFFSET = 4;
@@ -38,7 +47,7 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
   .addOptionalParam(
     'auctionReservePrice',
     'The auction reserve price (wei)',
-    1 /* 1 wei */,
+    BigNumber.from('330000000000000000') /* 0.33 ETH */,
     types.int,
   )
   .addOptionalParam(
@@ -50,7 +59,7 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
   .addOptionalParam(
     'auctionDuration',
     'The auction duration (seconds)',
-    60 * 60 * 24 /* 24 hours */,
+    60 * 60 * 12 /* 12 hours */,
     types.int,
   )
   .addOptionalParam(
@@ -86,16 +95,24 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
   .setAction(async (args, { ethers }) => {
     const network = await ethers.provider.getNetwork();
     const [deployer] = await ethers.getSigners();
+    console.log({deployer})
 
     // prettier-ignore
     const proxyRegistryAddress = proxyRegistries[network.chainId] ?? proxyRegistries[ChainId.Rinkeby];
 
     if (!args.noundersdao) {
+      const noundersDao = noundersSafe[network.chainId];
+      if (!noundersDao) {
+        throw new Error(
+          `Can not auto-detect nounders DAO contract on chain ${network.name}. Provide it with the --noundersdao arg.`,
+        );
+      }
       console.log(
-        `Nounders DAO address not provided. Setting to deployer (${deployer.address})...`,
+        `Nounders DAO address not provided. Setting to default (${noundersDao})...`,
       );
-      args.noundersdao = deployer.address;
+      args.noundersdao = noundersDao;
     }
+
     if (!args.weth) {
       const deployedWETHContract = wethContracts[network.chainId];
       if (!deployedWETHContract) {
@@ -104,6 +121,16 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
         );
       }
       args.weth = deployedWETHContract;
+    }
+
+    if (!args.nounsExecutor) {
+      const nounsExecutor = nounsExecutors[network.chainId];
+      if (!nounsExecutor) {
+        throw new Error(
+          `Can not auto-detect nouns executor contract on chain ${network.name}. Provide it with the --nounsexecutor arg.`,
+        );
+      }
+      args.nounsexecutor = nounsExecutor;
     }
 
     const nonce = await deployer.getTransactionCount();
@@ -140,7 +167,7 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
       NounsToken: {
         args: [
           args.noundersdao,
-          args.noundersdao,
+          args.nounsexecutor,
           expectedAuctionHouseProxyAddress,
           () => deployment.NounsDescriptorV2.address,
           () => deployment.NounsSeeder.address,
@@ -160,7 +187,7 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
               deployment.NounsToken.address,
               args.weth,
               args.auctionTimeBuffer,
-              args.auctionReservePrice,
+              args.auctionReservePrice, // todo reserve price
               args.auctionMinIncrementBidPercentage,
               args.auctionDuration,
             ]),

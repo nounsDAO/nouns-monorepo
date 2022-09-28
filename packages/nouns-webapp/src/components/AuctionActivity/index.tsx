@@ -17,12 +17,9 @@ import AuctionActivityDateHeadline from '../AuctionActivityDateHeadline';
 import BidHistoryBtn from '../BidHistoryBtn';
 import config from '../../config';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import NounInfoCard from '../NounInfoCard';
 import { useAppSelector } from '../../hooks';
 import BidHistoryModal from '../BidHistoryModal';
-import { Trans } from '@lingui/macro';
 import Holder from '../Holder';
 
 const openEtherscanBidHistory = () => {
@@ -86,6 +83,8 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
   }, [auctionTimer, auction]);
 
   if (!auction) return null;
+  
+  console.log({auction})
 
   return (
     <>
