@@ -81,6 +81,7 @@ export type AppDispatch = typeof store.dispatch;
 
 const supportedChainURLs = {
   [ChainId.Mainnet]: createNetworkHttpUrl('mainnet'),
+  [ChainId.Goerli]: createNetworkHttpUrl('goerli'),
   [ChainId.Rinkeby]: createNetworkHttpUrl('rinkeby'),
   [ChainId.Hardhat]: 'http://localhost:8545',
 };
