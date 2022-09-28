@@ -41,7 +41,7 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
 
     // Populate the on-chain seeder
     const probDoc = await run("get-prob-doc")
-    await run('populate-seeder', { ...contracts, probDoc });
+    await run('populate-seeder', { nSeeder: contracts.NSeeder.instance, probDoc });
 
     // Register OG punk hashes to make sure they will not be minted.
     await run('register-og-punks', contracts);

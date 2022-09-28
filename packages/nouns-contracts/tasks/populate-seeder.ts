@@ -4,7 +4,7 @@ task("populate-seeder", "Initialize deployed smart contracts")
     // .addOptionalParam('nToken', 'The NToken contract address')
     // .addOptionalParam('nSeeder', 'The NSeeder contract address')
     // .addOptionalParam('probDoc', 'The Probability config')
-    .setAction(async({ nToken, nSeeder, probDoc }, { ethers, run, network }) => {
+    .setAction(async({ nSeeder, probDoc }, { ethers, run, network }) => {
 
         const typeProbabilities =
         Object.values(probDoc.probabilities)
