@@ -19,6 +19,7 @@ const wethContracts: Record<number, string> = {
   [ChainId.Kovan]: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
 };
 
+
 const N_ART_NONCE_OFFSET = 4;
 const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 9;
 const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 12;
@@ -94,6 +95,7 @@ task('deploy', 'Deploys NFTDescriptor, NDescriptor, NSeeder, and NToken')
       );
       args.punkersdao = deployer.address;
     }
+    console.log(args)
     if (!args.weth) {
       const deployedWETHContract = wethContracts[network.chainId];
       if (!deployedWETHContract) {
@@ -122,19 +124,29 @@ task('deploy', 'Deploys NFTDescriptor, NDescriptor, NSeeder, and NToken')
       DeployedContract
     >;
     const contracts: Record<ContractName, ContractDeployment> = {
-      NFTDescriptorV2: {},
-      SVGRenderer: {},
+      NFTDescriptorV2: {
+        waitForConfirmation: true,
+      },
+      SVGRenderer: {
+        waitForConfirmation: true,
+      },
       NDescriptorV2: {
         args: [expectedNArtAddress, () => deployment.SVGRenderer.address],
         libraries: () => ({
           NFTDescriptorV2: deployment.NFTDescriptorV2.address,
         }),
+        waitForConfirmation: true,
       },
-      Inflator: {},
+      Inflator: {
+        waitForConfirmation: true,
+      },
       NArt: {
         args: [() => deployment.NDescriptorV2.address, () => deployment.Inflator.address],
+        waitForConfirmation: true,
       },
-      NSeeder: {},
+      NSeeder: {
+        waitForConfirmation: true,
+      },
       NToken: {
         args: [
           args.punkersdao,
@@ -143,11 +155,14 @@ task('deploy', 'Deploys NFTDescriptor, NDescriptor, NSeeder, and NToken')
           () => deployment.NSeeder.address,
           proxyRegistryAddress,
         ],
+        waitForConfirmation: true,
       },
       NAuctionHouse: {
         waitForConfirmation: true,
       },
-      NAuctionHouseProxyAdmin: {},
+      NAuctionHouseProxyAdmin: {
+        waitForConfirmation: true,
+      },
       NAuctionHouseProxy: {
         args: [
           () => deployment.NAuctionHouse.address,

@@ -37,7 +37,7 @@ pragma solidity ^0.8.6;
 
 import './NDAOInterfaces.sol';
 
-contract NounsDAOProxy is NDAOProxyStorage, NDAOEvents {
+contract NDAOProxy is NDAOProxyStorage, NDAOEvents {
     constructor(
         address timelock_,
         address npunks_,
