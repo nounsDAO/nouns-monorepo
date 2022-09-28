@@ -18,5 +18,5 @@
   directory = "packages/nouns-webapp/functions"
 
 [build]
-  command = "yarn workspace @nouns/webapp build"
+  command = "cd packages/nouns-contracts && yarn && cd ../../ && yarn workspace @nouns/webapp build"
   publish = "packages/nouns-webapp/build"
