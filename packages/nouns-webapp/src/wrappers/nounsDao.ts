@@ -252,6 +252,7 @@ export const useCurrentQuorum = (nounsDao: string, proposalId: number): number |
   const [quorum] =
     useContractCall<[EthersBN]>({
       abi: abiV2,
+      // abi,
       address: nounsDao,
       method: 'quorumVotes',
       args: [proposalId],

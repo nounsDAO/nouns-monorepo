@@ -372,6 +372,7 @@ const VotePage = ({
                   <div
                     data-for="view-dq-info"
                     data-tip="View Dynamic Quorum Info"
+                    onClick={() => setShowDynamicQuorumInfoModal(true)}
                     className={classes.thresholdInfo}
                   >
                     <span>

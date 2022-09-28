@@ -9,52 +9,8 @@ import classes from './DynamicQuorumInfoModal.module.css';
 import { XIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/macro';
 import clsx from 'clsx';
-import { ChartBounds, makeSmoothSVGChart, pointsPositionsCalc } from '../../utils/svgChartingUtils';
+import {pointsPositionsCalc } from '../../utils/svgChartingUtils';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
-
-const generatePointsForSVGChart = (
-  minQuorumBps: number,
-  maxQuorumBps: number,
-  height: number,
-  width: number,
-  quorumCoefficent: number,
-  numPoints: number,
-) => {
-  const linearToConstantCrossoverBPS = (maxQuorumBps - minQuorumBps) / quorumCoefficent;
-  // Space x points equally in [0, posDQMPolynomialRoot]
-  // We do this to get a dense sample of the function in the range it's most interesting
-  let xPoints = Array.from({ length: numPoints }, (_, i) =>
-    Math.floor(i * (Math.ceil(linearToConstantCrossoverBPS) / numPoints)),
-  );
-  for (let i = 0; i < 500; i++) {
-    xPoints.push(linearToConstantCrossoverBPS + i);
-  }
-  xPoints.push(linearToConstantCrossoverBPS * 2);
-  xPoints.push(linearToConstantCrossoverBPS * 2.5);
-  xPoints.push(5000);
-  xPoints.push(10_000);
-  xPoints.push(8_000);
-
-  const dqmFunction = (bps: number) => {
-    return Math.min(minQuorumBps + quorumCoefficent * bps, maxQuorumBps);
-  };
-
-  const yPoints = xPoints.map((againstVotesBPS: number) => {
-    return dqmFunction(againstVotesBPS);
-  });
-
-  const points = xPoints.map((x: number, i: number) => {
-    return [x, yPoints[i]];
-  });
-
-  const res = makeSmoothSVGChart(points, width, height, {
-    xMax: 10_000,
-    xMin: 0,
-    yMax: 1.06 * maxQuorumBps,
-    yMin: 0.87 * minQuorumBps,
-  } as ChartBounds);
-  return res;
-};
 
 const DynamicQuorumInfoModalOverlay: React.FC<{
   proposal: Proposal;
@@ -99,6 +55,13 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
 
   const againstVotesLabelLineEnd = pointsPositionsCalc(
     [[againstVotesBps, dqmFunction(againstVotesBps)]],
+    950 * 1.0,
+    320,
+    options,
+  );
+
+  const crossOver = pointsPositionsCalc(
+    [[linearToConstantCrossoverBPS, maxQuorumBps]],
     950 * 1.0,
     320,
     options,
@@ -184,18 +147,9 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                     stroke-dasharray="5"
                   />
                   <g fill="#4965F080" stroke="none">
-                    <path
-                      d={generatePointsForSVGChart(
-                        minQuorumBps,
-                        maxQuorumBps,
-                        320,
-                        950, // TODO
-                        quorumCoefficent,
-                        100,
-                      )}
-                    />
+                    <polygon points={`950,288 950,32 ${crossOver[0][0]},32 0,288`} />
+                    <polygon points={`950,320 950,288 ${0},288 0,320`} />
 
-                    <rect x="760" y="30" width="285" height={320}></rect>
                   </g>
                   {/* Vertical Line indicating against BPS */}
                   <line
@@ -383,7 +337,7 @@ const DynamicQuorumInfoModal: React.FC<{
       {ReactDOM.createPortal(
         <DynamicQuorumInfoModalOverlay
           againstVotesBps={Math.floor(
-            (againstVotesAbsolute / data.proposals[0].totalSupply) * 10_000,
+            (2 / data.proposals[0].totalSupply) * 10_000,
           )}
           againstVotesAbs={againstVotesAbsolute}
           minQuorumBps={dynamicQuorumProps?.minQuorumVotesBPS ?? 0}
