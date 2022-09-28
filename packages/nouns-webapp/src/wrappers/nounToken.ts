@@ -1,10 +1,11 @@
 import { useContractCall, useContractFunction, useEthers } from '@usedapp/core';
 import { BigNumber as EthersBN, ethers, utils } from 'ethers';
-import { NounsTokenABI, NounsTokenFactory } from '@nouns/contracts';
+import {  NounsTokenFactory } from '@nouns/contracts';
 import config, { cache, cacheKey, CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
 import { seedsQuery } from './subgraph';
 import { useEffect } from 'react';
+import newABI from "./abi.json";
 
 interface NounToken {
   name: string;
@@ -24,7 +25,7 @@ export enum NounsTokenContractFunction {
   delegateVotes = 'votesToDelegate',
 }
 
-const abi = new utils.Interface(NounsTokenABI);
+const abi = new utils.Interface(newABI);
 const seedCacheKey = cacheKey(cache.seed, CHAIN_ID, config.addresses.nounsToken);
 
 const isSeedValid = (seed: Record<string, any> | undefined) => {
