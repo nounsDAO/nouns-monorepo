@@ -336,7 +336,6 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                     onFocus={(e) => handleOnFocus(i)}
                                                     onMouseOver={() => setActiveNoun(i)} 
                                                     onMouseOut={() => selectedNoun && setActiveNoun(selectedNoun)}
-                                                    // autoFocus={i === 0}
                                                     >
                                                     <img 
                                                         src={process.env.PUBLIC_URL + `/nouns/noun${i}.svg`} 
@@ -381,6 +380,9 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                         } as React.CSSProperties
                                                         }
                                                      />
+                                                     <p className={classes.nounIdOverlay}>
+                                                        Noun {i}
+                                                     </p>
                                                     {/* <StandaloneNounImage nounId={BigNumber.from(i)} /> */}
                                                 </button>
                                             </motion.li>

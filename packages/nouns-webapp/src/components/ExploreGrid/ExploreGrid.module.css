@@ -80,11 +80,15 @@
     /* border: 1px solid rgba(0,0,0,0.2) !important; */
 }
 
-.exploreGrid li:hover img {
+.exploreGrid li:hover img, .exploreGrid li.activeNoun:hover img {
     transform: scale(1.1);
     /* top: -4px; */
     /* border-radius: 3%; */
     transition: transform 0.1s ease-in-out;
+}
+
+.exploreGrid li.activeNoun:hover img {
+    transform: scale(0.9);
 }
 
 .exploreGrid li img {
@@ -92,7 +96,7 @@
     margin: 0 auto;
     width: 100%;
     position: relative;
-    border-radius: 10px;
+    /* border-radius: 10px; */
     transition: transform 0.1s ease-in-out;
     /* Animation conflicts with transform */
     /* animation-name: animateIn; */
@@ -120,24 +124,37 @@
 .exploreGrid .nounIdOverlay {
     margin: 0;
     position: absolute;
-    bottom: 10px;
+    bottom: 6px;
     opacity: 0;
     /* Make match noun bg color */
-    background: #fff; 
-    border-radius: 8px;
-    padding: 3px 6px;
+    background: rgba(255,255,255,0.9); 
+    border-radius: 6px;
+    padding: 4px 6px;
+    line-height: 1;
     font-family: 0.8rem;
     box-shadow: 0px 0px 10px rgb(0 0 0 / 25%);
     font-family: 'Londrina Solid';
-    transition: all 0.15s ease-in-out;
+    transition: all .05s ease-in-out;
+    
 }
 
 .exploreGrid li:hover .nounIdOverlay, 
-.exploreGrid li:focus .nounIdOverlay, 
+.exploreGrid li.activeNoun:hover .nounIdOverlay {
+    background: #fff;
+}
+.exploreGrid li:hover .nounIdOverlay, 
+.exploreGrid li:focus .nounIdOverlay,
 .exploreGrid li.activeNoun .nounIdOverlay, 
 .exploreGrid li.activeNoun:focus .nounIdOverlay, 
 .exploreGrid li.activeNoun:hover .nounIdOverlay {
     opacity: 1;
+    bottom: 6px;
+    transition: none;
+}
+
+.exploreGrid li.activeNoun .nounIdOverlay, 
+.exploreGrid li.activeNoun:focus .nounIdOverlay, 
+.exploreGrid li.activeNoun:hover .nounIdOverlay {
     bottom: 12px;
 }
 
@@ -185,10 +202,16 @@
     /* border: 5px solid rgb(214, 60, 94) !important; */
     background: rgba(214, 60, 94, 1);
 }
-.activeNoun button img {
+.activeNoun button img{
+    border-radius: 6px;
     transform: scale(0.9);
-    border-radius: 5px;
+    /* overflow: hidden; */
 }
+
+.activeNoun button img {
+    
+}
+
 li.activeNoun button img, li.activeNoun:hover button img {
     transform: scale(0.9);
     transition: transform 0.05s ease-in-out;
