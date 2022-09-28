@@ -105,6 +105,7 @@ const NavBar = () => {
                 buttonStyle={nonWalletButtonStyle}
               />
             </Nav.Link>
+            {/* commented out until Discourse is needed 
             <Nav.Link
               href={externalURL(ExternalURL.discourse)}
               className={classes.nounsNavLink}
@@ -117,7 +118,7 @@ const NavBar = () => {
                 buttonIcon={<FontAwesomeIcon icon={faComments} />}
                 buttonStyle={nonWalletButtonStyle}
               />
-            </Nav.Link>
+            </Nav.Link> */}
             <Nav.Link
               as={Link}
               to="/playground"

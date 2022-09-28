@@ -1,6 +1,7 @@
 .wrapper h1 {
-  font-family: 'Londrina Solid';
-  font-size: 5rem;
+  font-family: 'Work Sans';
+  font-style: italic;
+  font-weight: 900;
 }
 
 @media (max-width: 992px) {
@@ -9,13 +10,13 @@
   }
 
   .wrapper h1 {
-    font-size: 3.75rem;
+    font-size: 2.5rem;
   }
 }
 
 @media (min-width: 992px) {
   .wrapper h1 {
-    font-size: 6rem;
+    font-size: 3.5rem;
     margin-left: 2rem;
   }
 }

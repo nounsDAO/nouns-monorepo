@@ -10,7 +10,7 @@ const Banner = () => {
     <Section fullWidth={false} className={classes.bannerSection}>
       <Col lg={6}>
         <div className={classes.wrapper}>
-          <h1 style={{fontSize: '80px'}}>
+          <h1>
             <Trans>1 PUBLIC NOUN,</Trans>
             <br />
             <Trans>EVERY 12 HOURS,</Trans>
@@ -19,7 +19,7 @@ const Banner = () => {
           </h1>
         </div>
       </Col>
-      <Col lg={6} className={classes.wrapper}>
+      <Col lg={6} className={classes.wrapper} style={{height: '100%'}}>
         <div style={{ padding: '2rem' }}>
           <Noun imgPath={pNounsGrid} alt="noun" />
         </div>
