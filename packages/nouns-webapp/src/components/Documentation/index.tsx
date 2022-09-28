@@ -4,8 +4,17 @@ import classes from './Documentation.module.css';
 import Accordion from 'react-bootstrap/Accordion';
 import Link from '../Link';
 import { Trans } from '@lingui/macro';
+import { externalURL, ExternalURL } from '../../utils/externalURL';
 
 const Documentation = () => {
+  const docsLink = (
+    <Link
+      text="Docs"
+      url={externalURL(ExternalURL.docs)}
+      leavesPage={true}
+    />
+  );
+  externalURL(ExternalURL.docs);
   const nounsDaoLink = (
     <Link
       text="Nouns"
@@ -35,26 +44,23 @@ const Documentation = () => {
       <Col lg={{ span: 10, offset: 1 }}>
         <div className={classes.headerWrapper}>
           <h1>
-            WTF?
+            WTF is Public Nouns?
           </h1>
+          <h3 className={classes.aboutText}>Public Nouns is an experimental new way to support public goods.</h3>
           <p className={classes.aboutText}>
-              {nounsDaoLink} has proven to be a strong mechanism for continuous funding alongside a simple yet effective governance framework. Public Goods are necessary, and often detached from value capture. Public Nouns is an experiment at bending the incentive toward continuous public goods funding. 
+              {nounsDaoLink} has proven to be a strong mechanism for continuous funding alongside a simple, yet effective governance framework. Public Goods are necessary, often detached from value capture out of necessity, and notoriously difficult to fund. Thus, we have forked Nouns and replaced all heads with memetic representations of public goods, as an experiment in continuous public goods funding. All ETH from Public Noun auctions goes direct to Public Nouns DAO, where one Public Noun equals one vote. Public Nouns DAO members curate and fund public goods projects. 
           </p>
+          <p>The mission of Public Nouns DAO is to support public goods by:</p>
           <p>
-            All heads have been replaced with 'mascots' of public goods, making each Public Noun a memetic representation of a public good.
-          </p>
-          <p>The mission of Public Nouns DAO is to support public goods by:
           <ol>
-            <li>spreading awareness of public goods</li>
-            <li>funding public goods, and public goods mechanisms</li>
             <li>experimenting with new methods of public goods funding, starting with Public Nouns itself.</li>
+            <li>spreading awareness of public goods</li>
+            <li>funding public goods, creators, and public goods mechanisms</li>
           </ol>
           </p>
           <p>Grab a Public Noun during an auction to get voice in Public Nouns DAO.</p>
           <p className={classes.aboutText} style={{ paddingBottom: '4rem' }}>
-            
               Play around making Public Nouns off-chain using the {playgroundLink}.
-            
           </p>
         </div>
         <Accordion flush>
@@ -93,13 +99,7 @@ const Documentation = () => {
                     No explicit rules exist for attribute scarcity; all Public Nouns are equally rare.
                   
                 </li>
-                <li>
-                  
-                    <ul>
                       <li>pNounders, Public Nouns DAO, and Nouns DAO receive rewards in the form of Public Nouns (10% of supply for first year).</li>
-                    </ul>
-                  
-                </li>
               </ul>
             </Accordion.Body>
           </Accordion.Item>
@@ -112,9 +112,7 @@ const Documentation = () => {
               <p className={classes.aboutText}>
                 <Trans>
                   The Public Nouns Auction Contract will act as a self-sufficient Public Noun generation and
-                  distribution mechanism, auctioning one Public Noun every 12 hours, forever. 100% of
-
-                  auction proceeds (ETH) are automatically deposited in the Public Nouns DAO treasury,
+                  distribution mechanism, auctioning one Public Noun every 12 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the Public Nouns DAO treasury,
                   where they are governed by Public Noun owners.
                   </Trans>
               </p>
@@ -135,12 +133,17 @@ const Documentation = () => {
               <Trans>Public Nouns DAO</Trans>
             </Accordion.Header>
             <Accordion.Body>
+              <p>
                Public Nouns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the
                Public Nouns ecosystem. The Public Nouns DAO treasury receives 100% of ETH proceeds from daily
                Public Noun auctions. Each Public Noun is an irrevocable member of Public Nouns DAO and entitled to one
                 vote in all governance matters. Public Noun votes are non-transferable (if you sell your
                 pNoun the vote goes with it) but delegatable, which means you can assign your vote to
                 someone else as long as you own your Public Noun.
+              </p>
+              <p>
+                Visit {docsLink} to get involved with the DAO.
+              </p>
             </Accordion.Body>
           </Accordion.Item>
           <Accordion.Item eventKey="3" className={classes.accordionItem}>
