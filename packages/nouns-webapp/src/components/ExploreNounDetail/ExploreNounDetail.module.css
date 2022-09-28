@@ -131,6 +131,9 @@
     z-index: 1;
     width: 100%;
 }
+.nounBirthday > div span {
+    white-space: pre-wrap;
+}
 .nounBirthday > div {
     opacity: 0.6;
     font-size: 0.8rem;
