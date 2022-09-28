@@ -83,8 +83,8 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         // console.log('currentAuction', currentAuction);
         if (currentAuction?.nounId) {
             // console.log('currentAuction.nounId', currentAuction?.nounId);
-            setSelectedNoun(BigNumber.from(currentAuction?.nounId).toNumber());
-            setActiveNoun(BigNumber.from(currentAuction?.nounId).toNumber());
+            !isMobile && setSelectedNoun(BigNumber.from(currentAuction?.nounId).toNumber());
+            !isMobile && setActiveNoun(BigNumber.from(currentAuction?.nounId).toNumber());
         }
         
     }, [currentAuction]);
@@ -241,7 +241,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
 
     const sortOptions = [
         {
-            label: "Latest Nouns", value: "date-descending"
+            label: "Youngest Nouns", value: "date-descending"
         },
         {
             label: "Oldest Nouns", value: "date-ascending"
@@ -298,7 +298,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                     </select>
                                 </div>
                             </div>
-                            <div className={classes.sizing}>
+                            {/* <div className={classes.sizing}>
                                 {sizeOptions.map((option, i) => {
                                     return (
                                         <button 
@@ -314,7 +314,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                         </button>
                                     )
                                 })}
-                            </div>
+                            </div> */}
                         </div>
                     </div>  
                     <motion.div 

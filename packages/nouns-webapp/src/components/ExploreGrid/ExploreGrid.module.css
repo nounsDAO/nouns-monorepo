@@ -135,7 +135,9 @@
     box-shadow: 0px 0px 10px rgb(0 0 0 / 25%);
     font-family: 'Londrina Solid';
     transition: all .05s ease-in-out;
-    
+    @media (max-width: 991px) {
+        display: none;
+    }
 }
 
 .exploreGrid li:hover .nounIdOverlay, 
@@ -155,7 +157,7 @@
 .exploreGrid li.activeNoun .nounIdOverlay, 
 .exploreGrid li.activeNoun:focus .nounIdOverlay, 
 .exploreGrid li.activeNoun:hover .nounIdOverlay {
-    bottom: 12px;
+    bottom: 14px;
 }
 
 
@@ -389,6 +391,9 @@ li.activeNoun button img, li.activeNoun:hover button img {
         padding: 0 0 15px 0;
     }
     .nav .sizing {
+        display: none;
+    }
+    .exploreGrid .nounIdOverlay { 
         display: none;
     }
 }
