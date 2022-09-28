@@ -80,7 +80,7 @@
     /* border: 1px solid rgba(0,0,0,0.2) !important; */
 }
 
-.exploreGrid li:hover button {
+.exploreGrid li:hover img {
     transform: scale(1.1);
     /* top: -4px; */
     /* border-radius: 3%; */
@@ -94,7 +94,8 @@
     position: relative;
     border-radius: 10px;
     transition: transform 0.1s ease-in-out;
-    animation-name: animateIn;
+    /* Animation conflicts with transform */
+    /* animation-name: animateIn; */
     animation-duration: 60ms;
     animation-delay: calc(var(--animation-order) * 25ms);
     animation-fill-mode: both;
@@ -115,8 +116,31 @@
     aspect-ratio: 1;
     transition: transform 0.05s ease-in-out;
 }
-.exploreGrid .activeNoun:focus {
+
+.exploreGrid .nounIdOverlay {
+    margin: 0;
+    position: absolute;
+    bottom: 10px;
+    opacity: 0;
+    /* Make match noun bg color */
+    background: #fff; 
+    border-radius: 8px;
+    padding: 3px 6px;
+    font-family: 0.8rem;
+    box-shadow: 0px 0px 10px rgb(0 0 0 / 25%);
+    font-family: 'Londrina Solid';
+    transition: all 0.15s ease-in-out;
 }
+
+.exploreGrid li:hover .nounIdOverlay, 
+.exploreGrid li:focus .nounIdOverlay, 
+.exploreGrid li.activeNoun .nounIdOverlay, 
+.exploreGrid li.activeNoun:focus .nounIdOverlay, 
+.exploreGrid li.activeNoun:hover .nounIdOverlay {
+    opacity: 1;
+    bottom: 12px;
+}
+
 
 .exploreGrid .activeNoun button:focus {
     border: none;
@@ -155,17 +179,17 @@
     opacity: 1;
 }
 
-.activeNoun {
+.exploreGrid li.activeNoun button {
     /* border: 10px solid transparent; */
     /* border: 1px solid rgba(0,0,0,0.2) !important; */
     /* border: 5px solid rgb(214, 60, 94) !important; */
     background: rgba(214, 60, 94, 1);
 }
-.activeNoun button {
+.activeNoun button img {
     transform: scale(0.9);
     border-radius: 5px;
 }
-li.activeNoun button, li.activeNoun:hover button {
+li.activeNoun button img, li.activeNoun:hover button img {
     transform: scale(0.9);
     transition: transform 0.05s ease-in-out;
 }

@@ -346,6 +346,9 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                         } as React.CSSProperties
                                                         }
                                                      />
+                                                     <p className={classes.nounIdOverlay}>
+                                                        Noun {i}
+                                                     </p>
                                                     {/* <StandaloneNounImage nounId={BigNumber.from(i)} /> */}
                                                 </button>
                                             </motion.li>
