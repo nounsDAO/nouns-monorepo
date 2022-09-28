@@ -42,15 +42,15 @@ const Documentation = () => {
           </p>
           <p>
             All heads have been replaced with 'mascots' of public goods, making each Public Noun a memetic representation of a public good.
-            Grab a Public Noun during an auction to get voice in Public Nouns DAO.
           </p>
-          <p>The mission of Public Nouns DAO is threefold:
+          <p>The mission of Public Nouns DAO is to support public goods by:
           <ol>
-            <li>spread awareness of public goods</li>
-            <li>fund public goods, and public goods mechanisms</li>
-            <li>experiment with new methods of public goods funding, starting with Public Nouns itself.</li>
+            <li>spreading awareness of public goods</li>
+            <li>funding public goods, and public goods mechanisms</li>
+            <li>experimenting with new methods of public goods funding, starting with Public Nouns itself.</li>
           </ol>
           </p>
+          <p>Grab a Public Noun during an auction to get voice in Public Nouns DAO.</p>
           <p className={classes.aboutText} style={{ paddingBottom: '4rem' }}>
             <Trans>
               Play around making Public Nouns off-chain using the {playgroundLink}.
@@ -106,13 +106,13 @@ const Documentation = () => {
 
           <Accordion.Item eventKey="1" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>Daily Auctions</Trans>
+              <Trans>Two Auctions Daily</Trans>
             </Accordion.Header>
             <Accordion.Body>
               <p className={classes.aboutText}>
                 <Trans>
-                  The Public Nouns Auction Contract will act as a self-sufficient Noun generation and
-                  distribution mechanism, auctioning one Noun every 12 hours, forever. 100% of
+                  The Public Nouns Auction Contract will act as a self-sufficient Public Noun generation and
+                  distribution mechanism, auctioning one Public Noun every 12 hours, forever. 100% of
                   auction proceeds (ETH) are automatically deposited in the Public Nouns DAO treasury,
                   where they are governed by Public Noun owners.
                 </Trans>
@@ -121,7 +121,7 @@ const Documentation = () => {
               <p className={classes.aboutText}>
                 <Trans>
                   Each time an auction is settled, the settlement transaction will also cause a new
-                  Noun to be minted and a new 12 hour auction to begin.{' '}
+                  Public Noun to be minted and a new 12 hour auction to begin.{' '}
                 </Trans>
               </p>
               <p>
@@ -135,7 +135,7 @@ const Documentation = () => {
           </Accordion.Item>
           <Accordion.Item eventKey="2" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>Nouns DAO</Trans>
+              <Trans>Public Nouns DAO</Trans>
             </Accordion.Header>
             <Accordion.Body>
               <Trans>
@@ -212,19 +212,19 @@ const Documentation = () => {
               </p>
               <ul>
                 <li>
-                  <Trans>backgrounds (4) </Trans>
+                  <Trans>backgrounds (2) </Trans>
                 </li>
                 <li>
-                  <Trans>bodies (30)</Trans>
+                  <Trans>bodies (31)</Trans>
                 </li>
                 <li>
-                  <Trans>accessories (140) </Trans>
+                  <Trans>accessories (139) </Trans>
                 </li>
                 <li>
                   <Trans>heads (21) </Trans>
                 </li>
                 <li>
-                  <Trans>glasses (23)</Trans>
+                  <Trans>glasses (24)</Trans>
                 </li>
               </ul>
               <Trans>
@@ -289,8 +289,7 @@ const Documentation = () => {
             <Accordion.Body>
               <p>
                 <Trans>
-                  'pNounders' is the coalition of public goods that formed to launch Public Nouns together, and help steward early governance. Here are the
-                  pNounders:
+                  'pNounders' is the coalition of public good enjoyers from the following orgs that formed to launch Public Nouns together, and help steward early governance.
                 </Trans>
               </p>
               <ul>
@@ -323,17 +322,27 @@ const Documentation = () => {
               <p>
                 <Trans>
                   Rewards: 
-                  Every 30th Public Noun for the first year of the project (Public Noun ids #0, #30, #60, and so on) will be automatically sent to the pNounder's multisig to be vested and shared among the coalition.
+                </Trans>
+              </p>
+              <p>
+                <Trans>Every 30th Public Noun for the first year of the project (Public Noun ids #0, #30, #60, and so on) will be automatically sent to the pNounder's multisig to be vested and shared among the coalition to help steward early governance.</Trans>
+              </p>
+              <p>
+                <Trans>
                   Every 30th Public Noun for the first year of the project (Public Noun ids #10, #40, #70, and so on) will be automatically sent to the
-                  NounsDAO, for building such an amazing base that we could fork.
+                  NounsDAO, for building such an amazing foundation that we could fork.
+                </Trans>
+              </p>
+              <p>
+                <Trans>
                   Every 30th Public Noun for the first year of the project (Public Noun ids #20, #50, #80, and so on) will be automatically sent to the
                   PublicNounsDAO, for rewards.
                 </Trans>
               </p>
               <p>
                 <Trans>
-                  These distributions don't interfere with the cadence of 12 hour auctions. Public Nouns
-                  are sent directly to the Pnounder's Multisig, and auctions continue on schedule
+                  These distributions don't interfere with the cadence of the 12 hour auctions. Public Nouns
+                  are sent directly to the pNounder's Multisig, and auctions continue on schedule
                   with the next available Public Noun ID.
                 </Trans>
               </p>
