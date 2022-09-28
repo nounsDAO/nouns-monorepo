@@ -18,6 +18,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 interface ExploreNounDetailProps {
     nounId: number;
+    handleCloseDetail: Function;
     handleNounDetail: Function;
     handleNounNavigation: Function;
     isVisible: boolean;
@@ -291,7 +292,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                             background: backgroundColor,
                         }}
                     >
-                        <button className={classes.close} onClick={() => props.handleNounDetail('close')}>
+                        <button className={classes.close} onClick={() => props.handleCloseDetail()}>
                             <XIcon className={classes.icon} />
                         </button>
                                     <div

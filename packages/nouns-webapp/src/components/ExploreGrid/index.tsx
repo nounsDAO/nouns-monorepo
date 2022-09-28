@@ -105,15 +105,18 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     
     const handleNounDetail = (nounId: number, sidebarVisibility: string, event: React.MouseEvent | React.FocusEvent) => {
         if (nounId === selectedNoun) {
-            console.log("nounId === selectedNoun");
-            setIsSidebarVisible(false)
-            setActiveNoun(-1);
-            setSelectedNoun(undefined);
+            handleCloseDetail();
         } else {
             nounId > -1 && nounId < nounCount && setActiveNoun(nounId);
             nounId > -1 && nounId < nounCount && setSelectedNoun(nounId);  
             setIsSidebarVisible(true)  
         }
+    }
+
+    const handleCloseDetail = () => {
+        setIsSidebarVisible(false);
+        setActiveNoun(-1);
+        setSelectedNoun(undefined);
     }
 
     const handleNounNavigation = (direction: string) => {
@@ -396,6 +399,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                     <AnimatePresence>
                         {isSidebarVisible && (
                             <ExploreNounDetail 
+                                handleCloseDetail={() => handleCloseDetail()} 
                                 handleNounDetail={handleNounDetail} 
                                 handleNounNavigation={handleNounNavigation} 
                                 nounId={activeNoun} 
