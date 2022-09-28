@@ -89,13 +89,31 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         
     }, [currentAuction]);
 
-    // console.log("activeNoun", activeNoun)
+    const handleOnFocus = (nounId: number) => {
+        if (document.activeElement && parseInt(document.activeElement.id) === selectedNoun) {
+            
+        } else {
+            focusNoun(nounId);
+        }
+    }
+
+    const removeFocus = () => {
+        setIsSidebarVisible(false);
+        setActiveNoun(-1);
+        setSelectedNoun(undefined);
+    }
     
-    const handleNounDetail = (nounId: number, sidebarVisibility: string) => {
-        nounId > -1 && nounId < nounCount && setActiveNoun(nounId);
-        nounId > -1 && nounId < nounCount && setSelectedNoun(nounId);
-        sidebarVisibility === "visible" ? setIsSidebarVisible(true) : setIsSidebarVisible(false);
-        sidebarVisibility !== "visible" && setSelectedNoun(undefined);
+    const handleNounDetail = (nounId: number, sidebarVisibility: string, event: React.MouseEvent | React.FocusEvent) => {
+        if (nounId === selectedNoun) {
+            console.log("nounId === selectedNoun");
+            setIsSidebarVisible(false)
+            setActiveNoun(-1);
+            setSelectedNoun(undefined);
+        } else {
+            nounId > -1 && nounId < nounCount && setActiveNoun(nounId);
+            nounId > -1 && nounId < nounCount && setSelectedNoun(nounId);  
+            setIsSidebarVisible(true)  
+        }
     }
 
     const handleNounNavigation = (direction: string) => {
@@ -118,9 +136,13 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     // const keyboardEsc: boolean = useKeyPress("Escape");
 
     const buttonsRef = useRef<(HTMLButtonElement | null)[]>([])
-    // const focusNoun = (index: number | undefined) => {
-    //     index && buttonsRef.current[index]?.focus()
-    // };
+    const focusNoun = (index: number) => {
+        console.log("focusing noun");
+        index && buttonsRef.current[index]?.focus();
+        setActiveNoun(index);
+        setSelectedNoun(index);
+        setIsSidebarVisible(true)
+    };
 
     const handleScrollTo = (nounId: number) => {
         nounId && buttonsRef.current[nounId]?.scrollIntoView({behavior: 'smooth'});
@@ -308,11 +330,13 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                 key={i}
                                             >
                                                 <button 
-                                                    onFocus={() => handleNounDetail(i, i === selectedNoun ? 'close' : 'visible')}
-                                                    onClick={() => handleNounDetail(i, i === selectedNoun ? 'close' : 'visible')}
+                                                    ref={el => buttonsRef.current[i] = el} 
+                                                    id={`${i}`}
+                                                    onMouseDown={(e) => (selectedNoun === i && document.activeElement && parseInt(document.activeElement.id) === i) ? removeFocus() : handleOnFocus(i)}
+                                                    onFocus={(e) => handleOnFocus(i)}
                                                     onMouseOver={() => setActiveNoun(i)} 
                                                     onMouseOut={() => selectedNoun && setActiveNoun(selectedNoun)}
-                                                    
+                                                    // autoFocus={i === 0}
                                                     >
                                                     <img 
                                                         src={process.env.PUBLIC_URL + `/nouns/noun${i}.svg`} 
@@ -341,8 +365,8 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                 key={i}
                                             >
                                                 <button 
-                                                    onFocus={() => handleNounDetail(i, i === selectedNoun ? 'close' : 'visible')}
-                                                    onClick={() => handleNounDetail(i, i === selectedNoun ? 'close' : 'visible')}
+                                                    onMouseDown={(e) => (selectedNoun === i && document.activeElement && parseInt(document.activeElement.id) === i) ? removeFocus() : handleOnFocus(i)}
+                                                    onFocus={(e) => handleOnFocus(i)}
                                                     onMouseOver={() => setActiveNoun(i)} 
                                                     onMouseOut={() => selectedNoun && setActiveNoun(selectedNoun)}
                                                     >
