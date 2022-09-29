@@ -3,8 +3,10 @@
 }
 
 .wrapper h1 {
-  font-family: 'Londrina Solid';
-  font-size: 68px;
+  font-family: 'Work Sans';
+  font-style: italic;
+  font-weight: 900;
+  font-size: 54px;
   margin-bottom: 10px;
 }
 

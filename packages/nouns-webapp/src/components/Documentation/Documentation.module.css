@@ -1,6 +1,8 @@
 .headerWrapper h1 {
-  font-family: 'Londrina Solid';
-  font-size: 4rem;
+  font-family: 'Work Sans';
+  font-style: italic;
+  font-weight: 900;
+  font-size: 3rem;
 }
 
 .headerWrapper p {
@@ -8,7 +10,7 @@
   font-weight: 500;
   letter-spacing: -0.25px;
   line-height: 28px;
-  margin: 3rem 0;
+  margin: 1.25rem 0;
 }
 
 .accordionItem {
@@ -46,8 +48,9 @@
 .accordionHeader button {
   border: none;
   background-color: transparent;
-  font-family: 'Londrina Solid';
-  font-size: 2.5rem !important;
+  font-family: 'Work Sans';
+  font-weight: 900;
+  font-size: 2rem !important;
   cursor: pointer;
   line-height: normal;
   padding-top: 0;
