@@ -6,7 +6,7 @@ import {
   AuctionSettledEvent,
   BidEvent,
 } from '../../utils/types';
-import { Auction as IAuction } from '../../wrappers/nounsAuction';
+import { Auction as IAuction } from '../../wrappers/tokenAuction';
 
 export interface AuctionState {
   activeAuction?: IAuction;
@@ -23,7 +23,7 @@ export const reduxSafeNewAuction = (auction: AuctionCreateEvent): IAuction => ({
   bidder: '',
   startTime: BigNumber.from(auction.startTime).toJSON(),
   endTime: BigNumber.from(auction.endTime).toJSON(),
-  nounId: BigNumber.from(auction.nounId).toJSON(),
+  tokenId: BigNumber.from(auction.tokenId).toJSON(),
   settled: false,
 });
 
@@ -32,12 +32,12 @@ export const reduxSafeAuction = (auction: IAuction): IAuction => ({
   bidder: auction.bidder,
   startTime: BigNumber.from(auction.startTime).toJSON(),
   endTime: BigNumber.from(auction.endTime).toJSON(),
-  nounId: BigNumber.from(auction.nounId).toJSON(),
+  tokenId: BigNumber.from(auction.tokenId).toJSON(),
   settled: auction.settled,
 });
 
 export const reduxSafeBid = (bid: BidEvent): BidEvent => ({
-  nounId: BigNumber.from(bid.nounId).toJSON(),
+  tokenId: BigNumber.from(bid.tokenId).toJSON(),
   sender: bid.sender,
   value: BigNumber.from(bid.value).toJSON(),
   extended: bid.extended,

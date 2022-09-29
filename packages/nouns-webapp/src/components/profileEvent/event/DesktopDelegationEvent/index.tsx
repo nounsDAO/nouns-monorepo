@@ -1,6 +1,6 @@
 import React from 'react';
 import { buildEtherscanAddressLink } from '../../../../utils/etherscan';
-import { DelegationEvent } from '../../../../wrappers/nounActivity';
+import { DelegationEvent } from '../../../../wrappers/nActivity';
 import classes from './DesktopDelegationEvent.module.css';
 import DesktopNounActivityRow from '../../activityRow/DesktopNounActivityRow';
 import { ScaleIcon } from '@heroicons/react/solid';

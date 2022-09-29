@@ -6,7 +6,7 @@ import {
   useProposal,
   useQueueProposal,
 } from '../../wrappers/nounsDao';
-import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
+import { useUserVotesAsOfBlock } from '../../wrappers/nToken';
 import classes from './Vote.module.css';
 import { RouteComponentProps } from 'react-router-dom';
 import { TransactionStatus, useBlockNumber } from '@usedapp/core';

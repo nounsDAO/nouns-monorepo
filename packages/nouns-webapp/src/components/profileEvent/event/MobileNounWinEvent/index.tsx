@@ -1,6 +1,6 @@
 import React from 'react';
 import { buildEtherscanTxLink } from '../../../../utils/etherscan';
-import { NounWinEvent } from '../../../../wrappers/nounActivity';
+import { NounWinEvent } from '../../../../wrappers/nActivity';
 import classes from './MobileNounWinEvent.module.css';
 import MobileNounActivityRow from '../../activityRow/MobileNounActivityRow';
 import { CakeIcon } from '@heroicons/react/solid';

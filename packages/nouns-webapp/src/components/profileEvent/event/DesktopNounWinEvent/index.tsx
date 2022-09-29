@@ -1,6 +1,6 @@
 import React from 'react';
 import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../../../utils/etherscan';
-import { NounWinEvent } from '../../../../wrappers/nounActivity';
+import { NounWinEvent } from '../../../../wrappers/nActivity';
 import classes from './DesktopNounWinEvent.module.css';
 import DesktopNounActivityRow from '../../activityRow/DesktopNounActivityRow';
 import { CakeIcon } from '@heroicons/react/solid';

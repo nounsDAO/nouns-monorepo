@@ -7,7 +7,7 @@ import {
   NounWinEvent,
   ProposalVoteEvent,
   TransferEvent,
-} from '../../wrappers/nounActivity';
+} from '../../wrappers/nActivity';
 import BrandSpinner from '../BrandSpinner';
 import DesktopDelegationEvent from '../profileEvent/event/DesktopDelegationEvent';
 import DesktopNounWinEvent from '../profileEvent/event/DesktopNounWinEvent';

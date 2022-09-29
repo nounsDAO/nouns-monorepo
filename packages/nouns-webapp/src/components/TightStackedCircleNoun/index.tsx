@@ -1,4 +1,4 @@
-import { useNounSeed } from '../../wrappers/nounToken';
+import { useNounSeed } from '../../wrappers/nToken';
 import { BigNumber } from 'ethers';
 import { getNoun } from '../StandaloneNoun';
 import { LoadingNoun } from '../Noun';

@@ -3,7 +3,7 @@ import { Trans } from '@lingui/macro';
 import React, { useEffect, useState } from 'react';
 import { useShortAddress } from '../../utils/addressAndENSDisplayUtils';
 import ShortAddress from '../ShortAddress';
-import { useAccountVotes } from '../../wrappers/nounToken';
+import { useAccountVotes } from '../../wrappers/nToken';
 import { ChangeDelegateState } from '../ChangeDelegatePannel';
 import { usePickByState } from '../../utils/pickByState';
 import DelegationCandidateVoteCountInfo from '../DelegationCandidateVoteCountInfo';
