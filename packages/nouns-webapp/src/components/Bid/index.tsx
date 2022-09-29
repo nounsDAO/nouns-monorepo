@@ -32,7 +32,7 @@ const computeMinimumNextBid = (
 
 const minBidEth = (minBid: BigNumber): string => {
   if (minBid.isZero()) {
-    return '0.01';
+    return '0.33';
   }
 
   const eth = utils.formatEther(EthersBN.from(minBid.toString()));
