@@ -401,7 +401,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                         }
                                                      />
                                                      <p className={classes.nounIdOverlay}>
-                                                        Noun {i}
+                                                        {i}
                                                      </p>
                                                     {/* <StandaloneNounImage nounId={BigNumber.from(i)} /> */}
                                                 </button>
