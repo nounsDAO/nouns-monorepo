@@ -246,7 +246,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
 
     const sortOptions = [
         {
-            label: "Youngest Nouns", value: "date-descending"
+            label: "Latest Nouns", value: "date-descending"
         },
         {
             label: "Oldest Nouns", value: "date-ascending"
@@ -272,7 +272,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                 >
                 {/* Todo: move wrapper into parent component */}
                 <motion.div 
-                    className={cx(classes.gridWrap, isSidebarVisible && classes.sidebarVisible)}
+                    className={cx(classes.gridWrap, isSidebarVisible && classes.sidebarVisible, !isSidebarVisible && classes.sidebarHidden)}
                     // layout            
                     // variants={gridVariants}
                     // initial={!isSidebarVisible && "closed"}
@@ -366,7 +366,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                         }
                                                      />
                                                      <p className={classes.nounIdOverlay}>
-                                                        Noun {i}
+                                                        {i}
                                                      </p>
                                                     {/* <StandaloneNounImage nounId={BigNumber.from(i)} /> */}
                                                 </button>
