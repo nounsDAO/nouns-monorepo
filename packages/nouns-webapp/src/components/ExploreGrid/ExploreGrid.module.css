@@ -450,6 +450,9 @@ li.activeNoun button img, li.activeNoun:hover button img {
     .exploreGrid .activeNoun.nounIdOverlay { 
         display: none;
     }
+    .exploreGrid .nounIdOverlay {
+        border-radius: 3px;
+    }
 }
 
 @media (max-width: 400px) {

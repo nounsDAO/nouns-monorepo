@@ -18,7 +18,7 @@
 .detailWrap .detail::-webkit-scrollbar-track {
 }
 .detailWrap .detail::-webkit-scrollbar {
-    width: 0.5em;
+    width: 0.35em;
 }
 .detailWrap .detail  {
     scrollbar-color: rgba(0,0,0,0.15) transparent;
@@ -235,39 +235,23 @@ h2 {
 @media (max-width: 992px) {
     .detailWrap {
         width: 100%;
-        /* width: calc(100% - 30px) !important; */
         height: 100%;
-        /* background: rgba(255,255,255,0.5); */
         position: fixed;
         top: 0;
         left: 0;
         z-index: 100;
-        overflow-y: scroll;
+        overflow-y: auto;
         overscroll-behavior: contain;
         border-radius: 8px;
         contain: content;
         background: transparent;
-        /* padding-bottom: 15px; */
         max-width: none;
-        /* position: fixed; 
-   overflow-y: scroll;
-   top: 0; right: 0; bottom: 0; left: 0;  */
     }
 
     .detailWrap > div {
         height: fit-content;
     }
     
-    /* .detailWrap::after {
-        content: "";
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,.6);
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 0;
-    } */
     .detail {
         width: calc(100% - 30px) !important;
         padding: 15px 2% 15px;
@@ -275,8 +259,6 @@ h2 {
         border-radius: 8px;
         contain: content;
         position: relative;
-        /* z-index: 1; */
-        /* position: absolute; */
     }  
     .detail > div {
         height: auto;

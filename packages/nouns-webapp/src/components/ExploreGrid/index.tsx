@@ -146,7 +146,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
 
     const buttonsRef = useRef<(HTMLButtonElement | null)[]>([])
     const focusNoun = (index: number) => {
-        console.log("focusing noun");
+        // console.log("focusing noun");
         index && buttonsRef.current[index]?.focus();
         setActiveNoun(index);
         setSelectedNoun(index);
@@ -201,40 +201,39 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
             amountToMove = 5;
         }
         if (width <= 1399) {
-            amountToMove = 10;
+            amountToMove = 8;
         }
 
-        if (selectedNoun) {
-
+        if (selectedNoun !== undefined && selectedNoun >= 0) {
             if (keyboardEsc) {
                 setIsSidebarVisible(false);
-                setSelectedNoun(undefined)
+                setSelectedNoun(undefined);
             }
             if (sortOrder === "date-descending") {
-                if (keyboardPrev) {
-                    focusNoun(selectedNoun && selectedNoun + 1);
+                if (keyboardPrev && (selectedNoun + 1 < nounCount)) {
+                    focusNoun(selectedNoun + 1);
                 }
-                if (keyboardNext) {
-                    focusNoun(selectedNoun && selectedNoun - 1);
+                if (keyboardNext && (selectedNoun - 1 >= 0)) {
+                    focusNoun(selectedNoun - 1);
                 }
-                if (keyboardUp) {
-                    focusNoun(selectedNoun && selectedNoun + amountToMove);
+                if (keyboardUp && (selectedNoun + amountToMove < nounCount)) {
+                    focusNoun(selectedNoun + amountToMove);
                 }
-                if (keyboardDown) {
-                    focusNoun(selectedNoun && selectedNoun - amountToMove);
+                if (keyboardDown && (selectedNoun - amountToMove >= 0)) {
+                    focusNoun(selectedNoun - amountToMove);
                 }
             } else {
-                if (keyboardPrev) {
-                    focusNoun(selectedNoun && selectedNoun - 1);
+                if (keyboardPrev && (selectedNoun - 1 >= 0)) {
+                    focusNoun(selectedNoun - 1);
                 }
-                if (keyboardNext) {
-                    focusNoun(selectedNoun && selectedNoun + 1);
+                if (keyboardNext && (selectedNoun + 1 < nounCount)) {
+                    focusNoun(selectedNoun + 1);
                 }
-                if (keyboardUp) {
-                    focusNoun(selectedNoun && selectedNoun - amountToMove);
+                if (keyboardUp && (selectedNoun - amountToMove >= 0)) {
+                    focusNoun(selectedNoun - amountToMove);
                 }
-                if (keyboardDown) {
-                    focusNoun(selectedNoun && selectedNoun + amountToMove);
+                if (keyboardDown && (selectedNoun + amountToMove < nounCount)) {
+                    focusNoun(selectedNoun + amountToMove);
                 }
             }
         }
