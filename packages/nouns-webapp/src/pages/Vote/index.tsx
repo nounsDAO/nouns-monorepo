@@ -378,7 +378,7 @@ const VotePage = ({
                     data-for="view-dq-info"
                     data-tip="View Dynamic Quorum Info"
                     onClick={() => setShowDynamicQuorumInfoModal(true && isV2Prop)}
-                    className={classes.thresholdInfo}
+                    className={clsx(classes.thresholdInfo, isV2Prop ? classes.cursorPointer : "")}
                   >
                     <span>{isV2Prop ? <Trans>Current Quorum</Trans> : <Trans>Quorum</Trans>}</span>
                     <h3>
