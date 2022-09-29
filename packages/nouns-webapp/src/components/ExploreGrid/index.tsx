@@ -18,36 +18,36 @@ interface ExploreGridProps {
 }
 
 // Custom hook
-// function useKeyPress(targetKey: string) {
-//     // State for keeping track of whether key is pressed
-//     const [keyPressed, setKeyPressed] = useState(false);
+function useKeyPress(targetKey: string) {
+    // State for keeping track of whether key is pressed
+    const [keyPressed, setKeyPressed] = useState(false);
   
-//     // Add event listeners
-//     useEffect(() => {
-//       // If pressed key is our target key then set to true
-//       function downHandler({ key }: KeyboardEvent) {
-//         if (key === targetKey) {
-//           setKeyPressed(true);
-//         }
-//       }
-//       // If released key is our target key then set to false
-//       const upHandler = ({ key }: KeyboardEvent) => {
-//         if (key === targetKey) {
-//           setKeyPressed(false);
-//         }
-//       };
+    // Add event listeners
+    useEffect(() => {
+      // If pressed key is our target key then set to true
+      function downHandler({ key }: KeyboardEvent) {
+        if (key === targetKey) {
+          setKeyPressed(true);
+        }
+      }
+      // If released key is our target key then set to false
+      const upHandler = ({ key }: KeyboardEvent) => {
+        if (key === targetKey) {
+          setKeyPressed(false);
+        }
+      };
   
-//       window.addEventListener('keydown', downHandler);
-//       window.addEventListener('keyup', upHandler);
-//       // Remove event listeners on cleanup
-//       return () => {
-//         window.removeEventListener('keydown', downHandler);
-//         window.removeEventListener('keyup', upHandler);
-//       };
-//     }, [targetKey]); // rerun the effect if the targetKey changes
+      window.addEventListener('keydown', downHandler);
+      window.addEventListener('keyup', upHandler);
+      // Remove event listeners on cleanup
+      return () => {
+        window.removeEventListener('keydown', downHandler);
+        window.removeEventListener('keyup', upHandler);
+      };
+    }, [targetKey]); // rerun the effect if the targetKey changes
   
-//     return keyPressed;
-//   }
+    return keyPressed;
+  }
 
 
 const ExploreGrid: React.FC<ExploreGridProps> = props => {
@@ -138,11 +138,11 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         // sidebarVisibility !== "visible" && setSelectedNoun(undefined);
     }
 
-    // const keyboardPrev: boolean = useKeyPress("ArrowLeft");
-    // const keyboardNext: boolean = useKeyPress("ArrowRight");
-    // const keyboardUp: boolean = useKeyPress("ArrowUp");
-    // const keyboardDown: boolean = useKeyPress("ArrowDown");
-    // const keyboardEsc: boolean = useKeyPress("Escape");
+    const keyboardPrev: boolean = useKeyPress("ArrowLeft");
+    const keyboardNext: boolean = useKeyPress("ArrowRight");
+    const keyboardUp: boolean = useKeyPress("ArrowUp");
+    const keyboardDown: boolean = useKeyPress("ArrowDown");
+    const keyboardEsc: boolean = useKeyPress("Escape");
 
     const buttonsRef = useRef<(HTMLButtonElement | null)[]>([])
     const focusNoun = (index: number) => {
@@ -185,61 +185,61 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     //         // y: 0,
     //     },
     // }
+
+    // Cols by max-width
+    // 400px: 3
+    // 991px: 5
+    // 1399px: 8
+    // > 10
     
-    // useEffect(() => {
-    //     if (keyboardEsc) {
-    //         setIsSidebarVisible(false);
-    //         setSelectedNoun(undefined)
-    //     }
-    //     if (sortOrder === "date-descending") {
-    //         if (keyboardPrev) {
-    //             focusNoun(selectedNoun && selectedNoun + 1);
-    //         }
-    //         if (keyboardNext) {
-    //             focusNoun(selectedNoun && selectedNoun - 1);
-    //         }
-    //         if (keyboardUp) {
-    //             if (activeSizeOption === "small") {
-    //                 focusNoun(selectedNoun && selectedNoun + 20);
-    //             }
-    //             if (activeSizeOption === "large") {
-    //                 focusNoun(selectedNoun && selectedNoun + 7);
-    //             }
-    //         }
-    //         if (keyboardDown) {
-    //             if (activeSizeOption === "small") {
-    //                 focusNoun(selectedNoun && selectedNoun - 20);
-    //             }
-    //             if (activeSizeOption === "large") {
-    //                 focusNoun(selectedNoun && selectedNoun - 7);
-    //             }
-    //         }
-    //     } else {
-    //         if (keyboardPrev) {
-    //             focusNoun(selectedNoun && selectedNoun - 1);
-    //         }
-    //         if (keyboardNext) {
-    //             focusNoun(selectedNoun && selectedNoun + 1);
-    //         }
-    //         if (keyboardUp) {
-    //             if (activeSizeOption === "small") {
-    //                 focusNoun(selectedNoun && selectedNoun - 20);
-    //             }
-    //             if (activeSizeOption === "large") {
-    //                 focusNoun(selectedNoun && selectedNoun - 7);
-    //             }
-    //         }
-    //         if (keyboardDown) {
-    //             if (activeSizeOption === "small") {
-    //                 focusNoun(selectedNoun && selectedNoun + 20);
-    //             }
-    //             if (activeSizeOption === "large") {
-    //                 focusNoun(selectedNoun && selectedNoun + 7);
-    //             }
-    //         }
-    //     }
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [keyboardPrev, keyboardNext, keyboardUp, keyboardDown, keyboardEsc]);
+    useEffect(() => {
+        let amountToMove = 10;
+        if (width <= 400) {
+            amountToMove = 3;
+        }
+        if (width <= 991) {
+            amountToMove = 5;
+        }
+        if (width <= 1399) {
+            amountToMove = 10;
+        }
+
+        if (selectedNoun) {
+
+            if (keyboardEsc) {
+                setIsSidebarVisible(false);
+                setSelectedNoun(undefined)
+            }
+            if (sortOrder === "date-descending") {
+                if (keyboardPrev) {
+                    focusNoun(selectedNoun && selectedNoun + 1);
+                }
+                if (keyboardNext) {
+                    focusNoun(selectedNoun && selectedNoun - 1);
+                }
+                if (keyboardUp) {
+                    focusNoun(selectedNoun && selectedNoun + amountToMove);
+                }
+                if (keyboardDown) {
+                    focusNoun(selectedNoun && selectedNoun - amountToMove);
+                }
+            } else {
+                if (keyboardPrev) {
+                    focusNoun(selectedNoun && selectedNoun - 1);
+                }
+                if (keyboardNext) {
+                    focusNoun(selectedNoun && selectedNoun + 1);
+                }
+                if (keyboardUp) {
+                    focusNoun(selectedNoun && selectedNoun - amountToMove);
+                }
+                if (keyboardDown) {
+                    focusNoun(selectedNoun && selectedNoun + amountToMove);
+                }
+            }
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [keyboardPrev, keyboardNext, keyboardUp, keyboardDown, keyboardEsc]);
 
     // const iconLargeGrid = <><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#000" d="M0 2.571A2.571 2.571 0 0 1 2.571 0h5.143a2.571 2.571 0 0 1 2.572 2.571v5.143a2.571 2.571 0 0 1-2.572 2.572H2.571A2.571 2.571 0 0 1 0 7.714V2.571Zm13.714 0A2.572 2.572 0 0 1 16.286 0h5.143A2.571 2.571 0 0 1 24 2.571v5.143a2.571 2.571 0 0 1-2.571 2.572h-5.143a2.572 2.572 0 0 1-2.572-2.572V2.571ZM0 16.286a2.572 2.572 0 0 1 2.571-2.572h5.143a2.572 2.572 0 0 1 2.572 2.572v5.143A2.571 2.571 0 0 1 7.714 24H2.571A2.571 2.571 0 0 1 0 21.429v-5.143Zm13.714 0a2.572 2.572 0 0 1 2.572-2.572h5.143A2.571 2.571 0 0 1 24 16.286v5.143A2.57 2.57 0 0 1 21.429 24h-5.143a2.571 2.571 0 0 1-2.572-2.571v-5.143Z"/></svg></>;
     // const iconSmallGrid = <><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#000" d="M0 1.714A1.714 1.714 0 0 1 1.714 0h3.429a1.714 1.714 0 0 1 1.714 1.714v3.429a1.714 1.714 0 0 1-1.714 1.714H1.714A1.714 1.714 0 0 1 0 5.143V1.714Zm8.571 0A1.714 1.714 0 0 1 10.286 0h3.428a1.714 1.714 0 0 1 1.715 1.714v3.429a1.714 1.714 0 0 1-1.715 1.714h-3.428A1.714 1.714 0 0 1 8.57 5.143V1.714Zm8.572 0A1.714 1.714 0 0 1 18.857 0h3.429A1.714 1.714 0 0 1 24 1.714v3.429a1.714 1.714 0 0 1-1.714 1.714h-3.429a1.714 1.714 0 0 1-1.714-1.714V1.714ZM0 10.286A1.714 1.714 0 0 1 1.714 8.57h3.429a1.714 1.714 0 0 1 1.714 1.715v3.428a1.714 1.714 0 0 1-1.714 1.715H1.714A1.714 1.714 0 0 1 0 13.714v-3.428Zm8.571 0a1.714 1.714 0 0 1 1.715-1.715h3.428a1.714 1.714 0 0 1 1.715 1.715v3.428a1.714 1.714 0 0 1-1.715 1.715h-3.428a1.714 1.714 0 0 1-1.715-1.715v-3.428Zm8.572 0a1.714 1.714 0 0 1 1.714-1.715h3.429A1.714 1.714 0 0 1 24 10.286v3.428a1.714 1.714 0 0 1-1.714 1.715h-3.429a1.714 1.714 0 0 1-1.714-1.715v-3.428ZM0 18.857a1.714 1.714 0 0 1 1.714-1.714h3.429a1.714 1.714 0 0 1 1.714 1.714v3.429A1.714 1.714 0 0 1 5.143 24H1.714A1.714 1.714 0 0 1 0 22.286v-3.429Zm8.571 0a1.714 1.714 0 0 1 1.715-1.714h3.428a1.714 1.714 0 0 1 1.715 1.714v3.429A1.714 1.714 0 0 1 13.714 24h-3.428a1.714 1.714 0 0 1-1.715-1.714v-3.429Zm8.572 0a1.714 1.714 0 0 1 1.714-1.714h3.429A1.714 1.714 0 0 1 24 18.857v3.429A1.714 1.714 0 0 1 22.286 24h-3.429a1.714 1.714 0 0 1-1.714-1.714v-3.429Z"/></svg></>;  
