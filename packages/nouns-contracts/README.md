@@ -1,3 +1,14 @@
+# Noun Sequitur
+
+## Dev tasks
+
+- [ ] contracts/token
+- [ ] contract info: nouns-contracts/contract-uri.json
+- [ ] token image is ipfs known in advance
+- [ ] test lays out parameters wanted
+- [ ] contracts/auction house
+- [ ] contracts/treasury (NounsDAOExecutor)
+
 # @nouns/contracts
 
 ## Background
@@ -36,6 +47,12 @@ yarn build
 
 ```sh
 yarn test
+```
+
+Test specific file:
+
+```sh
+yarn test ./test/path-to-file
 ```
 
 ### Install forge dependencies

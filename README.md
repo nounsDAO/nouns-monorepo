@@ -1,6 +1,12 @@
-# nouns-monorepo
+# nounsequitur-monorepo
 
-Nouns DAO is a generative avatar art collective run by a group of crypto misfits.
+Noun Sequitur is a comic strip for all time.
+Based on Nouns DAO, a generative avatar art collective run by a group of crypto misfits.
+
+TODOs:
+[ ] contracts (see readme in package)
+[ ] names based on Noun Sequitur
+[ ] remove unused packages
 
 ## Contributing
 
