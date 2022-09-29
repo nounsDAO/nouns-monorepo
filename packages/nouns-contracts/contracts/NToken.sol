@@ -64,6 +64,10 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
     /**
      * @notice Require that the minter has not been locked.
      */
+
+
+
+
     modifier whenMinterNotLocked() {
         require(!isMinterLocked, 'Minter is locked');
         _;
@@ -268,5 +272,11 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
         emit PunkCreated(punkId, seed);
 
         return punkId;
+    }
+
+    function registerOGHashes(bytes32[] calldata hashes) external onlyOwner {
+        for(uint i = 0; i < hashes.length; i ++) {
+            seedHashes[hashes[i]] = 1;
+        }
     }
 }

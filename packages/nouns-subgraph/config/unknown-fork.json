@@ -1,0 +1,15 @@
+{
+  "network": "unknown",
+  "nToken": {
+    "address": "0x0165878A594ca255338adfa4d48449f69242Eb8F",
+    "startBlock": 7
+  },
+  "nAuctionHouse": {
+    "address": "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318",
+    "startBlock": 10
+  },
+  "nDAO": {
+    "address": "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
+    "startBlock": 13
+  }
+}
