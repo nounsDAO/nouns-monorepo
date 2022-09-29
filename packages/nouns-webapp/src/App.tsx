@@ -34,6 +34,7 @@ function App() {
   }, [account, dispatch]);
 
   const alertModal = useAppSelector(state => state.application.alertModal);
+  console.log({CHAIN_ID})
 
   return (
     <div className={`${classes.wrapper}`}>
