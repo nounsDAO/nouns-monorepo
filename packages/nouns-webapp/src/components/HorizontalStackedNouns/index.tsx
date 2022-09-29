@@ -1,29 +1,29 @@
 import { BigNumber } from 'ethers';
 import React from 'react';
-import { StandaloneNounCircular } from '../StandaloneNoun';
+import { StandaloneTokenCircular } from '../StandaloneNoun';
 import classes from './HorizontalStackedNouns.module.css';
 
-interface HorizontalStackedNounsProps {
-  nounIds: string[];
+interface HorizontalStackedTokensProps {
+  tokenIds: string[];
 }
 
-const HorizontalStackedNouns: React.FC<HorizontalStackedNounsProps> = props => {
-  const { nounIds } = props;
+const HorizontalStackedNouns: React.FC<HorizontalStackedTokensProps> = props => {
+  const { tokenIds } = props;
   return (
     <div className={classes.wrapper}>
-      {nounIds
+      {tokenIds
         .slice(0, 6)
-        .map((nounId: string, i: number) => {
+        .map((tokenId: string, i: number) => {
           return (
             <div
-              key={nounId.toString()}
+              key={tokenId.toString()}
               style={{
                 top: '0px',
                 left: `${25 * i}px`,
               }}
               className={classes.nounWrapper}
             >
-              <StandaloneNounCircular nounId={BigNumber.from(nounId)} border={true} />
+              <StandaloneTokenCircular tokenId={BigNumber.from(tokenId)} border={true} />
             </div>
           );
         })

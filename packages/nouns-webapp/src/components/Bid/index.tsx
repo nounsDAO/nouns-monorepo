@@ -1,4 +1,4 @@
-import { Auction, AuctionHouseContractFunction } from '../../wrappers/nounsAuction';
+import { Auction, AuctionHouseContractFunction } from '../../wrappers/tokenAuction';
 import { useEthers, useContractFunction } from '@usedapp/core';
 import { connectContractToSigner } from '@usedapp/core/dist/cjs/src/hooks';
 import { useAppSelector } from '../../hooks';
@@ -7,10 +7,10 @@ import { utils, BigNumber as EthersBN } from 'ethers';
 import BigNumber from 'bignumber.js';
 import classes from './Bid.module.css';
 import { Spinner, InputGroup, FormControl, Button, Col } from 'react-bootstrap';
-import { useAuctionMinBidIncPercentage } from '../../wrappers/nounsAuction';
+import { useAuctionMinBidIncPercentage } from '../../wrappers/tokenAuction';
 import { useAppDispatch } from '../../hooks';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
-import { NounsAuctionHouseFactory } from '@nouns/sdk';
+import { NAuctionHouseFactory } from '@nouns/sdk';
 import config from '../../config';
 import WalletConnectModal from '../WalletConnectModal';
 import SettleManuallyBtn from '../SettleManuallyBtn';
@@ -54,8 +54,8 @@ const Bid: React.FC<{
   const { library } = useEthers();
   let { auction, auctionEnded } = props;
   const activeLocale = useActiveLocale();
-  const nounsAuctionHouseContract = new NounsAuctionHouseFactory().attach(
-    config.addresses.nounsAuctionHouseProxy,
+  const nAuctionHouseContract = new NAuctionHouseFactory().attach(
+    config.addresses.nAuctionHouseProxy,
   );
 
   const account = useAppSelector(state => state.account.activeAccount);

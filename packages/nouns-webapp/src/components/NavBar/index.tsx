@@ -28,10 +28,10 @@ const NavBar = () => {
   const stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
   const isCool = useAppSelector(state => state.application.isCoolBackground);
   const history = useHistory();
-  const ethBalance = useEtherBalance(config.addresses.nounsDaoExecutor);
+  const ethBalance = useEtherBalance(config.addresses.nDaoExecutor);
   const lidoBalanceAsETH = useLidoBalance();
   const treasuryBalance = ethBalance && lidoBalanceAsETH && ethBalance.add(lidoBalanceAsETH);
-  const daoEtherscanLink = buildEtherscanHoldingsLink(config.addresses.nounsDaoExecutor);
+  const daoEtherscanLink = buildEtherscanHoldingsLink(config.addresses.nDaoExecutor);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
 
   const useStateBg =

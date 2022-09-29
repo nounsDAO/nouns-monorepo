@@ -1,4 +1,4 @@
-import { Auction } from '../../wrappers/nounsAuction';
+import { Auction } from '../../wrappers/nAuction';
 import React, { useState, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
 import { Row, Col } from 'react-bootstrap';
@@ -26,7 +26,7 @@ import { Trans } from '@lingui/macro';
 import Holder from '../Holder';
 
 const openEtherscanBidHistory = () => {
-  const url = buildEtherscanAddressLink(config.addresses.nounsAuctionHouseProxy);
+  const url = buildEtherscanAddressLink(config.addresses.nAuctionHouseProxy);
   window.open(url);
 };
 
@@ -108,7 +108,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
               <AuctionActivityDateHeadline startTime={auction.startTime} />
             </AuctionTitleAndNavWrapper>
             <Col lg={12}>
-              <AuctionActivityNounTitle isCool={isCool} nounId={auction.nounId} />
+              <AuctionActivityNounTitle isCool={isCool} nounId={auction.tokenId} />
             </Col>
           </Row>
           <Row className={classes.activityRow}>
@@ -123,7 +123,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
                 isLastAuction ? (
                   <Winner winner={auction.bidder} />
                 ) : (
-                  <Holder nounId={auction.nounId.toNumber()} />
+                  <Holder nounId={auction.tokenId.toNumber()} />
                 )
               ) : (
                 <AuctionTimer auction={auction} auctionEnded={auctionEnded} />
@@ -154,13 +154,13 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
           <Col lg={12}>
             {!isLastAuction ? (
               <NounInfoCard
-                nounId={auction.nounId.toNumber()}
+                nounId={auction.tokenId.toNumber()}
                 bidHistoryOnClickHandler={showBidModalHandler}
               />
             ) : (
               displayGraphDepComps && (
                 <BidHistory
-                  auctionId={auction.nounId.toString()}
+                  auctionId={auction.tokenId.toString()}
                   max={3}
                   classes={bidHistoryClasses}
                 />

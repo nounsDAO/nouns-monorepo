@@ -1,6 +1,6 @@
 import { useContractCall } from '@usedapp/core';
 import { BigNumber as EthersBN, utils } from 'ethers';
-import { NounsAuctionHouseABI } from '@nouns/sdk';
+import { NAuctionHouseABI } from '@nouns/sdk';
 import config from '../config';
 import BigNumber from 'bignumber.js';
 import { isNounderNoun } from '../utils/nounderNoun';
@@ -21,11 +21,11 @@ export interface Auction {
   bidder: string;
   endTime: EthersBN;
   startTime: EthersBN;
-  nounId: EthersBN;
+  tokenId: EthersBN;
   settled: boolean;
 }
 
-const abi = new utils.Interface(NounsAuctionHouseABI);
+const abi = new utils.Interface(NAuctionHouseABI);
 
 export const useAuction = (auctionHouseProxyAddress: string) => {
   const auction = useContractCall<Auction>({
@@ -40,7 +40,7 @@ export const useAuction = (auctionHouseProxyAddress: string) => {
 export const useAuctionMinBidIncPercentage = () => {
   const minBidIncrement = useContractCall({
     abi,
-    address: config.addresses.nounsAuctionHouseProxy,
+    address: config.addresses.nAuctionHouseProxy,
     method: 'minBidIncrementPercentage',
     args: [],
   });
@@ -54,19 +54,19 @@ export const useAuctionMinBidIncPercentage = () => {
 
 /**
  * Computes timestamp after which a Noun could vote
- * @param nounId TokenId of Noun
+ * @param tokenId TokenId of Noun
  * @returns Unix timestamp after which Noun could vote
  */
-export const useNounCanVoteTimestamp = (nounId: number) => {
-  const nextNounId = nounId + 1;
+export const useNounCanVoteTimestamp = (tokenId: number) => {
+  const nextTokenId = tokenId + 1;
 
-  const nextNounIdForQuery = isNounderNoun(EthersBN.from(nextNounId)) ? nextNounId + 1 : nextNounId;
+  const nextTokenIdForQuery = isNounderNoun(EthersBN.from(nextTokenId)) ? nextTokenId + 1 : nextTokenId;
 
   const pastAuctions = useAppSelector(state => state.pastAuctions.pastAuctions);
 
   const maybeNounCanVoteTimestamp = pastAuctions.find((auction: AuctionState, i: number) => {
-    const maybeNounId = auction.activeAuction?.nounId;
-    return maybeNounId ? EthersBN.from(maybeNounId).eq(EthersBN.from(nextNounIdForQuery)) : false;
+    const maybeTokenId = auction.activeAuction?.tokenId;
+    return maybeTokenId ? EthersBN.from(maybeTokenId).eq(EthersBN.from(nextTokenIdForQuery)) : false;
   })?.activeAuction?.startTime;
 
   if (!maybeNounCanVoteTimestamp) {

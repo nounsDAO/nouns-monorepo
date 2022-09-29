@@ -1,43 +1,43 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface OnDisplayAuctionState {
-  lastAuctionNounId: number | undefined;
-  onDisplayAuctionNounId: number | undefined;
+  lastAuctionTokenId: number | undefined;
+  onDisplayAuctionTokenId: number | undefined;
 }
 
 const initialState: OnDisplayAuctionState = {
-  lastAuctionNounId: undefined,
-  onDisplayAuctionNounId: undefined,
+  lastAuctionTokenId: undefined,
+  onDisplayAuctionTokenId: undefined,
 };
 
 const onDisplayAuction = createSlice({
   name: 'onDisplayAuction',
   initialState: initialState,
   reducers: {
-    setLastAuctionNounId: (state, action: PayloadAction<number>) => {
-      state.lastAuctionNounId = action.payload;
+    setLastAuctionTokenId: (state, action: PayloadAction<number>) => {
+      state.lastAuctionTokenId = action.payload;
     },
-    setOnDisplayAuctionNounId: (state, action: PayloadAction<number>) => {
-      state.onDisplayAuctionNounId = action.payload;
+    setOnDisplayAuctionTokenId: (state, action: PayloadAction<number>) => {
+      state.onDisplayAuctionTokenId = action.payload;
     },
-    setPrevOnDisplayAuctionNounId: state => {
-      if (!state.onDisplayAuctionNounId) return;
-      if (state.onDisplayAuctionNounId === 0) return;
-      state.onDisplayAuctionNounId = state.onDisplayAuctionNounId - 1;
+    setPrevOnDisplayAuctionTokenId: state => {
+      if (!state.onDisplayAuctionTokenId) return;
+      if (state.onDisplayAuctionTokenId === 0) return;
+      state.onDisplayAuctionTokenId = state.onDisplayAuctionTokenId - 1;
     },
-    setNextOnDisplayAuctionNounId: state => {
-      if (state.onDisplayAuctionNounId === undefined) return;
-      if (state.lastAuctionNounId === state.onDisplayAuctionNounId) return;
-      state.onDisplayAuctionNounId = state.onDisplayAuctionNounId + 1;
+    setNextOnDisplayAuctionTokenId: state => {
+      if (state.onDisplayAuctionTokenId === undefined) return;
+      if (state.lastAuctionTokenId === state.onDisplayAuctionTokenId) return;
+      state.onDisplayAuctionTokenId = state.onDisplayAuctionTokenId + 1;
     },
   },
 });
 
 export const {
-  setLastAuctionNounId,
-  setOnDisplayAuctionNounId,
-  setPrevOnDisplayAuctionNounId,
-  setNextOnDisplayAuctionNounId,
+  setLastAuctionTokenId,
+  setOnDisplayAuctionTokenId,
+  setPrevOnDisplayAuctionTokenId,
+  setNextOnDisplayAuctionTokenId,
 } = onDisplayAuction.actions;
 
 export default onDisplayAuction.reducer;
