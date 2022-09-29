@@ -1,4 +1,4 @@
-import { StandaloneNounCircular } from '../../components/StandaloneNoun';
+import { StandaloneTokenCircular } from '../../components/StandaloneNoun';
 import { BigNumber as EthersBN } from 'ethers';
 import classes from './NounImageVoteTable.module.css';
 import { GrayCircle } from '../GrayCircle';

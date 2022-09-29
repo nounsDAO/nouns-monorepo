@@ -1,12 +1,12 @@
 import { useQuery } from '@apollo/client';
-import { NounVoteHistory } from '../components/ProfileActivityFeed';
-import { useNounCanVoteTimestamp } from './nounsAuction';
-import { Proposal, ProposalState, useAllProposals } from './nounsDao';
+import { TokenVoteHistory } from '../components/ProfileActivityFeed';
+import { useTokenCanVoteTimestamp } from './tokenAuction';
+import { Proposal, ProposalState, useAllProposals } from './tokenDao';
 import {
   createTimestampAllProposals,
-  nounDelegationHistoryQuery,
-  nounTransferHistoryQuery,
-  nounVotingHistoryQuery,
+  nDelegationHistoryQuery,
+  nTransferHistoryQuery,
+  nVotingHistoryQuery,
 } from './subgraph';
 
 export enum NounEventType {

@@ -20,8 +20,8 @@ function useLidoBalance(): BigNumber | undefined {
   }, [library]);
 
   useEffect(() => {
-    if (!lidoContract || !addresses.nounsDaoExecutor) return;
-    lidoContract.balanceOf(addresses.nounsDaoExecutor).then(setBalance);
+    if (!lidoContract || !addresses.nDaoExecutor) return;
+    lidoContract.balanceOf(addresses.nDaoExecutor).then(setBalance);
   }, [lidoContract]);
 
   return balance;

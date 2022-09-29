@@ -24,7 +24,7 @@ const NounInfoCard: React.FC<NounInfoCardProps> = props => {
   const { nounId, bidHistoryOnClickHandler } = props;
 
   const etherscanButtonClickHandler = () =>
-    window.open(buildEtherscanTokenLink(config.addresses.nounsToken, nounId));
+    window.open(buildEtherscanTokenLink(config.addresses.nToken, nounId));
 
   const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
 

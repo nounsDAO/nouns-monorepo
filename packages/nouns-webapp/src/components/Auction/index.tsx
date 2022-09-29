@@ -4,16 +4,16 @@ import AuctionActivity from '../AuctionActivity';
 import { Row, Container } from 'react-bootstrap';
 import { setStateBackgroundColor } from '../../state/slices/application';
 import { LoadingNoun } from '../Noun';
-import { Auction as IAuction } from '../../wrappers/nounsAuction';
+import { Auction as IAuction } from '../../wrappers/nAuction';
 import classes from './Auction.module.css';
-import { INounSeed } from '../../wrappers/nounToken';
+import { ISeed } from '../../wrappers/nToken';
 import NounderNounContent from '../NounderNounContent';
 import { useHistory } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { isNounderNoun } from '../../utils/nounderNoun';
 import {
-  setNextOnDisplayAuctionNounId,
-  setPrevOnDisplayAuctionNounId,
+  setNextOnDisplayAuctionTokenId,
+  setPrevOnDisplayAuctionTokenId,
 } from '../../state/slices/onDisplayAuction';
 import { beige, grey } from '../../utils/nounBgColors';
 
@@ -27,25 +27,25 @@ const Auction: React.FC<AuctionProps> = props => {
   const history = useHistory();
   const dispatch = useAppDispatch();
   let stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
-  const lastNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
+  const lastTokenId = useAppSelector(state => state.onDisplayAuction.lastAuctionTokenId);
 
-  const loadedNounHandler = (seed: INounSeed) => {
+  const loadedNounHandler = (seed: ISeed) => {
     dispatch(setStateBackgroundColor(seed.background === 0 ? grey : beige));
   };
 
   const prevAuctionHandler = () => {
-    dispatch(setPrevOnDisplayAuctionNounId());
-    currentAuction && history.push(`/noun/${currentAuction.nounId.toNumber() - 1}`);
+    dispatch(setPrevOnDisplayAuctionTokenId());
+    currentAuction && history.push(`/noun/${currentAuction.tokenId.toNumber() - 1}`);
   };
   const nextAuctionHandler = () => {
-    dispatch(setNextOnDisplayAuctionNounId());
-    currentAuction && history.push(`/noun/${currentAuction.nounId.toNumber() + 1}`);
+    dispatch(setNextOnDisplayAuctionTokenId());
+    currentAuction && history.push(`/noun/${currentAuction.tokenId.toNumber() + 1}`);
   };
 
   const nounContent = currentAuction && (
     <div className={classes.nounWrapper}>
       <StandaloneNounWithSeed
-        nounId={currentAuction.nounId}
+        nounId={currentAuction.tokenId}
         onLoadSeed={loadedNounHandler}
         shouldLinkToProfile={false}
       />
@@ -58,22 +58,22 @@ const Auction: React.FC<AuctionProps> = props => {
     </div>
   );
 
-  const currentAuctionActivityContent = currentAuction && lastNounId && (
+  const currentAuctionActivityContent = currentAuction && lastTokenId && (
     <AuctionActivity
       auction={currentAuction}
-      isFirstAuction={currentAuction.nounId.eq(0)}
-      isLastAuction={currentAuction.nounId.eq(lastNounId)}
+      isFirstAuction={currentAuction.tokenId.eq(0)}
+      isLastAuction={currentAuction.tokenId.eq(lastTokenId)}
       onPrevAuctionClick={prevAuctionHandler}
       onNextAuctionClick={nextAuctionHandler}
       displayGraphDepComps={true}
     />
   );
-  const nounderNounContent = currentAuction && lastNounId && (
+  const nounderNounContent = currentAuction && lastTokenId && (
     <NounderNounContent
       mintTimestamp={currentAuction.startTime}
-      nounId={currentAuction.nounId}
-      isFirstAuction={currentAuction.nounId.eq(0)}
-      isLastAuction={currentAuction.nounId.eq(lastNounId)}
+      nounId={currentAuction.tokenId}
+      isFirstAuction={currentAuction.tokenId.eq(0)}
+      isLastAuction={currentAuction.tokenId.eq(lastTokenId)}
       onPrevAuctionClick={prevAuctionHandler}
       onNextAuctionClick={nextAuctionHandler}
     />
@@ -88,7 +88,7 @@ const Auction: React.FC<AuctionProps> = props => {
           </Col>
           <Col lg={{ span: 6 }} className={classes.auctionActivityCol}>
             {currentAuction &&
-              (isNounderNoun(currentAuction.nounId)
+              (isNounderNoun(currentAuction.tokenId)
                 ? nounderNounContent
                 : currentAuctionActivityContent)}
           </Col>
