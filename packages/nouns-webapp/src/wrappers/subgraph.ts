@@ -194,6 +194,14 @@ export const latestAuctionsQuery = () => gql`
   }
 `;
 
+export const totalNounSupplyAtPropSnapshot = (proposalId: string) => gql`
+{
+  proposals(where: {id: ${proposalId}}) {
+    totalSupply
+  }
+}
+`;
+
 export const latestBidsQuery = (first: number = 10) => gql`
 {
 	bids(

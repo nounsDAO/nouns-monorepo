@@ -2,7 +2,9 @@ import { Row, Col, Button, Card, Spinner } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import {
   ProposalState,
+  useCurrentQuorum,
   useExecuteProposal,
+  useIsPropUsingDAOV2,
   useProposal,
   useQueueProposal,
 } from '../../wrappers/nounsDao';
@@ -16,7 +18,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
 import VoteModal from '../../components/VoteModal';
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import clsx from 'clsx';
 import ProposalHeader from '../../components/ProposalHeader';
@@ -34,6 +36,10 @@ import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
+import { SearchIcon } from '@heroicons/react/solid';
+import ReactTooltip from 'react-tooltip';
+import DynamicQuorumInfoModal from '../../components/DynamicQuorumInfoModal';
+import config from '../../config';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -47,6 +53,7 @@ const VotePage = ({
   const proposal = useProposal(id);
 
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
+  const [showDynamicQuorumInfoModal, setShowDynamicQuorumInfoModal] = useState<boolean>(false);
   // Toggle between Noun centric view and delegate view
   const [isDelegateView, setIsDelegateView] = useState(false);
 
@@ -55,6 +62,8 @@ const VotePage = ({
 
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
+
+  const isV2Prop = useIsPropUsingDAOV2(id ?? '');
 
   const { queueProposal, queueProposalState } = useQueueProposal();
   const { executeProposal, executeProposalState } = useExecuteProposal();
@@ -239,6 +248,11 @@ const VotePage = ({
     }
   }, [showToast]);
 
+  const currentQuorum = useCurrentQuorum(
+    config.addresses.nounsDAOProxy,
+    proposal && proposal.id ? parseInt(proposal.id) : 0,
+  );
+
   if (!proposal || loading || !data) {
     return (
       <div className={classes.spinner}>
@@ -260,6 +274,13 @@ const VotePage = ({
 
   return (
     <Section fullWidth={false} className={classes.votePage}>
+      {showDynamicQuorumInfoModal && (
+        <DynamicQuorumInfoModal
+          proposal={proposal}
+          againstVotesAbsolute={againstNouns.length}
+          onDismiss={() => setShowDynamicQuorumInfoModal(false)}
+        />
+      )}
       <VoteModal
         show={showVoteModal}
         onHide={() => setShowVoteModal(false)}
@@ -344,12 +365,34 @@ const VotePage = ({
                       <Trans>Threshold</Trans>
                     </h1>
                   </div>
-                  <div className={classes.thresholdInfo}>
-                    <span>
-                      <Trans>Quorum</Trans>
-                    </span>
+                  {isV2Prop && (
+                    <ReactTooltip
+                      id={'view-dq-info'}
+                      className={classes.delegateHover}
+                      getContent={dataTip => {
+                        return <Trans>View Dynamic Quorum Info</Trans>;
+                      }}
+                    />
+                  )}
+                  <div
+                    data-for="view-dq-info"
+                    data-tip="View Dynamic Quorum Info"
+                    onClick={() => setShowDynamicQuorumInfoModal(true && isV2Prop)}
+                    className={classes.thresholdInfo}
+                  >
+                    <span>{isV2Prop ? <Trans>Current Quorum</Trans> : <Trans>Quorum</Trans>}</span>
                     <h3>
-                      <Trans>{i18n.number(proposal.quorumVotes)} votes</Trans>
+                      <Trans>
+                        {isV2Prop
+                          ? i18n.number(
+                              // TODO(brianj) implement logic to only use new value for v2 props
+                              // proposal.quorumVotes
+                              currentQuorum ?? 0,
+                            )
+                          : proposal.quorumVotes}{' '}
+                        votes
+                      </Trans>
+                      {isV2Prop && <SearchIcon className={classes.dqIcon} />}
                     </h3>
                   </div>
                 </div>
