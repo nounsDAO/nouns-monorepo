@@ -42,32 +42,49 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
   const options = {
     xMax: 10_000,
     xMin: 0,
-    yMax: 1.06 * maxQuorumBps,
+    yMax: 1.09 * maxQuorumBps,
     yMin: 0.87 * minQuorumBps,
   };
 
   const againstVotesLabelLineStart = pointsPositionsCalc(
     [[againstVotesBps, 0]],
-    950 * 1.0,
+    950,
     320,
     options,
-  );
+  ).map((pt: Array<number>) => {
+    return [pt[0], Math.min(288, pt[1])];
+  });
 
   const againstVotesLabelLineEnd = pointsPositionsCalc(
     [[againstVotesBps, dqmFunction(againstVotesBps)]],
-    950 * 1.0,
+    950,
     320,
     options,
-  );
+  ).map((pt: Array<number>) => {
+    return [pt[0], Math.min(288, pt[1])];
+  });
 
   const crossOver = pointsPositionsCalc(
-    [[linearToConstantCrossoverBPS, maxQuorumBps]],
-    950 * 1.0,
+    Array.apply(null, Array(totalNounSupply))
+      .map(function (_, i) {
+        return i;
+      })
+      .map(noVoteCount => [
+        Math.floor((noVoteCount / totalNounSupply) * 10_000),
+        dqmFunction(Math.floor((noVoteCount / totalNounSupply) * 10_000)),
+      ]),
+    950,
     320,
     options,
-  );
+  )
+    .reverse()
+    .filter((pt: Array<number>) => {
+      return pt[1] < 288;
+    })
+    .map((pt: Array<number>) => {
+      return `${pt[0]}, ${pt[1]}`;
+    });
 
-  console.log('DQM FUNCITON: ', dqmFunction(againstVotesBps));
   return (
     <>
       <div className={classes.closeBtnWrapper}>
@@ -147,7 +164,8 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                     stroke-dasharray="5"
                   />
                   <g fill="#4965F080" stroke="none">
-                    <polygon points={`950,288 950,32 ${crossOver[0][0]},32 0,288`} />
+                    {/* <polygon points={`950,288 950,32 ${crossOver[0][0]},32 0,288`} /> */}
+                    <polygon points={`950,288 950,32 ${crossOver} 0,288`} />
                     <polygon points={`950,320 950,288 ${0},288 0,320`} />
                   </g>
                   {/* Vertical Line indicating against BPS */}
@@ -175,27 +193,27 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                     fill="var(--brand-gray-light-text)"
                   />
                   <text x="20" y="24">
-                    Max Quorum: {Math.floor((maxQuorumBps * totalNounSupply) / 10_000)} Nouns
-                  </text>
-                  <text x="195" y="24" fill="var(--brand-gray-light-text)">
-                    ({maxQuorumBps / 100}% of Nouns)
+                    Max Quorum: {Math.floor((maxQuorumBps * totalNounSupply) / 10_000)} Nouns{' '}
+                    <tspan fill="var(--brand-gray-light-text)">
+                      ({maxQuorumBps / 100}% of Nouns)
+                    </tspan>
                   </text>
                   {Math.abs(againstVotesLabelLineEnd[0][1] - 10 - 288) > 100 ? (
                     <>
                       <text x="20" y="280">
-                        Min Quorum: {Math.floor((minQuorumBps * totalNounSupply) / 10_000)} Nouns
-                      </text>
-                      <text x="195" y="280" fill="var(--brand-gray-light-text)">
-                        ({minQuorumBps / 100}% of Nouns)
+                        Min Quorum: {Math.floor((minQuorumBps * totalNounSupply) / 10_000)} Nouns{' '}
+                        <tspan fill="var(--brand-gray-light-text)">
+                          ({minQuorumBps / 100}% of Nouns)
+                        </tspan>
                       </text>
                     </>
                   ) : (
                     <>
                       <text x="550" y="280">
-                        Min Quorum: {Math.floor((minQuorumBps * totalNounSupply) / 10_000)} Nouns
-                      </text>
-                      <text x="720" y="280" fill="var(--brand-gray-light-text)">
-                        ({minQuorumBps / 100}% of Nouns)
+                        Min Quorum: {Math.floor((minQuorumBps * totalNounSupply) / 10_000)} Nouns{' '}
+                        <tspan fill="var(--brand-gray-light-text)">
+                          ({minQuorumBps / 100}% of Nouns)
+                        </tspan>
                       </text>
                     </>
                   )}
@@ -221,7 +239,10 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                       {Math.floor(
                         (Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) * totalNounSupply) /
                           10_000,
-                      )}
+                      )}{' '}
+                      <tspan fill="var(--brand-gray-light-text)">
+                        ({againstVotesAbs} Nouns Currently Against)
+                      </tspan>
                     </text>
                   ) : (
                     <text
@@ -235,30 +256,10 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                       {Math.floor(
                         (Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) * totalNounSupply) /
                           10_000,
-                      )}
-                    </text>
-                  )}
-                  {againstVotesBps > 4000 ? (
-                    <text
-                      x={againstVotesLabelLineEnd[0][0] - 390 + 155}
-                      y={
-                        againstVotesLabelLineEnd[0][1] +
-                        (againstVotesBps > 0.9 * linearToConstantCrossoverBPS ? 20 : -10)
-                      }
-                      fill="var(--brand-gray-light-text)"
-                    >
-                      ({againstVotesAbs} Nouns Currently Against)
-                    </text>
-                  ) : (
-                    <text
-                      x={againstVotesLabelLineEnd[0][0] + 10 + 145}
-                      y={
-                        againstVotesLabelLineEnd[0][1] +
-                        (againstVotesBps > 0.9 * linearToConstantCrossoverBPS ? 20 : -10)
-                      }
-                      fill="var(--brand-gray-light-text)"
-                    >
-                      ({againstVotesAbs} Nouns Currently Against)
+                      )}{' '}
+                      <tspan fill="var(--brand-gray-light-text)">
+                        ({againstVotesAbs} Nouns Currently Against)
+                      </tspan>
                     </text>
                   )}
                   {againstVotesAbs > 0 && (
