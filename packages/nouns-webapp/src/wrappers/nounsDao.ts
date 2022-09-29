@@ -1,4 +1,4 @@
-import { NounsDAOABI, NounsDaoLogicV1Factory } from '@nouns/sdk';
+import { NounsDAOABI, NounsDAOV2ABI, NounsDaoLogicV1Factory } from '@nouns/sdk';
 import {
   ChainId,
   useBlockMeta,
@@ -17,6 +17,12 @@ import config, { CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
 import { proposalsQuery } from './subgraph';
 import BigNumber from 'bignumber.js';
+
+export interface DynamicQuorumParams {
+  minQuorumVotesBPS: number;
+  maxQuorumVotesBPS: number;
+  quorumCoefficient: number;
+}
 
 export enum Vote {
   AGAINST = 0,
@@ -117,6 +123,7 @@ export interface ProposalTransaction {
 }
 
 const abi = new utils.Interface(NounsDAOABI);
+const nounsDaoV2ABI = new utils.Interface(NounsDAOV2ABI);
 const nounsDaoContract = new NounsDaoLogicV1Factory().attach(config.addresses.nounsDAOProxy);
 
 // Start the log search at the mainnet deployment block to speed up log queries
@@ -167,6 +174,50 @@ const removeItalics = (text: string | null): string | null =>
   text ? text.replace(/__/g, '') : text;
 
 const removeMarkdownStyle = R.compose(removeBold, removeItalics);
+
+export const useIsPropUsingDAOV2 = (proposalId: string | undefined): boolean => {
+  const [totalSupply] =
+    useContractCall<[EthersBN]>({
+      abi,
+      address: nounsDaoContract.address,
+      method: 'totalSupply',
+      args: [proposalId],
+    }) || [];
+
+  return totalSupply?.toNumber() !== undefined;
+};
+
+export const useCurrentQuorum = (
+  nounsDao: string,
+  proposalId: number,
+  isV2?: boolean,
+): number | undefined => {
+  const [quorum] =
+    useContractCall<[EthersBN]>({
+      abi: isV2 ? nounsDaoV2ABI : abi,
+      address: nounsDao,
+      method: 'quorumVotes',
+      args: isV2 ? [proposalId] : [],
+    }) || [];
+  const res = quorum?.toNumber();
+  console.log(res);
+  return quorum?.toNumber();
+};
+
+export const useDynamicQuorumProps = (
+  nounsDao: string,
+  block: number,
+): DynamicQuorumParams | undefined => {
+  const [params] =
+    useContractCall<[DynamicQuorumParams]>({
+      abi: nounsDaoV2ABI,
+      address: nounsDao,
+      method: 'getDynamicQuorumParamsAt',
+      args: [block],
+    }) || [];
+
+  return params;
+};
 
 export const useHasVotedOnProposal = (proposalId: string | undefined): boolean => {
   const { account } = useEthers();

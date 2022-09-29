@@ -311,6 +311,14 @@ export const currentlyDelegatedNouns = (delegate: string) => gql`
 }
 `;
 
+export const totalNounSupplyAtPropSnapshot = (proposalId: string) => gql`
+{
+  proposals(where: {id: ${proposalId}}) {
+    totalSupply
+  }
+}
+`;
+
 export const clientFactory = (uri: string) =>
   new ApolloClient({
     uri,
