@@ -8,7 +8,7 @@ import {
   useProposalThreshold,
   usePropose,
 } from '../../wrappers/nounsDao';
-import { useUserVotes } from '../../wrappers/nounToken';
+import { useUserVotes } from '../../wrappers/nToken';
 import classes from './CreateProposal.module.css';
 import { Link } from 'react-router-dom';
 import { useEthers } from '@usedapp/core';

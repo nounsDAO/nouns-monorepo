@@ -7,7 +7,7 @@ import {
   NounWinEvent,
   ProposalVoteEvent,
   TransferEvent,
-} from '../../wrappers/nounActivity';
+} from '../../wrappers/nActivity';
 import MobileDelegationEvent from '../profileEvent/event/MobileDelegationEvent';
 import MobileNounWinEvent from '../profileEvent/event/MobileNounWinEvent';
 import MobileProposalVoteEvent from '../profileEvent/event/MobileProposalVoteEvent';

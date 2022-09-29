@@ -2,7 +2,7 @@ import classes from './BidHistoryModal.module.css';
 import ReactDOM from 'react-dom';
 import React from 'react';
 import { XIcon } from '@heroicons/react/solid';
-import { Auction } from '../../wrappers/nounsAuction';
+import { Auction } from '../../wrappers/tokenAuction';
 import { StandaloneNounRoundedCorners } from '../StandaloneNoun';
 import { useAuctionBids } from '../../wrappers/onDisplayAuction';
 import { Bid } from '../../utils/types';

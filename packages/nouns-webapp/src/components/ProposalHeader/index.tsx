@@ -7,7 +7,7 @@ import navBarButtonClasses from '../NavBarButton/NavBarButton.module.css';
 import { Proposal, useHasVotedOnProposal, useProposalVote } from '../../wrappers/nounsDao';
 import clsx from 'clsx';
 import { isMobileScreen } from '../../utils/isMobile';
-import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
+import { useUserVotesAsOfBlock } from '../../wrappers/nToken';
 import { useBlockTimestamp } from '../../hooks/useBlockTimestamp';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../../../utils/etherscan';
-import { TransferEvent } from '../../../../wrappers/nounActivity';
+import { TransferEvent } from '../../../../wrappers/nActivity';
 import classes from './DesktopTransferEvent.module.css';
 import DesktopNounActivityRow from '../../activityRow/DesktopNounActivityRow';
 import { SwitchHorizontalIcon } from '@heroicons/react/solid';

@@ -4,7 +4,7 @@ import Section from '../../layout/Section';
 import classes from './ProfileActivityFeed.module.css';
 
 import { Trans } from '@lingui/macro';
-import { useNounActivity } from '../../wrappers/nounActivity';
+import { useNounActivity } from '../../wrappers/nActivity';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 import ProfileActivityFeedToggle from '../ProfileActivityFeedToggle';
 import DesktopProfileActivityFeed from '../DesktopProfileActivityFeed';

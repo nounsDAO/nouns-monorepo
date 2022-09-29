@@ -1,6 +1,6 @@
 import React from 'react';
 import { buildEtherscanTxLink } from '../../../../utils/etherscan';
-import { DelegationEvent } from '../../../../wrappers/nounActivity';
+import { DelegationEvent } from '../../../../wrappers/nActivity';
 import classes from './MobileDelegationEvent.module.css';
 import MobileNounActivityRow from '../../activityRow/MobileNounActivityRow';
 import { ScaleIcon } from '@heroicons/react/solid';

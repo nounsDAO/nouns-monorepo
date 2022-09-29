@@ -2,7 +2,7 @@ import { useHistory } from 'react-router-dom';
 import { Image } from 'react-bootstrap';
 import classes from './DesktopProposalVoteEvent.module.css';
 import ProposalVoteInfoPillsContainer from '../../eventData/ProposalVoteInfoPillsContainer';
-import { ProposalVoteEvent } from '../../../../wrappers/nounActivity';
+import { ProposalVoteEvent } from '../../../../wrappers/nActivity';
 import React from 'react';
 import { getProposalVoteIcon } from '../../../../utils/nounActivity/getProposalVoteIcon';
 import ProposalVoteHeadline from '../../eventData/ProposalVoteHeadline';
