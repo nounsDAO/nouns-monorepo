@@ -133,10 +133,8 @@ export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = (
     dispatch(setOnDisplayAuctionNounId(nounId.toNumber()));
   };
   
-  console.log({seed})
 
   const { image, description } = getNoun(nounId, seed);
-  console.log({image, description})
 
   const noun = <Noun imgPath={image} alt={description} />;
   const nounWithLink = (

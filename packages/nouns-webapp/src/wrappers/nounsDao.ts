@@ -117,7 +117,6 @@ export interface ProposalTransaction {
 }
 
 const abi = new utils.Interface(NounsDAOABI);
-console.log({config})
 const nounsDaoContract = new NounsDaoLogicV1Factory().attach(config.addresses.nounsDAOProxy);
 
 // Start the log search at the mainnet deployment block to speed up log queries

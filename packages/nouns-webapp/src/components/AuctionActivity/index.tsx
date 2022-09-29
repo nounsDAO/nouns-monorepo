@@ -84,8 +84,6 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
 
   if (!auction) return null;
   
-  console.log({auction})
-
   return (
     <>
       {showBidHistoryModal && (

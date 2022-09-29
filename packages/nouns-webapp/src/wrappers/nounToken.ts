@@ -75,7 +75,6 @@ const useNounSeeds = () => {
 
   useEffect(() => {
     if (!cachedSeeds && data?.seeds?.length) {
-      console.log({data})
       localStorage.removeItem(seedCacheKey);
     }
   }, [data, cachedSeeds]);
@@ -115,7 +114,6 @@ export const useNounSeed = (nounId: EthersBN) => {
           head: response.head,
         },
       });
-      console.log({updatedSeedCache})
       localStorage.setItem(seedCacheKey, updatedSeedCache);
     }
     return response;

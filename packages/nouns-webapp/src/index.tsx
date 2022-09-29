@@ -94,7 +94,6 @@ const useDappConfig = {
   },
 };
 
-console.log({config})
 const client = clientFactory(config.app.subgraphApiUri);
 
 const Updaters = () => {
@@ -155,11 +154,8 @@ const ChainSubscriber: React.FC = () => {
     };
 
     // Fetch the current auction
-    console.log({nounsAuctionHouseContract})
     const address = await nounsAuctionHouseContract.address
-    console.log({address})
     const currentAuction = await nounsAuctionHouseContract.auction();
-    console.log({currentAuction})
     dispatch(setFullAuction(reduxSafeAuction(currentAuction)));
     dispatch(setLastAuctionNounId(currentAuction.nounId.toNumber()));
 
