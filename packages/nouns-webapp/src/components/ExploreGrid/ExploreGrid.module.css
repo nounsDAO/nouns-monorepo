@@ -64,19 +64,15 @@
     list-style-type: none;
     margin: 0;
     padding: 0;
-    width: 10%;
-    /* transition: border 0.05s ease-in-out; */
     transition: width 0.2s ease-in-out;
-    border: transparent 1px solid;
     animation-name: animateIn;
     animation-duration: 25ms;
     animation-delay: calc(var(--animation-order) * 25ms);
     animation-fill-mode: both;
     animation-timing-function: ease-in-out;
     border-radius: 10px;
-    /* overflow: hidden; */
     width: calc((100% / var(--columns)) - var(--gap) + (var(--gap) / var(--columns)));
-
+    
 }
 
 .exploreGrid.small li {
@@ -86,6 +82,7 @@
 
 .exploreGrid li:hover {
     /* border: 1px solid rgba(0,0,0,0.2) !important; */
+    box-shadow: 0 0px 0px 4px rgba(0 0 0 / 30%);
 }
 
 .exploreGrid li:hover img, .exploreGrid li.activeNoun:hover img {
@@ -157,7 +154,7 @@
 .exploreGrid li.activeNoun:focus .nounIdOverlay, 
 .exploreGrid li.activeNoun:hover .nounIdOverlay {
     opacity: 1;
-    bottom: 6px;
+    bottom: clamp(4px, 0.7vw, 12px);
     /* bottom: clamp(-3px, -0.6vw, -8px); */
     transition: none;
 }
@@ -213,16 +210,16 @@
     /* border: 5px solid rgb(214, 60, 94) !important; */
     /* background: rgba(214, 60, 94, 1); */
     background: rgba(0, 0, 0, 0.4);
-    border-radius: 5px;
+    /* border-radius: 5px; */
 }
-.activeNoun button img{
-    border-radius: 6px;
+.activeNoun button img {
+    /* border-radius: 6px; */
     /* transform: scale(0.9); */
     /* overflow: hidden; */
 }
 
 .activeNoun button {
-    box-shadow: 0 0px 0px 4px rgba(0 0 0 / 40%);
+    box-shadow: 0 0px 0px 4px rgba(0 0 0 / 90%);
 }
 
 li.activeNoun button img, li.activeNoun:hover button img {

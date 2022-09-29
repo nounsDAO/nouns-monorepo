@@ -38,7 +38,7 @@
     display: flex;
     width: 100%;
     flex-direction: column;
-    /* height: 101vh; */
+    height: 101vh;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     padding-top: 8px;
