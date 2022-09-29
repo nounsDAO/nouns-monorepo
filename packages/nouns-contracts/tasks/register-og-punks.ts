@@ -1,8 +1,7 @@
 import { task } from 'hardhat/config'
 
 task("register-og-punks", "Register original cryptopunks for duplication check")
-    .setAction(async (_, { ethers, run }) => {
-        const { nToken } = await run("deploy")
+    .setAction(async ({ nToken }, { ethers, run }) => {
 
         const punkHashes = await run("create-merkle")
 
