@@ -2,6 +2,7 @@
 pragma solidity ^0.8.6;
 
 import 'forge-std/Test.sol';
+import 'forge-std/StdJson.sol';
 import { NounsDescriptorV2 } from '../../contracts/NounsDescriptorV2.sol';
 import { SVGRenderer } from '../../contracts/SVGRenderer.sol';
 import { ISVGRenderer } from '../../contracts/interfaces/ISVGRenderer.sol';
@@ -488,15 +489,10 @@ contract NounsDescriptorV2Test is Test {
 
 contract NounsDescriptorV2WithRealArtTest is DeployUtils {
     using strings for *;
+    using stdJson for string;
+    using Base64 for string;
 
     NounsDescriptorV2 descriptor;
-
-    // these indexes were computed once and hard-coded to speed up test runtime
-    // searching for the longest items each run is too slow
-    uint48 longestBodyIndex = 0;
-    uint48 longestAccessoryIndex = 64;
-    uint48 longestHeadIndex = 211;
-    uint48 longestGlassesIndex = 8;
 
     function setUp() public {
         descriptor = _deployAndPopulateV2();
@@ -505,26 +501,16 @@ contract NounsDescriptorV2WithRealArtTest is DeployUtils {
     function testGeneratesValidTokenURI() public {
         string memory uri = descriptor.tokenURI(
             0,
-            INounsSeeder.Seed({
-                background: 0,
-                body: longestBodyIndex,
-                accessory: longestAccessoryIndex,
-                head: longestHeadIndex,
-                glasses: longestGlassesIndex
-            })
+            INounsSeeder.Seed({ background: 0, body: 0, accessory: 0, head: 0, glasses: 0 })
         );
 
-        (
-            string memory nameKeyValue,
-            string memory descriptionKeyValue,
-            string memory imageBase64Value
-        ) = decodeAndSplitTokenURI(uri);
-        string memory imageDecoded = string(Base64.decode(imageBase64Value));
+        string memory json = string(removeDataTypePrefix(uri).decode());
+        string memory imageDecoded = string(removeDataTypePrefix(json.readString('.image')).decode());
         strings.slice memory imageSlice = imageDecoded.toSlice();
 
-        assertEq(nameKeyValue, '"name":"Noun 0"');
-        assertEq(descriptionKeyValue, '"description":"Noun 0 is a member of the Nouns DAO"');
-        assertEq(bytes(imageDecoded).length, 20931);
+        assertEq(json.readString('.name'), 'Noun 0');
+        assertEq(json.readString('.description'), 'Noun 0 is a member of the Nouns DAO');
+        assertEq(bytes(imageDecoded).length, 6849);
         assertTrue(
             imageSlice.startsWith(
                 '<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">'
@@ -532,41 +518,19 @@ contract NounsDescriptorV2WithRealArtTest is DeployUtils {
             )
         );
         assertTrue(
-            imageSlice.endsWith('<rect width="60" height="10" x="170" y="160" fill="#257ced" /></svg>'.toSlice())
+            imageSlice.endsWith(
+                '<rect width="60" height="10" x="100" y="160" fill="#ff638d" /><rect width="60" height="10" x="170" y="160" fill="#ff638d" /></svg>'
+                    .toSlice()
+            )
         );
     }
 
-    function decodeAndSplitTokenURI(string memory uri)
-        internal
-        pure
-        returns (
-            string memory nameKeyValue,
-            string memory descriptionKeyValue,
-            string memory imageBase64Value
-        )
-    {
-        // remove the data type prefix `data:application/json;base64,`
-        // modifies the slice to start after the prefix so we can decode
-        strings.slice memory uriSlice = uri.toSlice();
-        uriSlice.split(','.toSlice());
-        string memory decoded = string(Base64.decode(uriSlice.toString()));
-        strings.slice memory decodedSlice = decoded.toSlice();
+    function removeDataTypePrefix(string memory str) internal pure returns (string memory) {
+        // remove data type prefix like `data:application/json;base64,`
 
-        // returns a slice left of the comma, and modifies the input slice
-        // to start after the comma
-        // given an input that starts like: {"name":"Noun 0", "description":"Noun 0 is
-        // the return value is: {"name":"Noun 0"
-        // beyond '{' gets rid of that first character
-        // name = "name":"Noun 0"
-        strings.slice memory nameSlice = decodedSlice.split(','.toSlice());
-        nameKeyValue = nameSlice.beyond('{'.toSlice()).toString();
-
-        // description = "description":"Noun 0 is a member of the Nouns DAO"
-        strings.slice memory descSlice = strings.split(decodedSlice, strings.toSlice(','));
-        descriptionKeyValue = descSlice.beyond(' '.toSlice()).toString();
-
-        // skipping the image data prefix: ' "image": "data:image/svg+xml;base64,'
-        decodedSlice.split(','.toSlice());
-        imageBase64Value = decodedSlice.until('"}'.toSlice()).toString();
+        strings.slice memory strSlice = str.toSlice();
+        // modifies the slice to start after the prefix
+        strSlice.split(','.toSlice());
+        return strSlice.toString();
     }
 }
