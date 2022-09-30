@@ -43,7 +43,7 @@
 }
 
 .gridWrap.sidebarHidden .exploreGrid ul {
-    --columns: 24;
+    --columns: 28;
     --gap: 0.4vw;
 }
 .gridWrap.sidebarHidden .exploreGrid ul li {
