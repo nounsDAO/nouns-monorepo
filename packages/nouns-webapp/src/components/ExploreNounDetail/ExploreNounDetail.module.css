@@ -105,12 +105,13 @@
     -webkit-appearance: none;
     padding: 0;
     display: inline-block;
-    width: 2rem;
-    height: 2rem;
+    width: 1.5rem;
+    height: 1.5rem;
     border: none;
     background-size: contain;
     background-repeat: no-repeat;
-    font-size: large;
+    font-size: 1rem;
+    line-height: 1;
     border-radius: 50%;
     color: var(--brand-cool-dark-text);
     background-color: var(--brand-cool-accent);
@@ -163,6 +164,9 @@ h2 {
     font-size: 1rem;
     font-family: 'PT Root UI';
     font-weight: bold;
+    margin-bottom: 0.5rem;
+    padding-top: 0.5rem;
+    font-size: 0.8rem;
 }
 .activityLink a:hover {
     text-decoration: none;
@@ -224,11 +228,26 @@ h2 {
 }
 
 .detailNounImage img {
-    /* max-height: 40vh;
-    height: 100%;
-    cursor: pointer; */
     width: 100%;
     margin-top: 2vh;
+}
+
+/* Tighten up spacing on short screens to reduce likelihood of overflow scroll */
+@media (min-width: 992px) and (max-height: 920px) {
+    .infoWrap .arrow {
+        width: 1.2rem;
+        height: 1.2rem;
+    }
+    .traitsList .thumbnail {
+        max-width: 50px;
+    }
+    .detailNounImage img { 
+        margin: 0;
+    }
+    .traitsList {
+        padding: 10px;
+    }
+
 }
 
 /* Treat more like a modal on mobile */
