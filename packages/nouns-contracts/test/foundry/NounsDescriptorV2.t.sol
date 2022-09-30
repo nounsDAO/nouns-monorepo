@@ -524,13 +524,4 @@ contract NounsDescriptorV2WithRealArtTest is DeployUtils {
             )
         );
     }
-
-    function removeDataTypePrefix(string memory str) internal pure returns (string memory) {
-        // remove data type prefix like `data:application/json;base64,`
-
-        strings.slice memory strSlice = str.toSlice();
-        // modifies the slice to start after the prefix
-        strSlice.split(','.toSlice());
-        return strSlice.toString();
-    }
 }
