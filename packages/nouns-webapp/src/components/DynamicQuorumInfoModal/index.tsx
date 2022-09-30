@@ -9,8 +9,17 @@ import classes from './DynamicQuorumInfoModal.module.css';
 import { XIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/macro';
 import clsx from 'clsx';
-import { pointsPositionsCalc } from '../../utils/svgChartingUtils';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
+
+const PLOTTING_CONSTANTS = {
+  width: 950,
+  dqFunctionMaxQXCrossoverPlotSpace: 470,
+  height: 320,
+  minQHeightPlotSpace: 288,
+  maxQHeightPlotSpace: 32,
+  slopeDQFunctionPlotSpace: -0.54468085106,
+  mobileScreenCutoffWidthPixels: 1200,
+};
 
 const DynamicQuorumInfoModalOverlay: React.FC<{
   proposal: Proposal;
@@ -39,51 +48,17 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
     return Math.min(minQuorumBps + quorumCoefficent * bps, maxQuorumBps);
   };
 
-  const options = {
-    xMax: 10_000,
-    xMin: 0,
-    yMax: 1.09 * maxQuorumBps,
-    yMin: 0.87 * minQuorumBps,
+  const plotSpaceFunction = (x: number) => {
+    return PLOTTING_CONSTANTS.slopeDQFunctionPlotSpace * x + PLOTTING_CONSTANTS.minQHeightPlotSpace;
   };
 
-  const againstVotesLabelLineStart = pointsPositionsCalc(
-    [[againstVotesBps, 0]],
-    950,
-    320,
-    options,
-  ).map((pt: Array<number>) => {
-    return [pt[0], Math.min(288, pt[1])];
-  });
-
-  const againstVotesLabelLineEnd = pointsPositionsCalc(
-    [[againstVotesBps, dqmFunction(againstVotesBps)]],
-    950,
-    320,
-    options,
-  ).map((pt: Array<number>) => {
-    return [pt[0], Math.min(288, pt[1])];
-  });
-
-  const crossOver = pointsPositionsCalc(
-    Array.apply(null, Array(totalNounSupply))
-      .map(function (_, i) {
-        return i;
-      })
-      .map(noVoteCount => [
-        Math.floor((noVoteCount / totalNounSupply) * 10_000),
-        dqmFunction(Math.floor((noVoteCount / totalNounSupply) * 10_000)),
-      ]),
-    950,
-    320,
-    options,
-  )
-    .reverse()
-    .filter((pt: Array<number>) => {
-      return pt[1] < 288;
-    })
-    .map((pt: Array<number>) => {
-      return `${pt[0]}, ${pt[1]}`;
-    });
+  const x =
+    againstVotesBps <= maxQuorumBps
+      ? PLOTTING_CONSTANTS.dqFunctionMaxQXCrossoverPlotSpace *
+        (againstVotesAbs / Math.floor((maxQuorumBps * totalNounSupply) / 10_000))
+      : PLOTTING_CONSTANTS.dqFunctionMaxQXCrossoverPlotSpace +
+        0.5 * PLOTTING_CONSTANTS.width * (againstVotesBps / 10_000);
+  const y = Math.max(plotSpaceFunction(x), PLOTTING_CONSTANTS.maxQHeightPlotSpace);
 
   return (
     <>
@@ -144,64 +119,62 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
 
               {/* Inner graph container */}
               <div className={clsx(classes.graphContainer, classes.innerGraphContainer)}>
-                <svg width="950" height="320">
+                {/* <svg width="950" height="320"> */}
+                <svg width={PLOTTING_CONSTANTS.width} height={PLOTTING_CONSTANTS.height}>
                   <line
                     x1="0"
-                    y1={0.9 * 320}
+                    y1={PLOTTING_CONSTANTS.minQHeightPlotSpace}
                     x2="100%"
-                    y2={0.9 * 320}
+                    y2={PLOTTING_CONSTANTS.minQHeightPlotSpace}
                     stroke="#151C3B40"
                     stroke-width="4"
                     stroke-dasharray="5"
                   />
                   <line
                     x1="0"
-                    y1={0.1 * 320}
+                    y1={PLOTTING_CONSTANTS.maxQHeightPlotSpace}
                     x2="100%"
-                    y2={0.1 * 320}
+                    y2={PLOTTING_CONSTANTS.maxQHeightPlotSpace}
                     stroke="#151C3B40"
                     stroke-width="4"
                     stroke-dasharray="5"
                   />
                   <g fill="#4965F080" stroke="none">
-                    {/* <polygon points={`950,288 950,32 ${crossOver[0][0]},32 0,288`} /> */}
-                    <polygon points={`950,288 950,32 ${crossOver} 0,288`} />
+                    <polygon points={`950,288 950,32 470,32 0,288`} />
                     <polygon points={`950,320 950,288 ${0},288 0,320`} />
                   </g>
                   {/* Vertical Line indicating against BPS */}
                   <line
-                    x1={againstVotesLabelLineStart[0][0]}
-                    y1={320}
-                    y2={againstVotesLabelLineEnd[0][1]}
-                    x2={againstVotesLabelLineStart[0][0]}
+                    x1={x}
+                    y1={PLOTTING_CONSTANTS.height}
+                    y2={y}
+                    x2={x}
                     stroke="var(--brand-color-red)"
                     stroke-width="4"
                   />
                   {/* Horizontal Line Indicating Required For BPS */}
                   <line
                     x1={0}
-                    y1={againstVotesLabelLineEnd[0][1]}
-                    y2={againstVotesLabelLineEnd[0][1]}
-                    x2={againstVotesLabelLineStart[0][0]}
+                    y1={y}
+                    y2={y}
+                    x2={x}
                     stroke="var(--brand-color-green)"
                     stroke-width="4"
                   />
-                  <circle
-                    cx={againstVotesLabelLineEnd[0][0]}
-                    cy={againstVotesLabelLineEnd[0][1]}
-                    r="7"
-                    fill="var(--brand-gray-light-text)"
-                  />
+                  <circle cy={y} cx={x} r="7" fill="var(--brand-gray-light-text)" />
                   <text x="20" y="24">
                     Max Quorum: {Math.floor((maxQuorumBps * totalNounSupply) / 10_000)} Nouns{' '}
                     <tspan fill="var(--brand-gray-light-text)">
                       ({maxQuorumBps / 100}% of Nouns)
                     </tspan>
                   </text>
-                  {Math.abs(againstVotesLabelLineEnd[0][1] - 10 - 288) > 100 ? (
+                  {Math.abs(y - 10 - PLOTTING_CONSTANTS.minQHeightPlotSpace) > 100 ? (
                     <>
                       <text x="20" y="280">
-                        Min Quorum: {Math.floor((minQuorumBps * totalNounSupply) / 10_000)} Nouns{' '}
+                        Min Quorum: {Math.floor((minQuorumBps * totalNounSupply) / 10_000)}{' '}
+                        {Math.floor((minQuorumBps * totalNounSupply) / 10_000) === 1
+                          ? 'Noun'
+                          : 'Nouns'}{' '}
                         <tspan fill="var(--brand-gray-light-text)">
                           ({minQuorumBps / 100}% of Nouns)
                         </tspan>
@@ -218,22 +191,15 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                     </>
                   )}
                   {againstVotesBps >= 400 && againstVotesAbs >= maxQuorumBps && (
-                    <text
-                      x={10}
-                      y={againstVotesLabelLineEnd[0][1] - 10}
-                      fill="var(--brand-gray-light-text)"
-                    >
+                    <text x={10} y={y - 10} fill="var(--brand-gray-light-text)">
                       {Math.floor(Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) / 100)}% of
                       Nouns
                     </text>
                   )}
                   {againstVotesBps > 4000 ? (
                     <text
-                      x={againstVotesLabelLineEnd[0][0] - 390}
-                      y={
-                        againstVotesLabelLineEnd[0][1] +
-                        (againstVotesBps > 0.9 * linearToConstantCrossoverBPS ? 20 : -10)
-                      }
+                      x={x - 390}
+                      y={y + (againstVotesBps > 0.9 * linearToConstantCrossoverBPS ? 20 : -10)}
                     >
                       Current Quorum:{' '}
                       {Math.floor(
@@ -241,16 +207,14 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                           10_000,
                       )}{' '}
                       <tspan fill="var(--brand-gray-light-text)">
-                        ({againstVotesAbs} Nouns Currently Against)
+                        ({againstVotesAbs} {againstVotesAbs === 1 ? 'Noun' : 'Nouns'} Currently
+                        Against)
                       </tspan>
                     </text>
                   ) : (
                     <text
-                      x={againstVotesLabelLineEnd[0][0] + 10}
-                      y={
-                        againstVotesLabelLineEnd[0][1] +
-                        (againstVotesBps > 0.9 * linearToConstantCrossoverBPS ? 20 : -10)
-                      }
+                      x={x + 10}
+                      y={y + (againstVotesBps > 0.9 * linearToConstantCrossoverBPS ? 20 : -10)}
                     >
                       Current Quorum:{' '}
                       {Math.floor(
@@ -258,16 +222,13 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                           10_000,
                       )}{' '}
                       <tspan fill="var(--brand-gray-light-text)">
-                        ({againstVotesAbs} Nouns Currently Against)
+                        ({againstVotesAbs} {againstVotesAbs === 1 ? 'Noun' : 'Nouns'} Currently
+                        Against)
                       </tspan>
                     </text>
                   )}
                   {againstVotesAbs > 0 && (
-                    <text
-                      x={againstVotesLabelLineEnd[0][0] + 10}
-                      y={310}
-                      fill="var(--brand-gray-light-text)"
-                    >
+                    <text x={x + (x < 712 ? 10 : -130)} y={310} fill="var(--brand-gray-light-text)">
                       {Math.floor(againstVotesBps / 100)}% of Nouns
                     </text>
                   )}
@@ -276,9 +237,6 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                       0%
                     </text>
                   )}
-                  <text x={905} y={310} fill="var(--brand-gray-light-text)">
-                    100%
-                  </text>
                   Sorry, your browser does not support inline SVG.
                 </svg>
               </div>
@@ -327,7 +285,6 @@ const DynamicQuorumInfoModal: React.FC<{
 
   // coeffient is represented as fixed point number multiplied by 1e6, thus we need to divide by this number to rescale it
   const scalingFactor = 1_000_000;
-
   return (
     <>
       {ReactDOM.createPortal(
@@ -336,7 +293,9 @@ const DynamicQuorumInfoModal: React.FC<{
       )}
       {ReactDOM.createPortal(
         <DynamicQuorumInfoModalOverlay
-          againstVotesBps={Math.floor((2 / data.proposals[0].totalSupply) * 10_000)}
+          againstVotesBps={Math.floor(
+            (againstVotesAbsolute / data.proposals[0].totalSupply) * 10_000,
+          )}
           againstVotesAbs={againstVotesAbsolute}
           minQuorumBps={dynamicQuorumProps?.minQuorumVotesBPS ?? 0}
           maxQuorumBps={dynamicQuorumProps?.maxQuorumVotesBPS ?? 0}
