@@ -358,7 +358,8 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                     onMouseOut={() => selectedNoun && setActiveNoun(selectedNoun)}
                                                     >
                                                     <img 
-                                                        src={process.env.PUBLIC_URL + `/nouns/noun${i}.svg`} 
+                                                        // src={process.env.PUBLIC_URL + `/nouns/noun${i}.svg`} 
+                                                        src={`https://noun.pics/${i}.svg`}
                                                         alt=""
                                                         style={{ 
                                                             "--animation-order": Math.abs(i - nounCount), 
