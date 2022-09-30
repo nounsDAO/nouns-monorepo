@@ -176,15 +176,15 @@ const removeItalics = (text: string | null): string | null =>
 const removeMarkdownStyle = R.compose(removeBold, removeItalics);
 
 export const useIsPropUsingDAOV2 = (proposalId: string | undefined): boolean => {
-  const [totalSupply] =
-    useContractCall<[EthersBN]>({
-      abi,
+  const [proposal] =
+    useContractCall<[any]>({
+      abi: nounsDaoV2ABI,
       address: nounsDaoContract.address,
-      method: 'totalSupply',
+      method: 'proposals',
       args: [proposalId],
     }) || [];
 
-  return totalSupply?.toNumber() !== undefined;
+  return proposal?.totalSupply !== undefined;
 };
 
 export const useCurrentQuorum = (

@@ -143,7 +143,6 @@ export const useUserDelegatee = (): string | undefined => {
 
 export const useUserVotesAsOfBlock = (block: number | undefined): number | undefined => {
   const { account } = useEthers();
-  console.log(JSON.stringify(NounsTokenABI));
   // Check for available votes
   const [votes] =
     useContractCall<[EthersBN]>({
