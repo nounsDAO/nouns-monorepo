@@ -1,46 +1,19 @@
-# nounsequitur-monorepo
+# noun-sequiturs-monorepo
 
-Noun Sequitur is a comic strip for all time.
-Based on Nouns DAO, a generative avatar art collective run by a group of crypto misfits.
+Noun Sequiturs is a series of comic strips based on Nouns.
 
-TODOs:
-[ ] contracts (see readme in package)
-[ ] names based on Noun Sequitur
-[ ] remove unused packages
+They will be issued in seasons, the first season will have 52 weekly comics.
 
-## Contributing
+There will be an auction for each comic,Each comic is tied to a specific token, and a video of the making of that comic which will be sent to the auction winner privately.
 
-If you're interested in contributing to Nouns DAO repos we're excited to have you. Please discuss any changes in `#developers` in [discord.gg/nouns](https://discord.gg/nouns) prior to contributing to reduce duplication of effort and in case there is any prior art that may be useful to you.
+Technically, the image for that comic will be stored on IPFS with the hash committed to that specific token ID.
 
-## Packages
+### TODOs:
 
-### nouns-api
-
-The [nouns api](packages/nouns-api) is an HTTP webserver that hosts token metadata. This is currently unused because on-chain, data URIs are enabled.
-
-### nouns-assets
-
-The [nouns assets](packages/nouns-assets) package holds the Noun PNG and run-length encoded image data.
-
-### nouns-bots
-
-The [nouns bots](packages/nouns-bots) package contains a bot that monitors for changes in Noun auction state and notifies everyone via Twitter and Discord.
-
-### nouns-contracts
-
-The [nouns contracts](packages/nouns-contracts) is the suite of Solidity contracts powering Nouns DAO.
-
-### nouns-sdk
-
-The [nouns sdk](packages/nouns-sdk) exposes the Nouns contract addresses, ABIs, and instances as well as image encoding and SVG building utilities.
-
-### nouns-subgraph
-
-In order to make retrieving more complex data from the auction history, [nouns subgraph](packages/nouns-subgraph) contains subgraph manifests that are deployed onto [The Graph](https://thegraph.com).
-
-### nouns-webapp
-
-The [nouns webapp](packages/nouns-webapp) is the frontend for interacting with Noun auctions as hosted at [nouns.wtf](https://nouns.wtf).
+- [ ] contracts (see readme in package)
+- [ ] names based on Noun Sequitur
+- [ ] remove unused packages
+- [ ] or import as module
 
 ## Quickstart
 
@@ -67,3 +40,9 @@ yarn lint
 ```sh
 yarn format
 ```
+
+## Active Packages
+
+### nouns-contracts
+
+The [nouns contracts](packages/nouns-contracts) is the suite of Solidity contracts powering Nouns DAO.
