@@ -130,7 +130,7 @@
     margin: 0;
     position: absolute;
     /* bottom: 6px; */
-    bottom: clamp(3px, 0.6vw, 4px);
+    bottom: clamp(4px, 0.7vw, 8px);
     opacity: 0;
     /* Make match noun bg color */
     background: rgba(255,255,255,0.9); 
@@ -162,7 +162,7 @@
 .exploreGrid li.activeNoun:focus .nounIdOverlay, 
 .exploreGrid li.activeNoun:hover .nounIdOverlay {
     /* bottom: 14px; */
-    bottom: clamp(4px, 0.7vw, 12px);
+    bottom: clamp(4px, 0.7vw, 8px);
 }
 
 
