@@ -232,7 +232,7 @@ h2 {
     margin-top: 2vh;
 }
 .detailNounImage:hover {
-    cursor: pointer;
+    /* cursor: pointer; */
 }
 
 /* Tighten up spacing on short screens to reduce likelihood of overflow scroll */
