@@ -43,10 +43,10 @@
 }
 
 .gridWrap.sidebarHidden .exploreGrid ul {
-    --columns: 28;
+    --columns: 30;
     --gap: 0.4vw;
 }
-.gridWrap.sidebarHidden .exploreGrid ul li {
+.gridWrap.sidebarHidden .exploreGrid ul li, .gridWrap.sidebarHidden .exploreGrid ul li img {
     border-radius: 4px;
 }
 .gridWrap.sidebarHidden .exploreGrid .nounIdOverlay {
