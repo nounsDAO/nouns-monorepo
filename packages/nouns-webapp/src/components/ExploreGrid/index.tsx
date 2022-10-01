@@ -103,11 +103,11 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         }
     }
 
-    const removeFocus = () => {
-        setIsSidebarVisible(false);
-        setActiveNoun(-1);
-        setSelectedNoun(undefined);
-    }
+    // const removeFocus = () => {
+    //     setIsSidebarVisible(false);
+    //     setActiveNoun(-1);
+    //     setSelectedNoun(undefined);
+    // }
     
     const handleNounDetail = (nounId: number, sidebarVisibility: string, event: React.MouseEvent | React.FocusEvent) => {
         if (nounId === selectedNoun) {
