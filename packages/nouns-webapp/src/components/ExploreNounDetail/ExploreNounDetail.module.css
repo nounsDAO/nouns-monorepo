@@ -231,6 +231,9 @@ h2 {
     width: 100%;
     margin-top: 2vh;
 }
+.detailNounImage:hover {
+    cursor: pointer;
+}
 
 /* Tighten up spacing on short screens to reduce likelihood of overflow scroll */
 @media (min-width: 992px) and (max-height: 920px) {

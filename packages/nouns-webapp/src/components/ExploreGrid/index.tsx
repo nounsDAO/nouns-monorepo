@@ -352,14 +352,14 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                 <button 
                                                     ref={el => buttonsRef.current[i] = el} 
                                                     id={`${i}`}
-                                                    onMouseDown={(e) => (selectedNoun === i && document.activeElement && parseInt(document.activeElement.id) === i) ? removeFocus() : handleOnFocus(i)}
+                                                    onMouseDown={(e) => (selectedNoun === i && document.activeElement && parseInt(document.activeElement.id) === i) && handleOnFocus(i)}
                                                     onFocus={(e) => handleOnFocus(i)}
                                                     onMouseOver={() => setActiveNoun(i)} 
                                                     onMouseOut={() => selectedNoun && setActiveNoun(selectedNoun)}
                                                     >
                                                     <img 
                                                         // src={process.env.PUBLIC_URL + `/nouns/noun${i}.svg`} 
-                                                        src={`https://noun.pics/${i}.svg`}
+                                                        src={`https://dev.noun.pics/${i}.svg`}
                                                         alt=""
                                                         style={{ 
                                                             "--animation-order": Math.abs(i - nounCount), 
@@ -388,13 +388,14 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                 key={i}
                                             >
                                                 <button 
-                                                    onMouseDown={(e) => (selectedNoun === i && document.activeElement && parseInt(document.activeElement.id) === i) ? removeFocus() : handleOnFocus(i)}
+                                                    // onMouseDown={(e) => (selectedNoun === i && document.activeElement && parseInt(document.activeElement.id) === i) ? removeFocus() : handleOnFocus(i)}
+                                                    onMouseDown={(e) => (selectedNoun === i && document.activeElement && parseInt(document.activeElement.id) === i) && handleOnFocus(i)}
                                                     onFocus={(e) => handleOnFocus(i)}
                                                     onMouseOver={() => setActiveNoun(i)} 
                                                     onMouseOut={() => selectedNoun && setActiveNoun(selectedNoun)}
                                                     >
                                                     <img 
-                                                        src={process.env.PUBLIC_URL + `/nouns/noun${i}.svg`} 
+                                                        src={`https://dev.noun.pics/${i}.svg`}
                                                         alt=""
                                                         style={{ 
                                                             "--animation-order": i, 

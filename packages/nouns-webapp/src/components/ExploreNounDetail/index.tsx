@@ -304,7 +304,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                     >   
                                         {/* <StandaloneNounImage nounId={BigNumber.from(props.nounId)} /> */}
                                         {props.nounId >= 0 && seed ? (
-                                            <Image src={`https://noun.pics/${props.nounId}.svg`} alt={`Noun ${props.nounId}`} />
+                                            <Image src={`https://dev.noun.pics/${props.nounId}.svg`} alt={`Noun ${props.nounId}`} />
                                         ) : (
                                             <Image src={loadingNoun} alt="Loading nouns" />
                                         )}
