@@ -44,10 +44,16 @@
 
 .gridWrap.sidebarHidden .exploreGrid ul {
     --columns: 30;
-    --gap: 0.4vw;
+    /* --gap: 0.4vw; */
+    --gap: 0px;
 }
 .gridWrap.sidebarHidden .exploreGrid ul li, .gridWrap.sidebarHidden .exploreGrid ul li img {
-    border-radius: 4px;
+    /* border-radius: 4px; */
+    border-radius: 0;
+}
+.gridWrap.sidebarHidden .exploreGrid ul li:hover, .gridWrap.sidebarHidden .exploreGrid ul li.activeNoun button {
+    /* z-index: 9; */
+    box-shadow: none;
 }
 .gridWrap.sidebarHidden .exploreGrid .nounIdOverlay {
     display: none;
@@ -72,7 +78,6 @@
     animation-timing-function: ease-in-out;
     border-radius: 10px;
     width: calc((100% / var(--columns)) - var(--gap) + (var(--gap) / var(--columns)));
-    
 }
 
 .exploreGrid.small li {
@@ -431,7 +436,7 @@ li.activeNoun button img, li.activeNoun:hover button img {
         --columns: 8;
     }
     .gridWrap.sidebarHidden .exploreGrid ul {   
-        --gap: 0.8vw;
+        /* --gap: 0.8vw; */
     }
     .gridWrap.sidebarHidden .exploreGrid ul li img {   
         border-radius: 4px;
@@ -449,6 +454,9 @@ li.activeNoun button img, li.activeNoun:hover button img {
         --gap: 10px;
         --columns: 5;
         padding: 0;
+    }
+    .gridWrap.sidebarHidden .exploreGrid ul li img {   
+        border-radius: 4px;
     }
     /* .gridWrap.sidebarHidden .exploreGrid ul {
         --gap: 10px;
