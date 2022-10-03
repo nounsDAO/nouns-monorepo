@@ -124,43 +124,6 @@ describe('NounsDAOV2#state/1', () => {
     await ethers.provider.send('evm_revert', [snapshotId]);
   });
 
-  it('Invalid for proposal not found', async () => {
-    await makeProposal();
-    await expect(gov.state(5)).revertedWith('NounsDAO::state: invalid proposal id');
-  });
-
-  it('Pending', async () => {
-    await makeProposal();
-    await expectState(proposalId, 'Pending');
-  });
-
-  it('Active', async () => {
-    await makeProposal();
-    await expectState(proposalId, 'Pending');
-
-    // mine blocks passed voting delay; voting delay is 1 block, have to wait 2 blocks
-    await mineBlock();
-    await mineBlock();
-
-    await expectState(proposalId, 'Active');
-  });
-
-  it('Canceled', async () => {
-    // set proposalThresholdBPS to 10% (1 token) so proposalThreshold is > 0
-    await makeProposal(account0, 10, 2, account0, 1000);
-    await gov.proposals(proposalId);
-
-    // send away the delegates
-    await token.connect(account0).delegate(deployer.address);
-
-    await mineBlock();
-    await mineBlock();
-
-    await gov.cancel(proposalId);
-
-    await expectState(proposalId, 'Canceled');
-  });
-
   it('Defeated by running out of time', async () => {
     await makeProposal();
     // travel to end block

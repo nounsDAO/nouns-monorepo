@@ -62,6 +62,24 @@ contract NounsDAOLogicV2Test is Test, DeployUtils {
         vm.prank(address(daoProxy));
         timelock.acceptAdmin();
     }
+
+    function propose(
+        address target,
+        uint256 value,
+        string memory signature,
+        bytes memory data
+    ) internal returns (uint256 proposalId) {
+        vm.prank(proposer);
+        address[] memory targets = new address[](1);
+        targets[0] = target;
+        uint256[] memory values = new uint256[](1);
+        values[0] = value;
+        string[] memory signatures = new string[](1);
+        signatures[0] = signature;
+        bytes[] memory calldatas = new bytes[](1);
+        calldatas[0] = data;
+        proposalId = daoProxy.propose(targets, values, signatures, calldatas, 'my proposal');
+    }
 }
 
 contract UpdateVetoerTest is NounsDAOLogicV2Test {
@@ -152,16 +170,7 @@ contract CancelProposalTest is NounsDAOLogicV2Test {
 
         vm.roll(block.number + 1);
 
-        vm.prank(proposer);
-        address[] memory targets = new address[](1);
-        targets[0] = address(0x1234);
-        uint256[] memory values = new uint256[](1);
-        values[0] = 100;
-        string[] memory signatures = new string[](1);
-        signatures[0] = '';
-        bytes[] memory calldatas = new bytes[](1);
-        calldatas[0] = '';
-        proposalId = daoProxy.propose(targets, values, signatures, calldatas, 'my proposal');
+        proposalId = propose(address(0x1234), 100, '', '');
     }
 
     function testProposerCanCancelProposal() public {
@@ -213,5 +222,44 @@ contract WithdrawTest is NounsDAOLogicV2Test {
     function test_withdraw_revertsForNonAdmin() public {
         vm.expectRevert(NounsDAOLogicV2.AdminOnly.selector);
         daoProxy._withdraw();
+    }
+}
+
+contract StateTest is NounsDAOLogicV2Test {
+    function setUp() public override {
+        super.setUp();
+
+        vm.prank(minter);
+        nounsToken.mint();
+
+        vm.prank(minter);
+        nounsToken.transferFrom(minter, proposer, 1);
+
+        vm.roll(block.number + 1);
+    }
+
+    function testRevertsGivenProposalIdThatDoesntExist() public {
+        uint256 proposalId = propose(address(0x1234), 100, '', '');
+        vm.expectRevert('NounsDAO::state: invalid proposal id');
+        daoProxy.state(proposalId + 1);
+    }
+
+    function testPendingGivenProposalJustCreated() public {
+        uint256 proposalId = propose(address(0x1234), 100, '', '');
+        assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV1Adjusted.ProposalState.Pending);
+    }
+
+    function testActiveGivenProposalPastVotingDelay() public {
+        uint256 proposalId = propose(address(0x1234), 100, '', '');
+        vm.roll(block.number + daoProxy.votingDelay() + 1);
+        assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV1Adjusted.ProposalState.Active);
+    }
+
+    function testCanceledGivenCanceledProposal() public {
+        uint256 proposalId = propose(address(0x1234), 100, '', '');
+        vm.prank(proposer);
+        daoProxy.cancel(proposalId);
+
+        assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV1Adjusted.ProposalState.Canceled);
     }
 }
