@@ -496,7 +496,7 @@ li.activeNoun button img, li.activeNoun:hover button img {
     }
 }
 
-@media (hover: none) {
+@media (hover: none) and (max-width: 991px) {
     /* Hide overlay on tap */
     .exploreGrid .nounIdOverlay {
         display: none;
