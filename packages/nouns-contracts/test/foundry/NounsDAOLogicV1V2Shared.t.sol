@@ -19,11 +19,7 @@ abstract contract NounsDAOLogicV1V2StateTest is NounsDAOLogicSharedBaseTest {
     function setUp() public override {
         super.setUp();
 
-        vm.prank(minter);
-        nounsToken.mint();
-
-        vm.prank(minter);
-        nounsToken.transferFrom(minter, proposer, 1);
+        mint(proposer, 1);
 
         vm.roll(block.number + 1);
     }
@@ -51,6 +47,130 @@ abstract contract NounsDAOLogicV1V2StateTest is NounsDAOLogicSharedBaseTest {
         daoProxy.cancel(proposalId);
 
         assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV1.ProposalState.Canceled);
+    }
+
+    function testDefeatedByRunningOutOfTime() public {
+        uint256 proposalId = propose(address(0x1234), 100, '', '');
+        vm.roll(block.number + daoProxy.votingDelay() + daoProxy.votingPeriod() + 1);
+
+        assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV1.ProposalState.Defeated);
+    }
+
+    function testDefeatedByVotingAgainst() public {
+        address forVoter = utils.getNextUserAddress();
+        address againstVoter = utils.getNextUserAddress();
+        mint(forVoter, 3);
+        mint(againstVoter, 3);
+
+        uint256 proposalId = propose(address(0x1234), 100, '', '');
+        startVotingPeriod();
+        vote(forVoter, proposalId, 1);
+        vote(againstVoter, proposalId, 0);
+        endVotingPeriod();
+
+        assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV1.ProposalState.Defeated);
+    }
+
+    function testSucceeded() public {
+        address forVoter = utils.getNextUserAddress();
+        address againstVoter = utils.getNextUserAddress();
+        mint(forVoter, 4);
+        mint(againstVoter, 3);
+
+        uint256 proposalId = propose(address(0x1234), 100, '', '');
+        startVotingPeriod();
+        vote(forVoter, proposalId, 1);
+        vote(againstVoter, proposalId, 0);
+        endVotingPeriod();
+
+        assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV1.ProposalState.Succeeded);
+    }
+
+    function testQueueRevertsGivenDefeatedProposal() public {
+        uint256 proposalId = propose(address(0x1234), 100, '', '');
+        vm.roll(block.number + daoProxy.votingDelay() + daoProxy.votingPeriod() + 1);
+
+        assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV1.ProposalState.Defeated);
+
+        vm.expectRevert('NounsDAO::queue: proposal can only be queued if it is succeeded');
+        daoProxy.queue(proposalId);
+    }
+
+    function testQueueRevertsGivenCanceledProposal() public {
+        uint256 proposalId = propose(address(0x1234), 100, '', '');
+        vm.prank(proposer);
+        daoProxy.cancel(proposalId);
+
+        assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV1.ProposalState.Canceled);
+
+        vm.expectRevert('NounsDAO::queue: proposal can only be queued if it is succeeded');
+        daoProxy.queue(proposalId);
+    }
+
+    function testQueued() public {
+        address forVoter = utils.getNextUserAddress();
+        address againstVoter = utils.getNextUserAddress();
+        mint(forVoter, 4);
+        mint(againstVoter, 3);
+
+        uint256 proposalId = propose(address(0x1234), 100, '', '');
+        startVotingPeriod();
+        vote(forVoter, proposalId, 1);
+        vote(againstVoter, proposalId, 0);
+        endVotingPeriod();
+
+        // anyone can queue
+        daoProxy.queue(proposalId);
+
+        assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV1.ProposalState.Queued);
+    }
+
+    function testExpired() public {
+        address forVoter = utils.getNextUserAddress();
+        address againstVoter = utils.getNextUserAddress();
+        mint(forVoter, 4);
+        mint(againstVoter, 3);
+
+        uint256 proposalId = propose(address(0x1234), 100, '', '');
+        startVotingPeriod();
+        vote(forVoter, proposalId, 1);
+        vote(againstVoter, proposalId, 0);
+        endVotingPeriod();
+        daoProxy.queue(proposalId);
+        vm.warp(block.timestamp + timelock.delay() + timelock.GRACE_PERIOD() + 1);
+
+        assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV1.ProposalState.Expired);
+    }
+
+    function testExecutedOnlyAfterQueued() public {
+        address forVoter = utils.getNextUserAddress();
+        mint(forVoter, 4);
+
+        vm.deal(address(timelock), 100);
+        uint256 proposalId = propose(address(0x1234), 100, '', '');
+        vm.expectRevert('NounsDAO::execute: proposal can only be executed if it is queued');
+        daoProxy.execute(proposalId);
+
+        startVotingPeriod();
+        vote(forVoter, proposalId, 1);
+        vm.expectRevert('NounsDAO::execute: proposal can only be executed if it is queued');
+        daoProxy.execute(proposalId);
+
+        endVotingPeriod();
+        vm.expectRevert('NounsDAO::execute: proposal can only be executed if it is queued');
+        daoProxy.execute(proposalId);
+
+        daoProxy.queue(proposalId);
+        vm.expectRevert("NounsDAOExecutor::executeTransaction: Transaction hasn't surpassed time lock.");
+        daoProxy.execute(proposalId);
+
+        vm.warp(block.timestamp + timelock.delay() + 1);
+        daoProxy.execute(proposalId);
+
+        assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV1.ProposalState.Executed);
+
+        vm.warp(block.timestamp + timelock.delay() + timelock.GRACE_PERIOD() + 1);
+        assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV1.ProposalState.Executed);
     }
 }
 

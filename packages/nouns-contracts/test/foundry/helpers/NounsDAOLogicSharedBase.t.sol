@@ -12,6 +12,7 @@ import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { NounsSeeder } from '../../../contracts/NounsSeeder.sol';
 import { IProxyRegistry } from '../../../contracts/external/opensea/IProxyRegistry.sol';
 import { NounsDAOExecutor } from '../../../contracts/governance/NounsDAOExecutor.sol';
+import { Utils } from './Utils.sol';
 
 abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtils {
     NounsDAOLogicV1 daoProxy;
@@ -25,6 +26,7 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtils {
     uint256 votingPeriod = 6000;
     uint256 votingDelay = 1;
     uint256 proposalThresholdBPS = 200;
+    Utils utils;
 
     function setUp() public virtual {
         NounsDescriptorV2 descriptor = _deployAndPopulateV2();
@@ -36,6 +38,8 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtils {
         timelock.setPendingAdmin(address(daoProxy));
         vm.prank(address(daoProxy));
         timelock.acceptAdmin();
+
+        utils = new Utils();
     }
 
     function deployDAOProxy() internal virtual returns (NounsDAOLogicV1);
@@ -56,5 +60,31 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtils {
         bytes[] memory calldatas = new bytes[](1);
         calldatas[0] = data;
         proposalId = daoProxy.propose(targets, values, signatures, calldatas, 'my proposal');
+    }
+
+    function mint(address to, uint256 amount) internal {
+        vm.startPrank(minter);
+        for (uint256 i = 0; i < amount; i++) {
+            uint256 tokenId = nounsToken.mint();
+            nounsToken.transferFrom(minter, to, tokenId);
+        }
+        vm.stopPrank();
+    }
+
+    function startVotingPeriod() internal {
+        vm.roll(block.number + daoProxy.votingDelay() + 1);
+    }
+
+    function endVotingPeriod() internal {
+        vm.roll(block.number + daoProxy.votingDelay() + daoProxy.votingPeriod() + 1);
+    }
+
+    function vote(
+        address voter,
+        uint256 proposalId,
+        uint8 support
+    ) internal {
+        vm.prank(voter);
+        daoProxy.castVote(proposalId, support);
     }
 }
