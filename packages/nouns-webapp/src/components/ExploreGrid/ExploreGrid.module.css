@@ -448,12 +448,11 @@ li.activeNoun button img, li.activeNoun:hover button img {
         --columns: 8;
     }
     .gridWrap.sidebarHidden .exploreGrid ul {   
-        /* --gap: 0.8vw; */
+        --columns: 22;
     }
     .gridWrap.sidebarHidden .exploreGrid ul li img {   
         border-radius: 4px;
     }
-    
 }
 
 
@@ -466,6 +465,7 @@ li.activeNoun button img, li.activeNoun:hover button img {
         --gap: 10px;
         --columns: 5;
         padding: 0;
+        background: #fff;
     }
     .gridWrap.sidebarHidden .exploreGrid ul li img {   
         border-radius: 4px;
