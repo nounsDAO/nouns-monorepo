@@ -1,0 +1,30 @@
+import { task } from 'hardhat/config';
+import promptjs from 'prompt';
+import {
+  getDeploymentConfirmationWithPrompt,
+  getGasPriceWithPrompt,
+  printEstimatedCost,
+} from './utils';
+
+promptjs.colors = false;
+promptjs.message = '> ';
+promptjs.delimiter = '';
+
+task('deploy-v2-logic', 'Deploys NounsDAOLogicV2').setAction(async (_args, { ethers }) => {
+  const factory = await ethers.getContractFactory('NounsDAOLogicV2');
+  const signer = (await ethers.getSigners())[0];
+
+  const gasPrice = await getGasPriceWithPrompt(ethers);
+  await printEstimatedCost(factory, gasPrice);
+
+  const deployConfirmed = await getDeploymentConfirmationWithPrompt();
+  if (!deployConfirmed) {
+    console.log('Exiting');
+    return;
+  }
+
+  console.log('Deploying...');
+  const contract = await factory.deploy({ gasPrice });
+  console.log(`Transaction hash: ${contract.deployTransaction.hash} \n`);
+  console.log(`NounsDAOLogicV2 deployed to ${contract.address}`);
+});

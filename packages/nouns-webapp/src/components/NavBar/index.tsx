@@ -96,7 +96,7 @@ const NavBar = () => {
               />
             </Nav.Link>
             <Nav.Link
-              href={externalURL(ExternalURL.notion)}
+              href={externalURL(ExternalURL.nounsCenter)}
               className={classes.nounsNavLink}
               target="_blank"
               rel="noreferrer"
