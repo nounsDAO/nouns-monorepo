@@ -64,6 +64,12 @@
 .gridWrap.sidebarHidden .exploreGrid .nounIdOverlay {
     display: none;
 }
+.gridWrap.isKeyboardNavigating .exploreGrid li:hover {
+    box-shadow: none;
+}
+.gridWrap.isKeyboardNavigating .exploreGrid li:hover .nounIdOverlay {
+    display: none;
+}
 
 .exploreGrid.small ul {
     --gap: 7px;

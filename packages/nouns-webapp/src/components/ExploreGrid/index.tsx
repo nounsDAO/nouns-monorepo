@@ -148,16 +148,11 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     const keyboardDown: boolean = useKeyPress("ArrowDown");
     const keyboardEsc: boolean = useKeyPress("Escape");
 
-    const [selectedNounOffsetTop, setSelectedNounOffsetTop] = useState<number>();
+
 
 
     const buttonsRef = useRef<(HTMLButtonElement | null)[]>([])
     const focusNoun = (index: number) => {
-        console.log(buttonsRef.current[activeNoun]?.getBoundingClientRect());
-        const position = buttonsRef.current && buttonsRef.current[activeNoun]?.getBoundingClientRect();
-        setSelectedNounOffsetTop(position?.top);
-        console.log('position', position?.top)
-        // console.log("focusing noun");
         index && buttonsRef.current[index]?.focus();
         setActiveNoun(index);
         setSelectedNoun(index);
@@ -165,7 +160,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     };
 
     const handleScrollTo = (nounId: number) => {
-        console.log('handle scroll', nounId, buttonsRef.current[nounId])
+        // console.log('handle scroll', nounId, buttonsRef.current[nounId])
         nounId && buttonsRef.current[nounId]?.scrollIntoView({behavior: 'smooth'});
     };
     
@@ -203,18 +198,46 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     // 991px: 5
     // 1399px: 8
     // > 10
-    const [sidebarFinishedOpening, setSidebarFinishedOpening] = useState<boolean>(false);
+    
+    const [isKeyboardNavigating, setIsKeyboardNavigating] = useState<boolean>(false);
 
     useLayoutEffect(() => {
-        const position = buttonsRef.current && buttonsRef.current[activeNoun]?.getBoundingClientRect();
-        console.log('position', position?.top)
-        console.log('sidebarFinishedOpening', sidebarFinishedOpening)
+        // const position = buttonsRef.current && buttonsRef.current[activeNoun]?.getBoundingClientRect();
+        // console.log('position', position?.top)
+        // console.log('sidebarFinishedOpening', sidebarFinishedOpening)
         handleScrollTo(selectedNoun || 400);
         
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSidebarVisible])
 
+    // useEffect(() => {
+    //     const handleScroll = (event: any) => {
+    //       console.log('window.scrollY', window.scrollY);
+    //       console.log('isScrolling', isScrolling);
+
+    //       setIsScrolling(true);
+    //     };
+    
+    //     window.addEventListener('scroll', handleScroll);
+    
+    //     return () => {
+    //       window.removeEventListener('scroll', handleScroll);
+    //       setIsScrolling(false);
+    //     };
+    //   }, []);
+    useEffect(() => {
+        window.addEventListener('mousemove', (event) => {});
+        onmousemove = () => { 
+            setIsKeyboardNavigating(false);
+        };
+    
+        return () => {
+        //   window.removeEventListener('mousemove', onMouseMove);
+        };
+      }, []);
     
     useEffect(() => {
+        setIsKeyboardNavigating(true);
         let amountToMove = 10;
         if (width <= 400) {
             amountToMove = 3;
@@ -230,6 +253,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
             if (keyboardEsc) {
                 setIsSidebarVisible(false);
                 setSelectedNoun(undefined);
+                setIsKeyboardNavigating(false);
             }
             if (sortOrder === "date-descending") {
                 if (keyboardPrev && (selectedNoun + 1 < nounCount)) {
@@ -295,7 +319,12 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                 >
                 {/* Todo: move wrapper into parent component */}
                 <motion.div 
-                    className={cx(classes.gridWrap, isSidebarVisible && classes.sidebarVisible, !isSidebarVisible && classes.sidebarHidden)}
+                    className={cx(
+                        classes.gridWrap, 
+                        isSidebarVisible && classes.sidebarVisible, 
+                        !isSidebarVisible && classes.sidebarHidden,
+                        isKeyboardNavigating && classes.isKeyboardNavigating
+                    )}
                     // layout            
                     // variants={gridVariants}
                     // initial={!isSidebarVisible && "closed"}
@@ -394,7 +423,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                     id={`${i}`}
                                                     onMouseDown={(e) => (selectedNoun === i && document.activeElement && parseInt(document.activeElement.id) === i) && handleOnFocus(i)}
                                                     onFocus={(e) => handleOnFocus(i)}
-                                                    onMouseOver={() => setActiveNoun(i)} 
+                                                    onMouseOver={() => !isKeyboardNavigating && setActiveNoun(i)} 
                                                     onMouseOut={() => selectedNoun && setActiveNoun(selectedNoun)}
                                                     >
                                                     <img 
@@ -431,7 +460,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                     // onMouseDown={(e) => (selectedNoun === i && document.activeElement && parseInt(document.activeElement.id) === i) ? removeFocus() : handleOnFocus(i)}
                                                     onMouseDown={(e) => (selectedNoun === i && document.activeElement && parseInt(document.activeElement.id) === i) && handleOnFocus(i)}
                                                     onFocus={(e) => handleOnFocus(i)}
-                                                    onMouseOver={() => setActiveNoun(i)} 
+                                                    onMouseOver={() => !isKeyboardNavigating && setActiveNoun(i)} 
                                                     onMouseOut={() => selectedNoun && setActiveNoun(selectedNoun)}
                                                     >
                                                     <img 
