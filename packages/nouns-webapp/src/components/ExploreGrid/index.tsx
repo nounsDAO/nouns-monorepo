@@ -161,6 +161,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
 
     const handleScrollTo = (nounId: number) => {
         // console.log('handle scroll', nounId, buttonsRef.current[nounId])
+        setIsKeyboardNavigating(true);
         nounId && buttonsRef.current[nounId]?.scrollIntoView({behavior: 'smooth'});
     };
     
@@ -229,13 +230,14 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         window.addEventListener('mousemove', (event) => {});
         onmousemove = () => { 
             setIsKeyboardNavigating(false);
+            console.log('mouse move')
         };
     
         return () => {
         //   window.removeEventListener('mousemove', onMouseMove);
         };
       }, []);
-    
+    console.log(isKeyboardNavigating)
     useEffect(() => {
         setIsKeyboardNavigating(true);
         let amountToMove = 10;
