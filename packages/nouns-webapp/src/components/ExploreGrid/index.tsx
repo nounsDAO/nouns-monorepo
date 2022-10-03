@@ -230,14 +230,14 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         window.addEventListener('mousemove', (event) => {});
         onmousemove = () => { 
             setIsKeyboardNavigating(false);
-            console.log('mouse move')
+            // console.log('mouse move')
         };
     
         return () => {
         //   window.removeEventListener('mousemove', onMouseMove);
         };
       }, []);
-    console.log(isKeyboardNavigating)
+    // console.log(isKeyboardNavigating)
     useEffect(() => {
         setIsKeyboardNavigating(true);
         let amountToMove = 10;
