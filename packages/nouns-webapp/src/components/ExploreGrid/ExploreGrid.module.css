@@ -48,7 +48,8 @@
     --gap: 0px;
     padding: 0;
     background-color: var(--brand-cool-background);
-    border-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 .gridWrap.sidebarHidden .exploreWrap {
     /* overflow: hidden; */
