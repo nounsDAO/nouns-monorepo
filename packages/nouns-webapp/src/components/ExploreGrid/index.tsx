@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { BigNumber } from 'ethers';
 // import { StandaloneNounImage } from '../../components/StandaloneNoun';
 import classes from './ExploreGrid.module.css';
@@ -110,6 +110,10 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     // }
     
     const handleNounDetail = (nounId: number, sidebarVisibility: string, event: React.MouseEvent | React.FocusEvent) => {
+        console.log('handleNounDetail');
+        // if (isSidebarVisible === true) {
+            handleScrollTo(nounId);
+        // }
         if (nounId === selectedNoun) {
             handleCloseDetail();
         } else {
@@ -144,19 +148,27 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     const keyboardDown: boolean = useKeyPress("ArrowDown");
     const keyboardEsc: boolean = useKeyPress("Escape");
 
+    const [selectedNounOffsetTop, setSelectedNounOffsetTop] = useState<number>();
+
+
     const buttonsRef = useRef<(HTMLButtonElement | null)[]>([])
     const focusNoun = (index: number) => {
+        console.log(buttonsRef.current[activeNoun]?.getBoundingClientRect());
+        const position = buttonsRef.current && buttonsRef.current[activeNoun]?.getBoundingClientRect();
+        setSelectedNounOffsetTop(position?.top);
+        console.log('position', position?.top)
         // console.log("focusing noun");
         index && buttonsRef.current[index]?.focus();
         setActiveNoun(index);
         setSelectedNoun(index);
-        setIsSidebarVisible(true)
+        setIsSidebarVisible(true);
     };
 
     const handleScrollTo = (nounId: number) => {
+        console.log('handle scroll', nounId, buttonsRef.current[nounId])
         nounId && buttonsRef.current[nounId]?.scrollIntoView({behavior: 'smooth'});
     };
-
+    
     // const gridVariants = {
     //     closed: { 
     //         width: "100%", 
@@ -191,6 +203,16 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     // 991px: 5
     // 1399px: 8
     // > 10
+    const [sidebarFinishedOpening, setSidebarFinishedOpening] = useState<boolean>(false);
+
+    useLayoutEffect(() => {
+        const position = buttonsRef.current && buttonsRef.current[activeNoun]?.getBoundingClientRect();
+        console.log('position', position?.top)
+        console.log('sidebarFinishedOpening', sidebarFinishedOpening)
+        handleScrollTo(selectedNoun || 400);
+        
+    }, [isSidebarVisible])
+
     
     useEffect(() => {
         let amountToMove = 10;
@@ -243,6 +265,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     // const iconLargeGrid = <><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#000" d="M0 2.571A2.571 2.571 0 0 1 2.571 0h5.143a2.571 2.571 0 0 1 2.572 2.571v5.143a2.571 2.571 0 0 1-2.572 2.572H2.571A2.571 2.571 0 0 1 0 7.714V2.571Zm13.714 0A2.572 2.572 0 0 1 16.286 0h5.143A2.571 2.571 0 0 1 24 2.571v5.143a2.571 2.571 0 0 1-2.571 2.572h-5.143a2.572 2.572 0 0 1-2.572-2.572V2.571ZM0 16.286a2.572 2.572 0 0 1 2.571-2.572h5.143a2.572 2.572 0 0 1 2.572 2.572v5.143A2.571 2.571 0 0 1 7.714 24H2.571A2.571 2.571 0 0 1 0 21.429v-5.143Zm13.714 0a2.572 2.572 0 0 1 2.572-2.572h5.143A2.571 2.571 0 0 1 24 16.286v5.143A2.57 2.57 0 0 1 21.429 24h-5.143a2.571 2.571 0 0 1-2.572-2.571v-5.143Z"/></svg></>;
     // const iconSmallGrid = <><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#000" d="M0 1.714A1.714 1.714 0 0 1 1.714 0h3.429a1.714 1.714 0 0 1 1.714 1.714v3.429a1.714 1.714 0 0 1-1.714 1.714H1.714A1.714 1.714 0 0 1 0 5.143V1.714Zm8.571 0A1.714 1.714 0 0 1 10.286 0h3.428a1.714 1.714 0 0 1 1.715 1.714v3.429a1.714 1.714 0 0 1-1.715 1.714h-3.428A1.714 1.714 0 0 1 8.57 5.143V1.714Zm8.572 0A1.714 1.714 0 0 1 18.857 0h3.429A1.714 1.714 0 0 1 24 1.714v3.429a1.714 1.714 0 0 1-1.714 1.714h-3.429a1.714 1.714 0 0 1-1.714-1.714V1.714ZM0 10.286A1.714 1.714 0 0 1 1.714 8.57h3.429a1.714 1.714 0 0 1 1.714 1.715v3.428a1.714 1.714 0 0 1-1.714 1.715H1.714A1.714 1.714 0 0 1 0 13.714v-3.428Zm8.571 0a1.714 1.714 0 0 1 1.715-1.715h3.428a1.714 1.714 0 0 1 1.715 1.715v3.428a1.714 1.714 0 0 1-1.715 1.715h-3.428a1.714 1.714 0 0 1-1.715-1.715v-3.428Zm8.572 0a1.714 1.714 0 0 1 1.714-1.715h3.429A1.714 1.714 0 0 1 24 10.286v3.428a1.714 1.714 0 0 1-1.714 1.715h-3.429a1.714 1.714 0 0 1-1.714-1.715v-3.428ZM0 18.857a1.714 1.714 0 0 1 1.714-1.714h3.429a1.714 1.714 0 0 1 1.714 1.714v3.429A1.714 1.714 0 0 1 5.143 24H1.714A1.714 1.714 0 0 1 0 22.286v-3.429Zm8.571 0a1.714 1.714 0 0 1 1.715-1.714h3.428a1.714 1.714 0 0 1 1.715 1.714v3.429A1.714 1.714 0 0 1 13.714 24h-3.428a1.714 1.714 0 0 1-1.715-1.714v-3.429Zm8.572 0a1.714 1.714 0 0 1 1.714-1.714h3.429A1.714 1.714 0 0 1 24 18.857v3.429A1.714 1.714 0 0 1 22.286 24h-3.429a1.714 1.714 0 0 1-1.714-1.714v-3.429Z"/></svg></>;  
     const containerRef = useRef(null);
+    
 
     const sortOptions = [
         {
@@ -336,9 +359,26 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                     </div>  
                     <motion.div 
                         className={cx(classes.exploreGrid, isFullView && classes.fullViewGrid, !isMobile && classes[activeSizeOption])}
+                        // onAnimationComplete={() => setSidebarFinishedOpening(true)}
+                        // // onLayoutAnimationComplete={() => setSidebarFinishedOpening(!sidebarFinishedOpening)}
+                        // // // onAnimationComplete={() => handleScrollTo(5)}
+                        // initial={isSidebarVisible && {
+                        //     width: '100%',
+                        // }}
+                        // animate={isSidebarVisible && {
+                        //     width: '100%',
+                        // }}
+                        // animate={{ x: 1 }}
+                        // onAnimationComplete={definition => {
+                        //     console.log('Completed animating', definition);
+                        //     setSidebarFinishedOpening(!sidebarFinishedOpening);
+                        // }}
                     >   
                             {sortOrder === "date-descending" ? (
-                                <ul>  
+                                <motion.ul 
+                                // layout
+                                // onAnimationComplete={() => setSidebarFinishedOpening(true)}
+                                >  
                                     {nounCount >= 0 && 
                                         [...Array(nounCount)].map((x, i) => 
                                             <motion.li 
@@ -374,7 +414,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                             </motion.li>
                                         ).reverse()
                                     } 
-                                </ul>
+                                </motion.ul>
                             ) : (
                                 <ul>  
                                     {nounCount >= 0 && 
@@ -427,7 +467,6 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                 disablePrev={((sortOrder === "date-ascending" && activeNoun === 0) || (sortOrder === "date-descending" && activeNoun === nounCount - 1)) ? true : false}
                                 disableNext={((sortOrder === "date-ascending" && activeNoun === nounCount - 1) || (sortOrder === "date-descending" && activeNoun === 0)) ? true : false}
                             />
-                                
                         )}
                     </AnimatePresence>
             </div>

@@ -36,7 +36,7 @@
     width: 100%;
     display: flex;
     flex-wrap: wrap;
-    transition: all 0.15s ease-in-out;
+    /* transition: all 0.15s ease-in-out; */
     --gap: 0.8vw;
     --columns: 10;
     gap: var(--gap);
@@ -46,6 +46,12 @@
     --columns: 30;
     /* --gap: 0.4vw; */
     --gap: 0px;
+    padding: 0;
+    background-color: var(--brand-cool-background);
+    border-radius: 10px;
+}
+.gridWrap.sidebarHidden .exploreWrap {
+    /* overflow: hidden; */
 }
 .gridWrap.sidebarHidden .exploreGrid ul li, .gridWrap.sidebarHidden .exploreGrid ul li img {
     /* border-radius: 4px; */
@@ -70,7 +76,7 @@
     list-style-type: none;
     margin: 0;
     padding: 0;
-    transition: width 0.2s ease-in-out;
+    /* transition: width 0.2s ease-in-out; */
     animation-name: animateIn;
     animation-duration: 25ms;
     animation-delay: calc(var(--animation-order) * 25ms);
@@ -93,7 +99,7 @@
     /* transform: scale(1.1); */
     /* top: -4px; */
     /* border-radius: 3%; */
-    transition: transform 0.1s ease-in-out;
+    /* transition: transform 0.1s ease-in-out; */
 }
 
 .exploreGrid li.activeNoun:hover img {
@@ -105,7 +111,7 @@
     margin: 0 auto;
     width: 100%;
     position: relative;
-    transition: transform 0.1s ease-in-out;
+    /* transition: transform 0.1s ease-in-out; */
     /* Animation conflicts with transform */
     /* animation-name: animateIn; */
     animation-duration: 60ms;
@@ -128,7 +134,7 @@
     width: 100%;
     aspect-ratio: 1;
     border-radius: 10px;
-    transition: transform 0.05s ease-in-out;
+    /* transition: transform 0.05s ease-in-out; */
 }
 
 .exploreGrid .nounIdOverlay {
@@ -145,7 +151,7 @@
     box-shadow: 0px 0px 10px rgb(0 0 0 / 25%);
     font-family: 'Londrina Solid';
     font-size: clamp(14px, 0.8vw, 24px);
-    transition: all .05s ease-in-out;
+    /* transition: all .05s ease-in-out; */
 }
 
 .exploreGrid li:hover .nounIdOverlay, 
@@ -228,7 +234,7 @@
 
 li.activeNoun button img, li.activeNoun:hover button img {
     /* transform: scale(0.9); */
-    transition: transform 0.05s ease-in-out;
+    /* transition: transform 0.05s ease-in-out; */
 }
 
 .detailWrap > div{
@@ -323,7 +329,7 @@ li.activeNoun button img, li.activeNoun:hover button img {
 .nav .selectWrap:hover {
     background-color: #e2e3e8;
     color: black;
-    transition: all 0.2s ease-in-out;
+    /* transition: all 0.2s ease-in-out; */
     cursor:  crosshair !important;
 }
 .nav .selectWrap:hover {
@@ -390,7 +396,7 @@ li.activeNoun button img, li.activeNoun:hover button img {
 .nav button:hover {
     background-color: #e2e3e8;
     color: black;
-    transition: all 0.2s ease-in-out;
+    /* transition: all 0.2s ease-in-out; */
 }
 
 .nav button:hover svg {
