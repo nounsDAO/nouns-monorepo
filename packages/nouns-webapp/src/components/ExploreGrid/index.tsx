@@ -459,6 +459,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                 key={i}
                                             >
                                                 <button 
+                                                    ref={el => buttonsRef.current[i] = el} 
                                                     // onMouseDown={(e) => (selectedNoun === i && document.activeElement && parseInt(document.activeElement.id) === i) ? removeFocus() : handleOnFocus(i)}
                                                     onMouseDown={(e) => (selectedNoun === i && document.activeElement && parseInt(document.activeElement.id) === i) && handleOnFocus(i)}
                                                     onFocus={(e) => handleOnFocus(i)}
