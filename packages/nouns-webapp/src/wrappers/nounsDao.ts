@@ -1,7 +1,6 @@
 import { NounsDAOABI, NounsDAOV2ABI, NounsDaoLogicV1Factory } from '@nouns/sdk';
 import {
   ChainId,
-  useBlockMeta,
   useBlockNumber,
   useContractCall,
   useContractCalls,
@@ -17,6 +16,7 @@ import config, { CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
 import { proposalsQuery } from './subgraph';
 import BigNumber from 'bignumber.js';
+import { useBlockTimestamp } from '../hooks/useBlockTimestamp';
 
 export interface DynamicQuorumParams {
   minQuorumVotesBPS: number;
@@ -377,7 +377,7 @@ const getProposalState = (
 export const useAllProposalsViaSubgraph = (): ProposalData => {
   const { loading, data, error } = useQuery(proposalsQuery());
   const blockNumber = useBlockNumber();
-  const { timestamp } = useBlockMeta();
+  const timestamp = useBlockTimestamp(blockNumber);
 
   const proposals = data?.proposals?.map((proposal: ProposalSubgraphEntity) => {
     const description = proposal.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, '');
@@ -386,7 +386,7 @@ export const useAllProposalsViaSubgraph = (): ProposalData => {
       title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
       description: description ?? 'No description.',
       proposer: proposal.proposer.id,
-      status: getProposalState(blockNumber, timestamp, proposal),
+      status: getProposalState(blockNumber, new Date((timestamp ?? 0) * 1000), proposal),
       proposalThreshold: parseInt(proposal.proposalThreshold),
       quorumVotes: parseInt(proposal.quorumVotes),
       forCount: parseInt(proposal.forVotes),
