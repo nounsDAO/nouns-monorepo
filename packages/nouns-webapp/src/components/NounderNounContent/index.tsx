@@ -61,6 +61,8 @@ const NounderNounContent: React.FC<{
     };
   }, [handleKeyPress]);
 
+  console.log({ nounId })
+
   return (
     <AuctionActivityWrapper>
       <div className={auctionActivityClasses.informationRow}>
@@ -87,7 +89,7 @@ const NounderNounContent: React.FC<{
             className={`${auctionActivityClasses.currentBidCol} ${nounContentClasses.currentBidCol} ${auctionActivityClasses.auctionTimerCol}`}
           >
             <div className={auctionActivityClasses.section}>
-              <Winner winner={''} isNounders={true} />
+              <Winner winner={''} isNounders={true} nounId={nounId} />
             </div>
           </Col>
         </Row>

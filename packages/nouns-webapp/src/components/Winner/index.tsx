@@ -1,4 +1,5 @@
 import { Button, Row, Col } from 'react-bootstrap';
+import { BigNumber } from 'ethers';
 import { useAppSelector } from '../../hooks';
 import classes from './Winner.module.css';
 import ShortAddress from '../ShortAddress';
@@ -9,15 +10,19 @@ import { useActiveLocale } from '../../hooks/useActivateLocale';
 import React from 'react';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import Tooltip from '../Tooltip';
+import { rewardRecipient } from '../../utils/nounderNoun';
 
 interface WinnerProps {
   winner: string;
   isNounders?: boolean;
+  nounId: BigNumber;
 }
 
 const Winner: React.FC<WinnerProps> = props => {
-  const { winner, isNounders } = props;
+  const { winner, isNounders, nounId } = props;
   const activeAccount = useAppSelector(state => state.account.activeAccount);
+  
+  console.log({winner, isNounders})
 
   const isCool = useAppSelector(state => state.application.isCoolBackground);
   const isMobile = isMobileScreen();
@@ -57,10 +62,12 @@ const Winner: React.FC<WinnerProps> = props => {
   ) : (
     <ShortAddress size={40} address={winner} avatar={true} />
   );
-
+  
+  const rewardRecipientString = rewardRecipient(nounId)
+  
   const nounderNounContent = (
     <a
-      href={buildEtherscanAddressLink('pnounders.eth')}
+      href={buildEtherscanAddressLink(rewardRecipientString)}
       target={'_blank'}
       rel="noreferrer"
       className={classes.link}
@@ -72,7 +79,7 @@ const Winner: React.FC<WinnerProps> = props => {
         }}
         id="holder-etherscan-tooltip"
       >
-        pNounders.eth
+        {rewardRecipientString}
       </Tooltip>
     </a>
   );

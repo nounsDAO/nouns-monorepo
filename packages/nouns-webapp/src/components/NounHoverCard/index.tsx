@@ -8,7 +8,7 @@ import ShortAddress from '../ShortAddress';
 import { StandaloneNounCircular } from '../StandaloneNoun';
 import classes from './NounHoverCard.module.css';
 import { HeartIcon, CakeIcon } from '@heroicons/react/solid';
-import { isNounderNoun } from '../../utils/nounderNoun';
+import { isRewardNoun } from '../../utils/nounderNoun';
 import { useAppSelector } from '../../hooks';
 import { i18n } from '@lingui/core';
 import { getNounBirthday } from '../NounInfoRowBirthday';
@@ -40,7 +40,7 @@ const NounHoverCard: React.FC<NounHoverCardProps> = props => {
     );
   }
   const numericNounId = parseInt(nounId);
-  const nounIdForQuery = isNounderNoun(BigNumber.from(nounId)) ? numericNounId + 1 : numericNounId;
+  const nounIdForQuery = isRewardNoun(BigNumber.from(nounId)) ? numericNounId + 1 : numericNounId;
   const startTime = getNounBirthday(nounIdForQuery, pastAuctions);
 
   if (error || !startTime) {

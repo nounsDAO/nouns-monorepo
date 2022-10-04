@@ -3,7 +3,7 @@ import { BigNumber as EthersBN, utils } from 'ethers';
 import { NounsAuctionHouseABI } from '@nouns/sdk';
 import config from '../config';
 import BigNumber from 'bignumber.js';
-import { isNounderNoun } from '../utils/nounderNoun';
+import { isRewardNoun } from '../utils/nounderNoun';
 import { useAppSelector } from '../hooks';
 import { AuctionState } from '../state/slices/auction';
 
@@ -60,7 +60,7 @@ export const useAuctionMinBidIncPercentage = () => {
 export const useNounCanVoteTimestamp = (nounId: number) => {
   const nextNounId = nounId + 1;
 
-  const nextNounIdForQuery = isNounderNoun(EthersBN.from(nextNounId)) ? nextNounId + 1 : nextNounId;
+  const nextNounIdForQuery = isRewardNoun(EthersBN.from(nextNounId)) ? nextNounId + 1 : nextNounId;
 
   const pastAuctions = useAppSelector(state => state.pastAuctions.pastAuctions);
 

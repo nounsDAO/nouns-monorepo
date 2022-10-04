@@ -33,6 +33,7 @@ const Holder: React.FC<HolderProps> = props => {
   }
 
   const holder = data && data.noun.owner.id;
+  
 
   const nonNounderNounContent = (
     <a

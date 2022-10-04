@@ -15,7 +15,7 @@ interface MobileNounWinEventProps {
 const MobileNounWinEvent: React.FC<MobileNounWinEventProps> = props => {
   const { event } = props;
 
-  const isNounderNoun = parseInt(event.nounId as string) % 10 === 0;
+  const isRewardNoun = parseInt(event.nounId as string) % 10 === 0;
   return (
     <MobileNounActivityRow
       onClick={() => window.open(buildEtherscanTxLink(event.transactionHash), '_blank')}
@@ -26,7 +26,7 @@ const MobileNounWinEvent: React.FC<MobileNounWinEventProps> = props => {
       }
       primaryContent={
         <>
-          {isNounderNoun ? (
+          {isRewardNoun ? (
             <Trans>
               <span className={classes.bold}> Noun {event.nounId} </span> sent to{' '}
               <span className={classes.bold}>

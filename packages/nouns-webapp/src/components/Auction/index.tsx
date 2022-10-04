@@ -10,7 +10,7 @@ import { INounSeed } from '../../wrappers/nounToken';
 import NounderNounContent from '../NounderNounContent';
 import { useHistory } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { isNounderNoun } from '../../utils/nounderNoun';
+import { isRewardNoun, isNounsTreasuryNoun, isPNounsTreasuryNoun } from '../../utils/nounderNoun';
 import {
   setNextOnDisplayAuctionNounId,
   setPrevOnDisplayAuctionNounId,
@@ -79,6 +79,11 @@ const Auction: React.FC<AuctionProps> = props => {
     />
   );
 
+  const isNounder = currentAuction && isRewardNoun(currentAuction.nounId)
+  console.log({
+    currentAuction, isNounder
+  })
+
   return (
     <div style={{ backgroundColor: stateBgColor }} className={classes.wrapper}>
       <Container fluid="xl">
@@ -88,9 +93,15 @@ const Auction: React.FC<AuctionProps> = props => {
           </Col>
           <Col lg={{ span: 6 }} className={classes.auctionActivityCol}>
             {currentAuction &&
-              (isNounderNoun(currentAuction.nounId)
+              (isRewardNoun(currentAuction.nounId)
                 ? nounderNounContent
-                : currentAuctionActivityContent)}
+                : isPNounsTreasuryNoun(currentAuction.nounId)
+                  ? nounderNounContent
+                  : isNounsTreasuryNoun(currentAuction.nounId)
+                    ? nounderNounContent
+                    : currentAuctionActivityContent
+              )
+            }
           </Col>
         </Row>
       </Container>

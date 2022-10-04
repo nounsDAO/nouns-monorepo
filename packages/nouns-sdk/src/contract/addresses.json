@@ -8,6 +8,7 @@
     "nounsAuctionHouseProxy": "0x5fd95a5af4E60B9B796Cca6FEB44273359929ea8",
     "nounsAuctionHouseProxyAdmin": "0xA9D99aA042DD0c3B74120849a784C2A0AF7Fa038",
     "nounsDaoExecutor": "0x553826Cb0D0Ee63155920F42b4E60aaE6607DFCB",
+    "ogNounsExecutor": "0x0BC3807Ec262cB779b38D65b38158acC3bfedE10",
     "nounsDAOProxy": "0x2BbEbFECA0fEbde8C70EF8501C991f3AB2095862",
     "nounsDAOLogicV1": "0x65519993deD435233d8E9EdE178d5604De6c6eb2"
   },

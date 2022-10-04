@@ -118,7 +118,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
             <Col lg={6} className={classes.auctionTimerCol}>
               {auctionEnded ? (
                 isLastAuction ? (
-                  <Winner winner={auction.bidder} />
+                  <Winner winner={auction.bidder} nounId={auction.nounId} />
                 ) : (
                   <Holder nounId={auction.nounId.toNumber()} />
                 )
