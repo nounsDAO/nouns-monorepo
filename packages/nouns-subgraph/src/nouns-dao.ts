@@ -154,6 +154,10 @@ export function handleVoteCast(event: VoteCast): void {
 
   if (event.params.support == 0) {
     proposal.againstVotes = proposal.againstVotes.plus(event.params.votes);
+  } else if (event.params.support == 1) {
+    proposal.forVotes = proposal.forVotes.plus(event.params.votes);
+  } else if (event.params.support == 2) {
+    proposal.abstainVotes = proposal.abstainVotes.plus(event.params.votes);
   }
 
   if (proposal.usingDynamicQuorum) {
@@ -164,14 +168,6 @@ export function handleVoteCast(event: VoteCast): void {
       proposal.maxQuorumVotesBPS,
       proposal.quorumCoefficient,
     );
-  }
-
-  if (event.params.support == 0) {
-    proposal.againstVotes = proposal.againstVotes.plus(event.params.votes);
-  } else if (event.params.support == 1) {
-    proposal.forVotes = proposal.forVotes.plus(event.params.votes);
-  } else if (event.params.support == 2) {
-    proposal.abstainVotes = proposal.abstainVotes.plus(event.params.votes);
   }
 
   if (proposal.status == STATUS_PENDING) {
