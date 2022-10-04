@@ -24,6 +24,7 @@
     "deploy:hardhat": "yarn clean && yarn prepare:hardhat && yarn codegen && yarn create:localnode nounsdao/nouns-subgraph && yarn deploy:localnode nounsdao/nouns-subgraph",
     "deploy:rinkeby": "yarn clean && yarn prepare:rinkeby && yarn codegen && yarn deploy nounsdao/nouns-subgraph-rinkeby",
     "deploy:mainnet": "yarn clean && yarn prepare:mainnet && yarn codegen && yarn deploy nounsdao/nouns-subgraph",
+    "deploy:goerli": "yarn clean && yarn prepare:goerli && yarn codegen && yarn deploy verbsteam/nouns-goerli",
     "mustache": "mustache"
   },
   "devDependencies": {
