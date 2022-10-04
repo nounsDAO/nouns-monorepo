@@ -139,10 +139,28 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                     stroke-width="4"
                     stroke-dasharray="5"
                   />
+                  <line
+                    x1={470}
+                    y1={PLOTTING_CONSTANTS.maxQHeightPlotSpace}
+                    x2={470}
+                    y2={PLOTTING_CONSTANTS.height}
+                    stroke="#151C3B40"
+                    stroke-width="4"
+                    stroke-dasharray="5"
+                  />
                   <g fill="#4965F080" stroke="none">
                     <polygon points={`950,288 950,32 470,32 0,288`} />
                     <polygon points={`950,320 950,288 ${0},288 0,320`} />
                   </g>
+                  {Math.abs(x - 470) > 100 && (
+                    <text
+                      fill="var(--brand-gray-light-text)"
+                      x={470 + 10}
+                      y={PLOTTING_CONSTANTS.height - 10}
+                    >
+                      {linearToConstantCrossoverBPS / 100}% of Nouns Against
+                    </text>
+                  )}
                   {/* Vertical Line indicating against BPS */}
                   <line
                     x1={x}
