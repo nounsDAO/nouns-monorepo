@@ -319,6 +319,14 @@ export const totalNounSupplyAtPropSnapshot = (proposalId: string) => gql`
 }
 `;
 
+export const propUsingDynamicQuorum = (propoaslId: string) => gql`
+{
+  proposal(id: "${propoaslId}") {
+    quorumCoefficient 
+  }
+}
+`;
+
 export const clientFactory = (uri: string) =>
   new ApolloClient({
     uri,

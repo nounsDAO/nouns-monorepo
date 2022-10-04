@@ -4,7 +4,6 @@ import {
   ProposalState,
   useCurrentQuorum,
   useExecuteProposal,
-  useIsPropUsingDAOV2,
   useProposal,
   useQueueProposal,
 } from '../../wrappers/nounsDao';
@@ -30,6 +29,7 @@ import {
   delegateNounsAtBlockQuery,
   ProposalVotes,
   Delegates,
+  propUsingDynamicQuorum,
 } from '../../wrappers/subgraph';
 import { getNounVotes } from '../../utils/getNounsVotes';
 import { Trans } from '@lingui/macro';
@@ -62,7 +62,12 @@ const VotePage = ({
 
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
-  const isV2Prop = useIsPropUsingDAOV2(id ?? '');
+  // const isV2Prop = useIsPropUsingDAOV2(id ?? '');
+  const {
+    data: dqInfo,
+    loading: loadingDQInfo,
+    error: dqError,
+  } = useQuery(propUsingDynamicQuorum(id ?? '0'));
 
   const { queueProposal, queueProposalState } = useQueueProposal();
   const { executeProposal, executeProposalState } = useExecuteProposal();
@@ -101,7 +106,7 @@ const VotePage = ({
   const currentQuorum = useCurrentQuorum(
     config.addresses.nounsDAOProxy,
     proposal && proposal.id ? parseInt(proposal.id) : 0,
-    isV2Prop,
+    dqInfo && dqInfo.proposal ? dqInfo.proposal.quorumCoefficient > 0 : false,
   );
 
   const hasSucceeded = proposal?.status === ProposalState.SUCCEEDED;
@@ -253,7 +258,7 @@ const VotePage = ({
     }
   }, [showToast]);
 
-  if (!proposal || loading || !data) {
+  if (!proposal || loading || !data || loadingDQInfo || !dqInfo) {
     return (
       <div className={classes.spinner}>
         <Spinner animation="border" />
@@ -261,7 +266,7 @@ const VotePage = ({
     );
   }
 
-  if (error) {
+  if (error || dqError) {
     return <Trans>Failed to fetch</Trans>;
   }
 
@@ -271,6 +276,7 @@ const VotePage = ({
   const forNouns = getNounVotes(data, 1);
   const againstNouns = getNounVotes(data, 0);
   const abstainNouns = getNounVotes(data, 2);
+  const isV2Prop = dqInfo.proposal.quorumCoefficient > 0;
 
   return (
     <Section fullWidth={false} className={classes.votePage}>

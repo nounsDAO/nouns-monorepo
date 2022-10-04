@@ -175,24 +175,6 @@ const removeItalics = (text: string | null): string | null =>
 
 const removeMarkdownStyle = R.compose(removeBold, removeItalics);
 
-export const useIsPropUsingDAOV2 = (proposalId: string | undefined): boolean => {
-  try {
-  const [proposal] =
-    useContractCall<[any]>({
-      abi,
-      address: nounsDaoContract.address,
-      method: 'proposals',
-      args: [proposalId],
-    }) || [];
-
-  return proposal?.totalSupply !== undefined && proposal?.totalSupply > 0;
-  } catch (e) {
-    console.log(e);
-  }
-
-  return false;
-};
-
 export const useCurrentQuorum = (
   nounsDao: string,
   proposalId: number,
@@ -200,7 +182,7 @@ export const useCurrentQuorum = (
 ): number | undefined => {
   const [quorum] =
     useContractCall<[EthersBN]>({
-      abi: isV2 ? abi: abiV1,
+      abi: isV2 ? abi : abiV1,
       address: nounsDao,
       method: 'quorumVotes',
       args: isV2 ? [proposalId] : [],
