@@ -1,4 +1,4 @@
-import { NounsDAOV2ABI, NounsDaoLogicV1Factory } from '@nouns/sdk';
+import { NounsDAOABI, NounsDAOV2ABI, NounsDaoLogicV1Factory } from '@nouns/sdk';
 import {
   ChainId,
   useBlockMeta,
@@ -123,6 +123,7 @@ export interface ProposalTransaction {
 }
 
 const abi = new utils.Interface(NounsDAOV2ABI);
+const abiV1 = new utils.Interface(NounsDAOABI);
 const nounsDaoContract = new NounsDaoLogicV1Factory().attach(config.addresses.nounsDAOProxy);
 
 // Start the log search at the mainnet deployment block to speed up log queries
@@ -175,6 +176,7 @@ const removeItalics = (text: string | null): string | null =>
 const removeMarkdownStyle = R.compose(removeBold, removeItalics);
 
 export const useIsPropUsingDAOV2 = (proposalId: string | undefined): boolean => {
+  try {
   const [proposal] =
     useContractCall<[any]>({
       abi,
@@ -184,6 +186,11 @@ export const useIsPropUsingDAOV2 = (proposalId: string | undefined): boolean => 
     }) || [];
 
   return proposal?.totalSupply !== undefined && proposal?.totalSupply > 0;
+  } catch (e) {
+    console.log(e);
+  }
+
+  return false;
 };
 
 export const useCurrentQuorum = (
@@ -193,7 +200,7 @@ export const useCurrentQuorum = (
 ): number | undefined => {
   const [quorum] =
     useContractCall<[EthersBN]>({
-      abi,
+      abi: isV2 ? abi: abiV1,
       address: nounsDao,
       method: 'quorumVotes',
       args: isV2 ? [proposalId] : [],
