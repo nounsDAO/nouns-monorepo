@@ -14,7 +14,7 @@
   text-align: left;
 }
 
-.nounsRepresented {
+.nRepresented {
   color: var(--brand-gray-dark-text);
   display: flex;
   margin-top: 0.25rem;

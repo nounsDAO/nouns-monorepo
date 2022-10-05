@@ -1,6 +1,6 @@
 import { getGrayBackgroundSVG } from '../../utils/grayBackgroundSVG';
-import nounClasses from '../Noun/Noun.module.css';
-import Noun from '../Noun';
+import punkClasses from '../Punk/Token.module.css';
+import Punk from '../Punk';
 import classes from './GrayCircle.module.css';
 
 interface GrayCircleProps {
@@ -11,15 +11,15 @@ export const GrayCircle: React.FC<GrayCircleProps> = props => {
   const { isDelegateView } = props;
   return (
     <div className={isDelegateView ? classes.wrapper : ''}>
-      <Noun
+      <Punk
         imgPath={getGrayBackgroundSVG()}
         alt={''}
         wrapperClassName={
           isDelegateView
-            ? nounClasses.delegateViewCircularNounWrapper
-            : nounClasses.circularNounWrapper
+            ? punkClasses.delegateViewCircularTokenWrapper
+            : punkClasses.circularTokenWrapper
         }
-        className={isDelegateView ? nounClasses.delegateViewCircular : nounClasses.circular}
+        className={isDelegateView ? punkClasses.delegateViewCircular : punkClasses.circular}
       />
     </div>
   );

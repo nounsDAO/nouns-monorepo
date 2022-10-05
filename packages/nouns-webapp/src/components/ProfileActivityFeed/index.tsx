@@ -11,14 +11,14 @@ import DesktopProfileActivityFeed from '../DesktopProfileActivityFeed';
 import MobileProfileActivityFeed from '../MobileProfileActivityFeed';
 
 interface ProfileActivityFeedProps {
-  nounId: number;
+  tokenId: number;
 }
 
 interface ProposalInfo {
   id: number;
 }
 
-export interface NounVoteHistory {
+export interface TokenVoteHistory {
   blockNumber: number | string;
   proposal: ProposalInfo;
   support: boolean;
@@ -27,13 +27,13 @@ export interface NounVoteHistory {
 }
 
 const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
-  const { nounId } = props;
+  const { tokenId } = props;
 
   const MAX_EVENTS_SHOW_ABOVE_FOLD = 5;
 
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const { loading, error, data } = useNounActivity(nounId);
+  const { loading, error, data } = useNounActivity(tokenId);
 
   if (loading || !data || data === undefined) {
     return (
@@ -70,7 +70,7 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
         </div>
         {data && data.length === 0 ? (
           <div className={classes.nullStateCopy}>
-            <Trans>This Noun has no activity, since it was just created. Check back soon!</Trans>
+            <Trans>This Punk has no activity, since it was just created. Check back soon!</Trans>
           </div>
         ) : (
           <>

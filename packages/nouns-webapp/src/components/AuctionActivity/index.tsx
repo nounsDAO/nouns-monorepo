@@ -12,14 +12,14 @@ import BidHistory from '../BidHistory';
 import AuctionNavigation from '../AuctionNavigation';
 import AuctionActivityWrapper from '../AuctionActivityWrapper';
 import AuctionTitleAndNavWrapper from '../AuctionTitleAndNavWrapper';
-import AuctionActivityNounTitle from '../AuctionActivityNounTitle';
+import AuctionActivityPunkTitle from '../AuctionActivityPunkTitle';
 import AuctionActivityDateHeadline from '../AuctionActivityDateHeadline';
 import BidHistoryBtn from '../BidHistoryBtn';
 import config from '../../config';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import NounInfoCard from '../NounInfoCard';
+import NounInfoCard from '../PunkInfoCard';
 import { useAppSelector } from '../../hooks';
 import BidHistoryModal from '../BidHistoryModal';
 import { Trans } from '@lingui/macro';
@@ -108,7 +108,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
               <AuctionActivityDateHeadline startTime={auction.startTime} />
             </AuctionTitleAndNavWrapper>
             <Col lg={12}>
-              <AuctionActivityNounTitle isCool={isCool} nounId={auction.tokenId} />
+              <AuctionActivityPunkTitle isCool={isCool} tokenId={auction.tokenId} />
             </Col>
           </Row>
           <Row className={classes.activityRow}>
@@ -123,7 +123,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
                 isLastAuction ? (
                   <Winner winner={auction.bidder} />
                 ) : (
-                  <Holder nounId={auction.tokenId.toNumber()} />
+                  <Holder tokenId={auction.tokenId.toNumber()} />
                 )
               ) : (
                 <AuctionTimer auction={auction} auctionEnded={auctionEnded} />
@@ -154,7 +154,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
           <Col lg={12}>
             {!isLastAuction ? (
               <NounInfoCard
-                nounId={auction.tokenId.toNumber()}
+                tokenId={auction.tokenId.toNumber()}
                 bidHistoryOnClickHandler={showBidModalHandler}
               />
             ) : (

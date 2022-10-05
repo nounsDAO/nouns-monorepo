@@ -17,6 +17,7 @@ const wethContracts: Record<number, string> = {
   [ChainId.Ropsten]: '0xc778417e063141139fce010982780140aa0cd5ab',
   [ChainId.Rinkeby]: '0xc778417e063141139fce010982780140aa0cd5ab',
   [ChainId.Kovan]: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
+  [ChainId.Goerli]: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
 };
 
 
@@ -190,6 +191,7 @@ task('deploy', 'Deploys NFTDescriptor, NDescriptor, NSeeder, and NToken')
       },
       NDAOExecutor: {
         args: [expectedNDAOProxyAddress, args.timelockDelay],
+        waitForConfirmation: true,
       },
       NDAOLogicV1: {
         waitForConfirmation: true,
@@ -240,6 +242,7 @@ task('deploy', 'Deploys NFTDescriptor, NDescriptor, NSeeder, and NToken')
         ]);
         gasPrice = ethers.utils.parseUnits(result.gasPrice.toString(), 'gwei');
       }
+      gasPrice = ethers.utils.parseUnits("2", 'gwei');
 
       const factory = await ethers.getContractFactory(name, {
         libraries: contract?.libraries?.(),
@@ -266,7 +269,7 @@ task('deploy', 'Deploys NFTDescriptor, NDescriptor, NSeeder, and NToken')
         const result = await promptjs.get([
           {
             properties: {
-              confirm: {
+              operation: {
                 pattern: /^(DEPLOY|SKIP|EXIT)$/,
                 description:
                   'Type "DEPLOY" to confirm, "SKIP" to skip this contract, or "EXIT" to exit.',

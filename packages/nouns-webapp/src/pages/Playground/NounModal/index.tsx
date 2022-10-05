@@ -2,7 +2,7 @@ import { Button } from 'react-bootstrap';
 import classes from './NounModal.module.css';
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-import Noun from '../../../components/Noun';
+import Noun from '../../../components/Punk';
 import { svg2png } from '../../../utils/svg2png';
 import { Backdrop } from '../../../components/Modal';
 

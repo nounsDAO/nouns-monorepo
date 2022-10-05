@@ -1,13 +1,13 @@
 import { Col } from 'react-bootstrap';
-import { StandaloneNounWithSeed } from '../StandaloneNoun';
+import { StandaloneTokenWithSeed } from '../StandaloneToken';
 import AuctionActivity from '../AuctionActivity';
 import { Row, Container } from 'react-bootstrap';
 import { setStateBackgroundColor } from '../../state/slices/application';
-import { LoadingNoun } from '../Noun';
+import { LoadingPunk } from '../Punk';
 import { Auction as IAuction } from '../../wrappers/nAuction';
 import classes from './Auction.module.css';
 import { ISeed } from '../../wrappers/nToken';
-import NounderNounContent from '../NounderNounContent';
+import PunkerTokenContent from '../PunkerTokenContent';
 import { useHistory } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { isNounderNoun } from '../../utils/nounderNoun';
@@ -44,17 +44,17 @@ const Auction: React.FC<AuctionProps> = props => {
 
   const nounContent = currentAuction && (
     <div className={classes.nounWrapper}>
-      <StandaloneNounWithSeed
-        nounId={currentAuction.tokenId}
+      <StandaloneTokenWithSeed
+        tokenId={currentAuction.tokenId}
         onLoadSeed={loadedNounHandler}
         shouldLinkToProfile={false}
       />
     </div>
   );
 
-  const loadingNoun = (
+  const loadingPunk = (
     <div className={classes.nounWrapper}>
-      <LoadingNoun />
+      <LoadingPunk />
     </div>
   );
 
@@ -69,9 +69,9 @@ const Auction: React.FC<AuctionProps> = props => {
     />
   );
   const nounderNounContent = currentAuction && lastTokenId && (
-    <NounderNounContent
+    <PunkerTokenContent
       mintTimestamp={currentAuction.startTime}
-      nounId={currentAuction.tokenId}
+      tokenId={currentAuction.tokenId}
       isFirstAuction={currentAuction.tokenId.eq(0)}
       isLastAuction={currentAuction.tokenId.eq(lastTokenId)}
       onPrevAuctionClick={prevAuctionHandler}
@@ -84,7 +84,7 @@ const Auction: React.FC<AuctionProps> = props => {
       <Container fluid="xl">
         <Row>
           <Col lg={{ span: 6 }} className={classes.nounContentCol}>
-            {currentAuction ? nounContent : loadingNoun}
+            {currentAuction ? nounContent : loadingPunk}
           </Col>
           <Col lg={{ span: 6 }} className={classes.auctionActivityCol}>
             {currentAuction &&

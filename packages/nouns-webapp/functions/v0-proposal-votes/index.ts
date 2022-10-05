@@ -3,7 +3,7 @@ import { NormalizedNoun, NormalizedVote, nounsQuery } from '../theGraph';
 import { sharedResponseHeaders } from '../utils';
 
 interface ProposalVote {
-  nounId: number;
+  tokenId: number;
   owner: string;
   delegatedTo: null | string;
   supportDetailed: number;
@@ -14,7 +14,7 @@ interface ProposalVotes {
 }
 
 const builtProposalVote = (noun: NormalizedNoun, vote: NormalizedVote): ProposalVote => ({
-  nounId: noun.id,
+  tokenId: noun.id,
   owner: noun.owner,
   delegatedTo: noun.delegatedTo,
   supportDetailed: vote.supportDetailed,

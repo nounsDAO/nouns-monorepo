@@ -1,4 +1,4 @@
-import { Auction, AuctionHouseContractFunction } from '../../wrappers/tokenAuction';
+import { Auction, AuctionHouseContractFunction } from '../../wrappers/nAuction';
 import { useEthers, useContractFunction } from '@usedapp/core';
 import { connectContractToSigner } from '@usedapp/core/dist/cjs/src/hooks';
 import { useAppSelector } from '../../hooks';
@@ -7,7 +7,7 @@ import { utils, BigNumber as EthersBN } from 'ethers';
 import BigNumber from 'bignumber.js';
 import classes from './Bid.module.css';
 import { Spinner, InputGroup, FormControl, Button, Col } from 'react-bootstrap';
-import { useAuctionMinBidIncPercentage } from '../../wrappers/tokenAuction';
+import { useAuctionMinBidIncPercentage } from '../../wrappers/nAuction';
 import { useAppDispatch } from '../../hooks';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import { NAuctionHouseFactory } from '@nouns/sdk';
@@ -85,11 +85,11 @@ const Bid: React.FC<{
   );
 
   const { send: placeBid, state: placeBidState } = useContractFunction(
-    nounsAuctionHouseContract,
+    nAuctionHouseContract,
     AuctionHouseContractFunction.createBid,
   );
   const { send: settleAuction, state: settleAuctionState } = useContractFunction(
-    nounsAuctionHouseContract,
+    nAuctionHouseContract,
     AuctionHouseContractFunction.settleCurrentAndCreateNewAuction,
   );
 
@@ -125,11 +125,11 @@ const Bid: React.FC<{
     }
 
     const value = utils.parseEther(bidInputRef.current.value.toString());
-    const contract = connectContractToSigner(nounsAuctionHouseContract, undefined, library);
-    const gasLimit = await contract.estimateGas.createBid(auction.nounId, {
+    const contract = connectContractToSigner(nAuctionHouseContract, undefined, library);
+    const gasLimit = await contract.estimateGas.createBid(auction.tokenId, {
       value,
     });
-    placeBid(auction.nounId, {
+    placeBid(auction.tokenId, {
       value,
       gasLimit: gasLimit.add(10_000), // A 10,000 gas pad is used to avoid 'Out of gas' errors
     });

@@ -57,7 +57,7 @@ export const useAuctionMinBidIncPercentage = () => {
  * @param tokenId TokenId of Noun
  * @returns Unix timestamp after which Noun could vote
  */
-export const useNounCanVoteTimestamp = (tokenId: number) => {
+export const useTokenCanVoteTimestamp = (tokenId: number) => {
   const nextTokenId = tokenId + 1;
 
   const nextTokenIdForQuery = isNounderNoun(EthersBN.from(nextTokenId)) ? nextTokenId + 1 : nextTokenId;

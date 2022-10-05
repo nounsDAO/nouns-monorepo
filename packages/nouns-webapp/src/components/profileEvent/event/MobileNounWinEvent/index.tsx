@@ -1,6 +1,6 @@
 import React from 'react';
 import { buildEtherscanTxLink } from '../../../../utils/etherscan';
-import { NounWinEvent } from '../../../../wrappers/nActivity';
+import { TokenWinEvent } from '../../../../wrappers/nActivity';
 import classes from './MobileNounWinEvent.module.css';
 import MobileNounActivityRow from '../../activityRow/MobileNounActivityRow';
 import { CakeIcon } from '@heroicons/react/solid';
@@ -8,14 +8,14 @@ import ShortAddress from '../../../ShortAddress';
 import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
 import { Trans } from '@lingui/macro';
 
-interface MobileNounWinEventProps {
-  event: NounWinEvent;
+interface MobileTokenWinEventProps {
+  event: TokenWinEvent;
 }
 
-const MobileNounWinEvent: React.FC<MobileNounWinEventProps> = props => {
+const MobileNounWinEvent: React.FC<MobileTokenWinEventProps> = props => {
   const { event } = props;
 
-  const isNounderNoun = parseInt(event.nounId as string) % 10 === 0;
+  const isNounderNoun = parseInt(event.tokenId as string) % 10 === 0;
   return (
     <MobileNounActivityRow
       onClick={() => window.open(buildEtherscanTxLink(event.transactionHash), '_blank')}
@@ -28,7 +28,7 @@ const MobileNounWinEvent: React.FC<MobileNounWinEventProps> = props => {
         <>
           {isNounderNoun ? (
             <Trans>
-              <span className={classes.bold}> Noun {event.nounId} </span> sent to{' '}
+              <span className={classes.bold}> Noun {event.tokenId} </span> sent to{' '}
               <span className={classes.bold}>
                 {' '}
                 <ShortAddress address={event.winner} />
@@ -36,7 +36,7 @@ const MobileNounWinEvent: React.FC<MobileNounWinEventProps> = props => {
             </Trans>
           ) : (
             <Trans>
-              <span className={classes.bold}> Noun {event.nounId} </span> won by{' '}
+              <span className={classes.bold}> Noun {event.tokenId} </span> won by{' '}
               <span className={classes.bold}>
                 {' '}
                 <ShortAddress address={event.winner} />

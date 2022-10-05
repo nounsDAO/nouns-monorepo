@@ -5,7 +5,7 @@ import {
   useExecuteProposal,
   useProposal,
   useQueueProposal,
-} from '../../wrappers/nounsDao';
+} from '../../wrappers/nDao';
 import { useUserVotesAsOfBlock } from '../../wrappers/nToken';
 import classes from './Vote.module.css';
 import { RouteComponentProps } from 'react-router-dom';
@@ -25,11 +25,11 @@ import VoteCard, { VoteCardVariant } from '../../components/VoteCard';
 import { useQuery } from '@apollo/client';
 import {
   proposalVotesQuery,
-  delegateNounsAtBlockQuery,
+  delegateTokensAtBlockQuery,
   ProposalVotes,
   Delegates,
 } from '../../wrappers/subgraph';
-import { getNounVotes } from '../../utils/getNounsVotes';
+import { getTokensVotes } from '../../utils/getTokensVotes';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
@@ -48,7 +48,7 @@ const VotePage = ({
   const proposal = useProposal(id);
 
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
-  // Toggle between Noun centric view and delegate view
+  // Toggle between Punk centric view and delegate view
   const [isDelegateView, setIsDelegateView] = useState(false);
 
   const [isQueuePending, setQueuePending] = useState<boolean>(false);
@@ -213,22 +213,22 @@ const VotePage = ({
 
   const voterIds = voters?.votes?.map(v => v.voter.id);
   const { data: delegateSnapshot } = useQuery<Delegates>(
-    delegateNounsAtBlockQuery(voterIds ?? [], proposal?.createdBlock ?? 0),
+    delegateTokensAtBlockQuery(voterIds ?? [], proposal?.createdBlock ?? 0),
     {
       skip: !voters?.votes?.length,
     },
   );
 
   const { delegates } = delegateSnapshot || {};
-  const delegateToNounIds = delegates?.reduce<Record<string, string[]>>((acc, curr) => {
-    acc[curr.id] = curr?.nounsRepresented?.map(nr => nr.id) ?? [];
+  const delegateToTokenIds = delegates?.reduce<Record<string, string[]>>((acc, curr) => {
+    acc[curr.id] = curr?.nRepresented?.map(nr => nr.id) ?? [];
     return acc;
   }, {});
 
   const data = voters?.votes?.map(v => ({
     delegate: v.voter.id,
     supportDetailed: v.supportDetailed,
-    nounsRepresented: delegateToNounIds?.[v.voter.id] ?? [],
+    nRepresented: delegateToTokenIds?.[v.voter.id] ?? [],
   }));
 
   const [showToast, setShowToast] = useState(true);
@@ -255,9 +255,9 @@ const VotePage = ({
   const isWalletConnected = !(activeAccount === undefined);
   const isActiveForVoting = startDate?.isBefore(now) && endDate?.isAfter(now);
 
-  const forNouns = getNounVotes(data, 1);
-  const againstNouns = getNounVotes(data, 0);
-  const abstainNouns = getNounVotes(data, 2);
+  const forTokens = getTokensVotes(data, 1);
+  const againstTokens = getTokensVotes(data, 0);
+  const abstainTokens = getTokensVotes(data, 2);
 
   return (
     <Section fullWidth={false} className={classes.votePage}>
@@ -302,7 +302,7 @@ const VotePage = ({
           className={classes.toggleDelegateVoteView}
         >
           {isDelegateView ? (
-            <Trans>Switch to Noun view</Trans>
+            <Trans>Switch to Punk view</Trans>
           ) : (
             <Trans>Switch to delegate view</Trans>
           )}
@@ -311,7 +311,7 @@ const VotePage = ({
           <VoteCard
             proposal={proposal}
             percentage={forPercentage}
-            nounIds={forNouns}
+            tokenIds={forTokens}
             variant={VoteCardVariant.FOR}
             delegateView={isDelegateView}
             delegateGroupedVoteData={data}
@@ -319,7 +319,7 @@ const VotePage = ({
           <VoteCard
             proposal={proposal}
             percentage={againstPercentage}
-            nounIds={againstNouns}
+            tokenIds={againstTokens}
             variant={VoteCardVariant.AGAINST}
             delegateView={isDelegateView}
             delegateGroupedVoteData={data}
@@ -327,7 +327,7 @@ const VotePage = ({
           <VoteCard
             proposal={proposal}
             percentage={abstainPercentage}
-            nounIds={abstainNouns}
+            tokenIds={abstainTokens}
             variant={VoteCardVariant.ABSTAIN}
             delegateView={isDelegateView}
             delegateGroupedVoteData={data}

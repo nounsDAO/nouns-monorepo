@@ -6,6 +6,7 @@ cache
 artifacts
 typechain
 .openzeppelin
+.env
 
 # Script output
 logs

@@ -2,9 +2,9 @@ import React from 'react';
 import { Collapse } from 'react-bootstrap';
 import {
   DelegationEvent,
-  NounEventType,
-  NounProfileEvent,
-  NounWinEvent,
+  TokenEventType,
+  TokenProfileEvent,
+  TokenWinEvent,
   ProposalVoteEvent,
   TransferEvent,
 } from '../../wrappers/nActivity';
@@ -14,26 +14,26 @@ import MobileProposalVoteEvent from '../profileEvent/event/MobileProposalVoteEve
 import MobileTransferEvent from '../profileEvent/event/MobileTransferEvent';
 
 interface MobileProfileActivityFeedProps {
-  events: NounProfileEvent[];
+  events: TokenProfileEvent[];
   aboveFoldEventCount: number;
   isExpanded: boolean;
 }
 
-const getComponentFromEvent = (event: NounProfileEvent, key: number) => {
-  if (event.eventType === NounEventType.PROPOSAL_VOTE) {
+const getComponentFromEvent = (event: TokenProfileEvent, key: number) => {
+  if (event.eventType === TokenEventType.PROPOSAL_VOTE) {
     return <MobileProposalVoteEvent event={event.payload as ProposalVoteEvent} key={key} />;
   }
 
-  if (event.eventType === NounEventType.DELEGATION) {
+  if (event.eventType === TokenEventType.DELEGATION) {
     return <MobileDelegationEvent event={event.payload as DelegationEvent} key={key} />;
   }
 
-  if (event.eventType === NounEventType.TRANSFER) {
+  if (event.eventType === TokenEventType.TRANSFER) {
     return <MobileTransferEvent event={event.payload as TransferEvent} key={key} />;
   }
 
-  if (event.eventType === NounEventType.AUCTION_WIN) {
-    return <MobileNounWinEvent event={event.payload as NounWinEvent} key={key} />;
+  if (event.eventType === TokenEventType.AUCTION_WIN) {
+    return <MobileNounWinEvent event={event.payload as TokenWinEvent} key={key} />;
   }
 };
 
@@ -45,7 +45,7 @@ const MobileProfileActivityFeed: React.FC<MobileProfileActivityFeedProps> = prop
       {events
         .slice(0)
         .slice(0, aboveFoldEventCount)
-        .map((event: NounProfileEvent, i: number) => {
+        .map((event: TokenProfileEvent, i: number) => {
           return getComponentFromEvent(event, i);
         })}
       <Collapse in={isExpanded}>
@@ -53,7 +53,7 @@ const MobileProfileActivityFeed: React.FC<MobileProfileActivityFeedProps> = prop
           {events
             .slice(0)
             .slice(aboveFoldEventCount, events.length)
-            .map((event: NounProfileEvent, i: number) => {
+            .map((event: TokenProfileEvent, i: number) => {
               return getComponentFromEvent(event, i);
             })}
         </>

@@ -201,7 +201,7 @@ components:
       type: object
       description: How a Noun voted on a governance proposal
       properties:
-        nounId:
+        tokenId:
           type: integer
         owner:
           type: string

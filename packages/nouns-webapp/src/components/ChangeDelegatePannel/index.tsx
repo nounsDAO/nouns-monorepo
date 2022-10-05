@@ -8,7 +8,7 @@ import currentDelegatePannelClasses from '../CurrentDelegatePannel/CurrentDelega
 import DelegationCandidateInfo from '../DelegationCandidateInfo';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import classes from './ChangeDelegatePannel.module.css';
-import { useDelegateVotes, useNounTokenBalance, useUserDelegatee } from '../../wrappers/nToken';
+import { useDelegateVotes, useNTokenBalance, useUserDelegatee } from '../../wrappers/nToken';
 import { usePickByState } from '../../utils/pickByState';
 import { buildEtherscanTxLink } from '../../utils/etherscan';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
@@ -53,7 +53,7 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
   const [delegateAddress, setDelegateAddress] = useState('');
   const [delegateInputText, setDelegateInputText] = useState('');
   const [delegateInputClass, setDelegateInputClass] = useState<string>('');
-  const availableVotes = useNounTokenBalance(account ?? '') ?? 0;
+  const availableVotes = useNTokenBalance(account ?? '') ?? 0;
   const { send: delegateVotes, state: delegateState } = useDelegateVotes();
   const locale = useActiveLocale();
   const currentDelegate = useUserDelegatee();

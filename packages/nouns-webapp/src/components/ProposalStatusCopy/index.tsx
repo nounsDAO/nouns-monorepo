@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/macro';
 import React from 'react';
-import { Proposal, ProposalState } from '../../wrappers/nounsDao';
+import { Proposal, ProposalState } from '../../wrappers/nDao';
 
 interface ProposalStatusCopyProps {
   proposal: Proposal;

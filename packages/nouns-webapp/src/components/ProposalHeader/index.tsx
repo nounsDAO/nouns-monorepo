@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import ProposalStatus from '../ProposalStatus';
 import classes from './ProposalHeader.module.css';
 import navBarButtonClasses from '../NavBarButton/NavBarButton.module.css';
-import { Proposal, useHasVotedOnProposal, useProposalVote } from '../../wrappers/nounsDao';
+import { Proposal, useHasVotedOnProposal, useProposalVote } from '../../wrappers/nDao';
 import clsx from 'clsx';
 import { isMobileScreen } from '../../utils/isMobile';
 import { useUserVotesAsOfBlock } from '../../wrappers/nToken';
