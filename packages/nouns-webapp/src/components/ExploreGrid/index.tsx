@@ -12,6 +12,11 @@ import { Trans } from '@lingui/macro';
 import dotenv from 'dotenv';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSortDown } from '@fortawesome/free-solid-svg-icons';
+import Placeholder from 'react-bootstrap/Placeholder';
+
+import NounItemsRange from './NounItemsRange';
+import { range } from 'ramda';
+import ExploreGridItem from './ExploreGridItem';
 
 dotenv.config();
 interface ExploreGridProps {
@@ -73,13 +78,11 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     
     
 
-    // const gridOptions = [2.5, 5, 12.5];
-    const [isFullView] = useState<boolean>(false);
+    // const [isFullView] = useState<boolean>(false);
     const [isSidebarVisible, setIsSidebarVisible] = useState<boolean>(!isMobile && true);
-    const [activeSizeOption, 
-        // setSizeOption
-    ] = useState<string>("large");
-    // const sizeOptions = ["small", "large"];
+    // const [activeSizeOption, 
+    //     // setSizeOption
+    // ] = useState<string>("large");
 
     const [selectedNoun, setSelectedNoun] = useState<number | undefined>(undefined);
     const [activeNoun, setActiveNoun] = useState<number>(-1);
@@ -137,9 +140,6 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
             setActiveNoun(activeNoun - 1);
             setSelectedNoun(activeNoun - 1);
         }
-        // nounId > -1 && nounId < nounCount && setSelectedNoun(nounId);
-        // sidebarVisibility === "visible" ? setIsSidebarVisible(true) : setIsSidebarVisible(false);
-        // sidebarVisibility !== "visible" && setSelectedNoun(undefined);
     }
 
     const keyboardPrev: boolean = useKeyPress("ArrowLeft");
@@ -147,9 +147,6 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     const keyboardUp: boolean = useKeyPress("ArrowUp");
     const keyboardDown: boolean = useKeyPress("ArrowDown");
     const keyboardEsc: boolean = useKeyPress("Escape");
-
-
-
 
     const buttonsRef = useRef<(HTMLButtonElement | null)[]>([])
     const focusNoun = (index: number) => {
@@ -165,41 +162,6 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         nounId && buttonsRef.current[nounId]?.scrollIntoView({behavior: 'smooth'});
     };
     
-    // const gridVariants = {
-    //     closed: { 
-    //         width: "100%", 
-    //     },
-    //     open: { 
-    //         // width: isMobile ? "100%" : "auto",
-    //         width: "100%",
-    //         transition: { 
-    //             // delay: .35,
-    //         }
-    //     },
-    // }
-    // const gridItemVariants = {
-    //     initial: {
-    //         opacity: 0,
-    //         // y: 50,
-    //     },
-    //     small: { 
-    //         width: "5%", 
-    //         opacity: 1,
-    //         y: 0,
-    //     },
-    //     standard: { 
-    //         width: "14.28%",
-    //         opacity: 1,
-    //         // y: 0,
-    //     },
-    // }
-
-    // Cols by max-width
-    // 400px: 3
-    // 991px: 5
-    // 1399px: 8
-    // > 10
-    
     const [isKeyboardNavigating, setIsKeyboardNavigating] = useState<boolean>(false);
 
     useLayoutEffect(() => {
@@ -211,34 +173,18 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSidebarVisible])
 
-    // useEffect(() => {
-    //     const handleScroll = (event: any) => {
-    //       console.log('window.scrollY', window.scrollY);
-    //       console.log('isScrolling', isScrolling);
-
-    //       setIsScrolling(true);
-    //     };
-    
-    //     window.addEventListener('scroll', handleScroll);
-    
-    //     return () => {
-    //       window.removeEventListener('scroll', handleScroll);
-    //       setIsScrolling(false);
-    //     };
-    //   }, []);
     useEffect(() => {
         window.addEventListener('mousemove', (event) => {});
         onmousemove = () => { 
             setIsKeyboardNavigating(false);
-            // console.log('mouse move')
         };
     
         return () => {
         //   window.removeEventListener('mousemove', onMouseMove);
         };
       }, []);
-    // console.log(isKeyboardNavigating)
-    useEffect(() => {
+
+      useEffect(() => {
         setIsKeyboardNavigating(true);
         let amountToMove = 10;
         if (width <= 400) {
@@ -308,7 +254,120 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         setSortOrder(event.target.value);
     };
 
+    useEffect(() => {
+        const url = "https://noun.pics/range?start=0&end=9";       
+        const fetchData = async () => {
+            try {
+                const response = await fetch(url);
+                const json = await response.json();
+                console.log(response, json)
+                
+            } catch (error) {
+                console.log("error", error);
+            }
+            
+        };
 
+        fetchData();
+    }, []);
+
+    type NounPic = {
+        id: number;
+        svg: string;
+    };
+
+    const placeholderNounsData = [Array(nounCount >= 0 ? nounCount : 100)].map((x, i) => {
+        return {
+            id: i,
+            svg: '',
+        }
+    });
+
+    const [nounsData, setNounsData] = useState<NounPic[]>(placeholderNounsData);
+    const [isNounsDataLoaded, setIsNounsDataLoaded] = useState<boolean>(false)
+    // const fetchNouns = async (start: number, end: number) => {
+    //     const url = `https://noun.pics/range?start=${start}&end=${end}`;
+    //     try {
+    //         const response = await fetch(url);
+    //         const json = await response.json();
+    //         return json;            
+    //     } catch (error) {
+    //         console.log("error", error);
+    //     }
+    // };
+
+    const initialChunkSize = 10;
+    const individualCount = (nounCount % initialChunkSize) + 1;
+    const rangeChunkSize = 100;
+    let rangeIds: number[][] = [];
+    const [ranges, setRanges] = useState<number[][]>([]);
+    const [individualNouns, setIndividualNouns] = useState<number[]>([]);
+    const rangeCalls = async (nounCount: number) => {
+        // if (nounCount >= 0) {
+        //     const promises = [];
+        //     const range = 50;
+        //     for (let i = -1; i < nounCount; i += (range + 1)) {
+        //         const start = i + 1;
+        //         const end = i + range > (nounCount - 1) ? i + (nounCount - i - 1) : i + range;
+        //         const data = await fetchNouns(start, end);
+        //         promises.push(...data);
+        //         console.log('range, i, start, end', range, i, start, end);
+        //     }
+        //     Promise.all(promises).then((promises) => {
+        //         console.log('promises', promises);
+        //         setNounsData(promises);
+        //         setIsNounsDataLoaded(true);
+        //     });
+        // }
+
+        
+        let rangeStartId: number = nounCount - individualCount + 1; // 457 to 450 inclusive = 8
+        let rangeEndId: number | undefined = undefined;
+        const individualIds = new Array(individualCount - 1)
+            .fill(0)
+            .map((_, i) => rangeStartId && i + rangeStartId)
+            .reverse();
+        setIndividualNouns(individualIds);
+        // console.log('individualIds', individualIds);
+        // console.log('rangeCAlls', rangeStartId, rangeEndId)    
+
+        while (rangeStartId >= 0) {
+            // Push end of previous range to start of new range eg [(400 - 1) = 399, 300]
+            // Only performed after first set of Ids are calculated
+            if (rangeIds.length > 0 && rangeEndId) {
+              rangeIds.push([rangeEndId - 1, rangeStartId]);
+            }
+          
+            const rangeCount: number = rangeStartId % rangeChunkSize;
+            // End of range is either mod of chunk size from first itartion or chunk size
+            rangeEndId = rangeStartId - (rangeCount || rangeChunkSize);
+          
+            // Push the beginning of the next range [(300-1) = 299, 200]
+            rangeIds.push([rangeStartId - 1, rangeEndId]);
+            // setRanges(range => [...range, [0, 50]]);
+            // eslint-disable-next-line no-loop-func
+            console.log('ranges', rangeIds, ranges);
+            rangeStartId = rangeEndId - rangeChunkSize;
+          }
+        setRanges(rangeIds);
+        // console.log("load these by noun.pics/:id", individualIds);
+        // console.log("load these by noun.pics/range", rangeIds);
+    };
+    // console.log(nounsData.length, nounCount, initialCalls, nounsData);
+    
+    useEffect(() => {
+        nounCount >= 0 && rangeCalls(nounCount);
+        console.log('trigger by nounCount', nounCount);
+    }, [nounCount]);
+    
+    useEffect(() => {
+        setRanges(ranges.reverse().map((id, i) => ([id[1], id[0]])));
+        console.log('ranges', ranges)
+    }, [sortOrder]);
+    
+    console.log("load these by noun.pics/range", rangeIds, ranges);
+    console.log("individual nouns", individualCount, individualNouns);
+    
     return (
         <div className={classes.exploreWrap} ref={containerRef}>
             
@@ -317,23 +376,14 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                 style={{
                     overflow: isMobile && isSidebarVisible ? 'hidden' : 'visible'
                 }}
-
                 >
-                {/* Todo: move wrapper into parent component */}
-                <motion.div 
+                <div 
                     className={cx(
                         classes.gridWrap, 
                         isSidebarVisible && classes.sidebarVisible, 
                         !isSidebarVisible && classes.sidebarHidden,
                         isKeyboardNavigating && classes.isKeyboardNavigating
                     )}
-                    // layout            
-                    // variants={gridVariants}
-                    // initial={!isSidebarVisible && "closed"}
-                    // animate={isSidebarVisible ? "open" : "closed"}
-                    transition={{
-                        // delay: .05,
-                    }}
                 >
                      <div className={classes.nav}>
                         <h3><span><Trans>Explore</Trans></span> {nounCount >= 0 && (
@@ -347,16 +397,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                         </h3>
                         <div className={classes.buttons}>
                             <div className={classes.sort}>
-                                {/* <Dropdown
-                                    // className={clsx(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.desktopOnly)}
-                                    onToggle={() => setButtonUp(!buttonUp)}
-                                    >
-                                    <Dropdown.Toggle as={customDropdownToggle} id="dropdown-custom-components" />
-                                    <Dropdown.Menu className={`${navDropdownClasses.desktopDropdown} `} as={CustomMenu} />
-                                </Dropdown> */}
                                 <div className={classes.selectWrap}>
-                                    
-
                                     <select value={sortOrder} onChange={handleSortOrderChange}>
                                         {sortOptions.map(option => (
                                             <option key={option.label} value={option.value}>
@@ -369,123 +410,43 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                     </span>
                                 </div>
                             </div>
-                            {/* <div className={classes.sizing}>
-                                {sizeOptions.map((option, i) => {
-                                    return (
-                                        <button 
-                                            key={option} 
-                                            onClick={() => setSizeOption(option)}
-                                            className={cx(activeSizeOption === option && classes.activeLayout)}
-                                        >   
-                                            {i === 0 ? (
-                                                iconSmallGrid
-                                            ) : (
-                                                iconLargeGrid
-                                            )}
-                                        </button>
-                                    )
-                                })}
-                            </div> */}
                         </div>
                     </div>  
                     <motion.div 
-                        className={cx(classes.exploreGrid, isFullView && classes.fullViewGrid, !isMobile && classes[activeSizeOption])}
-                        // onAnimationComplete={() => setSidebarFinishedOpening(true)}
-                        // // onLayoutAnimationComplete={() => setSidebarFinishedOpening(!sidebarFinishedOpening)}
-                        // // // onAnimationComplete={() => handleScrollTo(5)}
-                        // initial={isSidebarVisible && {
-                        //     width: '100%',
-                        // }}
-                        // animate={isSidebarVisible && {
-                        //     width: '100%',
-                        // }}
-                        // animate={{ x: 1 }}
-                        // onAnimationComplete={definition => {
-                        //     console.log('Completed animating', definition);
-                        //     setSidebarFinishedOpening(!sidebarFinishedOpening);
-                        // }}
-                    >   
-                            {sortOrder === "date-descending" ? (
-                                <motion.ul 
-                                // layout
-                                // onAnimationComplete={() => setSidebarFinishedOpening(true)}
-                                >  
-                                    {nounCount >= 0 && 
-                                        [...Array(nounCount)].map((x, i) => 
-                                            <motion.li 
-                                                // style={ { 
-                                                //     "--animation-order": Math.abs(i - nounCount), 
-                                                // } as React.CSSProperties
-                                                // }
-                                                className={i === selectedNoun ? classes.activeNoun : ''} 
-                                                key={i}
-                                            >
-                                                <button 
-                                                    ref={el => buttonsRef.current[i] = el} 
-                                                    id={`${i}`}
-                                                    onMouseDown={(e) => (selectedNoun === i && document.activeElement && parseInt(document.activeElement.id) === i) && handleOnFocus(i)}
-                                                    onFocus={(e) => handleOnFocus(i)}
-                                                    onMouseOver={() => !isKeyboardNavigating && setActiveNoun(i)} 
-                                                    onMouseOut={() => selectedNoun && setActiveNoun(selectedNoun)}
-                                                    >
-                                                    <img 
-                                                        // src={process.env.PUBLIC_URL + `/nouns/noun${i}.svg`} 
-                                                        src={`https://noun.pics/${i}.svg`}
-                                                        alt=""
-                                                        style={{ 
-                                                            "--animation-order": Math.abs(i - nounCount), 
-                                                        } as React.CSSProperties
-                                                        }
-                                                     />
-                                                     <p className={classes.nounIdOverlay}>
-                                                        {i}
-                                                     </p>
-                                                    {/* <StandaloneNounImage nounId={BigNumber.from(i)} /> */}
-                                                </button>
-                                            </motion.li>
-                                        ).reverse()
-                                    } 
-                                </motion.ul>
-                            ) : (
-                                <ul>  
-                                    {nounCount >= 0 && 
-                                        [...Array(nounCount)].map((x, i) => 
-                                            <motion.li 
-                                                // style={{ 
-                                                //     "--animation-order": i, 
-                                                // } as React.CSSProperties
-                                                // }
-                                                className={i === selectedNoun ? classes.activeNoun : ''} 
-                                                key={i}
-                                            >
-                                                <button 
-                                                    ref={el => buttonsRef.current[i] = el} 
-                                                    // onMouseDown={(e) => (selectedNoun === i && document.activeElement && parseInt(document.activeElement.id) === i) ? removeFocus() : handleOnFocus(i)}
-                                                    onMouseDown={(e) => (selectedNoun === i && document.activeElement && parseInt(document.activeElement.id) === i) && handleOnFocus(i)}
-                                                    onFocus={(e) => handleOnFocus(i)}
-                                                    onMouseOver={() => !isKeyboardNavigating && setActiveNoun(i)} 
-                                                    onMouseOut={() => selectedNoun && setActiveNoun(selectedNoun)}
-                                                    >
-                                                    <img 
-                                                        src={`https://noun.pics/${i}.svg`}
-                                                        alt=""
-                                                        style={{ 
-                                                            "--animation-order": i, 
-                                                        } as React.CSSProperties
-                                                        }
-                                                     />
-                                                     <p className={classes.nounIdOverlay}>
-                                                        {i}
-                                                     </p>
-                                                    {/* <StandaloneNounImage nounId={BigNumber.from(i)} /> */}
-                                                </button>
-                                            </motion.li>
-                                        )
-                                    } 
-                                </ul>
-                            )}                      
+                        className={cx(
+                            classes.exploreGrid, 
+                            // isFullView && classes.fullViewGrid, 
+                            // !isMobile && classes[activeSizeOption]
+                        )}> 
+                            <ul>
+                                        {individualNouns.map((nounId, i) => {
+                                            return (
+                                                <ExploreGridItem 
+                                                    nounId={nounId}
+                                                    selectedNoun={selectedNoun}
+                                                    setActiveNoun={setActiveNoun}
+                                                    isKeyboardNavigating={isKeyboardNavigating}
+                                                    handleOnFocus={handleOnFocus}
+                                                />
+                                            )
+                                        })}
+                                        {ranges.reverse().map((range, i) => {
+                                            return (
+                                                <>
+                                                    <NounItemsRange start={range[0]} end={range[1]} key={i}>    
+                                                        <ExploreGridItem 
+                                                            selectedNoun={selectedNoun}
+                                                            setActiveNoun={setActiveNoun}
+                                                            isKeyboardNavigating={isKeyboardNavigating}
+                                                            handleOnFocus={handleOnFocus}
+                                                        />
+                                                    </NounItemsRange>
+                                                </>
+                                            )
+                                        })}
+                            </ul>             
                         </motion.div>
-                    </motion.div>
+                    </div>
 
                     <AnimatePresence>
                         {isSidebarVisible && (
