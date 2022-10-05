@@ -14,8 +14,8 @@ const AuctionNavigation: React.FC<{
   const isCool = useAppSelector(state => state.application.stateBackgroundColor) === '#d5d7e1';
   const history = useHistory();
   const onDisplayAuction = useOnDisplayAuction();
-  const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
-  const onDisplayAuctionNounId = onDisplayAuction?.nounId.toNumber();
+  const lastAuctionTokenId = useAppSelector(state => state.onDisplayAuction.lastAuctionTokenId);
+  const onDisplayAuctionTokenId = onDisplayAuction?.tokenId.toNumber();
 
   // Page through Nouns via keyboard
   // handle what happens on key press
@@ -24,8 +24,8 @@ const AuctionNavigation: React.FC<{
       if (event.key === 'ArrowLeft') {
         // This is a hack. If we don't put this the first keystoke
         // from the noun at / doesn't work (i.e. to go from current noun to current noun - 1 would take two arrow presses)
-        if (onDisplayAuctionNounId === lastAuctionNounId) {
-          history.push(`/noun/${lastAuctionNounId}`);
+        if (onDisplayAuctionTokenId === lastAuctionTokenId) {
+          history.push(`/noun/${lastAuctionTokenId}`);
         }
 
         if (!isFirstAuction) {
@@ -42,8 +42,8 @@ const AuctionNavigation: React.FC<{
       history,
       isFirstAuction,
       isLastAuction,
-      lastAuctionNounId,
-      onDisplayAuctionNounId,
+      lastAuctionTokenId,
+      onDisplayAuctionTokenId,
       onNextAuctionClick,
       onPrevAuctionClick,
     ],

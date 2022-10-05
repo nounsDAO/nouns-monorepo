@@ -11,7 +11,7 @@ export interface IBid {
   blockNumber: number;
   blockTimestamp: number;
   txIndex?: number;
-  noun: {
+  token: {
     id: number;
     startTime?: BigNumberish;
     endTime?: BigNumberish;
@@ -32,7 +32,7 @@ export interface ProposalVotes {
 
 export interface Delegate {
   id: string;
-  nounsRepresented: {
+  nRepresented: {
     id: string;
   }[];
 }
@@ -92,7 +92,7 @@ export const auctionQuery = (auctionId: number) => gql`
 	  }
 	  startTime
 	  endTime
-	  noun {
+	  token {
 		id
 		seed {
 		  id
@@ -127,16 +127,16 @@ export const bidsByAuctionQuery = (auctionId: string) => gql`
 	  bidder {
 	  	id
 	  }
-	  noun {
+	  token {
 		id
 	  }
 	}
   }
  `;
 
-export const nounQuery = (id: string) => gql`
+export const nQuery = (id: string) => gql`
  {
-	noun(id:"${id}") {
+	token(id:"${id}") {
 	  id
 	  seed {
 	  background
@@ -152,9 +152,9 @@ export const nounQuery = (id: string) => gql`
   }
  `;
 
-export const nounsIndex = () => gql`
+export const tokensIndex = () => gql`
   {
-    nouns {
+    tokens {
       id
       owner {
         id
@@ -174,7 +174,7 @@ export const latestAuctionsQuery = () => gql`
       }
       startTime
       endTime
-      noun {
+      token {
         id
         owner {
           id
@@ -219,9 +219,9 @@ export const latestBidsQuery = (first: number = 10) => gql`
   }  
 `;
 
-export const nounVotingHistoryQuery = (nounId: number) => gql`
+export const nVotingHistoryQuery = (tokenId: number) => gql`
 {
-	noun(id: ${nounId}) {
+	token(id: ${tokenId}) {
 		id
 		votes {
       blockNumber
@@ -238,9 +238,9 @@ export const nounVotingHistoryQuery = (nounId: number) => gql`
 }
 `;
 
-export const nounTransferHistoryQuery = (nounId: number) => gql`
+export const nTransferHistoryQuery = (tokenId: number) => gql`
 {
-  transferEvents(where: {noun: "${nounId}"}) {
+  transferEvents(where: {token: "${tokenId}"}) {
     id
     previousHolder {
       id
@@ -253,9 +253,9 @@ export const nounTransferHistoryQuery = (nounId: number) => gql`
 }
 `;
 
-export const nounDelegationHistoryQuery = (nounId: number) => gql`
+export const nDelegationHistoryQuery = (tokenId: number) => gql`
 {
-  delegationEvents(where: {noun: "${nounId}"}) {
+  delegationEvents(where: {token: "${tokenId}"}) {
     id
     previousDelegate {
       id
@@ -289,22 +289,22 @@ export const proposalVotesQuery = (proposalId: string) => gql`
   }
 `;
 
-export const delegateNounsAtBlockQuery = (delegates: string[], block: number) => gql`
+export const delegateTokensAtBlockQuery = (delegates: string[], block: number) => gql`
 {
   delegates(where: { id_in: ${JSON.stringify(delegates)} }, block: { number: ${block} }) {
     id
-    nounsRepresented {
+    nRepresented {
       id
     }
   }
 }
 `;
 
-export const currentlyDelegatedNouns = (delegate: string) => gql`
+export const currentlyDelegatedTokens = (delegate: string) => gql`
 {
   delegates(where: { id: "${delegate}"} ) {
     id
-    nounsRepresented {
+    nRepresented {
       id
     }
   }

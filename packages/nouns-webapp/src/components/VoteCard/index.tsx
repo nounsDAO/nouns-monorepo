@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
-import { Proposal } from '../../wrappers/nounsDao';
-import NounImageVoteTable from '../NounImageVoteTable';
+import { Proposal } from '../../wrappers/nDao';
+import PunkImageVoteTable from '../PunkImageVoteTable';
 import VoteProgressBar from '../VoteProgressBar';
 import classes from './VoteCard.module.css';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
-import DelegateGroupedNounImageVoteTable from '../DelegateGroupedNounImageVoteTable';
+import DelegateGroupedNounImageVoteTable from '../DelegateGroupedTokenImageVoteTable';
 import { useEthers } from '@usedapp/core';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 import clsx from 'clsx';
@@ -23,16 +23,16 @@ export enum VoteCardVariant {
 interface VoteCardProps {
   proposal: Proposal;
   percentage: number;
-  nounIds: Array<string>;
+  tokenIds: Array<string>;
   variant: VoteCardVariant;
   delegateView: boolean;
   delegateGroupedVoteData:
-    | { delegate: string; supportDetailed: 0 | 1 | 2; nounsRepresented: string[] }[]
+    | { delegate: string; supportDetailed: 0 | 1 | 2; nRepresented: string[] }[]
     | undefined;
 }
 
 const VoteCard: React.FC<VoteCardProps> = props => {
-  const { proposal, percentage, nounIds, variant, delegateView, delegateGroupedVoteData } = props;
+  const { proposal, percentage, tokenIds, variant, delegateView, delegateGroupedVoteData } = props;
 
   let titleClass;
   let titleCopy;
@@ -166,7 +166,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
                 proposalCreationBlock={proposal.createdBlock}
               />
             ) : (
-              <NounImageVoteTable nounIds={nounIds} propId={parseInt(proposal.id || '0')} />
+              <PunkImageVoteTable tokenIds={tokenIds} propId={parseInt(proposal.id || '0')} />
             )}
           </Row>
         </Card.Body>

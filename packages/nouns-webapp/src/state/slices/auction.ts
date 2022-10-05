@@ -6,7 +6,7 @@ import {
   AuctionSettledEvent,
   BidEvent,
 } from '../../utils/types';
-import { Auction as IAuction } from '../../wrappers/tokenAuction';
+import { Auction as IAuction } from '../../wrappers/nAuction';
 
 export interface AuctionState {
   activeAuction?: IAuction;
@@ -54,7 +54,7 @@ const maxBid = (bids: BidEvent[]): BidEvent => {
 const auctionsEqual = (
   a: IAuction,
   b: AuctionSettledEvent | AuctionCreateEvent | BidEvent | AuctionExtendedEvent,
-) => BigNumber.from(a.nounId).eq(BigNumber.from(b.nounId));
+) => BigNumber.from(a.tokenId).eq(BigNumber.from(b.tokenId));
 
 const containsBid = (bidEvents: BidEvent[], bidEvent: BidEvent) =>
   bidEvents.map(bid => bid.transactionHash).indexOf(bidEvent.transactionHash) >= 0;

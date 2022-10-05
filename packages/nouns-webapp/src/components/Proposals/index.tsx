@@ -1,4 +1,4 @@
-import { Proposal, ProposalState, useProposalThreshold } from '../../wrappers/nounsDao';
+import { Proposal, ProposalState, useProposalThreshold } from '../../wrappers/nDao';
 import { Alert, Button } from 'react-bootstrap';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { useBlockNumber, useEthers } from '@usedapp/core';
 import { isMobileScreen } from '../../utils/isMobile';
 import clsx from 'clsx';
-import { useUserNounTokenBalance, useUserVotes } from '../../wrappers/nToken';
+import { useUserNTokenBalance, useUserVotes } from '../../wrappers/nToken';
 import { Trans } from '@lingui/macro';
 import { ClockIcon } from '@heroicons/react/solid';
 import proposalStatusClasses from '../ProposalStatus/ProposalStatus.module.css';
@@ -104,7 +104,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
 
   const threshold = (useProposalThreshold() ?? 0) + 1;
   const hasEnoughVotesToPropose = account !== undefined && connectedAccountNounVotes >= threshold;
-  const hasNounBalance = (useUserNounTokenBalance() ?? 0) > 0;
+  const hasNounBalance = (useUserNTokenBalance() ?? 0) > 0;
 
   const nullStateCopy = () => {
     if (account !== null) {

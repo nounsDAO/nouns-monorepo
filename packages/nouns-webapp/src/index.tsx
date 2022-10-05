@@ -19,8 +19,8 @@ import auction, {
   setFullAuction,
 } from './state/slices/auction';
 import onDisplayAuction, {
-  setLastAuctionPunkId,
-  setOnDisplayAuctionPunkId,
+  setLastAuctionTokenId,
+  setOnDisplayAuctionTokenId,
 } from './state/slices/onDisplayAuction';
 import { ApolloProvider, useQuery } from '@apollo/client';
 import { clientFactory, latestAuctionsQuery } from './wrappers/subgraph';
@@ -40,7 +40,7 @@ import { applyMiddleware, createStore, combineReducers, PreloadedState } from 'r
 import { routerMiddleware } from 'connected-react-router';
 import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { punkPath } from './utils/history';
+import { tokenPath } from './utils/history';
 import { push } from 'connected-react-router';
 import { LanguageProvider } from './i18n/LanguageProvider';
 
@@ -120,7 +120,7 @@ const ChainSubscriber: React.FC = () => {
     const createdFilter = nAuctionHouseContract.filters.AuctionCreated(null, null, null);
     const settledFilter = nAuctionHouseContract.filters.AuctionSettled(null, null, null);
     const processBidFilter = async (
-      punkId: BigNumberish,
+      tokenId: BigNumberish,
       sender: string,
       value: BigNumberish,
       extended: boolean,
@@ -129,33 +129,33 @@ const ChainSubscriber: React.FC = () => {
       const timestamp = (await event.getBlock()).timestamp;
       const transactionHash = event.transactionHash;
       dispatch(
-        appendBid(reduxSafeBid({ punkId, sender, value, extended, transactionHash, timestamp })),
+        appendBid(reduxSafeBid({ tokenId, sender, value, extended, transactionHash, timestamp })),
       );
     };
     const processAuctionCreated = (
-      punkId: BigNumberish,
+      tokenId: BigNumberish,
       startTime: BigNumberish,
       endTime: BigNumberish,
     ) => {
       dispatch(
-        setActiveAuction(reduxSafeNewAuction({ punkId, startTime, endTime, settled: false })),
+        setActiveAuction(reduxSafeNewAuction({ tokenId, startTime, endTime, settled: false })),
       );
-      const punkIdNumber = BigNumber.from(punkId).toNumber();
-      dispatch(push(punkPath(punkIdNumber)));
-      dispatch(setOnDisplayAuctionPunkId(punkIdNumber));
-      dispatch(setLastAuctionPunkId(punkIdNumber));
+      const tokenIdNumber = BigNumber.from(tokenId).toNumber();
+      dispatch(push(tokenPath(tokenIdNumber)));
+      dispatch(setOnDisplayAuctionTokenId(tokenIdNumber));
+      dispatch(setLastAuctionTokenId(tokenIdNumber));
     };
-    const processAuctionExtended = (punkId: BigNumberish, endTime: BigNumberish) => {
-      dispatch(setAuctionExtended({ punkId, endTime }));
+    const processAuctionExtended = (tokenId: BigNumberish, endTime: BigNumberish) => {
+      dispatch(setAuctionExtended({ tokenId, endTime }));
     };
-    const processAuctionSettled = (punkId: BigNumberish, winner: string, amount: BigNumberish) => {
-      dispatch(setAuctionSettled({ punkId, amount, winner }));
+    const processAuctionSettled = (tokenId: BigNumberish, winner: string, amount: BigNumberish) => {
+      dispatch(setAuctionSettled({ tokenId, amount, winner }));
     };
 
     // Fetch the current auction
     const currentAuction = await nAuctionHouseContract.auction();
     dispatch(setFullAuction(reduxSafeAuction(currentAuction)));
-    dispatch(setLastAuctionPunkId(currentAuction.punkId.toNumber()));
+    dispatch(setLastAuctionTokenId(currentAuction.tokenId.toNumber()));
 
     // Fetch the previous 24hours of  bids
     const previousBids = await nAuctionHouseContract.queryFilter(bidFilter, 0 - BLOCKS_PER_DAY);
@@ -183,7 +183,7 @@ const ChainSubscriber: React.FC = () => {
 };
 
 const PastAuctions: React.FC = () => {
-  const latestAuctionId = useAppSelector(state => state.onDisplayAuction.lastAuctionPunkId);
+  const latestAuctionId = useAppSelector(state => state.onDisplayAuction.lastAuctionTokenId);
   const { data } = useQuery(latestAuctionsQuery());
   const dispatch = useAppDispatch();
 

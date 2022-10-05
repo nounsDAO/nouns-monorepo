@@ -1,6 +1,6 @@
 import { Col, Row } from 'react-bootstrap';
 import Section from '../../layout/Section';
-import { useAllProposals, useProposalThreshold } from '../../wrappers/nounsDao';
+import { useAllProposals, useProposalThreshold } from '../../wrappers/nDao';
 import Proposals from '../../components/Proposals';
 import classes from './Governance.module.css';
 import { utils } from 'ethers/lib/ethers';

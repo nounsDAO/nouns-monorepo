@@ -2,9 +2,9 @@ import React from 'react';
 import { Collapse, Table } from 'react-bootstrap';
 import {
   DelegationEvent,
-  NounEventType,
-  NounProfileEvent,
-  NounWinEvent,
+  TokenEventType,
+  TokenProfileEvent,
+  TokenWinEvent,
   ProposalVoteEvent,
   TransferEvent,
 } from '../../wrappers/nActivity';
@@ -16,26 +16,26 @@ import DesktopTransferEvent from '../profileEvent/event/DesktopTransferEvent';
 import classes from './DesktopProfileActivityFeed.module.css';
 
 interface DesktopProfileActivityFeedProps {
-  events: NounProfileEvent[];
+  events: TokenProfileEvent[];
   aboveFoldEventCount: number;
   isExpanded: boolean;
 }
 
-const getComponentFromEvent = (event: NounProfileEvent, key: number) => {
-  if (event.eventType === NounEventType.PROPOSAL_VOTE) {
+const getComponentFromEvent = (event: TokenProfileEvent, key: number) => {
+  if (event.eventType === TokenEventType.PROPOSAL_VOTE) {
     return <DesktopProposalVoteEvent event={event.payload as ProposalVoteEvent} key={key} />;
   }
 
-  if (event.eventType === NounEventType.DELEGATION) {
+  if (event.eventType === TokenEventType.DELEGATION) {
     return <DesktopDelegationEvent event={event.payload as DelegationEvent} key={key} />;
   }
 
-  if (event.eventType === NounEventType.TRANSFER) {
+  if (event.eventType === TokenEventType.TRANSFER) {
     return <DesktopTransferEvent event={event.payload as TransferEvent} key={key} />;
   }
 
-  if (event.eventType === NounEventType.AUCTION_WIN) {
-    return <DesktopNounWinEvent event={event.payload as NounWinEvent} key={key} />;
+  if (event.eventType === TokenEventType.AUCTION_WIN) {
+    return <DesktopNounWinEvent event={event.payload as TokenWinEvent} key={key} />;
   }
 };
 
@@ -47,7 +47,7 @@ const DesktopProfileActivityFeed: React.FC<DesktopProfileActivityFeedProps> = pr
       <Table responsive hover className={classes.aboveTheFoldEventsTable}>
         <tbody className={classes.nounInfoPadding}>
           {events?.length ? (
-            events.slice(0, aboveFoldEventCount).map((event: NounProfileEvent, i: number) => {
+            events.slice(0, aboveFoldEventCount).map((event: TokenProfileEvent, i: number) => {
               return getComponentFromEvent(event, i);
             })
           ) : (
@@ -57,11 +57,11 @@ const DesktopProfileActivityFeed: React.FC<DesktopProfileActivityFeedProps> = pr
       </Table>
       <Collapse in={isExpanded}>
         <Table responsive hover>
-          <tbody className={classes.nounInfoPadding}>
+          <tbody className={classes.tokenInfoPadding}>
             {events?.length ? (
               events
                 .slice(aboveFoldEventCount, events.length)
-                .map((event: NounProfileEvent, i: number) => {
+                .map((event: TokenProfileEvent, i: number) => {
                   return getComponentFromEvent(event, i);
                 })
             ) : (

@@ -2,9 +2,9 @@ import Banner from '../../components/Banner';
 import Auction from '../../components/Auction';
 import Documentation from '../../components/Documentation';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setOnDisplayAuctionNounId } from '../../state/slices/onDisplayAuction';
+import { setOnDisplayAuctionTokenId } from '../../state/slices/onDisplayAuction';
 import { push } from 'connected-react-router';
-import { nounPath } from '../../utils/history';
+import { tokenPath } from '../../utils/history';
 import useOnDisplayAuction from '../../wrappers/onDisplayAuction';
 import { useEffect } from 'react';
 import ProfileActivityFeed from '../../components/ProfileActivityFeed';
@@ -16,38 +16,38 @@ interface AuctionPageProps {
 const AuctionPage: React.FC<AuctionPageProps> = props => {
   const { initialAuctionId } = props;
   const onDisplayAuction = useOnDisplayAuction();
-  const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
-  const onDisplayAuctionNounId = onDisplayAuction?.nounId.toNumber();
+  const lastAuctionTokenId = useAppSelector(state => state.onDisplayAuction.lastAuctionTokenId);
+  const onDisplayAuctionTokenId = onDisplayAuction?.tokenId.toNumber();
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!lastAuctionNounId) return;
+    if (!lastAuctionTokenId) return;
 
     if (initialAuctionId !== undefined) {
-      // handle out of bounds noun path ids
-      if (initialAuctionId > lastAuctionNounId || initialAuctionId < 0) {
-        dispatch(setOnDisplayAuctionNounId(lastAuctionNounId));
-        dispatch(push(nounPath(lastAuctionNounId)));
+      // handle out of bounds token path ids
+      if (initialAuctionId > lastAuctionTokenId || initialAuctionId < 0) {
+        dispatch(setOnDisplayAuctionTokenId(lastAuctionTokenId));
+        dispatch(push(tokenPath(lastAuctionTokenId)));
       } else {
         if (onDisplayAuction === undefined) {
-          // handle regular noun path ids on first load
-          dispatch(setOnDisplayAuctionNounId(initialAuctionId));
+          // handle regular token path ids on first load
+          dispatch(setOnDisplayAuctionTokenId(initialAuctionId));
         }
       }
     } else {
-      // no noun path id set
-      if (lastAuctionNounId) {
-        dispatch(setOnDisplayAuctionNounId(lastAuctionNounId));
+      // no token path id set
+      if (lastAuctionTokenId) {
+        dispatch(setOnDisplayAuctionTokenId(lastAuctionTokenId));
       }
     }
-  }, [lastAuctionNounId, dispatch, initialAuctionId, onDisplayAuction]);
+  }, [lastAuctionTokenId, dispatch, initialAuctionId, onDisplayAuction]);
 
   return (
     <>
       <Auction auction={onDisplayAuction} />
-      {onDisplayAuctionNounId !== undefined && onDisplayAuctionNounId !== lastAuctionNounId ? (
-        <ProfileActivityFeed nounId={onDisplayAuctionNounId} />
+      {onDisplayAuctionTokenId !== undefined && onDisplayAuctionTokenId !== lastAuctionTokenId ? (
+        <ProfileActivityFeed tokenId={onDisplayAuctionTokenId} />
       ) : (
         <Banner />
       )}
