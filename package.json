@@ -22,7 +22,6 @@
     "husky": "^5.0.9",
     "lerna": "^3.22.1",
     "mocha": "^8.4.0",
-    "pinst": "^2.1.6",
     "prettier": "^2.3.0",
     "rimraf": "^3.0.2",
     "ts-node": "^10.0.0",
@@ -33,9 +32,9 @@
     "**/@ethersproject/contracts": "^5.6.2"
   },
   "workspaces": [
-    "packages/nouns-contracts",
     "packages/nouns-sdk",
-    "packages/nouns-webapp"
+    "packages/nouns-webapp",
+    "packages/nouns-contracts"
   ],
   "husky": {
     "hooks": {
