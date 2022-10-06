@@ -2,6 +2,7 @@ import React, { ReactNode, useEffect, useState } from 'react';
 import { Placeholder } from 'react-bootstrap';
 import classes from './ExploreGrid.module.css';
 interface ExploreGridItemProps {
+    key: number;
     nounId: number | null;
     selectedNoun: number | undefined;
     imgSrc?: string | undefined;
@@ -21,7 +22,7 @@ const ExploreGridItem: React.FC<ExploreGridItemProps> = props => {
     return (
         <li 
             className={nounId === props.selectedNoun ? classes.activeNoun : ''} 
-            key={nounId}
+            key={props.key}
         >
             <button 
                 // ref={el => props.buttonsRef.current[nounId] = el} 
@@ -30,6 +31,7 @@ const ExploreGridItem: React.FC<ExploreGridItemProps> = props => {
                 onFocus={(e) => props.handleOnFocus(nounId)}
                 onMouseOver={() => !props.isKeyboardNavigating && props.setActiveNoun(nounId)} 
                 onMouseOut={() => props.selectedNoun && props.setActiveNoun(props.selectedNoun)}
+                key={props.key}
                 >
                     {imgSrc ? (
                         <img 
