@@ -251,7 +251,8 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
 
     const handleSortOrderChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
         setSortOrder(event.target.value);
-        setNouns(nouns.reverse());
+        setListToDisplay(nouns.reverse());
+        // focusNoun(listToDisplay[0].id || 0);
     };
 
     // useEffect(() => {
@@ -272,19 +273,47 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     // }, []);
 
     type NounPic = {
-        id: number;
-        svg: string;
+        id: number | null;
+        svg: string | undefined;
     };
+    const [nouns, setNouns] = useState<NounPic[]>([]);
+    const [individualNouns, setIndividualNouns] = useState<NounPic[]>([]);
+    const [listToDisplay, setListToDisplay] = useState<NounPic[]>([]);
+    const [isNounsDataLoaded, setIsNounsDataLoaded] = useState<boolean>(false)
+    // new Array(nounCount >= 0 ? nounCount : 100).fill(0).map((x, i) => i + (nounCount - individualCount)).reverse();
+    useEffect(() => {
+        // const placeholderNounsData = new Array(nounCount >= 0 ? nounCount : 100).fill(0).map((x, i) => {
+        const placeholderNoun: NounPic = {id: null, svg: undefined};
+        const placeholderNounsData = new Array(250).fill(placeholderNoun).map((x, i): NounPic => {
+            return {
+                id: null,
+                svg: undefined,
+            }
+        });
+        setNouns(placeholderNounsData);
 
-    // const placeholderNounsData = [Array(nounCount >= 0 ? nounCount : 100)].map((x, i) => {
-    //     return {
-    //         id: i,
-    //         svg: '',
-    //     }
-    // });
+        // const individualIds = new Array(individualCount).fill(placeholderNoun).map((x, i): NounPic => {
+        //     console.log(i, individualCount, i + (nounCount - individualCount));
+        //     return {
+        //         id: i + (nounCount - individualCount),
+        //         svg: `https://noun.pics/${i + (nounCount - individualCount)}.svg`,
+        //     }
+        // }).reverse();
+        // setIndividualNouns(individualIds);
+        // setListToDisplay(placeholderNounsData);
+
+        
+        // const combined = individualIds.concat(placeholderNounsData);
+        // setListToDisplay(combined);
+        setListToDisplay(placeholderNounsData);
+        // console.log('combined', combined, 'individualNouns', individualIds, 'placeholderNounsData', placeholderNounsData, 'individualIds', individualIds);
+        console.log('placeholderNounsData', placeholderNounsData);
+    }, []);
+    
+    
 
     // const [nounsData, setNounsData] = useState<NounPic[]>(placeholderNounsData);
-    // const [isNounsDataLoaded, setIsNounsDataLoaded] = useState<boolean>(false)
+    
     // const fetchNouns = async (start: number, end: number) => {
     //     const url = `https://noun.pics/range?start=${start}&end=${end}`;
     //     try {
@@ -297,13 +326,15 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     // };
 
     const initialChunkSize = 10;
-    const individualCount = (nounCount % initialChunkSize) + 1;
+    // const individualCount = (nounCount % initialChunkSize) + 1;
+    const [individualCount, setIndividualCount] = useState<number>(initialChunkSize);
     // const rangeChunkSize = 100;
     // let rangeIds: number[][] = [];
     const [ranges, 
         // setRanges
     ] = useState<number[][]>([]);
-    const [individualNouns, setIndividualNouns] = useState<number[]>([]);
+    // const [individualNouns, setIndividualNouns] = useState<number[]>([]);
+    
 
     // const individualIds = new Array(individualCount - 1).fill(0).reverse();
     
@@ -315,8 +346,14 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         if (nounCount >= 0) {
             const promises = [];
             const rangeChunkSize = 100;
-            const individualIds = new Array(individualCount).fill(0).map((x, i) => i + (nounCount - individualCount)).reverse();
-            setIndividualNouns(individualIds);
+            // const individualIds = new Array(individualCount).fill(0).map((x, i) => i + (nounCount - individualCount)).reverse();
+            // const individualIds = new Array(individualCount).fill(0).map((x, i) => {
+            //     return {
+            //         id: i + (nounCount - individualCount),
+            //         svg: '',
+            //     }
+            // }).reverse();
+            // setIndividualNouns(individualIds);
                 
             for (let i = -1; i < nounCount; i += (rangeChunkSize)) {
                 const start = i + 1;
@@ -328,18 +365,34 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                 // setNouns(arr => [...arr, ...data]);
                 // console.log('range, i, start, end', rangeChunkSize, i, start, end);
             }
+            const placeholderNoun: NounPic = {id: null, svg: undefined};
+            const individualIds = new Array(individualCount).fill(placeholderNoun).map((x, i): NounPic => {
+                return {
+                    id: i + (nounCount - individualCount),
+                    svg: `https://noun.pics/${i + (nounCount - individualCount)}.svg`,
+                }
+            }).reverse();
             Promise.all(promises).then((promises) => {
                 console.log('promises', promises);
                 console.log('nouns', nouns);
                 // setNounsData(promises);
 
                 // reverse order initially to show latest noun first
-                setNouns(promises.reverse());
-                // setIsNounsDataLoaded(true);
+                
+                // setListToDisplay(promises);
+                console.log('individualNouns', individualNouns);
+                const loadedNouns = promises.reverse();
+                setNouns(individualIds.concat(loadedNouns));
+
+                setListToDisplay(individualIds.concat(loadedNouns));
+
+                setIsNounsDataLoaded(true);
+                console.log('listToDisplay', listToDisplay, individualIds.concat(promises.reverse()));
             });
         }
         console.log('nouns', nouns);
-        console.log('individualNouns', individualNouns);
+        // console.log('individualNouns', individualNouns);
+        // console.log('listToDisplay', listToDisplay);
 
         
         // let rangeStartId: number = nounCount - individualCount + 1; // 457 to 450 inclusive = 8
@@ -380,7 +433,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     };
     // console.log(nounsData.length, nounCount, initialCalls, nounsData);
     
-    const [nouns, setNouns] = useState<NounPic[]>([]);
+    
     // const [nounsList, setNounsList] = useState<NounPic[]>([]);
     const fetchNouns = async (start: number, end: number) => {
         // console.log('fetchNouns', start, end);
@@ -413,24 +466,13 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     }, [ranges]);
 
     useEffect(() => {
+        // setListToDisplay(individualNouns)
+        setIndividualCount((nounCount % initialChunkSize) + 1)
         nounCount >= 0 && rangeCalls(nounCount);
         console.log('trigger by nounCount', nounCount);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [nounCount]);
     
-    // useEffect(() => {
-    //     // setRanges(ranges.reverse().map((id, i) => ([id[1], id[0]])));
-    //     // console.log('ranges', ranges)
-    //     if (sortOrder === "date-descending") {
-    //         setNounsList(nouns.reverse());
-    //     } else {
-    //         setNounsList(nouns);
-    //     }
-        
-    // }, [nouns, sortOrder]);
-    
-    // console.log("load these by noun.pics/range", rangeIds, ranges);
-    // console.log("individual nouns", individualCount, individualNouns);
     
     return (
         <div className={classes.exploreWrap} ref={containerRef}>
@@ -483,12 +525,12 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                             // !isMobile && classes[activeSizeOption]
                         )}> 
                             <ul>       
-                                {sortOrder === "date-descending" && (
-                                    individualNouns.map((nounId, i) => {
+                                {/* {sortOrder === "date-descending" && (
+                                    individualNouns.map((noun, i) => {
                                         return (
                                             <>
                                                 <ExploreGridItem 
-                                                    nounId={nounId}
+                                                    nounId={noun.id}
                                                     selectedNoun={selectedNoun}
                                                     setActiveNoun={setActiveNoun}
                                                     isKeyboardNavigating={isKeyboardNavigating}
@@ -497,9 +539,24 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                             </>
                                         )
                                     })
-                                )}
+                                )} */}
                                         
-                                        {nouns.map((noun, i) => {
+                                        {listToDisplay.map((noun, i) => {
+                                            return (
+                                                <>
+                                                    <ExploreGridItem 
+                                                        nounId={noun.id}
+                                                        // imgSrc={!isNounsDataLoaded && i < individualCount ? undefined : noun.svg}
+                                                        imgSrc={noun.svg}
+                                                        selectedNoun={selectedNoun}
+                                                        setActiveNoun={setActiveNoun}
+                                                        isKeyboardNavigating={isKeyboardNavigating}
+                                                        handleOnFocus={handleOnFocus}
+                                                    />
+                                                </>
+                                            )
+                                        })}
+                                        {/* {nouns.map((noun, i) => {
                                             return (
                                                 <>
                                                     <ExploreGridItem 
@@ -512,13 +569,13 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                     />
                                                 </>
                                             )
-                                        })}
+                                        })} */}
                                     {sortOrder === "date-ascending" && (
-                                        individualNouns.map((nounId, i) => {
+                                        individualNouns.map((noun, i) => {
                                             return (
                                                 <>
                                                     <ExploreGridItem 
-                                                        nounId={nounId}
+                                                        nounId={noun.id}
                                                         selectedNoun={selectedNoun}
                                                         setActiveNoun={setActiveNoun}
                                                         isKeyboardNavigating={isKeyboardNavigating}

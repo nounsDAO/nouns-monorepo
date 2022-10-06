@@ -2,9 +2,9 @@ import React, { ReactNode, useEffect, useState } from 'react';
 import { Placeholder } from 'react-bootstrap';
 import classes from './ExploreGrid.module.css';
 interface ExploreGridItemProps {
-    nounId: number;
+    nounId: number | null;
     selectedNoun: number | undefined;
-    imgSrc?: string;
+    imgSrc?: string | undefined;
     // // nounCount: number;
     handleOnFocus: Function;
     // removeFocus: Function;
