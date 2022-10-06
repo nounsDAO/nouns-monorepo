@@ -14,8 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSortDown } from '@fortawesome/free-solid-svg-icons';
 import Placeholder from 'react-bootstrap/Placeholder';
 
-import NounItemsRange from './NounItemsRange';
-import { range } from 'ramda';
+// import NounItemsRange from './NounItemsRange';
 import ExploreGridItem from './ExploreGridItem';
 
 dotenv.config();
@@ -252,39 +251,40 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
 
     const handleSortOrderChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
         setSortOrder(event.target.value);
+        setNouns(nouns.reverse());
     };
 
-    useEffect(() => {
-        const url = "https://noun.pics/range?start=0&end=9";       
-        const fetchData = async () => {
-            try {
-                const response = await fetch(url);
-                const json = await response.json();
-                console.log(response, json)
+    // useEffect(() => {
+    //     const url = "https://noun.pics/range?start=0&end=9";       
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await fetch(url);
+    //             const json = await response.json();
+    //             console.log(response, json)
                 
-            } catch (error) {
-                console.log("error", error);
-            }
+    //         } catch (error) {
+    //             console.log("error", error);
+    //         }
             
-        };
+    //     };
 
-        fetchData();
-    }, []);
+    //     fetchData();
+    // }, []);
 
     type NounPic = {
         id: number;
         svg: string;
     };
 
-    const placeholderNounsData = [Array(nounCount >= 0 ? nounCount : 100)].map((x, i) => {
-        return {
-            id: i,
-            svg: '',
-        }
-    });
+    // const placeholderNounsData = [Array(nounCount >= 0 ? nounCount : 100)].map((x, i) => {
+    //     return {
+    //         id: i,
+    //         svg: '',
+    //     }
+    // });
 
-    const [nounsData, setNounsData] = useState<NounPic[]>(placeholderNounsData);
-    const [isNounsDataLoaded, setIsNounsDataLoaded] = useState<boolean>(false)
+    // const [nounsData, setNounsData] = useState<NounPic[]>(placeholderNounsData);
+    // const [isNounsDataLoaded, setIsNounsDataLoaded] = useState<boolean>(false)
     // const fetchNouns = async (start: number, end: number) => {
     //     const url = `https://noun.pics/range?start=${start}&end=${end}`;
     //     try {
@@ -298,75 +298,139 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
 
     const initialChunkSize = 10;
     const individualCount = (nounCount % initialChunkSize) + 1;
-    const rangeChunkSize = 100;
-    let rangeIds: number[][] = [];
-    const [ranges, setRanges] = useState<number[][]>([]);
+    // const rangeChunkSize = 100;
+    // let rangeIds: number[][] = [];
+    const [ranges, 
+        // setRanges
+    ] = useState<number[][]>([]);
     const [individualNouns, setIndividualNouns] = useState<number[]>([]);
+
+    // const individualIds = new Array(individualCount - 1).fill(0).reverse();
+    
+
+    
     const rangeCalls = async (nounCount: number) => {
-        // if (nounCount >= 0) {
-        //     const promises = [];
-        //     const range = 50;
-        //     for (let i = -1; i < nounCount; i += (range + 1)) {
-        //         const start = i + 1;
-        //         const end = i + range > (nounCount - 1) ? i + (nounCount - i - 1) : i + range;
-        //         const data = await fetchNouns(start, end);
-        //         promises.push(...data);
-        //         console.log('range, i, start, end', range, i, start, end);
-        //     }
-        //     Promise.all(promises).then((promises) => {
-        //         console.log('promises', promises);
-        //         setNounsData(promises);
-        //         setIsNounsDataLoaded(true);
-        //     });
-        // }
+        
+        
+        if (nounCount >= 0) {
+            const promises = [];
+            const rangeChunkSize = 100;
+            const individualIds = new Array(individualCount).fill(0).map((x, i) => i + (nounCount - individualCount)).reverse();
+            setIndividualNouns(individualIds);
+                
+            for (let i = -1; i < nounCount; i += (rangeChunkSize)) {
+                const start = i + 1;
+                const end = i + rangeChunkSize > (nounCount - 1 - individualCount) ? i + (nounCount - i - 1 - individualCount) : i + rangeChunkSize;
+                console.log(start, end);
+                // fetchNouns(start, end);
+                const data = await fetchNouns(start, end);
+                promises.push(...data);
+                // setNouns(arr => [...arr, ...data]);
+                // console.log('range, i, start, end', rangeChunkSize, i, start, end);
+            }
+            Promise.all(promises).then((promises) => {
+                console.log('promises', promises);
+                console.log('nouns', nouns);
+                // setNounsData(promises);
+
+                // reverse order initially to show latest noun first
+                setNouns(promises.reverse());
+                // setIsNounsDataLoaded(true);
+            });
+        }
+        console.log('nouns', nouns);
+        console.log('individualNouns', individualNouns);
 
         
-        let rangeStartId: number = nounCount - individualCount + 1; // 457 to 450 inclusive = 8
-        let rangeEndId: number | undefined = undefined;
-        const individualIds = new Array(individualCount - 1)
-            .fill(0)
-            .map((_, i) => rangeStartId && i + rangeStartId)
-            .reverse();
-        setIndividualNouns(individualIds);
-        // console.log('individualIds', individualIds);
-        // console.log('rangeCAlls', rangeStartId, rangeEndId)    
+        // let rangeStartId: number = nounCount - individualCount + 1; // 457 to 450 inclusive = 8
+        // let rangeEndId: number | undefined = undefined;
+        // const individualIds = new Array(individualCount - 1)
+        //     .fill(0)
+        //     .map((_, i) => rangeStartId && i + rangeStartId)
+        //     .reverse();
+        // setIndividualNouns(individualIds);
+        // // console.log('individualIds', individualIds);
+        // // console.log('rangeCAlls', rangeStartId, rangeEndId)    
 
-        while (rangeStartId >= 0) {
-            // Push end of previous range to start of new range eg [(400 - 1) = 399, 300]
-            // Only performed after first set of Ids are calculated
-            if (rangeIds.length > 0 && rangeEndId) {
-              rangeIds.push([rangeEndId - 1, rangeStartId]);
-            }
+        // while (rangeStartId >= 0) {
+        //     // Push end of previous range to start of new range eg [(400 - 1) = 399, 300]
+        //     // Only performed after first set of Ids are calculated
+        //     if (rangeIds.length > 0 && rangeEndId) {
+        //       rangeIds.push([rangeEndId - 1, rangeStartId]);
+        //       fetchNouns(rangeEndId - 1, rangeStartId);
+        //     }
           
-            const rangeCount: number = rangeStartId % rangeChunkSize;
-            // End of range is either mod of chunk size from first itartion or chunk size
-            rangeEndId = rangeStartId - (rangeCount || rangeChunkSize);
+        //     const rangeCount: number = rangeStartId % rangeChunkSize;
+        //     // End of range is either mod of chunk size from first itartion or chunk size
+        //     rangeEndId = rangeStartId - (rangeCount || rangeChunkSize);
           
-            // Push the beginning of the next range [(300-1) = 299, 200]
-            rangeIds.push([rangeStartId - 1, rangeEndId]);
-            // setRanges(range => [...range, [0, 50]]);
-            // eslint-disable-next-line no-loop-func
-            console.log('ranges', rangeIds, ranges);
-            rangeStartId = rangeEndId - rangeChunkSize;
-          }
-        setRanges(rangeIds);
+        //     // Push the beginning of the next range [(300-1) = 299, 200]
+        //     rangeIds.push([rangeStartId - 1, rangeEndId]);
+        //     fetchNouns(rangeStartId - 1, rangeEndId);
+        //     // setRanges(range => [...range, [0, 50]]);
+        //     // eslint-disable-next-line no-loop-func
+        //     console.log('ranges', rangeIds, ranges);
+        //     rangeStartId = rangeEndId - rangeChunkSize;
+        //     console.log('rangeStartId = rangeEndId - rangeChunkSize;', rangeStartId, rangeEndId, rangeChunkSize)
+            
+        //   }
+        // setRanges(rangeIds);
         // console.log("load these by noun.pics/:id", individualIds);
         // console.log("load these by noun.pics/range", rangeIds);
     };
     // console.log(nounsData.length, nounCount, initialCalls, nounsData);
     
+    const [nouns, setNouns] = useState<NounPic[]>([]);
+    // const [nounsList, setNounsList] = useState<NounPic[]>([]);
+    const fetchNouns = async (start: number, end: number) => {
+        // console.log('fetchNouns', start, end);
+        const url = `https://noun.pics/range?start=${start}&end=${end}`;
+        try {
+            const response = await fetch(url);
+            const json = await response.json();
+            // const reverseOrder = json.reverse().map((noun: any, i: any) => noun);
+            // console.log('json', json);
+            // setNouns(reverseOrder);
+            // setNouns(arr => [...arr, ...json]);
+            // console.log(nouns);
+            return json;
+        } catch (error) {
+            console.log("error", error);
+        }
+    };
+    
+    // console.log('nouns fetched', nouns);
+        
+    useEffect(() => {
+        if (ranges) {
+            ranges.map((range, i) => {
+                fetchNouns(range[0], range[1]);
+                // eslint-disable-next-line array-callback-return
+                return
+            })
+        }
+        
+    }, [ranges]);
+
     useEffect(() => {
         nounCount >= 0 && rangeCalls(nounCount);
         console.log('trigger by nounCount', nounCount);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [nounCount]);
     
-    useEffect(() => {
-        setRanges(ranges.reverse().map((id, i) => ([id[1], id[0]])));
-        console.log('ranges', ranges)
-    }, [sortOrder]);
+    // useEffect(() => {
+    //     // setRanges(ranges.reverse().map((id, i) => ([id[1], id[0]])));
+    //     // console.log('ranges', ranges)
+    //     if (sortOrder === "date-descending") {
+    //         setNounsList(nouns.reverse());
+    //     } else {
+    //         setNounsList(nouns);
+    //     }
+        
+    // }, [nouns, sortOrder]);
     
-    console.log("load these by noun.pics/range", rangeIds, ranges);
-    console.log("individual nouns", individualCount, individualNouns);
+    // console.log("load these by noun.pics/range", rangeIds, ranges);
+    // console.log("individual nouns", individualCount, individualNouns);
     
     return (
         <div className={classes.exploreWrap} ref={containerRef}>
@@ -418,9 +482,11 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                             // isFullView && classes.fullViewGrid, 
                             // !isMobile && classes[activeSizeOption]
                         )}> 
-                            <ul>
-                                        {individualNouns.map((nounId, i) => {
-                                            return (
+                            <ul>       
+                                {sortOrder === "date-descending" && (
+                                    individualNouns.map((nounId, i) => {
+                                        return (
+                                            <>
                                                 <ExploreGridItem 
                                                     nounId={nounId}
                                                     selectedNoun={selectedNoun}
@@ -428,8 +494,41 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                     isKeyboardNavigating={isKeyboardNavigating}
                                                     handleOnFocus={handleOnFocus}
                                                 />
+                                            </>
+                                        )
+                                    })
+                                )}
+                                        
+                                        {nouns.map((noun, i) => {
+                                            return (
+                                                <>
+                                                    <ExploreGridItem 
+                                                        nounId={noun.id}
+                                                        imgSrc={noun.svg}
+                                                        selectedNoun={selectedNoun}
+                                                        setActiveNoun={setActiveNoun}
+                                                        isKeyboardNavigating={isKeyboardNavigating}
+                                                        handleOnFocus={handleOnFocus}
+                                                    />
+                                                </>
                                             )
                                         })}
+                                    {sortOrder === "date-ascending" && (
+                                        individualNouns.map((nounId, i) => {
+                                            return (
+                                                <>
+                                                    <ExploreGridItem 
+                                                        nounId={nounId}
+                                                        selectedNoun={selectedNoun}
+                                                        setActiveNoun={setActiveNoun}
+                                                        isKeyboardNavigating={isKeyboardNavigating}
+                                                        handleOnFocus={handleOnFocus}
+                                                    />
+                                                </>
+                                            )
+                                        }).reverse()
+                                    )}
+                                        {/* 
                                         {ranges.reverse().map((range, i) => {
                                             return (
                                                 <>
@@ -443,7 +542,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                     </NounItemsRange>
                                                 </>
                                             )
-                                        })}
+                                        })} */}
                             </ul>             
                         </motion.div>
                     </div>

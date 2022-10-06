@@ -2,7 +2,7 @@ import React, { ReactNode, useEffect, useState } from 'react';
 import { Placeholder } from 'react-bootstrap';
 import classes from './ExploreGrid.module.css';
 interface ExploreGridItemProps {
-    nounId?: number;
+    nounId: number;
     selectedNoun: number | undefined;
     imgSrc?: string;
     // // nounCount: number;
@@ -14,7 +14,8 @@ interface ExploreGridItemProps {
     // isNounsDataLoaded: boolean;
 }
 const ExploreGridItem: React.FC<ExploreGridItemProps> = props => {
-    const nounId = (props.nounId !== undefined && props.nounId > -1 ? props.nounId : undefined);
+    // const nounId = (props.nounId !== undefined && props.nounId > -1 ? props.nounId : undefined);
+    const nounId = props.nounId;
     const imgSrc = props.imgSrc ? props.imgSrc : (props.nounId && props.nounId >= 0 ? `https://noun.pics/${nounId}.svg` : undefined);
     
     return (
