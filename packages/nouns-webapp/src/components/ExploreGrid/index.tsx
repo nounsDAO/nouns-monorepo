@@ -270,9 +270,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     
     const initialChunkSize = 10;
     const [individualCount, setIndividualCount] = useState<number>(initialChunkSize);
-    const [ranges, 
-        // setRanges
-    ] = useState<number[][]>([]);
+    // const [ranges, setRanges] = useState<number[][]>([]);
     
     const [orderedNouns, setOrderedNouns] = useState<NounPic[]>([]);
     const rangeCalls = async (nounCount: number) => {
