@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { useRef } from 'react';
 import { Placeholder } from 'react-bootstrap';
 import classes from './ExploreGrid.module.css';
 interface ExploreGridItemProps {
@@ -12,20 +12,27 @@ interface ExploreGridItemProps {
     setActiveNoun: Function;
     // sortOrder: string;
     isKeyboardNavigating: boolean;
+    handleButtonRef: Function;
     // isNounsDataLoaded: boolean;
 }
-const ExploreGridItem: React.FC<ExploreGridItemProps> = props => {
+// const ExploreGridItem: React.FC<ExploreGridItemProps> = props => {
+const ExploreGridItem: React.FC<ExploreGridItemProps> = React.forwardRef((props, ref: React.Ref<HTMLButtonElement>) => {
     // const nounId = (props.nounId !== undefined && props.nounId > -1 ? props.nounId : undefined);
     const nounId = props.nounId;
     const imgSrc = props.imgSrc ? props.imgSrc : (props.nounId && props.nounId >= 0 ? `https://noun.pics/${nounId}.svg` : undefined);
-    
+    // props.setRef(ref);
+    // console.log('ref', ref);
+    const buttonRef = useRef(null);
+    props.handleButtonRef(buttonRef, props.nounId)
     return (
         <li 
             className={nounId === props.selectedNoun ? classes.activeNoun : ''} 
             key={props.key}
         >
             <button 
-                // ref={el => props.buttonsRef.current[nounId] = el} 
+                ref={buttonRef} 
+                // ref={el => props.setRef(current[nounId] = el}
+                // ref={ref} 
                 id={`${nounId} - ${props.nounId}`}
                 onMouseDown={(e) => (props.selectedNoun === nounId && document.activeElement && parseInt(document.activeElement.id) === nounId) && props.handleOnFocus(nounId)}
                 onFocus={(e) => props.handleOnFocus(nounId)}
@@ -49,7 +56,7 @@ const ExploreGridItem: React.FC<ExploreGridItemProps> = props => {
             </button>
         </li>
     )
-}
+})
 
 
 export default ExploreGridItem;

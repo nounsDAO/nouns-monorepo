@@ -15,7 +15,7 @@ import { faSortDown } from '@fortawesome/free-solid-svg-icons';
 import Placeholder from 'react-bootstrap/Placeholder';
 
 // import NounItemsRange from './NounItemsRange';
-import ExploreGridItem from './ExploreGridItem';
+// import ExploreGridItem from './ExploreGridItem';
 
 dotenv.config();
 interface ExploreGridProps {
@@ -80,6 +80,8 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     const [isSidebarVisible, setIsSidebarVisible] = useState<boolean>(!isMobile && true);
     const [selectedNoun, setSelectedNoun] = useState<number | undefined>(undefined);
     const [activeNoun, setActiveNoun] = useState<number>(-1);
+    // const [activeNounObject, setActiveNounObject] = useState<NounPic>({id: null, svg: undefined});
+    // const [activeNounImg, setActiveNounImg] = useState<string>();
 
     // get latest noun id, then replace loading sidebar state with latest noun
     useEffect(() => {
@@ -193,6 +195,8 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                 setIsSidebarVisible(false);
                 setSelectedNoun(undefined);
                 setIsKeyboardNavigating(false);
+                // containerRef.current?.scrollIntoView();
+                containerRef.current && window.scrollTo(0, containerRef.current?.offsetTop);
             }
             if (sortOrder === "date-descending") {
                 if (keyboardPrev && (selectedNoun + 1 < nounCount)) {
@@ -224,7 +228,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [keyboardPrev, keyboardNext, keyboardUp, keyboardDown, keyboardEsc]);
-    const containerRef = useRef(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
     
 
     const sortOptions = [
@@ -246,12 +250,12 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         id: number | null;
         svg: string | undefined;
     };
-    const [nouns, setNouns] = useState<NounPic[]>([]);
-    const [individualNouns, setIndividualNouns] = useState<NounPic[]>([]);
+    // const [nouns, setNouns] = useState<NounPic[]>([]);
+    // const [individualNouns, setIndividualNouns] = useState<NounPic[]>([]);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [placeholderNouns, setPlaceholderNouns] = useState<NounPic[]>([]);
     const [listToDisplay, setListToDisplay] = useState<NounPic[]>([]);
-    const [listToDisplay2, setListToDisplay2] = useState<NounPic[]>([]);
-    const [isNounsDataLoaded, setIsNounsDataLoaded] = useState<boolean>(false)
+    // const [isNounsDataLoaded, setIsNounsDataLoaded] = useState<boolean>(false)
     useEffect(() => {
         const placeholderNoun: NounPic = {id: null, svg: undefined};
         const placeholderNounsData = new Array(250).fill(placeholderNoun).map((x, i): NounPic => {
@@ -270,6 +274,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         // setRanges
     ] = useState<number[][]>([]);
     
+    const [orderedNouns, setOrderedNouns] = useState<NounPic[]>([]);
     const rangeCalls = async (nounCount: number) => {
         
         
@@ -289,12 +294,15 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                 const start = i - rangeChunkSize < 0 ? 0 : i - rangeChunkSize;
                 const end = i - 1;
                 console.log(start, end);
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 const nounsRange = await fetchNouns(start, end);
 
             }
         }
+        setOrderedNouns(listToDisplay.reverse());
+        
     };
-    
+    console.log('orderedNouns', orderedNouns);
     
     const fetchNouns = async (start: number, end: number) => {
         // console.log('fetchNouns', start, end);
@@ -331,13 +339,20 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         console.log('trigger by nounCount', nounCount);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [nounCount]);
-    useEffect(() => {
-        console.log(listToDisplay2);
-    }, [listToDisplay2]);
+
     
     console.log('listToDisplay', listToDisplay);
 
     const nounList = [...Array(nounCount >= 0 ? nounCount : 100)].reverse(); 
+
+    // const handleButtonRef = (el: HTMLButtonElement, nounId: number) => {
+    //     buttonsRef.current[nounId] = el
+    //     console.log('handleButtonRef');
+    // }
+    
+    // const testRef = useRef<(HTMLDivElement[] | null)>([])
+    // const testRef = useRef<(HTMLButtonElement | null)[]>([])
+    
     return (
         <div className={classes.exploreWrap} ref={containerRef}>
             <div 
@@ -386,15 +401,26 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                             <ul>       
                                
                                         {(sortOrder === "date-ascending" ? nounList.reverse() : nounList).map((x, i) => {
-                                            let nounId = null;
-                                            let imgSrc = undefined; 
+                                            let nounId: number | null = null;
+                                            let imgSrc: React.SetStateAction<string | undefined> = undefined; 
                                             let index = sortOrder === "date-ascending" ? Math.abs(i - nounCount + 1) : i;
+
+                                            // nounCount >= 0 && i < 8 && sortOrder === "date-descending" && setActiveNounImg(`https://noun.pics/${nounCount - 1 - i}.svg`);
+                                            
                                             if (listToDisplay[index]) {
                                                 nounId = listToDisplay[index].id;
                                                 imgSrc = listToDisplay[index].svg;
                                             }
                                             return (
-                                                <ExploreGridItem 
+                                                <>
+                                                {/* <button id={`${nounId}`} 
+                                                key={nounId}
+                                                    // ref={el => testRef.current[i] = el}
+                                                    ref={el => 
+                                                            buttonsRef.current[nounId ? nounId : -1] = el
+                                                    }
+                                                >test</button> */}
+                                                {/* <ExploreGridItem 
                                                     key={i}
                                                     nounId={nounId}
                                                     imgSrc={imgSrc}
@@ -402,7 +428,38 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                     setActiveNoun={setActiveNoun}
                                                     isKeyboardNavigating={isKeyboardNavigating}
                                                     handleOnFocus={handleOnFocus}
-                                                />
+                                                    // ref={el => buttonsRef.current[nounId] = el}
+                                                    // ref={buttonsRef.current[index].nounId}
+                                                    handleButtonRef={handleButtonRef}
+                                                /> */}
+                                                <li 
+                                                    className={nounId === selectedNoun ? classes.activeNoun : ''} 
+                                                    key={nounId}
+                                                >
+                                                    <button 
+                                                        ref={el => buttonsRef.current[nounId ? nounId : -1] = el}
+                                                        id={`${nounId} - ${nounId}`}
+                                                        onMouseDown={(e) => (selectedNoun === nounId && document.activeElement && parseInt(document.activeElement.id) === nounId) && handleOnFocus(nounId)}
+                                                        onFocus={(e) => nounId !== null && handleOnFocus(nounId)}
+                                                        onMouseOver={() => !isKeyboardNavigating && nounId !== null && setActiveNoun(nounId)} 
+                                                        onMouseOut={() => selectedNoun !== undefined && setActiveNoun(selectedNoun)}
+                                                        >
+                                                            {imgSrc ? (
+                                                                <img 
+                                                                    src={imgSrc}
+                                                                    alt={`Noun ${nounId}`}
+                                                                />
+                                                            ) : (
+                                                                <Placeholder xs={12} animation="glow" />
+                                                            )}
+                                                        
+                                                        <p className={classes.nounIdOverlay}>
+                                                            {nounId}
+                                                        </p>
+                                                        {/* <StandaloneNounImage nounId={BigNumber.from(i)} /> */}
+                                                    </button>
+                                                </li>
+                                            </>
                                             )
                                         })}
                                         
@@ -417,6 +474,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                 handleNounDetail={handleNounDetail} 
                                 handleNounNavigation={handleNounNavigation} 
                                 nounId={activeNoun} 
+                                nounImgSrc={orderedNouns[activeNoun]?.svg}
                                 isVisible={isSidebarVisible} 
                                 handleScrollTo={handleScrollTo} 
                                 disablePrev={((sortOrder === "date-ascending" && activeNoun === 0) || (sortOrder === "date-descending" && activeNoun === nounCount - 1)) ? true : false}

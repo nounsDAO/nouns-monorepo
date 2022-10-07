@@ -1,5 +1,5 @@
-import React, { ReactElement, ReactNode, useEffect, useState } from 'react';
-import ExploreGridItem from './ExploreGridItem';
+import React, { ReactElement, useEffect, useState } from 'react';
+// import ExploreGridItem from './ExploreGridItem';
 interface ExploreItemsRangeProps {
     start: number;
     end: number;

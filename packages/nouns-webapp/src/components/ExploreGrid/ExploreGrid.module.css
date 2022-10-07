@@ -141,6 +141,7 @@
     width: 100%;
     aspect-ratio: 1;
     border-radius: 10px;
+    scroll-margin: 1vh;
     /* transition: transform 0.05s ease-in-out; */
 }
 

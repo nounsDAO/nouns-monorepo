@@ -25,6 +25,7 @@ interface ExploreNounDetailProps {
     handleScrollTo: Function;
     disablePrev: boolean;
     disableNext: boolean;
+    nounImgSrc: string | undefined;
 }
 
 // interface ExploreNounDetailTraitsProps {
@@ -304,7 +305,11 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                     >   
                                         {/* <StandaloneNounImage nounId={BigNumber.from(props.nounId)} /> */}
                                         {props.nounId >= 0 && seed ? (
-                                            <Image src={`https://noun.pics/${props.nounId}.svg`} alt={`Noun ${props.nounId}`} />
+                                            <Image 
+                                                // src={`https://noun.pics/${props.nounId}.svg`} 
+                                                src={props.nounImgSrc || `https://noun.pics/${props.nounId}.svg`} 
+                                                alt={`Noun ${props.nounId}`} 
+                                                />
                                         ) : (
                                             <Image src={loadingNoun} alt="Loading nouns" />
                                         )}
