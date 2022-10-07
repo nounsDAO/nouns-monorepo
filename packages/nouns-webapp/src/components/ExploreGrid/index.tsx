@@ -284,6 +284,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         });
         // setPlaceholderNouns(placeholderNounsData);
         setNounsList(placeholderNounsData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Fetch initial nouns by url
