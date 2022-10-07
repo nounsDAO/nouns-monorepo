@@ -14,15 +14,15 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '../../i18n/locales';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import DelegationModal from '../DelegationModal';
 import { i18n } from '@lingui/core';
 import en from 'dayjs/locale/en';
+import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
 
 dayjs.extend(relativeTime);
 
 const getCountdownCopy = (proposal: Proposal, currentBlock: number, locale: SupportedLocale) => {
-  const AVERAGE_BLOCK_TIME_IN_SECS = 13;
   const timestamp = Date.now();
   const startDate =
     proposal && timestamp && currentBlock
@@ -77,30 +77,6 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
   const isMobile = isMobileScreen();
   const activeLocale = useActiveLocale();
   const [showDelegateModal, setShowDelegateModal] = useState(false);
-  const [isMetaKeyPressed, setIsMetaKeyPressed] = useState(false);
-
-  // Key press handlers to meta key
-  // These allow us to support the mac meta+click to open in a new behavior
-  const metaKeyDownHandler = (event: { key: string }) => {
-    if (event.key === 'Meta') {
-      setIsMetaKeyPressed(true);
-    }
-  };
-
-  const metaKeyUpHandler = (event: { key: string }) => {
-    if (event.key === 'Meta') {
-      setIsMetaKeyPressed(false);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener('keydown', metaKeyDownHandler);
-    window.addEventListener('keyup', metaKeyUpHandler);
-    return () => {
-      window.removeEventListener('keydown', metaKeyDownHandler);
-      window.removeEventListener('keyup', metaKeyUpHandler);
-    };
-  }, []);
 
   const threshold = (useProposalThreshold() ?? 0) + 1;
   const hasEnoughVotesToPropose = account !== undefined && connectedAccountNounVotes >= threshold;
@@ -205,15 +181,9 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
             );
 
             return (
-              <div
+              <a
                 className={clsx(classes.proposalLink, classes.proposalLinkWithCountdown)}
-                onClick={() => {
-                  if (isMetaKeyPressed) {
-                    window.open(`${window.location.origin}/vote/${p.id}`, '_blank');
-                  } else {
-                    history.push(`/vote/${p.id}`);
-                  }
-                }}
+                href={`/vote/${p.id}`}
                 key={i}
               >
                 <div className={classes.proposalInfoWrapper}>
@@ -233,7 +203,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
                 {isPropInStateToHaveCountDown && (
                   <div className={classes.mobileCountdownWrapper}>{countdownPill}</div>
                 )}
-              </div>
+              </a>
             );
           })
       ) : (
