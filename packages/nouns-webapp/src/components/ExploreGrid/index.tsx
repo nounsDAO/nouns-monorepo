@@ -241,107 +241,121 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     ]
 
     const [sortOrder, setSortOrder] = useState(sortOptions[0].value);
-
     const handleSortOrderChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
         setSortOrder(event.target.value);
+        
+        if ((sortOrder === "date-ascending")) {
+            setActiveNoun(nounCount - 1);
+            setSelectedNoun(nounCount - 1);
+        } else {
+            setActiveNoun(0);
+            setSelectedNoun(0);
+        }
+    };
+
+    type Noun = {
+        id: number | null;
+        imgSrc: string | undefined;
     };
 
     type NounPic = {
         id: number | null;
         svg: string | undefined;
     };
+
+    
     // const [nouns, setNouns] = useState<NounPic[]>([]);
     // const [individualNouns, setIndividualNouns] = useState<NounPic[]>([]);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [placeholderNouns, setPlaceholderNouns] = useState<NounPic[]>([]);
-    const [listToDisplay, setListToDisplay] = useState<NounPic[]>([]);
+    // const [placeholderNouns, setPlaceholderNouns] = useState<Noun[]>([]);
+    // const [listToDisplay, setListToDisplay] = useState<NounPic[]>([]);
+    const [nounsList, setNounsList] = useState<Noun[]>([]);
+    // const [individualNouns, setIndividualNouns] = useState<Noun[]>([]);
     // const [isNounsDataLoaded, setIsNounsDataLoaded] = useState<boolean>(false)
+
+    // Set empty nouns to display grid while images are fetched
+    const placeholderNoun: Noun = {id: null, imgSrc: undefined};
     useEffect(() => {
-        const placeholderNoun: NounPic = {id: null, svg: undefined};
-        const placeholderNounsData = new Array(250).fill(placeholderNoun).map((x, i): NounPic => {
+        const placeholderNounsData = new Array(250).fill(placeholderNoun).map((x, i): Noun => {
             return {
                 id: null,
-                svg: undefined,
+                imgSrc: undefined,
             }
         });
-        setPlaceholderNouns(placeholderNounsData);
-        // console.log('placeholderNounsData', placeholderNounsData);
+        // setPlaceholderNouns(placeholderNounsData);
+        setNounsList(placeholderNounsData);
     }, []);
+
+    // Fetch initial nouns by url
+    const getInitialNouns = (individualCount: number) => {
+        const individualNouns = new Array(individualCount).fill(placeholderNoun).map((x, i): Noun => {
+            return {
+                id: i + (nounCount - individualCount),
+                imgSrc: `https://noun.pics/${i + (nounCount - individualCount)}.svg`,
+            }
+        }).reverse();
+
+        // Add initial nouns to end of placeholder array to 
+        // display them first on load
+        setNounsList(arr => [...arr, ...individualNouns]);
+        // setIndividualNouns(individualNouns);
+        
+        // After initial nouns are set, run range calls
+        rangeCalls(nounCount, individualNouns);
+    }
     
+    // Prep range calls
     const initialChunkSize = 10;
-    const [individualCount, setIndividualCount] = useState<number>(initialChunkSize);
-    // const [ranges, setRanges] = useState<number[][]>([]);
-    
-    const [orderedNouns, setOrderedNouns] = useState<NounPic[]>([]);
-    const rangeCalls = async (nounCount: number) => {
-        
-        
+    const [individualCount, setIndividualCount] = useState<number>(initialChunkSize);    
+    // const [orderedNouns, setOrderedNouns] = useState<NounPic[]>([]);
+    const rangeCalls = async (nounCount: number, individualNouns: Noun[]) => {        
         if (nounCount >= 0) {
-            // const promises = [];
-            setListToDisplay([]);
+            // keep initial nouns, clear others and replace with ranges
+            console.log('individualNouns in rangecalls', individualNouns)
+            setNounsList(individualNouns);
             const rangeChunkSize = 100;
-            const placeholderNoun: NounPic = {id: null, svg: undefined};
-            const individualIds = new Array(individualCount).fill(placeholderNoun).map((x, i): NounPic => {
-                return {
-                    id: i + (nounCount - individualCount),
-                    svg: `https://noun.pics/${i + (nounCount - individualCount)}.svg`,
-                }
-            }).reverse();
-            setListToDisplay(arr => [...arr, ...individualIds]);
             for (let i = nounCount - individualCount; i >= 0; i -= (rangeChunkSize)) {
                 const start = i - rangeChunkSize < 0 ? 0 : i - rangeChunkSize;
                 const end = i - 1;
-                // console.log(start, end);
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 const nounsRange = await fetchNouns(start, end);
-
             }
         }
-        setOrderedNouns(listToDisplay.reverse());
-        
-    };
-    // console.log('orderedNouns', orderedNouns);
-    
+        // setOrderedNouns(listToDisplay.reverse());
+    };    
     const fetchNouns = async (start: number, end: number) => {
-        // console.log('fetchNouns', start, end);
         const url = `https://noun.pics/range?start=${start}&end=${end}`;
         try {
             const response = await fetch(url);
             const json = await response.json();
-            const reverseOrder = json.reverse().map((noun: any, i: any) => noun);
 
-            setListToDisplay(arr => [...arr, ...reverseOrder]);
-            return reverseOrder;
+            // Convert noun.pic svg key to generic imgSrc key
+            const rangeNouns: Noun[] = json.reverse().map((noun: NounPic, i: number) => {
+                return {
+                    id: noun.id,
+                    imgSrc: noun.svg
+                }
+            });
+            setNounsList(arr => [...arr, ...rangeNouns]);
+            return rangeNouns;
         } catch (error) {
             console.log("error", error);
         }
     };
     
-    // console.log('nouns fetched', nouns);
-        
-    // useEffect(() => {
-    //     if (ranges) {
-    //         ranges.map((range, i) => {
-    //             fetchNouns(range[0], range[1]);
-    //             // eslint-disable-next-line array-callback-return
-    //             return
-    //         })
-    //     }
-        
-    // }, [ranges]);
 
     useEffect(() => {
-        // setListToDisplay(individualNouns)
-        setIndividualCount((nounCount % initialChunkSize) + 1)
-        nounCount >= 0 && rangeCalls(nounCount);
-        // console.log('trigger by nounCount', nounCount);
+        if (nounCount >= 0) {
+            getInitialNouns((nounCount % initialChunkSize) + 1);
+            setIndividualCount((nounCount % initialChunkSize) + 1);
+            // rangeCalls(nounCount);
+        }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [nounCount]);
 
     
     // console.log('listToDisplay', listToDisplay);
 
-    const nounList = [...Array(nounCount >= 0 ? nounCount : 100)].reverse(); 
 
     // const handleButtonRef = (el: HTMLButtonElement, nounId: number) => {
     //     buttonsRef.current[nounId] = el
@@ -350,6 +364,11 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     
     // const testRef = useRef<(HTMLDivElement[] | null)>([])
     // const testRef = useRef<(HTMLButtonElement | null)[]>([])
+    
+    // Console logs 
+    useEffect(() => {
+        console.log('nounsList', nounsList)
+    }, [nounsList]);
     
     return (
         <div className={classes.exploreWrap} ref={containerRef}>
@@ -397,18 +416,17 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                     <motion.div 
                         className={cx(classes.exploreGrid)}> 
                             <ul>       
-                               
-                                        {(sortOrder === "date-ascending" ? nounList.reverse() : nounList).map((x, i) => {
-                                            let nounId: number | null = null;
-                                            let imgSrc: React.SetStateAction<string | undefined> = undefined; 
-                                            let index = sortOrder === "date-ascending" ? Math.abs(i - nounCount + 1) : i;
+                                        {(sortOrder === "date-ascending" ? [...nounsList].reverse() : nounsList).map((noun, i) => {
+                                            // let nounId: number | null = null;
+                                            // let imgSrc: React.SetStateAction<string | undefined> = undefined; 
+                                            // let index = sortOrder === "date-ascending" ? Math.abs(i - nounCount + 1) : i;
 
                                             // nounCount >= 0 && i < 8 && sortOrder === "date-descending" && setActiveNounImg(`https://noun.pics/${nounCount - 1 - i}.svg`);
-                                            
-                                            if (listToDisplay[index]) {
-                                                nounId = listToDisplay[index].id;
-                                                imgSrc = listToDisplay[index].svg;
-                                            }
+                                            // console.log(listToDisplay[i], listToDisplay);
+                                            // if (listToDisplay[index]) {
+                                            //     nounId = listToDisplay[index].id;
+                                            //     imgSrc = listToDisplay[index].svg;
+                                            // }
                                             return (
                                                 <>
                                                 {/* <button id={`${nounId}`} 
@@ -431,28 +449,28 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                     handleButtonRef={handleButtonRef}
                                                 /> */}
                                                 <li 
-                                                    className={nounId === selectedNoun ? classes.activeNoun : ''} 
-                                                    key={nounId}
+                                                    className={noun.id === selectedNoun ? classes.activeNoun : ''} 
+                                                    key={i}
                                                 >
                                                     <button 
-                                                        ref={el => buttonsRef.current[nounId ? nounId : -1] = el}
-                                                        id={`${nounId} - ${nounId}`}
-                                                        onMouseDown={(e) => (selectedNoun === nounId && document.activeElement && parseInt(document.activeElement.id) === nounId) && handleOnFocus(nounId)}
-                                                        onFocus={(e) => nounId !== null && handleOnFocus(nounId)}
-                                                        onMouseOver={() => !isKeyboardNavigating && nounId !== null && setActiveNoun(nounId)} 
+                                                        ref={el => buttonsRef.current[noun.id ? noun.id : -1] = el}
+                                                        key={`${i}${noun.id}`}
+                                                        onMouseDown={(e) => (selectedNoun === noun.id && document.activeElement && parseInt(document.activeElement.id) === noun.id) && handleOnFocus(noun.id)}
+                                                        onFocus={(e) => noun.id !== null && handleOnFocus(noun.id)}
+                                                        onMouseOver={() => !isKeyboardNavigating && noun.id !== null && setActiveNoun(noun.id)} 
                                                         onMouseOut={() => selectedNoun !== undefined && setActiveNoun(selectedNoun)}
                                                         >
-                                                            {imgSrc ? (
+                                                            {noun.imgSrc ? (
                                                                 <img 
-                                                                    src={imgSrc}
-                                                                    alt={`Noun ${nounId}`}
+                                                                    src={noun.imgSrc}
+                                                                    alt={`Noun ${noun.id}`}
                                                                 />
                                                             ) : (
                                                                 <Placeholder xs={12} animation="glow" />
                                                             )}
                                                         
                                                         <p className={classes.nounIdOverlay}>
-                                                            {nounId}
+                                                            {noun.id}
                                                         </p>
                                                         {/* <StandaloneNounImage nounId={BigNumber.from(i)} /> */}
                                                     </button>
@@ -472,7 +490,8 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                 handleNounDetail={handleNounDetail} 
                                 handleNounNavigation={handleNounNavigation} 
                                 nounId={activeNoun} 
-                                nounImgSrc={orderedNouns[activeNoun]?.svg}
+                                nounImgSrc={[...nounsList].reverse()[activeNoun]?.imgSrc}
+                                // nounImgSrc={'orderedNouns[activeNoun]?.svg'}
                                 isVisible={isSidebarVisible} 
                                 handleScrollTo={handleScrollTo} 
                                 disablePrev={((sortOrder === "date-ascending" && activeNoun === 0) || (sortOrder === "date-descending" && activeNoun === nounCount - 1)) ? true : false}
