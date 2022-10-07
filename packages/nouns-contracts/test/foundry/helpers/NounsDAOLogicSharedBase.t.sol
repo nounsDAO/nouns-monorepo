@@ -44,6 +44,8 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtils {
 
     function deployDAOProxy() internal virtual returns (NounsDAOLogicV1);
 
+    function daoVersion() internal virtual returns (uint256);
+
     function propose(
         address _proposer,
         address target,
@@ -97,5 +99,9 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtils {
     ) internal {
         vm.prank(voter);
         daoProxy.castVote(proposalId, support);
+    }
+
+    function daoProxyAsV2() internal view returns (NounsDAOLogicV2) {
+        return NounsDAOLogicV2(payable(address(daoProxy)));
     }
 }

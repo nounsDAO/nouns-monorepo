@@ -22,6 +22,10 @@ contract NounsDAOUpgradeToV2 is NounsDAOLogicSharedBaseTest {
         voter = utils.getNextUserAddress();
     }
 
+    function daoVersion() internal pure override returns (uint256) {
+        return 1;
+    }
+
     function deployDAOProxy() internal override returns (NounsDAOLogicV1) {
         NounsDAOLogicV1 daoLogic = new NounsDAOLogicV1();
 
