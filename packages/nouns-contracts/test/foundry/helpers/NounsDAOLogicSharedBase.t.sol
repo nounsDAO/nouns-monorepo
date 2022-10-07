@@ -45,12 +45,13 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtils {
     function deployDAOProxy() internal virtual returns (NounsDAOLogicV1);
 
     function propose(
+        address _proposer,
         address target,
         uint256 value,
         string memory signature,
         bytes memory data
     ) internal returns (uint256 proposalId) {
-        vm.prank(proposer);
+        vm.prank(_proposer);
         address[] memory targets = new address[](1);
         targets[0] = target;
         uint256[] memory values = new uint256[](1);
@@ -62,6 +63,15 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtils {
         proposalId = daoProxy.propose(targets, values, signatures, calldatas, 'my proposal');
     }
 
+    function propose(
+        address target,
+        uint256 value,
+        string memory signature,
+        bytes memory data
+    ) internal returns (uint256 proposalId) {
+        return propose(proposer, target, value, signature, data);
+    }
+
     function mint(address to, uint256 amount) internal {
         vm.startPrank(minter);
         for (uint256 i = 0; i < amount; i++) {
@@ -69,6 +79,7 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtils {
             nounsToken.transferFrom(minter, to, tokenId);
         }
         vm.stopPrank();
+        vm.roll(block.number + 1);
     }
 
     function startVotingPeriod() internal {
