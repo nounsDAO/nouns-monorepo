@@ -109,7 +109,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     // }
     
     const handleNounDetail = (nounId: number, sidebarVisibility: string, event: React.MouseEvent | React.FocusEvent) => {
-        console.log('handleNounDetail');
+        // console.log('handleNounDetail');
         // if (isSidebarVisible === true) {
             handleScrollTo(nounId);
         // }
@@ -265,7 +265,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
             }
         });
         setPlaceholderNouns(placeholderNounsData);
-        console.log('placeholderNounsData', placeholderNounsData);
+        // console.log('placeholderNounsData', placeholderNounsData);
     }, []);
     
     const initialChunkSize = 10;
@@ -293,7 +293,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
             for (let i = nounCount - individualCount; i >= 0; i -= (rangeChunkSize)) {
                 const start = i - rangeChunkSize < 0 ? 0 : i - rangeChunkSize;
                 const end = i - 1;
-                console.log(start, end);
+                // console.log(start, end);
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 const nounsRange = await fetchNouns(start, end);
 
@@ -302,7 +302,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         setOrderedNouns(listToDisplay.reverse());
         
     };
-    console.log('orderedNouns', orderedNouns);
+    // console.log('orderedNouns', orderedNouns);
     
     const fetchNouns = async (start: number, end: number) => {
         // console.log('fetchNouns', start, end);
@@ -321,27 +321,27 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     
     // console.log('nouns fetched', nouns);
         
-    useEffect(() => {
-        if (ranges) {
-            ranges.map((range, i) => {
-                fetchNouns(range[0], range[1]);
-                // eslint-disable-next-line array-callback-return
-                return
-            })
-        }
+    // useEffect(() => {
+    //     if (ranges) {
+    //         ranges.map((range, i) => {
+    //             fetchNouns(range[0], range[1]);
+    //             // eslint-disable-next-line array-callback-return
+    //             return
+    //         })
+    //     }
         
-    }, [ranges]);
+    // }, [ranges]);
 
     useEffect(() => {
         // setListToDisplay(individualNouns)
         setIndividualCount((nounCount % initialChunkSize) + 1)
         nounCount >= 0 && rangeCalls(nounCount);
-        console.log('trigger by nounCount', nounCount);
+        // console.log('trigger by nounCount', nounCount);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [nounCount]);
 
     
-    console.log('listToDisplay', listToDisplay);
+    // console.log('listToDisplay', listToDisplay);
 
     const nounList = [...Array(nounCount >= 0 ? nounCount : 100)].reverse(); 
 
