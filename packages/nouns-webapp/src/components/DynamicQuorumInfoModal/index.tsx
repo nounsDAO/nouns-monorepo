@@ -53,9 +53,9 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
   };
 
   const x =
-    againstVotesBps <= maxQuorumBps
+    againstVotesBps < linearToConstantCrossoverBPS 
       ? PLOTTING_CONSTANTS.dqFunctionMaxQXCrossoverPlotSpace *
-        (againstVotesAbs / Math.floor((maxQuorumBps * totalNounSupply) / 10_000))
+        (againstVotesAbs / Math.floor((linearToConstantCrossoverBPS * totalNounSupply) / 10_000))
       : PLOTTING_CONSTANTS.dqFunctionMaxQXCrossoverPlotSpace +
         0.5 * PLOTTING_CONSTANTS.width * (againstVotesBps / 10_000);
   const y = Math.max(plotSpaceFunction(x), PLOTTING_CONSTANTS.maxQHeightPlotSpace);
@@ -246,7 +246,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                     </text>
                   )}
                   {againstVotesAbs > 0 && (
-                    <text x={x + (x < 712 ? 10 : -130)} y={310} fill="var(--brand-gray-light-text)">
+                    <text x={x + (x < 712 ? 10 : -110)} y={310} fill="var(--brand-gray-light-text)">
                       {Math.floor(againstVotesBps / 100)}% of Nouns
                     </text>
                   )}
