@@ -310,7 +310,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     // Prep range calls
     const initialChunkSize = 10;
     const rangeChunkSize = 100;
-    const [individualCount, setIndividualCount] = useState<number>(initialChunkSize);    
+    // const [individualCount, setIndividualCount] = useState<number>(initialChunkSize);    
     // const [orderedNouns, setOrderedNouns] = useState<NounPic[]>([]);
     const rangeCalls = async (nounCount: number, individualNouns: Noun[]) => {        
         if (nounCount >= 0) {
@@ -319,7 +319,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
             
             setNounsList(individualNouns);
             
-            for (let i = nounCount - individualCount; i >= 0; i -= (rangeChunkSize)) {
+            for (let i = nounCount - individualNouns.length; i >= 0; i -= (rangeChunkSize)) {
                 const start = i - rangeChunkSize < 0 ? 0 : i - rangeChunkSize;
                 const end = i - 1;
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -372,7 +372,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     useEffect(() => {
         if (nounCount >= 0) {
             getInitialNouns((nounCount % initialChunkSize) + 1);
-            setIndividualCount((nounCount % initialChunkSize) + 1);
+            // setIndividualCount((nounCount % initialChunkSize) + 1);
             // rangeCalls(nounCount);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
