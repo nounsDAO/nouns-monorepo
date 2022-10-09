@@ -270,7 +270,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     // const [placeholderNouns, setPlaceholderNouns] = useState<Noun[]>([]);
     // const [listToDisplay, setListToDisplay] = useState<NounPic[]>([]);
     const [nounsList, setNounsList] = useState<Noun[]>([]);
-    // const [individualNouns, setIndividualNouns] = useState<Noun[]>([]);
+    const [individualNouns, setIndividualNouns] = useState<Noun[]>([]);
     // const [isNounsDataLoaded, setIsNounsDataLoaded] = useState<boolean>(false)
 
     // Set empty nouns to display grid while images are fetched
@@ -300,8 +300,8 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
 
         // Add initial nouns to end of placeholder array to 
         // display them first on load
-        setNounsList(arr => [...arr, ...individualNouns]);
-        // setIndividualNouns(individualNouns);
+        setNounsList(arr => [...individualNouns, ...arr]);
+        setIndividualNouns(individualNouns);
         
         // After initial nouns are set, run range calls
         rangeCalls(nounCount, individualNouns);
@@ -317,11 +317,13 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
             // keep initial nouns, clear others and replace with ranges
             console.log('individualNouns in rangecalls', individualNouns)
             
-            setNounsList(individualNouns);
+            // setNounsList(individualNouns);
             
             for (let i = nounCount - individualNouns.length; i >= 0; i -= (rangeChunkSize)) {
                 const start = i - rangeChunkSize < 0 ? 0 : i - rangeChunkSize;
                 const end = i - 1;
+                
+                
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 const nounsRange = await fetchNouns(start, end);
             }
@@ -341,27 +343,41 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                     imgSrc: noun.svg
                 }
             });
-            setNounsList(arr => [...arr, ...rangeNouns]);
-            // setNounsList(arr => {
+            // setNounsList(arr => [...arr, ...rangeNouns]);
+            setNounsList(arr => {
                 
-            //     // const newArray = Array.prototype.splice.apply(arr, [10, 100].concat(rangeNouns));
-            //     // const newArray = arr.splice(0, individualCount, ...rangeNouns);
-            //     // if (arr.length === (individualCount + placeholderNoun.length))
-            //     console.log(start, end);
-            //     console.log('arr', arr);
-            //     const spliced = arr.splice(0, (nounCount) - 1 - end);
-            //     const newArray = arr.splice(0, (nounCount) - 1 - end).concat(rangeNouns);
-            //     // const newArray = arr.concat(rangeNouns);
-            //     // const newArray = arr;
+                // const newArray = Array.prototype.splice.apply(arr, [10, 100].concat(rangeNouns));
+                // const newArray = arr.splice(0, individualCount, ...rangeNouns);
+                // if (arr.length === (individualCount + placeholderNoun.length))
+                console.log(start, end);
+                // console.log('arr', arr);
+                // // const spliced = arr.splice(0, (nounCount) - 1 - end);
+                // // const spliced = arr.splice(0, 10);
+                let sliced;
                 
-            //     console.log('spliced', spliced);
-            //     // console.log('newArray', newArray);
-            //     // console.log(end, start, (nounCount) - 1 - end);
-            //     return (
-            //         arr
-            //     )
-            // }
-            // );
+                // // const newArray = arr.splice(0, (nounCount) - 1 - end).concat(rangeNouns);
+                // // const newArray = arr.concat(rangeNouns);
+                // // const newArray = arr;
+                
+                // console.log('sliced', sliced);
+                console.log('arr', arr);
+                // console.log('nounsList', nounsList);
+                if (arr[individualNouns.length + 1].id === null) {
+                    // list is individual nouns + placeholders
+                    sliced = arr.slice(0, individualNouns.length).concat(rangeNouns);
+                    console.log('individual sliced',sliced);
+                } else {
+                    sliced = arr.slice(0, (nounCount - 1) - end).concat(rangeNouns);
+                    console.log('full sliced',sliced);
+                }
+                
+                // console.log('newArray', newArray);
+                // console.log(end, start, (nounCount) - 1 - end);
+                return (
+                    sliced
+                )
+            }
+            );
             return rangeNouns;
         } catch (error) {
             console.log("error", error);
