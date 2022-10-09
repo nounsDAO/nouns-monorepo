@@ -19,9 +19,21 @@ import Placeholder from 'react-bootstrap/Placeholder';
 
 dotenv.config();
 interface ExploreGridProps {
+    // 
 }
 
-// Custom hook
+// noun.pics object
+type NounPic = {
+    id: number | null;
+    svg: string | undefined;
+};
+
+type Noun = {
+    id: number | null;
+    imgSrc: string | undefined;
+};
+
+// Custom keyboard nav hook
 function useKeyPress(targetKey: string) {
     // State for keeping track of whether key is pressed
     const [keyPressed, setKeyPressed] = useState(false);
@@ -74,20 +86,13 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         };
     }, []);
 
-    
-    
-
     const [isSidebarVisible, setIsSidebarVisible] = useState<boolean>(!isMobile && true);
     const [selectedNoun, setSelectedNoun] = useState<number | undefined>(undefined);
     const [activeNoun, setActiveNoun] = useState<number>(-1);
-    // const [activeNounObject, setActiveNounObject] = useState<NounPic>({id: null, svg: undefined});
-    // const [activeNounImg, setActiveNounImg] = useState<string>();
 
     // get latest noun id, then replace loading sidebar state with latest noun
     useEffect(() => {
-        // console.log('currentAuction', currentAuction);
         if (currentAuction?.nounId) {
-            // console.log('currentAuction.nounId', currentAuction?.nounId);
             !isMobile && setSelectedNoun(BigNumber.from(currentAuction?.nounId).toNumber());
             !isMobile && setActiveNoun(BigNumber.from(currentAuction?.nounId).toNumber());
         }
@@ -101,12 +106,6 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
             focusNoun(nounId);
         }
     }
-
-    // const removeFocus = () => {
-    //     setIsSidebarVisible(false);
-    //     setActiveNoun(-1);
-    //     setSelectedNoun(undefined);
-    // }
     
     const handleNounDetail = (nounId: number, sidebarVisibility: string, event: React.MouseEvent | React.FocusEvent) => {
         if (isSidebarVisible === true) {
@@ -159,9 +158,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     const [isKeyboardNavigating, setIsKeyboardNavigating] = useState<boolean>(false);
 
     useLayoutEffect(() => {
-
-        handleScrollTo(selectedNoun || 400);
-        
+        handleScrollTo(selectedNoun || nounCount);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSidebarVisible])
 
@@ -172,7 +169,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         };
     
         return () => {
-        //   window.removeEventListener('mousemove', onMouseMove);
+        //   window.removeEventListener('mousemove', onmousemove);
         };
       }, []);
 
@@ -194,7 +191,6 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                 setIsSidebarVisible(false);
                 setSelectedNoun(undefined);
                 setIsKeyboardNavigating(false);
-                // containerRef.current?.scrollIntoView();
                 containerRef.current && window.scrollTo(0, containerRef.current?.offsetTop);
             }
             if (sortOrder === "date-descending") {
@@ -250,17 +246,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
             setActiveNoun(0);
             setSelectedNoun(0);
         }
-    };
-
-    type Noun = {
-        id: number | null;
-        imgSrc: string | undefined;
-    };
-
-    type NounPic = {
-        id: number | null;
-        svg: string | undefined;
-    };
+    };    
 
     const [nounsList, setNounsList] = useState<Noun[]>([]);
     const [individualNouns, setIndividualNouns] = useState<Noun[]>([]);
@@ -274,7 +260,6 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                 imgSrc: undefined,
             }
         });
-        // setPlaceholderNouns(placeholderNounsData);
         setNounsList(placeholderNounsData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -309,7 +294,8 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                 const nounsRange = await fetchNouns(start, end);
             }
         }
-    };    
+    };
+
     const fetchNouns = async (start: number, end: number) => {
         const url = `https://noun.pics/range?start=${start}&end=${end}`;
         try {
@@ -323,6 +309,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                     imgSrc: noun.svg
                 }
             });
+
             setNounsList(arr => {
                 let sliced = arr.slice(0, (nounCount - 1) - end).concat(rangeNouns);
                 // if list is only individual nouns + placeholders
@@ -340,32 +327,13 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         }
     };
     
-
+    // Once nounCount is known, run dependent functions
     useEffect(() => {
         if (nounCount >= 0) {
             getInitialNouns((nounCount % initialChunkSize) + 1);
-            // setIndividualCount((nounCount % initialChunkSize) + 1);
-            // rangeCalls(nounCount);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [nounCount]);
-
-    
-    // console.log('listToDisplay', listToDisplay);
-
-
-    // const handleButtonRef = (el: HTMLButtonElement, nounId: number) => {
-    //     buttonsRef.current[nounId] = el
-    //     console.log('handleButtonRef');
-    // }
-    
-    // const testRef = useRef<(HTMLDivElement[] | null)>([])
-    // const testRef = useRef<(HTMLButtonElement | null)[]>([])
-    
-    // Console logs 
-    useEffect(() => {
-        // console.log('nounsList', nounsList)
-    }, [nounsList]);
     
     return (
         <div className={classes.exploreWrap} ref={containerRef}>
@@ -413,69 +381,39 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                     <motion.div 
                         className={cx(classes.exploreGrid)}> 
                             <ul>       
-                                        {(sortOrder === "date-ascending" ? [...nounsList].reverse() : nounsList).map((noun, i) => {
-                                            // let nounId: number | null = null;
-                                            // let imgSrc: React.SetStateAction<string | undefined> = undefined; 
-                                            // let index = sortOrder === "date-ascending" ? Math.abs(i - nounCount + 1) : i;
-
-                                            // nounCount >= 0 && i < 8 && sortOrder === "date-descending" && setActiveNounImg(`https://noun.pics/${nounCount - 1 - i}.svg`);
-                                            // console.log(listToDisplay[i], listToDisplay);
-                                            // if (listToDisplay[index]) {
-                                            //     nounId = listToDisplay[index].id;
-                                            //     imgSrc = listToDisplay[index].svg;
-                                            // }
-                                            return (
-                                                <>
-                                                {/* <button id={`${nounId}`} 
-                                                key={nounId}
-                                                    // ref={el => testRef.current[i] = el}
-                                                    ref={el => 
-                                                            buttonsRef.current[nounId ? nounId : -1] = el
-                                                    }
-                                                >test</button> */}
-                                                {/* <ExploreGridItem 
-                                                    key={i}
-                                                    nounId={nounId}
-                                                    imgSrc={imgSrc}
-                                                    selectedNoun={selectedNoun}
-                                                    setActiveNoun={setActiveNoun}
-                                                    isKeyboardNavigating={isKeyboardNavigating}
-                                                    handleOnFocus={handleOnFocus}
-                                                    // ref={el => buttonsRef.current[nounId] = el}
-                                                    // ref={buttonsRef.current[index].nounId}
-                                                    handleButtonRef={handleButtonRef}
-                                                /> */}
-                                                <li 
-                                                    className={noun.id === selectedNoun ? classes.activeNoun : ''} 
-                                                    key={i}
+                                {(sortOrder === "date-ascending" ? [...nounsList].reverse() : nounsList).map((noun, i) => {
+                                    return (
+                                        <>
+                                        <li 
+                                            className={noun.id === selectedNoun ? classes.activeNoun : ''} 
+                                            key={i}
+                                        >
+                                            <button 
+                                                ref={el => buttonsRef.current[noun.id ? noun.id : -1] = el}
+                                                key={`${i}${noun.id}`}
+                                                onMouseDown={(e) => (selectedNoun === noun.id && document.activeElement && parseInt(document.activeElement.id) === noun.id) && handleOnFocus(noun.id)}
+                                                onFocus={(e) => noun.id !== null && handleOnFocus(noun.id)}
+                                                onMouseOver={() => !isKeyboardNavigating && noun.id !== null && setActiveNoun(noun.id)} 
+                                                onMouseOut={() => selectedNoun !== undefined && setActiveNoun(selectedNoun)}
                                                 >
-                                                    <button 
-                                                        ref={el => buttonsRef.current[noun.id ? noun.id : -1] = el}
-                                                        key={`${i}${noun.id}`}
-                                                        onMouseDown={(e) => (selectedNoun === noun.id && document.activeElement && parseInt(document.activeElement.id) === noun.id) && handleOnFocus(noun.id)}
-                                                        onFocus={(e) => noun.id !== null && handleOnFocus(noun.id)}
-                                                        onMouseOver={() => !isKeyboardNavigating && noun.id !== null && setActiveNoun(noun.id)} 
-                                                        onMouseOut={() => selectedNoun !== undefined && setActiveNoun(selectedNoun)}
-                                                        >
-                                                            {noun.imgSrc ? (
-                                                                <img 
-                                                                    src={noun.imgSrc}
-                                                                    alt={`Noun ${noun.id}`}
-                                                                />
-                                                            ) : (
-                                                                <Placeholder xs={12} animation="glow" />
-                                                            )}
-                                                        
-                                                        <p className={classes.nounIdOverlay}>
-                                                            {noun.id}
-                                                        </p>
-                                                        {/* <StandaloneNounImage nounId={BigNumber.from(i)} /> */}
-                                                    </button>
-                                                </li>
-                                            </>
-                                            )
-                                        })}
-                                        
+                                                    {noun.imgSrc ? (
+                                                        <img 
+                                                            src={noun.imgSrc}
+                                                            alt={`Noun ${noun.id}`}
+                                                        />
+                                                    ) : (
+                                                        <Placeholder xs={12} animation="glow" />
+                                                    )}
+                                                
+                                                <p className={classes.nounIdOverlay}>
+                                                    {noun.id}
+                                                </p>
+                                                {/* <StandaloneNounImage nounId={BigNumber.from(i)} /> */}
+                                            </button>
+                                        </li>
+                                    </>
+                                    )
+                                })}
                             </ul>             
                         </motion.div>
                     </div>
@@ -488,7 +426,6 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                 handleNounNavigation={handleNounNavigation} 
                                 nounId={activeNoun} 
                                 nounImgSrc={[...nounsList].reverse()[activeNoun]?.imgSrc}
-                                // nounImgSrc={'orderedNouns[activeNoun]?.svg'}
                                 isVisible={isSidebarVisible} 
                                 handleScrollTo={handleScrollTo} 
                                 disablePrev={((sortOrder === "date-ascending" && activeNoun === 0) || (sortOrder === "date-descending" && activeNoun === nounCount - 1)) ? true : false}
