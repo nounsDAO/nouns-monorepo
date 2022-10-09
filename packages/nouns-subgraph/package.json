@@ -25,6 +25,7 @@
     "deploy:rinkeby": "yarn clean && yarn prepare:rinkeby && yarn codegen && yarn deploy nounsdao/nouns-subgraph-rinkeby",
     "deploy:mainnet": "yarn clean && yarn prepare:mainnet && yarn codegen && yarn deploy nounsdao/nouns-subgraph",
     "deploy:goerli": "yarn clean && yarn prepare:goerli && yarn codegen && yarn deploy verbsteam/nouns-goerli",
+    "deploy:goerli-brian": "yarn clean && yarn prepare:goerli && yarn codegen && yarn deploy bcjgit/nouns-v2-with-bugs",
     "mustache": "mustache"
   },
   "devDependencies": {
