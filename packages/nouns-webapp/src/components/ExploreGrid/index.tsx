@@ -109,10 +109,9 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     // }
     
     const handleNounDetail = (nounId: number, sidebarVisibility: string, event: React.MouseEvent | React.FocusEvent) => {
-        // console.log('handleNounDetail');
-        // if (isSidebarVisible === true) {
+        if (isSidebarVisible === true) {
             handleScrollTo(nounId);
-        // }
+        }
         if (nounId === selectedNoun) {
             handleCloseDetail();
         } else {
@@ -263,15 +262,8 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         svg: string | undefined;
     };
 
-    
-    // const [nouns, setNouns] = useState<NounPic[]>([]);
-    // const [individualNouns, setIndividualNouns] = useState<NounPic[]>([]);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    // const [placeholderNouns, setPlaceholderNouns] = useState<Noun[]>([]);
-    // const [listToDisplay, setListToDisplay] = useState<NounPic[]>([]);
     const [nounsList, setNounsList] = useState<Noun[]>([]);
     const [individualNouns, setIndividualNouns] = useState<Noun[]>([]);
-    // const [isNounsDataLoaded, setIsNounsDataLoaded] = useState<boolean>(false)
 
     // Set empty nouns to display grid while images are fetched
     const placeholderNoun: Noun = {id: null, imgSrc: undefined};
@@ -290,7 +282,6 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     // Fetch initial nouns by url
     const getInitialNouns = (individualCount: number) => {
         console.log('individual count', individualCount)
-        // console.log('individual count', (nounCount % initialChunkSize) + 1, nounCount, initialChunkSize)
         const individualNouns = new Array(individualCount).fill(placeholderNoun).map((x, i): Noun => {
             return {
                 id: i + (nounCount - individualCount),
@@ -310,25 +301,15 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     // Prep range calls
     const initialChunkSize = 10;
     const rangeChunkSize = 100;
-    // const [individualCount, setIndividualCount] = useState<number>(initialChunkSize);    
-    // const [orderedNouns, setOrderedNouns] = useState<NounPic[]>([]);
     const rangeCalls = async (nounCount: number, individualNouns: Noun[]) => {        
         if (nounCount >= 0) {
-            // keep initial nouns, clear others and replace with ranges
-            console.log('individualNouns in rangecalls', individualNouns)
-            
-            // setNounsList(individualNouns);
-            
             for (let i = nounCount - individualNouns.length; i >= 0; i -= (rangeChunkSize)) {
                 const start = i - rangeChunkSize < 0 ? 0 : i - rangeChunkSize;
-                const end = i - 1;
-                
-                
+                const end = i - 1;                
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 const nounsRange = await fetchNouns(start, end);
             }
         }
-        // setOrderedNouns(listToDisplay.reverse());
     };    
     const fetchNouns = async (start: number, end: number) => {
         const url = `https://noun.pics/range?start=${start}&end=${end}`;
@@ -343,41 +324,17 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                     imgSrc: noun.svg
                 }
             });
-            // setNounsList(arr => [...arr, ...rangeNouns]);
             setNounsList(arr => {
-                
-                // const newArray = Array.prototype.splice.apply(arr, [10, 100].concat(rangeNouns));
-                // const newArray = arr.splice(0, individualCount, ...rangeNouns);
-                // if (arr.length === (individualCount + placeholderNoun.length))
-                console.log(start, end);
-                // console.log('arr', arr);
-                // // const spliced = arr.splice(0, (nounCount) - 1 - end);
-                // // const spliced = arr.splice(0, 10);
-                let sliced;
-                
-                // // const newArray = arr.splice(0, (nounCount) - 1 - end).concat(rangeNouns);
-                // // const newArray = arr.concat(rangeNouns);
-                // // const newArray = arr;
-                
-                // console.log('sliced', sliced);
-                console.log('arr', arr);
-                // console.log('nounsList', nounsList);
+                let sliced = arr.slice(0, (nounCount - 1) - end).concat(rangeNouns);
+                // if list is only individual nouns + placeholders
+                // keep individual nouns, clear others and replace with ranges
                 if (arr[individualNouns.length + 1].id === null) {
-                    // list is individual nouns + placeholders
                     sliced = arr.slice(0, individualNouns.length).concat(rangeNouns);
-                    console.log('individual sliced',sliced);
-                } else {
-                    sliced = arr.slice(0, (nounCount - 1) - end).concat(rangeNouns);
-                    console.log('full sliced',sliced);
                 }
-                
-                // console.log('newArray', newArray);
-                // console.log(end, start, (nounCount) - 1 - end);
                 return (
                     sliced
                 )
-            }
-            );
+            });
             return rangeNouns;
         } catch (error) {
             console.log("error", error);
