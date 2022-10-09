@@ -23,6 +23,18 @@
     "nounsDAOProxy": "0xF5ab6f74c557c6e8B96EeF0371F9CfCf9F5e4b26",
     "nounsDAOLogicV1": "0x27c9e62fc1F1334eb2A090506675Ec31df878E00"
   },
+  "5": {
+    "nounsToken": "0x60FDa42Ed379074907663A95EE2F925abA8aba7E",
+    "nounsSeeder": "0x1D8180E925BFE187db9CDBb1D9f5996879868326",
+    "nounsDescriptor": "0xDde52f41c84a80c86cAD7e7f1ed7057f01fd87e1",
+    "nftDescriptor": "0x7a3E1B6b01bF80AE568e44C44940b46b8084c8f0",
+    "nounsAuctionHouse": "0x06817909189F1833757AC9962e98b2e23F29bba9",
+    "nounsAuctionHouseProxy": "0xFcF9a3112398EEFF646Db364c232f7b5812C3Eb2",
+    "nounsAuctionHouseProxyAdmin": "0x00AA737235c2438016428eF375A731FC975D2797",
+    "nounsDaoExecutor": "0x2849Ca0C47c4a5B4f32c2256842B087613241678",
+    "nounsDAOProxy": "0x26e4097bB313BA5520B4237ab93945B7F644b12a",
+    "nounsDAOLogicV1": "0x66E607b8345F921195Fb8aBF1D1FA5386c073559"
+  },
   "31337": {
     "nounsToken": "0xa513e6e4b8f2a923d98304ec87f64353c4d5c853",
     "nounsSeeder": "0x0165878a594ca255338adfa4d48449f69242eb8f",

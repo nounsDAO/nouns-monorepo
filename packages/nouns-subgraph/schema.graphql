@@ -6,19 +6,17 @@ type DelegationEvent @entity {
   noun: Noun!
 
   "Previous delegate address"
-  previousDelegate: Delegate! 
+  previousDelegate: Delegate!
 
   "New delegate address"
-  newDelegate: Delegate! 
+  newDelegate: Delegate!
 
- "Block number of the event"
+  "Block number of the event"
   blockNumber: BigInt!
 
   "The timestamp of the block the event is in"
   blockTimestamp: BigInt!
-
 }
-
 
 type TransferEvent @entity {
   "The txn hash of this event"
@@ -39,7 +37,6 @@ type TransferEvent @entity {
   "The timestamp of the block the event is in"
   blockTimestamp: BigInt!
 }
-
 
 type Seed @entity {
   "The Noun's ERC721 token id"
@@ -245,9 +242,6 @@ type Proposal @entity {
   "Votes associated to this proposal"
   votes: [Vote!]! @derivedFrom(field: "proposal")
 
-  "True if this proposal was created with V2"
-  usingDynamicQuorum: Boolean!
-
   "Total supply when this proposal was created"
   totalSupply: BigInt!
 
@@ -334,4 +328,7 @@ type DynamicQuorumParams @entity {
 
   "The dynamic quorum coefficient"
   quorumCoefficient: BigInt!
+
+  "The block from which proposals are using DQ, based on when we first see configuration being set"
+  dynamicQuorumStartBlock: BigInt
 }

@@ -145,3 +145,24 @@
     display: none;
   }
 }
+
+.delegateHover {
+  border-radius: 8px !important;
+  background-color: var(--brand-gray-dark-text) !important;
+  color: white;
+  opacity: 0.75 !important;
+  font-weight: 500;
+  transition: ease-in-out 125ms;
+}
+
+.dqIcon {
+  opacity: 0.5;
+  margin-left: 0.25rem;
+  margin-bottom: 0.25rem;
+  height: 18px;
+  width: 18px;
+}
+
+.cursorPointer {
+  cursor: pointer;
+}

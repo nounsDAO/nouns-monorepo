@@ -98,39 +98,6 @@ test('handleProposalCreatedWithRequirements: saved ACTIVE proposal as expected',
   clearStore();
 });
 
-test('handleProposalCreatedWithRequirements: marks prop as not using dynamic quorum (V1) when quorumVotes is not zero', () => {
-  getOrCreateDelegate(SOME_ADDRESS);
-
-  const eventInput = stubProposalCreatedWithRequirementsEventInput();
-  eventInput.quorumVotes = BIGINT_ONE;
-  const newEvent = createProposalCreatedWithRequirementsEvent(eventInput);
-
-  handleProposalCreatedWithRequirements(newEvent);
-
-  const savedProp = Proposal.load(newEvent.params.id.toString());
-
-  assert.booleanEquals(savedProp!.usingDynamicQuorum, false);
-
-  clearStore();
-});
-
-test('handleProposalCreatedWithRequirements: marks prop as using dynamic quorum (V2) when quorumVotes is zero AND sets againstVotes to zero', () => {
-  getOrCreateDelegate(SOME_ADDRESS);
-
-  const eventInput = stubProposalCreatedWithRequirementsEventInput();
-  eventInput.quorumVotes = BIGINT_ZERO;
-  const newEvent = createProposalCreatedWithRequirementsEvent(eventInput);
-
-  handleProposalCreatedWithRequirements(newEvent);
-
-  const savedProp = Proposal.load(newEvent.params.id.toString());
-
-  assert.booleanEquals(savedProp!.usingDynamicQuorum, true);
-  assert.bigIntEquals(BIGINT_ZERO, savedProp!.againstVotes);
-
-  clearStore();
-});
-
 test('handleProposalCreatedWithRequirements: sets againstVotes to zero and totalSupply to its current value', () => {
   getOrCreateDelegate(SOME_ADDRESS);
   const totalSupply = BigInt.fromI32(123);
@@ -153,6 +120,46 @@ test('handleProposalCreatedWithRequirements: sets againstVotes to zero and total
   clearStore();
 });
 
+test('handleVoteCast: given V1 prop does not update quorumVotes using dynamic quorum', () => {
+  getOrCreateDelegate(SOME_ADDRESS);
+  const totalSupply = BigInt.fromI32(200);
+
+  // Set total supply
+  const governance = getGovernanceEntity();
+  governance.totalTokenHolders = totalSupply;
+  governance.save();
+
+  // Save dynamic quorum params
+  handleAllQuorumParamEvents(1000, 4000, BigInt.fromI32(1_500_000));
+
+  const dqParams = getOrCreateDynamicQuorumParams(null);
+  assert.bigIntEquals(BIGINT_ZERO, dqParams.dynamicQuorumStartBlock as BigInt);
+
+  // Create prop with state we need for quorum inputs
+  // providing block number zero means this prop will look like a V1 prop
+  // since the DQ events above are simulated to be at block zero
+  const propEventInput = stubProposalCreatedWithRequirementsEventInput(BIGINT_ZERO);
+  const newPropEvent = createProposalCreatedWithRequirementsEvent(propEventInput);
+
+  handleProposalCreatedWithRequirements(newPropEvent);
+  const propId = BIGINT_ONE;
+
+  let savedProp = Proposal.load(propId.toString());
+  assert.bigIntEquals(BIGINT_ONE, savedProp!.quorumVotes);
+
+  const voter = Address.fromString(SOME_ADDRESS);
+  const support = 0; // against
+  const votes = BigInt.fromI32(32);
+  const voteEvent = createVoteCastEvent(voter, propId, support, votes);
+
+  handleVoteCast(voteEvent);
+
+  savedProp = Proposal.load(propId.toString());
+  assert.bigIntEquals(BIGINT_ONE, savedProp!.quorumVotes);
+
+  clearStore();
+});
+
 test('handleVoteCast: updates quorumVotes using dynamic quorum math', () => {
   getOrCreateDelegate(SOME_ADDRESS);
   const totalSupply = BigInt.fromI32(200);
@@ -165,10 +172,15 @@ test('handleVoteCast: updates quorumVotes using dynamic quorum math', () => {
   // Save dynamic quorum params
   handleAllQuorumParamEvents(1000, 4000, BigInt.fromI32(1_500_000));
 
+  const dqParams = getOrCreateDynamicQuorumParams(null);
+  assert.bigIntEquals(BIGINT_ZERO, dqParams.dynamicQuorumStartBlock as BigInt);
+
   // Create prop with state we need for quorum inputs
-  const propEventInput = stubProposalCreatedWithRequirementsEventInput();
-  propEventInput.quorumVotes = BIGINT_ZERO;
+  // providing a block number greater than zero means this prop will look like a V2 prop
+  // since the DQ events above are simulated to be at block zero
+  const propEventInput = stubProposalCreatedWithRequirementsEventInput(BIGINT_ONE);
   const newPropEvent = createProposalCreatedWithRequirementsEvent(propEventInput);
+
   handleProposalCreatedWithRequirements(newPropEvent);
 
   const voter = Address.fromString(SOME_ADDRESS);
@@ -199,8 +211,9 @@ test('handleVoteCast: uses quorum params from prop creation time, not newer para
   handleAllQuorumParamEvents(1000, 4000, BigInt.fromI32(1_200_000));
 
   // Create prop with state we need for quorum inputs
-  const propEventInput = stubProposalCreatedWithRequirementsEventInput();
-  propEventInput.quorumVotes = BIGINT_ZERO;
+  // providing a block number greater than zero means this prop will look like a V2 prop
+  // since the DQ events above are simulated to be at block zero
+  const propEventInput = stubProposalCreatedWithRequirementsEventInput(BIGINT_ONE);
   const newPropEvent = createProposalCreatedWithRequirementsEvent(propEventInput);
   handleProposalCreatedWithRequirements(newPropEvent);
 
@@ -224,11 +237,11 @@ test('handleVoteCast: uses quorum params from prop creation time, not newer para
 test('handleMinQuorumVotesBPSSet: saves incoming values', () => {
   const event1 = createMinQuorumVotesBPSSetEvent(0, 1);
   handleMinQuorumVotesBPSSet(event1);
-  assert.i32Equals(1, getOrCreateDynamicQuorumParams().minQuorumVotesBPS);
+  assert.i32Equals(1, getOrCreateDynamicQuorumParams(BIGINT_ZERO).minQuorumVotesBPS);
 
   const event2 = createMinQuorumVotesBPSSetEvent(1, 2);
   handleMinQuorumVotesBPSSet(event2);
-  assert.i32Equals(2, getOrCreateDynamicQuorumParams().minQuorumVotesBPS);
+  assert.i32Equals(2, getOrCreateDynamicQuorumParams(BIGINT_ZERO).minQuorumVotesBPS);
 
   clearStore();
 });
@@ -236,11 +249,11 @@ test('handleMinQuorumVotesBPSSet: saves incoming values', () => {
 test('handleMaxQuorumVotesBPSSet: saves incoming values', () => {
   const event1 = createMaxQuorumVotesBPSSetEvent(0, 1000);
   handleMaxQuorumVotesBPSSet(event1);
-  assert.i32Equals(1000, getOrCreateDynamicQuorumParams().maxQuorumVotesBPS);
+  assert.i32Equals(1000, getOrCreateDynamicQuorumParams(BIGINT_ZERO).maxQuorumVotesBPS);
 
   const event2 = createMaxQuorumVotesBPSSetEvent(1000, 2000);
   handleMaxQuorumVotesBPSSet(event2);
-  assert.i32Equals(2000, getOrCreateDynamicQuorumParams().maxQuorumVotesBPS);
+  assert.i32Equals(2000, getOrCreateDynamicQuorumParams(BIGINT_ZERO).maxQuorumVotesBPS);
 
   clearStore();
 });
@@ -248,11 +261,11 @@ test('handleMaxQuorumVotesBPSSet: saves incoming values', () => {
 test('handleQuorumCoefficientSet: saves incoming values', () => {
   const event1 = createQuorumCoefficientSetEvent(BIGINT_ZERO, BIGINT_ONE);
   handleQuorumCoefficientSet(event1);
-  assert.bigIntEquals(BIGINT_ONE, getOrCreateDynamicQuorumParams().quorumCoefficient);
+  assert.bigIntEquals(BIGINT_ONE, getOrCreateDynamicQuorumParams(BIGINT_ZERO).quorumCoefficient);
 
   const event2 = createQuorumCoefficientSetEvent(BIGINT_ONE, BIGINT_10K);
   handleQuorumCoefficientSet(event2);
-  assert.bigIntEquals(BIGINT_10K, getOrCreateDynamicQuorumParams().quorumCoefficient);
+  assert.bigIntEquals(BIGINT_10K, getOrCreateDynamicQuorumParams(BIGINT_ZERO).quorumCoefficient);
 
   clearStore();
 });

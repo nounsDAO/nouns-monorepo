@@ -1,3 +1,4 @@
+import { BigInt } from '@graphprotocol/graph-ts';
 import {
   Account,
   Delegate,
@@ -120,7 +121,7 @@ export function getGovernanceEntity(): Governance {
   return governance as Governance;
 }
 
-export function getOrCreateDynamicQuorumParams(): DynamicQuorumParams {
+export function getOrCreateDynamicQuorumParams(block: BigInt | null = null): DynamicQuorumParams {
   let params = DynamicQuorumParams.load('LATEST');
 
   if (params == null) {
@@ -128,6 +129,13 @@ export function getOrCreateDynamicQuorumParams(): DynamicQuorumParams {
     params.minQuorumVotesBPS = 0;
     params.maxQuorumVotesBPS = 0;
     params.quorumCoefficient = BIGINT_ZERO;
+    params.dynamicQuorumStartBlock = block;
+
+    params.save();
+  }
+
+  if (params.dynamicQuorumStartBlock === null && block !== null) {
+    params.dynamicQuorumStartBlock = block;
 
     params.save();
   }
