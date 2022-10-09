@@ -83,12 +83,6 @@
     list-style-type: none;
     margin: 0;
     padding: 0;
-    /* transition: width 0.2s ease-in-out; */
-    animation-name: animateIn;
-    animation-duration: 25ms;
-    animation-delay: calc(var(--animation-order) * 25ms);
-    animation-fill-mode: both;
-    animation-timing-function: ease-in-out;
     border-radius: 10px;
     width: calc((100% / var(--columns)) - var(--gap) + (var(--gap) / var(--columns)));
 }
@@ -102,28 +96,13 @@
     box-shadow: 0 0px 0px 4px rgba(0 0 0 / 30%);
 }
 
-.exploreGrid li:hover img, .exploreGrid li.activeNoun:hover img {
-    /* transform: scale(1.1); */
-    /* top: -4px; */
-    /* border-radius: 3%; */
-    /* transition: transform 0.1s ease-in-out; */
-}
-
-.exploreGrid li.activeNoun:hover img {
-    /* transform: scale(0.9); */
-}
-
 .exploreGrid li img {
     max-width: none;
     margin: 0 auto;
     width: 100%;
     position: relative;
-    /* transition: transform 0.1s ease-in-out; */
-    /* Animation conflicts with transform */
-    /* animation-name: animateIn; */
+    animation-name: animateIn;
     animation-duration: 60ms;
-    animation-delay: calc(var(--animation-order) * 25ms);
-    animation-fill-mode: both;
     animation-timing-function: ease-in-out;
     border-radius: 10px;
 }
@@ -142,13 +121,11 @@
     aspect-ratio: 1;
     border-radius: 10px;
     scroll-margin: 1vh;
-    /* transition: transform 0.05s ease-in-out; */
 }
 
 .exploreGrid .nounIdOverlay {
     margin: 0;
     position: absolute;
-    /* bottom: 6px; */
     bottom: clamp(4px, 0.7vw, 8px);
     opacity: 0;
     /* Make match noun bg color */
@@ -437,12 +414,10 @@ li.activeNoun button img, li.activeNoun:hover button img {
 @keyframes animateIn {
     0% {
       opacity: 0;
-      transform: translateY(25px);
     }
     
     100% {
       opacity: 1;
-      transform: translateY(0px);
     }
 }
 @media (max-width: 1399px) {
