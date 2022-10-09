@@ -101,8 +101,12 @@
     margin: 0 auto;
     width: 100%;
     position: relative;
+    /* transition: transform 0.1s ease-in-out; */
+    /* Animation conflicts with transform */
     animation-name: animateIn;
-    animation-duration: 60ms;
+    animation-duration: 100ms;
+    animation-delay: calc(var(--animation-order) * 25ms);
+    animation-fill-mode: both;
     animation-timing-function: ease-in-out;
     border-radius: 10px;
 }
@@ -121,11 +125,13 @@
     aspect-ratio: 1;
     border-radius: 10px;
     scroll-margin: 1vh;
+    /* transition: transform 0.05s ease-in-out; */
 }
 
 .exploreGrid .nounIdOverlay {
     margin: 0;
     position: absolute;
+    /* bottom: 6px; */
     bottom: clamp(4px, 0.7vw, 8px);
     opacity: 0;
     /* Make match noun bg color */
