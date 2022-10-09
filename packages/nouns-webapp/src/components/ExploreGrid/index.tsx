@@ -347,13 +347,18 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
             //     // const newArray = Array.prototype.splice.apply(arr, [10, 100].concat(rangeNouns));
             //     // const newArray = arr.splice(0, individualCount, ...rangeNouns);
             //     // if (arr.length === (individualCount + placeholderNoun.length))
-            //     // const newArray = arr.splice(0, (nounCount) - 1 - end).concat(rangeNouns);
+            //     console.log(start, end);
+            //     console.log('arr', arr);
+            //     const spliced = arr.splice(0, (nounCount) - 1 - end);
+            //     const newArray = arr.splice(0, (nounCount) - 1 - end).concat(rangeNouns);
             //     // const newArray = arr.concat(rangeNouns);
-            //     const newArray = arr;
-            //     console.log('newArray', newArray);
-            //     console.log(end, start, (nounCount) - 1 - end);
+            //     // const newArray = arr;
+                
+            //     console.log('spliced', spliced);
+            //     // console.log('newArray', newArray);
+            //     // console.log(end, start, (nounCount) - 1 - end);
             //     return (
-            //         newArray
+            //         arr
             //     )
             // }
             // );
