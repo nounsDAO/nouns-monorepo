@@ -281,7 +281,6 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
 
     // Fetch initial nouns by url
     const getInitialNouns = (individualCount: number) => {
-        console.log('individual count', individualCount)
         const individualNouns = new Array(individualCount).fill(placeholderNoun).map((x, i): Noun => {
             return {
                 id: i + (nounCount - individualCount),
@@ -365,7 +364,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     
     // Console logs 
     useEffect(() => {
-        console.log('nounsList', nounsList)
+        // console.log('nounsList', nounsList)
     }, [nounsList]);
     
     return (
