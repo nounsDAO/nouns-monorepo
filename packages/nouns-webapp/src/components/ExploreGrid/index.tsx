@@ -276,7 +276,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     // Set empty nouns to display grid while images are fetched
     const placeholderNoun: Noun = {id: null, imgSrc: undefined};
     useEffect(() => {
-        const placeholderNounsData = new Array(250).fill(placeholderNoun).map((x, i): Noun => {
+        const placeholderNounsData = new Array(rangeChunkSize).fill(placeholderNoun).map((x, i): Noun => {
             return {
                 id: null,
                 imgSrc: undefined,
@@ -289,6 +289,8 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
 
     // Fetch initial nouns by url
     const getInitialNouns = (individualCount: number) => {
+        console.log('individual count', individualCount)
+        // console.log('individual count', (nounCount % initialChunkSize) + 1, nounCount, initialChunkSize)
         const individualNouns = new Array(individualCount).fill(placeholderNoun).map((x, i): Noun => {
             return {
                 id: i + (nounCount - individualCount),
@@ -307,14 +309,16 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     
     // Prep range calls
     const initialChunkSize = 10;
+    const rangeChunkSize = 100;
     const [individualCount, setIndividualCount] = useState<number>(initialChunkSize);    
     // const [orderedNouns, setOrderedNouns] = useState<NounPic[]>([]);
     const rangeCalls = async (nounCount: number, individualNouns: Noun[]) => {        
         if (nounCount >= 0) {
             // keep initial nouns, clear others and replace with ranges
             console.log('individualNouns in rangecalls', individualNouns)
+            
             setNounsList(individualNouns);
-            const rangeChunkSize = 100;
+            
             for (let i = nounCount - individualCount; i >= 0; i -= (rangeChunkSize)) {
                 const start = i - rangeChunkSize < 0 ? 0 : i - rangeChunkSize;
                 const end = i - 1;
@@ -338,6 +342,21 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                 }
             });
             setNounsList(arr => [...arr, ...rangeNouns]);
+            // setNounsList(arr => {
+                
+            //     // const newArray = Array.prototype.splice.apply(arr, [10, 100].concat(rangeNouns));
+            //     // const newArray = arr.splice(0, individualCount, ...rangeNouns);
+            //     // if (arr.length === (individualCount + placeholderNoun.length))
+            //     // const newArray = arr.splice(0, (nounCount) - 1 - end).concat(rangeNouns);
+            //     // const newArray = arr.concat(rangeNouns);
+            //     const newArray = arr;
+            //     console.log('newArray', newArray);
+            //     console.log(end, start, (nounCount) - 1 - end);
+            //     return (
+            //         newArray
+            //     )
+            // }
+            // );
             return rangeNouns;
         } catch (error) {
             console.log("error", error);
