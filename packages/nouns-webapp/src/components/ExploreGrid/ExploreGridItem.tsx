@@ -1,62 +1,37 @@
-import React, { useRef } from 'react';
-import { Placeholder } from 'react-bootstrap';
-import classes from './ExploreGrid.module.css';
+import React, { useState } from 'react';
+import Placeholder from 'react-bootstrap/Placeholder';
+import { BigNumber } from 'ethers';
+import { StandaloneNounImage } from '../../components/StandaloneNoun';
+
 interface ExploreGridItemProps {
-    key: number;
     nounId: number | null;
-    selectedNoun: number | undefined;
-    imgSrc?: string | undefined;
-    // // nounCount: number;
-    handleOnFocus: Function;
-    // removeFocus: Function;
-    setActiveNoun: Function;
-    // sortOrder: string;
-    isKeyboardNavigating: boolean;
-    handleButtonRef: Function;
-    // isNounsDataLoaded: boolean;
+    imgSrc: string | undefined;
 }
-// const ExploreGridItem: React.FC<ExploreGridItemProps> = props => {
+
 const ExploreGridItem: React.FC<ExploreGridItemProps> = React.forwardRef((props, ref: React.Ref<HTMLButtonElement>) => {
-    // const nounId = (props.nounId !== undefined && props.nounId > -1 ? props.nounId : undefined);
-    const nounId = props.nounId;
-    const imgSrc = props.imgSrc ? props.imgSrc : (props.nounId && props.nounId >= 0 ? `https://noun.pics/${nounId}.svg` : undefined);
-    // props.setRef(ref);
-    // console.log('ref', ref);
-    const buttonRef = useRef(null);
-    props.handleButtonRef(buttonRef, props.nounId)
+    const [isImageLoaded, setIsImageLoaded] = useState<boolean | undefined>();
+    const [isImageError, setIsImageError] = useState<boolean | undefined>();
+
     return (
-        <li 
-            className={nounId === props.selectedNoun ? classes.activeNoun : ''} 
-            key={props.key}
-        >
-            <button 
-                ref={buttonRef} 
-                // ref={el => props.setRef(current[nounId] = el}
-                // ref={ref} 
-                id={`${nounId} - ${props.nounId}`}
-                onMouseDown={(e) => (props.selectedNoun === nounId && document.activeElement && parseInt(document.activeElement.id) === nounId) && props.handleOnFocus(nounId)}
-                onFocus={(e) => props.handleOnFocus(nounId)}
-                onMouseOver={() => !props.isKeyboardNavigating && props.setActiveNoun(nounId)} 
-                onMouseOut={() => props.selectedNoun && props.setActiveNoun(props.selectedNoun)}
-                key={props.key}
-                >
-                    {imgSrc ? (
-                        <img 
-                            src={imgSrc}
-                            alt={`Noun ${nounId}`}
-                        />
-                    ) : (
-                        <Placeholder xs={12} animation="glow" />
-                    )}
-                
-                <p className={classes.nounIdOverlay}>
-                    {nounId}
-                </p>
-                {/* <StandaloneNounImage nounId={BigNumber.from(i)} /> */}
-            </button>
-        </li>
+        <>  
+            <img
+                src={props.imgSrc}
+                style={isImageLoaded ? {} : { display: 'none' }}
+                onLoad={() => setIsImageLoaded(true)}
+                onError={() => setIsImageError(true)}
+            />
+
+            {/* Show placeholder until image is loaded */}
+            <div style={!isImageLoaded && !isImageError ? { display: 'block', height: '100%' } : { display: 'none' }}>
+                <Placeholder xs={12} animation="glow" />
+            </div>
+
+            {/* If image can't be loaded, fetch Noun image internally */}
+            {isImageError && props.nounId && (
+                <StandaloneNounImage nounId={BigNumber.from(props.nounId)} />
+            )}
+        </>
     )
 })
-
 
 export default ExploreGridItem;

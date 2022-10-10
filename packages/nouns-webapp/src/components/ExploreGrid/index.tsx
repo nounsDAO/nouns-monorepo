@@ -15,7 +15,7 @@ import { faSortDown } from '@fortawesome/free-solid-svg-icons';
 import Placeholder from 'react-bootstrap/Placeholder';
 
 // import NounItemsRange from './NounItemsRange';
-// import ExploreGridItem from './ExploreGridItem';
+import ExploreGridItem from './ExploreGridItem';
 
 dotenv.config();
 interface ExploreGridProps {
@@ -383,7 +383,6 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                             <ul>       
                                 {(sortOrder === "date-ascending" ? [...nounsList].reverse() : nounsList).map((noun, i) => {
                                     return (
-                                        <>
                                         <li 
                                             className={noun.id === selectedNoun ? classes.activeNoun : ''} 
                                             key={i}
@@ -396,22 +395,15 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                                                 onMouseOver={() => !isKeyboardNavigating && noun.id !== null && setActiveNoun(noun.id)} 
                                                 onMouseOut={() => selectedNoun !== undefined && setActiveNoun(selectedNoun)}
                                                 >
-                                                    {noun.imgSrc ? (
-                                                        <img 
-                                                            src={noun.imgSrc}
-                                                            alt={`Noun ${noun.id}`}
-                                                        />
-                                                    ) : (
-                                                        <Placeholder xs={12} animation="glow" />
-                                                    )}
-                                                
+                                                    <ExploreGridItem 
+                                                        nounId={noun.id}
+                                                        imgSrc={noun.imgSrc}
+                                                    />
                                                 <p className={classes.nounIdOverlay}>
                                                     {noun.id}
                                                 </p>
-                                                {/* <StandaloneNounImage nounId={BigNumber.from(i)} /> */}
                                             </button>
                                         </li>
-                                    </>
                                     )
                                 })}
                             </ul>             
