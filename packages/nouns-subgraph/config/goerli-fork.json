@@ -1,0 +1,15 @@
+{
+  "network": "goerli",
+  "nToken": {
+    "address": "0xce5e7602f7e469dB0189DECEbBC3F89F19ce43dd",
+    "startBlock": null
+  },
+  "nAuctionHouse": {
+    "address": "0x1763D81b0b77a35a590448dEba7452f0Bdbf8efd",
+    "startBlock": null
+  },
+  "nDAO": {
+    "address": "0x119C2c188AAfe10102b2B435F96de27A53e7a25C",
+    "startBlock": null
+  }
+}

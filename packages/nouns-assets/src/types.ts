@@ -1,9 +1,11 @@
-export interface NounSeed {
-  background: number;
-  body: number;
-  accessory: number;
-  head: number;
-  glasses: number;
+export interface Accessory {
+  accType: number;
+  accId: number;
+}
+export interface ISeed {
+  punkType: number;
+  skinTone: number;
+  accessories: Array<Accessory>;
 }
 
 export interface EncodedImage {
@@ -11,7 +13,7 @@ export interface EncodedImage {
   data: string;
 }
 
-export interface NounData {
+export interface PunkData {
   parts: EncodedImage[];
-  background: string;
+//  background: string;
 }

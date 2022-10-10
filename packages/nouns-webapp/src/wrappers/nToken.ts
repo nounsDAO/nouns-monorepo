@@ -12,12 +12,14 @@ interface NToken {
   image: string;
 }
 
+export interface Accessory {
+  accType: number;
+  accId: number;
+}
 export interface ISeed {
-  accessory: number;
-  background: number;
-  body: number;
-  glasses: number;
-  head: number;
+  punkType: number;
+  skinTone: number;
+  accessories: Array<Accessory>;
 }
 
 export enum NTokenContractFunction {
@@ -56,11 +58,9 @@ export const useNToken = (punkId: EthersBN) => {
 const seedArrayToObject = (seeds: (ISeed & { id: string })[]) => {
   return seeds.reduce<Record<string, ISeed>>((acc, seed) => {
     acc[seed.id] = {
-      background: Number(seed.background),
-      body: Number(seed.body),
-      accessory: Number(seed.accessory),
-      head: Number(seed.head),
-      glasses: Number(seed.glasses),
+      punkType: Number(seed.punkType),
+      skinTone: Number(seed.skinTone),
+      accessories: seed.accessories.map(item => ({ accType: Number(item.accType), accId: Number(item.accId) })),
     };
     return acc;
   }, {});
@@ -95,6 +95,7 @@ export const useNSeed = (punkId: EthersBN) => {
   const response = useContractCall<ISeed>(request);
   if (response) {
     const seedCache = localStorage.getItem(seedCacheKey);
+    console.log(response)
     if (seedCache && isSeedValid(response)) {
       const updatedSeedCache = JSON.stringify({
         ...JSON.parse(seedCache),

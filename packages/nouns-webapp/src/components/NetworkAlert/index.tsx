@@ -5,8 +5,8 @@ const networkName = () => {
   switch (Number(CHAIN_ID)) {
     case 1:
       return 'Ethereum Mainnet';
-    case 4:
-      return 'the Rinkeby network';
+    case 5:
+      return 'the Goerli network';
     default:
       return `Network ${CHAIN_ID}`;
   }
@@ -16,8 +16,8 @@ const metamaskNetworkName = () => {
   switch (Number(CHAIN_ID)) {
     case 1:
       return 'Ethereum Mainnet';
-    case 4:
-      return 'Rinkeby Test Network';
+    case 5:
+      return 'Goerli Test Network';
     default:
       return `Network ${CHAIN_ID}`;
   }

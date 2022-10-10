@@ -7,7 +7,8 @@ task("register-og-punks", "Register original cryptopunks for duplication check")
 
         const sliceCount = 200
         let gasUsed = 0
-        for(let i = 0; i < punkHashes.length; i += sliceCount) {
+        //for(let i = 0; i < punkHashes.length; i += sliceCount) {
+        for(let i = 0; i < 100; i += sliceCount) {
             const count = (i + sliceCount) > punkHashes.length ? (punkHashes.length - i) : sliceCount
             const regRes = await (await nToken.registerOGHashes(punkHashes.slice(0, count), {gasPrice: ethers.utils.parseUnits("14.26", "gwei")})).wait()
             gasUsed += Number(regRes.gasUsed)

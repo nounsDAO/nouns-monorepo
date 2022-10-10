@@ -3,7 +3,8 @@ import path from 'path'
 
 import { task } from 'hardhat/config'
 import { parse } from 'csv-parse'
-import yaml from 'js-yaml'
+import nameDoc from '../../nouns-assets/src/config/punk_name.json'
+import probDoc from '../../nouns-assets/src/config/probability.json'
 
 const fileList = [
     '0-999.csv',
@@ -21,7 +22,7 @@ const fileList = [
 
 const getAllRowsFromCSV = (fileName: string) => {
     const rows: Array<any> = []
-    const filePath = path.join(__dirname, `../config/og_punks/${fileName}`)
+    const filePath = path.join(__dirname, `../../nouns-assets/src/config/og_punks/${fileName}`)
     return new Promise((resolve, reject) => {
         fs.createReadStream(filePath)
             .pipe(parse({ delimiter: ",", from_line: 2 }))
@@ -32,13 +33,6 @@ const getAllRowsFromCSV = (fileName: string) => {
                 resolve(rows)
             });
     })
-}
-
-let nameDoc: any;
-try {
-    nameDoc = yaml.load(fs.readFileSync(path.join(__dirname, '../config/punk_name.yaml'), 'utf-8'))
-} catch(error) {
-    console.log(error)
 }
 
 const toByteArray = (value: number, len: number, pad: number): Array<number> => {
@@ -52,7 +46,6 @@ const toByteArray = (value: number, len: number, pad: number): Array<number> => 
 
 task("create-merkle", "Create merkle tree")
     .setAction(async (_, { ethers, run }) => {
-        const probDoc = await run("get-prob-doc")
         const values = await Promise.all(fileList.map(getAllRowsFromCSV))
         const punks = values.flat() as Array<Array<string> >
 
@@ -93,7 +86,7 @@ task("create-merkle", "Create merkle tree")
                 const accEntry = Object.entries(nameDoc).find((entry: any) => entry[1].name == accName && entry[1].gender == punkObj.gender)
                 if(!accEntry) throw new Error("Accessory name not found.")
                 const accId = accEntry[0]
-                const accTypeIndex = Object.keys(probDoc.acc_types).indexOf(probDoc.accessory_types[accId])
+                const accTypeIndex = Object.keys(probDoc.acc_types).indexOf((probDoc.accessory_types as any)[accId])
                 if(accTypeIndex < 0) throw new Error("Invalid accessory type.")
                 const accIndex = accGroupByType[accTypeIndex].indexOf(accId)
                 return { accType: accTypeIndex, accId: accIndex }
