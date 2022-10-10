@@ -52,10 +52,19 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
     return PLOTTING_CONSTANTS.slopeDQFunctionPlotSpace * x + PLOTTING_CONSTANTS.minQHeightPlotSpace;
   };
 
+  const calcPlotFrac = () => {
+    if (Math.floor((linearToConstantCrossoverBPS * totalNounSupply) / 10_000) <= 0) {
+      return 0;
+    }
+    return (
+      (againstVotesAbs / Math.floor((linearToConstantCrossoverBPS * totalNounSupply) / 10_000)) *
+      PLOTTING_CONSTANTS.dqFunctionMaxQXCrossoverPlotSpace
+    );
+  };
+
   const x =
-    againstVotesBps < linearToConstantCrossoverBPS 
-      ? PLOTTING_CONSTANTS.dqFunctionMaxQXCrossoverPlotSpace *
-        (againstVotesAbs / Math.floor((linearToConstantCrossoverBPS * totalNounSupply) / 10_000))
+    againstVotesBps < linearToConstantCrossoverBPS
+      ? calcPlotFrac()
       : PLOTTING_CONSTANTS.dqFunctionMaxQXCrossoverPlotSpace +
         0.5 * PLOTTING_CONSTANTS.width * (againstVotesBps / 10_000);
   const y = Math.max(plotSpaceFunction(x), PLOTTING_CONSTANTS.maxQHeightPlotSpace);

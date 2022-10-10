@@ -106,7 +106,7 @@ const VotePage = ({
   const currentQuorum = useCurrentQuorum(
     config.addresses.nounsDAOProxy,
     proposal && proposal.id ? parseInt(proposal.id) : 0,
-    (dqInfo && dqInfo.proposal) ?  dqInfo.proposal.quorumCoefficient === "0" : true
+    dqInfo && dqInfo.proposal ? dqInfo.proposal.quorumCoefficient === '0' : true,
   );
 
   const hasSucceeded = proposal?.status === ProposalState.SUCCEEDED;
