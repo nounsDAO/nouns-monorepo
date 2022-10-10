@@ -1,4 +1,4 @@
-import { ImageData as data, getNounData } from '@nouns/assets';
+import { ImageData as data, getPunkData } from '@nouns/assets';
 import { buildSVG } from '@nouns/sdk';
 import { BigNumber as EthersBN } from 'ethers';
 import { ISeed, useNSeed } from '../../wrappers/nToken';
@@ -27,8 +27,8 @@ export const getPunk = (tokenId: string | EthersBN, seed: ISeed) => {
   const id = tokenId.toString();
   const name = `Punk ${id}`;
   const description = `Punk ${id} is a member of the Punkers DAO`;
-  const { parts, background } = getNounData(seed);
-  const image = `data:image/svg+xml;base64,${btoa(buildSVG(parts, data.palette, background))}`;
+  const { parts } = getPunkData(seed);
+  const image = `data:image/svg+xml;base64,${btoa(buildSVG(parts, data.palette))}`;
 
   return {
     name,

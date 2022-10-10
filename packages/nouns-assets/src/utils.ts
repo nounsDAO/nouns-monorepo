@@ -1,23 +1,29 @@
 import { keccak256 as solidityKeccak256 } from '@ethersproject/solidity';
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
-import { NounSeed, NounData } from './types';
-import { images, bgcolors } from './image-data.json';
+import { ISeed, PunkData } from './types';
+import { images/*, bgcolors*/ } from './image-data.json';
+import probDoc from './config/probability.json'
 
-const { bodies, accessories, heads, glasses } = images;
+const probs: any = probDoc
+const { types, necks, cheekses, faces, beards, mouths, earses, hats, hairs, teeths, lipses, emotions, eyeses, glasseses, noses } = images;
+const accResource = [ necks, cheekses, faces, beards, mouths, earses, hats, hairs, teeths, lipses, emotions, eyeses, glasseses, noses ]
 
 /**
  * Get encoded part and background information using a Noun seed
  * @param seed The Noun seed
  */
-export const getNounData = (seed: NounSeed): NounData => {
+
+export const getPunkData = (seed: ISeed): PunkData => {
   return {
     parts: [
-      bodies[seed.body],
-      accessories[seed.accessory],
-      heads[seed.head],
-      glasses[seed.glasses],
+      types[seed.punkType],
+      ...seed.accessories.map(acc => accResource[acc.accType][acc.accId])
+      // bodies[seed.body],
+      // accessories[seed.accessory],
+      // heads[seed.head],
+      // glasses[seed.glasses],
     ],
-    background: bgcolors[seed.background],
+//    background: bgcolors[seed.background],
   };
 };
 
@@ -25,13 +31,73 @@ export const getNounData = (seed: NounSeed): NounData => {
  * Generate a random Noun seed
  * @param seed The Noun seed
  */
-export const getRandomNounSeed = (): NounSeed => {
+const pickRandom = (possibilities: Array<number>) => {
+  const accumulated = [...possibilities];
+  for (let i = 1; i < accumulated.length; i++)
+    accumulated[i] = accumulated[i - 1] + possibilities[i];
+  const max = accumulated[accumulated.length - 1];
+  const randomness = Math.random() * max;
+  return accumulated.findIndex((val) => val > randomness);
+};
+const groupByExclusive = (_accs: Array<any>, exclusive_groups: Array<any>) => {
+  const accs = [..._accs];
+  const res: Array<any> = [];
+  exclusive_groups.forEach((exc, index) => {
+    const group = exc.reduce((total: Array<any>, item: any) => {
+      const idx = accs.indexOf(item);
+      if (idx < 0) return total;
+      accs.splice(idx, 1);
+      total.push(item);
+      return total;
+    }, []);
+    res.push(group);
+    return res
+  }, []);
+  return res.concat(accs.map((item) => [item]));
+};
+export const getRandomPunkSeed = (): ISeed => {
+  const typeProbabilities = Object.values(probs.probabilities).map((probObj: any) =>
+    Math.floor(probObj.probability * 1000)
+  );
+  const punkType = pickRandom(typeProbabilities);
+  const punkTypeName = probDoc.types[punkType];
+  const skinTone = pickRandom(probs.probabilities[punkTypeName].skin);
+  const availableAccs = probs.probabilities[punkTypeName].accessories;
+
+  const groupedAccs = groupByExclusive(availableAccs, probs.exclusive_groups);
+  const accCount = pickRandom(
+    probs.accessory_count_probabbilities.slice(
+      0,
+      groupedAccs.length
+    )
+  );
+
+  const countPerGroup = groupedAccs.map((group) => {
+    return group
+      .map(
+        (item: any) =>
+          accResource[Object.keys(probs.acc_types).indexOf(item)].length
+      )
+      .reduce((sum: number, val: number) => sum + val, 0);
+  });
+  const selectedGroups = [];
+  for (let i = 0; i < accCount; i++) {
+    const selectedGroup = pickRandom(countPerGroup);
+    selectedGroups.push(selectedGroup);
+    countPerGroup[selectedGroup] = 0;
+  }
+
+  const accessories = []
+  for(let i in selectedGroups) {
+    const currentGroup = groupedAccs[selectedGroups[i]]
+    const selectedAccIndex = pickRandom(currentGroup.map((item: any) => accResource[Object.keys(probs.acc_types).indexOf(item)].length))
+    const selectedAcc = Object.keys(probs.acc_types).indexOf(currentGroup[selectedAccIndex])
+    accessories.push({ accType: selectedAcc, accId: Math.floor(Math.random() * accResource[selectedAcc].length) })
+  }
   return {
-    background: Math.floor(Math.random() * bgcolors.length),
-    body: Math.floor(Math.random() * bodies.length),
-    accessory: Math.floor(Math.random() * accessories.length),
-    head: Math.floor(Math.random() * heads.length),
-    glasses: Math.floor(Math.random() * glasses.length),
+    punkType,
+    skinTone,
+    accessories,
   };
 };
 
@@ -72,13 +138,13 @@ export const getPseudorandomPart = (
  * @param nounId The Noun tokenId used to create pseudorandomness
  * @param blockHash The block hash use to create pseudorandomness
  */
-export const getNounSeedFromBlockHash = (nounId: BigNumberish, blockHash: string): NounSeed => {
-  const pseudorandomness = solidityKeccak256(['bytes32', 'uint256'], [blockHash, nounId]);
-  return {
-    background: getPseudorandomPart(pseudorandomness, bgcolors.length, 0),
-    body: getPseudorandomPart(pseudorandomness, bodies.length, 48),
-    accessory: getPseudorandomPart(pseudorandomness, accessories.length, 96),
-    head: getPseudorandomPart(pseudorandomness, heads.length, 144),
-    glasses: getPseudorandomPart(pseudorandomness, glasses.length, 192),
-  };
-};
+// export const getPunkSeedFromBlockHash = (punkId: BigNumberish, blockHash: string): ISeed => {
+//   const pseudorandomness = solidityKeccak256(['bytes32', 'uint256'], [blockHash, punkId]);
+//   return {
+//     background: getPseudorandomPart(pseudorandomness, bgcolors.length, 0),
+//     body: getPseudorandomPart(pseudorandomness, bodies.length, 48),
+//     accessory: getPseudorandomPart(pseudorandomness, accessories.length, 96),
+//     head: getPseudorandomPart(pseudorandomness, heads.length, 144),
+//     glasses: getPseudorandomPart(pseudorandomness, glasses.length, 192),
+//   };
+// };

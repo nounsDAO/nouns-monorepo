@@ -6,6 +6,7 @@ import config from '../config';
 import ERC20 from '../libs/abi/ERC20.json';
 
 const { addresses } = config;
+console.log(addresses)
 
 const erc20Interface = new utils.Interface(ERC20);
 
@@ -21,6 +22,9 @@ function useLidoBalance(): BigNumber | undefined {
 
   useEffect(() => {
     if (!lidoContract || !addresses.nDaoExecutor) return;
+    // console.log(lidoContract)
+    // console.log(lidoContract.balanceOf(addresses.nDaoExecutor, { gasLimit: "21432" }))
+    console.log(lidoContract.functions)
     lidoContract.balanceOf(addresses.nDaoExecutor).then(setBalance);
   }, [lidoContract]);
 
