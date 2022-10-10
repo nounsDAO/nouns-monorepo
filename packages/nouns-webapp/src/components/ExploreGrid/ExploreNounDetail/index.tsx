@@ -1,15 +1,15 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import { useNounSeed } from '../../wrappers/nounToken';
+import { useNounSeed } from '../../../wrappers/nounToken';
 import { BigNumber } from 'ethers';
 // import { StandaloneNounImage } from '../../components/StandaloneNoun';
-import { StandalonePart } from '../StandalonePart';
+import { StandalonePart } from '../../StandalonePart';
 import classes from './ExploreNounDetail.module.css';
 import { ImageData } from '@nouns/assets';
 import { Trans } from '@lingui/macro';
 import {AnimatePresence, motion} from 'framer-motion/dist/framer-motion';
 import { XIcon } from '@heroicons/react/solid';
-import NounInfoRowBirthday from '../NounInfoRowBirthday';
-import loadingNoun from '../../assets/loading-skull-noun.gif';
+import NounInfoRowBirthday from '../../NounInfoRowBirthday';
+import loadingNoun from '../../../assets/loading-skull-noun.gif';
 import Placeholder from 'react-bootstrap/Placeholder';
 import Image from 'react-bootstrap/Image'
 import cx from 'classnames';
@@ -28,75 +28,9 @@ interface ExploreNounDetailProps {
     nounImgSrc: string | undefined;
 }
 
-// interface ExploreNounDetailTraitsProps {
-//     partType: string;
-//     part: (parameter) part: {
-//         partType: string;
-//         partName: string;
-//         partIndex: number;
-//     };
-//     nounId: number;
-//     backgroundColor: string;
-//     isNounImageLoaded: boolean;
-// }
-// const ExploreNounDetailTrait: React.FC<ExploreNounDetailTraitsProps> = props => {
-//     return (
-//         <li
-//             key={props.partType}
-//             id={props.partType}
-//         >
-//             <div 
-//                 className={classes.thumbnail}
-//                 style={{
-//                     backgroundColor: props.backgroundColor ? props.backgroundColor : 'transparent',
-//                 }}
-//             >
-//                 <AnimatePresence>
-//                     {props.nounId >= 0 && (
-//                         <StandalonePart partType={props.partType} partIndex={part.partIndex} />
-//                     )}
-//                 </AnimatePresence>
-//             </div>
-            
-//             <div className={classes.description}>
-//                 <p className='small'>
-//                     <AnimatePresence>
-//                         {props.nounId >= 0 ? (
-//                             <motion.span>
-//                                 {traitKeyToLocalizedTraitKeyFirstLetterCapitalized(nounTraitsOrdered[index].partType)}
-//                             </motion.span>
-//                         ) : (
-//                             <motion.span>
-//                                 <Placeholder as="span" animation="glow">
-//                                     <Placeholder xs={8} />
-//                                 </Placeholder>
-//                             </motion.span>
-//                         )}
-//                     </AnimatePresence>
-                        
-//                 </p>
-//                 <p>
-//                     <strong>
-//                     <AnimatePresence>
-//                         {props.nounId >= 0 ? (
-//                             <>{nounTraitsOrdered[index].partName}</>
-//                         ) : (
-//                             <Placeholder xs={12} animation="glow" />
-//                         )}
-//                     </AnimatePresence>
-                        
-//                     </strong>
-//                 </p>
-//             </div>
-//         </li>
-//     )
-// }
-
 const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
-    // borrowed from /src/pages/Playground/NounModal/index.tsx
     const [width, setWidth] = useState<number>(window.innerWidth);
     const isMobile: boolean = width <= 991;
-
     const handleWindowSizeChange = () => {
         setWidth(window.innerWidth);
     };
@@ -147,8 +81,6 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
         return i.map(imageData => imageData.filename);
       }),
     ];
-
-    
     
     const getOrderedTraits = (seed: { head: number; glasses: number; accessory: number; body: number; background: number; }) => {
         let nounTraitsOrdered;
@@ -210,10 +142,8 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
         }
         
         if (nounTraitsOrdered) {
-            // console.log('all traits', nounTraitsOrdered)
             return nounTraitsOrdered;
         } else {
-            // console.log('error', nounTraitsOrdered)
             return loadingNounTraits;
         }
     }
@@ -224,54 +154,6 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
     const backgroundColor = seed ? bgcolors[seed.background] : bgcolors[0];
     const nounTraitsOrdered =  getOrderedTraits(seed);
 
-    
-
-
-    // const list = {
-    //     visible: { 
-    //         opacity: 1,
-    //         transition: {
-    //             staggerChildren: 0.01,
-    //             when: "beforeChildren",
-    //         },
-    //     },
-    //     hidden: { 
-    //         opacity: 0,
-    //         transition: {
-    //             when: "afterChildren",
-    //           },
-    //     },
-    //   }
-      
-    //   const item = {
-    //     visible: { opacity: 1, y: 0 },
-    //     hidden: { opacity: 0, y: -50 },
-    //   }
-
-
-    // const sidebarVariants = {
-    //     closed: {
-    //         width: isMobile ? "100%" : 0,
-    //         x: isMobile ? 0 : 0,
-    //         y: isMobile ? "100%" : 0,
-    //     },
-    //     open: {
-    //         width: isMobile ? "100%" : "33%",
-    //         x: 0,
-    //         y: 0,
-    //     },
-    //     exit: {
-    //         width: isMobile ? "100%" : 0,
-    //         opacity: 0,
-    //         x: isMobile ? 0 : 0,
-    //         y: isMobile ? "100%" : 0,
-    //         transition: {
-    //             duration: 0.1,
-    //             when: "afterChildren",
-    //         },
-    //     }
-    // }    
-
     return (
         <>  
             <AnimatePresence>
@@ -281,11 +163,6 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
             </AnimatePresence>
             <motion.div 
                 className={classes.detailWrap}
-                // variants={sidebarVariants}
-                // initial="open"
-                // animate="open"
-                // exit="exit"
-                // layout
                 style={{
                     background: backgroundColor,
                 }}
@@ -303,15 +180,13 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                         className={classes.detailNounImage}
                                         onClick={() => props.handleScrollTo(props.nounId)}
                                     >   
-                                        {/* <StandaloneNounImage nounId={BigNumber.from(props.nounId)} /> */}
                                         {props.nounId >= 0 && seed ? (
                                             <Image 
-                                                // src={`https://noun.pics/${props.nounId}.svg`} 
                                                 src={props.nounImgSrc || `https://noun.pics/${props.nounId}.svg`} 
                                                 alt={`Noun ${props.nounId}`} 
-                                                />
+                                            />
                                         ) : (
-                                            <Image src={loadingNoun} alt="Loading nouns" />
+                                            <Image src={loadingNoun} alt="Loading noun" />
                                         )}
                                     </div>
                                     
@@ -343,21 +218,11 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                             </button>
                                         </div>
                                         
-                                        <motion.ul 
-                                            className={classes.traitsList}
-                                            // variants={list}
-                                            // initial="hidden"
-                                            // animate="visible"
-                                            // layout
-                                        >
+                                        <ul className={classes.traitsList}>
                                             {nounTraitsOrdered && Object.values(nounTraitsOrdered).map((part,index) => {    
                                                 const partType = traitTypeKeys(nounTraitsOrdered[index].partType);
                                                 return (
-                                                    <motion.li
-                                                        // variants={item}
-                                                        key={partType}
-                                                        id={partType}
-                                                    >
+                                                    <li key={partType} id={partType}>
                                                         <div 
                                                             className={classes.thumbnail}
                                                             style={{
@@ -390,21 +255,20 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                                             </p>
                                                             <p>
                                                                 <strong>
-                                                                <AnimatePresence>
-                                                                    {props.nounId >= 0 && seed ? (
-                                                                        <>{nounTraitsOrdered[index].partName}</>
-                                                                    ) : (
-                                                                        <Placeholder xs={12} animation="glow" />
-                                                                    )}
-                                                                </AnimatePresence>
-                                                                    
+                                                                    <AnimatePresence>
+                                                                        {props.nounId >= 0 && seed ? (
+                                                                            <>{nounTraitsOrdered[index].partName}</>
+                                                                        ) : (
+                                                                            <Placeholder xs={12} animation="glow" />
+                                                                        )}
+                                                                    </AnimatePresence>
                                                                 </strong>
                                                             </p>
                                                         </div>
-                                                    </motion.li>
+                                                    </li>
                                                 )
                                             })}
-                                        </motion.ul>
+                                        </ul>
                                         {props.nounId >= 0 && seed && (
                                             <p className={classes.activityLink}><a href={`/noun/${props.nounId}`}><Trans>Vote history</Trans></a></p>
                                         )}

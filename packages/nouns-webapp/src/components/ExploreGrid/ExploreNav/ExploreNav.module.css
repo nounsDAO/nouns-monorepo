@@ -1,0 +1,173 @@
+.nav {
+    justify-content: space-between;
+    display: flex;
+    grid-gap: 10px;
+    /* margin-bottom: 10px; */
+    /* padding: 15px 1em 0; */
+    padding: 15px;
+    border-bottom: rgba(0,0,0,0.1) 1px solid;
+    width: 100%;
+}
+
+.nav .buttons, .nav .sizing {
+    display: flex;
+    gap: 1em;
+}
+
+.nav svg {
+    width: 24px;
+    opacity: 0.8;
+}
+
+.nav .iconTextButton svg {
+    margin-right: 0.4rem;
+}
+
+.nav .iconTextButton:hover {
+    color: black;
+    background-color: var(--brand-cool-accent);
+}
+
+.nav .sort {
+    display: flex;
+    grid-gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+}
+.nav .sort p {
+    /* display: inline;
+    opacity: 0.75; */
+}
+
+.nav .selectWrap {
+    color: var(--brand-cool-light-text);
+    border: 1px solid var(--brand-cool-border);
+    border-radius: 10px;
+    /* padding: 0; */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: #fff;
+    font-size: 16px;
+    line-height: 1;
+    font-family: 'PT Root UI';
+    font-weight: bold;
+    position: relative;
+
+    /* width: 100%;
+    min-width: 15ch;
+    max-width: 30ch;
+    border: 1px solid var(--select-border);
+    border-radius: 0.25em;
+    padding: 0.25em 0.5em;
+    font-size: 1.25rem;
+    cursor: pointer;
+    line-height: 1.1;
+    background-color: #fff; */
+    /* background-image: linear-gradient(to top, #f9f9f9, #fff 33%); */
+    display: grid;
+    grid-template-areas: "select";
+    align-items: center;
+}
+.nav select,
+.nav .selectWrap:after {
+  grid-area: select;
+}
+
+.nav .selectWrap:hover {
+    background-color: #e2e3e8;
+    color: black;
+    /* transition: all 0.2s ease-in-out; */
+    cursor:  crosshair !important;
+}
+.nav .selectWrap:hover {
+    
+}
+
+
+.nav .selectWrap span {
+    position: absolute;
+    right: 10px;
+    margin-top: -5px;
+    pointer-events: none; 
+
+}
+/* :root {
+    --select-arrow: rgba(0,0,0,0.5);
+} */
+.nav .selectWrap::after {
+  /* content: "";
+  width: 0.8em;
+  height: 0.5em;
+  background-color: var(--select-arrow);
+  clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+  justify-self: end;
+  margin-right: .5rem; */
+  /* position: relative;
+  right: .5rem; */
+}
+.nav .selectWrap select:hover {
+    cursor: pointer;
+}
+.nav .selectWrap select {
+    background: transparent;
+    border: 0;
+    padding: .8rem 1.8rem .8rem .8rem;
+    color: rgb(95, 95, 95);
+    font-weight: bold;
+    position: relative;
+    appearance: none;
+}
+
+.nav button {
+    color: var(--brand-cool-light-text);
+    border: 1px solid var(--brand-cool-border);
+    border-radius: 10px;
+    padding: .5rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: transparent;
+    font-family: 'PT Root UI';
+    font-size: 16px;
+    line-height: 16px;
+    font-family: 'PT Root UI';
+    font-weight: bold;
+}
+
+.nav button .icon {
+    margin-right: 0.4rem;
+}
+
+.nav button:hover svg {
+    opacity: 0.5;
+}
+
+.nav button:hover {
+    background-color: #e2e3e8;
+    color: black;
+    /* transition: all 0.2s ease-in-out; */
+}
+
+.nav button:hover svg {
+    opacity: 0.8;
+}
+
+.nav button.activeLayout {
+    border: 1px solid rgba(0, 0, 0, 0.25)
+}
+
+.nav button.activeLayout svg {
+    opacity: 0.8;
+}
+
+.nav button.activeLayout svg path {
+    fill: rgba(0, 0, 0, 0.8);
+}
+
+.nav h3 {
+    font-size: 13px;
+    opacity: 0.65;
+    text-transform: uppercase;
+    /* font-weight: bold; */
+    letter-spacing: 0.1em;
+    line-height: 1;
+    align-self: center;
+    margin: 0;
+}
