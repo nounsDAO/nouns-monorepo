@@ -27,6 +27,7 @@ import { Dropdown } from 'react-bootstrap';
 import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 import { usePickByState } from '../../utils/colorResponsiveUIUtils';
+import {ReactComponent as Noggles }  from '../../assets/icons/Noggles.svg';
 import clsx from 'clsx';
 
 const NavBar = () => {
@@ -154,7 +155,7 @@ const NavBar = () => {
               </Nav.Link>
             </div>
             <div className={clsx(responsiveUiUtilsClasses.desktopOnly)}>
-              <NavDropdown buttonIcon={<FontAwesomeIcon icon={faStar} />} buttonStyle={nonWalletButtonStyle}>
+              <NavDropdown buttonIcon={<Noggles />} buttonStyle={nonWalletButtonStyle}>
                 <Dropdown.Item 
                   className={clsx(usePickByState(
                     navDropdownClasses.whiteInfoSelectedBottom,

@@ -75,20 +75,6 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
     setSelectedNoun(undefined);
   }
 
-  // const handleNounDetail = (nounId: number) => {
-  //   if (selectedNoun) {
-  //       console.log('scrolling to noun', selectedNoun);
-  //       handleScrollTo(nounId);
-  //   }
-  //   if (nounId === selectedNoun) {
-  //       handleCloseDetail();
-  //   } else {
-  //       nounId > -1 && nounId < nounCount && setActiveNoun(nounId);
-  //       nounId > -1 && nounId < nounCount && setSelectedNoun(nounId);  
-  //       // setIsSidebarVisible(true)  
-  //   }
-  // }
-
   const handleScrollTo = (nounId: number) => {
     setIsKeyboardNavigating(true);
     nounId && buttonsRef.current[nounId]?.scrollIntoView({behavior: 'smooth'});

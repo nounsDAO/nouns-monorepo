@@ -81,13 +81,13 @@ const NavBarButton: React.FC<NavBarButtonProps> = props => {
   return (
     <>
       <div
-        className={`${classes.wrapper} ${getNavBarButtonVariant(buttonStyle)}`}
+        className={clsx(`${classes.wrapper} ${getNavBarButtonVariant(buttonStyle)}`, props.isDropdown && classes.dropdown)}
         onClick={isDisabled ? () => {} : onClick}
       >
         <div
           className={clsx(classes.button, isDisabled ? classes.btnDisabled : classes.btnEnabled)}
         >
-          {buttonIcon && <div className={classes.icon}>{buttonIcon}</div>}
+          {buttonIcon && <div className={clsx(classes.icon, props.isDropdown && classes.dropdown)}>{buttonIcon}</div>}
           <div>{buttonText}</div>
           {props.isDropdown && (
             <div className={props.isButtonUp ? navDropdownClasses.arrowUp : navDropdownClasses.arrowDown}>
