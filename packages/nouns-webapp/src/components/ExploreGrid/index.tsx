@@ -118,7 +118,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
     return (
       <div className={cx(
           classes.exploreGrid,
-          !props.selectedNoun && props.nounCount >= 0 && classes.sidebarHidden,
+          ((props.selectedNoun !== undefined && props.selectedNoun < 0) || props.selectedNoun === undefined) && props.nounCount >= 0 && classes.sidebarHidden,
         )}
       > 
         <ul>       

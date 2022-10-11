@@ -75,9 +75,10 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
     setSelectedNoun(undefined);
   }
 
-  const handleNounDetail = (nounId: number, sidebarVisibility: string, event: React.MouseEvent | React.FocusEvent) => {
-    // if (isSidebarVisible === true) {
-    if (selectedNoun) {
+  const handleNounDetail = (nounId: number) => {
+    if (isSidebarVisible === true) {
+    // if (selectedNoun) {
+        console.log('scrolling to noun', selectedNoun);
         handleScrollTo(nounId);
     }
     if (nounId === selectedNoun) {
@@ -90,14 +91,15 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
   }
 
   const handleScrollTo = (nounId: number) => {
-    // setIsKeyboardNavigating(true);
+    setIsKeyboardNavigating(true);
     nounId && buttonsRef.current[nounId]?.scrollIntoView({behavior: 'smooth'});
   };
 
-  const handleFocusNoun = (index: number) => {
-    index && buttonsRef.current[index]?.focus();
-    setActiveNoun(index);
-    setSelectedNoun(index);
+  const handleFocusNoun = (nounId: number) => {
+    console.log('handleFocusNoun', nounId);
+    nounId >= 0 && buttonsRef.current[nounId]?.focus();
+    setActiveNoun(nounId);
+    setSelectedNoun(nounId);
     setIsSidebarVisible(true);
   };
 
@@ -164,6 +166,11 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
   }, [nounCount]);
 
   useEffect(() => {
+    handleScrollTo(selectedNoun || nounCount);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSidebarVisible])
+
+  useEffect(() => {
     window.addEventListener('resize', handleWindowSizeChange);
 
     // Remove block on hover over noun
@@ -186,9 +193,7 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
           >
           <div 
               className={cx(
-                classes.gridWrap, 
-                // selectedNoun && classes.sidebarVisible, 
-                // !selectedNoun && classes.sidebarHidden,
+                classes.gridWrap,
                 isKeyboardNavigating && classes.isKeyboardNavigating
               )}
           >
@@ -211,25 +216,24 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
                 buttonsRef={buttonsRef}
                 nounsList={nounsList}
                 sortOrder={sortOrder}
-              />
-              
-              </div>
+              />              
+            </div>
 
-              <AnimatePresence>
-                  {isSidebarVisible && (
-                      <ExploreNounDetail 
-                          handleCloseDetail={() => handleCloseDetail()} 
-                          handleNounDetail={handleNounDetail} 
-                          handleNounNavigation={handleNounNavigation} 
-                          nounId={activeNoun} 
-                          nounImgSrc={[...nounsList].reverse()[activeNoun]?.imgSrc}
-                          isVisible={isSidebarVisible} 
-                          handleScrollTo={handleScrollTo} 
-                          disablePrev={((sortOrder === "date-ascending" && activeNoun === 0) || (sortOrder === "date-descending" && activeNoun === nounCount - 1)) ? true : false}
-                          disableNext={((sortOrder === "date-ascending" && activeNoun === nounCount - 1) || (sortOrder === "date-descending" && activeNoun === 0)) ? true : false}
-                      />
-                  )}
-              </AnimatePresence>
+            <AnimatePresence>
+                {isSidebarVisible && (
+                    <ExploreNounDetail 
+                        handleCloseDetail={() => handleCloseDetail()} 
+                        handleNounDetail={handleNounDetail} 
+                        handleNounNavigation={handleNounNavigation} 
+                        nounId={activeNoun} 
+                        nounImgSrc={[...nounsList].reverse()[activeNoun]?.imgSrc}
+                        isVisible={isSidebarVisible} 
+                        handleScrollTo={handleScrollTo} 
+                        disablePrev={((sortOrder === "date-ascending" && activeNoun === 0) || (sortOrder === "date-descending" && activeNoun === nounCount - 1)) ? true : false}
+                        disableNext={((sortOrder === "date-ascending" && activeNoun === nounCount - 1) || (sortOrder === "date-descending" && activeNoun === 0)) ? true : false}
+                    />
+                )}
+            </AnimatePresence>
       </div>
   </div>
   );
