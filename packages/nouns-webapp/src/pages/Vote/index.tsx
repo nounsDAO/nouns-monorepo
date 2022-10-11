@@ -62,7 +62,6 @@ const VotePage = ({
 
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
-  // const isV2Prop = useIsPropUsingDAOV2(id ?? '');
   const {
     data: dqInfo,
     loading: loadingDQInfo,
@@ -391,8 +390,6 @@ const VotePage = ({
                       <Trans>
                         {isV2Prop
                           ? i18n.number(
-                              // TODO(brianj) implement logic to only use new value for v2 props
-                              // proposal.quorumVotes
                               currentQuorum ?? 0,
                             )
                           : proposal.quorumVotes}{' '}
