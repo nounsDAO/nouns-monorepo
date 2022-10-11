@@ -1,7 +1,6 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import { useNounSeed } from '../../../wrappers/nounToken';
 import { BigNumber } from 'ethers';
-// import { StandaloneNounImage } from '../../components/StandaloneNoun';
 import { StandalonePart } from '../../StandalonePart';
 import classes from './ExploreNounDetail.module.css';
 import { ImageData } from '@nouns/assets';
@@ -13,13 +12,11 @@ import loadingNoun from '../../../assets/loading-skull-noun.gif';
 import Placeholder from 'react-bootstrap/Placeholder';
 import Image from 'react-bootstrap/Image'
 import cx from 'classnames';
-
 import dotenv from 'dotenv';
 dotenv.config();
 interface ExploreNounDetailProps {
     nounId: number;
     handleCloseDetail: Function;
-    handleNounDetail: Function;
     handleNounNavigation: Function;
     isVisible: boolean;
     handleScrollTo: Function;

@@ -75,20 +75,19 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
     setSelectedNoun(undefined);
   }
 
-  const handleNounDetail = (nounId: number) => {
-    if (isSidebarVisible === true) {
-    // if (selectedNoun) {
-        console.log('scrolling to noun', selectedNoun);
-        handleScrollTo(nounId);
-    }
-    if (nounId === selectedNoun) {
-        handleCloseDetail();
-    } else {
-        nounId > -1 && nounId < nounCount && setActiveNoun(nounId);
-        nounId > -1 && nounId < nounCount && setSelectedNoun(nounId);  
-        setIsSidebarVisible(true)  
-    }
-  }
+  // const handleNounDetail = (nounId: number) => {
+  //   if (selectedNoun) {
+  //       console.log('scrolling to noun', selectedNoun);
+  //       handleScrollTo(nounId);
+  //   }
+  //   if (nounId === selectedNoun) {
+  //       handleCloseDetail();
+  //   } else {
+  //       nounId > -1 && nounId < nounCount && setActiveNoun(nounId);
+  //       nounId > -1 && nounId < nounCount && setSelectedNoun(nounId);  
+  //       // setIsSidebarVisible(true)  
+  //   }
+  // }
 
   const handleScrollTo = (nounId: number) => {
     setIsKeyboardNavigating(true);
@@ -209,7 +208,6 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
                 selectedNoun={selectedNoun}
                 setActiveNoun={setActiveNoun}
                 setSelectedNoun={setSelectedNoun}
-                setIsSidebarVisible={setIsSidebarVisible}
                 setNounsList={setNounsList}
                 handleFocusNoun={handleFocusNoun}
                 isKeyboardNavigating={isKeyboardNavigating}
@@ -220,10 +218,9 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
             </div>
 
             <AnimatePresence>
-                {isSidebarVisible && (
+                {selectedNoun !== undefined && selectedNoun >= 0 && (
                     <ExploreNounDetail 
                         handleCloseDetail={() => handleCloseDetail()} 
-                        handleNounDetail={handleNounDetail} 
                         handleNounNavigation={handleNounNavigation} 
                         nounId={activeNoun} 
                         nounImgSrc={[...nounsList].reverse()[activeNoun]?.imgSrc}

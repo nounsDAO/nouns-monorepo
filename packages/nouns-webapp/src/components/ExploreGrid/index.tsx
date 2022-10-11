@@ -9,7 +9,7 @@ interface ExploreGridProps {
     selectedNoun: number | undefined;
     setActiveNoun: Function;
     setSelectedNoun: Function;
-    setIsSidebarVisible: Function;
+    // setIsSidebarVisible: Function;
     setNounsList: Function;
     handleFocusNoun: Function;
     isKeyboardNavigating: boolean;
