@@ -1,5 +1,8 @@
 import clsx from 'clsx';
 import classes from './NavBarButton.module.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
+import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
 
 export enum NavBarButtonStyle {
   COOL_INFO,
@@ -22,6 +25,8 @@ interface NavBarButtonProps {
   buttonStyle?: NavBarButtonStyle;
   onClick?: (e?: any) => void;
   disabled?: boolean;
+  isDropdown?: boolean;
+  isButtonUp?: boolean;
 }
 
 export const getNavBarButtonVariant = (buttonStyle?: NavBarButtonStyle) => {
@@ -84,6 +89,11 @@ const NavBarButton: React.FC<NavBarButtonProps> = props => {
         >
           {buttonIcon && <div className={classes.icon}>{buttonIcon}</div>}
           <div>{buttonText}</div>
+          {props.isDropdown && (
+            <div className={props.isButtonUp ? navDropdownClasses.arrowUp : navDropdownClasses.arrowDown}>
+              <FontAwesomeIcon icon={props.isButtonUp ? faSortUp : faSortDown} />{' '}
+            </div>
+          )}
         </div>
       </div>
     </>
