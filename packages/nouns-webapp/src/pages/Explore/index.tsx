@@ -73,6 +73,7 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
     setIsSidebarVisible(false);
     setActiveNoun(-1);
     setSelectedNoun(undefined);
+    containerRef.current && window.scrollTo(0, containerRef.current?.offsetTop);
   }
 
   const handleScrollTo = (nounId: number) => {
