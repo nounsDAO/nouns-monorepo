@@ -43,7 +43,7 @@ export const CHAIN_ID: SupportedChains = parseInt(process.env.REACT_APP_CHAIN_ID
 
 export const ETHERSCAN_API_KEY = process.env.REACT_APP_ETHERSCAN_API_KEY ?? '';
 
-const INFURA_PROJECT_ID = 'f74ad8aacd6a44a7a52f4db811276bcd'; //process.env.REACT_APP_INFURA_PROJECT_ID;
+const INFURA_PROJECT_ID = process.env.REACT_APP_INFURA_PROJECT_ID;
 
 export const createNetworkHttpUrl = (network: string): string => {
   const custom = process.env[`REACT_APP_${network.toUpperCase()}_JSONRPC`];
