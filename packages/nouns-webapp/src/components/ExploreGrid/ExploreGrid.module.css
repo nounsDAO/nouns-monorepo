@@ -64,10 +64,6 @@
     transition: width 0.3s ease-in-out;
 }
 
-.exploreGrid.small li {
-    /* width: calc((100% / var(--columns)) - var(--gap) + (var(--gap) / var(--columns))); */
-}
-
 .exploreGrid li:hover {
     box-shadow: 0 0px 0px 4px rgba(0 0 0 / 30%);
 }
@@ -218,10 +214,6 @@
     .exploreGrid.sidebarHidden ul li img {   
         border-radius: 4px;
     }
-    /* .gridWrap.sidebarHidden .exploreGrid ul {
-        --gap: 10px;
-        --columns: 16;
-    } */
     .exploreGrid ul img, .exploreGrid ul li {   
         border-radius: 5px;
     }

@@ -30,10 +30,6 @@ type Noun = {
 };
 
 const ExploreGrid: React.FC<ExploreGridProps> = props => {
-  // const [width, setWidth] = useState<number>(window.innerWidth);
-  // const handleWindowSizeChange = () => {
-  //     setWidth(window.innerWidth);
-  // };
   const [individualNouns, setIndividualNouns] = useState<Noun[]>([]);
   const placeholderNoun: Noun = {id: null, imgSrc: undefined};
   
@@ -117,12 +113,6 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
       });
       props.setNounsList(placeholderNounsData);
 
-      // window.addEventListener('resize', handleWindowSizeChange);
-
-      // return () => {
-      //   window.removeEventListener('resize', handleWindowSizeChange);
-      // };
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -135,18 +125,9 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         <ul>       
           {(props.sortOrder === "date-ascending" ? [...props.nounsList].reverse() : props.nounsList).map((noun, i) => {
             return (
-              <motion.li 
+              <li 
                   className={noun.id === props.selectedNoun ? classes.activeNoun : ''} 
                   key={i}
-                  // initial={{ width: item}}
-                  animate={{ 
-                    // width: props.selectedNoun && props.selectedNoun >= 0 ? item : galaxyItem, 
-                    // width: props.selectedNoun && props.selectedNoun >= 0 ? '10%' : '3.3333%', 
-                    // transition: {
-                    //   delay: 0.05,
-                    //   duration: 0.1,
-                    // }
-                  }}
               >
                 <button 
                   ref={el => props.buttonsRef.current[noun.id ? noun.id : -1] = el}
@@ -164,7 +145,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                       {noun.id}
                   </p>
                 </button>
-              </motion.li>
+              </li>
             )
           })}
         </ul>             

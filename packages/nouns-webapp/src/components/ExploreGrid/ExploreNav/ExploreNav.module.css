@@ -2,8 +2,6 @@
     justify-content: space-between;
     display: flex;
     grid-gap: 10px;
-    /* margin-bottom: 10px; */
-    /* padding: 15px 1em 0; */
     padding: 15px;
     border-bottom: rgba(0,0,0,0.1) 1px solid;
     width: 100%;
@@ -34,16 +32,11 @@
     justify-content: center;
     align-items: center;
 }
-.nav .sort p {
-    /* display: inline;
-    opacity: 0.75; */
-}
 
 .nav .selectWrap {
     color: var(--brand-cool-light-text);
     border: 1px solid var(--brand-cool-border);
     border-radius: 10px;
-    /* padding: 0; */
     border: 1px solid rgba(0, 0, 0, 0.1);
     background: #fff;
     font-size: 16px;
@@ -51,18 +44,6 @@
     font-family: 'PT Root UI';
     font-weight: bold;
     position: relative;
-
-    /* width: 100%;
-    min-width: 15ch;
-    max-width: 30ch;
-    border: 1px solid var(--select-border);
-    border-radius: 0.25em;
-    padding: 0.25em 0.5em;
-    font-size: 1.25rem;
-    cursor: pointer;
-    line-height: 1.1;
-    background-color: #fff; */
-    /* background-image: linear-gradient(to top, #f9f9f9, #fff 33%); */
     display: grid;
     grid-template-areas: "select";
     align-items: center;
@@ -75,13 +56,8 @@
 .nav .selectWrap:hover {
     background-color: #e2e3e8;
     color: black;
-    /* transition: all 0.2s ease-in-out; */
     cursor:  crosshair !important;
 }
-.nav .selectWrap:hover {
-    
-}
-
 
 .nav .selectWrap span {
     position: absolute;
@@ -90,23 +66,11 @@
     pointer-events: none; 
 
 }
-/* :root {
-    --select-arrow: rgba(0,0,0,0.5);
-} */
-.nav .selectWrap::after {
-  /* content: "";
-  width: 0.8em;
-  height: 0.5em;
-  background-color: var(--select-arrow);
-  clip-path: polygon(100% 0%, 0 0%, 50% 100%);
-  justify-self: end;
-  margin-right: .5rem; */
-  /* position: relative;
-  right: .5rem; */
-}
+
 .nav .selectWrap select:hover {
     cursor: pointer;
 }
+
 .nav .selectWrap select {
     background: transparent;
     border: 0;
@@ -142,7 +106,6 @@
 .nav button:hover {
     background-color: #e2e3e8;
     color: black;
-    /* transition: all 0.2s ease-in-out; */
 }
 
 .nav button:hover svg {
@@ -165,7 +128,6 @@
     font-size: 13px;
     opacity: 0.65;
     text-transform: uppercase;
-    /* font-weight: bold; */
     letter-spacing: 0.1em;
     line-height: 1;
     align-self: center;
