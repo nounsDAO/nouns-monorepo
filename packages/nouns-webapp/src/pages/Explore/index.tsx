@@ -61,11 +61,11 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
   const handleSortOrderChange = (orderValue: string) => {
     setSortOrder(orderValue);
     if ((sortOrder === "date-ascending")) {
-      !isMobile && setActiveNoun(nounCount - 1);
-      !isMobile && setSelectedNoun(nounCount - 1);
+      !isMobile && isSidebarVisible && setActiveNoun(nounCount - 1);
+      !isMobile && isSidebarVisible && setSelectedNoun(nounCount - 1);
     } else {
-      !isMobile && setActiveNoun(0);
-      !isMobile && setSelectedNoun(0);
+      !isMobile && isSidebarVisible && setActiveNoun(0);
+      !isMobile && isSidebarVisible && setSelectedNoun(0);
     }
   }; 
   
