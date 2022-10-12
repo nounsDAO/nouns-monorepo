@@ -14,7 +14,6 @@
     --columns: 10;
     gap: var(--gap);
     transition: gap 0.15s ease-in-out, background-color 0.25s ease-in-out;
-    
 }
 
 .exploreGrid.sidebarHidden ul {
@@ -24,6 +23,7 @@
     background-color: var(--brand-cool-background);
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+    transition: gap 0.15s ease-in-out, background-color 0.25s ease-in-out;
 }
 
 .exploreGrid.sidebarHidden ul li, 

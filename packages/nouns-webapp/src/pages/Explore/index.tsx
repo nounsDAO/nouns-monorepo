@@ -73,7 +73,9 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
     setIsSidebarVisible(false);
     setActiveNoun(-1);
     setSelectedNoun(undefined);
-    containerRef.current && window.scrollTo(0, containerRef.current?.offsetTop);
+    // containerRef.current && window.scrollTo(0, containerRef.current?.offsetTop);
+    console.log('close detail');
+    window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
   }
 
   const handleScrollTo = (nounId: number) => {
@@ -106,7 +108,8 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
                 setIsSidebarVisible(false);
                 setSelectedNoun(undefined);
                 setIsKeyboardNavigating(false);
-                containerRef.current && window.scrollTo(0, containerRef.current?.offsetTop);
+                // containerRef.current && window.scrollTo(0, containerRef.current?.offsetTop);
+                window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
             }
             if (sortOrder === "date-descending") {
                 if (keyboardPrev && (selectedNoun + 1 < nounCount)) {
@@ -179,8 +182,7 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
             animate={{ 
               maxWidth: selectedNoun && selectedNoun >= 0 ? "80%" : "100%", 
               transition: {
-                // delay: 0.3,
-                duration: 0.05,
+                duration: 0.025
               }
             }}          
           >
