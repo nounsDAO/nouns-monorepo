@@ -173,7 +173,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
           width: "0%"
         },
         animate: {
-          width: "33%"
+          width: !isMobile ? "33%" : "100%",
         },
         exit: {
           width: "0%",
@@ -201,8 +201,8 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                     exit="exit"
                     onAnimationStart={() => handleAnimationStart()}
                     onAnimationComplete={(definition) => {
-                        definition === "animate" && handleAnimationComplete();
-                        definition === "exit" && window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+                        !isMobile && definition === "animate" && handleAnimationComplete();
+                        !isMobile && definition === "exit" && window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
                     }}
                 >
                     <motion.div 

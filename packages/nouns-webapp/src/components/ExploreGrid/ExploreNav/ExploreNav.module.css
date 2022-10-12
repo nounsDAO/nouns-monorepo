@@ -171,3 +171,10 @@
     align-self: center;
     margin: 0;
 }
+
+@media (max-width: 991px) {
+    .nav {
+        border: 0;
+        padding: 15px 0.5rem;
+    }
+}

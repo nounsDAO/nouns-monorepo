@@ -22,3 +22,15 @@
     position: relative;
     contain: paint;
 }
+
+
+
+@media (max-width: 991px) {
+    .exploreWrap {
+        border: 0;
+        margin: 0 .5rem;
+    }
+    .contentWrap {
+        contain: none;
+    }
+}

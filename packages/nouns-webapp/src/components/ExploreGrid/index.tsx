@@ -10,7 +10,6 @@ interface ExploreGridProps {
     selectedNoun: number | undefined;
     setActiveNoun: Function;
     setSelectedNoun: Function;
-    // setIsSidebarVisible: Function;
     setNounsList: Function;
     handleFocusNoun: Function;
     isNounHoverDisabled: boolean;
@@ -152,8 +151,8 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                 <button 
                   ref={el => props.buttonsRef.current[noun.id ? noun.id : -1] = el}
                   key={`${i}${noun.id}`}
-                  onMouseDown={(e) => (props.selectedNoun === noun.id && document.activeElement && parseInt(document.activeElement.id) === noun.id) && props.handleFocusNoun(noun.id)}
-                  onFocus={(e) => noun.id !== null && props.handleFocusNoun(noun.id)}
+                  onClick={(e) => (noun.id !== null && props.handleFocusNoun(noun.id))}
+                  onFocus={(e) => (noun.id !== null && props.handleFocusNoun(noun.id))}
                   onMouseOver={() => !props.isNounHoverDisabled && noun.id !== null && props.setActiveNoun(noun.id)} 
                   onMouseOut={() => props.selectedNoun !== undefined && props.setActiveNoun(props.selectedNoun)}
                   >

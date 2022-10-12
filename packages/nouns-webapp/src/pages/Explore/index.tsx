@@ -88,6 +88,8 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
     setActiveNoun(nounId);
     setSelectedNoun(nounId);
     setIsSidebarVisible(true);
+    setSortOrder('date-descending');
+    console.log('handleFocusNoun');
   };
 
   useEffect(() => {
@@ -108,8 +110,7 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
                 setIsSidebarVisible(false);
                 setSelectedNoun(undefined);
                 setIsNounHoverDisabled(false);
-                // containerRef.current && window.scrollTo(0, containerRef.current?.offsetTop);
-                window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+                !isMobile && window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
             }
             if (sortOrder === "date-descending") {
                 if (keyboardPrev && (selectedNoun + 1 < nounCount)) {
