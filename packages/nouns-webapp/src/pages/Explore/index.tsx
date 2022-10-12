@@ -177,10 +177,10 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
               isKeyboardNavigating && classes.isKeyboardNavigating
             )}    
             animate={{ 
-              width: selectedNoun && selectedNoun >= 0 ? "80%" : "100%", 
+              maxWidth: selectedNoun && selectedNoun >= 0 ? "80%" : "100%", 
               transition: {
                 // delay: 0.3,
-                duration: 0.1,
+                duration: 0.05,
               }
             }}          
           >

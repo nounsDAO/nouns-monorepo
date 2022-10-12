@@ -61,7 +61,7 @@
     padding: 0;
     border-radius: 10px;
     width: calc((100% / var(--columns)) - var(--gap) + (var(--gap) / var(--columns)));
-    transition: width 0.25s ease-in-out;
+    transition: width 0.1s ease-in-out;
 }
 
 .exploreGrid.small li {

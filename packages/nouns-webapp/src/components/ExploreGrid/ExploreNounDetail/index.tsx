@@ -184,7 +184,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
         
           transition: {
             // when: "afterChildren",
-            duration: 0.1
+            duration: 0.025
           }
         }
       };
@@ -228,9 +228,9 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                         exit={{
                             opacity: 0,
                             // height: "50vh",
-                            y: "300px",
+                            // y: "300px",
                             transition: {
-                                duration: 0.025
+                                duration: 0.01
                             }
                         }}
                     >
