@@ -134,7 +134,7 @@ export function getOrCreateDynamicQuorumParams(block: BigInt | null = null): Dyn
     params.save();
   }
 
-  if (params.dynamicQuorumStartBlock === null && block !== null) {
+  if (params.dynamicQuorumStartBlock == null && block != null) {
     params.dynamicQuorumStartBlock = block;
 
     params.save();

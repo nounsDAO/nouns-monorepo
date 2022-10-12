@@ -161,7 +161,7 @@ export function handleVoteCast(event: VoteCast): void {
 
   const dqParams = getOrCreateDynamicQuorumParams();
   const usingDynamicQuorum =
-    dqParams.dynamicQuorumStartBlock !== null &&
+    dqParams.dynamicQuorumStartBlock != null &&
     dqParams.dynamicQuorumStartBlock!.lt(proposal.createdBlock);
 
   if (usingDynamicQuorum) {
