@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import classes from './ExploreGrid.module.css';
 import cx from 'classnames';
 import ExploreGridItem from './ExploreGridItem';
-import { motion} from 'framer-motion/dist/framer-motion';
 
 interface ExploreGridProps {
     nounCount: number;
