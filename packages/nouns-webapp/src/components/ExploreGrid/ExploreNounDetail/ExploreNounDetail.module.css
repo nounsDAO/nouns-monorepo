@@ -238,7 +238,7 @@ h2 {
         z-index: 100;
         overflow-y: auto;
         overscroll-behavior: contain;
-        border-radius: 8px;
+        border-radius: 0;
         contain: content;
         background: transparent;
         max-width: none;
@@ -252,7 +252,7 @@ h2 {
         width: calc(100% - 30px) !important;
         padding: 15px 2% 15px;
         margin: 15px;
-        border-radius: 8px;
+        border-radius: 0;
         contain: content;
         position: relative;
     }  

@@ -170,15 +170,18 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
     }
     const motionVariants = {
         initial: {
-          width: "0%"
+          width: isMobile ? "100%" :  "0%",
+          x: isMobile ? 100 : 0,
         },
         animate: {
-          width: !isMobile ? "33%" : "100%",
+          width: isMobile ? "100%" :  "33%",
+          x: 0,
         },
         exit: {
-          width: "0%",
+          width: isMobile ? "100%" :  "0%",
+          x: isMobile ? 100 : 0,
           transition: {
-            duration: 0.025
+            duration: isMobile ? 0.05 : 0.025
           }
         }
       };
@@ -211,7 +214,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                             background: backgroundColor,
                         }}
                         exit={{
-                            opacity: 0,
+                            opacity: !isMobile ? 0 : 1,
                             transition: {
                                 duration: 0.01
                             }
