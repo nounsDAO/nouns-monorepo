@@ -158,7 +158,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
     const bgcolors = ["#d5d7e1", "#e1d7d5"];
     const backgroundColor = seed ? bgcolors[seed.background] : bgcolors[0];
     const nounTraitsOrdered =  getOrderedTraits(seed);
-    const nounId = props.noun && props.noun.id != null && props.noun.id >= 0 && props.noun.id;
+    const nounId = props.noun && props.noun.id != null && props.noun.id >= 0 ? props.noun.id : null;
     // const [isAnimating, setIsAnimating] = useState<boolean>(false);
 
     const handleAnimationStart = () => {
@@ -241,9 +241,9 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                         className={classes.detailNounImage}
                                         onClick={() => props.handleScrollTo(props.selectedNoun)}
                                     >   
-                                        {nounId && seed ? (
+                                        {nounId !== null && seed ? (
                                             <Image 
-                                                src={props.noun.imgSrc || `https://noun.pics/${props.noun.id}.svg`} 
+                                                src={props.noun.imgSrc || `https://noun.pics/${nounId}.svg`} 
                                                 alt={`Noun ${nounId}`} 
                                             />
                                         ) : (
@@ -261,7 +261,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                                 ←
                                             </button>
                                             <div className={classes.nounBirthday}>
-                                                {nounId && seed ? (
+                                                {nounId !== null && seed ? (
                                                     <>
                                                         <h2>Noun {nounId}</h2>
                                                         <NounInfoRowBirthday nounId={nounId} />    
@@ -291,7 +291,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                                             }}
                                                         >
                                                             <AnimatePresence>
-                                                                {nounId && seed && (
+                                                                {nounId !== null && seed && (
                                                                     <StandalonePart partType={partType} partIndex={part.partIndex} />
                                                                 )}
                                                             </AnimatePresence>
@@ -300,7 +300,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                                         <div className={classes.description}>
                                                             <p className='small'>
                                                                 <AnimatePresence>
-                                                                    {nounId && seed ? (
+                                                                    {nounId !== null && seed ? (
                                                                         <motion.span>
                                                                             {traitKeyToLocalizedTraitKeyFirstLetterCapitalized(nounTraitsOrdered[index].partType)}
                                                                         </motion.span>
@@ -317,7 +317,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                                             <p>
                                                                 <strong>
                                                                     <AnimatePresence>
-                                                                        {nounId && seed ? (
+                                                                        {nounId !== null && seed ? (
                                                                             <>{nounTraitsOrdered[index].partName}</>
                                                                         ) : (
                                                                             <Placeholder xs={12} animation="glow" />
@@ -330,7 +330,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                                                 )
                                             })}
                                         </ul>
-                                        {nounId && seed && (
+                                        {nounId !== null && seed && (
                                             <p className={classes.activityLink}><a href={`/noun/${nounId}`}><Trans>Vote history</Trans></a></p>
                                         )}
                                     </div>
