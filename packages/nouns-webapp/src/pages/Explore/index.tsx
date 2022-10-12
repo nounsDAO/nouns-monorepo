@@ -212,11 +212,9 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
                     <ExploreNounDetail 
                         handleCloseDetail={() => handleCloseDetail()} 
                         handleNounNavigation={handleNounNavigation}
-                        // noun={[...nounsList].reverse()[isKeyboardNavigating ? selectedNoun : activeNoun]?.imgSrc}
-                        noun={[...nounsList].reverse()[selectedNoun || activeNoun]}
+                        noun={[...nounsList].reverse()[activeNoun]}
                         nounId={activeNoun}
                         selectedNoun={selectedNoun}
-                        // nounImgSrc={[...nounsList].reverse()[(selectedNoun || activeNoun) && isKeyboardNavigating ? selectedNoun : activeNoun]?.imgSrc}
                         isVisible={isSidebarVisible} 
                         handleScrollTo={handleScrollTo} 
                         setIsKeyboardNavigating={setIsKeyboardNavigating}
