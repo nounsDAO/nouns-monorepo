@@ -1,5 +1,6 @@
 import { task, types } from 'hardhat/config';
 import { printContractsTable } from './utils';
+import probDoc from '../../nouns-assets/src/config/probability.json'
 
 task('deploy-and-configure', 'Deploy and configure all contracts')
   .addFlag('startAuction', 'Start the first auction upon deployment completion')
@@ -40,7 +41,6 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
     });
 
     // Populate the on-chain seeder
-    const probDoc = await run("get-prob-doc")
     await run('populate-seeder', { nSeeder: contracts.NSeeder.instance, probDoc });
 
     // Register OG punk hashes to make sure they will not be minted.

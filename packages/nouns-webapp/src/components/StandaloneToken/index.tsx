@@ -27,6 +27,7 @@ export const getPunk = (tokenId: string | EthersBN, seed: ISeed) => {
   const id = tokenId.toString();
   const name = `Punk ${id}`;
   const description = `Punk ${id} is a member of the Punkers DAO`;
+  console.log("TOKEN_ID", seed)
   const { parts } = getPunkData(seed);
   const image = `data:image/svg+xml;base64,${btoa(buildSVG(parts, data.palette))}`;
 
@@ -48,6 +49,7 @@ const StandaloneToken: React.FC<StandaloneTokenProps> = (props: StandaloneTokenP
     dispatch(setOnDisplayAuctionTokenId(tokenId.toNumber()));
   };
 
+  console.log("StandaloneToken")
   return (
     <Link
       to={'/token/' + tokenId.toString()}
@@ -70,6 +72,8 @@ export const StandaloneTokenCircular: React.FC<StandaloneCircularTokenProps> = (
   const onClickHandler = () => {
     dispatch(setOnDisplayAuctionTokenId(tokenId.toNumber()));
   };
+
+  console.log("StandaloneTokenCircular")
 
   if (!seed || !tokenId) return <Punk imgPath="" alt="punk" />;
 
@@ -100,6 +104,7 @@ export const StandaloneTokenRoundedCorners: React.FC<StandaloneTokenProps> = (
   const onClickHandler = () => {
     dispatch(setOnDisplayAuctionTokenId(tokenId.toNumber()));
   };
+  console.log("StandaloneTokenRoundedCorners")
 
   return (
     <Link
@@ -125,6 +130,7 @@ export const StandaloneTokenWithSeed: React.FC<StandaloneTokenWithSeedProps> = (
   const seed = useNSeed(tokenId);
   const seedIsInvalid = Object.values(seed || {}).every(v => v === 0);
 
+  console.log("StandaloneTokenWithSeed")
   if (!seed || seedIsInvalid || !tokenId || !onLoadSeed) return <Punk imgPath="" alt="Punk" />;
 
   onLoadSeed(seed);

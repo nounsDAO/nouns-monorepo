@@ -17,7 +17,7 @@
     "task:accounts": "npx hardhat accounts",
     "task:deploy": "npx hardhat deploy",
     "task:deploy-and-configure": "npx hardhat deploy-and-configure",
-    "task:mint-noun": "npx hardhat mint-noun",
+    "task:mint-punk": "npx hardhat mint-punk",
     "task:populate-descriptor": "npx hardhat populate-descriptor",
     "task:run-local": "npx hardhat run-local",
     "test": "npx hardhat test",

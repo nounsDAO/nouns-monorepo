@@ -62,8 +62,8 @@ export const buildSVG = (
         // Do not push rect if transparent
         if (colorIndex !== 0) {
           svgRects.push(
-            `<rect width="${length * 10}" height="10" x="${currentX * 10}" y="${
-              currentY * 10
+            `<rect width="${length * 4}" height="4" x="${currentX * 4}" y="${
+              currentY * 4
             }" fill="#${hexColor}" />`,
           );
         }
@@ -80,7 +80,7 @@ export const buildSVG = (
     });
     result += svgRects.join('');
     return result;
-  }, `<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges"><rect width="100%" height="100%" />`);
+  }, `<svg width="384" height="384" viewBox="0 0 384 384" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" fill="#f0f0f0"><rect width="100%" height="100%" />`);
 
   return `${svgWithoutEndTag}</svg>`;
 };
