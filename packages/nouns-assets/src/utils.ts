@@ -8,6 +8,19 @@ const probs: any = probDoc
 const { types, necks, cheekses, faces, beards, mouths, earses, hats, hairs, teeths, lipses, emotions, eyeses, glasseses, noses } = images;
 const accResource = [ necks, cheekses, faces, beards, mouths, earses, hats, hairs, teeths, lipses, emotions, eyeses, glasseses, noses ]
 
+export const type2PunkBasic = [
+  { punkType: 0, skinTone: 3 },
+  { punkType: 0, skinTone: 2 },
+  { punkType: 0, skinTone: 1 },
+  { punkType: 0, skinTone: 0 },
+  { punkType: 1, skinTone: 3 },
+  { punkType: 1, skinTone: 2 },
+  { punkType: 1, skinTone: 1 },
+  { punkType: 1, skinTone: 0 },
+  { punkType: 4, skinTone: 4 },
+  { punkType: 3, skinTone: 5 },
+  { punkType: 2, skinTone: 6 }
+]
 /**
  * Get encoded part and background information using a Noun seed
  * @param seed The Noun seed
@@ -16,7 +29,7 @@ const accResource = [ necks, cheekses, faces, beards, mouths, earses, hats, hair
 export const getPunkData = (seed: ISeed): PunkData => {
   return {
     parts: [
-      types[seed.punkType],
+      types[type2PunkBasic.findIndex((acc: any) => acc.punkType == seed.punkType && acc.skinTone == seed.skinTone)],
       ...seed.accessories.map(acc => accResource[acc.accType][acc.accId])
       // bodies[seed.body],
       // accessories[seed.accessory],
@@ -138,13 +151,7 @@ export const getPseudorandomPart = (
  * @param nounId The Noun tokenId used to create pseudorandomness
  * @param blockHash The block hash use to create pseudorandomness
  */
-// export const getPunkSeedFromBlockHash = (punkId: BigNumberish, blockHash: string): ISeed => {
-//   const pseudorandomness = solidityKeccak256(['bytes32', 'uint256'], [blockHash, punkId]);
-//   return {
-//     background: getPseudorandomPart(pseudorandomness, bgcolors.length, 0),
-//     body: getPseudorandomPart(pseudorandomness, bodies.length, 48),
-//     accessory: getPseudorandomPart(pseudorandomness, accessories.length, 96),
-//     head: getPseudorandomPart(pseudorandomness, heads.length, 144),
-//     glasses: getPseudorandomPart(pseudorandomness, glasses.length, 192),
-//   };
-// };
+export const getPunkSeedFromBlockHash = (punkId: BigNumberish, blockHash: string): ISeed => {
+  const pseudorandomness = solidityKeccak256(['bytes32', 'uint256'], [blockHash, punkId]);
+  return getRandomPunkSeed()
+};

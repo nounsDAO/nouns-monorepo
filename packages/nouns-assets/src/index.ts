@@ -5,4 +5,5 @@ export {
   shiftRightAndCast,
   getPseudorandomPart,
   getPunkSeedFromBlockHash,
+  type2PunkBasic
 } from './utils';

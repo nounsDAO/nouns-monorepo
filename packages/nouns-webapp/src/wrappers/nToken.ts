@@ -100,11 +100,9 @@ export const useNSeed = (punkId: EthersBN) => {
       const updatedSeedCache = JSON.stringify({
         ...JSON.parse(seedCache),
         [punkId.toString()]: {
-          accessory: response.accessory,
-          background: response.background,
-          body: response.body,
-          glasses: response.glasses,
-          head: response.head,
+          punkType: response.punkType,
+          skineTone: response.skinTone,
+          accessories: response.accessories
         },
       });
       localStorage.setItem(seedCacheKey, updatedSeedCache);

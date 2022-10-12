@@ -25,6 +25,8 @@ import { IToken } from './interfaces/IToken.sol';
 import { ERC721 } from './base/ERC721.sol';
 import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import { IProxyRegistry } from './external/opensea/IProxyRegistry.sol';
+import 'hardhat/console.sol';
+
 
 contract NToken is IToken, Ownable, ERC721Checkpointable {
     // The punkers DAO address (creators org)
@@ -259,6 +261,17 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
      */
     function _mintTo(address to, uint256 punkId) internal returns (uint256) {
         ISeeder.Seed memory seed = seeder.generateSeed(punkId);
+        seeds[punkId].punkType = seed.punkType;
+        seeds[punkId].skinTone = seed.skinTone;
+        console.log(seed.accessories.length);
+        for(uint i = 0; i < seed.accessories.length; i ++)
+            console.log(seed.accessories[i].accType, seed.accessories[i].accId);
+        for(uint i = 0; i < seed.accessories.length; i ++) {
+            seeds[punkId].accessories.push(ISeeder.Accessory({
+                accType: seed.accessories[i].accType,
+                accId: seed.accessories[i].accId
+            }));
+        }
         
         bytes32 seedHash;
         assembly {

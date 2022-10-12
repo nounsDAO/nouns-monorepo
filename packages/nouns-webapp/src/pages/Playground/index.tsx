@@ -10,9 +10,9 @@ import {
   Popover,
 } from 'react-bootstrap';
 import classes from './Playground.module.css';
-import React, { ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, ReactNode, useEffect, useRef, useState, useCallback } from 'react';
 import Link from '../../components/Link';
-import { ImageData, getNounData, getRandomPunkSeed } from '@nouns/assets';
+import { ImageData, getPunkData, getRandomPunkSeed, type2PunkBasic } from '@nouns/assets';
 import { buildSVG, EncodedImage, PNGCollectionEncoder } from '@nouns/sdk';
 import InfoIcon from '../../assets/icons/Info.svg';
 import Noun from '../../components/Punk';
@@ -61,11 +61,25 @@ const DEFAULT_TRAIT_TYPE = 'heads';
 const encoder = new PNGCollectionEncoder(ImageData.palette);
 
 const traitKeyToTitle: Record<string, string> = {
-  heads: 'head',
-  glasses: 'glasses',
-  bodies: 'body',
-  accessories: 'accessory',
+  types: 'type',
+  necks: 'neck',
+  cheekses: 'cheeks',
+  faces: 'face',
+  beards: 'beard',
+  mouths: 'mouth',
+  earses: 'ears',
+  hats: 'hat',
+  hairs: 'hair',
+  teeths: 'teeth',
+  lipses: 'lips',
+  emotions: 'emotion',
+  eyeses: 'eyes',
+  glasseses: 'glasses',
+  noses: 'nose'
 };
+const accNames = [
+  'neck', 'cheeks', 'face', 'beard', 'mouth', 'ears', 'hat', 'hair', 'teeth', 'lips', 'emotion', 'eyes', 'glasses', 'nose'
+]
 
 const parseTraitName = (partName: string): string =>
   capitalizeFirstLetter(partName.substring(partName.indexOf('-') + 1));
@@ -74,11 +88,21 @@ const capitalizeFirstLetter = (s: string): string => s.charAt(0).toUpperCase() +
 
 const traitKeyToLocalizedTraitKeyFirstLetterCapitalized = (s: string): ReactNode => {
   const traitMap = new Map([
-    ['background', <Trans>Background</Trans>],
-    ['body', <Trans>Body</Trans>],
-    ['accessory', <Trans>Accessory</Trans>],
-    ['head', <Trans>Head</Trans>],
+    ['type', <Trans>Type</Trans>],
+    ['neck', <Trans>Neck</Trans>],
+    ['cheeks', <Trans>Cheeks</Trans>],
+    ['face', <Trans>Face</Trans>],
+    ['beard', <Trans>Beard</Trans>],
+    ['mouth', <Trans>Mouth</Trans>],
+    ['ears', <Trans>Ears</Trans>],
+    ['hat', <Trans>Hat</Trans>],
+    ['hair', <Trans>Hair</Trans>],
+    ['teeth', <Trans>Teeth</Trans>],
+    ['lips', <Trans>Lips</Trans>],
+    ['emotion', <Trans>Emotion</Trans>],
+    ['eyes', <Trans>Eyes</Trans>],
     ['glasses', <Trans>Glasses</Trans>],
+    ['nose', <Trans>Nose</Trans>],
   ]);
 
   return traitMap.get(s);
@@ -97,12 +121,25 @@ const Playground: React.FC = () => {
 
   const customTraitFileRef = useRef<HTMLInputElement>(null);
 
-  const generateNounSvg = React.useCallback(
+  const generateNounSvg = useCallback(
     (amount: number = 1) => {
       for (let i = 0; i < amount; i++) {
-        const seed = { ...getRandomPunkSeed(), ...modSeed };
-        const { parts, background } = getNounData(seed);
-        const svg = buildSVG(parts, encoder.data.palette, background);
+        let seed: any = getRandomPunkSeed()
+        if(modSeed?.type !== undefined) {
+          Object.assign(seed, type2PunkBasic[modSeed.type])
+        }
+        for(let accName in modSeed) {
+          if(accName == "type") continue
+          const accType = accNames.indexOf(accName)
+          const accId = modSeed[accName]
+          const acc = seed.accessories.find((acc: any) => acc.accType == accType)
+          if(acc) acc.accId = accId
+          else seed.accessories.push({ accType, accId })
+        }
+
+        const { parts } = getPunkData(seed);
+        console.log(parts)
+        const svg = buildSVG(parts, encoder.data.palette);
         setNounSvgs(prev => {
           return prev ? [svg, ...prev] : [svg];
         });
@@ -113,9 +150,8 @@ const Playground: React.FC = () => {
   );
 
   useEffect(() => {
-    const traitTitles = ['background', 'body', 'accessory', 'head', 'glasses'];
+    const traitTitles = ['type', 'neck', 'cheeks', 'face', 'beard', 'mouth', 'ears', 'hat', 'hair', 'teeth', 'lips', 'emotion', 'eyes', 'glasses', 'nose'];
     const traitNames = [
-      ['cool', 'warm'],
       ...Object.values(ImageData.images).map(i => {
         return i.map(imageData => imageData.filename);
       }),
@@ -293,12 +329,11 @@ const Playground: React.FC = () => {
               {traits &&
                 traits.map((trait, index) => {
                   return (
-                    <Col lg={12} xs={6}>
+                    <Col lg={12} xs={6} key={index}>
                       <Form className={classes.traitForm}>
                         <FloatingLabel
                           controlId="floatingSelect"
                           label={traitKeyToLocalizedTraitKeyFirstLetterCapitalized(trait.title)}
-                          key={index}
                           className={classes.floatingLabel}
                         >
                           <Form.Select
