@@ -13,7 +13,8 @@
     --gap: 0.8vw;
     --columns: 10;
     gap: var(--gap);
-    transition: all 0.15s ease-in-out;
+    transition: gap 0.15s ease-in-out, background-color 0.25s ease-in-out;
+    
 }
 
 .exploreGrid.sidebarHidden ul {
@@ -23,7 +24,6 @@
     background-color: var(--brand-cool-background);
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
-    transition: all 0.15s ease-in-out;
 }
 
 .exploreGrid.sidebarHidden ul li, 
@@ -61,10 +61,11 @@
     padding: 0;
     border-radius: 10px;
     width: calc((100% / var(--columns)) - var(--gap) + (var(--gap) / var(--columns)));
+    transition: width 0.25s ease-in-out;
 }
 
 .exploreGrid.small li {
-    width: calc((100% / var(--columns)) - var(--gap) + (var(--gap) / var(--columns)));
+    /* width: calc((100% / var(--columns)) - var(--gap) + (var(--gap) / var(--columns))); */
 }
 
 .exploreGrid li:hover {

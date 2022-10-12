@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import classes from './ExploreGrid.module.css';
 import cx from 'classnames';
 import ExploreGridItem from './ExploreGridItem';
+import { motion} from 'framer-motion/dist/framer-motion';
 
 interface ExploreGridProps {
     nounCount: number;
@@ -30,6 +31,10 @@ type Noun = {
 };
 
 const ExploreGrid: React.FC<ExploreGridProps> = props => {
+  // const [width, setWidth] = useState<number>(window.innerWidth);
+  // const handleWindowSizeChange = () => {
+  //     setWidth(window.innerWidth);
+  // };
   const [individualNouns, setIndividualNouns] = useState<Noun[]>([]);
   const placeholderNoun: Noun = {id: null, imgSrc: undefined};
   
@@ -112,9 +117,16 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         }
       });
       props.setNounsList(placeholderNounsData);
+
+      // window.addEventListener('resize', handleWindowSizeChange);
+
+      // return () => {
+      //   window.removeEventListener('resize', handleWindowSizeChange);
+      // };
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    
+
     return (
       <div className={cx(
           classes.exploreGrid,
@@ -124,9 +136,18 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         <ul>       
           {(props.sortOrder === "date-ascending" ? [...props.nounsList].reverse() : props.nounsList).map((noun, i) => {
             return (
-              <li 
+              <motion.li 
                   className={noun.id === props.selectedNoun ? classes.activeNoun : ''} 
                   key={i}
+                  // initial={{ width: item}}
+                  animate={{ 
+                    // width: props.selectedNoun && props.selectedNoun >= 0 ? item : galaxyItem, 
+                    // width: props.selectedNoun && props.selectedNoun >= 0 ? '10%' : '3.3333%', 
+                    // transition: {
+                    //   delay: 0.05,
+                    //   duration: 0.1,
+                    // }
+                  }}
               >
                 <button 
                   ref={el => props.buttonsRef.current[noun.id ? noun.id : -1] = el}
@@ -137,14 +158,14 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                   onMouseOut={() => props.selectedNoun !== undefined && props.setActiveNoun(props.selectedNoun)}
                   >
                   <ExploreGridItem 
-                      nounId={noun.id}
-                      imgSrc={noun.imgSrc}
+                    nounId={noun.id}
+                    imgSrc={noun.imgSrc}
                   />
                   <p className={classes.nounIdOverlay}>
                       {noun.id}
                   </p>
                 </button>
-              </li>
+              </motion.li>
             )
           })}
         </ul>             

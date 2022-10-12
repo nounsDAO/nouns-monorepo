@@ -1,22 +1,19 @@
 .detailWrap {
-    /* position: absolute;
-    top: -30px;
-    right: 0; */
     position: relative;
-    /* height: 100%; */
     max-width: 500px;
-    width: 33%;
+    /* width: 33%; */
     border-left: 1px solid rgba(0,0,0,0.1); 
-    /* padding: 15px; */
     position: sticky;
     top: -8px;
     align-self: flex-start;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
+    z-index: 1;
 }
+/* .detailWrap.isAnimating {
+    position: relative;
+} */
 
-.detailWrap .detail::-webkit-scrollbar-track {
-}
 .detailWrap .detail::-webkit-scrollbar {
     width: 0.35em;
 }
@@ -29,10 +26,6 @@
     border-radius: 30px;
 }
 
-.detailWrap > div{
-    /* height: 100%; */
-}
-
 .detail {
     overflow-y: scroll;
     display: flex;
@@ -42,29 +35,10 @@
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     padding-top: 8px;
-    /* padding: 8px 2%; */
-    /* align-self: flex-start; */
-    /* transition: background-color 0.05s ease-in-out; */
-    /* position: sticky;
-    top: 0px; */
-    /* padding: 30px 15px; */
-    /* box-shadow: 0px 10px 24px rgba(0, 0, 0, 0.17); */
-    /* border-radius: 8px; */
-    /* border-top-right-radius: 0;
-    border-bottom-right-radius: 0; */
 }
-
-/* .detail > div {
-    height: 101vh;
-    overflow-y: scroll;
-} */
 
 .detailNounImage {
     text-align: center;
-    /* margin-top: 2vh; */
-    /* max-height: 40vh; */
-    /* height: 100%; */
-    /* cursor: pointer; */
     width: 100%;
     aspect-ratio: 1;
 }

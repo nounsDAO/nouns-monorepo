@@ -3,7 +3,7 @@ import { BigNumber } from 'ethers';
 import classes from './Explore.module.css';
 import cx from 'classnames';
 import ExploreNounDetail from '../../components/ExploreGrid/ExploreNounDetail';
-import { AnimatePresence } from 'framer-motion/dist/framer-motion';
+import { motion, AnimatePresence } from 'framer-motion/dist/framer-motion';
 import { Auction as IAuction } from '../../wrappers/nounsAuction';
 import { useAppSelector } from '../../hooks';
 import dotenv from 'dotenv';
@@ -82,7 +82,6 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
   };
 
   const handleFocusNoun = (nounId: number) => {
-    console.log('handleFocusNoun', nounId);
     nounId >= 0 && buttonsRef.current[nounId]?.focus();
     setActiveNoun(nounId);
     setSelectedNoun(nounId);
@@ -152,11 +151,6 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
   }, [nounCount]);
 
   useEffect(() => {
-    handleScrollTo(selectedNoun || nounCount);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSidebarVisible])
-
-  useEffect(() => {
     window.addEventListener('resize', handleWindowSizeChange);
 
     // Remove block on hover over noun
@@ -177,11 +171,18 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
               overflow: isMobile && selectedNoun ? 'hidden' : 'visible'
           }}
           >
-          <div 
-              className={cx(
-                classes.gridWrap,
-                isKeyboardNavigating && classes.isKeyboardNavigating
-              )}
+          <motion.div 
+            className={cx(
+              classes.gridWrap,
+              isKeyboardNavigating && classes.isKeyboardNavigating
+            )}    
+            animate={{ 
+              width: selectedNoun && selectedNoun >= 0 ? "80%" : "100%", 
+              transition: {
+                // delay: 0.3,
+                duration: 0.1,
+              }
+            }}          
           >
               <ExploreNav 
                 nounCount={nounCount}
@@ -202,17 +203,21 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
                 nounsList={nounsList}
                 sortOrder={sortOrder}
               />              
-            </div>
+            </motion.div>
 
-            <AnimatePresence>
-                {selectedNoun !== undefined && selectedNoun >= 0 && (
+            <AnimatePresence initial={false}>
+                {isSidebarVisible && (
                     <ExploreNounDetail 
                         handleCloseDetail={() => handleCloseDetail()} 
-                        handleNounNavigation={handleNounNavigation} 
-                        nounId={activeNoun} 
-                        nounImgSrc={[...nounsList].reverse()[activeNoun]?.imgSrc}
+                        handleNounNavigation={handleNounNavigation}
+                        // noun={[...nounsList].reverse()[isKeyboardNavigating ? selectedNoun : activeNoun]?.imgSrc}
+                        noun={[...nounsList].reverse()[selectedNoun || activeNoun]}
+                        nounId={activeNoun}
+                        selectedNoun={selectedNoun}
+                        // nounImgSrc={[...nounsList].reverse()[(selectedNoun || activeNoun) && isKeyboardNavigating ? selectedNoun : activeNoun]?.imgSrc}
                         isVisible={isSidebarVisible} 
                         handleScrollTo={handleScrollTo} 
+                        setIsKeyboardNavigating={setIsKeyboardNavigating}
                         disablePrev={((sortOrder === "date-ascending" && activeNoun === 0) || (sortOrder === "date-descending" && activeNoun === nounCount - 1)) ? true : false}
                         disableNext={((sortOrder === "date-ascending" && activeNoun === nounCount - 1) || (sortOrder === "date-descending" && activeNoun === 0)) ? true : false}
                     />
