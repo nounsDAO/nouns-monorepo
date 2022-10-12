@@ -61,11 +61,11 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
   const handleSortOrderChange = (orderValue: string) => {
     setSortOrder(orderValue);
     if ((sortOrder === "date-ascending")) {
-      setActiveNoun(nounCount - 1);
-      setSelectedNoun(nounCount - 1);
+      !isMobile && setActiveNoun(nounCount - 1);
+      !isMobile && setSelectedNoun(nounCount - 1);
     } else {
-      setActiveNoun(0);
-      setSelectedNoun(0);
+      !isMobile && setActiveNoun(0);
+      !isMobile && setSelectedNoun(0);
     }
   }; 
   
@@ -168,7 +168,8 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
       <div 
           className={classes.contentWrap}
           style={{
-              overflow: isMobile && selectedNoun ? 'hidden' : 'visible'
+              overflow: isMobile && isSidebarVisible ? 'hidden' : 'visible',
+              position: isMobile && isSidebarVisible ? 'fixed' : 'relative'
           }}
           >
           <motion.div 

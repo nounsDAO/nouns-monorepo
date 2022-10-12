@@ -232,6 +232,8 @@ h2 {
     .detailWrap {
         width: 100%;
         height: 100%;
+        /* height: 100vh; */
+        min-height: -webkit-fill-available;
         position: fixed;
         top: 0;
         left: 0;
@@ -242,6 +244,7 @@ h2 {
         contain: content;
         background: transparent;
         max-width: none;
+        padding-bottom: 15vh;
     }
 
     .detailWrap > div {
@@ -249,9 +252,9 @@ h2 {
     }
     
     .detail {
-        width: calc(100% - 30px) !important;
+        width: 100% !important;
         padding: 15px 2% 15px;
-        margin: 15px;
+        margin: 0 0 15px;
         border-radius: 0;
         contain: content;
         position: relative;

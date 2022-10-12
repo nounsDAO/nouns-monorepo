@@ -19,8 +19,6 @@
 .contentWrap {
     display: flex;
     justify-content: space-between;
-    position: relative;
-    contain: paint;
 }
 
 
@@ -32,5 +30,7 @@
     }
     .contentWrap {
         contain: none;
+        position: relative;
+        z-index: 2;
     }
 }

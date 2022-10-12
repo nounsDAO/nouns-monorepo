@@ -261,6 +261,9 @@
     .exploreGrid .nounIdOverlay {
         display: none;
     }
+    .activeNoun button {
+        box-shadow: none;
+    }
 }
 
 @keyframes animateIn {
