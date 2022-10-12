@@ -37,6 +37,7 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
   const [selectedNoun, setSelectedNoun] = useState<number | undefined>(undefined);
   const [activeNoun, setActiveNoun] = useState<number>(-1);
   const [isKeyboardNavigating, setIsKeyboardNavigating] = useState<boolean>(false);
+  const [isNounHoverDisabled, setIsNounHoverDisabled] = useState<boolean>(false);
   const [sortOrder, setSortOrder] = useState<string>('');
   const containerRef = useRef<HTMLDivElement | null>(null);
   const buttonsRef = useRef<(HTMLButtonElement | null)[]>([]);
@@ -79,7 +80,7 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
   }
 
   const handleScrollTo = (nounId: number) => {
-    setIsKeyboardNavigating(true);
+    setIsNounHoverDisabled(true);
     nounId && buttonsRef.current[nounId]?.scrollIntoView({behavior: 'smooth'});
   };
 
@@ -91,7 +92,7 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
   };
 
   useEffect(() => {
-        setIsKeyboardNavigating(true);
+    setIsNounHoverDisabled(true);
         let amountToMove = 10;
         if (width <= 400) {
             amountToMove = 3;
@@ -107,7 +108,7 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
             if (keyboardEsc) {
                 setIsSidebarVisible(false);
                 setSelectedNoun(undefined);
-                setIsKeyboardNavigating(false);
+                setIsNounHoverDisabled(false);
                 // containerRef.current && window.scrollTo(0, containerRef.current?.offsetTop);
                 window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
             }
@@ -159,7 +160,7 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
     // Remove block on hover over noun
     window.addEventListener('mousemove', (event) => {});
         onmousemove = () => { 
-            setIsKeyboardNavigating(false);
+          setIsNounHoverDisabled(false);
         };
     return () => {
         window.removeEventListener('resize', handleWindowSizeChange);
@@ -177,7 +178,7 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
           <motion.div 
             className={cx(
               classes.gridWrap,
-              isKeyboardNavigating && classes.isKeyboardNavigating
+              isNounHoverDisabled && classes.nounHoverDisabled
             )}    
             animate={{ 
               maxWidth: selectedNoun && selectedNoun >= 0 ? "80%" : "100%", 
@@ -200,7 +201,7 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
                 setSelectedNoun={setSelectedNoun}
                 setNounsList={setNounsList}
                 handleFocusNoun={handleFocusNoun}
-                isKeyboardNavigating={isKeyboardNavigating}
+                isNounHoverDisabled={isNounHoverDisabled}
                 buttonsRef={buttonsRef}
                 nounsList={nounsList}
                 sortOrder={sortOrder}
@@ -217,7 +218,7 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
                         selectedNoun={selectedNoun}
                         isVisible={isSidebarVisible} 
                         handleScrollTo={handleScrollTo} 
-                        setIsKeyboardNavigating={setIsKeyboardNavigating}
+                        setIsNounHoverDisabled={setIsNounHoverDisabled}
                         disablePrev={((sortOrder === "date-ascending" && activeNoun === 0) || (sortOrder === "date-descending" && activeNoun === nounCount - 1)) ? true : false}
                         disableNext={((sortOrder === "date-ascending" && activeNoun === nounCount - 1) || (sortOrder === "date-descending" && activeNoun === 0)) ? true : false}
                     />

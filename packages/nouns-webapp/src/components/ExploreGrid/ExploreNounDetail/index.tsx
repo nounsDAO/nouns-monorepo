@@ -27,7 +27,7 @@ interface ExploreNounDetailProps {
     selectedNoun?: number;
     isVisible: boolean;
     handleScrollTo: Function;
-    setIsKeyboardNavigating: Function;
+    setIsNounHoverDisabled: Function;
     disablePrev: boolean;
     disableNext: boolean;
     // nounImgSrc?: string | undefined;
@@ -159,13 +159,12 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
     const backgroundColor = seed ? bgcolors[seed.background] : bgcolors[0];
     const nounTraitsOrdered =  getOrderedTraits(seed);
     const nounId = props.noun && props.noun.id != null && props.noun.id >= 0 ? props.noun.id : null;
-    // const [isAnimating, setIsAnimating] = useState<boolean>(false);
 
     const handleAnimationStart = () => {
         // setIsAnimating(true);
-        props.setIsKeyboardNavigating(true)
+        props.setIsNounHoverDisabled(true)
     }
-    const handleAnimtionComplete = () => {
+    const handleAnimationComplete = () => {
         // setIsAnimating(false);
         props.handleScrollTo(props.selectedNoun)
     }
@@ -178,12 +177,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
         },
         exit: {
           width: "0%",
-        //   opacity: 0,
-        //   y: "100%",
-        //   x: "10vw",
-        
           transition: {
-            // when: "afterChildren",
             duration: 0.025
           }
         }
@@ -197,10 +191,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                 )}
             </AnimatePresence>
             <motion.div 
-                    className={cx(
-                        classes.detailWrap, 
-                        // isAnimating && classes.isAnimating
-                        )}
+                    className={classes.detailWrap}
                     style={{
                         background: backgroundColor
                     }}
@@ -208,17 +199,11 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                     initial="initial"
                     animate="animate"
                     exit="exit"
-                    // initial={{
-                    //     width: "0%"
-                    // }}
-                    // animate={{
-                    //     width: "33%"
-                    // }}
-                    // exit={{
-                    //     width: "0%"
-                    // }}
                     onAnimationStart={() => handleAnimationStart()}
-                    onAnimationComplete={() => handleAnimtionComplete()}
+                    onAnimationComplete={(definition) => {
+                        definition === "animate" && handleAnimationComplete();
+                        definition === "exit" && window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+                    }}
                 >
                     <motion.div 
                         className={classes.detail}
@@ -227,8 +212,6 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                         }}
                         exit={{
                             opacity: 0,
-                            // height: "50vh",
-                            // y: "300px",
                             transition: {
                                 duration: 0.01
                             }

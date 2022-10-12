@@ -40,11 +40,11 @@
     display: none;
 }
 
-.isKeyboardNavigating .exploreGrid li:hover {
+.nounHoverDisabled .exploreGrid li:hover {
     box-shadow: none;
 }
 
-.isKeyboardNavigating .exploreGrid li:hover .nounIdOverlay {
+.nounHoverDisabled .exploreGrid li:hover .nounIdOverlay {
     display: none;
 }
 
