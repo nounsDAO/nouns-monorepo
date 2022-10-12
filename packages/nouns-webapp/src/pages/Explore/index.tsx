@@ -36,7 +36,6 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
   const [nounsList, setNounsList] = useState<Noun[]>([]);
   const [selectedNoun, setSelectedNoun] = useState<number | undefined>(undefined);
   const [activeNoun, setActiveNoun] = useState<number>(-1);
-  const [isKeyboardNavigating, setIsKeyboardNavigating] = useState<boolean>(false);
   const [isNounHoverDisabled, setIsNounHoverDisabled] = useState<boolean>(false);
   const [sortOrder, setSortOrder] = useState<string>('');
   const containerRef = useRef<HTMLDivElement | null>(null);
