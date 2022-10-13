@@ -205,7 +205,8 @@
         border: 0;
         margin: 0 .5rem;
     }
-    .exploreGrid ul, .exploreGrid.sidebarHidden ul {   
+    .exploreGrid ul, 
+    .exploreGrid.sidebarHidden ul {   
         --gap: 10px;
         --columns: 5;
         padding: 0;
@@ -214,7 +215,8 @@
     .exploreGrid.sidebarHidden ul li img {   
         border-radius: 4px;
     }
-    .exploreGrid ul img, .exploreGrid ul li {   
+    .exploreGrid ul img, 
+    .exploreGrid ul li {   
         border-radius: 5px;
     }
     .exploreGrid.sidebarHidden ul li {
@@ -231,7 +233,10 @@
         display: none;
     }
     .exploreGrid .activeNoun.nounIdOverlay { 
-        display: none;
+        /* display: none; */
+    }
+    .exploreGrid .activeNoun.nounIdOverlay { 
+        display: block;
     }
     .exploreGrid .nounIdOverlay {
         border-radius: 3px;
@@ -251,7 +256,7 @@
 @media (hover: none) and (max-width: 991px) {
     /* Hide overlay on tap */
     .exploreGrid .nounIdOverlay {
-        display: none;
+        /* display: none; */
     }
     .activeNoun button {
         box-shadow: none;
