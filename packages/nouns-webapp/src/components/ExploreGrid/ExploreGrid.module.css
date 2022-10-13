@@ -207,21 +207,24 @@
     }
     .exploreGrid ul, 
     .exploreGrid.sidebarHidden ul {   
-        --gap: 10px;
-        --columns: 5;
+        --gap: 15px;
+        --columns: 6;
         padding: 0;
         background: #fff;
     }
-    .exploreGrid.sidebarHidden ul li img {   
-        border-radius: 4px;
+
+    .exploreGrid ul li, .exploreGrid.sidebarHidden ul li {
+        /* border: 1px solid rgba(0,0,0,0.1); */
+        overflow: hidden;
     }
+    
     .exploreGrid ul img, 
-    .exploreGrid ul li {   
-        border-radius: 5px;
+    .exploreGrid.sidebarHidden ul img, 
+    .exploreGrid ul li,
+    .exploreGrid.sidebarHidden ul li {   
+        border-radius: 6px;
     }
-    .exploreGrid.sidebarHidden ul li {
-        border-radius: 4px;
-    }
+    
     .exploreGrid li:hover {
         box-shadow: 0 0px 0px 2px rgba(0 0 0 / 30%);
     }
@@ -232,20 +235,34 @@
     .nav .sizing {
         display: none;
     }
-    .exploreGrid .activeNoun.nounIdOverlay { 
-        /* display: none; */
-    }
-    .exploreGrid .activeNoun.nounIdOverlay { 
+    .exploreGrid.sidebarHidden .nounIdOverlay {
         display: block;
+        width: 100%;
+        box-shadow: none;
+        border-radius: 0;
+        /* color: rgba(0,0,0.6); */
+        color: var(--brand-gray-light-text);
+        font-size: clamp(10px, 4vw, 16px);
+        padding: clamp(4px, 4vw, 8px) 6px clamp(4px, 2vw, 8px);
+        border: 1px solid rgba(0,0,0,0.1);
+        border-top: 0;
+        border-bottom-right-radius: 6px;
+        border-bottom-left-radius: 6px;
     }
-    .exploreGrid .nounIdOverlay {
-        border-radius: 3px;
+}
+
+@media (max-width: 767px) {
+    .exploreGrid ul, 
+    .exploreGrid.sidebarHidden ul {   
+        --gap: 15px;
+        --columns: 3;
     }
 }
 
 @media (max-width: 400px) {
-    .exploreGrid ul, .exploreGrid.sidebarHidden ul {
-        --gap: 5px;
+    .exploreGrid ul, 
+    .exploreGrid.sidebarHidden ul {
+        --gap: 10px;
         --columns: 3;
     }
     .exploreGrid ul li {   
@@ -257,6 +274,10 @@
     /* Hide overlay on tap */
     .exploreGrid .nounIdOverlay {
         /* display: none; */
+        display: block;
+        position: relative;
+        bottom: auto;
+        opacity: 1;
     }
     .activeNoun button {
         box-shadow: none;
