@@ -169,7 +169,8 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
           className={classes.contentWrap}
           style={{
               overflow: isMobile && isSidebarVisible ? 'hidden' : 'visible',
-              position: isMobile && isSidebarVisible ? 'fixed' : 'relative'
+              position: isMobile && isSidebarVisible ? 'fixed' : 'relative',
+              height: isMobile && isSidebarVisible ? '100vh' : '100%'
           }}
           >
           <motion.div 

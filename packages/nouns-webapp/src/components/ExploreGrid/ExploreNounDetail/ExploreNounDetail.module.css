@@ -1,7 +1,6 @@
 .detailWrap {
     position: relative;
     max-width: 500px;
-    /* width: 33%; */
     border-left: 1px solid rgba(0,0,0,0.1); 
     position: sticky;
     top: -8px;
@@ -281,11 +280,23 @@ h2 {
 
     .close {
         position: fixed;
-        top: 15px;
-        right: 15px;
+        top: 0;
+        right: 0;
+        padding: 15px;
     }
 
     .detailNounImage {
         margin-top: 15px;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    .detailNounImage img {
+        margin-top: 0;
+    }
+}
+
+@media (max-width: 767px) {
+    .detailNounImage {
+        max-width: 420px;
     }
 }

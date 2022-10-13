@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import classes from './ExploreGrid.module.css';
 import cx from 'classnames';
 import ExploreGridItem from './ExploreGridItem';
+import Placeholder from 'react-bootstrap/esm/Placeholder';
 
 interface ExploreGridProps {
     nounCount: number;
@@ -141,7 +142,11 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
                     imgSrc={noun.imgSrc}
                   />
                   <p className={classes.nounIdOverlay}>
-                      {noun.id}
+                      {noun.id != null ? (
+                        noun.id
+                      ) : (
+                        <Placeholder xs={12} animation="glow" />
+                      )}
                   </p>
                 </button>
               </li>
