@@ -18,3 +18,8 @@ export * from './populate-descriptor-via-proposal';
 export * from './deploy-test-token';
 export * from './populate-descriptor-v1';
 export * from './upgrade-descriptor-via-proposal';
+export * from './deploy-v2-logic';
+export * from './verify-etherscan-daov2';
+export * from './update-configs-daov2';
+export * from './deploy-short-times-daov1';
+export * from './deploy-and-configure-short-times-daov1';

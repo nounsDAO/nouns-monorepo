@@ -48,8 +48,14 @@ const ProposalEditor = ({
       {proposalText !== '' && (
         <div className={classes.previewArea}>
           <h3>
-            <Trans>Preview:</Trans>
+            <Trans>Preview</Trans>
           </h3>
+          {title && (
+            <>
+              <h1 className={classes.propTitle}>{title}</h1>
+              <hr />
+            </>
+          )}
           <ReactMarkdown
             className={classes.markdown}
             children={proposalText}

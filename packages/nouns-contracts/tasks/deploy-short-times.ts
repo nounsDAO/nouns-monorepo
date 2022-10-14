@@ -1,6 +1,13 @@
 import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json';
-import { ChainId, ContractDeployment, ContractName, DeployedContract } from './types';
-import { Interface } from 'ethers/lib/utils';
+import {
+  ChainId,
+  ContractDeployment,
+  ContractName,
+  ContractNameDescriptorV1,
+  ContractNamesDAOV2,
+  DeployedContract,
+} from './types';
+import { Interface, parseUnits } from 'ethers/lib/utils';
 import { task, types } from 'hardhat/config';
 import promptjs from 'prompt';
 
@@ -17,6 +24,7 @@ const wethContracts: Record<number, string> = {
   [ChainId.Ropsten]: '0xc778417e063141139fce010982780140aa0cd5ab',
   [ChainId.Rinkeby]: '0xc778417e063141139fce010982780140aa0cd5ab',
   [ChainId.Kovan]: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
+  [ChainId.Goerli]: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
 };
 
 const NOUNS_ART_NONCE_OFFSET = 4;
@@ -66,11 +74,18 @@ task('deploy-short-times', 'Deploy all Nouns contracts with short gov times for 
     types.int,
   )
   .addOptionalParam(
-    'quorumVotesBps',
-    'Votes required for quorum (basis points)',
-    1_000 /* 10% */,
+    'minQuorumVotesBPS',
+    'Min basis points input for dynamic quorum',
+    1_000,
     types.int,
-  )
+  ) // Default: 10%
+  .addOptionalParam(
+    'maxQuorumVotesBPS',
+    'Max basis points input for dynamic quorum',
+    4_000,
+    types.int,
+  ) // Default: 40%
+  .addOptionalParam('quorumCoefficient', 'Dynamic quorum coefficient (float)', 1, types.float)
   .setAction(async (args, { ethers }) => {
     const network = await ethers.provider.getNetwork();
     const [deployer] = await ethers.getSigners();
@@ -107,11 +122,11 @@ task('deploy-short-times', 'Deploy all Nouns contracts with short gov times for 
       from: deployer.address,
       nonce: nonce + GOVERNOR_N_DELEGATOR_NONCE_OFFSET,
     });
-    const deployment: Record<ContractName, DeployedContract> = {} as Record<
-      ContractName,
+    const deployment: Record<ContractNamesDAOV2, DeployedContract> = {} as Record<
+      ContractNamesDAOV2,
       DeployedContract
     >;
-    const contracts: Record<ContractName, ContractDeployment> = {
+    const contracts: Record<ContractNamesDAOV2, ContractDeployment> = {
       NFTDescriptorV2: {},
       SVGRenderer: {},
       NounsDescriptorV2: {
@@ -166,25 +181,29 @@ task('deploy-short-times', 'Deploy all Nouns contracts with short gov times for 
       NounsDAOExecutor: {
         args: [expectedNounsDAOProxyAddress, args.timelockDelay],
       },
-      NounsDAOLogicV1: {
+      NounsDAOLogicV2: {
         waitForConfirmation: true,
       },
-      NounsDAOProxy: {
+      NounsDAOProxyV2: {
         args: [
           () => deployment.NounsDAOExecutor.address,
           () => deployment.NounsToken.address,
           args.noundersdao,
           () => deployment.NounsDAOExecutor.address,
-          () => deployment.NounsDAOLogicV1.address,
+          () => deployment.NounsDAOLogicV2.address,
           args.votingPeriod,
           args.votingDelay,
           args.proposalThresholdBps,
-          args.quorumVotesBps,
+          {
+            minQuorumVotesBPS: args.minQuorumVotesBPS,
+            maxQuorumVotesBPS: args.maxQuorumVotesBPS,
+            quorumCoefficient: parseUnits(args.quorumCoefficient.toString(), 6),
+          },
         ],
         waitForConfirmation: true,
         validateDeployment: () => {
           const expected = expectedNounsDAOProxyAddress.toLowerCase();
-          const actual = deployment.NounsDAOProxy.address.toLowerCase();
+          const actual = deployment.NounsDAOProxyV2.address.toLowerCase();
           if (expected !== actual) {
             throw new Error(
               `Unexpected Nouns DAO proxy address. Expected: ${expected}. Actual: ${actual}.`,
@@ -221,8 +240,8 @@ task('deploy-short-times', 'Deploy all Nouns contracts with short gov times for 
         case 'NounsDAOExecutor':
           nameForFactory = 'NounsDAOExecutorTest';
           break;
-        case 'NounsDAOLogicV1':
-          nameForFactory = 'NounsDAOLogicV1Harness';
+        case 'NounsDAOLogicV2':
+          nameForFactory = 'NounsDAOLogicV2Harness';
           break;
         default:
           nameForFactory = name;
@@ -284,7 +303,7 @@ task('deploy-short-times', 'Deploy all Nouns contracts with short gov times for 
         await deployedContract.deployed();
       }
 
-      deployment[name as ContractName] = {
+      deployment[name as ContractNamesDAOV2] = {
         name: nameForFactory,
         instance: deployedContract,
         address: deployedContract.address,

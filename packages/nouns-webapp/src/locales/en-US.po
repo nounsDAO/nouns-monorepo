@@ -13,6 +13,10 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "% of Nouns Currently Against"
+msgstr "% of Nouns Currently Against"
+
 #: src/components/Documentation/index.tsx
 msgid "'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:"
 msgstr "'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:"
@@ -287,6 +291,10 @@ msgstr "Cryptopunks"
 msgid "Current Delegate"
 msgstr "Current"
 
+#: src/pages/Vote/index.tsx
+msgid "Current Quorum"
+msgstr "Current Quorum"
+
 #: src/components/CurrentBid/index.tsx
 msgid "Current bid"
 msgstr "Current bid"
@@ -354,6 +362,10 @@ msgstr "Discourse"
 #: src/components/NavBar/index.tsx
 msgid "Docs"
 msgstr "Docs"
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "Dynamic Quorum"
+msgstr "Dynamic Quorum"
 
 #: src/components/Banner/index.tsx
 msgid "EVERY DAY,"
@@ -534,6 +546,10 @@ msgstr "Loading..."
 msgid "Making a proposal requires {threshold} votes"
 msgstr "Making a proposal requires {threshold} votes"
 
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "More details on how dynamic quorum works can be found <0>here</0>."
+msgstr "More details on how dynamic quorum works can be found <0>here</0>."
+
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "Next"
 msgstr "Next"
@@ -710,8 +726,12 @@ msgid "Please try again."
 msgstr "Please try again."
 
 #: src/components/ProposalEditor/index.tsx
-msgid "Preview:"
-msgstr "Preview:"
+msgid "Preview"
+msgstr "Preview"
+
+#: src/components/ProposalEditor/index.tsx
+#~ msgid "Preview:"
+#~ msgstr "Preview:"
 
 #: src/components/ProposalEditor/index.tsx
 msgid "Proposal"
@@ -762,6 +782,10 @@ msgstr "Quorum"
 #: src/components/VoteModal/index.tsx
 msgid "Reason (Optional)"
 msgstr "Reason (Optional)"
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "Required % of Nouns to Pass"
+msgstr "Required % of Nouns to Pass"
 
 #: src/components/LanguageSelectionModal/index.tsx
 msgid "Select Language"
@@ -892,6 +916,14 @@ msgstr "The Nouns Foundation considers the veto an emergency power that should n
 msgid "The Nouns community has undertaken a preliminary exploration of proposal veto alternatives (‘rage quit’ etc.), but it is now clear that this is a difficult problem that will require significantly more research, development and testing before a satisfactory solution can be implemented."
 msgstr "The Nouns community has undertaken a preliminary exploration of proposal veto alternatives (‘rage quit’ etc.), but it is now clear that this is a difficult problem that will require significantly more research, development and testing before a satisfactory solution can be implemented."
 
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "The Quorum (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. It increases quadratically as a function of the % of Nouns voting against a prop, varying between Min Quorum and Max Quorum."
+msgstr "The Quorum (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. It increases quadratically as a function of the % of Nouns voting against a prop, varying between Min Quorum and Max Quorum."
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "The Quorum (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. The number of For votes required to pass Proposal {0} is given by the following curve:"
+msgstr "The Quorum (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. The number of For votes required to pass Proposal {0} is given by the following curve:"
+
 #: src/components/Documentation/index.tsx
 msgid "The compressed parts are efficiently converted into a single base64 encoded SVG image on-chain. To accomplish this, each part is decoded into an intermediate format before being converted into a series of SVG rects using batched, on-chain string concatenation. Once the entire SVG has been generated, it is base64 encoded."
 msgstr "The compressed parts are efficiently converted into a single base64 encoded SVG image on-chain. To accomplish this, each part is decoded into an intermediate format before being converted into a series of SVG rects using batched, on-chain string concatenation. Once the entire SVG has been generated, it is base64 encoded."
@@ -1001,6 +1033,10 @@ msgstr "Value in ETH (Optional)"
 #: src/components/ProposalStatusCopy/index.tsx
 msgid "Vetoed"
 msgstr "Vetoed"
+
+#: src/pages/Vote/index.tsx
+msgid "View Dynamic Quorum Info"
+msgstr "View Dynamic Quorum Info"
 
 #: src/components/BidHistoryBtn/index.tsx
 msgid "View all bids"

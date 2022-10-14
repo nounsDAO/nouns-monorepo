@@ -49,17 +49,24 @@ task(
     types.int,
   )
   .addOptionalParam(
-    'quorumVotesBps',
-    'Votes required for quorum (basis points)',
-    1_000 /* 10% */,
+    'minQuorumVotesBPS',
+    'Min basis points input for dynamic quorum',
+    1_000,
     types.int,
-  )
+  ) // Default: 10%
+  .addOptionalParam(
+    'maxQuorumVotesBPS',
+    'Max basis points input for dynamic quorum',
+    4_000,
+    types.int,
+  ) // Default: 40%
+  .addOptionalParam('quorumCoefficient', 'Dynamic quorum coefficient (float)', 1, types.float)
   .setAction(async (args, { run }) => {
     // Deploy the Nouns DAO contracts and return deployment information
     const contracts = await run('deploy-short-times', args);
 
     // Verify the contracts on Etherscan
-    await run('verify-etherscan', {
+    await run('verify-etherscan-daov2', {
       contracts,
     });
 
@@ -96,7 +103,7 @@ task(
 
     // Optionally write the deployed addresses to the SDK and subgraph configs.
     if (args.updateConfigs) {
-      await run('update-configs', {
+      await run('update-configs-daov2', {
         contracts,
       });
     }
