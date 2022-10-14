@@ -1,6 +1,13 @@
 import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json';
-import { ChainId, ContractDeployment, ContractName, DeployedContract } from './types';
-import { Interface } from 'ethers/lib/utils';
+import {
+  ChainId,
+  ContractDeployment,
+  ContractName,
+  ContractNameDescriptorV1,
+  ContractNamesDAOV2,
+  DeployedContract,
+} from './types';
+import { Interface, parseUnits } from 'ethers/lib/utils';
 import { task, types } from 'hardhat/config';
 import promptjs from 'prompt';
 
@@ -24,14 +31,14 @@ const NOUNS_ART_NONCE_OFFSET = 4;
 const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 9;
 const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 12;
 
-task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsToken')
+task('deploy-short-times-daov1', 'Deploy all Nouns contracts with short gov times for testing')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
   .addOptionalParam('weth', 'The WETH contract address', undefined, types.string)
   .addOptionalParam('noundersdao', 'The nounders DAO contract address', undefined, types.string)
   .addOptionalParam(
     'auctionTimeBuffer',
     'The auction time buffer (seconds)',
-    5 * 60 /* 5 minutes */,
+    30 /* 30 seconds */,
     types.int,
   )
   .addOptionalParam(
@@ -49,27 +56,17 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
   .addOptionalParam(
     'auctionDuration',
     'The auction duration (seconds)',
-    60 * 60 * 24 /* 24 hours */,
+    60 * 2 /* 2 minutes */,
     types.int,
   )
-  .addOptionalParam(
-    'timelockDelay',
-    'The timelock delay (seconds)',
-    60 * 60 * 24 * 2 /* 2 days */,
-    types.int,
-  )
+  .addOptionalParam('timelockDelay', 'The timelock delay (seconds)', 60 /* 1 min */, types.int)
   .addOptionalParam(
     'votingPeriod',
     'The voting period (blocks)',
-    Math.round(4 * 60 * 24 * (60 / 13)) /* 4 days (13s blocks) */,
+    80 /* 20 min (15s blocks) */,
     types.int,
   )
-  .addOptionalParam(
-    'votingDelay',
-    'The voting delay (blocks)',
-    Math.round(3 * 60 * 24 * (60 / 13)) /* 3 days (13s blocks) */,
-    types.int,
-  )
+  .addOptionalParam('votingDelay', 'The voting delay (blocks)', 1, types.int)
   .addOptionalParam(
     'proposalThresholdBps',
     'The proposal threshold (basis points)',
@@ -227,7 +224,20 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
         gasPrice = ethers.utils.parseUnits(result.gasPrice.toString(), 'gwei');
       }
 
-      const factory = await ethers.getContractFactory(name, {
+      let nameForFactory: string;
+      switch (name) {
+        case 'NounsDAOExecutor':
+          nameForFactory = 'NounsDAOExecutorTest';
+          break;
+        case 'NounsDAOLogicV1':
+          nameForFactory = 'NounsDAOLogicV1Harness';
+          break;
+        default:
+          nameForFactory = name;
+          break;
+      }
+
+      const factory = await ethers.getContractFactory(nameForFactory, {
         libraries: contract?.libraries?.(),
       });
 
@@ -283,7 +293,7 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
       }
 
       deployment[name as ContractName] = {
-        name,
+        name: nameForFactory,
         instance: deployedContract,
         address: deployedContract.address,
         constructorArguments: contract.args?.map(a => (typeof a === 'function' ? a() : a)) ?? [],
