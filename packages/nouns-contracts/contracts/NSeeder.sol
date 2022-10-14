@@ -34,8 +34,8 @@ contract NSeeder is ISeeder, Ownable {
     mapping(uint256 => uint256) public accExclusiveGroupMapping; // i: acc index, group index
     uint256[][] accExclusiveGroup; // i: group id, j: acc index in a group
 
-    uint256[] accCountByType;
-    uint256[] typeOrderSortedByCount; // [sorted_index] = real_group_id
+    uint256[][] accCountByType;
+    uint256[][] typeOrderSortedByCount; // [sorted_index] = real_group_id
 
     function generateSeed(uint256 punkId) external view override returns (ISeeder.Seed memory) {
         uint256 pseudorandomness = uint256(
@@ -72,10 +72,12 @@ contract NSeeder is ISeeder, Ownable {
         uint256 availableGroupCount = 0;
         for(uint8 acc = 0; tmp > 0; acc ++) {
             if(tmp & 0x01 == 1) {
-                uint256 group = accExclusiveGroupMapping[acc];
-                if(usedGroupFlags[group] == 0) {
-                    availableGroups[availableGroupCount ++] = group;
-                    usedGroupFlags[group] = 1;
+                if(accCountByType[seed.punkType][acc] != 0) {
+                    uint256 group = accExclusiveGroupMapping[acc];
+                    if(usedGroupFlags[group] == 0) {
+                        availableGroups[availableGroupCount ++] = group;
+                        usedGroupFlags[group] = 1;
+                    }
                 }
             }
             tmp >>= 1;
@@ -94,9 +96,11 @@ contract NSeeder is ISeeder, Ownable {
         pseudorandomness >>= 72;
         uint _accTypeCount = accTypeCount;
         uint256[] memory selectedRandomness = new uint256[](_accTypeCount);
-        uint256[] memory typeUsed = new uint256[](_accTypeCount);
         for(uint i = 0; i < _accTypeCount; i ++) {
-            selectedRandomness[i] = uint16((pseudorandomness >> (i * 16)) % (accCountByType[i] * 1000));
+            if(accCountByType[seed.punkType][i] == 0)
+                selectedRandomness[i] = 0;
+            else
+                selectedRandomness[i] = uint16((pseudorandomness >> (i * 16)) % (accCountByType[seed.punkType][i] * 1000 - 1) + 1);
         }
 
         pseudorandomness >>= curAccCount * 16;
@@ -104,21 +108,25 @@ contract NSeeder is ISeeder, Ownable {
 
         tmp = 0; // accType
         uint maxValue = 0;
+        for(uint i = 0; i < accExclusiveGroup.length; i ++)
+            usedGroupFlags[i] = 0;
         for(uint i = 0; i < curAccCount; i ++) {
             tmp = 0;
             maxValue = 0;
             for(uint j = 0; j < _accTypeCount; j ++) {
-                if(typeUsed[j] == 1) continue;
-                if(maxValue >= accCountByType[j]) break;
+                if(usedGroupFlags[accExclusiveGroupMapping[j]] == 1) continue;
+
+                if(maxValue >= accCountByType[seed.punkType][j] * 1000) break;
                 if(maxValue < selectedRandomness[j]) {
                     maxValue = selectedRandomness[j];
-                    tmp = typeOrderSortedByCount[j];
+                    tmp = j;
                 }
             }
 
-            uint accRand = uint8(pseudorandomness >> (i * 8)) % accCountByType[tmp];
+            uint accRand = uint8(pseudorandomness >> (i * 8)) % accCountByType[seed.punkType][tmp];
+            usedGroupFlags[accExclusiveGroupMapping[tmp]] = 1;
             seed.accessories[i] = Accessory({
-                accType: uint16(tmp),
+                accType: uint16(typeOrderSortedByCount[seed.punkType][tmp]),
                 accId: uint16(accRand)
             });
         }
@@ -171,26 +179,35 @@ contract NSeeder is ISeeder, Ownable {
         }
     }
 
-    function setAccCountPerType(uint256[] memory counts) external {
-        uint256[] memory _typeOrderSortedByCount = new uint256[](counts.length);
-        for(uint i = 0; i < counts.length; i ++)
-            _typeOrderSortedByCount[i] = i;
-        for(uint i = 0; i < counts.length; i ++) {
-            for(uint j = i + 1; j < counts.length; j ++) {
-                if(counts[i] < counts[j]) {
-                    uint temp = counts[i];
-                    counts[i] = counts[j];
-                    counts[j] = temp;
+    function setAccCountPerTypeAndPunk(uint256[][] memory counts) external {
+        uint256[][] memory _typeOrderSortedByCount = new uint256[][](counts.length);
+        for(uint k = 0; k < counts.length; k ++) {
+            _typeOrderSortedByCount[k] = new uint256[](counts[k].length);
+            for(uint i = 0; i < counts[k].length; i ++)
+                _typeOrderSortedByCount[k][i] = i;
+        }
+        for(uint k = 0; k < counts.length; k ++) {
+            for(uint i = 0; i < counts[k].length; i ++) {
+                for(uint j = i + 1; j < counts[k].length; j ++) {
+                    if(counts[k][i] < counts[k][j]) {
+                        uint temp = counts[k][i];
+                        counts[k][i] = counts[k][j];
+                        counts[k][j] = temp;
 
-                    temp = _typeOrderSortedByCount[i];
-                    _typeOrderSortedByCount[i] = _typeOrderSortedByCount[j];
-                    _typeOrderSortedByCount[j] = temp;
+                        temp = _typeOrderSortedByCount[k][i];
+                        _typeOrderSortedByCount[k][i] = _typeOrderSortedByCount[k][j];
+                        _typeOrderSortedByCount[k][j] = temp;
+                    }
                 }
             }
         }
-        for(uint i = 0; i < counts.length; i ++) {
-            typeOrderSortedByCount.push(_typeOrderSortedByCount[i]);
-            accCountByType.push(counts[i]);
+        for(uint k = 0; k < counts.length; k ++) {
+            typeOrderSortedByCount.push();
+            accCountByType.push();
+            for(uint i = 0; i < counts[k].length; i ++) {
+                typeOrderSortedByCount[k].push(_typeOrderSortedByCount[k][i]);
+                accCountByType[k].push(counts[k][i]);
+            }
         }
     }
 

@@ -1,5 +1,12 @@
 import { task, types } from 'hardhat/config'
 
+const shortPunkType: any = {
+    male: "m",
+    female: "f",
+    alien: "l",
+    ape: "p",
+    zombie: "z",
+}
 task("populate-seeder", "Initialize deployed smart contracts")
     // .addOptionalParam('nToken', 'The NToken contract address')
     // .addOptionalParam('nSeeder', 'The NSeeder contract address')
@@ -43,9 +50,13 @@ task("populate-seeder", "Initialize deployed smart contracts")
         const typeAvailabilityResponse = await (await nSeeder.setAccAvailability(accTypeCount, accTypeAvailabilities)).wait()
         console.log("setAccAvailability", accTypeCount, accTypeAvailabilities)
 
-        const accCountPerType = Object.keys(probDoc.acc_types).map(type => Object.values(probDoc.accessory_types).filter(item => item == type).length)
+        const accCountPerType = probDoc.types.map((punkType: string) => 
+            Object.keys(probDoc.acc_types).map(type => 
+                Object.values(probDoc.accessories).filter((item: any) => item.type == type && item.punk.split("").includes(shortPunkType[punkType])).length
+            )
+        )
         console.log(accCountPerType)
-        const accCountSetResponse = await (await nSeeder.setAccCountPerType(accCountPerType)).wait()
+        const accCountSetResponse = await (await nSeeder.setAccCountPerTypeAndPunk(accCountPerType)).wait()
 
         const exclusives = probDoc.exclusive_groups.reduce((prev: any, group: any, groupIndex: number) => {
             group.forEach((item: any) => {
@@ -62,7 +73,12 @@ task("populate-seeder", "Initialize deployed smart contracts")
         const exclusiveResponse = await (await nSeeder.setExclusiveAcc(curExclusive, exclusives)).wait()
         console.log("setExclusiveAcc", curExclusive, exclusives)
 
-        const seed = await nSeeder.generateSeed(0)
-        console.log(seed)
+        
+
+        // for(let i = 0; i < 100; i ++) {
+        //     const seed = await nSeeder.generateSeed(i)
+        //     console.log(seed)
+        //     console.log("---")
+        // }
 
     })

@@ -13,7 +13,6 @@ interface TightStackedCircleTokenProps {
 const TightStackedCircleToken: React.FC<TightStackedCircleTokenProps> = props => {
   const { tokenId, index, square, shift } = props;
   const seed = useNSeed(BigNumber.from(tokenId));
-
   if (!seed) {
     return <LoadingPunk />;
   }

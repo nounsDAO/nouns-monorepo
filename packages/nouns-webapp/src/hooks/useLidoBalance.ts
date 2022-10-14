@@ -24,7 +24,6 @@ function useLidoBalance(): BigNumber | undefined {
     if (!lidoContract || !addresses.nDaoExecutor) return;
     // console.log(lidoContract)
     // console.log(lidoContract.balanceOf(addresses.nDaoExecutor, { gasLimit: "21432" }))
-    console.log(lidoContract.functions)
     lidoContract.balanceOf(addresses.nDaoExecutor).then(setBalance);
   }, [lidoContract]);
 

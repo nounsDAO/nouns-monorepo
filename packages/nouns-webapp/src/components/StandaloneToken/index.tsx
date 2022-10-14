@@ -29,6 +29,7 @@ export const getPunk = (tokenId: string | EthersBN, seed: ISeed) => {
   const description = `Punk ${id} is a member of the Punkers DAO`;
   console.log("TOKEN_ID", seed)
   const { parts } = getPunkData(seed);
+  console.log(parts)
   const image = `data:image/svg+xml;base64,${btoa(buildSVG(parts, data.palette))}`;
 
   return {
@@ -130,7 +131,7 @@ export const StandaloneTokenWithSeed: React.FC<StandaloneTokenWithSeedProps> = (
   const seed = useNSeed(tokenId);
   const seedIsInvalid = Object.values(seed || {}).every(v => v === 0);
 
-  console.log("StandaloneTokenWithSeed")
+  console.log("StandaloneTokenWithSeed", seed)
   if (!seed || seedIsInvalid || !tokenId || !onLoadSeed) return <Punk imgPath="" alt="Punk" />;
 
   onLoadSeed(seed);

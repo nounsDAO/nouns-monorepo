@@ -41,6 +41,7 @@ const Auction: React.FC<AuctionProps> = props => {
     dispatch(setNextOnDisplayAuctionTokenId());
     currentAuction && history.push(`/noun/${currentAuction.tokenId.toNumber() + 1}`);
   };
+  console.log(currentAuction)
 
   const nounContent = currentAuction && (
     <div className={classes.nounWrapper}>

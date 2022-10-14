@@ -30,10 +30,11 @@ const abi = new utils.Interface(NTokenABI);
 const seedCacheKey = cacheKey(cache.seed, CHAIN_ID, config.addresses.nToken);
 
 const isSeedValid = (seed: Record<string, any> | undefined) => {
-  const expectedKeys = ['background', 'body', 'accessory', 'head', 'glasses'];
-  const hasExpectedKeys = expectedKeys.every(key => (seed || {}).hasOwnProperty(key));
-  const hasValidValues = Object.values(seed || {}).some(v => v !== 0);
-  return hasExpectedKeys && hasValidValues;
+  return true
+  // const expectedKeys = ['background', 'body', 'accessory', 'head', 'glasses'];
+  // const hasExpectedKeys = expectedKeys.every(key => (seed || {}).hasOwnProperty(key));
+  // const hasValidValues = Object.values(seed || {}).some(v => v !== 0);
+  // return hasExpectedKeys && hasValidValues;
 };
 
 export const useNToken = (punkId: EthersBN) => {
@@ -89,13 +90,13 @@ export const useNSeed = (punkId: EthersBN) => {
   const request = seed ? false : {
     abi,
     address: config.addresses.nToken,
-    method: 'seeds',
+    method: 'getPunk',
     args: [punkId],
   };
-  const response = useContractCall<ISeed>(request);
+  let response: any = useContractCall<ISeed>(request);
   if (response) {
+    response = response[0]
     const seedCache = localStorage.getItem(seedCacheKey);
-    console.log(response)
     if (seedCache && isSeedValid(response)) {
       const updatedSeedCache = JSON.stringify({
         ...JSON.parse(seedCache),
