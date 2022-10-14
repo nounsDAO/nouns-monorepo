@@ -39,7 +39,7 @@ export const cacheKey = (bucket: CacheBucket, ...parts: (string | number)[]) => 
   return [bucket.name, bucket.version, ...parts].join('-').toLowerCase();
 };
 
-export const CHAIN_ID: SupportedChains = parseInt(process.env.REACT_APP_CHAIN_ID ?? '4');
+export const CHAIN_ID: SupportedChains = parseInt(process.env.REACT_APP_CHAIN_ID ?? '5');
 
 export const ETHERSCAN_API_KEY = process.env.REACT_APP_ETHERSCAN_API_KEY ?? '';
 
@@ -59,25 +59,25 @@ const app: Record<SupportedChains, AppConfig> = {
   [ChainId.Rinkeby]: {
     jsonRpcUri: createNetworkHttpUrl('rinkeby'),
     wsRpcUri: createNetworkWsUrl('rinkeby'),
-    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph-rinkeby-v5',
+    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsbr/nounsbr-subgraph-rinkeby',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   [ChainId.Goerli]: {
     jsonRpcUri: createNetworkHttpUrl('goerli'),
     wsRpcUri: createNetworkWsUrl('goerli'),
-    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/bcjgit/dao-v2-test',
+    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsbr/nounsbr-subgraph-goerli',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   [ChainId.Mainnet]: {
     jsonRpcUri: createNetworkHttpUrl('mainnet'),
     wsRpcUri: createNetworkWsUrl('mainnet'),
-    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph',
+    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsbr/nounsbr-subgraph-mainnet',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   [ChainId.Hardhat]: {
     jsonRpcUri: 'http://localhost:8545',
     wsRpcUri: 'ws://localhost:8545',
-    subgraphApiUri: 'http://localhost:8000/subgraphs/name/nounsdao/nouns-subgraph',
+    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsbr/nounsbr-subgraph-goerli',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
 };
