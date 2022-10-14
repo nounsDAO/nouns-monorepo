@@ -63,12 +63,13 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
         contracts.NAuctionHouseProxy.address,
       );
       await auctionHouse.unpause({
-        gasLimit: 1_000_000,
+        gasLimit: 5_000_000,
       });
       await auctionHouse.transferOwnership(executorAddress);
       console.log(
         'Started the first auction and transferred ownership of the auction house to the executor.',
       );
+      console.log(await auctionHouse.auction())
     }
 
     // Optionally write the deployed addresses to the SDK and subgraph configs.

@@ -31,6 +31,7 @@ import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { IAuctionHouse } from './interfaces/IAuctionHouse.sol';
 import { IToken } from './interfaces/IToken.sol';
 import { IWETH } from './interfaces/IWETH.sol';
+// import "hardhat/console.sol";
 
 contract NAuctionHouse is IAuctionHouse, PausableUpgradeable, ReentrancyGuardUpgradeable, OwnableUpgradeable {
     // The Punk ERC721 token contract
@@ -195,6 +196,19 @@ contract NAuctionHouse is IAuctionHouse, PausableUpgradeable, ReentrancyGuardUpg
      * catch the revert and pause this contract.
      */
     function _createAuction() internal {
+        // uint tokenId = punks.mint();
+        // uint256 startTime = block.timestamp;
+        // uint256 endTime = startTime + duration;
+
+        // auction = Auction({
+        //     tokenId: tokenId,
+        //     amount: 0,
+        //     startTime: startTime,
+        //     endTime: endTime,
+        //     bidder: payable(0),
+        //     settled: false
+        // });
+        // emit AuctionCreated(tokenId, startTime, endTime);
         try punks.mint() returns (uint256 tokenId) {
             uint256 startTime = block.timestamp;
             uint256 endTime = startTime + duration;
@@ -207,7 +221,6 @@ contract NAuctionHouse is IAuctionHouse, PausableUpgradeable, ReentrancyGuardUpg
                 bidder: payable(0),
                 settled: false
             });
-
             emit AuctionCreated(tokenId, startTime, endTime);
         } catch Error(string memory) {
             _pause();

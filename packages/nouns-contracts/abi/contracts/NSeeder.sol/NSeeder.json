@@ -207,12 +207,12 @@
   {
     "inputs": [
       {
-        "internalType": "uint256[]",
+        "internalType": "uint256[][]",
         "name": "counts",
-        "type": "uint256[]"
+        "type": "uint256[][]"
       }
     ],
-    "name": "setAccCountPerType",
+    "name": "setAccCountPerTypeAndPunk",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

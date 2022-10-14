@@ -50,7 +50,7 @@ task("create-merkle", "Create merkle tree")
         const punks = values.flat() as Array<Array<string> >
 
         const accGroupByType = Object.keys(probDoc.acc_types).map(accType => 
-            Object.entries(probDoc.accessory_types).filter(entry => entry[1] === accType).map(entry => entry[0])
+            Object.entries(probDoc.accessories).filter(entry => entry[1].type === accType).map(entry => entry[0])
         )
 
         const seedHashes = []
@@ -86,7 +86,7 @@ task("create-merkle", "Create merkle tree")
                 const accEntry = Object.entries(nameDoc).find((entry: any) => entry[1].name == accName && entry[1].gender == punkObj.gender)
                 if(!accEntry) throw new Error("Accessory name not found.")
                 const accId = accEntry[0]
-                const accTypeIndex = Object.keys(probDoc.acc_types).indexOf((probDoc.accessory_types as any)[accId])
+                const accTypeIndex = Object.keys(probDoc.acc_types).indexOf((probDoc.accessories as any)[accId].type)
                 if(accTypeIndex < 0) throw new Error("Invalid accessory type.")
                 const accIndex = accGroupByType[accTypeIndex].indexOf(accId)
                 return { accType: accTypeIndex, accId: accIndex }

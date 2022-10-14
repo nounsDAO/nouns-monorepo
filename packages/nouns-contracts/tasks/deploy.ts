@@ -224,6 +224,7 @@ task('deploy', 'Deploys NFTDescriptor, NDescriptor, NSeeder, and NToken')
 
     for (const [name, contract] of Object.entries(contracts)) {
       let gasPrice = await ethers.provider.getGasPrice();
+      console.log("GAS_PRICE", gasPrice)
       if (!args.autoDeploy) {
         const gasInGwei = Math.round(Number(ethers.utils.formatUnits(gasPrice, 'gwei')));
 
@@ -243,7 +244,7 @@ task('deploy', 'Deploys NFTDescriptor, NDescriptor, NSeeder, and NToken')
         ]);
         gasPrice = ethers.utils.parseUnits(result.gasPrice.toString(), 'gwei');
       }
-      gasPrice = ethers.utils.parseUnits("2", 'gwei');
+      gasPrice = ethers.utils.parseUnits("3", 'gwei');
 
       const factory = await ethers.getContractFactory(name, {
         libraries: contract?.libraries?.(),
