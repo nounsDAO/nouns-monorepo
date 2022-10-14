@@ -68,7 +68,7 @@
 
 .nounsNavLink,
 .nounsNavLink:active,
-.nounsNavLink:visited, 
+.nounsNavLink:visited,
 .nounsNavDropdownButton > button {
   font-family: 'PT Root UI';
   font-weight: bold;

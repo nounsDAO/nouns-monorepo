@@ -9,7 +9,6 @@ import { Trans } from '@lingui/macro';
 import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 
-
 interface NavDropDownProps {
   buttonStyle?: NavBarButtonStyle;
   buttonIcon?: React.ReactNode;
@@ -45,9 +44,7 @@ const NavDropDown: React.FC<NavDropDownProps> = props => {
   const customDropdownToggle = React.forwardRef<RefType, Props>(({ onClick, value }, ref) => (
     <>
       <div
-        className={clsx(
-          classes.wrapper
-        )}
+        className={clsx(classes.wrapper)}
         onClick={e => {
           e.preventDefault();
           onClick(e);
@@ -67,12 +64,22 @@ const NavDropDown: React.FC<NavDropDownProps> = props => {
   return (
     <>
       <Dropdown
-        className={clsx(classes.dropdownButton, navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.desktopOnly)}
+        className={clsx(
+          classes.dropdownButton,
+          navDropdownClasses.nounsNavLink,
+          responsiveUiUtilsClasses.desktopOnly,
+        )}
         onToggle={() => setButtonUp(!buttonUp)}
         autoClose={true}
       >
         <Dropdown.Toggle as={customDropdownToggle} id="dropdown" />
-        <Dropdown.Menu className={clsx(classes.menu, stateSelectedDropdownClass, buttonUp ? stateSelectedDropdownClass : statePrimaryButtonClass,)}>
+        <Dropdown.Menu
+          className={clsx(
+            classes.menu,
+            stateSelectedDropdownClass,
+            buttonUp ? stateSelectedDropdownClass : statePrimaryButtonClass,
+          )}
+        >
           {props.children}
         </Dropdown.Menu>
       </Dropdown>

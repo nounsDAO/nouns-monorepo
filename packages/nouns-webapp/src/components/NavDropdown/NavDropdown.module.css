@@ -13,7 +13,7 @@
 .menu {
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  margin: 0; 
+  margin: 0;
   padding: 0;
   overflow: hidden;
 }
@@ -37,4 +37,3 @@
   /* color: var(--brand-black); */
   background-color: #fff;
 }
-

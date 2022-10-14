@@ -27,7 +27,7 @@ import { Dropdown } from 'react-bootstrap';
 import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 import { usePickByState } from '../../utils/colorResponsiveUIUtils';
-import {ReactComponent as Noggles }  from '../../assets/icons/Noggles.svg';
+import { ReactComponent as Noggles } from '../../assets/icons/Noggles.svg';
 import clsx from 'clsx';
 
 const NavBar = () => {
@@ -129,24 +129,14 @@ const NavBar = () => {
               />
             </Nav.Link>
             <div className={clsx(responsiveUiUtilsClasses.mobileOnly)}>
-              <Nav.Link
-                as={Link}
-                to="/explore"
-                className={classes.nounsNavLink}
-                onClick={closeNav}
-              >
+              <Nav.Link as={Link} to="/explore" className={classes.nounsNavLink} onClick={closeNav}>
                 <NavBarButton
                   buttonText={<Trans>Playground</Trans>}
                   buttonIcon={<FontAwesomeIcon icon={faPlay} />}
                   buttonStyle={nonWalletButtonStyle}
                 />
               </Nav.Link>
-              <Nav.Link
-                as={Link}
-                to="/explore"
-                className={classes.nounsNavLink}
-                onClick={closeNav}
-              >
+              <Nav.Link as={Link} to="/explore" className={classes.nounsNavLink} onClick={closeNav}>
                 <NavBarButton
                   buttonText={<Trans>Nouns &amp; Traits</Trans>}
                   buttonIcon={<FontAwesomeIcon icon={faStar} />}
@@ -156,25 +146,31 @@ const NavBar = () => {
             </div>
             <div className={clsx(responsiveUiUtilsClasses.desktopOnly)}>
               <NavDropdown buttonIcon={<Noggles />} buttonStyle={nonWalletButtonStyle}>
-                <Dropdown.Item 
-                  className={clsx(usePickByState(
-                    navDropdownClasses.whiteInfoSelectedBottom,
-                    navDropdownClasses.coolInfoSelected,
-                    navDropdownClasses.warmInfoSelected,
-                    history,
-                  ))}
-                  href="/explore">
-                    Nouns &amp; Traits
+                <Dropdown.Item
+                  className={clsx(
+                    usePickByState(
+                      navDropdownClasses.whiteInfoSelectedBottom,
+                      navDropdownClasses.coolInfoSelected,
+                      navDropdownClasses.warmInfoSelected,
+                      history,
+                    ),
+                  )}
+                  href="/explore"
+                >
+                  Nouns &amp; Traits
                 </Dropdown.Item>
-                <Dropdown.Item 
-                  className={clsx(usePickByState(
-                    navDropdownClasses.whiteInfoSelectedBottom,
-                    navDropdownClasses.coolInfoSelected,
-                    navDropdownClasses.warmInfoSelected,
-                    history,
-                  ))}
-                  href="/playground">
-                    Playground
+                <Dropdown.Item
+                  className={clsx(
+                    usePickByState(
+                      navDropdownClasses.whiteInfoSelectedBottom,
+                      navDropdownClasses.coolInfoSelected,
+                      navDropdownClasses.warmInfoSelected,
+                      history,
+                    ),
+                  )}
+                  href="/playground"
+                >
+                  Playground
                 </Dropdown.Item>
               </NavDropdown>
             </div>
