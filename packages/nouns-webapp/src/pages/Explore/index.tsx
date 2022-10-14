@@ -38,6 +38,7 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
   const [activeNoun, setActiveNoun] = useState<number>(-1);
   const [isNounHoverDisabled, setIsNounHoverDisabled] = useState<boolean>(false);
   const [sortOrder, setSortOrder] = useState<string>('');
+  const [scrollY, setScrollY] = useState<string>('');
   const containerRef = useRef<HTMLDivElement | null>(null);
   const buttonsRef = useRef<(HTMLButtonElement | null)[]>([]);
   // // Keyboard keys to listen for
@@ -74,6 +75,16 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
     setActiveNoun(-1);
     setSelectedNoun(undefined);
     !isMobile && window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+    if (isMobile) {
+      const body = document.body;
+      body.style.position = '';
+      body.style.top = '';
+      document.documentElement.style.scrollBehavior = 'auto';
+      window.scrollTo({
+        top: parseInt(scrollY),
+        behavior: 'auto'
+      });
+    }
   }
 
   const handleScrollTo = (nounId: number) => {
@@ -81,11 +92,18 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
     nounId && buttonsRef.current[nounId]?.scrollIntoView({behavior: 'smooth'});
   };
 
+  
+
   const handleFocusNoun = (nounId: number) => {
     nounId >= 0 && buttonsRef.current[nounId]?.focus();
     setActiveNoun(nounId);
     setSelectedNoun(nounId);
     setIsSidebarVisible(true);
+    if (isMobile) {
+      const body = document.body;
+      setScrollY(document.documentElement.style.getPropertyValue('--scroll-y'));      
+      body.style.top = `-${scrollY}`;
+    }
   };
 
   useEffect(() => {
@@ -103,10 +121,7 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
 
         if (selectedNoun !== undefined && selectedNoun >= 0) {
             if (keyboardEsc) {
-                setIsSidebarVisible(false);
-                setSelectedNoun(undefined);
-                setIsNounHoverDisabled(false);
-                !isMobile && window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+                handleCloseDetail();
             }
             if (sortOrder === "date-descending") {
                 if (keyboardPrev && (selectedNoun + 1 < nounCount)) {
@@ -152,6 +167,9 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
 
   useEffect(() => {
     window.addEventListener('resize', handleWindowSizeChange);
+    window.addEventListener('scroll', () => {
+      document.documentElement.style.setProperty('--scroll-y', `${window.scrollY}px`);
+    });
 
     // Remove block on hover over noun
     window.addEventListener('mousemove', (event) => {});
@@ -163,15 +181,11 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
     };
     
   }, []);
+  
   return (
     <div className={classes.exploreWrap} ref={containerRef}>
       <div 
           className={classes.contentWrap}
-          style={{
-              overflow: isMobile && isSidebarVisible ? 'hidden' : 'visible',
-              position: isMobile && isSidebarVisible ? 'fixed' : 'relative',
-              height: isMobile && isSidebarVisible ? '100vh' : '100%'
-          }}
           >
           <motion.div 
             className={cx(
