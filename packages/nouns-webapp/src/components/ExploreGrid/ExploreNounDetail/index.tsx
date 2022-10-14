@@ -12,6 +12,7 @@ import loadingNoun from '../../../assets/loading-skull-noun.gif';
 import Placeholder from 'react-bootstrap/Placeholder';
 import Image from 'react-bootstrap/Image'
 import cx from 'classnames';
+import { useSwipeable } from 'react-swipeable';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -22,15 +23,16 @@ type Noun = {
 interface ExploreNounDetailProps {
     nounId: number;
     noun: Noun;
+    nounCount: number;
     handleCloseDetail: Function;
     handleNounNavigation: Function;
+    handleFocusNoun: Function;
+    handleScrollTo: Function;
     selectedNoun?: number;
     isVisible: boolean;
-    handleScrollTo: Function;
     setIsNounHoverDisabled: Function;
     disablePrev: boolean;
     disableNext: boolean;
-    // nounImgSrc?: string | undefined;
 }
 
 const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
@@ -153,6 +155,14 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
         }
     }
 
+    const handlers = useSwipeable({
+        onSwipedLeft: () => !props.disableNext && props.handleNounNavigation('next'),
+        onSwipedRight: () => !props.disablePrev && props.handleNounNavigation('prev'),
+        swipeDuration: 500,
+        preventScrollOnSwipe: true,
+        trackMouse: true
+    });
+
     const seedId = props.noun?.id != null && props.noun?.id >= 0 ? BigNumber.from(props.noun.id) : BigNumber.from(0);
     const seed = useNounSeed(seedId);
     const bgcolors = ["#d5d7e1", "#e1d7d5"];
@@ -161,11 +171,9 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
     const nounId = props.noun && props.noun.id != null && props.noun.id >= 0 ? props.noun.id : null;
 
     const handleAnimationStart = () => {
-        // setIsAnimating(true);
         props.setIsNounHoverDisabled(true)
     }
     const handleAnimationComplete = () => {
-        // setIsAnimating(false);
         props.handleScrollTo(props.selectedNoun)
     }
     const motionVariants = {
@@ -207,6 +215,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
                         !isMobile && definition === "animate" && handleAnimationComplete();
                         !isMobile && definition === "exit" && window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
                     }}
+                    {...handlers}
                 >
                     <motion.div 
                         className={classes.detail}

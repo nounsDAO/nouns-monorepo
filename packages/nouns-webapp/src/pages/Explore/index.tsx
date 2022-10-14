@@ -227,12 +227,14 @@ const ExplorePage: React.FC<ExplorePageProps> = props => {
                         handleNounNavigation={handleNounNavigation}
                         noun={[...nounsList].reverse()[activeNoun]}
                         nounId={activeNoun}
+                        nounCount={nounCount}
                         selectedNoun={selectedNoun}
                         isVisible={isSidebarVisible} 
                         handleScrollTo={handleScrollTo} 
                         setIsNounHoverDisabled={setIsNounHoverDisabled}
                         disablePrev={((sortOrder === "date-ascending" && activeNoun === 0) || (sortOrder === "date-descending" && activeNoun === nounCount - 1)) ? true : false}
                         disableNext={((sortOrder === "date-ascending" && activeNoun === nounCount - 1) || (sortOrder === "date-descending" && activeNoun === 0)) ? true : false}
+                        handleFocusNoun={handleFocusNoun}
                     />
                 )}
             </AnimatePresence>
