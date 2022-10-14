@@ -80,6 +80,7 @@ msgstr "Abstain from voting on Prop {0}"
 msgid "Abstained on"
 msgstr "Abstained on"
 
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Accessory"
 msgstr "Accessory"
@@ -169,6 +170,7 @@ msgstr "Auction ends in"
 msgid "Back"
 msgstr "Back"
 
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Background"
 msgstr "Background"
@@ -202,6 +204,7 @@ msgstr "Bids for"
 msgid "Bids will appear here"
 msgstr "Bids will appear here"
 
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Body"
 msgstr "Body"
@@ -417,6 +420,8 @@ msgstr "Expired"
 msgid "Expires {0}"
 msgstr "Expires {0}"
 
+#: src/components/ExploreGrid/ExploreNav/index.tsx
+#: src/components/NavDropdown/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Explore"
 msgstr "Explore"
@@ -462,6 +467,7 @@ msgstr "Function (Optional)"
 msgid "Generate Nouns"
 msgstr "Generate Nouns"
 
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Glasses"
 msgstr "Glasses"
@@ -478,6 +484,7 @@ msgstr "Governance ‘Slow Start’"
 msgid "Has"
 msgstr "Has"
 
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Head"
 msgstr "Head"
@@ -492,6 +499,9 @@ msgid "Help mint the next Noun"
 msgstr "Help mint the next Noun"
 
 #: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
+msgid "Holder changed from <0><1/></0> to <2><3/></2>"
+msgstr "Holder changed from <0><1/></0> to <2><3/></2>"
+
 #: src/components/profileEvent/event/MobileTransferEvent/index.tsx
 msgid "Holder changed from<0><1/></0> to <2><3/></2>"
 msgstr "Holder changed from<0><1/></0> to <2><3/></2>"
@@ -589,6 +599,10 @@ msgstr "Nounders' Reward"
 #: src/pages/Governance/index.tsx
 msgid "Nouns"
 msgstr "Nouns"
+
+#: src/components/NavBar/index.tsx
+msgid "Nouns & Traits"
+msgstr "Nouns & Traits"
 
 #: src/components/NounInfoRowHolder/index.tsx
 msgid "Nouns Auction House"
@@ -1009,6 +1023,10 @@ msgstr "View on Etherscan"
 #: src/components/Bid/index.tsx
 msgid "Vote for the next Noun"
 msgstr "Vote for the next Noun"
+
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
+msgid "Vote history"
+msgstr "Vote history"
 
 #: src/components/VoteModal/index.tsx
 msgid "Vote on Prop {0}"
