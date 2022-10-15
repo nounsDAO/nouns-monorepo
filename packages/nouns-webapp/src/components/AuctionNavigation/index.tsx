@@ -17,7 +17,7 @@ const AuctionNavigation: React.FC<{
   const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
   const onDisplayAuctionNounId = onDisplayAuction?.nounId.toNumber();
 
-  // Page through Nouns via keyboard
+  // Page through NounsBR via keyboard
   // handle what happens on key press
   const handleKeyPress = useCallback(
     event => {

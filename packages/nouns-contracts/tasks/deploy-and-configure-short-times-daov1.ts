@@ -55,7 +55,7 @@ task(
     types.int,
   )
   .setAction(async (args, { run }) => {
-    // Deploy the Nouns DAO contracts and return deployment information
+    // Deploy the NounsBR DAO contracts and return deployment information
     const contracts = await run('deploy-short-times-daov1', args);
 
     // Verify the contracts on Etherscan
@@ -80,7 +80,7 @@ task(
     );
 
     // Optionally kick off the first auction and transfer ownership of the auction house
-    // to the Nouns DAO executor.
+    // to the NounsBR DAO executor.
     if (args.startAuction) {
       const auctionHouse = contracts.NounsAuctionHouse.instance.attach(
         contracts.NounsAuctionHouseProxy.address,

@@ -66,13 +66,13 @@ export function formatNewGovernanceProposalText(proposal: Proposal) {
 }
 
 export function formatUpdatedGovernanceProposalStatusText(proposal: Proposal) {
-  return `Nouns DAO proposal #${proposal.id} (${extractProposalTitle(
+  return `NounsBR DAO proposal #${proposal.id} (${extractProposalTitle(
     proposal,
   )}) has changed to status: ${proposal.status.toLocaleLowerCase()}`;
 }
 
 export function formatProposalAtRiskOfExpiryText(proposal: Proposal) {
-  return `Nouns DAO proposal #${proposal.id} (${extractProposalTitle(
+  return `NounsBR DAO proposal #${proposal.id} (${extractProposalTitle(
     proposal,
   )}) expires in less than two days. Please execute it immediately!`;
 }

@@ -114,7 +114,7 @@ contract NounsDescriptorV2Test is Test {
                                 '{"name":"',
                                 'Noun 42',
                                 '", "description":"',
-                                'Noun 42 is a member of the Nouns DAO',
+                                'Noun 42 is a member of the NounsBR DAO',
                                 '", "image": "',
                                 'data:image/svg+xml;base64,',
                                 Base64.encode(bytes('mock svg')),

@@ -37,7 +37,7 @@ task('update-configs-daov2', 'Write the deployed addresses to the SDK and subgra
       } catch {
         console.log('Failed to re-build `@nouns/sdk`. Please rebuild manually.');
       }
-      console.log('Addresses written to the Nouns SDK.');
+      console.log('Addresses written to the NounsBR SDK.');
 
       // Generate subgraph config
       const configName = `${network}-fork`;

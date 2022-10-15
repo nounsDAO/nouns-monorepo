@@ -61,7 +61,7 @@ const ByLineHoverCard: React.FC<ByLineHoverCardProps> = props => {
             </Trans>
           ) : (
             <Trans>
-              <span>Delegated Nouns: </span>
+              <span>Delegated NounsBR: </span>
             </Trans>
           )}
 

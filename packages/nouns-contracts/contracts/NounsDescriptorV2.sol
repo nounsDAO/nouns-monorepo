@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title The Nouns NFT descriptor
+/// @title The NounsBR NFT descriptor
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -395,7 +395,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     }
 
     /**
-     * @notice Given a token ID and seed, construct a token URI for an official Nouns DAO noun.
+     * @notice Given a token ID and seed, construct a token URI for an official NounsBR DAO noun.
      * @dev The returned value may be a base64 encoded data URI or an API URL.
      */
     function tokenURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view override returns (string memory) {
@@ -406,12 +406,12 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     }
 
     /**
-     * @notice Given a token ID and seed, construct a base64 encoded data URI for an official Nouns DAO noun.
+     * @notice Given a token ID and seed, construct a base64 encoded data URI for an official NounsBR DAO noun.
      */
     function dataURI(uint256 tokenId, INounsSeeder.Seed memory seed) public view override returns (string memory) {
         string memory nounId = tokenId.toString();
-        string memory name = string(abi.encodePacked('Noun ', nounId));
-        string memory description = string(abi.encodePacked('Noun ', nounId, ' is a member of the Nouns DAO'));
+        string memory name = string(abi.encodePacked('NounBR ', nounId));
+        string memory description = string(abi.encodePacked('NounBR ', nounId, ' is a member of the NounsBR DAO'));
 
         return genericDataURI(name, description, seed);
     }

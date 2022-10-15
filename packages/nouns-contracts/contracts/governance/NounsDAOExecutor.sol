@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 
-/// @title The Nouns DAO executor and treasury
+/// @title The NounsBR DAO executor and treasury
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -26,7 +26,7 @@
 //
 // MODIFICATIONS
 // NounsDAOExecutor.sol modifies Timelock to use Solidity 0.8.x receive(), fallback(), and built-in over/underflow protection
-// This contract acts as executor of Nouns DAO governance and its treasury, so it has been modified to accept ETH.
+// This contract acts as executor of NounsBR DAO governance and its treasury, so it has been modified to accept ETH.
 
 pragma solidity ^0.8.6;
 

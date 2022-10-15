@@ -54,7 +54,7 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
       <WalletButton
         onClick={() => {
           const walletlink = new WalletLinkConnector({
-            appName: 'Nouns.WTF',
+            appName: 'NounsBR.WTF',
             appLogoUrl: 'https://nouns.wtf/static/media/logo.cdea1650.svg',
             url: config.app.jsonRpcUri,
             supportedChainIds,

@@ -87,7 +87,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
               <Trans>
                 The Quorum (minimum number of For votes required to pass a proposal) is set as a
                 function of the number of Against votes a proposal has recieved. It increases
-                quadratically as a function of the % of Nouns voting against a prop, varying between
+                quadratically as a function of the % of NounsBR voting against a prop, varying between
                 Min Quorum and Max Quorum.
               </Trans>
             ) : (
@@ -102,7 +102,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
           {/* Mobile - no graph content */}
           <div className={clsx(responsiveUiUtilsClasses.mobileOnly, classes.mobileQuorumWrapper)}>
             <div className={classes.mobileQuorumInfo}>
-              <span>Min Quorum:</span> {Math.floor((minQuorumBps * totalNounSupply) / 10_000)} Nouns
+              <span>Min Quorum:</span> {Math.floor((minQuorumBps * totalNounSupply) / 10_000)} NounsBR
             </div>
 
             <div className={classes.mobileQuorumInfo}>
@@ -110,11 +110,11 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
               {Math.floor(
                 (Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) * totalNounSupply) / 10_000,
               )}{' '}
-              Nouns
+              NounsBR
             </div>
 
             <div className={classes.mobileQuorumInfo}>
-              <span>Max Quorum:</span> {Math.floor((maxQuorumBps * totalNounSupply) / 10_000)} Nouns
+              <span>Max Quorum:</span> {Math.floor((maxQuorumBps * totalNounSupply) / 10_000)} NounsBR
             </div>
           </div>
 
@@ -123,7 +123,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
             <div className={classes.graphWrapper}>
               {/* Y-Axis label */}
               <div className={classes.yAxisText}>
-                <Trans>Required % of Nouns to Pass</Trans>
+                <Trans>Required % of NounsBR to Pass</Trans>
               </div>
 
               {/* Inner graph container */}
@@ -167,7 +167,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                       x={470 + 10}
                       y={PLOTTING_CONSTANTS.height - 10}
                     >
-                      {linearToConstantCrossoverBPS / 100}% of Nouns Against
+                      {linearToConstantCrossoverBPS / 100}% of NounsBR Against
                     </text>
                   )}
                   {/* Vertical Line indicating against BPS */}
@@ -190,9 +190,9 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                   />
                   <circle cy={y} cx={x} r="7" fill="var(--brand-gray-light-text)" />
                   <text x="20" y="24">
-                    Max Quorum: {Math.floor((maxQuorumBps * totalNounSupply) / 10_000)} Nouns{' '}
+                    Max Quorum: {Math.floor((maxQuorumBps * totalNounSupply) / 10_000)} NounsBR{' '}
                     <tspan fill="var(--brand-gray-light-text)">
-                      ({maxQuorumBps / 100}% of Nouns)
+                      ({maxQuorumBps / 100}% of NounsBR)
                     </tspan>
                   </text>
                   {Math.abs(y - 10 - PLOTTING_CONSTANTS.minQHeightPlotSpace) > 100 ? (
@@ -201,18 +201,18 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                         Min Quorum: {Math.floor((minQuorumBps * totalNounSupply) / 10_000)}{' '}
                         {Math.floor((minQuorumBps * totalNounSupply) / 10_000) === 1
                           ? 'Noun'
-                          : 'Nouns'}{' '}
+                          : 'NounsBR'}{' '}
                         <tspan fill="var(--brand-gray-light-text)">
-                          ({minQuorumBps / 100}% of Nouns)
+                          ({minQuorumBps / 100}% of NounsBR)
                         </tspan>
                       </text>
                     </>
                   ) : (
                     <>
                       <text x="550" y="280">
-                        Min Quorum: {Math.floor((minQuorumBps * totalNounSupply) / 10_000)} Nouns{' '}
+                        Min Quorum: {Math.floor((minQuorumBps * totalNounSupply) / 10_000)} NounsBR{' '}
                         <tspan fill="var(--brand-gray-light-text)">
-                          ({minQuorumBps / 100}% of Nouns)
+                          ({minQuorumBps / 100}% of NounsBR)
                         </tspan>
                       </text>
                     </>
@@ -220,7 +220,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                   {againstVotesBps >= 400 && againstVotesAbs >= maxQuorumBps && (
                     <text x={10} y={y - 10} fill="var(--brand-gray-light-text)">
                       {Math.floor(Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) / 100)}% of
-                      Nouns
+                      NounsBR
                     </text>
                   )}
                   {againstVotesBps > 4000 ? (
@@ -234,7 +234,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                           10_000,
                       )}{' '}
                       <tspan fill="var(--brand-gray-light-text)">
-                        ({againstVotesAbs} {againstVotesAbs === 1 ? 'Noun' : 'Nouns'} Currently
+                        ({againstVotesAbs} {againstVotesAbs === 1 ? 'Noun' : 'NounsBR'} Currently
                         Against)
                       </tspan>
                     </text>
@@ -249,14 +249,14 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                           10_000,
                       )}{' '}
                       <tspan fill="var(--brand-gray-light-text)">
-                        ({againstVotesAbs} {againstVotesAbs === 1 ? 'Noun' : 'Nouns'} Currently
+                        ({againstVotesAbs} {againstVotesAbs === 1 ? 'Noun' : 'NounsBR'} Currently
                         Against)
                       </tspan>
                     </text>
                   )}
                   {againstVotesAbs > 0 && (
                     <text x={x + (x < 712 ? 10 : -110)} y={310} fill="var(--brand-gray-light-text)">
-                      {Math.floor(againstVotesBps / 100)}% of Nouns
+                      {Math.floor(againstVotesBps / 100)}% of NounsBR
                     </text>
                   )}
                   {againstVotesBps >= 0.1 * maxQuorumBps && (
@@ -270,7 +270,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
             </div>
 
             <div className={classes.xAxisText}>
-              <Trans>% of Nouns Currently Against</Trans>
+              <Trans>% of NounsBR Currently Against</Trans>
             </div>
           </div>
 

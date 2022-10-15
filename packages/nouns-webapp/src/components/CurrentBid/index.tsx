@@ -13,7 +13,7 @@ import { Trans } from '@lingui/macro';
 export const BID_N_A = 'n/a';
 
 /**
- * Special Bid type for not applicable auctions (Nounder Nouns)
+ * Special Bid type for not applicable auctions (Nounder NounsBR)
  */
 type BidNa = typeof BID_N_A;
 

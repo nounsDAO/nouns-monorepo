@@ -52,7 +52,7 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
     types.int,
   )
   .setAction(async (args, { run }) => {
-    // Deploy the Nouns DAO contracts and return deployment information
+    // Deploy the NounsBR DAO contracts and return deployment information
     const contracts = await run('deploy', args);
 
     // Verify the contracts on Etherscan
@@ -77,7 +77,7 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
     );
 
     // Optionally kick off the first auction and transfer ownership of the auction house
-    // to the Nouns DAO executor.
+    // to the NounsBR DAO executor.
     if (args.startAuction) {
       const auctionHouse = contracts.NounsAuctionHouse.instance.attach(
         contracts.NounsAuctionHouseProxy.address,

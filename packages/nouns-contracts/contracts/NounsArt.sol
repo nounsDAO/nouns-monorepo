@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title The Nouns art storage contract
+/// @title The NounsBR art storage contract
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -22,7 +22,7 @@ import { SSTORE2 } from './libs/SSTORE2.sol';
 import { IInflator } from './interfaces/IInflator.sol';
 
 contract NounsArt is INounsArt {
-    /// @notice Current Nouns Descriptor address
+    /// @notice Current NounsBR Descriptor address
     address public override descriptor;
 
     /// @notice Current inflator address

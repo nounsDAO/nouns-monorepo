@@ -22,7 +22,7 @@ import {
 chai.use(solidity);
 const { expect } = chai;
 
-describe('Nouns Governance', () => {
+describe('NounsBR Governance', () => {
   let snapshotId: number;
   let token: NounsToken;
   let tokenCallFromGuy: NounsToken;
@@ -66,7 +66,7 @@ describe('Nouns Governance', () => {
       NounsDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
     );
 
-    domain = Domain('Nouns', token.address, await chainId());
+    domain = Domain('NounsBR', token.address, await chainId());
 
     tokenCallFromGuy = token.connect(signers.account0);
     tokenCallFromDeployer = token;

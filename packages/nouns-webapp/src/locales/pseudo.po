@@ -14,11 +14,11 @@ msgstr ""
 "Plural-Forms: \n"
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
-msgid "% of Nouns Currently Against"
+msgid "% of NounsBR Currently Against"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:"
+msgid "'Nounders' are the group of ten builders that initiated NounsBR. Here are the Nounders:"
 msgstr ""
 
 #: src/components/ByLineHoverCard/index.tsx
@@ -60,7 +60,7 @@ msgid "<0>Delegated Noun: </0>"
 msgstr ""
 
 #: src/components/ByLineHoverCard/index.tsx
-msgid "<0>Delegated Nouns: </0>"
+msgid "<0>Delegated NounsBR: </0>"
 msgstr ""
 
 #: src/components/ProposalHeader/index.tsx
@@ -137,11 +137,11 @@ msgid "All Noun auction proceeds are sent to the"
 msgstr ""
 
 #: src/pages/Nounders/index.tsx
-msgid "All Noun auction proceeds are sent to the Nouns DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
+msgid "All Noun auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "All Nouns are members of Nouns DAO."
+msgid "All NounsBR are members of NounsBR DAO."
 msgstr ""
 
 #: src/pages/CreateProposal/index.tsx
@@ -178,7 +178,7 @@ msgid "Background"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "Because 100% of Noun auction proceeds are sent to Nouns DAO, Nounders have chosen to compensate themselves with Nouns. Every 10th Noun for the first 5 years of the project (Noun ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
+msgid "Because 100% of Noun auction proceeds are sent to NounsBR DAO, Nounders have chosen to compensate themselves with NounsBR. Every 10th Noun for the first 5 years of the project (Noun ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
 msgstr ""
 
 #: src/components/Bid/index.tsx
@@ -272,7 +272,7 @@ msgid "Connect your wallet"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "Consequently, the Nouns Foundation anticipates being the steward of the veto power until Nouns DAO is ready to implement an alternative, and therefore wishes to clarify the conditions under which it would exercise this power."
+msgid "Consequently, the NounsBR Foundation anticipates being the steward of the veto power until NounsBR DAO is ready to implement an alternative, and therefore wishes to clarify the conditions under which it would exercise this power."
 msgstr ""
 
 #: src/components/CreateProposalButton/index.tsx
@@ -455,7 +455,7 @@ msgid "For"
 msgstr ""
 
 #: src/components/NounderNounContent/index.tsx
-msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
+msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
 msgstr ""
 
 #: src/components/Footer/index.tsx
@@ -471,7 +471,7 @@ msgid "Function (Optional)"
 msgstr ""
 
 #: src/pages/Playground/index.tsx
-msgid "Generate Nouns"
+msgid "Generate NounsBR"
 msgstr ""
 
 #: src/pages/Playground/index.tsx
@@ -528,7 +528,7 @@ msgid "Learn more"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
+msgid "Learn more below, or start creating NounsBR off-chain using the {playgroundLink}."
 msgstr ""
 
 #: src/components/NounInfoRowHolder/index.tsx
@@ -552,7 +552,7 @@ msgid "No arguments required"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "No explicit rules exist for attribute scarcity; all Nouns are equally rare."
+msgid "No explicit rules exist for attribute scarcity; all NounsBR are equally rare."
 msgstr ""
 
 #: src/components/Proposals/index.tsx
@@ -586,7 +586,7 @@ msgid "Noun {0}"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "Nounder distributions don't interfere with the cadence of 24 hour auctions. Nouns are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available Noun ID."
+msgid "Nounder distributions don't interfere with the cadence of 24 hour auctions. NounsBR are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available Noun ID."
 msgstr ""
 
 #: src/components/Documentation/index.tsx
@@ -594,7 +594,7 @@ msgid "Nounder's Reward"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "Nounders receive rewards in the form of Nouns (10% of supply for first 5 years)."
+msgid "Nounders receive rewards in the form of NounsBR (10% of supply for first 5 years)."
 msgstr ""
 
 #: src/components/Documentation/index.tsx
@@ -606,49 +606,49 @@ msgid "Nounders' Reward"
 msgstr ""
 
 #: src/pages/Governance/index.tsx
-msgid "Nouns"
+msgid "NounsBR"
 msgstr ""
 
 #: src/components/NounInfoRowHolder/index.tsx
-msgid "Nouns Auction House"
+msgid "NounsBR Auction House"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
 #: src/components/NounderNounContent/index.tsx
 #: src/pages/Governance/index.tsx
-msgid "Nouns DAO"
+msgid "NounsBR DAO"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "Nouns DAO uses a fork of {compoundGovLink}."
+msgid "NounsBR DAO uses a fork of {compoundGovLink}."
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "Nouns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the Nouns ecosystem. The Nouns DAO treasury receives 100% of ETH proceeds from daily Noun auctions. Each Noun is an irrevocable member of Nouns DAO and entitled to one vote in all governance matters. Noun votes are non-transferable (if you sell your Noun the vote goes with it) but delegatable, which means you can assign your vote to someone else as long as you own your Noun."
+msgid "NounsBR DAO utilizes a fork of {compoundGovLink} and is the main governing body of the NounsBR ecosystem. The NounsBR DAO treasury receives 100% of ETH proceeds from daily Noun auctions. Each Noun is an irrevocable member of NounsBR DAO and entitled to one vote in all governance matters. Noun votes are non-transferable (if you sell your Noun the vote goes with it) but delegatable, which means you can assign your vote to someone else as long as you own your Noun."
 msgstr ""
 
 #: src/pages/Playground/index.tsx
-msgid "Nouns Protocol"
+msgid "NounsBR Protocol"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community."
+msgid "NounsBR are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, NounsBR attempt to bootstrap identity, community, governance, and a treasury that can be used by the community."
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "Nouns are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules governing Noun trait scarcity, which makes all Nouns equally rare. As of this writing, Nouns are made up of:"
+msgid "NounsBR are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules governing Noun trait scarcity, which makes all NounsBR equally rare. As of this writing, NounsBR are made up of:"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "Nouns are stored directly on Ethereum and do not utilize pointers to other networks such as IPFS. This is possible because Noun parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression."
+msgid "NounsBR are stored directly on Ethereum and do not utilize pointers to other networks such as IPFS. This is possible because Noun parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression."
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "Nouns artwork is in the {publicDomainLink}."
+msgid "NounsBR artwork is in the {publicDomainLink}."
 msgstr ""
 
 #: src/pages/Governance/index.tsx
-msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
+msgid "NounsBR govern <0>NounsBR DAO</0>. NounsBR can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
 msgstr ""
 
 #: src/components/DelegationCandidateInfo/index.tsx
@@ -676,7 +676,7 @@ msgid "Only 32x32 PNG images are accepted"
 msgstr ""
 
 #: src/components/ProposalHeader/index.tsx
-msgid "Only Nouns you owned or were delegated to you before {0} are eligible to vote."
+msgid "Only NounsBR you owned or were delegated to you before {0} are eligible to vote."
 msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx
@@ -773,7 +773,7 @@ msgid "Reason (Optional)"
 msgstr ""
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
-msgid "Required % of Nouns to Pass"
+msgid "Required % of NounsBR to Pass"
 msgstr ""
 
 #: src/components/LanguageSelectionModal/index.tsx
@@ -882,7 +882,7 @@ msgid "Thank you for voting."
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "The Noun Seeder contract is used to determine Noun traits during the minting process. The seeder contract can be replaced to allow for future trait generation algorithm upgrades. Additionally, it can be locked by the Nouns DAO to prevent any future updates. Currently, Noun traits are determined using pseudo-random number generation:"
+msgid "The Noun Seeder contract is used to determine Noun traits during the minting process. The seeder contract can be replaced to allow for future trait generation algorithm upgrades. Additionally, it can be locked by the NounsBR DAO to prevent any future updates. Currently, Noun traits are determined using pseudo-random number generation:"
 msgstr ""
 
 #: src/pages/Nounders/index.tsx
@@ -894,19 +894,19 @@ msgid "The Nounders reward is intended as compensation for our pre and post-laun
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "The Nouns Auction Contract will act as a self-sufficient Noun generation and distribution mechanism, auctioning one Noun every 24 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the Nouns DAO treasury, where they are governed by Noun owners."
+msgid "The NounsBR Auction Contract will act as a self-sufficient Noun generation and distribution mechanism, auctioning one Noun every 24 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the NounsBR DAO treasury, where they are governed by Noun owners."
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "The Nouns Foundation considers the veto an emergency power that should not be exercised in the normal course of business. The Nouns Foundation will veto proposals that introduce non-trivial legal or existential risks to the Nouns DAO or the Nouns Foundation, including (but not necessarily limited to) proposals that:"
+msgid "The NounsBR Foundation considers the veto an emergency power that should not be exercised in the normal course of business. The NounsBR Foundation will veto proposals that introduce non-trivial legal or existential risks to the NounsBR DAO or the NounsBR Foundation, including (but not necessarily limited to) proposals that:"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "The Nouns community has undertaken a preliminary exploration of proposal veto alternatives (‘rage quit’ etc.), but it is now clear that this is a difficult problem that will require significantly more research, development and testing before a satisfactory solution can be implemented."
+msgid "The NounsBR community has undertaken a preliminary exploration of proposal veto alternatives (‘rage quit’ etc.), but it is now clear that this is a difficult problem that will require significantly more research, development and testing before a satisfactory solution can be implemented."
 msgstr ""
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
-msgid "The Quorum (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. It increases quadratically as a function of the % of Nouns voting against a prop, varying between Min Quorum and Max Quorum."
+msgid "The Quorum (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. It increases quadratically as a function of the % of NounsBR voting against a prop, varying between Min Quorum and Max Quorum."
 msgstr ""
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
@@ -922,11 +922,11 @@ msgid "The playground was built using the {nounsProtocolLink}. Noun's traits are
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "The proposal veto right was initially envisioned as a temporary solution to the problem of ‘51% attacks’ on the Nouns DAO treasury. While Nounders initially believed that a healthy distribution of Nouns would be sufficient protection for the DAO, a more complete understanding of the incentives and risks has led to general consensus within the Nounders, the Nouns Foundation, and the wider community that a more robust game-theoretic solution should be implemented before the right is removed."
+msgid "The proposal veto right was initially envisioned as a temporary solution to the problem of ‘51% attacks’ on the NounsBR DAO treasury. While Nounders initially believed that a healthy distribution of NounsBR would be sufficient protection for the DAO, a more complete understanding of the incentives and risks has led to general consensus within the Nounders, the NounsBR Foundation, and the wider community that a more robust game-theoretic solution should be implemented before the right is removed."
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "The treasury is controlled exclusively by Nouns via governance."
+msgid "The treasury is controlled exclusively by NounsBR via governance."
 msgstr ""
 
 #: src/components/Documentation/index.tsx
@@ -942,7 +942,7 @@ msgid "This Noun has no activity, since it was just created. Check back soon!"
 msgstr ""
 
 #: src/pages/Governance/index.tsx
-msgid "This treasury exists for <0>Nouns DAO</0> participants to allocate resources for the long-term growth and prosperity of the Nouns project."
+msgid "This treasury exists for <0>NounsBR DAO</0> participants to allocate resources for the long-term growth and prosperity of the NounsBR project."
 msgstr ""
 
 #: src/pages/Vote/index.tsx
@@ -1070,7 +1070,7 @@ msgid "Voted with<0>{numVotesForProp}</0>Noun"
 msgstr ""
 
 #: src/components/DelegateHoverCard/index.tsx
-msgid "Voted with<0>{numVotesForProp}</0>Nouns"
+msgid "Voted with<0>{numVotesForProp}</0>NounsBR"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
@@ -1088,7 +1088,7 @@ msgid "What now?"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
+msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction NounsBR as long as Ethereum is operational and there are interested bidders."
 msgstr ""
 
 #: src/components/DelegationCandidateInfo/index.tsx
@@ -1157,7 +1157,7 @@ msgid "You've already delegated to this address"
 msgstr ""
 
 #: src/pages/Playground/index.tsx
-msgid "You've generated {0} years worth of Nouns"
+msgid "You've generated {0} years worth of NounsBR"
 msgstr ""
 
 #: src/components/VoteModal/index.tsx

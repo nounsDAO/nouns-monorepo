@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 
-/// @title The Nouns DAO logic version 1
+/// @title The NounsBR DAO logic version 1
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -64,7 +64,7 @@ import './NounsDAOInterfaces.sol';
 
 contract NounsDAOLogicV1 is NounsDAOStorageV1, NounsDAOEvents {
     /// @notice The name of this contract
-    string public constant name = 'Nouns DAO';
+    string public constant name = 'NounsBR DAO';
 
     /// @notice The minimum setable proposal threshold
     uint256 public constant MIN_PROPOSAL_THRESHOLD_BPS = 1; // 1 basis point or 0.01%

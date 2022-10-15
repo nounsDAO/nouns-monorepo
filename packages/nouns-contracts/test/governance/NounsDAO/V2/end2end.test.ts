@@ -93,7 +93,7 @@ async function deployV1() {
   // nonce ++: populate Descriptor
   // nonce ++: set ownable contracts owner to timelock
 
-  // 1. DEPLOY Nouns token
+  // 1. DEPLOY NounsBR token
   nounsToken = await deployNounsToken(
     deployer,
     noundersDAO.address,
@@ -155,7 +155,7 @@ async function deployV1() {
   // 7b. CAST Delegator as Delegate
   gov = NounsDaoLogicV1Factory.connect(nounsDAOProxy.address, deployer);
 
-  // 8. SET Nouns owner to NounsDAOExecutor
+  // 8. SET NounsBR owner to NounsDAOExecutor
   await nounsToken.transferOwnership(timelock.address);
   // 9. SET Descriptor owner to NounsDAOExecutor
   await descriptor.transferOwnership(timelock.address);

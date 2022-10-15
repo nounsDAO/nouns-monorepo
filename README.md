@@ -1,10 +1,10 @@
 # nouns-monorepo
 
-Nouns DAO is a generative avatar art collective run by a group of crypto misfits.
+NounsBR DAO is a generative avatar art collective run by a group of crypto misfits.
 
 ## Contributing
 
-If you're interested in contributing to Nouns DAO repos we're excited to have you. Please discuss any changes in `#developers` in [discord.gg/nouns](https://discord.gg/nouns) prior to contributing to reduce duplication of effort and in case there is any prior art that may be useful to you.
+If you're interested in contributing to NounsBR DAO repos we're excited to have you. Please discuss any changes in `#developers` in [discord.gg/nouns](https://discord.gg/nouns) prior to contributing to reduce duplication of effort and in case there is any prior art that may be useful to you.
 
 ## Packages
 
@@ -22,11 +22,11 @@ The [nouns bots](packages/nouns-bots) package contains a bot that monitors for c
 
 ### nouns-contracts
 
-The [nouns contracts](packages/nouns-contracts) is the suite of Solidity contracts powering Nouns DAO.
+The [nouns contracts](packages/nouns-contracts) is the suite of Solidity contracts powering NounsBR DAO.
 
 ### nouns-sdk
 
-The [nouns sdk](packages/nouns-sdk) exposes the Nouns contract addresses, ABIs, and instances as well as image encoding and SVG building utilities.
+The [nouns sdk](packages/nouns-sdk) exposes the NounsBR contract addresses, ABIs, and instances as well as image encoding and SVG building utilities.
 
 ### nouns-subgraph
 

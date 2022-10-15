@@ -188,7 +188,7 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
           const actual = deployment.NounsDAOProxy.address.toLowerCase();
           if (expected !== actual) {
             throw new Error(
-              `Unexpected Nouns DAO proxy address. Expected: ${expected}. Actual: ${actual}.`,
+              `Unexpected NounsBR DAO proxy address. Expected: ${expected}. Actual: ${actual}.`,
             );
           }
         },

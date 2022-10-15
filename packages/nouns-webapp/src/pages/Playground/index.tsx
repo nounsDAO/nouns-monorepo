@@ -34,7 +34,7 @@ interface PendingCustomTrait {
 
 const nounsProtocolLink = (
   <Link
-    text={<Trans>Nouns Protocol</Trans>}
+    text={<Trans>NounsBR Protocol</Trans>}
     url="https://www.notion.so/Noun-Protocol-32e4f0bf74fe433e927e2ea35e52a507"
     leavesPage={true}
   />
@@ -286,7 +286,7 @@ const Playground: React.FC = () => {
                 }}
                 className={classes.primaryBtn}
               >
-                <Trans>Generate Nouns</Trans>
+                <Trans>Generate NounsBR</Trans>
               </Button>
             </Col>
             <Row>
@@ -376,7 +376,7 @@ const Playground: React.FC = () => {
               <Trans>
                 You've generated{' '}
                 {i18n.number(parseInt(nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'))} years
-                worth of Nouns
+                worth of NounsBR
               </Trans>
             </p>
           </Col>

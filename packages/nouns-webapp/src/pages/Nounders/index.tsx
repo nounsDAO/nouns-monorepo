@@ -145,8 +145,8 @@ const NoundersPage = () => {
         </h3>
         <p style={{ textAlign: 'justify' }}>
           <Trans>
-            All Noun auction proceeds are sent to the Nouns DAO. For this reason, we, the project's
-            founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th noun
+            All Noun auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's
+            founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th noun
             for the first 5 years of the project will be sent to our multisig (5/10), where it will
             be vested and distributed to individual Nounders.
           </Trans>

@@ -210,7 +210,7 @@ export const deployGovAndToken = async (
 
   // Deploy Delegate
   const { address: govDelegateAddress } = await new NounsDaoLogicV1Factory(deployer).deploy();
-  // Deploy Nouns token
+  // Deploy NounsBR token
   const token = await deployNounsToken(deployer);
 
   // Deploy Delegator
@@ -254,7 +254,7 @@ export const deployGovV2AndToken = async (
 
   // Deploy Delegate
   const { address: govDelegateAddress } = await new NounsDaoLogicV2Factory(deployer).deploy();
-  // Deploy Nouns token
+  // Deploy NounsBR token
   const token = await deployNounsToken(deployer);
 
   // Deploy Delegator
@@ -279,9 +279,9 @@ export const deployGovV2AndToken = async (
 };
 
 /**
- * Return a function used to mint `amount` Nouns on the provided `token`
- * @param token The Nouns ERC721 token
- * @param amount The number of Nouns to mint
+ * Return a function used to mint `amount` NounsBR on the provided `token`
+ * @param token The NounsBR ERC721 token
+ * @param amount The number of NounsBR to mint
  */
 export const MintNouns = (
   token: NounsToken,

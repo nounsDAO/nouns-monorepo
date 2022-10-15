@@ -19,11 +19,11 @@ msgstr ""
 "Last-Translator: \n"
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
-msgid "% of Nouns Currently Against"
+msgid "% of NounsBR Currently Against"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:"
+msgid "'Nounders' are the group of ten builders that initiated NounsBR. Here are the Nounders:"
 msgstr "「Nounders」とはNounsの創業に携わった10人の創業者のことであり、以下の人物で構成されています："
 
 #: src/components/ByLineHoverCard/index.tsx
@@ -65,7 +65,7 @@ msgid "<0>Delegated Noun: </0>"
 msgstr "委任Noun: "
 
 #: src/components/ByLineHoverCard/index.tsx
-msgid "<0>Delegated Nouns: </0>"
+msgid "<0>Delegated NounsBR: </0>"
 msgstr "委任Noun: "
 
 #: src/components/ProposalHeader/index.tsx
@@ -142,11 +142,11 @@ msgid "All Noun auction proceeds are sent to the"
 msgstr "すべてのNounオークションの収益は、"
 
 #: src/pages/Nounders/index.tsx
-msgid "All Noun auction proceeds are sent to the Nouns DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
-msgstr "Nounオークションの収益は全て Nouns DAOに送られます。その為、我々、プロジェクトの創設者 (Nounders) はNounsで自らを補償することに決めました。 プロジェクトの最初の5年間の間は、毎回10体目のNounがマルチシグ(5/10) に送られた後、個々のナウンダーズに与えられ、配布されます。"
+msgid "All Noun auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
+msgstr "Nounオークションの収益は全て NounsBR DAOに送られます。その為、我々、プロジェクトの創設者 (Nounders) はNounsで自らを補償することに決めました。 プロジェクトの最初の5年間の間は、毎回10体目のNounがマルチシグ(5/10) に送られた後、個々のナウンダーズに与えられ、配布されます。"
 
 #: src/components/Documentation/index.tsx
-msgid "All Nouns are members of Nouns DAO."
+msgid "All NounsBR are members of NounsBR DAO."
 msgstr "Nounsは全員Nouns DAOの会員です。"
 
 #: src/pages/CreateProposal/index.tsx
@@ -183,7 +183,7 @@ msgid "Background"
 msgstr "背景"
 
 #: src/components/Documentation/index.tsx
-msgid "Because 100% of Noun auction proceeds are sent to Nouns DAO, Nounders have chosen to compensate themselves with Nouns. Every 10th Noun for the first 5 years of the project (Noun ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
+msgid "Because 100% of Noun auction proceeds are sent to NounsBR DAO, Nounders have chosen to compensate themselves with NounsBR. Every 10th Noun for the first 5 years of the project (Noun ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
 msgstr "Nounオークションの収益の100%がNouns DAOに送られるため、Nounderは自分達をNounsで補償することに決めました。プロジェクトの最初の5年間の間、毎回10番目のNoun (Noun ID #0, #10, #20, #30 など) が自動的にNoundersのマルチシグに送られ、プロジェクトの創設メンバー達に与えられて、共有されます。"
 
 #: src/components/Bid/index.tsx
@@ -277,7 +277,7 @@ msgid "Connect your wallet"
 msgstr "ウォレットに接続してください"
 
 #: src/components/Documentation/index.tsx
-msgid "Consequently, the Nouns Foundation anticipates being the steward of the veto power until Nouns DAO is ready to implement an alternative, and therefore wishes to clarify the conditions under which it would exercise this power."
+msgid "Consequently, the NounsBR Foundation anticipates being the steward of the veto power until NounsBR DAO is ready to implement an alternative, and therefore wishes to clarify the conditions under which it would exercise this power."
 msgstr ""
 
 #: src/components/CreateProposalButton/index.tsx
@@ -460,7 +460,7 @@ msgid "For"
 msgstr "賛成"
 
 #: src/components/NounderNounContent/index.tsx
-msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
+msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
 msgstr "その為、我々、プロジェクトの創設者 (Nounders) はNounsで自らを補償することに決めました。 プロジェクトの最初の5年間の間は、毎回10体目のNounがマルチシグ(5/10) に送られた後、個々のナウンダーズに与えられ、配布されます。"
 
 #: src/components/Footer/index.tsx
@@ -476,7 +476,7 @@ msgid "Function (Optional)"
 msgstr "関数 (任意)"
 
 #: src/pages/Playground/index.tsx
-msgid "Generate Nouns"
+msgid "Generate NounsBR"
 msgstr "Nounsを作る"
 
 #: src/pages/Playground/index.tsx
@@ -533,7 +533,7 @@ msgid "Learn more"
 msgstr "詳細はこちら"
 
 #: src/components/Documentation/index.tsx
-msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
+msgid "Learn more below, or start creating NounsBR off-chain using the {playgroundLink}."
 msgstr "詳しくは以下をご覧ください。また、{playgroundLink} を使いNounsのオフチェーンの作成をすることもできます。"
 
 #: src/components/NounInfoRowHolder/index.tsx
@@ -557,7 +557,7 @@ msgid "No arguments required"
 msgstr "引数は必要ありません"
 
 #: src/components/Documentation/index.tsx
-msgid "No explicit rules exist for attribute scarcity; all Nouns are equally rare."
+msgid "No explicit rules exist for attribute scarcity; all NounsBR are equally rare."
 msgstr "Nounsは全て等しく希少なため、属性の希少性についての明確なルールは存在しません。"
 
 #: src/components/Proposals/index.tsx
@@ -591,7 +591,7 @@ msgid "Noun {0}"
 msgstr "Noun {0}"
 
 #: src/components/Documentation/index.tsx
-msgid "Nounder distributions don't interfere with the cadence of 24 hour auctions. Nouns are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available Noun ID."
+msgid "Nounder distributions don't interfere with the cadence of 24 hour auctions. NounsBR are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available Noun ID."
 msgstr "Nounder配布により24時間オークションの頻度に影響が及ぶことはありません。 NounsはNounderのマルチシグに直接送られ、オークションは次の有効なNouns IDによって予定通り継続されます。"
 
 #: src/components/Documentation/index.tsx
@@ -599,7 +599,7 @@ msgid "Nounder's Reward"
 msgstr "Nounderへの報酬"
 
 #: src/components/Documentation/index.tsx
-msgid "Nounders receive rewards in the form of Nouns (10% of supply for first 5 years)."
+msgid "Nounders receive rewards in the form of NounsBR (10% of supply for first 5 years)."
 msgstr "Nounderには、Nounsという形で報酬が与えられます (最初の5年間は供給量の10％)。"
 
 #: src/components/Documentation/index.tsx
@@ -611,50 +611,50 @@ msgid "Nounders' Reward"
 msgstr "Nounderへの報酬"
 
 #: src/pages/Governance/index.tsx
-msgid "Nouns"
-msgstr "Nouns"
+msgid "NounsBR"
+msgstr "NounsBR"
 
 #: src/components/NounInfoRowHolder/index.tsx
-msgid "Nouns Auction House"
+msgid "NounsBR Auction House"
 msgstr "Nounsオークションハウス"
 
 #: src/components/Documentation/index.tsx
 #: src/components/NounderNounContent/index.tsx
 #: src/pages/Governance/index.tsx
-msgid "Nouns DAO"
-msgstr "Nouns DAO"
+msgid "NounsBR DAO"
+msgstr "NounsBR DAO"
 
 #: src/components/Documentation/index.tsx
-msgid "Nouns DAO uses a fork of {compoundGovLink}."
-msgstr "Nouns DAOは {compoundGovLink} のフォークを使用しています。"
+msgid "NounsBR DAO uses a fork of {compoundGovLink}."
+msgstr "NounsBR DAOは {compoundGovLink} のフォークを使用しています。"
 
 #: src/components/Documentation/index.tsx
-msgid "Nouns DAO utilizes a fork of {compoundGovLink} and is the main governing body of the Nouns ecosystem. The Nouns DAO treasury receives 100% of ETH proceeds from daily Noun auctions. Each Noun is an irrevocable member of Nouns DAO and entitled to one vote in all governance matters. Noun votes are non-transferable (if you sell your Noun the vote goes with it) but delegatable, which means you can assign your vote to someone else as long as you own your Noun."
-msgstr "Nouns DAOは {compoundGovLink} のフォークを利用しており、Nounsエコシステムの主要な統治機関です。毎日起こるNounオークションから得られるETHの収益の100％はNouns DAO トレジャリーにて受け取られています。各NounはNouns DAOの変更不可能なメンバーであり、すべてのガバナンスの問題で1票の投票権を有します。Nounの票は譲渡できませんが (Nounの売却にはそれに応じて票も移ります)、委任することができます。"
+msgid "NounsBR DAO utilizes a fork of {compoundGovLink} and is the main governing body of the NounsBR ecosystem. The NounsBR DAO treasury receives 100% of ETH proceeds from daily Noun auctions. Each Noun is an irrevocable member of NounsBR DAO and entitled to one vote in all governance matters. Noun votes are non-transferable (if you sell your Noun the vote goes with it) but delegatable, which means you can assign your vote to someone else as long as you own your Noun."
+msgstr "NounsBR DAOは {compoundGovLink} のフォークを利用しており、Nounsエコシステムの主要な統治機関です。毎日起こるNounオークションから得られるETHの収益の100％はNouns DAO トレジャリーにて受け取られています。各NounはNouns DAOの変更不可能なメンバーであり、すべてのガバナンスの問題で1票の投票権を有します。Nounの票は譲渡できませんが (Nounの売却にはそれに応じて票も移ります)、委任することができます。"
 
 #: src/pages/Playground/index.tsx
-msgid "Nouns Protocol"
+msgid "NounsBR Protocol"
 msgstr "Nounsプロトコル"
 
 #: src/components/Documentation/index.tsx
-msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community."
-msgstr "Nouns は、オンチェーン・アバターコミュニティの形成を改善するための実験的な試みです。{cryptopunksLink} などのプロジェクトがデジタルコミュニティとアイデンティティの構築を試みているのに対し、Nounsはアイデンティティ、コミュニティ、ガバナンス、そしてコミュニティが使用できるトレジャリーを構築することを試みています。"
+msgid "NounsBR are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, NounsBR attempt to bootstrap identity, community, governance, and a treasury that can be used by the community."
+msgstr "NounsBR は、オンチェーン・アバターコミュニティの形成を改善するための実験的な試みです。{cryptopunksLink} などのプロジェクトがデジタルコミュニティとアイデンティティの構築を試みているのに対し、Nounsはアイデンティティ、コミュニティ、ガバナンス、そしてコミュニティが使用できるトレジャリーを構築することを試みています。"
 
 #: src/components/Documentation/index.tsx
-msgid "Nouns are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules governing Noun trait scarcity, which makes all Nouns equally rare. As of this writing, Nouns are made up of:"
+msgid "NounsBR are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules governing Noun trait scarcity, which makes all NounsBR equally rare. As of this writing, NounsBR are made up of:"
 msgstr "Nounsは、イーサリアムのブロックハッシュに基づいてランダムに生成されます。Nounの特徴の希少性を管理する「if」ステートメントやその他のルールは存在しないため、すべてのNounが等しく希少となります。現時点では、Nounsは以下のもので構成されています："
 
 #: src/components/Documentation/index.tsx
-msgid "Nouns are stored directly on Ethereum and do not utilize pointers to other networks such as IPFS. This is possible because Noun parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression."
+msgid "NounsBR are stored directly on Ethereum and do not utilize pointers to other networks such as IPFS. This is possible because Noun parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression."
 msgstr "NounはEthereum上に直接保存されるため、IPFSのような他のネットワークへのポインタを利用することはありません。これは、Nounのパーツが可逆圧縮の一種であるカスタムのランレングス圧縮 (RLE) を使用してオンチェーンで圧縮・保存されていることから実現したものです。"
 
 #: src/components/Documentation/index.tsx
-msgid "Nouns artwork is in the {publicDomainLink}."
+msgid "NounsBR artwork is in the {publicDomainLink}."
 msgstr "Nounsのアートワークは {publicDomainLink} にあります。"
 
 #: src/pages/Governance/index.tsx
-msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
-msgstr "Nounsが統治する <0>Nouns DAO</0> 。Nounsは提案に対して投票したり、第三者に投票を委任することができますが、提案の提出には最低でも <1>{nounsRequired} {0}</1> 以上が必要です。"
+msgid "NounsBR govern <0>NounsBR DAO</0>. NounsBR can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
+msgstr "Nounsが統治する <0>NounsBR DAO</0> 。Nounsは提案に対して投票したり、第三者に投票を委任することができますが、提案の提出には最低でも <1>{nounsRequired} {0}</1> 以上が必要です。"
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Now has"
@@ -681,7 +681,7 @@ msgid "Only 32x32 PNG images are accepted"
 msgstr "32x32 PNG画像のみ受け付けています"
 
 #: src/components/ProposalHeader/index.tsx
-msgid "Only Nouns you owned or were delegated to you before {0} are eligible to vote."
+msgid "Only NounsBR you owned or were delegated to you before {0} are eligible to vote."
 msgstr "投票できるのは {0} 以前に所有していた、または委任されたNounsのみです。"
 
 #: src/components/NounProfileVoteRow/index.tsx
@@ -778,7 +778,7 @@ msgid "Reason (Optional)"
 msgstr "理由\"(任意)\""
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
-msgid "Required % of Nouns to Pass"
+msgid "Required % of NounsBR to Pass"
 msgstr ""
 
 #: src/components/LanguageSelectionModal/index.tsx
@@ -887,7 +887,7 @@ msgid "Thank you for voting."
 msgstr "投票ありがとうございます。"
 
 #: src/components/Documentation/index.tsx
-msgid "The Noun Seeder contract is used to determine Noun traits during the minting process. The seeder contract can be replaced to allow for future trait generation algorithm upgrades. Additionally, it can be locked by the Nouns DAO to prevent any future updates. Currently, Noun traits are determined using pseudo-random number generation:"
+msgid "The Noun Seeder contract is used to determine Noun traits during the minting process. The seeder contract can be replaced to allow for future trait generation algorithm upgrades. Additionally, it can be locked by the NounsBR DAO to prevent any future updates. Currently, Noun traits are determined using pseudo-random number generation:"
 msgstr "Nounシーダー契約は、ミントのプロセスでNounsの特徴を決定するために使用されます。シーダー契約は、今後の特徴生成アルゴリズムのアップグレードを可能にするために変更することができ、さらに、今後のアップデートを防ぐためにNouns DAOによってロックすることも可能です。現在、Nounsの特徴は擬似乱数生成を用い決められています。"
 
 #: src/pages/Nounders/index.tsx
@@ -899,19 +899,19 @@ msgid "The Nounders reward is intended as compensation for our pre and post-laun
 msgstr "Noundersの報酬は、プロジェクト開始前と開始後の貢献に対する対価として提供されるほか、プロジェクトが成熟するにつれ、ガバナンスに有意義に参加できるよう支援することも目的としています。Noundersは10人なので、5年後には各ナウンダーは最大でNounの供給量の1%を受け取ることができます。"
 
 #: src/components/Documentation/index.tsx
-msgid "The Nouns Auction Contract will act as a self-sufficient Noun generation and distribution mechanism, auctioning one Noun every 24 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the Nouns DAO treasury, where they are governed by Noun owners."
-msgstr "Nounsオークション契約は、Noun生成・分配の自律的なメカニズムとして機能するため、24時間ごとに1体のNounを永遠にオークションにかけ続けます。オークションの収益 (ETH) は100%自動的にNounの所有者によって管理されている、Nouns DAO のトレジャリーに預けられます。"
+msgid "The NounsBR Auction Contract will act as a self-sufficient Noun generation and distribution mechanism, auctioning one Noun every 24 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the NounsBR DAO treasury, where they are governed by Noun owners."
+msgstr "Nounsオークション契約は、Noun生成・分配の自律的なメカニズムとして機能するため、24時間ごとに1体のNounを永遠にオークションにかけ続けます。オークションの収益 (ETH) は100%自動的にNounの所有者によって管理されている、NounsBR DAO のトレジャリーに預けられます。"
 
 #: src/components/Documentation/index.tsx
-msgid "The Nouns Foundation considers the veto an emergency power that should not be exercised in the normal course of business. The Nouns Foundation will veto proposals that introduce non-trivial legal or existential risks to the Nouns DAO or the Nouns Foundation, including (but not necessarily limited to) proposals that:"
+msgid "The NounsBR Foundation considers the veto an emergency power that should not be exercised in the normal course of business. The NounsBR Foundation will veto proposals that introduce non-trivial legal or existential risks to the NounsBR DAO or the NounsBR Foundation, including (but not necessarily limited to) proposals that:"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "The Nouns community has undertaken a preliminary exploration of proposal veto alternatives (‘rage quit’ etc.), but it is now clear that this is a difficult problem that will require significantly more research, development and testing before a satisfactory solution can be implemented."
+msgid "The NounsBR community has undertaken a preliminary exploration of proposal veto alternatives (‘rage quit’ etc.), but it is now clear that this is a difficult problem that will require significantly more research, development and testing before a satisfactory solution can be implemented."
 msgstr ""
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
-msgid "The Quorum (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. It increases quadratically as a function of the % of Nouns voting against a prop, varying between Min Quorum and Max Quorum."
+msgid "The Quorum (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. It increases quadratically as a function of the % of NounsBR voting against a prop, varying between Min Quorum and Max Quorum."
 msgstr ""
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
@@ -927,11 +927,11 @@ msgid "The playground was built using the {nounsProtocolLink}. Noun's traits are
 msgstr "遊び場は{nounsProtocolLink} を使用して作られており、Nounの特徴は、Nounシードによって決まります。{nounsAssetsLink} でシードを生成し、{nounsSDKLink} でレンダリングされています。"
 
 #: src/components/Documentation/index.tsx
-msgid "The proposal veto right was initially envisioned as a temporary solution to the problem of ‘51% attacks’ on the Nouns DAO treasury. While Nounders initially believed that a healthy distribution of Nouns would be sufficient protection for the DAO, a more complete understanding of the incentives and risks has led to general consensus within the Nounders, the Nouns Foundation, and the wider community that a more robust game-theoretic solution should be implemented before the right is removed."
+msgid "The proposal veto right was initially envisioned as a temporary solution to the problem of ‘51% attacks’ on the NounsBR DAO treasury. While Nounders initially believed that a healthy distribution of NounsBR would be sufficient protection for the DAO, a more complete understanding of the incentives and risks has led to general consensus within the Nounders, the NounsBR Foundation, and the wider community that a more robust game-theoretic solution should be implemented before the right is removed."
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "The treasury is controlled exclusively by Nouns via governance."
+msgid "The treasury is controlled exclusively by NounsBR via governance."
 msgstr "トレジャリーは、ガバナンスを通じてNounsが独占的に管理しています。"
 
 #: src/components/Documentation/index.tsx
@@ -947,8 +947,8 @@ msgid "This Noun has no activity, since it was just created. Check back soon!"
 msgstr "このNounは作成されたばかりで、動きがありません。また後ほどご確認ください！"
 
 #: src/pages/Governance/index.tsx
-msgid "This treasury exists for <0>Nouns DAO</0> participants to allocate resources for the long-term growth and prosperity of the Nouns project."
-msgstr "このトレジャリーは、<0>Nouns DAO</0>の参加者がNounsプロジェクトの長期的な成長と繁栄目的に、リソースを配分するために存在しています。"
+msgid "This treasury exists for <0>NounsBR DAO</0> participants to allocate resources for the long-term growth and prosperity of the NounsBR project."
+msgstr "このトレジャリーは、<0>NounsBR DAO</0>の参加者がNounsプロジェクトの長期的な成長と繁栄目的に、リソースを配分するために存在しています。"
 
 #: src/pages/Vote/index.tsx
 msgid "Threshold"
@@ -1071,7 +1071,7 @@ msgid "Voted with<0>{numVotesForProp}</0>Noun"
 msgstr "<0>{numVotesForProp}</0>のNounで投票"
 
 #: src/components/DelegateHoverCard/index.tsx
-msgid "Voted with<0>{numVotesForProp}</0>Nouns"
+msgid "Voted with<0>{numVotesForProp}</0>NounsBR"
 msgstr "<0>{numVotesForProp}</0>のNounで投票"
 
 #: src/components/Documentation/index.tsx
@@ -1089,7 +1089,7 @@ msgid "What now?"
 msgstr "これからどうする？"
 
 #: src/components/Documentation/index.tsx
-msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
+msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction NounsBR as long as Ethereum is operational and there are interested bidders."
 msgstr "決済は落札者に最も大きなインセンティブが与えられるが、誰でも起動できるため、Ethereumが稼働し、関心のある入札者がいる限り、システムは第三者の介入無しでNounsをオークションにかけることができます。"
 
 #: src/components/DelegationCandidateInfo/index.tsx
@@ -1158,7 +1158,7 @@ msgid "You've already delegated to this address"
 msgstr "あなたはすでにこのアドレスに委任しています"
 
 #: src/pages/Playground/index.tsx
-msgid "You've generated {0} years worth of Nouns"
+msgid "You've generated {0} years worth of NounsBR"
 msgstr "{0} 年分のナウンを生成しました"
 
 #: src/components/VoteModal/index.tsx
