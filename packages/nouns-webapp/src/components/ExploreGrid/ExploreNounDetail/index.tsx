@@ -37,6 +37,15 @@ interface ExploreNounDetailProps {
 
 const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
   const [width, setWidth] = useState<number>(window.innerWidth);
+  const seedId =
+    props.noun?.id != null && props.noun?.id >= 0
+      ? BigNumber.from(props.noun.id)
+      : BigNumber.from(0);
+  const seed = useNounSeed(seedId);
+  const bgcolors = ['#d5d7e1', '#e1d7d5'];
+  const backgroundColor = seed ? bgcolors[seed.background] : bgcolors[0];
+  const nounId = props.noun && props.noun.id != null && props.noun.id >= 0 ? props.noun.id : null;
+  
   const isMobile: boolean = width <= 991;
   const handleWindowSizeChange = () => {
     setWidth(window.innerWidth);
@@ -124,6 +133,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
         partIndex: -1,
       },
     ];
+
     if (seed) {
       nounTraitsOrdered = [
         {
@@ -169,16 +179,7 @@ const ExploreNounDetail: React.FC<ExploreNounDetailProps> = props => {
     trackMouse: true,
   });
 
-  const seedId =
-    props.noun?.id != null && props.noun?.id >= 0
-      ? BigNumber.from(props.noun.id)
-      : BigNumber.from(0);
-  const seed = useNounSeed(seedId);
-  const bgcolors = ['#d5d7e1', '#e1d7d5'];
-  const backgroundColor = seed ? bgcolors[seed.background] : bgcolors[0];
   const nounTraitsOrdered = getOrderedTraits(seed);
-  const nounId = props.noun && props.noun.id != null && props.noun.id >= 0 ? props.noun.id : null;
-
   const handleAnimationStart = () => {
     props.setIsNounHoverDisabled(true);
   };
