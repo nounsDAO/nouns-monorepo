@@ -24,7 +24,7 @@ msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "'Nounders' are the group of ten builders that initiated NounsBR. Here are the Nounders:"
-msgstr "Nounders' é o grupo de 3 brasileiros que iniciaram a NounsBR. Aqui estão eles:"
+msgstr "NoundersBR' é o grupo de 3 brasileiros que iniciaram a NounsBR. Aqui estão eles:"
 
 #: src/components/ByLineHoverCard/index.tsx
 msgid "... and {0} more"
@@ -143,7 +143,7 @@ msgstr "Todos os lucros no leilão de um NounBR são enviados para"
 
 #: src/pages/Nounders/index.tsx
 msgid "All NounBR auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
-msgstr "Todos os lucros do leilão de um NounBR são enviados para o NounsBR DAO. Por isso, nós, os fundadores do projeto (‘Nounders’) optamos por nos remunerar com NounsBR. Cada 10.º nounbr durante os primeiros 5 anos do projeto serão enviados para o nosso multisig (3/3), onde serão adquiridos e distribuídos para Nounders individuais."
+msgstr "Todos os lucros do leilão de um NounBR são enviados para o NounsBR DAO. Por isso, nós, os fundadores do projeto (‘NoundersBR’) optamos por nos remunerar com NounsBR. Cada 10.º nounbr durante os primeiros 5 anos do projeto serão enviados para o nosso multisig (3/3), onde serão adquiridos e distribuídos para NoundersBR individuais."
 
 #: src/components/Documentation/index.tsx
 msgid "All NounsBR are members of NounsBR DAO."
@@ -184,7 +184,7 @@ msgstr "Background"
 
 #: src/components/Documentation/index.tsx
 msgid "Because 100% of NounBR auction proceeds are sent to NounsBR DAO, Nounders have chosen to compensate themselves with NounsBR. Every 10th NounBR for the first 5 years of the project (NounBR ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
-msgstr "Como 100% dos lucros do leilão do NounBR são enviados ao NounsBR DAO, os Nounders optaram por se compensar com o NounsBR. Cada 10º NounBR durante os primeiros 5 anos do projeto (NounBR ids #0, #10, #20, #30 e assim por diante) será automaticamente enviado ao multisig do Nounder para ser adquirido e compartilhado entre os membros fundadores do projeto."
+msgstr "Como 100% dos lucros do leilão do NounBR são enviados ao NounsBR DAO, os NoundersBR optaram por se compensar com o NounsBR. Cada 10º NounBR durante os primeiros 5 anos do projeto (NounBR ids #0, #10, #20, #30 e assim por diante) será automaticamente enviado ao multisig do Nounder para ser adquirido e compartilhado entre os membros fundadores do projeto."
 
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
@@ -461,7 +461,7 @@ msgstr "For"
 
 #: src/components/NounderNounContent/index.tsx
 msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th NounBR for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
-msgstr "Por isso, nós, os fundadores do projeto (‘Nounders’) optamos por nos remunerar com o NounsBR. Cada 10º NounBR nos primeiros 5 anos do projeto será enviado para o nosso multisig (5/10), onde será adquirido e distribuído para Nounders individuais."
+msgstr "Por isso, nós, os fundadores do projeto (‘NoundersBR’) optamos por nos remunerar com o NounsBR. Cada 10º NounBR nos primeiros 5 anos do projeto será enviado para o nosso multisig (5/10), onde será adquirido e distribuído para NoundersBR individuais."
 
 #: src/components/Footer/index.tsx
 msgid "Forums"
@@ -518,7 +518,7 @@ msgstr ""
 
 #: src/components/Documentation/index.tsx
 #~ msgid "In addition to the precautions taken by Compound Governance, Nounders have given themselves a special veto right to ensure that no malicious proposals can be passed while the NounBR supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort."
-#~ msgstr "Além das precauções tomadas pela Compound Governance, a Nounders se deu um direito de veto especial para garantir que nenhuma proposta maliciosa possa ser aprovada enquanto a oferta de NounBR estiver baixa. Esse direito de veto só será usado se for aprovada uma proposta de governança obviamente prejudicial, e pretende ser o último recurso."
+#~ msgstr "Além das precauções tomadas pela Compound Governance, a NoundersBR se deu um direito de veto especial para garantir que nenhuma proposta maliciosa possa ser aprovada enquanto a oferta de NounBR estiver baixa. Esse direito de veto só será usado se for aprovada uma proposta de governança obviamente prejudicial, e pretende ser o último recurso."
 
 #: src/components/Bid/index.tsx
 msgid "Insufficient bid amount 🤏"
@@ -596,19 +596,19 @@ msgstr "Distribuições nounder não interferem na cadência dos leilões de 24 
 
 #: src/components/Documentation/index.tsx
 msgid "Nounder's Reward"
-msgstr "Recompensação aos Nounders"
+msgstr "Recompensação aos NoundersBR"
 
 #: src/components/Documentation/index.tsx
 msgid "Nounders receive rewards in the form of NounsBR (10% of supply for first 5 years)."
-msgstr "Os Nounders recebem recompensas na forma de NounsBR (10% da oferta para os primeiros 5 anos)."
+msgstr "Os NoundersBR recebem recompensas na forma de NounsBR (10% da oferta para os primeiros 5 anos)."
 
 #: src/components/Documentation/index.tsx
 #~ msgid "Nounders will proveably revoke this veto right when they deem it safe to do so. This decision will be based on a healthy NounBR distribution and a community that is engaged in the governance process."
-#~ msgstr "Os Nounders provavelmente revogarão esse direito de veto quando julgarem seguro fazê-lo. Essa decisão será baseada em uma distribuição saudável do NounBR e uma comunidade engajada no processo de governança."
+#~ msgstr "Os NoundersBR provavelmente revogarão esse direito de veto quando julgarem seguro fazê-lo. Essa decisão será baseada em uma distribuição saudável do NounBR e uma comunidade engajada no processo de governança."
 
 #: src/pages/Nounders/index.tsx
 msgid "Nounders' Reward"
-msgstr "Recompensação aos Nounders"
+msgstr "Recompensação aos NoundersBR"
 
 #: src/pages/Governance/index.tsx
 msgid "NounsBR"
@@ -892,11 +892,11 @@ msgstr "O contrato de Seeder do NounBR é usado para determinar as característi
 
 #: src/pages/Nounders/index.tsx
 msgid "The Nounders"
-msgstr "Nounders"
+msgstr "NoundersBR"
 
 #: src/pages/Nounders/index.tsx
 msgid "The Nounders reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures. Since there are 10 Nounders, after 5 years each Nounder could receive up to 1% of the NounBR supply."
-msgstr "A recompensa da Nounders destina-se a compensar nossas contribuições pré e pós-lançamento ao projeto e a nos ajudar a participar significativamente da governança à medida que o projeto amadurece. Como são 10 Nounders, após 5 anos cada Nounder poderá receber até 1% da oferta do NounBR."
+msgstr "A recompensa da NoundersBR destina-se a compensar nossas contribuições pré e pós-lançamento ao projeto e a nos ajudar a participar significativamente da governança à medida que o projeto amadurece. Como são 10 NoundersBR, após 5 anos cada Nounder poderá receber até 1% da oferta do NounBR."
 
 #: src/components/Documentation/index.tsx
 msgid "The NounsBR Auction Contract will act as a self-sufficient NounBR generation and distribution mechanism, auctioning one NounBR every 24 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the NounsBR DAO treasury, where they are governed by NounBR owners."
@@ -928,7 +928,7 @@ msgstr "O playground foi construído usando o {nounsProtocolLink}. As caracterí
 
 #: src/components/Documentation/index.tsx
 msgid "The proposal veto right was initially envisioned as a temporary solution to the problem of ‘51% attacks’ on the NounsBR DAO treasury. While Nounders initially believed that a healthy distribution of NounsBR would be sufficient protection for the DAO, a more complete understanding of the incentives and risks has led to general consensus within the Nounders, the NounsBR Foundation, and the wider community that a more robust game-theoretic solution should be implemented before the right is removed."
-msgstr "O direito de veto da proposta foi inicialmente concebido como uma solução temporária para o problema dos ‘ataques de 51%’ ao tesouro do NounsBR DAO. Embora a Nounders inicialmente acreditasse que uma distribuição saudável do NounsBR seria proteção suficiente para o DAO, uma compreensão mais completa dos incentivos e riscos levou a um consenso geral dentro do Nounders, da NounsBR Foundation e da comunidade mais ampla de que um jogo mais robusto solução teórica deve ser implementada antes que o direito seja removido."
+msgstr "O direito de veto da proposta foi inicialmente concebido como uma solução temporária para o problema dos ‘ataques de 51%’ ao tesouro do NounsBR DAO. Embora a NoundersBR inicialmente acreditasse que uma distribuição saudável do NounsBR seria proteção suficiente para o DAO, uma compreensão mais completa dos incentivos e riscos levou a um consenso geral dentro do NoundersBR, da NounsBR Foundation e da comunidade mais ampla de que um jogo mais robusto solução teórica deve ser implementada antes que o direito seja removido."
 
 #: src/components/Documentation/index.tsx
 msgid "The treasury is controlled exclusively by NounsBR via governance."
