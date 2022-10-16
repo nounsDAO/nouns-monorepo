@@ -28,7 +28,7 @@ msgstr "Nounders' é o grupo de 3 brasileiros que iniciaram a NounsBR. Aqui est�
 
 #: src/components/ByLineHoverCard/index.tsx
 msgid "... and {0} more"
-msgstr "...そしてさらに3つ"
+msgstr "... e {0} mais"
 
 #: src/components/Documentation/index.tsx
 msgid "100% of NounBR auction proceeds are trustlessly sent to the treasury."
@@ -44,21 +44,21 @@ msgstr "404: Parece que não bem é o que voce procurando..."
 
 #: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
 #~ msgid "<0/>Holder changed from<1><2/></1> to <3><4/></3>"
-#~ msgstr ""
+#~ msgstr "<0/>Holder trocado de<1><2/></1> para <3><4/></3>"
 
 #: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
 #~ msgid "<0> NounBR {0} </0>  won by <1><2/></1>"
-#~ msgstr ""
+#~ msgstr "<0> NounBR {0} </0>  vencido por <1><2/></1>"
 
 #: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
 #: src/components/profileEvent/event/MobileNounWinEvent/index.tsx
 msgid "<0> NounBR {0} </0> sent to <1><2/></1>"
-msgstr ""
+msgstr "<0> NounBR {0} </0> enviado para <1><2/></1>"
 
 #: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
 #: src/components/profileEvent/event/MobileNounWinEvent/index.tsx
 msgid "<0> NounBR {0} </0> won by <1><2/></1>"
-msgstr ""
+msgstr "<0> NounBR {0} </0> vencido por <1><2/></1>"
 
 #: src/components/ByLineHoverCard/index.tsx
 msgid "<0>Delegated NounBR: </0>"
@@ -339,19 +339,19 @@ msgstr "Delegar {availableVotes} Votos"
 
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Delegate {availableVotes} Votes"
-msgstr "{availableVotes}票を委任する"
+msgstr "Delegate {availableVotes} Votes"
 
 #: src/components/CurrentDelegatePannel/index.tsx
 msgid "Delegation"
-msgstr "デリゲーション"
+msgstr "Delegation"
 
 #: src/components/ProposalContent/index.tsx
 msgid "Description"
-msgstr "説明"
+msgstr "Description"
 
 #: src/components/NavWallet/index.tsx
 msgid "Disconnect"
-msgstr "切断する"
+msgstr "Disconnect"
 
 #: src/components/Footer/index.tsx
 msgid "Discord"
@@ -363,15 +363,15 @@ msgstr "Discourse"
 
 #: src/components/NavBar/index.tsx
 msgid "Docs"
-msgstr "ドキュメント"
+msgstr "Docs"
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
 msgid "Dynamic Quorum"
-msgstr ""
+msgstr "Dynamic Quorum"
 
 #: src/components/Banner/index.tsx
 msgid "EVERY DAY,"
-msgstr "毎日"
+msgstr "EVERY DAY,"
 
 #: src/components/Documentation/index.tsx
 msgid "Each time an auction is settled, the settlement transaction will also cause a new NounBR to be minted and a new 24 hour auction to begin."
@@ -407,7 +407,7 @@ msgstr "Erro"
 
 #: src/components/NounInfoRowBirthday/index.tsx
 msgid "Error fetching NounBR birthday"
-msgstr "Nounの誕生日を取得できませんでした"
+msgstr "Error fetching NounBR birthday"
 
 #: src/components/Footer/index.tsx
 #: src/components/NounInfoCard/index.tsx
@@ -416,7 +416,7 @@ msgstr "Etherscan"
 
 #: src/pages/Vote/index.tsx
 msgid "Execute"
-msgstr "実行する"
+msgstr "Execute"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
@@ -444,20 +444,20 @@ msgstr "PARA SEMPRE"
 
 #: src/pages/Vote/index.tsx
 msgid "Failed to fetch"
-msgstr "取得できませんでした"
+msgstr "Failed to fetch"
 
 #: src/components/ProfileActivityFeed/index.tsx
 msgid "Failed to fetch NounBR activity history"
-msgstr "NounBR の活動履歴の取得に失敗しました。"
+msgstr "Failed to fetch NounBR activity history"
 
 #: src/components/Holder/index.tsx
 #: src/components/NounInfoRowHolder/index.tsx
 msgid "Failed to fetch NounBR info"
-msgstr "Nounに関する情報の取得に失敗しました"
+msgstr "Failed to fetch NounBR info"
 
 #: src/components/VoteCard/index.tsx
 msgid "For"
-msgstr "賛成"
+msgstr "For"
 
 #: src/components/NounderNounContent/index.tsx
 msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th NounBR for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
@@ -469,11 +469,11 @@ msgstr "Forums"
 
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "Function"
-msgstr "関数"
+msgstr "Função"
 
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "Function (Optional)"
-msgstr "関数 (任意)"
+msgstr "Função (Opcional)"
 
 #: src/pages/Playground/index.tsx
 msgid "Generate NounsBR"
@@ -493,7 +493,7 @@ msgstr "Governança ‘Inicio Lento’"
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Has"
-msgstr "Has"
+msgstr "Tem"
 
 #: src/pages/Playground/index.tsx
 msgid "Head"
@@ -502,7 +502,7 @@ msgstr "Head"
 #: src/components/Holder/index.tsx
 #: src/components/NounHoverCard/index.tsx
 msgid "Held by"
-msgstr "Held by"
+msgstr "Conquistado por"
 
 #: src/components/AuctionActivity/index.tsx
 msgid "Help mint the next NounBR"
@@ -658,7 +658,7 @@ msgstr "Os NounsBR governam <0>NounsBR DAO</0>. Os NounsBR podem votar em propos
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Now has"
-msgstr "Now has"
+msgstr "Agora tem"
 
 #: src/components/Banner/index.tsx
 msgid "ONE NOUNBR,"
@@ -729,15 +729,15 @@ msgstr ""
 
 #: src/components/ProposalEditor/index.tsx
 msgid "Proposal"
-msgstr "Proposal"
+msgstr "Proposta"
 
 #: src/pages/CreateProposal/index.tsx
 msgid "Proposal Created!"
-msgstr "Proposal Created!"
+msgstr "Proposta Criada!"
 
 #: src/pages/Vote/index.tsx
 msgid "Proposal Executed!"
-msgstr "Proposal Executed!"
+msgstr "Proposta Executada!"
 
 #: src/pages/Vote/index.tsx
 msgid "Proposal Queued!"
@@ -749,29 +749,29 @@ msgstr "Proposal {0}"
 
 #: src/components/Proposals/index.tsx
 msgid "Proposals"
-msgstr "Proposals"
+msgstr "Propostas"
 
 #: src/components/Proposals/index.tsx
 msgid "Proposals submitted by community members will appear here."
-msgstr "Proposals submitted by community members will appear here."
+msgstr "As propostas enviadas por membros da comunidade aparecerão aqui."
 
 #: src/components/ProposalContent/index.tsx
 msgid "Proposed Transactions"
-msgstr "Proposed Transactions"
+msgstr "Transações Propostas"
 
 #: src/pages/Vote/index.tsx
 msgid "Queue"
-msgstr "Queue"
+msgstr "Fila"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
 msgid "Queued"
-msgstr "Queued"
+msgstr "Na Fila"
 
 #: src/pages/Vote/index.tsx
 msgid "Quorum"
-msgstr "Quorum"
+msgstr "Quórum"
 
 #: src/components/VoteModal/index.tsx
 msgid "Reason (Optional)"
@@ -783,30 +783,30 @@ msgstr ""
 
 #: src/components/LanguageSelectionModal/index.tsx
 msgid "Select Language"
-msgstr "Select Language"
+msgstr "Selecionar Idioma"
 
 #: src/components/Bid/index.tsx
 msgid "Settle"
-msgstr "Settle"
+msgstr "Liquidar"
 
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 msgid "Settle Auction"
-msgstr "Settle Auction"
+msgstr "Liquidar Leilão"
 
 #: src/components/SettleManuallyBtn/index.tsx
 msgid "Settle manually"
-msgstr "Settle manually"
+msgstr "Liquidar Manualmente"
 
 #: src/components/Bid/index.tsx
 msgid "Settled auction successfully!"
-msgstr "Settled auction successfully!"
+msgstr "Leilão liquidado com sucesso!"
 
 #: src/components/Documentation/index.tsx
 msgid "Settlement of one auction kicks off the next."
-msgstr "Settlement of one auction kicks off the next."
+msgstr "A liquidação de um leilão inicia o próximo."
 
 #: src/components/ProfileActivityFeed/index.tsx
 #~ msgid "Show all {0} events"
@@ -826,7 +826,7 @@ msgstr "Sign out"
 
 #: src/pages/Vote/index.tsx
 msgid "Starts"
-msgstr "Starts"
+msgstr "Inicia"
 
 #: src/components/Proposals/index.tsx
 msgid "Starts {0}"
@@ -860,15 +860,15 @@ msgstr "Success"
 
 #: src/components/Documentation/index.tsx
 msgid "Summary"
-msgstr "Summary"
+msgstr "Resumo"
 
 #: src/components/NavWallet/index.tsx
 msgid "Switch"
-msgstr "Switch"
+msgstr "Trocar"
 
 #: src/pages/Vote/index.tsx
 msgid "Switch to NounBR view"
-msgstr "Switch to NounBR view"
+msgstr "Trocar para modo NounBR"
 
 #: src/pages/Vote/index.tsx
 msgid "Switch to delegate view"
@@ -876,7 +876,7 @@ msgstr "Switch to delegate view"
 
 #: src/components/NavWallet/index.tsx
 msgid "Switch wallet"
-msgstr "Switch wallet"
+msgstr "Trocar carteira"
 
 #: src/pages/Vote/index.tsx
 msgid "Taken at block"
@@ -956,11 +956,11 @@ msgstr "Threshold"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "Time left"
-msgstr "Time left"
+msgstr "Tempo restante"
 
 #: src/pages/CreateProposal/index.tsx
 msgid "Tip:"
-msgstr "Tip:"
+msgstr "Dica:"
 
 #: src/components/Documentation/index.tsx
 msgid "Trait generation is not truly random. Traits can be predicted when minting a NounBR on the pending block."
@@ -981,7 +981,7 @@ msgstr "Transaction Successful!"
 #: src/components/NavBarTreasury/index.tsx
 #: src/pages/Governance/index.tsx
 msgid "Treasury"
-msgstr "Treasury"
+msgstr "Tesouro"
 
 #: src/components/Footer/index.tsx
 msgid "Twitter"
@@ -1008,7 +1008,7 @@ msgstr "Upload"
 
 #: src/pages/Playground/index.tsx
 msgid "Upload Custom Trait"
-msgstr "Upload Custom Trait"
+msgstr "Upload Trait Personalizado"
 
 #: src/components/VoteModal/index.tsx
 msgid "User Already Voted"
@@ -1016,11 +1016,11 @@ msgstr "User Already Voted"
 
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "Value"
-msgstr "Value"
+msgstr "Valor"
 
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "Value in ETH (Optional)"
-msgstr "Value in ETH (Optional)"
+msgstr "Valor em ETH (Optional)"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
@@ -1034,7 +1034,7 @@ msgstr ""
 
 #: src/components/BidHistoryBtn/index.tsx
 msgid "View all bids"
-msgstr "View all bids"
+msgstr "Ver todos os lances"
 
 #: src/components/ChangeDelegatePannel/index.tsx
 #: src/components/Holder/index.tsx
@@ -1048,7 +1048,7 @@ msgstr "View all bids"
 #: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
 #: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
 msgid "View on Etherscan"
-msgstr "View on Etherscan"
+msgstr "Ver na Etherscan"
 
 #: src/components/Bid/index.tsx
 msgid "Vote for the next NounBR"
@@ -1086,7 +1086,7 @@ msgstr "Waiting for"
 #: src/components/Winner/index.tsx
 #: src/components/Winner/index.tsx
 msgid "What now?"
-msgstr "What now?"
+msgstr "E agora?"
 
 #: src/components/Documentation/index.tsx
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction NounsBR as long as Ethereum is operational and there are interested bidders."
@@ -1099,15 +1099,15 @@ msgstr "Will have"
 #: src/components/NounInfoRowHolder/index.tsx
 #: src/components/Winner/index.tsx
 msgid "Winner"
-msgstr "Winner"
+msgstr "Vencedor"
 
 #: src/components/CurrentBid/index.tsx
 msgid "Winning bid"
-msgstr "Winning bid"
+msgstr "Lance vencendo"
 
 #: src/components/Winner/index.tsx
 msgid "You"
-msgstr "You"
+msgstr "Voce"
 
 #: src/components/ProposalHeader/index.tsx
 msgid "You <0>Abstained</0> from this proposal"
@@ -1123,11 +1123,11 @@ msgstr "Você pode experimentar a geração off-chain NounBR no {playgroundLink}
 
 #: src/components/SettleManuallyBtn/index.tsx
 msgid "You can settle manually in 1 minute"
-msgstr "You can settle manually in 1 minute"
+msgstr "Você poderá liquidar manualmente em 1 minuto"
 
 #: src/components/SettleManuallyBtn/index.tsx
 msgid "You can settle manually in {0} minutes"
-msgstr "You can settle manually in {0} minutes"
+msgstr "Você poderá liquidar manualmente em {0} minutos"
 
 #: src/components/CreateProposalButton/index.tsx
 msgid "You don't have enough votes to submit a proposal"
@@ -1159,7 +1159,7 @@ msgstr "You've already delegated to this address"
 
 #: src/pages/Playground/index.tsx
 msgid "You've generated {0} years worth of NounsBR"
-msgstr "You've generated {0} years worth of NounsBR"
+msgstr "Você gerou {0} anos de NounsBR"
 
 #: src/components/VoteModal/index.tsx
 msgid "You've successfully voted on on prop {0}"
@@ -1175,27 +1175,27 @@ msgstr "Your <0>{availableVotes}</0> votes have been delegated to a new account.
 
 #: src/components/Documentation/index.tsx
 msgid "accessories (140)"
-msgstr "accessories(140)"
+msgstr "acessórios (140)"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "at"
-msgstr "at"
+msgstr "em"
 
 #: src/components/ProposalHeader/index.tsx
 msgid "at <0>{0}</0>"
-msgstr "at <0>{0}</0>"
+msgstr "em <0>{0}</0>"
 
 #: src/components/Documentation/index.tsx
 msgid "backgrounds (2)"
-msgstr "backgrounds (2)"
+msgstr "fundos (2)"
 
 #: src/components/Documentation/index.tsx
 msgid "bodies (30)"
-msgstr "bodies (30)"
+msgstr "corpos (30)"
 
 #: src/components/Documentation/index.tsx
 msgid "glasses (23)"
-msgstr "glasses (23)"
+msgstr "óculos (23)"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "h"
@@ -1203,7 +1203,7 @@ msgstr "h"
 
 #: src/components/Documentation/index.tsx
 msgid "heads (242)"
-msgstr "heads (242)"
+msgstr "cabeças (242)"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "m"
