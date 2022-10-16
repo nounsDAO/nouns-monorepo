@@ -28,22 +28,22 @@ contract NounsArt is INounsArt {
     /// @notice Current inflator address
     IInflator public override inflator;
 
-    /// @notice Noun Backgrounds (Hex Colors)
+    /// @notice NounBR Backgrounds (Hex Colors)
     string[] public override backgrounds;
 
-    /// @notice Noun Color Palettes (Index => Hex Colors, stored as a contract using SSTORE2)
+    /// @notice NounBR Color Palettes (Index => Hex Colors, stored as a contract using SSTORE2)
     mapping(uint8 => address) public palettesPointers;
 
-    /// @notice Noun Bodies Trait
+    /// @notice NounBR Bodies Trait
     Trait public bodiesTrait;
 
-    /// @notice Noun Accessories Trait
+    /// @notice NounBR Accessories Trait
     Trait public accessoriesTrait;
 
-    /// @notice Noun Heads Trait
+    /// @notice NounBR Heads Trait
     Trait public headsTrait;
 
-    /// @notice Noun Glasses Trait
+    /// @notice NounBR Glasses Trait
     Trait public glassesTrait;
 
     /**
@@ -124,7 +124,7 @@ contract NounsArt is INounsArt {
     }
 
     /**
-     * @notice Batch add Noun backgrounds.
+     * @notice Batch add NounBR backgrounds.
      * @dev This function can only be called by the descriptor.
      */
     function addManyBackgrounds(string[] calldata _backgrounds) external override onlyDescriptor {
@@ -136,7 +136,7 @@ contract NounsArt is INounsArt {
     }
 
     /**
-     * @notice Add a Noun background.
+     * @notice Add a NounBR background.
      * @dev This function can only be called by the descriptor.
      */
     function addBackground(string calldata _background) external override onlyDescriptor {
@@ -328,7 +328,7 @@ contract NounsArt is INounsArt {
     }
 
     /**
-     * @notice Get the number of available Noun `backgrounds`.
+     * @notice Get the number of available NounBR `backgrounds`.
      */
     function backgroundsCount() public view override returns (uint256) {
         return backgrounds.length;

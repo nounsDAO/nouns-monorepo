@@ -26,8 +26,8 @@ msgid "... and {0} more"
 msgstr "... and {0} more"
 
 #: src/components/Documentation/index.tsx
-msgid "100% of Noun auction proceeds are trustlessly sent to the treasury."
-msgstr "100% of Noun auction proceeds are trustlessly sent to the treasury."
+msgid "100% of NounBR auction proceeds are trustlessly sent to the treasury."
+msgstr "100% of NounBR auction proceeds are trustlessly sent to the treasury."
 
 #: src/pages/Nounders/index.tsx
 msgid "3.5 artists, 6.5 technologists"
@@ -42,22 +42,22 @@ msgstr "404: This is not the person, place, or thing you're looking for..."
 #~ msgstr "<0/>Holder changed from<1><2/></1> to <3><4/></3>"
 
 #: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
-#~ msgid "<0> Noun {0} </0>  won by <1><2/></1>"
-#~ msgstr "<0> Noun {0} </0>  won by <1><2/></1>"
+#~ msgid "<0> NounBR {0} </0>  won by <1><2/></1>"
+#~ msgstr "<0> NounBR {0} </0>  won by <1><2/></1>"
 
 #: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
 #: src/components/profileEvent/event/MobileNounWinEvent/index.tsx
-msgid "<0> Noun {0} </0> sent to <1><2/></1>"
-msgstr "<0> Noun {0} </0> sent to <1><2/></1>"
+msgid "<0> NounBR {0} </0> sent to <1><2/></1>"
+msgstr "<0> NounBR {0} </0> sent to <1><2/></1>"
 
 #: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
 #: src/components/profileEvent/event/MobileNounWinEvent/index.tsx
-msgid "<0> Noun {0} </0> won by <1><2/></1>"
-msgstr "<0> Noun {0} </0> won by <1><2/></1>"
+msgid "<0> NounBR {0} </0> won by <1><2/></1>"
+msgstr "<0> NounBR {0} </0> won by <1><2/></1>"
 
 #: src/components/ByLineHoverCard/index.tsx
-msgid "<0>Delegated Noun: </0>"
-msgstr "<0>Delegated Noun: </0>"
+msgid "<0>Delegated NounBR: </0>"
+msgstr "<0>Delegated NounBR: </0>"
 
 #: src/components/ByLineHoverCard/index.tsx
 msgid "<0>Delegated NounsBR: </0>"
@@ -133,12 +133,12 @@ msgid "Against"
 msgstr "Against"
 
 #: src/components/NounderNounContent/index.tsx
-msgid "All Noun auction proceeds are sent to the"
-msgstr "All Noun auction proceeds are sent to the"
+msgid "All NounBR auction proceeds are sent to the"
+msgstr "All NounBR auction proceeds are sent to the"
 
 #: src/pages/Nounders/index.tsx
-msgid "All Noun auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
-msgstr "All Noun auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
+msgid "All NounBR auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
+msgstr "All NounBR auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
 
 #: src/components/Documentation/index.tsx
 msgid "All NounsBR are members of NounsBR DAO."
@@ -178,8 +178,8 @@ msgid "Background"
 msgstr "Background"
 
 #: src/components/Documentation/index.tsx
-msgid "Because 100% of Noun auction proceeds are sent to NounsBR DAO, Nounders have chosen to compensate themselves with NounsBR. Every 10th Noun for the first 5 years of the project (Noun ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
-msgstr "Because 100% of Noun auction proceeds are sent to NounsBR DAO, Nounders have chosen to compensate themselves with NounsBR. Every 10th Noun for the first 5 years of the project (Noun ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
+msgid "Because 100% of NounBR auction proceeds are sent to NounsBR DAO, Nounders have chosen to compensate themselves with NounsBR. Every 10th NounBR for the first 5 years of the project (NounBR ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
+msgstr "Because 100% of NounBR auction proceeds are sent to NounsBR DAO, Nounders have chosen to compensate themselves with NounsBR. Every 10th NounBR for the first 5 years of the project (NounBR ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
 
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
@@ -369,8 +369,8 @@ msgid "EVERY DAY,"
 msgstr "EVERY DAY,"
 
 #: src/components/Documentation/index.tsx
-msgid "Each time an auction is settled, the settlement transaction will also cause a new Noun to be minted and a new 24 hour auction to begin."
-msgstr "Each time an auction is settled, the settlement transaction will also cause a new Noun to be minted and a new 24 hour auction to begin."
+msgid "Each time an auction is settled, the settlement transaction will also cause a new NounBR to be minted and a new 24 hour auction to begin."
+msgstr "Each time an auction is settled, the settlement transaction will also cause a new NounBR to be minted and a new 24 hour auction to begin."
 
 #: src/pages/Vote/index.tsx
 msgid "Ended"
@@ -401,8 +401,8 @@ msgid "Error"
 msgstr "Error"
 
 #: src/components/NounInfoRowBirthday/index.tsx
-msgid "Error fetching Noun birthday"
-msgstr "Error fetching Noun birthday"
+msgid "Error fetching NounBR birthday"
+msgstr "Error fetching NounBR birthday"
 
 #: src/components/Footer/index.tsx
 #: src/components/NounInfoCard/index.tsx
@@ -442,21 +442,21 @@ msgid "Failed to fetch"
 msgstr "Failed to fetch"
 
 #: src/components/ProfileActivityFeed/index.tsx
-msgid "Failed to fetch Noun activity history"
-msgstr "Failed to fetch Noun activity history"
+msgid "Failed to fetch NounBR activity history"
+msgstr "Failed to fetch NounBR activity history"
 
 #: src/components/Holder/index.tsx
 #: src/components/NounInfoRowHolder/index.tsx
-msgid "Failed to fetch Noun info"
-msgstr "Failed to fetch Noun info"
+msgid "Failed to fetch NounBR info"
+msgstr "Failed to fetch NounBR info"
 
 #: src/components/VoteCard/index.tsx
 msgid "For"
 msgstr "For"
 
 #: src/components/NounderNounContent/index.tsx
-msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
-msgstr "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th Noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
+msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th NounBR for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
+msgstr "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th NounBR for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
 
 #: src/components/Footer/index.tsx
 msgid "Forums"
@@ -500,8 +500,8 @@ msgid "Held by"
 msgstr "Held by"
 
 #: src/components/AuctionActivity/index.tsx
-msgid "Help mint the next Noun"
-msgstr "Help mint the next Noun"
+msgid "Help mint the next NounBR"
+msgstr "Help mint the next NounBR"
 
 #: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
 msgid "Holder changed from <0><1/></0> to <2><3/></2>"
@@ -512,8 +512,8 @@ msgid "Holder changed from<0><1/></0> to <2><3/></2>"
 msgstr "Holder changed from<0><1/></0> to <2><3/></2>"
 
 #: src/components/Documentation/index.tsx
-#~ msgid "In addition to the precautions taken by Compound Governance, Nounders have given themselves a special veto right to ensure that no malicious proposals can be passed while the Noun supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort."
-#~ msgstr "In addition to the precautions taken by Compound Governance, Nounders have given themselves a special veto right to ensure that no malicious proposals can be passed while the Noun supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort."
+#~ msgid "In addition to the precautions taken by Compound Governance, Nounders have given themselves a special veto right to ensure that no malicious proposals can be passed while the NounBR supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort."
+#~ msgstr "In addition to the precautions taken by Compound Governance, Nounders have given themselves a special veto right to ensure that no malicious proposals can be passed while the NounBR supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort."
 
 #: src/components/Bid/index.tsx
 msgid "Insufficient bid amount 🤏"
@@ -566,28 +566,28 @@ msgid "None"
 msgstr "None"
 
 #: src/pages/Governance/index.tsx
-msgid "Noun"
-msgstr "Noun"
+msgid "NounBR"
+msgstr "NounBR"
 
 #: src/components/Documentation/index.tsx
-msgid "Noun Seeder Contract"
-msgstr "Noun Seeder Contract"
+msgid "NounBR Seeder Contract"
+msgstr "NounBR Seeder Contract"
 
 #: src/components/Documentation/index.tsx
-msgid "Noun Traits"
-msgstr "Noun Traits"
+msgid "NounBR Traits"
+msgstr "NounBR Traits"
 
 #: src/components/CurrentDelegatePannel/index.tsx
-msgid "Noun votes are not transferable, but are <0>delegatable</0>, which means you can assign your vote to someone else as long as you own your Noun."
-msgstr "Noun votes are not transferable, but are <0>delegatable</0>, which means you can assign your vote to someone else as long as you own your Noun."
+msgid "NounBR votes are not transferable, but are <0>delegatable</0>, which means you can assign your vote to someone else as long as you own your NounBR."
+msgstr "NounBR votes are not transferable, but are <0>delegatable</0>, which means you can assign your vote to someone else as long as you own your NounBR."
 
 #: src/components/AuctionActivityNounTitle/index.tsx
-msgid "Noun {0}"
-msgstr "Noun {0}"
+msgid "NounBR {0}"
+msgstr "NounBR {0}"
 
 #: src/components/Documentation/index.tsx
-msgid "Nounder distributions don't interfere with the cadence of 24 hour auctions. NounsBR are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available Noun ID."
-msgstr "Nounder distributions don't interfere with the cadence of 24 hour auctions. NounsBR are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available Noun ID."
+msgid "Nounder distributions don't interfere with the cadence of 24 hour auctions. NounsBR are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available NounBR ID."
+msgstr "Nounder distributions don't interfere with the cadence of 24 hour auctions. NounsBR are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available NounBR ID."
 
 #: src/components/Documentation/index.tsx
 msgid "Nounder's Reward"
@@ -598,8 +598,8 @@ msgid "Nounders receive rewards in the form of NounsBR (10% of supply for first 
 msgstr "Nounders receive rewards in the form of NounsBR (10% of supply for first 5 years)."
 
 #: src/components/Documentation/index.tsx
-#~ msgid "Nounders will proveably revoke this veto right when they deem it safe to do so. This decision will be based on a healthy Noun distribution and a community that is engaged in the governance process."
-#~ msgstr "Nounders will proveably revoke this veto right when they deem it safe to do so. This decision will be based on a healthy Noun distribution and a community that is engaged in the governance process."
+#~ msgid "Nounders will proveably revoke this veto right when they deem it safe to do so. This decision will be based on a healthy NounBR distribution and a community that is engaged in the governance process."
+#~ msgstr "Nounders will proveably revoke this veto right when they deem it safe to do so. This decision will be based on a healthy NounBR distribution and a community that is engaged in the governance process."
 
 #: src/pages/Nounders/index.tsx
 msgid "Nounders' Reward"
@@ -624,8 +624,8 @@ msgid "NounsBR DAO uses a fork of {compoundGovLink}."
 msgstr "NounsBR DAO uses a fork of {compoundGovLink}."
 
 #: src/components/Documentation/index.tsx
-msgid "NounsBR DAO utilizes a fork of {compoundGovLink} and is the main governing body of the NounsBR ecosystem. The NounsBR DAO treasury receives 100% of ETH proceeds from daily Noun auctions. Each Noun is an irrevocable member of NounsBR DAO and entitled to one vote in all governance matters. Noun votes are non-transferable (if you sell your Noun the vote goes with it) but delegatable, which means you can assign your vote to someone else as long as you own your Noun."
-msgstr "NounsBR DAO utilizes a fork of {compoundGovLink} and is the main governing body of the NounsBR ecosystem. The NounsBR DAO treasury receives 100% of ETH proceeds from daily Noun auctions. Each Noun is an irrevocable member of NounsBR DAO and entitled to one vote in all governance matters. Noun votes are non-transferable (if you sell your Noun the vote goes with it) but delegatable, which means you can assign your vote to someone else as long as you own your Noun."
+msgid "NounsBR DAO utilizes a fork of {compoundGovLink} and is the main governing body of the NounsBR ecosystem. The NounsBR DAO treasury receives 100% of ETH proceeds from daily NounBR auctions. Each NounBR is an irrevocable member of NounsBR DAO and entitled to one vote in all governance matters. NounBR votes are non-transferable (if you sell your NounBR the vote goes with it) but delegatable, which means you can assign your vote to someone else as long as you own your NounBR."
+msgstr "NounsBR DAO utilizes a fork of {compoundGovLink} and is the main governing body of the NounsBR ecosystem. The NounsBR DAO treasury receives 100% of ETH proceeds from daily NounBR auctions. Each NounBR is an irrevocable member of NounsBR DAO and entitled to one vote in all governance matters. NounBR votes are non-transferable (if you sell your NounBR the vote goes with it) but delegatable, which means you can assign your vote to someone else as long as you own your NounBR."
 
 #: src/pages/Playground/index.tsx
 msgid "NounsBR Protocol"
@@ -636,12 +636,12 @@ msgid "NounsBR are an experimental attempt to improve the formation of on-chain 
 msgstr "NounsBR are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, NounsBR attempt to bootstrap identity, community, governance, and a treasury that can be used by the community."
 
 #: src/components/Documentation/index.tsx
-msgid "NounsBR are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules governing Noun trait scarcity, which makes all NounsBR equally rare. As of this writing, NounsBR are made up of:"
-msgstr "NounsBR are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules governing Noun trait scarcity, which makes all NounsBR equally rare. As of this writing, NounsBR are made up of:"
+msgid "NounsBR are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules governing NounBR trait scarcity, which makes all NounsBR equally rare. As of this writing, NounsBR are made up of:"
+msgstr "NounsBR are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules governing NounBR trait scarcity, which makes all NounsBR equally rare. As of this writing, NounsBR are made up of:"
 
 #: src/components/Documentation/index.tsx
-msgid "NounsBR are stored directly on Ethereum and do not utilize pointers to other networks such as IPFS. This is possible because Noun parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression."
-msgstr "NounsBR are stored directly on Ethereum and do not utilize pointers to other networks such as IPFS. This is possible because Noun parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression."
+msgid "NounsBR are stored directly on Ethereum and do not utilize pointers to other networks such as IPFS. This is possible because NounBR parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression."
+msgstr "NounsBR are stored directly on Ethereum and do not utilize pointers to other networks such as IPFS. This is possible because NounBR parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression."
 
 #: src/components/Documentation/index.tsx
 msgid "NounsBR artwork is in the {publicDomainLink}."
@@ -664,12 +664,12 @@ msgid "On-Chain Artwork"
 msgstr "On-Chain Artwork"
 
 #: src/components/Documentation/index.tsx
-msgid "One Noun is equal to one vote."
-msgstr "One Noun is equal to one vote."
+msgid "One NounBR is equal to one vote."
+msgstr "One NounBR is equal to one vote."
 
 #: src/components/Documentation/index.tsx
-msgid "One Noun is trustlessly auctioned every 24 hours, forever."
-msgstr "One Noun is trustlessly auctioned every 24 hours, forever."
+msgid "One NounBR is trustlessly auctioned every 24 hours, forever."
+msgstr "One NounBR is trustlessly auctioned every 24 hours, forever."
 
 #: src/pages/Playground/index.tsx
 msgid "Only 32x32 PNG images are accepted"
@@ -862,8 +862,8 @@ msgid "Switch"
 msgstr "Switch"
 
 #: src/pages/Vote/index.tsx
-msgid "Switch to Noun view"
-msgstr "Switch to Noun view"
+msgid "Switch to NounBR view"
+msgstr "Switch to NounBR view"
 
 #: src/pages/Vote/index.tsx
 msgid "Switch to delegate view"
@@ -882,20 +882,20 @@ msgid "Thank you for voting."
 msgstr "Thank you for voting."
 
 #: src/components/Documentation/index.tsx
-msgid "The Noun Seeder contract is used to determine Noun traits during the minting process. The seeder contract can be replaced to allow for future trait generation algorithm upgrades. Additionally, it can be locked by the NounsBR DAO to prevent any future updates. Currently, Noun traits are determined using pseudo-random number generation:"
-msgstr "The Noun Seeder contract is used to determine Noun traits during the minting process. The seeder contract can be replaced to allow for future trait generation algorithm upgrades. Additionally, it can be locked by the NounsBR DAO to prevent any future updates. Currently, Noun traits are determined using pseudo-random number generation:"
+msgid "The NounBR Seeder contract is used to determine NounBR traits during the minting process. The seeder contract can be replaced to allow for future trait generation algorithm upgrades. Additionally, it can be locked by the NounsBR DAO to prevent any future updates. Currently, NounBR traits are determined using pseudo-random number generation:"
+msgstr "The NounBR Seeder contract is used to determine NounBR traits during the minting process. The seeder contract can be replaced to allow for future trait generation algorithm upgrades. Additionally, it can be locked by the NounsBR DAO to prevent any future updates. Currently, NounBR traits are determined using pseudo-random number generation:"
 
 #: src/pages/Nounders/index.tsx
 msgid "The Nounders"
 msgstr "The Nounders"
 
 #: src/pages/Nounders/index.tsx
-msgid "The Nounders reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures. Since there are 10 Nounders, after 5 years each Nounder could receive up to 1% of the Noun supply."
-msgstr "The Nounders reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures. Since there are 10 Nounders, after 5 years each Nounder could receive up to 1% of the Noun supply."
+msgid "The Nounders reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures. Since there are 10 Nounders, after 5 years each Nounder could receive up to 1% of the NounBR supply."
+msgstr "The Nounders reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures. Since there are 10 Nounders, after 5 years each Nounder could receive up to 1% of the NounBR supply."
 
 #: src/components/Documentation/index.tsx
-msgid "The NounsBR Auction Contract will act as a self-sufficient Noun generation and distribution mechanism, auctioning one Noun every 24 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the NounsBR DAO treasury, where they are governed by Noun owners."
-msgstr "The NounsBR Auction Contract will act as a self-sufficient Noun generation and distribution mechanism, auctioning one Noun every 24 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the NounsBR DAO treasury, where they are governed by Noun owners."
+msgid "The NounsBR Auction Contract will act as a self-sufficient NounBR generation and distribution mechanism, auctioning one NounBR every 24 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the NounsBR DAO treasury, where they are governed by NounBR owners."
+msgstr "The NounsBR Auction Contract will act as a self-sufficient NounBR generation and distribution mechanism, auctioning one NounBR every 24 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the NounsBR DAO treasury, where they are governed by NounBR owners."
 
 #: src/components/Documentation/index.tsx
 msgid "The NounsBR Foundation considers the veto an emergency power that should not be exercised in the normal course of business. The NounsBR Foundation will veto proposals that introduce non-trivial legal or existential risks to the NounsBR DAO or the NounsBR Foundation, including (but not necessarily limited to) proposals that:"
@@ -918,8 +918,8 @@ msgid "The compressed parts are efficiently converted into a single base64 encod
 msgstr "The compressed parts are efficiently converted into a single base64 encoded SVG image on-chain. To accomplish this, each part is decoded into an intermediate format before being converted into a series of SVG rects using batched, on-chain string concatenation. Once the entire SVG has been generated, it is base64 encoded."
 
 #: src/pages/Playground/index.tsx
-msgid "The playground was built using the {nounsProtocolLink}. Noun's traits are determined by the Noun Seed. The seed was generated using {nounsAssetsLink} and rendered using the {nounsSDKLink}."
-msgstr "The playground was built using the {nounsProtocolLink}. Noun's traits are determined by the Noun Seed. The seed was generated using {nounsAssetsLink} and rendered using the {nounsSDKLink}."
+msgid "The playground was built using the {nounsProtocolLink}. NounBR's traits are determined by the NounBR Seed. The seed was generated using {nounsAssetsLink} and rendered using the {nounsSDKLink}."
+msgstr "The playground was built using the {nounsProtocolLink}. NounBR's traits are determined by the NounBR Seed. The seed was generated using {nounsAssetsLink} and rendered using the {nounsSDKLink}."
 
 #: src/components/Documentation/index.tsx
 msgid "The proposal veto right was initially envisioned as a temporary solution to the problem of ‘51% attacks’ on the NounsBR DAO treasury. While Nounders initially believed that a healthy distribution of NounsBR would be sufficient protection for the DAO, a more complete understanding of the incentives and risks has led to general consensus within the Nounders, the NounsBR Foundation, and the wider community that a more robust game-theoretic solution should be implemented before the right is removed."
@@ -938,8 +938,8 @@ msgid "There was an error voting for your account."
 msgstr "There was an error voting for your account."
 
 #: src/components/ProfileActivityFeed/index.tsx
-msgid "This Noun has no activity, since it was just created. Check back soon!"
-msgstr "This Noun has no activity, since it was just created. Check back soon!"
+msgid "This NounBR has no activity, since it was just created. Check back soon!"
+msgstr "This NounBR has no activity, since it was just created. Check back soon!"
 
 #: src/pages/Governance/index.tsx
 msgid "This treasury exists for <0>NounsBR DAO</0> participants to allocate resources for the long-term growth and prosperity of the NounsBR project."
@@ -958,8 +958,8 @@ msgid "Tip:"
 msgstr "Tip:"
 
 #: src/components/Documentation/index.tsx
-msgid "Trait generation is not truly random. Traits can be predicted when minting a Noun on the pending block."
-msgstr "Trait generation is not truly random. Traits can be predicted when minting a Noun on the pending block."
+msgid "Trait generation is not truly random. Traits can be predicted when minting a NounBR on the pending block."
+msgstr "Trait generation is not truly random. Traits can be predicted when minting a NounBR on the pending block."
 
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
@@ -1046,8 +1046,8 @@ msgid "View on Etherscan"
 msgstr "View on Etherscan"
 
 #: src/components/Bid/index.tsx
-msgid "Vote for the next Noun"
-msgstr "Vote for the next Noun"
+msgid "Vote for the next NounBR"
+msgstr "Vote for the next NounBR"
 
 #: src/components/VoteModal/index.tsx
 msgid "Vote on Prop {0}"
@@ -1066,8 +1066,8 @@ msgid "Voted for"
 msgstr "Voted for"
 
 #: src/components/DelegateHoverCard/index.tsx
-msgid "Voted with<0>{numVotesForProp}</0>Noun"
-msgstr "Voted with<0>{numVotesForProp}</0>Noun"
+msgid "Voted with<0>{numVotesForProp}</0>NounBR"
+msgstr "Voted with<0>{numVotesForProp}</0>NounBR"
 
 #: src/components/DelegateHoverCard/index.tsx
 msgid "Voted with<0>{numVotesForProp}</0>NounsBR"
@@ -1117,8 +1117,8 @@ msgid "You already have an active or pending proposal"
 msgstr "You already have an active or pending proposal"
 
 #: src/components/Documentation/index.tsx
-msgid "You can experiment with off-chain Noun generation at the {playgroundLink}."
-msgstr "You can experiment with off-chain Noun generation at the {playgroundLink}."
+msgid "You can experiment with off-chain NounBR generation at the {playgroundLink}."
+msgstr "You can experiment with off-chain NounBR generation at the {playgroundLink}."
 
 #: src/components/SettleManuallyBtn/index.tsx
 msgid "You can settle manually in 1 minute"

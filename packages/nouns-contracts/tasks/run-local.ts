@@ -56,7 +56,7 @@ task(
 
   console.table(accounts);
   console.log(
-    `Noun contracts deployed to local node at http://localhost:8545 (Chain ID: ${chainId})`,
+    `NounBR contracts deployed to local node at http://localhost:8545 (Chain ID: ${chainId})`,
   );
   console.log(`Auction House Proxy address: ${contracts.NounsAuctionHouseProxy.instance.address}`);
   console.log(`NounsBR ERC721 address: ${contracts.NounsToken.instance.address}`);

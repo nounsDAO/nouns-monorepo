@@ -12,7 +12,7 @@ import { NounSeed } from '../src/types';
 const { bodies, accessories, heads, glasses } = images;
 
 describe('@noun/assets utils', () => {
-  // Test against Noun 116, created at block 13661786
+  // Test against NounBR 116, created at block 13661786
   const NOUN116_ID = 116;
   const NOUN116_SEED: NounSeed = {
     background: 1,
@@ -46,7 +46,7 @@ describe('@noun/assets utils', () => {
   });
 
   describe('getNounSeedFromBlockHash', () => {
-    it('should match NounsSeeder.sol implementation for generating a Noun seed', () => {
+    it('should match NounsSeeder.sol implementation for generating a NounBR seed', () => {
       expect(getNounSeedFromBlockHash(NOUN116_ID, NOUN116_PREV_BLOCKHASH)).to.deep.equal(
         NOUN116_SEED,
       );

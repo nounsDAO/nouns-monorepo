@@ -92,7 +92,7 @@ describe('NounsAuctionHouse', () => {
       value: RESERVE_PRICE,
     });
 
-    await expect(tx).to.be.revertedWith('Noun not up for auction');
+    await expect(tx).to.be.revertedWith('NounBR not up for auction');
   });
 
   it('should revert if a user creates a bid for an expired auction', async () => {
@@ -312,7 +312,7 @@ describe('NounsAuctionHouse', () => {
     expect(paused).to.equal(true);
   });
 
-  it('should burn a Noun on auction settlement if no bids are received', async () => {
+  it('should burn a NounBR on auction settlement if no bids are received', async () => {
     await (await nounsAuctionHouse.unpause()).wait();
 
     const { nounId } = await nounsAuctionHouse.auction();

@@ -62,10 +62,10 @@ const Documentation = () => {
                   <Trans>NounsBR artwork is in the {publicDomainLink}.</Trans>
                 </li>
                 <li>
-                  <Trans>One Noun is trustlessly auctioned every 24 hours, forever.</Trans>
+                  <Trans>One NounBR is trustlessly auctioned every 24 hours, forever.</Trans>
                 </li>
                 <li>
-                  <Trans>100% of Noun auction proceeds are trustlessly sent to the treasury.</Trans>
+                  <Trans>100% of NounBR auction proceeds are trustlessly sent to the treasury.</Trans>
                 </li>
                 <li>
                   <Trans>Settlement of one auction kicks off the next.</Trans>
@@ -77,7 +77,7 @@ const Documentation = () => {
                   <Trans>NounsBR DAO uses a fork of {compoundGovLink}.</Trans>
                 </li>
                 <li>
-                  <Trans>One Noun is equal to one vote.</Trans>
+                  <Trans>One NounBR is equal to one vote.</Trans>
                 </li>
                 <li>
                   <Trans>The treasury is controlled exclusively by NounsBR via governance.</Trans>
@@ -106,17 +106,17 @@ const Documentation = () => {
             <Accordion.Body>
               <p className={classes.aboutText}>
                 <Trans>
-                  The NounsBR Auction Contract will act as a self-sufficient Noun generation and
-                  distribution mechanism, auctioning one Noun every 24 hours, forever. 100% of
+                  The NounsBR Auction Contract will act as a self-sufficient NounBR generation and
+                  distribution mechanism, auctioning one NounBR every 24 hours, forever. 100% of
                   auction proceeds (ETH) are automatically deposited in the NounsBR DAO treasury,
-                  where they are governed by Noun owners.
+                  where they are governed by NounBR owners.
                 </Trans>
               </p>
 
               <p className={classes.aboutText}>
                 <Trans>
                   Each time an auction is settled, the settlement transaction will also cause a new
-                  Noun to be minted and a new 24 hour auction to begin.{' '}
+                  NounBR to be minted and a new 24 hour auction to begin.{' '}
                 </Trans>
               </p>
               <p>
@@ -136,10 +136,10 @@ const Documentation = () => {
               <Trans>
                 NounsBR DAO utilizes a fork of {compoundGovLink} and is the main governing body of the
                 NounsBR ecosystem. The NounsBR DAO treasury receives 100% of ETH proceeds from daily
-                Noun auctions. Each Noun is an irrevocable member of NounsBR DAO and entitled to one
-                vote in all governance matters. Noun votes are non-transferable (if you sell your
-                Noun the vote goes with it) but delegatable, which means you can assign your vote to
-                someone else as long as you own your Noun.
+                NounBR auctions. Each NounBR is an irrevocable member of NounsBR DAO and entitled to one
+                vote in all governance matters. NounBR votes are non-transferable (if you sell your
+                NounBR the vote goes with it) but delegatable, which means you can assign your vote to
+                someone else as long as you own your NounBR.
               </Trans>
             </Accordion.Body>
           </Accordion.Item>
@@ -187,7 +187,7 @@ const Documentation = () => {
                 <li>unequally withdraw the treasury for personal gain</li>
                 <li>bribe voters to facilitate withdraws of the treasury for personal gain</li>
                 <li>
-                  attempt to alter Noun auction cadence for the purpose of maintaining or acquiring
+                  attempt to alter NounBR auction cadence for the purpose of maintaining or acquiring
                   a voting majority
                 </li>
                 <li>make upgrades to critical smart contracts without undergoing an audit</li>
@@ -203,13 +203,13 @@ const Documentation = () => {
           </Accordion.Item>
           <Accordion.Item eventKey="4" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>Noun Traits</Trans>
+              <Trans>NounBR Traits</Trans>
             </Accordion.Header>
             <Accordion.Body>
               <p>
                 <Trans>
                   NounsBR are generated randomly based Ethereum block hashes. There are no 'if'
-                  statements or other rules governing Noun trait scarcity, which makes all NounsBR
+                  statements or other rules governing NounBR trait scarcity, which makes all NounsBR
                   equally rare. As of this writing, NounsBR are made up of:
                 </Trans>
               </p>
@@ -231,7 +231,7 @@ const Documentation = () => {
                 </li>
               </ul>
               <Trans>
-                You can experiment with off-chain Noun generation at the {playgroundLink}.
+                You can experiment with off-chain NounBR generation at the {playgroundLink}.
               </Trans>
             </Accordion.Body>
           </Accordion.Item>
@@ -243,7 +243,7 @@ const Documentation = () => {
               <p>
                 <Trans>
                   NounsBR are stored directly on Ethereum and do not utilize pointers to other
-                  networks such as IPFS. This is possible because Noun parts are compressed and
+                  networks such as IPFS. This is possible because NounBR parts are compressed and
                   stored on-chain using a custom run-length encoding (RLE), which is a form of
                   lossless compression.
                 </Trans>
@@ -262,15 +262,15 @@ const Documentation = () => {
           </Accordion.Item>
           <Accordion.Item eventKey="6" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>Noun Seeder Contract</Trans>
+              <Trans>NounBR Seeder Contract</Trans>
             </Accordion.Header>
             <Accordion.Body>
               <p>
                 <Trans>
-                  The Noun Seeder contract is used to determine Noun traits during the minting
+                  The NounBR Seeder contract is used to determine NounBR traits during the minting
                   process. The seeder contract can be replaced to allow for future trait generation
                   algorithm upgrades. Additionally, it can be locked by the NounsBR DAO to prevent any
-                  future updates. Currently, Noun traits are determined using pseudo-random number
+                  future updates. Currently, NounBR traits are determined using pseudo-random number
                   generation:
                 </Trans>
               </p>
@@ -279,7 +279,7 @@ const Documentation = () => {
               <br />
               <p>
                 <Trans>
-                  Trait generation is not truly random. Traits can be predicted when minting a Noun
+                  Trait generation is not truly random. Traits can be predicted when minting a NounBR
                   on the pending block.
                 </Trans>
               </p>
@@ -342,9 +342,9 @@ const Documentation = () => {
               </ul>
               <p>
                 <Trans>
-                  Because 100% of Noun auction proceeds are sent to NounsBR DAO, Nounders have chosen
-                  to compensate themselves with NounsBR. Every 10th Noun for the first 5 years of the
-                  project (Noun ids #0, #10, #20, #30 and so on) will be automatically sent to the
+                  Because 100% of NounBR auction proceeds are sent to NounsBR DAO, Nounders have chosen
+                  to compensate themselves with NounsBR. Every 10th NounBR for the first 5 years of the
+                  project (NounBR ids #0, #10, #20, #30 and so on) will be automatically sent to the
                   Nounder's multisig to be vested and shared among the founding members of the
                   project.
                 </Trans>
@@ -353,7 +353,7 @@ const Documentation = () => {
                 <Trans>
                   Nounder distributions don't interfere with the cadence of 24 hour auctions. NounsBR
                   are sent directly to the Nounder's Multisig, and auctions continue on schedule
-                  with the next available Noun ID.
+                  with the next available NounBR ID.
                 </Trans>
               </p>
             </Accordion.Body>

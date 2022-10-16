@@ -36,7 +36,7 @@ export async function resolveEnsOrFormatAddress(address: string) {
 export function formatAuctionStartedTweetText(auctionId: number) {
   return `＊Bleep Bloop Blop＊
         
- An auction has started for Noun #${auctionId}
+ An auction has started for NounBR #${auctionId}
  Learn more at https://nouns.wtf`;
 }
 
@@ -48,7 +48,7 @@ export function formatAuctionStartedTweetText(auctionId: number) {
  */
 export async function formatBidMessageText(id: number, bid: Bid) {
   const bidder = await resolveEnsOrFormatAddress(bid.bidder.id);
-  return `Noun ${id} has received a bid of Ξ${ethers.utils.formatEther(bid.amount)} from ${bidder}`;
+  return `NounBR ${id} has received a bid of Ξ${ethers.utils.formatEther(bid.amount)} from ${bidder}`;
 }
 
 /**
@@ -86,9 +86,9 @@ export async function formatNewGovernanceVoteText(proposal: Proposal, vote: Vote
 }
 
 /**
- * Get the PNG buffer data of a Noun
+ * Get the PNG buffer data of a NounBR
  * @param tokenId The ERC721 token id
- * @returns The png buffer of the Noun or undefined
+ * @returns The png buffer of the NounBR or undefined
  */
 export async function getNounPngBuffer(tokenId: string): Promise<Buffer | undefined> {
   const dataURI = await tryF(() => nounsTokenContract.dataURI(tokenId));

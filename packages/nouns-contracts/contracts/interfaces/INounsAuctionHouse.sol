@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title Interface for Noun Auction Houses
+/// @title Interface for NounBR Auction Houses
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -19,7 +19,7 @@ pragma solidity ^0.8.6;
 
 interface INounsAuctionHouse {
     struct Auction {
-        // ID for the Noun (ERC721 token ID)
+        // ID for the NounBR (ERC721 token ID)
         uint256 nounId;
         // The current highest bid amount
         uint256 amount;

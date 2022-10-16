@@ -141,8 +141,8 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     }
 
     /**
-     * @notice Mint a Noun to the minter, along with a possible nounders reward
-     * Noun. Nounders reward NounsBR are minted every 10 NounsBR, starting at 0,
+     * @notice Mint a NounBR to the minter, along with a possible nounders reward
+     * NounBR. Nounders reward NounsBR are minted every 10 NounsBR, starting at 0,
      * until 183 nounder NounsBR have been minted (5 years w/ 24 hour auctions).
      * @dev Call _mintTo with the to address(es).
      */
@@ -250,7 +250,7 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     }
 
     /**
-     * @notice Mint a Noun with `nounId` to the provided `to` address.
+     * @notice Mint a NounBR with `nounId` to the provided `to` address.
      */
     function _mintTo(address to, uint256 nounId) internal returns (uint256) {
         INounsSeeder.Seed memory seed = seeds[nounId] = seeder.generateSeed(nounId, descriptor);

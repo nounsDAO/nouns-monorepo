@@ -38,7 +38,7 @@
 //    - `_setMaxQuorumVotesBPS(uint16 newMaxQuorumVotesBPS)`
 //    - `_setQuorumCoefficient(uint32 newQuorumCoefficient)`
 // - `minQuorumVotes` and `maxQuorumVotes`, which returns the current min and
-// max quorum votes using the current Noun supply.
+// max quorum votes using the current NounBR supply.
 // - New `Proposal` struct member:
 //    - `totalSupply` used in dynamic quorum calculation.
 //    - `creationBlock` used for retrieving checkpoints of votes and dynamic quorum params. This now
@@ -915,7 +915,7 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     }
 
     /**
-     * @notice Current proposal threshold using Noun Total Supply
+     * @notice Current proposal threshold using NounBR Total Supply
      * Differs from `GovernerBravo` which uses fixed amount
      */
     function proposalThreshold() public view returns (uint256) {
@@ -1050,14 +1050,14 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
     }
 
     /**
-     * @notice Current min quorum votes using Noun total supply
+     * @notice Current min quorum votes using NounBR total supply
      */
     function minQuorumVotes() public view returns (uint256) {
         return bps2Uint(getDynamicQuorumParamsAt(block.number).minQuorumVotesBPS, nouns.totalSupply());
     }
 
     /**
-     * @notice Current max quorum votes using Noun total supply
+     * @notice Current max quorum votes using NounBR total supply
      */
     function maxQuorumVotes() public view returns (uint256) {
         return bps2Uint(getDynamicQuorumParamsAt(block.number).maxQuorumVotesBPS, nouns.totalSupply());

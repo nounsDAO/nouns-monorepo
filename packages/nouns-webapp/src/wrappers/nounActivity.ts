@@ -37,7 +37,7 @@ export type DelegationEvent = {
   transactionHash: string;
 };
 
-// Wrapper type around Noun events.
+// Wrapper type around NounBR events.
 // All events are keyed by blockNumber to allow sorting.
 export type NounProfileEvent = {
   blockNumber: number;
@@ -58,8 +58,8 @@ export type NounProfileEventFetcherResponse = {
 };
 
 /**
- * Fetch list of ProposalVoteEvents representing the voting history of the given Noun
- * @param nounId Id of Noun who's voting history will be fetched
+ * Fetch list of ProposalVoteEvents representing the voting history of the given NounBR
+ * @param nounId Id of NounBR who's voting history will be fetched
  */
 const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherResponse => {
   const { loading, error, data } = useQuery(nounVotingHistoryQuery(nounId));
@@ -102,7 +102,7 @@ const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherRespo
       proposalCreatedTimestamps.proposals[id].createdTimestamp,
     );
 
-    // Filter props from before the Noun was born
+    // Filter props from before the NounBR was born
     if (nounCanVoteTimestamp.gt(proposalCreationTimestamp)) {
       return false;
     }
@@ -142,8 +142,8 @@ const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherRespo
 };
 
 /**
- * Fetch list of TransferEvents for given Noun
- * @param nounId Id of Noun who's transfer history we will fetch
+ * Fetch list of TransferEvents for given NounBR
+ * @param nounId Id of NounBR who's transfer history we will fetch
  */
 const useNounTransferEvents = (nounId: number): NounProfileEventFetcherResponse => {
   const { loading, error, data } = useQuery(nounTransferHistoryQuery(nounId));
@@ -186,8 +186,8 @@ const useNounTransferEvents = (nounId: number): NounProfileEventFetcherResponse 
 };
 
 /**
- * Fetch list of DelegationEvents for given Noun
- * @param nounId Id of Noun who's transfer history we will fetch
+ * Fetch list of DelegationEvents for given NounBR
+ * @param nounId Id of NounBR who's transfer history we will fetch
  */
 const useDelegationEvents = (nounId: number): NounProfileEventFetcherResponse => {
   const { loading, error, data } = useQuery(nounDelegationHistoryQuery(nounId));
@@ -230,8 +230,8 @@ const useDelegationEvents = (nounId: number): NounProfileEventFetcherResponse =>
 };
 
 /**
- * Fetch list of all events for given Noun (ex: voting, transfer, delegation, etc.)
- * @param nounId Id of Noun who's history we will fetch
+ * Fetch list of all events for given NounBR (ex: voting, transfer, delegation, etc.)
+ * @param nounId Id of NounBR who's history we will fetch
  */
 export const useNounActivity = (nounId: number): NounProfileEventFetcherResponse => {
   const {

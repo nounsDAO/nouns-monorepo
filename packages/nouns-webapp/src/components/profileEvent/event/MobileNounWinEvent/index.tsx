@@ -28,7 +28,7 @@ const MobileNounWinEvent: React.FC<MobileNounWinEventProps> = props => {
         <>
           {isNounderNoun ? (
             <Trans>
-              <span className={classes.bold}> Noun {event.nounId} </span> sent to{' '}
+              <span className={classes.bold}> NounBR {event.nounId} </span> sent to{' '}
               <span className={classes.bold}>
                 {' '}
                 <ShortAddress address={event.winner} />
@@ -36,7 +36,7 @@ const MobileNounWinEvent: React.FC<MobileNounWinEventProps> = props => {
             </Trans>
           ) : (
             <Trans>
-              <span className={classes.bold}> Noun {event.nounId} </span> won by{' '}
+              <span className={classes.bold}> NounBR {event.nounId} </span> won by{' '}
               <span className={classes.bold}>
                 {' '}
                 <ShortAddress address={event.winner} />

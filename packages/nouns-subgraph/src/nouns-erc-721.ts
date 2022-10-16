@@ -22,7 +22,7 @@ export function handleNounCreated(event: NounCreated): void {
 
   let noun = Noun.load(nounId);
   if (noun == null) {
-    log.error('[handleNounCreated] Noun #{} not found. Hash: {}', [
+    log.error('[handleNounCreated] NounBR #{} not found. Hash: {}', [
       nounId,
       event.transaction.hash.toHex(),
     ]);
@@ -60,7 +60,7 @@ export function handleDelegateChanged(event: DelegateChanged): void {
   previousDelegate.save();
   newDelegate.save();
 
-  // Log a transfer event for each Noun
+  // Log a transfer event for each NounBR
   for (let i = 0; i < accountNouns.length; i++) {
     let delegateChangedEvent = new DelegationEvent(
       event.transaction.hash.toHexString() + '_' + accountNouns[i],

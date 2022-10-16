@@ -14,11 +14,11 @@ The [nouns api](packages/nouns-api) is an HTTP webserver that hosts token metada
 
 ### nouns-assets
 
-The [nouns assets](packages/nouns-assets) package holds the Noun PNG and run-length encoded image data.
+The [nouns assets](packages/nouns-assets) package holds the NounBR PNG and run-length encoded image data.
 
 ### nouns-bots
 
-The [nouns bots](packages/nouns-bots) package contains a bot that monitors for changes in Noun auction state and notifies everyone via Twitter and Discord.
+The [nouns bots](packages/nouns-bots) package contains a bot that monitors for changes in NounBR auction state and notifies everyone via Twitter and Discord.
 
 ### nouns-contracts
 
@@ -34,7 +34,7 @@ In order to make retrieving more complex data from the auction history, [nouns s
 
 ### nouns-webapp
 
-The [nouns webapp](packages/nouns-webapp) is the frontend for interacting with Noun auctions as hosted at [nouns.wtf](https://nouns.wtf).
+The [nouns webapp](packages/nouns-webapp) is the frontend for interacting with NounBR auctions as hosted at [nouns.wtf](https://nouns.wtf).
 
 ## Quickstart
 

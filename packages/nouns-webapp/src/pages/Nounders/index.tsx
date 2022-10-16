@@ -145,7 +145,7 @@ const NoundersPage = () => {
         </h3>
         <p style={{ textAlign: 'justify' }}>
           <Trans>
-            All Noun auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's
+            All NounBR auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's
             founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th noun
             for the first 5 years of the project will be sent to our multisig (5/10), where it will
             be vested and distributed to individual Nounders.
@@ -156,7 +156,7 @@ const NoundersPage = () => {
             The Nounders reward is intended as compensation for our pre and post-launch
             contributions to the project, and to help us participate meaningfully in governance as
             the project matures. Since there are 10 Nounders, after 5 years each Nounder could
-            receive up to 1% of the Noun supply.
+            receive up to 1% of the NounBR supply.
           </Trans>
         </p>
       </Col>

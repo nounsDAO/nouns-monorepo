@@ -54,7 +54,7 @@ const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProp
       className={classes.clickableNoun}
       onClick={onClickHandler}
     >
-      <Noun imgPath={noun ? noun.image : ''} alt={noun ? noun.description : 'Noun'} />
+      <Noun imgPath={noun ? noun.image : ''} alt={noun ? noun.description : 'NounBR'} />
     </Link>
   );
 };
@@ -71,7 +71,7 @@ export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
     dispatch(setOnDisplayAuctionNounId(nounId.toNumber()));
   };
 
-  if (!seed || !nounId) return <Noun imgPath="" alt="Noun" />;
+  if (!seed || !nounId) return <Noun imgPath="" alt="NounBR" />;
 
   return (
     <Link
@@ -81,7 +81,7 @@ export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
     >
       <Noun
         imgPath={noun ? noun.image : ''}
-        alt={noun ? noun.description : 'Noun'}
+        alt={noun ? noun.description : 'NounBR'}
         wrapperClassName={nounClasses.circularNounWrapper}
         className={border ? nounClasses.circleWithBorder : nounClasses.circular}
       />
@@ -109,7 +109,7 @@ export const StandaloneNounRoundedCorners: React.FC<StandaloneNounProps> = (
     >
       <Noun
         imgPath={noun ? noun.image : ''}
-        alt={noun ? noun.description : 'Noun'}
+        alt={noun ? noun.description : 'NounBR'}
         className={nounClasses.rounded}
       />
     </Link>
@@ -125,7 +125,7 @@ export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = (
   const seed = useNounSeed(nounId);
   const seedIsInvalid = Object.values(seed || {}).every(v => v === 0);
 
-  if (!seed || seedIsInvalid || !nounId || !onLoadSeed) return <Noun imgPath="" alt="Noun" />;
+  if (!seed || seedIsInvalid || !nounId || !onLoadSeed) return <Noun imgPath="" alt="NounBR" />;
 
   onLoadSeed(seed);
 

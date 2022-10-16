@@ -53,9 +53,9 @@ export const useAuctionMinBidIncPercentage = () => {
 };
 
 /**
- * Computes timestamp after which a Noun could vote
- * @param nounId TokenId of Noun
- * @returns Unix timestamp after which Noun could vote
+ * Computes timestamp after which a NounBR could vote
+ * @param nounId TokenId of NounBR
+ * @returns Unix timestamp after which NounBR could vote
  */
 export const useNounCanVoteTimestamp = (nounId: number) => {
   const nextNounId = nounId + 1;

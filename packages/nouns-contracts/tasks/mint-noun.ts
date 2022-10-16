@@ -1,7 +1,7 @@
 import { Result } from 'ethers/lib/utils';
 import { task, types } from 'hardhat/config';
 
-task('mint-noun', 'Mints a Noun')
+task('mint-noun', 'Mints a NounBR')
   .addOptionalParam(
     'nounsToken',
     'The `NounsToken` contract address',
@@ -16,5 +16,5 @@ task('mint-noun', 'Mints a Noun')
     const nounCreated = receipt.events?.[1];
     const { tokenId } = nounCreated?.args as Result;
 
-    console.log(`Noun minted with ID: ${tokenId.toString()}.`);
+    console.log(`NounBR minted with ID: ${tokenId.toString()}.`);
   });

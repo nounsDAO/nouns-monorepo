@@ -27,13 +27,13 @@
 // MODIFICATIONS
 // NounsDAOLogicV1 adds:
 // - Proposal Threshold basis points instead of fixed number
-//   due to the Noun token's increasing supply
+//   due to the NounBR token's increasing supply
 //
 // - Quorum Votes basis points instead of fixed number
-//   due to the Noun token's increasing supply
+//   due to the NounBR token's increasing supply
 //
 // - Per proposal storing of fixed `proposalThreshold`
-//   and `quorumVotes` calculated using the Noun token's total supply
+//   and `quorumVotes` calculated using the NounBR token's total supply
 //   at the block the proposal was created and the basis point parameters
 //
 // - `ProposalCreatedWithRequirements` event that emits `ProposalCreated` parameters with
@@ -654,7 +654,7 @@ contract NounsDAOLogicV1 is NounsDAOStorageV1, NounsDAOEvents {
     }
 
     /**
-     * @notice Current proposal threshold using Noun Total Supply
+     * @notice Current proposal threshold using NounBR Total Supply
      * Differs from `GovernerBravo` which uses fixed amount
      */
     function proposalThreshold() public view returns (uint256) {
@@ -662,7 +662,7 @@ contract NounsDAOLogicV1 is NounsDAOStorageV1, NounsDAOEvents {
     }
 
     /**
-     * @notice Current quorum votes using Noun Total Supply
+     * @notice Current quorum votes using NounBR Total Supply
      * Differs from `GovernerBravo` which uses fixed amount
      */
     function quorumVotes() public view returns (uint256) {

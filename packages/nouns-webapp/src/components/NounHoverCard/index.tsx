@@ -56,11 +56,11 @@ const NounHoverCard: React.FC<NounHoverCardProps> = props => {
           <StandaloneNounCircular nounId={BigNumber.from(nounId)} />
         </div>
         <div>
-          <h1>Noun {nounId}</h1>
+          <h1>NounBR {nounId}</h1>
         </div>
       </div>
 
-      {/* Noun birthday */}
+      {/* NounBR birthday */}
       <div className={classes.nounInfoWrapper}>
         <CakeIcon height={20} width={20} className={classes.icon} />
         <Trans>Born</Trans> <span className={classes.bold}>{i18n.date(birthday)}</span>

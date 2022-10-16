@@ -2,8 +2,8 @@ type DelegationEvent @entity {
   "The txn hash of this event + nounId"
   id: ID!
 
-  "The Noun being delegated"
-  noun: Noun!
+  "The NounBR being delegated"
+  noun: NounBR!
 
   "Previous delegate address"
   previousDelegate: Delegate!
@@ -22,8 +22,8 @@ type TransferEvent @entity {
   "The txn hash of this event"
   id: ID!
 
-  "The Noun being transfered"
-  noun: Noun!
+  "The NounBR being transfered"
+  noun: NounBR!
 
   "Previous holder address"
   previousHolder: Account!
@@ -39,7 +39,7 @@ type TransferEvent @entity {
 }
 
 type Seed @entity {
-  "The Noun's ERC721 token id"
+  "The NounBR's ERC721 token id"
   id: ID!
 
   "The background index"
@@ -58,17 +58,17 @@ type Seed @entity {
   glasses: BigInt!
 }
 
-type Noun @entity {
-  "The Noun's ERC721 token id"
+type NounBR @entity {
+  "The NounBR's ERC721 token id"
   id: ID!
 
-  "The seed used to determine the Noun's traits"
+  "The seed used to determine the NounBR's traits"
   seed: Seed
 
-  "The owner of the Noun"
+  "The owner of the NounBR"
   owner: Account!
 
-  "Historical votes for the Noun"
+  "Historical votes for the NounBR"
   votes: [Vote!]! @derivedFrom(field: "nouns")
 }
 
@@ -76,8 +76,8 @@ type Bid @entity {
   "Bid transaction hash"
   id: ID!
 
-  "The Noun being bid on"
-  noun: Noun!
+  "The NounBR being bid on"
+  noun: NounBR!
 
   "Bid amount"
   amount: BigInt!
@@ -99,11 +99,11 @@ type Bid @entity {
 }
 
 type Auction @entity {
-  "The Noun's ERC721 token id"
+  "The NounBR's ERC721 token id"
   id: ID!
 
-  "The Noun"
-  noun: Noun!
+  "The NounBR"
+  noun: NounBR!
 
   "The current highest bid amount"
   amount: BigInt!
@@ -140,10 +140,10 @@ type Account @entity {
   "Delegate address of the token holder which will participate in votings. Delegates don't need to hold any tokens and can even be the token holder itself."
   delegate: Delegate
 
-  "Noun balance of this address expressed in the smallest unit of the NounsBR ERC721 Token"
+  "NounBR balance of this address expressed in the smallest unit of the NounsBR ERC721 Token"
   tokenBalanceRaw: BigInt!
 
-  "Noun balance of this address expressed as a BigInt normalized value for the NounsBR ERC721 Token"
+  "NounBR balance of this address expressed as a BigInt normalized value for the NounsBR ERC721 Token"
   tokenBalance: BigInt!
 
   "Total amount of NounsBR ever held by this address expressed in the smallest unit of the NounsBR ERC721 Token"
@@ -153,7 +153,7 @@ type Account @entity {
   totalTokensHeld: BigInt!
 
   "The NounsBR owned by this account"
-  nouns: [Noun!]!
+  nouns: [NounBR!]!
 }
 
 type Delegate @entity {
@@ -172,7 +172,7 @@ type Delegate @entity {
   tokenHoldersRepresented: [Account!]! @derivedFrom(field: "delegate")
 
   "NounsBR that this delegate represents"
-  nounsRepresented: [Noun!]!
+  nounsRepresented: [NounBR!]!
 
   "Votes that a delegate has made in different proposals"
   votes: [Vote!]! @derivedFrom(field: "voter")
@@ -278,7 +278,7 @@ type Vote @entity {
   voter: Delegate!
 
   "The NounsBR used to vote"
-  nouns: [Noun!]
+  nouns: [NounBR!]
 
   "Proposal that is being voted on"
   proposal: Proposal!

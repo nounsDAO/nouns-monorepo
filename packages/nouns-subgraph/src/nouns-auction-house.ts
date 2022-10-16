@@ -13,7 +13,7 @@ export function handleAuctionCreated(event: AuctionCreated): void {
 
   let noun = Noun.load(nounId);
   if (noun == null) {
-    log.error('[handleAuctionCreated] Noun #{} not found. Hash: {}', [
+    log.error('[handleAuctionCreated] NounBR #{} not found. Hash: {}', [
       nounId,
       event.transaction.hash.toHex(),
     ]);
@@ -37,7 +37,7 @@ export function handleAuctionBid(event: AuctionBid): void {
 
   let auction = Auction.load(nounId);
   if (auction == null) {
-    log.error('[handleAuctionBid] Auction not found for Noun #{}. Hash: {}', [
+    log.error('[handleAuctionBid] Auction not found for NounBR #{}. Hash: {}', [
       nounId,
       event.transaction.hash.toHex(),
     ]);
@@ -65,7 +65,7 @@ export function handleAuctionExtended(event: AuctionExtended): void {
 
   let auction = Auction.load(nounId);
   if (auction == null) {
-    log.error('[handleAuctionExtended] Auction not found for Noun #{}. Hash: {}', [
+    log.error('[handleAuctionExtended] Auction not found for NounBR #{}. Hash: {}', [
       nounId,
       event.transaction.hash.toHex(),
     ]);
@@ -81,7 +81,7 @@ export function handleAuctionSettled(event: AuctionSettled): void {
 
   let auction = Auction.load(nounId);
   if (auction == null) {
-    log.error('[handleAuctionSettled] Auction not found for Noun #{}. Hash: {}', [
+    log.error('[handleAuctionSettled] Auction not found for NounBR #{}. Hash: {}', [
       nounId,
       event.transaction.hash.toHex(),
     ]);

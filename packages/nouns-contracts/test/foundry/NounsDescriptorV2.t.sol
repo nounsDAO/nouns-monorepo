@@ -112,9 +112,9 @@ contract NounsDescriptorV2Test is Test {
                         bytes(
                             abi.encodePacked(
                                 '{"name":"',
-                                'Noun 42',
+                                'NounBR 42',
                                 '", "description":"',
-                                'Noun 42 is a member of the NounsBR DAO',
+                                'NounBR 42 is a member of the NounsBR DAO',
                                 '", "image": "',
                                 'data:image/svg+xml;base64,',
                                 Base64.encode(bytes('mock svg')),

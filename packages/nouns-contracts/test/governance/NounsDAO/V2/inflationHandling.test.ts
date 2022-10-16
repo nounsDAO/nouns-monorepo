@@ -84,7 +84,7 @@ describe('NounsDAOV2#inflationHandling', () => {
     ).to.equal(minQuorumVotesBPS);
   });
 
-  it('returns quorum votes and proposal threshold based on Noun total supply', async () => {
+  it('returns quorum votes and proposal threshold based on NounBR total supply', async () => {
     // Total Supply = 40
     await setTotalSupply(token, 40);
 

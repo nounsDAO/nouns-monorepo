@@ -33,13 +33,13 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     // https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt
     bytes32 constant COPYRIGHT_CC0_1_0_UNIVERSAL_LICENSE = 0xa2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499;
 
-    /// @notice The contract responsible for holding compressed Noun art
+    /// @notice The contract responsible for holding compressed NounBR art
     INounsArt public art;
 
     /// @notice The contract responsible for constructing SVGs
     ISVGRenderer public renderer;
 
-    /// @notice Whether or not new Noun parts can be added
+    /// @notice Whether or not new NounBR parts can be added
     bool public override arePartsLocked;
 
     /// @notice Whether or not `tokenURI` should be returned as a data URI (Default: true)
@@ -62,7 +62,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     }
 
     /**
-     * @notice Set the Noun's art contract.
+     * @notice Set the NounBR's art contract.
      * @dev Only callable by the owner when not locked.
      */
     function setArt(INounsArt _art) external onlyOwner whenPartsNotLocked {
@@ -100,42 +100,42 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     }
 
     /**
-     * @notice Get the number of available Noun `backgrounds`.
+     * @notice Get the number of available NounBR `backgrounds`.
      */
     function backgroundCount() external view override returns (uint256) {
         return art.backgroundsCount();
     }
 
     /**
-     * @notice Get the number of available Noun `bodies`.
+     * @notice Get the number of available NounBR `bodies`.
      */
     function bodyCount() external view override returns (uint256) {
         return art.getBodiesTrait().storedImagesCount;
     }
 
     /**
-     * @notice Get the number of available Noun `accessories`.
+     * @notice Get the number of available NounBR `accessories`.
      */
     function accessoryCount() external view override returns (uint256) {
         return art.getAccessoriesTrait().storedImagesCount;
     }
 
     /**
-     * @notice Get the number of available Noun `heads`.
+     * @notice Get the number of available NounBR `heads`.
      */
     function headCount() external view override returns (uint256) {
         return art.getHeadsTrait().storedImagesCount;
     }
 
     /**
-     * @notice Get the number of available Noun `glasses`.
+     * @notice Get the number of available NounBR `glasses`.
      */
     function glassesCount() external view override returns (uint256) {
         return art.getGlassesTrait().storedImagesCount;
     }
 
     /**
-     * @notice Batch add Noun backgrounds.
+     * @notice Batch add NounBR backgrounds.
      * @dev This function can only be called by the owner when not locked.
      */
     function addManyBackgrounds(string[] calldata _backgrounds) external override onlyOwner whenPartsNotLocked {
@@ -143,7 +143,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     }
 
     /**
-     * @notice Add a Noun background.
+     * @notice Add a NounBR background.
      * @dev This function can only be called by the owner when not locked.
      */
     function addBackground(string calldata _background) external override onlyOwner whenPartsNotLocked {
@@ -361,7 +361,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     }
 
     /**
-     * @notice Lock all Noun parts.
+     * @notice Lock all NounBR parts.
      * @dev This cannot be reversed and can only be called by the owner when not locked.
      */
     function lockParts() external override onlyOwner whenPartsNotLocked {
@@ -445,7 +445,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     }
 
     /**
-     * @notice Get all Noun parts for the passed `seed`.
+     * @notice Get all NounBR parts for the passed `seed`.
      */
     function getPartsForSeed(INounsSeeder.Seed memory seed) public view returns (ISVGRenderer.Part[] memory) {
         bytes memory body = art.bodies(seed.body);

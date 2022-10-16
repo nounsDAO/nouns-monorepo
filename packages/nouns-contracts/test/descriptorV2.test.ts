@@ -84,8 +84,8 @@ describe('NounsDescriptorV2', () => {
         'ascii',
       ),
     );
-    expect(name).to.equal('Noun 0');
-    expect(description).to.equal('Noun 0 is a member of the NounsBR DAO');
+    expect(name).to.equal('NounBR 0');
+    expect(description).to.equal('NounBR 0 is a member of the NounsBR DAO');
     expect(image).to.not.be.undefined;
   }).timeout(1_000_000);
 
@@ -111,8 +111,8 @@ describe('NounsDescriptorV2', () => {
           'ascii',
         ),
       );
-      expect(name).to.equal(`Noun ${i}`);
-      expect(description).to.equal(`Noun ${i} is a member of the NounsBR DAO`);
+      expect(name).to.equal(`NounBR ${i}`);
+      expect(description).to.equal(`NounBR ${i} is a member of the NounsBR DAO`);
       expect(image).to.not.be.undefined;
 
       appendFileSync(

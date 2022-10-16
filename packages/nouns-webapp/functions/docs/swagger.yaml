@@ -15,7 +15,7 @@ tags:
 - name: "Governance"
   description: "Functions for fetching governance data"
 - name: "NounsBR"
-  description: "Information about Noun tokens"
+  description: "Information about NounBR tokens"
 - name: "Cryptography"
   description: "Functions for verifying identity"
 servers:
@@ -26,10 +26,10 @@ paths:
     post:
       tags:
         - "Address Data"
-      summary: "Check if an Ethereum address owns a Noun"
+      summary: "Check if an Ethereum address owns a NounBR"
       operationId: "isNounOwner"
       requestBody:
-        description: The Ethereum address to check for Noun ownership
+        description: The Ethereum address to check for NounBR ownership
         content:
           "text/plain":
             schema:
@@ -37,7 +37,7 @@ paths:
             example: "0x2536c09e5f5691498805884fa37811be3b2bddb4"
       responses:
         "200":
-          description: "Does address own a Noun"
+          description: "Does address own a NounBR"
           content:
             application/json:
               schema:
@@ -47,10 +47,10 @@ paths:
     post:
       tags:
         - "Address Data"
-      summary: "Check if an Ethereum is delegated the voting power of a Noun"
+      summary: "Check if an Ethereum is delegated the voting power of a NounBR"
       operationId: "isNounDelegate"
       requestBody:
-        description: The Ethereum address to check for Noun delegation
+        description: The Ethereum address to check for NounBR delegation
         content:
           "text/plain":
             schema:
@@ -58,7 +58,7 @@ paths:
             example: "0x75ee6eb3d8dacf41ee2e5307090b197d3e1cca6e"
       responses:
         "200":
-          description: "Is address delegated the voting power of a Noun"
+          description: "Is address delegated the voting power of a NounBR"
           content:
             application/json:
               schema:
@@ -72,7 +72,7 @@ paths:
       operationId: "getNounOwners"
       responses:
         "200":
-          description: "Lite Noun information including owners and delegates"
+          description: "Lite NounBR information including owners and delegates"
           content:
             application/json:
               schema:
@@ -131,7 +131,7 @@ paths:
       parameters:
         - name: fetchParticipation
           in: "query"
-          description: If set to true and the signature is valid, fetch to see if the signer owns or is delegated a Noun
+          description: If set to true and the signature is valid, fetch to see if the signer owns or is delegated a NounBR
           schema:
             type: boolean
           example: false
@@ -167,7 +167,7 @@ components:
           description: "The integer support value: against (0), for (1), or abstain (2)"
     Seed:
       type: object
-      description: The attributes that make up a Noun's seed
+      description: The attributes that make up a NounBR's seed
       properties:
         head:
           type: integer
@@ -181,7 +181,7 @@ components:
           type: integer
     NormalizedNoun:
       type: object
-      description: A Noun record
+      description: A NounBR record
       properties:
         id:
           type: integer
@@ -190,7 +190,7 @@ components:
           type: string
         delegatedTo:
           type: string
-          description: The address that the Noun's voting power is delegated to
+          description: The address that the NounBR's voting power is delegated to
         votes:
           type: array
           items:
@@ -199,25 +199,25 @@ components:
           $ref: "#/components/schemas/Seed"
     ProposalVote:
       type: object
-      description: How a Noun voted on a governance proposal
+      description: How a NounBR voted on a governance proposal
       properties:
         nounId:
           type: integer
         owner:
           type: string
-          description: The owner of the Noun
+          description: The owner of the NounBR
         delegatedTo:
           type: string
-          description: The Ethereum address the Noun's voting power is delegated
+          description: The Ethereum address the NounBR's voting power is delegated
         supportDetailed:
           type: integer
           description: "The integer support value: against (0), for (1), or abstain (2)"
     ProposalVotes:
       type: object
-      description: A map of Noun governance proposal ID to an array of votes
+      description: A map of NounBR governance proposal ID to an array of votes
     NounWithSeeds:
       type: object
-      description: A Noun and its seed attributes
+      description: A NounBR and its seed attributes
       properties:
         id:
           type: integer
@@ -227,17 +227,17 @@ components:
           $ref: "#/components/schemas/Seed"
     NounWithVotes:
       type: object
-      description: How a Noun has voted on NounsBR governance proposals
+      description: How a NounBR has voted on NounsBR governance proposals
       properties:
         id:
           type: integer
           format: uint256
         owner:
           type: string
-          description: The owner of the Noun
+          description: The owner of the NounBR
         delegatedTo:
           type: string
-          description: The Ethereum address a Noun's voting power has been delegated to
+          description: The Ethereum address a NounBR's voting power has been delegated to
         votes:
           type: array
           items:
@@ -250,10 +250,10 @@ components:
           format: uint256
         owner:
           type: string
-          description: The owner of the Noun
+          description: The owner of the NounBR
         delegatedTo:
           type: string
-          description: The Ethereum address a Noun's voting power has been delegated to
+          description: The Ethereum address a NounBR's voting power has been delegated to
     VerifySignatureRequest:
       type: object
       required:
@@ -296,7 +296,7 @@ components:
           description: If the supplied signature is valid
         isNounOwner:
           type: boolean
-          description: If the signature is valid and the address owns a Noun
+          description: If the signature is valid and the address owns a NounBR
         isNounDelegate:
           type: boolean
-          description: If the signature is valid and the address is delegated a Noun
+          description: If the signature is valid and the address is delegated a NounBR

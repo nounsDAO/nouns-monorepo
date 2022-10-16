@@ -21,7 +21,7 @@ const Banner = () => {
       </Col>
       <Col lg={6}>
         <div style={{ padding: '2rem' }}>
-          <Noun imgPath={calendar_noun} alt="noun" />
+          <Noun imgPath={calendar_noun} alt="nounBR" />
         </div>
       </Col>
     </Section>

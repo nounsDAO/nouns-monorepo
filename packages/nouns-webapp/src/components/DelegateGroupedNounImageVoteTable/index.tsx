@@ -39,7 +39,7 @@ const DelegateGruopedNounImageVoteTable: React.FC<
             hoverCardContent={(tip: string) => (
               <DelegateHoverCard delegateId={tip} proposalCreationBlock={proposalCreationBlock} />
             )}
-            // We add this prefix to prevent collisions with the Noun info cards
+            // We add this prefix to prevent collisions with the NounBR info cards
             tip={`delegate-${data.delegate}`}
             id="delegateVoteHoverCard"
           >
