@@ -40,7 +40,7 @@ msgstr "3.5 artistas, 6.5 tecnologistas"
 
 #: src/pages/NotFound/index.tsx
 msgid "404: This is not the person, place, or thing you're looking for..."
-msgstr "404: Parece que não bem é o que voce procurando..."
+msgstr "404: Parece que não bem é o que você procurando..."
 
 #: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
 #~ msgid "<0/>Holder changed from<1><2/></1> to <3><4/></3>"
@@ -371,7 +371,7 @@ msgstr "Dynamic Quorum"
 
 #: src/components/Banner/index.tsx
 msgid "EVERY DAY,"
-msgstr "EVERY DAY,"
+msgstr "TODO DIA,"
 
 #: src/components/Documentation/index.tsx
 msgid "Each time an auction is settled, the settlement transaction will also cause a new NounBR to be minted and a new 24 hour auction to begin."
@@ -1107,7 +1107,7 @@ msgstr "Lance vencendo"
 
 #: src/components/Winner/index.tsx
 msgid "You"
-msgstr "Voce"
+msgstr "Você "
 
 #: src/components/ProposalHeader/index.tsx
 msgid "You <0>Abstained</0> from this proposal"
@@ -1175,7 +1175,7 @@ msgstr "Your <0>{availableVotes}</0> votes have been delegated to a new account.
 
 #: src/components/Documentation/index.tsx
 msgid "accessories (140)"
-msgstr "acessórios (140)"
+msgstr "accessories (140)"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "at"
@@ -1187,15 +1187,15 @@ msgstr "em <0>{0}</0>"
 
 #: src/components/Documentation/index.tsx
 msgid "backgrounds (2)"
-msgstr "fundos (2)"
+msgstr "backgrounds (2)"
 
 #: src/components/Documentation/index.tsx
 msgid "bodies (30)"
-msgstr "corpos (30)"
+msgstr "bodies (30)"
 
 #: src/components/Documentation/index.tsx
 msgid "glasses (23)"
-msgstr "óculos (23)"
+msgstr "glasses (23)"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "h"
@@ -1203,7 +1203,7 @@ msgstr "h"
 
 #: src/components/Documentation/index.tsx
 msgid "heads (242)"
-msgstr "cabeças (242)"
+msgstr "heads (242)"
 
 #: src/components/AuctionTimer/index.tsx
 msgid "m"
