@@ -13,7 +13,7 @@ export type SupportedLocale = typeof SUPPORTED_LOCALES[number] | 'pseudo';
 export const DEFAULT_LOCALE: SupportedLocale = 'pt-BR';
 
 export const LOCALE_LABEL: { [locale in SupportedLocale]: string } = {
-  'pt-BR': 'Portugues',
+  'pt-BR': 'Português',
   'en-US': 'English',
   'ja-JP': '日本語',
   pseudo: 'ƥƨèúδô',

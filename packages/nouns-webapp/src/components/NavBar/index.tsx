@@ -62,7 +62,6 @@ const NavBar = () => {
             </Navbar.Brand>
             {Number(CHAIN_ID) !== 1 && (
               <Nav.Item>
-                <img className={classes.testnetImg} src={testnetNoun} alt="testnet noun" />
                 TESTNET
               </Nav.Item>
             )}
