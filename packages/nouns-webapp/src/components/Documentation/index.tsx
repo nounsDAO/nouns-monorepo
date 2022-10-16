@@ -299,45 +299,16 @@ const Documentation = () => {
               <ul>
                 <li>
                   <Link
-                    text="@cryptoseneca"
-                    url="https://twitter.com/cryptoseneca"
+                    text="@beautyandpunk"
+                    url="https://twitter.com/beautyandpunk"
                     leavesPage={true}
                   />
                 </li>
                 <li>
-                  <Link text="@gremplin" url="https://twitter.com/gremplin" leavesPage={true} />
+                  <Link text="@komesciart" url="https://twitter.com/komesciart" leavesPage={true} />
                 </li>
                 <li>
-                  <Link text="@punk4156" url="https://twitter.com/punk4156" leavesPage={true} />
-                </li>
-                <li>
-                  <Link text="@eboyarts" url="https://twitter.com/eBoyArts" leavesPage={true} />
-                </li>
-                <li>
-                  <Link text="@punk4464" url="https://twitter.com/punk4464" leavesPage={true} />
-                </li>
-                <li>
-                  <Link
-                    text="@_solimander_"
-                    url="https://twitter.com/_solimander_"
-                    leavesPage={true}
-                  />
-                </li>
-                <li>
-                  <Link text="@dhof" url="https://twitter.com/dhof" leavesPage={true} />
-                </li>
-                <li>
-                  <Link text="@devcarrot" url="https://twitter.com/carrot_init" leavesPage={true} />
-                </li>
-                <li>
-                  <Link text="@TimpersHD" url="https://twitter.com/TimpersHD" leavesPage={true} />
-                </li>
-                <li>
-                  <Link
-                    text="@lastpunk9999"
-                    url="https://twitter.com/lastpunk9999"
-                    leavesPage={true}
-                  />
+                  <Link text="@QuijoteHorizon" url="https://twitter.com/QuijoteHorizon" leavesPage={true} />
                 </li>
               </ul>
               <p>

@@ -2,7 +2,7 @@
   "name": "NounsBR",
   "description": "One NounBR, every day, forever.\r\n\r\nnouns.wtf",
   "image": "ipfs://QmNdUibRHNqX2byJLtCD3ofn65cfCtvXdQnV87wRjqWf96",
-  "external_link": "https://nouns.wtf",
+  "external_link": "https://nounsbr.wtf",
   "seller_fee_basis_points": 0,
   "fee_recipient": "0x0000000000000000000000000000000000000000"
 }
