@@ -1290,30 +1290,20 @@ msgid "Welcome"
 msgstr "Bem-vindo"
 
 #: src/pages/Nouners/index.tsx
-msgid "Basic information, major announcements, and user verification. If you just bought a
-              NounBR, you will need to verify your ownership in the #authentication channel to get added to the
-              "NounerBR" role of the server."
-msgstr "Informações básicas, anúncios importantes e verificação do usuário. Se você acabou de comprar um
-              NounBR, você precisará verificar sua propriedade no canal #authentication para ser adicionado ao
-              Função "NounerBR" do servidor."
+msgid "Basic information, major announcements, and user verification. If you just bought a NounBR, you will need to verify your ownership in the #authentication channel to get added to the "NounerBR" role of the server."
+msgstr "Informações básicas, anúncios importantes e verificação do usuário. Se você acabou de comprar um NounBR, você precisará verificar sua propriedade no canal #authentication para ser adicionado ao Função "NounerBR" do servidor."
 
 #: src/pages/Nouners/index.tsx
-msgid "These are channels where only NounsBR DAO members can post. In the spirit of having an open
-              and collaborative environment, all of these channels (except for #nounerbr-private) are
-              viewable by the public."
-msgstr "Esses são canais onde apenas membros do NounsBR DAO podem postar. No espírito de ter uma abertura
-              e colaborativo, todos esses canais (exceto #nounerbr-private) são
-              visíveis pelo público."
+msgid "These are channels where only NounsBR DAO members can post. In the spirit of having an open and collaborative environment, all of these channels (except for #nounerbr-private) are viewable by the public."
+msgstr "Esses são canais onde apenas membros do NounsBR DAO podem postar. No espírito de ter uma abertura e ambiente colaborativo, todos esses canais (exceto #nounerbr-private) são visíveis pelo público."
 
 #: src/pages/Nouners/index.tsx
 msgid "#nounsbr-chat"
 msgstr "#nounsbr-chat"
 
 #: src/pages/Nouners/index.tsx
-msgid "This is where most communication between members occurs. Anything that doesn't fit in
-              the other NounersBR channels likely goes here."
-msgstr "É aqui que ocorre a maior parte da comunicação entre os membros. Qualquer coisa que não se encaixe
-              os outros canais NounersBR provavelmente vão aqui."
+msgid "This is where most communication between members occurs. Anything that doesn't fit in the other NounersBR channels likely goes here."
+msgstr "É aqui que ocorre a maior parte da comunicação entre os membros. Qualquer coisa que não se encaixe os outros canais NounersBR provavelmente vão aqui."
 
 #: src/pages/Nouners/index.tsx
 msgid "#proposals"
@@ -1328,10 +1318,8 @@ msgid "#nounerbr-private"
 msgstr "#nounerbr-private"
 
 #: src/pages/Nouners/index.tsx
-msgid "While we generally prefer to keep everything out in the open, sometimes there are
-              sensitive matters where information is only kept to members."
-msgstr "Embora geralmente prefiramos manter tudo ao ar livre, às vezes há
-              assuntos sensíveis onde as informações são mantidas apenas para os membros."
+msgid "While we generally prefer to keep everything out in the open, sometimes there are sensitive matters where information is only kept to members."
+msgstr "Embora geralmente prefiramos manter tudo ao ar livre, às vezes há assuntos sensíveis onde as informações são mantidas apenas para os membros."
 
 #: src/pages/Nouners/index.tsx
 msgid "These are channels where anyone can post."
@@ -1342,22 +1330,14 @@ msgid "#general-chat"
 msgstr "#chat-geral"
 
 #: src/pages/Nouners/index.tsx
-msgid "The most active channel, and the other are topic specific. Non-members often post in
-            these channels asking for guidance on proposal ideas, or to share things they have made."
-msgstr "O canal mais ativo e os outros são específicos do tópico. Não membros costumam postar em
-            esses canais pedindo orientação sobre ideias de propostas ou para compartilhar coisas que fizeram."
+msgid "The most active channel, and the other are topic specific. Non-members often post in these channels asking for guidance on proposal ideas, or to share things they have made."
+msgstr "O canal mais ativo e os outros são específicos do tópico. Não membros costumam postar em esses canais pedindo orientação sobre ideias de propostas ou para compartilhar coisas que fizeram."
 
 #: src/pages/Nouners/index.tsx
 msgid "Projects"
 msgstr "Projetos"
 
 #: src/pages/Nouners/index.tsx
-msgid "When a project passes an on-chain vote, the creator of that proposal will often be given
-            their own channel in this section to answer questions and share updates on the status of
-            their work. This is a constantly expanding list - for more information on each of these,
-            check out the DAO section of the NounsBR website."
-msgstr "Quando um projeto passa por uma votação on-chain, o criador dessa proposta geralmente recebe
-            seu próprio canal nesta seção para responder a perguntas e compartilhar atualizações sobre o status de
-            trabalho deles. Esta é uma lista em constante expansão - para mais informações sobre cada um deles,
-            confira a seção DAO do site NounsBR."
+msgid "When a project passes an on-chain vote, the creator of that proposal will often be given their own channel in this section to answer questions and share updates on the status of their work. This is a constantly expanding list - for more information on each of these, check out the DAO section of the NounsBR website."
+msgstr "Quando um projeto passa por uma votação on-chain, o criador dessa proposta geralmente recebe seu próprio canal nesta seção para responder a perguntas e compartilhar atualizações sobre o status de trabalho deles. Esta é uma lista em constante expansão - para mais informações sobre cada um deles, confira a seção DAO do site NounsBR."
 

@@ -1261,10 +1261,6 @@ msgid "{voterComponent} voted for"
 msgstr "{voterComponent} voted for"
 
 #: src/pages/Nouners/index.tsx
-msgid "NounersBR"
-msgstr "NounersBR"
-
-#: src/pages/Nouners/index.tsx
 msgid "Welcome, NounerBR!"
 msgstr "Welcome, NounerBR!"
 
@@ -1289,30 +1285,20 @@ msgid "Welcome"
 msgstr "Welcome"
 
 #: src/pages/Nouners/index.tsx
-msgid "Basic information, major announcements, and user verification. If you just bought a
-              NounBR, you will need to verify your ownership in the #authentication channel to get added to the
-              "NounerBR" role of the server."
-msgstr "Basic information, major announcements, and user verification. If you just bought a
-              NounBR, you will need to verify your ownership in the #authentication channel to get added to the
-              "NounerBR" role of the server."
+msgid "Basic information, major announcements, and user verification. If you just bought a NounBR, you will need to verify your ownership in the #authentication channel to get added to the "NounerBR" role of the server."
+msgstr "Basic information, major announcements, and user verification. If you just bought a NounBR, you will need to verify your ownership in the #authentication channel to get added to the "NounerBR" role of the server."
 
 #: src/pages/Nouners/index.tsx
-msgid "These are channels where only NounsBR DAO members can post. In the spirit of having an open
-              and collaborative environment, all of these channels (except for #nounerbr-private) are
-              viewable by the public."
-msgstr "These are channels where only NounsBR DAO members can post. In the spirit of having an open
-              and collaborative environment, all of these channels (except for #nounerbr-private) are
-              viewable by the public."
+msgid "These are channels where only NounsBR DAO members can post. In the spirit of having an open and collaborative environment, all of these channels (except for #nounerbr-private) are viewable by the public."
+msgstr "These are channels where only NounsBR DAO members can post. In the spirit of having an open and collaborative environment, all of these channels (except for #nounerbr-private) are viewable by the public."
 
 #: src/pages/Nouners/index.tsx
 msgid "#nounsbr-chat"
 msgstr "#nounsbr-chat"
 
 #: src/pages/Nouners/index.tsx
-msgid "This is where most communication between members occurs. Anything that doesn't fit in
-              the other NounersBR channels likely goes here."
-msgstr "This is where most communication between members occurs. Anything that doesn't fit in
-              the other NounersBR channels likely goes here."
+msgid "This is where most communication between members occurs. Anything that doesn't fit in the other NounersBR channels likely goes here."
+msgstr "This is where most communication between members occurs. Anything that doesn't fit in the other NounersBR channels likely goes here."
 
 #: src/pages/Nouners/index.tsx
 msgid "#proposals"
@@ -1327,10 +1313,8 @@ msgid "#nounerbr-private"
 msgstr "#nounerbr-private"
 
 #: src/pages/Nouners/index.tsx
-msgid "While we generally prefer to keep everything out in the open, sometimes there are
-              sensitive matters where information is only kept to members."
-msgstr "While we generally prefer to keep everything out in the open, sometimes there are
-              sensitive matters where information is only kept to members."
+msgid "While we generally prefer to keep everything out in the open, sometimes there are sensitive matters where information is only kept to members."
+msgstr "While we generally prefer to keep everything out in the open, sometimes there are sensitive matters where information is only kept to members."
 
 #: src/pages/Nouners/index.tsx
 msgid "These are channels where anyone can post."
@@ -1341,22 +1325,13 @@ msgid "#general-chat"
 msgstr "#general-chat"
 
 #: src/pages/Nouners/index.tsx
-msgid "The most active channel, and the other are topic specific. Non-members often post in
-            these channels asking for guidance on proposal ideas, or to share things they have made."
-msgstr "The most active channel, and the other are topic specific. Non-members often post in
-            these channels asking for guidance on proposal ideas, or to share things they have made."
+msgid "The most active channel, and the other are topic specific. Non-members often post in these channels asking for guidance on proposal ideas, or to share things they have made."
+msgstr "The most active channel, and the other are topic specific. Non-members often post in these channels asking for guidance on proposal ideas, or to share things they have made."
 
 #: src/pages/Nouners/index.tsx
 msgid "Projects"
 msgstr "Projects"
 
 #: src/pages/Nouners/index.tsx
-msgid "When a project passes an on-chain vote, the creator of that proposal will often be given
-            their own channel in this section to answer questions and share updates on the status of
-            their work. This is a constantly expanding list - for more information on each of these,
-            check out the DAO section of the NounsBR website."
-msgstr "When a project passes an on-chain vote, the creator of that proposal will often be given
-            their own channel in this section to answer questions and share updates on the status of
-            their work. This is a constantly expanding list - for more information on each of these,
-            check out the DAO section of the NounsBR website."
-
+msgid "When a project passes an on-chain vote, the creator of that proposal will often be given their own channel in this section to answer questions and share updates on the status of their work. This is a constantly expanding list - for more information on each of these, check out the DAO section of the NounsBR website."
+msgstr "When a project passes an on-chain vote, the creator of that proposal will often be given their own channel in this section to answer questions and share updates on the status of their work. This is a constantly expanding list - for more information on each of these, check out the DAO section of the NounsBR website."
