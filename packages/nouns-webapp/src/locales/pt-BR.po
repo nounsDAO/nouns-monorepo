@@ -650,7 +650,7 @@ msgstr "Os NounsBR são armazenados diretamente no Ethereum e não utilizam pont
 
 #: src/components/Documentation/index.tsx
 msgid "NounsBR artwork is in the {publicDomainLink}."
-msgstr "A arte da NounsBR é totalmente CC0 {publicDomainLink}."
+msgstr "A arte da NounsBR é totalmente CC0 em {publicDomainLink}."
 
 #: src/pages/Governance/index.tsx
 msgid "NounsBR govern <0>NounsBR DAO</0>. NounsBR can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
@@ -1086,7 +1086,7 @@ msgstr "Aguardando pelo"
 #: src/components/Winner/index.tsx
 #: src/components/Winner/index.tsx
 msgid "What now?"
-msgstr "E agora?"
+msgstr "O que fazer agora?"
 
 #: src/components/Documentation/index.tsx
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction NounsBR as long as Ethereum is operational and there are interested bidders."
