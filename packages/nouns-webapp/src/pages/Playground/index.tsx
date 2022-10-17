@@ -34,7 +34,7 @@ interface PendingCustomTrait {
 
 const nounsProtocolLink = (
   <Link
-    text={<Trans>NounsBR Protocol</Trans>}
+    text={<Trans>Nouns Protocol</Trans>}
     url="https://www.notion.so/Noun-Protocol-32e4f0bf74fe433e927e2ea35e52a507"
     leavesPage={true}
   />
@@ -43,7 +43,7 @@ const nounsProtocolLink = (
 const nounsAssetsLink = (
   <Link
     text="nouns-assets"
-    url="https://github.com/nounsDAO/nouns-monorepo/tree/master/packages/nouns-assets"
+    url="https://github.com/nounsbr/nounsbr-monorepo/tree/master/packages/nouns-assets"
     leavesPage={true}
   />
 );
@@ -51,7 +51,7 @@ const nounsAssetsLink = (
 const nounsSDKLink = (
   <Link
     text="nouns-sdk"
-    url="https://github.com/nounsDAO/nouns-monorepo/tree/master/packages/nouns-sdk"
+    url="https://github.com/nounsbr/nounsbr-monorepo/tree/master/packages/nouns-sdk"
     leavesPage={true}
   />
 );
