@@ -184,7 +184,7 @@ msgstr "Background"
 
 #: src/components/Documentation/index.tsx
 msgid "Because 100% of NounBR auction proceeds are sent to NounsBR DAO, Nounders have chosen to compensate themselves with NounsBR. Every 10th NounBR for the first 5 years of the project (NounBR ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
-msgstr "Como 100% dos lucros do leilão do NounBR são enviados ao NounsBR DAO, os NoundersBR optaram por se compensar com o NounsBR. Cada 10º NounBR durante os primeiros 5 anos do projeto (NounBR ids #0, #10, #20, #30 e assim por diante) será automaticamente enviado ao multisig do Nounder para ser adquirido e compartilhado entre os membros fundadores do projeto."
+msgstr "Como 100% dos lucros do leilão do NounBR são enviados ao NounsBR DAO, os NoundersBR optaram por se compensar com o NounsBR. Cada 10º NounBR durante os primeiros 5 anos do projeto (NounBR ids #0, #10, #20, #30 e assim por diante) será automaticamente enviado ao multisig do NounderBR para ser adquirido e compartilhado entre os membros fundadores do projeto."
 
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
@@ -592,11 +592,11 @@ msgstr "NounBR {0}"
 
 #: src/components/Documentation/index.tsx
 msgid "Nounder distributions don't interfere with the cadence of 24 hour auctions. NounsBR are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available NounBR ID."
-msgstr "Distribuições nounder não interferem na cadência dos leilões de 24 horas. Os NounsBR são enviados diretamente para o Multisig da Nounder, e os leilões continuam no horário com o próximo NounBR ID disponível."
+msgstr "Distribuições NounderBR não interferem na cadência dos leilões de 24 horas. Os NounsBR são enviados diretamente para o Multisig da NounderBR, e os leilões continuam no horário com o próximo NounBR ID disponível."
 
 #: src/components/Documentation/index.tsx
 msgid "Nounder's Reward"
-msgstr "Recompensação aos NoundersBR"
+msgstr "NoundersBR Recompensação"
 
 #: src/components/Documentation/index.tsx
 msgid "Nounders receive rewards in the form of NounsBR (10% of supply for first 5 years)."
@@ -896,7 +896,7 @@ msgstr "NoundersBR"
 
 #: src/pages/Nounders/index.tsx
 msgid "The Nounders reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures. Since there are 10 Nounders, after 5 years each Nounder could receive up to 1% of the NounBR supply."
-msgstr "A recompensa da NoundersBR destina-se a compensar nossas contribuições pré e pós-lançamento ao projeto e a nos ajudar a participar significativamente da governança à medida que o projeto amadurece. Como são 10 NoundersBR, após 5 anos cada Nounder poderá receber até 1% da oferta do NounBR."
+msgstr "A recompensa da NoundersBR destina-se a compensar nossas contribuições pré e pós-lançamento ao projeto e a nos ajudar a participar significativamente da governança à medida que o projeto amadurece. Como são 10 NoundersBR, após 5 anos cada NounderBR poderá receber até 1% da oferta do NounBR."
 
 #: src/components/Documentation/index.tsx
 msgid "The NounsBR Auction Contract will act as a self-sufficient NounBR generation and distribution mechanism, auctioning one NounBR every 24 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the NounsBR DAO treasury, where they are governed by NounBR owners."

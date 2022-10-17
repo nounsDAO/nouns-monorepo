@@ -2,78 +2,29 @@ import React from 'react';
 import classes from './NoundersPage.module.css';
 import Section from '../../layout/Section';
 import { Col, Row, Card } from 'react-bootstrap';
-import pfp4156 from '../../assets/nounder-pfps/4156.png';
-import pfp9999 from '../../assets/nounder-pfps/9999.png';
-import pfpCryptoseneca from '../../assets/nounder-pfps/cryptoseneca.png';
-import pfpDevcarrot from '../../assets/nounder-pfps/devcarrot.png';
-import pfpDom from '../../assets/nounder-pfps/dom.png';
-import pfpKai from '../../assets/nounder-pfps/kai.png';
-import pfpSolimander from '../../assets/nounder-pfps/solimander.png';
-import pfpGremplin from '../../assets/nounder-pfps/gremplin.png';
-import pfpTimpers from '../../assets/nounder-pfps/timpers.png';
-import pfpVapeape from '../../assets/nounder-pfps/vapeape.png';
+import pfpbeautyandpunk from '../../assets/nounder-pfps/beautyandpunk.jpg';
+import pfpkome from '../../assets/nounder-pfps/kome.jpg';
+import pfpquijote from '../../assets/nounder-pfps/quijote.jpg';
 import { Trans } from '@lingui/macro';
 
 const bios = [
   {
-    name: '4156',
-    image: pfp4156,
+    name: 'beautyandpunk',
+    image: pfpbeautyandpunk,
     description: undefined,
-    handle: 'punk4156',
+    handle: 'beautyandpunk',
   },
   {
-    name: 'cryptoseneca',
-    image: pfpCryptoseneca,
+    name: 'kome',
+    image: pfpkome,
     description: undefined,
-    handle: 'cryptoseneca',
+    handle: 'komesciart',
   },
   {
-    name: 'Kai@eboy',
-    image: pfpKai,
+    name: 'quijote',
+    image: pfpquijote,
     description: undefined,
-    handle: 'eBoyArts',
-  },
-  {
-    name: 'dom',
-    image: pfpDom,
-    description: undefined,
-    handle: 'dhof',
-  },
-  {
-    name: 'vapeape',
-    image: pfpVapeape,
-    description: undefined,
-    handle: 'punk4464',
-  },
-  {
-    name: 'gremplin',
-    image: pfpGremplin,
-    description: undefined,
-    handle: 'gremplin',
-  },
-  {
-    name: 'solimander',
-    image: pfpSolimander,
-    description: undefined,
-    handle: '_solimander_',
-  },
-  {
-    name: 'devcarrot',
-    image: pfpDevcarrot,
-    description: undefined,
-    handle: 'carrot_init',
-  },
-  {
-    name: 'timpers',
-    image: pfpTimpers,
-    description: undefined,
-    handle: 'TimpersHD',
-  },
-  {
-    name: '9999',
-    image: pfp9999,
-    description: undefined,
-    handle: 'lastpunk9999',
+    handle: 'QuijoteHorizon',
   },
 ];
 
