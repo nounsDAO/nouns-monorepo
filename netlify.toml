@@ -1,6 +1,11 @@
 [context.production.environment]
-  REACT_APP_CHAIN_ID = "1"
+  REACT_APP_CHAIN_ID = "5"
+  NETLIFY_USE_YARN = "true"
   REACT_APP_ENABLE_HISTORY = "true"
+  REACT_APP_INFURA_PROJECT_ID="225fb67024db4200bfdd1588919649f5"
+  REACT_APP_ETHERSCAN_API_KEY="5BGRCTVMT8V28A9X5TJX3FIYZNIXJVGACA"
+  REACT_APP_GOERLI_JSONRPC="https://eth-goerli.g.alchemy.com/v2/vCJVhffVcze-0blCOC57SIvw3IWAeaoq"
+  REACT_APP_GOERLI_WSRPC="wss://eth-goerli.g.alchemy.com/v2/vCJVhffVcze-0blCOC57SIvw3IWAeaoq"
 
 [context."staging".environment]
   REACT_APP_CHAIN_ID = "1"
