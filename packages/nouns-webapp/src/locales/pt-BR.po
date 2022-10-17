@@ -142,7 +142,7 @@ msgid "All NounBR auction proceeds are sent to the"
 msgstr "Todos os lucros no leilão de um NounBR são enviados para"
 
 #: src/pages/Nounders/index.tsx
-msgid "All NounBR auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
+msgid "All NounBR auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th noun for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual Nounders."
 msgstr "Todos os lucros do leilão de um NounBR são enviados para o NounsBR DAO. Por isso, nós, os fundadores do projeto (‘NoundersBR’) optamos por nos remunerar com NounsBR. Cada 10.º nounbr durante os primeiros 5 anos do projeto serão enviados para o nosso multisig (3/3), onde serão adquiridos e distribuídos para NoundersBR individuais."
 
 #: src/components/Documentation/index.tsx
@@ -895,8 +895,8 @@ msgid "The Nounders"
 msgstr "NoundersBR"
 
 #: src/pages/Nounders/index.tsx
-msgid "The Nounders reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures. Since there are 10 Nounders, after 5 years each Nounder could receive up to 1% of the NounBR supply."
-msgstr "A recompensa da NoundersBR destina-se a compensar nossas contribuições pré e pós-lançamento ao projeto e a nos ajudar a participar significativamente da governança à medida que o projeto amadurece. Como são 10 NoundersBR, após 5 anos cada NounderBR poderá receber até 1% da oferta do NounBR."
+msgid "The Nounders reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures."
+msgstr "A recompensa da NoundersBR destina-se a compensar nossas contribuições pré e pós-lançamento ao projeto e a nos ajudar a participar significativamente da governança à medida que o projeto amadurece."
 
 #: src/components/Documentation/index.tsx
 msgid "The NounsBR Auction Contract will act as a self-sufficient NounBR generation and distribution mechanism, auctioning one NounBR every 24 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the NounsBR DAO treasury, where they are governed by NounBR owners."
