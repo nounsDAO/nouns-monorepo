@@ -1,0 +1,189 @@
+.nounersPage h1,
+.nounersPage h2,
+.nounersPage h3 {
+  font-family: 'Londrina Solid';
+}
+
+
+/* .nounersPage h2 {
+  margin-bottom: 2rem;
+} */
+/* .nounersPage span {
+  margin-bottom: 2rem;
+} */
+.nounersPage a {
+  color: var(--brand-black);
+}
+.nounersPage a:hover {
+  color: var(--brand-dark-red);
+}
+
+.bioGroup {
+  padding-right: 5px;
+  padding-left: 5px;
+}
+.bioGroup a {
+  font-size: 1rem;
+}
+
+.nounersPage img {
+  border-radius: 20px;
+}
+
+.marginBottom {
+  margin-bottom: 0rem;
+}
+
+.bioGroup {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+.bioGroup a:hover svg {
+  fill: var(--brand-dark-red);
+}
+.bioGroup img {
+  margin-bottom: 1rem;
+}
+
+.twitterIcon {
+  width: 20px;
+  color: #aaa;
+  margin-right: 5px;
+}
+
+.card {
+  border: none;
+}
+
+.card,
+.headerWrapper {
+  font-size: 1.3rem;
+}
+.cardHeader {
+  border: none;
+  background-color: transparent;
+  font-family: 'Londrina Solid';
+  font-size: 2.5rem;
+  cursor: pointer;
+}
+
+.pictureCard {
+  margin-bottom: 3rem;
+  border-radius: 20px;
+  background-color: var(--brand-warm-background);
+  border: 1px solid #d5d7e0;
+  /* padding-top: 1rem; */
+}
+
+.heading {
+  display: inline-block;
+  font-weight: bold;
+  font-size: 3rem;
+}
+
+.headerRow span {
+  color: #333333ee;
+  font-size: 24px;
+  font-family: 'Londrina Solid';
+}
+
+.headerRow h1 {
+  color: #14161b;
+  font-size: 56px;
+  font-family: 'Londrina Solid';
+}
+
+.subheading {
+  color: var(--brand-dark-green);
+  font-family: 'PT Root UI';
+  font-weight: 500;
+  font-size: 1.2rem;
+}
+
+.boldText {
+  font-family: 'PT Root UI';
+  font-weight: bold;
+}
+
+p {
+  padding-top: 1rem;
+}
+
+.ethTreasuryAmt {
+  display: flex;
+  height: 3rem;
+  min-width: 9rem;
+  padding-top: 0.2rem;
+}
+
+.verifyButtonWrapper {
+  text-align: right;
+  padding-top: 0.8rem;
+}
+
+
+.generateBtn {
+  max-width: 15rem;
+  height: 3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  color: var(--brand-dark-blue);
+  background-color: var(--brand-nu-green);
+  border: var(--brand-color-purple);
+}
+.generateBtn:focus,
+.generateBtn:hover {
+  background-color: var(--brand-color-purple) !important;
+  box-shadow: 0 0 0 0.2rem rgb(67, 179, 105, 0.75);
+}
+.generateBtn:active {
+  background-color: var(--brand-color-purple) !important;
+}
+
+.generateBtnDisabled {
+  max-width: 10rem;
+  height: 3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  background-color: #f4f4f8;
+  border: #f4f4f8;
+  color: #8c8d92;
+  border: 1px solid #e2e3e8;
+}
+.generateBtnDisabled:focus,
+.generateBtnDisabled:hover,
+.generateBtnDisabled:active {
+  cursor: not-allowed;
+  background-color: #f4f4f8 !important;
+  border: #f4f4f8 !important;
+  color: #8c8d92 !important;
+  border: 1px solid #e2e3e8 !important;
+  outline: none;
+  box-shadow: none;
+}
+
+@media (max-width: 992px) {
+  .verifyButtonWrapper {
+    text-align: center;
+    width :fit-content;
+  }
+
+}
+
+.treasuryInfoText {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  font-family: 'PT Root UI';
+  font-weight: 500;
+}
+
+.treasuryAmtWrapper {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
