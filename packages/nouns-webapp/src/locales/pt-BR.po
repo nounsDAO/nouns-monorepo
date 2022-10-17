@@ -1086,7 +1086,7 @@ msgstr "Aguardando pelo"
 #: src/components/Winner/index.tsx
 #: src/components/Winner/index.tsx
 msgid "What now?"
-msgstr "O que fazer agora?"
+msgstr "E agora?"
 
 #: src/components/Documentation/index.tsx
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction NounsBR as long as Ethereum is operational and there are interested bidders."
