@@ -15,6 +15,7 @@
     "prepare:hardhat": "mustache config/hardhat.json subgraph.yaml.mustache > subgraph.yaml",
     "prepare:rinkeby": "mustache config/rinkeby.json subgraph.yaml.mustache > subgraph.yaml",
     "prepare:mainnet": "mustache config/mainnet.json subgraph.yaml.mustache > subgraph.yaml",
+    "prepare:goerli": "mustache config/goerli.json subgraph.yaml.mustache > subgraph.yaml",
     "codegen": "graph codegen --output-dir src/types/",
     "test": "graph test",
     "create:localnode": "graph create --node http://localhost:8020/",
@@ -23,12 +24,13 @@
     "deploy:hardhat": "yarn clean && yarn prepare:hardhat && yarn codegen && yarn create:localnode nounsdao/nouns-subgraph && yarn deploy:localnode nounsdao/nouns-subgraph",
     "deploy:rinkeby": "yarn clean && yarn prepare:rinkeby && yarn codegen && yarn deploy nounsdao/nouns-subgraph-rinkeby",
     "deploy:mainnet": "yarn clean && yarn prepare:mainnet && yarn codegen && yarn deploy nounsdao/nouns-subgraph",
+    "deploy:goerli": "yarn clean && yarn prepare:goerli && yarn codegen && yarn deploy verbsteam/nouns-goerli",
     "mustache": "mustache"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.26.0",
     "@graphprotocol/graph-ts": "^0.26.0",
     "mustache": "^4.2.0",
-    "matchstick-as": "^0.4.2"
+    "matchstick-as": "0.4.2"
   }
 }
