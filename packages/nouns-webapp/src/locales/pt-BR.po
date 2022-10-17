@@ -1258,5 +1258,5 @@ msgid "{voterComponent} voted against"
 msgstr "{voterComponent} votou contra"
 
 #: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
-msgid "{voterComponent} votou a favor"
-msgstr ""
+msgid "{voterComponent} voted for"
+msgstr "{voterComponent} votou a favor"
