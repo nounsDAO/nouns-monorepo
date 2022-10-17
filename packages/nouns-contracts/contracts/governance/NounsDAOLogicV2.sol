@@ -680,20 +680,10 @@ contract NounsDAOLogicV2 is NounsDAOStorageV2, NounsDAOEventsV2 {
         require(state(proposalId) == ProposalState.ObjectionPeriod, 'not in objection period');
         Proposal storage proposal = _proposals[proposalId];
         Receipt storage receipt = proposal.receipts[voter];
-        require(!(receipt.hasVoted && receipt.support == 0), 'already voted against');
+        require(receipt.hasVoted == false, 'NounsDAO::castVoteInternal: voter already voted');
 
-        uint96 votes;
-        if (receipt.hasVoted) {
-            votes = receipt.votes;
-            if (receipt.support == 1) {
-                proposal.forVotes = proposal.forVotes - votes;
-            } else {
-                proposal.abstainVotes = proposal.abstainVotes - votes;
-            }
-        } else {
-            votes = receipt.votes = nouns.getPriorVotes(voter, proposalCreationBlock(proposal));
-            receipt.hasVoted = true;
-        }
+        uint96 votes = receipt.votes = nouns.getPriorVotes(voter, proposalCreationBlock(proposal));
+        receipt.hasVoted = true;
         receipt.support = 0;
         proposal.againstVotes = proposal.againstVotes + votes;
 
