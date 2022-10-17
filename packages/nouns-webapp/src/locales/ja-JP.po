@@ -1260,3 +1260,124 @@ msgstr ""
 #: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "{voterComponent} voted for"
 msgstr ""
+
+#: src/pages/Nouners/index.tsx
+msgid "NounersBR"
+msgstr "NounersBR"
+
+#: src/pages/Nouners/index.tsx
+msgid "Welcome, NounerBR!"
+msgstr "Welcome, NounerBR!"
+
+#: src/pages/Nouners/index.tsx
+msgid "Next steps"
+msgstr "Next steps"
+
+#: src/pages/Nouners/index.tsx
+msgid "So you just won a NounBR.... Cool! Be sure to go over how everything works and head over to our discord server to verify your NounBR!"
+msgstr "So you just won a NounBR.... Cool! Be sure to go over how everything works and head over to our discord server to verify your NounBR!"
+
+#: src/pages/Nouners/index.tsx
+msgid "Join"
+msgstr "Join"
+
+#: src/pages/Nouners/index.tsx
+msgid "Discord Channels"
+msgstr "Discord Channels"
+
+#: src/pages/Nouners/index.tsx
+msgid "Welcome"
+msgstr "Welcome"
+
+#: src/pages/Nouners/index.tsx
+msgid "Basic information, major announcements, and user verification. If you just bought a"
+msgstr "Basic information, major announcements, and user verification. If you just bought a"
+
+#: src/pages/Nouners/index.tsx
+msgid "NounBR, you will need to verify your ownership in the #authentication channel to get added to the"
+msgstr "NounBR, you will need to verify your ownership in the #authentication channel to get added to the"
+
+#: src/pages/Nouners/index.tsx
+msgid ""NounerBR" role of the server."
+msgstr ""NounerBR" role of the server."
+
+#: src/pages/Nouners/index.tsx
+msgid "These are channels where only NounsBR DAO members can post. In the spirit of having an open"
+msgstr "These are channels where only NounsBR DAO members can post. In the spirit of having an open"
+
+#: src/pages/Nouners/index.tsx
+msgid "and collaborative environment, all of these channels (except for #nounerbr-private) are"
+msgstr "and collaborative environment, all of these channels (except for #nounerbr-private) are"
+
+#: src/pages/Nouners/index.tsx
+msgid "viewable by the public."
+msgstr "viewable by the public."
+
+#: src/pages/Nouners/index.tsx
+msgid "#nounsbr-chat"
+msgstr "#nounsbr-chat"
+
+#: src/pages/Nouners/index.tsx
+msgid "This is where most communication between members occurs. Anything that doesn't fit in"
+msgstr "This is where most communication between members occurs. Anything that doesn't fit in"
+
+#: src/pages/Nouners/index.tsx
+msgid "the other NounersBR channels likely goes here."
+msgstr "the other NounersBR channels likely goes here."
+
+#: src/pages/Nouners/index.tsx
+msgid "#proposals"
+msgstr "#proposals"
+
+#: src/pages/Nouners/index.tsx
+msgid "Discussion and questions about proposals."
+msgstr "Discussion and questions about proposals."
+
+#: src/pages/Nouners/index.tsx
+msgid "#nounerbr-private"
+msgstr "#nounerbr-private"
+
+#: src/pages/Nouners/index.tsx
+msgid "While we generally prefer to keep everything out in the open, sometimes there are"
+msgstr "While we generally prefer to keep everything out in the open, sometimes there are"
+
+#: src/pages/Nouners/index.tsx
+msgid "sensitive matters where information is only kept to members."
+msgstr "sensitive matters where information is only kept to members."
+
+#: src/pages/Nouners/index.tsx
+msgid "These are channels where anyone can post."
+msgstr "These are channels where anyone can post."
+
+#: src/pages/Nouners/index.tsx
+msgid "#general-chat"
+msgstr "#general-chat"
+
+#: src/pages/Nouners/index.tsx
+msgid "The most active channel, and the other are topic specific. Non-members often post in"
+msgstr "The most active channel, and the other are topic specific. Non-members often post in"
+
+#: src/pages/Nouners/index.tsx
+msgid "these channels asking for guidance on proposal ideas, or to share things they have made."
+msgstr "these channels asking for guidance on proposal ideas, or to share things they have made."
+
+#: src/pages/Nouners/index.tsx
+msgid "Projects"
+msgstr "Projects"
+
+#: src/pages/Nouners/index.tsx
+msgid "When a project passes an on-chain vote, the creator of that proposal will often be given"
+msgstr "When a project passes an on-chain vote, the creator of that proposal will often be given"
+
+#: src/pages/Nouners/index.tsx
+msgid "their own channel in this section to answer questions and share updates on the status of"
+msgstr "their own channel in this section to answer questions and share updates on the status of"
+
+#: src/pages/Nouners/index.tsx
+msgid "their work. This is a constantly expanding list - for more information on each of these,"
+msgstr "their work. This is a constantly expanding list - for more information on each of these,"
+
+#: src/pages/Nouners/index.tsx
+msgid "check out the DAO section of the NounsBR website."
+msgstr "check out the DAO section of the NounsBR website."
+

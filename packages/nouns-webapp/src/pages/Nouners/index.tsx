@@ -2,7 +2,7 @@ import React from 'react';
 import classes from './NounersPage.module.css';
 import Section from '../../layout/Section';
 import { Col, Row, Button } from 'react-bootstrap';
-
+import { Trans } from '@lingui/macro';
 
 const NounersPage = () => {
   return (
@@ -11,8 +11,8 @@ const NounersPage = () => {
 
         {/******************************************************/}
         <Row className={classes.headerRow}>
-          <span>NounersBR</span>
-          <h1>Welcome, NounerBR!</h1>
+          <span><Trans>NounersBR</Trans></span>
+          <h1><Trans>Welcome, NounerBR!</Trans></h1>
         </Row>
              
         <br />
@@ -21,11 +21,11 @@ const NounersPage = () => {
         <Row className={classes.pictureCard}>
           <Col lg={8} className={classes.treasuryAmtWrapper}>
             <Row className={classes.headerRow}>
-              <span>Next steps</span>
+              <span><Trans>Next steps</Trans></span>
             </Row>
             <Row>
               <Col>
-                So you just won a NounBR.... Cool! Be sure to go over how everything works and head over to our discord server to verify your NounBR!
+              <Trans>So you just won a NounBR.... Cool! Be sure to go over how everything works and head over to our discord server to verify your NounBR!</Trans>
               </Col>
             </Row>
           </Col>
@@ -33,31 +33,31 @@ const NounersPage = () => {
           <Col className={classes.treasuryInfoText}>
             <div className={classes.verifyButtonWrapper}>
               <a href={`https://discord.gg/?????`}>
-            <Button className={classes.generateBtn}>Collabland Join</Button>
+            <Button className={classes.generateBtn}><Trans>Join</Trans></Button>
           </a>
             </div>
           </Col>
         </Row>
 
         {/******************************************************/}
-        <h2>Discord Channels</h2>
+        <h2><Trans>Discord Channels</Trans></h2>
           <br />
 
           {/*--------------------------------------------------*/}
-          <h3>Welcome</h3>
+          <h3><Trans>Welcome</Trans></h3>
             <Col style={{ textAlign: 'justify' }}>
-              Basic information, major announcements, and user verification. If you just bought a
+            <Trans>Basic information, major announcements, and user verification. If you just bought a
               NounBR, you will need to verify your ownership in the #authentication channel to get added to the
-              "NounerBR" role of the server.
+              "NounerBR" role of the server.</Trans>
             </Col>
             <br />
 
           {/*--------------------------------------------------*/}
-          <h3>NounsBR DAO</h3>
+          <h3><Trans>NounsBR DAO</Trans></h3>
             <Col style={{ textAlign: 'justify' }}>
-              These are channels where only NounsBR DAO members can post. In the spirit of having an open
+            <Trans>These are channels where only NounsBR DAO members can post. In the spirit of having an open
               and collaborative environment, all of these channels (except for #nounerbr-private) are
-              viewable by the public.
+              viewable by the public.</Trans>
             </Col>
             <br />
             
@@ -67,11 +67,11 @@ const NounersPage = () => {
               rel="noreferrer"
               className={classes.boldText}
             >
-              #nounsbr-chat
+              <Trans>#nounsbr-chat</Trans>
             </a>
             <Col style={{ textAlign: 'justify' }}>
-              This is where most communication between members occurs. Anything that doesn't fit in
-              the other NounersBR channels likely goes here.
+            <Trans>This is where most communication between members occurs. Anything that doesn't fit in
+              the other NounersBR channels likely goes here.</Trans>
             </Col>
             <br />
 
@@ -81,10 +81,10 @@ const NounersPage = () => {
               rel="noreferrer"
               className={classes.boldText}
             >
-              #proposals
+              <Trans>#proposals</Trans>
             </a>
             <Col style={{ textAlign: 'justify' }}>
-              Discussion and questions about proposals.
+            <Trans>Discussion and questions about proposals.</Trans>
             </Col>
             <br />
 
@@ -94,18 +94,18 @@ const NounersPage = () => {
               rel="noreferrer"
               className={classes.boldText}
             >
-              #nounerbr-private
+              <Trans>#nounerbr-private</Trans>
             </a>
             <Col style={{ textAlign: 'justify' }}>
-              While we generally prefer to keep everything out in the open, sometimes there are
-              sensitive matters where information is only kept to members.
+            <Trans>While we generally prefer to keep everything out in the open, sometimes there are
+              sensitive matters where information is only kept to members.</Trans>
             </Col>
             <br />
 
           {/*--------------------------------------------------*/}
-          <h3>General</h3>
+          <h3><Trans>General</Trans></h3>
           <Col style={{ textAlign: 'justify' }}>
-            These are channels where anyone can post.
+          <Trans>These are channels where anyone can post.</Trans>
           </Col>
           <br />
 
@@ -115,21 +115,21 @@ const NounersPage = () => {
             rel="noreferrer"
             className={classes.boldText}
           >
-            #general-chat
+            <Trans>#general-chat</Trans>
           </a>
           <Col style={{ textAlign: 'justify' }}>
-            The most active channel, and the other are topic specific. Non-members often post in
-            these channels asking for guidance on proposal ideas, or to share things they have made.
+          <Trans>The most active channel, and the other are topic specific. Non-members often post in
+            these channels asking for guidance on proposal ideas, or to share things they have made.</Trans>
           </Col>
           <br />
 
           {/*--------------------------------------------------*/}
-          <h3>Projects</h3>
+          <h3><Trans>Projects</Trans></h3>
           <Col style={{ textAlign: 'justify' }}>
-            When a project passes an on-chain vote, the creator of that proposal will often be given
+          <Trans>When a project passes an on-chain vote, the creator of that proposal will often be given
             their own channel in this section to answer questions and share updates on the status of
             their work. This is a constantly expanding list - for more information on each of these,
-            check out the DAO section of the NounsBR website.
+            check out the DAO section of the NounsBR website.</Trans>
           </Col>
           <br />
           
