@@ -137,8 +137,8 @@ msgid "All NounBR auction proceeds are sent to the"
 msgstr "All NounBR auction proceeds are sent to the"
 
 #: src/pages/Nounders/index.tsx
-msgid "All NounBR auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
-msgstr "All NounBR auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
+msgid "All NounBR auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th noun for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual Nounders."
+msgstr "All NounBR auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th noun for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual Nounders."
 
 #: src/components/Documentation/index.tsx
 msgid "All NounsBR are members of NounsBR DAO."
@@ -455,8 +455,8 @@ msgid "For"
 msgstr "For"
 
 #: src/components/NounderNounContent/index.tsx
-msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th NounBR for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
-msgstr "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th NounBR for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
+msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th NounBR for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual Nounders."
+msgstr "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th NounBR for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual Nounders."
 
 #: src/components/Footer/index.tsx
 msgid "Forums"

@@ -460,8 +460,8 @@ msgid "For"
 msgstr "a Favor"
 
 #: src/components/NounderNounContent/index.tsx
-msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th NounBR for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
-msgstr "Por isso, nós, os fundadores do projeto (‘NoundersBR’) optamos por nos remunerar com o NounsBR. Cada 10º NounBR nos primeiros 5 anos do projeto será enviado para o nosso multisig (5/10), onde será adquirido e distribuído para NoundersBR individuais."
+msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th NounBR for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual Nounders."
+msgstr "Por isso, nós, os fundadores do projeto (‘NoundersBR’) optamos por nos remunerar com o NounsBR. Cada 10º NounBR nos primeiros 5 anos do projeto será enviado para o nosso multisig (3/3), onde será adquirido e distribuído para NoundersBR individuais."
 
 #: src/components/Footer/index.tsx
 msgid "Forums"
@@ -584,7 +584,7 @@ msgstr "NounBR Traits"
 
 #: src/components/CurrentDelegatePannel/index.tsx
 msgid "NounBR votes are not transferable, but are <0>delegatable</0>, which means you can assign your vote to someone else as long as you own your NounBR."
-msgstr "Os votos do NounBR não são transferíveis, mas são <0>delegáveis</0>, o que significa que você pode atribuir seu voto a outra pessoa desde que seja o proprietário do seu NounBR."
+msgstr "Os votos do NounBR não são transferíveis, mas são <0>delegáveis</0>, o que significa que você, proprietário, pode atribuir seu voto a outra pessoa."
 
 #: src/components/AuctionActivityNounTitle/index.tsx
 msgid "NounBR {0}"

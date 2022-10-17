@@ -109,7 +109,7 @@ const NounderNounContent: React.FC<{
               <Trans>
                 For this reason, we, the project's founders (‘Nounders’) have chosen to compensate
                 ourselves with NounsBR. Every 10th NounBR for the first 5 years of the project will be
-                sent to our multisig (5/10), where it will be vested and distributed to individual
+                sent to our multisig (3/3), where it will be vested and distributed to individual
                 Nounders.
               </Trans>
             </li>
