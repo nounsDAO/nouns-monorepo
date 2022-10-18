@@ -39,6 +39,8 @@ library Noracle {
     }
 
     function initialize(NoracleState storage self) internal {
+        if (self.cardinality > 0) return;
+
         self.cardinality = 1;
         self.cardinalityNext = 1;
         warmUpObservation(self.observations[0]);

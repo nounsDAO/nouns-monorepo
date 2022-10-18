@@ -14,6 +14,11 @@ import { NounsSeeder } from '../../../contracts/NounsSeeder.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { NounsDAOProxy } from '../../../contracts/governance/NounsDAOProxy.sol';
 import { Inflator } from '../../../contracts/Inflator.sol';
+import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionHouseProxy.sol';
+import { NounsAuctionHouseProxyAdmin } from '../../../contracts/proxies/NounsAuctionHouseProxyAdmin.sol';
+import { NounsAuctionHouse } from '../../../contracts/NounsAuctionHouse.sol';
+import { NounsAuctionHouseV2 } from '../../../contracts/NounsAuctionHouseV2.sol';
+import { WETH } from '../../../contracts/test/WETH.sol';
 
 abstract contract DeployUtils is Test, DescriptorHelpers {
     uint256 constant TIMELOCK_DELAY = 2 days;
@@ -21,6 +26,55 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
     uint256 constant VOTING_DELAY = 1;
     uint256 constant PROPOSAL_THRESHOLD = 1;
     uint256 constant QUORUM_VOTES_BPS = 2000;
+    uint256 constant AUCTION_TIME_BUFFER = 5 minutes;
+    uint256 constant AUCTION_RESERVE_PRICE = 1;
+    uint8 constant AUCTION_MIN_BID_INCREMENT_PRCT = 2;
+    uint256 constant AUCTION_DURATION = 24 hours;
+
+    function _deployAuctionHouseV1AndToken(
+        address owner,
+        address noundersDAO,
+        address minter
+    ) internal returns (NounsAuctionHouseProxy, NounsAuctionHouseProxyAdmin) {
+        NounsAuctionHouse logic = new NounsAuctionHouse();
+        NounsToken token = deployToken(noundersDAO, minter);
+        WETH weth = new WETH();
+        NounsAuctionHouseProxyAdmin admin = new NounsAuctionHouseProxyAdmin();
+        admin.transferOwnership(owner);
+
+        bytes memory data = abi.encodeWithSelector(
+            NounsAuctionHouse.initialize.selector,
+            address(token),
+            address(weth),
+            AUCTION_TIME_BUFFER,
+            AUCTION_RESERVE_PRICE,
+            AUCTION_MIN_BID_INCREMENT_PRCT,
+            AUCTION_DURATION
+        );
+        NounsAuctionHouseProxy proxy = new NounsAuctionHouseProxy(address(logic), address(admin), data);
+        NounsAuctionHouse auction = NounsAuctionHouse(address(proxy));
+
+        auction.transferOwnership(owner);
+        token.setMinter(address(proxy));
+
+        return (proxy, admin);
+    }
+
+    function _upgradeAuctionHouse(
+        address owner,
+        NounsAuctionHouseProxyAdmin proxyAdmin,
+        NounsAuctionHouseProxy proxy,
+        address newLogic
+    ) internal {
+        vm.startPrank(owner);
+
+        proxyAdmin.upgrade(proxy, newLogic);
+
+        NounsAuctionHouseV2 auctionV2 = NounsAuctionHouseV2(address(proxy));
+        auctionV2.initializeOracle();
+
+        vm.stopPrank();
+    }
 
     function _deployAndPopulateV2() internal returns (NounsDescriptorV2) {
         NounsDescriptorV2 descriptorV2 = _deployDescriptorV2();
@@ -69,5 +123,13 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         _populateDescriptor(descriptor);
 
         return (address(nounsToken), address(proxy));
+    }
+
+    function deployToken(address noundersDAO, address minter) internal returns (NounsToken nounsToken) {
+        IProxyRegistry proxyRegistry = IProxyRegistry(address(3));
+        NounsDescriptor descriptor = new NounsDescriptor();
+        _populateDescriptor(descriptor);
+
+        nounsToken = new NounsToken(noundersDAO, minter, descriptor, new NounsSeeder(), proxyRegistry);
     }
 }
