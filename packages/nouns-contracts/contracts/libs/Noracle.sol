@@ -32,10 +32,10 @@ library Noracle {
     }
 
     struct NoracleState {
-        mapping(uint16 => Observation) observations;
-        uint16 index;
-        uint16 cardinality;
-        uint16 cardinalityNext;
+        mapping(uint32 => Observation) observations;
+        uint32 index;
+        uint32 cardinality;
+        uint32 cardinalityNext;
     }
 
     function initialize(NoracleState storage self) internal {
@@ -52,12 +52,15 @@ library Noracle {
         address winner
     ) internal {
         // if the conditions are right, we can bump the cardinality
-        if (self.cardinalityNext > self.cardinality && self.index == (self.cardinality - 1)) {
-            self.cardinality = self.cardinalityNext;
+        uint32 cardinalityNext = self.cardinalityNext;
+        uint32 currentIndex = self.index;
+        if (cardinalityNext > self.cardinality && currentIndex == (self.cardinality - 1)) {
+            self.cardinality = cardinalityNext;
         }
 
-        self.index = (self.index + 1) % self.cardinality;
-        self.observations[self.index] = Observation({
+        uint32 newIndex = (currentIndex + 1) % self.cardinality;
+        self.index = newIndex;
+        self.observations[newIndex] = Observation({
             initialized: true,
             blockTimestamp: blockTimestamp,
             nounId: nounId,
@@ -66,40 +69,42 @@ library Noracle {
         });
     }
 
-    function grow(NoracleState storage self, uint16 next) internal returns (uint16) {
-        uint16 current = self.cardinalityNext;
+    function grow(NoracleState storage self, uint32 next) internal returns (uint32) {
+        uint32 current = self.cardinalityNext;
 
         // no-op if the passed next value isn't greater than the current next value
         if (next <= current) return current;
 
-        // store in each slot to prevent fresh SSTOREs in swaps
+        // store in each slot to prevent fresh SSTOREs
         // this data will not be used because the initialized boolean is still false
-        for (uint16 i = current; i < next; i++) {
+        for (uint32 i = current; i < next; i++) {
             warmUpObservation(self.observations[i]);
         }
 
         return self.cardinalityNext = next;
     }
 
-    function observe(NoracleState storage self, uint16 fromAuctionsAgo)
+    function observe(NoracleState storage self, uint32 fromAuctionsAgo)
         internal
         view
         returns (Observation[] memory observations)
     {
-        uint16 cardinality = self.cardinality;
+        uint32 cardinality = self.cardinality;
         require(fromAuctionsAgo <= cardinality, 'too many auctions ago');
 
+        uint32 index = self.index;
         observations = new Observation[](fromAuctionsAgo);
-        uint16 initializedObservationsFound = 0;
-        uint16 checkedIndexesCount = 0;
+        uint32 initializedObservationsFound = 0;
+        uint32 checkedIndexesCount = 0;
         while (initializedObservationsFound < fromAuctionsAgo && checkedIndexesCount < cardinality) {
-            uint16 checkIndex = (self.index + (cardinality - checkedIndexesCount)) % cardinality;
+            uint32 checkIndex = (index + (cardinality - checkedIndexesCount)) % cardinality;
+            checkedIndexesCount++;
+
             Observation storage obs = self.observations[checkIndex];
             if (obs.initialized) {
                 observations[initializedObservationsFound] = obs;
                 initializedObservationsFound++;
             }
-            checkedIndexesCount++;
         }
     }
 
