@@ -65,7 +65,7 @@ const app: Record<SupportedChains, AppConfig> = {
   [ChainId.Goerli]: {
     jsonRpcUri: createNetworkHttpUrl('goerli'),
     wsRpcUri: createNetworkWsUrl('goerli'),
-    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsbr/nounsbr-subgraph-goerli',
+    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsbr/nounsbr-subgraph-testnet',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   [ChainId.Mainnet]: {
@@ -77,7 +77,7 @@ const app: Record<SupportedChains, AppConfig> = {
   [ChainId.Hardhat]: {
     jsonRpcUri: 'http://localhost:8545',
     wsRpcUri: 'ws://localhost:8545',
-    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsbr/nounsbr-subgraph-goerli',
+    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsbr/nounsbr-subgraph-testnet',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
 };

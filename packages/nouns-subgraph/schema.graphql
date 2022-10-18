@@ -316,19 +316,3 @@ type Governance @entity {
   proposalsQueued: BigInt!
 }
 
-type DynamicQuorumParams @entity {
-  "Unique entity used to store the latest dymanic quorum params"
-  id: ID!
-
-  "Min quorum basis points"
-  minQuorumVotesBPS: Int!
-
-  "Max quorum basis points"
-  maxQuorumVotesBPS: Int!
-
-  "The dynamic quorum coefficient"
-  quorumCoefficient: BigInt!
-
-  "The block from which proposals are using DQ, based on when we first see configuration being set"
-  dynamicQuorumStartBlock: BigInt
-}
