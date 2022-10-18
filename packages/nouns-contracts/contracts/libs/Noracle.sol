@@ -103,6 +103,10 @@ library Noracle {
         }
     }
 
+    function ethPriceToUint40(uint256 ethPrice) internal pure returns (uint40) {
+        return uint40(ethPrice / 1e10);
+    }
+
     function warmUpObservation(Observation storage obs) private {
         obs.blockTimestamp = 1;
     }
