@@ -11,7 +11,7 @@ contract NoracleTest is Test {
 
     function test_cardinality1_worksWithOneWrite() public {
         state.initialize();
-        state.write(block.timestamp, 142, 69, address(0xdead));
+        state.write(uint32(block.timestamp), 142, 69, address(0xdead));
 
         Noracle.Observation[] memory observations = state.observe(1);
 
@@ -24,8 +24,8 @@ contract NoracleTest is Test {
 
     function test_cardinality1_secondWriteOverrides() public {
         state.initialize();
-        state.write(block.timestamp, 142, 69, address(0xdead));
-        state.write(block.timestamp + 1, 143, 70, address(0x1234));
+        state.write(uint32(block.timestamp), 142, 69, address(0xdead));
+        state.write(uint32(block.timestamp + 1), 143, 70, address(0x1234));
 
         Noracle.Observation[] memory observations = state.observe(1);
 
@@ -41,21 +41,21 @@ contract NoracleTest is Test {
 
     function test_cadinality2_secondWriteDoesNotOverride() public {
         state.initialize();
-        state.write(block.timestamp, 142, 69, address(0xdead));
+        state.write(uint32(block.timestamp), 142, 69, address(0xdead));
         state.grow(2);
-        state.write(block.timestamp + 1, 143, 70, address(0x1234));
+        state.write(uint32(block.timestamp + 1), 143, 70, address(0x1234));
 
         Noracle.Observation[] memory observations = state.observe(2);
         assertEq(observations.length, 2);
 
-        assertEq(observations[0].blockTimestamp, block.timestamp);
-        assertEq(observations[0].nounId, 142);
-        assertEq(observations[0].amount, 69);
-        assertEq(observations[0].winner, address(0xdead));
+        assertEq(observations[0].blockTimestamp, block.timestamp + 1);
+        assertEq(observations[0].nounId, 143);
+        assertEq(observations[0].amount, 70);
+        assertEq(observations[0].winner, address(0x1234));
 
-        assertEq(observations[1].blockTimestamp, block.timestamp + 1);
-        assertEq(observations[1].nounId, 143);
-        assertEq(observations[1].amount, 70);
-        assertEq(observations[1].winner, address(0x1234));
+        assertEq(observations[1].blockTimestamp, block.timestamp);
+        assertEq(observations[1].nounId, 142);
+        assertEq(observations[1].amount, 69);
+        assertEq(observations[1].winner, address(0xdead));
     }
 }

@@ -20,11 +20,11 @@ pragma solidity ^0.8.6;
 library Noracle {
     struct Observation {
         // The block.timestamp when the auction was settled
-        uint256 blockTimestamp;
+        uint32 blockTimestamp;
         // ID for the Noun (ERC721 token ID)
-        uint256 nounId;
-        // The current highest bid amount
-        uint256 amount;
+        uint16 nounId;
+        // The winning bid amount, with 8 decimal places (reducing accuracy to save bits)
+        uint40 amount;
         // The address of the auction winner
         address winner;
         // whether or not the observation is initialized
@@ -46,9 +46,9 @@ library Noracle {
 
     function write(
         NoracleState storage self,
-        uint256 blockTimestamp,
-        uint256 nounId,
-        uint256 amount,
+        uint32 blockTimestamp,
+        uint16 nounId,
+        uint40 amount,
         address winner
     ) internal {
         // if the conditions are right, we can bump the cardinality
@@ -93,20 +93,17 @@ library Noracle {
         uint16 initializedObservationsFound = 0;
         uint16 checkedIndexesCount = 0;
         while (initializedObservationsFound < fromAuctionsAgo && checkedIndexesCount < cardinality) {
-            checkedIndexesCount++;
             uint16 checkIndex = (self.index + (cardinality - checkedIndexesCount)) % cardinality;
             Observation storage obs = self.observations[checkIndex];
             if (obs.initialized) {
                 observations[initializedObservationsFound] = obs;
                 initializedObservationsFound++;
             }
+            checkedIndexesCount++;
         }
     }
 
     function warmUpObservation(Observation storage obs) private {
         obs.blockTimestamp = 1;
-        obs.nounId = 1;
-        obs.amount = 1;
-        obs.winner = address(1);
     }
 }
