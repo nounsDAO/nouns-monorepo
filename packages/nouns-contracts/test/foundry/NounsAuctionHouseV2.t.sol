@@ -12,7 +12,6 @@ contract NounsAuctionHouseV2Test is Test, DeployUtils {
     address owner = address(0x1111);
     address noundersDAO = address(0x2222);
     address minter = address(0x3333);
-    address user = address(0x4444);
 
     NounsAuctionHouseV2 auction;
 
@@ -34,18 +33,105 @@ contract NounsAuctionHouseV2Test is Test, DeployUtils {
     }
 
     function test_prices_worksWithOneAuction() public {
-        (uint256 nounId, , , uint256 endTime, , ) = auction.auction();
-        vm.deal(user, 1 ether);
-        vm.prank(user);
-        auction.createBid{ value: 1 ether }(nounId);
-        vm.warp(endTime);
-        auction.settleCurrentAndCreateNewAuction();
+        address bidder = address(0x4444);
+        bidAndWinCurrentAuction(bidder, 1 ether);
 
         Noracle.Observation[] memory prices = auction.prices(1);
 
         assertEq(prices[0].blockTimestamp, uint32(block.timestamp));
         assertEq(prices[0].nounId, 1);
         assertEq(prices[0].amount, 1e8);
-        assertEq(prices[0].winner, user);
+        assertEq(prices[0].winner, bidder);
+    }
+
+    function test_prices_worksWithThreeAuctions() public {
+        vm.prank(owner);
+        auction.growPriceHistory(3);
+
+        address bidder1 = address(0x4444);
+        address bidder2 = address(0x5555);
+        address bidder3 = address(0x6666);
+        uint256 bid1Time = bidAndWinCurrentAuction(bidder1, 1.1 ether);
+        uint256 bid2Time = bidAndWinCurrentAuction(bidder2, 2.2 ether);
+        uint256 bid3Time = bidAndWinCurrentAuction(bidder3, 3.3 ether);
+
+        Noracle.Observation[] memory prices = auction.prices(3);
+        assertEq(prices.length, 3);
+
+        assertEq(prices[0].blockTimestamp, uint32(bid3Time));
+        assertEq(prices[0].nounId, 3);
+        assertEq(prices[0].amount, 3.3e8);
+        assertEq(prices[0].winner, bidder3);
+
+        assertEq(prices[1].blockTimestamp, uint32(bid2Time));
+        assertEq(prices[1].nounId, 2);
+        assertEq(prices[1].amount, 2.2e8);
+        assertEq(prices[1].winner, bidder2);
+
+        assertEq(prices[2].blockTimestamp, uint32(bid1Time));
+        assertEq(prices[2].nounId, 1);
+        assertEq(prices[2].amount, 1.1e8);
+        assertEq(prices[2].winner, bidder1);
+    }
+
+    function test_prices_worksWithHigherCardinality() public {
+        address bidder1 = address(0x4444);
+        uint256 bid1Time = bidAndWinCurrentAuction(bidder1, 1 ether);
+
+        vm.prank(owner);
+        auction.growPriceHistory(1_000);
+
+        address bidder2 = address(0x5555);
+        uint256 bid2Time = bidAndWinCurrentAuction(bidder2, 2 ether);
+
+        (, uint32 cardinality, ) = auction.oracle();
+        assertEq(cardinality, 1_000);
+
+        Noracle.Observation[] memory prices = auction.prices(2);
+
+        assertEq(prices[0].blockTimestamp, uint32(bid2Time));
+        assertEq(prices[0].nounId, 2);
+        assertEq(prices[0].amount, 2e8);
+        assertEq(prices[0].winner, bidder2);
+
+        assertEq(prices[1].blockTimestamp, uint32(bid1Time));
+        assertEq(prices[1].nounId, 1);
+        assertEq(prices[1].amount, 1e8);
+        assertEq(prices[1].winner, bidder1);
+    }
+
+    function test_prices_dropsEarlierBidsWithLowerCardinality() public {
+        vm.prank(owner);
+        auction.growPriceHistory(2);
+
+        address bidder1 = address(0x4444);
+        address bidder2 = address(0x5555);
+        address bidder3 = address(0x6666);
+        bidAndWinCurrentAuction(bidder1, 1.1 ether);
+        uint256 bid2Time = bidAndWinCurrentAuction(bidder2, 2.2 ether);
+        uint256 bid3Time = bidAndWinCurrentAuction(bidder3, 3.3 ether);
+
+        Noracle.Observation[] memory prices = auction.prices(2);
+        assertEq(prices.length, 2);
+
+        assertEq(prices[0].blockTimestamp, uint32(bid3Time));
+        assertEq(prices[0].nounId, 3);
+        assertEq(prices[0].amount, 3.3e8);
+        assertEq(prices[0].winner, bidder3);
+
+        assertEq(prices[1].blockTimestamp, uint32(bid2Time));
+        assertEq(prices[1].nounId, 2);
+        assertEq(prices[1].amount, 2.2e8);
+        assertEq(prices[1].winner, bidder2);
+    }
+
+    function bidAndWinCurrentAuction(address bidder, uint256 bid) internal returns (uint256) {
+        (uint256 nounId, , , uint256 endTime, , ) = auction.auction();
+        vm.deal(bidder, bid);
+        vm.prank(bidder);
+        auction.createBid{ value: bid }(nounId);
+        vm.warp(endTime);
+        auction.settleCurrentAndCreateNewAuction();
+        return block.timestamp;
     }
 }
