@@ -21,16 +21,30 @@ export const type2PunkBasic = [
   { punkType: 3, skinTone: 5 },
   { punkType: 2, skinTone: 6 }
 ]
+const shortPunkType: any = {
+  male: "m",
+  female: "f",
+  alien: "l",
+  ape: "p",
+  zombie: "z",
+}
 /**
  * Get encoded part and background information using a Noun seed
  * @param seed The Noun seed
  */
 
 export const getPunkData = (seed: ISeed): PunkData => {
+  const punkTypeChr = shortPunkType[probDoc.types[seed.punkType]]
   return {
     parts: [
       types[type2PunkBasic.findIndex((acc: any) => acc.punkType == seed.punkType && acc.skinTone == seed.skinTone)],
-      ...seed.accessories.map(acc => accResource[acc.accType][acc.accId])
+      ...seed.accessories.map(acc =>
+        accResource[acc.accType].filter((res: any, index: number) => {
+          const accTypeName = Object.keys(probDoc.acc_types)[acc.accType]
+          const item = Object.values(probDoc.accessories).filter((acc) => acc.type == accTypeName)[index]
+          return item.punk.split("").includes(punkTypeChr)
+        })[acc.accId]
+      )
       // bodies[seed.body],
       // accessories[seed.accessory],
       // heads[seed.head],

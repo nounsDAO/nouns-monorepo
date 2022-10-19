@@ -128,7 +128,7 @@ export function handleVoteCast(event: VoteCast): void {
   vote.votes = event.params.votes;
   vote.support = event.params.support == 1;
   vote.supportDetailed = event.params.support;
-  vote.nouns = voter.nounsRepresented;
+  vote.punks = voter.punksRepresented;
   vote.blockNumber = event.block.number;
 
   if (event.params.reason != '') {

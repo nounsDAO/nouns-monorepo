@@ -41,6 +41,7 @@ const useOnDisplayAuction = (): Auction | undefined => {
   const currentAuction = useAppSelector(state => state.auction.activeAuction);
   const pastAuctions = useAppSelector(state => state.pastAuctions.pastAuctions);
 
+  console.log(currentAuction, pastAuctions)
   if (
     onDisplayAuctionTokenId === undefined ||
     lastAuctionTokenId === undefined ||

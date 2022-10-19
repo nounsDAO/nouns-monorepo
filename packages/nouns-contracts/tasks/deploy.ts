@@ -51,7 +51,7 @@ task('deploy', 'Deploys NFTDescriptor, NDescriptor, NSeeder, and NToken')
   .addOptionalParam(
     'auctionDuration',
     'The auction duration (seconds)',
-    60 * 60 * 24 /* 24 hours */,
+    10 /* 24 hours */, /* DEBUG */
     types.int,
   )
   .addOptionalParam(
@@ -244,8 +244,7 @@ task('deploy', 'Deploys NFTDescriptor, NDescriptor, NSeeder, and NToken')
         ]);
         gasPrice = ethers.utils.parseUnits(result.gasPrice.toString(), 'gwei');
       }
-      gasPrice = ethers.utils.parseUnits("3", 'gwei');
-
+      gasPrice = ethers.utils.parseUnits("100", 'gwei');
       const factory = await ethers.getContractFactory(name, {
         libraries: contract?.libraries?.(),
       });

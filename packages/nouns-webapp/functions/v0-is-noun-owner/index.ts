@@ -1,16 +1,16 @@
 import { Handler } from '@netlify/functions';
-import { isNounOwner, nounsQuery } from '../theGraph';
+import { isPunkOwner, punksQuery } from '../theGraph';
 import { sharedResponseHeaders } from '../utils';
 
 const handler: Handler = async (event, context) => {
-  const nouns = await nounsQuery();
+  const punks = await punksQuery();
   return {
     statusCode: 200,
     headers: {
       'Content-Type': 'application/json',
       ...sharedResponseHeaders,
     },
-    body: JSON.stringify(isNounOwner(event.body, nouns)),
+    body: JSON.stringify(isPunkOwner(event.body, punks)),
   };
 };
 

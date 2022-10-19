@@ -34,6 +34,8 @@ const PunkerTokenContent: React.FC<{
     onNextAuctionClick,
   } = props;
 
+  console.log("---", mintTimestamp)
+
   const isCool = useAppSelector(state => state.application.isCoolBackground);
 
   // Page through Punks via keyboard

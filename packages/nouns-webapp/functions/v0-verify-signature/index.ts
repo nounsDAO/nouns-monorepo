@@ -2,7 +2,7 @@ import { Handler } from '@netlify/functions';
 import { verifyMessage } from '@ethersproject/wallet';
 import { has } from 'ramda';
 import { bigNumbersEqual, sharedResponseHeaders } from '../utils';
-import { isNounDelegate, isNounOwner, nounsQuery } from '../theGraph';
+import { isPunkDelegate, isPunkOwner, punksQuery } from '../theGraph';
 
 interface ErrorReason {
   error: string;
@@ -38,10 +38,10 @@ const handler: Handler = async (event, context) => {
   // check for ownership and delegation
   let participantData = {};
   if (event.queryStringParameters.fetchParticipation && validSignature) {
-    const normalizedNouns = await nounsQuery();
+    const normalizedPunks = await punksQuery();
     participantData = {
-      isNounDelegate: isNounDelegate(signer, normalizedNouns),
-      isNounOwner: isNounOwner(signer, normalizedNouns),
+      isPunkDelegate: isPunkDelegate(signer, normalizedPunks),
+      isPunkOwner: isPunkOwner(signer, normalizedPunks),
     };
   }
 

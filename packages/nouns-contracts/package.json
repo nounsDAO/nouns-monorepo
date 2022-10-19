@@ -51,9 +51,8 @@
     "typechain": "^8.0.0"
   },
   "dependencies": {
-    "@tenderly/hardhat-tenderly": "^1.1.6",
-    "csv-parse": "^5.3.0",
-    "ethers": "^5.6.8",
+    "@types/csv-parse": "^1.2.2",
+    "csv-parse": "^5.3.1",
     "js-yaml": "^4.1.0"
   }
 }

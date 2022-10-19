@@ -138,7 +138,6 @@ const Playground: React.FC = () => {
         }
 
         const { parts } = getPunkData(seed);
-        console.log(parts)
         const svg = buildSVG(parts, encoder.data.palette);
         setNounSvgs(prev => {
           return prev ? [svg, ...prev] : [svg];

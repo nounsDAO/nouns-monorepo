@@ -1,6 +1,6 @@
 # @nouns/subgraph
 
-A subgraph that indexes nouns events.
+A subgraph that indexes punks events.
 
 ## Quickstart
 
@@ -8,7 +8,7 @@ A subgraph that indexes nouns events.
 yarn
 ```
 
-## Nouns Subgraph
+## Punks Subgraph
 
 This repo contains the templates for compiling and deploying a graphql schema to thegraph.
 
@@ -24,7 +24,7 @@ yarn run graph auth https://api.thegraph.com/deploy/ $ACCESS_TOKEN
 
 ```sh
 # Official Subgraph
-yarn prepare:[network] # Supports rinkeby and mainnet
+yarn prepare:[network] # Supports goerli and mainnet
 
 # Fork
 yarn --silent mustache config/[network]-fork.json subgraph.yaml.mustache > subgraph.yaml
@@ -40,7 +40,7 @@ yarn codegen
 
 ```sh
 # Official Subgraph
-yarn deploy:[network] # Supports rinkeby and mainnet
+yarn deploy:[network] # Supports goerli and mainnet
 
 # Fork
 yarn deploy [organization]/[subgraph-name]

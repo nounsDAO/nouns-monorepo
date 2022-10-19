@@ -1,16 +1,16 @@
 import { Handler } from '@netlify/functions';
-import { isNounDelegate, nounsQuery } from '../theGraph';
+import { isPunkDelegate, punksQuery } from '../theGraph';
 import { sharedResponseHeaders } from '../utils';
 
 const handler: Handler = async (event, context) => {
-  const nouns = await nounsQuery();
+  const punks = await punksQuery();
   return {
     statusCode: 200,
     headers: {
       'Content-Type': 'application/json',
       ...sharedResponseHeaders,
     },
-    body: JSON.stringify(isNounDelegate(event.body, nouns)),
+    body: JSON.stringify(isPunkDelegate(event.body, punks)),
   };
 };
 

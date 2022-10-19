@@ -26,7 +26,7 @@ const getAllRowsFromCSV = (fileName: string) => {
     return new Promise((resolve, reject) => {
         fs.createReadStream(filePath)
             .pipe(parse({ delimiter: ",", from_line: 2 }))
-            .on("data", function (row) {
+            .on("data", function (row: any) {
                 rows.push(row)
             })
             .on('end', () => {

@@ -1,5 +1,5 @@
 import {
-  ContractAddresses as NounsContractAddresses,
+  ContractAddresses as PunkContractAddresses,
   getContractAddressesForChainOrThrow,
 } from '@nouns/sdk';
 import { ChainId } from '@usedapp/core';
@@ -8,7 +8,7 @@ interface ExternalContractAddresses {
   lidoToken: string | undefined;
 }
 
-export type ContractAddresses = NounsContractAddresses & ExternalContractAddresses;
+export type ContractAddresses = PunkContractAddresses & ExternalContractAddresses;
 
 interface AppConfig {
   jsonRpcUri: string;
