@@ -31,10 +31,10 @@ const NOUNS_ART_NONCE_OFFSET = 4;
 const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 9;
 const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 12;
 
-task('deploy-short-times', 'Deploy all NounsBR contracts with short gov times for testing')
+task('deploy-short-times', 'Deploy all Nouns contracts with short gov times for testing')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
   .addOptionalParam('weth', 'The WETH contract address', undefined, types.string)
-  .addOptionalParam('noundersdao', 'The nounders DAO contract address', undefined, types.string)
+  .addOptionalParam('noundersdao', 'The nounders DAO contract address', '0x3c68309658218f9eE50E659390b3C23A4F5c1400', types.string)
   .addOptionalParam(
     'auctionTimeBuffer',
     'The auction time buffer (seconds)',
@@ -56,7 +56,7 @@ task('deploy-short-times', 'Deploy all NounsBR contracts with short gov times fo
   .addOptionalParam(
     'auctionDuration',
     'The auction duration (seconds)',
-    60 * 2 /* 2 minutes */,
+    60 * 10 /* 10 minutes */,
     types.int,
   )
   .addOptionalParam('timelockDelay', 'The timelock delay (seconds)', 60 /* 1 min */, types.int)
@@ -206,7 +206,7 @@ task('deploy-short-times', 'Deploy all NounsBR contracts with short gov times fo
           const actual = deployment.NounsDAOProxyV2.address.toLowerCase();
           if (expected !== actual) {
             throw new Error(
-              `Unexpected NounsBR DAO proxy address. Expected: ${expected}. Actual: ${actual}.`,
+              `Unexpected Nouns DAO proxy address. Expected: ${expected}. Actual: ${actual}.`,
             );
           }
         },
@@ -235,6 +235,7 @@ task('deploy-short-times', 'Deploy all NounsBR contracts with short gov times fo
         gasPrice = ethers.utils.parseUnits(result.gasPrice.toString(), 'gwei');
       }
 
+      /*
       let nameForFactory: string;
       switch (name) {
         case 'NounsDAOExecutor':
@@ -247,8 +248,9 @@ task('deploy-short-times', 'Deploy all NounsBR contracts with short gov times fo
           nameForFactory = name;
           break;
       }
+      */
 
-      const factory = await ethers.getContractFactory(nameForFactory, {
+      const factory = await ethers.getContractFactory(name, {
         libraries: contract?.libraries?.(),
       });
 
@@ -304,7 +306,7 @@ task('deploy-short-times', 'Deploy all NounsBR contracts with short gov times fo
       }
 
       deployment[name as ContractNamesDAOV2] = {
-        name: nameForFactory,
+        name,
         instance: deployedContract,
         address: deployedContract.address,
         constructorArguments: contract.args?.map(a => (typeof a === 'function' ? a() : a)) ?? [],

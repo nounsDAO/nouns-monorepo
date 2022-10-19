@@ -6,8 +6,8 @@ import { images, bgcolors } from './image-data.json';
 const { bodies, accessories, heads, glasses } = images;
 
 /**
- * Get encoded part and background information using a NounBR seed
- * @param seed The NounBR seed
+ * Get encoded part and background information using a Noun seed
+ * @param seed The Noun seed
  */
 export const getNounData = (seed: NounSeed): NounData => {
   return {
@@ -22,8 +22,8 @@ export const getNounData = (seed: NounSeed): NounData => {
 };
 
 /**
- * Generate a random NounBR seed
- * @param seed The NounBR seed
+ * Generate a random Noun seed
+ * @param seed The Noun seed
  */
 export const getRandomNounSeed = (): NounSeed => {
   return {
@@ -68,8 +68,8 @@ export const getPseudorandomPart = (
 };
 
 /**
- * Emulates the NounsSeeder.sol methodology for generating a NounBR seed
- * @param nounId The NounBR tokenId used to create pseudorandomness
+ * Emulates the NounsSeeder.sol methodology for generating a Noun seed
+ * @param nounId The Noun tokenId used to create pseudorandomness
  * @param blockHash The block hash use to create pseudorandomness
  */
 export const getNounSeedFromBlockHash = (nounId: BigNumberish, blockHash: string): NounSeed => {

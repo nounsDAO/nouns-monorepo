@@ -1,4 +1,4 @@
-import { Bytes, log } from '@graphprotocol/graph-ts';
+import { BigInt, Bytes, log } from '@graphprotocol/graph-ts';
 import {
   ProposalCreatedWithRequirements,
   ProposalCanceled,
@@ -6,12 +6,17 @@ import {
   ProposalExecuted,
   VoteCast,
   ProposalVetoed,
+  MinQuorumVotesBPSSet,
+  MaxQuorumVotesBPSSet,
+  QuorumCoefficientSet,
 } from './types/NounsDAO/NounsDAO';
 import {
   getOrCreateDelegate,
   getOrCreateProposal,
   getOrCreateVote,
   getGovernanceEntity,
+  getOrCreateDelegateWithNullOption,
+  getOrCreateDynamicQuorumParams,
 } from './utils/helpers';
 import {
   BIGINT_ONE,
@@ -23,12 +28,13 @@ import {
   STATUS_VETOED,
   BIGINT_ZERO,
 } from './utils/constants';
+import { dynamicQuorumVotes } from './utils/dynamicQuorum';
 
 export function handleProposalCreatedWithRequirements(
   event: ProposalCreatedWithRequirements,
 ): void {
   let proposal = getOrCreateProposal(event.params.id.toString());
-  let proposer = getOrCreateDelegate(event.params.proposer.toHexString(), false);
+  let proposer = getOrCreateDelegateWithNullOption(event.params.proposer.toHexString(), false);
 
   // Check if the proposer was a delegate already accounted for, if not we should log an error
   // since it shouldn't be possible for a delegate to propose anything without first being 'created'
@@ -38,10 +44,8 @@ export function handleProposalCreatedWithRequirements(
       event.transaction.hash.toHexString(),
     ]);
   }
-
   // Create it anyway since we will want to account for this event data, even though it should've never happened
   proposer = getOrCreateDelegate(event.params.proposer.toHexString());
-
   proposal.proposer = proposer.id;
   proposal.targets = changetype<Bytes[]>(event.params.targets);
   proposal.values = event.params.values;
@@ -59,6 +63,16 @@ export function handleProposalCreatedWithRequirements(
   proposal.abstainVotes = BIGINT_ZERO;
   proposal.description = event.params.description.split('\\n').join('\n'); // The Graph's AssemblyScript version does not support string.replace
   proposal.status = event.block.number >= proposal.startBlock ? STATUS_ACTIVE : STATUS_PENDING;
+
+  // Storing state for dynamic quorum calculations
+  // Doing these for V1 props as well to avoid making these fields optional + avoid missing required field warnings
+  const governance = getGovernanceEntity();
+  proposal.totalSupply = governance.totalTokenHolders;
+
+  const dynamicQuorum = getOrCreateDynamicQuorumParams();
+  proposal.minQuorumVotesBPS = dynamicQuorum.minQuorumVotesBPS;
+  proposal.maxQuorumVotesBPS = dynamicQuorum.maxQuorumVotesBPS;
+  proposal.quorumCoefficient = dynamicQuorum.quorumCoefficient;
 
   proposal.save();
 }
@@ -85,7 +99,7 @@ export function handleProposalQueued(event: ProposalQueued): void {
   proposal.executionETA = event.params.eta;
   proposal.save();
 
-  governance.proposalsQueued = governance.proposalsQueued + BIGINT_ONE;
+  governance.proposalsQueued = governance.proposalsQueued.plus(BIGINT_ONE);
   governance.save();
 }
 
@@ -97,7 +111,7 @@ export function handleProposalExecuted(event: ProposalExecuted): void {
   proposal.executionETA = null;
   proposal.save();
 
-  governance.proposalsQueued = governance.proposalsQueued - BIGINT_ONE;
+  governance.proposalsQueued = governance.proposalsQueued.minus(BIGINT_ONE);
   governance.save();
 }
 
@@ -108,7 +122,7 @@ export function handleVoteCast(event: VoteCast): void {
     .concat('-')
     .concat(event.params.proposalId.toString());
   let vote = getOrCreateVote(voteId);
-  let voter = getOrCreateDelegate(event.params.voter.toHexString(), false);
+  let voter = getOrCreateDelegateWithNullOption(event.params.voter.toHexString(), false);
 
   // Check if the voter was a delegate already accounted for, if not we should log an error
   // since it shouldn't be possible for a delegate to vote without first being 'created'
@@ -145,8 +159,40 @@ export function handleVoteCast(event: VoteCast): void {
     proposal.abstainVotes = proposal.abstainVotes.plus(event.params.votes);
   }
 
+  const dqParams = getOrCreateDynamicQuorumParams();
+  const usingDynamicQuorum =
+    dqParams.dynamicQuorumStartBlock;
+
+  if (usingDynamicQuorum) {
+    proposal.quorumVotes = dynamicQuorumVotes(
+      proposal.againstVotes,
+      proposal.totalSupply,
+      proposal.minQuorumVotesBPS,
+      proposal.maxQuorumVotesBPS,
+      proposal.quorumCoefficient,
+    );
+  }
+
   if (proposal.status == STATUS_PENDING) {
     proposal.status = STATUS_ACTIVE;
   }
   proposal.save();
+}
+
+export function handleMinQuorumVotesBPSSet(event: MinQuorumVotesBPSSet): void {
+  const params = getOrCreateDynamicQuorumParams(event.block.number);
+  params.minQuorumVotesBPS = event.params.newMinQuorumVotesBPS;
+  params.save();
+}
+
+export function handleMaxQuorumVotesBPSSet(event: MaxQuorumVotesBPSSet): void {
+  const params = getOrCreateDynamicQuorumParams(event.block.number);
+  params.maxQuorumVotesBPS = event.params.newMaxQuorumVotesBPS;
+  params.save();
+}
+
+export function handleQuorumCoefficientSet(event: QuorumCoefficientSet): void {
+  const params = getOrCreateDynamicQuorumParams(event.block.number);
+  params.quorumCoefficient = event.params.newQuorumCoefficient;
+  params.save();
 }

@@ -19,7 +19,7 @@ import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import NavBarTreasury from '../NavBarTreasury';
 import NavWallet from '../NavWallet';
 import { Trans } from '@lingui/macro';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import NavLocaleSwitcher from '../NavLocaleSwitcher';
 
 const NavBar = () => {

@@ -31,7 +31,7 @@ task(
   .addOptionalParam(
     'auctionDuration',
     'The auction duration (seconds)',
-    60 * 2 /* 2 minutes */,
+    60 * 10 /* 10 minutes */,
     types.int,
   )
   .addOptionalParam('timelockDelay', 'The timelock delay (seconds)', 60 /* 1 min */, types.int)
@@ -62,8 +62,8 @@ task(
   ) // Default: 40%
   .addOptionalParam('quorumCoefficient', 'Dynamic quorum coefficient (float)', 1, types.float)
   .setAction(async (args, { run }) => {
-    // Deploy the NounsBR DAO contracts and return deployment information
-    const contracts = await run('deploy-short-times', args);
+    // Deploy the Nouns DAO contracts and return deployment information
+    const contracts = await run('deploy', args);
 
     // Verify the contracts on Etherscan
     await run('verify-etherscan-daov2', {
@@ -87,7 +87,7 @@ task(
     );
 
     // Optionally kick off the first auction and transfer ownership of the auction house
-    // to the NounsBR DAO executor.
+    // to the Nouns DAO executor.
     if (args.startAuction) {
       const auctionHouse = contracts.NounsAuctionHouse.instance.attach(
         contracts.NounsAuctionHouseProxy.address,

@@ -88,7 +88,7 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
      * @notice Require that the sender is the nounders DAO.
      */
     modifier onlyNoundersDAO() {
-        require(msg.sender == noundersDAO, 'Sender is not the nounders DAO');
+        require(msg.sender == noundersDAO, 'Sender is not the noundersbr DAO');
         _;
     }
 

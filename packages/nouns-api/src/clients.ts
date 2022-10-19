@@ -20,7 +20,7 @@ export const redis = new Redis(config.redisPort, config.redisHost);
 export const jsonRpcProvider = new providers.JsonRpcProvider(config.jsonRpcUrl);
 
 /**
- * NounsBR ERC721 Token Contract
+ * Nouns ERC721 Token Contract
  */
 export const nounsTokenContract = new Contract(
   config.nounsTokenAddress,

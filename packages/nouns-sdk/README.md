@@ -16,7 +16,7 @@ yarn test
 
 ## Usage
 
-The NounsBR SDK contains useful tooling for interacting with the NounsBR protocol.
+The Nouns SDK contains useful tooling for interacting with the Nouns protocol.
 
 ### Contracts
 

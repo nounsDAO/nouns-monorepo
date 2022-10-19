@@ -1,6 +1,13 @@
 import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json';
-import { ChainId, ContractDeployment, ContractName, DeployedContract } from './types';
-import { Interface } from 'ethers/lib/utils';
+import {
+  ChainId,
+  ContractDeployment,
+  ContractName,
+  ContractNameDescriptorV1,
+  ContractNamesDAOV2,
+  DeployedContract,
+} from './types';
+import { Interface, parseUnits } from 'ethers/lib/utils';
 import { task, types } from 'hardhat/config';
 import promptjs from 'prompt';
 
@@ -11,7 +18,7 @@ promptjs.delimiter = '';
 const proxyRegistries: Record<number, string> = {
   [ChainId.Mainnet]: '0xa5409ec958c83c3f309868babaca7c86dcb077c1',
   [ChainId.Rinkeby]: '0xf57b2c51ded3a29e6891aba85459d600256cf317',
-  [ChainId.Goerli]: '0xf57b2c51ded3a29e6891aba85459d600256cf317',
+  [ChainId.Goerli]: '0x2417cbb7247F91C9F162574003F88dc06C167696',
 };
 const wethContracts: Record<number, string> = {
   [ChainId.Mainnet]: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
@@ -25,10 +32,10 @@ const NOUNS_ART_NONCE_OFFSET = 4;
 const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 9;
 const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 12;
 
-task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsToken')
+task('deploy', 'Deploy all Nouns contracts with short gov times for testing')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
   .addOptionalParam('weth', 'The WETH contract address', undefined, types.string)
-  .addOptionalParam('noundersdao', 'The nounders DAO contract address','0xB44084e3feC20E0C0e96f825Fe1115526890F91B', types.string)
+  .addOptionalParam('noundersdao', 'The nounders DAO contract address', '0x3c68309658218f9eE50E659390b3C23A4F5c1400', types.string)
   .addOptionalParam(
     'auctionTimeBuffer',
     'The auction time buffer (seconds)',
@@ -68,11 +75,18 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
     types.int,
   )
   .addOptionalParam(
-    'quorumVotesBps',
-    'Votes required for quorum (basis points)',
-    1_000 /* 10% */,
+    'minQuorumVotesBPS',
+    'Min basis points input for dynamic quorum',
+    1_000,
     types.int,
-  )
+  ) // Default: 10%
+  .addOptionalParam(
+    'maxQuorumVotesBPS',
+    'Max basis points input for dynamic quorum',
+    4_000,
+    types.int,
+  ) // Default: 40%
+  .addOptionalParam('quorumCoefficient', 'Dynamic quorum coefficient (float)', 1, types.float)
   .setAction(async (args, { ethers }) => {
     const network = await ethers.provider.getNetwork();
     const [deployer] = await ethers.getSigners();
@@ -109,11 +123,11 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
       from: deployer.address,
       nonce: nonce + GOVERNOR_N_DELEGATOR_NONCE_OFFSET,
     });
-    const deployment: Record<ContractName, DeployedContract> = {} as Record<
-      ContractName,
+    const deployment: Record<ContractNamesDAOV2, DeployedContract> = {} as Record<
+      ContractNamesDAOV2,
       DeployedContract
     >;
-    const contracts: Record<ContractName, ContractDeployment> = {
+    const contracts: Record<ContractNamesDAOV2, ContractDeployment> = {
       NFTDescriptorV2: {},
       SVGRenderer: {},
       NounsDescriptorV2: {
@@ -168,28 +182,32 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
       NounsDAOExecutor: {
         args: [expectedNounsDAOProxyAddress, args.timelockDelay],
       },
-      NounsDAOLogicV1: {
+      NounsDAOLogicV2: {
         waitForConfirmation: true,
       },
-      NounsDAOProxy: {
+      NounsDAOProxyV2: {
         args: [
           () => deployment.NounsDAOExecutor.address,
           () => deployment.NounsToken.address,
           args.noundersdao,
           () => deployment.NounsDAOExecutor.address,
-          () => deployment.NounsDAOLogicV1.address,
+          () => deployment.NounsDAOLogicV2.address,
           args.votingPeriod,
           args.votingDelay,
           args.proposalThresholdBps,
-          args.quorumVotesBps,
+          {
+            minQuorumVotesBPS: args.minQuorumVotesBPS,
+            maxQuorumVotesBPS: args.maxQuorumVotesBPS,
+            quorumCoefficient: parseUnits(args.quorumCoefficient.toString(), 6),
+          },
         ],
         waitForConfirmation: true,
         validateDeployment: () => {
           const expected = expectedNounsDAOProxyAddress.toLowerCase();
-          const actual = deployment.NounsDAOProxy.address.toLowerCase();
+          const actual = deployment.NounsDAOProxyV2.address.toLowerCase();
           if (expected !== actual) {
             throw new Error(
-              `Unexpected NounsBR DAO proxy address. Expected: ${expected}. Actual: ${actual}.`,
+              `Unexpected Nouns DAO proxy address. Expected: ${expected}. Actual: ${actual}.`,
             );
           }
         },
@@ -217,6 +235,21 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
         ]);
         gasPrice = ethers.utils.parseUnits(result.gasPrice.toString(), 'gwei');
       }
+
+      /*
+      let nameForFactory: string;
+      switch (name) {
+        case 'NounsDAOExecutor':
+          nameForFactory = 'NounsDAOExecutorTest';
+          break;
+        case 'NounsDAOLogicV2':
+          nameForFactory = 'NounsDAOLogicV2Harness';
+          break;
+        default:
+          nameForFactory = name;
+          break;
+      }
+      */
 
       const factory = await ethers.getContractFactory(name, {
         libraries: contract?.libraries?.(),
@@ -273,7 +306,7 @@ task('deploy', 'Deploys NFTDescriptor, NounsDescriptor, NounsSeeder, and NounsTo
         await deployedContract.deployed();
       }
 
-      deployment[name as ContractName] = {
+      deployment[name as ContractNamesDAOV2] = {
         name,
         instance: deployedContract,
         address: deployedContract.address,

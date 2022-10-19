@@ -1,12 +1,15 @@
 import { task, types } from 'hardhat/config';
 import { printContractsTable } from './utils';
 
-task('deploy-and-configure', 'Deploy and configure all contracts')
+task(
+  'deploy-and-configure',
+  'Deploy and configure all contracts with short gov times for testing',
+)
   .addFlag('startAuction', 'Start the first auction upon deployment completion')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
   .addFlag('updateConfigs', 'Write the deployed addresses to the SDK and subgraph configs')
   .addOptionalParam('weth', 'The WETH contract address')
-  .addOptionalParam('noundersdao', 'The nounders DAO contract address','0xB44084e3feC20E0C0e96f825Fe1115526890F91B')
+  .addOptionalParam('noundersdao', 'The nounders DAO contract address', '0x3c68309658218f9eE50E659390b3C23A4F5c1400')
   .addOptionalParam(
     'auctionTimeBuffer',
     'The auction time buffer (seconds)',
@@ -46,17 +49,24 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
     types.int,
   )
   .addOptionalParam(
-    'quorumVotesBps',
-    'Votes required for quorum (basis points)',
-    1_000 /* 10% */,
+    'minQuorumVotesBPS',
+    'Min basis points input for dynamic quorum',
+    1_000,
     types.int,
-  )
+  ) // Default: 10%
+  .addOptionalParam(
+    'maxQuorumVotesBPS',
+    'Max basis points input for dynamic quorum',
+    4_000,
+    types.int,
+  ) // Default: 40%
+  .addOptionalParam('quorumCoefficient', 'Dynamic quorum coefficient (float)', 1, types.float)
   .setAction(async (args, { run }) => {
-    // Deploy the NounsBR DAO contracts and return deployment information
+    // Deploy the Nouns DAO contracts and return deployment information
     const contracts = await run('deploy', args);
 
     // Verify the contracts on Etherscan
-    await run('verify-etherscan', {
+    await run('verify-etherscan-daov2', {
       contracts,
     });
 
@@ -77,7 +87,7 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
     );
 
     // Optionally kick off the first auction and transfer ownership of the auction house
-    // to the NounsBR DAO executor.
+    // to the Nouns DAO executor.
     if (args.startAuction) {
       const auctionHouse = contracts.NounsAuctionHouse.instance.attach(
         contracts.NounsAuctionHouseProxy.address,
@@ -93,7 +103,7 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
 
     // Optionally write the deployed addresses to the SDK and subgraph configs.
     if (args.updateConfigs) {
-      await run('update-configs', {
+      await run('update-configs-daov2', {
         contracts,
       });
     }

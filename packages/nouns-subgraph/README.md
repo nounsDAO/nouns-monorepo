@@ -8,7 +8,7 @@ A subgraph that indexes nouns events.
 yarn
 ```
 
-## NounsBR Subgraph
+## Nouns Subgraph
 
 This repo contains the templates for compiling and deploying a graphql schema to thegraph.
 

@@ -31,7 +31,7 @@ const NOUNS_ART_NONCE_OFFSET = 4;
 const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 9;
 const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 12;
 
-task('deploy-short-times-daov1', 'Deploy all NounsBR contracts with short gov times for testing')
+task('deploy-short-times-daov1', 'Deploy all Nouns contracts with short gov times for testing')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
   .addOptionalParam('weth', 'The WETH contract address', undefined, types.string)
   .addOptionalParam('noundersdao', 'The nounders DAO contract address', undefined, types.string)
@@ -195,7 +195,7 @@ task('deploy-short-times-daov1', 'Deploy all NounsBR contracts with short gov ti
           const actual = deployment.NounsDAOProxy.address.toLowerCase();
           if (expected !== actual) {
             throw new Error(
-              `Unexpected NounsBR DAO proxy address. Expected: ${expected}. Actual: ${actual}.`,
+              `Unexpected Nouns DAO proxy address. Expected: ${expected}. Actual: ${actual}.`,
             );
           }
         },
