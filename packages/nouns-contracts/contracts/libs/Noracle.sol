@@ -18,6 +18,10 @@
 pragma solidity ^0.8.6;
 
 library Noracle {
+    error AlreadyInitialized();
+    error NotInitialized();
+    error AuctionCountOutOfBounds(uint32 auctionCount, uint32 cardinality);
+
     struct Observation {
         // The block.timestamp when the auction was settled
         uint32 blockTimestamp;
@@ -39,7 +43,7 @@ library Noracle {
     }
 
     function initialize(NoracleState storage self) internal {
-        if (self.cardinality > 0) return;
+        if (self.cardinality > 0) revert AlreadyInitialized();
 
         self.cardinality = 1;
         self.cardinalityNext = 1;
@@ -53,8 +57,10 @@ library Noracle {
         uint40 amount,
         address winner
     ) internal {
-        // if the conditions are right, we can bump the cardinality
         uint32 cardinalityNext = self.cardinalityNext;
+        if (cardinalityNext == 0) revert NotInitialized();
+
+        // if the conditions are right, we can bump the cardinality
         uint32 currentIndex = self.index;
         if (cardinalityNext > self.cardinality && currentIndex == (self.cardinality - 1)) {
             self.cardinality = cardinalityNext;
@@ -73,6 +79,7 @@ library Noracle {
 
     function grow(NoracleState storage self, uint32 next) internal returns (uint32) {
         uint32 current = self.cardinalityNext;
+        if (current == 0) revert NotInitialized();
 
         // no-op if the passed next value isn't greater than the current next value
         if (next <= current) return current;
@@ -92,7 +99,7 @@ library Noracle {
         returns (Observation[] memory observations)
     {
         uint32 cardinality = self.cardinality;
-        require(auctionCount <= cardinality, 'too many auctions ago');
+        if (auctionCount > cardinality) revert AuctionCountOutOfBounds(auctionCount, cardinality);
 
         uint32 index = self.index;
         observations = new Observation[](auctionCount);

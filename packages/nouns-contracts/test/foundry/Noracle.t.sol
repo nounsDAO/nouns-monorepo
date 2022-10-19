@@ -9,7 +9,7 @@ contract NoracleTest is Test {
 
     Noracle.NoracleState state;
 
-    function test_cardinality1_worksWithOneWrite() public {
+    function test_writeObserve_cardinality1_worksWithOneWrite() public {
         state.initialize();
         state.write(uint32(block.timestamp), 142, 69, address(0xdead));
 
@@ -22,7 +22,7 @@ contract NoracleTest is Test {
         assertEq(observations[0].winner, address(0xdead));
     }
 
-    function test_cardinality1_preserves8DecimalsUnder2KETH() public {
+    function test_writeObserve_cardinality1_preserves8DecimalsUnder2KETH() public {
         state.initialize();
         state.write(uint32(block.timestamp), 142, Noracle.ethPriceToUint40(1999.98765432109 ether), address(0xdead));
 
@@ -35,7 +35,7 @@ contract NoracleTest is Test {
         assertEq(observations[0].winner, address(0xdead));
     }
 
-    function test_cardinality1_secondWriteOverrides() public {
+    function test_writeObserve_cardinality1_secondWriteOverrides() public {
         state.initialize();
         state.write(uint32(block.timestamp), 142, 69, address(0xdead));
         state.write(uint32(block.timestamp + 1), 143, 70, address(0x1234));
@@ -48,11 +48,11 @@ contract NoracleTest is Test {
         assertEq(observations[0].amount, 70);
         assertEq(observations[0].winner, address(0x1234));
 
-        vm.expectRevert('too many auctions ago');
+        vm.expectRevert(abi.encodeWithSelector(Noracle.AuctionCountOutOfBounds.selector, 2, 1));
         state.observe(2);
     }
 
-    function test_cadinality2_secondWriteDoesNotOverride() public {
+    function test_writeObserve_cadinality2_secondWriteDoesNotOverride() public {
         state.initialize();
         state.write(uint32(block.timestamp), 142, 69, address(0xdead));
         state.grow(2);
@@ -70,5 +70,22 @@ contract NoracleTest is Test {
         assertEq(observations[1].nounId, 142);
         assertEq(observations[1].amount, 69);
         assertEq(observations[1].winner, address(0xdead));
+    }
+
+    function test_initialize_revertsOnRepeatAttempt() public {
+        state.initialize();
+
+        vm.expectRevert(abi.encodeWithSelector(Noracle.AlreadyInitialized.selector));
+        state.initialize();
+    }
+
+    function test_write_revertsWheNotInitialized() public {
+        vm.expectRevert(abi.encodeWithSelector(Noracle.NotInitialized.selector));
+        state.write(uint32(block.timestamp), 142, 69, address(0xdead));
+    }
+
+    function test_grow_revertsWheNotInitialized() public {
+        vm.expectRevert(abi.encodeWithSelector(Noracle.NotInitialized.selector));
+        state.grow(42);
     }
 }
