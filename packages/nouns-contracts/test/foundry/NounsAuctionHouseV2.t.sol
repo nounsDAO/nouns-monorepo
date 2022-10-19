@@ -9,6 +9,8 @@ import { NounsAuctionHouseV2 } from '../../contracts/NounsAuctionHouseV2.sol';
 import { Noracle } from '../../contracts/libs/Noracle.sol';
 
 contract NounsAuctionHouseV2Test is Test, DeployUtils {
+    event PriceHistoryGrown(uint32 current, uint32 next);
+
     address owner = address(0x1111);
     address noundersDAO = address(0x2222);
     address minter = address(0x3333);
@@ -123,6 +125,23 @@ contract NounsAuctionHouseV2Test is Test, DeployUtils {
         assertEq(prices[1].nounId, 2);
         assertEq(prices[1].amount, 2.2e8);
         assertEq(prices[1].winner, bidder2);
+    }
+
+    function test_growPriceHistory_emitsEvent() public {
+        vm.expectEmit(true, true, true, true);
+        emit PriceHistoryGrown(1, 3);
+        vm.prank(owner);
+        auction.growPriceHistory(3);
+
+        vm.expectEmit(true, true, true, true);
+        emit PriceHistoryGrown(3, 5);
+        vm.prank(owner);
+        auction.growPriceHistory(5);
+
+        vm.expectEmit(true, true, true, true);
+        emit PriceHistoryGrown(5, 5);
+        vm.prank(owner);
+        auction.growPriceHistory(5);
     }
 
     function bidAndWinCurrentAuction(address bidder, uint256 bid) internal returns (uint256) {

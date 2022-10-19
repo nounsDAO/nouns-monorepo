@@ -282,9 +282,10 @@ contract NounsAuctionHouseV2 is
     }
 
     function growPriceHistory(uint32 newCardinality) external {
-        oracle.grow(newCardinality);
+        uint32 current = oracle.cardinalityNext;
+        uint32 next = oracle.grow(newCardinality);
 
-        // TODO emit event
+        emit PriceHistoryGrown(current, next);
     }
 
     function prices(uint32 auctionCount) external view returns (Noracle.Observation[] memory observations) {
