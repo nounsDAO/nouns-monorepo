@@ -115,6 +115,14 @@ library Noracle {
                 initializedObservationsFound++;
             }
         }
+
+        if (auctionCount > initializedObservationsFound) {
+            Observation[] memory trimmedObservations = new Observation[](initializedObservationsFound);
+            for (uint32 i = 0; i < initializedObservationsFound; i++) {
+                trimmedObservations[i] = observations[i];
+            }
+            observations = trimmedObservations;
+        }
     }
 
     function ethPriceToUint40(uint256 ethPrice) internal pure returns (uint40) {

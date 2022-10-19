@@ -9,6 +9,23 @@ contract NoracleTest is Test {
 
     Noracle.NoracleState state;
 
+    function test_initialize_revertsOnRepeatAttempt() public {
+        state.initialize();
+
+        vm.expectRevert(abi.encodeWithSelector(Noracle.AlreadyInitialized.selector));
+        state.initialize();
+    }
+
+    function test_grow_revertsWheNotInitialized() public {
+        vm.expectRevert(abi.encodeWithSelector(Noracle.NotInitialized.selector));
+        state.grow(42);
+    }
+
+    function test_write_revertsWheNotInitialized() public {
+        vm.expectRevert(abi.encodeWithSelector(Noracle.NotInitialized.selector));
+        state.write(uint32(block.timestamp), 142, 69, address(0xdead));
+    }
+
     function test_writeObserve_cardinality1_worksWithOneWrite() public {
         state.initialize();
         state.write(uint32(block.timestamp), 142, 69, address(0xdead));
@@ -72,20 +89,23 @@ contract NoracleTest is Test {
         assertEq(observations[1].winner, address(0xdead));
     }
 
-    function test_initialize_revertsOnRepeatAttempt() public {
+    function test_observe_returnsEmptyArrayGivenNoWrites() public {
         state.initialize();
 
-        vm.expectRevert(abi.encodeWithSelector(Noracle.AlreadyInitialized.selector));
-        state.initialize();
+        Noracle.Observation[] memory observations = state.observe(1);
+
+        assertEq(observations.length, 0);
     }
 
-    function test_write_revertsWheNotInitialized() public {
-        vm.expectRevert(abi.encodeWithSelector(Noracle.NotInitialized.selector));
+    function test_observe_trimsObervationsArrayGivenHighCardinalityWithManyEmptySlots() public {
+        state.initialize();
         state.write(uint32(block.timestamp), 142, 69, address(0xdead));
-    }
+        state.grow(1_000);
+        state.write(uint32(block.timestamp + 1), 143, 70, address(0x1234));
 
-    function test_grow_revertsWheNotInitialized() public {
-        vm.expectRevert(abi.encodeWithSelector(Noracle.NotInitialized.selector));
-        state.grow(42);
+        Noracle.Observation[] memory observations = state.observe(500);
+
+        assertEq(state.cardinality, 1_000);
+        assertEq(observations.length, 2);
     }
 }
