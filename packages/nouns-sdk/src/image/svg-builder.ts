@@ -40,11 +40,15 @@ const getRectLength = (currentX: number, drawLength: number, rightBound: number)
  * @param parts The RLE part datas
  * @param paletteColors The hex palette colors
  * @param bgColor The hex background color
+ * @param width The width of the SVG image
+ * @param height The height of the SVG image
  */
 export const buildSVG = (
   parts: { data: string }[],
   paletteColors: string[],
   bgColor: string,
+  width: number = 320,
+  height: number = 320,
 ): string => {
   const svgWithoutEndTag = parts.reduce((result, part) => {
     const svgRects: string[] = [];
@@ -80,7 +84,7 @@ export const buildSVG = (
     });
     result += svgRects.join('');
     return result;
-  }, `<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="#${bgColor}" />`);
+  }, `<svg width="${width}" height="${height}" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="#${bgColor}" />`);
 
   return `${svgWithoutEndTag}</svg>`;
 };
