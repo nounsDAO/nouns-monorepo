@@ -287,7 +287,7 @@ contract NounsAuctionHouseV2 is
         // TODO emit event
     }
 
-    function prices(uint32 fromAuctionsAgo) external view returns (Noracle.Observation[] memory observations) {
-        return oracle.observe(fromAuctionsAgo);
+    function prices(uint32 auctionCount) external view returns (Noracle.Observation[] memory observations) {
+        return oracle.observe(auctionCount);
     }
 }

@@ -86,19 +86,19 @@ library Noracle {
         return self.cardinalityNext = next;
     }
 
-    function observe(NoracleState storage self, uint32 fromAuctionsAgo)
+    function observe(NoracleState storage self, uint32 auctionCount)
         internal
         view
         returns (Observation[] memory observations)
     {
         uint32 cardinality = self.cardinality;
-        require(fromAuctionsAgo <= cardinality, 'too many auctions ago');
+        require(auctionCount <= cardinality, 'too many auctions ago');
 
         uint32 index = self.index;
-        observations = new Observation[](fromAuctionsAgo);
+        observations = new Observation[](auctionCount);
         uint32 initializedObservationsFound = 0;
         uint32 checkedIndexesCount = 0;
-        while (initializedObservationsFound < fromAuctionsAgo && checkedIndexesCount < cardinality) {
+        while (initializedObservationsFound < auctionCount && checkedIndexesCount < cardinality) {
             uint32 checkIndex = (index + (cardinality - checkedIndexesCount)) % cardinality;
             checkedIndexesCount++;
 
