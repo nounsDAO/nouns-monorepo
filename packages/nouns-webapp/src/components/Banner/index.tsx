@@ -1,7 +1,7 @@
 import classes from './Banner.module.css';
 import Section from '../../layout/Section';
 import { Col } from 'react-bootstrap';
-import carmen_miranda from '../../assets/carmen_miranda.jpeg';
+import carmen_miranda from '../../assets/carmen_miranda.png';
 import Noun from '../Noun';
 import { Trans } from '@lingui/macro';
 
