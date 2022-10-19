@@ -94,9 +94,8 @@ contract NSeeder is ISeeder, Ownable {
         }
 
         pseudorandomness >>= 72;
-        uint _accTypeCount = accTypeCount;
-        uint256[] memory selectedRandomness = new uint256[](_accTypeCount);
-        for(uint i = 0; i < _accTypeCount; i ++) {
+        uint256[] memory selectedRandomness = new uint256[](accTypeCount);
+        for(uint i = 0; i < accTypeCount; i ++) {
             if(accCountByType[seed.punkType][i] == 0)
                 selectedRandomness[i] = 0;
             else
@@ -113,8 +112,8 @@ contract NSeeder is ISeeder, Ownable {
         for(uint i = 0; i < curAccCount; i ++) {
             tmp = 0;
             maxValue = 0;
-            for(uint j = 0; j < _accTypeCount; j ++) {
-                if(usedGroupFlags[accExclusiveGroupMapping[j]] == 1) continue;
+            for(uint j = 0; j < accTypeCount; j ++) {
+                if(usedGroupFlags[accExclusiveGroupMapping[typeOrderSortedByCount[seed.punkType][j]]] == 1) continue;
 
                 if(maxValue >= accCountByType[seed.punkType][j] * 1000) break;
                 if(maxValue < selectedRandomness[j]) {
@@ -124,7 +123,7 @@ contract NSeeder is ISeeder, Ownable {
             }
 
             uint accRand = uint8(pseudorandomness >> (i * 8)) % accCountByType[seed.punkType][tmp];
-            usedGroupFlags[accExclusiveGroupMapping[tmp]] = 1;
+            usedGroupFlags[accExclusiveGroupMapping[typeOrderSortedByCount[seed.punkType][tmp]]] = 1;
             seed.accessories[i] = Accessory({
                 accType: uint16(typeOrderSortedByCount[seed.punkType][tmp]),
                 accId: uint16(accRand)

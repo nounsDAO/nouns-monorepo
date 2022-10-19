@@ -5,25 +5,25 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: NounsAuctionHouse
+    name: NAuctionHouse
     network: {{network}}
     source:
-      address: '{{nounsAuctionHouse.address}}'
-      abi: NounsAuctionHouse
-      startBlock: {{nounsAuctionHouse.startBlock}}
+      address: '{{nAuctionHouse.address}}'
+      abi: NAuctionHouse
+      startBlock: {{nAuctionHouse.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ./src/nouns-auction-house.ts
+      file: ./src/n-auction-house.ts
       entities:
         - Account
         - Auction
         - Bid
-        - Noun
+        - Punk
       abis:
-        - name: NounsAuctionHouse
-          file: ../nouns-contracts/abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json
+        - name: NAuctionHouse
+          file: ../nouns-contracts/abi/contracts/NAuctionHouse.sol/NAuctionHouse.json
       eventHandlers:
         - event: AuctionCreated(indexed uint256,uint256,uint256)
           handler: handleAuctionCreated
@@ -34,29 +34,29 @@ dataSources:
         - event: AuctionSettled(indexed uint256,address,uint256)
           handler: handleAuctionSettled
   - kind: ethereum/contract
-    name: NounsToken
+    name: NToken
     network: {{network}}
     source:
-      address: '{{nounsToken.address}}'
-      abi: NounsToken
-      startBlock: {{nounsToken.startBlock}}
+      address: '{{nToken.address}}'
+      abi: NToken
+      startBlock: {{nToken.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ./src/nouns-erc-721.ts
+      file: ./src/n-erc-721.ts
       entities:
-        - Noun
+        - Punk
         - Seed
         - Account
         - Delegate
         - Governance
       abis:
-        - name: NounsToken
-          file: ../nouns-contracts/abi/contracts/NounsToken.sol/NounsToken.json
+        - name: NToken
+          file: ../nouns-contracts/abi/contracts/NToken.sol/NToken.json
       eventHandlers:
-        - event: NounCreated(indexed uint256,(uint48,uint48,uint48,uint48,uint48))
-          handler: handleNounCreated
+        - event: PunkCreated(indexed uint256,(uint8,uint8,(uint16,uint16)[]))
+          handler: handlePunkCreated
         - event: DelegateChanged(indexed address,indexed address,indexed address)
           handler: handleDelegateChanged
         - event: DelegateVotesChanged(indexed address,uint256,uint256)
@@ -64,17 +64,17 @@ dataSources:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
   - kind: ethereum/contract
-    name: NounsDAO
+    name: NDAO
     network: {{network}}
     source:
-      address: '{{nounsDAO.address}}'
-      abi: NounsDAO
-      startBlock: {{nounsDAO.startBlock}}
+      address: '{{nDAO.address}}'
+      abi: NDAO
+      startBlock: {{nDAO.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: ./src/nouns-dao.ts
+      file: ./src/n-dao.ts
       entities:
         - Account
         - Delegate
@@ -82,8 +82,8 @@ dataSources:
         - Vote
         - Governance
       abis:
-        - name: NounsDAO
-          file: ../nouns-contracts/abi/contracts/governance/NounsDAOLogicV1.sol/NounsDAOLogicV1.json
+        - name: NDAO
+          file: ../nouns-contracts/abi/contracts/governance/NDAOLogicV1.sol/NDAOLogicV1.json
       eventHandlers:
         - event: ProposalCreatedWithRequirements(uint256,address,address[],uint256[],string[],bytes[],uint256,uint256,uint256,uint256,string)
           handler: handleProposalCreatedWithRequirements

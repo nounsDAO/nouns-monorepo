@@ -59,6 +59,8 @@ const Auction: React.FC<AuctionProps> = props => {
     </div>
   );
 
+  console.log("CUR_AUCTION", currentAuction)
+
   const currentAuctionActivityContent = currentAuction && lastTokenId && (
     <AuctionActivity
       auction={currentAuction}

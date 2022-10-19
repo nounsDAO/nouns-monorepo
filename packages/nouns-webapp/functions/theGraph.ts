@@ -8,15 +8,18 @@ export interface NormalizedVote {
   supportDetailed: number;
 }
 
-export interface Seed {
-  background: number;
-  body: number;
-  accessory: number;
-  head: number;
-  glasses: number;
+export interface Accessory {
+  accType: number;
+  accId: number;
 }
 
-export interface NormalizedNoun {
+export interface Seed {
+  punkType: number;
+  skinTone: number;
+  accessories: Accessory[];
+}
+
+export interface NormalizedPunk {
   id: number;
   owner: string;
   delegatedTo: null | string;
@@ -24,9 +27,9 @@ export interface NormalizedNoun {
   seed: Seed;
 }
 
-const nounsGql = `
+const punksGql = `
 {
-  nouns {
+  punks {
     id
     owner {
       id
@@ -41,11 +44,10 @@ const nounsGql = `
       supportDetailed
     }
     seed {
-      background
-      body
-      accessory
-      head
-      glasses
+      punkType
+      skinTone
+      accessory_types
+      accessory_ids
     }
   }
 }
@@ -57,38 +59,38 @@ export const normalizeVote = (vote: any): NormalizedVote => ({
 });
 
 export const normalizeSeed = (seed: any): Seed => ({
-  background: Number(seed.background),
-  body: Number(seed.body),
-  glasses: Number(seed.glasses),
-  accessory: Number(seed.accessory),
-  head: Number(seed.head),
+  punkType: Number(seed.punkType),
+  skinTone: Number(seed.skinTone),
+  accessories: seed.accessory_types.map((accType: any, index: number) => (
+    { accType: Number(accType), accId: Number(seed.accessory_ids[index]) } as Accessory
+  )), /* DEBUG */
 });
 
-export const normalizeNoun = (noun: any): NormalizedNoun => ({
-  id: Number(noun.id),
-  owner: noun.owner.id,
-  delegatedTo: noun.owner.delegate?.id,
-  votes: normalizeVotes(noun.votes),
-  seed: normalizeSeed(noun.seed),
+export const normalizePunk = (punk: any): NormalizedPunk => ({
+  id: Number(punk.id),
+  owner: punk.owner.id,
+  delegatedTo: punk.owner.delegate?.id,
+  votes: normalizeVotes(punk.votes),
+  seed: normalizeSeed(punk.seed),
 });
 
-export const normalizeNouns = R.map(normalizeNoun);
+export const normalizePunks = R.map(normalizePunk);
 
 export const normalizeVotes = R.map(normalizeVote);
 
 export const ownerFilterFactory = (address: string) =>
-  R.filter((noun: any) => bigNumbersEqual(address, noun.owner));
+  R.filter((punk: any) => bigNumbersEqual(address, punk.owner));
 
-export const isNounOwner = (address: string, nouns: NormalizedNoun[]) =>
-  ownerFilterFactory(address)(nouns).length > 0;
+export const isPunkOwner = (address: string, punks: NormalizedPunk[]) =>
+  ownerFilterFactory(address)(punks).length > 0;
 
 export const delegateFilterFactory = (address: string) =>
-  R.filter((noun: any) => noun.delegatedTo && bigNumbersEqual(address, noun.delegatedTo));
+  R.filter((punk: any) => punk.delegatedTo && bigNumbersEqual(address, punk.delegatedTo));
 
-export const isNounDelegate = (address: string, nouns: NormalizedNoun[]) =>
-  delegateFilterFactory(address)(nouns).length > 0;
+export const isPunkDelegate = (address: string, punks: NormalizedPunk[]) =>
+  delegateFilterFactory(address)(punks).length > 0;
 
-export const nounsQuery = async () =>
-  normalizeNouns(
-    (await axios.post(config.app.subgraphApiUri, { query: nounsGql })).data.data.nouns,
+export const punksQuery = async () =>
+  normalizePunks(
+    (await axios.post(config.app.subgraphApiUri, { query: punksGql })).data.data.punks,
   );

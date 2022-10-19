@@ -10,7 +10,7 @@
       "modified": 1632805896357,
       "created": 1632713524015,
       "url": "{{_.host}}/v0-noun-owners",
-      "name": "Noun Owners",
+      "name": "Punk Owners",
       "description": "",
       "method": "GET",
       "body": {},
@@ -32,7 +32,7 @@
       "parentId": null,
       "modified": 1632713355841,
       "created": 1632713355841,
-      "name": "Nouns API",
+      "name": "Punks API",
       "description": "",
       "scope": "collection",
       "_type": "workspace"
@@ -43,7 +43,7 @@
       "modified": 1633056552484,
       "created": 1633056549711,
       "url": "{{_.host}}/v0-noun-seeds",
-      "name": "Noun Seeds",
+      "name": "Punk Seeds",
       "description": "",
       "method": "GET",
       "body": {},
@@ -94,7 +94,7 @@
       "method": "POST",
       "body": {
         "mimeType": "application/json",
-        "text": "{\n\t\"message\": \"I am 0x28f1F4ea77Af433c45366151F6f9906435d9DB19\\n\\nThis is me testing the Nouns serverless API\",\n\t\"signer\": \"0x28f1F4ea77Af433c45366151F6f9906435d9DB19\",\n\t\"signature\": \"0xc82fd716033ae41efd155258622a6c7d0d42ce56d03d6ba0bef1091d54675c4872e99f5718dfe0cb1a1a8dfd8d62fd35dfa10445d40e001174756a7059dd80d81b\"\n}"
+        "text": "{\n\t\"message\": \"I am 0x28f1F4ea77Af433c45366151F6f9906435d9DB19\\n\\nThis is me testing the Punks serverless API\",\n\t\"signer\": \"0x28f1F4ea77Af433c45366151F6f9906435d9DB19\",\n\t\"signature\": \"0xc82fd716033ae41efd155258622a6c7d0d42ce56d03d6ba0bef1091d54675c4872e99f5718dfe0cb1a1a8dfd8d62fd35dfa10445d40e001174756a7059dd80d81b\"\n}"
       },
       "parameters": [],
       "headers": [
@@ -126,7 +126,7 @@
       "method": "POST",
       "body": {
         "mimeType": "application/json",
-        "text": "{\n\t\"message\": \"I am 0x28f1F4ea77Af433c45366151F6f9906435d9DB19\\n\\nThis is me testing the Nouns serverless API\",\n\t\"signer\": \"0x28f1F4ea77Af433c45366151F6f9906435d9DB19\",\n\t\"signature\": \"0xc82fd716033ae41efd155258622a6c7d0d42ce56d03d6ba0bef1091d54675c4872e99f5718dfe0cb1a1a8dfd8d62fd35dfa10445d40e001174756a7059dd80d81b\"\n}"
+        "text": "{\n\t\"message\": \"I am 0x28f1F4ea77Af433c45366151F6f9906435d9DB19\\n\\nThis is me testing the Punks serverless API\",\n\t\"signer\": \"0x28f1F4ea77Af433c45366151F6f9906435d9DB19\",\n\t\"signature\": \"0xc82fd716033ae41efd155258622a6c7d0d42ce56d03d6ba0bef1091d54675c4872e99f5718dfe0cb1a1a8dfd8d62fd35dfa10445d40e001174756a7059dd80d81b\"\n}"
       },
       "parameters": [],
       "headers": [
@@ -153,7 +153,7 @@
       "modified": 1632805914375,
       "created": 1632713370143,
       "url": "{{_.host}}/v0-is-noun-owner",
-      "name": "Is Noun Owner",
+      "name": "Is Punk Owner",
       "description": "",
       "method": "POST",
       "body": { "mimeType": "text/plain", "text": "0x2536c09e5f5691498805884fa37811be3b2bddb4" },
@@ -182,7 +182,7 @@
       "modified": 1632805920228,
       "created": 1632716185270,
       "url": "{{_.host}}/v0-is-noun-delegate",
-      "name": "Is Noun Delegate",
+      "name": "Is Punk Delegate",
       "description": "",
       "method": "POST",
       "body": { "mimeType": "text/plain", "text": "0x75ee6eb3d8dacf41ee2e5307090b197d3e1cca6e" },
@@ -232,7 +232,7 @@
       "parentId": "wrk_d942513a879747709dda126ab8f38b87",
       "modified": 1632713355841,
       "created": 1632713355841,
-      "fileName": "Nouns API",
+      "fileName": "Punks API",
       "contents": "",
       "contentType": "yaml",
       "_type": "api_spec"

@@ -1,27 +1,27 @@
 import { Handler } from '@netlify/functions';
-import { nounsQuery, Seed } from '../theGraph';
+import { punksQuery, Seed } from '../theGraph';
 import * as R from 'ramda';
 import { sharedResponseHeaders } from '../utils';
 
-interface SeededNoun {
+interface SeededPunk {
   id: number;
   seed: Seed;
 }
 
-const buildSeededNoun = R.pick(['id', 'seed']);
+const buildSeededPunk = R.pick(['id', 'seed']);
 
-const buildSeededNouns = R.map(buildSeededNoun);
+const buildSeededPunks = R.map(buildSeededPunk);
 
 const handler: Handler = async (event, context) => {
-  const nouns = await nounsQuery();
-  const seededNouns: SeededNoun[] = buildSeededNouns(nouns);
+  const punks = await punksQuery();
+  const seededPunks: SeededPunk[] = buildSeededPunks(punks);
   return {
     statusCode: 200,
     headers: {
       'Content-Type': 'application/json',
       ...sharedResponseHeaders,
     },
-    body: JSON.stringify(seededNouns),
+    body: JSON.stringify(seededPunks),
   };
 };
 

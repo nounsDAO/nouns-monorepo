@@ -1,15 +1,15 @@
 {
   "network": "goerli",
   "nToken": {
-    "address": "0xcD1316fA78ef4B477b7C597c153eB5828644D851",
+    "address": "0xD29D3d58A956D7C177e06fc4b53FaA854733E760",
     "startBlock": null
   },
   "nAuctionHouse": {
-    "address": "0xd89EcB307dB33f5Ff58194E6Fe21b86764d943F1",
+    "address": "0xBa0Be7803075a0576AF816643b8798868227A3CF",
     "startBlock": null
   },
   "nDAO": {
-    "address": "0xE29da30D7e9cadc7479261F5da0b8A6c1ca82c35",
+    "address": "0x2818FA33D60eF4D07c7FC7Ec56c41A2B165D1Cb4",
     "startBlock": null
   }
 }

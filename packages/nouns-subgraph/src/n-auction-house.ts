@@ -5,23 +5,23 @@ import {
   AuctionExtended,
   AuctionSettled,
 } from './types/NAuctionHouse/NAuctionHouse';
-import { Auction, Noun, Bid } from './types/schema';
+import { Auction, Punk, Bid } from './types/schema';
 import { getOrCreateAccount } from './utils/helpers';
 
 export function handleAuctionCreated(event: AuctionCreated): void {
-  let punkId = event.params.nounId.toString();
+  let tokenId = event.params.tokenId.toString();
 
-  let noun = Noun.load(punkId);
-  if (noun == null) {
-    log.error('[handleAuctionCreated] Noun #{} not found. Hash: {}', [
-      punkId,
+  let punk = Punk.load(tokenId);
+  if (punk == null) {
+    log.error('[handleAuctionCreated] Punk #{} not found. Hash: {}', [
+      tokenId,
       event.transaction.hash.toHex(),
     ]);
     return;
   }
 
-  let auction = new Auction(punkId);
-  auction.noun = noun.id;
+  let auction = new Auction(tokenId);
+  auction.punk = punk.id;
   auction.amount = BigInt.fromI32(0);
   auction.startTime = event.params.startTime;
   auction.endTime = event.params.endTime;
@@ -30,15 +30,15 @@ export function handleAuctionCreated(event: AuctionCreated): void {
 }
 
 export function handleAuctionBid(event: AuctionBid): void {
-  let nounId = event.params.nounId.toString();
+  let tokenId = event.params.tokenId.toString();
   let bidderAddress = event.params.sender.toHex();
 
   let bidder = getOrCreateAccount(bidderAddress);
 
-  let auction = Auction.load(nounId);
+  let auction = Auction.load(tokenId);
   if (auction == null) {
-    log.error('[handleAuctionBid] Auction not found for Noun #{}. Hash: {}', [
-      nounId,
+    log.error('[handleAuctionBid] Auction not found for Punk #{}. Hash: {}', [
+      tokenId,
       event.transaction.hash.toHex(),
     ]);
     return;
@@ -52,7 +52,7 @@ export function handleAuctionBid(event: AuctionBid): void {
   let bid = new Bid(event.transaction.hash.toHex());
   bid.bidder = bidder.id;
   bid.amount = auction.amount;
-  bid.noun = auction.noun;
+  bid.punk = auction.punk;
   bid.txIndex = event.transaction.index;
   bid.blockNumber = event.block.number;
   bid.blockTimestamp = event.block.timestamp;
@@ -61,12 +61,12 @@ export function handleAuctionBid(event: AuctionBid): void {
 }
 
 export function handleAuctionExtended(event: AuctionExtended): void {
-  let nounId = event.params.nounId.toString();
+  let tokenId = event.params.tokenId.toString();
 
-  let auction = Auction.load(nounId);
+  let auction = Auction.load(tokenId);
   if (auction == null) {
-    log.error('[handleAuctionExtended] Auction not found for Noun #{}. Hash: {}', [
-      nounId,
+    log.error('[handleAuctionExtended] Auction not found for Punk #{}. Hash: {}', [
+      tokenId,
       event.transaction.hash.toHex(),
     ]);
     return;
@@ -77,12 +77,12 @@ export function handleAuctionExtended(event: AuctionExtended): void {
 }
 
 export function handleAuctionSettled(event: AuctionSettled): void {
-  let nounId = event.params.nounId.toString();
+  let tokenId = event.params.tokenId.toString();
 
-  let auction = Auction.load(nounId);
+  let auction = Auction.load(tokenId);
   if (auction == null) {
-    log.error('[handleAuctionSettled] Auction not found for Noun #{}. Hash: {}', [
-      nounId,
+    log.error('[handleAuctionSettled] Auction not found for Punk #{}. Hash: {}', [
+      tokenId,
       event.transaction.hash.toHex(),
     ]);
     return;

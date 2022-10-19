@@ -50,7 +50,6 @@ const StandaloneToken: React.FC<StandaloneTokenProps> = (props: StandaloneTokenP
     dispatch(setOnDisplayAuctionTokenId(tokenId.toNumber()));
   };
 
-  console.log("StandaloneToken")
   return (
     <Link
       to={'/token/' + tokenId.toString()}
@@ -74,7 +73,6 @@ export const StandaloneTokenCircular: React.FC<StandaloneCircularTokenProps> = (
     dispatch(setOnDisplayAuctionTokenId(tokenId.toNumber()));
   };
 
-  console.log("StandaloneTokenCircular")
 
   if (!seed || !tokenId) return <Punk imgPath="" alt="punk" />;
 
@@ -105,7 +103,6 @@ export const StandaloneTokenRoundedCorners: React.FC<StandaloneTokenProps> = (
   const onClickHandler = () => {
     dispatch(setOnDisplayAuctionTokenId(tokenId.toNumber()));
   };
-  console.log("StandaloneTokenRoundedCorners")
 
   return (
     <Link

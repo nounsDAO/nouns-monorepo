@@ -1,5 +1,5 @@
 import { Handler } from '@netlify/functions';
-import { NormalizedNoun, NormalizedVote, nounsQuery } from '../theGraph';
+import { NormalizedPunk, NormalizedVote, punksQuery } from '../theGraph';
 import { sharedResponseHeaders } from '../utils';
 
 interface ProposalVote {
@@ -13,32 +13,32 @@ interface ProposalVotes {
   [key: number]: ProposalVote[];
 }
 
-const builtProposalVote = (noun: NormalizedNoun, vote: NormalizedVote): ProposalVote => ({
-  tokenId: noun.id,
-  owner: noun.owner,
-  delegatedTo: noun.delegatedTo,
+const builtProposalVote = (punk: NormalizedPunk, vote: NormalizedVote): ProposalVote => ({
+  tokenId: punk.id,
+  owner: punk.owner,
+  delegatedTo: punk.delegatedTo,
   supportDetailed: vote.supportDetailed,
 });
 
-const reduceProposalVotes = (nouns: NormalizedNoun[]) =>
-  nouns.reduce((acc: ProposalVotes, noun: NormalizedNoun) => {
-    for (let i in noun.votes) {
-      const vote = noun.votes[i];
+const reduceProposalVotes = (punks: NormalizedPunk[]) =>
+punks.reduce((acc: ProposalVotes, punk: NormalizedPunk) => {
+    for (let i in punk.votes) {
+      const vote = punk.votes[i];
       if (!acc[vote.proposalId]) acc[vote.proposalId] = [];
-      acc[vote.proposalId].push(builtProposalVote(noun, vote));
+      acc[vote.proposalId].push(builtProposalVote(punk, vote));
     }
     return acc;
   }, {});
 
 const handler: Handler = async (event, context) => {
-  const nouns = await nounsQuery();
+  const punks = await punksQuery();
   return {
     statusCode: 200,
     headers: {
       'Content-Type': 'application/json',
       ...sharedResponseHeaders,
     },
-    body: JSON.stringify(reduceProposalVotes(nouns)),
+    body: JSON.stringify(reduceProposalVotes(punks)),
   };
 };
 
