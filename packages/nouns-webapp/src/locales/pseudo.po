@@ -365,11 +365,11 @@ msgid "Dynamic Quorum"
 msgstr ""
 
 #: src/components/Banner/index.tsx
-msgid "EVERY DAY,"
+msgid "EVERY 15 MIN,"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "Each time an auction is settled, the settlement transaction will also cause a new NounBR to be minted and a new 24 hour auction to begin."
+msgid "Each time an auction is settled, the settlement transaction will also cause a new NounBR to be minted and a new 15 minutes auction to begin."
 msgstr ""
 
 #: src/pages/Vote/index.tsx
@@ -586,7 +586,7 @@ msgid "NounBR {0}"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "Nounder distributions don't interfere with the cadence of 24 hour auctions. NounsBR are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available NounBR ID."
+msgid "Nounder distributions don't interfere with the cadence of 15 minutes auctions. NounsBR are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available NounBR ID."
 msgstr ""
 
 #: src/components/Documentation/index.tsx
@@ -668,7 +668,7 @@ msgid "One NounBR is equal to one vote."
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "One NounBR is trustlessly auctioned every 24 hours, forever."
+msgid "One NounBR is trustlessly auctioned every 15 minutes, forever."
 msgstr ""
 
 #: src/pages/Playground/index.tsx
@@ -894,7 +894,7 @@ msgid "The Nounders reward is intended as compensation for our pre and post-laun
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "The NounsBR Auction Contract will act as a self-sufficient NounBR generation and distribution mechanism, auctioning one NounBR every 24 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the NounsBR DAO treasury, where they are governed by NounBR owners."
+msgid "The NounsBR Auction Contract will act as a self-sufficient NounBR generation and distribution mechanism, auctioning one NounBR every 15 minutes, forever. 100% of auction proceeds (ETH) are automatically deposited in the NounsBR DAO treasury, where they are governed by NounBR owners."
 msgstr ""
 
 #: src/components/Documentation/index.tsx

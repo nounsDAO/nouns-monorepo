@@ -370,12 +370,12 @@ msgid "Dynamic Quorum"
 msgstr "Dynamic Quorum"
 
 #: src/components/Banner/index.tsx
-msgid "EVERY DAY,"
-msgstr "TODO DIA,"
+msgid "EVERY 15 MIN,"
+msgstr "A CADA 15 MIN,"
 
 #: src/components/Documentation/index.tsx
-msgid "Each time an auction is settled, the settlement transaction will also cause a new NounBR to be minted and a new 24 hour auction to begin."
-msgstr "Cada vez que um leilão é liquidado, a transação de liquidação também fará com que um novo NounBR seja mintado e um novo leilão de 24 horas seja iniciado."
+msgid "Each time an auction is settled, the settlement transaction will also cause a new NounBR to be minted and a new 15 minutes auction to begin."
+msgstr "Cada vez que um leilão é liquidado, a transação de liquidação também fará com que um novo NounBR seja mintado e um novo leilão de 15 minutos seja iniciado."
 
 #: src/pages/Vote/index.tsx
 msgid "Ended"
@@ -591,8 +591,8 @@ msgid "NounBR {0}"
 msgstr "NounBR {0}"
 
 #: src/components/Documentation/index.tsx
-msgid "Nounder distributions don't interfere with the cadence of 24 hour auctions. NounsBR are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available NounBR ID."
-msgstr "Distribuições NounderBR não interferem na cadência dos leilões de 24 horas. Os NounsBR são enviados diretamente para o Multisig da NounderBR, e os leilões continuam no horário com o próximo NounBR ID disponível."
+msgid "Nounder distributions don't interfere with the cadence of 15 minutes auctions. NounsBR are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available NounBR ID."
+msgstr "Distribuições NounderBR não interferem na cadência dos leilões de 15 minutos. Os NounsBR são enviados diretamente para o Multisig da NounderBR, e os leilões continuam no horário com o próximo NounBR ID disponível."
 
 #: src/components/Documentation/index.tsx
 msgid "Nounder's Reward"
@@ -673,8 +673,8 @@ msgid "One NounBR is equal to one vote."
 msgstr "Um NounBR é igual a um voto."
 
 #: src/components/Documentation/index.tsx
-msgid "One NounBR is trustlessly auctioned every 24 hours, forever."
-msgstr "Um NounBR é leiloado automaticamente a cada 24 horas, para sempre."
+msgid "One NounBR is trustlessly auctioned every 15 minutes, forever."
+msgstr "Um NounBR é leiloado automaticamente a cada 15 minutos, para sempre."
 
 #: src/pages/Playground/index.tsx
 msgid "Only 32x32 PNG images are accepted"
@@ -899,8 +899,8 @@ msgid "The Nounders reward is intended as compensation for our pre and post-laun
 msgstr "A recompensa da NoundersBR destina-se a compensar nossas contribuições pré e pós-lançamento ao projeto e a nos ajudar a participar significativamente da governança à medida que o projeto amadurece."
 
 #: src/components/Documentation/index.tsx
-msgid "The NounsBR Auction Contract will act as a self-sufficient NounBR generation and distribution mechanism, auctioning one NounBR every 24 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the NounsBR DAO treasury, where they are governed by NounBR owners."
-msgstr "O Contrato de Leilão NounsBR funcionará como um mecanismo autossuficiente de geração e distribuição de um NounBR, leiloando um NounBR a cada 24 horas, para sempre. 100% dos rendimentos do leilão (ETH) são depositados automaticamente na tesouraria do NounsBR DAO, onde são regidos pelos proprietários do NounBR."
+msgid "The NounsBR Auction Contract will act as a self-sufficient NounBR generation and distribution mechanism, auctioning one NounBR every 15 minutes, forever. 100% of auction proceeds (ETH) are automatically deposited in the NounsBR DAO treasury, where they are governed by NounBR owners."
+msgstr "O Contrato de Leilão NounsBR funcionará como um mecanismo autossuficiente de geração e distribuição de um NounBR, leiloando um NounBR a cada 15 minutos, para sempre. 100% dos rendimentos do leilão (ETH) são depositados automaticamente na tesouraria do NounsBR DAO, onde são regidos pelos proprietários do NounBR."
 
 #: src/components/Documentation/index.tsx
 msgid "The NounsBR Foundation considers the veto an emergency power that should not be exercised in the normal course of business. The NounsBR Foundation will veto proposals that introduce non-trivial legal or existential risks to the NounsBR DAO or the NounsBR Foundation, including (but not necessarily limited to) proposals that:"

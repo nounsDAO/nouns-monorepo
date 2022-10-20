@@ -62,7 +62,7 @@ const Documentation = () => {
                   <Trans>NounsBR artwork is in the {publicDomainLink}.</Trans>
                 </li>
                 <li>
-                  <Trans>One NounBR is trustlessly auctioned every 24 hours, forever.</Trans>
+                  <Trans>One NounBR is trustlessly auctioned every 15 minutes, forever.</Trans>
                 </li>
                 <li>
                   <Trans>100% of NounBR auction proceeds are trustlessly sent to the treasury.</Trans>
@@ -107,7 +107,7 @@ const Documentation = () => {
               <p className={classes.aboutText}>
                 <Trans>
                   The NounsBR Auction Contract will act as a self-sufficient NounBR generation and
-                  distribution mechanism, auctioning one NounBR every 24 hours, forever. 100% of
+                  distribution mechanism, auctioning one NounBR every 15 minutes, forever. 100% of
                   auction proceeds (ETH) are automatically deposited in the NounsBR DAO treasury,
                   where they are governed by NounBR owners.
                 </Trans>
@@ -116,7 +116,7 @@ const Documentation = () => {
               <p className={classes.aboutText}>
                 <Trans>
                   Each time an auction is settled, the settlement transaction will also cause a new
-                  NounBR to be minted and a new 24 hour auction to begin.{' '}
+                  NounBR to be minted and a new 15 minutes auction to begin.{' '}
                 </Trans>
               </p>
               <p>
@@ -322,7 +322,7 @@ const Documentation = () => {
               </p>
               <p>
                 <Trans>
-                  Nounder distributions don't interfere with the cadence of 24 hour auctions. NounsBR
+                  Nounder distributions don't interfere with the cadence of 15 minutes auctions. NounsBR
                   are sent directly to the Nounder's Multisig, and auctions continue on schedule
                   with the next available NounBR ID.
                 </Trans>

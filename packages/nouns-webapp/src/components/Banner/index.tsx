@@ -13,7 +13,7 @@ const Banner = () => {
           <h1>
             <Trans>ONE NOUNBR,</Trans>
             <br />
-            <Trans>EVERY DAY,</Trans>
+            <Trans>EVERY 15 MIN,</Trans>
             <br />
             <Trans>FOREVER.</Trans>
           </h1>

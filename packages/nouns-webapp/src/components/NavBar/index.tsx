@@ -8,9 +8,11 @@ import { Nav, Navbar, Container } from 'react-bootstrap';
 import config, { CHAIN_ID } from '../../config';
 import { utils } from 'ethers';
 import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
+import { ExternalURL, externalURL } from '../../utils/externalURL';
 import useLidoBalance from '../../hooks/useLidoBalance';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBookOpen } from '@fortawesome/free-solid-svg-icons';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import NavBarTreasury from '../NavBarTreasury';
@@ -58,7 +60,7 @@ const NavBar = () => {
             </Navbar.Brand>
             {Number(CHAIN_ID) !== 1 && (
               <Nav.Item>
-                em testes
+                * testnet *
               </Nav.Item>
             )}
             <Nav.Item>
@@ -87,6 +89,19 @@ const NavBar = () => {
               <NavBarButton
                 buttonText={<Trans>DAO</Trans>}
                 buttonIcon={<FontAwesomeIcon icon={faUsers} />}
+                buttonStyle={nonWalletButtonStyle}
+              />
+            </Nav.Link>
+            <Nav.Link
+              href={externalURL(ExternalURL.about)}
+              className={classes.nounsNavLink}
+              target="_blank"
+              rel="noreferrer"
+              onClick={closeNav}
+            >
+              <NavBarButton
+                buttonText={<Trans>About</Trans>}
+                buttonIcon={<FontAwesomeIcon icon={faBookOpen} />}
                 buttonStyle={nonWalletButtonStyle}
               />
             </Nav.Link>

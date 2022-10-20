@@ -370,11 +370,11 @@ msgid "Dynamic Quorum"
 msgstr ""
 
 #: src/components/Banner/index.tsx
-msgid "EVERY DAY,"
+msgid "EVERY 15 MIN,"
 msgstr "毎日"
 
 #: src/components/Documentation/index.tsx
-msgid "Each time an auction is settled, the settlement transaction will also cause a new NounBR to be minted and a new 24 hour auction to begin."
+msgid "Each time an auction is settled, the settlement transaction will also cause a new NounBR to be minted and a new 15 minutes auction to begin."
 msgstr "オークションが決済される度に、決済取引によって新しいNounがミントされ、また新たに24時間のオークションが開催されます。"
 
 #: src/pages/Vote/index.tsx
@@ -591,7 +591,7 @@ msgid "NounBR {0}"
 msgstr "NounBR {0}"
 
 #: src/components/Documentation/index.tsx
-msgid "Nounder distributions don't interfere with the cadence of 24 hour auctions. NounsBR are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available NounBR ID."
+msgid "Nounder distributions don't interfere with the cadence of 15 minutes auctions. NounsBR are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available NounBR ID."
 msgstr "Nounder配布により24時間オークションの頻度に影響が及ぶことはありません。 NounsはNounderのマルチシグに直接送られ、オークションは次の有効なNouns IDによって予定通り継続されます。"
 
 #: src/components/Documentation/index.tsx
@@ -673,7 +673,7 @@ msgid "One NounBR is equal to one vote."
 msgstr "1体のNounにつき、1票の投票件を得ることができます。"
 
 #: src/components/Documentation/index.tsx
-msgid "One NounBR is trustlessly auctioned every 24 hours, forever."
+msgid "One NounBR is trustlessly auctioned every 15 minutes, forever."
 msgstr "Nounsは24時間ごとに1体ずつ、第三者の介入無しでオークションに出され続けます。"
 
 #: src/pages/Playground/index.tsx
@@ -899,7 +899,7 @@ msgid "The Nounders reward is intended as compensation for our pre and post-laun
 msgstr "Noundersの報酬は、プロジェクト開始前と開始後の貢献に対する対価として提供されるほか、プロジェクトが成熟するにつれ、ガバナンスに有意義に参加できるよう支援することも目的としています。Noundersは10人なので、5年後には各ナウンダーは最大でNounの供給量の1%を受け取ることができます。"
 
 #: src/components/Documentation/index.tsx
-msgid "The NounsBR Auction Contract will act as a self-sufficient NounBR generation and distribution mechanism, auctioning one NounBR every 24 hours, forever. 100% of auction proceeds (ETH) are automatically deposited in the NounsBR DAO treasury, where they are governed by NounBR owners."
+msgid "The NounsBR Auction Contract will act as a self-sufficient NounBR generation and distribution mechanism, auctioning one NounBR every 15 minutes, forever. 100% of auction proceeds (ETH) are automatically deposited in the NounsBR DAO treasury, where they are governed by NounBR owners."
 msgstr "Nounsオークション契約は、Noun生成・分配の自律的なメカニズムとして機能するため、24時間ごとに1体のNounを永遠にオークションにかけ続けます。オークションの収益 (ETH) は100%自動的にNounの所有者によって管理されている、NounsBR DAO のトレジャリーに預けられます。"
 
 #: src/components/Documentation/index.tsx
