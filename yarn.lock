@@ -2597,17 +2597,17 @@
     which "2.0.2"
     yaml "^1.5.1"
 
+"@graphprotocol/graph-ts@^0.24.1":
+  version "0.24.1"
+  resolved "https://registry.yarnpkg.com/@graphprotocol/graph-ts/-/graph-ts-0.24.1.tgz#50961b52b5383f9c5cf5e6e23fa039f24e729ddf"
+  integrity sha512-2vU4m5ZPQIqMlMce/z5vmOtGHRlRmcRhMfemS3NIwxCSxSBGVnX2zb7QBTzzdQKGwsAZdbz6V0okkOtvohELfQ==
+  dependencies:
+    assemblyscript "0.19.10"
+
 "@graphprotocol/graph-ts@^0.26.0":
   version "0.26.0"
   resolved "https://registry.yarnpkg.com/@graphprotocol/graph-ts/-/graph-ts-0.26.0.tgz#576f995531eebaca4374901aeaff499219e382e8"
   integrity sha512-GW/emOJl+35MXgmIxTnUK7dJtPCaB9u5aAwoLVqJ8swogC794O92UrXMVrAJsherUriu+yI9bLMGmNPOIi60jw==
-  dependencies:
-    assemblyscript "0.19.10"
-
-"@graphprotocol/graph-ts@^0.27.0":
-  version "0.27.0"
-  resolved "https://registry.yarnpkg.com/@graphprotocol/graph-ts/-/graph-ts-0.27.0.tgz#948fe1716f6082964a01a63a19bcbf9ac44e06ff"
-  integrity sha512-r1SPDIZVQiGMxcY8rhFSM0y7d/xAbQf5vHMWUf59js1KgoyWpM6P3tczZqmQd7JTmeyNsDGIPzd9FeaxllsU4w==
   dependencies:
     assemblyscript "0.19.10"
 
@@ -16133,12 +16133,12 @@ markdown-table@^1.1.3:
   resolved "https://registry.yarnpkg.com/markdown-table/-/markdown-table-1.1.3.tgz#9fcb69bcfdb8717bfd0398c6ec2d93036ef8de60"
   integrity sha512-1RUZVgQlpJSPWYbFSpmudq5nHY1doEIv89gBtF0s4gW1GF2XorxcA/70M5vq7rLv0a6mhOUccRsqkwhwLCIQ2Q==
 
-matchstick-as@^0.4.2:
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/matchstick-as/-/matchstick-as-0.4.4.tgz#bf96d2388c95860a4f0f5b7c648a1b2bd8ee46b4"
-  integrity sha512-ZetjP1+DFuokSYUovPEZ8F5cyUaWVG/DZcT6OU9dm3ObHU5oL55NwguplpP+fHpIZizDTXH3lMGBS3ElBkSJ/w==
+matchstick-as@0.4.2:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/matchstick-as/-/matchstick-as-0.4.2.tgz#d9b20af5890a1c0191a2b88936a1296d8113a90b"
+  integrity sha512-LbLWA9DLMgus/GIsT7fHxP9cdb/oLQFrjpj2dAcHd64X4wxrVs2VIyxoNlha6h+9lQWHBmdT8042Oi+/wh/idg==
   dependencies:
-    "@graphprotocol/graph-ts" "^0.27.0"
+    "@graphprotocol/graph-ts" "^0.24.1"
     assemblyscript "^0.19.20"
     wabt "1.0.24"
 
