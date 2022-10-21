@@ -1,6 +1,6 @@
 # @nouns/webapp
 
-This package contains the source for the Nouns webapp at [nouns.wtf](https://nouns.wtf).
+This package contains the source for the Nouns webapp at [nounsbr.wtf](https://nounsbr.wtf).
 
 ## Quickstart
 

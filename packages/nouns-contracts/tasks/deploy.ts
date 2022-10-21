@@ -18,7 +18,7 @@ promptjs.delimiter = '';
 const proxyRegistries: Record<number, string> = {
   [ChainId.Mainnet]: '0xa5409ec958c83c3f309868babaca7c86dcb077c1',
   [ChainId.Rinkeby]: '0xf57b2c51ded3a29e6891aba85459d600256cf317',
-  [ChainId.Goerli]: '0x2417cbb7247F91C9F162574003F88dc06C167696',
+  [ChainId.Goerli]: '0x3D8911A6253b1df0e13D49DbAfb130fBA1821FB9',
 };
 const wethContracts: Record<number, string> = {
   [ChainId.Mainnet]: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
@@ -39,7 +39,7 @@ task('deploy', 'Deploy all Nouns contracts with short gov times for testing')
   .addOptionalParam(
     'auctionTimeBuffer',
     'The auction time buffer (seconds)',
-    30 /* 30 seconds */,
+    60 /* 60 seconds */,
     types.int,
   )
   .addOptionalParam(
@@ -57,7 +57,7 @@ task('deploy', 'Deploy all Nouns contracts with short gov times for testing')
   .addOptionalParam(
     'auctionDuration',
     'The auction duration (seconds)',
-    60 * 10 /* 10 minutes */,
+    60 * 15 /* 15 minutes */,
     types.int,
   )
   .addOptionalParam('timelockDelay', 'The timelock delay (seconds)', 60 /* 1 min */, types.int)
@@ -92,7 +92,7 @@ task('deploy', 'Deploy all Nouns contracts with short gov times for testing')
     const [deployer] = await ethers.getSigners();
 
     // prettier-ignore
-    const proxyRegistryAddress = proxyRegistries[network.chainId] ?? proxyRegistries[ChainId.Rinkeby];
+    const proxyRegistryAddress = proxyRegistries[network.chainId] ?? proxyRegistries[ChainId.Goerli];
 
     if (!args.noundersdao) {
       console.log(

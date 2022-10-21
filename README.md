@@ -34,7 +34,7 @@ In order to make retrieving more complex data from the auction history, [nouns s
 
 ### nouns-webapp
 
-The [nouns webapp](packages/nouns-webapp) is the frontend for interacting with NounBR auctions as hosted at [nouns.wtf](https://nouns.wtf).
+The [nouns webapp](packages/nouns-webapp) is the frontend for interacting with NounBR auctions as hosted at [nounsbr.wtf](https://nounsbr.wtf).
 
 ## Quickstart
 

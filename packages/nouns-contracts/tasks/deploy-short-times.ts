@@ -91,7 +91,7 @@ task('deploy-short-times', 'Deploy all Nouns contracts with short gov times for 
     const [deployer] = await ethers.getSigners();
 
     // prettier-ignore
-    const proxyRegistryAddress = proxyRegistries[network.chainId] ?? proxyRegistries[ChainId.Rinkeby];
+    const proxyRegistryAddress = proxyRegistries[network.chainId] ?? proxyRegistries[ChainId.Goerli];
 
     if (!args.noundersdao) {
       console.log(

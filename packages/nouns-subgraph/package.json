@@ -2,7 +2,7 @@
   "name": "@nouns/subgraph",
   "version": "0.1.0",
   "description": "A subgraph that indexes nounsbr events",
-  "author": "Nounders",
+  "author": "NoundersBR",
   "homepage": "https://nounsbr.wtf",
   "license": "GPL-3.0",
   "main": "build/index.js",
@@ -24,7 +24,7 @@
     "deploy:hardhat": "yarn clean && yarn prepare:hardhat && yarn codegen && yarn create:localnode nounsdao/nouns-subgraph && yarn deploy:localnode nounsdao/nouns-subgraph",
     "deploy:rinkeby": "yarn clean && yarn prepare:rinkeby && yarn codegen && yarn deploy nounsbr/nounsbr-subgraph-rinkeby",
     "deploy:mainnet": "yarn clean && yarn prepare:mainnet && yarn codegen && yarn deploy nounsbr/nounsbr-subgraph",
-    "deploy:goerli": "yarn clean && yarn prepare:goerli && yarn codegen && yarn deploy nounsbr/nounsbr-subgraph-testnet",
+    "deploy:goerli": "yarn clean && yarn prepare:goerli && yarn codegen && yarn deploy nounsbr/nounsbr-subgraph-goerly",
     "mustache": "mustache"
   },
   "devDependencies": {

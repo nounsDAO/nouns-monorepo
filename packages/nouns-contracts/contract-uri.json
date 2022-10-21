@@ -1,7 +1,7 @@
 {
   "name": "NounsBR",
-  "description": "One NounBR, every 15 min, forever.\r\n\r\nnouns.wtf",
-  "image": "ipfs://QmNdUibRHNqX2byJLtCD3ofn65cfCtvXdQnV87wRjqWf96",
+  "description": "One NounBR, every 15 min, forever.\r\n\r\nnounsbr.wtf",
+  "image": "ipfs://bafkreia5jdkyiprcozn4e5ht7hyncifda5zkjnktdad3tml5tnnrky4br4",
   "external_link": "https://nounsbr.wtf",
   "seller_fee_basis_points": 0,
   "fee_recipient": "0x0000000000000000000000000000000000000000"

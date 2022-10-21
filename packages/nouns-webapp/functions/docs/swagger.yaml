@@ -19,7 +19,7 @@ tags:
 - name: "Cryptography"
   description: "Functions for verifying identity"
 servers:
-  - url: "https://nouns.wtf/.netlify/functions/"
+  - url: "https://nounsbr.wtf/.netlify/functions/"
     description: Production Deployment
 paths:
   /v0-is-noun-owner:

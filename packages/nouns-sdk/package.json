@@ -3,7 +3,7 @@
   "version": "0.2.1",
   "description": "Useful tooling for interacting with the Nouns protocol",
   "author": "Nounders",
-  "homepage": "https://nouns.wtf",
+  "homepage": "https://nounsbr.wtf",
   "license": "GPL-3.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
