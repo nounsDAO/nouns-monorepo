@@ -492,6 +492,22 @@ export const useCastVoteWithReason = () => {
   return { castVoteWithReason, castVoteWithReasonState };
 };
 
+export const useCastRefundableVote = () => {
+  const { send: castRefundableVote, state: castRefundableVoteState } = useContractFunction(
+    nounsDaoContract,
+    'castRefundableVote',
+  );
+  return { castRefundableVote, castRefundableVoteState };
+};
+
+export const useCastRefundableVoteWithReason = () => {
+  const { send: castRefundableVoteWithReason, state: castRefundableVoteWithReasonState } = useContractFunction(
+    nounsDaoContract,
+    'castRefundableVoteWithReason',
+  );
+  return { castRefundableVoteWithReason, castRefundableVoteWithReasonState };
+};
+
 export const usePropose = () => {
   const { send: propose, state: proposeState } = useContractFunction(nounsDaoContract, 'propose');
   return { propose, proposeState };
