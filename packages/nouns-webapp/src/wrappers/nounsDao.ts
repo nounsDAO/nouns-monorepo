@@ -1,6 +1,7 @@
 import { NounsDAOV2ABI, NounsDaoLogicV2Factory } from '@nouns/sdk';
 import {
   ChainId,
+  connectContractToSigner,
   useBlockNumber,
   useContractCall,
   useContractCalls,
@@ -493,19 +494,42 @@ export const useCastVoteWithReason = () => {
 };
 
 export const useCastRefundableVote = () => {
+  const { library } = useEthers();
   const { send: castRefundableVote, state: castRefundableVoteState } = useContractFunction(
     nounsDaoContract,
     'castRefundableVote',
   );
-  return { castRefundableVote, castRefundableVoteState };
+
+  return {
+    castRefundableVote: async (...args: any[]): Promise<void> => {
+      const contract = connectContractToSigner(nounsDaoContract, undefined, library);
+      const gasLimit = await contract.estimateGas.castRefundableVote(...args);
+      return castRefundableVote(...args, {
+        gasLimit: gasLimit.add(20_000), // A 20,000 gas pad is used to avoid 'Out of gas' errors
+      });
+    },
+    castRefundableVoteState,
+  };
 };
 
 export const useCastRefundableVoteWithReason = () => {
+  const { library } = useEthers();
+  // prettier-ignore
   const { send: castRefundableVoteWithReason, state: castRefundableVoteWithReasonState } = useContractFunction(
     nounsDaoContract,
     'castRefundableVoteWithReason',
   );
-  return { castRefundableVoteWithReason, castRefundableVoteWithReasonState };
+
+  return {
+    castRefundableVoteWithReason: async (...args: any[]): Promise<void> => {
+      const contract = connectContractToSigner(nounsDaoContract, undefined, library);
+      const gasLimit = await contract.estimateGas.castRefundableVoteWithReason(...args);
+      return castRefundableVoteWithReason(...args, {
+        gasLimit: gasLimit.add(20_000), // A 20,000 gas pad is used to avoid 'Out of gas' errors
+      });
+    },
+    castRefundableVoteWithReasonState,
+  };
 };
 
 export const usePropose = () => {
