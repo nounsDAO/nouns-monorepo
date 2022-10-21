@@ -1,4 +1,4 @@
-import { NounsDAOV2ABI, NounsDaoLogicV1Factory } from '@nouns/sdk';
+import { NounsDAOV2ABI, NounsDaoLogicV2Factory } from '@nouns/sdk';
 import {
   ChainId,
   useBlockNumber,
@@ -123,7 +123,7 @@ export interface ProposalTransaction {
 }
 
 const abi = new utils.Interface(NounsDAOV2ABI);
-const nounsDaoContract = new NounsDaoLogicV1Factory().attach(config.addresses.nounsDAOProxy);
+const nounsDaoContract = new NounsDaoLogicV2Factory().attach(config.addresses.nounsDAOProxy);
 
 // Start the log search at the mainnet deployment block to speed up log queries
 const fromBlock = CHAIN_ID === ChainId.Mainnet ? 12985453 : 0;
