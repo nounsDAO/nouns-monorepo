@@ -73,12 +73,13 @@ msgid "Absent for"
 msgstr "Absent for"
 
 #: src/components/VoteCard/index.tsx
+#: src/components/VoteModal/index.tsx
 msgid "Abstain"
 msgstr "Abstain"
 
 #: src/components/VoteModal/index.tsx
-msgid "Abstain from voting on Prop {0}"
-msgstr "Abstain from voting on Prop {0}"
+#~ msgid "Abstain from voting on Prop {0}"
+#~ msgstr "Abstain from voting on Prop {0}"
 
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Abstained on"
@@ -129,6 +130,7 @@ msgid "Addresses"
 msgstr "Addresses"
 
 #: src/components/VoteCard/index.tsx
+#: src/components/VoteModal/index.tsx
 msgid "Against"
 msgstr "Against"
 
@@ -222,20 +224,20 @@ msgid "Canceled"
 msgstr "Canceled"
 
 #: src/components/VoteModal/index.tsx
-msgid "Cast 1 vote against Prop {0}"
-msgstr "Cast 1 vote against Prop {0}"
+#~ msgid "Cast 1 vote against Prop {0}"
+#~ msgstr "Cast 1 vote against Prop {0}"
 
 #: src/components/VoteModal/index.tsx
-msgid "Cast 1 vote for Prop {0}"
-msgstr "Cast 1 vote for Prop {0}"
+#~ msgid "Cast 1 vote for Prop {0}"
+#~ msgstr "Cast 1 vote for Prop {0}"
 
 #: src/components/VoteModal/index.tsx
-msgid "Cast {0} votes against Prop {1}"
-msgstr "Cast {0} votes against Prop {1}"
+#~ msgid "Cast {0} votes against Prop {1}"
+#~ msgstr "Cast {0} votes against Prop {1}"
 
 #: src/components/VoteModal/index.tsx
-msgid "Cast {0} votes for Prop {1}"
-msgstr "Cast {0} votes for Prop {1}"
+#~ msgid "Cast {0} votes for Prop {1}"
+#~ msgstr "Cast {0} votes for Prop {1}"
 
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Change"
@@ -451,6 +453,7 @@ msgid "Failed to fetch Noun info"
 msgstr "Failed to fetch Noun info"
 
 #: src/components/VoteCard/index.tsx
+#: src/components/VoteModal/index.tsx
 msgid "For"
 msgstr "For"
 
@@ -469,6 +472,10 @@ msgstr "Function"
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "Function (Optional)"
 msgstr "Function (Optional)"
+
+#: src/components/VoteModal/index.tsx
+msgid "Gas spent on voting will be refunded to you"
+msgstr "Gas spent on voting will be refunded to you"
 
 #: src/pages/Playground/index.tsx
 msgid "Generate Nouns"
@@ -1072,6 +1079,14 @@ msgstr "Voted with<0>{numVotesForProp}</0>Noun"
 #: src/components/DelegateHoverCard/index.tsx
 msgid "Voted with<0>{numVotesForProp}</0>Nouns"
 msgstr "Voted with<0>{numVotesForProp}</0>Nouns"
+
+#: src/components/VoteModal/index.tsx
+msgid "Voting with <0>{0}</0> Noun"
+msgstr "Voting with <0>{0}</0> Noun"
+
+#: src/components/VoteModal/index.tsx
+msgid "Voting with <0>{0}</0> Nouns"
+msgstr "Voting with <0>{0}</0> Nouns"
 
 #: src/components/Documentation/index.tsx
 msgid "WTF?"

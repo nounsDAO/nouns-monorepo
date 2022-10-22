@@ -203,23 +203,14 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
           </Button>
 
           <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              width: '100%',
-              marginTop: '0.5rem',
-            }}
+          className={classes.gasFreeVotingWrapper}
           >
             <span
-              style={{
-                fontFamily: 'PT Root UI',
-                fontSize: '14px',
-                color: 'var(--brand-gray-light-text)',
-                opacity: '75%',
-                width: 'fit-content',
-              }}
+            className={classes.gasFreeVotingCopy}
             >
+              <Trans>
               Gas spent on voting will be refunded to you
+              </Trans>
             </span>
           </div>
         </div>

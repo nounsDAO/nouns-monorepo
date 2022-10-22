@@ -143,3 +143,18 @@
   transform: scale(90%);
   opacity: 50%;
 }
+
+.gasFreeVotingWrapper {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.gasFreeVotingCopy {
+  font-family: 'PT Root UI';
+  font-size: 14px;
+  color: var(--brand-gray-light-text);
+  opacity: 75%;
+  width: fit-content;
+}
