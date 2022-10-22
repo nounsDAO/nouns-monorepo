@@ -141,7 +141,7 @@
 
 .unselected {
   transform: scale(90%);
-  opacity: 50%;
+  opacity: .5;
 }
 
 .gasFreeVotingWrapper {
@@ -155,6 +155,6 @@
   font-family: 'PT Root UI';
   font-size: 14px;
   color: var(--brand-gray-light-text);
-  opacity: 75%;
+  opacity: .75;
   width: fit-content;
 }
