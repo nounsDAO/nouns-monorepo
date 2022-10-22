@@ -136,10 +136,9 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
             <NavBarButton
               buttonText={<Trans>For</Trans>}
               buttonIcon={<></>}
-              buttonStyle={
-                vote === Vote.FOR
-                  ? NavBarButtonStyle.WHITE_ACTIVE_VOTE_SUBMIT
-                  : NavBarButtonStyle.WHITE_INFO
+              buttonStyle={NavBarButtonStyle.FOR_VOTE_SUBMIT}
+              className={
+                vote === Vote.FOR ? '' : vote === undefined ? classes.inactive : classes.unselected
               }
             />
           </div>
@@ -148,10 +147,13 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
             <NavBarButton
               buttonText={<Trans>Against</Trans>}
               buttonIcon={<></>}
-              buttonStyle={
+              buttonStyle={NavBarButtonStyle.AGAINST_VOTE_SUBMIT}
+              className={
                 vote === Vote.AGAINST
-                  ? NavBarButtonStyle.WHITE_ACTIVE_VOTE_SUBMIT
-                  : NavBarButtonStyle.WHITE_INFO
+                  ? ''
+                  : vote === undefined
+                  ? classes.inactive
+                  : classes.unselected
               }
             />
           </div>
@@ -160,10 +162,13 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
             <NavBarButton
               buttonText={<Trans>Abstain</Trans>}
               buttonIcon={<></>}
-              buttonStyle={
+              buttonStyle={NavBarButtonStyle.ABSTAIN_VOTE_SUBMIT}
+              className={
                 vote === Vote.ABSTAIN
-                  ? NavBarButtonStyle.WHITE_ACTIVE_VOTE_SUBMIT
-                  : NavBarButtonStyle.WHITE_INFO
+                  ? ''
+                  : vote === undefined
+                  ? classes.inactive
+                  : classes.unselected
               }
             />
           </div>
@@ -196,6 +201,27 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
           >
             {isLoading ? <Spinner animation="border" /> : <Trans>Submit Vote</Trans>}
           </Button>
+
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              width: '100%',
+              marginTop: '0.5rem',
+            }}
+          >
+            <span
+              style={{
+                fontFamily: 'PT Root UI',
+                fontSize: '14px',
+                color: 'var(--brand-gray-light-text)',
+                opacity: '75%',
+                width: 'fit-content',
+              }}
+            >
+              Gas spent on voting will be refunded to you
+            </span>
+          </div>
         </div>
       )}
     </>

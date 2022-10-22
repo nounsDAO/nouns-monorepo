@@ -134,3 +134,12 @@
   box-shadow: none;
   border: 1px solid rgba(0, 0, 0, 0.25) !important;
 }
+
+.inactive {
+  transform: scale(95%) !important;
+}
+
+.unselected {
+  transform: scale(90%);
+  opacity: 50%;
+}
