@@ -102,22 +102,24 @@ library Noracle {
 
         uint32 index = self.index;
         observations = new Observation[](auctionCount);
-        uint32 initializedObservationsFound = 0;
-        uint32 checkedIndexesCount = 0;
-        while (initializedObservationsFound < auctionCount && checkedIndexesCount < cardinality) {
-            uint32 checkIndex = (index + (cardinality - checkedIndexesCount)) % cardinality;
-            checkedIndexesCount++;
 
+        uint32 observationsCount = 0;
+        while (observationsCount < auctionCount) {
+            uint32 checkIndex = (index + (cardinality - observationsCount)) % cardinality;
             Observation storage obs = self.observations[checkIndex];
-            if (initialized(obs)) {
-                observations[initializedObservationsFound] = obs;
-                initializedObservationsFound++;
-            }
+
+            // when cardinality has been increased, and not used up yet, there are uninitialized items
+            // this loop reads from index backwards, so when it hits an uninitialized item
+            // it means all items from there backwards until index are uninitialized, so we should break.
+            if (!initialized(obs)) break;
+
+            observations[observationsCount] = obs;
+            ++observationsCount;
         }
 
-        if (auctionCount > initializedObservationsFound) {
-            Observation[] memory trimmedObservations = new Observation[](initializedObservationsFound);
-            for (uint32 i = 0; i < initializedObservationsFound; i++) {
+        if (auctionCount > observationsCount) {
+            Observation[] memory trimmedObservations = new Observation[](observationsCount);
+            for (uint32 i = 0; i < observationsCount; i++) {
                 trimmedObservations[i] = observations[i];
             }
             observations = trimmedObservations;
