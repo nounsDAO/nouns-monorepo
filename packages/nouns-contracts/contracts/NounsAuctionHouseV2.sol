@@ -238,13 +238,6 @@ contract NounsAuctionHouseV2 is
 
         auction.settled = true;
 
-        oracle.write(
-            uint32(block.timestamp),
-            uint16(_auction.nounId),
-            Noracle.ethPriceToUint48(_auction.amount),
-            _auction.bidder
-        );
-
         if (_auction.bidder == address(0)) {
             nouns.burn(_auction.nounId);
         } else {
@@ -254,6 +247,13 @@ contract NounsAuctionHouseV2 is
         if (_auction.amount > 0) {
             _safeTransferETHWithFallback(owner(), _auction.amount);
         }
+
+        oracle.write(
+            uint32(block.timestamp),
+            uint16(_auction.nounId),
+            Noracle.ethPriceToUint48(_auction.amount),
+            _auction.bidder
+        );
 
         emit AuctionSettled(_auction.nounId, _auction.bidder, _auction.amount);
     }
