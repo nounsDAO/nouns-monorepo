@@ -56,8 +56,7 @@
     "redux": "^4.1.0",
     "remark-breaks": "^3.0.1",
     "web-vitals": "^1.0.1",
-    "react-transition-group": "^4.4.5",
-    "@types/react-transition-group": "^4.4.5"
+    "react-transition-group": "^4.4.5"
   },
   "devDependencies": {
     "@types/jest": "^26.0.15",
@@ -68,6 +67,7 @@
     "@types/react-dom": "^17.0.0",
     "@types/react-router-dom": "^5.1.7",
     "@types/bad-words": "^3.0.1",
+    "@types/react-transition-group": "^4.4.5",
     "dotenv": "^10.0.0"
   },
   "scripts": {

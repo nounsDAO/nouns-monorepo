@@ -157,4 +157,5 @@
   color: var(--brand-gray-light-text);
   opacity: .75;
   width: fit-content;
+  text-align: center;
 }
