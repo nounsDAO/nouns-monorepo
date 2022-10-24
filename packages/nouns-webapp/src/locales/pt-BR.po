@@ -1341,3 +1341,6 @@ msgstr "Projetos"
 msgid "When a project passes an on-chain vote, the creator of that proposal will often be given their own channel in this section to answer questions and share updates on the status of their work. This is a constantly expanding list - for more information on each of these, check out the DAO section of the NounsBR website."
 msgstr "Quando um projeto passa por uma votação on-chain, o criador dessa proposta geralmente recebe seu próprio canal nesta seção para responder a perguntas e compartilhar atualizações sobre o status de trabalho deles. Esta é uma lista em constante expansão - para mais informações sobre cada um deles, confira a seção DAO do site NounsBR."
 
+#: src/components/NavBar/index.tsx
+msgid "About"
+msgstr "Sobre"
