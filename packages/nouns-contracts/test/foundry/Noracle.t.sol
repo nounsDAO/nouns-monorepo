@@ -9,6 +9,10 @@ contract NoracleTest is Test {
 
     Noracle.NoracleState state;
 
+    function setUp() public {
+        vm.warp(Noracle.WARMUP_TIMESTAMP + 1);
+    }
+
     function test_initialize_revertsOnRepeatAttempt() public {
         state.initialize();
 
@@ -39,16 +43,24 @@ contract NoracleTest is Test {
         assertEq(observations[0].winner, address(0xdead));
     }
 
-    function test_writeObserve_cardinality1_preserves8DecimalsUnder2KETH() public {
+    function test_writeObserve_cardinality1_preserves8DecimalsUnderUint48MaxValue() public {
         state.initialize();
-        state.write(uint32(block.timestamp), 142, Noracle.ethPriceToUint40(1999.98765432109 ether), address(0xdead));
+
+        // amount is uint48; maxValue - 1 = 281474976710655
+        // at 8 decimal points it's 2814749.76710655
+        state.write(
+            uint32(block.timestamp),
+            142,
+            Noracle.ethPriceToUint48(2814749.76710655999999 ether),
+            address(0xdead)
+        );
 
         Noracle.Observation[] memory observations = state.observe(1);
 
         assertEq(observations.length, 1);
         assertEq(observations[0].blockTimestamp, block.timestamp);
         assertEq(observations[0].nounId, 142);
-        assertEq(observations[0].amount, 199998765432);
+        assertEq(observations[0].amount, 281474976710655);
         assertEq(observations[0].winner, address(0xdead));
     }
 

@@ -241,7 +241,7 @@ contract NounsAuctionHouseV2 is
         oracle.write(
             uint32(block.timestamp),
             uint16(_auction.nounId),
-            Noracle.ethPriceToUint40(_auction.amount),
+            Noracle.ethPriceToUint48(_auction.amount),
             _auction.bidder
         );
 

@@ -18,6 +18,8 @@
 pragma solidity ^0.8.6;
 
 library Noracle {
+    uint32 public constant WARMUP_TIMESTAMP = 1;
+
     error AlreadyInitialized();
     error NotInitialized();
     error AuctionCountOutOfBounds(uint32 auctionCount, uint32 cardinality);
@@ -28,11 +30,9 @@ library Noracle {
         // ID for the Noun (ERC721 token ID)
         uint16 nounId;
         // The winning bid amount, with 8 decimal places (reducing accuracy to save bits)
-        uint40 amount;
+        uint48 amount;
         // The address of the auction winner
         address winner;
-        // whether or not the observation is initialized
-        bool initialized;
     }
 
     struct NoracleState {
@@ -54,7 +54,7 @@ library Noracle {
         NoracleState storage self,
         uint32 blockTimestamp,
         uint16 nounId,
-        uint40 amount,
+        uint48 amount,
         address winner
     ) internal {
         uint32 cardinalityNext = self.cardinalityNext;
@@ -69,7 +69,6 @@ library Noracle {
         uint32 newIndex = (currentIndex + 1) % self.cardinality;
         self.index = newIndex;
         self.observations[newIndex] = Observation({
-            initialized: true,
             blockTimestamp: blockTimestamp,
             nounId: nounId,
             amount: amount,
@@ -110,7 +109,7 @@ library Noracle {
             checkedIndexesCount++;
 
             Observation storage obs = self.observations[checkIndex];
-            if (obs.initialized) {
+            if (initialized(obs)) {
                 observations[initializedObservationsFound] = obs;
                 initializedObservationsFound++;
             }
@@ -125,11 +124,15 @@ library Noracle {
         }
     }
 
-    function ethPriceToUint40(uint256 ethPrice) internal pure returns (uint40) {
-        return uint40(ethPrice / 1e10);
+    function ethPriceToUint48(uint256 ethPrice) internal pure returns (uint48) {
+        return uint48(ethPrice / 1e10);
     }
 
     function warmUpObservation(Observation storage obs) private {
-        obs.blockTimestamp = 1;
+        obs.blockTimestamp = WARMUP_TIMESTAMP;
+    }
+
+    function initialized(Observation storage obs) internal view returns (bool) {
+        return obs.blockTimestamp > WARMUP_TIMESTAMP;
     }
 }
