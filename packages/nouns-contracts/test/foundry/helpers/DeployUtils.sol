@@ -127,8 +127,7 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
 
     function deployToken(address noundersDAO, address minter) internal returns (NounsToken nounsToken) {
         IProxyRegistry proxyRegistry = IProxyRegistry(address(3));
-        NounsDescriptor descriptor = new NounsDescriptor();
-        _populateDescriptor(descriptor);
+        NounsDescriptorV2 descriptor = _deployAndPopulateV2();
 
         nounsToken = new NounsToken(noundersDAO, minter, descriptor, new NounsSeeder(), proxyRegistry);
     }
