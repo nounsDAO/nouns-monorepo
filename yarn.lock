@@ -2568,10 +2568,10 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.2.tgz#30aa825f11d438671d585bd44e7fd564535fc210"
   integrity sha512-82cpyJyKRoQoRi+14ibCeGPu0CwypgtBAdBhq1WfvagpCZNKqwXbKwXllYSMG91DhmG4jt9gN8eP6lGOtozuaw==
 
-"@graphprotocol/graph-cli@0.26.0":
-  version "0.26.0"
-  resolved "https://registry.yarnpkg.com/@graphprotocol/graph-cli/-/graph-cli-0.26.0.tgz#9bcc3533d1384d44b65e0bf7eef81221ae8a4e05"
-  integrity sha512-sQKKfkGy6jsfpZD6KA9KdvHRpeStd1ZH334CMVxhyJtPY006a/Wc2rr7TBqgAtwpggs7UiT0UA3s5vG0jFQB5g==
+"@graphprotocol/graph-cli@^0.26.0":
+  version "0.26.1"
+  resolved "https://registry.yarnpkg.com/@graphprotocol/graph-cli/-/graph-cli-0.26.1.tgz#06016d8cb94630104ddedd8818f5eea0e737e650"
+  integrity sha512-DFYzbOztny54xo38LlRTBFtsmuPQdinjxb7t3UnUgIBakyZTUSb+HorlcijBG1z+3RYWSZjDkSq+6BBprwxXgA==
   dependencies:
     assemblyscript "0.19.10"
     binary-install-raw "0.0.13"
@@ -17168,7 +17168,7 @@ murmurhash3js@^3.0.1:
   resolved "https://registry.yarnpkg.com/murmurhash3js/-/murmurhash3js-3.0.1.tgz#3e983e5b47c2a06f43a713174e7e435ca044b998"
   integrity sha1-Ppg+W0fCoG9DpxMXTn5DXKBEuZg=
 
-mustache@4.2.0:
+mustache@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/mustache/-/mustache-4.2.0.tgz#e5892324d60a12ec9c2a73359edca52972bf6f64"
   integrity sha512-71ippSywq5Yb7/tVYyGbkBggbU8H3u5Rz56fH60jGFgr8uHwxs+aSKeqmluIVzM0m0kB7xQjKS6qPfd0b2ZoqQ==
