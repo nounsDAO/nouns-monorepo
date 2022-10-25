@@ -34,10 +34,6 @@ jobs:
         run: |
           cd packages/nouns-contracts
           yarn test
-      - name: Run contract coverage
-        run: |
-          cd packages/nouns-contracts
-          yarn coverage
       - name: Uninstall Yarn
         if: always()
         run: npm uninstall -g yarn
