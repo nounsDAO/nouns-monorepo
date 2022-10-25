@@ -33,6 +33,7 @@ import { deflateRawSync } from 'zlib';
 import { chunkArray } from '../utils';
 import { MAX_QUORUM_VOTES_BPS, MIN_QUORUM_VOTES_BPS } from './constants';
 import { DynamicQuorumParams } from './types';
+import { BigNumber } from 'ethers';
 
 export type TestSigners = {
   deployer: SignerWithAddress;
@@ -365,6 +366,10 @@ export const blockTimestamp = async (
 ): Promise<number | string> => {
   const block = await blockByNumber(n);
   return parse ? parseInt(block.timestamp.toString()) : block.timestamp;
+};
+
+export const setNextBlockBaseFee = async (value: BigNumber): Promise<void> => {
+  await network.provider.send('hardhat_setNextBlockBaseFeePerGas', [value.toHexString()]);
 };
 
 export const setNextBlockTimestamp = async (n: number, mine = true): Promise<void> => {

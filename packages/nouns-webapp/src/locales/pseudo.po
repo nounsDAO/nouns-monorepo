@@ -13,6 +13,10 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "% of Nouns Currently Against"
+msgstr ""
+
 #: src/components/Documentation/index.tsx
 msgid "'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:"
 msgstr ""
@@ -33,6 +37,24 @@ msgstr ""
 msgid "404: This is not the person, place, or thing you're looking for..."
 msgstr ""
 
+#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
+#~ msgid "<0/>Holder changed from<1><2/></1> to <3><4/></3>"
+#~ msgstr ""
+
+#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
+#~ msgid "<0> Noun {0} </0>  won by <1><2/></1>"
+#~ msgstr ""
+
+#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
+#: src/components/profileEvent/event/MobileNounWinEvent/index.tsx
+msgid "<0> Noun {0} </0> sent to <1><2/></1>"
+msgstr ""
+
+#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
+#: src/components/profileEvent/event/MobileNounWinEvent/index.tsx
+msgid "<0> Noun {0} </0> won by <1><2/></1>"
+msgstr ""
+
 #: src/components/ByLineHoverCard/index.tsx
 msgid "<0>Delegated Noun: </0>"
 msgstr ""
@@ -46,6 +68,7 @@ msgid "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
 msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx
+#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Absent for"
 msgstr ""
 
@@ -67,9 +90,11 @@ msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Active"
 msgstr ""
 
+#: src/components/ProfileActivityFeed/index.tsx
 #: src/components/ProfileActivityFeed/index.tsx
 msgid "Activity"
 msgstr ""
@@ -84,8 +109,12 @@ msgid "Add a Proposal Transaction"
 msgstr ""
 
 #: src/pages/CreateProposal/index.tsx
-msgid "Add one or more transactions and describe your proposal for the community. The proposal cannot modified after submission, so please verify all information before submitting. The voting period will begin after 2 1/3 days and last for 3 days."
+msgid "Add one or more transactions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 2 1/3 days and last for 3 days."
 msgstr ""
+
+#: src/pages/CreateProposal/index.tsx
+#~ msgid "Add one or more transactions and describe your proposal for the community. The proposal cannot modified after submission, so please verify all information before submitting. The voting period will begin after 2 1/3 days and last for 3 days."
+#~ msgstr ""
 
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "Address"
@@ -188,6 +217,7 @@ msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Canceled"
 msgstr ""
 
@@ -258,6 +288,10 @@ msgstr ""
 msgid "Current Delegate"
 msgstr ""
 
+#: src/pages/Vote/index.tsx
+msgid "Current Quorum"
+msgstr ""
+
 #: src/components/CurrentBid/index.tsx
 msgid "Current bid"
 msgstr ""
@@ -272,6 +306,7 @@ msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Defeated"
 msgstr ""
 
@@ -287,6 +322,10 @@ msgstr ""
 
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Delegate Updated!"
+msgstr ""
+
+#: src/components/profileEvent/event/MobileDelegationEvent/index.tsx
+msgid "Delegate changed from<0><1/></0> to <2><3/></2>"
 msgstr ""
 
 #: src/components/ChangeDelegatePannel/index.tsx
@@ -319,6 +358,10 @@ msgstr ""
 
 #: src/components/NavBar/index.tsx
 msgid "Docs"
+msgstr ""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "Dynamic Quorum"
 msgstr ""
 
 #: src/components/Banner/index.tsx
@@ -372,11 +415,13 @@ msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Executed"
 msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Expired"
 msgstr ""
 
@@ -458,6 +503,14 @@ msgstr ""
 msgid "Help mint the next Noun"
 msgstr ""
 
+#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
+msgid "Holder changed from <0><1/></0> to <2><3/></2>"
+msgstr ""
+
+#: src/components/profileEvent/event/MobileTransferEvent/index.tsx
+msgid "Holder changed from<0><1/></0> to <2><3/></2>"
+msgstr ""
+
 #: src/components/Documentation/index.tsx
 #~ msgid "In addition to the precautions taken by Compound Governance, Nounders have given themselves a special veto right to ensure that no malicious proposals can be passed while the Noun supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort."
 #~ msgstr ""
@@ -480,6 +533,14 @@ msgstr ""
 
 #: src/components/NounInfoRowHolder/index.tsx
 msgid "Loading..."
+msgstr ""
+
+#: src/components/Proposals/index.tsx
+msgid "Making a proposal requires {threshold} votes"
+msgstr ""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "More details on how dynamic quorum works can be found <0>here</0>."
 msgstr ""
 
 #: src/components/ProposalTransactionFormModal/index.tsx
@@ -620,6 +681,7 @@ msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Pending"
 msgstr ""
 
@@ -653,8 +715,12 @@ msgid "Please try again."
 msgstr ""
 
 #: src/components/ProposalEditor/index.tsx
-msgid "Preview:"
+msgid "Preview"
 msgstr ""
+
+#: src/components/ProposalEditor/index.tsx
+#~ msgid "Preview:"
+#~ msgstr ""
 
 #: src/components/ProposalEditor/index.tsx
 msgid "Proposal"
@@ -694,6 +760,7 @@ msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Queued"
 msgstr ""
 
@@ -703,6 +770,10 @@ msgstr ""
 
 #: src/components/VoteModal/index.tsx
 msgid "Reason (Optional)"
+msgstr ""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "Required % of Nouns to Pass"
 msgstr ""
 
 #: src/components/LanguageSelectionModal/index.tsx
@@ -733,10 +804,14 @@ msgid "Settlement of one auction kicks off the next."
 msgstr ""
 
 #: src/components/ProfileActivityFeed/index.tsx
-msgid "Show all {0} events"
+#~ msgid "Show all {0} events"
+#~ msgstr ""
+
+#: src/components/ProfileActivityFeedToggle/index.tsx
+msgid "Show all {numEvents} events"
 msgstr ""
 
-#: src/components/ProfileActivityFeed/index.tsx
+#: src/components/ProfileActivityFeedToggle/index.tsx
 msgid "Show fewer"
 msgstr ""
 
@@ -767,6 +842,7 @@ msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Succeeded"
 msgstr ""
 
@@ -827,6 +903,14 @@ msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "The Nouns community has undertaken a preliminary exploration of proposal veto alternatives (‘rage quit’ etc.), but it is now clear that this is a difficult problem that will require significantly more research, development and testing before a satisfactory solution can be implemented."
+msgstr ""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "The Quorum (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. It increases quadratically as a function of the % of Nouns voting against a prop, varying between Min Quorum and Max Quorum."
+msgstr ""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "The Quorum (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. The number of For votes required to pass Proposal {0} is given by the following curve:"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
@@ -900,6 +984,7 @@ msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Undetermined"
 msgstr ""
 
@@ -934,7 +1019,12 @@ msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
 msgid "Vetoed"
+msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "View Dynamic Quorum Info"
 msgstr ""
 
 #: src/components/BidHistoryBtn/index.tsx
@@ -942,6 +1032,16 @@ msgid "View all bids"
 msgstr ""
 
 #: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/Holder/index.tsx
+#: src/components/NounInfoRowHolder/index.tsx
+#: src/components/Winner/index.tsx
+#: src/components/profileEvent/event/DesktopDelegationEvent/index.tsx
+#: src/components/profileEvent/event/DesktopDelegationEvent/index.tsx
+#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
+#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
+#: src/components/profileEvent/event/DesktopProposalVoteEvent/index.tsx
+#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
+#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
 msgid "View on Etherscan"
 msgstr ""
 
@@ -978,6 +1078,7 @@ msgid "WTF?"
 msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx
+#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Waiting for"
 msgstr ""
 
@@ -1072,7 +1173,7 @@ msgid "Your <0>{availableVotes}</0> votes have been delegated to a new account."
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "accessories (137)"
+msgid "accessories (140)"
 msgstr ""
 
 #: src/components/AuctionTimer/index.tsx
@@ -1092,7 +1193,7 @@ msgid "bodies (30)"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "glasses (21)"
+msgid "glasses (23)"
 msgstr ""
 
 #: src/components/AuctionTimer/index.tsx
@@ -1100,7 +1201,7 @@ msgid "h"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "heads (234)"
+msgid "heads (242)"
 msgstr ""
 
 #: src/components/AuctionTimer/index.tsx
@@ -1145,4 +1246,16 @@ msgstr ""
 
 #: src/components/DelegationCandidateVoteCountInfo/index.tsx
 msgid "{voteCount} Votes"
+msgstr ""
+
+#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
+msgid "{voterComponent} abstained on"
+msgstr ""
+
+#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
+msgid "{voterComponent} voted against"
+msgstr ""
+
+#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
+msgid "{voterComponent} voted for"
 msgstr ""

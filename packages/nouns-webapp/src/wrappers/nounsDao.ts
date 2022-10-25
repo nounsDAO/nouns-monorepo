@@ -1,7 +1,6 @@
-import { NounsDAOABI, NounsDaoLogicV1Factory } from '@nouns/sdk';
+import { NounsDAOV2ABI, NounsDaoLogicV1Factory } from '@nouns/sdk';
 import {
   ChainId,
-  useBlockMeta,
   useBlockNumber,
   useContractCall,
   useContractCalls,
@@ -17,6 +16,13 @@ import config, { CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
 import { proposalsQuery } from './subgraph';
 import BigNumber from 'bignumber.js';
+import { useBlockTimestamp } from '../hooks/useBlockTimestamp';
+
+export interface DynamicQuorumParams {
+  minQuorumVotesBPS: number;
+  maxQuorumVotesBPS: number;
+  quorumCoefficient: number;
+}
 
 export enum Vote {
   AGAINST = 0,
@@ -116,7 +122,7 @@ export interface ProposalTransaction {
   calldata: string;
 }
 
-const abi = new utils.Interface(NounsDAOABI);
+const abi = new utils.Interface(NounsDAOV2ABI);
 const nounsDaoContract = new NounsDaoLogicV1Factory().attach(config.addresses.nounsDAOProxy);
 
 // Start the log search at the mainnet deployment block to speed up log queries
@@ -167,6 +173,39 @@ const removeItalics = (text: string | null): string | null =>
   text ? text.replace(/__/g, '') : text;
 
 const removeMarkdownStyle = R.compose(removeBold, removeItalics);
+
+export const useCurrentQuorum = (
+  nounsDao: string,
+  proposalId: number,
+  skip: boolean = false,
+): number | undefined => {
+  const request = () => {
+    if (skip) return false;
+    return {
+      abi,
+      address: nounsDao,
+      method: 'quorumVotes',
+      args: [proposalId],
+    };
+  };
+  const [quorum] = useContractCall<[EthersBN]>(request()) || [];
+  return quorum?.toNumber();
+};
+
+export const useDynamicQuorumProps = (
+  nounsDao: string,
+  block: number,
+): DynamicQuorumParams | undefined => {
+  const [params] =
+    useContractCall<[DynamicQuorumParams]>({
+      abi,
+      address: nounsDao,
+      method: 'getDynamicQuorumParamsAt',
+      args: [block],
+    }) || [];
+
+  return params;
+};
 
 export const useHasVotedOnProposal = (proposalId: string | undefined): boolean => {
   const { account } = useEthers();
@@ -338,16 +377,16 @@ const getProposalState = (
 export const useAllProposalsViaSubgraph = (): ProposalData => {
   const { loading, data, error } = useQuery(proposalsQuery());
   const blockNumber = useBlockNumber();
-  const { timestamp } = useBlockMeta();
+  const timestamp = useBlockTimestamp(blockNumber);
 
   const proposals = data?.proposals?.map((proposal: ProposalSubgraphEntity) => {
-    const description = proposal.description?.replace(/\\n/g, '\n');
+    const description = proposal.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, '');
     return {
       id: proposal.id,
       title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
       description: description ?? 'No description.',
       proposer: proposal.proposer.id,
-      status: getProposalState(blockNumber, timestamp, proposal),
+      status: getProposalState(blockNumber, new Date((timestamp ?? 0) * 1000), proposal),
       proposalThreshold: parseInt(proposal.proposalThreshold),
       quorumVotes: parseInt(proposal.quorumVotes),
       forCount: parseInt(proposal.forVotes),

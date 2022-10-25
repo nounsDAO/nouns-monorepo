@@ -78,7 +78,9 @@ export function createProposalCreatedWithRequirementsEvent(
   return newEvent;
 }
 
-export function stubProposalCreatedWithRequirementsEventInput(): ProposalCreatedWithRequirementsEvent {
+export function stubProposalCreatedWithRequirementsEventInput(
+  eventBlockNumber: BigInt = BIGINT_ZERO,
+): ProposalCreatedWithRequirementsEvent {
   return {
     id: BigInt.fromI32(1),
     proposer: Address.fromString('0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'),
@@ -91,7 +93,7 @@ export function stubProposalCreatedWithRequirementsEventInput(): ProposalCreated
     proposalThreshold: BIGINT_ONE,
     quorumVotes: BIGINT_ONE,
     description: 'some description',
-    eventBlockNumber: BigInt.fromI32(4),
+    eventBlockNumber: eventBlockNumber,
   };
 }
 
@@ -124,6 +126,7 @@ export function createMinQuorumVotesBPSSetEvent(
   newMinQuorumVotesBPS: i32,
 ): MinQuorumVotesBPSSet {
   let newEvent = changetype<MinQuorumVotesBPSSet>(newMockEvent());
+  newEvent.block.number = BIGINT_ZERO;
   newEvent.parameters = new Array();
 
   newEvent.parameters.push(
@@ -142,6 +145,7 @@ export function createMaxQuorumVotesBPSSetEvent(
   newMaxQuorumVotesBPS: i32,
 ): MaxQuorumVotesBPSSet {
   let newEvent = changetype<MaxQuorumVotesBPSSet>(newMockEvent());
+  newEvent.block.number = BIGINT_ZERO;
   newEvent.parameters = new Array();
 
   newEvent.parameters.push(
@@ -160,6 +164,7 @@ export function createQuorumCoefficientSetEvent(
   newQuorumCoefficient: BigInt,
 ): QuorumCoefficientSet {
   let newEvent = changetype<QuorumCoefficientSet>(newMockEvent());
+  newEvent.block.number = BIGINT_ZERO;
   newEvent.parameters = new Array();
 
   newEvent.parameters.push(

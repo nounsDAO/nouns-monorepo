@@ -115,6 +115,15 @@ contract NounsDAOEventsV2 is NounsDAOEvents {
 
     /// @notice Emitted when quorumCoefficient is set
     event QuorumCoefficientSet(uint32 oldQuorumCoefficient, uint32 newQuorumCoefficient);
+
+    /// @notice Emitted when a voter cast a vote requesting a gas refund.
+    event RefundableVote(address indexed voter, uint256 refundAmount, bool refundSent);
+
+    /// @notice Emitted when admin withdraws the DAO's balance.
+    event Withdraw(uint256 amount, bool sent);
+
+    /// @notice Emitted when pendingVetoer is changed
+    event NewPendingVetoer(address oldPendingVetoer, address newPendingVetoer);
 }
 
 contract NounsDAOProxyStorage {
@@ -341,6 +350,9 @@ contract NounsDAOStorageV1Adjusted is NounsDAOProxyStorage {
 contract NounsDAOStorageV2 is NounsDAOStorageV1Adjusted {
     DynamicQuorumParamsCheckpoint[] public quorumParamsCheckpoints;
 
+    /// @notice Pending new vetoer
+    address public pendingVetoer;
+
     struct DynamicQuorumParams {
         /// @notice The minimum basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed.
         uint16 minQuorumVotesBPS;
@@ -430,5 +442,5 @@ interface INounsDAOExecutor {
 interface NounsTokenLike {
     function getPriorVotes(address account, uint256 blockNumber) external view returns (uint96);
 
-    function totalSupply() external view returns (uint96);
+    function totalSupply() external view returns (uint256);
 }

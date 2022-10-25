@@ -5,8 +5,12 @@ import 'forge-std/Test.sol';
 import { NounsDescriptor } from '../../../contracts/NounsDescriptor.sol';
 import { NounsDescriptorV2 } from '../../../contracts/NounsDescriptorV2.sol';
 import { Constants } from './Constants.sol';
+import { strings } from '../lib/strings.sol';
 
 abstract contract DescriptorHelpers is Test, Constants {
+    using strings for string;
+    using strings for strings.slice;
+
     function _populateDescriptor(NounsDescriptor descriptor) internal {
         // created with `npx hardhat descriptor-v1-export-abi`
         string memory filename = './test/foundry/files/descriptor_v1/image-data.abi';
@@ -78,5 +82,14 @@ abstract contract DescriptorHelpers is Test, Constants {
         )
     {
         return abi.decode(readFile('./test/foundry/files/descriptor_v2/glassesPage.abi'), (bytes, uint80, uint16));
+    }
+
+    function removeDataTypePrefix(string memory str) internal pure returns (string memory) {
+        // remove data type prefix like `data:application/json;base64,`
+
+        strings.slice memory strSlice = str.toSlice();
+        // modifies the slice to start after the prefix
+        strSlice.split(string(',').toSlice());
+        return strSlice.toString();
     }
 }

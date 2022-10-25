@@ -66,7 +66,7 @@ const seedArrayToObject = (seeds: (INounSeed & { id: string })[]) => {
   }, {});
 };
 
-export const useNounSeeds = () => {
+const useNounSeeds = () => {
   const cache = localStorage.getItem(seedCacheKey);
   const cachedSeeds = cache ? JSON.parse(cache) : undefined;
   const { data } = useQuery(seedsQuery(), {
@@ -143,7 +143,6 @@ export const useUserDelegatee = (): string | undefined => {
 
 export const useUserVotesAsOfBlock = (block: number | undefined): number | undefined => {
   const { account } = useEthers();
-
   // Check for available votes
   const [votes] =
     useContractCall<[EthersBN]>({

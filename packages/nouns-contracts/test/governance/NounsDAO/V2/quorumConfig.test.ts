@@ -240,9 +240,9 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
         await expect(tx).to.emit(gov, 'MinQuorumVotesBPSSet').withArgs(200, 222);
       });
 
-      it('reverts when sender is not admin', async () => {
+      it('reverts when sender is not admin [ @skip-on-coverage ]', async () => {
         await expect(gov.connect(account0)._setMinQuorumVotesBPS(222)).to.be.revertedWith(
-          'NounsDAO::_setMinQuorumVotesBPS: admin only',
+          'AdminOnly()',
         );
       });
 
@@ -276,9 +276,9 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
         await expect(tx).to.emit(gov, 'MaxQuorumVotesBPSSet').withArgs(3000, 3333);
       });
 
-      it('reverts when sender is not admin', async () => {
+      it('reverts when sender is not admin [ @skip-on-coverage ]', async () => {
         await expect(gov.connect(account0)._setMaxQuorumVotesBPS(3333)).to.be.revertedWith(
-          'NounsDAO::_setMaxQuorumVotesBPS: admin only',
+          'AdminOnly()',
         );
       });
 
@@ -304,9 +304,9 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
         await expect(tx).to.emit(gov, 'QuorumCoefficientSet').withArgs(1, 111);
       });
 
-      it('reverts when sender is not admin', async () => {
+      it('reverts when sender is not admin [ @skip-on-coverage ]', async () => {
         await expect(gov.connect(account0)._setQuorumCoefficient(111)).to.be.revertedWith(
-          'NounsDAO::_setQuorumCoefficient: admin only',
+          'AdminOnly()',
         );
       });
     });

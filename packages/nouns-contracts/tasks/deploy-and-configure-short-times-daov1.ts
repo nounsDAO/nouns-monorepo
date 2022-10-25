@@ -1,7 +1,10 @@
 import { task, types } from 'hardhat/config';
 import { printContractsTable } from './utils';
 
-task('deploy-and-configure-short-times-descriptorv1', 'Deploy and configure all contracts')
+task(
+  'deploy-and-configure-short-times-daov1',
+  'Deploy and configure all contracts with short gov times for testing',
+)
   .addFlag('startAuction', 'Start the first auction upon deployment completion')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
   .addFlag('updateConfigs', 'Write the deployed addresses to the SDK and subgraph configs')
@@ -53,7 +56,7 @@ task('deploy-and-configure-short-times-descriptorv1', 'Deploy and configure all 
   )
   .setAction(async (args, { run }) => {
     // Deploy the Nouns DAO contracts and return deployment information
-    const contracts = await run('deploy-short-times-descriptorv1', args);
+    const contracts = await run('deploy-short-times-daov1', args);
 
     // Verify the contracts on Etherscan
     await run('verify-etherscan', {
@@ -61,15 +64,15 @@ task('deploy-and-configure-short-times-descriptorv1', 'Deploy and configure all 
     });
 
     // Populate the on-chain art
-    await run('populate-descriptor-v1', {
-      nftDescriptor: contracts.NFTDescriptor.address,
-      nounsDescriptor: contracts.NounsDescriptor.address,
+    await run('populate-descriptor', {
+      nftDescriptor: contracts.NFTDescriptorV2.address,
+      nounsDescriptor: contracts.NounsDescriptorV2.address,
     });
 
     // Transfer ownership of all contract except for the auction house.
     // We must maintain ownership of the auction house to kick off the first auction.
     const executorAddress = contracts.NounsDAOExecutor.address;
-    await contracts.NounsDescriptor.instance.transferOwnership(executorAddress);
+    await contracts.NounsDescriptorV2.instance.transferOwnership(executorAddress);
     await contracts.NounsToken.instance.transferOwnership(executorAddress);
     await contracts.NounsAuctionHouseProxyAdmin.instance.transferOwnership(executorAddress);
     console.log(

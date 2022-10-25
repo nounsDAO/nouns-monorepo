@@ -50,45 +50,6 @@ describe('NounsDescriptorV2', () => {
     await ethers.provider.send('evm_revert', [snapshotId]);
   });
 
-  it('should generate valid token uri metadata when data uris are disabled', async () => {
-    const BASE_URI = 'https://api.nouns.wtf/metadata/';
-
-    await nounsDescriptor.setBaseURI(BASE_URI);
-    await nounsDescriptor.toggleDataURIEnabled();
-
-    const tokenUri = await nounsDescriptor.tokenURI(0, {
-      background: 0,
-      body: longest.bodies.index,
-      accessory: longest.accessories.index,
-      head: longest.heads.index,
-      glasses: longest.glasses.index,
-    });
-    expect(tokenUri).to.equal(`${BASE_URI}0`);
-  });
-
-  // Skipping until we resolve the CI memory issue
-  it('should generate valid token uri metadata when data uris are enabled [ @skip-on-coverage ]', async () => {
-    const tokenUri = await nounsDescriptor.tokenURI(
-      0,
-      {
-        background: 0,
-        body: longest.bodies.index,
-        accessory: longest.accessories.index,
-        head: longest.heads.index,
-        glasses: longest.glasses.index,
-      },
-      { gasLimit: 200_000_000 },
-    );
-    const { name, description, image } = JSON.parse(
-      Buffer.from(tokenUri.replace('data:application/json;base64,', ''), 'base64').toString(
-        'ascii',
-      ),
-    );
-    expect(name).to.equal('Noun 0');
-    expect(description).to.equal('Noun 0 is a member of the Nouns DAO');
-    expect(image).to.not.be.undefined;
-  }).timeout(1_000_000);
-
   // Unskip this test to validate the encoding of all parts. It ensures that no parts revert when building the token URI.
   // This test also outputs a parts.html file, which can be visually inspected.
   // Note that this test takes a long time to run. You must increase the mocha timeout to a large number.

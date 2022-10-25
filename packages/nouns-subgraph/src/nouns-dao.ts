@@ -63,7 +63,6 @@ export function handleProposalCreatedWithRequirements(
   proposal.abstainVotes = BIGINT_ZERO;
   proposal.description = event.params.description.split('\\n').join('\n'); // The Graph's AssemblyScript version does not support string.replace
   proposal.status = event.block.number >= proposal.startBlock ? STATUS_ACTIVE : STATUS_PENDING;
-  proposal.usingDynamicQuorum = event.params.quorumVotes.equals(BIGINT_ZERO);
 
   // Storing state for dynamic quorum calculations
   // Doing these for V1 props as well to avoid making these fields optional + avoid missing required field warnings
@@ -144,6 +143,7 @@ export function handleVoteCast(event: VoteCast): void {
   vote.support = event.params.support == 1;
   vote.supportDetailed = event.params.support;
   vote.nouns = voter.nounsRepresented;
+  vote.blockNumber = event.block.number;
 
   if (event.params.reason != '') {
     vote.reason = event.params.reason;
@@ -153,9 +153,18 @@ export function handleVoteCast(event: VoteCast): void {
 
   if (event.params.support == 0) {
     proposal.againstVotes = proposal.againstVotes.plus(event.params.votes);
+  } else if (event.params.support == 1) {
+    proposal.forVotes = proposal.forVotes.plus(event.params.votes);
+  } else if (event.params.support == 2) {
+    proposal.abstainVotes = proposal.abstainVotes.plus(event.params.votes);
   }
 
-  if (proposal.usingDynamicQuorum) {
+  const dqParams = getOrCreateDynamicQuorumParams();
+  const usingDynamicQuorum =
+    dqParams.dynamicQuorumStartBlock != null &&
+    dqParams.dynamicQuorumStartBlock!.lt(proposal.createdBlock);
+
+  if (usingDynamicQuorum) {
     proposal.quorumVotes = dynamicQuorumVotes(
       proposal.againstVotes,
       proposal.totalSupply,
@@ -165,14 +174,6 @@ export function handleVoteCast(event: VoteCast): void {
     );
   }
 
-  if (event.params.support == 0) {
-    proposal.againstVotes = proposal.againstVotes.plus(event.params.votes);
-  } else if (event.params.support == 1) {
-    proposal.forVotes = proposal.forVotes.plus(event.params.votes);
-  } else if (event.params.support == 2) {
-    proposal.abstainVotes = proposal.abstainVotes.plus(event.params.votes);
-  }
-
   if (proposal.status == STATUS_PENDING) {
     proposal.status = STATUS_ACTIVE;
   }
@@ -180,19 +181,19 @@ export function handleVoteCast(event: VoteCast): void {
 }
 
 export function handleMinQuorumVotesBPSSet(event: MinQuorumVotesBPSSet): void {
-  const params = getOrCreateDynamicQuorumParams();
+  const params = getOrCreateDynamicQuorumParams(event.block.number);
   params.minQuorumVotesBPS = event.params.newMinQuorumVotesBPS;
   params.save();
 }
 
 export function handleMaxQuorumVotesBPSSet(event: MaxQuorumVotesBPSSet): void {
-  const params = getOrCreateDynamicQuorumParams();
+  const params = getOrCreateDynamicQuorumParams(event.block.number);
   params.maxQuorumVotesBPS = event.params.newMaxQuorumVotesBPS;
   params.save();
 }
 
 export function handleQuorumCoefficientSet(event: QuorumCoefficientSet): void {
-  const params = getOrCreateDynamicQuorumParams();
+  const params = getOrCreateDynamicQuorumParams(event.block.number);
   params.quorumCoefficient = event.params.newQuorumCoefficient;
   params.save();
 }

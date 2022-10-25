@@ -1,4 +1,4 @@
-import { Proposal, ProposalState } from '../../wrappers/nounsDao';
+import { Proposal, ProposalState, useProposalThreshold } from '../../wrappers/nounsDao';
 import { Alert, Button } from 'react-bootstrap';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
@@ -18,11 +18,11 @@ import React, { useState } from 'react';
 import DelegationModal from '../DelegationModal';
 import { i18n } from '@lingui/core';
 import en from 'dayjs/locale/en';
+import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
 
 dayjs.extend(relativeTime);
 
 const getCountdownCopy = (proposal: Proposal, currentBlock: number, locale: SupportedLocale) => {
-  const AVERAGE_BLOCK_TIME_IN_SECS = 13;
   const timestamp = Date.now();
   const startDate =
     proposal && timestamp && currentBlock
@@ -78,24 +78,33 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
   const activeLocale = useActiveLocale();
   const [showDelegateModal, setShowDelegateModal] = useState(false);
 
+  const threshold = (useProposalThreshold() ?? 0) + 1;
+  const hasEnoughVotesToPropose = account !== undefined && connectedAccountNounVotes >= threshold;
+  const hasNounBalance = (useUserNounTokenBalance() ?? 0) > 0;
+
   const nullStateCopy = () => {
     if (account !== null) {
+      if (connectedAccountNounVotes > 0) {
+        return <Trans>Making a proposal requires {threshold} votes</Trans>;
+      }
       return <Trans>You have no Votes.</Trans>;
     }
     return <Trans>Connect wallet to make a proposal.</Trans>;
   };
 
-  const hasNounVotes = account !== undefined && connectedAccountNounVotes > 0;
-  const hasNounBalance =
-    (useUserNounTokenBalance() ?? 0) > 0;
   return (
     <div className={classes.proposals}>
       {showDelegateModal && <DelegationModal onDismiss={() => setShowDelegateModal(false)} />}
-      <div className={clsx(classes.headerWrapper, !hasNounVotes ? classes.forceFlexRow : '')}>
+      <div
+        className={clsx(
+          classes.headerWrapper,
+          !hasEnoughVotesToPropose ? classes.forceFlexRow : '',
+        )}
+      >
         <h3 className={classes.heading}>
           <Trans>Proposals</Trans>
         </h3>
-        {hasNounVotes ? (
+        {hasEnoughVotesToPropose ? (
           <div className={classes.nounInWalletBtnWrapper}>
             <div className={classes.submitProposalButtonWrapper}>
               <Button
@@ -172,9 +181,9 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
             );
 
             return (
-              <div
+              <a
                 className={clsx(classes.proposalLink, classes.proposalLinkWithCountdown)}
-                onClick={() => history.push(`/vote/${p.id}`)}
+                href={`/vote/${p.id}`}
                 key={i}
               >
                 <div className={classes.proposalInfoWrapper}>
@@ -194,7 +203,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
                 {isPropInStateToHaveCountDown && (
                   <div className={classes.mobileCountdownWrapper}>{countdownPill}</div>
                 )}
-              </div>
+              </a>
             );
           })
       ) : (
