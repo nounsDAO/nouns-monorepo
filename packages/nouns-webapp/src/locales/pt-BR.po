@@ -1355,3 +1355,4 @@ msgstr "tentar alterar a cadência do leilão NounBR com o objetivo de manter ou
 #: src/components/NavBar/index.tsx
 msgid "make upgrades to critical smart contracts without undergoing an audit"
 msgstr "fazer atualizações para contratos inteligentes críticos sem passar por uma auditoria"
+
