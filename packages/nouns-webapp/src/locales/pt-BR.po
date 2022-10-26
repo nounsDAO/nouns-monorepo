@@ -863,11 +863,11 @@ msgstr "Trocar"
 
 #: src/pages/Vote/index.tsx
 msgid "Switch to NounBR view"
-msgstr "Trocar para modo NounBR"
+msgstr "Mudar para modo NounBR"
 
 #: src/pages/Vote/index.tsx
 msgid "Switch to delegate view"
-msgstr "Mudar para view de delegado"
+msgstr "Mudar para modo delegado"
 
 #: src/components/NavWallet/index.tsx
 msgid "Switch wallet"
