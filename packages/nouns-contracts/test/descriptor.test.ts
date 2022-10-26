@@ -66,24 +66,6 @@ describe('NounsDescriptor', () => {
     expect(tokenUri).to.equal(`${BASE_URI}0`);
   });
 
-  it('should generate valid token uri metadata when data uris are enabled', async () => {
-    const tokenUri = await nounsDescriptor.tokenURI(0, {
-      background: 0,
-      body: longest.bodies.index,
-      accessory: longest.accessories.index,
-      head: longest.heads.index,
-      glasses: longest.glasses.index,
-    });
-    const { name, description, image } = JSON.parse(
-      Buffer.from(tokenUri.replace('data:application/json;base64,', ''), 'base64').toString(
-        'ascii',
-      ),
-    );
-    expect(name).to.equal('NounBR 0');
-    expect(description).to.equal('NounBR 0 is a member of the NounsBR DAO');
-    expect(image).to.not.be.undefined;
-  });
-
   // Unskip this test to validate the encoding of all parts. It ensures that no parts revert when building the token URI.
   // This test also outputs a parts.html file, which can be visually inspected.
   // Note that this test takes a long time to run. You must increase the mocha timeout to a large number.

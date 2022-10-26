@@ -388,12 +388,7 @@ const VotePage = ({
                     <span>{isV2Prop ? <Trans>Current Quorum</Trans> : <Trans>Quorum</Trans>}</span>
                     <h3>
                       <Trans>
-                        {isV2Prop
-                          ? i18n.number(
-                              currentQuorum ?? 0,
-                            )
-                          : proposal.quorumVotes}{' '}
-                        votes
+                        {isV2Prop ? i18n.number(currentQuorum ?? 0) : proposal.quorumVotes} votes
                       </Trans>
                       {isV2Prop && <SearchIcon className={classes.dqIcon} />}
                     </h3>

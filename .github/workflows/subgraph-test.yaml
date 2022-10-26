@@ -1,4 +1,4 @@
-name: Contracts CI
+name: Subgraph CI
 
 on:
   push:
@@ -6,13 +6,10 @@ on:
       - master
   pull_request:
     paths:
-      - 'packages/nouns-contracts/**'
+      - 'packages/nouns-contracts/abi/contracts/**'
       - 'packages/nouns-subgraph/**'
     branches:
       - '**'
-
-env:
-  NODE_OPTIONS: --max_old_space_size=5120
 
 jobs:
   build_and_test:
@@ -30,23 +27,22 @@ jobs:
         run: npm install -g yarn
       - run: yarn
       - run: yarn build
-      - name: Run contract tests
+      - name: Prepare subgraph yaml
         run: |
-          cd packages/nouns-contracts
+          cd packages/nouns-subgraph
+          yarn prepare:rinkeby
+      - name: Generate code
+        run: |
+          cd packages/nouns-subgraph
+          yarn codegen
+      - name: Generate config
+        run: |
+          cd packages/nouns-subgraph
+          yarn test:configgen
+      - name: Run tests
+        run: |
+          cd packages/nouns-subgraph
           yarn test
       - name: Uninstall Yarn
         if: always()
         run: npm uninstall -g yarn
-      - name: Install Foundry
-        uses: foundry-rs/foundry-toolchain@v1
-        with:
-          version: nightly
-      - name: Run Forge build
-        run: |
-          cd packages/nouns-contracts
-          forge --version
-          forge build --sizes
-      - name: Run Forge tests
-        run: |
-          cd packages/nouns-contracts
-          forge test -vvv --ffi
