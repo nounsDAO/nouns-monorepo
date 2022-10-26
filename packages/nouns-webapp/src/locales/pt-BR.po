@@ -1,22 +1,17 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2022-10-16 06:39-0700\n"
+"POT-Creation-Date: 2022-10-24 06:39-0700\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
-"Language: pt\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: nounswtf\n"
-"X-Crowdin-Project-ID: 511110\n"
-"X-Crowdin-Language: pt\n"
-"X-Crowdin-File: messages.po\n"
-"X-Crowdin-File-ID: 4\n"
-"Project-Id-Version: nounswtf\n"
-"Language-Team: Portuguese\n"
-"PO-Revision-Date: 2022-10-16 04:36\n"
+"Language: pt-BR\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
 msgid "% of NounsBR Currently Against"
@@ -40,7 +35,7 @@ msgstr "empreendedores e artistas"
 
 #: src/pages/NotFound/index.tsx
 msgid "404: This is not the person, place, or thing you're looking for..."
-msgstr "404: Parece que não bem é o que você estava procurando..."
+msgstr "404: Este não é a pessoa, local ou qualquer coisa que você estava procurando..."
 
 #: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
 #~ msgid "<0/>Holder changed from<1><2/></1> to <3><4/></3>"
@@ -48,7 +43,7 @@ msgstr "404: Parece que não bem é o que você estava procurando..."
 
 #: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
 #~ msgid "<0> NounBR {0} </0>  won by <1><2/></1>"
-#~ msgstr "<0> NounBR {0} </0>  conquistado por <1><2/></1>"
+#~ msgstr "<0> NounBR {0} </0>  vencido por <1><2/></1>"
 
 #: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
 #: src/components/profileEvent/event/MobileNounWinEvent/index.tsx
@@ -58,7 +53,7 @@ msgstr "<0> NounBR {0} </0> enviado para <1><2/></1>"
 #: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
 #: src/components/profileEvent/event/MobileNounWinEvent/index.tsx
 msgid "<0> NounBR {0} </0> won by <1><2/></1>"
-msgstr "<0> NounBR {0} </0> conquistado por <1><2/></1>"
+msgstr "<0> NounBR {0} </0> vencido por <1><2/></1>"
 
 #: src/components/ByLineHoverCard/index.tsx
 msgid "<0>Delegated NounBR: </0>"
@@ -91,7 +86,7 @@ msgstr "Absteve-se em"
 
 #: src/pages/Playground/index.tsx
 msgid "Accessory"
-msgstr "Acessório"
+msgstr "Accessory"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
@@ -262,15 +257,15 @@ msgstr "Compound Governance"
 
 #: src/components/NavWallet/WalletConnectButton/index.tsx
 msgid "Connect"
-msgstr "Conecte"
+msgstr "Conectar"
 
 #: src/components/ProposalHeader/index.tsx
 msgid "Connect a wallet to vote."
-msgstr "Conecte a carteira para votar."
+msgstr "Conectar a carteira para votar."
 
 #: src/components/Proposals/index.tsx
 msgid "Connect wallet to make a proposal."
-msgstr "Conecte a carteira para criar uma proposta."
+msgstr "Conectar a carteira para criar uma proposta."
 
 #: src/components/WalletConnectModal/index.tsx
 msgid "Connect your wallet"
@@ -301,7 +296,7 @@ msgstr "Quórum Atual"
 msgid "Current bid"
 msgstr "Lance Atual"
 
-#: src/components/NavBar/index.tsx
+#: src/componentAcessórios/NavBar/index.tsx
 msgid "DAO"
 msgstr "DAO"
 
@@ -327,7 +322,7 @@ msgstr "Falha na Atualização da Delegação"
 
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Delegate Updated!"
-msgstr "Delegação Atualizada!"
+msgstr "Delegaçã Atualizada!"
 
 #: src/components/profileEvent/event/MobileDelegationEvent/index.tsx
 msgid "Delegate changed from<0><1/></0> to <2><3/></2>"
@@ -339,19 +334,19 @@ msgstr "Delegar {availableVotes} Votos"
 
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Delegate {availableVotes} Votes"
-msgstr "Delegate {availableVotes} Votes"
+msgstr "Delegados {availableVotes} Votos"
 
 #: src/components/CurrentDelegatePannel/index.tsx
 msgid "Delegation"
-msgstr "Delegation"
+msgstr "Delegação"
 
 #: src/components/ProposalContent/index.tsx
 msgid "Description"
-msgstr "Description"
+msgstr "Descrição"
 
 #: src/components/NavWallet/index.tsx
 msgid "Disconnect"
-msgstr "Disconnect"
+msgstr "Desconectar"
 
 #: src/components/Footer/index.tsx
 msgid "Discord"
@@ -367,7 +362,7 @@ msgstr "Docs"
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
 msgid "Dynamic Quorum"
-msgstr "Dynamic Quorum"
+msgstr "Quórum Dinâmico"
 
 #: src/components/Banner/index.tsx
 msgid "EVERY 15 MIN,"
@@ -407,7 +402,7 @@ msgstr "Erro"
 
 #: src/components/NounInfoRowBirthday/index.tsx
 msgid "Error fetching NounBR birthday"
-msgstr "Falha ao buscar data de aniversário"
+msgstr "Falha ao buscar data de aniversário do NounBR"
 
 #: src/components/Footer/index.tsx
 #: src/components/NounInfoCard/index.tsx
@@ -416,7 +411,7 @@ msgstr "Etherscan"
 
 #: src/pages/Vote/index.tsx
 msgid "Execute"
-msgstr "Execute"
+msgstr "Executar"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
@@ -451,7 +446,7 @@ msgid "Failed to fetch NounBR activity history"
 msgstr "Falha ao buscar o histórico de atividades do NounBR"
 
 #: src/components/Holder/index.tsx
-#: src/components/NounInfoRowHolder/index.tsx
+#: src/componenmsgstr "Dynamic Quorum"ts/NounInfoRowHolder/index.tsx
 msgid "Failed to fetch NounBR info"
 msgstr "Falha ao buscar informações de NounBR"
 
@@ -650,7 +645,7 @@ msgstr "Os NounsBR são armazenados diretamente no Ethereum e não utilizam pont
 
 #: src/components/Documentation/index.tsx
 msgid "NounsBR artwork is in the {publicDomainLink}."
-msgstr "A obra de arte da NounsBR é CC0 e está totalmente {publicDomainLink}."
+msgstr "A obra de arte da Nouns está em {publicDomainLink}."
 
 #: src/pages/Governance/index.tsx
 msgid "NounsBR govern <0>NounsBR DAO</0>. NounsBR can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
@@ -888,7 +883,7 @@ msgstr "Obrigado por votar."
 
 #: src/components/Documentation/index.tsx
 msgid "The NounBR Seeder contract is used to determine NounBR traits during the minting process. The seeder contract can be replaced to allow for future trait generation algorithm upgrades. Additionally, it can be locked by the NounsBR DAO to prevent any future updates. Currently, NounBR traits are determined using pseudo-random number generation:"
-msgstr "O contrato de Seeder do NounBR é usado para determinar as características do NounBR durante o processo de mint. O contrato do Seeder pode ser substituído para permitir futuras atualizações do algoritmo de geração de características. Além disso, ele pode ser bloqueado pela NounsBR DAO para evitar atualizações futuras. Atualmente, os traits de um NounBR são determinados usando geração de números pseudo-aleatórios:"
+msgstr "O contrato de Seeder do NounBR é usado para determinar os Traits do NounBR durante o processo de mint. O contrato do Seeder pode ser substituído para permitir futuras atualizações do algoritmo de geração de Traits. Além disso, ele pode ser bloqueado pela NounsBR DAO para evitar atualizações futuras. Atualmente, os traits de um NounBR são determinados usando geração de números pseudo-aleatórios:"
 
 #: src/pages/Nounders/index.tsx
 msgid "The Nounders"
@@ -924,7 +919,7 @@ msgstr "As partes comprimidas são convertidas de forma eficiente em uma única 
 
 #: src/pages/Playground/index.tsx
 msgid "The playground was built using the {nounsProtocolLink}. NounBR's traits are determined by the NounBR Seed. The seed was generated using {nounsAssetsLink} and rendered using the {nounsSDKLink}."
-msgstr "O playground foi construído usando o {nounsProtocolLink}. As características do NounBR são determinadas pela Semente NounBR. A semente foi gerada usando {nounsAssetsLink} e renderizada usando {nounsSDKLink}."
+msgstr "O playground foi construído usando o {nounsProtocolLink}. Os Traits do NounBR são determinadas pela Semente NounBR. A semente foi gerada usando {nounsAssetsLink} e renderizada usando {nounsSDKLink}."
 
 #: src/components/Documentation/index.tsx
 msgid "The proposal veto right was initially envisioned as a temporary solution to the problem of ‘51% attacks’ on the NounsBR DAO treasury. While Nounders initially believed that a healthy distribution of NounsBR would be sufficient protection for the DAO, a more complete understanding of the incentives and risks has led to general consensus within the Nounders, the NounsBR Foundation, and the wider community that a more robust game-theoretic solution should be implemented before the right is removed."
@@ -964,7 +959,7 @@ msgstr "Dica:"
 
 #: src/components/Documentation/index.tsx
 msgid "Trait generation is not truly random. Traits can be predicted when minting a NounBR on the pending block."
-msgstr "A geração de traços não é verdadeiramente aleatória. As características podem ser previstas ao fazer o mint de um NounBR no bloco pendente."
+msgstr "A geração de Trait não é verdadeiramente aleatória. Os Traits podem ser previstas ao fazer o mint de um NounBR no bloco pendente."
 
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
@@ -972,7 +967,7 @@ msgstr "A geração de traços não é verdadeiramente aleatória. As caracterí
 #: src/pages/CreateProposal/index.tsx
 #: src/pages/Vote/index.tsx
 msgid "Transaction Failed"
-msgstr "Transação Falhou"
+msgstr "A Transação Falhou"
 
 #: src/pages/Vote/index.tsx
 msgid "Transaction Successful!"
@@ -1119,7 +1114,7 @@ msgstr "Você já tem uma proposta ativa ou pendente"
 
 #: src/components/Documentation/index.tsx
 msgid "You can experiment with off-chain NounBR generation at the {playgroundLink}."
-msgstr "Você pode experimentar a geração off-chain NounBR no {playgroundLink}."
+msgstr "Você pode experimentar a geração de um NounBR off-chain no {playgroundLink}."
 
 #: src/components/SettleManuallyBtn/index.tsx
 msgid "You can settle manually in 1 minute"
@@ -1147,11 +1142,11 @@ msgstr "Você deve ter {0} votos para enviar uma proposta"
 
 #: src/components/ProposalHeader/index.tsx
 msgid "You voted <0>Against</0> this proposal"
-msgstr "Você votou <0>Contra</0> para esta proposta"
+msgstr "Você votou <0>Contra</0> essa proposta"
 
 #: src/components/ProposalHeader/index.tsx
 msgid "You voted <0>For</0> this proposal"
-msgstr "Você votou <0>a Favor</0> para esta proposta"
+msgstr "Você votou <0>a Favor</0> dessa proposta"
 
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "You've already delegated to this address"
@@ -1167,11 +1162,11 @@ msgstr "Você votou com sucesso na proposta {0}"
 
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Your <0>{availableVotes}</0> votes are being delegated to a new account."
-msgstr "Seus votos <0>{availableVotes}</0> estão sendo delegados para uma nova conta."
+msgstr "Seus <0>{availableVotes}</0> votos estão sendo delegados para uma nova conta."
 
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Your <0>{availableVotes}</0> votes have been delegated to a new account."
-msgstr "Seus votos <0>{availableVotes}</0> foram delegados para uma nova conta."
+msgstr "Seus <0>{availableVotes}</0> votos foram delegados para uma nova conta."
 
 #: src/components/Documentation/index.tsx
 msgid "accessories (140)"
@@ -1344,3 +1339,19 @@ msgstr "Quando um projeto passa por uma votação on-chain, o criador dessa prop
 #: src/components/NavBar/index.tsx
 msgid "About"
 msgstr "Sobre"
+
+#: src/components/Documentation/index.tsx
+msgid "unequally withdraw the treasury for personal gain"
+msgstr "retirar desigualmente o tesouro para ganho pessoal"
+
+#: src/components/NavBar/index.tsx
+msgid "bribe voters to facilitate withdraws of the treasury for personal gain"
+msgstr "subornar eleitores para facilitar saques do tesouro para ganho pessoal"
+
+#: src/components/NavBar/index.tsx
+msgid "attempt to alter NounBR auction cadence for the purpose of maintaining or acquiring a voting majority"
+msgstr "tentar alterar a cadência do leilão NounBR com o objetivo de manter ou adquirir a maioria dos votos"
+
+#: src/components/NavBar/index.tsx
+msgid "make upgrades to critical smart contracts without undergoing an audit"
+msgstr "fazer atualizações para contratos inteligentes críticos sem passar por uma auditoria"

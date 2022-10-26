@@ -184,13 +184,13 @@ const Documentation = () => {
                 </Trans>
               </p>
               <ul>
-                <li>unequally withdraw the treasury for personal gain</li>
-                <li>bribe voters to facilitate withdraws of the treasury for personal gain</li>
+                <li><Trans>unequally withdraw the treasury for personal gain</Trans></li>
+                <li><Trans>bribe voters to facilitate withdraws of the treasury for personal gain</Trans></li>
                 <li>
-                  attempt to alter NounBR auction cadence for the purpose of maintaining or acquiring
-                  a voting majority
+                <Trans>attempt to alter NounBR auction cadence for the purpose of maintaining or acquiring
+                  a voting majority</Trans>
                 </li>
-                <li>make upgrades to critical smart contracts without undergoing an audit</li>
+                <li><Trans>make upgrades to critical smart contracts without undergoing an audit</Trans></li>
               </ul>
               <p>
                 <Trans>
