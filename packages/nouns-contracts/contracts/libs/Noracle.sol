@@ -86,7 +86,7 @@ library Noracle {
 
         // store in each slot to prevent fresh SSTOREs
         // this data will not be used because the initialized boolean is still false
-        for (uint32 i = current; i < next; i++) {
+        for (uint32 i = current; i < next; ++i) {
             warmUpObservation(self.observations[i]);
         }
 
@@ -121,7 +121,7 @@ library Noracle {
 
         if (auctionCount > observationsCount) {
             Observation[] memory trimmedObservations = new Observation[](observationsCount);
-            for (uint32 i = 0; i < observationsCount; i++) {
+            for (uint32 i = 0; i < observationsCount; ++i) {
                 trimmedObservations[i] = observations[i];
             }
             observations = trimmedObservations;
