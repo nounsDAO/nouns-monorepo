@@ -2,10 +2,6 @@
 
 Nouns DAO is a generative avatar art collective run by a group of crypto misfits.
 
-## Contributing
-
-If you're interested in contributing to Nouns DAO repos we're excited to have you. Please discuss any changes in `#developers` in [discord.gg/nouns](https://discord.gg/nouns) prior to contributing to reduce duplication of effort and in case there is any prior art that may be useful to you.
-
 ## Packages
 
 ### nouns-api
@@ -18,7 +14,7 @@ The [nouns assets](packages/nouns-assets) package holds the Noun PNG and run-len
 
 ### nouns-bots
 
-The [nouns bots](packages/nouns-bots) package contains a bot that monitors for changes in Noun auction state and notifies everyone via Twitter and Discord.
+The [nouns bots](packages/nouns-bots) package contains a bot that monitors for changes in Noun auction state and notifies everyone via Twitter.
 
 ### nouns-contracts
 
