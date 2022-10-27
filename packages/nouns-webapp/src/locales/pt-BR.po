@@ -892,8 +892,8 @@ msgid "The NounsBR Auction Contract will act as a self-sufficient NounBR generat
 msgstr "O Contrato de Leilão NounsBR funcionará como um mecanismo autossuficiente de geração e distribuição de um NounBR, leiloando um NounBR a cada 15 minutos, para sempre. 100% dos rendimentos do leilão (ETH) são depositados automaticamente no tesouro da NounsBR DAO, onde são regidos pelos proprietários do NounBR."
 
 #: src/components/Documentation/index.tsx
-msgid "The Nouns Foundation considers the veto an emergency power that should not be exercised in the normal course of business. The NounsBR will veto proposals that introduce non-trivial legal or existential risks to the NounsBR DAO, including (but not necessarily limited to) proposals that:"
-msgstr "A Fundação Nouns considera o veto um poder emergencial que não deve ser exercido no curso normal dos negócios. A NounsBR vetará propostas que apresentem riscos jurídicos ou existenciais não triviais a NounsBR DAO, incluindo (mas não necessariamente limitado a) propostas que:"
+msgid "The Nouns Foundation considers the veto an emergency power that should not be exercised in the normal course of business. The Nouns Foundation will veto proposals that introduce non-trivial legal or existential risks to the Nouns DAO, including (but not necessarily limited to) proposals that:"
+msgstr "A Fundação Nouns considera o veto um poder emergencial que não deve ser exercido no curso normal dos negócios. A Fundação Nouns vetará propostas que apresentem riscos jurídicos ou existenciais não triviais a Nouns DAO, incluindo (mas não necessariamente limitado a) propostas que:"
 
 #: src/components/Documentation/index.tsx
 msgid "The Nouns community has undertaken a preliminary exploration of proposal veto alternatives (‘rage quit’ etc.), but it is now clear that this is a difficult problem that will require significantly more research, development and testing before a satisfactory solution can be implemented."
