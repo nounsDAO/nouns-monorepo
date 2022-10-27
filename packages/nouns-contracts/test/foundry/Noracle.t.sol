@@ -25,8 +25,7 @@ contract NoracleTest is Test {
         state.grow(42);
     }
 
-    function test_write_revertsWheNotInitialized() public {
-        vm.expectRevert(abi.encodeWithSelector(Noracle.NotInitialized.selector));
+    function test_write_doesntRevertsWheNotInitialized() public {
         state.write(uint32(block.timestamp), 142, 69, address(0xdead));
     }
 

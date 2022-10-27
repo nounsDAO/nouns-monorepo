@@ -60,7 +60,7 @@ library Noracle {
         uint32 currentIndex = self.index;
         uint32 cardinality = self.cardinality;
         uint32 cardinalityNext = self.cardinalityNext;
-        if (cardinalityNext == 0) revert NotInitialized();
+        if (cardinalityNext == 0) return;
 
         // if the conditions are right, we can bump the cardinality
         if (cardinalityNext > cardinality && currentIndex == (cardinality - 1)) {
