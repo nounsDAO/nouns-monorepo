@@ -2,7 +2,7 @@ import { Web3Provider } from '@ethersproject/providers';
 import { BigNumber as EthersBN, utils } from 'ethers';
 
 /**
- * Look up either NNS or ENS (using NNS contract to resovle NNS with ENS fallback)
+ * Look up either NNS or ENS (using NNS contract to resolve NNS with ENS fallback)
  * @param library provider
  * @param address  Address to resolve
  * @returns  NNS or ENS or null (if neither resolve)

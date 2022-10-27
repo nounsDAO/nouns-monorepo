@@ -76,6 +76,12 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         vm.stopPrank();
     }
 
+    function _deployAndPopulateDescriptor() internal returns (NounsDescriptor) {
+        NounsDescriptor descriptor = new NounsDescriptor();
+        _populateDescriptor(descriptor);
+        return descriptor;
+    }
+
     function _deployAndPopulateV2() internal returns (NounsDescriptorV2) {
         NounsDescriptorV2 descriptorV2 = _deployDescriptorV2();
         _populateDescriptorV2(descriptorV2);
