@@ -90,7 +90,8 @@ library Noracle {
             warmUpObservation(self.observations[i]);
         }
 
-        return self.cardinalityNext = next;
+        self.cardinalityNext = next;
+        return next;
     }
 
     function observe(NoracleState storage self, uint32 auctionCount)
