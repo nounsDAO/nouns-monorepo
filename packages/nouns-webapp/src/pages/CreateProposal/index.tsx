@@ -16,11 +16,13 @@ import { AlertModal, setAlertModal } from '../../state/slices/application';
 import ProposalEditor from '../../components/ProposalEditor';
 import CreateProposalButton from '../../components/CreateProposalButton';
 import ProposalTransactions from '../../components/ProposalTransactions';
-import ProposalTransactionFormModal from '../../components/ProposalTransactionFormModal';
 import { withStepProgress } from 'react-stepz';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch } from '../../hooks';
 import { Trans } from '@lingui/macro';
+import clsx from 'clsx';
+import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
+import ProposalActionModal from '../../components/ProposalActionsModal';
 
 const CreateProposalPage = () => {
   const { account } = useEthers();
@@ -134,34 +136,35 @@ const CreateProposalPage = () => {
 
   return (
     <Section fullWidth={false} className={classes.createProposalPage}>
-      <ProposalTransactionFormModal
+      <ProposalActionModal
+        onDismiss={() => setShowTransactionFormModal(false)}
         show={showTransactionFormModal}
-        onHide={() => setShowTransactionFormModal(false)}
-        onProposalTransactionAdded={handleAddProposalAction}
+        onActionAdd={handleAddProposalAction}
       />
-      <Col lg={{ span: 8, offset: 2 }}>
-        <Link to="/vote">
-          ← <Trans>All Proposals</Trans>
-        </Link>
-      </Col>
+
       <Col lg={{ span: 8, offset: 2 }} className={classes.createProposalForm}>
-        <h3 className={classes.heading}>
-          <Trans>Create Proposal</Trans>
-        </h3>
+        <div className={classes.wrapper}>
+          <Link to={'/vote'}>
+            <button className={clsx(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button>
+          </Link>
+          <h3 className={classes.heading}>
+            <Trans>Create Proposal</Trans>
+          </h3>
+        </div>
         <Alert variant="secondary" className={classes.voterIneligibleAlert}>
           <b>
-            <Trans>Tip:</Trans>
+            <Trans>Tip</Trans>
           </b>
-          :
+          :{' '}
           <Trans>
-            Add one or more transactions and describe your proposal for the community. The proposal
-            cannot be modified after submission, so please verify all information before submitting.
-            The voting period will begin after 2 1/3 days and last for 3 days.
+            Add one or more proposal actions and describe your proposal for the community. The
+            proposal cannot be modified after submission, so please verify all information before
+            submitting. The voting period will begin after 2 1/3 days and last for 3 days.
           </Trans>
         </Alert>
         <div className="d-grid">
           <Button
-            className={classes.addTransactionButton}
+            className={classes.proposalActionButton}
             variant="dark"
             onClick={() => setShowTransactionFormModal(true)}
           >
