@@ -151,17 +151,17 @@ const Documentation = () => {
               <p>
                 <Trans>
                   The proposal veto right was initially envisioned as a temporary solution to the
-                  problem of ‘51% attacks’ on the NounsBR DAO treasury. While NoundersBR initially
-                  believed that a healthy distribution of NounsBR would be sufficient protection for
+                  problem of ‘51% attacks’ on the Nouns DAO treasury. While Nounders initially
+                  believed that a healthy distribution of Nouns would be sufficient protection for
                   the DAO, a more complete understanding of the incentives and risks has led to
-                  general consensus within the Nounders, the NounsBR Foundation, and the wider
+                  general consensus within the Nounders, the Nouns Foundation, and the wider
                   community that a more robust game-theoretic solution should be implemented before
                   the right is removed.
                 </Trans>
               </p>
               <p>
                 <Trans>
-                  The NounsBR community has undertaken a preliminary exploration of proposal veto
+                  The Nouns community has undertaken a preliminary exploration of proposal veto
                   alternatives (‘rage quit’ etc.), but it is now clear that this is a difficult
                   problem that will require significantly more research, development and testing
                   before a satisfactory solution can be implemented.
@@ -169,17 +169,17 @@ const Documentation = () => {
               </p>
               <p>
                 <Trans>
-                  Consequently, the NounsBR Foundation anticipates being the steward of the veto power
-                  until NounsBR DAO is ready to implement an alternative, and therefore wishes to
+                  Consequently, the Nouns Foundation anticipates being the steward of the veto power
+                  until Nouns DAO is ready to implement an alternative, and therefore wishes to
                   clarify the conditions under which it would exercise this power.
                 </Trans>
               </p>
               <p>
                 <Trans>
-                  The NounsBR Foundation considers the veto an emergency power that should not be
-                  exercised in the normal course of business. The NounsBR Foundation will veto
-                  proposals that introduce non-trivial legal or existential risks to the NounsBR DAO
-                  or the NounsBR Foundation, including (but not necessarily limited to) proposals
+                  The Nouns Foundation considers the veto an emergency power that should not be
+                  exercised in the normal course of business. The Nouns Foundation will veto
+                  proposals that introduce non-trivial legal or existential risks to the Nouns DAO
+                  or the Nouns Foundation, including (but not necessarily limited to) proposals
                   that:
                 </Trans>
               </p>
@@ -292,8 +292,7 @@ const Documentation = () => {
             <Accordion.Body>
               <p>
                 <Trans>
-                  'Nounders' are the group of ten builders that initiated NounsBR. Here are the
-                  NoundersBR:
+                  NoundersBR' are the group of 3 brazilian entrepreneurs that initiated NounsBR. Here are the NoundersBR:
                 </Trans>
               </p>
               <ul>
