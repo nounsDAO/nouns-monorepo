@@ -30,8 +30,8 @@ msgid "100% of NounBR auction proceeds are trustlessly sent to the treasury."
 msgstr "100% of NounBR auction proceeds are trustlessly sent to the treasury."
 
 #: src/pages/Nounders/index.tsx
-msgid "3.5 artists, 6.5 technologists"
-msgstr "3.5 artists, 6.5 technologists"
+msgid "artists and entrepreneurs"
+msgstr "artists and entrepreneurs"
 
 #: src/pages/NotFound/index.tsx
 msgid "404: This is not the person, place, or thing you're looking for..."
@@ -137,7 +137,7 @@ msgid "All NounBR auction proceeds are sent to the"
 msgstr "All NounBR auction proceeds are sent to the"
 
 #: src/pages/Nounders/index.tsx
-msgid "All NounBR auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th noun for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual Nounders."
+msgid "All NounBR auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's founders (‘NoundersBR’) have chosen to compensate ourselves with NounsBR. Every 10th nounbr for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual NoundersBR."
 msgstr "All NounBR auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th noun for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual Nounders."
 
 #: src/components/Documentation/index.tsx
@@ -455,7 +455,7 @@ msgid "For"
 msgstr "For"
 
 #: src/components/NounderNounContent/index.tsx
-msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th NounBR for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual Nounders."
+msgid "For this reason, we, the project's founders (‘NoundersBR’) have chosen to compensate ourselves with NounsBR. Every 10th NounBR for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual NoundersBR."
 msgstr "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th NounBR for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual Nounders."
 
 #: src/components/Footer/index.tsx
@@ -510,10 +510,6 @@ msgstr "Holder changed from <0><1/></0> to <2><3/></2>"
 #: src/components/profileEvent/event/MobileTransferEvent/index.tsx
 msgid "Holder changed from<0><1/></0> to <2><3/></2>"
 msgstr "Holder changed from<0><1/></0> to <2><3/></2>"
-
-#: src/components/Documentation/index.tsx
-#~ msgid "In addition to the precautions taken by Compound Governance, Nounders have given themselves a special veto right to ensure that no malicious proposals can be passed while the NounBR supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort."
-#~ msgstr "In addition to the precautions taken by Compound Governance, Nounders have given themselves a special veto right to ensure that no malicious proposals can be passed while the NounBR supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort."
 
 #: src/components/Bid/index.tsx
 msgid "Insufficient bid amount 🤏"
@@ -886,11 +882,11 @@ msgid "The NounBR Seeder contract is used to determine NounBR traits during the 
 msgstr "The NounBR Seeder contract is used to determine NounBR traits during the minting process. The seeder contract can be replaced to allow for future trait generation algorithm upgrades. Additionally, it can be locked by the NounsBR DAO to prevent any future updates. Currently, NounBR traits are determined using pseudo-random number generation:"
 
 #: src/pages/Nounders/index.tsx
-msgid "The Nounders"
+msgid "The NoundersBR"
 msgstr "The Nounders"
 
 #: src/pages/Nounders/index.tsx
-msgid "The Nounders reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures. Since there are 10 Nounders, after 5 years each Nounder could receive up to 1% of the NounBR supply."
+msgid "The NoundersBR reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures."
 msgstr "The Nounders reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures. Since there are 10 Nounders, after 5 years each Nounder could receive up to 1% of the NounBR supply."
 
 #: src/components/Documentation/index.tsx
@@ -1261,6 +1257,10 @@ msgid "{voterComponent} voted for"
 msgstr "{voterComponent} voted for"
 
 #: src/pages/Nouners/index.tsx
+msgid "NounersBR"
+msgstr "NounersBR"
+
+#: src/pages/Nouners/index.tsx
 msgid "Welcome, NounerBR!"
 msgstr "Welcome, NounerBR!"
 
@@ -1285,8 +1285,8 @@ msgid "Welcome"
 msgstr "Welcome"
 
 #: src/pages/Nouners/index.tsx
-msgid "Basic information, major announcements, and user verification. If you just bought a NounBR, you will need to verify your ownership in the #authentication channel to get added to the "NounerBR" role of the server."
-msgstr "Basic information, major announcements, and user verification. If you just bought a NounBR, you will need to verify your ownership in the #authentication channel to get added to the "NounerBR" role of the server."
+msgid "Basic information, major announcements, and user verification. If you just bought a NounBR, you will need to verify your ownership in the #authentication channel to get added to the 'NounerBR' role of the server."
+msgstr "Basic information, major announcements, and user verification. If you just bought a NounBR, you will need to verify your ownership in the #authentication channel to get added to the 'NounerBR' role of the server."
 
 #: src/pages/Nouners/index.tsx
 msgid "These are channels where only NounsBR DAO members can post. In the spirit of having an open and collaborative environment, all of these channels (except for #nounerbr-private) are viewable by the public."
@@ -1335,3 +1335,25 @@ msgstr "Projects"
 #: src/pages/Nouners/index.tsx
 msgid "When a project passes an on-chain vote, the creator of that proposal will often be given their own channel in this section to answer questions and share updates on the status of their work. This is a constantly expanding list - for more information on each of these, check out the DAO section of the NounsBR website."
 msgstr "When a project passes an on-chain vote, the creator of that proposal will often be given their own channel in this section to answer questions and share updates on the status of their work. This is a constantly expanding list - for more information on each of these, check out the DAO section of the NounsBR website."
+
+#: src/components/NavBar/index.tsx
+msgid "About"
+msgstr "Sobre"
+
+#: src/components/Documentation/index.tsx
+msgid "unequally withdraw the treasury for personal gain"
+msgstr "unequally withdraw the treasury for personal gain"
+
+#: src/components/NavBar/index.tsx
+msgid "bribe voters to facilitate withdraws of the treasury for personal gain"
+msgstr "bribe voters to facilitate withdraws of the treasury for personal gain"
+
+#: src/components/NavBar/index.tsx
+msgid "attempt to alter NounBR auction cadence for the purpose of maintaining or acquiring a voting majority"
+msgstr "attempt to alter NounBR auction cadence for the purpose of maintaining or acquiring a voting majority"
+
+#: src/components/NavBar/index.tsx
+msgid "make upgrades to critical smart contracts without undergoing an audit"
+msgstr "make upgrades to critical smart contracts without undergoing an audit"
+
+

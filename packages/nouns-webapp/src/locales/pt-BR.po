@@ -30,7 +30,7 @@ msgid "100% of NounBR auction proceeds are trustlessly sent to the treasury."
 msgstr "100% dos lucros do leilao de um NounBR é enviado automaticamente(trustlessly) para o tesouro da NounsBR."
 
 #: src/pages/Nounders/index.tsx
-msgid "artists and entrepreneurs"
+msgid "artists and entrepreuners"
 msgstr "artistas e empreendedores"
 
 #: src/pages/NotFound/index.tsx
@@ -1254,7 +1254,7 @@ msgstr "{voterComponent} votou a favor"
 msgid "NounersBR"
 msgstr "NounersBR"
 
-#: src/pages/Nouners/iNouns Foundationndex.tsx
+#: src/pages/Nouners/index.tsx
 msgid "Welcome, NounerBR!"
 msgstr "Bem-vindo, NounerBR!"
 

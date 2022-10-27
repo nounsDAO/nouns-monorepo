@@ -142,7 +142,7 @@ msgid "All NounBR auction proceeds are sent to the"
 msgstr "すべてのNounオークションの収益は、"
 
 #: src/pages/Nounders/index.tsx
-msgid "All NounBR auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th noun for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual Nounders."
+msgid "All NounBR auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's founders (‘NoundersBR’) have chosen to compensate ourselves with NounsBR. Every 10th nounbr for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual NoundersBR."
 msgstr "Nounオークションの収益は全て NounsBR DAOに送られます。その為、我々、プロジェクトの創設者 (Nounders) はNounsで自らを補償することに決めました。 プロジェクトの最初の5年間の間は、毎回10体目のNounがマルチシグ(5/10) に送られた後、個々のナウンダーズに与えられ、配布されます。"
 
 #: src/components/Documentation/index.tsx
@@ -460,7 +460,7 @@ msgid "For"
 msgstr "賛成"
 
 #: src/components/NounderNounContent/index.tsx
-msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th NounBR for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
+msgid "For this reason, we, the project's founders (‘NoundersBR’) have chosen to compensate ourselves with NounsBR. Every 10th NounBR for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual NoundersBR."
 msgstr "その為、我々、プロジェクトの創設者 (Nounders) はNounsで自らを補償することに決めました。 プロジェクトの最初の5年間の間は、毎回10体目のNounがマルチシグ(5/10) に送られた後、個々のナウンダーズに与えられ、配布されます。"
 
 #: src/components/Footer/index.tsx
@@ -515,10 +515,6 @@ msgstr ""
 #: src/components/profileEvent/event/MobileTransferEvent/index.tsx
 msgid "Holder changed from<0><1/></0> to <2><3/></2>"
 msgstr ""
-
-#: src/components/Documentation/index.tsx
-#~ msgid "In addition to the precautions taken by Compound Governance, Nounders have given themselves a special veto right to ensure that no malicious proposals can be passed while the NounBR supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort."
-#~ msgstr "コンパウンドガバナンスによる予防措置に加えて、Nounの供給量が少ない間に悪意のある議案が通らないように、Noundersは特別な拒否権を保有しています。この拒否権は、明らかに有害なガバナンスの提案が可決された場合にのみ行使され、最後の手段として使用されます。"
 
 #: src/components/Bid/index.tsx
 msgid "Insufficient bid amount 🤏"
@@ -595,11 +591,11 @@ msgid "NounderBR distributions don't interfere with the cadence of 15 minutes au
 msgstr "Nounder配布により24時間オークションの頻度に影響が及ぶことはありません。 NounsはNounderのマルチシグに直接送られ、オークションは次の有効なNouns IDによって予定通り継続されます。"
 
 #: src/components/Documentation/index.tsx
-msgid "Nounder's Reward"
+msgid "NounderBR's Reward"
 msgstr "Nounderへの報酬"
 
 #: src/components/Documentation/index.tsx
-msgid "Nounders receive rewards in the form of NounsBR (10% of supply for first 5 years)."
+msgid "NoundersBR receive rewards in the form of NounsBR (10% of supply for first 5 years)."
 msgstr "Nounderには、Nounsという形で報酬が与えられます (最初の5年間は供給量の10％)。"
 
 #: src/components/Documentation/index.tsx
@@ -607,7 +603,7 @@ msgstr "Nounderには、Nounsという形で報酬が与えられます (最初�
 #~ msgstr "Nounderは、安全であると判断した場合、この拒否権を無効にすることが出来ます。この決定は、健全なNounの分布と、ガバナンスプロセスに関与しているコミュニティに基づいて行われます。"
 
 #: src/pages/Nounders/index.tsx
-msgid "Nounders' Reward"
+msgid "NoundersBR' Reward"
 msgstr "Nounderへの報酬"
 
 #: src/pages/Governance/index.tsx
@@ -895,7 +891,7 @@ msgid "The Nounders"
 msgstr "Nounders"
 
 #: src/pages/Nounders/index.tsx
-msgid "The Nounders reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures. Since there are 10 Nounders, after 5 years each Nounder could receive up to 1% of the NounBR supply."
+msgid "The NoundersBR reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures."
 msgstr "Noundersの報酬は、プロジェクト開始前と開始後の貢献に対する対価として提供されるほか、プロジェクトが成熟するにつれ、ガバナンスに有意義に参加できるよう支援することも目的としています。Noundersは10人なので、5年後には各ナウンダーは最大でNounの供給量の1%を受け取ることができます。"
 
 #: src/components/Documentation/index.tsx
@@ -1262,6 +1258,10 @@ msgid "{voterComponent} voted for"
 msgstr ""
 
 #: src/pages/Nouners/index.tsx
+msgid "NounersBR"
+msgstr "NounersBR"
+
+#: src/pages/Nouners/index.tsx
 msgid "Welcome, NounerBR!"
 msgstr "Welcome, NounerBR!"
 
@@ -1286,8 +1286,8 @@ msgid "Welcome"
 msgstr "Welcome"
 
 #: src/pages/Nouners/index.tsx
-msgid "Basic information, major announcements, and user verification. If you just bought a NounBR, you will need to verify your ownership in the #authentication channel to get added to the "NounerBR" role of the server."
-msgstr "Basic information, major announcements, and user verification. If you just bought a NounBR, you will need to verify your ownership in the #authentication channel to get added to the "NounerBR" role of the server."
+msgid "Basic information, major announcements, and user verification. If you just bought a NounBR, you will need to verify your ownership in the #authentication channel to get added to the 'NounerBR' role of the server."
+msgstr "Basic information, major announcements, and user verification. If you just bought a NounBR, you will need to verify your ownership in the #authentication channel to get added to the 'NounerBR' role of the server."
 
 #: src/pages/Nouners/index.tsx
 msgid "These are channels where only NounsBR DAO members can post. In the spirit of having an open and collaborative environment, all of these channels (except for #nounerbr-private) are viewable by the public."
@@ -1336,3 +1336,21 @@ msgstr "Projects"
 #: src/pages/Nouners/index.tsx
 msgid "When a project passes an on-chain vote, the creator of that proposal will often be given their own channel in this section to answer questions and share updates on the status of their work. This is a constantly expanding list - for more information on each of these, check out the DAO section of the NounsBR website."
 msgstr "When a project passes an on-chain vote, the creator of that proposal will often be given their own channel in this section to answer questions and share updates on the status of their work. This is a constantly expanding list - for more information on each of these, check out the DAO section of the NounsBR website."
+
+#: src/components/Documentation/index.tsx
+msgid "unequally withdraw the treasury for personal gain"
+msgstr "unequally withdraw the treasury for personal gain"
+
+#: src/components/NavBar/index.tsx
+msgid "bribe voters to facilitate withdraws of the treasury for personal gain"
+msgstr "bribe voters to facilitate withdraws of the treasury for personal gain"
+
+#: src/components/NavBar/index.tsx
+msgid "attempt to alter NounBR auction cadence for the purpose of maintaining or acquiring a voting majority"
+msgstr "attempt to alter NounBR auction cadence for the purpose of maintaining or acquiring a voting majority"
+
+#: src/components/NavBar/index.tsx
+msgid "make upgrades to critical smart contracts without undergoing an audit"
+msgstr "make upgrades to critical smart contracts without undergoing an audit"
+
+
