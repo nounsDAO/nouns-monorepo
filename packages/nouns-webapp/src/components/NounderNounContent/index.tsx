@@ -107,10 +107,10 @@ const NounderNounContent: React.FC<{
               </Link>
               .{' '}
               <Trans>
-                For this reason, we, the project's founders (‘Nounders’) have chosen to compensate
+                For this reason, we, the project's founders (‘NoundersBR’) have chosen to compensate
                 ourselves with NounsBR. Every 10th NounBR for the first 5 years of the project will be
                 sent to our multisig (3/3), where it will be vested and distributed to individual
-                Nounders.
+                NoundersBR.
               </Trans>
             </li>
           </ul>

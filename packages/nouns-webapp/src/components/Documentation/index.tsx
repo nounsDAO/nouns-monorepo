@@ -92,7 +92,7 @@ const Documentation = () => {
                 </li>
                 <li>
                   <Trans>
-                    Nounders receive rewards in the form of NounsBR (10% of supply for first 5 years).
+                    NoundersBR receive rewards in the form of NounsBR (10% of supply for first 5 years).
                   </Trans>
                 </li>
               </ul>
@@ -151,7 +151,7 @@ const Documentation = () => {
               <p>
                 <Trans>
                   The proposal veto right was initially envisioned as a temporary solution to the
-                  problem of ‘51% attacks’ on the NounsBR DAO treasury. While Nounders initially
+                  problem of ‘51% attacks’ on the NounsBR DAO treasury. While NoundersBR initially
                   believed that a healthy distribution of NounsBR would be sufficient protection for
                   the DAO, a more complete understanding of the incentives and risks has led to
                   general consensus within the Nounders, the NounsBR Foundation, and the wider
@@ -287,13 +287,13 @@ const Documentation = () => {
           </Accordion.Item>
           <Accordion.Item eventKey="7" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>Nounder's Reward</Trans>
+              <Trans>NounderBR's Reward</Trans>
             </Accordion.Header>
             <Accordion.Body>
               <p>
                 <Trans>
                   'Nounders' are the group of ten builders that initiated NounsBR. Here are the
-                  Nounders:
+                  NoundersBR:
                 </Trans>
               </p>
               <ul>
@@ -313,17 +313,17 @@ const Documentation = () => {
               </ul>
               <p>
                 <Trans>
-                  Because 100% of NounBR auction proceeds are sent to NounsBR DAO, Nounders have chosen
+                  Because 100% of NounBR auction proceeds are sent to NounsBR DAO, NoundersBR have chosen
                   to compensate themselves with NounsBR. Every 10th NounBR for the first 5 years of the
                   project (NounBR ids #0, #10, #20, #30 and so on) will be automatically sent to the
-                  Nounder's multisig to be vested and shared among the founding members of the
+                  NounderBR's multisig to be vested and shared among the founding members of the
                   project.
                 </Trans>
               </p>
               <p>
                 <Trans>
-                  Nounder distributions don't interfere with the cadence of 15 minutes auctions. NounsBR
-                  are sent directly to the Nounder's Multisig, and auctions continue on schedule
+                  NounderBR distributions don't interfere with the cadence of 15 minutes auctions. NounsBR
+                  are sent directly to the NounderBR's Multisig, and auctions continue on schedule
                   with the next available NounBR ID.
                 </Trans>
               </p>
