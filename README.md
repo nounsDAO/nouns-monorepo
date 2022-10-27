@@ -14,7 +14,7 @@ The [nouns assets](packages/nouns-assets) package holds the Noun PNG and run-len
 
 ### nouns-bots
 
-The [nouns bots](packages/nouns-bots) package contains a bot that monitors for changes in Noun auction state and notifies everyone via Twitter.
+The [nouns bots](packages/nouns-bots) package contains a bot that monitors for changes in Noun auction state and notifies everyone via Twitter and Discord.
 
 ### nouns-contracts
 
