@@ -273,7 +273,7 @@ msgstr "Conecte sua carteira"
 
 #: src/components/Documentation/index.tsx
 msgid "Consequently, the NounsBR Foundation anticipates being the steward of the veto power until NounsBR DAO is ready to implement an alternative, and therefore wishes to clarify the conditions under which it would exercise this power."
-msgstr "Consequentemente, a Fundação NounsBR antecipa ser a administradora do poder de veto até que a NounsBR DAO esteja pronto para implementar uma alternativa e, portanto, deseja esclarecer as condições sob as quais exerceria esse poder."
+msgstr "Consequentemente, a Fundação NounsBR antecipa ser a administradora do poder de veto até que a NounsBR DAO esteja pronta para implementar uma alternativa e, portanto, deseja esclarecer as condições sob as quais exerceria esse poder."
 
 #: src/components/CreateProposalButton/index.tsx
 #: src/pages/CreateProposal/index.tsx
@@ -623,7 +623,7 @@ msgstr "NounsBR DAO usa um fork de {compoundGovLink}."
 
 #: src/components/Documentation/index.tsx
 msgid "NounsBR DAO utilizes a fork of {compoundGovLink} and is the main governing body of the NounsBR ecosystem. The NounsBR DAO treasury receives 100% of ETH proceeds from daily NounBR auctions. Each NounBR is an irrevocable member of NounsBR DAO and entitled to one vote in all governance matters. NounBR votes are non-transferable (if you sell your NounBR the vote goes with it) but delegatable, which means you can assign your vote to someone else as long as you own your NounBR."
-msgstr "NounsBR DAO utiliza um fork de {compoundGovLink} e é o principal órgão regulador do ecossistema NounsBR. O tesouro da NounsBR DAO recebe 100% dos rendimentos de ETH dos leilões diários do NounBR. Cada NounBR é um membro irrevogável do NounsBR DAO e tem direito a um voto em todas as questões de governança. Os votos do NounBR são intransferíveis (se você vender seu NounBR, o voto vai junto), mas são delegáveis, o que significa que você pode atribuir seu voto a outra pessoa, desde que você possua seu NounBR."
+msgstr "NounsBR DAO utiliza um fork de {compoundGovLink} e é o principal órgão regulador do ecossistema NounsBR. O tesouro da NounsBR DAO recebe 100% dos rendimentos de ETH dos leilões diários de um NounBR. Cada NounBR é um membro irrevogável da NounsBR DAO e tem direito a um voto em todas as questões de governança. Os votos do NounBR são intransferíveis (se você vender seu NounBR, o voto vai junto), mas são delegáveis, o que significa que você pode atribuir seu voto a outra pessoa, desde que você possua seu NounBR."
 
 #: src/pages/Playground/index.tsx
 msgid "NounsBR Protocol"
@@ -1083,7 +1083,7 @@ msgstr "E agora?"
 
 #: src/components/Documentation/index.tsx
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction NounsBR as long as Ethereum is operational and there are interested bidders."
-msgstr "Embora a liquidação seja mais fortemente incentivada para o licitante vencedor, ela pode ser acionada por qualquer pessoa, permitindo que o sistema leiloe automáticamente(trustlessly) o NounsBR enquanto o Ethereum estiver operacional e houver licitantes interessados."
+msgstr "Embora a liquidação seja mais fortemente incentivada para o licitante vencedor, ela pode ser acionada por qualquer pessoa, permitindo que o sistema leiloe automaticamente(trustlessly) NounsBR enquanto o Ethereum estiver operacional e houver licitantes interessados."
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Will have"
@@ -1288,7 +1288,7 @@ msgstr "Informações básicas, anúncios importantes e verificação do usuári
 
 #: src/pages/Nouners/index.tsx
 msgid "These are channels where only NounsBR DAO members can post. In the spirit of having an open and collaborative environment, all of these channels (except for #nounerbr-private) are viewable by the public."
-msgstr "Esses são canais onde apenas membros do NounsBR DAO podem postar. No espírito de ter uma abertura e ambiente colaborativo, todos esses canais (exceto #nounerbr-private) são visíveis pelo público."
+msgstr "Esses são canais onde apenas membros da NounsBR DAO podem postar. No espírito de ter uma abertura e ambiente colaborativo, todos esses canais (exceto #nounerbr-private) são visíveis pelo público."
 
 #: src/pages/Nouners/index.tsx
 msgid "#nounsbr-chat"
