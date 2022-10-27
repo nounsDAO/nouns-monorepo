@@ -57,16 +57,17 @@ library Noracle {
         uint48 amount,
         address winner
     ) internal {
+        uint32 currentIndex = self.index;
+        uint32 cardinality = self.cardinality;
         uint32 cardinalityNext = self.cardinalityNext;
         if (cardinalityNext == 0) revert NotInitialized();
 
         // if the conditions are right, we can bump the cardinality
-        uint32 currentIndex = self.index;
-        if (cardinalityNext > self.cardinality && currentIndex == (self.cardinality - 1)) {
-            self.cardinality = cardinalityNext;
+        if (cardinalityNext > cardinality && currentIndex == (cardinality - 1)) {
+            self.cardinality = cardinality = cardinalityNext;
         }
 
-        uint32 newIndex = (currentIndex + 1) % self.cardinality;
+        uint32 newIndex = (currentIndex + 1) % cardinality;
         self.index = newIndex;
         self.observations[newIndex] = Observation({
             blockTimestamp: blockTimestamp,
