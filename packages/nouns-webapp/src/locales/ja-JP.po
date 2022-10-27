@@ -23,7 +23,7 @@ msgid "% of NounsBR Currently Against"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "'Nounders' are the group of ten builders that initiated NounsBR. Here are the Nounders:"
+msgid "'NoundersBR' are the group of 3 brazilian artists and entrepreneurs that initiated NounsBR. Here are the NoundersBR:"
 msgstr "「Nounders」とはNounsの創業に携わった10人の創業者のことであり、以下の人物で構成されています："
 
 #: src/components/ByLineHoverCard/index.tsx
@@ -183,7 +183,7 @@ msgid "Background"
 msgstr "背景"
 
 #: src/components/Documentation/index.tsx
-msgid "Because 100% of NounBR auction proceeds are sent to NounsBR DAO, Nounders have chosen to compensate themselves with NounsBR. Every 10th NounBR for the first 5 years of the project (NounBR ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
+msgid "Because 100% of NounBR auction proceeds are sent to NounsBR DAO, NoundersBR have chosen to compensate themselves with NounsBR. Every 10th NounBR for the first 5 years of the project (NounBR ids #0, #10, #20, #30 and so on) will be automatically sent to the NounderBR's multisig to be vested and shared among the founding members of the project."
 msgstr "Nounオークションの収益の100%がNouns DAOに送られるため、Nounderは自分達をNounsで補償することに決めました。プロジェクトの最初の5年間の間、毎回10番目のNoun (NounBR ID #0, #10, #20, #30 など) が自動的にNoundersのマルチシグに送られ、プロジェクトの創設メンバー達に与えられて、共有されます。"
 
 #: src/components/Bid/index.tsx
@@ -591,7 +591,7 @@ msgid "NounBR {0}"
 msgstr "NounBR {0}"
 
 #: src/components/Documentation/index.tsx
-msgid "Nounder distributions don't interfere with the cadence of 15 minutes auctions. NounsBR are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available NounBR ID."
+msgid "NounderBR distributions don't interfere with the cadence of 15 minutes auctions. NounsBR are sent directly to the NounderBR's Multisig, and auctions continue on schedule with the next available NounBR ID."
 msgstr "Nounder配布により24時間オークションの頻度に影響が及ぶことはありません。 NounsはNounderのマルチシグに直接送られ、オークションは次の有効なNouns IDによって予定通り継続されます。"
 
 #: src/components/Documentation/index.tsx

@@ -288,7 +288,7 @@ const Documentation = () => {
             <Accordion.Body>
               <p>
                 <Trans>
-                  NoundersBR' are the group of 3 brazilian entrepreneurs that initiated NounsBR. Here are the NoundersBR:
+                  'NoundersBR' are the group of 3 brazilian artists and entrepreneurs that initiated NounsBR. Here are the NoundersBR:
                 </Trans>
               </p>
               <ul>
@@ -317,9 +317,7 @@ const Documentation = () => {
               </p>
               <p>
                 <Trans>
-                  NounderBR distributions don't interfere with the cadence of 15 minutes auctions. NounsBR
-                  are sent directly to the NounderBR's Multisig, and auctions continue on schedule
-                  with the next available NounBR ID.
+                  NounderBR distributions don't interfere with the cadence of 15 minutes auctions. NounsBR are sent directly to the NounderBR's Multisig, and auctions continue on schedule with the next available NounBR ID.
                 </Trans>
               </p>
             </Accordion.Body>

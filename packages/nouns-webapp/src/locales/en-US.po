@@ -18,8 +18,8 @@ msgid "% of NounsBR Currently Against"
 msgstr "% of NounsBR Currently Against"
 
 #: src/components/Documentation/index.tsx
-msgid "'Nounders' are the group of ten builders that initiated NounsBR. Here are the Nounders:"
-msgstr "'Nounders' are the group of ten builders that initiated NounsBR. Here are the Nounders:"
+msgid "'NoundersBR' are the group of 3 brazilian artists and entrepreneurs that initiated NounsBR. Here are the NoundersBR:"
+msgstr "'NoundersBR' are the group of 3 brazilian artists and entrepreneurs that initiated NounsBR. Here are the NoundersBR:"
 
 #: src/components/ByLineHoverCard/index.tsx
 msgid "... and {0} more"
@@ -178,8 +178,8 @@ msgid "Background"
 msgstr "Background"
 
 #: src/components/Documentation/index.tsx
-msgid "Because 100% of NounBR auction proceeds are sent to NounsBR DAO, Nounders have chosen to compensate themselves with NounsBR. Every 10th NounBR for the first 5 years of the project (NounBR ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
-msgstr "Because 100% of NounBR auction proceeds are sent to NounsBR DAO, Nounders have chosen to compensate themselves with NounsBR. Every 10th NounBR for the first 5 years of the project (NounBR ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
+msgid "Because 100% of NounBR auction proceeds are sent to NounsBR DAO, NoundersBR have chosen to compensate themselves with NounsBR. Every 10th NounBR for the first 5 years of the project (NounBR ids #0, #10, #20, #30 and so on) will be automatically sent to the NounderBR's multisig to be vested and shared among the founding members of the project."
+msgstr "Because 100% of NounBR auction proceeds are sent to NounsBR DAO, NoundersBR have chosen to compensate themselves with NounsBR. Every 10th NounBR for the first 5 years of the project (NounBR ids #0, #10, #20, #30 and so on) will be automatically sent to the NounderBR's multisig to be vested and shared among the founding members of the project."
 
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
@@ -586,24 +586,24 @@ msgid "NounBR {0}"
 msgstr "NounBR {0}"
 
 #: src/components/Documentation/index.tsx
-msgid "Nounder distributions don't interfere with the cadence of 15 minutes auctions. NounsBR are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available NounBR ID."
-msgstr "Nounder distributions don't interfere with the cadence of 15 minutes auctions. NounsBR are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available NounBR ID."
+msgid "NounderBR distributions don't interfere with the cadence of 15 minutes auctions. NounsBR are sent directly to the NounderBR's Multisig, and auctions continue on schedule with the next available NounBR ID."
+msgstr "NounderBR distributions don't interfere with the cadence of 15 minutes auctions. NounsBR are sent directly to the NounderBR's Multisig, and auctions continue on schedule with the next available NounBR ID."
 
 #: src/components/Documentation/index.tsx
-msgid "Nounder's Reward"
-msgstr "Nounder's Reward"
+msgid "NounderBR's Reward"
+msgstr "NounderBR's Reward"
 
 #: src/components/Documentation/index.tsx
-msgid "Nounders receive rewards in the form of NounsBR (10% of supply for first 5 years)."
-msgstr "Nounders receive rewards in the form of NounsBR (10% of supply for first 5 years)."
+msgid "NoundersBR receive rewards in the form of NounsBR (10% of supply for first 5 years)."
+msgstr "NoundersBR receive rewards in the form of NounsBR (10% of supply for first 5 years)."
 
-#: src/components/Documentation/index.tsx
+#: src/comNounderponents/Documentation/index.tsx
 #~ msgid "Nounders will proveably revoke this veto right when they deem it safe to do so. This decision will be based on a healthy NounBR distribution and a community that is engaged in the governance process."
 #~ msgstr "Nounders will proveably revoke this veto right when they deem it safe to do so. This decision will be based on a healthy NounBR distribution and a community that is engaged in the governance process."
 
 #: src/pages/Nounders/index.tsx
-msgid "Nounders' Reward"
-msgstr "Nounders' Reward"
+msgid "NoundersBR' Reward"
+msgstr "NoundersBR' Reward"
 
 #: src/pages/Governance/index.tsx
 msgid "NounsBR"

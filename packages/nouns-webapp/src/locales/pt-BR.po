@@ -18,8 +18,8 @@ msgid "% of NounsBR Currently Against"
 msgstr "% de NounsBR Atualmente Contra"
 
 #: src/components/Documentation/index.tsx
-msgid "'NoundersBR' are the group of 3 brazilian entrepreneurs that initiated NounsBR. Here are the NoundersBR:"
-msgstr "NoundersBR' é o grupo de 3 empreendedores brasileiros que iniciaram a NounsBR. Estes são os NoundersBR:"
+msgid "'NoundersBR' are the group of 3 brazilian artists and entrepreneurs that initiated NounsBR. Here are the NoundersBR:"
+msgstr "NoundersBR' é o grupo de 3 artistas e empreendedores brasileiros que iniciaram a NounsBR. Estes são os NoundersBR:"
 
 #: src/components/ByLineHoverCard/index.tsx
 msgid "... and {0} more"
@@ -178,7 +178,7 @@ msgid "Background"
 msgstr "Background"
 
 #: src/components/Documentation/index.tsx
-msgid "Because 100% of NounBR auction proceeds are sent to NounsBR DAO, Nounders have chosen to compensate themselves with NounsBR. Every 10th NounBR for the first 5 years of the project (NounBR ids #0, #10, #20, #30 and so on) will be automatically sent to the NounderBR's multisig to be vested and shared among the founding members of the project."
+msgid "Because 100% of NounBR auction proceeds are sent to NounsBR DAO, NoundersBR have chosen to compensate themselves with NounsBR. Every 10th NounBR for the first 5 years of the project (NounBR ids #0, #10, #20, #30 and so on) will be automatically sent to the NounderBR's multisig to be vested and shared among the founding members of the project."
 msgstr "Como 100% dos lucros do leilão de um NounBR são enviados para a NounsBR DAO, os NoundersBR optaram por se compensar com NounsBR. Cada 10º NounBR durante os primeiros 5 anos do projeto (NounBR ids #0, #10, #20, #30 e assim por diante) será automaticamente enviado a multisig NounderBR para ser adquirido e compartilhado entre os membros fundadores do projeto."
 
 #: src/components/Bid/index.tsx
@@ -580,7 +580,7 @@ msgid "NounBR {0}"
 msgstr "NounBR {0}"
 
 #: src/components/Documentation/index.tsx
-msgid "Nounder distributions don't interfere with the cadence of 15 minutes auctions. NounsBR are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available NounBR ID."
+msgid "NounderBR distributions don't interfere with the cadence of 15 minutes auctions. NounsBR are sent directly to the NounderBR's Multisig, and auctions continue on schedule with the next available NounBR ID."
 msgstr "Distribuições NounderBR não interferem na cadência dos leilões de 15 minutos. Os NounsBR são enviados diretamente para a Multisig NounderBR, e os leilões continuam no horário com o próximo NounBR ID disponível."
 
 #: src/components/Documentation/index.tsx

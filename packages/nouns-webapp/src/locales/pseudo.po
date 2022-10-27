@@ -18,7 +18,7 @@ msgid "% of NounsBR Currently Against"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "'Nounders' are the group of ten builders that initiated NounsBR. Here are the Nounders:"
+msgid "'NoundersBR' are the group of 3 brazilian artists and entrepreneurs that initiated NounsBR. Here are the NoundersBR:"
 msgstr ""
 
 #: src/components/ByLineHoverCard/index.tsx
@@ -137,7 +137,7 @@ msgid "All NounBR auction proceeds are sent to the"
 msgstr ""
 
 #: src/pages/Nounders/index.tsx
-msgid "All NounBR auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th noun for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual Nounders."
+msgid "All NounBR auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th noun for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual NoundersBR."
 msgstr ""
 
 #: src/components/Documentation/index.tsx
@@ -178,7 +178,7 @@ msgid "Background"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "Because 100% of NounBR auction proceeds are sent to NounsBR DAO, Nounders have chosen to compensate themselves with NounsBR. Every 10th NounBR for the first 5 years of the project (NounBR ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
+msgid "Because 100% of NounBR auction proceeds are sent to NounsBR DAO, NoundersBR have chosen to compensate themselves with NounsBR. Every 10th NounBR for the first 5 years of the project (NounBR ids #0, #10, #20, #30 and so on) will be automatically sent to the NounderBR's multisig to be vested and shared among the founding members of the project."
 msgstr ""
 
 #: src/components/Bid/index.tsx
@@ -455,7 +455,7 @@ msgid "For"
 msgstr ""
 
 #: src/components/NounderNounContent/index.tsx
-msgid "For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with NounsBR. Every 10th NounBR for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual Nounders."
+msgid "For this reason, we, the project's founders (‘NoundersBR’) have chosen to compensate ourselves with NounsBR. Every 10th NounBR for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual NoundersBR."
 msgstr ""
 
 #: src/components/Footer/index.tsx
@@ -586,15 +586,15 @@ msgid "NounBR {0}"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "Nounder distributions don't interfere with the cadence of 15 minutes auctions. NounsBR are sent directly to the Nounder's Multisig, and auctions continue on schedule with the next available NounBR ID."
+msgid "NounderBR distributions don't interfere with the cadence of 15 minutes auctions. NounsBR are sent directly to the NounderBR's Multisig, and auctions continue on schedule with the next available NounBR ID."
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "Nounder's Reward"
+msgid "NounderBR's Reward"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
-msgid "Nounders receive rewards in the form of NounsBR (10% of supply for first 5 years)."
+msgid "NoundersBR receive rewards in the form of NounsBR (10% of supply for first 5 years)."
 msgstr ""
 
 #: src/components/Documentation/index.tsx
@@ -602,7 +602,7 @@ msgstr ""
 #~ msgstr ""
 
 #: src/pages/Nounders/index.tsx
-msgid "Nounders' Reward"
+msgid "NoundersBR' Reward"
 msgstr ""
 
 #: src/pages/Governance/index.tsx
@@ -886,11 +886,11 @@ msgid "The NounBR Seeder contract is used to determine NounBR traits during the 
 msgstr ""
 
 #: src/pages/Nounders/index.tsx
-msgid "The Nounders"
+msgid "The NoundersBR"
 msgstr ""
 
 #: src/pages/Nounders/index.tsx
-msgid "The Nounders reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures. Since there are 10 Nounders, after 5 years each Nounder could receive up to 1% of the NounBR supply."
+msgid "The NoundersBR reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures. Since there are 10 Nounders, after 5 years each NounderBR could receive up to 1% of the NounBR supply."
 msgstr ""
 
 #: src/components/Documentation/index.tsx
