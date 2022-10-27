@@ -176,10 +176,10 @@ const Documentation = () => {
               </p>
               <p>
                 <Trans>
-                  The Nouns Foundation considers the veto an emergency power that should not be
-                  exercised in the normal course of business. The Nouns Foundation will veto
-                  proposals that introduce non-trivial legal or existential risks to the Nouns DAO
-                  or the Nouns Foundation, including (but not necessarily limited to) proposals
+                  The Nouns Foundation and NounsBR DAO considers the veto an emergency power that should not be
+                  exercised in the normal course of business. The NounsBR DAO will veto
+                  proposals that introduce non-trivial legal or existential risks to the NounsBR DAO
+                  , including (but not necessarily limited to) proposals
                   that:
                 </Trans>
               </p>
