@@ -77,12 +77,12 @@ library Noracle {
         });
     }
 
-    function grow(NoracleState storage self, uint32 next) internal returns (uint32) {
+    function grow(NoracleState storage self, uint32 next) internal returns (uint32, uint32) {
         uint32 current = self.cardinalityNext;
         if (current == 0) revert NotInitialized();
 
         // no-op if the passed next value isn't greater than the current next value
-        if (next <= current) return current;
+        if (next <= current) return (current, current);
 
         // store in each slot to prevent fresh SSTOREs
         // this data will not be used because the initialized boolean is still false
@@ -91,7 +91,7 @@ library Noracle {
         }
 
         self.cardinalityNext = next;
-        return next;
+        return (current, next);
     }
 
     function observe(NoracleState storage self, uint32 auctionCount)

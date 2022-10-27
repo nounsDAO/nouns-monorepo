@@ -282,8 +282,7 @@ contract NounsAuctionHouseV2 is
     }
 
     function growPriceHistory(uint32 newCardinality) external {
-        uint32 current = oracle.cardinalityNext;
-        uint32 next = oracle.grow(newCardinality);
+        (uint32 current, uint32 next) = oracle.grow(newCardinality);
 
         emit PriceHistoryGrown(current, next);
     }
