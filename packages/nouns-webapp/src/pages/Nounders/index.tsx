@@ -82,17 +82,17 @@ const NoundersPage = () => {
     <Section fullWidth={true} className={classes.noundersPage}>
       <Col lg={{ span: 6, offset: 3 }}>
         <h2 style={{ marginBottom: '2rem' }}>
-          <Trans>The Nounders</Trans>
+          <Trans>The NoundersBR</Trans>
         </h2>
         <h3 style={{ marginBottom: '2rem' }}>
-          <Trans>3.5 artists, 6.5 technologists</Trans>
+          <Trans>artists and entrepreuners</Trans>
         </h3>
         <Row style={{ marginBottom: '0rem' }}>
           <BioCards min={0} max={5} />
           <BioCards min={5} max={10} />
         </Row>
         <h3>
-          <Trans>Nounders' Reward</Trans>
+          <Trans>NoundersBR' Reward</Trans>
         </h3>
         <p style={{ textAlign: 'justify' }}>
           <Trans>
