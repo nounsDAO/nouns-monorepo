@@ -41,7 +41,7 @@ msgstr "404: Este não é a pessoa, local ou qualquer coisa que você estava pro
 #~ msgid "<0/>Holder changed from<1><2/></1> to <3><4/></3>"
 #~ msgstr "<0/>Titular trocado de<1><2/></1> para <3><4/></3>"
 
-#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
+#: src/comptesouroonents/profileEvent/event/DesktopNounWinEvent/index.tsx
 #~ msgid "<0> NounBR {0} </0>  won by <1><2/></1>"
 #~ msgstr "<0> NounBR {0} </0>  vencido por <1><2/></1>"
 
@@ -206,7 +206,7 @@ msgstr "Lances para"
 msgid "Bids will appear here"
 msgstr "Os lances aparecerão aqui"
 
-#: src/pages/Playground/index.tsx
+#: src/pages/paraPlayground/index.tsx
 msgid "Body"
 msgstr "Body"
 
@@ -440,7 +440,7 @@ msgid "Failed to fetch"
 msgstr "Falha ao buscar"
 
 #: src/components/ProfileActivityFeed/index.tsx
-msgid "Failed to fetch NounBR activity history"
+msgid "Failed to feparatch NounBR activity history"
 msgstr "Falha ao buscar o histórico de atividades do NounBR"
 
 #: src/components/Holder/index.tsx
@@ -635,7 +635,7 @@ msgstr "NounsBR é uma tentativa experimental de melhorar a formação de comuni
 
 #: src/components/Documentation/index.tsx
 msgid "NounsBR are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules governing NounBR trait scarcity, which makes all NounsBR equally rare. As of this writing, NounsBR are made up of:"
-msgstr "Os NounsBR são hashes de bloco Ethereum gerados aleatoriamente. Não há declarações 'se' ou outras regras que regem a escassez de traits de um NounBR, o que torna todos os NounsBR igualmente raros. No momento da redação deste artigo, o NounsBR é composto por:"
+msgstr "Os NounsBR são hashes de bloco Ethereum gerados aleatoriamente. Não há declarações 'se' ou outras regras que regem a escassez de traits de um NounBR, o que torna todos os NounsBR igualmente raros. No momento da redação deste artigo, os NounsBR são compostos por:"
 
 #: src/components/Documentation/index.tsx
 msgid "NounsBR are stored directly on Ethereum and do not utilize pointers to other networks such as IPFS. This is possible because NounBR parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression."
@@ -647,7 +647,7 @@ msgstr "A obra de arte da NounsBR está em {publicDomainLink}."
 
 #: src/pages/Governance/index.tsx
 msgid "NounsBR govern <0>NounsBR DAO</0>. NounsBR can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
-msgstr "NounsBR governam <0>NounsBR DAO</0>. Os NounsBR podem votar em propostas ou delegarem seus votos a terceiros. Um mínimo de <1>{nounsRequired} {0}</1> é necessário para enviar propostas."
+msgstr "NounsBR governam a <0>NounsBR DAO</0>. Os NounsBR podem votar em propostas ou delegarem seus votos a terceiros. Um mínimo de <1>{nounsRequired} {0}</1> é necessário para enviar propostas."
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Now has"
@@ -893,7 +893,7 @@ msgstr "A recompensa da NoundersBR destina-se a compensar nossas contribuições
 
 #: src/components/Documentation/index.tsx
 msgid "The NounsBR Auction Contract will act as a self-sufficient NounBR generation and distribution mechanism, auctioning one NounBR every 15 minutes, forever. 100% of auction proceeds (ETH) are automatically deposited in the NounsBR DAO treasury, where they are governed by NounBR owners."
-msgstr "O Contrato de Leilão NounsBR funcionará como um mecanismo autossuficiente de geração e distribuição de um NounBR, leiloando um NounBR a cada 15 minutos, para sempre. 100% dos rendimentos do leilão (ETH) são depositados automaticamente no tesouro do NounsBR DAO, onde são regidos pelos proprietários do NounBR."
+msgstr "O Contrato de Leilão NounsBR funcionará como um mecanismo autossuficiente de geração e distribuição de um NounBR, leiloando um NounBR a cada 15 minutos, para sempre. 100% dos rendimentos do leilão (ETH) são depositados automaticamente no tesouro da NounsBR DAO, onde são regidos pelos proprietários do NounBR."
 
 #: src/components/Documentation/index.tsx
 msgid "The NounsBR Foundation considers the veto an emergency power that should not be exercised in the normal course of business. The NounsBR Foundation will veto proposals that introduce non-trivial legal or existential risks to the NounsBR DAO or the NounsBR Foundation, including (but not necessarily limited to) proposals that:"
@@ -917,7 +917,7 @@ msgstr "As partes comprimidas são convertidas de forma eficiente em uma única 
 
 #: src/pages/Playground/index.tsx
 msgid "The playground was built using the {nounsProtocolLink}. NounBR's traits are determined by the NounBR Seed. The seed was generated using {nounsAssetsLink} and rendered using the {nounsSDKLink}."
-msgstr "O playground foi construído usando o {nounsProtocolLink}. Os Traits do NounBR são determinadas pela Semente NounBR. A semente foi gerada usando {nounsAssetsLink} e renderizada usando {nounsSDKLink}."
+msgstr "O playground foi construído usando o {nounsProtocolLink}. Os Traits do NounBR são determinados pela Semente NounBR. A semente foi gerada usando {nounsAssetsLink} e renderizada usando {nounsSDKLink}."
 
 #: src/components/Documentation/index.tsx
 msgid "The proposal veto right was initially envisioned as a temporary solution to the problem of ‘51% attacks’ on the NounsBR DAO treasury. While Nounders initially believed that a healthy distribution of NounsBR would be sufficient protection for the DAO, a more complete understanding of the incentives and risks has led to general consensus within the Nounders, the NounsBR Foundation, and the wider community that a more robust game-theoretic solution should be implemented before the right is removed."
