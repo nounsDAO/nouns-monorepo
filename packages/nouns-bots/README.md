@@ -1,6 +1,9 @@
 # @nouns/bots
 
-A bot that monitors for changes in Noun auction state and notifies everyone via Twitter and Discord.
+A bot that monitors for changes in Public Noun auction state and notifies everyone via Twitter and Discord.
+
+## Environmental variables setup
+Copy .env_example to .env and update vairables
 
 ## Install dependencies
 
