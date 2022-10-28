@@ -11,3 +11,4 @@ dist
 *.log
 *.out
 packages/nouns-bots/docker-compose.yaml
+yarn.lock

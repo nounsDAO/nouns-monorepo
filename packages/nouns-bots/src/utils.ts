@@ -37,7 +37,7 @@ export function formatAuctionStartedTweetText(auctionId: number) {
   return `＊Bleep Bloop Blop＊
         
  An auction has started for Public Noun #${auctionId}
- Learn more at https://publicnouns.wtf`;
+ Learn more at https://publicnouns.wtf/noun/$auctionId`;
 }
 
 /**
@@ -56,7 +56,7 @@ export async function formatBidMessageText(id: number, bid: Bid) {
  * @returns The auction ending soon text
  */
 export function getAuctionEndingSoonTweetText() {
-  return `This auction is ending soon! Bid now at https://publicnouns.wtf`;
+  return `This auction is ending soon! Bid now at https://publicnouns.wtf/noun/$auctionId`;
 }
 
 export function formatNewGovernanceProposalText(proposal: Proposal) {
