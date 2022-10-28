@@ -24,7 +24,7 @@ export class DiscordAuctionLifecycleHandler implements IAuctionLifecycleHandler 
       const message = new Discord.MessageEmbed()
         .setTitle(`New Auction Discovered`)
         .setDescription(`An auction has started for Public Noun #${auctionId}`)
-        .setURL('https://publicnouns.wtf')
+        .setURL('https://publicnouns.wtf/noun/${auctionId}')
         .addField('Public Noun ID', auctionId, true)
         .attachFiles([attachment])
         .setImage(`attachment://${attachmentName}`)
@@ -43,7 +43,7 @@ export class DiscordAuctionLifecycleHandler implements IAuctionLifecycleHandler 
   async handleNewBid(auctionId: number, bid: Bid) {
     const message = new Discord.MessageEmbed()
       .setTitle(`New Bid Placed`)
-      .setURL('https://publicnouns.wtf')
+      .setURL('https://publicnouns.wtf/noun/${auctionId}')
       .setDescription(await formatBidMessageText(auctionId, bid))
       .setTimestamp();
       console.log(message);
