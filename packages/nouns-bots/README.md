@@ -5,6 +5,11 @@ A bot that monitors for changes in Public Noun auction state and notifies everyo
 ## Environmental variables setup
 Copy .env_example to .env and update vairables
 
+## Docker setup
+Copy docker-compose_yaml_example to docker-compose.yaml and update. Don't forget to set a secure password in both .env and docker-compose.yaml
+
+Block public connections to Redis port 6379
+
 ## Install dependencies
 
 ```sh
