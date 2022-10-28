@@ -26,6 +26,10 @@ docker-compose up -d
 
 ```sh
 yarn start
+(nohup yarn start&) 
+```
+To run detached from console:
 
-To run detached from console: (nohup yarn start&) 
+```
+(nohup yarn start&) 
 ```
