@@ -9,3 +9,5 @@ dist
 .DS_Store
 *.tsbuildinfo
 *.log
+*.out
+packages/nouns-bots/docker-compose.yaml

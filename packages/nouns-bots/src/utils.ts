@@ -36,8 +36,8 @@ export async function resolveEnsOrFormatAddress(address: string) {
 export function formatAuctionStartedTweetText(auctionId: number) {
   return `＊Bleep Bloop Blop＊
         
- An auction has started for Noun #${auctionId}
- Learn more at https://nouns.wtf`;
+ An auction has started for Public Noun #${auctionId}
+ Learn more at https://publicnouns.wtf`;
 }
 
 /**
@@ -48,7 +48,7 @@ export function formatAuctionStartedTweetText(auctionId: number) {
  */
 export async function formatBidMessageText(id: number, bid: Bid) {
   const bidder = await resolveEnsOrFormatAddress(bid.bidder.id);
-  return `Noun ${id} has received a bid of Ξ${ethers.utils.formatEther(bid.amount)} from ${bidder}`;
+  return `Public Noun ${id} has received a bid of Ξ${ethers.utils.formatEther(bid.amount)} from ${bidder}`;
 }
 
 /**
@@ -56,23 +56,23 @@ export async function formatBidMessageText(id: number, bid: Bid) {
  * @returns The auction ending soon text
  */
 export function getAuctionEndingSoonTweetText() {
-  return `This auction is ending soon! Bid now at https://nouns.wtf`;
+  return `This auction is ending soon! Bid now at https://publicnouns.wtf`;
 }
 
 export function formatNewGovernanceProposalText(proposal: Proposal) {
-  return `A new NounsDAO proposal (#${proposal.id}) has been created: ${extractProposalTitle(
+  return `A new Public NounsDAO proposal (#${proposal.id}) has been created: ${extractProposalTitle(
     proposal,
   )}`;
 }
 
 export function formatUpdatedGovernanceProposalStatusText(proposal: Proposal) {
-  return `Nouns DAO proposal #${proposal.id} (${extractProposalTitle(
+  return `Public Nouns DAO proposal #${proposal.id} (${extractProposalTitle(
     proposal,
   )}) has changed to status: ${proposal.status.toLocaleLowerCase()}`;
 }
 
 export function formatProposalAtRiskOfExpiryText(proposal: Proposal) {
-  return `Nouns DAO proposal #${proposal.id} (${extractProposalTitle(
+  return `Public Nouns DAO proposal #${proposal.id} (${extractProposalTitle(
     proposal,
   )}) expires in less than two days. Please execute it immediately!`;
 }

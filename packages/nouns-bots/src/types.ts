@@ -23,6 +23,11 @@ export interface AuctionBids {
   bids: Bid[];
 }
 
+export interface UnsettledAuction {
+  id:	number;
+  bidder:	number;
+}
+
 export interface TokenMetadata {
   name: string;
   description: string;

@@ -1,6 +1,6 @@
 import { buildCounterName } from './utils';
 import { internalDiscordWebhook, incrementCounter, publicDiscordWebhook } from './clients';
-import { getAllProposals, getLastAuctionBids } from './subgraph';
+import { getAllProposals, getLastAuctionBids, getUnsettledAuction } from './subgraph';
 import {
   getAuctionCache,
   getAuctionEndingSoonCache,
@@ -45,10 +45,30 @@ async function setupAuction() {
 /**
  * Process the last auction, update cache and push socials if new auction or respective bid is discovered
  */
-async function processAuctionTick() {
+
+async function setupRedis () {
+
+  console.log(`Setting up Redis Cache...`);
   const cachedAuctionId = await getAuctionCache();
+	
+  const unsettledAuctions = await getUnsettledAuction();
+  const unsettledAuction = unsettledAuctions.id;
+  console.log(`Found unsettled auction ID: ${unsettledAuction}`);
+
+  await updateAuctionCache(unsettledAuction);
+  console.log(`Updated cache to reflect unsettled auction ID: ${unsettledAuction}`);
+  }
+
+
+
+async function processAuctionTick() {
+
+  const cachedAuctionId = await getAuctionCache();
+  console.log(`cachedAuctionId: ${cachedAuctionId}`);
   const cachedBidId = await getBidCache();
+  console.log(`cachedBidId: ${cachedBidId}`);
   const cachedAuctionEndingSoon = await getAuctionEndingSoonCache();
+
   const lastAuctionBids = await getLastAuctionBids();
   const lastAuctionId = lastAuctionBids.id;
   console.log(
@@ -57,19 +77,25 @@ async function processAuctionTick() {
 
   // check if new auction discovered
   if (cachedAuctionId < lastAuctionId) {
-    await incrementCounter(buildCounterName(`auctions_discovered`));
+    console.log(`Checking for new auction...`);
+  /**  await incrementCounter(buildCounterName(`auctions_discovered`)); **/
     await updateAuctionCache(lastAuctionId);
-    await Promise.all(auctionLifecycleHandlers.map(h => h.handleNewAuction(lastAuctionId)));
-    await incrementCounter(buildCounterName('auction_cache_updates'));
+    await Promise.all(auctionLifecycleHandlers.map(h => h.handleNewAuction(lastAuctionId)))
+    .catch(console.log);
+   /** await incrementCounter(buildCounterName('auction_cache_updates'));**/
   }
-  await incrementCounter(buildCounterName('auction_process_last_auction'));
+ /** await incrementCounter(buildCounterName('auction_process_last_auction')); **/
+
 
   // check if new bid discovered
   if (lastAuctionBids.bids.length > 0 && cachedBidId != lastAuctionBids.bids[0].id) {
+    console.log(`Checking for new bids...`);
     const bid = lastAuctionBids.bids[0];
     await updateBidCache(bid.id);
-    await Promise.all(auctionLifecycleHandlers.map(h => h.handleNewBid(lastAuctionId, bid)));
+    await Promise.all(auctionLifecycleHandlers.map(h => h.handleNewBid(lastAuctionId, bid))) 
+    .catch(console.log);
   }
+
 
   // check if auction ending soon (within 20 min)
   const currentTimestamp = ~~(Date.now() / 1000); // second timestamp utc
@@ -79,7 +105,7 @@ async function processAuctionTick() {
     await updateAuctionEndingSoonCache(lastAuctionId);
     await Promise.all(
       auctionLifecycleHandlers.map(h => h.handleAuctionEndingSoon?.(lastAuctionId)),
-    );
+    ) .catch(console.log);
   }
 }
 
@@ -90,6 +116,7 @@ async function setupGovernance() {
   const proposals = await getAllProposals();
   await Promise.all(proposals.map(p => updateProposalCache(p)));
 }
+
 
 async function processGovernanceTick() {
   const proposals = await getAllProposals();
@@ -127,7 +154,10 @@ async function processGovernanceTick() {
   }, proposals);
 }
 
+
+setupRedis();
 setInterval(async () => processAuctionTick(), 30000);
-setInterval(async () => processGovernanceTick(), 60000);
 setupAuction().then(() => 'setupAuction');
+
+setInterval(async () => processGovernanceTick(), 60000);
 setupGovernance().then(() => 'setupGovernance');

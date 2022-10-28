@@ -1,6 +1,6 @@
 import { request, gql } from 'graphql-request';
 import { config } from './config';
-import { AuctionBids, Proposal, ProposalSubgraphResponse } from './types';
+import { UnsettledAuction, AuctionBids, Proposal, ProposalSubgraphResponse } from './types';
 import { parseProposalSubgraphResponse } from './utils/proposals';
 
 /**
@@ -28,6 +28,36 @@ export async function getLastAuctionBids(): Promise<AuctionBids> {
   );
   return res.auctions[0];
 }
+
+
+/**
+ * Query the subgraph and returni id of unsettled auction.
+ * @returns id of unsettled auction
+ */
+
+export async function getUnsettledAuction(): Promise<UnsettledAuction> {
+  const res = await request<{ auctions: UnsettledAuction[] }>(
+    config.nounsSubgraph,
+    gql`
+    query {
+  	auctions(where: {settled: false}) {
+    		id
+    			bidder {
+      			  id
+    			}
+  		}
+	}
+    `,
+  );
+  return res.auctions[0];
+}
+
+
+
+
+
+
+
 
 /**
  * Query the subgraph and return all proposals and votes
