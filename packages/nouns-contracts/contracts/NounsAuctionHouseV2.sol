@@ -277,16 +277,41 @@ contract NounsAuctionHouseV2 is
         return success;
     }
 
+    /**
+     * @notice Initialize the price oracle, setting its cardinality to one.
+     * Cardinality is the the number past prices to store. For the oracle to store more than one price
+     * call `growPriceHistory` with the new number of auctions the oracle should store.
+     * @dev This function can only be called by `owner`.
+     */
     function initializeOracle() external onlyOwner {
         oracle.initialize();
     }
 
+    /**
+     * @notice Increase the price oracle cardinality, i.e. how many past auction prices it stores.
+     * The caller of this function chooses to spend gas to warm up the new storage slots, so that
+     * writing price history upon auction settlement will cost minimal gas.
+     * In other words, the higher the value of `newCardinality`, the more gas calling this function costs.
+     * @param newCardinality the new total number of price history slots the oracle can store.
+     */
     function growPriceHistory(uint32 newCardinality) external {
         (uint32 current, uint32 next) = oracle.grow(newCardinality);
 
         emit PriceHistoryGrown(current, next);
     }
 
+    /**
+     * @notice Get past auction prices, up to `oracle.cardinality` observations.
+     * There are times when cardinality is increased and not yet fully used, when a user might request more
+     * observations than what's stored; in such cases users will get the maximum number of observations the
+     * oracle has to offer.
+     * For example, say cardinality was just increased from 3 to 10, a user can then ask for 10 observations.
+     * Since the oracle only has 3 prices stored, the user will get 3 observations.
+     * @dev Reverts with a `AuctionCountOutOfBounds` error if `auctionCount` is greater than `oracle.cardinality`.
+     * @param auctionCount The number of price observations to get.
+     * @return observations An array of type `Noracle.Observation`, where each Observation includes a timestamp,
+     * the Noun ID of that auction, the winning bid amount, and the winner's addreess.
+     */
     function prices(uint32 auctionCount) external view returns (Noracle.Observation[] memory observations) {
         return oracle.observe(auctionCount);
     }
