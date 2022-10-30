@@ -25,4 +25,5 @@ export const config = {
   pinataEnabled: process.env.PINATA_ENABLED === 'true',
   pinataApiKey: process.env.PINATA_API_KEY ?? '',
   pinataApiSecretKey: process.env.PINATA_API_SECRET_KEY ?? '',
+  publicURL: process.env.PUBLIC_URL ?? '',
 };
