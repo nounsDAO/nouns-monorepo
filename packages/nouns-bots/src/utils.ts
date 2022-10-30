@@ -37,7 +37,7 @@ export function formatAuctionStartedTweetText(auctionId: number) {
   return `＊Bleep Bloop Blop＊
         
  An auction has started for Public Noun #${auctionId}
- Learn more at https://publicnouns.wtf/noun/$auctionId`;
+ Learn more at https://publicnouns.wtf/vote/noun/\+${auctionId}`;
 }
 
 /**
