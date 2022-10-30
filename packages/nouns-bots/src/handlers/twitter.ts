@@ -54,7 +54,7 @@ export class TwitterAuctionLifecycleHandler implements IAuctionLifecycleHandler 
       console.error(`handleAuctionEndingSoon no reply tweet id exists for auction ${auctionId}`);
       return;
     }
-    const tweet = await twitter.v1.reply(getAuctionEndingSoonTweetText(), tweetReplyId);
+    const tweet = await twitter.v1.reply(getAuctionEndingSoonTweetText(auctionId), tweetReplyId);
     await updateAuctionReplyTweetId(tweet.id_str);
     console.log(`processed twitter auction ending soon update for auction ${auctionId}`);
   }

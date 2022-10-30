@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import sharp from 'sharp';
 import { isError, tryF } from 'ts-try';
-import { nounsTokenContract } from './clients';
+import { nounsTokenContract, publicURL, publicTitle } from './clients';
 import { Bid, Proposal, TokenMetadata, Vote, VoteDirection } from './types';
 import { extractProposalTitle } from './utils/proposals';
 
@@ -34,14 +34,9 @@ export async function resolveEnsOrFormatAddress(address: string) {
  * @returns Text to be used in tweet when auction starts.
  */
 export function formatAuctionStartedTweetText(auctionId: number) {
-  return `＊Bleep Bloop Blop＊
-        
- An auction has started for Public Noun #${auctionId}
-<<<<<<< HEAD
- Learn more at https://publicnouns.wtf/vote/noun/\+${auctionId}`;
-=======
- Learn more at "https://publicnouns.wtf/vote/noun/${auctionId}"`;
->>>>>>> 1f98e260b07275e72fc4acc6af9d98f19e335fb1
+  return `*Bleep Bloop Blop＊
+An auction has started for ${publicTitle} #${auctionId}
+Learn more at ${publicURL}noun/${auctionId}`;        
 }
 
 /**
@@ -52,31 +47,31 @@ export function formatAuctionStartedTweetText(auctionId: number) {
  */
 export async function formatBidMessageText(id: number, bid: Bid) {
   const bidder = await resolveEnsOrFormatAddress(bid.bidder.id);
-  return `Public Noun ${id} has received a bid of Ξ${ethers.utils.formatEther(bid.amount)} from ${bidder}`;
+  return `${publicTitle} ${id} has received a bid of Ξ${ethers.utils.formatEther(bid.amount)} from ${bidder}`;
 }
 
 /**
  * Get the tweet text for an auction ending soon.
  * @returns The auction ending soon text
  */
-export function getAuctionEndingSoonTweetText() {
-  return `This auction is ending soon! Bid now at https://publicnouns.wtf/noun/$auctionId`;
+export function getAuctionEndingSoonTweetText(auctionId: number) {
+  return `This ${publicTitle} auction is ending soon! Bid now at ${publicURL}noun/${auctionId}`;
 }
 
 export function formatNewGovernanceProposalText(proposal: Proposal) {
-  return `A new Public NounsDAO proposal (#${proposal.id}) has been created: ${extractProposalTitle(
+  return `A new ${publicTitle} DAO proposal (#${proposal.id}) has been created: ${extractProposalTitle(
     proposal,
   )}`;
 }
 
 export function formatUpdatedGovernanceProposalStatusText(proposal: Proposal) {
-  return `Public Nouns DAO proposal #${proposal.id} (${extractProposalTitle(
+  return `${publicTitle} DAO proposal #${proposal.id} (${extractProposalTitle(
     proposal,
   )}) has changed to status: ${proposal.status.toLocaleLowerCase()}`;
 }
 
 export function formatProposalAtRiskOfExpiryText(proposal: Proposal) {
-  return `Public Nouns DAO proposal #${proposal.id} (${extractProposalTitle(
+  return `${publicTitle} DAO proposal #${proposal.id} (${extractProposalTitle(
     proposal,
   )}) expires in less than two days. Please execute it immediately!`;
 }
