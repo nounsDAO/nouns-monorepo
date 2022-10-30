@@ -26,4 +26,5 @@ export const config = {
   pinataApiKey: process.env.PINATA_API_KEY ?? '',
   pinataApiSecretKey: process.env.PINATA_API_SECRET_KEY ?? '',
   publicURL: process.env.PUBLIC_URL ?? '',
+  publicTitle: process.env.PUBLIC_TITLE ?? '',
 };
