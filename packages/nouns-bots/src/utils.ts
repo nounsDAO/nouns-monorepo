@@ -34,7 +34,6 @@ export async function resolveEnsOrFormatAddress(address: string) {
  * @returns Text to be used in tweet when auction starts.
  */
 export function formatAuctionStartedTweetText(auctionId: number) {
-
   return `*Bleep Bloop Blop＊
 An auction has started for ${publicTitle} #${auctionId}
 Learn more at ${publicURL}noun/${auctionId}`;        
