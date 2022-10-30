@@ -63,3 +63,6 @@ export const publicDiscordWebhook = new Discord.WebhookClient(
  */
 export const incrementCounter = (counterName: string) =>
   axios.post(`https://simple-counter.nouns.tools/count/inc/${counterName}`);
+	  //
+//* export const publicNounUrl = publicUrl + "/noun/"; **/
+
