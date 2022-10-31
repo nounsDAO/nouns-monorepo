@@ -115,13 +115,11 @@ contract NounsAuctionHouseV2 is
     function createBid(uint256 nounId) external payable override {
         INounsAuctionHouse.AuctionV2 memory _auction = auction;
 
-        require(_auction.nounId == nounId, 'Noun not up for auction');
-        require(block.timestamp < _auction.endTime, 'Auction expired');
-        require(msg.value >= reservePrice, 'Must send at least reservePrice');
-        require(
-            msg.value >= _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100),
-            'Must send more than last bid by minBidIncrementPercentage amount'
-        );
+        if (_auction.nounId != nounId) revert NounNotUpForAuction();
+        if (block.timestamp >= _auction.endTime) revert AuctionExpired();
+        if (msg.value < reservePrice) revert MustSendAtLeastReservePrice();
+        if (msg.value < _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100))
+            revert BidDifferenceMustBeGreaterThanMinBidIncrement();
 
         auction.amount = uint128(msg.value);
         auction.bidder = payable(msg.sender);
@@ -232,9 +230,9 @@ contract NounsAuctionHouseV2 is
     function _settleAuction() internal {
         INounsAuctionHouse.AuctionV2 memory _auction = auction;
 
-        require(_auction.startTime != 0, "Auction hasn't begun");
-        require(!_auction.settled, 'Auction has already been settled');
-        require(block.timestamp >= _auction.endTime, "Auction hasn't completed");
+        if (_auction.startTime == 0) revert AuctionHasntBegun();
+        if (_auction.settled) revert AuctionAlreadySettled();
+        if (block.timestamp < _auction.endTime) revert AuctionNotDone();
 
         auction.settled = true;
 

@@ -64,6 +64,20 @@ interface INounsAuctionHouse {
 
     event PriceHistoryGrown(uint32 current, uint32 next);
 
+    error NounNotUpForAuction();
+
+    error AuctionExpired();
+
+    error AuctionHasntBegun();
+
+    error AuctionAlreadySettled();
+
+    error AuctionNotDone();
+
+    error MustSendAtLeastReservePrice();
+
+    error BidDifferenceMustBeGreaterThanMinBidIncrement();
+
     function settleAuction() external;
 
     function settleCurrentAndCreateNewAuction() external;
