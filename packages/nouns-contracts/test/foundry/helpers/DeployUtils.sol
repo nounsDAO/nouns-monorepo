@@ -18,6 +18,7 @@ import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionH
 import { NounsAuctionHouseProxyAdmin } from '../../../contracts/proxies/NounsAuctionHouseProxyAdmin.sol';
 import { NounsAuctionHouse } from '../../../contracts/NounsAuctionHouse.sol';
 import { NounsAuctionHouseV2 } from '../../../contracts/NounsAuctionHouseV2.sol';
+import { NounsAuctionHousePreV2Migration } from '../../../contracts/NounsAuctionHousePreV2Migration.sol';
 import { WETH } from '../../../contracts/test/WETH.sol';
 
 abstract contract DeployUtils is Test, DescriptorHelpers {
@@ -63,13 +64,21 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
     function _upgradeAuctionHouse(
         address owner,
         NounsAuctionHouseProxyAdmin proxyAdmin,
-        NounsAuctionHouseProxy proxy,
-        address newLogic
+        NounsAuctionHouseProxy proxy
     ) internal {
+        NounsAuctionHouseV2 newLogic = new NounsAuctionHouseV2();
+        NounsAuctionHousePreV2Migration migratorLogic = new NounsAuctionHousePreV2Migration();
+
         vm.startPrank(owner);
 
-        proxyAdmin.upgrade(proxy, newLogic);
+        // not using upgradeAndCall because the call must come from the auction house owner
+        // which is owner, not the proxy admin
 
+        proxyAdmin.upgrade(proxy, address(migratorLogic));
+        NounsAuctionHousePreV2Migration migrator = NounsAuctionHousePreV2Migration(address(proxy));
+        migrator.migrate();
+
+        proxyAdmin.upgrade(proxy, address(newLogic));
         NounsAuctionHouseV2 auctionV2 = NounsAuctionHouseV2(address(proxy));
         auctionV2.initializeOracle();
 

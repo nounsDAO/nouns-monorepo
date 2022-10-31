@@ -5,7 +5,10 @@ import 'forge-std/Test.sol';
 import { DeployUtils } from './helpers/DeployUtils.sol';
 import { NounsAuctionHouseProxy } from '../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { NounsAuctionHouseProxyAdmin } from '../../contracts/proxies/NounsAuctionHouseProxyAdmin.sol';
+import { NounsAuctionHouse } from '../../contracts/NounsAuctionHouse.sol';
+import { INounsAuctionHouse } from '../../contracts/interfaces/INounsAuctionHouse.sol';
 import { NounsAuctionHouseV2 } from '../../contracts/NounsAuctionHouseV2.sol';
+import { NounsAuctionHousePreV2Migration } from '../../contracts/NounsAuctionHousePreV2Migration.sol';
 import { Noracle } from '../../contracts/libs/Noracle.sol';
 import { BidderWithGasGriefing } from './helpers/BidderWithGasGriefing.sol';
 
@@ -25,8 +28,7 @@ contract NounsAuctionHouseV2Test is Test, DeployUtils {
             minter
         );
 
-        NounsAuctionHouseV2 auctionV2 = new NounsAuctionHouseV2();
-        _upgradeAuctionHouse(owner, proxyAdmin, auctionProxy, address(auctionV2));
+        _upgradeAuctionHouse(owner, proxyAdmin, auctionProxy);
 
         auction = NounsAuctionHouseV2(address(auctionProxy));
 
@@ -187,6 +189,44 @@ contract NounsAuctionHouseV2Test is Test, DeployUtils {
         // Before the transfer with assembly fix this diff was greater
         // closer to 50K
         assertLt(gasDiffWithGriefing - gasDiffNoGriefing, 10_000);
+    }
+
+    function test_V2Migration_works() public {
+        (NounsAuctionHouseProxy auctionProxy, NounsAuctionHouseProxyAdmin proxyAdmin) = _deployAuctionHouseV1AndToken(
+            owner,
+            noundersDAO,
+            minter
+        );
+        NounsAuctionHouse auctionV1 = NounsAuctionHouse(address(auctionProxy));
+        vm.prank(owner);
+        auctionV1.unpause();
+        vm.roll(block.number + 1);
+        (uint256 nounId, , uint256 startTime, uint256 endTime, , ) = auctionV1.auction();
+
+        address payable bidder = payable(address(0x142));
+        uint256 amount = 142 ether;
+        vm.deal(bidder, amount);
+        vm.prank(bidder);
+        auctionV1.createBid{ value: amount }(nounId);
+
+        _upgradeAuctionHouse(owner, proxyAdmin, auctionProxy);
+
+        NounsAuctionHouseV2 auctionV2 = NounsAuctionHouseV2(address(auctionProxy));
+        (
+            uint128 nounIdV2,
+            uint128 amountV2,
+            uint40 startTimeV2,
+            uint40 endTimeV2,
+            address payable bidderV2,
+            bool settledV2
+        ) = auctionV2.auction();
+
+        assertEq(nounIdV2, nounId);
+        assertEq(amountV2, amount);
+        assertEq(startTimeV2, startTime);
+        assertEq(endTimeV2, endTime);
+        assertEq(bidderV2, bidder);
+        assertEq(settledV2, false);
     }
 
     function bidAndWinCurrentAuction(address bidder, uint256 bid) internal returns (uint256) {

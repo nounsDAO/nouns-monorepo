@@ -60,7 +60,7 @@ contract NounsAuctionHouseV2 is
     uint256 public duration;
 
     // The active auction
-    INounsAuctionHouse.Auction public auction;
+    INounsAuctionHouse.AuctionV2 public auction;
 
     // The Nouns price feed state
     Noracle.NoracleState public oracle;
@@ -113,7 +113,7 @@ contract NounsAuctionHouseV2 is
      * @dev This contract only accepts payment in ETH.
      */
     function createBid(uint256 nounId) external payable override {
-        INounsAuctionHouse.Auction memory _auction = auction;
+        INounsAuctionHouse.AuctionV2 memory _auction = auction;
 
         require(_auction.nounId == nounId, 'Noun not up for auction');
         require(block.timestamp < _auction.endTime, 'Auction expired');
@@ -123,13 +123,13 @@ contract NounsAuctionHouseV2 is
             'Must send more than last bid by minBidIncrementPercentage amount'
         );
 
-        auction.amount = msg.value;
+        auction.amount = uint128(msg.value);
         auction.bidder = payable(msg.sender);
 
         // Extend the auction if the bid was received within `timeBuffer` of the auction end time
         bool extended = _auction.endTime - block.timestamp < timeBuffer;
         if (extended) {
-            auction.endTime = _auction.endTime = block.timestamp + timeBuffer;
+            auction.endTime = _auction.endTime = uint40(block.timestamp + timeBuffer);
         }
 
         emit AuctionBid(_auction.nounId, msg.sender, msg.value, extended);
@@ -207,11 +207,11 @@ contract NounsAuctionHouseV2 is
      */
     function _createAuction() internal {
         try nouns.mint() returns (uint256 nounId) {
-            uint256 startTime = block.timestamp;
-            uint256 endTime = startTime + duration;
+            uint40 startTime = uint40(block.timestamp);
+            uint40 endTime = startTime + uint40(duration);
 
-            auction = Auction({
-                nounId: nounId,
+            auction = AuctionV2({
+                nounId: uint128(nounId),
                 amount: 0,
                 startTime: startTime,
                 endTime: endTime,
@@ -230,7 +230,7 @@ contract NounsAuctionHouseV2 is
      * @dev If there are no bids, the Noun is burned.
      */
     function _settleAuction() internal {
-        INounsAuctionHouse.Auction memory _auction = auction;
+        INounsAuctionHouse.AuctionV2 memory _auction = auction;
 
         require(_auction.startTime != 0, "Auction hasn't begun");
         require(!_auction.settled, 'Auction has already been settled');
