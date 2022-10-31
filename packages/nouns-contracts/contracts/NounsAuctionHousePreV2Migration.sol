@@ -21,7 +21,6 @@ import { PausableUpgradeable } from '@openzeppelin/contracts-upgradeable/securit
 import { ReentrancyGuardUpgradeable } from '@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol';
 import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
 import { INounsAuctionHouse } from './interfaces/INounsAuctionHouse.sol';
-import 'forge-std/console.sol';
 
 contract NounsAuctionHousePreV2Migration is PausableUpgradeable, ReentrancyGuardUpgradeable, OwnableUpgradeable {
     // See NounsAuctionHouse for docs on these state vars
