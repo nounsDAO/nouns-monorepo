@@ -144,6 +144,25 @@ contract NounsAuctionHouseV2Test is Test, DeployUtils {
         auction.growPriceHistory(5);
     }
 
+    function test_createBid_refundsPreviousBidder() public {
+        (uint256 nounId, , , , , ) = auction.auction();
+        address bidder1 = address(0x4444);
+        address bidder2 = address(0x5555);
+
+        vm.deal(bidder1, 1.1 ether);
+        vm.prank(bidder1);
+        auction.createBid{ value: 1.1 ether }(nounId);
+
+        assertEq(bidder1.balance, 0);
+
+        vm.deal(bidder2, 2.2 ether);
+        vm.prank(bidder2);
+        auction.createBid{ value: 2.2 ether }(nounId);
+
+        assertEq(bidder1.balance, 1.1 ether);
+        assertEq(bidder2.balance, 0);
+    }
+
     function bidAndWinCurrentAuction(address bidder, uint256 bid) internal returns (uint256) {
         (uint256 nounId, , , uint256 endTime, , ) = auction.auction();
         vm.deal(bidder, bid);

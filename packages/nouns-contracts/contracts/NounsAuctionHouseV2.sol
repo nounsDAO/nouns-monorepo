@@ -123,13 +123,6 @@ contract NounsAuctionHouseV2 is
             'Must send more than last bid by minBidIncrementPercentage amount'
         );
 
-        address payable lastBidder = _auction.bidder;
-
-        // Refund the last bidder, if applicable
-        if (lastBidder != address(0)) {
-            _safeTransferETHWithFallback(lastBidder, _auction.amount);
-        }
-
         auction.amount = msg.value;
         auction.bidder = payable(msg.sender);
 
@@ -143,6 +136,13 @@ contract NounsAuctionHouseV2 is
 
         if (extended) {
             emit AuctionExtended(_auction.nounId, _auction.endTime);
+        }
+
+        address payable lastBidder = _auction.bidder;
+
+        // Refund the last bidder, if applicable
+        if (lastBidder != address(0)) {
+            _safeTransferETHWithFallback(lastBidder, _auction.amount);
         }
     }
 
