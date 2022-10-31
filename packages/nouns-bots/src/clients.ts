@@ -7,6 +7,12 @@ import Discord from 'discord.js';
 import axios from 'axios';
 
 /**
+ * URL 
+ */
+export const publicURL = config.publicURL;
+export const publicTitle = config.publicTitle;
+
+/**
  * Redis Client
  */
 export const redis = new Redis(config.redisPort, config.redisHost, {
