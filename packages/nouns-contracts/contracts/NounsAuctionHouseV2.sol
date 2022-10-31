@@ -273,7 +273,10 @@ contract NounsAuctionHouseV2 is
      * @dev This function only forwards 30,000 gas to the callee.
      */
     function _safeTransferETH(address to, uint256 value) internal returns (bool) {
-        (bool success, ) = to.call{ value: value, gas: 30_000 }(new bytes(0));
+        bool success;
+        assembly {
+            success := call(30000, to, value, 0, 0, 0, 0)
+        }
         return success;
     }
 

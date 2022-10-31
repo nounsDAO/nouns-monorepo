@@ -7,6 +7,7 @@ import { NounsAuctionHouseProxy } from '../../contracts/proxies/NounsAuctionHous
 import { NounsAuctionHouseProxyAdmin } from '../../contracts/proxies/NounsAuctionHouseProxyAdmin.sol';
 import { NounsAuctionHouseV2 } from '../../contracts/NounsAuctionHouseV2.sol';
 import { Noracle } from '../../contracts/libs/Noracle.sol';
+import { BidderWithGasGriefing } from './helpers/BidderWithGasGriefing.sol';
 
 contract NounsAuctionHouseV2Test is Test, DeployUtils {
     event PriceHistoryGrown(uint32 current, uint32 next);
@@ -161,6 +162,31 @@ contract NounsAuctionHouseV2Test is Test, DeployUtils {
 
         assertEq(bidder1.balance, 1.1 ether);
         assertEq(bidder2.balance, 0);
+    }
+
+    function test_createBid_preventsGasGriefingUponRefunding() public {
+        BidderWithGasGriefing badBidder = new BidderWithGasGriefing();
+        (uint256 nounId, , , , , ) = auction.auction();
+
+        badBidder.bid{ value: 1 ether }(auction, nounId);
+
+        address bidder = address(0x4444);
+        vm.deal(bidder, 1.2 ether);
+        vm.prank(bidder);
+        uint256 gasBefore = gasleft();
+        auction.createBid{ value: 1.2 ether }(nounId);
+        uint256 gasDiffWithGriefing = gasBefore - gasleft();
+
+        address bidder2 = address(0x5555);
+        vm.deal(bidder2, 2.2 ether);
+        vm.prank(bidder2);
+        gasBefore = gasleft();
+        auction.createBid{ value: 2.2 ether }(nounId);
+        uint256 gasDiffNoGriefing = gasBefore - gasleft();
+
+        // Before the transfer with assembly fix this diff was greater
+        // closer to 50K
+        assertLt(gasDiffWithGriefing - gasDiffNoGriefing, 10_000);
     }
 
     function bidAndWinCurrentAuction(address bidder, uint256 bid) internal returns (uint256) {
