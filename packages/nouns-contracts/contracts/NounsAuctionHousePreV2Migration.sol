@@ -34,6 +34,9 @@ contract NounsAuctionHousePreV2Migration is PausableUpgradeable, ReentrancyGuard
 
     function migrate() public onlyOwner {
         INounsAuctionHouse.Auction memory _auction = auction;
+
+        auction = INounsAuctionHouse.Auction(0, 0, 0, 0, payable(address(0)), false);
+
         INounsAuctionHouse.AuctionV2 storage auctionV2;
         assembly {
             auctionV2.slot := auction.slot
