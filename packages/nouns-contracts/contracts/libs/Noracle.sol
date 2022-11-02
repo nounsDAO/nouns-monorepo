@@ -176,11 +176,9 @@ library Noracle {
         }
 
         if (auctionCount > observationsCount) {
-            Observation[] memory trimmedObservations = new Observation[](observationsCount);
-            for (uint32 i = 0; i < observationsCount; ++i) {
-                trimmedObservations[i] = observations[i];
+            assembly {
+                mstore(observations, observationsCount)
             }
-            observations = trimmedObservations;
         }
     }
 
