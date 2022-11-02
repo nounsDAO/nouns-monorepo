@@ -33,6 +33,21 @@ interface INounsAuctionHouse {
         bool settled;
     }
 
+    struct AuctionV2 {
+        // ID for the Noun (ERC721 token ID)
+        uint128 nounId;
+        // The current highest bid amount
+        uint128 amount;
+        // The time that the auction started
+        uint40 startTime;
+        // The time that the auction is scheduled to end
+        uint40 endTime;
+        // The address of the current highest bid
+        address payable bidder;
+        // Whether or not the auction has been settled
+        bool settled;
+    }
+
     event AuctionCreated(uint256 indexed nounId, uint256 startTime, uint256 endTime);
 
     event AuctionBid(uint256 indexed nounId, address sender, uint256 value, bool extended);
@@ -48,6 +63,20 @@ interface INounsAuctionHouse {
     event AuctionMinBidIncrementPercentageUpdated(uint256 minBidIncrementPercentage);
 
     event PriceHistoryGrown(uint32 current, uint32 next);
+
+    error NounNotUpForAuction();
+
+    error AuctionExpired();
+
+    error AuctionHasntBegun();
+
+    error AuctionAlreadySettled();
+
+    error AuctionNotDone();
+
+    error MustSendAtLeastReservePrice();
+
+    error BidDifferenceMustBeGreaterThanMinBidIncrement();
 
     function settleAuction() external;
 

@@ -60,7 +60,7 @@ contract NounsAuctionHouseV2 is
     uint256 public duration;
 
     // The active auction
-    INounsAuctionHouse.Auction public auction;
+    INounsAuctionHouse.AuctionV2 public auction;
 
     // The Nouns price feed state
     Noracle.NoracleState public oracle;
@@ -95,7 +95,7 @@ contract NounsAuctionHouseV2 is
     /**
      * @notice Settle the current auction, mint a new Noun, and put it up for auction.
      */
-    function settleCurrentAndCreateNewAuction() external override nonReentrant whenNotPaused {
+    function settleCurrentAndCreateNewAuction() external override whenNotPaused {
         _settleAuction();
         _createAuction();
     }
@@ -104,7 +104,7 @@ contract NounsAuctionHouseV2 is
      * @notice Settle the current auction.
      * @dev This function can only be called when the contract is paused.
      */
-    function settleAuction() external override whenPaused nonReentrant {
+    function settleAuction() external override whenPaused {
         _settleAuction();
     }
 
@@ -112,37 +112,33 @@ contract NounsAuctionHouseV2 is
      * @notice Create a bid for a Noun, with a given amount.
      * @dev This contract only accepts payment in ETH.
      */
-    function createBid(uint256 nounId) external payable override nonReentrant {
-        INounsAuctionHouse.Auction memory _auction = auction;
+    function createBid(uint256 nounId) external payable override {
+        INounsAuctionHouse.AuctionV2 memory _auction = auction;
 
-        require(_auction.nounId == nounId, 'Noun not up for auction');
-        require(block.timestamp < _auction.endTime, 'Auction expired');
-        require(msg.value >= reservePrice, 'Must send at least reservePrice');
-        require(
-            msg.value >= _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100),
-            'Must send more than last bid by minBidIncrementPercentage amount'
-        );
+        if (_auction.nounId != nounId) revert NounNotUpForAuction();
+        if (block.timestamp >= _auction.endTime) revert AuctionExpired();
+        if (msg.value < reservePrice) revert MustSendAtLeastReservePrice();
+        if (msg.value < _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100))
+            revert BidDifferenceMustBeGreaterThanMinBidIncrement();
+
+        auction.amount = uint128(msg.value);
+        auction.bidder = payable(msg.sender);
+
+        // Extend the auction if the bid was received within `timeBuffer` of the auction end time
+        bool extended = _auction.endTime - block.timestamp < timeBuffer;
+
+        emit AuctionBid(_auction.nounId, msg.sender, msg.value, extended);
+
+        if (extended) {
+            auction.endTime = _auction.endTime = uint40(block.timestamp + timeBuffer);
+            emit AuctionExtended(_auction.nounId, _auction.endTime);
+        }
 
         address payable lastBidder = _auction.bidder;
 
         // Refund the last bidder, if applicable
         if (lastBidder != address(0)) {
             _safeTransferETHWithFallback(lastBidder, _auction.amount);
-        }
-
-        auction.amount = msg.value;
-        auction.bidder = payable(msg.sender);
-
-        // Extend the auction if the bid was received within `timeBuffer` of the auction end time
-        bool extended = _auction.endTime - block.timestamp < timeBuffer;
-        if (extended) {
-            auction.endTime = _auction.endTime = block.timestamp + timeBuffer;
-        }
-
-        emit AuctionBid(_auction.nounId, msg.sender, msg.value, extended);
-
-        if (extended) {
-            emit AuctionExtended(_auction.nounId, _auction.endTime);
         }
     }
 
@@ -207,11 +203,11 @@ contract NounsAuctionHouseV2 is
      */
     function _createAuction() internal {
         try nouns.mint() returns (uint256 nounId) {
-            uint256 startTime = block.timestamp;
-            uint256 endTime = startTime + duration;
+            uint40 startTime = uint40(block.timestamp);
+            uint40 endTime = startTime + uint40(duration);
 
-            auction = Auction({
-                nounId: nounId,
+            auction = AuctionV2({
+                nounId: uint128(nounId),
                 amount: 0,
                 startTime: startTime,
                 endTime: endTime,
@@ -230,11 +226,11 @@ contract NounsAuctionHouseV2 is
      * @dev If there are no bids, the Noun is burned.
      */
     function _settleAuction() internal {
-        INounsAuctionHouse.Auction memory _auction = auction;
+        INounsAuctionHouse.AuctionV2 memory _auction = auction;
 
-        require(_auction.startTime != 0, "Auction hasn't begun");
-        require(!_auction.settled, 'Auction has already been settled');
-        require(block.timestamp >= _auction.endTime, "Auction hasn't completed");
+        if (_auction.startTime == 0) revert AuctionHasntBegun();
+        if (_auction.settled) revert AuctionAlreadySettled();
+        if (block.timestamp < _auction.endTime) revert AuctionNotDone();
 
         auction.settled = true;
 
@@ -273,7 +269,10 @@ contract NounsAuctionHouseV2 is
      * @dev This function only forwards 30,000 gas to the callee.
      */
     function _safeTransferETH(address to, uint256 value) internal returns (bool) {
-        (bool success, ) = to.call{ value: value, gas: 30_000 }(new bytes(0));
+        bool success;
+        assembly {
+            success := call(30000, to, value, 0, 0, 0, 0)
+        }
         return success;
     }
 
