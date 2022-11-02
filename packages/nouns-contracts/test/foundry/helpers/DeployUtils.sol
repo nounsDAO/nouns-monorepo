@@ -22,6 +22,12 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
     uint256 constant PROPOSAL_THRESHOLD = 1;
     uint256 constant QUORUM_VOTES_BPS = 2000;
 
+    function _deployAndPopulateDescriptor() internal returns (NounsDescriptor) {
+        NounsDescriptor descriptor = new NounsDescriptor();
+        _populateDescriptor(descriptor);
+        return descriptor;
+    }
+
     function _deployAndPopulateV2() internal returns (NounsDescriptorV2) {
         NounsDescriptorV2 descriptorV2 = _deployDescriptorV2();
         _populateDescriptorV2(descriptorV2);

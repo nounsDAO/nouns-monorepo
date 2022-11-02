@@ -4,7 +4,12 @@ import { Interface, parseUnits } from 'ethers/lib/utils';
 import { Contract as EthersContract } from 'ethers';
 import { ContractName } from './types';
 
-type LocalContractName = Exclude<ContractName, 'NounsDAOLogicV1' | 'NounsDAOProxy'> | 'NounsDAOLogicV2' | 'NounsDAOProxyV2' | 'WETH' | 'Multicall2';
+type LocalContractName =
+  | Exclude<ContractName, 'NounsDAOLogicV1' | 'NounsDAOProxy'>
+  | 'NounsDAOLogicV2'
+  | 'NounsDAOProxyV2'
+  | 'WETH'
+  | 'Multicall2';
 
 interface Contract {
   args?: (string | number | (() => string | undefined))[];
