@@ -175,6 +175,7 @@ library Noracle {
         }
 
         if (auctionCount > observationsCount) {
+            // this assembly trims the observations array, getting rid of unused cells
             assembly {
                 mstore(observations, observationsCount)
             }
