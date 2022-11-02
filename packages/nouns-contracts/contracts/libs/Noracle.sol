@@ -155,12 +155,11 @@ library Noracle {
         view
         returns (Observation[] memory observations)
     {
+        uint32 index = self.index;
         uint32 cardinality = self.cardinality;
         if (auctionCount > cardinality) revert AuctionCountOutOfBounds(auctionCount, cardinality);
 
-        uint32 index = self.index;
         observations = new Observation[](auctionCount);
-
         uint32 observationsCount = 0;
         while (observationsCount < auctionCount) {
             uint32 checkIndex = (index + (cardinality - observationsCount)) % cardinality;
