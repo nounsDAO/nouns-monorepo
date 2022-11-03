@@ -172,7 +172,7 @@ const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = p
           setState(x => ({
             ...x,
             abi,
-            amount: parseInt(value),
+            amount: value,
             address,
             function: func,
           }));

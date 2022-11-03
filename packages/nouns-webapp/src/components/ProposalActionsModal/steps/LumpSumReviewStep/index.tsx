@@ -27,7 +27,8 @@ const handleActionAdd = (state: ProposalActionModalState, onActionAdd: (e?: any)
       signature,
       calldata: abi?._encodeParams(abi?.functions[signature]?.inputs, [
         state.address,
-        state.amount,
+        // USDC has 6 decimals so we convert from human readable format to contract input format here
+        Math.round(parseFloat(state.amount ?? '0') * 1_000_000).toString(),
       ]),
     });
   } else {

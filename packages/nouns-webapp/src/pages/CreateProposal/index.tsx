@@ -23,6 +23,9 @@ import { Trans } from '@lingui/macro';
 import clsx from 'clsx';
 import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
 import ProposalActionModal from '../../components/ProposalActionsModal';
+import config from '../../config';
+import tokenBuyerABI from '../../utils/tokenBuyerContractUtils/tokenBuyerABI.json';
+import { Interface } from 'ethers/lib/utils';
 
 const CreateProposalPage = () => {
   const { account } = useEthers();
@@ -57,6 +60,41 @@ const CreateProposalPage = () => {
     },
     [proposalTransactions],
   );
+
+  // Add tokenBuyer top up if a USDC proposal action has been added
+  useEffect(() => {
+    const hasUSDCProposalAction =
+      proposalTransactions.filter(txn => txn.address === config.addresses.payerContract).length > 0;
+    const hasTokenBuyterTopTop =
+      proposalTransactions.filter(txn => txn.address === config.addresses.tokenBuyer).length > 0;
+    if (hasUSDCProposalAction && !hasTokenBuyterTopTop) {
+      const abi = new Interface(tokenBuyerABI);
+      const signature = 'buyETH(uint256)';
+      const TOP_UP_AMT_ETH = 10_000;
+      handleAddProposalAction({
+        address: config.addresses.tokenBuyer ?? '',
+        value: '0',
+        signature,
+        calldata: abi._encodeParams(abi.functions[signature].inputs, [TOP_UP_AMT_ETH]),
+      });
+    }
+
+    if (!hasUSDCProposalAction && hasTokenBuyterTopTop) {
+      const indexOfTokenBuyerTopUp = proposalTransactions
+        .map((txn, index) => {
+          if (txn.address === config.addresses.tokenBuyer) {
+            return index;
+          } else {
+            return -1;
+          }
+        })
+        .filter(n => n >= 0);
+
+      if (indexOfTokenBuyerTopUp.length > 0) {
+        handleRemoveProposalAction(indexOfTokenBuyerTopUp[0]);
+      }
+    }
+  }, [handleAddProposalAction, handleRemoveProposalAction, proposalTransactions]);
 
   const handleTitleInput = useCallback(
     (title: string) => {

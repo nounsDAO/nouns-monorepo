@@ -7,6 +7,7 @@ import { ChainId } from '@usedapp/core';
 interface ExternalContractAddresses {
   lidoToken: string | undefined;
   payerContract: string | undefined;
+  tokenBuyer: string | undefined;
 }
 
 export type ContractAddresses = NounsContractAddresses & ExternalContractAddresses;
@@ -87,18 +88,22 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
   [ChainId.Rinkeby]: {
     lidoToken: '0xF4242f9d78DB7218Ad72Ee3aE14469DBDE8731eD',
     payerContract: undefined,
+    tokenBuyer: undefined,
   },
   [ChainId.Goerli]: {
     lidoToken: '0x2DD6530F136D2B56330792D46aF959D9EA62E276',
     payerContract: undefined,
+    tokenBuyer: undefined,
   },
   [ChainId.Mainnet]: {
     lidoToken: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
-    payerContract: '0x94A63a8391b8d7d188d48994c4564f0946EbA000',
+    payerContract: '0x89AbC50b1Ed7B9B0879433032203a0Bd21B80EB4',
+    tokenBuyer: '0x12d5d5370C3a7F90D1008413736B017032878803',
   },
   [ChainId.Hardhat]: {
     lidoToken: undefined,
     payerContract: undefined,
+    tokenBuyer: undefined,
   },
 };
 

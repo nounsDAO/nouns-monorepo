@@ -26,7 +26,7 @@ export enum ProposalActionType {
 export interface ProposalActionModalState {
   actionType: ProposalActionType;
   address: string;
-  amount?: number;
+  amount?: string;
   lumpSumCurrency?: SupportedCurrency;
   function?: string;
   abi?: Interface;

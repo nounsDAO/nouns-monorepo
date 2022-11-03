@@ -19,12 +19,12 @@ const LumpSumDetailsStep: React.FC<ProposalActionModalStepProps> = props => {
   const [currency, setCurrency] = useState<SupportedCurrency>(
     state.lumpSumCurrency ?? SupportedCurrency.ETH,
   );
-  const [amount, setAmount] = useState<number>(state.amount ?? 0);
+  const [amount, setAmount] = useState<string>(state.amount ?? '0');
   const [address, setAddress] = useState(state.address ?? '');
   const [isValidForNextStage, setIsValidForNextStage] = useState(false);
 
   useEffect(() => {
-    if (utils.isAddress(address) && amount > 0 && !isValidForNextStage) {
+    if (utils.isAddress(address) && parseFloat(amount) > 0 && !isValidForNextStage) {
       setIsValidForNextStage(true);
     }
   }, [amount, address, isValidForNextStage]);
@@ -54,11 +54,10 @@ const LumpSumDetailsStep: React.FC<ProposalActionModalStepProps> = props => {
       <BrandTextEntry
         label={'Amount'}
         value={amount}
-        onChange={e => setAmount(parseInt(e.target.value))}
-        type="number"
-        min="0"
+        onChange={e => setAmount(e.target.value)}
+        type="string"
         placeholder={currency === SupportedCurrency.ETH ? '0 ETH' : '0 USDC'}
-        isInvalid={amount > 0 && new BigNumber(amount).isNaN()}
+        isInvalid={parseFloat(amount) > 0 && new BigNumber(amount).isNaN()}
       />
 
       <BrandTextEntry
