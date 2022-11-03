@@ -21,9 +21,11 @@ const handleActionAdd = (state: ProposalActionModalState, onActionAdd: (e?: any)
   } else if (state.lumpSumCurrency === SupportedCurrency.USDC) {
     const signature = 'sendOrRegisterDebt(address,uint256)';
     const abi = new utils.Interface(payerABI);
+
     onActionAdd({
       address: config.addresses.payerContract,
       value: '0',
+      usdcValue: Math.round(parseFloat(state.amount ?? '0') * 1_000_000),
       signature,
       calldata: abi?._encodeParams(abi?.functions[signature]?.inputs, [
         state.address,

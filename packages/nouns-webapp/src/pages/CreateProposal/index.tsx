@@ -24,8 +24,7 @@ import clsx from 'clsx';
 import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.module.css';
 import ProposalActionModal from '../../components/ProposalActionsModal';
 import config from '../../config';
-import tokenBuyerABI from '../../utils/tokenBuyerContractUtils/tokenBuyerABI.json';
-import { Interface } from 'ethers/lib/utils';
+import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
 
 const CreateProposalPage = () => {
   const { account } = useEthers();
@@ -40,6 +39,13 @@ const CreateProposalPage = () => {
   const [titleValue, setTitleValue] = useState('');
   const [bodyValue, setBodyValue] = useState('');
 
+  const [totalUSDCPayment, setTotalUSDCPayment] = useState<number>(0);
+  const [tokenBuyerTopUpEth, setTokenBuyerTopUpETH] = useState<string>('0');
+  const ethNeeded = useEthNeeded(config.addresses.tokenBuyer ?? '', totalUSDCPayment);
+
+  console.log('ETH NEEDED: ', ethNeeded);
+  console.log('TOKEN USDC PAYMENT AMT: ', totalUSDCPayment);
+
   const handleAddProposalAction = useCallback(
     (transaction: ProposalTransaction) => {
       if (!transaction.address.startsWith('0x')) {
@@ -48,53 +54,68 @@ const CreateProposalPage = () => {
       if (!transaction.calldata.startsWith('0x')) {
         transaction.calldata = `0x${transaction.calldata}`;
       }
+
+      if (transaction.usdcValue) {
+        setTotalUSDCPayment(totalUSDCPayment + transaction.usdcValue);
+      }
+
       setProposalTransactions([...proposalTransactions, transaction]);
       setShowTransactionFormModal(false);
     },
-    [proposalTransactions],
+    [proposalTransactions, totalUSDCPayment],
   );
 
   const handleRemoveProposalAction = useCallback(
     (index: number) => {
+      setTotalUSDCPayment(totalUSDCPayment - (proposalTransactions[index].usdcValue ?? 0));
       setProposalTransactions(proposalTransactions.filter((_, i) => i !== index));
     },
-    [proposalTransactions],
+    [proposalTransactions, totalUSDCPayment],
   );
 
-  // Add tokenBuyer top up if a USDC proposal action has been added
   useEffect(() => {
-    const hasUSDCProposalAction =
-      proposalTransactions.filter(txn => txn.address === config.addresses.payerContract).length > 0;
-    const hasTokenBuyterTopTop =
-      proposalTransactions.filter(txn => txn.address === config.addresses.tokenBuyer).length > 0;
-    if (hasUSDCProposalAction && !hasTokenBuyterTopTop) {
-      const abi = new Interface(tokenBuyerABI);
-      const signature = 'buyETH(uint256)';
-      const TOP_UP_AMT_ETH = 10_000;
-      handleAddProposalAction({
-        address: config.addresses.tokenBuyer ?? '',
-        value: '0',
-        signature,
-        calldata: abi._encodeParams(abi.functions[signature].inputs, [TOP_UP_AMT_ETH]),
-      });
-    }
+    if (ethNeeded !== undefined && ethNeeded !== tokenBuyerTopUpEth) {
+      const hasTokenBuyterTopTop =
+        proposalTransactions.filter(txn => txn.address === config.addresses.tokenBuyer).length > 0;
 
-    if (!hasUSDCProposalAction && hasTokenBuyterTopTop) {
-      const indexOfTokenBuyerTopUp = proposalTransactions
-        .map((txn, index) => {
-          if (txn.address === config.addresses.tokenBuyer) {
-            return index;
-          } else {
-            return -1;
+      // Add a new top up txn if one isn't there already, else add to the existing one
+      if (parseInt(ethNeeded) > 0 && !hasTokenBuyterTopTop) {
+        handleAddProposalAction({
+          address: config.addresses.tokenBuyer ?? '',
+          value: ethNeeded ?? '0',
+          calldata: '0x',
+          signature: '',
+        });
+      } else {
+        if (parseInt(ethNeeded) > 0) {
+          const indexOfTokenBuyerTopUp =
+            proposalTransactions
+              .map((txn, index: number) => {
+                if (txn.address === config.addresses.tokenBuyer) {
+                  return index;
+                } else {
+                  return -1;
+                }
+              })
+              .filter(n => n >= 0) ?? new Array<number>();
+
+          const txns = proposalTransactions;
+          if (indexOfTokenBuyerTopUp.length > 0) {
+            txns[indexOfTokenBuyerTopUp[0]].value = ethNeeded;
+            setProposalTransactions(txns);
           }
-        })
-        .filter(n => n >= 0);
-
-      if (indexOfTokenBuyerTopUp.length > 0) {
-        handleRemoveProposalAction(indexOfTokenBuyerTopUp[0]);
+        }
       }
+
+      setTokenBuyerTopUpETH(ethNeeded ?? '0');
     }
-  }, [handleAddProposalAction, handleRemoveProposalAction, proposalTransactions]);
+  }, [
+    ethNeeded,
+    handleAddProposalAction,
+    handleRemoveProposalAction,
+    proposalTransactions,
+    tokenBuyerTopUpEth,
+  ]);
 
   const handleTitleInput = useCallback(
     (title: string) => {
