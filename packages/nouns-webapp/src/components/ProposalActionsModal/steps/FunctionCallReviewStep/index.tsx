@@ -1,4 +1,5 @@
 import { Trans } from '@lingui/macro';
+import { utils } from 'ethers/lib/ethers';
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { FinalProposalActionStepProps, ProposalActionModalState } from '../..';
@@ -16,7 +17,7 @@ export enum SupportedCurrencies {
 const handleActionAdd = (state: ProposalActionModalState, onActionAdd: (e?: any) => void) => {
   onActionAdd({
     address: state.address,
-    value: state.amount ? state.amount.toString() : '0',
+    value: state.amount ?  utils.parseEther(state.amount.toString()).toString() : '0',
     signature: state.function,
     calldata: state.abi?._encodeParams(
       state.abi?.functions[state.function ?? '']?.inputs,
