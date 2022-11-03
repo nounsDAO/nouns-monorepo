@@ -43,9 +43,6 @@ const CreateProposalPage = () => {
   const [tokenBuyerTopUpEth, setTokenBuyerTopUpETH] = useState<string>('0');
   const ethNeeded = useEthNeeded(config.addresses.tokenBuyer ?? '', totalUSDCPayment);
 
-  console.log('ETH NEEDED: ', ethNeeded);
-  console.log('TOKEN USDC PAYMENT AMT: ', totalUSDCPayment);
-
   const handleAddProposalAction = useCallback(
     (transaction: ProposalTransaction) => {
       if (!transaction.address.startsWith('0x')) {
