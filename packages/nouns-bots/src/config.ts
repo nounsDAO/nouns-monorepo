@@ -28,3 +28,5 @@ export const config = {
   publicURL: process.env.PUBLIC_URL ?? '',
   publicTitle: process.env.PUBLIC_TITLE ?? '',
 };
+
+export { default as NounsTokenABI } from '../abi/NounsToken.json';
