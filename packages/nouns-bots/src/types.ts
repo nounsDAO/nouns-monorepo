@@ -7,6 +7,7 @@ import {
   STATUS_VETOED,
 } from './utils/constants';
 
+
 export interface Account {
   id: string;
 }
@@ -21,6 +22,11 @@ export interface AuctionBids {
   id: number;
   endTime: number;
   bids: Bid[];
+}
+
+export interface UnsettledAuction {
+  id:	number;
+  bidder:	number;
 }
 
 export interface TokenMetadata {

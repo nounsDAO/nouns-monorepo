@@ -7,6 +7,12 @@ import Discord from 'discord.js';
 import axios from 'axios';
 
 /**
+ * URL 
+ */
+export const publicURL = config.publicURL;
+export const publicTitle = config.publicTitle;
+
+/**
  * Redis Client
  */
 export const redis = new Redis(config.redisPort, config.redisHost, {
@@ -63,3 +69,6 @@ export const publicDiscordWebhook = new Discord.WebhookClient(
  */
 export const incrementCounter = (counterName: string) =>
   axios.post(`https://simple-counter.nouns.tools/count/inc/${counterName}`);
+	  //
+//* export const publicNounUrl = publicUrl + "/noun/"; **/
+

@@ -10,5 +10,5 @@ dist
 *.tsbuildinfo
 *.log
 *.out
-packages/nouns-bots/docker-compose.yaml
+docker-compose.yaml
 yarn.lock
