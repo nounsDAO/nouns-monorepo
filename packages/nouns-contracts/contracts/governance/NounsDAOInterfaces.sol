@@ -417,6 +417,8 @@ interface INounsDAOExecutor {
 
     function acceptAdmin() external;
 
+    function setPendingAdmin(address pendingAdmin_) external;
+
     function queuedTransactions(bytes32 hash) external view returns (bool);
 
     function queueTransaction(
@@ -441,11 +443,21 @@ interface INounsDAOExecutor {
         string calldata signature,
         bytes calldata data,
         uint256 eta
-    ) external payable returns (bytes memory);
+    ) external returns (bytes memory); // TODO why was this payable but not in NounsDAOExecutor?
+}
+
+interface INounsDAOExecutorV2 is INounsDAOExecutor {
+    function redeem(address account, uint256 amount) external;
 }
 
 interface NounsTokenLike {
     function getPriorVotes(address account, uint256 blockNumber) external view returns (uint96);
 
     function totalSupply() external view returns (uint256);
+
+    function ownerOf(uint256 tokenId) external view returns (address);
+
+    function balanceOf(address owner) external view returns (uint256);
+
+    function transferFrom(address from, address to, uint256 tokenId) external;
 }

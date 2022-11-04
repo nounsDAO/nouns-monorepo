@@ -11,7 +11,9 @@ import { DeployUtils } from './DeployUtils.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { NounsSeeder } from '../../../contracts/NounsSeeder.sol';
 import { IProxyRegistry } from '../../../contracts/external/opensea/IProxyRegistry.sol';
+import { ProxyRegistryMock } from '../mocks/ProxyRegistryMock.sol';
 import { NounsDAOExecutor } from '../../../contracts/governance/NounsDAOExecutor.sol';
+import { INounsDAOExecutor } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { Utils } from './Utils.sol';
 
 abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtils {
@@ -30,14 +32,15 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtils {
 
     function setUp() public virtual {
         NounsDescriptorV2 descriptor = _deployAndPopulateV2();
-        nounsToken = new NounsToken(noundersDAO, minter, descriptor, new NounsSeeder(), IProxyRegistry(address(0)));
+        nounsToken = new NounsToken(noundersDAO, minter, descriptor, new NounsSeeder(), new ProxyRegistryMock());
 
         daoProxy = deployDAOProxy();
 
-        vm.prank(address(timelock));
-        timelock.setPendingAdmin(address(daoProxy));
+        INounsDAOExecutor timelock_ = daoProxy.timelock();
+        vm.prank(address(timelock_));
+        timelock_.setPendingAdmin(address(daoProxy));
         vm.prank(address(daoProxy));
-        timelock.acceptAdmin();
+        timelock_.acceptAdmin();
 
         utils = new Utils();
     }

@@ -52,9 +52,13 @@
 
 pragma solidity ^0.8.6;
 
-import './NounsDAOInterfaces.sol';
+import { NounsDAOEventsV2, INounsDAOExecutorV2, NounsTokenLike } from './NounsDAOInterfaces.sol';
+import { NounsDAOStorageV3, DynamicQuorumParams, Receipt, ProposalState, ProposalCondensed, 
+         Proposal, DynamicQuorumParamsCheckpoint } from './NounsDAOStorageV3.sol';
+import { IERC20 } from '../interfaces/IERC20.sol';
+import 'forge-std/console.sol';
 
-contract NounsDAOLogicV3 is NounsDAOStorageV2, NounsDAOEventsV2 {
+contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV2 {
     /// @notice The name of this contract
     string public constant name = 'Nouns DAO';
 
@@ -121,6 +125,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV2, NounsDAOEventsV2 {
     error VetoerBurned();
     error CantVetoExecutedProposal();
     error CantCancelExecutedProposal();
+    error NounOwnerOnly();
 
     /**
      * @notice Used to initialize the contract during delegator contructor
@@ -164,7 +169,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV2, NounsDAOEventsV2 {
         emit VotingDelaySet(votingDelay, votingDelay_);
         emit ProposalThresholdBPSSet(proposalThresholdBPS, proposalThresholdBPS_);
 
-        timelock = INounsDAOExecutor(timelock_);
+        timelock = INounsDAOExecutorV2(timelock_);
         nouns = NounsTokenLike(nouns_);
         vetoer = vetoer_;
         votingPeriod = votingPeriod_;
@@ -417,6 +422,59 @@ contract NounsDAOLogicV3 is NounsDAOStorageV2, NounsDAOEventsV2 {
         }
 
         emit ProposalVetoed(proposalId);
+    }
+
+    function ragequit(uint256[] calldata nounIds) external {
+        uint256 supply = nounsCirculatingSupply();
+
+        // transfer all nouns to timelock
+        // will revert if not owner or has approval for all nouns
+        // TODO: should this be allowed only for owner of the nouns?
+        for (uint256 i = 0; i < nounIds.length; ++i) {
+            nouns.transferFrom(msg.sender, address(timelock), nounIds[i]);
+        }
+
+        ////// ETH redeem
+
+        // calculate ETH pro rata share
+        uint256 proRataShare = (nounIds.length * address(timelock).balance) / supply;
+
+        // apply penalty
+        uint256 amountOfEthToRedeem = ((10_000 - ragequitPenaltyBPs) * proRataShare) / 10_000;
+
+        // send ETH to msg.sender
+        timelock.redeem(msg.sender, amountOfEthToRedeem);
+
+        ////// ERC20s redeem
+        for (uint256 i = 0; i < redeemableAssets.length; ++i) {
+            address asset = redeemableAssets[i];
+
+            proRataShare = (nounIds.length * IERC20(asset).balanceOf(address(timelock))) / supply;
+            uint256 amountOfTokensToRedeem = ((10_000 - ragequitPenaltyBPs) * proRataShare) / 10_000;
+            IERC20(asset).transferFrom(address(timelock), msg.sender, amountOfTokensToRedeem);
+        }
+    }
+
+    function _setRagequitPenaltyBPs(uint32 ragequitPenaltyBPs_) external {
+        if (msg.sender != admin) {
+            revert AdminOnly();
+        }
+
+        // TODO: check max bps value?
+
+        ragequitPenaltyBPs = ragequitPenaltyBPs_;
+    }
+
+    function _addRedeemableAsset(address erc20) external {
+        if (msg.sender != admin) {
+            revert AdminOnly();
+        }
+
+        redeemableAssets.push(erc20);
+    }
+
+    function nounsCirculatingSupply() public view returns (uint256) {
+        return nouns.totalSupply() - nouns.balanceOf(address(timelock));
     }
 
     /**
