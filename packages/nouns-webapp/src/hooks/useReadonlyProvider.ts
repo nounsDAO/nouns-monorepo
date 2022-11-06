@@ -13,6 +13,10 @@ export function useReadonlyProvider(): providers.JsonRpcProvider | undefined {
     if (!rpcURL) {
       return;
     }
-    return new providers.JsonRpcProvider(rpcURL);
+    const connection = {
+      url: rpcURL,
+      headers: {"Content-Type": "application/json; charset=utf-8"}
+    }
+    return new providers.JsonRpcProvider(connection);
   }, [rpcURL]);
 }

@@ -125,7 +125,7 @@ const Bid: React.FC<{
     }
 
     const value = utils.parseEther(bidInputRef.current.value.toString());
-    const contract = connectContractToSigner(nounsAuctionHouseContract, undefined, library);
+    const contract = connectContractToSigner(nounsAuctionHouseContract, undefined, library as any);
     const gasLimit = await contract.estimateGas.createBid(auction.nounId, {
       value,
     });
@@ -291,11 +291,11 @@ const Bid: React.FC<{
           </Button>
         ) : (
           <>
-            <Col lg={12} className={classes.voteForNextNounBtnWrapper}>
-              <Button className={classes.bidBtnAuctionEnded} onClick={fomoNounsBtnOnClickHandler}>
-                <Trans>Vote for the next Noun</Trans> ⌐◧-◧
-              </Button>
-            </Col>
+            {/*<Col lg={12} className={classes.voteForNextNounBtnWrapper}>*/}
+            {/*  <Button className={classes.bidBtnAuctionEnded} onClick={fomoNounsBtnOnClickHandler}>*/}
+            {/*    <Trans>Vote for the next Noun</Trans> ⌐◧-◧*/}
+            {/*  </Button>*/}
+            {/*</Col>*/}
             {/* Only show force settle button if wallet connected */}
             {isWalletConnected && (
               <Col lg={12}>

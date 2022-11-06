@@ -5,7 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ChainId, DAppProvider } from '@usedapp/core';
 import { Web3ReactProvider } from '@web3-react/core';
-import { Web3Provider } from '@ethersproject/providers';
+import { Web3Provider, StaticJsonRpcProvider } from '@ethersproject/providers';
 import account from './state/slices/account';
 import application from './state/slices/application';
 import logs from './state/slices/logs';
@@ -84,13 +84,18 @@ const supportedChainURLs = {
   [ChainId.Rinkeby]: createNetworkHttpUrl('rinkeby'),
   [ChainId.Hardhat]: 'http://localhost:8545',
   [ChainId.Goerli]: createNetworkHttpUrl('goerli'),
+  [1666600000]: createNetworkHttpUrl('harmony'),
 };
 
 // prettier-ignore
 const useDappConfig = {
   readOnlyChainId: CHAIN_ID,
   readOnlyUrls: {
-    [CHAIN_ID]: supportedChainURLs[CHAIN_ID],
+    //[CHAIN_ID]: supportedChainURLs[CHAIN_ID],
+    [CHAIN_ID]: new StaticJsonRpcProvider({
+      url: supportedChainURLs[CHAIN_ID],
+      headers: { 'Content-Type': 'application/json; charset=utf-8' }
+    })
   },
   multicallAddresses: {
     [ChainId.Hardhat]: multicallOnLocalhost,
@@ -107,7 +112,7 @@ const Updaters = () => {
   );
 };
 
-const BLOCKS_PER_DAY = 6_500;
+const BLOCKS_PER_DAY = 1000;
 
 const ChainSubscriber: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -153,6 +158,7 @@ const ChainSubscriber: React.FC = () => {
       dispatch(setAuctionExtended({ nounId, endTime }));
     };
     const processAuctionSettled = (nounId: BigNumberish, winner: string, amount: BigNumberish) => {
+      console.log('processAuctionSettled', nounId, winner, amount)
       dispatch(setAuctionSettled({ nounId, amount, winner }));
     };
 

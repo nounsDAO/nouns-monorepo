@@ -78,7 +78,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
         return;
       }
 
-      lookupNNSOrENS(library, delegateInfo.delegate)
+      lookupNNSOrENS(library as any, delegateInfo.delegate)
         .then(name => {
           // Store data as mapping of address_Expiration => address or ENS
           if (name) {

@@ -6,7 +6,7 @@ const getBaseURL = (network: ChainId) => {
     case ChainId.Rinkeby:
       return 'https://rinkeby.etherscan.io/';
     default:
-      return 'https://etherscan.io/';
+      return 'https://explorer.harmony.one/';
   }
 };
 

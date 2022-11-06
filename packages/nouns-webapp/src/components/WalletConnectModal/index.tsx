@@ -28,50 +28,50 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
         }}
         walletType={WALLET_TYPE.metamask}
       />
-      <WalletButton
-        onClick={() => {
-          const fortmatic = new FortmaticConnector({
-            apiKey: 'pk_live_60FAF077265B4CBA',
-            chainId: CHAIN_ID,
-          });
-          activate(fortmatic);
-        }}
-        walletType={WALLET_TYPE.fortmatic}
-      />
-      <WalletButton
-        onClick={() => {
-          const walletlink = new WalletConnectConnector({
-            supportedChainIds,
-            chainId: CHAIN_ID,
-            rpc: {
-              [CHAIN_ID]: config.app.jsonRpcUri,
-            },
-          });
-          activate(walletlink);
-        }}
-        walletType={WALLET_TYPE.walletconnect}
-      />
-      <WalletButton
-        onClick={() => {
-          const walletlink = new WalletLinkConnector({
-            appName: 'Nouns.WTF',
-            appLogoUrl: 'https://nouns.wtf/static/media/logo.cdea1650.svg',
-            url: config.app.jsonRpcUri,
-            supportedChainIds,
-          });
-          activate(walletlink);
-        }}
-        walletType={WALLET_TYPE.coinbaseWallet}
-      />
-      <WalletButton
-        onClick={() => {
-          const injected = new InjectedConnector({
-            supportedChainIds,
-          });
-          activate(injected);
-        }}
-        walletType={WALLET_TYPE.brave}
-      />
+      {/*<WalletButton*/}
+      {/*  onClick={() => {*/}
+      {/*    const fortmatic = new FortmaticConnector({*/}
+      {/*      apiKey: 'pk_live_60FAF077265B4CBA',*/}
+      {/*      chainId: CHAIN_ID,*/}
+      {/*    });*/}
+      {/*    activate(fortmatic);*/}
+      {/*  }}*/}
+      {/*  walletType={WALLET_TYPE.fortmatic}*/}
+      {/*/>*/}
+      {/*<WalletButton*/}
+      {/*  onClick={() => {*/}
+      {/*    const walletlink = new WalletConnectConnector({*/}
+      {/*      supportedChainIds,*/}
+      {/*      chainId: CHAIN_ID,*/}
+      {/*      rpc: {*/}
+      {/*        [CHAIN_ID]: config.app.jsonRpcUri,*/}
+      {/*      },*/}
+      {/*    });*/}
+      {/*    activate(walletlink);*/}
+      {/*  }}*/}
+      {/*  walletType={WALLET_TYPE.walletconnect}*/}
+      {/*/>*/}
+      {/*<WalletButton*/}
+      {/*  onClick={() => {*/}
+      {/*    const walletlink = new WalletLinkConnector({*/}
+      {/*      appName: 'Nouns.WTF',*/}
+      {/*      appLogoUrl: 'https://nouns.wtf/static/media/logo.cdea1650.svg',*/}
+      {/*      url: config.app.jsonRpcUri,*/}
+      {/*      supportedChainIds,*/}
+      {/*    });*/}
+      {/*    activate(walletlink);*/}
+      {/*  }}*/}
+      {/*  walletType={WALLET_TYPE.coinbaseWallet}*/}
+      {/*/>*/}
+      {/*<WalletButton*/}
+      {/*  onClick={() => {*/}
+      {/*    const injected = new InjectedConnector({*/}
+      {/*      supportedChainIds,*/}
+      {/*    });*/}
+      {/*    activate(injected);*/}
+      {/*  }}*/}
+      {/*  walletType={WALLET_TYPE.brave}*/}
+      {/*/>*/}
       {/* <WalletButton
         onClick={() => {
           const ledger = new LedgerConnector({
@@ -83,18 +83,18 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
         }}
         walletType={WALLET_TYPE.ledger}
       /> */}
-      <WalletButton
-        onClick={() => {
-          const trezor = new TrezorConnector({
-            chainId: CHAIN_ID,
-            url: config.app.jsonRpcUri,
-            manifestAppUrl: 'https://nouns.wtf',
-            manifestEmail: 'nounops+trezorconnect@protonmail.com',
-          });
-          activate(trezor);
-        }}
-        walletType={WALLET_TYPE.trezor}
-      />
+      {/*<WalletButton*/}
+      {/*  onClick={() => {*/}
+      {/*    const trezor = new TrezorConnector({*/}
+      {/*      chainId: CHAIN_ID,*/}
+      {/*      url: config.app.jsonRpcUri,*/}
+      {/*      manifestAppUrl: 'https://nouns.wtf',*/}
+      {/*      manifestEmail: 'nounops+trezorconnect@protonmail.com',*/}
+      {/*    });*/}
+      {/*    activate(trezor as any);*/}
+      {/*  }}*/}
+      {/*  walletType={WALLET_TYPE.trezor}*/}
+      {/*/>*/}
       <div
         className={clsx(classes.clickable, classes.walletConnectData)}
         onClick={() => localStorage.removeItem('walletconnect')}
