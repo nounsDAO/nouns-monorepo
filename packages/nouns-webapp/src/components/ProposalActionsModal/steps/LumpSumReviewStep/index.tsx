@@ -15,7 +15,7 @@ const handleActionAdd = (state: ProposalActionModalState, onActionAdd: (e?: any)
     onActionAdd({
       address: state.address,
       value: state.amount ? utils.parseEther(state.amount.toString()).toString() : '0',
-      signature: undefined,
+      signature: '',
       calldata: '0x',
     });
   } else if (state.lumpSumCurrency === SupportedCurrency.USDC) {
