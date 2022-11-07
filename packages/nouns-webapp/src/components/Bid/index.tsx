@@ -131,7 +131,7 @@ const Bid: React.FC<{
     });
     placeBid(auction.nounId, {
       value,
-      gasLimit: gasLimit.add(10_000), // A 10,000 gas pad is used to avoid 'Out of gas' errors
+      gasLimit: gasLimit.add(20_000), // A 10,000 gas pad is used to avoid 'Out of gas' errors
     });
   };
 

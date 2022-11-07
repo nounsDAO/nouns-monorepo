@@ -39,7 +39,8 @@ class IdenticonInner extends Component<IdenticonInnerProps> {
       <>
         {this.state.fallback
           ? this.renderJazzicon(this.props.address, this.props.size)
-          : this.renderDavatar(this.props.address, this.props.provider, this.props.size)}
+          : null // this.renderDavatar(this.props.address, this.props.provider, this.props.size)
+        }
       </>
     );
   }

@@ -47,10 +47,10 @@ function App() {
         />
       )}
       <BrowserRouter>
-        <AvatarProvider
-          provider={chainId === ChainId.Mainnet ? library : undefined}
-          batchLookups={true}
-        >
+        {/*<AvatarProvider*/}
+        {/*  provider={chainId === ChainId.Mainnet ? library : undefined}*/}
+        {/*  batchLookups={true}*/}
+        {/*>*/}
           <NavBar />
           <Switch>
             <Route exact path="/" component={AuctionPage} />
@@ -69,7 +69,7 @@ function App() {
             <Route component={NotFoundPage} />
           </Switch>
           <Footer />
-        </AvatarProvider>
+        {/*</AvatarProvider>*/}
       </BrowserRouter>
     </div>
   );

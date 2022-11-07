@@ -11,6 +11,7 @@ import { FortmaticConnector } from '@web3-react/fortmatic-connector';
 import config, { CHAIN_ID } from '../../config';
 import classes from './WalletConnectModal.module.css';
 import { Trans } from '@lingui/macro';
+import {ethers} from "ethers";
 
 const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
   const { onDismiss } = props;
@@ -24,6 +25,8 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
           const injected = new InjectedConnector({
             supportedChainIds,
           });
+            // // @ts-ignore
+            // const provider = new ethers.providers.Web3Provider(window.ethereum, 1666600000);
           activate(injected);
         }}
         walletType={WALLET_TYPE.metamask}
@@ -95,12 +98,12 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
       {/*  }}*/}
       {/*  walletType={WALLET_TYPE.trezor}*/}
       {/*/>*/}
-      <div
-        className={clsx(classes.clickable, classes.walletConnectData)}
-        onClick={() => localStorage.removeItem('walletconnect')}
-      >
-        <Trans>Clear WalletConnect Data</Trans>
-      </div>
+      {/*<div*/}
+      {/*  className={clsx(classes.clickable, classes.walletConnectData)}*/}
+      {/*  onClick={() => localStorage.removeItem('walletconnect')}*/}
+      {/*>*/}
+      {/*  <Trans>Clear WalletConnect Data</Trans>*/}
+      {/*</div>*/}
     </div>
   );
   return (
