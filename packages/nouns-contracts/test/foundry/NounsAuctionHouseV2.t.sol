@@ -189,6 +189,40 @@ contract NounsAuctionHouseV2Test is Test, DeployUtils {
         assertEq(settledV2, false);
     }
 
+    function test_auctionGetter_compatibleWithV1() public {
+        address bidder = address(0x4242);
+        vm.deal(bidder, 1.1 ether);
+        vm.prank(bidder);
+        auction.createBid{ value: 1.1 ether }(1);
+
+        NounsAuctionHouse auctionV1 = NounsAuctionHouse(address(auction));
+
+        (
+            uint128 nounIdV2,
+            uint128 amountV2,
+            uint40 startTimeV2,
+            uint40 endTimeV2,
+            address payable bidderV2,
+            bool settledV2
+        ) = auction.auction();
+
+        (
+            uint256 nounIdV1,
+            uint256 amountV1,
+            uint256 startTimeV1,
+            uint256 endTimeV1,
+            address payable bidderV1,
+            bool settledV1
+        ) = auctionV1.auction();
+
+        assertEq(nounIdV2, nounIdV1);
+        assertEq(amountV2, amountV1);
+        assertEq(startTimeV2, startTimeV1);
+        assertEq(endTimeV2, endTimeV1);
+        assertEq(bidderV2, bidderV1);
+        assertEq(settledV2, settledV1);
+    }
+
     function bidAndWinCurrentAuction(address bidder, uint256 bid) internal returns (uint256) {
         (uint256 nounId, , , uint256 endTime, , ) = auction.auction();
         vm.deal(bidder, bid);
