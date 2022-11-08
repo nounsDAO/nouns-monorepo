@@ -13,7 +13,7 @@ on:
 jobs:
   build_and_push:
     name: Build and Push
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Login to GCR
