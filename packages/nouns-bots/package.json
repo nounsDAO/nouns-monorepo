@@ -34,7 +34,7 @@
     "graphql": "^15.3.0",
     "graphql-request": "^3.1.0",
     "ioredis": "^4.27.6",
-    "sharp": "^0.31.2",
+    "sharp": "^0.28.3",
     "tmp": "^0.2.1",
     "ts-try": "^0.2.0",
     "twitter-api-v2": "^1.1.1"

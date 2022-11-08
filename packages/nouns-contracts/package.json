@@ -25,6 +25,7 @@
     "prepare": "yarn build"
   },
   "devDependencies": {
+    "solidity-coverage": "0.7.21",
     "@nomiclabs/hardhat-ethers": "^2.0.6",
     "@nomiclabs/hardhat-etherscan": "^3.0.3",
     "@nomiclabs/hardhat-waffle": "^2.0.3",
@@ -37,16 +38,13 @@
     "@types/prompt": "^1.1.0",
     "base64-sol": "^1.0.1",
     "dotenv": "^10.0.0",
-    "ds-test": "https://github.com/dapphub/ds-test.git#9310e879db8ba3ea6d5c6489a579118fd264a3f5",
     "ethereum-waffle": "^3.4.4",
-    "forge-std": "https://github.com/foundry-rs/forge-std.git#22c773d412f22f55c7116d9d9ea49488a99bdba4",
     "hardhat": "^2.9.6",
     "hardhat-abi-exporter": "^2.9.0",
     "hardhat-gas-reporter": "^1.0.8",
     "prettier-plugin-solidity": "^1.0.0-beta.12",
     "prompt": "^1.1.0",
     "shx": "^0.3.3",
-    "solidity-coverage": "0.7.21",
     "ts-node": "^10.0.0",
     "typechain": "^8.0.0"
   },
