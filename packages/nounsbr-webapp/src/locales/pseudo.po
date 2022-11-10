@@ -1,0 +1,1362 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2022-04-27 06:39-0700\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: pseudo\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "% of NounsBR Currently Against"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "'NoundersBR' are the group of 3 brazilian artists and entrepreneurs that initiated NounsBR. Here are the NoundersBR:"
+msgstr ""
+
+#: src/components/ByLineHoverCard/index.tsx
+msgid "... and {0} more"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "100% of NounBR auction proceeds are trustlessly sent to the treasury."
+msgstr ""
+
+#: src/pages/NoundersBR/index.tsx
+msgid "artists and entrepreuners"
+msgstr ""
+
+#: src/pages/NotFound/index.tsx
+msgid "404: This is not the person, place, or thing you're looking for..."
+msgstr ""
+
+#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
+#~ msgid "<0/>Holder changed from<1><2/></1> to <3><4/></3>"
+#~ msgstr ""
+
+#: src/components/profileEvent/event/DesktopNounBRWinEvent/index.tsx
+#~ msgid "<0> NounBR {0} </0>  won by <1><2/></1>"
+#~ msgstr ""
+
+#: src/components/profileEvent/event/DesktopNounBRWinEvent/index.tsx
+#: src/components/profileEvent/event/MobileNounBRWinEvent/index.tsx
+msgid "<0> NounBR {0} </0> sent to <1><2/></1>"
+msgstr ""
+
+#: src/components/profileEvent/event/DesktopNounBRWinEvent/index.tsx
+#: src/components/profileEvent/event/MobileNounBRWinEvent/index.tsx
+msgid "<0> NounBR {0} </0> won by <1><2/></1>"
+msgstr ""
+
+#: src/components/ByLineHoverCard/index.tsx
+msgid "<0>Delegated NounBR: </0>"
+msgstr ""
+
+#: src/components/ByLineHoverCard/index.tsx
+msgid "<0>Delegated NounsBR: </0>"
+msgstr ""
+
+#: src/components/ProposalHeader/index.tsx
+msgid "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
+msgstr ""
+
+#: src/components/NounBRProfileVoteRow/index.tsx
+#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
+msgid "Absent for"
+msgstr ""
+
+#: src/components/VoteCard/index.tsx
+msgid "Abstain"
+msgstr ""
+
+#: src/components/VoteModal/index.tsx
+msgid "Abstain from voting on Prop {0}"
+msgstr ""
+
+#: src/components/NounBRProfileVoteRow/index.tsx
+msgid "Abstained on"
+msgstr ""
+
+#: src/pages/Playground/index.tsx
+msgid "Accessory"
+msgstr ""
+
+#: src/components/NounBRProfileVoteRow/index.tsx
+#: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
+msgid "Active"
+msgstr ""
+
+#: src/components/ProfileActivityFeed/index.tsx
+#: src/components/ProfileActivityFeed/index.tsx
+msgid "Activity"
+msgstr ""
+
+#: src/components/ProposalTransactionFormModal/index.tsx
+#: src/pages/CreateProposal/index.tsx
+msgid "Add Transaction"
+msgstr ""
+
+#: src/components/ProposalTransactionFormModal/index.tsx
+msgid "Add a Proposal Transaction"
+msgstr ""
+
+#: src/pages/CreateProposal/index.tsx
+msgid "Add one or more transactions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 2 1/3 days and last for 3 days."
+msgstr ""
+
+#: src/pages/CreateProposal/index.tsx
+#~ msgid "Add one or more transactions and describe your proposal for the community. The proposal cannot modified after submission, so please verify all information before submitting. The voting period will begin after 2 1/3 days and last for 3 days."
+#~ msgstr ""
+
+#: src/components/ProposalTransactionFormModal/index.tsx
+msgid "Address"
+msgstr ""
+
+#: src/components/ProposalTransactionFormModal/index.tsx
+msgid "Address (Callee or Recipient)"
+msgstr ""
+
+#: src/components/VoteCard/index.tsx
+msgid "Addresses"
+msgstr ""
+
+#: src/components/VoteCard/index.tsx
+msgid "Against"
+msgstr ""
+
+#: src/components/NounderBRNounBRContent/index.tsx
+msgid "All NounBR auction proceeds are sent to the"
+msgstr ""
+
+#: src/pages/NoundersBR/index.tsx
+msgid "All NounBR auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's founders (‘NoundersBR’) have chosen to compensate ourselves with NounsBR. Every 10th nounbr for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual NoundersBR."
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "All NounsBR are members of NounsBR DAO."
+msgstr ""
+
+#: src/pages/CreateProposal/index.tsx
+msgid "All Proposals"
+msgstr ""
+
+#: src/components/DelegationCandidateInfo/index.tsx
+msgid "Already has"
+msgstr ""
+
+#: src/components/ProposalTransactionFormModal/index.tsx
+msgid "Arguments"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "Artwork is generative and stored directly on-chain (not IPFS)."
+msgstr ""
+
+#: src/components/AuctionTimer/index.tsx
+#: src/components/AuctionTimer/index.tsx
+msgid "Auction ended"
+msgstr ""
+
+#: src/components/AuctionTimer/index.tsx
+msgid "Auction ends in"
+msgstr ""
+
+#: src/components/ProposalTransactionFormModal/index.tsx
+msgid "Back"
+msgstr ""
+
+#: src/pages/Playground/index.tsx
+msgid "Background"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "Because 100% of NounBR auction proceeds are sent to NounsBR DAO, NoundersBR have chosen to compensate themselves with NounsBR. Every 10th NounBR for the first 5 years of the project (NounBR ids #0, #10, #20, #30 and so on) will be automatically sent to the NounderBR's multisig to be vested and shared among the founding members of the project."
+msgstr ""
+
+#: src/components/Bid/index.tsx
+#: src/components/Bid/index.tsx
+msgid "Bid"
+msgstr ""
+
+#: src/components/NounBRInfoCard/index.tsx
+msgid "Bid history"
+msgstr ""
+
+#: src/components/Bid/index.tsx
+msgid "Bid was placed successfully!"
+msgstr ""
+
+#: src/components/NounBRInfoCard/index.tsx
+msgid "Bids"
+msgstr ""
+
+#: src/components/BidHistoryModal/index.tsx
+msgid "Bids for"
+msgstr ""
+
+#: src/components/BidHistoryModal/index.tsx
+msgid "Bids will appear here"
+msgstr ""
+
+#: src/pages/Playground/index.tsx
+msgid "Body"
+msgstr ""
+
+#: src/components/NounBRHoverCard/index.tsx
+#: src/components/NounBRInfoRowBirthday/index.tsx
+msgid "Born"
+msgstr ""
+
+#: src/components/NounBRProfileVoteRow/index.tsx
+#: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
+msgid "Canceled"
+msgstr ""
+
+#: src/components/VoteModal/index.tsx
+msgid "Cast 1 vote against Prop {0}"
+msgstr ""
+
+#: src/components/VoteModal/index.tsx
+msgid "Cast 1 vote for Prop {0}"
+msgstr ""
+
+#: src/components/VoteModal/index.tsx
+msgid "Cast {0} votes against Prop {1}"
+msgstr ""
+
+#: src/components/VoteModal/index.tsx
+msgid "Cast {0} votes for Prop {1}"
+msgstr ""
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Change"
+msgstr ""
+
+#: src/components/WalletConnectModal/index.tsx
+msgid "Clear WalletConnect Data"
+msgstr ""
+
+#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/CurrentDelegatePannel/index.tsx
+msgid "Close"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "Compound Governance"
+msgstr ""
+
+#: src/components/NavWallet/WalletConnectButton/index.tsx
+msgid "Connect"
+msgstr ""
+
+#: src/components/ProposalHeader/index.tsx
+msgid "Connect a wallet to vote."
+msgstr ""
+
+#: src/components/Proposals/index.tsx
+msgid "Connect wallet to make a proposal."
+msgstr ""
+
+#: src/components/WalletConnectModal/index.tsx
+msgid "Connect your wallet"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "Consequently, the NounsBR Foundation anticipates being the steward of the veto power until NounsBR DAO is ready to implement an alternative, and therefore wishes to clarify the conditions under which it would exercise this power."
+msgstr ""
+
+#: src/components/CreateProposalButton/index.tsx
+#: src/pages/CreateProposal/index.tsx
+msgid "Create Proposal"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "Cryptopunks"
+msgstr ""
+
+#: src/components/CurrentDelegatePannel/index.tsx
+msgid "Current Delegate"
+msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "Current Quorum"
+msgstr ""
+
+#: src/components/CurrentBid/index.tsx
+msgid "Current bid"
+msgstr ""
+
+#: src/components/NavBar/index.tsx
+msgid "DAO"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "Daily Auctions"
+msgstr ""
+
+#: src/components/NounBRProfileVoteRow/index.tsx
+#: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
+msgid "Defeated"
+msgstr ""
+
+#: src/components/Proposals/index.tsx
+#: src/components/Proposals/index.tsx
+#: src/components/Proposals/index.tsx
+msgid "Delegate"
+msgstr ""
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Delegate Update Failed"
+msgstr ""
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Delegate Updated!"
+msgstr ""
+
+#: src/components/profileEvent/event/MobileDelegationEvent/index.tsx
+msgid "Delegate changed from<0><1/></0> to <2><3/></2>"
+msgstr ""
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Delegate {availableVotes} Vote"
+msgstr ""
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Delegate {availableVotes} Votes"
+msgstr ""
+
+#: src/components/CurrentDelegatePannel/index.tsx
+msgid "Delegation"
+msgstr ""
+
+#: src/components/ProposalContent/index.tsx
+msgid "Description"
+msgstr ""
+
+#: src/components/NavWallet/index.tsx
+msgid "Disconnect"
+msgstr ""
+
+#: src/components/Footer/index.tsx
+msgid "Discord"
+msgstr ""
+
+#: src/components/NavBar/index.tsx
+msgid "Discourse"
+msgstr ""
+
+#: src/components/NavBar/index.tsx
+msgid "Docs"
+msgstr ""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "Dynamic Quorum"
+msgstr ""
+
+#: src/components/Banner/index.tsx
+msgid "EVERY 15 MIN,"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "Each time an auction is settled, the settlement transaction will also cause a new NounBR to be minted and a new 15 minutes auction to begin."
+msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "Ended"
+msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "Ends"
+msgstr ""
+
+#: src/components/AuctionTimer/index.tsx
+msgid "Ends on"
+msgstr ""
+
+#: src/components/Proposals/index.tsx
+msgid "Ends {0}"
+msgstr ""
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Enter the Ethereum address or ENS name of the account you would like to delegate your votes to."
+msgstr ""
+
+#: src/components/Bid/index.tsx
+#: src/components/Bid/index.tsx
+#: src/components/VoteModal/index.tsx
+#: src/pages/CreateProposal/index.tsx
+#: src/pages/Vote/index.tsx
+msgid "Error"
+msgstr ""
+
+#: src/components/NounBRInfoRowBirthday/index.tsx
+msgid "Error fetching NounBR birthday"
+msgstr ""
+
+#: src/components/Footer/index.tsx
+#: src/components/NounBRInfoCard/index.tsx
+msgid "Etherscan"
+msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "Execute"
+msgstr ""
+
+#: src/components/NounBRProfileVoteRow/index.tsx
+#: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
+msgid "Executed"
+msgstr ""
+
+#: src/components/NounBRProfileVoteRow/index.tsx
+#: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
+msgid "Expired"
+msgstr ""
+
+#: src/components/Proposals/index.tsx
+msgid "Expires {0}"
+msgstr ""
+
+#: src/pages/Playground/index.tsx
+msgid "Explore"
+msgstr ""
+
+#: src/components/Banner/index.tsx
+msgid "FOREVER."
+msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "Failed to fetch"
+msgstr ""
+
+#: src/components/ProfileActivityFeed/index.tsx
+msgid "Failed to fetch NounBR activity history"
+msgstr ""
+
+#: src/components/Holder/index.tsx
+#: src/components/NounBRInfoRowHolder/index.tsx
+msgid "Failed to fetch NounBR info"
+msgstr ""
+
+#: src/components/VoteCard/index.tsx
+msgid "For"
+msgstr ""
+
+#: src/components/NounderBRNounBRContent/index.tsx
+msgid "For this reason, we, the project's founders (‘NoundersBR’) have chosen to compensate ourselves with NounsBR. Every 10th NounBR for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual NoundersBR."
+msgstr ""
+
+#: src/components/Footer/index.tsx
+msgid "Forums"
+msgstr ""
+
+#: src/components/ProposalTransactionFormModal/index.tsx
+msgid "Function"
+msgstr ""
+
+#: src/components/ProposalTransactionFormModal/index.tsx
+msgid "Function (Optional)"
+msgstr ""
+
+#: src/pages/Playground/index.tsx
+msgid "Generate NounsBR"
+msgstr ""
+
+#: src/pages/Playground/index.tsx
+msgid "Glasses"
+msgstr ""
+
+#: src/pages/Governance/index.tsx
+msgid "Governance"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "Governance ‘Slow Start’"
+msgstr ""
+
+#: src/components/DelegationCandidateInfo/index.tsx
+msgid "Has"
+msgstr ""
+
+#: src/pages/Playground/index.tsx
+msgid "Head"
+msgstr ""
+
+#: src/components/Holder/index.tsx
+#: src/components/NounBRHoverCard/index.tsx
+msgid "Held by"
+msgstr ""
+
+#: src/components/AuctionActivity/index.tsx
+msgid "Help mint the next NounBR"
+msgstr ""
+
+#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
+msgid "Holder changed from <0><1/></0> to <2><3/></2>"
+msgstr ""
+
+#: src/components/profileEvent/event/MobileTransferEvent/index.tsx
+msgid "Holder changed from<0><1/></0> to <2><3/></2>"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+#~ msgid "In addition to the precautions taken by Compound Governance, NoundersBR have given themselves a special veto right to ensure that no malicious proposals can be passed while the NounBR supply is low. This veto right will only be used if an obviously harmful governance proposal has been passed, and is intended as a last resort."
+#~ msgstr ""
+
+#: src/components/Bid/index.tsx
+msgid "Insufficient bid amount 🤏"
+msgstr ""
+
+#: src/components/NavLocaleSwitcher/index.tsx
+msgid "Language"
+msgstr ""
+
+#: src/components/NounderBRNounBRContent/index.tsx
+msgid "Learn more"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "Learn more below, or start creating NounsBR off-chain using the {playgroundLink}."
+msgstr ""
+
+#: src/components/NounBRInfoRowHolder/index.tsx
+msgid "Loading..."
+msgstr ""
+
+#: src/components/Proposals/index.tsx
+msgid "Making a proposal requires {threshold} votes"
+msgstr ""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "More details on how dynamic quorum works can be found <0>here</0>."
+msgstr ""
+
+#: src/components/ProposalTransactionFormModal/index.tsx
+msgid "Next"
+msgstr ""
+
+#: src/components/ProposalTransactionFormModal/index.tsx
+msgid "No arguments required"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "No explicit rules exist for attribute scarcity; all NounsBR are equally rare."
+msgstr ""
+
+#: src/components/Proposals/index.tsx
+msgid "No proposals found"
+msgstr ""
+
+#: src/components/ProposalTransactionFormModal/index.tsx
+#: src/components/ProposalTransactionFormModal/index.tsx
+#: src/components/ProposalTransactionFormModal/index.tsx
+msgid "None"
+msgstr ""
+
+#: src/pages/Governance/index.tsx
+msgid "NounBR"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "NounBR Seeder Contract"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "NounBR Traits"
+msgstr ""
+
+#: src/components/CurrentDelegatePannel/index.tsx
+msgid "NounBR votes are not transferable, but are <0>delegatable</0>, which means you can assign your vote to someone else as long as you own your NounBR."
+msgstr ""
+
+#: src/components/AuctionActivityNounBRTitle/index.tsx
+msgid "NounBR {0}"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "NounderBR distributions don't interfere with the cadence of 15 minutes auctions. NounsBR are sent directly to the NounderBR's Multisig, and auctions continue on schedule with the next available NounBR ID."
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "NounderBR's Reward"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "NoundersBR receive rewards in the form of NounsBR (10% of supply for first 5 years)."
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+#~ msgid "NoundersBR will proveably revoke this veto right when they deem it safe to do so. This decision will be based on a healthy NounBR distribution and a community that is engaged in the governance process."
+#~ msgstr ""
+
+#: src/pages/NoundersBR/index.tsx
+msgid "NoundersBR' Reward"
+msgstr ""
+
+#: src/pages/Governance/index.tsx
+msgid "NounsBR"
+msgstr ""
+
+#: src/components/NounBRInfoRowHolder/index.tsx
+msgid "NounsBR Auction House"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+#: src/components/NounderBRNounBRContent/index.tsx
+#: src/pages/Governance/index.tsx
+msgid "NounsBR DAO"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "NounsBR DAO uses a fork of {compoundGovLink}."
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "NounsBR DAO utilizes a fork of {compoundGovLink} and is the main governing body of the NounsBR ecosystem. The NounsBR DAO treasury receives 100% of ETH proceeds from daily NounBR auctions. Each NounBR is an irrevocable member of NounsBR DAO and entitled to one vote in all governance matters. NounBR votes are non-transferable (if you sell your NounBR the vote goes with it) but delegatable, which means you can assign your vote to someone else as long as you own your NounBR."
+msgstr ""
+
+#: src/pages/Playground/index.tsx
+msgid "NounsBR Protocol"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "NounsBR are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, NounsBR attempt to bootstrap identity, community, governance, and a treasury that can be used by the community."
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "NounsBR are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules governing NounBR trait scarcity, which makes all NounsBR equally rare. As of this writing, NounsBR are made up of:"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "NounsBR are stored directly on Ethereum and do not utilize pointers to other networks such as IPFS. This is possible because NounBR parts are compressed and stored on-chain using a custom run-length encoding (RLE), which is a form of lossless compression."
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "NounsBR artwork is in the {publicDomainLink}."
+msgstr ""
+
+#: src/pages/Governance/index.tsx
+msgid "NounsBR govern <0>NounsBR DAO</0>. NounsBR can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsbrRequired} {0}</1> is required to submit proposals."
+msgstr ""
+
+#: src/components/DelegationCandidateInfo/index.tsx
+msgid "Now has"
+msgstr ""
+
+#: src/components/Banner/index.tsx
+msgid "ONE NOUNBR,"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "On-Chain Artwork"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "One NounBR is equal to one vote."
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "One NounBR is trustlessly auctioned every 15 minutes, forever."
+msgstr ""
+
+#: src/pages/Playground/index.tsx
+msgid "Only 32x32 PNG images are accepted"
+msgstr ""
+
+#: src/components/ProposalHeader/index.tsx
+msgid "Only NounsBR you owned or were delegated to you before {0} are eligible to vote."
+msgstr ""
+
+#: src/components/NounBRProfileVoteRow/index.tsx
+#: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
+msgid "Pending"
+msgstr ""
+
+#: src/components/Bid/index.tsx
+#: src/components/Bid/index.tsx
+#: src/components/Bid/index.tsx
+msgid "Place bid"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+#: src/components/NavBar/index.tsx
+#: src/pages/Playground/index.tsx
+msgid "Playground"
+msgstr ""
+
+#: src/components/Bid/index.tsx
+msgid "Please place a bid higher than or equal to the minimum bid amount of {0} ETH"
+msgstr ""
+
+#: src/components/Bid/index.tsx
+#: src/components/Bid/index.tsx
+#: src/components/Bid/index.tsx
+#: src/components/Bid/index.tsx
+#: src/components/VoteModal/index.tsx
+#: src/components/VoteModal/index.tsx
+#: src/pages/CreateProposal/index.tsx
+#: src/pages/CreateProposal/index.tsx
+#: src/pages/Vote/index.tsx
+#: src/pages/Vote/index.tsx
+msgid "Please try again."
+msgstr ""
+
+#: src/components/ProposalEditor/index.tsx
+msgid "Preview"
+msgstr ""
+
+#: src/components/ProposalEditor/index.tsx
+#~ msgid "Preview:"
+#~ msgstr ""
+
+#: src/components/ProposalEditor/index.tsx
+msgid "Proposal"
+msgstr ""
+
+#: src/pages/CreateProposal/index.tsx
+msgid "Proposal Created!"
+msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "Proposal Executed!"
+msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "Proposal Queued!"
+msgstr ""
+
+#: src/components/ProposalHeader/index.tsx
+msgid "Proposal {0}"
+msgstr ""
+
+#: src/components/Proposals/index.tsx
+msgid "Proposals"
+msgstr ""
+
+#: src/components/Proposals/index.tsx
+msgid "Proposals submitted by community members will appear here."
+msgstr ""
+
+#: src/components/ProposalContent/index.tsx
+msgid "Proposed Transactions"
+msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "Queue"
+msgstr ""
+
+#: src/components/NounBRProfileVoteRow/index.tsx
+#: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
+msgid "Queued"
+msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "Quorum"
+msgstr ""
+
+#: src/components/VoteModal/index.tsx
+msgid "Reason (Optional)"
+msgstr ""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "Required % of NounsBR to Pass"
+msgstr ""
+
+#: src/components/LanguageSelectionModal/index.tsx
+msgid "Select Language"
+msgstr ""
+
+#: src/components/Bid/index.tsx
+msgid "Settle"
+msgstr ""
+
+#: src/components/Bid/index.tsx
+#: src/components/Bid/index.tsx
+#: src/components/Bid/index.tsx
+#: src/components/Bid/index.tsx
+msgid "Settle Auction"
+msgstr ""
+
+#: src/components/SettleManuallyBtn/index.tsx
+msgid "Settle manually"
+msgstr ""
+
+#: src/components/Bid/index.tsx
+msgid "Settled auction successfully!"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "Settlement of one auction kicks off the next."
+msgstr ""
+
+#: src/components/ProfileActivityFeed/index.tsx
+#~ msgid "Show all {0} events"
+#~ msgstr ""
+
+#: src/components/ProfileActivityFeedToggle/index.tsx
+msgid "Show all {numEvents} events"
+msgstr ""
+
+#: src/components/ProfileActivityFeedToggle/index.tsx
+msgid "Show fewer"
+msgstr ""
+
+#: src/components/NavWallet/index.tsx
+msgid "Sign out"
+msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "Starts"
+msgstr ""
+
+#: src/components/Proposals/index.tsx
+msgid "Starts {0}"
+msgstr ""
+
+#: src/components/Proposals/index.tsx
+#: src/components/Proposals/index.tsx
+msgid "Submit Proposal"
+msgstr ""
+
+#: src/components/VoteModal/index.tsx
+msgid "Submit Vote"
+msgstr ""
+
+#: src/components/ProposalHeader/index.tsx
+msgid "Submit vote"
+msgstr ""
+
+#: src/components/NounBRProfileVoteRow/index.tsx
+#: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
+msgid "Succeeded"
+msgstr ""
+
+#: src/components/Bid/index.tsx
+#: src/components/Bid/index.tsx
+#: src/pages/CreateProposal/index.tsx
+#: src/pages/Vote/index.tsx
+msgid "Success"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "Summary"
+msgstr ""
+
+#: src/components/NavWallet/index.tsx
+msgid "Switch"
+msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "Switch to NounBR view"
+msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "Switch to delegate view"
+msgstr ""
+
+#: src/components/NavWallet/index.tsx
+msgid "Switch wallet"
+msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "Taken at block"
+msgstr ""
+
+#: src/components/VoteModal/index.tsx
+msgid "Thank you for voting."
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "The NounBR Seeder contract is used to determine NounBR traits during the minting process. The seeder contract can be replaced to allow for future trait generation algorithm upgrades. Additionally, it can be locked by the NounsBR DAO to prevent any future updates. Currently, NounBR traits are determined using pseudo-random number generation:"
+msgstr ""
+
+#: src/pages/NoundersBR/index.tsx
+msgid "The NoundersBR"
+msgstr ""
+
+#: src/pages/NoundersBR/index.tsx
+msgid "The NoundersBR reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures."
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "The NounsBR Auction Contract will act as a self-sufficient NounBR generation and distribution mechanism, auctioning one NounBR every 15 minutes, forever. 100% of auction proceeds (ETH) are automatically deposited in the NounsBR DAO treasury, where they are governed by NounBR owners."
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "The NounsBR Foundation and NounsBR DAO considers the veto an emergency power that should not be exercised in the normal course of business. The NounsBR DAO will veto proposals that introduce non-trivial legal or existential risks to the NounsBR DAO , including (but not necessarily limited to) proposals that:"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "The NounsBR community has undertaken a preliminary exploration of proposal veto alternatives (‘rage quit’ etc.), but it is now clear that this is a difficult problem that will require significantly more research, development and testing before a satisfactory solution can be implemented."
+msgstr ""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "The Quorum (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. It increases quadratically as a function of the % of NounsBR voting against a prop, varying between Min Quorum and Max Quorum."
+msgstr ""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "The Quorum (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. The number of For votes required to pass Proposal {0} is given by the following curve:"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "The compressed parts are efficiently converted into a single base64 encoded SVG image on-chain. To accomplish this, each part is decoded into an intermediate format before being converted into a series of SVG rects using batched, on-chain string concatenation. Once the entire SVG has been generated, it is base64 encoded."
+msgstr ""
+
+#: src/pages/Playground/index.tsx
+msgid "The playground was built using the {nounsbrProtocolLink}. NounBR's traits are determined by the NounBR Seed. The seed was generated using {nounsbrAssetsLink} and rendered using the {nounsbrSDKLink}."
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "The proposal veto right was initially envisioned as a temporary solution to the problem of ‘51% attacks’ on the NounsBR DAO treasury. While NoundersBR initially believed that a healthy distribution of NounsBR would be sufficient protection for the DAO, a more complete understanding of the incentives and risks has led to general consensus within the NoundersBR, the NounsBR Foundation, and the wider community that a more robust game-theoretic solution should be implemented before the right is removed."
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "The treasury is controlled exclusively by NounsBR via governance."
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "There are unfortunately no algorithmic solutions for making these determinations in advance (if there were, the veto would not be required), and proposals must be considered on a case by case basis."
+msgstr ""
+
+#: src/components/VoteModal/index.tsx
+msgid "There was an error voting for your account."
+msgstr ""
+
+#: src/components/ProfileActivityFeed/index.tsx
+msgid "This NounBR has no activity, since it was just created. Check back soon!"
+msgstr ""
+
+#: src/pages/Governance/index.tsx
+msgid "This treasury exists for <0>NounsBR DAO</0> participants to allocate resources for the long-term growth and prosperity of the NounsBR project."
+msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "Threshold"
+msgstr ""
+
+#: src/components/AuctionTimer/index.tsx
+msgid "Time left"
+msgstr ""
+
+#: src/pages/CreateProposal/index.tsx
+msgid "Tip:"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "Trait generation is not truly random. Traits can be predicted when minting a NounBR on the pending block."
+msgstr ""
+
+#: src/components/Bid/index.tsx
+#: src/components/Bid/index.tsx
+#: src/components/VoteModal/index.tsx
+#: src/pages/CreateProposal/index.tsx
+#: src/pages/Vote/index.tsx
+msgid "Transaction Failed"
+msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "Transaction Successful!"
+msgstr ""
+
+#: src/components/NavBarTreasury/index.tsx
+#: src/pages/Governance/index.tsx
+msgid "Treasury"
+msgstr ""
+
+#: src/components/Footer/index.tsx
+msgid "Twitter"
+msgstr ""
+
+#: src/components/NounBRProfileVoteRow/index.tsx
+#: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
+msgid "Undetermined"
+msgstr ""
+
+#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/CurrentDelegatePannel/index.tsx
+msgid "Update Delegate"
+msgstr ""
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Updating..."
+msgstr ""
+
+#: src/pages/Playground/index.tsx
+msgid "Upload"
+msgstr ""
+
+#: src/pages/Playground/index.tsx
+msgid "Upload Custom Trait"
+msgstr ""
+
+#: src/components/VoteModal/index.tsx
+msgid "User Already Voted"
+msgstr ""
+
+#: src/components/ProposalTransactionFormModal/index.tsx
+msgid "Value"
+msgstr ""
+
+#: src/components/ProposalTransactionFormModal/index.tsx
+msgid "Value in ETH (Optional)"
+msgstr ""
+
+#: src/components/NounBRProfileVoteRow/index.tsx
+#: src/components/ProposalStatus/index.tsx
+#: src/components/ProposalStatusCopy/index.tsx
+msgid "Vetoed"
+msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "View Dynamic Quorum Info"
+msgstr ""
+
+#: src/components/BidHistoryBtn/index.tsx
+msgid "View all bids"
+msgstr ""
+
+#: src/components/ChangeDelegatePannel/index.tsx
+#: src/components/Holder/index.tsx
+#: src/components/NounBRInfoRowHolder/index.tsx
+#: src/components/Winner/index.tsx
+#: src/components/profileEvent/event/DesktopDelegationEvent/index.tsx
+#: src/components/profileEvent/event/DesktopDelegationEvent/index.tsx
+#: src/components/profileEvent/event/DesktopNounBRWinEvent/index.tsx
+#: src/components/profileEvent/event/DesktopNounBRWinEvent/index.tsx
+#: src/components/profileEvent/event/DesktopProposalVoteEvent/index.tsx
+#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
+#: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
+msgid "View on Etherscan"
+msgstr ""
+
+#: src/components/Bid/index.tsx
+msgid "Vote for the next NounBR"
+msgstr ""
+
+#: src/components/VoteModal/index.tsx
+msgid "Vote on Prop {0}"
+msgstr ""
+
+#: src/components/NounBRProfileVoteRow/index.tsx
+msgid "Voted against"
+msgstr ""
+
+#: src/components/NounBRProfileVoteRow/index.tsx
+#~ msgid "Voted aginst"
+#~ msgstr ""
+
+#: src/components/NounBRProfileVoteRow/index.tsx
+msgid "Voted for"
+msgstr ""
+
+#: src/components/DelegateHoverCard/index.tsx
+msgid "Voted with<0>{numVotesForProp}</0>NounBR"
+msgstr ""
+
+#: src/components/DelegateHoverCard/index.tsx
+msgid "Voted with<0>{numVotesForProp}</0>NounsBR"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "WTF?"
+msgstr ""
+
+#: src/components/NounBRProfileVoteRow/index.tsx
+#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
+msgid "Waiting for"
+msgstr ""
+
+#: src/components/Winner/index.tsx
+#: src/components/Winner/index.tsx
+msgid "What now?"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction NounsBR as long as Ethereum is operational and there are interested bidders."
+msgstr ""
+
+#: src/components/DelegationCandidateInfo/index.tsx
+msgid "Will have"
+msgstr ""
+
+#: src/components/NounBRInfoRowHolder/index.tsx
+#: src/components/Winner/index.tsx
+msgid "Winner"
+msgstr ""
+
+#: src/components/CurrentBid/index.tsx
+msgid "Winning bid"
+msgstr ""
+
+#: src/components/Winner/index.tsx
+msgid "You"
+msgstr ""
+
+#: src/components/ProposalHeader/index.tsx
+msgid "You <0>Abstained</0> from this proposal"
+msgstr ""
+
+#: src/components/CreateProposalButton/index.tsx
+msgid "You already have an active or pending proposal"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "You can experiment with off-chain NounBR generation at the {playgroundLink}."
+msgstr ""
+
+#: src/components/SettleManuallyBtn/index.tsx
+msgid "You can settle manually in 1 minute"
+msgstr ""
+
+#: src/components/SettleManuallyBtn/index.tsx
+msgid "You can settle manually in {0} minutes"
+msgstr ""
+
+#: src/components/CreateProposalButton/index.tsx
+msgid "You don't have enough votes to submit a proposal"
+msgstr ""
+
+#: src/components/Proposals/index.tsx
+msgid "You have no Votes."
+msgstr ""
+
+#: src/components/ProposalHeader/index.tsx
+msgid "You have no votes."
+msgstr ""
+
+#: src/components/CreateProposalButton/index.tsx
+msgid "You must have {0} votes to submit a proposal"
+msgstr ""
+
+#: src/components/ProposalHeader/index.tsx
+msgid "You voted <0>Against</0> this proposal"
+msgstr ""
+
+#: src/components/ProposalHeader/index.tsx
+msgid "You voted <0>For</0> this proposal"
+msgstr ""
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "You've already delegated to this address"
+msgstr ""
+
+#: src/pages/Playground/index.tsx
+msgid "You've generated {0} years worth of NounsBR"
+msgstr ""
+
+#: src/components/VoteModal/index.tsx
+msgid "You've successfully voted on on prop {0}"
+msgstr ""
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Your <0>{availableVotes}</0> votes are being delegated to a new account."
+msgstr ""
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Your <0>{availableVotes}</0> votes have been delegated to a new account."
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "accessories (140)"
+msgstr ""
+
+#: src/components/AuctionTimer/index.tsx
+msgid "at"
+msgstr ""
+
+#: src/components/ProposalHeader/index.tsx
+msgid "at <0>{0}</0>"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "backgrounds (2)"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "bodies (30)"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "glasses (23)"
+msgstr ""
+
+#: src/components/AuctionTimer/index.tsx
+msgid "h"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "heads (242)"
+msgstr ""
+
+#: src/components/AuctionTimer/index.tsx
+msgid "m"
+msgstr ""
+
+#: src/components/Bid/index.tsx
+msgid "or more"
+msgstr ""
+
+#: src/components/Documentation/index.tsx
+msgid "public domain"
+msgstr ""
+
+#: src/components/AuctionTimer/index.tsx
+msgid "s"
+msgstr ""
+
+#: src/components/VoteCard/index.tsx
+#~ msgid "{0} <0>Address </0>"
+#~ msgstr ""
+
+#: src/components/VoteCard/index.tsx
+msgid "{0} <0>Address</0>"
+msgstr ""
+
+#: src/components/VoteCard/index.tsx
+msgid "{0} <0>Addresses</0>"
+msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "{0} votes"
+msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "{moveStateButtonAction} Proposal ⌐◧-◧"
+msgstr ""
+
+#: src/components/DelegationCandidateVoteCountInfo/index.tsx
+msgid "{voteCount} Vote"
+msgstr ""
+
+#: src/components/DelegationCandidateVoteCountInfo/index.tsx
+msgid "{voteCount} Votes"
+msgstr ""
+
+#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
+msgid "{voterComponent} abstained on"
+msgstr ""
+
+#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
+msgid "{voterComponent} voted against"
+msgstr ""
+
+#: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
+msgid "{voterComponent} voted for"
+msgstr ""
+
+#: src/pages/NounersBR/index.tsx
+msgid "NounersBR"
+msgstr "NounersBR"
+
+#: src/pages/NounersBR/index.tsx
+msgid "Welcome, NounerBR!"
+msgstr "Welcome, NounerBR!"
+
+#: src/pages/NounersBR/index.tsx
+msgid "Next steps"
+msgstr "Next steps"
+
+#: src/pages/NounersBR/index.tsx
+msgid "So you just won a NounBR.... Cool! Be sure to go over how everything works and head over to our discord server to verify your NounBR!"
+msgstr "So you just won a NounBR.... Cool! Be sure to go over how everything works and head over to our discord server to verify your NounBR!"
+
+#: src/pages/NounersBR/index.tsx
+msgid "Join"
+msgstr "Join"
+
+#: src/pages/NounersBR/index.tsx
+msgid "Discord Channels"
+msgstr "Discord Channels"
+
+#: src/pages/NounersBR/index.tsx
+msgid "Welcome"
+msgstr "Welcome"
+
+#: src/pages/NounersBR/index.tsx
+msgid "Basic information, major announbrcements, and user verification. If you just bought a NounBR, you will need to verify your ownership in the #authentication channel to get added to the 'NounerBR' role of the server."
+msgstr "Basic information, major announbrcements, and user verification. If you just bought a NounBR, you will need to verify your ownership in the #authentication channel to get added to the 'NounerBR' role of the server."
+
+#: src/pages/NounersBR/index.tsx
+msgid "These are channels where only NounsBR DAO members can post. In the spirit of having an open and collaborative environment, all of these channels (except for #nounbrer-private) are viewable by the public."
+msgstr "These are channels where only NounsBR DAO members can post. In the spirit of having an open and collaborative environment, all of these channels (except for #nounbrer-private) are viewable by the public."
+
+#: src/pages/NounersBR/index.tsx
+msgid "#nounsbr-chat"
+msgstr "#nounsbr-chat"
+
+#: src/pages/NounersBR/index.tsx
+msgid "This is where most communication between members occurs. Anything that doesn't fit in the other NounersBR channels likely goes here."
+msgstr "This is where most communication between members occurs. Anything that doesn't fit in the other NounersBR channels likely goes here."
+
+#: src/pages/NounersBR/index.tsx
+msgid "#proposals"
+msgstr "#proposals"
+
+#: src/pages/NounersBR/index.tsx
+msgid "Discussion and questions about proposals."
+msgstr "Discussion and questions about proposals."
+
+#: src/pages/NounersBR/index.tsx
+msgid "#nounbrer-private"
+msgstr "#nounbrer-private"
+
+#: src/pages/NounersBR/index.tsx
+msgid "While we generally prefer to keep everything out in the open, sometimes there are sensitive matters where information is only kept to members."
+msgstr "While we generally prefer to keep everything out in the open, sometimes there are sensitive matters where information is only kept to members."
+
+#: src/pages/NounersBR/index.tsx
+msgid "These are channels where anyone can post."
+msgstr "These are channels where anyone can post."
+
+#: src/pages/NounersBR/index.tsx
+msgid "#general-chat"
+msgstr "#general-chat"
+
+#: src/pages/NounersBR/index.tsx
+msgid "The most active channel, and the other are topic specific. Non-members often post in these channels asking for guidance on proposal ideas, or to share things they have made."
+msgstr "The most active channel, and the other are topic specific. Non-members often post in these channels asking for guidance on proposal ideas, or to share things they have made."
+
+#: src/pages/NounersBR/index.tsx
+msgid "Projects"
+msgstr "Projects"
+
+#: src/pages/NounersBR/index.tsx
+msgid "When a project passes an on-chain vote, the creator of that proposal will often be given their own channel in this section to answer questions and share updates on the status of their work. This is a constantly expanding list - for more information on each of these, check out the DAO section of the NounsBR website."
+msgstr "When a project passes an on-chain vote, the creator of that proposal will often be given their own channel in this section to answer questions and share updates on the status of their work. This is a constantly expanding list - for more information on each of these, check out the DAO section of the NounsBR website."
+
+#: src/components/NavBar/index.tsx
+msgid "About"
+msgstr "About"
+
+#: src/components/Documentation/index.tsx
+msgid "unequally withdraw the treasury for personal gain"
+msgstr "unequally withdraw the treasury for personal gain"
+
+#: src/components/NavBar/index.tsx
+msgid "bribe voters to facilitate withdraws of the treasury for personal gain"
+msgstr "bribe voters to facilitate withdraws of the treasury for personal gain"
+
+#: src/components/NavBar/index.tsx
+msgid "attempt to alter NounBR auction cadence for the purpose of maintaining or acquiring a voting majority"
+msgstr "attempt to alter NounBR auction cadence for the purpose of maintaining or acquiring a voting majority"
+
+#: src/components/NavBar/index.tsx
+msgid "make upgrades to critical smart contracts without undergoing an audit"
+msgstr "make upgrades to critical smart contracts without undergoing an audit"
+

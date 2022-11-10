@@ -1,0 +1,37 @@
+{
+  "name": "@nounsbr/subgraph",
+  "version": "0.1.0",
+  "description": "A subgraph that indexes nounsbr events",
+  "author": "NoundersBR",
+  "homepage": "https://nounsbr.wtf",
+  "license": "GPL-3.0",
+  "main": "build/index.js",
+  "directories": {
+    "src": "src"
+  },
+  "scripts": {
+    "graph-node": "docker-compose up",
+    "clean": "rimraf ./src/types ./build subgraph.yaml",
+    "prepare:hardhat": "mustache config/hardhat.json subgraph.yaml.mustache > subgraph.yaml",
+    "prepare:rinkeby": "mustache config/rinkeby.json subgraph.yaml.mustache > subgraph.yaml",
+    "prepare:mainnet": "mustache config/mainnet.json subgraph.yaml.mustache > subgraph.yaml",
+    "prepare:goerli": "mustache config/goerli.json subgraph.yaml.mustache > subgraph.yaml",
+    "codegen": "graph codegen --output-dir src/types/",
+    "test:configgen": "echo libsFolder: $(dirname `cd ../..; pwd`)/nounsbr-monorepo/node_modules > matchstick.yaml",
+    "test": "graph test",
+    "create:localnode": "graph create --node http://localhost:8020/",
+    "deploy": "graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/",
+    "deploy:localnode": "graph deploy --debug --node http://localhost:8020/ --ipfs http://localhost:5001/",
+    "deploy:hardhat": "yarn clean && yarn prepare:hardhat && yarn codegen && yarn create:localnode nounsbrdao/nounsbr-subgraph && yarn deploy:localnode nounsbrdao/nounsbr-subgraph",
+    "deploy:rinkeby": "yarn clean && yarn prepare:rinkeby && yarn codegen && yarn deploy nounsbr/nounsbr-subgraph-rinkeby",
+    "deploy:mainnet": "yarn clean && yarn prepare:mainnet && yarn codegen && yarn deploy nounsbr/nounsbr-subgraph",
+    "deploy:goerli": "yarn clean && yarn prepare:goerli && yarn codegen && yarn deploy nounsbr/nounsbr-subgraph-goerly",
+    "mustache": "mustache"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "^0.26.0",
+    "@graphprotocol/graph-ts": "^0.26.0",
+    "mustache": "^4.2.0",
+    "matchstick-as": "0.4.2"
+  }
+}
