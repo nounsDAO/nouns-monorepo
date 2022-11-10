@@ -2,26 +2,26 @@ import chai from 'chai';
 import { ethers } from 'hardhat';
 import { BigNumber as EthersBN, constants } from 'ethers';
 import { solidity } from 'ethereum-waffle';
-import { NounsDescriptorV2__factory as NounsDescriptorV2Factory, NounsToken } from '../typechain';
-import { deployNounsToken, populateDescriptorV2 } from './utils';
+import { NounsBRDescriptorV2__factory as NounsBRDescriptorV2Factory, NounsBRToken } from '../typechain';
+import { deployNounsBRToken, populateDescriptorV2 } from './utils';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 chai.use(solidity);
 const { expect } = chai;
 
-describe('NounsToken', () => {
-  let nounsToken: NounsToken;
+describe('NounsBRToken', () => {
+  let nounsbrToken: NounsBRToken;
   let deployer: SignerWithAddress;
-  let noundersDAO: SignerWithAddress;
+  let noundersbrDAO: SignerWithAddress;
   let snapshotId: number;
 
   before(async () => {
-    [deployer, noundersDAO] = await ethers.getSigners();
-    nounsToken = await deployNounsToken(deployer, noundersDAO.address, deployer.address);
+    [deployer, noundersbrDAO] = await ethers.getSigners();
+    nounsbrToken = await deployNounsBRToken(deployer, noundersbrDAO.address, deployer.address);
 
-    const descriptor = await nounsToken.descriptor();
+    const descriptor = await nounsbrToken.descriptor();
 
-    await populateDescriptorV2(NounsDescriptorV2Factory.connect(descriptor, deployer));
+    await populateDescriptorV2(NounsBRDescriptorV2Factory.connect(descriptor, deployer));
   });
 
   beforeEach(async () => {
@@ -32,52 +32,52 @@ describe('NounsToken', () => {
     await ethers.provider.send('evm_revert', [snapshotId]);
   });
 
-  it('should allow the minter to mint a noun to itself and a reward noun to the noundersDAO', async () => {
-    const receipt = await (await nounsToken.mint()).wait();
+  it('should allow the minter to mint a nounbr to itself and a reward nounbr to the noundersbrDAO', async () => {
+    const receipt = await (await nounsbrToken.mint()).wait();
 
-    const [, , , noundersNounCreated, , , , ownersNounCreated] = receipt.events || [];
+    const [, , , noundersbrNounBRCreated, , , , ownersNounBRCreated] = receipt.events || [];
 
-    expect(await nounsToken.ownerOf(0)).to.eq(noundersDAO.address);
-    expect(noundersNounCreated?.event).to.eq('NounCreated');
-    expect(noundersNounCreated?.args?.tokenId).to.eq(0);
-    expect(noundersNounCreated?.args?.seed.length).to.equal(5);
+    expect(await nounsbrToken.ownerOf(0)).to.eq(noundersbrDAO.address);
+    expect(noundersbrNounBRCreated?.event).to.eq('NounBRCreated');
+    expect(noundersbrNounBRCreated?.args?.tokenId).to.eq(0);
+    expect(noundersbrNounBRCreated?.args?.seed.length).to.equal(5);
 
-    expect(await nounsToken.ownerOf(1)).to.eq(deployer.address);
-    expect(ownersNounCreated?.event).to.eq('NounCreated');
-    expect(ownersNounCreated?.args?.tokenId).to.eq(1);
-    expect(ownersNounCreated?.args?.seed.length).to.equal(5);
+    expect(await nounsbrToken.ownerOf(1)).to.eq(deployer.address);
+    expect(ownersNounBRCreated?.event).to.eq('NounBRCreated');
+    expect(ownersNounBRCreated?.args?.tokenId).to.eq(1);
+    expect(ownersNounBRCreated?.args?.seed.length).to.equal(5);
 
-    noundersNounCreated?.args?.seed.forEach((item: EthersBN | number) => {
+    noundersbrNounBRCreated?.args?.seed.forEach((item: EthersBN | number) => {
       const value = typeof item !== 'number' ? item?.toNumber() : item;
       expect(value).to.be.a('number');
     });
 
-    ownersNounCreated?.args?.seed.forEach((item: EthersBN | number) => {
+    ownersNounBRCreated?.args?.seed.forEach((item: EthersBN | number) => {
       const value = typeof item !== 'number' ? item?.toNumber() : item;
       expect(value).to.be.a('number');
     });
   });
 
   it('should set symbol', async () => {
-    expect(await nounsToken.symbol()).to.eq('NOUNBR');
+    expect(await nounsbrToken.symbol()).to.eq('NOUNBR');
   });
 
   it('should set name', async () => {
-    expect(await nounsToken.name()).to.eq('NounsBR');
+    expect(await nounsbrToken.name()).to.eq('NounsBR');
   });
 
-  it('should allow minter to mint a noun to itself', async () => {
-    await (await nounsToken.mint()).wait();
+  it('should allow minter to mint a nounbr to itself', async () => {
+    await (await nounsbrToken.mint()).wait();
 
-    const receipt = await (await nounsToken.mint()).wait();
-    const nounCreated = receipt.events?.[3];
+    const receipt = await (await nounsbrToken.mint()).wait();
+    const nounbrCreated = receipt.events?.[3];
 
-    expect(await nounsToken.ownerOf(2)).to.eq(deployer.address);
-    expect(nounCreated?.event).to.eq('NounCreated');
-    expect(nounCreated?.args?.tokenId).to.eq(2);
-    expect(nounCreated?.args?.seed.length).to.equal(5);
+    expect(await nounsbrToken.ownerOf(2)).to.eq(deployer.address);
+    expect(nounbrCreated?.event).to.eq('NounBRCreated');
+    expect(nounbrCreated?.args?.tokenId).to.eq(2);
+    expect(nounbrCreated?.args?.seed.length).to.equal(5);
 
-    nounCreated?.args?.seed.forEach((item: EthersBN | number) => {
+    nounbrCreated?.args?.seed.forEach((item: EthersBN | number) => {
       const value = typeof item !== 'number' ? item?.toNumber() : item;
       expect(value).to.be.a('number');
     });
@@ -86,44 +86,44 @@ describe('NounsToken', () => {
   it('should emit two transfer logs on mint', async () => {
     const [, , creator, minter] = await ethers.getSigners();
 
-    await (await nounsToken.mint()).wait();
+    await (await nounsbrToken.mint()).wait();
 
-    await (await nounsToken.setMinter(minter.address)).wait();
-    await (await nounsToken.transferOwnership(creator.address)).wait();
+    await (await nounsbrToken.setMinter(minter.address)).wait();
+    await (await nounsbrToken.transferOwnership(creator.address)).wait();
 
-    const tx = nounsToken.connect(minter).mint();
+    const tx = nounsbrToken.connect(minter).mint();
 
     await expect(tx)
-      .to.emit(nounsToken, 'Transfer')
+      .to.emit(nounsbrToken, 'Transfer')
       .withArgs(constants.AddressZero, creator.address, 2);
-    await expect(tx).to.emit(nounsToken, 'Transfer').withArgs(creator.address, minter.address, 2);
+    await expect(tx).to.emit(nounsbrToken, 'Transfer').withArgs(creator.address, minter.address, 2);
   });
 
-  it('should allow minter to burn a noun', async () => {
-    await (await nounsToken.mint()).wait();
+  it('should allow minter to burn a nounbr', async () => {
+    await (await nounsbrToken.mint()).wait();
 
-    const tx = nounsToken.burn(0);
-    await expect(tx).to.emit(nounsToken, 'NounBurned').withArgs(0);
+    const tx = nounsbrToken.burn(0);
+    await expect(tx).to.emit(nounsbrToken, 'NounBRBurned').withArgs(0);
   });
 
   it('should revert on non-minter mint', async () => {
-    const account0AsNounErc721Account = nounsToken.connect(noundersDAO);
-    await expect(account0AsNounErc721Account.mint()).to.be.reverted;
+    const account0AsNounBRErc721Account = nounsbrToken.connect(noundersbrDAO);
+    await expect(account0AsNounBRErc721Account.mint()).to.be.reverted;
   });
 
   describe('contractURI', async () => {
     it('should return correct contractURI', async () => {
-      expect(await nounsToken.contractURI()).to.eq(
+      expect(await nounsbrToken.contractURI()).to.eq(
         'ipfs://QmZi1n79FqWt2tTLwCqiy6nLM6xLGRsEPQ5JmReJQKNNzX',
       );
     });
     it('should allow owner to set contractURI', async () => {
-      await nounsToken.setContractURIHash('ABC123');
-      expect(await nounsToken.contractURI()).to.eq('ipfs://ABC123');
+      await nounsbrToken.setContractURIHash('ABC123');
+      expect(await nounsbrToken.contractURI()).to.eq('ipfs://ABC123');
     });
     it('should not allow non owner to set contractURI', async () => {
       const [, nonOwner] = await ethers.getSigners();
-      await expect(nounsToken.connect(nonOwner).setContractURIHash('BAD')).to.be.revertedWith(
+      await expect(nounsbrToken.connect(nonOwner).setContractURIHash('BAD')).to.be.revertedWith(
         'Ownable: caller is not the owner',
       );
     });

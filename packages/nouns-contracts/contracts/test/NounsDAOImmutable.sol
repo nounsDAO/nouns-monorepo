@@ -2,12 +2,12 @@
 
 pragma solidity ^0.8.6;
 
-import '../governance/NounsDAOLogicV1.sol';
+import '../governance/NounsBRDAOLogicV1.sol';
 
-contract NounsDAOImmutable is NounsDAOLogicV1 {
+contract NounsBRDAOImmutable is NounsBRDAOLogicV1 {
     constructor(
         address timelock_,
-        address nouns_,
+        address nounsbr_,
         address admin_,
         address vetoer_,
         uint256 votingPeriod_,
@@ -16,25 +16,25 @@ contract NounsDAOImmutable is NounsDAOLogicV1 {
         uint256 quorumVotesBPS_
     ) {
         admin = msg.sender;
-        initialize(timelock_, nouns_, vetoer_, votingPeriod_, votingDelay_, proposalThresholdBPS_, quorumVotesBPS_);
+        initialize(timelock_, nounsbr_, vetoer_, votingPeriod_, votingDelay_, proposalThresholdBPS_, quorumVotesBPS_);
 
         admin = admin_;
     }
 
     function initialize(
         address timelock_,
-        address nouns_,
+        address nounsbr_,
         address vetoer_,
         uint256 votingPeriod_,
         uint256 votingDelay_,
         uint256 proposalThresholdBPS_,
         uint256 quorumVotesBPS_
     ) public override {
-        require(msg.sender == admin, 'NounsDAO::initialize: admin only');
-        require(address(timelock) == address(0), 'NounsDAO::initialize: can only initialize once');
+        require(msg.sender == admin, 'NounsBRDAO::initialize: admin only');
+        require(address(timelock) == address(0), 'NounsBRDAO::initialize: can only initialize once');
 
-        timelock = INounsDAOExecutor(timelock_);
-        nouns = NounsTokenLike(nouns_);
+        timelock = INounsBRDAOExecutor(timelock_);
+        nounsbr = NounsBRTokenLike(nounsbr_);
         vetoer = vetoer_;
         votingPeriod = votingPeriod_;
         votingDelay = votingDelay_;

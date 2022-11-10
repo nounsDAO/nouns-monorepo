@@ -27,6 +27,6 @@ yarn-error.log*
 
 # i18n 
 /src/locales/**/*.js
-/src/locales/**/en-US.po
-/src/locales/**/pseudo.po
+#/src/locales/**/en-US.po
+#/src/locales/**/pseudo.po
 

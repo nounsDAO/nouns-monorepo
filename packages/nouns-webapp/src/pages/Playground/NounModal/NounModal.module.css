@@ -9,33 +9,33 @@
   width: 25rem;
 }
 
-.displayNounFooter {
+.displayNounBRFooter {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.displayNounFooter span {
+.displayNounBRFooter span {
   color: white;
   font-weight: bold;
   margin-bottom: 1rem;
 }
-.displayNounFooter button {
+.displayNounBRFooter button {
   width: 50%;
   background: rgba(255, 255, 255, 0.3);
   border: none;
 }
 
-.displayNounFooter button:hover,
-.displayNounFooter button:active,
-.displayNounFooter button:focus {
+.displayNounBRFooter button:hover,
+.displayNounBRFooter button:active,
+.displayNounBRFooter button:focus {
   background: rgba(255, 255, 255, 0.4) !important;
   box-shadow: none !important;
 }
 
-.nounImg {
+.nounbrImg {
   border-radius: 16px;
 }
-.nounWrapper {
+.nounbrWrapper {
   margin-bottom: 1rem;
 }
 

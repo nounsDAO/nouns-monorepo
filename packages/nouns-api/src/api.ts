@@ -12,7 +12,7 @@ export const createAPI = (): Express => {
 
   app.get('/', (_req, res) => {
     res.status(200).send({
-      message: 'Nouns API Root',
+      message: 'NounsBR API Root',
     });
   });
 

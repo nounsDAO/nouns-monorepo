@@ -1,4 +1,4 @@
-.nounButtonCool {
+.nounbrButtonCool {
   height: 40px;
   color: var(--brand-cool-dark-text);
   background-color: var(--brand-cool-accent);
@@ -19,7 +19,7 @@
   transition: all 0.15s ease-in-out;
 }
 
-.nounButtonWarm {
+.nounbrButtonWarm {
   height: 40px;
   color: var(--brand-warm-dark-text);
   background-color: var(--brand-warm-accent);
@@ -40,7 +40,7 @@
   transition: all 0.15s ease-in-out;
 }
 
-.nounButton {
+.nounbrButton {
   height: 40px;
   color: var(--brand-cool-dark-text);
   background-color: var(--brand-cool-accent);
@@ -61,18 +61,18 @@
   transition: all 0.15s ease-in-out;
 }
 
-.nounButtonCool:hover,
-.nounButtonWarm:hover,
-.nounButton:hover {
+.nounbrButtonCool:hover,
+.nounbrButtonWarm:hover,
+.nounbrButton:hover {
   text-decoration: none;
   background-color: var(--brand-gray-hover);
 }
 
-.nounButton:active {
+.nounbrButton:active {
   color: black;
 }
 
-.nounButtonContents {
+.nounbrButtonContents {
   display: flex;
   flex-direction: row;
   justify-content: space-between;

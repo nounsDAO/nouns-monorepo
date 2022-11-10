@@ -5,22 +5,22 @@ import ShortAddress from '../ShortAddress';
 import clsx from 'clsx';
 import { Trans } from '@lingui/macro';
 import { useQuery } from '@apollo/client';
-import { nounQuery } from '../../wrappers/subgraph';
+import { nounbrQuery } from '../../wrappers/subgraph';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import React from 'react';
 import Tooltip from '../Tooltip';
 
 interface HolderProps {
-  nounId: number;
-  isNounders?: boolean;
+  nounbrId: number;
+  isNoundersBRBR?: boolean;
 }
 
 const Holder: React.FC<HolderProps> = props => {
-  const { nounId, isNounders } = props;
+  const { nounbrId, isNoundersBRBR } = props;
 
   const isCool = useAppSelector(state => state.application.isCoolBackground);
 
-  const { loading, error, data } = useQuery(nounQuery(nounId.toString()));
+  const { loading, error, data } = useQuery(nounbrQuery(nounbrId.toString()));
 
   if (loading) {
     return <></>;
@@ -32,9 +32,9 @@ const Holder: React.FC<HolderProps> = props => {
     );
   }
 
-  const holder = data && data.noun.owner.id;
+  const holder = data && data.nounbr.owner.id;
 
-  const nonNounderNounContent = (
+  const nonNounderBRBRNounBRContent = (
     <a
       href={buildEtherscanAddressLink(holder)}
       target={'_blank'}
@@ -53,7 +53,7 @@ const Holder: React.FC<HolderProps> = props => {
     </a>
   );
 
-  const nounderNounContent = 'nounders.eth';
+  const nounderbrNounBRContent = 'noundersbr.eth';
 
   return (
     <>
@@ -75,7 +75,7 @@ const Holder: React.FC<HolderProps> = props => {
               color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
             }}
           >
-            {isNounders ? nounderNounContent : nonNounderNounContent}
+            {isNoundersBRBR ? nounderbrNounBRContent : nonNounderBRBRNounBRContent}
           </h2>
         </Col>
       </Row>

@@ -127,7 +127,7 @@
   display: flex;
 }
 
-.nounInWalletBtnWrapper {
+.nounbrInWalletBtnWrapper {
   display: flex;
   padding-top: 0.8rem;
 }
@@ -152,7 +152,7 @@
     overflow-wrap: break-word;
   }
 
-  .nounInWalletBtnWrapper {
+  .nounbrInWalletBtnWrapper {
     width: 100%;
   }
 

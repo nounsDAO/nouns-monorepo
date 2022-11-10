@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import { Auction } from '../../wrappers/nounsAuction';
+import { Auction } from '../../wrappers/nounsbrAuction';
 import classes from './AuctionTimer.module.css';
 import { useState, useEffect, useRef } from 'react';
 import { Row, Col } from 'react-bootstrap';

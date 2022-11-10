@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title Common interface for NounsDescriptor versions, as used by NounsToken and NounsSeeder.
+/// @title Common interface for NounsBRDescriptor versions, as used by NounsBRToken and NounsBRSeeder.
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -17,16 +17,16 @@
 
 pragma solidity ^0.8.6;
 
-import { INounsSeeder } from './INounsSeeder.sol';
+import { INounsBRSeeder } from './INounsBRSeeder.sol';
 
-interface INounsDescriptorMinimal {
+interface INounsBRDescriptorMinimal {
     ///
     /// USED BY TOKEN
     ///
 
-    function tokenURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view returns (string memory);
+    function tokenURI(uint256 tokenId, INounsBRSeeder.Seed memory seed) external view returns (string memory);
 
-    function dataURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view returns (string memory);
+    function dataURI(uint256 tokenId, INounsBRSeeder.Seed memory seed) external view returns (string memory);
 
     ///
     /// USED BY SEEDER

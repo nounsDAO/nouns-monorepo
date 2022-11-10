@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title Interface for NounsDescriptor
+/// @title Interface for NounsBRDescriptor
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -17,10 +17,10 @@
 
 pragma solidity ^0.8.6;
 
-import { INounsSeeder } from './INounsSeeder.sol';
-import { INounsDescriptorMinimal } from './INounsDescriptorMinimal.sol';
+import { INounsBRSeeder } from './INounsBRSeeder.sol';
+import { INounsBRDescriptorMinimal } from './INounsBRDescriptorMinimal.sol';
 
-interface INounsDescriptor is INounsDescriptorMinimal {
+interface INounsBRDescriptor is INounsBRDescriptorMinimal {
     event PartsLocked();
 
     event DataURIToggled(bool enabled);
@@ -85,15 +85,15 @@ interface INounsDescriptor is INounsDescriptorMinimal {
 
     function setBaseURI(string calldata baseURI) external;
 
-    function tokenURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view override returns (string memory);
+    function tokenURI(uint256 tokenId, INounsBRSeeder.Seed memory seed) external view override returns (string memory);
 
-    function dataURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view override returns (string memory);
+    function dataURI(uint256 tokenId, INounsBRSeeder.Seed memory seed) external view override returns (string memory);
 
     function genericDataURI(
         string calldata name,
         string calldata description,
-        INounsSeeder.Seed memory seed
+        INounsBRSeeder.Seed memory seed
     ) external view returns (string memory);
 
-    function generateSVGImage(INounsSeeder.Seed memory seed) external view returns (string memory);
+    function generateSVGImage(INounsBRSeeder.Seed memory seed) external view returns (string memory);
 }

@@ -19,25 +19,25 @@ pragma solidity ^0.8.6;
 
 import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
 import { ERC721Checkpointable } from './base/ERC721Checkpointable.sol';
-import { INounsDescriptorMinimal } from './interfaces/INounsDescriptorMinimal.sol';
-import { INounsSeeder } from './interfaces/INounsSeeder.sol';
-import { INounsToken } from './interfaces/INounsToken.sol';
+import { INounsBRDescriptorMinimal } from './interfaces/INounsBRDescriptorMinimal.sol';
+import { INounsBRSeeder } from './interfaces/INounsBRSeeder.sol';
+import { INounsBRToken } from './interfaces/INounsBRToken.sol';
 import { ERC721 } from './base/ERC721.sol';
 import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import { IProxyRegistry } from './external/opensea/IProxyRegistry.sol';
 
-contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
-    // The nounders DAO address (creators org)
-    address public noundersDAO;
+contract NounsBRToken is INounsBRToken, Ownable, ERC721Checkpointable {
+    // The noundersbr DAO address (creators org)
+    address public noundersbrDAO;
 
     // An address who has permissions to mint NounsBR
     address public minter;
 
     // The NounsBR token URI descriptor
-    INounsDescriptorMinimal public descriptor;
+    INounsBRDescriptorMinimal public descriptor;
 
     // The NounsBR token seeder
-    INounsSeeder public seeder;
+    INounsBRSeeder public seeder;
 
     // Whether the minter can be updated
     bool public isMinterLocked;
@@ -48,11 +48,11 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     // Whether the seeder can be updated
     bool public isSeederLocked;
 
-    // The noun seeds
-    mapping(uint256 => INounsSeeder.Seed) public seeds;
+    // The nounbr seeds
+    mapping(uint256 => INounsBRSeeder.Seed) public seeds;
 
-    // The internal noun ID tracker
-    uint256 private _currentNounId;
+    // The internal nounbr ID tracker
+    uint256 private _currentNounBRId;
 
     // IPFS content hash of contract-level metadata
     string private _contractURIHash = 'bafkreidlljxwtx4a26kkapf3gxnrfho2lug3vwlbrmztb5rsyubw3fvpce';
@@ -85,10 +85,10 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     }
 
     /**
-     * @notice Require that the sender is the nounders DAO.
+     * @notice Require that the sender is the noundersbr DAO.
      */
-    modifier onlyNoundersDAO() {
-        require(msg.sender == noundersDAO, 'Sender is not the noundersbr DAO');
+    modifier onlyNoundersBRBRDAO() {
+        require(msg.sender == noundersbrDAO, 'Sender is not the noundersbr DAO');
         _;
     }
 
@@ -101,13 +101,13 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     }
 
     constructor(
-        address _noundersDAO,
+        address _noundersbrDAO,
         address _minter,
-        INounsDescriptorMinimal _descriptor,
-        INounsSeeder _seeder,
+        INounsBRDescriptorMinimal _descriptor,
+        INounsBRSeeder _seeder,
         IProxyRegistry _proxyRegistry
     ) ERC721('NounsBR', 'NOUNBR') {
-        noundersDAO = _noundersDAO;
+        noundersbrDAO = _noundersbrDAO;
         minter = _minter;
         descriptor = _descriptor;
         seeder = _seeder;
@@ -141,24 +141,24 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     }
 
     /**
-     * @notice Mint a NounBR to the minter, along with a possible nounders reward
-     * NounBR. Nounders reward NounsBR are minted every 10 NounsBR, starting at 0,
-     * until 175201 nounder NounsBR have been minted (5 years w/ 15 minutes auctions).
+     * @notice Mint a NounBR to the minter, along with a possible noundersbr reward
+     * NounBR. NoundersBRBR reward NounsBR are minted every 10 NounsBR, starting at 0,
+     * until 175201 nounderbr NounsBR have been minted (5 years w/ 15 minutes auctions).
      * @dev Call _mintTo with the to address(es).
      */
     function mint() public override onlyMinter returns (uint256) {
-        if (_currentNounId <= 175200 && _currentNounId % 10 == 0) {
-            _mintTo(noundersDAO, _currentNounId++);
+        if (_currentNounBRId <= 175200 && _currentNounBRId % 10 == 0) {
+            _mintTo(noundersbrDAO, _currentNounBRId++);
         }
-        return _mintTo(minter, _currentNounId++);
+        return _mintTo(minter, _currentNounBRId++);
     }
 
     /**
-     * @notice Burn a noun.
+     * @notice Burn a nounbr.
      */
-    function burn(uint256 nounId) public override onlyMinter {
-        _burn(nounId);
-        emit NounBurned(nounId);
+    function burn(uint256 nounbrId) public override onlyMinter {
+        _burn(nounbrId);
+        emit NounBRBurned(nounbrId);
     }
 
     /**
@@ -166,7 +166,7 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
      * @dev See {IERC721Metadata-tokenURI}.
      */
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
-        require(_exists(tokenId), 'NounsToken: URI query for nonexistent token');
+        require(_exists(tokenId), 'NounsBRToken: URI query for nonexistent token');
         return descriptor.tokenURI(tokenId, seeds[tokenId]);
     }
 
@@ -175,18 +175,18 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
      * with the JSON contents directly inlined.
      */
     function dataURI(uint256 tokenId) public view override returns (string memory) {
-        require(_exists(tokenId), 'NounsToken: URI query for nonexistent token');
+        require(_exists(tokenId), 'NounsBRToken: URI query for nonexistent token');
         return descriptor.dataURI(tokenId, seeds[tokenId]);
     }
 
     /**
-     * @notice Set the nounders DAO.
-     * @dev Only callable by the nounders DAO when not locked.
+     * @notice Set the noundersbr DAO.
+     * @dev Only callable by the noundersbr DAO when not locked.
      */
-    function setNoundersDAO(address _noundersDAO) external override onlyNoundersDAO {
-        noundersDAO = _noundersDAO;
+    function setNoundersBRBRDAO(address _noundersbrDAO) external override onlyNoundersBRBRDAO {
+        noundersbrDAO = _noundersbrDAO;
 
-        emit NoundersDAOUpdated(_noundersDAO);
+        emit NoundersBRBRDAOUpdated(_noundersbrDAO);
     }
 
     /**
@@ -213,7 +213,7 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
      * @notice Set the token URI descriptor.
      * @dev Only callable by the owner when not locked.
      */
-    function setDescriptor(INounsDescriptorMinimal _descriptor) external override onlyOwner whenDescriptorNotLocked {
+    function setDescriptor(INounsBRDescriptorMinimal _descriptor) external override onlyOwner whenDescriptorNotLocked {
         descriptor = _descriptor;
 
         emit DescriptorUpdated(_descriptor);
@@ -233,7 +233,7 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
      * @notice Set the token seeder.
      * @dev Only callable by the owner when not locked.
      */
-    function setSeeder(INounsSeeder _seeder) external override onlyOwner whenSeederNotLocked {
+    function setSeeder(INounsBRSeeder _seeder) external override onlyOwner whenSeederNotLocked {
         seeder = _seeder;
 
         emit SeederUpdated(_seeder);
@@ -250,14 +250,14 @@ contract NounsToken is INounsToken, Ownable, ERC721Checkpointable {
     }
 
     /**
-     * @notice Mint a NounBR with `nounId` to the provided `to` address.
+     * @notice Mint a NounBR with `nounbrId` to the provided `to` address.
      */
-    function _mintTo(address to, uint256 nounId) internal returns (uint256) {
-        INounsSeeder.Seed memory seed = seeds[nounId] = seeder.generateSeed(nounId, descriptor);
+    function _mintTo(address to, uint256 nounbrId) internal returns (uint256) {
+        INounsBRSeeder.Seed memory seed = seeds[nounbrId] = seeder.generateSeed(nounbrId, descriptor);
 
-        _mint(owner(), to, nounId);
-        emit NounCreated(nounId, seed);
+        _mint(owner(), to, nounbrId);
+        emit NounBRCreated(nounbrId, seed);
 
-        return nounId;
+        return nounbrId;
     }
 }

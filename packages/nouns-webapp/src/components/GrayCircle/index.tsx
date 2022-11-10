@@ -1,6 +1,6 @@
 import { getGrayBackgroundSVG } from '../../utils/grayBackgroundSVG';
-import nounClasses from '../Noun/Noun.module.css';
-import Noun from '../Noun';
+import nounbrClasses from '../NounBR/NounBR.module.css';
+import NounBR from '../NounBR';
 import classes from './GrayCircle.module.css';
 
 interface GrayCircleProps {
@@ -11,15 +11,15 @@ export const GrayCircle: React.FC<GrayCircleProps> = props => {
   const { isDelegateView } = props;
   return (
     <div className={isDelegateView ? classes.wrapper : ''}>
-      <Noun
+      <NounBR
         imgPath={getGrayBackgroundSVG()}
         alt={''}
         wrapperClassName={
           isDelegateView
-            ? nounClasses.delegateViewCircularNounWrapper
-            : nounClasses.circularNounWrapper
+            ? nounbrClasses.delegateViewCircularNounBRWrapper
+            : nounbrClasses.circularNounBRWrapper
         }
-        className={isDelegateView ? nounClasses.delegateViewCircular : nounClasses.circular}
+        className={isDelegateView ? nounbrClasses.delegateViewCircular : nounbrClasses.circular}
       />
     </div>
   );

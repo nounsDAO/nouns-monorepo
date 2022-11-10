@@ -2,7 +2,7 @@ import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import hardhat from 'hardhat';
 import {
-  deployNounsToken,
+  deployNounsBRToken,
   getSigners,
   TestSigners,
   setTotalSupply,
@@ -14,9 +14,9 @@ import {
 } from '../../../utils';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
-  NounsToken,
-  NounsDescriptorV2__factory as NounsDescriptorV2Factory,
-  NounsDAOLogicV2,
+  NounsBRToken,
+  NounsBRDescriptorV2__factory as NounsBRDescriptorV2Factory,
+  NounsBRDAOLogicV2,
 } from '../../../../typechain';
 import { parseUnits } from 'ethers/lib/utils';
 import { DynamicQuorumParams } from '../../../types';
@@ -25,20 +25,20 @@ chai.use(solidity);
 const { expect } = chai;
 const { ethers } = hardhat;
 
-let token: NounsToken;
+let token: NounsBRToken;
 let deployer: SignerWithAddress;
 let account0: SignerWithAddress;
 let signers: TestSigners;
-let gov: NounsDAOLogicV2;
+let gov: NounsBRDAOLogicV2;
 let snapshotId: number;
 
 const V1_QUORUM_BPS = 201;
 
 async function setupWithV2() {
-  token = await deployNounsToken(signers.deployer);
+  token = await deployNounsBRToken(signers.deployer);
 
   await populateDescriptorV2(
-    NounsDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
+    NounsBRDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
   );
 
   await setTotalSupply(token, 100);
@@ -51,7 +51,7 @@ async function setupWithV2() {
   gov = await deployGovernorV2(deployer, govProxyAddress);
 }
 
-describe('NounsDAOV2#_setDynamicQuorumParams', () => {
+describe('NounsBRDAOV2#_setDynamicQuorumParams', () => {
   before(async () => {
     signers = await getSigners();
     deployer = signers.deployer;
@@ -248,13 +248,13 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
 
       it('reverts given input below lower bound', async () => {
         await expect(gov._setMinQuorumVotesBPS(199)).to.be.revertedWith(
-          'NounsDAO::_setMinQuorumVotesBPS: invalid min quorum votes bps',
+          'NounsBRDAO::_setMinQuorumVotesBPS: invalid min quorum votes bps',
         );
       });
 
       it('reverts given input above upper bound', async () => {
         await expect(gov._setMinQuorumVotesBPS(2001)).to.be.revertedWith(
-          'NounsDAO::_setMinQuorumVotesBPS: invalid min quorum votes bps',
+          'NounsBRDAO::_setMinQuorumVotesBPS: invalid min quorum votes bps',
         );
       });
 
@@ -262,7 +262,7 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
         await gov._setMaxQuorumVotesBPS(1998);
 
         await expect(gov._setMinQuorumVotesBPS(1999)).to.be.revertedWith(
-          'NounsDAO::_setMinQuorumVotesBPS: min quorum votes bps greater than max',
+          'NounsBRDAO::_setMinQuorumVotesBPS: min quorum votes bps greater than max',
         );
       });
     });
@@ -284,13 +284,13 @@ describe('NounsDAOV2#_setDynamicQuorumParams', () => {
 
       it('reverts given input above upper bound', async () => {
         await expect(gov._setMaxQuorumVotesBPS(6001)).to.be.revertedWith(
-          'NounsDAO::_setMaxQuorumVotesBPS: invalid max quorum votes bps',
+          'NounsBRDAO::_setMaxQuorumVotesBPS: invalid max quorum votes bps',
         );
       });
 
       it('reverts given input less than min param', async () => {
         await expect(gov._setMaxQuorumVotesBPS(199)).to.be.revertedWith(
-          'NounsDAO::_setMaxQuorumVotesBPS: min quorum votes bps greater than max',
+          'NounsBRDAO::_setMaxQuorumVotesBPS: min quorum votes bps greater than max',
         );
       });
     });

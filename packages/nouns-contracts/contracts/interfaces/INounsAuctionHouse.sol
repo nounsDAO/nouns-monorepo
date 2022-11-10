@@ -17,10 +17,10 @@
 
 pragma solidity ^0.8.6;
 
-interface INounsAuctionHouse {
+interface INounsBRAuctionHouse {
     struct Auction {
         // ID for the NounBR (ERC721 token ID)
-        uint256 nounId;
+        uint256 nounbrId;
         // The current highest bid amount
         uint256 amount;
         // The time that the auction started
@@ -33,13 +33,13 @@ interface INounsAuctionHouse {
         bool settled;
     }
 
-    event AuctionCreated(uint256 indexed nounId, uint256 startTime, uint256 endTime);
+    event AuctionCreated(uint256 indexed nounbrId, uint256 startTime, uint256 endTime);
 
-    event AuctionBid(uint256 indexed nounId, address sender, uint256 value, bool extended);
+    event AuctionBid(uint256 indexed nounbrId, address sender, uint256 value, bool extended);
 
-    event AuctionExtended(uint256 indexed nounId, uint256 endTime);
+    event AuctionExtended(uint256 indexed nounbrId, uint256 endTime);
 
-    event AuctionSettled(uint256 indexed nounId, address winner, uint256 amount);
+    event AuctionSettled(uint256 indexed nounbrId, address winner, uint256 amount);
 
     event AuctionTimeBufferUpdated(uint256 timeBuffer);
 
@@ -51,7 +51,7 @@ interface INounsAuctionHouse {
 
     function settleCurrentAndCreateNewAuction() external;
 
-    function createBid(uint256 nounId) external payable;
+    function createBid(uint256 nounbrId) external payable;
 
     function pause() external;
 

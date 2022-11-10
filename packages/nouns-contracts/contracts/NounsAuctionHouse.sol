@@ -16,11 +16,11 @@
  *********************************/
 
 // LICENSE
-// NounsAuctionHouse.sol is a modified version of Zora's AuctionHouse.sol:
+// NounsBRAuctionHouse.sol is a modified version of Zora's AuctionHouse.sol:
 // https://github.com/ourzora/auction-house/blob/54a12ec1a6cf562e49f0a4917990474b11350a2d/contracts/AuctionHouse.sol
 //
 // AuctionHouse.sol source code Copyright Zora licensed under the GPL-3.0 license.
-// With modifications by Nounders DAO.
+// With modifications by NoundersBRBR DAO.
 
 pragma solidity ^0.8.6;
 
@@ -28,13 +28,13 @@ import { PausableUpgradeable } from '@openzeppelin/contracts-upgradeable/securit
 import { ReentrancyGuardUpgradeable } from '@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol';
 import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
-import { INounsAuctionHouse } from './interfaces/INounsAuctionHouse.sol';
-import { INounsToken } from './interfaces/INounsToken.sol';
+import { INounsBRAuctionHouse } from './interfaces/INounsBRAuctionHouse.sol';
+import { INounsBRToken } from './interfaces/INounsBRToken.sol';
 import { IWETH } from './interfaces/IWETH.sol';
 
-contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, ReentrancyGuardUpgradeable, OwnableUpgradeable {
+contract NounsBRAuctionHouse is INounsBRAuctionHouse, PausableUpgradeable, ReentrancyGuardUpgradeable, OwnableUpgradeable {
     // The NounsBR ERC721 token contract
-    INounsToken public nouns;
+    INounsBRToken public nounsbr;
 
     // The address of the WETH contract
     address public weth;
@@ -52,7 +52,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     uint256 public duration;
 
     // The active auction
-    INounsAuctionHouse.Auction public auction;
+    INounsBRAuctionHouse.Auction public auction;
 
     /**
      * @notice Initialize the auction house and base contracts,
@@ -60,7 +60,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      * @dev This function can only be called once.
      */
     function initialize(
-        INounsToken _nouns,
+        INounsBRToken _nounsbr,
         address _weth,
         uint256 _timeBuffer,
         uint256 _reservePrice,
@@ -73,7 +73,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
 
         _pause();
 
-        nouns = _nouns;
+        nounsbr = _nounsbr;
         weth = _weth;
         timeBuffer = _timeBuffer;
         reservePrice = _reservePrice;
@@ -101,10 +101,10 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      * @notice Create a bid for a NounBR, with a given amount.
      * @dev This contract only accepts payment in ETH.
      */
-    function createBid(uint256 nounId) external payable override nonReentrant {
-        INounsAuctionHouse.Auction memory _auction = auction;
+    function createBid(uint256 nounbrId) external payable override nonReentrant {
+        INounsBRAuctionHouse.Auction memory _auction = auction;
 
-        require(_auction.nounId == nounId, 'NounBR not up for auction');
+        require(_auction.nounbrId == nounbrId, 'NounBR not up for auction');
         require(block.timestamp < _auction.endTime, 'Auction expired');
         require(msg.value >= reservePrice, 'Must send at least reservePrice');
         require(
@@ -128,10 +128,10 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
             auction.endTime = _auction.endTime = block.timestamp + timeBuffer;
         }
 
-        emit AuctionBid(_auction.nounId, msg.sender, msg.value, extended);
+        emit AuctionBid(_auction.nounbrId, msg.sender, msg.value, extended);
 
         if (extended) {
-            emit AuctionExtended(_auction.nounId, _auction.endTime);
+            emit AuctionExtended(_auction.nounbrId, _auction.endTime);
         }
     }
 
@@ -195,12 +195,12 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      * catch the revert and pause this contract.
      */
     function _createAuction() internal {
-        try nouns.mint() returns (uint256 nounId) {
+        try nounsbr.mint() returns (uint256 nounbrId) {
             uint256 startTime = block.timestamp;
             uint256 endTime = startTime + duration;
 
             auction = Auction({
-                nounId: nounId,
+                nounbrId: nounbrId,
                 amount: 0,
                 startTime: startTime,
                 endTime: endTime,
@@ -208,7 +208,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
                 settled: false
             });
 
-            emit AuctionCreated(nounId, startTime, endTime);
+            emit AuctionCreated(nounbrId, startTime, endTime);
         } catch Error(string memory) {
             _pause();
         }
@@ -219,7 +219,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      * @dev If there are no bids, the NounBR is burned.
      */
     function _settleAuction() internal {
-        INounsAuctionHouse.Auction memory _auction = auction;
+        INounsBRAuctionHouse.Auction memory _auction = auction;
 
         require(_auction.startTime != 0, "Auction hasn't begun");
         require(!_auction.settled, 'Auction has already been settled');
@@ -228,16 +228,16 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
         auction.settled = true;
 
         if (_auction.bidder == address(0)) {
-            nouns.burn(_auction.nounId);
+            nounsbr.burn(_auction.nounbrId);
         } else {
-            nouns.transferFrom(address(this), _auction.bidder, _auction.nounId);
+            nounsbr.transferFrom(address(this), _auction.bidder, _auction.nounbrId);
         }
 
         if (_auction.amount > 0) {
             _safeTransferETHWithFallback(owner(), _auction.amount);
         }
 
-        emit AuctionSettled(_auction.nounId, _auction.bidder, _auction.amount);
+        emit AuctionSettled(_auction.nounbrId, _auction.bidder, _auction.amount);
     }
 
     /**

@@ -19,12 +19,12 @@ pragma solidity ^0.8.6;
 
 import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
 import { Strings } from '@openzeppelin/contracts/utils/Strings.sol';
-import { INounsDescriptor } from './interfaces/INounsDescriptor.sol';
-import { INounsSeeder } from './interfaces/INounsSeeder.sol';
+import { INounsBRDescriptor } from './interfaces/INounsBRDescriptor.sol';
+import { INounsBRSeeder } from './interfaces/INounsBRSeeder.sol';
 import { NFTDescriptor } from './libs/NFTDescriptor.sol';
 import { MultiPartRLEToSVG } from './libs/MultiPartRLEToSVG.sol';
 
-contract NounsDescriptor is INounsDescriptor, Ownable {
+contract NounsBRDescriptor is INounsBRDescriptor, Ownable {
     using Strings for uint256;
 
     // prettier-ignore
@@ -246,10 +246,10 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     }
 
     /**
-     * @notice Given a token ID and seed, construct a token URI for an official NounsBR DAO noun.
+     * @notice Given a token ID and seed, construct a token URI for an official NounsBR DAO nounbr.
      * @dev The returned value may be a base64 encoded data URI or an API URL.
      */
-    function tokenURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view override returns (string memory) {
+    function tokenURI(uint256 tokenId, INounsBRSeeder.Seed memory seed) external view override returns (string memory) {
         if (isDataURIEnabled) {
             return dataURI(tokenId, seed);
         }
@@ -257,12 +257,12 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     }
 
     /**
-     * @notice Given a token ID and seed, construct a base64 encoded data URI for an official NounsBR DAO noun.
+     * @notice Given a token ID and seed, construct a base64 encoded data URI for an official NounsBR DAO nounbr.
      */
-    function dataURI(uint256 tokenId, INounsSeeder.Seed memory seed) public view override returns (string memory) {
-        string memory nounId = tokenId.toString();
-        string memory name = string(abi.encodePacked('NounBR ', nounId));
-        string memory description = string(abi.encodePacked('NounBR ', nounId, ' is a member of the NounsBR DAO'));
+    function dataURI(uint256 tokenId, INounsBRSeeder.Seed memory seed) public view override returns (string memory) {
+        string memory nounbrId = tokenId.toString();
+        string memory name = string(abi.encodePacked('NounBR ', nounbrId));
+        string memory description = string(abi.encodePacked('NounBR ', nounbrId, ' is a member of the NounsBR DAO'));
 
         return genericDataURI(name, description, seed);
     }
@@ -273,7 +273,7 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     function genericDataURI(
         string memory name,
         string memory description,
-        INounsSeeder.Seed memory seed
+        INounsBRSeeder.Seed memory seed
     ) public view override returns (string memory) {
         NFTDescriptor.TokenURIParams memory params = NFTDescriptor.TokenURIParams({
             name: name,
@@ -287,7 +287,7 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     /**
      * @notice Given a seed, construct a base64 encoded SVG image.
      */
-    function generateSVGImage(INounsSeeder.Seed memory seed) external view override returns (string memory) {
+    function generateSVGImage(INounsBRSeeder.Seed memory seed) external view override returns (string memory) {
         MultiPartRLEToSVG.SVGParams memory params = MultiPartRLEToSVG.SVGParams({
             parts: _getPartsForSeed(seed),
             background: backgrounds[seed.background]
@@ -340,7 +340,7 @@ contract NounsDescriptor is INounsDescriptor, Ownable {
     /**
      * @notice Get all NounBR parts for the passed `seed`.
      */
-    function _getPartsForSeed(INounsSeeder.Seed memory seed) internal view returns (bytes[] memory) {
+    function _getPartsForSeed(INounsBRSeeder.Seed memory seed) internal view returns (bytes[] memory) {
         bytes[] memory _parts = new bytes[](4);
         _parts[0] = bodies[seed.body];
         _parts[1] = accessories[seed.accessory];

@@ -1,48 +1,48 @@
 import React from 'react';
 import { Col } from 'react-bootstrap';
 
-import classes from './NounInfoCard.module.css';
+import classes from './NounBRInfoCard.module.css';
 
 import _AddressIcon from '../../assets/icons/Address.svg';
 import _BidsIcon from '../../assets/icons/Bids.svg';
 
-import NounInfoRowBirthday from '../NounInfoRowBirthday';
-import NounInfoRowHolder from '../NounInfoRowHolder';
-import NounInfoRowButton from '../NounInfoRowButton';
+import NounBRInfoRowBirthday from '../NounBRInfoRowBirthday';
+import NounBRInfoRowHolder from '../NounBRInfoRowHolder';
+import NounBRInfoRowButton from '../NounBRInfoRowButton';
 import { useAppSelector } from '../../hooks';
 
 import config from '../../config';
 import { buildEtherscanTokenLink } from '../../utils/etherscan';
 import { Trans } from '@lingui/macro';
 
-interface NounInfoCardProps {
-  nounId: number;
+interface NounBRInfoCardProps {
+  nounbrId: number;
   bidHistoryOnClickHandler: () => void;
 }
 
-const NounInfoCard: React.FC<NounInfoCardProps> = props => {
-  const { nounId, bidHistoryOnClickHandler } = props;
+const NounBRInfoCard: React.FC<NounBRInfoCardProps> = props => {
+  const { nounbrId, bidHistoryOnClickHandler } = props;
 
   const etherscanButtonClickHandler = () =>
-    window.open(buildEtherscanTokenLink(config.addresses.nounsToken, nounId));
+    window.open(buildEtherscanTokenLink(config.addresses.nounsbrToken, nounbrId));
 
-  const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
+  const lastAuctionNounBRId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounBRId);
 
   return (
     <>
-      <Col lg={12} className={classes.nounInfoRow}>
-        <NounInfoRowBirthday nounId={nounId} />
+      <Col lg={12} className={classes.nounbrInfoRow}>
+        <NounBRInfoRowBirthday nounbrId={nounbrId} />
       </Col>
-      <Col lg={12} className={classes.nounInfoRow}>
-        <NounInfoRowHolder nounId={nounId} />
+      <Col lg={12} className={classes.nounbrInfoRow}>
+        <NounBRInfoRowHolder nounbrId={nounbrId} />
       </Col>
-      <Col lg={12} className={classes.nounInfoRow}>
-        <NounInfoRowButton
+      <Col lg={12} className={classes.nounbrInfoRow}>
+        <NounBRInfoRowButton
           iconImgSource={_BidsIcon}
-          btnText={lastAuctionNounId === nounId ? <Trans>Bids</Trans> : <Trans>Bid history</Trans>}
+          btnText={lastAuctionNounBRId === nounbrId ? <Trans>Bids</Trans> : <Trans>Bid history</Trans>}
           onClickHandler={bidHistoryOnClickHandler}
         />
-        <NounInfoRowButton
+        <NounBRInfoRowButton
           iconImgSource={_AddressIcon}
           btnText={<Trans>Etherscan</Trans>}
           onClickHandler={etherscanButtonClickHandler}
@@ -52,4 +52,4 @@ const NounInfoCard: React.FC<NounInfoCardProps> = props => {
   );
 };
 
-export default NounInfoCard;
+export default NounBRInfoCard;

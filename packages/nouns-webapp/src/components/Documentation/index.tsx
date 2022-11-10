@@ -92,7 +92,7 @@ const Documentation = () => {
                 </li>
                 <li>
                   <Trans>
-                    NoundersBR receive rewards in the form of NounsBR (10% of supply for first 5 years).
+                    NoundersBRBR receive rewards in the form of NounsBR (10% of supply for first 5 years).
                   </Trans>
                 </li>
               </ul>
@@ -151,17 +151,17 @@ const Documentation = () => {
               <p>
                 <Trans>
                   The proposal veto right was initially envisioned as a temporary solution to the
-                  problem of ‘51% attacks’ on the Nouns DAO treasury. While Nounders initially
-                  believed that a healthy distribution of Nouns would be sufficient protection for
+                  problem of ‘51% attacks’ on the NounsBR DAO treasury. While NoundersBRBR initially
+                  believed that a healthy distribution of NounsBR would be sufficient protection for
                   the DAO, a more complete understanding of the incentives and risks has led to
-                  general consensus within the Nounders, the Nouns Foundation, and the wider
+                  general consensus within the NoundersBRBR, the NounsBR Foundation, and the wider
                   community that a more robust game-theoretic solution should be implemented before
                   the right is removed.
                 </Trans>
               </p>
               <p>
                 <Trans>
-                  The Nouns community has undertaken a preliminary exploration of proposal veto
+                  The NounsBR community has undertaken a preliminary exploration of proposal veto
                   alternatives (‘rage quit’ etc.), but it is now clear that this is a difficult
                   problem that will require significantly more research, development and testing
                   before a satisfactory solution can be implemented.
@@ -169,14 +169,14 @@ const Documentation = () => {
               </p>
               <p>
                 <Trans>
-                  Consequently, the Nouns Foundation anticipates being the steward of the veto power
-                  until Nouns DAO is ready to implement an alternative, and therefore wishes to
+                  Consequently, the NounsBR Foundation anticipates being the steward of the veto power
+                  until NounsBR DAO is ready to implement an alternative, and therefore wishes to
                   clarify the conditions under which it would exercise this power.
                 </Trans>
               </p>
               <p>
                 <Trans>
-                  The Nouns Foundation and NounsBR DAO considers the veto an emergency power that should not be exercised in the normal course of business. The NounsBR DAO will veto proposals that introduce non-trivial legal or existential risks to the NounsBR DAO , including (but not necessarily limited to) proposals that:
+                  The NounsBR Foundation and NounsBR DAO considers the veto an emergency power that should not be exercised in the normal course of business. The NounsBR DAO will veto proposals that introduce non-trivial legal or existential risks to the NounsBR DAO , including (but not necessarily limited to) proposals that:
                 </Trans>
               </p>
               <ul>
@@ -270,7 +270,7 @@ const Documentation = () => {
                   generation:
                 </Trans>
               </p>
-              <code>keccak256(abi.encodePacked(blockhash(block.number - 1), nounId))</code>
+              <code>keccak256(abi.encodePacked(blockhash(block.number - 1), nounbrId))</code>
               <br />
               <br />
               <p>
@@ -283,12 +283,12 @@ const Documentation = () => {
           </Accordion.Item>
           <Accordion.Item eventKey="7" className={classes.accordionItem}>
             <Accordion.Header className={classes.accordionHeader}>
-              <Trans>NounderBR's Reward</Trans>
+              <Trans>NounderBRBR's Reward</Trans>
             </Accordion.Header>
             <Accordion.Body>
               <p>
                 <Trans>
-                  'NoundersBR' are the group of 3 brazilian artists and entrepreneurs that initiated NounsBR. Here are the NoundersBR:
+                  'NoundersBRBR' are the group of 3 brazilian artists and entrepreneurs that initiated NounsBR. Here are the NoundersBRBR:
                 </Trans>
               </p>
               <ul>
@@ -308,16 +308,16 @@ const Documentation = () => {
               </ul>
               <p>
                 <Trans>
-                  Because 100% of NounBR auction proceeds are sent to NounsBR DAO, NoundersBR have chosen
+                  Because 100% of NounBR auction proceeds are sent to NounsBR DAO, NoundersBRBR have chosen
                   to compensate themselves with NounsBR. Every 10th NounBR for the first 5 years of the
                   project (NounBR ids #0, #10, #20, #30 and so on) will be automatically sent to the
-                  NounderBR's multisig to be vested and shared among the founding members of the
+                  NounderBRBR's multisig to be vested and shared among the founding members of the
                   project.
                 </Trans>
               </p>
               <p>
                 <Trans>
-                  NounderBR distributions don't interfere with the cadence of 15 minutes auctions. NounsBR are sent directly to the NounderBR's Multisig, and auctions continue on schedule with the next available NounBR ID.
+                  NounderBRBR distributions don't interfere with the cadence of 15 minutes auctions. NounsBR are sent directly to the NounderBRBR's Multisig, and auctions continue on schedule with the next available NounBR ID.
                 </Trans>
               </p>
             </Accordion.Body>

@@ -782,7 +782,7 @@
             "type": "uint96"
           }
         ],
-        "internalType": "struct NounsDAOStorageV1.Receipt",
+        "internalType": "struct NounsBRDAOStorageV1.Receipt",
         "name": "",
         "type": "tuple"
       }
@@ -812,7 +812,7 @@
       },
       {
         "internalType": "address",
-        "name": "nouns_",
+        "name": "nounsbr_",
         "type": "address"
       },
       {
@@ -880,10 +880,10 @@
   },
   {
     "inputs": [],
-    "name": "nouns",
+    "name": "nounsbr",
     "outputs": [
       {
-        "internalType": "contract NounsTokenLike",
+        "internalType": "contract NounsBRTokenLike",
         "name": "",
         "type": "address"
       }
@@ -1124,7 +1124,7 @@
     "name": "state",
     "outputs": [
       {
-        "internalType": "enum NounsDAOStorageV1.ProposalState",
+        "internalType": "enum NounsBRDAOStorageV1.ProposalState",
         "name": "",
         "type": "uint8"
       }
@@ -1137,7 +1137,7 @@
     "name": "timelock",
     "outputs": [
       {
-        "internalType": "contract INounsDAOExecutor",
+        "internalType": "contract INounsBRDAOExecutor",
         "name": "",
         "type": "address"
       }

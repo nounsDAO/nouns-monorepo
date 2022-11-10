@@ -2,8 +2,8 @@ import { useQuery } from '@apollo/client';
 import { Trans } from '@lingui/macro';
 import React from 'react';
 import { Spinner } from 'react-bootstrap';
-import { currentlyDelegatedNouns } from '../../wrappers/subgraph';
-import HorizontalStackedNouns from '../HorizontalStackedNouns';
+import { currentlyDelegatedNounsBR } from '../../wrappers/subgraph';
+import HorizontalStackedNounsBR from '../HorizontalStackedNounsBR';
 import ShortAddress from '../ShortAddress';
 import classes from './ByLineHoverCard.module.css';
 import { ScaleIcon } from '@heroicons/react/solid';
@@ -12,12 +12,12 @@ interface ByLineHoverCardProps {
   proposerAddress: string;
 }
 
-const MAX_NOUN_IDS_SHOWN = 12;
+const MAX_NOUNBR_IDS_SHOWN = 12;
 
 const ByLineHoverCard: React.FC<ByLineHoverCardProps> = props => {
   const { proposerAddress } = props;
 
-  const { data, loading, error } = useQuery(currentlyDelegatedNouns(proposerAddress));
+  const { data, loading, error } = useQuery(currentlyDelegatedNounsBR(proposerAddress));
 
   if (loading || (data && data.delegates.length === 0)) {
     return (
@@ -32,9 +32,9 @@ const ByLineHoverCard: React.FC<ByLineHoverCardProps> = props => {
     return <>Error fetching Vote info</>;
   }
 
-  const sortedNounIds = data.delegates[0].nounsRepresented
-    .map((noun: { id: string }) => {
-      return parseInt(noun.id);
+  const sortedNounBRIds = data.delegates[0].nounsbrRepresented
+    .map((nounbr: { id: string }) => {
+      return parseInt(nounbr.id);
     })
     .sort((a: number, b: number) => {
       return a - b;
@@ -42,9 +42,9 @@ const ByLineHoverCard: React.FC<ByLineHoverCardProps> = props => {
 
   return (
     <div className={classes.wrapper}>
-      <div className={classes.stackedNounWrapper}>
-        <HorizontalStackedNouns
-          nounIds={data.delegates[0].nounsRepresented.map((noun: { id: string }) => noun.id)}
+      <div className={classes.stackedNounBRWrapper}>
+        <HorizontalStackedNounsBR
+          nounbrIds={data.delegates[0].nounsbrRepresented.map((nounbr: { id: string }) => nounbr.id)}
         />
       </div>
 
@@ -52,10 +52,10 @@ const ByLineHoverCard: React.FC<ByLineHoverCardProps> = props => {
         <ShortAddress address={data ? data.delegates[0].id : ''} />
       </div>
 
-      <div className={classes.nounsRepresented}>
+      <div className={classes.nounsbrRepresented}>
         <div>
           <ScaleIcon height={15} width={15} className={classes.icon} />
-          {sortedNounIds.length === 1 ? (
+          {sortedNounBRIds.length === 1 ? (
             <Trans>
               <span>Delegated NounBR: </span>
             </Trans>
@@ -65,17 +65,17 @@ const ByLineHoverCard: React.FC<ByLineHoverCardProps> = props => {
             </Trans>
           )}
 
-          {sortedNounIds.slice(0, MAX_NOUN_IDS_SHOWN).map((nounId: number, i: number) => {
+          {sortedNounBRIds.slice(0, MAX_NOUNBR_IDS_SHOWN).map((nounbrId: number, i: number) => {
             return (
-              <span className={classes.bold} key={nounId.toString()}>
-                {nounId}
-                {i !== Math.min(MAX_NOUN_IDS_SHOWN, sortedNounIds.length) - 1 && ', '}{' '}
+              <span className={classes.bold} key={nounbrId.toString()}>
+                {nounbrId}
+                {i !== Math.min(MAX_NOUNBR_IDS_SHOWN, sortedNounBRIds.length) - 1 && ', '}{' '}
               </span>
             );
           })}
-          {sortedNounIds.length > MAX_NOUN_IDS_SHOWN && (
+          {sortedNounBRIds.length > MAX_NOUNBR_IDS_SHOWN && (
             <span>
-              <Trans>... and {sortedNounIds.length - MAX_NOUN_IDS_SHOWN} more</Trans>
+              <Trans>... and {sortedNounBRIds.length - MAX_NOUNBR_IDS_SHOWN} more</Trans>
             </span>
           )}
         </div>

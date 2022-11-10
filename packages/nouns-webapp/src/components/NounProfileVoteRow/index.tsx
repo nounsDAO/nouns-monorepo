@@ -1,19 +1,19 @@
-import { Proposal } from '../../wrappers/nounsDao';
+import { Proposal } from '../../wrappers/nounsbrDao';
 import { Image } from 'react-bootstrap';
 import _YesVoteIcon from '../../assets/icons/YesVote.svg';
 import _NoVoteIcon from '../../assets/icons/NoVote.svg';
 import _AbsentVoteIcon from '../../assets/icons/AbsentVote.svg';
 import _AbstainVoteIcon from '../../assets/icons/Abstain.svg';
-import { ProposalState } from '../../wrappers/nounsDao';
+import { ProposalState } from '../../wrappers/nounsbrDao';
 
-import classes from './NounProfileVoteRow.module.css';
+import classes from './NounBRProfileVoteRow.module.css';
 
 import { useHistory } from 'react-router-dom';
 import VoteStatusPill from '../VoteStatusPill';
 
 import _PendingVoteIcon from '../../assets/icons/PendingVote.svg';
 import { Vote } from '../../utils/vote';
-import { NounVoteHistory } from '../ProfileActivityFeed';
+import { NounBRVoteHistory } from '../ProfileActivityFeed';
 import { Trans } from '@lingui/macro';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
@@ -21,12 +21,12 @@ import ShortAddress from '../ShortAddress';
 import React from 'react';
 import ReactTooltip from 'react-tooltip';
 
-interface NounProfileVoteRowProps {
+interface NounBRProfileVoteRowProps {
   proposal: Proposal;
-  vote?: NounVoteHistory;
+  vote?: NounBRVoteHistory;
 }
 
-const selectIconForNounVoteActivityRow = (proposal: Proposal, vote?: NounVoteHistory) => {
+const selectIconForNounBRVoteActivityRow = (proposal: Proposal, vote?: NounBRVoteHistory) => {
   if (!vote) {
     if (proposal.status === ProposalState.PENDING || proposal.status === ProposalState.ACTIVE) {
       return <Image src={_PendingVoteIcon} className={classes.voteIcon} />;
@@ -45,7 +45,7 @@ const selectIconForNounVoteActivityRow = (proposal: Proposal, vote?: NounVoteHis
   }
 };
 
-const selectVotingInfoText = (proposal: Proposal, vote?: NounVoteHistory) => {
+const selectVotingInfoText = (proposal: Proposal, vote?: NounBRVoteHistory) => {
   if (!vote) {
     if (proposal.status === ProposalState.PENDING || proposal.status === ProposalState.ACTIVE) {
       return <Trans>Waiting for</Trans>;
@@ -109,7 +109,7 @@ const selectProposalText = (proposal: Proposal) => {
   }
 };
 
-const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
+const NounBRProfileVoteRow: React.FC<NounBRProfileVoteRowProps> = props => {
   const { proposal, vote } = props;
 
   const history = useHistory();
@@ -118,7 +118,7 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
 
   return (
     <tr onClick={proposalOnClickHandler} className={classes.voteInfoRow}>
-      <td className={classes.voteIcon}>{selectIconForNounVoteActivityRow(proposal, vote)}</td>
+      <td className={classes.voteIcon}>{selectIconForNounBRVoteActivityRow(proposal, vote)}</td>
       <td className={classes.voteInfoTableCell}>
         <div className={classes.voteInfoContainer}>
           {selectVotingInfoText(proposal, vote)}
@@ -141,7 +141,7 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
               }}
             >
               <ReactTooltip
-                id={'noun-profile-delegate'}
+                id={'nounbr-profile-delegate'}
                 effect={'solid'}
                 className={classes.delegateHover}
                 getContent={dataTip => {
@@ -150,7 +150,7 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
               />
               <div
                 data-tip={`Delegate for Proposal ${vote.proposal.id}`}
-                data-for="noun-profile-delegate"
+                data-for="nounbr-profile-delegate"
                 style={{
                   borderRadius: '8px',
                   padding: '0.36rem 0.65rem 0.36rem 0.65rem',
@@ -193,4 +193,4 @@ const NounProfileVoteRow: React.FC<NounProfileVoteRowProps> = props => {
   );
 };
 
-export default NounProfileVoteRow;
+export default NounBRProfileVoteRow;

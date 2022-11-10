@@ -4,21 +4,21 @@ import Section from '../../layout/Section';
 import classes from './ProfileActivityFeed.module.css';
 
 import { Trans } from '@lingui/macro';
-import { useNounActivity } from '../../wrappers/nounActivity';
+import { useNounBRActivity } from '../../wrappers/nounbrActivity';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 import ProfileActivityFeedToggle from '../ProfileActivityFeedToggle';
 import DesktopProfileActivityFeed from '../DesktopProfileActivityFeed';
 import MobileProfileActivityFeed from '../MobileProfileActivityFeed';
 
 interface ProfileActivityFeedProps {
-  nounId: number;
+  nounbrId: number;
 }
 
 interface ProposalInfo {
   id: number;
 }
 
-export interface NounVoteHistory {
+export interface NounBRVoteHistory {
   blockNumber: number | string;
   proposal: ProposalInfo;
   support: boolean;
@@ -27,13 +27,13 @@ export interface NounVoteHistory {
 }
 
 const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
-  const { nounId } = props;
+  const { nounbrId } = props;
 
   const MAX_EVENTS_SHOW_ABOVE_FOLD = 5;
 
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const { loading, error, data } = useNounActivity(nounId);
+  const { loading, error, data } = useNounBRActivity(nounbrId);
 
   if (loading || !data || data === undefined) {
     return (

@@ -1,23 +1,23 @@
 import React from 'react';
 import { buildEtherscanTxLink } from '../../../../utils/etherscan';
-import { NounWinEvent } from '../../../../wrappers/nounActivity';
-import classes from './MobileNounWinEvent.module.css';
-import MobileNounActivityRow from '../../activityRow/MobileNounActivityRow';
+import { NounBRWinEvent } from '../../../../wrappers/nounbrActivity';
+import classes from './MobileNounBRWinEvent.module.css';
+import MobileNounBRActivityRow from '../../activityRow/MobileNounBRActivityRow';
 import { CakeIcon } from '@heroicons/react/solid';
 import ShortAddress from '../../../ShortAddress';
 import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
 import { Trans } from '@lingui/macro';
 
-interface MobileNounWinEventProps {
-  event: NounWinEvent;
+interface MobileNounBRWinEventProps {
+  event: NounBRWinEvent;
 }
 
-const MobileNounWinEvent: React.FC<MobileNounWinEventProps> = props => {
+const MobileNounBRWinEvent: React.FC<MobileNounBRWinEventProps> = props => {
   const { event } = props;
 
-  const isNounderNoun = parseInt(event.nounId as string) % 10 === 0;
+  const isNounderBRBRNounBR = parseInt(event.nounbrId as string) % 10 === 0;
   return (
-    <MobileNounActivityRow
+    <MobileNounBRActivityRow
       onClick={() => window.open(buildEtherscanTxLink(event.transactionHash), '_blank')}
       icon={
         <div className={classes.iconWrapper}>
@@ -26,9 +26,9 @@ const MobileNounWinEvent: React.FC<MobileNounWinEventProps> = props => {
       }
       primaryContent={
         <>
-          {isNounderNoun ? (
+          {isNounderBRBRNounBR ? (
             <Trans>
-              <span className={classes.bold}> NounBR {event.nounId} </span> sent to{' '}
+              <span className={classes.bold}> NounBR {event.nounbrId} </span> sent to{' '}
               <span className={classes.bold}>
                 {' '}
                 <ShortAddress address={event.winner} />
@@ -36,7 +36,7 @@ const MobileNounWinEvent: React.FC<MobileNounWinEventProps> = props => {
             </Trans>
           ) : (
             <Trans>
-              <span className={classes.bold}> NounBR {event.nounId} </span> won by{' '}
+              <span className={classes.bold}> NounBR {event.nounbrId} </span> won by{' '}
               <span className={classes.bold}>
                 {' '}
                 <ShortAddress address={event.winner} />
@@ -54,4 +54,4 @@ const MobileNounWinEvent: React.FC<MobileNounWinEventProps> = props => {
   );
 };
 
-export default MobileNounWinEvent;
+export default MobileNounBRWinEvent;

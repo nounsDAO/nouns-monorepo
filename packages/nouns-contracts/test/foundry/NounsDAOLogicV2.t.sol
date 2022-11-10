@@ -2,24 +2,24 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { NounsDAOLogicV2 } from '../../contracts/governance/NounsDAOLogicV2.sol';
-import { NounsDAOProxyV2 } from '../../contracts/governance/NounsDAOProxyV2.sol';
-import { NounsDAOStorageV2, NounsDAOStorageV1Adjusted } from '../../contracts/governance/NounsDAOInterfaces.sol';
-import { NounsDescriptorV2 } from '../../contracts/NounsDescriptorV2.sol';
+import { NounsBRDAOLogicV2 } from '../../contracts/governance/NounsBRDAOLogicV2.sol';
+import { NounsBRDAOProxyV2 } from '../../contracts/governance/NounsBRDAOProxyV2.sol';
+import { NounsBRDAOStorageV2, NounsBRDAOStorageV1Adjusted } from '../../contracts/governance/NounsBRDAOInterfaces.sol';
+import { NounsBRDescriptorV2 } from '../../contracts/NounsBRDescriptorV2.sol';
 import { DeployUtils } from './helpers/DeployUtils.sol';
-import { NounsToken } from '../../contracts/NounsToken.sol';
-import { NounsSeeder } from '../../contracts/NounsSeeder.sol';
+import { NounsBRToken } from '../../contracts/NounsBRToken.sol';
+import { NounsBRSeeder } from '../../contracts/NounsBRSeeder.sol';
 import { IProxyRegistry } from '../../contracts/external/opensea/IProxyRegistry.sol';
-import { NounsDAOExecutor } from '../../contracts/governance/NounsDAOExecutor.sol';
+import { NounsBRDAOExecutor } from '../../contracts/governance/NounsBRDAOExecutor.sol';
 
-contract NounsDAOLogicV2Test is Test, DeployUtils {
-    NounsDAOLogicV2 daoLogic;
-    NounsDAOLogicV2 daoProxy;
-    NounsToken nounsToken;
-    NounsDAOExecutor timelock = new NounsDAOExecutor(address(1), TIMELOCK_DELAY);
+contract NounsBRDAOLogicV2Test is Test, DeployUtils {
+    NounsBRDAOLogicV2 daoLogic;
+    NounsBRDAOLogicV2 daoProxy;
+    NounsBRToken nounsbrToken;
+    NounsBRDAOExecutor timelock = new NounsBRDAOExecutor(address(1), TIMELOCK_DELAY);
     address vetoer = address(0x3);
     address admin = address(0x4);
-    address noundersDAO = address(0x5);
+    address noundersbrDAO = address(0x5);
     address minter = address(0x6);
     address proposer = address(0x7);
     uint256 votingPeriod = 6000;
@@ -29,24 +29,24 @@ contract NounsDAOLogicV2Test is Test, DeployUtils {
     event Withdraw(uint256 amount, bool sent);
 
     function setUp() public virtual {
-        daoLogic = new NounsDAOLogicV2();
+        daoLogic = new NounsBRDAOLogicV2();
 
-        NounsDescriptorV2 descriptor = _deployAndPopulateV2();
+        NounsBRDescriptorV2 descriptor = _deployAndPopulateV2();
 
-        nounsToken = new NounsToken(noundersDAO, minter, descriptor, new NounsSeeder(), IProxyRegistry(address(0)));
+        nounsbrToken = new NounsBRToken(noundersbrDAO, minter, descriptor, new NounsBRSeeder(), IProxyRegistry(address(0)));
 
-        daoProxy = NounsDAOLogicV2(
+        daoProxy = NounsBRDAOLogicV2(
             payable(
-                new NounsDAOProxyV2(
+                new NounsBRDAOProxyV2(
                     address(timelock),
-                    address(nounsToken),
+                    address(nounsbrToken),
                     vetoer,
                     admin,
                     address(daoLogic),
                     votingPeriod,
                     votingDelay,
                     proposalThresholdBPS,
-                    NounsDAOStorageV2.DynamicQuorumParams({
+                    NounsBRDAOStorageV2.DynamicQuorumParams({
                         minQuorumVotesBPS: 200,
                         maxQuorumVotesBPS: 2000,
                         quorumCoefficient: 10000
@@ -80,17 +80,17 @@ contract NounsDAOLogicV2Test is Test, DeployUtils {
     }
 }
 
-contract CancelProposalTest is NounsDAOLogicV2Test {
+contract CancelProposalTest is NounsBRDAOLogicV2Test {
     uint256 proposalId;
 
     function setUp() public override {
         super.setUp();
 
         vm.prank(minter);
-        nounsToken.mint();
+        nounsbrToken.mint();
 
         vm.prank(minter);
-        nounsToken.transferFrom(minter, proposer, 1);
+        nounsbrToken.transferFrom(minter, proposer, 1);
 
         vm.roll(block.number + 1);
 
@@ -101,29 +101,29 @@ contract CancelProposalTest is NounsDAOLogicV2Test {
         vm.prank(proposer);
         daoProxy.cancel(proposalId);
 
-        assertEq(uint256(daoProxy.state(proposalId)), uint256(NounsDAOStorageV1Adjusted.ProposalState.Canceled));
+        assertEq(uint256(daoProxy.state(proposalId)), uint256(NounsBRDAOStorageV1Adjusted.ProposalState.Canceled));
     }
 
     function testNonProposerCantCancel() public {
-        vm.expectRevert('NounsDAO::cancel: proposer above threshold');
+        vm.expectRevert('NounsBRDAO::cancel: proposer above threshold');
         daoProxy.cancel(proposalId);
 
-        assertEq(uint256(daoProxy.state(proposalId)), uint256(NounsDAOStorageV1Adjusted.ProposalState.Pending));
+        assertEq(uint256(daoProxy.state(proposalId)), uint256(NounsBRDAOStorageV1Adjusted.ProposalState.Pending));
     }
 
     function testAnyoneCanCancelIfProposerVotesBelowThreshold() public {
         vm.prank(proposer);
-        nounsToken.transferFrom(proposer, address(0x9999), 1);
+        nounsbrToken.transferFrom(proposer, address(0x9999), 1);
 
         vm.roll(block.number + 1);
 
         daoProxy.cancel(proposalId);
 
-        assertEq(uint256(daoProxy.state(proposalId)), uint256(NounsDAOStorageV1Adjusted.ProposalState.Canceled));
+        assertEq(uint256(daoProxy.state(proposalId)), uint256(NounsBRDAOStorageV1Adjusted.ProposalState.Canceled));
     }
 }
 
-contract WithdrawTest is NounsDAOLogicV2Test {
+contract WithdrawTest is NounsBRDAOLogicV2Test {
     function setUp() public override {
         super.setUp();
     }
@@ -144,7 +144,7 @@ contract WithdrawTest is NounsDAOLogicV2Test {
     }
 
     function test_withdraw_revertsForNonAdmin() public {
-        vm.expectRevert(NounsDAOLogicV2.AdminOnly.selector);
+        vm.expectRevert(NounsBRDAOLogicV2.AdminOnly.selector);
         daoProxy._withdraw();
     }
 }

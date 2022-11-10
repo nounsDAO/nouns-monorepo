@@ -1,4 +1,4 @@
-import { nounsTokenContract, redis, storage } from './clients';
+import { nounsbrTokenContract, redis, storage } from './clients';
 import { TokenMetadata } from './types';
 import { tryF, isError } from 'ts-try';
 import sharp from 'sharp';
@@ -21,7 +21,7 @@ export const getTokenMetadata = async (tokenId: string): Promise<undefined | Tok
     return JSON.parse(cachedMetadata);
   }
 
-  const dataURI = await tryF(() => nounsTokenContract.dataURI(tokenId));
+  const dataURI = await tryF(() => nounsbrTokenContract.dataURI(tokenId));
   if (isError(dataURI)) {
     console.error(`Error fetching dataURI for token ID ${tokenId}: ${dataURI.message}`);
     return;

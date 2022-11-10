@@ -1,4 +1,4 @@
-import { Auction, AuctionHouseContractFunction } from '../../wrappers/nounsAuction';
+import { Auction, AuctionHouseContractFunction } from '../../wrappers/nounsbrAuction';
 import { useEthers, useContractFunction } from '@usedapp/core';
 import { connectContractToSigner } from '@usedapp/core/dist/cjs/src/hooks';
 import { useAppSelector } from '../../hooks';
@@ -7,10 +7,10 @@ import { utils, BigNumber as EthersBN } from 'ethers';
 import BigNumber from 'bignumber.js';
 import classes from './Bid.module.css';
 import { Spinner, InputGroup, FormControl, Button, Col } from 'react-bootstrap';
-import { useAuctionMinBidIncPercentage } from '../../wrappers/nounsAuction';
+import { useAuctionMinBidIncPercentage } from '../../wrappers/nounsbrAuction';
 import { useAppDispatch } from '../../hooks';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
-import { NounsAuctionHouseFactory } from '@nouns/sdk';
+import { NounsBRAuctionHouseFactory } from '@nounsbr/sdk';
 import config from '../../config';
 import WalletConnectModal from '../WalletConnectModal';
 import { Trans } from '@lingui/macro';
@@ -53,8 +53,8 @@ const Bid: React.FC<{
   const { library } = useEthers();
   let { auction, auctionEnded } = props;
   const activeLocale = useActiveLocale();
-  const nounsAuctionHouseContract = new NounsAuctionHouseFactory().attach(
-    config.addresses.nounsAuctionHouseProxy,
+  const nounsbrAuctionHouseContract = new NounsBRAuctionHouseFactory().attach(
+    config.addresses.nounsbrAuctionHouseProxy,
   );
 
   const account = useAppSelector(state => state.account.activeAccount);
@@ -84,11 +84,11 @@ const Bid: React.FC<{
   );
 
   const { send: placeBid, state: placeBidState } = useContractFunction(
-    nounsAuctionHouseContract,
+    nounsbrAuctionHouseContract,
     AuctionHouseContractFunction.createBid,
   );
   const { send: settleAuction, state: settleAuctionState } = useContractFunction(
-    nounsAuctionHouseContract,
+    nounsbrAuctionHouseContract,
     AuctionHouseContractFunction.settleCurrentAndCreateNewAuction,
   );
 
@@ -124,11 +124,11 @@ const Bid: React.FC<{
     }
 
     const value = utils.parseEther(bidInputRef.current.value.toString());
-    const contract = connectContractToSigner(nounsAuctionHouseContract, undefined, library);
-    const gasLimit = await contract.estimateGas.createBid(auction.nounId, {
+    const contract = connectContractToSigner(nounsbrAuctionHouseContract, undefined, library);
+    const gasLimit = await contract.estimateGas.createBid(auction.nounbrId, {
       value,
     });
-    placeBid(auction.nounId, {
+    placeBid(auction.nounbrId, {
       value,
       gasLimit: gasLimit.add(10_000), // A 10,000 gas pad is used to avoid 'Out of gas' errors
     });
@@ -287,7 +287,7 @@ const Bid: React.FC<{
           <>
             {/* Only show force settle button if wallet connected */}
             {isWalletConnected && (
-              <Col lg={12} className={classes.voteForNextNounBtnWrapper}>
+              <Col lg={12} className={classes.voteForNextNounBRBtnWrapper}>
                 <Button className={classes.bidBtnAuctionEnded} onClick={settleAuctionHandler}>
                   <Trans>Settle manually</Trans> ⌐◧-◧
                 </Button>

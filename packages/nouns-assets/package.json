@@ -1,8 +1,8 @@
 {
-  "name": "@nouns/assets",
+  "name": "@nounsbr/assets",
   "version": "0.4.0",
-  "description": "Nouns run-length encoded image data",
-  "author": "Nounders",
+  "description": "NounsBR run-length encoded image data",
+  "author": "NoundersBRBR",
   "homepage": "https://nounsbr.wtf",
   "license": "GPL-3.0",
   "main": "dist/index.js",
@@ -17,7 +17,7 @@
     "test": "mocha -r ts-node/register \"test/**/*.test.ts\""
   },
   "devDependencies": {
-    "@nouns/sdk": "^0.2.0",
+    "@nounsbr/sdk": "^0.2.0",
     "@types/pngjs": "^6.0.1",
     "chai": "^4.2.0",
     "mocha": "^8.4.0",

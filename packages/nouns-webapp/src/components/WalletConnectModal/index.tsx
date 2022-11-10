@@ -89,7 +89,7 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
             chainId: CHAIN_ID,
             url: config.app.jsonRpcUri,
             manifestAppUrl: 'https://nounsbr.wtf',
-            manifestEmail: 'nounops+trezorconnect@protonmail.com',
+            manifestEmail: 'nounbrops+trezorconnect@protonmail.com',
           });
           activate(trezor);
         }}

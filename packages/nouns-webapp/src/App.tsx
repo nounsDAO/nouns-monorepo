@@ -15,8 +15,8 @@ import AuctionPage from './pages/Auction';
 import GovernancePage from './pages/Governance';
 import CreateProposalPage from './pages/CreateProposal';
 import VotePage from './pages/Vote';
-import NoundersPage from './pages/Nounders';
-import NounersPage from './pages/Nouners';
+import NoundersBRBRPage from './pages/NoundersBRBR';
+import NounBRersPage from './pages/NounBRers';
 import NotFoundPage from './pages/NotFound';
 import Playground from './pages/Playground';
 import { CHAIN_ID } from './config';
@@ -55,14 +55,14 @@ function App() {
           <NavBar />
           <Switch>
             <Route exact path="/" component={AuctionPage} />
-            <Redirect from="/auction/:id" to="/noun/:id" />
+            <Redirect from="/auction/:id" to="/nounbr/:id" />
             <Route
               exact
-              path="/noun/:id"
+              path="/nounbr/:id"
               render={props => <AuctionPage initialAuctionId={Number(props.match.params.id)} />}
             />
-            <Route exact path="/nounders" component={NoundersPage} />
-            <Route exact path="/nounersbr" component={NounersPage} />
+            <Route exact path="/noundersbr" component={NoundersBRBRPage} />
+            <Route exact path="/nounbrers" component={NounBRersPage} />
             <Route exact path="/create-proposal" component={CreateProposalPage} />
             <Route exact path="/vote" component={GovernancePage} />
             <Route exact path="/vote/:id" component={VotePage} />

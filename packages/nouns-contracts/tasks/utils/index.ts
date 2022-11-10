@@ -54,7 +54,7 @@ export async function printEstimatedCost(factory: ContractFactory, gasPrice: Big
   );
   const deploymentCost = deploymentGas.mul(gasPrice);
   console.log(
-    `Estimated cost to deploy NounsDAOLogicV2: ${utils.formatUnits(deploymentCost, 'ether')} ETH`,
+    `Estimated cost to deploy NounsBRDAOLogicV2: ${utils.formatUnits(deploymentCost, 'ether')} ETH`,
   );
 }
 

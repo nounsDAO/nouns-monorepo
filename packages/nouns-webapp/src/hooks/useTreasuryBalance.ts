@@ -10,7 +10,7 @@ import { ethers } from 'ethers';
  * @returns Total balance of treasury (ETH + Lido) as EthersBN
  */
 export const useTreasuryBalance = () => {
-  const ethBalance = useEtherBalance(config.addresses.nounsDaoExecutor);
+  const ethBalance = useEtherBalance(config.addresses.nounsbrDaoExecutor);
   const lidoBalanceAsETH = useLidoBalance();
   return ethBalance && lidoBalanceAsETH && ethBalance.add(lidoBalanceAsETH);
 };

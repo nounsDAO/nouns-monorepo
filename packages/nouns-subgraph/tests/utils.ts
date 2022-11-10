@@ -5,12 +5,12 @@ import {
   MinQuorumVotesBPSSet,
   MaxQuorumVotesBPSSet,
   QuorumCoefficientSet,
-} from '../src/types/NounsDAO/NounsDAO';
+} from '../src/types/NounsBRDAO/NounsBRDAO';
 import {
   handleMinQuorumVotesBPSSet,
   handleMaxQuorumVotesBPSSet,
   handleQuorumCoefficientSet,
-} from '../src/nouns-dao';
+} from '../src/nounsbr-dao';
 import { Address, ethereum, Bytes, BigInt, ByteArray } from '@graphprotocol/graph-ts';
 import { BIGINT_ONE, BIGINT_ZERO } from '../src/utils/constants';
 

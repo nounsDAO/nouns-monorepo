@@ -1,4 +1,4 @@
-import { Proposal, ProposalState } from '../wrappers/nounsDao';
+import { Proposal, ProposalState } from '../wrappers/nounsbrDao';
 
 export const useProposalStatus = (proposal: Proposal): string => {
   switch (proposal.status) {

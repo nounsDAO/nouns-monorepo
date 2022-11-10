@@ -5,7 +5,7 @@
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "nounId",
+        "name": "nounbrId",
         "type": "uint256"
       },
       {
@@ -36,7 +36,7 @@
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "nounId",
+        "name": "nounbrId",
         "type": "uint256"
       },
       {
@@ -61,7 +61,7 @@
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "nounId",
+        "name": "nounbrId",
         "type": "uint256"
       },
       {
@@ -106,7 +106,7 @@
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "nounId",
+        "name": "nounbrId",
         "type": "uint256"
       },
       {
@@ -189,7 +189,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "nounId",
+        "name": "nounbrId",
         "type": "uint256"
       },
       {
@@ -225,7 +225,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "nounId",
+        "name": "nounbrId",
         "type": "uint256"
       }
     ],
@@ -250,8 +250,8 @@
   {
     "inputs": [
       {
-        "internalType": "contract INounsToken",
-        "name": "_nouns",
+        "internalType": "contract INounsBRToken",
+        "name": "_nounsbr",
         "type": "address"
       },
       {
@@ -300,10 +300,10 @@
   },
   {
     "inputs": [],
-    "name": "nouns",
+    "name": "nounsbr",
     "outputs": [
       {
-        "internalType": "contract INounsToken",
+        "internalType": "contract INounsBRToken",
         "name": "",
         "type": "address"
       }
@@ -346,7 +346,7 @@
   },
   {
     "inputs": [],
-    "name": "renounceOwnership",
+    "name": "renounbrceOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

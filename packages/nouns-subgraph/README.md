@@ -1,6 +1,6 @@
-# @nouns/subgraph
+# @nounsbr/subgraph
 
-A subgraph that indexes nouns events.
+A subgraph that indexes nounsbr events.
 
 ## Quickstart
 
@@ -8,7 +8,7 @@ A subgraph that indexes nouns events.
 yarn
 ```
 
-## Nouns Subgraph
+## NounsBR Subgraph
 
 This repo contains the templates for compiling and deploying a graphql schema to thegraph.
 
@@ -55,7 +55,7 @@ Run your local graph node by running:
 yarn graph-node
 ```
 
-Make sure your local chain is running: in a new terminal go to the `nouns-contracts` package and run:
+Make sure your local chain is running: in a new terminal go to the `nounsbr-contracts` package and run:
 
 ```sh
 yarn task:run-local

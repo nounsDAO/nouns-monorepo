@@ -2,7 +2,7 @@ import classes from './Banner.module.css';
 import Section from '../../layout/Section';
 import { Col } from 'react-bootstrap';
 import carmen_miranda from '../../assets/carmen_miranda.png';
-import Noun from '../Noun';
+import NounBR from '../NounBR';
 import { Trans } from '@lingui/macro';
 
 const Banner = () => {
@@ -21,7 +21,7 @@ const Banner = () => {
       </Col>
       <Col lg={6}>
         <div style={{ padding: '2rem' }}>
-          <Noun imgPath={carmen_miranda} alt="nounBR" />
+          <NounBR imgPath={carmen_miranda} alt="nounbr" />
         </div>
       </Col>
     </Section>

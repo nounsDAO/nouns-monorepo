@@ -1,6 +1,6 @@
-# @nouns/bots
+# @nounsbr/bots
 
-A bot that monitors for changes in Noun auction state and notifies everyone via Twitter and Discord.
+A bot that monitors for changes in NounBR auction state and notifies everyone via Twitter and Discord.
 
 ## Install dependencies
 

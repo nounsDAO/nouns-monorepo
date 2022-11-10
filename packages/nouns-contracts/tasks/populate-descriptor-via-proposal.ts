@@ -5,14 +5,14 @@ import { readFileSync } from 'fs';
 // see image-data-example-for-populate-via-proposal.json for an example input file
 task(
   'populate-descriptor-via-proposal',
-  'Populates the descriptor with color palettes and Noun parts; accepts an input JSON with missing properies.',
+  'Populates the descriptor with color palettes and NounBR parts; accepts an input JSON with missing properies.',
 )
-  .addParam('nounsDescriptor', 'The `NounsDescriptor` contract address')
-  .addParam('daoAddress', 'The `NounsDAOProxy` contract address')
+  .addParam('nounsbrDescriptor', 'The `NounsBRDescriptor` contract address')
+  .addParam('daoAddress', 'The `NounsBRDAOProxy` contract address')
   .addParam('imageDataPath', 'The path to the image data JSON file')
   .addParam('proposalTextPath', 'Path to the proposal descriptor text file')
   .setAction(
-    async ({ nounsDescriptor, daoAddress, imageDataPath, proposalTextPath }, { ethers }) => {
+    async ({ nounsbrDescriptor, daoAddress, imageDataPath, proposalTextPath }, { ethers }) => {
       const ImageData = JSON.parse(readFileSync(imageDataPath, 'utf-8'));
       const proposalText = readFileSync(proposalTextPath, 'utf-8');
 
@@ -22,7 +22,7 @@ task(
       const calldatas = [];
 
       if (ImageData.bgcolors) {
-        targets.push(nounsDescriptor);
+        targets.push(nounsbrDescriptor);
         values.push(0);
         signatures.push('addManyBackgrounds(string[])');
         calldatas.push(ethers.utils.defaultAbiCoder.encode(['string[]'], [ImageData.bgcolors]));
@@ -30,7 +30,7 @@ task(
 
       if (ImageData.palettes) {
         for (const [index, colors] of Object.entries(ImageData.palettes)) {
-          targets.push(nounsDescriptor);
+          targets.push(nounsbrDescriptor);
           values.push(0);
           signatures.push('setPalette(uint8,bytes)');
           calldatas.push(
@@ -50,7 +50,7 @@ task(
             (bodies as [{ data: string }]).map(({ data }) => data),
           );
 
-          targets.push(nounsDescriptor);
+          targets.push(nounsbrDescriptor);
           values.push(0);
           signatures.push('addBodies(bytes,uint80,uint16)');
           calldatas.push(
@@ -66,7 +66,7 @@ task(
             (heads as [{ data: string }]).map(({ data }) => data),
           );
 
-          targets.push(nounsDescriptor);
+          targets.push(nounsbrDescriptor);
           values.push(0);
           signatures.push('addHeads(bytes,uint80,uint16)');
           calldatas.push(
@@ -82,7 +82,7 @@ task(
             (glasses as [{ data: string }]).map(({ data }) => data),
           );
 
-          targets.push(nounsDescriptor);
+          targets.push(nounsbrDescriptor);
           values.push(0);
           signatures.push('addGlasses(bytes,uint80,uint16)');
           calldatas.push(
@@ -98,7 +98,7 @@ task(
             (accessories as [{ data: string }]).map(({ data }) => data),
           );
 
-          targets.push(nounsDescriptor);
+          targets.push(nounsbrDescriptor);
           values.push(0);
           signatures.push('addAccessories(bytes,uint80,uint16)');
           calldatas.push(
@@ -114,7 +114,7 @@ task(
         }
       }
 
-      const dao = (await ethers.getContractFactory('NounsDAOLogicV1')).attach(daoAddress);
+      const dao = (await ethers.getContractFactory('NounsBRDAOLogicV1')).attach(daoAddress);
       const propTx = await dao.propose(targets, values, signatures, calldatas, proposalText);
       await propTx.wait();
 

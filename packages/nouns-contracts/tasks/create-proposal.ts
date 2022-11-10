@@ -3,20 +3,20 @@ import { task, types } from 'hardhat/config';
 
 task('create-proposal', 'Create a governance proposal')
   .addOptionalParam(
-    'nounsDaoProxy',
-    'The `NounsDAOProxy` contract address',
+    'nounsbrDaoProxy',
+    'The `NounsBRDAOProxy` contract address',
     '0x610178dA211FEF7D417bC0e6FeD39F05609AD788',
     types.string,
   )
-  .setAction(async ({ nounsDaoProxy }, { ethers }) => {
-    const nounsDaoFactory = await ethers.getContractFactory('NounsDAOLogicV1');
-    const nounsDao = nounsDaoFactory.attach(nounsDaoProxy);
+  .setAction(async ({ nounsbrDaoProxy }, { ethers }) => {
+    const nounsbrDaoFactory = await ethers.getContractFactory('NounsBRDAOLogicV1');
+    const nounsbrDao = nounsbrDaoFactory.attach(nounsbrDaoProxy);
 
     const [deployer] = await ethers.getSigners();
     const oneETH = utils.parseEther('1');
 
     const receipt = await (
-      await nounsDao.propose(
+      await nounsbrDao.propose(
         [deployer.address],
         [oneETH],
         [''],

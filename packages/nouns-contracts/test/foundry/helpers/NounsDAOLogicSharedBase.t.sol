@@ -2,25 +2,25 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { NounsDAOLogicV1 } from '../../../contracts/governance/NounsDAOLogicV1.sol';
-import { NounsDAOLogicV2 } from '../../../contracts/governance/NounsDAOLogicV2.sol';
-import { NounsDAOProxy } from '../../../contracts/governance/NounsDAOProxy.sol';
-import { NounsDAOProxyV2 } from '../../../contracts/governance/NounsDAOProxyV2.sol';
-import { NounsDescriptorV2 } from '../../../contracts/NounsDescriptorV2.sol';
+import { NounsBRDAOLogicV1 } from '../../../contracts/governance/NounsBRDAOLogicV1.sol';
+import { NounsBRDAOLogicV2 } from '../../../contracts/governance/NounsBRDAOLogicV2.sol';
+import { NounsBRDAOProxy } from '../../../contracts/governance/NounsBRDAOProxy.sol';
+import { NounsBRDAOProxyV2 } from '../../../contracts/governance/NounsBRDAOProxyV2.sol';
+import { NounsBRDescriptorV2 } from '../../../contracts/NounsBRDescriptorV2.sol';
 import { DeployUtils } from './DeployUtils.sol';
-import { NounsToken } from '../../../contracts/NounsToken.sol';
-import { NounsSeeder } from '../../../contracts/NounsSeeder.sol';
+import { NounsBRToken } from '../../../contracts/NounsBRToken.sol';
+import { NounsBRSeeder } from '../../../contracts/NounsBRSeeder.sol';
 import { IProxyRegistry } from '../../../contracts/external/opensea/IProxyRegistry.sol';
-import { NounsDAOExecutor } from '../../../contracts/governance/NounsDAOExecutor.sol';
+import { NounsBRDAOExecutor } from '../../../contracts/governance/NounsBRDAOExecutor.sol';
 import { Utils } from './Utils.sol';
 
-abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtils {
-    NounsDAOLogicV1 daoProxy;
-    NounsToken nounsToken;
-    NounsDAOExecutor timelock = new NounsDAOExecutor(address(1), TIMELOCK_DELAY);
+abstract contract NounsBRDAOLogicSharedBaseTest is Test, DeployUtils {
+    NounsBRDAOLogicV1 daoProxy;
+    NounsBRToken nounsbrToken;
+    NounsBRDAOExecutor timelock = new NounsBRDAOExecutor(address(1), TIMELOCK_DELAY);
     address vetoer = address(0x3);
     address admin = address(0x4);
-    address noundersDAO = address(0x5);
+    address noundersbrDAO = address(0x5);
     address minter = address(0x6);
     address proposer = address(0x7);
     uint256 votingPeriod = 6000;
@@ -29,8 +29,8 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtils {
     Utils utils;
 
     function setUp() public virtual {
-        NounsDescriptorV2 descriptor = _deployAndPopulateV2();
-        nounsToken = new NounsToken(noundersDAO, minter, descriptor, new NounsSeeder(), IProxyRegistry(address(0)));
+        NounsBRDescriptorV2 descriptor = _deployAndPopulateV2();
+        nounsbrToken = new NounsBRToken(noundersbrDAO, minter, descriptor, new NounsBRSeeder(), IProxyRegistry(address(0)));
 
         daoProxy = deployDAOProxy();
 
@@ -42,7 +42,7 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtils {
         utils = new Utils();
     }
 
-    function deployDAOProxy() internal virtual returns (NounsDAOLogicV1);
+    function deployDAOProxy() internal virtual returns (NounsBRDAOLogicV1);
 
     function daoVersion() internal virtual returns (uint256);
 
@@ -77,8 +77,8 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtils {
     function mint(address to, uint256 amount) internal {
         vm.startPrank(minter);
         for (uint256 i = 0; i < amount; i++) {
-            uint256 tokenId = nounsToken.mint();
-            nounsToken.transferFrom(minter, to, tokenId);
+            uint256 tokenId = nounsbrToken.mint();
+            nounsbrToken.transferFrom(minter, to, tokenId);
         }
         vm.stopPrank();
         vm.roll(block.number + 1);
@@ -101,7 +101,7 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtils {
         daoProxy.castVote(proposalId, support);
     }
 
-    function daoProxyAsV2() internal view returns (NounsDAOLogicV2) {
-        return NounsDAOLogicV2(payable(address(daoProxy)));
+    function daoProxyAsV2() internal view returns (NounsBRDAOLogicV2) {
+        return NounsBRDAOLogicV2(payable(address(daoProxy)));
     }
 }

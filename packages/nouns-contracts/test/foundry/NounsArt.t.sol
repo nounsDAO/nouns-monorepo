@@ -2,14 +2,14 @@
 pragma solidity ^0.8.6;
 
 import 'forge-std/Test.sol';
-import { NounsArt } from '../../contracts/NounsArt.sol';
-import { INounsArt } from '../../contracts/interfaces/INounsArt.sol';
+import { NounsBRArt } from '../../contracts/NounsBRArt.sol';
+import { INounsBRArt } from '../../contracts/interfaces/INounsBRArt.sol';
 import { SSTORE2 } from '../../contracts/libs/SSTORE2.sol';
 import { DescriptorHelpers } from './helpers/DescriptorHelpers.sol';
 import { Inflator } from '../../contracts/Inflator.sol';
 import { IInflator } from '../../contracts/interfaces/IInflator.sol';
 
-contract NounsArtTest is Test, DescriptorHelpers {
+contract NounsBRArtTest is Test, DescriptorHelpers {
     event BackgroundsAdded(uint256 count);
 
     event PaletteSet(uint8 paletteIndex);
@@ -26,13 +26,13 @@ contract NounsArtTest is Test, DescriptorHelpers {
 
     event InflatorUpdated(address oldInflator, address newInflator);
 
-    NounsArt art;
+    NounsBRArt art;
     address descriptor = address(1);
     IInflator inflator;
 
     function setUp() public {
         inflator = new Inflator();
-        art = new NounsArt(descriptor, inflator);
+        art = new NounsBRArt(descriptor, inflator);
     }
 
     ///
@@ -40,7 +40,7 @@ contract NounsArtTest is Test, DescriptorHelpers {
     ///
 
     function testSetDescriptorRevertsIfSenderNotDescriptor() public {
-        vm.expectRevert(INounsArt.SenderIsNotDescriptor.selector);
+        vm.expectRevert(INounsBRArt.SenderIsNotDescriptor.selector);
         art.setDescriptor(address(2));
     }
 
@@ -61,7 +61,7 @@ contract NounsArtTest is Test, DescriptorHelpers {
     ///
 
     function testSetInflatorRevertsIfSenderNotDescriptor() public {
-        vm.expectRevert(INounsArt.SenderIsNotDescriptor.selector);
+        vm.expectRevert(INounsBRArt.SenderIsNotDescriptor.selector);
         art.setInflator(IInflator(address(2)));
     }
 
@@ -87,7 +87,7 @@ contract NounsArtTest is Test, DescriptorHelpers {
     }
 
     function testAddBackgroundRevertsIfSenderNotDescriptor() public {
-        vm.expectRevert(INounsArt.SenderIsNotDescriptor.selector);
+        vm.expectRevert(INounsBRArt.SenderIsNotDescriptor.selector);
         art.addBackground('ffffff');
     }
 
@@ -107,7 +107,7 @@ contract NounsArtTest is Test, DescriptorHelpers {
         bgs[0] = 'ffffff';
         bgs[1] = '000000';
 
-        vm.expectRevert(INounsArt.SenderIsNotDescriptor.selector);
+        vm.expectRevert(INounsBRArt.SenderIsNotDescriptor.selector);
         art.addManyBackgrounds(bgs);
     }
 
@@ -132,18 +132,18 @@ contract NounsArtTest is Test, DescriptorHelpers {
     ///
 
     function testPalettesRevertsGivenNoArt() public {
-        vm.expectRevert(INounsArt.PaletteNotFound.selector);
+        vm.expectRevert(INounsBRArt.PaletteNotFound.selector);
         art.palettes(0);
     }
 
     function testSetPaletteRevertsIfSenderNotDescriptor() public {
-        vm.expectRevert(INounsArt.SenderIsNotDescriptor.selector);
+        vm.expectRevert(INounsBRArt.SenderIsNotDescriptor.selector);
         art.setPalette(0, hex'ffffff');
     }
 
     function testSetPalettePointerRevertsIfSenderNotDescriptor() public {
         address pointer = SSTORE2.write(hex'ffffff000000');
-        vm.expectRevert(INounsArt.SenderIsNotDescriptor.selector);
+        vm.expectRevert(INounsBRArt.SenderIsNotDescriptor.selector);
         art.setPalettePointer(0, pointer);
     }
 
@@ -227,32 +227,32 @@ contract NounsArtTest is Test, DescriptorHelpers {
 
     function testCannotSetEmptyPalette() public {
         vm.prank(descriptor);
-        vm.expectRevert(INounsArt.EmptyPalette.selector);
+        vm.expectRevert(INounsBRArt.EmptyPalette.selector);
         art.setPalette(0, new bytes(0));
     }
 
     function testCannotSetPaletteWithLengthNotAMultipleOf3() public {
         vm.startPrank(descriptor);
 
-        vm.expectRevert(INounsArt.BadPaletteLength.selector);
+        vm.expectRevert(INounsBRArt.BadPaletteLength.selector);
         art.setPalette(0, new bytes(1));
 
-        vm.expectRevert(INounsArt.BadPaletteLength.selector);
+        vm.expectRevert(INounsBRArt.BadPaletteLength.selector);
         art.setPalette(0, new bytes(2));
 
         // expected to work
         art.setPalette(0, new bytes(3));
 
-        vm.expectRevert(INounsArt.BadPaletteLength.selector);
+        vm.expectRevert(INounsBRArt.BadPaletteLength.selector);
         art.setPalette(0, new bytes(4));
 
-        vm.expectRevert(INounsArt.BadPaletteLength.selector);
+        vm.expectRevert(INounsBRArt.BadPaletteLength.selector);
         art.setPalette(0, new bytes(5));
 
         // expected to work
         art.setPalette(0, new bytes(6));
 
-        vm.expectRevert(INounsArt.BadPaletteLength.selector);
+        vm.expectRevert(INounsBRArt.BadPaletteLength.selector);
         art.setPalette(0, new bytes(7));
 
         vm.stopPrank();
@@ -260,7 +260,7 @@ contract NounsArtTest is Test, DescriptorHelpers {
 
     function testCannotSetPaletteWithMoreThan256Colors() public {
         vm.prank(descriptor);
-        vm.expectRevert(INounsArt.BadPaletteLength.selector);
+        vm.expectRevert(INounsBRArt.BadPaletteLength.selector);
         art.setPalette(0, new bytes(769));
     }
 
@@ -269,30 +269,30 @@ contract NounsArtTest is Test, DescriptorHelpers {
     ///
 
     function testBodiesRevertsGivenNoArt() public {
-        vm.expectRevert(INounsArt.ImageNotFound.selector);
+        vm.expectRevert(INounsBRArt.ImageNotFound.selector);
         art.bodies(0);
     }
 
     function testAddBodiesRevertsIfSenderNotDescriptor() public {
-        vm.expectRevert(INounsArt.SenderIsNotDescriptor.selector);
+        vm.expectRevert(INounsBRArt.SenderIsNotDescriptor.selector);
         art.addBodies(hex'123456', uint80(12), uint16(1));
     }
 
     function testCannotAddBodiesWithNoBytes() public {
         vm.prank(descriptor);
-        vm.expectRevert(INounsArt.EmptyBytes.selector);
+        vm.expectRevert(INounsBRArt.EmptyBytes.selector);
         art.addBodies(new bytes(0), 0, 0);
     }
 
     function testCannotAddBodiesWithZeroDecompressedLength() public {
         vm.prank(descriptor);
-        vm.expectRevert(INounsArt.BadDecompressedLength.selector);
+        vm.expectRevert(INounsBRArt.BadDecompressedLength.selector);
         art.addBodies(FIRST_TWO_IMAGES_COMPRESSED, 0, 0);
     }
 
     function testCannotAddBodiesWithZeroImageCount() public {
         vm.prank(descriptor);
-        vm.expectRevert(INounsArt.BadImageCount.selector);
+        vm.expectRevert(INounsBRArt.BadImageCount.selector);
         art.addBodies(FIRST_TWO_IMAGES_COMPRESSED, FIRST_TWO_IMAGES_DEFLATED_LENGTH, 0);
     }
 
@@ -314,14 +314,14 @@ contract NounsArtTest is Test, DescriptorHelpers {
     function testCannotAddBodiesFromPointerWithZeroDecompressedLength() public {
         address pointer = SSTORE2.write(FIRST_TWO_IMAGES_COMPRESSED);
         vm.prank(descriptor);
-        vm.expectRevert(INounsArt.BadDecompressedLength.selector);
+        vm.expectRevert(INounsBRArt.BadDecompressedLength.selector);
         art.addBodiesFromPointer(pointer, 0, 0);
     }
 
     function testCannotAddBodiesFromPointerWithZeroImageCount() public {
         address pointer = SSTORE2.write(FIRST_TWO_IMAGES_COMPRESSED);
         vm.prank(descriptor);
-        vm.expectRevert(INounsArt.BadImageCount.selector);
+        vm.expectRevert(INounsBRArt.BadImageCount.selector);
         art.addBodiesFromPointer(pointer, FIRST_TWO_IMAGES_DEFLATED_LENGTH, 0);
     }
 
@@ -349,30 +349,30 @@ contract NounsArtTest is Test, DescriptorHelpers {
     ///
 
     function testAccessoriesRevertsGivenNoArt() public {
-        vm.expectRevert(INounsArt.ImageNotFound.selector);
+        vm.expectRevert(INounsBRArt.ImageNotFound.selector);
         art.accessories(0);
     }
 
     function testAddAccessoriesRevertsIfSenderNotDescriptor() public {
-        vm.expectRevert(INounsArt.SenderIsNotDescriptor.selector);
+        vm.expectRevert(INounsBRArt.SenderIsNotDescriptor.selector);
         art.addAccessories(hex'123456', uint80(12), uint16(1));
     }
 
     function testCannotAddAccessoriesWithNoBytes() public {
         vm.prank(descriptor);
-        vm.expectRevert(INounsArt.EmptyBytes.selector);
+        vm.expectRevert(INounsBRArt.EmptyBytes.selector);
         art.addAccessories(new bytes(0), 0, 0);
     }
 
     function testCannotAddAccessoriesWithZeroDecompressedLength() public {
         vm.prank(descriptor);
-        vm.expectRevert(INounsArt.BadDecompressedLength.selector);
+        vm.expectRevert(INounsBRArt.BadDecompressedLength.selector);
         art.addAccessories(FIRST_TWO_IMAGES_COMPRESSED, 0, 0);
     }
 
     function testCannotAddAccessoriesWithZeroImageCount() public {
         vm.prank(descriptor);
-        vm.expectRevert(INounsArt.BadImageCount.selector);
+        vm.expectRevert(INounsBRArt.BadImageCount.selector);
         art.addAccessories(FIRST_TWO_IMAGES_COMPRESSED, FIRST_TWO_IMAGES_DEFLATED_LENGTH, 0);
     }
 
@@ -394,14 +394,14 @@ contract NounsArtTest is Test, DescriptorHelpers {
     function testCannotAddAccessoriesFromPointerWithZeroDecompressedLength() public {
         address pointer = SSTORE2.write(FIRST_TWO_IMAGES_COMPRESSED);
         vm.prank(descriptor);
-        vm.expectRevert(INounsArt.BadDecompressedLength.selector);
+        vm.expectRevert(INounsBRArt.BadDecompressedLength.selector);
         art.addAccessoriesFromPointer(pointer, 0, 0);
     }
 
     function testCannotAddAccessoriesFromPointerWithZeroImageCount() public {
         address pointer = SSTORE2.write(FIRST_TWO_IMAGES_COMPRESSED);
         vm.prank(descriptor);
-        vm.expectRevert(INounsArt.BadImageCount.selector);
+        vm.expectRevert(INounsBRArt.BadImageCount.selector);
         art.addAccessoriesFromPointer(pointer, FIRST_TWO_IMAGES_DEFLATED_LENGTH, 0);
     }
 
@@ -433,30 +433,30 @@ contract NounsArtTest is Test, DescriptorHelpers {
     ///
 
     function testHeadsRevertsGivenNoArt() public {
-        vm.expectRevert(INounsArt.ImageNotFound.selector);
+        vm.expectRevert(INounsBRArt.ImageNotFound.selector);
         art.heads(0);
     }
 
     function testAddHeadsRevertsIfSenderNotDescriptor() public {
-        vm.expectRevert(INounsArt.SenderIsNotDescriptor.selector);
+        vm.expectRevert(INounsBRArt.SenderIsNotDescriptor.selector);
         art.addHeads(hex'123456', uint80(12), uint16(1));
     }
 
     function testCannotAddHeadsWithNoBytes() public {
         vm.prank(descriptor);
-        vm.expectRevert(INounsArt.EmptyBytes.selector);
+        vm.expectRevert(INounsBRArt.EmptyBytes.selector);
         art.addHeads(new bytes(0), 0, 0);
     }
 
     function testCannotAddHeadsWithZeroDecompressedLength() public {
         vm.prank(descriptor);
-        vm.expectRevert(INounsArt.BadDecompressedLength.selector);
+        vm.expectRevert(INounsBRArt.BadDecompressedLength.selector);
         art.addHeads(FIRST_TWO_IMAGES_COMPRESSED, 0, 0);
     }
 
     function testCannotAddHeadsWithZeroImageCount() public {
         vm.prank(descriptor);
-        vm.expectRevert(INounsArt.BadImageCount.selector);
+        vm.expectRevert(INounsBRArt.BadImageCount.selector);
         art.addHeads(FIRST_TWO_IMAGES_COMPRESSED, FIRST_TWO_IMAGES_DEFLATED_LENGTH, 0);
     }
 
@@ -478,14 +478,14 @@ contract NounsArtTest is Test, DescriptorHelpers {
     function testCannotAddHeadsFromPointerWithZeroDecompressedLength() public {
         address pointer = SSTORE2.write(FIRST_TWO_IMAGES_COMPRESSED);
         vm.prank(descriptor);
-        vm.expectRevert(INounsArt.BadDecompressedLength.selector);
+        vm.expectRevert(INounsBRArt.BadDecompressedLength.selector);
         art.addHeadsFromPointer(pointer, 0, 0);
     }
 
     function testCannotAddHeadsFromPointerWithZeroImageCount() public {
         address pointer = SSTORE2.write(FIRST_TWO_IMAGES_COMPRESSED);
         vm.prank(descriptor);
-        vm.expectRevert(INounsArt.BadImageCount.selector);
+        vm.expectRevert(INounsBRArt.BadImageCount.selector);
         art.addHeadsFromPointer(pointer, FIRST_TWO_IMAGES_DEFLATED_LENGTH, 0);
     }
 
@@ -513,30 +513,30 @@ contract NounsArtTest is Test, DescriptorHelpers {
     ///
 
     function testGlassesRevertsGivenNoArt() public {
-        vm.expectRevert(INounsArt.ImageNotFound.selector);
+        vm.expectRevert(INounsBRArt.ImageNotFound.selector);
         art.glasses(0);
     }
 
     function testAddGlassesRevertsIfSenderNotDescriptor() public {
-        vm.expectRevert(INounsArt.SenderIsNotDescriptor.selector);
+        vm.expectRevert(INounsBRArt.SenderIsNotDescriptor.selector);
         art.addGlasses(hex'123456', uint80(12), uint16(1));
     }
 
     function testCannotAddGlassesWithNoBytes() public {
         vm.prank(descriptor);
-        vm.expectRevert(INounsArt.EmptyBytes.selector);
+        vm.expectRevert(INounsBRArt.EmptyBytes.selector);
         art.addGlasses(new bytes(0), 0, 0);
     }
 
     function testCannotAddGlassesWithZeroDecompressedLength() public {
         vm.prank(descriptor);
-        vm.expectRevert(INounsArt.BadDecompressedLength.selector);
+        vm.expectRevert(INounsBRArt.BadDecompressedLength.selector);
         art.addGlasses(FIRST_TWO_IMAGES_COMPRESSED, 0, 0);
     }
 
     function testCannotAddGlassesWithZeroImageCount() public {
         vm.prank(descriptor);
-        vm.expectRevert(INounsArt.BadImageCount.selector);
+        vm.expectRevert(INounsBRArt.BadImageCount.selector);
         art.addGlasses(FIRST_TWO_IMAGES_COMPRESSED, FIRST_TWO_IMAGES_DEFLATED_LENGTH, 0);
     }
 
@@ -558,14 +558,14 @@ contract NounsArtTest is Test, DescriptorHelpers {
     function testCannotAddGlassesFromPointerWithZeroDecompressedLength() public {
         address pointer = SSTORE2.write(FIRST_TWO_IMAGES_COMPRESSED);
         vm.prank(descriptor);
-        vm.expectRevert(INounsArt.BadDecompressedLength.selector);
+        vm.expectRevert(INounsBRArt.BadDecompressedLength.selector);
         art.addGlassesFromPointer(pointer, 0, 0);
     }
 
     function testCannotAddGlassesFromPointerWithZeroImageCount() public {
         address pointer = SSTORE2.write(FIRST_TWO_IMAGES_COMPRESSED);
         vm.prank(descriptor);
-        vm.expectRevert(INounsArt.BadImageCount.selector);
+        vm.expectRevert(INounsBRArt.BadImageCount.selector);
         art.addGlassesFromPointer(pointer, FIRST_TWO_IMAGES_DEFLATED_LENGTH, 0);
     }
 

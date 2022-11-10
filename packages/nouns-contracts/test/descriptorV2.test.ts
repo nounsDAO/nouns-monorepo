@@ -1,17 +1,17 @@
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
-import { NounsDescriptorV2 } from '../typechain';
+import { NounsBRDescriptorV2 } from '../typechain';
 import ImageData from '../files/image-data-v2.json';
 import { LongestPart } from './types';
-import { deployNounsDescriptorV2, populateDescriptorV2 } from './utils';
+import { deployNounsBRDescriptorV2, populateDescriptorV2 } from './utils';
 import { ethers } from 'hardhat';
 import { appendFileSync } from 'fs';
 
 chai.use(solidity);
 const { expect } = chai;
 
-describe('NounsDescriptorV2', () => {
-  let nounsDescriptor: NounsDescriptorV2;
+describe('NounsBRDescriptorV2', () => {
+  let nounsbrDescriptor: NounsBRDescriptorV2;
   let snapshotId: number;
 
   const part: LongestPart = {
@@ -26,7 +26,7 @@ describe('NounsDescriptorV2', () => {
   };
 
   before(async () => {
-    nounsDescriptor = await deployNounsDescriptorV2();
+    nounsbrDescriptor = await deployNounsBRDescriptorV2();
 
     for (const [l, layer] of Object.entries(ImageData.images)) {
       for (const [i, item] of layer.entries()) {
@@ -39,7 +39,7 @@ describe('NounsDescriptorV2', () => {
       }
     }
 
-    await populateDescriptorV2(nounsDescriptor);
+    await populateDescriptorV2(nounsbrDescriptor);
   });
 
   beforeEach(async () => {
@@ -60,7 +60,7 @@ describe('NounsDescriptorV2', () => {
     const { bodies, accessories, heads, glasses } = images;
     const max = Math.max(bodies.length, accessories.length, heads.length, glasses.length);
     for (let i = 0; i < max; i++) {
-      const tokenUri = await nounsDescriptor.tokenURI(i, {
+      const tokenUri = await nounsbrDescriptor.tokenURI(i, {
         background: Math.min(i, bgcolors.length - 1),
         body: Math.min(i, bodies.length - 1),
         accessory: Math.min(i, accessories.length - 1),

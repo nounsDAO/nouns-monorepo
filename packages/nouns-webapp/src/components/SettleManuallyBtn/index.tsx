@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Auction } from '../../wrappers/nounsAuction';
+import { Auction } from '../../wrappers/nounsbrAuction';
 import classes from './SettleManuallyBtn.module.css';
 import dayjs from 'dayjs';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

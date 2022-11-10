@@ -3,26 +3,26 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { Trans } from '@lingui/macro';
 import React from 'react';
 import { Spinner } from 'react-bootstrap';
-import { nounQuery } from '../../wrappers/subgraph';
+import { nounbrQuery } from '../../wrappers/subgraph';
 import ShortAddress from '../ShortAddress';
-import { StandaloneNounCircular } from '../StandaloneNoun';
-import classes from './NounHoverCard.module.css';
+import { StandaloneNounBRCircular } from '../StandaloneNounBR';
+import classes from './NounBRHoverCard.module.css';
 import { HeartIcon, CakeIcon } from '@heroicons/react/solid';
-import { isNounderNoun } from '../../utils/nounderNoun';
+import { isNounderBRBRNounBR } from '../../utils/nounderbrNounBR';
 import { useAppSelector } from '../../hooks';
 import { i18n } from '@lingui/core';
-import { getNounBirthday } from '../NounInfoRowBirthday';
+import { getNounBRBirthday } from '../NounBRInfoRowBirthday';
 import clsx from 'clsx';
 
-interface NounHoverCardProps {
-  nounId: string;
+interface NounBRHoverCardProps {
+  nounbrId: string;
 }
 
-const NounHoverCard: React.FC<NounHoverCardProps> = props => {
-  const { nounId } = props;
+const NounBRHoverCard: React.FC<NounBRHoverCardProps> = props => {
+  const { nounbrId } = props;
 
-  const { loading, error, data } = useQuery(nounQuery(nounId), {
-    skip: nounId === null,
+  const { loading, error, data } = useQuery(nounbrQuery(nounbrId), {
+    skip: nounbrId === null,
   });
 
   const pastAuctions = useAppSelector(state => state.pastAuctions.pastAuctions);
@@ -30,7 +30,7 @@ const NounHoverCard: React.FC<NounHoverCardProps> = props => {
     return <></>;
   }
 
-  if (loading || !data || !nounId) {
+  if (loading || !data || !nounbrId) {
     return (
       <div className={classes.spinnerWrapper}>
         <div className={classes.spinner}>
@@ -39,9 +39,9 @@ const NounHoverCard: React.FC<NounHoverCardProps> = props => {
       </div>
     );
   }
-  const numericNounId = parseInt(nounId);
-  const nounIdForQuery = isNounderNoun(BigNumber.from(nounId)) ? numericNounId + 1 : numericNounId;
-  const startTime = getNounBirthday(nounIdForQuery, pastAuctions);
+  const numericNounBRId = parseInt(nounbrId);
+  const nounbrIdForQuery = isNounderBRBRNounBR(BigNumber.from(nounbrId)) ? numericNounBRId + 1 : numericNounBRId;
+  const startTime = getNounBRBirthday(nounbrIdForQuery, pastAuctions);
 
   if (error || !startTime) {
     return <>Failed to fetch</>;
@@ -52,32 +52,32 @@ const NounHoverCard: React.FC<NounHoverCardProps> = props => {
     <div className={classes.wrapper}>
       {/* First Row */}
       <div className={classes.titleWrapper}>
-        <div className={classes.nounWrapper}>
-          <StandaloneNounCircular nounId={BigNumber.from(nounId)} />
+        <div className={classes.nounbrWrapper}>
+          <StandaloneNounBRCircular nounbrId={BigNumber.from(nounbrId)} />
         </div>
         <div>
-          <h1>NounBR {nounId}</h1>
+          <h1>NounBR {nounbrId}</h1>
         </div>
       </div>
 
       {/* NounBR birthday */}
-      <div className={classes.nounInfoWrapper}>
+      <div className={classes.nounbrInfoWrapper}>
         <CakeIcon height={20} width={20} className={classes.icon} />
         <Trans>Born</Trans> <span className={classes.bold}>{i18n.date(birthday)}</span>
       </div>
 
       {/* Current holder */}
-      <div className={clsx(classes.nounInfoWrapper, classes.currentHolder)}>
+      <div className={clsx(classes.nounbrInfoWrapper, classes.currentHolder)}>
         <HeartIcon height={20} width={20} className={classes.icon} />
         <span>
           <Trans>Held by</Trans>
         </span>
         <span className={classes.bold}>
-          <ShortAddress address={data.noun.owner.id} />
+          <ShortAddress address={data.nounbr.owner.id} />
         </span>
       </div>
     </div>
   );
 };
 
-export default NounHoverCard;
+export default NounBRHoverCard;

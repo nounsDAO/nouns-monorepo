@@ -5,7 +5,7 @@ import {
   formatNewGovernanceVoteText,
   formatProposalAtRiskOfExpiryText,
   formatUpdatedGovernanceProposalStatusText,
-  getNounPngBuffer,
+  getNounBRPngBuffer,
 } from '../utils';
 import { Bid, IAuctionLifecycleHandler, Proposal, Vote } from '../types';
 
@@ -13,11 +13,11 @@ export class DiscordAuctionLifecycleHandler implements IAuctionLifecycleHandler 
   constructor(public readonly discordClients: Discord.WebhookClient[]) {}
 
   /**
-   * Send Discord message with an image of the current noun alerting users
+   * Send Discord message with an image of the current nounbr alerting users
    * @param auctionId The current auction ID
    */
   async handleNewAuction(auctionId: number) {
-    const png = await getNounPngBuffer(auctionId.toString());
+    const png = await getNounBRPngBuffer(auctionId.toString());
     if (png) {
       const attachmentName = `Auction-${auctionId}.png`;
       const attachment = new Discord.MessageAttachment(png, attachmentName);

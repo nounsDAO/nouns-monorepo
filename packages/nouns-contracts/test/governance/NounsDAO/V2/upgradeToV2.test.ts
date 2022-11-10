@@ -1,7 +1,7 @@
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import {
-  deployNounsToken,
+  deployNounsBRToken,
   getSigners,
   TestSigners,
   setTotalSupply,
@@ -16,12 +16,12 @@ import {
 import { mineBlock } from '../../../utils';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
-  NounsToken,
-  NounsDescriptorV2__factory as NounsDescriptorV2Factory,
-  NounsDAOLogicV1,
-  NounsDAOLogicV1__factory as NounsDaoLogicV1Factory,
-  NounsDAOLogicV2,
-  NounsDAOLogicV2__factory as NounsDaoLogicV2Factory,
+  NounsBRToken,
+  NounsBRDescriptorV2__factory as NounsBRDescriptorV2Factory,
+  NounsBRDAOLogicV1,
+  NounsBRDAOLogicV1__factory as NounsBRDaoLogicV1Factory,
+  NounsBRDAOLogicV2,
+  NounsBRDAOLogicV2__factory as NounsBRDaoLogicV2Factory,
 } from '../../../../typechain';
 import { MAX_QUORUM_VOTES_BPS, MIN_QUORUM_VOTES_BPS } from '../../../constants';
 
@@ -30,7 +30,7 @@ const { expect } = chai;
 
 const V1_QUORUM_BPS = 100;
 
-let token: NounsToken;
+let token: NounsBRToken;
 let deployer: SignerWithAddress;
 let account0: SignerWithAddress;
 let account1: SignerWithAddress;
@@ -38,14 +38,14 @@ let account2: SignerWithAddress;
 let signers: TestSigners;
 
 let govProxyAddress: string;
-let govV1: NounsDAOLogicV1;
-let govV2: NounsDAOLogicV2;
+let govV1: NounsBRDAOLogicV1;
+let govV2: NounsBRDAOLogicV2;
 
 async function setupWithV1() {
-  token = await deployNounsToken(signers.deployer);
+  token = await deployNounsBRToken(signers.deployer);
 
   await populateDescriptorV2(
-    NounsDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
+    NounsBRDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
   );
 
   await setTotalSupply(token, 100);
@@ -53,7 +53,7 @@ async function setupWithV1() {
   ({ address: govProxyAddress } = await deployGovernorV1(deployer, token.address, V1_QUORUM_BPS));
 }
 
-describe('NounsDAO upgrade to V2', () => {
+describe('NounsBRDAO upgrade to V2', () => {
   before(async () => {
     signers = await getSigners();
     deployer = signers.deployer;
@@ -63,8 +63,8 @@ describe('NounsDAO upgrade to V2', () => {
 
     await setupWithV1();
 
-    govV1 = NounsDaoLogicV1Factory.connect(govProxyAddress, deployer);
-    govV2 = NounsDaoLogicV2Factory.connect(govProxyAddress, deployer);
+    govV1 = NounsBRDaoLogicV1Factory.connect(govProxyAddress, deployer);
+    govV2 = NounsBRDaoLogicV2Factory.connect(govProxyAddress, deployer);
   });
 
   it('Simulate some proposals in V1', async () => {

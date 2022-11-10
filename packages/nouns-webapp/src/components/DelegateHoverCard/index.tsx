@@ -3,8 +3,8 @@ import { ScaleIcon } from '@heroicons/react/solid';
 import { Trans } from '@lingui/macro';
 import React from 'react';
 import { Spinner } from 'react-bootstrap';
-import { delegateNounsAtBlockQuery } from '../../wrappers/subgraph';
-import HorizontalStackedNouns from '../HorizontalStackedNouns';
+import { delegateNounsBRAtBlockQuery } from '../../wrappers/subgraph';
+import HorizontalStackedNounsBR from '../HorizontalStackedNounsBR';
 import ShortAddress from '../ShortAddress';
 import classes from './DelegateHoverCard.module.css';
 
@@ -19,7 +19,7 @@ const DelegateHoverCard: React.FC<DelegateHoverCardProps> = props => {
   const unwrappedDelegateId = delegateId ? delegateId.replace('delegate-', '') : '';
 
   const { data, loading, error } = useQuery(
-    delegateNounsAtBlockQuery([unwrappedDelegateId], proposalCreationBlock),
+    delegateNounsBRAtBlockQuery([unwrappedDelegateId], proposalCreationBlock),
   );
 
   if (loading || !data || data === undefined || data.delegates.length === 0) {
@@ -36,13 +36,13 @@ const DelegateHoverCard: React.FC<DelegateHoverCardProps> = props => {
     return <>Error fetching Vote info</>;
   }
 
-  const numVotesForProp = data.delegates[0].nounsRepresented.length;
+  const numVotesForProp = data.delegates[0].nounsbrRepresented.length;
 
   return (
     <div className={classes.wrapper}>
-      <div className={classes.stackedNounWrapper}>
-        <HorizontalStackedNouns
-          nounIds={data.delegates[0].nounsRepresented.map((noun: { id: string }) => noun.id)}
+      <div className={classes.stackedNounBRWrapper}>
+        <HorizontalStackedNounsBR
+          nounbrIds={data.delegates[0].nounsbrRepresented.map((nounbr: { id: string }) => nounbr.id)}
         />
       </div>
 
@@ -50,7 +50,7 @@ const DelegateHoverCard: React.FC<DelegateHoverCardProps> = props => {
         <ShortAddress address={data ? data.delegates[0].id : ''} />
       </div>
 
-      <div className={classes.nounInfoWrapper}>
+      <div className={classes.nounbrInfoWrapper}>
         <ScaleIcon height={20} width={20} className={classes.icon} />
         {numVotesForProp === 1 ? (
           <Trans>

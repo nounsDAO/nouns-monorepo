@@ -2,9 +2,9 @@ import Banner from '../../components/Banner';
 import Auction from '../../components/Auction';
 import Documentation from '../../components/Documentation';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setOnDisplayAuctionNounId } from '../../state/slices/onDisplayAuction';
+import { setOnDisplayAuctionNounBRId } from '../../state/slices/onDisplayAuction';
 import { push } from 'connected-react-router';
-import { nounPath } from '../../utils/history';
+import { nounbrPath } from '../../utils/history';
 import useOnDisplayAuction from '../../wrappers/onDisplayAuction';
 import { useEffect } from 'react';
 import ProfileActivityFeed from '../../components/ProfileActivityFeed';
@@ -16,38 +16,38 @@ interface AuctionPageProps {
 const AuctionPage: React.FC<AuctionPageProps> = props => {
   const { initialAuctionId } = props;
   const onDisplayAuction = useOnDisplayAuction();
-  const lastAuctionNounId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounId);
-  const onDisplayAuctionNounId = onDisplayAuction?.nounId.toNumber();
+  const lastAuctionNounBRId = useAppSelector(state => state.onDisplayAuction.lastAuctionNounBRId);
+  const onDisplayAuctionNounBRId = onDisplayAuction?.nounbrId.toNumber();
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!lastAuctionNounId) return;
+    if (!lastAuctionNounBRId) return;
 
     if (initialAuctionId !== undefined) {
-      // handle out of bounds noun path ids
-      if (initialAuctionId > lastAuctionNounId || initialAuctionId < 0) {
-        dispatch(setOnDisplayAuctionNounId(lastAuctionNounId));
-        dispatch(push(nounPath(lastAuctionNounId)));
+      // handle out of bounds nounbr path ids
+      if (initialAuctionId > lastAuctionNounBRId || initialAuctionId < 0) {
+        dispatch(setOnDisplayAuctionNounBRId(lastAuctionNounBRId));
+        dispatch(push(nounbrPath(lastAuctionNounBRId)));
       } else {
         if (onDisplayAuction === undefined) {
-          // handle regular noun path ids on first load
-          dispatch(setOnDisplayAuctionNounId(initialAuctionId));
+          // handle regular nounbr path ids on first load
+          dispatch(setOnDisplayAuctionNounBRId(initialAuctionId));
         }
       }
     } else {
-      // no noun path id set
-      if (lastAuctionNounId) {
-        dispatch(setOnDisplayAuctionNounId(lastAuctionNounId));
+      // no nounbr path id set
+      if (lastAuctionNounBRId) {
+        dispatch(setOnDisplayAuctionNounBRId(lastAuctionNounBRId));
       }
     }
-  }, [lastAuctionNounId, dispatch, initialAuctionId, onDisplayAuction]);
+  }, [lastAuctionNounBRId, dispatch, initialAuctionId, onDisplayAuction]);
 
   return (
     <>
       <Auction auction={onDisplayAuction} />
-      {onDisplayAuctionNounId !== undefined && onDisplayAuctionNounId !== lastAuctionNounId ? (
-        <ProfileActivityFeed nounId={onDisplayAuctionNounId} />
+      {onDisplayAuctionNounBRId !== undefined && onDisplayAuctionNounBRId !== lastAuctionNounBRId ? (
+        <ProfileActivityFeed nounbrId={onDisplayAuctionNounBRId} />
       ) : (
         <Banner />
       )}

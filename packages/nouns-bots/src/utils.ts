@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import sharp from 'sharp';
 import { isError, tryF } from 'ts-try';
-import { nounsTokenContract } from './clients';
+import { nounsbrTokenContract } from './clients';
 import { Bid, Proposal, TokenMetadata, Vote, VoteDirection } from './types';
 import { extractProposalTitle } from './utils/proposals';
 
@@ -42,7 +42,7 @@ export function formatAuctionStartedTweetText(auctionId: number) {
 
 /**
  * Get the formatted text for a new bid.
- * @param id The auction/noun id
+ * @param id The auction/nounbr id
  * @param bid The amount of the current bid
  * @returns The bid update tweet text
  */
@@ -60,7 +60,7 @@ export function getAuctionEndingSoonTweetText() {
 }
 
 export function formatNewGovernanceProposalText(proposal: Proposal) {
-  return `A new NounsDAO proposal (#${proposal.id}) has been created: ${extractProposalTitle(
+  return `A new NounsBRDAO proposal (#${proposal.id}) has been created: ${extractProposalTitle(
     proposal,
   )}`;
 }
@@ -90,8 +90,8 @@ export async function formatNewGovernanceVoteText(proposal: Proposal, vote: Vote
  * @param tokenId The ERC721 token id
  * @returns The png buffer of the NounBR or undefined
  */
-export async function getNounPngBuffer(tokenId: string): Promise<Buffer | undefined> {
-  const dataURI = await tryF(() => nounsTokenContract.dataURI(tokenId));
+export async function getNounBRPngBuffer(tokenId: string): Promise<Buffer | undefined> {
+  const dataURI = await tryF(() => nounsbrTokenContract.dataURI(tokenId));
   if (isError(dataURI)) {
     console.error(`Error fetching dataURI for token ID ${tokenId}: ${dataURI.message}`);
     return;

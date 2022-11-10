@@ -1095,7 +1095,7 @@
             "type": "uint32"
           }
         ],
-        "internalType": "struct NounsDAOStorageV2.DynamicQuorumParams",
+        "internalType": "struct NounsBRDAOStorageV2.DynamicQuorumParams",
         "name": "params",
         "type": "tuple"
       }
@@ -1186,7 +1186,7 @@
             "type": "uint32"
           }
         ],
-        "internalType": "struct NounsDAOStorageV2.DynamicQuorumParams",
+        "internalType": "struct NounsBRDAOStorageV2.DynamicQuorumParams",
         "name": "",
         "type": "tuple"
       }
@@ -1227,7 +1227,7 @@
             "type": "uint96"
           }
         ],
-        "internalType": "struct NounsDAOStorageV1Adjusted.Receipt",
+        "internalType": "struct NounsBRDAOStorageV1Adjusted.Receipt",
         "name": "",
         "type": "tuple"
       }
@@ -1257,7 +1257,7 @@
       },
       {
         "internalType": "address",
-        "name": "nouns_",
+        "name": "nounsbr_",
         "type": "address"
       },
       {
@@ -1298,7 +1298,7 @@
             "type": "uint32"
           }
         ],
-        "internalType": "struct NounsDAOStorageV2.DynamicQuorumParams",
+        "internalType": "struct NounsBRDAOStorageV2.DynamicQuorumParams",
         "name": "dynamicQuorumParams_",
         "type": "tuple"
       }
@@ -1368,10 +1368,10 @@
   },
   {
     "inputs": [],
-    "name": "nouns",
+    "name": "nounsbr",
     "outputs": [
       {
-        "internalType": "contract NounsTokenLike",
+        "internalType": "contract NounsBRTokenLike",
         "name": "",
         "type": "address"
       }
@@ -1545,7 +1545,7 @@
             "type": "uint256"
           }
         ],
-        "internalType": "struct NounsDAOStorageV2.ProposalCondensed",
+        "internalType": "struct NounsBRDAOStorageV2.ProposalCondensed",
         "name": "",
         "type": "tuple"
       }
@@ -1638,7 +1638,7 @@
             "type": "uint32"
           }
         ],
-        "internalType": "struct NounsDAOStorageV2.DynamicQuorumParams",
+        "internalType": "struct NounsBRDAOStorageV2.DynamicQuorumParams",
         "name": "params",
         "type": "tuple"
       }
@@ -1689,7 +1689,7 @@
     "name": "state",
     "outputs": [
       {
-        "internalType": "enum NounsDAOStorageV1Adjusted.ProposalState",
+        "internalType": "enum NounsBRDAOStorageV1Adjusted.ProposalState",
         "name": "",
         "type": "uint8"
       }
@@ -1702,7 +1702,7 @@
     "name": "timelock",
     "outputs": [
       {
-        "internalType": "contract INounsDAOExecutor",
+        "internalType": "contract INounsBRDAOExecutor",
         "name": "",
         "type": "address"
       }

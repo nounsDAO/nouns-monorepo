@@ -1,19 +1,19 @@
 import { Button } from 'react-bootstrap';
-import classes from './NounModal.module.css';
+import classes from './NounBRModal.module.css';
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-import Noun from '../../../components/Noun';
+import NounBR from '../../../components/NounBR';
 import { svg2png } from '../../../utils/svg2png';
 import { Backdrop } from '../../../components/Modal';
 
-const downloadNounPNG = (png: string) => {
+const downloadNounBRPNG = (png: string) => {
   const downloadEl = document.createElement('a');
   downloadEl.href = png;
-  downloadEl.download = 'noun.png';
+  downloadEl.download = 'nounbr.png';
   downloadEl.click();
 };
 
-const NounModal: React.FC<{ onDismiss: () => void; svg: string }> = props => {
+const NounBRModal: React.FC<{ onDismiss: () => void; svg: string }> = props => {
   const { onDismiss, svg } = props;
 
   const [width, setWidth] = useState<number>(window.innerWidth);
@@ -51,19 +51,19 @@ const NounModal: React.FC<{ onDismiss: () => void; svg: string }> = props => {
       {ReactDOM.createPortal(
         <div className={classes.modal}>
           {png && (
-            <Noun
+            <NounBR
               imgPath={png}
-              alt="noun"
-              className={classes.nounImg}
-              wrapperClassName={classes.nounWrapper}
+              alt="nounbr"
+              className={classes.nounbrImg}
+              wrapperClassName={classes.nounbrWrapper}
             />
           )}
-          <div className={classes.displayNounFooter}>
+          <div className={classes.displayNounBRFooter}>
             <span>Use this NounBR as your profile picture!</span>
             {!isMobile && png && (
               <Button
                 onClick={() => {
-                  downloadNounPNG(png);
+                  downloadNounBRPNG(png);
                 }}
               >
                 Download
@@ -76,4 +76,4 @@ const NounModal: React.FC<{ onDismiss: () => void; svg: string }> = props => {
     </>
   );
 };
-export default NounModal;
+export default NounBRModal;

@@ -15,7 +15,7 @@ const DelegatePill: React.FC<DelegatePillProps> = props => {
   return (
     <div className={classes.wrapper}>
       <ReactTooltip
-        id={'noun-profile-delegate'}
+        id={'nounbr-profile-delegate'}
         effect={'solid'}
         className={classes.delegateHover}
         getContent={dataTip => {
@@ -24,7 +24,7 @@ const DelegatePill: React.FC<DelegatePillProps> = props => {
       />
       <div
         data-tip={`Delegate for Proposal ${proposalId}`}
-        data-for="noun-profile-delegate"
+        data-for="nounbr-profile-delegate"
         className={classes.pill}
       >
         <ScaleIcon className={classes.icon} />

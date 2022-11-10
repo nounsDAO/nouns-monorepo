@@ -2,7 +2,7 @@ import { task, types } from 'hardhat/config';
 import ImageData from '../files/image-data-v1.json';
 import { chunkArray } from '../utils';
 
-task('populate-descriptor-v1', 'Populates the descriptor with color palettes and Noun parts')
+task('populate-descriptor-v1', 'Populates the descriptor with color palettes and NounBR parts')
   .addOptionalParam(
     'nftDescriptor',
     'The `NFTDescriptor` contract address',
@@ -10,18 +10,18 @@ task('populate-descriptor-v1', 'Populates the descriptor with color palettes and
     types.string,
   )
   .addOptionalParam(
-    'nounsDescriptor',
-    'The `NounsDescriptor` contract address',
+    'nounsbrDescriptor',
+    'The `NounsBRDescriptor` contract address',
     '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
     types.string,
   )
-  .setAction(async ({ nftDescriptor, nounsDescriptor }, { ethers }) => {
-    const descriptorFactory = await ethers.getContractFactory('NounsDescriptor', {
+  .setAction(async ({ nftDescriptor, nounsbrDescriptor }, { ethers }) => {
+    const descriptorFactory = await ethers.getContractFactory('NounsBRDescriptor', {
       libraries: {
         NFTDescriptor: nftDescriptor,
       },
     });
-    const descriptorContract = descriptorFactory.attach(nounsDescriptor);
+    const descriptorContract = descriptorFactory.attach(nounsbrDescriptor);
 
     const { bgcolors, palette, images } = ImageData;
     const { bodies, accessories, heads, glasses } = images;

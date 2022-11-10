@@ -1,4 +1,4 @@
-import { Auction } from '../../wrappers/nounsAuction';
+import { Auction } from '../../wrappers/nounsbrAuction';
 import React, { useState, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
 import { Row, Col } from 'react-bootstrap';
@@ -12,21 +12,21 @@ import BidHistory from '../BidHistory';
 import AuctionNavigation from '../AuctionNavigation';
 import AuctionActivityWrapper from '../AuctionActivityWrapper';
 import AuctionTitleAndNavWrapper from '../AuctionTitleAndNavWrapper';
-import AuctionActivityNounTitle from '../AuctionActivityNounTitle';
+import AuctionActivityNounBRTitle from '../AuctionActivityNounBRTitle';
 import AuctionActivityDateHeadline from '../AuctionActivityDateHeadline';
 import BidHistoryBtn from '../BidHistoryBtn';
 import config from '../../config';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import NounInfoCard from '../NounInfoCard';
+import NounBRInfoCard from '../NounBRInfoCard';
 import { useAppSelector } from '../../hooks';
 import BidHistoryModal from '../BidHistoryModal';
 import { Trans } from '@lingui/macro';
 import Holder from '../Holder';
 
 const openEtherscanBidHistory = () => {
-  const url = buildEtherscanAddressLink(config.addresses.nounsAuctionHouseProxy);
+  const url = buildEtherscanAddressLink(config.addresses.nounsbrAuctionHouseProxy);
   window.open(url);
 };
 
@@ -108,7 +108,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
               <AuctionActivityDateHeadline startTime={auction.startTime} />
             </AuctionTitleAndNavWrapper>
             <Col lg={12}>
-              <AuctionActivityNounTitle isCool={isCool} nounId={auction.nounId} />
+              <AuctionActivityNounBRTitle isCool={isCool} nounbrId={auction.nounbrId} />
             </Col>
           </Row>
           <Row className={classes.activityRow}>
@@ -123,7 +123,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
                 isLastAuction ? (
                   <Winner winner={auction.bidder} />
                 ) : (
-                  <Holder nounId={auction.nounId.toNumber()} />
+                  <Holder nounbrId={auction.nounbrId.toNumber()} />
                 )
               ) : (
                 <AuctionTimer auction={auction} auctionEnded={auctionEnded} />
@@ -133,7 +133,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
         </div>
         {!auctionEnded && (
           <Row className={classes.activityRow}>
-            <Col lg={12} className={classes.fomoNounsLink}>
+            <Col lg={12} className={classes.fomoNounsBRLink}>
               <FontAwesomeIcon icon={faInfoCircle} />
               <a href={'https://fomonounsbr.wtf'} target={'_blank'} rel="noreferrer">
                 <Trans>Help mint the next NounBR</Trans>
@@ -153,14 +153,14 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
         <Row className={classes.activityRow}>
           <Col lg={12}>
             {!isLastAuction ? (
-              <NounInfoCard
-                nounId={auction.nounId.toNumber()}
+              <NounBRInfoCard
+                nounbrId={auction.nounbrId.toNumber()}
                 bidHistoryOnClickHandler={showBidModalHandler}
               />
             ) : (
               displayGraphDepComps && (
                 <BidHistory
-                  auctionId={auction.nounId.toString()}
+                  auctionId={auction.nounbrId.toString()}
                   max={3}
                   classes={bidHistoryClasses}
                 />

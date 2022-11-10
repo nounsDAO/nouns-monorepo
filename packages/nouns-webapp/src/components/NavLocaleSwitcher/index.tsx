@@ -148,7 +148,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
       )}
 
       <div
-        className={clsx(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.mobileOnly)}
+        className={clsx(navDropdownClasses.nounsbrNavLink, responsiveUiUtilsClasses.mobileOnly)}
         onClick={() => setShowLanguagePickerModal(true)}
       >
         <NavBarButton
@@ -159,7 +159,7 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
       </div>
 
       <Dropdown
-        className={clsx(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.desktopOnly)}
+        className={clsx(navDropdownClasses.nounsbrNavLink, responsiveUiUtilsClasses.desktopOnly)}
         onToggle={() => setButtonUp(!buttonUp)}
         autoClose={true}
       >

@@ -19,14 +19,14 @@ pragma solidity ^0.8.6;
 
 import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
 import { Strings } from '@openzeppelin/contracts/utils/Strings.sol';
-import { INounsDescriptorV2 } from './interfaces/INounsDescriptorV2.sol';
-import { INounsSeeder } from './interfaces/INounsSeeder.sol';
+import { INounsBRDescriptorV2 } from './interfaces/INounsBRDescriptorV2.sol';
+import { INounsBRSeeder } from './interfaces/INounsBRSeeder.sol';
 import { NFTDescriptorV2 } from './libs/NFTDescriptorV2.sol';
 import { ISVGRenderer } from './interfaces/ISVGRenderer.sol';
-import { INounsArt } from './interfaces/INounsArt.sol';
+import { INounsBRArt } from './interfaces/INounsBRArt.sol';
 import { IInflator } from './interfaces/IInflator.sol';
 
-contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
+contract NounsBRDescriptorV2 is INounsBRDescriptorV2, Ownable {
     using Strings for uint256;
 
     // prettier-ignore
@@ -34,7 +34,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     bytes32 constant COPYRIGHT_CC0_1_0_UNIVERSAL_LICENSE = 0xa2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499;
 
     /// @notice The contract responsible for holding compressed NounBR art
-    INounsArt public art;
+    INounsBRArt public art;
 
     /// @notice The contract responsible for constructing SVGs
     ISVGRenderer public renderer;
@@ -56,7 +56,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
         _;
     }
 
-    constructor(INounsArt _art, ISVGRenderer _renderer) {
+    constructor(INounsBRArt _art, ISVGRenderer _renderer) {
         art = _art;
         renderer = _renderer;
     }
@@ -65,7 +65,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
      * @notice Set the NounBR's art contract.
      * @dev Only callable by the owner when not locked.
      */
-    function setArt(INounsArt _art) external onlyOwner whenPartsNotLocked {
+    function setArt(INounsBRArt _art) external onlyOwner whenPartsNotLocked {
         art = _art;
 
         emit ArtUpdated(_art);
@@ -395,10 +395,10 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     }
 
     /**
-     * @notice Given a token ID and seed, construct a token URI for an official NounsBR DAO noun.
+     * @notice Given a token ID and seed, construct a token URI for an official NounsBR DAO nounbr.
      * @dev The returned value may be a base64 encoded data URI or an API URL.
      */
-    function tokenURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view override returns (string memory) {
+    function tokenURI(uint256 tokenId, INounsBRSeeder.Seed memory seed) external view override returns (string memory) {
         if (isDataURIEnabled) {
             return dataURI(tokenId, seed);
         }
@@ -406,12 +406,12 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     }
 
     /**
-     * @notice Given a token ID and seed, construct a base64 encoded data URI for an official NounsBR DAO noun.
+     * @notice Given a token ID and seed, construct a base64 encoded data URI for an official NounsBR DAO nounbr.
      */
-    function dataURI(uint256 tokenId, INounsSeeder.Seed memory seed) public view override returns (string memory) {
-        string memory nounId = tokenId.toString();
-        string memory name = string(abi.encodePacked('NounBR ', nounId));
-        string memory description = string(abi.encodePacked('NounBR ', nounId, ' is a member of the NounsBR DAO'));
+    function dataURI(uint256 tokenId, INounsBRSeeder.Seed memory seed) public view override returns (string memory) {
+        string memory nounbrId = tokenId.toString();
+        string memory name = string(abi.encodePacked('NounBR ', nounbrId));
+        string memory description = string(abi.encodePacked('NounBR ', nounbrId, ' is a member of the NounsBR DAO'));
 
         return genericDataURI(name, description, seed);
     }
@@ -422,7 +422,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     function genericDataURI(
         string memory name,
         string memory description,
-        INounsSeeder.Seed memory seed
+        INounsBRSeeder.Seed memory seed
     ) public view override returns (string memory) {
         NFTDescriptorV2.TokenURIParams memory params = NFTDescriptorV2.TokenURIParams({
             name: name,
@@ -436,7 +436,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     /**
      * @notice Given a seed, construct a base64 encoded SVG image.
      */
-    function generateSVGImage(INounsSeeder.Seed memory seed) external view override returns (string memory) {
+    function generateSVGImage(INounsBRSeeder.Seed memory seed) external view override returns (string memory) {
         ISVGRenderer.SVGParams memory params = ISVGRenderer.SVGParams({
             parts: getPartsForSeed(seed),
             background: art.backgrounds(seed.background)
@@ -447,7 +447,7 @@ contract NounsDescriptorV2 is INounsDescriptorV2, Ownable {
     /**
      * @notice Get all NounBR parts for the passed `seed`.
      */
-    function getPartsForSeed(INounsSeeder.Seed memory seed) public view returns (ISVGRenderer.Part[] memory) {
+    function getPartsForSeed(INounsBRSeeder.Seed memory seed) public view returns (ISVGRenderer.Part[] memory) {
         bytes memory body = art.bodies(seed.body);
         bytes memory accessory = art.accessories(seed.accessory);
         bytes memory head = art.heads(seed.head);

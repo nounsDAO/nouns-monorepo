@@ -5,25 +5,25 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: NounsAuctionHouse
+    name: NounsBRAuctionHouse
     network: {{network}}
     source:
-      address: '{{nounsAuctionHouse.address}}'
-      abi: NounsAuctionHouse
-      startBlock: {{nounsAuctionHouse.startBlock}}
+      address: '{{nounsbrAuctionHouse.address}}'
+      abi: NounsBRAuctionHouse
+      startBlock: {{nounsbrAuctionHouse.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
       language: wasm/assemblyscript
-      file: ./src/nouns-auction-house.ts
+      file: ./src/nounsbr-auction-house.ts
       entities:
         - Account
         - Auction
         - Bid
-        - Noun
+        - NounBR
       abis:
-        - name: NounsAuctionHouse
-          file: ../nouns-contracts/abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json
+        - name: NounsBRAuctionHouse
+          file: ../nounsbr-contracts/abi/contracts/NounsBRAuctionHouse.sol/NounsBRAuctionHouse.json
       eventHandlers:
         - event: AuctionCreated(indexed uint256,uint256,uint256)
           handler: handleAuctionCreated
@@ -34,29 +34,29 @@ dataSources:
         - event: AuctionSettled(indexed uint256,address,uint256)
           handler: handleAuctionSettled
   - kind: ethereum/contract
-    name: NounsToken
+    name: NounsBRToken
     network: {{network}}
     source:
-      address: '{{nounsToken.address}}'
-      abi: NounsToken
-      startBlock: {{nounsToken.startBlock}}
+      address: '{{nounsbrToken.address}}'
+      abi: NounsBRToken
+      startBlock: {{nounsbrToken.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
       language: wasm/assemblyscript
-      file: ./src/nouns-erc-721.ts
+      file: ./src/nounsbr-erc-721.ts
       entities:
-        - Noun
+        - NounBR
         - Seed
         - Account
         - Delegate
         - Governance
       abis:
-        - name: NounsToken
-          file: ../nouns-contracts/abi/contracts/NounsToken.sol/NounsToken.json
+        - name: NounsBRToken
+          file: ../nounsbr-contracts/abi/contracts/NounsBRToken.sol/NounsBRToken.json
       eventHandlers:
-        - event: NounCreated(indexed uint256,(uint48,uint48,uint48,uint48,uint48))
-          handler: handleNounCreated
+        - event: NounBRCreated(indexed uint256,(uint48,uint48,uint48,uint48,uint48))
+          handler: handleNounBRCreated
         - event: DelegateChanged(indexed address,indexed address,indexed address)
           handler: handleDelegateChanged
         - event: DelegateVotesChanged(indexed address,uint256,uint256)
@@ -64,17 +64,17 @@ dataSources:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
   - kind: ethereum/contract
-    name: NounsDAO
+    name: NounsBRDAO
     network: {{network}}
     source:
-      address: '{{nounsDAO.address}}'
-      abi: NounsDAO
-      startBlock: {{nounsDAO.startBlock}}
+      address: '{{nounsbrDAO.address}}'
+      abi: NounsBRDAO
+      startBlock: {{nounsbrDAO.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
       language: wasm/assemblyscript
-      file: ./src/nouns-dao.ts
+      file: ./src/nounsbr-dao.ts
       entities:
         - Account
         - Delegate
@@ -82,8 +82,8 @@ dataSources:
         - Vote
         - Governance
       abis:
-        - name: NounsDAO
-          file: ../nouns-contracts/abi/contracts/governance/NounsDAOLogicV2.sol/NounsDAOLogicV2.json
+        - name: NounsBRDAO
+          file: ../nounsbr-contracts/abi/contracts/governance/NounsBRDAOLogicV2.sol/NounsBRDAOLogicV2.json
       eventHandlers:
         - event: ProposalCreatedWithRequirements(uint256,address,address[],uint256[],string[],bytes[],uint256,uint256,uint256,uint256,string)
           handler: handleProposalCreatedWithRequirements

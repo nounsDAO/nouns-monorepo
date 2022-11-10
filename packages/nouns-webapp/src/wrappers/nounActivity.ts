@@ -1,15 +1,15 @@
 import { useQuery } from '@apollo/client';
-import { NounVoteHistory } from '../components/ProfileActivityFeed';
-import { useNounCanVoteTimestamp } from './nounsAuction';
-import { Proposal, ProposalState, useAllProposals } from './nounsDao';
+import { NounBRVoteHistory } from '../components/ProfileActivityFeed';
+import { useNounBRCanVoteTimestamp } from './nounsbrAuction';
+import { Proposal, ProposalState, useAllProposals } from './nounsbrDao';
 import {
   createTimestampAllProposals,
-  nounDelegationHistoryQuery,
-  nounTransferHistoryQuery,
-  nounVotingHistoryQuery,
+  nounbrDelegationHistoryQuery,
+  nounbrTransferHistoryQuery,
+  nounbrVotingHistoryQuery,
 } from './subgraph';
 
-export enum NounEventType {
+export enum NounBREventType {
   PROPOSAL_VOTE,
   DELEGATION,
   TRANSFER,
@@ -39,30 +39,30 @@ export type DelegationEvent = {
 
 // Wrapper type around NounBR events.
 // All events are keyed by blockNumber to allow sorting.
-export type NounProfileEvent = {
+export type NounBRProfileEvent = {
   blockNumber: number;
-  eventType: NounEventType;
-  payload: ProposalVoteEvent | DelegationEvent | TransferEvent | NounWinEvent;
+  eventType: NounBREventType;
+  payload: ProposalVoteEvent | DelegationEvent | TransferEvent | NounBRWinEvent;
 };
 
-export type NounWinEvent = {
-  nounId: string | number;
+export type NounBRWinEvent = {
+  nounbrId: string | number;
   winner: string;
   transactionHash: string;
 };
 
-export type NounProfileEventFetcherResponse = {
-  data?: NounProfileEvent[];
+export type NounBRProfileEventFetcherResponse = {
+  data?: NounBRProfileEvent[];
   error: boolean;
   loading: boolean;
 };
 
 /**
  * Fetch list of ProposalVoteEvents representing the voting history of the given NounBR
- * @param nounId Id of NounBR who's voting history will be fetched
+ * @param nounbrId Id of NounBR who's voting history will be fetched
  */
-const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherResponse => {
-  const { loading, error, data } = useQuery(nounVotingHistoryQuery(nounId));
+const useNounBRProposalVoteEvents = (nounbrId: number): NounBRProfileEventFetcherResponse => {
+  const { loading, error, data } = useQuery(nounbrVotingHistoryQuery(nounbrId));
 
   const {
     loading: proposalTimestampLoading,
@@ -70,7 +70,7 @@ const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherRespo
     data: proposalCreatedTimestamps,
   } = useQuery(createTimestampAllProposals());
 
-  const nounCanVoteTimestamp = useNounCanVoteTimestamp(nounId);
+  const nounbrCanVoteTimestamp = useNounBRCanVoteTimestamp(nounbrId);
 
   const { data: proposals } = useAllProposals();
 
@@ -86,9 +86,9 @@ const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherRespo
     };
   }
 
-  const nounVotes: { [key: string]: NounVoteHistory } = data.noun.votes
+  const nounbrVotes: { [key: string]: NounBRVoteHistory } = data.nounbr.votes
     .slice(0)
-    .reduce((acc: any, h: NounVoteHistory, i: number) => {
+    .reduce((acc: any, h: NounBRVoteHistory, i: number) => {
       acc[h.proposal.id] = h;
       return acc;
     }, {});
@@ -103,7 +103,7 @@ const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherRespo
     );
 
     // Filter props from before the NounBR was born
-    if (nounCanVoteTimestamp.gt(proposalCreationTimestamp)) {
+    if (nounbrCanVoteTimestamp.gt(proposalCreationTimestamp)) {
       return false;
     }
     // Filter props which were cancelled and got 0 votes of any kind
@@ -117,13 +117,13 @@ const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherRespo
   });
 
   const events = filteredProposals.map((proposal: Proposal) => {
-    const vote = nounVotes[proposal.id as string];
+    const vote = nounbrVotes[proposal.id as string];
     const didVote = vote !== undefined;
     return {
       // If no vote was cast, for indexing / sorting purposes declear the block number of this event
       // to be the end block of the voting period
       blockNumber: didVote ? parseInt(vote.blockNumber.toString()) : proposal.endBlock,
-      eventType: NounEventType.PROPOSAL_VOTE,
+      eventType: NounBREventType.PROPOSAL_VOTE,
       payload: {
         proposal,
         vote: {
@@ -132,7 +132,7 @@ const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherRespo
         },
       },
     };
-  }) as NounProfileEvent[];
+  }) as NounBRProfileEvent[];
 
   return {
     loading: false,
@@ -143,10 +143,10 @@ const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherRespo
 
 /**
  * Fetch list of TransferEvents for given NounBR
- * @param nounId Id of NounBR who's transfer history we will fetch
+ * @param nounbrId Id of NounBR who's transfer history we will fetch
  */
-const useNounTransferEvents = (nounId: number): NounProfileEventFetcherResponse => {
-  const { loading, error, data } = useQuery(nounTransferHistoryQuery(nounId));
+const useNounBRTransferEvents = (nounbrId: number): NounBRProfileEventFetcherResponse => {
+  const { loading, error, data } = useQuery(nounbrTransferHistoryQuery(nounbrId));
   if (loading) {
     return {
       loading,
@@ -173,13 +173,13 @@ const useNounTransferEvents = (nounId: number): NounProfileEventFetcherResponse 
       }) => {
         return {
           blockNumber: parseInt(event.blockNumber),
-          eventType: NounEventType.TRANSFER,
+          eventType: NounBREventType.TRANSFER,
           payload: {
             from: event.previousHolder.id,
             to: event.newHolder.id,
             transactionHash: event.id.substring(0, event.id.indexOf('_')),
           } as TransferEvent,
-        } as NounProfileEvent;
+        } as NounBRProfileEvent;
       },
     ),
   };
@@ -187,10 +187,10 @@ const useNounTransferEvents = (nounId: number): NounProfileEventFetcherResponse 
 
 /**
  * Fetch list of DelegationEvents for given NounBR
- * @param nounId Id of NounBR who's transfer history we will fetch
+ * @param nounbrId Id of NounBR who's transfer history we will fetch
  */
-const useDelegationEvents = (nounId: number): NounProfileEventFetcherResponse => {
-  const { loading, error, data } = useQuery(nounDelegationHistoryQuery(nounId));
+const useDelegationEvents = (nounbrId: number): NounBRProfileEventFetcherResponse => {
+  const { loading, error, data } = useQuery(nounbrDelegationHistoryQuery(nounbrId));
   if (loading) {
     return {
       loading,
@@ -217,13 +217,13 @@ const useDelegationEvents = (nounId: number): NounProfileEventFetcherResponse =>
       }) => {
         return {
           blockNumber: parseInt(event.blockNumber),
-          eventType: NounEventType.DELEGATION,
+          eventType: NounBREventType.DELEGATION,
           payload: {
             previousDelegate: event.previousDelegate.id,
             newDelegate: event.newDelegate.id,
             transactionHash: event.id.substring(0, event.id.indexOf('_')),
           } as DelegationEvent,
-        } as NounProfileEvent;
+        } as NounBRProfileEvent;
       },
     ),
   };
@@ -231,33 +231,33 @@ const useDelegationEvents = (nounId: number): NounProfileEventFetcherResponse =>
 
 /**
  * Fetch list of all events for given NounBR (ex: voting, transfer, delegation, etc.)
- * @param nounId Id of NounBR who's history we will fetch
+ * @param nounbrId Id of NounBR who's history we will fetch
  */
-export const useNounActivity = (nounId: number): NounProfileEventFetcherResponse => {
+export const useNounBRActivity = (nounbrId: number): NounBRProfileEventFetcherResponse => {
   const {
     loading: loadingVotes,
     error: votesError,
     data: votesData,
-  } = useNounProposalVoteEvents(nounId);
+  } = useNounBRProposalVoteEvents(nounbrId);
   const {
-    loading: loadingNounTransfer,
-    error: nounTransferError,
-    data: nounTransferData,
-  } = useNounTransferEvents(nounId);
+    loading: loadingNounBRTransfer,
+    error: nounbrTransferError,
+    data: nounbrTransferData,
+  } = useNounBRTransferEvents(nounbrId);
   const {
     loading: loadingDelegationEvents,
     error: delegationEventsError,
     data: delegationEventsData,
-  } = useDelegationEvents(nounId);
+  } = useDelegationEvents(nounbrId);
 
-  if (loadingDelegationEvents || loadingNounTransfer || loadingVotes) {
+  if (loadingDelegationEvents || loadingNounBRTransfer || loadingVotes) {
     return {
       loading: true,
       error: false,
     };
   }
 
-  if (votesError || nounTransferError || delegationEventsError) {
+  if (votesError || nounbrTransferError || delegationEventsError) {
     return {
       loading: false,
       error: true,
@@ -265,7 +265,7 @@ export const useNounActivity = (nounId: number): NounProfileEventFetcherResponse
   }
 
   if (
-    nounTransferData === undefined ||
+    nounbrTransferData === undefined ||
     votesData === undefined ||
     delegationEventsData === undefined
   ) {
@@ -276,36 +276,36 @@ export const useNounActivity = (nounId: number): NounProfileEventFetcherResponse
   }
 
   const events = votesData
-    ?.concat(nounTransferData)
+    ?.concat(nounbrTransferData)
     .concat(delegationEventsData)
-    .sort((a: NounProfileEvent, b: NounProfileEvent) => a.blockNumber - b.blockNumber)
+    .sort((a: NounBRProfileEvent, b: NounBRProfileEvent) => a.blockNumber - b.blockNumber)
     .reverse();
 
-  const postProcessedEvents = events.slice(0, events.length - (nounId % 10 === 0 ? 2 : 4));
+  const postProcessedEvents = events.slice(0, events.length - (nounbrId % 10 === 0 ? 2 : 4));
 
   // Wrap this line in a try-catch to prevent edge case
   // where excessive spamming to left / right keys can cause transfer
   // and delegation data to be empty which leads to errors
   try {
-    // Parse noun birth + win events into a single event
-    const nounTransferFromAuctionHouse = nounTransferData.sort(
-      (a: NounProfileEvent, b: NounProfileEvent) => a.blockNumber - b.blockNumber,
-    )[nounId % 10 === 0 ? 0 : 1].payload as TransferEvent;
-    const nounTransferFromAuctionHouseBlockNumber = nounTransferData.sort(
-      (a: NounProfileEvent, b: NounProfileEvent) => a.blockNumber - b.blockNumber,
-    )[nounId % 10 === 0 ? 0 : 1].blockNumber;
+    // Parse nounbr birth + win events into a single event
+    const nounbrTransferFromAuctionHouse = nounbrTransferData.sort(
+      (a: NounBRProfileEvent, b: NounBRProfileEvent) => a.blockNumber - b.blockNumber,
+    )[nounbrId % 10 === 0 ? 0 : 1].payload as TransferEvent;
+    const nounbrTransferFromAuctionHouseBlockNumber = nounbrTransferData.sort(
+      (a: NounBRProfileEvent, b: NounBRProfileEvent) => a.blockNumber - b.blockNumber,
+    )[nounbrId % 10 === 0 ? 0 : 1].blockNumber;
 
-    const nounWinEvent = {
-      nounId: nounId,
-      winner: nounTransferFromAuctionHouse.to,
-      transactionHash: nounTransferFromAuctionHouse.transactionHash,
-    } as NounWinEvent;
+    const nounbrWinEvent = {
+      nounbrId: nounbrId,
+      winner: nounbrTransferFromAuctionHouse.to,
+      transactionHash: nounbrTransferFromAuctionHouse.transactionHash,
+    } as NounBRWinEvent;
 
     postProcessedEvents.push({
-      eventType: NounEventType.AUCTION_WIN,
-      blockNumber: nounTransferFromAuctionHouseBlockNumber,
-      payload: nounWinEvent,
-    } as NounProfileEvent);
+      eventType: NounBREventType.AUCTION_WIN,
+      blockNumber: nounbrTransferFromAuctionHouseBlockNumber,
+      payload: nounbrWinEvent,
+    } as NounBRProfileEvent);
   } catch (e) {
     console.log(e);
   }

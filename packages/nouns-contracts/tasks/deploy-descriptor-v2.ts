@@ -6,10 +6,10 @@ async function delay(seconds: number) {
   return new Promise(resolve => setTimeout(resolve, 1000 * seconds));
 }
 
-task('deploy-descriptor-v2', 'Deploy NounsDescriptorV2 & populate it with art')
+task('deploy-descriptor-v2', 'Deploy NounsBRDescriptorV2 & populate it with art')
   .addParam(
     'daoExecutor',
-    'The address of the NounsDAOExecutor that should be the owner of the descriptor.',
+    'The address of the NounsBRDAOExecutor that should be the owner of the descriptor.',
   )
   .setAction(async ({ daoExecutor }, { ethers, run, network }) => {
     const contracts: Record<ContractName, DeployedContract> = {} as Record<
@@ -20,7 +20,7 @@ task('deploy-descriptor-v2', 'Deploy NounsDescriptorV2 & populate it with art')
     console.log(`Deploying from address ${deployer.address}`);
 
     const nonce = await deployer.getTransactionCount();
-    const expectedNounsArtAddress = ethers.utils.getContractAddress({
+    const expectedNounsBRArtAddress = ethers.utils.getContractAddress({
       from: deployer.address,
       nonce: nonce + 4,
     });
@@ -44,20 +44,20 @@ task('deploy-descriptor-v2', 'Deploy NounsDescriptorV2 & populate it with art')
       libraries: {},
     };
 
-    const nounsDescriptorFactory = await ethers.getContractFactory('NounsDescriptorV2', {
+    const nounsbrDescriptorFactory = await ethers.getContractFactory('NounsBRDescriptorV2', {
       libraries: {
         NFTDescriptorV2: library.address,
       },
     });
-    const nounsDescriptor = await nounsDescriptorFactory.deploy(
-      expectedNounsArtAddress,
+    const nounsbrDescriptor = await nounsbrDescriptorFactory.deploy(
+      expectedNounsBRArtAddress,
       renderer.address,
     );
-    contracts.NounsDescriptorV2 = {
-      name: 'NounsDescriptorV2',
-      address: nounsDescriptor.address,
-      constructorArguments: [expectedNounsArtAddress, renderer.address],
-      instance: nounsDescriptor,
+    contracts.NounsBRDescriptorV2 = {
+      name: 'NounsBRDescriptorV2',
+      address: nounsbrDescriptor.address,
+      constructorArguments: [expectedNounsBRArtAddress, renderer.address],
+      instance: nounsbrDescriptor,
       libraries: {
         NFTDescriptorV2: library.address,
       },
@@ -73,12 +73,12 @@ task('deploy-descriptor-v2', 'Deploy NounsDescriptorV2 & populate it with art')
     };
 
     const art = await (
-      await ethers.getContractFactory('NounsArt', deployer)
-    ).deploy(nounsDescriptor.address, inflator.address);
-    contracts.NounsArt = {
-      name: 'NounsArt',
+      await ethers.getContractFactory('NounsBRArt', deployer)
+    ).deploy(nounsbrDescriptor.address, inflator.address);
+    contracts.NounsBRArt = {
+      name: 'NounsBRArt',
       address: art.address,
-      constructorArguments: [nounsDescriptor.address, inflator.address],
+      constructorArguments: [nounsbrDescriptor.address, inflator.address],
       instance: art,
       libraries: {},
     };
@@ -96,12 +96,12 @@ task('deploy-descriptor-v2', 'Deploy NounsDescriptorV2 & populate it with art')
     console.log('Populating Descriptor...');
     await run('populate-descriptor', {
       nftDescriptor: contracts.NFTDescriptorV2.address,
-      nounsDescriptor: contracts.NounsDescriptorV2.address,
+      nounsbrDescriptor: contracts.NounsBRDescriptorV2.address,
     });
     console.log('Population complete.');
 
     console.log('Transfering ownership to DAO Executor...');
-    await nounsDescriptor.transferOwnership(daoExecutor);
+    await nounsbrDescriptor.transferOwnership(daoExecutor);
     console.log('Transfer complete.');
 
     if (network.name !== 'localhost') {

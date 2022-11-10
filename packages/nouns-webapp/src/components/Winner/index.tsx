@@ -12,12 +12,12 @@ import Tooltip from '../Tooltip';
 
 interface WinnerProps {
   winner: string;
-  isNounders?: boolean;
+  isNoundersBRBR?: boolean;
 }
 
 
 const Winner: React.FC<WinnerProps> = props => {
-  const { winner, isNounders } = props;
+  const { winner, isNoundersBRBR } = props;
   const activeAccount = useAppSelector(state => state.account.activeAccount);
 
   const isCool = useAppSelector(state => state.application.isCoolBackground);
@@ -28,7 +28,7 @@ const Winner: React.FC<WinnerProps> = props => {
 
   const activeLocale = useActiveLocale();
 
-  const nonNounderNounContent = isWinnerYou ? (
+  const nonNounderBRBRNounBRContent = isWinnerYou ? (
     <Row className={classes.youSection}>
       <Col lg={activeLocale === 'ja-JP' ? 8 : 4} className={classes.youCopy}>
         <h2
@@ -43,7 +43,7 @@ const Winner: React.FC<WinnerProps> = props => {
       {!isMobile && (
         <Col>
           <a
-            href="https://nounsbr.wtf/nounersbr"
+            href="https://nounsbr.wtf/nounbrers"
             target="_blank"
             rel="noreferrer noopener"
             className={classes.verifyLink}
@@ -59,9 +59,9 @@ const Winner: React.FC<WinnerProps> = props => {
     <ShortAddress size={40} address={winner} avatar={true} />
   );
 
-  const nounderNounContent = (
+  const nounderbrNounBRContent = (
     <a
-      href={buildEtherscanAddressLink('nounders.eth')}
+      href={buildEtherscanAddressLink('noundersbr.eth')}
       target={'_blank'}
       rel="noreferrer"
       className={classes.link}
@@ -98,14 +98,14 @@ const Winner: React.FC<WinnerProps> = props => {
               color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)',
             }}
           >
-            {isNounders ? nounderNounContent : nonNounderNounContent}
+            {isNoundersBRBR ? nounderbrNounBRContent : nonNounderBRBRNounBRContent}
           </h2>
         </Col>
       </Row>
       {isWinnerYou && isMobile && (
         <Row>
           <a
-            href="https://nounsbr.wtf/nounersbr"
+            href="https://nounsbr.wtf/nounbrers"
             target="_blank"
             rel="noreferrer noopener"
             className={classes.verifyLink}

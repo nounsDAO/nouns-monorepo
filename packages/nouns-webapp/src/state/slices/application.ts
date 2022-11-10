@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ReactNode } from 'react';
-import { grey } from '../../utils/nounBgColors';
+import { grey } from '../../utils/nounbrBgColors';
 
 export interface AlertModal {
   show: boolean;

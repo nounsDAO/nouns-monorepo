@@ -1,24 +1,24 @@
 import React from 'react';
 import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../../../utils/etherscan';
-import { NounWinEvent } from '../../../../wrappers/nounActivity';
-import classes from './DesktopNounWinEvent.module.css';
-import DesktopNounActivityRow from '../../activityRow/DesktopNounActivityRow';
+import { NounBRWinEvent } from '../../../../wrappers/nounbrActivity';
+import classes from './DesktopNounBRWinEvent.module.css';
+import DesktopNounBRActivityRow from '../../activityRow/DesktopNounBRActivityRow';
 import { CakeIcon } from '@heroicons/react/solid';
 import ReactTooltip from 'react-tooltip';
 import ShortAddress from '../../../ShortAddress';
 import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
 import { Trans } from '@lingui/macro';
 
-interface DesktopNounWinEventProps {
-  event: NounWinEvent;
+interface DesktopNounBRWinEventProps {
+  event: NounBRWinEvent;
 }
 
-const DesktopNounWinEvent: React.FC<DesktopNounWinEventProps> = props => {
+const DesktopNounBRWinEvent: React.FC<DesktopNounBRWinEventProps> = props => {
   const { event } = props;
 
-  const isNounderNoun = parseInt(event.nounId as string) % 10 === 0;
+  const isNounderBRBRNounBR = parseInt(event.nounbrId as string) % 10 === 0;
   return (
-    <DesktopNounActivityRow
+    <DesktopNounBRActivityRow
       icon={
         <div className={classes.switchIconWrapper}>
           <CakeIcon className={classes.switchIcon} />
@@ -34,9 +34,9 @@ const DesktopNounWinEvent: React.FC<DesktopNounWinEventProps> = props => {
               return <Trans>View on Etherscan</Trans>;
             }}
           />
-          {isNounderNoun ? (
+          {isNounderBRBRNounBR ? (
             <Trans>
-              <span className={classes.bold}> NounBR {event.nounId} </span> sent to{' '}
+              <span className={classes.bold}> NounBR {event.nounbrId} </span> sent to{' '}
               <span
                 data-tip={`View on Etherscan`}
                 onClick={() => window.open(buildEtherscanAddressLink(event.winner), '_blank')}
@@ -49,7 +49,7 @@ const DesktopNounWinEvent: React.FC<DesktopNounWinEventProps> = props => {
             </Trans>
           ) : (
             <Trans>
-              <span className={classes.bold}> NounBR {event.nounId} </span> won by{' '}
+              <span className={classes.bold}> NounBR {event.nounbrId} </span> won by{' '}
               <span
                 data-tip={`View on Etherscan`}
                 onClick={() => window.open(buildEtherscanAddressLink(event.winner), '_blank')}
@@ -86,4 +86,4 @@ const DesktopNounWinEvent: React.FC<DesktopNounWinEventProps> = props => {
   );
 };
 
-export default DesktopNounWinEvent;
+export default DesktopNounBRWinEvent;

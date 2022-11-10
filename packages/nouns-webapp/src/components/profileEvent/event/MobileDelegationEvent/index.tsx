@@ -1,8 +1,8 @@
 import React from 'react';
 import { buildEtherscanTxLink } from '../../../../utils/etherscan';
-import { DelegationEvent } from '../../../../wrappers/nounActivity';
+import { DelegationEvent } from '../../../../wrappers/nounbrActivity';
 import classes from './MobileDelegationEvent.module.css';
-import MobileNounActivityRow from '../../activityRow/MobileNounActivityRow';
+import MobileNounBRActivityRow from '../../activityRow/MobileNounBRActivityRow';
 import { ScaleIcon } from '@heroicons/react/solid';
 import ShortAddress from '../../../ShortAddress';
 import TransactionHashPill from '../../eventData/infoPills/TransactionHashPill';
@@ -16,7 +16,7 @@ const MobileDelegationEvent: React.FC<MobileDelegationEventProps> = props => {
   const { event } = props;
 
   return (
-    <MobileNounActivityRow
+    <MobileNounBRActivityRow
       onClick={() => window.open(buildEtherscanTxLink(event.transactionHash), '_blank')}
       icon={
         <div className={classes.scaleIconWrapper}>

@@ -2,8 +2,8 @@ import { useQuery } from '@apollo/client';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import config from '../../config';
-import { Proposal, useDynamicQuorumProps } from '../../wrappers/nounsDao';
-import { totalNounSupplyAtPropSnapshot } from '../../wrappers/subgraph';
+import { Proposal, useDynamicQuorumProps } from '../../wrappers/nounsbrDao';
+import { totalNounBRSupplyAtPropSnapshot } from '../../wrappers/subgraph';
 import { Backdrop } from '../Modal';
 import classes from './DynamicQuorumInfoModal.module.css';
 import { XIcon } from '@heroicons/react/solid';
@@ -28,7 +28,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
   minQuorumBps: number;
   maxQuorumBps: number;
   quorumCoefficent: number;
-  totalNounSupply: number;
+  totalNounBRSupply: number;
   onDismiss: () => void;
 }> = props => {
   const {
@@ -39,7 +39,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
     quorumCoefficent,
     minQuorumBps,
     maxQuorumBps,
-    totalNounSupply,
+    totalNounBRSupply,
   } = props;
 
   const linearToConstantCrossoverBPS = (maxQuorumBps - minQuorumBps) / quorumCoefficent;
@@ -53,11 +53,11 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
   };
 
   const calcPlotFrac = () => {
-    if (Math.floor((linearToConstantCrossoverBPS * totalNounSupply) / 10_000) <= 0) {
+    if (Math.floor((linearToConstantCrossoverBPS * totalNounBRSupply) / 10_000) <= 0) {
       return 0;
     }
     return (
-      (againstVotesAbs / Math.floor((linearToConstantCrossoverBPS * totalNounSupply) / 10_000)) *
+      (againstVotesAbs / Math.floor((linearToConstantCrossoverBPS * totalNounBRSupply) / 10_000)) *
       PLOTTING_CONSTANTS.dqFunctionMaxQXCrossoverPlotSpace
     );
   };
@@ -102,19 +102,19 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
           {/* Mobile - no graph content */}
           <div className={clsx(responsiveUiUtilsClasses.mobileOnly, classes.mobileQuorumWrapper)}>
             <div className={classes.mobileQuorumInfo}>
-              <span>Min Quorum:</span> {Math.floor((minQuorumBps * totalNounSupply) / 10_000)} NounsBR
+              <span>Min Quorum:</span> {Math.floor((minQuorumBps * totalNounBRSupply) / 10_000)} NounsBR
             </div>
 
             <div className={classes.mobileQuorumInfo}>
               <span>Current Quorum:</span>{' '}
               {Math.floor(
-                (Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) * totalNounSupply) / 10_000,
+                (Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) * totalNounBRSupply) / 10_000,
               )}{' '}
               NounsBR
             </div>
 
             <div className={classes.mobileQuorumInfo}>
-              <span>Max Quorum:</span> {Math.floor((maxQuorumBps * totalNounSupply) / 10_000)} NounsBR
+              <span>Max Quorum:</span> {Math.floor((maxQuorumBps * totalNounBRSupply) / 10_000)} NounsBR
             </div>
           </div>
 
@@ -190,7 +190,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                   />
                   <circle cy={y} cx={x} r="7" fill="var(--brand-gray-light-text)" />
                   <text x="20" y="24">
-                    Max Quorum: {Math.floor((maxQuorumBps * totalNounSupply) / 10_000)} NounsBR{' '}
+                    Max Quorum: {Math.floor((maxQuorumBps * totalNounBRSupply) / 10_000)} NounsBR{' '}
                     <tspan fill="var(--brand-gray-light-text)">
                       ({maxQuorumBps / 100}% of NounsBR)
                     </tspan>
@@ -198,8 +198,8 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                   {Math.abs(y - 10 - PLOTTING_CONSTANTS.minQHeightPlotSpace) > 100 ? (
                     <>
                       <text x="20" y="280">
-                        Min Quorum: {Math.floor((minQuorumBps * totalNounSupply) / 10_000)}{' '}
-                        {Math.floor((minQuorumBps * totalNounSupply) / 10_000) === 1
+                        Min Quorum: {Math.floor((minQuorumBps * totalNounBRSupply) / 10_000)}{' '}
+                        {Math.floor((minQuorumBps * totalNounBRSupply) / 10_000) === 1
                           ? 'NounBR'
                           : 'NounsBR'}{' '}
                         <tspan fill="var(--brand-gray-light-text)">
@@ -210,7 +210,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                   ) : (
                     <>
                       <text x="550" y="280">
-                        Min Quorum: {Math.floor((minQuorumBps * totalNounSupply) / 10_000)} NounsBR{' '}
+                        Min Quorum: {Math.floor((minQuorumBps * totalNounBRSupply) / 10_000)} NounsBR{' '}
                         <tspan fill="var(--brand-gray-light-text)">
                           ({minQuorumBps / 100}% of NounsBR)
                         </tspan>
@@ -230,7 +230,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                     >
                       Current Quorum:{' '}
                       {Math.floor(
-                        (Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) * totalNounSupply) /
+                        (Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) * totalNounBRSupply) /
                           10_000,
                       )}{' '}
                       <tspan fill="var(--brand-gray-light-text)">
@@ -245,7 +245,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                     >
                       Current Quorum:{' '}
                       {Math.floor(
-                        (Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) * totalNounSupply) /
+                        (Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) * totalNounBRSupply) /
                           10_000,
                       )}{' '}
                       <tspan fill="var(--brand-gray-light-text)">
@@ -294,11 +294,11 @@ const DynamicQuorumInfoModal: React.FC<{
   const { onDismiss, proposal, againstVotesAbsolute } = props;
 
   const { data, loading, error } = useQuery(
-    totalNounSupplyAtPropSnapshot(proposal && proposal.id ? proposal.id : '0'),
+    totalNounBRSupplyAtPropSnapshot(proposal && proposal.id ? proposal.id : '0'),
   );
 
   const dynamicQuorumProps = useDynamicQuorumProps(
-    config.addresses.nounsDAOProxy,
+    config.addresses.nounsbrDAOProxy,
     proposal.startBlock,
   );
 
@@ -333,7 +333,7 @@ const DynamicQuorumInfoModal: React.FC<{
           }
           onDismiss={onDismiss}
           proposal={proposal}
-          totalNounSupply={data.proposals[0].totalSupply}
+          totalNounBRSupply={data.proposals[0].totalSupply}
         />,
         document.getElementById('overlay-root')!,
       )}

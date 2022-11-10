@@ -3,26 +3,26 @@ import { pseudoRandomPredictableShuffle } from '../../utils/pseudoRandomPredicta
 import DelegateHoverCard from '../DelegateHoverCard';
 import { GrayCircle } from '../GrayCircle';
 import HoverCard from '../HoverCard';
-import TightStackedCircleNouns from '../TightStackedCircleNouns';
-import classes from './DelegateGroupedNounImageVoteTable.module.css';
+import TightStackedCircleNounsBR from '../TightStackedCircleNounsBR';
+import classes from './DelegateGroupedNounBRImageVoteTable.module.css';
 import VoteCardPager from '../VoteCardPager';
 
-interface DelegateGruopedNounImageVoteTableProps {
+interface DelegateGruopedNounBRImageVoteTableProps {
   filteredDelegateGroupedVoteData:
-    | { delegate: string; supportDetailed: 0 | 1 | 2; nounsRepresented: string[] }[]
+    | { delegate: string; supportDetailed: 0 | 1 | 2; nounsbrRepresented: string[] }[]
     | undefined;
   propId: number;
   proposalCreationBlock: number;
 }
 
-const NOUNS_PER_VOTE_CARD_DESKTOP = 12;
+const NOUNSBR_PER_VOTE_CARD_DESKTOP = 12;
 
-const DelegateGruopedNounImageVoteTable: React.FC<
-  DelegateGruopedNounImageVoteTableProps
+const DelegateGruopedNounBRImageVoteTable: React.FC<
+  DelegateGruopedNounBRImageVoteTableProps
 > = props => {
   const { filteredDelegateGroupedVoteData, propId, proposalCreationBlock } = props;
 
-  const shuffledDelegatedGroupedNouns = pseudoRandomPredictableShuffle(
+  const shuffledDelegatedGroupedNounsBR = pseudoRandomPredictableShuffle(
     filteredDelegateGroupedVoteData,
     propId,
   );
@@ -32,8 +32,8 @@ const DelegateGruopedNounImageVoteTable: React.FC<
     const rows = 3;
     const rowLength = 4;
 
-    const paddedNounIds = shuffledDelegatedGroupedNouns
-      .map((data: { delegate: string; supportDetailed: 0 | 1 | 2; nounsRepresented: string[] }) => {
+    const paddedNounBRIds = shuffledDelegatedGroupedNounsBR
+      .map((data: { delegate: string; supportDetailed: 0 | 1 | 2; nounsbrRepresented: string[] }) => {
         return (
           <HoverCard
             hoverCardContent={(tip: string) => (
@@ -43,14 +43,14 @@ const DelegateGruopedNounImageVoteTable: React.FC<
             tip={`delegate-${data.delegate}`}
             id="delegateVoteHoverCard"
           >
-            <TightStackedCircleNouns
-              nounIds={data.nounsRepresented.map((nounId: string) => parseInt(nounId))}
+            <TightStackedCircleNounsBR
+              nounbrIds={data.nounsbrRepresented.map((nounbrId: string) => parseInt(nounbrId))}
             />
           </HoverCard>
         );
       })
-      .slice(page * NOUNS_PER_VOTE_CARD_DESKTOP, (page + 1) * NOUNS_PER_VOTE_CARD_DESKTOP)
-      .concat(Array(NOUNS_PER_VOTE_CARD_DESKTOP).fill(<GrayCircle isDelegateView={true} />));
+      .slice(page * NOUNSBR_PER_VOTE_CARD_DESKTOP, (page + 1) * NOUNSBR_PER_VOTE_CARD_DESKTOP)
+      .concat(Array(NOUNSBR_PER_VOTE_CARD_DESKTOP).fill(<GrayCircle isDelegateView={true} />));
 
     return Array(rows)
       .fill(0)
@@ -59,8 +59,8 @@ const DelegateGruopedNounImageVoteTable: React.FC<
           {Array(rowLength)
             .fill(0)
             .map((_, j) => (
-              <td className={classes.nounCell} key={j}>
-                {paddedNounIds[i * rowLength + j]}
+              <td className={classes.nounbrCell} key={j}>
+                {paddedNounBRIds[i * rowLength + j]}
               </td>
             ))}
         </tr>
@@ -77,10 +77,10 @@ const DelegateGruopedNounImageVoteTable: React.FC<
         onRightArrowClick={() => setPage(page + 1)}
         isLeftArrowDisabled={page === 0}
         isRightArrowDisabled={
-          (page + 1) * NOUNS_PER_VOTE_CARD_DESKTOP > shuffledDelegatedGroupedNouns.length
+          (page + 1) * NOUNSBR_PER_VOTE_CARD_DESKTOP > shuffledDelegatedGroupedNounsBR.length
         }
         numPages={
-          Math.floor(shuffledDelegatedGroupedNouns.length / NOUNS_PER_VOTE_CARD_DESKTOP) + 1
+          Math.floor(shuffledDelegatedGroupedNounsBR.length / NOUNSBR_PER_VOTE_CARD_DESKTOP) + 1
         }
         currentPage={page}
       />
@@ -88,4 +88,4 @@ const DelegateGruopedNounImageVoteTable: React.FC<
   );
 };
 
-export default DelegateGruopedNounImageVoteTable;
+export default DelegateGruopedNounBRImageVoteTable;

@@ -1,17 +1,17 @@
-import classes from './Noun.module.css';
+import classes from './NounBR.module.css';
 import React from 'react';
-import loadingNoun from '../../assets/loading-skull-noun.gif';
+import loadingNounBR from '../../assets/loading-skull-nounbr.gif';
 import Image from 'react-bootstrap/Image';
 
-export const LoadingNoun = () => {
+export const LoadingNounBR = () => {
   return (
     <div className={classes.imgWrapper}>
-      <Image className={classes.img} src={loadingNoun} alt={'loading noun'} fluid />
+      <Image className={classes.img} src={loadingNounBR} alt={'loading nounbr'} fluid />
     </div>
   );
 };
 
-const Noun: React.FC<{
+const NounBR: React.FC<{
   imgPath: string;
   alt: string;
   className?: string;
@@ -22,7 +22,7 @@ const Noun: React.FC<{
     <div className={`${classes.imgWrapper} ${wrapperClassName}`}>
       <Image
         className={`${classes.img} ${className}`}
-        src={imgPath ? imgPath : loadingNoun}
+        src={imgPath ? imgPath : loadingNounBR}
         alt={alt}
         fluid
       />
@@ -30,4 +30,4 @@ const Noun: React.FC<{
   );
 };
 
-export default Noun;
+export default NounBR;

@@ -1,9 +1,9 @@
-.nounWrapper {
+.nounbrWrapper {
   align-self: flex-end;
   width: 100%;
 }
 
-.nounContentCol {
+.nounbrContentCol {
   display: flex;
 }
 
@@ -15,7 +15,7 @@
 }
 
 @media (max-width: 992px) {
-  .nounWrapper {
+  .nounbrWrapper {
     width: 70%;
     margin-left: 15%;
     margin-right: 15%;
@@ -40,14 +40,14 @@
     padding-left: 0;
   }
 
-  .nounWrapper {
+  .nounbrWrapper {
     width: 80%;
     margin-left: 10%;
     margin-right: 10%;
     margin-top: 2rem;
   }
 
-  .nounContentCol {
+  .nounbrContentCol {
     padding: 0rem;
   }
 }

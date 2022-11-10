@@ -2,11 +2,11 @@ import { Col, Row } from 'react-bootstrap';
 import { BigNumber } from 'ethers';
 import AuctionActivityWrapper from '../AuctionActivityWrapper';
 import AuctionNavigation from '../AuctionNavigation';
-import AuctionActivityNounTitle from '../AuctionActivityNounTitle';
+import AuctionActivityNounBRTitle from '../AuctionActivityNounBRTitle';
 import AuctionActivityDateHeadline from '../AuctionActivityDateHeadline';
 import AuctionTitleAndNavWrapper from '../AuctionTitleAndNavWrapper';
 import { Link } from 'react-router-dom';
-import nounContentClasses from './NounderNounContent.module.css';
+import nounbrContentClasses from './NounderBRBRNounBRContent.module.css';
 import auctionBidClasses from '../AuctionActivity/BidHistory.module.css';
 import bidBtnClasses from '../BidHistoryBtn/BidHistoryBtn.module.css';
 import auctionActivityClasses from '../AuctionActivity/AuctionActivity.module.css';
@@ -17,9 +17,9 @@ import { Trans } from '@lingui/macro';
 import { useAppSelector } from '../../hooks';
 import { useCallback, useEffect } from 'react';
 
-const NounderNounContent: React.FC<{
+const NounderBRBRNounBRContent: React.FC<{
   mintTimestamp: BigNumber;
-  nounId: BigNumber;
+  nounbrId: BigNumber;
   isFirstAuction: boolean;
   isLastAuction: boolean;
   onPrevAuctionClick: () => void;
@@ -27,7 +27,7 @@ const NounderNounContent: React.FC<{
 }> = props => {
   const {
     mintTimestamp,
-    nounId,
+    nounbrId,
     isFirstAuction,
     isLastAuction,
     onPrevAuctionClick,
@@ -75,7 +75,7 @@ const NounderNounContent: React.FC<{
             <AuctionActivityDateHeadline startTime={mintTimestamp} />
           </AuctionTitleAndNavWrapper>
           <Col lg={12}>
-            <AuctionActivityNounTitle nounId={nounId} />
+            <AuctionActivityNounBRTitle nounbrId={nounbrId} />
           </Col>
         </Row>
         <Row className={auctionActivityClasses.activityRow}>
@@ -84,10 +84,10 @@ const NounderNounContent: React.FC<{
           </Col>
           <Col
             lg={5}
-            className={`${auctionActivityClasses.currentBidCol} ${nounContentClasses.currentBidCol} ${auctionActivityClasses.auctionTimerCol}`}
+            className={`${auctionActivityClasses.currentBidCol} ${nounbrContentClasses.currentBidCol} ${auctionActivityClasses.auctionTimerCol}`}
           >
             <div className={auctionActivityClasses.section}>
-              <Winner winner={''} isNounders={true} />
+              <Winner winner={''} isNoundersBRBR={true} />
             </div>
           </Col>
         </Row>
@@ -98,19 +98,19 @@ const NounderNounContent: React.FC<{
             <li
               className={
                 (isCool ? `${auctionBidClasses.bidRowCool}` : `${auctionBidClasses.bidRowWarm}`) +
-                ` ${nounContentClasses.bidRow}`
+                ` ${nounbrContentClasses.bidRow}`
               }
             >
               <Trans>All NounBR auction proceeds are sent to the</Trans>{' '}
-              <Link to="/vote" className={nounContentClasses.link}>
+              <Link to="/vote" className={nounbrContentClasses.link}>
                 <Trans>NounsBR DAO</Trans>
               </Link>
               .{' '}
               <Trans>
-                For this reason, we, the project's founders (‘NoundersBR’) have chosen to compensate
+                For this reason, we, the project's founders (‘NoundersBRBR’) have chosen to compensate
                 ourselves with NounsBR. Every 10th NounBR for the first 5 years of the project will be
                 sent to our multisig (3/3), where it will be vested and distributed to individual
-                NoundersBR.
+                NoundersBRBR.
               </Trans>
             </li>
           </ul>
@@ -120,7 +120,7 @@ const NounderNounContent: React.FC<{
             }
           >
             <Link
-              to="/nounders"
+              to="/noundersbr"
               className={isCool ? bidBtnClasses.bidHistoryCool : bidBtnClasses.bidHistoryWarm}
             >
               <Trans>Learn more</Trans> →
@@ -131,4 +131,4 @@ const NounderNounContent: React.FC<{
     </AuctionActivityWrapper>
   );
 };
-export default NounderNounContent;
+export default NounderBRBRNounBRContent;

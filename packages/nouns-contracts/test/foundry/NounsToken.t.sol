@@ -2,44 +2,44 @@
 pragma solidity ^0.8.6;
 
 import 'forge-std/Test.sol';
-import { NounsToken } from '../../contracts/NounsToken.sol';
-import { NounsDescriptorV2 } from '../../contracts/NounsDescriptorV2.sol';
-import { NounsSeeder } from '../../contracts/NounsSeeder.sol';
+import { NounsBRToken } from '../../contracts/NounsBRToken.sol';
+import { NounsBRDescriptorV2 } from '../../contracts/NounsBRDescriptorV2.sol';
+import { NounsBRSeeder } from '../../contracts/NounsBRSeeder.sol';
 import { IProxyRegistry } from '../../contracts/external/opensea/IProxyRegistry.sol';
 import { SVGRenderer } from '../../contracts/SVGRenderer.sol';
-import { NounsArt } from '../../contracts/NounsArt.sol';
+import { NounsBRArt } from '../../contracts/NounsBRArt.sol';
 import { DeployUtils } from './helpers/DeployUtils.sol';
 
-contract NounsTokenTest is Test, DeployUtils {
-    NounsToken nounsToken;
-    address noundersDAO = address(1);
+contract NounsBRTokenTest is Test, DeployUtils {
+    NounsBRToken nounsbrToken;
+    address noundersbrDAO = address(1);
     address minter = address(2);
 
     function setUp() public {
-        NounsDescriptorV2 descriptor = _deployAndPopulateV2();
+        NounsBRDescriptorV2 descriptor = _deployAndPopulateV2();
         _populateDescriptorV2(descriptor);
 
-        nounsToken = new NounsToken(noundersDAO, minter, descriptor, new NounsSeeder(), IProxyRegistry(address(0)));
+        nounsbrToken = new NounsBRToken(noundersbrDAO, minter, descriptor, new NounsBRSeeder(), IProxyRegistry(address(0)));
     }
 
     function testSymbol() public {
-        assertEq(nounsToken.symbol(), 'NOUNBR');
+        assertEq(nounsbrToken.symbol(), 'NOUNBR');
     }
 
     function testName() public {
-        assertEq(nounsToken.name(), 'NounsBR');
+        assertEq(nounsbrToken.name(), 'NounsBR');
     }
 
-    function testMintANounToSelfAndRewardsNoundersDao() public {
+    function testMintANounBRToSelfAndRewardsNoundersBRBRDao() public {
         vm.prank(minter);
-        nounsToken.mint();
+        nounsbrToken.mint();
 
-        assertEq(nounsToken.ownerOf(0), noundersDAO);
-        assertEq(nounsToken.ownerOf(1), minter);
+        assertEq(nounsbrToken.ownerOf(0), noundersbrDAO);
+        assertEq(nounsbrToken.ownerOf(1), minter);
     }
 
     function testRevertsOnNotMinterMint() public {
         vm.expectRevert('Sender is not the minter');
-        nounsToken.mint();
+        nounsbrToken.mint();
     }
 }

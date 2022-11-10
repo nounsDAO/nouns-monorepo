@@ -1,4 +1,4 @@
-import { Proposal, ProposalState, Vote } from '../../wrappers/nounsDao';
+import { Proposal, ProposalState, Vote } from '../../wrappers/nounsbrDao';
 import _YesVoteIcon from '../../assets/icons/YesVote.svg';
 import _NoVoteIcon from '../../assets/icons/NoVote.svg';
 import _AbsentVoteIcon from '../../assets/icons/AbsentVote.svg';

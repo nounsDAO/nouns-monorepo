@@ -14,20 +14,20 @@ task('update-configs-daov2', 'Write the deployed addresses to the SDK and subgra
       const { name: network, chainId } = await ethers.provider.getNetwork();
 
       // Update SDK addresses
-      const sdkPath = join(__dirname, '../../nouns-sdk');
+      const sdkPath = join(__dirname, '../../nounsbr-sdk');
       const addressesPath = join(sdkPath, 'src/contract/addresses.json');
       const addresses = JSON.parse(readFileSync(addressesPath, 'utf8'));
       addresses[chainId] = {
-        nounsToken: contracts.NounsToken.address,
-        nounsSeeder: contracts.NounsSeeder.address,
-        nounsDescriptor: contracts.NounsDescriptorV2.address,
+        nounsbrToken: contracts.NounsBRToken.address,
+        nounsbrSeeder: contracts.NounsBRSeeder.address,
+        nounsbrDescriptor: contracts.NounsBRDescriptorV2.address,
         nftDescriptor: contracts.NFTDescriptorV2.address,
-        nounsAuctionHouse: contracts.NounsAuctionHouse.address,
-        nounsAuctionHouseProxy: contracts.NounsAuctionHouseProxy.address,
-        nounsAuctionHouseProxyAdmin: contracts.NounsAuctionHouseProxyAdmin.address,
-        nounsDaoExecutor: contracts.NounsDAOExecutor.address,
-        nounsDAOProxy: contracts.NounsDAOProxyV2.address,
-        nounsDAOLogicV1: contracts.NounsDAOLogicV2.address,
+        nounsbrAuctionHouse: contracts.NounsBRAuctionHouse.address,
+        nounsbrAuctionHouseProxy: contracts.NounsBRAuctionHouseProxy.address,
+        nounsbrAuctionHouseProxyAdmin: contracts.NounsBRAuctionHouseProxyAdmin.address,
+        nounsbrDaoExecutor: contracts.NounsBRDAOExecutor.address,
+        nounsbrDAOProxy: contracts.NounsBRDAOProxyV2.address,
+        nounsbrDAOLogicV1: contracts.NounsBRDAOLogicV2.address,
       };
       writeFileSync(addressesPath, JSON.stringify(addresses, null, 2));
       try {
@@ -35,26 +35,26 @@ task('update-configs-daov2', 'Write the deployed addresses to the SDK and subgra
           cwd: sdkPath,
         });
       } catch {
-        console.log('Failed to re-build `@nouns/sdk`. Please rebuild manually.');
+        console.log('Failed to re-build `@nounsbr/sdk`. Please rebuild manually.');
       }
-      console.log('Addresses written to the Nouns SDK.');
+      console.log('Addresses written to the NounsBR SDK.');
 
       // Generate subgraph config
       const configName = `${network}-fork`;
-      const subgraphConfigPath = join(__dirname, `../../nouns-subgraph/config/${configName}.json`);
+      const subgraphConfigPath = join(__dirname, `../../nounsbr-subgraph/config/${configName}.json`);
       const subgraphConfig = {
         network,
-        nounsToken: {
-          address: contracts.NounsToken.address,
-          startBlock: contracts.NounsToken.instance.deployTransaction.blockNumber,
+        nounsbrToken: {
+          address: contracts.NounsBRToken.address,
+          startBlock: contracts.NounsBRToken.instance.deployTransaction.blockNumber,
         },
-        nounsAuctionHouse: {
-          address: contracts.NounsAuctionHouseProxy.address,
-          startBlock: contracts.NounsAuctionHouseProxy.instance.deployTransaction.blockNumber,
+        nounsbrAuctionHouse: {
+          address: contracts.NounsBRAuctionHouseProxy.address,
+          startBlock: contracts.NounsBRAuctionHouseProxy.instance.deployTransaction.blockNumber,
         },
-        nounsDAO: {
-          address: contracts.NounsDAOProxyV2.address,
-          startBlock: contracts.NounsDAOProxyV2.instance.deployTransaction.blockNumber,
+        nounsbrDAO: {
+          address: contracts.NounsBRDAOProxyV2.address,
+          startBlock: contracts.NounsBRDAOProxyV2.instance.deployTransaction.blockNumber,
         },
       };
       writeFileSync(subgraphConfigPath, JSON.stringify(subgraphConfig, null, 2));

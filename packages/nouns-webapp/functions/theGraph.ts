@@ -16,7 +16,7 @@ export interface Seed {
   glasses: number;
 }
 
-export interface NormalizedNoun {
+export interface NormalizedNounBR {
   id: number;
   owner: string;
   delegatedTo: null | string;
@@ -24,9 +24,9 @@ export interface NormalizedNoun {
   seed: Seed;
 }
 
-const nounsGql = `
+const nounsbrGql = `
 {
-  nouns {
+  nounsbr {
     id
     owner {
       id
@@ -64,31 +64,31 @@ export const normalizeSeed = (seed: any): Seed => ({
   head: Number(seed.head),
 });
 
-export const normalizeNoun = (noun: any): NormalizedNoun => ({
-  id: Number(noun.id),
-  owner: noun.owner.id,
-  delegatedTo: noun.owner.delegate?.id,
-  votes: normalizeVotes(noun.votes),
-  seed: normalizeSeed(noun.seed),
+export const normalizeNounBR = (nounbr: any): NormalizedNounBR => ({
+  id: Number(nounbr.id),
+  owner: nounbr.owner.id,
+  delegatedTo: nounbr.owner.delegate?.id,
+  votes: normalizeVotes(nounbr.votes),
+  seed: normalizeSeed(nounbr.seed),
 });
 
-export const normalizeNouns = R.map(normalizeNoun);
+export const normalizeNounsBR = R.map(normalizeNounBR);
 
 export const normalizeVotes = R.map(normalizeVote);
 
 export const ownerFilterFactory = (address: string) =>
-  R.filter((noun: any) => bigNumbersEqual(address, noun.owner));
+  R.filter((nounbr: any) => bigNumbersEqual(address, nounbr.owner));
 
-export const isNounOwner = (address: string, nouns: NormalizedNoun[]) =>
-  ownerFilterFactory(address)(nouns).length > 0;
+export const isNounBROwner = (address: string, nounsbr: NormalizedNounBR[]) =>
+  ownerFilterFactory(address)(nounsbr).length > 0;
 
 export const delegateFilterFactory = (address: string) =>
-  R.filter((noun: any) => noun.delegatedTo && bigNumbersEqual(address, noun.delegatedTo));
+  R.filter((nounbr: any) => nounbr.delegatedTo && bigNumbersEqual(address, nounbr.delegatedTo));
 
-export const isNounDelegate = (address: string, nouns: NormalizedNoun[]) =>
-  delegateFilterFactory(address)(nouns).length > 0;
+export const isNounBRDelegate = (address: string, nounsbr: NormalizedNounBR[]) =>
+  delegateFilterFactory(address)(nounsbr).length > 0;
 
-export const nounsQuery = async () =>
-  normalizeNouns(
-    (await axios.post(config.app.subgraphApiUri, { query: nounsGql })).data.data.nouns,
+export const nounsbrQuery = async () =>
+  normalizeNounsBR(
+    (await axios.post(config.app.subgraphApiUri, { query: nounsbrGql })).data.data.nounsbr,
   );

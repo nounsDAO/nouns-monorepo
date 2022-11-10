@@ -18,8 +18,8 @@ msgid "% of NounsBR Currently Against"
 msgstr "% de NounsBR Atualmente Contra"
 
 #: src/components/Documentation/index.tsx
-msgid "'NoundersBR' are the group of 3 brazilian artists and entrepreneurs that initiated NounsBR. Here are the NoundersBR:"
-msgstr "NoundersBR' é o grupo de 3 artistas e empreendedores brasileiros que iniciaram a NounsBR. Estes são os NoundersBR:"
+msgid "'NoundersBRBR' are the group of 3 brazilian artists and entrepreneurs that initiated NounsBR. Here are the NoundersBRBR:"
+msgstr "NoundersBRBR' é o grupo de 3 artistas e empreendedores brasileiros que iniciaram a NounsBR. Estes são os NoundersBRBR:"
 
 #: src/components/ByLineHoverCard/index.tsx
 msgid "... and {0} more"
@@ -29,7 +29,7 @@ msgstr "... e {0} mais"
 msgid "100% of NounBR auction proceeds are trustlessly sent to the treasury."
 msgstr "100% dos lucros do leilao de um NounBR é enviado automaticamente(trustlessly) para o tesouro da NounsBR."
 
-#: src/pages/Nounders/index.tsx
+#: src/pages/NoundersBRBR/index.tsx
 msgid "artists and entrepreuners"
 msgstr "artistas e empreendedores"
 
@@ -41,17 +41,17 @@ msgstr "404: Este não é a pessoa, local ou qualquer coisa que você estava pro
 #~ msgid "<0/>Holder changed from<1><2/></1> to <3><4/></3>"
 #~ msgstr "<0/>Titular trocado de<1><2/></1> para <3><4/></3>"
 
-#: src/comptesouroonents/profileEvent/event/DesktopNounWinEvent/index.tsx
+#: src/comptesouroonents/profileEvent/event/DesktopNounBRWinEvent/index.tsx
 #~ msgid "<0> NounBR {0} </0>  won by <1><2/></1>"
 #~ msgstr "<0> NounBR {0} </0>  vencido por <1><2/></1>"
 
-#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
-#: src/components/profileEvent/event/MobileNounWinEvent/index.tsx
+#: src/components/profileEvent/event/DesktopNounBRWinEvent/index.tsx
+#: src/components/profileEvent/event/MobileNounBRWinEvent/index.tsx
 msgid "<0> NounBR {0} </0> sent to <1><2/></1>"
 msgstr "<0> NounBR {0} </0> enviado para <1><2/></1>"
 
-#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
-#: src/components/profileEvent/event/MobileNounWinEvent/index.tsx
+#: src/components/profileEvent/event/DesktopNounBRWinEvent/index.tsx
+#: src/components/profileEvent/event/MobileNounBRWinEvent/index.tsx
 msgid "<0> NounBR {0} </0> won by <1><2/></1>"
 msgstr "<0> NounBR {0} </0> vencido por <1><2/></1>"
 
@@ -67,7 +67,7 @@ msgstr "NounBR Delegado: "
 msgid "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
 msgstr "<0>Proposto por: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
 
-#: src/components/NounProfileVoteRow/index.tsx
+#: src/components/NounBRProfileVoteRow/index.tsx
 #: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Absent for"
 msgstr "Ausente para"
@@ -80,7 +80,7 @@ msgstr "Abster-se"
 msgid "Abstain from voting on Prop {0}"
 msgstr "Abster-se de votar na Prop {0} "
 
-#: src/components/NounProfileVoteRow/index.tsx
+#: src/components/NounBRProfileVoteRow/index.tsx
 msgid "Abstained on"
 msgstr "Absteve-se em"
 
@@ -88,7 +88,7 @@ msgstr "Absteve-se em"
 msgid "Accessory"
 msgstr "Accessory"
 
-#: src/components/NounProfileVoteRow/index.tsx
+#: src/components/NounBRProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
 msgid "Active"
@@ -132,13 +132,13 @@ msgstr "Endereços"
 msgid "Against"
 msgstr "Contra"
 
-#: src/components/NounderNounContent/index.tsx
+#: src/components/NounderBRBRNounBRContent/index.tsx
 msgid "All NounBR auction proceeds are sent to the"
 msgstr "Todos os lucros no leilão de um NounBR são enviados para"
 
-#: src/pages/Nounders/index.tsx
-msgid "All NounBR auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's founders (‘NoundersBR’) have chosen to compensate ourselves with NounsBR. Every 10th nounbr for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual NoundersBR."
-msgstr "Todos os lucros do leilão de um NounBR são enviados para a NounsBR DAO. Por isso, nós, os fundadores do projeto (‘NoundersBR’) optamos por nos remunerar com NounsBR. Cada 10.º nounbr durante os primeiros 5 anos do projeto serão enviados para a nossa multisig (3/3), onde serão adquiridos e distribuídos individualmente para os NoundersBR."
+#: src/pages/NoundersBRBR/index.tsx
+msgid "All NounBR auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's founders (‘NoundersBRBR’) have chosen to compensate ourselves with NounsBR. Every 10th nounbr for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual NoundersBRBR."
+msgstr "Todos os lucros do leilão de um NounBR são enviados para a NounsBR DAO. Por isso, nós, os fundadores do projeto (‘NoundersBRBR’) optamos por nos remunerar com NounsBR. Cada 10.º nounbr durante os primeiros 5 anos do projeto serão enviados para a nossa multisig (3/3), onde serão adquiridos e distribuídos individualmente para os NoundersBRBR."
 
 #: src/components/Documentation/index.tsx
 msgid "All NounsBR are members of NounsBR DAO."
@@ -178,15 +178,15 @@ msgid "Background"
 msgstr "Background"
 
 #: src/components/Documentation/index.tsx
-msgid "Because 100% of NounBR auction proceeds are sent to NounsBR DAO, NoundersBR have chosen to compensate themselves with NounsBR. Every 10th NounBR for the first 5 years of the project (NounBR ids #0, #10, #20, #30 and so on) will be automatically sent to the NounderBR's multisig to be vested and shared among the founding members of the project."
-msgstr "Como 100% dos lucros do leilão de um NounBR são enviados para a NounsBR DAO, os NoundersBR optaram por se compensar com NounsBR. Cada 10º NounBR durante os primeiros 5 anos do projeto (NounBR ids #0, #10, #20, #30 e assim por diante) será automaticamente enviado a multisig NounderBR para ser adquirido e compartilhado entre os membros fundadores do projeto."
+msgid "Because 100% of NounBR auction proceeds are sent to NounsBR DAO, NoundersBRBR have chosen to compensate themselves with NounsBR. Every 10th NounBR for the first 5 years of the project (NounBR ids #0, #10, #20, #30 and so on) will be automatically sent to the NounderBRBR's multisig to be vested and shared among the founding members of the project."
+msgstr "Como 100% dos lucros do leilão de um NounBR são enviados para a NounsBR DAO, os NoundersBRBR optaram por se compensar com NounsBR. Cada 10º NounBR durante os primeiros 5 anos do projeto (NounBR ids #0, #10, #20, #30 e assim por diante) será automaticamente enviado a multisig NounderBRBR para ser adquirido e compartilhado entre os membros fundadores do projeto."
 
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 msgid "Bid"
 msgstr "Lance"
 
-#: src/components/NounInfoCard/index.tsx
+#: src/components/NounBRInfoCard/index.tsx
 msgid "Bid history"
 msgstr "Histórico de Lances"
 
@@ -194,7 +194,7 @@ msgstr "Histórico de Lances"
 msgid "Bid was placed successfully!"
 msgstr "Lance feito com sucesso!"
 
-#: src/components/NounInfoCard/index.tsx
+#: src/components/NounBRInfoCard/index.tsx
 msgid "Bids"
 msgstr "Lances"
 
@@ -210,12 +210,12 @@ msgstr "Os lances aparecerão aqui"
 msgid "Body"
 msgstr "Body"
 
-#: src/components/NounHoverCard/index.tsx
-#: src/components/NounInfoRowBirthday/index.tsx
+#: src/components/NounBRHoverCard/index.tsx
+#: src/components/NounBRInfoRowBirthday/index.tsx
 msgid "Born"
 msgstr "Nascido"
 
-#: src/components/NounProfileVoteRow/index.tsx
+#: src/components/NounBRProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
 msgid "Canceled"
@@ -272,8 +272,8 @@ msgid "Connect your wallet"
 msgstr "Conecte sua carteira"
 
 #: src/components/Documentation/index.tsx
-msgid "Consequently, the Nouns Foundation anticipates being the steward of the veto power until Nouns DAO is ready to implement an alternative, and therefore wishes to clarify the conditions under which it would exercise this power."
-msgstr "Consequentemente, a Fundação Nouns antecipa ser a administradora do poder de veto até que a Nouns DAO esteja pronta para implementar uma alternativa e, portanto, deseja esclarecer as condições sob as quais exerceria esse poder."
+msgid "Consequently, the NounsBR Foundation anticipates being the steward of the veto power until NounsBR DAO is ready to implement an alternative, and therefore wishes to clarify the conditions under which it would exercise this power."
+msgstr "Consequentemente, a Fundação NounsBR antecipa ser a administradora do poder de veto até que a NounsBR DAO esteja pronta para implementar uma alternativa e, portanto, deseja esclarecer as condições sob as quais exerceria esse poder."
 
 #: src/components/CreateProposalButton/index.tsx
 #: src/pages/CreateProposal/index.tsx
@@ -304,7 +304,7 @@ msgstr "DAO"
 msgid "Daily Auctions"
 msgstr "Leilões Diários"
 
-#: src/components/NounProfileVoteRow/index.tsx
+#: src/components/NounBRProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
 msgid "Defeated"
@@ -398,12 +398,12 @@ msgstr "Digite o endereço Ethereum ou o nome ENS da conta para a qual você des
 msgid "Error"
 msgstr "Erro"
 
-#: src/components/NounInfoRowBirthday/index.tsx
+#: src/components/NounBRInfoRowBirthday/index.tsx
 msgid "Error fetching NounBR birthday"
 msgstr "Falha ao buscar a data de aniversário do NounBR"
 
 #: src/components/Footer/index.tsx
-#: src/components/NounInfoCard/index.tsx
+#: src/components/NounBRInfoCard/index.tsx
 msgid "Etherscan"
 msgstr "Etherscan"
 
@@ -411,13 +411,13 @@ msgstr "Etherscan"
 msgid "Execute"
 msgstr "Executar"
 
-#: src/components/NounProfileVoteRow/index.tsx
+#: src/components/NounBRProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
 msgid "Executed"
 msgstr "Executada"
 
-#: src/components/NounProfileVoteRow/index.tsx
+#: src/components/NounBRProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
 msgid "Expired"
@@ -444,7 +444,7 @@ msgid "Failed to fetch NounBR activity history"
 msgstr "Falha ao buscar o histórico de atividades do NounBR"
 
 #: src/components/Holder/index.tsx
-#: src/components/NounInfoRowHolder/index.tsx
+#: src/components/NounBRInfoRowHolder/index.tsx
 msgid "Failed to fetch NounBR info"
 msgstr "Falha ao buscar informações do NounBR"
 
@@ -452,9 +452,9 @@ msgstr "Falha ao buscar informações do NounBR"
 msgid "For"
 msgstr "a Favor"
 
-#: src/components/NounderNounContent/index.tsx
-msgid "For this reason, we, the project's founders (‘NoundersBR’) have chosen to compensate ourselves with NounsBR. Every 10th NounBR for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual NoundersBR."
-msgstr "Por isso, nós, os fundadores do projeto (‘NoundersBR’) optamos por nos remunerar com NounsBR. Cada 10º NounBR nos primeiros 5 anos do projeto será enviado para a nossa multisig (3/3), onde será adquirido e distribuído para os NoundersBR individualmente."
+#: src/components/NounderBRBRNounBRContent/index.tsx
+msgid "For this reason, we, the project's founders (‘NoundersBRBR’) have chosen to compensate ourselves with NounsBR. Every 10th NounBR for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual NoundersBRBR."
+msgstr "Por isso, nós, os fundadores do projeto (‘NoundersBRBR’) optamos por nos remunerar com NounsBR. Cada 10º NounBR nos primeiros 5 anos do projeto será enviado para a nossa multisig (3/3), onde será adquirido e distribuído para os NoundersBRBR individualmente."
 
 #: src/components/Footer/index.tsx
 msgid "Forums"
@@ -493,7 +493,7 @@ msgid "Head"
 msgstr "Head"
 
 #: src/components/Holder/index.tsx
-#: src/components/NounHoverCard/index.tsx
+#: src/components/NounBRHoverCard/index.tsx
 msgid "Held by"
 msgstr "Mantido por"
 
@@ -517,7 +517,7 @@ msgstr "Valor do lance insuficiente 🤏"
 msgid "Language"
 msgstr "Idioma"
 
-#: src/components/NounderNounContent/index.tsx
+#: src/components/NounderBRBRNounBRContent/index.tsx
 msgid "Learn more"
 msgstr "Saiba mais"
 
@@ -525,7 +525,7 @@ msgstr "Saiba mais"
 msgid "Learn more below, or start creating NounsBR off-chain using the {playgroundLink}."
 msgstr "Saiba mais abaixo ou comece a criar NounsBR off-chain usando o {playgroundLink}."
 
-#: src/components/NounInfoRowHolder/index.tsx
+#: src/components/NounBRInfoRowHolder/index.tsx
 msgid "Loading..."
 msgstr "Carregando..."
 
@@ -575,40 +575,40 @@ msgstr "NounBR Traits"
 msgid "NounBR votes are not transferable, but are <0>delegatable</0>, which means you can assign your vote to someone else as long as you own your NounBR."
 msgstr "Os votos do NounBR não são transferíveis, mas são <0>delegáveis</0>, o que significa que você, proprietário(a), pode atribuir seu voto a outra pessoa."
 
-#: src/components/AuctionActivityNounTitle/index.tsx
+#: src/components/AuctionActivityNounBRTitle/index.tsx
 msgid "NounBR {0}"
 msgstr "NounBR {0}"
 
 #: src/components/Documentation/index.tsx
-msgid "NounderBR distributions don't interfere with the cadence of 15 minutes auctions. NounsBR are sent directly to the NounderBR's Multisig, and auctions continue on schedule with the next available NounBR ID."
-msgstr "Distribuições NounderBR não interferem na cadência dos leilões de 15 minutos. Os NounsBR são enviados diretamente para a Multisig NounderBR, e os leilões continuam no horário com o próximo NounBR ID disponível."
+msgid "NounderBRBR distributions don't interfere with the cadence of 15 minutes auctions. NounsBR are sent directly to the NounderBRBR's Multisig, and auctions continue on schedule with the next available NounBR ID."
+msgstr "Distribuições NounderBRBR não interferem na cadência dos leilões de 15 minutos. Os NounsBR são enviados diretamente para a Multisig NounderBRBR, e os leilões continuam no horário com o próximo NounBR ID disponível."
 
 #: src/components/Documentation/index.tsx
-msgid "NounderBR's Reward"
-msgstr "Recompensa dos NoundersBR"
+msgid "NounderBRBR's Reward"
+msgstr "Recompensa dos NoundersBRBR"
 
 #: src/components/Documentation/index.tsx
-msgid "NoundersBR receive rewards in the form of NounsBR (10% of supply for first 5 years)."
-msgstr "Os NoundersBR recebem recompensas na forma de NounsBR (10% da oferta para os primeiros 5 anos)."
+msgid "NoundersBRBR receive rewards in the form of NounsBR (10% of supply for first 5 years)."
+msgstr "Os NoundersBRBR recebem recompensas na forma de NounsBR (10% da oferta para os primeiros 5 anos)."
 
 #: src/components/Documentation/index.tsx
-#~ msgid "NoundersBR will proveably revoke this veto right when they deem it safe to do so. This decision will be based on a healthy NounBR distribution and a community that is engaged in the governance process."
-#~ msgstr "Os NoundersBR provavelmente revogarão esse direito de veto quando julgarem seguro fazê-lo. Essa decisão será baseada em uma distribuição saudável do NounBR e uma comunidade engajada no processo de governança."
+#~ msgid "NoundersBRBR will proveably revoke this veto right when they deem it safe to do so. This decision will be based on a healthy NounBR distribution and a community that is engaged in the governance process."
+#~ msgstr "Os NoundersBRBR provavelmente revogarão esse direito de veto quando julgarem seguro fazê-lo. Essa decisão será baseada em uma distribuição saudável do NounBR e uma comunidade engajada no processo de governança."
 
-#: src/pages/Nounders/index.tsx
-msgid "NoundersBR' Reward"
-msgstr "Recompensa dos NoundersBR"
+#: src/pages/NoundersBRBR/index.tsx
+msgid "NoundersBRBR' Reward"
+msgstr "Recompensa dos NoundersBRBR"
 
 #: src/pages/Governance/index.tsx
 msgid "NounsBR"
 msgstr "NounsBR"
 
-#: src/components/NounInfoRowHolder/index.tsx
+#: src/components/NounBRInfoRowHolder/index.tsx
 msgid "NounsBR Auction House"
 msgstr "NounsBR Casa de Leilões"
 
 #: src/components/Documentation/index.tsx
-#: src/components/NounderNounContent/index.tsx
+#: src/components/NounderBRBRNounBRContent/index.tsx
 #: src/pages/Governance/index.tsx
 msgid "NounsBR DAO"
 msgstr "NounsBR DAO"
@@ -642,8 +642,8 @@ msgid "NounsBR artwork is in the {publicDomainLink}."
 msgstr "A obra de arte da NounsBR está em {publicDomainLink}."
 
 #: src/pages/Governance/index.tsx
-msgid "NounsBR govern <0>NounsBR DAO</0>. NounsBR can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
-msgstr "NounsBR governam a <0>NounsBR DAO</0>. Os NounsBR podem votar em propostas ou delegarem seus votos a terceiros. Um mínimo de <1>{nounsRequired} {0}</1> é necessário para enviar propostas."
+msgid "NounsBR govern <0>NounsBR DAO</0>. NounsBR can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsbrRequired} {0}</1> is required to submit proposals."
+msgstr "NounsBR governam a <0>NounsBR DAO</0>. Os NounsBR podem votar em propostas ou delegarem seus votos a terceiros. Um mínimo de <1>{nounsbrRequired} {0}</1> é necessário para enviar propostas."
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Now has"
@@ -673,7 +673,7 @@ msgstr "Apenas imagens PNG 32x32 são aceitas"
 msgid "Only NounsBR you owned or were delegated to you before {0} are eligible to vote."
 msgstr "Apenas NounsBR que você possuía ou foram delegados a você antes de {0} estão elegíveis para votar."
 
-#: src/components/NounProfileVoteRow/index.tsx
+#: src/components/NounBRProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
 msgid "Pending"
@@ -752,7 +752,7 @@ msgstr "Transações Propostas"
 msgid "Queue"
 msgstr "Fila"
 
-#: src/components/NounProfileVoteRow/index.tsx
+#: src/components/NounBRProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
 msgid "Queued"
@@ -834,7 +834,7 @@ msgstr "Enviar voto"
 msgid "Submit vote"
 msgstr "Enviar voto"
 
-#: src/components/NounProfileVoteRow/index.tsx
+#: src/components/NounBRProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
 msgid "Succeeded"
@@ -879,25 +879,25 @@ msgstr "Obrigado por votar."
 msgid "The NounBR Seeder contract is used to determine NounBR traits during the minting process. The seeder contract can be replaced to allow for future trait generation algorithm upgrades. Additionally, it can be locked by the NounsBR DAO to prevent any future updates. Currently, NounBR traits are determined using pseudo-random number generation:"
 msgstr "O contrato da Semente do NounBR é usado para determinar os Traits do NounBR durante o processo de mint. O contrato da Semente pode ser substituído para permitir futuras atualizações do algoritmo de geração de Traits. Além disso, ele pode ser bloqueado pela NounsBR DAO para evitar atualizações futuras. Atualmente, os traits de um NounBR são determinados usando geração de números pseudo-aleatórios:"
 
-#: src/pages/Nounders/index.tsx
-msgid "The NoundersBR"
-msgstr "NoundersBR"
+#: src/pages/NoundersBRBR/index.tsx
+msgid "The NoundersBRBR"
+msgstr "NoundersBRBR"
 
-#: src/pages/Nounders/index.tsx
-msgid "The NoundersBR reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures."
-msgstr "A recompensa da NoundersBR destina-se a compensar nossas contribuições pré e pós-lançamento ao projeto e a nos ajudar a participar significativamente da governança à medida que o projeto amadurece."
+#: src/pages/NoundersBRBR/index.tsx
+msgid "The NoundersBRBR reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures."
+msgstr "A recompensa da NoundersBRBR destina-se a compensar nossas contribuições pré e pós-lançamento ao projeto e a nos ajudar a participar significativamente da governança à medida que o projeto amadurece."
 
 #: src/components/Documentation/index.tsx
 msgid "The NounsBR Auction Contract will act as a self-sufficient NounBR generation and distribution mechanism, auctioning one NounBR every 15 minutes, forever. 100% of auction proceeds (ETH) are automatically deposited in the NounsBR DAO treasury, where they are governed by NounBR owners."
 msgstr "O Contrato de Leilão NounsBR funcionará como um mecanismo autossuficiente de geração e distribuição de um NounBR, leiloando um NounBR a cada 15 minutos, para sempre. 100% dos rendimentos do leilão (ETH) são depositados automaticamente no tesouro da NounsBR DAO, onde são regidos pelos proprietários do NounBR."
 
 #: src/components/Documentation/index.tsx
-msgid "The Nouns Foundation and NounsBR DAO considers the veto an emergency power that should not be exercised in the normal course of business. The NounsBR DAO will veto proposals that introduce non-trivial legal or existential risks to the NounsBR DAO , including (but not necessarily limited to) proposals that:"
-msgstr "A Fundação Nouns e a NounsBR DAO consideram o veto um poder emergencial que não deve ser exercido no curso normal dos negócios. A NounsBR DAO vetará propostas que apresentem riscos jurídicos ou existenciais não triviais a NounsBR DAO, incluindo (mas não necessariamente limitado a) propostas que:"
+msgid "The NounsBR Foundation and NounsBR DAO considers the veto an emergency power that should not be exercised in the normal course of business. The NounsBR DAO will veto proposals that introduce non-trivial legal or existential risks to the NounsBR DAO , including (but not necessarily limited to) proposals that:"
+msgstr "A Fundação NounsBR e a NounsBR DAO consideram o veto um poder emergencial que não deve ser exercido no curso normal dos negócios. A NounsBR DAO vetará propostas que apresentem riscos jurídicos ou existenciais não triviais a NounsBR DAO, incluindo (mas não necessariamente limitado a) propostas que:"
 
 #: src/components/Documentation/index.tsx
-msgid "The Nouns community has undertaken a preliminary exploration of proposal veto alternatives (‘rage quit’ etc.), but it is now clear that this is a difficult problem that will require significantly more research, development and testing before a satisfactory solution can be implemented."
-msgstr "A comunidade Nouns empreendeu uma exploração preliminar das alternativas de veto da proposta (‘rage quit’ etc.), mas agora está claro que este é um problema difícil que exigirá significativamente mais pesquisa, desenvolvimento e testes antes que uma solução satisfatória possa ser implementada."
+msgid "The NounsBR community has undertaken a preliminary exploration of proposal veto alternatives (‘rage quit’ etc.), but it is now clear that this is a difficult problem that will require significantly more research, development and testing before a satisfactory solution can be implemented."
+msgstr "A comunidade NounsBR empreendeu uma exploração preliminar das alternativas de veto da proposta (‘rage quit’ etc.), mas agora está claro que este é um problema difícil que exigirá significativamente mais pesquisa, desenvolvimento e testes antes que uma solução satisfatória possa ser implementada."
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
 msgid "The Quorum (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. It increases quadratically as a function of the % of NounsBR voting against a prop, varying between Min Quorum and Max Quorum."
@@ -912,12 +912,12 @@ msgid "The compressed parts are efficiently converted into a single base64 encod
 msgstr "As partes comprimidas são convertidas de forma eficiente em uma única imagem SVG codificada em base64 na cadeia. Para conseguir isso, cada parte é decodificada em um formato intermediário antes de ser convertida em uma série de rects SVG usando concatenação de strings em lote na cadeia. Depois que todo o SVG é gerado, ele é codificado em base64."
 
 #: src/pages/Playground/index.tsx
-msgid "The playground was built using the {nounsProtocolLink}. NounBR's traits are determined by the NounBR Seed. The seed was generated using {nounsAssetsLink} and rendered using the {nounsSDKLink}."
-msgstr "O playground foi construído usando o {nounsProtocolLink}. Os Traits do NounBR são determinados pela Semente NounBR. A semente foi gerada usando {nounsAssetsLink} e renderizada usando {nounsSDKLink}."
+msgid "The playground was built using the {nounsbrProtocolLink}. NounBR's traits are determined by the NounBR Seed. The seed was generated using {nounsbrAssetsLink} and rendered using the {nounsbrSDKLink}."
+msgstr "O playground foi construído usando o {nounsbrProtocolLink}. Os Traits do NounBR são determinados pela Semente NounBR. A semente foi gerada usando {nounsbrAssetsLink} e renderizada usando {nounsbrSDKLink}."
 
 #: src/components/Documentation/index.tsx
-msgid "The proposal veto right was initially envisioned as a temporary solution to the problem of ‘51% attacks’ on the Nouns DAO treasury. While Nounders initially believed that a healthy distribution of Nouns would be sufficient protection for the DAO, a more complete understanding of the incentives and risks has led to general consensus within the Nounders, the Nouns Foundation, and the wider community that a more robust game-theoretic solution should be implemented before the right is removed."
-msgstr "O direito de veto da proposta foi inicialmente concebido como uma solução temporária para o problema dos ‘ataques de 51%’ ao tesouro da Nouns DAO. Embora os Nounders inicialmente acreditassem que uma distribuição saudável de Nouns seria proteção suficiente para a DAO, uma compreensão mais completa dos incentivos e riscos levou a um consenso geral dentro dos Nounders, da Fundação Nouns e da comunidade mais ampla de que um jogo mais robusto solução teórica deve ser implementada antes que o direito seja removido."
+msgid "The proposal veto right was initially envisioned as a temporary solution to the problem of ‘51% attacks’ on the NounsBR DAO treasury. While NoundersBRBR initially believed that a healthy distribution of NounsBR would be sufficient protection for the DAO, a more complete understanding of the incentives and risks has led to general consensus within the NoundersBRBR, the NounsBR Foundation, and the wider community that a more robust game-theoretic solution should be implemented before the right is removed."
+msgstr "O direito de veto da proposta foi inicialmente concebido como uma solução temporária para o problema dos ‘ataques de 51%’ ao tesouro da NounsBR DAO. Embora os NoundersBRBR inicialmente acreditassem que uma distribuição saudável de NounsBR seria proteção suficiente para a DAO, uma compreensão mais completa dos incentivos e riscos levou a um consenso geral dentro dos NoundersBRBR, da Fundação NounsBR e da comunidade mais ampla de que um jogo mais robusto solução teórica deve ser implementada antes que o direito seja removido."
 
 #: src/components/Documentation/index.tsx
 msgid "The treasury is controlled exclusively by NounsBR via governance."
@@ -976,7 +976,7 @@ msgstr "Tesouro"
 msgid "Twitter"
 msgstr "Twitter"
 
-#: src/components/NounProfileVoteRow/index.tsx
+#: src/components/NounBRProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
 msgid "Undetermined"
@@ -1011,7 +1011,7 @@ msgstr "Valor"
 msgid "Value in ETH (Optional)"
 msgstr "Valor em ETH (Optional)"
 
-#: src/components/NounProfileVoteRow/index.tsx
+#: src/components/NounBRProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
 msgid "Vetoed"
@@ -1027,12 +1027,12 @@ msgstr "Ver todos os lances"
 
 #: src/components/ChangeDelegatePannel/index.tsx
 #: src/components/Holder/index.tsx
-#: src/components/NounInfoRowHolder/index.tsx
+#: src/components/NounBRInfoRowHolder/index.tsx
 #: src/components/Winner/index.tsx
 #: src/components/profileEvent/event/DesktopDelegationEvent/index.tsx
 #: src/components/profileEvent/event/DesktopDelegationEvent/index.tsx
-#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
-#: src/components/profileEvent/event/DesktopNounWinEvent/index.tsx
+#: src/components/profileEvent/event/DesktopNounBRWinEvent/index.tsx
+#: src/components/profileEvent/event/DesktopNounBRWinEvent/index.tsx
 #: src/components/profileEvent/event/DesktopProposalVoteEvent/index.tsx
 #: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
 #: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
@@ -1047,11 +1047,11 @@ msgstr "Vote no próximo NounBR"
 msgid "Vote on Prop {0}"
 msgstr "Vote na Prop {0}"
 
-#: src/components/NounProfileVoteRow/index.tsx
+#: src/components/NounBRProfileVoteRow/index.tsx
 msgid "Voted against"
 msgstr "Votou contra"
 
-#: src/components/NounProfileVoteRow/index.tsx
+#: src/components/NounBRProfileVoteRow/index.tsx
 msgid "Voted for"
 msgstr "Votou a favor"
 
@@ -1067,7 +1067,7 @@ msgstr "Votou com<0>{numVotesForProp}</0>NounsBR"
 msgid "WTF?"
 msgstr "WTF?"
 
-#: src/components/NounProfileVoteRow/index.tsx
+#: src/components/NounBRProfileVoteRow/index.tsx
 #: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Waiting for"
 msgstr "Aguardando pelo"
@@ -1085,7 +1085,7 @@ msgstr "Embora a liquidação seja mais fortemente incentivada para o licitante 
 msgid "Will have"
 msgstr "Terá"
 
-#: src/components/NounInfoRowHolder/index.tsx
+#: src/components/NounBRInfoRowHolder/index.tsx
 #: src/components/Winner/index.tsx
 msgid "Winner"
 msgstr "Vencedor"
@@ -1250,83 +1250,83 @@ msgstr "{voterComponent} votou contra"
 msgid "{voterComponent} voted for"
 msgstr "{voterComponent} votou a favor"
 
-#: src/pages/Nouners/index.tsx
-msgid "NounersBR"
-msgstr "NounersBR"
+#: src/pages/NounBRers/index.tsx
+msgid "NounBRers"
+msgstr "NounBRers"
 
-#: src/pages/Nouners/index.tsx
-msgid "Welcome, NounerBR!"
-msgstr "Bem-vindo, NounerBR!"
+#: src/pages/NounBRers/index.tsx
+msgid "Welcome, NounBRer!"
+msgstr "Bem-vindo, NounBRer!"
 
-#: src/pages/Nouners/index.tsx
+#: src/pages/NounBRers/index.tsx
 msgid "Next steps"
 msgstr "Proximos passos"
 
-#: src/pages/Nouners/index.tsx
+#: src/pages/NounBRers/index.tsx
 msgid "So you just won a NounBR.... Cool! Be sure to go over how everything works and head over to our discord server to verify your NounBR!"
 msgstr "Então você acabou de ganhar um NounBR... Legal! Certifique-se de ver como tudo funciona e vá para o nosso servidor de discórdia para verificar seu NounBR!"
 
-#: src/pages/Nouners/index.tsx
+#: src/pages/NounBRers/index.tsx
 msgid "Join"
 msgstr "Join"
 
-#: src/pages/Nouners/index.tsx
+#: src/pages/NounBRers/index.tsx
 msgid "Discord Channels"
 msgstr "Canais do Discord"
 
-#: src/pages/Nouners/index.tsx
+#: src/pages/NounBRers/index.tsx
 msgid "Welcome"
 msgstr "Bem-vindo"
 
-#: src/pages/Nouners/index.tsx
-msgid "Basic information, major announcements, and user verification. If you just bought a NounBR, you will need to verify your ownership in the #authentication channel to get added to the 'NounerBR' role of the server."
-msgstr "Informações básicas, anúncios importantes e verificação do usuário. Se você acabou de comprar um NounBR, você precisará verificar sua propriedade no canal #authentication para ser adicionado ao Função 'NounerBR' do servidor."
+#: src/pages/NounBRers/index.tsx
+msgid "Basic information, major announbrcements, and user verification. If you just bought a NounBR, you will need to verify your ownership in the #authentication channel to get added to the 'NounBRer' role of the server."
+msgstr "Informações básicas, anúncios importantes e verificação do usuário. Se você acabou de comprar um NounBR, você precisará verificar sua propriedade no canal #authentication para ser adicionado ao Função 'NounBRer' do servidor."
 
-#: src/pages/Nouners/index.tsx
-msgid "These are channels where only NounsBR DAO members can post. In the spirit of having an open and collaborative environment, all of these channels (except for #nounerbr-private) are viewable by the public."
-msgstr "Esses são canais onde apenas membros da NounsBR DAO podem postar. No espírito de ter uma abertura e ambiente colaborativo, todos esses canais (exceto #nounerbr-private) são visíveis pelo público."
+#: src/pages/NounBRers/index.tsx
+msgid "These are channels where only NounsBR DAO members can post. In the spirit of having an open and collaborative environment, all of these channels (except for #nounbrer-private) are viewable by the public."
+msgstr "Esses são canais onde apenas membros da NounsBR DAO podem postar. No espírito de ter uma abertura e ambiente colaborativo, todos esses canais (exceto #nounbrer-private) são visíveis pelo público."
 
-#: src/pages/Nouners/index.tsx
+#: src/pages/NounBRers/index.tsx
 msgid "#nounsbr-chat"
 msgstr "#nounsbr-chat"
 
-#: src/pages/Nouners/index.tsx
-msgid "This is where most communication between members occurs. Anything that doesn't fit in the other NounersBR channels likely goes here."
-msgstr "É aqui que ocorre a maior parte da comunicação entre os membros. Qualquer coisa que não se encaixe os outros canais NounersBR provavelmente vão aqui."
+#: src/pages/NounBRers/index.tsx
+msgid "This is where most communication between members occurs. Anything that doesn't fit in the other NounBRers channels likely goes here."
+msgstr "É aqui que ocorre a maior parte da comunicação entre os membros. Qualquer coisa que não se encaixe os outros canais NounBRers provavelmente vão aqui."
 
-#: src/pages/Nouners/index.tsx
+#: src/pages/NounBRers/index.tsx
 msgid "#proposals"
 msgstr "#propostas"
 
-#: src/pages/Nouners/index.tsx
+#: src/pages/NounBRers/index.tsx
 msgid "Discussion and questions about proposals."
 msgstr "Discussão e perguntas sobre propostas."
 
-#: src/pages/Nouners/index.tsx
-msgid "#nounerbr-private"
-msgstr "#nounerbr-private"
+#: src/pages/NounBRers/index.tsx
+msgid "#nounbrer-private"
+msgstr "#nounbrer-private"
 
-#: src/pages/Nouners/index.tsx
+#: src/pages/NounBRers/index.tsx
 msgid "While we generally prefer to keep everything out in the open, sometimes there are sensitive matters where information is only kept to members."
 msgstr "Embora geralmente prefiramos manter tudo ao ar livre, às vezes há assuntos sensíveis onde as informações são mantidas apenas para os membros."
 
-#: src/pages/Nouners/index.tsx
+#: src/pages/NounBRers/index.tsx
 msgid "These are channels where anyone can post."
 msgstr "Estes são canais onde qualquer pessoa pode postar."
 
-#: src/pages/Nouners/index.tsx
+#: src/pages/NounBRers/index.tsx
 msgid "#general-chat"
 msgstr "#chat-geral"
 
-#: src/pages/Nouners/index.tsx
+#: src/pages/NounBRers/index.tsx
 msgid "The most active channel, and the other are topic specific. Non-members often post in these channels asking for guidance on proposal ideas, or to share things they have made."
 msgstr "O canal mais ativo e os outros são específicos do tópico. Não membros costumam postar em esses canais pedindo orientação sobre ideias de propostas ou para compartilhar coisas que fizeram."
 
-#: src/pages/Nouners/index.tsx
+#: src/pages/NounBRers/index.tsx
 msgid "Projects"
 msgstr "Projetos"
 
-#: src/pages/Nouners/index.tsx
+#: src/pages/NounBRers/index.tsx
 msgid "When a project passes an on-chain vote, the creator of that proposal will often be given their own channel in this section to answer questions and share updates on the status of their work. This is a constantly expanding list - for more information on each of these, check out the DAO section of the NounsBR website."
 msgstr "Quando um projeto passa por uma votação on-chain, o criador dessa proposta geralmente recebe seu próprio canal nesta seção para responder a perguntas e compartilhar atualizações sobre o status de trabalho deles. Esta é uma lista em constante expansão - para mais informações sobre cada um deles, confira a seção DAO do site NounsBR."
 

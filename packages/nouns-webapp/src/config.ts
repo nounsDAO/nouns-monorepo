@@ -1,14 +1,14 @@
 import {
-  ContractAddresses as NounsContractAddresses,
+  ContractAddresses as NounsBRContractAddresses,
   getContractAddressesForChainOrThrow,
-} from '@nouns/sdk';
+} from '@nounsbr/sdk';
 import { ChainId } from '@usedapp/core';
 
 interface ExternalContractAddresses {
   lidoToken: string | undefined;
 }
 
-export type ContractAddresses = NounsContractAddresses & ExternalContractAddresses;
+export type ContractAddresses = NounsBRContractAddresses & ExternalContractAddresses;
 
 interface AppConfig {
   jsonRpcUri: string;
@@ -98,11 +98,11 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
 };
 
 const getAddresses = (): ContractAddresses => {
-  let nounsAddresses = {} as NounsContractAddresses;
+  let nounsbrAddresses = {} as NounsBRContractAddresses;
   try {
-    nounsAddresses = getContractAddressesForChainOrThrow(CHAIN_ID);
+    nounsbrAddresses = getContractAddressesForChainOrThrow(CHAIN_ID);
   } catch {}
-  return { ...nounsAddresses, ...externalAddresses[CHAIN_ID] };
+  return { ...nounsbrAddresses, ...externalAddresses[CHAIN_ID] };
 };
 
 const config = {

@@ -2,8 +2,8 @@ export const config = {
   serverPort: Number(process.env.SERVER_PORT ?? 5000),
   redisPort: Number(process.env.REDIS_PORT ?? 6379),
   redisHost: process.env.REDIS_HOST ?? 'localhost',
-  nounsTokenAddress:
-    process.env.NOUNS_TOKEN_ADDRESS ?? '0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9',
+  nounsbrTokenAddress:
+    process.env.NOUNSBR_TOKEN_ADDRESS ?? '0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9',
   jsonRpcUrl: process.env.JSON_RPC_URL ?? 'http://localhost:8545',
   nftStorageApiKey:
     process.env.NFT_STORAGE_API_KEY ??

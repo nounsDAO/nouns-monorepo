@@ -3,37 +3,37 @@ pragma solidity ^0.8.6;
 
 import 'forge-std/Test.sol';
 import { DeployUtils } from './helpers/DeployUtils.sol';
-import { NounsToken } from '../../contracts/NounsToken.sol';
-import { NounsDescriptorV2 } from '../../contracts/NounsDescriptorV2.sol';
-import { NounsDAOLogicV1 } from '../../contracts/governance/NounsDAOLogicV1.sol';
+import { NounsBRToken } from '../../contracts/NounsBRToken.sol';
+import { NounsBRDescriptorV2 } from '../../contracts/NounsBRDescriptorV2.sol';
+import { NounsBRDAOLogicV1 } from '../../contracts/governance/NounsBRDAOLogicV1.sol';
 
 contract DescriptorUpgradeViaProposalTest is Test, DeployUtils {
-    NounsToken nounsToken;
-    NounsDAOLogicV1 dao;
+    NounsBRToken nounsbrToken;
+    NounsBRDAOLogicV1 dao;
     address minter = address(2);
     address tokenHolder = address(1337);
 
     function setUp() public {
-        address noundersDAO = address(42);
+        address noundersbrDAO = address(42);
         (address tokenAddress, address daoAddress) = _deployTokenAndDAOAndPopulateDescriptor(
-            noundersDAO,
-            noundersDAO,
+            noundersbrDAO,
+            noundersbrDAO,
             minter
         );
-        nounsToken = NounsToken(tokenAddress);
-        dao = NounsDAOLogicV1(daoAddress);
+        nounsbrToken = NounsBRToken(tokenAddress);
+        dao = NounsBRDAOLogicV1(daoAddress);
 
         vm.startPrank(minter);
-        nounsToken.mint();
-        nounsToken.transferFrom(minter, tokenHolder, 1);
+        nounsbrToken.mint();
+        nounsbrToken.transferFrom(minter, tokenHolder, 1);
         vm.stopPrank();
     }
 
     function testUpgradeToV2ViaProposal() public {
-        NounsDescriptorV2 descriptorV2 = _deployAndPopulateV2();
+        NounsBRDescriptorV2 descriptorV2 = _deployAndPopulateV2();
 
         address[] memory targets = new address[](1);
-        targets[0] = address(nounsToken);
+        targets[0] = address(nounsbrToken);
         uint256[] memory values = new uint256[](1);
         values[0] = 0;
         string[] memory signatures = new string[](1);
@@ -58,6 +58,6 @@ contract DescriptorUpgradeViaProposalTest is Test, DeployUtils {
         vm.warp(block.timestamp + TIMELOCK_DELAY + 1);
         dao.execute(1);
 
-        assertEq(address(nounsToken.descriptor()), address(descriptorV2));
+        assertEq(address(nounsbrToken.descriptor()), address(descriptorV2));
     }
 }

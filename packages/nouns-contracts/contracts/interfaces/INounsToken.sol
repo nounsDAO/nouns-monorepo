@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title Interface for NounsToken
+/// @title Interface for NounsBRToken
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -18,25 +18,25 @@
 pragma solidity ^0.8.6;
 
 import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
-import { INounsDescriptorMinimal } from './INounsDescriptorMinimal.sol';
-import { INounsSeeder } from './INounsSeeder.sol';
+import { INounsBRDescriptorMinimal } from './INounsBRDescriptorMinimal.sol';
+import { INounsBRSeeder } from './INounsBRSeeder.sol';
 
-interface INounsToken is IERC721 {
-    event NounCreated(uint256 indexed tokenId, INounsSeeder.Seed seed);
+interface INounsBRToken is IERC721 {
+    event NounBRCreated(uint256 indexed tokenId, INounsBRSeeder.Seed seed);
 
-    event NounBurned(uint256 indexed tokenId);
+    event NounBRBurned(uint256 indexed tokenId);
 
-    event NoundersDAOUpdated(address noundersDAO);
+    event NoundersBRBRDAOUpdated(address noundersbrDAO);
 
     event MinterUpdated(address minter);
 
     event MinterLocked();
 
-    event DescriptorUpdated(INounsDescriptorMinimal descriptor);
+    event DescriptorUpdated(INounsBRDescriptorMinimal descriptor);
 
     event DescriptorLocked();
 
-    event SeederUpdated(INounsSeeder seeder);
+    event SeederUpdated(INounsBRSeeder seeder);
 
     event SeederLocked();
 
@@ -46,17 +46,17 @@ interface INounsToken is IERC721 {
 
     function dataURI(uint256 tokenId) external returns (string memory);
 
-    function setNoundersDAO(address noundersDAO) external;
+    function setNoundersBRBRDAO(address noundersbrDAO) external;
 
     function setMinter(address minter) external;
 
     function lockMinter() external;
 
-    function setDescriptor(INounsDescriptorMinimal descriptor) external;
+    function setDescriptor(INounsBRDescriptorMinimal descriptor) external;
 
     function lockDescriptor() external;
 
-    function setSeeder(INounsSeeder seeder) external;
+    function setSeeder(INounsBRSeeder seeder) external;
 
     function lockSeeder() external;
 }

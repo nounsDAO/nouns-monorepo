@@ -7,7 +7,7 @@ const { ethers } = hardhat;
 import { BigNumber as EthersBN } from 'ethers';
 
 import {
-  deployNounsToken,
+  deployNounsBRToken,
   getSigners,
   TestSigners,
   setTotalSupply,
@@ -19,9 +19,9 @@ import {
 import { mineBlock } from '../../../utils';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
-  NounsToken,
-  NounsDescriptorV2__factory as NounsDescriptorV2Factory,
-  NounsDAOLogicV2,
+  NounsBRToken,
+  NounsBRDescriptorV2__factory as NounsBRDescriptorV2Factory,
+  NounsBRDAOLogicV2,
 } from '../../../../typechain';
 
 chai.use(solidity);
@@ -29,14 +29,14 @@ const { expect } = chai;
 
 let snapshotId: number;
 
-let token: NounsToken;
+let token: NounsBRToken;
 let deployer: SignerWithAddress;
 let account0: SignerWithAddress;
 let account1: SignerWithAddress;
 let account2: SignerWithAddress;
 let signers: TestSigners;
 
-let gov: NounsDAOLogicV2;
+let gov: NounsBRDAOLogicV2;
 let proposalId: EthersBN;
 
 async function reset() {
@@ -45,10 +45,10 @@ async function reset() {
     snapshotId = await ethers.provider.send('evm_snapshot', []);
     return;
   }
-  token = await deployNounsToken(signers.deployer);
+  token = await deployNounsBRToken(signers.deployer);
 
   await populateDescriptorV2(
-    NounsDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
+    NounsBRDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
   );
 
   await setTotalSupply(token, 10);
@@ -57,7 +57,7 @@ async function reset() {
   snapshotId = await ethers.provider.send('evm_snapshot', []);
 }
 
-describe('NounsDAOV2#castVote/2', () => {
+describe('NounsBRDAOV2#castVote/2', () => {
   before(async () => {
     signers = await getSigners();
     deployer = signers.deployer;
@@ -74,7 +74,7 @@ describe('NounsDAOV2#castVote/2', () => {
 
     it("There does not exist a proposal with matching proposal id where the current block number is between the proposal's start block (exclusive) and end block (inclusive)", async () => {
       await expect(gov.castVote(proposalId, 1)).revertedWith(
-        'NounsDAO::castVoteInternal: voting is closed',
+        'NounsBRDAO::castVoteInternal: voting is closed',
       );
     });
 
@@ -90,7 +90,7 @@ describe('NounsDAOV2#castVote/2', () => {
       await gov.connect(account1).castVoteWithReason(proposalId, 1, '');
 
       await expect(gov.connect(account0).castVote(proposalId, 1)).revertedWith(
-        'NounsDAO::castVoteInternal: voter already voted',
+        'NounsBRDAO::castVoteInternal: voter already voted',
       );
     });
   });

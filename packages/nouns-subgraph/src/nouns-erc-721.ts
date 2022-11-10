@@ -2,17 +2,17 @@ import { log } from '@graphprotocol/graph-ts';
 import {
   DelegateChanged,
   DelegateVotesChanged,
-  NounCreated,
+  NounBRCreated,
   Transfer,
-} from './types/NounsToken/NounsToken';
-import { Noun, Seed, DelegationEvent, TransferEvent } from './types/schema';
+} from './types/NounsBRToken/NounsBRToken';
+import { NounBR, Seed, DelegationEvent, TransferEvent } from './types/schema';
 import { BIGINT_ONE, BIGINT_ZERO, ZERO_ADDRESS } from './utils/constants';
 import { getGovernanceEntity, getOrCreateDelegate, getOrCreateAccount } from './utils/helpers';
 
-export function handleNounCreated(event: NounCreated): void {
-  let nounId = event.params.tokenId.toString();
+export function handleNounBRCreated(event: NounBRCreated): void {
+  let nounbrId = event.params.tokenId.toString();
 
-  let seed = new Seed(nounId);
+  let seed = new Seed(nounbrId);
   seed.background = event.params.seed.background;
   seed.body = event.params.seed.body;
   seed.accessory = event.params.seed.accessory;
@@ -20,54 +20,54 @@ export function handleNounCreated(event: NounCreated): void {
   seed.glasses = event.params.seed.glasses;
   seed.save();
 
-  let noun = Noun.load(nounId);
-  if (noun == null) {
-    log.error('[handleNounCreated] Noun #{} not found. Hash: {}', [
-      nounId,
+  let nounbr = NounBR.load(nounbrId);
+  if (nounbr == null) {
+    log.error('[handleNounBRCreated] NounBR #{} not found. Hash: {}', [
+      nounbrId,
       event.transaction.hash.toHex(),
     ]);
     return;
   }
 
-  noun.seed = seed.id;
-  noun.save();
+  nounbr.seed = seed.id;
+  nounbr.save();
 }
 
 // Use WebAssembly global due to lack of closure support
-let accountNouns: string[] = [];
+let accountNounsBR: string[] = [];
 
 export function handleDelegateChanged(event: DelegateChanged): void {
   let tokenHolder = getOrCreateAccount(event.params.delegator.toHexString());
   let previousDelegate = getOrCreateDelegate(event.params.fromDelegate.toHexString());
   let newDelegate = getOrCreateDelegate(event.params.toDelegate.toHexString());
-  accountNouns = tokenHolder.nouns;
+  accountNounsBR = tokenHolder.nounsbr;
 
   tokenHolder.delegate = newDelegate.id;
   tokenHolder.save();
 
   previousDelegate.tokenHoldersRepresentedAmount =
     previousDelegate.tokenHoldersRepresentedAmount - 1;
-  let previousNounsRepresented = previousDelegate.nounsRepresented; // Re-assignment required to update array
-  previousDelegate.nounsRepresented = previousNounsRepresented.filter(
-    n => !accountNouns.includes(n),
+  let previousNounsBRRepresented = previousDelegate.nounsbrRepresented; // Re-assignment required to update array
+  previousDelegate.nounsbrRepresented = previousNounsBRRepresented.filter(
+    n => !accountNounsBR.includes(n),
   );
   newDelegate.tokenHoldersRepresentedAmount = newDelegate.tokenHoldersRepresentedAmount + 1;
-  let newNounsRepresented = newDelegate.nounsRepresented; // Re-assignment required to update array
-  for (let i = 0; i < accountNouns.length; i++) {
-    newNounsRepresented.push(accountNouns[i]);
+  let newNounsBRRepresented = newDelegate.nounsbrRepresented; // Re-assignment required to update array
+  for (let i = 0; i < accountNounsBR.length; i++) {
+    newNounsBRRepresented.push(accountNounsBR[i]);
   }
-  newDelegate.nounsRepresented = newNounsRepresented;
+  newDelegate.nounsbrRepresented = newNounsBRRepresented;
   previousDelegate.save();
   newDelegate.save();
 
-  // Log a transfer event for each Noun
-  for (let i = 0; i < accountNouns.length; i++) {
+  // Log a transfer event for each NounBR
+  for (let i = 0; i < accountNounsBR.length; i++) {
     let delegateChangedEvent = new DelegationEvent(
-      event.transaction.hash.toHexString() + '_' + accountNouns[i],
+      event.transaction.hash.toHexString() + '_' + accountNounsBR[i],
     );
     delegateChangedEvent.blockNumber = event.block.number;
     delegateChangedEvent.blockTimestamp = event.block.timestamp;
-    delegateChangedEvent.noun = accountNouns[i];
+    delegateChangedEvent.nounbr = accountNounsBR[i];
     delegateChangedEvent.previousDelegate = previousDelegate.id
       ? previousDelegate.id
       : tokenHolder.id;
@@ -96,19 +96,19 @@ export function handleDelegateVotesChanged(event: DelegateVotesChanged): void {
   governance.save();
 }
 
-let transferredNounId: string; // Use WebAssembly global due to lack of closure support
+let transferredNounBRId: string; // Use WebAssembly global due to lack of closure support
 export function handleTransfer(event: Transfer): void {
   let fromHolder = getOrCreateAccount(event.params.from.toHexString());
   let toHolder = getOrCreateAccount(event.params.to.toHexString());
   let governance = getGovernanceEntity();
-  transferredNounId = event.params.tokenId.toString();
+  transferredNounBRId = event.params.tokenId.toString();
 
   let transferEvent = new TransferEvent(
-    event.transaction.hash.toHexString() + '_' + transferredNounId,
+    event.transaction.hash.toHexString() + '_' + transferredNounBRId,
   );
   transferEvent.blockNumber = event.block.number;
   transferEvent.blockTimestamp = event.block.timestamp;
-  transferEvent.noun = event.params.tokenId.toString();
+  transferEvent.nounbr = event.params.tokenId.toString();
   transferEvent.previousHolder = fromHolder.id.toString();
   transferEvent.newHolder = toHolder.id.toString();
   transferEvent.save();
@@ -121,14 +121,14 @@ export function handleTransfer(event: Transfer): void {
     let fromHolderPreviousBalance = fromHolder.tokenBalanceRaw;
     fromHolder.tokenBalanceRaw = fromHolder.tokenBalanceRaw.minus(BIGINT_ONE);
     fromHolder.tokenBalance = fromHolder.tokenBalanceRaw;
-    let fromHolderNouns = fromHolder.nouns; // Re-assignment required to update array
-    fromHolder.nouns = fromHolderNouns.filter(n => n != transferredNounId);
+    let fromHolderNounsBR = fromHolder.nounsbr; // Re-assignment required to update array
+    fromHolder.nounsbr = fromHolderNounsBR.filter(n => n != transferredNounBRId);
 
     if (fromHolder.delegate != null) {
       let fromHolderDelegate = getOrCreateDelegate(fromHolder.delegate as string);
-      let fromHolderNounsRepresented = fromHolderDelegate.nounsRepresented; // Re-assignment required to update array
-      fromHolderDelegate.nounsRepresented = fromHolderNounsRepresented.filter(
-        n => n != transferredNounId,
+      let fromHolderNounsBRRepresented = fromHolderDelegate.nounsbrRepresented; // Re-assignment required to update array
+      fromHolderDelegate.nounsbrRepresented = fromHolderNounsBRRepresented.filter(
+        n => n != transferredNounBRId,
       );
       fromHolderDelegate.save();
     }
@@ -167,7 +167,7 @@ export function handleTransfer(event: Transfer): void {
   );
   delegateChangedEvent.blockNumber = event.block.number;
   delegateChangedEvent.blockTimestamp = event.block.timestamp;
-  delegateChangedEvent.noun = event.params.tokenId.toString();
+  delegateChangedEvent.nounbr = event.params.tokenId.toString();
   delegateChangedEvent.previousDelegate = fromHolder.delegate
     ? fromHolder.delegate!.toString()
     : fromHolder.id.toString();
@@ -177,9 +177,9 @@ export function handleTransfer(event: Transfer): void {
   delegateChangedEvent.save();
 
   let toHolderDelegate = getOrCreateDelegate(toHolder.delegate ? toHolder.delegate! : toHolder.id);
-  let toHolderNounsRepresented = toHolderDelegate.nounsRepresented; // Re-assignment required to update array
-  toHolderNounsRepresented.push(transferredNounId);
-  toHolderDelegate.nounsRepresented = toHolderNounsRepresented;
+  let toHolderNounsBRRepresented = toHolderDelegate.nounsbrRepresented; // Re-assignment required to update array
+  toHolderNounsBRRepresented.push(transferredNounBRId);
+  toHolderDelegate.nounsbrRepresented = toHolderNounsBRRepresented;
   toHolderDelegate.save();
 
   let toHolderPreviousBalance = toHolder.tokenBalanceRaw;
@@ -187,9 +187,9 @@ export function handleTransfer(event: Transfer): void {
   toHolder.tokenBalance = toHolder.tokenBalanceRaw;
   toHolder.totalTokensHeldRaw = toHolder.totalTokensHeldRaw.plus(BIGINT_ONE);
   toHolder.totalTokensHeld = toHolder.totalTokensHeldRaw;
-  let toHolderNouns = toHolder.nouns; // Re-assignment required to update array
-  toHolderNouns.push(event.params.tokenId.toString());
-  toHolder.nouns = toHolderNouns;
+  let toHolderNounsBR = toHolder.nounsbr; // Re-assignment required to update array
+  toHolderNounsBR.push(event.params.tokenId.toString());
+  toHolder.nounsbr = toHolderNounsBR;
 
   if (toHolder.tokenBalanceRaw == BIGINT_ZERO && toHolderPreviousBalance > BIGINT_ZERO) {
     governance.currentTokenHolders = governance.currentTokenHolders.minus(BIGINT_ONE);
@@ -201,13 +201,13 @@ export function handleTransfer(event: Transfer): void {
     toHolder.delegate = toHolder.id;
   }
 
-  let noun = Noun.load(transferredNounId);
-  if (noun == null) {
-    noun = new Noun(transferredNounId);
+  let nounbr = NounBR.load(transferredNounBRId);
+  if (nounbr == null) {
+    nounbr = new NounBR(transferredNounBRId);
   }
 
-  noun.owner = toHolder.id;
-  noun.save();
+  nounbr.owner = toHolder.id;
+  nounbr.save();
 
   toHolder.save();
 }

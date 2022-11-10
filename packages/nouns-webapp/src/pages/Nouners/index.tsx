@@ -1,18 +1,18 @@
 import React from 'react';
-import classes from './NounersPage.module.css';
+import classes from './NounBRersPage.module.css';
 import Section from '../../layout/Section';
 import { Col, Row, Button } from 'react-bootstrap';
 import { Trans } from '@lingui/macro';
 
-const NounersPage = () => {
+const NounBRersPage = () => {
   return (
-    <Section fullWidth={true} className={classes.nounersPage}>
+    <Section fullWidth={true} className={classes.nounbrersPage}>
       <Col lg={{ span: 6, offset: 3 }}>
 
         {/******************************************************/}
         <Row className={classes.headerRow}>
-          <span><Trans>NounersBR</Trans></span>
-          <h1><Trans>Welcome, NounerBR!</Trans></h1>
+          <span><Trans>NounBRers</Trans></span>
+          <h1><Trans>Welcome, NounBRer!</Trans></h1>
         </Row>
              
         <br />
@@ -46,9 +46,9 @@ const NounersPage = () => {
           {/*--------------------------------------------------*/}
           <h3><Trans>Welcome</Trans></h3>
             <Col style={{ textAlign: 'justify' }}>
-            <Trans>Basic information, major announcements, and user verification. If you just bought a
+            <Trans>Basic information, major announbrcements, and user verification. If you just bought a
               NounBR, you will need to verify your ownership in the #authentication channel to get added to the
-              "NounerBR" role of the server.</Trans>
+              "NounBRer" role of the server.</Trans>
             </Col>
             <br />
 
@@ -56,7 +56,7 @@ const NounersPage = () => {
           <h3><Trans>NounsBR DAO</Trans></h3>
             <Col style={{ textAlign: 'justify' }}>
             <Trans>These are channels where only NounsBR DAO members can post. In the spirit of having an open
-              and collaborative environment, all of these channels (except for #nounerbr-private) are
+              and collaborative environment, all of these channels (except for #nounbrer-private) are
               viewable by the public.</Trans>
             </Col>
             <br />
@@ -71,7 +71,7 @@ const NounersPage = () => {
             </a>
             <Col style={{ textAlign: 'justify' }}>
             <Trans>This is where most communication between members occurs. Anything that doesn't fit in
-              the other NounersBR channels likely goes here.</Trans>
+              the other NounBRers channels likely goes here.</Trans>
             </Col>
             <br />
 
@@ -94,7 +94,7 @@ const NounersPage = () => {
               rel="noreferrer"
               className={classes.boldText}
             >
-              <Trans>#nounerbr-private</Trans>
+              <Trans>#nounbrer-private</Trans>
             </a>
             <Col style={{ textAlign: 'justify' }}>
             <Trans>While we generally prefer to keep everything out in the open, sometimes there are
@@ -138,4 +138,4 @@ const NounersPage = () => {
   );
 };
 
-export default NounersPage;
+export default NounBRersPage;

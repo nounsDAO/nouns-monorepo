@@ -2,14 +2,14 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { NounsDAOLogicSharedBaseTest } from '../helpers/NounsDAOLogicSharedBase.t.sol';
-import { NounsDAOLogicV1 } from '../../../contracts/governance/NounsDAOLogicV1.sol';
-import { NounsDAOLogicV2 } from '../../../contracts/governance/NounsDAOLogicV2.sol';
-import { NounsDAOProxyV2 } from '../../../contracts/governance/NounsDAOProxyV2.sol';
-import { NounsDAOStorageV1, NounsDAOStorageV2 } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsBRDAOLogicSharedBaseTest } from '../helpers/NounsBRDAOLogicSharedBase.t.sol';
+import { NounsBRDAOLogicV1 } from '../../../contracts/governance/NounsBRDAOLogicV1.sol';
+import { NounsBRDAOLogicV2 } from '../../../contracts/governance/NounsBRDAOLogicV2.sol';
+import { NounsBRDAOProxyV2 } from '../../../contracts/governance/NounsBRDAOProxyV2.sol';
+import { NounsBRDAOStorageV1, NounsBRDAOStorageV2 } from '../../../contracts/governance/NounsBRDAOInterfaces.sol';
 import { Utils } from '../helpers/Utils.sol';
 
-abstract contract NounsDAOLogicV2InflationHandlingTest is NounsDAOLogicSharedBaseTest, Utils {
+abstract contract NounsBRDAOLogicV2InflationHandlingTest is NounsBRDAOLogicSharedBaseTest, Utils {
     uint256 constant proposalThresholdBPS_ = 678; // 6.78%
     uint16 constant minQuorumVotesBPS = 1100; // 11%
     address tokenHolder;
@@ -21,22 +21,22 @@ abstract contract NounsDAOLogicV2InflationHandlingTest is NounsDAOLogicSharedBas
         return 2;
     }
 
-    function deployDAOProxy() internal override returns (NounsDAOLogicV1) {
-        NounsDAOLogicV2 daoLogic = new NounsDAOLogicV2();
+    function deployDAOProxy() internal override returns (NounsBRDAOLogicV1) {
+        NounsBRDAOLogicV2 daoLogic = new NounsBRDAOLogicV2();
 
         return
-            NounsDAOLogicV1(
+            NounsBRDAOLogicV1(
                 payable(
-                    new NounsDAOProxyV2(
+                    new NounsBRDAOProxyV2(
                         address(timelock),
-                        address(nounsToken),
+                        address(nounsbrToken),
                         vetoer,
                         admin,
                         address(daoLogic),
                         votingPeriod,
                         votingDelay,
                         proposalThresholdBPS_,
-                        NounsDAOStorageV2.DynamicQuorumParams({
+                        NounsBRDAOStorageV2.DynamicQuorumParams({
                             minQuorumVotesBPS: minQuorumVotesBPS,
                             maxQuorumVotesBPS: 2000,
                             quorumCoefficient: 10000
@@ -56,24 +56,24 @@ abstract contract NounsDAOLogicV2InflationHandlingTest is NounsDAOLogicSharedBas
     }
 
     function setTotalSupply(uint256 totalSupply) public {
-        mint(tokenHolder, totalSupply - nounsToken.totalSupply());
+        mint(tokenHolder, totalSupply - nounsbrToken.totalSupply());
 
-        // Burn extra nouns minted because of founder rewards
-        while (nounsToken.totalSupply() > totalSupply) {
-            uint256 lastId = nounsToken.totalSupply() - 1;
+        // Burn extra nounsbr minted because of founder rewards
+        while (nounsbrToken.totalSupply() > totalSupply) {
+            uint256 lastId = nounsbrToken.totalSupply() - 1;
 
             vm.prank(minter);
-            nounsToken.burn(lastId);
+            nounsbrToken.burn(lastId);
         }
     }
 }
 
-contract NounsDAOLogicV2InflationHandling40TotalSupplyTest is NounsDAOLogicV2InflationHandlingTest {
+contract NounsBRDAOLogicV2InflationHandling40TotalSupplyTest is NounsBRDAOLogicV2InflationHandlingTest {
     function setUp() public virtual override {
         super.setUp();
 
         setTotalSupply(40);
-        assertEq(nounsToken.totalSupply(), 40);
+        assertEq(nounsbrToken.totalSupply(), 40);
     }
 
     function testSetsParametersCorrectly() public {
@@ -96,35 +96,35 @@ contract NounsDAOLogicV2InflationHandling40TotalSupplyTest is NounsDAOLogicV2Inf
     function testRejectsIfProposingBelowThreshold() public {
         // Give user1 2 tokens, proposal requires 3
         vm.startPrank(tokenHolder);
-        nounsToken.transferFrom(tokenHolder, user1, 1);
-        nounsToken.transferFrom(tokenHolder, user1, 2);
+        nounsbrToken.transferFrom(tokenHolder, user1, 1);
+        nounsbrToken.transferFrom(tokenHolder, user1, 2);
         vm.stopPrank();
 
         vm.roll(block.number + 1);
 
-        assertEq(nounsToken.getPriorVotes(user1, block.number - 1), 2);
+        assertEq(nounsbrToken.getPriorVotes(user1, block.number - 1), 2);
 
-        vm.expectRevert('NounsDAO::propose: proposer votes below proposal threshold');
+        vm.expectRevert('NounsBRDAO::propose: proposer votes below proposal threshold');
         propose(user1, address(0), 0, '', '');
     }
 
     function testAllowsProposingIfAboveTreshold() public {
         // Give user1 3 tokens, proposal requires 3
         vm.startPrank(tokenHolder);
-        nounsToken.transferFrom(tokenHolder, user1, 1);
-        nounsToken.transferFrom(tokenHolder, user1, 2);
-        nounsToken.transferFrom(tokenHolder, user1, 3);
+        nounsbrToken.transferFrom(tokenHolder, user1, 1);
+        nounsbrToken.transferFrom(tokenHolder, user1, 2);
+        nounsbrToken.transferFrom(tokenHolder, user1, 3);
         vm.stopPrank();
 
         vm.roll(block.number + 1);
 
-        assertEq(nounsToken.getPriorVotes(user1, block.number - 1), 3);
+        assertEq(nounsbrToken.getPriorVotes(user1, block.number - 1), 3);
 
         propose(user1, address(0), 0, '', '');
     }
 }
 
-abstract contract TotalSupply40WithAProposalState is NounsDAOLogicV2InflationHandlingTest {
+abstract contract TotalSupply40WithAProposalState is NounsBRDAOLogicV2InflationHandlingTest {
     uint256 proposalId;
 
     function setUp() public virtual override {
@@ -134,26 +134,26 @@ abstract contract TotalSupply40WithAProposalState is NounsDAOLogicV2InflationHan
 
         vm.startPrank(tokenHolder);
         // 3 votes to user1
-        nounsToken.transferFrom(tokenHolder, user1, 1);
-        nounsToken.transferFrom(tokenHolder, user1, 2);
-        nounsToken.transferFrom(tokenHolder, user1, 3);
+        nounsbrToken.transferFrom(tokenHolder, user1, 1);
+        nounsbrToken.transferFrom(tokenHolder, user1, 2);
+        nounsbrToken.transferFrom(tokenHolder, user1, 3);
 
         // 3 votes to user2
-        nounsToken.transferFrom(tokenHolder, user2, 11);
-        nounsToken.transferFrom(tokenHolder, user2, 12);
-        nounsToken.transferFrom(tokenHolder, user2, 13);
+        nounsbrToken.transferFrom(tokenHolder, user2, 11);
+        nounsbrToken.transferFrom(tokenHolder, user2, 12);
+        nounsbrToken.transferFrom(tokenHolder, user2, 13);
 
         // 5 votes to user3
-        nounsToken.transferFrom(tokenHolder, user3, 21);
-        nounsToken.transferFrom(tokenHolder, user3, 22);
-        nounsToken.transferFrom(tokenHolder, user3, 23);
-        nounsToken.transferFrom(tokenHolder, user3, 24);
-        nounsToken.transferFrom(tokenHolder, user3, 25);
+        nounsbrToken.transferFrom(tokenHolder, user3, 21);
+        nounsbrToken.transferFrom(tokenHolder, user3, 22);
+        nounsbrToken.transferFrom(tokenHolder, user3, 23);
+        nounsbrToken.transferFrom(tokenHolder, user3, 24);
+        nounsbrToken.transferFrom(tokenHolder, user3, 25);
         vm.stopPrank();
 
         vm.roll(block.number + 1);
 
-        assertEq(nounsToken.getPriorVotes(user1, block.number - 1), 3);
+        assertEq(nounsbrToken.getPriorVotes(user1, block.number - 1), 3);
 
         proposalId = propose(user1, address(0), 0, '', '');
     }
@@ -183,7 +183,7 @@ contract SupplyIncreasedStateTest is SupplyIncreasedState {
     }
 
     function testRejectsProposalsPreviouslyAboveThresholdButNowBelowBecauseSupplyIncreased() public {
-        vm.expectRevert('NounsDAO::propose: proposer votes below proposal threshold');
+        vm.expectRevert('NounsBRDAO::propose: proposer votes below proposal threshold');
         propose(user1, address(0), 0, '', '');
     }
 
@@ -207,6 +207,6 @@ contract SupplyIncreasedStateTest is SupplyIncreasedState {
 
         vm.roll(block.number + votingPeriod);
 
-        assertEq(uint256(daoProxy.state(proposalId)), uint256(NounsDAOStorageV1.ProposalState.Succeeded));
+        assertEq(uint256(daoProxy.state(proposalId)), uint256(NounsBRDAOStorageV1.ProposalState.Succeeded));
     }
 }

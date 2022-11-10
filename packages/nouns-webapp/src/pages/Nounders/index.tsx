@@ -1,10 +1,10 @@
 import React from 'react';
-import classes from './NoundersPage.module.css';
+import classes from './NoundersBRBRPage.module.css';
 import Section from '../../layout/Section';
 import { Col, Row, Card } from 'react-bootstrap';
-import pfpbeautyandpunk from '../../assets/nounder-pfps/beautyandpunk.jpg';
-import pfpkome from '../../assets/nounder-pfps/kome.jpg';
-import pfpquijote from '../../assets/nounder-pfps/quijote.jpg';
+import pfpbeautyandpunk from '../../assets/nounderbr-pfps/beautyandpunk.jpg';
+import pfpkome from '../../assets/nounderbr-pfps/kome.jpg';
+import pfpquijote from '../../assets/nounderbr-pfps/quijote.jpg';
 import { Trans } from '@lingui/macro';
 
 const bios = [
@@ -77,12 +77,12 @@ const BioCards: React.FC<{ min: number; max: number }> = props => {
   );
 };
 
-const NoundersPage = () => {
+const NoundersBRBRPage = () => {
   return (
-    <Section fullWidth={true} className={classes.noundersPage}>
+    <Section fullWidth={true} className={classes.noundersbrPage}>
       <Col lg={{ span: 6, offset: 3 }}>
         <h2 style={{ marginBottom: '2rem' }}>
-          <Trans>The NoundersBR</Trans>
+          <Trans>The NoundersBRBR</Trans>
         </h2>
         <h3 style={{ marginBottom: '2rem' }}>
           <Trans>artists and entrepreuners</Trans>
@@ -92,16 +92,16 @@ const NoundersPage = () => {
           <BioCards min={5} max={10} />
         </Row>
         <h3>
-          <Trans>NoundersBR' Reward</Trans>
+          <Trans>NoundersBRBR' Reward</Trans>
         </h3>
         <p style={{ textAlign: 'justify' }}>
           <Trans>
-            All NounBR auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's founders (‘NoundersBR’) have chosen to compensate ourselves with NounsBR. Every 10th nounbr for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual NoundersBR.
+            All NounBR auction proceeds are sent to the NounsBR DAO. For this reason, we, the project's founders (‘NoundersBRBR’) have chosen to compensate ourselves with NounsBR. Every 10th nounbr for the first 5 years of the project will be sent to our multisig (3/3), where it will be vested and distributed to individual NoundersBRBR.
           </Trans>
         </p>
         <p style={{ textAlign: 'justify' }}>
           <Trans>
-              The NoundersBR reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures.
+              The NoundersBRBR reward is intended as compensation for our pre and post-launch contributions to the project, and to help us participate meaningfully in governance as the project matures.
           </Trans>
         </p>
       </Col>
@@ -109,4 +109,4 @@ const NoundersPage = () => {
   );
 };
 
-export default NoundersPage;
+export default NoundersBRBRPage;

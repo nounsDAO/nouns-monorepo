@@ -1,4 +1,4 @@
-import { NounsDAOV2ABI, NounsDaoLogicV1Factory } from '@nouns/sdk';
+import { NounsBRDAOV2ABI, NounsBRDaoLogicV1Factory } from '@nounsbr/sdk';
 import {
   ChainId,
   useBlockNumber,
@@ -122,13 +122,13 @@ export interface ProposalTransaction {
   calldata: string;
 }
 
-const abi = new utils.Interface(NounsDAOV2ABI);
-const nounsDaoContract = new NounsDaoLogicV1Factory().attach(config.addresses.nounsDAOProxy);
+const abi = new utils.Interface(NounsBRDAOV2ABI);
+const nounsbrDaoContract = new NounsBRDaoLogicV1Factory().attach(config.addresses.nounsbrDAOProxy);
 
 // Start the log search at the mainnet deployment block to speed up log queries //defnullx arrumar
 const fromBlock = CHAIN_ID === ChainId.Mainnet ? 12985453 : 0;
 const proposalCreatedFilter = {
-  ...nounsDaoContract.filters?.ProposalCreated(
+  ...nounsbrDaoContract.filters?.ProposalCreated(
     null,
     null,
     null,
@@ -175,7 +175,7 @@ const removeItalics = (text: string | null): string | null =>
 const removeMarkdownStyle = R.compose(removeBold, removeItalics);
 
 export const useCurrentQuorum = (
-  nounsDao: string,
+  nounsbrDao: string,
   proposalId: number,
   skip: boolean = false,
 ): number | undefined => {
@@ -183,7 +183,7 @@ export const useCurrentQuorum = (
     if (skip) return false;
     return {
       abi,
-      address: nounsDao,
+      address: nounsbrDao,
       method: 'quorumVotes',
       args: [proposalId],
     };
@@ -193,13 +193,13 @@ export const useCurrentQuorum = (
 };
 
 export const useDynamicQuorumProps = (
-  nounsDao: string,
+  nounsbrDao: string,
   block: number,
 ): DynamicQuorumParams | undefined => {
   const [params] =
     useContractCall<[DynamicQuorumParams]>({
       abi,
-      address: nounsDao,
+      address: nounsbrDao,
       method: 'getDynamicQuorumParamsAt',
       args: [block],
     }) || [];
@@ -214,7 +214,7 @@ export const useHasVotedOnProposal = (proposalId: string | undefined): boolean =
   const [receipt] =
     useContractCall<[any]>({
       abi,
-      address: nounsDaoContract.address,
+      address: nounsbrDaoContract.address,
       method: 'getReceipt',
       args: [proposalId, account],
     }) || [];
@@ -228,7 +228,7 @@ export const useProposalVote = (proposalId: string | undefined): string => {
   const [receipt] =
     useContractCall<[any]>({
       abi,
-      address: nounsDaoContract.address,
+      address: nounsbrDaoContract.address,
       method: 'getReceipt',
       args: [proposalId, account],
     }) || [];
@@ -250,7 +250,7 @@ export const useProposalCount = (): number | undefined => {
   const [count] =
     useContractCall<[EthersBN]>({
       abi,
-      address: nounsDaoContract.address,
+      address: nounsbrDaoContract.address,
       method: 'proposalCount',
       args: [],
     }) || [];
@@ -261,18 +261,18 @@ export const useProposalThreshold = (): number | undefined => {
   const [count] =
     useContractCall<[EthersBN]>({
       abi,
-      address: nounsDaoContract.address,
+      address: nounsbrDaoContract.address,
       method: 'proposalThreshold',
       args: [],
     }) || [];
   return count?.toNumber();
 };
 
-const useVotingDelay = (nounsDao: string): number | undefined => {
+const useVotingDelay = (nounsbrDao: string): number | undefined => {
   const [blockDelay] =
     useContractCall<[EthersBN]>({
       abi,
-      address: nounsDao,
+      address: nounsbrDao,
       method: 'votingDelay',
       args: [],
     }) || [];
@@ -410,7 +410,7 @@ export const useAllProposalsViaSubgraph = (): ProposalData => {
 
 export const useAllProposalsViaChain = (skip = false): ProposalData => {
   const proposalCount = useProposalCount();
-  const votingDelay = useVotingDelay(nounsDaoContract.address);
+  const votingDelay = useVotingDelay(nounsbrDaoContract.address);
 
   const govProposalIndexes = useMemo(() => {
     return countToIndices(proposalCount);
@@ -421,7 +421,7 @@ export const useAllProposalsViaChain = (skip = false): ProposalData => {
     return govProposalIndexes.map(index => ({
       abi,
       method,
-      address: nounsDaoContract.address,
+      address: nounsbrDaoContract.address,
       args: [index],
     }));
   };
@@ -478,7 +478,7 @@ export const useProposal = (id: string | number): Proposal | undefined => {
 
 export const useCastVote = () => {
   const { send: castVote, state: castVoteState } = useContractFunction(
-    nounsDaoContract,
+    nounsbrDaoContract,
     'castVote',
   );
   return { castVote, castVoteState };
@@ -486,20 +486,20 @@ export const useCastVote = () => {
 
 export const useCastVoteWithReason = () => {
   const { send: castVoteWithReason, state: castVoteWithReasonState } = useContractFunction(
-    nounsDaoContract,
+    nounsbrDaoContract,
     'castVoteWithReason',
   );
   return { castVoteWithReason, castVoteWithReasonState };
 };
 
 export const usePropose = () => {
-  const { send: propose, state: proposeState } = useContractFunction(nounsDaoContract, 'propose');
+  const { send: propose, state: proposeState } = useContractFunction(nounsbrDaoContract, 'propose');
   return { propose, proposeState };
 };
 
 export const useQueueProposal = () => {
   const { send: queueProposal, state: queueProposalState } = useContractFunction(
-    nounsDaoContract,
+    nounsbrDaoContract,
     'queue',
   );
   return { queueProposal, queueProposalState };
@@ -507,7 +507,7 @@ export const useQueueProposal = () => {
 
 export const useExecuteProposal = () => {
   const { send: executeProposal, state: executeProposalState } = useContractFunction(
-    nounsDaoContract,
+    nounsbrDaoContract,
     'execute',
   );
   return { executeProposal, executeProposalState };

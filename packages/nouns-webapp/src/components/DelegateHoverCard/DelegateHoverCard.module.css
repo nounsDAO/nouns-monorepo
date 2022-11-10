@@ -4,7 +4,7 @@
   max-width: 11rem;
 }
 
-.stackedNounWrapper {
+.stackedNounBRWrapper {
   display: flex;
 }
 
@@ -15,7 +15,7 @@
   text-align: left;
 }
 
-.nounsRepresented {
+.nounsbrRepresented {
   color: var(--brand-gray-dark-text);
   display: flex;
   margin-top: 0.25rem;
@@ -44,7 +44,7 @@
   justify-content: center;
 }
 
-.nounInfoWrapper {
+.nounbrInfoWrapper {
   margin-top: 0.25rem;
   margin-bottom: 0.75rem;
   font-style: normal;

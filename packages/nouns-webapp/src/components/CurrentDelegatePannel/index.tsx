@@ -2,7 +2,7 @@ import { Trans } from '@lingui/macro';
 import { useEthers } from '@usedapp/core';
 import React from 'react';
 import { useShortAddress } from '../../utils/addressAndENSDisplayUtils';
-import { useUserDelegatee } from '../../wrappers/nounToken';
+import { useUserDelegatee } from '../../wrappers/nounbrToken';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import ShortAddress from '../ShortAddress';
 import classes from './CurrentDelegatePannel.module.css';

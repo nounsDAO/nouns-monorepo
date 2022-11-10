@@ -16,21 +16,21 @@
  *********************************/
 
 // LICENSE
-// NounsDAOExecutor.sol is a modified version of Compound Lab's Timelock.sol:
+// NounsBRDAOExecutor.sol is a modified version of Compound Lab's Timelock.sol:
 // https://github.com/compound-finance/compound-protocol/blob/20abad28055a2f91df48a90f8bb6009279a4cb35/contracts/Timelock.sol
 //
 // Timelock.sol source code Copyright 2020 Compound Labs, Inc. licensed under the BSD-3-Clause license.
-// With modifications by Nounders DAO.
+// With modifications by NoundersBRBR DAO.
 //
 // Additional conditions of BSD-3-Clause can be found here: https://opensource.org/licenses/BSD-3-Clause
 //
 // MODIFICATIONS
-// NounsDAOExecutor.sol modifies Timelock to use Solidity 0.8.x receive(), fallback(), and built-in over/underflow protection
+// NounsBRDAOExecutor.sol modifies Timelock to use Solidity 0.8.x receive(), fallback(), and built-in over/underflow protection
 // This contract acts as executor of NounsBR DAO governance and its treasury, so it has been modified to accept ETH.
 
 pragma solidity ^0.8.6;
 
-contract NounsDAOExecutor {
+contract NounsBRDAOExecutor {
     event NewAdmin(address indexed newAdmin);
     event NewPendingAdmin(address indexed newPendingAdmin);
     event NewDelay(uint256 indexed newDelay);
@@ -70,24 +70,24 @@ contract NounsDAOExecutor {
     mapping(bytes32 => bool) public queuedTransactions;
 
     constructor(address admin_, uint256 delay_) {
-        require(delay_ >= MINIMUM_DELAY, 'NounsDAOExecutor::constructor: Delay must exceed minimum delay.');
-        require(delay_ <= MAXIMUM_DELAY, 'NounsDAOExecutor::setDelay: Delay must not exceed maximum delay.');
+        require(delay_ >= MINIMUM_DELAY, 'NounsBRDAOExecutor::constructor: Delay must exceed minimum delay.');
+        require(delay_ <= MAXIMUM_DELAY, 'NounsBRDAOExecutor::setDelay: Delay must not exceed maximum delay.');
 
         admin = admin_;
         delay = delay_;
     }
 
     function setDelay(uint256 delay_) public {
-        require(msg.sender == address(this), 'NounsDAOExecutor::setDelay: Call must come from NounsDAOExecutor.');
-        require(delay_ >= MINIMUM_DELAY, 'NounsDAOExecutor::setDelay: Delay must exceed minimum delay.');
-        require(delay_ <= MAXIMUM_DELAY, 'NounsDAOExecutor::setDelay: Delay must not exceed maximum delay.');
+        require(msg.sender == address(this), 'NounsBRDAOExecutor::setDelay: Call must come from NounsBRDAOExecutor.');
+        require(delay_ >= MINIMUM_DELAY, 'NounsBRDAOExecutor::setDelay: Delay must exceed minimum delay.');
+        require(delay_ <= MAXIMUM_DELAY, 'NounsBRDAOExecutor::setDelay: Delay must not exceed maximum delay.');
         delay = delay_;
 
         emit NewDelay(delay);
     }
 
     function acceptAdmin() public {
-        require(msg.sender == pendingAdmin, 'NounsDAOExecutor::acceptAdmin: Call must come from pendingAdmin.');
+        require(msg.sender == pendingAdmin, 'NounsBRDAOExecutor::acceptAdmin: Call must come from pendingAdmin.');
         admin = msg.sender;
         pendingAdmin = address(0);
 
@@ -97,7 +97,7 @@ contract NounsDAOExecutor {
     function setPendingAdmin(address pendingAdmin_) public {
         require(
             msg.sender == address(this),
-            'NounsDAOExecutor::setPendingAdmin: Call must come from NounsDAOExecutor.'
+            'NounsBRDAOExecutor::setPendingAdmin: Call must come from NounsBRDAOExecutor.'
         );
         pendingAdmin = pendingAdmin_;
 
@@ -111,10 +111,10 @@ contract NounsDAOExecutor {
         bytes memory data,
         uint256 eta
     ) public returns (bytes32) {
-        require(msg.sender == admin, 'NounsDAOExecutor::queueTransaction: Call must come from admin.');
+        require(msg.sender == admin, 'NounsBRDAOExecutor::queueTransaction: Call must come from admin.');
         require(
             eta >= getBlockTimestamp() + delay,
-            'NounsDAOExecutor::queueTransaction: Estimated execution block must satisfy delay.'
+            'NounsBRDAOExecutor::queueTransaction: Estimated execution block must satisfy delay.'
         );
 
         bytes32 txHash = keccak256(abi.encode(target, value, signature, data, eta));
@@ -131,7 +131,7 @@ contract NounsDAOExecutor {
         bytes memory data,
         uint256 eta
     ) public {
-        require(msg.sender == admin, 'NounsDAOExecutor::cancelTransaction: Call must come from admin.');
+        require(msg.sender == admin, 'NounsBRDAOExecutor::cancelTransaction: Call must come from admin.');
 
         bytes32 txHash = keccak256(abi.encode(target, value, signature, data, eta));
         queuedTransactions[txHash] = false;
@@ -146,17 +146,17 @@ contract NounsDAOExecutor {
         bytes memory data,
         uint256 eta
     ) public returns (bytes memory) {
-        require(msg.sender == admin, 'NounsDAOExecutor::executeTransaction: Call must come from admin.');
+        require(msg.sender == admin, 'NounsBRDAOExecutor::executeTransaction: Call must come from admin.');
 
         bytes32 txHash = keccak256(abi.encode(target, value, signature, data, eta));
-        require(queuedTransactions[txHash], "NounsDAOExecutor::executeTransaction: Transaction hasn't been queued.");
+        require(queuedTransactions[txHash], "NounsBRDAOExecutor::executeTransaction: Transaction hasn't been queued.");
         require(
             getBlockTimestamp() >= eta,
-            "NounsDAOExecutor::executeTransaction: Transaction hasn't surpassed time lock."
+            "NounsBRDAOExecutor::executeTransaction: Transaction hasn't surpassed time lock."
         );
         require(
             getBlockTimestamp() <= eta + GRACE_PERIOD,
-            'NounsDAOExecutor::executeTransaction: Transaction is stale.'
+            'NounsBRDAOExecutor::executeTransaction: Transaction is stale.'
         );
 
         queuedTransactions[txHash] = false;
@@ -171,7 +171,7 @@ contract NounsDAOExecutor {
 
         // solium-disable-next-line security/no-call-value
         (bool success, bytes memory returnData) = target.call{ value: value }(callData);
-        require(success, 'NounsDAOExecutor::executeTransaction: Transaction execution reverted.');
+        require(success, 'NounsBRDAOExecutor::executeTransaction: Transaction execution reverted.');
 
         emit ExecuteTransaction(txHash, target, value, signature, data, eta);
 

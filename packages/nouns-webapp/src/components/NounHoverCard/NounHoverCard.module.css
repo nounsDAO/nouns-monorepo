@@ -33,12 +33,12 @@
   margin-left: 0.5rem;
 }
 
-.nounWrapper {
+.nounbrWrapper {
   height: 42px;
   width: 42px;
 }
 
-.nounInfoWrapper {
+.nounbrInfoWrapper {
   margin-top: 0.75rem;
   font-style: normal;
   font-weight: 500;

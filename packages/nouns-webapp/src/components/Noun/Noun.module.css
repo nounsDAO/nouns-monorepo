@@ -34,19 +34,19 @@
   border-radius: 15px;
 }
 
-.circularNounWrapper {
+.circularNounBRWrapper {
   width: 42px;
   height: 42px;
 }
 
-.delegateViewCircularNounWrapper {
+.delegateViewCircularNounBRWrapper {
   width: 42px;
   height: 42px;
   margin-left: 12px;
 }
 
 @media (max-width: 1200px) {
-  .circularNounWrapper {
+  .circularNounBRWrapper {
     height: 70%;
     width: 70%;
   }

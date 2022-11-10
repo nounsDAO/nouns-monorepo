@@ -1,17 +1,17 @@
-.noundersPage h1,
-.noundersPage h2,
-.noundersPage h3 {
+.noundersbrPage h1,
+.noundersbrPage h2,
+.noundersbrPage h3 {
   font-family: 'Londrina Solid';
 }
 
-.noundersPage h2 {
+.noundersbrPage h2 {
   margin-bottom: 2rem;
 }
 
-.noundersPage a {
+.noundersbrPage a {
   color: var(--brand-black);
 }
-.noundersPage a:hover {
+.noundersbrPage a:hover {
   color: var(--brand-dark-red);
 }
 
@@ -23,7 +23,7 @@
   font-size: 1rem;
 }
 
-.noundersPage img {
+.noundersbrPage img {
   border-radius: 50%;
   width: 50%;
 }

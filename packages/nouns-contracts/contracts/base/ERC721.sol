@@ -20,7 +20,7 @@
 // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/6618f9f18424ade44116d0221719f4c93be6a078/contracts/token/ERC721/ERC721.sol
 //
 // ERC721.sol source code copyright OpenZeppelin licensed under the MIT License.
-// With modifications by Nounders DAO.
+// With modifications by NoundersBRBR DAO.
 //
 //
 // MODIFICATIONS:

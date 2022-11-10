@@ -1,33 +1,33 @@
-import { ImageData as data, getNounData } from '@nouns/assets';
-import { buildSVG } from '@nouns/sdk';
+import { ImageData as data, getNounBRData } from '@nounsbr/assets';
+import { buildSVG } from '@nounsbr/sdk';
 import { BigNumber as EthersBN } from 'ethers';
-import { INounSeed, useNounSeed } from '../../wrappers/nounToken';
-import Noun from '../Noun';
+import { INounBRSeed, useNounBRSeed } from '../../wrappers/nounbrToken';
+import NounBR from '../NounBR';
 import { Link } from 'react-router-dom';
-import classes from './StandaloneNoun.module.css';
+import classes from './StandaloneNounBR.module.css';
 import { useDispatch } from 'react-redux';
-import { setOnDisplayAuctionNounId } from '../../state/slices/onDisplayAuction';
-import nounClasses from '../Noun/Noun.module.css';
+import { setOnDisplayAuctionNounBRId } from '../../state/slices/onDisplayAuction';
+import nounbrClasses from '../NounBR/NounBR.module.css';
 
-interface StandaloneNounProps {
-  nounId: EthersBN;
+interface StandaloneNounBRProps {
+  nounbrId: EthersBN;
 }
-interface StandaloneCircularNounProps {
-  nounId: EthersBN;
+interface StandaloneCircularNounBRProps {
+  nounbrId: EthersBN;
   border?: boolean;
 }
 
-interface StandaloneNounWithSeedProps {
-  nounId: EthersBN;
-  onLoadSeed?: (seed: INounSeed) => void;
+interface StandaloneNounBRWithSeedProps {
+  nounbrId: EthersBN;
+  onLoadSeed?: (seed: INounBRSeed) => void;
   shouldLinkToProfile: boolean;
 }
 
-export const getNoun = (nounId: string | EthersBN, seed: INounSeed) => {
-  const id = nounId.toString();
+export const getNounBR = (nounbrId: string | EthersBN, seed: INounBRSeed) => {
+  const id = nounbrId.toString();
   const name = `NounBR ${id}`;
   const description = `NounBR ${id} is a member of the NounsBR DAO`;
-  const { parts, background } = getNounData(seed);
+  const { parts, background } = getNounBRData(seed);
   const image = `data:image/svg+xml;base64,${btoa(buildSVG(parts, data.palette, background))}`;
 
   return {
@@ -37,115 +37,115 @@ export const getNoun = (nounId: string | EthersBN, seed: INounSeed) => {
   };
 };
 
-const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProps) => {
-  const { nounId } = props;
-  const seed = useNounSeed(nounId);
-  const noun = seed && getNoun(nounId, seed);
+const StandaloneNounBR: React.FC<StandaloneNounBRProps> = (props: StandaloneNounBRProps) => {
+  const { nounbrId } = props;
+  const seed = useNounBRSeed(nounbrId);
+  const nounbr = seed && getNounBR(nounbrId, seed);
 
   const dispatch = useDispatch();
 
   const onClickHandler = () => {
-    dispatch(setOnDisplayAuctionNounId(nounId.toNumber()));
+    dispatch(setOnDisplayAuctionNounBRId(nounbrId.toNumber()));
   };
 
   return (
     <Link
-      to={'/noun/' + nounId.toString()}
-      className={classes.clickableNoun}
+      to={'/nounbr/' + nounbrId.toString()}
+      className={classes.clickableNounBR}
       onClick={onClickHandler}
     >
-      <Noun imgPath={noun ? noun.image : ''} alt={noun ? noun.description : 'NounBR'} />
+      <NounBR imgPath={nounbr ? nounbr.image : ''} alt={nounbr ? nounbr.description : 'NounBR'} />
     </Link>
   );
 };
 
-export const StandaloneNounCircular: React.FC<StandaloneCircularNounProps> = (
-  props: StandaloneCircularNounProps,
+export const StandaloneNounBRCircular: React.FC<StandaloneCircularNounBRProps> = (
+  props: StandaloneCircularNounBRProps,
 ) => {
-  const { nounId, border } = props;
-  const seed = useNounSeed(nounId);
-  const noun = seed && getNoun(nounId, seed);
+  const { nounbrId, border } = props;
+  const seed = useNounBRSeed(nounbrId);
+  const nounbr = seed && getNounBR(nounbrId, seed);
 
   const dispatch = useDispatch();
   const onClickHandler = () => {
-    dispatch(setOnDisplayAuctionNounId(nounId.toNumber()));
+    dispatch(setOnDisplayAuctionNounBRId(nounbrId.toNumber()));
   };
 
-  if (!seed || !nounId) return <Noun imgPath="" alt="NounBR" />;
+  if (!seed || !nounbrId) return <NounBR imgPath="" alt="NounBR" />;
 
   return (
     <Link
-      to={'/noun/' + nounId.toString()}
-      className={classes.clickableNoun}
+      to={'/nounbr/' + nounbrId.toString()}
+      className={classes.clickableNounBR}
       onClick={onClickHandler}
     >
-      <Noun
-        imgPath={noun ? noun.image : ''}
-        alt={noun ? noun.description : 'NounBR'}
-        wrapperClassName={nounClasses.circularNounWrapper}
-        className={border ? nounClasses.circleWithBorder : nounClasses.circular}
+      <NounBR
+        imgPath={nounbr ? nounbr.image : ''}
+        alt={nounbr ? nounbr.description : 'NounBR'}
+        wrapperClassName={nounbrClasses.circularNounBRWrapper}
+        className={border ? nounbrClasses.circleWithBorder : nounbrClasses.circular}
       />
     </Link>
   );
 };
 
-export const StandaloneNounRoundedCorners: React.FC<StandaloneNounProps> = (
-  props: StandaloneNounProps,
+export const StandaloneNounBRRoundedCorners: React.FC<StandaloneNounBRProps> = (
+  props: StandaloneNounBRProps,
 ) => {
-  const { nounId } = props;
-  const seed = useNounSeed(nounId);
-  const noun = seed && getNoun(nounId, seed);
+  const { nounbrId } = props;
+  const seed = useNounBRSeed(nounbrId);
+  const nounbr = seed && getNounBR(nounbrId, seed);
 
   const dispatch = useDispatch();
   const onClickHandler = () => {
-    dispatch(setOnDisplayAuctionNounId(nounId.toNumber()));
+    dispatch(setOnDisplayAuctionNounBRId(nounbrId.toNumber()));
   };
 
   return (
     <Link
-      to={'/noun/' + nounId.toString()}
-      className={classes.clickableNoun}
+      to={'/nounbr/' + nounbrId.toString()}
+      className={classes.clickableNounBR}
       onClick={onClickHandler}
     >
-      <Noun
-        imgPath={noun ? noun.image : ''}
-        alt={noun ? noun.description : 'NounBR'}
-        className={nounClasses.rounded}
+      <NounBR
+        imgPath={nounbr ? nounbr.image : ''}
+        alt={nounbr ? nounbr.description : 'NounBR'}
+        className={nounbrClasses.rounded}
       />
     </Link>
   );
 };
 
-export const StandaloneNounWithSeed: React.FC<StandaloneNounWithSeedProps> = (
-  props: StandaloneNounWithSeedProps,
+export const StandaloneNounBRWithSeed: React.FC<StandaloneNounBRWithSeedProps> = (
+  props: StandaloneNounBRWithSeedProps,
 ) => {
-  const { nounId, onLoadSeed, shouldLinkToProfile } = props;
+  const { nounbrId, onLoadSeed, shouldLinkToProfile } = props;
 
   const dispatch = useDispatch();
-  const seed = useNounSeed(nounId);
+  const seed = useNounBRSeed(nounbrId);
   const seedIsInvalid = Object.values(seed || {}).every(v => v === 0);
 
-  if (!seed || seedIsInvalid || !nounId || !onLoadSeed) return <Noun imgPath="" alt="NounBR" />;
+  if (!seed || seedIsInvalid || !nounbrId || !onLoadSeed) return <NounBR imgPath="" alt="NounBR" />;
 
   onLoadSeed(seed);
 
   const onClickHandler = () => {
-    dispatch(setOnDisplayAuctionNounId(nounId.toNumber()));
+    dispatch(setOnDisplayAuctionNounBRId(nounbrId.toNumber()));
   };
 
-  const { image, description } = getNoun(nounId, seed);
+  const { image, description } = getNounBR(nounbrId, seed);
 
-  const noun = <Noun imgPath={image} alt={description} />;
-  const nounWithLink = (
+  const nounbr = <NounBR imgPath={image} alt={description} />;
+  const nounbrWithLink = (
     <Link
-      to={'/noun/' + nounId.toString()}
-      className={classes.clickableNoun}
+      to={'/nounbr/' + nounbrId.toString()}
+      className={classes.clickableNounBR}
       onClick={onClickHandler}
     >
-      {noun}
+      {nounbr}
     </Link>
   );
-  return shouldLinkToProfile ? nounWithLink : noun;
+  return shouldLinkToProfile ? nounbrWithLink : nounbr;
 };
 
-export default StandaloneNoun;
+export default StandaloneNounBR;

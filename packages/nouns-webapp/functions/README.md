@@ -1,6 +1,6 @@
-# Nouns Serverless API
+# NounsBR Serverless API
 
-`nounsbr.wtf` provides a serverless API to make fetching data about the Nouns ecosystem easier. [An Insomnia manifest is provided for example.](./docs/insomnia.json)
+`nounsbr.wtf` provides a serverless API to make fetching data about the NounsBR ecosystem easier. [An Insomnia manifest is provided for example.](./docs/insomnia.json)
 
 ## API Convention
 

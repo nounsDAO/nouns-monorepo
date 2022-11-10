@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title Interface for NounsSeeder
+/// @title Interface for NounsBRSeeder
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -17,9 +17,9 @@
 
 pragma solidity ^0.8.6;
 
-import { INounsDescriptorMinimal } from './INounsDescriptorMinimal.sol';
+import { INounsBRDescriptorMinimal } from './INounsBRDescriptorMinimal.sol';
 
-interface INounsSeeder {
+interface INounsBRSeeder {
     struct Seed {
         uint48 background;
         uint48 body;
@@ -28,5 +28,5 @@ interface INounsSeeder {
         uint48 glasses;
     }
 
-    function generateSeed(uint256 nounId, INounsDescriptorMinimal descriptor) external view returns (Seed memory);
+    function generateSeed(uint256 nounbrId, INounsBRDescriptorMinimal descriptor) external view returns (Seed memory);
 }

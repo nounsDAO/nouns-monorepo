@@ -9,7 +9,7 @@ import { parseProposalSubgraphResponse } from './utils/proposals';
  */
 export async function getLastAuctionBids(): Promise<AuctionBids> {
   const res = await request<{ auctions: AuctionBids[] }>(
-    config.nounsSubgraph,
+    config.nounsbrSubgraph,
     gql`
       query {
         auctions(orderBy: startTime, orderDirection: desc, first: 1) {
@@ -35,7 +35,7 @@ export async function getLastAuctionBids(): Promise<AuctionBids> {
  */
 export async function getAllProposals(): Promise<Proposal[]> {
   const res = await request<ProposalSubgraphResponse>(
-    config.nounsSubgraph,
+    config.nounsbrSubgraph,
     gql`
       {
         proposals {

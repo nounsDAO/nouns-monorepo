@@ -1,6 +1,6 @@
 import React from 'react';
 import { useProposalStatus } from '../../../../hooks/useProposalStatus';
-import { Proposal } from '../../../../wrappers/nounsDao';
+import { Proposal } from '../../../../wrappers/nounsbrDao';
 import ProposalStatusCopy from '../../../ProposalStatusCopy';
 import VoteStatusPill from '../../../VoteStatusPill';
 import classes from './ProposalVoteInfoPills.module.css';

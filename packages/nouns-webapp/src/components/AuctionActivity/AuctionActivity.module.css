@@ -44,7 +44,7 @@ h4 {
   align-self: flex-start;
 }
 
-.modalHeaderNounImgWrapper {
+.modalHeaderNounBRImgWrapper {
   width: 150px;
   height: 150px;
 }
@@ -91,13 +91,13 @@ h4 {
     padding-left: 0rem;
   }
 
-  .fomoNounsLink {
+  .fomoNounsBRLink {
     padding-left: 14px;
   }
 }
 
 @media (max-width: 400px) {
-  .fomoNounsLink {
+  .fomoNounsBRLink {
     font-size: 14px;
   }
 }
@@ -110,18 +110,18 @@ h4 {
   }
 }
 
-.fomoNounsLink {
+.fomoNounsBRLink {
   margin-top: 0rem;
   margin-bottom: 1rem;
   transition: 0.2s ease-in-out;
 }
 
-.fomoNounsLink svg {
+.fomoNounsBRLink svg {
   opacity: 0.6;
 }
 
-.fomoNounsLink a,
-.fomoNounsLink:active a {
+.fomoNounsBRLink a,
+.fomoNounsBRLink:active a {
   font-family: 'PT Root UI', sans-serif;
   font-weight: 500;
   padding-left: 0.5rem;
@@ -130,8 +130,8 @@ h4 {
   color: rgb(95, 95, 95);
 }
 
-.fomoNounsLink:hover,
-.fomoNounsLink:hover a {
+.fomoNounsBRLink:hover,
+.fomoNounsBRLink:hover a {
   text-decoration: none;
   color: black;
   opacity: 1;

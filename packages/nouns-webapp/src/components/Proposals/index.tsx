@@ -1,4 +1,4 @@
-import { Proposal, ProposalState, useProposalThreshold } from '../../wrappers/nounsDao';
+import { Proposal, ProposalState, useProposalThreshold } from '../../wrappers/nounsbrDao';
 import { Alert, Button } from 'react-bootstrap';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { useBlockNumber, useEthers } from '@usedapp/core';
 import { isMobileScreen } from '../../utils/isMobile';
 import clsx from 'clsx';
-import { useUserNounTokenBalance, useUserVotes } from '../../wrappers/nounToken';
+import { useUserNounBRTokenBalance, useUserVotes } from '../../wrappers/nounbrToken';
 import { Trans } from '@lingui/macro';
 import { ClockIcon } from '@heroicons/react/solid';
 import proposalStatusClasses from '../ProposalStatus/ProposalStatus.module.css';
@@ -72,19 +72,19 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
   const history = useHistory();
 
   const { account } = useEthers();
-  const connectedAccountNounVotes = useUserVotes() || 0;
+  const connectedAccountNounBRVotes = useUserVotes() || 0;
   const currentBlock = useBlockNumber();
   const isMobile = isMobileScreen();
   const activeLocale = useActiveLocale();
   const [showDelegateModal, setShowDelegateModal] = useState(false);
 
   const threshold = (useProposalThreshold() ?? 0) + 1;
-  const hasEnoughVotesToPropose = account !== undefined && connectedAccountNounVotes >= threshold;
-  const hasNounBalance = (useUserNounTokenBalance() ?? 0) > 0;
+  const hasEnoughVotesToPropose = account !== undefined && connectedAccountNounBRVotes >= threshold;
+  const hasNounBRBalance = (useUserNounBRTokenBalance() ?? 0) > 0;
 
   const nullStateCopy = () => {
     if (account !== null) {
-      if (connectedAccountNounVotes > 0) {
+      if (connectedAccountNounBRVotes > 0) {
         return <Trans>Making a proposal requires {threshold} votes</Trans>;
       }
       return <Trans>You have no Votes.</Trans>;
@@ -105,7 +105,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
           <Trans>Proposals</Trans>
         </h3>
         {hasEnoughVotesToPropose ? (
-          <div className={classes.nounInWalletBtnWrapper}>
+          <div className={classes.nounbrInWalletBtnWrapper}>
             <div className={classes.submitProposalButtonWrapper}>
               <Button
                 className={classes.generateBtn}
@@ -115,7 +115,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
               </Button>
             </div>
 
-            {hasNounBalance && (
+            {hasNounBRBalance && (
               <div className={classes.delegateBtnWrapper}>
                 <Button
                   className={classes.changeDelegateBtn}
@@ -134,7 +134,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
                 <Trans>Submit Proposal</Trans>
               </Button>
             </div>
-            {!isMobile && hasNounBalance && (
+            {!isMobile && hasNounBRBalance && (
               <div className={classes.delegateBtnWrapper}>
                 <Button
                   className={classes.changeDelegateBtn}
@@ -148,7 +148,7 @@ const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
         )}
       </div>
       {isMobile && <div className={classes.nullStateCopy}>{nullStateCopy()}</div>}
-      {isMobile && hasNounBalance && (
+      {isMobile && hasNounBRBalance && (
         <div>
           <Button className={classes.changeDelegateBtn} onClick={() => setShowDelegateModal(true)}>
             <Trans>Delegate</Trans>

@@ -1,30 +1,30 @@
 import {
-  NounsTokenFactory,
-  NounsAuctionHouseFactory,
-  NounsDescriptorFactory,
-  NounsSeederFactory,
-  NounsDaoLogicV1Factory,
-} from '@nouns/contracts';
+  NounsBRTokenFactory,
+  NounsBRAuctionHouseFactory,
+  NounsBRDescriptorFactory,
+  NounsBRSeederFactory,
+  NounsBRDaoLogicV1Factory,
+} from '@nounsbr/contracts';
 
 export interface ContractAddresses {
-  nounsToken: string;
-  nounsSeeder: string;
-  nounsDescriptor: string;
+  nounsbrToken: string;
+  nounsbrSeeder: string;
+  nounsbrDescriptor: string;
   nftDescriptor: string;
-  nounsAuctionHouse: string;
-  nounsAuctionHouseProxy: string;
-  nounsAuctionHouseProxyAdmin: string;
-  nounsDaoExecutor: string;
-  nounsDAOProxy: string;
-  nounsDAOLogicV1: string;
+  nounsbrAuctionHouse: string;
+  nounsbrAuctionHouseProxy: string;
+  nounsbrAuctionHouseProxyAdmin: string;
+  nounsbrDaoExecutor: string;
+  nounsbrDAOProxy: string;
+  nounsbrDAOLogicV1: string;
 }
 
 export interface Contracts {
-  nounsTokenContract: ReturnType<typeof NounsTokenFactory.connect>;
-  nounsAuctionHouseContract: ReturnType<typeof NounsAuctionHouseFactory.connect>;
-  nounsDescriptorContract: ReturnType<typeof NounsDescriptorFactory.connect>;
-  nounsSeederContract: ReturnType<typeof NounsSeederFactory.connect>;
-  nounsDaoContract: ReturnType<typeof NounsDaoLogicV1Factory.connect>;
+  nounsbrTokenContract: ReturnType<typeof NounsBRTokenFactory.connect>;
+  nounsbrAuctionHouseContract: ReturnType<typeof NounsBRAuctionHouseFactory.connect>;
+  nounsbrDescriptorContract: ReturnType<typeof NounsBRDescriptorFactory.connect>;
+  nounsbrSeederContract: ReturnType<typeof NounsBRSeederFactory.connect>;
+  nounsbrDaoContract: ReturnType<typeof NounsBRDaoLogicV1Factory.connect>;
 }
 
 export enum ChainId {

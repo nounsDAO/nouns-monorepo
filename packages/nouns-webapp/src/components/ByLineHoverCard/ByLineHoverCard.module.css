@@ -3,7 +3,7 @@
   flex-direction: column;
 }
 
-.stackedNounWrapper {
+.stackedNounBRWrapper {
   display: flex;
 }
 
@@ -14,7 +14,7 @@
   text-align: left;
 }
 
-.nounsRepresented {
+.nounsbrRepresented {
   color: var(--brand-gray-dark-text);
   display: flex;
   margin-top: 0.25rem;

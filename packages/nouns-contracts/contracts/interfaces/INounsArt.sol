@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title Interface for NounsArt
+/// @title Interface for NounsBRArt
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -20,7 +20,7 @@ pragma solidity ^0.8.6;
 import { Inflate } from '../libs/Inflate.sol';
 import { IInflator } from './IInflator.sol';
 
-interface INounsArt {
+interface INounsBRArt {
     error SenderIsNotDescriptor();
 
     error EmptyPalette();
@@ -53,14 +53,14 @@ interface INounsArt {
 
     event GlassesAdded(uint16 count);
 
-    struct NounArtStoragePage {
+    struct NounBRArtStoragePage {
         uint16 imageCount;
         uint80 decompressedLength;
         address pointer;
     }
 
     struct Trait {
-        NounArtStoragePage[] storagePages;
+        NounBRArtStoragePage[] storagePages;
         uint256 storedImagesCount;
     }
 

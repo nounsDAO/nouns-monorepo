@@ -1,29 +1,29 @@
 import { Handler } from '@netlify/functions';
-import { NormalizedVote, nounsQuery } from '../theGraph';
+import { NormalizedVote, nounsbrQuery } from '../theGraph';
 import * as R from 'ramda';
 import { sharedResponseHeaders } from '../utils';
 
-interface NounVote {
+interface NounBRVote {
   id: number;
   owner: string;
   delegatedTo: null | string;
   votes: NormalizedVote[];
 }
 
-const buildNounVote = R.pick(['id', 'owner', 'delegatedTo', 'votes']);
+const buildNounBRVote = R.pick(['id', 'owner', 'delegatedTo', 'votes']);
 
-const buildNounVotes = R.map(buildNounVote);
+const buildNounBRVotes = R.map(buildNounBRVote);
 
 const handler: Handler = async (event, context) => {
-  const nouns = await nounsQuery();
-  const nounVotes: NounVote[] = buildNounVotes(nouns);
+  const nounsbr = await nounsbrQuery();
+  const nounbrVotes: NounBRVote[] = buildNounBRVotes(nounsbr);
   return {
     statusCode: 200,
     headers: {
       'Content-Type': 'application/json',
       ...sharedResponseHeaders,
     },
-    body: JSON.stringify(nounVotes),
+    body: JSON.stringify(nounbrVotes),
   };
 };
 

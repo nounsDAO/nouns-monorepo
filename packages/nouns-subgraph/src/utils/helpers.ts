@@ -22,7 +22,7 @@ export function getOrCreateAccount(
     tokenHolder.tokenBalance = BIGINT_ZERO;
     tokenHolder.totalTokensHeldRaw = BIGINT_ZERO;
     tokenHolder.totalTokensHeld = BIGINT_ZERO;
-    tokenHolder.nouns = [];
+    tokenHolder.nounsbr = [];
 
     if (save) {
       tokenHolder.save();
@@ -49,7 +49,7 @@ export function getOrCreateDelegateWithNullOption(
     delegate.delegatedVotesRaw = BIGINT_ZERO;
     delegate.delegatedVotes = BIGINT_ZERO;
     delegate.tokenHoldersRepresentedAmount = 0;
-    delegate.nounsRepresented = [];
+    delegate.nounsbrRepresented = [];
     if (id != ZERO_ADDRESS) {
       let governance = getGovernanceEntity();
       governance.totalDelegates = governance.totalDelegates.plus(BIGINT_ONE);

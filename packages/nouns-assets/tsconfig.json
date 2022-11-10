@@ -6,7 +6,7 @@
   },
   "references": [
     {
-      "path": "../nouns-sdk/tsconfig.build.json"
+      "path": "../nounsbr-sdk/tsconfig.build.json"
     }
   ],
   "include": ["src/**/*.ts", "src/**/*.json", "scripts"]

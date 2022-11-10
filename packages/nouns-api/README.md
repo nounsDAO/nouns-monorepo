@@ -1,4 +1,4 @@
-# @nouns/api
+# @nounsbr/api
 
 A HTTP webserver that hosts token metadata. This is currently unused because on-chain, data URIs are enabled.
 

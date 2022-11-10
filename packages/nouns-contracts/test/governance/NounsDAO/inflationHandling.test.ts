@@ -8,7 +8,7 @@ import { getSigners, TestSigners, setTotalSupply, deployGovAndToken } from '../.
 import { mineBlock, address, encodeParameters, advanceBlocks } from '../../utils';
 
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { NounsToken, NounsDAOLogicV1 } from '../../../typechain';
+import { NounsBRToken, NounsBRDAOLogicV1 } from '../../../typechain';
 
 chai.use(solidity);
 const { expect } = chai;
@@ -23,14 +23,14 @@ async function propose(proposer: SignerWithAddress) {
   proposalId = await gov.latestProposalIds(proposer.address);
 }
 
-let token: NounsToken;
+let token: NounsBRToken;
 let deployer: SignerWithAddress;
 let account0: SignerWithAddress;
 let account1: SignerWithAddress;
 let account2: SignerWithAddress;
 let signers: TestSigners;
 
-let gov: NounsDAOLogicV1;
+let gov: NounsBRDAOLogicV1;
 const timelockDelay = 172800; // 2 days
 
 const proposalThresholdBPS = 678; // 6.78%
@@ -42,7 +42,7 @@ let signatures: string[];
 let callDatas: string[];
 let proposalId: EthersBN;
 
-describe('NounsDAO#inflationHandling', () => {
+describe('NounsBRDAO#inflationHandling', () => {
   before(async () => {
     signers = await getSigners();
     deployer = signers.deployer;
@@ -86,7 +86,7 @@ describe('NounsDAO#inflationHandling', () => {
     await mineBlock();
     await expect(
       gov.connect(account0).propose(targets, values, signatures, callDatas, 'do nothing'),
-    ).revertedWith('NounsDAO::propose: proposer votes below proposal threshold');
+    ).revertedWith('NounsBRDAO::propose: proposer votes below proposal threshold');
   });
   it('allows proposing if above threshold', async () => {
     // account0 has 3 token, requires 3
@@ -129,7 +129,7 @@ describe('NounsDAO#inflationHandling', () => {
     // account1 has 3 tokens, but requires 5 to pass new proposal threshold when totalSupply = 80 and threshold = 5%
     await expect(
       gov.connect(account1).propose(targets, values, signatures, callDatas, 'do nothing'),
-    ).revertedWith('NounsDAO::propose: proposer votes below proposal threshold');
+    ).revertedWith('NounsBRDAO::propose: proposer votes below proposal threshold');
   });
 
   it('does not change previous proposal attributes when total supply changes', async () => {

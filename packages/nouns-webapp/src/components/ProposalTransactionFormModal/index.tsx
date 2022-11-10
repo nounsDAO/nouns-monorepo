@@ -14,7 +14,7 @@ import {
 } from 'react-bootstrap';
 import { useStepProgress, Step, StepProgressBar } from 'react-stepz';
 import { buildEtherscanAddressLink, buildEtherscanApiQuery } from '../../utils/etherscan';
-import { ProposalTransaction } from '../../wrappers/nounsDao';
+import { ProposalTransaction } from '../../wrappers/nounsbrDao';
 import classes from './ProposalTransactionFormModal.module.css';
 import BigNumber from 'bignumber.js';
 import 'bs-custom-file-input';

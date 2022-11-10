@@ -1,14 +1,14 @@
 import { ReactNode } from 'react';
-import classes from './MobileNounActivityRow.module.css';
+import classes from './MobileNounBRActivityRow.module.css';
 
-interface MobileNounActivityRowProps {
+interface MobileNounBRActivityRowProps {
   onClick: () => void;
   icon: ReactNode;
   primaryContent: ReactNode;
   secondaryContent?: ReactNode;
 }
 
-const MobileNounActivityRow: React.FC<MobileNounActivityRowProps> = props => {
+const MobileNounBRActivityRow: React.FC<MobileNounBRActivityRowProps> = props => {
   const { onClick, icon, primaryContent, secondaryContent } = props;
 
   return (
@@ -23,4 +23,4 @@ const MobileNounActivityRow: React.FC<MobileNounActivityRowProps> = props => {
   );
 };
 
-export default MobileNounActivityRow;
+export default MobileNounBRActivityRow;

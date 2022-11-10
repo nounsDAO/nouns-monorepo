@@ -1,7 +1,7 @@
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import {
-  deployNounsToken,
+  deployNounsBRToken,
   getSigners,
   TestSigners,
   setTotalSupply,
@@ -12,32 +12,32 @@ import {
 
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
-  NounsToken,
-  NounsDescriptorV2__factory as NounsDescriptorV2Factory,
-  NounsDAOLogicV2,
+  NounsBRToken,
+  NounsBRDescriptorV2__factory as NounsBRDescriptorV2Factory,
+  NounsBRDAOLogicV2,
 } from '../../../../typechain';
 import { MAX_QUORUM_VOTES_BPS, MIN_QUORUM_VOTES_BPS } from '../../../constants';
 
 chai.use(solidity);
 const { expect } = chai;
 
-let token: NounsToken;
+let token: NounsBRToken;
 let deployer: SignerWithAddress;
 let signers: TestSigners;
 
-let govV2: NounsDAOLogicV2;
+let govV2: NounsBRDAOLogicV2;
 
 async function setup() {
-  token = await deployNounsToken(signers.deployer);
+  token = await deployNounsBRToken(signers.deployer);
 
   await populateDescriptorV2(
-    NounsDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
+    NounsBRDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
   );
 
   await setTotalSupply(token, 100);
 }
 
-describe('NounsDAOProxyV2', () => {
+describe('NounsBRDAOProxyV2', () => {
   before(async () => {
     signers = await getSigners();
     deployer = signers.deployer;

@@ -1,18 +1,18 @@
 import { useContractCall, useContractFunction, useEthers } from '@usedapp/core';
 import { BigNumber as EthersBN, ethers, utils } from 'ethers';
-import { NounsTokenABI, NounsTokenFactory } from '@nouns/contracts';
+import { NounsBRTokenABI, NounsBRTokenFactory } from '@nounsbr/contracts';
 import config, { cache, cacheKey, CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
 import { seedsQuery } from './subgraph';
 import { useEffect } from 'react';
 
-interface NounToken {
+interface NounBRToken {
   name: string;
   description: string;
   image: string;
 }
 
-export interface INounSeed {
+export interface INounBRSeed {
   accessory: number;
   background: number;
   body: number;
@@ -20,12 +20,12 @@ export interface INounSeed {
   head: number;
 }
 
-export enum NounsTokenContractFunction {
+export enum NounsBRTokenContractFunction {
   delegateVotes = 'votesToDelegate',
 }
 
-const abi = new utils.Interface(NounsTokenABI);
-const seedCacheKey = cacheKey(cache.seed, CHAIN_ID, config.addresses.nounsToken);
+const abi = new utils.Interface(NounsBRTokenABI);
+const seedCacheKey = cacheKey(cache.seed, CHAIN_ID, config.addresses.nounsbrToken);
 
 const isSeedValid = (seed: Record<string, any> | undefined) => {
   const expectedKeys = ['background', 'body', 'accessory', 'head', 'glasses'];
@@ -34,27 +34,27 @@ const isSeedValid = (seed: Record<string, any> | undefined) => {
   return hasExpectedKeys && hasValidValues;
 };
 
-export const useNounToken = (nounId: EthersBN) => {
-  const [noun] =
+export const useNounBRToken = (nounbrId: EthersBN) => {
+  const [nounbr] =
     useContractCall<[string]>({
       abi,
-      address: config.addresses.nounsToken,
+      address: config.addresses.nounsbrToken,
       method: 'dataURI',
-      args: [nounId],
+      args: [nounbrId],
     }) || [];
 
-  if (!noun) {
+  if (!nounbr) {
     return;
   }
 
-  const nounImgData = noun.split(';base64,').pop() as string;
-  const json: NounToken = JSON.parse(atob(nounImgData));
+  const nounbrImgData = nounbr.split(';base64,').pop() as string;
+  const json: NounBRToken = JSON.parse(atob(nounbrImgData));
 
   return json;
 };
 
-const seedArrayToObject = (seeds: (INounSeed & { id: string })[]) => {
-  return seeds.reduce<Record<string, INounSeed>>((acc, seed) => {
+const seedArrayToObject = (seeds: (INounBRSeed & { id: string })[]) => {
+  return seeds.reduce<Record<string, INounBRSeed>>((acc, seed) => {
     acc[seed.id] = {
       background: Number(seed.background),
       body: Number(seed.body),
@@ -66,7 +66,7 @@ const seedArrayToObject = (seeds: (INounSeed & { id: string })[]) => {
   }, {});
 };
 
-const useNounSeeds = () => {
+const useNounBRSeeds = () => {
   const cache = localStorage.getItem(seedCacheKey);
   const cachedSeeds = cache ? JSON.parse(cache) : undefined;
   const { data } = useQuery(seedsQuery(), {
@@ -82,23 +82,23 @@ const useNounSeeds = () => {
   return cachedSeeds;
 };
 
-export const useNounSeed = (nounId: EthersBN) => {
-  const seeds = useNounSeeds();
-  const seed = seeds?.[nounId.toString()];
+export const useNounBRSeed = (nounbrId: EthersBN) => {
+  const seeds = useNounBRSeeds();
+  const seed = seeds?.[nounbrId.toString()];
   // prettier-ignore
   const request = seed ? false : {
     abi,
-    address: config.addresses.nounsToken,
+    address: config.addresses.nounsbrToken,
     method: 'seeds',
-    args: [nounId],
+    args: [nounbrId],
   };
-  const response = useContractCall<INounSeed>(request);
+  const response = useContractCall<INounBRSeed>(request);
   if (response) {
     const seedCache = localStorage.getItem(seedCacheKey);
     if (seedCache && isSeedValid(response)) {
       const updatedSeedCache = JSON.stringify({
         ...JSON.parse(seedCache),
-        [nounId.toString()]: {
+        [nounbrId.toString()]: {
           accessory: response.accessory,
           background: response.background,
           body: response.body,
@@ -122,7 +122,7 @@ export const useAccountVotes = (account?: string): number | undefined => {
   const [votes] =
     useContractCall<[EthersBN]>({
       abi,
-      address: config.addresses.nounsToken,
+      address: config.addresses.nounsbrToken,
       method: 'getCurrentVotes',
       args: [account],
     }) || [];
@@ -134,7 +134,7 @@ export const useUserDelegatee = (): string | undefined => {
   const [delegate] =
     useContractCall<[string]>({
       abi,
-      address: config.addresses.nounsToken,
+      address: config.addresses.nounsbrToken,
       method: 'delegates',
       args: [account],
     }) || [];
@@ -147,7 +147,7 @@ export const useUserVotesAsOfBlock = (block: number | undefined): number | undef
   const [votes] =
     useContractCall<[EthersBN]>({
       abi,
-      address: config.addresses.nounsToken,
+      address: config.addresses.nounsbrToken,
       method: 'getPriorVotes',
       args: [account, block],
     }) || [];
@@ -155,31 +155,31 @@ export const useUserVotesAsOfBlock = (block: number | undefined): number | undef
 };
 
 export const useDelegateVotes = () => {
-  const nounsToken = new NounsTokenFactory().attach(config.addresses.nounsToken);
+  const nounsbrToken = new NounsBRTokenFactory().attach(config.addresses.nounsbrToken);
 
-  const { send, state } = useContractFunction(nounsToken, 'delegate');
+  const { send, state } = useContractFunction(nounsbrToken, 'delegate');
 
   return { send, state };
 };
 
-export const useNounTokenBalance = (address: string): number | undefined => {
+export const useNounBRTokenBalance = (address: string): number | undefined => {
   const [tokenBalance] =
     useContractCall<[EthersBN]>({
       abi,
-      address: config.addresses.nounsToken,
+      address: config.addresses.nounsbrToken,
       method: 'balanceOf',
       args: [address],
     }) || [];
   return tokenBalance?.toNumber();
 };
 
-export const useUserNounTokenBalance = (): number | undefined => {
+export const useUserNounBRTokenBalance = (): number | undefined => {
   const { account } = useEthers();
 
   const [tokenBalance] =
     useContractCall<[EthersBN]>({
       abi,
-      address: config.addresses.nounsToken,
+      address: config.addresses.nounsbrToken,
       method: 'balanceOf',
       args: [account],
     }) || [];

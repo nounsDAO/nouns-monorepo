@@ -7,7 +7,7 @@ const { ethers } = hardhat;
 import { BigNumber as EthersBN } from 'ethers';
 
 import {
-  deployNounsToken,
+  deployNounsBRToken,
   getSigners,
   TestSigners,
   setTotalSupply,
@@ -19,11 +19,11 @@ import { mineBlock, address } from '../../utils';
 
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
-  NounsToken,
-  NounsDescriptorV2__factory as NounsDescriptorV2Factory,
-  NounsDAOLogicV1Harness,
-  NounsDAOLogicV1Harness__factory as NounsDaoLogicV1HarnessFactory,
-  NounsDAOProxy__factory as NounsDaoProxyFactory,
+  NounsBRToken,
+  NounsBRDescriptorV2__factory as NounsBRDescriptorV2Factory,
+  NounsBRDAOLogicV1Harness,
+  NounsBRDAOLogicV1Harness__factory as NounsBRDaoLogicV1HarnessFactory,
+  NounsBRDAOProxy__factory as NounsBRDaoProxyFactory,
 } from '../../../typechain';
 
 chai.use(solidity);
@@ -32,11 +32,11 @@ const { expect } = chai;
 async function deployGovernor(
   deployer: SignerWithAddress,
   tokenAddress: string,
-): Promise<NounsDAOLogicV1Harness> {
-  const { address: govDelegateAddress } = await new NounsDaoLogicV1HarnessFactory(
+): Promise<NounsBRDAOLogicV1Harness> {
+  const { address: govDelegateAddress } = await new NounsBRDaoLogicV1HarnessFactory(
     deployer,
   ).deploy();
-  const params: Parameters<NounsDaoProxyFactory['deploy']> = [
+  const params: Parameters<NounsBRDaoProxyFactory['deploy']> = [
     address(0),
     tokenAddress,
     deployer.address,
@@ -49,22 +49,22 @@ async function deployGovernor(
   ];
 
   const { address: _govDelegatorAddress } = await (
-    await ethers.getContractFactory('NounsDAOProxy', deployer)
+    await ethers.getContractFactory('NounsBRDAOProxy', deployer)
   ).deploy(...params);
 
-  return NounsDaoLogicV1HarnessFactory.connect(_govDelegatorAddress, deployer);
+  return NounsBRDaoLogicV1HarnessFactory.connect(_govDelegatorAddress, deployer);
 }
 
 let snapshotId: number;
 
-let token: NounsToken;
+let token: NounsBRToken;
 let deployer: SignerWithAddress;
 let account0: SignerWithAddress;
 let account1: SignerWithAddress;
 let account2: SignerWithAddress;
 let signers: TestSigners;
 
-let gov: NounsDAOLogicV1Harness;
+let gov: NounsBRDAOLogicV1Harness;
 let targets: string[];
 let values: string[];
 let signatures: string[];
@@ -77,10 +77,10 @@ async function reset() {
     snapshotId = await ethers.provider.send('evm_snapshot', []);
     return;
   }
-  token = await deployNounsToken(signers.deployer);
+  token = await deployNounsBRToken(signers.deployer);
 
   await populateDescriptorV2(
-    NounsDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
+    NounsBRDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
   );
 
   await setTotalSupply(token, 10);
@@ -89,7 +89,7 @@ async function reset() {
   snapshotId = await ethers.provider.send('evm_snapshot', []);
 }
 
-describe('NounsDAO#castVote/2', () => {
+describe('NounsBRDAO#castVote/2', () => {
   before(async () => {
     signers = await getSigners();
     deployer = signers.deployer;
@@ -106,7 +106,7 @@ describe('NounsDAO#castVote/2', () => {
 
     it("There does not exist a proposal with matching proposal id where the current block number is between the proposal's start block (exclusive) and end block (inclusive)", async () => {
       await expect(gov.castVote(proposalId, 1)).revertedWith(
-        'NounsDAO::castVoteInternal: voting is closed',
+        'NounsBRDAO::castVoteInternal: voting is closed',
       );
     });
 
@@ -122,7 +122,7 @@ describe('NounsDAO#castVote/2', () => {
       await gov.connect(account1).castVoteWithReason(proposalId, 1, '');
 
       await expect(gov.connect(account0).castVote(proposalId, 1)).revertedWith(
-        'NounsDAO::castVoteInternal: voter already voted',
+        'NounsBRDAO::castVoteInternal: voter already voted',
       );
     });
   });

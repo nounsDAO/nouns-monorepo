@@ -3,7 +3,7 @@ import { Trans } from '@lingui/macro';
 import React, { useEffect, useState } from 'react';
 import { useShortAddress } from '../../utils/addressAndENSDisplayUtils';
 import ShortAddress from '../ShortAddress';
-import { useAccountVotes } from '../../wrappers/nounToken';
+import { useAccountVotes } from '../../wrappers/nounbrToken';
 import { ChangeDelegateState } from '../ChangeDelegatePannel';
 import { usePickByState } from '../../utils/pickByState';
 import DelegationCandidateVoteCountInfo from '../DelegationCandidateVoteCountInfo';
@@ -25,7 +25,7 @@ const DelegationCandidateInfo: React.FC<DelegationCandidateInfoProps> = props =>
 
   const votes = useAccountVotes(address);
 
-  const countDelegatedNouns = votes ?? 0;
+  const countDelegatedNounsBR = votes ?? 0;
 
   // Do this so that in the lag between the delegation happening on chain and the UI updating
   // we don't show that we've added the delegated votes twice
@@ -43,11 +43,11 @@ const DelegationCandidateInfo: React.FC<DelegationCandidateInfoProps> = props =>
     }
     if (
       changeModalState !== ChangeDelegateState.ENTER_DELEGATE_ADDRESS &&
-      willHaveVoteCount !== countDelegatedNouns + votesToAdd
+      willHaveVoteCount !== countDelegatedNounsBR + votesToAdd
     ) {
-      setWillHaveVoteCount(countDelegatedNouns + votesToAdd);
+      setWillHaveVoteCount(countDelegatedNounsBR + votesToAdd);
     }
-  }, [willHaveVoteCount, countDelegatedNouns, votesToAdd, changeModalState]);
+  }, [willHaveVoteCount, countDelegatedNounsBR, votesToAdd, changeModalState]);
 
   const changeDelegateInfo = usePickByState(
     changeModalState,
@@ -58,8 +58,8 @@ const DelegationCandidateInfo: React.FC<DelegationCandidateInfoProps> = props =>
     ],
     [
       <DelegationCandidateVoteCountInfo
-        text={countDelegatedNouns > 0 ? <Trans>Already has</Trans> : <Trans>Has</Trans>}
-        voteCount={countDelegatedNouns}
+        text={countDelegatedNounsBR > 0 ? <Trans>Already has</Trans> : <Trans>Has</Trans>}
+        voteCount={countDelegatedNounsBR}
         isLoading={false}
       />,
       <DelegationCandidateVoteCountInfo
@@ -69,7 +69,7 @@ const DelegationCandidateInfo: React.FC<DelegationCandidateInfoProps> = props =>
       />,
       <DelegationCandidateVoteCountInfo
         text={<Trans>Now has</Trans>}
-        voteCount={countDelegatedNouns}
+        voteCount={countDelegatedNounsBR}
         isLoading={false}
       />,
     ],

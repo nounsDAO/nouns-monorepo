@@ -1,15 +1,15 @@
 import { keccak256 as solidityKeccak256 } from '@ethersproject/solidity';
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber';
-import { NounSeed, NounData } from './types';
+import { NounBRSeed, NounBRData } from './types';
 import { images, bgcolors } from './image-data.json';
 
 const { bodies, accessories, heads, glasses } = images;
 
 /**
- * Get encoded part and background information using a Noun seed
- * @param seed The Noun seed
+ * Get encoded part and background information using a NounBR seed
+ * @param seed The NounBR seed
  */
-export const getNounData = (seed: NounSeed): NounData => {
+export const getNounBRData = (seed: NounBRSeed): NounBRData => {
   return {
     parts: [
       bodies[seed.body],
@@ -22,10 +22,10 @@ export const getNounData = (seed: NounSeed): NounData => {
 };
 
 /**
- * Generate a random Noun seed
- * @param seed The Noun seed
+ * Generate a random NounBR seed
+ * @param seed The NounBR seed
  */
-export const getRandomNounSeed = (): NounSeed => {
+export const getRandomNounBRSeed = (): NounBRSeed => {
   return {
     background: Math.floor(Math.random() * bgcolors.length),
     body: Math.floor(Math.random() * bodies.length),
@@ -51,7 +51,7 @@ export const shiftRightAndCast = (
 };
 
 /**
- * Emulates the NounsSeeder.sol methodology for pseudorandomly selecting a part
+ * Emulates the NounsBRSeeder.sol methodology for pseudorandomly selecting a part
  * @param pseudorandomness Hex representation of a number
  * @param partCount The number of parts to pseudorandomly choose from
  * @param shiftAmount The amount to right shift
@@ -68,12 +68,12 @@ export const getPseudorandomPart = (
 };
 
 /**
- * Emulates the NounsSeeder.sol methodology for generating a Noun seed
- * @param nounId The Noun tokenId used to create pseudorandomness
+ * Emulates the NounsBRSeeder.sol methodology for generating a NounBR seed
+ * @param nounbrId The NounBR tokenId used to create pseudorandomness
  * @param blockHash The block hash use to create pseudorandomness
  */
-export const getNounSeedFromBlockHash = (nounId: BigNumberish, blockHash: string): NounSeed => {
-  const pseudorandomness = solidityKeccak256(['bytes32', 'uint256'], [blockHash, nounId]);
+export const getNounBRSeedFromBlockHash = (nounbrId: BigNumberish, blockHash: string): NounBRSeed => {
+  const pseudorandomness = solidityKeccak256(['bytes32', 'uint256'], [blockHash, nounbrId]);
   return {
     background: getPseudorandomPart(pseudorandomness, bgcolors.length, 0),
     body: getPseudorandomPart(pseudorandomness, bodies.length, 48),

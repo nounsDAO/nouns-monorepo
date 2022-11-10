@@ -9,7 +9,7 @@ import {
   MinQuorumVotesBPSSet,
   MaxQuorumVotesBPSSet,
   QuorumCoefficientSet,
-} from './types/NounsDAO/NounsDAO';
+} from './types/NounsBRDAO/NounsBRDAO';
 import {
   getOrCreateDelegate,
   getOrCreateProposal,
@@ -142,7 +142,7 @@ export function handleVoteCast(event: VoteCast): void {
   vote.votes = event.params.votes;
   vote.support = event.params.support == 1;
   vote.supportDetailed = event.params.support;
-  vote.nouns = voter.nounsRepresented;
+  vote.nounsbr = voter.nounsbrRepresented;
   vote.blockNumber = event.block.number;
 
   if (event.params.reason != '') {

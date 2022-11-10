@@ -4,7 +4,7 @@ import { Image } from 'react-bootstrap';
 import _LinkIcon from '../../assets/icons/Link.svg';
 import { auctionQuery } from '../../wrappers/subgraph';
 import _HeartIcon from '../../assets/icons/Heart.svg';
-import classes from './NounInfoRowHolder.module.css';
+import classes from './NounBRInfoRowHolder.module.css';
 
 import config from '../../config';
 import { buildEtherscanAddressLink } from '../../utils/etherscan';
@@ -14,21 +14,21 @@ import { useAppSelector } from '../../hooks';
 import { Trans } from '@lingui/macro';
 import Tooltip from '../Tooltip';
 
-interface NounInfoRowHolderProps {
-  nounId: number;
+interface NounBRInfoRowHolderProps {
+  nounbrId: number;
 }
 
-const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
-  const { nounId } = props;
+const NounBRInfoRowHolder: React.FC<NounBRInfoRowHolderProps> = props => {
+  const { nounbrId } = props;
   const isCool = useAppSelector(state => state.application.isCoolBackground);
-  const { loading, error, data } = useQuery(auctionQuery(nounId));
+  const { loading, error, data } = useQuery(auctionQuery(nounbrId));
 
   const winner = data && data.auction.bidder?.id;
 
   if (loading || !winner) {
     return (
-      <div className={classes.nounHolderInfoContainer}>
-        <span className={classes.nounHolderLoading}>
+      <div className={classes.nounbrHolderInfoContainer}>
+        <span className={classes.nounbrHolderLoading}>
           <Trans>Loading...</Trans>
         </span>
       </div>
@@ -52,7 +52,7 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
       }}
       id="holder-etherscan-tooltip"
     >
-      <div className={classes.nounHolderInfoContainer}>
+      <div className={classes.nounbrHolderInfoContainer}>
         <span>
           <Image src={_HeartIcon} className={classes.heartIcon} />
         </span>
@@ -62,13 +62,13 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
         <span>
           <a
             className={
-              isCool ? classes.nounHolderEtherscanLinkCool : classes.nounHolderEtherscanLinkWarm
+              isCool ? classes.nounbrHolderEtherscanLinkCool : classes.nounbrHolderEtherscanLinkWarm
             }
             href={etherscanURL}
             target={'_blank'}
             rel="noreferrer"
           >
-            {winner.toLowerCase() === config.addresses.nounsAuctionHouseProxy.toLowerCase() ? (
+            {winner.toLowerCase() === config.addresses.nounsbrAuctionHouseProxy.toLowerCase() ? (
               <Trans>NounsBR Auction House</Trans>
             ) : (
               shortAddressComponent
@@ -83,4 +83,4 @@ const NounInfoRowHolder: React.FC<NounInfoRowHolderProps> = props => {
   );
 };
 
-export default NounInfoRowHolder;
+export default NounBRInfoRowHolder;

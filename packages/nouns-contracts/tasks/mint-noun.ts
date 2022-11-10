@@ -1,20 +1,20 @@
 import { Result } from 'ethers/lib/utils';
 import { task, types } from 'hardhat/config';
 
-task('mint-noun', 'Mints a Noun')
+task('mint-nounbr', 'Mints a NounBR')
   .addOptionalParam(
-    'nounsToken',
-    'The `NounsToken` contract address',
+    'nounsbrToken',
+    'The `NounsBRToken` contract address',
     '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9',
     types.string,
   )
-  .setAction(async ({ nounsToken }, { ethers }) => {
-    const nftFactory = await ethers.getContractFactory('NounsToken');
-    const nftContract = nftFactory.attach(nounsToken);
+  .setAction(async ({ nounsbrToken }, { ethers }) => {
+    const nftFactory = await ethers.getContractFactory('NounsBRToken');
+    const nftContract = nftFactory.attach(nounsbrToken);
 
     const receipt = await (await nftContract.mint()).wait();
-    const nounCreated = receipt.events?.[1];
-    const { tokenId } = nounCreated?.args as Result;
+    const nounbrCreated = receipt.events?.[1];
+    const { tokenId } = nounbrCreated?.args as Result;
 
-    console.log(`Noun minted with ID: ${tokenId.toString()}.`);
+    console.log(`NounBR minted with ID: ${tokenId.toString()}.`);
   });

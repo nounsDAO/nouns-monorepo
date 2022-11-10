@@ -26,15 +26,15 @@ const NavBar = () => {
   const stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
   const isCool = useAppSelector(state => state.application.isCoolBackground);
   const history = useHistory();
-  const ethBalance = useEtherBalance(config.addresses.nounsDaoExecutor);
+  const ethBalance = useEtherBalance(config.addresses.nounsbrDaoExecutor);
   const lidoBalanceAsETH = useLidoBalance();
   const treasuryBalance = ethBalance && lidoBalanceAsETH && ethBalance.add(lidoBalanceAsETH);
-  const daoEtherscanLink = buildEtherscanHoldingsLink(config.addresses.nounsDaoExecutor);
+  const daoEtherscanLink = buildEtherscanHoldingsLink(config.addresses.nounsbrDaoExecutor);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
 
   const useStateBg =
     history.location.pathname === '/' ||
-    history.location.pathname.includes('/noun/') ||
+    history.location.pathname.includes('/nounbr/') ||
     history.location.pathname.includes('/auction/');
 
   const nonWalletButtonStyle = !useStateBg
@@ -67,7 +67,7 @@ const NavBar = () => {
               {treasuryBalance && (
                 <Nav.Link
                   href={daoEtherscanLink}
-                  className={classes.nounsNavLink}
+                  className={classes.nounsbrNavLink}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -85,7 +85,7 @@ const NavBar = () => {
             onClick={() => setIsNavExpanded(!isNavExpanded)}
           />
           <Navbar.Collapse className="justify-content-end">
-            <Nav.Link as={Link} to="/vote" className={classes.nounsNavLink} onClick={closeNav}>
+            <Nav.Link as={Link} to="/vote" className={classes.nounsbrNavLink} onClick={closeNav}>
               <NavBarButton
                 buttonText={<Trans>DAO</Trans>}
                 buttonIcon={<FontAwesomeIcon icon={faUsers} />}
@@ -94,7 +94,7 @@ const NavBar = () => {
             </Nav.Link>
             <Nav.Link
               href={externalURL(ExternalURL.about)}
-              className={classes.nounsNavLink}
+              className={classes.nounsbrNavLink}
               target="_blank"
               rel="noreferrer"
               onClick={closeNav}
@@ -108,7 +108,7 @@ const NavBar = () => {
             <Nav.Link
               as={Link}
               to="/playground"
-              className={classes.nounsNavLink}
+              className={classes.nounsbrNavLink}
               onClick={closeNav}
             >
               <NavBarButton

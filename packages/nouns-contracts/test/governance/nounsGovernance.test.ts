@@ -2,12 +2,12 @@ import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { ethers } from 'hardhat';
 import {
-  NounsToken,
-  NounsDescriptorV2__factory as NounsDescriptorV2Factory,
+  NounsBRToken,
+  NounsBRDescriptorV2__factory as NounsBRDescriptorV2Factory,
 } from '../../typechain';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
-  deployNounsToken,
+  deployNounsBRToken,
   getSigners,
   TestSigners,
   setTotalSupply,
@@ -24,9 +24,9 @@ const { expect } = chai;
 
 describe('NounsBR Governance', () => {
   let snapshotId: number;
-  let token: NounsToken;
-  let tokenCallFromGuy: NounsToken;
-  let tokenCallFromDeployer: NounsToken;
+  let token: NounsBRToken;
+  let tokenCallFromGuy: NounsBRToken;
+  let tokenCallFromDeployer: NounsBRToken;
   let account0: SignerWithAddress;
   let account1: SignerWithAddress;
   let account2: SignerWithAddress;
@@ -60,10 +60,10 @@ describe('NounsBR Governance', () => {
     account2 = signers.account2;
     deployer = signers.deployer;
 
-    token = await deployNounsToken(signers.deployer);
+    token = await deployNounsBRToken(signers.deployer);
 
     await populateDescriptorV2(
-      NounsDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
+      NounsBRDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
     );
 
     domain = Domain('NounsBR', token.address, await chainId());

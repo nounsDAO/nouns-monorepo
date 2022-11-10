@@ -1,5 +1,5 @@
 import classes from './ProposalStatus.module.css';
-import { ProposalState } from '../../wrappers/nounsDao';
+import { ProposalState } from '../../wrappers/nounsbrDao';
 import React from 'react';
 import clsx from 'clsx';
 import { Trans } from '@lingui/macro';

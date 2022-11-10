@@ -6,8 +6,8 @@ on:
       - master
   pull_request:
     paths:
-      - 'packages/nouns-contracts/abi/contracts/**'
-      - 'packages/nouns-subgraph/**'
+      - 'packages/nounsbr-contracts/abi/contracts/**'
+      - 'packages/nounsbr-subgraph/**'
     branches:
       - '**'
 
@@ -29,19 +29,19 @@ jobs:
       - run: yarn build
       - name: Prepare subgraph yaml
         run: |
-          cd packages/nouns-subgraph
+          cd packages/nounsbr-subgraph
           yarn prepare:rinkeby
       - name: Generate code
         run: |
-          cd packages/nouns-subgraph
+          cd packages/nounsbr-subgraph
           yarn codegen
       - name: Generate config
         run: |
-          cd packages/nouns-subgraph
+          cd packages/nounsbr-subgraph
           yarn test:configgen
       - name: Run tests
         run: |
-          cd packages/nouns-subgraph
+          cd packages/nounsbr-subgraph
           yarn test
       - name: Uninstall Yarn
         if: always()

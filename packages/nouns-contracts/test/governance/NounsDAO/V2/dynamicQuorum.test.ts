@@ -3,8 +3,8 @@ import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { parseUnits } from 'ethers/lib/utils';
 import {
-  NounsDAOLogicV2,
-  NounsDAOLogicV2__factory as NounsDaoLogicV2Factory,
+  NounsBRDAOLogicV2,
+  NounsBRDAOLogicV2__factory as NounsBRDaoLogicV2Factory,
 } from '../../../../typechain';
 import { getSigners, TestSigners } from '../../../utils';
 
@@ -13,10 +13,10 @@ const { expect } = chai;
 
 let deployer: SignerWithAddress;
 let signers: TestSigners;
-let gov: NounsDAOLogicV2;
+let gov: NounsBRDAOLogicV2;
 
-async function deployGovernorV2(deployer: SignerWithAddress): Promise<NounsDAOLogicV2> {
-  return await new NounsDaoLogicV2Factory(deployer).deploy();
+async function deployGovernorV2(deployer: SignerWithAddress): Promise<NounsBRDAOLogicV2> {
+  return await new NounsBRDaoLogicV2Factory(deployer).deploy();
 }
 
 describe('Dynamic Quorum', () => {

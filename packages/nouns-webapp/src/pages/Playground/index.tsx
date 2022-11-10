@@ -12,11 +12,11 @@ import {
 import classes from './Playground.module.css';
 import React, { ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react';
 import Link from '../../components/Link';
-import { ImageData, getNounData, getRandomNounSeed } from '@nouns/assets';
-import { buildSVG, EncodedImage, PNGCollectionEncoder } from '@nouns/sdk';
+import { ImageData, getNounBRData, getRandomNounBRSeed } from '@nounsbr/assets';
+import { buildSVG, EncodedImage, PNGCollectionEncoder } from '@nounsbr/sdk';
 import InfoIcon from '../../assets/icons/Info.svg';
-import Noun from '../../components/Noun';
-import NounModal from './NounModal';
+import NounBR from '../../components/NounBR';
+import NounBRModal from './NounBRModal';
 import { PNG } from 'pngjs';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
@@ -32,26 +32,26 @@ interface PendingCustomTrait {
   filename: string;
 }
 
-const nounsProtocolLink = (
+const nounsbrProtocolLink = (
   <Link
-    text={<Trans>Nouns Protocol</Trans>}
-    url="https://www.notion.so/Noun-Protocol-32e4f0bf74fe433e927e2ea35e52a507"
+    text={<Trans>NounsBR Protocol</Trans>}
+    url="https://www.notion.so/NounBR-Protocol-32e4f0bf74fe433e927e2ea35e52a507"
     leavesPage={true}
   />
 );
 
-const nounsAssetsLink = (
+const nounsbrAssetsLink = (
   <Link
-    text="nouns-assets"
-    url="https://github.com/nounsbr/nounsbr-monorepo/tree/master/packages/nouns-assets"
+    text="nounsbr-assets"
+    url="https://github.com/nounsbr/nounsbr-monorepo/tree/master/packages/nounsbr-assets"
     leavesPage={true}
   />
 );
 
-const nounsSDKLink = (
+const nounsbrSDKLink = (
   <Link
-    text="nouns-sdk"
-    url="https://github.com/nounsbr/nounsbr-monorepo/tree/master/packages/nouns-sdk"
+    text="nounsbr-sdk"
+    url="https://github.com/nounsbr/nounsbr-monorepo/tree/master/packages/nounsbr-sdk"
     leavesPage={true}
   />
 );
@@ -85,25 +85,25 @@ const traitKeyToLocalizedTraitKeyFirstLetterCapitalized = (s: string): ReactNode
 };
 
 const Playground: React.FC = () => {
-  const [nounSvgs, setNounSvgs] = useState<string[]>();
+  const [nounbrSvgs, setNounBRSvgs] = useState<string[]>();
   const [traits, setTraits] = useState<Trait[]>();
   const [modSeed, setModSeed] = useState<{ [key: string]: number }>();
   const [initLoad, setInitLoad] = useState<boolean>(true);
-  const [displayNoun, setDisplayNoun] = useState<boolean>(false);
-  const [indexOfNounToDisplay, setIndexOfNounToDisplay] = useState<number>();
+  const [displayNounBR, setDisplayNounBR] = useState<boolean>(false);
+  const [indexOfNounBRToDisplay, setIndexOfNounBRToDisplay] = useState<number>();
   const [selectIndexes, setSelectIndexes] = useState<Record<string, number>>({});
   const [pendingTrait, setPendingTrait] = useState<PendingCustomTrait>();
   const [isPendingTraitValid, setPendingTraitValid] = useState<boolean>();
 
   const customTraitFileRef = useRef<HTMLInputElement>(null);
 
-  const generateNounSvg = React.useCallback(
+  const generateNounBRSvg = React.useCallback(
     (amount: number = 1) => {
       for (let i = 0; i < amount; i++) {
-        const seed = { ...getRandomNounSeed(), ...modSeed };
-        const { parts, background } = getNounData(seed);
+        const seed = { ...getRandomNounBRSeed(), ...modSeed };
+        const { parts, background } = getNounBRData(seed);
         const svg = buildSVG(parts, encoder.data.palette, background);
-        setNounSvgs(prev => {
+        setNounBRSvgs(prev => {
           return prev ? [svg, ...prev] : [svg];
         });
       }
@@ -130,10 +130,10 @@ const Playground: React.FC = () => {
     );
 
     if (initLoad) {
-      generateNounSvg(8);
+      generateNounBRSvg(8);
       setInitLoad(false);
     }
-  }, [generateNounSvg, initLoad]);
+  }, [generateNounBRSvg, initLoad]);
 
   const traitOptions = (trait: Trait) => {
     return Array.from(Array(trait.traitNames.length + 1)).map((_, index) => {
@@ -250,12 +250,12 @@ const Playground: React.FC = () => {
 
   return (
     <>
-      {displayNoun && indexOfNounToDisplay !== undefined && nounSvgs && (
-        <NounModal
+      {displayNounBR && indexOfNounBRToDisplay !== undefined && nounbrSvgs && (
+        <NounBRModal
           onDismiss={() => {
-            setDisplayNoun(false);
+            setDisplayNounBR(false);
           }}
-          svg={nounSvgs[indexOfNounToDisplay]}
+          svg={nounbrSvgs[indexOfNounBRToDisplay]}
         />
       )}
 
@@ -270,9 +270,9 @@ const Playground: React.FC = () => {
             </h1>
             <p>
               <Trans>
-                The playground was built using the {nounsProtocolLink}. NounBR's traits are determined
-                by the NounBR Seed. The seed was generated using {nounsAssetsLink} and rendered using
-                the {nounsSDKLink}.
+                The playground was built using the {nounsbrProtocolLink}. NounBR's traits are determined
+                by the NounBR Seed. The seed was generated using {nounsbrAssetsLink} and rendered using
+                the {nounsbrSDKLink}.
               </Trans>
             </p>
           </Col>
@@ -282,7 +282,7 @@ const Playground: React.FC = () => {
             <Col lg={12}>
               <Button
                 onClick={() => {
-                  generateNounSvg();
+                  generateNounBRSvg();
                 }}
                 className={classes.primaryBtn}
               >
@@ -372,31 +372,31 @@ const Playground: React.FC = () => {
                 </Button>
               </>
             )}
-            <p className={classes.nounYearsFooter}>
+            <p className={classes.nounbrYearsFooter}>
               <Trans>
                 You've generated{' '}
-                {i18n.number(parseInt(nounSvgs ? (nounSvgs.length / 365).toFixed(2) : '0'))} years
+                {i18n.number(parseInt(nounbrSvgs ? (nounbrSvgs.length / 365).toFixed(2) : '0'))} years
                 worth of NounsBR
               </Trans>
             </p>
           </Col>
           <Col lg={9}>
             <Row>
-              {nounSvgs &&
-                nounSvgs.map((svg, i) => {
+              {nounbrSvgs &&
+                nounbrSvgs.map((svg, i) => {
                   return (
                     <Col xs={4} lg={3} key={i}>
                       <div
                         onClick={() => {
-                          setIndexOfNounToDisplay(i);
-                          setDisplayNoun(true);
+                          setIndexOfNounBRToDisplay(i);
+                          setDisplayNounBR(true);
                         }}
                       >
-                        <Noun
+                        <NounBR
                           imgPath={`data:image/svg+xml;base64,${btoa(svg)}`}
-                          alt="noun"
-                          className={classes.nounImg}
-                          wrapperClassName={classes.nounWrapper}
+                          alt="nounbr"
+                          className={classes.nounbrImg}
+                          wrapperClassName={classes.nounbrWrapper}
                         />
                       </div>
                     </Col>

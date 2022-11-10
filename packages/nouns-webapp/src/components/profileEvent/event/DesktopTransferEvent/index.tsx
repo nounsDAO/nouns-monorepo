@@ -1,8 +1,8 @@
 import React from 'react';
 import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../../../utils/etherscan';
-import { TransferEvent } from '../../../../wrappers/nounActivity';
+import { TransferEvent } from '../../../../wrappers/nounbrActivity';
 import classes from './DesktopTransferEvent.module.css';
-import DesktopNounActivityRow from '../../activityRow/DesktopNounActivityRow';
+import DesktopNounBRActivityRow from '../../activityRow/DesktopNounBRActivityRow';
 import { SwitchHorizontalIcon } from '@heroicons/react/solid';
 import ReactTooltip from 'react-tooltip';
 import ShortAddress from '../../../ShortAddress';
@@ -17,7 +17,7 @@ const DesktopTransferEvent: React.FC<DesktopTransferEventProps> = props => {
   const { event } = props;
 
   return (
-    <DesktopNounActivityRow
+    <DesktopNounBRActivityRow
       icon={
         <div className={classes.switchIconWrapper}>
           <SwitchHorizontalIcon className={classes.switchIcon} />

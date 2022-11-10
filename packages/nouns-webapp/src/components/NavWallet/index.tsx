@@ -198,7 +198,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
   };
 
   const walletConnectedContentMobile = (
-    <div className={clsx(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.mobileOnly)}>
+    <div className={clsx(navDropdownClasses.nounsbrNavLink, responsiveUiUtilsClasses.mobileOnly)}>
       <div
         className={'d-flex flex-row justify-content-between'}
         style={{
@@ -240,7 +240,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
 
   const walletConnectedContentDesktop = (
     <Dropdown
-      className={clsx(navDropdownClasses.nounsNavLink, responsiveUiUtilsClasses.desktopOnly)}
+      className={clsx(navDropdownClasses.nounsbrNavLink, responsiveUiUtilsClasses.desktopOnly)}
       onToggle={() => setButtonUp(!buttonUp)}
     >
       <Dropdown.Toggle as={customDropdownToggle} id="dropdown-custom-components" />
@@ -260,7 +260,7 @@ const NavWallet: React.FC<NavWalletProps> = props => {
         </>
       ) : (
         <WalletConnectButton
-          className={clsx(navDropdownClasses.nounsNavLink, navDropdownClasses.connectBtn)}
+          className={clsx(navDropdownClasses.nounsbrNavLink, navDropdownClasses.connectBtn)}
           onClickHandler={() => setModalStateHandler(true)}
           buttonStyle={connectWalletButtonStyle}
         />

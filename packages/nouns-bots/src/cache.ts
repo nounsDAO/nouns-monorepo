@@ -4,32 +4,32 @@ import { Proposal } from './types';
 /**
  * Key mapped to the current auction
  */
-export const getAuctionCacheKey = 'NOUNS_AUCTION_CACHE';
+export const getAuctionCacheKey = 'NOUNSBR_AUCTION_CACHE';
 
 /**
  * Key mapped to the last processed bid
  */
-export const getBidCacheKey = 'NOUNS_BID_CACHE';
+export const getBidCacheKey = 'NOUNSBR_BID_CACHE';
 
 /**
  * Key mapped to the tweet id to reply updates to
  */
-export const getReplyTweetIdKey = 'NOUNS_REPLY_TWEET_ID';
+export const getReplyTweetIdKey = 'NOUNSBR_REPLY_TWEET_ID';
 
 /**
  * Key mapped to the latest auction id processed for auction ending soon
  */
-export const getAuctionEndingSoonCacheKey = 'NOUNS_AUCTION_ENDING_SOON_CACHE';
+export const getAuctionEndingSoonCacheKey = 'NOUNSBR_AUCTION_ENDING_SOON_CACHE';
 
 /**
  * Key prefix for caching proposal records
  */
-export const getProposalCacheKeyPrefix = 'NOUNS_PROPOSAL_';
+export const getProposalCacheKeyPrefix = 'NOUNSBR_PROPOSAL_';
 
 /**
  * Key prefix for caching proposal expiry warning sent records
  */
-export const getProposalExpiryWarningSentCacheKeyPrefix = 'NOUNS_PROPOSAL_EXPIRY_WARNING_SENT_';
+export const getProposalExpiryWarningSentCacheKeyPrefix = 'NOUNSBR_PROPOSAL_EXPIRY_WARNING_SENT_';
 
 /**
  * Update the auction cache with `id`

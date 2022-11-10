@@ -6,8 +6,8 @@ import {
   useExecuteProposal,
   useProposal,
   useQueueProposal,
-} from '../../wrappers/nounsDao';
-import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
+} from '../../wrappers/nounsbrDao';
+import { useUserVotesAsOfBlock } from '../../wrappers/nounbrToken';
 import classes from './Vote.module.css';
 import { RouteComponentProps } from 'react-router-dom';
 import { TransactionStatus, useBlockNumber } from '@usedapp/core';
@@ -26,12 +26,12 @@ import VoteCard, { VoteCardVariant } from '../../components/VoteCard';
 import { useQuery } from '@apollo/client';
 import {
   proposalVotesQuery,
-  delegateNounsAtBlockQuery,
+  delegateNounsBRAtBlockQuery,
   ProposalVotes,
   Delegates,
   propUsingDynamicQuorum,
 } from '../../wrappers/subgraph';
-import { getNounVotes } from '../../utils/getNounsVotes';
+import { getNounBRVotes } from '../../utils/getNounsBRVotes';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
 import { ReactNode } from 'react-markdown/lib/react-markdown';
@@ -103,7 +103,7 @@ const VotePage = ({
   const availableVotes = useUserVotesAsOfBlock(proposal?.createdBlock ?? undefined);
 
   const currentQuorum = useCurrentQuorum(
-    config.addresses.nounsDAOProxy,
+    config.addresses.nounsbrDAOProxy,
     proposal && proposal.id ? parseInt(proposal.id) : 0,
     dqInfo && dqInfo.proposal ? dqInfo.proposal.quorumCoefficient === '0' : true,
   );
@@ -230,22 +230,22 @@ const VotePage = ({
 
   const voterIds = voters?.votes?.map(v => v.voter.id);
   const { data: delegateSnapshot } = useQuery<Delegates>(
-    delegateNounsAtBlockQuery(voterIds ?? [], proposal?.createdBlock ?? 0),
+    delegateNounsBRAtBlockQuery(voterIds ?? [], proposal?.createdBlock ?? 0),
     {
       skip: !voters?.votes?.length,
     },
   );
 
   const { delegates } = delegateSnapshot || {};
-  const delegateToNounIds = delegates?.reduce<Record<string, string[]>>((acc, curr) => {
-    acc[curr.id] = curr?.nounsRepresented?.map(nr => nr.id) ?? [];
+  const delegateToNounBRIds = delegates?.reduce<Record<string, string[]>>((acc, curr) => {
+    acc[curr.id] = curr?.nounsbrRepresented?.map(nr => nr.id) ?? [];
     return acc;
   }, {});
 
   const data = voters?.votes?.map(v => ({
     delegate: v.voter.id,
     supportDetailed: v.supportDetailed,
-    nounsRepresented: delegateToNounIds?.[v.voter.id] ?? [],
+    nounsbrRepresented: delegateToNounBRIds?.[v.voter.id] ?? [],
   }));
 
   const [showToast, setShowToast] = useState(true);
@@ -272,9 +272,9 @@ const VotePage = ({
   const isWalletConnected = !(activeAccount === undefined);
   const isActiveForVoting = startDate?.isBefore(now) && endDate?.isAfter(now);
 
-  const forNouns = getNounVotes(data, 1);
-  const againstNouns = getNounVotes(data, 0);
-  const abstainNouns = getNounVotes(data, 2);
+  const forNounsBR = getNounBRVotes(data, 1);
+  const againstNounsBR = getNounBRVotes(data, 0);
+  const abstainNounsBR = getNounBRVotes(data, 2);
   const isV2Prop = dqInfo.proposal.quorumCoefficient > 0;
 
   return (
@@ -282,7 +282,7 @@ const VotePage = ({
       {showDynamicQuorumInfoModal && (
         <DynamicQuorumInfoModal
           proposal={proposal}
-          againstVotesAbsolute={againstNouns.length}
+          againstVotesAbsolute={againstNounsBR.length}
           onDismiss={() => setShowDynamicQuorumInfoModal(false)}
         />
       )}
@@ -336,7 +336,7 @@ const VotePage = ({
           <VoteCard
             proposal={proposal}
             percentage={forPercentage}
-            nounIds={forNouns}
+            nounbrIds={forNounsBR}
             variant={VoteCardVariant.FOR}
             delegateView={isDelegateView}
             delegateGroupedVoteData={data}
@@ -344,7 +344,7 @@ const VotePage = ({
           <VoteCard
             proposal={proposal}
             percentage={againstPercentage}
-            nounIds={againstNouns}
+            nounbrIds={againstNounsBR}
             variant={VoteCardVariant.AGAINST}
             delegateView={isDelegateView}
             delegateGroupedVoteData={data}
@@ -352,7 +352,7 @@ const VotePage = ({
           <VoteCard
             proposal={proposal}
             percentage={abstainPercentage}
-            nounIds={abstainNouns}
+            nounbrIds={abstainNounsBR}
             variant={VoteCardVariant.ABSTAIN}
             delegateView={isDelegateView}
             delegateGroupedVoteData={data}

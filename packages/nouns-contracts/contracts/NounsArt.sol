@@ -17,11 +17,11 @@
 
 pragma solidity ^0.8.6;
 
-import { INounsArt } from './interfaces/INounsArt.sol';
+import { INounsBRArt } from './interfaces/INounsBRArt.sol';
 import { SSTORE2 } from './libs/SSTORE2.sol';
 import { IInflator } from './interfaces/IInflator.sol';
 
-contract NounsArt is INounsArt {
+contract NounsBRArt is INounsBRArt {
     /// @notice Current NounsBR Descriptor address
     address public override descriptor;
 
@@ -403,13 +403,13 @@ contract NounsArt is INounsArt {
             revert BadImageCount();
         }
         trait.storagePages.push(
-            NounArtStoragePage({ pointer: pointer, decompressedLength: decompressedLength, imageCount: imageCount })
+            NounBRArtStoragePage({ pointer: pointer, decompressedLength: decompressedLength, imageCount: imageCount })
         );
         trait.storedImagesCount += imageCount;
     }
 
-    function imageByIndex(INounsArt.Trait storage trait, uint256 index) internal view returns (bytes memory) {
-        (INounsArt.NounArtStoragePage storage page, uint256 indexInPage) = getPage(trait.storagePages, index);
+    function imageByIndex(INounsBRArt.Trait storage trait, uint256 index) internal view returns (bytes memory) {
+        (INounsBRArt.NounBRArtStoragePage storage page, uint256 indexInPage) = getPage(trait.storagePages, index);
         bytes[] memory decompressedImages = decompressAndDecode(page);
         return decompressedImages[indexInPage];
     }
@@ -419,18 +419,18 @@ contract NounsArt is INounsArt {
      * inside the page, so the image can be read from storage.
      * Example: if you have 2 pages with 100 images each, and you want to get image 150, this function would return
      * the 2nd page, and the 50th index.
-     * @return INounsArt.NounArtStoragePage the page containing the image at index
+     * @return INounsBRArt.NounBRArtStoragePage the page containing the image at index
      * @return uint256 the index of the image in the page
      */
-    function getPage(INounsArt.NounArtStoragePage[] storage pages, uint256 index)
+    function getPage(INounsBRArt.NounBRArtStoragePage[] storage pages, uint256 index)
         internal
         view
-        returns (INounsArt.NounArtStoragePage storage, uint256)
+        returns (INounsBRArt.NounBRArtStoragePage storage, uint256)
     {
         uint256 len = pages.length;
         uint256 pageFirstImageIndex = 0;
         for (uint256 i = 0; i < len; i++) {
-            INounsArt.NounArtStoragePage storage page = pages[i];
+            INounsBRArt.NounBRArtStoragePage storage page = pages[i];
 
             if (index < pageFirstImageIndex + page.imageCount) {
                 return (page, index - pageFirstImageIndex);
@@ -442,7 +442,7 @@ contract NounsArt is INounsArt {
         revert ImageNotFound();
     }
 
-    function decompressAndDecode(INounsArt.NounArtStoragePage storage page) internal view returns (bytes[] memory) {
+    function decompressAndDecode(INounsBRArt.NounBRArtStoragePage storage page) internal view returns (bytes[] memory) {
         bytes memory compressedData = SSTORE2.read(page.pointer);
         (, bytes memory decompressedData) = inflator.puff(compressedData, page.decompressedLength);
         return abi.decode(decompressedData, (bytes[]));

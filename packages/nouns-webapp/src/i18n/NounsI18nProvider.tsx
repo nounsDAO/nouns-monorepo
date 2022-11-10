@@ -1,5 +1,5 @@
 /**
- * NounsI18nProvier.tsx is a modified version of https://github.com/Uniswap/interface/blob/main/src/lib/i18n.tsx
+ * NounsBRI18nProvier.tsx is a modified version of https://github.com/Uniswap/interface/blob/main/src/lib/i18n.tsx
  */
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
@@ -37,7 +37,7 @@ interface ProviderProps {
   children: ReactNode;
 }
 
-export function NounsI18nProvider({
+export function NounsBRI18nProvider({
   locale,
   forceRenderAfterLocaleChange = true,
   onActivate,

@@ -5,7 +5,7 @@ async function delay(seconds: number) {
   return new Promise(resolve => setTimeout(resolve, 1000 * seconds));
 }
 
-task('deploy-test-token', 'Deploy NounsTokenHarness given a descriptor')
+task('deploy-test-token', 'Deploy NounsBRTokenHarness given a descriptor')
   .addParam('descriptorAddress', 'Address of a deployed descriptor contractor')
   .addParam('seederAddress', 'Address of a deployed seeder contract')
   .setAction(async ({ descriptorAddress, seederAddress }, { ethers, run, network }) => {
@@ -15,7 +15,7 @@ task('deploy-test-token', 'Deploy NounsTokenHarness given a descriptor')
     const proxyRegistryAddress = '0xa5409ec958c83c3f309868babaca7c86dcb077c1';
 
     const token = await (
-      await ethers.getContractFactory('NounsTokenHarness', deployer)
+      await ethers.getContractFactory('NounsBRTokenHarness', deployer)
     ).deploy(
       deployer.address,
       deployer.address,
@@ -23,7 +23,7 @@ task('deploy-test-token', 'Deploy NounsTokenHarness given a descriptor')
       seederAddress,
       proxyRegistryAddress,
     );
-    console.log(`NounsTokenHarness deployed to: ${token.address}`);
+    console.log(`NounsBRTokenHarness deployed to: ${token.address}`);
 
     if (network.name !== 'localhost') {
       console.log('Waiting 1 minute before verifying contracts on Etherscan');
@@ -32,8 +32,8 @@ task('deploy-test-token', 'Deploy NounsTokenHarness given a descriptor')
       console.log('Verifying contracts on Etherscan...');
       const contracts: Record<string, DeployedContract> = {} as Record<string, DeployedContract>;
 
-      contracts.NounsTokenHarness = {
-        name: 'NounsTokenHarness',
+      contracts.NounsBRTokenHarness = {
+        name: 'NounsBRTokenHarness',
         address: token.address,
         constructorArguments: [
           deployer.address,

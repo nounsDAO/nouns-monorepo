@@ -3,7 +3,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_noundersDAO",
+        "name": "_noundersbrDAO",
         "type": "address"
       },
       {
@@ -12,12 +12,12 @@
         "type": "address"
       },
       {
-        "internalType": "contract INounsDescriptor",
+        "internalType": "contract INounsBRDescriptor",
         "name": "_descriptor",
         "type": "address"
       },
       {
-        "internalType": "contract INounsSeeder",
+        "internalType": "contract INounsBRSeeder",
         "name": "_seeder",
         "type": "address"
       },
@@ -141,7 +141,7 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "contract INounsDescriptor",
+        "internalType": "contract INounsBRDescriptor",
         "name": "descriptor",
         "type": "address"
       }
@@ -178,7 +178,7 @@
         "type": "uint256"
       }
     ],
-    "name": "NounBurned",
+    "name": "NounBRBurned",
     "type": "event"
   },
   {
@@ -219,12 +219,12 @@
           }
         ],
         "indexed": false,
-        "internalType": "struct INounsSeeder.Seed",
+        "internalType": "struct INounsBRSeeder.Seed",
         "name": "seed",
         "type": "tuple"
       }
     ],
-    "name": "NounCreated",
+    "name": "NounBRCreated",
     "type": "event"
   },
   {
@@ -233,11 +233,11 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "noundersDAO",
+        "name": "noundersbrDAO",
         "type": "address"
       }
     ],
-    "name": "NoundersDAOUpdated",
+    "name": "NoundersBRBRDAOUpdated",
     "type": "event"
   },
   {
@@ -270,7 +270,7 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "contract INounsSeeder",
+        "internalType": "contract INounsBRSeeder",
         "name": "seeder",
         "type": "address"
       }
@@ -370,7 +370,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "nounId",
+        "name": "nounbrId",
         "type": "uint256"
       }
     ],
@@ -528,7 +528,7 @@
     "name": "descriptor",
     "outputs": [
       {
-        "internalType": "contract INounsDescriptor",
+        "internalType": "contract INounsBRDescriptor",
         "name": "",
         "type": "address"
       }
@@ -742,7 +742,7 @@
   },
   {
     "inputs": [],
-    "name": "noundersDAO",
+    "name": "noundersbrDAO",
     "outputs": [
       {
         "internalType": "address",
@@ -819,7 +819,7 @@
   },
   {
     "inputs": [],
-    "name": "renounceOwnership",
+    "name": "renounbrceOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -880,7 +880,7 @@
     "name": "seeder",
     "outputs": [
       {
-        "internalType": "contract INounsSeeder",
+        "internalType": "contract INounsBRSeeder",
         "name": "",
         "type": "address"
       }
@@ -961,7 +961,7 @@
   {
     "inputs": [
       {
-        "internalType": "contract INounsDescriptor",
+        "internalType": "contract INounsBRDescriptor",
         "name": "_descriptor",
         "type": "address"
       }
@@ -988,11 +988,11 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_noundersDAO",
+        "name": "_noundersbrDAO",
         "type": "address"
       }
     ],
-    "name": "setNoundersDAO",
+    "name": "setNoundersBRBRDAO",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1000,7 +1000,7 @@
   {
     "inputs": [
       {
-        "internalType": "contract INounsSeeder",
+        "internalType": "contract INounsBRSeeder",
         "name": "_seeder",
         "type": "address"
       }

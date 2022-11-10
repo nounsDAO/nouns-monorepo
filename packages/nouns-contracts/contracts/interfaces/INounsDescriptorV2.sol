@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title Interface for NounsDescriptorV2
+/// @title Interface for NounsBRDescriptorV2
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -17,19 +17,19 @@
 
 pragma solidity ^0.8.6;
 
-import { INounsSeeder } from './INounsSeeder.sol';
+import { INounsBRSeeder } from './INounsBRSeeder.sol';
 import { ISVGRenderer } from './ISVGRenderer.sol';
-import { INounsArt } from './INounsArt.sol';
-import { INounsDescriptorMinimal } from './INounsDescriptorMinimal.sol';
+import { INounsBRArt } from './INounsBRArt.sol';
+import { INounsBRDescriptorMinimal } from './INounsBRDescriptorMinimal.sol';
 
-interface INounsDescriptorV2 is INounsDescriptorMinimal {
+interface INounsBRDescriptorV2 is INounsBRDescriptorMinimal {
     event PartsLocked();
 
     event DataURIToggled(bool enabled);
 
     event BaseURIUpdated(string baseURI);
 
-    event ArtUpdated(INounsArt art);
+    event ArtUpdated(INounsBRArt art);
 
     event RendererUpdated(ISVGRenderer renderer);
 
@@ -127,15 +127,15 @@ interface INounsDescriptorV2 is INounsDescriptorMinimal {
 
     function setBaseURI(string calldata baseURI) external;
 
-    function tokenURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view override returns (string memory);
+    function tokenURI(uint256 tokenId, INounsBRSeeder.Seed memory seed) external view override returns (string memory);
 
-    function dataURI(uint256 tokenId, INounsSeeder.Seed memory seed) external view override returns (string memory);
+    function dataURI(uint256 tokenId, INounsBRSeeder.Seed memory seed) external view override returns (string memory);
 
     function genericDataURI(
         string calldata name,
         string calldata description,
-        INounsSeeder.Seed memory seed
+        INounsBRSeeder.Seed memory seed
     ) external view returns (string memory);
 
-    function generateSVGImage(INounsSeeder.Seed memory seed) external view returns (string memory);
+    function generateSVGImage(INounsBRSeeder.Seed memory seed) external view returns (string memory);
 }

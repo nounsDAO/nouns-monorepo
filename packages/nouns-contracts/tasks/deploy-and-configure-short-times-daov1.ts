@@ -9,7 +9,7 @@ task(
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
   .addFlag('updateConfigs', 'Write the deployed addresses to the SDK and subgraph configs')
   .addOptionalParam('weth', 'The WETH contract address')
-  .addOptionalParam('noundersdao', 'The nounders DAO contract address')
+  .addOptionalParam('noundersbrdao', 'The noundersbr DAO contract address')
   .addOptionalParam(
     'auctionTimeBuffer',
     'The auction time buffer (seconds)',
@@ -55,7 +55,7 @@ task(
     types.int,
   )
   .setAction(async (args, { run }) => {
-    // Deploy the Nouns DAO contracts and return deployment information
+    // Deploy the NounsBR DAO contracts and return deployment information
     const contracts = await run('deploy-short-times-daov1', args);
 
     // Verify the contracts on Etherscan
@@ -66,24 +66,24 @@ task(
     // Populate the on-chain art
     await run('populate-descriptor', {
       nftDescriptor: contracts.NFTDescriptorV2.address,
-      nounsDescriptor: contracts.NounsDescriptorV2.address,
+      nounsbrDescriptor: contracts.NounsBRDescriptorV2.address,
     });
 
     // Transfer ownership of all contract except for the auction house.
     // We must maintain ownership of the auction house to kick off the first auction.
-    const executorAddress = contracts.NounsDAOExecutor.address;
-    await contracts.NounsDescriptorV2.instance.transferOwnership(executorAddress);
-    await contracts.NounsToken.instance.transferOwnership(executorAddress);
-    await contracts.NounsAuctionHouseProxyAdmin.instance.transferOwnership(executorAddress);
+    const executorAddress = contracts.NounsBRDAOExecutor.address;
+    await contracts.NounsBRDescriptorV2.instance.transferOwnership(executorAddress);
+    await contracts.NounsBRToken.instance.transferOwnership(executorAddress);
+    await contracts.NounsBRAuctionHouseProxyAdmin.instance.transferOwnership(executorAddress);
     console.log(
       'Transferred ownership of the descriptor, token, and proxy admin contracts to the executor.',
     );
 
     // Optionally kick off the first auction and transfer ownership of the auction house
-    // to the Nouns DAO executor.
+    // to the NounsBR DAO executor.
     if (args.startAuction) {
-      const auctionHouse = contracts.NounsAuctionHouse.instance.attach(
-        contracts.NounsAuctionHouseProxy.address,
+      const auctionHouse = contracts.NounsBRAuctionHouse.instance.attach(
+        contracts.NounsBRAuctionHouseProxy.address,
       );
       await auctionHouse.unpause({
         gasLimit: 1_000_000,

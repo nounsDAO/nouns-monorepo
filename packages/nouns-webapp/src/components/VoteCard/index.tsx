@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
-import { Proposal } from '../../wrappers/nounsDao';
-import NounImageVoteTable from '../NounImageVoteTable';
+import { Proposal } from '../../wrappers/nounsbrDao';
+import NounBRImageVoteTable from '../NounBRImageVoteTable';
 import VoteProgressBar from '../VoteProgressBar';
 import classes from './VoteCard.module.css';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
-import DelegateGroupedNounImageVoteTable from '../DelegateGroupedNounImageVoteTable';
+import DelegateGroupedNounBRImageVoteTable from '../DelegateGroupedNounBRImageVoteTable';
 import { useEthers } from '@usedapp/core';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
 import clsx from 'clsx';
@@ -23,16 +23,16 @@ export enum VoteCardVariant {
 interface VoteCardProps {
   proposal: Proposal;
   percentage: number;
-  nounIds: Array<string>;
+  nounbrIds: Array<string>;
   variant: VoteCardVariant;
   delegateView: boolean;
   delegateGroupedVoteData:
-    | { delegate: string; supportDetailed: 0 | 1 | 2; nounsRepresented: string[] }[]
+    | { delegate: string; supportDetailed: 0 | 1 | 2; nounsbrRepresented: string[] }[]
     | undefined;
 }
 
 const VoteCard: React.FC<VoteCardProps> = props => {
-  const { proposal, percentage, nounIds, variant, delegateView, delegateGroupedVoteData } = props;
+  const { proposal, percentage, nounbrIds, variant, delegateView, delegateGroupedVoteData } = props;
 
   let titleClass;
   let titleCopy;
@@ -158,15 +158,15 @@ const VoteCard: React.FC<VoteCardProps> = props => {
           </Card.Text>
 
           <VoteProgressBar variant={variant} percentage={percentage} />
-          <Row className={classes.nounProfilePics}>
+          <Row className={classes.nounbrProfilePics}>
             {delegateView ? (
-              <DelegateGroupedNounImageVoteTable
+              <DelegateGroupedNounBRImageVoteTable
                 filteredDelegateGroupedVoteData={filteredDelegateGroupedVoteData}
                 propId={parseInt(proposal.id || '0')}
                 proposalCreationBlock={proposal.createdBlock}
               />
             ) : (
-              <NounImageVoteTable nounIds={nounIds} propId={parseInt(proposal.id || '0')} />
+              <NounBRImageVoteTable nounbrIds={nounbrIds} propId={parseInt(proposal.id || '0')} />
             )}
           </Row>
         </Card.Body>

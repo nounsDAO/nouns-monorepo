@@ -1,45 +1,45 @@
-import { StandaloneNounCircular } from '../../components/StandaloneNoun';
+import { StandaloneNounBRCircular } from '../../components/StandaloneNounBR';
 import { BigNumber as EthersBN } from 'ethers';
-import classes from './NounImageVoteTable.module.css';
+import classes from './NounBRImageVoteTable.module.css';
 import { GrayCircle } from '../GrayCircle';
 import { pseudoRandomPredictableShuffle } from '../../utils/pseudoRandomPredictableShuffle';
 import HoverCard from '../HoverCard';
-import NounHoverCard from '../NounHoverCard';
+import NounBRHoverCard from '../NounBRHoverCard';
 import React, { useState } from 'react';
 import VoteCardPager from '../VoteCardPager';
 
-interface NounImageVoteTableProps {
-  nounIds: string[];
+interface NounBRImageVoteTableProps {
+  nounbrIds: string[];
   propId: number;
 }
-const NOUNS_PER_VOTE_CARD_DESKTOP = 15;
+const NOUNSBR_PER_VOTE_CARD_DESKTOP = 15;
 
 const isXLScreen = window.innerWidth > 1200;
 
-const NounImageVoteTable: React.FC<NounImageVoteTableProps> = props => {
-  const { nounIds, propId } = props;
+const NounBRImageVoteTable: React.FC<NounBRImageVoteTableProps> = props => {
+  const { nounbrIds, propId } = props;
 
-  const shuffledNounIds = pseudoRandomPredictableShuffle(nounIds, propId);
+  const shuffledNounBRIds = pseudoRandomPredictableShuffle(nounbrIds, propId);
   const [page, setPage] = useState(0);
 
   const content = (page: number) => {
     const rows = 3;
     const rowLength = isXLScreen ? 5 : 4;
 
-    const paddedNounIds = shuffledNounIds
-      .map((nounId: string) => {
+    const paddedNounBRIds = shuffledNounBRIds
+      .map((nounbrId: string) => {
         return (
           <HoverCard
-            hoverCardContent={(tip: string) => <NounHoverCard nounId={tip} />}
-            tip={nounId.toString()}
-            id="nounHoverCard"
+            hoverCardContent={(tip: string) => <NounBRHoverCard nounbrId={tip} />}
+            tip={nounbrId.toString()}
+            id="nounbrHoverCard"
           >
-            <StandaloneNounCircular nounId={EthersBN.from(nounId)} />
+            <StandaloneNounBRCircular nounbrId={EthersBN.from(nounbrId)} />
           </HoverCard>
         );
       })
-      .slice(page * NOUNS_PER_VOTE_CARD_DESKTOP, (page + 1) * NOUNS_PER_VOTE_CARD_DESKTOP)
-      .concat(Array(NOUNS_PER_VOTE_CARD_DESKTOP).fill(<GrayCircle />));
+      .slice(page * NOUNSBR_PER_VOTE_CARD_DESKTOP, (page + 1) * NOUNSBR_PER_VOTE_CARD_DESKTOP)
+      .concat(Array(NOUNSBR_PER_VOTE_CARD_DESKTOP).fill(<GrayCircle />));
 
     return Array(rows)
       .fill(0)
@@ -48,7 +48,7 @@ const NounImageVoteTable: React.FC<NounImageVoteTableProps> = props => {
           {Array(rowLength)
             .fill(0)
             .map((_, j) => (
-              <td key={j}>{paddedNounIds[i * rowLength + j]}</td>
+              <td key={j}>{paddedNounBRIds[i * rowLength + j]}</td>
             ))}
         </tr>
       ));
@@ -63,12 +63,12 @@ const NounImageVoteTable: React.FC<NounImageVoteTableProps> = props => {
         onLeftArrowClick={() => setPage(page - 1)}
         onRightArrowClick={() => setPage(page + 1)}
         isLeftArrowDisabled={page === 0}
-        isRightArrowDisabled={(page + 1) * NOUNS_PER_VOTE_CARD_DESKTOP > nounIds.length}
-        numPages={Math.floor(nounIds.length / NOUNS_PER_VOTE_CARD_DESKTOP) + 1}
+        isRightArrowDisabled={(page + 1) * NOUNSBR_PER_VOTE_CARD_DESKTOP > nounbrIds.length}
+        numPages={Math.floor(nounbrIds.length / NOUNSBR_PER_VOTE_CARD_DESKTOP) + 1}
         currentPage={page}
       />
     </>
   );
 };
 
-export default NounImageVoteTable;
+export default NounBRImageVoteTable;

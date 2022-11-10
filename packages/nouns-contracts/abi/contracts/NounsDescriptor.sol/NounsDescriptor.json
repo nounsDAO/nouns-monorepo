@@ -373,7 +373,7 @@
             "type": "uint48"
           }
         ],
-        "internalType": "struct INounsSeeder.Seed",
+        "internalType": "struct INounsBRSeeder.Seed",
         "name": "seed",
         "type": "tuple"
       }
@@ -419,7 +419,7 @@
             "type": "uint48"
           }
         ],
-        "internalType": "struct INounsSeeder.Seed",
+        "internalType": "struct INounsBRSeeder.Seed",
         "name": "seed",
         "type": "tuple"
       }
@@ -475,7 +475,7 @@
             "type": "uint48"
           }
         ],
-        "internalType": "struct INounsSeeder.Seed",
+        "internalType": "struct INounsBRSeeder.Seed",
         "name": "seed",
         "type": "tuple"
       }
@@ -614,7 +614,7 @@
   },
   {
     "inputs": [],
-    "name": "renounceOwnership",
+    "name": "renounbrceOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -674,7 +674,7 @@
             "type": "uint48"
           }
         ],
-        "internalType": "struct INounsSeeder.Seed",
+        "internalType": "struct INounsBRSeeder.Seed",
         "name": "seed",
         "type": "tuple"
       }

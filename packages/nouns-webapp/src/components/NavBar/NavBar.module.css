@@ -66,9 +66,9 @@
   z-index: 3;
 }
 
-.nounsNavLink,
-.nounsNavLink:active,
-.nounsNavLink:visited {
+.nounsbrNavLink,
+.nounsbrNavLink:active,
+.nounsbrNavLink:visited {
   font-family: 'PT Root UI';
   font-weight: bold;
   font-size: 0.9rem;

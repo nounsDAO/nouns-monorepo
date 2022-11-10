@@ -6,7 +6,7 @@ on:
       - master
   pull_request:
     paths:
-      - "packages/nouns-bots/**"
+      - "packages/nounsbr-bots/**"
     branches:
       - "**"
 
@@ -29,6 +29,6 @@ jobs:
           context: .
           file: ./Dockerfile.bots
           push: true
-          tags: gcr.io/nouns-infra/bots:${{ github.sha }}
+          tags: gcr.io/nounsbr-infra/bots:${{ github.sha }}
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}

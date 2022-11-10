@@ -1,14 +1,14 @@
 import React from 'react';
-import TightStackedCircleNoun from '../TightStackedCircleNoun';
+import TightStackedCircleNounBR from '../TightStackedCircleNounBR';
 
-interface StackedCircleNounsProps {
-  nounIds: Array<number>;
+interface StackedCircleNounsBRProps {
+  nounbrIds: Array<number>;
 }
 
-const MAX_NOUNS_PER_STACK = 3;
+const MAX_NOUNSBR_PER_STACK = 3;
 
-const TightStackedCircleNouns: React.FC<StackedCircleNounsProps> = props => {
-  const { nounIds } = props;
+const TightStackedCircleNounsBR: React.FC<StackedCircleNounsBRProps> = props => {
+  const { nounbrIds } = props;
 
   const shift = 3;
 
@@ -16,14 +16,14 @@ const TightStackedCircleNouns: React.FC<StackedCircleNounsProps> = props => {
 
   return (
     <svg width={square} height={square}>
-      {nounIds
-        .slice(0, MAX_NOUNS_PER_STACK)
-        .map((nounId: number, i: number) => {
-          return <TightStackedCircleNoun nounId={nounId} index={i} square={square} shift={shift} />;
+      {nounbrIds
+        .slice(0, MAX_NOUNSBR_PER_STACK)
+        .map((nounbrId: number, i: number) => {
+          return <TightStackedCircleNounBR nounbrId={nounbrId} index={i} square={square} shift={shift} />;
         })
         .reverse()}
     </svg>
   );
 };
 
-export default TightStackedCircleNouns;
+export default TightStackedCircleNounsBR;
