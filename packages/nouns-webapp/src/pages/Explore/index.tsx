@@ -6,11 +6,9 @@ import ExploreNounDetail from '../../components/ExploreGrid/ExploreNounDetail';
 import { motion, AnimatePresence } from 'framer-motion/dist/framer-motion';
 import { Auction as IAuction } from '../../wrappers/nounsAuction';
 import { useAppSelector } from '../../hooks';
-import dotenv from 'dotenv';
 import { useKeyPress } from '../../hooks/useKeyPress';
 import ExploreNav from '../../components/ExploreGrid/ExploreNav';
 import ExploreGrid from '../../components/ExploreGrid';
-dotenv.config();
 
 interface ExplorePageProps {}
 
