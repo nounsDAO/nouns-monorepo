@@ -93,4 +93,3 @@ export const getNounSeedFromBlockHash = (nounId: BigNumberish, blockHash: string
   const part = partType as ObjectKey;
   return images[part][partIndex].data;
 };
-exports.getPartData = getPartData;
