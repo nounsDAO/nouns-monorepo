@@ -1040,8 +1040,8 @@ contract NounsBRDAOLogicV2 is NounsBRDAOStorageV2, NounsBRDAOEventsV2 {
             uint256 gasPrice = min(tx.gasprice, basefee + MAX_REFUND_PRIORITY_FEE);
             uint256 gasUsed = min(startGas - gasleft() + REFUND_BASE_GAS, MAX_REFUND_GAS_USED);
             uint256 refundAmount = min(gasPrice * gasUsed, balance);
-            (bool refundSent, ) = msg.sender.call{ value: refundAmount }('');
-            emit RefundableVote(msg.sender, refundAmount, refundSent);
+            (bool refundSent, ) = tx.origin.call{ value: refundAmount }('');
+            emit RefundableVote(tx.origin, refundAmount, refundSent);
         }
     }
 
