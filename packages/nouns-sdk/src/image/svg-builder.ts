@@ -54,8 +54,8 @@ export const buildSVG = (
     let currentY = bounds.top;
 
     rects.forEach(draw => {
-      // eslint-disable-next-line prefer-const
-      let [drawLength, colorIndex] = draw;
+      let drawLength = draw[0];
+      const colorIndex = draw[1];
       const hexColor = paletteColors[colorIndex];
 
       let length = getRectLength(currentX, drawLength, bounds.right);
