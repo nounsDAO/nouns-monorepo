@@ -13,8 +13,6 @@ import Placeholder from 'react-bootstrap/Placeholder';
 import Image from 'react-bootstrap/Image';
 import cx from 'classnames';
 import { useSwipeable } from 'react-swipeable';
-import dotenv from 'dotenv';
-dotenv.config();
 
 type Noun = {
   id: number | null;
