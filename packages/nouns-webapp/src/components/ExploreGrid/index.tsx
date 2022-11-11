@@ -36,7 +36,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
   // Handle events
   const getInitialNouns = (individualCount: number) => {
     // Fetch initial nouns by url
-    const individualNouns = new Array(individualCount)
+    const nouns = new Array(individualCount)
       .fill(placeholderNoun)
       .map((x, i): Noun => {
         return {
@@ -45,12 +45,13 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         };
       })
       .reverse();
+      
+    setIndividualNouns(nouns);
+    // After initial nouns are set, run range calls
+    rangeCalls(props.nounCount, nouns);
 
     // Add initial nouns to end of placeholder array to display them first on load
-    props.setNounsList((arr: Noun[]) => [...individualNouns, ...arr]);
-    setIndividualNouns(individualNouns);
-    // After initial nouns are set, run range calls
-    rangeCalls(props.nounCount, individualNouns);
+    props.setNounsList((arr: Noun[]) => [...nouns, ...arr]);
   };
 
   // Range calls
@@ -98,14 +99,6 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
 
   // Once nounCount is known, run dependent functions
   useEffect(() => {
-    if (props.nounCount >= 0) {
-      getInitialNouns((props.nounCount % initialChunkSize) + 1);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.nounCount]);
-
-  useEffect(() => {
-    // Set empty nouns to display grid while images are fetched
     const placeholderNounsData = new Array(rangeChunkSize)
       .fill(placeholderNoun)
       .map((x, i): Noun => {
@@ -113,11 +106,14 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
           id: null,
           imgSrc: undefined,
         };
-      });
+    });
     props.setNounsList(placeholderNounsData);
 
+    if (props.nounCount >= 0) {
+      getInitialNouns((props.nounCount % initialChunkSize) + 1);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [props.nounCount]);
 
   return (
     <div
