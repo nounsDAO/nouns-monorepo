@@ -88,7 +88,7 @@ export const getNounSeedFromBlockHash = (nounId: BigNumberish, blockHash: string
  * @param partType The label of the part type to use
  * @param partIndex The index within the image data array of the part to get
  */
- export const getPartData = (partType:string, partIndex:number) => {
+ export const getPartData = (partType:string, partIndex:number): string => {
   type ObjectKey = keyof typeof images;
   const part = partType as ObjectKey;
   return images[part][partIndex].data;
