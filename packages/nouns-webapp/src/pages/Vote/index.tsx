@@ -372,10 +372,10 @@ const VotePage = ({
                   </div>
                   {isV2Prop && (
                     <ReactTooltip
-                      id={'view-dq-info'}
+                      id={'view-dq-info'}git
                       className={classes.delegateHover}
                       getContent={dataTip => {
-                        return <Trans>View Dynamic Quorum Info</Trans>;
+                        return <Trans>View Dynamic Threshold Info</Trans>;
                       }}
                     />
                   )}
@@ -385,7 +385,7 @@ const VotePage = ({
                     onClick={() => setShowDynamicQuorumInfoModal(true && isV2Prop)}
                     className={clsx(classes.thresholdInfo, isV2Prop ? classes.cursorPointer : '')}
                   >
-                    <span>{isV2Prop ? <Trans>Current Quorum</Trans> : <Trans>Quorum</Trans>}</span>
+                    <span>{isV2Prop ? <Trans>For Votes Required</Trans> : <Trans>Threshold</Trans>}</span>
                     <h3>
                       <Trans>
                         {isV2Prop ? i18n.number(currentQuorum ?? 0) : proposal.quorumVotes} votes
