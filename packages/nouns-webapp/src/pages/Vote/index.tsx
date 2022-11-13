@@ -372,7 +372,7 @@ const VotePage = ({
                   </div>
                   {isV2Prop && (
                     <ReactTooltip
-                      id={'view-dq-info'}git 
+                      id={'view-dq-info'}
                       className={classes.delegateHover}
                       getContent={dataTip => {
                         return <Trans>View Dynamic Threshold Info</Trans>;
