@@ -45,7 +45,7 @@ const LumpSumReviewStep: React.FC<FinalProposalActionStepProps> = props => {
   return (
     <div>
       <ModalTitle>
-        <Trans>Review Lump Sum Action</Trans>
+        <Trans>Review Transfer Funds Action</Trans>
       </ModalTitle>
 
       <span className={classes.label}>Pay</span>
@@ -60,7 +60,7 @@ const LumpSumReviewStep: React.FC<FinalProposalActionStepProps> = props => {
       <ModalBottomButtonRow
         prevBtnText={<Trans>Back</Trans>}
         onPrevBtnClick={onPrevBtnClick}
-        nextBtnText={<Trans>Add Lump Sum Action</Trans>}
+        nextBtnText={<Trans>Add Transfer Funds Action</Trans>}
         onNextBtnClick={() => {
           handleActionAdd(state, onNextBtnClick);
           onDismiss();

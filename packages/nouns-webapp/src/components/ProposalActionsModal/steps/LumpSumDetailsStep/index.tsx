@@ -32,7 +32,7 @@ const LumpSumDetailsStep: React.FC<ProposalActionModalStepProps> = props => {
   return (
     <div>
       <ModalTitle>
-        <Trans>Add Lump Sum Action</Trans>
+        <Trans>Add Transfer Funds Action</Trans>
       </ModalTitle>
 
       <BrandDropdown

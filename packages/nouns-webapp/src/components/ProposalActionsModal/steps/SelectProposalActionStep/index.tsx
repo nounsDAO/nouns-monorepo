@@ -26,31 +26,31 @@ const SelectProposalActionStep: React.FC<ProposalActionModalStepProps> = props =
 
       <ModalSubTitle>
         <Trans>
-          Nouns supports two transaction types: Lump sum and function call. Lump sum transaction
+          Nouns supports two transaction types: Transfer Funds and function call. Transfer Funds transaction
           send a fixed amount of ETH or USDC to a given wallet. Function call transaction call a
           function on a provided contract.
         </Trans>
       </ModalSubTitle>
 
       <BrandDropdown
-        value={state.actionType === ProposalActionType.LUMP_SUM ? 'Lump sum' : 'Function call'}
+        value={state.actionType === ProposalActionType.LUMP_SUM ? 'Transfer Funds' : 'Function call'}
         onChange={e => {
           setState(x => ({
             ...x,
             actionType:
-              e.target.value === 'Lump sum'
+              e.target.value === 'Transfer Funds'
                 ? ProposalActionType.LUMP_SUM
                 : ProposalActionType.FUNCTION_CALL,
           }));
 
-          if (e.target.value === 'Lump sum') {
+          if (e.target.value === 'Transfer Funds') {
             setNextStep(ProposalActionCreationStep.LUMP_SUM_DETAILS);
           } else {
             setNextStep(ProposalActionCreationStep.FUNCTION_CALL_SELECT_FUNCTION);
           }
         }}
       >
-        <option value={'Lump sum'}>Lump sum</option>
+        <option value={'Transfer Funds'}>Transfer Funds</option>
         <option value={'Function call'}>Function call</option>
       </BrandDropdown>
 
