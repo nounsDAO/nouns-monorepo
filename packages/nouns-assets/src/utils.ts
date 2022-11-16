@@ -5,6 +5,8 @@ import { images, bgcolors } from './image-data.json';
 
 const { bodies, accessories, heads, glasses } = images;
 
+type ObjectKey = keyof typeof images;
+
 /**
  * Get encoded part and background information using a Noun seed
  * @param seed The Noun seed
@@ -88,8 +90,7 @@ export const getNounSeedFromBlockHash = (nounId: BigNumberish, blockHash: string
  * @param partType The label of the part type to use
  * @param partIndex The index within the image data array of the part to get
  */
- export const getPartData = (partType:string, partIndex:number): string => {
-  type ObjectKey = keyof typeof images;
+export const getPartData = (partType: string, partIndex: number): string => {
   const part = partType as ObjectKey;
   return images[part][partIndex].data;
 };
