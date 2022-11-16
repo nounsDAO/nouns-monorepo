@@ -61,7 +61,7 @@ export const getPseudorandomPart = (
   pseudorandomness: string,
   partCount: number,
   shiftAmount: number,
-  uintSize: number = 48,
+  uintSize = 48,
 ): number => {
   const hex = shiftRightAndCast(pseudorandomness, shiftAmount, uintSize);
   return BigNumber.from(hex).mod(partCount).toNumber();
@@ -81,4 +81,15 @@ export const getNounSeedFromBlockHash = (nounId: BigNumberish, blockHash: string
     head: getPseudorandomPart(pseudorandomness, heads.length, 144),
     glasses: getPseudorandomPart(pseudorandomness, glasses.length, 192),
   };
+};
+
+/**
+ * Get encoded part information for one trait
+ * @param partType The label of the part type to use
+ * @param partIndex The index within the image data array of the part to get
+ */
+ export const getPartData = (partType:string, partIndex:number): string => {
+  type ObjectKey = keyof typeof images;
+  const part = partType as ObjectKey;
+  return images[part][partIndex].data;
 };
