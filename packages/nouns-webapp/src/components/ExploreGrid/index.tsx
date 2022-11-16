@@ -45,7 +45,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
         };
       })
       .reverse();
-      
+
     setIndividualNouns(nouns);
     // After initial nouns are set, run range calls
     rangeCalls(props.nounCount, nouns);
@@ -106,7 +106,7 @@ const ExploreGrid: React.FC<ExploreGridProps> = props => {
           id: null,
           imgSrc: undefined,
         };
-    });
+      });
     props.setNounsList(placeholderNounsData);
 
     if (props.nounCount >= 0) {

@@ -43,9 +43,7 @@ export const StandaloneNounImage: React.FC<StandaloneNounProps> = (props: Standa
   const seed = useNounSeed(nounId);
   const noun = seed && getNoun(nounId, seed);
 
-  return (
-    <Image src={noun ? noun.image : ''} fluid />
-  );
+  return <Image src={noun ? noun.image : ''} fluid />;
 };
 
 const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProps) => {

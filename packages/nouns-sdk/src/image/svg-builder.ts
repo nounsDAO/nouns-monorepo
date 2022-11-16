@@ -46,42 +46,44 @@ export const buildSVG = (
   paletteColors: string[],
   bgColor?: string,
 ): string => {
-  const svgWithoutEndTag = parts.reduce((result, part) => {
-    const svgRects: string[] = [];
-    const { bounds, rects } = decodeImage(part.data);
+  const svgWithoutEndTag = parts.reduce(
+    (result, part) => {
+      const svgRects: string[] = [];
+      const { bounds, rects } = decodeImage(part.data);
 
-    let currentX = bounds.left;
-    let currentY = bounds.top;
+      let currentX = bounds.left;
+      let currentY = bounds.top;
 
-    rects.forEach(draw => {
-      let drawLength = draw[0];
-      const colorIndex = draw[1];
-      const hexColor = paletteColors[colorIndex];
+      rects.forEach(draw => {
+        let drawLength = draw[0];
+        const colorIndex = draw[1];
+        const hexColor = paletteColors[colorIndex];
 
-      let length = getRectLength(currentX, drawLength, bounds.right);
-      while (length > 0) {
-        // Do not push rect if transparent
-        if (colorIndex !== 0) {
-          svgRects.push(
-            `<rect width="${length * 10}" height="10" x="${currentX * 10}" y="${
-              currentY * 10
-            }" fill="#${hexColor}" />`,
-          );
+        let length = getRectLength(currentX, drawLength, bounds.right);
+        while (length > 0) {
+          // Do not push rect if transparent
+          if (colorIndex !== 0) {
+            svgRects.push(
+              `<rect width="${length * 10}" height="10" x="${currentX * 10}" y="${
+                currentY * 10
+              }" fill="#${hexColor}" />`,
+            );
+          }
+
+          currentX += length;
+          if (currentX === bounds.right) {
+            currentX = bounds.left;
+            currentY++;
+          }
+
+          drawLength -= length;
+          length = getRectLength(currentX, drawLength, bounds.right);
         }
-
-        currentX += length;
-        if (currentX === bounds.right) {
-          currentX = bounds.left;
-          currentY++;
-        }
-
-        drawLength -= length;
-        length = getRectLength(currentX, drawLength, bounds.right);
-      }
-    });
-    result += svgRects.join('');
-    return result;
-  }, `
+      });
+      result += svgRects.join('');
+      return result;
+    },
+    `
     <svg 
       width="320" 
       height="320" 
@@ -90,7 +92,8 @@ export const buildSVG = (
       shape-rendering="crispEdges">
         <rect width="100%" height="100%" ${bgColor ? `fill="#${bgColor}"` : 'fill="none"'} />
     />
-  `);
+  `,
+  );
 
   return `${svgWithoutEndTag}</svg>`;
 };
