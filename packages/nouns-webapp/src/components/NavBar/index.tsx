@@ -13,15 +13,22 @@ import { ExternalURL, externalURL } from '../../utils/externalURL';
 import useLidoBalance from '../../hooks/useLidoBalance';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookOpen } from '@fortawesome/free-solid-svg-icons';
+import { faBookOpen, faStar } from '@fortawesome/free-solid-svg-icons';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import NavBarTreasury from '../NavBarTreasury';
 import NavWallet from '../NavWallet';
 import { Trans } from '@lingui/macro';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import NavLocaleSwitcher from '../NavLocaleSwitcher';
+import NavDropdown from '../NavDropdown';
+import { Dropdown } from 'react-bootstrap';
+import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
+import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
+import { usePickByState } from '../../utils/colorResponsiveUIUtils';
+import { ReactComponent as Noggles } from '../../assets/icons/Noggles.svg';
+import clsx from 'clsx';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
@@ -121,18 +128,52 @@ const NavBar = () => {
                 buttonStyle={nonWalletButtonStyle}
               />
             </Nav.Link>
-            <Nav.Link
-              as={Link}
-              to="/playground"
-              className={classes.nounsNavLink}
-              onClick={closeNav}
-            >
-              <NavBarButton
-                buttonText={<Trans>Playground</Trans>}
-                buttonIcon={<FontAwesomeIcon icon={faPlay} />}
-                buttonStyle={nonWalletButtonStyle}
-              />
-            </Nav.Link>
+            <div className={clsx(responsiveUiUtilsClasses.mobileOnly)}>
+              <Nav.Link as={Link} to="/explore" className={classes.nounsNavLink} onClick={closeNav}>
+                <NavBarButton
+                  buttonText={<Trans>Playground</Trans>}
+                  buttonIcon={<FontAwesomeIcon icon={faPlay} />}
+                  buttonStyle={nonWalletButtonStyle}
+                />
+              </Nav.Link>
+              <Nav.Link as={Link} to="/explore" className={classes.nounsNavLink} onClick={closeNav}>
+                <NavBarButton
+                  buttonText={<Trans>Nouns &amp; Traits</Trans>}
+                  buttonIcon={<FontAwesomeIcon icon={faStar} />}
+                  buttonStyle={nonWalletButtonStyle}
+                />
+              </Nav.Link>
+            </div>
+            <div className={clsx(responsiveUiUtilsClasses.desktopOnly)}>
+              <NavDropdown buttonIcon={<Noggles />} buttonStyle={nonWalletButtonStyle}>
+                <Dropdown.Item
+                  className={clsx(
+                    usePickByState(
+                      navDropdownClasses.whiteInfoSelectedBottom,
+                      navDropdownClasses.coolInfoSelected,
+                      navDropdownClasses.warmInfoSelected,
+                      history,
+                    ),
+                  )}
+                  href="/explore"
+                >
+                  Nouns &amp; Traits
+                </Dropdown.Item>
+                <Dropdown.Item
+                  className={clsx(
+                    usePickByState(
+                      navDropdownClasses.whiteInfoSelectedBottom,
+                      navDropdownClasses.coolInfoSelected,
+                      navDropdownClasses.warmInfoSelected,
+                      history,
+                    ),
+                  )}
+                  href="/playground"
+                >
+                  Playground
+                </Dropdown.Item>
+              </NavDropdown>
+            </div>
             <NavLocaleSwitcher buttonStyle={nonWalletButtonStyle} />
             <NavWallet address={activeAccount || '0'} buttonStyle={nonWalletButtonStyle} />{' '}
           </Navbar.Collapse>

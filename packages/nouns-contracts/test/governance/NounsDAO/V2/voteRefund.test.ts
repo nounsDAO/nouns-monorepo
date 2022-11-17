@@ -3,7 +3,13 @@ import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { BigNumber, ContractReceipt } from 'ethers';
 import { ethers } from 'hardhat';
-import { NounsDAOLogicV2, NounsDescriptorV2__factory, NounsToken } from '../../../../typechain';
+import {
+  NounsDAOLogicV2,
+  NounsDAOLogicV2__factory,
+  NounsDescriptorV2__factory,
+  NounsToken,
+  Voter__factory,
+} from '../../../../typechain';
 import { MaliciousVoter__factory } from '../../../../typechain/factories/contracts/test/MaliciousVoter__factory';
 import {
   address,
@@ -286,6 +292,29 @@ describe('Vote Refund', () => {
       expect(balanceDiff).to.be.eq(await txCostInEth(r));
       await expect(tx).to.changeEtherBalance(gov, 0);
     });
+
+    it('refunds EOA user when voting via a smart contract (tx.origin)', async () => {
+      await fundGov();
+
+      const voter = await new Voter__factory(deployer).deploy(gov.address, 2, 1, true);
+      await token.connect(user).transferFrom(user.address, voter.address, 0);
+      await token.connect(user).transferFrom(user.address, user2.address, 1);
+      await advanceBlocks(1);
+      await submitProposal(user2);
+
+      const balanceBefore = await user.getBalance();
+      const tx = await voter.connect(user).castVote(DEFAULT_GAS_OPTIONS);
+      const r = await tx.wait();
+      const balanceDiff = balanceBefore.sub(await user.getBalance());
+
+      expect(r.gasUsed).to.be.gt(0);
+      expect(balanceDiff).to.be.closeTo(BigNumber.from(0), REFUND_ERROR_MARGIN);
+
+      expectRefundEvent(r, user, await txCostInEth(r));
+      await expect(tx)
+        .to.emit(gov, 'VoteCast')
+        .withArgs(voter.address, BigNumber.from(2), 1, 1, 'some reason');
+    });
   });
 
   async function expectedPriorityFeeCappedDiff(r: ContractReceipt): Promise<BigNumber> {
@@ -322,7 +351,17 @@ describe('Vote Refund', () => {
 
   function expectRefundEvent(r: ContractReceipt, u: SignerWithAddress, expectedCost: BigNumber) {
     // Not using expect emit because it doesn't support the `closeTo` matcher
-    const refundEvent = r.events!.find(e => e.event! === 'RefundableVote');
+    // Using longer event parsing because r.events doesn't work when using the Voter contract
+    // to simulate multisig usage; events are returned undefined
+    const daoInterface = NounsDAOLogicV2__factory.createInterface();
+    const eventId = ethers.utils.id('RefundableVote(address,uint256,bool)');
+    const filtered = r.logs.filter(l => l.topics[0] === eventId);
+    const parsed = filtered.map(e => {
+      return daoInterface.parseLog(e);
+    });
+
+    expect(parsed.length).to.equal(1);
+    const refundEvent = parsed[0];
     expect(refundEvent).to.not.be.undefined;
     expect(refundEvent!.args!.voter).to.equal(u.address);
     expect(refundEvent!.args!.refundSent).to.be.true;

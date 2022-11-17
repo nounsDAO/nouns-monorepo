@@ -84,6 +84,7 @@ msgstr ""
 msgid "Abstained on"
 msgstr ""
 
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Accessory"
 msgstr ""
@@ -206,6 +207,7 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Background"
 msgstr ""
@@ -243,6 +245,7 @@ msgstr ""
 msgid "Bids will appear here"
 msgstr ""
 
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Body"
 msgstr ""
@@ -467,6 +470,8 @@ msgstr ""
 msgid "Expires {0}"
 msgstr ""
 
+#: src/components/ExploreGrid/ExploreNav/index.tsx
+#: src/components/NavDropdown/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Explore"
 msgstr ""
@@ -512,6 +517,7 @@ msgstr ""
 msgid "Generate Nouns"
 msgstr ""
 
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Glasses"
 msgstr ""
@@ -528,6 +534,7 @@ msgstr ""
 msgid "Has"
 msgstr ""
 
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Head"
 msgstr ""
@@ -653,6 +660,10 @@ msgstr ""
 
 #: src/pages/Governance/index.tsx
 msgid "Nouns"
+msgstr ""
+
+#: src/components/NavBar/index.tsx
+msgid "Nouns & Traits"
 msgstr ""
 
 #: src/components/NounInfoRowHolder/index.tsx
@@ -1118,6 +1129,10 @@ msgstr ""
 
 #: src/components/Bid/index.tsx
 msgid "Vote for the next Noun"
+msgstr ""
+
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
+msgid "Vote history"
 msgstr ""
 
 #: src/components/VoteModal/index.tsx

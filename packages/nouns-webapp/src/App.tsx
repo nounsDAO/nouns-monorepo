@@ -16,6 +16,7 @@ import GovernancePage from './pages/Governance';
 import CreateProposalPage from './pages/CreateProposal';
 import VotePage from './pages/Vote';
 import NoundersPage from './pages/Nounders';
+import ExplorePage from './pages/Explore';
 import NotFoundPage from './pages/NotFound';
 import Playground from './pages/Playground';
 import { CHAIN_ID } from './config';
@@ -66,6 +67,7 @@ function App() {
             <Route exact path="/vote/:id" component={VotePage} />
             <Route exact path="/playground" component={Playground} />
             <Route exact path="/delegate" component={DelegatePage} />
+            <Route exact path="/explore" component={ExplorePage} />
             <Route component={NotFoundPage} />
           </Switch>
           <Footer />

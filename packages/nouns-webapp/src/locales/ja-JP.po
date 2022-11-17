@@ -89,6 +89,7 @@ msgstr "Propへの投票を棄権する {0} "
 msgid "Abstained on"
 msgstr "棄権しました。"
 
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Accessory"
 msgstr "付属品"
@@ -211,6 +212,7 @@ msgstr "オークション終了まで"
 msgid "Back"
 msgstr "戻る"
 
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Background"
 msgstr "背景"
@@ -248,6 +250,7 @@ msgstr "入札"
 msgid "Bids will appear here"
 msgstr "入札はここに表示されます"
 
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Body"
 msgstr "体"
@@ -472,6 +475,8 @@ msgstr "期限切れです"
 msgid "Expires {0}"
 msgstr "残り {0} で期限切れになります"
 
+#: src/components/ExploreGrid/ExploreNav/index.tsx
+#: src/components/NavDropdown/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Explore"
 msgstr "探索"
@@ -517,6 +522,7 @@ msgstr "関数"
 msgid "Generate Nouns"
 msgstr "Nounsを作る"
 
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Glasses"
 msgstr "メガネ"
@@ -533,6 +539,7 @@ msgstr "ガバナンス「スロースタート」"
 msgid "Has"
 msgstr "票あり"
 
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Head"
 msgstr "頭"
@@ -659,6 +666,10 @@ msgstr "Nounderへの報酬"
 #: src/pages/Governance/index.tsx
 msgid "Nouns"
 msgstr "Nouns"
+
+#: src/components/NavBar/index.tsx
+msgid "Nouns & Traits"
+msgstr ""
 
 #: src/components/NounInfoRowHolder/index.tsx
 msgid "Nouns Auction House"
@@ -1124,6 +1135,10 @@ msgstr "イーサスキャンで見る"
 #: src/components/Bid/index.tsx
 msgid "Vote for the next Noun"
 msgstr "次のNounに投票する"
+
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
+msgid "Vote history"
+msgstr ""
 
 #: src/components/VoteModal/index.tsx
 msgid "Vote on Prop {0}"
