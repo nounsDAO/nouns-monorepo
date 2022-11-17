@@ -11,6 +11,24 @@
   margin: 3rem 0;
 }
 
+.headerWrapper ul {
+  margin: 1rem 0;
+}
+
+.headerWrapper ol {
+  margin: 3rem 0;
+  list-style-type: upper-roman;
+}
+
+.headerWrapper li {
+  margin: 0 1rem 1rem 1rem;
+}
+
+.boldText {
+  font-family: 'PT Root UI';
+  font-weight: bold;
+}
+
 .accordionItem {
   font-family: 'PT Root UI', sans-serif;
   font-weight: 500;
