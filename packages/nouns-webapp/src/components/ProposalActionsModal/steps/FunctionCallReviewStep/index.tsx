@@ -17,8 +17,9 @@ export enum SupportedCurrencies {
 const handleActionAdd = (state: ProposalActionModalState, onActionAdd: (e?: any) => void) => {
   onActionAdd({
     address: state.address,
-    value: state.amount ?  utils.parseEther(state.amount.toString()).toString() : '0',
+    value: state.amount ? utils.parseEther(state.amount.toString()).toString() : '0',
     signature: state.function,
+    decodedCalldata: JSON.stringify(state.args ?? []),
     calldata: state.abi?._encodeParams(
       state.abi?.functions[state.function ?? '']?.inputs,
       state.args ?? [],

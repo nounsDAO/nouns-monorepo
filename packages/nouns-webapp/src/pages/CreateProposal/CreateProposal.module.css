@@ -64,6 +64,11 @@
   border-radius: 8px;
 }
 
+.tokenBuyerNotif {
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
 .createProposalButton {
   height: 50px;
   border-radius: 8px;

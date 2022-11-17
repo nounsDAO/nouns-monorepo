@@ -26,14 +26,16 @@ const SelectProposalActionStep: React.FC<ProposalActionModalStepProps> = props =
 
       <ModalSubTitle>
         <Trans>
-          Nouns supports two transaction types: Transfer Funds and function call. Transfer Funds transaction
-          send a fixed amount of ETH or USDC to a given wallet. Function call transaction call a
-          function on a provided contract.
+          Nouns supports two transaction types: Transfer Funds and function call. Transfer Funds
+          transaction send a fixed amount of ETH or USDC to a given wallet. Function call
+          transaction call a function on a provided contract.
         </Trans>
       </ModalSubTitle>
 
       <BrandDropdown
-        value={state.actionType === ProposalActionType.LUMP_SUM ? 'Transfer Funds' : 'Function call'}
+        value={
+          state.actionType === ProposalActionType.LUMP_SUM ? 'Transfer Funds' : 'Function call'
+        }
         onChange={e => {
           setState(x => ({
             ...x,

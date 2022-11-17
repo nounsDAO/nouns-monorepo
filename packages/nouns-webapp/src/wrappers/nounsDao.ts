@@ -120,6 +120,7 @@ export interface ProposalTransaction {
   value: string;
   signature: string;
   calldata: string;
+  decodedCalldata?: string;
   usdcValue?: number;
 }
 

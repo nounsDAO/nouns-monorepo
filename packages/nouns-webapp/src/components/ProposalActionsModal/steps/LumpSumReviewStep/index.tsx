@@ -27,6 +27,11 @@ const handleActionAdd = (state: ProposalActionModalState, onActionAdd: (e?: any)
       value: '0',
       usdcValue: Math.round(parseFloat(state.amount ?? '0') * 1_000_000),
       signature,
+      decodedCalldata: JSON.stringify([
+        state.address,
+        // USDC has 6 decimals so we convert from human readable format to contract input format here
+        Math.round(parseFloat(state.amount ?? '0') * 1_000_000).toString(),
+      ]),
       calldata: abi?._encodeParams(abi?.functions[signature]?.inputs, [
         state.address,
         // USDC has 6 decimals so we convert from human readable format to contract input format here

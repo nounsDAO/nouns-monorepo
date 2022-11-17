@@ -45,6 +45,7 @@ const CreateProposalPage = () => {
 
   const handleAddProposalAction = useCallback(
     (transaction: ProposalTransaction) => {
+      console.log(transaction);
       if (!transaction.address.startsWith('0x')) {
         transaction.address = `0x${transaction.address}`;
       }
@@ -231,6 +232,20 @@ const CreateProposalPage = () => {
           proposalTransactions={proposalTransactions}
           onRemoveProposalTransaction={handleRemoveProposalAction}
         />
+
+        {totalUSDCPayment > 0 && (
+          <Alert variant="secondary" className={classes.tokenBuyerNotif}>
+            <b>
+              <Trans>Note</Trans>
+            </b>
+            :{' '}
+            <Trans>
+              Because this proposal contains a USDC fund transfer action we've added an additional
+              ETH transaction to refill the TokenBuyer contract. This action allows to DAO to
+              continue to trustlessly acquire USDC to fund proposals like this.
+            </Trans>
+          </Alert>
+        )}
         <ProposalEditor
           title={titleValue}
           body={bodyValue}

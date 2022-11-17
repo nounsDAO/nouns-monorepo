@@ -97,8 +97,8 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
   },
   [ChainId.Mainnet]: {
     lidoToken: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
-    payerContract: '0x89AbC50b1Ed7B9B0879433032203a0Bd21B80EB4',
-    tokenBuyer: '0xeb12082a312a295c4794f9fda05d563bcd21bbb3',
+    payerContract: '0xd97Bcd9f47cEe35c0a9ec1dc40C1269afc9E8E1D',
+    tokenBuyer: '0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5',
   },
   [ChainId.Hardhat]: {
     lidoToken: undefined,
