@@ -1024,6 +1024,10 @@ msgstr "このNounは作成されたばかりで、動きがありません。�
 msgid "This transaction sends {0} USDC to <0/> via the DAO's PayerContract."
 msgstr ""
 
+#: src/components/ProposalContent/index.tsx
+msgid "This transaction was automatically added to refill the TokenBuyer. Proposers do not recieve this ETH."
+msgstr ""
+
 #: src/pages/Governance/index.tsx
 msgid "This treasury exists for <0>Nouns DAO</0> participants to allocate resources for the long-term growth and prosperity of the Nouns project."
 msgstr "このトレジャリーは、<0>Nouns DAO</0>の参加者がNounsプロジェクトの長期的な成長と繁栄目的に、リソースを配分するために存在しています。"
