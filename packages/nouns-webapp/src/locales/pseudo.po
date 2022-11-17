@@ -390,8 +390,8 @@ msgid "Disconnect"
 msgstr ""
 
 #: src/components/Footer/index.tsx
-msgid "Discord"
-msgstr ""
+#~ msgid "Discord"
+#~ msgstr ""
 
 #: src/components/NavBar/index.tsx
 msgid "Discourse"

@@ -395,8 +395,8 @@ msgid "Disconnect"
 msgstr "切断する"
 
 #: src/components/Footer/index.tsx
-msgid "Discord"
-msgstr "Discord"
+#~ msgid "Discord"
+#~ msgstr "Discord"
 
 #: src/components/NavBar/index.tsx
 msgid "Discourse"
