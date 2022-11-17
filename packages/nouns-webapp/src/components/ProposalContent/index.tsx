@@ -82,19 +82,29 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
                   )
                   {d.target.toLowerCase() === config.addresses.tokenBuyer?.toLowerCase() && (
                     <div className={classes.txnInfoText}>
-                      <InformationCircleIcon className={classes.txnInfoIcon} />
-                      This transaction was automatically added to refill the TokenBuyer. Proposers
-                      do not recieve this ETH.
+                      <div className={classes.txnInfoIconWrapper}>
+                        <InformationCircleIcon className={classes.txnInfoIcon} />
+                      </div>
+                      <div>
+                        <Trans>
+                          This transaction was automatically added to refill the TokenBuyer.
+                          Proposers do not recieve this ETH.
+                        </Trans>
+                      </div>
                     </div>
                   )}
                   {d.target.toLowerCase() === config.addresses.payerContract?.toLowerCase() && (
                     <div className={classes.txnInfoText}>
-                      <InformationCircleIcon className={classes.txnInfoIcon} />
-                      <Trans>
-                        This transaction sends {parseInt(d.callData.split(',')[1]) / 10_0000} USDC
-                        to <ShortAddress address={d.callData.split(',')[0]} /> via the DAO's
-                        PayerContract.
-                      </Trans>
+                      <div className={classes.txnInfoIconWrapper}>
+                        <InformationCircleIcon className={classes.txnInfoIcon} />
+                      </div>
+                      <div>
+                        <Trans>
+                          This transaction sends {parseInt(d.callData.split(',')[1]) / 10_0000} USDC
+                          to <ShortAddress address={d.callData.split(',')[0]} /> via the DAO's
+                          PayerContract.
+                        </Trans>
+                      </div>
                     </div>
                   )}
                 </li>
