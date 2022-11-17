@@ -81,51 +81,15 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
                   })}
                   )
                   {d.target.toLowerCase() === config.addresses.tokenBuyer?.toLowerCase() && (
-                    <div
-                      style={{
-                        color: 'var(--brand-gray-light-text)',
-                        marginLeft: '-0.1rem',
-                        marginTop: '0.25rem',
-                        marginBottom: '0.25rem',
-                        fontWeight: '500',
-                        fontSize: '14px',
-                        display: 'flex',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <InformationCircleIcon
-                        style={{
-                          marginRight: '0.25rem',
-                          height: '14px',
-                          width: '14px',
-                          marginTop: '0.1rem',
-                        }}
-                      />
+                    <div className={classes.txnInfoText}>
+                      <InformationCircleIcon className={classes.txnInfoIcon} />
                       This transaction was automatically added to refill the TokenBuyer. Proposers
                       do not recieve this ETH.
                     </div>
                   )}
                   {d.target.toLowerCase() === config.addresses.payerContract?.toLowerCase() && (
-                    <div
-                      style={{
-                        color: 'var(--brand-gray-light-text)',
-                        marginLeft: '-0.1rem',
-                        marginTop: '0.25rem',
-                        marginBottom: '0.25rem',
-                        fontWeight: '500',
-                        fontSize: '14px',
-                        display: 'flex',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <InformationCircleIcon
-                        style={{
-                          marginRight: '0.25rem',
-                          height: '14px',
-                          width: '14px',
-                          marginTop: '0.1rem',
-                        }}
-                      />
+                    <div className={classes.txnInfoText}>
+                      <InformationCircleIcon className={classes.txnInfoIcon} />
                       <Trans>
                         This transaction sends {parseInt(d.callData.split(',')[1]) / 10_0000} USDC
                         to <ShortAddress address={d.callData.split(',')[0]} /> via the DAO's

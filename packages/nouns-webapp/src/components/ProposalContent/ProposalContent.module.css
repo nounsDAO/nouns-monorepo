@@ -36,3 +36,33 @@
   max-width: 100%;
   height: auto;
 }
+
+.txnInfoText {
+  color: var(--brand-gray-light-text);
+  margin-left: -0.1rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 992px) {
+  .txnInfoText {
+    align-items: flex-start;
+    margin-top: 1rem;
+  }
+
+  .txnInfoIcon {
+    height: 16px;
+    width: 16px;
+  }
+}
+
+.txnInfoIcon {
+  margin-right: 0.25rem;
+  height: 14px;
+  width: 14px;
+  margin-top: 0.1rem;
+}
