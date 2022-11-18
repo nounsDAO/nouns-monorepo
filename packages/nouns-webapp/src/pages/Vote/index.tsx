@@ -375,7 +375,7 @@ const VotePage = ({
                       id={'view-dq-info'}
                       className={classes.delegateHover}
                       getContent={dataTip => {
-                        return <Trans>View Dynamic Quorum Info</Trans>;
+                        return <Trans>View Treshold Info</Trans>;
                       }}
                     />
                   )}
@@ -385,7 +385,7 @@ const VotePage = ({
                     onClick={() => setShowDynamicQuorumInfoModal(true && isV2Prop)}
                     className={clsx(classes.thresholdInfo, isV2Prop ? classes.cursorPointer : '')}
                   >
-                    <span>{isV2Prop ? <Trans>Current Quorum</Trans> : <Trans>Quorum</Trans>}</span>
+                    <span>{isV2Prop ? <Trans>Current Threshold</Trans> : <Trans>Threshold</Trans>}</span>
                     <h3>
                       <Trans>
                         {isV2Prop ? i18n.number(currentQuorum ?? 0) : proposal.quorumVotes} votes
