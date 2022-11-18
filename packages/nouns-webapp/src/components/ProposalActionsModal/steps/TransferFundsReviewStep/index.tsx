@@ -3,22 +3,22 @@ import { utils } from 'ethers';
 import React from 'react';
 import { FinalProposalActionStepProps, ProposalActionModalState } from '../..';
 import ShortAddress from '../../../ShortAddress';
-import { SupportedCurrency } from '../LumpSumDetailsStep';
-import classes from './LumpSumReviewStep.module.css';
+import { SupportedCurrency } from '../TransferFundsDetailsStep';
+import classes from './TransferFundsReviewStep.module.css';
 import payerABI from '../../../../utils/payerContractUtils/payerABI.json';
 import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
 import ModalTitle from '../../../ModalTitle';
 import config from '../../../../config';
 
 const handleActionAdd = (state: ProposalActionModalState, onActionAdd: (e?: any) => void) => {
-  if (state.lumpSumCurrency === SupportedCurrency.ETH) {
+  if (state.TransferFundsCurrency === SupportedCurrency.ETH) {
     onActionAdd({
       address: state.address,
       value: state.amount ? utils.parseEther(state.amount.toString()).toString() : '0',
       signature: '',
       calldata: '0x',
     });
-  } else if (state.lumpSumCurrency === SupportedCurrency.USDC) {
+  } else if (state.TransferFundsCurrency === SupportedCurrency.USDC) {
     const signature = 'sendOrRegisterDebt(address,uint256)';
     const abi = new utils.Interface(payerABI);
 
@@ -44,7 +44,7 @@ const handleActionAdd = (state: ProposalActionModalState, onActionAdd: (e?: any)
   }
 };
 
-const LumpSumReviewStep: React.FC<FinalProposalActionStepProps> = props => {
+const TransferFundsReviewStep: React.FC<FinalProposalActionStepProps> = props => {
   const { onNextBtnClick, onPrevBtnClick, state, onDismiss } = props;
 
   return (
@@ -55,7 +55,7 @@ const LumpSumReviewStep: React.FC<FinalProposalActionStepProps> = props => {
 
       <span className={classes.label}>Pay</span>
       <div className={classes.text}>
-        {state.amount} {state.lumpSumCurrency}
+        {state.amount} {state.TransferFundsCurrency}
       </div>
       <span className={classes.label}>To</span>
       <div className={classes.text}>
@@ -75,4 +75,4 @@ const LumpSumReviewStep: React.FC<FinalProposalActionStepProps> = props => {
   );
 };
 
-export default LumpSumReviewStep;
+export default TransferFundsReviewStep;

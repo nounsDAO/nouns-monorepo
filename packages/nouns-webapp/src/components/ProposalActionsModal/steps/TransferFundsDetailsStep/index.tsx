@@ -13,11 +13,11 @@ export enum SupportedCurrency {
   USDC = 'USDC',
 }
 
-const LumpSumDetailsStep: React.FC<ProposalActionModalStepProps> = props => {
+const TransferFundsDetailsStep: React.FC<ProposalActionModalStepProps> = props => {
   const { onNextBtnClick, onPrevBtnClick, state, setState } = props;
 
   const [currency, setCurrency] = useState<SupportedCurrency>(
-    state.lumpSumCurrency ?? SupportedCurrency.ETH,
+    state.TransferFundsCurrency ?? SupportedCurrency.ETH,
   );
   const [amount, setAmount] = useState<string>(state.amount ?? '0');
   const [address, setAddress] = useState(state.address ?? '');
@@ -79,7 +79,7 @@ const LumpSumDetailsStep: React.FC<ProposalActionModalStepProps> = props => {
             ...x,
             amount,
             address,
-            lumpSumCurrency: currency,
+            TransferFundsCurrency: currency,
           }));
           onNextBtnClick();
         }}
@@ -88,4 +88,4 @@ const LumpSumDetailsStep: React.FC<ProposalActionModalStepProps> = props => {
   );
 };
 
-export default LumpSumDetailsStep;
+export default TransferFundsDetailsStep;

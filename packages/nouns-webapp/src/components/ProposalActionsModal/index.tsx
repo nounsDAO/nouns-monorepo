@@ -2,8 +2,8 @@ import React, { SetStateAction, useState } from 'react';
 import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
 import { ProposalTransaction } from '../../wrappers/nounsDao';
 import SelectProposalActionStep from './steps/SelectProposalActionStep';
-import LumpSumDetailsStep, { SupportedCurrency } from './steps/LumpSumDetailsStep';
-import LumpSumReviewStep from './steps/LumpSumReviewStep';
+import TransferFundsDetailsStep, { SupportedCurrency } from './steps/TransferFundsDetailsStep';
+import TransferFundsReviewStep from './steps/TransferFundsReviewStep';
 import FunctionCallSelectFunctionStep from './steps/FunctionCallSelectFunctionStep';
 import FunctionCallEnterArgsStep from './steps/FunctionCallEnterArgsStep';
 import FunctionCallReviewStep from './steps/FunctionCallReviewStep';
@@ -27,7 +27,7 @@ export interface ProposalActionModalState {
   actionType: ProposalActionType;
   address: string;
   amount?: string;
-  lumpSumCurrency?: SupportedCurrency;
+  TransferFundsCurrency?: SupportedCurrency;
   function?: string;
   abi?: Interface;
   args?: string[];
@@ -76,7 +76,7 @@ const ModalContent: React.FC<{
       );
     case ProposalActionCreationStep.LUMP_SUM_DETAILS:
       return (
-        <LumpSumDetailsStep
+        <TransferFundsDetailsStep
           onNextBtnClick={() => setStep(ProposalActionCreationStep.LUMP_SUM_REVIEW)}
           onPrevBtnClick={() => setStep(ProposalActionCreationStep.SELECT_ACTION_TYPE)}
           state={state}
@@ -85,7 +85,7 @@ const ModalContent: React.FC<{
       );
     case ProposalActionCreationStep.LUMP_SUM_REVIEW:
       return (
-        <LumpSumReviewStep
+        <TransferFundsReviewStep
           onNextBtnClick={onActionAdd}
           onPrevBtnClick={() => setStep(ProposalActionCreationStep.LUMP_SUM_DETAILS)}
           state={state}
