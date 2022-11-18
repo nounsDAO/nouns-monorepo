@@ -81,7 +81,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
       <div className={classes.modal}>
         <div className={classes.content}>
           <h1 className={classes.title}>
-            <Trans>Dynamic Treshold</Trans>
+            <Trans>Dynamic Threshold</Trans>
           </h1>
 
           <p className={classes.mainCopy}>
@@ -90,7 +90,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                 The Threshold (minimum number of For votes required to pass a proposal) is set as a
                 function of the number of Against votes a proposal has recieved. It increases
                 linearly as a function of the % of Nouns voting against a prop, varying between Min
-                Treshold and Max Treshold.
+                Threshold and Max Threshold.
               </Trans>
             ) : (
               <Trans>
@@ -104,12 +104,12 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
           {/* Mobile - no graph content */}
           <div className={clsx(responsiveUiUtilsClasses.mobileOnly, classes.mobileQuorumWrapper)}>
             <div className={classes.mobileQuorumInfo}>
-              <span>Min Treshold:</span> {Math.floor((minQuorumBps * totalNounSupply) / 10_000)}{' '}
+              <span>Min Threshold:</span> {Math.floor((minQuorumBps * totalNounSupply) / 10_000)}{' '}
               Nouns
             </div>
 
             <div className={classes.mobileQuorumInfo}>
-              <span>Current Treshold:</span>{' '}
+              <span>Current Threshold:</span>{' '}
               {Math.floor(
                 (Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) * totalNounSupply) / 10_000,
               )}{' '}
@@ -117,7 +117,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
             </div>
 
             <div className={classes.mobileQuorumInfo}>
-              <span>Max Treshold:</span> {Math.floor((maxQuorumBps * totalNounSupply) / 10_000)}{' '}
+              <span>Max Threshold:</span> {Math.floor((maxQuorumBps * totalNounSupply) / 10_000)}{' '}
               Nouns
             </div>
           </div>
@@ -194,7 +194,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                   />
                   <circle cy={y} cx={x} r="7" fill="var(--brand-gray-light-text)" />
                   <text x="20" y="24">
-                    Max Treshold: {Math.floor((maxQuorumBps * totalNounSupply) / 10_000)} Nouns{' '}
+                    Max Threshold: {Math.floor((maxQuorumBps * totalNounSupply) / 10_000)} Nouns{' '}
                     <tspan fill="var(--brand-gray-light-text)">
                       ({maxQuorumBps / 100}% of Nouns)
                     </tspan>
@@ -243,7 +243,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                       x={x + 10}
                       y={y + (againstVotesBps > 0.9 * linearToConstantCrossoverBPS ? 20 : -10)}
                     >
-                      Current Treshold: {currentQuorum}{' '}
+                      Current Threshold: {currentQuorum}{' '}
                       <tspan fill="var(--brand-gray-light-text)">
                         ({againstVotesAbs} {againstVotesAbs === 1 ? 'Noun' : 'Nouns'} Currently
                         Against)
