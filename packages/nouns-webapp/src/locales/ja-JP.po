@@ -377,8 +377,12 @@ msgstr "ドキュメント"
 #~ msgstr ""
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
-msgid "Dynamic Treshold"
+msgid "Dynamic Threshold"
 msgstr ""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+#~ msgid "Dynamic Treshold"
+#~ msgstr ""
 
 #: src/components/Banner/index.tsx
 msgid "EVERY DAY,"
@@ -942,8 +946,12 @@ msgstr ""
 #~ msgstr ""
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
-msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. It increases linearly as a function of the % of Nouns voting against a prop, varying between Min Treshold and Max Treshold."
+msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. It increases linearly as a function of the % of Nouns voting against a prop, varying between Min Threshold and Max Threshold."
 msgstr ""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+#~ msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. It increases linearly as a function of the % of Nouns voting against a prop, varying between Min Treshold and Max Treshold."
+#~ msgstr ""
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
 msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. The number of For votes required to pass Proposal {0} is given by the following curve:"
