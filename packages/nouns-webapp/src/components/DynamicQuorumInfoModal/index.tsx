@@ -30,6 +30,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
   quorumCoefficent: number;
   totalNounSupply: number;
   onDismiss: () => void;
+  currentQuorum?: number;
 }> = props => {
   const {
     onDismiss,
@@ -40,6 +41,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
     minQuorumBps,
     maxQuorumBps,
     totalNounSupply,
+    currentQuorum,
   } = props;
 
   const linearToConstantCrossoverBPS = (maxQuorumBps - minQuorumBps) / quorumCoefficent;
@@ -87,8 +89,8 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
               <Trans>
                 The Threshold (minimum number of For votes required to pass a proposal) is set as a
                 function of the number of Against votes a proposal has recieved. It increases
-                linearlly as a function of the % of Nouns voting against a prop, varying between
-                Min Treshold and Max Treshold.
+                linearly as a function of the % of Nouns voting against a prop, varying between Min
+                Treshold and Max Treshold.
               </Trans>
             ) : (
               <Trans>
@@ -102,7 +104,8 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
           {/* Mobile - no graph content */}
           <div className={clsx(responsiveUiUtilsClasses.mobileOnly, classes.mobileQuorumWrapper)}>
             <div className={classes.mobileQuorumInfo}>
-              <span>Min Treshold:</span> {Math.floor((minQuorumBps * totalNounSupply) / 10_000)} Nouns
+              <span>Min Treshold:</span> {Math.floor((minQuorumBps * totalNounSupply) / 10_000)}{' '}
+              Nouns
             </div>
 
             <div className={classes.mobileQuorumInfo}>
@@ -114,7 +117,8 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
             </div>
 
             <div className={classes.mobileQuorumInfo}>
-              <span>Max Treshold:</span> {Math.floor((maxQuorumBps * totalNounSupply) / 10_000)} Nouns
+              <span>Max Treshold:</span> {Math.floor((maxQuorumBps * totalNounSupply) / 10_000)}{' '}
+              Nouns
             </div>
           </div>
 
@@ -228,11 +232,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                       x={x - 390}
                       y={y + (againstVotesBps > 0.9 * linearToConstantCrossoverBPS ? 20 : -10)}
                     >
-                      Current Threshold:{' '}
-                      {Math.floor(
-                        (Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) * totalNounSupply) /
-                          10_000,
-                      )}{' '}
+                      Current Threshold: {currentQuorum}{' '}
                       <tspan fill="var(--brand-gray-light-text)">
                         ({againstVotesAbs} {againstVotesAbs === 1 ? 'Noun' : 'Nouns'} Currently
                         Against)
@@ -243,11 +243,7 @@ const DynamicQuorumInfoModalOverlay: React.FC<{
                       x={x + 10}
                       y={y + (againstVotesBps > 0.9 * linearToConstantCrossoverBPS ? 20 : -10)}
                     >
-                      Current Treshold:{' '}
-                      {Math.floor(
-                        (Math.min(maxQuorumBps, dqmFunction(againstVotesBps)) * totalNounSupply) /
-                          10_000,
-                      )}{' '}
+                      Current Treshold: {currentQuorum}{' '}
                       <tspan fill="var(--brand-gray-light-text)">
                         ({againstVotesAbs} {againstVotesAbs === 1 ? 'Noun' : 'Nouns'} Currently
                         Against)
@@ -290,8 +286,9 @@ const DynamicQuorumInfoModal: React.FC<{
   proposal: Proposal;
   againstVotesAbsolute: number;
   onDismiss: () => void;
+  currentQuorum?: number;
 }> = props => {
-  const { onDismiss, proposal, againstVotesAbsolute } = props;
+  const { onDismiss, proposal, againstVotesAbsolute, currentQuorum } = props;
 
   const { data, loading, error } = useQuery(
     totalNounSupplyAtPropSnapshot(proposal && proposal.id ? proposal.id : '0'),
@@ -334,6 +331,7 @@ const DynamicQuorumInfoModal: React.FC<{
           onDismiss={onDismiss}
           proposal={proposal}
           totalNounSupply={data.proposals[0].totalSupply}
+          currentQuorum={currentQuorum}
         />,
         document.getElementById('overlay-root')!,
       )}
