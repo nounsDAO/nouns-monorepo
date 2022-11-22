@@ -112,7 +112,7 @@ const VotePage = ({
     return false;
   };
 
-  const isAwaitingDesctructiveStateChange = () => {
+  const isAwaitingDestructiveStateChange = () => {
     if (isCancellable) {
       return true;
     }
@@ -152,8 +152,8 @@ const VotePage = ({
     };
   })();
 
-  const desctructiveStateButtonAction = isCancellable ? <Trans>Cancel</Trans> : '';
-  const desctructiveStateAction = (() => {
+  const destructiveStateButtonAction = isCancellable ? <Trans>Cancel</Trans> : '';
+  const destructiveStateAction = (() => {
     if (isCancellable) {
       return () => {
         if (proposal?.id) {
@@ -311,7 +311,7 @@ const VotePage = ({
         )}
       </Col>
       <Col lg={10} className={clsx(classes.proposal, classes.wrapper)}>
-        {(isAwaitingStateChange() || isAwaitingDesctructiveStateChange()) && (
+        {(isAwaitingStateChange() || isAwaitingDestructiveStateChange()) && (
           <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
             <Col className="d-grid gap-4">
               {isAwaitingStateChange() && (
@@ -329,9 +329,9 @@ const VotePage = ({
                 </Button>
               )}
 
-              {isAwaitingDesctructiveStateChange() && (
+              {isAwaitingDestructiveStateChange() && (
                 <Button
-                  onClick={desctructiveStateAction}
+                  onClick={destructiveStateAction}
                   disabled={isCancelPending}
                   variant="danger"
                   className={classes.desturctiveTransitionStateButton}
@@ -339,7 +339,7 @@ const VotePage = ({
                   {isCancelPending ? (
                     <Spinner animation="border" />
                   ) : (
-                    <Trans>{desctructiveStateButtonAction} Proposal ⌐◧-◧</Trans>
+                    <Trans>{destructiveStateButtonAction} Proposal ⌐◧-◧</Trans>
                   )}
                 </Button>
               )}
