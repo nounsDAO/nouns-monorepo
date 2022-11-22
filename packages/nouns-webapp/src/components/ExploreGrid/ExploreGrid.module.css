@@ -1,0 +1,289 @@
+.exploreGrid {
+  display: flex;
+  flex: 1 1;
+  width: 100%;
+  --border-radius: 10px;
+}
+
+.exploreGrid ul {
+  padding: 15px;
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  --gap: 0.8vw;
+  --columns: 10;
+  gap: var(--gap);
+  transition: gap 0.15s ease-in-out, background-color 0.25s ease-in-out;
+}
+
+.exploreGrid.sidebarHidden ul {
+  --columns: 30;
+  --gap: 0px;
+  padding: 0;
+  background-color: var(--brand-cool-background);
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  transition: gap 0.15s ease-in-out, background-color 0.25s ease-in-out;
+}
+
+.exploreGrid.sidebarHidden ul li,
+.exploreGrid.sidebarHidden ul li img {
+  border-radius: 0;
+}
+
+.exploreGrid.sidebarHidden ul li:hover,
+.exploreGrid.sidebarHidden ul li.activeNoun button,
+.nounHoverDisabled .exploreGrid li:hover {
+  box-shadow: none;
+}
+
+.exploreGrid.sidebarHidden .nounIdOverlay,
+.nounHoverDisabled .exploreGrid li:hover .nounIdOverlay {
+  display: none;
+}
+
+.exploreGrid.small ul {
+  --gap: 7px;
+  --columns: 20;
+  gap: var(--gap);
+}
+
+.exploreGrid li {
+  position: relative;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  border-radius: var(--border-radius);
+  width: calc((100% / var(--columns)) - var(--gap) + (var(--gap) / var(--columns)));
+  transition: width 0.3s ease-in-out;
+}
+
+.exploreGrid li:hover {
+  box-shadow: 0 0px 0px 4px rgba(0 0 0 / 30%);
+}
+
+.exploreGrid li img {
+  max-width: none;
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+  animation-name: animateIn;
+  animation-duration: 100ms;
+  animation-delay: calc(var(--animation-order) * 25ms);
+  animation-fill-mode: both;
+  animation-timing-function: ease-in-out;
+  border-radius: var(--border-radius);
+}
+
+.exploreGrid li button {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  background: #d5d7e1;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: var(--border-radius);
+  scroll-margin: 1vh;
+}
+
+.exploreGrid .nounIdOverlay {
+  margin: 0;
+  position: absolute;
+  bottom: clamp(4px, 0.7vw, 8px);
+  opacity: 0;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 6px;
+  padding: 4px 6px;
+  line-height: 1;
+  box-shadow: 0px 0px 10px rgb(0 0 0 / 25%);
+  font-family: 'Londrina Solid';
+  font-size: clamp(14px, 0.8vw, 24px);
+}
+
+.exploreGrid li:hover .nounIdOverlay,
+.exploreGrid li.activeNoun:hover .nounIdOverlay {
+  background: #fff;
+}
+
+.exploreGrid li:hover .nounIdOverlay,
+.exploreGrid li:focus .nounIdOverlay,
+.exploreGrid li.activeNoun .nounIdOverlay,
+.exploreGrid li.activeNoun:focus .nounIdOverlay,
+.exploreGrid li.activeNoun:hover .nounIdOverlay {
+  opacity: 1;
+  bottom: clamp(4px, 0.7vw, 8px);
+  transition: none;
+}
+
+.exploreGrid li.activeNoun .nounIdOverlay,
+.exploreGrid li.activeNoun:focus .nounIdOverlay,
+.exploreGrid li.activeNoun:hover .nounIdOverlay {
+  bottom: clamp(4px, 0.7vw, 8px);
+}
+
+.exploreGrid .activeNoun button:focus {
+  border: none;
+  outline: transparent;
+}
+
+.exploreGrid li a {
+  display: block;
+}
+
+.exploreGrid li .currentAuction {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  color: #000;
+  font-size: 0.5em;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0;
+  padding: 2px 3px 1px;
+}
+
+.exploreGrid li .label {
+  text-align: center;
+  font-family: 'Londrina Solid';
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  position: absolute;
+  bottom: 0px;
+}
+
+.exploreGrid li:hover .label {
+  bottom: 0px;
+  opacity: 1;
+}
+
+.activeNoun button {
+  box-shadow: 0 0px 0px 4px rgba(0 0 0 / 90%);
+}
+
+.exploreGrid li.activeNoun button {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.exploreGrid li a > div {
+  width: 100%;
+  padding: 0;
+  height: auto;
+  position: relative;
+}
+
+.exploreGrid.fullViewGrid li {
+  width: 3%;
+}
+
+@media (max-width: 1399px) {
+  .exploreGrid ul {
+    --columns: 8;
+  }
+  .exploreGrid.sidebarHidden ul {
+    --columns: 22;
+  }
+  /* .exploreGrid.sidebarHidden ul li img {   
+        border-radius: 4px;
+    } */
+}
+
+@media (max-width: 991px) {
+  .exploreWrap {
+    border: 0;
+    margin: 0 0.5rem;
+    --border-radius: 6px;
+  }
+  .exploreGrid ul,
+  .exploreGrid.sidebarHidden ul {
+    --gap: 15px;
+    --columns: 6;
+    background: #fff;
+    /* match padding around header elements */
+    padding: 0 0.5rem;
+  }
+
+  .exploreGrid ul li,
+  .exploreGrid.sidebarHidden ul li {
+    overflow: hidden;
+  }
+
+  .exploreGrid ul img,
+  .exploreGrid.sidebarHidden ul img,
+  .exploreGrid ul li,
+  .exploreGrid.sidebarHidden ul li,
+  .exploreGrid ul li button,
+  .exploreGrid.sidebarHidden ul li button {
+    border-radius: var(--border-radius);
+  }
+
+  .exploreGrid ul li:hover {
+    box-shadow: none;
+  }
+  .nav {
+    border: 0;
+    padding: 0 0 15px 0;
+  }
+  .nav .sizing {
+    display: none;
+  }
+  .exploreGrid .nounIdOverlay,
+  .exploreGrid.sidebarHidden .nounIdOverlay,
+  .exploreGrid li:hover .nounIdOverlay,
+  .exploreGrid li:focus .nounIdOverlay,
+  .exploreGrid li.activeNoun .nounIdOverlay,
+  .exploreGrid li.activeNoun:focus .nounIdOverlay,
+  .exploreGrid li.activeNoun:hover .nounIdOverlay {
+    display: block;
+    position: relative;
+    box-shadow: none;
+    bottom: auto;
+    opacity: 1;
+    width: 100%;
+    color: var(--brand-gray-light-text);
+    font-size: clamp(10px, 4vw, 16px);
+    padding: clamp(4px, 4vw, 8px) 6px clamp(4px, 2vw, 8px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-top: 0;
+    border-radius: 0;
+    border-bottom-right-radius: var(--border-radius);
+    border-bottom-left-radius: var(--border-radius);
+  }
+  .activeNoun button {
+    box-shadow: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .exploreGrid ul,
+  .exploreGrid.sidebarHidden ul {
+    --gap: 15px;
+    --columns: 3;
+  }
+}
+
+@media (max-width: 280px) {
+  .exploreGrid ul,
+  .exploreGrid.sidebarHidden ul {
+    --gap: 15px;
+    --columns: 1;
+  }
+}
+
+@keyframes animateIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
