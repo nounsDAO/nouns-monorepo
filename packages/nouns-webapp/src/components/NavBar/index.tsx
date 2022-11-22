@@ -129,17 +129,17 @@ const NavBar = () => {
               />
             </Nav.Link>
             <div className={clsx(responsiveUiUtilsClasses.mobileOnly)}>
-              <Nav.Link as={Link} to="/explore" className={classes.nounsNavLink} onClick={closeNav}>
+              <Nav.Link as={Link} to="/playground" className={classes.nounsNavLink} onClick={closeNav}>
                 <NavBarButton
                   buttonText={<Trans>Playground</Trans>}
                   buttonIcon={<FontAwesomeIcon icon={faPlay} />}
                   buttonStyle={nonWalletButtonStyle}
                 />
               </Nav.Link>
-              <Nav.Link as={Link} to="/explore" className={classes.nounsNavLink} onClick={closeNav}>
+              <Nav.Link as={Link} to="/explore" className={clsx(classes.nounsNavLink, classes.exploreButton)} onClick={closeNav}>
                 <NavBarButton
                   buttonText={<Trans>Nouns &amp; Traits</Trans>}
-                  buttonIcon={<FontAwesomeIcon icon={faStar} />}
+                  buttonIcon={<Noggles />}
                   buttonStyle={nonWalletButtonStyle}
                 />
               </Nav.Link>
