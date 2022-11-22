@@ -71,7 +71,7 @@
   border-top: 0px;
 }
 
-.desturctiveTransitionStateButton {
+.destructiveTransitionStateButton {
   height: 50px;
   border-radius: 8px;
   border-color: var(--brand-color-red);
@@ -82,13 +82,13 @@
   background-color: var(--brand-color-red);
 }
 
-.desturctiveTransitionStateButton:hover {
+.destructiveTransitionStateButton:hover {
   background-color: var(--brand-color-red);
   opacity: 0.5;
   cursor: pointer;
 }
 
-.desturctiveTransitionStateButtonSection {
+.destructiveTransitionStateButtonSection {
   height: 50px;
   border-radius: 8px;
   font-family: 'PT Root UI';
