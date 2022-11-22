@@ -128,3 +128,11 @@
   width: 100%;
   border: none;
 }
+/* Unique styling for non-fa icon on Explore button */
+@media (max-width: 992px) {
+  .exploreButton svg {
+    max-height: none;
+    min-height: 40px;
+    max-width: 40px;
+  }
+}
