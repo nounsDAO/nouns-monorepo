@@ -290,7 +290,9 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2Test {
         (, uint32 cardinality, ) = auction.oracle();
         assertEq(cardinality, 1_000);
 
-        Noracle.Observation[] memory prices = auction.prices(2);
+        Noracle.Observation[] memory prices = auction.prices(1_000);
+
+        assertEq(prices.length, 2);
 
         assertEq(prices[0].blockTimestamp, uint32(bid2Time));
         assertEq(prices[0].nounId, 2);
