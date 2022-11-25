@@ -37,6 +37,7 @@ library Noracle {
 
     /**
      * @dev Struct members size has been adjusted so the sum of bits is 256, to fit into a single storage slot.
+     * If updated to use more than 256 bits, consider updating `warmUpObservation` to warm up the additional storage space.
      * The maximum `amount` supported is 2814749.76710655 ETH.
      */
     struct Observation {
