@@ -68,12 +68,17 @@
 
 .nounsNavLink,
 .nounsNavLink:active,
-.nounsNavLink:visited {
+.nounsNavLink:visited,
+.nounsNavDropdownButton > button {
   font-family: 'PT Root UI';
   font-weight: bold;
   font-size: 0.9rem;
   padding: 0.3rem 0.3rem !important;
   color: black !important;
+}
+
+.nounsNavDropdownButton > button {
+  background: transparent;
 }
 
 .testnetImg {
@@ -100,4 +105,34 @@
   height: 44px;
   padding: 0.25rem 0.5rem;
   margin-right: 12px;
+}
+
+.nounsNavDropdownButton {
+  height: 40px;
+  border-radius: 10px;
+  font-size: 16px;
+  line-height: 16px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  padding: 0px 12px 0px 12px;
+  transition: all 0.125s ease-in-out;
+  box-shadow: none !important;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.nounsNavDropdownButton button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  border: none;
+}
+/* Unique styling for non-fa icon on Explore button */
+@media (max-width: 992px) {
+  .exploreButton svg {
+    max-height: none;
+    min-height: 40px;
+    max-width: 40px;
+  }
 }
