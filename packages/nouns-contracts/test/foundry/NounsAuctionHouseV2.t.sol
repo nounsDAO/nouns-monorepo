@@ -330,6 +330,39 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2Test {
         assertEq(prices[1].winner, bidder2);
     }
 
+    function test_prices_worksWhenLoopingBackFromIndexZeroAfterGrow() public {
+        vm.prank(owner);
+
+        // because grow happens before any writes, the first written index is 1
+        // so we need 4 writes to bring index to zero, such that getting two prices
+        // leads to a loop back to index = cardinality - 1
+        auction.growPriceHistory(2);
+
+        address bidder1 = address(0x4444);
+        address bidder2 = address(0x5555);
+        address bidder3 = address(0x6666);
+        address bidder4 = address(0x6666);
+        bidAndWinCurrentAuction(bidder1, 1.1 ether);
+        uint256 bid2Time = bidAndWinCurrentAuction(bidder2, 2.2 ether);
+        uint256 bid3Time = bidAndWinCurrentAuction(bidder3, 3.3 ether);
+        uint256 bid4Time = bidAndWinCurrentAuction(bidder4, 4.4 ether);
+
+        auction.growPriceHistory(4);
+
+        Noracle.Observation[] memory prices = auction.prices(2);
+        assertEq(prices.length, 2);
+
+        assertEq(prices[0].blockTimestamp, uint32(bid4Time));
+        assertEq(prices[0].nounId, 4);
+        assertEq(prices[0].amount, 4.4e8);
+        assertEq(prices[0].winner, bidder4);
+
+        assertEq(prices[1].blockTimestamp, uint32(bid3Time));
+        assertEq(prices[1].nounId, 3);
+        assertEq(prices[1].amount, 3.3e8);
+        assertEq(prices[1].winner, bidder3);
+    }
+
     function test_growPriceHistory_emitsEvent() public {
         vm.expectEmit(true, true, true, true);
         emit PriceHistoryGrown(1, 3);

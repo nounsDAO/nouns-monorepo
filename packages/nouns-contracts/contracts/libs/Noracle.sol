@@ -64,6 +64,10 @@ library Noracle {
         // The maximum number of observation the oracle can store.
         uint32 cardinality;
         // The next value to assign to cardinality once the oracle needs more slots, also the current number of warm storage slots.
+        // Important to the proper function of `observe`; if `cardinality` was incremented directly in `grow`, `observe` would not
+        // work as expected when looping back from index zero to the end of stored values is necessary
+        // e.g. 10 written values, index at zero, asking to `observe` 2+ prices, would loop back to the new cardinality - 1, hit an
+        // uninitialized observation and exit early.
         uint32 cardinalityNext;
     }
 
@@ -98,11 +102,13 @@ library Noracle {
         uint32 cardinalityNext = self.cardinalityNext;
         if (cardinalityNext == 0) return;
 
-        // if the conditions are right, we can bump the cardinality
+        // if the conditions are right, we can bump the cardinality        
         if (cardinalityNext > cardinality && currentIndex == (cardinality - 1)) {
             self.cardinality = cardinality = cardinalityNext;
         }
 
+        // if `grow` is executed before the first write, cardinality is greater than 1
+        // and the first write will be into index 1.
         uint32 newIndex = (currentIndex + 1) % cardinality;
         self.index = newIndex;
         self.observations[newIndex] = Observation({
