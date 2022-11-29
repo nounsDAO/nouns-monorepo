@@ -17,6 +17,9 @@ export enum NavBarButtonStyle {
   DELEGATE_PRIMARY,
   DELEGATE_SECONDARY,
   DELEGATE_DISABLED,
+  FOR_VOTE_SUBMIT,
+  AGAINST_VOTE_SUBMIT,
+  ABSTAIN_VOTE_SUBMIT,
 }
 
 interface NavBarButtonProps {
@@ -25,6 +28,7 @@ interface NavBarButtonProps {
   buttonStyle?: NavBarButtonStyle;
   onClick?: (e?: any) => void;
   disabled?: boolean;
+  className?: string;
   isDropdown?: boolean;
   isButtonUp?: boolean;
 }
@@ -67,6 +71,15 @@ export const getNavBarButtonVariant = (buttonStyle?: NavBarButtonStyle) => {
     case NavBarButtonStyle.DELEGATE_DISABLED: {
       return classes.delegateDisabled;
     }
+    case NavBarButtonStyle.FOR_VOTE_SUBMIT: {
+      return classes.forVoteSubmit;
+    }
+    case NavBarButtonStyle.AGAINST_VOTE_SUBMIT: {
+      return classes.againstVoteSubmit;
+    }
+    case NavBarButtonStyle.ABSTAIN_VOTE_SUBMIT: {
+      return classes.abstainVoteSubmit;
+    }
     default: {
       return classes.info;
     }
@@ -74,7 +87,7 @@ export const getNavBarButtonVariant = (buttonStyle?: NavBarButtonStyle) => {
 };
 
 const NavBarButton: React.FC<NavBarButtonProps> = props => {
-  const { buttonText, buttonIcon, buttonStyle, onClick, disabled } = props;
+  const { buttonText, buttonIcon, buttonStyle, onClick, disabled, className = '' } = props;
 
   let isDisabled = disabled ?? false;
 
@@ -82,7 +95,7 @@ const NavBarButton: React.FC<NavBarButtonProps> = props => {
     <>
       <div
         className={clsx(
-          `${classes.wrapper} ${getNavBarButtonVariant(buttonStyle)}`,
+          `${classes.wrapper} ${getNavBarButtonVariant(buttonStyle)} ${className}`,
           props.isDropdown && classes.dropdown,
         )}
         onClick={isDisabled ? () => {} : onClick}

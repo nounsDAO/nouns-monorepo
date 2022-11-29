@@ -78,12 +78,13 @@ msgid "Absent for"
 msgstr "不参加"
 
 #: src/components/VoteCard/index.tsx
+#: src/components/VoteModal/index.tsx
 msgid "Abstain"
 msgstr "棄権"
 
 #: src/components/VoteModal/index.tsx
-msgid "Abstain from voting on Prop {0}"
-msgstr "Propへの投票を棄権する {0} "
+#~ msgid "Abstain from voting on Prop {0}"
+#~ msgstr "Propへの投票を棄権する {0} "
 
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Abstained on"
@@ -135,6 +136,7 @@ msgid "Addresses"
 msgstr "イーサリアムアドレス"
 
 #: src/components/VoteCard/index.tsx
+#: src/components/VoteModal/index.tsx
 msgid "Against"
 msgstr "反対"
 
@@ -230,20 +232,20 @@ msgid "Canceled"
 msgstr "キャンセルしました"
 
 #: src/components/VoteModal/index.tsx
-msgid "Cast 1 vote against Prop {0}"
-msgstr "Prop {0} に対しての反対票を1票投じてください"
+#~ msgid "Cast 1 vote against Prop {0}"
+#~ msgstr "Prop {0} に対しての反対票を1票投じてください"
 
 #: src/components/VoteModal/index.tsx
-msgid "Cast 1 vote for Prop {0}"
-msgstr "提案 {0} に 対する1 票を投票してください"
+#~ msgid "Cast 1 vote for Prop {0}"
+#~ msgstr "提案 {0} に 対する1 票を投票してください"
 
 #: src/components/VoteModal/index.tsx
-msgid "Cast {0} votes against Prop {1}"
-msgstr "提案 {1} に対して {0} 反対票を投じてください"
+#~ msgid "Cast {0} votes against Prop {1}"
+#~ msgstr "提案 {1} に対して {0} 反対票を投じてください"
 
 #: src/components/VoteModal/index.tsx
-msgid "Cast {0} votes for Prop {1}"
-msgstr "提案 \"{1}\" にする1票を投票\"{0}\"してください"
+#~ msgid "Cast {0} votes for Prop {1}"
+#~ msgstr "提案 \"{1}\" にする1票を投票\"{0}\"してください"
 
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Change"
@@ -473,6 +475,7 @@ msgid "Failed to fetch Noun info"
 msgstr "Nounに関する情報の取得に失敗しました"
 
 #: src/components/VoteCard/index.tsx
+#: src/components/VoteModal/index.tsx
 msgid "For"
 msgstr "賛成"
 
@@ -491,6 +494,10 @@ msgstr "関数"
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "Function (Optional)"
 msgstr "関数 (任意)"
+
+#: src/components/VoteModal/index.tsx
+msgid "Gas spent on voting will be refunded to you. Gnosis Safe is not yet supported."
+msgstr ""
 
 #: src/pages/Playground/index.tsx
 msgid "Generate Nouns"
@@ -1121,6 +1128,14 @@ msgstr "<0>{numVotesForProp}</0>のNounで投票"
 #: src/components/DelegateHoverCard/index.tsx
 msgid "Voted with<0>{numVotesForProp}</0>Nouns"
 msgstr "<0>{numVotesForProp}</0>のNounで投票"
+
+#: src/components/VoteModal/index.tsx
+msgid "Voting with <0>{0}</0> Noun"
+msgstr ""
+
+#: src/components/VoteModal/index.tsx
+msgid "Voting with <0>{0}</0> Nouns"
+msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "WTF?"
