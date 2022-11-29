@@ -376,7 +376,7 @@ const VotePage = ({
                       id={'view-dq-info'}
                       className={classes.delegateHover}
                       getContent={dataTip => {
-                        return <Trans>View Treshold Info</Trans>;
+                        return <Trans>View Threshold Info</Trans>;
                       }}
                     />
                   )}
