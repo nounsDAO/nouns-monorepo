@@ -29,6 +29,23 @@
   opacity: 0.5;
 }
 
+.wrapper.dropdown {
+  padding-left: 4px;
+}
+
+.icon.dropdown {
+  margin-right: 0.2rem;
+  width: 30px;
+  display: block;
+}
+
+.icon.dropdown > svg {
+  width: 100%;
+  max-height: 40px;
+  position: relative;
+  top: 1px;
+}
+
 @media (max-width: 992px) {
   .icon > svg {
     max-height: 17px;

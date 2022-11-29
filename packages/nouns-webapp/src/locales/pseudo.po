@@ -85,6 +85,7 @@ msgstr ""
 msgid "Abstained on"
 msgstr ""
 
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Accessory"
 msgstr ""
@@ -175,6 +176,7 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Background"
 msgstr ""
@@ -208,6 +210,7 @@ msgstr ""
 msgid "Bids will appear here"
 msgstr ""
 
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Body"
 msgstr ""
@@ -291,7 +294,11 @@ msgid "Current Delegate"
 msgstr ""
 
 #: src/pages/Vote/index.tsx
-msgid "Current Quorum"
+#~ msgid "Current Quorum"
+#~ msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "Current Threshold"
 msgstr ""
 
 #: src/components/CurrentBid/index.tsx
@@ -351,8 +358,8 @@ msgid "Disconnect"
 msgstr ""
 
 #: src/components/Footer/index.tsx
-msgid "Discord"
-msgstr ""
+#~ msgid "Discord"
+#~ msgstr ""
 
 #: src/components/NavBar/index.tsx
 msgid "Discourse"
@@ -363,8 +370,16 @@ msgid "Docs"
 msgstr ""
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
-msgid "Dynamic Quorum"
+#~ msgid "Dynamic Quorum"
+#~ msgstr ""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "Dynamic Threshold"
 msgstr ""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+#~ msgid "Dynamic Treshold"
+#~ msgstr ""
 
 #: src/components/Banner/index.tsx
 msgid "EVERY DAY,"
@@ -431,6 +446,8 @@ msgstr ""
 msgid "Expires {0}"
 msgstr ""
 
+#: src/components/ExploreGrid/ExploreNav/index.tsx
+#: src/components/NavDropdown/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Explore"
 msgstr ""
@@ -474,13 +491,14 @@ msgid "Function (Optional)"
 msgstr ""
 
 #: src/components/VoteModal/index.tsx
-msgid "Gas spent on voting will be refunded to you"
+msgid "Gas spent on voting will be refunded to you. Gnosis Safe is not yet supported."
 msgstr ""
 
 #: src/pages/Playground/index.tsx
 msgid "Generate Nouns"
 msgstr ""
 
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Glasses"
 msgstr ""
@@ -497,6 +515,7 @@ msgstr ""
 msgid "Has"
 msgstr ""
 
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Head"
 msgstr ""
@@ -547,7 +566,11 @@ msgid "Making a proposal requires {threshold} votes"
 msgstr ""
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
-msgid "More details on how dynamic quorum works can be found <0>here</0>."
+#~ msgid "More details on how dynamic quorum works can be found <0>here</0>."
+#~ msgstr ""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "More details on how the dynamic threshold works can be found <0>here</0>."
 msgstr ""
 
 #: src/components/ProposalTransactionFormModal/index.tsx
@@ -614,6 +637,10 @@ msgstr ""
 
 #: src/pages/Governance/index.tsx
 msgid "Nouns"
+msgstr ""
+
+#: src/components/NavBar/index.tsx
+msgid "Nouns & Traits"
 msgstr ""
 
 #: src/components/NounInfoRowHolder/index.tsx
@@ -772,8 +799,8 @@ msgid "Queued"
 msgstr ""
 
 #: src/pages/Vote/index.tsx
-msgid "Quorum"
-msgstr ""
+#~ msgid "Quorum"
+#~ msgstr ""
 
 #: src/components/VoteModal/index.tsx
 msgid "Reason (Optional)"
@@ -913,11 +940,23 @@ msgid "The Nouns community has undertaken a preliminary exploration of proposal 
 msgstr ""
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
-msgid "The Quorum (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. It increases quadratically as a function of the % of Nouns voting against a prop, varying between Min Quorum and Max Quorum."
+#~ msgid "The Quorum (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. It increases quadratically as a function of the % of Nouns voting against a prop, varying between Min Quorum and Max Quorum."
+#~ msgstr ""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+#~ msgid "The Quorum (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. The number of For votes required to pass Proposal {0} is given by the following curve:"
+#~ msgstr ""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. It increases linearly as a function of the % of Nouns voting against a prop, varying between Min Threshold and Max Threshold."
 msgstr ""
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
-msgid "The Quorum (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. The number of For votes required to pass Proposal {0} is given by the following curve:"
+#~ msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. It increases linearly as a function of the % of Nouns voting against a prop, varying between Min Treshold and Max Treshold."
+#~ msgstr ""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. The number of For votes required to pass Proposal {0} is given by the following curve:"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
@@ -952,6 +991,7 @@ msgstr ""
 msgid "This treasury exists for <0>Nouns DAO</0> participants to allocate resources for the long-term growth and prosperity of the Nouns project."
 msgstr ""
 
+#: src/pages/Vote/index.tsx
 #: src/pages/Vote/index.tsx
 msgid "Threshold"
 msgstr ""
@@ -1031,7 +1071,11 @@ msgid "Vetoed"
 msgstr ""
 
 #: src/pages/Vote/index.tsx
-msgid "View Dynamic Quorum Info"
+#~ msgid "View Dynamic Quorum Info"
+#~ msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "View Treshold Info"
 msgstr ""
 
 #: src/components/BidHistoryBtn/index.tsx
@@ -1054,6 +1098,10 @@ msgstr ""
 
 #: src/components/Bid/index.tsx
 msgid "Vote for the next Noun"
+msgstr ""
+
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
+msgid "Vote history"
 msgstr ""
 
 #: src/components/VoteModal/index.tsx

@@ -209,7 +209,7 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
             className={classes.gasFreeVotingCopy}
             >
               <Trans>
-              Gas spent on voting will be refunded to the direct caller (i.e. if voting through a Gnosis safe, funds will be returned there) 
+              Gas spent on voting will be refunded to you. Gnosis Safe is not yet supported.
               </Trans>
             </span>
           </div>

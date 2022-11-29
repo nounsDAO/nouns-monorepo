@@ -1,5 +1,4 @@
 export enum ExternalURL {
-  discord,
   twitter,
   notion,
   discourse,
@@ -8,8 +7,6 @@ export enum ExternalURL {
 
 export const externalURL = (externalURL: ExternalURL) => {
   switch (externalURL) {
-    case ExternalURL.discord:
-      return 'http://discord.gg/nouns';
     case ExternalURL.twitter:
       return 'https://twitter.com/nounsdao';
     case ExternalURL.notion:
