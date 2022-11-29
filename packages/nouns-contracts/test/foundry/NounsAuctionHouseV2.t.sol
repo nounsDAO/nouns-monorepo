@@ -12,7 +12,7 @@ import { NounsAuctionHousePreV2Migration } from '../../contracts/NounsAuctionHou
 import { Noracle } from '../../contracts/libs/Noracle.sol';
 import { BidderWithGasGriefing } from './helpers/BidderWithGasGriefing.sol';
 
-contract NounsAuctionHouseV2Test is Test, DeployUtils {
+contract NounsAuctionHouseV2TestBase is Test, DeployUtils {
     event PriceHistoryGrown(uint32 current, uint32 next);
 
     address owner = address(0x1111);
@@ -36,6 +36,19 @@ contract NounsAuctionHouseV2Test is Test, DeployUtils {
         auction.unpause();
         vm.roll(block.number + 1);
     }
+
+    function bidAndWinCurrentAuction(address bidder, uint256 bid) internal returns (uint256) {
+        (uint256 nounId, , , uint256 endTime, , ) = auction.auction();
+        vm.deal(bidder, bid);
+        vm.prank(bidder);
+        auction.createBid{ value: bid }(nounId);
+        vm.warp(endTime);
+        auction.settleCurrentAndCreateNewAuction();
+        return block.timestamp;
+    }
+}
+
+contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
 
     function test_createBid_revertsGivenWrongNounId() public {
         (uint128 nounId, , , , , ) = auction.auction();
@@ -222,19 +235,9 @@ contract NounsAuctionHouseV2Test is Test, DeployUtils {
         assertEq(bidderV2, bidderV1);
         assertEq(settledV2, settledV1);
     }
-
-    function bidAndWinCurrentAuction(address bidder, uint256 bid) internal returns (uint256) {
-        (uint256 nounId, , , uint256 endTime, , ) = auction.auction();
-        vm.deal(bidder, bid);
-        vm.prank(bidder);
-        auction.createBid{ value: bid }(nounId);
-        vm.warp(endTime);
-        auction.settleCurrentAndCreateNewAuction();
-        return block.timestamp;
-    }
 }
 
-contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2Test {
+contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2TestBase {
     function test_prices_worksWithOneAuction() public {
         address bidder = address(0x4444);
         bidAndWinCurrentAuction(bidder, 1 ether);
@@ -343,7 +346,7 @@ contract NounsAuctionHouseV2_OracleTest is NounsAuctionHouseV2Test {
         address bidder3 = address(0x6666);
         address bidder4 = address(0x6666);
         bidAndWinCurrentAuction(bidder1, 1.1 ether);
-        uint256 bid2Time = bidAndWinCurrentAuction(bidder2, 2.2 ether);
+        bidAndWinCurrentAuction(bidder2, 2.2 ether);
         uint256 bid3Time = bidAndWinCurrentAuction(bidder3, 3.3 ether);
         uint256 bid4Time = bidAndWinCurrentAuction(bidder4, 4.4 ether);
 
