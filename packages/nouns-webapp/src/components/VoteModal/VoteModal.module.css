@@ -1,3 +1,20 @@
+.voteModalTitle {
+  text-align: center;
+  font-family: 'Londrina Solid';
+  font-size: 36px;
+}
+
+.voteModalSubtitle {
+  margin-bottom: 1rem;
+  text-align: center;
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.bold {
+  font-weight: bold;
+}
+
 .voteModal {
   font-family: 'PT Root UI';
 }
@@ -110,8 +127,35 @@
   border: none;
   font-weight: bold;
   font-size: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .voteReasonTextarea:focus {
   box-shadow: none;
+  border: 1px solid rgba(0, 0, 0, 0.25) !important;
+}
+
+.inactive {
+  transform: scale(95%) !important;
+}
+
+.unselected {
+  transform: scale(90%);
+  opacity: .5;
+}
+
+.gasFreeVotingWrapper {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.gasFreeVotingCopy {
+  font-family: 'PT Root UI';
+  font-size: 14px;
+  color: var(--brand-gray-light-text);
+  opacity: .75;
+  width: fit-content;
+  text-align: center;
 }
