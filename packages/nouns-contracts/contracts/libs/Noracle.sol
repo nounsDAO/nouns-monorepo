@@ -102,7 +102,7 @@ library Noracle {
         uint32 cardinalityNext = self.cardinalityNext;
         if (cardinalityNext == 0) return;
 
-        // if the conditions are right, we can bump the cardinality        
+        // if the conditions are right, we can bump the cardinality
         if (cardinalityNext > cardinality && currentIndex == (cardinality - 1)) {
             self.cardinality = cardinality = cardinalityNext;
         }
