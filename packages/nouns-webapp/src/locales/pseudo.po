@@ -73,12 +73,13 @@ msgid "Absent for"
 msgstr ""
 
 #: src/components/VoteCard/index.tsx
+#: src/components/VoteModal/index.tsx
 msgid "Abstain"
 msgstr ""
 
 #: src/components/VoteModal/index.tsx
-msgid "Abstain from voting on Prop {0}"
-msgstr ""
+#~ msgid "Abstain from voting on Prop {0}"
+#~ msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx
 msgid "Abstained on"
@@ -130,6 +131,7 @@ msgid "Addresses"
 msgstr ""
 
 #: src/components/VoteCard/index.tsx
+#: src/components/VoteModal/index.tsx
 msgid "Against"
 msgstr ""
 
@@ -225,20 +227,20 @@ msgid "Canceled"
 msgstr ""
 
 #: src/components/VoteModal/index.tsx
-msgid "Cast 1 vote against Prop {0}"
-msgstr ""
+#~ msgid "Cast 1 vote against Prop {0}"
+#~ msgstr ""
 
 #: src/components/VoteModal/index.tsx
-msgid "Cast 1 vote for Prop {0}"
-msgstr ""
+#~ msgid "Cast 1 vote for Prop {0}"
+#~ msgstr ""
 
 #: src/components/VoteModal/index.tsx
-msgid "Cast {0} votes against Prop {1}"
-msgstr ""
+#~ msgid "Cast {0} votes against Prop {1}"
+#~ msgstr ""
 
 #: src/components/VoteModal/index.tsx
-msgid "Cast {0} votes for Prop {1}"
-msgstr ""
+#~ msgid "Cast {0} votes for Prop {1}"
+#~ msgstr ""
 
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Change"
@@ -468,6 +470,7 @@ msgid "Failed to fetch Noun info"
 msgstr ""
 
 #: src/components/VoteCard/index.tsx
+#: src/components/VoteModal/index.tsx
 msgid "For"
 msgstr ""
 
@@ -485,6 +488,10 @@ msgstr ""
 
 #: src/components/ProposalTransactionFormModal/index.tsx
 msgid "Function (Optional)"
+msgstr ""
+
+#: src/components/VoteModal/index.tsx
+msgid "Gas spent on voting will be refunded to you. Gnosis Safe is not yet supported."
 msgstr ""
 
 #: src/pages/Playground/index.tsx
@@ -1119,6 +1126,14 @@ msgstr ""
 
 #: src/components/DelegateHoverCard/index.tsx
 msgid "Voted with<0>{numVotesForProp}</0>Nouns"
+msgstr ""
+
+#: src/components/VoteModal/index.tsx
+msgid "Voting with <0>{0}</0> Noun"
+msgstr ""
+
+#: src/components/VoteModal/index.tsx
+msgid "Voting with <0>{0}</0> Nouns"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
