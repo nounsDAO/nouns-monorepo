@@ -1,0 +1,34 @@
+.exploreWrap {
+  padding: 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  margin: 0 3vw;
+  border-radius: 10px;
+}
+
+.gridWrap {
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.detailBlock {
+  max-width: 500px;
+  flex: 0 0 33%;
+}
+
+.contentWrap {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media (max-width: 991px) {
+  .exploreWrap {
+    border: 0;
+    margin: 0 0.5rem;
+  }
+  .contentWrap {
+    contain: none;
+    position: relative;
+    z-index: 2;
+  }
+}

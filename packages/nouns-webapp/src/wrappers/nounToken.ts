@@ -82,7 +82,7 @@ const useNounSeeds = () => {
   return cachedSeeds;
 };
 
-export const useNounSeed = (nounId: EthersBN) => {
+export const useNounSeed = (nounId: EthersBN): INounSeed => {
   const seeds = useNounSeeds();
   const seed = seeds?.[nounId.toString()];
   // prettier-ignore
@@ -143,7 +143,6 @@ export const useUserDelegatee = (): string | undefined => {
 
 export const useUserVotesAsOfBlock = (block: number | undefined): number | undefined => {
   const { account } = useEthers();
-
   // Check for available votes
   const [votes] =
     useContractCall<[EthersBN]>({

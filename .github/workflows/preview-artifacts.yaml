@@ -8,7 +8,7 @@ on:
       - 'img-permutator-preview/src-**'
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Extract branch name

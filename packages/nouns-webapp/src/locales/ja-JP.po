@@ -18,6 +18,10 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: \n"
 
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "% of Nouns Currently Against"
+msgstr ""
+
 #: src/components/Documentation/index.tsx
 msgid "'Nounders' are the group of ten builders that initiated Nouns. Here are the Nounders:"
 msgstr "「Nounders」とはNounsの創業に携わった10人の創業者のことであり、以下の人物で構成されています："
@@ -85,6 +89,7 @@ msgstr "Propへの投票を棄権する {0} "
 msgid "Abstained on"
 msgstr "棄権しました。"
 
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Accessory"
 msgstr "付属品"
@@ -174,6 +179,7 @@ msgstr "オークション終了まで"
 msgid "Back"
 msgstr "戻る"
 
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Background"
 msgstr "背景"
@@ -207,6 +213,7 @@ msgstr "入札"
 msgid "Bids will appear here"
 msgstr "入札はここに表示されます"
 
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Body"
 msgstr "体"
@@ -289,6 +296,14 @@ msgstr "クリプトパンクス"
 msgid "Current Delegate"
 msgstr "現在の代表者"
 
+#: src/pages/Vote/index.tsx
+#~ msgid "Current Quorum"
+#~ msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "Current Threshold"
+msgstr ""
+
 #: src/components/CurrentBid/index.tsx
 msgid "Current bid"
 msgstr "現在の入札額"
@@ -346,8 +361,8 @@ msgid "Disconnect"
 msgstr "切断する"
 
 #: src/components/Footer/index.tsx
-msgid "Discord"
-msgstr "Discord"
+#~ msgid "Discord"
+#~ msgstr "Discord"
 
 #: src/components/NavBar/index.tsx
 msgid "Discourse"
@@ -356,6 +371,18 @@ msgstr "Discourse"
 #: src/components/NavBar/index.tsx
 msgid "Docs"
 msgstr "ドキュメント"
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+#~ msgid "Dynamic Quorum"
+#~ msgstr ""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "Dynamic Threshold"
+msgstr ""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+#~ msgid "Dynamic Treshold"
+#~ msgstr ""
 
 #: src/components/Banner/index.tsx
 msgid "EVERY DAY,"
@@ -422,6 +449,8 @@ msgstr "期限切れです"
 msgid "Expires {0}"
 msgstr "残り {0} で期限切れになります"
 
+#: src/components/ExploreGrid/ExploreNav/index.tsx
+#: src/components/NavDropdown/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Explore"
 msgstr "探索"
@@ -467,6 +496,7 @@ msgstr "関数 (任意)"
 msgid "Generate Nouns"
 msgstr "Nounsを作る"
 
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Glasses"
 msgstr "メガネ"
@@ -483,6 +513,7 @@ msgstr "ガバナンス「スロースタート」"
 msgid "Has"
 msgstr "票あり"
 
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
 msgid "Head"
 msgstr "頭"
@@ -530,6 +561,14 @@ msgstr "ロード中..."
 
 #: src/components/Proposals/index.tsx
 msgid "Making a proposal requires {threshold} votes"
+msgstr ""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+#~ msgid "More details on how dynamic quorum works can be found <0>here</0>."
+#~ msgstr ""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "More details on how the dynamic threshold works can be found <0>here</0>."
 msgstr ""
 
 #: src/components/ProposalTransactionFormModal/index.tsx
@@ -597,6 +636,10 @@ msgstr "Nounderへの報酬"
 #: src/pages/Governance/index.tsx
 msgid "Nouns"
 msgstr "Nouns"
+
+#: src/components/NavBar/index.tsx
+msgid "Nouns & Traits"
+msgstr ""
 
 #: src/components/NounInfoRowHolder/index.tsx
 msgid "Nouns Auction House"
@@ -704,8 +747,12 @@ msgid "Please try again."
 msgstr "もう一度やり直してください。"
 
 #: src/components/ProposalEditor/index.tsx
-msgid "Preview:"
-msgstr "プレビュー："
+msgid "Preview"
+msgstr ""
+
+#: src/components/ProposalEditor/index.tsx
+#~ msgid "Preview:"
+#~ msgstr "プレビュー："
 
 #: src/components/ProposalEditor/index.tsx
 msgid "Proposal"
@@ -750,12 +797,16 @@ msgid "Queued"
 msgstr "キューに入りました"
 
 #: src/pages/Vote/index.tsx
-msgid "Quorum"
-msgstr "定足数"
+#~ msgid "Quorum"
+#~ msgstr "定足数"
 
 #: src/components/VoteModal/index.tsx
 msgid "Reason (Optional)"
 msgstr "理由\"(任意)\""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "Required % of Nouns to Pass"
+msgstr ""
 
 #: src/components/LanguageSelectionModal/index.tsx
 msgid "Select Language"
@@ -886,6 +937,26 @@ msgstr ""
 msgid "The Nouns community has undertaken a preliminary exploration of proposal veto alternatives (‘rage quit’ etc.), but it is now clear that this is a difficult problem that will require significantly more research, development and testing before a satisfactory solution can be implemented."
 msgstr ""
 
+#: src/components/DynamicQuorumInfoModal/index.tsx
+#~ msgid "The Quorum (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. It increases quadratically as a function of the % of Nouns voting against a prop, varying between Min Quorum and Max Quorum."
+#~ msgstr ""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+#~ msgid "The Quorum (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. The number of For votes required to pass Proposal {0} is given by the following curve:"
+#~ msgstr ""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. It increases linearly as a function of the % of Nouns voting against a prop, varying between Min Threshold and Max Threshold."
+msgstr ""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+#~ msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. It increases linearly as a function of the % of Nouns voting against a prop, varying between Min Treshold and Max Treshold."
+#~ msgstr ""
+
+#: src/components/DynamicQuorumInfoModal/index.tsx
+msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has recieved. The number of For votes required to pass Proposal {0} is given by the following curve:"
+msgstr ""
+
 #: src/components/Documentation/index.tsx
 msgid "The compressed parts are efficiently converted into a single base64 encoded SVG image on-chain. To accomplish this, each part is decoded into an intermediate format before being converted into a series of SVG rects using batched, on-chain string concatenation. Once the entire SVG has been generated, it is base64 encoded."
 msgstr "圧縮されたパーツは、オンチェインで効率よく1つのbase64エンコードされたSVG画像に変換されます。そのために、各パーツは中間フォーマットにデコードされた後、オンチェーンでの文字列連結により一連のSVG rectsに変換されます。SVG全体が生成されると、それはbase64でエンコードされます。"
@@ -918,6 +989,7 @@ msgstr "このNounは作成されたばかりで、動きがありません。�
 msgid "This treasury exists for <0>Nouns DAO</0> participants to allocate resources for the long-term growth and prosperity of the Nouns project."
 msgstr "このトレジャリーは、<0>Nouns DAO</0>の参加者がNounsプロジェクトの長期的な成長と繁栄目的に、リソースを配分するために存在しています。"
 
+#: src/pages/Vote/index.tsx
 #: src/pages/Vote/index.tsx
 msgid "Threshold"
 msgstr "しきい値"
@@ -996,6 +1068,14 @@ msgstr "ETHの価格 (任意)"
 msgid "Vetoed"
 msgstr "拒否"
 
+#: src/pages/Vote/index.tsx
+#~ msgid "View Dynamic Quorum Info"
+#~ msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "View Treshold Info"
+msgstr ""
+
 #: src/components/BidHistoryBtn/index.tsx
 msgid "View all bids"
 msgstr "すべての入札を表示"
@@ -1017,6 +1097,10 @@ msgstr "イーサスキャンで見る"
 #: src/components/Bid/index.tsx
 msgid "Vote for the next Noun"
 msgstr "次のNounに投票する"
+
+#: src/components/ExploreGrid/ExploreNounDetail/index.tsx
+msgid "Vote history"
+msgstr ""
 
 #: src/components/VoteModal/index.tsx
 msgid "Vote on Prop {0}"
