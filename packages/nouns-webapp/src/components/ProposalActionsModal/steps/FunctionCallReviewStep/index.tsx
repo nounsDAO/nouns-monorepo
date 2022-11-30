@@ -21,7 +21,7 @@ const handleActionAdd = (state: ProposalActionModalState, onActionAdd: (e?: any)
     signature: state.function,
     decodedCalldata: JSON.stringify(state.args ?? []),
     calldata: state.abi?._encodeParams(
-      state.abi?.functions[state.function ?? '']?.inputs,
+      state.abi?.functions[state.function ?? '']?.inputs ?? [],
       state.args ?? [],
     ),
   });
