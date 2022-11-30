@@ -55,7 +55,8 @@ const TransferFundsReviewStep: React.FC<FinalProposalActionStepProps> = props =>
 
       <span className={classes.label}>Pay</span>
       <div className={classes.text}>
-        {state.amount} {state.TransferFundsCurrency}
+        {Intl.NumberFormat(undefined, { maximumFractionDigits: 18 }).format(Number(state.amount))}{' '}
+        {state.TransferFundsCurrency}
       </div>
       <span className={classes.label}>To</span>
       <div className={classes.text}>
