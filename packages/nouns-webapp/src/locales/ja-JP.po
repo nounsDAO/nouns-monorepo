@@ -72,6 +72,10 @@ msgstr "委任Noun: "
 msgid "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
 msgstr "<2>{proposedAtTransactionHash}</2> <1>{proposer}</1> <0>が提案したものです</0>"
 
+#: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
+msgid "<0>Supported Action Types:</0><1/><2>• Transfer Funds: </2>Send a fixed amount of ETH or USDC.<3/><4>• Function Call: </4>Call a contract function."
+msgstr ""
+
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Absent for"
@@ -106,6 +110,7 @@ msgid "Activity"
 msgstr "アクティビティ"
 
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
+#: src/pages/CreateProposal/index.tsx
 msgid "Add Action"
 msgstr ""
 
@@ -126,12 +131,8 @@ msgstr ""
 msgid "Add Proposal Action"
 msgstr ""
 
-#: src/pages/CreateProposal/index.tsx
-msgid "Add Transaction"
-msgstr "トランザクションを追加する"
-
-#: src/components/ProposalActionsModal/steps/LumpSumDetailsStep/index.tsx
-#: src/components/ProposalActionsModal/steps/LumpSumReviewStep/index.tsx
+#: src/components/ProposalActionsModal/steps/TransferFundsDetailsStep/index.tsx
+#: src/components/ProposalActionsModal/steps/TransferFundsReviewStep/index.tsx
 msgid "Add Transfer Funds Action"
 msgstr ""
 
@@ -140,7 +141,7 @@ msgstr ""
 #~ msgstr "提案するトランザクションを追加する"
 
 #: src/pages/CreateProposal/index.tsx
-msgid "Add one or more proposal actions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 2 1/3 days and last for 3 days."
+msgid "Add one or more proposal actions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 2 days and last for 5 days."
 msgstr ""
 
 #: src/pages/CreateProposal/index.tsx
@@ -207,8 +208,8 @@ msgstr "オークション終了まで"
 #: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallSelectFunctionStep/index.tsx
-#: src/components/ProposalActionsModal/steps/LumpSumDetailsStep/index.tsx
-#: src/components/ProposalActionsModal/steps/LumpSumReviewStep/index.tsx
+#: src/components/ProposalActionsModal/steps/TransferFundsDetailsStep/index.tsx
+#: src/components/ProposalActionsModal/steps/TransferFundsReviewStep/index.tsx
 msgid "Back"
 msgstr "戻る"
 
@@ -713,10 +714,6 @@ msgstr "Nounsのアートワークは {publicDomainLink} にあります。"
 msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
 msgstr "Nounsが統治する <0>Nouns DAO</0> 。Nounsは提案に対して投票したり、第三者に投票を委任することができますが、提案の提出には最低でも <1>{nounsRequired} {0}</1> 以上が必要です。"
 
-#: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
-msgid "Nouns supports two transaction types: Transfer Funds and function call. Transfer Funds transaction send a fixed amount of ETH or USDC to a given wallet. Function call transaction call a function on a provided contract."
-msgstr ""
-
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Now has"
 msgstr "今持っています"
@@ -846,12 +843,12 @@ msgstr ""
 msgid "Review Function Call Action"
 msgstr ""
 
-#: src/components/ProposalActionsModal/steps/LumpSumReviewStep/index.tsx
+#: src/components/ProposalActionsModal/steps/TransferFundsReviewStep/index.tsx
 msgid "Review Transfer Funds Action"
 msgstr ""
 
 #: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
-#: src/components/ProposalActionsModal/steps/LumpSumDetailsStep/index.tsx
+#: src/components/ProposalActionsModal/steps/TransferFundsDetailsStep/index.tsx
 msgid "Review and Add"
 msgstr ""
 

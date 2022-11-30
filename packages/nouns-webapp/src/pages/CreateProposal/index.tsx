@@ -45,7 +45,6 @@ const CreateProposalPage = () => {
 
   const handleAddProposalAction = useCallback(
     (transaction: ProposalTransaction) => {
-      console.log(transaction);
       if (!transaction.address.startsWith('0x')) {
         transaction.address = `0x${transaction.address}`;
       }
@@ -216,7 +215,7 @@ const CreateProposalPage = () => {
           <Trans>
             Add one or more proposal actions and describe your proposal for the community. The
             proposal cannot be modified after submission, so please verify all information before
-            submitting. The voting period will begin after 2 1/3 days and last for 3 days.
+            submitting. The voting period will begin after 2 days and last for 5 days.
           </Trans>
         </Alert>
         <div className="d-grid">
@@ -225,7 +224,7 @@ const CreateProposalPage = () => {
             variant="dark"
             onClick={() => setShowTransactionFormModal(true)}
           >
-            <Trans>Add Transaction</Trans>
+            <Trans>Add Action</Trans>
           </Button>
         </div>
         <ProposalTransactions
