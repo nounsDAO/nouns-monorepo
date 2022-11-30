@@ -52,6 +52,12 @@ const FunctionCallSelectFunctionStep: React.FC<ProposalActionModalStepProps> = p
     }
   }, [address, isABIUploadValid, isValidForNextStage]);
 
+  useEffect(() => {
+    if (abi) {
+      setFunction(Object.keys(abi.functions)?.[0]);
+    }
+  }, [abi]);
+
   let abiErrorTimeout: NodeJS.Timeout;
   const setABIInvalid = () => {
     setABIUploadValid(false);
