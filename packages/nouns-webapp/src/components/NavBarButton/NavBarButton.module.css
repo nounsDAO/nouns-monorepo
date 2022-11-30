@@ -177,7 +177,7 @@
 }
 
 .delegateSecondary:hover {
-  filter: brightness(200%);
+  background-color: var(--brand-color-blue-darker);
 }
 
 .delegateDisabled {

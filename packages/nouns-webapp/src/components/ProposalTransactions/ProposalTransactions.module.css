@@ -6,7 +6,7 @@
   margin-top: 1rem;
   padding: 0.5rem 1rem;
   border: 1px solid #aaa !important;
-  border-radius: 0.25rem !important;
+  border-radius: 8px !important;
 }
 
 .removeTransactionButton {

@@ -121,6 +121,8 @@ export interface ProposalTransaction {
   value: string;
   signature: string;
   calldata: string;
+  decodedCalldata?: string;
+  usdcValue?: number;
 }
 
 const abi = new utils.Interface(NounsDAOV2ABI);
