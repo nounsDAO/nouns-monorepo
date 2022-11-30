@@ -7,7 +7,6 @@ const abi = new Interface(tokenBuyerABI);
 const BUFFER_BPS = 5_000;
 
 export const useEthNeeded = (address: string, additionalTokens: number) => {
-  console.log(additionalTokens);
   const [ethNeeded] =
     useContractCall<[EthersBN]>({
       abi,
