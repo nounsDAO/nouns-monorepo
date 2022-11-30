@@ -67,6 +67,10 @@ msgstr ""
 msgid "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
 msgstr ""
 
+#: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
+msgid "<0>Supported Action Types:</0><1/><2>• Transfer Funds: </2>Send a fixed amount of ETH or USDC.<3/><4>• Function Call: </4>Call a contract function."
+msgstr ""
+
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Absent for"
@@ -101,30 +105,56 @@ msgstr ""
 msgid "Activity"
 msgstr ""
 
-#: src/components/ProposalTransactionFormModal/index.tsx
+#: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 #: src/pages/CreateProposal/index.tsx
-msgid "Add Transaction"
+msgid "Add Action"
+msgstr ""
+
+#: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
+msgid "Add Action Details"
+msgstr ""
+
+#: src/components/ProposalActionsModal/steps/FunctionCallSelectFunctionStep/index.tsx
+msgid "Add Arguments"
+msgstr ""
+
+#: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
+#: src/components/ProposalActionsModal/steps/FunctionCallSelectFunctionStep/index.tsx
+msgid "Add Function Call Arguments"
+msgstr ""
+
+#: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
+msgid "Add Proposal Action"
+msgstr ""
+
+#: src/components/ProposalActionsModal/steps/TransferFundsDetailsStep/index.tsx
+#: src/components/ProposalActionsModal/steps/TransferFundsReviewStep/index.tsx
+msgid "Add Transfer Funds Action"
 msgstr ""
 
 #: src/components/ProposalTransactionFormModal/index.tsx
-msgid "Add a Proposal Transaction"
+#~ msgid "Add a Proposal Transaction"
+#~ msgstr ""
+
+#: src/pages/CreateProposal/index.tsx
+msgid "Add one or more proposal actions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 2 days and last for 5 days."
 msgstr ""
 
 #: src/pages/CreateProposal/index.tsx
-msgid "Add one or more transactions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 2 1/3 days and last for 3 days."
-msgstr ""
+#~ msgid "Add one or more transactions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 2 1/3 days and last for 3 days."
+#~ msgstr ""
 
 #: src/pages/CreateProposal/index.tsx
 #~ msgid "Add one or more transactions and describe your proposal for the community. The proposal cannot modified after submission, so please verify all information before submitting. The voting period will begin after 2 1/3 days and last for 3 days."
 #~ msgstr ""
 
-#: src/components/ProposalTransactionFormModal/index.tsx
+#: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 msgid "Address"
 msgstr ""
 
 #: src/components/ProposalTransactionFormModal/index.tsx
-msgid "Address (Callee or Recipient)"
-msgstr ""
+#~ msgid "Address (Callee or Recipient)"
+#~ msgstr ""
 
 #: src/components/VoteCard/index.tsx
 msgid "Addresses"
@@ -148,14 +178,14 @@ msgid "All Nouns are members of Nouns DAO."
 msgstr ""
 
 #: src/pages/CreateProposal/index.tsx
-msgid "All Proposals"
-msgstr ""
+#~ msgid "All Proposals"
+#~ msgstr ""
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Already has"
 msgstr ""
 
-#: src/components/ProposalTransactionFormModal/index.tsx
+#: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 msgid "Arguments"
 msgstr ""
 
@@ -172,7 +202,11 @@ msgstr ""
 msgid "Auction ends in"
 msgstr ""
 
-#: src/components/ProposalTransactionFormModal/index.tsx
+#: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
+#: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
+#: src/components/ProposalActionsModal/steps/FunctionCallSelectFunctionStep/index.tsx
+#: src/components/ProposalActionsModal/steps/TransferFundsDetailsStep/index.tsx
+#: src/components/ProposalActionsModal/steps/TransferFundsReviewStep/index.tsx
 msgid "Back"
 msgstr ""
 
@@ -183,6 +217,10 @@ msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "Because 100% of Noun auction proceeds are sent to Nouns DAO, Nounders have chosen to compensate themselves with Nouns. Every 10th Noun for the first 5 years of the project (Noun ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
+msgstr ""
+
+#: src/pages/CreateProposal/index.tsx
+msgid "Because this proposal contains a USDC fund transfer action we've added an additional ETH transaction to refill the TokenBuyer contract. This action allows to DAO to continue to trustlessly acquire USDC to fund proposals like this."
 msgstr ""
 
 #: src/components/Bid/index.tsx
@@ -253,6 +291,7 @@ msgstr ""
 #: src/components/ChangeDelegatePannel/index.tsx
 #: src/components/ChangeDelegatePannel/index.tsx
 #: src/components/CurrentDelegatePannel/index.tsx
+#: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 msgid "Close"
 msgstr ""
 
@@ -482,13 +521,13 @@ msgstr ""
 msgid "Forums"
 msgstr ""
 
-#: src/components/ProposalTransactionFormModal/index.tsx
+#: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 msgid "Function"
 msgstr ""
 
 #: src/components/ProposalTransactionFormModal/index.tsx
-msgid "Function (Optional)"
-msgstr ""
+#~ msgid "Function (Optional)"
+#~ msgstr ""
 
 #: src/components/VoteModal/index.tsx
 msgid "Gas spent on voting will be refunded to you. Gnosis Safe is not yet supported."
@@ -545,6 +584,10 @@ msgstr ""
 msgid "Insufficient bid amount 🤏"
 msgstr ""
 
+#: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
+msgid "Invalid Arguments"
+msgstr ""
+
 #: src/components/NavLocaleSwitcher/index.tsx
 msgid "Language"
 msgstr ""
@@ -574,10 +617,10 @@ msgid "More details on how the dynamic threshold works can be found <0>here</0>.
 msgstr ""
 
 #: src/components/ProposalTransactionFormModal/index.tsx
-msgid "Next"
-msgstr ""
+#~ msgid "Next"
+#~ msgstr ""
 
-#: src/components/ProposalTransactionFormModal/index.tsx
+#: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
 msgid "No arguments required"
 msgstr ""
 
@@ -589,10 +632,14 @@ msgstr ""
 msgid "No proposals found"
 msgstr ""
 
-#: src/components/ProposalTransactionFormModal/index.tsx
-#: src/components/ProposalTransactionFormModal/index.tsx
-#: src/components/ProposalTransactionFormModal/index.tsx
+#: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
+#: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
+#: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 msgid "None"
+msgstr ""
+
+#: src/pages/CreateProposal/index.tsx
+msgid "Note"
 msgstr ""
 
 #: src/pages/Governance/index.tsx
@@ -810,6 +857,19 @@ msgstr ""
 msgid "Required % of Nouns to Pass"
 msgstr ""
 
+#: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
+msgid "Review Function Call Action"
+msgstr ""
+
+#: src/components/ProposalActionsModal/steps/TransferFundsReviewStep/index.tsx
+msgid "Review Transfer Funds Action"
+msgstr ""
+
+#: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
+#: src/components/ProposalActionsModal/steps/TransferFundsDetailsStep/index.tsx
+msgid "Review and Add"
+msgstr ""
+
 #: src/components/LanguageSelectionModal/index.tsx
 msgid "Select Language"
 msgstr ""
@@ -987,6 +1047,14 @@ msgstr ""
 msgid "This Noun has no activity, since it was just created. Check back soon!"
 msgstr ""
 
+#: src/components/ProposalContent/index.tsx
+msgid "This transaction sends {0} USDC to <0/> via the DAO's PayerContract."
+msgstr ""
+
+#: src/components/ProposalContent/index.tsx
+msgid "This transaction was automatically added to refill the TokenBuyer. Proposers do not recieve this ETH."
+msgstr ""
+
 #: src/pages/Governance/index.tsx
 msgid "This treasury exists for <0>Nouns DAO</0> participants to allocate resources for the long-term growth and prosperity of the Nouns project."
 msgstr ""
@@ -1001,8 +1069,12 @@ msgid "Time left"
 msgstr ""
 
 #: src/pages/CreateProposal/index.tsx
-msgid "Tip:"
+msgid "Tip"
 msgstr ""
+
+#: src/pages/CreateProposal/index.tsx
+#~ msgid "Tip:"
+#~ msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "Trait generation is not truly random. Traits can be predicted when minting a Noun on the pending block."
@@ -1056,13 +1128,13 @@ msgstr ""
 msgid "User Already Voted"
 msgstr ""
 
-#: src/components/ProposalTransactionFormModal/index.tsx
+#: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 msgid "Value"
 msgstr ""
 
 #: src/components/ProposalTransactionFormModal/index.tsx
-msgid "Value in ETH (Optional)"
-msgstr ""
+#~ msgid "Value in ETH (Optional)"
+#~ msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
