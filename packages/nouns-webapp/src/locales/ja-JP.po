@@ -1152,7 +1152,7 @@ msgstr "拒否"
 #~ msgstr ""
 
 #: src/pages/Vote/index.tsx
-msgid "View Treshold Info"
+msgid "View Threshold Info"
 msgstr ""
 
 #: src/components/BidHistoryBtn/index.tsx
