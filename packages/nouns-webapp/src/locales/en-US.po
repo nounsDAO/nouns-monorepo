@@ -1147,8 +1147,8 @@ msgstr "Vetoed"
 #~ msgstr "View Dynamic Quorum Info"
 
 #: src/pages/Vote/index.tsx
-msgid "View Treshold Info"
-msgstr "View Treshold Info"
+msgid "View Threshold Info"
+msgstr "View Threshold Info"
 
 #: src/components/BidHistoryBtn/index.tsx
 msgid "View all bids"
