@@ -177,7 +177,7 @@
 }
 
 .delegateSecondary:hover {
-  filter: brightness(200%);
+  background-color: var(--brand-color-blue-darker);
 }
 
 .delegateDisabled {
@@ -200,4 +200,31 @@
   .delegateDisabled {
     width: 210px;
   }
+}
+
+.forVoteSubmit {
+  background-color: var(--brand-color-green-translucent);
+  color: var(--brand-color-green);
+}
+
+.forVoteSubmit:hover {
+  filter: brightness(80%);
+}
+
+.againstVoteSubmit {
+  background-color: var(--brand-color-red-translucent);
+  color: var(--brand-color-red);
+}
+
+.againstVoteSubmit:hover {
+  filter: brightness(80%);
+}
+
+.abstainVoteSubmit {
+  background-color: var(--brand-gray-light-text-translucent);
+  color: var(--brand-gray-light-text);
+}
+
+.abstainVoteSubmit:hover {
+  filter: brightness(80%);
 }

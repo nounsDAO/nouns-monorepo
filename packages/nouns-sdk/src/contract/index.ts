@@ -13,4 +13,5 @@ export {
   NounsDescriptorFactory,
   NounsSeederFactory,
   NounsDaoLogicV1Factory,
+  NounsDaoLogicV2Factory,
 } from '@nouns/contracts';
