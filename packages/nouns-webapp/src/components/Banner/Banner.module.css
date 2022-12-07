@@ -9,13 +9,13 @@
   }
 
   .wrapper h1 {
-    font-size: 3.75rem;
+    font-size: 1.75rem;
   }
 }
 
 @media (min-width: 992px) {
   .wrapper h1 {
-    font-size: 6rem;
+    font-size: 3rem;
     margin-left: 2rem;
   }
 }
