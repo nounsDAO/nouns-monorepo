@@ -217,6 +217,12 @@ const CreateProposalPage = () => {
             proposal cannot be modified after submission, so please verify all information before
             submitting. The voting period will begin after 2 days and last for 5 days.
           </Trans>
+          <br />
+          <br />
+          <Trans>
+            You <b>MUST</b> maintain enough voting power to meet the proposal threshold until your
+            proposal is executed. If you fail to do so, anyone can cancel your proposal.
+          </Trans>
         </Alert>
         <div className="d-grid">
           <Button

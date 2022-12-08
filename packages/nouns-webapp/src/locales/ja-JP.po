@@ -1248,6 +1248,10 @@ msgstr "あなた"
 msgid "You <0>Abstained</0> from this proposal"
 msgstr "あなたはこの提案から<0>棄権</0>しました"
 
+#: src/pages/CreateProposal/index.tsx
+msgid "You <0>MUST</0> maintain enough voting power to meet the proposal threshold until your proposal is executed. If you fail to do so, anyone can cancel your proposal."
+msgstr ""
+
 #: src/components/CreateProposalButton/index.tsx
 msgid "You already have an active or pending proposal"
 msgstr "すでに有効または保留中の提案があります"
