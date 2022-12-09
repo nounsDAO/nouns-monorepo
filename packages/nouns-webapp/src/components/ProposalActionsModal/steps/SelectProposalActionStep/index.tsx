@@ -10,12 +10,23 @@ import ModalSubTitle from '../../../ModalSubtitle';
 import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
 import ModalTitle from '../../../ModalTitle';
 
+const proposalActionTypeToProposalActionCreationStep = (actionTypeString: string) => {
+
+  if (actionTypeString === ProposalActionType.LUMP_SUM.toString()) {
+    return ProposalActionCreationStep.LUMP_SUM_DETAILS;
+  } else if (actionTypeString === ProposalActionType.STREAM.toString()) {
+    return ProposalActionCreationStep.STREAM_PAYMENT_DETAILS;
+  } 
+  else {
+     return ProposalActionCreationStep.FUNCTION_CALL_SELECT_FUNCTION;
+  }    
+};
+
 const SelectProposalActionStep: React.FC<ProposalActionModalStepProps> = props => {
   const { onPrevBtnClick, onNextBtnClick, state, setState } = props;
+
   const [nextStep, setNextStep] = useState<ProposalActionCreationStep>(
-    state.actionType === ProposalActionType.FUNCTION_CALL
-      ? ProposalActionCreationStep.FUNCTION_CALL_SELECT_FUNCTION
-      : ProposalActionCreationStep.LUMP_SUM_DETAILS,
+    proposalActionTypeToProposalActionCreationStep(state.actionType?.toString() ?? "")
   );
 
   return (
@@ -30,31 +41,32 @@ const SelectProposalActionStep: React.FC<ProposalActionModalStepProps> = props =
           <hr />
           <b>• Transfer Funds: </b>Send a fixed amount of ETH or USDC.
           <br />
+          <b>• Stream Funds: </b>Stream a fixed amount of ETH or USDC over time.
+          <br />
           <b>• Function Call: </b>Call a contract function.
         </Trans>
       </ModalSubTitle>
 
       <BrandDropdown
         value={
-          state.actionType === ProposalActionType.LUMP_SUM ? 'Transfer Funds' : 'Function Call'
+          state.actionType.toString() 
         }
         onChange={e => {
-          setState(x => ({
+          const actionType = Object.entries(ProposalActionType).find((entry) => {
+              return entry[1] === e.target.value;
+            });
+
+            setState(x => ({
             ...x,
             actionType:
-              e.target.value === 'Transfer Funds'
-                ? ProposalActionType.LUMP_SUM
-                : ProposalActionType.FUNCTION_CALL,
+            actionType ? actionType[1] : ProposalActionType.LUMP_SUM
           }));
 
-          if (e.target.value === 'Transfer Funds') {
-            setNextStep(ProposalActionCreationStep.LUMP_SUM_DETAILS);
-          } else {
-            setNextStep(ProposalActionCreationStep.FUNCTION_CALL_SELECT_FUNCTION);
-          }
+          setNextStep(proposalActionTypeToProposalActionCreationStep(e.taget.value));
         }}
       >
         <option value={'Transfer Funds'}>Transfer Funds</option>
+        <option value={'Stream Funds'}>Stream Funds</option>
         <option value={'Function Call'}>Function Call</option>
       </BrandDropdown>
 

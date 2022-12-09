@@ -8,6 +8,7 @@ import FunctionCallSelectFunctionStep from './steps/FunctionCallSelectFunctionSt
 import FunctionCallEnterArgsStep from './steps/FunctionCallEnterArgsStep';
 import FunctionCallReviewStep from './steps/FunctionCallReviewStep';
 import { Interface } from 'ethers/lib/utils';
+import StreamPaymentsDetailsStep from './steps/StreamPaymentsDetailsStep';
 
 export enum ProposalActionCreationStep {
   SELECT_ACTION_TYPE,
@@ -16,11 +17,14 @@ export enum ProposalActionCreationStep {
   FUNCTION_CALL_SELECT_FUNCTION,
   FUNCTION_CALL_ADD_ARGUMENTS,
   FUNCTION_CALL_REVIEW,
+  STREAM_PAYMENT_DETAILS,
+  STREAM_PAYMENT_REVIEW,
 }
 
 export enum ProposalActionType {
-  LUMP_SUM,
-  FUNCTION_CALL,
+  LUMP_SUM="Transfer Funds",
+  STREAM="Stream Funds",
+  FUNCTION_CALL="Function Call",
 }
 
 export interface ProposalActionModalState {
@@ -119,6 +123,15 @@ const ModalContent: React.FC<{
           state={state}
           setState={setState}
           onDismiss={onDismiss}
+        />
+      );
+      case ProposalActionCreationStep.STREAM_PAYMENT_DETAILS:
+      return (
+        <StreamPaymentsDetailsStep
+          onNextBtnClick={() => setStep(ProposalActionCreationStep.STREAM_PAYMENT_REVIEW)}
+          onPrevBtnClick={() => setStep(ProposalActionCreationStep.SELECT_ACTION_TYPE)}
+          state={state}
+          setState={setState}
         />
       );
     default:
