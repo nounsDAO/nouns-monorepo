@@ -8,7 +8,9 @@ import FunctionCallSelectFunctionStep from './steps/FunctionCallSelectFunctionSt
 import FunctionCallEnterArgsStep from './steps/FunctionCallEnterArgsStep';
 import FunctionCallReviewStep from './steps/FunctionCallReviewStep';
 import { Interface } from 'ethers/lib/utils';
-import StreamPaymentsDetailsStep from './steps/StreamPaymentsDetailsStep';
+import StreamPaymentsPaymentDetailsStep from './steps/StreamPaymentsPaymentDetailsStep';
+import StreamPaymentDateDetailsStep from './steps/StreamPaymentsDateDetailsStep';
+import StreamPaymentsReviewStep from './steps/StreamPaymentsReviewStep';
 
 export enum ProposalActionCreationStep {
   SELECT_ACTION_TYPE,
@@ -17,14 +19,15 @@ export enum ProposalActionCreationStep {
   FUNCTION_CALL_SELECT_FUNCTION,
   FUNCTION_CALL_ADD_ARGUMENTS,
   FUNCTION_CALL_REVIEW,
-  STREAM_PAYMENT_DETAILS,
+  STREAM_PAYMENT_PAYMENT_DETAILS,
+  STREAM_PAYMENT_DATE_DETAILS,
   STREAM_PAYMENT_REVIEW,
 }
 
 export enum ProposalActionType {
-  LUMP_SUM="Transfer Funds",
-  STREAM="Stream Funds",
-  FUNCTION_CALL="Function Call",
+  LUMP_SUM = 'Transfer Funds',
+  STREAM = 'Stream Funds',
+  FUNCTION_CALL = 'Function Call',
 }
 
 export interface ProposalActionModalState {
@@ -32,6 +35,8 @@ export interface ProposalActionModalState {
   address: string;
   amount?: string;
   TransferFundsCurrency?: SupportedCurrency;
+  streamStartTimestamp?: number;
+  streamEndTimestamp?: number;
   function?: string;
   abi?: Interface;
   args?: string[];
@@ -67,6 +72,8 @@ const ModalContent: React.FC<{
     actionType: ProposalActionType.LUMP_SUM,
     address: '',
   });
+
+  console.log('STATE: ', state);
 
   switch (step) {
     case ProposalActionCreationStep.SELECT_ACTION_TYPE:
@@ -125,13 +132,32 @@ const ModalContent: React.FC<{
           onDismiss={onDismiss}
         />
       );
-      case ProposalActionCreationStep.STREAM_PAYMENT_DETAILS:
+    case ProposalActionCreationStep.STREAM_PAYMENT_PAYMENT_DETAILS:
       return (
-        <StreamPaymentsDetailsStep
-          onNextBtnClick={() => setStep(ProposalActionCreationStep.STREAM_PAYMENT_REVIEW)}
+        <StreamPaymentsPaymentDetailsStep
+          onNextBtnClick={() => setStep(ProposalActionCreationStep.STREAM_PAYMENT_DATE_DETAILS)}
           onPrevBtnClick={() => setStep(ProposalActionCreationStep.SELECT_ACTION_TYPE)}
           state={state}
           setState={setState}
+        />
+      );
+    case ProposalActionCreationStep.STREAM_PAYMENT_DATE_DETAILS:
+      return (
+        <StreamPaymentDateDetailsStep
+          onNextBtnClick={() => setStep(ProposalActionCreationStep.STREAM_PAYMENT_REVIEW)}
+          onPrevBtnClick={() => setStep(ProposalActionCreationStep.STREAM_PAYMENT_PAYMENT_DETAILS)}
+          state={state}
+          setState={setState}
+        />
+      );
+    case ProposalActionCreationStep.STREAM_PAYMENT_REVIEW:
+      return (
+        <StreamPaymentsReviewStep
+          onNextBtnClick={onActionAdd}
+          onPrevBtnClick={() => setStep(ProposalActionCreationStep.STREAM_PAYMENT_DATE_DETAILS)}
+          state={state}
+          setState={setState}
+          onDismiss={onDismiss}
         />
       );
     default:

@@ -11,22 +11,20 @@ import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
 import ModalTitle from '../../../ModalTitle';
 
 const proposalActionTypeToProposalActionCreationStep = (actionTypeString: string) => {
-
   if (actionTypeString === ProposalActionType.LUMP_SUM.toString()) {
     return ProposalActionCreationStep.LUMP_SUM_DETAILS;
   } else if (actionTypeString === ProposalActionType.STREAM.toString()) {
-    return ProposalActionCreationStep.STREAM_PAYMENT_DETAILS;
-  } 
-  else {
-     return ProposalActionCreationStep.FUNCTION_CALL_SELECT_FUNCTION;
-  }    
+    return ProposalActionCreationStep.STREAM_PAYMENT_PAYMENT_DETAILS;
+  } else {
+    return ProposalActionCreationStep.FUNCTION_CALL_SELECT_FUNCTION;
+  }
 };
 
 const SelectProposalActionStep: React.FC<ProposalActionModalStepProps> = props => {
   const { onPrevBtnClick, onNextBtnClick, state, setState } = props;
 
   const [nextStep, setNextStep] = useState<ProposalActionCreationStep>(
-    proposalActionTypeToProposalActionCreationStep(state.actionType?.toString() ?? "")
+    proposalActionTypeToProposalActionCreationStep(state.actionType?.toString() ?? ''),
   );
 
   return (
@@ -48,21 +46,18 @@ const SelectProposalActionStep: React.FC<ProposalActionModalStepProps> = props =
       </ModalSubTitle>
 
       <BrandDropdown
-        value={
-          state.actionType.toString() 
-        }
+        value={state.actionType.toString()}
         onChange={e => {
-          const actionType = Object.entries(ProposalActionType).find((entry) => {
-              return entry[1] === e.target.value;
-            });
+          const actionType = Object.entries(ProposalActionType).find(entry => {
+            return entry[1] === e.target.value;
+          });
 
-            setState(x => ({
+          setState(x => ({
             ...x,
-            actionType:
-            actionType ? actionType[1] : ProposalActionType.LUMP_SUM
+            actionType: actionType ? actionType[1] : ProposalActionType.LUMP_SUM,
           }));
 
-          setNextStep(proposalActionTypeToProposalActionCreationStep(e.taget.value));
+          setNextStep(proposalActionTypeToProposalActionCreationStep(e.target.value));
         }}
       >
         <option value={'Transfer Funds'}>Transfer Funds</option>
