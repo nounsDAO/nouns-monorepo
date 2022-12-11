@@ -10,6 +10,8 @@ interface ExternalContractAddresses {
   chainlinkEthUsdc: string | undefined;
   payerContract: string | undefined;
   tokenBuyer: string | undefined;
+  nounsStreamFactory: string | undefined;
+  nounsStream: string | undefined;
 }
 
 export type ContractAddresses = NounsContractAddresses & ExternalContractAddresses;
@@ -93,6 +95,8 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     payerContract: undefined,
     tokenBuyer: undefined,
     chainlinkEthUsdc: undefined,
+    nounsStream: undefined,
+    nounsStreamFactory: undefined,
   },
   [ChainId.Goerli]: {
     lidoToken: '0x2DD6530F136D2B56330792D46aF959D9EA62E276',
@@ -100,6 +104,8 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     payerContract: '0xD4A3bf1dF54699E63A2ef7F490E8E22b27B945f0',
     tokenBuyer: '0x61Ec4584c5B5eBaaD9f21Aac491fBB5B2ff30779',
     chainlinkEthUsdc: undefined,
+    nounsStream: '0x033250f82FAbc5dD0005aB314e3c0124623d9D58',
+    nounsStreamFactory: '0x51EdD88CD84e93e99d49122144Efc0719D6eE450',
   },
   [ChainId.Mainnet]: {
     lidoToken: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
@@ -107,6 +113,8 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     chainlinkEthUsdc: '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419',
     payerContract: '0xd97Bcd9f47cEe35c0a9ec1dc40C1269afc9E8E1D',
     tokenBuyer: '0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5',
+    nounsStream: undefined,
+    nounsStreamFactory: undefined,
   },
   [ChainId.Hardhat]: {
     lidoToken: undefined,
@@ -114,6 +122,8 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     payerContract: undefined,
     tokenBuyer: undefined,
     chainlinkEthUsdc: undefined,
+    nounsStream: undefined,
+    nounsStreamFactory: undefined,
   },
 };
 

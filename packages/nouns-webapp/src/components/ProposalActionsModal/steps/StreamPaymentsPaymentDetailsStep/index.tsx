@@ -1,7 +1,6 @@
 import { Trans } from '@lingui/macro';
 import React, { useEffect, useState } from 'react';
 import { ProposalActionModalStepProps } from '../..';
-import BrandDropdown from '../../../BrandDropdown';
 import BrandNumericEntry from '../../../BrandNumericEntry';
 import BrandTextEntry from '../../../BrandTextEntry';
 import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
@@ -9,12 +8,10 @@ import ModalTitle from '../../../ModalTitle';
 import { SupportedCurrency } from '../TransferFundsDetailsStep';
 import BigNumber from 'bignumber.js';
 import { utils } from 'ethers';
+import ModalSubTitle from '../../../ModalSubtitle';
 
 const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props => {
   const { onPrevBtnClick, onNextBtnClick, state, setState } = props;
-  const [currency, setCurrency] = useState<SupportedCurrency>(
-    state.TransferFundsCurrency ?? SupportedCurrency.ETH,
-  );
   const [amount, setAmount] = useState<string>(state.amount ?? '');
   const [formattedAmount, setFormattedAmount] = useState<string>(state.amount ?? '');
   const [address, setAddress] = useState(state.address ?? '');
@@ -33,21 +30,9 @@ const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props 
         <Trans>Add Streaming Payment Action</Trans>
       </ModalTitle>
 
-      <BrandDropdown
-        label={'Currency'}
-        value={currency === SupportedCurrency.ETH ? 'ETH' : 'USDC'}
-        onChange={e => {
-          if (e.target.value === 'ETH') {
-            setCurrency(SupportedCurrency.ETH);
-          } else {
-            setCurrency(SupportedCurrency.USDC);
-          }
-        }}
-        chevronTop={38}
-      >
-        <option value="ETH">ETH</option>
-        <option value="USDC">USDC</option>
-      </BrandDropdown>
+      <ModalSubTitle>
+        <Trans>At this time only USDC streams are supported</Trans>
+      </ModalSubTitle>
 
       <BrandNumericEntry
         label={'Amount'}
@@ -56,7 +41,7 @@ const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props 
           setAmount(e.value);
           setFormattedAmount(e.formattedValue);
         }}
-        placeholder={currency === SupportedCurrency.ETH ? '0 ETH' : '0 USDC'}
+        placeholder={'0 USDC'}
         isInvalid={parseFloat(amount) > 0 && new BigNumber(amount).isNaN()}
       />
 
@@ -74,7 +59,7 @@ const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props 
         onPrevBtnClick={onPrevBtnClick}
         nextBtnText={<Trans>Add Stream Date Details</Trans>}
         onNextBtnClick={() => {
-          setState(x => ({ ...x, address, amount, TransferFundsCurrency: currency }));
+          setState(x => ({ ...x, address, amount, TransferFundsCurrency: SupportedCurrency.USDC }));
           onNextBtnClick();
         }}
         isNextBtnDisabled={!isValidForNextStage}

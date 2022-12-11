@@ -10,6 +10,7 @@ import ModalTitle from '../../../ModalTitle';
 import config from '../../../../config';
 import { SupportedCurrency } from '../TransferFundsDetailsStep';
 import dayjs from 'dayjs';
+import { usePredictStreamAddress } from '../../../../utils/streamingPaymentUtils/streamingPaymentUtils';
 
 const handleActionAdd = (state: ProposalActionModalState, onActionAdd: (e?: any) => void) => {
   if (state.TransferFundsCurrency === SupportedCurrency.ETH) {
@@ -47,6 +48,18 @@ const handleActionAdd = (state: ProposalActionModalState, onActionAdd: (e?: any)
 
 const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props => {
   const { onNextBtnClick, onPrevBtnClick, state, onDismiss } = props;
+
+  const predictedAddress = usePredictStreamAddress({
+      msgSender: config.addresses.nounsDaoExecutor,
+      payer: config.addresses.payerContract,
+      recipient: state.address,
+      tokenAmount: state.amount,
+      tokenAddress: config.addresses.usdcToken,
+      startTime: state.streamStartTimestamp,
+      endTime: state.streamEndTimestamp
+  });
+
+  console.log("PREDICTED ADDRESS: ", predictedAddress);
 
   return (
     <div>
