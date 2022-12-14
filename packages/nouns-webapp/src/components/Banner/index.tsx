@@ -1,8 +1,8 @@
 import classes from './Banner.module.css';
 import Section from '../../layout/Section';
 import { Col } from 'react-bootstrap';
-import calendar_noun from '../../assets/calendar_noun.png';
-import Noun from '../Noun';
+// import calendar_noun from '../../assets/calendar_noun.png';
+// import Noun from '../Noun';
 import { Trans } from '@lingui/macro';
 import BostonDAOLogo from '../../components/BostonDAOLogo';
 
