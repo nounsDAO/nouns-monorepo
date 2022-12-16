@@ -258,6 +258,10 @@ msgstr "Body"
 msgid "Born"
 msgstr "Born"
 
+#: src/pages/Vote/index.tsx
+msgid "Cancel"
+msgstr "Cancel"
+
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
@@ -1374,6 +1378,10 @@ msgstr "{0} <0>Addresses</0>"
 #: src/pages/Vote/index.tsx
 msgid "{0} votes"
 msgstr "{0} votes"
+
+#: src/pages/Vote/index.tsx
+msgid "{destructiveStateButtonAction} Proposal ⌐◧-◧"
+msgstr "{destructiveStateButtonAction} Proposal ⌐◧-◧"
 
 #: src/pages/Vote/index.tsx
 msgid "{moveStateButtonAction} Proposal ⌐◧-◧"

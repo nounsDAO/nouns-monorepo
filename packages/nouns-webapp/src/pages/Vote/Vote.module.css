@@ -71,6 +71,33 @@
   border-top: 0px;
 }
 
+.destructiveTransitionStateButton {
+  height: 50px;
+  border-radius: 8px;
+  border-color: var(--brand-color-red);
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 24px;
+  transition: all 0.125s ease-in-out;
+  background-color: var(--brand-color-red);
+}
+
+.destructiveTransitionStateButton:hover {
+  background-color: var(--brand-color-red);
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.destructiveTransitionStateButtonSection {
+  height: 50px;
+  border-radius: 8px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 24px;
+  transition: all 0.125s ease-in-out;
+  background-color: var(--brand-color-red);
+}
+
 .spinner {
   margin-left: auto;
   margin-right: auto;

@@ -263,6 +263,10 @@ msgstr "体"
 msgid "Born"
 msgstr "誕生"
 
+#: src/pages/Vote/index.tsx
+msgid "Cancel"
+msgstr ""
+
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
@@ -1375,6 +1379,10 @@ msgstr "{0}<0>イーサリアムアドレス</0>"
 #: src/pages/Vote/index.tsx
 msgid "{0} votes"
 msgstr "{0} 票"
+
+#: src/pages/Vote/index.tsx
+msgid "{destructiveStateButtonAction} Proposal ⌐◧-◧"
+msgstr "{destructiveStateButtonAction} 提案の順番 ⌐◧-◧"
 
 #: src/pages/Vote/index.tsx
 msgid "{moveStateButtonAction} Proposal ⌐◧-◧"
