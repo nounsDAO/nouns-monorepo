@@ -1,9 +1,10 @@
 import classes from './ProposalEditor.module.css';
 import { InputGroup, FormControl, FormText } from 'react-bootstrap';
 import remarkBreaks from 'remark-breaks';
+import remarkGfm from 'remark-gfm';
 import ReactMarkdown from 'react-markdown';
-import { useState } from 'react';
 import { Trans } from '@lingui/macro';
+import { useState } from 'react';
 
 const ProposalEditor = ({
   title,
@@ -59,7 +60,7 @@ const ProposalEditor = ({
           <ReactMarkdown
             className={classes.markdown}
             children={proposalText}
-            remarkPlugins={[remarkBreaks]}
+            remarkPlugins={[remarkBreaks, remarkGfm]}
           />
         </div>
       )}

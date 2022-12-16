@@ -59,8 +59,8 @@
     "redux": "^4.1.0",
     "redux-devtools-extension": "^2.13.9",
     "remark-breaks": "^3.0.1",
-    "web-vitals": "^1.0.1",
-    "react-transition-group": "^4.4.5"
+    "remark-gfm": "^3.0.1",
+    "web-vitals": "^1.0.1"
   },
   "devDependencies": {
     "@types/bad-words": "^3.0.1",

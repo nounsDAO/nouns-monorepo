@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
 import { Proposal } from '../../wrappers/nounsDao';
 import remarkBreaks from 'remark-breaks';
+import remarkGfm from 'remark-gfm';
 import { buildEtherscanAddressLink, buildEtherscanTxLink } from '../../utils/etherscan';
 import { utils } from 'ethers';
 import classes from './ProposalContent.module.css';
@@ -50,7 +51,7 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
             <ReactMarkdown
               className={classes.markdown}
               children={processProposalDescriptionText(proposal.description, proposal.title)}
-              remarkPlugins={[remarkBreaks]}
+              remarkPlugins={[remarkBreaks, remarkGfm]}
             />
           )}
         </Col>
