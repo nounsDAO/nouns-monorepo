@@ -20,7 +20,7 @@ const parseArguments = (abi: Interface | undefined, func: string, args: string[]
       return JSON.parse(a);
     }
     return a;
-  })
+  });
 };
 
 const FunctionCallEnterArgsStep: React.FC<ProposalActionModalStepProps> = props => {
