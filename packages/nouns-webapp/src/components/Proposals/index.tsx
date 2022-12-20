@@ -14,7 +14,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '../../i18n/locales';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import DelegationModal from '../DelegationModal';
 import { i18n } from '@lingui/core';
 import en from 'dayjs/locale/en';
