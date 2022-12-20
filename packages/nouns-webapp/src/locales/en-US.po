@@ -365,6 +365,8 @@ msgstr "Defeated"
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
+#: src/components/Winner/index.tsx
+#: src/components/Winner/index.tsx
 msgid "Delegate"
 msgstr "Delegate"
 
@@ -540,6 +542,11 @@ msgstr "Gas spent on voting will be refunded to you. Gnosis Safe is not yet supp
 #: src/pages/Playground/index.tsx
 msgid "Generate Nouns"
 msgstr "Generate Nouns"
+
+#: src/components/Winner/index.tsx
+#: src/components/Winner/index.tsx
+msgid "Get Involved"
+msgstr "Get Involved"
 
 #: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
@@ -1221,10 +1228,6 @@ msgstr "WTF?"
 msgid "Waiting for"
 msgstr "Waiting for"
 
-#: src/components/Winner/index.tsx
-#: src/components/Winner/index.tsx
-msgid "What now?"
-msgstr "What now?"
 
 #: src/components/Documentation/index.tsx
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."

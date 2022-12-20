@@ -365,6 +365,8 @@ msgstr ""
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
+#: src/components/Winner/index.tsx
+#: src/components/Winner/index.tsx
 msgid "Delegate"
 msgstr ""
 
@@ -539,6 +541,11 @@ msgstr ""
 
 #: src/pages/Playground/index.tsx
 msgid "Generate Nouns"
+msgstr ""
+
+#: src/components/Winner/index.tsx
+#: src/components/Winner/index.tsx
+msgid "Get Involved"
 msgstr ""
 
 #: src/components/ExploreGrid/ExploreNounDetail/index.tsx
@@ -1219,11 +1226,6 @@ msgstr ""
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Waiting for"
-msgstr ""
-
-#: src/components/Winner/index.tsx
-#: src/components/Winner/index.tsx
-msgid "What now?"
 msgstr ""
 
 #: src/components/Documentation/index.tsx

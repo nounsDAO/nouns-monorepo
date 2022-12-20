@@ -370,6 +370,8 @@ msgstr "却下"
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
+#: src/components/Winner/index.tsx
+#: src/components/Winner/index.tsx
 msgid "Delegate"
 msgstr "投票を委任する"
 
@@ -545,6 +547,11 @@ msgstr ""
 #: src/pages/Playground/index.tsx
 msgid "Generate Nouns"
 msgstr "Nounsを作る"
+
+#: src/components/Winner/index.tsx
+#: src/components/Winner/index.tsx
+msgid "Get Involved"
+msgstr ""
 
 #: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
@@ -1221,11 +1228,6 @@ msgstr "WTF?"
 #: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Waiting for"
 msgstr "待機"
-
-#: src/components/Winner/index.tsx
-#: src/components/Winner/index.tsx
-msgid "What now?"
-msgstr "これからどうする？"
 
 #: src/components/Documentation/index.tsx
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
