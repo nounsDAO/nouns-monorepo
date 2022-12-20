@@ -54,6 +54,33 @@ export const seedsQuery = (first = 1_000) => gql`
 }
 `;
 
+export const proposalQuery = (id: string | number) => gql`
+{
+  proposal(id: ${id}) {
+    id
+    description
+    status
+    proposalThreshold
+    quorumVotes
+    forVotes
+    againstVotes
+    abstainVotes
+    createdTransactionHash
+    createdBlock
+    startBlock
+    endBlock
+    executionETA
+    targets
+    values
+    signatures
+    calldatas
+    proposer {
+      id
+    }
+  }
+}
+`;
+
 export const proposalsQuery = (first = 1_000) => gql`
 {
   proposals(first: ${first}, orderBy: createdBlock, orderDirection: asc) {
