@@ -59,23 +59,34 @@ export const createNetworkWsUrl = (network: string): string => {
   return custom || `wss://${network}.infura.io/ws/v3/${INFURA_PROJECT_ID}`;
 };
 
+const createSubgraphUrl = (network: string, hostedName: string): string => {
+  const apiKey = process.env[`REACT_APP_${network.toUpperCase()}_SUBGRAPH_API_KEY`];
+  const subgraphId = process.env[`REACT_APP_${network.toUpperCase()}_SUBGRAPH_ID`];
+
+  // Fallback to hosted service if API key or subgraph ID are not available
+  if (!apiKey || !subgraphId) {
+    return `https://api.thegraph.com/subgraphs/name/${hostedName}`;
+  }
+  return `https://gateway.thegraph.com/api/${apiKey}/subgraphs/id/${subgraphId}`;
+};
+
 const app: Record<SupportedChains, AppConfig> = {
   [ChainId.Rinkeby]: {
     jsonRpcUri: createNetworkHttpUrl('rinkeby'),
     wsRpcUri: createNetworkWsUrl('rinkeby'),
-    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph-rinkeby-v5',
+    subgraphApiUri: createSubgraphUrl('rinkeby', 'nounsdao/nouns-subgraph-rinkeby-v5'),
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   [ChainId.Goerli]: {
     jsonRpcUri: createNetworkHttpUrl('goerli'),
     wsRpcUri: createNetworkWsUrl('goerli'),
-    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/bcjgit/dao-v2-test',
+    subgraphApiUri: createSubgraphUrl('goerli', 'bcjgit/dao-v2-test'),
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   [ChainId.Mainnet]: {
     jsonRpcUri: createNetworkHttpUrl('mainnet'),
     wsRpcUri: createNetworkWsUrl('mainnet'),
-    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph',
+    subgraphApiUri: createSubgraphUrl('mainnet', 'nounsdao/nouns-subgraph'),
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   [ChainId.Hardhat]: {
