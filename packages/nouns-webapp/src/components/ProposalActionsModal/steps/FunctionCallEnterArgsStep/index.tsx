@@ -7,11 +7,21 @@ import 'react-stepz/dist/index.css';
 import { Trans } from '@lingui/macro';
 import ModalTitle from '../../../ModalTitle';
 import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
+import { Interface } from 'ethers/lib/utils';
 
 export enum SupportedCurrencies {
   ETH = 'ETH',
   USDC = 'USDC',
 }
+
+const parseArguments = (abi: Interface | undefined, func: string, args: string[]) => {
+  return args.map((a, i) => {
+    if (abi?.functions[func]?.inputs?.[i].type === 'tuple') {
+      return JSON.parse(a);
+    }
+    return a;
+  });
+};
 
 const FunctionCallEnterArgsStep: React.FC<ProposalActionModalStepProps> = props => {
   const { onNextBtnClick, onPrevBtnClick, state, setState } = props;
@@ -36,7 +46,7 @@ const FunctionCallEnterArgsStep: React.FC<ProposalActionModalStepProps> = props 
       }
 
       try {
-        return !!abi?._encodeParams(abi?.functions[func]?.inputs, a);
+        return !!abi?._encodeParams(abi?.functions[func]?.inputs, parseArguments(abi, func, a));
       } catch {
         setInvalidArgument(true);
         return false;
@@ -95,7 +105,7 @@ const FunctionCallEnterArgsStep: React.FC<ProposalActionModalStepProps> = props 
         onNextBtnClick={() => {
           setState(x => ({
             ...x,
-            args,
+            args: parseArguments(abi, func, args),
           }));
           onNextBtnClick();
         }}

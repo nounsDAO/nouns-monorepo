@@ -258,6 +258,10 @@ msgstr ""
 msgid "Born"
 msgstr ""
 
+#: src/pages/Vote/index.tsx
+msgid "Cancel"
+msgstr ""
+
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
@@ -361,6 +365,8 @@ msgstr ""
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
+#: src/components/Winner/index.tsx
+#: src/components/Winner/index.tsx
 msgid "Delegate"
 msgstr ""
 
@@ -535,6 +541,11 @@ msgstr ""
 
 #: src/pages/Playground/index.tsx
 msgid "Generate Nouns"
+msgstr ""
+
+#: src/components/Winner/index.tsx
+#: src/components/Winner/index.tsx
+msgid "Get Involved"
 msgstr ""
 
 #: src/components/ExploreGrid/ExploreNounDetail/index.tsx
@@ -1217,11 +1228,6 @@ msgstr ""
 msgid "Waiting for"
 msgstr ""
 
-#: src/components/Winner/index.tsx
-#: src/components/Winner/index.tsx
-msgid "What now?"
-msgstr ""
-
 #: src/components/Documentation/index.tsx
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
 msgstr ""
@@ -1373,6 +1379,10 @@ msgstr ""
 
 #: src/pages/Vote/index.tsx
 msgid "{0} votes"
+msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "{destructiveStateButtonAction} Proposal ⌐◧-◧"
 msgstr ""
 
 #: src/pages/Vote/index.tsx
