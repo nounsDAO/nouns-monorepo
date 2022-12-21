@@ -1,5 +1,8 @@
 import clsx from 'clsx';
 import classes from './NavBarButton.module.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
+import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
 
 export enum NavBarButtonStyle {
   COOL_INFO,
@@ -14,6 +17,9 @@ export enum NavBarButtonStyle {
   DELEGATE_PRIMARY,
   DELEGATE_SECONDARY,
   DELEGATE_DISABLED,
+  FOR_VOTE_SUBMIT,
+  AGAINST_VOTE_SUBMIT,
+  ABSTAIN_VOTE_SUBMIT,
 }
 
 interface NavBarButtonProps {
@@ -22,6 +28,9 @@ interface NavBarButtonProps {
   buttonStyle?: NavBarButtonStyle;
   onClick?: (e?: any) => void;
   disabled?: boolean;
+  className?: string;
+  isDropdown?: boolean;
+  isButtonUp?: boolean;
 }
 
 export const getNavBarButtonVariant = (buttonStyle?: NavBarButtonStyle) => {
@@ -62,6 +71,15 @@ export const getNavBarButtonVariant = (buttonStyle?: NavBarButtonStyle) => {
     case NavBarButtonStyle.DELEGATE_DISABLED: {
       return classes.delegateDisabled;
     }
+    case NavBarButtonStyle.FOR_VOTE_SUBMIT: {
+      return classes.forVoteSubmit;
+    }
+    case NavBarButtonStyle.AGAINST_VOTE_SUBMIT: {
+      return classes.againstVoteSubmit;
+    }
+    case NavBarButtonStyle.ABSTAIN_VOTE_SUBMIT: {
+      return classes.abstainVoteSubmit;
+    }
     default: {
       return classes.info;
     }
@@ -69,21 +87,37 @@ export const getNavBarButtonVariant = (buttonStyle?: NavBarButtonStyle) => {
 };
 
 const NavBarButton: React.FC<NavBarButtonProps> = props => {
-  const { buttonText, buttonIcon, buttonStyle, onClick, disabled } = props;
+  const { buttonText, buttonIcon, buttonStyle, onClick, disabled, className = '' } = props;
 
   let isDisabled = disabled ?? false;
 
   return (
     <>
       <div
-        className={`${classes.wrapper} ${getNavBarButtonVariant(buttonStyle)}`}
+        className={clsx(
+          `${classes.wrapper} ${getNavBarButtonVariant(buttonStyle)} ${className}`,
+          props.isDropdown && classes.dropdown,
+        )}
         onClick={isDisabled ? () => {} : onClick}
       >
         <div
           className={clsx(classes.button, isDisabled ? classes.btnDisabled : classes.btnEnabled)}
         >
-          {buttonIcon && <div className={classes.icon}>{buttonIcon}</div>}
+          {buttonIcon && (
+            <div className={clsx(classes.icon, props.isDropdown && classes.dropdown)}>
+              {buttonIcon}
+            </div>
+          )}
           <div>{buttonText}</div>
+          {props.isDropdown && (
+            <div
+              className={
+                props.isButtonUp ? navDropdownClasses.arrowUp : navDropdownClasses.arrowDown
+              }
+            >
+              <FontAwesomeIcon icon={props.isButtonUp ? faSortUp : faSortDown} />{' '}
+            </div>
+          )}
         </div>
       </div>
     </>

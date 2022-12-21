@@ -44,7 +44,9 @@ const ProposalTransactions = ({
           <Col sm="3">
             <b>Calldata</b>
           </Col>
-          <Col sm="9">{tx.calldata === '0x' ? 'None' : tx.calldata}</Col>
+          <Col sm="9">
+            {tx.calldata === '0x' ? 'None' : tx.decodedCalldata ? tx.decodedCalldata : tx.calldata}
+          </Col>
         </Row>
       </Popover.Body>
     </Popover>

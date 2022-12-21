@@ -1,6 +1,7 @@
-import { NounsDAOV2ABI, NounsDaoLogicV1Factory } from '@nouns/sdk';
+import { NounsDAOV2ABI, NounsDaoLogicV2Factory } from '@nouns/sdk';
 import {
   ChainId,
+  connectContractToSigner,
   useBlockNumber,
   useContractCall,
   useContractCalls,
@@ -14,7 +15,7 @@ import { useLogs } from '../hooks/useLogs';
 import * as R from 'ramda';
 import config, { CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
-import { proposalsQuery } from './subgraph';
+import { proposalQuery, proposalsQuery } from './subgraph';
 import BigNumber from 'bignumber.js';
 import { useBlockTimestamp } from '../hooks/useBlockTimestamp';
 
@@ -120,10 +121,12 @@ export interface ProposalTransaction {
   value: string;
   signature: string;
   calldata: string;
+  decodedCalldata?: string;
+  usdcValue?: number;
 }
 
 const abi = new utils.Interface(NounsDAOV2ABI);
-const nounsDaoContract = new NounsDaoLogicV1Factory().attach(config.addresses.nounsDAOProxy);
+const nounsDaoContract = new NounsDaoLogicV2Factory().attach(config.addresses.nounsDAOProxy);
 
 // Start the log search at the mainnet deployment block to speed up log queries
 const fromBlock = CHAIN_ID === ChainId.Mainnet ? 12985453 : 0;
@@ -285,12 +288,13 @@ const countToIndices = (count: number | undefined) => {
 
 const formatProposalTransactionDetails = (details: ProposalTransactionDetails | Result) => {
   return details.targets.map((target: string, i: number) => {
-    const signature = details.signatures[i];
+    const signature: string = details.signatures[i];
     const value = EthersBN.from(
       // Handle both logs and subgraph responses
       (details as ProposalTransactionDetails).values?.[i] ?? (details as Result)?.[3]?.[i] ?? 0,
     );
-    const [name, types] = signature.substring(0, signature.length - 1)?.split('(');
+    // Split at first occurrence of '('
+    let [name, types] = signature.substring(0, signature.length - 1)?.split(/\((.*)/s);
     if (!name || !types) {
       return {
         target,
@@ -299,7 +303,8 @@ const formatProposalTransactionDetails = (details: ProposalTransactionDetails | 
       };
     }
     const calldata = details.calldatas[i];
-    const decoded = defaultAbiCoder.decode(types.split(','), calldata);
+    // Split using comma as separator, unless comma is between parentheses (tuple).
+    const decoded = defaultAbiCoder.decode(types.split(/,(?![^(]*\))/g), calldata);
     return {
       target,
       functionSig: name,
@@ -374,32 +379,44 @@ const getProposalState = (
   return status;
 };
 
+const parseSubgraphProposal = (
+  proposal: ProposalSubgraphEntity | undefined,
+  blockNumber: number | undefined,
+  timestamp: number | undefined,
+) => {
+  if (!proposal) {
+    return;
+  }
+
+  const description = proposal.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, '');
+  return {
+    id: proposal.id,
+    title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
+    description: description ?? 'No description.',
+    proposer: proposal.proposer?.id,
+    status: getProposalState(blockNumber, new Date((timestamp ?? 0) * 1000), proposal),
+    proposalThreshold: parseInt(proposal.proposalThreshold),
+    quorumVotes: parseInt(proposal.quorumVotes),
+    forCount: parseInt(proposal.forVotes),
+    againstCount: parseInt(proposal.againstVotes),
+    abstainCount: parseInt(proposal.abstainVotes),
+    createdBlock: parseInt(proposal.createdBlock),
+    startBlock: parseInt(proposal.startBlock),
+    endBlock: parseInt(proposal.endBlock),
+    eta: proposal.executionETA ? new Date(Number(proposal.executionETA) * 1000) : undefined,
+    details: formatProposalTransactionDetails(proposal),
+    transactionHash: proposal.createdTransactionHash,
+  };
+};
+
 export const useAllProposalsViaSubgraph = (): ProposalData => {
   const { loading, data, error } = useQuery(proposalsQuery());
   const blockNumber = useBlockNumber();
   const timestamp = useBlockTimestamp(blockNumber);
 
-  const proposals = data?.proposals?.map((proposal: ProposalSubgraphEntity) => {
-    const description = proposal.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, '');
-    return {
-      id: proposal.id,
-      title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
-      description: description ?? 'No description.',
-      proposer: proposal.proposer.id,
-      status: getProposalState(blockNumber, new Date((timestamp ?? 0) * 1000), proposal),
-      proposalThreshold: parseInt(proposal.proposalThreshold),
-      quorumVotes: parseInt(proposal.quorumVotes),
-      forCount: parseInt(proposal.forVotes),
-      againstCount: parseInt(proposal.againstVotes),
-      abstainCount: parseInt(proposal.abstainVotes),
-      createdBlock: parseInt(proposal.createdBlock),
-      startBlock: parseInt(proposal.startBlock),
-      endBlock: parseInt(proposal.endBlock),
-      eta: proposal.executionETA ? new Date(Number(proposal.executionETA) * 1000) : undefined,
-      details: formatProposalTransactionDetails(proposal),
-      transactionHash: proposal.createdTransactionHash,
-    };
-  });
+  const proposals = data?.proposals?.map((proposal: ProposalSubgraphEntity) =>
+    parseSubgraphProposal(proposal, blockNumber, timestamp),
+  );
 
   return {
     loading,
@@ -426,7 +443,7 @@ export const useAllProposalsViaChain = (skip = false): ProposalData => {
     }));
   };
 
-  const proposals = useContractCalls<ProposalCallResult>(requests('proposals'));
+  const proposals = useContractCalls<[ProposalCallResult]>(requests('proposals'));
   const proposalStates = useContractCalls<[ProposalState]>(requests('state'));
 
   const formattedLogs = useFormattedProposalCreatedLogs(skip);
@@ -439,7 +456,8 @@ export const useAllProposalsViaChain = (skip = false): ProposalData => {
     }
 
     return {
-      data: proposals.map((proposal, i) => {
+      data: proposals.map((p, i) => {
+        const proposal = p?.[0];
         const description = logs[i]?.description?.replace(/\\n/g, '\n');
         return {
           id: proposal?.id.toString(),
@@ -472,8 +490,9 @@ export const useAllProposals = (): ProposalData => {
 };
 
 export const useProposal = (id: string | number): Proposal | undefined => {
-  const { data } = useAllProposals();
-  return data?.find(p => p.id === id.toString());
+  const blockNumber = useBlockNumber();
+  const timestamp = useBlockTimestamp(blockNumber);
+  return parseSubgraphProposal(useQuery(proposalQuery(id)).data?.proposal, blockNumber, timestamp);
 };
 
 export const useCastVote = () => {
@@ -492,6 +511,45 @@ export const useCastVoteWithReason = () => {
   return { castVoteWithReason, castVoteWithReasonState };
 };
 
+export const useCastRefundableVote = () => {
+  const { library } = useEthers();
+  const { send: castRefundableVote, state: castRefundableVoteState } = useContractFunction(
+    nounsDaoContract,
+    'castRefundableVote',
+  );
+
+  return {
+    castRefundableVote: async (...args: any[]): Promise<void> => {
+      const contract = connectContractToSigner(nounsDaoContract, undefined, library);
+      const gasLimit = await contract.estimateGas.castRefundableVote(...args);
+      return castRefundableVote(...args, {
+        gasLimit: gasLimit.add(20_000), // A 20,000 gas pad is used to avoid 'Out of gas' errors
+      });
+    },
+    castRefundableVoteState,
+  };
+};
+
+export const useCastRefundableVoteWithReason = () => {
+  const { library } = useEthers();
+  // prettier-ignore
+  const { send: castRefundableVoteWithReason, state: castRefundableVoteWithReasonState } = useContractFunction(
+    nounsDaoContract,
+    'castRefundableVoteWithReason',
+  );
+
+  return {
+    castRefundableVoteWithReason: async (...args: any[]): Promise<void> => {
+      const contract = connectContractToSigner(nounsDaoContract, undefined, library);
+      const gasLimit = await contract.estimateGas.castRefundableVoteWithReason(...args);
+      return castRefundableVoteWithReason(...args, {
+        gasLimit: gasLimit.add(20_000), // A 20,000 gas pad is used to avoid 'Out of gas' errors
+      });
+    },
+    castRefundableVoteWithReasonState,
+  };
+};
+
 export const usePropose = () => {
   const { send: propose, state: proposeState } = useContractFunction(nounsDaoContract, 'propose');
   return { propose, proposeState };
@@ -503,6 +561,14 @@ export const useQueueProposal = () => {
     'queue',
   );
   return { queueProposal, queueProposalState };
+};
+
+export const useCancelProposal = () => {
+  const { send: cancelProposal, state: cancelProposalState } = useContractFunction(
+    nounsDaoContract,
+    'cancel',
+  );
+  return { cancelProposal, cancelProposalState };
 };
 
 export const useExecuteProposal = () => {

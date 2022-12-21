@@ -42,13 +42,23 @@ const Winner: React.FC<WinnerProps> = props => {
       {!isMobile && (
         <Col>
           <a
-            href="https://nouns.center/nouners"
+            href="https://nouns.center/groups"
             target="_blank"
             rel="noreferrer noopener"
             className={classes.verifyLink}
           >
             <Button className={classes.verifyButton}>
-              <Trans>What now?</Trans>
+              <Trans>Get Involved</Trans>
+            </Button>
+          </a>
+          <a
+            href="https://www.nounsagora.com/"
+            target="_blank"
+            rel="noreferrer noopener"
+            className={classes.verifyLink}
+          >
+            <Button className={classes.verifyButton}>
+              <Trans>Delegate</Trans>
             </Button>
           </a>
         </Col>
@@ -104,13 +114,23 @@ const Winner: React.FC<WinnerProps> = props => {
       {isWinnerYou && isMobile && (
         <Row>
           <a
-            href="https://nouns.center/nouners"
+            href="https://nouns.center/groups"
             target="_blank"
             rel="noreferrer noopener"
             className={classes.verifyLink}
           >
             <Button className={classes.verifyButton}>
-              <Trans>What now?</Trans>
+              <Trans>Get Involved</Trans>
+            </Button>
+          </a>
+          <a
+            href="https://www.nounsagora.com/"
+            target="_blank"
+            rel="noreferrer noopener"
+            className={classes.verifyLink}
+          >
+            <Button className={classes.verifyButton}>
+              <Trans>Delegate</Trans>
             </Button>
           </a>
         </Row>

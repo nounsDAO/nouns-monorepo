@@ -1,16 +1,21 @@
+.createProposalPage {
+  font-family: 'PT Root UI';
+}
+
 .createProposalPage a {
   color: var(--brand-dark-red);
 }
 
 .createProposalForm {
   border-radius: 5px;
-  padding: 1rem 2.5rem;
-  margin-top: 1em;
+  padding: 0rem 2.5rem;
   background-color: white;
 }
 
 .heading {
   margin: 1rem 0;
+  font-family: 'Londrina Solid';
+  font-size: 42px;
 }
 
 .section {
@@ -23,4 +28,57 @@
 .addTransactionButton,
 .createProposalButton {
   margin-top: 1rem;
+}
+
+.backButton {
+  -webkit-appearance: none;
+  padding: 0;
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  font-weight: bold;
+  margin-right: 1rem;
+  margin-top: 0.1rem;
+}
+
+.proposalActionButton {
+  height: 50px;
+  border-radius: 8px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 24px;
+  transition: all 0.125s ease-in-out;
+}
+
+.proposalActionButton:hover {
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.proposalActionButtonSection {
+  border-top: 0px;
+}
+
+.voterIneligibleAlert {
+  border-radius: 8px;
+}
+
+.tokenBuyerNotif {
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.createProposalButton {
+  height: 50px;
+  border-radius: 8px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 18px;
+  transition: all 0.125s ease-in-out;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
 }

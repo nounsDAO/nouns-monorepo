@@ -1,8 +1,9 @@
 import { useEtherBalance } from '@usedapp/core';
 import useLidoBalance from './useLidoBalance';
+import useTokenBuyerBalance from './useTokenBuyerBalance';
 import { useCoingeckoPrice } from '@usedapp/coingecko';
 import config from '../config';
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 
 /**
  * Computes treasury balance (ETH + Lido)
@@ -12,7 +13,10 @@ import { ethers } from 'ethers';
 export const useTreasuryBalance = () => {
   const ethBalance = useEtherBalance(config.addresses.nounsDaoExecutor);
   const lidoBalanceAsETH = useLidoBalance();
-  return ethBalance && lidoBalanceAsETH && ethBalance.add(lidoBalanceAsETH);
+  const tokenBuyerBalanceAsETH = useTokenBuyerBalance();
+
+  const zero = BigNumber.from(0);
+  return ethBalance?.add(lidoBalanceAsETH ?? zero).add(tokenBuyerBalanceAsETH ?? zero) ?? zero;
 };
 
 /**
