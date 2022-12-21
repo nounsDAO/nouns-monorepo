@@ -1,5 +1,5 @@
 import { buildCounterName } from './utils';
-import { internalDiscordWebhook, incrementCounter, publicDiscordWebhook } from './clients';
+import { internalDiscordWebhook, incrementCounter, twitter } from './clients';
 import { getAllProposals, getLastAuctionBids } from './subgraph';
 import {
   getAuctionCache,
@@ -16,7 +16,7 @@ import {
 import { IAuctionLifecycleHandler } from './types';
 import { config } from './config';
 import { TwitterAuctionLifecycleHandler } from './handlers/twitter';
-import { DiscordAuctionLifecycleHandler } from './handlers/discord';
+import { DiscordWebhookAuctionLifecycleHandler } from './handlers/discord';
 import { extractNewVotes, isAtRiskOfExpiry } from './utils/proposals';
 import R from 'ramda';
 
@@ -24,12 +24,12 @@ import R from 'ramda';
  * Create configured `IAuctionLifecycleHandler`s
  */
 const auctionLifecycleHandlers: IAuctionLifecycleHandler[] = [];
-if (config.twitterEnabled) {
-  auctionLifecycleHandlers.push(new TwitterAuctionLifecycleHandler());
+if (config.twitterEnabled && twitter) {
+  auctionLifecycleHandlers.push(new TwitterAuctionLifecycleHandler(twitter));
 }
-if (config.discordEnabled) {
+if (config.discordWebhookEnabled) {
   auctionLifecycleHandlers.push(
-    new DiscordAuctionLifecycleHandler([internalDiscordWebhook, publicDiscordWebhook]),
+    new DiscordWebhookAuctionLifecycleHandler([internalDiscordWebhook]),
   );
 }
 

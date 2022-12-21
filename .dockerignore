@@ -1,0 +1,11 @@
+node_modules
+.vscode
+build/
+dist
+/**/sha.ts
+/**/sha.h
+*.tgz
+.env
+.DS_Store
+*.tsbuildinfo
+*.log

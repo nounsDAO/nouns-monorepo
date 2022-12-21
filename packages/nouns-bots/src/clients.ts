@@ -3,7 +3,7 @@ import Redis from 'ioredis';
 import TwitterApi from 'twitter-api-v2';
 import { Contract, providers } from 'ethers';
 import { NounsTokenABI } from '@nouns/contracts';
-import Discord from 'discord.js';
+import Discord, { GatewayIntentBits } from 'discord.js';
 import axios from 'axios';
 
 /**
@@ -17,12 +17,12 @@ export const redis = new Redis(config.redisPort, config.redisHost, {
 /**
  * Twitter Client
  */
-export const twitter = new TwitterApi({
+export const twitter = config.twitterEnabled ? new TwitterApi({
   appKey: config.twitterAppKey,
   appSecret: config.twitterAppSecret,
   accessToken: config.twitterAccessToken,
   accessSecret: config.twitterAccessSecret,
-});
+}) : undefined;
 
 /**
  * Ethers JSON RPC Provider
@@ -42,19 +42,16 @@ export const nounsTokenContract = new Contract(
  * Discord webhook client for sending messages to the private
  * Discord channel
  */
-export const internalDiscordWebhook = new Discord.WebhookClient(
-  config.discordWebhookId,
-  config.discordWebhookToken,
+export const internalDiscordWebhook = new Discord.WebhookClient({
+  id: config.discordWebhookId,
+  token: config.discordWebhookToken,
+}
 );
 
-/**
- * Discord webhook client for sending messages to the public
- * Discord channel
- */
-export const publicDiscordWebhook = new Discord.WebhookClient(
-  config.discordPublicWebhookId,
-  config.discordPublicWebhookToken,
-);
+export let discordClient: undefined | Discord.Client;
+if (config.discordToken) {
+  discordClient = new Discord.Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages] })
+}
 
 /**
  * Increment one of the Nouns infra counters

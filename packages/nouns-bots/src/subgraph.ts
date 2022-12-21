@@ -38,7 +38,7 @@ export async function getAllProposals(): Promise<Proposal[]> {
     config.nounsSubgraph,
     gql`
       {
-        proposals {
+        proposals(first: 500) {
           id
           proposer {
             id

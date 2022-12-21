@@ -1,14 +1,17 @@
 import { getAuctionReplyTweetId, updateAuctionReplyTweetId } from '../cache';
 import { IAuctionLifecycleHandler, Bid } from '../types';
-import { twitter } from '../clients';
 import {
   getAuctionEndingSoonTweetText,
   formatAuctionStartedTweetText,
   formatBidMessageText,
   getNounPngBuffer,
 } from '../utils';
+import { TwitterApi } from 'twitter-api-v2';
 
 export class TwitterAuctionLifecycleHandler implements IAuctionLifecycleHandler {
+
+  constructor(private readonly twitterClient: TwitterApi) {}
+
   /**
    * Tweet an image of the current noun alerting users
    * to the new auction and update the tweet reply id cache
@@ -18,8 +21,8 @@ export class TwitterAuctionLifecycleHandler implements IAuctionLifecycleHandler 
     const png = await getNounPngBuffer(auctionId.toString());
     if (png) {
       console.log(`handleNewAuction tweeting discovered auction id ${auctionId}`);
-      const mediaId = await twitter.v1.uploadMedia(png, { type: 'png' });
-      const tweet = await twitter.v1.tweet(formatAuctionStartedTweetText(auctionId), {
+      const mediaId = await this.twitterClient.v1.uploadMedia(png, { type: 'png' });
+      const tweet = await this.twitterClient.v1.tweet(formatAuctionStartedTweetText(auctionId), {
         media_ids: mediaId,
       });
       await updateAuctionReplyTweetId(tweet.id_str);
@@ -39,7 +42,7 @@ export class TwitterAuctionLifecycleHandler implements IAuctionLifecycleHandler 
       console.error(`handleNewBid no reply tweet id exists: auction(${auctionId}) bid(${bid.id})`);
       return;
     }
-    const tweet = await twitter.v1.reply(await formatBidMessageText(auctionId, bid), tweetReplyId);
+    const tweet = await this.twitterClient.v1.reply(await formatBidMessageText(auctionId, bid), tweetReplyId);
     await updateAuctionReplyTweetId(tweet.id_str);
     console.log(`processed twitter new bid ${bid.id}:${auctionId}`);
   }
@@ -54,7 +57,7 @@ export class TwitterAuctionLifecycleHandler implements IAuctionLifecycleHandler 
       console.error(`handleAuctionEndingSoon no reply tweet id exists for auction ${auctionId}`);
       return;
     }
-    const tweet = await twitter.v1.reply(getAuctionEndingSoonTweetText(), tweetReplyId);
+    const tweet = await this.twitterClient.v1.reply(getAuctionEndingSoonTweetText(), tweetReplyId);
     await updateAuctionReplyTweetId(tweet.id_str);
     console.log(`processed twitter auction ending soon update for auction ${auctionId}`);
   }
