@@ -1,4 +1,4 @@
-import { Proposal, ProposalState, useProposalThreshold } from '../../wrappers/nounsDao';
+import { PartialProposal, ProposalState, useProposalThreshold } from '../../wrappers/nounsDao';
 import { Alert, Button } from 'react-bootstrap';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
@@ -22,7 +22,11 @@ import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
 
 dayjs.extend(relativeTime);
 
-const getCountdownCopy = (proposal: Proposal, currentBlock: number, locale: SupportedLocale) => {
+const getCountdownCopy = (
+  proposal: PartialProposal,
+  currentBlock: number,
+  locale: SupportedLocale,
+) => {
   const timestamp = Date.now();
   const startDate =
     proposal && timestamp && currentBlock
@@ -68,7 +72,7 @@ const getCountdownCopy = (proposal: Proposal, currentBlock: number, locale: Supp
   );
 };
 
-const Proposals = ({ proposals }: { proposals: Proposal[] }) => {
+const Proposals = ({ proposals }: { proposals: PartialProposal[] }) => {
   const history = useHistory();
 
   const { account } = useEthers();

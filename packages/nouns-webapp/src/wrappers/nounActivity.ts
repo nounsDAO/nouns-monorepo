@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { NounVoteHistory } from '../components/ProfileActivityFeed';
 import { useNounCanVoteTimestamp } from './nounsAuction';
-import { Proposal, ProposalState, useAllProposals } from './nounsDao';
+import { PartialProposal, Proposal, ProposalState, useAllProposals } from './nounsDao';
 import {
   createTimestampAllProposals,
   nounDelegationHistoryQuery,
@@ -93,7 +93,7 @@ const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherRespo
       return acc;
     }, {});
 
-  const filteredProposals = proposals.filter((p: Proposal, id: number) => {
+  const filteredProposals = proposals.filter((p: PartialProposal, id: number) => {
     if (!p.id) {
       return false;
     }
@@ -116,7 +116,7 @@ const useNounProposalVoteEvents = (nounId: number): NounProfileEventFetcherRespo
     return true;
   });
 
-  const events = filteredProposals.map((proposal: Proposal) => {
+  const events = filteredProposals.map((proposal: PartialProposal) => {
     const vote = nounVotes[proposal.id as string];
     const didVote = vote !== undefined;
     return {
