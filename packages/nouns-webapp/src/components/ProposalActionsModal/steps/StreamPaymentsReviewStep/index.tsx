@@ -30,7 +30,7 @@ const handleActionAdd = (
   const actions = [
     {
       address: config.addresses.nounsStreamFactory ?? '',
-      signature: [fundStreamFunction],
+      signature: fundStreamFunction,
       value: '0',
       usdcValue: isUSDC ? Math.round(parseFloat(state.amount ?? '0') * 1_000_000) : 0,
       decodedCalldata: JSON.stringify([
@@ -56,7 +56,7 @@ const handleActionAdd = (
     console.log('hey hey hey');
     actions.push({
       address: config.addresses.weth ?? '',
-      signature: ['deposit()'],
+      signature: 'deposit()',
       usdcValue: 0,
       value: state.amount ? utils.parseEther(state.amount.toString()).toString() : '0',
       decodedCalldata: JSON.stringify([]),
@@ -65,7 +65,7 @@ const handleActionAdd = (
     const wethTransfer = 'transfer(address,uint256)';
     actions.push({
       address: config.addresses.weth ?? '',
-      signature: [wethTransfer],
+      signature: wethTransfer,
       usdcValue: 0,
       value: state.amount ? utils.parseEther(state.amount.toString()).toString() : '0',
       decodedCalldata: JSON.stringify([
@@ -84,7 +84,7 @@ const handleActionAdd = (
       address: config.addresses.payerContract ?? '',
       value: '0',
       usdcValue: Math.round(parseFloat(state.amount ?? '0') * 1_000_000),
-      signature: [signature],
+      signature: signature,
       decodedCalldata: JSON.stringify([
         // USDC has 6 decimals so we convert from human readable format to contract input format here
         predictedAddress,
