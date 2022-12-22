@@ -11,8 +11,11 @@ import { SupportedCurrency } from '../TransferFundsDetailsStep';
 import dayjs from 'dayjs';
 import { usePredictStreamAddress } from '../../../../utils/streamingPaymentUtils/streamingPaymentUtils';
 import StreamFactoryABI from '../../../../utils/streamingPaymentUtils/streamFactory.abi.json';
+import wethABIJSON from '../../../../utils/wethUtils/weth.abi.json';
+import payerABIJSON from '../../../../utils/payerContractUtils/payerABI.json';
 
 const abi = new utils.Interface(StreamFactoryABI);
+const wethABI = new utils.Interface(wethABIJSON);
 
 const handleActionAdd = (
   state: ProposalActionModalState,
@@ -58,6 +61,40 @@ const handleActionAdd = (
       value: state.amount ? utils.parseEther(state.amount.toString()).toString() : '0',
       decodedCalldata: JSON.stringify([]),
       calldata: '0x',
+    });
+    const wethTransfer = 'transfer(address,uint256)';
+    actions.push({
+      address: config.addresses.weth ?? '',
+      signature: [wethTransfer],
+      usdcValue: 0,
+      value: state.amount ? utils.parseEther(state.amount.toString()).toString() : '0',
+      decodedCalldata: JSON.stringify([
+        predictedAddress,
+        utils.parseEther((state.amount ?? 0).toString()).toString(),
+      ]),
+      calldata: wethABI._encodeParams(wethABI.functions[wethTransfer ?? '']?.inputs ?? [], [
+        predictedAddress,
+        state.amount ? utils.parseEther(state.amount.toString()).toString() : '0',
+      ]),
+    });
+  } else {
+    const signature = 'sendOrRegisterDebt(address,uint256)';
+    const payerABI = new utils.Interface(payerABIJSON);
+    actions.push({
+      address: config.addresses.payerContract ?? '',
+      value: '0',
+      usdcValue: Math.round(parseFloat(state.amount ?? '0') * 1_000_000),
+      signature: [signature],
+      decodedCalldata: JSON.stringify([
+        // USDC has 6 decimals so we convert from human readable format to contract input format here
+        predictedAddress,
+        Math.round(parseFloat(state.amount ?? '0') * 1_000_000).toString(),
+      ]),
+      calldata: payerABI?._encodeParams(payerABI?.functions[signature]?.inputs, [
+        predictedAddress,
+        // USDC has 6 decimals so we convert from human readable format to contract input format here
+        Math.round(parseFloat(state.amount ?? '0') * 1_000_000).toString(),
+      ]),
     });
   }
 
