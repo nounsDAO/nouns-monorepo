@@ -50,7 +50,7 @@ function extractTitle(description: string): string {
     return 'Untitled';
   }
   return title;
-};
+}
 
 export function handleProposalCreatedWithRequirements(
   event: ProposalCreatedWithRequirements,
