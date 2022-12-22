@@ -81,29 +81,19 @@ export const proposalQuery = (id: string | number) => gql`
 }
 `;
 
-export const proposalsQuery = (first = 1_000) => gql`
+export const partialProposalsQuery = (first = 1_000) => gql`
 {
   proposals(first: ${first}, orderBy: createdBlock, orderDirection: asc) {
     id
-    description
+    title
     status
-    proposalThreshold
-    quorumVotes
     forVotes
     againstVotes
     abstainVotes
-    createdTransactionHash
-    createdBlock
+    quorumVotes
+    executionETA
     startBlock
     endBlock
-    executionETA
-    targets
-    values
-    signatures
-    calldatas
-    proposer {
-      id
-    }
   }
 }
 `;

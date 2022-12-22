@@ -30,6 +30,28 @@ import {
 } from './utils/constants';
 import { dynamicQuorumVotes } from './utils/dynamicQuorum';
 
+/**
+ * Extracts the title from a proposal's description. Returns 'Untitled' if the title is empty.
+ * Note: Assemblyscript does not support regular expressions.
+ * @param description The proposal description
+ */
+function extractTitle(description: string): string {
+  // Extract a markdown title from a proposal body that uses the `# Title` or `Title\n===` formats
+  let splitDescription = description.split('#', 3);
+  if (splitDescription.length > 1) {
+    splitDescription.shift(); // Remove any characters before `#`
+  }
+  let title = splitDescription.join('').split('\n', 1).join('').trim();
+
+  // Remove bold and italics
+  title = title.replaceAll('**', '').replaceAll('__', '');
+
+  if (title == '') {
+    return 'Untitled';
+  }
+  return title;
+}
+
 export function handleProposalCreatedWithRequirements(
   event: ProposalCreatedWithRequirements,
 ): void {
@@ -62,6 +84,7 @@ export function handleProposalCreatedWithRequirements(
   proposal.againstVotes = BIGINT_ZERO;
   proposal.abstainVotes = BIGINT_ZERO;
   proposal.description = event.params.description.split('\\n').join('\n'); // The Graph's AssemblyScript version does not support string.replace
+  proposal.title = extractTitle(proposal.description);
   proposal.status = event.block.number >= proposal.startBlock ? STATUS_ACTIVE : STATUS_PENDING;
 
   // Storing state for dynamic quorum calculations

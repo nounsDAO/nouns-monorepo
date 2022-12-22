@@ -263,6 +263,10 @@ msgstr "体"
 msgid "Born"
 msgstr "誕生"
 
+#: src/pages/Vote/index.tsx
+msgid "Cancel"
+msgstr ""
+
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
@@ -366,6 +370,8 @@ msgstr "却下"
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
+#: src/components/Winner/index.tsx
+#: src/components/Winner/index.tsx
 msgid "Delegate"
 msgstr "投票を委任する"
 
@@ -541,6 +547,11 @@ msgstr ""
 #: src/pages/Playground/index.tsx
 msgid "Generate Nouns"
 msgstr "Nounsを作る"
+
+#: src/components/Winner/index.tsx
+#: src/components/Winner/index.tsx
+msgid "Get Involved"
+msgstr ""
 
 #: src/components/ExploreGrid/ExploreNounDetail/index.tsx
 #: src/pages/Playground/index.tsx
@@ -1218,11 +1229,6 @@ msgstr "WTF?"
 msgid "Waiting for"
 msgstr "待機"
 
-#: src/components/Winner/index.tsx
-#: src/components/Winner/index.tsx
-msgid "What now?"
-msgstr "これからどうする？"
-
 #: src/components/Documentation/index.tsx
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
 msgstr "決済は落札者に最も大きなインセンティブが与えられるが、誰でも起動できるため、Ethereumが稼働し、関心のある入札者がいる限り、システムは第三者の介入無しでNounsをオークションにかけることができます。"
@@ -1375,6 +1381,10 @@ msgstr "{0}<0>イーサリアムアドレス</0>"
 #: src/pages/Vote/index.tsx
 msgid "{0} votes"
 msgstr "{0} 票"
+
+#: src/pages/Vote/index.tsx
+msgid "{destructiveStateButtonAction} Proposal ⌐◧-◧"
+msgstr "{destructiveStateButtonAction} 提案の順番 ⌐◧-◧"
 
 #: src/pages/Vote/index.tsx
 msgid "{moveStateButtonAction} Proposal ⌐◧-◧"
