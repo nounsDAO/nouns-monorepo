@@ -37,7 +37,11 @@ import { dynamicQuorumVotes } from './utils/dynamicQuorum';
  */
 function extractTitle(description: string): string {
   // Extract a markdown title from a proposal body that uses the `# Title` or `Title\n===` formats
-  let title = description.split('#', 2).join('').split('\n', 1).join('').trim();
+  let splitDescription = description.split('#', 3);
+  if (splitDescription.length > 1) {
+    splitDescription.shift(); // Remove any characters before `#`
+  }
+  let title = splitDescription.join('').split('\n', 1).join('').trim();
 
   // Remove bold and italics
   title = title.replaceAll('**', '').replaceAll('__', '');
