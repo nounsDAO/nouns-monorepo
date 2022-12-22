@@ -41,6 +41,8 @@ import { SearchIcon } from '@heroicons/react/solid';
 import ReactTooltip from 'react-tooltip';
 import DynamicQuorumInfoModal from '../../components/DynamicQuorumInfoModal';
 import config from '../../config';
+import ShortAddress from '../../components/ShortAddress';
+import StreamWidthdrawModal from '../../components/StreamWithdrawModal';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -62,6 +64,12 @@ const VotePage = ({
   const [isQueuePending, setQueuePending] = useState<boolean>(false);
   const [isExecutePending, setExecutePending] = useState<boolean>(false);
   const [isCancelPending, setCancelPending] = useState<boolean>(false);
+  const [showStreamWidthdrawModal, setShowStreamWidthdrawModal] = useState<boolean>(false);
+  const [streamWithdrawInfo, setSreamWidthdrawInfo] = useState<{
+    streamAddress: string;
+    startTime: number;
+    endTime: number;
+  } | null>(null);
 
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
@@ -313,6 +321,8 @@ const VotePage = ({
   const abstainNouns = getNounVotes(data, 2);
   const isV2Prop = dqInfo.proposal.quorumCoefficient > 0;
 
+  console.log('DETAILS: ', proposal.details);
+
   return (
     <Section fullWidth={false} className={classes.votePage}>
       {showDynamicQuorumInfoModal && (
@@ -321,6 +331,12 @@ const VotePage = ({
           againstVotesAbsolute={againstNouns.length}
           onDismiss={() => setShowDynamicQuorumInfoModal(false)}
           currentQuorum={currentQuorum}
+        />
+      )}
+      {showStreamWidthdrawModal && streamWithdrawInfo !== null && (
+        <StreamWidthdrawModal
+          onDismiss={() => setShowStreamWidthdrawModal(false)}
+          {...streamWithdrawInfo}
         />
       )}
       <VoteModal
@@ -340,22 +356,42 @@ const VotePage = ({
         )}
       </Col>
       <Col lg={10} className={clsx(classes.proposal, classes.wrapper)}>
-        <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
-          <span
-            style={{
-              fontWeight: '500',
-              color: 'var(--brand-gray-light-text)',
-              marginBottom: '0.5rem',
-            }}
-          >
-            Only visable to you
-          </span>
-          <Col className="d-grid gap-4">
-            <Button variant="dark" className={classes.transitionStateButton}>
-              Withdraw from Stream
-            </Button>
-          </Col>
-        </Row>
+        {proposal.details
+          .filter(txn => txn?.functionSig.includes('createStream'))
+          .map(txn => {
+            const streamAddress = txn.callData.split(',')[5];
+            const startTime = parseInt(txn.callData.split(',')[3]);
+            const endTime = parseInt(txn.callData.split(',')[4]);
+            return (
+              <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
+                <span
+                  style={{
+                    fontWeight: '500',
+                    color: 'var(--brand-gray-light-text)',
+                    marginBottom: '0.5rem',
+                  }}
+                >
+                  Only visable to you
+                </span>
+                <Col className="d-grid gap-4">
+                  <Button
+                    onClick={() => {
+                      setShowStreamWidthdrawModal(true);
+                      setSreamWidthdrawInfo({
+                        streamAddress,
+                        startTime,
+                        endTime,
+                      });
+                    }}
+                    variant="dark"
+                    className={classes.transitionStateButton}
+                  >
+                    Withdraw from Stream <ShortAddress address={streamAddress} />
+                  </Button>
+                </Col>
+              </Row>
+            );
+          })}
 
         {(isAwaitingStateChange() || isAwaitingDestructiveStateChange()) && (
           <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
