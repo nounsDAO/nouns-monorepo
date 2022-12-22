@@ -41,22 +41,43 @@ const CreateProposalPage = () => {
 
   const [totalUSDCPayment, setTotalUSDCPayment] = useState<number>(0);
   const [tokenBuyerTopUpEth, setTokenBuyerTopUpETH] = useState<string>('0');
-  const ethNeeded = useEthNeeded(config.addresses.tokenBuyer ?? '', totalUSDCPayment);
+  const ethNeeded = useEthNeeded(
+    config.addresses.tokenBuyer ?? '',
+    totalUSDCPayment,
+    config.addresses.tokenBuyer === undefined || totalUSDCPayment === 0,
+  );
 
   const handleAddProposalAction = useCallback(
-    (transaction: ProposalTransaction) => {
-      if (!transaction.address.startsWith('0x')) {
-        transaction.address = `0x${transaction.address}`;
-      }
-      if (!transaction.calldata.startsWith('0x')) {
-        transaction.calldata = `0x${transaction.calldata}`;
+    (transactions: ProposalTransaction | ProposalTransaction[]) => {
+      console.log(transactions);
+      if (!Array.isArray(transactions)) {
+        if (!transactions.address.startsWith('0x')) {
+          transactions.address = `0x${transactions.address}`;
+        }
+        if (!transactions.calldata.startsWith('0x')) {
+          transactions.calldata = `0x${transactions.calldata}`;
+        }
+
+        if (transactions.usdcValue) {
+          setTotalUSDCPayment(totalUSDCPayment + transactions.usdcValue);
+        }
+        setProposalTransactions([...proposalTransactions, transactions]);
+      } else {
+        transactions.forEach(transaction => {
+          if (!transaction.address.startsWith('0x')) {
+            transaction.address = `0x${transaction.address}`;
+          }
+          if (!transaction.calldata.startsWith('0x')) {
+            transaction.calldata = `0x${transaction.calldata}`;
+          }
+
+          if (transaction.usdcValue) {
+            setTotalUSDCPayment(totalUSDCPayment + transaction.usdcValue);
+          }
+        });
+        setProposalTransactions([...proposalTransactions, ...transactions]);
       }
 
-      if (transaction.usdcValue) {
-        setTotalUSDCPayment(totalUSDCPayment + transaction.usdcValue);
-      }
-
-      setProposalTransactions([...proposalTransactions, transaction]);
       setShowTransactionFormModal(false);
     },
     [proposalTransactions, totalUSDCPayment],

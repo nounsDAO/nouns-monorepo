@@ -73,8 +73,6 @@ const ModalContent: React.FC<{
     address: '',
   });
 
-  console.log('STATE: ', state);
-
   switch (step) {
     case ProposalActionCreationStep.SELECT_ACTION_TYPE:
       return (

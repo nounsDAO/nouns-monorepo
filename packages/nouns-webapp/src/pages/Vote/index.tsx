@@ -340,6 +340,23 @@ const VotePage = ({
         )}
       </Col>
       <Col lg={10} className={clsx(classes.proposal, classes.wrapper)}>
+        <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
+          <span
+            style={{
+              fontWeight: '500',
+              color: 'var(--brand-gray-light-text)',
+              marginBottom: '0.5rem',
+            }}
+          >
+            Only visable to you
+          </span>
+          <Col className="d-grid gap-4">
+            <Button variant="dark" className={classes.transitionStateButton}>
+              Withdraw from Stream
+            </Button>
+          </Col>
+        </Row>
+
         {(isAwaitingStateChange() || isAwaitingDestructiveStateChange()) && (
           <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
             <Col className="d-grid gap-4">

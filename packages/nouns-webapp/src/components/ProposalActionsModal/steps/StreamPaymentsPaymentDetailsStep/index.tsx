@@ -9,10 +9,15 @@ import { SupportedCurrency } from '../TransferFundsDetailsStep';
 import BigNumber from 'bignumber.js';
 import { utils } from 'ethers';
 import ModalSubTitle from '../../../ModalSubtitle';
+import BrandDropdown from '../../../BrandDropdown';
 
 const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props => {
   const { onPrevBtnClick, onNextBtnClick, state, setState } = props;
+
   const [amount, setAmount] = useState<string>(state.amount ?? '');
+  const [currency, setCurrency] = useState<SupportedCurrency.WETH | SupportedCurrency.USDC>(
+    SupportedCurrency.WETH,
+  );
   const [formattedAmount, setFormattedAmount] = useState<string>(state.amount ?? '');
   const [address, setAddress] = useState(state.address ?? '');
 
@@ -31,8 +36,24 @@ const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props 
       </ModalTitle>
 
       <ModalSubTitle>
-        <Trans>At this time only USDC streams are supported</Trans>
+        <Trans>At this time only USDC and WETH streams are supported</Trans>
       </ModalSubTitle>
+
+      <BrandDropdown
+        label={'Currency'}
+        value={currency === SupportedCurrency.WETH ? 'WETH' : 'USDC'}
+        onChange={e => {
+          if (e.target.value === 'WETH') {
+            setCurrency(SupportedCurrency.WETH);
+          } else {
+            setCurrency(SupportedCurrency.USDC);
+          }
+        }}
+        chevronTop={38}
+      >
+        <option value="WETH">WETH</option>
+        <option value="USDC">USDC</option>
+      </BrandDropdown>
 
       <BrandNumericEntry
         label={'Amount'}
@@ -41,7 +62,7 @@ const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props 
           setAmount(e.value);
           setFormattedAmount(e.formattedValue);
         }}
-        placeholder={'0 USDC'}
+        placeholder={`0 ${currency === SupportedCurrency.USDC ? 'USDC' : 'WETH'}`}
         isInvalid={parseFloat(amount) > 0 && new BigNumber(amount).isNaN()}
       />
 
@@ -59,7 +80,7 @@ const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props 
         onPrevBtnClick={onPrevBtnClick}
         nextBtnText={<Trans>Add Stream Date Details</Trans>}
         onNextBtnClick={() => {
-          setState(x => ({ ...x, address, amount, TransferFundsCurrency: SupportedCurrency.USDC }));
+          setState(x => ({ ...x, address, amount, TransferFundsCurrency: currency }));
           onNextBtnClick();
         }}
         isNextBtnDisabled={!isValidForNextStage}

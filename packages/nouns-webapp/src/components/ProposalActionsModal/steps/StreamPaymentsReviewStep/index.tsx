@@ -4,62 +4,79 @@ import React from 'react';
 import { FinalProposalActionStepProps, ProposalActionModalState } from '../..';
 import ShortAddress from '../../../ShortAddress';
 import classes from './StreamPaymentsReviewStep.module.css';
-import payerABI from '../../../../utils/payerContractUtils/payerABI.json';
 import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
 import ModalTitle from '../../../ModalTitle';
 import config from '../../../../config';
 import { SupportedCurrency } from '../TransferFundsDetailsStep';
 import dayjs from 'dayjs';
 import { usePredictStreamAddress } from '../../../../utils/streamingPaymentUtils/streamingPaymentUtils';
+import StreamFactoryABI from '../../../../utils/streamingPaymentUtils/streamFactory.abi.json';
 
-const handleActionAdd = (state: ProposalActionModalState, onActionAdd: (e?: any) => void) => {
-  if (state.TransferFundsCurrency === SupportedCurrency.ETH) {
-    onActionAdd({
-      address: state.address,
-      value: state.amount ? utils.parseEther(state.amount.toString()).toString() : '0',
-      signature: '',
-      calldata: '0x',
-    });
-  } else if (state.TransferFundsCurrency === SupportedCurrency.USDC) {
-    const signature = 'sendOrRegisterDebt(address,uint256)';
-    const abi = new utils.Interface(payerABI);
+const abi = new utils.Interface(StreamFactoryABI);
 
-    onActionAdd({
-      address: config.addresses.payerContract,
+const handleActionAdd = (
+  state: ProposalActionModalState,
+  onActionAdd: (e?: any) => void,
+  predictedAddress?: string,
+) => {
+  const fundStreamFunction = 'createStream(address,uint256,address,uint256,uint256,address)';
+  const isUSDC = state.TransferFundsCurrency === SupportedCurrency.USDC;
+
+  // We only support WETH and USDC right now so !isUSDC => WETH
+
+  const actions = [
+    {
+      address: config.addresses.nounsStreamFactory ?? '',
+      signature: [fundStreamFunction],
       value: '0',
-      usdcValue: Math.round(parseFloat(state.amount ?? '0') * 1_000_000),
-      signature,
+      usdcValue: isUSDC ? Math.round(parseFloat(state.amount ?? '0') * 1_000_000) : 0,
       decodedCalldata: JSON.stringify([
         state.address,
-        // USDC has 6 decimals so we convert from human readable format to contract input format here
-        Math.round(parseFloat(state.amount ?? '0') * 1_000_000).toString(),
+        isUSDC ? Math.round(parseFloat(state.amount ?? '0') * 1_000_000).toString() : state.amount,
+        isUSDC ? config.addresses.usdcToken : config.addresses.weth,
+        state.streamStartTimestamp,
+        state.streamEndTimestamp,
+        predictedAddress,
       ]),
-      calldata: abi?._encodeParams(abi?.functions[signature]?.inputs, [
+      calldata: abi._encodeParams(abi.functions[fundStreamFunction ?? '']?.inputs ?? [], [
         state.address,
-        // USDC has 6 decimals so we convert from human readable format to contract input format here
-        Math.round(parseFloat(state.amount ?? '0') * 1_000_000).toString(),
+        isUSDC ? Math.round(parseFloat(state.amount ?? '0') * 1_000_000).toString() : state.amount,
+        isUSDC ? config.addresses.usdcToken : config.addresses.weth,
+        state.streamStartTimestamp,
+        state.streamEndTimestamp,
+        predictedAddress,
       ]),
+    },
+  ];
+
+  if (!isUSDC) {
+    console.log('hey hey hey');
+    actions.push({
+      address: config.addresses.weth ?? '',
+      signature: ['deposit()'],
+      usdcValue: 0,
+      value: state.amount ? utils.parseEther(state.amount.toString()).toString() : '0',
+      decodedCalldata: JSON.stringify([]),
+      calldata: '0x',
     });
-  } else {
-    // This should never happen
-    alert('Unsupported currency selected');
   }
+
+  console.log('HELLO: ', actions);
+  onActionAdd(actions);
 };
 
 const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props => {
   const { onNextBtnClick, onPrevBtnClick, state, onDismiss } = props;
 
   const predictedAddress = usePredictStreamAddress({
-      msgSender: config.addresses.nounsDaoExecutor,
-      payer: config.addresses.payerContract,
-      recipient: state.address,
-      tokenAmount: state.amount,
-      tokenAddress: config.addresses.usdcToken,
-      startTime: state.streamStartTimestamp,
-      endTime: state.streamEndTimestamp
+    msgSender: config.addresses.nounsDaoExecutor,
+    payer: config.addresses.payerContract,
+    recipient: state.address,
+    tokenAmount: state.amount,
+    tokenAddress: config.addresses.usdcToken,
+    startTime: state.streamStartTimestamp,
+    endTime: state.streamEndTimestamp,
   });
-
-  console.log("PREDICTED ADDRESS: ", predictedAddress);
 
   return (
     <div>
@@ -96,7 +113,7 @@ const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props =
         onPrevBtnClick={onPrevBtnClick}
         nextBtnText={<Trans>Add Streaming Payment Action</Trans>}
         onNextBtnClick={() => {
-          handleActionAdd(state, onNextBtnClick);
+          handleActionAdd(state, onNextBtnClick, predictedAddress);
           onDismiss();
         }}
       />
