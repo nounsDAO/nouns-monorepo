@@ -44,7 +44,7 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
   }, [lastAuctionNounId, dispatch, initialAuctionId, onDisplayAuction]);
 
   const isCoolBackground = useAppSelector(state => state.application.isCoolBackground);
-  const backgroundColor = isCoolBackground ? 'rgb(212, 215, 225)' : 'rgb(224, 214, 212)';
+  const backgroundColor = isCoolBackground ? 'var(--brand-cool-background)' : 'var(--brand-warm-background)';
 
   return (
     <>

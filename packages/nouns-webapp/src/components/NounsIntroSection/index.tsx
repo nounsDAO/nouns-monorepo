@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 const NounsIntroSection = () => {
   return (
-    <Section fullWidth={false}>
+    <Section fullWidth={false} style={{ padding: '4rem 0' }}>
       <Col lg={6}>
         <div className={classes.textWrapper}>
           <h1>
