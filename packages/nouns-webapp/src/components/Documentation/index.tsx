@@ -5,7 +5,11 @@ import Accordion from 'react-bootstrap/Accordion';
 import Link from '../Link';
 import { Trans } from '@lingui/macro';
 
-const Documentation = () => {
+interface DocumentationProps {
+  useGrayBackground?: boolean;
+}
+
+const Documentation = (props: DocumentationProps) => {
   const cryptopunksLink = (
     <Link
       text={<Trans>Cryptopunks</Trans>}
@@ -31,7 +35,7 @@ const Documentation = () => {
     />
   );
   return (
-    <Section fullWidth={false} className={classes.documentationSection}>
+    <Section fullWidth={false} className={props.useGrayBackground ? classes.grayBg : ''}>
       <Col lg={{ span: 10, offset: 1 }}>
         <div className={classes.headerWrapper}>
           <h1>
@@ -52,7 +56,7 @@ const Documentation = () => {
           </p>
         </div>
         <Accordion flush>
-          <Accordion.Item eventKey="0" className={classes.accordionItem}>
+          <Accordion.Item eventKey="0" className={`${classes.accordionItem} ${props?.useGrayBackground ? classes.grayBg : ''}`}>
             <Accordion.Header className={classes.accordionHeader}>
               <Trans>Summary</Trans>
             </Accordion.Header>
@@ -99,7 +103,7 @@ const Documentation = () => {
             </Accordion.Body>
           </Accordion.Item>
 
-          <Accordion.Item eventKey="1" className={classes.accordionItem}>
+          <Accordion.Item eventKey="1" className={`${classes.accordionItem} ${props?.useGrayBackground ? classes.grayBg : ''}`}>
             <Accordion.Header className={classes.accordionHeader}>
               <Trans>Daily Auctions</Trans>
             </Accordion.Header>
@@ -128,7 +132,7 @@ const Documentation = () => {
               </p>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="2" className={classes.accordionItem}>
+          <Accordion.Item eventKey="2" className={`${classes.accordionItem} ${props?.useGrayBackground ? classes.grayBg : ''}`}>
             <Accordion.Header className={classes.accordionHeader}>
               <Trans>Nouns DAO</Trans>
             </Accordion.Header>
@@ -143,7 +147,7 @@ const Documentation = () => {
               </Trans>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="3" className={classes.accordionItem}>
+          <Accordion.Item eventKey="3" className={`${classes.accordionItem} ${props?.useGrayBackground ? classes.grayBg : ''}`}>
             <Accordion.Header className={classes.accordionHeader}>
               <Trans>Governance ‘Slow Start’</Trans>
             </Accordion.Header>
@@ -201,7 +205,7 @@ const Documentation = () => {
               </p>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="4" className={classes.accordionItem}>
+          <Accordion.Item eventKey="4" className={`${classes.accordionItem} ${props?.useGrayBackground ? classes.grayBg : ''}`}>
             <Accordion.Header className={classes.accordionHeader}>
               <Trans>Noun Traits</Trans>
             </Accordion.Header>
@@ -235,7 +239,7 @@ const Documentation = () => {
               </Trans>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="5" className={classes.accordionItem}>
+          <Accordion.Item eventKey="5" className={`${classes.accordionItem} ${props?.useGrayBackground ? classes.grayBg : ''}`}>
             <Accordion.Header className={classes.accordionHeader}>
               <Trans>On-Chain Artwork</Trans>
             </Accordion.Header>
@@ -260,7 +264,7 @@ const Documentation = () => {
               </p>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="6" className={classes.accordionItem}>
+          <Accordion.Item eventKey="6" className={`${classes.accordionItem} ${props?.useGrayBackground ? classes.grayBg : ''}`}>
             <Accordion.Header className={classes.accordionHeader}>
               <Trans>Noun Seeder Contract</Trans>
             </Accordion.Header>
@@ -285,7 +289,7 @@ const Documentation = () => {
               </p>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="7" className={classes.accordionItem}>
+          <Accordion.Item eventKey="7" className={`${classes.accordionItem} ${props?.useGrayBackground ? classes.grayBg : ''}`}>
             <Accordion.Header className={classes.accordionHeader}>
               <Trans>Nounder's Reward</Trans>
             </Accordion.Header>

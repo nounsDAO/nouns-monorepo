@@ -1,4 +1,4 @@
-.documentationSection {
+.grayBg {
   background: #EEE;
 }
 
@@ -41,7 +41,6 @@
 .accordionItem,
 .headerWrapper {
   font-size: 1.3rem;
-  background: #EEE;
 }
 
 .accordionHeader button:hover {

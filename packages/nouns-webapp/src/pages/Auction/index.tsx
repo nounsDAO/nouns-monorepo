@@ -49,7 +49,12 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
       {onDisplayAuctionNounId !== undefined && onDisplayAuctionNounId !== lastAuctionNounId ? (
         <ProfileActivityFeed nounId={onDisplayAuctionNounId} />
       ) : (<NounsIntroSection />)}
-      <Documentation />
+      <Documentation
+        useGrayBackground={
+          onDisplayAuctionNounId === undefined ||
+          onDisplayAuctionNounId === lastAuctionNounId
+        }
+      />
     </>
   );
 };
