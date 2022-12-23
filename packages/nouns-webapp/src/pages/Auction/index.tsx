@@ -1,4 +1,3 @@
-import Banner from '../../components/Banner';
 import Auction from '../../components/Auction';
 import Documentation from '../../components/Documentation';
 import { useAppDispatch, useAppSelector } from '../../hooks';
