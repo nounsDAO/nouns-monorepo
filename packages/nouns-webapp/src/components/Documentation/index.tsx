@@ -31,7 +31,7 @@ const Documentation = () => {
     />
   );
   return (
-    <Section fullWidth={false}>
+    <Section fullWidth={false} className={classes.documentationSection}>
       <Col lg={{ span: 10, offset: 1 }}>
         <div className={classes.headerWrapper}>
           <h1>

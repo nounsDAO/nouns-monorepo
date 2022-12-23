@@ -9,13 +9,12 @@ const NounsIntroSection = () => {
       <Col lg={6}>
         <div className={classes.wrapper}>
           <h1>
-            <Trans>WTF is Nouns?</Trans>
+            <Trans>One Noun, Every Day, Forever.</Trans>
           </h1>
           <p>
             <Trans>
-              That's the question we sought to answer in this crazy video - packing in more artistic
-              styles than we've ever put into a project before, and a sprinkling of humour along the
-              way.
+              Behold, an infinite work of art! Nouns is an experimental project that takes the best parts of web3 and tries to create a community that
+              can proliferate its brand and do good at the same time. Learn more in this video (paid for by the Nouns treasury and created by its community members).
             </Trans>
           </p>
         </div>
