@@ -1,20 +1,21 @@
 import classes from './NounsIntroSection.module.css';
 import Section from '../../layout/Section';
-import { Button, Col } from 'react-bootstrap';
+import { Button, Col, Nav } from 'react-bootstrap';
 import { Trans } from '@lingui/macro';
+import { Link } from 'react-router-dom';
 
 const NounsIntroSection = () => {
   return (
     <Section fullWidth={false}>
       <Col lg={6}>
-        <div className={classes.wrapper}>
+        <div className={classes.textWrapper}>
           <h1>
             <Trans>One Noun, Every Day, Forever.</Trans>
           </h1>
           <p>
             <Trans>
               Behold, an infinite work of art! Nouns is an experimental project that takes the best parts of web3 and tries to create a community that
-              can proliferate its brand and do good at the same time. Learn more in this video (paid for by the Nouns treasury and created by its community members).
+              can proliferate its brand and do good at the same time.
             </Trans>
             <br />
             <Trans>Like this video?</Trans>
@@ -30,10 +31,12 @@ const NounsIntroSection = () => {
         <iframe
           title="This is Nouns"
           src="https://player.vimeo.com/video/781320182?h=db24612c0a&color=eaeae5&title=0&byline=0&portrait=0"
-          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
           frameBorder="0"
           allowFullScreen
         ></iframe>
+        <small className={`${classes.videoSubtitle} text-muted`}>
+          This video was commissioned in <Nav.Link as={Link} to="/vote/113">Prop 113</Nav.Link> and minted in <Nav.Link as={Link} to="/vote/190">Prop 190</Nav.Link>.
+        </small>
       </Col>
     </Section>
   );
