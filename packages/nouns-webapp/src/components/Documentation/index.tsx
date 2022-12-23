@@ -6,10 +6,10 @@ import Link from '../Link';
 import { Trans } from '@lingui/macro';
 
 interface DocumentationProps {
-  useGrayBackground?: boolean;
+  backgroundColor?: string;
 }
 
-const Documentation = (props: DocumentationProps) => {
+const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) => {
   const cryptopunksLink = (
     <Link
       text={<Trans>Cryptopunks</Trans>}
@@ -35,7 +35,7 @@ const Documentation = (props: DocumentationProps) => {
     />
   );
   return (
-    <Section fullWidth={false} className={props.useGrayBackground ? classes.grayBg : ''}>
+    <Section fullWidth={false} style={{ background: props.backgroundColor }}>
       <Col lg={{ span: 10, offset: 1 }}>
         <div className={classes.headerWrapper}>
           <h1>
@@ -56,7 +56,7 @@ const Documentation = (props: DocumentationProps) => {
           </p>
         </div>
         <Accordion flush>
-          <Accordion.Item eventKey="0" className={`${classes.accordionItem} ${props?.useGrayBackground ? classes.grayBg : ''}`}>
+          <Accordion.Item eventKey="0" className={classes.accordionItem} style={{ background: props.backgroundColor }}>
             <Accordion.Header className={classes.accordionHeader}>
               <Trans>Summary</Trans>
             </Accordion.Header>
@@ -103,7 +103,7 @@ const Documentation = (props: DocumentationProps) => {
             </Accordion.Body>
           </Accordion.Item>
 
-          <Accordion.Item eventKey="1" className={`${classes.accordionItem} ${props?.useGrayBackground ? classes.grayBg : ''}`}>
+          <Accordion.Item eventKey="1" className={classes.accordionItem} style={{ background: props.backgroundColor }}>
             <Accordion.Header className={classes.accordionHeader}>
               <Trans>Daily Auctions</Trans>
             </Accordion.Header>
@@ -132,7 +132,7 @@ const Documentation = (props: DocumentationProps) => {
               </p>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="2" className={`${classes.accordionItem} ${props?.useGrayBackground ? classes.grayBg : ''}`}>
+          <Accordion.Item eventKey="2" className={classes.accordionItem} style={{ background: props.backgroundColor }}>
             <Accordion.Header className={classes.accordionHeader}>
               <Trans>Nouns DAO</Trans>
             </Accordion.Header>
@@ -147,7 +147,7 @@ const Documentation = (props: DocumentationProps) => {
               </Trans>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="3" className={`${classes.accordionItem} ${props?.useGrayBackground ? classes.grayBg : ''}`}>
+          <Accordion.Item eventKey="3" className={classes.accordionItem} style={{ background: props.backgroundColor }}>
             <Accordion.Header className={classes.accordionHeader}>
               <Trans>Governance ‘Slow Start’</Trans>
             </Accordion.Header>
@@ -205,7 +205,7 @@ const Documentation = (props: DocumentationProps) => {
               </p>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="4" className={`${classes.accordionItem} ${props?.useGrayBackground ? classes.grayBg : ''}`}>
+          <Accordion.Item eventKey="4" className={classes.accordionItem} style={{ background: props.backgroundColor }}>
             <Accordion.Header className={classes.accordionHeader}>
               <Trans>Noun Traits</Trans>
             </Accordion.Header>
@@ -239,7 +239,7 @@ const Documentation = (props: DocumentationProps) => {
               </Trans>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="5" className={`${classes.accordionItem} ${props?.useGrayBackground ? classes.grayBg : ''}`}>
+          <Accordion.Item eventKey="5" className={classes.accordionItem} style={{ background: props.backgroundColor }}>
             <Accordion.Header className={classes.accordionHeader}>
               <Trans>On-Chain Artwork</Trans>
             </Accordion.Header>
@@ -264,7 +264,7 @@ const Documentation = (props: DocumentationProps) => {
               </p>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="6" className={`${classes.accordionItem} ${props?.useGrayBackground ? classes.grayBg : ''}`}>
+          <Accordion.Item eventKey="6" className={classes.accordionItem} style={{ background: props.backgroundColor }}>
             <Accordion.Header className={classes.accordionHeader}>
               <Trans>Noun Seeder Contract</Trans>
             </Accordion.Header>
@@ -289,7 +289,7 @@ const Documentation = (props: DocumentationProps) => {
               </p>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="7" className={`${classes.accordionItem} ${props?.useGrayBackground ? classes.grayBg : ''}`}>
+          <Accordion.Item eventKey="7" className={classes.accordionItem} style={{ background: props.backgroundColor }}>
             <Accordion.Header className={classes.accordionHeader}>
               <Trans>Nounder's Reward</Trans>
             </Accordion.Header>

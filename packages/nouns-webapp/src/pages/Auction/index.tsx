@@ -50,9 +50,8 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
         <ProfileActivityFeed nounId={onDisplayAuctionNounId} />
       ) : (<NounsIntroSection />)}
       <Documentation
-        useGrayBackground={
-          onDisplayAuctionNounId === undefined ||
-          onDisplayAuctionNounId === lastAuctionNounId
+        backgroundColor={
+          onDisplayAuctionNounId === undefined || onDisplayAuctionNounId === lastAuctionNounId ? '#EEE' : undefined
         }
       />
     </>
