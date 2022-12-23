@@ -17,6 +17,7 @@
   letter-spacing: -0.25px;
   line-height: 28px;
   font-size: 1.2rem !important;
+  background: transparent;
 }
 
 @media (max-width: 992px) {
