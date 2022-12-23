@@ -14,8 +14,7 @@ const NounsIntroSection = () => {
           </h1>
           <p>
             <Trans>
-              Behold, an infinite work of art! Nouns is an experimental project that takes the best parts of web3 and tries to create a community that
-              can proliferate its brand and do good at the same time.
+            Behold, an infinite work of art! From collectors, technologists and builders, to non-profits and brands, Nouns has something for everyone. Watch the video to learn more.
             </Trans>
             <br />
             <Trans>Like this video?</Trans>

@@ -223,6 +223,10 @@ msgstr ""
 msgid "Because this proposal contains a USDC fund transfer action we've added an additional ETH transaction to refill the TokenBuyer contract. This action allows to DAO to continue to trustlessly acquire USDC to fund proposals like this."
 msgstr ""
 
+#: src/components/NounsIntroSection/index.tsx
+msgid "Behold, an infinite work of art! From collectors, technologists and builders, to non-profits and brands, Nouns has something for everyone. Watch the video to learn more."
+msgstr ""
+
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 msgid "Bid"
@@ -297,6 +301,10 @@ msgstr ""
 #: src/components/CurrentDelegatePannel/index.tsx
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 msgid "Close"
+msgstr ""
+
+#: src/components/NounsIntroSection/index.tsx
+msgid "Collect it"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
@@ -611,6 +619,10 @@ msgstr ""
 msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
 msgstr ""
 
+#: src/components/NounsIntroSection/index.tsx
+msgid "Like this video?"
+msgstr ""
+
 #: src/components/NounInfoRowHolder/index.tsx
 msgid "Loading..."
 msgstr ""
@@ -761,6 +773,10 @@ msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "One Noun is trustlessly auctioned every 24 hours, forever."
+msgstr ""
+
+#: src/components/NounsIntroSection/index.tsx
+msgid "One Noun, Every Day, Forever."
 msgstr ""
 
 #: src/pages/Playground/index.tsx
