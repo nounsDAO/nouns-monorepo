@@ -1,0 +1,87 @@
+.bannerSectionOuter {
+  padding: 2rem;
+}
+.bannerSection {
+  position: relative;
+  padding: 0;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.bannerSection img {
+  display: block;
+  width: 100%;
+}
+
+.bannerSection a {
+  text-decoration: none;
+}
+
+.wrapper {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 2rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}
+
+.wrapper h1,
+.wrapper p {
+  text-align: center;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+.button {
+  margin-top: 10px;
+  height: auto;
+  padding: 18px 32px;
+}
+
+.button,
+.wrapper p {
+  font-size: 1.6rem;
+}
+
+.wrapper h1 {
+  font-family: 'Londrina Solid';
+}
+
+
+@media (max-width: 992px) {
+  .bannerSectionOuter {
+    padding: 0;
+  }
+  .bannerSection {
+    border-radius: 0px;
+  }
+  .wrapper {
+    gap: 0px;
+  }
+  .button {
+    padding: 0px 12px 0px 12px;
+  }
+  .button,
+  .wrapper p {
+    font-size: 1.2rem;
+  }
+  .wrapper h1 {
+    font-size: 3.75rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .wrapper h1 {
+    font-size: 6rem;
+    margin-left: 2rem;
+  }
+}
