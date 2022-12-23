@@ -1,0 +1,27 @@
+.wrapper h1 {
+  font-family: 'Londrina Solid';
+  font-size: 5rem;
+}
+
+.wrapper p {
+  font-size: 1.2rem;
+}
+
+.embedContainer {
+  padding: 40% 0 0 0;
+  position: relative;
+}
+
+@media (max-width: 992px) {
+  .wrapper {
+    padding: 2rem;
+  }
+
+  .wrapper h1 {
+    font-size: 3.75rem;
+  }
+
+  .embedContainer {
+    padding: 56.25% 0 0 0 !important;
+  }
+}
