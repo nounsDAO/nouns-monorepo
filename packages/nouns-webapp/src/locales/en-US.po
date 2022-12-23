@@ -223,10 +223,6 @@ msgstr "Because 100% of Noun auction proceeds are sent to Nouns DAO, Nounders ha
 msgid "Because this proposal contains a USDC fund transfer action we've added an additional ETH transaction to refill the TokenBuyer contract. This action allows to DAO to continue to trustlessly acquire USDC to fund proposals like this."
 msgstr "Because this proposal contains a USDC fund transfer action we've added an additional ETH transaction to refill the TokenBuyer contract. This action allows to DAO to continue to trustlessly acquire USDC to fund proposals like this."
 
-#: src/components/NounsIntroSection/index.tsx
-msgid "Behold, an infinite work of art! From collectors, technologists and builders, to non-profits and brands, Nouns has something for everyone. Watch the video to learn more."
-msgstr "Behold, an infinite work of art! From collectors, technologists and builders, to non-profits and brands, Nouns has something for everyone. Watch the video to learn more."
-
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 msgid "Bid"
@@ -302,10 +298,6 @@ msgstr "Clear WalletConnect Data"
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 msgid "Close"
 msgstr "Close"
-
-#: src/components/NounsIntroSection/index.tsx
-msgid "Collect it"
-msgstr "Collect it"
 
 #: src/components/Documentation/index.tsx
 msgid "Compound Governance"
@@ -619,10 +611,6 @@ msgstr "Learn more"
 msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
 msgstr "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
 
-#: src/components/NounsIntroSection/index.tsx
-msgid "Like this video?"
-msgstr "Like this video?"
-
 #: src/components/NounInfoRowHolder/index.tsx
 msgid "Loading..."
 msgstr "Loading..."
@@ -774,10 +762,6 @@ msgstr "One Noun is equal to one vote."
 #: src/components/Documentation/index.tsx
 msgid "One Noun is trustlessly auctioned every 24 hours, forever."
 msgstr "One Noun is trustlessly auctioned every 24 hours, forever."
-
-#: src/components/NounsIntroSection/index.tsx
-msgid "One Noun, Every Day, Forever."
-msgstr "One Noun, Every Day, Forever."
 
 #: src/pages/Playground/index.tsx
 msgid "Only 32x32 PNG images are accepted"
@@ -1243,6 +1227,7 @@ msgstr "WTF?"
 #: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Waiting for"
 msgstr "Waiting for"
+
 
 #: src/components/Documentation/index.tsx
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."

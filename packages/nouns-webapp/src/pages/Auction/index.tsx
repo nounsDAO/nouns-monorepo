@@ -1,3 +1,4 @@
+import Banner from '../../components/Banner';
 import Auction from '../../components/Auction';
 import Documentation from '../../components/Documentation';
 import { useAppDispatch, useAppSelector } from '../../hooks';
@@ -7,7 +8,6 @@ import { nounPath } from '../../utils/history';
 import useOnDisplayAuction from '../../wrappers/onDisplayAuction';
 import { useEffect } from 'react';
 import ProfileActivityFeed from '../../components/ProfileActivityFeed';
-import NounsIntroSection from '../../components/NounsIntroSection';
 
 interface AuctionPageProps {
   initialAuctionId?: number;
@@ -43,20 +43,15 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
     }
   }, [lastAuctionNounId, dispatch, initialAuctionId, onDisplayAuction]);
 
-  const isCoolBackground = useAppSelector(state => state.application.isCoolBackground);
-  const backgroundColor = isCoolBackground ? 'var(--brand-cool-background)' : 'var(--brand-warm-background)';
-
   return (
     <>
       <Auction auction={onDisplayAuction} />
       {onDisplayAuctionNounId !== undefined && onDisplayAuctionNounId !== lastAuctionNounId ? (
         <ProfileActivityFeed nounId={onDisplayAuctionNounId} />
-      ) : (<NounsIntroSection />)}
-      <Documentation
-        backgroundColor={
-          onDisplayAuctionNounId === undefined || onDisplayAuctionNounId === lastAuctionNounId ? backgroundColor : undefined
-        }
-      />
+      ) : (
+        <Banner />
+      )}
+      <Documentation />
     </>
   );
 };
