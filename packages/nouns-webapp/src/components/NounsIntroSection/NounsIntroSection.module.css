@@ -70,6 +70,7 @@
 
   .embedContainer {
     padding: 56.25% 0 0 0 !important;
+    margin-bottom: 60px;
   }
 
   .embedContainer iframe {
@@ -78,13 +79,14 @@
   }
 
   .videoSubtitle {
-    top: -40px;
+    top: unset;
+    bottom: -40px;
     padding: 0 2.5rem;
   }
 }
 
 @media (max-width: 576px) {
   .videoSubtitle {
-    top: -60px;
+    bottom: -50px;
   }
 }
