@@ -1,6 +1,6 @@
 import classes from './NounsIntroSection.module.css';
 import Section from '../../layout/Section';
-import { Col } from 'react-bootstrap';
+import { Button, Col } from 'react-bootstrap';
 import { Trans } from '@lingui/macro';
 
 const NounsIntroSection = () => {
@@ -16,6 +16,13 @@ const NounsIntroSection = () => {
               Behold, an infinite work of art! Nouns is an experimental project that takes the best parts of web3 and tries to create a community that
               can proliferate its brand and do good at the same time. Learn more in this video (paid for by the Nouns treasury and created by its community members).
             </Trans>
+            <br />
+            <Trans>Like this video?</Trans>
+            <a href="https://www.thisisnouns.wtf/" target="_blank" rel="noreferrer">
+              <Button className={classes.collectVideoBtn}>
+                <Trans>Collect it</Trans>
+              </Button>
+            </a>
           </p>
         </div>
       </Col>
