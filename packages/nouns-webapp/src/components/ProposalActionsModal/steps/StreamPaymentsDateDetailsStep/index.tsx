@@ -1,6 +1,7 @@
 import { Trans } from '@lingui/macro';
 import React, { useEffect, useState } from 'react';
 import { ProposalActionModalStepProps } from '../..';
+import { currentUnixEpoch, toUnixEpoch } from '../../../../utils/timeUtils';
 import BrandDatePicker from '../../../BrandDatePicker';
 import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
 import ModalSubTitle from '../../../ModalSubtitle';
@@ -15,12 +16,12 @@ const StreamPaymentDateDetailsStep: React.FC<ProposalActionModalStepProps> = pro
   const [endTimestamp, setEndTimestamp] = useState(0);
 
   useEffect(() => {
-    setEndTimestamp(new Date(endDate).valueOf() / 1000);
-    setStartTimestamp(new Date(startDate).valueOf() / 1000);
+    setEndTimestamp(toUnixEpoch(endDate));
+    setStartTimestamp(toUnixEpoch(startDate));
   }, [startDate, endDate]);
 
   return (
-    <div>
+    <>
       <ModalTitle>
         <Trans>Add Streaming Payment Action</Trans>
       </ModalTitle>
@@ -35,7 +36,7 @@ const StreamPaymentDateDetailsStep: React.FC<ProposalActionModalStepProps> = pro
       <BrandDatePicker
         onChange={e => setStartDate(e.target.value)}
         label="Start date"
-        isInvalid={startTimestamp > 0 && new Date().getTime() / 1000 > startTimestamp}
+        isInvalid={startTimestamp > 0 && currentUnixEpoch() > startTimestamp}
       />
 
       <BrandDatePicker
@@ -57,14 +58,12 @@ const StreamPaymentDateDetailsStep: React.FC<ProposalActionModalStepProps> = pro
             ...x,
             streamStartTimestamp: startTimestamp,
             streamEndTimestamp: endTimestamp,
-            // streamStartTimestamp: START_TIME_OVERRIDE,
-            // streamEndTimestamp: END_TIME_OVERRIDE,
           }));
           onNextBtnClick();
         }}
         isNextBtnDisabled={startTimestamp > 0 && endTimestamp > 0 && endTimestamp < startTimestamp}
       />
-    </div>
+    </>
   );
 };
 
