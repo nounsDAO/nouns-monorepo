@@ -49,34 +49,21 @@ const CreateProposalPage = () => {
 
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
-      console.log(transactions);
-      if (!Array.isArray(transactions)) {
-        if (!transactions.address.startsWith('0x')) {
-          transactions.address = `0x${transactions.address}`;
+      const transactionsArray = Array.isArray(transactions) ? transactions : [transactions];
+
+      transactionsArray.forEach(transaction => {
+        if (!transaction.address.startsWith('0x')) {
+          transaction.address = `0x${transaction.address}`;
         }
-        if (!transactions.calldata.startsWith('0x')) {
-          transactions.calldata = `0x${transactions.calldata}`;
+        if (!transaction.calldata.startsWith('0x')) {
+          transaction.calldata = `0x${transaction.calldata}`;
         }
 
-        if (transactions.usdcValue) {
-          setTotalUSDCPayment(totalUSDCPayment + transactions.usdcValue);
+        if (transaction.usdcValue) {
+          setTotalUSDCPayment(totalUSDCPayment + transaction.usdcValue);
         }
-        setProposalTransactions([...proposalTransactions, transactions]);
-      } else {
-        transactions.forEach(transaction => {
-          if (!transaction.address.startsWith('0x')) {
-            transaction.address = `0x${transaction.address}`;
-          }
-          if (!transaction.calldata.startsWith('0x')) {
-            transaction.calldata = `0x${transaction.calldata}`;
-          }
-
-          if (transaction.usdcValue) {
-            setTotalUSDCPayment(totalUSDCPayment + transaction.usdcValue);
-          }
-        });
-        setProposalTransactions([...proposalTransactions, ...transactions]);
-      }
+      });
+      setProposalTransactions([...proposalTransactions, ...transactionsArray]);
 
       setShowTransactionFormModal(false);
     },
