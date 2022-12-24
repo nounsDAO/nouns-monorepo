@@ -55,10 +55,17 @@ const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props =
         <ShortAddress address={state.address} />
       </ModalTextPrimary>
 
-      <ModalLabel>Starting on</ModalLabel>
+      <ModalLabel>
+        <Trans>
+          Starting on
+          </Trans></ModalLabel>
       <ModalTextPrimary>{unixToDateString(state.streamStartTimestamp)}</ModalTextPrimary>
 
-      <ModalLabel>Ending on</ModalLabel>
+      <ModalLabel>
+        <Trans>
+          Ending on
+        </Trans>
+      </ModalLabel>
 
       <ModalTextPrimary>{unixToDateString(state.streamEndTimestamp)}</ModalTextPrimary>
 
