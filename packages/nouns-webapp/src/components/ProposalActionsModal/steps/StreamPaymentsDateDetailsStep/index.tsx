@@ -57,6 +57,8 @@ const StreamPaymentDateDetailsStep: React.FC<ProposalActionModalStepProps> = pro
             ...x,
             streamStartTimestamp: startTimestamp,
             streamEndTimestamp: endTimestamp,
+            // streamStartTimestamp: START_TIME_OVERRIDE,
+            // streamEndTimestamp: END_TIME_OVERRIDE,
           }));
           onNextBtnClick();
         }}

@@ -13,6 +13,7 @@ import { usePredictStreamAddress } from '../../../../utils/streamingPaymentUtils
 import StreamFactoryABI from '../../../../utils/streamingPaymentUtils/streamFactory.abi.json';
 import wethABIJSON from '../../../../utils/wethUtils/weth.abi.json';
 import payerABIJSON from '../../../../utils/payerContractUtils/payerABI.json';
+import { human2ContractUSDCFormat } from '../../../../utils/usdcUtils';
 
 const abi = new utils.Interface(StreamFactoryABI);
 const wethABI = new utils.Interface(wethABIJSON);
@@ -24,18 +25,17 @@ const handleActionAdd = (
 ) => {
   const fundStreamFunction = 'createStream(address,uint256,address,uint256,uint256,address)';
   const isUSDC = state.TransferFundsCurrency === SupportedCurrency.USDC;
-
-  // We only support WETH and USDC right now so !isUSDC => WETH
+  const amount = state.amount ?? '0';
 
   const actions = [
     {
       address: config.addresses.nounsStreamFactory ?? '',
       signature: fundStreamFunction,
       value: '0',
-      usdcValue: isUSDC ? Math.round(parseFloat(state.amount ?? '0') * 1_000_000) : 0,
+      usdcValue: isUSDC ? Math.round(parseFloat(amount) * 1_000_000) : 0,
       decodedCalldata: JSON.stringify([
         state.address,
-        isUSDC ? Math.round(parseFloat(state.amount ?? '0') * 1_000_000).toString() : state.amount,
+        isUSDC ? human2ContractUSDCFormat(amount) : utils.parseEther(amount.toString()).toString(),
         isUSDC ? config.addresses.usdcToken : config.addresses.weth,
         state.streamStartTimestamp,
         state.streamEndTimestamp,
@@ -43,7 +43,9 @@ const handleActionAdd = (
       ]),
       calldata: abi._encodeParams(abi.functions[fundStreamFunction ?? '']?.inputs ?? [], [
         state.address,
-        isUSDC ? Math.round(parseFloat(state.amount ?? '0') * 1_000_000).toString() : state.amount,
+        isUSDC
+          ? Math.round(parseFloat(state.amount ?? '0') * 1_000_000).toString()
+          : utils.parseEther(amount.toString()).toString(),
         isUSDC ? config.addresses.usdcToken : config.addresses.weth,
         state.streamStartTimestamp,
         state.streamEndTimestamp,
@@ -53,7 +55,6 @@ const handleActionAdd = (
   ];
 
   if (!isUSDC) {
-    console.log('hey hey hey');
     actions.push({
       address: config.addresses.weth ?? '',
       signature: 'deposit()',
@@ -67,14 +68,14 @@ const handleActionAdd = (
       address: config.addresses.weth ?? '',
       signature: wethTransfer,
       usdcValue: 0,
-      value: state.amount ? utils.parseEther(state.amount.toString()).toString() : '0',
+      value: '0',
       decodedCalldata: JSON.stringify([
         predictedAddress,
         utils.parseEther((state.amount ?? 0).toString()).toString(),
       ]),
       calldata: wethABI._encodeParams(wethABI.functions[wethTransfer ?? '']?.inputs ?? [], [
         predictedAddress,
-        state.amount ? utils.parseEther(state.amount.toString()).toString() : '0',
+        utils.parseEther(amount.toString()).toString(),
       ]),
     });
   } else {
@@ -105,12 +106,19 @@ const handleActionAdd = (
 const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props => {
   const { onNextBtnClick, onPrevBtnClick, state, onDismiss } = props;
 
+  const isUSDC = state.TransferFundsCurrency === SupportedCurrency.USDC;
   const predictedAddress = usePredictStreamAddress({
     msgSender: config.addresses.nounsDaoExecutor,
-    payer: config.addresses.payerContract,
+    // payer: config.addresses.payerContract,
+    payer: config.addresses.nounsDaoExecutor,
+    // payer: config.addresses.nounsDAOProxy,
     recipient: state.address,
-    tokenAmount: state.amount,
-    tokenAddress: config.addresses.usdcToken,
+    // tokenAmount: state.amount,
+    // tokenAddress: config.addresses.usdcToken,
+    tokenAmount: isUSDC
+      ? Math.round(parseFloat(state.amount ?? '0') * 1_000_000).toString()
+      : utils.parseEther((state.amount ?? 0).toString()).toString(),
+    tokenAddress: isUSDC ? config.addresses.usdcToken : config.addresses.weth,
     startTime: state.streamStartTimestamp,
     endTime: state.streamEndTimestamp,
   });

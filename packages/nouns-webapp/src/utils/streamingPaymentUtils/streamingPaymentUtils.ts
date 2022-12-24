@@ -61,24 +61,24 @@ export function usePredictStreamAddress({
   startTime,
   endTime,
 }: UsePredictStreamAddressProps) {
-  console.log(
-    encodeCallData(
-      {
-        abi,
-        address: config.addresses.nounsStreamFactory ?? '',
-        method: 'predictStreamAddress',
-        args: [msgSender, payer, recipient, 100, tokenAddress, startTime, endTime],
-      },
-      5,
-    ),
-  );
+  // console.log(
+  //   encodeCallData(
+  //     {
+  //       abi,
+  //       address: config.addresses.nounsStreamFactory ?? '',
+  //       method: 'predictStreamAddress',
+  //       args: [msgSender, payer, recipient, tokenAddress, tokenAddress, startTime, endTime],
+  //     },
+  //     5,
+  //   ),
+  // );
 
   const [predictedAddress] =
     useContractCall<[string]>({
       abi,
       address: config.addresses.nounsStreamFactory ?? '',
       method: 'predictStreamAddress',
-      args: [msgSender, payer, recipient, 100, tokenAddress, startTime, endTime],
+      args: [msgSender, payer, recipient, tokenAmount, tokenAddress, startTime, endTime],
     }) || [];
   return predictedAddress?.toString();
 }

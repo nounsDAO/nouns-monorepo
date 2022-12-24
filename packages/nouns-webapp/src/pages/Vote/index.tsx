@@ -69,6 +69,8 @@ const VotePage = ({
     streamAddress: string;
     startTime: number;
     endTime: number;
+    streamAmount: number;
+    tokenAddress: string;
   } | null>(null);
 
   const dispatch = useAppDispatch();
@@ -321,8 +323,6 @@ const VotePage = ({
   const abstainNouns = getNounVotes(data, 2);
   const isV2Prop = dqInfo.proposal.quorumCoefficient > 0;
 
-  console.log('DETAILS: ', proposal.details);
-
   return (
     <Section fullWidth={false} className={classes.votePage}>
       {showDynamicQuorumInfoModal && (
@@ -333,12 +333,11 @@ const VotePage = ({
           currentQuorum={currentQuorum}
         />
       )}
-      {showStreamWidthdrawModal && streamWithdrawInfo !== null && (
-        <StreamWidthdrawModal
-          onDismiss={() => setShowStreamWidthdrawModal(false)}
-          {...streamWithdrawInfo}
-        />
-      )}
+      <StreamWidthdrawModal
+        show={showStreamWidthdrawModal}
+        onDismiss={() => setShowStreamWidthdrawModal(false)}
+        {...streamWithdrawInfo}
+      />
       <VoteModal
         show={showVoteModal}
         onHide={() => setShowVoteModal(false)}
@@ -356,42 +355,48 @@ const VotePage = ({
         )}
       </Col>
       <Col lg={10} className={clsx(classes.proposal, classes.wrapper)}>
-        {proposal.details
-          .filter(txn => txn?.functionSig.includes('createStream'))
-          .map(txn => {
-            const streamAddress = txn.callData.split(',')[5];
-            const startTime = parseInt(txn.callData.split(',')[3]);
-            const endTime = parseInt(txn.callData.split(',')[4]);
-            return (
-              <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
-                <span
-                  style={{
-                    fontWeight: '500',
-                    color: 'var(--brand-gray-light-text)',
-                    marginBottom: '0.5rem',
-                  }}
-                >
-                  Only visable to you
-                </span>
-                <Col className="d-grid gap-4">
-                  <Button
-                    onClick={() => {
-                      setShowStreamWidthdrawModal(true);
-                      setSreamWidthdrawInfo({
-                        streamAddress,
-                        startTime,
-                        endTime,
-                      });
+        {proposal.status === ProposalState.EXECUTED &&
+          proposal.details
+            .filter(txn => txn?.functionSig.includes('createStream'))
+            .map(txn => {
+              const streamAddress = txn.callData.split(',')[5];
+              const startTime = parseInt(txn.callData.split(',')[3]);
+              const endTime = parseInt(txn.callData.split(',')[4]);
+              const streamAmount = parseInt(txn.callData.split(',')[1]);
+              const tokenAddress = txn.callData.split(',')[2];
+
+              return (
+                <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
+                  <span
+                    style={{
+                      fontWeight: '500',
+                      color: 'var(--brand-gray-light-text)',
+                      marginBottom: '0.5rem',
                     }}
-                    variant="dark"
-                    className={classes.transitionStateButton}
                   >
-                    Withdraw from Stream <ShortAddress address={streamAddress} />
-                  </Button>
-                </Col>
-              </Row>
-            );
-          })}
+                    Only visable to you
+                  </span>
+                  <Col className="d-grid gap-4">
+                    <Button
+                      onClick={() => {
+                        setShowStreamWidthdrawModal(true);
+                        setSreamWidthdrawInfo({
+                          streamAddress,
+                          startTime,
+                          endTime,
+                          streamAmount,
+                          tokenAddress,
+                        });
+                      }}
+                      variant="dark"
+                      className={classes.transitionStateButton}
+                    >
+                      Withdraw from Stream <ShortAddress address={streamAddress} />
+                    </Button>
+                  </Col>
+                </Row>
+              );
+            })}
 
         {(isAwaitingStateChange() || isAwaitingDestructiveStateChange()) && (
           <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
