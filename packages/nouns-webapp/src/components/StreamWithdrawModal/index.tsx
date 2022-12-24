@@ -1,21 +1,23 @@
-import { XIcon } from '@heroicons/react/solid';
 import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
 import classes from './StreamWidthdrawModal.module.css';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import { Trans } from '@lingui/macro';
 import ModalTitle from '../ModalTitle';
 import config from '../../config';
 import { contract2humanUSDCFormat, human2ContractUSDCFormat } from '../../utils/usdcUtils';
-import { ethers, utils } from 'ethers';
+import { BigNumber, ethers, utils } from 'ethers';
 import { useEthers } from '@usedapp/core/dist/cjs/src';
-import { useStreamRemaningBalance, useWithdrawTokens } from '../../wrappers/nounsStream';
+import {
+  useStreamRatePerSecond,
+  useStreamRemaningBalance,
+  useWithdrawTokens,
+} from '../../wrappers/nounsStream';
 import ModalBottomButtonRow from '../ModalBottomButtonRow';
 import BrandSpinner from '../BrandSpinner';
 import BrandNumericEntry from '../BrandNumericEntry';
 import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
+import StartOrEndTime from '../StartOrEndTime';
 
 dayjs.extend(relativeTime);
 
@@ -27,6 +29,7 @@ const StreamWidthdrawModalOverlay: React.FC<{
   onDismiss: () => void;
   streamAddress?: string;
   endTime?: number;
+  startTime?: number;
   streamAmount?: number;
   tokenAddress?: string;
 }> = props => {
@@ -35,6 +38,7 @@ const StreamWidthdrawModalOverlay: React.FC<{
     streamAddress = '',
     streamAmount = '',
     endTime = 0,
+    startTime = 0,
     tokenAddress = '',
   } = props;
 
@@ -46,6 +50,11 @@ const StreamWidthdrawModalOverlay: React.FC<{
   const { widthdrawTokens, widthdrawTokensState } = useWithdrawTokens(streamAddress ?? '');
   const [widthdrawAmount, setWidthdrawAmount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
+  const streamRatePerSecond = useStreamRatePerSecond(streamAddress ?? '') ?? 0;
+  const streamedSoFar =
+    streamRatePerSecond && Math.floor(Date.now() / 1000) - startTime > 0
+      ? streamRatePerSecond.mul(BigNumber.from(Math.floor(Date.now() / 1000) - startTime))
+      : 0;
 
   if (!streamRemaningBalance || isLoading) {
     return (
@@ -125,6 +134,25 @@ const StreamWidthdrawModalOverlay: React.FC<{
           fontWeight: 'bold',
         }}
       >
+        Streamed so far
+      </span>
+      <h1
+        style={{
+          fontWeight: 'bold',
+        }}
+      >
+        {isUSDC
+          ? contract2humanUSDCFormat(streamedSoFar?.toString() ?? '')
+          : ethers.utils.formatUnits(streamedSoFar?.toString() ?? '').toString()}{' '}
+        {unitForDisplay}
+      </h1>
+
+      <span
+        style={{
+          opacity: '0.5',
+          fontWeight: 'bold',
+        }}
+      >
         Total stream value
       </span>
       <h1
@@ -140,16 +168,6 @@ const StreamWidthdrawModalOverlay: React.FC<{
 
       <div
         style={{
-          opacity: '0.5',
-          fontWeight: 'bold',
-          marginBottom: '1rem',
-        }}
-      >
-        Stream ends {dayjs.unix(endTime).fromNow()}
-      </div>
-
-      <div
-        style={{
           display: 'flex',
           alignItems: 'flex-end',
         }}
@@ -161,28 +179,29 @@ const StreamWidthdrawModalOverlay: React.FC<{
             setWidthdrawAmount(parseInt(e.value));
           }}
           placeholder={isUSDC ? '0 USDC' : '0 WETH'}
-          isInvalid={false}
+          isInvalid={widthdrawAmount > streamRemaningBalance.toNumber()}
         />
+        {/* Hover brightness */}
         <div
           style={{
-            width: '25%',
-            paddingLeft: '0.1rem',
-            marginBottom: '0.75rem',
+            position: 'absolute',
+            right: '40px',
+            top: '68%',
+            fontSize: '18px',
+            fontWeight: 'bold',
+            cursor: 'pointer',
           }}
+          onClick={() =>
+            setWidthdrawAmount(
+              parseFloat(
+                isUSDC
+                  ? contract2humanUSDCFormat(streamRemaningBalance?.toString() ?? '')
+                  : ethers.utils.formatUnits(streamRemaningBalance?.toString() ?? '').toString(),
+              ),
+            )
+          }
         >
-          <NavBarButton
-            buttonText={'Max'}
-            buttonStyle={NavBarButtonStyle.COOL_INFO}
-            onClick={() =>
-              setWidthdrawAmount(
-                parseFloat(
-                  isUSDC
-                    ? contract2humanUSDCFormat(streamRemaningBalance?.toString() ?? '')
-                    : ethers.utils.formatUnits(streamRemaningBalance?.toString() ?? '').toString(),
-                ),
-              )
-            }
-          />
+          Max
         </div>
       </div>
 
@@ -200,6 +219,18 @@ const StreamWidthdrawModalOverlay: React.FC<{
         }}
         isNextBtnDisabled={streamRemaningBalance && streamRemaningBalance.toNumber() === 0}
       />
+      <div
+        style={{
+          opacity: '0.5',
+          fontWeight: 'bold',
+          marginBottom: '1rem',
+          marginTop: '1rem',
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+        Stream <StartOrEndTime startTime={startTime} endTime={endTime} />
+      </div>
     </>
   );
 };

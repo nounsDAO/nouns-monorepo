@@ -16,6 +16,16 @@ export const useStreamRemaningBalance = (streamAddress: string, userAddress: str
   return balance;
 };
 
+export const useStreamRatePerSecond = (streamAddress: string) => {
+  const [rps] = useContractCall<[BigNumber]>({
+    abi,
+    address: streamAddress,
+    method: 'ratePerSecond',
+    args: [],
+  }) || [BigNumber.from(0)];
+  return rps;
+};
+
 export const useWithdrawTokens = (streamAddress: string) => {
   const { library } = useEthers();
   const { send: widthdrawTokens, state: widthdrawTokensState } = useContractFunction(
