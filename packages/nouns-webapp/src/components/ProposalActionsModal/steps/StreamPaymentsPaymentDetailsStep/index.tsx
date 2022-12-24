@@ -30,7 +30,7 @@ const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props 
   }, [amount, address, isValidForNextStage]);
 
   return (
-    <div>
+    <>
       <ModalTitle>
         <Trans>Add Streaming Payment Action</Trans>
       </ModalTitle>
@@ -85,7 +85,7 @@ const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props 
         }}
         isNextBtnDisabled={!isValidForNextStage}
       />
-    </div>
+    </>
   );
 };
 
