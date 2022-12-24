@@ -73,7 +73,11 @@ msgid "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
 msgstr "<2>{proposedAtTransactionHash}</2> <1>{proposer}</1> <0>が提案したものです</0>"
 
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
-msgid "<0>Supported Action Types:</0><1/><2>• Transfer Funds: </2>Send a fixed amount of ETH or USDC.<3/><4>• Function Call: </4>Call a contract function."
+#~ msgid "<0>Supported Action Types:</0><1/><2>• Transfer Funds: </2>Send a fixed amount of ETH or USDC.<3/><4>• Function Call: </4>Call a contract function."
+#~ msgstr ""
+
+#: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
+msgid "<0>Supported Action Types:</0><1/><2>• Transfer Funds: </2>Send a fixed amount of ETH or USDC.<3/><4>• Stream Funds: </4>Stream a fixed amount of WETH or USDC.<5/><6>• Function Call: </6>Call a contract function."
 msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx
@@ -130,6 +134,16 @@ msgstr ""
 
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 msgid "Add Proposal Action"
+msgstr ""
+
+#: src/components/ProposalActionsModal/steps/StreamPaymentsPaymentDetailsStep/index.tsx
+msgid "Add Stream Date Details"
+msgstr ""
+
+#: src/components/ProposalActionsModal/steps/StreamPaymentsDateDetailsStep/index.tsx
+#: src/components/ProposalActionsModal/steps/StreamPaymentsPaymentDetailsStep/index.tsx
+#: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
+msgid "Add Streaming Payment Action"
 msgstr ""
 
 #: src/components/ProposalActionsModal/steps/TransferFundsDetailsStep/index.tsx
@@ -198,6 +212,10 @@ msgstr "引数"
 msgid "Artwork is generative and stored directly on-chain (not IPFS)."
 msgstr "生成されたアートワークは直接オンチェーンに保存されます(IPFSではありません)。"
 
+#: src/components/ProposalActionsModal/steps/StreamPaymentsPaymentDetailsStep/index.tsx
+msgid "At this time only USDC and WETH streams are supported"
+msgstr ""
+
 #: src/components/AuctionTimer/index.tsx
 #: src/components/AuctionTimer/index.tsx
 msgid "Auction ended"
@@ -210,6 +228,7 @@ msgstr "オークション終了まで"
 #: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallSelectFunctionStep/index.tsx
+#: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/TransferFundsDetailsStep/index.tsx
 #: src/components/ProposalActionsModal/steps/TransferFundsReviewStep/index.tsx
 msgid "Back"
@@ -263,6 +282,7 @@ msgstr "体"
 msgid "Born"
 msgstr "誕生"
 
+#: src/components/StreamWithdrawModal/index.tsx
 #: src/pages/Vote/index.tsx
 msgid "Cancel"
 msgstr ""
@@ -301,6 +321,8 @@ msgstr "WalletConnect データを消去"
 #: src/components/ChangeDelegatePannel/index.tsx
 #: src/components/CurrentDelegatePannel/index.tsx
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
+#: src/components/ProposalActionsModal/steps/StreamPaymentsDateDetailsStep/index.tsx
+#: src/components/ProposalActionsModal/steps/StreamPaymentsPaymentDetailsStep/index.tsx
 msgid "Close"
 msgstr "近い"
 
@@ -442,6 +464,10 @@ msgstr "オークションが決済される度に、決済取引によって新
 #: src/pages/Vote/index.tsx
 msgid "Ended"
 msgstr "終了しました"
+
+#: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
+msgid "Ending on"
+msgstr ""
 
 #: src/pages/Vote/index.tsx
 msgid "Ends"
@@ -776,6 +802,10 @@ msgstr "32x32 PNG画像のみ受け付けています"
 msgid "Only Nouns you owned or were delegated to you before {0} are eligible to vote."
 msgstr "投票できるのは {0} 以前に所有していた、または委任されたNounsのみです。"
 
+#: src/pages/Vote/index.tsx
+msgid "Only visable to you"
+msgstr ""
+
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
 #: src/components/ProposalStatusCopy/index.tsx
@@ -873,8 +903,16 @@ msgstr "理由\"(任意)\""
 msgid "Required % of Nouns to Pass"
 msgstr ""
 
+#: src/components/ProposalActionsModal/steps/StreamPaymentsDateDetailsStep/index.tsx
+msgid "Review Action Details"
+msgstr ""
+
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 msgid "Review Function Call Action"
+msgstr ""
+
+#: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
+msgid "Review Streaming Payment Action"
 msgstr ""
 
 #: src/components/ProposalActionsModal/steps/TransferFundsReviewStep/index.tsx
@@ -929,6 +967,10 @@ msgstr "少なく表示する"
 msgid "Sign out"
 msgstr "サインアウト"
 
+#: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
+msgid "Starting on"
+msgstr ""
+
 #: src/pages/Vote/index.tsx
 msgid "Starts"
 msgstr "開始"
@@ -936,6 +978,14 @@ msgstr "開始"
 #: src/components/Proposals/index.tsx
 msgid "Starts {0}"
 msgstr "あと{0}で始まります"
+
+#: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
+msgid "Stream"
+msgstr ""
+
+#: src/components/ProposalActionsModal/steps/StreamPaymentsDateDetailsStep/index.tsx
+msgid "Streams start and end at 00:00 UTC on selected dates."
+msgstr ""
 
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
@@ -1059,6 +1109,10 @@ msgstr ""
 msgid "There was an error voting for your account."
 msgstr "アカウントの投票中にエラーが発生しました。"
 
+#: src/components/StreamWithdrawModal/index.tsx
+msgid "There was an error withdrawing to your wallet."
+msgstr ""
+
 #: src/components/ProfileActivityFeed/index.tsx
 msgid "This Noun has no activity, since it was just created. Check back soon!"
 msgstr "このNounは作成されたばかりで、動きがありません。また後ほどご確認ください！"
@@ -1091,6 +1145,10 @@ msgstr ""
 #: src/pages/CreateProposal/index.tsx
 #~ msgid "Tip:"
 #~ msgstr "コツ："
+
+#: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
+msgid "To"
+msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "Trait generation is not truly random. Traits can be predicted when minting a Noun on the pending block."
@@ -1229,9 +1287,17 @@ msgstr "WTF?"
 msgid "Waiting for"
 msgstr "待機"
 
+#: src/components/ProposalActionsModal/steps/StreamPaymentsDateDetailsStep/index.tsx
+msgid "We suggest adding a buffer between when you assume the proposal to be executed and when the stream begins."
+msgstr ""
+
 #: src/components/Documentation/index.tsx
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
 msgstr "決済は落札者に最も大きなインセンティブが与えられるが、誰でも起動できるため、Ethereumが稼働し、関心のある入札者がいる限り、システムは第三者の介入無しでNounsをオークションにかけることができます。"
+
+#: src/components/StreamWithdrawModal/index.tsx
+msgid "Widthdraw"
+msgstr ""
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Will have"
@@ -1245,6 +1311,15 @@ msgstr "落札者"
 #: src/components/CurrentBid/index.tsx
 msgid "Winning bid"
 msgstr "落札"
+
+#: src/components/StreamWithdrawModal/index.tsx
+#: src/components/StreamWithdrawModal/index.tsx
+msgid "Withdraw from Stream"
+msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "Withdraw from Stream <0/>"
+msgstr ""
 
 #: src/components/Winner/index.tsx
 msgid "You"
@@ -1310,6 +1385,10 @@ msgstr "{0} 年分のナウンを生成しました"
 msgid "You've successfully voted on on prop {0}"
 msgstr "あなたは提案 {0} に投票することに成功しました。"
 
+#: src/components/StreamWithdrawModal/index.tsx
+msgid "You've successfully withrawn {0} {unitForDisplay} to your wallet"
+msgstr ""
+
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Your <0>{availableVotes}</0> votes are being delegated to a new account."
 msgstr "あなたは<0>{availableVotes}</0>アカウントに委任されています"
@@ -1317,6 +1396,10 @@ msgstr "あなたは<0>{availableVotes}</0>アカウントに委任されてい�
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Your <0>{availableVotes}</0> votes have been delegated to a new account."
 msgstr "あなたの<0>{availableVotes}</0>票が新しいアカウントに委任されました"
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Your account will have less than {0} {1} after this delegation. Unexecuted props you've created will now be cancelable by anyone."
+msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "accessories (140)"
@@ -1337,6 +1420,10 @@ msgstr "背景 (2)"
 #: src/components/Documentation/index.tsx
 msgid "bodies (30)"
 msgstr "体 (30)"
+
+#: src/components/StartOrEndTime/index.tsx
+msgid "ends {0}"
+msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "glasses (23)"
@@ -1365,6 +1452,10 @@ msgstr "パブリックドメイン"
 #: src/components/AuctionTimer/index.tsx
 msgid "s"
 msgstr "秒"
+
+#: src/components/StartOrEndTime/index.tsx
+msgid "starts {0}"
+msgstr ""
 
 #: src/components/VoteCard/index.tsx
 #~ msgid "{0} <0>Address </0>"
