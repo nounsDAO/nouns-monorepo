@@ -1,168 +1,77 @@
 import { Trans } from '@lingui/macro';
-import { utils } from 'ethers';
 import React from 'react';
-import { FinalProposalActionStepProps, ProposalActionModalState } from '../..';
+import { FinalProposalActionStepProps } from '../..';
 import ShortAddress from '../../../ShortAddress';
-import classes from './StreamPaymentsReviewStep.module.css';
 import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
 import ModalTitle from '../../../ModalTitle';
 import config from '../../../../config';
-import { SupportedCurrency } from '../TransferFundsDetailsStep';
-import dayjs from 'dayjs';
-import { usePredictStreamAddress } from '../../../../utils/streamingPaymentUtils/streamingPaymentUtils';
-import StreamFactoryABI from '../../../../utils/streamingPaymentUtils/streamFactory.abi.json';
-import wethABIJSON from '../../../../utils/wethUtils/weth.abi.json';
-import payerABIJSON from '../../../../utils/payerContractUtils/payerABI.json';
-import { human2ContractUSDCFormat } from '../../../../utils/usdcUtils';
-
-const abi = new utils.Interface(StreamFactoryABI);
-const wethABI = new utils.Interface(wethABIJSON);
-
-const handleActionAdd = (
-  state: ProposalActionModalState,
-  onActionAdd: (e?: any) => void,
-  predictedAddress?: string,
-) => {
-  const fundStreamFunction = 'createStream(address,uint256,address,uint256,uint256,address)';
-  const isUSDC = state.TransferFundsCurrency === SupportedCurrency.USDC;
-  const amount = state.amount ?? '0';
-
-  const actions = [
-    {
-      address: config.addresses.nounsStreamFactory ?? '',
-      signature: fundStreamFunction,
-      value: '0',
-      usdcValue: isUSDC ? Math.round(parseFloat(amount) * 1_000_000) : 0,
-      decodedCalldata: JSON.stringify([
-        state.address,
-        isUSDC ? human2ContractUSDCFormat(amount) : utils.parseEther(amount.toString()).toString(),
-        isUSDC ? config.addresses.usdcToken : config.addresses.weth,
-        state.streamStartTimestamp,
-        state.streamEndTimestamp,
-        predictedAddress,
-      ]),
-      calldata: abi._encodeParams(abi.functions[fundStreamFunction ?? '']?.inputs ?? [], [
-        state.address,
-        isUSDC
-          ? Math.round(parseFloat(state.amount ?? '0') * 1_000_000).toString()
-          : utils.parseEther(amount.toString()).toString(),
-        isUSDC ? config.addresses.usdcToken : config.addresses.weth,
-        state.streamStartTimestamp,
-        state.streamEndTimestamp,
-        predictedAddress,
-      ]),
-    },
-  ];
-
-  if (!isUSDC) {
-    actions.push({
-      address: config.addresses.weth ?? '',
-      signature: 'deposit()',
-      usdcValue: 0,
-      value: state.amount ? utils.parseEther(state.amount.toString()).toString() : '0',
-      decodedCalldata: JSON.stringify([]),
-      calldata: '0x',
-    });
-    const wethTransfer = 'transfer(address,uint256)';
-    actions.push({
-      address: config.addresses.weth ?? '',
-      signature: wethTransfer,
-      usdcValue: 0,
-      value: '0',
-      decodedCalldata: JSON.stringify([
-        predictedAddress,
-        utils.parseEther((state.amount ?? 0).toString()).toString(),
-      ]),
-      calldata: wethABI._encodeParams(wethABI.functions[wethTransfer ?? '']?.inputs ?? [], [
-        predictedAddress,
-        utils.parseEther(amount.toString()).toString(),
-      ]),
-    });
-  } else {
-    const signature = 'sendOrRegisterDebt(address,uint256)';
-    const payerABI = new utils.Interface(payerABIJSON);
-    actions.push({
-      address: config.addresses.payerContract ?? '',
-      value: '0',
-      usdcValue: Math.round(parseFloat(state.amount ?? '0') * 1_000_000),
-      signature: signature,
-      decodedCalldata: JSON.stringify([
-        // USDC has 6 decimals so we convert from human readable format to contract input format here
-        predictedAddress,
-        Math.round(parseFloat(state.amount ?? '0') * 1_000_000).toString(),
-      ]),
-      calldata: payerABI?._encodeParams(payerABI?.functions[signature]?.inputs, [
-        predictedAddress,
-        // USDC has 6 decimals so we convert from human readable format to contract input format here
-        Math.round(parseFloat(state.amount ?? '0') * 1_000_000).toString(),
-      ]),
-    });
-  }
-
-  console.log('HELLO: ', actions);
-  onActionAdd(actions);
-};
+import {
+  formatTokenAmmount,
+  getTokenAddressForCurrency,
+  usePredictStreamAddress,
+} from '../../../../utils/streamingPaymentUtils/streamingPaymentUtils';
+import { unixToDateString } from '../../../../utils/timeUtils';
+import ModalLabel from '../../../ModalLabel';
+import ModalTextPrimary from '../../../ModalTextPrimary';
+import useStreamPaymentTransactions from '../../../../hooks/useStreamPaymentTransactions';
 
 const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props => {
   const { onNextBtnClick, onPrevBtnClick, state, onDismiss } = props;
 
-  const isUSDC = state.TransferFundsCurrency === SupportedCurrency.USDC;
   const predictedAddress = usePredictStreamAddress({
     msgSender: config.addresses.nounsDaoExecutor,
-    // payer: config.addresses.payerContract,
     payer: config.addresses.nounsDaoExecutor,
-    // payer: config.addresses.nounsDAOProxy,
     recipient: state.address,
-    // tokenAmount: state.amount,
-    // tokenAddress: config.addresses.usdcToken,
-    tokenAmount: isUSDC
-      ? Math.round(parseFloat(state.amount ?? '0') * 1_000_000).toString()
-      : utils.parseEther((state.amount ?? 0).toString()).toString(),
-    tokenAddress: isUSDC ? config.addresses.usdcToken : config.addresses.weth,
+    tokenAmount: formatTokenAmmount(state.amount, state.TransferFundsCurrency),
+    tokenAddress: getTokenAddressForCurrency(state.TransferFundsCurrency),
     startTime: state.streamStartTimestamp,
     endTime: state.streamEndTimestamp,
   });
 
+  const actionTransactions = useStreamPaymentTransactions({
+    state,
+    predictedAddress,
+  });
+
   return (
-    <div>
+    <>
       <ModalTitle>
         <Trans>Review Streaming Payment Action</Trans>
       </ModalTitle>
 
-      <span className={classes.label}>Stream</span>
-      <div className={classes.text}>
+      <ModalLabel>
+        <Trans>Stream</Trans>
+      </ModalLabel>
+
+      <ModalTextPrimary>
         {Intl.NumberFormat(undefined, { maximumFractionDigits: 18 }).format(Number(state.amount))}{' '}
         {state.TransferFundsCurrency}
-      </div>
-      <span className={classes.label}>To</span>
-      <div className={classes.text}>
+      </ModalTextPrimary>
+
+      <ModalLabel>
+        <Trans>To</Trans>
+      </ModalLabel>
+      <ModalTextPrimary>
         <ShortAddress address={state.address} />
-      </div>
-      <span className={classes.label}>Starting on</span>
-      <div className={classes.text}>
-        {dayjs
-          .unix(state.streamStartTimestamp ?? 0)
-          .utc()
-          .format('MMMM DD, YYYY')}
-      </div>
-      <span className={classes.label}>Ending on</span>
-      <div className={classes.text}>
-        {dayjs
-          .unix(state.streamEndTimestamp ?? 0)
-          .utc()
-          .format('MMMM DD, YYYY')}
-      </div>
+      </ModalTextPrimary>
+
+      <ModalLabel>Starting on</ModalLabel>
+      <ModalTextPrimary>{unixToDateString(state.streamStartTimestamp)}</ModalTextPrimary>
+
+      <ModalLabel>Ending on</ModalLabel>
+
+      <ModalTextPrimary>{unixToDateString(state.streamEndTimestamp)}</ModalTextPrimary>
 
       <ModalBottomButtonRow
         prevBtnText={<Trans>Back</Trans>}
         onPrevBtnClick={onPrevBtnClick}
         nextBtnText={<Trans>Add Streaming Payment Action</Trans>}
         onNextBtnClick={() => {
-          handleActionAdd(state, onNextBtnClick, predictedAddress);
+          onNextBtnClick(actionTransactions);
           onDismiss();
         }}
       />
-    </div>
+    </>
   );
 };
 

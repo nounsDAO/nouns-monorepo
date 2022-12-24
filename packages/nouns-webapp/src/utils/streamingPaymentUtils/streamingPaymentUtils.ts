@@ -1,5 +1,6 @@
 import { useContractCall } from '@usedapp/core';
 import { utils } from 'ethers';
+import { SupportedCurrency } from '../../components/ProposalActionsModal/steps/TransferFundsDetailsStep';
 import config from '../../config';
 import StreamFactoryABI from './streamFactory.abi.json';
 
@@ -32,4 +33,27 @@ export function usePredictStreamAddress({
       args: [msgSender, payer, recipient, tokenAmount, tokenAddress, startTime, endTime],
     }) || [];
   return predictedAddress?.toString();
+}
+
+export function formatTokenAmmount(amount?: string, currency?: SupportedCurrency) {
+  const amt = amount ?? '0';
+  switch (currency) {
+    case SupportedCurrency.USDC:
+      return Math.round(parseFloat(amt) * 1_000_000).toString();
+    case SupportedCurrency.WETH:
+      return utils.parseEther(amt).toString();
+    default:
+      return amt;
+  }
+}
+
+export function getTokenAddressForCurrency(currency?: SupportedCurrency) {
+  switch (currency) {
+    case SupportedCurrency.USDC:
+      return config.addresses.usdcToken;
+    case SupportedCurrency.WETH:
+      return config.addresses.weth;
+    default:
+      return '';
+  }
 }

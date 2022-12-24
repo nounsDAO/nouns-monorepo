@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 export const currentUnixEpoch = () => {
   return new Date().getTime() / 1000;
 };
@@ -8,4 +10,11 @@ export const currentUnixEpoch = () => {
  */
 export const toUnixEpoch = (dateString: string) => {
   return new Date(dateString).valueOf() / 1000;
+};
+
+export const unixToDateString = (timestamp?: number) => {
+  return dayjs
+    .unix(timestamp ?? 0)
+    .utc()
+    .format('MMMM DD, YYYY');
 };
