@@ -57,3 +57,33 @@ export function getTokenAddressForCurrency(currency?: SupportedCurrency) {
       return '';
   }
 }
+
+export function parseStreamCreationCallData(callData: string) {
+  const callDataArray = callData.split(',');
+
+  if (!callDataArray || callDataArray.length < 6) {
+    return {
+      recipient: '',
+      streamAddress: '',
+      startTime: 0,
+      endTime: 0,
+      streamAmount: 0,
+      tokenAddress: '',
+    };
+  }
+
+  const streamAddress = callDataArray[5];
+  const startTime = parseInt(callDataArray[3]);
+  const endTime = parseInt(callDataArray[4]);
+  const streamAmount = parseInt(callDataArray[1]);
+  const recipient = callDataArray[0];
+  const tokenAddress = callDataArray[2];
+  return {
+    recipient,
+    streamAddress,
+    startTime,
+    endTime,
+    streamAmount,
+    tokenAddress,
+  };
+}

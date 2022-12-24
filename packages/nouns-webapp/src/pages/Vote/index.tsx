@@ -43,6 +43,7 @@ import DynamicQuorumInfoModal from '../../components/DynamicQuorumInfoModal';
 import config from '../../config';
 import ShortAddress from '../../components/ShortAddress';
 import StreamWidthdrawModal from '../../components/StreamWithdrawModal';
+import { parseStreamCreationCallData } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -65,7 +66,7 @@ const VotePage = ({
   const [isExecutePending, setExecutePending] = useState<boolean>(false);
   const [isCancelPending, setCancelPending] = useState<boolean>(false);
   const [showStreamWidthdrawModal, setShowStreamWidthdrawModal] = useState<boolean>(false);
-  const [streamWithdrawInfo, setSreamWidthdrawInfo] = useState<{
+  const [streamWithdrawInfo, setStreamWidthdrawInfo] = useState<{
     streamAddress: string;
     startTime: number;
     endTime: number;
@@ -359,39 +360,35 @@ const VotePage = ({
           proposal.details
             .filter(txn => txn?.functionSig.includes('createStream'))
             .map(txn => {
-              const streamAddress = txn.callData.split(',')[5];
-              const startTime = parseInt(txn.callData.split(',')[3]);
-              const endTime = parseInt(txn.callData.split(',')[4]);
-              const streamAmount = parseInt(txn.callData.split(',')[1]);
-              const tokenAddress = txn.callData.split(',')[2];
+              const parsedCallData = parseStreamCreationCallData(txn.callData);
+              if (parsedCallData.recipient.toLowerCase() !== account?.toLowerCase()) {
+                return <></>;
+              }
 
               return (
                 <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
-                  <span
-                    style={{
-                      fontWeight: '500',
-                      color: 'var(--brand-gray-light-text)',
-                      marginBottom: '0.5rem',
-                    }}
-                  >
-                    Only visable to you
+                  <span className={classes.boldedLabel}>
+                    <Trans>Only visable to you</Trans>
                   </span>
                   <Col className="d-grid gap-4">
                     <Button
                       onClick={() => {
                         setShowStreamWidthdrawModal(true);
-                        setSreamWidthdrawInfo({
-                          streamAddress,
-                          startTime,
-                          endTime,
-                          streamAmount,
-                          tokenAddress,
+                        setStreamWidthdrawInfo({
+                          streamAddress: parsedCallData.streamAddress,
+                          startTime: parsedCallData.startTime,
+                          endTime: parsedCallData.endTime,
+                          streamAmount: parsedCallData.streamAmount,
+                          tokenAddress: parsedCallData.tokenAddress,
                         });
                       }}
-                      variant="dark"
+                      variant="primary"
                       className={classes.transitionStateButton}
                     >
-                      Withdraw from Stream <ShortAddress address={streamAddress} />
+                      <Trans>
+                        Withdraw from Stream{' '}
+                        <ShortAddress address={parsedCallData.streamAddress ?? ''} />
+                      </Trans>
                     </Button>
                   </Col>
                 </Row>
