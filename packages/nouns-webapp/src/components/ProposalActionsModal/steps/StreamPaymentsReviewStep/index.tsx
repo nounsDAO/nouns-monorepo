@@ -56,15 +56,12 @@ const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props =
       </ModalTextPrimary>
 
       <ModalLabel>
-        <Trans>
-          Starting on
-          </Trans></ModalLabel>
+        <Trans>Starting on</Trans>
+      </ModalLabel>
       <ModalTextPrimary>{unixToDateString(state.streamStartTimestamp)}</ModalTextPrimary>
 
       <ModalLabel>
-        <Trans>
-          Ending on
-        </Trans>
+        <Trans>Ending on</Trans>
       </ModalLabel>
 
       <ModalTextPrimary>{unixToDateString(state.streamEndTimestamp)}</ModalTextPrimary>

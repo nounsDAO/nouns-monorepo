@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classes from './StreamWidthdrawModal.module.css';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -18,6 +18,7 @@ import BrandSpinner from '../BrandSpinner';
 import BrandNumericEntry from '../BrandNumericEntry';
 import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
 import StartOrEndTime from '../StartOrEndTime';
+import { currentUnixEpoch } from '../../utils/timeUtils';
 
 dayjs.extend(relativeTime);
 
@@ -36,7 +37,7 @@ const StreamWidthdrawModalOverlay: React.FC<{
   const {
     onDismiss,
     streamAddress = '',
-    streamAmount = '',
+    streamAmount = 0,
     endTime = 0,
     startTime = 0,
     tokenAddress = '',
@@ -45,18 +46,30 @@ const StreamWidthdrawModalOverlay: React.FC<{
   const isUSDC = tokenAddress.toLowerCase() === config.addresses.usdcToken?.toLowerCase();
   const unitForDisplay = isUSDC ? 'USDC' : 'WETH';
   const { account } = useEthers();
-  // TODO chance name to available to withdraw or something to that effect
-  const streamRemaningBalance = useStreamRemaningBalance(streamAddress ?? '', account ?? '');
+
+  const withdrawableBalance = useStreamRemaningBalance(streamAddress ?? '', account ?? '');
   const { widthdrawTokens, widthdrawTokensState } = useWithdrawTokens(streamAddress ?? '');
   const [widthdrawAmount, setWidthdrawAmount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
   const streamRatePerSecond = useStreamRatePerSecond(streamAddress ?? '') ?? 0;
-  const streamedSoFar =
-    streamRatePerSecond && Math.floor(Date.now() / 1000) - startTime > 0
-      ? streamRatePerSecond.mul(BigNumber.from(Math.floor(Date.now() / 1000) - startTime))
-      : 0;
 
-  if (!streamRemaningBalance || isLoading) {
+  const [streamedSoFar, setStreamedSoFar] = useState<BigNumber | string>(BigNumber.from(0));
+  useEffect(() => {
+    setTimeout(() => {
+      if (currentUnixEpoch() > endTime) {
+        setStreamedSoFar(streamAmount.toString());
+        return;
+      }
+
+      setStreamedSoFar(
+        streamRatePerSecond && Math.floor(Date.now() / 1000) - startTime > 0
+          ? streamRatePerSecond.mul(BigNumber.from(Math.floor(Date.now() / 1000) - startTime))
+          : BigNumber.from(0),
+      );
+    }, 1000);
+  }, [endTime, startTime, streamAmount, streamRatePerSecond, streamedSoFar]);
+
+  if (!withdrawableBalance || isLoading) {
     return (
       <>
         <ModalTitle>
@@ -69,7 +82,7 @@ const StreamWidthdrawModalOverlay: React.FC<{
           }}
         >
           {(widthdrawTokensState.status === 'Mining' ||
-            !streamRemaningBalance ||
+            !withdrawableBalance ||
             widthdrawTokensState.status === 'PendingSignature') && <BrandSpinner />}
           {widthdrawTokensState.status === 'Success' && (
             <div className={classes.transactionStatus}>
@@ -103,6 +116,12 @@ const StreamWidthdrawModalOverlay: React.FC<{
     );
   }
 
+  const humanUnitsStreamRemaningBalance = parseFloat(
+    isUSDC
+      ? contract2humanUSDCFormat(withdrawableBalance?.toString() ?? '')
+      : ethers.utils.formatUnits(withdrawableBalance?.toString() ?? '').toString(),
+  );
+
   return (
     <>
       <ModalTitle>
@@ -123,8 +142,8 @@ const StreamWidthdrawModalOverlay: React.FC<{
         }}
       >
         {isUSDC
-          ? contract2humanUSDCFormat(streamRemaningBalance?.toString() ?? '')
-          : ethers.utils.formatUnits(streamRemaningBalance?.toString() ?? '').toString()}{' '}
+          ? contract2humanUSDCFormat(withdrawableBalance?.toString() ?? '')
+          : ethers.utils.formatUnits(withdrawableBalance?.toString() ?? '').toString()}{' '}
         {unitForDisplay}
       </h1>
 
@@ -143,7 +162,7 @@ const StreamWidthdrawModalOverlay: React.FC<{
       >
         {isUSDC
           ? contract2humanUSDCFormat(streamedSoFar?.toString() ?? '')
-          : ethers.utils.formatUnits(streamedSoFar?.toString() ?? '').toString()}{' '}
+          : ethers.utils.formatUnits(streamedSoFar).toString()}{' '}
         {unitForDisplay}
       </h1>
 
@@ -179,7 +198,7 @@ const StreamWidthdrawModalOverlay: React.FC<{
             setWidthdrawAmount(parseInt(e.value));
           }}
           placeholder={isUSDC ? '0 USDC' : '0 WETH'}
-          isInvalid={widthdrawAmount > streamRemaningBalance.toNumber()}
+          isInvalid={widthdrawAmount > humanUnitsStreamRemaningBalance}
         />
         {/* Hover brightness */}
         <div
@@ -195,8 +214,8 @@ const StreamWidthdrawModalOverlay: React.FC<{
             setWidthdrawAmount(
               parseFloat(
                 isUSDC
-                  ? contract2humanUSDCFormat(streamRemaningBalance?.toString() ?? '')
-                  : ethers.utils.formatUnits(streamRemaningBalance?.toString() ?? '').toString(),
+                  ? contract2humanUSDCFormat(withdrawableBalance?.toString() ?? '')
+                  : ethers.utils.formatUnits(withdrawableBalance?.toString() ?? '').toString(),
               ),
             )
           }
@@ -217,7 +236,7 @@ const StreamWidthdrawModalOverlay: React.FC<{
               : utils.parseEther(widthdrawAmount.toString()).toString(),
           );
         }}
-        isNextBtnDisabled={streamRemaningBalance && streamRemaningBalance.toNumber() === 0}
+        isNextBtnDisabled={withdrawableBalance && humanUnitsStreamRemaningBalance === 0}
       />
       <div
         style={{
