@@ -21,6 +21,7 @@ import StartOrEndTime from '../StartOrEndTime';
 import { currentUnixEpoch } from '../../utils/timeUtils';
 import { formatTokenAmmount } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
 import { SupportedCurrency } from '../ProposalActionsModal/steps/TransferFundsDetailsStep';
+import ModalLabel from '../ModalLabel';
 
 dayjs.extend(relativeTime);
 
@@ -79,12 +80,7 @@ const StreamWidthdrawModalOverlay: React.FC<{
         <ModalTitle>
           <Trans>Withdraw from Stream</Trans>
         </ModalTitle>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-          }}
-        >
+        <div className={classes.center}>
           {(widthdrawTokensState.status === 'Mining' ||
             !withdrawableBalance ||
             widthdrawTokensState.status === 'PendingSignature') && <BrandSpinner />}
@@ -100,12 +96,12 @@ const StreamWidthdrawModalOverlay: React.FC<{
           {(widthdrawTokensState.status === 'Exception' ||
             widthdrawTokensState.status === 'Fail') && (
             <div className={classes.transactionStatus}>
-              <p className={classes.voteFailureTitle}>
+              <p className={classes.txnFailureTitle}>
                 <Trans>There was an error withdrawing to your wallet.</Trans>
               </p>
-              <div className={classes.voteFailureBody}>
+              <div className={classes.txnFailureBody}>
                 Error:{' '}
-                <span className={classes.voteFailureErrorMessage}>
+                <span className={classes.txnFailureErrorMessage}>
                   {widthdrawTokensState.errorMessage}
                 </span>
               </div>
@@ -128,69 +124,36 @@ const StreamWidthdrawModalOverlay: React.FC<{
         <Trans>Withdraw from Stream</Trans>
       </ModalTitle>
 
-      <span
-        style={{
-          opacity: '0.5',
-          fontWeight: 'bold',
-        }}
-      >
-        Avilable to withdraw
-      </span>
-      <h1
-        style={{
-          fontWeight: 'bold',
-        }}
-      >
+      <ModalLabel>
+        <Trans>Avilable to withdraw</Trans>
+      </ModalLabel>
+      <h1 className={classes.bold}>
         {isUSDC
           ? contract2humanUSDCFormat(withdrawableBalance?.toString() ?? '')
           : ethers.utils.formatUnits(withdrawableBalance?.toString() ?? '').toString()}{' '}
         {unitForDisplay}
       </h1>
 
-      <span
-        style={{
-          opacity: '0.5',
-          fontWeight: 'bold',
-        }}
-      >
-        Streamed so far
-      </span>
-      <h1
-        style={{
-          fontWeight: 'bold',
-        }}
-      >
+      <ModalLabel>
+        <Trans>Streamed so far</Trans>
+      </ModalLabel>
+      <h1 className={classes.bold}>
         {isUSDC
           ? parseFloat(contract2humanUSDCFormat(streamedSoFar?.toString() ?? '')).toFixed(2)
           : parseFloat(ethers.utils.formatUnits(streamedSoFar).toString()).toFixed(2)}{' '}
         {unitForDisplay}
       </h1>
 
-      <span
-        style={{
-          opacity: '0.5',
-          fontWeight: 'bold',
-        }}
-      >
-        Total stream value
-      </span>
-      <h1
-        style={{
-          fontWeight: 'bold',
-        }}
-      >
+      <ModalLabel>Total stream value</ModalLabel>
+
+      <h1 className={classes.bold}>
         {isUSDC
           ? contract2humanUSDCFormat(streamAmount)
           : ethers.utils.formatUnits(streamAmount.toString()).toString()}{' '}
         {unitForDisplay}
       </h1>
 
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'flex-end',
-        }}
-      >
+      <div className={classes.amtEntryWrapper}>
         <BrandNumericEntry
           label={'Widthdraw amount'}
           value={widthdrawAmount}
@@ -203,14 +166,7 @@ const StreamWidthdrawModalOverlay: React.FC<{
         />
         {/* Hover brightness */}
         <div
-          style={{
-            position: 'absolute',
-            right: '40px',
-            top: '68%',
-            fontSize: '18px',
-            fontWeight: 'bold',
-            cursor: 'pointer',
-          }}
+          className={classes.amtEntryMax}
           onClick={() =>
             setWidthdrawAmount(
               parseFloat(
@@ -246,16 +202,7 @@ const StreamWidthdrawModalOverlay: React.FC<{
         }}
         isNextBtnDisabled={withdrawableBalance && humanUnitsStreamRemaningBalance === 0}
       />
-      <div
-        style={{
-          opacity: '0.5',
-          fontWeight: 'bold',
-          marginBottom: '1rem',
-          marginTop: '1rem',
-          display: 'flex',
-          justifyContent: 'center',
-        }}
-      >
+      <div className={classes.streamTimeWrapper}>
         Stream <StartOrEndTime startTime={startTime} endTime={endTime} />
       </div>
     </>
