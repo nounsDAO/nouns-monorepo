@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 
 export const currentUnixEpoch = () => {
-  return new Date().getTime() / 1000;
+  return Math.floor(new Date().getTime() / 1000);
 };
 
 /**

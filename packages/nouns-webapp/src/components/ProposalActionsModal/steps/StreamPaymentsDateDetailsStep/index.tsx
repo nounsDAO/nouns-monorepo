@@ -58,8 +58,8 @@ const StreamPaymentDateDetailsStep: React.FC<ProposalActionModalStepProps> = pro
             ...x,
             // streamStartTimestamp: startTimestamp,
             // streamEndTimestamp: endTimestamp,
-            streamStartTimestamp: 1671917719,
-            streamEndTimestamp: 1671917719 + 60 * 10,
+            streamStartTimestamp: currentUnixEpoch() + 20 * 60,
+            streamEndTimestamp: currentUnixEpoch() + 60 * 25,
           }));
           onNextBtnClick();
         }}

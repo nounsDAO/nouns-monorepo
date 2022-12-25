@@ -16,14 +16,18 @@ export const useStreamRemaningBalance = (streamAddress: string, userAddress: str
   return balance;
 };
 
-export const useStreamRatePerSecond = (streamAddress: string) => {
+export const useStreamRatePerSecond = (streamAddress: string, scaling?: number) => {
   const [rps] = useContractCall<[BigNumber]>({
     abi,
     address: streamAddress,
     method: 'ratePerSecond',
     args: [],
   }) || [BigNumber.from(0)];
-  return rps;
+
+  if (!scaling) {
+    return rps;
+  }
+  return rps.div(BigNumber.from(scaling));
 };
 
 export const useWithdrawTokens = (streamAddress: string) => {

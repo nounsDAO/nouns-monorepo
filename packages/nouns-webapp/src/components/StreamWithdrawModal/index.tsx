@@ -19,6 +19,8 @@ import BrandNumericEntry from '../BrandNumericEntry';
 import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
 import StartOrEndTime from '../StartOrEndTime';
 import { currentUnixEpoch } from '../../utils/timeUtils';
+import { formatTokenAmmount } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
+import { SupportedCurrency } from '../ProposalActionsModal/steps/TransferFundsDetailsStep';
 
 dayjs.extend(relativeTime);
 
@@ -51,9 +53,9 @@ const StreamWidthdrawModalOverlay: React.FC<{
   const { widthdrawTokens, widthdrawTokensState } = useWithdrawTokens(streamAddress ?? '');
   const [widthdrawAmount, setWidthdrawAmount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
-  const streamRatePerSecond = useStreamRatePerSecond(streamAddress ?? '') ?? 0;
+  const streamRatePerSecond = useStreamRatePerSecond(streamAddress ?? '', 1_000_000) ?? 0;
 
-  const [streamedSoFar, setStreamedSoFar] = useState<BigNumber | string>(BigNumber.from(0));
+  const [streamedSoFar, setStreamedSoFar] = useState<BigNumber | string | null>(null);
   useEffect(() => {
     setTimeout(() => {
       if (currentUnixEpoch() > endTime) {
@@ -63,13 +65,15 @@ const StreamWidthdrawModalOverlay: React.FC<{
 
       setStreamedSoFar(
         streamRatePerSecond && Math.floor(Date.now() / 1000) - startTime > 0
-          ? streamRatePerSecond.mul(BigNumber.from(Math.floor(Date.now() / 1000) - startTime))
+          ? streamRatePerSecond
+              .mul(BigNumber.from(Math.floor(Date.now() / 1000) - startTime))
+              .toString()
           : BigNumber.from(0),
       );
     }, 1000);
   }, [endTime, startTime, streamAmount, streamRatePerSecond, streamedSoFar]);
 
-  if (!withdrawableBalance || isLoading) {
+  if (!withdrawableBalance || isLoading || streamedSoFar === null) {
     return (
       <>
         <ModalTitle>
@@ -88,11 +92,7 @@ const StreamWidthdrawModalOverlay: React.FC<{
             <div className={classes.transactionStatus}>
               <p>
                 <Trans>
-                  You've successfully withrawn{' '}
-                  {isUSDC
-                    ? contract2humanUSDCFormat(widthdrawAmount.toString())
-                    : ethers.utils.formatUnits(widthdrawAmount.toString()).toString()}{' '}
-                  {unitForDisplay} to your wallet
+                  You've successfully withdrawn {widthdrawAmount} {unitForDisplay} to your wallet
                 </Trans>
               </p>
             </div>
@@ -161,8 +161,8 @@ const StreamWidthdrawModalOverlay: React.FC<{
         }}
       >
         {isUSDC
-          ? contract2humanUSDCFormat(streamedSoFar?.toString() ?? '')
-          : ethers.utils.formatUnits(streamedSoFar).toString()}{' '}
+          ? parseFloat(contract2humanUSDCFormat(streamedSoFar?.toString() ?? '')).toFixed(2)
+          : parseFloat(ethers.utils.formatUnits(streamedSoFar).toString()).toFixed(2)}{' '}
         {unitForDisplay}
       </h1>
 
@@ -195,7 +195,8 @@ const StreamWidthdrawModalOverlay: React.FC<{
           label={'Widthdraw amount'}
           value={widthdrawAmount}
           onValueChange={e => {
-            setWidthdrawAmount(parseInt(e.value));
+            console.log(e);
+            setWidthdrawAmount(e.floatValue ?? 0);
           }}
           placeholder={isUSDC ? '0 USDC' : '0 WETH'}
           isInvalid={widthdrawAmount > humanUnitsStreamRemaningBalance}
@@ -230,10 +231,17 @@ const StreamWidthdrawModalOverlay: React.FC<{
         nextBtnText={<Trans>Widthdraw</Trans>}
         onNextBtnClick={async () => {
           setIsLoading(true);
+          console.log(
+            formatTokenAmmount(
+              widthdrawAmount.toString(),
+              isUSDC ? SupportedCurrency.USDC : SupportedCurrency.WETH,
+            ),
+          );
           widthdrawTokens(
-            isUSDC
-              ? human2ContractUSDCFormat(widthdrawAmount.toString())
-              : utils.parseEther(widthdrawAmount.toString()).toString(),
+            formatTokenAmmount(
+              widthdrawAmount.toString(),
+              isUSDC ? SupportedCurrency.USDC : SupportedCurrency.WETH,
+            ),
           );
         }}
         isNextBtnDisabled={withdrawableBalance && humanUnitsStreamRemaningBalance === 0}

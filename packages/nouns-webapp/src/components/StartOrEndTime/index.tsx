@@ -10,11 +10,13 @@ const getCountdownCopy = (startTime: number, endTime: number) => {
 
   const now = dayjs();
 
-  if (startDate?.isBefore(now) && endDate?.isAfter(now)) {
-    return <Trans>ends {endDate.fromNow()}</Trans>;
+  if (now?.isBefore(startDate)) {
+    return <Trans>starts {endDate.fromNow()}</Trans>;
+  } else if (now?.isBefore(endDate)) {
+    return <Trans>ends {dayjs(endDate).fromNow()}</Trans>;
+  } else {
+    return <Trans>ended {dayjs(endDate).fromNow()}</Trans>;
   }
-
-  return <Trans>starts {dayjs(startDate).fromNow()}</Trans>;
 };
 
 export interface StartOrEndTimeProps {
