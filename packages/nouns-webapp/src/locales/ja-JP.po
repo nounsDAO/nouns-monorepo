@@ -228,6 +228,10 @@ msgstr "Nounオークションの収益の100%がNouns DAOに送られるため�
 msgid "Because this proposal contains a USDC fund transfer action we've added an additional ETH transaction to refill the TokenBuyer contract. This action allows to DAO to continue to trustlessly acquire USDC to fund proposals like this."
 msgstr ""
 
+#: src/components/NounsIntroSection/index.tsx
+msgid "Behold, an infinite work of art! From collectors, technologists and builders, to non-profits and brands, Nouns has something for everyone. Watch the video to learn more."
+msgstr ""
+
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 msgid "Bid"
@@ -303,6 +307,10 @@ msgstr "WalletConnect データを消去"
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 msgid "Close"
 msgstr "近い"
+
+#: src/components/NounsIntroSection/index.tsx
+msgid "Collect it"
+msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "Compound Governance"
@@ -616,6 +624,10 @@ msgstr "詳細はこちら"
 msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
 msgstr "詳しくは以下をご覧ください。また、{playgroundLink} を使いNounsのオフチェーンの作成をすることもできます。"
 
+#: src/components/NounsIntroSection/index.tsx
+msgid "Like this video?"
+msgstr ""
+
 #: src/components/NounInfoRowHolder/index.tsx
 msgid "Loading..."
 msgstr "ロード中..."
@@ -767,6 +779,10 @@ msgstr "1体のNounにつき、1票の投票件を得ることができます。
 #: src/components/Documentation/index.tsx
 msgid "One Noun is trustlessly auctioned every 24 hours, forever."
 msgstr "Nounsは24時間ごとに1体ずつ、第三者の介入無しでオークションに出され続けます。"
+
+#: src/components/NounsIntroSection/index.tsx
+msgid "One Noun, Every Day, Forever."
+msgstr ""
 
 #: src/pages/Playground/index.tsx
 msgid "Only 32x32 PNG images are accepted"
