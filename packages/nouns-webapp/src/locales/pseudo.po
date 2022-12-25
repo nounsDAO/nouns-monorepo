@@ -220,6 +220,10 @@ msgstr ""
 msgid "Auction ends in"
 msgstr ""
 
+#: src/components/StreamWithdrawModal/index.tsx
+msgid "Avilable to withdraw"
+msgstr ""
+
 #: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallSelectFunctionStep/index.tsx
@@ -978,6 +982,10 @@ msgstr ""
 msgid "Stream"
 msgstr ""
 
+#: src/components/StreamWithdrawModal/index.tsx
+msgid "Streamed so far"
+msgstr ""
+
 #: src/components/ProposalActionsModal/steps/StreamPaymentsDateDetailsStep/index.tsx
 msgid "Streams start and end at 00:00 UTC on selected dates."
 msgstr ""
@@ -1385,8 +1393,12 @@ msgid "You've successfully voted on on prop {0}"
 msgstr ""
 
 #: src/components/StreamWithdrawModal/index.tsx
-msgid "You've successfully withrawn {0} {unitForDisplay} to your wallet"
+msgid "You've successfully withdrawn {widthdrawAmount} {unitForDisplay} to your wallet"
 msgstr ""
+
+#: src/components/StreamWithdrawModal/index.tsx
+#~ msgid "You've successfully withrawn {0} {unitForDisplay} to your wallet"
+#~ msgstr ""
 
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Your <0>{availableVotes}</0> votes are being delegated to a new account."
@@ -1418,6 +1430,10 @@ msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "bodies (30)"
+msgstr ""
+
+#: src/components/StartOrEndTime/index.tsx
+msgid "ended {0}"
 msgstr ""
 
 #: src/components/StartOrEndTime/index.tsx
