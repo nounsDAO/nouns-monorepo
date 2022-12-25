@@ -5,8 +5,8 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { Trans } from '@lingui/macro';
 import ModalTitle from '../ModalTitle';
 import config from '../../config';
-import { contract2humanUSDCFormat, human2ContractUSDCFormat } from '../../utils/usdcUtils';
-import { BigNumber, ethers, utils } from 'ethers';
+import { contract2humanUSDCFormat } from '../../utils/usdcUtils';
+import { BigNumber, ethers } from 'ethers';
 import { useEthers } from '@usedapp/core/dist/cjs/src';
 import {
   useStreamRatePerSecond,
