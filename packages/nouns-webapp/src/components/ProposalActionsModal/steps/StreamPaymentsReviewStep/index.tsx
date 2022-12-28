@@ -51,9 +51,7 @@ const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props =
       <ModalLabel>
         <Trans>To</Trans>
       </ModalLabel>
-      <ModalTextPrimary>
-        {state.address}
-      </ModalTextPrimary>
+      <ModalTextPrimary>{state.address}</ModalTextPrimary>
 
       <ModalLabel>
         <Trans>Starting on</Trans>
