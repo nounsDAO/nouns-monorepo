@@ -129,8 +129,8 @@ const StreamWidthdrawModalOverlay: React.FC<{
       </ModalLabel>
       <h1 className={classes.bold}>
         {isUSDC
-          ? contract2humanUSDCFormat(withdrawableBalance?.toString() ?? '')
-          : ethers.utils.formatUnits(withdrawableBalance?.toString() ?? '').toString()}{' '}
+          ? parseFloat(contract2humanUSDCFormat(withdrawableBalance?.toString() ?? '')).toFixed(2)
+          : parseFloat(ethers.utils.formatUnits(withdrawableBalance?.toString() ?? '').toString()).toFixed(2)}{' '}
         {unitForDisplay}
       </h1>
 

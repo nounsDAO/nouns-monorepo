@@ -52,7 +52,7 @@ const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props =
         <Trans>To</Trans>
       </ModalLabel>
       <ModalTextPrimary>
-        <ShortAddress address={state.address} />
+        {state.address}
       </ModalTextPrimary>
 
       <ModalLabel>
