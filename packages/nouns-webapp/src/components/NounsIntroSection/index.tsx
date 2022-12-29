@@ -17,9 +17,9 @@ const NounsIntroSection = () => {
             </h1>
             <p>
               <Trans>
-                Behold, an infinite work of art! From collectors, technologists and builders, to
-                non-profits and brands, Nouns has something for everyone. Watch the video to learn
-                more.
+                Behold, an infinite work of art! Nouns is a community-owned brand that makes a
+                positive impact by funding ideas and fostering collaboration. From collectors
+                and technologists, to non-profits and brands, Nouns is for everyone.
               </Trans>
               <br />
               <Trans>Like this video?</Trans>
