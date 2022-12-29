@@ -51,7 +51,7 @@ const NounsIntroSection = () => {
           </small>
         </Col>
       </Section>
-      <Section fullWidth={false}>
+      <Section style={{ padding: 0 }} fullWidth={false}>
         <Col lg={6} className={classes.iosImgContainer}>
           <img src={nounsIosGif} className={classes.iosImg} alt="nouns ios" />
         </Col>
