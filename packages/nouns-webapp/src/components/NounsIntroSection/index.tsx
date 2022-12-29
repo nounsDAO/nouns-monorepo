@@ -58,7 +58,7 @@ const NounsIntroSection = () => {
         <Col lg={6}>
           <div className={classes.textWrapper}>
             <h1>
-              <Trans>Download the free iOS app</Trans>
+              <Trans>Download the Free iOS App</Trans>
             </h1>
             <p>
               <Trans>
