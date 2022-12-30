@@ -59,6 +59,22 @@
   padding: 0;
 }
 
+.iosImgContainer {
+  padding: 0;
+  position: relative;
+}
+
+.iosImg {
+  max-width: 100%;
+  height: 35rem;
+  bottom: 0;
+}
+
+.dlFromAppStoreImg {
+  margin-top: 2rem;
+  width: 10rem;
+}
+
 @media (max-width: 992px) {
   .textWrapper {
     padding: 2rem;
@@ -88,5 +104,8 @@
 @media (max-width: 576px) {
   .videoSubtitle {
     bottom: -50px;
+  }
+  .iosImgContainer {
+    display: none;
   }
 }
