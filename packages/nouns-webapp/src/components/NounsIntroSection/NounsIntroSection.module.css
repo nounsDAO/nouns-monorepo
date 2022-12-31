@@ -83,6 +83,30 @@
   width: 10rem;
 }
 
+.lensesVideoContainer {
+  padding: 0;
+  position: relative;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+  margin-left: 40px;
+  max-width: 360px;
+  height: 35rem;
+}
+
+.lensesVideo {
+  height: 100%;
+  width: 100%;
+  border-radius: inherit;
+  background-size: cover;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
+
+.socialPlatformLogo {
+  margin-top: 2rem;
+}
+
 @media (max-width: 992px) {
   .videoSection {
     padding: 0 !important;
