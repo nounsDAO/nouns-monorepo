@@ -35,7 +35,7 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
     />
   );
   return (
-    <Section fullWidth={false} style={{ background: props.backgroundColor, padding: '4rem 0' }}>
+    <Section fullWidth={false} className={classes.documentationSection} style={{ background: props.backgroundColor }}>
       <Col lg={{ span: 10, offset: 1 }}>
         <div className={classes.headerWrapper}>
           <h1>

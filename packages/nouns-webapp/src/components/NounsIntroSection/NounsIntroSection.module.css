@@ -1,3 +1,11 @@
+.videoSection {
+  padding: 4rem 0 !important;
+}
+
+.iosSection {
+  padding: 0 !important;
+}
+
 .textWrapper {
   padding-right: 2rem;
 }
@@ -59,7 +67,31 @@
   padding: 0;
 }
 
+.iosImgContainer {
+  padding: 0;
+  position: relative;
+}
+
+.iosImg {
+  max-width: 100%;
+  height: 35rem;
+  bottom: 0;
+}
+
+.dlFromAppStoreImg {
+  margin-top: 2rem;
+  width: 10rem;
+}
+
 @media (max-width: 992px) {
+  .videoSection {
+    padding: 0 !important;
+  }
+
+  .iosSection {
+    padding-bottom: 2rem;
+  }
+
   .textWrapper {
     padding: 2rem;
   }
@@ -82,6 +114,10 @@
     top: unset;
     bottom: -40px;
     padding: 0 2.5rem;
+  }
+
+  .iosImgContainer {
+    display: none;
   }
 }
 
