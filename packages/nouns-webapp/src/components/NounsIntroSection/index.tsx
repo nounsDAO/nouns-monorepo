@@ -75,7 +75,7 @@ const NounsIntroSection = () => {
           as={Col}
           lg={6}
           style={{ paddingLeft: '2rem', height: '35rem' }}
-          interval={4000}
+          interval={5500}
           variant="dark"
           controls={false}
           onSlide={index => setCarouselIndex(index)}
@@ -113,7 +113,8 @@ const NounsIntroSection = () => {
               <p>
                 <Trans>
                   Add whimsy to your videos by putting on a pair of Nouns glasses or completely
-                  transform yourself into a quirky and playful Noun with an AR filters.
+                  transform yourself into a quirky and playful Noun with AR filters. Available for
+                  TikTok, Snapchat, and Instagram.
                 </Trans>
                 <br />
                 <a
