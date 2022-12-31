@@ -1,3 +1,11 @@
+.videoSection {
+  padding: 4rem 0 !important;
+}
+
+.iosSection {
+  padding: 0 !important;
+}
+
 .textWrapper {
   padding-right: 2rem;
 }
@@ -76,6 +84,14 @@
 }
 
 @media (max-width: 992px) {
+  .videoSection {
+    padding: 0 !important;
+  }
+
+  .iosSection {
+    padding-bottom: 2rem;
+  }
+
   .textWrapper {
     padding: 2rem;
   }
@@ -99,13 +115,14 @@
     bottom: -40px;
     padding: 0 2.5rem;
   }
+
+  .iosImgContainer {
+    display: none;
+  }
 }
 
 @media (max-width: 576px) {
   .videoSubtitle {
     bottom: -50px;
-  }
-  .iosImgContainer {
-    display: none;
   }
 }

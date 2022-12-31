@@ -9,7 +9,7 @@ import dlFromAppStoreImg from '../../assets/download-on-app-store.svg';
 const NounsIntroSection = () => {
   return (
     <>
-      <Section fullWidth={false} style={{ padding: '4rem 0' }}>
+      <Section fullWidth={false} className={classes.videoSection}>
         <Col lg={6}>
           <div className={classes.textWrapper}>
             <h1>
@@ -51,7 +51,7 @@ const NounsIntroSection = () => {
           </small>
         </Col>
       </Section>
-      <Section style={{ padding: 0 }} fullWidth={false}>
+      <Section fullWidth={false} className={classes.iosSection}>
         <Col lg={6} className={classes.iosImgContainer}>
           <img src={nounsIosGif} className={classes.iosImg} alt="nouns ios" />
         </Col>
