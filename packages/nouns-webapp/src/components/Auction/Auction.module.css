@@ -32,7 +32,6 @@
 @media (max-width: 568px) {
   .auctionActivityCol {
     width: 100%;
-    min-height: unset;
     margin-left: unset;
     margin-right: unset;
     padding-top: 2rem;
