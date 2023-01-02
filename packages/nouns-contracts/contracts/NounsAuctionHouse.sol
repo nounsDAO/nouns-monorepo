@@ -51,6 +51,9 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
     // The duration of a single auction
     uint256 public duration;
 
+    // The address of the Govenor Bravo executor address
+    address public executorAddress;
+
     // The active auction
     INounsAuctionHouse.Auction public auction;
 
@@ -65,7 +68,8 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
         uint256 _timeBuffer,
         uint256 _reservePrice,
         uint8 _minBidIncrementPercentage,
-        uint256 _duration
+        uint256 _duration,
+        address _executorAddress
     ) external initializer {
         __Pausable_init();
         __ReentrancyGuard_init();
@@ -79,6 +83,16 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
         reservePrice = _reservePrice;
         minBidIncrementPercentage = _minBidIncrementPercentage;
         duration = _duration;
+        executorAddress = _executorAddress;
+    }
+
+    modifier onlyBravoOrOwner() {
+        checkBravoOrOwner ();
+        _;
+    }
+    
+    function checkBravoOrOwner() internal view virtual {
+        require(msg.sender == owner() || msg.sender == executorAddress, "Caller is not bravo or owner");
     }
 
     /**
@@ -141,7 +155,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      * contract is unpaused. While no new auctions can be started when paused,
      * anyone can settle an ongoing auction.
      */
-    function pause() external override onlyOwner {
+    function pause() external override onlyBravoOrOwner {
         _pause();
     }
 
@@ -150,7 +164,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      * @dev This function can only be called by the owner when the
      * contract is paused. If required, this function will start a new auction.
      */
-    function unpause() external override onlyOwner {
+    function unpause() external override onlyBravoOrOwner {
         _unpause();
 
         if (auction.startTime == 0 || auction.settled) {
@@ -162,7 +176,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      * @notice Set the auction time buffer.
      * @dev Only callable by the owner.
      */
-    function setTimeBuffer(uint256 _timeBuffer) external override onlyOwner {
+    function setTimeBuffer(uint256 _timeBuffer) external override onlyBravoOrOwner{
         timeBuffer = _timeBuffer;
 
         emit AuctionTimeBufferUpdated(_timeBuffer);
@@ -172,7 +186,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      * @notice Set the auction reserve price.
      * @dev Only callable by the owner.
      */
-    function setReservePrice(uint256 _reservePrice) external override onlyOwner {
+    function setReservePrice(uint256 _reservePrice) external override onlyBravoOrOwner {
         reservePrice = _reservePrice;
 
         emit AuctionReservePriceUpdated(_reservePrice);
@@ -182,7 +196,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      * @notice Set the auction minimum bid increment percentage.
      * @dev Only callable by the owner.
      */
-    function setMinBidIncrementPercentage(uint8 _minBidIncrementPercentage) external override onlyOwner {
+    function setMinBidIncrementPercentage(uint8 _minBidIncrementPercentage) external override onlyBravoOrOwner{
         minBidIncrementPercentage = _minBidIncrementPercentage;
 
         emit AuctionMinBidIncrementPercentageUpdated(_minBidIncrementPercentage);
@@ -192,7 +206,7 @@ contract NounsAuctionHouse is INounsAuctionHouse, PausableUpgradeable, Reentranc
      * @notice Set the duration of an auction.
      * @dev Only callable by the owner.
      */
-    function setDuration(uint256 _duration) external override onlyOwner {
+    function setDuration(uint256 _duration) external override onlyBravoOrOwner {
         duration = _duration;
 
         emit AuctionDurationUpdated(_duration);

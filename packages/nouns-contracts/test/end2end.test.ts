@@ -100,6 +100,7 @@ async function deploy() {
     RESERVE_PRICE,
     MIN_INCREMENT_BID_PERCENTAGE,
     DURATION,
+    deployer.address
   ]);
 
   // 2b. CAST proxy as AuctionHouse

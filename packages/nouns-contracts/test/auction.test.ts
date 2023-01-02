@@ -23,6 +23,7 @@ describe('NounsAuctionHouse', () => {
   let noundersDAO: SignerWithAddress;
   let bidderA: SignerWithAddress;
   let bidderB: SignerWithAddress;
+  let executor: SignerWithAddress;
   let snapshotId: number;
 
   const TIME_BUFFER = 15 * 60;
@@ -39,12 +40,12 @@ describe('NounsAuctionHouse', () => {
       RESERVE_PRICE,
       MIN_INCREMENT_BID_PERCENTAGE,
       DURATION,
+      executor.address
     ]) as Promise<NounsAuctionHouse>;
   }
 
   before(async () => {
-    [deployer, noundersDAO, bidderA, bidderB] = await ethers.getSigners();
-
+    [deployer, noundersDAO, bidderA, bidderB, executor] = await ethers.getSigners();
     nounsToken = await deployNounsToken(deployer, noundersDAO.address, deployer.address);
     weth = await deployWeth(deployer);
     nounsAuctionHouse = await deploy(deployer);
@@ -72,6 +73,7 @@ describe('NounsAuctionHouse', () => {
       RESERVE_PRICE,
       MIN_INCREMENT_BID_PERCENTAGE,
       DURATION,
+      executor.address,
     );
     await expect(tx).to.be.revertedWith('Initializable: contract is already initialized');
   });
@@ -324,5 +326,16 @@ describe('NounsAuctionHouse', () => {
     await expect(tx)
       .to.emit(nounsAuctionHouse, 'AuctionSettled')
       .withArgs(nounId, '0x0000000000000000000000000000000000000000', 0);
+  });
+
+  it('should set the duration of an auction', async () => {
+    await (await nounsAuctionHouse.unpause()).wait();
+    await (await nounsAuctionHouse.setDuration(60 * 60 * 25)) // sets duration to 25 hours
+    let newDuration = await nounsAuctionHouse.duration();
+    await expect(newDuration).to.be.equal(60 * 60 * 25)
+
+    await nounsAuctionHouse.connect(executor).setDuration(60 * 60 * 26) // sets duration to 26 hours
+    newDuration = await nounsAuctionHouse.duration();
+    await expect(newDuration).to.be.equal(60 * 60 * 26)
   });
 });
