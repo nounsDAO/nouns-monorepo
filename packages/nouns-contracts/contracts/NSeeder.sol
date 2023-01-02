@@ -41,7 +41,10 @@ contract NSeeder is ISeeder, Ownable {
         uint256 pseudorandomness = uint256(
             keccak256(abi.encodePacked(blockhash(block.number - 1), punkId))
         );
+        return generateSeedFromNumber(pseudorandomness);
+    }
 
+    function generateSeedFromNumber(uint256 pseudorandomness) public view returns (ISeeder.Seed memory) {
         Seed memory seed;
         uint256 tmp;
 

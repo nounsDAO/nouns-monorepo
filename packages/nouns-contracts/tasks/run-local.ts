@@ -1,5 +1,6 @@
 import { TASK_COMPILE, TASK_NODE } from 'hardhat/builtin-tasks/task-names';
 import { task } from 'hardhat/config';
+import probDoc from '../../nouns-assets/src/config/probability.json'
 
 task(
   'run-local',
@@ -15,11 +16,13 @@ task(
     nftDescriptor: contracts.NFTDescriptorV2.instance.address,
     nDescriptor: contracts.NDescriptorV2.instance.address,
   });
+    // Populate the on-chain seeder
+  await run('populate-seeder', { nSeeder: contracts.NSeeder.instance, probDoc });
 
   await contracts.NAuctionHouse.instance
     .attach(contracts.NAuctionHouseProxy.instance.address)
     .unpause({
-      gasLimit: 1_000_000,
+      gasLimit: 10_000_000,
     });
 
   // Transfer ownership
