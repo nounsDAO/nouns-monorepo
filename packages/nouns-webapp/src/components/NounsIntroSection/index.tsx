@@ -139,8 +139,8 @@ const NounsIntroSection = () => {
               </h1>
               <p>
                 <Trans>
-                  Add whimsy to your videos with Nouns glasses or transform yourself into a Noun
-                  using these custom AR lenses.
+                  Try on a pair of Nouns glasses or transform yourself into a Noun with these
+                  expressive AR lenses.
                 </Trans>
                 <br />
                 <a
