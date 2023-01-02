@@ -9,22 +9,43 @@ import tiktokImg from '../../assets/tiktok.png';
 import snapchatImg from '../../assets/snapchat.png';
 import instagramImg from '../../assets/instagram.png';
 import facebookImg from '../../assets/facebook.png';
+import arFrogStill from '../../assets/nouns-ar-frog.png';
+import arNogglesStill from '../../assets/nouns-ar-noggles.png';
 import Carousel from 'react-bootstrap/Carousel';
-import { useState } from 'react';
+import Fade from 'react-bootstrap/Fade';
+import { useState, useEffect } from 'react';
 
-const CarouselImages = [
-  <img src={nounsIosGif} className={classes.iosImg} alt="nouns ios" />,
-  <div className={classes.lensesVideoContainer}>
-    <video autoPlay loop muted className={classes.lensesVideo}>
-      <source
-        src="https://community-lens.storage.googleapis.com/preview-media/final/de17e9c7-cbef-47bb-b4cf-76a7dd70d2bc.mp4"
-        type="video/mp4"
-      />
-    </video>
-  </div>,
-];
 const NounsIntroSection = () => {
+  const fadeTimeout = 300;
+  // Track which carousel items is displayed
   const [carouselIndex, setCarouselIndex] = useState(0);
+  // Fade in carousel item as it enters; Fade out carousel item as it leaves
+  const [fadeIn, setFadeIn] = useState([true, false]);
+  // Swap between still and video for AR examples
+  const [showARVideo, setShowARVideo] = useState(1);
+  const arExamples = [
+    ['https://imgur.com/dq8BsTw.jpeg', arFrogStill],
+    ['https://imgur.com/R60fKbf.jpeg', arNogglesStill],
+  ];
+
+  const CarouselItems = [
+    <Fade in={fadeIn[0]} timeout={fadeTimeout}>
+      <img src={nounsIosGif} className={classes.iosImg} alt="nouns ios" />
+    </Fade>,
+    <Fade in={fadeIn[1]} timeout={fadeTimeout}>
+      <div className={classes.lensesImage}>
+        <img src={arExamples[0][1 - showARVideo]} alt="nouns ar frog head" />
+        <img src={arExamples[1][showARVideo]} alt="nouns ar glasses" />
+        <img src={arExamples[0][0]} alt="nouns ar frog head" />
+      </div>
+    </Fade>,
+  ];
+  // alternate AR examples between still and video every 4s
+  useEffect(() => {
+    const id = setInterval(() => setShowARVideo(prev => 1 - prev), 4000);
+    return () => clearInterval(id);
+  }, []);
+
   return (
     <>
       <Section fullWidth={false} className={classes.videoSection}>
@@ -70,15 +91,21 @@ const NounsIntroSection = () => {
         </Col>
       </Section>
       <Section fullWidth={false}>
-        <Col lg={6}>{CarouselImages[carouselIndex]}</Col>
+        <Col lg={6} className={classes.carouselImages}>
+          {CarouselItems[carouselIndex]}
+        </Col>
         <Carousel
+          // activeIndex={1}
           as={Col}
           lg={6}
-          style={{ paddingLeft: '2rem', height: '35rem' }}
+          className={classes.carouselText}
           interval={5500}
           variant="dark"
           controls={false}
-          onSlide={index => setCarouselIndex(index)}
+          onSlide={index => {
+            setFadeIn(prev => (index === 0 ? [true, false] : [false, true]));
+            setTimeout(() => setCarouselIndex(index), fadeTimeout);
+          }}
         >
           <Carousel.Item>
             <div className={classes.textWrapper}>
@@ -108,13 +135,12 @@ const NounsIntroSection = () => {
           <Carousel.Item>
             <div className={classes.textWrapper} style={{ paddingLeft: '0rem' }}>
               <h1>
-                <Trans>You, but Nounish</Trans>
+                <Trans>Nouns AR Lenses</Trans>
               </h1>
               <p>
                 <Trans>
-                  Add whimsy to your videos by putting on a pair of Nouns glasses or completely
-                  transform yourself into a quirky and playful Noun with AR filters. Available for
-                  TikTok, Snapchat, and Instagram.
+                  Add whimsy to your videos with Nouns glasses or transform yourself into a Noun
+                  using these custom AR lenses.
                 </Trans>
                 <br />
                 <a
@@ -129,7 +155,7 @@ const NounsIntroSection = () => {
                   />
                 </a>
                 <a
-                  href="https://lens.snapchat.com/d1507087c8f5479f89a73464805f76cb"
+                  href="https://lensstudio.snapchat.com/creator/6y_fgP0Vr6RqaJt3jIJLRw"
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -168,6 +194,6 @@ const NounsIntroSection = () => {
       </Section>
     </>
   );
-};
+};;
 
 export default NounsIntroSection;

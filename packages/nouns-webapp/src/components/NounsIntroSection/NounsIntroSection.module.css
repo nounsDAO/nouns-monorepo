@@ -67,9 +67,12 @@
   padding: 0;
 }
 
-.iosImgContainer {
-  padding: 0;
-  position: relative;
+.carouselImages{
+  height: 35rem;
+}
+.carouselText {
+  padding-left: 2rem;
+  height: 35rem;
 }
 
 .iosImg {
@@ -83,11 +86,34 @@
   width: 10rem;
 }
 
+
+.lensesImage img{
+  width:440px;
+  max-width: 100%;
+  border:10px solid #fff;
+
+}
+
+.lensesImage img:first-child, .lensesImage img:nth-child(3){
+  box-shadow: 2px 2px 10px rgba(33, 37, 41, 0.25);
+  transform: rotate(-3deg);
+}
+
+.lensesImage img:nth-child(2){
+  box-shadow: 2px 2px 10px rgba(33, 37, 41, 0.25);
+  transform: rotate(2deg) translate(15px,-10px);
+}
+
+.lensesImage img:nth-child(3){
+  display: none;
+}
+
+
 .lensesVideoContainer {
   padding: 0;
   position: relative;
-  border-top-right-radius: 20px;
-  border-top-left-radius: 20px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
   margin-left: 40px;
   max-width: 360px;
   height: 35rem;
@@ -140,9 +166,28 @@
     padding: 0 2.5rem;
   }
 
-  .iosImgContainer {
+
+  .carouselImages {
+    height: auto;
+  }
+
+  .iosImg {
     display: none;
   }
+
+ .lensesImage img:nth-child(1), .lensesImage img:nth-child(2){
+  display: none;
+}
+.lensesImage img:nth-child(3){
+display: block;
+  margin-bottom:-1rem;
+}
+
+
+  .carouselText {
+    height:auto;
+  }
+
 }
 
 @media (max-width: 576px) {
