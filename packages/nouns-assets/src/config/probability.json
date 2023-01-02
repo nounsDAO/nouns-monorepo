@@ -1,7 +1,7 @@
 {
   "types": [ "male", "female", "alien", "ape", "zombie" ],
   "skins": [ "albino", "light", "mid", "dark", "green", "brown", "blue" ],
-  "acc_types": { "neck": 0, "cheeks": 0, "face": 0, "beard": 4, "mouth": 0, "ears": 0, "hat": 6, "hair": 6, "teeth": 1, "lips": 1, "emotion": 0, "eyes": 3, "glasses": 3, "nose": 0 },
+  "acc_types": { "hat": 6, "hair": 6, "beard": 4, "eyes": 3, "glasses": 3, "mouth": 0, "teeth": 1, "lips": 1, "neck": 0, "emotion": 0, "face": 0, "ears": 0, "nose": 0, "cheeks": 0 },
   "exclusive_groups": [ ["hair", "hat"], ["glasses", "eyes"], ["lips", "emotion", "teeth"], ["face", "cheeks"] ],
   "probabilities": {
     "male": {

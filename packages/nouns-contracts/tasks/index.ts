@@ -22,3 +22,4 @@ export * from './register-og-punks';
 export * from './create-merkle';
 export * from './populate-seeder';
 export * from './tenderly-register';
+export * from './generate-metadata';

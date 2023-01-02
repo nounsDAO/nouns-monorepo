@@ -55,7 +55,7 @@ task("populate-seeder", "Initialize deployed smart contracts")
                 Object.values(probDoc.accessories).filter((item: any) => item.type == type && item.punk.split("").includes(shortPunkType[punkType])).length
             )
         )
-        console.log(accCountPerType)
+        console.log("accCountPerType", accCountPerType)
         const accCountSetResponse = await (await nSeeder.setAccCountPerTypeAndPunk(accCountPerType)).wait()
 
         const exclusives = probDoc.exclusive_groups.reduce((prev: any, group: any, groupIndex: number) => {
