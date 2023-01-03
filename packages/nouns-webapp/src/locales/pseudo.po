@@ -221,8 +221,12 @@ msgid "Auction ends in"
 msgstr ""
 
 #: src/components/StreamWithdrawModal/index.tsx
-msgid "Avilable to withdraw"
+msgid "Available to withdraw"
 msgstr ""
+
+#: src/components/StreamWithdrawModal/index.tsx
+#~ msgid "Avilable to withdraw"
+#~ msgstr ""
 
 #: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
@@ -802,7 +806,11 @@ msgid "Only Nouns you owned or were delegated to you before {0} are eligible to 
 msgstr ""
 
 #: src/pages/Vote/index.tsx
-msgid "Only visable to you"
+#~ msgid "Only visable to you"
+#~ msgstr ""
+
+#: src/pages/Vote/index.tsx
+msgid "Only visible to you"
 msgstr ""
 
 #: src/components/NounProfileVoteRow/index.tsx

@@ -42,7 +42,7 @@ import ReactTooltip from 'react-tooltip';
 import DynamicQuorumInfoModal from '../../components/DynamicQuorumInfoModal';
 import config from '../../config';
 import ShortAddress from '../../components/ShortAddress';
-import StreamWidthdrawModal from '../../components/StreamWithdrawModal';
+import StreamWithdrawModal from '../../components/StreamWithdrawModal';
 import { parseStreamCreationCallData } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
 
 dayjs.extend(utc);
@@ -65,7 +65,7 @@ const VotePage = ({
   const [isQueuePending, setQueuePending] = useState<boolean>(false);
   const [isExecutePending, setExecutePending] = useState<boolean>(false);
   const [isCancelPending, setCancelPending] = useState<boolean>(false);
-  const [showStreamWidthdrawModal, setShowStreamWidthdrawModal] = useState<boolean>(false);
+  const [showStreamWithdrawModal, setShowStreamWithdrawModal] = useState<boolean>(false);
   const [streamWithdrawInfo, setStreamWidthdrawInfo] = useState<{
     streamAddress: string;
     startTime: number;
@@ -334,9 +334,9 @@ const VotePage = ({
           currentQuorum={currentQuorum}
         />
       )}
-      <StreamWidthdrawModal
-        show={showStreamWidthdrawModal}
-        onDismiss={() => setShowStreamWidthdrawModal(false)}
+      <StreamWithdrawModal
+        show={showStreamWithdrawModal}
+        onDismiss={() => setShowStreamWithdrawModal(false)}
         {...streamWithdrawInfo}
       />
       <VoteModal
@@ -368,12 +368,12 @@ const VotePage = ({
               return (
                 <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
                   <span className={classes.boldedLabel}>
-                    <Trans>Only visable to you</Trans>
+                    <Trans>Only visible to you</Trans>
                   </span>
                   <Col className="d-grid gap-4">
                     <Button
                       onClick={() => {
-                        setShowStreamWidthdrawModal(true);
+                        setShowStreamWithdrawModal(true);
                         setStreamWidthdrawInfo({
                           streamAddress: parsedCallData.streamAddress,
                           startTime: parsedCallData.startTime,

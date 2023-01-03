@@ -1,7 +1,6 @@
 import { Trans } from '@lingui/macro';
 import React from 'react';
 import { FinalProposalActionStepProps } from '../..';
-import ShortAddress from '../../../ShortAddress';
 import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
 import ModalTitle from '../../../ModalTitle';
 import config from '../../../../config';

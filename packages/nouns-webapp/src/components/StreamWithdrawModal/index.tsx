@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import classes from './StreamWidthdrawModal.module.css';
+import classes from './StreamWithdrawModal.module.css';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Trans } from '@lingui/macro';
@@ -29,7 +29,7 @@ export const Backdrop: React.FC<{ onDismiss: () => void }> = props => {
   return <div className={classes.backdrop} onClick={props.onDismiss} />;
 };
 
-const StreamWidthdrawModalOverlay: React.FC<{
+const StreamWithdrawModalOverlay: React.FC<{
   onDismiss: () => void;
   streamAddress?: string;
   endTime?: number;
@@ -125,7 +125,7 @@ const StreamWidthdrawModalOverlay: React.FC<{
       </ModalTitle>
 
       <ModalLabel>
-        <Trans>Avilable to withdraw</Trans>
+        <Trans>Available to withdraw</Trans>
       </ModalLabel>
       <h1 className={classes.bold}>
         {isUSDC
@@ -211,7 +211,7 @@ const StreamWidthdrawModalOverlay: React.FC<{
   );
 };
 
-const StreamWidthdrawModal: React.FC<{
+const StreamWithdrawModal: React.FC<{
   show: boolean;
   onDismiss: () => void;
   streamAddress?: string;
@@ -226,10 +226,10 @@ const StreamWidthdrawModal: React.FC<{
       <SolidColorBackgroundModal
         show={show}
         onDismiss={onDismiss}
-        content={<StreamWidthdrawModalOverlay {...props} />}
+        content={<StreamWithdrawModalOverlay {...props} />}
       />
     </>
   );
 };
 
-export default StreamWidthdrawModal;
+export default StreamWithdrawModal;

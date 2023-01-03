@@ -11,7 +11,6 @@ interface ExternalContractAddresses {
   payerContract: string | undefined;
   tokenBuyer: string | undefined;
   nounsStreamFactory: string | undefined;
-  nounsStream: string | undefined;
   weth: string | undefined;
 }
 
@@ -97,7 +96,6 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     payerContract: undefined,
     tokenBuyer: undefined,
     chainlinkEthUsdc: undefined,
-    nounsStream: undefined,
     nounsStreamFactory: undefined,
   },
   [ChainId.Goerli]: {
@@ -107,7 +105,6 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     payerContract: '0xD4A3bf1dF54699E63A2ef7F490E8E22b27B945f0',
     tokenBuyer: '0x61Ec4584c5B5eBaaD9f21Aac491fBB5B2ff30779',
     chainlinkEthUsdc: undefined,
-    nounsStream: '0x0F56690520Fa0ca09fBEF06642f07700788D7451',
     nounsStreamFactory: '0x404603ceF86A2010B2022f184d00a57ba25256C6',
   },
   [ChainId.Mainnet]: {
@@ -117,7 +114,6 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     payerContract: '0xd97Bcd9f47cEe35c0a9ec1dc40C1269afc9E8E1D',
     tokenBuyer: '0x4f2aCdc74f6941390d9b1804faBc3E780388cfe5',
     weth: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
-    nounsStream: undefined,
     nounsStreamFactory: undefined,
   },
   [ChainId.Hardhat]: {
@@ -127,7 +123,6 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
     tokenBuyer: undefined,
     chainlinkEthUsdc: undefined,
     weth: undefined,
-    nounsStream: undefined,
     nounsStreamFactory: undefined,
   },
 };
