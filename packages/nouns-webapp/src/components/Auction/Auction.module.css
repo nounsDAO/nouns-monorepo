@@ -10,7 +10,7 @@
 .auctionActivityCol {
   padding-right: 5rem;
   padding-bottom: 0rem;
-  min-height: 520px;
+  min-height: 558px;
   align-self: flex-end !important;
 }
 
@@ -34,7 +34,6 @@
     width: 100%;
     margin-left: unset;
     margin-right: unset;
-    padding-bottom: 2rem;
     padding-top: 2rem;
     padding-right: unset;
     padding-left: 0;

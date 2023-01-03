@@ -250,6 +250,10 @@ msgstr "Because 100% of Noun auction proceeds are sent to Nouns DAO, Nounders ha
 msgid "Because this proposal contains a USDC fund transfer action we've added an additional ETH transaction to refill the TokenBuyer contract. This action allows to DAO to continue to trustlessly acquire USDC to fund proposals like this."
 msgstr "Because this proposal contains a USDC fund transfer action we've added an additional ETH transaction to refill the TokenBuyer contract. This action allows to DAO to continue to trustlessly acquire USDC to fund proposals like this."
 
+#: src/components/NounsIntroSection/index.tsx
+msgid "Behold, an infinite work of art! Nouns is a community-owned brand that makes a positive impact by funding ideas and fostering collaboration. From collectors and technologists, to non-profits and brands, Nouns is for everyone."
+msgstr "Behold, an infinite work of art! Nouns is a community-owned brand that makes a positive impact by funding ideas and fostering collaboration. From collectors and technologists, to non-profits and brands, Nouns is for everyone."
+
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 msgid "Bid"
@@ -328,6 +332,10 @@ msgstr "Clear WalletConnect Data"
 #: src/components/ProposalActionsModal/steps/StreamPaymentsPaymentDetailsStep/index.tsx
 msgid "Close"
 msgstr "Close"
+
+#: src/components/NounsIntroSection/index.tsx
+msgid "Collect it"
+msgstr "Collect it"
 
 #: src/components/Documentation/index.tsx
 msgid "Compound Governance"
@@ -444,6 +452,10 @@ msgstr "Discourse"
 msgid "Docs"
 msgstr "Docs"
 
+#: src/components/NounsIntroSection/index.tsx
+msgid "Download the Free iOS App"
+msgstr "Download the Free iOS App"
+
 #: src/components/DynamicQuorumInfoModal/index.tsx
 #~ msgid "Dynamic Quorum"
 #~ msgstr "Dynamic Quorum"
@@ -504,6 +516,10 @@ msgstr "Error fetching Noun birthday"
 #: src/components/NounInfoCard/index.tsx
 msgid "Etherscan"
 msgstr "Etherscan"
+
+#: src/components/NounsIntroSection/index.tsx
+msgid "Every new Noun pushed right to your pocket! View the current auction, remix your own Noun, and explore the entire history directly from the app."
+msgstr "Every new Noun pushed right to your pocket! View the current auction, remix your own Noun, and explore the entire history directly from the app."
 
 #: src/pages/Vote/index.tsx
 msgid "Execute"
@@ -644,6 +660,10 @@ msgstr "Learn more"
 #: src/components/Documentation/index.tsx
 msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
 msgstr "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
+
+#: src/components/NounsIntroSection/index.tsx
+msgid "Like this video?"
+msgstr "Like this video?"
 
 #: src/components/NounInfoRowHolder/index.tsx
 msgid "Loading..."
@@ -796,6 +816,10 @@ msgstr "One Noun is equal to one vote."
 #: src/components/Documentation/index.tsx
 msgid "One Noun is trustlessly auctioned every 24 hours, forever."
 msgstr "One Noun is trustlessly auctioned every 24 hours, forever."
+
+#: src/components/NounsIntroSection/index.tsx
+msgid "One Noun, Every Day, Forever."
+msgstr "One Noun, Every Day, Forever."
 
 #: src/pages/Playground/index.tsx
 msgid "Only 32x32 PNG images are accepted"
@@ -1301,10 +1325,6 @@ msgstr "WTF?"
 #: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
 msgid "Waiting for"
 msgstr "Waiting for"
-
-#: src/components/ProposalActionsModal/steps/StreamPaymentsDateDetailsStep/index.tsx
-msgid "We suggest adding a buffer between when you assume the proposal to be executed and when the stream begins."
-msgstr "We suggest adding a buffer between when you assume the proposal to be executed and when the stream begins."
 
 #: src/components/Documentation/index.tsx
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."

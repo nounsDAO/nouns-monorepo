@@ -230,7 +230,10 @@ type Proposal @entity {
   "The number of votes to abstain on the proposal"
   abstainVotes: BigInt!
 
-  "String description of the change"
+  "The proposal title, parsed from the description"
+  title: String!
+
+  "The full proposal description, which includes the title"
   description: String!
 
   "Status of the proposal"

@@ -5,7 +5,11 @@ import Accordion from 'react-bootstrap/Accordion';
 import Link from '../Link';
 import { Trans } from '@lingui/macro';
 
-const Documentation = () => {
+interface DocumentationProps {
+  backgroundColor?: string;
+}
+
+const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) => {
   const cryptopunksLink = (
     <Link
       text={<Trans>Cryptopunks</Trans>}
@@ -31,7 +35,7 @@ const Documentation = () => {
     />
   );
   return (
-    <Section fullWidth={false}>
+    <Section fullWidth={false} className={classes.documentationSection} style={{ background: props.backgroundColor }}>
       <Col lg={{ span: 10, offset: 1 }}>
         <div className={classes.headerWrapper}>
           <h1>

@@ -1,0 +1,128 @@
+.videoSection {
+  padding: 4rem 0 !important;
+}
+
+.iosSection {
+  padding: 0 !important;
+}
+
+.textWrapper {
+  padding-right: 2rem;
+}
+
+.textWrapper h1 {
+  font-family: 'Londrina Solid';
+  font-size: 5rem;
+}
+
+.textWrapper p {
+  font-size: 1.2rem;
+}
+
+.collectVideoBtn {
+  font-family: 'PT Root UI';
+  border-radius: 12px !important;
+  margin: 1.5rem 1rem;
+  padding: 10px 16px;
+  height: 3rem;
+  color: white;
+  border: transparent;
+  background-color: var(--brand-black);
+  font-weight: bold;
+  letter-spacing: normal;
+  font-size: 19px;
+  transition: all 0.2s ease-in-out;
+}
+
+.collectVideoBtn:hover,
+.collectVideoBtn:active,
+.collectVideoBtn:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  background-color: #2125298a;
+}
+
+.embedContainer {
+  padding: 36% 0 0 0;
+  position: relative;
+}
+
+.embedContainer iframe {
+  position: absolute;
+  top: 3px;
+  left: 0;
+  width: 100%;
+  height: 350px;
+}
+
+.videoSubtitle {
+  position: absolute;
+  top: 348px;
+}
+
+.videoSubtitle a {
+  display: inline-block;
+  text-decoration: underline;
+  color: #6c757d;
+  padding: 0;
+}
+
+.iosImgContainer {
+  padding: 0;
+  position: relative;
+}
+
+.iosImg {
+  max-width: 100%;
+  height: 35rem;
+  bottom: 0;
+}
+
+.dlFromAppStoreImg {
+  margin-top: 2rem;
+  width: 10rem;
+}
+
+@media (max-width: 992px) {
+  .videoSection {
+    padding: 0 !important;
+  }
+
+  .iosSection {
+    padding-bottom: 2rem;
+  }
+
+  .textWrapper {
+    padding: 2rem;
+  }
+
+  .textWrapper h1 {
+    font-size: 3.75rem;
+  }
+
+  .embedContainer {
+    padding: 56.25% 0 0 0 !important;
+    margin-bottom: 60px;
+  }
+
+  .embedContainer iframe {
+    top: 0;
+    height: 100%;
+  }
+
+  .videoSubtitle {
+    top: unset;
+    bottom: -40px;
+    padding: 0 2.5rem;
+  }
+
+  .iosImgContainer {
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .videoSubtitle {
+    bottom: -50px;
+  }
+}

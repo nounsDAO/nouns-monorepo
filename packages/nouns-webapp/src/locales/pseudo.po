@@ -250,6 +250,10 @@ msgstr ""
 msgid "Because this proposal contains a USDC fund transfer action we've added an additional ETH transaction to refill the TokenBuyer contract. This action allows to DAO to continue to trustlessly acquire USDC to fund proposals like this."
 msgstr ""
 
+#: src/components/NounsIntroSection/index.tsx
+msgid "Behold, an infinite work of art! Nouns is a community-owned brand that makes a positive impact by funding ideas and fostering collaboration. From collectors and technologists, to non-profits and brands, Nouns is for everyone."
+msgstr ""
+
 #: src/components/Bid/index.tsx
 #: src/components/Bid/index.tsx
 msgid "Bid"
@@ -327,6 +331,10 @@ msgstr ""
 #: src/components/ProposalActionsModal/steps/StreamPaymentsDateDetailsStep/index.tsx
 #: src/components/ProposalActionsModal/steps/StreamPaymentsPaymentDetailsStep/index.tsx
 msgid "Close"
+msgstr ""
+
+#: src/components/NounsIntroSection/index.tsx
+msgid "Collect it"
 msgstr ""
 
 #: src/components/Documentation/index.tsx
@@ -444,6 +452,10 @@ msgstr ""
 msgid "Docs"
 msgstr ""
 
+#: src/components/NounsIntroSection/index.tsx
+msgid "Download the Free iOS App"
+msgstr ""
+
 #: src/components/DynamicQuorumInfoModal/index.tsx
 #~ msgid "Dynamic Quorum"
 #~ msgstr ""
@@ -503,6 +515,10 @@ msgstr ""
 #: src/components/Footer/index.tsx
 #: src/components/NounInfoCard/index.tsx
 msgid "Etherscan"
+msgstr ""
+
+#: src/components/NounsIntroSection/index.tsx
+msgid "Every new Noun pushed right to your pocket! View the current auction, remix your own Noun, and explore the entire history directly from the app."
 msgstr ""
 
 #: src/pages/Vote/index.tsx
@@ -643,6 +659,10 @@ msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
+msgstr ""
+
+#: src/components/NounsIntroSection/index.tsx
+msgid "Like this video?"
 msgstr ""
 
 #: src/components/NounInfoRowHolder/index.tsx
@@ -795,6 +815,10 @@ msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "One Noun is trustlessly auctioned every 24 hours, forever."
+msgstr ""
+
+#: src/components/NounsIntroSection/index.tsx
+msgid "One Noun, Every Day, Forever."
 msgstr ""
 
 #: src/pages/Playground/index.tsx
