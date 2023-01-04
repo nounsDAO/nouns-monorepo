@@ -32,6 +32,7 @@ import { INounsAuctionHouse } from './interfaces/INounsAuctionHouse.sol';
 import { INounsToken } from './interfaces/INounsToken.sol';
 import { IWETH } from './interfaces/IWETH.sol';
 import { Noracle } from './libs/Noracle.sol';
+import { NounsCoupon } from './NounsCoupon.sol';
 
 contract NounsAuctionHouseV2 is
     INounsAuctionHouse,
@@ -64,6 +65,8 @@ contract NounsAuctionHouseV2 is
 
     // The Nouns price feed state
     Noracle.NoracleState public oracle;
+
+    NounsCoupon public nounsCoupon;
 
     /**
      * @notice Initialize the auction house and base contracts,
@@ -108,6 +111,39 @@ contract NounsAuctionHouseV2 is
         _settleAuction();
     }
 
+    function createBidWithCoupon(uint256 nounId, uint256 couponId) external {
+        INounsAuctionHouse.AuctionV2 memory _auction = auction;
+
+        if (nounsCoupon.ownerOf(couponId) != msg.sender) revert NotCouponOwner();
+        uint256 couponValue = calculateCouponPrice();
+
+        if (_auction.nounId != nounId) revert NounNotUpForAuction();
+        if (block.timestamp >= _auction.endTime) revert AuctionExpired();
+        if (couponValue < reservePrice) revert MustSendAtLeastReservePrice();
+        if (couponValue < _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100))
+            revert BidDifferenceMustBeGreaterThanMinBidIncrement();
+
+        auction.amount = uint128(couponValue);
+        auction.bidder = payable(msg.sender);
+
+        // Extend the auction if the bid was received within `timeBuffer` of the auction end time
+        bool extended = _auction.endTime - block.timestamp < timeBuffer;
+
+        emit AuctionBid(_auction.nounId, msg.sender, couponValue, extended, true);
+
+        if (extended) {
+            auction.endTime = _auction.endTime = uint40(block.timestamp + timeBuffer);
+            emit AuctionExtended(_auction.nounId, _auction.endTime);
+        }
+
+        address payable lastBidder = _auction.bidder;
+
+        // Refund the last bidder, if applicable
+        if (lastBidder != address(0) && !_auction.couponBid) {
+            _safeTransferETHWithFallback(lastBidder, _auction.amount);
+        }
+    }
+
     /**
      * @notice Create a bid for a Noun, with a given amount.
      * @dev This contract only accepts payment in ETH.
@@ -127,7 +163,7 @@ contract NounsAuctionHouseV2 is
         // Extend the auction if the bid was received within `timeBuffer` of the auction end time
         bool extended = _auction.endTime - block.timestamp < timeBuffer;
 
-        emit AuctionBid(_auction.nounId, msg.sender, msg.value, extended);
+        emit AuctionBid(_auction.nounId, msg.sender, msg.value, extended, false);
 
         if (extended) {
             auction.endTime = _auction.endTime = uint40(block.timestamp + timeBuffer);
@@ -137,7 +173,7 @@ contract NounsAuctionHouseV2 is
         address payable lastBidder = _auction.bidder;
 
         // Refund the last bidder, if applicable
-        if (lastBidder != address(0)) {
+        if (lastBidder != address(0) && !_auction.couponBid) {
             _safeTransferETHWithFallback(lastBidder, _auction.amount);
         }
     }
@@ -212,7 +248,9 @@ contract NounsAuctionHouseV2 is
                 startTime: startTime,
                 endTime: endTime,
                 bidder: payable(0),
-                settled: false
+                settled: false,
+                couponBid: false,
+                couponId: 0
             });
 
             emit AuctionCreated(nounId, startTime, endTime);
@@ -240,10 +278,15 @@ contract NounsAuctionHouseV2 is
             nouns.transferFrom(address(this), _auction.bidder, _auction.nounId);
         }
 
-        if (_auction.amount > 0) {
+        if (_auction.amount > 0 && !_auction.couponBid) {
             _safeTransferETHWithFallback(owner(), _auction.amount);
         }
 
+        if (_auction.couponBid) {
+            nounsCoupon.burn(_auction.couponId);
+        }
+
+        // TODO do we want to add coupon info to oracle data?
         oracle.write(
             uint32(block.timestamp),
             uint16(_auction.nounId),
@@ -313,5 +356,25 @@ contract NounsAuctionHouseV2 is
      */
     function prices(uint32 auctionCount) external view returns (Noracle.Observation[] memory observations) {
         return oracle.observe(auctionCount);
+    }
+
+    function setNounsCoupons(NounsCoupon nounsCoupon_) external onlyOwner {
+        nounsCoupon = nounsCoupon_;
+
+        // TODO emit event
+    }
+
+    function calculateCouponPrice() public view returns (uint256) {
+        // TODO make these configurable by the DAO
+        uint32 auctionCount = 7;
+        uint256 bufferBPs = 2000; // 20%
+        Noracle.Observation[] memory observations = oracle.observe(auctionCount);
+        uint256 sum;
+        for (uint256 i = 0; i < observations.length; ++i) {
+            if (observations[i].amount > 0) {
+                sum += observations[i].amount;
+            }
+        }
+        return sum * (10_000 + bufferBPs) / (observations.length * 10_000);
     }
 }

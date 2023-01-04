@@ -38,7 +38,7 @@ contract NounsAuctionHouseV2TestBase is Test, DeployUtils {
     }
 
     function bidAndWinCurrentAuction(address bidder, uint256 bid) internal returns (uint256) {
-        (uint256 nounId, , , uint256 endTime, , ) = auction.auction();
+        (uint256 nounId, , , uint256 endTime, , , , ) = auction.auction();
         vm.deal(bidder, bid);
         vm.prank(bidder);
         auction.createBid{ value: bid }(nounId);
@@ -51,7 +51,7 @@ contract NounsAuctionHouseV2TestBase is Test, DeployUtils {
 contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
 
     function test_createBid_revertsGivenWrongNounId() public {
-        (uint128 nounId, , , , , ) = auction.auction();
+        (uint128 nounId, , , , , , , ) = auction.auction();
 
         vm.expectRevert(abi.encodeWithSelector(INounsAuctionHouse.NounNotUpForAuction.selector));
         auction.createBid(nounId - 1);
@@ -61,7 +61,7 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
     }
 
     function test_createBid_revertsPastEndTime() public {
-        (uint128 nounId, , , uint40 endTime, , ) = auction.auction();
+        (uint128 nounId, , , uint40 endTime, , , , ) = auction.auction();
         vm.warp(endTime + 1);
 
         vm.expectRevert(abi.encodeWithSelector(INounsAuctionHouse.AuctionExpired.selector));
@@ -72,7 +72,7 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
         vm.prank(owner);
         auction.setReservePrice(1 ether);
 
-        (uint128 nounId, , , , , ) = auction.auction();
+        (uint128 nounId, , , , , , , ) = auction.auction();
 
         vm.expectRevert(abi.encodeWithSelector(INounsAuctionHouse.MustSendAtLeastReservePrice.selector));
         auction.createBid{ value: 0.9 ether }(nounId);
@@ -81,7 +81,7 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
     function test_createBid_revertsGivenBidLowerThanMinIncrement() public {
         vm.prank(owner);
         auction.setMinBidIncrementPercentage(50);
-        (uint128 nounId, , , , , ) = auction.auction();
+        (uint128 nounId, , , , , , , ) = auction.auction();
         auction.createBid{ value: 1 ether }(nounId);
 
         vm.expectRevert(
@@ -91,7 +91,7 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
     }
 
     function test_createBid_refundsPreviousBidder() public {
-        (uint256 nounId, , , , , ) = auction.auction();
+        (uint256 nounId, , , , , , , ) = auction.auction();
         address bidder1 = address(0x4444);
         address bidder2 = address(0x5555);
 
@@ -111,7 +111,7 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
 
     function test_createBid_preventsGasGriefingUponRefunding() public {
         BidderWithGasGriefing badBidder = new BidderWithGasGriefing();
-        (uint256 nounId, , , , , ) = auction.auction();
+        (uint256 nounId, , , , , , , ) = auction.auction();
 
         badBidder.bid{ value: 1 ether }(auction, nounId);
 
@@ -140,7 +140,7 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
     }
 
     function test_settleAuction_revertsWhenSettled() public {
-        (, , , uint40 endTime, , ) = auction.auction();
+        (, , , uint40 endTime, , , , ) = auction.auction();
         vm.warp(endTime + 1);
 
         vm.prank(owner);
@@ -191,7 +191,7 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
             uint40 startTimeV2,
             uint40 endTimeV2,
             address payable bidderV2,
-            bool settledV2
+            bool settledV2, ,
         ) = auctionV2.auction();
 
         assertEq(nounIdV2, nounId);
@@ -216,7 +216,7 @@ contract NounsAuctionHouseV2Test is NounsAuctionHouseV2TestBase {
             uint40 startTimeV2,
             uint40 endTimeV2,
             address payable bidderV2,
-            bool settledV2
+            bool settledV2, ,
         ) = auction.auction();
 
         (

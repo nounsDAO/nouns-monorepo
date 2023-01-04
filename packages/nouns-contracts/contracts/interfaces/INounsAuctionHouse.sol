@@ -46,11 +46,16 @@ interface INounsAuctionHouse {
         address payable bidder;
         // Whether or not the auction has been settled
         bool settled;
+        // ---- COUPONS ----
+        bool couponBid;
+        uint256 couponId;
     }
 
     event AuctionCreated(uint256 indexed nounId, uint256 startTime, uint256 endTime);
 
     event AuctionBid(uint256 indexed nounId, address sender, uint256 value, bool extended);
+
+    event AuctionBid(uint256 indexed nounId, address sender, uint256 value, bool extended, bool withCoupon);
 
     event AuctionExtended(uint256 indexed nounId, uint256 endTime);
 
@@ -77,6 +82,8 @@ interface INounsAuctionHouse {
     error MustSendAtLeastReservePrice();
 
     error BidDifferenceMustBeGreaterThanMinBidIncrement();
+
+    error NotCouponOwner();
 
     function settleAuction() external;
 
