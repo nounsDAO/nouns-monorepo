@@ -1,6 +1,7 @@
-import { NounsDAOV2ABI, NounsDaoLogicV1Factory } from '@nouns/sdk';
+import { NounsDAOV2ABI, NounsDaoLogicV2Factory } from '@nouns/sdk';
 import {
   ChainId,
+  connectContractToSigner,
   useBlockNumber,
   useContractCall,
   useContractCalls,
@@ -14,7 +15,7 @@ import { useLogs } from '../hooks/useLogs';
 import * as R from 'ramda';
 import config, { CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
-import { proposalsQuery } from './subgraph';
+import { proposalQuery, partialProposalsQuery } from './subgraph';
 import BigNumber from 'bignumber.js';
 import { useBlockTimestamp } from '../hooks/useBlockTimestamp';
 
@@ -66,21 +67,24 @@ interface ProposalDetail {
   callData: string;
 }
 
-export interface Proposal {
+export interface PartialProposal {
   id: string | undefined;
   title: string;
-  description: string;
   status: ProposalState;
   forCount: number;
   againstCount: number;
   abstainCount: number;
-  createdBlock: number;
   startBlock: number;
   endBlock: number;
   eta: Date | undefined;
+  quorumVotes: number;
+}
+
+export interface Proposal extends PartialProposal {
+  description: string;
+  createdBlock: number;
   proposer: string | undefined;
   proposalThreshold: number;
-  quorumVotes: number;
   details: ProposalDetail[];
   transactionHash: string;
 }
@@ -92,25 +96,29 @@ interface ProposalTransactionDetails {
   calldatas: string[];
 }
 
-export interface ProposalSubgraphEntity extends ProposalTransactionDetails {
+export interface PartialProposalSubgraphEntity {
   id: string;
-  description: string;
+  title: string;
   status: keyof typeof ProposalState;
   forVotes: string;
   againstVotes: string;
   abstainVotes: string;
-  createdBlock: string;
-  createdTransactionHash: string;
   startBlock: string;
   endBlock: string;
   executionETA: string | null;
-  proposer: { id: string };
-  proposalThreshold: string;
   quorumVotes: string;
 }
 
-interface ProposalData {
-  data: Proposal[];
+export interface ProposalSubgraphEntity extends ProposalTransactionDetails, PartialProposalSubgraphEntity {
+  description: string;
+  createdBlock: string;
+  createdTransactionHash: string;
+  proposer: { id: string };
+  proposalThreshold: string;
+}
+
+interface PartialProposalData {
+  data: PartialProposal[];
   error?: Error;
   loading: boolean;
 }
@@ -120,10 +128,12 @@ export interface ProposalTransaction {
   value: string;
   signature: string;
   calldata: string;
+  decodedCalldata?: string;
+  usdcValue?: number;
 }
 
 const abi = new utils.Interface(NounsDAOV2ABI);
-const nounsDaoContract = new NounsDaoLogicV1Factory().attach(config.addresses.nounsDAOProxy);
+const nounsDaoContract = new NounsDaoLogicV2Factory().attach(config.addresses.nounsDAOProxy);
 
 // Start the log search at the mainnet deployment block to speed up log queries
 const fromBlock = CHAIN_ID === ChainId.Mainnet ? 12985453 : 0;
@@ -268,29 +278,19 @@ export const useProposalThreshold = (): number | undefined => {
   return count?.toNumber();
 };
 
-const useVotingDelay = (nounsDao: string): number | undefined => {
-  const [blockDelay] =
-    useContractCall<[EthersBN]>({
-      abi,
-      address: nounsDao,
-      method: 'votingDelay',
-      args: [],
-    }) || [];
-  return blockDelay?.toNumber();
-};
-
 const countToIndices = (count: number | undefined) => {
   return typeof count === 'number' ? new Array(count).fill(0).map((_, i) => [i + 1]) : [];
 };
 
 const formatProposalTransactionDetails = (details: ProposalTransactionDetails | Result) => {
   return details.targets.map((target: string, i: number) => {
-    const signature = details.signatures[i];
+    const signature: string = details.signatures[i];
     const value = EthersBN.from(
       // Handle both logs and subgraph responses
       (details as ProposalTransactionDetails).values?.[i] ?? (details as Result)?.[3]?.[i] ?? 0,
     );
-    const [name, types] = signature.substring(0, signature.length - 1)?.split('(');
+    // Split at first occurrence of '('
+    let [name, types] = signature.substring(0, signature.length - 1)?.split(/\((.*)/s);
     if (!name || !types) {
       return {
         target,
@@ -299,7 +299,8 @@ const formatProposalTransactionDetails = (details: ProposalTransactionDetails | 
       };
     }
     const calldata = details.calldatas[i];
-    const decoded = defaultAbiCoder.decode(types.split(','), calldata);
+    // Split using comma as separator, unless comma is between parentheses (tuple).
+    const decoded = defaultAbiCoder.decode(types.split(/,(?![^(]*\))/g), calldata);
     return {
       target,
       functionSig: name,
@@ -334,7 +335,7 @@ const useFormattedProposalCreatedLogs = (skip: boolean, fromBlock?: number) => {
 const getProposalState = (
   blockNumber: number | undefined,
   blockTimestamp: Date | undefined,
-  proposal: ProposalSubgraphEntity,
+  proposal: PartialProposalSubgraphEntity,
 ) => {
   const status = ProposalState[proposal.status];
   if (status === ProposalState.PENDING) {
@@ -374,32 +375,67 @@ const getProposalState = (
   return status;
 };
 
-export const useAllProposalsViaSubgraph = (): ProposalData => {
-  const { loading, data, error } = useQuery(proposalsQuery());
+const parsePartialSubgraphProposal = (
+  proposal: PartialProposalSubgraphEntity | undefined,
+  blockNumber: number | undefined,
+  timestamp: number | undefined,
+) => {
+  if (!proposal) {
+    return;
+  }
+
+  return {
+    id: proposal.id,
+    title: proposal.title ?? 'Untitled',
+    status: getProposalState(blockNumber, new Date((timestamp ?? 0) * 1000), proposal),
+    startBlock: parseInt(proposal.startBlock),
+    endBlock: parseInt(proposal.endBlock),
+    forCount: parseInt(proposal.forVotes),
+    againstCount: parseInt(proposal.againstVotes),
+    abstainCount: parseInt(proposal.abstainVotes),
+    quorumVotes: parseInt(proposal.quorumVotes),
+    eta: proposal.executionETA ? new Date(Number(proposal.executionETA) * 1000) : undefined,
+  };
+};
+
+const parseSubgraphProposal = (
+  proposal: ProposalSubgraphEntity | undefined,
+  blockNumber: number | undefined,
+  timestamp: number | undefined,
+) => {
+  if (!proposal) {
+    return;
+  }
+
+  const description = proposal.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, '');
+  return {
+    id: proposal.id,
+    title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
+    description: description ?? 'No description.',
+    proposer: proposal.proposer?.id,
+    status: getProposalState(blockNumber, new Date((timestamp ?? 0) * 1000), proposal),
+    proposalThreshold: parseInt(proposal.proposalThreshold),
+    quorumVotes: parseInt(proposal.quorumVotes),
+    forCount: parseInt(proposal.forVotes),
+    againstCount: parseInt(proposal.againstVotes),
+    abstainCount: parseInt(proposal.abstainVotes),
+    createdBlock: parseInt(proposal.createdBlock),
+    startBlock: parseInt(proposal.startBlock),
+    endBlock: parseInt(proposal.endBlock),
+    eta: proposal.executionETA ? new Date(Number(proposal.executionETA) * 1000) : undefined,
+    details: formatProposalTransactionDetails(proposal),
+    transactionHash: proposal.createdTransactionHash,
+  };
+};
+
+export const useAllProposalsViaSubgraph = (): PartialProposalData => {
+  const { loading, data, error } = useQuery(partialProposalsQuery());
   const blockNumber = useBlockNumber();
   const timestamp = useBlockTimestamp(blockNumber);
 
-  const proposals = data?.proposals?.map((proposal: ProposalSubgraphEntity) => {
-    const description = proposal.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, '');
-    return {
-      id: proposal.id,
-      title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
-      description: description ?? 'No description.',
-      proposer: proposal.proposer.id,
-      status: getProposalState(blockNumber, new Date((timestamp ?? 0) * 1000), proposal),
-      proposalThreshold: parseInt(proposal.proposalThreshold),
-      quorumVotes: parseInt(proposal.quorumVotes),
-      forCount: parseInt(proposal.forVotes),
-      againstCount: parseInt(proposal.againstVotes),
-      abstainCount: parseInt(proposal.abstainVotes),
-      createdBlock: parseInt(proposal.createdBlock),
-      startBlock: parseInt(proposal.startBlock),
-      endBlock: parseInt(proposal.endBlock),
-      eta: proposal.executionETA ? new Date(Number(proposal.executionETA) * 1000) : undefined,
-      details: formatProposalTransactionDetails(proposal),
-      transactionHash: proposal.createdTransactionHash,
-    };
-  });
+  const proposals = data?.proposals?.map((proposal: ProposalSubgraphEntity) =>
+    parsePartialSubgraphProposal(proposal, blockNumber, timestamp),
+  );
 
   return {
     loading,
@@ -408,9 +444,8 @@ export const useAllProposalsViaSubgraph = (): ProposalData => {
   };
 };
 
-export const useAllProposalsViaChain = (skip = false): ProposalData => {
+export const useAllProposalsViaChain = (skip = false): PartialProposalData => {
   const proposalCount = useProposalCount();
-  const votingDelay = useVotingDelay(nounsDaoContract.address);
 
   const govProposalIndexes = useMemo(() => {
     return countToIndices(proposalCount);
@@ -426,7 +461,7 @@ export const useAllProposalsViaChain = (skip = false): ProposalData => {
     }));
   };
 
-  const proposals = useContractCalls<ProposalCallResult>(requests('proposals'));
+  const proposals = useContractCalls<[ProposalCallResult]>(requests('proposals'));
   const proposalStates = useContractCalls<[ProposalState]>(requests('state'));
 
   const formattedLogs = useFormattedProposalCreatedLogs(skip);
@@ -439,41 +474,38 @@ export const useAllProposalsViaChain = (skip = false): ProposalData => {
     }
 
     return {
-      data: proposals.map((proposal, i) => {
+      data: proposals.map((p, i) => {
+        const proposal = p?.[0];
         const description = logs[i]?.description?.replace(/\\n/g, '\n');
         return {
           id: proposal?.id.toString(),
           title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
-          description: description ?? 'No description.',
-          proposer: proposal?.proposer,
           status: proposalStates[i]?.[0] ?? ProposalState.UNDETERMINED,
-          proposalThreshold: parseInt(proposal?.proposalThreshold?.toString() ?? '0'),
-          quorumVotes: parseInt(proposal?.quorumVotes?.toString() ?? '0'),
+
+          startBlock: parseInt(proposal?.startBlock?.toString() ?? ''),
+          endBlock: parseInt(proposal?.endBlock?.toString() ?? ''),
           forCount: parseInt(proposal?.forVotes?.toString() ?? '0'),
           againstCount: parseInt(proposal?.againstVotes?.toString() ?? '0'),
           abstainCount: parseInt(proposal?.abstainVotes?.toString() ?? '0'),
-          createdBlock: parseInt(proposal?.startBlock.sub(votingDelay ?? 0)?.toString() ?? ''),
-          startBlock: parseInt(proposal?.startBlock?.toString() ?? ''),
-          endBlock: parseInt(proposal?.endBlock?.toString() ?? ''),
+          quorumVotes: parseInt(proposal?.quorumVotes?.toString() ?? '0'),
           eta: proposal?.eta ? new Date(proposal?.eta?.toNumber() * 1000) : undefined,
-          details: logs[i]?.details,
-          transactionHash: logs[i]?.transactionHash,
         };
       }),
       loading: false,
     };
-  }, [formattedLogs, proposalStates, proposals, votingDelay]);
+  }, [formattedLogs, proposalStates, proposals]);
 };
 
-export const useAllProposals = (): ProposalData => {
+export const useAllProposals = (): PartialProposalData => {
   const subgraph = useAllProposalsViaSubgraph();
   const onchain = useAllProposalsViaChain(!subgraph.error);
   return subgraph?.error ? onchain : subgraph;
 };
 
 export const useProposal = (id: string | number): Proposal | undefined => {
-  const { data } = useAllProposals();
-  return data?.find(p => p.id === id.toString());
+  const blockNumber = useBlockNumber();
+  const timestamp = useBlockTimestamp(blockNumber);
+  return parseSubgraphProposal(useQuery(proposalQuery(id)).data?.proposal, blockNumber, timestamp);
 };
 
 export const useCastVote = () => {
@@ -492,6 +524,45 @@ export const useCastVoteWithReason = () => {
   return { castVoteWithReason, castVoteWithReasonState };
 };
 
+export const useCastRefundableVote = () => {
+  const { library } = useEthers();
+  const { send: castRefundableVote, state: castRefundableVoteState } = useContractFunction(
+    nounsDaoContract,
+    'castRefundableVote',
+  );
+
+  return {
+    castRefundableVote: async (...args: any[]): Promise<void> => {
+      const contract = connectContractToSigner(nounsDaoContract, undefined, library);
+      const gasLimit = await contract.estimateGas.castRefundableVote(...args);
+      return castRefundableVote(...args, {
+        gasLimit: gasLimit.add(20_000), // A 20,000 gas pad is used to avoid 'Out of gas' errors
+      });
+    },
+    castRefundableVoteState,
+  };
+};
+
+export const useCastRefundableVoteWithReason = () => {
+  const { library } = useEthers();
+  // prettier-ignore
+  const { send: castRefundableVoteWithReason, state: castRefundableVoteWithReasonState } = useContractFunction(
+    nounsDaoContract,
+    'castRefundableVoteWithReason',
+  );
+
+  return {
+    castRefundableVoteWithReason: async (...args: any[]): Promise<void> => {
+      const contract = connectContractToSigner(nounsDaoContract, undefined, library);
+      const gasLimit = await contract.estimateGas.castRefundableVoteWithReason(...args);
+      return castRefundableVoteWithReason(...args, {
+        gasLimit: gasLimit.add(20_000), // A 20,000 gas pad is used to avoid 'Out of gas' errors
+      });
+    },
+    castRefundableVoteWithReasonState,
+  };
+};
+
 export const usePropose = () => {
   const { send: propose, state: proposeState } = useContractFunction(nounsDaoContract, 'propose');
   return { propose, proposeState };
@@ -503,6 +574,14 @@ export const useQueueProposal = () => {
     'queue',
   );
   return { queueProposal, queueProposalState };
+};
+
+export const useCancelProposal = () => {
+  const { send: cancelProposal, state: cancelProposalState } = useContractFunction(
+    nounsDaoContract,
+    'cancel',
+  );
+  return { cancelProposal, cancelProposalState };
 };
 
 export const useExecuteProposal = () => {

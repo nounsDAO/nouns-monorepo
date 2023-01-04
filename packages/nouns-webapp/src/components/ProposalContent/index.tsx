@@ -9,6 +9,9 @@ import { utils } from 'ethers';
 import classes from './ProposalContent.module.css';
 import { Trans } from '@lingui/macro';
 import EnsOrLongAddress from '../EnsOrLongAddress';
+import config from '../../config';
+import { InformationCircleIcon } from '@heroicons/react/solid';
+import ShortAddress from '../ShortAddress';
 
 interface ProposalContentProps {
   proposal?: Proposal;
@@ -77,6 +80,36 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
                     );
                   })}
                   )
+                  {d.target.toLowerCase() === config.addresses.tokenBuyer?.toLowerCase() && (
+                    <div className={classes.txnInfoText}>
+                      <div className={classes.txnInfoIconWrapper}>
+                        <InformationCircleIcon className={classes.txnInfoIcon} />
+                      </div>
+                      <div>
+                        <Trans>
+                          This transaction was automatically added to refill the TokenBuyer.
+                          Proposers do not recieve this ETH.
+                        </Trans>
+                      </div>
+                    </div>
+                  )}
+                  {d.target.toLowerCase() === config.addresses.payerContract?.toLowerCase() && (
+                    <div className={classes.txnInfoText}>
+                      <div className={classes.txnInfoIconWrapper}>
+                        <InformationCircleIcon className={classes.txnInfoIcon} />
+                      </div>
+                      <div>
+                        <Trans>
+                          This transaction sends{' '}
+                          {Intl.NumberFormat(undefined, { maximumFractionDigits: 6 }).format(
+                            Number(utils.formatUnits(d.callData.split(',')[1], 6)),
+                          )}{' '}
+                          USDC to <ShortAddress address={d.callData.split(',')[0]} /> via the DAO's
+                          PayerContract.
+                        </Trans>
+                      </div>
+                    </div>
+                  )}
                 </li>
               );
             })}

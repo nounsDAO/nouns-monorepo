@@ -54,9 +54,9 @@ export const seedsQuery = (first = 1_000) => gql`
 }
 `;
 
-export const proposalsQuery = (first = 1_000) => gql`
+export const proposalQuery = (id: string | number) => gql`
 {
-  proposals(first: ${first}, orderBy: createdBlock, orderDirection: asc) {
+  proposal(id: ${id}) {
     id
     description
     status
@@ -77,6 +77,23 @@ export const proposalsQuery = (first = 1_000) => gql`
     proposer {
       id
     }
+  }
+}
+`;
+
+export const partialProposalsQuery = (first = 1_000) => gql`
+{
+  proposals(first: ${first}, orderBy: createdBlock, orderDirection: asc) {
+    id
+    title
+    status
+    forVotes
+    againstVotes
+    abstainVotes
+    quorumVotes
+    executionETA
+    startBlock
+    endBlock
   }
 }
 `;
@@ -219,11 +236,11 @@ export const latestBidsQuery = (first: number = 10) => gql`
   }  
 `;
 
-export const nounVotingHistoryQuery = (nounId: number) => gql`
+export const nounVotingHistoryQuery = (nounId: number, first = 1_000) => gql`
 {
 	noun(id: ${nounId}) {
 		id
-		votes {
+		votes(first: ${first}) {
       blockNumber
       proposal {
         id
@@ -238,9 +255,9 @@ export const nounVotingHistoryQuery = (nounId: number) => gql`
 }
 `;
 
-export const nounTransferHistoryQuery = (nounId: number) => gql`
+export const nounTransferHistoryQuery = (nounId: number, first = 1_000) => gql`
 {
-  transferEvents(where: {noun: "${nounId}"}) {
+  transferEvents(where: {noun: "${nounId}"}, first: ${first}) {
     id
     previousHolder {
       id
@@ -253,9 +270,9 @@ export const nounTransferHistoryQuery = (nounId: number) => gql`
 }
 `;
 
-export const nounDelegationHistoryQuery = (nounId: number) => gql`
+export const nounDelegationHistoryQuery = (nounId: number, first = 1_000) => gql`
 {
-  delegationEvents(where: {noun: "${nounId}"}) {
+  delegationEvents(where: {noun: "${nounId}"}, first: ${first}) {
     id
     previousDelegate {
       id

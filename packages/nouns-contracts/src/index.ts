@@ -9,3 +9,4 @@ export { NounsAuctionHouse__factory as NounsAuctionHouseFactory } from '../typec
 export { NounsDescriptor__factory as NounsDescriptorFactory } from '../typechain/factories/contracts/NounsDescriptor__factory';
 export { NounsSeeder__factory as NounsSeederFactory } from '../typechain/factories/contracts/NounsSeeder__factory';
 export { NounsDAOLogicV1__factory as NounsDaoLogicV1Factory } from '../typechain/factories/contracts/governance/NounsDAOLogicV1__factory';
+export { NounsDAOLogicV2__factory as NounsDaoLogicV2Factory } from '../typechain/factories/contracts/governance/NounsDAOLogicV2__factory';

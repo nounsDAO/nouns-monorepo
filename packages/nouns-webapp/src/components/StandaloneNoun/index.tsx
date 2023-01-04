@@ -8,6 +8,7 @@ import classes from './StandaloneNoun.module.css';
 import { useDispatch } from 'react-redux';
 import { setOnDisplayAuctionNounId } from '../../state/slices/onDisplayAuction';
 import nounClasses from '../Noun/Noun.module.css';
+import Image from 'react-bootstrap/Image';
 
 interface StandaloneNounProps {
   nounId: EthersBN;
@@ -35,6 +36,14 @@ export const getNoun = (nounId: string | EthersBN, seed: INounSeed) => {
     description,
     image,
   };
+};
+
+export const StandaloneNounImage: React.FC<StandaloneNounProps> = (props: StandaloneNounProps) => {
+  const { nounId } = props;
+  const seed = useNounSeed(nounId);
+  const noun = seed && getNoun(nounId, seed);
+
+  return <Image src={noun ? noun.image : ''} fluid />;
 };
 
 const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProps) => {
