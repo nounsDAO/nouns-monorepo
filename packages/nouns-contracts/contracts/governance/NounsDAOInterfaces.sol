@@ -124,6 +124,16 @@ contract NounsDAOEventsV2 is NounsDAOEvents {
 
     /// @notice Emitted when pendingVetoer is changed
     event NewPendingVetoer(address oldPendingVetoer, address newPendingVetoer);
+
+    event ProposalUpdated(
+        uint256 id,
+        address indexed proposer,
+        address[] targets,
+        uint256[] values,
+        string[] signatures,
+        bytes[] calldatas,
+        string description
+    );
 }
 
 contract NounsDAOProxyStorage {

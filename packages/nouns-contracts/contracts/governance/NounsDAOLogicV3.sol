@@ -121,6 +121,11 @@ contract NounsDAOLogicV3 is NounsDAOStorageV2, NounsDAOEventsV2 {
     error VetoerBurned();
     error CantVetoExecutedProposal();
     error CantCancelExecutedProposal();
+    error OnlyProposerCanEdit();
+    error CanOnlyEditPendingProposals();
+    error ProposalInfoArityMismatch();
+    error MustProvideActions();
+    error TooManyActions();
 
     /**
      * @notice Used to initialize the contract during delegator contructor
@@ -215,14 +220,11 @@ contract NounsDAOLogicV3 is NounsDAOStorageV2, NounsDAOEventsV2 {
             nouns.getPriorVotes(msg.sender, block.number - 1) > temp.proposalThreshold,
             'NounsDAO::propose: proposer votes below proposal threshold'
         );
-        require(
-            targets.length == values.length &&
-                targets.length == signatures.length &&
-                targets.length == calldatas.length,
-            'NounsDAO::propose: proposal function information arity mismatch'
-        );
-        require(targets.length != 0, 'NounsDAO::propose: must provide actions');
-        require(targets.length <= proposalMaxOperations, 'NounsDAO::propose: too many actions');
+        if (
+            targets.length != values.length || targets.length != signatures.length || targets.length != calldatas.length
+        ) revert ProposalInfoArityMismatch();
+        if (targets.length == 0) revert MustProvideActions();
+        if (targets.length > proposalMaxOperations) revert TooManyActions();
 
         temp.latestProposalId = latestProposalIds[msg.sender];
         if (temp.latestProposalId != 0) {
@@ -293,6 +295,32 @@ contract NounsDAOLogicV3 is NounsDAOStorageV2, NounsDAOEventsV2 {
         );
 
         return newProposal.id;
+    }
+
+    function updateProposal(
+        uint256 proposalId,
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas,
+        string memory description
+    ) external {
+        if (
+            targets.length != values.length || targets.length != signatures.length || targets.length != calldatas.length
+        ) revert ProposalInfoArityMismatch();
+        if (targets.length == 0) revert MustProvideActions();
+        if (targets.length > proposalMaxOperations) revert TooManyActions();
+
+        Proposal storage proposal = _proposals[proposalId];
+        if (msg.sender != proposal.proposer) revert OnlyProposerCanEdit();
+        if (state(proposalId) != ProposalState.Pending) revert CanOnlyEditPendingProposals();
+
+        proposal.targets = targets;
+        proposal.values = values;
+        proposal.signatures = signatures;
+        proposal.calldatas = calldatas;
+
+        emit ProposalUpdated(proposalId, msg.sender, targets, values, signatures, calldatas, description);
     }
 
     /**
