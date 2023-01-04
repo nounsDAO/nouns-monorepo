@@ -123,8 +123,11 @@ contract NounsAuctionHouseV2 is
         if (couponValue < _auction.amount + ((_auction.amount * minBidIncrementPercentage) / 100))
             revert BidDifferenceMustBeGreaterThanMinBidIncrement();
 
+        nounsCoupon.transferFrom(msg.sender, address(this), couponId);
         auction.amount = uint128(couponValue);
         auction.bidder = payable(msg.sender);
+        auction.couponId = couponId;
+        auction.couponBid = true;
 
         // Extend the auction if the bid was received within `timeBuffer` of the auction end time
         bool extended = _auction.endTime - block.timestamp < timeBuffer;
@@ -139,8 +142,12 @@ contract NounsAuctionHouseV2 is
         address payable lastBidder = _auction.bidder;
 
         // Refund the last bidder, if applicable
-        if (lastBidder != address(0) && !_auction.couponBid) {
-            _safeTransferETHWithFallback(lastBidder, _auction.amount);
+        if (lastBidder != address(0)) {
+            if (!_auction.couponBid) {
+                _safeTransferETHWithFallback(lastBidder, _auction.amount);
+            } else {
+                nounsCoupon.transferFrom(address(this), lastBidder, _auction.couponId);
+            }
         }
     }
 
@@ -159,6 +166,7 @@ contract NounsAuctionHouseV2 is
 
         auction.amount = uint128(msg.value);
         auction.bidder = payable(msg.sender);
+        auction.couponBid = false;
 
         // Extend the auction if the bid was received within `timeBuffer` of the auction end time
         bool extended = _auction.endTime - block.timestamp < timeBuffer;
@@ -173,8 +181,12 @@ contract NounsAuctionHouseV2 is
         address payable lastBidder = _auction.bidder;
 
         // Refund the last bidder, if applicable
-        if (lastBidder != address(0) && !_auction.couponBid) {
-            _safeTransferETHWithFallback(lastBidder, _auction.amount);
+        if (lastBidder != address(0)) {
+            if (!_auction.couponBid) {
+                _safeTransferETHWithFallback(lastBidder, _auction.amount);
+            } else {
+                nounsCoupon.transferFrom(address(this), lastBidder, _auction.couponId);
+            }
         }
     }
 
