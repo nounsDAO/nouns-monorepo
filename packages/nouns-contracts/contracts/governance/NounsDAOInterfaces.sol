@@ -428,6 +428,68 @@ contract NounsDAOStorageV2 is NounsDAOStorageV1Adjusted {
     }
 }
 
+contract NounsDAOStorageV3 is NounsDAOStorageV1Adjusted {
+    DynamicQuorumParamsCheckpoint[] public quorumParamsCheckpoints;
+
+    /// @notice Pending new vetoer
+    address public pendingVetoer;
+
+    uint256 public lastMinuteWindowInBlocks;
+    uint256 public objectionPeriodDurationInBlocks;
+
+    struct DynamicQuorumParams {
+        /// @notice The minimum basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed.
+        uint16 minQuorumVotesBPS;
+        /// @notice The maximum basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed.
+        uint16 maxQuorumVotesBPS;
+        /// @notice The dynamic quorum coefficient
+        /// @dev Assumed to be fixed point integer with 6 decimals, i.e 0.2 is represented as 0.2 * 1e6 = 200000
+        uint32 quorumCoefficient;
+    }
+
+    /// @notice A checkpoint for storing dynamic quorum params from a given block
+    struct DynamicQuorumParamsCheckpoint {
+        /// @notice The block at which the new values were set
+        uint32 fromBlock;
+        /// @notice The parameter values of this checkpoint
+        DynamicQuorumParams params;
+    }
+
+    struct ProposalCondensed {
+        /// @notice Unique id for looking up a proposal
+        uint256 id;
+        /// @notice Creator of the proposal
+        address proposer;
+        /// @notice The number of votes needed to create a proposal at the time of proposal creation. *DIFFERS from GovernerBravo
+        uint256 proposalThreshold;
+        /// @notice The minimum number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed at the time of proposal creation. *DIFFERS from GovernerBravo
+        uint256 quorumVotes;
+        /// @notice The timestamp that the proposal will be available for execution, set once the vote succeeds
+        uint256 eta;
+        /// @notice The block at which voting begins: holders must delegate their votes prior to this block
+        uint256 startBlock;
+        /// @notice The block at which voting ends: votes must be cast prior to this block
+        uint256 endBlock;
+        /// @notice Current number of votes in favor of this proposal
+        uint256 forVotes;
+        /// @notice Current number of votes in opposition to this proposal
+        uint256 againstVotes;
+        /// @notice Current number of votes for abstaining for this proposal
+        uint256 abstainVotes;
+        /// @notice Flag marking whether the proposal has been canceled
+        bool canceled;
+        /// @notice Flag marking whether the proposal has been vetoed
+        bool vetoed;
+        /// @notice Flag marking whether the proposal has been executed
+        bool executed;
+        /// @notice The total supply at the time of proposal creation
+        uint256 totalSupply;
+        /// @notice The block at which this proposal was created
+        uint256 creationBlock;
+        address[] proposers;
+    }
+}
+
 interface INounsDAOExecutor {
     function delay() external view returns (uint256);
 

@@ -55,7 +55,7 @@ pragma solidity ^0.8.6;
 import './NounsDAOInterfaces.sol';
 import { IERC1271 } from '@openzeppelin/contracts/interfaces/IERC1271.sol';
 
-contract NounsDAOLogicV3 is NounsDAOStorageV2, NounsDAOEventsV3 {
+contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     /// @notice The name of this contract
     string public constant name = 'Nouns DAO';
 
@@ -303,11 +303,12 @@ contract NounsDAOLogicV3 is NounsDAOStorageV2, NounsDAOEventsV3 {
         if (targets.length > proposalMaxOperations) revert TooManyActions();
 
         uint256 proposalId = proposalCount = proposalCount + 1;
-        bytes32 proposalHash = keccak256(abi.encode(targets, values, signatures, calldatas, description));
         uint256 votes;
+        bytes32 proposalHash = keccak256(abi.encode(targets, values, signatures, calldatas, description));
         address[] memory proposers = new address[](proposerSignatures.length);
         for (uint256 i = 0; i < proposerSignatures.length; ++i) {
             address signatory = _checkPropSig(proposalHash, proposerSignatures[i]);
+            proposers[i] = signatory;
 
             _checkNoActiveProp(signatory);
             latestProposalIds[signatory] = proposalId;
@@ -459,8 +460,46 @@ contract NounsDAOLogicV3 is NounsDAOStorageV2, NounsDAOEventsV3 {
         if (targets.length > proposalMaxOperations) revert TooManyActions();
 
         Proposal storage proposal = _proposals[proposalId];
-        if (msg.sender != proposal.proposer) revert OnlyProposerCanEdit();
         if (state(proposalId) != ProposalState.Pending) revert CanOnlyEditPendingProposals();
+        if (msg.sender != proposal.proposer) revert OnlyProposerCanEdit();
+
+        proposal.targets = targets;
+        proposal.values = values;
+        proposal.signatures = signatures;
+        proposal.calldatas = calldatas;
+
+        emit ProposalUpdated(proposalId, msg.sender, targets, values, signatures, calldatas, description);
+    }
+
+    function updateProposalBySigs(
+        uint256 proposalId,
+        ProposerSignature[] memory proposerSignatures,
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas,
+        string memory description
+    ) external {
+        if (
+            targets.length != values.length || targets.length != signatures.length || targets.length != calldatas.length
+        ) revert ProposalInfoArityMismatch();
+        if (targets.length == 0) revert MustProvideActions();
+        if (targets.length > proposalMaxOperations) revert TooManyActions();
+
+        Proposal storage proposal = _proposals[proposalId];
+        if (state(proposalId) != ProposalState.Pending) revert CanOnlyEditPendingProposals();
+
+        address[] memory proposers = proposal.proposers;
+        if (proposerSignatures.length != proposers.length) revert OnlyProposerCanEdit();
+
+        bytes32 proposalHash = keccak256(abi.encode(targets, values, signatures, calldatas, description));
+        for (uint256 i = 0; i < proposerSignatures.length; ++i) {
+            address signer = _checkPropSig(proposalHash, proposerSignatures[i]);
+
+            // To avoid the gas cost of having to search signers in proposers, we're assuming the sigs we get
+            // use the same amount of signers and the same order.
+            if (proposers[i] != signer) revert OnlyProposerCanEdit();
+        }
 
         proposal.targets = targets;
         proposal.values = values;
@@ -694,7 +733,8 @@ contract NounsDAOLogicV3 is NounsDAOStorageV2, NounsDAOEventsV3 {
                 vetoed: proposal.vetoed,
                 executed: proposal.executed,
                 totalSupply: proposal.totalSupply,
-                creationBlock: proposal.creationBlock
+                creationBlock: proposal.creationBlock,
+                proposers: proposal.proposers
             });
     }
 
