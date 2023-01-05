@@ -124,7 +124,9 @@ contract NounsDAOEventsV2 is NounsDAOEvents {
 
     /// @notice Emitted when pendingVetoer is changed
     event NewPendingVetoer(address oldPendingVetoer, address newPendingVetoer);
+}
 
+contract NounsDAOEventsV3 is NounsDAOEventsV2 {
     event ProposalUpdated(
         uint256 id,
         address indexed proposer,
@@ -326,6 +328,7 @@ contract NounsDAOStorageV1Adjusted is NounsDAOProxyStorage {
         /// @notice The block at which this proposal was created
         uint256 creationBlock;
         uint256 objectionPeriodEndBlock;
+        address[] proposers;
     }
 
     /// @notice Ballot receipt record for a voter

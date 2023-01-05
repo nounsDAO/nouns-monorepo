@@ -54,7 +54,7 @@ pragma solidity ^0.8.6;
 
 import './NounsDAOInterfaces.sol';
 
-contract NounsDAOLogicV3 is NounsDAOStorageV2, NounsDAOEventsV2 {
+contract NounsDAOLogicV3 is NounsDAOStorageV2, NounsDAOEventsV3 {
     /// @notice The name of this contract
     string public constant name = 'Nouns DAO';
 
@@ -126,6 +126,8 @@ contract NounsDAOLogicV3 is NounsDAOStorageV2, NounsDAOEventsV2 {
     error ProposalInfoArityMismatch();
     error MustProvideActions();
     error TooManyActions();
+    error InvalidSignature();
+    error ProposerAlreadyHasALiveProposal();
 
     /**
      * @notice Used to initialize the contract during delegator contructor
@@ -225,19 +227,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV2, NounsDAOEventsV2 {
         ) revert ProposalInfoArityMismatch();
         if (targets.length == 0) revert MustProvideActions();
         if (targets.length > proposalMaxOperations) revert TooManyActions();
-
-        temp.latestProposalId = latestProposalIds[msg.sender];
-        if (temp.latestProposalId != 0) {
-            ProposalState proposersLatestProposalState = state(temp.latestProposalId);
-            require(
-                proposersLatestProposalState != ProposalState.Active,
-                'NounsDAO::propose: one live proposal per proposer, found an already active proposal'
-            );
-            require(
-                proposersLatestProposalState != ProposalState.Pending,
-                'NounsDAO::propose: one live proposal per proposer, found an already pending proposal'
-            );
-        }
+        _checkNoActiveProp(msg.sender);
 
         temp.startBlock = block.number + votingDelay;
         temp.endBlock = temp.startBlock + votingPeriod;
@@ -295,6 +285,150 @@ contract NounsDAOLogicV3 is NounsDAOStorageV2, NounsDAOEventsV2 {
         );
 
         return newProposal.id;
+    }
+
+    function proposeBySigs(
+        bytes[] memory proposerSignatures,
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas,
+        string memory description
+    ) external returns (uint256) {
+        if (
+            targets.length != values.length || targets.length != signatures.length || targets.length != calldatas.length
+        ) revert ProposalInfoArityMismatch();
+        if (targets.length == 0) revert MustProvideActions();
+        if (targets.length > proposalMaxOperations) revert TooManyActions();
+
+        uint256 proposalId = proposalCount = proposalCount + 1;
+        bytes32 proposalHash = keccak256(abi.encode(targets, values, signatures, calldatas, description));
+        uint256 votes;
+        address[] memory proposers = new address[](proposerSignatures.length);
+        for (uint256 i = 0; i < proposerSignatures.length; ++i) {
+            address signatory = _checkPropSig(proposalHash, proposerSignatures[i]);
+
+            _checkNoActiveProp(signatory);
+            latestProposalIds[signatory] = proposalId;
+
+            votes += nouns.getPriorVotes(signatory, block.number - 1);
+        }
+
+        uint256 startBlock = block.number + votingDelay;
+
+        Proposal storage newProposal = _proposals[proposalCount];
+        newProposal.id = proposalId;
+        newProposal.proposer = msg.sender;
+        newProposal.proposalThreshold = _checkPropThreshold(votes);
+        newProposal.eta = 0;
+        newProposal.targets = targets;
+        newProposal.values = values;
+        newProposal.signatures = signatures;
+        newProposal.calldatas = calldatas;
+        newProposal.startBlock = startBlock;
+        newProposal.endBlock = startBlock + votingPeriod;
+        newProposal.forVotes = 0;
+        newProposal.againstVotes = 0;
+        newProposal.abstainVotes = 0;
+        newProposal.canceled = false;
+        newProposal.executed = false;
+        newProposal.vetoed = false;
+        newProposal.totalSupply = nouns.totalSupply();
+        newProposal.creationBlock = block.number;
+        newProposal.proposers = proposers;
+
+        _emitNewPropEvents(newProposal, targets, values, signatures, calldatas, description);
+
+        return proposalId;
+    }
+
+    function _emitNewPropEvents(
+        Proposal storage newProposal,
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas,
+        string memory description
+    ) internal {
+        /// @notice Maintains backwards compatibility with GovernorBravo events
+        emit ProposalCreated(
+            newProposal.id,
+            msg.sender,
+            targets,
+            values,
+            signatures,
+            calldatas,
+            newProposal.startBlock,
+            newProposal.endBlock,
+            description
+        );
+
+        /// @notice Updated event with `proposalThreshold` and `minQuorumVotes`
+        /// @notice `minQuorumVotes` is always zero since V2 introduces dynamic quorum with checkpoints
+        emit ProposalCreatedWithRequirements(
+            newProposal.id,
+            msg.sender,
+            targets,
+            values,
+            signatures,
+            calldatas,
+            newProposal.startBlock,
+            newProposal.endBlock,
+            newProposal.proposalThreshold,
+            minQuorumVotes(),
+            description
+        );
+    }
+
+    function _checkNoActiveProp(address proposer) internal view {
+        uint256 latestProposalId = latestProposalIds[proposer];
+        if (latestProposalId != 0) {
+            ProposalState proposersLatestProposalState = state(latestProposalId);
+            if (
+                proposersLatestProposalState == ProposalState.Active ||
+                proposersLatestProposalState == ProposalState.Pending
+            ) revert ProposerAlreadyHasALiveProposal();
+        }
+    }
+
+    function _checkPropSig(bytes32 proposalHash, bytes memory sig) internal view returns (address signatory) {
+        bytes32 digest = keccak256(
+            abi.encodePacked(
+                '\x19\x01',
+                keccak256(abi.encode(DOMAIN_TYPEHASH, keccak256(bytes(name)), getChainIdInternal(), address(this))),
+                proposalHash
+            )
+        );
+        (bytes32 r, bytes32 s, uint8 v) = _splitSignature(sig);
+        signatory = ecrecover(digest, v, r, s);
+        if (signatory == address(0)) revert InvalidSignature();
+    }
+
+    function _checkPropThreshold(uint256 votes) internal view returns (uint256 propThreshold) {
+        uint256 totalSupply = nouns.totalSupply();
+        propThreshold = bps2Uint(proposalThresholdBPS, totalSupply);
+
+        require(votes > propThreshold, 'NounsDAO::propose: proposer votes below proposal threshold');
+    }
+
+    function _splitSignature(bytes memory sig)
+        internal
+        pure
+        returns (
+            bytes32 r,
+            bytes32 s,
+            uint8 v
+        )
+    {
+        require(sig.length == 65, 'invalid signature length');
+        assembly {
+            // first 32 bytes, after the length prefix
+            r := mload(add(sig, 32))
+            // second 32 bytes
+            s := mload(add(sig, 64))
+            // final byte (first byte of the next 32 bytes)
+            v := byte(0, mload(add(sig, 96)))
+        }
     }
 
     function updateProposal(
@@ -394,9 +528,22 @@ contract NounsDAOLogicV3 is NounsDAOStorageV2, NounsDAOEventsV2 {
         }
 
         Proposal storage proposal = _proposals[proposalId];
+        address proposer = proposal.proposer;
+
+        uint256 votes;
+        bool msgSenderIsProposer = proposer == msg.sender;
+        if (proposer != address(0)) {
+            votes = nouns.getPriorVotes(proposer, block.number - 1);
+        } else {
+            address[] memory proposers = proposal.proposers;
+            for (uint256 i = 0; i < proposers.length; ++i) {
+                msgSenderIsProposer = msgSenderIsProposer || msg.sender == proposers[i];
+                votes += nouns.getPriorVotes(proposers[i], block.number - 1);
+            }
+        }
+
         require(
-            msg.sender == proposal.proposer ||
-                nouns.getPriorVotes(proposal.proposer, block.number - 1) <= proposal.proposalThreshold,
+            msgSenderIsProposer || votes <= proposal.proposalThreshold,
             'NounsDAO::cancel: proposer above threshold'
         );
 
