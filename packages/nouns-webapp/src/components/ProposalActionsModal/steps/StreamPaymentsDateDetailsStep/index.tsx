@@ -50,7 +50,7 @@ const StreamPaymentDateDetailsStep: React.FC<ProposalActionModalStepProps> = pro
       </ModalSubTitle>
 
       <ModalBottomButtonRow
-        prevBtnText={<Trans>Close</Trans>}
+        prevBtnText={<Trans>Back</Trans>}
         onPrevBtnClick={onPrevBtnClick}
         nextBtnText={<Trans>Review Action Details</Trans>}
         onNextBtnClick={() => {

@@ -76,7 +76,7 @@ const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props 
       />
 
       <ModalBottomButtonRow
-        prevBtnText={<Trans>Close</Trans>}
+        prevBtnText={<Trans>Back</Trans>}
         onPrevBtnClick={onPrevBtnClick}
         nextBtnText={<Trans>Add Stream Date Details</Trans>}
         onNextBtnClick={() => {

@@ -236,6 +236,8 @@ msgstr ""
 #: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallSelectFunctionStep/index.tsx
+#: src/components/ProposalActionsModal/steps/StreamPaymentsDateDetailsStep/index.tsx
+#: src/components/ProposalActionsModal/steps/StreamPaymentsPaymentDetailsStep/index.tsx
 #: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/TransferFundsDetailsStep/index.tsx
 #: src/components/ProposalActionsModal/steps/TransferFundsReviewStep/index.tsx
@@ -333,8 +335,6 @@ msgstr "WalletConnect データを消去"
 #: src/components/ChangeDelegatePannel/index.tsx
 #: src/components/CurrentDelegatePannel/index.tsx
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
-#: src/components/ProposalActionsModal/steps/StreamPaymentsDateDetailsStep/index.tsx
-#: src/components/ProposalActionsModal/steps/StreamPaymentsPaymentDetailsStep/index.tsx
 msgid "Close"
 msgstr "近い"
 
