@@ -317,7 +317,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV2, NounsDAOEventsV3 {
 
         uint256 startBlock = block.number + votingDelay;
 
-        Proposal storage newProposal = _proposals[proposalCount];
+        Proposal storage newProposal = _proposals[proposalId];
         newProposal.id = proposalId;
         newProposal.proposer = msg.sender;
         newProposal.proposalThreshold = _checkPropThreshold(votes);
