@@ -129,6 +129,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     error TooManyActions();
     error InvalidSignature();
     error ProposerAlreadyHasALiveProposal();
+    error ProposalSignatureNonceAlreadyUsed();
 
     /**
      * @notice Used to initialize the contract during delegator contructor
@@ -393,18 +394,27 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         }
     }
 
-    function _checkPropSig(bytes32 proposalHash, ProposerSignature memory propSig) internal view returns (address) {
+    function _checkPropSig(bytes32 proposalHash, ProposerSignature memory propSig)
+        internal
+        returns (address signatory)
+    {
+        bytes32 proposalAndNonceHash = keccak256(abi.encodePacked(proposalHash, propSig.nonce));
+
         if (propSig.erc1271Account == address(0)) {
             (bytes32 r, bytes32 s, uint8 v) = _splitSignature(propSig.sig);
-            address signatory = ecrecover(_propDigest(proposalHash), v, r, s);
+            signatory = ecrecover(_propDigest(proposalAndNonceHash), v, r, s);
             if (signatory == address(0)) revert InvalidSignature();
-            return signatory;
         } else {
-            if (IERC1271(propSig.erc1271Account).isValidSignature(_propDigest(proposalHash), propSig.sig) != 0x1626ba7e)
-                revert InvalidSignature();
+            if (
+                IERC1271(propSig.erc1271Account).isValidSignature(_propDigest(proposalAndNonceHash), propSig.sig) !=
+                0x1626ba7e
+            ) revert InvalidSignature();
 
-            return propSig.erc1271Account;
+            signatory = propSig.erc1271Account;
         }
+
+        if (proposeBySigNonces[signatory][propSig.nonce]) revert ProposalSignatureNonceAlreadyUsed();
+        proposeBySigNonces[signatory][propSig.nonce] = true;
     }
 
     function _propDigest(bytes32 proposalHash) internal view returns (bytes32) {

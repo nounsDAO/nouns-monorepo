@@ -136,11 +136,6 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
         bytes[] calldatas,
         string description
     );
-
-    struct ProposerSignature {
-        bytes sig;
-        address erc1271Account;
-    }
 }
 
 contract NounsDAOProxyStorage {
@@ -488,6 +483,14 @@ contract NounsDAOStorageV3 is NounsDAOStorageV1Adjusted {
         uint256 creationBlock;
         address[] proposers;
     }
+
+    struct ProposerSignature {
+        uint256 nonce;
+        bytes sig;
+        address erc1271Account;
+    }
+
+    mapping(address => mapping(uint256 => bool)) proposeBySigNonces;
 }
 
 interface INounsDAOExecutor {
