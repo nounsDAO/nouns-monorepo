@@ -136,6 +136,11 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
         bytes[] calldatas,
         string description
     );
+
+    struct ProposerSignature {
+        bytes sig;
+        address erc1271Account;
+    }
 }
 
 contract NounsDAOProxyStorage {

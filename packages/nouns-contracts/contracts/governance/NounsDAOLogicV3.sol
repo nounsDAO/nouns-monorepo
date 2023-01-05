@@ -53,6 +53,7 @@
 pragma solidity ^0.8.6;
 
 import './NounsDAOInterfaces.sol';
+import { IERC1271 } from '@openzeppelin/contracts/interfaces/IERC1271.sol';
 
 contract NounsDAOLogicV3 is NounsDAOStorageV2, NounsDAOEventsV3 {
     /// @notice The name of this contract
@@ -288,7 +289,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV2, NounsDAOEventsV3 {
     }
 
     function proposeBySigs(
-        bytes[] memory proposerSignatures,
+        ProposerSignature[] memory proposerSignatures,
         address[] memory targets,
         uint256[] memory values,
         string[] memory signatures,
@@ -391,17 +392,29 @@ contract NounsDAOLogicV3 is NounsDAOStorageV2, NounsDAOEventsV3 {
         }
     }
 
-    function _checkPropSig(bytes32 proposalHash, bytes memory sig) internal view returns (address signatory) {
-        bytes32 digest = keccak256(
-            abi.encodePacked(
-                '\x19\x01',
-                keccak256(abi.encode(DOMAIN_TYPEHASH, keccak256(bytes(name)), getChainIdInternal(), address(this))),
-                proposalHash
-            )
-        );
-        (bytes32 r, bytes32 s, uint8 v) = _splitSignature(sig);
-        signatory = ecrecover(digest, v, r, s);
-        if (signatory == address(0)) revert InvalidSignature();
+    function _checkPropSig(bytes32 proposalHash, ProposerSignature memory propSig) internal view returns (address) {
+        if (propSig.erc1271Account == address(0)) {
+            (bytes32 r, bytes32 s, uint8 v) = _splitSignature(propSig.sig);
+            address signatory = ecrecover(_propDigest(proposalHash), v, r, s);
+            if (signatory == address(0)) revert InvalidSignature();
+            return signatory;
+        } else {
+            if (IERC1271(propSig.erc1271Account).isValidSignature(_propDigest(proposalHash), propSig.sig) != 0x1626ba7e)
+                revert InvalidSignature();
+
+            return propSig.erc1271Account;
+        }
+    }
+
+    function _propDigest(bytes32 proposalHash) internal view returns (bytes32) {
+        return
+            keccak256(
+                abi.encodePacked(
+                    '\x19\x01',
+                    keccak256(abi.encode(DOMAIN_TYPEHASH, keccak256(bytes(name)), getChainIdInternal(), address(this))),
+                    proposalHash
+                )
+            );
     }
 
     function _checkPropThreshold(uint256 votes) internal view returns (uint256 propThreshold) {
