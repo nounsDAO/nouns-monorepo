@@ -27,7 +27,7 @@ export default function useStreamPaymentTransactions({
     return [];
   }
 
-  const fundStreamFunction = 'createStream(address,uint256,address,uint256,uint256,address)';
+  const fundStreamFunction = 'createStream(address,uint256,address,uint256,uint256,uint8,address)';
   const isUSDC = state.TransferFundsCurrency === SupportedCurrency.USDC;
   const amount = state.amount ?? '0';
 
@@ -43,6 +43,7 @@ export default function useStreamPaymentTransactions({
         isUSDC ? config.addresses.usdcToken : config.addresses.weth,
         state.streamStartTimestamp,
         state.streamEndTimestamp,
+        0,
         predictedAddress,
       ]),
       calldata: abi._encodeParams(abi.functions[fundStreamFunction ?? '']?.inputs ?? [], [
@@ -51,6 +52,7 @@ export default function useStreamPaymentTransactions({
         getTokenAddressForCurrency(state.TransferFundsCurrency),
         state.streamStartTimestamp,
         state.streamEndTimestamp,
+        0,
         predictedAddress,
       ]),
     },

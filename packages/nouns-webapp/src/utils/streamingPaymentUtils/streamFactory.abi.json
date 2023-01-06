@@ -40,18 +40,54 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "recipient", "type": "address" },
-      { "internalType": "uint256", "name": "tokenAmount", "type": "uint256" },
-      { "internalType": "address", "name": "tokenAddress", "type": "address" },
-      { "internalType": "uint256", "name": "startTime", "type": "uint256" },
-      { "internalType": "uint256", "name": "stopTime", "type": "uint256" },
-      { "internalType": "address", "name": "predictedStreamAddress", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "recipient",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "tokenAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "startTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "stopTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint8",
+        "name": "nonce",
+        "type": "uint8"
+      },
+      {
+        "internalType": "address",
+        "name": "predictedStreamAddress",
+        "type": "address"
+      }
     ],
     "name": "createStream",
-    "outputs": [{ "internalType": "address", "name": "stream", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "stream",
+        "type": "address"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
+
   {
     "inputs": [
       { "internalType": "address", "name": "msgSender", "type": "address" },
