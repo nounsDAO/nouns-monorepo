@@ -308,10 +308,6 @@ msgstr "WalletConnect データを消去"
 msgid "Close"
 msgstr "近い"
 
-#: src/components/NounsIntroSection/index.tsx
-msgid "Collect it"
-msgstr ""
-
 #: src/components/Documentation/index.tsx
 msgid "Compound Governance"
 msgstr "コンパウンドガバナンス"
@@ -631,10 +627,6 @@ msgstr "詳細はこちら"
 #: src/components/Documentation/index.tsx
 msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
 msgstr "詳しくは以下をご覧ください。また、{playgroundLink} を使いNounsのオフチェーンの作成をすることもできます。"
-
-#: src/components/NounsIntroSection/index.tsx
-msgid "Like this video?"
-msgstr ""
 
 #: src/components/NounInfoRowHolder/index.tsx
 msgid "Loading..."
