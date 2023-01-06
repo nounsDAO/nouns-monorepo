@@ -407,7 +407,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         } else {
             if (
                 IERC1271(propSig.erc1271Account).isValidSignature(_propDigest(proposalAndNonceHash), propSig.sig) !=
-                0x1626ba7e
+                IERC1271.isValidSignature.selector
             ) revert InvalidSignature();
 
             signatory = propSig.erc1271Account;
