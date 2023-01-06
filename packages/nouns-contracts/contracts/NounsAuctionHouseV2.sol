@@ -31,7 +31,6 @@ import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { INounsAuctionHouse } from './interfaces/INounsAuctionHouse.sol';
 import { INounsToken } from './interfaces/INounsToken.sol';
 import { IWETH } from './interfaces/IWETH.sol';
-import { Noracle } from './libs/Noracle.sol';
 
 contract NounsAuctionHouseV2 is
     INounsAuctionHouse,
@@ -39,8 +38,6 @@ contract NounsAuctionHouseV2 is
     ReentrancyGuardUpgradeable,
     OwnableUpgradeable
 {
-    using Noracle for Noracle.NoracleState;
-
     // The Nouns ERC721 token contract
     INounsToken public nouns;
 
@@ -63,7 +60,7 @@ contract NounsAuctionHouseV2 is
     INounsAuctionHouse.AuctionV2 public auction;
 
     // The Nouns price feed state
-    Noracle.NoracleState public oracle;
+    mapping(uint256 => ObservationState) observations;
 
     /**
      * @notice Initialize the auction house and base contracts,
@@ -244,12 +241,11 @@ contract NounsAuctionHouseV2 is
             _safeTransferETHWithFallback(owner(), _auction.amount);
         }
 
-        oracle.write(
-            uint32(block.timestamp),
-            uint16(_auction.nounId),
-            Noracle.ethPriceToUint48(_auction.amount),
-            _auction.bidder
-        );
+        observations[_auction.nounId] = ObservationState({
+            blockTimestamp: uint32(block.timestamp),
+            amount: ethPriceToUint64(_auction.amount),
+            winner: _auction.bidder
+        });
 
         emit AuctionSettled(_auction.nounId, _auction.bidder, _auction.amount);
     }
@@ -276,27 +272,16 @@ contract NounsAuctionHouseV2 is
         return success;
     }
 
-    /**
-     * @notice Initialize the price oracle, setting its cardinality to one.
-     * Cardinality is the the number past prices to store. For the oracle to store more than one price
-     * call `growPriceHistory` with the new number of auctions the oracle should store.
-     * @dev This function can only be called by `owner`.
-     */
-    function initializeOracle() external onlyOwner {
-        oracle.initialize();
-    }
+    function setPrices(Observation[] memory observations_) external onlyOwner {
+        for (uint256 i = 0; i < observations_.length; ++i) {
+            observations[observations_[i].nounId] = ObservationState({
+                blockTimestamp: observations_[i].blockTimestamp,
+                amount: observations_[i].amount,
+                winner: observations_[i].winner
+            });
+        }
 
-    /**
-     * @notice Increase the price oracle cardinality, i.e. how many past auction prices it stores.
-     * The caller of this function chooses to spend gas to warm up the new storage slots, so that
-     * writing price history upon auction settlement will cost minimal gas.
-     * In other words, the higher the value of `newCardinality`, the more gas calling this function costs.
-     * @param newCardinality the new total number of price history slots the oracle can store.
-     */
-    function growPriceHistory(uint32 newCardinality) external {
-        (uint32 current, uint32 next) = oracle.grow(newCardinality);
-
-        emit PriceHistoryGrown(current, next);
+        // TODO emit event
     }
 
     /**
@@ -308,10 +293,77 @@ contract NounsAuctionHouseV2 is
      * Since the oracle only has 3 prices stored, the user will get 3 observations.
      * @dev Reverts with a `AuctionCountOutOfBounds` error if `auctionCount` is greater than `oracle.cardinality`.
      * @param auctionCount The number of price observations to get.
-     * @return observations An array of type `Noracle.Observation`, where each Observation includes a timestamp,
+     * @return observations_ An array of type `Noracle.Observation`, where each Observation includes a timestamp,
      * the Noun ID of that auction, the winning bid amount, and the winner's addreess.
      */
-    function prices(uint32 auctionCount) external view returns (Noracle.Observation[] memory observations) {
-        return oracle.observe(auctionCount);
+    function prices(uint256 auctionCount) external view returns (Observation[] memory observations_) {
+        uint256 latestNounId = auction.nounId;
+        if (!auction.settled && latestNounId > 0) {
+            latestNounId -= 1;
+        }
+
+        observations_ = new Observation[](auctionCount);
+        uint256 observationsCount = 0;
+        while (observationsCount < auctionCount && latestNounId > 0) {
+            // Skip Nouner reward Nouns, they have no price
+            if (latestNounId <= 1820 && latestNounId % 10 == 0) {
+                --latestNounId;
+                continue;
+            }
+
+            observations_[observationsCount] = Observation({
+                blockTimestamp: observations[latestNounId].blockTimestamp,
+                amount: observations[latestNounId].amount,
+                winner: observations[latestNounId].winner,
+                nounId: latestNounId
+            });
+            ++observationsCount;
+            --latestNounId;
+        }
+
+        if (auctionCount > observationsCount) {
+            // this assembly trims the observations array, getting rid of unused cells
+            assembly {
+                mstore(observations_, observationsCount)
+            }
+        }
+    }
+
+    function prices(uint256 latestId, uint256 oldestId) external view returns (Observation[] memory observations_) {
+        observations_ = new Observation[](latestId - oldestId);
+        uint256 observationsCount = 0;
+        uint256 currentId = latestId;
+        while (currentId > oldestId) {
+            // Skip Nouner reward Nouns, they have no price
+            if (currentId <= 1820 && currentId % 10 == 0) {
+                --currentId;
+                continue;
+            }
+
+            observations_[observationsCount] = Observation({
+                blockTimestamp: observations[currentId].blockTimestamp,
+                amount: observations[currentId].amount,
+                winner: observations[currentId].winner,
+                nounId: currentId
+            });
+            ++observationsCount;
+            --currentId;
+        }
+
+        if (observations_.length > observationsCount) {
+            // this assembly trims the observations array, getting rid of unused cells
+            assembly {
+                mstore(observations_, observationsCount)
+            }
+        }
+    }
+
+    /**
+     * @dev Convert an ETH price of 256 bits with 18 decimals, to 64 bits with 10 decimals.
+     * Max supported value is 1844674407.3709551615 ETH.
+     *
+     */
+    function ethPriceToUint64(uint256 ethPrice) internal pure returns (uint64) {
+        return uint64(ethPrice / 1e8);
     }
 }

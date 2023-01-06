@@ -77,10 +77,7 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         proxyAdmin.upgrade(proxy, address(migratorLogic));
         NounsAuctionHousePreV2Migration migrator = NounsAuctionHousePreV2Migration(address(proxy));
         migrator.migrate();
-
         proxyAdmin.upgrade(proxy, address(newLogic));
-        NounsAuctionHouseV2 auctionV2 = NounsAuctionHouseV2(address(proxy));
-        auctionV2.initializeOracle();
 
         vm.stopPrank();
     }

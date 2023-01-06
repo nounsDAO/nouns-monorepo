@@ -48,6 +48,27 @@ interface INounsAuctionHouse {
         bool settled;
     }
 
+    struct ObservationState {
+        // The block.timestamp when the auction was settled.
+        uint32 blockTimestamp;
+        // The winning bid amount, with 10 decimal places (reducing accuracy to save bits).
+        // TODO update accuracy
+        uint64 amount;
+        // The address of the auction winner.
+        address winner;
+    }
+
+    struct Observation {
+        // The block.timestamp when the auction was settled.
+        uint32 blockTimestamp;
+        // The winning bid amount, with 10 decimal places (reducing accuracy to save bits).
+        uint64 amount;
+        // The address of the auction winner.
+        address winner;
+        // ID for the Noun (ERC721 token ID).
+        uint256 nounId;
+    }
+
     event AuctionCreated(uint256 indexed nounId, uint256 startTime, uint256 endTime);
 
     event AuctionBid(uint256 indexed nounId, address sender, uint256 value, bool extended);
