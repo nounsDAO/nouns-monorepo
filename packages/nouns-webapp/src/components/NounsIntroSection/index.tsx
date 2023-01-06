@@ -1,6 +1,6 @@
 import classes from './NounsIntroSection.module.css';
 import Section from '../../layout/Section';
-import { Button, Col, Nav } from 'react-bootstrap';
+import { Col, Nav } from 'react-bootstrap';
 import { Trans } from '@lingui/macro';
 import { Link } from 'react-router-dom';
 import nounsIosGif from '../../assets/nouns-ios.gif';
