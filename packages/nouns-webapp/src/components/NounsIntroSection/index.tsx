@@ -21,13 +21,6 @@ const NounsIntroSection = () => {
                 positive impact by funding ideas and fostering collaboration. From collectors
                 and technologists, to non-profits and brands, Nouns is for everyone.
               </Trans>
-              <br />
-              <Trans>Like this video?</Trans>
-              <a href="https://www.thisisnouns.wtf/" target="_blank" rel="noreferrer">
-                <Button className={classes.collectVideoBtn}>
-                  <Trans>Collect it</Trans>
-                </Button>
-              </a>
             </p>
           </div>
         </Col>
