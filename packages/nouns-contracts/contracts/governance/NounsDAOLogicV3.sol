@@ -53,7 +53,7 @@
 pragma solidity ^0.8.6;
 
 import './NounsDAOInterfaces.sol';
-import { IERC1271 } from '@openzeppelin/contracts/interfaces/IERC1271.sol';
+import { SignatureChecker } from '@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol';
 
 contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     /// @notice The name of this contract
@@ -308,13 +308,13 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         bytes32 proposalHash = keccak256(abi.encode(targets, values, signatures, calldatas, description));
         address[] memory proposers = new address[](proposerSignatures.length);
         for (uint256 i = 0; i < proposerSignatures.length; ++i) {
-            address signatory = _checkPropSig(proposalHash, proposerSignatures[i]);
-            proposers[i] = signatory;
+            _checkPropSig(proposalHash, proposerSignatures[i]);
+            address signer = proposers[i] = proposerSignatures[i].signer;
 
-            _checkNoActiveProp(signatory);
-            latestProposalIds[signatory] = proposalId;
+            _checkNoActiveProp(signer);
+            latestProposalIds[signer] = proposalId;
 
-            votes += nouns.getPriorVotes(signatory, block.number - 1);
+            votes += nouns.getPriorVotes(signer, block.number - 1);
         }
 
         uint256 startBlock = block.number + votingDelay;
@@ -394,27 +394,14 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         }
     }
 
-    function _checkPropSig(bytes32 proposalHash, ProposerSignature memory propSig)
-        internal
-        returns (address signatory)
-    {
+    function _checkPropSig(bytes32 proposalHash, ProposerSignature memory propSig) internal {
+        if (proposeBySigNonces[propSig.signer][propSig.nonce]) revert ProposalSignatureNonceAlreadyUsed();
+        proposeBySigNonces[propSig.signer][propSig.nonce] = true;
+
         bytes32 proposalAndNonceHash = keccak256(abi.encodePacked(proposalHash, propSig.nonce));
 
-        if (propSig.erc1271Account == address(0)) {
-            (bytes32 r, bytes32 s, uint8 v) = _splitSignature(propSig.sig);
-            signatory = ecrecover(_propDigest(proposalAndNonceHash), v, r, s);
-            if (signatory == address(0)) revert InvalidSignature();
-        } else {
-            if (
-                IERC1271(propSig.erc1271Account).isValidSignature(_propDigest(proposalAndNonceHash), propSig.sig) !=
-                IERC1271.isValidSignature.selector
-            ) revert InvalidSignature();
-
-            signatory = propSig.erc1271Account;
-        }
-
-        if (proposeBySigNonces[signatory][propSig.nonce]) revert ProposalSignatureNonceAlreadyUsed();
-        proposeBySigNonces[signatory][propSig.nonce] = true;
+        if (!SignatureChecker.isValidSignatureNow(propSig.signer, proposalAndNonceHash, propSig.sig))
+            revert InvalidSignature();
     }
 
     function _propDigest(bytes32 proposalHash) internal view returns (bytes32) {
@@ -504,11 +491,11 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
 
         bytes32 proposalHash = keccak256(abi.encode(targets, values, signatures, calldatas, description));
         for (uint256 i = 0; i < proposerSignatures.length; ++i) {
-            address signer = _checkPropSig(proposalHash, proposerSignatures[i]);
+            _checkPropSig(proposalHash, proposerSignatures[i]);
 
             // To avoid the gas cost of having to search signers in proposers, we're assuming the sigs we get
             // use the same amount of signers and the same order.
-            if (proposers[i] != signer) revert OnlyProposerCanEdit();
+            if (proposers[i] != proposerSignatures[i].signer) revert OnlyProposerCanEdit();
         }
 
         proposal.targets = targets;

@@ -487,7 +487,7 @@ contract NounsDAOStorageV3 is NounsDAOStorageV1Adjusted {
     struct ProposerSignature {
         uint256 nonce;
         bytes sig;
-        address erc1271Account;
+        address signer;
     }
 
     mapping(address => mapping(uint256 => bool)) proposeBySigNonces;
