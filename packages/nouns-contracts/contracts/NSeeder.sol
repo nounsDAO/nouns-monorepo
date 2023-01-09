@@ -34,8 +34,11 @@ contract NSeeder is ISeeder, Ownable {
     mapping(uint256 => uint256) public accExclusiveGroupMapping; // i: acc index, group index
     uint256[][] accExclusiveGroup; // i: group id, j: acc index in a group
 
-    uint256[][] accCountByType;
+    uint256[][] accCountByType; // typeOrderSorted acctually
     uint256[][] typeOrderSortedByCount; // [sorted_index] = real_group_id
+
+    // punk type, acc type, acc order id => accId
+    mapping(uint256 => mapping(uint256 => mapping(uint256 => uint256))) internal accIdByType; // not typeOrderSorted
 
     function generateSeed(uint256 punkId) external view override returns (ISeeder.Seed memory) {
         uint256 pseudorandomness = uint256(
@@ -125,11 +128,12 @@ contract NSeeder is ISeeder, Ownable {
                 }
             }
 
-            uint accRand = uint8(pseudorandomness >> (i * 8)) % accCountByType[seed.punkType][tmp];
-            usedGroupFlags[accExclusiveGroupMapping[typeOrderSortedByCount[seed.punkType][tmp]]] = 1;
+            uint256 accRand = uint8(pseudorandomness >> (i * 8)) % accCountByType[seed.punkType][tmp];
+            uint256 accType = typeOrderSortedByCount[seed.punkType][tmp];
+            usedGroupFlags[accExclusiveGroupMapping[accType]] = 1;
             seed.accessories[i] = Accessory({
-                accType: uint16(typeOrderSortedByCount[seed.punkType][tmp]),
-                accId: uint16(accRand)
+                accType: uint16(accType),
+                accId: uint16(accIdByType[seed.punkType][accType][accRand])
             });
         }
 
@@ -213,6 +217,15 @@ contract NSeeder is ISeeder, Ownable {
         }
     }
 
+    function setAccIdByType(uint256[][][] memory accIds) external onlyOwner {
+        for (uint256 i = 0 ; i < accIds.length ; i ++) {
+            for (uint256 j = 0 ; j < accIds[i].length ; j ++) {
+                for (uint256 k = 0 ; k < accIds[i][j].length ; k ++) {
+                    accIdByType[i][j][k] = accIds[i][j][k];
+                }
+            }
+        }
+    }
 
     function _setProbability(
         uint24[] storage cumulativeArray,

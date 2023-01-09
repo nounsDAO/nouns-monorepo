@@ -168,7 +168,7 @@ contract SVGRenderer is ISVGRenderer {
             chunk = string(
                 abi.encodePacked(
                     chunk,
-                    '<rect width="', buffer[i], '" height="10" x="', buffer[i + 1], '" y="', buffer[i + 2], '" fill="#', buffer[i + 3], '" />'
+                    '<rect width="', buffer[i], '" height="4" x="', buffer[i + 1], '" y="', buffer[i + 2], '" fill="#', buffer[i + 3], '" />'
                 )
             );
         }

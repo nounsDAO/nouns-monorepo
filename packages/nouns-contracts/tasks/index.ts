@@ -23,3 +23,4 @@ export * from './create-merkle';
 export * from './populate-seeder';
 export * from './tenderly-register';
 export * from './generate-metadata';
+export * from './generate-metadatas';
