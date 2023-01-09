@@ -26,3 +26,6 @@ abi/contracts/test
 # Foundry
 foundry-out
 foundry-cache
+
+output/
+.idea

@@ -58,6 +58,17 @@ task("populate-seeder", "Initialize deployed smart contracts")
         console.log("accCountPerType", accCountPerType)
         const accCountSetResponse = await (await nSeeder.setAccCountPerTypeAndPunk(accCountPerType)).wait()
 
+        const accIdPerType = probDoc.types.map((punkType: string) =>
+            Object.keys(probDoc.acc_types).map(type =>
+                Object.values(probDoc.accessories).filter((item: any) => item.type == type)
+                    .map((item: any, idx: number) => [item.punk.split("").includes(shortPunkType[punkType]), idx])
+                    .filter((entry: any) => entry[0])
+                    .map((entry: any) => entry[1])
+            )
+        )
+        console.log("accIdPerType", accIdPerType);
+        const accIdSetResponse = await (await nSeeder.setAccIdByType(accIdPerType)).wait()
+
         const exclusives = probDoc.exclusive_groups.reduce((prev: any, group: any, groupIndex: number) => {
             group.forEach((item: any) => {
                 const typeIndex = Object.keys(probDoc.acc_types).indexOf(item)

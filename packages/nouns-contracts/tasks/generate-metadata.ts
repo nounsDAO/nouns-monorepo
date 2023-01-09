@@ -46,7 +46,7 @@ task('generate-metadata', 'Generates virtual Metadata')
 //                };
     console.log('Generated Seed: ', seed);
 
-//    const parts = await descriptorContract.getPartsForSeed(seed);
+//    const parts = await descriptorContract.getPartsForSeed(seed, {gasLimit: 100_000_000});
 //    console.log('parts', parts);
 
 //    const tokenMetadata = await descriptorContract.tokenURI(tokenId, seed);
