@@ -26,33 +26,14 @@
 //
 // MODIFICATIONS
 // See NounsDAOLogicV1 for initial GovernorBravoDelegate modifications.
+// See NounsDAOLogicV2 for additional modifications.
 
-// NounsDAOLogicV2 adds:
-// - `quorumParamsCheckpoints`, which store dynamic quorum parameters checkpoints
-// to be used when calculating the dynamic quorum.
-// - `_setDynamicQuorumParams(DynamicQuorumParams memory params)`, which allows the
-// DAO to update the dynamic quorum parameters' values.
-// - `getDynamicQuorumParamsAt(uint256 blockNumber_)`
-// - Individual setters of the DynamicQuorumParams members:
-//    - `_setMinQuorumVotesBPS(uint16 newMinQuorumVotesBPS)`
-//    - `_setMaxQuorumVotesBPS(uint16 newMaxQuorumVotesBPS)`
-//    - `_setQuorumCoefficient(uint32 newQuorumCoefficient)`
-// - `minQuorumVotes` and `maxQuorumVotes`, which returns the current min and
-// max quorum votes using the current Noun supply.
-// - New `Proposal` struct member:
-//    - `totalSupply` used in dynamic quorum calculation.
-//    - `creationBlock` used for retrieving checkpoints of votes and dynamic quorum params. This now
-// allows changing `votingDelay` without affecting the checkpoints lookup.
-// - `quorumVotes(uint256 proposalId)`, which calculates and returns the dynamic
-// quorum for a specific proposal.
-// - `proposals(uint256 proposalId)` instead of the implicit getter, to avoid stack-too-deep error
-//
-// NounsDAOLogicV2 removes:
-// - `quorumVotes()` has been replaced by `quorumVotes(uint256 proposalId)`.
+// NounsDAOLogicV3: TODO
 
 pragma solidity ^0.8.6;
 
 import './NounsDAOInterfaces.sol';
+import { NounsDAODynamicQuorum } from './NounsDAODynamicQuorum.sol';
 import { SignatureChecker } from '@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol';
 
 contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
@@ -140,6 +121,9 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @param votingDelay_ The initial voting delay
      * @param proposalThresholdBPS_ The initial proposal threshold in basis points
      * @param dynamicQuorumParams_ The initial dynamic quorum parameters
+     * @param lastMinuteWindowInBlocks_ The last minute window that activates the objection period, in blocks
+     * @param objectionPeriodDurationInBlocks_ The duration of the objection period, in blocks
+     * @param extensionLogic_ The address of the extension contract
      */
     function initialize(
         address timelock_,
@@ -148,7 +132,10 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         uint256 votingPeriod_,
         uint256 votingDelay_,
         uint256 proposalThresholdBPS_,
-        DynamicQuorumParams calldata dynamicQuorumParams_
+        DynamicQuorumParams calldata dynamicQuorumParams_,
+        uint256 lastMinuteWindowInBlocks_,
+        uint256 objectionPeriodDurationInBlocks_,
+        address extensionLogic_
     ) public virtual {
         require(address(timelock) == address(0), 'NounsDAO::initialize: can only initialize once');
         if (msg.sender != admin) {
@@ -179,15 +166,51 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         votingPeriod = votingPeriod_;
         votingDelay = votingDelay_;
         proposalThresholdBPS = proposalThresholdBPS_;
-        _setDynamicQuorumParams(
+        NounsDAODynamicQuorum._setDynamicQuorumParams(
+            quorumParamsCheckpoints,
+            quorumVotesBPS,
             dynamicQuorumParams_.minQuorumVotesBPS,
             dynamicQuorumParams_.maxQuorumVotesBPS,
             dynamicQuorumParams_.quorumCoefficient
         );
 
-        // TODO make this configurable
-        lastMinuteWindowInBlocks = 7200; // 7200 blocks = 1 days
-        objectionPeriodDurationInBlocks = 14400; // 14400 blocks = 2 days
+        lastMinuteWindowInBlocks = lastMinuteWindowInBlocks_; // e.g. 7200 blocks = 1 days
+        objectionPeriodDurationInBlocks = objectionPeriodDurationInBlocks_; // e.g. 14400 blocks = 2 days
+        extensionLogic = extensionLogic_;
+    }
+
+    fallback() external payable virtual {
+        _fallback(extensionLogic);
+    }
+
+    /**
+     * @dev Using this extra fallback function to avoid this compilation error:
+     * Only local variables are supported. To access storage variables, use the ".slot" and ".offset" suffixes.
+     * Code was copied from OpenZeppelin's Proxy.sol.
+     */
+    function _fallback(address extensionLogic_) internal virtual {
+        assembly {
+            // Copy msg.data. We take full control of memory in this inline assembly
+            // block because it will not return to Solidity code. We overwrite the
+            // Solidity scratch pad at memory position 0.
+            calldatacopy(0, 0, calldatasize())
+
+            // Call the implementation.
+            // out and outsize are 0 because we don't know the size yet.
+            let result := delegatecall(gas(), extensionLogic_, 0, calldatasize(), 0, 0)
+
+            // Copy the returned data.
+            returndatacopy(0, 0, returndatasize())
+
+            switch result
+            // delegatecall returns 0 on error.
+            case 0 {
+                revert(0, returndatasize())
+            }
+            default {
+                return(0, returndatasize())
+            }
+        }
     }
 
     struct ProposalTemp {
@@ -215,76 +238,30 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         string memory description
     ) public returns (uint256) {
         ProposalTemp memory temp;
-
         temp.totalSupply = nouns.totalSupply();
-
+        temp.startBlock = block.number + votingDelay;
         temp.proposalThreshold = bps2Uint(proposalThresholdBPS, temp.totalSupply);
-
         require(
             nouns.getPriorVotes(msg.sender, block.number - 1) > temp.proposalThreshold,
             'NounsDAO::propose: proposer votes below proposal threshold'
         );
-        if (
-            targets.length != values.length || targets.length != signatures.length || targets.length != calldatas.length
-        ) revert ProposalInfoArityMismatch();
-        if (targets.length == 0) revert MustProvideActions();
-        if (targets.length > proposalMaxOperations) revert TooManyActions();
+        _checkProposalInputs(targets, values, signatures, calldatas);
         _checkNoActiveProp(msg.sender);
 
-        temp.startBlock = block.number + votingDelay;
-        temp.endBlock = temp.startBlock + votingPeriod;
-
         proposalCount++;
-        Proposal storage newProposal = _proposals[proposalCount];
-        newProposal.id = proposalCount;
-        newProposal.proposer = msg.sender;
-        newProposal.proposalThreshold = temp.proposalThreshold;
-        newProposal.eta = 0;
-        newProposal.targets = targets;
-        newProposal.values = values;
-        newProposal.signatures = signatures;
-        newProposal.calldatas = calldatas;
-        newProposal.startBlock = temp.startBlock;
-        newProposal.endBlock = temp.endBlock;
-        newProposal.forVotes = 0;
-        newProposal.againstVotes = 0;
-        newProposal.abstainVotes = 0;
-        newProposal.canceled = false;
-        newProposal.executed = false;
-        newProposal.vetoed = false;
-        newProposal.totalSupply = temp.totalSupply;
-        newProposal.creationBlock = block.number;
+        Proposal storage newProposal = _createNewProposal(
+            proposalCount,
+            temp.proposalThreshold,
+            targets,
+            values,
+            signatures,
+            calldatas,
+            temp.startBlock
+        );
 
         latestProposalIds[newProposal.proposer] = newProposal.id;
 
-        /// @notice Maintains backwards compatibility with GovernorBravo events
-        emit ProposalCreated(
-            newProposal.id,
-            msg.sender,
-            targets,
-            values,
-            signatures,
-            calldatas,
-            newProposal.startBlock,
-            newProposal.endBlock,
-            description
-        );
-
-        /// @notice Updated event with `proposalThreshold` and `minQuorumVotes`
-        /// @notice `minQuorumVotes` is always zero since V2 introduces dynamic quorum with checkpoints
-        emit ProposalCreatedWithRequirements(
-            newProposal.id,
-            msg.sender,
-            targets,
-            values,
-            signatures,
-            calldatas,
-            newProposal.startBlock,
-            newProposal.endBlock,
-            newProposal.proposalThreshold,
-            minQuorumVotes(),
-            description
-        );
+        _emitNewPropEvents(newProposal, targets, values, signatures, calldatas, description);
 
         return newProposal.id;
     }
@@ -297,15 +274,12 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         bytes[] memory calldatas,
         string memory description
     ) external returns (uint256) {
-        if (
-            targets.length != values.length || targets.length != signatures.length || targets.length != calldatas.length
-        ) revert ProposalInfoArityMismatch();
-        if (targets.length == 0) revert MustProvideActions();
-        if (targets.length > proposalMaxOperations) revert TooManyActions();
-
+        _checkProposalInputs(targets, values, signatures, calldatas);
         uint256 proposalId = proposalCount = proposalCount + 1;
-        uint256 votes;
+        uint256 startBlock = block.number + votingDelay;
         bytes32 proposalHash = keccak256(abi.encode(targets, values, signatures, calldatas, description));
+
+        uint256 votes;
         address[] memory proposers = new address[](proposerSignatures.length);
         for (uint256 i = 0; i < proposerSignatures.length; ++i) {
             _checkPropSig(proposalHash, proposerSignatures[i]);
@@ -317,12 +291,35 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
             votes += nouns.getPriorVotes(signer, block.number - 1);
         }
 
-        uint256 startBlock = block.number + votingDelay;
+        Proposal storage newProposal = _createNewProposal(
+            proposalId,
+            _checkPropThreshold(votes),
+            targets,
+            values,
+            signatures,
+            calldatas,
+            startBlock
+        );
+        newProposal.proposers = proposers;
 
-        Proposal storage newProposal = _proposals[proposalId];
+        _emitNewPropEvents(newProposal, targets, values, signatures, calldatas, description);
+
+        return proposalId;
+    }
+
+    function _createNewProposal(
+        uint256 proposalId,
+        uint256 proposalThreshold,
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas,
+        uint256 startBlock
+    ) internal returns (Proposal storage newProposal) {
+        newProposal = _proposals[proposalId];
         newProposal.id = proposalId;
         newProposal.proposer = msg.sender;
-        newProposal.proposalThreshold = _checkPropThreshold(votes);
+        newProposal.proposalThreshold = proposalThreshold;
         newProposal.eta = 0;
         newProposal.targets = targets;
         newProposal.values = values;
@@ -338,11 +335,6 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         newProposal.vetoed = false;
         newProposal.totalSupply = nouns.totalSupply();
         newProposal.creationBlock = block.number;
-        newProposal.proposers = proposers;
-
-        _emitNewPropEvents(newProposal, targets, values, signatures, calldatas, description);
-
-        return proposalId;
     }
 
     function _emitNewPropEvents(
@@ -422,26 +414,6 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         require(votes > propThreshold, 'NounsDAO::propose: proposer votes below proposal threshold');
     }
 
-    function _splitSignature(bytes memory sig)
-        internal
-        pure
-        returns (
-            bytes32 r,
-            bytes32 s,
-            uint8 v
-        )
-    {
-        require(sig.length == 65, 'invalid signature length');
-        assembly {
-            // first 32 bytes, after the length prefix
-            r := mload(add(sig, 32))
-            // second 32 bytes
-            s := mload(add(sig, 64))
-            // final byte (first byte of the next 32 bytes)
-            v := byte(0, mload(add(sig, 96)))
-        }
-    }
-
     function updateProposal(
         uint256 proposalId,
         address[] memory targets,
@@ -450,12 +422,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         bytes[] memory calldatas,
         string memory description
     ) external {
-        if (
-            targets.length != values.length || targets.length != signatures.length || targets.length != calldatas.length
-        ) revert ProposalInfoArityMismatch();
-        if (targets.length == 0) revert MustProvideActions();
-        if (targets.length > proposalMaxOperations) revert TooManyActions();
-
+        _checkProposalInputs(targets, values, signatures, calldatas);
         Proposal storage proposal = _proposals[proposalId];
         if (state(proposalId) != ProposalState.Pending) revert CanOnlyEditPendingProposals();
         if (msg.sender != proposal.proposer) revert OnlyProposerCanEdit();
@@ -477,12 +444,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         bytes[] memory calldatas,
         string memory description
     ) external {
-        if (
-            targets.length != values.length || targets.length != signatures.length || targets.length != calldatas.length
-        ) revert ProposalInfoArityMismatch();
-        if (targets.length == 0) revert MustProvideActions();
-        if (targets.length > proposalMaxOperations) revert TooManyActions();
-
+        _checkProposalInputs(targets, values, signatures, calldatas);
         Proposal storage proposal = _proposals[proposalId];
         if (state(proposalId) != ProposalState.Pending) revert CanOnlyEditPendingProposals();
 
@@ -504,6 +466,19 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         proposal.calldatas = calldatas;
 
         emit ProposalUpdated(proposalId, msg.sender, targets, values, signatures, calldatas, description);
+    }
+
+    function _checkProposalInputs(
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas
+    ) internal pure {
+        if (
+            targets.length != values.length || targets.length != signatures.length || targets.length != calldatas.length
+        ) revert ProposalInfoArityMismatch();
+        if (targets.length == 0) revert MustProvideActions();
+        if (targets.length > proposalMaxOperations) revert TooManyActions();
     }
 
     /**
@@ -611,71 +586,6 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     }
 
     /**
-     * @notice Vetoes a proposal only if sender is the vetoer and the proposal has not been executed.
-     * @param proposalId The id of the proposal to veto
-     */
-    function veto(uint256 proposalId) external {
-        if (vetoer == address(0)) {
-            revert VetoerBurned();
-        }
-
-        if (msg.sender != vetoer) {
-            revert VetoerOnly();
-        }
-
-        if (state(proposalId) == ProposalState.Executed) {
-            revert CantVetoExecutedProposal();
-        }
-
-        Proposal storage proposal = _proposals[proposalId];
-
-        proposal.vetoed = true;
-        for (uint256 i = 0; i < proposal.targets.length; i++) {
-            timelock.cancelTransaction(
-                proposal.targets[i],
-                proposal.values[i],
-                proposal.signatures[i],
-                proposal.calldatas[i],
-                proposal.eta
-            );
-        }
-
-        emit ProposalVetoed(proposalId);
-    }
-
-    /**
-     * @notice Gets actions of a proposal
-     * @param proposalId the id of the proposal
-     * @return targets
-     * @return values
-     * @return signatures
-     * @return calldatas
-     */
-    function getActions(uint256 proposalId)
-        external
-        view
-        returns (
-            address[] memory targets,
-            uint256[] memory values,
-            string[] memory signatures,
-            bytes[] memory calldatas
-        )
-    {
-        Proposal storage p = _proposals[proposalId];
-        return (p.targets, p.values, p.signatures, p.calldatas);
-    }
-
-    /**
-     * @notice Gets the receipt for a voter on a given proposal
-     * @param proposalId the id of proposal
-     * @param voter The address of the voter
-     * @return The voting receipt
-     */
-    function getReceipt(uint256 proposalId, address voter) external view returns (Receipt memory) {
-        return _proposals[proposalId].receipts[voter];
-    }
-
-    /**
      * @notice Gets the state of a proposal
      * @param proposalId The id of the proposal
      * @return Proposal state
@@ -704,35 +614,6 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         } else {
             return ProposalState.Queued;
         }
-    }
-
-    /**
-     * @notice Returns the proposal details given a proposal id.
-     *     The `quorumVotes` member holds the *current* quorum, given the current votes.
-     * @param proposalId the proposal id to get the data for
-     * @return A `ProposalCondensed` struct with the proposal data
-     */
-    function proposals(uint256 proposalId) external view returns (ProposalCondensed memory) {
-        Proposal storage proposal = _proposals[proposalId];
-        return
-            ProposalCondensed({
-                id: proposal.id,
-                proposer: proposal.proposer,
-                proposalThreshold: proposal.proposalThreshold,
-                quorumVotes: quorumVotes(proposal.id),
-                eta: proposal.eta,
-                startBlock: proposal.startBlock,
-                endBlock: proposal.endBlock,
-                forVotes: proposal.forVotes,
-                againstVotes: proposal.againstVotes,
-                abstainVotes: proposal.abstainVotes,
-                canceled: proposal.canceled,
-                vetoed: proposal.vetoed,
-                executed: proposal.executed,
-                totalSupply: proposal.totalSupply,
-                creationBlock: proposal.creationBlock,
-                proposers: proposal.proposers
-            });
     }
 
     /**
@@ -919,291 +800,6 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         return proposal.forVotes <= proposal.againstVotes || proposal.forVotes < quorumVotes(proposal.id);
     }
 
-    /**
-     * @notice Admin function for setting the voting delay
-     * @param newVotingDelay new voting delay, in blocks
-     */
-    function _setVotingDelay(uint256 newVotingDelay) external {
-        if (msg.sender != admin) {
-            revert AdminOnly();
-        }
-        require(
-            newVotingDelay >= MIN_VOTING_DELAY && newVotingDelay <= MAX_VOTING_DELAY,
-            'NounsDAO::_setVotingDelay: invalid voting delay'
-        );
-        uint256 oldVotingDelay = votingDelay;
-        votingDelay = newVotingDelay;
-
-        emit VotingDelaySet(oldVotingDelay, votingDelay);
-    }
-
-    /**
-     * @notice Admin function for setting the voting period
-     * @param newVotingPeriod new voting period, in blocks
-     */
-    function _setVotingPeriod(uint256 newVotingPeriod) external {
-        if (msg.sender != admin) {
-            revert AdminOnly();
-        }
-        require(
-            newVotingPeriod >= MIN_VOTING_PERIOD && newVotingPeriod <= MAX_VOTING_PERIOD,
-            'NounsDAO::_setVotingPeriod: invalid voting period'
-        );
-        uint256 oldVotingPeriod = votingPeriod;
-        votingPeriod = newVotingPeriod;
-
-        emit VotingPeriodSet(oldVotingPeriod, votingPeriod);
-    }
-
-    /**
-     * @notice Admin function for setting the proposal threshold basis points
-     * @dev newProposalThresholdBPS must be greater than the hardcoded min
-     * @param newProposalThresholdBPS new proposal threshold
-     */
-    function _setProposalThresholdBPS(uint256 newProposalThresholdBPS) external {
-        if (msg.sender != admin) {
-            revert AdminOnly();
-        }
-        require(
-            newProposalThresholdBPS >= MIN_PROPOSAL_THRESHOLD_BPS &&
-                newProposalThresholdBPS <= MAX_PROPOSAL_THRESHOLD_BPS,
-            'NounsDAO::_setProposalThreshold: invalid proposal threshold bps'
-        );
-        uint256 oldProposalThresholdBPS = proposalThresholdBPS;
-        proposalThresholdBPS = newProposalThresholdBPS;
-
-        emit ProposalThresholdBPSSet(oldProposalThresholdBPS, proposalThresholdBPS);
-    }
-
-    /**
-     * @notice Admin function for setting the minimum quorum votes bps
-     * @param newMinQuorumVotesBPS minimum quorum votes bps
-     *     Must be between `MIN_QUORUM_VOTES_BPS_LOWER_BOUND` and `MIN_QUORUM_VOTES_BPS_UPPER_BOUND`
-     *     Must be lower than or equal to maxQuorumVotesBPS
-     */
-    function _setMinQuorumVotesBPS(uint16 newMinQuorumVotesBPS) external {
-        if (msg.sender != admin) {
-            revert AdminOnly();
-        }
-        DynamicQuorumParams memory params = getDynamicQuorumParamsAt(block.number);
-
-        require(
-            newMinQuorumVotesBPS >= MIN_QUORUM_VOTES_BPS_LOWER_BOUND &&
-                newMinQuorumVotesBPS <= MIN_QUORUM_VOTES_BPS_UPPER_BOUND,
-            'NounsDAO::_setMinQuorumVotesBPS: invalid min quorum votes bps'
-        );
-        require(
-            newMinQuorumVotesBPS <= params.maxQuorumVotesBPS,
-            'NounsDAO::_setMinQuorumVotesBPS: min quorum votes bps greater than max'
-        );
-
-        uint16 oldMinQuorumVotesBPS = params.minQuorumVotesBPS;
-        params.minQuorumVotesBPS = newMinQuorumVotesBPS;
-
-        _writeQuorumParamsCheckpoint(params);
-
-        emit MinQuorumVotesBPSSet(oldMinQuorumVotesBPS, newMinQuorumVotesBPS);
-    }
-
-    /**
-     * @notice Admin function for setting the maximum quorum votes bps
-     * @param newMaxQuorumVotesBPS maximum quorum votes bps
-     *     Must be lower than `MAX_QUORUM_VOTES_BPS_UPPER_BOUND`
-     *     Must be higher than or equal to minQuorumVotesBPS
-     */
-    function _setMaxQuorumVotesBPS(uint16 newMaxQuorumVotesBPS) external {
-        if (msg.sender != admin) {
-            revert AdminOnly();
-        }
-        DynamicQuorumParams memory params = getDynamicQuorumParamsAt(block.number);
-
-        require(
-            newMaxQuorumVotesBPS <= MAX_QUORUM_VOTES_BPS_UPPER_BOUND,
-            'NounsDAO::_setMaxQuorumVotesBPS: invalid max quorum votes bps'
-        );
-        require(
-            params.minQuorumVotesBPS <= newMaxQuorumVotesBPS,
-            'NounsDAO::_setMaxQuorumVotesBPS: min quorum votes bps greater than max'
-        );
-
-        uint16 oldMaxQuorumVotesBPS = params.maxQuorumVotesBPS;
-        params.maxQuorumVotesBPS = newMaxQuorumVotesBPS;
-
-        _writeQuorumParamsCheckpoint(params);
-
-        emit MaxQuorumVotesBPSSet(oldMaxQuorumVotesBPS, newMaxQuorumVotesBPS);
-    }
-
-    /**
-     * @notice Admin function for setting the dynamic quorum coefficient
-     * @param newQuorumCoefficient the new coefficient, as a fixed point integer with 6 decimals
-     */
-    function _setQuorumCoefficient(uint32 newQuorumCoefficient) external {
-        if (msg.sender != admin) {
-            revert AdminOnly();
-        }
-        DynamicQuorumParams memory params = getDynamicQuorumParamsAt(block.number);
-
-        uint32 oldQuorumCoefficient = params.quorumCoefficient;
-        params.quorumCoefficient = newQuorumCoefficient;
-
-        _writeQuorumParamsCheckpoint(params);
-
-        emit QuorumCoefficientSet(oldQuorumCoefficient, newQuorumCoefficient);
-    }
-
-    /**
-     * @notice Admin function for setting all the dynamic quorum parameters
-     * @param newMinQuorumVotesBPS minimum quorum votes bps
-     *     Must be between `MIN_QUORUM_VOTES_BPS_LOWER_BOUND` and `MIN_QUORUM_VOTES_BPS_UPPER_BOUND`
-     *     Must be lower than or equal to maxQuorumVotesBPS
-     * @param newMaxQuorumVotesBPS maximum quorum votes bps
-     *     Must be lower than `MAX_QUORUM_VOTES_BPS_UPPER_BOUND`
-     *     Must be higher than or equal to minQuorumVotesBPS
-     * @param newQuorumCoefficient the new coefficient, as a fixed point integer with 6 decimals
-     */
-    function _setDynamicQuorumParams(
-        uint16 newMinQuorumVotesBPS,
-        uint16 newMaxQuorumVotesBPS,
-        uint32 newQuorumCoefficient
-    ) public {
-        if (msg.sender != admin) {
-            revert AdminOnly();
-        }
-        if (
-            newMinQuorumVotesBPS < MIN_QUORUM_VOTES_BPS_LOWER_BOUND ||
-            newMinQuorumVotesBPS > MIN_QUORUM_VOTES_BPS_UPPER_BOUND
-        ) {
-            revert InvalidMinQuorumVotesBPS();
-        }
-        if (newMaxQuorumVotesBPS > MAX_QUORUM_VOTES_BPS_UPPER_BOUND) {
-            revert InvalidMaxQuorumVotesBPS();
-        }
-        if (newMinQuorumVotesBPS > newMaxQuorumVotesBPS) {
-            revert MinQuorumBPSGreaterThanMaxQuorumBPS();
-        }
-
-        DynamicQuorumParams memory oldParams = getDynamicQuorumParamsAt(block.number);
-
-        DynamicQuorumParams memory params = DynamicQuorumParams({
-            minQuorumVotesBPS: newMinQuorumVotesBPS,
-            maxQuorumVotesBPS: newMaxQuorumVotesBPS,
-            quorumCoefficient: newQuorumCoefficient
-        });
-        _writeQuorumParamsCheckpoint(params);
-
-        emit MinQuorumVotesBPSSet(oldParams.minQuorumVotesBPS, params.minQuorumVotesBPS);
-        emit MaxQuorumVotesBPSSet(oldParams.maxQuorumVotesBPS, params.maxQuorumVotesBPS);
-        emit QuorumCoefficientSet(oldParams.quorumCoefficient, params.quorumCoefficient);
-    }
-
-    function _withdraw() external returns (uint256, bool) {
-        if (msg.sender != admin) {
-            revert AdminOnly();
-        }
-
-        uint256 amount = address(this).balance;
-        (bool sent, ) = msg.sender.call{ value: amount }('');
-
-        emit Withdraw(amount, sent);
-
-        return (amount, sent);
-    }
-
-    /**
-     * @notice Begins transfer of admin rights. The newPendingAdmin must call `_acceptAdmin` to finalize the transfer.
-     * @dev Admin function to begin change of admin. The newPendingAdmin must call `_acceptAdmin` to finalize the transfer.
-     * @param newPendingAdmin New pending admin.
-     */
-    function _setPendingAdmin(address newPendingAdmin) external {
-        // Check caller = admin
-        require(msg.sender == admin, 'NounsDAO::_setPendingAdmin: admin only');
-
-        // Save current value, if any, for inclusion in log
-        address oldPendingAdmin = pendingAdmin;
-
-        // Store pendingAdmin with value newPendingAdmin
-        pendingAdmin = newPendingAdmin;
-
-        // Emit NewPendingAdmin(oldPendingAdmin, newPendingAdmin)
-        emit NewPendingAdmin(oldPendingAdmin, newPendingAdmin);
-    }
-
-    /**
-     * @notice Accepts transfer of admin rights. msg.sender must be pendingAdmin
-     * @dev Admin function for pending admin to accept role and update admin
-     */
-    function _acceptAdmin() external {
-        // Check caller is pendingAdmin and pendingAdmin ≠ address(0)
-        require(msg.sender == pendingAdmin && msg.sender != address(0), 'NounsDAO::_acceptAdmin: pending admin only');
-
-        // Save current values for inclusion in log
-        address oldAdmin = admin;
-        address oldPendingAdmin = pendingAdmin;
-
-        // Store admin with value pendingAdmin
-        admin = pendingAdmin;
-
-        // Clear the pending value
-        pendingAdmin = address(0);
-
-        emit NewAdmin(oldAdmin, admin);
-        emit NewPendingAdmin(oldPendingAdmin, pendingAdmin);
-    }
-
-    /**
-     * @notice Begins transition of vetoer. The newPendingVetoer must call _acceptVetoer to finalize the transfer.
-     * @param newPendingVetoer New Pending Vetoer
-     */
-    function _setPendingVetoer(address newPendingVetoer) public {
-        if (msg.sender != vetoer) {
-            revert VetoerOnly();
-        }
-
-        emit NewPendingVetoer(pendingVetoer, newPendingVetoer);
-
-        pendingVetoer = newPendingVetoer;
-    }
-
-    function _acceptVetoer() external {
-        if (msg.sender != pendingVetoer) {
-            revert PendingVetoerOnly();
-        }
-
-        // Update vetoer
-        emit NewVetoer(vetoer, pendingVetoer);
-        vetoer = pendingVetoer;
-
-        // Clear the pending value
-        emit NewPendingVetoer(pendingVetoer, address(0));
-        pendingVetoer = address(0);
-    }
-
-    /**
-     * @notice Burns veto priviledges
-     * @dev Vetoer function destroying veto power forever
-     */
-    function _burnVetoPower() public {
-        // Check caller is vetoer
-        require(msg.sender == vetoer, 'NounsDAO::_burnVetoPower: vetoer only');
-
-        // Update vetoer to 0x0
-        emit NewVetoer(vetoer, address(0));
-        vetoer = address(0);
-
-        // Clear the pending value
-        emit NewPendingVetoer(pendingVetoer, address(0));
-        pendingVetoer = address(0);
-    }
-
-    /**
-     * @notice Current proposal threshold using Noun Total Supply
-     * Differs from `GovernerBravo` which uses fixed amount
-     */
-    function proposalThreshold() public view returns (uint256) {
-        return bps2Uint(proposalThresholdBPS, nouns.totalSupply());
-    }
-
     function proposalCreationBlock(Proposal storage proposal) internal view returns (uint256) {
         if (proposal.creationBlock == 0) {
             return proposal.startBlock - votingDelay;
@@ -1214,102 +810,11 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     /**
      * @notice Quorum votes required for a specific proposal to succeed
      * Differs from `GovernerBravo` which uses fixed amount
+     * @dev used in `isDefeated()`, which is used in `state()`.
      */
     function quorumVotes(uint256 proposalId) public view returns (uint256) {
         Proposal storage proposal = _proposals[proposalId];
-        if (proposal.totalSupply == 0) {
-            return proposal.quorumVotes;
-        }
-
-        return
-            dynamicQuorumVotes(
-                proposal.againstVotes,
-                proposal.totalSupply,
-                getDynamicQuorumParamsAt(proposal.creationBlock)
-            );
-    }
-
-    /**
-     * @notice Calculates the required quorum of for-votes based on the amount of against-votes
-     *     The more against-votes there are for a proposal, the higher the required quorum is.
-     *     The quorum BPS is between `params.minQuorumVotesBPS` and params.maxQuorumVotesBPS.
-     *     The additional quorum is calculated as:
-     *       quorumCoefficient * againstVotesBPS
-     * @dev Note the coefficient is a fixed point integer with 6 decimals
-     * @param againstVotes Number of against-votes in the proposal
-     * @param totalSupply The total supply of Nouns at the time of proposal creation
-     * @param params Configurable parameters for calculating the quorum based on againstVotes. See `DynamicQuorumParams` definition for additional details.
-     * @return quorumVotes The required quorum
-     */
-    function dynamicQuorumVotes(
-        uint256 againstVotes,
-        uint256 totalSupply,
-        DynamicQuorumParams memory params
-    ) public pure returns (uint256) {
-        uint256 againstVotesBPS = (10000 * againstVotes) / totalSupply;
-        uint256 quorumAdjustmentBPS = (params.quorumCoefficient * againstVotesBPS) / 1e6;
-        uint256 adjustedQuorumBPS = params.minQuorumVotesBPS + quorumAdjustmentBPS;
-        uint256 quorumBPS = min(params.maxQuorumVotesBPS, adjustedQuorumBPS);
-        return bps2Uint(quorumBPS, totalSupply);
-    }
-
-    /**
-     * @notice returns the dynamic quorum parameters values at a certain block number
-     * @dev The checkpoints array must not be empty, and the block number must be higher than or equal to
-     *     the block of the first checkpoint
-     * @param blockNumber_ the block number to get the params at
-     * @return The dynamic quorum parameters that were set at the given block number
-     */
-    function getDynamicQuorumParamsAt(uint256 blockNumber_) public view returns (DynamicQuorumParams memory) {
-        uint32 blockNumber = safe32(blockNumber_, 'NounsDAO::getDynamicQuorumParamsAt: block number exceeds 32 bits');
-        uint256 len = quorumParamsCheckpoints.length;
-
-        if (len == 0) {
-            return
-                DynamicQuorumParams({
-                    minQuorumVotesBPS: safe16(quorumVotesBPS),
-                    maxQuorumVotesBPS: safe16(quorumVotesBPS),
-                    quorumCoefficient: 0
-                });
-        }
-
-        if (quorumParamsCheckpoints[len - 1].fromBlock <= blockNumber) {
-            return quorumParamsCheckpoints[len - 1].params;
-        }
-
-        if (quorumParamsCheckpoints[0].fromBlock > blockNumber) {
-            return
-                DynamicQuorumParams({
-                    minQuorumVotesBPS: safe16(quorumVotesBPS),
-                    maxQuorumVotesBPS: safe16(quorumVotesBPS),
-                    quorumCoefficient: 0
-                });
-        }
-
-        uint256 lower = 0;
-        uint256 upper = len - 1;
-        while (upper > lower) {
-            uint256 center = upper - (upper - lower) / 2;
-            DynamicQuorumParamsCheckpoint memory cp = quorumParamsCheckpoints[center];
-            if (cp.fromBlock == blockNumber) {
-                return cp.params;
-            } else if (cp.fromBlock < blockNumber) {
-                lower = center;
-            } else {
-                upper = center - 1;
-            }
-        }
-        return quorumParamsCheckpoints[lower].params;
-    }
-
-    function _writeQuorumParamsCheckpoint(DynamicQuorumParams memory params) internal {
-        uint32 blockNumber = safe32(block.number, 'block number exceeds 32 bits');
-        uint256 pos = quorumParamsCheckpoints.length;
-        if (pos > 0 && quorumParamsCheckpoints[pos - 1].fromBlock == blockNumber) {
-            quorumParamsCheckpoints[pos - 1].params = params;
-        } else {
-            quorumParamsCheckpoints.push(DynamicQuorumParamsCheckpoint({ fromBlock: blockNumber, params: params }));
-        }
+        return NounsDAODynamicQuorum.quorumVotes(proposal, quorumParamsCheckpoints, quorumVotesBPS);
     }
 
     function _refundGas(uint256 startGas) internal {
@@ -1333,16 +838,16 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
 
     /**
      * @notice Current min quorum votes using Noun total supply
+     * @dev used in `propose`
      */
     function minQuorumVotes() public view returns (uint256) {
-        return bps2Uint(getDynamicQuorumParamsAt(block.number).minQuorumVotesBPS, nouns.totalSupply());
-    }
-
-    /**
-     * @notice Current max quorum votes using Noun total supply
-     */
-    function maxQuorumVotes() public view returns (uint256) {
-        return bps2Uint(getDynamicQuorumParamsAt(block.number).maxQuorumVotesBPS, nouns.totalSupply());
+        return
+            bps2Uint(
+                NounsDAODynamicQuorum
+                    .getDynamicQuorumParamsAt(quorumParamsCheckpoints, block.number, quorumVotesBPS)
+                    .minQuorumVotesBPS,
+                nouns.totalSupply()
+            );
     }
 
     function bps2Uint(uint256 bps, uint256 number) internal pure returns (uint256) {
@@ -1355,18 +860,6 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
             chainId := chainid()
         }
         return chainId;
-    }
-
-    function safe32(uint256 n, string memory errorMessage) internal pure returns (uint32) {
-        require(n <= type(uint32).max, errorMessage);
-        return uint32(n);
-    }
-
-    function safe16(uint256 n) internal pure returns (uint16) {
-        if (n > type(uint16).max) {
-            revert UnsafeUint16Cast();
-        }
-        return uint16(n);
     }
 
     receive() external payable {}
