@@ -582,36 +582,52 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
      */
     function getPartsForSeed(ISeeder.Seed memory seed) public view returns (ISVGRenderer.Part[] memory) {
         ISVGRenderer.Part[] memory parts = new ISVGRenderer.Part[](seed.accessories.length + 1);
+
         bytes memory accBuffer;
         uint256 punkTypeId;
         if (seed.punkType == 0) {
-            punkTypeId = 2 * seed.skinTone;
+            punkTypeId = seed.skinTone;
         } else if (seed.punkType == 1) {
-            punkTypeId = 8 + 2 * seed.skinTone;
+            punkTypeId = 4 + seed.skinTone;
         } else {
-            punkTypeId = 12 + 2 * seed.punkType;
+            punkTypeId = 6 + seed.punkType;
         }
-        accBuffer = art.punkTypes(punkTypeId);
+        // times 2 because all images are in two versions
+        accBuffer = art.punkTypes(2 * punkTypeId);
         parts[0] = ISVGRenderer.Part({ image: accBuffer, palette: _getPalette(accBuffer) });
-        for(uint i = 0; i < seed.accessories.length; i ++) {
-            uint accType = seed.accessories[i].accType;
-            uint accId = 2 * seed.accessories[i].accId;
-            if(accType == 0) accBuffer = art.hats(accId);
-            else if(accType == 1) accBuffer = art.hairs(accId);
-            else if(accType == 2) accBuffer = art.beards(accId);
-            else if(accType == 3) accBuffer = art.eyeses(accId);
-            else if(accType == 4) accBuffer = art.glasseses(accId);
-            else if(accType == 5) accBuffer = art.mouths(accId);
-            else if(accType == 6) accBuffer = art.teeths(accId);
-            else if(accType == 7) accBuffer = art.lipses(accId);
-            else if(accType == 8) accBuffer = art.necks(accId);
-            else if(accType == 9) accBuffer = art.emotions(accId);
-            else if(accType == 10) accBuffer = art.faces(accId);
-            else if(accType == 11) accBuffer = art.earses(accId);
-            else if(accType == 12) accBuffer = art.noses(accId);
-            else if(accType == 13) accBuffer = art.cheekses(accId);
-            else revert();
-            parts[i + 1] = ISVGRenderer.Part({ image: accBuffer, palette: _getPalette(accBuffer) });
+
+        uint256[] memory sortedAccessories = new uint256[](14);
+        for (uint256 i = 0 ; i < seed.accessories.length; i ++) {
+            // 10_000 is a trick so filled entries are not zero
+            // times 2 because all images are in two versions
+            unchecked {
+                sortedAccessories[seed.accessories[i].accType] = 10_000 + 2 * seed.accessories[i].accId;
+            }
+        }
+
+        uint256 idx = 1; // starts from 1, 0 is taken by punkType
+        for(uint i = 0; i < 14; i ++) {
+            if (sortedAccessories[i] > 0) {
+                // i is accType
+                uint256 accIdImage = sortedAccessories[i] % 10_000;
+                if(i == 0) accBuffer = art.necks(accIdImage);
+                else if(i == 1) accBuffer = art.cheekses(accIdImage);
+                else if(i == 2) accBuffer = art.faces(accIdImage);
+                else if(i == 3) accBuffer = art.lipses(accIdImage);
+                else if(i == 4) accBuffer = art.emotions(accIdImage);
+                else if(i == 5) accBuffer = art.beards(accIdImage);
+                else if(i == 6) accBuffer = art.teeths(accIdImage);
+                else if(i == 7) accBuffer = art.earses(accIdImage);
+                else if(i == 8) accBuffer = art.hats(accIdImage);
+                else if(i == 9) accBuffer = art.hairs(accIdImage);
+                else if(i == 10) accBuffer = art.mouths(accIdImage);
+                else if(i == 11) accBuffer = art.glasseses(accIdImage);
+                else if(i == 12) accBuffer = art.eyeses(accIdImage);
+                else if(i == 13) accBuffer = art.noses(accIdImage);
+                else revert();
+                parts[idx] = ISVGRenderer.Part({ image: accBuffer, palette: _getPalette(accBuffer) });
+                idx ++;
+            }
         }
         return parts;
     }
