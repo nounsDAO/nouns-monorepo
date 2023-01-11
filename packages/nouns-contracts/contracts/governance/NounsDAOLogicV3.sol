@@ -396,17 +396,6 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
             revert InvalidSignature();
     }
 
-    function _propDigest(bytes32 proposalHash) internal view returns (bytes32) {
-        return
-            keccak256(
-                abi.encodePacked(
-                    '\x19\x01',
-                    keccak256(abi.encode(DOMAIN_TYPEHASH, keccak256(bytes(name)), getChainIdInternal(), address(this))),
-                    proposalHash
-                )
-            );
-    }
-
     function _checkPropThreshold(uint256 votes) internal view returns (uint256 propThreshold) {
         uint256 totalSupply = nouns.totalSupply();
         propThreshold = bps2Uint(proposalThresholdBPS, totalSupply);
