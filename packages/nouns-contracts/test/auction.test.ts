@@ -338,4 +338,13 @@ describe('NounsAuctionHouse', () => {
     newDuration = await nounsAuctionHouse.duration();
     await expect(newDuration).to.be.equal(60 * 60 * 26)
   });
+
+  it('Verify duration change not available for non-owner', async () => {
+    await (await nounsAuctionHouse.unpause()).wait();
+
+    let prevDuration = await nounsAuctionHouse.duration();
+    const tx = nounsAuctionHouse.connect(bidderA).setDuration(prevDuration.add(1));
+    await expect(tx).to.be.revertedWith("Caller is not bravo or owner");
+  });
+
 });

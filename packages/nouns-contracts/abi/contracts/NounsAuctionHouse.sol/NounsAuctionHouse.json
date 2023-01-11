@@ -59,6 +59,19 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "duration",
+        "type": "uint256"
+      }
+    ],
+    "name": "AuctionDurationUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "uint256",
         "name": "nounId",
@@ -248,6 +261,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "executorAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "contract INounsToken",
@@ -278,6 +304,11 @@
         "internalType": "uint256",
         "name": "_duration",
         "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_executorAddress",
+        "type": "address"
       }
     ],
     "name": "initialize",
@@ -362,6 +393,19 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_duration",
+        "type": "uint256"
+      }
+    ],
+    "name": "setDuration",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

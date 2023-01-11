@@ -29,6 +29,7 @@ const wethContracts: Record<number, string> = {
 
 const NOUNS_ART_NONCE_OFFSET = 4;
 const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 9;
+const NOUNS_DAO_EXECUTOR_NONCE_OFFSET = 10;
 const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 12;
 
 task('deploy-short-times', 'Deploy all Nouns contracts with short gov times for testing')
@@ -122,6 +123,10 @@ task('deploy-short-times', 'Deploy all Nouns contracts with short gov times for 
       from: deployer.address,
       nonce: nonce + GOVERNOR_N_DELEGATOR_NONCE_OFFSET,
     });
+    const expectedNounsDAOExecutorAddress = ethers.utils.getContractAddress({
+      from: deployer.address,
+      nonce: nonce + NOUNS_DAO_EXECUTOR_NONCE_OFFSET,
+    });
     const deployment: Record<ContractNamesDAOV2, DeployedContract> = {} as Record<
       ContractNamesDAOV2,
       DeployedContract
@@ -165,6 +170,7 @@ task('deploy-short-times', 'Deploy all Nouns contracts with short gov times for 
               args.auctionReservePrice,
               args.auctionMinIncrementBidPercentage,
               args.auctionDuration,
+              expectedNounsDAOExecutorAddress
             ]),
         ],
         waitForConfirmation: true,
@@ -180,6 +186,16 @@ task('deploy-short-times', 'Deploy all Nouns contracts with short gov times for 
       },
       NounsDAOExecutor: {
         args: [expectedNounsDAOProxyAddress, args.timelockDelay],
+        waitForConfirmation: true,
+        validateDeployment: () => {
+          const expected = expectedNounsDAOExecutorAddress.toLowerCase();
+          const actual = deployment.NounsDAOExecutor.address.toLowerCase();
+          if (expected !== actual) {
+            throw new Error(
+              `Unexpected executor address. Expected: ${expected}. Actual: ${actual}.`,
+            );
+          }
+        },
       },
       NounsDAOLogicV2: {
         waitForConfirmation: true,
