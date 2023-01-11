@@ -42,7 +42,7 @@ const Landing: NextPage = (props) => {
                   </a>
               </li>
               <li>
-                  <a href="discord.gg/2Gp55Uzsad" 
+                  <a href="https://discord.gg/2Gp55Uzsad" 
                     target="_blank"
                     rel="noreferrer"
                     aria-label="link to n00uns discord"
