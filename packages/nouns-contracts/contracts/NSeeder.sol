@@ -63,7 +63,7 @@ contract NSeeder is ISeeder, Ownable {
         
         // Pick up random skin tone
         partRandom = uint24(pseudorandomness >> 24);
-        tmp = cSkinProbability.length;
+        tmp = cSkinProbability[seed.punkType].length;
         for(uint8 i = 0; i < tmp; i ++) {
             if(partRandom < cSkinProbability[seed.punkType][i]) {
                 seed.skinTone = i;
