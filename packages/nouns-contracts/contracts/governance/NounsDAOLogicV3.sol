@@ -53,11 +53,17 @@
 pragma solidity ^0.8.6;
 
 import './NounsDAOInterfaces.sol';
+import { NounsDAOV3Admin } from './NounsDAOV3Admin.sol';
+import { NounsDAOV3DynamicQuorum } from './NounsDAOV3DynamicQuorum.sol';
+import { NounsDAOV3Votes } from './NounsDAOV3Votes.sol';
+import { NounsDAOV3Proposals } from './NounsDAOV3Proposals.sol';
 import { SignatureChecker } from '@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol';
 
 contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
-    /// @notice The name of this contract
-    string public constant name = 'Nouns DAO';
+    using NounsDAOV3Admin for StorageV3;
+    using NounsDAOV3DynamicQuorum for StorageV3;
+    using NounsDAOV3Votes for StorageV3;
+    using NounsDAOV3Proposals for StorageV3;
 
     /// @notice The minimum setable proposal threshold
     uint256 public constant MIN_PROPOSAL_THRESHOLD_BPS = 1; // 1 basis point or 0.01%
@@ -77,51 +83,11 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     /// @notice The max setable voting delay
     uint256 public constant MAX_VOTING_DELAY = 40_320; // About 1 week
 
-    /// @notice The lower bound of minimum quorum votes basis points
-    uint256 public constant MIN_QUORUM_VOTES_BPS_LOWER_BOUND = 200; // 200 basis points or 2%
-
-    /// @notice The upper bound of minimum quorum votes basis points
-    uint256 public constant MIN_QUORUM_VOTES_BPS_UPPER_BOUND = 2_000; // 2,000 basis points or 20%
-
-    /// @notice The upper bound of maximum quorum votes basis points
-    uint256 public constant MAX_QUORUM_VOTES_BPS_UPPER_BOUND = 6_000; // 4,000 basis points or 60%
-
-    /// @notice The maximum setable quorum votes basis points
-    uint256 public constant MAX_QUORUM_VOTES_BPS = 2_000; // 2,000 basis points or 20%
-
     /// @notice The maximum number of actions that can be included in a proposal
     uint256 public constant proposalMaxOperations = 10; // 10 actions
 
-    /// @notice The maximum priority fee used to cap gas refunds in `castRefundableVote`
-    uint256 public constant MAX_REFUND_PRIORITY_FEE = 2 gwei;
-
-    /// @notice The vote refund gas overhead, including 7K for ETH transfer and 29K for general transaction overhead
-    uint256 public constant REFUND_BASE_GAS = 36000;
-
-    /// @notice The maximum gas units the DAO will refund voters on; supports about 9,190 characters
-    uint256 public constant MAX_REFUND_GAS_USED = 200_000;
-
-    /// @notice The maximum basefee the DAO will refund voters on
-    uint256 public constant MAX_REFUND_BASE_FEE = 200 gwei;
-
-    /// @notice The EIP-712 typehash for the contract's domain
-    bytes32 public constant DOMAIN_TYPEHASH =
-        keccak256('EIP712Domain(string name,uint256 chainId,address verifyingContract)');
-
-    /// @notice The EIP-712 typehash for the ballot struct used by the contract
-    bytes32 public constant BALLOT_TYPEHASH = keccak256('Ballot(uint256 proposalId,uint8 support)');
-
     /// @dev Introduced these errors to reduce contract size, to avoid deployment failure
     error AdminOnly();
-    error InvalidMinQuorumVotesBPS();
-    error InvalidMaxQuorumVotesBPS();
-    error MinQuorumBPSGreaterThanMaxQuorumBPS();
-    error UnsafeUint16Cast();
-    error VetoerOnly();
-    error PendingVetoerOnly();
-    error VetoerBurned();
-    error CantVetoExecutedProposal();
-    error CantCancelExecutedProposal();
     error OnlyProposerCanEdit();
     error CanOnlyEditPendingProposals();
     error ProposalInfoArityMismatch();
@@ -150,8 +116,8 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         uint256 proposalThresholdBPS_,
         DynamicQuorumParams calldata dynamicQuorumParams_
     ) public virtual {
-        require(address(timelock) == address(0), 'NounsDAO::initialize: can only initialize once');
-        if (msg.sender != admin) {
+        require(address(ds.timelock) == address(0), 'NounsDAO::initialize: can only initialize once');
+        if (msg.sender != ds.admin) {
             revert AdminOnly();
         }
         require(timelock_ != address(0), 'NounsDAO::initialize: invalid timelock address');
@@ -169,16 +135,16 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
             'NounsDAO::initialize: invalid proposal threshold bps'
         );
 
-        emit VotingPeriodSet(votingPeriod, votingPeriod_);
-        emit VotingDelaySet(votingDelay, votingDelay_);
-        emit ProposalThresholdBPSSet(proposalThresholdBPS, proposalThresholdBPS_);
+        emit VotingPeriodSet(ds.votingPeriod, votingPeriod_);
+        emit VotingDelaySet(ds.votingDelay, votingDelay_);
+        emit ProposalThresholdBPSSet(ds.proposalThresholdBPS, proposalThresholdBPS_);
 
-        timelock = INounsDAOExecutor(timelock_);
-        nouns = NounsTokenLike(nouns_);
-        vetoer = vetoer_;
-        votingPeriod = votingPeriod_;
-        votingDelay = votingDelay_;
-        proposalThresholdBPS = proposalThresholdBPS_;
+        ds.timelock = INounsDAOExecutor(timelock_);
+        ds.nouns = NounsTokenLike(nouns_);
+        ds.vetoer = vetoer_;
+        ds.votingPeriod = votingPeriod_;
+        ds.votingDelay = votingDelay_;
+        ds.proposalThresholdBPS = proposalThresholdBPS_;
         _setDynamicQuorumParams(
             dynamicQuorumParams_.minQuorumVotesBPS,
             dynamicQuorumParams_.maxQuorumVotesBPS,
@@ -186,16 +152,14 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         );
 
         // TODO make this configurable
-        lastMinuteWindowInBlocks = 7200; // 7200 blocks = 1 days
-        objectionPeriodDurationInBlocks = 14400; // 14400 blocks = 2 days
+        ds.lastMinuteWindowInBlocks = 7200; // 7200 blocks = 1 days
+        ds.objectionPeriodDurationInBlocks = 14400; // 14400 blocks = 2 days
     }
 
     struct ProposalTemp {
         uint256 totalSupply;
         uint256 proposalThreshold;
         uint256 latestProposalId;
-        uint256 startBlock;
-        uint256 endBlock;
     }
 
     /**
@@ -216,12 +180,12 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     ) public returns (uint256) {
         ProposalTemp memory temp;
 
-        temp.totalSupply = nouns.totalSupply();
+        temp.totalSupply = ds.nouns.totalSupply();
 
-        temp.proposalThreshold = bps2Uint(proposalThresholdBPS, temp.totalSupply);
+        temp.proposalThreshold = bps2Uint(ds.proposalThresholdBPS, temp.totalSupply);
 
         require(
-            nouns.getPriorVotes(msg.sender, block.number - 1) > temp.proposalThreshold,
+            ds.nouns.getPriorVotes(msg.sender, block.number - 1) > temp.proposalThreshold,
             'NounsDAO::propose: proposer votes below proposal threshold'
         );
         if (
@@ -231,60 +195,18 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         if (targets.length > proposalMaxOperations) revert TooManyActions();
         _checkNoActiveProp(msg.sender);
 
-        temp.startBlock = block.number + votingDelay;
-        temp.endBlock = temp.startBlock + votingPeriod;
-
-        proposalCount++;
-        Proposal storage newProposal = _proposals[proposalCount];
-        newProposal.id = proposalCount;
-        newProposal.proposer = msg.sender;
-        newProposal.proposalThreshold = temp.proposalThreshold;
-        newProposal.eta = 0;
-        newProposal.targets = targets;
-        newProposal.values = values;
-        newProposal.signatures = signatures;
-        newProposal.calldatas = calldatas;
-        newProposal.startBlock = temp.startBlock;
-        newProposal.endBlock = temp.endBlock;
-        newProposal.forVotes = 0;
-        newProposal.againstVotes = 0;
-        newProposal.abstainVotes = 0;
-        newProposal.canceled = false;
-        newProposal.executed = false;
-        newProposal.vetoed = false;
-        newProposal.totalSupply = temp.totalSupply;
-        newProposal.creationBlock = block.number;
-
-        latestProposalIds[newProposal.proposer] = newProposal.id;
-
-        /// @notice Maintains backwards compatibility with GovernorBravo events
-        emit ProposalCreated(
-            newProposal.id,
-            msg.sender,
+        ds.proposalCount++;
+        Proposal storage newProposal = _createNewProposal(
+            ds.proposalCount,
+            temp.proposalThreshold,
             targets,
             values,
             signatures,
-            calldatas,
-            newProposal.startBlock,
-            newProposal.endBlock,
-            description
+            calldatas
         );
+        ds.latestProposalIds[newProposal.proposer] = newProposal.id;
 
-        /// @notice Updated event with `proposalThreshold` and `minQuorumVotes`
-        /// @notice `minQuorumVotes` is always zero since V2 introduces dynamic quorum with checkpoints
-        emit ProposalCreatedWithRequirements(
-            newProposal.id,
-            msg.sender,
-            targets,
-            values,
-            signatures,
-            calldatas,
-            newProposal.startBlock,
-            newProposal.endBlock,
-            newProposal.proposalThreshold,
-            minQuorumVotes(),
-            description
-        );
+        _emitNewPropEvents(newProposal, targets, values, signatures, calldatas, description);
 
         return newProposal.id;
     }
@@ -303,7 +225,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         if (targets.length == 0) revert MustProvideActions();
         if (targets.length > proposalMaxOperations) revert TooManyActions();
 
-        uint256 proposalId = proposalCount = proposalCount + 1;
+        uint256 proposalId = ds.proposalCount = ds.proposalCount + 1;
         uint256 votes;
         bytes32 proposalHash = keccak256(abi.encode(targets, values, signatures, calldatas, description));
         address[] memory proposers = new address[](proposerSignatures.length);
@@ -312,37 +234,55 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
             address signer = proposers[i] = proposerSignatures[i].signer;
 
             _checkNoActiveProp(signer);
-            latestProposalIds[signer] = proposalId;
+            ds.latestProposalIds[signer] = proposalId;
 
-            votes += nouns.getPriorVotes(signer, block.number - 1);
+            votes += ds.nouns.getPriorVotes(signer, block.number - 1);
         }
 
-        uint256 startBlock = block.number + votingDelay;
+        Proposal storage newProposal = _createNewProposal(
+            proposalId,
+            _checkPropThreshold(votes),
+            targets,
+            values,
+            signatures,
+            calldatas
+        );
+        newProposal.proposers = proposers;
 
-        Proposal storage newProposal = _proposals[proposalId];
+        _emitNewPropEvents(newProposal, targets, values, signatures, calldatas, description);
+
+        return proposalId;
+    }
+
+    function _createNewProposal(
+        uint256 proposalId,
+        uint256 proposalThreshold_,
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas
+    ) internal returns (Proposal storage newProposal) {
+        uint256 startBlock = block.number + ds.votingDelay;
+
+        newProposal = ds._proposals[proposalId];
         newProposal.id = proposalId;
         newProposal.proposer = msg.sender;
-        newProposal.proposalThreshold = _checkPropThreshold(votes);
+        newProposal.proposalThreshold = proposalThreshold_;
         newProposal.eta = 0;
         newProposal.targets = targets;
         newProposal.values = values;
         newProposal.signatures = signatures;
         newProposal.calldatas = calldatas;
         newProposal.startBlock = startBlock;
-        newProposal.endBlock = startBlock + votingPeriod;
+        newProposal.endBlock = startBlock + ds.votingPeriod;
         newProposal.forVotes = 0;
         newProposal.againstVotes = 0;
         newProposal.abstainVotes = 0;
         newProposal.canceled = false;
         newProposal.executed = false;
         newProposal.vetoed = false;
-        newProposal.totalSupply = nouns.totalSupply();
+        newProposal.totalSupply = ds.nouns.totalSupply();
         newProposal.creationBlock = block.number;
-        newProposal.proposers = proposers;
-
-        _emitNewPropEvents(newProposal, targets, values, signatures, calldatas, description);
-
-        return proposalId;
     }
 
     function _emitNewPropEvents(
@@ -384,9 +324,9 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     }
 
     function _checkNoActiveProp(address proposer) internal view {
-        uint256 latestProposalId = latestProposalIds[proposer];
+        uint256 latestProposalId = ds.latestProposalIds[proposer];
         if (latestProposalId != 0) {
-            ProposalState proposersLatestProposalState = state(latestProposalId);
+            ProposalState proposersLatestProposalState = ds.state(latestProposalId);
             if (
                 proposersLatestProposalState == ProposalState.Active ||
                 proposersLatestProposalState == ProposalState.Pending
@@ -395,8 +335,8 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     }
 
     function _checkPropSig(bytes32 proposalHash, ProposerSignature memory propSig) internal {
-        if (proposeBySigNonces[propSig.signer][propSig.nonce]) revert ProposalSignatureNonceAlreadyUsed();
-        proposeBySigNonces[propSig.signer][propSig.nonce] = true;
+        if (ds.proposeBySigNonces[propSig.signer][propSig.nonce]) revert ProposalSignatureNonceAlreadyUsed();
+        ds.proposeBySigNonces[propSig.signer][propSig.nonce] = true;
 
         bytes32 proposalAndNonceHash = keccak256(abi.encodePacked(proposalHash, propSig.nonce));
 
@@ -404,42 +344,11 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
             revert InvalidSignature();
     }
 
-    function _propDigest(bytes32 proposalHash) internal view returns (bytes32) {
-        return
-            keccak256(
-                abi.encodePacked(
-                    '\x19\x01',
-                    keccak256(abi.encode(DOMAIN_TYPEHASH, keccak256(bytes(name)), getChainIdInternal(), address(this))),
-                    proposalHash
-                )
-            );
-    }
-
     function _checkPropThreshold(uint256 votes) internal view returns (uint256 propThreshold) {
-        uint256 totalSupply = nouns.totalSupply();
-        propThreshold = bps2Uint(proposalThresholdBPS, totalSupply);
+        uint256 totalSupply = ds.nouns.totalSupply();
+        propThreshold = bps2Uint(ds.proposalThresholdBPS, totalSupply);
 
         require(votes > propThreshold, 'NounsDAO::propose: proposer votes below proposal threshold');
-    }
-
-    function _splitSignature(bytes memory sig)
-        internal
-        pure
-        returns (
-            bytes32 r,
-            bytes32 s,
-            uint8 v
-        )
-    {
-        require(sig.length == 65, 'invalid signature length');
-        assembly {
-            // first 32 bytes, after the length prefix
-            r := mload(add(sig, 32))
-            // second 32 bytes
-            s := mload(add(sig, 64))
-            // final byte (first byte of the next 32 bytes)
-            v := byte(0, mload(add(sig, 96)))
-        }
     }
 
     function updateProposal(
@@ -456,8 +365,8 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         if (targets.length == 0) revert MustProvideActions();
         if (targets.length > proposalMaxOperations) revert TooManyActions();
 
-        Proposal storage proposal = _proposals[proposalId];
-        if (state(proposalId) != ProposalState.Pending) revert CanOnlyEditPendingProposals();
+        Proposal storage proposal = ds._proposals[proposalId];
+        if (ds.state(proposalId) != ProposalState.Pending) revert CanOnlyEditPendingProposals();
         if (msg.sender != proposal.proposer) revert OnlyProposerCanEdit();
 
         proposal.targets = targets;
@@ -483,8 +392,8 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         if (targets.length == 0) revert MustProvideActions();
         if (targets.length > proposalMaxOperations) revert TooManyActions();
 
-        Proposal storage proposal = _proposals[proposalId];
-        if (state(proposalId) != ProposalState.Pending) revert CanOnlyEditPendingProposals();
+        Proposal storage proposal = ds._proposals[proposalId];
+        if (ds.state(proposalId) != ProposalState.Pending) revert CanOnlyEditPendingProposals();
 
         address[] memory proposers = proposal.proposers;
         if (proposerSignatures.length != proposers.length) revert OnlyProposerCanEdit();
@@ -511,37 +420,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @param proposalId The id of the proposal to queue
      */
     function queue(uint256 proposalId) external {
-        require(
-            state(proposalId) == ProposalState.Succeeded,
-            'NounsDAO::queue: proposal can only be queued if it is succeeded'
-        );
-        Proposal storage proposal = _proposals[proposalId];
-        uint256 eta = block.timestamp + timelock.delay();
-        for (uint256 i = 0; i < proposal.targets.length; i++) {
-            queueOrRevertInternal(
-                proposal.targets[i],
-                proposal.values[i],
-                proposal.signatures[i],
-                proposal.calldatas[i],
-                eta
-            );
-        }
-        proposal.eta = eta;
-        emit ProposalQueued(proposalId, eta);
-    }
-
-    function queueOrRevertInternal(
-        address target,
-        uint256 value,
-        string memory signature,
-        bytes memory data,
-        uint256 eta
-    ) internal {
-        require(
-            !timelock.queuedTransactions(keccak256(abi.encode(target, value, signature, data, eta))),
-            'NounsDAO::queueOrRevertInternal: identical proposal action already queued at eta'
-        );
-        timelock.queueTransaction(target, value, signature, data, eta);
+        ds.queue(proposalId);
     }
 
     /**
@@ -549,22 +428,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @param proposalId The id of the proposal to execute
      */
     function execute(uint256 proposalId) external {
-        require(
-            state(proposalId) == ProposalState.Queued,
-            'NounsDAO::execute: proposal can only be executed if it is queued'
-        );
-        Proposal storage proposal = _proposals[proposalId];
-        proposal.executed = true;
-        for (uint256 i = 0; i < proposal.targets.length; i++) {
-            timelock.executeTransaction(
-                proposal.targets[i],
-                proposal.values[i],
-                proposal.signatures[i],
-                proposal.calldatas[i],
-                proposal.eta
-            );
-        }
-        emit ProposalExecuted(proposalId);
+        ds.execute(proposalId);
     }
 
     /**
@@ -572,42 +436,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @param proposalId The id of the proposal to cancel
      */
     function cancel(uint256 proposalId) external {
-        if (state(proposalId) == ProposalState.Executed) {
-            revert CantCancelExecutedProposal();
-        }
-
-        Proposal storage proposal = _proposals[proposalId];
-        address proposer = proposal.proposer;
-
-        uint256 votes;
-        bool msgSenderIsProposer = proposer == msg.sender;
-        if (proposer != address(0)) {
-            votes = nouns.getPriorVotes(proposer, block.number - 1);
-        } else {
-            address[] memory proposers = proposal.proposers;
-            for (uint256 i = 0; i < proposers.length; ++i) {
-                msgSenderIsProposer = msgSenderIsProposer || msg.sender == proposers[i];
-                votes += nouns.getPriorVotes(proposers[i], block.number - 1);
-            }
-        }
-
-        require(
-            msgSenderIsProposer || votes <= proposal.proposalThreshold,
-            'NounsDAO::cancel: proposer above threshold'
-        );
-
-        proposal.canceled = true;
-        for (uint256 i = 0; i < proposal.targets.length; i++) {
-            timelock.cancelTransaction(
-                proposal.targets[i],
-                proposal.values[i],
-                proposal.signatures[i],
-                proposal.calldatas[i],
-                proposal.eta
-            );
-        }
-
-        emit ProposalCanceled(proposalId);
+        ds.cancel(proposalId);
     }
 
     /**
@@ -615,32 +444,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @param proposalId The id of the proposal to veto
      */
     function veto(uint256 proposalId) external {
-        if (vetoer == address(0)) {
-            revert VetoerBurned();
-        }
-
-        if (msg.sender != vetoer) {
-            revert VetoerOnly();
-        }
-
-        if (state(proposalId) == ProposalState.Executed) {
-            revert CantVetoExecutedProposal();
-        }
-
-        Proposal storage proposal = _proposals[proposalId];
-
-        proposal.vetoed = true;
-        for (uint256 i = 0; i < proposal.targets.length; i++) {
-            timelock.cancelTransaction(
-                proposal.targets[i],
-                proposal.values[i],
-                proposal.signatures[i],
-                proposal.calldatas[i],
-                proposal.eta
-            );
-        }
-
-        emit ProposalVetoed(proposalId);
+        ds.veto(proposalId);
     }
 
     /**
@@ -661,7 +465,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
             bytes[] memory calldatas
         )
     {
-        Proposal storage p = _proposals[proposalId];
+        Proposal storage p = ds._proposals[proposalId];
         return (p.targets, p.values, p.signatures, p.calldatas);
     }
 
@@ -672,38 +476,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @return The voting receipt
      */
     function getReceipt(uint256 proposalId, address voter) external view returns (Receipt memory) {
-        return _proposals[proposalId].receipts[voter];
-    }
-
-    /**
-     * @notice Gets the state of a proposal
-     * @param proposalId The id of the proposal
-     * @return Proposal state
-     */
-    function state(uint256 proposalId) public view returns (ProposalState) {
-        require(proposalCount >= proposalId, 'NounsDAO::state: invalid proposal id');
-        Proposal storage proposal = _proposals[proposalId];
-        if (proposal.vetoed) {
-            return ProposalState.Vetoed;
-        } else if (proposal.canceled) {
-            return ProposalState.Canceled;
-        } else if (block.number <= proposal.startBlock) {
-            return ProposalState.Pending;
-        } else if (block.number <= proposal.endBlock) {
-            return ProposalState.Active;
-        } else if (block.number <= proposal.objectionPeriodEndBlock) {
-            return ProposalState.ObjectionPeriod;
-        } else if (isDefeated(proposal)) {
-            return ProposalState.Defeated;
-        } else if (proposal.eta == 0) {
-            return ProposalState.Succeeded;
-        } else if (proposal.executed) {
-            return ProposalState.Executed;
-        } else if (block.timestamp >= proposal.eta + timelock.GRACE_PERIOD()) {
-            return ProposalState.Expired;
-        } else {
-            return ProposalState.Queued;
-        }
+        return ds._proposals[proposalId].receipts[voter];
     }
 
     /**
@@ -713,26 +486,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @return A `ProposalCondensed` struct with the proposal data
      */
     function proposals(uint256 proposalId) external view returns (ProposalCondensed memory) {
-        Proposal storage proposal = _proposals[proposalId];
-        return
-            ProposalCondensed({
-                id: proposal.id,
-                proposer: proposal.proposer,
-                proposalThreshold: proposal.proposalThreshold,
-                quorumVotes: quorumVotes(proposal.id),
-                eta: proposal.eta,
-                startBlock: proposal.startBlock,
-                endBlock: proposal.endBlock,
-                forVotes: proposal.forVotes,
-                againstVotes: proposal.againstVotes,
-                abstainVotes: proposal.abstainVotes,
-                canceled: proposal.canceled,
-                vetoed: proposal.vetoed,
-                executed: proposal.executed,
-                totalSupply: proposal.totalSupply,
-                creationBlock: proposal.creationBlock,
-                proposers: proposal.proposers
-            });
+        return ds.proposals(proposalId);
     }
 
     /**
@@ -741,7 +495,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @param support The support value for the vote. 0=against, 1=for, 2=abstain
      */
     function castVote(uint256 proposalId, uint8 support) external {
-        emit VoteCast(msg.sender, proposalId, support, castVoteInternal(msg.sender, proposalId, support), '');
+        ds.castVote(proposalId, support);
     }
 
     /**
@@ -755,7 +509,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @dev Reentrancy is defended against in `castVoteInternal` at the `receipt.hasVoted == false` require statement.
      */
     function castRefundableVote(uint256 proposalId, uint8 support) external {
-        castRefundableVoteInternal(proposalId, support, '');
+        ds.castRefundableVote(proposalId, support);
     }
 
     /**
@@ -774,27 +528,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         uint8 support,
         string calldata reason
     ) external {
-        castRefundableVoteInternal(proposalId, support, reason);
-    }
-
-    /**
-     * @notice Internal function that carries out refundable voting logic
-     * @param proposalId The id of the proposal to vote on
-     * @param support The support value for the vote. 0=against, 1=for, 2=abstain
-     * @param reason The reason given for the vote by the voter
-     * @dev Reentrancy is defended against in `castVoteInternal` at the `receipt.hasVoted == false` require statement.
-     */
-    function castRefundableVoteInternal(
-        uint256 proposalId,
-        uint8 support,
-        string memory reason
-    ) internal {
-        uint256 startGas = gasleft();
-        uint96 votes = castVoteInternal(msg.sender, proposalId, support);
-        emit VoteCast(msg.sender, proposalId, support, votes, reason);
-        if (votes > 0) {
-            _refundGas(startGas);
-        }
+        ds.castRefundableVoteWithReason(proposalId, support, reason);
     }
 
     /**
@@ -808,7 +542,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         uint8 support,
         string calldata reason
     ) external {
-        emit VoteCast(msg.sender, proposalId, support, castVoteInternal(msg.sender, proposalId, support), reason);
+        ds.castVoteWithReason(proposalId, support, reason);
     }
 
     /**
@@ -822,101 +556,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         bytes32 r,
         bytes32 s
     ) external {
-        bytes32 domainSeparator = keccak256(
-            abi.encode(DOMAIN_TYPEHASH, keccak256(bytes(name)), getChainIdInternal(), address(this))
-        );
-        bytes32 structHash = keccak256(abi.encode(BALLOT_TYPEHASH, proposalId, support));
-        bytes32 digest = keccak256(abi.encodePacked('\x19\x01', domainSeparator, structHash));
-        address signatory = ecrecover(digest, v, r, s);
-        require(signatory != address(0), 'NounsDAO::castVoteBySig: invalid signature');
-        emit VoteCast(signatory, proposalId, support, castVoteInternal(signatory, proposalId, support), '');
-    }
-
-    /**
-     * @notice Internal function that caries out voting logic
-     * @param voter The voter that is casting their vote
-     * @param proposalId The id of the proposal to vote on
-     * @param support The support value for the vote. 0=against, 1=for, 2=abstain
-     * @return The number of votes cast
-     */
-    function castVoteInternal(
-        address voter,
-        uint256 proposalId,
-        uint8 support
-    ) internal returns (uint96) {
-        ProposalState proposalState = state(proposalId);
-
-        if (proposalState == ProposalState.Active) {
-            return castVoteDuringVotingPeriodInternal(voter, proposalId, support);
-        } else if (proposalState == ProposalState.ObjectionPeriod) {
-            require(support == 0, 'can only object with an against vote');
-            return castObjectionInternal(voter, proposalId);
-        }
-
-        revert('NounsDAO::castVoteInternal: voting is closed');
-    }
-
-    function castVoteDuringVotingPeriodInternal(
-        address voter,
-        uint256 proposalId,
-        uint8 support
-    ) internal returns (uint96) {
-        require(state(proposalId) == ProposalState.Active, 'NounsDAO::castVoteInternal: voting is closed');
-        require(support <= 2, 'NounsDAO::castVoteInternal: invalid vote type');
-        Proposal storage proposal = _proposals[proposalId];
-        Receipt storage receipt = proposal.receipts[voter];
-        require(receipt.hasVoted == false, 'NounsDAO::castVoteInternal: voter already voted');
-
-        /// @notice: Unlike GovernerBravo, votes are considered from the block the proposal was created in order to normalize quorumVotes and proposalThreshold metrics
-        uint96 votes = nouns.getPriorVotes(voter, proposalCreationBlock(proposal));
-
-        bool isDefeatedBefore = isDefeated(proposal);
-
-        if (support == 0) {
-            proposal.againstVotes = proposal.againstVotes + votes;
-        } else if (support == 1) {
-            proposal.forVotes = proposal.forVotes + votes;
-        } else if (support == 2) {
-            proposal.abstainVotes = proposal.abstainVotes + votes;
-        }
-
-        if (
-            // haven't turn on objection yet
-            proposal.objectionPeriodEndBlock == 0 &&
-            // only for votes can trigger an objection period
-            support == 1 &&
-            // this vote flips the proposal
-            isDefeatedBefore &&
-            !isDefeated(proposal) &&
-            // we're in the last minute window
-            (proposal.endBlock - block.number < lastMinuteWindowInBlocks)
-        ) {
-            proposal.objectionPeriodEndBlock = proposal.endBlock + objectionPeriodDurationInBlocks;
-        }
-
-        receipt.hasVoted = true;
-        receipt.support = support;
-        receipt.votes = votes;
-
-        return votes;
-    }
-
-    function castObjectionInternal(address voter, uint256 proposalId) internal returns (uint96) {
-        require(state(proposalId) == ProposalState.ObjectionPeriod, 'not in objection period');
-        Proposal storage proposal = _proposals[proposalId];
-        Receipt storage receipt = proposal.receipts[voter];
-        require(receipt.hasVoted == false, 'NounsDAO::castVoteInternal: voter already voted');
-
-        uint96 votes = receipt.votes = nouns.getPriorVotes(voter, proposalCreationBlock(proposal));
-        receipt.hasVoted = true;
-        receipt.support = 0;
-        proposal.againstVotes = proposal.againstVotes + votes;
-
-        return votes;
-    }
-
-    function isDefeated(Proposal storage proposal) internal view returns (bool) {
-        return proposal.forVotes <= proposal.againstVotes || proposal.forVotes < quorumVotes(proposal.id);
+        ds.castVoteBySig(proposalId, support, v, r, s);
     }
 
     /**
@@ -924,17 +564,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @param newVotingDelay new voting delay, in blocks
      */
     function _setVotingDelay(uint256 newVotingDelay) external {
-        if (msg.sender != admin) {
-            revert AdminOnly();
-        }
-        require(
-            newVotingDelay >= MIN_VOTING_DELAY && newVotingDelay <= MAX_VOTING_DELAY,
-            'NounsDAO::_setVotingDelay: invalid voting delay'
-        );
-        uint256 oldVotingDelay = votingDelay;
-        votingDelay = newVotingDelay;
-
-        emit VotingDelaySet(oldVotingDelay, votingDelay);
+        ds._setVotingDelay(newVotingDelay);
     }
 
     /**
@@ -942,17 +572,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @param newVotingPeriod new voting period, in blocks
      */
     function _setVotingPeriod(uint256 newVotingPeriod) external {
-        if (msg.sender != admin) {
-            revert AdminOnly();
-        }
-        require(
-            newVotingPeriod >= MIN_VOTING_PERIOD && newVotingPeriod <= MAX_VOTING_PERIOD,
-            'NounsDAO::_setVotingPeriod: invalid voting period'
-        );
-        uint256 oldVotingPeriod = votingPeriod;
-        votingPeriod = newVotingPeriod;
-
-        emit VotingPeriodSet(oldVotingPeriod, votingPeriod);
+        ds._setVotingPeriod(newVotingPeriod);
     }
 
     /**
@@ -961,18 +581,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @param newProposalThresholdBPS new proposal threshold
      */
     function _setProposalThresholdBPS(uint256 newProposalThresholdBPS) external {
-        if (msg.sender != admin) {
-            revert AdminOnly();
-        }
-        require(
-            newProposalThresholdBPS >= MIN_PROPOSAL_THRESHOLD_BPS &&
-                newProposalThresholdBPS <= MAX_PROPOSAL_THRESHOLD_BPS,
-            'NounsDAO::_setProposalThreshold: invalid proposal threshold bps'
-        );
-        uint256 oldProposalThresholdBPS = proposalThresholdBPS;
-        proposalThresholdBPS = newProposalThresholdBPS;
-
-        emit ProposalThresholdBPSSet(oldProposalThresholdBPS, proposalThresholdBPS);
+        ds._setProposalThresholdBPS(newProposalThresholdBPS);
     }
 
     /**
@@ -982,27 +591,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      *     Must be lower than or equal to maxQuorumVotesBPS
      */
     function _setMinQuorumVotesBPS(uint16 newMinQuorumVotesBPS) external {
-        if (msg.sender != admin) {
-            revert AdminOnly();
-        }
-        DynamicQuorumParams memory params = getDynamicQuorumParamsAt(block.number);
-
-        require(
-            newMinQuorumVotesBPS >= MIN_QUORUM_VOTES_BPS_LOWER_BOUND &&
-                newMinQuorumVotesBPS <= MIN_QUORUM_VOTES_BPS_UPPER_BOUND,
-            'NounsDAO::_setMinQuorumVotesBPS: invalid min quorum votes bps'
-        );
-        require(
-            newMinQuorumVotesBPS <= params.maxQuorumVotesBPS,
-            'NounsDAO::_setMinQuorumVotesBPS: min quorum votes bps greater than max'
-        );
-
-        uint16 oldMinQuorumVotesBPS = params.minQuorumVotesBPS;
-        params.minQuorumVotesBPS = newMinQuorumVotesBPS;
-
-        _writeQuorumParamsCheckpoint(params);
-
-        emit MinQuorumVotesBPSSet(oldMinQuorumVotesBPS, newMinQuorumVotesBPS);
+        ds._setMinQuorumVotesBPS(newMinQuorumVotesBPS);
     }
 
     /**
@@ -1012,26 +601,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      *     Must be higher than or equal to minQuorumVotesBPS
      */
     function _setMaxQuorumVotesBPS(uint16 newMaxQuorumVotesBPS) external {
-        if (msg.sender != admin) {
-            revert AdminOnly();
-        }
-        DynamicQuorumParams memory params = getDynamicQuorumParamsAt(block.number);
-
-        require(
-            newMaxQuorumVotesBPS <= MAX_QUORUM_VOTES_BPS_UPPER_BOUND,
-            'NounsDAO::_setMaxQuorumVotesBPS: invalid max quorum votes bps'
-        );
-        require(
-            params.minQuorumVotesBPS <= newMaxQuorumVotesBPS,
-            'NounsDAO::_setMaxQuorumVotesBPS: min quorum votes bps greater than max'
-        );
-
-        uint16 oldMaxQuorumVotesBPS = params.maxQuorumVotesBPS;
-        params.maxQuorumVotesBPS = newMaxQuorumVotesBPS;
-
-        _writeQuorumParamsCheckpoint(params);
-
-        emit MaxQuorumVotesBPSSet(oldMaxQuorumVotesBPS, newMaxQuorumVotesBPS);
+        ds._setMaxQuorumVotesBPS(newMaxQuorumVotesBPS);
     }
 
     /**
@@ -1039,17 +609,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @param newQuorumCoefficient the new coefficient, as a fixed point integer with 6 decimals
      */
     function _setQuorumCoefficient(uint32 newQuorumCoefficient) external {
-        if (msg.sender != admin) {
-            revert AdminOnly();
-        }
-        DynamicQuorumParams memory params = getDynamicQuorumParamsAt(block.number);
-
-        uint32 oldQuorumCoefficient = params.quorumCoefficient;
-        params.quorumCoefficient = newQuorumCoefficient;
-
-        _writeQuorumParamsCheckpoint(params);
-
-        emit QuorumCoefficientSet(oldQuorumCoefficient, newQuorumCoefficient);
+        ds._setQuorumCoefficient(newQuorumCoefficient);
     }
 
     /**
@@ -1067,47 +627,11 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         uint16 newMaxQuorumVotesBPS,
         uint32 newQuorumCoefficient
     ) public {
-        if (msg.sender != admin) {
-            revert AdminOnly();
-        }
-        if (
-            newMinQuorumVotesBPS < MIN_QUORUM_VOTES_BPS_LOWER_BOUND ||
-            newMinQuorumVotesBPS > MIN_QUORUM_VOTES_BPS_UPPER_BOUND
-        ) {
-            revert InvalidMinQuorumVotesBPS();
-        }
-        if (newMaxQuorumVotesBPS > MAX_QUORUM_VOTES_BPS_UPPER_BOUND) {
-            revert InvalidMaxQuorumVotesBPS();
-        }
-        if (newMinQuorumVotesBPS > newMaxQuorumVotesBPS) {
-            revert MinQuorumBPSGreaterThanMaxQuorumBPS();
-        }
-
-        DynamicQuorumParams memory oldParams = getDynamicQuorumParamsAt(block.number);
-
-        DynamicQuorumParams memory params = DynamicQuorumParams({
-            minQuorumVotesBPS: newMinQuorumVotesBPS,
-            maxQuorumVotesBPS: newMaxQuorumVotesBPS,
-            quorumCoefficient: newQuorumCoefficient
-        });
-        _writeQuorumParamsCheckpoint(params);
-
-        emit MinQuorumVotesBPSSet(oldParams.minQuorumVotesBPS, params.minQuorumVotesBPS);
-        emit MaxQuorumVotesBPSSet(oldParams.maxQuorumVotesBPS, params.maxQuorumVotesBPS);
-        emit QuorumCoefficientSet(oldParams.quorumCoefficient, params.quorumCoefficient);
+        ds._setDynamicQuorumParams(newMinQuorumVotesBPS, newMaxQuorumVotesBPS, newQuorumCoefficient);
     }
 
     function _withdraw() external returns (uint256, bool) {
-        if (msg.sender != admin) {
-            revert AdminOnly();
-        }
-
-        uint256 amount = address(this).balance;
-        (bool sent, ) = msg.sender.call{ value: amount }('');
-
-        emit Withdraw(amount, sent);
-
-        return (amount, sent);
+        return ds._withdraw();
     }
 
     /**
@@ -1116,17 +640,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @param newPendingAdmin New pending admin.
      */
     function _setPendingAdmin(address newPendingAdmin) external {
-        // Check caller = admin
-        require(msg.sender == admin, 'NounsDAO::_setPendingAdmin: admin only');
-
-        // Save current value, if any, for inclusion in log
-        address oldPendingAdmin = pendingAdmin;
-
-        // Store pendingAdmin with value newPendingAdmin
-        pendingAdmin = newPendingAdmin;
-
-        // Emit NewPendingAdmin(oldPendingAdmin, newPendingAdmin)
-        emit NewPendingAdmin(oldPendingAdmin, newPendingAdmin);
+        ds._setPendingAdmin(newPendingAdmin);
     }
 
     /**
@@ -1134,21 +648,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @dev Admin function for pending admin to accept role and update admin
      */
     function _acceptAdmin() external {
-        // Check caller is pendingAdmin and pendingAdmin ≠ address(0)
-        require(msg.sender == pendingAdmin && msg.sender != address(0), 'NounsDAO::_acceptAdmin: pending admin only');
-
-        // Save current values for inclusion in log
-        address oldAdmin = admin;
-        address oldPendingAdmin = pendingAdmin;
-
-        // Store admin with value pendingAdmin
-        admin = pendingAdmin;
-
-        // Clear the pending value
-        pendingAdmin = address(0);
-
-        emit NewAdmin(oldAdmin, admin);
-        emit NewPendingAdmin(oldPendingAdmin, pendingAdmin);
+        ds._acceptAdmin();
     }
 
     /**
@@ -1156,27 +656,11 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @param newPendingVetoer New Pending Vetoer
      */
     function _setPendingVetoer(address newPendingVetoer) public {
-        if (msg.sender != vetoer) {
-            revert VetoerOnly();
-        }
-
-        emit NewPendingVetoer(pendingVetoer, newPendingVetoer);
-
-        pendingVetoer = newPendingVetoer;
+        ds._setPendingVetoer(newPendingVetoer);
     }
 
     function _acceptVetoer() external {
-        if (msg.sender != pendingVetoer) {
-            revert PendingVetoerOnly();
-        }
-
-        // Update vetoer
-        emit NewVetoer(vetoer, pendingVetoer);
-        vetoer = pendingVetoer;
-
-        // Clear the pending value
-        emit NewPendingVetoer(pendingVetoer, address(0));
-        pendingVetoer = address(0);
+        ds._acceptVetoer();
     }
 
     /**
@@ -1184,16 +668,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @dev Vetoer function destroying veto power forever
      */
     function _burnVetoPower() public {
-        // Check caller is vetoer
-        require(msg.sender == vetoer, 'NounsDAO::_burnVetoPower: vetoer only');
-
-        // Update vetoer to 0x0
-        emit NewVetoer(vetoer, address(0));
-        vetoer = address(0);
-
-        // Clear the pending value
-        emit NewPendingVetoer(pendingVetoer, address(0));
-        pendingVetoer = address(0);
+        ds._burnVetoPower();
     }
 
     /**
@@ -1201,14 +676,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * Differs from `GovernerBravo` which uses fixed amount
      */
     function proposalThreshold() public view returns (uint256) {
-        return bps2Uint(proposalThresholdBPS, nouns.totalSupply());
-    }
-
-    function proposalCreationBlock(Proposal storage proposal) internal view returns (uint256) {
-        if (proposal.creationBlock == 0) {
-            return proposal.startBlock - votingDelay;
-        }
-        return proposal.creationBlock;
+        return bps2Uint(ds.proposalThresholdBPS, ds.nouns.totalSupply());
     }
 
     /**
@@ -1216,17 +684,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * Differs from `GovernerBravo` which uses fixed amount
      */
     function quorumVotes(uint256 proposalId) public view returns (uint256) {
-        Proposal storage proposal = _proposals[proposalId];
-        if (proposal.totalSupply == 0) {
-            return proposal.quorumVotes;
-        }
-
-        return
-            dynamicQuorumVotes(
-                proposal.againstVotes,
-                proposal.totalSupply,
-                getDynamicQuorumParamsAt(proposal.creationBlock)
-            );
+        return ds.quorumVotes(proposalId);
     }
 
     /**
@@ -1246,11 +704,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         uint256 totalSupply,
         DynamicQuorumParams memory params
     ) public pure returns (uint256) {
-        uint256 againstVotesBPS = (10000 * againstVotes) / totalSupply;
-        uint256 quorumAdjustmentBPS = (params.quorumCoefficient * againstVotesBPS) / 1e6;
-        uint256 adjustedQuorumBPS = params.minQuorumVotesBPS + quorumAdjustmentBPS;
-        uint256 quorumBPS = min(params.maxQuorumVotesBPS, adjustedQuorumBPS);
-        return bps2Uint(quorumBPS, totalSupply);
+        return NounsDAOV3DynamicQuorum.dynamicQuorumVotes(againstVotes, totalSupply, params);
     }
 
     /**
@@ -1261,112 +715,29 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @return The dynamic quorum parameters that were set at the given block number
      */
     function getDynamicQuorumParamsAt(uint256 blockNumber_) public view returns (DynamicQuorumParams memory) {
-        uint32 blockNumber = safe32(blockNumber_, 'NounsDAO::getDynamicQuorumParamsAt: block number exceeds 32 bits');
-        uint256 len = quorumParamsCheckpoints.length;
-
-        if (len == 0) {
-            return
-                DynamicQuorumParams({
-                    minQuorumVotesBPS: safe16(quorumVotesBPS),
-                    maxQuorumVotesBPS: safe16(quorumVotesBPS),
-                    quorumCoefficient: 0
-                });
-        }
-
-        if (quorumParamsCheckpoints[len - 1].fromBlock <= blockNumber) {
-            return quorumParamsCheckpoints[len - 1].params;
-        }
-
-        if (quorumParamsCheckpoints[0].fromBlock > blockNumber) {
-            return
-                DynamicQuorumParams({
-                    minQuorumVotesBPS: safe16(quorumVotesBPS),
-                    maxQuorumVotesBPS: safe16(quorumVotesBPS),
-                    quorumCoefficient: 0
-                });
-        }
-
-        uint256 lower = 0;
-        uint256 upper = len - 1;
-        while (upper > lower) {
-            uint256 center = upper - (upper - lower) / 2;
-            DynamicQuorumParamsCheckpoint memory cp = quorumParamsCheckpoints[center];
-            if (cp.fromBlock == blockNumber) {
-                return cp.params;
-            } else if (cp.fromBlock < blockNumber) {
-                lower = center;
-            } else {
-                upper = center - 1;
-            }
-        }
-        return quorumParamsCheckpoints[lower].params;
+        return ds.getDynamicQuorumParamsAt(blockNumber_);
     }
 
     function _writeQuorumParamsCheckpoint(DynamicQuorumParams memory params) internal {
-        uint32 blockNumber = safe32(block.number, 'block number exceeds 32 bits');
-        uint256 pos = quorumParamsCheckpoints.length;
-        if (pos > 0 && quorumParamsCheckpoints[pos - 1].fromBlock == blockNumber) {
-            quorumParamsCheckpoints[pos - 1].params = params;
-        } else {
-            quorumParamsCheckpoints.push(DynamicQuorumParamsCheckpoint({ fromBlock: blockNumber, params: params }));
-        }
-    }
-
-    function _refundGas(uint256 startGas) internal {
-        unchecked {
-            uint256 balance = address(this).balance;
-            if (balance == 0) {
-                return;
-            }
-            uint256 basefee = min(block.basefee, MAX_REFUND_BASE_FEE);
-            uint256 gasPrice = min(tx.gasprice, basefee + MAX_REFUND_PRIORITY_FEE);
-            uint256 gasUsed = min(startGas - gasleft() + REFUND_BASE_GAS, MAX_REFUND_GAS_USED);
-            uint256 refundAmount = min(gasPrice * gasUsed, balance);
-            (bool refundSent, ) = msg.sender.call{ value: refundAmount }('');
-            emit RefundableVote(msg.sender, refundAmount, refundSent);
-        }
-    }
-
-    function min(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a < b ? a : b;
+        ds._writeQuorumParamsCheckpoint(params);
     }
 
     /**
      * @notice Current min quorum votes using Noun total supply
      */
     function minQuorumVotes() public view returns (uint256) {
-        return bps2Uint(getDynamicQuorumParamsAt(block.number).minQuorumVotesBPS, nouns.totalSupply());
+        return bps2Uint(getDynamicQuorumParamsAt(block.number).minQuorumVotesBPS, ds.nouns.totalSupply());
     }
 
     /**
      * @notice Current max quorum votes using Noun total supply
      */
     function maxQuorumVotes() public view returns (uint256) {
-        return bps2Uint(getDynamicQuorumParamsAt(block.number).maxQuorumVotesBPS, nouns.totalSupply());
+        return bps2Uint(getDynamicQuorumParamsAt(block.number).maxQuorumVotesBPS, ds.nouns.totalSupply());
     }
 
     function bps2Uint(uint256 bps, uint256 number) internal pure returns (uint256) {
         return (number * bps) / 10000;
-    }
-
-    function getChainIdInternal() internal view returns (uint256) {
-        uint256 chainId;
-        assembly {
-            chainId := chainid()
-        }
-        return chainId;
-    }
-
-    function safe32(uint256 n, string memory errorMessage) internal pure returns (uint32) {
-        require(n <= type(uint32).max, errorMessage);
-        return uint32(n);
-    }
-
-    function safe16(uint256 n) internal pure returns (uint16) {
-        if (n > type(uint16).max) {
-            revert UnsafeUint16Cast();
-        }
-        return uint16(n);
     }
 
     receive() external payable {}
