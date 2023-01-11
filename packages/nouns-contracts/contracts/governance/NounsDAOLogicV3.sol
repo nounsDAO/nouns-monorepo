@@ -33,8 +33,8 @@
 pragma solidity ^0.8.6;
 
 import './NounsDAOInterfaces.sol';
-import { NounsDAODynamicQuorum } from './NounsDAODynamicQuorum.sol';
 import { SignatureChecker } from '@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol';
+import { NounsDAOLogicV3Extension } from './NounsDAOLogicV3Extension.sol';
 
 contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     /// @notice The name of this contract
@@ -135,7 +135,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         DynamicQuorumParams calldata dynamicQuorumParams_,
         uint256 lastMinuteWindowInBlocks_,
         uint256 objectionPeriodDurationInBlocks_,
-        address extensionLogic_
+        address payable extensionLogic_
     ) public virtual {
         require(address(timelock) == address(0), 'NounsDAO::initialize: can only initialize once');
         if (msg.sender != admin) {
@@ -166,9 +166,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         votingPeriod = votingPeriod_;
         votingDelay = votingDelay_;
         proposalThresholdBPS = proposalThresholdBPS_;
-        NounsDAODynamicQuorum._setDynamicQuorumParams(
-            quorumParamsCheckpoints,
-            quorumVotesBPS,
+        NounsDAOLogicV3Extension(extensionLogic_)._setDynamicQuorumParams(
             dynamicQuorumParams_.minQuorumVotesBPS,
             dynamicQuorumParams_.maxQuorumVotesBPS,
             dynamicQuorumParams_.quorumCoefficient
@@ -802,8 +800,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @dev used in `isDefeated()`, which is used in `state()`.
      */
     function quorumVotes(uint256 proposalId) public view returns (uint256) {
-        Proposal storage proposal = _proposals[proposalId];
-        return NounsDAODynamicQuorum.quorumVotes(proposal, quorumParamsCheckpoints, quorumVotesBPS);
+        return NounsDAOLogicV3Extension(extensionLogic).quorumVotes(proposalId);
     }
 
     function _refundGas(uint256 startGas) internal {
@@ -832,9 +829,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     function minQuorumVotes() public view returns (uint256) {
         return
             bps2Uint(
-                NounsDAODynamicQuorum
-                    .getDynamicQuorumParamsAt(quorumParamsCheckpoints, block.number, quorumVotesBPS)
-                    .minQuorumVotesBPS,
+                NounsDAOLogicV3Extension(extensionLogic).getDynamicQuorumParamsAt(block.number).minQuorumVotesBPS,
                 nouns.totalSupply()
             );
     }

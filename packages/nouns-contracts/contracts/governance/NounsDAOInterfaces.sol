@@ -434,7 +434,7 @@ contract NounsDAOStorageV3 is NounsDAOStorageV1Adjusted {
 
     mapping(address => mapping(uint256 => bool)) proposeBySigNonces;
 
-    address extensionLogic;
+    address payable extensionLogic;
 
     struct DynamicQuorumParams {
         /// @notice The minimum basis point number of votes in support of a proposal required in order for a quorum to be reached and for a vote to succeed.
