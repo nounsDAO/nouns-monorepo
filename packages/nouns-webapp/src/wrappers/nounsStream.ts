@@ -5,29 +5,15 @@ import streamABI from '../utils/streamingPaymentUtils/stream.abi.json';
 const abi = new utils.Interface(streamABI);
 
 export const useStreamRemaningBalance = (streamAddress: string, userAddress: string) => {
+
   const [balance] =
     useContractCall<[BigNumber]>({
       abi,
       address: streamAddress,
-      method: 'balanceOf',
-      args: [userAddress],
+      method: 'recipientBalance',
     }) || [];
 
-  return balance;
-};
-
-export const useStreamRatePerSecond = (streamAddress: string, scaling?: number) => {
-  const [rps] = useContractCall<[BigNumber]>({
-    abi,
-    address: streamAddress,
-    method: 'ratePerSecond',
-    args: [],
-  }) || [BigNumber.from(0)];
-
-  if (!scaling) {
-    return rps;
-  }
-  return rps.div(BigNumber.from(scaling));
+  return balance?.toString();
 };
 
 export const useWithdrawTokens = (streamAddress: string) => {
