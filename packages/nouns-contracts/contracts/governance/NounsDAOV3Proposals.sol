@@ -463,17 +463,6 @@ library NounsDAOV3Proposals {
         return proposal.forVotes <= proposal.againstVotes || proposal.forVotes < ds.quorumVotes(proposal.id);
     }
 
-    function proposalCreationBlock(NounsDAOStorageV3.StorageV3 storage ds, NounsDAOStorageV3.Proposal storage proposal)
-        internal
-        view
-        returns (uint256)
-    {
-        if (proposal.creationBlock == 0) {
-            return proposal.startBlock - ds.votingDelay;
-        }
-        return proposal.creationBlock;
-    }
-
     function checkNoActiveProp(NounsDAOStorageV3.StorageV3 storage ds, address proposer) internal view {
         uint256 latestProposalId = ds.latestProposalIds[proposer];
         if (latestProposalId != 0) {

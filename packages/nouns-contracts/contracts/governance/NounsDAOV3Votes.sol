@@ -246,7 +246,7 @@ library NounsDAOV3Votes {
         require(receipt.hasVoted == false, 'NounsDAO::castVoteInternal: voter already voted');
 
         /// @notice: Unlike GovernerBravo, votes are considered from the block the proposal was created in order to normalize quorumVotes and proposalThreshold metrics
-        uint96 votes = ds.nouns.getPriorVotes(voter, ds.proposalCreationBlock(proposal));
+        uint96 votes = ds.nouns.getPriorVotes(voter, proposalCreationBlock(ds, proposal));
 
         bool isDefeatedBefore = ds.isDefeated(proposal);
 
@@ -289,7 +289,7 @@ library NounsDAOV3Votes {
         NounsDAOStorageV3.Receipt storage receipt = proposal.receipts[voter];
         require(receipt.hasVoted == false, 'NounsDAO::castVoteInternal: voter already voted');
 
-        uint96 votes = receipt.votes = ds.nouns.getPriorVotes(voter, ds.proposalCreationBlock(proposal));
+        uint96 votes = receipt.votes = ds.nouns.getPriorVotes(voter, proposalCreationBlock(ds, proposal));
         receipt.hasVoted = true;
         receipt.support = 0;
         proposal.againstVotes = proposal.againstVotes + votes;
@@ -310,6 +310,17 @@ library NounsDAOV3Votes {
             (bool refundSent, ) = msg.sender.call{ value: refundAmount }('');
             emit RefundableVote(msg.sender, refundAmount, refundSent);
         }
+    }
+
+    function proposalCreationBlock(NounsDAOStorageV3.StorageV3 storage ds, NounsDAOStorageV3.Proposal storage proposal)
+        internal
+        view
+        returns (uint256)
+    {
+        if (proposal.creationBlock == 0) {
+            return proposal.startBlock - ds.votingDelay;
+        }
+        return proposal.creationBlock;
     }
 
     function getChainIdInternal() internal view returns (uint256) {
