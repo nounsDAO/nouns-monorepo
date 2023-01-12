@@ -112,8 +112,10 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3 {
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
 
-    /// @dev Introduced these errors to reduce contract size, to avoid deployment failure
     error AdminOnly();
+    error CanOnlyInitializeOnce();
+    error InvalidTimelockAddress();
+    error InvalidNounsAddress();
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -155,36 +157,17 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3 {
         uint256 proposalThresholdBPS_,
         DynamicQuorumParams calldata dynamicQuorumParams_
     ) public virtual {
-        require(address(ds.timelock) == address(0), 'NounsDAO::initialize: can only initialize once');
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
-        require(timelock_ != address(0), 'NounsDAO::initialize: invalid timelock address');
-        require(nouns_ != address(0), 'NounsDAO::initialize: invalid nouns address');
-        require(
-            votingPeriod_ >= NounsDAOV3Admin.MIN_VOTING_PERIOD && votingPeriod_ <= NounsDAOV3Admin.MAX_VOTING_PERIOD,
-            'NounsDAO::initialize: invalid voting period'
-        );
-        require(
-            votingDelay_ >= NounsDAOV3Admin.MIN_VOTING_DELAY && votingDelay_ <= NounsDAOV3Admin.MAX_VOTING_DELAY,
-            'NounsDAO::initialize: invalid voting delay'
-        );
-        require(
-            proposalThresholdBPS_ >= NounsDAOV3Admin.MIN_PROPOSAL_THRESHOLD_BPS &&
-                proposalThresholdBPS_ <= NounsDAOV3Admin.MAX_PROPOSAL_THRESHOLD_BPS,
-            'NounsDAO::initialize: invalid proposal threshold bps'
-        );
+        if (address(ds.timelock) != address(0)) revert CanOnlyInitializeOnce();
+        if (msg.sender != ds.admin) revert AdminOnly();
+        if (timelock_ == address(0)) revert InvalidTimelockAddress();
+        if (nouns_ == address(0)) revert InvalidNounsAddress();
 
-        emit VotingPeriodSet(ds.votingPeriod, votingPeriod_);
-        emit VotingDelaySet(ds.votingDelay, votingDelay_);
-        emit ProposalThresholdBPSSet(ds.proposalThresholdBPS, proposalThresholdBPS_);
-
+        ds._setVotingDelay(votingPeriod_);
+        ds._setVotingDelay(votingDelay_);
+        ds._setProposalThresholdBPS(proposalThresholdBPS_);
         ds.timelock = INounsDAOExecutor(timelock_);
         ds.nouns = NounsTokenLike(nouns_);
         ds.vetoer = vetoer_;
-        ds.votingPeriod = votingPeriod_;
-        ds.votingDelay = votingDelay_;
-        ds.proposalThresholdBPS = proposalThresholdBPS_;
         _setDynamicQuorumParams(
             dynamicQuorumParams_.minQuorumVotesBPS,
             dynamicQuorumParams_.maxQuorumVotesBPS,
