@@ -3,5 +3,5 @@ export const human2ContractUSDCFormat = (humanReadableUSDCAmt: string | number) 
 };
 
 export const contract2humanUSDCFormat = (contractUSCDAmt: string | number) => {
-  return Math.round(parseFloat(contractUSCDAmt.toString()) / 1_000_000).toString();
+  return (parseFloat(contractUSCDAmt.toString()) / 1_000_000).toFixed(3).toString();
 };
