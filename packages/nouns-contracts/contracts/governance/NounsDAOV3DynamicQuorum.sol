@@ -117,6 +117,20 @@ library NounsDAOV3DynamicQuorum {
         return ds.quorumParamsCheckpoints[lower].params;
     }
 
+    /**
+     * @notice Current min quorum votes using Noun total supply
+     */
+    function minQuorumVotes(NounsDAOStorageV3.StorageV3 storage ds) public view returns (uint256) {
+        return bps2Uint(getDynamicQuorumParamsAt(ds, block.number).minQuorumVotesBPS, ds.nouns.totalSupply());
+    }
+
+    /**
+     * @notice Current max quorum votes using Noun total supply
+     */
+    function maxQuorumVotes(NounsDAOStorageV3.StorageV3 storage ds) public view returns (uint256) {
+        return bps2Uint(getDynamicQuorumParamsAt(ds, block.number).maxQuorumVotesBPS, ds.nouns.totalSupply());
+    }
+
     function safe32(uint256 n, string memory errorMessage) internal pure returns (uint32) {
         require(n <= type(uint32).max, errorMessage);
         return uint32(n);

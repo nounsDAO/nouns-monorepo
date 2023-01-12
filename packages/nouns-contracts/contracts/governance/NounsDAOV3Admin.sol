@@ -361,6 +361,19 @@ library NounsDAOV3Admin {
         emit QuorumCoefficientSet(oldParams.quorumCoefficient, params.quorumCoefficient);
     }
 
+    function _withdraw(NounsDAOStorageV3.StorageV3 storage ds) external returns (uint256, bool) {
+        if (msg.sender != ds.admin) {
+            revert AdminOnly();
+        }
+
+        uint256 amount = address(this).balance;
+        (bool sent, ) = msg.sender.call{ value: amount }('');
+
+        emit Withdraw(amount, sent);
+
+        return (amount, sent);
+    }
+
     function _writeQuorumParamsCheckpoint(
         NounsDAOStorageV3.StorageV3 storage ds,
         NounsDAOStorageV3.DynamicQuorumParams memory params
@@ -374,19 +387,6 @@ library NounsDAOV3Admin {
                 NounsDAOStorageV3.DynamicQuorumParamsCheckpoint({ fromBlock: blockNumber, params: params })
             );
         }
-    }
-
-    function _withdraw(NounsDAOStorageV3.StorageV3 storage ds) external returns (uint256, bool) {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
-
-        uint256 amount = address(this).balance;
-        (bool sent, ) = msg.sender.call{ value: amount }('');
-
-        emit Withdraw(amount, sent);
-
-        return (amount, sent);
     }
 
     function safe32(uint256 n, string memory errorMessage) internal pure returns (uint32) {

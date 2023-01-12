@@ -126,18 +126,6 @@ contract NounsDAOEventsV2 is NounsDAOEvents {
     event NewPendingVetoer(address oldPendingVetoer, address newPendingVetoer);
 }
 
-contract NounsDAOEventsV3 is NounsDAOEventsV2 {
-    event ProposalUpdated(
-        uint256 id,
-        address indexed proposer,
-        address[] targets,
-        uint256[] values,
-        string[] signatures,
-        bytes[] calldatas,
-        string description
-    );
-}
-
 contract NounsDAOProxyStorage {
     /// @notice Administrator for this contract
     address public admin;
