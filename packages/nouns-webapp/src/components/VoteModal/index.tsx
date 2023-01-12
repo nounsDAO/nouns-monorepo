@@ -68,14 +68,6 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
     }
   }, []);
 
-  const signerIsContract = async () => {
-    if (!library || !account) {
-      return false;
-    }
-    const code = await library?.getCode(account);
-    return code !== '0x';
-  };
-
   // Cast vote transaction state hook
   useEffect(() => {
     handleVoteStateChange(castVoteState);
@@ -212,20 +204,11 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
                 return;
               }
               setIsLoading(true);
-              const isContract = await signerIsContract();
               const isReasonEmpty = voteReason.trim() === '';
-              if (isContract) {
-                if (isReasonEmpty) {
-                  castVote(proposalId, vote);
-                } else {
-                  castVoteWithReason(proposalId, vote, voteReason);
-                }
+              if (isReasonEmpty) {
+                castRefundableVote(proposalId, vote);
               } else {
-                if (isReasonEmpty) {
-                  castRefundableVote(proposalId, vote);
-                } else {
-                  castRefundableVoteWithReason(proposalId, vote, voteReason);
-                }
+                castRefundableVoteWithReason(proposalId, vote, voteReason);
               }
             }}
             className={vote === undefined ? classes.submitBtnDisabled : classes.submitBtn}
@@ -240,7 +223,7 @@ const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps)
             className={classes.gasFreeVotingCopy}
             >
               <Trans>
-              Gas spent on voting will be refunded to you. Gnosis Safe is not yet supported.
+              Gas spent on voting will be refunded to you.
               </Trans>
             </span>
           </div>

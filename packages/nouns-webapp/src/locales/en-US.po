@@ -303,10 +303,6 @@ msgstr "Clear WalletConnect Data"
 msgid "Close"
 msgstr "Close"
 
-#: src/components/NounsIntroSection/index.tsx
-msgid "Collect it"
-msgstr "Collect it"
-
 #: src/components/Documentation/index.tsx
 msgid "Compound Governance"
 msgstr "Compound Governance"
@@ -552,8 +548,8 @@ msgstr "Function"
 #~ msgstr "Function (Optional)"
 
 #: src/components/VoteModal/index.tsx
-msgid "Gas spent on voting will be refunded to you. Gnosis Safe is not yet supported."
-msgstr "Gas spent on voting will be refunded to you. Gnosis Safe is not yet supported."
+msgid "Gas spent on voting will be refunded to you."
+msgstr "Gas spent on voting will be refunded to you."
 
 #: src/pages/Playground/index.tsx
 msgid "Generate Nouns"
@@ -626,10 +622,6 @@ msgstr "Learn more"
 #: src/components/Documentation/index.tsx
 msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
 msgstr "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
-
-#: src/components/NounsIntroSection/index.tsx
-msgid "Like this video?"
-msgstr "Like this video?"
 
 #: src/components/NounInfoRowHolder/index.tsx
 msgid "Loading..."
