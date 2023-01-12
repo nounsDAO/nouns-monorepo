@@ -94,6 +94,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     error MustProvideActions();
     error TooManyActions();
     error InvalidSignature();
+    error SignatureExpired();
     error ProposerAlreadyHasALiveProposal();
     error ProposalSignatureNonceAlreadyUsed();
     error ProposerCannotUpdateProposalWithSigners();
@@ -236,13 +237,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         );
         address[] memory signers = new address[](proposerSignatures.length);
         for (uint256 i = 0; i < proposerSignatures.length; ++i) {
-            if (
-                !SignatureChecker.isValidSignatureNow(
-                    proposerSignatures[i].signer,
-                    proposalHash,
-                    proposerSignatures[i].sig
-                )
-            ) revert InvalidSignature();
+            verifyProposalSignature(proposalHash, proposerSignatures[i]);
             address signer = signers[i] = proposerSignatures[i].signer;
 
             _checkNoActiveProp(signer);
@@ -408,13 +403,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
             abi.encode(msg.sender, nonce, targets, values, signatures, calldatas, description)
         );
         for (uint256 i = 0; i < proposerSignatures.length; ++i) {
-            if (
-                !SignatureChecker.isValidSignatureNow(
-                    proposerSignatures[i].signer,
-                    proposalHash,
-                    proposerSignatures[i].sig
-                )
-            ) revert InvalidSignature();
+            verifyProposalSignature(proposalHash, proposerSignatures[i]);
 
             // To avoid the gas cost of having to search signers in proposal.signers, we're assuming the sigs we get
             // use the same amount of signers and the same order.
@@ -427,6 +416,15 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         proposal.calldatas = calldatas;
 
         emit ProposalUpdated(proposalId, msg.sender, targets, values, signatures, calldatas, description);
+    }
+
+    function verifyProposalSignature(bytes32 proposalHash, ProposerSignature memory proposerSignature) internal view {
+        bytes32 signerHash = keccak256(abi.encode(proposalHash, proposerSignature.expirationTimestamp));
+
+        if (!SignatureChecker.isValidSignatureNow(proposerSignature.signer, signerHash, proposerSignature.sig))
+            revert InvalidSignature();
+
+        if (block.timestamp > proposerSignature.expirationTimestamp) revert SignatureExpired();
     }
 
     /**
