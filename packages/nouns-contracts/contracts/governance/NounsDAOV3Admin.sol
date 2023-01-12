@@ -40,6 +40,15 @@ library NounsDAOV3Admin {
     /// @notice An event emitted when the voting period is set
     event VotingPeriodSet(uint256 oldVotingPeriod, uint256 newVotingPeriod);
 
+    /// @notice An event emitted when the objection period duration is set
+    event ObjectionPeriodDurationSet(
+        uint256 oldObjectionPeriodDurationInBlocks,
+        uint256 newObjectionPeriodDurationInBlocks
+    );
+
+    /// @notice An event emitted when the objection period last minute window is set
+    event LastMinuteWindowSet(uint256 oldLastMinuteWindowInBlocks, uint256 newLastMinuteWindowInBlocks);
+
     /// @notice Emitted when pendingAdmin is changed
     event NewPendingAdmin(address oldPendingAdmin, address newPendingAdmin);
 
@@ -106,7 +115,7 @@ library NounsDAOV3Admin {
         uint256 oldVotingDelay = ds.votingDelay;
         ds.votingDelay = newVotingDelay;
 
-        emit VotingDelaySet(oldVotingDelay, ds.votingDelay);
+        emit VotingDelaySet(oldVotingDelay, newVotingDelay);
     }
 
     /**
@@ -124,7 +133,7 @@ library NounsDAOV3Admin {
         uint256 oldVotingPeriod = ds.votingPeriod;
         ds.votingPeriod = newVotingPeriod;
 
-        emit VotingPeriodSet(oldVotingPeriod, ds.votingPeriod);
+        emit VotingPeriodSet(oldVotingPeriod, newVotingPeriod);
     }
 
     /**
@@ -146,7 +155,34 @@ library NounsDAOV3Admin {
         uint256 oldProposalThresholdBPS = ds.proposalThresholdBPS;
         ds.proposalThresholdBPS = newProposalThresholdBPS;
 
-        emit ProposalThresholdBPSSet(oldProposalThresholdBPS, ds.proposalThresholdBPS);
+        emit ProposalThresholdBPSSet(oldProposalThresholdBPS, newProposalThresholdBPS);
+    }
+
+    function _setObjectionPeriodDurationInBlocks(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        uint256 newObjectionPeriodDurationInBlocks
+    ) external {
+        if (msg.sender != ds.admin) {
+            revert AdminOnly();
+        }
+
+        uint256 oldObjectionPeriodDurationInBlocks = ds.objectionPeriodDurationInBlocks;
+        ds.objectionPeriodDurationInBlocks = newObjectionPeriodDurationInBlocks;
+
+        emit ObjectionPeriodDurationSet(oldObjectionPeriodDurationInBlocks, newObjectionPeriodDurationInBlocks);
+    }
+
+    function _setLastMinuteWindowInBlocks(NounsDAOStorageV3.StorageV3 storage ds, uint256 newLastMinuteWindowInBlocks)
+        external
+    {
+        if (msg.sender != ds.admin) {
+            revert AdminOnly();
+        }
+
+        uint256 oldLastMinuteWindowInBlocks = ds.lastMinuteWindowInBlocks;
+        ds.lastMinuteWindowInBlocks = newLastMinuteWindowInBlocks;
+
+        emit LastMinuteWindowSet(oldLastMinuteWindowInBlocks, newLastMinuteWindowInBlocks);
     }
 
     /**

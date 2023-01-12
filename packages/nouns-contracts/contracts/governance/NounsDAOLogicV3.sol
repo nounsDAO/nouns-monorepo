@@ -158,9 +158,9 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3 {
             dynamicQuorumParams_.quorumCoefficient
         );
 
-        // TODO make this configurable
-        ds.lastMinuteWindowInBlocks = 7200; // 7200 blocks = 1 days
-        ds.objectionPeriodDurationInBlocks = 14400; // 14400 blocks = 2 days
+        // TODO add to initializer function signature (requires a new proxy version)
+        ds._setObjectionPeriodDurationInBlocks(14400); // 14400 blocks = 2 days
+        ds._setLastMinuteWindowInBlocks(7200); // 7200 blocks = 1 days
     }
 
     /**
@@ -434,6 +434,22 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3 {
      */
     function _setProposalThresholdBPS(uint256 newProposalThresholdBPS) external {
         ds._setProposalThresholdBPS(newProposalThresholdBPS);
+    }
+
+    /**
+     * @notice Admin function for setting the objection period duration
+     * @param newObjectionPeriodDurationInBlocks new objection period duration, in blocks
+     */
+    function _setObjectionPeriodDurationInBlocks(uint256 newObjectionPeriodDurationInBlocks) external {
+        ds._setObjectionPeriodDurationInBlocks(newObjectionPeriodDurationInBlocks);
+    }
+
+    /**
+     * @notice Admin function for setting the objection period last minute window
+     * @param newLastMinuteWindowInBlocks new objection period last minute window, in blocks
+     */
+    function _setLastMinuteWindowInBlocks(uint256 newLastMinuteWindowInBlocks) external {
+        ds._setLastMinuteWindowInBlocks(newLastMinuteWindowInBlocks);
     }
 
     /**
