@@ -96,6 +96,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     error InvalidSignature();
     error ProposerAlreadyHasALiveProposal();
     error ProposalSignatureNonceAlreadyUsed();
+    error ProposerCannotUpdateProposalWithSigners();
 
     /**
      * @notice Used to initialize the contract during delegator contructor
@@ -227,11 +228,11 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
 
         uint256 proposalId = ds.proposalCount = ds.proposalCount + 1;
         uint256 votes;
-        bytes32 proposalHash = keccak256(abi.encode(targets, values, signatures, calldatas, description));
-        address[] memory proposers = new address[](proposerSignatures.length);
+        bytes32 proposalHash = keccak256(abi.encode(msg.sender, targets, values, signatures, calldatas, description));
+        address[] memory signers = new address[](proposerSignatures.length);
         for (uint256 i = 0; i < proposerSignatures.length; ++i) {
             _checkPropSig(proposalHash, proposerSignatures[i]);
-            address signer = proposers[i] = proposerSignatures[i].signer;
+            address signer = signers[i] = proposerSignatures[i].signer;
 
             _checkNoActiveProp(signer);
             ds.latestProposalIds[signer] = proposalId;
@@ -247,7 +248,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
             signatures,
             calldatas
         );
-        newProposal.proposers = proposers;
+        newProposal.signers = signers;
 
         _emitNewPropEvents(newProposal, targets, values, signatures, calldatas, description);
 
@@ -368,6 +369,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         Proposal storage proposal = ds._proposals[proposalId];
         if (ds.state(proposalId) != ProposalState.Pending) revert CanOnlyEditPendingProposals();
         if (msg.sender != proposal.proposer) revert OnlyProposerCanEdit();
+        if (proposal.signers.length > 0) revert ProposerCannotUpdateProposalWithSigners();
 
         proposal.targets = targets;
         proposal.values = values;
@@ -395,16 +397,16 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         Proposal storage proposal = ds._proposals[proposalId];
         if (ds.state(proposalId) != ProposalState.Pending) revert CanOnlyEditPendingProposals();
 
-        address[] memory proposers = proposal.proposers;
-        if (proposerSignatures.length != proposers.length) revert OnlyProposerCanEdit();
+        address[] memory signers = proposal.signers;
+        if (proposerSignatures.length != signers.length) revert OnlyProposerCanEdit();
 
-        bytes32 proposalHash = keccak256(abi.encode(targets, values, signatures, calldatas, description));
+        bytes32 proposalHash = keccak256(abi.encode(msg.sender, targets, values, signatures, calldatas, description));
         for (uint256 i = 0; i < proposerSignatures.length; ++i) {
             _checkPropSig(proposalHash, proposerSignatures[i]);
 
-            // To avoid the gas cost of having to search signers in proposers, we're assuming the sigs we get
+            // To avoid the gas cost of having to search signers in proposal.signers, we're assuming the sigs we get
             // use the same amount of signers and the same order.
-            if (proposers[i] != proposerSignatures[i].signer) revert OnlyProposerCanEdit();
+            if (signers[i] != proposerSignatures[i].signer) revert OnlyProposerCanEdit();
         }
 
         proposal.targets = targets;

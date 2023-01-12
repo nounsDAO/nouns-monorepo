@@ -111,13 +111,13 @@ library NounsDAOV3Proposals {
 
         uint256 votes;
         bool msgSenderIsProposer = proposer == msg.sender;
-        if (proposer != address(0)) {
+        address[] memory signers = proposal.signers;
+        if (signers.length == 0) {
             votes = ds.nouns.getPriorVotes(proposer, block.number - 1);
         } else {
-            address[] memory proposers = proposal.proposers;
-            for (uint256 i = 0; i < proposers.length; ++i) {
-                msgSenderIsProposer = msgSenderIsProposer || msg.sender == proposers[i];
-                votes += ds.nouns.getPriorVotes(proposers[i], block.number - 1);
+            for (uint256 i = 0; i < signers.length; ++i) {
+                msgSenderIsProposer = msgSenderIsProposer || msg.sender == signers[i];
+                votes += ds.nouns.getPriorVotes(signers[i], block.number - 1);
             }
         }
 
@@ -204,7 +204,7 @@ library NounsDAOV3Proposals {
                 executed: proposal.executed,
                 totalSupply: proposal.totalSupply,
                 creationBlock: proposal.creationBlock,
-                proposers: proposal.proposers
+                signers: proposal.signers
             });
     }
 

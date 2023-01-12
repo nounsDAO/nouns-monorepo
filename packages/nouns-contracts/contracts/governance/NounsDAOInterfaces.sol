@@ -327,8 +327,6 @@ contract NounsDAOStorageV1Adjusted is NounsDAOProxyStorage {
         uint256 totalSupply;
         /// @notice The block at which this proposal was created
         uint256 creationBlock;
-        uint256 objectionPeriodEndBlock;
-        address[] proposers;
     }
 
     /// @notice Ballot receipt record for a voter
@@ -547,7 +545,7 @@ contract NounsDAOStorageV3 {
         /// @notice The block at which this proposal was created
         uint256 creationBlock;
         uint256 objectionPeriodEndBlock;
-        address[] proposers;
+        address[] signers;
     }
 
     /// @notice Ballot receipt record for a voter
@@ -597,7 +595,7 @@ contract NounsDAOStorageV3 {
         uint256 totalSupply;
         /// @notice The block at which this proposal was created
         uint256 creationBlock;
-        address[] proposers;
+        address[] signers;
     }
 
     struct DynamicQuorumParams {
