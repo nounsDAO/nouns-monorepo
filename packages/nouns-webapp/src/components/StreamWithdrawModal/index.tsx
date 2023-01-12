@@ -6,10 +6,9 @@ import { Trans } from '@lingui/macro';
 import ModalTitle from '../ModalTitle';
 import config from '../../config';
 import { contract2humanUSDCFormat } from '../../utils/usdcUtils';
-import { BigNumber, ethers } from 'ethers';
+import { ethers } from 'ethers';
 import { useEthers } from '@usedapp/core/dist/cjs/src';
 import {
-  useStreamRatePerSecond,
   useStreamRemaningBalance,
   useWithdrawTokens,
 } from '../../wrappers/nounsStream';
@@ -22,6 +21,7 @@ import { currentUnixEpoch } from '../../utils/timeUtils';
 import { formatTokenAmmount } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
 import { SupportedCurrency } from '../ProposalActionsModal/steps/TransferFundsDetailsStep';
 import ModalLabel from '../ModalLabel';
+import { countDecimals } from '../../utils/numberUtils';
 
 dayjs.extend(relativeTime);
 
@@ -50,31 +50,30 @@ const StreamWithdrawModalOverlay: React.FC<{
   const unitForDisplay = isUSDC ? 'USDC' : 'WETH';
   const { account } = useEthers();
 
-  const withdrawableBalance = useStreamRemaningBalance(streamAddress ?? '', account ?? '');
+  const withdrawableBalance = useStreamRemaningBalance(streamAddress ?? '', account ?? '') ?? 0;
   const { widthdrawTokens, widthdrawTokensState } = useWithdrawTokens(streamAddress ?? '');
   const [widthdrawAmount, setWidthdrawAmount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
-  const streamRatePerSecond = useStreamRatePerSecond(streamAddress ?? '', 1_000_000) ?? 0;
 
-  const [streamedSoFar, setStreamedSoFar] = useState<BigNumber | string | null>(null);
+  const [percentStreamedSoFar, setPercentStreamedSoFar] = useState(0);
+
   useEffect(() => {
     setTimeout(() => {
-      if (currentUnixEpoch() > endTime) {
-        setStreamedSoFar(streamAmount.toString());
-        return;
-      }
-
-      setStreamedSoFar(
-        streamRatePerSecond && Math.floor(Date.now() / 1000) - startTime > 0
-          ? streamRatePerSecond
-              .mul(BigNumber.from(Math.floor(Date.now() / 1000) - startTime))
-              .toString()
-          : BigNumber.from(0),
-      );
+      setPercentStreamedSoFar((100.0*Math.max(0,Math.min(1, (currentUnixEpoch() - startTime) / (endTime - startTime)))));
     }, 1000);
-  }, [endTime, startTime, streamAmount, streamRatePerSecond, streamedSoFar]);
+  }, [endTime, percentStreamedSoFar, startTime]);
 
-  if (!withdrawableBalance || isLoading || streamedSoFar === null) {
+
+  const totalStreamValueFormatted = parseFloat(
+    isUSDC
+      ? contract2humanUSDCFormat(withdrawableBalance?.toString() ?? '')
+      : ethers.utils.formatUnits(withdrawableBalance?.toString() ?? '').toString(),
+  );
+
+  const numDecimalPlaces = Math.max(2, countDecimals(totalStreamValueFormatted));
+
+
+  if (isLoading) {
     return (
       <>
         <ModalTitle>
@@ -129,10 +128,10 @@ const StreamWithdrawModalOverlay: React.FC<{
       </ModalLabel>
       <h1 className={classes.bold}>
         {isUSDC
-          ? parseFloat(contract2humanUSDCFormat(withdrawableBalance?.toString() ?? '')).toFixed(2)
+          ? parseFloat(contract2humanUSDCFormat(withdrawableBalance?.toString() ?? ''))
           : parseFloat(
               ethers.utils.formatUnits(withdrawableBalance?.toString() ?? '').toString(),
-            ).toFixed(2)}{' '}
+            ).toFixed(numDecimalPlaces)}{' '}
         {unitForDisplay}
       </h1>
 
@@ -140,10 +139,7 @@ const StreamWithdrawModalOverlay: React.FC<{
         <Trans>Streamed so far</Trans>
       </ModalLabel>
       <h1 className={classes.bold}>
-        {isUSDC
-          ? parseFloat(contract2humanUSDCFormat(streamedSoFar?.toString() ?? '')).toFixed(2)
-          : parseFloat(ethers.utils.formatUnits(streamedSoFar).toString()).toFixed(2)}{' '}
-        {unitForDisplay}
+        {percentStreamedSoFar.toFixed(numDecimalPlaces)}%
       </h1>
 
       <ModalLabel>Total stream value</ModalLabel>
@@ -160,7 +156,6 @@ const StreamWithdrawModalOverlay: React.FC<{
           label={'Widthdraw amount'}
           value={widthdrawAmount}
           onValueChange={e => {
-            console.log(e);
             setWidthdrawAmount(e.floatValue ?? 0);
           }}
           placeholder={isUSDC ? '0 USDC' : '0 WETH'}
@@ -189,12 +184,6 @@ const StreamWithdrawModalOverlay: React.FC<{
         nextBtnText={<Trans>Widthdraw</Trans>}
         onNextBtnClick={async () => {
           setIsLoading(true);
-          console.log(
-            formatTokenAmmount(
-              widthdrawAmount.toString(),
-              isUSDC ? SupportedCurrency.USDC : SupportedCurrency.WETH,
-            ),
-          );
           widthdrawTokens(
             formatTokenAmmount(
               widthdrawAmount.toString(),
@@ -202,7 +191,7 @@ const StreamWithdrawModalOverlay: React.FC<{
             ),
           );
         }}
-        isNextBtnDisabled={withdrawableBalance && humanUnitsStreamRemaningBalance === 0}
+        isNextBtnDisabled={withdrawableBalance !== 0 && humanUnitsStreamRemaningBalance === 0}
       />
       <div className={classes.streamTimeWrapper}>
         Stream <StartOrEndTime startTime={startTime} endTime={endTime} />
