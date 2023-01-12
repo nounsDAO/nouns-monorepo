@@ -214,6 +214,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
 
     function proposeBySigs(
         ProposerSignature[] memory proposerSignatures,
+        uint256 nonce,
         address[] memory targets,
         uint256[] memory values,
         string[] memory signatures,
@@ -225,13 +226,23 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         ) revert ProposalInfoArityMismatch();
         if (targets.length == 0) revert MustProvideActions();
         if (targets.length > proposalMaxOperations) revert TooManyActions();
+        if (ds.proposeBySigNonces[nonce]) revert ProposalSignatureNonceAlreadyUsed();
+        ds.proposeBySigNonces[nonce] = true;
 
         uint256 proposalId = ds.proposalCount = ds.proposalCount + 1;
         uint256 votes;
-        bytes32 proposalHash = keccak256(abi.encode(msg.sender, targets, values, signatures, calldatas, description));
+        bytes32 proposalHash = keccak256(
+            abi.encode(msg.sender, nonce, targets, values, signatures, calldatas, description)
+        );
         address[] memory signers = new address[](proposerSignatures.length);
         for (uint256 i = 0; i < proposerSignatures.length; ++i) {
-            _checkPropSig(proposalHash, proposerSignatures[i]);
+            if (
+                !SignatureChecker.isValidSignatureNow(
+                    proposerSignatures[i].signer,
+                    proposalHash,
+                    proposerSignatures[i].sig
+                )
+            ) revert InvalidSignature();
             address signer = signers[i] = proposerSignatures[i].signer;
 
             _checkNoActiveProp(signer);
@@ -335,16 +346,6 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         }
     }
 
-    function _checkPropSig(bytes32 proposalHash, ProposerSignature memory propSig) internal {
-        if (ds.proposeBySigNonces[propSig.signer][propSig.nonce]) revert ProposalSignatureNonceAlreadyUsed();
-        ds.proposeBySigNonces[propSig.signer][propSig.nonce] = true;
-
-        bytes32 proposalAndNonceHash = keccak256(abi.encodePacked(proposalHash, propSig.nonce));
-
-        if (!SignatureChecker.isValidSignatureNow(propSig.signer, proposalAndNonceHash, propSig.sig))
-            revert InvalidSignature();
-    }
-
     function _checkPropThreshold(uint256 votes) internal view returns (uint256 propThreshold) {
         uint256 totalSupply = ds.nouns.totalSupply();
         propThreshold = bps2Uint(ds.proposalThresholdBPS, totalSupply);
@@ -382,6 +383,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     function updateProposalBySigs(
         uint256 proposalId,
         ProposerSignature[] memory proposerSignatures,
+        uint256 nonce,
         address[] memory targets,
         uint256[] memory values,
         string[] memory signatures,
@@ -393,6 +395,8 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         ) revert ProposalInfoArityMismatch();
         if (targets.length == 0) revert MustProvideActions();
         if (targets.length > proposalMaxOperations) revert TooManyActions();
+        if (ds.proposeBySigNonces[nonce]) revert ProposalSignatureNonceAlreadyUsed();
+        ds.proposeBySigNonces[nonce] = true;
 
         Proposal storage proposal = ds._proposals[proposalId];
         if (ds.state(proposalId) != ProposalState.Pending) revert CanOnlyEditPendingProposals();
@@ -400,9 +404,17 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         address[] memory signers = proposal.signers;
         if (proposerSignatures.length != signers.length) revert OnlyProposerCanEdit();
 
-        bytes32 proposalHash = keccak256(abi.encode(msg.sender, targets, values, signatures, calldatas, description));
+        bytes32 proposalHash = keccak256(
+            abi.encode(msg.sender, nonce, targets, values, signatures, calldatas, description)
+        );
         for (uint256 i = 0; i < proposerSignatures.length; ++i) {
-            _checkPropSig(proposalHash, proposerSignatures[i]);
+            if (
+                !SignatureChecker.isValidSignatureNow(
+                    proposerSignatures[i].signer,
+                    proposalHash,
+                    proposerSignatures[i].sig
+                )
+            ) revert InvalidSignature();
 
             // To avoid the gas cost of having to search signers in proposal.signers, we're assuming the sigs we get
             // use the same amount of signers and the same order.

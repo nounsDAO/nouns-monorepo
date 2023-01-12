@@ -500,7 +500,7 @@ contract NounsDAOStorageV3 {
         // ================ V3 ================ //
         uint256 lastMinuteWindowInBlocks;
         uint256 objectionPeriodDurationInBlocks;
-        mapping(address => mapping(uint256 => bool)) proposeBySigNonces;
+        mapping(uint256 => bool) proposeBySigNonces;
     }
 
     struct Proposal {
@@ -559,7 +559,6 @@ contract NounsDAOStorageV3 {
     }
 
     struct ProposerSignature {
-        uint256 nonce;
         bytes sig;
         address signer;
     }
