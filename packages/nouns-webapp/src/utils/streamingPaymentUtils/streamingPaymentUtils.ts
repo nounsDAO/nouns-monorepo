@@ -72,7 +72,8 @@ export function parseStreamCreationCallData(callData: string) {
     };
   }
 
-  const streamAddress = callDataArray[5];
+  const streamAddress = callDataArray[6];
+  const nonce = callDataArray[5];
   const startTime = parseInt(callDataArray[3]);
   const endTime = parseInt(callDataArray[4]);
   const streamAmount = parseInt(callDataArray[1]);
@@ -85,5 +86,6 @@ export function parseStreamCreationCallData(callData: string) {
     endTime,
     streamAmount,
     tokenAddress,
+    nonce
   };
 }
