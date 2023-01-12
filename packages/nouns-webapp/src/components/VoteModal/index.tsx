@@ -2,7 +2,7 @@ import { Button, FloatingLabel, FormControl, Spinner } from 'react-bootstrap';
 import classes from './VoteModal.module.css';
 import { useCastRefundableVote, useCastRefundableVoteWithReason, useCastVote, useCastVoteWithReason, Vote } from '../../wrappers/nounsDao';
 import { ReactNode, useCallback, useEffect, useState } from 'react';
-import { TransactionStatus, useEthers } from '@usedapp/core';
+import { TransactionStatus } from '@usedapp/core';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import clsx from 'clsx';
 import { Trans } from '@lingui/macro';
@@ -19,9 +19,8 @@ interface VoteModalProps {
 const POST_SUCESSFUL_VOTE_MODAL_CLOSE_TIME_MS = 3000;
 
 const VoteModal = ({ show, onHide, proposalId, availableVotes }: VoteModalProps) => {
-  const { library, account } = useEthers();
-  const { castVote, castVoteState } = useCastVote();
-  const { castVoteWithReason, castVoteWithReasonState } = useCastVoteWithReason();
+  const { castVoteState } = useCastVote();
+  const { castVoteWithReasonState } = useCastVoteWithReason();
   const { castRefundableVote, castRefundableVoteState } = useCastRefundableVote();
   const { castRefundableVoteWithReason, castRefundableVoteWithReasonState } = useCastRefundableVoteWithReason();
   const [vote, setVote] = useState<Vote>();
