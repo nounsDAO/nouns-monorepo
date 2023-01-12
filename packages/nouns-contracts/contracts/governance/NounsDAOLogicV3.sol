@@ -57,7 +57,6 @@ import { NounsDAOV3Admin } from './NounsDAOV3Admin.sol';
 import { NounsDAOV3DynamicQuorum } from './NounsDAOV3DynamicQuorum.sol';
 import { NounsDAOV3Votes } from './NounsDAOV3Votes.sol';
 import { NounsDAOV3Proposals } from './NounsDAOV3Proposals.sol';
-import { SignatureChecker } from '@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol';
 
 contract NounsDAOLogicV3 is NounsDAOStorageV3 {
     using NounsDAOV3Admin for StorageV3;
@@ -116,21 +115,6 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3 {
     error CanOnlyInitializeOnce();
     error InvalidTimelockAddress();
     error InvalidNounsAddress();
-
-    /**
-     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-     *   EVENTS
-     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-     */
-
-    /// @notice An event emitted when the voting delay is set
-    event VotingDelaySet(uint256 oldVotingDelay, uint256 newVotingDelay);
-
-    /// @notice An event emitted when the voting period is set
-    event VotingPeriodSet(uint256 oldVotingPeriod, uint256 newVotingPeriod);
-
-    /// @notice Emitted when proposal threshold basis points is set
-    event ProposalThresholdBPSSet(uint256 oldProposalThresholdBPS, uint256 newProposalThresholdBPS);
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
