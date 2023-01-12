@@ -736,6 +736,54 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         return bps2Uint(getDynamicQuorumParamsAt(block.number).maxQuorumVotesBPS, ds.nouns.totalSupply());
     }
 
+    function vetoer() public view returns (address) {
+        return ds.vetoer;
+    }
+
+    function pendingVetoer() public view returns (address) {
+        return ds.pendingVetoer;
+    }
+
+    function votingDelay() public view returns (uint256) {
+        return ds.votingDelay;
+    }
+
+    function votingPeriod() public view returns (uint256) {
+        return ds.votingPeriod;
+    }
+
+    function proposalThresholdBPS() public view returns (uint256) {
+        return ds.proposalThresholdBPS;
+    }
+
+    function quorumVotesBPS() public view returns (uint256) {
+        return ds.quorumVotesBPS;
+    }
+
+    function proposalCount() public view returns (uint256) {
+        return ds.proposalCount;
+    }
+
+    function timelock() public view returns (INounsDAOExecutor) {
+        return ds.timelock;
+    }
+
+    function nouns() public view returns (NounsTokenLike) {
+        return ds.nouns;
+    }
+
+    function latestProposalIds(address account) public view returns (uint256) {
+        return ds.latestProposalIds[account];
+    }
+
+    function lastMinuteWindowInBlocks() public view returns (uint256) {
+        return ds.lastMinuteWindowInBlocks;
+    }
+
+    function objectionPeriodDurationInBlocks() public view returns (uint256) {
+        return ds.objectionPeriodDurationInBlocks;
+    }
+
     function bps2Uint(uint256 bps, uint256 number) internal pure returns (uint256) {
         return (number * bps) / 10000;
     }
