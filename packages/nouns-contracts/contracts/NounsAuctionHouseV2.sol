@@ -284,6 +284,14 @@ contract NounsAuctionHouseV2 is
         // TODO emit event
     }
 
+    function warmUpSettlementState(uint256[] memory nounIds) external {
+        for (uint256 i = 0; i < nounIds.length; ++i) {
+            if (settlementHistory[nounIds[i]].blockTimestamp == 0) {
+                settlementHistory[nounIds[i]] = SettlementState({ blockTimestamp: 1, amount: 0, winner: address(0) });
+            }
+        }
+    }
+
     /**
      * @notice Get past auction prices, up to `oracle.cardinality` observations.
      * There are times when cardinality is increased and not yet fully used, when a user might request more
