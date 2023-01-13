@@ -60,7 +60,7 @@ contract NounsAuctionHouseV2 is
     INounsAuctionHouse.AuctionV2 public auction;
 
     // The Nouns price feed state
-    mapping(uint256 => ObservationState) observations;
+    mapping(uint256 => SettlementState) settlementHistory;
 
     /**
      * @notice Initialize the auction house and base contracts,
@@ -241,7 +241,7 @@ contract NounsAuctionHouseV2 is
             _safeTransferETHWithFallback(owner(), _auction.amount);
         }
 
-        observations[_auction.nounId] = ObservationState({
+        settlementHistory[_auction.nounId] = SettlementState({
             blockTimestamp: uint32(block.timestamp),
             amount: ethPriceToUint64(_auction.amount),
             winner: _auction.bidder
@@ -272,9 +272,9 @@ contract NounsAuctionHouseV2 is
         return success;
     }
 
-    function setPrices(Observation[] memory observations_) external onlyOwner {
+    function setPrices(Settlement[] memory observations_) external onlyOwner {
         for (uint256 i = 0; i < observations_.length; ++i) {
-            observations[observations_[i].nounId] = ObservationState({
+            settlementHistory[observations_[i].nounId] = SettlementState({
                 blockTimestamp: observations_[i].blockTimestamp,
                 amount: observations_[i].amount,
                 winner: observations_[i].winner
@@ -293,45 +293,45 @@ contract NounsAuctionHouseV2 is
      * Since the oracle only has 3 prices stored, the user will get 3 observations.
      * @dev Reverts with a `AuctionCountOutOfBounds` error if `auctionCount` is greater than `oracle.cardinality`.
      * @param auctionCount The number of price observations to get.
-     * @return observations_ An array of type `Noracle.Observation`, where each Observation includes a timestamp,
+     * @return settlements An array of type `Settlement`, where each Settlement includes a timestamp,
      * the Noun ID of that auction, the winning bid amount, and the winner's addreess.
      */
-    function prices(uint256 auctionCount) external view returns (Observation[] memory observations_) {
+    function prices(uint256 auctionCount) external view returns (Settlement[] memory settlements) {
         uint256 latestNounId = auction.nounId;
         if (!auction.settled && latestNounId > 0) {
             latestNounId -= 1;
         }
 
-        observations_ = new Observation[](auctionCount);
-        uint256 observationsCount = 0;
-        while (observationsCount < auctionCount && latestNounId > 0) {
+        settlements = new Settlement[](auctionCount);
+        uint256 actualCount = 0;
+        while (actualCount < auctionCount && latestNounId > 0) {
             // Skip Nouner reward Nouns, they have no price
             if (latestNounId <= 1820 && latestNounId % 10 == 0) {
                 --latestNounId;
                 continue;
             }
 
-            observations_[observationsCount] = Observation({
-                blockTimestamp: observations[latestNounId].blockTimestamp,
-                amount: observations[latestNounId].amount,
-                winner: observations[latestNounId].winner,
+            settlements[actualCount] = Settlement({
+                blockTimestamp: settlementHistory[latestNounId].blockTimestamp,
+                amount: settlementHistory[latestNounId].amount,
+                winner: settlementHistory[latestNounId].winner,
                 nounId: latestNounId
             });
-            ++observationsCount;
+            ++actualCount;
             --latestNounId;
         }
 
-        if (auctionCount > observationsCount) {
+        if (auctionCount > actualCount) {
             // this assembly trims the observations array, getting rid of unused cells
             assembly {
-                mstore(observations_, observationsCount)
+                mstore(settlements, actualCount)
             }
         }
     }
 
-    function prices(uint256 latestId, uint256 oldestId) external view returns (Observation[] memory observations_) {
-        observations_ = new Observation[](latestId - oldestId);
-        uint256 observationsCount = 0;
+    function prices(uint256 latestId, uint256 oldestId) external view returns (Settlement[] memory settlements) {
+        settlements = new Settlement[](latestId - oldestId);
+        uint256 actualCount = 0;
         uint256 currentId = latestId;
         while (currentId > oldestId) {
             // Skip Nouner reward Nouns, they have no price
@@ -340,20 +340,20 @@ contract NounsAuctionHouseV2 is
                 continue;
             }
 
-            observations_[observationsCount] = Observation({
-                blockTimestamp: observations[currentId].blockTimestamp,
-                amount: observations[currentId].amount,
-                winner: observations[currentId].winner,
+            settlements[actualCount] = Settlement({
+                blockTimestamp: settlementHistory[currentId].blockTimestamp,
+                amount: settlementHistory[currentId].amount,
+                winner: settlementHistory[currentId].winner,
                 nounId: currentId
             });
-            ++observationsCount;
+            ++actualCount;
             --currentId;
         }
 
-        if (observations_.length > observationsCount) {
+        if (settlements.length > actualCount) {
             // this assembly trims the observations array, getting rid of unused cells
             assembly {
-                mstore(observations_, observationsCount)
+                mstore(settlements, actualCount)
             }
         }
     }

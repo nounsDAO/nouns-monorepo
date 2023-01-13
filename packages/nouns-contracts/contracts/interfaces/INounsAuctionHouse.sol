@@ -48,7 +48,7 @@ interface INounsAuctionHouse {
         bool settled;
     }
 
-    struct ObservationState {
+    struct SettlementState {
         // The block.timestamp when the auction was settled.
         uint32 blockTimestamp;
         // The winning bid amount, with 10 decimal places (reducing accuracy to save bits).
@@ -58,7 +58,7 @@ interface INounsAuctionHouse {
         address winner;
     }
 
-    struct Observation {
+    struct Settlement {
         // The block.timestamp when the auction was settled.
         uint32 blockTimestamp;
         // The winning bid amount, with 10 decimal places (reducing accuracy to save bits).
