@@ -553,7 +553,7 @@ msgstr "関数"
 #~ msgstr "関数 (任意)"
 
 #: src/components/VoteModal/index.tsx
-msgid "Gas spent on voting will be refunded to you. Gnosis Safe is not yet supported."
+msgid "Gas spent on voting will be refunded to you."
 msgstr ""
 
 #: src/pages/Playground/index.tsx

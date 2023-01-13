@@ -303,10 +303,6 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: src/components/NounsIntroSection/index.tsx
-msgid "Collect it"
-msgstr ""
-
 #: src/components/Documentation/index.tsx
 msgid "Compound Governance"
 msgstr ""
@@ -552,7 +548,7 @@ msgstr ""
 #~ msgstr ""
 
 #: src/components/VoteModal/index.tsx
-msgid "Gas spent on voting will be refunded to you. Gnosis Safe is not yet supported."
+msgid "Gas spent on voting will be refunded to you."
 msgstr ""
 
 #: src/pages/Playground/index.tsx
@@ -625,10 +621,6 @@ msgstr ""
 
 #: src/components/Documentation/index.tsx
 msgid "Learn more below, or start creating Nouns off-chain using the {playgroundLink}."
-msgstr ""
-
-#: src/components/NounsIntroSection/index.tsx
-msgid "Like this video?"
 msgstr ""
 
 #: src/components/NounInfoRowHolder/index.tsx
