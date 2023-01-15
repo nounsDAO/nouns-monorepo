@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Image from "next/image";
 import { Player, Controls } from "@lottiefiles/react-lottie-player";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.svg";
 import n00uns_soon from "../assets/animations/n00uns_soon.json";
 import {FaTwitter, FaDiscord} from 'react-icons/fa'
 
