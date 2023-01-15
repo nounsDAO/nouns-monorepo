@@ -15,6 +15,7 @@ const Landing: NextPage = (props) => {
           className="mx-auto object-cover w-72 mb-48"
           alt="n00uns logo"
           aria-label="n00uns logo"
+          priority={false}
         />
         <div className="w-[100%] mx-auto absolute overflow-hidden">
           <Player
@@ -29,9 +30,9 @@ const Landing: NextPage = (props) => {
         </div>
         <span className="mb-12">[Q2 2023]</span>
       </div>
-      <footer className="fixed bottom-0 w-full flex flex-col items-center justify-between p-6">
-        <div className="w-3/4 border-t border-gray-700"></div>
-          <ul className="flex flex-wrap items-center mx-auto mt-5 text-gray-500 space-x-4">
+      <footer className="fixed h-20 bg-white bottom-0 w-full items-center justify-between p-6">
+        {/* <div className="w-3/4 border-t border-gray-700"></div> */}
+          <ul className="flex items-center justify-center mx-auto text-black space-x-8">
               <li>
                   <a href="https://twitter.com/snounsdao?s=20&t=YOW-qmN9O20RX-lB-fOmiA" 
                     target="_blank"
