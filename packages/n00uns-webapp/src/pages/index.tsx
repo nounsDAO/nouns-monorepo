@@ -12,7 +12,7 @@ const Landing: NextPage = (props) => {
       <div className="w-full h-full flex flex-col items-center justify-center bg-nuetral">
         <Image
           src={logo}
-          className="mx-auto object-cover w-72 mb-48"
+          className="mx-auto object-cover w-72 mb-56"
           alt="n00uns logo"
           aria-label="n00uns logo"
           priority={false}
@@ -28,7 +28,7 @@ const Landing: NextPage = (props) => {
           </Player>
           
         </div>
-        <span className="mb-12">[Q2 2023]</span>
+        <span className="mb-14">[Q2 2023]</span>
       </div>
       <footer className="fixed h-20 bg-white bottom-0 w-full items-center justify-between p-6">
         {/* <div className="w-3/4 border-t border-gray-700"></div> */}
