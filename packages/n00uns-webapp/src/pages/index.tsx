@@ -23,7 +23,7 @@ const Landing: NextPage = (props) => {
       <meta property="og:url" content="https://www.n00uns.com" key="url" />
     </Head>
     <main className="w-screen h-screen relative overflow-hidden">
-      <div className="w-full h-full flex flex-col items-center justify-center bg-nuetral -mt-20 sm:mt-0">
+      <div className="w-full h-full flex flex-col items-center justify-center bg-nuetral">
         <Image
           src={logo}
           className="mx-auto object-cover w-72 mb-36 sm:mb-56"
@@ -36,7 +36,7 @@ const Landing: NextPage = (props) => {
             autoplay
             loop
             src={n00uns_soon}
-            style={{ width: '100%', height:'500px' }}
+            style={{ width: '100%', height: '500px' }}
           >
             {/* <Controls visible={true} buttons={['play', 'repeat', 'frame', 'debug']} /> */}
           </Player>
@@ -49,7 +49,6 @@ const Landing: NextPage = (props) => {
         </div>
       </div>
       <footer className="fixed h-20 bg-white bottom-0 w-full items-center justify-between p-6">
-        {/* <div className="w-3/4 border-t border-gray-700"></div> */}
           <ul className="flex items-center justify-center mx-auto text-black space-x-8">
               <li>
                   <a href="https://twitter.com/snounsdao?s=20&t=YOW-qmN9O20RX-lB-fOmiA" 
