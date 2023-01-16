@@ -45,7 +45,16 @@ const Landing: NextPage = (props) => {
         <span className="mb-12 sm:mb-14">[Q2 2023]</span>
         <div className="flex flex-col items-center absolute bottom-20 sm:bottom-24 px-5 mb-20 sm:mb-0">
           <p className="text-2xl sm:text-3xl pb-2 font-light text-center">The best way to predict the future is to create it.</p>
-          <p className="text-xs py-4 font-thin text-center">n00unsDAO is an ambitious multi-chain DAO and community proliferating via the <span className="font-bold">@nounsdao</span> protocol and <span className="font-bold">@y00tsNFT</span></p>
+          <p className="text-xs py-4 font-thin text-center">n00unsDAO is an ambitious multi-chain DAO and community proliferating via the  
+            <a className="font-bold" href="https://twitter.com/nounsdao?s=20&t=d8jUWsIUeYdptSuxu-yUdg" 
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="link to nouns twitter">&nbsp;@nounsdao</a> protocol and 
+            <a className="font-bold" href="https://twitter.com/y00tsNFT?s=20&t=d8jUWsIUeYdptSuxu-yUdg" 
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="link to y00ts twitter">&nbsp;@y00tsNFT</a>
+            </p>
         </div>
       </div>
       <footer className="fixed h-20 bg-white bottom-0 w-full items-center justify-between p-6">
@@ -55,7 +64,7 @@ const Landing: NextPage = (props) => {
                     target="_blank"
                     rel="noreferrer"
                     aria-label="link to n00uns twitter"
-                    className="mr-4 hover:scale-110 md:mr-6 ">
+                    className="mr-4 hover:scale-110 md:mr-6">
                     <FaTwitter className="text-3xl" />
                   </a>
               </li>
