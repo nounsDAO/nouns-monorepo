@@ -23,7 +23,7 @@ const Landing: NextPage = (props) => {
       <meta property="og:url" content="https://www.n00uns.com" key="url" />
     </Head>
     <main className="w-screen h-screen relative overflow-hidden">
-      <div className="w-full h-full flex flex-col items-center justify-center bg-nuetral">
+      <div className="w-full h-full flex flex-col items-center justify-center bg-nuetral -mt-28 sm:-mt-20">
         <Image
           src={logo}
           className="mx-auto object-cover w-72 mb-36 sm:mb-56"
@@ -43,7 +43,7 @@ const Landing: NextPage = (props) => {
           
         </div>
         <span className="mb-12 sm:mb-14">[Q2 2023]</span>
-        <div className="flex flex-col items-center absolute bottom-20 sm:bottom-24 px-5">
+        <div className="flex flex-col items-center absolute bottom-20 sm:bottom-24 px-5 mb-20 sm:mb-0">
           <p className="text-2xl sm:text-3xl pb-2 font-light text-center">The best way to predict the future is to create it.</p>
           <p className="text-xs py-4 font-thin text-center">n00unsDAO is an ambitious multi-chain DAO and community proliferating via the <span className="font-bold">@nounsdao</span> protocol and <span className="font-bold">@y00tsNFT</span></p>
         </div>
