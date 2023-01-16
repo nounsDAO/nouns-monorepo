@@ -11,7 +11,8 @@ const Landing: NextPage = (props) => {
   return (
     <>
     <Head>
-      <meta property="og:title" content="n00uns dao" key="title" />
+      <meta property="og:title" content="n00unsDAO" key="title" />
+      <meta property="og:description" content="n00uns soon" key="description" />
       <meta property="og:type" content="website" key="type" />
       <meta property="og:image" content={og_img.src} key="image" />
       <meta property="og:url" content="https://www.n00uns.com" key="url" />
