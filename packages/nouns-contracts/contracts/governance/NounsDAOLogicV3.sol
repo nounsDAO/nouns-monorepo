@@ -307,10 +307,21 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3 {
      * @notice Returns the proposal details given a proposal id.
      *     The `quorumVotes` member holds the *current* quorum, given the current votes.
      * @param proposalId the proposal id to get the data for
-     * @return A `ProposalCondensed` struct with the proposal data
+     * @return A `ProposalCondensed` struct with the proposal data, backwards compatible with V1 and V2
      */
-    function proposals(uint256 proposalId) external view returns (ProposalCondensed memory) {
+    function proposals(uint256 proposalId) external view returns (NounsDAOStorageV2.ProposalCondensed memory) {
         return ds.proposals(proposalId);
+    }
+
+    /**
+     * @notice Returns the proposal details given a proposal id.
+     *     The `quorumVotes` member holds the *current* quorum, given the current votes.
+     * @param proposalId the proposal id to get the data for
+     * @return A `ProposalCondensed` struct with the proposal data, not backwards compatible as it contains additional values
+     * like `objectionPeriodEndBlock` and `signers`
+     */
+    function proposalsV3(uint256 proposalId) external view returns (ProposalCondensed memory) {
+        return ds.proposalsV3(proposalId);
     }
 
     /**

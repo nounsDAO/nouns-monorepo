@@ -583,6 +583,8 @@ contract NounsDAOStorageV3 {
         uint256 totalSupply;
         /// @notice The block at which this proposal was created
         uint256 creationBlock;
+        uint256 objectionPeriodEndBlock;
+        address[] signers;
     }
 
     struct DynamicQuorumParams {

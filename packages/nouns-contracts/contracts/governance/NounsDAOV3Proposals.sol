@@ -423,6 +423,38 @@ library NounsDAOV3Proposals {
     function proposals(NounsDAOStorageV3.StorageV3 storage ds, uint256 proposalId)
         external
         view
+        returns (NounsDAOStorageV2.ProposalCondensed memory)
+    {
+        NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
+        return
+            NounsDAOStorageV2.ProposalCondensed({
+                id: proposal.id,
+                proposer: proposal.proposer,
+                proposalThreshold: proposal.proposalThreshold,
+                quorumVotes: ds.quorumVotes(proposal.id),
+                eta: proposal.eta,
+                startBlock: proposal.startBlock,
+                endBlock: proposal.endBlock,
+                forVotes: proposal.forVotes,
+                againstVotes: proposal.againstVotes,
+                abstainVotes: proposal.abstainVotes,
+                canceled: proposal.canceled,
+                vetoed: proposal.vetoed,
+                executed: proposal.executed,
+                totalSupply: proposal.totalSupply,
+                creationBlock: proposal.creationBlock
+            });
+    }
+
+    /**
+     * @notice Returns the proposal details given a proposal id.
+     *     The `quorumVotes` member holds the *current* quorum, given the current votes.
+     * @param proposalId the proposal id to get the data for
+     * @return A `ProposalCondensed` struct with the proposal data
+     */
+    function proposalsV3(NounsDAOStorageV3.StorageV3 storage ds, uint256 proposalId)
+        external
+        view
         returns (NounsDAOStorageV3.ProposalCondensed memory)
     {
         NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
@@ -442,7 +474,9 @@ library NounsDAOV3Proposals {
                 vetoed: proposal.vetoed,
                 executed: proposal.executed,
                 totalSupply: proposal.totalSupply,
-                creationBlock: proposal.creationBlock
+                creationBlock: proposal.creationBlock,
+                objectionPeriodEndBlock: proposal.objectionPeriodEndBlock,
+                signers: proposal.signers
             });
     }
 
