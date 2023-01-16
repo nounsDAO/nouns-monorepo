@@ -73,6 +73,12 @@ library NounsDAOV3Admin {
     /// @notice Emitted when admin withdraws the DAO's balance.
     event Withdraw(uint256 amount, bool sent);
 
+    /// @notice Emitted when the proposal id at which vote snapshot block changes is set
+    event VoteSnapshotBlockSwitchProposalIdSet(
+        uint256 oldVoteSnapshotBlockSwitchProposalId,
+        uint256 newVoteSnapshotBlockSwitchProposalId
+    );
+
     /// @notice The minimum setable proposal threshold
     uint256 public constant MIN_PROPOSAL_THRESHOLD_BPS = 1; // 1 basis point or 0.01%
 
@@ -408,6 +414,28 @@ library NounsDAOV3Admin {
         emit Withdraw(amount, sent);
 
         return (amount, sent);
+    }
+
+    /**
+     * @notice Admin function for setting the proposal id at which vote snapshots start using the voting start block
+     * instead of the proposal creation block.
+     * @param newVoteSnapshotBlockSwitchProposalId the new proposal id at which to flip the switch
+     */
+    function _setVoteSnapshotBlockSwitchProposalId(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        uint256 newVoteSnapshotBlockSwitchProposalId
+    ) external {
+        if (msg.sender != ds.admin) {
+            revert AdminOnly();
+        }
+
+        uint256 oldVoteSnapshotBlockSwitchProposalId = ds.voteSnapshotBlockSwitchProposalId;
+        ds.voteSnapshotBlockSwitchProposalId = newVoteSnapshotBlockSwitchProposalId;
+
+        emit VoteSnapshotBlockSwitchProposalIdSet(
+            oldVoteSnapshotBlockSwitchProposalId,
+            newVoteSnapshotBlockSwitchProposalId
+        );
     }
 
     function _writeQuorumParamsCheckpoint(

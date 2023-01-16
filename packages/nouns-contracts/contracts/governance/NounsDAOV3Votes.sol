@@ -317,10 +317,13 @@ library NounsDAOV3Votes {
         view
         returns (uint256)
     {
-        if (proposal.creationBlock == 0) {
-            return proposal.startBlock - ds.votingDelay;
+        // The idea is to temporarily use this code that would still use `creationBlock` until all proposals are using
+        // `startBlock`, then we can deploy a quick DAO fix that removes this line and only uses `startBlock`.
+        // In that version upgrade we can also zero-out and remove this storage variable for max cleanup.
+        if (proposal.id < ds.voteSnapshotBlockSwitchProposalId || ds.voteSnapshotBlockSwitchProposalId == 0) {
+            return proposal.creationBlock;
         }
-        return proposal.creationBlock;
+        return proposal.startBlock;
     }
 
     function getChainIdInternal() internal view returns (uint256) {

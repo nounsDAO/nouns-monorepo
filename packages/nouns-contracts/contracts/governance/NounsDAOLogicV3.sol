@@ -551,6 +551,15 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3 {
     }
 
     /**
+     * @notice Admin function for setting the proposal id at which vote snapshots start using the voting start block
+     * instead of the proposal creation block.
+     * @param newVoteSnapshotBlockSwitchProposalId the new proposal id at which to flip the switch
+     */
+    function _setVoteSnapshotBlockSwitchProposalId(uint256 newVoteSnapshotBlockSwitchProposalId) external {
+        ds._setVoteSnapshotBlockSwitchProposalId(newVoteSnapshotBlockSwitchProposalId);
+    }
+
+    /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      *   DYNAMIC QUORUM
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
