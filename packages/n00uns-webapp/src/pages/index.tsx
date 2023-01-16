@@ -11,14 +11,19 @@ const Landing: NextPage = (props) => {
   return (
     <>
     <Head>
+      <meta name="twitter:card" content="summary_large_image" key="card" />
+      <meta name="twitter:site" content="@snounsdao" key="site" />
+      <meta property="og:site_name" content="n00uns" key="sitename" />
       <meta property="og:title" content="n00unsDAO" key="title" />
       <meta property="og:description" content="n00uns soon" key="description" />
       <meta property="og:type" content="website" key="type" />
       <meta property="og:image" content={og_img.src} key="image" />
+      <meta property="og:image:width" content="1200" key="imagewidth" />
+      <meta property="og:image:height" content="630" key="imageheight" />
       <meta property="og:url" content="https://www.n00uns.com" key="url" />
     </Head>
     <main className="w-screen h-screen relative">
-      <div className="w-full h-full flex flex-col items-center justify-center bg-nuetral -mt-10 sm:mt-0">
+      <div className="w-full h-full flex flex-col items-center justify-center bg-nuetral -mt-10 sm:mt-0 overflow-hidden">
         <Image
           src={logo}
           className="mx-auto object-cover w-72 mb-36 sm:mb-56"
