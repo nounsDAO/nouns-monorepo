@@ -14,8 +14,8 @@ const Landing: NextPage = (props) => {
       <meta name="twitter:card" content="summary_large_image" key="card" />
       <meta name="twitter:site" content="@snounsdao" key="site" />
       <meta property="og:site_name" content="n00uns" key="sitename" />
-      <meta property="og:title" content="n00unsDAO" key="title" />
-      <meta property="og:description" content="n00uns soon" key="description" />
+      <meta property="og:title" content="n00uns soon" key="title" />
+      <meta property="og:description" content="n00unsDAO is an ambitious multi-chain DAO and community proliferating via the @nounsdao protocol and @y00tsNFT" key="description" />
       <meta property="og:type" content="website" key="type" />
       <meta property="og:image" content={og_img.src} key="image" />
       <meta property="og:image:width" content="1200" key="imagewidth" />
