@@ -43,9 +43,9 @@ const Landing: NextPage = (props) => {
           
         </div>
         <span className="mb-12 sm:mb-14">[Q2 2023]</span>
-        <div className="flex flex-col items-center absolute bottom-20 sm:bottom-24 px-5 mb-20 sm:mb-0">
+        <div className="flex flex-col items-center absolute bottom-20 sm:bottom-24 p-5 mb-20 sm:mb-0">
           <p className="text-2xl sm:text-3xl pb-2 font-light text-center">The best way to predict the future is to create it.</p>
-          <p className="text-xs py-4 font-thin text-center">n00unsDAO is an ambitious multi-chain DAO and community proliferating via the  
+          {/* <p className="text-xs py-4 font-thin text-center">n00unsDAO is an ambitious multi-chain DAO and community proliferating via the  
             <a className="font-bold" href="https://twitter.com/nounsdao?s=20&t=d8jUWsIUeYdptSuxu-yUdg" 
                     target="_blank"
                     rel="noreferrer"
@@ -54,11 +54,11 @@ const Landing: NextPage = (props) => {
                     target="_blank"
                     rel="noreferrer"
                     aria-label="link to y00ts twitter">&nbsp;@y00tsNFT</a>
-            </p>
+            </p> */}
         </div>
       </div>
-      <footer className="fixed h-20 bg-white bottom-0 w-full items-center justify-between p-6">
-          <ul className="flex items-center justify-center mx-auto text-black space-x-8">
+      <footer className="fixed h-20 bg-white bottom-0 w-full items-center justify-between">
+          <ul className="flex items-center justify-center mx-auto text-black space-x-8 content-center p-6">
               <li>
                   <a href="https://twitter.com/snounsdao?s=20&t=YOW-qmN9O20RX-lB-fOmiA" 
                     target="_blank"
