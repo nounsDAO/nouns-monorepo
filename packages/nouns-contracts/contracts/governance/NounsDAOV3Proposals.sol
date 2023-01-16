@@ -442,8 +442,7 @@ library NounsDAOV3Proposals {
                 vetoed: proposal.vetoed,
                 executed: proposal.executed,
                 totalSupply: proposal.totalSupply,
-                creationBlock: proposal.creationBlock,
-                signers: proposal.signers
+                creationBlock: proposal.creationBlock
             });
     }
 
