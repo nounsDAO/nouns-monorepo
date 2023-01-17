@@ -177,11 +177,7 @@ library NounsDAOV3Proposals {
         bytes[] memory calldatas,
         string memory description
     ) internal {
-        if (
-            targets.length != values.length || targets.length != signatures.length || targets.length != calldatas.length
-        ) revert ProposalInfoArityMismatch();
-        if (targets.length == 0) revert MustProvideActions();
-        if (targets.length > proposalMaxOperations) revert TooManyActions();
+        checkProposaTxs(ProposalTxs(targets, values, signatures, calldatas));
 
         NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
         if (state(ds, proposalId) != NounsDAOStorageV3.ProposalState.Pending) revert CanOnlyEditPendingProposals();
