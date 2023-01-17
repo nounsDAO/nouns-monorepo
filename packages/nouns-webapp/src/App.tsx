@@ -16,6 +16,7 @@ import GovernancePage from './pages/Governance';
 import CreateProposalPage from './pages/CreateProposal';
 import VotePage from './pages/Vote';
 import NoundersPage from './pages/Nounders';
+import SignPage from './pages/Sign';
 import ExplorePage from './pages/Explore';
 import NotFoundPage from './pages/NotFound';
 import Playground from './pages/Playground';
@@ -68,6 +69,7 @@ function App() {
             <Route exact path="/playground" component={Playground} />
             <Route exact path="/delegate" component={DelegatePage} />
             <Route exact path="/explore" component={ExplorePage} />
+            <Route exact path="/sign" component={SignPage} />
             <Route component={NotFoundPage} />
           </Switch>
           <Footer />
