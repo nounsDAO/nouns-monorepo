@@ -157,12 +157,9 @@ library NounsDAOV3Proposals {
             votes += ds.nouns.getPriorVotes(signer, block.number - 1);
         }
 
-        NounsDAOStorageV3.Proposal storage newProposal = createNewProposal(
-            ds,
-            proposalId,
-            checkPropThreshold(ds, votes),
-            txs
-        );
+        uint256 propThreshold = checkPropThreshold(ds, votes);
+
+        NounsDAOStorageV3.Proposal storage newProposal = createNewProposal(ds, proposalId, propThreshold, txs);
         newProposal.signers = signers;
 
         emitNewPropEvents(newProposal, ds.minQuorumVotes(), txs, description);
