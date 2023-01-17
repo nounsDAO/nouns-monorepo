@@ -14,8 +14,9 @@ const SignPage = () => {
 
     const domain = {
       name: 'Nouns DAO',
+      version: 'V1',
       chainId: chainId,
-      verifyingContract: '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC'
+      verifyingContract: '0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f'
     };
 
     const types = {
@@ -31,7 +32,7 @@ const SignPage = () => {
     };
 
     const value = {
-      targets: ['0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC', '0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC'],
+      targets: ['0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC','0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa'],
       values: ['1000000000000000000', '0'],
       signatures: ['sendOrRegisterDebt(address,uint256)', ''],
       calldatas: ['0x0000000000000000000000002B63BC71926AD001BCAFD9DF55952CF8FAD4F1B20000000000000000000000000000000000000000000000000000002F49B40F00', '0x'],
