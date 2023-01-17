@@ -35,6 +35,7 @@ library NounsDAOV3Proposals {
     error CanOnlyEditPendingProposals();
     error OnlyProposerCanEdit();
     error ProposerCannotUpdateProposalWithSigners();
+    error MustProvideSignatures();
 
     /// @notice An event emitted when a new proposal is created
     event ProposalCreated(
@@ -208,6 +209,9 @@ library NounsDAOV3Proposals {
     ) internal {
         checkProposaTxs(ProposalTxs(targets, values, signatures, calldatas));
         checkNonce(ds, nonce);
+        // without this check it's possible to run through this function and update a proposal without signatures
+        // this problem doesn't exist in the propose function because we check for prop threshold there
+        if (proposerSignatures.length == 0) revert MustProvideSignatures();
 
         NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
         if (state(ds, proposalId) != NounsDAOStorageV3.ProposalState.Pending) revert CanOnlyEditPendingProposals();
