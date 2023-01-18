@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDirs": ["src", "scripts"],
+    "outDir": "dist"
+  },
+  "references": [
+    {
+      "path": "../n00uns-sdk/tsconfig.build.json"
+    }
+  ],
+  "include": ["src/**/*.ts", "src/**/*.json", "scripts"]
+}

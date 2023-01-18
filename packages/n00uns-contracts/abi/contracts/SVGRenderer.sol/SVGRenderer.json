@@ -1,0 +1,107 @@
+[
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "components": [
+              {
+                "internalType": "bytes",
+                "name": "image",
+                "type": "bytes"
+              },
+              {
+                "internalType": "bytes",
+                "name": "palette",
+                "type": "bytes"
+              }
+            ],
+            "internalType": "struct ISVGRenderer.Part[]",
+            "name": "parts",
+            "type": "tuple[]"
+          },
+          {
+            "internalType": "string",
+            "name": "background",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct ISVGRenderer.SVGParams",
+        "name": "params",
+        "type": "tuple"
+      }
+    ],
+    "name": "generateSVG",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "svg",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "bytes",
+            "name": "image",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "palette",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct ISVGRenderer.Part",
+        "name": "part",
+        "type": "tuple"
+      }
+    ],
+    "name": "generateSVGPart",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "partialSVG",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "bytes",
+            "name": "image",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes",
+            "name": "palette",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct ISVGRenderer.Part[]",
+        "name": "parts",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "generateSVGParts",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "partialSVG",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  }
+]

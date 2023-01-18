@@ -1,0 +1,105 @@
+specVersion: 0.0.3
+description: >-
+  Randomly generated avatar NFTs auctioned daily.
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: N00unsAuctionHouse
+    network: {{network}}
+    source:
+      address: '{{n00unsAuctionHouse.address}}'
+      abi: N00unsAuctionHouse
+      startBlock: {{n00unsAuctionHouse.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/n00uns-auction-house.ts
+      entities:
+        - Account
+        - Auction
+        - Bid
+        - N00un
+      abis:
+        - name: N00unsAuctionHouse
+          file: ../n00uns-contracts/abi/contracts/N00unsAuctionHouse.sol/N00unsAuctionHouse.json
+      eventHandlers:
+        - event: AuctionCreated(indexed uint256,uint256,uint256)
+          handler: handleAuctionCreated
+        - event: AuctionBid(indexed uint256,address,uint256,bool)
+          handler: handleAuctionBid
+        - event: AuctionExtended(indexed uint256,uint256)
+          handler: handleAuctionExtended
+        - event: AuctionSettled(indexed uint256,address,uint256)
+          handler: handleAuctionSettled
+  - kind: ethereum/contract
+    name: N00unsToken
+    network: {{network}}
+    source:
+      address: '{{n00unsToken.address}}'
+      abi: N00unsToken
+      startBlock: {{n00unsToken.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/n00uns-erc-721.ts
+      entities:
+        - N00un
+        - Seed
+        - Account
+        - Delegate
+        - Governance
+      abis:
+        - name: N00unsToken
+          file: ../n00uns-contracts/abi/contracts/N00unsToken.sol/N00unsToken.json
+      eventHandlers:
+        - event: N00unCreated(indexed uint256,(uint48,uint48,uint48,uint48,uint48))
+          handler: handleN00unCreated
+        - event: DelegateChanged(indexed address,indexed address,indexed address)
+          handler: handleDelegateChanged
+        - event: DelegateVotesChanged(indexed address,uint256,uint256)
+          handler: handleDelegateVotesChanged
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+  - kind: ethereum/contract
+    name: N00unsDAO
+    network: {{network}}
+    source:
+      address: '{{n00unsDAO.address}}'
+      abi: N00unsDAO
+      startBlock: {{n00unsDAO.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/n00uns-dao.ts
+      entities:
+        - Account
+        - Delegate
+        - Proposal
+        - Vote
+        - Governance
+      abis:
+        - name: N00unsDAO
+          file: ../n00uns-contracts/abi/contracts/governance/N00unsDAOLogicV2.sol/N00unsDAOLogicV2.json
+      eventHandlers:
+        - event: ProposalCreatedWithRequirements(uint256,address,address[],uint256[],string[],bytes[],uint256,uint256,uint256,uint256,string)
+          handler: handleProposalCreatedWithRequirements
+        - event: ProposalCanceled(uint256)
+          handler: handleProposalCanceled
+        - event: ProposalVetoed(uint256)
+          handler: handleProposalVetoed
+        - event: ProposalQueued(uint256,uint256)
+          handler: handleProposalQueued
+        - event: ProposalExecuted(uint256)
+          handler: handleProposalExecuted
+        - event: VoteCast(indexed address,uint256,uint8,uint256,string)
+          handler: handleVoteCast
+        - event: MinQuorumVotesBPSSet(uint16,uint16)
+          handler: handleMinQuorumVotesBPSSet
+        - event: MaxQuorumVotesBPSSet(uint16,uint16)
+          handler: handleMaxQuorumVotesBPSSet        
+        - event: QuorumCoefficientSet(uint32,uint32)
+          handler: handleQuorumCoefficientSet

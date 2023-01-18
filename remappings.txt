@@ -1,1 +1,1 @@
-packages/nouns-contracts/remappings.txt
+packages/n00uns-contracts/remappings.txt

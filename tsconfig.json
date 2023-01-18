@@ -1,11 +1,11 @@
 {
-    "references": [
-        { "path": "packages/nouns-api" },
-        { "path": "packages/nouns-assets" },
-        { "path": "packages/nouns-bots" },
-        { "path": "packages/nouns-contracts" },
-        { "path": "packages/nouns-sdk" },
-        { "path": "packages/nouns-subgraph" },
-        { "path": "packages/nouns-webapp" },
-    ]
+  "references": [
+    { "path": "packages/n00uns-api" },
+    { "path": "packages/n00uns-assets" },
+    { "path": "packages/n00uns-bots" },
+    { "path": "packages/n00uns-contracts" },
+    { "path": "packages/n00uns-sdk" },
+    { "path": "packages/n00uns-subgraph" },
+    { "path": "packages/n00uns-webapp" }
+  ]
 }

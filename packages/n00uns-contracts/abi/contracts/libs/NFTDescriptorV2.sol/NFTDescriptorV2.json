@@ -1,0 +1,108 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "contract ISVGRenderer",
+        "name": "renderer",
+        "type": "ISVGRenderer"
+      },
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "description",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "background",
+            "type": "string"
+          },
+          {
+            "components": [
+              {
+                "internalType": "bytes",
+                "name": "image",
+                "type": "bytes"
+              },
+              {
+                "internalType": "bytes",
+                "name": "palette",
+                "type": "bytes"
+              }
+            ],
+            "internalType": "struct ISVGRenderer.Part[]",
+            "name": "parts",
+            "type": "tuple[]"
+          }
+        ],
+        "internalType": "struct NFTDescriptorV2.TokenURIParams",
+        "name": "params",
+        "type": "tuple"
+      }
+    ],
+    "name": "constructTokenURI",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract ISVGRenderer",
+        "name": "renderer",
+        "type": "ISVGRenderer"
+      },
+      {
+        "components": [
+          {
+            "components": [
+              {
+                "internalType": "bytes",
+                "name": "image",
+                "type": "bytes"
+              },
+              {
+                "internalType": "bytes",
+                "name": "palette",
+                "type": "bytes"
+              }
+            ],
+            "internalType": "struct ISVGRenderer.Part[]",
+            "name": "parts",
+            "type": "tuple[]"
+          },
+          {
+            "internalType": "string",
+            "name": "background",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct ISVGRenderer.SVGParams",
+        "name": "params",
+        "type": "tuple"
+      }
+    ],
+    "name": "generateSVGImage",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "svg",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

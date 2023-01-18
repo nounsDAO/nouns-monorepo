@@ -1,0 +1,51 @@
+{
+  "1": {
+    "n00unsToken": "0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03",
+    "n00unsSeeder": "0xCC8a0FB5ab3C7132c1b2A0109142Fb112c4Ce515",
+    "n00unsDescriptor": "0x0Cfdb3Ba1694c2bb2CFACB0339ad7b1Ae5932B63",
+    "nftDescriptor": "0x0BBAd8c947210ab6284699605ce2a61780958264",
+    "n00unsAuctionHouse": "0xF15a943787014461d94da08aD4040f79Cd7c124e",
+    "n00unsAuctionHouseProxy": "0x830BD73E4184ceF73443C15111a1DF14e495C706",
+    "n00unsAuctionHouseProxyAdmin": "0xC1C119932d78aB9080862C5fcb964029f086401e",
+    "n00unsDaoExecutor": "0x0BC3807Ec262cB779b38D65b38158acC3bfedE10",
+    "n00unsDAOProxy": "0x6f3E6272A167e8AcCb32072d08E0957F9c79223d",
+    "n00unsDAOLogicV1": "0xa43aFE317985726E4e194eb061Af77fbCb43F944",
+    "n00unsDAOLogicV2": "0xCaCF365eDA93F07741a80D4F39a773BAaBb3a873"
+  },
+  "4": {
+    "n00unsToken": "0x65dA5EbD09f0C6CA1DFc5EaA5639626ccd5DaD06",
+    "n00unsSeeder": "0x62F257406e9C1752c65d60ADF5D283FEe55C6301",
+    "n00unsDescriptor": "0x8B7Ec9f2ad70C10F4Ba5D352D6691B9BFF2F628b",
+    "nftDescriptor": "0xc905C0c663394181F44809854497D8783b743A21",
+    "n00unsAuctionHouse": "0xF2d27387353161d77FCD918E7f4DE07A5f77aba3",
+    "n00unsAuctionHouseProxy": "0xDAF873A2Ae77D570da094B52A8eC50Ef8885b2c4",
+    "n00unsAuctionHouseProxyAdmin": "0xFE3347665088A7933044941822e6e46EF70771f8",
+    "n00unsDaoExecutor": "0x06C0BaC8E6a697eC883372d3e9Db9B200fF93C03",
+    "n00unsDAOProxy": "0xF5ab6f74c557c6e8B96EeF0371F9CfCf9F5e4b26",
+    "n00unsDAOLogicV1": "0x27c9e62fc1F1334eb2A090506675Ec31df878E00"
+  },
+  "5": {
+    "n00unsToken": "0x1d0030f304b542D5A5F77CC0E5945fd79ec89D8E",
+    "n00unsSeeder": "0xF6a38E8235916334268da317EC84F5dfcfB9e023",
+    "n00unsDescriptor": "0xB6D0AF8C27930E13005Bf447d54be8235724a102",
+    "nftDescriptor": "0x9417e5d955e6e1deA90499Baa527C9d6360b737f",
+    "n00unsAuctionHouse": "0x047B373629148A30299e11a1582d9EAd8181ff46",
+    "n00unsAuctionHouseProxy": "0xC143D0F48E0ba1e547Ff0fE489b4DC7A90063683",
+    "n00unsAuctionHouseProxyAdmin": "0xC6Fb7F9707ba1E0B0fC008bFC72c4C1DA255695E",
+    "n00unsDaoExecutor": "0x2f12ABA664E6D2b4DDD264E2a175d29703836AaE",
+    "n00unsDAOProxy": "0xD08faCeb444dbb6b063a51C2ddFb564Fa0f8Dce0",
+    "n00unsDAOLogicV1": "0x4B245a12e8D449e79120526C350262B587Eb3b7d"
+  },
+  "31337": {
+    "n00unsToken": "0xa513e6e4b8f2a923d98304ec87f64353c4d5c853",
+    "n00unsSeeder": "0x0165878a594ca255338adfa4d48449f69242eb8f",
+    "n00unsDescriptor": "0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9",
+    "nftDescriptor": "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512",
+    "n00unsAuctionHouse": "0x2279b7a0a67db372996a5fab50d91eaa73d2ebe6",
+    "n00unsAuctionHouseProxy": "0x610178da211fef7d417bc0e6fed39f05609ad788",
+    "n00unsAuctionHouseProxyAdmin": "0x8a791620dd6260079bf849dc5567adc3f2fdc318",
+    "n00unsDaoExecutor": "0xb7f8bc63bbcad18155201308c8f3540b07f84f5e",
+    "n00unsDAOProxy": "0x0dcd1bf9a1b36ce34237eeafef220932846bcd82",
+    "n00unsDAOLogicV1": "0xa51c1fc2f0d1a1b8494ed1fe312d7c3a78ed91c0"
+  }
+}

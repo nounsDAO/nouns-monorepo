@@ -1,0 +1,838 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_descriptor",
+        "type": "address"
+      },
+      {
+        "internalType": "contract IInflator",
+        "name": "_inflator",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "BadDecompressedLength",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "BadImageCount",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "BadPaletteLength",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EmptyBytes",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EmptyPalette",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ImageNotFound",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "PaletteNotFound",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "SenderIsNotDescriptor",
+    "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "count",
+        "type": "uint16"
+      }
+    ],
+    "name": "AccessoriesAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "count",
+        "type": "uint256"
+      }
+    ],
+    "name": "BackgroundsAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "count",
+        "type": "uint16"
+      }
+    ],
+    "name": "BodiesAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "oldDescriptor",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "newDescriptor",
+        "type": "address"
+      }
+    ],
+    "name": "DescriptorUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "count",
+        "type": "uint16"
+      }
+    ],
+    "name": "GlassesAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "count",
+        "type": "uint16"
+      }
+    ],
+    "name": "HeadsAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "oldInflator",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "newInflator",
+        "type": "address"
+      }
+    ],
+    "name": "InflatorUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "paletteIndex",
+        "type": "uint8"
+      }
+    ],
+    "name": "PaletteSet",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "accessories",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "accessoriesTrait",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "storedImagesCount",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "encodedCompressed",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addAccessories",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "pointer",
+        "type": "address"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addAccessoriesFromPointer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_background",
+        "type": "string"
+      }
+    ],
+    "name": "addBackground",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "encodedCompressed",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addBodies",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "pointer",
+        "type": "address"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addBodiesFromPointer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "encodedCompressed",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addGlasses",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "pointer",
+        "type": "address"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addGlassesFromPointer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "encodedCompressed",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addHeads",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "pointer",
+        "type": "address"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addHeadsFromPointer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string[]",
+        "name": "_backgrounds",
+        "type": "string[]"
+      }
+    ],
+    "name": "addManyBackgrounds",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "backgrounds",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "backgroundsCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "bodies",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "bodiesTrait",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "storedImagesCount",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "descriptor",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getAccessoriesTrait",
+    "outputs": [
+      {
+        "components": [
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "imageCount",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint80",
+                "name": "decompressedLength",
+                "type": "uint80"
+              },
+              {
+                "internalType": "address",
+                "name": "pointer",
+                "type": "address"
+              }
+            ],
+            "internalType": "struct IN00unsArt.N00unArtStoragePage[]",
+            "name": "storagePages",
+            "type": "tuple[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "storedImagesCount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct IN00unsArt.Trait",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getBodiesTrait",
+    "outputs": [
+      {
+        "components": [
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "imageCount",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint80",
+                "name": "decompressedLength",
+                "type": "uint80"
+              },
+              {
+                "internalType": "address",
+                "name": "pointer",
+                "type": "address"
+              }
+            ],
+            "internalType": "struct IN00unsArt.N00unArtStoragePage[]",
+            "name": "storagePages",
+            "type": "tuple[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "storedImagesCount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct IN00unsArt.Trait",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getGlassesTrait",
+    "outputs": [
+      {
+        "components": [
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "imageCount",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint80",
+                "name": "decompressedLength",
+                "type": "uint80"
+              },
+              {
+                "internalType": "address",
+                "name": "pointer",
+                "type": "address"
+              }
+            ],
+            "internalType": "struct IN00unsArt.N00unArtStoragePage[]",
+            "name": "storagePages",
+            "type": "tuple[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "storedImagesCount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct IN00unsArt.Trait",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getHeadsTrait",
+    "outputs": [
+      {
+        "components": [
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "imageCount",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint80",
+                "name": "decompressedLength",
+                "type": "uint80"
+              },
+              {
+                "internalType": "address",
+                "name": "pointer",
+                "type": "address"
+              }
+            ],
+            "internalType": "struct IN00unsArt.N00unArtStoragePage[]",
+            "name": "storagePages",
+            "type": "tuple[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "storedImagesCount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct IN00unsArt.Trait",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "glasses",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "glassesTrait",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "storedImagesCount",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "heads",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "headsTrait",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "storedImagesCount",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "inflator",
+    "outputs": [
+      {
+        "internalType": "contract IInflator",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint8",
+        "name": "paletteIndex",
+        "type": "uint8"
+      }
+    ],
+    "name": "palettes",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "name": "palettesPointers",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_descriptor",
+        "type": "address"
+      }
+    ],
+    "name": "setDescriptor",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract IInflator",
+        "name": "_inflator",
+        "type": "address"
+      }
+    ],
+    "name": "setInflator",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint8",
+        "name": "paletteIndex",
+        "type": "uint8"
+      },
+      {
+        "internalType": "bytes",
+        "name": "palette",
+        "type": "bytes"
+      }
+    ],
+    "name": "setPalette",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint8",
+        "name": "paletteIndex",
+        "type": "uint8"
+      },
+      {
+        "internalType": "address",
+        "name": "pointer",
+        "type": "address"
+      }
+    ],
+    "name": "setPalettePointer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
