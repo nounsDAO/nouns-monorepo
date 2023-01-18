@@ -1,36 +1,36 @@
-# nouns-monorepo
+# n00uns-monorepo
 
-Nouns DAO is a generative avatar art collective run by a group of crypto misfits.
+N00uns DAO is a generative avatar art collective run by a group of crypto misfits.
 
 ## Packages
 
-### nouns-api
+### n00uns-api
 
-The [nouns api](packages/nouns-api) is an HTTP webserver that hosts token metadata. This is currently unused because on-chain, data URIs are enabled.
+The [n00uns api](packages/n00uns-api) is an HTTP webserver that hosts token metadata. This is currently unused because on-chain, data URIs are enabled.
 
-### nouns-assets
+### n00uns-assets
 
-The [nouns assets](packages/nouns-assets) package holds the Noun PNG and run-length encoded image data.
+The [n00uns assets](packages/n00uns-assets) package holds the N00un PNG and run-length encoded image data.
 
-### nouns-bots
+### n00uns-bots
 
-The [nouns bots](packages/nouns-bots) package contains a bot that monitors for changes in Noun auction state and notifies everyone via Twitter and Discord.
+The [n00uns bots](packages/n00uns-bots) package contains a bot that monitors for changes in N00un auction state and notifies everyone via Twitter and Discord.
 
-### nouns-contracts
+### n00uns-contracts
 
-The [nouns contracts](packages/nouns-contracts) is the suite of Solidity contracts powering Nouns DAO.
+The [n00uns contracts](packages/n00uns-contracts) is the suite of Solidity contracts powering N00uns DAO.
 
-### nouns-sdk
+### n00uns-sdk
 
-The [nouns sdk](packages/nouns-sdk) exposes the Nouns contract addresses, ABIs, and instances as well as image encoding and SVG building utilities.
+The [n00uns sdk](packages/n00uns-sdk) exposes the N00uns contract addresses, ABIs, and instances as well as image encoding and SVG building utilities.
 
-### nouns-subgraph
+### n00uns-subgraph
 
-In order to make retrieving more complex data from the auction history, [nouns subgraph](packages/nouns-subgraph) contains subgraph manifests that are deployed onto [The Graph](https://thegraph.com).
+In order to make retrieving more complex data from the auction history, [n00uns subgraph](packages/n00uns-subgraph) contains subgraph manifests that are deployed onto [The Graph](https://thegraph.com).
 
-### nouns-webapp
+### n00uns-webapp
 
-The [nouns webapp](packages/nouns-webapp) is the frontend for interacting with Noun auctions as hosted at [nouns.wtf](https://nouns.wtf).
+The [n00uns webapp](packages/n00uns-webapp) is the frontend for interacting with N00un auctions as hosted at [n00uns.wtf](https://n00uns.wtf).
 
 ## Quickstart
 
