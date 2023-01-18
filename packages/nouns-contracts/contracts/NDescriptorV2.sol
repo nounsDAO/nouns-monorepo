@@ -592,16 +592,14 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
         } else {
             punkTypeId = 6 + seed.punkType;
         }
-        // times 2 because all images are in two versions
-        accBuffer = art.punkTypes(2 * punkTypeId);
+        accBuffer = art.punkTypes(punkTypeId);
         parts[0] = ISVGRenderer.Part({ image: accBuffer, palette: _getPalette(accBuffer) });
 
         uint256[] memory sortedAccessories = new uint256[](14);
         for (uint256 i = 0 ; i < seed.accessories.length; i ++) {
             // 10_000 is a trick so filled entries are not zero
-            // times 2 because all images are in two versions
             unchecked {
-                sortedAccessories[seed.accessories[i].accType] = 10_000 + 2 * seed.accessories[i].accId;
+                sortedAccessories[seed.accessories[i].accType] = 10_000 + seed.accessories[i].accId;
             }
         }
 

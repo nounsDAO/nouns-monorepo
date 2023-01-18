@@ -72,7 +72,7 @@ library Inflate {
         uint256[] symbols;
     }
 
-    function bits(State memory s, uint256 need) private pure returns (ErrorCode, uint256) {
+    function bits(State memory s, uint256 need) private pure returns (uint256) {
         unchecked {
             // Bit accumulator (can use up to 20 bits)
             uint256 val;
@@ -80,13 +80,15 @@ library Inflate {
             // Load at least need bits into val
             val = s.bitbuf;
             while (s.bitcnt < need) {
-                if (s.incnt == s.input.length) {
-                    // Out of input
-                    return (ErrorCode.ERR_NOT_TERMINATED, 0);
-                }
+                require(s.incnt < s.input.length, "Inflate: ErrorCode.ERR_NOT_TERMINATED");
 
                 // Load eight bits
-                val |= uint256(uint8(s.input[s.incnt++])) << s.bitcnt;
+                // val |= uint256(uint8(s.input[s.incnt])) << s.bitcnt;
+                // array length check is skipped
+                assembly {
+                    val := or(val, shl(mload(add(s, 0xa0)), shr(0xf8, mload(add(add(mload(add(s, 0x40)), 0x20), mload(add(s, 0x60)))))))
+                }
+                s.incnt++;
                 s.bitcnt += 8;
             }
 
@@ -96,7 +98,30 @@ library Inflate {
 
             // Return need bits, zeroing the bits above that
             uint256 ret = (val & ((1 << need) - 1));
-            return (ErrorCode.ERR_NONE, ret);
+            return ret;
+        }
+    }
+
+    function bits1(State memory s) private pure returns (uint256) {
+        unchecked {
+            uint256 val;
+            if (s.bitcnt > 0) {
+                val = s.bitbuf & 0x1;
+                s.bitbuf >>= 1;
+                s.bitcnt--;
+            } else {
+                require(s.incnt < s.input.length, "Inflate: ErrorCode.ERR_NOT_TERMINATED");
+                // val = uint256(uint8(s.input[s.incnt]));
+                // array length check is skipped
+                assembly {
+                    val := shr(0xf8, mload(add(add(mload(add(s, 0x40)), 0x20), mload(add(s, 0x60)))))
+                }
+                s.bitbuf = val >> 1;
+                val &= 0x1;
+                s.bitcnt = 7;
+                s.incnt++;
+            }
+            return val;
         }
     }
 
@@ -142,7 +167,7 @@ library Inflate {
         }
     }
 
-    function _decode(State memory s, Huffman memory h) private pure returns (ErrorCode, uint256) {
+    function _decode(State memory s, Huffman memory h) private pure returns (uint256) {
         unchecked {
             // Current number of bits in code
             uint256 len;
@@ -154,22 +179,15 @@ library Inflate {
             uint256 count;
             // Index of first code of length len in symbol table
             uint256 index = 0;
-            // Error code
-            ErrorCode err;
 
-            uint256 tempCode;
             for (len = 1; len <= MAXBITS; len += 5) {
                 // Get next bit
-                (err, tempCode) = bits(s, 1);
-                if (err != ErrorCode.ERR_NONE) {
-                    return (err, 0);
-                }
-                code |= tempCode;
+                code |= bits1(s);
                 count = h.counts[len];
 
                 // If length len, return symbol
                 if (code < first + count) {
-                    return (ErrorCode.ERR_NONE, h.symbols[index + (code - first)]);
+                    return h.symbols[index + (code - first)];
                 }
                 // Else update for next length
                 index += count;
@@ -178,16 +196,12 @@ library Inflate {
                 code <<= 1;
 
                 // Get next bit
-                (err, tempCode) = bits(s, 1);
-                if (err != ErrorCode.ERR_NONE) {
-                    return (err, 0);
-                }
-                code |= tempCode;
+                code |= bits1(s);
                 count = h.counts[len + 1];
 
                 // If length len, return symbol
                 if (code < first + count) {
-                    return (ErrorCode.ERR_NONE, h.symbols[index + (code - first)]);
+                    return h.symbols[index + (code - first)];
                 }
                 // Else update for next length
                 index += count;
@@ -196,16 +210,12 @@ library Inflate {
                 code <<= 1;
 
                 // Get next bit
-                (err, tempCode) = bits(s, 1);
-                if (err != ErrorCode.ERR_NONE) {
-                    return (err, 0);
-                }
-                code |= tempCode;
+                code |= bits1(s);
                 count = h.counts[len + 2];
 
                 // If length len, return symbol
                 if (code < first + count) {
-                    return (ErrorCode.ERR_NONE, h.symbols[index + (code - first)]);
+                    return h.symbols[index + (code - first)];
                 }
                 // Else update for next length
                 index += count;
@@ -214,16 +224,12 @@ library Inflate {
                 code <<= 1;
 
                 // Get next bit
-                (err, tempCode) = bits(s, 1);
-                if (err != ErrorCode.ERR_NONE) {
-                    return (err, 0);
-                }
-                code |= tempCode;
+                code |= bits1(s);
                 count = h.counts[len + 3];
 
                 // If length len, return symbol
                 if (code < first + count) {
-                    return (ErrorCode.ERR_NONE, h.symbols[index + (code - first)]);
+                    return h.symbols[index + (code - first)];
                 }
                 // Else update for next length
                 index += count;
@@ -232,16 +238,12 @@ library Inflate {
                 code <<= 1;
 
                 // Get next bit
-                (err, tempCode) = bits(s, 1);
-                if (err != ErrorCode.ERR_NONE) {
-                    return (err, 0);
-                }
-                code |= tempCode;
+                code |= bits1(s);
                 count = h.counts[len + 4];
 
                 // If length len, return symbol
                 if (code < first + count) {
-                    return (ErrorCode.ERR_NONE, h.symbols[index + (code - first)]);
+                    return h.symbols[index + (code - first)];
                 }
                 // Else update for next length
                 index += count;
@@ -251,7 +253,7 @@ library Inflate {
             }
 
             // Ran out of codes
-            return (ErrorCode.ERR_INVALID_LENGTH_OR_DISTANCE_CODE, 0);
+            revert("Inflate: ErrorCode.ERR_INVALID_LENGTH_OR_DISTANCE_CODE");
         }
     }
 
@@ -466,48 +468,11 @@ library Inflate {
                 24577
             ];
             // Extra bits for distance codes 0..29
-            uint8[30] memory dext = [
-                0,
-                0,
-                0,
-                0,
-                1,
-                1,
-                2,
-                2,
-                3,
-                3,
-                4,
-                4,
-                5,
-                5,
-                6,
-                6,
-                7,
-                7,
-                8,
-                8,
-                9,
-                9,
-                10,
-                10,
-                11,
-                11,
-                12,
-                12,
-                13,
-                13
-            ];
-            // Error code
-            ErrorCode err;
+            // uint8[30] memory dext = [0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13];
 
             // Decode literals and length/distance pairs
             while (symbol != 256) {
-                (err, symbol) = _decode(s, lencode);
-                if (err != ErrorCode.ERR_NONE) {
-                    // Invalid symbol
-                    return err;
-                }
+                symbol = _decode(s, lencode);
 
                 if (symbol < 256) {
                     // Literal: symbol is the byte
@@ -515,10 +480,14 @@ library Inflate {
                     if (s.outcnt == s.output.length) {
                         return ErrorCode.ERR_OUTPUT_EXHAUSTED;
                     }
-                    s.output[s.outcnt] = bytes1(uint8(symbol));
+                    // s.output[s.outcnt] = bytes1(uint8(symbol));
+                    // array length check is skipped
+                    // symbol range trimming is skipped because symbol < 256
+                    assembly {
+                        mstore8(add(add(mload(s), 0x20), mload(add(s, 0x20))), symbol)
+                    }
                     ++s.outcnt;
                 } else if (symbol > 256) {
-                    uint256 tempBits;
                     // Length
                     // Get and compute length
                     symbol -= 257;
@@ -527,23 +496,12 @@ library Inflate {
                         return ErrorCode.ERR_INVALID_LENGTH_OR_DISTANCE_CODE;
                     }
 
-                    (err, tempBits) = bits(s, lext[symbol]);
-                    if (err != ErrorCode.ERR_NONE) {
-                        return err;
-                    }
-                    len = lens[symbol] + tempBits;
+                    len = lens[symbol] + bits(s, lext[symbol]);
 
                     // Get and check distance
-                    (err, symbol) = _decode(s, distcode);
-                    if (err != ErrorCode.ERR_NONE) {
-                        // Invalid symbol
-                        return err;
-                    }
-                    (err, tempBits) = bits(s, dext[symbol]);
-                    if (err != ErrorCode.ERR_NONE) {
-                        return err;
-                    }
-                    dist = dists[symbol] + tempBits;
+                    symbol = _decode(s, distcode);
+                    // (symbol/2 - 1) % type(uint256).max == dext[symbol]
+                    dist = dists[symbol] + bits(s, ((symbol / 2) - 1) % type(uint256).max);
                     if (dist > s.outcnt) {
                         // Distance too far back
                         return ErrorCode.ERR_DISTANCE_TOO_FAR;
@@ -553,10 +511,40 @@ library Inflate {
                     if (s.outcnt + len > s.output.length) {
                         return ErrorCode.ERR_OUTPUT_EXHAUSTED;
                     }
+                    while (len > 32) {
+                        assembly {
+                            mstore(
+                                add(add(mload(s), 0x20), mload(add(s, 0x20))),
+                                mload(
+                                    sub(
+                                        add(add(mload(s), 0x20), mload(add(s, 0x20))),
+                                        dist
+                                    )
+                                )
+                            )
+                        }
+                        len -= 32;
+                        s.outcnt += 32;
+                    }
                     while (len != 0) {
                         // Note: Solidity reverts on underflow, so we decrement here
                         len -= 1;
-                        s.output[s.outcnt] = s.output[s.outcnt - dist];
+                        // s.output[s.outcnt] = s.output[s.outcnt - dist];
+                        // array length check is skipped
+                        // symbol range trimming is skipped because symbol < 256
+                        assembly {
+                            mstore8(
+                              add(add(mload(s), 0x20), mload(add(s, 0x20))),
+                              shr(0xf8,
+                                mload(
+                                  sub(
+                                    add(add(mload(s), 0x20), mload(add(s, 0x20))),
+                                    dist
+                                  )
+                                )
+                              )
+                            )
+                        }
                         ++s.outcnt;
                     }
                 } else {
@@ -572,32 +560,29 @@ library Inflate {
     function _build_fixed(State memory s) private pure returns (ErrorCode) {
         unchecked {
             // Build fixed Huffman tables
-            // TODO this is all a compile-time constant
-            uint256 symbol;
-            uint256[] memory lengths = new uint256[](FIXLCODES);
 
-            // Literal/length table
-            for (symbol = 0; symbol < 144; ++symbol) {
-                lengths[symbol] = 8;
+            // _construct(s.lencode, lengths, FIXLCODES, 0);
+            for (uint256 symbol = 0; symbol < 144; ++symbol) { // 8
+                s.lencode.symbols[symbol + 24] = symbol;
             }
-            for (; symbol < 256; ++symbol) {
-                lengths[symbol] = 9;
+            for (uint256 symbol = 144; symbol < 256; ++symbol) { // 9
+                s.lencode.symbols[symbol + FIXLCODES - 256] = symbol;
             }
-            for (; symbol < 280; ++symbol) {
-                lengths[symbol] = 7;
+            for (uint256 symbol = 256; symbol < 280; ++symbol) { // 7
+                s.lencode.symbols[symbol - 256] = symbol;
             }
-            for (; symbol < FIXLCODES; ++symbol) {
-                lengths[symbol] = 8;
+            for (uint256 symbol = 280; symbol < FIXLCODES; ++symbol) { // 8
+                s.lencode.symbols[symbol - 112] = symbol;
             }
+            s.lencode.counts[7] = 280 - 256;
+            s.lencode.counts[8] = 144 + FIXLCODES - 280;
+            s.lencode.counts[9] = 256 - 144;
 
-            _construct(s.lencode, lengths, FIXLCODES, 0);
-
-            // Distance table
-            for (symbol = 0; symbol < MAXDCODES; ++symbol) {
-                lengths[symbol] = 5;
+            // _construct(s.distcode, lengths, MAXDCODES, 0);
+            for (uint256 symbol = 0; symbol < MAXDCODES; ++symbol) {
+                s.distcode.symbols[symbol] = symbol;
             }
-
-            _construct(s.distcode, lengths, MAXDCODES, 0);
+            s.distcode.counts[5] = MAXDCODES;
 
             return ErrorCode.ERR_NONE;
         }
@@ -617,23 +602,14 @@ library Inflate {
             uint256 index;
             // Descriptor code lengths
             uint256[] memory lengths = new uint256[](MAXCODES);
-            // Error code
-            ErrorCode err;
             // Permutation of code length codes
             uint8[19] memory order = [16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15];
 
-            (err, ncode) = bits(s, 4);
-            if (err != ErrorCode.ERR_NONE) {
-                return (err, lengths);
-            }
-            ncode += 4;
+            ncode = bits(s, 4) + 4;
 
             // Read code length code lengths (really), missing lengths are zero
             for (index = 0; index < ncode; ++index) {
-                (err, lengths[order[index]]) = bits(s, 3);
-                if (err != ErrorCode.ERR_NONE) {
-                    return (err, lengths);
-                }
+                lengths[order[index]] = bits(s, 3);
             }
             for (; index < 19; ++index) {
                 lengths[order[index]] = 0;
@@ -665,19 +641,10 @@ library Inflate {
             // Length and distance codes
             Huffman memory lencode = Huffman(new uint256[](MAXBITS + 1), new uint256[](MAXLCODES));
             Huffman memory distcode = Huffman(new uint256[](MAXBITS + 1), new uint256[](MAXDCODES));
-            uint256 tempBits;
 
             // Get number of lengths in each table, check lengths
-            (err, nlen) = bits(s, 5);
-            if (err != ErrorCode.ERR_NONE) {
-                return (err, lencode, distcode);
-            }
-            nlen += 257;
-            (err, ndist) = bits(s, 5);
-            if (err != ErrorCode.ERR_NONE) {
-                return (err, lencode, distcode);
-            }
-            ndist += 1;
+            nlen = bits(s, 5) + 257;
+            ndist = bits(s, 5) + 1;
 
             if (nlen > MAXLCODES || ndist > MAXDCODES) {
                 // Bad counts
@@ -704,11 +671,7 @@ library Inflate {
                 // Last length to repeat
                 uint256 len;
 
-                (err, symbol) = _decode(s, lencode);
-                if (err != ErrorCode.ERR_NONE) {
-                    // Invalid symbol
-                    return (err, lencode, distcode);
-                }
+                symbol = _decode(s, lencode);
 
                 if (symbol < 16) {
                     // Length in 0..15
@@ -725,25 +688,13 @@ library Inflate {
                         }
                         // Last length
                         len = lengths[index - 1];
-                        (err, tempBits) = bits(s, 2);
-                        if (err != ErrorCode.ERR_NONE) {
-                            return (err, lencode, distcode);
-                        }
-                        symbol = 3 + tempBits;
+                        symbol = 3 + bits(s, 2);
                     } else if (symbol == 17) {
                         // Repeat zero 3..10 times
-                        (err, tempBits) = bits(s, 3);
-                        if (err != ErrorCode.ERR_NONE) {
-                            return (err, lencode, distcode);
-                        }
-                        symbol = 3 + tempBits;
+                        symbol = 3 + bits(s, 3);
                     } else {
                         // == 18, repeat zero 11..138 times
-                        (err, tempBits) = bits(s, 7);
-                        if (err != ErrorCode.ERR_NONE) {
-                            return (err, lencode, distcode);
-                        }
-                        symbol = 11 + tempBits;
+                        symbol = 11 + bits(s, 7);
                     }
 
                     if (index + symbol > nlen + ndist) {
@@ -840,16 +791,10 @@ library Inflate {
             // Process blocks until last block or error
             while (last == 0) {
                 // One if last block
-                (err, last) = bits(s, 1);
-                if (err != ErrorCode.ERR_NONE) {
-                    return (err, s.output);
-                }
+                last = bits1(s);
 
                 // Block type 0..3
-                (err, t) = bits(s, 2);
-                if (err != ErrorCode.ERR_NONE) {
-                    return (err, s.output);
-                }
+                t = bits(s, 2);
 
                 err = (
                     t == 0
