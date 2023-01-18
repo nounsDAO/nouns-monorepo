@@ -1,0 +1,15 @@
+.wrapper {
+  display: inline-block;
+}
+
+.wrapper h1 {
+  font-family: 'Londrina Solid';
+  font-size: 68px;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 992px) {
+  .wrapper h1 {
+    font-size: 56px;
+  }
+}

@@ -1,0 +1,43 @@
+.chevron {
+  height: 1.75rem;
+  width: 1.75rem;
+  color: var(--brand-cool-dark-text);
+}
+
+.chevronWrapper {
+  position: absolute;
+}
+
+.dropdownContainer {
+  width: 100%;
+  margin-top: 1rem;
+  position: relative;
+}
+
+.select {
+  border-radius: 15px;
+  width: 100%;
+  height: 3rem;
+  font-size: 22px;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: var(--brand-cool-dark-text);
+}
+
+.dropdownContainer select {
+  /* for Firefox */
+  -moz-appearance: none;
+  /* for Safari, Chrome, Opera */
+  -webkit-appearance: none;
+  outline: none;
+}
+
+/* for IE10 */
+.dropdownContainer select::-ms-expand {
+  display: none;
+}
+
+.label {
+  opacity: 0.5;
+}

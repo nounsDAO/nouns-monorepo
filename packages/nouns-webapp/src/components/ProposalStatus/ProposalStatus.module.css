@@ -1,0 +1,32 @@
+.proposalStatus {
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  color: white;
+  border-radius: 8px;
+  font-size: 14px;
+  border: 0rem;
+  padding-left: 0.65rem;
+  padding-right: 0.65rem;
+  padding-top: 0.36rem;
+  padding-bottom: 0.36rem;
+}
+
+.primary {
+  background-color: var(--brand-color-green);
+}
+
+.success {
+  background-color: var(--brand-color-blue);
+}
+
+.danger {
+  background-color: var(--brand-color-red);
+}
+
+.secondary {
+  background-color: var(--brand-gray-light-text);
+}
+
+.votePageProposalStatus {
+  margin-top: 0.8rem;
+}

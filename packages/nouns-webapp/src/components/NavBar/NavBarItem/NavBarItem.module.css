@@ -1,0 +1,23 @@
+.navBarItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+}
+
+.navBarItem a {
+  color: var(--brand-black);
+}
+.navBarItem a:hover {
+  color: var(--brand-dark-red);
+}
+
+@media (max-width: 992px) {
+  .navBarItem {
+    background-color: transparent !important;
+    color: var(--brand-black) !important;
+  }
+  .navBarItem:hover {
+    background-color: transparent !important;
+  }
+}

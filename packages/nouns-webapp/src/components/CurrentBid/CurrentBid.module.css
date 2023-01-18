@@ -1,0 +1,54 @@
+.section span {
+  font-size: 3rem;
+  font-weight: bold;
+  font-family: 'Londrina Solid';
+}
+
+.section h4 {
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.section h2 {
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 32px;
+  margin-bottom: 0px !important;
+  margin-top: 3px;
+}
+
+.wrapper {
+  padding-left: 0rem;
+  padding-right: 0rem;
+}
+
+@media (max-width: 992px) {
+  .section h4 {
+    font-size: 18px;
+    margin-bottom: 0px;
+    margin-top: 6px;
+  }
+
+  .section h2 {
+    font-size: 23px;
+  }
+
+  .section {
+    justify-content: space-between;
+  }
+
+  .currentBid {
+    margin-right: 0.5rem;
+  }
+
+  .wrapper {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .leftCol {
+    padding-left: 0.5rem;
+  }
+}

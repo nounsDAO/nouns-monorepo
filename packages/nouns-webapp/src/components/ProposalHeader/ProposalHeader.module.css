@@ -1,0 +1,192 @@
+.backButton {
+  -webkit-appearance: none;
+  padding: 0;
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  font-weight: bold;
+  margin-right: 1rem;
+  margin-top: 0.1rem;
+}
+
+.headerRow span {
+  color: #8c8d92;
+  font-size: 24px;
+  font-family: 'Londrina Solid';
+}
+.headerRow h1 {
+  color: #14161b;
+  font-size: 42px;
+  font-family: 'Londrina Solid';
+}
+
+.proposalStatus {
+  margin-left: 0.75rem;
+  margin-top: 0.1rem;
+}
+
+.connectWalletText {
+  color: var(--brand-gray-light-text);
+  font-family: 'PT Root UI';
+  font-weight: 500;
+  font-size: 16px;
+  min-width: 12rem;
+  margin-bottom: 1.15rem;
+}
+
+.noVotesText {
+  color: var(--brand-gray-light-text);
+  font-family: 'PT Root UI';
+  font-weight: 500;
+  font-size: 16px;
+  margin-bottom: 1.15rem;
+  min-width: 9.5rem;
+}
+
+.submitBtn {
+  width: 100%;
+  max-width: 8rem;
+  min-width: 8rem;
+  height: 3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  background-color: var(--brand-color-green);
+  border: var(--brand-color-green);
+}
+.submitBtn:focus,
+.submitBtn:hover {
+  background-color: var(--brand-color-green) !important;
+  box-shadow: 0 0 0 0.2rem rgb(67, 179, 105, 0.75);
+}
+.submitBtn:active {
+  background-color: var(--brand-color-green) !important;
+}
+.submitBtnDisabled {
+  background-color: var(--brand-gray-light-text) !important;
+  width: 100%;
+  max-width: 8rem;
+  min-width: 8rem;
+  height: 3rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  border: var(--brand-dark-red);
+  opacity: 0.5;
+  box-shadow: none !important;
+}
+
+.submitBtnDisabled:hover,
+.submitBtnDisabled:active,
+.submitBtn:focus {
+  cursor: not-allowed;
+  box-shadow: none !important;
+}
+
+.proposalTitleWrapper {
+  display: flex;
+  padding-right: 2rem;
+}
+
+.proposalTitle {
+  margin-right: 0.5rem;
+}
+
+.mobileSubmitProposalButton {
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+
+@media (max-width: 992px) {
+  .submitBtn {
+    max-width: 100%;
+  }
+
+  .submitBtnDisabled {
+    max-width: 100%;
+  }
+}
+
+.voterIneligibleAlert {
+  font-family: 'PT Root UI';
+  font-weight: 500;
+  background-color: #e2e3e8;
+  color: black;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  margin-top: 0.5rem;
+}
+
+.byLineWrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.byLineWrapper h3 {
+  font-family: 'Londrina Solid';
+  color: var(--brand-gray-light-text);
+  margin-left: 3rem;
+  font-size: 24px;
+}
+
+.byLineContentWrapper {
+  display: flex;
+  flex-direction: row;
+  margin-left: 0;
+}
+
+.propTransactionWrapper {
+  margin-left: 0.33rem;
+  margin-right: 0.5rem;
+  font-size: 18px;
+  color: var(--brand-gray-light-text);
+}
+.propTransactionWrapperJp {
+  margin-left: 0.37rem;
+  margin-right: 0.25rem;
+  color: var(--brand-gray-light-text);
+}
+
+.proposedByJp {
+  color: var(--brand-gray-light-text);
+}
+
+.proposerLinkJp {
+  margin-right: 0.25rem;
+}
+
+.proposalByLineWrapperJp {
+  font-weight: 500;
+  margin-left: 2.5rem;
+}
+
+.propTransactionHash {
+  margin-left: 0.2rem;
+}
+
+.byLineContentWrapper h3 {
+  margin-left: 0.5rem;
+}
+
+@media (max-width: 450px) {
+  .byLineWrapper {
+    flex-direction: column;
+  }
+
+  .byLineContentWrapper {
+    margin-left: 2.5rem;
+  }
+
+  .proposalByLineWrapperJp {
+    flex-direction: column;
+    display: flex;
+  }
+
+  .proposerJp {
+    margin-left: 0.5rem;
+  }
+
+  .proposedByJp {
+    margin-left: 0.5rem;
+  }
+}

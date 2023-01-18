@@ -1,0 +1,69 @@
+.icon {
+  min-width: 24px;
+  margin-right: 0.5rem;
+}
+
+/* connect button displays differently to default NavBarItems, thus the !importants */
+.connectBtn {
+  cursor: pointer;
+}
+
+.connectBtn:hover,
+.connectBtn:active,
+.connectBtn:focus {
+  cursor: pointer !important;
+}
+
+.connectContentMobileWrapper {
+  margin-left: 0.25rem;
+  margin-top: 0.3rem;
+}
+
+.connectContentMobileText {
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 18px;
+  margin-top: 1rem;
+  height: 2rem;
+  width: fit-content;
+}
+
+.disconnectText {
+  color: var(--brand-color-red) !important;
+}
+
+.disconnectText:hover {
+  color: var(--brand-color-red) !important;
+  transition: all 0.125s ease-in-out;
+  cursor: pointer;
+}
+
+.mobileSwitchWalletText {
+  margin-right: 1rem;
+  padding-right: 1rem;
+}
+
+.dropDownTop {
+  border-radius: 10px 10px 0px 0px;
+  padding-top: 0.65rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  justify-content: flex-start;
+  margin-left: 4px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  transition: all 0.125s ease-in-out;
+}
+
+.dropDownTop:hover {
+  color: black;
+}
+
+.dropDownBottom {
+  border-radius: 0px 0px 10px 10px;
+  padding-bottom: 0.65rem;
+  padding-top: 0.5rem;
+  padding-left: 1rem;
+  justify-content: flex-start;
+  color: var(--brand-color-red);
+  margin-left: 4px;
+}

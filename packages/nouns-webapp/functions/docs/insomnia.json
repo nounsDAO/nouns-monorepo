@@ -1,0 +1,241 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2021-10-01T04:25:32.240Z",
+  "__export_source": "insomnia.desktop.app:v2021.5.3",
+  "resources": [
+    {
+      "_id": "req_59bb55e7bf6e4d7f92d54677a422a308",
+      "parentId": "wrk_d942513a879747709dda126ab8f38b87",
+      "modified": 1632805896357,
+      "created": 1632713524015,
+      "url": "{{_.host}}/v0-noun-owners",
+      "name": "Noun Owners",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1632713524015,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "wrk_d942513a879747709dda126ab8f38b87",
+      "parentId": null,
+      "modified": 1632713355841,
+      "created": 1632713355841,
+      "name": "Nouns API",
+      "description": "",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "req_3c206d310f374e04b4aa18e5459bbe8a",
+      "parentId": "wrk_d942513a879747709dda126ab8f38b87",
+      "modified": 1633056552484,
+      "created": 1633056549711,
+      "url": "{{_.host}}/v0-noun-seeds",
+      "name": "Noun Seeds",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1632713504781,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_23551dfd383b4838893438ff9d6e4895",
+      "parentId": "wrk_d942513a879747709dda126ab8f38b87",
+      "modified": 1633053648812,
+      "created": 1633053643538,
+      "url": "{{_.host}}/v0-proposal-votes",
+      "name": "Proposal Votes",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1632713485547,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_796cbd3f134f492f9a84a5dbb9959d0d",
+      "parentId": "wrk_d942513a879747709dda126ab8f38b87",
+      "modified": 1632805903082,
+      "created": 1632713590945,
+      "url": "{{_.host}}/v0-verify-signature",
+      "name": "Verify Signature",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"message\": \"I am 0x28f1F4ea77Af433c45366151F6f9906435d9DB19\\n\\nThis is me testing the Nouns serverless API\",\n\t\"signer\": \"0x28f1F4ea77Af433c45366151F6f9906435d9DB19\",\n\t\"signature\": \"0xc82fd716033ae41efd155258622a6c7d0d42ce56d03d6ba0bef1091d54675c4872e99f5718dfe0cb1a1a8dfd8d62fd35dfa10445d40e001174756a7059dd80d81b\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "id": "pair_492d1e53d8d74a2786bc97371a7cc901"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1632713447079,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_4db3bf5c0d8b404c808d18e002196785",
+      "parentId": "wrk_d942513a879747709dda126ab8f38b87",
+      "modified": 1632805908501,
+      "created": 1632716643557,
+      "url": "{{_.host}}/v0-verify-signature?fetchParticipation=true",
+      "name": "Verify Signature (with Participation)",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"message\": \"I am 0x28f1F4ea77Af433c45366151F6f9906435d9DB19\\n\\nThis is me testing the Nouns serverless API\",\n\t\"signer\": \"0x28f1F4ea77Af433c45366151F6f9906435d9DB19\",\n\t\"signature\": \"0xc82fd716033ae41efd155258622a6c7d0d42ce56d03d6ba0bef1091d54675c4872e99f5718dfe0cb1a1a8dfd8d62fd35dfa10445d40e001174756a7059dd80d81b\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "id": "pair_492d1e53d8d74a2786bc97371a7cc901"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1632713408611,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_75aafeac67f742d68b0dee923ee2a763",
+      "parentId": "wrk_d942513a879747709dda126ab8f38b87",
+      "modified": 1632805914375,
+      "created": 1632713370143,
+      "url": "{{_.host}}/v0-is-noun-owner",
+      "name": "Is Noun Owner",
+      "description": "",
+      "method": "POST",
+      "body": { "mimeType": "text/plain", "text": "0x2536c09e5f5691498805884fa37811be3b2bddb4" },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "text/plain",
+          "id": "pair_7bfb3c02c3dc4f4396b47ef9b5d8c254"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1632713370143,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_10013e2990e14b76af9e2916071e87af",
+      "parentId": "wrk_d942513a879747709dda126ab8f38b87",
+      "modified": 1632805920228,
+      "created": 1632716185270,
+      "url": "{{_.host}}/v0-is-noun-delegate",
+      "name": "Is Noun Delegate",
+      "description": "",
+      "method": "POST",
+      "body": { "mimeType": "text/plain", "text": "0x75ee6eb3d8dacf41ee2e5307090b197d3e1cca6e" },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "text/plain",
+          "id": "pair_7bfb3c02c3dc4f4396b47ef9b5d8c254"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1630036503129.5,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "env_36e3647014bac1f16493feab26d97b7d064ac5dd",
+      "parentId": "wrk_d942513a879747709dda126ab8f38b87",
+      "modified": 1632713433876,
+      "created": 1632713355846,
+      "name": "Base Environment",
+      "data": { "host": "https://deploy-preview-222--nouns-home.netlify.app/.netlify/functions" },
+      "dataPropertyOrder": { "&": ["host"] },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1632713355846,
+      "_type": "environment"
+    },
+    {
+      "_id": "jar_36e3647014bac1f16493feab26d97b7d064ac5dd",
+      "parentId": "wrk_d942513a879747709dda126ab8f38b87",
+      "modified": 1632713355847,
+      "created": 1632713355847,
+      "name": "Default Jar",
+      "cookies": [],
+      "_type": "cookie_jar"
+    },
+    {
+      "_id": "spc_4b81ef8f1aa64b3e99940c029d49a36a",
+      "parentId": "wrk_d942513a879747709dda126ab8f38b87",
+      "modified": 1632713355841,
+      "created": 1632713355841,
+      "fileName": "Nouns API",
+      "contents": "",
+      "contentType": "yaml",
+      "_type": "api_spec"
+    }
+  ]
+}

@@ -1,0 +1,302 @@
+openapi: "3.0.3"
+info:
+  description: |
+    The Nouns serverless API can provide projected data that may be easier to use for non-blockchain-native clients.
+
+    ## Function Versioning
+    `v0-` prefixed functions are in development and may change before becoming finalized.
+  version: "0.1.0"
+  title: "Nouns Serverless API"
+  license:
+    name: "CC0"
+tags:
+- name: "Address Data"
+  description: "Functions that check status of Ethereum addresses"
+- name: "Governance"
+  description: "Functions for fetching governance data"
+- name: "Nouns"
+  description: "Information about Noun tokens"
+- name: "Cryptography"
+  description: "Functions for verifying identity"
+servers:
+  - url: "https://nouns.wtf/.netlify/functions/"
+    description: Production Deployment
+paths:
+  /v0-is-noun-owner:
+    post:
+      tags:
+        - "Address Data"
+      summary: "Check if an Ethereum address owns a Noun"
+      operationId: "isNounOwner"
+      requestBody:
+        description: The Ethereum address to check for Noun ownership
+        content:
+          "text/plain":
+            schema:
+              type: string
+            example: "0x2536c09e5f5691498805884fa37811be3b2bddb4"
+      responses:
+        "200":
+          description: "Does address own a Noun"
+          content:
+            application/json:
+              schema:
+                type: boolean
+              example: true
+  /v0-is-noun-delegate:
+    post:
+      tags:
+        - "Address Data"
+      summary: "Check if an Ethereum is delegated the voting power of a Noun"
+      operationId: "isNounDelegate"
+      requestBody:
+        description: The Ethereum address to check for Noun delegation
+        content:
+          "text/plain":
+            schema:
+              type: string
+            example: "0x75ee6eb3d8dacf41ee2e5307090b197d3e1cca6e"
+      responses:
+        "200":
+          description: "Is address delegated the voting power of a Noun"
+          content:
+            application/json:
+              schema:
+                type: boolean
+              example: true
+  /v0-noun-owners:
+    get:
+      summary: "Ethereum addresses that own Nouns or are delegated voting power"
+      tags:
+        - "Address Data"
+      operationId: "getNounOwners"
+      responses:
+        "200":
+          description: "Lite Noun information including owners and delegates"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LiteNoun"
+  /v0-noun-votes:
+    get:
+      summary: "All Nouns and their votes"
+      tags:
+        - "Governance"
+      operationId: "getNounVotes"
+      responses:
+        "200":
+          description: "All Nouns and how the votes they cast in Nouns governance proposals"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/NounWithVotes"
+  /v0-proposal-votes:
+    get:
+      summary: "All governance proposals and their votes"
+      tags:
+        - "Governance"
+      operationId: "getProposalVotes"
+      responses:
+        "200":
+          description: "All governance proposals and an array of votes cast"
+          content:
+            application/json:
+              schema:
+                type: object
+  /v0-noun-seeds:
+    get:
+      summary: "All Nouns and their seeds"
+      tags:
+        - "Nouns"
+      operationId: "getNounSeeds"
+      responses:
+        "200":
+          description: "All Nouns and their seeds"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/NounWithSeeds"
+  /v0-verify-signature:
+    post:
+      summary: "Verify an ethereum signed message"
+      tags:
+        - "Cryptography"
+      operationId: "getProposalVotes"
+      parameters:
+        - name: fetchParticipation
+          in: "query"
+          description: If set to true and the signature is valid, fetch to see if the signer owns or is delegated a Noun
+          schema:
+            type: boolean
+          example: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VerifySignatureRequest"
+            example:
+              message: "I am 0x28f1F4ea77Af433c45366151F6f9906435d9DB19\n\nThis is me testing the Nouns serverless API"
+              signer: "0x28f1F4ea77Af433c45366151F6f9906435d9DB19"
+              signature": "0xc82fd716033ae41efd155258622a6c7d0d42ce56d03d6ba0bef1091d54675c4872e99f5718dfe0cb1a1a8dfd8d62fd35dfa10445d40e001174756a7059dd80d81b"
+      responses:
+        "200":
+          description: "All governance proposals and an array of votes cast"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VerifySignatureResponse"
+components:
+  schemas:
+    NormalizedVote:
+      type: object
+      description: A Nouns proposal vote
+      properties:
+        proposalId:
+          type: integer
+          format: uint256
+          description: The ID of the Nouns Governance proposal
+        supportDetailed:
+          type: integer
+          format: uint256
+          description: "The integer support value: against (0), for (1), or abstain (2)"
+    Seed:
+      type: object
+      description: The attributes that make up a Noun's seed
+      properties:
+        head:
+          type: integer
+        body:
+          type: integer
+        background:
+          type: integer
+        accessory:
+          type: integer
+        glasses:
+          type: integer
+    NormalizedNoun:
+      type: object
+      description: A Noun record
+      properties:
+        id:
+          type: integer
+          format: uint256
+        owner:
+          type: string
+        delegatedTo:
+          type: string
+          description: The address that the Noun's voting power is delegated to
+        votes:
+          type: array
+          items:
+            $ref: "#/components/schemas/NormalizedVote"
+        seed:
+          $ref: "#/components/schemas/Seed"
+    ProposalVote:
+      type: object
+      description: How a Noun voted on a governance proposal
+      properties:
+        nounId:
+          type: integer
+        owner:
+          type: string
+          description: The owner of the Noun
+        delegatedTo:
+          type: string
+          description: The Ethereum address the Noun's voting power is delegated
+        supportDetailed:
+          type: integer
+          description: "The integer support value: against (0), for (1), or abstain (2)"
+    ProposalVotes:
+      type: object
+      description: A map of Noun governance proposal ID to an array of votes
+    NounWithSeeds:
+      type: object
+      description: A Noun and its seed attributes
+      properties:
+        id:
+          type: integer
+          format: uint256
+        seed:
+          type: object
+          $ref: "#/components/schemas/Seed"
+    NounWithVotes:
+      type: object
+      description: How a Noun has voted on Nouns governance proposals
+      properties:
+        id:
+          type: integer
+          format: uint256
+        owner:
+          type: string
+          description: The owner of the Noun
+        delegatedTo:
+          type: string
+          description: The Ethereum address a Noun's voting power has been delegated to
+        votes:
+          type: array
+          items:
+            $ref: "#/components/schemas/NormalizedVote"
+    LiteNoun:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: uint256
+        owner:
+          type: string
+          description: The owner of the Noun
+        delegatedTo:
+          type: string
+          description: The Ethereum address a Noun's voting power has been delegated to
+    VerifySignatureRequest:
+      type: object
+      required:
+        - "message"
+        - "signature"
+        - "signer"
+      properties:
+        message:
+          type: string
+          description: The original signed message
+        signature:
+          type: string
+          description: Signature submitted for verification
+        signer:
+          type: string
+          description: The address attesting to have signed the message
+    VerifySignatureResponse:
+      type: object
+      required:
+        - "message"
+        - "signature"
+        - "providedSignature"
+        - "recoveredAddress"
+        - "validSignature"
+      properties:
+        message:
+          type: string
+          description: The original signed message
+        signature:
+          type: string
+          description: Signature submitted for verification
+        providedSigner:
+          type: string
+          description: The signer address provided in the request
+        recoveredAddress:
+          type: string
+          description: The address recovered from the signature
+        validSignature:
+          type: boolean
+          description: If the supplied signature is valid
+        isNounOwner:
+          type: boolean
+          description: If the signature is valid and the address owns a Noun
+        isNounDelegate:
+          type: boolean
+          description: If the signature is valid and the address is delegated a Noun

@@ -1,0 +1,58 @@
+.wrapper {
+  display: flex;
+  flex: 1;
+}
+
+.container {
+  display: flex;
+}
+
+.footerSignature {
+  margin: auto auto 0 auto;
+  font-family: 'PT Root UI' !important;
+  font-weight: 500;
+  font-size: 18px;
+  padding-bottom: 4rem;
+  padding-top: 2rem;
+  color: var(--brand-black) !important;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.footerSignature a {
+  text-decoration: none;
+  color: black;
+  margin: 8px 14px;
+  transition: all 0.15s ease-in-out;
+}
+
+.footerSignature a:hover {
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.footerSignature img {
+  width: 32px;
+  height: 32px;
+  margin: 0 8px;
+}
+
+@media (max-width: 992px) {
+  .footerSignature a {
+    font-size: 16px;
+  }
+}
+
+@keyframes slidein {
+  from {
+    margin-left: 100%;
+    width: 300%;
+  }
+
+  to {
+    margin-left: 0%;
+    width: 100%;
+  }
+}

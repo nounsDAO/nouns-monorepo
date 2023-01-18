@@ -1,0 +1,131 @@
+.altWrapper {
+  text-align: center;
+}
+
+.bidCollection {
+  display: grid;
+  text-align: start;
+  list-style-type: none;
+  row-gap: 0.5rem;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+.bidRowCool {
+  font-family: 'PT Root UI', sans-serif;
+  padding: 0.8rem;
+  border-bottom: 1px solid var(--brand-cool-border);
+  font-size: 1.1rem;
+  font-weight: bold;
+  transition: all 0.2s ease-in-out;
+}
+
+.bidRowWarm {
+  font-family: 'PT Root UI', sans-serif;
+  padding: 0.25rem 0.75rem 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--brand-warm-border);
+  font-size: 0.95rem;
+  font-weight: bold;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+}
+
+.bidRowWarm a {
+  color: var(--brand-color-red) !important;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.bidRowCool a {
+  color: var(--brand-color-blue) !important;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.bidRowWarm a:hover,
+.bidRowCool a:hover {
+  filter: brightness(110%);
+}
+
+.bidRowCool:hover,
+.bidRowWarm:hover {
+  filter: brightness(105%);
+}
+
+.bidItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.leftSectionWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.bidder {
+  font-family: 'PT Root UI';
+  font-weight: bold;
+}
+
+.bidder > div > div {
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.bidRowCool .bidder > div > div {
+  color: var(--brand-cool-dark-text);
+}
+
+.bidRowWarm .bidder > div > div {
+  color: var(--brand-warm-dark-text);
+}
+
+.bidDate {
+  display: none;
+  color: gray;
+}
+
+.rightSectionWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.bidAmount {
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  margin-right: 1rem;
+  font-size: 18px;
+  padding-top: 2px;
+}
+
+.bidRowCool .bidAmount {
+  color: var(--brand-cool-dark-text);
+}
+
+.bidRowWarm .bidAmount {
+  color: var(--brand-warm-dark-text);
+}
+
+.linkSymbol {
+  color: var(--brand-cool-light-text);
+}
+
+.linkSymbol:hover {
+  color: var(--brand-cool-dark-text);
+}
+
+@media (max-width: 992px) {
+  .bidRow {
+    border-radius: 10px;
+  }
+
+  .bidAmount .linkSymbol .bidder {
+    font-size: 16px;
+  }
+}
