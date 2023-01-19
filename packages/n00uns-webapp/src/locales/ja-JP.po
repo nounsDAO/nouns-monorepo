@@ -644,32 +644,6 @@ msgstr ""
 msgid "More details on how the dynamic threshold works can be found <0>here</0>."
 msgstr ""
 
-#: src/components/ProposalTransactionFormModal/index.tsx
-#~ msgid "Next"
-#~ msgstr "次へ"
-
-#: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
-msgid "No arguments required"
-msgstr "引数は必要ありません"
-
-#: src/components/Documentation/index.tsx
-msgid "No explicit rules exist for attribute scarcity; all N00uns are equally rare."
-msgstr "N00unsは全て等しく希少なため、属性の希少性についての明確なルールは存在しません。"
-
-#: src/components/Proposals/index.tsx
-msgid "No proposals found"
-msgstr "提案が見つかりません"
-
-#: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
-#: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
-#: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
-msgid "None"
-msgstr "なし"
-
-#: src/pages/CreateProposal/index.tsx
-msgid "Note"
-msgstr ""
-
 #: src/pages/Governance/index.tsx
 msgid "N00un"
 msgstr "N00un"
@@ -759,6 +733,32 @@ msgstr "N00unsのアートワークは {publicDomainLink} にあります。"
 #: src/pages/Governance/index.tsx
 msgid "N00uns govern <0>N00uns DAO</0>. N00uns can vote on proposals or delegate their vote to a third party. A minimum of <1>{n00unsRequired} {0}</1> is required to submit proposals."
 msgstr "N00unsが統治する <0>N00uns DAO</0> 。N00unsは提案に対して投票したり、第三者に投票を委任することができますが、提案の提出には最低でも <1>{n00unsRequired} {0}</1> 以上が必要です。"
+
+#: src/components/ProposalTransactionFormModal/index.tsx
+#~ msgid "Next"
+#~ msgstr "次へ"
+
+#: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
+msgid "No arguments required"
+msgstr "引数は必要ありません"
+
+#: src/components/Documentation/index.tsx
+msgid "No explicit rules exist for attribute scarcity; all N00uns are equally rare."
+msgstr "N00unsは全て等しく希少なため、属性の希少性についての明確なルールは存在しません。"
+
+#: src/components/Proposals/index.tsx
+msgid "No proposals found"
+msgstr "提案が見つかりません"
+
+#: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
+#: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
+#: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
+msgid "None"
+msgstr "なし"
+
+#: src/pages/CreateProposal/index.tsx
+msgid "Note"
+msgstr ""
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Now has"
@@ -1189,7 +1189,6 @@ msgstr "すべての入札を表示"
 #: src/components/ChangeDelegatePannel/index.tsx
 #: src/components/Holder/index.tsx
 #: src/components/N00unInfoRowHolder/index.tsx
-#: src/components/Winner/index.tsx
 #: src/components/profileEvent/event/DesktopDelegationEvent/index.tsx
 #: src/components/profileEvent/event/DesktopDelegationEvent/index.tsx
 #: src/components/profileEvent/event/DesktopN00unWinEvent/index.tsx
@@ -1197,6 +1196,7 @@ msgstr "すべての入札を表示"
 #: src/components/profileEvent/event/DesktopProposalVoteEvent/index.tsx
 #: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
 #: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
+#: src/components/Winner/index.tsx
 msgid "View on Etherscan"
 msgstr "イーサスキャンで見る"
 
