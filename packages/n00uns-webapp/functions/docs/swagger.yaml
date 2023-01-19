@@ -1,0 +1,302 @@
+openapi: '3.0.3'
+info:
+  description: |
+    The N00uns serverless API can provide projected data that may be easier to use for non-blockchain-native clients.
+
+    ## Function Versioning
+    `v0-` prefixed functions are in development and may change before becoming finalized.
+  version: '0.1.0'
+  title: 'N00uns Serverless API'
+  license:
+    name: 'CC0'
+tags:
+  - name: 'Address Data'
+    description: 'Functions that check status of Ethereum addresses'
+  - name: 'Governance'
+    description: 'Functions for fetching governance data'
+  - name: 'N00uns'
+    description: 'Information about N00un tokens'
+  - name: 'Cryptography'
+    description: 'Functions for verifying identity'
+servers:
+  - url: 'https://n00uns.wtf/.netlify/functions/'
+    description: Production Deployment
+paths:
+  /v0-is-n00un-owner:
+    post:
+      tags:
+        - 'Address Data'
+      summary: 'Check if an Ethereum address owns a N00un'
+      operationId: 'isN00unOwner'
+      requestBody:
+        description: The Ethereum address to check for N00un ownership
+        content:
+          'text/plain':
+            schema:
+              type: string
+            example: '0x2536c09e5f5691498805884fa37811be3b2bddb4'
+      responses:
+        '200':
+          description: 'Does address own a N00un'
+          content:
+            application/json:
+              schema:
+                type: boolean
+              example: true
+  /v0-is-n00un-delegate:
+    post:
+      tags:
+        - 'Address Data'
+      summary: 'Check if an Ethereum is delegated the voting power of a N00un'
+      operationId: 'isN00unDelegate'
+      requestBody:
+        description: The Ethereum address to check for N00un delegation
+        content:
+          'text/plain':
+            schema:
+              type: string
+            example: '0x75ee6eb3d8dacf41ee2e5307090b197d3e1cca6e'
+      responses:
+        '200':
+          description: 'Is address delegated the voting power of a N00un'
+          content:
+            application/json:
+              schema:
+                type: boolean
+              example: true
+  /v0-n00un-owners:
+    get:
+      summary: 'Ethereum addresses that own N00uns or are delegated voting power'
+      tags:
+        - 'Address Data'
+      operationId: 'getN00unOwners'
+      responses:
+        '200':
+          description: 'Lite N00un information including owners and delegates'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LiteN00un'
+  /v0-n00un-votes:
+    get:
+      summary: 'All N00uns and their votes'
+      tags:
+        - 'Governance'
+      operationId: 'getN00unVotes'
+      responses:
+        '200':
+          description: 'All N00uns and how the votes they cast in N00uns governance proposals'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/N00unWithVotes'
+  /v0-proposal-votes:
+    get:
+      summary: 'All governance proposals and their votes'
+      tags:
+        - 'Governance'
+      operationId: 'getProposalVotes'
+      responses:
+        '200':
+          description: 'All governance proposals and an array of votes cast'
+          content:
+            application/json:
+              schema:
+                type: object
+  /v0-n00un-seeds:
+    get:
+      summary: 'All N00uns and their seeds'
+      tags:
+        - 'N00uns'
+      operationId: 'getN00unSeeds'
+      responses:
+        '200':
+          description: 'All N00uns and their seeds'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/N00unWithSeeds'
+  /v0-verify-signature:
+    post:
+      summary: 'Verify an ethereum signed message'
+      tags:
+        - 'Cryptography'
+      operationId: 'getProposalVotes'
+      parameters:
+        - name: fetchParticipation
+          in: 'query'
+          description: If set to true and the signature is valid, fetch to see if the signer owns or is delegated a N00un
+          schema:
+            type: boolean
+          example: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifySignatureRequest'
+            example:
+              message: "I am 0x28f1F4ea77Af433c45366151F6f9906435d9DB19\n\nThis is me testing the N00uns serverless API"
+              signer: '0x28f1F4ea77Af433c45366151F6f9906435d9DB19'
+              signature": '0xc82fd716033ae41efd155258622a6c7d0d42ce56d03d6ba0bef1091d54675c4872e99f5718dfe0cb1a1a8dfd8d62fd35dfa10445d40e001174756a7059dd80d81b'
+      responses:
+        '200':
+          description: 'All governance proposals and an array of votes cast'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifySignatureResponse'
+components:
+  schemas:
+    NormalizedVote:
+      type: object
+      description: A N00uns proposal vote
+      properties:
+        proposalId:
+          type: integer
+          format: uint256
+          description: The ID of the N00uns Governance proposal
+        supportDetailed:
+          type: integer
+          format: uint256
+          description: 'The integer support value: against (0), for (1), or abstain (2)'
+    Seed:
+      type: object
+      description: The attributes that make up a N00un's seed
+      properties:
+        head:
+          type: integer
+        body:
+          type: integer
+        background:
+          type: integer
+        accessory:
+          type: integer
+        glasses:
+          type: integer
+    NormalizedN00un:
+      type: object
+      description: A N00un record
+      properties:
+        id:
+          type: integer
+          format: uint256
+        owner:
+          type: string
+        delegatedTo:
+          type: string
+          description: The address that the N00un's voting power is delegated to
+        votes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NormalizedVote'
+        seed:
+          $ref: '#/components/schemas/Seed'
+    ProposalVote:
+      type: object
+      description: How a N00un voted on a governance proposal
+      properties:
+        n00unId:
+          type: integer
+        owner:
+          type: string
+          description: The owner of the N00un
+        delegatedTo:
+          type: string
+          description: The Ethereum address the N00un's voting power is delegated
+        supportDetailed:
+          type: integer
+          description: 'The integer support value: against (0), for (1), or abstain (2)'
+    ProposalVotes:
+      type: object
+      description: A map of N00un governance proposal ID to an array of votes
+    N00unWithSeeds:
+      type: object
+      description: A N00un and its seed attributes
+      properties:
+        id:
+          type: integer
+          format: uint256
+        seed:
+          type: object
+          $ref: '#/components/schemas/Seed'
+    N00unWithVotes:
+      type: object
+      description: How a N00un has voted on N00uns governance proposals
+      properties:
+        id:
+          type: integer
+          format: uint256
+        owner:
+          type: string
+          description: The owner of the N00un
+        delegatedTo:
+          type: string
+          description: The Ethereum address a N00un's voting power has been delegated to
+        votes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NormalizedVote'
+    LiteN00un:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: uint256
+        owner:
+          type: string
+          description: The owner of the N00un
+        delegatedTo:
+          type: string
+          description: The Ethereum address a N00un's voting power has been delegated to
+    VerifySignatureRequest:
+      type: object
+      required:
+        - 'message'
+        - 'signature'
+        - 'signer'
+      properties:
+        message:
+          type: string
+          description: The original signed message
+        signature:
+          type: string
+          description: Signature submitted for verification
+        signer:
+          type: string
+          description: The address attesting to have signed the message
+    VerifySignatureResponse:
+      type: object
+      required:
+        - 'message'
+        - 'signature'
+        - 'providedSignature'
+        - 'recoveredAddress'
+        - 'validSignature'
+      properties:
+        message:
+          type: string
+          description: The original signed message
+        signature:
+          type: string
+          description: Signature submitted for verification
+        providedSigner:
+          type: string
+          description: The signer address provided in the request
+        recoveredAddress:
+          type: string
+          description: The address recovered from the signature
+        validSignature:
+          type: boolean
+          description: If the supplied signature is valid
+        isN00unOwner:
+          type: boolean
+          description: If the signature is valid and the address owns a N00un
+        isN00unDelegate:
+          type: boolean
+          description: If the signature is valid and the address is delegated a N00un
