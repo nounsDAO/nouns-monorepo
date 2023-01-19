@@ -1,0 +1,15 @@
+{
+  "network": "mumbai",
+  "n00unsToken": {
+    "address": "0xe5Ce8F254FE31531acB88adae714597009BFB27f",
+    "startBlock": 31128705
+  },
+  "n00unsAuctionHouse": {
+    "address": "0x2aE62d59B775c5037023D434E1f4a2c07077776d",
+    "startBlock": 31128705
+  },
+  "n00unsDAO": {
+    "address": "0x1C3DF3083593644AA4c4046709EE14e37735ED2c",
+    "startBlock": 31128705
+  }
+}

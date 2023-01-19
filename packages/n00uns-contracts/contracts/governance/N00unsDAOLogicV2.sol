@@ -65,16 +65,16 @@ contract N00unsDAOLogicV2 is N00unsDAOStorageV2, N00unsDAOEventsV2 {
     uint256 public constant MAX_PROPOSAL_THRESHOLD_BPS = 1_000; // 1,000 basis points or 10%
 
     /// @notice The minimum setable voting period
-    uint256 public constant MIN_VOTING_PERIOD = 5_760; // About 24 hours
+    uint256 public constant MIN_VOTING_PERIOD = 43_200; // About 24 hours
 
     /// @notice The max setable voting period
-    uint256 public constant MAX_VOTING_PERIOD = 80_640; // About 2 weeks
+    uint256 public constant MAX_VOTING_PERIOD = 604_800; // About 2 weeks
 
     /// @notice The min setable voting delay
     uint256 public constant MIN_VOTING_DELAY = 1;
 
     /// @notice The max setable voting delay
-    uint256 public constant MAX_VOTING_DELAY = 40_320; // About 1 week
+    uint256 public constant MAX_VOTING_DELAY = 302_400; // About 1 week
 
     /// @notice The lower bound of minimum quorum votes basis points
     uint256 public constant MIN_QUORUM_VOTES_BPS_LOWER_BOUND = 200; // 200 basis points or 2%

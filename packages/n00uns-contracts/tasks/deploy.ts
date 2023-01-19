@@ -18,6 +18,8 @@ const wethContracts: Record<number, string> = {
   [ChainId.Rinkeby]: '0xc778417e063141139fce010982780140aa0cd5ab',
   [ChainId.Kovan]: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
   [ChainId.Goerli]: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
+  [ChainId.Mumbai]: '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619',
+  [ChainId.Polygon]: '  0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619',
 };
 
 const NOUNS_ART_NONCE_OFFSET = 4;
@@ -61,13 +63,13 @@ task('deploy', 'Deploys NFTDescriptor, N00unsDescriptor, N00unsSeeder, and N00un
   .addOptionalParam(
     'votingPeriod',
     'The voting period (blocks)',
-    Math.round(4 * 60 * 24 * (60 / 13)) /* 4 days (13s blocks) */,
+    Math.round(4 * 60 * 24 * (60 / 2)) /* 4 days (2s blocks) */,
     types.int,
   )
   .addOptionalParam(
     'votingDelay',
     'The voting delay (blocks)',
-    Math.round(3 * 60 * 24 * (60 / 13)) /* 3 days (13s blocks) */,
+    Math.round(3 * 60 * 24 * (60 / 2)) /* 3 days (2s blocks) */,
     types.int,
   )
   .addOptionalParam(

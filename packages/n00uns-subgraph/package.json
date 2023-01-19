@@ -16,6 +16,7 @@
     "prepare:rinkeby": "mustache config/rinkeby.json subgraph.yaml.mustache > subgraph.yaml",
     "prepare:mainnet": "mustache config/mainnet.json subgraph.yaml.mustache > subgraph.yaml",
     "prepare:goerli": "mustache config/goerli.json subgraph.yaml.mustache > subgraph.yaml",
+    "prepare:mumbai": "mustache config/mumbai.json subgraph.yaml.mustache > subgraph.yaml",
     "codegen": "graph codegen --output-dir src/types/",
     "test:configgen": "echo libsFolder: $(dirname `cd ../..; pwd`)/n00uns-monorepo/node_modules > matchstick.yaml",
     "test": "graph test",
@@ -26,6 +27,7 @@
     "deploy:rinkeby": "yarn clean && yarn prepare:rinkeby && yarn codegen && yarn deploy n00unsdao/n00uns-subgraph-rinkeby",
     "deploy:mainnet": "yarn clean && yarn prepare:mainnet && yarn codegen && yarn deploy n00unsdao/n00uns-subgraph",
     "deploy:goerli": "yarn clean && yarn prepare:goerli && yarn codegen && yarn deploy verbsteam/n00uns-goerli",
+    "deploy:mumbai": "yarn clean && yarn prepare:mumbai && yarn codegen && yarn deploy verbsteam/n00uns-mumbai",
     "mustache": "mustache"
   },
   "devDependencies": {
