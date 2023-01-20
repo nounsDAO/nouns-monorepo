@@ -370,8 +370,9 @@ library Inflate {
             // Distance for copy
             uint256 dist;
             // TODO Solidity doesn't support constant arrays, but these are fixed at compile-time
+            uint16[88] memory fixedTabs = [
             // Size base for length codes 257..285
-            uint16[29] memory lens = [
+            // uint16[29] memory lens = [
                 3,
                 4,
                 5,
@@ -400,10 +401,10 @@ library Inflate {
                 163,
                 195,
                 227,
-                258
-            ];
+                258,
+            // ];
             // Extra bits for length codes 257..285
-            uint8[29] memory lext = [
+            // uint8[29] memory lext = [
                 0,
                 0,
                 0,
@@ -432,10 +433,10 @@ library Inflate {
                 5,
                 5,
                 5,
-                0
-            ];
+                0,
+            // ];
             // Offset base for distance codes 0..29
-            uint16[30] memory dists = [
+            // uint16[30] memory dists = [
                 1,
                 2,
                 3,
@@ -465,10 +466,41 @@ library Inflate {
                 8193,
                 12289,
                 16385,
-                24577
-            ];
+                24577,
+            // ];
             // Extra bits for distance codes 0..29
-            // uint8[30] memory dext = [0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13];
+            // uint8[30] memory dext = [
+                0,
+                0,
+                0,
+                0,
+                1,
+                1,
+                2,
+                2,
+                3,
+                3,
+                4,
+                4,
+                5,
+                5,
+                6,
+                6,
+                7,
+                7,
+                8,
+                8,
+                9,
+                9,
+                10,
+                10,
+                11,
+                11,
+                12,
+                12,
+                13,
+                13
+            ];
 
             // Decode literals and length/distance pairs
             while (symbol != 256) {
@@ -496,12 +528,11 @@ library Inflate {
                         return ErrorCode.ERR_INVALID_LENGTH_OR_DISTANCE_CODE;
                     }
 
-                    len = lens[symbol] + bits(s, lext[symbol]);
+                    len = fixedTabs[symbol] + bits(s, fixedTabs[29 + symbol]);
 
                     // Get and check distance
                     symbol = _decode(s, distcode);
-                    // (symbol/2 - 1) % type(uint256).max == dext[symbol]
-                    dist = dists[symbol] + bits(s, ((symbol / 2) - 1) % type(uint256).max);
+                    dist = fixedTabs[58 + symbol] + bits(s, fixedTabs[88 + symbol]);
                     if (dist > s.outcnt) {
                         // Distance too far back
                         return ErrorCode.ERR_DISTANCE_TOO_FAR;
@@ -511,41 +542,45 @@ library Inflate {
                     if (s.outcnt + len > s.output.length) {
                         return ErrorCode.ERR_OUTPUT_EXHAUSTED;
                     }
-                    while (len > 32) {
+                    uint256 pointer;
+                    assembly {
+                        pointer := add(add(mload(s), 0x20), mload(add(s, 0x20)))
+                    }
+                    s.outcnt += len;
+                    if (dist < len && dist < 32) {  // copy dist bytes
+                        uint256 mask;
                         assembly {
-                            mstore(
-                                add(add(mload(s), 0x20), mload(add(s, 0x20))),
-                                mload(
-                                    sub(
-                                        add(add(mload(s), 0x20), mload(add(s, 0x20))),
-                                        dist
+                            mask := shr(mul(dist, 8), 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff)
+                        }
+                        while (len > dist) {
+                            assembly {
+                                mstore(pointer,
+                                    or(
+                                        and(mload(sub(pointer, dist)), not(mask)),
+                                        and(mload(pointer), mask)
                                     )
                                 )
-                            )
+                            }
+                            pointer += dist;
+                            len -= dist;
                         }
-                        len -= 32;
-                        s.outcnt += 32;
+                    } else {  // copy 32 bytes
+                        while (len > 32) {
+                            assembly {
+                                mstore(pointer, mload(sub(pointer, dist)))
+                            }
+                            pointer += 32;
+                            len -= 32;
+                        }
                     }
-                    while (len != 0) {
-                        // Note: Solidity reverts on underflow, so we decrement here
-                        len -= 1;
-                        // s.output[s.outcnt] = s.output[s.outcnt - dist];
-                        // array length check is skipped
-                        // symbol range trimming is skipped because symbol < 256
-                        assembly {
-                            mstore8(
-                              add(add(mload(s), 0x20), mload(add(s, 0x20))),
-                              shr(0xf8,
-                                mload(
-                                  sub(
-                                    add(add(mload(s), 0x20), mload(add(s, 0x20))),
-                                    dist
-                                  )
-                                )
-                              )
+                    assembly {  // copy left
+                        let mask := shr(mul(len, 8), 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff)
+                        mstore(pointer,
+                            or(
+                                and(mload(sub(pointer, dist)), not(mask)),
+                                and(mload(pointer), mask)
                             )
-                        }
-                        ++s.outcnt;
+                        )
                     }
                 } else {
                     s.outcnt += len;
@@ -810,6 +845,64 @@ library Inflate {
             }
 
             return (err, s.output);
+        }
+    }
+
+    function log10(uint256 value) internal pure returns (uint256) {
+        uint256 result = 0;
+        unchecked {
+            if (value >= 10 ** 64) {
+                value /= 10 ** 64;
+                result += 64;
+            }
+            if (value >= 10 ** 32) {
+                value /= 10 ** 32;
+                result += 32;
+            }
+            if (value >= 10 ** 16) {
+                value /= 10 ** 16;
+                result += 16;
+            }
+            if (value >= 10 ** 8) {
+                value /= 10 ** 8;
+                result += 8;
+            }
+            if (value >= 10 ** 4) {
+                value /= 10 ** 4;
+                result += 4;
+            }
+            if (value >= 10 ** 2) {
+                value /= 10 ** 2;
+                result += 2;
+            }
+            if (value >= 10 ** 1) {
+                result += 1;
+            }
+        }
+        return result;
+    }
+
+    bytes16 private constant _SYMBOLS = "0123456789abcdef";
+
+    function toString(uint256 value) internal pure returns (string memory) {
+        unchecked {
+            uint256 length = log10(value) + 1;
+            string memory buffer = new string(length);
+            uint256 ptr;
+            /// @solidity memory-safe-assembly
+            assembly {
+                ptr := add(buffer, add(32, length))
+            }
+            while (true) {
+                ptr--;
+                /// @solidity memory-safe-assembly
+                assembly {
+                    mstore8(ptr, byte(mod(value, 10), _SYMBOLS))
+                }
+                value /= 10;
+                if (value == 0) break;
+            }
+            return buffer;
         }
     }
 }
