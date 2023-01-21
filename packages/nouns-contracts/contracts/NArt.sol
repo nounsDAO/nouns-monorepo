@@ -165,14 +165,14 @@ contract NArt is IArt {
      * @notice Update a single color palette. This function can be used to
      * add a new color palette or update an existing palette.
      * @param paletteIndex the identifier of this palette
-     * @param palette byte array of colors. every 3 bytes represent an RGB color. max length: 256 * 3 = 768
+     * @param palette byte array of colors. every 4 bytes represent an RGBA color. max length: 256 * 4 = 1024
      * @dev This function can only be called by the descriptor.
      */
     function setPalette(uint8 paletteIndex, bytes calldata palette) external override onlyDescriptor {
         if (palette.length == 0) {
             revert EmptyPalette();
         }
-        if (palette.length % 3 != 0 || palette.length > 768) {
+        if (palette.length % 4 != 0 || palette.length > 1024) {
             revert BadPaletteLength();
         }
         palettesPointers[paletteIndex] = SSTORE2.write(palette);

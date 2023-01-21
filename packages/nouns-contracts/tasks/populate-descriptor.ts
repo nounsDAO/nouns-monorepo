@@ -45,7 +45,7 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and Pu
     const nosesPage = dataToDescriptorInput(noses.map(({ data }) => data));
 
 //    await descriptorContract.addManyBackgrounds(bgcolors);
-    await descriptorContract.setPalette(0, `0x000000${palette.join('')}`);
+    await descriptorContract.setPalette(0, `0x00000000${palette.join('')}`);
 
     await descriptorContract.addPunkTypes(
       typesPage.encodedCompressed,
