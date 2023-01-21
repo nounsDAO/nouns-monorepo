@@ -370,7 +370,7 @@ library Inflate {
             // Distance for copy
             uint256 dist;
             // TODO Solidity doesn't support constant arrays, but these are fixed at compile-time
-            uint16[88] memory fixedTabs = [
+            uint16[118] memory fixedTabs = [
             // Size base for length codes 257..285
             // uint16[29] memory lens = [
                 3,
