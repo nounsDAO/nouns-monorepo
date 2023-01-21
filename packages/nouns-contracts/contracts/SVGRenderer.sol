@@ -21,7 +21,7 @@ import { ISVGRenderer } from './interfaces/ISVGRenderer.sol';
 
 contract SVGRenderer is ISVGRenderer {
     bytes16 private constant _HEX_SYMBOLS = '0123456789abcdef';
-    uint256 private constant _INDEX_TO_BYTES3_FACTOR = 3;
+    uint256 private constant _INDEX_TO_BYTES3_FACTOR = 4;
 
     // prettier-ignore
     string private constant _SVG_START_TAG = '<svg width="96" height="96" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">';
@@ -160,17 +160,20 @@ contract SVGRenderer is ISVGRenderer {
 
     /**
      * @notice Return a string that consists of all rects in the provided `buffer`.
+     * @dev no range check for cursor
      */
     // prettier-ignore
     function _getChunk(uint256 cursor, string[16] memory buffer) private pure returns (string memory) {
         string memory chunk;
-        for (uint256 i = 0; i < cursor; i += 4) {
-            chunk = string(
-                abi.encodePacked(
-                    chunk,
-                    '<rect width="', buffer[i], '" height="4" x="', buffer[i + 1], '" y="', buffer[i + 2], '" fill="#', buffer[i + 3], '" />'
-                )
-            );
+        unchecked {
+            for (uint256 i = 0; i < cursor; i += 4) {
+                chunk = string(
+                    abi.encodePacked(
+                        chunk,
+                        '<rect width="', buffer[i], '" height="4" x="', buffer[i + 1], '" y="', buffer[i + 2], '" fill="#', buffer[i + 3], '" />'
+                    )
+                );
+            }
         }
         return chunk;
     }
@@ -206,24 +209,26 @@ contract SVGRenderer is ISVGRenderer {
     ) private pure returns (string memory) {
         if (bytes(cache[index]).length == 0) {
             uint256 i = index * _INDEX_TO_BYTES3_FACTOR;
-            cache[index] = _toHexString(abi.encodePacked(palette[i], palette[i + 1], palette[i + 2]));
+            cache[index] = _toHexString(abi.encodePacked(palette[i], palette[i + 1], palette[i + 2], palette[i + 3]));
         }
         return cache[index];
     }
 
     /**
-     * @dev Convert `bytes` to a 6 character ASCII `string` hexadecimal representation.
+     * @dev Convert `bytes` to a 8 character ASCII `string` hexadecimal representation.
      */
     function _toHexString(bytes memory b) private pure returns (string memory) {
-        uint24 value = uint24(bytes3(b));
+        uint32 value = uint32(bytes4(b));
 
-        bytes memory buffer = new bytes(6);
-        buffer[5] = _HEX_SYMBOLS[value & 0xf];
-        buffer[4] = _HEX_SYMBOLS[(value >> 4) & 0xf];
-        buffer[3] = _HEX_SYMBOLS[(value >> 8) & 0xf];
-        buffer[2] = _HEX_SYMBOLS[(value >> 12) & 0xf];
-        buffer[1] = _HEX_SYMBOLS[(value >> 16) & 0xf];
-        buffer[0] = _HEX_SYMBOLS[(value >> 20) & 0xf];
+        bytes memory buffer = new bytes(8);
+        buffer[7] = _HEX_SYMBOLS[value & 0xf];
+        buffer[6] = _HEX_SYMBOLS[(value >> 4) & 0xf];
+        buffer[5] = _HEX_SYMBOLS[(value >> 8) & 0xf];
+        buffer[4] = _HEX_SYMBOLS[(value >> 12) & 0xf];
+        buffer[3] = _HEX_SYMBOLS[(value >> 16) & 0xf];
+        buffer[2] = _HEX_SYMBOLS[(value >> 20) & 0xf];
+        buffer[1] = _HEX_SYMBOLS[(value >> 24) & 0xf];
+        buffer[0] = _HEX_SYMBOLS[(value >> 28) & 0xf];
         return string(buffer);
     }
 }
