@@ -96,15 +96,17 @@ contract SVGRenderer is ISVGRenderer {
         ];
         string memory rects;
         string[] memory cache;
+        string[] memory opacityCache;
         for (uint8 p = 0; p < params.parts.length; p++) {
             cache = new string[](256); // Initialize color cache
+            opacityCache = new string[](256); // Initialize opacity cache
 
             DecodedImage memory image = _decodeRLEImage(params.parts[p].image);
             bytes memory palette = params.parts[p].palette;
             uint256 currentX = image.bounds.left;
             uint256 currentY = image.bounds.top;
             uint256 cursor;
-            string[16] memory buffer;
+            string[20] memory buffer;
 
             string memory part;
             for (uint256 i = 0; i < image.draws.length; i++) {
@@ -116,11 +118,12 @@ contract SVGRenderer is ISVGRenderer {
                         buffer[cursor] = lookup[length];                                 // width
                         buffer[cursor + 1] = lookup[currentX];                           // x
                         buffer[cursor + 2] = lookup[currentY];                           // y
-                        buffer[cursor + 3] = _getColor(palette, draw.colorIndex, cache); // color
+                        buffer[cursor + 3] = _getColor(palette, draw.colorIndex, cache, opacityCache); // color
+                        buffer[cursor + 4] = opacityCache[draw.colorIndex];              // opacity
 
-                        cursor += 4;
+                        cursor += 5;
 
-                        if (cursor >= 16) {
+                        if (cursor >= 20) {
                             part = string(abi.encodePacked(part, _getChunk(cursor, buffer)));
                             cursor = 0;
                         }
@@ -163,16 +166,26 @@ contract SVGRenderer is ISVGRenderer {
      * @dev no range check for cursor
      */
     // prettier-ignore
-    function _getChunk(uint256 cursor, string[16] memory buffer) private pure returns (string memory) {
+    function _getChunk(uint256 cursor, string[20] memory buffer) private pure returns (string memory) {
         string memory chunk;
         unchecked {
-            for (uint256 i = 0; i < cursor; i += 4) {
-                chunk = string(
-                    abi.encodePacked(
-                        chunk,
-                        '<rect width="', buffer[i], '" height="4" x="', buffer[i + 1], '" y="', buffer[i + 2], '" fill="#', buffer[i + 3], '" />'
-                    )
-                );
+            for (uint256 i = 0; i < cursor; i += 5) {
+                if (bytes(buffer[i + 4]).length == 0) {
+                    chunk = string(
+                        abi.encodePacked(
+                            chunk,
+                            '<rect width="', buffer[i], '" height="4" x="', buffer[i + 1], '" y="', buffer[i + 2], '" fill="#', buffer[i + 3], '" />'
+                        )
+                    );
+
+                } else {
+                    chunk = string(
+                        abi.encodePacked(
+                            chunk,
+                            '<rect width="', buffer[i], '" height="4" x="', buffer[i + 1], '" y="', buffer[i + 2], '" fill="#', buffer[i + 3], '" opacity="', buffer[i + 4], '" />'
+                        )
+                    );
+                }
             }
         }
         return chunk;
@@ -205,11 +218,19 @@ contract SVGRenderer is ISVGRenderer {
     function _getColor(
         bytes memory palette,
         uint256 index,
-        string[] memory cache
+        string[] memory cache,
+        string[] memory opacityCache
     ) private pure returns (string memory) {
         if (bytes(cache[index]).length == 0) {
             uint256 i = index * _INDEX_TO_BYTES3_FACTOR;
-            cache[index] = _toHexString(abi.encodePacked(palette[i], palette[i + 1], palette[i + 2], palette[i + 3]));
+            cache[index] = _toHexString(abi.encodePacked(palette[i], palette[i + 1], palette[i + 2]));
+            if (palette[i + 3] != 0xff) {
+                uint256 opacityValue = uint256(uint8(palette[i + 3])) * 100 / 0xff;
+                bytes memory opacityLabel = '0.  ';
+                opacityLabel[2] = bytes1(uint8(48 + (opacityValue / 10))); // 48 is ascii 0
+                opacityLabel[3] = bytes1(uint8(48 + (opacityValue % 10))); // 48 is ascii 0
+                opacityCache[index] = string(opacityLabel);
+            }
         }
         return cache[index];
     }
@@ -218,17 +239,15 @@ contract SVGRenderer is ISVGRenderer {
      * @dev Convert `bytes` to a 8 character ASCII `string` hexadecimal representation.
      */
     function _toHexString(bytes memory b) private pure returns (string memory) {
-        uint32 value = uint32(bytes4(b));
+        uint32 value = uint24(bytes3(b));
 
-        bytes memory buffer = new bytes(8);
-        buffer[7] = _HEX_SYMBOLS[value & 0xf];
-        buffer[6] = _HEX_SYMBOLS[(value >> 4) & 0xf];
-        buffer[5] = _HEX_SYMBOLS[(value >> 8) & 0xf];
-        buffer[4] = _HEX_SYMBOLS[(value >> 12) & 0xf];
-        buffer[3] = _HEX_SYMBOLS[(value >> 16) & 0xf];
-        buffer[2] = _HEX_SYMBOLS[(value >> 20) & 0xf];
-        buffer[1] = _HEX_SYMBOLS[(value >> 24) & 0xf];
-        buffer[0] = _HEX_SYMBOLS[(value >> 28) & 0xf];
+        bytes memory buffer = new bytes(6);
+        buffer[5] = _HEX_SYMBOLS[value & 0xf];
+        buffer[4] = _HEX_SYMBOLS[(value >> 4) & 0xf];
+        buffer[3] = _HEX_SYMBOLS[(value >> 8) & 0xf];
+        buffer[2] = _HEX_SYMBOLS[(value >> 12) & 0xf];
+        buffer[1] = _HEX_SYMBOLS[(value >> 16) & 0xf];
+        buffer[0] = _HEX_SYMBOLS[(value >> 20) & 0xf];
         return string(buffer);
     }
 }
