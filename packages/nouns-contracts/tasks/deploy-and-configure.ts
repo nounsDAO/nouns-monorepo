@@ -19,7 +19,12 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
     'auctionMinIncrementBidPercentage',
     'The auction min increment bid percentage (out of 100)',
   )
-  .addOptionalParam('auctionDuration', 'The auction duration (seconds)')
+  .addOptionalParam(
+    'auctionDuration',
+    'The auction duration (seconds)',
+    24 * 60 * 60 /* 24 hours */, /* DEBUG */
+    types.int,
+  )
   .addOptionalParam('timelockDelay', 'The timelock delay (seconds)')
   .addOptionalParam('votingPeriod', 'The voting period (blocks)')
   .addOptionalParam('votingDelay', 'The voting delay (blocks)')
