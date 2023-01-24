@@ -18,7 +18,6 @@ import BrandSpinner from '../BrandSpinner';
 import BrandNumericEntry from '../BrandNumericEntry';
 import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
 import StartOrEndTime from '../StartOrEndTime';
-import { currentUnixEpoch } from '../../utils/timeUtils';
 import { formatTokenAmmount } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
 import { SupportedCurrency } from '../ProposalActionsModal/steps/TransferFundsDetailsStep';
 import ModalLabel from '../ModalLabel';
