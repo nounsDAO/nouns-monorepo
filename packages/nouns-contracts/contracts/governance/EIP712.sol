@@ -58,7 +58,7 @@ abstract contract EIP712 {
         );
         _HASHED_NAME = hashedName;
         _HASHED_VERSION = hashedVersion;
-        _CACHED_CHAIN_ID = 5;//block.chainid; // TODO: revert to block.chainId
+        _CACHED_CHAIN_ID = block.chainid;
         _CACHED_DOMAIN_SEPARATOR = _buildDomainSeparator(typeHash, hashedName, hashedVersion);
         _CACHED_THIS = address(this);
         _TYPE_HASH = typeHash;
@@ -81,7 +81,7 @@ abstract contract EIP712 {
         bytes32 versionHash
     ) private view returns (bytes32) {
         // TODO: revert to block.chainId
-        return keccak256(abi.encode(typeHash, nameHash, versionHash, 5, address(this)));
+        return keccak256(abi.encode(typeHash, nameHash, versionHash, block.chainid, address(this)));
     }
 
     /**

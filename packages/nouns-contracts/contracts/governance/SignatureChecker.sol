@@ -9,16 +9,16 @@ import 'forge-std/console.sol';
 
 contract SignatureChecker is EIP712("Nouns DAO", "V1") {
     function checkSig(
+        address proposer,
         address[] memory targets,
         uint256[] memory values,
         string[] memory signatures,
         bytes[] memory calldatas,
         string memory description,
-        uint256 nonce,
         uint40 expiry,
         bytes memory signature
     ) public view returns (address signer) {
-        bytes32 proposalTypeHash = keccak256("Proposal(address[] targets,uint256[] values,string[] signatures,bytes[] calldatas,string description,uint256 nonce,uint40 expiry)");
+        bytes32 proposalTypeHash = keccak256("Proposal(address proposer,address[] targets,uint256[] values,string[] signatures,bytes[] calldatas,string description,uint40 expiry)");
 
         bytes32[] memory signatureHashes = new bytes32[](signatures.length);
         for (uint256 i=0; i<signatures.length; ++i) {
@@ -32,12 +32,12 @@ contract SignatureChecker is EIP712("Nouns DAO", "V1") {
 
         bytes32 digest = _hashTypedDataV4(keccak256(abi.encode(
             proposalTypeHash,
+            proposer,
             keccak256(abi.encodePacked(targets)),
             keccak256(abi.encodePacked(values)),
             keccak256(abi.encodePacked(signatureHashes)),
             keccak256(abi.encodePacked(calldatasHashes)),
             keccak256(bytes(description)),
-            nonce,
             expiry
         )));
 

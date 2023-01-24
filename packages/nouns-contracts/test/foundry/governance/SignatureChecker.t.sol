@@ -13,6 +13,8 @@ contract SignatureCheckerTest is Test {
         assertEq(address(checker), 0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f, 'contract address changed');
         console.log('chainId', block.chainid);
 
+        address proposer = 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266;
+
         address[] memory targets = new address[](2);
         targets[0] = 0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC;
         targets[1] = 0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa;
@@ -31,14 +33,12 @@ contract SignatureCheckerTest is Test {
 
         string memory description = 'This is my awesome proposal';
 
-        uint256 nonce = 1234;
-
         uint40 expiry = 1677625200;
 
-        bytes memory signature = hex'f35c03a63181e13c0066721b1dce622653785ed5e6621d709608b1ddd14584bf17b9bfa1b784e958ec9dda55acc0660f0cc583f507e2480cf128f5063d87bb791b';
+        bytes memory signature = hex'586618161e0258fa438e572435d35a1c81c282be78eefa4873277e7739c982ae7987fc125871a05e7392967203a5b379347620b4c176bb7fc7b9eb2e13130a5f1b';
 
-        address signer = checker.checkSig(targets, values, signatures, calldatas, description, nonce, expiry, signature);
+        address signer = checker.checkSig(proposer, targets, values, signatures, calldatas, description, expiry, signature);
         
-        assertEq(signer, 0xaD36c32F3c28A9214ADCf50A09998de1d3b0EE06);
+        assertEq(signer, 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266);
     }
 }

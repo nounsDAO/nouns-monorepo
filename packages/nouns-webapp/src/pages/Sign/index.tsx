@@ -21,23 +21,23 @@ const SignPage = () => {
 
     const types = {
       Proposal: [
+        { name: 'proposer', type: 'address' },
         { name: 'targets', type: 'address[]' },
         { name: 'values', type: 'uint256[]' },
         { name: 'signatures', type: 'string[]' },
         { name: 'calldatas', type: 'bytes[]' },
         { name: 'description', type: 'string' },
-        { name: 'nonce', type: 'uint256' },
         { name: 'expiry', type: 'uint40' }
       ]
     };
 
     const value = {
+      proposer: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
       targets: ['0xCcCCccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC','0xaAaAaAaaAaAaAaaAaAAAAAAAAaaaAaAaAaaAaaAa'],
       values: ['1000000000000000000', '0'],
       signatures: ['sendOrRegisterDebt(address,uint256)', ''],
       calldatas: ['0x0000000000000000000000002B63BC71926AD001BCAFD9DF55952CF8FAD4F1B20000000000000000000000000000000000000000000000000000002F49B40F00', '0x'],
       description: 'This is my awesome proposal',
-      nonce: '1234',
       expiry: 1677625200
     };
 
