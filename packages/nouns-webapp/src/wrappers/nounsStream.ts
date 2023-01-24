@@ -24,3 +24,15 @@ export const useWithdrawTokens = (streamAddress: string) => {
   );
   return { widthdrawTokens, widthdrawTokensState };
 };
+
+export const useEllapsedTime = (streamAddress: string) => {
+
+  const [elapsedTime] =
+    useContractCall<[BigNumber]>({
+      abi,
+      address: streamAddress,
+      method: 'elapsedTime',
+    }) || [];
+
+  return elapsedTime?.toNumber();
+}

@@ -9,6 +9,7 @@ import { contract2humanUSDCFormat } from '../../utils/usdcUtils';
 import { ethers } from 'ethers';
 import { useEthers } from '@usedapp/core/dist/cjs/src';
 import {
+  useEllapsedTime,
   useStreamRemaningBalance,
   useWithdrawTokens,
 } from '../../wrappers/nounsStream';
@@ -54,14 +55,15 @@ const StreamWithdrawModalOverlay: React.FC<{
   const { widthdrawTokens, widthdrawTokensState } = useWithdrawTokens(streamAddress ?? '');
   const [widthdrawAmount, setWidthdrawAmount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
+  const elapsedTime = useEllapsedTime(streamAddress ?? '');
 
   const [percentStreamedSoFar, setPercentStreamedSoFar] = useState(0);
 
   useEffect(() => {
-    setTimeout(() => {
-      setPercentStreamedSoFar((100.0*Math.max(0,Math.min(1, (currentUnixEpoch() - startTime) / (endTime - startTime)))));
-    }, 1000);
-  }, [endTime, percentStreamedSoFar, startTime]);
+      if (elapsedTime) {
+        setPercentStreamedSoFar((100.0*Math.max(0,Math.min(1, (elapsedTime) / (endTime - startTime)))));
+      }
+  }, [elapsedTime, endTime, percentStreamedSoFar, startTime]);
 
 
   const totalStreamValueFormatted = parseFloat(
