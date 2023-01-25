@@ -39,7 +39,7 @@
     "base64-sol": "^1.0.1",
     "dotenv": "^10.0.0",
     "ethereum-waffle": "^3.4.4",
-    "hardhat": "^2.9.6",
+    "hardhat": "^2.9.7",
     "hardhat-abi-exporter": "^2.9.0",
     "hardhat-gas-reporter": "^1.0.8",
     "prettier-plugin-solidity": "^1.0.0-beta.12",

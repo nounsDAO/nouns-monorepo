@@ -14,6 +14,7 @@ import Footer from './components/Footer';
 import AuctionPage from './pages/Auction';
 import GovernancePage from './pages/Governance';
 import CreateProposalPage from './pages/CreateProposal';
+import CreateDraftProposalPage from './pages/CreateDraftProposal';
 import VotePage from './pages/Vote';
 import NoundersPage from './pages/Nounders';
 import ExplorePage from './pages/Explore';
@@ -24,6 +25,8 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { AvatarProvider } from '@davatar/react';
 import dayjs from 'dayjs';
 import DelegatePage from './pages/DelegatePage';
+import DraftProposals from './pages/DraftProposals';
+import DraftProposalPage from './pages/DraftProposal';
 
 function App() {
   const { account, chainId, library } = useEthers();
@@ -63,6 +66,9 @@ function App() {
             />
             <Route exact path="/nounders" component={NoundersPage} />
             <Route exact path="/create-proposal" component={CreateProposalPage} />
+            <Route exact path="/create-draft-proposal" component={CreateDraftProposalPage} />
+            <Route exact path="/draft-proposals" component={DraftProposals} />
+            <Route exact path="/draft-proposals/:id" component={DraftProposalPage} />
             <Route exact path="/vote" component={GovernancePage} />
             <Route exact path="/vote/:id" component={VotePage} />
             <Route exact path="/playground" component={Playground} />

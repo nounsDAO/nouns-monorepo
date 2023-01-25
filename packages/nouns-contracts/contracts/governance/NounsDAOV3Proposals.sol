@@ -20,6 +20,7 @@ pragma solidity ^0.8.6;
 import './NounsDAOInterfaces.sol';
 import { NounsDAOV3DynamicQuorum } from './NounsDAOV3DynamicQuorum.sol';
 import { SignatureChecker } from '@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol';
+import { ECDSA } from '@openzeppelin/contracts/utils/cryptography/ECDSA.sol';
 
 library NounsDAOV3Proposals {
     using NounsDAOV3DynamicQuorum for NounsDAOStorageV3.StorageV3;
@@ -29,7 +30,6 @@ library NounsDAOV3Proposals {
     error MustProvideActions();
     error TooManyActions();
     error ProposerAlreadyHasALiveProposal();
-    error ProposalSignatureNonceAlreadyUsed();
     error InvalidSignature();
     error SignatureExpired();
     error CanOnlyEditPendingProposals();
@@ -101,6 +101,11 @@ library NounsDAOV3Proposals {
     /// @notice The maximum number of actions that can be included in a proposal
     uint256 public constant proposalMaxOperations = 10; // 10 actions
 
+    bytes32 public constant DOMAIN_TYPEHASH =
+        keccak256('EIP712Domain(string name,uint256 chainId,address verifyingContract)');
+
+    bytes32 public constant PROPOSAL_TYPEHASH = keccak256("Proposal(address proposer,address[] targets,uint256[] values,string[] signatures,bytes[] calldatas,string description,uint40 expiry)");
+
     /**
      * @notice Function used to propose a new proposal. Sender must have delegates above the proposal threshold
      * @param txs Target addresses, eth values, function signatures and calldatas for proposal calls
@@ -135,21 +140,18 @@ library NounsDAOV3Proposals {
     function proposeBySigs(
         NounsDAOStorageV3.StorageV3 storage ds,
         NounsDAOStorageV3.ProposerSignature[] memory proposerSignatures,
-        uint256 nonce,
         ProposalTxs memory txs,
         string memory description
     ) internal returns (uint256) {
         checkProposaTxs(txs);
-        checkNonce(ds, nonce);
         uint256 proposalId = ds.proposalCount = ds.proposalCount + 1;
-        bytes32 proposalHash = keccak256(
-            abi.encode(msg.sender, nonce, txs.targets, txs.values, txs.signatures, txs.calldatas, description)
-        );
+
+        bytes memory proposalEncodeData = calcProposalEncodeData(txs, description);
 
         uint256 votes;
         address[] memory signers = new address[](proposerSignatures.length);
         for (uint256 i = 0; i < proposerSignatures.length; ++i) {
-            verifyProposalSignature(proposalHash, proposerSignatures[i]);
+            verifyProposalSignature(proposalEncodeData, proposerSignatures[i]);
             address signer = signers[i] = proposerSignatures[i].signer;
 
             checkNoActiveProp(ds, signer);
@@ -166,6 +168,27 @@ library NounsDAOV3Proposals {
         emitNewPropEvents(newProposal, ds.minQuorumVotes(), txs, description);
 
         return proposalId;
+    }
+
+    function calcProposalEncodeData(ProposalTxs memory txs, string memory description) internal view returns (bytes memory) {
+        bytes32[] memory signatureHashes = new bytes32[](txs.signatures.length);
+        for (uint256 i=0; i < txs.signatures.length; ++i) {
+            signatureHashes[i] = keccak256(bytes(txs.signatures[i]));
+        }
+
+        bytes32[] memory calldatasHashes = new bytes32[](txs.calldatas.length);
+        for (uint256 i=0; i<txs.calldatas.length; ++i) {
+            calldatasHashes[i] = keccak256(txs.calldatas[i]);
+        }
+
+        return abi.encode(
+            msg.sender, // proposer
+            keccak256(abi.encodePacked(txs.targets)),
+            keccak256(abi.encodePacked(txs.values)),
+            keccak256(abi.encodePacked(signatureHashes)),
+            keccak256(abi.encodePacked(calldatasHashes)),
+            keccak256(bytes(description))
+        );
     }
 
     function updateProposal(
@@ -196,15 +219,10 @@ library NounsDAOV3Proposals {
         NounsDAOStorageV3.StorageV3 storage ds,
         uint256 proposalId,
         NounsDAOStorageV3.ProposerSignature[] memory proposerSignatures,
-        uint256 nonce,
-        address[] memory targets,
-        uint256[] memory values,
-        string[] memory signatures,
-        bytes[] memory calldatas,
+        ProposalTxs memory txs,
         string memory description
     ) internal {
-        checkProposaTxs(ProposalTxs(targets, values, signatures, calldatas));
-        checkNonce(ds, nonce);
+        checkProposaTxs(txs);
         // without this check it's possible to run through this function and update a proposal without signatures
         // this problem doesn't exist in the propose function because we check for prop threshold there
         if (proposerSignatures.length == 0) revert MustProvideSignatures();
@@ -215,23 +233,22 @@ library NounsDAOV3Proposals {
         address[] memory signers = proposal.signers;
         if (proposerSignatures.length != signers.length) revert OnlyProposerCanEdit();
 
-        bytes32 proposalHash = keccak256(
-            abi.encode(msg.sender, nonce, targets, values, signatures, calldatas, description)
-        );
+        bytes memory proposalEncodeData = calcProposalEncodeData(txs, description);
+        
         for (uint256 i = 0; i < proposerSignatures.length; ++i) {
-            verifyProposalSignature(proposalHash, proposerSignatures[i]);
+            verifyProposalSignature(proposalEncodeData, proposerSignatures[i]);
 
             // To avoid the gas cost of having to search signers in proposal.signers, we're assuming the sigs we get
             // use the same amount of signers and the same order.
             if (signers[i] != proposerSignatures[i].signer) revert OnlyProposerCanEdit();
         }
 
-        proposal.targets = targets;
-        proposal.values = values;
-        proposal.signatures = signatures;
-        proposal.calldatas = calldatas;
+        proposal.targets = txs.targets;
+        proposal.values = txs.values;
+        proposal.signatures = txs.signatures;
+        proposal.calldatas = txs.calldatas;
 
-        emit ProposalUpdated(proposalId, msg.sender, targets, values, signatures, calldatas, description);
+        emit ProposalUpdated(proposalId, msg.sender, txs.targets, txs.values, txs.signatures, txs.calldatas, description);
     }
 
     /**
@@ -590,18 +607,21 @@ library NounsDAOV3Proposals {
         if (txs.targets.length > proposalMaxOperations) revert TooManyActions();
     }
 
-    function checkNonce(NounsDAOStorageV3.StorageV3 storage ds, uint256 nonce) internal {
-        if (ds.proposeBySigNonces[nonce]) revert ProposalSignatureNonceAlreadyUsed();
-        ds.proposeBySigNonces[nonce] = true;
-    }
-
-    function verifyProposalSignature(bytes32 proposalHash, NounsDAOStorageV3.ProposerSignature memory proposerSignature)
+    function verifyProposalSignature(bytes memory proposalEncodeData, NounsDAOStorageV3.ProposerSignature memory proposerSignature)
         internal
         view
     {
-        bytes32 signerHash = keccak256(abi.encode(proposalHash, proposerSignature.expirationTimestamp));
+        bytes32 structHash = keccak256(abi.encodePacked(
+            PROPOSAL_TYPEHASH,
+            proposalEncodeData,
+            uint256(proposerSignature.expirationTimestamp) // TODO: maybe make this uint256?
+        ));
 
-        if (!SignatureChecker.isValidSignatureNow(proposerSignature.signer, signerHash, proposerSignature.sig))
+        bytes32 domainSeparator = keccak256(abi.encode(DOMAIN_TYPEHASH, keccak256(bytes('Nouns DAO')), block.chainid, address(this)));
+
+        bytes32 digest = ECDSA.toTypedDataHash(domainSeparator, structHash);
+
+        if (!SignatureChecker.isValidSignatureNow(proposerSignature.signer, digest, proposerSignature.sig))
             revert InvalidSignature();
 
         if (block.timestamp > proposerSignature.expirationTimestamp) revert SignatureExpired();

@@ -488,7 +488,6 @@ contract NounsDAOStorageV3 {
         // ================ V3 ================ //
         uint256 lastMinuteWindowInBlocks;
         uint256 objectionPeriodDurationInBlocks;
-        mapping(uint256 => bool) proposeBySigNonces;
         /// @notice The proposal at which to start using `startBlock` instead of `creationBlock` for vote snapshots
         /// @dev To be zeroed-out and removed in a V3.1 fix version once the switch takes place
         uint256 voteSnapshotBlockSwitchProposalId;
