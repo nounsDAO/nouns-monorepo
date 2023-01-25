@@ -12,7 +12,7 @@ task(
     new Promise(resolve => setTimeout(resolve, 2_000)),
   ]);
 
-  const contracts = await run('deploy-local-dao-v3');
+  const contracts = await run('deploy-local-dao-v3', {votingDelay: 10});
 
   await run('populate-descriptor', {
     nftDescriptor: contracts.NFTDescriptorV2.instance.address,
