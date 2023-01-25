@@ -230,6 +230,7 @@ library NounsDAOV3Proposals {
 
         NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
         if (state(ds, proposalId) != NounsDAOStorageV3.ProposalState.Pending) revert CanOnlyEditPendingProposals();
+        if (msg.sender != proposal.proposer) revert OnlyProposerCanEdit();
 
         address[] memory signers = proposal.signers;
         if (proposerSignatures.length != signers.length) revert OnlyProposerCanEdit();
