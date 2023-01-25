@@ -61,7 +61,7 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
 
     const NOUNS_ART_NONCE_OFFSET = 5;
     const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 10;
-    const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 13;
+    const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 17;
 
     const [deployer] = await ethers.getSigners();
     const nonce = await deployer.getTransactionCount();
@@ -189,6 +189,21 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
       contracts[name as LocalContractName].instance = deployedContract;
 
       console.log(`${name} contract deployed to ${deployedContract.address}`);
+    }
+
+    if (expectedNounsArtAddress !== contracts.NounsArt.instance?.address) {
+      console.log(`wrong art address expected: ${expectedNounsArtAddress} actual: ${contracts.NounsArt.instance?.address}`);
+      throw 'wrong address';
+    }
+
+    if (expectedAuctionHouseProxyAddress !== contracts.NounsAuctionHouseProxy.instance?.address) {
+      console.log(`wrong auctio house proxy address expected: ${expectedAuctionHouseProxyAddress} actual: ${contracts.NounsAuctionHouseProxy.instance?.address}`);
+      throw 'wrong address';
+    }
+
+    if (expectedNounsDAOProxyAddress !== contracts.NounsDAOProxyV2.instance?.address) {
+      console.log(`wrong dao proxy address expected: ${expectedNounsDAOProxyAddress} actual: ${contracts.NounsDAOProxyV2.instance?.address}`);
+      throw 'wrong address';
     }
 
     return contracts;
