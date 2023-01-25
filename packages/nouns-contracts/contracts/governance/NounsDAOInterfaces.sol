@@ -491,6 +491,8 @@ contract NounsDAOStorageV3 {
         /// @notice The proposal at which to start using `startBlock` instead of `creationBlock` for vote snapshots
         /// @dev To be zeroed-out and removed in a V3.1 fix version once the switch takes place
         uint256 voteSnapshotBlockSwitchProposalId;
+        /// @notice signatures already used that shouldn't be used again
+        mapping(bytes32 => bool) usedSigs;
     }
 
     struct Proposal {

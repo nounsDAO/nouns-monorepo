@@ -36,6 +36,7 @@ library NounsDAOV3Proposals {
     error OnlyProposerCanEdit();
     error ProposerCannotUpdateProposalWithSigners();
     error MustProvideSignatures();
+    error SignatureAlreadyUsed();
 
     /// @notice An event emitted when a new proposal is created
     event ProposalCreated(
@@ -151,7 +152,7 @@ library NounsDAOV3Proposals {
         uint256 votes;
         address[] memory signers = new address[](proposerSignatures.length);
         for (uint256 i = 0; i < proposerSignatures.length; ++i) {
-            verifyProposalSignature(proposalEncodeData, proposerSignatures[i]);
+            verifyProposalSignature(ds, proposalEncodeData, proposerSignatures[i]);
             address signer = signers[i] = proposerSignatures[i].signer;
 
             checkNoActiveProp(ds, signer);
@@ -236,7 +237,7 @@ library NounsDAOV3Proposals {
         bytes memory proposalEncodeData = calcProposalEncodeData(txs, description);
         
         for (uint256 i = 0; i < proposerSignatures.length; ++i) {
-            verifyProposalSignature(proposalEncodeData, proposerSignatures[i]);
+            verifyProposalSignature(ds, proposalEncodeData, proposerSignatures[i]);
 
             // To avoid the gas cost of having to search signers in proposal.signers, we're assuming the sigs we get
             // use the same amount of signers and the same order.
@@ -607,10 +608,13 @@ library NounsDAOV3Proposals {
         if (txs.targets.length > proposalMaxOperations) revert TooManyActions();
     }
 
-    function verifyProposalSignature(bytes memory proposalEncodeData, NounsDAOStorageV3.ProposerSignature memory proposerSignature)
+    function verifyProposalSignature(NounsDAOStorageV3.StorageV3 storage ds, bytes memory proposalEncodeData, NounsDAOStorageV3.ProposerSignature memory proposerSignature)
         internal
-        view
     {
+        bytes32 sigHash = keccak256(proposerSignature.sig);
+        if (ds.usedSigs[sigHash]) revert SignatureAlreadyUsed();
+        ds.usedSigs[sigHash] = true;
+
         bytes32 structHash = keccak256(abi.encodePacked(
             PROPOSAL_TYPEHASH,
             proposalEncodeData,
