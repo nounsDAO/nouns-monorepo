@@ -159,7 +159,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3 {
         if (timelock_ == address(0)) revert InvalidTimelockAddress();
         if (nouns_ == address(0)) revert InvalidNounsAddress();
 
-        ds._setVotingDelay(votingPeriod_);
+        ds._setVotingPeriod(votingPeriod_);
         ds._setVotingDelay(votingDelay_);
         ds._setProposalThresholdBPS(proposalThresholdBPS_);
         ds.timelock = INounsDAOExecutor(timelock_);
