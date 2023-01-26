@@ -64,6 +64,19 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3 {
     using NounsDAOV3Votes for StorageV3;
     using NounsDAOV3Proposals for StorageV3;
 
+    /// @dev This is here for typechain to add this event to the NounsDAOLogicV3 generated class
+    event ProposalCreated(
+        uint256 id,
+        address proposer,
+        address[] targets,
+        uint256[] values,
+        string[] signatures,
+        bytes[] calldatas,
+        uint256 startBlock,
+        uint256 endBlock,
+        string description
+    );
+
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      *   CONSTANTS
@@ -146,7 +159,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3 {
         if (timelock_ == address(0)) revert InvalidTimelockAddress();
         if (nouns_ == address(0)) revert InvalidNounsAddress();
 
-        ds._setVotingDelay(votingPeriod_);
+        ds._setVotingPeriod(votingPeriod_);
         ds._setVotingDelay(votingDelay_);
         ds._setProposalThresholdBPS(proposalThresholdBPS_);
         ds.timelock = INounsDAOExecutor(timelock_);
@@ -190,7 +203,6 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3 {
 
     function proposeBySigs(
         ProposerSignature[] memory proposerSignatures,
-        uint256 nonce,
         address[] memory targets,
         uint256[] memory values,
         string[] memory signatures,
@@ -200,7 +212,6 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3 {
         return
             ds.proposeBySigs(
                 proposerSignatures,
-                nonce,
                 NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas),
                 description
             );
@@ -220,7 +231,6 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3 {
     function updateProposalBySigs(
         uint256 proposalId,
         ProposerSignature[] memory proposerSignatures,
-        uint256 nonce,
         address[] memory targets,
         uint256[] memory values,
         string[] memory signatures,
@@ -230,11 +240,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3 {
         ds.updateProposalBySigs(
             proposalId,
             proposerSignatures,
-            nonce,
-            targets,
-            values,
-            signatures,
-            calldatas,
+            NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas),
             description
         );
     }

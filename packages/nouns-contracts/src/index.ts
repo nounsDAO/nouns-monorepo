@@ -10,3 +10,4 @@ export { NounsDescriptor__factory as NounsDescriptorFactory } from '../typechain
 export { NounsSeeder__factory as NounsSeederFactory } from '../typechain/factories/contracts/NounsSeeder__factory';
 export { NounsDAOLogicV1__factory as NounsDaoLogicV1Factory } from '../typechain/factories/contracts/governance/NounsDAOLogicV1__factory';
 export { NounsDAOLogicV2__factory as NounsDaoLogicV2Factory } from '../typechain/factories/contracts/governance/NounsDAOLogicV2__factory';
+export { NounsDAOLogicV3__factory as NounsDaoLogicV3Factory } from '../typechain/factories/contracts/governance/NounsDAOLogicV3__factory';
