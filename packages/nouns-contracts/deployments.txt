@@ -1,0 +1,20 @@
+Goerli 01.2023
+
+┌─────────────────────────┬──────────────────────────────────────────────┬──────────────────────────────────────────────────────────────────────┐
+│         (index)         │                   Address                    │                           Deployment Hash                            │
+├─────────────────────────┼──────────────────────────────────────────────┼──────────────────────────────────────────────────────────────────────┤
+│     NFTDescriptorV2     │ '0x88C9Bcb515198183851e9a77dBdD71F1629AE5C4' │ '0x2e0d825eca98c5d698653480186a0d56aede8dfc111add0c4e1f732bccda7318' │
+│       SVGRenderer       │ '0x296541E8c93c7bdB180b6846B4ED7650dFF09694' │ '0x8166d5a2b4f9c84a75bd829410b20191fdc52a8c43081539b1f29b199a725e0c' │
+│      NDescriptorV2      │ '0xA006F5c0c114eD7A8271066A2B814463b58727b8' │ '0x0e7580ffcef4430023b0b309d3dba729d4ed9565245c588d2958818e778045fc' │
+│        Inflator         │ '0xc2A0C74F6f3DD76150D71DBa5511bd9b41ece735' │ '0x3cad2bb48e450ba0a8adf5353e25d863ed76745dd80d9b7284a16e98b8890b2d' │
+│          NArt           │ '0x70e3435C9fDf905517096Be49F34cCD7214cea9f' │ '0x80f8210cd1a3c98b184abb77047726a20ed053cc7eabdab85e2419a1c509474a' │
+│         NSeeder         │ '0x2A670F920648940b2F69E901378f2e77079382b5' │ '0xf134931a8b03cea4b0141ee4061f7f821456200e4bfda0b730930a15580232fe' │
+│         NToken          │ '0xB9D0Aa3F0cD869356017384A913Caf2237986Cda' │ '0x6703aad6c2f0a8a3daa14dbb55609e1fae0f8e1ad6da6fa6c3b8174dfeaa77ce' │
+│      NAuctionHouse      │ '0xE3744026Dd7285d7d08448fc06409f27CcfDBbfC' │ '0x790d30915871278a069e2d7f07dca5e9acd54b8d1950d1fe3a5b071c8f264efd' │
+│ NAuctionHouseProxyAdmin │ '0x992023f434fBB88CC64f1d3358a2211A769128Ac' │ '0xb7d1220d5714673d176dda925cf3b6acd900ac70f649d26efaab4b62bda5e7d6' │
+│   NAuctionHouseProxy    │ '0xD711De1005C6b5b1E0e99DfE167D2CCC7ad889D2' │ '0x47e304d36407c0bfce621db879a48700250edb12079c0b744d89641f9db88c01' │
+│      NDAOExecutor       │ '0x92D08d69Cfd6734F854Fa1EF6440c36de7Ca40Ce' │ '0xedadfaacd500938828dfe57f4aac8f13cacb0c04c0ca39a078f1bd6698596e93' │
+│       NDAOLogicV1       │ '0x10485478B9cDBd84460E648e550612AAccEc8301' │ '0xc27a7405f11ebeed452e097e5be276b88f1efa9e33f3ff5b5d820541c9506ccc' │
+│        NDAOProxy        │ '0x2d55919eC1538B1868fd43b15008A48Fc98990F9' │ '0x753c664713b9c1aea5aee9037f4e23097d6c1528fca5249d4c432266236093c8' │
+└─────────────────────────┴──────────────────────────────────────────────┴──────────────────────────────────────────────────────────────────────┘
+

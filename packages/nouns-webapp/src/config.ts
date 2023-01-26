@@ -89,7 +89,7 @@ const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
 };
 
 const getAddresses = (): ContractAddresses => {
-  let nounsAddresses = {} as NounsContractAddresses;
+  let nounsAddresses = {} as PunkContractAddresses;
   try {
     nounsAddresses = getContractAddressesForChainOrThrow(CHAIN_ID);
   } catch {}
