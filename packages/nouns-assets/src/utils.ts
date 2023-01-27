@@ -6,17 +6,17 @@ import probDoc from './config/probability.json'
 
 const probs: any = probDoc
 const { types, necks, cheekses, faces, beards, mouths, earses, hats, hairs, teeths, lipses, emotions, eyeses, glasseses, noses } = images;
-const accResource = [ necks, cheekses, faces, beards, mouths, earses, hats, hairs, teeths, lipses, emotions, eyeses, glasseses, noses ]
+const accResource = [ necks, cheekses, faces, lipses, emotions, beards, teeths, earses, hats, hairs, mouths, glasseses, eyeses, noses ]
 
 export const type2PunkBasic = [
-  { punkType: 0, skinTone: 3 },
-  { punkType: 0, skinTone: 2 },
-  { punkType: 0, skinTone: 1 },
   { punkType: 0, skinTone: 0 },
-  { punkType: 1, skinTone: 3 },
-  { punkType: 1, skinTone: 2 },
-  { punkType: 1, skinTone: 1 },
+  { punkType: 0, skinTone: 1 },
+  { punkType: 0, skinTone: 2 },
+  { punkType: 0, skinTone: 3 },
   { punkType: 1, skinTone: 0 },
+  { punkType: 1, skinTone: 1 },
+  { punkType: 1, skinTone: 2 },
+  { punkType: 1, skinTone: 3 },
   { punkType: 4, skinTone: 4 },
   { punkType: 3, skinTone: 5 },
   { punkType: 2, skinTone: 6 }
@@ -39,11 +39,7 @@ export const getPunkData = (seed: ISeed): PunkData => {
     parts: [
       types[type2PunkBasic.findIndex((acc: any) => acc.punkType == seed.punkType && acc.skinTone == seed.skinTone)],
       ...seed.accessories.map(acc =>
-        accResource[acc.accType].filter((res: any, index: number) => {
-          const accTypeName = Object.keys(probDoc.acc_types)[acc.accType]
-          const item = Object.values(probDoc.accessories).filter((acc) => acc.type == accTypeName)[index]
-          return item.punk.split("").includes(punkTypeChr)
-        })[acc.accId]
+        accResource[acc.accType][acc.accId]
       )
       // bodies[seed.body],
       // accessories[seed.accessory],
