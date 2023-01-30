@@ -5,6 +5,7 @@ import { Player, Controls } from "@lottiefiles/react-lottie-player";
 import logo from "../assets/logo.svg";
 import n00uns_soon from "../assets/animations/n00uns_soon.json";
 import {FaTwitter, FaDiscord} from 'react-icons/fa';
+import {SiSubstack} from 'react-icons/si';
 import og_img from "../../public/og-image.png";
 
 const Landing: NextPage = (props) => {
@@ -77,6 +78,16 @@ const Landing: NextPage = (props) => {
                     <FaDiscord className="text-3xl" />
                   </a>
               </li>
+              <li>
+                  <a href="https://n00uns.substack.com/" 
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="link to n00uns substack"
+                    className="mr-4 hover:scale-110 md:mr-6">
+                    <SiSubstack className="text-3xl" />
+                  </a>
+              </li>
+              
           </ul>
       </footer>
     </main>
