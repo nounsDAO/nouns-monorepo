@@ -568,6 +568,11 @@ export const usePropose = () => {
   return { propose, proposeState };
 };
 
+export const useUpdateProposal = () => {
+  const { send: updateProposal, state: updateProposalState } = useContractFunction(nounsDaoContract, 'updateProposal');
+  return { updateProposal, updateProposalState };
+}
+
 export const useProposeBySigs = () => {
   const { send: proposeBySigs, state: proposeBySigsState } = useContractFunction(nounsDaoContract, 'proposeBySigs');
   return { proposeBySigs, proposeBySigsState };

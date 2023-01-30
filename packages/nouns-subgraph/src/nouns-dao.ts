@@ -9,6 +9,7 @@ import {
   MinQuorumVotesBPSSet,
   MaxQuorumVotesBPSSet,
   QuorumCoefficientSet,
+  ProposalUpdated,
 } from './types/NounsDAO/NounsDAO';
 import {
   getOrCreateDelegate,
@@ -96,6 +97,21 @@ export function handleProposalCreatedWithRequirements(
   proposal.minQuorumVotesBPS = dynamicQuorum.minQuorumVotesBPS;
   proposal.maxQuorumVotesBPS = dynamicQuorum.maxQuorumVotesBPS;
   proposal.quorumCoefficient = dynamicQuorum.quorumCoefficient;
+
+  proposal.save();
+}
+
+export function handleProposalUpdated(event: ProposalUpdated): void {
+  let proposal = getOrCreateProposal(event.params.id.toString());
+
+  proposal.targets = changetype<Bytes[]>(event.params.targets);
+  proposal.values = event.params.values;
+  proposal.signatures = event.params.signatures;
+  proposal.calldatas = event.params.calldatas;
+  proposal.description = event.params.description.split('\\n').join('\n'); // The Graph's AssemblyScript version does not support string.replace
+  
+  proposal.lastUpdatedBlock = event.block.number;
+  proposal.lastUpdatedTimestamp = event.block.timestamp;
 
   proposal.save();
 }

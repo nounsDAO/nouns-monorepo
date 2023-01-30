@@ -10,7 +10,7 @@ import {
 } from '../../wrappers/nounsDao';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Vote.module.css';
-import { RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import dayjs from 'dayjs';
@@ -121,6 +121,8 @@ const VotePage = ({
   ].includes(proposal?.status!);
   const isCancellable =
     isInNonFinalState && proposal?.proposer?.toLowerCase() === account?.toLowerCase();
+
+  const isUpdateable = proposal?.status == ProposalState.PENDING && proposal?.proposer?.toLowerCase() === account?.toLowerCase();
 
   const isAwaitingStateChange = () => {
     if (hasSucceeded) {
@@ -372,6 +374,14 @@ const VotePage = ({
                   )}
                 </Button>
               )}
+            </Col>
+          </Row>
+        )}
+
+        { isUpdateable && (
+          <Row>
+            <Col className="d-grid gap-4">
+            <Link to={`/update-proposal/${id}`}><Button style={{marginTop: '10px'}}>Update Proposal</Button></Link>
             </Col>
           </Row>
         )}

@@ -206,6 +206,12 @@ type Proposal @entity {
   "The proposal creation block"
   createdBlock: BigInt!
 
+  "The proposal last updated timestamp"
+  lastUpdatedTimestamp: BigInt
+
+  "The proposal last updated block"
+  lastUpdatedBlock: BigInt
+
   "The proposal creation transaction hash"
   createdTransactionHash: Bytes!
 
