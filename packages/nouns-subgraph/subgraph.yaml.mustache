@@ -89,6 +89,8 @@ dataSources:
           handler: handleProposalCreatedWithRequirements
         - event: ProposalUpdated(indexed uint256,indexed address,address[],uint256[],string[],bytes[],string)
           handler: handleProposalUpdated
+        - event: ProposalObjectionPeriodSet(indexed uint256,uint256)
+          handler: handleProposalObjectionPeriodSet
         - event: ProposalCanceled(uint256)
           handler: handleProposalCanceled
         - event: ProposalVetoed(uint256)

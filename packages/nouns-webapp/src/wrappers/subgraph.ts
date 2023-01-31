@@ -69,6 +69,7 @@ export const proposalQuery = (id: string | number) => gql`
     createdBlock
     startBlock
     endBlock
+    objectionPeriodEndBlock
     executionETA
     targets
     values
@@ -94,6 +95,7 @@ export const partialProposalsQuery = (first = 1_000) => gql`
     executionETA
     startBlock
     endBlock
+    objectionPeriodEndBlock
   }
 }
 `;

@@ -118,6 +118,7 @@ const VotePage = ({
     ProposalState.ACTIVE,
     ProposalState.SUCCEEDED,
     ProposalState.QUEUED,
+    ProposalState.OBJECTION_PERIOD
   ].includes(proposal?.status!);
   const isCancellable =
     isInNonFinalState && proposal?.proposer?.toLowerCase() === account?.toLowerCase();
@@ -308,7 +309,7 @@ const VotePage = ({
   }
 
   const isWalletConnected = !(activeAccount === undefined);
-  const isActiveForVoting = startDate?.isBefore(now) && endDate?.isAfter(now);
+  const isActiveForVoting = proposal?.status === ProposalState.ACTIVE || proposal?.status === ProposalState.OBJECTION_PERIOD;
 
   const forNouns = getNounVotes(data, 1);
   const againstNouns = getNounVotes(data, 0);

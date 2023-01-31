@@ -41,6 +41,9 @@ library NounsDAOV3Votes {
     /// @notice Emitted when a voter cast a vote requesting a gas refund.
     event RefundableVote(address indexed voter, uint256 refundAmount, bool refundSent);
 
+    /// @notice Emitted when a proposal is set to have an objection period
+    event ProposalObjectionPeriodSet(uint256 indexed id, uint256 objectionPeriodEndBlock);
+
     /// @notice The name of this contract
     string public constant name = 'Nouns DAO';
 
@@ -270,6 +273,8 @@ library NounsDAOV3Votes {
             (proposal.endBlock - block.number < ds.lastMinuteWindowInBlocks)
         ) {
             proposal.objectionPeriodEndBlock = proposal.endBlock + ds.objectionPeriodDurationInBlocks;
+            
+            emit ProposalObjectionPeriodSet(proposal.id, proposal.objectionPeriodEndBlock);
         }
 
         receipt.hasVoted = true;

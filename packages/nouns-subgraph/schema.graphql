@@ -262,6 +262,9 @@ type Proposal @entity {
 
   "Dynamic quorum param snapshot: the dynamic quorum coefficient"
   quorumCoefficient: BigInt!
+
+  "The block at which objection period ends. Zero if no objection period"
+  objectionPeriodEndBlock: BigInt
 }
 
 type Vote @entity {

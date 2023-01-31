@@ -10,6 +10,7 @@ import {
   MaxQuorumVotesBPSSet,
   QuorumCoefficientSet,
   ProposalUpdated,
+  ProposalObjectionPeriodSet,
 } from './types/NounsDAO/NounsDAO';
 import {
   getOrCreateDelegate,
@@ -112,6 +113,14 @@ export function handleProposalUpdated(event: ProposalUpdated): void {
   
   proposal.lastUpdatedBlock = event.block.number;
   proposal.lastUpdatedTimestamp = event.block.timestamp;
+
+  proposal.save();
+}
+
+export function handleProposalObjectionPeriodSet(event: ProposalObjectionPeriodSet): void {
+  let proposal = getOrCreateProposal(event.params.id.toString());
+
+  proposal.objectionPeriodEndBlock = event.params.objectionPeriodEndBlock;
 
   proposal.save();
 }

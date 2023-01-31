@@ -42,6 +42,7 @@ export enum ProposalState {
   EXPIRED,
   EXECUTED,
   VETOED,
+  OBJECTION_PERIOD
 }
 
 interface ProposalCallResult {
@@ -107,6 +108,7 @@ export interface PartialProposalSubgraphEntity {
   endBlock: string;
   executionETA: string | null;
   quorumVotes: string;
+  objectionPeriodEndBlock: string;
 }
 
 export interface ProposalSubgraphEntity extends ProposalTransactionDetails, PartialProposalSubgraphEntity {
@@ -352,6 +354,9 @@ const getProposalState = (
       return ProposalState.UNDETERMINED;
     }
     if (blockNumber > parseInt(proposal.endBlock)) {
+      if (blockNumber <= parseInt(proposal.objectionPeriodEndBlock)) {
+        return ProposalState.OBJECTION_PERIOD;
+      }
       const forVotes = new BigNumber(proposal.forVotes);
       if (forVotes.lte(proposal.againstVotes) || forVotes.lt(proposal.quorumVotes)) {
         return ProposalState.DEFEATED;

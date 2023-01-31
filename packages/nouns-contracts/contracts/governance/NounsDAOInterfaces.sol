@@ -137,6 +137,9 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
         bytes[] calldatas,
         string description
     );
+
+    /// @notice Emitted when a proposal is set to have an objection period
+    event ProposalObjectionPeriodSet(uint256 indexed id, uint256 objectionPeriodEndBlock);
 }
 
 contract NounsDAOProxyStorage {
