@@ -14,7 +14,7 @@ export async function lookupNNSOrENS(
   try {
     // Call resolver contract
     const res = await library.call({
-      to: '0x5982ce3554b18a5cf02169049e81ec43bfb73961', // see https://etherscan.io/address/0x5982cE3554B18a5CF02169049e81ec43BFB73961
+      to: '0x3e1970dc478991b49c4327973ea8a4862ef5a4de', // see https://etherscan.io/address/0x3e1970dc478991b49c4327973ea8a4862ef5a4de
       data: '0x55ea6c47000000000000000000000000' + address.substring(2), // call .resolve(address) method
     });
     // Parse result into a string.
