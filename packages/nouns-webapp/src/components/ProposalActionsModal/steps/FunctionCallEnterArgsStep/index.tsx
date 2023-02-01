@@ -104,7 +104,6 @@ const FunctionCallEnterArgsStep: React.FC<ProposalActionModalStepProps> = props 
         nextBtnText={<Trans>Review and Add</Trans>}
         isNextBtnDisabled={abi?.functions[func]?.inputs.length ? !isValidForNextStage : false}
         onNextBtnClick={() => {
-          console.log('hi');
           setState(x => ({
             ...x,
             args: parseArguments(abi, func, args),
