@@ -16,7 +16,8 @@ export enum SupportedCurrencies {
 
 const parseArguments = (abi: Interface | undefined, func: string, args: string[]) => {
   return args.map((a, i) => {
-    if (abi?.functions[func]?.inputs?.[i].type === 'tuple') {
+    const type = abi?.functions[func]?.inputs?.[i].type;
+    if (type === 'tuple' || type?.endsWith('[]')) {
       return JSON.parse(a);
     }
     return a;
@@ -103,6 +104,7 @@ const FunctionCallEnterArgsStep: React.FC<ProposalActionModalStepProps> = props 
         nextBtnText={<Trans>Review and Add</Trans>}
         isNextBtnDisabled={abi?.functions[func]?.inputs.length ? !isValidForNextStage : false}
         onNextBtnClick={() => {
+          console.log('hi');
           setState(x => ({
             ...x,
             args: parseArguments(abi, func, args),
