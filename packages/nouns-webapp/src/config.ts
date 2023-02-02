@@ -23,7 +23,7 @@ interface AppConfig {
   enableHistory: boolean;
 }
 
-type SupportedChains = ChainId.Rinkeby | ChainId.Mainnet | ChainId.Hardhat | ChainId.Goerli;
+type SupportedChains = ChainId.Mainnet | ChainId.Hardhat | ChainId.Goerli;
 
 interface CacheBucket {
   name: string;
@@ -62,22 +62,18 @@ export const createNetworkWsUrl = (network: string): string => {
 };
 
 const app: Record<SupportedChains, AppConfig> = {
-  [ChainId.Rinkeby]: {
-    jsonRpcUri: createNetworkHttpUrl('rinkeby'),
-    wsRpcUri: createNetworkWsUrl('rinkeby'),
-    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph-rinkeby-v5',
-    enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
-  },
   [ChainId.Goerli]: {
     jsonRpcUri: createNetworkHttpUrl('goerli'),
     wsRpcUri: createNetworkWsUrl('goerli'),
-    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/bcjgit/dao-v2-test',
+    subgraphApiUri:
+      'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns-goerli/0.1.0/gn',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   [ChainId.Mainnet]: {
     jsonRpcUri: createNetworkHttpUrl('mainnet'),
     wsRpcUri: createNetworkWsUrl('mainnet'),
-    subgraphApiUri: 'https://api.thegraph.com/subgraphs/name/nounsdao/nouns-subgraph',
+    subgraphApiUri:
+      'https://api.goldsky.com/api/public/project_cldf2o9pqagp43svvbk5u3kmo/subgraphs/nouns/0.1.0/gn',
     enableHistory: process.env.REACT_APP_ENABLE_HISTORY === 'true',
   },
   [ChainId.Hardhat]: {
@@ -89,15 +85,6 @@ const app: Record<SupportedChains, AppConfig> = {
 };
 
 const externalAddresses: Record<SupportedChains, ExternalContractAddresses> = {
-  [ChainId.Rinkeby]: {
-    lidoToken: '0xF4242f9d78DB7218Ad72Ee3aE14469DBDE8731eD',
-    usdcToken: '0xeb8f08a975Ab53E34D8a0330E0D34de942C95926',
-    weth: undefined,
-    payerContract: undefined,
-    tokenBuyer: undefined,
-    chainlinkEthUsdc: undefined,
-    nounsStreamFactory: undefined,
-  },
   [ChainId.Goerli]: {
     lidoToken: '0x2DD6530F136D2B56330792D46aF959D9EA62E276',
     usdcToken: '0x07865c6e87b9f70255377e024ace6630c1eaa37f',
