@@ -129,4 +129,4 @@ const config = {
 
 export default config;
 
-export const multicallOnLocalhost = '0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e';
+export const multicallOnLocalhost = '0x9A676e781A523b5d0C0e43731313A708CB607508';
