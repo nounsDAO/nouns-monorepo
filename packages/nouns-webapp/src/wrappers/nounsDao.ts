@@ -289,18 +289,29 @@ const formatProposalTransactionDetails = (details: ProposalTransactionDetails | 
       // Handle both logs and subgraph responses
       (details as ProposalTransactionDetails).values?.[i] ?? (details as Result)?.[3]?.[i] ?? 0,
     );
+    const callData = details.calldatas[i];
+
     // Split at first occurrence of '('
     let [name, types] = signature.substring(0, signature.length - 1)?.split(/\((.*)/s);
     if (!name || !types) {
+      // If there's no signature and calldata is present, display the raw calldata
+      if (callData && callData !== '0x') {
+        return {
+          target,
+          callData,
+          value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH } ` : '',
+        };
+      }
+
       return {
         target,
         functionSig: name === '' ? 'transfer' : name === undefined ? 'unknown' : name,
         callData: types ? types : value ? `${utils.formatEther(value)} ETH` : '',
       };
     }
-    const calldata = details.calldatas[i];
+
     // Split using comma as separator, unless comma is between parentheses (tuple).
-    const decoded = defaultAbiCoder.decode(types.split(/,(?![^(]*\))/g), calldata);
+    const decoded = defaultAbiCoder.decode(types.split(/,(?![^(]*\))/g), callData);
     return {
       target,
       functionSig: name,
