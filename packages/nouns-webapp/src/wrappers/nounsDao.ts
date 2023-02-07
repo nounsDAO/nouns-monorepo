@@ -282,6 +282,13 @@ const countToIndices = (count: number | undefined) => {
   return typeof count === 'number' ? new Array(count).fill(0).map((_, i) => [i + 1]) : [];
 };
 
+const concatSelectorToCalldata = (signature: string, callData: string) => {
+  if (signature) {
+    return `${keccak256(toUtf8Bytes(signature)).substring(0, 10)}${callData.substring(2)}`;
+  }
+  return callData;
+};
+
 const formatProposalTransactionDetails = (details: ProposalTransactionDetails | Result) => {
   return details.targets.map((target: string, i: number) => {
     const signature: string = details.signatures[i];
@@ -298,7 +305,7 @@ const formatProposalTransactionDetails = (details: ProposalTransactionDetails | 
       if (callData && callData !== '0x') {
         return {
           target,
-          callData,
+          callData: concatSelectorToCalldata(signature, callData),
           value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH } ` : '',
         };
       }
@@ -321,11 +328,9 @@ const formatProposalTransactionDetails = (details: ProposalTransactionDetails | 
       };
     } catch (error) {
       // We failed to decode. Display the raw calldata, appending function selectors if they exist.
-      const data = signature ? `${keccak256(toUtf8Bytes(signature)).substring(0, 10)}${callData.substring(2)}` : callData;
-
       return {
         target,
-        callData: data,
+        callData: concatSelectorToCalldata(signature, callData),
         value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH } ` : '',
       };
     }
