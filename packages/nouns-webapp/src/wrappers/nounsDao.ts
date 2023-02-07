@@ -9,7 +9,7 @@ import {
   useEthers,
 } from '@usedapp/core';
 import { utils, BigNumber as EthersBN } from 'ethers';
-import { defaultAbiCoder, Result } from 'ethers/lib/utils';
+import { defaultAbiCoder, keccak256, Result, toUtf8Bytes } from 'ethers/lib/utils';
 import { useMemo } from 'react';
 import { useLogs } from '../hooks/useLogs';
 import * as R from 'ramda';
@@ -310,14 +310,25 @@ const formatProposalTransactionDetails = (details: ProposalTransactionDetails | 
       };
     }
 
-    // Split using comma as separator, unless comma is between parentheses (tuple).
-    const decoded = defaultAbiCoder.decode(types.split(/,(?![^(]*\))/g), callData);
-    return {
-      target,
-      functionSig: name,
-      callData: decoded.join(),
-      value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH }` : '',
-    };
+    try {
+      // Split using comma as separator, unless comma is between parentheses (tuple).
+      const decoded = defaultAbiCoder.decode(types.split(/,(?![^(]*\))/g), callData);
+      return {
+        target,
+        functionSig: name,
+        callData: decoded.join(),
+        value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH }` : '',
+      };
+    } catch (error) {
+      // We failed to decode. Display the raw calldata, appending function selectors if they exist.
+      const data = signature ? `${keccak256(toUtf8Bytes(signature)).substring(0, 10)}${callData.substring(2)}` : callData;
+
+      return {
+        target,
+        callData: data,
+        value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH } ` : '',
+      };
+    }
   });
 };
 
