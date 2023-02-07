@@ -114,9 +114,11 @@ const StreamWithdrawModalOverlay: React.FC<{
 
   const humanUnitsStreamRemaningBalance = parseFloat(
     isUSDC
-      ? contract2humanUSDCFormat(withdrawableBalance?.toString() ?? '')
+      ? contract2humanUSDCFormat(withdrawableBalance?.toString() ?? '', true)
       : ethers.utils.formatUnits(withdrawableBalance?.toString() ?? '').toString(),
   );
+
+  
 
   return (
     <>
@@ -169,7 +171,7 @@ const StreamWithdrawModalOverlay: React.FC<{
             setWidthdrawAmount(
               parseFloat(
                 isUSDC
-                  ? contract2humanUSDCFormat(withdrawableBalance?.toString() ?? '')
+                  ? contract2humanUSDCFormat(withdrawableBalance?.toString() ?? '', true)
                   : ethers.utils.formatUnits(withdrawableBalance?.toString() ?? '').toString(),
               ),
             )
