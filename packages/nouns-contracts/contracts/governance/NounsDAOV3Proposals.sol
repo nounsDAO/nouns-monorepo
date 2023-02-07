@@ -105,7 +105,10 @@ library NounsDAOV3Proposals {
     bytes32 public constant DOMAIN_TYPEHASH =
         keccak256('EIP712Domain(string name,uint256 chainId,address verifyingContract)');
 
-    bytes32 public constant PROPOSAL_TYPEHASH = keccak256("Proposal(address proposer,address[] targets,uint256[] values,string[] signatures,bytes[] calldatas,string description,uint40 expiry)");
+    bytes32 public constant PROPOSAL_TYPEHASH =
+        keccak256(
+            'Proposal(address proposer,address[] targets,uint256[] values,string[] signatures,bytes[] calldatas,string description,uint40 expiry)'
+        );
 
     /**
      * @notice Function used to propose a new proposal. Sender must have delegates above the proposal threshold
@@ -171,25 +174,30 @@ library NounsDAOV3Proposals {
         return proposalId;
     }
 
-    function calcProposalEncodeData(ProposalTxs memory txs, string memory description) internal view returns (bytes memory) {
+    function calcProposalEncodeData(ProposalTxs memory txs, string memory description)
+        internal
+        view
+        returns (bytes memory)
+    {
         bytes32[] memory signatureHashes = new bytes32[](txs.signatures.length);
-        for (uint256 i=0; i < txs.signatures.length; ++i) {
+        for (uint256 i = 0; i < txs.signatures.length; ++i) {
             signatureHashes[i] = keccak256(bytes(txs.signatures[i]));
         }
 
         bytes32[] memory calldatasHashes = new bytes32[](txs.calldatas.length);
-        for (uint256 i=0; i<txs.calldatas.length; ++i) {
+        for (uint256 i = 0; i < txs.calldatas.length; ++i) {
             calldatasHashes[i] = keccak256(txs.calldatas[i]);
         }
 
-        return abi.encode(
-            msg.sender, // proposer
-            keccak256(abi.encodePacked(txs.targets)),
-            keccak256(abi.encodePacked(txs.values)),
-            keccak256(abi.encodePacked(signatureHashes)),
-            keccak256(abi.encodePacked(calldatasHashes)),
-            keccak256(bytes(description))
-        );
+        return
+            abi.encode(
+                msg.sender, // proposer
+                keccak256(abi.encodePacked(txs.targets)),
+                keccak256(abi.encodePacked(txs.values)),
+                keccak256(abi.encodePacked(signatureHashes)),
+                keccak256(abi.encodePacked(calldatasHashes)),
+                keccak256(bytes(description))
+            );
     }
 
     function updateProposal(
@@ -236,7 +244,7 @@ library NounsDAOV3Proposals {
         if (proposerSignatures.length != signers.length) revert OnlyProposerCanEdit();
 
         bytes memory proposalEncodeData = calcProposalEncodeData(txs, description);
-        
+
         for (uint256 i = 0; i < proposerSignatures.length; ++i) {
             verifyProposalSignature(ds, proposalEncodeData, proposerSignatures[i]);
 
@@ -250,7 +258,15 @@ library NounsDAOV3Proposals {
         proposal.signatures = txs.signatures;
         proposal.calldatas = txs.calldatas;
 
-        emit ProposalUpdated(proposalId, msg.sender, txs.targets, txs.values, txs.signatures, txs.calldatas, description);
+        emit ProposalUpdated(
+            proposalId,
+            msg.sender,
+            txs.targets,
+            txs.values,
+            txs.signatures,
+            txs.calldatas,
+            description
+        );
     }
 
     /**
@@ -361,11 +377,27 @@ library NounsDAOV3Proposals {
 
     /**
      * @notice Gets the state of a proposal
+     * @param ds the DAO's state struct
      * @param proposalId The id of the proposal
      * @return Proposal state
      */
     function state(NounsDAOStorageV3.StorageV3 storage ds, uint256 proposalId)
         public
+        view
+        returns (NounsDAOStorageV3.ProposalState)
+    {
+        return stateInternal(ds, proposalId);
+    }
+
+    /**
+     * @notice Gets the state of a proposal
+     * @dev This internal function is used by other libraries to embed in compile time and save the runtime gas cost of a delegate call
+     * @param ds the DAO's state struct
+     * @param proposalId The id of the proposal
+     * @return Proposal state
+     */
+    function stateInternal(NounsDAOStorageV3.StorageV3 storage ds, uint256 proposalId)
+        internal
         view
         returns (NounsDAOStorageV3.ProposalState)
     {
@@ -609,20 +641,26 @@ library NounsDAOV3Proposals {
         if (txs.targets.length > proposalMaxOperations) revert TooManyActions();
     }
 
-    function verifyProposalSignature(NounsDAOStorageV3.StorageV3 storage ds, bytes memory proposalEncodeData, NounsDAOStorageV3.ProposerSignature memory proposerSignature)
-        internal
-    {
+    function verifyProposalSignature(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        bytes memory proposalEncodeData,
+        NounsDAOStorageV3.ProposerSignature memory proposerSignature
+    ) internal {
         bytes32 sigHash = keccak256(proposerSignature.sig);
         if (ds.usedSigs[sigHash]) revert SignatureAlreadyUsed();
         ds.usedSigs[sigHash] = true;
 
-        bytes32 structHash = keccak256(abi.encodePacked(
-            PROPOSAL_TYPEHASH,
-            proposalEncodeData,
-            uint256(proposerSignature.expirationTimestamp) // TODO: maybe make this uint256?
-        ));
+        bytes32 structHash = keccak256(
+            abi.encodePacked(
+                PROPOSAL_TYPEHASH,
+                proposalEncodeData,
+                uint256(proposerSignature.expirationTimestamp) // TODO: maybe make this uint256?
+            )
+        );
 
-        bytes32 domainSeparator = keccak256(abi.encode(DOMAIN_TYPEHASH, keccak256(bytes('Nouns DAO')), block.chainid, address(this)));
+        bytes32 domainSeparator = keccak256(
+            abi.encode(DOMAIN_TYPEHASH, keccak256(bytes('Nouns DAO')), block.chainid, address(this))
+        );
 
         bytes32 digest = ECDSA.toTypedDataHash(domainSeparator, structHash);
 
