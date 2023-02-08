@@ -612,6 +612,20 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     }
 
     /**
+     * @notice Get all quorum params checkpoints
+     */
+    function quorumParamsCheckpoints() public view returns (DynamicQuorumParamsCheckpoint[] memory) {
+        return ds.quorumParamsCheckpoints;
+    }
+
+    /**
+     * @notice Get a quorum params checkpoint by its index
+     */
+    function quorumParamsCheckpoints(uint256 index) public view returns (DynamicQuorumParamsCheckpoint memory) {
+        return ds.quorumParamsCheckpoints[index];
+    }
+
+    /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      *   STATE VARIABLE GETTERS
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
