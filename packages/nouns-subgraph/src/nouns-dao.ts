@@ -1,6 +1,7 @@
 import { BigInt, Bytes, log } from '@graphprotocol/graph-ts';
 import {
   ProposalCreatedWithRequirements,
+  ProposalCreatedWithRequirements1,
   ProposalCanceled,
   ProposalQueued,
   ProposalExecuted,
@@ -9,6 +10,7 @@ import {
   MinQuorumVotesBPSSet,
   MaxQuorumVotesBPSSet,
   QuorumCoefficientSet,
+  ProposalUpdated,
 } from './types/NounsDAO/NounsDAO';
 import {
   getOrCreateDelegate,
@@ -17,6 +19,7 @@ import {
   getGovernanceEntity,
   getOrCreateDelegateWithNullOption,
   getOrCreateDynamicQuorumParams,
+  getOrCreateProposalUpdate,
 } from './utils/helpers';
 import {
   BIGINT_ONE,
@@ -29,63 +32,69 @@ import {
   BIGINT_ZERO,
 } from './utils/constants';
 import { dynamicQuorumVotes } from './utils/dynamicQuorum';
-
-/**
- * Extracts the title from a proposal's description. Returns 'Untitled' if the title is empty.
- * Note: Assemblyscript does not support regular expressions.
- * @param description The proposal description
- */
-function extractTitle(description: string): string {
-  // Extract a markdown title from a proposal body that uses the `# Title` or `Title\n===` formats
-  let splitDescription = description.split('#', 3);
-  if (splitDescription.length > 1) {
-    splitDescription.shift(); // Remove any characters before `#`
-  }
-  let title = splitDescription.join('').split('\n', 1).join('').trim();
-
-  // Remove bold and italics
-  title = title.replaceAll('**', '').replaceAll('__', '');
-
-  if (title == '') {
-    return 'Untitled';
-  }
-  return title;
-}
+import { ParsedProposalV3, extractTitle } from './custom-types/ParsedProposalV3';
 
 export function handleProposalCreatedWithRequirements(
+  event: ProposalCreatedWithRequirements1,
+): void {
+  handleParsedProposalV3(ParsedProposalV3.fromV1Event(event));
+}
+
+export function handleProposalCreatedWithRequirementsV3(
   event: ProposalCreatedWithRequirements,
 ): void {
-  let proposal = getOrCreateProposal(event.params.id.toString());
-  let proposer = getOrCreateDelegateWithNullOption(event.params.proposer.toHexString(), false);
+  handleParsedProposalV3(ParsedProposalV3.fromV3Event(event));
+}
+
+function handleParsedProposalV3(parsedProposal: ParsedProposalV3): void {
+  let proposal = getOrCreateProposal(parsedProposal.id);
+  let proposer = getOrCreateDelegateWithNullOption(parsedProposal.proposer, false);
 
   // Check if the proposer was a delegate already accounted for, if not we should log an error
   // since it shouldn't be possible for a delegate to propose anything without first being 'created'
-  if (proposer == null) {
+  if (proposer == null && parsedProposal.signers.length == 0) {
     log.error('Delegate {} not found on ProposalCreated. tx_hash: {}', [
-      event.params.proposer.toHexString(),
-      event.transaction.hash.toHexString(),
+      parsedProposal.proposer,
+      parsedProposal.txHash,
     ]);
   }
-  // Create it anyway since we will want to account for this event data, even though it should've never happened
-  proposer = getOrCreateDelegate(event.params.proposer.toHexString());
+
+  // Create it anyway, which supports V3 cases of proposers not having any Nouns
+  proposer = getOrCreateDelegate(parsedProposal.proposer);
   proposal.proposer = proposer.id;
-  proposal.targets = changetype<Bytes[]>(event.params.targets);
-  proposal.values = event.params.values;
-  proposal.signatures = event.params.signatures;
-  proposal.calldatas = event.params.calldatas;
-  proposal.createdTimestamp = event.block.timestamp;
-  proposal.createdBlock = event.block.number;
-  proposal.createdTransactionHash = event.transaction.hash;
-  proposal.startBlock = event.params.startBlock;
-  proposal.endBlock = event.params.endBlock;
-  proposal.proposalThreshold = event.params.proposalThreshold;
-  proposal.quorumVotes = event.params.quorumVotes;
+  proposal.targets = parsedProposal.targets;
+  proposal.values = parsedProposal.values;
+  proposal.signatures = parsedProposal.signatures;
+  proposal.calldatas = parsedProposal.calldatas;
+  proposal.createdTimestamp = parsedProposal.createdTimestamp;
+  proposal.createdBlock = parsedProposal.createdBlock;
+  proposal.createdTransactionHash = parsedProposal.createdTransactionHash;
+  proposal.startBlock = parsedProposal.startBlock;
+  proposal.endBlock = parsedProposal.endBlock;
+  proposal.proposalThreshold = parsedProposal.proposalThreshold;
+  proposal.quorumVotes = parsedProposal.quorumVotes;
   proposal.forVotes = BIGINT_ZERO;
   proposal.againstVotes = BIGINT_ZERO;
   proposal.abstainVotes = BIGINT_ZERO;
-  proposal.description = event.params.description.split('\\n').join('\n'); // The Graph's AssemblyScript version does not support string.replace
-  proposal.title = extractTitle(proposal.description);
-  proposal.status = event.block.number >= proposal.startBlock ? STATUS_ACTIVE : STATUS_PENDING;
+  proposal.description = parsedProposal.description;
+  proposal.title = parsedProposal.title;
+  proposal.status = parsedProposal.status;
+
+  const signerDelegates = new Array<string>(parsedProposal.signers.length);
+  for (let i = 0; i < parsedProposal.signers.length; i++) {
+    const signerAddress = parsedProposal.signers[i];
+    const signerDelegate = getOrCreateDelegateWithNullOption(signerAddress, false);
+
+    if (signerDelegate == null) {
+      log.error('Signer delegate {} not found on ProposalCreated. tx_hash: {}', [
+        signerAddress,
+        parsedProposal.txHash,
+      ]);
+    } else {
+      signerDelegates[i] = signerDelegate.id;
+    }
+  }
+  proposal.signers = signerDelegates;
 
   // Storing state for dynamic quorum calculations
   // Doing these for V1 props as well to avoid making these fields optional + avoid missing required field warnings
@@ -97,6 +106,35 @@ export function handleProposalCreatedWithRequirements(
   proposal.maxQuorumVotesBPS = dynamicQuorum.maxQuorumVotesBPS;
   proposal.quorumCoefficient = dynamicQuorum.quorumCoefficient;
 
+  proposal.save();
+}
+
+export function handleProposalUpdated(event: ProposalUpdated): void {
+  const updateId = event.params.id
+    .toString()
+    .concat('-')
+    .concat(event.transaction.hash.toHexString());
+
+  const proposalUpdate = getOrCreateProposalUpdate(updateId);
+  const proposal = getOrCreateProposal(event.params.id.toString());
+
+  // First save the current state of the proposal to the updates history entity
+  proposalUpdate.createdAt = event.block.timestamp;
+  proposalUpdate.targets = proposal.targets;
+  proposalUpdate.values = proposal.values;
+  proposalUpdate.signatures = proposal.signatures;
+  proposalUpdate.calldatas = proposal.calldatas;
+  proposalUpdate.title = proposal.title;
+  proposalUpdate.description = proposal.description;
+  proposalUpdate.save();
+
+  // Then update the proposal to the latest state
+  proposal.targets = changetype<Bytes[]>(event.params.targets);
+  proposal.values = event.params.values;
+  proposal.signatures = event.params.signatures;
+  proposal.calldatas = event.params.calldatas;
+  proposal.description = event.params.description.split('\\n').join('\n');
+  proposal.title = extractTitle(proposal.description);
   proposal.save();
 }
 

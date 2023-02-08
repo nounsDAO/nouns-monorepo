@@ -83,10 +83,12 @@ dataSources:
         - Governance
       abis:
         - name: NounsDAO
-          file: ../nouns-contracts/abi/contracts/governance/NounsDAOLogicV2.sol/NounsDAOLogicV2.json
+          file: ../nouns-contracts/abi/contracts/governance/NounsDAOLogicV3.sol/NounsDAOLogicV3.json
       eventHandlers:
         - event: ProposalCreatedWithRequirements(uint256,address,address[],uint256[],string[],bytes[],uint256,uint256,uint256,uint256,string)
           handler: handleProposalCreatedWithRequirements
+        - event: ProposalCreatedWithRequirements(uint256,address,address[],address[],uint256[],string[],bytes[],uint256,uint256,uint256,uint256,string)
+          handler: handleProposalCreatedWithRequirementsV3
         - event: ProposalCanceled(uint256)
           handler: handleProposalCanceled
         - event: ProposalVetoed(uint256)
@@ -103,3 +105,5 @@ dataSources:
           handler: handleMaxQuorumVotesBPSSet        
         - event: QuorumCoefficientSet(uint32,uint32)
           handler: handleQuorumCoefficientSet
+        - event: ProposalUpdated(indexed uint256,indexed address,address[],uint256[],string[],bytes[],string)
+          handler: handleProposalUpdated

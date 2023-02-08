@@ -1,6 +1,6 @@
 import { newMockEvent } from 'matchstick-as/assembly/index';
 import {
-  ProposalCreatedWithRequirements,
+  ProposalCreatedWithRequirements1,
   VoteCast,
   MinQuorumVotesBPSSet,
   MaxQuorumVotesBPSSet,
@@ -31,8 +31,8 @@ export class ProposalCreatedWithRequirementsEvent {
 
 export function createProposalCreatedWithRequirementsEvent(
   input: ProposalCreatedWithRequirementsEvent,
-): ProposalCreatedWithRequirements {
-  let newEvent = changetype<ProposalCreatedWithRequirements>(newMockEvent());
+): ProposalCreatedWithRequirements1 {
+  let newEvent = changetype<ProposalCreatedWithRequirements1>(newMockEvent());
   newEvent.parameters = new Array();
 
   newEvent.parameters.push(
