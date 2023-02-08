@@ -67,7 +67,7 @@ library NounsDAOV3Proposals {
     );
 
     event ProposalUpdated(
-        uint256 id,
+        uint256 indexed id,
         address indexed proposer,
         address[] targets,
         uint256[] values,

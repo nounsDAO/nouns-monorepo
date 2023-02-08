@@ -58,24 +58,11 @@ import { NounsDAOV3DynamicQuorum } from './NounsDAOV3DynamicQuorum.sol';
 import { NounsDAOV3Votes } from './NounsDAOV3Votes.sol';
 import { NounsDAOV3Proposals } from './NounsDAOV3Proposals.sol';
 
-contract NounsDAOLogicV3 is NounsDAOStorageV3 {
+contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     using NounsDAOV3Admin for StorageV3;
     using NounsDAOV3DynamicQuorum for StorageV3;
     using NounsDAOV3Votes for StorageV3;
     using NounsDAOV3Proposals for StorageV3;
-
-    /// @dev This is here for typechain to add this event to the NounsDAOLogicV3 generated class
-    event ProposalCreated(
-        uint256 id,
-        address proposer,
-        address[] targets,
-        uint256[] values,
-        string[] signatures,
-        bytes[] calldatas,
-        uint256 startBlock,
-        uint256 endBlock,
-        string description
-    );
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
