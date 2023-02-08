@@ -79,7 +79,7 @@ library NounsDAOV3Votes {
             revert VetoerOnly();
         }
 
-        if (ds.state(proposalId) == NounsDAOStorageV3.ProposalState.Executed) {
+        if (ds.stateInternal(proposalId) == NounsDAOStorageV3.ProposalState.Executed) {
             revert CantVetoExecutedProposal();
         }
 
@@ -221,13 +221,13 @@ library NounsDAOV3Votes {
         uint256 proposalId,
         uint8 support
     ) internal returns (uint96) {
-        NounsDAOStorageV3.ProposalState proposalState = ds.state(proposalId);
+        NounsDAOStorageV3.ProposalState proposalState = ds.stateInternal(proposalId);
 
         if (proposalState == NounsDAOStorageV3.ProposalState.Active) {
-            return castVoteDuringVotingPeriodInternal(ds, voter, proposalId, support);
+            return castVoteDuringVotingPeriodInternal(ds, proposalId, proposalState, voter, support);
         } else if (proposalState == NounsDAOStorageV3.ProposalState.ObjectionPeriod) {
             require(support == 0, 'can only object with an against vote');
-            return castObjectionInternal(ds, voter, proposalId);
+            return castObjectionInternal(ds, proposalId, proposalState, voter);
         }
 
         revert('NounsDAO::castVoteInternal: voting is closed');
@@ -235,12 +235,13 @@ library NounsDAOV3Votes {
 
     function castVoteDuringVotingPeriodInternal(
         NounsDAOStorageV3.StorageV3 storage ds,
-        address voter,
         uint256 proposalId,
+        NounsDAOStorageV3.ProposalState proposalState,
+        address voter,
         uint8 support
     ) internal returns (uint96) {
         require(
-            ds.state(proposalId) == NounsDAOStorageV3.ProposalState.Active,
+            proposalState == NounsDAOStorageV3.ProposalState.Active,
             'NounsDAO::castVoteInternal: voting is closed'
         );
         require(support <= 2, 'NounsDAO::castVoteInternal: invalid vote type');
@@ -251,7 +252,13 @@ library NounsDAOV3Votes {
         /// @notice: Unlike GovernerBravo, votes are considered from the block the proposal was created in order to normalize quorumVotes and proposalThreshold metrics
         uint96 votes = ds.nouns.getPriorVotes(voter, proposalCreationBlock(ds, proposal));
 
-        bool isDefeatedBefore = ds.isDefeated(proposal);
+        bool isForVoteInLastMinuteWindow = false;
+        if (support == 1) {
+            isForVoteInLastMinuteWindow = (proposal.endBlock - block.number < ds.lastMinuteWindowInBlocks);
+        }
+
+        bool isDefeatedBefore = false;
+        if (isForVoteInLastMinuteWindow) isDefeatedBefore = ds.isDefeated(proposal);
 
         if (support == 0) {
             proposal.againstVotes = proposal.againstVotes + votes;
@@ -262,15 +269,16 @@ library NounsDAOV3Votes {
         }
 
         if (
+            // only for votes can trigger an objection period
+            // we're in the last minute window
+            isForVoteInLastMinuteWindow &&
+            // first part of the vote flip check
+            // separated from the second part to optimize gas
+            isDefeatedBefore &&
             // haven't turn on objection yet
             proposal.objectionPeriodEndBlock == 0 &&
-            // only for votes can trigger an objection period
-            support == 1 &&
-            // this vote flips the proposal
-            isDefeatedBefore &&
-            !ds.isDefeated(proposal) &&
-            // we're in the last minute window
-            (proposal.endBlock - block.number < ds.lastMinuteWindowInBlocks)
+            // second part of the vote flip check
+            !ds.isDefeated(proposal)
         ) {
             proposal.objectionPeriodEndBlock = proposal.endBlock + ds.objectionPeriodDurationInBlocks;
             
@@ -286,10 +294,11 @@ library NounsDAOV3Votes {
 
     function castObjectionInternal(
         NounsDAOStorageV3.StorageV3 storage ds,
-        address voter,
-        uint256 proposalId
+        uint256 proposalId,
+        NounsDAOStorageV3.ProposalState proposalState,
+        address voter
     ) internal returns (uint96) {
-        require(ds.state(proposalId) == NounsDAOStorageV3.ProposalState.ObjectionPeriod, 'not in objection period');
+        require(proposalState == NounsDAOStorageV3.ProposalState.ObjectionPeriod, 'not in objection period');
         NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
         NounsDAOStorageV3.Receipt storage receipt = proposal.receipts[voter];
         require(receipt.hasVoted == false, 'NounsDAO::castVoteInternal: voter already voted');
