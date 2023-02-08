@@ -259,6 +259,9 @@ type Proposal @entity {
 
   "Dynamic quorum param snapshot: the dynamic quorum coefficient"
   quorumCoefficient: BigInt!
+
+  "The objection period end block"
+  objectionPeriodEndBlock: BigInt!
 }
 
 type ProposalUpdate @entity(immutable: true) {

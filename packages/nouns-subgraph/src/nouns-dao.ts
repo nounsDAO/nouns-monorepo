@@ -11,6 +11,7 @@ import {
   MaxQuorumVotesBPSSet,
   QuorumCoefficientSet,
   ProposalUpdated,
+  ProposalObjectionPeriodSet,
 } from './types/NounsDAO/NounsDAO';
 import {
   getOrCreateDelegate,
@@ -79,6 +80,7 @@ function handleParsedProposalV3(parsedProposal: ParsedProposalV3): void {
   proposal.description = parsedProposal.description;
   proposal.title = parsedProposal.title;
   proposal.status = parsedProposal.status;
+  proposal.objectionPeriodEndBlock = BIGINT_ZERO;
 
   const signerDelegates = new Array<string>(parsedProposal.signers.length);
   for (let i = 0; i < parsedProposal.signers.length; i++) {
@@ -257,4 +259,10 @@ export function handleQuorumCoefficientSet(event: QuorumCoefficientSet): void {
   const params = getOrCreateDynamicQuorumParams(event.block.number);
   params.quorumCoefficient = event.params.newQuorumCoefficient;
   params.save();
+}
+
+export function handleProposalObjectionPeriodSet(event: ProposalObjectionPeriodSet): void {
+  const proposal = getOrCreateProposal(event.params.id.toString());
+  proposal.objectionPeriodEndBlock = event.params.objectionPeriodEndBlock;
+  proposal.save();
 }
