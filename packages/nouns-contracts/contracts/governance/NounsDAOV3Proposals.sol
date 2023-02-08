@@ -160,9 +160,12 @@ library NounsDAOV3Proposals {
 
             checkNoActiveProp(ds, signer);
             ds.latestProposalIds[signer] = proposalId;
-
             votes += ds.nouns.getPriorVotes(signer, block.number - 1);
         }
+
+        checkNoActiveProp(ds, msg.sender);
+        ds.latestProposalIds[msg.sender] = proposalId;
+        votes += ds.nouns.getPriorVotes(msg.sender, block.number - 1);
 
         uint256 propThreshold = checkPropThreshold(ds, votes);
 
