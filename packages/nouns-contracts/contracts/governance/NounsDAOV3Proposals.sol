@@ -34,6 +34,7 @@ library NounsDAOV3Proposals {
     error SignatureExpired();
     error CanOnlyEditPendingProposals();
     error OnlyProposerCanEdit();
+    error SignerCountMismtach();
     error ProposerCannotUpdateProposalWithSigners();
     error MustProvideSignatures();
     error SignatureAlreadyUsed();
@@ -244,7 +245,7 @@ library NounsDAOV3Proposals {
         if (msg.sender != proposal.proposer) revert OnlyProposerCanEdit();
 
         address[] memory signers = proposal.signers;
-        if (proposerSignatures.length != signers.length) revert OnlyProposerCanEdit();
+        if (proposerSignatures.length != signers.length) revert SignerCountMismtach();
 
         bytes memory proposalEncodeData = calcProposalEncodeData(txs, description);
 
