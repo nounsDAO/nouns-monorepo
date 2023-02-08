@@ -51,8 +51,8 @@ const StreamWithdrawModalOverlay: React.FC<{
   const { account } = useEthers();
 
   const withdrawableBalance = useStreamRemaningBalance(streamAddress ?? '', account ?? '') ?? 0;
-  const { widthdrawTokens, widthdrawTokensState } = useWithdrawTokens(streamAddress ?? '');
-  const [widthdrawAmount, setWidthdrawAmount] = useState<number>(0);
+  const { withdrawTokens, withdrawTokensState } = useWithdrawTokens(streamAddress ?? '');
+  const [withdrawAmount, setWithdrawAmount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
   const elapsedTime = useEllapsedTime(streamAddress ?? '');
 
@@ -81,20 +81,20 @@ const StreamWithdrawModalOverlay: React.FC<{
           <Trans>Withdraw from Stream</Trans>
         </ModalTitle>
         <div className={classes.center}>
-          {(widthdrawTokensState.status === 'Mining' ||
+          {(withdrawTokensState.status === 'Mining' ||
             !withdrawableBalance ||
-            widthdrawTokensState.status === 'PendingSignature') && <BrandSpinner />}
-          {widthdrawTokensState.status === 'Success' && (
+            withdrawTokensState.status === 'PendingSignature') && <BrandSpinner />}
+          {withdrawTokensState.status === 'Success' && (
             <div className={classes.transactionStatus}>
               <p>
                 <Trans>
-                  You've successfully withdrawn {widthdrawAmount} {unitForDisplay} to your wallet
+                  You've successfully withdrawn {withdrawAmount} {unitForDisplay} to your wallet
                 </Trans>
               </p>
             </div>
           )}
-          {(widthdrawTokensState.status === 'Exception' ||
-            widthdrawTokensState.status === 'Fail') && (
+          {(withdrawTokensState.status === 'Exception' ||
+            withdrawTokensState.status === 'Fail') && (
             <div className={classes.transactionStatus}>
               <p className={classes.txnFailureTitle}>
                 <Trans>There was an error withdrawing to your wallet.</Trans>
@@ -102,7 +102,7 @@ const StreamWithdrawModalOverlay: React.FC<{
               <div className={classes.txnFailureBody}>
                 Error:{' '}
                 <span className={classes.txnFailureErrorMessage}>
-                  {widthdrawTokensState.errorMessage}
+                  {withdrawTokensState.errorMessage}
                 </span>
               </div>
             </div>
@@ -156,19 +156,19 @@ const StreamWithdrawModalOverlay: React.FC<{
 
       <div className={classes.amtEntryWrapper}>
         <BrandNumericEntry
-          label={'Widthdraw amount'}
-          value={widthdrawAmount}
+          label={'Withdraw amount'}
+          value={withdrawAmount}
           onValueChange={e => {
-            setWidthdrawAmount(e.floatValue ?? 0);
+            setWithdrawAmount(e.floatValue ?? 0);
           }}
           placeholder={isUSDC ? '0 USDC' : '0 WETH'}
-          isInvalid={widthdrawAmount > humanUnitsStreamRemaningBalance}
+          isInvalid={withdrawAmount > humanUnitsStreamRemaningBalance}
         />
         {/* Hover brightness */}
         <div
           className={classes.amtEntryMax}
           onClick={() =>
-            setWidthdrawAmount(
+            setWithdrawAmount(
               parseFloat(
                 isUSDC
                   ? contract2humanUSDCFormat(withdrawableBalance?.toString() ?? '', true)
@@ -184,12 +184,12 @@ const StreamWithdrawModalOverlay: React.FC<{
       <ModalBottomButtonRow
         prevBtnText={<Trans>Cancel</Trans>}
         onPrevBtnClick={onDismiss}
-        nextBtnText={<Trans>Widthdraw</Trans>}
+        nextBtnText={<Trans>Withdraw</Trans>}
         onNextBtnClick={async () => {
           setIsLoading(true);
-          widthdrawTokens(
+          withdrawTokens(
             formatTokenAmmount(
-              widthdrawAmount.toString(),
+              withdrawAmount.toString(),
               isUSDC ? SupportedCurrency.USDC : SupportedCurrency.WETH,
             ),
           );

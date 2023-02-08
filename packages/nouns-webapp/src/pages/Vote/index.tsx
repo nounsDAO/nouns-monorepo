@@ -66,7 +66,7 @@ const VotePage = ({
   const [isExecutePending, setExecutePending] = useState<boolean>(false);
   const [isCancelPending, setCancelPending] = useState<boolean>(false);
   const [showStreamWithdrawModal, setShowStreamWithdrawModal] = useState<boolean>(false);
-  const [streamWithdrawInfo, setStreamWidthdrawInfo] = useState<{
+  const [streamWithdrawInfo, setStreamWithdrawInfo] = useState<{
     streamAddress: string;
     startTime: number;
     endTime: number;
@@ -356,44 +356,34 @@ const VotePage = ({
         )}
       </Col>
       <Col lg={10} className={clsx(classes.proposal, classes.wrapper)}>
-        {proposal.status === ProposalState.EXECUTED &&
-          proposal.details
-            .filter(txn => txn?.functionSig.includes('createStream'))
-            .map(txn => {
-              const parsedCallData = parseStreamCreationCallData(txn.callData);
-              if (parsedCallData.recipient.toLowerCase() !== account?.toLowerCase()) {
-                return <></>;
-              }
-
-              return (
-                <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
-                  <span className={classes.boldedLabel}>
-                    <Trans>Only visible to you</Trans>
-                  </span>
-                  <Col className="d-grid gap-4">
-                    <Button
-                      onClick={() => {
-                        setShowStreamWithdrawModal(true);
-                        setStreamWidthdrawInfo({
-                          streamAddress: parsedCallData.streamAddress,
-                          startTime: parsedCallData.startTime,
-                          endTime: parsedCallData.endTime,
-                          streamAmount: parsedCallData.streamAmount,
-                          tokenAddress: parsedCallData.tokenAddress,
-                        });
-                      }}
-                      variant="primary"
-                      className={classes.transitionStateButton}
-                    >
-                      <Trans>
-                        Withdraw from Stream{' '}
-                        <ShortAddress address={parsedCallData.streamAddress ?? ''} />
-                      </Trans>
-                    </Button>
-                  </Col>
-                </Row>
-              );
-            })}
+        {proposal.status === ProposalState.EXECUTED && proposal.id === '207' && account?.toLowerCase() === '0x2713bcb77e7a1dfa6ffdf98ff07c65024597a5ce' && (
+          <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
+          <span className={classes.boldedLabel}>
+            <Trans>Only visible to you</Trans>
+          </span>
+          <Col className="d-grid gap-4">
+            <Button
+              onClick={() => {
+                setShowStreamWithdrawModal(true);
+                setStreamWithdrawInfo({
+                  streamAddress: '0x2b63bC71926aD001bcaFd9df55952Cf8FAD4F1B2',
+                  startTime: 1674604800,
+                  endTime: 1706140800,
+                  streamAmount: 203100000000,
+                  tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+                });
+              }}
+              variant="primary"
+              className={classes.transitionStateButton}
+            >
+              <Trans>
+                Withdraw from Stream{' '}
+                <ShortAddress address={'0x2b63bC71926aD001bcaFd9df55952Cf8FAD4F1B2' ?? ''} />
+              </Trans>
+            </Button>
+          </Col>
+        </Row>
+        )}
 
         {(isAwaitingStateChange() || isAwaitingDestructiveStateChange()) && (
           <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
