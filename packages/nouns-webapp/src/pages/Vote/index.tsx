@@ -43,7 +43,6 @@ import DynamicQuorumInfoModal from '../../components/DynamicQuorumInfoModal';
 import config from '../../config';
 import ShortAddress from '../../components/ShortAddress';
 import StreamWithdrawModal from '../../components/StreamWithdrawModal';
-import { parseStreamCreationCallData } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
