@@ -53,9 +53,11 @@ library NounsDAOV3Proposals {
     );
 
     /// @notice An event emitted when a new proposal is created, which includes additional information
+    /// @dev V3 adds `signers` compared to the V1/V2 event.
     event ProposalCreatedWithRequirements(
         uint256 id,
         address proposer,
+        address[] signers,
         address[] targets,
         uint256[] values,
         string[] signatures,
@@ -137,7 +139,7 @@ library NounsDAOV3Proposals {
         );
         ds.latestProposalIds[newProposal.proposer] = newProposal.id;
 
-        emitNewPropEvents(newProposal, ds.minQuorumVotes(), txs, description);
+        emitNewPropEvents(newProposal, new address[](0), ds.minQuorumVotes(), txs, description);
 
         return newProposal.id;
     }
@@ -173,7 +175,7 @@ library NounsDAOV3Proposals {
         NounsDAOStorageV3.Proposal storage newProposal = createNewProposal(ds, proposalId, propThreshold, txs);
         newProposal.signers = signers;
 
-        emitNewPropEvents(newProposal, ds.minQuorumVotes(), txs, description);
+        emitNewPropEvents(newProposal, signers, ds.minQuorumVotes(), txs, description);
 
         return proposalId;
     }
@@ -590,6 +592,7 @@ library NounsDAOV3Proposals {
 
     function emitNewPropEvents(
         NounsDAOStorageV3.Proposal storage newProposal,
+        address[] memory signers,
         uint256 minQuorumVotes,
         ProposalTxs memory txs,
         string memory description
@@ -607,11 +610,13 @@ library NounsDAOV3Proposals {
             description
         );
 
-        /// @notice Updated event with `proposalThreshold` and `minQuorumVotes`
-        /// @notice `minQuorumVotes` is always zero since V2 introduces dynamic quorum with checkpoints
+        /// @notice V1: Updated event with `proposalThreshold` and `quorumVotes` `minQuorumVotes`
+        /// @notice V2: `quorumVotes` changed to `minQuorumVotes`
+        /// @notice V3: Added signers
         emit ProposalCreatedWithRequirements(
             newProposal.id,
             msg.sender,
+            signers,
             txs.targets,
             txs.values,
             txs.signatures,
