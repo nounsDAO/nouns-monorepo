@@ -72,17 +72,6 @@ const WalletConnectModal: React.FC<{ onDismiss: () => void }> = props => {
         }}
         walletType={WALLET_TYPE.brave}
       />
-      {/* <WalletButton
-        onClick={() => {
-          const ledger = new LedgerConnector({
-            //TODO: refactor
-            chainId: config.supportedChainId,
-            url: config.rinkebyJsonRpc,
-          });
-          activate(ledger);
-        }}
-        walletType={WALLET_TYPE.ledger}
-      /> */}
       <WalletButton
         onClick={() => {
           const trezor = new TrezorConnector({

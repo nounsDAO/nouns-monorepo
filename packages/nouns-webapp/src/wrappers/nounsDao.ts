@@ -9,7 +9,7 @@ import {
   useEthers,
 } from '@usedapp/core';
 import { utils, BigNumber as EthersBN } from 'ethers';
-import { defaultAbiCoder, Result } from 'ethers/lib/utils';
+import { defaultAbiCoder, keccak256, Result, toUtf8Bytes } from 'ethers/lib/utils';
 import { useMemo } from 'react';
 import { useLogs } from '../hooks/useLogs';
 import * as R from 'ramda';
@@ -282,6 +282,13 @@ const countToIndices = (count: number | undefined) => {
   return typeof count === 'number' ? new Array(count).fill(0).map((_, i) => [i + 1]) : [];
 };
 
+const concatSelectorToCalldata = (signature: string, callData: string) => {
+  if (signature) {
+    return `${keccak256(toUtf8Bytes(signature)).substring(0, 10)}${callData.substring(2)}`;
+  }
+  return callData;
+};
+
 const formatProposalTransactionDetails = (details: ProposalTransactionDetails | Result) => {
   return details.targets.map((target: string, i: number) => {
     const signature: string = details.signatures[i];
@@ -289,24 +296,44 @@ const formatProposalTransactionDetails = (details: ProposalTransactionDetails | 
       // Handle both logs and subgraph responses
       (details as ProposalTransactionDetails).values?.[i] ?? (details as Result)?.[3]?.[i] ?? 0,
     );
+    const callData = details.calldatas[i];
+
     // Split at first occurrence of '('
     let [name, types] = signature.substring(0, signature.length - 1)?.split(/\((.*)/s);
     if (!name || !types) {
+      // If there's no signature and calldata is present, display the raw calldata
+      if (callData && callData !== '0x') {
+        return {
+          target,
+          callData: concatSelectorToCalldata(signature, callData),
+          value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH } ` : '',
+        };
+      }
+
       return {
         target,
         functionSig: name === '' ? 'transfer' : name === undefined ? 'unknown' : name,
         callData: types ? types : value ? `${utils.formatEther(value)} ETH` : '',
       };
     }
-    const calldata = details.calldatas[i];
-    // Split using comma as separator, unless comma is between parentheses (tuple).
-    const decoded = defaultAbiCoder.decode(types.split(/,(?![^(]*\))/g), calldata);
-    return {
-      target,
-      functionSig: name,
-      callData: decoded.join(),
-      value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH }` : '',
-    };
+
+    try {
+      // Split using comma as separator, unless comma is between parentheses (tuple).
+      const decoded = defaultAbiCoder.decode(types.split(/,(?![^(]*\))/g), callData);
+      return {
+        target,
+        functionSig: name,
+        callData: decoded.join(),
+        value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH }` : '',
+      };
+    } catch (error) {
+      // We failed to decode. Display the raw calldata, appending function selectors if they exist.
+      return {
+        target,
+        callData: concatSelectorToCalldata(signature, callData),
+        value: value.gt(0) ? `{ value: ${utils.formatEther(value)} ETH } ` : '',
+      };
+    }
   });
 };
 
@@ -536,7 +563,7 @@ export const useCastRefundableVote = () => {
       const contract = connectContractToSigner(nounsDaoContract, undefined, library);
       const gasLimit = await contract.estimateGas.castRefundableVote(...args);
       return castRefundableVote(...args, {
-        gasLimit: gasLimit.add(20_000), // A 20,000 gas pad is used to avoid 'Out of gas' errors
+        gasLimit: gasLimit.add(30_000), // A 30,000 gas pad is used to avoid 'Out of gas' errors
       });
     },
     castRefundableVoteState,
@@ -556,7 +583,7 @@ export const useCastRefundableVoteWithReason = () => {
       const contract = connectContractToSigner(nounsDaoContract, undefined, library);
       const gasLimit = await contract.estimateGas.castRefundableVoteWithReason(...args);
       return castRefundableVoteWithReason(...args, {
-        gasLimit: gasLimit.add(20_000), // A 20,000 gas pad is used to avoid 'Out of gas' errors
+        gasLimit: gasLimit.add(30_000), // A 30,000 gas pad is used to avoid 'Out of gas' errors
       });
     },
     castRefundableVoteWithReasonState,
