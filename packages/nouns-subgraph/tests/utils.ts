@@ -6,6 +6,7 @@ import {
   MinQuorumVotesBPSSet,
   MaxQuorumVotesBPSSet,
   QuorumCoefficientSet,
+  ProposalObjectionPeriodSet,
 } from '../src/types/NounsDAO/NounsDAO';
 import {
   handleMinQuorumVotesBPSSet,
@@ -248,4 +249,24 @@ export function handleAllQuorumParamEvents(
   handleMinQuorumVotesBPSSet(createMinQuorumVotesBPSSetEvent(0, newMinQuorumVotesBPS));
   handleMaxQuorumVotesBPSSet(createMaxQuorumVotesBPSSetEvent(0, newMaxQuorumVotesBPS));
   handleQuorumCoefficientSet(createQuorumCoefficientSetEvent(BIGINT_ZERO, newCoefficient));
+}
+
+export function createProposalObjectionPeriodSetEvent(
+  proposalId: BigInt,
+  objectionPeriodEndBlock: BigInt,
+): ProposalObjectionPeriodSet {
+  let newEvent = changetype<ProposalObjectionPeriodSet>(newMockEvent());
+  newEvent.parameters = new Array();
+
+  newEvent.parameters.push(
+    new ethereum.EventParam('id', ethereum.Value.fromUnsignedBigInt(proposalId)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam(
+      'objectionPeriodEndBlock',
+      ethereum.Value.fromUnsignedBigInt(objectionPeriodEndBlock),
+    ),
+  );
+
+  return newEvent;
 }
