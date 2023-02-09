@@ -8,8 +8,8 @@ import {
   beforeEach,
   afterEach,
 } from 'matchstick-as/assembly/index';
-import { Address, BigInt, Bytes, ByteArray } from '@graphprotocol/graph-ts';
-import { Proposal } from '../src/types/schema';
+import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
+import { Proposal, ProposalPreviousVersion } from '../src/types/schema';
 import {
   handleProposalCreatedWithRequirements,
   handleVoteCast,
@@ -18,6 +18,7 @@ import {
   handleQuorumCoefficientSet,
   handleProposalCreated,
   handleProposalObjectionPeriodSet,
+  handleProposalUpdated,
 } from '../src/nouns-dao';
 import {
   createProposalCreatedWithRequirementsEventV1,
@@ -29,6 +30,7 @@ import {
   createQuorumCoefficientSetEvent,
   handleAllQuorumParamEvents,
   createProposalObjectionPeriodSetEvent,
+  createProposalUpdatedEvent,
 } from './utils';
 import {
   BIGINT_10K,
@@ -42,7 +44,7 @@ import {
   getGovernanceEntity,
   getOrCreateDelegate,
 } from '../src/utils/helpers';
-import { ParsedProposalV3 } from '../src/custom-types/ParsedProposalV3';
+import { extractTitle, ParsedProposalV3 } from '../src/custom-types/ParsedProposalV3';
 
 const SOME_ADDRESS = '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266';
 const proposerWithDelegate = Address.fromString('0x0000000000000000000000000000000000000001');
@@ -399,6 +401,81 @@ describe('nouns-dao', () => {
         createProposalObjectionPeriodSetEvent(BIGINT_ONE, BIGINT_10K),
       );
       assert.fieldEquals('Proposal', '1', 'objectionPeriodEndBlock', '10000');
+    });
+  });
+
+  describe('handleProposalUpdated', () => {
+    test('happy flow', () => {
+      const txHash = Bytes.fromI32(11);
+      const logIndex = BigInt.fromI32(3);
+      const updateBlockTimestamp = BigInt.fromI32(946684800);
+      const updateBlockNumber = BigInt.fromI32(15537394);
+      const proposalId = BigInt.fromI32(42);
+
+      const proposalEvent = new ParsedProposalV3();
+      proposalEvent.id = proposalId.toString();
+      proposalEvent.proposer = proposerWithDelegate.toHexString();
+      proposalEvent.createdTimestamp = updateBlockTimestamp.minus(BIGINT_ONE);
+      proposalEvent.createdBlock = updateBlockNumber.minus(BIGINT_ONE);
+      proposalEvent.targets = [signerWithNoDelegate];
+      proposalEvent.values = [BigInt.fromI32(987)];
+      proposalEvent.signatures = ['first signature'];
+      proposalEvent.calldatas = [Bytes.fromI32(888)];
+      proposalEvent.description = '# Original Title\nOriginal body';
+      proposalEvent.title = extractTitle(proposalEvent.description);
+
+      handleProposalCreated(proposalEvent);
+
+      const updateTargets = [signerWithDelegate];
+      const updateValues = [BigInt.fromI32(321)];
+      const updateSignatures = ['update signature'];
+      const updateCalldatas = [Bytes.fromI32(312)];
+      const updateDescription = '# Updated Title\nUpdated body';
+
+      handleProposalUpdated(
+        createProposalUpdatedEvent(
+          txHash,
+          logIndex,
+          updateBlockTimestamp,
+          updateBlockNumber,
+          proposalId,
+          proposerWithDelegate,
+          updateTargets,
+          updateValues,
+          updateSignatures,
+          updateCalldatas,
+          updateDescription,
+        ),
+      );
+
+      const proposal = Proposal.load(proposalId.toString())!;
+      assert.bigIntEquals(updateBlockTimestamp, proposal.lastUpdatedTimestamp);
+      assert.bigIntEquals(updateBlockNumber, proposal.lastUpdatedBlock);
+      assert.bytesEquals(changetype<Bytes[]>(updateTargets)[0], proposal.targets![0]);
+      assert.bigIntEquals(updateValues[0], proposal.values![0]);
+      assert.stringEquals(updateSignatures[0], proposal.signatures![0]);
+      assert.bytesEquals(updateCalldatas[0], proposal.calldatas![0]);
+      assert.stringEquals(updateDescription, proposal.description);
+      assert.stringEquals(extractTitle(updateDescription), proposal.title);
+
+      const previousVersionId = proposalId
+        .toString()
+        .concat('-')
+        .concat(txHash.toHexString())
+        .concat('-')
+        .concat(logIndex.toString());
+      const previousVersion = ProposalPreviousVersion.load(previousVersionId)!;
+      assert.stringEquals(proposalId.toString(), previousVersion.proposal);
+      assert.bigIntEquals(proposalEvent.createdTimestamp, previousVersion.createdAt);
+      assert.bytesEquals(
+        changetype<Bytes[]>(proposalEvent.targets)[0],
+        previousVersion.targets![0],
+      );
+      assert.bigIntEquals(proposalEvent.values[0], previousVersion.values![0]);
+      assert.stringEquals(proposalEvent.signatures[0], previousVersion.signatures![0]);
+      assert.bytesEquals(proposalEvent.calldatas[0], previousVersion.calldatas![0]);
+      assert.stringEquals(proposalEvent.description, previousVersion.description);
+      assert.stringEquals(extractTitle(proposalEvent.description), previousVersion.title);
     });
   });
 });

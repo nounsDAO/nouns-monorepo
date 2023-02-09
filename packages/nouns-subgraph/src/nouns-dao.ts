@@ -20,7 +20,7 @@ import {
   getGovernanceEntity,
   getOrCreateDelegateWithNullOption,
   getOrCreateDynamicQuorumParams,
-  getOrCreateProposalUpdate,
+  getOrCreateProposalPreviousVersion,
 } from './utils/helpers';
 import {
   BIGINT_ONE,
@@ -121,19 +121,19 @@ export function handleProposalUpdated(event: ProposalUpdated): void {
     .concat('-')
     .concat(event.logIndex.toString());
 
-  const proposalUpdate = getOrCreateProposalUpdate(updateId);
+  const previousVersion = getOrCreateProposalPreviousVersion(updateId);
   const proposal = getOrCreateProposal(event.params.id.toString());
 
-  // First save the current state of the proposal to the updates history entity
-  proposalUpdate.proposal = proposal.id;
-  proposalUpdate.createdAt = event.block.timestamp;
-  proposalUpdate.targets = proposal.targets;
-  proposalUpdate.values = proposal.values;
-  proposalUpdate.signatures = proposal.signatures;
-  proposalUpdate.calldatas = proposal.calldatas;
-  proposalUpdate.title = proposal.title;
-  proposalUpdate.description = proposal.description;
-  proposalUpdate.save();
+  // First save the current state of the proposal to the previous version
+  previousVersion.proposal = proposal.id;
+  previousVersion.createdAt = proposal.lastUpdatedTimestamp;
+  previousVersion.targets = proposal.targets;
+  previousVersion.values = proposal.values;
+  previousVersion.signatures = proposal.signatures;
+  previousVersion.calldatas = proposal.calldatas;
+  previousVersion.title = proposal.title;
+  previousVersion.description = proposal.description;
+  previousVersion.save();
 
   // Then update the proposal to the latest state
   proposal.lastUpdatedTimestamp = event.block.timestamp;

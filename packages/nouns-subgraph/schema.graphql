@@ -270,7 +270,7 @@ type Proposal @entity {
   objectionPeriodEndBlock: BigInt!
 }
 
-type ProposalUpdate @entity(immutable: true) {
+type ProposalPreviousVersion @entity(immutable: true) {
   id: ID!
 
   "The proposal that was updated"

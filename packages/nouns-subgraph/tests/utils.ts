@@ -7,6 +7,7 @@ import {
   MaxQuorumVotesBPSSet,
   QuorumCoefficientSet,
   ProposalObjectionPeriodSet,
+  ProposalUpdated,
 } from '../src/types/NounsDAO/NounsDAO';
 import {
   handleMinQuorumVotesBPSSet,
@@ -266,6 +267,53 @@ export function createProposalObjectionPeriodSetEvent(
       'objectionPeriodEndBlock',
       ethereum.Value.fromUnsignedBigInt(objectionPeriodEndBlock),
     ),
+  );
+
+  return newEvent;
+}
+
+export function createProposalUpdatedEvent(
+  txHash: Bytes,
+  logIndex: BigInt,
+  blockTimestamp: BigInt,
+  blockNumber: BigInt,
+  proposalId: BigInt,
+  proposer: Address,
+  targets: Address[],
+  values: BigInt[],
+  signatures: string[],
+  calldatas: Bytes[],
+  description: string,
+): ProposalUpdated {
+  let newEvent = changetype<ProposalUpdated>(newMockEvent());
+
+  newEvent.transaction.hash = txHash;
+  newEvent.logIndex = logIndex;
+  newEvent.block.timestamp = blockTimestamp;
+  newEvent.block.number = blockNumber;
+
+  newEvent.parameters = new Array();
+  newEvent.parameters.push(
+    new ethereum.EventParam('id', ethereum.Value.fromUnsignedBigInt(proposalId)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('proposer', ethereum.Value.fromAddress(proposer)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('targets', ethereum.Value.fromAddressArray(targets)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('values', ethereum.Value.fromUnsignedBigIntArray(values)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('signatures', ethereum.Value.fromStringArray(signatures)),
+  );
+
+  newEvent.parameters.push(
+    new ethereum.EventParam('calldatas', ethereum.Value.fromBytesArray(calldatas)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('description', ethereum.Value.fromString(description)),
   );
 
   return newEvent;
