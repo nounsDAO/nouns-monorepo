@@ -1,4 +1,13 @@
-import { assert, clearStore, test } from 'matchstick-as/assembly/index';
+import {
+  assert,
+  clearStore,
+  test,
+  describe,
+  beforeAll,
+  afterAll,
+  beforeEach,
+  afterEach,
+} from 'matchstick-as/assembly/index';
 import { Address, BigInt, Bytes, ByteArray } from '@graphprotocol/graph-ts';
 import { Proposal } from '../src/types/schema';
 import {
@@ -7,6 +16,7 @@ import {
   handleMinQuorumVotesBPSSet,
   handleMaxQuorumVotesBPSSet,
   handleQuorumCoefficientSet,
+  handleProposerCreated,
 } from '../src/nouns-dao';
 import {
   createProposalCreatedWithRequirementsEvent,
@@ -29,8 +39,107 @@ import {
   getGovernanceEntity,
   getOrCreateDelegate,
 } from '../src/utils/helpers';
+import { ParsedProposalV3 } from '../src/custom-types/ParsedProposalV3';
 
 const SOME_ADDRESS = '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266';
+const proposerWithDelegate = Address.fromString('0x0000000000000000000000000000000000000001');
+const proposerWithNoDelegate = Address.fromString('0x0000000000000000000000000000000000000002');
+const signerWithDelegate = Address.fromString('0x0000000000000000000000000000000000000003');
+const signerWithNoDelegate = Address.fromString('0x0000000000000000000000000000000000000004');
+
+describe('handleProposerCreated', () => {
+  beforeEach(() => {
+    const delegate = getOrCreateDelegate(proposerWithDelegate.toHexString());
+    delegate.tokenHoldersRepresentedAmount = 1;
+    delegate.delegatedVotes = BIGINT_ONE;
+    delegate.delegatedVotesRaw = BIGINT_ONE;
+    delegate.save();
+  });
+
+  afterEach(() => {
+    clearStore();
+  });
+
+  describe('with signers', () => {
+    beforeAll(() => {
+      const delegate = getOrCreateDelegate(signerWithDelegate.toHexString());
+      delegate.tokenHoldersRepresentedAmount = 1;
+      delegate.delegatedVotes = BIGINT_ONE;
+      delegate.delegatedVotesRaw = BIGINT_ONE;
+      delegate.save();
+    });
+
+    afterAll(() => {
+      clearStore();
+    });
+
+    test('uses existing delegates when they exist, and creates new ones when they are missing', () => {
+      const proposalEvent = new ParsedProposalV3();
+      proposalEvent.id = '1';
+      proposalEvent.proposer = proposerWithDelegate.toHexString();
+      proposalEvent.signers = [
+        signerWithDelegate.toHexString(),
+        signerWithNoDelegate.toHexString(),
+      ];
+
+      // 2 delegates because one is the proposer and the second is the signer with a delegate
+      assert.entityCount('Delegate', 2);
+
+      handleProposerCreated(proposalEvent);
+      assert.entityCount('Proposal', 1);
+      assert.entityCount('Delegate', 3);
+
+      const proposal = Proposal.load('1')!;
+      assert.stringEquals(proposal.proposer, proposalEvent.proposer);
+      assert.stringEquals(proposal.signers![0], signerWithDelegate.toHexString());
+      assert.stringEquals(proposal.signers![1], signerWithNoDelegate.toHexString());
+
+      // The delegate that already existed has a votes balance
+      assert.fieldEquals('Delegate', proposal.signers![0], 'tokenHoldersRepresentedAmount', '1');
+      assert.fieldEquals('Delegate', proposal.signers![0], 'delegatedVotes', '1');
+      assert.fieldEquals('Delegate', proposal.signers![0], 'delegatedVotesRaw', '1');
+
+      // The delegate that was created on the fly has no votes
+      assert.fieldEquals('Delegate', proposal.signers![1], 'tokenHoldersRepresentedAmount', '0');
+      assert.fieldEquals('Delegate', proposal.signers![1], 'delegatedVotes', '0');
+      assert.fieldEquals('Delegate', proposal.signers![1], 'delegatedVotesRaw', '0');
+    });
+  });
+
+  describe('single proposer', () => {
+    test('uses an existing delegate when it is there', () => {
+      const proposalEvent = new ParsedProposalV3();
+      proposalEvent.id = '1';
+      proposalEvent.proposer = proposerWithDelegate.toHexString();
+      assert.entityCount('Delegate', 1);
+
+      handleProposerCreated(proposalEvent);
+
+      assert.entityCount('Proposal', 1);
+      assert.entityCount('Delegate', 1);
+      assert.fieldEquals('Proposal', '1', 'proposer', proposalEvent.proposer);
+      assert.fieldEquals('Delegate', proposalEvent.proposer, 'tokenHoldersRepresentedAmount', '1');
+      assert.fieldEquals('Delegate', proposalEvent.proposer, 'delegatedVotes', '1');
+      assert.fieldEquals('Delegate', proposalEvent.proposer, 'delegatedVotesRaw', '1');
+    });
+
+    test('creates a delegate if the proposer was never seen before', () => {
+      const proposalEvent = new ParsedProposalV3();
+      proposalEvent.id = '1';
+      proposalEvent.proposer = proposerWithNoDelegate.toHexString();
+      assert.entityCount('Delegate', 1);
+
+      handleProposerCreated(proposalEvent);
+
+      assert.entityCount('Proposal', 1);
+      assert.entityCount('Delegate', 2);
+      assert.fieldEquals('Proposal', '1', 'proposer', proposalEvent.proposer);
+      assert.fieldEquals('Delegate', proposalEvent.proposer, 'tokenHoldersRepresentedAmount', '0');
+      assert.fieldEquals('Delegate', proposalEvent.proposer, 'delegatedVotes', '0');
+      assert.fieldEquals('Delegate', proposalEvent.proposer, 'delegatedVotesRaw', '0');
+    });
+  });
+});
 
 test('handleProposalCreatedWithRequirements: saved PENDING proposal as expected', () => {
   // this is to prevent a log error in the code under test that expects there to be a delegate

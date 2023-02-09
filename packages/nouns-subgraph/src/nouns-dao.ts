@@ -47,7 +47,7 @@ export function handleProposalCreatedWithRequirementsV3(
   handleProposerCreated(ParsedProposalV3.fromV3Event(event));
 }
 
-function handleProposerCreated(parsedProposal: ParsedProposalV3): void {
+export function handleProposerCreated(parsedProposal: ParsedProposalV3): void {
   let proposal = getOrCreateProposal(parsedProposal.id);
   let proposer = getOrCreateDelegateWithNullOption(parsedProposal.proposer, false);
 
