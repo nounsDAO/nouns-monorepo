@@ -117,7 +117,9 @@ export function handleProposalUpdated(event: ProposalUpdated): void {
   const updateId = event.params.id
     .toString()
     .concat('-')
-    .concat(event.transaction.hash.toHexString());
+    .concat(event.transaction.hash.toHexString())
+    .concat('-')
+    .concat(event.logIndex.toString());
 
   const proposalUpdate = getOrCreateProposalUpdate(updateId);
   const proposal = getOrCreateProposal(event.params.id.toString());
