@@ -273,6 +273,10 @@ type Proposal @entity {
 type ProposalUpdate @entity(immutable: true) {
   id: ID!
 
+  "The proposal that was updated"
+  proposal: Proposal!
+
+  "The block timestamp of the update"
   createdAt: BigInt!
 
   "Targets data for the change"

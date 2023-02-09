@@ -125,6 +125,7 @@ export function handleProposalUpdated(event: ProposalUpdated): void {
   const proposal = getOrCreateProposal(event.params.id.toString());
 
   // First save the current state of the proposal to the updates history entity
+  proposalUpdate.proposal = proposal.id;
   proposalUpdate.createdAt = event.block.timestamp;
   proposalUpdate.targets = proposal.targets;
   proposalUpdate.values = proposal.values;
