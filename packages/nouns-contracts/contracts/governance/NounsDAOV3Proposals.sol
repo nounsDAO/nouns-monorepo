@@ -360,16 +360,12 @@ library NounsDAOV3Proposals {
         NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
         address proposer = proposal.proposer;
 
-        uint256 votes;
+        uint256 votes = ds.nouns.getPriorVotes(proposer, block.number - 1);
         bool msgSenderIsProposer = proposer == msg.sender;
         address[] memory signers = proposal.signers;
-        if (signers.length == 0) {
-            votes = ds.nouns.getPriorVotes(proposer, block.number - 1);
-        } else {
-            for (uint256 i = 0; i < signers.length; ++i) {
-                msgSenderIsProposer = msgSenderIsProposer || msg.sender == signers[i];
-                votes += ds.nouns.getPriorVotes(signers[i], block.number - 1);
-            }
+        for (uint256 i = 0; i < signers.length; ++i) {
+            msgSenderIsProposer = msgSenderIsProposer || msg.sender == signers[i];
+            votes += ds.nouns.getPriorVotes(signers[i], block.number - 1);
         }
 
         require(
