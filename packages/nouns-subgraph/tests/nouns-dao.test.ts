@@ -89,6 +89,52 @@ describe('ParsedProposalV3', () => {
       assert.stringEquals(parsedProposal.status, STATUS_ACTIVE);
     });
   });
+
+  describe('extracts title', () => {
+    test('fromV1Event', () => {
+      const propEventInput = stubProposalCreatedWithRequirementsEventInput();
+      propEventInput.description = '# Title text\nBody text';
+      const newPropEvent = createProposalCreatedWithRequirementsEventV1(propEventInput);
+
+      const parsedProposal = ParsedProposalV3.fromV1Event(newPropEvent);
+
+      assert.stringEquals(parsedProposal.title, 'Title text');
+      assert.stringEquals(parsedProposal.description, propEventInput.description);
+    });
+    test('fromV3Event', () => {
+      const propEventInput = stubProposalCreatedWithRequirementsEventInput();
+      propEventInput.description = '# Title text\nBody text';
+      const newPropEvent = createProposalCreatedWithRequirementsEventV3(propEventInput);
+
+      const parsedProposal = ParsedProposalV3.fromV3Event(newPropEvent);
+
+      assert.stringEquals(parsedProposal.title, 'Title text');
+      assert.stringEquals(parsedProposal.description, propEventInput.description);
+    });
+  });
+
+  describe('parses signers', () => {
+    test('fromV1Event', () => {
+      const propEventInput = stubProposalCreatedWithRequirementsEventInput();
+      propEventInput.signers = [Address.fromString(SOME_ADDRESS)];
+      const newPropEvent = createProposalCreatedWithRequirementsEventV1(propEventInput);
+
+      const parsedProposal = ParsedProposalV3.fromV1Event(newPropEvent);
+
+      assert.i32Equals(parsedProposal.signers.length, 0);
+    });
+    test('fromV3Event', () => {
+      const propEventInput = stubProposalCreatedWithRequirementsEventInput();
+      propEventInput.signers = [Address.fromString(SOME_ADDRESS), proposerWithDelegate];
+      const newPropEvent = createProposalCreatedWithRequirementsEventV3(propEventInput);
+
+      const parsedProposal = ParsedProposalV3.fromV3Event(newPropEvent);
+
+      assert.i32Equals(parsedProposal.signers.length, 2);
+      assert.stringEquals(parsedProposal.signers[0], SOME_ADDRESS);
+      assert.stringEquals(parsedProposal.signers[1], proposerWithDelegate.toHexString());
+    });
+  });
 });
 
 describe('handleProposalCreated', () => {
