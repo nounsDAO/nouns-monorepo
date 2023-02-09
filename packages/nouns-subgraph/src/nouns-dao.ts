@@ -69,6 +69,8 @@ function handleProposerCreated(parsedProposal: ParsedProposalV3): void {
   proposal.calldatas = parsedProposal.calldatas;
   proposal.createdTimestamp = parsedProposal.createdTimestamp;
   proposal.createdBlock = parsedProposal.createdBlock;
+  proposal.lastUpdatedTimestamp = parsedProposal.createdTimestamp;
+  proposal.lastUpdatedBlock = parsedProposal.createdBlock;
   proposal.createdTransactionHash = parsedProposal.createdTransactionHash;
   proposal.startBlock = parsedProposal.startBlock;
   proposal.endBlock = parsedProposal.endBlock;
@@ -131,6 +133,8 @@ export function handleProposalUpdated(event: ProposalUpdated): void {
   proposalUpdate.save();
 
   // Then update the proposal to the latest state
+  proposal.lastUpdatedTimestamp = event.block.timestamp;
+  proposal.lastUpdatedBlock = event.block.number;
   proposal.targets = changetype<Bytes[]>(event.params.targets);
   proposal.values = event.params.values;
   proposal.signatures = event.params.signatures;
