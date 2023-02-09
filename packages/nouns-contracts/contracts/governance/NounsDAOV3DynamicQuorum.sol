@@ -26,7 +26,7 @@ library NounsDAOV3DynamicQuorum {
      * @notice Quorum votes required for a specific proposal to succeed
      * Differs from `GovernerBravo` which uses fixed amount
      */
-    function quorumVotes(NounsDAOStorageV3.StorageV3 storage ds, uint256 proposalId) public view returns (uint256) {
+    function quorumVotes(NounsDAOStorageV3.StorageV3 storage ds, uint256 proposalId) internal view returns (uint256) {
         NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
         if (proposal.totalSupply == 0) {
             return proposal.quorumVotes;
@@ -120,14 +120,14 @@ library NounsDAOV3DynamicQuorum {
     /**
      * @notice Current min quorum votes using Noun total supply
      */
-    function minQuorumVotes(NounsDAOStorageV3.StorageV3 storage ds) public view returns (uint256) {
+    function minQuorumVotes(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (uint256) {
         return bps2Uint(getDynamicQuorumParamsAt(ds, block.number).minQuorumVotesBPS, ds.nouns.totalSupply());
     }
 
     /**
      * @notice Current max quorum votes using Noun total supply
      */
-    function maxQuorumVotes(NounsDAOStorageV3.StorageV3 storage ds) public view returns (uint256) {
+    function maxQuorumVotes(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (uint256) {
         return bps2Uint(getDynamicQuorumParamsAt(ds, block.number).maxQuorumVotesBPS, ds.nouns.totalSupply());
     }
 
