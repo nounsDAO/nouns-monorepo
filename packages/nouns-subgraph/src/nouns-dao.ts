@@ -85,16 +85,16 @@ function handleProposerCreated(parsedProposal: ParsedProposalV3): void {
   const signerDelegates = new Array<string>(parsedProposal.signers.length);
   for (let i = 0; i < parsedProposal.signers.length; i++) {
     const signerAddress = parsedProposal.signers[i];
-    const signerDelegate = getOrCreateDelegateWithNullOption(signerAddress, false);
-
+    let signerDelegate = getOrCreateDelegateWithNullOption(signerAddress, false);
     if (signerDelegate == null) {
       log.error('Signer delegate {} not found on ProposalCreated. tx_hash: {}', [
         signerAddress,
         parsedProposal.txHash,
       ]);
-    } else {
-      signerDelegates[i] = signerDelegate.id;
+      signerDelegate = getOrCreateDelegate(signerAddress);
     }
+
+    signerDelegates[i] = signerDelegate.id;
   }
   proposal.signers = signerDelegates;
 
