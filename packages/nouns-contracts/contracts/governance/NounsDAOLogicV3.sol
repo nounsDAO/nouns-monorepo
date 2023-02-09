@@ -204,6 +204,10 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
             );
     }
 
+    function cancelSig(bytes calldata sig) external {
+        ds.cancelSig(sig);
+    }
+
     function updateProposal(
         uint256 proposalId,
         address[] memory targets,

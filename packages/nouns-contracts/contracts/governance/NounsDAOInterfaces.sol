@@ -521,8 +521,8 @@ contract NounsDAOStorageV3 {
         // ================ V3 ================ //
         uint256 lastMinuteWindowInBlocks;
         uint256 objectionPeriodDurationInBlocks;
-        /// @notice signatures already used that shouldn't be used again
-        mapping(bytes32 => bool) usedSigs;
+        /// @notice user => sig => isCancelled: signatures that have been cancelled by the signer and are no longer valid
+        mapping(address => mapping(bytes32 => bool)) cancelledSigs;
         /// @notice The proposal at which to start using `startBlock` instead of `creationBlock` for vote snapshots
         /// @dev To be zeroed-out and removed in a V3.1 fix version once the switch takes place
         uint256 voteSnapshotBlockSwitchProposalId;

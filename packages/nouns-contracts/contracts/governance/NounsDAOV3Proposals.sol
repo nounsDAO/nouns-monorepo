@@ -37,7 +37,7 @@ library NounsDAOV3Proposals {
     error SignerCountMismtach();
     error ProposerCannotUpdateProposalWithSigners();
     error MustProvideSignatures();
-    error SignatureAlreadyUsed();
+    error SignatureIsCancelled();
 
     /// @notice An event emitted when a new proposal is created
     event ProposalCreated(
@@ -87,6 +87,9 @@ library NounsDAOV3Proposals {
 
     /// @notice An event emitted when a proposal has been canceled
     event ProposalCanceled(uint256 id);
+
+    /// @notice Emitted when someone cancels a signature
+    event SignatureCancelled(address indexed signer, bytes sig);
 
     struct ProposalTemp {
         uint256 totalSupply;
@@ -178,6 +181,13 @@ library NounsDAOV3Proposals {
         emitNewPropEvents(newProposal, signers, ds.minQuorumVotes(), txs, description);
 
         return proposalId;
+    }
+
+    function cancelSig(NounsDAOStorageV3.StorageV3 storage ds, bytes calldata sig) internal {
+        bytes32 sigHash = keccak256(sig);
+        ds.cancelledSigs[msg.sender][sigHash] = true;
+
+        emit SignatureCancelled(msg.sender, sig);
     }
 
     function calcProposalEncodeData(ProposalTxs memory txs, string memory description)
@@ -654,10 +664,9 @@ library NounsDAOV3Proposals {
         NounsDAOStorageV3.StorageV3 storage ds,
         bytes memory proposalEncodeData,
         NounsDAOStorageV3.ProposerSignature memory proposerSignature
-    ) internal {
+    ) internal view {
         bytes32 sigHash = keccak256(proposerSignature.sig);
-        if (ds.usedSigs[sigHash]) revert SignatureAlreadyUsed();
-        ds.usedSigs[sigHash] = true;
+        if (ds.cancelledSigs[proposerSignature.signer][sigHash]) revert SignatureIsCancelled();
 
         bytes32 structHash = keccak256(
             abi.encodePacked(
