@@ -16,7 +16,7 @@ import {
   handleMinQuorumVotesBPSSet,
   handleMaxQuorumVotesBPSSet,
   handleQuorumCoefficientSet,
-  handleProposerCreated,
+  handleProposalCreated,
 } from '../src/nouns-dao';
 import {
   createProposalCreatedWithRequirementsEventV1,
@@ -91,7 +91,7 @@ describe('ParsedProposalV3', () => {
   });
 });
 
-describe('handleProposerCreated', () => {
+describe('handleProposalCreated', () => {
   beforeEach(() => {
     const delegate = getOrCreateDelegate(proposerWithDelegate.toHexString());
     delegate.tokenHoldersRepresentedAmount = 1;
@@ -129,7 +129,7 @@ describe('handleProposerCreated', () => {
       // 2 delegates because one is the proposer and the second is the signer with a delegate
       assert.entityCount('Delegate', 2);
 
-      handleProposerCreated(proposalEvent);
+      handleProposalCreated(proposalEvent);
       assert.entityCount('Proposal', 1);
       assert.entityCount('Delegate', 3);
 
@@ -157,7 +157,7 @@ describe('handleProposerCreated', () => {
       proposalEvent.proposer = proposerWithDelegate.toHexString();
       assert.entityCount('Delegate', 1);
 
-      handleProposerCreated(proposalEvent);
+      handleProposalCreated(proposalEvent);
 
       assert.entityCount('Proposal', 1);
       assert.entityCount('Delegate', 1);
@@ -173,7 +173,7 @@ describe('handleProposerCreated', () => {
       proposalEvent.proposer = proposerWithNoDelegate.toHexString();
       assert.entityCount('Delegate', 1);
 
-      handleProposerCreated(proposalEvent);
+      handleProposalCreated(proposalEvent);
 
       assert.entityCount('Proposal', 1);
       assert.entityCount('Delegate', 2);
@@ -204,7 +204,7 @@ describe('handleProposerCreated', () => {
       proposalEvent.title = 'some title';
       proposalEvent.status = STATUS_PENDING;
 
-      handleProposerCreated(proposalEvent);
+      handleProposalCreated(proposalEvent);
       const proposal = Proposal.load('42')!;
 
       assert.stringEquals(proposal.proposer, proposalEvent.proposer);
@@ -238,7 +238,7 @@ describe('handleProposerCreated', () => {
       const proposalEvent = new ParsedProposalV3();
       proposalEvent.proposer = proposerWithDelegate.toHexString();
       proposalEvent.id = '43';
-      handleProposerCreated(proposalEvent);
+      handleProposalCreated(proposalEvent);
 
       assert.fieldEquals('Proposal', '43', 'totalSupply', '601');
       assert.fieldEquals('Proposal', '43', 'minQuorumVotesBPS', '100');
@@ -250,7 +250,7 @@ describe('handleProposerCreated', () => {
       const proposalEvent = new ParsedProposalV3();
       proposalEvent.proposer = proposerWithDelegate.toHexString();
       proposalEvent.id = '44';
-      handleProposerCreated(proposalEvent);
+      handleProposalCreated(proposalEvent);
 
       assert.fieldEquals('Proposal', '44', 'forVotes', '0');
       assert.fieldEquals('Proposal', '44', 'againstVotes', '0');

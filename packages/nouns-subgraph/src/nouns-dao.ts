@@ -38,16 +38,16 @@ import { ParsedProposalV3, extractTitle } from './custom-types/ParsedProposalV3'
 export function handleProposalCreatedWithRequirements(
   event: ProposalCreatedWithRequirements1,
 ): void {
-  handleProposerCreated(ParsedProposalV3.fromV1Event(event));
+  handleProposalCreated(ParsedProposalV3.fromV1Event(event));
 }
 
 export function handleProposalCreatedWithRequirementsV3(
   event: ProposalCreatedWithRequirements,
 ): void {
-  handleProposerCreated(ParsedProposalV3.fromV3Event(event));
+  handleProposalCreated(ParsedProposalV3.fromV3Event(event));
 }
 
-export function handleProposerCreated(parsedProposal: ParsedProposalV3): void {
+export function handleProposalCreated(parsedProposal: ParsedProposalV3): void {
   let proposal = getOrCreateProposal(parsedProposal.id);
   let proposer = getOrCreateDelegateWithNullOption(parsedProposal.proposer, false);
 
