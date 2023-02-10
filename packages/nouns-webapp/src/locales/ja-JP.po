@@ -229,10 +229,6 @@ msgstr "オークション終了まで"
 msgid "Available to withdraw"
 msgstr ""
 
-#: src/components/StreamWithdrawModal/index.tsx
-#~ msgid "Avilable to withdraw"
-#~ msgstr ""
-
 #: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallSelectFunctionStep/index.tsx
@@ -464,10 +460,6 @@ msgstr ""
 #: src/components/DynamicQuorumInfoModal/index.tsx
 msgid "Dynamic Threshold"
 msgstr ""
-
-#: src/components/DynamicQuorumInfoModal/index.tsx
-#~ msgid "Dynamic Treshold"
-#~ msgstr ""
 
 #: src/components/Banner/index.tsx
 msgid "EVERY DAY,"
@@ -736,10 +728,6 @@ msgstr "Nounderへの報酬"
 msgid "Nounders receive rewards in the form of Nouns (10% of supply for first 5 years)."
 msgstr "Nounderには、Nounsという形で報酬が与えられます (最初の5年間は供給量の10％)。"
 
-#: src/components/Documentation/index.tsx
-#~ msgid "Nounders will proveably revoke this veto right when they deem it safe to do so. This decision will be based on a healthy Noun distribution and a community that is engaged in the governance process."
-#~ msgstr "Nounderは、安全であると判断した場合、この拒否権を無効にすることが出来ます。この決定は、健全なNounの分布と、ガバナンスプロセスに関与しているコミュニティに基づいて行われます。"
-
 #: src/pages/Nounders/index.tsx
 msgid "Nounders' Reward"
 msgstr "Nounderへの報酬"
@@ -825,10 +813,6 @@ msgstr "32x32 PNG画像のみ受け付けています"
 #: src/components/ProposalHeader/index.tsx
 msgid "Only Nouns you owned or were delegated to you before {0} are eligible to vote."
 msgstr "投票できるのは {0} 以前に所有していた、または委任されたNounsのみです。"
-
-#: src/pages/Vote/index.tsx
-#~ msgid "Only visable to you"
-#~ msgstr ""
 
 #: src/pages/Vote/index.tsx
 msgid "Only visible to you"
@@ -1108,10 +1092,6 @@ msgstr ""
 #: src/components/DynamicQuorumInfoModal/index.tsx
 msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. It increases linearly as a function of the % of Nouns voting against a prop, varying between Min Threshold and Max Threshold."
 msgstr ""
-
-#: src/components/DynamicQuorumInfoModal/index.tsx
-#~ msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. It increases linearly as a function of the % of Nouns voting against a prop, varying between Min Treshold and Max Treshold."
-#~ msgstr ""
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
 msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. The number of For votes required to pass Proposal {0} is given by the following curve:"
@@ -1420,10 +1400,6 @@ msgstr "あなたは提案 {0} に投票することに成功しました。"
 #: src/components/StreamWithdrawModal/index.tsx
 msgid "You've successfully withdrawn {withdrawAmount} {unitForDisplay} to your wallet"
 msgstr ""
-
-#: src/components/StreamWithdrawModal/index.tsx
-#~ msgid "You've successfully withrawn {0} {unitForDisplay} to your wallet"
-#~ msgstr ""
 
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Your <0>{availableVotes}</0> votes are being delegated to a new account."

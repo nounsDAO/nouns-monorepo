@@ -4,7 +4,7 @@ import streamABI from '../utils/streamingPaymentUtils/stream.abi.json';
 
 const abi = new utils.Interface(streamABI);
 
-export const useStreamRemaningBalance = (streamAddress: string, userAddress: string) => {
+export const useStreamRemainingBalance = (streamAddress: string) => {
 
   const [balance] =
     useContractCall<[BigNumber]>({
@@ -25,7 +25,7 @@ export const useWithdrawTokens = (streamAddress: string) => {
   return { withdrawTokens, withdrawTokensState };
 };
 
-export const useEllapsedTime = (streamAddress: string) => {
+export const useElapsedTime = (streamAddress: string) => {
 
   const [elapsedTime] =
     useContractCall<[BigNumber]>({

@@ -7,10 +7,9 @@ import ModalTitle from '../ModalTitle';
 import config from '../../config';
 import { contract2humanUSDCFormat } from '../../utils/usdcUtils';
 import { ethers } from 'ethers';
-import { useEthers } from '@usedapp/core/dist/cjs/src';
 import {
-  useEllapsedTime,
-  useStreamRemaningBalance,
+  useElapsedTime,
+  useStreamRemainingBalance,
   useWithdrawTokens,
 } from '../../wrappers/nounsStream';
 import ModalBottomButtonRow from '../ModalBottomButtonRow';
@@ -18,7 +17,7 @@ import BrandSpinner from '../BrandSpinner';
 import BrandNumericEntry from '../BrandNumericEntry';
 import SolidColorBackgroundModal from '../SolidColorBackgroundModal';
 import StartOrEndTime from '../StartOrEndTime';
-import { formatTokenAmmount } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
+import { formatTokenAmount } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
 import { SupportedCurrency } from '../ProposalActionsModal/steps/TransferFundsDetailsStep';
 import ModalLabel from '../ModalLabel';
 import { countDecimals } from '../../utils/numberUtils';
@@ -48,13 +47,12 @@ const StreamWithdrawModalOverlay: React.FC<{
 
   const isUSDC = tokenAddress.toLowerCase() === config.addresses.usdcToken?.toLowerCase();
   const unitForDisplay = isUSDC ? 'USDC' : 'WETH';
-  const { account } = useEthers();
 
-  const withdrawableBalance = useStreamRemaningBalance(streamAddress ?? '', account ?? '') ?? 0;
+  const withdrawableBalance = useStreamRemainingBalance(streamAddress ?? '') ?? 0;
   const { withdrawTokens, withdrawTokensState } = useWithdrawTokens(streamAddress ?? '');
   const [withdrawAmount, setWithdrawAmount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
-  const elapsedTime = useEllapsedTime(streamAddress ?? '');
+  const elapsedTime = useElapsedTime(streamAddress ?? '');
 
   const [percentStreamedSoFar, setPercentStreamedSoFar] = useState(0);
 
@@ -112,7 +110,7 @@ const StreamWithdrawModalOverlay: React.FC<{
     );
   }
 
-  const humanUnitsStreamRemaningBalance = parseFloat(
+  const humanUnitsStreamRemainingBalance = parseFloat(
     isUSDC
       ? contract2humanUSDCFormat(withdrawableBalance?.toString() ?? '', true)
       : ethers.utils.formatUnits(withdrawableBalance?.toString() ?? '').toString(),
@@ -162,7 +160,7 @@ const StreamWithdrawModalOverlay: React.FC<{
             setWithdrawAmount(e.floatValue ?? 0);
           }}
           placeholder={isUSDC ? '0 USDC' : '0 WETH'}
-          isInvalid={withdrawAmount > humanUnitsStreamRemaningBalance}
+          isInvalid={withdrawAmount > humanUnitsStreamRemainingBalance}
         />
         {/* Hover brightness */}
         <div
@@ -188,13 +186,13 @@ const StreamWithdrawModalOverlay: React.FC<{
         onNextBtnClick={async () => {
           setIsLoading(true);
           withdrawTokens(
-            formatTokenAmmount(
+            formatTokenAmount(
               withdrawAmount.toString(),
               isUSDC ? SupportedCurrency.USDC : SupportedCurrency.WETH,
             ),
           );
         }}
-        isNextBtnDisabled={withdrawableBalance !== 0 && humanUnitsStreamRemaningBalance === 0}
+        isNextBtnDisabled={withdrawableBalance !== 0 && humanUnitsStreamRemainingBalance === 0}
       />
       <div className={classes.streamTimeWrapper}>
         Stream <StartOrEndTime startTime={startTime} endTime={endTime} />

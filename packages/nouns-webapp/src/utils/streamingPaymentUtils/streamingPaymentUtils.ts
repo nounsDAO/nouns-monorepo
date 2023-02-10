@@ -35,7 +35,7 @@ export function usePredictStreamAddress({
   return predictedAddress?.toString();
 }
 
-export function formatTokenAmmount(amount?: string, currency?: SupportedCurrency) {
+export function formatTokenAmount(amount?: string, currency?: SupportedCurrency) {
   const amt = amount ?? '0';
   switch (currency) {
     case SupportedCurrency.USDC:

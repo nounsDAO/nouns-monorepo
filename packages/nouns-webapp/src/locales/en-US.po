@@ -224,10 +224,6 @@ msgstr "Auction ends in"
 msgid "Available to withdraw"
 msgstr "Available to withdraw"
 
-#: src/components/StreamWithdrawModal/index.tsx
-#~ msgid "Avilable to withdraw"
-#~ msgstr "Avilable to withdraw"
-
 #: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallSelectFunctionStep/index.tsx
@@ -459,10 +455,6 @@ msgstr "Download the Free iOS App"
 #: src/components/DynamicQuorumInfoModal/index.tsx
 msgid "Dynamic Threshold"
 msgstr "Dynamic Threshold"
-
-#: src/components/DynamicQuorumInfoModal/index.tsx
-#~ msgid "Dynamic Treshold"
-#~ msgstr "Dynamic Treshold"
 
 #: src/components/Banner/index.tsx
 msgid "EVERY DAY,"
@@ -731,10 +723,6 @@ msgstr "Nounder's Reward"
 msgid "Nounders receive rewards in the form of Nouns (10% of supply for first 5 years)."
 msgstr "Nounders receive rewards in the form of Nouns (10% of supply for first 5 years)."
 
-#: src/components/Documentation/index.tsx
-#~ msgid "Nounders will proveably revoke this veto right when they deem it safe to do so. This decision will be based on a healthy Noun distribution and a community that is engaged in the governance process."
-#~ msgstr "Nounders will proveably revoke this veto right when they deem it safe to do so. This decision will be based on a healthy Noun distribution and a community that is engaged in the governance process."
-
 #: src/pages/Nounders/index.tsx
 msgid "Nounders' Reward"
 msgstr "Nounders' Reward"
@@ -820,10 +808,6 @@ msgstr "Only 32x32 PNG images are accepted"
 #: src/components/ProposalHeader/index.tsx
 msgid "Only Nouns you owned or were delegated to you before {0} are eligible to vote."
 msgstr "Only Nouns you owned or were delegated to you before {0} are eligible to vote."
-
-#: src/pages/Vote/index.tsx
-#~ msgid "Only visable to you"
-#~ msgstr "Only visable to you"
 
 #: src/pages/Vote/index.tsx
 msgid "Only visible to you"
@@ -1103,10 +1087,6 @@ msgstr "The Nouns community has undertaken a preliminary exploration of proposal
 #: src/components/DynamicQuorumInfoModal/index.tsx
 msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. It increases linearly as a function of the % of Nouns voting against a prop, varying between Min Threshold and Max Threshold."
 msgstr "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. It increases linearly as a function of the % of Nouns voting against a prop, varying between Min Threshold and Max Threshold."
-
-#: src/components/DynamicQuorumInfoModal/index.tsx
-#~ msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. It increases linearly as a function of the % of Nouns voting against a prop, varying between Min Treshold and Max Treshold."
-#~ msgstr "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. It increases linearly as a function of the % of Nouns voting against a prop, varying between Min Treshold and Max Treshold."
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
 msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. The number of For votes required to pass Proposal {0} is given by the following curve:"
@@ -1415,10 +1395,6 @@ msgstr "You've successfully voted on on prop {0}"
 #: src/components/StreamWithdrawModal/index.tsx
 msgid "You've successfully withdrawn {widthdrawAmount} {unitForDisplay} to your wallet"
 msgstr "You've successfully withdrawn {widthdrawAmount} {unitForDisplay} to your wallet"
-
-#: src/components/StreamWithdrawModal/index.tsx
-#~ msgid "You've successfully withrawn {0} {unitForDisplay} to your wallet"
-#~ msgstr "You've successfully withrawn {0} {unitForDisplay} to your wallet"
 
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Your <0>{availableVotes}</0> votes are being delegated to a new account."

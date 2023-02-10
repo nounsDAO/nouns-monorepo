@@ -7,7 +7,7 @@ import StreamFactoryABI from '../utils/streamingPaymentUtils/streamFactory.abi.j
 import wethABIJSON from '../utils/wethUtils/weth.abi.json';
 import payerABIJSON from '../utils/payerContractUtils/payerABI.json';
 import {
-  formatTokenAmmount,
+  formatTokenAmount,
   getTokenAddressForCurrency,
 } from '../utils/streamingPaymentUtils/streamingPaymentUtils';
 
@@ -48,7 +48,7 @@ export default function useStreamPaymentTransactions({
       ]),
       calldata: abi._encodeParams(abi.functions[fundStreamFunction ?? '']?.inputs ?? [], [
         state.address,
-        formatTokenAmmount(state.amount, state.TransferFundsCurrency),
+        formatTokenAmount(state.amount, state.TransferFundsCurrency),
         getTokenAddressForCurrency(state.TransferFundsCurrency),
         state.streamStartTimestamp,
         state.streamEndTimestamp,

@@ -5,7 +5,7 @@ import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
 import ModalTitle from '../../../ModalTitle';
 import config from '../../../../config';
 import {
-  formatTokenAmmount,
+  formatTokenAmount,
   getTokenAddressForCurrency,
   usePredictStreamAddress,
 } from '../../../../utils/streamingPaymentUtils/streamingPaymentUtils';
@@ -24,7 +24,7 @@ const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props =
     msgSender: config.addresses.nounsDaoExecutor,
     payer: config.addresses.nounsDaoExecutor,
     recipient: state.address,
-    tokenAmount: formatTokenAmmount(state.amount, state.TransferFundsCurrency),
+    tokenAmount: formatTokenAmount(state.amount, state.TransferFundsCurrency),
     tokenAddress: getTokenAddressForCurrency(state.TransferFundsCurrency),
     startTime: state.streamStartTimestamp,
     endTime: state.streamEndTimestamp,
