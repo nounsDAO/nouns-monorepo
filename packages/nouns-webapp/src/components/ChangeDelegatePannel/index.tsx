@@ -8,11 +8,17 @@ import currentDelegatePannelClasses from '../CurrentDelegatePannel/CurrentDelega
 import DelegationCandidateInfo from '../DelegationCandidateInfo';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import classes from './ChangeDelegatePannel.module.css';
-import { useDelegateVotes, useNounTokenBalance, useUserDelegatee } from '../../wrappers/nounToken';
+import {
+  useAccountVotes,
+  useDelegateVotes,
+  useNounTokenBalance,
+  useUserDelegatee,
+} from '../../wrappers/nounToken';
 import { usePickByState } from '../../utils/pickByState';
 import { buildEtherscanTxLink } from '../../utils/etherscan';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import BrandSpinner from '../BrandSpinner';
+import { useProposalThreshold } from '../../wrappers/nounsDao';
 
 interface ChangeDelegatePannelProps {
   onDismiss: () => void;
@@ -60,6 +66,8 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
   const { send: delegateVotes, state: delegateState } = useDelegateVotes();
   const locale = useActiveLocale();
   const currentDelegate = useUserDelegatee();
+  const proposalThreshold = useProposalThreshold();
+  const accountVotes = useAccountVotes(account ?? '') ?? 0;
 
   useEffect(() => {
     if (delegateState.status === 'Success') {
@@ -198,6 +206,15 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
           {getTitleFromState(changeDelegateState)}
         </h1>
         <p className={currentDelegatePannelClasses.copy}>{primaryCopy}</p>
+        {availableVotes > 0 && accountVotes - availableVotes < (proposalThreshold ?? 0) + 1 && (
+          <div className={classes.changeDelegateWarning}>
+            <Trans>
+              Your account will have less than {(proposalThreshold ?? 0) + 1}{' '}
+              {proposalThreshold === 0 || proposalThreshold === undefined ? 'vote' : 'votes'} after
+              this delegation. Unexecuted props you've created will now be cancelable by anyone.
+            </Trans>
+          </div>
+        )}
       </div>
 
       {!(changeDelegateState === ChangeDelegateState.CHANGE_FAILURE) && delegateTo === undefined && (
