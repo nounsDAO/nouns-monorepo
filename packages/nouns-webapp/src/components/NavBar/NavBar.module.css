@@ -2,15 +2,18 @@
   position: relative;
   z-index: 2;
   padding: 1rem 0rem;
+}
+
+.navBarBrand img {
   transition: all 0.15s ease-in-out;
 }
 
-.navBarBrand:hover {
-  transform: scale(0.95);
+.navBarBrand:hover img {
+  transform: scale(0.667);
 }
 
 .navBarLogo {
-  width: 75px;
+  width: 85px;
   height: 75px;
 }
 
