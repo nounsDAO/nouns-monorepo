@@ -6,6 +6,7 @@ import {
   Governance,
   Vote,
   DynamicQuorumParams,
+  ProposalPreviousVersion,
 } from '../types/schema';
 import { ZERO_ADDRESS, BIGINT_ZERO, BIGINT_ONE } from './constants';
 
@@ -141,4 +142,12 @@ export function getOrCreateDynamicQuorumParams(block: BigInt | null = null): Dyn
   }
 
   return params as DynamicQuorumParams;
+}
+
+export function getOrCreateProposalPreviousVersion(id: string): ProposalPreviousVersion {
+  let update = ProposalPreviousVersion.load(id);
+  if (update == null) {
+    update = new ProposalPreviousVersion(id);
+  }
+  return update;
 }

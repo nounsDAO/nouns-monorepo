@@ -34,9 +34,10 @@ library NounsDAOV3Proposals {
     error SignatureExpired();
     error CanOnlyEditPendingProposals();
     error OnlyProposerCanEdit();
+    error SignerCountMismtach();
     error ProposerCannotUpdateProposalWithSigners();
     error MustProvideSignatures();
-    error SignatureAlreadyUsed();
+    error SignatureIsCancelled();
 
     /// @notice An event emitted when a new proposal is created
     event ProposalCreated(
@@ -52,9 +53,11 @@ library NounsDAOV3Proposals {
     );
 
     /// @notice An event emitted when a new proposal is created, which includes additional information
+    /// @dev V3 adds `signers` compared to the V1/V2 event.
     event ProposalCreatedWithRequirements(
         uint256 id,
         address proposer,
+        address[] signers,
         address[] targets,
         uint256[] values,
         string[] signatures,
@@ -84,6 +87,9 @@ library NounsDAOV3Proposals {
 
     /// @notice An event emitted when a proposal has been canceled
     event ProposalCanceled(uint256 id);
+
+    /// @notice Emitted when someone cancels a signature
+    event SignatureCancelled(address indexed signer, bytes sig);
 
     struct ProposalTemp {
         uint256 totalSupply;
@@ -136,7 +142,7 @@ library NounsDAOV3Proposals {
         );
         ds.latestProposalIds[newProposal.proposer] = newProposal.id;
 
-        emitNewPropEvents(newProposal, ds.minQuorumVotes(), txs, description);
+        emitNewPropEvents(newProposal, new address[](0), ds.minQuorumVotes(), txs, description);
 
         return newProposal.id;
     }
@@ -160,18 +166,28 @@ library NounsDAOV3Proposals {
 
             checkNoActiveProp(ds, signer);
             ds.latestProposalIds[signer] = proposalId;
-
             votes += ds.nouns.getPriorVotes(signer, block.number - 1);
         }
+
+        checkNoActiveProp(ds, msg.sender);
+        ds.latestProposalIds[msg.sender] = proposalId;
+        votes += ds.nouns.getPriorVotes(msg.sender, block.number - 1);
 
         uint256 propThreshold = checkPropThreshold(ds, votes);
 
         NounsDAOStorageV3.Proposal storage newProposal = createNewProposal(ds, proposalId, propThreshold, txs);
         newProposal.signers = signers;
 
-        emitNewPropEvents(newProposal, ds.minQuorumVotes(), txs, description);
+        emitNewPropEvents(newProposal, signers, ds.minQuorumVotes(), txs, description);
 
         return proposalId;
+    }
+
+    function cancelSig(NounsDAOStorageV3.StorageV3 storage ds, bytes calldata sig) internal {
+        bytes32 sigHash = keccak256(sig);
+        ds.cancelledSigs[msg.sender][sigHash] = true;
+
+        emit SignatureCancelled(msg.sender, sig);
     }
 
     function calcProposalEncodeData(ProposalTxs memory txs, string memory description)
@@ -241,7 +257,7 @@ library NounsDAOV3Proposals {
         if (msg.sender != proposal.proposer) revert OnlyProposerCanEdit();
 
         address[] memory signers = proposal.signers;
-        if (proposerSignatures.length != signers.length) revert OnlyProposerCanEdit();
+        if (proposerSignatures.length != signers.length) revert SignerCountMismtach();
 
         bytes memory proposalEncodeData = calcProposalEncodeData(txs, description);
 
@@ -344,16 +360,12 @@ library NounsDAOV3Proposals {
         NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
         address proposer = proposal.proposer;
 
-        uint256 votes;
+        uint256 votes = ds.nouns.getPriorVotes(proposer, block.number - 1);
         bool msgSenderIsProposer = proposer == msg.sender;
         address[] memory signers = proposal.signers;
-        if (signers.length == 0) {
-            votes = ds.nouns.getPriorVotes(proposer, block.number - 1);
-        } else {
-            for (uint256 i = 0; i < signers.length; ++i) {
-                msgSenderIsProposer = msgSenderIsProposer || msg.sender == signers[i];
-                votes += ds.nouns.getPriorVotes(signers[i], block.number - 1);
-            }
+        for (uint256 i = 0; i < signers.length; ++i) {
+            msgSenderIsProposer = msgSenderIsProposer || msg.sender == signers[i];
+            votes += ds.nouns.getPriorVotes(signers[i], block.number - 1);
         }
 
         require(
@@ -549,6 +561,7 @@ library NounsDAOV3Proposals {
         if (latestProposalId != 0) {
             NounsDAOStorageV3.ProposalState proposersLatestProposalState = state(ds, latestProposalId);
             if (
+                proposersLatestProposalState == NounsDAOStorageV3.ProposalState.ObjectionPeriod ||
                 proposersLatestProposalState == NounsDAOStorageV3.ProposalState.Active ||
                 proposersLatestProposalState == NounsDAOStorageV3.ProposalState.Pending
             ) revert ProposerAlreadyHasALiveProposal();
@@ -586,6 +599,7 @@ library NounsDAOV3Proposals {
 
     function emitNewPropEvents(
         NounsDAOStorageV3.Proposal storage newProposal,
+        address[] memory signers,
         uint256 minQuorumVotes,
         ProposalTxs memory txs,
         string memory description
@@ -603,11 +617,13 @@ library NounsDAOV3Proposals {
             description
         );
 
-        /// @notice Updated event with `proposalThreshold` and `minQuorumVotes`
-        /// @notice `minQuorumVotes` is always zero since V2 introduces dynamic quorum with checkpoints
+        /// @notice V1: Updated event with `proposalThreshold` and `quorumVotes` `minQuorumVotes`
+        /// @notice V2: `quorumVotes` changed to `minQuorumVotes`
+        /// @notice V3: Added signers
         emit ProposalCreatedWithRequirements(
             newProposal.id,
             msg.sender,
+            signers,
             txs.targets,
             txs.values,
             txs.signatures,
@@ -645,10 +661,9 @@ library NounsDAOV3Proposals {
         NounsDAOStorageV3.StorageV3 storage ds,
         bytes memory proposalEncodeData,
         NounsDAOStorageV3.ProposerSignature memory proposerSignature
-    ) internal {
+    ) internal view {
         bytes32 sigHash = keccak256(proposerSignature.sig);
-        if (ds.usedSigs[sigHash]) revert SignatureAlreadyUsed();
-        ds.usedSigs[sigHash] = true;
+        if (ds.cancelledSigs[proposerSignature.signer][sigHash]) revert SignatureIsCancelled();
 
         bytes32 structHash = keccak256(
             abi.encodePacked(

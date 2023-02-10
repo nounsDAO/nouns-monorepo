@@ -188,6 +188,9 @@ type Proposal @entity {
   "Delegate that proposed the change"
   proposer: Delegate!
 
+  "Delegates that signed on this proposal to get it over the proposal threshold"
+  signers: [Delegate!]
+
   "Targets data for the change"
   targets: [Bytes!]
 
@@ -206,11 +209,11 @@ type Proposal @entity {
   "The proposal creation block"
   createdBlock: BigInt!
 
-  "The proposal last updated timestamp"
-  lastUpdatedTimestamp: BigInt
+  "The proposal's last update timestamp"
+  lastUpdatedTimestamp: BigInt!
 
-  "The proposal last updated block"
-  lastUpdatedBlock: BigInt
+  "The proposal's last update block"
+  lastUpdatedBlock: BigInt!
 
   "The proposal creation transaction hash"
   createdTransactionHash: Bytes!
@@ -263,8 +266,36 @@ type Proposal @entity {
   "Dynamic quorum param snapshot: the dynamic quorum coefficient"
   quorumCoefficient: BigInt!
 
-  "The block at which objection period ends. Zero if no objection period"
-  objectionPeriodEndBlock: BigInt
+  "The objection period end block"
+  objectionPeriodEndBlock: BigInt!
+}
+
+type ProposalPreviousVersion @entity(immutable: true) {
+  id: ID!
+
+  "The proposal that was updated"
+  proposal: Proposal!
+
+  "The block timestamp of the update"
+  createdAt: BigInt!
+
+  "Targets data for the change"
+  targets: [Bytes!]
+
+  "Values data for the change"
+  values: [BigInt!]
+
+  "Signature data for the change"
+  signatures: [String!]
+
+  "Call data for the change"
+  calldatas: [Bytes!]
+
+  "The proposal title, parsed from the description"
+  title: String!
+
+  "The full proposal description, which includes the title"
+  description: String!
 }
 
 type Vote @entity {

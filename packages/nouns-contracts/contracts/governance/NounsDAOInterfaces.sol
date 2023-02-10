@@ -127,6 +127,23 @@ contract NounsDAOEventsV2 is NounsDAOEvents {
 }
 
 contract NounsDAOEventsV3 is NounsDAOEventsV2 {
+    /// @notice An event emitted when a new proposal is created, which includes additional information
+    /// @dev V3 adds `signers` compared to the V1/V2 event.
+    event ProposalCreatedWithRequirements(
+        uint256 id,
+        address proposer,
+        address[] signers,
+        address[] targets,
+        uint256[] values,
+        string[] signatures,
+        bytes[] calldatas,
+        uint256 startBlock,
+        uint256 endBlock,
+        uint256 proposalThreshold,
+        uint256 quorumVotes,
+        string description
+    );
+
     /// @notice Emitted when a proposal is updated
     event ProposalUpdated(
         uint256 indexed id,
@@ -140,6 +157,24 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
 
     /// @notice Emitted when a proposal is set to have an objection period
     event ProposalObjectionPeriodSet(uint256 indexed id, uint256 objectionPeriodEndBlock);
+
+    /// @notice Emitted when someone cancels a signature
+    event SignatureCancelled(address indexed signer, bytes sig);
+
+    /// @notice An event emitted when the objection period duration is set
+    event ObjectionPeriodDurationSet(
+        uint256 oldObjectionPeriodDurationInBlocks,
+        uint256 newObjectionPeriodDurationInBlocks
+    );
+
+    /// @notice An event emitted when the objection period last minute window is set
+    event LastMinuteWindowSet(uint256 oldLastMinuteWindowInBlocks, uint256 newLastMinuteWindowInBlocks);
+
+    /// @notice Emitted when the proposal id at which vote snapshot block changes is set
+    event VoteSnapshotBlockSwitchProposalIdSet(
+        uint256 oldVoteSnapshotBlockSwitchProposalId,
+        uint256 newVoteSnapshotBlockSwitchProposalId
+    );
 }
 
 contract NounsDAOProxyStorage {
@@ -504,8 +539,8 @@ contract NounsDAOStorageV3 {
         // ================ V3 ================ //
         uint256 lastMinuteWindowInBlocks;
         uint256 objectionPeriodDurationInBlocks;
-        /// @notice signatures already used that shouldn't be used again
-        mapping(bytes32 => bool) usedSigs;
+        /// @notice user => sig => isCancelled: signatures that have been cancelled by the signer and are no longer valid
+        mapping(address => mapping(bytes32 => bool)) cancelledSigs;
         /// @notice The proposal at which to start using `startBlock` instead of `creationBlock` for vote snapshots
         /// @dev To be zeroed-out and removed in a V3.1 fix version once the switch takes place
         uint256 voteSnapshotBlockSwitchProposalId;

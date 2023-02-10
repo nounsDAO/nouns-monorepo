@@ -204,6 +204,10 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
             );
     }
 
+    function cancelSig(bytes calldata sig) external {
+        ds.cancelSig(sig);
+    }
+
     function updateProposal(
         uint256 proposalId,
         address[] memory targets,
@@ -609,6 +613,20 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      */
     function maxQuorumVotes() public view returns (uint256) {
         return ds.maxQuorumVotes();
+    }
+
+    /**
+     * @notice Get all quorum params checkpoints
+     */
+    function quorumParamsCheckpoints() public view returns (DynamicQuorumParamsCheckpoint[] memory) {
+        return ds.quorumParamsCheckpoints;
+    }
+
+    /**
+     * @notice Get a quorum params checkpoint by its index
+     */
+    function quorumParamsCheckpoints(uint256 index) public view returns (DynamicQuorumParamsCheckpoint memory) {
+        return ds.quorumParamsCheckpoints[index];
     }
 
     /**

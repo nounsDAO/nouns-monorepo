@@ -65,21 +65,27 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
               return (
                 <li key={i} className="m-0">
                   {linkIfAddress(d.target)}.{d.functionSig}
-                  {d.value}(
-                  <br />
-                  {d.callData.split(',').map((content, i) => {
-                    return (
-                      <Fragment key={i}>
-                        <span key={i}>
-                          &emsp;
-                          {linkIfAddress(content)}
-                          {d.callData.split(',').length - 1 === i ? '' : ','}
-                        </span>
-                        <br />
-                      </Fragment>
-                    );
-                  })}
-                  )
+                  {d.value}
+                  {!!d.functionSig ? (
+                    <>
+                      (<br />
+                      {d.callData.split(',').map((content, i) => {
+                        return (
+                          <Fragment key={i}>
+                            <span key={i}>
+                              &emsp;
+                              {linkIfAddress(content)}
+                              {d.callData.split(',').length - 1 === i ? '' : ','}
+                            </span>
+                            <br />
+                          </Fragment>
+                        );
+                      })}
+                      )
+                    </>
+                  ) : (
+                    d.callData
+                  )}
                   {d.target.toLowerCase() === config.addresses.tokenBuyer?.toLowerCase() && (
                     <div className={classes.txnInfoText}>
                       <div className={classes.txnInfoIconWrapper}>
@@ -88,7 +94,7 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
                       <div>
                         <Trans>
                           This transaction was automatically added to refill the TokenBuyer.
-                          Proposers do not recieve this ETH.
+                          Proposers do not receive this ETH.
                         </Trans>
                       </div>
                     </div>

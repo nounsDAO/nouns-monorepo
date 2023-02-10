@@ -1,10 +1,13 @@
 import { newMockEvent } from 'matchstick-as/assembly/index';
 import {
   ProposalCreatedWithRequirements,
+  ProposalCreatedWithRequirements1,
   VoteCast,
   MinQuorumVotesBPSSet,
   MaxQuorumVotesBPSSet,
   QuorumCoefficientSet,
+  ProposalObjectionPeriodSet,
+  ProposalUpdated,
 } from '../src/types/NounsDAO/NounsDAO';
 import {
   handleMinQuorumVotesBPSSet,
@@ -14,9 +17,62 @@ import {
 import { Address, ethereum, Bytes, BigInt, ByteArray } from '@graphprotocol/graph-ts';
 import { BIGINT_ONE, BIGINT_ZERO } from '../src/utils/constants';
 
+export function createProposalCreatedWithRequirementsEventV3(
+  input: ProposalCreatedWithRequirementsEvent,
+): ProposalCreatedWithRequirements {
+  let newEvent = changetype<ProposalCreatedWithRequirements>(newMockEvent());
+  newEvent.parameters = new Array();
+
+  newEvent.parameters.push(
+    new ethereum.EventParam('id', ethereum.Value.fromUnsignedBigInt(input.id)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('proposer', ethereum.Value.fromAddress(input.proposer)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('signers', ethereum.Value.fromAddressArray(input.signers)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('targets', ethereum.Value.fromAddressArray(input.targets)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('values', ethereum.Value.fromUnsignedBigIntArray(input.values)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('signatures', ethereum.Value.fromStringArray(input.signatures)),
+  );
+
+  newEvent.parameters.push(
+    new ethereum.EventParam('calldatas', ethereum.Value.fromBytesArray(input.calldatas)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('startBlock', ethereum.Value.fromUnsignedBigInt(input.startBlock)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('endBlock', ethereum.Value.fromUnsignedBigInt(input.endBlock)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam(
+      'proposalThreshold',
+      ethereum.Value.fromUnsignedBigInt(input.proposalThreshold),
+    ),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('quorumVotes', ethereum.Value.fromUnsignedBigInt(input.quorumVotes)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('description', ethereum.Value.fromString(input.description)),
+  );
+
+  newEvent.block.number = input.eventBlockNumber;
+
+  return newEvent;
+}
+
 export class ProposalCreatedWithRequirementsEvent {
   id: BigInt;
   proposer: Address;
+  signers: Address[];
   targets: Address[];
   values: BigInt[];
   signatures: string[];
@@ -29,10 +85,10 @@ export class ProposalCreatedWithRequirementsEvent {
   eventBlockNumber: BigInt;
 }
 
-export function createProposalCreatedWithRequirementsEvent(
+export function createProposalCreatedWithRequirementsEventV1(
   input: ProposalCreatedWithRequirementsEvent,
-): ProposalCreatedWithRequirements {
-  let newEvent = changetype<ProposalCreatedWithRequirements>(newMockEvent());
+): ProposalCreatedWithRequirements1 {
+  let newEvent = changetype<ProposalCreatedWithRequirements1>(newMockEvent());
   newEvent.parameters = new Array();
 
   newEvent.parameters.push(
@@ -80,10 +136,12 @@ export function createProposalCreatedWithRequirementsEvent(
 
 export function stubProposalCreatedWithRequirementsEventInput(
   eventBlockNumber: BigInt = BIGINT_ZERO,
+  signers: Address[] = [],
 ): ProposalCreatedWithRequirementsEvent {
   return {
     id: BigInt.fromI32(1),
     proposer: Address.fromString('0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'),
+    signers: signers,
     targets: [Address.fromString('0x000000000000000000000000000000000000dEaD')],
     values: [BigInt.fromI32(0)],
     signatures: ['some signature'],
@@ -192,4 +250,71 @@ export function handleAllQuorumParamEvents(
   handleMinQuorumVotesBPSSet(createMinQuorumVotesBPSSetEvent(0, newMinQuorumVotesBPS));
   handleMaxQuorumVotesBPSSet(createMaxQuorumVotesBPSSetEvent(0, newMaxQuorumVotesBPS));
   handleQuorumCoefficientSet(createQuorumCoefficientSetEvent(BIGINT_ZERO, newCoefficient));
+}
+
+export function createProposalObjectionPeriodSetEvent(
+  proposalId: BigInt,
+  objectionPeriodEndBlock: BigInt,
+): ProposalObjectionPeriodSet {
+  let newEvent = changetype<ProposalObjectionPeriodSet>(newMockEvent());
+  newEvent.parameters = new Array();
+
+  newEvent.parameters.push(
+    new ethereum.EventParam('id', ethereum.Value.fromUnsignedBigInt(proposalId)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam(
+      'objectionPeriodEndBlock',
+      ethereum.Value.fromUnsignedBigInt(objectionPeriodEndBlock),
+    ),
+  );
+
+  return newEvent;
+}
+
+export function createProposalUpdatedEvent(
+  txHash: Bytes,
+  logIndex: BigInt,
+  blockTimestamp: BigInt,
+  blockNumber: BigInt,
+  proposalId: BigInt,
+  proposer: Address,
+  targets: Address[],
+  values: BigInt[],
+  signatures: string[],
+  calldatas: Bytes[],
+  description: string,
+): ProposalUpdated {
+  let newEvent = changetype<ProposalUpdated>(newMockEvent());
+
+  newEvent.transaction.hash = txHash;
+  newEvent.logIndex = logIndex;
+  newEvent.block.timestamp = blockTimestamp;
+  newEvent.block.number = blockNumber;
+
+  newEvent.parameters = new Array();
+  newEvent.parameters.push(
+    new ethereum.EventParam('id', ethereum.Value.fromUnsignedBigInt(proposalId)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('proposer', ethereum.Value.fromAddress(proposer)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('targets', ethereum.Value.fromAddressArray(targets)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('values', ethereum.Value.fromUnsignedBigIntArray(values)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('signatures', ethereum.Value.fromStringArray(signatures)),
+  );
+
+  newEvent.parameters.push(
+    new ethereum.EventParam('calldatas', ethereum.Value.fromBytesArray(calldatas)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('description', ethereum.Value.fromString(description)),
+  );
+
+  return newEvent;
 }

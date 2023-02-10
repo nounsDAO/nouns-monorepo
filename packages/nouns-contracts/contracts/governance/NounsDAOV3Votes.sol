@@ -250,7 +250,7 @@ library NounsDAOV3Votes {
         require(receipt.hasVoted == false, 'NounsDAO::castVoteInternal: voter already voted');
 
         /// @notice: Unlike GovernerBravo, votes are considered from the block the proposal was created in order to normalize quorumVotes and proposalThreshold metrics
-        uint96 votes = ds.nouns.getPriorVotes(voter, proposalCreationBlock(ds, proposal));
+        uint96 votes = ds.nouns.getPriorVotes(voter, proposalVoteSnapshotBlock(ds, proposal));
 
         bool isForVoteInLastMinuteWindow = false;
         if (support == 1) {
@@ -281,7 +281,7 @@ library NounsDAOV3Votes {
             !ds.isDefeated(proposal)
         ) {
             proposal.objectionPeriodEndBlock = proposal.endBlock + ds.objectionPeriodDurationInBlocks;
-            
+
             emit ProposalObjectionPeriodSet(proposal.id, proposal.objectionPeriodEndBlock);
         }
 
@@ -303,7 +303,7 @@ library NounsDAOV3Votes {
         NounsDAOStorageV3.Receipt storage receipt = proposal.receipts[voter];
         require(receipt.hasVoted == false, 'NounsDAO::castVoteInternal: voter already voted');
 
-        uint96 votes = receipt.votes = ds.nouns.getPriorVotes(voter, proposalCreationBlock(ds, proposal));
+        uint96 votes = receipt.votes = ds.nouns.getPriorVotes(voter, proposalVoteSnapshotBlock(ds, proposal));
         receipt.hasVoted = true;
         receipt.support = 0;
         proposal.againstVotes = proposal.againstVotes + votes;
@@ -326,11 +326,10 @@ library NounsDAOV3Votes {
         }
     }
 
-    function proposalCreationBlock(NounsDAOStorageV3.StorageV3 storage ds, NounsDAOStorageV3.Proposal storage proposal)
-        internal
-        view
-        returns (uint256)
-    {
+    function proposalVoteSnapshotBlock(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        NounsDAOStorageV3.Proposal storage proposal
+    ) internal view returns (uint256) {
         // The idea is to temporarily use this code that would still use `creationBlock` until all proposals are using
         // `startBlock`, then we can deploy a quick DAO fix that removes this line and only uses `startBlock`.
         // In that version upgrade we can also zero-out and remove this storage variable for max cleanup.
