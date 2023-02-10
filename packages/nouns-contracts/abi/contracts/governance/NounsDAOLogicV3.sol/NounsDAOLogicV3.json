@@ -61,12 +61,12 @@
   },
   {
     "inputs": [],
-    "name": "SignatureAlreadyUsed",
+    "name": "SignatureExpired",
     "type": "error"
   },
   {
     "inputs": [],
-    "name": "SignatureExpired",
+    "name": "SignatureIsCancelled",
     "type": "error"
   },
   {
@@ -78,6 +78,30 @@
     "inputs": [],
     "name": "TooManyActions",
     "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "UnsafeUint16Cast",
+    "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "oldLastMinuteWindowInBlocks",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newLastMinuteWindowInBlocks",
+        "type": "uint256"
+      }
+    ],
+    "name": "LastMinuteWindowSet",
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -210,6 +234,25 @@
       }
     ],
     "name": "NewVetoer",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "oldObjectionPeriodDurationInBlocks",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newObjectionPeriodDurationInBlocks",
+        "type": "uint256"
+      }
+    ],
+    "name": "ObjectionPeriodDurationSet",
     "type": "event"
   },
   {
@@ -639,6 +682,25 @@
       {
         "indexed": true,
         "internalType": "address",
+        "name": "signer",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "sig",
+        "type": "bytes"
+      }
+    ],
+    "name": "SignatureCancelled",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
         "name": "voter",
         "type": "address"
       },
@@ -668,6 +730,25 @@
       }
     ],
     "name": "VoteCast",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "oldVoteSnapshotBlockSwitchProposalId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newVoteSnapshotBlockSwitchProposalId",
+        "type": "uint256"
+      }
+    ],
+    "name": "VoteSnapshotBlockSwitchProposalIdSet",
     "type": "event"
   },
   {
@@ -1019,6 +1100,19 @@
       }
     ],
     "name": "cancel",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "sig",
+        "type": "bytes"
+      }
+    ],
+    "name": "cancelSig",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

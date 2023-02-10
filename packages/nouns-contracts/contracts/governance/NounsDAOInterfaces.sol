@@ -160,6 +160,21 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
 
     /// @notice Emitted when someone cancels a signature
     event SignatureCancelled(address indexed signer, bytes sig);
+
+    /// @notice An event emitted when the objection period duration is set
+    event ObjectionPeriodDurationSet(
+        uint256 oldObjectionPeriodDurationInBlocks,
+        uint256 newObjectionPeriodDurationInBlocks
+    );
+
+    /// @notice An event emitted when the objection period last minute window is set
+    event LastMinuteWindowSet(uint256 oldLastMinuteWindowInBlocks, uint256 newLastMinuteWindowInBlocks);
+
+    /// @notice Emitted when the proposal id at which vote snapshot block changes is set
+    event VoteSnapshotBlockSwitchProposalIdSet(
+        uint256 oldVoteSnapshotBlockSwitchProposalId,
+        uint256 newVoteSnapshotBlockSwitchProposalId
+    );
 }
 
 contract NounsDAOProxyStorage {
