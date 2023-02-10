@@ -86,10 +86,11 @@ const VotePage = ({
         )
       : undefined;
 
+  const endBlock = proposal?.objectionPeriodEndBlock || proposal?.endBlock;
   const endDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
+          AVERAGE_BLOCK_TIME_IN_SECS * (endBlock! - currentBlock),
           'seconds',
         )
       : undefined;

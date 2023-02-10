@@ -79,6 +79,7 @@ export interface PartialProposal {
   endBlock: number;
   eta: Date | undefined;
   quorumVotes: number;
+  objectionPeriodEndBlock: number;
 }
 
 export interface Proposal extends PartialProposal {
@@ -457,6 +458,7 @@ const parseSubgraphProposal = (
     eta: proposal.executionETA ? new Date(Number(proposal.executionETA) * 1000) : undefined,
     details: formatProposalTransactionDetails(proposal),
     transactionHash: proposal.createdTransactionHash,
+    objectionPeriodEndBlock: parseInt(proposal.objectionPeriodEndBlock)
   };
 };
 
@@ -516,6 +518,7 @@ export const useAllProposalsViaChain = (skip = false): PartialProposalData => {
 
           startBlock: parseInt(proposal?.startBlock?.toString() ?? ''),
           endBlock: parseInt(proposal?.endBlock?.toString() ?? ''),
+          objectionPeriodEndBlock: 0, // TODO: this should read from the contract
           forCount: parseInt(proposal?.forVotes?.toString() ?? '0'),
           againstCount: parseInt(proposal?.againstVotes?.toString() ?? '0'),
           abstainCount: parseInt(proposal?.abstainVotes?.toString() ?? '0'),
