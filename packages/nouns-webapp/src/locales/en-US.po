@@ -37,6 +37,10 @@ msgstr "3.5 artists, 6.5 technologists"
 msgid "404: This is not the person, place, or thing you're looking for..."
 msgstr "404: This is not the person, place, or thing you're looking for..."
 
+#: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
+msgid "<0/><1>Guidelines</1><2/>• Do <3>NOT</3> request ETH to trade into USDC. Instead, request USDC directly.<4/>• Do <5>NOT</5> transfer funds externally to create an ETH or USDC stream. Instead, use the \"Stream Funds\" action.<6/><7>Supported Action Types</7><8/><9>• Transfer Funds: </9>Send a fixed amount of ETH or USDC.<10/><11>• Stream Funds: </11>Stream a fixed amount of WETH or USDC.<12/><13>• Function Call: </13>Call a contract function."
+msgstr "<0/><1>Guidelines</1><2/>• Do <3>NOT</3> request ETH to trade into USDC. Instead, request USDC directly.<4/>• Do <5>NOT</5> transfer funds externally to create an ETH or USDC stream. Instead, use the \"Stream Funds\" action.<6/><7>Supported Action Types</7><8/><9>• Transfer Funds: </9>Send a fixed amount of ETH or USDC.<10/><11>• Stream Funds: </11>Stream a fixed amount of WETH or USDC.<12/><13>• Function Call: </13>Call a contract function."
+
 #: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
 #~ msgid "<0/>Holder changed from<1><2/></1> to <3><4/></3>"
 #~ msgstr "<0/>Holder changed from<1><2/></1> to <3><4/></3>"
@@ -70,10 +74,6 @@ msgstr "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 #~ msgid "<0>Supported Action Types:</0><1/><2>• Transfer Funds: </2>Send a fixed amount of ETH or USDC.<3/><4>• Function Call: </4>Call a contract function."
 #~ msgstr "<0>Supported Action Types:</0><1/><2>• Transfer Funds: </2>Send a fixed amount of ETH or USDC.<3/><4>• Function Call: </4>Call a contract function."
-
-#: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
-msgid "<0>Supported Action Types:</0><1/><2>• Transfer Funds: </2>Send a fixed amount of ETH or USDC.<3/><4>• Stream Funds: </4>Stream a fixed amount of WETH or USDC.<5/><6>• Function Call: </6>Call a contract function."
-msgstr "<0>Supported Action Types:</0><1/><2>• Transfer Funds: </2>Send a fixed amount of ETH or USDC.<3/><4>• Stream Funds: </4>Stream a fixed amount of WETH or USDC.<5/><6>• Function Call: </6>Call a contract function."
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
@@ -1298,13 +1298,13 @@ msgstr "WTF?"
 msgid "Waiting for"
 msgstr "Waiting for"
 
+#: src/components/ProposalActionsModal/steps/StreamPaymentsDateDetailsStep/index.tsx
+msgid "We suggest adding a buffer between when you assume the proposal to be executed and when the stream begins."
+msgstr "We suggest adding a buffer between when you assume the proposal to be executed and when the stream begins."
+
 #: src/components/Documentation/index.tsx
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
 msgstr "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
-
-#: src/components/StreamWithdrawModal/index.tsx
-msgid "Widthdraw"
-msgstr "Widthdraw"
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Will have"
@@ -1318,6 +1318,10 @@ msgstr "Winner"
 #: src/components/CurrentBid/index.tsx
 msgid "Winning bid"
 msgstr "Winning bid"
+
+#: src/components/StreamWithdrawModal/index.tsx
+msgid "Withdraw"
+msgstr "Withdraw"
 
 #: src/components/StreamWithdrawModal/index.tsx
 #: src/components/StreamWithdrawModal/index.tsx
@@ -1393,8 +1397,8 @@ msgid "You've successfully voted on on prop {0}"
 msgstr "You've successfully voted on on prop {0}"
 
 #: src/components/StreamWithdrawModal/index.tsx
-msgid "You've successfully withdrawn {widthdrawAmount} {unitForDisplay} to your wallet"
-msgstr "You've successfully withdrawn {widthdrawAmount} {unitForDisplay} to your wallet"
+msgid "You've successfully withdrawn {withdrawAmount} {unitForDisplay} to your wallet"
+msgstr "You've successfully withdrawn {withdrawAmount} {unitForDisplay} to your wallet"
 
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Your <0>{availableVotes}</0> votes are being delegated to a new account."
