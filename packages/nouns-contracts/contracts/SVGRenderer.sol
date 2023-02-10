@@ -18,6 +18,7 @@
 pragma solidity ^0.8.6;
 
 import { ISVGRenderer } from './interfaces/ISVGRenderer.sol';
+import { StringBufferLib } from '@lukasz.glen/string-buffer/contracts/StringBufferLib.sol';
 
 contract SVGRenderer is ISVGRenderer {
     bytes16 private constant _HEX_SYMBOLS = '0123456789abcdef';
@@ -40,6 +41,7 @@ contract SVGRenderer is ISVGRenderer {
     }
 
     struct DecodedImage {
+        uint8 paletteId;
         ContentBounds bounds;
         Draw[] draws;
     }
@@ -47,7 +49,7 @@ contract SVGRenderer is ISVGRenderer {
     /**
      * @notice Given RLE image data and color palette pointers, merge to generate a single SVG image.
      */
-    function generateSVG(SVGParams calldata params) external pure override returns (string memory svg) {
+    function generateSVG(SVGParams calldata params) external pure override returns (string memory svg) { // 6 480 356
         // if (bytes(params.background).length != 0) {
         //     // prettier-ignore
         //     return string(
@@ -59,7 +61,12 @@ contract SVGRenderer is ISVGRenderer {
         //         )
         //     );
         // }
-        return string(abi.encodePacked(_SVG_START_TAG, _generateSVGRects(params), _SVG_END_TAG));
+        StringBufferLib.StringBuffer memory outputBuffer = StringBufferLib.initialize(2048);
+        StringBufferLib.appendBytes(outputBuffer, bytes(_SVG_START_TAG));
+        _generateSVGRects(params, outputBuffer);
+        StringBufferLib.appendBytes(outputBuffer, bytes(_SVG_END_TAG));
+        StringBufferLib.finalize(outputBuffer);
+        return string(outputBuffer.data);
     }
 
     /**
@@ -69,64 +76,61 @@ contract SVGRenderer is ISVGRenderer {
         Part[] memory parts = new Part[](1);
         parts[0] = part;
 
-        return _generateSVGRects(SVGParams({ parts: parts/*, background: '' */}));
+        StringBufferLib.StringBuffer memory outputBuffer = StringBufferLib.initialize(2048);
+        _generateSVGRects(SVGParams({ parts: parts/*, background: '' */}), outputBuffer);
+        StringBufferLib.finalize(outputBuffer);
+        return string(outputBuffer.data);
     }
 
     /**
      * @notice Given RLE image data and color palette pointers, merge to generate a partial SVG image.
      */
     function generateSVGParts(Part[] calldata parts) external pure override returns (string memory partialSVG) {
-        return _generateSVGRects(SVGParams({ parts: parts/*, background: '' */}));
+        StringBufferLib.StringBuffer memory outputBuffer = StringBufferLib.initialize(2048);
+        _generateSVGRects(SVGParams({ parts: parts/*, background: '' */}), outputBuffer);
+        StringBufferLib.finalize(outputBuffer);
+        return string(outputBuffer.data);
     }
 
     /**
      * @notice Given RLE image parts and color palettes, generate SVG rects.
      */
     // prettier-ignore
-    function _generateSVGRects(SVGParams memory params)
+    function _generateSVGRects(SVGParams memory params, StringBufferLib.StringBuffer memory outputBuffer)
         private
         pure
-        returns (string memory svg)
     {
-        string[25] memory lookup = [
-            '0', '4', '8', '12', '16', '20', '24', '28', 
-            '32', '36', '40', '44', '48', '52', '56', '60', 
-            '64', '68', '72', '76', '80', '84', '88', '92', 
+        bytes32[25] memory lookup = [
+            bytes32('0'), '4', '8', '12', '16', '20', '24', '28',
+            '32', '36', '40', '44', '48', '52', '56', '60',
+            '64', '68', '72', '76', '80', '84', '88', '92',
             '96'
         ];
-        string memory rects;
         string[] memory cache;
-        string[] memory opacityCache;
+        uint256 cachedPaletteId = 256; // just to enforce cache initialization, max paletteId is 255
         for (uint8 p = 0; p < params.parts.length; p++) {
-            cache = new string[](256); // Initialize color cache
-            opacityCache = new string[](256); // Initialize opacity cache
-
             DecodedImage memory image = _decodeRLEImage(params.parts[p].image);
-            bytes memory palette = params.parts[p].palette;
+            if (cachedPaletteId != image.paletteId) {
+                cache = new string[](128); // Initialize color cache, assumed that palette is shorter than 128
+                cachedPaletteId = image.paletteId;
+            }
             uint256 currentX = image.bounds.left;
             uint256 currentY = image.bounds.top;
-            uint256 cursor;
-            string[20] memory buffer;
 
-            string memory part;
             for (uint256 i = 0; i < image.draws.length; i++) {
                 Draw memory draw = image.draws[i];
 
                 uint8 length = _getRectLength(currentX, draw.length, image.bounds.right);
                 while (length > 0) {
                     if (draw.colorIndex != 0) {
-                        buffer[cursor] = lookup[length];                                 // width
-                        buffer[cursor + 1] = lookup[currentX];                           // x
-                        buffer[cursor + 2] = lookup[currentY];                           // y
-                        buffer[cursor + 3] = _getColor(palette, draw.colorIndex, cache, opacityCache); // color
-                        buffer[cursor + 4] = opacityCache[draw.colorIndex];              // opacity
-
-                        cursor += 5;
-
-                        if (cursor >= 20) {
-                            part = string(abi.encodePacked(part, _getChunk(cursor, buffer)));
-                            cursor = 0;
-                        }
+                        string memory colorPart = _getColorPart(params.parts[p].palette, draw.colorIndex, cache); // color
+                        StringBufferLib.appendBytesXX(outputBuffer, 0x3C726563742077696474683D2200000000000000000000000000000000000000, 13);  // <rect width="
+                        StringBufferLib.appendBytesXX(outputBuffer, lookup[length], length < 3 ? 1 : 2);
+                        StringBufferLib.appendBytesXX(outputBuffer, 0x22206865696768743D22342220783D2200000000000000000000000000000000, 16);  // " height="4" x="
+                        StringBufferLib.appendBytesXX(outputBuffer, lookup[currentX], currentX < 3 ? 1 : 2);
+                        StringBufferLib.appendBytesXX(outputBuffer, 0x2220793D22000000000000000000000000000000000000000000000000000000, 5);  // " y="
+                        StringBufferLib.appendBytesXX(outputBuffer, lookup[currentY], currentY < 3 ? 1 : 2);
+                        StringBufferLib.appendBytes(outputBuffer, bytes(colorPart));
                     }
 
                     currentX += length;
@@ -139,13 +143,7 @@ contract SVGRenderer is ISVGRenderer {
                     length = _getRectLength(currentX, draw.length, image.bounds.right);
                 }
             }
-
-            if (cursor != 0) {
-                part = string(abi.encodePacked(part, _getChunk(cursor, buffer)));
-            }
-            rects = string(abi.encodePacked(rects, part));
         }
-        return rects;
     }
 
     /**
@@ -159,36 +157,6 @@ contract SVGRenderer is ISVGRenderer {
     ) private pure returns (uint8) {
         uint8 remainingPixelsInLine = rightBound - uint8(currentX);
         return drawLength <= remainingPixelsInLine ? drawLength : remainingPixelsInLine;
-    }
-
-    /**
-     * @notice Return a string that consists of all rects in the provided `buffer`.
-     * @dev no range check for cursor
-     */
-    // prettier-ignore
-    function _getChunk(uint256 cursor, string[20] memory buffer) private pure returns (string memory) {
-        string memory chunk;
-        unchecked {
-            for (uint256 i = 0; i < cursor; i += 5) {
-                if (bytes(buffer[i + 4]).length == 0) {
-                    chunk = string(
-                        abi.encodePacked(
-                            chunk,
-                            '<rect width="', buffer[i], '" height="4" x="', buffer[i + 1], '" y="', buffer[i + 2], '" fill="#', buffer[i + 3], '" />'
-                        )
-                    );
-
-                } else {
-                    chunk = string(
-                        abi.encodePacked(
-                            chunk,
-                            '<rect width="', buffer[i], '" height="4" x="', buffer[i + 1], '" y="', buffer[i + 2], '" fill="#', buffer[i + 3], '" opacity="', buffer[i + 4], '" />'
-                        )
-                    );
-                }
-            }
-        }
-        return chunk;
     }
 
     /**
@@ -208,46 +176,40 @@ contract SVGRenderer is ISVGRenderer {
             draws[cursor] = Draw({ length: uint8(image[i]), colorIndex: uint8(image[i + 1]) });
             cursor++;
         }
-        return DecodedImage({ bounds: bounds, draws: draws });
+        return DecodedImage({ paletteId: uint8(image[0]), bounds: bounds, draws: draws });
     }
 
     /**
      * @notice Get the target hex color code from the cache. Populate the cache if
      * the color code does not yet exist.
      */
-    function _getColor(
+    function _getColorPart(
         bytes memory palette,
         uint256 index,
-        string[] memory cache,
-        string[] memory opacityCache
+        string[] memory cache
     ) private pure returns (string memory) {
-        if (bytes(cache[index]).length == 0) {
-            uint256 i = index * _INDEX_TO_BYTES3_FACTOR;
-            cache[index] = _toHexString(abi.encodePacked(palette[i], palette[i + 1], palette[i + 2]));
-            if (palette[i + 3] != 0xff) {
-                uint256 opacityValue = uint256(uint8(palette[i + 3])) * 100 / 0xff;
-                bytes memory opacityLabel = '0.  ';
-                opacityLabel[2] = bytes1(uint8(48 + (opacityValue / 10))); // 48 is ascii 0
-                opacityLabel[3] = bytes1(uint8(48 + (opacityValue % 10))); // 48 is ascii 0
-                opacityCache[index] = string(opacityLabel);
+        unchecked {
+            if (bytes(cache[index]).length == 0) {
+                uint256 i = index * _INDEX_TO_BYTES3_FACTOR;
+                bytes memory entry;
+                if (palette[i + 3] == 0xff) {
+                    entry = '" fill="#      " />';
+                } else {
+                    entry = '" fill="#      " opacity="0.  " />';
+                    uint256 opacityValue = uint256(uint8(palette[i + 3])) * 100 / 0xff;
+                    entry[28] = bytes1(uint8(48 + (opacityValue / 10))); // 48 is ascii 0
+                    entry[29] = bytes1(uint8(48 + (opacityValue % 10))); // 48 is ascii 0
+                }
+                entry[9] = _HEX_SYMBOLS[uint8(palette[i]) >> 4];
+                entry[10] = _HEX_SYMBOLS[uint8(palette[i]) & 0xf];
+                entry[11] = _HEX_SYMBOLS[uint8(palette[i + 1]) >> 4];
+                entry[12] = _HEX_SYMBOLS[uint8(palette[i + 1]) & 0xf];
+                entry[13] = _HEX_SYMBOLS[uint8(palette[i + 2]) >> 4];
+                entry[14] = _HEX_SYMBOLS[uint8(palette[i + 2]) & 0xf];
+                cache[index] = string(entry);
+                return string(entry);
             }
+            return cache[index];
         }
-        return cache[index];
-    }
-
-    /**
-     * @dev Convert `bytes` to a 8 character ASCII `string` hexadecimal representation.
-     */
-    function _toHexString(bytes memory b) private pure returns (string memory) {
-        uint32 value = uint24(bytes3(b));
-
-        bytes memory buffer = new bytes(6);
-        buffer[5] = _HEX_SYMBOLS[value & 0xf];
-        buffer[4] = _HEX_SYMBOLS[(value >> 4) & 0xf];
-        buffer[3] = _HEX_SYMBOLS[(value >> 8) & 0xf];
-        buffer[2] = _HEX_SYMBOLS[(value >> 12) & 0xf];
-        buffer[1] = _HEX_SYMBOLS[(value >> 16) & 0xf];
-        buffer[0] = _HEX_SYMBOLS[(value >> 20) & 0xf];
-        return string(buffer);
     }
 }
