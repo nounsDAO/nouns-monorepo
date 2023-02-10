@@ -66,7 +66,7 @@ const VotePage = ({
   const [isExecutePending, setExecutePending] = useState<boolean>(false);
   const [isCancelPending, setCancelPending] = useState<boolean>(false);
   const [showStreamWithdrawModal, setShowStreamWithdrawModal] = useState<boolean>(false);
-  const [streamWithdrawInfo, setStreamWidthdrawInfo] = useState<{
+  const [streamWithdrawInfo, setStreamWithdrawInfo] = useState<{
     streamAddress: string;
     startTime: number;
     endTime: number;
@@ -374,7 +374,7 @@ const VotePage = ({
                     <Button
                       onClick={() => {
                         setShowStreamWithdrawModal(true);
-                        setStreamWidthdrawInfo({
+                        setStreamWithdrawInfo({
                           streamAddress: parsedCallData.streamAddress,
                           startTime: parsedCallData.startTime,
                           endTime: parsedCallData.endTime,

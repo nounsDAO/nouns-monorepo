@@ -1328,7 +1328,7 @@ msgid "While settlement is most heavily incentivized for the winning bidder, it 
 msgstr "決済は落札者に最も大きなインセンティブが与えられるが、誰でも起動できるため、Ethereumが稼働し、関心のある入札者がいる限り、システムは第三者の介入無しでNounsをオークションにかけることができます。"
 
 #: src/components/StreamWithdrawModal/index.tsx
-msgid "Widthdraw"
+msgid "Withdraw"
 msgstr ""
 
 #: src/components/DelegationCandidateInfo/index.tsx
@@ -1418,7 +1418,7 @@ msgid "You've successfully voted on on prop {0}"
 msgstr "あなたは提案 {0} に投票することに成功しました。"
 
 #: src/components/StreamWithdrawModal/index.tsx
-msgid "You've successfully withdrawn {widthdrawAmount} {unitForDisplay} to your wallet"
+msgid "You've successfully withdrawn {withdrawAmount} {unitForDisplay} to your wallet"
 msgstr ""
 
 #: src/components/StreamWithdrawModal/index.tsx
