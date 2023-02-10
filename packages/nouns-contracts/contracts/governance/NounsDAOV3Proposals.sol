@@ -561,6 +561,7 @@ library NounsDAOV3Proposals {
         if (latestProposalId != 0) {
             NounsDAOStorageV3.ProposalState proposersLatestProposalState = state(ds, latestProposalId);
             if (
+                proposersLatestProposalState == NounsDAOStorageV3.ProposalState.ObjectionPeriod ||
                 proposersLatestProposalState == NounsDAOStorageV3.ProposalState.Active ||
                 proposersLatestProposalState == NounsDAOStorageV3.ProposalState.Pending
             ) revert ProposerAlreadyHasALiveProposal();
