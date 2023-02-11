@@ -38,3 +38,48 @@ code {
   src: url(./fonts/PT_Root_UI/PT-Root-UI_Bold.woff2) format('woff2'),
     url(./fonts/PT_Root_UI/PT-Root-UI_Bold.woff) format('woff');
 }
+
+@font-face {
+  font-family: 'Retro Gaming';
+  src: url(./fonts/Retro_Gaming/Retro_Gaming.ttf);
+}
+
+@font-face {
+  font-family: 'Satoshi Light';
+  src: url('./fonts/Satoshi/Satoshi-Light.woff2') format('woff2'),
+       url('./fonts/Satoshi/Satoshi-Light.woff') format('woff'),
+       url('./fonts/Satoshi/Satoshi-Light.ttf') format('truetype');
+       font-weight: 300;
+       font-display: swap;
+       font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi Regular';
+  src: url('./fonts/Satoshi/Satoshi-Regular.woff2') format('woff2'),
+       url('./fonts/Satoshi/Satoshi-Regular.woff') format('woff'),
+       url('./fonts/Satoshi/Satoshi-Regular.ttf') format('truetype');
+       font-weight: 400;
+       font-display: swap;
+       font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi Medium';
+  src: url('./fonts/Satoshi/Satoshi-Medium.woff2') format('woff2'),
+       url('./fonts/Satoshi/Satoshi-Medium.woff') format('woff'),
+       url('./fonts/Satoshi/Satoshi-Medium.ttf') format('truetype');
+       font-weight: 500;
+       font-display: swap;
+       font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi Bold';
+  src: url('./fonts/Satoshi/Satoshi-Bold.woff2') format('woff2'),
+       url('./fonts/Satoshi/Satoshi-Bold.woff') format('woff'),
+       url('./fonts/Satoshi/Satoshi-Bold.ttf') format('truetype');
+       font-weight: 700;
+       font-display: swap;
+       font-style: normal;
+}

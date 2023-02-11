@@ -1,3 +1,14 @@
 .clickableN00un {
   cursor: pointer;
 }
+
+.swiperSlide {
+  background-position: center;
+  background-size: cover;
+  width: 25em !important;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+}

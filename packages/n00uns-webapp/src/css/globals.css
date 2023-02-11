@@ -10,3 +10,11 @@
 body {
   overflow-x: hidden;
 }
+
+.swiper-pagination-bullet {
+  background: gray !important;
+}
+
+.swiper-pagination-bullet-active {
+  background: white !important;
+}

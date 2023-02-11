@@ -65,7 +65,7 @@ const Winner: React.FC<WinnerProps> = props => {
       )}
     </Row>
   ) : (
-    <ShortAddress size={40} address={winner} avatar={true} />
+    <ShortAddress size={30} address={winner} avatar={true} />
   );
 
   const n00underN00unContent = (

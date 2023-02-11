@@ -96,7 +96,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
       <AuctionActivityWrapper>
         <div className={classes.informationRow}>
           <Row className={classes.activityRow}>
-            <AuctionTitleAndNavWrapper>
+            {/* <AuctionTitleAndNavWrapper>
               {displayGraphDepComps && (
                 <AuctionNavigation
                   isFirstAuction={isFirstAuction}
@@ -106,13 +106,13 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
                 />
               )}
               <AuctionActivityDateHeadline startTime={auction.startTime} />
-            </AuctionTitleAndNavWrapper>
+            </AuctionTitleAndNavWrapper> */}
             <Col lg={12}>
               <AuctionActivityN00unTitle isCool={isCool} n00unId={auction.n00unId} />
             </Col>
           </Row>
           <Row className={classes.activityRow}>
-            <Col lg={4} className={classes.currentBidCol}>
+            <Col lg={6} className={isCool ? classes.currentBidColCool : classes.currentBidColWarm}>
               <CurrentBid
                 currentBid={new BigNumber(auction.amount.toString())}
                 auctionEnded={auctionEnded}
@@ -131,7 +131,7 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
             </Col>
           </Row>
         </div>
-        {!auctionEnded && (
+        {/* {!auctionEnded && (
           <Row className={classes.activityRow}>
             <Col lg={12} className={classes.fomoN00unsLink}>
               <FontAwesomeIcon icon={faInfoCircle} />
@@ -140,17 +140,18 @@ const AuctionActivity: React.FC<AuctionActivityProps> = (props: AuctionActivityP
               </a>
             </Col>
           </Row>
-        )}
+        )} */}
         {isLastAuction && (
           <>
             <Row className={classes.activityRow}>
-              <Col lg={12}>
+              <Col lg={12} className={classes.bidSection}>
                 <Bid auction={auction} auctionEnded={auctionEnded} />
               </Col>
             </Row>
           </>
         )}
-        <Row className={classes.activityRow}>
+        <Row>
+        {/* <Row className={classes.activityRow}> */}
           <Col lg={12}>
             {!isLastAuction ? (
               <N00unInfoCard

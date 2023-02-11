@@ -1,6 +1,8 @@
 import { ImageData as data, getN00unData } from '@n00uns/assets';
+import { useAppSelector } from '../../hooks';
+import fomon00un from '../../assets/fomon00un.svg';
 import { buildSVG } from '@n00uns/sdk';
-import { BigNumber as EthersBN } from 'ethers';
+import { BigNumber, BigNumber as EthersBN } from 'ethers';
 import { IN00unSeed, useN00unSeed } from '../../wrappers/n00unToken';
 import N00un from '../N00un';
 import { Link } from 'react-router-dom';
@@ -9,6 +11,11 @@ import { useDispatch } from 'react-redux';
 import { setOnDisplayAuctionN00unId } from '../../state/slices/onDisplayAuction';
 import n00unClasses from '../N00un/N00un.module.css';
 import Image from 'react-bootstrap/Image';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { EffectCoverflow, Pagination } from "swiper";
+import "swiper/swiper.css";
+import "swiper/modules/effect-coverflow/effect-coverflow.min.css";
+import "swiper/modules/pagination/pagination.min.css";
 
 interface StandaloneN00unProps {
   n00unId: EthersBN;
@@ -131,10 +138,16 @@ export const StandaloneN00unWithSeed: React.FC<StandaloneN00unWithSeedProps> = (
   props: StandaloneN00unWithSeedProps,
 ) => {
   const { n00unId, onLoadSeed, shouldLinkToProfile } = props;
-
   const dispatch = useDispatch();
   const seed = useN00unSeed(n00unId);
   const seedIsInvalid = Object.values(seed || {}).every(v => v === 0);
+
+  //prev seed
+  // const pastAuctions = useAppSelector(state => state.pastAuctions.pastAuctions);
+  const prevID = BigNumber.from(n00unId.toNumber() -1);
+  const prevSeed = useN00unSeed(prevID);
+  const prev: { image:string, description:string } = getN00un(prevID, prevSeed);
+  // console.log(prev);
 
   if (!seed || seedIsInvalid || !n00unId || !onLoadSeed) return <N00un imgPath="" alt="N00un" />;
 
@@ -145,18 +158,68 @@ export const StandaloneN00unWithSeed: React.FC<StandaloneN00unWithSeedProps> = (
   };
 
   const { image, description } = getN00un(n00unId, seed);
+console.log(image);
+// console.log(pastAuctions);
+  const slideData = [
+    {},
+    {},
+    {}
+  ]
+  
+  let slides = [
+    <SwiperSlide key={0} className={classes.swiperSlide}>
+      <N00un imgPath={fomon00un} alt={description} />
+    </SwiperSlide>,
+        <SwiperSlide key={1} className={classes.swiperSlide}>
+        <N00un imgPath={image} alt={description} />
+      </SwiperSlide>,
+      <SwiperSlide key={2} className={classes.swiperSlide}>
+        <N00un imgPath={prev.image} alt={prev.description} />
+      </SwiperSlide>
+  ];
+  
+  let i = 3;
+  let slidesMain = slideData.map((team) => (
+    <SwiperSlide key={i++} className={classes.swiperSlide}>
+      <N00un imgPath={image} alt={description} />
+    </SwiperSlide>
+  ));
 
-  const n00un = <N00un imgPath={image} alt={description} />;
+  slides.push(...slidesMain);
+
+  const swiperEl = (
+    <Swiper
+      onSwiper={(swiper) => {swiper.changeLanguageDirection('rtl')}}
+      onSlideChange={(swiper) => {console.log(swiper)}}
+      initialSlide={1}
+      effect={"coverflow"}
+      grabCursor={true}
+      centeredSlides={true}
+      slidesPerView={"auto"}
+      coverflowEffect={{
+        rotate: 20,
+        stretch: 0,
+        depth: 250,
+        modifier: 1,
+        slideShadows: true,
+      }}
+      pagination={false}
+      modules={[EffectCoverflow, Pagination]}
+    >
+      {slides}
+    </Swiper>
+  );
+
   const n00unWithLink = (
     <Link
       to={'/n00un/' + n00unId.toString()}
       className={classes.clickableN00un}
       onClick={onClickHandler}
     >
-      {n00un}
+      {swiperEl}
     </Link>
   );
-  return shouldLinkToProfile ? n00unWithLink : n00un;
+  return shouldLinkToProfile ? n00unWithLink : swiperEl;
 };
 
 export default StandaloneN00un;

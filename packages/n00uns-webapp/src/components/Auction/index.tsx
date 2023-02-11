@@ -16,6 +16,7 @@ import {
   setPrevOnDisplayAuctionN00unId,
 } from '../../state/slices/onDisplayAuction';
 import { beige, grey } from '../../utils/n00unBgColors';
+import pixel_border from '../../assets/pixel_border.svg';
 
 interface AuctionProps {
   auction?: IAuction;
@@ -94,6 +95,7 @@ const Auction: React.FC<AuctionProps> = props => {
           </Col>
         </Row>
       </Container>
+      <img src={pixel_border} className={classes.auctionBorder}alt="border" />
     </div>
   );
 };

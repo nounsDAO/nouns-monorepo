@@ -1,5 +1,5 @@
 .n00unWrapper {
-  align-self: flex-end;
+  /* align-self: flex-end; */
   width: 100%;
 }
 
@@ -8,36 +8,47 @@
 }
 
 .auctionActivityCol {
-  padding-right: 5rem;
+  margin-top: 3px;
+  padding-right: 2.5rem;
   padding-bottom: 0rem;
   min-height: 558px;
   align-self: flex-end !important;
 }
 
-@media (max-width: 992px) {
-  .n00unWrapper {
+.auctionBorder {
+  width: 100%;
+}
+
+@media (max-width: 991.98px) {
+  /* .n00unWrapper {
     width: 70%;
     margin-left: 15%;
     margin-right: 15%;
-  }
+  } */
   .auctionActivityCol {
-    padding-top: 5%;
+    /* padding-top: 5%;
     padding-right: 5%;
-    padding-left: 5%;
-    width: 100%;
+    padding-left: 5%; */
+    padding: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    width: 90%;
     background-color: white;
+    margin-right: auto;
+    margin-left: auto;
+    min-height: auto;
   }
 }
 
 @media (max-width: 568px) {
-  .auctionActivityCol {
+  /* .auctionActivityCol {
     width: 100%;
     margin-left: unset;
     margin-right: unset;
     padding-top: 2rem;
     padding-right: unset;
     padding-left: 0;
-  }
+  } */
 
   .n00unWrapper {
     width: 80%;

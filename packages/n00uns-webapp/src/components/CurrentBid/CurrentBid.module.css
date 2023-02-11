@@ -1,19 +1,28 @@
 .section span {
   font-size: 3rem;
   font-weight: bold;
-  font-family: 'Londrina Solid';
+  font-family: 'Retro Gaming';
 }
 
 .section h4 {
-  font-family: 'PT Root UI';
+  font-family: 'Satoshi Regular';
   font-weight: bold;
   font-size: 18px;
 }
 
 .section h2 {
-  font-family: 'PT Root UI';
+  font-family: 'Retro Gaming';
   font-weight: bold;
   font-size: 32px;
+  color: var(--brand-color-red);
+  margin-bottom: 2px !important;
+  margin-top: 3px;
+}
+
+.section h3 {
+  font-family: 'Retro Gaming';
+  /* font-weight: bold; */
+  font-size: 20px;
   margin-bottom: 0px !important;
   margin-top: 3px;
 }
@@ -21,6 +30,7 @@
 .wrapper {
   padding-left: 0rem;
   padding-right: 0rem;
+  text-align: center;
 }
 
 @media (max-width: 992px) {

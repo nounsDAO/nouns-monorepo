@@ -1,7 +1,8 @@
 .wrapper {
   margin-left: 0.5rem;
-  margin-top: 2px;
-  padding-left: 1.5rem;
+  /* margin-top: 2px; */
+  /* padding-left: 1.5rem; */
+  text-align: center;
 }
 
 .youCopy {
@@ -26,7 +27,7 @@
   color: white;
   border: transparent;
   background-color: var(--brand-black);
-  font-family: 'PT Root UI';
+  font-family: 'Satoshi Regular';
   font-weight: bold;
   border-radius: 8px;
   font-size: 16px;
@@ -42,19 +43,20 @@
 }
 
 .section h4 {
-  font-family: 'PT Root UI';
+  font-family: 'Satoshi Regular';
   font-size: 18px;
   line-height: 27px;
 }
 
 .section h2 {
-  font-family: 'PT Root UI';
+  font-family: 'Satoshi Regular';
   font-weight: bold;
-  font-size: 32px;
+  font-size: 28px;
 }
 
 .leftCol {
-  font-family: 'PT Root UI';
+  font-family: 'Satoshi Regular';
+  text-align: center;
 }
 
 .leftCol h4 {

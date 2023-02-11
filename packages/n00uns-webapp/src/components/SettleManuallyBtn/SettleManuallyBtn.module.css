@@ -1,4 +1,9 @@
-@media (max-width: 992px) {
+.emergencySettleWrapper {
+  margin-bottom: 0;
+  padding-top: 20px;
+}
+
+/* @media (max-width: 992px) {
   .emergencySettleWrapper {
     text-align: center;
     margin-left: 0.5rem;
@@ -10,7 +15,7 @@
     text-align: center;
     margin-left: 0rem;
   }
-}
+} */
 
 .emergencySettleButton {
   background-color: transparent;
@@ -20,6 +25,8 @@
   display: inline;
   margin: 0;
   padding: 0;
+  width: 100%;
+  text-align: center;
 }
 .emergencySettleButton:disabled {
   color: #8c8d92;

@@ -17,6 +17,7 @@ import SettleManuallyBtn from '../SettleManuallyBtn';
 import { Trans } from '@lingui/macro';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import responsiveUiUtilsClasses from '../../utils/ResponsiveUIUtils.module.css';
+import { Web3Provider } from '@ethersproject/providers';
 
 const computeMinimumNextBid = (
   currentBid: BigNumber,
@@ -85,11 +86,11 @@ const Bid: React.FC<{
   );
 
   const { send: placeBid, state: placeBidState } = useContractFunction(
-    n00unsAuctionHouseContract,
+    n00unsAuctionHouseContract as any,
     AuctionHouseContractFunction.createBid,
   );
   const { send: settleAuction, state: settleAuctionState } = useContractFunction(
-    n00unsAuctionHouseContract,
+    n00unsAuctionHouseContract as any,
     AuctionHouseContractFunction.settleCurrentAndCreateNewAuction,
   );
 
@@ -125,7 +126,7 @@ const Bid: React.FC<{
     }
 
     const value = utils.parseEther(bidInputRef.current.value.toString());
-    const contract = connectContractToSigner(n00unsAuctionHouseContract, undefined, library);
+    const contract = connectContractToSigner(n00unsAuctionHouseContract as any, undefined, new Web3Provider((library as any)));
     const gasLimit = await contract.estimateGas.createBid(auction.n00unId, {
       value,
     });
@@ -258,7 +259,7 @@ const Bid: React.FC<{
             <span className={classes.customPlaceholderBidAmt}>
               {!auctionEnded && !bidInput ? (
                 <>
-                  Ξ {minBidEth(minBid)}{' '}
+                  {minBidEth(minBid)}{' '}
                   <span
                     className={
                       activeLocale === 'ja-JP' ? responsiveUiUtilsClasses.disableSmallScreens : ''
@@ -293,12 +294,12 @@ const Bid: React.FC<{
           <>
             <Col lg={12} className={classes.voteForNextN00unBtnWrapper}>
               <Button className={classes.bidBtnAuctionEnded} onClick={fomoN00unsBtnOnClickHandler}>
-                <Trans>Vote for the next N00un</Trans> ⌐◧-◧
+                <Trans>View the next n00un</Trans> ⌐◧-◧
               </Button>
             </Col>
             {/* Only show force settle button if wallet connected */}
             {isWalletConnected && (
-              <Col lg={12}>
+              <Col sm={12}>
                 <SettleManuallyBtn settleAuctionHandler={settleAuctionHandler} auction={auction} />
               </Col>
             )}

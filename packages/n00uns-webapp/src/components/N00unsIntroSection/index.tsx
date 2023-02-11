@@ -44,7 +44,7 @@ const N00unsIntroSection = () => {
           </small>
         </Col>
       </Section>
-      <Section fullWidth={false} className={classes.iosSection}>
+      {/* <Section fullWidth={false} className={classes.iosSection}>
         <Col lg={6} className={classes.iosImgContainer}>
           <img src={n00unsIosGif} className={classes.iosImg} alt="n00uns ios" />
         </Col>
@@ -73,7 +73,7 @@ const N00unsIntroSection = () => {
             </p>
           </div>
         </Col>
-      </Section>
+      </Section> */}
     </>
   );
 };
