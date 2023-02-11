@@ -6,7 +6,7 @@
   },
   {
     "inputs": [],
-    "name": "CanOnlyEditPendingProposals",
+    "name": "CanOnlyEditUpdatableProposals",
     "type": "error"
   },
   {
@@ -89,15 +89,15 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "oldLastMinuteWindowInBlocks",
-        "type": "uint256"
+        "type": "uint32"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "newLastMinuteWindowInBlocks",
-        "type": "uint256"
+        "type": "uint32"
       }
     ],
     "name": "LastMinuteWindowSet",
@@ -241,15 +241,15 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "oldObjectionPeriodDurationInBlocks",
-        "type": "uint256"
+        "type": "uint32"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "newObjectionPeriodDurationInBlocks",
-        "type": "uint256"
+        "type": "uint32"
       }
     ],
     "name": "ObjectionPeriodDurationSet",
@@ -549,6 +549,25 @@
       }
     ],
     "name": "ProposalThresholdBPSSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint32",
+        "name": "oldProposalUpdatablePeriodInBlock",
+        "type": "uint32"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint32",
+        "name": "newProposalUpdatablePeriodInBlock",
+        "type": "uint32"
+      }
+    ],
+    "name": "ProposalUpdatablePeriodSet",
     "type": "event"
   },
   {
@@ -933,9 +952,9 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "newLastMinuteWindowInBlocks",
-        "type": "uint256"
+        "type": "uint32"
       }
     ],
     "name": "_setLastMinuteWindowInBlocks",
@@ -972,9 +991,9 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
+        "internalType": "uint32",
         "name": "newObjectionPeriodDurationInBlocks",
-        "type": "uint256"
+        "type": "uint32"
       }
     ],
     "name": "_setObjectionPeriodDurationInBlocks",
@@ -1017,6 +1036,19 @@
       }
     ],
     "name": "_setProposalThresholdBPS",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "newProposalUpdatablePeriodInBlock",
+        "type": "uint32"
+      }
+    ],
+    "name": "_setProposalUpdatablePeriodInBlock",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1795,14 +1827,19 @@
             "type": "uint256"
           },
           {
-            "internalType": "uint256",
-            "name": "objectionPeriodEndBlock",
-            "type": "uint256"
-          },
-          {
             "internalType": "address[]",
             "name": "signers",
             "type": "address[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "updatePeriodEndBlock",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "objectionPeriodEndBlock",
+            "type": "uint256"
           }
         ],
         "internalType": "struct NounsDAOStorageV3.ProposalCondensed",

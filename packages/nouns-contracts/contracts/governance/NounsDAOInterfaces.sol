@@ -163,12 +163,18 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
 
     /// @notice An event emitted when the objection period duration is set
     event ObjectionPeriodDurationSet(
-        uint256 oldObjectionPeriodDurationInBlocks,
-        uint256 newObjectionPeriodDurationInBlocks
+        uint32 oldObjectionPeriodDurationInBlocks,
+        uint32 newObjectionPeriodDurationInBlocks
     );
 
     /// @notice An event emitted when the objection period last minute window is set
-    event LastMinuteWindowSet(uint256 oldLastMinuteWindowInBlocks, uint256 newLastMinuteWindowInBlocks);
+    event LastMinuteWindowSet(uint32 oldLastMinuteWindowInBlocks, uint32 newLastMinuteWindowInBlocks);
+
+    /// @notice An event emitted when the proposal updatable period is set
+    event ProposalUpdatablePeriodSet(
+        uint32 oldProposalUpdatablePeriodInBlock,
+        uint32 newProposalUpdatablePeriodInBlock
+    );
 
     /// @notice Emitted when the proposal id at which vote snapshot block changes is set
     event VoteSnapshotBlockSwitchProposalIdSet(
@@ -537,10 +543,11 @@ contract NounsDAOStorageV3 {
         /// @notice Pending new vetoer
         address pendingVetoer;
         // ================ V3 ================ //
-        uint256 lastMinuteWindowInBlocks;
-        uint256 objectionPeriodDurationInBlocks;
         /// @notice user => sig => isCancelled: signatures that have been cancelled by the signer and are no longer valid
         mapping(address => mapping(bytes32 => bool)) cancelledSigs;
+        uint32 lastMinuteWindowInBlocks;
+        uint32 objectionPeriodDurationInBlocks;
+        uint32 proposalUpdatablePeriodInBlock;
         /// @notice The proposal at which to start using `startBlock` instead of `creationBlock` for vote snapshots
         /// @dev To be zeroed-out and removed in a V3.1 fix version once the switch takes place
         uint256 voteSnapshotBlockSwitchProposalId;
@@ -587,8 +594,9 @@ contract NounsDAOStorageV3 {
         uint256 totalSupply;
         /// @notice The block at which this proposal was created
         uint256 creationBlock;
-        uint256 objectionPeriodEndBlock;
         address[] signers;
+        uint256 updatePeriodEndBlock;
+        uint256 objectionPeriodEndBlock;
     }
 
     /// @notice Ballot receipt record for a voter
@@ -638,8 +646,9 @@ contract NounsDAOStorageV3 {
         uint256 totalSupply;
         /// @notice The block at which this proposal was created
         uint256 creationBlock;
-        uint256 objectionPeriodEndBlock;
         address[] signers;
+        uint256 updatePeriodEndBlock;
+        uint256 objectionPeriodEndBlock;
     }
 
     struct DynamicQuorumParams {
@@ -671,6 +680,7 @@ contract NounsDAOStorageV3 {
         Expired,
         Executed,
         Vetoed,
-        ObjectionPeriod
+        ObjectionPeriod,
+        Updatable
     }
 }
