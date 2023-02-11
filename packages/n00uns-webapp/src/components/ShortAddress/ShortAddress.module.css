@@ -3,6 +3,7 @@
   flex-flow: row nowrap;
   gap: 6px;
   align-items: center;
+  justify-content: center;
 }
 
 .shortAddress > div {
@@ -11,6 +12,6 @@
 
 .shortAddress span {
   letter-spacing: 0.2px;
-  font-family: 'PT Root UI';
+  font-family: 'Retro Gaming';
   font-weight: bold;
 }

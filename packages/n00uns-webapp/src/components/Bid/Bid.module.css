@@ -7,8 +7,8 @@
 }
 
 .bidBtn {
-  font-family: 'PT Root UI';
-  border-radius: 12px !important;
+  font-family: 'Satoshi Regular';
+  /* border-radius: 12px !important; */
   margin-left: 0.6rem !important;
   margin-top: 3px;
   width: auto;
@@ -16,7 +16,7 @@
   height: 3rem;
   color: white;
   border: transparent;
-  background-color: var(--brand-black);
+  background-color: var(--brand-color-red);
   font-weight: bold;
   letter-spacing: normal;
   font-size: 19px;
@@ -53,12 +53,12 @@
   width: auto;
   height: 54px;
   color: black;
-  border-radius: 12px !important;
+  /* border-radius: 12px !important; */
   box-shadow: inset 0px 0px 0px 1px #fff;
-  background-color: white;
+  background-color: var(--brand-cool-background);
   outline: none !important;
   box-shadow: none !important;
-  font-family: 'PT Root UI';
+  font-family: 'Satoshi Regular';
   font-weight: bold;
   font-size: 25px;
   transition: all 0.2s ease-in-out;
@@ -71,7 +71,7 @@
 
 .customPlaceholder {
   color: var(--brand-cool-light-text);
-  font-family: 'PT Root UI';
+  font-family: 'Satoshi Regular';
   font-weight: bold;
   z-index: 3;
   user-select: none;
@@ -83,7 +83,7 @@
   top: 15%;
   left: 3%;
   color: var(--brand-cool-light-text);
-  font-family: 'PT Root UI';
+  font-family: 'Satoshi Regular';
   font-weight: bold;
   font-size: 25px;
   z-index: 1;
@@ -101,11 +101,11 @@
   height: 3rem;
   color: white;
   border: transparent;
-  background-color: var(--brand-black);
+  background-color: var(--brand-color-red);
   font-weight: bold;
-  font-family: 'PT Root UI';
+  font-family: 'Satoshi Regular';
   font-size: 18px;
-  border-radius: 10px;
+  /* border-radius: 10px; */
 }
 
 .bidBtnAuctionEnded:hover,

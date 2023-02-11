@@ -6,6 +6,7 @@ import { containsBlockedText } from '../../utils/moderation/containsBlockedText'
 import { useShortAddress } from '../../utils/addressAndENSDisplayUtils';
 import React from 'react';
 import Identicon from '../Identicon';
+import { Web3Provider } from '@ethersproject/providers';
 
 const ShortAddress: React.FC<{ address: string; avatar?: boolean; size?: number }> = props => {
   const { address, avatar, size = 24 } = props;
@@ -20,7 +21,7 @@ const ShortAddress: React.FC<{ address: string; avatar?: boolean; size?: number 
       <div className={classes.shortAddress}>
         {avatar && (
           <div key={address}>
-            <Identicon size={size} address={address} provider={provider} />
+            <Identicon size={size} address={address} provider={new Web3Provider((provider as any))} />
           </div>
         )}
         <span>{ens && !ensMatchesBlocklistRegex ? ens : shortAddress}</span>

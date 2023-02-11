@@ -1,11 +1,13 @@
 .wrapper {
-  display: inline-block;
+  display: block;
 }
 
 .wrapper h1 {
-  font-family: 'Londrina Solid';
-  font-size: 68px;
-  margin-bottom: 10px;
+  font-family: 'Retro Gaming';
+  font-size: 64px;
+  /* margin-bottom: 10px; */
+  text-align: center;
+  padding: 8px;
 }
 
 @media (max-width: 992px) {

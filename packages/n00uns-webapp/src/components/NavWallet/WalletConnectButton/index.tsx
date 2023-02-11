@@ -13,7 +13,7 @@ const WalletConnectButton: React.FC<WalletConnectButtonProps> = props => {
   const { className, onClickHandler, buttonStyle } = props;
   return (
     <Nav.Link className={className} onClick={onClickHandler}>
-      <NavBarButton buttonStyle={buttonStyle} buttonText={<Trans>Connect</Trans>} />
+      <NavBarButton buttonStyle={buttonStyle} buttonText={<Trans>Connect wallet</Trans>} />
     </Nav.Link>
   );
 };

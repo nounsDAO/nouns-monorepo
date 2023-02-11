@@ -13,6 +13,7 @@ import clsx from 'clsx';
 import { ensCacheKey } from '../../utils/ensLookup';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import { lookupNNSOrENS } from '../../utils/lookupNNSOrENS';
+import { Web3Provider } from '@ethersproject/providers';
 
 export enum VoteCardVariant {
   FOR,
@@ -78,7 +79,7 @@ const VoteCard: React.FC<VoteCardProps> = props => {
         return;
       }
 
-      lookupNNSOrENS(library, delegateInfo.delegate)
+      lookupNNSOrENS(new Web3Provider((library as any)), delegateInfo.delegate)
         .then(name => {
           // Store data as mapping of address_Expiration => address or ENS
           if (name) {

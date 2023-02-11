@@ -1,13 +1,13 @@
 .wrapper {
   height: 40px;
-  border-radius: 10px;
+  /* border-radius: 10px; */
   font-size: 16px;
   font-family: 'PT Root UI';
   font-weight: bold;
   padding: 0px 10px 0px 10px;
   transition: all 0.125s ease-in-out;
   box-shadow: none;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  /* border: 1px solid rgba(0, 0, 0, 0.1); */
 }
 
 .button {
@@ -66,8 +66,8 @@
 }
 
 .coolInfo {
-  border: 1px solid var(--brand-cool-border);
-  border-radius: 10px;
+  /* border: 1px solid var(--brand-cool-border); */
+  /* border-radius: 10px; */
   color: var(--brand-cool-dark-text);
 }
 
@@ -77,8 +77,8 @@
 }
 
 .warmInfo {
-  border: 1px solid var(--brand-warm-border);
-  border-radius: 10px;
+  /* border: 1px solid var(--brand-warm-border); */
+  /* border-radius: 10px; */
   color: var(--brand-warm-light-text);
 }
 

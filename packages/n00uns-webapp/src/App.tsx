@@ -24,6 +24,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { AvatarProvider } from '@davatar/react';
 import dayjs from 'dayjs';
 import DelegatePage from './pages/DelegatePage';
+import { Web3Provider } from '@ethersproject/providers';
 
 function App() {
   const { account, chainId, library } = useEthers();
@@ -49,7 +50,7 @@ function App() {
       )}
       <BrowserRouter>
         <AvatarProvider
-          provider={chainId === ChainId.Mainnet ? library : undefined}
+          provider={chainId === ChainId.Mainnet ? new Web3Provider((library as any)) : undefined}
           batchLookups={true}
         >
           <NavBar />

@@ -1,6 +1,6 @@
 .wrapper {
   height: 40px;
-  border-radius: 10px;
+  /* border-radius: 10px; */
   font-size: 16px;
   line-height: 16px;
   font-family: 'PT Root UI';
@@ -11,7 +11,7 @@
 }
 
 .whiteInfo {
-  background-color: white;
+  /* background-color: white; */
   border: 1px solid rgba(0, 0, 0, 0.1);
   color: rgb(95, 95, 95);
 }
@@ -23,7 +23,7 @@
 
 .coolInfo {
   color: #79809c;
-  background-color: #e9ebf3;
+  /* background-color: #e9ebf3; */
 }
 
 .coolInfo:hover {
@@ -33,7 +33,7 @@
 
 .warmInfo {
   color: #b6a9a7;
-  background-color: #fdf9f9;
+  /* background-color: #fdf9f9; */
 }
 
 .warmInfo:hover {

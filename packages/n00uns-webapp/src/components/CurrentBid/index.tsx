@@ -36,10 +36,16 @@ const CurrentBid: React.FC<{ currentBid: BigNumber | BidNa; auctionEnded: boolea
       <Col xs="auto" lg={12}>
         <h2
           className={classes.currentBid}
-          style={{ color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)' }}
         >
           {currentBid === BID_N_A ? BID_N_A : <TruncatedAmount amount={currentBid && currentBid} />}
         </h2>
+      </Col>
+      <Col xs="auto" lg={12}>
+        <h3
+          className={classes.currentCurrency}
+        >
+          WETH
+        </h3>
       </Col>
     </Row>
   );

@@ -14,9 +14,9 @@
     "@lingui/detect-locale": "^3.13.2",
     "@lingui/macro": "^3.9.0",
     "@lingui/react": "^3.9.0",
-    "@netlify/functions": "^0.7.2",
     "@n00uns/assets": "^0.4.2",
     "@n00uns/sdk": "^0.4.0",
+    "@netlify/functions": "^0.7.2",
     "@reduxjs/toolkit": "^1.6.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -59,8 +59,8 @@
     "redux": "^4.1.0",
     "redux-devtools-extension": "^2.13.9",
     "remark-breaks": "^3.0.1",
-    "web-vitals": "^1.0.1",
-    "react-transition-group": "^4.4.5"
+    "swiper": "^9.0.1",
+    "web-vitals": "^1.0.1"
   },
   "devDependencies": {
     "@types/bad-words": "^3.0.1",

@@ -5,15 +5,18 @@
 }
 
 .informationRow {
-  margin-bottom: 0.5rem;
+  margin-bottom: 2px;
 }
 
 .activityRow {
-  margin-bottom: 0rem;
+  margin-bottom: 2px;
+  background-color: white;
+  padding: 10px;
 }
 
 h1 {
   font-size: 3rem;
+  margin-bottom: 0;
 }
 
 h2 {
@@ -49,26 +52,38 @@ h4 {
   height: 150px;
 }
 
-.currentBidCol {
-  border-right: 1px solid #79809c49;
-  margin-left: 6px;
-  margin-top: 6px;
+.currentBidColCool {
+  border-right: 2px solid rgb(213, 215, 225);
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.currentBidColWarm {
+  border-right: 2px solid rgb(225 215 213);
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 .auctionTimerCol {
   padding-left: 0rem;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 .section h4 {
-  font-family: 'PT Root UI';
+  font-family: 'Retro Gaming';
   font-size: 17px;
   line-height: 25px;
 }
 
 .section h2 {
-  font-family: 'PT Root UI';
+  font-family: 'Retro Gaming';
   font-weight: bold;
   font-size: 32px;
+}
+
+.bidSection {
+  padding:20px;
 }
 
 @media (max-width: 992px) {
@@ -86,7 +101,12 @@ h4 {
     padding-left: 0rem;
   }
 
-  .currentBidCol {
+  .currentBidColCool {
+    border-right: 0px;
+    padding-left: 0rem;
+  }
+
+  .currentBidColWarm {
     border-right: 0px;
     padding-left: 0rem;
   }
@@ -122,7 +142,7 @@ h4 {
 
 .fomoN00unsLink a,
 .fomoN00unsLink:active a {
-  font-family: 'PT Root UI', sans-serif;
+  font-family: 'Retro Gaming';
   font-weight: 500;
   padding-left: 0.5rem;
   text-decoration: none;

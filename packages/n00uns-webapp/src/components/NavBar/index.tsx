@@ -125,7 +125,7 @@ const NavBar = () => {
                 buttonStyle={nonWalletButtonStyle}
               />
             </Nav.Link>
-            <div className={clsx(responsiveUiUtilsClasses.mobileOnly)}>
+            {/* <div className={clsx(responsiveUiUtilsClasses.mobileOnly)}>
               <Nav.Link
                 as={Link}
                 to="/playground"
@@ -150,8 +150,8 @@ const NavBar = () => {
                   buttonStyle={nonWalletButtonStyle}
                 />
               </Nav.Link>
-            </div>
-            <div className={clsx(responsiveUiUtilsClasses.desktopOnly)}>
+            </div> */}
+            {/* <div className={clsx(responsiveUiUtilsClasses.desktopOnly)}>
               <NavDropdown buttonIcon={<Noggles />} buttonStyle={nonWalletButtonStyle}>
                 <Dropdown.Item
                   className={clsx(
@@ -180,8 +180,8 @@ const NavBar = () => {
                   Playground
                 </Dropdown.Item>
               </NavDropdown>
-            </div>
-            <NavLocaleSwitcher buttonStyle={nonWalletButtonStyle} />
+            </div> */}
+            {/* <NavLocaleSwitcher buttonStyle={nonWalletButtonStyle} /> */}
             <NavWallet address={activeAccount || '0'} buttonStyle={nonWalletButtonStyle} />{' '}
           </Navbar.Collapse>
         </Container>

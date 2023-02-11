@@ -512,7 +512,7 @@ export const useProposal = (id: string | number): Proposal | undefined => {
 
 export const useCastVote = () => {
   const { send: castVote, state: castVoteState } = useContractFunction(
-    n00unsDaoContract,
+    n00unsDaoContract as any,
     'castVote',
   );
   return { castVote, castVoteState };
@@ -520,7 +520,7 @@ export const useCastVote = () => {
 
 export const useCastVoteWithReason = () => {
   const { send: castVoteWithReason, state: castVoteWithReasonState } = useContractFunction(
-    n00unsDaoContract,
+    n00unsDaoContract as any,
     'castVoteWithReason',
   );
   return { castVoteWithReason, castVoteWithReasonState };
@@ -529,13 +529,13 @@ export const useCastVoteWithReason = () => {
 export const useCastRefundableVote = () => {
   const { library } = useEthers();
   const { send: castRefundableVote, state: castRefundableVoteState } = useContractFunction(
-    n00unsDaoContract,
+    n00unsDaoContract as any,
     'castRefundableVote',
   );
 
   return {
     castRefundableVote: async (...args: any[]): Promise<void> => {
-      const contract = connectContractToSigner(n00unsDaoContract, undefined, library);
+      const contract = connectContractToSigner(n00unsDaoContract as any, undefined, library);
       const gasLimit = await contract.estimateGas.castRefundableVote(...args);
       return castRefundableVote(...args, {
         gasLimit: gasLimit.add(30_000), // A 30,000 gas pad is used to avoid 'Out of gas' errors
@@ -549,13 +549,13 @@ export const useCastRefundableVoteWithReason = () => {
   const { library } = useEthers();
   // prettier-ignore
   const { send: castRefundableVoteWithReason, state: castRefundableVoteWithReasonState } = useContractFunction(
-    n00unsDaoContract,
+    n00unsDaoContract as any,
     'castRefundableVoteWithReason',
   );
 
   return {
     castRefundableVoteWithReason: async (...args: any[]): Promise<void> => {
-      const contract = connectContractToSigner(n00unsDaoContract, undefined, library);
+      const contract = connectContractToSigner(n00unsDaoContract as any, undefined, library);
       const gasLimit = await contract.estimateGas.castRefundableVoteWithReason(...args);
       return castRefundableVoteWithReason(...args, {
         gasLimit: gasLimit.add(30_000), // A 30,000 gas pad is used to avoid 'Out of gas' errors
@@ -566,13 +566,13 @@ export const useCastRefundableVoteWithReason = () => {
 };
 
 export const usePropose = () => {
-  const { send: propose, state: proposeState } = useContractFunction(n00unsDaoContract, 'propose');
+  const { send: propose, state: proposeState } = useContractFunction(n00unsDaoContract as any, 'propose');
   return { propose, proposeState };
 };
 
 export const useQueueProposal = () => {
   const { send: queueProposal, state: queueProposalState } = useContractFunction(
-    n00unsDaoContract,
+    n00unsDaoContract as any,
     'queue',
   );
   return { queueProposal, queueProposalState };
@@ -580,7 +580,7 @@ export const useQueueProposal = () => {
 
 export const useCancelProposal = () => {
   const { send: cancelProposal, state: cancelProposalState } = useContractFunction(
-    n00unsDaoContract,
+    n00unsDaoContract as any,
     'cancel',
   );
   return { cancelProposal, cancelProposalState };
@@ -588,7 +588,7 @@ export const useCancelProposal = () => {
 
 export const useExecuteProposal = () => {
   const { send: executeProposal, state: executeProposalState } = useContractFunction(
-    n00unsDaoContract,
+    n00unsDaoContract as any,
     'execute',
   );
   return { executeProposal, executeProposalState };
