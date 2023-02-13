@@ -612,7 +612,7 @@ contract NounsDAOStorageV3 {
     struct ProposerSignature {
         bytes sig;
         address signer;
-        uint32 expirationTimestamp;
+        uint256 expirationTimestamp;
     }
 
     struct ProposalCondensed {

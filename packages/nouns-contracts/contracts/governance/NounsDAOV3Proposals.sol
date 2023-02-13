@@ -113,7 +113,12 @@ library NounsDAOV3Proposals {
 
     bytes32 public constant PROPOSAL_TYPEHASH =
         keccak256(
-            'Proposal(address proposer,address[] targets,uint256[] values,string[] signatures,bytes[] calldatas,string description,uint40 expiry)'
+            'Proposal(address proposer,address[] targets,uint256[] values,string[] signatures,bytes[] calldatas,string description,uint256 expiry)'
+        );
+
+    bytes32 public constant UPDATE_PROPOSAL_TYPEHASH = 
+        keccak256(
+            'UpdateProposal(uint256 proposalId,address proposer,address[] targets,uint256[] values,string[] signatures,bytes[] calldatas,string description,uint256 expiry)'
         );
 
     /**
@@ -161,7 +166,7 @@ library NounsDAOV3Proposals {
         uint256 votes;
         address[] memory signers = new address[](proposerSignatures.length);
         for (uint256 i = 0; i < proposerSignatures.length; ++i) {
-            verifyProposalSignature(ds, proposalEncodeData, proposerSignatures[i]);
+            verifyProposalSignature(ds, proposalEncodeData, proposerSignatures[i], PROPOSAL_TYPEHASH);
             address signer = signers[i] = proposerSignatures[i].signer;
 
             checkNoActiveProp(ds, signer);
@@ -259,10 +264,10 @@ library NounsDAOV3Proposals {
         address[] memory signers = proposal.signers;
         if (proposerSignatures.length != signers.length) revert SignerCountMismtach();
 
-        bytes memory proposalEncodeData = calcProposalEncodeData(txs, description);
+        bytes memory proposalEncodeData = abi.encodePacked(proposalId, calcProposalEncodeData(txs, description));
 
         for (uint256 i = 0; i < proposerSignatures.length; ++i) {
-            verifyProposalSignature(ds, proposalEncodeData, proposerSignatures[i]);
+            verifyProposalSignature(ds, proposalEncodeData, proposerSignatures[i], UPDATE_PROPOSAL_TYPEHASH);
 
             // To avoid the gas cost of having to search signers in proposal.signers, we're assuming the sigs we get
             // use the same amount of signers and the same order.
@@ -674,16 +679,17 @@ library NounsDAOV3Proposals {
     function verifyProposalSignature(
         NounsDAOStorageV3.StorageV3 storage ds,
         bytes memory proposalEncodeData,
-        NounsDAOStorageV3.ProposerSignature memory proposerSignature
+        NounsDAOStorageV3.ProposerSignature memory proposerSignature,
+        bytes32 typehash
     ) internal view {
         bytes32 sigHash = keccak256(proposerSignature.sig);
         if (ds.cancelledSigs[proposerSignature.signer][sigHash]) revert SignatureIsCancelled();
 
         bytes32 structHash = keccak256(
             abi.encodePacked(
-                PROPOSAL_TYPEHASH,
+                typehash,
                 proposalEncodeData,
-                uint256(proposerSignature.expirationTimestamp) // TODO: maybe make this uint256?
+                proposerSignature.expirationTimestamp
             )
         );
 
