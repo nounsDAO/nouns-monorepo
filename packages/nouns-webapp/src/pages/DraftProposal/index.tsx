@@ -19,7 +19,7 @@ const domain = {
   verifyingContract: config.addresses.nounsDAOProxy
 };
 
-const types = {
+const createProposalTypes = {
   Proposal: [
     { name: 'proposer', type: 'address' },
     { name: 'targets', type: 'address[]' },
@@ -27,7 +27,20 @@ const types = {
     { name: 'signatures', type: 'string[]' },
     { name: 'calldatas', type: 'bytes[]' },
     { name: 'description', type: 'string' },
-    { name: 'expiry', type: 'uint40' }
+    { name: 'expiry', type: 'uint256' }
+  ]
+};
+
+const updateProposalTypes = {
+  UpdateProposal: [
+    { name: 'proposalId', type: 'uint256' },
+    { name: 'proposer', type: 'address' },
+    { name: 'targets', type: 'address[]' },
+    { name: 'values', type: 'uint256[]' },
+    { name: 'signatures', type: 'string[]' },
+    { name: 'calldatas', type: 'bytes[]' },
+    { name: 'description', type: 'string' },
+    { name: 'expiry', type: 'uint256' }
   ]
 };
 
@@ -40,7 +53,7 @@ const DraftProposalPage = ({
   const { library, chainId } = useEthers();
   const signer = library?.getSigner();
   const [draftProposal, setDraftProposal] = useState<DraftProposal | undefined>(undefined);
-  const [expiry, setExpiry] = useState(Math.round(Date.now() / 1000));
+  const [expiry, setExpiry] = useState(Math.round(Date.now() / 1000) + 60*60*24);
   const [proposalIdToUpdate, setProposalIdToUpdate] = useState('');
 
   useEffect(() => {
@@ -52,12 +65,23 @@ const DraftProposalPage = ({
   async function sign() {
     if (!draftProposal) return;
 
-    const value = {
-      ...draftProposal.proposalContent,
-      'expiry': expiry
-    };
+    let signature;
 
-    const signature = await signer!._signTypedData(domain, types, value);
+    if (proposalIdToUpdate) {
+      const value = {
+        ...draftProposal.proposalContent,
+        'expiry': expiry,
+        'proposalId': proposalIdToUpdate
+      };
+      signature = await signer!._signTypedData(domain, updateProposalTypes, value);
+    } else {
+      const value = {
+        ...draftProposal.proposalContent,
+        'expiry': expiry
+      };
+      signature = await signer!._signTypedData(domain, createProposalTypes, value);
+    }
+    
     const updatedDraftProposal = addSignature(
       {
         signer: await signer!.getAddress(), 
@@ -183,15 +207,15 @@ const DraftProposalPage = ({
       </pre>
       
       <label>Expiry: <input type="text" value={expiry} onChange={e => setExpiry(Number.parseInt(e.target.value))} /></label>
+      <label>
+        Update proposal id (leave empty if creating a new proposal):
+        <input type="text" value={proposalIdToUpdate} onChange={e => setProposalIdToUpdate(e.target.value)} />
+      </label>
       
       <Button onClick={() => sign()} style={{marginBottom: 10}}>Sign proposal</Button>
       <Button onClick={() => proposeBySigsClicked()} style={{marginBottom: 10}}>proposeBySigs</Button>
 
       <Container>
-        <label>
-          Update proposal id (leave empty if creating a new proposal):
-          <input type="text" value={proposalIdToUpdate} onChange={e => setProposalIdToUpdate(e.target.value)} />
-        </label>
         <Button onClick={() => updateProposalBySigsClicked()} style={{display: 'inline'}}>updateProposalBySig</Button>
       </Container>
     </Section>
