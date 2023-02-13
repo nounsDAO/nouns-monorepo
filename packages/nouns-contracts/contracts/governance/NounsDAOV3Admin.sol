@@ -51,8 +51,8 @@ library NounsDAOV3Admin {
 
     /// @notice An event emitted when the proposal updatable period is set
     event ProposalUpdatablePeriodSet(
-        uint32 oldProposalUpdatablePeriodInBlock,
-        uint32 newProposalUpdatablePeriodInBlock
+        uint32 oldProposalUpdatablePeriodInBlocks,
+        uint32 newProposalUpdatablePeriodInBlocks
     );
 
     /// @notice Emitted when pendingAdmin is changed
@@ -199,16 +199,16 @@ library NounsDAOV3Admin {
 
     function _setProposalUpdatablePeriodInBlock(
         NounsDAOStorageV3.StorageV3 storage ds,
-        uint32 newProposalUpdatablePeriodInBlock
+        uint32 newProposalUpdatablePeriodInBlocks
     ) external {
         if (msg.sender != ds.admin) {
             revert AdminOnly();
         }
 
-        uint32 oldProposalUpdatablePeriodInBlock = ds.proposalUpdatablePeriodInBlock;
-        ds.proposalUpdatablePeriodInBlock = newProposalUpdatablePeriodInBlock;
+        uint32 oldProposalUpdatablePeriodInBlocks = ds.proposalUpdatablePeriodInBlocks;
+        ds.proposalUpdatablePeriodInBlocks = newProposalUpdatablePeriodInBlocks;
 
-        emit ProposalUpdatablePeriodSet(oldProposalUpdatablePeriodInBlock, newProposalUpdatablePeriodInBlock);
+        emit ProposalUpdatablePeriodSet(oldProposalUpdatablePeriodInBlocks, newProposalUpdatablePeriodInBlocks);
     }
 
     /**

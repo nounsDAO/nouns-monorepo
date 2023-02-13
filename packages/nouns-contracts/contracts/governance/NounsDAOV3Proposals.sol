@@ -116,7 +116,7 @@ library NounsDAOV3Proposals {
             'Proposal(address proposer,address[] targets,uint256[] values,string[] signatures,bytes[] calldatas,string description,uint256 expiry)'
         );
 
-    bytes32 public constant UPDATE_PROPOSAL_TYPEHASH = 
+    bytes32 public constant UPDATE_PROPOSAL_TYPEHASH =
         keccak256(
             'UpdateProposal(uint256 proposalId,address proposer,address[] targets,uint256[] values,string[] signatures,bytes[] calldatas,string description,uint256 expiry)'
         );
@@ -590,7 +590,7 @@ library NounsDAOV3Proposals {
         uint256 proposalThreshold_,
         ProposalTxs memory txs
     ) internal returns (NounsDAOStorageV3.Proposal storage newProposal) {
-        uint256 updatePeriodEndBlock = block.number + ds.proposalUpdatablePeriodInBlock;
+        uint256 updatePeriodEndBlock = block.number + ds.proposalUpdatablePeriodInBlocks;
         uint256 startBlock = updatePeriodEndBlock + ds.votingDelay;
         uint256 endBlock = startBlock + ds.votingPeriod;
 
@@ -686,11 +686,7 @@ library NounsDAOV3Proposals {
         if (ds.cancelledSigs[proposerSignature.signer][sigHash]) revert SignatureIsCancelled();
 
         bytes32 structHash = keccak256(
-            abi.encodePacked(
-                typehash,
-                proposalEncodeData,
-                proposerSignature.expirationTimestamp
-            )
+            abi.encodePacked(typehash, proposalEncodeData, proposerSignature.expirationTimestamp)
         );
 
         bytes32 domainSeparator = keccak256(
