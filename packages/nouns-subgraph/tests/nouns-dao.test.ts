@@ -184,16 +184,16 @@ describe('nouns-dao', () => {
         assert.bigIntEquals(proposal.values![0], proposalEvent.values[0]);
         assert.stringEquals(proposal.signatures![0], proposalEvent.signatures[0]);
         assert.bytesEquals(proposal.calldatas![0], proposalEvent.calldatas[0]);
-        assert.bigIntEquals(proposal.createdTimestamp!, proposalEvent.createdTimestamp);
-        assert.bigIntEquals(proposal.createdBlock!, proposalEvent.createdBlock);
-        assert.bytesEquals(proposal.createdTransactionHash!, proposalEvent.createdTransactionHash);
-        assert.bigIntEquals(proposal.startBlock!, proposalEvent.startBlock);
-        assert.bigIntEquals(proposal.endBlock!, proposalEvent.endBlock);
-        assert.bigIntEquals(proposal.proposalThreshold!, proposalEvent.proposalThreshold);
-        assert.bigIntEquals(proposal.quorumVotes!, proposalEvent.quorumVotes);
-        assert.stringEquals(proposal.description!, proposalEvent.description);
-        assert.stringEquals(proposal.title!, proposalEvent.title);
-        assert.stringEquals(proposal.status!, proposalEvent.status);
+        assert.bigIntEquals(proposal.createdTimestamp, proposalEvent.createdTimestamp);
+        assert.bigIntEquals(proposal.createdBlock, proposalEvent.createdBlock);
+        assert.bytesEquals(proposal.createdTransactionHash, proposalEvent.createdTransactionHash);
+        assert.bigIntEquals(proposal.startBlock, proposalEvent.startBlock);
+        assert.bigIntEquals(proposal.endBlock, proposalEvent.endBlock);
+        assert.bigIntEquals(proposal.proposalThreshold, proposalEvent.proposalThreshold);
+        assert.bigIntEquals(proposal.quorumVotes, proposalEvent.quorumVotes);
+        assert.stringEquals(proposal.description, proposalEvent.description);
+        assert.stringEquals(proposal.title, proposalEvent.title);
+        assert.stringEquals(proposal.status, proposalEvent.status);
       });
 
       test('copies values from governance and dynamic quorum', () => {
