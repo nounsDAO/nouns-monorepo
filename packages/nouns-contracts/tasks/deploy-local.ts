@@ -57,6 +57,7 @@ task('deploy-local', 'Deploy contracts to hardhat')
 
     const NOUNS_ART_NONCE_OFFSET = 5;
     const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 10;
+    const NOUNS_DAO_EXECUTOR_NONCE_OFFSET = 11;
     const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 13;
 
     const [deployer] = await ethers.getSigners();
@@ -72,6 +73,10 @@ task('deploy-local', 'Deploy contracts to hardhat')
     const expectedAuctionHouseProxyAddress = ethers.utils.getContractAddress({
       from: deployer.address,
       nonce: nonce + AUCTION_HOUSE_PROXY_NONCE_OFFSET,
+    });
+    const expectedNounsDAOExecutorAddress = ethers.utils.getContractAddress({
+      from: deployer.address,
+      nonce: nonce + NOUNS_DAO_EXECUTOR_NONCE_OFFSET,
     });
     const contracts: Record<LocalContractName, Contract> = {
       WETH: {},
@@ -116,6 +121,7 @@ task('deploy-local', 'Deploy contracts to hardhat')
               args.auctionReservePrice,
               args.auctionMinIncrementBidPercentage,
               args.auctionDuration,
+              expectedNounsDAOExecutorAddress
             ]),
         ],
       },
