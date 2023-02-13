@@ -448,7 +448,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @notice Admin function for setting the objection period duration
      * @param newObjectionPeriodDurationInBlocks new objection period duration, in blocks
      */
-    function _setObjectionPeriodDurationInBlocks(uint256 newObjectionPeriodDurationInBlocks) external {
+    function _setObjectionPeriodDurationInBlocks(uint32 newObjectionPeriodDurationInBlocks) external {
         ds._setObjectionPeriodDurationInBlocks(newObjectionPeriodDurationInBlocks);
     }
 
@@ -456,8 +456,16 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @notice Admin function for setting the objection period last minute window
      * @param newLastMinuteWindowInBlocks new objection period last minute window, in blocks
      */
-    function _setLastMinuteWindowInBlocks(uint256 newLastMinuteWindowInBlocks) external {
+    function _setLastMinuteWindowInBlocks(uint32 newLastMinuteWindowInBlocks) external {
         ds._setLastMinuteWindowInBlocks(newLastMinuteWindowInBlocks);
+    }
+
+    /**
+     * @notice Admin function for setting the proposal updatable period
+     * @param newProposalUpdatablePeriodInBlock the new proposal updatable period, in blocks
+     */
+    function _setProposalUpdatablePeriodInBlock(uint32 newProposalUpdatablePeriodInBlock) external {
+        ds._setProposalUpdatablePeriodInBlock(newProposalUpdatablePeriodInBlock);
     }
 
     /**

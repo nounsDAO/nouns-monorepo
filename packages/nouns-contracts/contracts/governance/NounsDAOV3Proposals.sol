@@ -25,14 +25,14 @@ import { ECDSA } from '@openzeppelin/contracts/utils/cryptography/ECDSA.sol';
 library NounsDAOV3Proposals {
     using NounsDAOV3DynamicQuorum for NounsDAOStorageV3.StorageV3;
 
-    error CantCancelExecutedProposal();
+    error CantCancelProposalAtFinalState();
     error ProposalInfoArityMismatch();
     error MustProvideActions();
     error TooManyActions();
     error ProposerAlreadyHasALiveProposal();
     error InvalidSignature();
     error SignatureExpired();
-    error CanOnlyEditPendingProposals();
+    error CanOnlyEditUpdatableProposals();
     error OnlyProposerCanEdit();
     error SignerCountMismtach();
     error ProposerCannotUpdateProposalWithSigners();
@@ -224,11 +224,11 @@ library NounsDAOV3Proposals {
         string[] memory signatures,
         bytes[] memory calldatas,
         string memory description
-    ) internal {
+    ) external {
         checkProposaTxs(ProposalTxs(targets, values, signatures, calldatas));
 
         NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
-        if (state(ds, proposalId) != NounsDAOStorageV3.ProposalState.Pending) revert CanOnlyEditPendingProposals();
+        if (state(ds, proposalId) != NounsDAOStorageV3.ProposalState.Updatable) revert CanOnlyEditUpdatableProposals();
         if (msg.sender != proposal.proposer) revert OnlyProposerCanEdit();
         if (proposal.signers.length > 0) revert ProposerCannotUpdateProposalWithSigners();
 
@@ -246,14 +246,14 @@ library NounsDAOV3Proposals {
         NounsDAOStorageV3.ProposerSignature[] memory proposerSignatures,
         ProposalTxs memory txs,
         string memory description
-    ) internal {
+    ) external {
         checkProposaTxs(txs);
         // without this check it's possible to run through this function and update a proposal without signatures
         // this problem doesn't exist in the propose function because we check for prop threshold there
         if (proposerSignatures.length == 0) revert MustProvideSignatures();
 
         NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
-        if (state(ds, proposalId) != NounsDAOStorageV3.ProposalState.Pending) revert CanOnlyEditPendingProposals();
+        if (state(ds, proposalId) != NounsDAOStorageV3.ProposalState.Updatable) revert CanOnlyEditUpdatableProposals();
         if (msg.sender != proposal.proposer) revert OnlyProposerCanEdit();
 
         address[] memory signers = proposal.signers;
@@ -353,8 +353,15 @@ library NounsDAOV3Proposals {
      * @param proposalId The id of the proposal to cancel
      */
     function cancel(NounsDAOStorageV3.StorageV3 storage ds, uint256 proposalId) external {
-        if (state(ds, proposalId) == NounsDAOStorageV3.ProposalState.Executed) {
-            revert CantCancelExecutedProposal();
+        NounsDAOStorageV3.ProposalState proposalState = state(ds, proposalId);
+        if (
+            proposalState == NounsDAOStorageV3.ProposalState.Canceled ||
+            proposalState == NounsDAOStorageV3.ProposalState.Defeated ||
+            proposalState == NounsDAOStorageV3.ProposalState.Expired ||
+            proposalState == NounsDAOStorageV3.ProposalState.Executed ||
+            proposalState == NounsDAOStorageV3.ProposalState.Vetoed
+        ) {
+            revert CantCancelProposalAtFinalState();
         }
 
         NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
@@ -419,6 +426,8 @@ library NounsDAOV3Proposals {
             return NounsDAOStorageV3.ProposalState.Vetoed;
         } else if (proposal.canceled) {
             return NounsDAOStorageV3.ProposalState.Canceled;
+        } else if (block.number <= proposal.updatePeriodEndBlock) {
+            return NounsDAOStorageV3.ProposalState.Updatable;
         } else if (block.number <= proposal.startBlock) {
             return NounsDAOStorageV3.ProposalState.Pending;
         } else if (block.number <= proposal.endBlock) {
@@ -535,8 +544,9 @@ library NounsDAOV3Proposals {
                 executed: proposal.executed,
                 totalSupply: proposal.totalSupply,
                 creationBlock: proposal.creationBlock,
-                objectionPeriodEndBlock: proposal.objectionPeriodEndBlock,
-                signers: proposal.signers
+                signers: proposal.signers,
+                updatePeriodEndBlock: proposal.updatePeriodEndBlock,
+                objectionPeriodEndBlock: proposal.objectionPeriodEndBlock
             });
     }
 
@@ -563,7 +573,8 @@ library NounsDAOV3Proposals {
             if (
                 proposersLatestProposalState == NounsDAOStorageV3.ProposalState.ObjectionPeriod ||
                 proposersLatestProposalState == NounsDAOStorageV3.ProposalState.Active ||
-                proposersLatestProposalState == NounsDAOStorageV3.ProposalState.Pending
+                proposersLatestProposalState == NounsDAOStorageV3.ProposalState.Pending ||
+                proposersLatestProposalState == NounsDAOStorageV3.ProposalState.Updatable
             ) revert ProposerAlreadyHasALiveProposal();
         }
     }
@@ -574,7 +585,9 @@ library NounsDAOV3Proposals {
         uint256 proposalThreshold_,
         ProposalTxs memory txs
     ) internal returns (NounsDAOStorageV3.Proposal storage newProposal) {
-        uint256 startBlock = block.number + ds.votingDelay;
+        uint256 updatePeriodEndBlock = block.number + ds.proposalUpdatablePeriodInBlock;
+        uint256 startBlock = updatePeriodEndBlock + ds.votingDelay;
+        uint256 endBlock = startBlock + ds.votingPeriod;
 
         newProposal = ds._proposals[proposalId];
         newProposal.id = proposalId;
@@ -586,7 +599,7 @@ library NounsDAOV3Proposals {
         newProposal.signatures = txs.signatures;
         newProposal.calldatas = txs.calldatas;
         newProposal.startBlock = startBlock;
-        newProposal.endBlock = startBlock + ds.votingPeriod;
+        newProposal.endBlock = endBlock;
         newProposal.forVotes = 0;
         newProposal.againstVotes = 0;
         newProposal.abstainVotes = 0;
@@ -595,6 +608,7 @@ library NounsDAOV3Proposals {
         newProposal.vetoed = false;
         newProposal.totalSupply = ds.nouns.totalSupply();
         newProposal.creationBlock = block.number;
+        newProposal.updatePeriodEndBlock = updatePeriodEndBlock;
     }
 
     function emitNewPropEvents(

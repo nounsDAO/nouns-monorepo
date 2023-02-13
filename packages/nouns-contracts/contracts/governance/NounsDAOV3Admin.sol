@@ -42,12 +42,18 @@ library NounsDAOV3Admin {
 
     /// @notice An event emitted when the objection period duration is set
     event ObjectionPeriodDurationSet(
-        uint256 oldObjectionPeriodDurationInBlocks,
-        uint256 newObjectionPeriodDurationInBlocks
+        uint32 oldObjectionPeriodDurationInBlocks,
+        uint32 newObjectionPeriodDurationInBlocks
     );
 
     /// @notice An event emitted when the objection period last minute window is set
-    event LastMinuteWindowSet(uint256 oldLastMinuteWindowInBlocks, uint256 newLastMinuteWindowInBlocks);
+    event LastMinuteWindowSet(uint32 oldLastMinuteWindowInBlocks, uint32 newLastMinuteWindowInBlocks);
+
+    /// @notice An event emitted when the proposal updatable period is set
+    event ProposalUpdatablePeriodSet(
+        uint32 oldProposalUpdatablePeriodInBlock,
+        uint32 newProposalUpdatablePeriodInBlock
+    );
 
     /// @notice Emitted when pendingAdmin is changed
     event NewPendingAdmin(address oldPendingAdmin, address newPendingAdmin);
@@ -166,29 +172,43 @@ library NounsDAOV3Admin {
 
     function _setObjectionPeriodDurationInBlocks(
         NounsDAOStorageV3.StorageV3 storage ds,
-        uint256 newObjectionPeriodDurationInBlocks
+        uint32 newObjectionPeriodDurationInBlocks
     ) external {
         if (msg.sender != ds.admin) {
             revert AdminOnly();
         }
 
-        uint256 oldObjectionPeriodDurationInBlocks = ds.objectionPeriodDurationInBlocks;
+        uint32 oldObjectionPeriodDurationInBlocks = ds.objectionPeriodDurationInBlocks;
         ds.objectionPeriodDurationInBlocks = newObjectionPeriodDurationInBlocks;
 
         emit ObjectionPeriodDurationSet(oldObjectionPeriodDurationInBlocks, newObjectionPeriodDurationInBlocks);
     }
 
-    function _setLastMinuteWindowInBlocks(NounsDAOStorageV3.StorageV3 storage ds, uint256 newLastMinuteWindowInBlocks)
+    function _setLastMinuteWindowInBlocks(NounsDAOStorageV3.StorageV3 storage ds, uint32 newLastMinuteWindowInBlocks)
         external
     {
         if (msg.sender != ds.admin) {
             revert AdminOnly();
         }
 
-        uint256 oldLastMinuteWindowInBlocks = ds.lastMinuteWindowInBlocks;
+        uint32 oldLastMinuteWindowInBlocks = ds.lastMinuteWindowInBlocks;
         ds.lastMinuteWindowInBlocks = newLastMinuteWindowInBlocks;
 
         emit LastMinuteWindowSet(oldLastMinuteWindowInBlocks, newLastMinuteWindowInBlocks);
+    }
+
+    function _setProposalUpdatablePeriodInBlock(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        uint32 newProposalUpdatablePeriodInBlock
+    ) external {
+        if (msg.sender != ds.admin) {
+            revert AdminOnly();
+        }
+
+        uint32 oldProposalUpdatablePeriodInBlock = ds.proposalUpdatablePeriodInBlock;
+        ds.proposalUpdatablePeriodInBlock = newProposalUpdatablePeriodInBlock;
+
+        emit ProposalUpdatablePeriodSet(oldProposalUpdatablePeriodInBlock, newProposalUpdatablePeriodInBlock);
     }
 
     /**
