@@ -108,7 +108,7 @@ contract NounsDAOLogicV2InflationHandling40TotalSupplyTest is NounsDAOLogicV2Inf
         propose(user1, address(0), 0, '', '');
     }
 
-    function testAllowsProposingIfAboveTreshold() public {
+    function testAllowsProposingIfAboveThreshold() public {
         // Give user1 3 tokens, proposal requires 3
         vm.startPrank(tokenHolder);
         nounsToken.transferFrom(tokenHolder, user1, 1);

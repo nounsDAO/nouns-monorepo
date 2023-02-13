@@ -12,6 +12,7 @@
   width: 100%;
   margin-top: 1rem;
   position: relative;
+  cursor: pointer;
 }
 
 .select {
@@ -31,6 +32,7 @@
   /* for Safari, Chrome, Opera */
   -webkit-appearance: none;
   outline: none;
+  cursor: pointer;
 }
 
 /* for IE10 */

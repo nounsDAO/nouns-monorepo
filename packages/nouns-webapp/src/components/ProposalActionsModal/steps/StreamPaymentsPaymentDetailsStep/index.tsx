@@ -1,29 +1,26 @@
 import { Trans } from '@lingui/macro';
-import BigNumber from 'bignumber.js';
-import { utils } from 'ethers';
 import React, { useEffect, useState } from 'react';
 import { ProposalActionModalStepProps } from '../..';
-import BrandDropdown from '../../../BrandDropdown';
-import BrandTextEntry from '../../../BrandTextEntry';
 import BrandNumericEntry from '../../../BrandNumericEntry';
+import BrandTextEntry from '../../../BrandTextEntry';
 import ModalBottomButtonRow from '../../../ModalBottomButtonRow';
 import ModalTitle from '../../../ModalTitle';
+import { SupportedCurrency } from '../TransferFundsDetailsStep';
+import BigNumber from 'bignumber.js';
+import { utils } from 'ethers';
+import ModalSubTitle from '../../../ModalSubtitle';
+import BrandDropdown from '../../../BrandDropdown';
 
-export enum SupportedCurrency {
-  ETH = 'ETH',
-  WETH = 'WETH',
-  USDC = 'USDC',
-}
+const StreamPaymentsDetailsStep: React.FC<ProposalActionModalStepProps> = props => {
+  const { onPrevBtnClick, onNextBtnClick, state, setState } = props;
 
-const TransferFundsDetailsStep: React.FC<ProposalActionModalStepProps> = props => {
-  const { onNextBtnClick, onPrevBtnClick, state, setState } = props;
-
-  const [currency, setCurrency] = useState<SupportedCurrency>(
-    state.TransferFundsCurrency ?? SupportedCurrency.ETH,
-  );
   const [amount, setAmount] = useState<string>(state.amount ?? '');
+  const [currency, setCurrency] = useState<SupportedCurrency.WETH | SupportedCurrency.USDC>(
+    SupportedCurrency.WETH,
+  );
   const [formattedAmount, setFormattedAmount] = useState<string>(state.amount ?? '');
   const [address, setAddress] = useState(state.address ?? '');
+
   const [isValidForNextStage, setIsValidForNextStage] = useState(false);
 
   useEffect(() => {
@@ -33,24 +30,28 @@ const TransferFundsDetailsStep: React.FC<ProposalActionModalStepProps> = props =
   }, [amount, address, isValidForNextStage]);
 
   return (
-    <div>
+    <>
       <ModalTitle>
-        <Trans>Add Transfer Funds Action</Trans>
+        <Trans>Add Streaming Payment Action</Trans>
       </ModalTitle>
+
+      <ModalSubTitle>
+        <Trans>At this time only USDC and WETH streams are supported</Trans>
+      </ModalSubTitle>
 
       <BrandDropdown
         label={'Currency'}
-        value={currency === SupportedCurrency.ETH ? 'ETH' : 'USDC'}
+        value={currency === SupportedCurrency.WETH ? 'WETH' : 'USDC'}
         onChange={e => {
-          if (e.target.value === 'ETH') {
-            setCurrency(SupportedCurrency.ETH);
+          if (e.target.value === 'WETH') {
+            setCurrency(SupportedCurrency.WETH);
           } else {
             setCurrency(SupportedCurrency.USDC);
           }
         }}
         chevronTop={38}
       >
-        <option value="ETH">ETH</option>
+        <option value="WETH">WETH</option>
         <option value="USDC">USDC</option>
       </BrandDropdown>
 
@@ -61,7 +62,7 @@ const TransferFundsDetailsStep: React.FC<ProposalActionModalStepProps> = props =
           setAmount(e.value);
           setFormattedAmount(e.formattedValue);
         }}
-        placeholder={currency === SupportedCurrency.ETH ? '0 ETH' : '0 USDC'}
+        placeholder={`0 ${currency === SupportedCurrency.USDC ? 'USDC' : 'WETH'}`}
         isInvalid={parseFloat(amount) > 0 && new BigNumber(amount).isNaN()}
       />
 
@@ -77,20 +78,15 @@ const TransferFundsDetailsStep: React.FC<ProposalActionModalStepProps> = props =
       <ModalBottomButtonRow
         prevBtnText={<Trans>Back</Trans>}
         onPrevBtnClick={onPrevBtnClick}
-        nextBtnText={<Trans>Review and Add</Trans>}
-        isNextBtnDisabled={!isValidForNextStage}
+        nextBtnText={<Trans>Add Stream Date Details</Trans>}
         onNextBtnClick={() => {
-          setState(x => ({
-            ...x,
-            amount,
-            address,
-            TransferFundsCurrency: currency,
-          }));
+          setState(x => ({ ...x, address, amount, TransferFundsCurrency: currency }));
           onNextBtnClick();
         }}
+        isNextBtnDisabled={!isValidForNextStage}
       />
-    </div>
+    </>
   );
 };
 
-export default TransferFundsDetailsStep;
+export default StreamPaymentsDetailsStep;

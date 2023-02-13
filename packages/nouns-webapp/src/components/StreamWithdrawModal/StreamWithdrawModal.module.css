@@ -25,8 +25,7 @@
   padding: 1.5rem;
   border-radius: 24px;
   left: calc(50% - 236px);
-  min-width: 472px;
-  max-height: 347px;
+  width: 472px;
 }
 
 .modal .header {
@@ -99,35 +98,63 @@
   }
 }
 
-.title {
-  font-family: 'Londrina Solid';
-}
-
-.info {
-  font-weight: 500;
-}
-
-.buttonWrapper {
+.center {
   display: flex;
-  justify-content: space-between;
-  margin-top: 2rem;
+  justify-content: center;
 }
 
-.dropdownContainer {
+/* FROM VOTE MODAL */
+
+.bold {
+  font-weight: bold;
+}
+
+.transactionStatus {
+  font-size: 18px;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+}
+
+.disabled {
+  opacity: 0.5;
+}
+
+.txnFailureTitle {
+  font-weight: normal;
   width: 100%;
+}
+
+.txnFailureBody {
   margin-top: 1rem;
-  position: relative;
+  font-weight: bold;
 }
 
-.dropdownContainer select {
-  /* for Firefox */
-  -moz-appearance: none;
-  /* for Safari, Chrome, Opera */
-  -webkit-appearance: none;
-  outline: none;
+.txnFailureErrorMessage {
+  font-weight: bold;
+  color: var(--brand-color-red);
 }
 
-/* for IE10 */
-.dropdownContainer select::-ms-expand {
-  display: none;
+.amtEntyWrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.amtEntryMax {
+  position: absolute;
+  right: 40px;
+  top: 68%;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.streamTimeWrapper {
+  opacity: 0.5;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
 }
