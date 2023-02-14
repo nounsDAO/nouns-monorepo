@@ -4,6 +4,7 @@ pragma solidity ^0.8.15;
 import 'forge-std/Test.sol';
 import { ECDSA } from '@openzeppelin/contracts/utils/cryptography/ECDSA.sol';
 import { NounsDAOV3Proposals } from '../../../contracts/governance/NounsDAOV3Proposals.sol';
+import { IERC1271 } from '@openzeppelin/contracts/interfaces/IERC1271.sol';
 
 contract SigUtils is Test {
     bytes32 public constant DOMAIN_TYPEHASH =
@@ -22,12 +23,24 @@ contract SigUtils is Test {
         uint256 expirationTimestamp,
         address verifyingContract
     ) public returns (bytes memory) {
+        return signProposal(proposer, signerPK, txs, description, expirationTimestamp, verifyingContract, 'Nouns DAO');
+    }
+
+    function signProposal(
+        address proposer,
+        uint256 signerPK,
+        NounsDAOV3Proposals.ProposalTxs memory txs,
+        string memory description,
+        uint256 expirationTimestamp,
+        address verifyingContract,
+        string memory domainName
+    ) public returns (bytes memory) {
         bytes32 structHash = keccak256(
             abi.encodePacked(PROPOSAL_TYPEHASH, calcProposalEncodeData(proposer, txs, description), expirationTimestamp)
         );
 
         bytes32 domainSeparator = keccak256(
-            abi.encode(DOMAIN_TYPEHASH, keccak256(bytes('Nouns DAO')), block.chainid, verifyingContract)
+            abi.encode(DOMAIN_TYPEHASH, keccak256(bytes(domainName)), block.chainid, verifyingContract)
         );
 
         bytes32 digest = ECDSA.toTypedDataHash(domainSeparator, structHash);
@@ -60,5 +73,24 @@ contract SigUtils is Test {
                 keccak256(abi.encodePacked(calldatasHashes)),
                 keccak256(bytes(description))
             );
+    }
+}
+
+contract ERC1271Stub is IERC1271 {
+    mapping(bytes32 => bool) responses;
+
+    /**
+     * @dev Should return whether the signature provided is valid for the provided data
+     */
+    function isValidSignature(bytes32, bytes memory signature) external view returns (bytes4 magicValue) {
+        bytes32 signatureHash = keccak256(signature);
+        if (responses[signatureHash]) {
+            return IERC1271.isValidSignature.selector;
+        }
+        return 0;
+    }
+
+    function setResponse(bytes32 signatureHash, bool response) external {
+        responses[signatureHash] = response;
     }
 }

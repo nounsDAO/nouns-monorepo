@@ -158,6 +158,7 @@ library NounsDAOV3Proposals {
         ProposalTxs memory txs,
         string memory description
     ) internal returns (uint256) {
+        if (proposerSignatures.length == 0) revert MustProvideSignatures();
         checkProposaTxs(txs);
         uint256 proposalId = ds.proposalCount = ds.proposalCount + 1;
 
