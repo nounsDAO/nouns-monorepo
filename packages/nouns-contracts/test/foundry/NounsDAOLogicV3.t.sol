@@ -256,7 +256,7 @@ contract NounsDAOLogicV3_UpdateProposal_Test is NounsDAOLogicV3Test {
         // Succeeded
         vm.prank(proposer);
         dao.castVote(proposalId, 1);
-        vm.roll(block.number + VOTING_DELAY + VOTING_PERIOD);
+        vm.roll(block.number + VOTING_PERIOD);
         assertTrue(dao.state(proposalId) == NounsDAOStorageV3.ProposalState.Succeeded);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
         updateProposal(proposer, proposalId, makeAddr('target'), 0, '', '', '');
