@@ -153,15 +153,57 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
         string memory description,
         uint256 expirationTimestamp
     ) internal returns (uint256 proposalId) {
-        vm.prank(proposer);
-        NounsDAOStorageV3.ProposerSignature[] memory sigs = new NounsDAOStorageV3.ProposerSignature[](1);
-        sigs[0] = NounsDAOStorageV3.ProposerSignature(
-            signProposal(proposer, signerPK, txs, description, expirationTimestamp, address(dao)),
-            signer,
-            expirationTimestamp
-        );
+        address[] memory signers = new address[](1);
+        signers[0] = signer;
+        uint256[] memory signerPKs = new uint256[](1);
+        signerPKs[0] = signerPK;
+        uint256[] memory expirationTimestamps = new uint256[](1);
+        expirationTimestamps[0] = expirationTimestamp;
 
+        return proposeBySigs(proposer, signers, signerPKs, expirationTimestamps, txs, description);
+    }
+
+    function proposeBySigs(
+        address proposer,
+        address[] memory signers,
+        uint256[] memory signerPKs,
+        uint256[] memory expirationTimestamps,
+        NounsDAOV3Proposals.ProposalTxs memory txs,
+        string memory description
+    ) internal returns (uint256 proposalId) {
+        NounsDAOStorageV3.ProposerSignature[] memory sigs = new NounsDAOStorageV3.ProposerSignature[](signers.length);
+        for (uint256 i = 0; i < signers.length; ++i) {
+            sigs[i] = NounsDAOStorageV3.ProposerSignature(
+                signProposal(proposer, signerPKs[i], txs, description, expirationTimestamps[i], address(dao)),
+                signers[i],
+                expirationTimestamps[i]
+            );
+        }
+
+        vm.prank(proposer);
         proposalId = dao.proposeBySigs(sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, description);
+    }
+
+    function updateProposalBySigs(
+        uint256 proposalId,
+        address proposer,
+        address[] memory signers,
+        uint256[] memory signerPKs,
+        uint256[] memory expirationTimestamps,
+        NounsDAOV3Proposals.ProposalTxs memory txs,
+        string memory description
+    ) internal {
+        NounsDAOStorageV3.ProposerSignature[] memory sigs = new NounsDAOStorageV3.ProposerSignature[](signers.length);
+        for (uint256 i = 0; i < signers.length; ++i) {
+            sigs[i] = NounsDAOStorageV3.ProposerSignature(
+                signProposal(proposer, signerPKs[i], txs, description, expirationTimestamps[i], address(dao)),
+                signers[i],
+                expirationTimestamps[i]
+            );
+        }
+
+        vm.prank(proposer);
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, description);
     }
 
     function makeTxs(

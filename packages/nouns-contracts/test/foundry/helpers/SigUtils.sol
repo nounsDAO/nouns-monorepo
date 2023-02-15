@@ -3,8 +3,9 @@ pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
 import { ECDSA } from '@openzeppelin/contracts/utils/cryptography/ECDSA.sol';
-import { NounsDAOV3Proposals } from '../../../contracts/governance/NounsDAOV3Proposals.sol';
 import { IERC1271 } from '@openzeppelin/contracts/interfaces/IERC1271.sol';
+import { NounsDAOStorageV3 } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsDAOV3Proposals } from '../../../contracts/governance/NounsDAOV3Proposals.sol';
 
 contract SigUtils is Test {
     bytes32 public constant DOMAIN_TYPEHASH =
@@ -14,6 +15,59 @@ contract SigUtils is Test {
         keccak256(
             'Proposal(address proposer,address[] targets,uint256[] values,string[] signatures,bytes[] calldatas,string description,uint256 expiry)'
         );
+
+    bytes32 public constant UPDATE_PROPOSAL_TYPEHASH =
+        keccak256(
+            'UpdateProposal(uint256 proposalId,address proposer,address[] targets,uint256[] values,string[] signatures,bytes[] calldatas,string description,uint256 expiry)'
+        );
+
+    function makeUpdateProposalSigs(
+        address[] memory signers,
+        uint256[] memory signerPKs,
+        uint256[] memory expirationTimestamps,
+        uint256 proposalId,
+        address proposer,
+        NounsDAOV3Proposals.ProposalTxs memory txs,
+        string memory description,
+        address verifyingContract
+    ) internal returns (NounsDAOStorageV3.ProposerSignature[] memory sigs) {
+        sigs = new NounsDAOStorageV3.ProposerSignature[](signers.length);
+        for (uint256 i = 0; i < signers.length; ++i) {
+            sigs[i] = NounsDAOStorageV3.ProposerSignature(
+                signProposalUpdate(
+                    proposalId,
+                    proposer,
+                    signerPKs[i],
+                    txs,
+                    description,
+                    expirationTimestamps[i],
+                    verifyingContract
+                ),
+                signers[i],
+                expirationTimestamps[i]
+            );
+        }
+    }
+
+    function signProposalUpdate(
+        uint256 proposalId,
+        address proposer,
+        uint256 signerPK,
+        NounsDAOV3Proposals.ProposalTxs memory txs,
+        string memory description,
+        uint256 expirationTimestamp,
+        address verifyingContract
+    ) public returns (bytes memory) {
+        return
+            sign(
+                abi.encodePacked(proposalId, calcProposalEncodeData(proposer, txs, description)),
+                signerPK,
+                expirationTimestamp,
+                verifyingContract,
+                'Nouns DAO',
+                UPDATE_PROPOSAL_TYPEHASH
+            );
+    }
 
     function signProposal(
         address proposer,
@@ -35,9 +89,26 @@ contract SigUtils is Test {
         address verifyingContract,
         string memory domainName
     ) public returns (bytes memory) {
-        bytes32 structHash = keccak256(
-            abi.encodePacked(PROPOSAL_TYPEHASH, calcProposalEncodeData(proposer, txs, description), expirationTimestamp)
-        );
+        return
+            sign(
+                calcProposalEncodeData(proposer, txs, description),
+                signerPK,
+                expirationTimestamp,
+                verifyingContract,
+                domainName,
+                PROPOSAL_TYPEHASH
+            );
+    }
+
+    function sign(
+        bytes memory proposalEncodeData,
+        uint256 signerPK,
+        uint256 expirationTimestamp,
+        address verifyingContract,
+        string memory domainName,
+        bytes32 structTypeHash
+    ) public returns (bytes memory) {
+        bytes32 structHash = keccak256(abi.encodePacked(structTypeHash, proposalEncodeData, expirationTimestamp));
 
         bytes32 domainSeparator = keccak256(
             abi.encode(DOMAIN_TYPEHASH, keccak256(bytes(domainName)), block.chainid, verifyingContract)
