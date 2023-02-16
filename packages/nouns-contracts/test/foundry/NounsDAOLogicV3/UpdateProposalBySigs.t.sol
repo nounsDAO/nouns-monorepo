@@ -84,10 +84,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
             signers,
             signerPKs,
             expirationTimestamps,
-            proposalId,
-            proposer,
-            txs,
-            '',
+            UpdateProposalParams(proposalId, proposer, txs, ''),
             address(dao)
         );
 
@@ -107,10 +104,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
             signers,
             signerPKs,
             expirationTimestamps,
-            proposalId,
-            proposer,
-            txs,
-            '',
+            UpdateProposalParams(proposalId, proposer, txs, ''),
             address(dao)
         );
 
@@ -130,10 +124,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
             signers,
             signerPKs,
             expirationTimestamps,
-            proposalId,
-            proposer,
-            txs,
-            '',
+            UpdateProposalParams(proposalId, proposer, txs, ''),
             address(dao)
         );
 
@@ -158,15 +149,285 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
             signers,
             signerPKs,
             expirationTimestamps,
-            proposalId,
-            proposer,
-            txs,
-            '',
+            UpdateProposalParams(proposalId, proposer, txs, ''),
             address(dao)
         );
 
         vm.prank(proposer);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.OnlyProposerCanEdit.selector));
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+    }
+
+    function test_givenCanceledSig_reverts() public {
+        (
+            address[] memory signers,
+            uint256[] memory signerPKs,
+            uint256[] memory expirationTimestamps
+        ) = signersPKsExpirations();
+
+        NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
+        NounsDAOStorageV3.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+            signers,
+            signerPKs,
+            expirationTimestamps,
+            UpdateProposalParams(proposalId, proposer, txs, ''),
+            address(dao)
+        );
+
+        vm.prank(sigs[1].signer);
+        dao.cancelSig(sigs[1].sig);
+
+        vm.prank(proposer);
+        vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.SignatureIsCancelled.selector));
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+    }
+
+    function test_givenExpireddSig_reverts() public {
+        (
+            address[] memory signers,
+            uint256[] memory signerPKs,
+            uint256[] memory expirationTimestamps
+        ) = signersPKsExpirations();
+
+        expirationTimestamps[1] = block.timestamp - 1;
+
+        NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
+        NounsDAOStorageV3.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+            signers,
+            signerPKs,
+            expirationTimestamps,
+            UpdateProposalParams(proposalId, proposer, txs, ''),
+            address(dao)
+        );
+
+        vm.prank(proposer);
+        vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.SignatureExpired.selector));
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+    }
+
+    function test_givenSigOnDifferentDescription_reverts() public {
+        (
+            address[] memory signers,
+            uint256[] memory signerPKs,
+            uint256[] memory expirationTimestamps
+        ) = signersPKsExpirations();
+
+        NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
+        NounsDAOStorageV3.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+            signers,
+            signerPKs,
+            expirationTimestamps,
+            UpdateProposalParams(proposalId, proposer, txs, 'different description'),
+            address(dao)
+        );
+
+        vm.prank(proposer);
+        vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.InvalidSignature.selector));
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+    }
+
+    function test_givenSigOnDifferentTargets_reverts() public {
+        (
+            address[] memory signers,
+            uint256[] memory signerPKs,
+            uint256[] memory expirationTimestamps
+        ) = signersPKsExpirations();
+
+        NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
+        address[] memory updateTargets = txs.targets;
+
+        // sign on differet new target
+        address[] memory differentTargets = new address[](1);
+        differentTargets[0] = makeAddr('different new target');
+        txs.targets = differentTargets;
+        NounsDAOStorageV3.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+            signers,
+            signerPKs,
+            expirationTimestamps,
+            UpdateProposalParams(proposalId, proposer, txs, ''),
+            address(dao)
+        );
+
+        // set it back to the original new target
+        txs.targets = updateTargets;
+        vm.prank(proposer);
+        vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.InvalidSignature.selector));
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+    }
+
+    function test_givenSigOnDifferentValues_reverts() public {
+        (
+            address[] memory signers,
+            uint256[] memory signerPKs,
+            uint256[] memory expirationTimestamps
+        ) = signersPKsExpirations();
+
+        NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
+        uint256[] memory updateValues = txs.values;
+
+        // sign on differet values
+        uint256[] memory differentValues = new uint256[](1);
+        differentValues[0] = updateValues[0] + 1234;
+        txs.values = differentValues;
+        NounsDAOStorageV3.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+            signers,
+            signerPKs,
+            expirationTimestamps,
+            UpdateProposalParams(proposalId, proposer, txs, ''),
+            address(dao)
+        );
+
+        // set it back to the original update values
+        txs.values = updateValues;
+        vm.prank(proposer);
+        vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.InvalidSignature.selector));
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+    }
+
+    function test_givenSigOnDifferentSignatures_reverts() public {
+        (
+            address[] memory signers,
+            uint256[] memory signerPKs,
+            uint256[] memory expirationTimestamps
+        ) = signersPKsExpirations();
+
+        NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
+        string[] memory updateSignatures = txs.signatures;
+
+        // sign on differet signatures
+        string[] memory differentSignatures = new string[](1);
+        differentSignatures[0] = 'different signature';
+        txs.signatures = differentSignatures;
+        NounsDAOStorageV3.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+            signers,
+            signerPKs,
+            expirationTimestamps,
+            UpdateProposalParams(proposalId, proposer, txs, ''),
+            address(dao)
+        );
+
+        // set it back to the original update signatures
+        txs.signatures = updateSignatures;
+        vm.prank(proposer);
+        vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.InvalidSignature.selector));
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+    }
+
+    function test_givenSigOnDifferentCalldatas_reverts() public {
+        (
+            address[] memory signers,
+            uint256[] memory signerPKs,
+            uint256[] memory expirationTimestamps
+        ) = signersPKsExpirations();
+
+        NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
+        bytes[] memory updateCalldatas = txs.calldatas;
+
+        // sign on differet calldatas
+        bytes[] memory differentCalldatas = new bytes[](1);
+        differentCalldatas[0] = 'different calldatas';
+        txs.calldatas = differentCalldatas;
+        NounsDAOStorageV3.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+            signers,
+            signerPKs,
+            expirationTimestamps,
+            UpdateProposalParams(proposalId, proposer, txs, ''),
+            address(dao)
+        );
+
+        // set it back to the original update calldatas
+        txs.calldatas = updateCalldatas;
+        vm.prank(proposer);
+        vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.InvalidSignature.selector));
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+    }
+
+    function test_givenSigOnDifferentExpiration_reverts() public {
+        (
+            address[] memory signers,
+            uint256[] memory signerPKs,
+            uint256[] memory expirationTimestamps
+        ) = signersPKsExpirations();
+
+        NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
+        NounsDAOStorageV3.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+            signers,
+            signerPKs,
+            expirationTimestamps,
+            UpdateProposalParams(proposalId, proposer, txs, ''),
+            address(dao)
+        );
+
+        sigs[1].expirationTimestamp = sigs[1].expirationTimestamp + 1234;
+
+        vm.prank(proposer);
+        vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.InvalidSignature.selector));
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+    }
+
+    function test_givenSigOnDifferentSigner_reverts() public {
+        (
+            address[] memory signers,
+            uint256[] memory signerPKs,
+            uint256[] memory expirationTimestamps
+        ) = signersPKsExpirations();
+
+        NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
+        NounsDAOStorageV3.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+            signers,
+            signerPKs,
+            expirationTimestamps,
+            UpdateProposalParams(proposalId, proposer, txs, ''),
+            address(dao)
+        );
+
+        sigs[1].signer = makeAddr('different signer');
+
+        vm.prank(proposer);
+        vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.InvalidSignature.selector));
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+    }
+
+    function test_givenSigOnDifferentDomainName_reverts() public {
+        (
+            address[] memory signers,
+            uint256[] memory signerPKs,
+            uint256[] memory expirationTimestamps
+        ) = signersPKsExpirations();
+
+        NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
+        NounsDAOStorageV3.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+            signers,
+            signerPKs,
+            expirationTimestamps,
+            UpdateProposalParams(proposalId, proposer, txs, ''),
+            address(dao),
+            'different domain name'
+        );
+
+        vm.prank(proposer);
+        vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.InvalidSignature.selector));
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+    }
+
+    function test_givenSigOnDifferentVerifyingContract_reverts() public {
+        (
+            address[] memory signers,
+            uint256[] memory signerPKs,
+            uint256[] memory expirationTimestamps
+        ) = signersPKsExpirations();
+
+        NounsDAOV3Proposals.ProposalTxs memory txs = makeTxs(makeAddr('new target'), 0, '', '');
+        NounsDAOStorageV3.ProposerSignature[] memory sigs = makeUpdateProposalSigs(
+            signers,
+            signerPKs,
+            expirationTimestamps,
+            UpdateProposalParams(proposalId, proposer, txs, ''),
+            makeAddr('other verifying contract')
+        );
+
+        vm.prank(proposer);
+        vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.InvalidSignature.selector));
         dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
     }
 

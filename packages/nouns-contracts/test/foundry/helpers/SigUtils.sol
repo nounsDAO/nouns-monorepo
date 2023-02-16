@@ -21,27 +21,52 @@ contract SigUtils is Test {
             'UpdateProposal(uint256 proposalId,address proposer,address[] targets,uint256[] values,string[] signatures,bytes[] calldatas,string description,uint256 expiry)'
         );
 
+    /// @dev using this struct to prevent stack-too-deep.
+    struct UpdateProposalParams {
+        uint256 proposalId;
+        address proposer;
+        NounsDAOV3Proposals.ProposalTxs txs;
+        string description;
+    }
+
     function makeUpdateProposalSigs(
         address[] memory signers,
         uint256[] memory signerPKs,
         uint256[] memory expirationTimestamps,
-        uint256 proposalId,
-        address proposer,
-        NounsDAOV3Proposals.ProposalTxs memory txs,
-        string memory description,
+        UpdateProposalParams memory proposalParams,
         address verifyingContract
+    ) internal returns (NounsDAOStorageV3.ProposerSignature[] memory sigs) {
+        return
+            makeUpdateProposalSigs(
+                signers,
+                signerPKs,
+                expirationTimestamps,
+                proposalParams,
+                verifyingContract,
+                'Nouns DAO'
+            );
+    }
+
+    function makeUpdateProposalSigs(
+        address[] memory signers,
+        uint256[] memory signerPKs,
+        uint256[] memory expirationTimestamps,
+        UpdateProposalParams memory proposalParams,
+        address verifyingContract,
+        string memory domainName
     ) internal returns (NounsDAOStorageV3.ProposerSignature[] memory sigs) {
         sigs = new NounsDAOStorageV3.ProposerSignature[](signers.length);
         for (uint256 i = 0; i < signers.length; ++i) {
             sigs[i] = NounsDAOStorageV3.ProposerSignature(
                 signProposalUpdate(
-                    proposalId,
-                    proposer,
+                    proposalParams.proposalId,
+                    proposalParams.proposer,
                     signerPKs[i],
-                    txs,
-                    description,
+                    proposalParams.txs,
+                    proposalParams.description,
                     expirationTimestamps[i],
-                    verifyingContract
+                    verifyingContract,
+                    domainName
                 ),
                 signers[i],
                 expirationTimestamps[i]
@@ -56,7 +81,8 @@ contract SigUtils is Test {
         NounsDAOV3Proposals.ProposalTxs memory txs,
         string memory description,
         uint256 expirationTimestamp,
-        address verifyingContract
+        address verifyingContract,
+        string memory domainName
     ) public returns (bytes memory) {
         return
             sign(
@@ -64,7 +90,7 @@ contract SigUtils is Test {
                 signerPK,
                 expirationTimestamp,
                 verifyingContract,
-                'Nouns DAO',
+                domainName,
                 UPDATE_PROPOSAL_TYPEHASH
             );
     }
