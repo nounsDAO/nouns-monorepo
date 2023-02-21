@@ -17,7 +17,7 @@ import { Inflator } from '../../../contracts/Inflator.sol';
 
 abstract contract DeployUtils is Test, DescriptorHelpers {
     uint256 constant TIMELOCK_DELAY = 2 days;
-    uint256 constant VOTING_PERIOD = 5_760; // About 24 hours
+    uint256 constant VOTING_PERIOD = 7_200; // 24 hours
     uint256 constant VOTING_DELAY = 1;
     uint256 constant PROPOSAL_THRESHOLD = 1;
     uint256 constant QUORUM_VOTES_BPS = 2000;
