@@ -219,9 +219,10 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         uint256[] memory values,
         string[] memory signatures,
         bytes[] memory calldatas,
-        string memory description
+        string memory description,
+        string memory updateMessage
     ) external {
-        ds.updateProposal(proposalId, targets, values, signatures, calldatas, description);
+        ds.updateProposal(proposalId, targets, values, signatures, calldatas, description, updateMessage);
     }
 
     function updateProposalBySigs(
@@ -231,13 +232,15 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         uint256[] memory values,
         string[] memory signatures,
         bytes[] memory calldatas,
-        string memory description
+        string memory description,
+        string memory updateMessage
     ) external {
         ds.updateProposalBySigs(
             proposalId,
             proposerSignatures,
             NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas),
-            description
+            description,
+            updateMessage
         );
     }
 

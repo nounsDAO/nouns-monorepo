@@ -20,7 +20,7 @@ import {
   getGovernanceEntity,
   getOrCreateDelegateWithNullOption,
   getOrCreateDynamicQuorumParams,
-  getOrCreateProposalPreviousVersion,
+  getOrCreateProposalVersion,
 } from './utils/helpers';
 import {
   BIGINT_ONE,
@@ -34,6 +34,7 @@ import {
 } from './utils/constants';
 import { dynamicQuorumVotes } from './utils/dynamicQuorum';
 import { ParsedProposalV3, extractTitle } from './custom-types/ParsedProposalV3';
+import { Proposal } from './types/schema';
 
 export function handleProposalCreatedWithRequirements(
   event: ProposalCreatedWithRequirements1,
@@ -108,29 +109,12 @@ export function handleProposalCreated(parsedProposal: ParsedProposalV3): void {
   proposal.quorumCoefficient = dynamicQuorum.quorumCoefficient;
 
   proposal.save();
+
+  captureProposalVersion(parsedProposal.txHash, parsedProposal.logIndex, proposal);
 }
 
 export function handleProposalUpdated(event: ProposalUpdated): void {
-  const updateId = event.params.id
-    .toString()
-    .concat('-')
-    .concat(event.transaction.hash.toHexString())
-    .concat('-')
-    .concat(event.logIndex.toString());
-
-  const previousVersion = getOrCreateProposalPreviousVersion(updateId);
   const proposal = getOrCreateProposal(event.params.id.toString());
-
-  // First save the current state of the proposal to the previous version
-  previousVersion.proposal = proposal.id;
-  previousVersion.createdAt = proposal.lastUpdatedTimestamp;
-  previousVersion.targets = proposal.targets;
-  previousVersion.values = proposal.values;
-  previousVersion.signatures = proposal.signatures;
-  previousVersion.calldatas = proposal.calldatas;
-  previousVersion.title = proposal.title;
-  previousVersion.description = proposal.description;
-  previousVersion.save();
 
   // Then update the proposal to the latest state
   proposal.lastUpdatedTimestamp = event.block.timestamp;
@@ -142,6 +126,13 @@ export function handleProposalUpdated(event: ProposalUpdated): void {
   proposal.description = event.params.description.split('\\n').join('\n');
   proposal.title = extractTitle(proposal.description);
   proposal.save();
+
+  captureProposalVersion(
+    event.transaction.hash.toHexString(),
+    event.logIndex.toString(),
+    proposal,
+    event.params.updateMessage,
+  );
 }
 
 export function handleProposalCanceled(event: ProposalCanceled): void {
@@ -268,4 +259,24 @@ export function handleProposalObjectionPeriodSet(event: ProposalObjectionPeriodS
   const proposal = getOrCreateProposal(event.params.id.toString());
   proposal.objectionPeriodEndBlock = event.params.objectionPeriodEndBlock;
   proposal.save();
+}
+
+function captureProposalVersion(
+  txHash: string,
+  logIndex: string,
+  proposal: Proposal,
+  updateMessage: string = '',
+): void {
+  const versionId = txHash.concat('-').concat(logIndex);
+  const previousVersion = getOrCreateProposalVersion(versionId);
+  previousVersion.proposal = proposal.id;
+  previousVersion.createdAt = proposal.lastUpdatedTimestamp;
+  previousVersion.targets = proposal.targets;
+  previousVersion.values = proposal.values;
+  previousVersion.signatures = proposal.signatures;
+  previousVersion.calldatas = proposal.calldatas;
+  previousVersion.title = proposal.title;
+  previousVersion.description = proposal.description;
+  previousVersion.updateMessage = updateMessage;
+  previousVersion.save();
 }

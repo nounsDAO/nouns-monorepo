@@ -152,7 +152,8 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
         uint256[] values,
         string[] signatures,
         bytes[] calldatas,
-        string description
+        string description,
+        string updateMessage
     );
 
     /// @notice Emitted when a proposal is set to have an objection period

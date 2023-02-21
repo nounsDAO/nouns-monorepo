@@ -6,11 +6,6 @@
   },
   {
     "inputs": [],
-    "name": "CanOnlyEditUpdatableProposals",
-    "type": "error"
-  },
-  {
-    "inputs": [],
     "name": "CanOnlyInitializeOnce",
     "type": "error"
   },
@@ -41,11 +36,6 @@
   },
   {
     "inputs": [],
-    "name": "OnlyProposerCanEdit",
-    "type": "error"
-  },
-  {
-    "inputs": [],
     "name": "ProposalInfoArityMismatch",
     "type": "error"
   },
@@ -56,22 +46,12 @@
   },
   {
     "inputs": [],
-    "name": "ProposerCannotUpdateProposalWithSigners",
-    "type": "error"
-  },
-  {
-    "inputs": [],
     "name": "SignatureExpired",
     "type": "error"
   },
   {
     "inputs": [],
     "name": "SignatureIsCancelled",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "SignerCountMismtach",
     "type": "error"
   },
   {
@@ -557,13 +537,13 @@
       {
         "indexed": false,
         "internalType": "uint32",
-        "name": "oldProposalUpdatablePeriodInBlock",
+        "name": "oldProposalUpdatablePeriodInBlocks",
         "type": "uint32"
       },
       {
         "indexed": false,
         "internalType": "uint32",
-        "name": "newProposalUpdatablePeriodInBlock",
+        "name": "newProposalUpdatablePeriodInBlocks",
         "type": "uint32"
       }
     ],
@@ -613,6 +593,12 @@
         "indexed": false,
         "internalType": "string",
         "name": "description",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "updateMessage",
         "type": "string"
       }
     ],
@@ -1487,6 +1473,26 @@
         "internalType": "struct NounsDAOStorageV3.DynamicQuorumParams",
         "name": "dynamicQuorumParams_",
         "type": "tuple"
+      },
+      {
+        "internalType": "uint32",
+        "name": "lastMinuteWindowInBlocks_",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint32",
+        "name": "objectionPeriodDurationInBlocks_",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint32",
+        "name": "proposalUpdatablePeriodInBlocks_",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "voteSnapshotBlockSwitchProposalId_",
+        "type": "uint256"
       }
     ],
     "name": "initialize",
@@ -1904,9 +1910,9 @@
             "type": "address"
           },
           {
-            "internalType": "uint32",
+            "internalType": "uint256",
             "name": "expirationTimestamp",
-            "type": "uint32"
+            "type": "uint256"
           }
         ],
         "internalType": "struct NounsDAOStorageV3.ProposerSignature[]",
@@ -2148,6 +2154,11 @@
         "internalType": "string",
         "name": "description",
         "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "updateMessage",
+        "type": "string"
       }
     ],
     "name": "updateProposal",
@@ -2175,9 +2186,9 @@
             "type": "address"
           },
           {
-            "internalType": "uint32",
+            "internalType": "uint256",
             "name": "expirationTimestamp",
-            "type": "uint32"
+            "type": "uint256"
           }
         ],
         "internalType": "struct NounsDAOStorageV3.ProposerSignature[]",
@@ -2207,6 +2218,11 @@
       {
         "internalType": "string",
         "name": "description",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "updateMessage",
         "type": "string"
       }
     ],

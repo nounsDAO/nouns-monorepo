@@ -91,7 +91,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
 
         vm.prank(makeAddr('not proposer'));
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.OnlyProposerCanEdit.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenSignerMismatch_tooFewSigners_reverts() public {
@@ -111,7 +111,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
 
         vm.prank(proposer);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.SignerCountMismtach.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenSignerMismatch_tooManySigners_reverts() public {
@@ -131,7 +131,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
 
         vm.prank(proposer);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.SignerCountMismtach.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenSignerMismatch_sameNumberOneDifferentSigner_reverts() public {
@@ -156,7 +156,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
 
         vm.prank(proposer);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.OnlyProposerCanEdit.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenCanceledSig_reverts() public {
@@ -180,7 +180,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
 
         vm.prank(proposer);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.SignatureIsCancelled.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenExpireddSig_reverts() public {
@@ -203,7 +203,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
 
         vm.prank(proposer);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.SignatureExpired.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenSigOnDifferentDescription_reverts() public {
@@ -224,7 +224,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
 
         vm.prank(proposer);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.InvalidSignature.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenSigOnDifferentTargets_reverts() public {
@@ -253,7 +253,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         txs.targets = updateTargets;
         vm.prank(proposer);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.InvalidSignature.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenSigOnDifferentValues_reverts() public {
@@ -282,7 +282,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         txs.values = updateValues;
         vm.prank(proposer);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.InvalidSignature.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenSigOnDifferentSignatures_reverts() public {
@@ -311,7 +311,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         txs.signatures = updateSignatures;
         vm.prank(proposer);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.InvalidSignature.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenSigOnDifferentCalldatas_reverts() public {
@@ -340,7 +340,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         txs.calldatas = updateCalldatas;
         vm.prank(proposer);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.InvalidSignature.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenSigOnDifferentExpiration_reverts() public {
@@ -363,7 +363,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
 
         vm.prank(proposer);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.InvalidSignature.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenSigOnDifferentSigner_reverts() public {
@@ -386,7 +386,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
 
         vm.prank(proposer);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.InvalidSignature.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenSigOnDifferentDomainName_reverts() public {
@@ -408,7 +408,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
 
         vm.prank(proposer);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.InvalidSignature.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenSigOnDifferentVerifyingContract_reverts() public {
@@ -429,7 +429,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
 
         vm.prank(proposer);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.InvalidSignature.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenERC1271CheckReturnsFalse_reverts() public {
@@ -454,7 +454,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
 
         vm.prank(proposer);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.InvalidSignature.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenProposalDoesntExist_reverts() public {
@@ -474,7 +474,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         );
 
         vm.expectRevert('NounsDAO::state: invalid proposal id');
-        dao.updateProposalBySigs(proposalId + 1, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId + 1, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenNoTxs_reverts() public {
@@ -503,7 +503,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         );
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.MustProvideActions.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenTooManyTxs_reverts() public {
@@ -538,7 +538,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         );
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.TooManyActions.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenTxsWithArityMismatch_reverts() public {
@@ -568,7 +568,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         );
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.ProposalInfoArityMismatch.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenStatesPendingActiveSucceededQueuedAndExecuted_reverts() public {
@@ -590,13 +590,13 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         vm.roll(block.number + proposalUpdatablePeriodInBlocks);
         assertTrue(dao.state(proposalId) == NounsDAOStorageV3.ProposalState.Pending);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
 
         // Active
         vm.roll(block.number + VOTING_DELAY);
         assertTrue(dao.state(proposalId) == NounsDAOStorageV3.ProposalState.Active);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
 
         // Succeeded
         vm.prank(proposer);
@@ -606,20 +606,20 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         vm.roll(block.number + VOTING_PERIOD);
         assertTrue(dao.state(proposalId) == NounsDAOStorageV3.ProposalState.Succeeded);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
 
         // Queued
         dao.queue(proposalId);
         assertTrue(dao.state(proposalId) == NounsDAOStorageV3.ProposalState.Queued);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
 
         // Executed
         vm.warp(block.timestamp + TIMELOCK_DELAY);
         dao.execute(proposalId);
         assertTrue(dao.state(proposalId) == NounsDAOStorageV3.ProposalState.Executed);
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenStateCanceled_reverts() public {
@@ -642,7 +642,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         assertTrue(dao.state(proposalId) == NounsDAOStorageV3.ProposalState.Canceled);
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenStateDefeated_reverts() public {
@@ -664,7 +664,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         assertTrue(dao.state(proposalId) == NounsDAOStorageV3.ProposalState.Defeated);
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenStateExpired_reverts() public {
@@ -693,7 +693,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         assertTrue(dao.state(proposalId) == NounsDAOStorageV3.ProposalState.Expired);
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenStateVetoed_reverts() public {
@@ -716,7 +716,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         assertTrue(dao.state(proposalId) == NounsDAOStorageV3.ProposalState.Vetoed);
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenStateObjectionPeriod_reverts() public {
@@ -745,7 +745,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
         assertTrue(dao.state(proposalId) == NounsDAOStorageV3.ProposalState.ObjectionPeriod);
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.CanOnlyEditUpdatableProposals.selector));
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenPropNotBySigs_reverts() public {
@@ -778,7 +778,7 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.SignerCountMismtach.selector));
         vm.prank(proposer);
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '');
+        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, '', '');
     }
 
     function test_givenStateUpdatable_updatesTxsAndEmitsEvent() public {
@@ -820,7 +820,8 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
             txs.values,
             txs.signatures,
             txs.calldatas,
-            'descriptionAfter'
+            'descriptionAfter',
+            'some update message'
         );
 
         vm.prank(proposer);
@@ -831,7 +832,8 @@ contract UpdateProposalBySigsTest is NounsDAOLogicV3BaseTest {
             txs.values,
             txs.signatures,
             txs.calldatas,
-            'descriptionAfter'
+            'descriptionAfter',
+            'some update message'
         );
 
         (

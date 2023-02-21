@@ -284,6 +284,7 @@ export function createProposalUpdatedEvent(
   signatures: string[],
   calldatas: Bytes[],
   description: string,
+  updateMessage: string,
 ): ProposalUpdated {
   let newEvent = changetype<ProposalUpdated>(newMockEvent());
 
@@ -314,6 +315,9 @@ export function createProposalUpdatedEvent(
   );
   newEvent.parameters.push(
     new ethereum.EventParam('description', ethereum.Value.fromString(description)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('updateMessage', ethereum.Value.fromString(updateMessage)),
   );
 
   return newEvent;

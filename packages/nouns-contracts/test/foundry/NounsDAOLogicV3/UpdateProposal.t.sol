@@ -44,7 +44,7 @@ contract UpdateProposalTest is NounsDAOLogicV3BaseTest {
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.MustProvideActions.selector));
         vm.prank(proposer);
-        dao.updateProposal(proposalId, targets, values, signatures, calldatas, '');
+        dao.updateProposal(proposalId, targets, values, signatures, calldatas, '', '');
     }
 
     function test_givenTooManyTxs_reverts() public {
@@ -61,7 +61,7 @@ contract UpdateProposalTest is NounsDAOLogicV3BaseTest {
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.TooManyActions.selector));
         vm.prank(proposer);
-        dao.updateProposal(proposalId, targets, values, signatures, calldatas, '');
+        dao.updateProposal(proposalId, targets, values, signatures, calldatas, '', '');
     }
 
     function test_givenTxsWithArityMismatch_reverts() public {
@@ -73,7 +73,7 @@ contract UpdateProposalTest is NounsDAOLogicV3BaseTest {
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOV3Proposals.ProposalInfoArityMismatch.selector));
         vm.prank(proposer);
-        dao.updateProposal(proposalId, targets, values, signatures, calldatas, '');
+        dao.updateProposal(proposalId, targets, values, signatures, calldatas, '', '');
     }
 
     function test_givenMsgSenderNotProposer_reverts() public {
@@ -216,7 +216,8 @@ contract UpdateProposalTest is NounsDAOLogicV3BaseTest {
             txsAfter.values,
             txsAfter.signatures,
             txsAfter.calldatas,
-            'descriptionAfter'
+            'descriptionAfter',
+            'some update message'
         );
         updateProposal(
             proposer,
@@ -225,7 +226,8 @@ contract UpdateProposalTest is NounsDAOLogicV3BaseTest {
             txsAfter.values[0],
             txsAfter.signatures[0],
             txsAfter.calldatas[0],
-            'descriptionAfter'
+            'descriptionAfter',
+            'some update message'
         );
 
         (

@@ -21,7 +21,8 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
         uint256[] values,
         string[] signatures,
         bytes[] calldatas,
-        string description
+        string description,
+        string updateMessage
     );
 
     event ProposalCreated(
@@ -133,6 +134,19 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
         bytes memory data,
         string memory description
     ) internal {
+        updateProposal(proposer, proposalId, target, value, signature, data, description, '');
+    }
+
+    function updateProposal(
+        address proposer,
+        uint256 proposalId,
+        address target,
+        uint256 value,
+        string memory signature,
+        bytes memory data,
+        string memory description,
+        string memory updateMessage
+    ) internal {
         vm.prank(proposer);
         address[] memory targets = new address[](1);
         targets[0] = target;
@@ -142,7 +156,7 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
         signatures[0] = signature;
         bytes[] memory calldatas = new bytes[](1);
         calldatas[0] = data;
-        dao.updateProposal(proposalId, targets, values, signatures, calldatas, description);
+        dao.updateProposal(proposalId, targets, values, signatures, calldatas, description, updateMessage);
     }
 
     function proposeBySigs(
@@ -203,7 +217,16 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
         }
 
         vm.prank(proposer);
-        dao.updateProposalBySigs(proposalId, sigs, txs.targets, txs.values, txs.signatures, txs.calldatas, description);
+        dao.updateProposalBySigs(
+            proposalId,
+            sigs,
+            txs.targets,
+            txs.values,
+            txs.signatures,
+            txs.calldatas,
+            description,
+            ''
+        );
     }
 
     function makeTxs(

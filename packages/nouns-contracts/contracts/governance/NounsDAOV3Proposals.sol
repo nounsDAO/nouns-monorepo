@@ -76,7 +76,8 @@ library NounsDAOV3Proposals {
         uint256[] values,
         string[] signatures,
         bytes[] calldatas,
-        string description
+        string description,
+        string updateMessage
     );
 
     /// @notice An event emitted when a proposal has been queued in the NounsDAOExecutor
@@ -229,7 +230,8 @@ library NounsDAOV3Proposals {
         uint256[] memory values,
         string[] memory signatures,
         bytes[] memory calldatas,
-        string memory description
+        string memory description,
+        string memory updateMessage
     ) external {
         checkProposaTxs(ProposalTxs(targets, values, signatures, calldatas));
 
@@ -243,7 +245,16 @@ library NounsDAOV3Proposals {
         proposal.signatures = signatures;
         proposal.calldatas = calldatas;
 
-        emit ProposalUpdated(proposalId, msg.sender, targets, values, signatures, calldatas, description);
+        emit ProposalUpdated(
+            proposalId,
+            msg.sender,
+            targets,
+            values,
+            signatures,
+            calldatas,
+            description,
+            updateMessage
+        );
     }
 
     function updateProposalBySigs(
@@ -251,7 +262,8 @@ library NounsDAOV3Proposals {
         uint256 proposalId,
         NounsDAOStorageV3.ProposerSignature[] memory proposerSignatures,
         ProposalTxs memory txs,
-        string memory description
+        string memory description,
+        string memory updateMessage
     ) external {
         checkProposaTxs(txs);
         // without this check it's possible to run through this function and update a proposal without signatures
@@ -287,7 +299,8 @@ library NounsDAOV3Proposals {
             txs.values,
             txs.signatures,
             txs.calldatas,
-            description
+            description,
+            updateMessage
         );
     }
 

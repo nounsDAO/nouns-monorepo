@@ -270,7 +270,7 @@ type Proposal @entity {
   objectionPeriodEndBlock: BigInt!
 }
 
-type ProposalPreviousVersion @entity(immutable: true) {
+type ProposalVersion @entity(immutable: true) {
   id: ID!
 
   "The proposal that was updated"
@@ -296,6 +296,9 @@ type ProposalPreviousVersion @entity(immutable: true) {
 
   "The full proposal description, which includes the title"
   description: String!
+
+  "The update message of this proposal version, relevant when it's a proposal update"
+  updateMessage: String!
 }
 
 type Vote @entity {
