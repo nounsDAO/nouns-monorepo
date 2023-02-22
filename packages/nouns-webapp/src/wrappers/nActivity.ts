@@ -74,7 +74,7 @@ const useNounProposalVoteEvents = (tokenId: number): NounProfileEventFetcherResp
 
   const { data: proposals } = useAllProposals();
 
-  if (loading || !proposals || !proposals.length || proposalTimestampLoading) {
+  if (loading || proposalTimestampLoading) {
     return {
       loading: true,
       error: false,
@@ -86,7 +86,7 @@ const useNounProposalVoteEvents = (tokenId: number): NounProfileEventFetcherResp
     };
   }
 
-  const nounVotes: { [key: string]: TokenVoteHistory } = data.noun.votes
+  const nounVotes: { [key: string]: TokenVoteHistory } = data.punk.votes
     .slice(0)
     .reduce((acc: any, h: TokenVoteHistory, i: number) => {
       acc[h.proposal.id] = h;
@@ -137,7 +137,7 @@ const useNounProposalVoteEvents = (tokenId: number): NounProfileEventFetcherResp
   return {
     loading: false,
     error: false,
-    data: events,
+    data: events ?? [],
   };
 };
 
@@ -264,11 +264,7 @@ export const useNounActivity = (tokenId: number): NounProfileEventFetcherRespons
     };
   }
 
-  if (
-    tokenTransferData === undefined ||
-    votesData === undefined ||
-    delegationEventsData === undefined
-  ) {
+  if (!tokenTransferData || !votesData || !delegationEventsData) {
     return {
       loading: true,
       error: false,

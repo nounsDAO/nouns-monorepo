@@ -73,7 +73,7 @@ const NounHoverCard: React.FC<NounHoverCardProps> = props => {
           <Trans>Held by</Trans>
         </span>
         <span className={classes.bold}>
-          <ShortAddress address={data.noun.owner.id} />
+          <ShortAddress address={data.punk.owner.id} />
         </span>
       </div>
     </div>
