@@ -2,14 +2,14 @@
   "network": "goerli",
   "nToken": {
     "address": "0xB9D0Aa3F0cD869356017384A913Caf2237986Cda",
-    "startBlock": null
+    "startBlock": 8361000
   },
   "nAuctionHouse": {
     "address": "0xD711De1005C6b5b1E0e99DfE167D2CCC7ad889D2",
-    "startBlock": null
+    "startBlock": 8361000
   },
   "nDAO": {
     "address": "0x2d55919eC1538B1868fd43b15008A48Fc98990F9",
-    "startBlock": null
+    "startBlock": 8361000
   }
 }

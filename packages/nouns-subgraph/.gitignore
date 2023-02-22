@@ -1,2 +1,3 @@
 src/types
 subgraph.yaml
+docker-compose.yml
