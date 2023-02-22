@@ -45,11 +45,10 @@ export const seedsQuery = (first = 1_000) => gql`
 {
   seeds(first: ${first}) {
     id
-    background
-    body
-    accessory
-    head
-    glasses
+    punkType
+    skinTone
+    accessory_types
+    accessory_ids
   }
 }
 `;
@@ -92,15 +91,14 @@ export const auctionQuery = (auctionId: number) => gql`
 	  }
 	  startTime
 	  endTime
-	  token {
+	  punk {
 		id
 		seed {
 		  id
-		  background
-		  body
-		  accessory
-		  head
-		  glasses
+          punkType
+          skinTone
+          accessory_types
+          accessory_ids
 		}
 		owner {
 		  id
@@ -127,7 +125,7 @@ export const bidsByAuctionQuery = (auctionId: string) => gql`
 	  bidder {
 	  	id
 	  }
-	  token {
+	  punk {
 		id
 	  }
 	}
@@ -136,15 +134,14 @@ export const bidsByAuctionQuery = (auctionId: string) => gql`
 
 export const nQuery = (id: string) => gql`
  {
-	token(id:"${id}") {
+	punk(id:"${id}") {
 	  id
 	  seed {
-	  background
-		body
-		accessory
-		head
-		glasses
-	}
+        punkType
+        skinTone
+        accessory_types
+        accessory_ids
+	  }
 	  owner {
 		id
 	  }
@@ -154,7 +151,7 @@ export const nQuery = (id: string) => gql`
 
 export const tokensIndex = () => gql`
   {
-    tokens {
+    punks {
       id
       owner {
         id
@@ -174,7 +171,7 @@ export const latestAuctionsQuery = () => gql`
       }
       startTime
       endTime
-      token {
+      punk {
         id
         owner {
           id
@@ -221,26 +218,26 @@ export const latestBidsQuery = (first: number = 10) => gql`
 
 export const nVotingHistoryQuery = (tokenId: number) => gql`
 {
-	token(id: ${tokenId}) {
-		id
-		votes {
-      blockNumber
-      proposal {
+	punk(id: ${tokenId}) {
         id
-      }
-      support
-      supportDetailed
-      voter {
-        id
-      }
-		}
-	}
+        votes {
+          blockNumber
+          proposal {
+              id
+          }
+          support
+          supportDetailed
+          voter {
+              id
+          }
+        }
+    }
 }
 `;
 
 export const nTransferHistoryQuery = (tokenId: number) => gql`
 {
-  transferEvents(where: {token: "${tokenId}"}) {
+  transferEvents(where: {id: "${tokenId}"}) {
     id
     previousHolder {
       id
@@ -255,7 +252,7 @@ export const nTransferHistoryQuery = (tokenId: number) => gql`
 
 export const nDelegationHistoryQuery = (tokenId: number) => gql`
 {
-  delegationEvents(where: {token: "${tokenId}"}) {
+  delegationEvents(where: {id: "${tokenId}"}) {
     id
     previousDelegate {
       id
@@ -284,8 +281,7 @@ export const proposalVotesQuery = (proposalId: string) => gql`
       voter {
         id
       }
-
-    }	
+    }
   }
 `;
 
