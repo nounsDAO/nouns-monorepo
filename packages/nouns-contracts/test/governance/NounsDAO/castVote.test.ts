@@ -7,7 +7,7 @@ const { ethers } = hardhat;
 import { BigNumber as EthersBN } from 'ethers';
 
 import {
-  deployNounsToken,
+  deployNToken,
   getSigners,
   TestSigners,
   setTotalSupply,
@@ -18,11 +18,11 @@ import { mineBlock, address, encodeParameters } from '../../utils';
 
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
-  NounsToken,
-  NounsDescriptorV2__factory as NounsDescriptorV2Factory,
-  NounsDAOLogicV1Harness,
-  NounsDAOLogicV1Harness__factory as NounsDaoLogicV1HarnessFactory,
-  NounsDAOProxy__factory as NounsDaoProxyFactory,
+  NToken,
+  NDescriptorV2__factory as NDescriptorV2Factory,
+  NDAOLogicV1Harness,
+  NDAOLogicV1Harness__factory as NDaoLogicV1HarnessFactory,
+  NDAOProxy__factory as NDaoProxyFactory,
 } from '../../../typechain';
 
 chai.use(solidity);
@@ -31,11 +31,11 @@ const { expect } = chai;
 async function deployGovernor(
   deployer: SignerWithAddress,
   tokenAddress: string,
-): Promise<NounsDAOLogicV1Harness> {
-  const { address: govDelegateAddress } = await new NounsDaoLogicV1HarnessFactory(
+): Promise<NDAOLogicV1Harness> {
+  const { address: govDelegateAddress } = await new NDaoLogicV1HarnessFactory(
     deployer,
   ).deploy();
-  const params: Parameters<NounsDaoProxyFactory['deploy']> = [
+  const params: Parameters<NDaoProxyFactory['deploy']> = [
     address(0),
     tokenAddress,
     deployer.address,
@@ -51,19 +51,19 @@ async function deployGovernor(
     await ethers.getContractFactory('NounsDAOProxy', deployer)
   ).deploy(...params);
 
-  return NounsDaoLogicV1HarnessFactory.connect(_govDelegatorAddress, deployer);
+  return NDaoLogicV1HarnessFactory.connect(_govDelegatorAddress, deployer);
 }
 
 let snapshotId: number;
 
-let token: NounsToken;
+let token: NToken;
 let deployer: SignerWithAddress;
 let account0: SignerWithAddress;
 let account1: SignerWithAddress;
 let account2: SignerWithAddress;
 let signers: TestSigners;
 
-let gov: NounsDAOLogicV1Harness;
+let gov: NDAOLogicV1Harness;
 let targets: string[];
 let values: string[];
 let signatures: string[];
@@ -76,10 +76,10 @@ async function reset() {
     snapshotId = await ethers.provider.send('evm_snapshot', []);
     return;
   }
-  token = await deployNounsToken(signers.deployer);
+  token = await deployNToken(signers.deployer);
 
   await populateDescriptorV2(
-    NounsDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
+    NDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
   );
 
   await setTotalSupply(token, 10);

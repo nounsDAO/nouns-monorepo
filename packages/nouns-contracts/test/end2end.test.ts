@@ -5,20 +5,20 @@ import { solidity } from 'ethereum-waffle';
 
 import {
   WETH,
-  NounsToken,
-  NounsAuctionHouse,
-  NounsAuctionHouse__factory as NounsAuctionHouseFactory,
-  NounsDescriptorV2,
-  NounsDescriptorV2__factory as NounsDescriptorV2Factory,
-  NounsDAOProxy__factory as NounsDaoProxyFactory,
-  NounsDAOLogicV1,
-  NounsDAOLogicV1__factory as NounsDaoLogicV1Factory,
-  NounsDAOExecutor,
-  NounsDAOExecutor__factory as NounsDaoExecutorFactory,
+  NToken,
+  NAuctionHouse,
+  NAuctionHouse__factory as NAuctionHouseFactory,
+  NDescriptorV2,
+  NDescriptorV2__factory as NDescriptorV2Factory,
+  NDAOProxy__factory as NDaoProxyFactory,
+  NDAOLogicV1,
+  NDAOLogicV1__factory as NDaoLogicV1Factory,
+  NDAOExecutor,
+  NDAOExecutor__factory as NDaoExecutorFactory,
 } from '../typechain';
 
 import {
-  deployNounsToken,
+  deployNToken,
   deployWeth,
   populateDescriptorV2,
   address,
@@ -33,12 +33,12 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 chai.use(solidity);
 const { expect } = chai;
 
-let nounsToken: NounsToken;
-let nounsAuctionHouse: NounsAuctionHouse;
-let descriptor: NounsDescriptorV2;
+let nounsToken: NToken;
+let nounsAuctionHouse: NAuctionHouse;
+let descriptor: NDescriptorV2;
 let weth: WETH;
-let gov: NounsDAOLogicV1;
-let timelock: NounsDAOExecutor;
+let gov: NDAOLogicV1;
+let timelock: NDAOExecutor;
 
 let deployer: SignerWithAddress;
 let wethDeployer: SignerWithAddress;
@@ -77,22 +77,22 @@ async function deploy() {
   // nonce 3: Deploy nftDescriptorLibraryFactory
   // nonce 4: Deploy NounsDescriptor
   // nonce 5: Deploy NounsSeeder
-  // nonce 6: Deploy NounsToken
-  // nonce 0: Deploy NounsDAOExecutor
-  // nonce 1: Deploy NounsDAOLogicV1
-  // nonce 7: Deploy NounsDAOProxy
+  // nonce 6: Deploy NToken
+  // nonce 0: Deploy NDAOExecutor
+  // nonce 1: Deploy NDAOLogicV1
+  // nonce 7: Deploy NDAOProxy
   // nonce ++: populate Descriptor
   // nonce ++: set ownable contracts owner to timelock
 
   // 1. DEPLOY Nouns token
-  nounsToken = await deployNounsToken(
+  nounsToken = await deployNToken(
     deployer,
     noundersDAO.address,
     deployer.address, // do not know minter/auction house yet
   );
 
   // 2a. DEPLOY AuctionHouse
-  const auctionHouseFactory = await ethers.getContractFactory('NounsAuctionHouse', deployer);
+  const auctionHouseFactory = await ethers.getContractFactory('NAuctionHouse', deployer);
   const nounsAuctionHouseProxy = await upgrades.deployProxy(auctionHouseFactory, [
     nounsToken.address,
     weth.address,
@@ -103,13 +103,13 @@ async function deploy() {
   ]);
 
   // 2b. CAST proxy as AuctionHouse
-  nounsAuctionHouse = NounsAuctionHouseFactory.connect(nounsAuctionHouseProxy.address, deployer);
+  nounsAuctionHouse = NAuctionHouseFactory.connect(nounsAuctionHouseProxy.address, deployer);
 
   // 3. SET MINTER
   await nounsToken.setMinter(nounsAuctionHouse.address);
 
   // 4. POPULATE body parts
-  descriptor = NounsDescriptorV2Factory.connect(await nounsToken.descriptor(), deployer);
+  descriptor = NDescriptorV2Factory.connect(await nounsToken.descriptor(), deployer);
 
   await populateDescriptorV2(descriptor);
 
@@ -119,17 +119,17 @@ async function deploy() {
     nonce: (await deployer.getTransactionCount()) + 2,
   });
 
-  // 5b. DEPLOY NounsDAOExecutor with pre-computed Delegator address
-  timelock = await new NounsDaoExecutorFactory(deployer).deploy(
+  // 5b. DEPLOY NDAOExecutor with pre-computed Delegator address
+  timelock = await new NDaoExecutorFactory(deployer).deploy(
     calculatedGovDelegatorAddress,
     TIME_LOCK_DELAY,
   );
 
   // 6. DEPLOY Delegate
-  const govDelegate = await new NounsDaoLogicV1Factory(deployer).deploy();
+  const govDelegate = await new NDaoLogicV1Factory(deployer).deploy();
 
   // 7a. DEPLOY Delegator
-  const nounsDAOProxy = await new NounsDaoProxyFactory(deployer).deploy(
+  const nounsDAOProxy = await new NDaoProxyFactory(deployer).deploy(
     timelock.address,
     nounsToken.address,
     noundersDAO.address, // NoundersDAO is vetoer
@@ -144,17 +144,17 @@ async function deploy() {
   expect(calculatedGovDelegatorAddress).to.equal(nounsDAOProxy.address);
 
   // 7b. CAST Delegator as Delegate
-  gov = NounsDaoLogicV1Factory.connect(nounsDAOProxy.address, deployer);
+  gov = NDaoLogicV1Factory.connect(nounsDAOProxy.address, deployer);
 
-  // 8. SET Nouns owner to NounsDAOExecutor
+  // 8. SET Nouns owner to NDAOExecutor
   await nounsToken.transferOwnership(timelock.address);
-  // 9. SET Descriptor owner to NounsDAOExecutor
+  // 9. SET Descriptor owner to NDAOExecutor
   await descriptor.transferOwnership(timelock.address);
 
   // 10. UNPAUSE auction and kick off first mint
   await nounsAuctionHouse.unpause();
 
-  // 11. SET Auction House owner to NounsDAOExecutor
+  // 11. SET Auction House owner to NDAOExecutor
   await nounsAuctionHouse.transferOwnership(timelock.address);
 }
 
@@ -167,7 +167,7 @@ describe('End to End test with deployment, auction, proposing, voting, executing
     expect(await nounsAuctionHouse.owner()).to.equal(timelock.address);
 
     expect(await nounsToken.minter()).to.equal(nounsAuctionHouse.address);
-    expect(await nounsToken.noundersDAO()).to.equal(noundersDAO.address);
+    expect(await nounsToken.punkersDAO()).to.equal(noundersDAO.address);
 
     expect(await gov.admin()).to.equal(timelock.address);
     expect(await timelock.admin()).to.equal(gov.address);
@@ -180,7 +180,7 @@ describe('End to End test with deployment, auction, proposing, voting, executing
     expect(await nounsToken.ownerOf(0)).to.equal(noundersDAO.address);
     expect(await nounsToken.ownerOf(1)).to.equal(nounsAuctionHouse.address);
 
-    expect((await nounsAuctionHouse.auction()).nounId).to.equal(EthersBN.from('1'));
+    expect((await nounsAuctionHouse.auction()).tokenId).to.equal(EthersBN.from('1'));
   });
 
   it('allows bidding, settling, and transferring ETH correctly', async () => {
@@ -268,7 +268,7 @@ describe('End to End test with deployment, auction, proposing, voting, executing
     expect(error2);
   });
 
-  it('allows NounsDAOExecutor to receive funds', async () => {
+  it('allows NDAOExecutor to receive funds', async () => {
     // test receive()
     await bidderA.sendTransaction({
       to: timelock.address,

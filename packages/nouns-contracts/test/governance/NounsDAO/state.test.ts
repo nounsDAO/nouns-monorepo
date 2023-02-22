@@ -7,7 +7,7 @@ const { ethers } = hardhat;
 import { BigNumber as EthersBN } from 'ethers';
 
 import {
-  deployNounsToken,
+  deployNToken,
   getSigners,
   TestSigners,
   setTotalSupply,
@@ -26,12 +26,12 @@ import {
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 import {
-  NounsToken,
-  NounsDescriptorV2__factory as NounsDescriptorV2Factory,
-  NounsDAOExecutorHarness,
-  NounsDAOExecutorHarness__factory as NounsDaoExecutorHarnessFactory,
-  NounsDAOImmutable,
-  NounsDAOImmutable__factory as NounsDaoImmutableFactory,
+  NToken,
+  NDescriptorV2__factory as NDescriptorV2Factory,
+  NDAOExecutorHarness,
+  NDAOExecutorHarness__factory as NDaoExecutorHarnessFactory,
+  NDAOImmutable,
+  NDAOImmutable__factory as NDaoImmutableFactory,
 } from '../../../typechain';
 
 chai.use(solidity);
@@ -48,14 +48,14 @@ const states: string[] = [
   'Executed',
 ];
 
-let token: NounsToken;
+let token: NToken;
 let deployer: SignerWithAddress;
 let account0: SignerWithAddress;
 let account1: SignerWithAddress;
 let signers: TestSigners;
 
-let gov: NounsDAOImmutable;
-let timelock: NounsDAOExecutorHarness;
+let gov: NDAOImmutable;
+let timelock: NDAOExecutorHarness;
 let delay: number;
 
 let targets: string[];
@@ -82,9 +82,9 @@ async function makeProposal(
 
   delay = 4 * 24 * 60 * 60;
 
-  timelock = await new NounsDaoExecutorHarnessFactory(deployer).deploy(deployer.address, delay);
+  timelock = await new NDaoExecutorHarnessFactory(deployer).deploy(deployer.address, delay);
 
-  gov = await new NounsDaoImmutableFactory(deployer).deploy(
+  gov = await new NDaoImmutableFactory(deployer).deploy(
     timelock.address,
     token.address,
     address(0),
@@ -119,10 +119,10 @@ describe('NounsDAO#state/1', () => {
     account0 = signers.account0;
     account1 = signers.account1;
 
-    token = await deployNounsToken(signers.deployer);
+    token = await deployNToken(signers.deployer);
 
     await populateDescriptorV2(
-      NounsDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
+      NDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
     );
   });
 

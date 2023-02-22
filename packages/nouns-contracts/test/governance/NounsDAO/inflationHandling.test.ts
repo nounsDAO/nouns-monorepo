@@ -18,12 +18,12 @@ import { mineBlock, address, encodeParameters, advanceBlocks } from '../../utils
 
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
-  NounsToken,
-  NounsDescriptor__factory as NounsDescriptorFactory,
-  NounsDAOProxy__factory as NounsDaoProxyFactory,
-  NounsDAOLogicV1,
-  NounsDAOLogicV1__factory as NounsDaoLogicV1Factory,
-  NounsDAOExecutor__factory as NounsDaoExecutorFactory,
+  NToken,
+  NDescriptor__factory as NDescriptorFactory,
+  NDAOProxy__factory as NDaoProxyFactory,
+  NDAOLogicV1,
+  NDAOLogicV1__factory as NDaoLogicV1Factory,
+  NDAOExecutor__factory as NDaoExecutorFactory,
 } from '../../../typechain';
 
 chai.use(solidity);
@@ -39,14 +39,14 @@ async function propose(proposer: SignerWithAddress) {
   proposalId = await gov.latestProposalIds(proposer.address);
 }
 
-let token: NounsToken;
+let token: NToken;
 let deployer: SignerWithAddress;
 let account0: SignerWithAddress;
 let account1: SignerWithAddress;
 let account2: SignerWithAddress;
 let signers: TestSigners;
 
-let gov: NounsDAOLogicV1;
+let gov: NDAOLogicV1;
 const timelockDelay = 172800; // 2 days
 
 const proposalThresholdBPS = 678; // 6.78%

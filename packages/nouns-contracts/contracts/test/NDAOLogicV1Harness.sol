@@ -4,7 +4,7 @@ pragma solidity ^0.8.6;
 
 import '../governance/NDAOLogicV1.sol';
 
-contract NounsDAOLogicV1Harness is NDAOLogicV1 {
+contract NDAOLogicV1Harness is NDAOLogicV1 {
     function initialize(
         address timelock_,
         address npunks_,

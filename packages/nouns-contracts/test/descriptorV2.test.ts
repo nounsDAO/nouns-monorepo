@@ -1,17 +1,17 @@
 import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
-import { NounsDescriptorV2 } from '../typechain';
+import { NDescriptorV2 } from '../typechain';
 import ImageData from '../files/image-data-v2.json';
 import { LongestPart } from './types';
-import { deployNounsDescriptorV2, populateDescriptorV2 } from './utils';
+import { deployNDescriptorV2, populateDescriptorV2 } from './utils';
 import { ethers } from 'hardhat';
 import { appendFileSync } from 'fs';
 
 chai.use(solidity);
 const { expect } = chai;
 
-describe('NounsDescriptorV2', () => {
-  let nounsDescriptor: NounsDescriptorV2;
+describe('NDescriptorV2', () => {
+  let nDescriptor: NDescriptorV2;
   let snapshotId: number;
 
   const part: LongestPart = {
@@ -19,14 +19,25 @@ describe('NounsDescriptorV2', () => {
     index: 0,
   };
   const longest: Record<string, LongestPart> = {
-    bodies: part,
-    accessories: part,
-    heads: part,
-    glasses: part,
+    types: part,
+    necks: part,
+    cheekses: part,
+    faces: part,
+    beards: part,
+    mouths: part,
+    earses: part,
+    hats: part,
+    hairs: part,
+    teeths: part,
+    lipses: part,
+    emotions: part,
+    eyeses: part,
+    glasseses: part,
+    noses: part,
   };
 
   before(async () => {
-    nounsDescriptor = await deployNounsDescriptorV2();
+    nDescriptor = await deployNDescriptorV2();
 
     for (const [l, layer] of Object.entries(ImageData.images)) {
       for (const [i, item] of layer.entries()) {
@@ -39,7 +50,7 @@ describe('NounsDescriptorV2', () => {
       }
     }
 
-    await populateDescriptorV2(nounsDescriptor);
+    await populateDescriptorV2(nDescriptor);
   });
 
   beforeEach(async () => {
@@ -53,29 +64,25 @@ describe('NounsDescriptorV2', () => {
   it('should generate valid token uri metadata when data uris are disabled', async () => {
     const BASE_URI = 'https://api.nouns.wtf/metadata/';
 
-    await nounsDescriptor.setBaseURI(BASE_URI);
-    await nounsDescriptor.toggleDataURIEnabled();
+    await nDescriptor.setBaseURI(BASE_URI);
+    await nDescriptor.toggleDataURIEnabled();
 
-    const tokenUri = await nounsDescriptor.tokenURI(0, {
-      background: 0,
-      body: longest.bodies.index,
-      accessory: longest.accessories.index,
-      head: longest.heads.index,
-      glasses: longest.glasses.index,
+    const tokenUri = await nDescriptor.tokenURI(0, {
+      punkType: 0,
+      skinTone: 0,
+      accessories: [ {accType: 6, accId: 0}, {accType: 12, accId: 1} ],
     });
     expect(tokenUri).to.equal(`${BASE_URI}0`);
   });
 
   // Skipping until we resolve the CI memory issue
   it('should generate valid token uri metadata when data uris are enabled [ @skip-on-coverage ]', async () => {
-    const tokenUri = await nounsDescriptor.tokenURI(
+    const tokenUri = await nDescriptor.tokenURI(
       0,
       {
-        background: 0,
-        body: longest.bodies.index,
-        accessory: longest.accessories.index,
-        head: longest.heads.index,
-        glasses: longest.glasses.index,
+        punkType: 0,
+        skinTone: 0,
+        accessories: [ {accType: 6, accId: 0}, {accType: 12, accId: 1} ],
       },
       { gasLimit: 200_000_000 },
     );
@@ -95,16 +102,22 @@ describe('NounsDescriptorV2', () => {
   it.skip('should generate valid token uri metadata for all supported parts when data uris are enabled', async () => {
     console.log('Running... this may take a little while...');
 
-    const { bgcolors, images } = ImageData;
-    const { bodies, accessories, heads, glasses } = images;
-    const max = Math.max(bodies.length, accessories.length, heads.length, glasses.length);
-    for (let i = 0; i < max; i++) {
-      const tokenUri = await nounsDescriptor.tokenURI(i, {
-        background: Math.min(i, bgcolors.length - 1),
-        body: Math.min(i, bodies.length - 1),
-        accessory: Math.min(i, accessories.length - 1),
-        head: Math.min(i, heads.length - 1),
-        glasses: Math.min(i, glasses.length - 1),
+    const { images } = ImageData;
+    const { types, necks, cheekses, faces, beards, mouths, earses, hats, hairs, teeths, lipses, emotions, eyeses, glasseses, noses } = images;
+    const lengths = [ necks.length, cheekses.length, faces.length, beards.length, mouths.length, earses.length, hats.length, hairs.length, teeths.length, lipses.length, emotions.length, eyeses.length, glasseses.length, noses.length ];
+    const punkTypes = [0,0,0,0,1,1,1,1,2,3,4];
+    const skinTones = [0,1,2,3,0,1,2,3,4,5,6];
+    const max = Math.max(necks.length, cheekses.length, faces.length, beards.length, mouths.length, earses.length, hats.length, hairs.length, teeths.length, lipses.length, emotions.length, eyeses.length, glasseses.length, noses.length );
+    for (let i = 0; i < max * 14; i++) {
+      const type = i % types.length;
+      const punkType = punkTypes[i];
+      const skinTone = skinTones[i];
+      const accType = i % lengths.length;
+      const accId = i % lengths[accType];
+      const tokenUri = await nDescriptor.tokenURI(i, {
+        punkType: punkType,
+        skinTone: skinTone,
+        accessories: [ {accType: accType, accId: accId} ],
       });
       const { name, description, image } = JSON.parse(
         Buffer.from(tokenUri.replace('data:application/json;base64,', ''), 'base64').toString(
