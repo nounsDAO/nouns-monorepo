@@ -2,12 +2,12 @@ import chai from 'chai';
 import { solidity } from 'ethereum-waffle';
 import { ethers } from 'hardhat';
 import {
-  NounsToken,
-  NounsDescriptorV2__factory as NounsDescriptorV2Factory,
+  NToken,
+  NDescriptorV2__factory as NDescriptorV2Factory,
 } from '../../typechain';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
-  deployNounsToken,
+  deployNToken,
   getSigners,
   TestSigners,
   setTotalSupply,
@@ -24,9 +24,9 @@ const { expect } = chai;
 
 describe('Nouns Governance', () => {
   let snapshotId: number;
-  let token: NounsToken;
-  let tokenCallFromGuy: NounsToken;
-  let tokenCallFromDeployer: NounsToken;
+  let token: NToken;
+  let tokenCallFromGuy: NToken;
+  let tokenCallFromDeployer: NToken;
   let account0: SignerWithAddress;
   let account1: SignerWithAddress;
   let account2: SignerWithAddress;
@@ -60,10 +60,10 @@ describe('Nouns Governance', () => {
     account2 = signers.account2;
     deployer = signers.deployer;
 
-    token = await deployNounsToken(signers.deployer);
+    token = await deployNToken(signers.deployer);
 
     await populateDescriptorV2(
-      NounsDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
+      NDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
     );
 
     domain = Domain('Nouns', token.address, await chainId());

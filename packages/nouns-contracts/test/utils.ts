@@ -1,23 +1,23 @@
 import { ethers, network } from 'hardhat';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
-  NounsDescriptor,
-  NounsDescriptor__factory as NounsDescriptorFactory,
-  NounsDescriptorV2,
-  NounsDescriptorV2__factory as NounsDescriptorV2Factory,
-  NounsToken,
-  NounsToken__factory as NounsTokenFactory,
-  NounsSeeder,
-  NounsSeeder__factory as NounsSeederFactory,
+  NDescriptor,
+  NDescriptor__factory as NDescriptorFactory,
+  NDescriptorV2,
+  NDescriptorV2__factory as NDescriptorV2Factory,
+  NToken,
+  NToken__factory as NTokenFactory,
+  NSeeder,
+  NSeeder__factory as NSeederFactory,
   WETH,
   WETH__factory as WethFactory,
-  NounsArt__factory as NounsArtFactory,
+  NArt__factory as NArtFactory,
   SVGRenderer__factory as SVGRendererFactory,
-  NounsDAOExecutor__factory as NounsDaoExecutorFactory,
-  NounsDAOLogicV1__factory as NounsDaoLogicV1Factory,
-  NounsDAOProxy__factory as NounsDaoProxyFactory,
-  NounsDAOLogicV1,
-  NounsDAOExecutor,
+  NDAOExecutor__factory as NDaoExecutorFactory,
+  NDAOLogicV1__factory as NDaoLogicV1Factory,
+  NDAOProxy__factory as NDaoProxyFactory,
+  NDAOLogicV1,
+  NDAOExecutor,
   Inflator__factory,
 } from '../typechain';
 import ImageData from '../files/image-data-v1.json';
@@ -43,13 +43,13 @@ export const getSigners = async (): Promise<TestSigners> => {
   };
 };
 
-export const deployNounsDescriptor = async (
+export const deployNDescriptor = async (
   deployer?: SignerWithAddress,
-): Promise<NounsDescriptor> => {
+): Promise<NDescriptor> => {
   const signer = deployer || (await getSigners()).deployer;
   const nftDescriptorLibraryFactory = await ethers.getContractFactory('NFTDescriptor', signer);
   const nftDescriptorLibrary = await nftDescriptorLibraryFactory.deploy();
-  const nounsDescriptorFactory = new NounsDescriptorFactory(
+  const nounsDescriptorFactory = new NDescriptorFactory(
     {
       'contracts/libs/NFTDescriptor.sol:NFTDescriptor': nftDescriptorLibrary.address,
     },
@@ -59,13 +59,13 @@ export const deployNounsDescriptor = async (
   return nounsDescriptorFactory.deploy();
 };
 
-export const deployNounsDescriptorV2 = async (
+export const deployNDescriptorV2 = async (
   deployer?: SignerWithAddress,
-): Promise<NounsDescriptorV2> => {
+): Promise<NDescriptorV2> => {
   const signer = deployer || (await getSigners()).deployer;
   const nftDescriptorLibraryFactory = await ethers.getContractFactory('NFTDescriptorV2', signer);
   const nftDescriptorLibrary = await nftDescriptorLibraryFactory.deploy();
-  const nounsDescriptorFactory = new NounsDescriptorV2Factory(
+  const nounsDescriptorFactory = new NDescriptorV2Factory(
     {
       'contracts/libs/NFTDescriptorV2.sol:NFTDescriptorV2': nftDescriptorLibrary.address,
     },
@@ -80,34 +80,34 @@ export const deployNounsDescriptorV2 = async (
 
   const inflator = await new Inflator__factory(signer).deploy();
 
-  const art = await new NounsArtFactory(signer).deploy(descriptor.address, inflator.address);
+  const art = await new NArtFactory(signer).deploy(descriptor.address, inflator.address);
   await descriptor.setArt(art.address);
 
   return descriptor;
 };
 
-export const deployNounsSeeder = async (deployer?: SignerWithAddress): Promise<NounsSeeder> => {
-  const factory = new NounsSeederFactory(deployer || (await getSigners()).deployer);
+export const deployNSeeder = async (deployer?: SignerWithAddress): Promise<NSeeder> => {
+  const factory = new NSeederFactory(deployer || (await getSigners()).deployer);
 
   return factory.deploy();
 };
 
-export const deployNounsToken = async (
+export const deployNToken = async (
   deployer?: SignerWithAddress,
   noundersDAO?: string,
   minter?: string,
   descriptor?: string,
   seeder?: string,
   proxyRegistryAddress?: string,
-): Promise<NounsToken> => {
+): Promise<NToken> => {
   const signer = deployer || (await getSigners()).deployer;
-  const factory = new NounsTokenFactory(signer);
+  const factory = new NTokenFactory(signer);
 
   return factory.deploy(
     noundersDAO || signer.address,
     minter || signer.address,
-    descriptor || (await deployNounsDescriptorV2(signer)).address,
-    seeder || (await deployNounsSeeder(signer)).address,
+    descriptor || (await deployNDescriptorV2(signer)).address,
+    seeder || (await deployNSeeder(signer)).address,
     proxyRegistryAddress || address(0),
   );
 };
@@ -118,54 +118,147 @@ export const deployWeth = async (deployer?: SignerWithAddress): Promise<WETH> =>
   return factory.deploy();
 };
 
-export const populateDescriptor = async (nounsDescriptor: NounsDescriptor): Promise<void> => {
-  const { bgcolors, palette, images } = ImageData;
-  const { bodies, accessories, heads, glasses } = images;
+export const populateDescriptor = async (nDescriptor: NDescriptor): Promise<void> => {
+  const { /*bgcolors, */palette, images } = ImageDataV2;
+  const { types, necks, cheekses, faces, beards, mouths, earses, hats, hairs, teeths, lipses, emotions, eyeses, glasseses, noses } = images;
 
-  // Split up head and accessory population due to high gas usage
-  await Promise.all([
-    nounsDescriptor.addManyBackgrounds(bgcolors),
-    nounsDescriptor.addManyColorsToPalette(0, palette),
-    nounsDescriptor.addManyBodies(bodies.map(({ data }) => data)),
-    chunkArray(accessories, 10).map(chunk =>
-      nounsDescriptor.addManyAccessories(chunk.map(({ data }) => data)),
-    ),
-    chunkArray(heads, 10).map(chunk => nounsDescriptor.addManyHeads(chunk.map(({ data }) => data))),
-    nounsDescriptor.addManyGlasses(glasses.map(({ data }) => data)),
-  ]);
+  // await nDescriptor.addManyBackgrounds(bgcolors);
+  await nDescriptor.addManyColorsToPalette(0, palette);
+
+  const options = { gasLimit: 30000000 };
+
+  await nDescriptor.addManyPunkTypes(types.map(({ data }) => data));
+  await nDescriptor.addManyNecks(necks.map(({ data }) => data));
+  await nDescriptor.addManyCheekses(cheekses.map(({ data }) => data));
+  await nDescriptor.addManyFaces(faces.map(({ data }) => data));
+  await nDescriptor.addManyBeards(beards.map(({ data }) => data));
+  await nDescriptor.addManyMouths(mouths.map(({ data }) => data));
+  await nDescriptor.addManyEarses(earses.map(({ data }) => data));
+  await nDescriptor.addManyHats(hats.map(({ data }) => data));
+  await nDescriptor.addManyHairs(hairs.map(({ data }) => data));
+  await nDescriptor.addManyTeeths(teeths.map(({ data }) => data));
+  await nDescriptor.addManyLipses(lipses.map(({ data }) => data));
+  await nDescriptor.addManyEmotions(emotions.map(({ data }) => data));
+  await nDescriptor.addManyEyeses(eyeses.map(({ data }) => data));
+  await nDescriptor.addManyGlasseses(glasseses.map(({ data }) => data));
+  await nDescriptor.addManyNoses(noses.map(({ data }) => data));
 };
 
-export const populateDescriptorV2 = async (nounsDescriptor: NounsDescriptorV2): Promise<void> => {
-  const { bgcolors, palette, images } = ImageDataV2;
-  const { bodies, accessories, heads, glasses } = images;
+export const populateDescriptorV2 = async (nDescriptor: NDescriptorV2): Promise<void> => {
+  const { /*bgcolors, */palette, images } = ImageDataV2;
+  const { types, necks, cheekses, faces, beards, mouths, earses, hats, hairs, teeths, lipses, emotions, eyeses, glasseses, noses } = images;
 
-  const {
-    encodedCompressed: bodiesCompressed,
-    originalLength: bodiesLength,
-    itemCount: bodiesCount,
-  } = dataToDescriptorInput(bodies.map(({ data }) => data));
-  const {
-    encodedCompressed: accessoriesCompressed,
-    originalLength: accessoriesLength,
-    itemCount: accessoriesCount,
-  } = dataToDescriptorInput(accessories.map(({ data }) => data));
-  const {
-    encodedCompressed: headsCompressed,
-    originalLength: headsLength,
-    itemCount: headsCount,
-  } = dataToDescriptorInput(heads.map(({ data }) => data));
-  const {
-    encodedCompressed: glassesCompressed,
-    originalLength: glassesLength,
-    itemCount: glassesCount,
-  } = dataToDescriptorInput(glasses.map(({ data }) => data));
+  const typesPage = dataToDescriptorInput(types.map(({ data }) => data));
+  const necksPage = dataToDescriptorInput(necks.map(({ data }) => data));
+  const cheeksesPage = dataToDescriptorInput(cheekses.map(({ data }) => data));
+  const facesPage = dataToDescriptorInput(faces.map(({ data }) => data));
+  const beardsPage = dataToDescriptorInput(beards.map(({ data }) => data));
+  const mouthsPage = dataToDescriptorInput(mouths.map(({ data }) => data));
+  const earsesPage = dataToDescriptorInput(earses.map(({ data }) => data));
+  const hatsPage = dataToDescriptorInput(hats.map(({ data }) => data));
+  const hairsPage = dataToDescriptorInput(hairs.map(({ data }) => data));
+  const teethsPage = dataToDescriptorInput(teeths.map(({ data }) => data));
+  const lipsesPage = dataToDescriptorInput(lipses.map(({ data }) => data));
+  const emotionsPage = dataToDescriptorInput(emotions.map(({ data }) => data));
+  const eyesesPage = dataToDescriptorInput(eyeses.map(({ data }) => data));
+  const glassesesPage = dataToDescriptorInput(glasseses.map(({ data }) => data));
+  const nosesPage = dataToDescriptorInput(noses.map(({ data }) => data));
 
-  await nounsDescriptor.addManyBackgrounds(bgcolors);
-  await nounsDescriptor.setPalette(0, `0x000000${palette.join('')}`);
-  await nounsDescriptor.addBodies(bodiesCompressed, bodiesLength, bodiesCount);
-  await nounsDescriptor.addAccessories(accessoriesCompressed, accessoriesLength, accessoriesCount);
-  await nounsDescriptor.addHeads(headsCompressed, headsLength, headsCount);
-  await nounsDescriptor.addGlasses(glassesCompressed, glassesLength, glassesCount);
+  // await nDescriptor.addManyBackgrounds(bgcolors);
+  await nDescriptor.setPalette(0, `0x00000000${palette.join('')}`);
+
+  const options = { gasLimit: 30000000 };
+
+  await nDescriptor.addPunkTypes(
+    typesPage.encodedCompressed,
+    typesPage.originalLength,
+    typesPage.itemCount,
+    options,
+  );
+  await nDescriptor.addNecks(
+    necksPage.encodedCompressed,
+    necksPage.originalLength,
+    necksPage.itemCount,
+    options,
+  );
+  await nDescriptor.addCheekses(
+    cheeksesPage.encodedCompressed,
+    cheeksesPage.originalLength,
+    cheeksesPage.itemCount,
+    options,
+  );
+  await nDescriptor.addFaces(
+    facesPage.encodedCompressed,
+    facesPage.originalLength,
+    facesPage.itemCount,
+    options,
+  );
+  await nDescriptor.addBeards(
+    beardsPage.encodedCompressed,
+    beardsPage.originalLength,
+    beardsPage.itemCount,
+    options,
+  );
+  await nDescriptor.addMouths(
+    mouthsPage.encodedCompressed,
+    mouthsPage.originalLength,
+    mouthsPage.itemCount,
+    options,
+  );
+  await nDescriptor.addEarses(
+    earsesPage.encodedCompressed,
+    earsesPage.originalLength,
+    earsesPage.itemCount,
+    options,
+  );
+  await nDescriptor.addHats(
+    hatsPage.encodedCompressed,
+    hatsPage.originalLength,
+    hatsPage.itemCount,
+    options,
+  );
+  await nDescriptor.addHairs(
+    hairsPage.encodedCompressed,
+    hairsPage.originalLength,
+    hairsPage.itemCount,
+    options,
+  );
+  await nDescriptor.addTeeths(
+    teethsPage.encodedCompressed,
+    teethsPage.originalLength,
+    teethsPage.itemCount,
+    options,
+  );
+  await nDescriptor.addLipses(
+    lipsesPage.encodedCompressed,
+    lipsesPage.originalLength,
+    lipsesPage.itemCount,
+    options,
+  );
+  await nDescriptor.addEmotions(
+    emotionsPage.encodedCompressed,
+    emotionsPage.originalLength,
+    emotionsPage.itemCount,
+    options,
+  );
+  await nDescriptor.addEyeses(
+    eyesesPage.encodedCompressed,
+    eyesesPage.originalLength,
+    eyesesPage.itemCount,
+    options,
+  );
+  await nDescriptor.addGlasseses(
+    glassesesPage.encodedCompressed,
+    glassesesPage.originalLength,
+    glassesesPage.itemCount,
+    options,
+  );
+  await nDescriptor.addNoses(
+    nosesPage.encodedCompressed,
+    nosesPage.originalLength,
+    nosesPage.itemCount,
+    options,
+  );
 };
 
 export const deployGovAndToken = async (
@@ -174,18 +267,18 @@ export const deployGovAndToken = async (
   proposalThresholdBPS: number,
   quorumVotesBPS: number,
   vetoer?: string,
-): Promise<{ token: NounsToken; gov: NounsDAOLogicV1; timelock: NounsDAOExecutor }> => {
-  // nonce 0: Deploy NounsDAOExecutor
-  // nonce 1: Deploy NounsDAOLogicV1
+): Promise<{ token: NToken; gov: NDAOLogicV1; timelock: NDAOExecutor }> => {
+  // nonce 0: Deploy NDAOExecutor
+  // nonce 1: Deploy NDAOLogicV1
   // nonce 2: Deploy nftDescriptorLibraryFactory
   // nonce 3: Deploy SVGRenderer
-  // nonce 4: Deploy NounsDescriptor
+  // nonce 4: Deploy NDescriptor
   // nonce 5: Deploy Inflator
-  // nonce 6: Deploy NounsArt
-  // nonce 7: NounsDescriptor.setArt
-  // nonce 8: Deploy NounsSeeder
-  // nonce 9: Deploy NounsToken
-  // nonce 10: Deploy NounsDAOProxy
+  // nonce 6: Deploy NArt
+  // nonce 7: NDescriptor.setArt
+  // nonce 8: Deploy NSeeder
+  // nonce 9: Deploy NToken
+  // nonce 10: Deploy NDAOProxy
   // nonce 11+: populate Descriptor
 
   const govDelegatorAddress = ethers.utils.getContractAddress({
@@ -193,19 +286,19 @@ export const deployGovAndToken = async (
     nonce: (await deployer.getTransactionCount()) + 10,
   });
 
-  // Deploy NounsDAOExecutor with pre-computed Delegator address
-  const timelock = await new NounsDaoExecutorFactory(deployer).deploy(
+  // Deploy NDAOExecutor with pre-computed Delegator address
+  const timelock = await new NDaoExecutorFactory(deployer).deploy(
     govDelegatorAddress,
     timelockDelay,
   );
 
   // Deploy Delegate
-  const { address: govDelegateAddress } = await new NounsDaoLogicV1Factory(deployer).deploy();
+  const { address: govDelegateAddress } = await new NDaoLogicV1Factory(deployer).deploy();
   // Deploy Nouns token
-  const token = await deployNounsToken(deployer);
+  const token = await deployNToken(deployer);
 
   // Deploy Delegator
-  await new NounsDaoProxyFactory(deployer).deploy(
+  await new NDaoProxyFactory(deployer).deploy(
     timelock.address,
     token.address,
     vetoer || address(0),
@@ -218,9 +311,9 @@ export const deployGovAndToken = async (
   );
 
   // Cast Delegator as Delegate
-  const gov = NounsDaoLogicV1Factory.connect(govDelegatorAddress, deployer);
+  const gov = NDaoLogicV1Factory.connect(govDelegatorAddress, deployer);
 
-  await populateDescriptorV2(NounsDescriptorV2Factory.connect(await token.descriptor(), deployer));
+  await populateDescriptorV2(NDescriptorV2Factory.connect(await token.descriptor(), deployer));
 
   return { token, gov, timelock };
 };
@@ -231,7 +324,7 @@ export const deployGovAndToken = async (
  * @param amount The number of Nouns to mint
  */
 export const MintNouns = (
-  token: NounsToken,
+  token: NToken,
   burnNoundersTokens = true,
 ): ((amount: number) => Promise<void>) => {
   return async (amount: number): Promise<void> => {
@@ -247,7 +340,7 @@ export const MintNouns = (
 /**
  * Mints or burns tokens to target a total supply. Due to Nounders' rewards tokens may be burned and tokenIds will not be sequential
  */
-export const setTotalSupply = async (token: NounsToken, newTotalSupply: number): Promise<void> => {
+export const setTotalSupply = async (token: NToken, newTotalSupply: number): Promise<void> => {
   const totalSupply = (await token.totalSupply()).toNumber();
 
   if (totalSupply < newTotalSupply) {
