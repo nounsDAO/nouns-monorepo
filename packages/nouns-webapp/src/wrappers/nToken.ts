@@ -56,12 +56,15 @@ export const useNToken = (punkId: EthersBN) => {
   return json;
 };
 
-const seedArrayToObject = (seeds: (ISeed & { id: string })[]) => {
+const seedArrayToObject = (seeds: (ISeed & { id: string; accessory_ids: string[]; accessory_types: string[] })[]) => {
   return seeds.reduce<Record<string, ISeed>>((acc, seed) => {
     acc[seed.id] = {
       punkType: Number(seed.punkType),
       skinTone: Number(seed.skinTone),
-      accessories: seed.accessories.map(item => ({ accType: Number(item.accType), accId: Number(item.accId) })),
+      accessories: Array.from({ length: seed.accessory_ids.length }).map((_, i) => ({
+        accType: Number(seed.accessory_types[i]),
+        accId: Number(seed.accessory_ids[i]),
+      })),
     };
     return acc;
   }, {});
