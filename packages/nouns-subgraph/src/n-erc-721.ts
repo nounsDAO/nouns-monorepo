@@ -16,10 +16,14 @@ export function handlePunkCreated(event: PunkCreated): void {
   seed.punkType = BigInt.fromI32(event.params.seed.punkType);
   seed.skinTone = BigInt.fromI32(event.params.seed.skinTone);
   let accessories = event.params.seed.accessories
+  let accessory_types = new Array<BigInt>();
+  let accessory_ids = new Array<BigInt>();
   for(let i = 0; i < accessories.length; i ++) {
-    seed.accessory_types.push(BigInt.fromI32(accessories[i].accType))
-    seed.accessory_ids.push(BigInt.fromI32(accessories[i].accId))
+    accessory_types.push(BigInt.fromI32(accessories[i].accType))
+    accessory_ids.push(BigInt.fromI32(accessories[i].accId))
   }
+  seed.accessory_types = accessory_types;
+  seed.accessory_ids = accessory_ids;
   seed.save();
 
   let punk = Punk.load(tokenId);
