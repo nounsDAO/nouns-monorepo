@@ -32,7 +32,7 @@ const Holder: React.FC<HolderProps> = props => {
     );
   }
 
-  const holder = data && data.noun.owner.id;
+  const holder = data?.punk.owner.id;
 
   const nonNounderNounContent = (
     <a

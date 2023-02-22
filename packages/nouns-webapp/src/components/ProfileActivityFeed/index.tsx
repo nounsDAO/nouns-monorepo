@@ -35,7 +35,7 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
 
   const { loading, error, data } = useNounActivity(tokenId);
 
-  if (loading || !data || data === undefined) {
+  if (loading || !data) {
     return (
       <Section fullWidth={false}>
         <Col lg={{ span: 10, offset: 1 }}>

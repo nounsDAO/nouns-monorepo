@@ -23,9 +23,9 @@ const PunkInfoRowHolder: React.FC<PunkInfoRowHolderProps> = props => {
   const isCool = useAppSelector(state => state.application.isCoolBackground);
   const { loading, error, data } = useQuery(auctionQuery(tokenId));
 
-  const winner = data && data.auction.bidder.id;
+  const winner = data?.auction.bidder?.id;
 
-  if (loading || !winner) {
+  if (loading) {
     return (
       <div className={classes.nounHolderInfoContainer}>
         <span className={classes.nounHolderLoading}>
@@ -33,10 +33,18 @@ const PunkInfoRowHolder: React.FC<PunkInfoRowHolderProps> = props => {
         </span>
       </div>
     );
+  } else if (!winner) {
+    return (
+      <div className={classes.nounHolderInfoContainer}>
+        <span className={classes.nounHolderLoading}>
+          <Trans>No bids yet</Trans>
+        </span>
+      </div>
+    );
   } else if (error) {
     return (
       <div>
-        <Trans>Failed to fetch Noun info</Trans>
+        <Trans>Failed to fetch Punk info</Trans>
       </div>
     );
   }
@@ -69,7 +77,7 @@ const PunkInfoRowHolder: React.FC<PunkInfoRowHolderProps> = props => {
             rel="noreferrer"
           >
             {winner.toLowerCase() === config.addresses.nAuctionHouseProxy.toLowerCase() ? (
-              <Trans>Nouns Auction House</Trans>
+              <Trans>Punks Auction House</Trans>
             ) : (
               shortAddressComponent
             )}
