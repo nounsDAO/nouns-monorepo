@@ -3781,6 +3781,11 @@
     "@babel/runtime" "^7.11.2"
     "@lingui/core" "^3.13.3"
 
+"@lukasz.glen/string-buffer@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@lukasz.glen/string-buffer/-/string-buffer-1.0.0.tgz#c54d042a828541fc89aafd4fccc22b067bbc8320"
+  integrity sha512-txlBietv5SvQOH9VBUeH79/ENtXNiL1mfyovwD8ztIxFbHwZebV/TW5WTrykCOYe8VWoT7eFobQtchjdc9Y9bw==
+
 "@metamask/detect-provider@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@metamask/detect-provider/-/detect-provider-1.2.0.tgz#3667a7531f2a682e3c3a43eaf3a1958bdb42a696"

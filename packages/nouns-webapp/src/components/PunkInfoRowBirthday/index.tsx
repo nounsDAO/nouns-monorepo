@@ -39,7 +39,7 @@ const NounInfoRowBirthday: React.FC<NounInfoRowBirthdayProps> = props => {
 
   const startTime = getNounBirthday(tokenIdForQuery, pastAuctions);
   if (!startTime) {
-    return <Trans>Error fetching Noun birthday</Trans>;
+    return <Trans>Error fetching Punk birthday</Trans>;
   }
 
   const birthday = new Date(Number(startTime._hex) * 1000);
