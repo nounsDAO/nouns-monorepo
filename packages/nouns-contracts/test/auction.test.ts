@@ -7,10 +7,11 @@ import {
   MaliciousBidder__factory as MaliciousBidderFactory,
   NAuctionHouse,
   NDescriptorV2__factory as NDescriptorV2Factory,
+  NSeeder__factory as NSeederFactory,
   NToken,
   WETH,
 } from '../typechain';
-import { deployNToken, deployWeth, populateDescriptorV2 } from './utils';
+import { deployNToken, deployWeth, populateDescriptorV2, populateSeeder } from './utils';
 
 chai.use(solidity);
 const { expect } = chai;
@@ -50,8 +51,10 @@ describe('NAuctionHouse', () => {
     nAuctionHouse = await deploy(deployer);
 
     const descriptor = await nToken.descriptor();
+    const seeder = await nToken.seeder();
 
     await populateDescriptorV2(NDescriptorV2Factory.connect(descriptor, deployer));
+    await populateSeeder(NSeederFactory.connect(seeder, deployer));
 
     await nToken.setMinter(nAuctionHouse.address);
   });

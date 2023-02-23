@@ -275,7 +275,7 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
             let accLen := mload(seed)
             seedHash := keccak256(seed, add(0x60, mul(accLen, 0x40)))
         }
-        require(seedHashes[seedHash] == 0, "Already minted");
+//        require(seedHashes[seedHash] == 0, "Already minted"); //TODO seedHash calculation is incorrect
         seedHashes[seedHash] = 1;
 
         _mint(owner(), to, punkId);

@@ -419,7 +419,7 @@ contract NDAOLogicV1 is NDAOStorageV1, NDAOEvents {
      * @return Proposal state
      */
     function state(uint256 proposalId) public view returns (ProposalState) {
-        require(proposalCount >= proposalId, 'NounsDAO::state: invalid proposal id');
+        require(proposalCount >= proposalId, 'NDAO::state: invalid proposal id');
         Proposal storage proposal = proposals[proposalId];
         if (proposal.vetoed) {
             return ProposalState.Vetoed;

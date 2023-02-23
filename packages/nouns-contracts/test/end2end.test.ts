@@ -10,6 +10,7 @@ import {
   NAuctionHouse__factory as NAuctionHouseFactory,
   NDescriptorV2,
   NDescriptorV2__factory as NDescriptorV2Factory,
+  NSeeder__factory as NSeederFactory,
   NDAOProxy__factory as NDaoProxyFactory,
   NDAOLogicV1,
   NDAOLogicV1__factory as NDaoLogicV1Factory,
@@ -21,6 +22,7 @@ import {
   deployNToken,
   deployWeth,
   populateDescriptorV2,
+  populateSeeder,
   address,
   encodeParameters,
   advanceBlocks,
@@ -110,8 +112,10 @@ async function deploy() {
 
   // 4. POPULATE body parts
   descriptor = NDescriptorV2Factory.connect(await nounsToken.descriptor(), deployer);
+  const seeder = NSeederFactory.connect(await nounsToken.seeder(), deployer);
 
   await populateDescriptorV2(descriptor);
+  await populateSeeder(seeder);
 
   // 5a. CALCULATE Gov Delegate, takes place after 2 transactions
   const calculatedGovDelegatorAddress = ethers.utils.getContractAddress({

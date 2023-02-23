@@ -4,6 +4,7 @@ import { ethers } from 'hardhat';
 import {
   NToken,
   NDescriptorV2__factory as NDescriptorV2Factory,
+  NSeeder__factory as NSeederFactory,
 } from '../../typechain';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
@@ -12,6 +13,7 @@ import {
   TestSigners,
   setTotalSupply,
   populateDescriptorV2,
+  populateSeeder,
   minerStart,
   minerStop,
   mineBlock,
@@ -22,7 +24,7 @@ import {
 chai.use(solidity);
 const { expect } = chai;
 
-describe('Nouns Governance', () => {
+describe('NGovernance', () => {
   let snapshotId: number;
   let token: NToken;
   let tokenCallFromGuy: NToken;
@@ -65,8 +67,11 @@ describe('Nouns Governance', () => {
     await populateDescriptorV2(
       NDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
     );
+    await populateSeeder(
+      NSeederFactory.connect(await token.seeder(), signers.deployer),
+    );
 
-    domain = Domain('Nouns', token.address, await chainId());
+    domain = Domain('Cryptopunks', token.address, await chainId());
 
     tokenCallFromGuy = token.connect(signers.account0);
     tokenCallFromDeployer = token;

@@ -12,6 +12,7 @@ import {
   TestSigners,
   setTotalSupply,
   populateDescriptorV2,
+  populateSeeder,
 } from '../../utils';
 
 import {
@@ -28,6 +29,7 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NToken,
   NDescriptorV2__factory as NDescriptorV2Factory,
+  NSeeder__factory as NSeederFactory,
   NDAOExecutorHarness,
   NDAOExecutorHarness__factory as NDaoExecutorHarnessFactory,
   NDAOImmutable,
@@ -111,7 +113,7 @@ async function makeProposal(
   proposalId = await gov.latestProposalIds(proposer.address);
 }
 
-describe('NounsDAO#state/1', () => {
+describe('NDAO#state/1', () => {
   before(async () => {
     await freezeTime(100);
     signers = await getSigners();
@@ -123,6 +125,10 @@ describe('NounsDAO#state/1', () => {
 
     await populateDescriptorV2(
       NDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
+    );
+
+    await populateSeeder(
+      NSeederFactory.connect(await token.seeder(), signers.deployer),
     );
   });
 
@@ -136,7 +142,7 @@ describe('NounsDAO#state/1', () => {
 
   it('Invalid for proposal not found', async () => {
     await makeProposal();
-    await expect(gov.state(5)).revertedWith('NounsDAO::state: invalid proposal id');
+    await expect(gov.state(5)).revertedWith('NDAO::state: invalid proposal id');
   });
 
   it('Pending', async () => {
