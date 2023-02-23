@@ -94,6 +94,11 @@ abstract contract NounsDAOLogic_GasSnapshot_castVote is NounsDAOLogicSharedBaseT
         vm.prank(nouner);
         daoProxy.castVote(1, 0);
     }
+
+    function test_castVoteWithReason() public {
+        vm.prank(nouner);
+        daoProxy.castVoteWithReason(1, 0, "I don't like this proposal");
+    }
 }
 
 contract NounsDAOLogic_GasSnapshot_V3_propose is DeployUtils, NounsDAOLogic_GasSnapshot_propose {
