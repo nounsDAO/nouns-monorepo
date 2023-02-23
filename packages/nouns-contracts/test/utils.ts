@@ -7,6 +7,8 @@ import {
   NDescriptorV2__factory as NDescriptorV2Factory,
   NToken,
   NToken__factory as NTokenFactory,
+  CryptopunksMock,
+  CryptopunksMock__factory as CryptopunksMockFactory,
   NSeeder,
   NSeeder__factory as NSeederFactory,
   WETH,
@@ -111,6 +113,15 @@ export const deployNToken = async (
     seeder || (await deployNSeeder(signer)).address,
     proxyRegistryAddress || address(0),
   );
+};
+
+export const deployCryptopunksMock = async (
+  deployer?: SignerWithAddress,
+): Promise<CryptopunksMock> => {
+  const signer = deployer || (await getSigners()).deployer;
+  const factory = new CryptopunksMockFactory(signer);
+
+  return factory.deploy();
 };
 
 export const deployWeth = async (deployer?: SignerWithAddress): Promise<WETH> => {
@@ -337,7 +348,7 @@ export const deployGovAndToken = async (
   proposalThresholdBPS: number,
   quorumVotesBPS: number,
   vetoer?: string,
-): Promise<{ token: NToken; gov: NDAOLogicV1; timelock: NDAOExecutor }> => {
+): Promise<{ token: NToken; cryptopunks: CryptopunksMock; gov: NDAOLogicV1; timelock: NDAOExecutor }> => {
   // nonce 0: Deploy NDAOExecutor
   // nonce 1: Deploy NDAOLogicV1
   // nonce 2: Deploy nftDescriptorLibraryFactory
@@ -353,7 +364,7 @@ export const deployGovAndToken = async (
 
   const govDelegatorAddress = ethers.utils.getContractAddress({
     from: deployer.address,
-    nonce: (await deployer.getTransactionCount()) + 10,
+    nonce: (await deployer.getTransactionCount()) + 11,
   });
 
   // Deploy NDAOExecutor with pre-computed Delegator address
@@ -367,10 +378,13 @@ export const deployGovAndToken = async (
   // Deploy Nouns token
   const token = await deployNToken(deployer);
 
+  const cryptopunks = await deployCryptopunksMock(deployer);
+
   // Deploy Delegator
   await new NDaoProxyFactory(deployer).deploy(
     timelock.address,
     token.address,
+    cryptopunks.address,
     vetoer || address(0),
     timelock.address,
     govDelegateAddress,
@@ -387,7 +401,7 @@ export const deployGovAndToken = async (
 
   await populateSeeder(NSeederFactory.connect(await token.seeder(), deployer));
 
-  return { token, gov, timelock };
+  return { token, cryptopunks, gov, timelock };
 };
 
 /**

@@ -41,6 +41,7 @@ contract NDAOProxy is NDAOProxyStorage, NDAOEvents {
     constructor(
         address timelock_,
         address npunks_,
+        address cryptopunks_,
         address vetoer_,
         address admin_,
         address implementation_,
@@ -55,9 +56,10 @@ contract NDAOProxy is NDAOProxyStorage, NDAOEvents {
         delegateTo(
             implementation_,
             abi.encodeWithSignature(
-                'initialize(address,address,address,uint256,uint256,uint256,uint256)',
+                'initialize(address,address,address,address,uint256,uint256,uint256,uint256)',
                 timelock_,
                 npunks_,
+                cryptopunks_,
                 vetoer_,
                 votingPeriod_,
                 votingDelay_,

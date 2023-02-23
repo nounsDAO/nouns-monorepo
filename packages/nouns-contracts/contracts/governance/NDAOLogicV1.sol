@@ -104,6 +104,7 @@ contract NDAOLogicV1 is NDAOStorageV1, NDAOEvents {
      * @notice Used to initialize the contract during delegator contructor
      * @param timelock_ The address of the NDAOExecutor
      * @param npunks_ The address of the PUNK2 tokens
+     * @param cryptopunks_ The address of the CryptoPunks tokens
      * @param vetoer_ The address allowed to unilaterally veto proposals
      * @param votingPeriod_ The initial voting period
      * @param votingDelay_ The initial voting delay
@@ -113,6 +114,7 @@ contract NDAOLogicV1 is NDAOStorageV1, NDAOEvents {
     function initialize(
         address timelock_,
         address npunks_,
+        address cryptopunks_,
         address vetoer_,
         uint256 votingPeriod_,
         uint256 votingDelay_,
@@ -123,6 +125,7 @@ contract NDAOLogicV1 is NDAOStorageV1, NDAOEvents {
         require(msg.sender == admin, 'NDAO::initialize: admin only');
         require(timelock_ != address(0), 'NDAO::initialize: invalid timelock address');
         require(npunks_ != address(0), 'NDAO::initialize: invalid punk2 address');
+        require(cryptopunks_ != address(0), 'NDAO::initialize: invalid cryptopunks address');
         require(
             votingPeriod_ >= MIN_VOTING_PERIOD && votingPeriod_ <= MAX_VOTING_PERIOD,
             'NDAO::initialize: invalid voting period'
@@ -147,6 +150,7 @@ contract NDAOLogicV1 is NDAOStorageV1, NDAOEvents {
 
         timelock = IDAOExecutor(timelock_);
         npunks = NTokenLike(npunks_);
+        cryptopunks = ICryptopunks(cryptopunks_);
         vetoer = vetoer_;
         votingPeriod = votingPeriod_;
         votingDelay = votingDelay_;

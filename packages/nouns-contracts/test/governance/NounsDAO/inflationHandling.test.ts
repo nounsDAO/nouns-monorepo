@@ -19,6 +19,7 @@ import { mineBlock, address, encodeParameters, advanceBlocks } from '../../utils
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NToken,
+  CryptopunksMock,
   NDescriptor__factory as NDescriptorFactory,
   NDAOProxy__factory as NDaoProxyFactory,
   NDAOLogicV1,
@@ -40,6 +41,7 @@ async function propose(proposer: SignerWithAddress) {
 }
 
 let token: NToken;
+let cryptopunks: CryptopunksMock;
 let deployer: SignerWithAddress;
 let account0: SignerWithAddress;
 let account1: SignerWithAddress;
@@ -71,7 +73,7 @@ describe('NDAO#inflationHandling', () => {
     signatures = ['getBalanceOf(address)'];
     callDatas = [encodeParameters(['address'], [account0.address])];
 
-    ({ token, gov } = await deployGovAndToken(
+    ({ token, cryptopunks, gov } = await deployGovAndToken(
       deployer,
       timelockDelay,
       proposalThresholdBPS,
