@@ -25,6 +25,7 @@ import {
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NToken,
+  CryptopunksMock,
   NDescriptor__factory as NDescriptorFactory,
   NDAOProxy__factory as NDaoProxyFactory,
   NDAOLogicV1,
@@ -61,7 +62,7 @@ async function reset(): Promise<void> {
 
   vetoer = deployer;
 
-  ({ token, gov, timelock } = await deployGovAndToken(
+  ({ token, cryptopunks, gov, timelock } = await deployGovAndToken(
     deployer,
     timelockDelay,
     proposalThresholdBPS,
@@ -92,6 +93,7 @@ async function propose(proposer: SignerWithAddress, mint = true) {
 let snapshotId: number;
 
 let token: NToken;
+let cryptopunks: CryptopunksMock;
 let deployer: SignerWithAddress;
 let vetoer: SignerWithAddress;
 let account0: SignerWithAddress;

@@ -8,6 +8,7 @@ import { BigNumber as EthersBN } from 'ethers';
 
 import {
   deployNToken,
+  deployCryptopunksMock,
   getSigners,
   TestSigners,
   setTotalSupply,
@@ -28,6 +29,7 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 import {
   NToken,
+  CryptopunksMock,
   NDescriptorV2__factory as NDescriptorV2Factory,
   NSeeder__factory as NSeederFactory,
   NDAOExecutorHarness,
@@ -51,6 +53,7 @@ const states: string[] = [
 ];
 
 let token: NToken;
+let cryptopunks: CryptopunksMock;
 let deployer: SignerWithAddress;
 let account0: SignerWithAddress;
 let account1: SignerWithAddress;
@@ -89,6 +92,7 @@ async function makeProposal(
   gov = await new NDaoImmutableFactory(deployer).deploy(
     timelock.address,
     token.address,
+    cryptopunks.address,
     address(0),
     deployer.address,
     1728,
@@ -122,6 +126,7 @@ describe('NDAO#state/1', () => {
     account1 = signers.account1;
 
     token = await deployNToken(signers.deployer);
+    cryptopunks = await deployCryptopunksMock(deployer);
 
     await populateDescriptorV2(
       NDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),

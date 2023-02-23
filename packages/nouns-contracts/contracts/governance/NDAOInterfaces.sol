@@ -30,6 +30,8 @@
 
 pragma solidity ^0.8.6;
 
+import "../interfaces/ICryptopunks.sol";
+
 contract NDAOEvents {
     /// @notice An event emitted when a new proposal is created
     event ProposalCreated(
@@ -150,6 +152,9 @@ contract NDAOStorageV1 is NDAOProxyStorage {
 
     /// @notice The latest proposal for each proposer
     mapping(address => uint256) public latestProposalIds;
+
+    /// @notice The address of Cryptopunks OG
+    ICryptopunks public cryptopunks;
 
     struct Proposal {
         /// @notice Unique id for looking up a proposal

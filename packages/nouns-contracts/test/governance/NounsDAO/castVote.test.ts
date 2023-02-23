@@ -8,6 +8,7 @@ import { BigNumber as EthersBN } from 'ethers';
 
 import {
   deployNToken,
+  deployCryptopunksMock,
   getSigners,
   TestSigners,
   setTotalSupply,
@@ -20,6 +21,7 @@ import { mineBlock, address, encodeParameters } from '../../utils';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NToken,
+  CryptopunksMock,
   NDescriptorV2__factory as NDescriptorV2Factory,
   NSeeder__factory as NSeederFactory,
   NDAOLogicV1Harness,
@@ -33,6 +35,7 @@ const { expect } = chai;
 async function deployGovernor(
   deployer: SignerWithAddress,
   tokenAddress: string,
+  cryptopunksAddress: string,
 ): Promise<NDAOLogicV1Harness> {
   const { address: govDelegateAddress } = await new NDaoLogicV1HarnessFactory(
     deployer,
@@ -40,6 +43,7 @@ async function deployGovernor(
   const params: Parameters<NDaoProxyFactory['deploy']> = [
     address(0),
     tokenAddress,
+    cryptopunksAddress,
     deployer.address,
     address(0),
     govDelegateAddress,
@@ -59,6 +63,7 @@ async function deployGovernor(
 let snapshotId: number;
 
 let token: NToken;
+let cryptopunks: CryptopunksMock;
 let deployer: SignerWithAddress;
 let account0: SignerWithAddress;
 let account1: SignerWithAddress;
@@ -79,6 +84,7 @@ async function reset() {
     return;
   }
   token = await deployNToken(signers.deployer);
+  cryptopunks = await deployCryptopunksMock(deployer);
 
   await populateDescriptorV2(
     NDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
@@ -90,7 +96,7 @@ async function reset() {
 
   await setTotalSupply(token, 10);
 
-  gov = await deployGovernor(deployer, token.address);
+  gov = await deployGovernor(deployer, token.address, cryptopunks.address);
   snapshotId = await ethers.provider.send('evm_snapshot', []);
 }
 

@@ -6,6 +6,7 @@ import { solidity } from 'ethereum-waffle';
 import {
   WETH,
   NToken,
+  CryptopunksMock,
   NAuctionHouse,
   NAuctionHouse__factory as NAuctionHouseFactory,
   NDescriptorV2,
@@ -20,6 +21,7 @@ import {
 
 import {
   deployNToken,
+  deployCryptopunksMock,
   deployWeth,
   populateDescriptorV2,
   populateSeeder,
@@ -36,6 +38,7 @@ chai.use(solidity);
 const { expect } = chai;
 
 let nounsToken: NToken;
+let cryptopunks: CryptopunksMock;
 let nounsAuctionHouse: NAuctionHouse;
 let descriptor: NDescriptorV2;
 let weth: WETH;
@@ -93,6 +96,8 @@ async function deploy() {
     deployer.address, // do not know minter/auction house yet
   );
 
+  cryptopunks = await deployCryptopunksMock(deployer);
+
   // 2a. DEPLOY AuctionHouse
   const auctionHouseFactory = await ethers.getContractFactory('NAuctionHouse', deployer);
   const nounsAuctionHouseProxy = await upgrades.deployProxy(auctionHouseFactory, [
@@ -136,6 +141,7 @@ async function deploy() {
   const nounsDAOProxy = await new NDaoProxyFactory(deployer).deploy(
     timelock.address,
     nounsToken.address,
+    cryptopunks.address,
     noundersDAO.address, // NoundersDAO is vetoer
     timelock.address,
     govDelegate.address,
