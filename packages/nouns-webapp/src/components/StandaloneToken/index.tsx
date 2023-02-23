@@ -52,7 +52,7 @@ const StandaloneToken: React.FC<StandaloneTokenProps> = (props: StandaloneTokenP
 
   return (
     <Link
-      to={'/token/' + tokenId.toString()}
+      to={'/punk/' + tokenId.toString()}
       className={classes.clickablePunk}
       onClick={onClickHandler}
     >
@@ -78,7 +78,7 @@ export const StandaloneTokenCircular: React.FC<StandaloneCircularTokenProps> = (
 
   return (
     <Link
-      to={'/token/' + tokenId.toString()}
+      to={'/punk/' + tokenId.toString()}
       className={classes.clickablePunk}
       onClick={onClickHandler}
     >
@@ -106,7 +106,7 @@ export const StandaloneTokenRoundedCorners: React.FC<StandaloneTokenProps> = (
 
   return (
     <Link
-      to={'/noun/' + tokenId.toString()}
+      to={'/punk/' + tokenId.toString()}
       className={classes.clickableNoun}
       onClick={onClickHandler}
     >
@@ -142,7 +142,7 @@ export const StandaloneTokenWithSeed: React.FC<StandaloneTokenWithSeedProps> = (
   const punk = <Punk imgPath={image} alt={description} />;
   const punkWithLink = (
     <Link
-      to={'/noun/' + tokenId.toString()}
+      to={'/punk/' + tokenId.toString()}
       className={classes.clickablePunk}
       onClick={onClickHandler}
     >

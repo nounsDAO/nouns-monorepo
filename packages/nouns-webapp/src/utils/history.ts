@@ -1,1 +1,1 @@
-export const tokenPath = (tokenId: Number) => `/token/${tokenId}`;
+export const tokenPath = (tokenId: Number) => `/punk/${tokenId}`;
