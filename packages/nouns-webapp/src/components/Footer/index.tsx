@@ -16,10 +16,10 @@ const Footer = () => {
     <div className={classes.wrapper}>
       <Container className={classes.container}>
         <footer className={classes.footerSignature}>
-          <Link text={<Trans>Discord</Trans>} url={discordURL} leavesPage={true} />
-          <Link text={<Trans>Twitter</Trans>} url={twitterURL} leavesPage={true} />
+          {/*<Link text={<Trans>Discord</Trans>} url={discordURL} leavesPage={true} />*/}
+          {/*<Link text={<Trans>Twitter</Trans>} url={twitterURL} leavesPage={true} />*/}
           <Link text={<Trans>Etherscan</Trans>} url={etherscanURL} leavesPage={true} />
-          <Link text={<Trans>Forums</Trans>} url={discourseURL} leavesPage={false} />
+          {/*<Link text={<Trans>Forums</Trans>} url={discourseURL} leavesPage={false} />*/}
         </footer>
       </Container>
     </div>

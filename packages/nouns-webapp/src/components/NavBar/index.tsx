@@ -36,7 +36,7 @@ const NavBar = () => {
 
   const useStateBg =
     history.location.pathname === '/' ||
-    history.location.pathname.includes('/noun/') ||
+    history.location.pathname.includes('/punk/') ||
     history.location.pathname.includes('/auction/');
 
   const nonWalletButtonStyle = !useStateBg
@@ -95,45 +95,45 @@ const NavBar = () => {
                 buttonStyle={nonWalletButtonStyle}
               />
             </Nav.Link>
-            <Nav.Link
-              href={externalURL(ExternalURL.notion)}
-              className={classes.nounsNavLink}
-              target="_blank"
-              rel="noreferrer"
-              onClick={closeNav}
-            >
-              <NavBarButton
-                buttonText={<Trans>Docs</Trans>}
-                buttonIcon={<FontAwesomeIcon icon={faBookOpen} />}
-                buttonStyle={nonWalletButtonStyle}
-              />
-            </Nav.Link>
-            <Nav.Link
-              href={externalURL(ExternalURL.discourse)}
-              className={classes.nounsNavLink}
-              target="_blank"
-              rel="noreferrer"
-              onClick={closeNav}
-            >
-              <NavBarButton
-                buttonText={<Trans>Discourse</Trans>}
-                buttonIcon={<FontAwesomeIcon icon={faComments} />}
-                buttonStyle={nonWalletButtonStyle}
-              />
-            </Nav.Link>
-            <Nav.Link
-              as={Link}
-              to="/playground"
-              className={classes.nounsNavLink}
-              onClick={closeNav}
-            >
-              <NavBarButton
-                buttonText={<Trans>Playground</Trans>}
-                buttonIcon={<FontAwesomeIcon icon={faPlay} />}
-                buttonStyle={nonWalletButtonStyle}
-              />
-            </Nav.Link>
-            <NavLocaleSwitcher buttonStyle={nonWalletButtonStyle} />
+            {/*<Nav.Link*/}
+            {/*  href={externalURL(ExternalURL.notion)}*/}
+            {/*  className={classes.nounsNavLink}*/}
+            {/*  target="_blank"*/}
+            {/*  rel="noreferrer"*/}
+            {/*  onClick={closeNav}*/}
+            {/*>*/}
+            {/*  <NavBarButton*/}
+            {/*    buttonText={<Trans>Docs</Trans>}*/}
+            {/*    buttonIcon={<FontAwesomeIcon icon={faBookOpen} />}*/}
+            {/*    buttonStyle={nonWalletButtonStyle}*/}
+            {/*  />*/}
+            {/*</Nav.Link>*/}
+            {/*<Nav.Link*/}
+            {/*  href={externalURL(ExternalURL.discourse)}*/}
+            {/*  className={classes.nounsNavLink}*/}
+            {/*  target="_blank"*/}
+            {/*  rel="noreferrer"*/}
+            {/*  onClick={closeNav}*/}
+            {/*>*/}
+            {/*  <NavBarButton*/}
+            {/*    buttonText={<Trans>Discourse</Trans>}*/}
+            {/*    buttonIcon={<FontAwesomeIcon icon={faComments} />}*/}
+            {/*    buttonStyle={nonWalletButtonStyle}*/}
+            {/*  />*/}
+            {/*</Nav.Link>*/}
+            {/*<Nav.Link*/}
+            {/*  as={Link}*/}
+            {/*  to="/playground"*/}
+            {/*  className={classes.nounsNavLink}*/}
+            {/*  onClick={closeNav}*/}
+            {/*>*/}
+            {/*  <NavBarButton*/}
+            {/*    buttonText={<Trans>Playground</Trans>}*/}
+            {/*    buttonIcon={<FontAwesomeIcon icon={faPlay} />}*/}
+            {/*    buttonStyle={nonWalletButtonStyle}*/}
+            {/*  />*/}
+            {/*</Nav.Link>*/}
+            {/*<NavLocaleSwitcher buttonStyle={nonWalletButtonStyle} />*/}
             <NavWallet address={activeAccount || '0'} buttonStyle={nonWalletButtonStyle} />{' '}
           </Navbar.Collapse>
         </Container>
