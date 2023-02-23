@@ -22,6 +22,7 @@ import {
 } from '../typechain';
 import ImageData from '../files/image-data-v1.json';
 import ImageDataV2 from '../files/image-data-v2.json';
+import probDoc from '../../nouns-assets/src/config/probability.json'
 import { Block } from '@ethersproject/abstract-provider';
 import { deflateRawSync } from 'zlib';
 import { chunkArray } from '../utils';
@@ -261,6 +262,75 @@ export const populateDescriptorV2 = async (nDescriptor: NDescriptorV2): Promise<
   );
 };
 
+export const populateSeeder = async (nSeeder: NSeeder): Promise<void> => {
+  const shortPunkType: any = {
+    male: "m",
+    female: "f",
+    alien: "l",
+    ape: "p",
+    zombie: "z",
+  }
+
+  const typeProbabilities = Object.values(probDoc.probabilities)
+    .map((probObj: any) => Math.floor(probObj.probability * 1000))
+  const typeResponse = await (await nSeeder.setTypeProbability(typeProbabilities)).wait()
+
+  let skinIdx = 0;
+  for(let [type, probObj] of Object.entries(probDoc.probabilities)) {
+    const skinProbabilities = probObj.skin
+      .map((value: any) => Math.floor(value * 1000))
+    const skinResponse = await (await nSeeder.setSkinProbability(skinIdx++, skinProbabilities)).wait()
+  }
+
+  const accCountProbabilities = probDoc.accessory_count_probabbilities
+    .map((value: any) => Math.floor(value * 1000))
+  const accResponse = await (await nSeeder.setAccCountProbability(accCountProbabilities)).wait()
+
+  const accTypeCount = Object.keys(probDoc.acc_types).length
+  const accTypeAvailabilities = Object.values(probDoc.probabilities)
+    .map((probObj: any) => {
+      const binaryArray = probObj.accessories.reduce((prev: any, acc: any) => {
+        const typeIndex = Object.keys(probDoc.acc_types).indexOf(acc)
+        if(typeIndex < 0) throw new Error(`Unknown type found in type availability - ${acc}`)
+        prev[typeIndex] = 1
+        return prev
+      }, Array(accTypeCount).fill(0))
+      return parseInt(binaryArray.join(""), 2)
+    })
+  const typeAvailabilityResponse = await (await nSeeder.setAccAvailability(accTypeCount, accTypeAvailabilities)).wait()
+
+  const accCountPerType = probDoc.types.map((punkType: string) =>
+      Object.keys(probDoc.acc_types).map(type =>
+          Object.values(probDoc.accessories).filter((item: any) => item.type == type && item.punk.split("").includes(shortPunkType[punkType])).length
+      )
+  )
+  const accCountSetResponse = await (await nSeeder.setAccCountPerTypeAndPunk(accCountPerType)).wait()
+
+  const accIdPerType = probDoc.types.map((punkType: string) =>
+    Object.keys(probDoc.acc_types).map(type =>
+      Object.values(probDoc.accessories).filter((item: any) => item.type == type)
+        .map((item: any, idx: number) => [item.punk.split("").includes(shortPunkType[punkType]), idx])
+        .filter((entry: any) => entry[0])
+        .map((entry: any) => entry[1])
+    )
+  )
+  const accIdSetResponse = await (await nSeeder.setAccIdByType(accIdPerType)).wait()
+
+  const exclusives = probDoc.exclusive_groups.reduce((prev: any, group: any, groupIndex: number) => {
+    group.forEach((item: any) => {
+      const typeIndex = Object.keys(probDoc.acc_types).indexOf(item)
+      if(typeIndex < 0) throw new Error(`Unknown type found in exclusive groups - ${item}`)
+      prev[typeIndex] = groupIndex
+    })
+    return prev
+  }, Array(accTypeCount).fill(-1))
+  let curExclusive = probDoc.exclusive_groups.length;
+  for(let i in exclusives)
+    if(exclusives[i] < 0)
+      exclusives[i] = curExclusive ++
+  const exclusiveResponse = await (await nSeeder.setExclusiveAcc(curExclusive, exclusives)).wait()
+}
+
 export const deployGovAndToken = async (
   deployer: SignerWithAddress,
   timelockDelay: number,
@@ -314,6 +384,8 @@ export const deployGovAndToken = async (
   const gov = NDaoLogicV1Factory.connect(govDelegatorAddress, deployer);
 
   await populateDescriptorV2(NDescriptorV2Factory.connect(await token.descriptor(), deployer));
+
+  await populateSeeder(NSeederFactory.connect(await token.seeder(), deployer));
 
   return { token, gov, timelock };
 };

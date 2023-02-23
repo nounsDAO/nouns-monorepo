@@ -112,7 +112,7 @@ let signatures: string[];
 let callDatas: string[];
 let proposalId: EthersBN;
 
-describe('NounsDAO#vetoing', () => {
+describe('NDAO#vetoing', () => {
   before(async () => {
     signers = await getSigners();
     deployer = signers.deployer;
@@ -134,7 +134,7 @@ describe('NounsDAO#vetoing', () => {
 
   it('rejects setting a new vetoer when sender is not vetoer', async () => {
     await expect(gov.connect(account0)._setVetoer(account1.address)).revertedWith(
-      'NounsDAO::_setVetoer: vetoer only',
+      'NDAO::_setVetoer: vetoer only',
     );
   });
 
@@ -147,18 +147,18 @@ describe('NounsDAO#vetoing', () => {
 
   it('only vetoer can veto', async () => {
     await propose(account0);
-    await expect(gov.veto(proposalId)).revertedWith('NounsDAO::veto: only vetoer');
+    await expect(gov.veto(proposalId)).revertedWith('NDAO::veto: only vetoer');
   });
 
   it('burns veto power correctly', async () => {
     // vetoer is still set
     expect(await gov.vetoer()).to.equal(vetoer.address);
-    await expect(gov._burnVetoPower()).revertedWith('NounsDAO::_burnVetoPower: vetoer only');
+    await expect(gov._burnVetoPower()).revertedWith('NDAO::_burnVetoPower: vetoer only');
     // burn
     await gov.connect(vetoer)._burnVetoPower();
     expect(await gov.vetoer()).to.equal(address(0));
     await expect(gov.connect(vetoer).veto(proposalId)).revertedWith(
-      'NounsDAO::veto: veto power burned',
+      'NDAO::veto: veto power burned',
     );
   });
 
@@ -274,7 +274,7 @@ describe('NounsDAO#vetoing', () => {
       await gov.execute(proposalId);
       await expectState(proposalId, 'Executed');
       await expect(gov.veto(proposalId)).revertedWith(
-        'NounsDAO::veto: cannot veto executed proposal',
+        'NDAO::veto: cannot veto executed proposal',
       );
     });
     it('Vetoed', async () => {

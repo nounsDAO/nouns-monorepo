@@ -2,8 +2,8 @@ import chai from 'chai';
 import { ethers } from 'hardhat';
 import { BigNumber as EthersBN, constants } from 'ethers';
 import { solidity } from 'ethereum-waffle';
-import { NDescriptorV2__factory as NDescriptorV2Factory, NToken } from '../typechain';
-import { deployNToken, populateDescriptorV2 } from './utils';
+import { NDescriptorV2__factory as NDescriptorV2Factory, NToken, NSeeder__factory as NSeederFactory } from '../typechain';
+import { deployNToken, populateDescriptorV2, populateSeeder } from './utils';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 chai.use(solidity);
@@ -20,8 +20,10 @@ describe('NToken', () => {
     nounsToken = await deployNToken(deployer, noundersDAO.address, deployer.address);
 
     const descriptor = await nounsToken.descriptor();
+    const seeder = await nounsToken.seeder();
 
     await populateDescriptorV2(NDescriptorV2Factory.connect(descriptor, deployer));
+    await populateSeeder(NSeederFactory.connect(descriptor, deployer));
   });
 
   beforeEach(async () => {

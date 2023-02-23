@@ -12,6 +12,7 @@ import {
   TestSigners,
   setTotalSupply,
   populateDescriptorV2,
+  populateSeeder,
 } from '../../utils';
 
 import { mineBlock, address, encodeParameters } from '../../utils';
@@ -20,6 +21,7 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import {
   NToken,
   NDescriptorV2__factory as NDescriptorV2Factory,
+  NSeeder__factory as NSeederFactory,
   NDAOLogicV1Harness,
   NDAOLogicV1Harness__factory as NDaoLogicV1HarnessFactory,
   NDAOProxy__factory as NDaoProxyFactory,
@@ -48,7 +50,7 @@ async function deployGovernor(
   ];
 
   const { address: _govDelegatorAddress } = await (
-    await ethers.getContractFactory('NounsDAOProxy', deployer)
+    await ethers.getContractFactory('NDAOProxy', deployer)
   ).deploy(...params);
 
   return NDaoLogicV1HarnessFactory.connect(_govDelegatorAddress, deployer);
@@ -82,6 +84,10 @@ async function reset() {
     NDescriptorV2Factory.connect(await token.descriptor(), signers.deployer),
   );
 
+  await populateSeeder(
+    NSeederFactory.connect(await token.seeder(), signers.deployer),
+  );
+
   await setTotalSupply(token, 10);
 
   gov = await deployGovernor(deployer, token.address);
@@ -98,7 +104,7 @@ async function propose(proposer: SignerWithAddress) {
   proposalId = await gov.latestProposalIds(proposer.address);
 }
 
-describe('NounsDAO#castVote/2', () => {
+describe('NDAO#castVote/2', () => {
   before(async () => {
     signers = await getSigners();
     deployer = signers.deployer;
@@ -115,7 +121,7 @@ describe('NounsDAO#castVote/2', () => {
 
     it("There does not exist a proposal with matching proposal id where the current block number is between the proposal's start block (exclusive) and end block (inclusive)", async () => {
       await expect(gov.castVote(proposalId, 1)).revertedWith(
-        'NounsDAO::castVoteInternal: voting is closed',
+        'NDAO::castVoteInternal: voting is closed',
       );
     });
 
@@ -131,7 +137,7 @@ describe('NounsDAO#castVote/2', () => {
       await gov.connect(account1).castVoteWithReason(proposalId, 1, '');
 
       await expect(gov.connect(account0).castVote(proposalId, 1)).revertedWith(
-        'NounsDAO::castVoteInternal: voter already voted',
+        'NDAO::castVoteInternal: voter already voted',
       );
     });
   });
