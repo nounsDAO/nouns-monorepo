@@ -13,7 +13,7 @@ import { ExternalURL, externalURL } from '../../utils/externalURL';
 import useLidoBalance from '../../hooks/useLidoBalance';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBookOpen } from '@fortawesome/free-solid-svg-icons';
+import {faBookOpen, faHome} from '@fortawesome/free-solid-svg-icons';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import { faComments } from '@fortawesome/free-solid-svg-icons';
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
@@ -58,11 +58,12 @@ const NavBar = () => {
         <Container style={{ maxWidth: 'unset' }}>
           <div className={classes.brandAndTreasuryWrapper}>
             <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
-              <img src={logo} className={classes.navBarLogo} alt="Nouns DAO logo" />
+              <FontAwesomeIcon icon={faHome} />
+              {/*<img src={logo} className={classes.navBarLogo} alt="Nouns DAO logo" />*/}
             </Navbar.Brand>
             {Number(CHAIN_ID) !== 1 && (
               <Nav.Item>
-                <img className={classes.testnetImg} src={testnetNoun} alt="testnet noun" />
+                {/*<img className={classes.testnetImg} src={testnetNoun} alt="testnet noun" />*/}
                 TESTNET
               </Nav.Item>
             )}

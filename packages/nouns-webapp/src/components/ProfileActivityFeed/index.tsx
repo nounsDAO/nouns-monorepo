@@ -55,7 +55,7 @@ const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = props => {
   if (error) {
     return (
       <div>
-        <Trans>Failed to fetch Noun activity history</Trans>
+        <Trans>Failed to fetch Punk activity history</Trans>
       </div>
     );
   }

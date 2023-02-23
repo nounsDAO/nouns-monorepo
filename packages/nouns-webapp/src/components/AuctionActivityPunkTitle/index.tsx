@@ -7,7 +7,7 @@ const AuctionActivityPunkTitle: React.FC<{ tokenId: BigNumber; isCool?: boolean 
   return (
     <div className={classes.wrapper}>
       <h1 style={{ color: isCool ? 'var(--brand-cool-dark-text)' : 'var(--brand-warm-dark-text)' }}>
-        <Trans>Noun {tokenId.toString()}</Trans>
+        <Trans>Punk {tokenId.toString()}</Trans>
       </h1>
     </div>
   );

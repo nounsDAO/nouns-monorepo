@@ -109,10 +109,10 @@ const PunkerTokenContent: React.FC<{
               </Link>
               .{' '}
               <Trans>
-                For this reason, we, the project's founders (‘Nounders’) have chosen to compensate
-                ourselves with Nouns. Every 10th Noun for the first 5 years of the project will be
+                For this reason, we, the project's founders (‘Punkers’) have chosen to compensate
+                ourselves with Punks. Every 10th Punk for the first 5 years of the project will be
                 sent to our multisig (5/10), where it will be vested and distributed to individual
-                Nounders.
+                Punkers.
               </Trans>
             </li>
           </ul>
@@ -121,12 +121,12 @@ const PunkerTokenContent: React.FC<{
               isCool ? bidBtnClasses.bidHistoryWrapperCool : bidBtnClasses.bidHistoryWrapperWarm
             }
           >
-            <Link
-              to="/nounders"
-              className={isCool ? bidBtnClasses.bidHistoryCool : bidBtnClasses.bidHistoryWarm}
-            >
-              <Trans>Learn more</Trans> →
-            </Link>
+            {/*<Link*/}
+            {/*  to="/nounders"*/}
+            {/*  className={isCool ? bidBtnClasses.bidHistoryCool : bidBtnClasses.bidHistoryWarm}*/}
+            {/*>*/}
+            {/*  <Trans>Learn more</Trans> →*/}
+            {/*</Link>*/}
           </div>
         </Col>
       </Row>
