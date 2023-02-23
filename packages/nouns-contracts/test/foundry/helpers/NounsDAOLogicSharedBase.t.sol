@@ -32,7 +32,7 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtils {
         NounsDescriptorV2 descriptor = _deployAndPopulateV2();
         nounsToken = new NounsToken(noundersDAO, minter, descriptor, new NounsSeeder(), IProxyRegistry(address(0)));
 
-        daoProxy = deployDAOProxy();
+        daoProxy = deployDAOProxy(address(timelock), address(nounsToken), vetoer);
 
         vm.prank(address(timelock));
         timelock.setPendingAdmin(address(daoProxy));
@@ -42,9 +42,11 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtils {
         utils = new Utils();
     }
 
-    function deployDAOProxy() internal virtual returns (NounsDAOLogicV1);
+    function deployDAOProxy(address timelock, address nounsToken, address vetoer) internal virtual returns (NounsDAOLogicV1);
 
-    function daoVersion() internal virtual returns (uint256);
+    function daoVersion() internal virtual returns (uint256) {
+        return 0; // override to specify version
+    }
 
     function propose(
         address _proposer,

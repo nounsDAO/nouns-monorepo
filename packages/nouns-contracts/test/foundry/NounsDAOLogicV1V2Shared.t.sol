@@ -179,15 +179,15 @@ contract NounsDAOLogicV1StateTest is NounsDAOLogicV1V2StateTest {
         return 1;
     }
 
-    function deployDAOProxy() internal override returns (NounsDAOLogicV1) {
+    function deployDAOProxy(address timelock, address nounsToken, address vetoer) internal override returns (NounsDAOLogicV1) {
         NounsDAOLogicV1 daoLogic = new NounsDAOLogicV1();
 
         return
             NounsDAOLogicV1(
                 payable(
                     new NounsDAOProxy(
-                        address(timelock),
-                        address(nounsToken),
+                        timelock,
+                        nounsToken,
                         vetoer,
                         admin,
                         address(daoLogic),
@@ -206,15 +206,15 @@ contract NounsDAOLogicV2StateTest is NounsDAOLogicV1V2StateTest {
         return 2;
     }
 
-    function deployDAOProxy() internal override returns (NounsDAOLogicV1) {
+    function deployDAOProxy(address timelock, address nounsToken, address vetoer) internal override returns (NounsDAOLogicV1) {
         NounsDAOLogicV2 daoLogic = new NounsDAOLogicV2();
 
         return
             NounsDAOLogicV1(
                 payable(
                     new NounsDAOProxyV2(
-                        address(timelock),
-                        address(nounsToken),
+                        timelock,
+                        nounsToken,
                         vetoer,
                         admin,
                         address(daoLogic),
@@ -432,15 +432,15 @@ contract NounsDAOLogicV1VetoingTest is NounsDAOLogicV1V2VetoingTest {
         return 1;
     }
 
-    function deployDAOProxy() internal override returns (NounsDAOLogicV1) {
+    function deployDAOProxy(address timelock, address nounsToken, address vetoer) internal override returns (NounsDAOLogicV1) {
         NounsDAOLogicV1 daoLogic = new NounsDAOLogicV1();
 
         return
             NounsDAOLogicV1(
                 payable(
                     new NounsDAOProxy(
-                        address(timelock),
-                        address(nounsToken),
+                        timelock,
+                        nounsToken,
                         vetoer,
                         admin,
                         address(daoLogic),
@@ -530,15 +530,15 @@ contract NounsDAOLogicV2VetoingTest is NounsDAOLogicV1V2VetoingTest {
         return 2;
     }
 
-    function deployDAOProxy() internal override returns (NounsDAOLogicV1) {
+    function deployDAOProxy(address timelock, address nounsToken, address vetoer) internal override returns (NounsDAOLogicV1) {
         NounsDAOLogicV2 daoLogic = new NounsDAOLogicV2();
 
         return
             NounsDAOLogicV1(
                 payable(
                     new NounsDAOProxyV2(
-                        address(timelock),
-                        address(nounsToken),
+                        timelock,
+                        nounsToken,
                         vetoer,
                         admin,
                         address(daoLogic),
