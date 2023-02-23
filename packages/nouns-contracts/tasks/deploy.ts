@@ -20,6 +20,10 @@ const wethContracts: Record<number, string> = {
   [ChainId.Kovan]: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
   [ChainId.Goerli]: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
 };
+const cryptopunksContracts: Record<number, string> = {
+  [ChainId.Mainnet]: '0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB',
+  [ChainId.Goerli]: '0x85B353Ba06d16a237F24CB370ea291972F9bDd42',
+};
 
 
 const N_ART_NONCE_OFFSET = 4;
@@ -29,6 +33,7 @@ const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 12;
 task('deploy', 'Deploys NFTDescriptor, NDescriptor, NSeeder, and NToken')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
   .addOptionalParam('weth', 'The WETH contract address', undefined, types.string)
+  .addOptionalParam('cryptopunks', 'The CryptoPunks contract address', undefined, types.string)
   .addOptionalParam('punkersdao', 'The punkers DAO contract address', undefined, types.string)
   .addOptionalParam(
     'auctionTimeBuffer',
@@ -98,6 +103,15 @@ task('deploy', 'Deploys NFTDescriptor, NDescriptor, NSeeder, and NToken')
       args.punkersdao = deployer.address;
     }
     console.log(args)
+    if (!args.cryptopunks) {
+      const deployedCryptoPunksContract = cryptopunksContracts[network.chainId];
+      if (!deployedCryptoPunksContract) {
+        throw new Error(
+          `Can not auto-detect CryptoPunks contract on chain ${network.name}. Provide it with the --cryptopunks arg.`,
+        );
+      }
+      args.cryptopunks = deployedCryptoPunksContract;
+    }
     if (!args.weth) {
       const deployedWETHContract = wethContracts[network.chainId];
       if (!deployedWETHContract) {
@@ -201,6 +215,7 @@ task('deploy', 'Deploys NFTDescriptor, NDescriptor, NSeeder, and NToken')
         args: [
           () => deployment.NDAOExecutor.address,
           () => deployment.NToken.address,
+          args.cryptopunks,
           args.punkersdao,
           () => deployment.NDAOExecutor.address,
           () => deployment.NDAOLogicV1.address,

@@ -18,6 +18,10 @@ const wethContracts: Record<number, string> = {
   [ChainId.Rinkeby]: '0xc778417e063141139fce010982780140aa0cd5ab',
   [ChainId.Kovan]: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
 };
+const cryptopunksContracts: Record<number, string> = {
+  [ChainId.Mainnet]: '0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB',
+  [ChainId.Goerli]: '0x85B353Ba06d16a237F24CB370ea291972F9bDd42',
+};
 
 const N_ART_NONCE_OFFSET = 4;
 const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 9;
@@ -26,6 +30,7 @@ const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 12;
 task('deploy-short-times', 'Deploy all Punks contracts with short gov times for testing')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
   .addOptionalParam('weth', 'The WETH contract address', undefined, types.string)
+  .addOptionalParam('cryptopunks', 'The CryptoPunks contract address', undefined, types.string)
   .addOptionalParam('punkersdao', 'The punkers DAO contract address', undefined, types.string)
   .addOptionalParam(
     'auctionTimeBuffer',
@@ -83,6 +88,15 @@ task('deploy-short-times', 'Deploy all Punks contracts with short gov times for 
         `Punkers DAO address not provided. Setting to deployer (${deployer.address})...`,
       );
       args.punkersdao = deployer.address;
+    }
+    if (!args.cryptopunks) {
+      const deployedCryptoPunksContract = cryptopunksContracts[network.chainId];
+      if (!deployedCryptoPunksContract) {
+        throw new Error(
+          `Can not auto-detect CryptoPunks contract on chain ${network.name}. Provide it with the --cryptopunks arg.`,
+        );
+      }
+      args.cryptopunks = deployedCryptoPunksContract;
     }
     if (!args.weth) {
       const deployedWETHContract = wethContracts[network.chainId];
@@ -173,6 +187,7 @@ task('deploy-short-times', 'Deploy all Punks contracts with short gov times for 
         args: [
           () => deployment.NDAOExecutor.address,
           () => deployment.NToken.address,
+          args.cryptopunks,
           args.punkersdao,
           () => deployment.NDAOExecutor.address,
           () => deployment.NDAOLogicV1.address,
