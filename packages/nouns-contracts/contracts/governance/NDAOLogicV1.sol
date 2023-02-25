@@ -104,7 +104,7 @@ contract NDAOLogicV1 is NDAOStorageV1, NDAOEvents {
      * @notice Used to initialize the contract during delegator contructor
      * @param timelock_ The address of the NDAOExecutor
      * @param npunks_ The address of the PUNK2 tokens
-     * @param cryptopunks_ The address of the CryptoPunks tokens
+     * @param cryptopunksVote_ The address of the CryptoPunks Voting contract
      * @param vetoer_ The address allowed to unilaterally veto proposals
      * @param votingPeriod_ The initial voting period
      * @param votingDelay_ The initial voting delay
@@ -114,7 +114,7 @@ contract NDAOLogicV1 is NDAOStorageV1, NDAOEvents {
     function initialize(
         address timelock_,
         address npunks_,
-        address cryptopunks_,
+        address cryptopunksVote_,
         address vetoer_,
         uint256 votingPeriod_,
         uint256 votingDelay_,
@@ -125,7 +125,7 @@ contract NDAOLogicV1 is NDAOStorageV1, NDAOEvents {
         require(msg.sender == admin, 'NDAO::initialize: admin only');
         require(timelock_ != address(0), 'NDAO::initialize: invalid timelock address');
         require(npunks_ != address(0), 'NDAO::initialize: invalid punk2 address');
-        require(cryptopunks_ != address(0), 'NDAO::initialize: invalid cryptopunks address');
+        require(cryptopunksVote_ != address(0), 'NDAO::initialize: invalid cryptopunksVote address');
         require(
             votingPeriod_ >= MIN_VOTING_PERIOD && votingPeriod_ <= MAX_VOTING_PERIOD,
             'NDAO::initialize: invalid voting period'
@@ -150,7 +150,7 @@ contract NDAOLogicV1 is NDAOStorageV1, NDAOEvents {
 
         timelock = IDAOExecutor(timelock_);
         npunks = NTokenLike(npunks_);
-        cryptopunks = ICryptopunks(cryptopunks_);
+        cryptopunksVote = CryptopunksVote(cryptopunksVote_);
         vetoer = vetoer_;
         votingPeriod = votingPeriod_;
         votingDelay = votingDelay_;
@@ -184,12 +184,13 @@ contract NDAOLogicV1 is NDAOStorageV1, NDAOEvents {
     ) public returns (uint256) {
         ProposalTemp memory temp;
 
-        temp.totalSupply = npunks.totalSupply();
+        temp.totalSupply = npunks.totalSupply() + cryptopunksVote.totalSupply();
 
         temp.proposalThreshold = bps2Uint(proposalThresholdBPS, temp.totalSupply);
 
         require(
-            npunks.getPriorVotes(msg.sender, block.number - 1) > temp.proposalThreshold,
+            npunks.getPriorVotes(msg.sender, block.number - 1) +
+                cryptopunksVote.getPriorVotes(msg.sender, block.number - 1) > temp.proposalThreshold,
             'NDAO::propose: proposer votes below proposal threshold'
         );
         require(
@@ -342,7 +343,8 @@ contract NDAOLogicV1 is NDAOStorageV1, NDAOEvents {
         Proposal storage proposal = proposals[proposalId];
         require(
             msg.sender == proposal.proposer ||
-                npunks.getPriorVotes(proposal.proposer, block.number - 1) < proposal.proposalThreshold,
+                npunks.getPriorVotes(proposal.proposer, block.number - 1) +
+                    cryptopunksVote.getPriorVotes(proposal.proposer, block.number - 1) < proposal.proposalThreshold,
             'NDAO::cancel: proposer above threshold'
         );
 
@@ -509,7 +511,9 @@ contract NDAOLogicV1 is NDAOStorageV1, NDAOEvents {
         require(receipt.hasVoted == false, 'NDAO::castVoteInternal: voter already voted');
 
         /// @notice: Unlike GovernerBravo, votes are considered from the block the proposal was created in order to normalize quorumVotes and proposalThreshold metrics
-        uint96 votes = npunks.getPriorVotes(voter, proposal.startBlock - votingDelay);
+        uint96 votes =
+            npunks.getPriorVotes(voter, proposal.startBlock - votingDelay) +
+            cryptopunksVote.getPriorVotes(voter, proposal.startBlock - votingDelay);
 
         if (support == 0) {
             proposal.againstVotes = proposal.againstVotes + votes;
@@ -662,7 +666,7 @@ contract NDAOLogicV1 is NDAOStorageV1, NDAOEvents {
      * Differs from `GovernerBravo` which uses fixed amount
      */
     function proposalThreshold() public view returns (uint256) {
-        return bps2Uint(proposalThresholdBPS, npunks.totalSupply());
+        return bps2Uint(proposalThresholdBPS, npunks.totalSupply() + cryptopunksVote.totalSupply());
     }
 
     /**
@@ -670,7 +674,7 @@ contract NDAOLogicV1 is NDAOStorageV1, NDAOEvents {
      * Differs from `GovernerBravo` which uses fixed amount
      */
     function quorumVotes() public view returns (uint256) {
-        return bps2Uint(quorumVotesBPS, npunks.totalSupply());
+        return bps2Uint(quorumVotesBPS, npunks.totalSupply() + cryptopunksVote.totalSupply());
     }
 
     function bps2Uint(uint256 bps, uint256 number) internal pure returns (uint256) {

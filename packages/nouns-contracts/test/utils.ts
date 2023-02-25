@@ -9,6 +9,8 @@ import {
   NToken__factory as NTokenFactory,
   CryptopunksMock,
   CryptopunksMock__factory as CryptopunksMockFactory,
+  CryptopunksVote,
+  CryptopunksVote__factory as CryptopunksVoteFactory,
   NSeeder,
   NSeeder__factory as NSeederFactory,
   WETH,
@@ -115,13 +117,16 @@ export const deployNToken = async (
   );
 };
 
-export const deployCryptopunksMock = async (
+export const deployCryptopunksVote = async (
   deployer?: SignerWithAddress,
-): Promise<CryptopunksMock> => {
+): Promise<{cryptopunks: CryptopunksMock, cryptopunksVote: CryptopunksVote}> => {
   const signer = deployer || (await getSigners()).deployer;
-  const factory = new CryptopunksMockFactory(signer);
+  const cryptopunksMockFactory = new CryptopunksMockFactory(signer);
+  const cryptopunksVoteFactory = new CryptopunksVoteFactory(signer);
+  const cryptopunks = await cryptopunksMockFactory.deploy()
+  const cryptopunksVote = await cryptopunksVoteFactory.deploy(cryptopunks.address)
 
-  return factory.deploy();
+  return {cryptopunks, cryptopunksVote};
 };
 
 export const deployWeth = async (deployer?: SignerWithAddress): Promise<WETH> => {
@@ -348,7 +353,7 @@ export const deployGovAndToken = async (
   proposalThresholdBPS: number,
   quorumVotesBPS: number,
   vetoer?: string,
-): Promise<{ token: NToken; cryptopunks: CryptopunksMock; gov: NDAOLogicV1; timelock: NDAOExecutor }> => {
+): Promise<{ token: NToken; cryptopunks: CryptopunksMock; cryptopunksVote: CryptopunksVote; gov: NDAOLogicV1; timelock: NDAOExecutor }> => {
   // nonce 0: Deploy NDAOExecutor
   // nonce 1: Deploy NDAOLogicV1
   // nonce 2: Deploy nftDescriptorLibraryFactory
@@ -364,7 +369,7 @@ export const deployGovAndToken = async (
 
   const govDelegatorAddress = ethers.utils.getContractAddress({
     from: deployer.address,
-    nonce: (await deployer.getTransactionCount()) + 11,
+    nonce: (await deployer.getTransactionCount()) + 12,
   });
 
   // Deploy NDAOExecutor with pre-computed Delegator address
@@ -378,13 +383,13 @@ export const deployGovAndToken = async (
   // Deploy Nouns token
   const token = await deployNToken(deployer);
 
-  const cryptopunks = await deployCryptopunksMock(deployer);
+  const {cryptopunks, cryptopunksVote} = await deployCryptopunksVote(deployer);
 
   // Deploy Delegator
   await new NDaoProxyFactory(deployer).deploy(
     timelock.address,
     token.address,
-    cryptopunks.address,
+    cryptopunksVote.address,
     vetoer || address(0),
     timelock.address,
     govDelegateAddress,
@@ -401,7 +406,7 @@ export const deployGovAndToken = async (
 
   await populateSeeder(NSeederFactory.connect(await token.seeder(), deployer));
 
-  return { token, cryptopunks, gov, timelock };
+  return { token, cryptopunks, cryptopunksVote, gov, timelock };
 };
 
 /**
