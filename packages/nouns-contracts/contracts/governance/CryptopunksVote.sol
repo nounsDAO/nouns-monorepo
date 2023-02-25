@@ -137,14 +137,14 @@ function getHash(uint256 punkIndex, address delegatee, uint256 nonce, uint256 ex
     /**
      * @dev Delegates votes from the sender to `delegatee`.
      */
-    function delegate(uint256 punkIndex, address delegatee) external {
-        _delegate(punkIndex, msg.sender, delegatee);
+    function delegate(address delegatee, uint256 punkIndex) external {
+        _delegate(msg.sender, punkIndex, delegatee);
     }
 
     /**
      * @dev Delegates votes from signer to `delegatee`.
      */
-    function delegateBySig(uint256 punkIndex, address delegatee, uint256 nonce, uint256 expiry, uint8 v, bytes32 r, bytes32 s) external {
+    function delegateBySig(address delegatee, uint256 punkIndex, uint256 nonce, uint256 expiry, uint8 v, bytes32 r, bytes32 s) external {
         require(block.timestamp <= expiry, "CryptopunkVote: signature expired");
         address signatory = ECDSA.recover(
             _hashTypedDataV4(keccak256(abi.encode(DELEGATION_TYPEHASH, punkIndex, delegatee, nonce, expiry))),
@@ -153,10 +153,10 @@ function getHash(uint256 punkIndex, address delegatee, uint256 nonce, uint256 ex
             s
         );
         require(nonce == nonces[signatory]++, "CryptopunkVote: invalid nonce");
-        _delegate(punkIndex, signatory, delegatee);
+        _delegate(signatory, punkIndex, delegatee);
     }
 
-    function _delegate(uint256 punkIndex, address delegator, address delegatee) internal {
+    function _delegate(address delegator, uint256 punkIndex, address delegatee) internal {
         require(punkIndex < CRYPTOPUNKS_TOTAL_SUPPLY, "CryptopunksVote: invalid punkIndex");
         require(block.number < type(uint32).max, "CryptopunksVote: max block exceeded");
         require(delegatee != address(0), "CryptopunksVote: invalid delegatee");
