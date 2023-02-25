@@ -34,8 +34,20 @@ contract CryptopunksVote is EIP712 {
 
     ICryptopunks public immutable cryptopunks;
     uint256 internal constant CRYPTOPUNKS_TOTAL_SUPPLY = 10_000;
+    /// @dev just for convenience, user cannot delegate to zero address
     address internal constant TOTAL_SUPPLY_HOLDER = address(0);
 
+    /**
+     * @dev Emitted when a punk changes its delegate.
+     * IERC5805 not compliant
+     */
+    event DelegateChanged(address delegator, address indexed fromDelegate, address indexed toDelegate, uint256 indexed punkIndex);
+
+    /**
+     * @dev Emitted when a delegate change results in changes to a delegate's number of votes.
+     * IERC5805 compliant
+     */
+    event DelegateVotesChanged(address indexed delegate, uint256 previousBalance, uint256 newBalance);
 
     constructor(address cryptopunks_) EIP712("CryptopunksVote", "1.0") {
         require(cryptopunks_ != address (0), "CryptopunksVote: zero address of cryptopunks");
@@ -46,6 +58,7 @@ function getHash(uint256 punkIndex, address delegatee, uint256 nonce, uint256 ex
 
     /**
      * @dev Returns the current amount of votes that `account` has.
+     * IERC5805 compliant
      */
     function getVotes(address account) external view returns (uint256) {
         uint32 nCheckpoints = numCheckpoints[account];
@@ -63,6 +76,7 @@ function getHash(uint256 punkIndex, address delegatee, uint256 nonce, uint256 ex
     /**
      * @dev Returns the amount of votes that `account` had at a specific moment in the past. If the `clock()` is
      * configured to use block numbers, this will return the value the end of the corresponding block.
+     * IERC5805 compliant
      */
     function getPastVotes(address account, uint256 timepoint) external view returns (uint256) {
         return _getPriorVotes(account, timepoint);
@@ -87,6 +101,8 @@ function getHash(uint256 punkIndex, address delegatee, uint256 nonce, uint256 ex
      * NOTE: This value is the sum of all available votes, which is not necessarily the sum of all delegated votes.
      * Votes that have not been delegated are still part of total supply, even though they would not participate in a
      * vote.
+     *
+     * IERC5805 compliant
      */
     function getPastTotalSupply(uint256 timepoint) external view returns (uint256) {
         return _getPriorVotes(TOTAL_SUPPLY_HOLDER, timepoint);
@@ -128,6 +144,7 @@ function getHash(uint256 punkIndex, address delegatee, uint256 nonce, uint256 ex
 
     /**
      * @dev Returns the delegate that `account` has chosen.
+     * IERC5805 not compliant
      */
     function delegates(uint256 punkIndex) external view returns (address) {
         require(punkIndex < CRYPTOPUNKS_TOTAL_SUPPLY, "CryptopunksVote: invalid punkIndex");
@@ -136,6 +153,7 @@ function getHash(uint256 punkIndex, address delegatee, uint256 nonce, uint256 ex
 
     /**
      * @dev Delegates votes from the sender to `delegatee`.
+     * IERC5805 not compliant
      */
     function delegate(address delegatee, uint256 punkIndex) external {
         _delegate(msg.sender, punkIndex, delegatee);
@@ -143,6 +161,7 @@ function getHash(uint256 punkIndex, address delegatee, uint256 nonce, uint256 ex
 
     /**
      * @dev Delegates votes from signer to `delegatee`.
+     * IERC5805 not compliant
      */
     function delegateBySig(address delegatee, uint256 punkIndex, uint256 nonce, uint256 expiry, uint8 v, bytes32 r, bytes32 s) external {
         require(block.timestamp <= expiry, "CryptopunkVote: signature expired");
@@ -172,7 +191,7 @@ function getHash(uint256 punkIndex, address delegatee, uint256 nonce, uint256 ex
             if (prevDelegatee != address(0)) {
                 uint32 nCheckpoints = numCheckpoints[prevDelegatee];
                 uint96 newVotes = checkpoints[prevDelegatee][nCheckpoints - 1].votes - 1;
-                _writeCheckpoint(prevDelegatee, nCheckpoints, newVotes);
+                _writeCheckpointAndEvent(prevDelegatee, nCheckpoints, newVotes);
             } else {
                 uint32 nCheckpoints = numCheckpoints[TOTAL_SUPPLY_HOLDER];
                 uint96 newVotes = nCheckpoints > 0 ? checkpoints[TOTAL_SUPPLY_HOLDER][nCheckpoints - 1].votes + 1: 1;
@@ -182,9 +201,11 @@ function getHash(uint256 punkIndex, address delegatee, uint256 nonce, uint256 ex
             {
                 uint32 nCheckpoints = numCheckpoints[delegatee];
                 uint96 newVotes = nCheckpoints > 0 ? checkpoints[delegatee][nCheckpoints - 1].votes + 1: 1;
-                _writeCheckpoint(delegatee, nCheckpoints, newVotes);
+                _writeCheckpointAndEvent(delegatee, nCheckpoints, newVotes);
             }
         }
+
+        emit DelegateChanged(delegator, prevDelegatee, delegatee, punkIndex);
     }
 
     function _writeCheckpoint(
@@ -192,13 +213,42 @@ function getHash(uint256 punkIndex, address delegatee, uint256 nonce, uint256 ex
         uint32 nCheckpoints,
         uint96 newVotes
     ) internal {
-        uint32 blockNumber = uint32(block.number);
+        // all operations are safe,
+        unchecked {
+            // range check already done
+            uint32 blockNumber = uint32(block.number);
 
-        if (nCheckpoints > 0 && checkpoints[delegatee][nCheckpoints - 1].fromBlock == blockNumber) {
-            checkpoints[delegatee][nCheckpoints - 1].votes = newVotes;
-        } else {
-            checkpoints[delegatee][nCheckpoints] = Checkpoint(blockNumber, newVotes);
-            numCheckpoints[delegatee] = nCheckpoints + 1;
+            if (nCheckpoints > 0 && checkpoints[delegatee][nCheckpoints - 1].fromBlock == blockNumber) {
+                checkpoints[delegatee][nCheckpoints - 1].votes = newVotes;
+            } else {
+                checkpoints[delegatee][nCheckpoints] = Checkpoint(blockNumber, newVotes);
+                numCheckpoints[delegatee] = nCheckpoints + 1;
+            }
+        }
+    }
+
+    function _writeCheckpointAndEvent(
+        address delegatee,
+        uint32 nCheckpoints,
+        uint96 newVotes
+    ) internal {
+        // all operations are safe,
+        unchecked {
+            // range check already done
+            uint32 blockNumber = uint32(block.number);
+
+            if (nCheckpoints == 0) {
+                emit DelegateVotesChanged(delegatee, 0, newVotes);
+                checkpoints[delegatee][0] = Checkpoint(blockNumber, newVotes);
+                numCheckpoints[delegatee] = 1;
+            } else if (checkpoints[delegatee][nCheckpoints - 1].fromBlock == blockNumber) {
+                emit DelegateVotesChanged(delegatee, checkpoints[delegatee][nCheckpoints - 1].votes, newVotes);
+                checkpoints[delegatee][nCheckpoints - 1].votes = newVotes;
+            } else {
+                emit DelegateVotesChanged(delegatee, checkpoints[delegatee][nCheckpoints - 1].votes, newVotes);
+                checkpoints[delegatee][nCheckpoints] = Checkpoint(blockNumber, newVotes);
+                numCheckpoints[delegatee] = nCheckpoints + 1;
+            }
         }
     }
 }

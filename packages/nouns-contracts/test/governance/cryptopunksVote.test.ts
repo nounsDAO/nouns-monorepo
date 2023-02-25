@@ -126,6 +126,98 @@ describe('CryptopunksVote', () => {
   describe('numCheckpoints', () => {
     beforeEach(async () => {
       snapshotId = await ethers.provider.send('evm_snapshot', []);
+      await cryptopunks.mint(deployer.address)
+    });
+
+    afterEach(async () => {
+      await ethers.provider.send('evm_revert', [snapshotId]);
+    });
+
+    it('a delegate call emits DelegateChanged', async () => {
+      const tx = cryptopunksVote.connect(deployer).delegate(deployer.address, 0);
+      await expect(tx)
+        .to.emit(cryptopunksVote, 'DelegateChanged')
+        .withArgs(deployer.address, address(0), deployer.address, 0);
+    });
+
+    it('two delegate calls emit DelegateChanged', async () => {
+      const tx1 = cryptopunksVote.connect(deployer).delegate(deployer.address, 0);
+      await expect(tx1)
+        .to.emit(cryptopunksVote, 'DelegateChanged')
+        .withArgs(deployer.address, address(0), deployer.address, 0);
+      const tx2 = cryptopunksVote.connect(deployer).delegate(account0.address, 0);
+      await expect(tx2)
+        .to.emit(cryptopunksVote, 'DelegateChanged')
+        .withArgs(deployer.address, deployer.address, account0.address, 0);
+    });
+
+    it('three delegate calls emit DelegateChanged', async () => {
+      const tx1 = cryptopunksVote.connect(deployer).delegate(deployer.address, 0);
+      await expect(tx1)
+        .to.emit(cryptopunksVote, 'DelegateChanged')
+        .withArgs(deployer.address, address(0), deployer.address, 0);
+      const tx2 = cryptopunksVote.connect(deployer).delegate(account0.address, 0);
+      await expect(tx2)
+        .to.emit(cryptopunksVote, 'DelegateChanged')
+        .withArgs(deployer.address, deployer.address, account0.address, 0);
+      const tx3 = cryptopunksVote.connect(account0).delegate(account1.address, 0);
+      await expect(tx3)
+        .to.emit(cryptopunksVote, 'DelegateChanged')
+        .withArgs(account0.address, account0.address, account1.address, 0);
+    });
+
+    it('a delegate call emits DelegateVotesChanged', async () => {
+      const tx = cryptopunksVote.connect(deployer).delegate(deployer.address, 0);
+      await expect(tx)
+        .to.emit(cryptopunksVote, 'DelegateVotesChanged')
+        .withArgs(deployer.address, 0, 1);
+    });
+
+    it('three delegate calls emit DelegateVotesChanged', async () => {
+      await cryptopunks.mint(deployer.address)
+
+      const tx1 = cryptopunksVote.connect(deployer).delegate(deployer.address, 0);
+      await expect(tx1)
+        .to.emit(cryptopunksVote, 'DelegateVotesChanged')
+        .withArgs(deployer.address, 0, 1);
+      const tx2 = cryptopunksVote.connect(deployer).delegate(deployer.address, 1);
+      await expect(tx2)
+        .to.emit(cryptopunksVote, 'DelegateVotesChanged')
+        .withArgs(deployer.address, 1, 2);
+      const tx3 = cryptopunksVote.connect(deployer).delegate(account0.address, 0);
+      await expect(tx3)
+        .to.emit(cryptopunksVote, 'DelegateVotesChanged')
+        .withArgs(deployer.address, 2, 1);
+      await expect(tx3)
+        .to.emit(cryptopunksVote, 'DelegateVotesChanged')
+        .withArgs(account0.address, 0, 1);
+    });
+
+    it('two delegate calls in a single block emit DelegateVotesChanged', async () => {
+      await cryptopunks.mint(deployer.address)
+
+      await minerStop();
+
+      const tx1 = await cryptopunksVote.connect(deployer).delegate(deployer.address, 0);
+      const tx2 = await cryptopunksVote.connect(deployer).delegate(deployer.address, 1);
+
+      await mineBlock();
+      await minerStart();
+
+      await expect(tx1)
+        .to.emit(cryptopunksVote, 'DelegateVotesChanged')
+        .withArgs(deployer.address, 0, 1);
+      await expect(tx2)
+        .to.emit(cryptopunksVote, 'DelegateVotesChanged')
+        .withArgs(deployer.address, 1, 2);
+      expect(await cryptopunksVote.numCheckpoints(deployer.address)).to.equal(1);
+    });
+  });
+
+
+  describe('numCheckpoints', () => {
+    beforeEach(async () => {
+      snapshotId = await ethers.provider.send('evm_snapshot', []);
     });
 
     afterEach(async () => {
