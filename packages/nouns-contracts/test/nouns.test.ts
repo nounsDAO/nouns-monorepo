@@ -23,7 +23,7 @@ describe('NToken', () => {
     const seeder = await nounsToken.seeder();
 
     await populateDescriptorV2(NDescriptorV2Factory.connect(descriptor, deployer));
-    await populateSeeder(NSeederFactory.connect(descriptor, deployer));
+    await populateSeeder(NSeederFactory.connect(seeder, deployer));
   });
 
   beforeEach(async () => {
@@ -40,12 +40,12 @@ describe('NToken', () => {
     const [, , , noundersNounCreated, , , , ownersNounCreated] = receipt.events || [];
 
     expect(await nounsToken.ownerOf(0)).to.eq(noundersDAO.address);
-    expect(noundersNounCreated?.event).to.eq('NounCreated');
+    expect(noundersNounCreated?.event).to.eq('PunkCreated');
     expect(noundersNounCreated?.args?.tokenId).to.eq(0);
     expect(noundersNounCreated?.args?.seed.length).to.equal(5);
 
     expect(await nounsToken.ownerOf(1)).to.eq(deployer.address);
-    expect(ownersNounCreated?.event).to.eq('NounCreated');
+    expect(ownersNounCreated?.event).to.eq('PunkCreated');
     expect(ownersNounCreated?.args?.tokenId).to.eq(1);
     expect(ownersNounCreated?.args?.seed.length).to.equal(5);
 
@@ -61,11 +61,11 @@ describe('NToken', () => {
   });
 
   it('should set symbol', async () => {
-    expect(await nounsToken.symbol()).to.eq('NOUN');
+    expect(await nounsToken.symbol()).to.eq('PUNK');
   });
 
   it('should set name', async () => {
-    expect(await nounsToken.name()).to.eq('Nouns');
+    expect(await nounsToken.name()).to.eq('Cryptopunks');
   });
 
   it('should allow minter to mint a noun to itself', async () => {
@@ -75,7 +75,7 @@ describe('NToken', () => {
     const nounCreated = receipt.events?.[3];
 
     expect(await nounsToken.ownerOf(2)).to.eq(deployer.address);
-    expect(nounCreated?.event).to.eq('NounCreated');
+    expect(nounCreated?.event).to.eq('PunkCreated');
     expect(nounCreated?.args?.tokenId).to.eq(2);
     expect(nounCreated?.args?.seed.length).to.equal(5);
 
@@ -105,7 +105,7 @@ describe('NToken', () => {
     await (await nounsToken.mint()).wait();
 
     const tx = nounsToken.burn(0);
-    await expect(tx).to.emit(nounsToken, 'NounBurned').withArgs(0);
+    await expect(tx).to.emit(nounsToken, 'PunkBurned').withArgs(0);
   });
 
   it('should revert on non-minter mint', async () => {

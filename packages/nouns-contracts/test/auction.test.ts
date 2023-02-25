@@ -95,7 +95,7 @@ describe('NAuctionHouse', () => {
       value: RESERVE_PRICE,
     });
 
-    await expect(tx).to.be.revertedWith('Noun not up for auction');
+    await expect(tx).to.be.revertedWith('Punk not up for auction');
   });
 
   it('should revert if a user creates a bid for an expired auction', async () => {

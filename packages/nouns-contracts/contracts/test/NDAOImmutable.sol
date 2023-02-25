@@ -8,7 +8,7 @@ contract NDAOImmutable is NDAOLogicV1 {
     constructor(
         address timelock_,
         address nouns_,
-        address cryptopunks_,
+        address cryptopunksVote_,
         address admin_,
         address vetoer_,
         uint256 votingPeriod_,
@@ -17,7 +17,7 @@ contract NDAOImmutable is NDAOLogicV1 {
         uint256 quorumVotesBPS_
     ) {
         admin = msg.sender;
-        initialize(timelock_, nouns_, cryptopunks_, vetoer_, votingPeriod_, votingDelay_, proposalThresholdBPS_, quorumVotesBPS_);
+        initialize(timelock_, nouns_, cryptopunksVote_, vetoer_, votingPeriod_, votingDelay_, proposalThresholdBPS_, quorumVotesBPS_);
 
         admin = admin_;
     }
@@ -25,7 +25,7 @@ contract NDAOImmutable is NDAOLogicV1 {
     function initialize(
         address timelock_,
         address npunks_,
-        address cryptopunks_,
+        address cryptopunksVote_,
         address vetoer_,
         uint256 votingPeriod_,
         uint256 votingDelay_,
@@ -37,7 +37,7 @@ contract NDAOImmutable is NDAOLogicV1 {
 
         timelock = IDAOExecutor(timelock_);
         npunks = NTokenLike(npunks_);
-        cryptopunks = ICryptopunks(cryptopunks_);
+        cryptopunksVote = CryptopunksVote(cryptopunksVote_);
         vetoer = vetoer_;
         votingPeriod = votingPeriod_;
         votingDelay = votingDelay_;

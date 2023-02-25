@@ -7,6 +7,7 @@ import {
   WETH,
   NToken,
   CryptopunksMock,
+  CryptopunksVote,
   NAuctionHouse,
   NAuctionHouse__factory as NAuctionHouseFactory,
   NDescriptorV2,
@@ -21,7 +22,7 @@ import {
 
 import {
   deployNToken,
-  deployCryptopunksMock,
+  deployCryptopunksVote,
   deployWeth,
   populateDescriptorV2,
   populateSeeder,
@@ -39,6 +40,7 @@ const { expect } = chai;
 
 let nounsToken: NToken;
 let cryptopunks: CryptopunksMock;
+let cryptopunksVote: CryptopunksVote;
 let nounsAuctionHouse: NAuctionHouse;
 let descriptor: NDescriptorV2;
 let weth: WETH;
@@ -96,7 +98,7 @@ async function deploy() {
     deployer.address, // do not know minter/auction house yet
   );
 
-  cryptopunks = await deployCryptopunksMock(deployer);
+  ({cryptopunks, cryptopunksVote} = await deployCryptopunksVote(deployer));
 
   // 2a. DEPLOY AuctionHouse
   const auctionHouseFactory = await ethers.getContractFactory('NAuctionHouse', deployer);
@@ -141,7 +143,7 @@ async function deploy() {
   const nounsDAOProxy = await new NDaoProxyFactory(deployer).deploy(
     timelock.address,
     nounsToken.address,
-    cryptopunks.address,
+    cryptopunksVote.address,
     noundersDAO.address, // NoundersDAO is vetoer
     timelock.address,
     govDelegate.address,

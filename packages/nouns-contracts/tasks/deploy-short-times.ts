@@ -18,9 +18,8 @@ const wethContracts: Record<number, string> = {
   [ChainId.Rinkeby]: '0xc778417e063141139fce010982780140aa0cd5ab',
   [ChainId.Kovan]: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
 };
-const cryptopunksContracts: Record<number, string> = {
-  [ChainId.Mainnet]: '0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB',
-  [ChainId.Goerli]: '0x85B353Ba06d16a237F24CB370ea291972F9bDd42',
+const cryptopunksVoteContracts: Record<number, string> = {
+  [ChainId.Goerli]: '0x7F053e48d7Aaaa2d4356C5feF0B042576cE1d2DB',
 };
 
 const N_ART_NONCE_OFFSET = 4;
@@ -30,7 +29,7 @@ const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 12;
 task('deploy-short-times', 'Deploy all Punks contracts with short gov times for testing')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
   .addOptionalParam('weth', 'The WETH contract address', undefined, types.string)
-  .addOptionalParam('cryptopunks', 'The CryptoPunks contract address', undefined, types.string)
+  .addOptionalParam('cryptopunksVote', 'The CryptopunksVote contract address', undefined, types.string)
   .addOptionalParam('punkersdao', 'The punkers DAO contract address', undefined, types.string)
   .addOptionalParam(
     'auctionTimeBuffer',
@@ -89,14 +88,14 @@ task('deploy-short-times', 'Deploy all Punks contracts with short gov times for 
       );
       args.punkersdao = deployer.address;
     }
-    if (!args.cryptopunks) {
-      const deployedCryptoPunksContract = cryptopunksContracts[network.chainId];
-      if (!deployedCryptoPunksContract) {
+    if (!args.cryptopunksVote) {
+      const deployedCryptoPunksVoteContract = cryptopunksVoteContracts[network.chainId];
+      if (!deployedCryptoPunksVoteContract) {
         throw new Error(
-          `Can not auto-detect CryptoPunks contract on chain ${network.name}. Provide it with the --cryptopunks arg.`,
+          `Can not auto-detect CryptopunksVote contract on chain ${network.name}. Provide it with the --cryptopunksVote arg.`,
         );
       }
-      args.cryptopunks = deployedCryptoPunksContract;
+      args.cryptopunksVote = deployedCryptoPunksVoteContract;
     }
     if (!args.weth) {
       const deployedWETHContract = wethContracts[network.chainId];
@@ -187,7 +186,7 @@ task('deploy-short-times', 'Deploy all Punks contracts with short gov times for 
         args: [
           () => deployment.NDAOExecutor.address,
           () => deployment.NToken.address,
-          args.cryptopunks,
+          args.cryptopunksVote,
           args.punkersdao,
           () => deployment.NDAOExecutor.address,
           () => deployment.NDAOLogicV1.address,

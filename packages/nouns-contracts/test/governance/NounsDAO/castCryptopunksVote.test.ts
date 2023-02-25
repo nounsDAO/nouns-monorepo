@@ -96,7 +96,10 @@ async function reset() {
     NSeederFactory.connect(await token.seeder(), signers.deployer),
   );
 
-  await setTotalSupply(token, 10);
+  for (let i = 0 ; i < 10; i ++) {
+    await cryptopunks.mint(deployer.address);
+    await cryptopunksVote.connect(deployer).delegate(i, deployer.address);
+  }
 
   gov = await deployGovernor(deployer, token.address, cryptopunksVote.address);
   snapshotId = await ethers.provider.send('evm_snapshot', []);
@@ -112,7 +115,7 @@ async function propose(proposer: SignerWithAddress) {
   proposalId = await gov.latestProposalIds(proposer.address);
 }
 
-describe('NDAO#castVote/2', () => {
+describe('NDAO#castCyptopunksVote', () => {
   before(async () => {
     signers = await getSigners();
     deployer = signers.deployer;
@@ -137,8 +140,8 @@ describe('NDAO#castVote/2', () => {
       await mineBlock();
       await mineBlock();
 
-      await token.transferFrom(deployer.address, account0.address, 0);
-      await token.transferFrom(deployer.address, account1.address, 1);
+      await cryptopunksVote.connect(deployer).delegate(0, account0.address);
+      await cryptopunksVote.connect(deployer).delegate(1, account1.address);
 
       await gov.connect(account0).castVote(proposalId, 1);
 
@@ -168,8 +171,8 @@ describe('NDAO#castVote/2', () => {
       it('and we add that ForVotes', async () => {
         actor = account0;
 
-        await token.transferFrom(deployer.address, actor.address, 0);
-        await token.transferFrom(deployer.address, actor.address, 1);
+        await cryptopunksVote.connect(deployer).delegate(0, actor.address);
+        await cryptopunksVote.connect(deployer).delegate(1, actor.address);
         await propose(actor);
 
         const beforeFors = (await gov.proposals(proposalId)).forVotes;
@@ -178,15 +181,15 @@ describe('NDAO#castVote/2', () => {
 
         const afterFors = (await gov.proposals(proposalId)).forVotes;
 
-        const balance = (await token.balanceOf(actor.address)).toString();
+        const balance = (await token.balanceOf(actor.address)).add(await cryptopunksVote.getCurrentVotes(actor.address)).toString();
 
         expect(afterFors).to.equal(beforeFors.add(balance));
       });
 
       it("or AgainstVotes corresponding to the caller's support flag.", async () => {
         actor = account1;
-        await token.transferFrom(deployer.address, actor.address, 2);
-        await token.transferFrom(deployer.address, actor.address, 3);
+        await cryptopunksVote.connect(deployer).delegate(2, actor.address);
+        await cryptopunksVote.connect(deployer).delegate(3, actor.address);
 
         await propose(actor);
 
@@ -197,7 +200,7 @@ describe('NDAO#castVote/2', () => {
 
         const afterAgainst = (await gov.proposals(proposalId)).againstVotes;
 
-        const balance = (await token.balanceOf(actor.address)).toString();
+        const balance = (await token.balanceOf(actor.address)).add(await cryptopunksVote.getCurrentVotes(actor.address)).toString();
 
         expect(afterAgainst).to.equal(beforeAgainst.add(balance));
       });

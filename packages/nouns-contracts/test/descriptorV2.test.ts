@@ -91,8 +91,8 @@ describe('NDescriptorV2', () => {
         'ascii',
       ),
     );
-    expect(name).to.equal('Noun 0');
-    expect(description).to.equal('Noun 0 is a member of the Nouns DAO');
+    expect(name).to.equal('Token 0');
+    expect(description).to.equal('Token 0 is a member of the Punk DAO');
     expect(image).to.not.be.undefined;
   }).timeout(1_000_000);
 
