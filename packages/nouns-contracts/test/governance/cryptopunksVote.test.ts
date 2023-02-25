@@ -40,8 +40,8 @@ describe('CryptopunksVote', () => {
 
   const Types = {
     Delegation: [
-      { name: 'punkIndex', type: 'uint256' },
       { name: 'delegatee', type: 'address' },
+      { name: 'punkIndex', type: 'uint256' },
       { name: 'nonce', type: 'uint256' },
       { name: 'expiry', type: 'uint256' },
     ],
@@ -106,17 +106,17 @@ describe('CryptopunksVote', () => {
 //       console.log(await cryptopunksVote.getChainId());
 //       console.log(account0);
 //       await cryptopunks.mint(account0.address);
-//       const punkIndex = 0,
-//         delegatee = account1.address,
+//       const delegatee = account1.address,
+//         punkIndex = 0,
 //         nonce = 0,
 //         expiry = 10e9;
-//       console.log(await cryptopunksVote.getHash(punkIndex, delegatee, nonce, expiry));
+//       console.log(await cryptopunksVote.getHash(delegatee, punkIndex, nonce, expiry));
 //       const signature = await account0._signTypedData({name: 'CryptopunksVote', version: '1.0', chainId: 0, verifyingContract: cryptopunksVote.address}, Types, { punkIndex, delegatee, nonce, expiry });
 //       const { v, r, s } = ethers.utils.splitSignature(signature);
 //
 //       expect(await cryptopunksVote.delegates(0)).to.equal(address(0));
 //
-//       const tx = await (await cryptopunksVote.connect(deployer).delegateBySig(punkIndex, delegatee, nonce, expiry, v, r, s)).wait();
+//       const tx = await (await cryptopunksVote.connect(deployer).delegateBySig(delegatee, punkIndex, nonce, expiry, v, r, s)).wait();
 //
 //       expect(tx.gasUsed.toNumber() < 80000);
 //       expect(await cryptopunksVote.delegates(0)).to.equal(account1.address);
@@ -143,20 +143,20 @@ describe('CryptopunksVote', () => {
 
       expect(await cryptopunksVote.numCheckpoints(account1.address)).to.equal(0);
 
-      const t1 = await cryptopunksVote.connect(account0).delegate(0, account1.address);
+      const t1 = await cryptopunksVote.connect(account0).delegate(account1.address, 0);
       expect(await cryptopunksVote.numCheckpoints(account1.address)).to.equal(1);
       await cryptopunks.connect(account0).transferPunk(account2.address, 0);
       expect(await cryptopunksVote.numCheckpoints(account1.address)).to.equal(1);
-      const t2 = await cryptopunksVote.connect(account2).delegate(0, account2.address);
+      const t2 = await cryptopunksVote.connect(account2).delegate(account2.address, 0);
       expect(await cryptopunksVote.numCheckpoints(account1.address)).to.equal(2);
 
       await cryptopunks.connect(account0).transferPunk(account2.address, 1);
       expect(await cryptopunksVote.numCheckpoints(account1.address)).to.equal(2);
-      const t3 = await cryptopunksVote.connect(account2).delegate(1, account1.address);
+      const t3 = await cryptopunksVote.connect(account2).delegate(account1.address, 1);
       expect(await cryptopunksVote.numCheckpoints(account1.address)).to.equal(3);
 
       await cryptopunks.connect(deployer).transferPunk(account0.address, 2);
-      const t4 = await cryptopunksVote.connect(account2).delegate(1, account0.address);
+      const t4 = await cryptopunksVote.connect(account2).delegate(account0.address, 1);
       expect(await cryptopunksVote.numCheckpoints(account1.address)).to.equal(4);
 
       const checkpoint0 = await cryptopunksVote.checkpoints(account1.address, 0);
@@ -191,13 +191,13 @@ describe('CryptopunksVote', () => {
 
       await minerStop();
 
-      const tx1 = await cryptopunksVote.connect(account0).delegate(0, account1.address); // delegate 1 vote
-      await cryptopunksVote.connect(account0).delegate(1, account1.address); // delegate 1 vote
-      await cryptopunksVote.connect(account0).delegate(2, account1.address); // delegate 1 vote
+      const tx1 = await cryptopunksVote.connect(account0).delegate(account1.address, 0); // delegate 1 vote
+      await cryptopunksVote.connect(account0).delegate(account1.address, 1); // delegate 1 vote
+      await cryptopunksVote.connect(account0).delegate(account1.address, 2); // delegate 1 vote
       const tx2 = await cryptopunks.connect(account0).transferPunk(account2.address, 0); // transfer 1 vote
       const tx3 = await cryptopunks.connect(account0).transferPunk(account2.address, 1); // transfer 1 vote
-      await cryptopunksVote.connect(account2).delegate(0, account2.address); // delegate 1 vote
-      await cryptopunksVote.connect(account2).delegate(1, account2.address); // delegate 1 vote
+      await cryptopunksVote.connect(account2).delegate(account2.address, 0); // delegate 1 vote
+      await cryptopunksVote.connect(account2).delegate(account2.address, 1); // delegate 1 vote
 
       await mineBlock();
       const receipt1 = await tx1.wait();
@@ -221,7 +221,7 @@ describe('CryptopunksVote', () => {
       expect(checkpoint2.votes.toString(), '0');
 
       await cryptopunks.connect(deployer).transferPunk(account0.address, 3);
-      const tx4 = await cryptopunksVote.connect(account0).delegate(3, account1.address); // delegate 1 vote
+      const tx4 = await cryptopunksVote.connect(account0).delegate(account1.address, 3); // delegate 1 vote
 
       expect(await cryptopunksVote.numCheckpoints(account1.address)).to.equal(2);
 
@@ -252,7 +252,7 @@ describe('CryptopunksVote', () => {
 
     it('returns the latest block if >= last checkpoint block', async () => {
       await cryptopunks.mint(deployer.address)
-      const t1 = await (await cryptopunksVote.connect(deployer).delegate(0, account1.address)).wait();
+      const t1 = await (await cryptopunksVote.connect(deployer).delegate(account1.address, 0)).wait();
       await mineBlock();
       await mineBlock();
 
@@ -263,7 +263,7 @@ describe('CryptopunksVote', () => {
     it('returns zero if < first checkpoint block', async () => {
       await mineBlock();
       await cryptopunks.mint(deployer.address)
-      const t1 = await (await cryptopunksVote.connect(deployer).delegate(0, account1.address)).wait();
+      const t1 = await (await cryptopunksVote.connect(deployer).delegate(account1.address, 0)).wait();
       await mineBlock();
       await mineBlock();
 
@@ -275,9 +275,9 @@ describe('CryptopunksVote', () => {
       await cryptopunks.mint(deployer.address)
       await cryptopunks.mint(deployer.address)
       await cryptopunks.mint(deployer.address)
-      const t1 = await (await cryptopunksVote.connect(deployer).delegate(0, account1.address)).wait();
-      await (await cryptopunksVote.connect(deployer).delegate(1, account1.address)).wait();
-      await (await cryptopunksVote.connect(deployer).delegate(2, account1.address)).wait();
+      const t1 = await (await cryptopunksVote.connect(deployer).delegate(account1.address, 0)).wait();
+      await (await cryptopunksVote.connect(deployer).delegate(account1.address, 1)).wait();
+      await (await cryptopunksVote.connect(deployer).delegate(account1.address, 2)).wait();
       await mineBlock();
       await mineBlock();
 
@@ -285,7 +285,7 @@ describe('CryptopunksVote', () => {
       const t2 = await (
         await cryptopunks.connect(deployer).transferPunk(account0.address, 0)
       ).wait();
-      await (await cryptopunksVote.connect(account0).delegate(0, account0.address)).wait();
+      await (await cryptopunksVote.connect(account0).delegate(account0.address, 0)).wait();
       await mineBlock();
       await mineBlock();
 
@@ -293,7 +293,7 @@ describe('CryptopunksVote', () => {
       const t3 = await (
         await cryptopunks.connect(deployer).transferPunk(account0.address, 1)
       ).wait();
-      await (await cryptopunksVote.connect(account0).delegate(1, account0.address)).wait();
+      await (await cryptopunksVote.connect(account0).delegate(account0.address, 1)).wait();
       await mineBlock();
       await mineBlock();
 
@@ -301,7 +301,7 @@ describe('CryptopunksVote', () => {
       const t4 = await (
         await cryptopunks.connect(account0).transferPunk(account1.address, 0)
       ).wait();
-      await (await cryptopunksVote.connect(account1).delegate(0, account1.address)).wait();
+      await (await cryptopunksVote.connect(account1).delegate(account1.address, 0)).wait();
       await mineBlock();
       await mineBlock();
 
@@ -319,7 +319,7 @@ describe('CryptopunksVote', () => {
       await cryptopunks.mint(deployer.address)
 
       // Delegate from Deployer -> Account1
-      await (await cryptopunksVote.connect(deployer).delegate(0, account1.address)).wait();
+      await (await cryptopunksVote.connect(deployer).delegate(account1.address, 0)).wait();
       await mineBlock();
       await mineBlock();
 
@@ -327,7 +327,7 @@ describe('CryptopunksVote', () => {
       expect(await cryptopunksVote.getCurrentVotes(deployer.address)).to.equal(0);
       expect(await cryptopunksVote.getCurrentVotes(account1.address)).to.equal(1);
 
-      await expect(cryptopunksVote.connect(deployer).delegate(0, address(0))).to.be.revertedWith(
+      await expect(cryptopunksVote.connect(deployer).delegate(address(0), 0)).to.be.revertedWith(
         'CryptopunksVote: invalid delegatee',
       );
     });

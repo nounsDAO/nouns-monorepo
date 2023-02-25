@@ -98,7 +98,7 @@ async function reset() {
 
   for (let i = 0 ; i < 10; i ++) {
     await cryptopunks.mint(deployer.address);
-    await cryptopunksVote.connect(deployer).delegate(i, deployer.address);
+    await cryptopunksVote.connect(deployer).delegate(deployer.address, i);
   }
 
   gov = await deployGovernor(deployer, token.address, cryptopunksVote.address);
@@ -140,8 +140,8 @@ describe('NDAO#castCyptopunksVote', () => {
       await mineBlock();
       await mineBlock();
 
-      await cryptopunksVote.connect(deployer).delegate(0, account0.address);
-      await cryptopunksVote.connect(deployer).delegate(1, account1.address);
+      await cryptopunksVote.connect(deployer).delegate(account0.address, 0);
+      await cryptopunksVote.connect(deployer).delegate(account1.address, 1);
 
       await gov.connect(account0).castVote(proposalId, 1);
 
@@ -171,8 +171,8 @@ describe('NDAO#castCyptopunksVote', () => {
       it('and we add that ForVotes', async () => {
         actor = account0;
 
-        await cryptopunksVote.connect(deployer).delegate(0, actor.address);
-        await cryptopunksVote.connect(deployer).delegate(1, actor.address);
+        await cryptopunksVote.connect(deployer).delegate(actor.address, 0);
+        await cryptopunksVote.connect(deployer).delegate(actor.address, 1);
         await propose(actor);
 
         const beforeFors = (await gov.proposals(proposalId)).forVotes;
@@ -188,8 +188,8 @@ describe('NDAO#castCyptopunksVote', () => {
 
       it("or AgainstVotes corresponding to the caller's support flag.", async () => {
         actor = account1;
-        await cryptopunksVote.connect(deployer).delegate(2, actor.address);
-        await cryptopunksVote.connect(deployer).delegate(3, actor.address);
+        await cryptopunksVote.connect(deployer).delegate(actor.address, 2);
+        await cryptopunksVote.connect(deployer).delegate(actor.address, 3);
 
         await propose(actor);
 
