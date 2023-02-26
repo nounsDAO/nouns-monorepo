@@ -21,7 +21,7 @@ const wethContracts: Record<number, string> = {
   [ChainId.Goerli]: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
 };
 const cryptopunksVoteContracts: Record<number, string> = {
-  [ChainId.Goerli]: '0xfF48E862DE2d6111EFAaB57Ed5aB16bDe463974C',
+  [ChainId.Goerli]: '0xfABD98b4976620eE2bc79641126C734FC49e2c81',
 };
 
 

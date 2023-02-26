@@ -19,7 +19,7 @@ const wethContracts: Record<number, string> = {
   [ChainId.Kovan]: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
 };
 const cryptopunksVoteContracts: Record<number, string> = {
-  [ChainId.Goerli]: '0xfF48E862DE2d6111EFAaB57Ed5aB16bDe463974C',
+  [ChainId.Goerli]: '0xfABD98b4976620eE2bc79641126C734FC49e2c81',
 };
 
 const N_ART_NONCE_OFFSET = 4;
