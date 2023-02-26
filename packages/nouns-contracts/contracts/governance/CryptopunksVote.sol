@@ -53,8 +53,6 @@ contract CryptopunksVote is EIP712 {
         require(cryptopunks_ != address (0), "CryptopunksVote: zero address of cryptopunks");
         cryptopunks = ICryptopunks(cryptopunks_);
     }
-function getChainId() external view returns (uint256) {return block.chainid;}
-function getHash(uint256 punkIndex, address delegatee, uint256 nonce, uint256 expiry) external view returns (bytes32) {return _hashTypedDataV4(keccak256(abi.encode(DELEGATION_TYPEHASH, punkIndex, delegatee, nonce, expiry)));}
 
     /**
      * @dev Returns the current amount of votes that `account` has.
@@ -164,14 +162,14 @@ function getHash(uint256 punkIndex, address delegatee, uint256 nonce, uint256 ex
      * IERC5805 not compliant
      */
     function delegateBySig(address delegatee, uint256 punkIndex, uint256 nonce, uint256 expiry, uint8 v, bytes32 r, bytes32 s) external {
-        require(block.timestamp <= expiry, "CryptopunkVote: signature expired");
+        require(block.timestamp <= expiry, "CryptopunksVote: signature expired");
         address signatory = ECDSA.recover(
             _hashTypedDataV4(keccak256(abi.encode(DELEGATION_TYPEHASH, delegatee, punkIndex, nonce, expiry))),
             v,
             r,
             s
         );
-        require(nonce == nonces[signatory]++, "CryptopunkVote: invalid nonce");
+        require(nonce == nonces[signatory]++, "CryptopunksVote: invalid nonce");
         _delegate(signatory, delegatee, punkIndex);
     }
 
