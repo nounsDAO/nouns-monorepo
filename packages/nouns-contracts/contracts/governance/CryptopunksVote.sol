@@ -27,7 +27,7 @@ contract CryptopunksVote is EIP712 {
 
     /// @notice The EIP-712 typehash for the delegation struct used by the contract
     bytes32 public constant DELEGATION_TYPEHASH =
-        keccak256('Delegation(uint256 punkIndex,address delegatee,uint256 nonce,uint256 expiry)');
+        keccak256('Delegation(address delegatee,uint256 punkIndex,uint256 nonce,uint256 expiry)');
 
     /// @notice A record of states for signing / validating signatures
     mapping(address => uint256) public nonces;
@@ -156,7 +156,7 @@ function getHash(uint256 punkIndex, address delegatee, uint256 nonce, uint256 ex
      * IERC5805 not compliant
      */
     function delegate(address delegatee, uint256 punkIndex) external {
-        _delegate(msg.sender, punkIndex, delegatee);
+        _delegate(msg.sender, delegatee, punkIndex);
     }
 
     /**
@@ -166,16 +166,16 @@ function getHash(uint256 punkIndex, address delegatee, uint256 nonce, uint256 ex
     function delegateBySig(address delegatee, uint256 punkIndex, uint256 nonce, uint256 expiry, uint8 v, bytes32 r, bytes32 s) external {
         require(block.timestamp <= expiry, "CryptopunkVote: signature expired");
         address signatory = ECDSA.recover(
-            _hashTypedDataV4(keccak256(abi.encode(DELEGATION_TYPEHASH, punkIndex, delegatee, nonce, expiry))),
+            _hashTypedDataV4(keccak256(abi.encode(DELEGATION_TYPEHASH, delegatee, punkIndex, nonce, expiry))),
             v,
             r,
             s
         );
         require(nonce == nonces[signatory]++, "CryptopunkVote: invalid nonce");
-        _delegate(signatory, punkIndex, delegatee);
+        _delegate(signatory, delegatee, punkIndex);
     }
 
-    function _delegate(address delegator, uint256 punkIndex, address delegatee) internal {
+    function _delegate(address delegator, address delegatee, uint256 punkIndex) internal {
         require(punkIndex < CRYPTOPUNKS_TOTAL_SUPPLY, "CryptopunksVote: invalid punkIndex");
         require(block.number < type(uint32).max, "CryptopunksVote: max block exceeded");
         require(delegatee != address(0), "CryptopunksVote: invalid delegatee");

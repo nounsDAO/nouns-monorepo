@@ -124,6 +124,11 @@
         "internalType": "uint256",
         "name": "punkId",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "salt",
+        "type": "uint256"
       }
     ],
     "name": "generateSeed",

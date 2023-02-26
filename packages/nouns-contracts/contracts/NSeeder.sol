@@ -40,13 +40,17 @@ contract NSeeder is ISeeder, Ownable {
     // punk type, acc type, acc order id => accId
     mapping(uint256 => mapping(uint256 => mapping(uint256 => uint256))) internal accIdByType; // not typeOrderSorted
 
-    function generateSeed(uint256 punkId) external view override returns (ISeeder.Seed memory) {
+    function generateSeed(uint256 punkId, uint256 salt) external view override returns (ISeeder.Seed memory) {
         uint256 pseudorandomness = uint256(
-            keccak256(abi.encodePacked(blockhash(block.number - 1), punkId))
+            keccak256(abi.encodePacked(blockhash(block.number - 1), punkId, salt))
         );
         return generateSeedFromNumber(pseudorandomness);
     }
 
+    /**
+     * @return a seed with sorted accessories
+     * Public for test purposes.
+     */
     function generateSeedFromNumber(uint256 pseudorandomness) public view returns (ISeeder.Seed memory) {
         Seed memory seed;
         uint256 tmp;
@@ -137,18 +141,33 @@ contract NSeeder is ISeeder, Ownable {
             });
         }
 
-        //return sortedSeed(seed);
+        seed.accessories = _sortAccessories(seed.accessories);
         return seed;
     }
 
-    // function sortedSeed(Seed calldata seed) internal returns (Seed memory) {
-    //     for(uint i  = 0; i < seed.accessories.length; i ++)
-    //         if(seed.accessories[i].accType == 3) {
-    //             if(seed.accessories[i].accId == 2 || ) {
-                    
-    //             }
-    //         }
-    // }
+    function _sortAccessories(Accessory[] memory accessories) internal pure returns (Accessory[] memory) {
+        // all operations are safe
+        unchecked {
+            uint256[] memory accessoriesMap = new uint256[](14);
+            for (uint256 i = 0 ; i < accessories.length; i ++) {
+                // just check
+                assert(accessoriesMap[accessories[i].accType] == 0);
+                // 10_000 is a trick so filled entries are not zero
+                accessoriesMap[accessories[i].accType] = 10_000 + accessories[i].accId;
+            }
+
+            Accessory[] memory sortedAccessories = new Accessory[](accessories.length);
+            uint256 j = 0;
+            for (uint256 i = 0 ; i < 14 ; i ++) {
+                if (accessoriesMap[i] != 0) {
+                    sortedAccessories[j] = Accessory(uint16(i), uint16(accessoriesMap[i] - 10_000));
+                    j++;
+                }
+            }
+
+            return sortedAccessories;
+        }
+    }
 
     function setTypeProbability(uint256[] calldata probabilities) external onlyOwner {
         delete cTypeProbability;
