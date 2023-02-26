@@ -384,6 +384,54 @@
   {
     "inputs": [
       {
+        "components": [
+          {
+            "internalType": "uint8",
+            "name": "punkType",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "skinTone",
+            "type": "uint8"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "accType",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint16",
+                "name": "accId",
+                "type": "uint16"
+              }
+            ],
+            "internalType": "struct ISeeder.Accessory[]",
+            "name": "accessories",
+            "type": "tuple[]"
+          }
+        ],
+        "internalType": "struct ISeeder.Seed",
+        "name": "seed",
+        "type": "tuple"
+      }
+    ],
+    "name": "calculateSeedHash",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "",
         "type": "address"

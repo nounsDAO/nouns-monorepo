@@ -5,12 +5,13 @@ task('generate-metadata', 'Generates virtual Metadata')
   .addOptionalParam(
     'nToken',
     'The `NToken` contract address',
-    '0xa513e6e4b8f2a923d98304ec87f64353c4d5c853',
+    '0x8a791620dd6260079bf849dc5567adc3f2fdc318',
     types.string,
   )
   .setAction(async ({ nToken }, { ethers }) => {
-    //const randomNumber = '972416539812324512364354326547893581';
-    const randomNumber = ethers.BigNumber.from(ethers.utils.randomBytes(32));
+//     const randomNumber = '972416539812324512364354326547893581';
+    const randomNumber = ethers.BigNumber.from(ethers.utils.keccak256('0x9f'));
+//     const randomNumber = ethers.BigNumber.from(ethers.utils.randomBytes(32));
     const tokenId = 1;
 
     const nftFactory = await ethers.getContractFactory('NToken');
@@ -52,6 +53,7 @@ task('generate-metadata', 'Generates virtual Metadata')
 //    const tokenMetadata = await descriptorContract.tokenURI(tokenId, seed);
 //    console.log(`Generated Metadata: ${tokenMetadata}`);
 
+    console.log(await descriptorContract.estimateGas.generateSVGImage(seed, {gasLimit: 100_000_000}));
     const tokenImage = await descriptorContract.generateSVGImage(seed, {gasLimit: 100_000_000});
     console.log(`Generated Image: ${tokenImage}`);
   });

@@ -30,5 +30,5 @@ interface ISeeder {
         Accessory[] accessories;
     }
 
-    function generateSeed(uint256 punkId) external view returns (Seed memory);
+    function generateSeed(uint256 punkId, uint256 salt) external view returns (Seed memory);
 }

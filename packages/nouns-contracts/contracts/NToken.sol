@@ -256,10 +256,41 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
     }
 
     /**
+     * @dev calculates seed's hash.
+     * Public for testing purposes.
+     * Accessories are assumed to be sorted.
+     * This is not hash actually, rather encoding.
+     * It is assumed that there is no more than 14 accessories, accType and accId does not exceed 255.
+     */
+    function calculateSeedHash(ISeeder.Seed memory seed) public pure returns (bytes32) {
+        unchecked {
+            uint256 seedHash = uint256(seed.punkType) + (uint256(seed.skinTone) << 8) + (seed.accessories.length << 16);
+            assert(seed.accessories.length < 15); // max 14 accessories
+            for (uint256 i = 0 ; i < seed.accessories.length ; i ++) {
+                seedHash += (uint256(seed.accessories[i].accType) << (16*i + 24)) + (uint256(seed.accessories[i].accId) << (16*i + 32));
+            }
+            return bytes32(seedHash);
+        }
+    }
+
+    /**
      * @notice Mint a Punk with `punkId` to the provided `to` address.
      */
     function _mintTo(address to, uint256 punkId) internal returns (uint256) {
-        ISeeder.Seed memory seed = seeder.generateSeed(punkId);
+        // with sorted accessories
+        ISeeder.Seed memory seed = seeder.generateSeed(punkId, 0); // salt 0
+        bytes32 seedHash = calculateSeedHash(seed);
+
+        uint256 salt = 1;
+        // there is little chance to enter the loop, the probability to make a few steps is almost astronomical
+        // so the risk of high gas usage is accepted here
+        while (seedHashes[seedHash] != 0) {
+            seed = seeder.generateSeed(punkId, salt ++);
+            seedHash = calculateSeedHash(seed);
+        }
+
+        seedHashes[seedHash] = 1;
+
         seeds[punkId].punkType = seed.punkType;
         seeds[punkId].skinTone = seed.skinTone;
             
@@ -270,14 +301,6 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
             }));
         }
         
-        bytes32 seedHash;
-        assembly {
-            let accLen := mload(seed)
-            seedHash := keccak256(seed, add(0x60, mul(accLen, 0x40)))
-        }
-//        require(seedHashes[seedHash] == 0, "Already minted"); //TODO seedHash calculation is incorrect
-        seedHashes[seedHash] = 1;
-
         _mint(owner(), to, punkId);
         emit PunkCreated(punkId, seed);
 
