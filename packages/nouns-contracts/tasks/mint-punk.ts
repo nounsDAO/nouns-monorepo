@@ -5,7 +5,7 @@ task('mint-punk', 'Mints a Punk')
   .addOptionalParam(
     'nToken',
     'The `NToken` contract address',
-    '0x5072c9496199785f747eea3d4fC3fdD53eBc22a6',
+    '0x8A791620dd6260079BF849Dc5567aDC3F2FdC318',
     types.string,
   )
   .setAction(async ({ nToken }, { ethers }) => {

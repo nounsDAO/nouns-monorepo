@@ -7,6 +7,7 @@ task('deploy-and-configure', 'Deploy and configure all contracts')
   .addFlag('autoDeploy', 'Deploy all contracts without user interaction')
   .addFlag('updateConfigs', 'Write the deployed addresses to the SDK and subgraph configs')
   .addOptionalParam('weth', 'The WETH contract address')
+  .addOptionalParam('cryptopunksVote', 'The CryptopunksVote contract address', undefined, types.string)
   .addOptionalParam('punkersdao', 'The punkers DAO contract address')
   .addOptionalParam(
     'auctionTimeBuffer',

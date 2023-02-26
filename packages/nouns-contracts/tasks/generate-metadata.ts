@@ -5,7 +5,7 @@ task('generate-metadata', 'Generates virtual Metadata')
   .addOptionalParam(
     'nToken',
     'The `NToken` contract address',
-    '0x8a791620dd6260079bf849dc5567adc3f2fdc318',
+    '0x8A791620dd6260079BF849Dc5567aDC3F2FdC318',
     types.string,
   )
   .setAction(async ({ nToken }, { ethers }) => {
