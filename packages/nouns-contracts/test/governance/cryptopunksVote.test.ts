@@ -63,64 +63,64 @@ describe('CryptopunksVote', () => {
   describe('delegateBySig', () => {
     beforeEach(async () => {
       snapshotId = await ethers.provider.send('evm_snapshot', []);
+      await cryptopunks.mint(account0.address);
     });
 
     afterEach(async () => {
       await ethers.provider.send('evm_revert', [snapshotId]);
     });
 
-//     it('reverts if the signatory is invalid', async () => {
-//       const delegatee = account1.address,
-//         nonce = 0,
-//         expiry = 0;
-//       const badhex = '0xbad0000000000000000000000000000000000000000000000000000000000000';
-//       await expect(
-//         token.delegateBySig(delegatee, nonce, expiry, 0, badhex, badhex),
-//       ).to.be.revertedWith('ERC721Checkpointable::delegateBySig: invalid signature');
-//     });
-//
-//     it('reverts if the nonce is bad ', async () => {
-//       const delegatee = account1.address,
-//         nonce = 1,
-//         expiry = 0;
-//       const signature = await account0._signTypedData(domain, Types, { delegatee, nonce, expiry });
-//       const { v, r, s } = ethers.utils.splitSignature(signature);
-//       await expect(token.delegateBySig(delegatee, nonce, expiry, v, r, s)).to.be.revertedWith(
-//         'ERC721Checkpointable::delegateBySig: invalid nonce',
-//       );
-//     });
-//
-//     it('reverts if the signature has expired', async () => {
-//       const delegatee = account1.address,
-//         nonce = 0,
-//         expiry = 0;
-//       const signature = await account0._signTypedData(domain, Types, { delegatee, nonce, expiry });
-//       const { v, r, s } = ethers.utils.splitSignature(signature);
-//       await expect(token.delegateBySig(delegatee, nonce, expiry, v, r, s)).to.be.revertedWith(
-//         'ERC721Checkpointable::delegateBySig: signature expired',
-//       );
-//     });
-//
-//     it('delegates on behalf of the signatory', async () => {
-//       console.log(await chainId());
-//       console.log(await cryptopunksVote.getChainId());
-//       console.log(account0);
-//       await cryptopunks.mint(account0.address);
-//       const delegatee = account1.address,
-//         punkIndex = 0,
-//         nonce = 0,
-//         expiry = 10e9;
-//       console.log(await cryptopunksVote.getHash(delegatee, punkIndex, nonce, expiry));
-//       const signature = await account0._signTypedData({name: 'CryptopunksVote', version: '1.0', chainId: 0, verifyingContract: cryptopunksVote.address}, Types, { punkIndex, delegatee, nonce, expiry });
-//       const { v, r, s } = ethers.utils.splitSignature(signature);
-//
-//       expect(await cryptopunksVote.delegates(0)).to.equal(address(0));
-//
-//       const tx = await (await cryptopunksVote.connect(deployer).delegateBySig(delegatee, punkIndex, nonce, expiry, v, r, s)).wait();
-//
-//       expect(tx.gasUsed.toNumber() < 80000);
-//       expect(await cryptopunksVote.delegates(0)).to.equal(account1.address);
-//     });
+    it('reverts if the signatory is invalid', async () => {
+      const delegatee = account1.address,
+        punkIndex = 0,
+        nonce = 0,
+        expiry = 10e9;
+      const signature = await account1._signTypedData(domain, Types, { delegatee, punkIndex, nonce, expiry });
+      const { v, r, s } = ethers.utils.splitSignature(signature);
+      await expect(
+        cryptopunksVote.connect(deployer).delegateBySig(delegatee, punkIndex, nonce, expiry, v, r, s),
+      ).to.be.revertedWith('CryptopunksVote: illegal delegation');
+    });
+
+    it('reverts if the nonce is bad ', async () => {
+      const delegatee = account1.address,
+        punkIndex = 0,
+        nonce = 1,
+        expiry = 10e9;
+      const signature = await account0._signTypedData(domain, Types, { delegatee, punkIndex, nonce, expiry });
+      const { v, r, s } = ethers.utils.splitSignature(signature);
+      await expect(cryptopunksVote.connect(deployer).delegateBySig(delegatee, punkIndex, nonce, expiry, v, r, s)).to.be.revertedWith(
+        'CryptopunksVote: invalid nonce',
+      );
+    });
+
+    it('reverts if the signature has expired', async () => {
+      const delegatee = account1.address,
+        punkIndex = 0,
+        nonce = 0,
+        expiry = 0;
+      const signature = await account0._signTypedData(domain, Types, { delegatee, punkIndex, nonce, expiry });
+      const { v, r, s } = ethers.utils.splitSignature(signature);
+      await expect(cryptopunksVote.connect(deployer).delegateBySig(delegatee, punkIndex, nonce, expiry, v, r, s)).to.be.revertedWith(
+        'CryptopunksVote: signature expired',
+      );
+    });
+
+    it('delegates on behalf of the signatory', async () => {
+      const delegatee = account1.address,
+        punkIndex = 0,
+        nonce = 0,
+        expiry = 10e9;
+      const signature = await account0._signTypedData(domain, Types, { delegatee, punkIndex, nonce, expiry });
+      const { v, r, s } = ethers.utils.splitSignature(signature);
+
+      expect(await cryptopunksVote.delegates(0)).to.equal(address(0));
+
+      // gasLimit because of hardhat
+      await cryptopunksVote.connect(deployer).delegateBySig(delegatee, punkIndex, nonce, expiry, v, r, s, { gasLimit:180000 });
+
+      expect(await cryptopunksVote.delegates(0)).to.equal(account1.address);
+    });
   });
 
   describe('numCheckpoints', () => {

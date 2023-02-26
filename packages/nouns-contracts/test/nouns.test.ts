@@ -113,6 +113,26 @@ describe('NToken', () => {
     await expect(account0AsNounErc721Account.mint()).to.be.reverted;
   });
 
+  it('generated seeds have sorted accessories', async () => {
+    const seederAddress = await nounsToken.seeder();
+    const seeder = NSeederFactory.connect(seederAddress, deployer);
+    for (let i = 0; i < 20 ; i ++) {
+      const n = ethers.BigNumber.from(ethers.utils.keccak256(ethers.BigNumber.from(i).toHexString()));
+      const seed = await seeder.generateSeedFromNumber(n);
+      const accessories = seed.accessories;
+      for (let j = 0 ; j < accessories.length - 1 ; j ++) {
+        expect(accessories[j].accType).to.be.lt(accessories[j+1].accType);
+      }
+      console.log(seed.accessories);
+    }
+  });
+
+  it('calculates correct seed hash', async () => {
+    const seed = {punkType: 1, skinTone: 2, accessories: [{accType: 9, accId: 23}, {accType: 10, accId: 5}, {accType: 11, accId: 15}]}
+    const seedHash = await nounsToken.calculateSeedHash(seed);
+    expect(seedHash).to.be.equal('0x00000000000000000000000000000000000000000000000f0b050a1709030201');
+  });
+
   describe('contractURI', async () => {
     it('should return correct contractURI', async () => {
       expect(await nounsToken.contractURI()).to.eq(
