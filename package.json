@@ -1,9 +1,6 @@
 {
   "name": "root",
   "private": true,
-  "engines" : { 
-    "node" : ">=16.0.0 <17.0.0"
-  },
   "scripts": {
     "lerna": "lerna",
     "build": "lerna run build",
