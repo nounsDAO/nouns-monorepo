@@ -2,9 +2,6 @@
   "name": "@nouns/webapp",
   "version": "0.1.0",
   "private": true,
-  "engines": {
-    "node": ">=16.0.0 <17.0.0"
-  },
   "dependencies": {
     "@apollo/client": "^3.3.21",
     "@davatar/react": "^1.10.3",
