@@ -15,6 +15,7 @@ type LocalePlural = {
 const plurals: LocalePlural = {
   'en-US': en,
   'ja-JP': ja,
+  'ko-KOR': ko,
   pseudo: en,
 };
 
