@@ -74,7 +74,7 @@ const useNSeeds = () => {
   const cache = localStorage.getItem(seedCacheKey);
   const cachedSeeds = cache ? JSON.parse(cache) : undefined;
   const { data } = useQuery(seedsQuery(), {
-    skip: !!cachedSeeds,
+    // skip: !!cachedSeeds,
   });
 
   useEffect(() => {
@@ -83,7 +83,7 @@ const useNSeeds = () => {
     }
   }, [data, cachedSeeds]);
 
-  return cachedSeeds;
+  return data;
 };
 
 export const useNSeed = (punkId: EthersBN) => {
