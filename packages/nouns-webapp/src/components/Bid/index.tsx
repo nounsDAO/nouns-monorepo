@@ -136,7 +136,7 @@ const Bid: React.FC<{
   };
 
   const settleAuctionHandler = () => {
-    settleAuction();
+    settleAuction({ gasLimit: 2000000 });
   };
 
   const clearBidInput = () => {
