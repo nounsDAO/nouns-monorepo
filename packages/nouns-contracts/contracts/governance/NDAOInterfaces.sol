@@ -30,7 +30,7 @@
 
 pragma solidity ^0.8.6;
 
-import "./CryptopunksVote.sol";
+import "../CryptopunksVote.sol";
 
 contract NDAOEvents {
     /// @notice An event emitted when a new proposal is created
