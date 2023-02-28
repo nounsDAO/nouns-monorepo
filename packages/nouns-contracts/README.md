@@ -86,3 +86,7 @@ yarn hardhat run-local
 ```shell
 yarn hardhat generate-metadata --network localhost
 ```
+
+```shell
+yarn hardhat deploy-and-configure --network goerli --start-auction --auto-deploy --auction-duration 1200
+```
