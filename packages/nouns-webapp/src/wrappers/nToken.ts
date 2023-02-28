@@ -118,7 +118,10 @@ export const useNSeed = (punkId: EthersBN) => {
 
 export const useUserVotes = (): number | undefined => {
   const { account } = useEthers();
-  return useAccountVotes(account ?? ethers.constants.AddressZero);
+  const accountVotes = useAccountVotes(account ?? ethers.constants.AddressZero) ?? 0;
+  const cryptopunksVotes = useCryptopunksVotes(account ?? ethers.constants.AddressZero) ?? 0;
+
+  return accountVotes + cryptopunksVotes;
 };
 
 export const useAccountVotes = (account?: string): number | undefined => {
@@ -126,6 +129,17 @@ export const useAccountVotes = (account?: string): number | undefined => {
     useContractCall<[EthersBN]>({
       abi,
       address: config.addresses.nToken,
+      method: 'getCurrentVotes',
+      args: [account],
+    }) || [];
+  return votes?.toNumber();
+};
+
+export const useCryptopunksVotes = (account?: string): number | undefined => {
+  const [votes] =
+    useContractCall<[EthersBN]>({
+      abi,
+      address: config.addresses.cryptopunksVote,
       method: 'getCurrentVotes',
       args: [account],
     }) || [];

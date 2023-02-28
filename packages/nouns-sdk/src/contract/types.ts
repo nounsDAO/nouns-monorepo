@@ -8,6 +8,7 @@ import {
 
 export interface ContractAddresses {
   nToken: string;
+  cryptopunksVote: string;
   nSeeder: string;
   nDescriptor: string;
   nftDescriptor: string;
