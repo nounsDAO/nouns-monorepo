@@ -1,6 +1,7 @@
 {
   "1": {
     "nToken": "0x9C8fF314C9Bc7F6e59A9d9225Fb22946427eDC03",
+    "cryptopunksVote": "0xfABD98b4976620eE2bc79641126C734FC49e2c81",
     "nSeeder": "0xCC8a0FB5ab3C7132c1b2A0109142Fb112c4Ce515",
     "nDescriptor": "0x0Cfdb3Ba1694c2bb2CFACB0339ad7b1Ae5932B63",
     "nftDescriptor": "0x0BBAd8c947210ab6284699605ce2a61780958264",
@@ -13,6 +14,7 @@
   },
   "4": {
     "nToken": "0x3540f99C12F29d3d5B9C8a0796BC81464608102a",
+    "cryptopunksVote": "0xfABD98b4976620eE2bc79641126C734FC49e2c81",
     "nSeeder": "0x37B19B27A175727ea75004c8C64993316B966F5d",
     "nDescriptor": "0xa38B93c409Cd54f2D7b8cdA15C31347Cc1e43c3a",
     "nftDescriptor": "0x216D4281D122DF83FCA051d766C5CB5167e11d75",
@@ -25,6 +27,7 @@
   },
   "5": {
     "nToken": "0xf3cdd09fC3A4fdA4B1fE51984bb927F594bF139C",
+    "cryptopunksVote": "0xfABD98b4976620eE2bc79641126C734FC49e2c81",
     "nSeeder": "0x5ab75c1fA62657a3e65F0fd10DdE86C39682F0a1",
     "nDescriptor": "0x1F5fEf9553491F33ee0b0973A8EC7cc129fC62e0",
     "nftDescriptor": "0x355d813614dDa90C2b9aB62AAfd8Ed678E34F089",
@@ -37,6 +40,7 @@
   },
   "31337": {
     "nToken": "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
+    "cryptopunksVote": "0xfABD98b4976620eE2bc79641126C734FC49e2c81",
     "nSeeder": "0x0165878A594ca255338adfa4d48449f69242Eb8F",
     "nDescriptor": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
     "nftDescriptor": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
