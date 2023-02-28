@@ -39,20 +39,20 @@ const Winner: React.FC<WinnerProps> = props => {
           <Trans>You</Trans>
         </h2>
       </Col>
-      {!isMobile && (
-        <Col>
-          <a
-            href="https://nouns.center/nouners"
-            target="_blank"
-            rel="noreferrer noopener"
-            className={classes.verifyLink}
-          >
-            <Button className={classes.verifyButton}>
-              <Trans>What now?</Trans>
-            </Button>
-          </a>
-        </Col>
-      )}
+      {/*{!isMobile && (*/}
+      {/*  <Col>*/}
+      {/*    <a*/}
+      {/*      href="https://nouns.center/nouners"*/}
+      {/*      target="_blank"*/}
+      {/*      rel="noreferrer noopener"*/}
+      {/*      className={classes.verifyLink}*/}
+      {/*    >*/}
+      {/*      <Button className={classes.verifyButton}>*/}
+      {/*        <Trans>What now?</Trans>*/}
+      {/*      </Button>*/}
+      {/*    </a>*/}
+      {/*  </Col>*/}
+      {/*)}*/}
     </Row>
   ) : (
     <ShortAddress size={40} address={winner} avatar={true} />
@@ -101,20 +101,20 @@ const Winner: React.FC<WinnerProps> = props => {
           </h2>
         </Col>
       </Row>
-      {isWinnerYou && isMobile && (
-        <Row>
-          <a
-            href="https://nouns.center/nouners"
-            target="_blank"
-            rel="noreferrer noopener"
-            className={classes.verifyLink}
-          >
-            <Button className={classes.verifyButton}>
-              <Trans>What now?</Trans>
-            </Button>
-          </a>
-        </Row>
-      )}
+      {/*{isWinnerYou && isMobile && (*/}
+      {/*  <Row>*/}
+      {/*    <a*/}
+      {/*      href="https://nouns.center/nouners"*/}
+      {/*      target="_blank"*/}
+      {/*      rel="noreferrer noopener"*/}
+      {/*      className={classes.verifyLink}*/}
+      {/*    >*/}
+      {/*      <Button className={classes.verifyButton}>*/}
+      {/*        <Trans>What now?</Trans>*/}
+      {/*      </Button>*/}
+      {/*    </a>*/}
+      {/*  </Row>*/}
+      {/*)}*/}
     </>
   );
 };
