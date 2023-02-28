@@ -55,17 +55,26 @@ export const buildSVG = (
 
     rects.forEach(draw => {
       let [drawLength, colorIndex] = draw;
-      const hexColor = paletteColors[colorIndex];
 
       let length = getRectLength(currentX, drawLength, bounds.right);
       while (length > 0) {
         // Do not push rect if transparent
         if (colorIndex !== 0) {
-          svgRects.push(
-            `<rect width="${length * 4}" height="4" x="${currentX * 4}" y="${
-              currentY * 4
-            }" fill="#${hexColor}" />`,
-          );
+          const hexColor = paletteColors[colorIndex].substring(0, 6);
+          const hexOpacity = paletteColors[colorIndex].substring(6);
+          if (hexOpacity == 'ff') {
+            svgRects.push(
+              `<rect width="${length * 4}" height="4" x="${currentX * 4}" y="${
+                currentY * 4
+              }" fill="#${hexColor}" />`,
+            );
+          } else {
+            svgRects.push(
+              `<rect width="${length * 4}" height="4" x="${currentX * 4}" y="${
+                currentY * 4
+              }" fill="#${hexColor}" opacity="0.30" />`,
+            );
+          }
         }
 
         currentX += length;
