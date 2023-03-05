@@ -35,6 +35,9 @@ interface IAuctionHouse {
 
     event AuctionCreated(uint256 indexed tokenId, uint256 startTime, uint256 endTime);
 
+    // just to record what went wrong during _createAuction()
+    event CreateAuctionError(string errorMessage);
+
     event AuctionBid(uint256 indexed tokenId, address sender, uint256 value, bool extended);
 
     event AuctionExtended(uint256 indexed tokenId, uint256 endTime);
