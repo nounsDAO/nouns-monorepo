@@ -196,35 +196,23 @@ contract NAuctionHouse is IAuctionHouse, PausableUpgradeable, ReentrancyGuardUpg
      * catch the revert and pause this contract.
      */
     function _createAuction() internal {
-        uint tokenId = punks.mint();
-        uint256 startTime = block.timestamp;
-        uint256 endTime = startTime + duration;
+         try punks.mint() returns (uint256 tokenId) {
+             uint256 startTime = block.timestamp;
+             uint256 endTime = startTime + duration;
 
-        auction = Auction({
-            tokenId: tokenId,
-            amount: 0,
-            startTime: startTime,
-            endTime: endTime,
-            bidder: payable(0),
-            settled: false
-        });
-        emit AuctionCreated(tokenId, startTime, endTime);
-        // try punks.mint() returns (uint256 tokenId) {
-        //     uint256 startTime = block.timestamp;
-        //     uint256 endTime = startTime + duration;
-
-        //     auction = Auction({
-        //         tokenId: tokenId,
-        //         amount: 0,
-        //         startTime: startTime,
-        //         endTime: endTime,
-        //         bidder: payable(0),
-        //         settled: false
-        //     });
-        //     emit AuctionCreated(tokenId, startTime, endTime);
-        // } catch Error(string memory) {
-        //     _pause();
-        // }
+             auction = Auction({
+                 tokenId: tokenId,
+                 amount: 0,
+                 startTime: startTime,
+                 endTime: endTime,
+                 bidder: payable(0),
+                 settled: false
+             });
+             emit AuctionCreated(tokenId, startTime, endTime);
+         } catch Error(string memory errorMessage) {
+             emit CreateAuctionError(errorMessage);
+             _pause();
+         }
     }
 
     /**
