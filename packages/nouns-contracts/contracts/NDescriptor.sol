@@ -363,7 +363,6 @@ contract NDescriptor is IDescriptor, Ownable {
             name: name,
             description: description,
             parts: _getPartsForSeed(seed)
-//            background: backgrounds[seed.background]
         });
         return NFTDescriptor.constructTokenURI(params, palettes);
     }
@@ -446,28 +445,51 @@ contract NDescriptor is IDescriptor, Ownable {
      * @notice Get all Noun parts for the passed `seed`.
      */
     function _getPartsForSeed(ISeeder.Seed memory seed) internal view returns (bytes[] memory) {
-        bytes[] memory _parts = new bytes[](15);
-        for(uint i = 0; i < seed.accessories.length; i ++) {
-            uint accType = seed.accessories[i].accType;
-            uint accId = seed.accessories[i].accId;
-            bytes[] memory accArr;
-            if(accType == 0) accArr = punkTypes;
-            else if(accType == 1) accArr = hats;
-            else if(accType == 2) accArr = hairs;
-            else if(accType == 3) accArr = beards;
-            else if(accType == 4) accArr = eyeses;
-            else if(accType == 5) accArr = glasseses;
-            else if(accType == 6) accArr = mouths;
-            else if(accType == 7) accArr = teeths;
-            else if(accType == 8) accArr = lipses;
-            else if(accType == 9) accArr = necks;
-            else if(accType == 10) accArr = emotions;
-            else if(accType == 11) accArr = faces;
-            else if(accType == 12) accArr = earses;
-            else if(accType == 13) accArr = noses;
-            else if(accType == 14) accArr = cheekses;
-            _parts[accType] = accArr[accId];
+        bytes[] memory parts = new bytes[](seed.accessories.length + 1);
+
+        uint256 punkTypeId;
+        if (seed.punkType == 0) {
+            punkTypeId = seed.skinTone;
+        } else if (seed.punkType == 1) {
+            punkTypeId = 4 + seed.skinTone;
+        } else {
+            punkTypeId = 6 + seed.punkType;
         }
-        return _parts;
+        parts[0] = punkTypes[punkTypeId];
+
+        uint256[] memory sortedAccessories = new uint256[](14);
+        for (uint256 i = 0 ; i < seed.accessories.length; i ++) {
+            // 10_000 is a trick so filled entries are not zero
+            unchecked {
+                sortedAccessories[seed.accessories[i].accType] = 10_000 + seed.accessories[i].accId;
+            }
+        }
+
+        bytes memory accBuffer;
+        uint256 idx = 1; // starts from 1, 0 is taken by punkType
+        for(uint i = 0; i < 14; i ++) {
+            if (sortedAccessories[i] > 0) {
+                // i is accType
+                uint256 accIdImage = sortedAccessories[i] % 10_000;
+                if(i == 0) accBuffer = necks[accIdImage];
+                else if(i == 1) accBuffer = cheekses[accIdImage];
+                else if(i == 2) accBuffer = faces[accIdImage];
+                else if(i == 3) accBuffer = lipses[accIdImage];
+                else if(i == 4) accBuffer = emotions[accIdImage];
+                else if(i == 5) accBuffer = beards[accIdImage];
+                else if(i == 6) accBuffer = teeths[accIdImage];
+                else if(i == 7) accBuffer = earses[accIdImage];
+                else if(i == 8) accBuffer = hats[accIdImage];
+                else if(i == 9) accBuffer = hairs[accIdImage];
+                else if(i == 10) accBuffer = mouths[accIdImage];
+                else if(i == 11) accBuffer = glasseses[accIdImage];
+                else if(i == 12) accBuffer = eyeses[accIdImage];
+                else if(i == 13) accBuffer = noses[accIdImage];
+                else revert();
+                parts[idx] = accBuffer;
+                idx ++;
+            }
+        }
+        return parts;
     }
 }

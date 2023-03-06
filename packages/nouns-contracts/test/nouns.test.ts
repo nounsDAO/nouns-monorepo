@@ -42,21 +42,25 @@ describe('NToken', () => {
     expect(await nounsToken.ownerOf(0)).to.eq(noundersDAO.address);
     expect(noundersNounCreated?.event).to.eq('PunkCreated');
     expect(noundersNounCreated?.args?.tokenId).to.eq(0);
-    expect(noundersNounCreated?.args?.seed.length).to.equal(5);
+    expect(noundersNounCreated?.args?.seed.length).to.equal(3);
+    expect(noundersNounCreated?.args?.seed.punkType).to.be.a('number');
+    expect(noundersNounCreated?.args?.seed.skinTone).to.be.a('number');
 
     expect(await nounsToken.ownerOf(1)).to.eq(deployer.address);
     expect(ownersNounCreated?.event).to.eq('PunkCreated');
     expect(ownersNounCreated?.args?.tokenId).to.eq(1);
-    expect(ownersNounCreated?.args?.seed.length).to.equal(5);
+    expect(ownersNounCreated?.args?.seed.length).to.equal(3);
+    expect(ownersNounCreated?.args?.seed.punkType).to.be.a('number');
+    expect(ownersNounCreated?.args?.seed.skinTone).to.be.a('number');
 
-    noundersNounCreated?.args?.seed.forEach((item: EthersBN | number) => {
-      const value = typeof item !== 'number' ? item?.toNumber() : item;
-      expect(value).to.be.a('number');
+    noundersNounCreated?.args?.seed.accessories.forEach((item: any) => {
+      expect(item.accType).to.be.a('number');
+      expect(item.accId).to.be.a('number');
     });
 
-    ownersNounCreated?.args?.seed.forEach((item: EthersBN | number) => {
-      const value = typeof item !== 'number' ? item?.toNumber() : item;
-      expect(value).to.be.a('number');
+    ownersNounCreated?.args?.seed.accessories.forEach((item: any) => {
+      expect(item.accType).to.be.a('number');
+      expect(item.accId).to.be.a('number');
     });
   });
 
@@ -77,11 +81,13 @@ describe('NToken', () => {
     expect(await nounsToken.ownerOf(2)).to.eq(deployer.address);
     expect(nounCreated?.event).to.eq('PunkCreated');
     expect(nounCreated?.args?.tokenId).to.eq(2);
-    expect(nounCreated?.args?.seed.length).to.equal(5);
+    expect(nounCreated?.args?.seed.length).to.equal(3);
+    expect(nounCreated?.args?.seed.punkType).to.be.a('number');
+    expect(nounCreated?.args?.seed.skinTone).to.be.a('number');
 
-    nounCreated?.args?.seed.forEach((item: EthersBN | number) => {
-      const value = typeof item !== 'number' ? item?.toNumber() : item;
-      expect(value).to.be.a('number');
+    nounCreated?.args?.seed.accessories.forEach((item: any) => {
+      expect(item.accType).to.be.a('number');
+      expect(item.accId).to.be.a('number');
     });
   });
 
@@ -123,7 +129,6 @@ describe('NToken', () => {
       for (let j = 0 ; j < accessories.length - 1 ; j ++) {
         expect(accessories[j].accType).to.be.lt(accessories[j+1].accType);
       }
-      console.log(seed.accessories);
     }
   });
 

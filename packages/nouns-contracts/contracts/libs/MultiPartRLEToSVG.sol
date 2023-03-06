@@ -88,6 +88,7 @@ library MultiPartRLEToSVG {
             string memory part;
             for (uint256 i = 0; i < image.rects.length; i++) {
                 Rect memory rect = image.rects[i];
+                uint8 length = _getRectLength(currentX, rect.length, image.bounds.right);
                 if (rect.colorIndex != 0) {
                     buffer[cursor] = lookup[rect.length];          // width
                     buffer[cursor + 1] = lookup[currentX];         // x
@@ -102,7 +103,7 @@ library MultiPartRLEToSVG {
                     }
                 }
 
-                currentX += rect.length;
+                currentX += length;
                 if (currentX == image.bounds.right) {
                     currentX = image.bounds.left;
                     currentY++;
@@ -132,6 +133,19 @@ library MultiPartRLEToSVG {
             );
         }
         return chunk;
+    }
+
+    /**
+     * @notice Given an x-coordinate, draw length, and right bound, return the draw
+     * length for a single SVG rectangle.
+     */
+    function _getRectLength(
+        uint256 currentX,
+        uint8 drawLength,
+        uint8 rightBound
+    ) private pure returns (uint8) {
+        uint8 remainingPixelsInLine = rightBound - uint8(currentX);
+        return drawLength <= remainingPixelsInLine ? drawLength : remainingPixelsInLine;
     }
 
     /**
