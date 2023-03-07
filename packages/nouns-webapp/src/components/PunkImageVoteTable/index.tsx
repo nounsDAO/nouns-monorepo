@@ -5,7 +5,7 @@ import { GrayCircle } from '../GrayCircle';
 import { pseudoRandomPredictableShuffle } from '../../utils/pseudoRandomPredictableShuffle';
 import HoverCard from '../HoverCard';
 import PunkHoverCard from '../PunkHoverCard';
-import React, { useReducer, useState } from 'react';
+import React, { useState } from 'react';
 import VoteCardPager from '../VoteCardPager';
 
 interface PunkImageVoteTableProps {

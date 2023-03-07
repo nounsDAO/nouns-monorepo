@@ -1,9 +1,9 @@
-import { Button, Row, Col } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import { useAppSelector } from '../../hooks';
 import classes from './Winner.module.css';
 import ShortAddress from '../ShortAddress';
 import clsx from 'clsx';
-import { isMobileScreen } from '../../utils/isMobile';
+// import { isMobileScreen } from '../../utils/isMobile';
 import { Trans } from '@lingui/macro';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import React from 'react';
@@ -20,7 +20,7 @@ const Winner: React.FC<WinnerProps> = props => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
 
   const isCool = useAppSelector(state => state.application.isCoolBackground);
-  const isMobile = isMobileScreen();
+  // const isMobile = isMobileScreen();
 
   const isWinnerYou =
     activeAccount !== undefined && activeAccount.toLocaleLowerCase() === winner.toLocaleLowerCase();

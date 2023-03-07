@@ -2,7 +2,7 @@ import { Col } from 'react-bootstrap';
 import { StandaloneTokenWithSeed } from '../StandaloneToken';
 import AuctionActivity from '../AuctionActivity';
 import { Row, Container } from 'react-bootstrap';
-import { setStateBackgroundColor } from '../../state/slices/application';
+// import { setStateBackgroundColor } from '../../state/slices/application';
 import { LoadingPunk } from '../Punk';
 import { Auction as IAuction } from '../../wrappers/nAuction';
 import classes from './Auction.module.css';
@@ -15,7 +15,7 @@ import {
   setNextOnDisplayAuctionTokenId,
   setPrevOnDisplayAuctionTokenId,
 } from '../../state/slices/onDisplayAuction';
-import { beige, grey } from '../../utils/nounBgColors';
+// import { beige, grey } from '../../utils/nounBgColors';
 
 interface AuctionProps {
   auction?: IAuction;
