@@ -1,27 +1,27 @@
 import { useAppSelector } from '../../hooks';
 import classes from './NavBar.module.css';
-import logo from '../../assets/logo.svg';
+// import logo from '../../assets/logo.svg';
 import { useEtherBalance } from '@usedapp/core';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Nav, Navbar, Container } from 'react-bootstrap';
-import testnetNoun from '../../assets/testnet-noun.png';
+// import testnetNoun from '../../assets/testnet-noun.png';
 import config, { CHAIN_ID } from '../../config';
 import { utils } from 'ethers';
 import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
-import { ExternalURL, externalURL } from '../../utils/externalURL';
+// import { ExternalURL, externalURL } from '../../utils/externalURL';
 import useLidoBalance from '../../hooks/useLidoBalance';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faBookOpen, faHome} from '@fortawesome/free-solid-svg-icons';
+import { faHome} from '@fortawesome/free-solid-svg-icons';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
-import { faComments } from '@fortawesome/free-solid-svg-icons';
-import { faPlay } from '@fortawesome/free-solid-svg-icons';
+// import { faComments } from '@fortawesome/free-solid-svg-icons';
+// import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import NavBarTreasury from '../NavBarTreasury';
 import NavWallet from '../NavWallet';
 import { Trans } from '@lingui/macro';
 import React, { useState } from 'react';
-import NavLocaleSwitcher from '../NavLocaleSwitcher';
+// import NavLocaleSwitcher from '../NavLocaleSwitcher';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);

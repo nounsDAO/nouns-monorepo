@@ -17,7 +17,7 @@ import CreateProposalPage from './pages/CreateProposal';
 import VotePage from './pages/Vote';
 import NoundersPage from './pages/Nounders';
 import NotFoundPage from './pages/NotFound';
-import Playground from './pages/Playground';
+// import Playground from './pages/Playground';
 import { CHAIN_ID } from './config';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { AvatarProvider } from '@davatar/react';

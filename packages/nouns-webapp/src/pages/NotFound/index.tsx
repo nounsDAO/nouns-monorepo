@@ -1,7 +1,7 @@
-import { Col, Image } from 'react-bootstrap';
+// import { Col, Image } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import classes from './NotFound.module.css';
-import _404img from '../../assets/404noun.png';
+// import _404img from '../../assets/404noun.png';
 import { Trans } from '@lingui/macro';
 
 const NotFoundPage = () => {

@@ -1,6 +1,6 @@
-import Banner from '../../components/Banner';
+// import Banner from '../../components/Banner';
 import Auction from '../../components/Auction';
-import Documentation from '../../components/Documentation';
+// import Documentation from '../../components/Documentation';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setOnDisplayAuctionTokenId } from '../../state/slices/onDisplayAuction';
 import { push } from 'connected-react-router';
