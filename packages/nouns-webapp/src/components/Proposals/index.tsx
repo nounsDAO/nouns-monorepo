@@ -106,7 +106,7 @@ const Proposals = ({ proposals }: { proposals: PartialProposal[] }) => {
         )}
       >
         <h3 className={classes.heading}>
-          <Trans>Proposals</Trans>
+          <Trans>Onchain Proposals</Trans>
         </h3>
         {hasEnoughVotesToPropose ? (
           <div className={classes.nounInWalletBtnWrapper}>
