@@ -1,6 +1,6 @@
 import { Col, Row } from 'react-bootstrap';
 import Section from '../../layout/Section';
-import { useAllProposals, useProposalThreshold } from '../../wrappers/nounsDao';
+import { ProposalState, useAllProposals, useProposalThreshold } from '../../wrappers/nounsDao';
 import Proposals from '../../components/Proposals';
 import classes from './Governance.module.css';
 import { utils } from 'ethers/lib/ethers';
@@ -8,6 +8,17 @@ import clsx from 'clsx';
 import { useTreasuryBalance, useTreasuryUSDValue } from '../../hooks/useTreasuryBalance';
 import { Trans } from '@lingui/macro';
 import { i18n } from '@lingui/core';
+import SnapshotProposals from '../../components/SnapshotProposals';
+
+const snapshotProposals = [
+  {
+    id: '0x7f4db41648494a7406d58a2a621280fb3568aaa87c5f26aadd36b1f657a0e7a9',
+    title: 'Nouns DAO Split (a version of ragequit) Urgency Signaling',
+    status: ProposalState.ACTIVE,
+    startDateMs: 1678406400000,
+    endDateMs: 1679356800000,
+  },
+];
 
 const GovernancePage = () => {
   const { data: proposals } = useAllProposals();
@@ -77,6 +88,7 @@ const GovernancePage = () => {
             </Trans>
           </Col>
         </Row>
+        <SnapshotProposals proposals={snapshotProposals} />
         <Proposals proposals={proposals} />
       </Col>
     </Section>
