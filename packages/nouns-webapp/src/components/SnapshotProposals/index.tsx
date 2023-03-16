@@ -43,7 +43,7 @@ const SnapshotProposals = ({ proposals }: { proposals: SnapshotProposal[] }) => 
     <div className={classes.proposals}>
       <div className={classes.headerWrapper} style={{ marginBottom: '1 rem' }}>
         <h3 className={classes.heading}>
-          <Trans>Snapshot Proposals</Trans>
+          <Trans>Offchain Proposals</Trans>
         </h3>
       </div>
       {proposals?.length ? (
