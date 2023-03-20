@@ -80,14 +80,6 @@ export interface PartialProposal {
   quorumVotes: number;
 }
 
-export interface SnapshotProposal {
-  id: string;
-  title: string;
-  status: ProposalState;
-  startDateMs: number;
-  endDateMs: number;
-}
-
 export interface Proposal extends PartialProposal {
   description: string;
   createdBlock: number;
@@ -117,9 +109,7 @@ export interface PartialProposalSubgraphEntity {
   quorumVotes: string;
 }
 
-export interface ProposalSubgraphEntity
-  extends ProposalTransactionDetails,
-    PartialProposalSubgraphEntity {
+export interface ProposalSubgraphEntity extends ProposalTransactionDetails, PartialProposalSubgraphEntity {
   description: string;
   createdBlock: string;
   createdTransactionHash: string;
