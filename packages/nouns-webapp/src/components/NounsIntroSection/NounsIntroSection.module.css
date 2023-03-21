@@ -44,9 +44,12 @@
   padding: 0;
 }
 
-.iosImgContainer {
-  padding: 0;
-  position: relative;
+.carouselImages {
+  height: 35rem;
+}
+.carouselText {
+  padding-left: 2rem;
+  height: 35rem;
 }
 
 .iosImg {
@@ -58,6 +61,49 @@
 .dlFromAppStoreImg {
   margin-top: 2rem;
   width: 10rem;
+}
+
+
+.lensesImage img {
+  width: 450px;
+  max-width: 100%;
+
+}
+
+.lensesImage img:first-child {
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
+
+}
+
+.lensesImage img:nth-child(2) {
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.lensesImage img:nth-child(3) {
+  display: none;
+}
+
+.lensesVideoContainer {
+  padding: 0;
+  position: relative;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  margin-left: 40px;
+  max-width: 360px;
+  height: 35rem;
+}
+
+.lensesVideo {
+  height: 100%;
+  width: 100%;
+  border-radius: inherit;
+  background-size: cover;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
+.socialPlatformLogo {
+  margin-top: 2rem;
 }
 
 @media (max-width: 992px) {
@@ -93,8 +139,29 @@
     padding: 0 2.5rem;
   }
 
-  .iosImgContainer {
+  .carouselImages {
+    height: auto;
+  }
+
+  .iosImg {
     display: none;
+  }
+
+  .lensesImage img:nth-child(1),
+  .lensesImage img:nth-child(2) {
+    display: none;
+  }
+
+  .lensesImage img:nth-child(3) {
+    width: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: -1rem;
+  }
+
+  .carouselText {
+    height: auto;
   }
 }
 
