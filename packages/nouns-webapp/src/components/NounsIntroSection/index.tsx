@@ -10,7 +10,9 @@ const NounsIntroSection = () => {
 const prophouseLink= (
   <a
     href="https://prop.house/"
-	target="_blank"
+    target="_blank"
+    rel="noreferrer"
+
     className={classes.NounsIntroLinks}
   >
     <Trans>Prop House</Trans>
