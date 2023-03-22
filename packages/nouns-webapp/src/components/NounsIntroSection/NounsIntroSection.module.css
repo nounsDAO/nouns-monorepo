@@ -1,5 +1,5 @@
 .videoSection {
-  padding: 4rem 0 !important;
+  padding: 1.5rem 0 !important;
 }
 
 .iosSection {
@@ -18,12 +18,19 @@
 .textWrapper p {
   font-size: 1.2rem;
 }
+.YouTubeSectionText {
+	margin-left: 20px;
+	padding-right: 0px;
+}
 
 .embedContainer {
   padding: 36% 0 0 0;
   position: relative;
 }
-
+.YouTubeembedContainer {
+  padding: 32% 0 0 0;
+  position: relative;
+}
 .embedContainer iframe {
   position: absolute;
   top: 20px;
@@ -32,9 +39,22 @@
   height: 350px;
 }
 
+.YouTubeembedContainer iframe {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  height: 320px;
+  width: 100%;
+}
+
 .videoSubtitle {
   position: absolute;
   top: 365px;
+}
+
+.YouTubevideoSubtitle {
+  position: absolute;
+  top: 350px;
 }
 
 .videoSubtitle a {
@@ -70,6 +90,7 @@
   }
 
   .textWrapper {
+	  margin-left: 20px;
     padding: 2rem;
   }
 
@@ -82,10 +103,21 @@
     margin-bottom: 60px;
   }
 
+ .YouTubeembedContainer {
+    padding: 56.25% 0 0 0 !important;
+    margin-bottom: 60px;
+  }
+
+
   .embedContainer iframe {
     top: 0;
     height: 100%;
   }
+  .YouTubeembedContainer iframe {
+    top: 0;
+    height: 100%;
+  }
+
 
   .videoSubtitle {
     top: unset;
