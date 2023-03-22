@@ -7,6 +7,15 @@ import nounsIosGif from '../../assets/nouns-ios.gif';
 import dlFromAppStoreImg from '../../assets/download-on-app-store.svg';
 
 const NounsIntroSection = () => {
+const prophouseLink= (
+  <a
+    href="https://prop.house/"
+	target="_blank"
+    className={classes.NounsIntroLinks}
+  >
+    <Trans>Prop House</Trans>
+  </a>
+);
   return (
     <>
       <Section fullWidth={false} className={classes.videoSection}>
@@ -25,7 +34,7 @@ const NounsIntroSection = () => {
             </p>
           </div>
         </Col>
-<Col lg={6} className={classes.embedContainer}>
+	<Col lg={6} className={classes.embedContainer}>
           <iframe
             title="This is Nouns"
             src="https://player.vimeo.com/video/781320182?h=db24612c0a&color=eaeae5&title=0&byline=0&portrait=0"
@@ -47,9 +56,9 @@ const NounsIntroSection = () => {
 
       </Section>
 	<Section fullWidth={false} className={classes.videoSection}>
-  <Col lg={6} className={`${classes.YouTubeembedContainer} order-lg-1 order-2`}>
+  	  <Col lg={6} className={`${classes.YouTubeembedContainer} order-lg-1 order-2`}>
 
-<iframe  src="https://www.youtube.com/embed/oa79nN4gMPs" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen  ></iframe>
+	  <iframe  src="https://www.youtube.com/embed/oa79nN4gMPs" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen  ></iframe>
           <small className={`${classes.videoSubtitle} ${classes.YouTubevideoSubtitle} text-muted`}>
             This video was produced as part of{' '}
             <Nav.Link as={Link} to="/vote/143">
@@ -58,7 +67,7 @@ const NounsIntroSection = () => {
             .
           </small>
         </Col>
-  <Col lg={6} className={`order-lg-2 order-1`}>
+  	  <Col lg={6} className={`order-lg-2 order-1`}>
 
           <div className={`${classes.textWrapper} ${classes.YouTubeSectionText}`}>
             <h1>
@@ -66,11 +75,11 @@ const NounsIntroSection = () => {
             </h1>
             <p>
               <Trans>
-Nouns funds projects of all sizes and in all domains. From naming a frog, through a giant Rose Parade float, to new tech such as Prop House. Anyone can get funded to build with Nouns. 
+		Nouns funds projects of all sizes and in all domains. From naming a frog, through building a giant float at the Rose Parade, to public goods such as {prophouseLink}. Anyone can get funded to build with Nouns. 
               </Trans>
             </p>
           </div>
-        </Col>
+          </Col>
 
       </Section>
 
