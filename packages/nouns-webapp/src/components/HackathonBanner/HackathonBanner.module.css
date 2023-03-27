@@ -1,0 +1,11 @@
+.banner {
+  display: flex;
+  justify-content: center;
+  padding: 10px 15px;
+  background-color: #2A83F6;
+}
+
+.banner a {
+  color: white;
+  text-decoration: none;
+}
