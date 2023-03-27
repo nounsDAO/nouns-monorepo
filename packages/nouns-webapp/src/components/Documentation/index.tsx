@@ -12,8 +12,8 @@ interface DocumentationProps {
 const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) => {
   const cryptopunksLink = (
     <Link
-      text={<Trans>Cryptopunks</Trans>}
-      url="https://www.larvalabs.com/cryptopunks"
+      text={<Trans>CryptoPunks</Trans>}
+      url="https://cryptopunks.app/"
       leavesPage={true}
     />
   );
