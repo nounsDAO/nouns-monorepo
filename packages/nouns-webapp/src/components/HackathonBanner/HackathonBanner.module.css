@@ -1,6 +1,7 @@
 .banner {
   display: flex;
   justify-content: center;
+  font-weight: 500;
   padding: 10px 15px;
   background-color: #2A83F6;
 }
