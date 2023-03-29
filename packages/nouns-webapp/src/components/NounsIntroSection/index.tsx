@@ -36,14 +36,10 @@ const prophouseLink= (
             </p>
           </div>
         </Col>
-	<Col lg={6} className={classes.embedContainer}>
-          <iframe
-            title="This is Nouns"
-            src="https://player.vimeo.com/video/781320182?h=db24612c0a&color=eaeae5&title=0&byline=0&portrait=0"
-            frameBorder="0"
-            allowFullScreen
-          ></iframe>
-          <small className={`${classes.videoSubtitle} text-muted`}>
+	<Col lg={6} className={classes.YouTubeembedContainer}>
+	  <iframe  src="https://www.youtube.com/embed/lOzCA7bZG_k" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen  ></iframe>
+
+          <small className={`${classes.videoSubtitle} ${classes.YouTubevideoSubtitle} text-muted`}>
             This video was commissioned in{' '}
             <Nav.Link as={Link} to="/vote/113">
               Prop 113
