@@ -16,6 +16,7 @@
 
 .navBarCustom {
   padding-bottom: 1rem;
+  padding-top: 0;
 }
 
 @media (max-width: 992px) {
