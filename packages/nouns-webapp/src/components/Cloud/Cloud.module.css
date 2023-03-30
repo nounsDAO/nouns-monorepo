@@ -1,0 +1,30 @@
+.cloud {
+  height: 50px;
+  position: absolute;
+  background-size: contain;
+  background-repeat: no-repeat;
+  -webkit-animation: move ease-in 65s infinite;
+  animation: move ease-in 65s infinite;
+}
+
+@-webkit-keyframes move {
+  100% {
+    /* If the cloud is blinking out of view, make more negative */
+    left: -200px;
+  }
+
+  0% {
+    left: 100%;
+  }
+}
+
+@keyframes move {
+  100% {
+    /* If the cloud is blinking out of view, make more negative */
+    left: -200px;
+  }
+
+  0% {
+    left: 100%;
+  }
+}
