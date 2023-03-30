@@ -7,6 +7,7 @@ interface CarouselProps<T> {
   rootClassName?: string;
   scrollClassName?: string;
   startScrollRight?: boolean;
+  onPageChanged?: (pageIndex: number) => void;
   renderItem: (props: CarouselRenderItemProps<T>) => React.ReactElement<CarouselItemProps>;
 }
 
@@ -20,10 +21,11 @@ const Carousel = <T extends any>({
   rootClassName,
   scrollClassName,
   startScrollRight,
+  onPageChanged,
   renderItem,
 }: CarouselProps<T>) => {
   const scrollEl = useRef<HTMLUListElement>(null);
-  const { scrollRef } = useSnapCarousel();
+  const { scrollRef, activePageIndex } = useSnapCarousel();
 
   useEffect(() => {
     if (startScrollRight && scrollEl.current) {
@@ -31,6 +33,10 @@ const Carousel = <T extends any>({
     }
     scrollRef(scrollEl.current);
   }, [scrollRef, startScrollRight]);
+
+  useEffect(() => {
+    onPageChanged?.(activePageIndex);
+  }, [activePageIndex, onPageChanged]);
 
   return (
     <div className={rootClassName}>

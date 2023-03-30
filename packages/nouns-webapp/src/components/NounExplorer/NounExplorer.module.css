@@ -27,6 +27,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  align-items: center;
 }
 
 .itemSnapPoint {
@@ -55,7 +56,7 @@
   .land {
     height: 5rem;
   }
-  
+
   .land div {
     height: 2rem;
   }
