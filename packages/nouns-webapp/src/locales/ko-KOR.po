@@ -759,7 +759,7 @@ msgstr "Nouns 프로토콜"
 
 #: src/components/Documentation/index.tsx
 msgid "Nouns are an experimental attempt to improve the formation of on-chain avatar communities. While projects such as {cryptopunksLink} have attempted to bootstrap digital community and identity, Nouns attempt to bootstrap identity, community, governance, and a treasury that can be used by the community."
-msgstr "Nouns는 온체인 아바타 공동체의 형성을 개선하기 위한 실험적인 시도입니다. {cryptopunks Link} 등의 프로젝트가 디지털 공동체와 정체성 구축을 시도하고 있는 반면 Nouns는 정체성, 공동체, 경영, 그리고 공동체가 사용할 수 있는 공동 지갑 구축을 시도하고 있습니다."
+msgstr "Nouns는 온체인 아바타 공동체의 형성을 개선하기 위한 실험적인 시도입니다. {cryptopunksLink} 등의 프로젝트가 디지털 공동체와 정체성 구축을 시도하고 있는 반면 Nouns는 정체성, 공동체, 경영, 그리고 공동체가 사용할 수 있는 공동 지갑 구축을 시도하고 있습니다."
 
 #: src/components/Documentation/index.tsx
 msgid "Nouns are generated randomly based Ethereum block hashes. There are no 'if' statements or other rules governing Noun trait scarcity, which makes all Nouns equally rare. As of this writing, Nouns are made up of:"
