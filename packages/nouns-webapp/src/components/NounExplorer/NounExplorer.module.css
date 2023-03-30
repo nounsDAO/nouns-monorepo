@@ -1,5 +1,6 @@
 .explorer {
   background: #a6d5fa;
+  text-align: center;
 }
 
 .carousel {
@@ -8,6 +9,15 @@
 
 .carousel .noun {
   height: 20rem;
+}
+
+.activeNounId {
+  font-family: 'Londrina Solid';
+  position: absolute;
+  right: 0;
+  left: 0;
+  font-size: 3rem;
+  top: 20rem;
 }
 
 .scroll {
@@ -49,6 +59,11 @@
     height: 16rem;
   }
 
+  .activeNounId {
+    font-size: 2rem;
+    top: 12rem;
+  }
+
   .item {
     height: 20rem;
   }
@@ -59,5 +74,11 @@
 
   .land div {
     height: 2rem;
+  }
+}
+
+@media (max-width: 568px) {
+  .activeNounId {
+    top: 14rem;
   }
 }

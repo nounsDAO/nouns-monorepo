@@ -1,13 +1,13 @@
 import { useEffect, useRef } from 'react';
-import { useSnapCarousel } from 'react-snap-carousel';
 import { CarouselItemProps } from '../CarouselItem';
+import { useSnapCarousel } from '../../hooks/useSnapCarousel';
 
 interface CarouselProps<T> {
   items: T[];
   rootClassName?: string;
   scrollClassName?: string;
   startScrollRight?: boolean;
-  onPageChanged?: (pageIndex: number) => void;
+  onPageChanged?: (pageIndex: number, pageCount: number) => void;
   renderItem: (props: CarouselRenderItemProps<T>) => React.ReactElement<CarouselItemProps>;
 }
 
@@ -25,7 +25,7 @@ const Carousel = <T extends any>({
   renderItem,
 }: CarouselProps<T>) => {
   const scrollEl = useRef<HTMLUListElement>(null);
-  const { scrollRef, activePageIndex } = useSnapCarousel();
+  const { scrollRef, refresh, activePageIndex, pages } = useSnapCarousel();
 
   useEffect(() => {
     if (startScrollRight && scrollEl.current) {
@@ -35,20 +35,21 @@ const Carousel = <T extends any>({
   }, [scrollRef, startScrollRight]);
 
   useEffect(() => {
-    onPageChanged?.(activePageIndex);
-  }, [activePageIndex, onPageChanged]);
+    onPageChanged?.(activePageIndex, pages.length);
+    refresh();
+  }, [activePageIndex, onPageChanged, pages.length, refresh]);
 
   return (
     <div className={rootClassName}>
       <ul className={scrollClassName} ref={scrollEl}>
-        <div style={{ flexShrink: 0, width: '50%' }} />
+        <li style={{ flexShrink: 0, width: '50%' }} />
         {items.map(item =>
           renderItem({
             item,
             isSnapPoint: true, // For now, every item is a snap point
           }),
         )}
-        <div style={{ flexShrink: 0, width: '50%' }} />
+        <li style={{ flexShrink: 0, width: '50%' }} />
       </ul>
     </div>
   );
