@@ -1,4 +1,3 @@
-import Auction from '../../components/Auction';
 import Documentation from '../../components/Documentation';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setOnDisplayAuctionNounId } from '../../state/slices/onDisplayAuction';
@@ -8,6 +7,7 @@ import useOnDisplayAuction from '../../wrappers/onDisplayAuction';
 import { useEffect } from 'react';
 import ProfileActivityFeed from '../../components/ProfileActivityFeed';
 import NounsIntroSection from '../../components/NounsIntroSection';
+import NounExplorer from '../../components/NounExplorer';
 
 interface AuctionPageProps {
   initialAuctionId?: number;
@@ -48,7 +48,11 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
 
   return (
     <>
-      <Auction auction={onDisplayAuction} />
+      <NounExplorer auction={onDisplayAuction} />
+      {/*
+        TODO: Switch to auction view when "Bid" is clicked.
+        <Auction auction={onDisplayAuction} /> */
+      }
       {onDisplayAuctionNounId !== undefined && onDisplayAuctionNounId !== lastAuctionNounId ? (
         <ProfileActivityFeed nounId={onDisplayAuctionNounId} />
       ) : (<NounsIntroSection />)}

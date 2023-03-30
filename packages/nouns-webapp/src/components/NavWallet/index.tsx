@@ -103,19 +103,13 @@ const NavWallet: React.FC<NavWalletProps> = props => {
     history,
   );
 
-  const connectWalletButtonStyle = usePickByState(
-    NavBarButtonStyle.WHITE_WALLET,
-    NavBarButtonStyle.COOL_WALLET,
-    NavBarButtonStyle.WARM_WALLET,
-    history,
-  );
+  const connectWalletButtonStyle = NavBarButtonStyle.NONE;
 
   const customDropdownToggle = React.forwardRef<RefType, Props>(({ onClick, value }, ref) => (
     <>
       <div
         className={clsx(
           navDropdownClasses.wrapper,
-          buttonUp ? stateSelectedDropdownClass : statePrimaryButtonClass,
         )}
         onClick={e => {
           e.preventDefault();

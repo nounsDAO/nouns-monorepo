@@ -14,6 +14,8 @@ const NavBarTreasury: React.FC<NavBarTreasuryProps> = props => {
 
   let treasuryStyleClass;
   switch (treasuryStyle) {
+    case NavBarButtonStyle.NONE:
+      break;
     case NavBarButtonStyle.WARM_INFO:
       treasuryStyleClass = classes.warmInfo;
       break;

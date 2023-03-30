@@ -1,0 +1,62 @@
+.explorer {
+  background: #a6d5fa;
+}
+
+.carousel {
+  margin-top: auto;
+}
+
+.carousel .noun {
+  height: 24rem;
+}
+
+.scroll {
+  list-style-type: none;
+  position: relative;
+  display: flex;
+  overflow: auto;
+  scroll-snap-type: x mandatory;
+  margin-bottom: 0;
+}
+
+.item {
+  width: 30rem;
+  height: 34rem;
+  flex-shrink: 0;
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.itemSnapPoint {
+  scroll-snap-align: center;
+}
+
+.land {
+  background: #4e6d45;
+  height: 8rem;
+}
+
+.land div {
+  background: #a2ba4d;
+  height: 3rem;
+}
+
+@media (max-width: 992px) {
+  .carousel .noun {
+    height: 16rem;
+  }
+
+  .item {
+    height: 20rem;
+  }
+
+  .land {
+    height: 5rem;
+  }
+  
+  .land div {
+    height: 2rem;
+  }
+}

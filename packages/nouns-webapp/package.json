@@ -52,6 +52,7 @@
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "react-snap-carousel": "^0.3.1",
     "react-stepz": "^1.0.2",
     "react-swipeable": "^7.0.0",
     "react-tooltip": "^4.2.21",
@@ -59,8 +60,7 @@
     "redux": "^4.1.0",
     "redux-devtools-extension": "^2.13.9",
     "remark-breaks": "^3.0.1",
-    "web-vitals": "^1.0.1",
-    "react-transition-group": "^4.4.5"
+    "web-vitals": "^1.0.1"
   },
   "devDependencies": {
     "@types/bad-words": "^3.0.1",

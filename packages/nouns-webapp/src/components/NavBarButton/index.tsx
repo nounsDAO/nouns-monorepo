@@ -5,6 +5,7 @@ import { faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import navDropdownClasses from '../NavWallet/NavBarDropdown.module.css';
 
 export enum NavBarButtonStyle {
+  NONE,
   COOL_INFO,
   COOL_WALLET,
   WARM_INFO,

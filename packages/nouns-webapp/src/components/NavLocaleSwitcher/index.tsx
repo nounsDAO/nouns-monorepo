@@ -76,7 +76,6 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
       <div
         className={clsx(
           navDropdownClasses.wrapper,
-          buttonUp ? stateSelectedDropdownClass : statePrimaryButtonClass,
         )}
         onClick={e => {
           e.preventDefault();

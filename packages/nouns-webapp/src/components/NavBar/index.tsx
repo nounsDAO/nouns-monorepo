@@ -31,8 +31,6 @@ import clsx from 'clsx';
 
 const NavBar = () => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
-  const stateBgColor = useAppSelector(state => state.application.stateBackgroundColor);
-  const isCool = useAppSelector(state => state.application.isCoolBackground);
   const history = useHistory();
   const treasuryBalance = useTreasuryBalance();
   const daoEtherscanLink = buildEtherscanHoldingsLink(config.addresses.nounsDaoExecutor);
@@ -43,11 +41,7 @@ const NavBar = () => {
     history.location.pathname.includes('/noun/') ||
     history.location.pathname.includes('/auction/');
 
-  const nonWalletButtonStyle = !useStateBg
-    ? NavBarButtonStyle.WHITE_INFO
-    : isCool
-    ? NavBarButtonStyle.COOL_INFO
-    : NavBarButtonStyle.WARM_INFO;
+  const nonWalletButtonStyle = NavBarButtonStyle.NONE;
 
   const closeNav = () => setIsNavExpanded(false);
 
@@ -55,7 +49,7 @@ const NavBar = () => {
     <>
       <Navbar
         expand="xl"
-        style={{ backgroundColor: `${useStateBg ? stateBgColor : 'white'}` }}
+        style={{ backgroundColor: '#A6D5FA' }}
         className={classes.navBarCustom}
         expanded={isNavExpanded}
       >

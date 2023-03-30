@@ -12,6 +12,8 @@ import Image from 'react-bootstrap/Image';
 
 interface StandaloneNounProps {
   nounId: EthersBN;
+  withBackground?: boolean;
+  className?: string;
 }
 interface StandaloneCircularNounProps {
   nounId: EthersBN;
@@ -24,12 +26,14 @@ interface StandaloneNounWithSeedProps {
   shouldLinkToProfile: boolean;
 }
 
-export const getNoun = (nounId: string | EthersBN, seed: INounSeed) => {
+export const getNoun = (nounId: string | EthersBN, seed: INounSeed, withBackground = true) => {
   const id = nounId.toString();
   const name = `Noun ${id}`;
   const description = `Noun ${id} is a member of the Nouns DAO`;
   const { parts, background } = getNounData(seed);
-  const image = `data:image/svg+xml;base64,${btoa(buildSVG(parts, data.palette, background))}`;
+  const image = `data:image/svg+xml;base64,${btoa(
+    buildSVG(parts, data.palette, withBackground ? background : undefined),
+  )}`;
 
   return {
     name,
@@ -39,11 +43,11 @@ export const getNoun = (nounId: string | EthersBN, seed: INounSeed) => {
 };
 
 export const StandaloneNounImage: React.FC<StandaloneNounProps> = (props: StandaloneNounProps) => {
-  const { nounId } = props;
+  const { nounId, withBackground, className } = props;
   const seed = useNounSeed(nounId);
-  const noun = seed && getNoun(nounId, seed);
+  const noun = seed && getNoun(nounId, seed, withBackground);
 
-  return <Image src={noun ? noun.image : ''} fluid />;
+  return <Image className={className} src={noun ? noun.image : ''} fluid />;
 };
 
 const StandaloneNoun: React.FC<StandaloneNounProps> = (props: StandaloneNounProps) => {
