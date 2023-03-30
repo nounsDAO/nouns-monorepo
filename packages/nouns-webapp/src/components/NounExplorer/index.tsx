@@ -3,7 +3,7 @@ import Carousel from '../Carousel';
 import classes from './NounExplorer.module.css';
 import CarouselItem from '../CarouselItem';
 import skull from '../../assets/loading-skull-noun.gif';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { debounce } from '../../utils/debounce';
 import { Image } from 'react-bootstrap';
 import Cloud from '../Cloud';
@@ -66,14 +66,17 @@ const NounExplorer: React.FC<NounExplorerProps> = props => {
   };
   const debouncedPopulateNextNouns = debounce(populateNextNouns, 1_000);
 
-  const onPageChanged = (pageIndex: number, pageCount: number) => {
-    if (!props.auction?.nounId) {
-      return;
-    }
-    // Off by 2 due to current padding approach
-    setActiveNounId(props.auction.nounId.sub(pageCount - pageIndex - 3).toNumber());
-    debouncedPopulateNextNouns(pageIndex);
-  };
+  const onPageChanged = useCallback(
+    (pageIndex: number, pageCount: number) => {
+      if (!props.auction?.nounId) {
+        return;
+      }
+      // Off by 2 due to current padding approach
+      setActiveNounId(props.auction.nounId.sub(pageCount - pageIndex - 3).toNumber());
+      debouncedPopulateNextNouns(pageIndex);
+    },
+    [props.auction, debouncedPopulateNextNouns],
+  );
 
   const clouds = useMemo(() => {
     return range(0, 5).map(i => {
@@ -92,7 +95,9 @@ const NounExplorer: React.FC<NounExplorerProps> = props => {
     <div className={classes.explorer}>
       {/* TODO: use different size clouds rather than scaling */}
       {clouds}
-      {activeNounId !== undefined && (<span className={classes.activeNounId}>Noun {activeNounId}</span>)}
+      {activeNounId !== undefined && (
+        <span className={classes.activeNounId}>Noun {activeNounId}</span>
+      )}
       <Carousel
         rootClassName={classes.carousel}
         scrollClassName={classes.scroll}
