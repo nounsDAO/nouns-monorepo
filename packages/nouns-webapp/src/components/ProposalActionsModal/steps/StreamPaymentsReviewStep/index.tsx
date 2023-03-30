@@ -15,7 +15,7 @@ import ModalTextPrimary from '../../../ModalTextPrimary';
 import useStreamPaymentTransactions from '../../../../hooks/useStreamPaymentTransactions';
 import ShortAddress from '../../../ShortAddress';
 import ReactTooltip from 'react-tooltip';
-import classes from "./StreamPaymentsReviewStep.module.css";
+import classes from './StreamPaymentsReviewStep.module.css';
 
 const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props => {
   const { onNextBtnClick, onPrevBtnClick, state, onDismiss } = props;
@@ -37,14 +37,14 @@ const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props =
 
   return (
     <>
-     <ReactTooltip
-            id={'address-tooltip'}
-            effect={'solid'}
-            className={classes.hover}
-            getContent={dataTip => {
-              return state.address;
-            }}
-          />
+      <ReactTooltip
+        id={'address-tooltip'}
+        effect={'solid'}
+        className={classes.hover}
+        getContent={dataTip => {
+          return state.address;
+        }}
+      />
       <ModalTitle>
         <Trans>Review Streaming Payment Action</Trans>
       </ModalTitle>
@@ -62,11 +62,8 @@ const StreamPaymentsReviewStep: React.FC<FinalProposalActionStepProps> = props =
         <Trans>To</Trans>
       </ModalLabel>
       <ModalTextPrimary>
-        <span 
-           data-for="address-tooltip" 
-           data-tip="address" 
-        >
-        <ShortAddress address={state.address}/>
+        <span data-for="address-tooltip" data-tip="address">
+          <ShortAddress address={state.address} />
         </span>
       </ModalTextPrimary>
 

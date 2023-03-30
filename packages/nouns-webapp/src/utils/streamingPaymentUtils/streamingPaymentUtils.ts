@@ -86,6 +86,6 @@ export function parseStreamCreationCallData(callData: string) {
     endTime,
     streamAmount,
     tokenAddress,
-    nonce
+    nonce,
   };
 }

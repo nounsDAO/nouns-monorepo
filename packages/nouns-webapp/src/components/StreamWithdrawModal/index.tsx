@@ -57,11 +57,12 @@ const StreamWithdrawModalOverlay: React.FC<{
   const [percentStreamedSoFar, setPercentStreamedSoFar] = useState(0);
 
   useEffect(() => {
-      if (elapsedTime) {
-        setPercentStreamedSoFar((100.0*Math.max(0,Math.min(1, (elapsedTime) / (endTime - startTime)))));
-      }
+    if (elapsedTime) {
+      setPercentStreamedSoFar(
+        100.0 * Math.max(0, Math.min(1, elapsedTime / (endTime - startTime))),
+      );
+    }
   }, [elapsedTime, endTime, percentStreamedSoFar, startTime]);
-
 
   const totalStreamValueFormatted = parseFloat(
     isUSDC
@@ -70,7 +71,6 @@ const StreamWithdrawModalOverlay: React.FC<{
   );
 
   const numDecimalPlaces = Math.max(2, countDecimals(totalStreamValueFormatted));
-
 
   if (isLoading) {
     return (
@@ -116,8 +116,6 @@ const StreamWithdrawModalOverlay: React.FC<{
       : ethers.utils.formatUnits(withdrawableBalance?.toString() ?? '').toString(),
   );
 
-  
-
   return (
     <>
       <ModalTitle>
@@ -139,9 +137,7 @@ const StreamWithdrawModalOverlay: React.FC<{
       <ModalLabel>
         <Trans>Streamed so far</Trans>
       </ModalLabel>
-      <h1 className={classes.bold}>
-        {percentStreamedSoFar.toFixed(numDecimalPlaces)}%
-      </h1>
+      <h1 className={classes.bold}>{percentStreamedSoFar.toFixed(numDecimalPlaces)}%</h1>
 
       <ModalLabel>Total stream value</ModalLabel>
 
