@@ -43,20 +43,6 @@ const NavLocaleSwitcher: React.FC<NavLocalSwitcherProps> = props => {
   const [showLanguagePickerModal, setShowLanguagePickerModal] = useState(false);
   const activeLocale = useActiveLocale();
 
-  const statePrimaryButtonClass = usePickByState(
-    navDropdownClasses.whiteInfo,
-    navDropdownClasses.coolInfo,
-    navDropdownClasses.warmInfo,
-    history,
-  );
-
-  const stateSelectedDropdownClass = usePickByState(
-    navDropdownClasses.whiteInfoSelected,
-    navDropdownClasses.dropdownActive,
-    navDropdownClasses.dropdownActive,
-    history,
-  );
-
   const buttonStyleTop = usePickByState(
     navDropdownClasses.whiteInfoSelectedTop,
     navDropdownClasses.coolInfoSelected,

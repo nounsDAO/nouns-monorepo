@@ -36,11 +36,6 @@ const NavBar = () => {
   const daoEtherscanLink = buildEtherscanHoldingsLink(config.addresses.nounsDaoExecutor);
   const [isNavExpanded, setIsNavExpanded] = useState(false);
 
-  const useStateBg =
-    history.location.pathname === '/' ||
-    history.location.pathname.includes('/noun/') ||
-    history.location.pathname.includes('/auction/');
-
   const nonWalletButtonStyle = NavBarButtonStyle.NONE;
 
   const closeNav = () => setIsNavExpanded(false);

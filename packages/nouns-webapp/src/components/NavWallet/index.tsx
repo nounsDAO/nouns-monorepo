@@ -75,20 +75,6 @@ const NavWallet: React.FC<NavWalletProps> = props => {
     deactivate();
   };
 
-  const statePrimaryButtonClass = usePickByState(
-    navDropdownClasses.whiteInfo,
-    navDropdownClasses.coolInfo,
-    navDropdownClasses.warmInfo,
-    history,
-  );
-
-  const stateSelectedDropdownClass = usePickByState(
-    navDropdownClasses.whiteInfoSelected,
-    navDropdownClasses.dropdownActive,
-    navDropdownClasses.dropdownActive,
-    history,
-  );
-
   const mobileTextColor = usePickByState(
     'rgba(140, 141, 146, 1)',
     'rgba(121, 128, 156, 1)',
