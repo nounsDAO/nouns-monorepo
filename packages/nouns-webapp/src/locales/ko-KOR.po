@@ -27,7 +27,7 @@ msgstr "... 그리고 {0} 더"
 
 #: src/components/Documentation/index.tsx
 msgid "100% of Noun auction proceeds are trustlessly sent to the treasury."
-msgstr "100%의 경매 수익금은 제 3자의 개입 없이 공동 지갑으로 보내집니다."
+msgstr "100%의 나운 경매 수익금은 제 3자의 개입 없이 공동 지갑으로 보내집니다."
 
 #: src/pages/Nounders/index.tsx
 msgid "3.5 artists, 6.5 technologists"
@@ -181,11 +181,11 @@ msgstr "반대"
 
 #: src/components/NounderNounContent/index.tsx
 msgid "All Noun auction proceeds are sent to the"
-msgstr "모든 Noun 경매 수익금은 공동 지갑으로 보내집니다"
+msgstr "모든 나운 경매 수익금은 공동 지갑으로 보내집니다"
 
 #: src/pages/Nounders/index.tsx
 msgid "All Noun auction proceeds are sent to the Nouns DAO. For this reason, we, the project's founders (‘Nounders’) have chosen to compensate ourselves with Nouns. Every 10th noun for the first 5 years of the project will be sent to our multisig (5/10), where it will be vested and distributed to individual Nounders."
-msgstr "모든 Noun 경매의 수익금은 나운스 분권적 자율 조직(Nouns DAO)로 보내집니다. 그래서 우리 설립자들 ('Nounders')은 Nouns로 스스로에게 보상하기로 결정했습니다. 첫 5년 동안 매번 10번째 Noun은 멀티시그(5/10)로 보내진 후 개별 나운더스(Nounders)에게 배포됩니다."
+msgstr "모든 나운 경매의 수익금은 나운스 분권적 자율 조직(Nouns DAO)로 보내집니다. 그래서 우리 설립자들 ('Nounders')은 Nouns로 스스로에게 보상하기로 결정했습니다. 첫 5년 동안 매번 10번째 Noun은 멀티시그(5/10)로 보내진 후 개별 나운더스(Nounders)에게 배포됩니다."
 
 #: src/components/Documentation/index.tsx
 msgid "All Nouns are members of Nouns DAO."
@@ -242,7 +242,7 @@ msgstr "배경"
 
 #: src/components/Documentation/index.tsx
 msgid "Because 100% of Noun auction proceeds are sent to Nouns DAO, Nounders have chosen to compensate themselves with Nouns. Every 10th Noun for the first 5 years of the project (Noun ids #0, #10, #20, #30 and so on) will be automatically sent to the Nounder's multisig to be vested and shared among the founding members of the project."
-msgstr "Noun 경매 수익금의 100%가 Nouns DAO(나운스 분권적 자율 조직)로 보내지기 때문에 나운더스들(Nounders)은 그들 스스로에게 Nouns로 보상하기로 결정했습니다. 첫 5년 동안 매회 10번째 Noun(Noun ID #0, #10, #20, #30 등)이 자동으로 나운더스의 멀티시그로 보내져 프로젝트의 설립 멤버들에게 주어지고 공유됩니다."
+msgstr "Noun 경매 수익금의 100%가 나운스 분권적 자율 조직로 (Nouns DAO) 보내지기 때문에 나운더스들(Nounders)은 그들 스스로에게 나운스로 보상하기로 결정했습니다. 첫 5년 동안 매회 10번째 나운(Noun ID #0, #10, #20, #30 등)이 자동으로 나운더스의 멀티시그로 보내져 프로젝트의 설립 멤버들에게 주어지고 공유됩니다."
 
 #: src/pages/CreateProposal/index.tsx
 msgid "Because this proposal contains a USDC fund transfer action we've added an additional ETH transaction to refill the TokenBuyer contract. This action allows to DAO to continue to trustlessly acquire USDC to fund proposals like this."
@@ -351,7 +351,7 @@ msgstr "지갑에 접속"
 
 #: src/components/Documentation/index.tsx
 msgid "Consequently, the Nouns Foundation anticipates being the steward of the veto power until Nouns DAO is ready to implement an alternative, and therefore wishes to clarify the conditions under which it would exercise this power."
-msgstr "따라서 Nouns Foundation(나운스 재단)은 Nouns DAO(나운스 분권적 자율 조직)가 대안을 실행할 준비가 될 때까지 거부권의 관리자가 되는 것으로 예상하므로 이 권한을 행사할 조건을 명확히 하고 싶어 한다."
+msgstr "따라서 나운스 재단은 (Nouns Foundation) 나운스 분권적 자율 조직가 (Nouns DAO) 대안을 실행할 준비가 될 때까지 거부권의 관리자가 되는 것으로 예상하므로 이 권한을 행사할 조건을 명확히 하고 싶어 한다."
 
 #: src/components/CreateProposalButton/index.tsx
 #: src/pages/CreateProposal/index.tsx
@@ -775,7 +775,7 @@ msgstr "Nouns의 예술품은 {publicDomainLink}에 있습니다."
 
 #: src/pages/Governance/index.tsx
 msgid "Nouns govern <0>Nouns DAO</0>. Nouns can vote on proposals or delegate their vote to a third party. A minimum of <1>{nounsRequired} {0}</1> is required to submit proposals."
-msgstr "Nouns가 경영하는 <0> Nouns DAO(나운스 분권적 자율 조직)</0>입니다. Nouns는 제안에 대해 투표하거나 제3자에게 투표를 위임할 수 있으나 제안 제출에는 최소 <1>{nounsRequired}{0}</1> 이상이 필요합니다."
+msgstr "Nouns가 경영하는 <0>Nouns DAO(나운스 분권적 자율 조직)</0>입니다. Nouns는 제안에 대해 투표하거나 제3자에게 투표를 위임할 수 있으나 제안 제출에는 최소 <1>{nounsRequired} {0}</1> 이상이 필요합니다."
 
 #: src/components/DelegationCandidateInfo/index.tsx
 msgid "Now has"
@@ -1098,7 +1098,7 @@ msgstr "압축된 부분은 온체인에서 하나의 base64로 인코딩된 SVG
 
 #: src/pages/Playground/index.tsx
 msgid "The playground was built using the {nounsProtocolLink}. Noun's traits are determined by the Noun Seed. The seed was generated using {nounsAssetsLink} and rendered using the {nounsSDKLink}."
-msgstr "놀이터는 {nouns Protocol Link}를 사용하여 만들어졌습니다. Noun의 특징은 나운 시드(Noun Seed)에 의해 결정됩니다. 시드는 {nouns AssetsLink}에서 만들어지고 {nounsSDKLink}를 이용하여 보내집니다."
+msgstr "놀이터는 {nounsProtocolLink}를 사용하여 만들어졌습니다. Noun의 특징은 나운 시드(Noun Seed)에 의해 결정됩니다. 시드는 {nounsAssetsLink}에서 만들어지고 {nounsSDKLink}를 이용하여 보내집니다."
 
 #: src/components/Documentation/index.tsx
 msgid "The proposal veto right was initially envisioned as a temporary solution to the problem of ‘51% attacks’ on the Nouns DAO treasury. While Nounders initially believed that a healthy distribution of Nouns would be sufficient protection for the DAO, a more complete understanding of the incentives and risks has led to general consensus within the Nounders, the Nouns Foundation, and the wider community that a more robust game-theoretic solution should be implemented before the right is removed."
