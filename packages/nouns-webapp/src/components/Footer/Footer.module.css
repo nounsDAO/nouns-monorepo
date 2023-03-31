@@ -7,16 +7,21 @@
   display: flex;
 }
 
-.footerSignature {
-  margin: auto auto 0 auto;
+.footerLinks {
+  display: flex;
+  flex-flow: row wrap;
   font-family: 'PT Root UI' !important;
   font-weight: 500;
   font-size: 18px;
+  color: var(--brand-black) !important;
+}
+
+.footerSignature {
   padding-bottom: 4rem;
   padding-top: 2rem;
-  color: var(--brand-black) !important;
   display: flex;
-  flex-flow: row wrap;
+  width: 100%;
+  flex-direction: column;
   align-items: center;
   justify-content: flex-start;
 }

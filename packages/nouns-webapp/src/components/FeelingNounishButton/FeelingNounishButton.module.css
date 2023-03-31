@@ -1,0 +1,14 @@
+.container > p {
+  font-size: 2.25rem;
+  margin-bottom: 0.3rem;
+  text-align: center;
+  font-family: 'Londrina Solid' !important;
+  color: black !important;
+}
+
+.container > img {
+  cursor: pointer;
+  width: 200px;
+  margin-bottom: 2rem;
+  height: auto;
+}
