@@ -59,23 +59,23 @@ const propLink= (
             <Nav.Link as={Link} to="/vote/190">
               Prop 190
             </Nav.Link>
-            .
           </small>
         </Col>
 
       </Section>
 	<Section fullWidth={false} className={classes.videoSection}>
-  	  <Col lg={6} className={`${classes.YouTubeembedContainer} order-lg-1 order-2`}>
 
+  	  <Col lg={6} className={`${classes.YouTubeembedContainer} order-lg-1 order-2`}>
 	  <iframe  src="https://www.youtube.com/embed/oa79nN4gMPs" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen  ></iframe>
+
           <small className={`${classes.videoSubtitle} ${classes.YouTubevideoSubtitle} text-muted`}>
-            This video was produced as part of{' '}
+            This video was produced as part of {' '}
             <Nav.Link as={Link} to="/vote/143">
-              Prop 143
+              Prop 143 
             </Nav.Link>
-            .
           </small>
         </Col>
+
   	  <Col lg={6} className={`order-lg-2 order-1`}>
 
           <div className={`${classes.textWrapper} ${classes.YouTubeSectionText}`}>
