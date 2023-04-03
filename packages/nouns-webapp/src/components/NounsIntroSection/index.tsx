@@ -18,16 +18,7 @@ const prophouseLink= (
     <Trans>Prop House</Trans>
   </a>
 );
-const propLink= (
-  <a
-    href="/vote"
-    rel="noreferrer"
 
-    className={classes.NounsIntroLinks}
-  >
-    <Trans>proposals</Trans>
-  </a>
-);
 
   return (
     <>
