@@ -1,9 +1,11 @@
 .videoSection {
-  padding: 4rem 0 !important;
+  padding-top: 4rem !important;
+  padding-bottom: 2rem 0 !important;
 }
 
 .iosSection {
-  padding: 0 !important;
+  padding-top: 4rem;
+  padding-bottom: 0 !important;
 }
 
 .textWrapper {
@@ -19,8 +21,18 @@
   font-size: 1.2rem;
 }
 
+.YouTubeSectionText {
+  margin-left: 20px;
+  padding-right: 0px;
+}
+
 .embedContainer {
   padding: 36% 0 0 0;
+  position: relative;
+}
+
+.YouTubeembedContainer {
+  padding: 32% 0 0 0;
   position: relative;
 }
 
@@ -32,9 +44,22 @@
   height: 350px;
 }
 
+.YouTubeembedContainer iframe {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  height: 320px;
+  width: 100%;
+}
+
 .videoSubtitle {
   position: absolute;
   top: 365px;
+}
+
+.YouTubevideoSubtitle {
+  position: absolute;
+  top: 350px;
 }
 
 .videoSubtitle a {
@@ -66,10 +91,12 @@
   }
 
   .iosSection {
+    padding-top: 0;
     padding-bottom: 2rem;
   }
 
   .textWrapper {
+    margin-left: 20px;
     padding: 2rem;
   }
 
@@ -82,10 +109,21 @@
     margin-bottom: 60px;
   }
 
+ .YouTubeembedContainer {
+    padding: 56.25% 0 0 0 !important;
+    margin-bottom: 60px;
+  }
+
+
   .embedContainer iframe {
     top: 0;
     height: 100%;
   }
+  .YouTubeembedContainer iframe {
+    top: 0;
+    height: 100%;
+  }
+
 
   .videoSubtitle {
     top: unset;
@@ -100,6 +138,15 @@
 
 @media (max-width: 576px) {
   .videoSubtitle {
-    bottom: -50px;
+    bottom: -30px;
   }
+}
+
+.NounsIntroLinks {
+	color: #d63c5e;
+}
+
+.NounsIntroLinks:hover {
+	color: #d63c5e;
+
 }
