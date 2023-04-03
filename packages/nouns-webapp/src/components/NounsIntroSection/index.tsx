@@ -18,6 +18,17 @@ const prophouseLink= (
     <Trans>Prop House</Trans>
   </a>
 );
+const propLink= (
+  <a
+    href="/vote"
+    rel="noreferrer"
+
+    className={classes.NounsIntroLinks}
+  >
+    <Trans>proposals</Trans>
+  </a>
+);
+
   return (
     <>
       <Section fullWidth={false} className={classes.videoSection}>
@@ -73,8 +84,9 @@ const prophouseLink= (
             </h1>
             <p>
               <Trans>
-		Nouns funds projects of all sizes and in all domains. From naming a frog, through building a giant float at the Rose Parade, to public goods such as {prophouseLink}. Anyone can get funded to build with Nouns. 
-              </Trans>
+There’s a way for everyone to get involved with Nouns. From whimsical endeavors like naming a frog, to ambitious projects like constructing a giant float for the Rose Parade, or even crypto infrastructure like {prophouseLink}. Nouns funds projects of all sizes and domains.
+
+  </Trans>
             </p>
           </div>
           </Col>
