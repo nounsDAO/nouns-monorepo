@@ -81,7 +81,7 @@ const NounsIntroSection = () => {
             </h1>
             <p>
               <Trans>
-                There’s a way for everyone to get involved with Nouns. From whimsical endeavors like
+                There's a way for everyone to get involved with Nouns. From whimsical endeavors like
                 naming a frog, to ambitious projects like constructing a giant float for the Rose
                 Parade, or even crypto infrastructure like {prophouseLink}. Nouns funds projects of
                 all sizes and domains.
