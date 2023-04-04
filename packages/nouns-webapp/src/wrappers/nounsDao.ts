@@ -109,7 +109,9 @@ export interface PartialProposalSubgraphEntity {
   quorumVotes: string;
 }
 
-export interface ProposalSubgraphEntity extends ProposalTransactionDetails, PartialProposalSubgraphEntity {
+export interface ProposalSubgraphEntity
+  extends ProposalTransactionDetails,
+    PartialProposalSubgraphEntity {
   description: string;
   createdBlock: string;
   createdTransactionHash: string;

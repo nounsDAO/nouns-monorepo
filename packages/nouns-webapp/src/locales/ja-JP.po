@@ -156,7 +156,7 @@ msgstr ""
 #~ msgstr "提案するトランザクションを追加する"
 
 #: src/pages/CreateProposal/index.tsx
-msgid "Add one or more proposal actions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 2 days and last for 5 days."
+msgid "Add one or more proposal actions and describe your proposal for the community. The proposal cannot be modified after submission, so please verify all information before submitting. The voting period will begin after 5 days and last for 5 days."
 msgstr ""
 
 #: src/pages/CreateProposal/index.tsx
@@ -292,6 +292,10 @@ msgstr "体"
 msgid "Born"
 msgstr "誕生"
 
+#: src/components/NounsIntroSection/index.tsx
+msgid "Build With Nouns. Get Funded."
+msgstr ""
+
 #: src/components/StreamWithdrawModal/index.tsx
 #: src/pages/Vote/index.tsx
 msgid "Cancel"
@@ -364,7 +368,7 @@ msgid "Create Proposal"
 msgstr "提案を作成"
 
 #: src/components/Documentation/index.tsx
-msgid "Cryptopunks"
+msgid "CryptoPunks"
 msgstr "クリプトパンクス"
 
 #: src/components/CurrentDelegatePannel/index.tsx
@@ -861,6 +865,10 @@ msgstr ""
 #~ msgid "Preview:"
 #~ msgstr "プレビュー："
 
+#: src/components/NounsIntroSection/index.tsx
+msgid "Prop House"
+msgstr ""
+
 #: src/components/ProposalEditor/index.tsx
 msgid "Proposal"
 msgstr "提案"
@@ -1123,6 +1131,10 @@ msgstr "アカウントの投票中にエラーが発生しました。"
 
 #: src/components/StreamWithdrawModal/index.tsx
 msgid "There was an error withdrawing to your wallet."
+msgstr ""
+
+#: src/components/NounsIntroSection/index.tsx
+msgid "There's a way for everyone to get involved with Nouns. From whimsical endeavors like naming a frog, to ambitious projects like constructing a giant float for the Rose Parade, or even crypto infrastructure like {prophouseLink}. Nouns funds projects of all sizes and domains."
 msgstr ""
 
 #: src/components/ProfileActivityFeed/index.tsx
