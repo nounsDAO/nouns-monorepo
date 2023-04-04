@@ -114,7 +114,14 @@ const CreateProposalPage = () => {
 
       setTokenBuyerTopUpETH(ethNeeded ?? '0');
     }
-  }, [ethNeeded, handleAddProposalAction, handleRemoveProposalAction, proposalTransactions, tokenBuyerTopUpEth, totalUSDCPayment]);
+  }, [
+    ethNeeded,
+    handleAddProposalAction,
+    handleRemoveProposalAction,
+    proposalTransactions,
+    tokenBuyerTopUpEth,
+    totalUSDCPayment,
+  ]);
 
   const handleTitleInput = useCallback(
     (title: string) => {

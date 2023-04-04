@@ -11,11 +11,7 @@ interface DocumentationProps {
 
 const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) => {
   const cryptopunksLink = (
-    <Link
-      text={<Trans>CryptoPunks</Trans>}
-      url="https://cryptopunks.app/"
-      leavesPage={true}
-    />
+    <Link text={<Trans>CryptoPunks</Trans>} url="https://cryptopunks.app/" leavesPage={true} />
   );
   const playgroundLink = (
     <Link text={<Trans>Playground</Trans>} url="/playground" leavesPage={false} />
@@ -35,7 +31,11 @@ const Documentation = (props: DocumentationProps = { backgroundColor: '#FFF' }) 
     />
   );
   return (
-    <Section fullWidth={false} className={classes.documentationSection} style={{ background: props.backgroundColor }}>
+    <Section
+      fullWidth={false}
+      className={classes.documentationSection}
+      style={{ background: props.backgroundColor }}
+    >
       <Col lg={{ span: 10, offset: 1 }}>
         <div className={classes.headerWrapper}>
           <h1>

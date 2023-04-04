@@ -21,7 +21,7 @@
   font-size: 1.2rem;
 }
 
-.YouTubeSectionText {
+.youtubeSectionText {
   margin-left: 20px;
   padding-right: 0px;
 }
@@ -31,7 +31,7 @@
   position: relative;
 }
 
-.YouTubeembedContainer {
+.youtubeEmbedContainer {
   padding: 32% 0 0 0;
   position: relative;
 }
@@ -44,7 +44,7 @@
   height: 350px;
 }
 
-.YouTubeembedContainer iframe {
+.youtubeEmbedContainer iframe {
   position: absolute;
   top: 20px;
   left: 0;
@@ -57,7 +57,7 @@
   top: 365px;
 }
 
-.YouTubevideoSubtitle {
+.youtubeVideoSubtitle {
   position: absolute;
   top: 350px;
 }
@@ -109,21 +109,19 @@
     margin-bottom: 60px;
   }
 
- .YouTubeembedContainer {
+  .youtubeEmbedContainer {
     padding: 56.25% 0 0 0 !important;
     margin-bottom: 60px;
   }
-
 
   .embedContainer iframe {
     top: 0;
     height: 100%;
   }
-  .YouTubeembedContainer iframe {
+  .youtubeEmbedContainer iframe {
     top: 0;
     height: 100%;
   }
-
 
   .videoSubtitle {
     top: unset;
@@ -142,11 +140,10 @@
   }
 }
 
-.NounsIntroLinks {
-	color: #d63c5e;
+.nounsIntroLinks {
+  color: #d63c5e;
 }
 
-.NounsIntroLinks:hover {
-	color: #d63c5e;
-
+.nounsIntroLinks:hover {
+  color: #d63c5e;
 }
