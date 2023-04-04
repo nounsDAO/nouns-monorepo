@@ -37,10 +37,9 @@ const SelectProposalActionStep: React.FC<ProposalActionModalStepProps> = props =
         <Trans>
           <hr />
           <b>Guidelines</b>
-          <hr />
-          • Do <b>NOT</b> request ETH to trade into USDC. Instead, request USDC directly.
-          <br />
-          • Do <b>NOT</b> transfer funds externally to create an ETH or USDC stream. Instead, use the "Stream Funds" action.
+          <hr />• Do <b>NOT</b> request ETH to trade into USDC. Instead, request USDC directly.
+          <br />• Do <b>NOT</b> transfer funds externally to create an ETH or USDC stream. Instead,
+          use the "Stream Funds" action.
           <hr />
           <b>Supported Action Types</b>
           <hr />
