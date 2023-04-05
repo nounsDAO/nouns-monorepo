@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { CarouselItemProps } from '../CarouselItem';
 import { useSnapCarousel } from '../../hooks/useSnapCarousel';
+import classes from './Carousel.module.css';
 
 interface CarouselProps<T> {
   items: T[];
@@ -42,14 +43,14 @@ const Carousel = <T extends any>({
   return (
     <div className={rootClassName}>
       <ul className={scrollClassName} ref={scrollEl}>
-        <li style={{ flexShrink: 0, width: '50%' }} />
+        <li className={`${classes.padding} ${classes.paddingLeft}`} />
         {items.map(item =>
           renderItem({
             item,
             isSnapPoint: true, // For now, every item is a snap point
           }),
         )}
-        <li style={{ flexShrink: 0, width: '50%' }} />
+        <li className={`${classes.padding} ${classes.paddingRight}`} />
       </ul>
     </div>
   );

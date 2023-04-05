@@ -5,10 +5,19 @@
 
 .carousel {
   margin-top: auto;
+  overflow: visible;
 }
 
 .carousel .noun {
   height: 20rem;
+  position: absolute;
+  margin-bottom: 9rem;
+}
+
+.carousel .underground {
+  position: absolute;
+  height: 8rem;
+  width: 100%;
 }
 
 .activeNounId {
@@ -24,20 +33,24 @@
   list-style-type: none;
   position: relative;
   display: flex;
-  overflow: auto;
+  /* Overlay happy on Chrome and mobile, but not FF */
+  overflow-x: overlay;
   scroll-snap-type: x mandatory;
   margin-bottom: 0;
+  overflow-y: visible;
 }
 
 .item {
   width: 30rem;
-  height: 34rem;
+  height: 42rem;
   flex-shrink: 0;
   margin-top: auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
+  overflow: visible;
+  position: relative;
 }
 
 .itemSnapPoint {
@@ -47,6 +60,7 @@
 .land {
   background: #4e6d45;
   height: 8rem;
+  margin-top: -9rem;
 }
 
 .land div {
@@ -57,11 +71,16 @@
 @media (max-width: 992px) {
   .carousel .noun {
     height: 16rem;
+    margin-bottom: 5rem;
+  }
+
+  .carousel .underground {
+    height: 5rem;
   }
 
   .activeNounId {
     font-size: 2rem;
-    top: 12rem;
+    top: 8rem;
   }
 
   .item {
@@ -70,6 +89,7 @@
 
   .land {
     height: 5rem;
+    margin-top: -5rem;
   }
 
   .land div {
@@ -79,6 +99,6 @@
 
 @media (max-width: 568px) {
   .activeNounId {
-    top: 14rem;
+    top: 10rem;
   }
 }

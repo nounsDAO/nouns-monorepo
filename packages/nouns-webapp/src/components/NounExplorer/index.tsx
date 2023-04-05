@@ -112,6 +112,7 @@ const NounExplorer: React.FC<NounExplorerProps> = props => {
             itemSnapPointClassName={classes.itemSnapPoint}
           >
             <Image className={classes.noun} src={item.src || skull} />
+            <div className={classes.underground}>skull</div>
           </CarouselItem>
         )}
       />

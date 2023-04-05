@@ -1,0 +1,20 @@
+.padding {
+  flex-shrink: 0;
+}
+
+.paddingRight {
+  width: 50%;
+}
+
+.paddingLeft {
+  width: 50%;
+}
+
+@media (max-width: 568px) {
+  .paddingLeft {
+    /* width: 0%; */
+  }
+  .paddingRight {
+    /* width: 0%; */
+  }
+}
