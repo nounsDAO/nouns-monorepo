@@ -49,10 +49,12 @@ const NounsIntroSection = () => {
             <Nav.Link as={Link} to="/vote/113">
               Prop 113
             </Nav.Link>{' '}
-            and minted in{' '}
-            <Nav.Link as={Link} to="/vote/190">
-              Prop 190
-            </Nav.Link>
+            <span className={classes.videoMintedSubtitle}>
+              and minted in{' '}
+              <Nav.Link as={Link} to="/vote/190">
+                Prop 190
+              </Nav.Link>
+            </span>
           </small>
         </Col>
       </Section>
