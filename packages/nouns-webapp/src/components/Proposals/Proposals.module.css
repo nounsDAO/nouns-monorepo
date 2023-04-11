@@ -10,10 +10,57 @@
   margin-bottom: 1rem;
 }
 
+.section {
+  margin: 0 auto;
+  width: 100%;
+}
+
+.sectionWrapper {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.headerWrapper { 
+  display: flex; 
+  flex-direction: row;
+  justify-content: space-between;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tabs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;  
+  margin: 0;
+}
+
+.tab {
+  background-color: #fff;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  font-family: 'Londrina Solid';
+  padding: 10px 14px 6px;
+  font-size: 32px;
+  line-height: 1;
+}
+
+.activeTab {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #fff;
+  padding: 10px 14px 10px;
+  position: relative;
+  top: 2px;
+}
+
 .heading {
   font-family: 'Londrina Solid';
   font-size: 40px;
   margin: 0 !important;
+  width: auto;
 }
 
 .generateBtn {
@@ -132,7 +179,22 @@
   padding-top: 0.8rem;
 }
 
+.alert {
+  width: 100%;
+}
+
+.proposalsList {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 @media (max-width: 992px) {
+  .headerWrapper { 
+    display: flex; 
+    flex-direction: column;
+    justify-content: start;
+  }
+
   .desktopCountdownWrapper {
     display: none;
   }

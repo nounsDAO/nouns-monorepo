@@ -1,5 +1,5 @@
 import { PartialProposal, ProposalState, useProposalThreshold } from '../../wrappers/nounsDao';
-import { Alert, Button } from 'react-bootstrap';
+import { Alert, Button, Col } from 'react-bootstrap';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
 import { useHistory } from 'react-router-dom';
@@ -19,6 +19,8 @@ import DelegationModal from '../DelegationModal';
 import { i18n } from '@lingui/core';
 import en from 'dayjs/locale/en';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
+import Section from '../../layout/Section';
+import CandidateCard from '../CandidateCard';
 
 dayjs.extend(relativeTime);
 
@@ -86,6 +88,9 @@ const Proposals = ({ proposals }: { proposals: PartialProposal[] }) => {
   const hasEnoughVotesToPropose = account !== undefined && connectedAccountNounVotes >= threshold;
   const hasNounBalance = (useUserNounTokenBalance() ?? 0) > 0;
 
+  const [activeTab, setActiveTab] = useState(0);
+  const tabs = ['Proposals', 'Candidates'];
+
   const nullStateCopy = () => {
     if (account !== null) {
       if (connectedAccountNounVotes > 0) {
@@ -99,57 +104,71 @@ const Proposals = ({ proposals }: { proposals: PartialProposal[] }) => {
   return (
     <div className={classes.proposals}>
       {showDelegateModal && <DelegationModal onDismiss={() => setShowDelegateModal(false)} />}
-      <div
-        className={clsx(
-          classes.headerWrapper,
-          !hasEnoughVotesToPropose ? classes.forceFlexRow : '',
-        )}
-      >
-        <h3 className={classes.heading}>
-          <Trans>Proposals</Trans>
-        </h3>
-        {hasEnoughVotesToPropose ? (
-          <div className={classes.nounInWalletBtnWrapper}>
-            <div className={classes.submitProposalButtonWrapper}>
-              <Button
-                className={classes.generateBtn}
-                onClick={() => history.push('create-proposal')}
-              >
-                <Trans>Submit Proposal</Trans>
-              </Button>
+      <div className={classes.sectionWrapper}>
+        <Section fullWidth={false} className={classes.section}>
+          <Col
+            lg={10}
+            className={clsx(
+              classes.headerWrapper,
+              !hasEnoughVotesToPropose ? classes.forceFlexRow : '',
+            )}
+          >
+            <div className={classes.tabs}>
+              {tabs.map((tab, index) => (
+                <button
+                  className={clsx(classes.tab, index === activeTab ? classes.activeTab : '')}
+                  onClick={() => setActiveTab(index)}
+                >
+                  <Trans>{tab}</Trans>
+                </button>
+              ))}
             </div>
 
-            {hasNounBalance && (
-              <div className={classes.delegateBtnWrapper}>
-                <Button
-                  className={classes.changeDelegateBtn}
-                  onClick={() => setShowDelegateModal(true)}
-                >
-                  <Trans>Delegate</Trans>
-                </Button>
+            {hasEnoughVotesToPropose ? (
+              <div className={classes.nounInWalletBtnWrapper}>
+                <div className={classes.submitProposalButtonWrapper}>
+                  <Button
+                    className={classes.generateBtn}
+                    onClick={() => history.push('create-proposal')}
+                  >
+                    <Trans>Submit Proposal</Trans>
+                  </Button>
+                </div>
+
+                {hasNounBalance && (
+                  <div className={classes.delegateBtnWrapper}>
+                    <Button
+                      className={classes.changeDelegateBtn}
+                      onClick={() => setShowDelegateModal(true)}
+                    >
+                      <Trans>Delegate</Trans>
+                    </Button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className={clsx('d-flex', classes.nullStateSubmitProposalBtnWrapper)}>
+                {!isMobile && <div className={classes.nullStateCopy}>{nullStateCopy()}</div>}
+                <div className={classes.nullBtnWrapper}>
+                  <Button className={classes.generateBtnDisabled}>
+                    <Trans>Submit Proposal</Trans>
+                  </Button>
+                </div>
+                {!isMobile && hasNounBalance && (
+                  <div className={classes.delegateBtnWrapper}>
+                    <Button
+                      className={classes.changeDelegateBtn}
+                      onClick={() => setShowDelegateModal(true)}
+                    >
+                      <Trans>Delegate</Trans>
+                    </Button>
+                  </div>
+                )}
               </div>
             )}
-          </div>
-        ) : (
-          <div className={clsx('d-flex', classes.nullStateSubmitProposalBtnWrapper)}>
-            {!isMobile && <div className={classes.nullStateCopy}>{nullStateCopy()}</div>}
-            <div className={classes.nullBtnWrapper}>
-              <Button className={classes.generateBtnDisabled}>
-                <Trans>Submit Proposal</Trans>
-              </Button>
-            </div>
-            {!isMobile && hasNounBalance && (
-              <div className={classes.delegateBtnWrapper}>
-                <Button
-                  className={classes.changeDelegateBtn}
-                  onClick={() => setShowDelegateModal(true)}
-                >
-                  <Trans>Delegate</Trans>
-                </Button>
-              </div>
-            )}
-          </div>
-        )}
+            {/* </div> */}
+          </Col>
+        </Section>
       </div>
       {isMobile && <div className={classes.nullStateCopy}>{nullStateCopy()}</div>}
       {isMobile && hasNounBalance && (
@@ -159,67 +178,107 @@ const Proposals = ({ proposals }: { proposals: PartialProposal[] }) => {
           </Button>
         </div>
       )}
-      {proposals?.length ? (
-        proposals
-          .slice(0)
-          .reverse()
-          .map((p, i) => {
-            const isPropInStateToHaveCountDown =
-              p.status === ProposalState.PENDING ||
-              p.status === ProposalState.ACTIVE ||
-              p.status === ProposalState.QUEUED;
+      <Section fullWidth={false} className={classes.section}>
+        {activeTab === 0 && (
+          <Col lg={10} className={classes.proposalsList}>
+            {proposals?.length ? (
+              proposals
+                .slice(0)
+                .reverse()
+                .map((p, i) => {
+                  const isPropInStateToHaveCountDown =
+                    p.status === ProposalState.PENDING ||
+                    p.status === ProposalState.ACTIVE ||
+                    p.status === ProposalState.QUEUED;
 
-            const countdownPill = (
-              <div className={classes.proposalStatusWrapper}>
-                <div className={clsx(proposalStatusClasses.proposalStatus, classes.countdownPill)}>
-                  <div className={classes.countdownPillContentWrapper}>
-                    <span className={classes.countdownPillClock}>
-                      <ClockIcon height={16} width={16} />
-                    </span>{' '}
-                    <span className={classes.countdownPillText}>
-                      {getCountdownCopy(p, currentBlock || 0, activeLocale)}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            );
+                  const countdownPill = (
+                    <div className={classes.proposalStatusWrapper}>
+                      <div
+                        className={clsx(
+                          proposalStatusClasses.proposalStatus,
+                          classes.countdownPill,
+                        )}
+                      >
+                        <div className={classes.countdownPillContentWrapper}>
+                          <span className={classes.countdownPillClock}>
+                            <ClockIcon height={16} width={16} />
+                          </span>{' '}
+                          <span className={classes.countdownPillText}>
+                            {getCountdownCopy(p, currentBlock || 0, activeLocale)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
 
-            return (
-              <a
-                className={clsx(classes.proposalLink, classes.proposalLinkWithCountdown)}
-                href={`/vote/${p.id}`}
-                key={i}
-              >
-                <div className={classes.proposalInfoWrapper}>
-                  <span className={classes.proposalTitle}>
-                    <span className={classes.proposalId}>{i18n.number(parseInt(p.id || '0'))}</span>{' '}
-                    <span>{p.title}</span>
-                  </span>
+                  return (
+                    <a
+                      className={clsx(classes.proposalLink, classes.proposalLinkWithCountdown)}
+                      href={`/vote/${p.id}`}
+                      key={i}
+                    >
+                      <div className={classes.proposalInfoWrapper}>
+                        <span className={classes.proposalTitle}>
+                          <span className={classes.proposalId}>
+                            {i18n.number(parseInt(p.id || '0'))}
+                          </span>{' '}
+                          <span>{p.title}</span>
+                        </span>
 
-                  {isPropInStateToHaveCountDown && (
-                    <div className={classes.desktopCountdownWrapper}>{countdownPill}</div>
-                  )}
-                  <div className={clsx(classes.proposalStatusWrapper, classes.votePillWrapper)}>
-                    <ProposalStatus status={p.status}></ProposalStatus>
-                  </div>
-                </div>
+                        {isPropInStateToHaveCountDown && (
+                          <div className={classes.desktopCountdownWrapper}>{countdownPill}</div>
+                        )}
+                        <div
+                          className={clsx(classes.proposalStatusWrapper, classes.votePillWrapper)}
+                        >
+                          <ProposalStatus status={p.status}></ProposalStatus>
+                        </div>
+                      </div>
 
-                {isPropInStateToHaveCountDown && (
-                  <div className={classes.mobileCountdownWrapper}>{countdownPill}</div>
-                )}
-              </a>
-            );
-          })
-      ) : (
-        <Alert variant="secondary">
-          <Alert.Heading>
-            <Trans>No proposals found</Trans>
-          </Alert.Heading>
-          <p>
-            <Trans>Proposals submitted by community members will appear here.</Trans>
-          </p>
-        </Alert>
-      )}
+                      {isPropInStateToHaveCountDown && (
+                        <div className={classes.mobileCountdownWrapper}>{countdownPill}</div>
+                      )}
+                    </a>
+                  );
+                })
+            ) : (
+              <Alert variant="secondary" className={classes.alert}>
+                <Alert.Heading>
+                  <Trans>No proposals found</Trans>
+                </Alert.Heading>
+                <p>
+                  <Trans>Proposals submitted by community members will appear here.</Trans>
+                </p>
+              </Alert>
+            )}
+          </Col>
+        )}
+        {activeTab === 1 && (
+          <Col lg={10} className={classes.proposalsList}>
+            {proposals?.length ? (
+              proposals
+                .slice(0)
+                .reverse()
+                .map((p, i) => {
+                  return (
+                    <div>
+                      <CandidateCard candidate={p} key={p.id} />
+                    </div>
+                  );
+                })
+            ) : (
+              <Alert variant="secondary" className={classes.alert}>
+                <Alert.Heading>
+                  <Trans>No candidates found</Trans>
+                </Alert.Heading>
+                <p>
+                  <Trans>Candidates submitted by community members will appear here.</Trans>
+                </p>
+              </Alert>
+            )}
+          </Col>
+        )}
+      </Section>
     </div>
   );
 };

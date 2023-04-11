@@ -1,0 +1,25 @@
+.sponsors {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+  gap: 5px;
+}
+.sponsorAvatar {
+  max-width: 32px;
+  width: 100%;
+}
+.sponsorAvatar img {
+  width: 100%;
+  border-radius: 100%;
+}
+.emptySponsorSpot {
+  width: 32px;
+  height: 32px;
+  border-radius: 100%;
+  background: #E8E8EC;
+  
+  border: 1px dashed #A7A7AA;
+}
