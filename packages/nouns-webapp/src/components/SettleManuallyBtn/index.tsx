@@ -13,9 +13,9 @@ const SettleManuallyBtn: React.FC<{
 }> = props => {
   const { settleAuctionHandler, auction } = props;
 
-  const MINS_TO_ENABLE_MANUAL_SETTLEMENT = 5;
+  const MINS_TO_ENABLE_MANUAL_SETTLEMENT = 0;
 
-  const [settleEnabled, setSettleEnabled] = useState(false);
+  const [settleEnabled, setSettleEnabled] = useState(true);
   const [auctionTimer, setAuctionTimer] = useState(MINS_TO_ENABLE_MANUAL_SETTLEMENT * 60);
   const auctionTimerRef = useRef(auctionTimer); // to access within setTimeout
   auctionTimerRef.current = auctionTimer;
