@@ -142,8 +142,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         DynamicQuorumParams calldata dynamicQuorumParams_,
         uint32 lastMinuteWindowInBlocks_,
         uint32 objectionPeriodDurationInBlocks_,
-        uint32 proposalUpdatablePeriodInBlocks_,
-        uint256 voteSnapshotBlockSwitchProposalId_
+        uint32 proposalUpdatablePeriodInBlocks_
     ) public virtual {
         if (address(ds.timelock) != address(0)) revert CanOnlyInitializeOnce();
         if (msg.sender != ds.admin) revert AdminOnly();
@@ -165,7 +164,6 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         ds._setLastMinuteWindowInBlocks(lastMinuteWindowInBlocks_);
         ds._setObjectionPeriodDurationInBlocks(objectionPeriodDurationInBlocks_);
         ds._setProposalUpdatablePeriodInBlock(proposalUpdatablePeriodInBlocks_);
-        ds._setVoteSnapshotBlockSwitchProposalId(voteSnapshotBlockSwitchProposalId_);
     }
 
     /**

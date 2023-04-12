@@ -158,7 +158,7 @@ library NounsDAOV3Proposals {
         NounsDAOStorageV3.ProposerSignature[] memory proposerSignatures,
         ProposalTxs memory txs,
         string memory description
-    ) internal returns (uint256) {
+    ) external returns (uint256) {
         if (proposerSignatures.length == 0) revert MustProvideSignatures();
         checkProposaTxs(txs);
         uint256 proposalId = ds.proposalCount = ds.proposalCount + 1;
@@ -190,7 +190,7 @@ library NounsDAOV3Proposals {
         return proposalId;
     }
 
-    function cancelSig(NounsDAOStorageV3.StorageV3 storage ds, bytes calldata sig) internal {
+    function cancelSig(NounsDAOStorageV3.StorageV3 storage ds, bytes calldata sig) external {
         bytes32 sigHash = keccak256(sig);
         ds.cancelledSigs[msg.sender][sigHash] = true;
 
