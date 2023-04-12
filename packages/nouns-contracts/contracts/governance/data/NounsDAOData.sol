@@ -65,6 +65,8 @@ contract NounsDAOData is OwnableUpgradeable {
         address indexed signer,
         bytes sig,
         uint256 expirationTimestamp,
+        address proposer,
+        string slug,
         bytes32 encodedPropHash,
         string reason
     );
@@ -217,10 +219,14 @@ contract NounsDAOData is OwnableUpgradeable {
         address signer,
         bytes memory sig,
         uint256 expirationTimestamp,
+        address proposer,
+        string memory slug,
         bytes32 encodedPropHash,
         string memory reason
     ) external {
-        emit SignatureAdded(msg.sender, signer, sig, expirationTimestamp, encodedPropHash, reason);
+        if (!propCandidates[proposer][keccak256(bytes(slug))]) revert SlugDoesNotExist();
+
+        emit SignatureAdded(msg.sender, signer, sig, expirationTimestamp, proposer, slug, encodedPropHash, reason);
     }
 
     /**
