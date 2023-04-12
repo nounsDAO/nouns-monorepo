@@ -152,7 +152,8 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
         uint256[] values,
         string[] signatures,
         bytes[] calldatas,
-        string description
+        string description,
+        string updateMessage
     );
 
     /// @notice Emitted when a proposal is set to have an objection period
@@ -172,8 +173,8 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
 
     /// @notice An event emitted when the proposal updatable period is set
     event ProposalUpdatablePeriodSet(
-        uint32 oldProposalUpdatablePeriodInBlock,
-        uint32 newProposalUpdatablePeriodInBlock
+        uint32 oldProposalUpdatablePeriodInBlocks,
+        uint32 newProposalUpdatablePeriodInBlocks
     );
 
     /// @notice Emitted when the proposal id at which vote snapshot block changes is set
@@ -547,7 +548,7 @@ contract NounsDAOStorageV3 {
         mapping(address => mapping(bytes32 => bool)) cancelledSigs;
         uint32 lastMinuteWindowInBlocks;
         uint32 objectionPeriodDurationInBlocks;
-        uint32 proposalUpdatablePeriodInBlock;
+        uint32 proposalUpdatablePeriodInBlocks;
         /// @notice The proposal at which to start using `startBlock` instead of `creationBlock` for vote snapshots
         /// @dev To be zeroed-out and removed in a V3.1 fix version once the switch takes place
         uint256 voteSnapshotBlockSwitchProposalId;
@@ -612,7 +613,7 @@ contract NounsDAOStorageV3 {
     struct ProposerSignature {
         bytes sig;
         address signer;
-        uint32 expirationTimestamp;
+        uint256 expirationTimestamp;
     }
 
     struct ProposalCondensed {

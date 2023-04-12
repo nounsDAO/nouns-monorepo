@@ -9,7 +9,7 @@ import {
   afterEach,
 } from 'matchstick-as/assembly/index';
 import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
-import { Proposal, ProposalPreviousVersion } from '../src/types/schema';
+import { Proposal, ProposalVersion } from '../src/types/schema';
 import {
   handleProposalCreatedWithRequirements,
   handleVoteCast,
@@ -157,7 +157,7 @@ describe('nouns-dao', () => {
     });
 
     describe('field setting', () => {
-      test('copies values from ParsedProposalV3', () => {
+      test('copies values from ParsedProposalV3 and saves a ProposalVersion', () => {
         const proposalEvent = new ParsedProposalV3();
         proposalEvent.id = '42';
         proposalEvent.proposer = proposerWithDelegate.toHexString();
@@ -175,6 +175,8 @@ describe('nouns-dao', () => {
         proposalEvent.description = 'some description';
         proposalEvent.title = 'some title';
         proposalEvent.status = STATUS_PENDING;
+        proposalEvent.txHash = Bytes.fromI32(11223344).toHexString();
+        proposalEvent.logIndex = '2';
 
         handleProposalCreated(proposalEvent);
         const proposal = Proposal.load('42')!;
@@ -184,16 +186,28 @@ describe('nouns-dao', () => {
         assert.bigIntEquals(proposal.values![0], proposalEvent.values[0]);
         assert.stringEquals(proposal.signatures![0], proposalEvent.signatures[0]);
         assert.bytesEquals(proposal.calldatas![0], proposalEvent.calldatas[0]);
-        assert.bigIntEquals(proposal.createdTimestamp!, proposalEvent.createdTimestamp);
-        assert.bigIntEquals(proposal.createdBlock!, proposalEvent.createdBlock);
-        assert.bytesEquals(proposal.createdTransactionHash!, proposalEvent.createdTransactionHash);
-        assert.bigIntEquals(proposal.startBlock!, proposalEvent.startBlock);
-        assert.bigIntEquals(proposal.endBlock!, proposalEvent.endBlock);
-        assert.bigIntEquals(proposal.proposalThreshold!, proposalEvent.proposalThreshold);
-        assert.bigIntEquals(proposal.quorumVotes!, proposalEvent.quorumVotes);
-        assert.stringEquals(proposal.description!, proposalEvent.description);
-        assert.stringEquals(proposal.title!, proposalEvent.title);
-        assert.stringEquals(proposal.status!, proposalEvent.status);
+        assert.bigIntEquals(proposal.createdTimestamp, proposalEvent.createdTimestamp);
+        assert.bigIntEquals(proposal.createdBlock, proposalEvent.createdBlock);
+        assert.bytesEquals(proposal.createdTransactionHash, proposalEvent.createdTransactionHash);
+        assert.bigIntEquals(proposal.startBlock, proposalEvent.startBlock);
+        assert.bigIntEquals(proposal.endBlock, proposalEvent.endBlock);
+        assert.bigIntEquals(proposal.proposalThreshold, proposalEvent.proposalThreshold);
+        assert.bigIntEquals(proposal.quorumVotes, proposalEvent.quorumVotes);
+        assert.stringEquals(proposal.description, proposalEvent.description);
+        assert.stringEquals(proposal.title, proposalEvent.title);
+        assert.stringEquals(proposal.status, proposalEvent.status);
+
+        const versionId = proposalEvent.txHash.concat('-').concat(proposalEvent.logIndex);
+        const propVersion = ProposalVersion.load(versionId)!;
+        assert.stringEquals('42', propVersion.proposal);
+        assert.bigIntEquals(proposalEvent.createdTimestamp, propVersion.createdAt);
+        assert.bytesEquals(changetype<Bytes[]>(proposalEvent.targets)[0], propVersion.targets![0]);
+        assert.bigIntEquals(proposalEvent.values[0], propVersion.values![0]);
+        assert.stringEquals(proposalEvent.signatures[0], propVersion.signatures![0]);
+        assert.bytesEquals(proposalEvent.calldatas[0], propVersion.calldatas![0]);
+        assert.stringEquals(proposalEvent.description, propVersion.description);
+        assert.stringEquals(proposalEvent.title, propVersion.title);
+        assert.stringEquals('', propVersion.updateMessage);
       });
 
       test('copies values from governance and dynamic quorum', () => {
@@ -431,6 +445,7 @@ describe('nouns-dao', () => {
       const updateSignatures = ['update signature'];
       const updateCalldatas = [Bytes.fromI32(312)];
       const updateDescription = '# Updated Title\nUpdated body';
+      const updateMessage = 'some update message';
 
       handleProposalUpdated(
         createProposalUpdatedEvent(
@@ -445,6 +460,7 @@ describe('nouns-dao', () => {
           updateSignatures,
           updateCalldatas,
           updateDescription,
+          updateMessage,
         ),
       );
 
@@ -458,24 +474,17 @@ describe('nouns-dao', () => {
       assert.stringEquals(updateDescription, proposal.description);
       assert.stringEquals(extractTitle(updateDescription), proposal.title);
 
-      const previousVersionId = proposalId
-        .toString()
-        .concat('-')
-        .concat(txHash.toHexString())
-        .concat('-')
-        .concat(logIndex.toString());
-      const previousVersion = ProposalPreviousVersion.load(previousVersionId)!;
-      assert.stringEquals(proposalId.toString(), previousVersion.proposal);
-      assert.bigIntEquals(proposalEvent.createdTimestamp, previousVersion.createdAt);
-      assert.bytesEquals(
-        changetype<Bytes[]>(proposalEvent.targets)[0],
-        previousVersion.targets![0],
-      );
-      assert.bigIntEquals(proposalEvent.values[0], previousVersion.values![0]);
-      assert.stringEquals(proposalEvent.signatures[0], previousVersion.signatures![0]);
-      assert.bytesEquals(proposalEvent.calldatas[0], previousVersion.calldatas![0]);
-      assert.stringEquals(proposalEvent.description, previousVersion.description);
-      assert.stringEquals(extractTitle(proposalEvent.description), previousVersion.title);
+      const updatedVersionId = txHash.toHexString().concat('-').concat(logIndex.toString());
+      const updatedVersion = ProposalVersion.load(updatedVersionId)!;
+      assert.stringEquals(proposalId.toString(), updatedVersion.proposal);
+      assert.bigIntEquals(updateBlockTimestamp, updatedVersion.createdAt);
+      assert.bytesEquals(changetype<Bytes[]>(updateTargets)[0], updatedVersion.targets![0]);
+      assert.bigIntEquals(updateValues[0], updatedVersion.values![0]);
+      assert.stringEquals(updateSignatures[0], updatedVersion.signatures![0]);
+      assert.bytesEquals(updateCalldatas[0], updatedVersion.calldatas![0]);
+      assert.stringEquals(updateDescription, updatedVersion.description);
+      assert.stringEquals(extractTitle(updateDescription), updatedVersion.title);
+      assert.stringEquals(updateMessage, updatedVersion.updateMessage);
     });
   });
 });

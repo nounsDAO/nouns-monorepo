@@ -76,7 +76,8 @@ library NounsDAOV3Proposals {
         uint256[] values,
         string[] signatures,
         bytes[] calldatas,
-        string description
+        string description,
+        string updateMessage
     );
 
     /// @notice An event emitted when a proposal has been queued in the NounsDAOExecutor
@@ -113,7 +114,12 @@ library NounsDAOV3Proposals {
 
     bytes32 public constant PROPOSAL_TYPEHASH =
         keccak256(
-            'Proposal(address proposer,address[] targets,uint256[] values,string[] signatures,bytes[] calldatas,string description,uint40 expiry)'
+            'Proposal(address proposer,address[] targets,uint256[] values,string[] signatures,bytes[] calldatas,string description,uint256 expiry)'
+        );
+
+    bytes32 public constant UPDATE_PROPOSAL_TYPEHASH =
+        keccak256(
+            'UpdateProposal(uint256 proposalId,address proposer,address[] targets,uint256[] values,string[] signatures,bytes[] calldatas,string description,uint256 expiry)'
         );
 
     /**
@@ -153,6 +159,7 @@ library NounsDAOV3Proposals {
         ProposalTxs memory txs,
         string memory description
     ) internal returns (uint256) {
+        if (proposerSignatures.length == 0) revert MustProvideSignatures();
         checkProposaTxs(txs);
         uint256 proposalId = ds.proposalCount = ds.proposalCount + 1;
 
@@ -161,7 +168,7 @@ library NounsDAOV3Proposals {
         uint256 votes;
         address[] memory signers = new address[](proposerSignatures.length);
         for (uint256 i = 0; i < proposerSignatures.length; ++i) {
-            verifyProposalSignature(ds, proposalEncodeData, proposerSignatures[i]);
+            verifyProposalSignature(ds, proposalEncodeData, proposerSignatures[i], PROPOSAL_TYPEHASH);
             address signer = signers[i] = proposerSignatures[i].signer;
 
             checkNoActiveProp(ds, signer);
@@ -223,7 +230,8 @@ library NounsDAOV3Proposals {
         uint256[] memory values,
         string[] memory signatures,
         bytes[] memory calldatas,
-        string memory description
+        string memory description,
+        string memory updateMessage
     ) external {
         checkProposaTxs(ProposalTxs(targets, values, signatures, calldatas));
 
@@ -237,7 +245,16 @@ library NounsDAOV3Proposals {
         proposal.signatures = signatures;
         proposal.calldatas = calldatas;
 
-        emit ProposalUpdated(proposalId, msg.sender, targets, values, signatures, calldatas, description);
+        emit ProposalUpdated(
+            proposalId,
+            msg.sender,
+            targets,
+            values,
+            signatures,
+            calldatas,
+            description,
+            updateMessage
+        );
     }
 
     function updateProposalBySigs(
@@ -245,7 +262,8 @@ library NounsDAOV3Proposals {
         uint256 proposalId,
         NounsDAOStorageV3.ProposerSignature[] memory proposerSignatures,
         ProposalTxs memory txs,
-        string memory description
+        string memory description,
+        string memory updateMessage
     ) external {
         checkProposaTxs(txs);
         // without this check it's possible to run through this function and update a proposal without signatures
@@ -259,10 +277,10 @@ library NounsDAOV3Proposals {
         address[] memory signers = proposal.signers;
         if (proposerSignatures.length != signers.length) revert SignerCountMismtach();
 
-        bytes memory proposalEncodeData = calcProposalEncodeData(txs, description);
+        bytes memory proposalEncodeData = abi.encodePacked(proposalId, calcProposalEncodeData(txs, description));
 
         for (uint256 i = 0; i < proposerSignatures.length; ++i) {
-            verifyProposalSignature(ds, proposalEncodeData, proposerSignatures[i]);
+            verifyProposalSignature(ds, proposalEncodeData, proposerSignatures[i], UPDATE_PROPOSAL_TYPEHASH);
 
             // To avoid the gas cost of having to search signers in proposal.signers, we're assuming the sigs we get
             // use the same amount of signers and the same order.
@@ -281,7 +299,8 @@ library NounsDAOV3Proposals {
             txs.values,
             txs.signatures,
             txs.calldatas,
-            description
+            description,
+            updateMessage
         );
     }
 
@@ -585,7 +604,7 @@ library NounsDAOV3Proposals {
         uint256 proposalThreshold_,
         ProposalTxs memory txs
     ) internal returns (NounsDAOStorageV3.Proposal storage newProposal) {
-        uint256 updatePeriodEndBlock = block.number + ds.proposalUpdatablePeriodInBlock;
+        uint256 updatePeriodEndBlock = block.number + ds.proposalUpdatablePeriodInBlocks;
         uint256 startBlock = updatePeriodEndBlock + ds.votingDelay;
         uint256 endBlock = startBlock + ds.votingPeriod;
 
@@ -674,17 +693,14 @@ library NounsDAOV3Proposals {
     function verifyProposalSignature(
         NounsDAOStorageV3.StorageV3 storage ds,
         bytes memory proposalEncodeData,
-        NounsDAOStorageV3.ProposerSignature memory proposerSignature
+        NounsDAOStorageV3.ProposerSignature memory proposerSignature,
+        bytes32 typehash
     ) internal view {
         bytes32 sigHash = keccak256(proposerSignature.sig);
         if (ds.cancelledSigs[proposerSignature.signer][sigHash]) revert SignatureIsCancelled();
 
         bytes32 structHash = keccak256(
-            abi.encodePacked(
-                PROPOSAL_TYPEHASH,
-                proposalEncodeData,
-                uint256(proposerSignature.expirationTimestamp) // TODO: maybe make this uint256?
-            )
+            abi.encodePacked(typehash, proposalEncodeData, proposerSignature.expirationTimestamp)
         );
 
         bytes32 domainSeparator = keccak256(

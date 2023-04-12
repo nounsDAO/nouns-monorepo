@@ -8,16 +8,21 @@ import { SVGRenderer } from '../../../contracts/SVGRenderer.sol';
 import { NounsArt } from '../../../contracts/NounsArt.sol';
 import { NounsDAOExecutor } from '../../../contracts/governance/NounsDAOExecutor.sol';
 import { NounsDAOLogicV1 } from '../../../contracts/governance/NounsDAOLogicV1.sol';
+import { NounsDAOLogicV2 } from '../../../contracts/governance/NounsDAOLogicV2.sol';
+import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
 import { IProxyRegistry } from '../../../contracts/external/opensea/IProxyRegistry.sol';
 import { NounsDescriptor } from '../../../contracts/NounsDescriptor.sol';
 import { NounsSeeder } from '../../../contracts/NounsSeeder.sol';
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { NounsDAOProxy } from '../../../contracts/governance/NounsDAOProxy.sol';
+import { NounsDAOStorageV2, NounsDAOStorageV3 } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsDAOProxyV2 } from '../../../contracts/governance/NounsDAOProxyV2.sol';
+import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
 import { Inflator } from '../../../contracts/Inflator.sol';
 
 abstract contract DeployUtils is Test, DescriptorHelpers {
     uint256 constant TIMELOCK_DELAY = 2 days;
-    uint256 constant VOTING_PERIOD = 5_760; // About 24 hours
+    uint256 constant VOTING_PERIOD = 7_200; // 24 hours
     uint256 constant VOTING_DELAY = 1;
     uint256 constant PROPOSAL_THRESHOLD = 1;
     uint256 constant QUORUM_VOTES_BPS = 2000;
@@ -75,5 +80,52 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         _populateDescriptor(descriptor);
 
         return (address(nounsToken), address(proxy));
+    }
+
+    function _createDAOV3Proxy(address timelock, address nounsToken, address vetoer) internal returns (NounsDAOLogicV1) {
+        return NounsDAOLogicV1(
+            payable(
+                new NounsDAOProxyV3(
+                    NounsDAOProxyV3.ProxyParams(timelock, address(new NounsDAOLogicV3())),
+                    timelock,
+                    nounsToken,
+                    vetoer,
+                    VOTING_PERIOD,
+                    VOTING_DELAY,
+                    PROPOSAL_THRESHOLD,
+                    NounsDAOStorageV3.DynamicQuorumParams({
+                        minQuorumVotesBPS: 200,
+                        maxQuorumVotesBPS: 2000,
+                        quorumCoefficient: 10000
+                    }),
+                    0,
+                    0,
+                    0,
+                    0
+                )
+            )
+        );
+    }
+
+    function _createDAOV2Proxy(address timelock, address nounsToken, address vetoer) internal returns (NounsDAOLogicV1) {
+        return NounsDAOLogicV1(
+            payable(
+                new NounsDAOProxyV2(
+                    timelock,
+                        nounsToken,
+                        vetoer,
+                        timelock,
+                        address(new NounsDAOLogicV2()),
+                        VOTING_PERIOD,
+                        VOTING_DELAY,
+                        PROPOSAL_THRESHOLD,
+                        NounsDAOStorageV2.DynamicQuorumParams({
+                            minQuorumVotesBPS: 200,
+                            maxQuorumVotesBPS: 2000,
+                            quorumCoefficient: 10000
+                        })
+                )
+            )
+        );
     }
 }

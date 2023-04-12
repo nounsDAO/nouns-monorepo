@@ -21,15 +21,15 @@ abstract contract NounsDAOLogicV2InflationHandlingTest is NounsDAOLogicSharedBas
         return 2;
     }
 
-    function deployDAOProxy() internal override returns (NounsDAOLogicV1) {
+    function deployDAOProxy(address timelock, address nounsToken, address vetoer) internal override returns (NounsDAOLogicV1) {
         NounsDAOLogicV2 daoLogic = new NounsDAOLogicV2();
 
         return
             NounsDAOLogicV1(
                 payable(
                     new NounsDAOProxyV2(
-                        address(timelock),
-                        address(nounsToken),
+                        timelock,
+                        nounsToken,
                         vetoer,
                         admin,
                         address(daoLogic),
@@ -108,7 +108,7 @@ contract NounsDAOLogicV2InflationHandling40TotalSupplyTest is NounsDAOLogicV2Inf
         propose(user1, address(0), 0, '', '');
     }
 
-    function testAllowsProposingIfAboveTreshold() public {
+    function testAllowsProposingIfAboveThreshold() public {
         // Give user1 3 tokens, proposal requires 3
         vm.startPrank(tokenHolder);
         nounsToken.transferFrom(tokenHolder, user1, 1);

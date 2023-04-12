@@ -9,6 +9,7 @@ export class ParsedProposalV3 {
   id: string = '';
   proposer: string = '';
   txHash: string = '';
+  logIndex: string = '';
   targets: Bytes[] = [];
   values: BigInt[] = [];
   signatures: string[] = [];
@@ -31,6 +32,7 @@ export class ParsedProposalV3 {
     proposal.id = event.params.id.toString();
     proposal.proposer = event.params.proposer.toHexString();
     proposal.txHash = event.transaction.hash.toHexString();
+    proposal.logIndex = event.logIndex.toString();
     proposal.targets = changetype<Bytes[]>(event.params.targets);
     proposal.values = event.params.values;
     proposal.signatures = event.params.signatures;

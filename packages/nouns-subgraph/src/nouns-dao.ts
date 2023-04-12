@@ -20,7 +20,7 @@ import {
   getGovernanceEntity,
   getOrCreateDelegateWithNullOption,
   getOrCreateDynamicQuorumParams,
-  getOrCreateProposalPreviousVersion,
+  getOrCreateProposalVersion,
 } from './utils/helpers';
 import {
   BIGINT_ONE,
@@ -34,6 +34,7 @@ import {
 } from './utils/constants';
 import { dynamicQuorumVotes } from './utils/dynamicQuorum';
 import { ParsedProposalV3, extractTitle } from './custom-types/ParsedProposalV3';
+import { Proposal } from './types/schema';
 
 export function handleProposalCreatedWithRequirements(
   event: ProposalCreatedWithRequirements1,
@@ -49,11 +50,11 @@ export function handleProposalCreatedWithRequirementsV3(
 
 export function handleProposalCreated(parsedProposal: ParsedProposalV3): void {
   let proposal = getOrCreateProposal(parsedProposal.id);
-  let proposer = getOrCreateDelegateWithNullOption(parsedProposal.proposer, false);
+  let proposerResult = getOrCreateDelegateWithNullOption(parsedProposal.proposer);
 
   // Check if the proposer was a delegate already accounted for, if not we should log an error
   // since it shouldn't be possible for a delegate to propose anything without first being 'created'
-  if (proposer == null && parsedProposal.signers.length == 0) {
+  if (proposerResult.created && parsedProposal.signers.length == 0) {
     log.error('Delegate {} not found on ProposalCreated. tx_hash: {}', [
       parsedProposal.proposer,
       parsedProposal.txHash,
@@ -61,8 +62,7 @@ export function handleProposalCreated(parsedProposal: ParsedProposalV3): void {
   }
 
   // Create it anyway, which supports V3 cases of proposers not having any Nouns
-  proposer = getOrCreateDelegate(parsedProposal.proposer);
-  proposal.proposer = proposer.id;
+  proposal.proposer = proposerResult.entity!.id;
   proposal.targets = parsedProposal.targets;
   proposal.values = parsedProposal.values;
   proposal.signatures = parsedProposal.signatures;
@@ -87,16 +87,14 @@ export function handleProposalCreated(parsedProposal: ParsedProposalV3): void {
   const signerDelegates = new Array<string>(parsedProposal.signers.length);
   for (let i = 0; i < parsedProposal.signers.length; i++) {
     const signerAddress = parsedProposal.signers[i];
-    let signerDelegate = getOrCreateDelegateWithNullOption(signerAddress, false);
-    if (signerDelegate == null) {
+    const signerDelegateResult = getOrCreateDelegateWithNullOption(signerAddress);
+    if (signerDelegateResult.created) {
       log.error('Signer delegate {} not found on ProposalCreated. tx_hash: {}', [
         signerAddress,
         parsedProposal.txHash,
       ]);
-      signerDelegate = getOrCreateDelegate(signerAddress);
     }
-
-    signerDelegates[i] = signerDelegate.id;
+    signerDelegates[i] = signerDelegateResult.entity!.id;
   }
   proposal.signers = signerDelegates;
 
@@ -111,29 +109,12 @@ export function handleProposalCreated(parsedProposal: ParsedProposalV3): void {
   proposal.quorumCoefficient = dynamicQuorum.quorumCoefficient;
 
   proposal.save();
+
+  captureProposalVersion(parsedProposal.txHash, parsedProposal.logIndex, proposal);
 }
 
 export function handleProposalUpdated(event: ProposalUpdated): void {
-  const updateId = event.params.id
-    .toString()
-    .concat('-')
-    .concat(event.transaction.hash.toHexString())
-    .concat('-')
-    .concat(event.logIndex.toString());
-
-  const previousVersion = getOrCreateProposalPreviousVersion(updateId);
   const proposal = getOrCreateProposal(event.params.id.toString());
-
-  // First save the current state of the proposal to the previous version
-  previousVersion.proposal = proposal.id;
-  previousVersion.createdAt = proposal.lastUpdatedTimestamp;
-  previousVersion.targets = proposal.targets;
-  previousVersion.values = proposal.values;
-  previousVersion.signatures = proposal.signatures;
-  previousVersion.calldatas = proposal.calldatas;
-  previousVersion.title = proposal.title;
-  previousVersion.description = proposal.description;
-  previousVersion.save();
 
   // Then update the proposal to the latest state
   proposal.lastUpdatedTimestamp = event.block.timestamp;
@@ -145,6 +126,13 @@ export function handleProposalUpdated(event: ProposalUpdated): void {
   proposal.description = event.params.description.split('\\n').join('\n');
   proposal.title = extractTitle(proposal.description);
   proposal.save();
+
+  captureProposalVersion(
+    event.transaction.hash.toHexString(),
+    event.logIndex.toString(),
+    proposal,
+    event.params.updateMessage,
+  );
 }
 
 export function handleProposalCanceled(event: ProposalCanceled): void {
@@ -192,11 +180,11 @@ export function handleVoteCast(event: VoteCast): void {
     .concat('-')
     .concat(event.params.proposalId.toString());
   let vote = getOrCreateVote(voteId);
-  let voter = getOrCreateDelegateWithNullOption(event.params.voter.toHexString(), false);
+  let voterResult = getOrCreateDelegateWithNullOption(event.params.voter.toHexString());
 
   // Check if the voter was a delegate already accounted for, if not we should log an error
   // since it shouldn't be possible for a delegate to vote without first being 'created'
-  if (voter == null) {
+  if (voterResult.created) {
     log.error('Delegate {} not found on VoteCast. tx_hash: {}', [
       event.params.voter.toHexString(),
       event.transaction.hash.toHexString(),
@@ -204,8 +192,7 @@ export function handleVoteCast(event: VoteCast): void {
   }
 
   // Create it anyway since we will want to account for this event data, even though it should've never happened
-  voter = getOrCreateDelegate(event.params.voter.toHexString());
-
+  const voter = voterResult.entity!;
   vote.proposal = proposal.id;
   vote.voter = voter.id;
   vote.votesRaw = event.params.votes;
@@ -272,4 +259,24 @@ export function handleProposalObjectionPeriodSet(event: ProposalObjectionPeriodS
   const proposal = getOrCreateProposal(event.params.id.toString());
   proposal.objectionPeriodEndBlock = event.params.objectionPeriodEndBlock;
   proposal.save();
+}
+
+function captureProposalVersion(
+  txHash: string,
+  logIndex: string,
+  proposal: Proposal,
+  updateMessage: string = '',
+): void {
+  const versionId = txHash.concat('-').concat(logIndex);
+  const previousVersion = getOrCreateProposalVersion(versionId);
+  previousVersion.proposal = proposal.id;
+  previousVersion.createdAt = proposal.lastUpdatedTimestamp;
+  previousVersion.targets = proposal.targets;
+  previousVersion.values = proposal.values;
+  previousVersion.signatures = proposal.signatures;
+  previousVersion.calldatas = proposal.calldatas;
+  previousVersion.title = proposal.title;
+  previousVersion.description = proposal.description;
+  previousVersion.updateMessage = updateMessage;
+  previousVersion.save();
 }

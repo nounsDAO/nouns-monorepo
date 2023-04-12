@@ -6,9 +6,19 @@ import {
   Governance,
   Vote,
   DynamicQuorumParams,
-  ProposalPreviousVersion,
+  ProposalVersion,
 } from '../types/schema';
 import { ZERO_ADDRESS, BIGINT_ZERO, BIGINT_ONE } from './constants';
+
+export class GetOrCreateResult<T> {
+  entity: T | null;
+  created: boolean;
+
+  constructor(entity: T | null, created: boolean) {
+    this.entity = entity;
+    this.created = created;
+  }
+}
 
 export function getOrCreateAccount(
   id: string,
@@ -36,16 +46,18 @@ export function getOrCreateAccount(
 // These two functions are split up to minimize the extra code required
 // to handle return types with `Type | null`
 export function getOrCreateDelegate(id: string): Delegate {
-  return getOrCreateDelegateWithNullOption(id, true, true) as Delegate;
+  return getOrCreateDelegateWithNullOption(id, true, true).entity!;
 }
 
 export function getOrCreateDelegateWithNullOption(
   id: string,
   createIfNotFound: boolean = true,
   save: boolean = true,
-): Delegate | null {
+): GetOrCreateResult<Delegate> {
   let delegate = Delegate.load(id);
+  let created = false;
   if (delegate == null && createIfNotFound) {
+    created = true;
     delegate = new Delegate(id);
     delegate.delegatedVotesRaw = BIGINT_ZERO;
     delegate.delegatedVotes = BIGINT_ZERO;
@@ -60,7 +72,8 @@ export function getOrCreateDelegateWithNullOption(
       delegate.save();
     }
   }
-  return delegate;
+
+  return new GetOrCreateResult<Delegate>(delegate, created);
 }
 
 export function getOrCreateVote(
@@ -144,10 +157,10 @@ export function getOrCreateDynamicQuorumParams(block: BigInt | null = null): Dyn
   return params as DynamicQuorumParams;
 }
 
-export function getOrCreateProposalPreviousVersion(id: string): ProposalPreviousVersion {
-  let update = ProposalPreviousVersion.load(id);
+export function getOrCreateProposalVersion(id: string): ProposalVersion {
+  let update = ProposalVersion.load(id);
   if (update == null) {
-    update = new ProposalPreviousVersion(id);
+    update = new ProposalVersion(id);
   }
   return update;
 }

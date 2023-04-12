@@ -26,15 +26,15 @@ contract NounsDAOUpgradeToV2 is NounsDAOLogicSharedBaseTest {
         return 1;
     }
 
-    function deployDAOProxy() internal override returns (NounsDAOLogicV1) {
+    function deployDAOProxy(address timelock, address nounsToken, address vetoer) internal override returns (NounsDAOLogicV1) {
         NounsDAOLogicV1 daoLogic = new NounsDAOLogicV1();
 
         return
             NounsDAOLogicV1(
                 payable(
                     new NounsDAOProxy(
-                        address(timelock),
-                        address(nounsToken),
+                        timelock,
+                        nounsToken,
                         vetoer,
                         address(timelock),
                         address(daoLogic),

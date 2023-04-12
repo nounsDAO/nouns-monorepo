@@ -51,8 +51,8 @@ library NounsDAOV3Admin {
 
     /// @notice An event emitted when the proposal updatable period is set
     event ProposalUpdatablePeriodSet(
-        uint32 oldProposalUpdatablePeriodInBlock,
-        uint32 newProposalUpdatablePeriodInBlock
+        uint32 oldProposalUpdatablePeriodInBlocks,
+        uint32 newProposalUpdatablePeriodInBlocks
     );
 
     /// @notice Emitted when pendingAdmin is changed
@@ -92,16 +92,16 @@ library NounsDAOV3Admin {
     uint256 public constant MAX_PROPOSAL_THRESHOLD_BPS = 1_000; // 1,000 basis points or 10%
 
     /// @notice The minimum setable voting period
-    uint256 public constant MIN_VOTING_PERIOD = 5_760; // About 24 hours
+    uint256 public constant MIN_VOTING_PERIOD = 7_200; // 24 hours
 
     /// @notice The max setable voting period
-    uint256 public constant MAX_VOTING_PERIOD = 80_640; // About 2 weeks
+    uint256 public constant MAX_VOTING_PERIOD = 100_800; // 2 weeks
 
     /// @notice The min setable voting delay
     uint256 public constant MIN_VOTING_DELAY = 1;
 
     /// @notice The max setable voting delay
-    uint256 public constant MAX_VOTING_DELAY = 40_320; // About 1 week
+    uint256 public constant MAX_VOTING_DELAY = 100_800; // 2 weeks
 
     /// @notice The lower bound of minimum quorum votes basis points
     uint256 public constant MIN_QUORUM_VOTES_BPS_LOWER_BOUND = 200; // 200 basis points or 2%
@@ -199,16 +199,16 @@ library NounsDAOV3Admin {
 
     function _setProposalUpdatablePeriodInBlock(
         NounsDAOStorageV3.StorageV3 storage ds,
-        uint32 newProposalUpdatablePeriodInBlock
+        uint32 newProposalUpdatablePeriodInBlocks
     ) external {
         if (msg.sender != ds.admin) {
             revert AdminOnly();
         }
 
-        uint32 oldProposalUpdatablePeriodInBlock = ds.proposalUpdatablePeriodInBlock;
-        ds.proposalUpdatablePeriodInBlock = newProposalUpdatablePeriodInBlock;
+        uint32 oldProposalUpdatablePeriodInBlocks = ds.proposalUpdatablePeriodInBlocks;
+        ds.proposalUpdatablePeriodInBlocks = newProposalUpdatablePeriodInBlocks;
 
-        emit ProposalUpdatablePeriodSet(oldProposalUpdatablePeriodInBlock, newProposalUpdatablePeriodInBlock);
+        emit ProposalUpdatablePeriodSet(oldProposalUpdatablePeriodInBlocks, newProposalUpdatablePeriodInBlocks);
     }
 
     /**
