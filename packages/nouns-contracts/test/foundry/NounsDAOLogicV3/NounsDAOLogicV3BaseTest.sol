@@ -79,10 +79,11 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
         dao = NounsDAOLogicV3(
             payable(
                 new NounsDAOProxyV3(
-                    NounsDAOProxyV3.ProxyParams(address(timelock), address(new NounsDAOLogicV3())),
                     address(timelock),
                     address(nounsToken),
                     vetoer,
+                    address(timelock),
+                    address(new NounsDAOLogicV3()),
                     VOTING_PERIOD,
                     VOTING_DELAY,
                     PROPOSAL_THRESHOLD,
@@ -93,8 +94,7 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
                     }),
                     lastMinuteWindowInBlocks,
                     objectionPeriodDurationInBlocks,
-                    proposalUpdatablePeriodInBlocks,
-                    voteSnapshotBlockSwitchProposalId
+                    proposalUpdatablePeriodInBlocks
                 )
             )
         );

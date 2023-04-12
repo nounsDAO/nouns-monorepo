@@ -86,10 +86,11 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         return NounsDAOLogicV1(
             payable(
                 new NounsDAOProxyV3(
-                    NounsDAOProxyV3.ProxyParams(timelock, address(new NounsDAOLogicV3())),
                     timelock,
                     nounsToken,
                     vetoer,
+                    timelock,
+                    address(new NounsDAOLogicV3()),
                     VOTING_PERIOD,
                     VOTING_DELAY,
                     PROPOSAL_THRESHOLD,
@@ -98,7 +99,6 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
                         maxQuorumVotesBPS: 2000,
                         quorumCoefficient: 10000
                     }),
-                    0,
                     0,
                     0,
                     0
