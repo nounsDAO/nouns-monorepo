@@ -163,7 +163,7 @@ library NounsDAOV3Proposals {
         checkProposaTxs(txs);
         uint256 proposalId = ds.proposalCount = ds.proposalCount + 1;
 
-        bytes memory proposalEncodeData = calcProposalEncodeData(txs, description);
+        bytes memory proposalEncodeData = calcProposalEncodeData(msg.sender, txs, description);
 
         uint256 votes;
         address[] memory signers = new address[](proposerSignatures.length);
@@ -197,11 +197,11 @@ library NounsDAOV3Proposals {
         emit SignatureCancelled(msg.sender, sig);
     }
 
-    function calcProposalEncodeData(ProposalTxs memory txs, string memory description)
-        internal
-        view
-        returns (bytes memory)
-    {
+    function calcProposalEncodeData(
+        address proposer,
+        ProposalTxs memory txs,
+        string memory description
+    ) public pure returns (bytes memory) {
         bytes32[] memory signatureHashes = new bytes32[](txs.signatures.length);
         for (uint256 i = 0; i < txs.signatures.length; ++i) {
             signatureHashes[i] = keccak256(bytes(txs.signatures[i]));
@@ -214,7 +214,7 @@ library NounsDAOV3Proposals {
 
         return
             abi.encode(
-                msg.sender, // proposer
+                proposer,
                 keccak256(abi.encodePacked(txs.targets)),
                 keccak256(abi.encodePacked(txs.values)),
                 keccak256(abi.encodePacked(signatureHashes)),
@@ -277,7 +277,10 @@ library NounsDAOV3Proposals {
         address[] memory signers = proposal.signers;
         if (proposerSignatures.length != signers.length) revert SignerCountMismtach();
 
-        bytes memory proposalEncodeData = abi.encodePacked(proposalId, calcProposalEncodeData(txs, description));
+        bytes memory proposalEncodeData = abi.encodePacked(
+            proposalId,
+            calcProposalEncodeData(msg.sender, txs, description)
+        );
 
         for (uint256 i = 0; i < proposerSignatures.length; ++i) {
             verifyProposalSignature(ds, proposalEncodeData, proposerSignatures[i], UPDATE_PROPOSAL_TYPEHASH);

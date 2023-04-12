@@ -62,7 +62,6 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
     uint32 lastMinuteWindowInBlocks = 10;
     uint32 objectionPeriodDurationInBlocks = 10;
     uint32 proposalUpdatablePeriodInBlocks = 10;
-    uint256 voteSnapshotBlockSwitchProposalId;
 
     function setUp() public virtual {
         timelock = new NounsDAOExecutor(address(1), TIMELOCK_DELAY);
@@ -79,10 +78,11 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
         dao = NounsDAOLogicV3(
             payable(
                 new NounsDAOProxyV3(
-                    NounsDAOProxyV3.ProxyParams(address(timelock), address(new NounsDAOLogicV3())),
                     address(timelock),
                     address(nounsToken),
                     vetoer,
+                    address(timelock),
+                    address(new NounsDAOLogicV3()),
                     VOTING_PERIOD,
                     VOTING_DELAY,
                     PROPOSAL_THRESHOLD,
@@ -93,8 +93,7 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
                     }),
                     lastMinuteWindowInBlocks,
                     objectionPeriodDurationInBlocks,
-                    proposalUpdatablePeriodInBlocks,
-                    voteSnapshotBlockSwitchProposalId
+                    proposalUpdatablePeriodInBlocks
                 )
             )
         );
