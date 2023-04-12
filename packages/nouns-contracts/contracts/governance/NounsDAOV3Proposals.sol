@@ -201,7 +201,7 @@ library NounsDAOV3Proposals {
         address proposer,
         ProposalTxs memory txs,
         string memory description
-    ) public pure returns (bytes memory) {
+    ) internal pure returns (bytes memory) {
         bytes32[] memory signatureHashes = new bytes32[](txs.signatures.length);
         for (uint256 i = 0; i < txs.signatures.length; ++i) {
             signatureHashes[i] = keccak256(bytes(txs.signatures[i]));
