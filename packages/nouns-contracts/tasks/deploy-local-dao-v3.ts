@@ -7,7 +7,7 @@ import { ContractName } from './types';
 type LocalContractName =
   | Exclude<ContractName, 'NounsDAOLogicV1' | 'NounsDAOProxy' | 'NounsDAOLogicV2' >
   | 'NounsDAOLogicV3'
-  | 'NounsDAOProxyV2'
+  | 'NounsDAOProxyV3'
   | 'NounsDAOV3Admin'
   | 'NounsDAOV3DynamicQuorum'
   | 'NounsDAOV3Proposals'
@@ -143,21 +143,24 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
         }),
         waitForConfirmation: true,
       },
-      NounsDAOProxyV2: {
+      NounsDAOProxyV3: {
         args: [
-          () => contracts.NounsDAOExecutor.instance?.address,
-          () => contracts.NounsToken.instance?.address,
-          args.noundersdao || deployer.address,
-          () => contracts.NounsDAOExecutor.instance?.address,
-          () => contracts.NounsDAOLogicV3.instance?.address,
-          args.votingPeriod,
-          args.votingDelay,
-          args.proposalThresholdBps,
+          () => contracts.NounsDAOExecutor.instance?.address, // timelock
+          () => contracts.NounsToken.instance?.address, // token
+          args.noundersdao || deployer.address, // vetoer
+          () => contracts.NounsDAOExecutor.instance?.address, // admin
+          () => contracts.NounsDAOLogicV3.instance?.address, // implementation
+          args.votingPeriod, // votingPeriod
+          args.votingDelay, // votingDelay
+          args.proposalThresholdBps, // proposalThresholdBps
           {
             minQuorumVotesBPS: args.minQuorumVotesBPS,
             maxQuorumVotesBPS: args.maxQuorumVotesBPS,
             quorumCoefficient: parseUnits(args.quorumCoefficient.toString(), 6),
-          },
+          }, // DynamicQuorumParams
+          0, // lastMinuteWindowInBlocks
+          0, // objectionPeriodDurationInBlocks
+          0, // proposalUpdatablePeriodInBlocks
         ],
         waitForConfirmation: true,
       },
@@ -192,8 +195,8 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
       throw 'wrong address';
     }
 
-    if (expectedNounsDAOProxyAddress !== contracts.NounsDAOProxyV2.instance?.address) {
-      console.log(`wrong dao proxy address expected: ${expectedNounsDAOProxyAddress} actual: ${contracts.NounsDAOProxyV2.instance?.address}`);
+    if (expectedNounsDAOProxyAddress !== contracts.NounsDAOProxyV3.instance?.address) {
+      console.log(`wrong dao proxy address expected: ${expectedNounsDAOProxyAddress} actual: ${contracts.NounsDAOProxyV3.instance?.address}`);
       throw 'wrong address';
     }
 
