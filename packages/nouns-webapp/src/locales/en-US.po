@@ -37,6 +37,10 @@ msgstr "3.5 artists, 6.5 technologists"
 msgid "404: This is not the person, place, or thing you're looking for..."
 msgstr "404: This is not the person, place, or thing you're looking for..."
 
+#: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
+msgid "<0/><1>Guidelines</1><2/>• Do <3>NOT</3> request ETH to trade into USDC. Instead, request USDC directly.<4/>• Do <5>NOT</5> transfer funds externally to create an ETH or USDC stream. Instead, use the \"Stream Funds\" action.<6/><7>Supported Action Types</7><8/><9>• Transfer Funds: </9>Send a fixed amount of ETH or USDC.<10/><11>• Stream Funds: </11>Stream a fixed amount of WETH or USDC.<12/><13>• Function Call: </13>Call a contract function."
+msgstr "<0/><1>Guidelines</1><2/>• Do <3>NOT</3> request ETH to trade into USDC. Instead, request USDC directly.<4/>• Do <5>NOT</5> transfer funds externally to create an ETH or USDC stream. Instead, use the \"Stream Funds\" action.<6/><7>Supported Action Types</7><8/><9>• Transfer Funds: </9>Send a fixed amount of ETH or USDC.<10/><11>• Stream Funds: </11>Stream a fixed amount of WETH or USDC.<12/><13>• Function Call: </13>Call a contract function."
+
 #: src/components/profileEvent/event/DesktopTransferEvent/index.tsx
 #~ msgid "<0/>Holder changed from<1><2/></1> to <3><4/></3>"
 #~ msgstr "<0/>Holder changed from<1><2/></1> to <3><4/></3>"
@@ -68,8 +72,8 @@ msgid "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
 msgstr "<0>Proposed by: </0><1>{proposer}</1><2>{proposedAtTransactionHash}</2>"
 
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
-msgid "<0>Supported Action Types:</0><1/><2>• Transfer Funds: </2>Send a fixed amount of ETH or USDC.<3/><4>• Function Call: </4>Call a contract function."
-msgstr "<0>Supported Action Types:</0><1/><2>• Transfer Funds: </2>Send a fixed amount of ETH or USDC.<3/><4>• Function Call: </4>Call a contract function."
+#~ msgid "<0>Supported Action Types:</0><1/><2>• Transfer Funds: </2>Send a fixed amount of ETH or USDC.<3/><4>• Function Call: </4>Call a contract function."
+#~ msgstr "<0>Supported Action Types:</0><1/><2>• Transfer Funds: </2>Send a fixed amount of ETH or USDC.<3/><4>• Function Call: </4>Call a contract function."
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/profileEvent/eventData/ProposalVoteHeadline/index.tsx
@@ -126,6 +130,16 @@ msgstr "Add Function Call Arguments"
 #: src/components/ProposalActionsModal/steps/SelectProposalActionStep/index.tsx
 msgid "Add Proposal Action"
 msgstr "Add Proposal Action"
+
+#: src/components/ProposalActionsModal/steps/StreamPaymentsPaymentDetailsStep/index.tsx
+msgid "Add Stream Date Details"
+msgstr "Add Stream Date Details"
+
+#: src/components/ProposalActionsModal/steps/StreamPaymentsDateDetailsStep/index.tsx
+#: src/components/ProposalActionsModal/steps/StreamPaymentsPaymentDetailsStep/index.tsx
+#: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
+msgid "Add Streaming Payment Action"
+msgstr "Add Streaming Payment Action"
 
 #: src/components/ProposalActionsModal/steps/TransferFundsDetailsStep/index.tsx
 #: src/components/ProposalActionsModal/steps/TransferFundsReviewStep/index.tsx
@@ -193,6 +207,10 @@ msgstr "Arguments"
 msgid "Artwork is generative and stored directly on-chain (not IPFS)."
 msgstr "Artwork is generative and stored directly on-chain (not IPFS)."
 
+#: src/components/ProposalActionsModal/steps/StreamPaymentsPaymentDetailsStep/index.tsx
+msgid "At this time only USDC and WETH streams are supported"
+msgstr "At this time only USDC and WETH streams are supported"
+
 #: src/components/AuctionTimer/index.tsx
 #: src/components/AuctionTimer/index.tsx
 msgid "Auction ended"
@@ -202,9 +220,16 @@ msgstr "Auction ended"
 msgid "Auction ends in"
 msgstr "Auction ends in"
 
+#: src/components/StreamWithdrawModal/index.tsx
+msgid "Available to withdraw"
+msgstr "Available to withdraw"
+
 #: src/components/ProposalActionsModal/steps/FunctionCallEnterArgsStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/FunctionCallSelectFunctionStep/index.tsx
+#: src/components/ProposalActionsModal/steps/StreamPaymentsDateDetailsStep/index.tsx
+#: src/components/ProposalActionsModal/steps/StreamPaymentsPaymentDetailsStep/index.tsx
+#: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
 #: src/components/ProposalActionsModal/steps/TransferFundsDetailsStep/index.tsx
 #: src/components/ProposalActionsModal/steps/TransferFundsReviewStep/index.tsx
 msgid "Back"
@@ -262,6 +287,7 @@ msgstr "Body"
 msgid "Born"
 msgstr "Born"
 
+#: src/components/StreamWithdrawModal/index.tsx
 #: src/pages/Vote/index.tsx
 msgid "Cancel"
 msgstr "Cancel"
@@ -430,10 +456,6 @@ msgstr "Download the Free iOS App"
 msgid "Dynamic Threshold"
 msgstr "Dynamic Threshold"
 
-#: src/components/DynamicQuorumInfoModal/index.tsx
-#~ msgid "Dynamic Treshold"
-#~ msgstr "Dynamic Treshold"
-
 #: src/components/Banner/index.tsx
 msgid "EVERY DAY,"
 msgstr "EVERY DAY,"
@@ -445,6 +467,10 @@ msgstr "Each time an auction is settled, the settlement transaction will also ca
 #: src/pages/Vote/index.tsx
 msgid "Ended"
 msgstr "Ended"
+
+#: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
+msgid "Ending on"
+msgstr "Ending on"
 
 #: src/pages/Vote/index.tsx
 msgid "Ends"
@@ -697,10 +723,6 @@ msgstr "Nounder's Reward"
 msgid "Nounders receive rewards in the form of Nouns (10% of supply for first 5 years)."
 msgstr "Nounders receive rewards in the form of Nouns (10% of supply for first 5 years)."
 
-#: src/components/Documentation/index.tsx
-#~ msgid "Nounders will proveably revoke this veto right when they deem it safe to do so. This decision will be based on a healthy Noun distribution and a community that is engaged in the governance process."
-#~ msgstr "Nounders will proveably revoke this veto right when they deem it safe to do so. This decision will be based on a healthy Noun distribution and a community that is engaged in the governance process."
-
 #: src/pages/Nounders/index.tsx
 msgid "Nounders' Reward"
 msgstr "Nounders' Reward"
@@ -786,6 +808,10 @@ msgstr "Only 32x32 PNG images are accepted"
 #: src/components/ProposalHeader/index.tsx
 msgid "Only Nouns you owned or were delegated to you before {0} are eligible to vote."
 msgstr "Only Nouns you owned or were delegated to you before {0} are eligible to vote."
+
+#: src/pages/Vote/index.tsx
+msgid "Only visible to you"
+msgstr "Only visible to you"
 
 #: src/components/NounProfileVoteRow/index.tsx
 #: src/components/ProposalStatus/index.tsx
@@ -884,9 +910,17 @@ msgstr "Reason (Optional)"
 msgid "Required % of Nouns to Pass"
 msgstr "Required % of Nouns to Pass"
 
+#: src/components/ProposalActionsModal/steps/StreamPaymentsDateDetailsStep/index.tsx
+msgid "Review Action Details"
+msgstr "Review Action Details"
+
 #: src/components/ProposalActionsModal/steps/FunctionCallReviewStep/index.tsx
 msgid "Review Function Call Action"
 msgstr "Review Function Call Action"
+
+#: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
+msgid "Review Streaming Payment Action"
+msgstr "Review Streaming Payment Action"
 
 #: src/components/ProposalActionsModal/steps/TransferFundsReviewStep/index.tsx
 msgid "Review Transfer Funds Action"
@@ -940,6 +974,10 @@ msgstr "Show fewer"
 msgid "Sign out"
 msgstr "Sign out"
 
+#: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
+msgid "Starting on"
+msgstr "Starting on"
+
 #: src/pages/Vote/index.tsx
 msgid "Starts"
 msgstr "Starts"
@@ -947,6 +985,18 @@ msgstr "Starts"
 #: src/components/Proposals/index.tsx
 msgid "Starts {0}"
 msgstr "Starts {0}"
+
+#: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
+msgid "Stream"
+msgstr "Stream"
+
+#: src/components/StreamWithdrawModal/index.tsx
+msgid "Streamed so far"
+msgstr "Streamed so far"
+
+#: src/components/ProposalActionsModal/steps/StreamPaymentsDateDetailsStep/index.tsx
+msgid "Streams start and end at 00:00 UTC on selected dates."
+msgstr "Streams start and end at 00:00 UTC on selected dates."
 
 #: src/components/Proposals/index.tsx
 #: src/components/Proposals/index.tsx
@@ -1039,10 +1089,6 @@ msgid "The Threshold (minimum number of For votes required to pass a proposal) i
 msgstr "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. It increases linearly as a function of the % of Nouns voting against a prop, varying between Min Threshold and Max Threshold."
 
 #: src/components/DynamicQuorumInfoModal/index.tsx
-#~ msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. It increases linearly as a function of the % of Nouns voting against a prop, varying between Min Treshold and Max Treshold."
-#~ msgstr "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. It increases linearly as a function of the % of Nouns voting against a prop, varying between Min Treshold and Max Treshold."
-
-#: src/components/DynamicQuorumInfoModal/index.tsx
 msgid "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. The number of For votes required to pass Proposal {0} is given by the following curve:"
 msgstr "The Threshold (minimum number of For votes required to pass a proposal) is set as a function of the number of Against votes a proposal has received. The number of For votes required to pass Proposal {0} is given by the following curve:"
 
@@ -1069,6 +1115,10 @@ msgstr "There are unfortunately no algorithmic solutions for making these determ
 #: src/components/VoteModal/index.tsx
 msgid "There was an error voting for your account."
 msgstr "There was an error voting for your account."
+
+#: src/components/StreamWithdrawModal/index.tsx
+msgid "There was an error withdrawing to your wallet."
+msgstr "There was an error withdrawing to your wallet."
 
 #: src/components/ProfileActivityFeed/index.tsx
 msgid "This Noun has no activity, since it was just created. Check back soon!"
@@ -1102,6 +1152,10 @@ msgstr "Tip"
 #: src/pages/CreateProposal/index.tsx
 #~ msgid "Tip:"
 #~ msgstr "Tip:"
+
+#: src/components/ProposalActionsModal/steps/StreamPaymentsReviewStep/index.tsx
+msgid "To"
+msgstr "To"
 
 #: src/components/Documentation/index.tsx
 msgid "Trait generation is not truly random. Traits can be predicted when minting a Noun on the pending block."
@@ -1244,6 +1298,10 @@ msgstr "WTF?"
 msgid "Waiting for"
 msgstr "Waiting for"
 
+#: src/components/ProposalActionsModal/steps/StreamPaymentsDateDetailsStep/index.tsx
+msgid "We suggest adding a buffer between when you assume the proposal to be executed and when the stream begins."
+msgstr "We suggest adding a buffer between when you assume the proposal to be executed and when the stream begins."
+
 #: src/components/Documentation/index.tsx
 msgid "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
 msgstr "While settlement is most heavily incentivized for the winning bidder, it can be triggered by anyone, allowing the system to trustlessly auction Nouns as long as Ethereum is operational and there are interested bidders."
@@ -1260,6 +1318,19 @@ msgstr "Winner"
 #: src/components/CurrentBid/index.tsx
 msgid "Winning bid"
 msgstr "Winning bid"
+
+#: src/components/StreamWithdrawModal/index.tsx
+msgid "Withdraw"
+msgstr "Withdraw"
+
+#: src/components/StreamWithdrawModal/index.tsx
+#: src/components/StreamWithdrawModal/index.tsx
+msgid "Withdraw from Stream"
+msgstr "Withdraw from Stream"
+
+#: src/pages/Vote/index.tsx
+msgid "Withdraw from Stream <0/>"
+msgstr "Withdraw from Stream <0/>"
 
 #: src/components/Winner/index.tsx
 msgid "You"
@@ -1325,6 +1396,10 @@ msgstr "You've generated {0} years worth of Nouns"
 msgid "You've successfully voted on on prop {0}"
 msgstr "You've successfully voted on on prop {0}"
 
+#: src/components/StreamWithdrawModal/index.tsx
+msgid "You've successfully withdrawn {withdrawAmount} {unitForDisplay} to your wallet"
+msgstr "You've successfully withdrawn {withdrawAmount} {unitForDisplay} to your wallet"
+
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Your <0>{availableVotes}</0> votes are being delegated to a new account."
 msgstr "Your <0>{availableVotes}</0> votes are being delegated to a new account."
@@ -1332,6 +1407,10 @@ msgstr "Your <0>{availableVotes}</0> votes are being delegated to a new account.
 #: src/components/ChangeDelegatePannel/index.tsx
 msgid "Your <0>{availableVotes}</0> votes have been delegated to a new account."
 msgstr "Your <0>{availableVotes}</0> votes have been delegated to a new account."
+
+#: src/components/ChangeDelegatePannel/index.tsx
+msgid "Your account will have less than {0} {1} after this delegation. Unexecuted props you've created will now be cancelable by anyone."
+msgstr "Your account will have less than {0} {1} after this delegation. Unexecuted props you've created will now be cancelable by anyone."
 
 #: src/components/Documentation/index.tsx
 msgid "accessories (140)"
@@ -1352,6 +1431,14 @@ msgstr "backgrounds (2)"
 #: src/components/Documentation/index.tsx
 msgid "bodies (30)"
 msgstr "bodies (30)"
+
+#: src/components/StartOrEndTime/index.tsx
+msgid "ended {0}"
+msgstr "ended {0}"
+
+#: src/components/StartOrEndTime/index.tsx
+msgid "ends {0}"
+msgstr "ends {0}"
 
 #: src/components/Documentation/index.tsx
 msgid "glasses (23)"
@@ -1380,6 +1467,10 @@ msgstr "public domain"
 #: src/components/AuctionTimer/index.tsx
 msgid "s"
 msgstr "s"
+
+#: src/components/StartOrEndTime/index.tsx
+msgid "starts {0}"
+msgstr "starts {0}"
 
 #: src/components/VoteCard/index.tsx
 #~ msgid "{0} <0>Address </0>"

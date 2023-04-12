@@ -193,3 +193,9 @@
 .cursorPointer {
   cursor: pointer;
 }
+
+.boldedLabel {
+  font-weight: 500;
+  color: var(--brand-gray-light-text);
+  margin-bottom: 0.5rem;
+}
