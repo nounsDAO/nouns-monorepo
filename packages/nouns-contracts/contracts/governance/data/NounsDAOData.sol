@@ -32,6 +32,8 @@ contract NounsDAOData is OwnableUpgradeable {
     error SlugAlreadyUsed();
     error SlugDoesNotExist();
     error MustBeNouner();
+    error AmountExceedsBalance();
+    error FailedWithdrawingETH(bytes data);
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -73,6 +75,7 @@ contract NounsDAOData is OwnableUpgradeable {
     event FeedbackSent(address indexed msgSender, uint256 proposalId, uint8 support, string reason);
     event CreateCandidateCostSet(uint256 oldCreateCandidateCost, uint256 newCreateCandidateCost);
     event UpdateCandidateCostSet(uint256 oldUpdateCandidateCost, uint256 newUpdateCandidateCost);
+    event ETHWithdrawn(address indexed to, uint256 amount);
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -264,6 +267,22 @@ contract NounsDAOData is OwnableUpgradeable {
         updateCandidateCost = newUpdateCandidateCost;
 
         emit UpdateCandidateCostSet(oldUpdateCandidateCost, newUpdateCandidateCost);
+    }
+
+    /**
+     * @notice Withdraw ETH from this contract's balance. Only owner can call this function.
+     * @param to the recipient.
+     * @param amount the ETH amount to send.
+     */
+    function withdrawETH(address to, uint256 amount) external onlyOwner {
+        if (amount > address(this).balance) revert AmountExceedsBalance();
+
+        (bool sent, bytes memory data) = to.call{ value: amount }('');
+        if (!sent) {
+            revert FailedWithdrawingETH(data);
+        }
+
+        emit ETHWithdrawn(to, amount);
     }
 
     /**

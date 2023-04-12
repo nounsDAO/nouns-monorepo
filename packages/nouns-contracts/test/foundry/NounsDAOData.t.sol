@@ -43,6 +43,7 @@ contract NounsDAODataTest is Test {
     event FeedbackSent(address indexed msgSender, uint256 proposalId, uint8 support, string reason);
     event CreateCandidateCostSet(uint256 oldCreateCandidateCost, uint256 newCreateCandidateCost);
     event UpdateCandidateCostSet(uint256 oldUpdateCandidateCost, uint256 newUpdateCandidateCost);
+    event ETHWithdrawn(address indexed to, uint256 amount);
 
     NounsTokenLikeMock tokenLikeMock;
     NounsDAODataProxyAdmin proxyAdmin;
@@ -389,6 +390,39 @@ contract NounsDAODataTest is Test {
         data.setUpdateCandidateCost(0.42 ether);
 
         assertEq(data.updateCandidateCost(), 0.42 ether);
+    }
+
+    function test_withdrawETH_revertsForNonAdmin() public {
+        address recipient = makeAddr('recipient');
+        assertEq(recipient.balance, 0);
+        vm.deal(address(data), 1.42 ether);
+
+        vm.expectRevert('Ownable: caller is not the owner');
+        data.withdrawETH(recipient, 1.42 ether);
+    }
+
+    function test_withdrawETH_revertsIfAmountExceedsBalance() public {
+        address recipient = makeAddr('recipient');
+        assertEq(recipient.balance, 0);
+        vm.deal(address(data), 1.42 ether);
+
+        vm.expectRevert(abi.encodeWithSelector(NounsDAOData.AmountExceedsBalance.selector));
+        vm.prank(dataAdmin);
+        data.withdrawETH(recipient, 1.69 ether);
+    }
+
+    function test_withdrawETH_sendsBalanceAndEmits() public {
+        address recipient = makeAddr('recipient');
+        assertEq(recipient.balance, 0);
+        vm.deal(address(data), 1.42 ether);
+
+        vm.expectEmit(true, true, true, true);
+        emit ETHWithdrawn(recipient, 1.42 ether);
+
+        vm.prank(dataAdmin);
+        data.withdrawETH(recipient, 1.42 ether);
+
+        assertEq(recipient.balance, 1.42 ether);
     }
 
     function createTxs(
