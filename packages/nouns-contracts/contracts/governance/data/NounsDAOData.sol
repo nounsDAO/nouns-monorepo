@@ -62,7 +62,8 @@ contract NounsDAOData is OwnableUpgradeable {
         bytes[] calldatas,
         string description,
         string slug,
-        bytes32 encodedProposalHash
+        bytes32 encodedProposalHash,
+        string reason
     );
     event ProposalCandidateCanceled(address indexed msgSender, string slug);
     event SignatureAdded(
@@ -175,6 +176,7 @@ contract NounsDAOData is OwnableUpgradeable {
      * @param calldatas the candidate proposal calldatas.
      * @param description the candidate proposal description.
      * @param slug the candidate proposal slug string, used alognside the proposer to uniquely identify candidates.
+     * @param reason the free text reason and context for the update.
      */
     function updateProposalCandidate(
         address[] memory targets,
@@ -182,7 +184,8 @@ contract NounsDAOData is OwnableUpgradeable {
         string[] memory signatures,
         bytes[] memory calldatas,
         string memory description,
-        string memory slug
+        string memory slug,
+        string memory reason
     ) external payable {
         if (!isNouner(msg.sender) && msg.value < updateCandidateCost) revert MustBeNounerOrPaySufficientFee();
         if (!propCandidates[msg.sender][keccak256(bytes(slug))]) revert SlugDoesNotExist();
@@ -201,7 +204,8 @@ contract NounsDAOData is OwnableUpgradeable {
             calldatas,
             description,
             slug,
-            keccak256(encodedProp)
+            keccak256(encodedProp),
+            reason
         );
     }
 

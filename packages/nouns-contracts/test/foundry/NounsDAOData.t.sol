@@ -28,7 +28,8 @@ contract NounsDAODataTest is Test, SigUtils {
         bytes[] calldatas,
         string description,
         string slug,
-        bytes32 encodedProposalHash
+        bytes32 encodedProposalHash,
+        string reason
     );
     event ProposalCandidateCanceled(address indexed msgSender, string slug);
     event SignatureAdded(
@@ -188,7 +189,15 @@ contract NounsDAODataTest is Test, SigUtils {
         );
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOData.MustBeNounerOrPaySufficientFee.selector));
-        data.updateProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, description, slug);
+        data.updateProposalCandidate(
+            txs.targets,
+            txs.values,
+            txs.signatures,
+            txs.calldatas,
+            description,
+            slug,
+            'reason'
+        );
     }
 
     function test_updateProposalCandidate_revertsOnUnseenSlug() public {
@@ -202,7 +211,8 @@ contract NounsDAODataTest is Test, SigUtils {
             txs.signatures,
             txs.calldatas,
             'description',
-            'slug'
+            'slug',
+            'reason'
         );
     }
 
@@ -223,10 +233,19 @@ contract NounsDAODataTest is Test, SigUtils {
             txs.calldatas,
             updateDescription,
             slug,
-            keccak256(NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, updateDescription))
+            keccak256(NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, updateDescription)),
+            'reason'
         );
 
-        data.updateProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, updateDescription, slug);
+        data.updateProposalCandidate(
+            txs.targets,
+            txs.values,
+            txs.signatures,
+            txs.calldatas,
+            updateDescription,
+            slug,
+            'reason'
+        );
     }
 
     function test_updateProposalCandidate_worksForNonNounerWithEnoughPayment() public {
@@ -252,7 +271,8 @@ contract NounsDAODataTest is Test, SigUtils {
             txs.calldatas,
             updateDescription,
             slug,
-            keccak256(NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, updateDescription))
+            keccak256(NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, updateDescription)),
+            'reason'
         );
 
         data.updateProposalCandidate{ value: data.updateCandidateCost() }(
@@ -261,7 +281,8 @@ contract NounsDAODataTest is Test, SigUtils {
             txs.signatures,
             txs.calldatas,
             updateDescription,
-            slug
+            slug,
+            'reason'
         );
     }
 
@@ -290,10 +311,19 @@ contract NounsDAODataTest is Test, SigUtils {
             txs.calldatas,
             updateDescription,
             slug,
-            keccak256(NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, updateDescription))
+            keccak256(NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, updateDescription)),
+            'reason'
         );
 
-        data.updateProposalCandidate(txs.targets, txs.values, txs.signatures, txs.calldatas, updateDescription, slug);
+        data.updateProposalCandidate(
+            txs.targets,
+            txs.values,
+            txs.signatures,
+            txs.calldatas,
+            updateDescription,
+            slug,
+            'reason'
+        );
     }
 
     function test_cancelProposalCandidate_revertsOnUnseenSlug() public {
