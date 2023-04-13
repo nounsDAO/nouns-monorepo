@@ -80,6 +80,18 @@ library NounsDAOV3Proposals {
         string updateMessage
     );
 
+    event ProposalTransactionsUpdated(
+        uint256 indexed id,
+        address indexed proposer,
+        address[] targets,
+        uint256[] values,
+        string[] signatures,
+        bytes[] calldatas,
+        string updateMessage
+    );
+
+    event ProposalDescriptionUpdated(uint256 indexed id, address indexed proposer, string description, string updateMessage);
+
     /// @notice An event emitted when a proposal has been queued in the NounsDAOExecutor
     event ProposalQueued(uint256 id, uint256 eta);
 
@@ -136,7 +148,7 @@ library NounsDAOV3Proposals {
         ProposalTemp memory temp;
         temp.totalSupply = ds.nouns.totalSupply();
         temp.proposalThreshold = checkPropThreshold(ds, ds.nouns.getPriorVotes(msg.sender, block.number - 1));
-        checkProposaTxs(txs);
+        checkProposalTxs(txs);
         checkNoActiveProp(ds, msg.sender);
 
         ds.proposalCount++;
@@ -160,7 +172,7 @@ library NounsDAOV3Proposals {
         string memory description
     ) external returns (uint256) {
         if (proposerSignatures.length == 0) revert MustProvideSignatures();
-        checkProposaTxs(txs);
+        checkProposalTxs(txs);
         uint256 proposalId = ds.proposalCount = ds.proposalCount + 1;
 
         bytes memory proposalEncodeData = calcProposalEncodeData(msg.sender, txs, description);
@@ -233,17 +245,7 @@ library NounsDAOV3Proposals {
         string memory description,
         string memory updateMessage
     ) external {
-        checkProposaTxs(ProposalTxs(targets, values, signatures, calldatas));
-
-        NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
-        if (state(ds, proposalId) != NounsDAOStorageV3.ProposalState.Updatable) revert CanOnlyEditUpdatableProposals();
-        if (msg.sender != proposal.proposer) revert OnlyProposerCanEdit();
-        if (proposal.signers.length > 0) revert ProposerCannotUpdateProposalWithSigners();
-
-        proposal.targets = targets;
-        proposal.values = values;
-        proposal.signatures = signatures;
-        proposal.calldatas = calldatas;
+        updateProposalTransactionsInternal(ds, proposalId, targets, values, signatures, calldatas);
 
         emit ProposalUpdated(
             proposalId,
@@ -256,6 +258,70 @@ library NounsDAOV3Proposals {
             updateMessage
         );
     }
+    
+    function updateProposalTransactions(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        uint256 proposalId,
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas,
+        string memory updateMessage
+    ) external {
+        updateProposalTransactionsInternal(ds, proposalId, targets, values, signatures, calldatas);
+
+        emit ProposalTransactionsUpdated(
+            proposalId,
+            msg.sender,
+            targets,
+            values,
+            signatures,
+            calldatas,
+            updateMessage
+        );
+    }
+
+    function updateProposalTransactionsInternal(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        uint256 proposalId,
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas
+    ) internal {
+        checkProposalTxs(ProposalTxs(targets, values, signatures, calldatas));
+
+        NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
+        checkProposalUpdatable(ds, proposalId, proposal);
+
+        proposal.targets = targets;
+        proposal.values = values;
+        proposal.signatures = signatures;
+        proposal.calldatas = calldatas;
+    }
+
+    function updateProposalDescription(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        uint256 proposalId,
+        string calldata description,
+        string calldata updateMessage
+    ) external {
+        NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
+        checkProposalUpdatable(ds, proposalId, proposal);
+
+        emit ProposalDescriptionUpdated(proposalId, msg.sender, description, updateMessage);
+    }
+
+    function checkProposalUpdatable(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        uint256 proposalId,
+        NounsDAOStorageV3.Proposal storage proposal
+    ) internal view {
+        // TODO: gas: does reading the proposal once save gas?
+        if (state(ds, proposalId) != NounsDAOStorageV3.ProposalState.Updatable) revert CanOnlyEditUpdatableProposals();
+        if (msg.sender != proposal.proposer) revert OnlyProposerCanEdit();
+        if (proposal.signers.length > 0) revert ProposerCannotUpdateProposalWithSigners();
+    }
 
     function updateProposalBySigs(
         NounsDAOStorageV3.StorageV3 storage ds,
@@ -265,7 +331,7 @@ library NounsDAOV3Proposals {
         string memory description,
         string memory updateMessage
     ) external {
-        checkProposaTxs(txs);
+        checkProposalTxs(txs);
         // without this check it's possible to run through this function and update a proposal without signatures
         // this problem doesn't exist in the propose function because we check for prop threshold there
         if (proposerSignatures.length == 0) revert MustProvideSignatures();
@@ -683,7 +749,7 @@ library NounsDAOV3Proposals {
         require(votes > propThreshold, 'NounsDAO::propose: proposer votes below proposal threshold');
     }
 
-    function checkProposaTxs(ProposalTxs memory txs) internal pure {
+    function checkProposalTxs(ProposalTxs memory txs) internal pure {
         if (
             txs.targets.length != txs.values.length ||
             txs.targets.length != txs.signatures.length ||

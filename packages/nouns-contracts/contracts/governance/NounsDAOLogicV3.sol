@@ -223,6 +223,31 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         ds.updateProposal(proposalId, targets, values, signatures, calldatas, description, updateMessage);
     }
 
+    /**
+     * Updates the proposal's description. Only the proposer can update it, and only during the updateable period.
+     * @param proposalId proposal's id
+     * @param description the updated description
+     * @param updateMessage short message to explain the update
+     */
+    function updateProposalDescription(uint256 proposalId, string calldata description, string calldata updateMessage) external {
+        ds.updateProposalDescription(proposalId, description, updateMessage);
+    }
+
+    /**
+     * Updates the proposal's transactions. Only the proposer can update it, and only during the updateable period.
+     */
+    function updateProposalTransactions(
+        uint256 proposalId,
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas,
+        string memory updateMessage
+    ) external {
+        // TODO: gas: should these be calldata instead of memory?
+        ds.updateProposalTransactions(proposalId, targets, values, signatures, calldatas, updateMessage);
+    }
+
     function updateProposalBySigs(
         uint256 proposalId,
         ProposerSignature[] memory proposerSignatures,
