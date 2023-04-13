@@ -1,10 +1,5 @@
 import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json';
-import {
-  ChainId,
-  ContractDeployment,
-  ContractNamesDAOV2,
-  DeployedContract,
-} from './types';
+import { ChainId, ContractDeployment, ContractNamesDAOV2, DeployedContract } from './types';
 import { Interface, parseUnits } from 'ethers/lib/utils';
 import { task, types } from 'hardhat/config';
 import { constants } from 'ethers';

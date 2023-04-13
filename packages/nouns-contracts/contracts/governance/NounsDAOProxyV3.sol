@@ -41,32 +41,28 @@ pragma solidity ^0.8.6;
 import './NounsDAOInterfaces.sol';
 
 contract NounsDAOProxyV3 is NounsDAOProxyStorage, NounsDAOEvents {
-    struct ProxyParams {
-        address admin2;
-        address implementation;
-    }
 
     constructor(
-        ProxyParams memory proxyParams,
         address timelock_,
         address nouns_,
         address vetoer_,
+        address admin_,
+        address implementation_,
         uint256 votingPeriod_,
         uint256 votingDelay_,
         uint256 proposalThresholdBPS_,
         NounsDAOStorageV3.DynamicQuorumParams memory dynamicQuorumParams_,
         uint32 lastMinuteWindowInBlocks_,
         uint32 objectionPeriodDurationInBlocks_,
-        uint32 proposalUpdatablePeriodInBlocks_,
-        uint256 voteSnapshotBlockSwitchProposalId_
+        uint32 proposalUpdatablePeriodInBlocks_
     ) {
         // Admin set to msg.sender for initialization
         admin = msg.sender;
 
         delegateTo(
-            proxyParams.implementation,
+            implementation_,
             abi.encodeWithSignature(
-                'initialize(address,address,address,uint256,uint256,uint256,(uint16,uint16,uint32),uint32,uint32,uint32,uint256)',
+                'initialize(address,address,address,uint256,uint256,uint256,(uint16,uint16,uint32),uint32,uint32,uint32)',
                 timelock_,
                 nouns_,
                 vetoer_,
@@ -76,14 +72,13 @@ contract NounsDAOProxyV3 is NounsDAOProxyStorage, NounsDAOEvents {
                 dynamicQuorumParams_,
                 lastMinuteWindowInBlocks_,
                 objectionPeriodDurationInBlocks_,
-                proposalUpdatablePeriodInBlocks_,
-                voteSnapshotBlockSwitchProposalId_
+                proposalUpdatablePeriodInBlocks_
             )
         );
 
-        _setImplementation(proxyParams.implementation);
+        _setImplementation(implementation_);
 
-        admin = proxyParams.admin2;
+        admin = admin_;
     }
 
     /**

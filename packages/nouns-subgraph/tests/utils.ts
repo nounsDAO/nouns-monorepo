@@ -8,6 +8,8 @@ import {
   QuorumCoefficientSet,
   ProposalObjectionPeriodSet,
   ProposalUpdated,
+  ProposalDescriptionUpdated,
+  ProposalTransactionsUpdated,
 } from '../src/types/NounsDAO/NounsDAO';
 import {
   handleMinQuorumVotesBPSSet,
@@ -16,6 +18,7 @@ import {
 } from '../src/nouns-dao';
 import { Address, ethereum, Bytes, BigInt, ByteArray } from '@graphprotocol/graph-ts';
 import { BIGINT_ONE, BIGINT_ZERO } from '../src/utils/constants';
+import { ProposalCandidateCreated } from '../src/types/NounsDAOData/NounsDAOData';
 
 export function createProposalCreatedWithRequirementsEventV3(
   input: ProposalCreatedWithRequirementsEvent,
@@ -315,6 +318,134 @@ export function createProposalUpdatedEvent(
   );
   newEvent.parameters.push(
     new ethereum.EventParam('description', ethereum.Value.fromString(description)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('updateMessage', ethereum.Value.fromString(updateMessage)),
+  );
+
+  return newEvent;
+}
+
+export function createProposalCandidateCreatedEvent(
+  txHash: Bytes,
+  logIndex: BigInt,
+  blockTimestamp: BigInt,
+  blockNumber: BigInt,
+  sender: Address,
+  targets: Address[],
+  values: BigInt[],
+  signatures: string[],
+  calldatas: Bytes[],
+  description: string,
+  slug: string,
+  encodedProposalHash: Bytes,
+): ProposalCandidateCreated {
+  let newEvent = changetype<ProposalCandidateCreated>(newMockEvent());
+
+  newEvent.transaction.hash = txHash;
+  newEvent.logIndex = logIndex;
+  newEvent.block.timestamp = blockTimestamp;
+  newEvent.block.number = blockNumber;
+
+  newEvent.parameters = new Array();
+  newEvent.parameters.push(
+    new ethereum.EventParam('msgSender', ethereum.Value.fromAddress(sender)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('targets', ethereum.Value.fromAddressArray(targets)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('values', ethereum.Value.fromUnsignedBigIntArray(values)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('signatures', ethereum.Value.fromStringArray(signatures)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('calldatas', ethereum.Value.fromBytesArray(calldatas)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('description', ethereum.Value.fromString(description)),
+  );
+  newEvent.parameters.push(new ethereum.EventParam('slug', ethereum.Value.fromString(slug)));
+  newEvent.parameters.push(
+    new ethereum.EventParam('encodedProposalHash', ethereum.Value.fromBytes(encodedProposalHash)),
+  );
+
+  return newEvent;
+}
+
+export function createProposalDescriptionUpdatedEvent(
+  txHash: Bytes,
+  logIndex: BigInt,
+  blockTimestamp: BigInt,
+  blockNumber: BigInt,
+  proposalId: BigInt,
+  proposer: Address,
+  description: string,
+  updateMessage: string,
+): ProposalDescriptionUpdated {
+  let newEvent = changetype<ProposalDescriptionUpdated>(newMockEvent());
+
+  newEvent.transaction.hash = txHash;
+  newEvent.logIndex = logIndex;
+  newEvent.block.timestamp = blockTimestamp;
+  newEvent.block.number = blockNumber;
+
+  newEvent.parameters = new Array();
+  newEvent.parameters.push(
+    new ethereum.EventParam('id', ethereum.Value.fromUnsignedBigInt(proposalId)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('proposer', ethereum.Value.fromAddress(proposer)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('description', ethereum.Value.fromString(description)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('updateMessage', ethereum.Value.fromString(updateMessage)),
+  );
+
+  return newEvent;
+}
+
+export function createProposalTransactionsUpdatedEvent(
+  txHash: Bytes,
+  logIndex: BigInt,
+  blockTimestamp: BigInt,
+  blockNumber: BigInt,
+  proposalId: BigInt,
+  proposer: Address,
+  targets: Address[],
+  values: BigInt[],
+  signatures: string[],
+  calldatas: Bytes[],
+  updateMessage: string,
+): ProposalTransactionsUpdated {
+  let newEvent = changetype<ProposalTransactionsUpdated>(newMockEvent());
+
+  newEvent.transaction.hash = txHash;
+  newEvent.logIndex = logIndex;
+  newEvent.block.timestamp = blockTimestamp;
+  newEvent.block.number = blockNumber;
+
+  newEvent.parameters = new Array();
+  newEvent.parameters.push(
+    new ethereum.EventParam('id', ethereum.Value.fromUnsignedBigInt(proposalId)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('proposer', ethereum.Value.fromAddress(proposer)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('targets', ethereum.Value.fromAddressArray(targets)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('values', ethereum.Value.fromUnsignedBigIntArray(values)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('signatures', ethereum.Value.fromStringArray(signatures)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('calldatas', ethereum.Value.fromBytesArray(calldatas)),
   );
   newEvent.parameters.push(
     new ethereum.EventParam('updateMessage', ethereum.Value.fromString(updateMessage)),

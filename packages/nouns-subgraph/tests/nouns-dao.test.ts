@@ -19,6 +19,8 @@ import {
   handleProposalCreated,
   handleProposalObjectionPeriodSet,
   handleProposalUpdated,
+  handleProposalDescriptionUpdated,
+  handleProposalTransactionsUpdated,
 } from '../src/nouns-dao';
 import {
   createProposalCreatedWithRequirementsEventV1,
@@ -31,6 +33,8 @@ import {
   handleAllQuorumParamEvents,
   createProposalObjectionPeriodSetEvent,
   createProposalUpdatedEvent,
+  createProposalDescriptionUpdatedEvent,
+  createProposalTransactionsUpdatedEvent,
 } from './utils';
 import {
   BIGINT_10K,
@@ -52,6 +56,16 @@ const proposerWithNoDelegate = Address.fromString('0x000000000000000000000000000
 const signerWithDelegate = Address.fromString('0x0000000000000000000000000000000000000003');
 const signerWithNoDelegate = Address.fromString('0x0000000000000000000000000000000000000004');
 
+const txHash = Bytes.fromI32(11);
+const logIndex = BigInt.fromI32(3);
+const updateBlockTimestamp = BigInt.fromI32(946684800);
+const updateBlockNumber = BigInt.fromI32(15537394);
+const proposalId = BigInt.fromI32(42);
+
+afterEach(() => {
+  clearStore();
+});
+
 describe('nouns-dao', () => {
   beforeEach(() => {
     const delegate = getOrCreateDelegate(proposerWithDelegate.toHexString());
@@ -59,10 +73,6 @@ describe('nouns-dao', () => {
     delegate.delegatedVotes = BIGINT_ONE;
     delegate.delegatedVotesRaw = BIGINT_ONE;
     delegate.save();
-  });
-
-  afterEach(() => {
-    clearStore();
   });
 
   describe('handleProposalCreated', () => {
@@ -418,14 +428,8 @@ describe('nouns-dao', () => {
     });
   });
 
-  describe('handleProposalUpdated', () => {
-    test('happy flow', () => {
-      const txHash = Bytes.fromI32(11);
-      const logIndex = BigInt.fromI32(3);
-      const updateBlockTimestamp = BigInt.fromI32(946684800);
-      const updateBlockNumber = BigInt.fromI32(15537394);
-      const proposalId = BigInt.fromI32(42);
-
+  describe('Proposal Updated', () => {
+    beforeEach(() => {
       const proposalEvent = new ParsedProposalV3();
       proposalEvent.id = proposalId.toString();
       proposalEvent.proposer = proposerWithDelegate.toHexString();
@@ -439,7 +443,103 @@ describe('nouns-dao', () => {
       proposalEvent.title = extractTitle(proposalEvent.description);
 
       handleProposalCreated(proposalEvent);
+    });
 
+    test('handleProposalDescriptionUpdated', () => {
+      const updateDescription = '# Updated Title\nUpdated body';
+      const updateMessage = 'some update message';
+
+      handleProposalDescriptionUpdated(
+        createProposalDescriptionUpdatedEvent(
+          txHash,
+          logIndex,
+          updateBlockTimestamp,
+          updateBlockNumber,
+          proposalId,
+          proposerWithDelegate,
+          updateDescription,
+          updateMessage,
+        ),
+      );
+
+      const proposal = Proposal.load(proposalId.toString())!;
+      assert.bigIntEquals(updateBlockTimestamp, proposal.lastUpdatedTimestamp);
+      assert.bigIntEquals(updateBlockNumber, proposal.lastUpdatedBlock);
+      assert.stringEquals(updateDescription, proposal.description);
+      assert.stringEquals(extractTitle(updateDescription), proposal.title);
+
+      // check that the original values remained as is
+      assert.bytesEquals(signerWithNoDelegate, proposal.targets![0]);
+      assert.bigIntEquals(BigInt.fromI32(987), proposal.values![0]);
+      assert.stringEquals('first signature', proposal.signatures![0]);
+      assert.bytesEquals(Bytes.fromI32(888), proposal.calldatas![0]);
+
+      const updatedVersionId = txHash.toHexString().concat('-').concat(logIndex.toString());
+      const updatedVersion = ProposalVersion.load(updatedVersionId)!;
+      assert.stringEquals(proposalId.toString(), updatedVersion.proposal);
+      assert.bigIntEquals(updateBlockTimestamp, updatedVersion.createdAt);
+      assert.stringEquals(updateDescription, updatedVersion.description);
+      assert.stringEquals(extractTitle(updateDescription), updatedVersion.title);
+      assert.stringEquals(updateMessage, updatedVersion.updateMessage);
+
+      // check that the original values are saved
+      assert.bytesEquals(signerWithNoDelegate, updatedVersion.targets![0]);
+      assert.bigIntEquals(BigInt.fromI32(987), updatedVersion.values![0]);
+      assert.stringEquals('first signature', updatedVersion.signatures![0]);
+      assert.bytesEquals(Bytes.fromI32(888), updatedVersion.calldatas![0]);
+    });
+
+    test('handleProposalTransactionsUpdated', () => {
+      const updateTargets = [signerWithDelegate];
+      const updateValues = [BigInt.fromI32(321)];
+      const updateSignatures = ['update signature'];
+      const updateCalldatas = [Bytes.fromI32(312)];
+      const updateMessage = 'some update message';
+
+      handleProposalTransactionsUpdated(
+        createProposalTransactionsUpdatedEvent(
+          txHash,
+          logIndex,
+          updateBlockTimestamp,
+          updateBlockNumber,
+          proposalId,
+          proposerWithDelegate,
+          updateTargets,
+          updateValues,
+          updateSignatures,
+          updateCalldatas,
+          updateMessage,
+        ),
+      );
+
+      const proposal = Proposal.load(proposalId.toString())!;
+      assert.bigIntEquals(updateBlockTimestamp, proposal.lastUpdatedTimestamp);
+      assert.bigIntEquals(updateBlockNumber, proposal.lastUpdatedBlock);
+      assert.bytesEquals(changetype<Bytes[]>(updateTargets)[0], proposal.targets![0]);
+      assert.bigIntEquals(updateValues[0], proposal.values![0]);
+      assert.stringEquals(updateSignatures[0], proposal.signatures![0]);
+      assert.bytesEquals(updateCalldatas[0], proposal.calldatas![0]);
+
+      // check that the original values remained as is
+      assert.stringEquals('# Original Title\nOriginal body', proposal.description);
+      assert.stringEquals('Original Title', proposal.title);
+
+      const updatedVersionId = txHash.toHexString().concat('-').concat(logIndex.toString());
+      const updatedVersion = ProposalVersion.load(updatedVersionId)!;
+      assert.stringEquals(proposalId.toString(), updatedVersion.proposal);
+      assert.bigIntEquals(updateBlockTimestamp, updatedVersion.createdAt);
+      assert.bytesEquals(changetype<Bytes[]>(updateTargets)[0], updatedVersion.targets![0]);
+      assert.bigIntEquals(updateValues[0], updatedVersion.values![0]);
+      assert.stringEquals(updateSignatures[0], updatedVersion.signatures![0]);
+      assert.bytesEquals(updateCalldatas[0], updatedVersion.calldatas![0]);
+      assert.stringEquals(updateMessage, updatedVersion.updateMessage);
+
+      // check that the original values are saved
+      assert.stringEquals('# Original Title\nOriginal body', updatedVersion.description);
+      assert.stringEquals('Original Title', updatedVersion.title);
+    });
+
+    test('handleProposalUpdated', () => {
       const updateTargets = [signerWithDelegate];
       const updateValues = [BigInt.fromI32(321)];
       const updateSignatures = ['update signature'];

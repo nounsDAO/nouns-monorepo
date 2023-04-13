@@ -268,6 +268,9 @@ type Proposal @entity {
 
   "The objection period end block"
   objectionPeriodEndBlock: BigInt!
+
+  "Feedback posts associated to this proposal"
+  feedbackPosts: [ProposalFeedback!]! @derivedFrom(field: "proposal")
 }
 
 type ProposalVersion @entity(immutable: true) {
@@ -377,4 +380,156 @@ type DynamicQuorumParams @entity {
 
   "The block from which proposals are using DQ, based on when we first see configuration being set"
   dynamicQuorumStartBlock: BigInt
+}
+
+type ProposalCandidate @entity {
+  "A concatination of proposer and slug"
+  id: ID!
+
+  "The proposer account"
+  proposer: Bytes!
+
+  "The candidate slug, together with the proposer account makes the candidate's unique key"
+  slug: String!
+
+  "Targets data for the change"
+  targets: [Bytes!]
+
+  "Values data for the change"
+  values: [BigInt!]
+
+  "Signature data for the change"
+  signatures: [String!]
+
+  "Call data for the change"
+  calldatas: [Bytes!]
+
+  "The full proposal description, which includes the title"
+  description: String!
+
+  "The proposal title, parsed from the description"
+  title: String!
+
+  "The hash of the abi encoded proposal data"
+  encodedProposalHash: Bytes!
+
+  "The proposal candidate creation transaction hash"
+  createdTransactionHash: Bytes!
+
+  "The proposal candidate creation timestamp"
+  createdTimestamp: BigInt!
+
+  "The proposal candidate creation block"
+  createdBlock: BigInt!
+
+  "The proposal candidate's last update timestamp"
+  lastUpdatedTimestamp: BigInt!
+
+  "The proposal candidate's last update block"
+  lastUpdatedBlock: BigInt!
+
+  "Delegates that add a signature on this proposal candidate to get it over the proposal threshold"
+  signers: [Delegate!]
+
+  "Whether this candidate was canceled or not"
+  canceled: Boolean!
+
+  "The timestamp at which this candidate was canceled"
+  canceledTimestamp: BigInt
+
+  "The block number at which this candidate was canceled"
+  canceledBlock: BigInt
+
+  "This candidate's versions"
+  versions: [ProposalCandidateVersion!]! @derivedFrom(field: "proposal")
+}
+
+type ProposalCandidateVersion @entity(immutable: true) {
+  "A concatination of tx hash and log index, just to make sure these entities have a unique ID"
+  id: ID!
+
+  "The proposal candidate this entity is a version of"
+  proposal: ProposalCandidate!
+
+  "This version's creation timestamp"
+  createdTimestamp: BigInt!
+
+  "The version's creation block"
+  createdBlock: BigInt!
+
+  "Targets data for the change"
+  targets: [Bytes!]
+
+  "Values data for the change"
+  values: [BigInt!]
+
+  "Signature data for the change"
+  signatures: [String!]
+
+  "Call data for the change"
+  calldatas: [Bytes!]
+
+  "The full proposal description, which includes the title"
+  description: String!
+
+  "The proposal title, parsed from the description"
+  title: String!
+
+  "The hash of the abi encoded proposal data"
+  encodedProposalHash: Bytes!
+
+  "The update message of this version, relevant when it's an update"
+  updateMessage: String!
+}
+
+type ProposalCandidateSignature @entity(immutable: true) {
+  "A concatination of tx hash and log index, just to make sure these entities have a unique ID"
+  id: ID!
+
+  "The candidate version this signature is signing on"
+  version: ProposalCandidateVersion!
+
+  "The signing account"
+  signer: Delegate!
+
+  "The signature bytes"
+  sig: Bytes!
+
+  "The signature's expiration timestamp"
+  expirationTimestamp: BigInt!
+
+  "The hash of the abi encoded proposal data"
+  encodedProposalHash: Bytes!
+
+  "The typed signature hash"
+  sigDigest: Bytes!
+
+  "The free text signer reason"
+  reason: String!
+}
+
+type ProposalFeedback @entity(immutable: true) {
+  "A concatination of tx hash and log index, just to make sure these entities have a unique ID"
+  id: ID!
+
+  "This feedback's creation timestamp"
+  createdTimestamp: BigInt!
+
+  "The feedback's creation block"
+  createdBlock: BigInt!
+
+  "The proposal this feedback is provided on"
+  proposal: Proposal!
+
+  "The voter account providing the feedback"
+  voter: Delegate!
+
+  "The integer support value: against (0), for (1), or abstain (2)"
+  supportDetailed: Int!
+
+  "Amount of votes voter had when feedback was submitted"
+  votes: BigInt!
+
+  "The optional feedback reason free text"
+  reason: String
 }

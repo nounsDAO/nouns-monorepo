@@ -41,6 +41,9 @@ import { SearchIcon } from '@heroicons/react/solid';
 import ReactTooltip from 'react-tooltip';
 import DynamicQuorumInfoModal from '../../components/DynamicQuorumInfoModal';
 import config from '../../config';
+import ShortAddress from '../../components/ShortAddress';
+import StreamWithdrawModal from '../../components/StreamWithdrawModal';
+import { parseStreamCreationCallData } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -62,6 +65,14 @@ const VotePage = ({
   const [isQueuePending, setQueuePending] = useState<boolean>(false);
   const [isExecutePending, setExecutePending] = useState<boolean>(false);
   const [isCancelPending, setCancelPending] = useState<boolean>(false);
+  const [showStreamWithdrawModal, setShowStreamWithdrawModal] = useState<boolean>(false);
+  const [streamWithdrawInfo, setStreamWithdrawInfo] = useState<{
+    streamAddress: string;
+    startTime: number;
+    endTime: number;
+    streamAmount: number;
+    tokenAddress: string;
+  } | null>(null);
 
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
@@ -323,6 +334,11 @@ const VotePage = ({
           currentQuorum={currentQuorum}
         />
       )}
+      <StreamWithdrawModal
+        show={showStreamWithdrawModal}
+        onDismiss={() => setShowStreamWithdrawModal(false)}
+        {...streamWithdrawInfo}
+      />
       <VoteModal
         show={showVoteModal}
         onHide={() => setShowVoteModal(false)}
@@ -340,6 +356,45 @@ const VotePage = ({
         )}
       </Col>
       <Col lg={10} className={clsx(classes.proposal, classes.wrapper)}>
+        {proposal.status === ProposalState.EXECUTED &&
+          proposal.details
+            .filter(txn => txn?.functionSig.includes('createStream'))
+            .map(txn => {
+              const parsedCallData = parseStreamCreationCallData(txn.callData);
+              if (parsedCallData.recipient.toLowerCase() !== account?.toLowerCase()) {
+                return <></>;
+              }
+
+              return (
+                <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
+                  <span className={classes.boldedLabel}>
+                    <Trans>Only visible to you</Trans>
+                  </span>
+                  <Col className="d-grid gap-4">
+                    <Button
+                      onClick={() => {
+                        setShowStreamWithdrawModal(true);
+                        setStreamWithdrawInfo({
+                          streamAddress: parsedCallData.streamAddress,
+                          startTime: parsedCallData.startTime,
+                          endTime: parsedCallData.endTime,
+                          streamAmount: parsedCallData.streamAmount,
+                          tokenAddress: parsedCallData.tokenAddress,
+                        });
+                      }}
+                      variant="primary"
+                      className={classes.transitionStateButton}
+                    >
+                      <Trans>
+                        Withdraw from Stream{' '}
+                        <ShortAddress address={parsedCallData.streamAddress ?? ''} />
+                      </Trans>
+                    </Button>
+                  </Col>
+                </Row>
+              );
+            })}
+
         {(isAwaitingStateChange() || isAwaitingDestructiveStateChange()) && (
           <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
             <Col className="d-grid gap-4">

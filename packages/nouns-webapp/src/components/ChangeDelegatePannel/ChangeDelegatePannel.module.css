@@ -97,3 +97,12 @@
   margin-left: 0.25rem;
   color: var(--brand-cool-light-text);
 }
+
+.changeDelegateWarning {
+  border: 1px solid var(--brand-color-red);
+  background-color: var(--brand-color-red-translucent);
+  color: var(--brand-color-red);
+  padding: 0.25rem 1rem;
+  border-radius: 14px;
+  margin-top: -0.5rem;
+}

@@ -11,6 +11,7 @@ import ModalTitle from '../../../ModalTitle';
 
 export enum SupportedCurrency {
   ETH = 'ETH',
+  WETH = 'WETH',
   USDC = 'USDC',
 }
 

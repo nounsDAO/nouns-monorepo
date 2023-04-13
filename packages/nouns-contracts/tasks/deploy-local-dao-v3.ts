@@ -1,19 +1,23 @@
 import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json';
+import { default as NounsDaoDataABI } from '../abi/contracts/governance/NounsDAOData.sol/NounsDAOData.json';
 import { task, types } from 'hardhat/config';
 import { Interface, parseUnits } from 'ethers/lib/utils';
 import { Contract as EthersContract } from 'ethers';
 import { ContractName } from './types';
 
 type LocalContractName =
-  | Exclude<ContractName, 'NounsDAOLogicV1' | 'NounsDAOProxy' | 'NounsDAOLogicV2' >
+  | Exclude<ContractName, 'NounsDAOLogicV1' | 'NounsDAOProxy' | 'NounsDAOLogicV2'>
   | 'NounsDAOLogicV3'
-  | 'NounsDAOProxyV2'
+  | 'NounsDAOProxyV3'
   | 'NounsDAOV3Admin'
   | 'NounsDAOV3DynamicQuorum'
   | 'NounsDAOV3Proposals'
   | 'NounsDAOV3Votes'
   | 'WETH'
-  | 'Multicall2';
+  | 'Multicall2'
+  | 'NounsDAOData'
+  | 'NounsDAODataProxy'
+  | 'NounsDAODataProxyAdmin';
 
 interface Contract {
   args?: (string | number | (() => string | undefined))[];
@@ -50,6 +54,18 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
     types.int,
   ) // Default: 40%
   .addOptionalParam('quorumCoefficient', 'Dynamic quorum coefficient (float)', 1, types.float)
+  .addOptionalParam(
+    'createCandidateCost',
+    'Data contract proposal candidate creation cost in wei',
+    100000000000000, // 0.0001 ether
+    types.int,
+  )
+  .addOptionalParam(
+    'updateCandidateCost',
+    'Data contract proposal candidate update cost in wei',
+    0,
+    types.int,
+  )
   .setAction(async (args, { ethers }) => {
     const network = await ethers.provider.getNetwork();
     if (network.chainId !== 31337) {
@@ -130,7 +146,7 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
       NounsDAOV3Admin: {
         libraries: () => ({
           NounsDAOV3DynamicQuorum: contracts.NounsDAOV3DynamicQuorum.instance?.address as string,
-        })
+        }),
       },
       NounsDAOV3Proposals: {},
       NounsDAOV3Votes: {},
@@ -143,25 +159,47 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
         }),
         waitForConfirmation: true,
       },
-      NounsDAOProxyV2: {
+      NounsDAOProxyV3: {
         args: [
-          () => contracts.NounsDAOExecutor.instance?.address,
-          () => contracts.NounsToken.instance?.address,
-          args.noundersdao || deployer.address,
-          () => contracts.NounsDAOExecutor.instance?.address,
-          () => contracts.NounsDAOLogicV3.instance?.address,
-          args.votingPeriod,
-          args.votingDelay,
-          args.proposalThresholdBps,
+          () => contracts.NounsDAOExecutor.instance?.address, // timelock
+          () => contracts.NounsToken.instance?.address, // token
+          args.noundersdao || deployer.address, // vetoer
+          () => contracts.NounsDAOExecutor.instance?.address, // admin
+          () => contracts.NounsDAOLogicV3.instance?.address, // implementation
+          args.votingPeriod, // votingPeriod
+          args.votingDelay, // votingDelay
+          args.proposalThresholdBps, // proposalThresholdBps
           {
             minQuorumVotesBPS: args.minQuorumVotesBPS,
             maxQuorumVotesBPS: args.maxQuorumVotesBPS,
             quorumCoefficient: parseUnits(args.quorumCoefficient.toString(), 6),
-          },
+          }, // DynamicQuorumParams
+          0, // lastMinuteWindowInBlocks
+          0, // objectionPeriodDurationInBlocks
+          0, // proposalUpdatablePeriodInBlocks
         ],
         waitForConfirmation: true,
       },
       Multicall2: {},
+      NounsDAOData: {
+        args: [() => contracts.NounsToken.instance?.address],
+        waitForConfirmation: true,
+      },
+      NounsDAODataProxyAdmin: {
+        waitForConfirmation: true,
+      },
+      NounsDAODataProxy: {
+        args: [
+          () => contracts.NounsDAOData.instance?.address,
+          () => contracts.NounsDAODataProxyAdmin.instance?.address,
+          () =>
+            new Interface(NounsDaoDataABI).encodeFunctionData('initialize', [
+              contracts.NounsDAOExecutor.instance?.address,
+              args.createCandidateCost,
+              args.updateCandidateCost,
+            ]),
+        ],
+      },
     };
 
     for (const [name, contract] of Object.entries(contracts)) {
@@ -183,17 +221,23 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
     }
 
     if (expectedNounsArtAddress !== contracts.NounsArt.instance?.address) {
-      console.log(`wrong art address expected: ${expectedNounsArtAddress} actual: ${contracts.NounsArt.instance?.address}`);
+      console.log(
+        `wrong art address expected: ${expectedNounsArtAddress} actual: ${contracts.NounsArt.instance?.address}`,
+      );
       throw 'wrong address';
     }
 
     if (expectedAuctionHouseProxyAddress !== contracts.NounsAuctionHouseProxy.instance?.address) {
-      console.log(`wrong auctio house proxy address expected: ${expectedAuctionHouseProxyAddress} actual: ${contracts.NounsAuctionHouseProxy.instance?.address}`);
+      console.log(
+        `wrong auctio house proxy address expected: ${expectedAuctionHouseProxyAddress} actual: ${contracts.NounsAuctionHouseProxy.instance?.address}`,
+      );
       throw 'wrong address';
     }
 
-    if (expectedNounsDAOProxyAddress !== contracts.NounsDAOProxyV2.instance?.address) {
-      console.log(`wrong dao proxy address expected: ${expectedNounsDAOProxyAddress} actual: ${contracts.NounsDAOProxyV2.instance?.address}`);
+    if (expectedNounsDAOProxyAddress !== contracts.NounsDAOProxyV3.instance?.address) {
+      console.log(
+        `wrong dao proxy address expected: ${expectedNounsDAOProxyAddress} actual: ${contracts.NounsDAOProxyV3.instance?.address}`,
+      );
       throw 'wrong address';
     }
 

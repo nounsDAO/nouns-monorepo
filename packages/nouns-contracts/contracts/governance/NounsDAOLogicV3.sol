@@ -142,8 +142,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         DynamicQuorumParams calldata dynamicQuorumParams_,
         uint32 lastMinuteWindowInBlocks_,
         uint32 objectionPeriodDurationInBlocks_,
-        uint32 proposalUpdatablePeriodInBlocks_,
-        uint256 voteSnapshotBlockSwitchProposalId_
+        uint32 proposalUpdatablePeriodInBlocks_
     ) public virtual {
         if (address(ds.timelock) != address(0)) revert CanOnlyInitializeOnce();
         if (msg.sender != ds.admin) revert AdminOnly();
@@ -165,7 +164,6 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         ds._setLastMinuteWindowInBlocks(lastMinuteWindowInBlocks_);
         ds._setObjectionPeriodDurationInBlocks(objectionPeriodDurationInBlocks_);
         ds._setProposalUpdatablePeriodInBlock(proposalUpdatablePeriodInBlocks_);
-        ds._setVoteSnapshotBlockSwitchProposalId(voteSnapshotBlockSwitchProposalId_);
     }
 
     /**
@@ -223,6 +221,31 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         string memory updateMessage
     ) external {
         ds.updateProposal(proposalId, targets, values, signatures, calldatas, description, updateMessage);
+    }
+
+    /**
+     * Updates the proposal's description. Only the proposer can update it, and only during the updateable period.
+     * @param proposalId proposal's id
+     * @param description the updated description
+     * @param updateMessage short message to explain the update
+     */
+    function updateProposalDescription(uint256 proposalId, string calldata description, string calldata updateMessage) external {
+        ds.updateProposalDescription(proposalId, description, updateMessage);
+    }
+
+    /**
+     * Updates the proposal's transactions. Only the proposer can update it, and only during the updateable period.
+     */
+    function updateProposalTransactions(
+        uint256 proposalId,
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas,
+        string memory updateMessage
+    ) external {
+        // TODO: gas: should these be calldata instead of memory?
+        ds.updateProposalTransactions(proposalId, targets, values, signatures, calldatas, updateMessage);
     }
 
     function updateProposalBySigs(

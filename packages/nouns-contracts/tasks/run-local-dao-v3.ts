@@ -12,7 +12,7 @@ task(
     new Promise(resolve => setTimeout(resolve, 2_000)),
   ]);
 
-  const contracts = await run('deploy-local-dao-v3', {votingDelay: 10});
+  const contracts = await run('deploy-local-dao-v3', { votingDelay: 10 });
 
   await run('populate-descriptor', {
     nftDescriptor: contracts.NFTDescriptorV2.instance.address,
@@ -33,6 +33,7 @@ task(
   await contracts.NounsAuctionHouse.instance
     .attach(contracts.NounsAuctionHouseProxy.instance.address)
     .transferOwnership(executorAddress);
+  await contracts.NounsDAODataProxyAdmin.instance.transferOwnership(executorAddress);
   console.log(
     'Transferred ownership of the descriptor, token, and proxy admin contracts to the executor.',
   );
@@ -61,7 +62,8 @@ task(
   console.log(`Auction House Proxy address: ${contracts.NounsAuctionHouseProxy.instance.address}`);
   console.log(`Nouns ERC721 address: ${contracts.NounsToken.instance.address}`);
   console.log(`Nouns DAO Executor address: ${contracts.NounsDAOExecutor.instance.address}`);
-  console.log(`Nouns DAO Proxy address: ${contracts.NounsDAOProxyV2.instance.address}`);
+  console.log(`Nouns DAO Proxy address: ${contracts.NounsDAOProxyV3.instance.address}`);
+  console.log(`Data Proxy address: ${contracts.NounsDAODataProxy.instance.address}`);
 
   await ethers.provider.send('evm_setIntervalMining', [12_000]);
 

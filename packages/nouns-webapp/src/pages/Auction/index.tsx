@@ -44,17 +44,23 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
   }, [lastAuctionNounId, dispatch, initialAuctionId, onDisplayAuction]);
 
   const isCoolBackground = useAppSelector(state => state.application.isCoolBackground);
-  const backgroundColor = isCoolBackground ? 'var(--brand-cool-background)' : 'var(--brand-warm-background)';
+  const backgroundColor = isCoolBackground
+    ? 'var(--brand-cool-background)'
+    : 'var(--brand-warm-background)';
 
   return (
     <>
       <Auction auction={onDisplayAuction} />
       {onDisplayAuctionNounId !== undefined && onDisplayAuctionNounId !== lastAuctionNounId ? (
         <ProfileActivityFeed nounId={onDisplayAuctionNounId} />
-      ) : (<NounsIntroSection />)}
+      ) : (
+        <NounsIntroSection />
+      )}
       <Documentation
         backgroundColor={
-          onDisplayAuctionNounId === undefined || onDisplayAuctionNounId === lastAuctionNounId ? backgroundColor : undefined
+          onDisplayAuctionNounId === undefined || onDisplayAuctionNounId === lastAuctionNounId
+            ? backgroundColor
+            : undefined
         }
       />
     </>
