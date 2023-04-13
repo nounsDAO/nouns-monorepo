@@ -55,9 +55,6 @@ export function handleProposalCandidateUpdated(event: ProposalCandidateUpdated):
   candidate.description = event.params.description.split('\\n').join('\n');
   candidate.title = extractTitle(candidate.description);
   candidate.encodedProposalHash = event.params.encodedProposalHash;
-  candidate.createdTransactionHash = event.transaction.hash;
-  candidate.createdTimestamp = event.block.timestamp;
-  candidate.createdBlock = event.block.number;
   candidate.lastUpdatedTimestamp = event.block.timestamp;
   candidate.lastUpdatedBlock = event.block.number;
   candidate.save();
