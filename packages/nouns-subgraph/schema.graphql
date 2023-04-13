@@ -435,10 +435,10 @@ type ProposalCandidate @entity {
   canceled: Boolean!
 
   "The timestamp at which this candidate was canceled"
-  canceledTimestamp: BigInt!
+  canceledTimestamp: BigInt
 
   "The block number at which this candidate was canceled"
-  canceledBlock: BigInt!
+  canceledBlock: BigInt
 
   "This candidate's versions"
   versions: [ProposalCandidateVersion!]! @derivedFrom(field: "proposal")

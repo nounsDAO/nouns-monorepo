@@ -34,6 +34,7 @@ export function handleProposalCandidateCreated(event: ProposalCandidateCreated):
   candidate.createdBlock = event.block.number;
   candidate.lastUpdatedTimestamp = event.block.timestamp;
   candidate.lastUpdatedBlock = event.block.number;
+  candidate.canceled = false;
 
   candidate.save();
 
