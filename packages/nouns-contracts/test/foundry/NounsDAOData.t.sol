@@ -53,15 +53,14 @@ contract NounsDAODataTest is Test {
 
     function setUp() public {
         tokenLikeMock = new NounsTokenLikeMock();
-        NounsDAOData logic = new NounsDAOData();
+        NounsDAOData logic = new NounsDAOData(address(tokenLikeMock));
         proxyAdmin = new NounsDAODataProxyAdmin();
 
         bytes memory initCallData = abi.encodeWithSignature(
-            'initialize(address,uint256,uint256,address)',
+            'initialize(address,uint256,uint256)',
             address(dataAdmin),
             0.01 ether,
-            0.01 ether,
-            address(tokenLikeMock)
+            0.01 ether
         );
 
         proxy = new NounsDAODataProxy(address(logic), address(proxyAdmin), initCallData);

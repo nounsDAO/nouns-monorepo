@@ -83,34 +83,34 @@ contract NounsDAOData is OwnableUpgradeable {
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
 
+    /// @notice The Nouns token contract.
+    NounsTokenLike public immutable nounsToken;
     /// @notice The cost non-Nouners must pay in ETH in order to emit a new proposal candidate event from this contract.
     uint256 public createCandidateCost;
     /// @notice The cost non-Nouners must pay in ETH in order to emit a proposal candidate update event from this contract.
     uint256 public updateCandidateCost;
-    /// @notice The Nouns token contract.
-    NounsTokenLike public nounsToken;
     /// @notice The state of which (proposer,slug) pairs have been used to create a proposal candidate.
     mapping(address => mapping(bytes32 => bool)) public propCandidates;
+
+    constructor(address nounsToken_) {
+        nounsToken = NounsTokenLike(nounsToken_);
+    }
 
     /**
      * @notice Initialize this data availability contract.
      * @param admin the account that can set config state like `createCandidateCost` and `updateCandidateCost`
      * @param createCandidateCost_ the cost non-Nouners must pay in ETH in order to emit a new proposal candidate event from this contract.
      * @param updateCandidateCost_ the cost non-Nouners must pay in ETH in order to emit a proposal candidate update event from this contract.
-     * @param nounsToken_ the Nouns token contract.
      */
     function initialize(
         address admin,
         uint256 createCandidateCost_,
-        uint256 updateCandidateCost_,
-        address nounsToken_
+        uint256 updateCandidateCost_
     ) external initializer {
         _transferOwnership(admin);
 
         createCandidateCost = createCandidateCost_;
         updateCandidateCost = updateCandidateCost_;
-
-        nounsToken = NounsTokenLike(nounsToken_);
     }
 
     /**
