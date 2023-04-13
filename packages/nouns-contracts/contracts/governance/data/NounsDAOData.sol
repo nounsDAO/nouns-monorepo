@@ -36,6 +36,7 @@ contract NounsDAOData is OwnableUpgradeable {
     error AmountExceedsBalance();
     error FailedWithdrawingETH(bytes data);
     error InvalidSignature();
+    error InvalidSupportValue();
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -258,7 +259,7 @@ contract NounsDAOData is OwnableUpgradeable {
      * @notice Send feedback on a proposal. Meant to be used during a proposal's Updatable period, to help proposers receive
      * valuable feedback and update their proposal in time.
      * @param proposalId the ID of the proposal.
-     * @param support msg.sender's vote-like feedback: for, against or abstain.
+     * @param support msg.sender's vote-like feedback: 0 is against, 1 is for, 2 is abstain.
      * @param reason their free text feedback.
      */
     function sendFeedback(
@@ -266,6 +267,7 @@ contract NounsDAOData is OwnableUpgradeable {
         uint8 support,
         string memory reason
     ) external {
+        if (support > 2) revert InvalidSupportValue();
         if (!isNouner(msg.sender)) revert MustBeNouner();
 
         emit FeedbackSent(msg.sender, proposalId, support, reason);

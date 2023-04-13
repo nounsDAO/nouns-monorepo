@@ -408,6 +408,13 @@ contract NounsDAODataTest is Test, SigUtils {
         data.sendFeedback(1, 1, 'reason');
     }
 
+    function test_sendFeedback_revertsWithBadSupportValue() public {
+        tokenLikeMock.setPriorVotes(address(this), block.number - 1, 1);
+
+        vm.expectRevert(abi.encodeWithSelector(NounsDAOData.InvalidSupportValue.selector));
+        data.sendFeedback(1, 3, 'some reason');
+    }
+
     function test_sendFeedback_emitsEventForNouner() public {
         tokenLikeMock.setPriorVotes(address(this), block.number - 1, 1);
 
