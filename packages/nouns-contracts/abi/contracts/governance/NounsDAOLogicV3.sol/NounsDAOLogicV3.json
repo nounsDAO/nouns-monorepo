@@ -16,11 +16,6 @@
   },
   {
     "inputs": [],
-    "name": "InvalidSignature",
-    "type": "error"
-  },
-  {
-    "inputs": [],
     "name": "InvalidTimelockAddress",
     "type": "error"
   },
@@ -31,27 +26,12 @@
   },
   {
     "inputs": [],
-    "name": "MustProvideSignatures",
-    "type": "error"
-  },
-  {
-    "inputs": [],
     "name": "ProposalInfoArityMismatch",
     "type": "error"
   },
   {
     "inputs": [],
     "name": "ProposerAlreadyHasALiveProposal",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "SignatureExpired",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "SignatureIsCancelled",
     "type": "error"
   },
   {
@@ -465,6 +445,37 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "proposer",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "description",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "updateMessage",
+        "type": "string"
+      }
+    ],
+    "name": "ProposalDescriptionUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": false,
         "internalType": "uint256",
         "name": "id",
@@ -529,6 +540,55 @@
       }
     ],
     "name": "ProposalThresholdBPSSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "proposer",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address[]",
+        "name": "targets",
+        "type": "address[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256[]",
+        "name": "values",
+        "type": "uint256[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "string[]",
+        "name": "signatures",
+        "type": "string[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes[]",
+        "name": "calldatas",
+        "type": "bytes[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "updateMessage",
+        "type": "string"
+      }
+    ],
+    "name": "ProposalTransactionsUpdated",
     "type": "event"
   },
   {
@@ -1488,11 +1548,6 @@
         "internalType": "uint32",
         "name": "proposalUpdatablePeriodInBlocks_",
         "type": "uint32"
-      },
-      {
-        "internalType": "uint256",
-        "name": "voteSnapshotBlockSwitchProposalId_",
-        "type": "uint256"
       }
     ],
     "name": "initialize",
@@ -2227,6 +2282,67 @@
       }
     ],
     "name": "updateProposalBySigs",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "proposalId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "description",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "updateMessage",
+        "type": "string"
+      }
+    ],
+    "name": "updateProposalDescription",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "proposalId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "targets",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "values",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "signatures",
+        "type": "string[]"
+      },
+      {
+        "internalType": "bytes[]",
+        "name": "calldatas",
+        "type": "bytes[]"
+      },
+      {
+        "internalType": "string",
+        "name": "updateMessage",
+        "type": "string"
+      }
+    ],
+    "name": "updateProposalTransactions",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

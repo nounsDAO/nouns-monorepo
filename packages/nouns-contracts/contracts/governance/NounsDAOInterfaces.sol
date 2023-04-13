@@ -156,6 +156,18 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
         string updateMessage
     );
 
+    event ProposalTransactionsUpdated(
+        uint256 indexed id,
+        address indexed proposer,
+        address[] targets,
+        uint256[] values,
+        string[] signatures,
+        bytes[] calldatas,
+        string updateMessage
+    );
+
+    event ProposalDescriptionUpdated(uint256 indexed id, address indexed proposer, string description, string updateMessage);
+
     /// @notice Emitted when a proposal is set to have an objection period
     event ProposalObjectionPeriodSet(uint256 indexed id, uint256 objectionPeriodEndBlock);
 
