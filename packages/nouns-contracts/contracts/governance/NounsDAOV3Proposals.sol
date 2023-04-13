@@ -702,20 +702,34 @@ library NounsDAOV3Proposals {
         bytes32 sigHash = keccak256(proposerSignature.sig);
         if (ds.cancelledSigs[proposerSignature.signer][sigHash]) revert SignatureIsCancelled();
 
-        bytes32 structHash = keccak256(
-            abi.encodePacked(typehash, proposalEncodeData, proposerSignature.expirationTimestamp)
-        );
-
-        bytes32 domainSeparator = keccak256(
-            abi.encode(DOMAIN_TYPEHASH, keccak256(bytes('Nouns DAO')), block.chainid, address(this))
-        );
-
-        bytes32 digest = ECDSA.toTypedDataHash(domainSeparator, structHash);
-
+        bytes32 digest = sigDigest(typehash, proposalEncodeData, proposerSignature.expirationTimestamp, address(this));
         if (!SignatureChecker.isValidSignatureNow(proposerSignature.signer, digest, proposerSignature.sig))
             revert InvalidSignature();
 
         if (block.timestamp > proposerSignature.expirationTimestamp) revert SignatureExpired();
+    }
+
+    /**
+     * @notice Generate the digest (hash) used to verify proposal signatures.
+     * @param typehash the EIP 712 type hash of the signed message, e.g. `PROPOSAL_TYPEHASH` or `UPDATE_PROPOSAL_TYPEHASH`.
+     * @param proposalEncodeData the abi encoded proposal data, identical to the output of `calcProposalEncodeData`.
+     * @param expirationTimestamp the signature's expiration timestamp.
+     * @param verifyingContract the contract verifying the signature, e.g. the DAO proxy by default.
+     * @return bytes32 the signature's typed data hash.
+     */
+    function sigDigest(
+        bytes32 typehash,
+        bytes memory proposalEncodeData,
+        uint256 expirationTimestamp,
+        address verifyingContract
+    ) internal view returns (bytes32) {
+        bytes32 structHash = keccak256(abi.encodePacked(typehash, proposalEncodeData, expirationTimestamp));
+
+        bytes32 domainSeparator = keccak256(
+            abi.encode(DOMAIN_TYPEHASH, keccak256(bytes('Nouns DAO')), block.chainid, verifyingContract)
+        );
+
+        return ECDSA.toTypedDataHash(domainSeparator, structHash);
     }
 
     function bps2Uint(uint256 bps, uint256 number) internal pure returns (uint256) {

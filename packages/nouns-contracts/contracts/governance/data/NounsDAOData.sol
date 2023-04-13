@@ -20,6 +20,7 @@ pragma solidity ^0.8.6;
 import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
 import { NounsDAOV3Proposals } from '../NounsDAOV3Proposals.sol';
 import { NounsTokenLike } from '../NounsDAOInterfaces.sol';
+import { SignatureChecker } from '@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol';
 
 contract NounsDAOData is OwnableUpgradeable {
     /**
@@ -34,6 +35,7 @@ contract NounsDAOData is OwnableUpgradeable {
     error MustBeNouner();
     error AmountExceedsBalance();
     error FailedWithdrawingETH(bytes data);
+    error InvalidSignature();
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -63,13 +65,13 @@ contract NounsDAOData is OwnableUpgradeable {
     );
     event ProposalCandidateCanceled(address indexed msgSender, string slug);
     event SignatureAdded(
-        address indexed msgSender,
         address indexed signer,
         bytes sig,
         uint256 expirationTimestamp,
         address proposer,
         string slug,
         bytes32 encodedPropHash,
+        bytes32 sigDigest,
         string reason
     );
     event FeedbackSent(address indexed msgSender, uint256 proposalId, uint8 support, string reason);
@@ -212,24 +214,44 @@ contract NounsDAOData is OwnableUpgradeable {
 
     /**
      * @notice Add a signature supporting a new candidate to be proposed to the DAO using `proposeBySigs`, by emitting an event with the signature data.
-     * @param signer the signer's address.
+     * Only lets the signer account submit their signature, to minimize potential spam.
      * @param sig the signature bytes.
      * @param expirationTimestamp the signature's expiration timestamp.
-     * @param encodedPropHash the keccak256 hash of the candidate version signed; the hash is performed on the output of
+     * @param proposer the proposer account that posted the candidate proposal with the provided slug.
+     * @param slug the slug of the proposal candidate signer signed on.
+     * @param encodedProp the abi encoding of the candidate version signed; should be identical to the output of
      * the `NounsDAOV3Proposals.calcProposalEncodeData` function.
+     * @param reason signer's reason free text.
      */
     function addSignature(
-        address signer,
         bytes memory sig,
         uint256 expirationTimestamp,
         address proposer,
         string memory slug,
-        bytes32 encodedPropHash,
+        bytes memory encodedProp,
         string memory reason
     ) external {
         if (!propCandidates[proposer][keccak256(bytes(slug))]) revert SlugDoesNotExist();
 
-        emit SignatureAdded(msg.sender, signer, sig, expirationTimestamp, proposer, slug, encodedPropHash, reason);
+        bytes32 sigDigest = NounsDAOV3Proposals.sigDigest(
+            NounsDAOV3Proposals.PROPOSAL_TYPEHASH,
+            encodedProp,
+            expirationTimestamp,
+            address(this)
+        );
+
+        if (!SignatureChecker.isValidSignatureNow(msg.sender, sigDigest, sig)) revert InvalidSignature();
+
+        emit SignatureAdded(
+            msg.sender,
+            sig,
+            expirationTimestamp,
+            proposer,
+            slug,
+            keccak256(encodedProp),
+            sigDigest,
+            reason
+        );
     }
 
     /**

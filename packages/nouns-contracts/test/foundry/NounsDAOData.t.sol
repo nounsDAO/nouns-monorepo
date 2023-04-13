@@ -7,8 +7,9 @@ import { NounsDAODataProxy } from '../../contracts/governance/data/NounsDAODataP
 import { NounsDAODataProxyAdmin } from '../../contracts/governance/data/NounsDAODataProxyAdmin.sol';
 import { NounsTokenLikeMock } from './helpers/NounsTokenLikeMock.sol';
 import { NounsDAOV3Proposals } from '../../contracts/governance/NounsDAOV3Proposals.sol';
+import { SigUtils } from './helpers/SigUtils.sol';
 
-contract NounsDAODataTest is Test {
+contract NounsDAODataTest is Test, SigUtils {
     event ProposalCandidateCreated(
         address indexed msgSender,
         address[] targets,
@@ -31,13 +32,13 @@ contract NounsDAODataTest is Test {
     );
     event ProposalCandidateCanceled(address indexed msgSender, string slug);
     event SignatureAdded(
-        address indexed msgSender,
         address indexed signer,
         bytes sig,
         uint256 expirationTimestamp,
         address proposer,
         string slug,
         bytes32 encodedPropHash,
+        bytes32 sigDigest,
         string reason
     );
     event FeedbackSent(address indexed msgSender, uint256 proposalId, uint8 support, string reason);
@@ -318,33 +319,88 @@ contract NounsDAODataTest is Test {
     }
 
     function test_addSignature_revertsOnUnseenSlug() public {
+        address signer = makeAddr('signer');
         bytes memory sig = new bytes(0);
 
         vm.expectRevert(abi.encodeWithSelector(NounsDAOData.SlugDoesNotExist.selector));
-        data.addSignature(makeAddr('signer'), sig, 1234, address(this), 'slug', keccak256('hello'), 'reason');
+        vm.prank(signer);
+        data.addSignature(sig, 1234, address(this), 'slug', 'encoded proposal', 'reason');
     }
 
-    function test_addSignature_emitsEvent() public {
+    function test_addSignature_revertsWhenSenderIsntSigner() public {
+        string memory description = 'some description';
+        string memory slug = 'slug';
         NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
         data.createProposalCandidate{ value: data.createCandidateCost() }(
             txs.targets,
             txs.values,
             txs.signatures,
             txs.calldatas,
-            'description',
-            'slug'
+            description,
+            slug
         );
 
-        address signer = makeAddr('signer');
-        bytes memory sig = new bytes(0);
+        (address signer, uint256 signerKey) = makeAddrAndKey('signer');
+        address proposer = address(this);
         uint256 expiration = 1234;
-        bytes32 encodedPropHash = keccak256('prop content');
+        address verifyingContract = address(data);
         string memory reason = 'reason';
+        bytes memory sig = signProposal(
+            proposer,
+            signerKey,
+            txs,
+            description,
+            expiration,
+            verifyingContract,
+            'Nouns DAO'
+        );
+        bytes memory encodedProp = NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, description);
+
+        vm.expectRevert(abi.encodeWithSelector(NounsDAOData.InvalidSignature.selector));
+        vm.prank(makeAddr('not signer'));
+        data.addSignature(sig, expiration, proposer, slug, encodedProp, reason);
+    }
+
+    function test_addSignature_emitsEvent() public {
+        string memory description = 'some description';
+        string memory slug = 'slug';
+        NounsDAOV3Proposals.ProposalTxs memory txs = createTxs(address(0), 0, 'some signature', 'some data');
+        data.createProposalCandidate{ value: data.createCandidateCost() }(
+            txs.targets,
+            txs.values,
+            txs.signatures,
+            txs.calldatas,
+            description,
+            slug
+        );
+
+        (address signer, uint256 signerKey) = makeAddrAndKey('signer');
+        address proposer = address(this);
+        uint256 expiration = 1234;
+        address verifyingContract = address(data);
+        string memory reason = 'reason';
+        bytes memory sig = signProposal(
+            proposer,
+            signerKey,
+            txs,
+            description,
+            expiration,
+            verifyingContract,
+            'Nouns DAO'
+        );
+        bytes memory encodedProp = NounsDAOV3Proposals.calcProposalEncodeData(address(this), txs, description);
+        bytes32 sigDigest = NounsDAOV3Proposals.sigDigest(
+            NounsDAOV3Proposals.PROPOSAL_TYPEHASH,
+            encodedProp,
+            expiration,
+            address(data)
+        );
 
         vm.expectEmit(true, true, true, true);
-        emit SignatureAdded(address(this), signer, sig, expiration, address(this), 'slug', encodedPropHash, reason);
+        emit SignatureAdded(signer, sig, expiration, proposer, slug, keccak256(encodedProp), sigDigest, reason);
 
-        data.addSignature(signer, sig, expiration, address(this), 'slug', encodedPropHash, reason);
+        vm.prank(signer);
+        data.addSignature(sig, expiration, proposer, slug, encodedProp, reason);
     }
 
     function test_sendFeedback_revertsForNonNouner() public {
