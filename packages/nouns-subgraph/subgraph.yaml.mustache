@@ -109,3 +109,35 @@ dataSources:
           handler: handleProposalUpdated
         - event: ProposalObjectionPeriodSet(indexed uint256,uint256)
           handler: handleProposalObjectionPeriodSet
+  - kind: ethereum/contract
+    name: NounsDAOData
+    network: {{network}}
+    source:
+      address: '{{nounsDAOData.address}}'
+      abi: NounsDAOData
+      startBlock: {{nounsDAOData.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/nouns-dao-data.ts
+      entities:
+        - Delegate
+        - ProposalCandidate
+        - ProposalCandidateVersion
+        - ProposalCandidateSignature
+        - ProposalFeedback
+      abis:
+        - name: NounsDAOData
+          file: ../nouns-contracts/abi/contracts/governance/NounsDAOData.sol/NounsDAOData.json
+      eventHandlers:
+        - event: ProposalCandidateCreated(indexed address,address[],uint256[],string[],bytes[],string,string,bytes32)
+          handler: handleProposalCandidateCreated
+        - event: ProposalCandidateUpdated(indexed address,address[],uint256[],string[],bytes[],string,string,bytes32,string)
+          handler: handleProposalCandidateUpdated
+        - event: ProposalCandidateCanceled(indexed address,string)
+          handler: handleProposalCandidateCanceled
+        - event: SignatureAdded(indexed address,bytes,uint256,address,string,bytes32,bytes32,string)
+          handler: handleSignatureAdded
+        - event: FeedbackSent(indexed address,uint256,uint96,uint8,string)
+          handler: handleFeedbackSent

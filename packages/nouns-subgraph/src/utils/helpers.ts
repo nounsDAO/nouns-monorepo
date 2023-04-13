@@ -7,6 +7,10 @@ import {
   Vote,
   DynamicQuorumParams,
   ProposalVersion,
+  ProposalCandidateVersion,
+  ProposalCandidate,
+  ProposalCandidateSignature,
+  ProposalFeedback,
 } from '../types/schema';
 import { ZERO_ADDRESS, BIGINT_ZERO, BIGINT_ONE } from './constants';
 
@@ -163,4 +167,36 @@ export function getOrCreateProposalVersion(id: string): ProposalVersion {
     update = new ProposalVersion(id);
   }
   return update;
+}
+
+export function getOrCreateProposalCandidate(id: string): ProposalCandidate {
+  let candidate = ProposalCandidate.load(id);
+  if (candidate == null) {
+    candidate = new ProposalCandidate(id);
+  }
+  return candidate;
+}
+
+export function getOrCreateProposalCandidateVersion(id: string): ProposalCandidateVersion {
+  let version = ProposalCandidateVersion.load(id);
+  if (version == null) {
+    version = new ProposalCandidateVersion(id);
+  }
+  return version;
+}
+
+export function getOrCreateProposalCandidateSignature(id: string): ProposalCandidateSignature {
+  let sig = ProposalCandidateSignature.load(id);
+  if (sig == null) {
+    sig = new ProposalCandidateSignature(id);
+  }
+  return sig;
+}
+
+export function getOrCreateProposalFeedback(id: string): ProposalFeedback {
+  let feedback = ProposalFeedback.load(id);
+  if (feedback == null) {
+    feedback = new ProposalFeedback(id);
+  }
+  return feedback;
 }
