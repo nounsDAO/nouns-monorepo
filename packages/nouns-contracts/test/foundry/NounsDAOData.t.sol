@@ -41,7 +41,7 @@ contract NounsDAODataTest is Test, SigUtils {
         bytes32 sigDigest,
         string reason
     );
-    event FeedbackSent(address indexed msgSender, uint256 proposalId, uint8 support, string reason);
+    event FeedbackSent(address indexed msgSender, uint256 proposalId, uint96 votes, uint8 support, string reason);
     event CreateCandidateCostSet(uint256 oldCreateCandidateCost, uint256 newCreateCandidateCost);
     event UpdateCandidateCostSet(uint256 oldUpdateCandidateCost, uint256 newUpdateCandidateCost);
     event ETHWithdrawn(address indexed to, uint256 amount);
@@ -340,7 +340,7 @@ contract NounsDAODataTest is Test, SigUtils {
             slug
         );
 
-        (address signer, uint256 signerKey) = makeAddrAndKey('signer');
+        (, uint256 signerKey) = makeAddrAndKey('signer');
         address proposer = address(this);
         uint256 expiration = 1234;
         address verifyingContract = address(data);
@@ -416,10 +416,10 @@ contract NounsDAODataTest is Test, SigUtils {
     }
 
     function test_sendFeedback_emitsEventForNouner() public {
-        tokenLikeMock.setPriorVotes(address(this), block.number - 1, 1);
+        tokenLikeMock.setPriorVotes(address(this), block.number - 1, 3);
 
         vm.expectEmit(true, true, true, true);
-        emit FeedbackSent(address(this), 1, 1, 'some reason');
+        emit FeedbackSent(address(this), 1, 3, 1, 'some reason');
 
         data.sendFeedback(1, 1, 'some reason');
     }

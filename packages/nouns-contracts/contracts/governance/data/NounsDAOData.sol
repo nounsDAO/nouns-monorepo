@@ -75,7 +75,7 @@ contract NounsDAOData is OwnableUpgradeable {
         bytes32 sigDigest,
         string reason
     );
-    event FeedbackSent(address indexed msgSender, uint256 proposalId, uint8 support, string reason);
+    event FeedbackSent(address indexed msgSender, uint256 proposalId, uint96 votes, uint8 support, string reason);
     event CreateCandidateCostSet(uint256 oldCreateCandidateCost, uint256 newCreateCandidateCost);
     event UpdateCandidateCostSet(uint256 oldUpdateCandidateCost, uint256 newUpdateCandidateCost);
     event ETHWithdrawn(address indexed to, uint256 amount);
@@ -85,6 +85,9 @@ contract NounsDAOData is OwnableUpgradeable {
      *   STATE
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
+
+    /// @notice The number of blocks before the current block where account votes are counted.
+    uint256 public constant PRIOR_VOTES_BLOCKS_AGO = 1;
 
     /// @notice The Nouns token contract.
     NounsTokenLike public immutable nounsToken;
@@ -268,9 +271,10 @@ contract NounsDAOData is OwnableUpgradeable {
         string memory reason
     ) external {
         if (support > 2) revert InvalidSupportValue();
-        if (!isNouner(msg.sender)) revert MustBeNouner();
+        uint96 votes = nounsToken.getPriorVotes(msg.sender, block.number - PRIOR_VOTES_BLOCKS_AGO);
+        if (votes == 0) revert MustBeNouner();
 
-        emit FeedbackSent(msg.sender, proposalId, support, reason);
+        emit FeedbackSent(msg.sender, proposalId, votes, support, reason);
     }
 
     /**
@@ -316,6 +320,6 @@ contract NounsDAOData is OwnableUpgradeable {
      */
 
     function isNouner(address account) internal view returns (bool) {
-        return nounsToken.getPriorVotes(account, block.number - 1) > 0;
+        return nounsToken.getPriorVotes(account, block.number - PRIOR_VOTES_BLOCKS_AGO) > 0;
     }
 }
