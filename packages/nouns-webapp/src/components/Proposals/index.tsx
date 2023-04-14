@@ -1,5 +1,5 @@
 import { PartialProposal, ProposalState, useProposalThreshold } from '../../wrappers/nounsDao';
-import { Alert, Button, Col } from 'react-bootstrap';
+import { Alert, Button, Col, Row } from 'react-bootstrap';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
 import { useHistory } from 'react-router-dom';
@@ -21,6 +21,7 @@ import en from 'dayjs/locale/en';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
 import Section from '../../layout/Section';
 import CandidateCard from '../CandidateCard';
+import Link from '../Link';
 
 dayjs.extend(relativeTime);
 
@@ -255,27 +256,52 @@ const Proposals = ({ proposals }: { proposals: PartialProposal[] }) => {
         )}
         {activeTab === 1 && (
           <Col lg={10} className={classes.proposalsList}>
-            {proposals?.length ? (
-              proposals
-                .slice(0)
-                .reverse()
-                .map((p, i) => {
-                  return (
-                    <div>
-                      <CandidateCard candidate={p} key={p.id} />
-                    </div>
-                  );
-                })
-            ) : (
-              <Alert variant="secondary" className={classes.alert}>
-                <Alert.Heading>
-                  <Trans>No candidates found</Trans>
-                </Alert.Heading>
+            <Row>
+              <Col lg={9}>
+                {proposals?.length ? (
+                  proposals
+                    .slice(0)
+                    .reverse()
+                    .map((p, i) => {
+                      return (
+                        <div>
+                          <CandidateCard candidate={p} key={p.id} />
+                        </div>
+                      );
+                    })
+                ) : (
+                  <Alert variant="secondary" className={classes.alert}>
+                    <Alert.Heading>
+                      <Trans>No candidates found</Trans>
+                    </Alert.Heading>
+                    <p>
+                      <Trans>Candidates submitted by community members will appear here.</Trans>
+                    </p>
+                  </Alert>
+                )}
+              </Col>
+              <Col lg={3}>
+                <h4>
+                  <strong>
+                    <Trans>About Proposal Candidates</Trans>
+                  </strong>
+                </h4>
+                {/* TODO: add real copy */}
                 <p>
-                  <Trans>Candidates submitted by community members will appear here.</Trans>
+                  <Trans>
+                    Nullam id dolor id nibh ultricies vehicula ut id elit. Cras justo odio, dapibus
+                    ac facilisis in, egestas eget quam.
+                  </Trans>
                 </p>
-              </Alert>
-            )}
+                <p>
+                  <strong>
+                    <Trans>Current threshold: </Trans>
+                    {threshold} Nouns
+                  </strong>
+                </p>
+                <a href="/create-candidate">Create a candidate</a>
+              </Col>
+            </Row>
           </Col>
         )}
       </Section>
