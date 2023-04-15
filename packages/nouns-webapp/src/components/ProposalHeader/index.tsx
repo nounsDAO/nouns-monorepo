@@ -23,6 +23,7 @@ interface ProposalHeaderProps {
   proposal: Proposal;
   isActiveForVoting?: boolean;
   isWalletConnected: boolean;
+  isCandidate?: boolean;
   submitButtonClickHandler: () => void;
 }
 
@@ -108,18 +109,32 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
     <>
       <div className="d-flex justify-content-between align-items-center">
         <div className="d-flex justify-content-start align-items-start">
+          {/* TODO: bleed left on wide. move above on mobile */}
           <Link to={'/vote'}>
             <button className={clsx(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button>
           </Link>
           <div className={classes.headerRow}>
             <span>
               <div className="d-flex">
-                <div>
-                  <Trans>Proposal {i18n.number(parseInt(proposal.id || '0'))}</Trans>
-                </div>
-                <div>
-                  <ProposalStatus status={proposal?.status} className={classes.proposalStatus} />
-                </div>
+                {props.isCandidate ? (
+                  <>
+                    <div>
+                      <Trans>Proposal Candide</Trans>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      <Trans>Proposal {i18n.number(parseInt(proposal.id || '0'))}</Trans>
+                    </div>
+                    <div>
+                      <ProposalStatus
+                        status={proposal?.status}
+                        className={classes.proposalStatus}
+                      />
+                    </div>
+                  </>
+                )}
               </div>
             </span>
             <div className={classes.proposalTitleWrapper}>
