@@ -1,5 +1,5 @@
 import { default as NounsAuctionHouseABI } from '../abi/contracts/NounsAuctionHouse.sol/NounsAuctionHouse.json';
-import { default as NounsDaoDataABI } from '../abi/contracts/governance/NounsDAOData.sol/NounsDAOData.json';
+import { default as NounsDaoDataABI } from '../abi/contracts/governance/data/NounsDAOData.sol/NounsDAOData.json';
 import { task, types } from 'hardhat/config';
 import { Interface, parseUnits } from 'ethers/lib/utils';
 import { Contract as EthersContract } from 'ethers';
