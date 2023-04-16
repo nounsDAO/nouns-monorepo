@@ -20,11 +20,13 @@ code {
   src: url(./fonts/Londrina_Solid/LondrinaSolid-Black.ttf);
   src: url(./fonts/Londrina_Solid/LondrinaSolid-Regular.ttf);
 }
+
 @font-face {
   font-family: 'PT Root UI';
   src: url(./fonts/PT_Root_UI/PT-Root-UI_Regular.woff2) format('woff2'),
     url(./fonts/PT_Root_UI/PT-Root-UI_Regular.woff) format('woff');
 }
+
 @font-face {
   font-family: 'PT Root UI';
   font-weight: 500;
@@ -37,4 +39,16 @@ code {
   font-weight: bold;
   src: url(./fonts/PT_Root_UI/PT-Root-UI_Bold.woff2) format('woff2'),
     url(./fonts/PT_Root_UI/PT-Root-UI_Bold.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'Montserrat Regular';
+  font-weight: 400;
+  src: url(./fonts/Montserrat/Montserrat-Regular.ttf);
+}
+
+@font-face {
+  font-family: 'Montserrat Bold';
+  font-weight: 700;
+  src: url(./fonts/Montserrat/Montserrat-Bold.ttf);
 }

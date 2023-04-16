@@ -3,7 +3,7 @@
 }
 
 .title {
-  font-family: 'Londrina Solid';
+  font-family: 'Montserrat Bold', sans-serif;
   display: flex;
   flex-direction: column;
   line-height: 42px;

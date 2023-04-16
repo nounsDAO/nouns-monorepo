@@ -1,5 +1,5 @@
 .headerWrapper h1 {
-  font-family: 'Londrina Solid';
+  font-family: 'Montserrat Bold', sans-serif;
   font-size: 4rem;
 }
 
@@ -46,7 +46,7 @@
 .accordionHeader button {
   border: none;
   background-color: transparent;
-  font-family: 'Londrina Solid';
+  font-family: 'Montserrat Bold', sans-serif;
   font-size: 2.5rem !important;
   cursor: pointer;
   line-height: normal;

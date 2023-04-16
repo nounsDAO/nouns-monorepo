@@ -1,11 +1,11 @@
 .voteCardHeaderTextEn {
   font-size: 22px;
-  font-family: 'Londrina Solid';
+  font-family: 'Montserrat Bold', sans-serif;
 }
 
 .voteCardHeaderTextNonEn {
   font-size: 16px;
-  font-family: 'Londrina Solid';
+  font-family: 'Montserrat Bold', sans-serif;
 }
 
 .voteCardVoteCount {

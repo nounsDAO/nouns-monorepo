@@ -7,13 +7,13 @@
 .headerRow span {
   color: #8c8d92;
   font-size: 24px;
-  font-family: 'Londrina Solid';
+  font-family: 'Montserrat Bold', sans-serif;
 }
 
 .headerRow h1 {
   color: #14161b;
   font-size: 56px;
-  font-family: 'Londrina Solid';
+  font-family: 'Montserrat Bold', sans-serif;
 }
 
 .subheading {
@@ -70,12 +70,12 @@ p {
 
 .ethTreasuryAmt h1 {
   font-size: 36px;
-  font-family: 'Londrina Solid';
+  font-family: 'Montserrat Bold', sans-serif;
 }
 
 .usdBalance {
   font-size: 36px;
-  font-family: 'Londrina Solid';
+  font-family: 'Montserrat Bold', sans-serif;
 }
 
 .ethSymbol {
@@ -85,7 +85,7 @@ p {
 
 .usdBalance {
   color: var(--brand-gray-light-text);
-  font-family: 'Londrina Solid';
+  font-family: 'Montserrat Bold', sans-serif;
 }
 
 .treasuryInfoText {

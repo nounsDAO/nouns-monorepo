@@ -1,7 +1,7 @@
 .noundersPage h1,
 .noundersPage h2,
 .noundersPage h3 {
-  font-family: 'Londrina Solid';
+  font-family: 'Montserrat Bold', sans-serif;
 }
 
 .noundersPage h2 {
@@ -60,7 +60,7 @@
 .cardHeader {
   border: none;
   background-color: transparent;
-  font-family: 'Londrina Solid';
+  font-family: 'Montserrat Bold', sans-serif;
   font-size: 2.5rem;
   cursor: pointer;
 }
