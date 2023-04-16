@@ -1,7 +1,7 @@
 .nounInfoHeader {
   display: inline-block;
   padding-left: 0rem;
-  font-family: 'Londrina Solid';
+  font-family: 'Montserrat Bold', sans-serif;
 }
 
 @media only screen and (max-width: 600px) {

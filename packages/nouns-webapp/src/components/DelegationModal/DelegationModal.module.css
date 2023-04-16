@@ -34,7 +34,7 @@
 }
 
 .modal .title {
-  font-family: 'Londrina Solid';
+  font-family: 'Montserrat Bold', sans-serif;
   display: flex;
   flex-direction: column;
 }

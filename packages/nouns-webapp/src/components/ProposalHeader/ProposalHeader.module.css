@@ -13,12 +13,12 @@
 .headerRow span {
   color: #8c8d92;
   font-size: 24px;
-  font-family: 'Londrina Solid';
+  font-family: 'Montserrat Bold', sans-serif;
 }
 .headerRow h1 {
   color: #14161b;
   font-size: 42px;
-  font-family: 'Londrina Solid';
+  font-family: 'Montserrat Bold', sans-serif;
 }
 
 .proposalStatus {
@@ -123,7 +123,7 @@
 }
 
 .byLineWrapper h3 {
-  font-family: 'Londrina Solid';
+  font-family: 'Montserrat Bold', sans-serif;
   color: var(--brand-gray-light-text);
   margin-left: 3rem;
   font-size: 24px;
