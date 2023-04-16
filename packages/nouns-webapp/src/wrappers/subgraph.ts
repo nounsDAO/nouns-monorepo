@@ -100,6 +100,31 @@ export const partialProposalsQuery = (first = 1_000) => gql`
 }
 `;
 
+export const candidateProposalsQuery = (first = 1_000) => gql`
+  {
+    proposalCandidates {
+      id
+      slug
+      title
+    }
+  }
+`;
+
+export const candidateProposalQuery = (id: string) => gql`
+{
+  proposalCandidate(id: "${id}") {
+    id
+    title
+    description
+    proposer
+    targets
+    values
+    signatures
+    calldatas
+  }
+}
+`;
+
 export const auctionQuery = (auctionId: number) => gql`
 {
 	auction(id: ${auctionId}) {
