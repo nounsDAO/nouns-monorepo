@@ -480,6 +480,9 @@ type ProposalCandidateVersion @entity(immutable: true) {
 
   "The update message of this version, relevant when it's an update"
   updateMessage: String!
+
+  "This version's signatures by signers"
+  versionSignatures: [ProposalCandidateSignature!]! @derivedFrom(field: "version")
 }
 
 type ProposalCandidateSignature @entity(immutable: true) {
