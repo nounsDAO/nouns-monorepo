@@ -26,7 +26,7 @@
   color: white;
   border: transparent;
   background-color: var(--brand-black);
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
   font-weight: bold;
   border-radius: 8px;
   font-size: 16px;
@@ -42,19 +42,19 @@
 }
 
 .section h4 {
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
   font-size: 18px;
   line-height: 27px;
 }
 
 .section h2 {
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
   font-weight: bold;
   font-size: 32px;
 }
 
 .leftCol {
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
 }
 
 .leftCol h4 {

@@ -18,13 +18,13 @@
 
 .subheading {
   color: var(--brand-dark-green);
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
   font-weight: 500;
   font-size: 1.2rem;
 }
 
 .boldText {
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
   font-weight: bold;
 }
 
@@ -79,7 +79,7 @@ p {
 }
 
 .ethSymbol {
-  font-family: 'PT Root UI' !important;
+  font-family: 'Montserrat Regular', sans-serif !important;
   margin-right: 0.5rem;
 }
 
@@ -93,7 +93,7 @@ p {
   padding-bottom: 1rem;
   padding-left: 2rem;
   padding-right: 2rem;
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
   font-weight: 500;
 }
 

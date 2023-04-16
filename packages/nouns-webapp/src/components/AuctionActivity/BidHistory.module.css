@@ -13,7 +13,7 @@
 }
 
 .bidRowCool {
-  font-family: 'PT Root UI', sans-serif;
+  font-family: 'Montserrat Regular', sans-serif;
   padding: 0.8rem;
   border-bottom: 1px solid var(--brand-cool-border);
   font-size: 1.1rem;
@@ -22,7 +22,7 @@
 }
 
 .bidRowWarm {
-  font-family: 'PT Root UI', sans-serif;
+  font-family: 'Montserrat Regular', sans-serif;
   padding: 0.25rem 0.75rem 0.5rem 0.75rem;
   border-bottom: 1px solid var(--brand-warm-border);
   font-size: 0.95rem;
@@ -67,12 +67,12 @@
 }
 
 .bidder {
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
   font-weight: bold;
 }
 
 .bidder > div > div {
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
   font-weight: bold;
   font-size: 18px;
 }
@@ -98,7 +98,7 @@
 }
 
 .bidAmount {
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
   font-weight: bold;
   margin-right: 1rem;
   font-size: 18px;

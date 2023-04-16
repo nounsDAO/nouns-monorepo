@@ -22,7 +22,7 @@
 
 .expandCollapseCopy {
   color: var(--brand-cool-light-text);
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
   font-weight: bold;
   font-size: 20px;
   text-align: center;
@@ -42,7 +42,7 @@
 .nullStateCopy {
   opacity: 0.5;
   margin-left: 1rem;
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
   font-weight: 500;
   font-size: 18px;
 }

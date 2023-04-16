@@ -56,7 +56,7 @@
 .transitionStateButton {
   height: 50px;
   border-radius: 8px;
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
   font-weight: bold;
   font-size: 24px;
   transition: all 0.125s ease-in-out;
@@ -97,13 +97,13 @@
 
 .voteMetadataRow span {
   font-size: 14px;
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
   color: var(--brand-gray-light-text);
 }
 
 .voteMetadataRow h3 {
   font-size: 18px;
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
   font-weight: bold;
 }
 
