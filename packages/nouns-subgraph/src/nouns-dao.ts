@@ -12,6 +12,8 @@ import {
   QuorumCoefficientSet,
   ProposalUpdated,
   ProposalObjectionPeriodSet,
+  ProposalDescriptionUpdated,
+  ProposalTransactionsUpdated,
 } from './types/NounsDAO/NounsDAO';
 import {
   getOrCreateDelegate,
@@ -125,6 +127,42 @@ export function handleProposalUpdated(event: ProposalUpdated): void {
   proposal.calldatas = event.params.calldatas;
   proposal.description = event.params.description.split('\\n').join('\n');
   proposal.title = extractTitle(proposal.description);
+  proposal.save();
+
+  captureProposalVersion(
+    event.transaction.hash.toHexString(),
+    event.logIndex.toString(),
+    proposal,
+    event.params.updateMessage,
+  );
+}
+
+export function handleProposalDescriptionUpdated(event: ProposalDescriptionUpdated): void {
+  const proposal = getOrCreateProposal(event.params.id.toString());
+
+  proposal.lastUpdatedTimestamp = event.block.timestamp;
+  proposal.lastUpdatedBlock = event.block.number;
+  proposal.description = event.params.description.split('\\n').join('\n');
+  proposal.title = extractTitle(proposal.description);
+  proposal.save();
+
+  captureProposalVersion(
+    event.transaction.hash.toHexString(),
+    event.logIndex.toString(),
+    proposal,
+    event.params.updateMessage,
+  );
+}
+
+export function handleProposalTransactionsUpdated(event: ProposalTransactionsUpdated): void {
+  const proposal = getOrCreateProposal(event.params.id.toString());
+
+  proposal.lastUpdatedTimestamp = event.block.timestamp;
+  proposal.lastUpdatedBlock = event.block.number;
+  proposal.targets = changetype<Bytes[]>(event.params.targets);
+  proposal.values = event.params.values;
+  proposal.signatures = event.params.signatures;
+  proposal.calldatas = event.params.calldatas;
   proposal.save();
 
   captureProposalVersion(

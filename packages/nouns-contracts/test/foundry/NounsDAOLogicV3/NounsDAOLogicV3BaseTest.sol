@@ -25,6 +25,18 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
         string updateMessage
     );
 
+    event ProposalTransactionsUpdated(
+        uint256 indexed id,
+        address indexed proposer,
+        address[] targets,
+        uint256[] values,
+        string[] signatures,
+        bytes[] calldatas,
+        string updateMessage
+    );
+
+    event ProposalDescriptionUpdated(uint256 indexed id, address indexed proposer, string description, string updateMessage);
+
     event ProposalCreated(
         uint256 id,
         address proposer,
@@ -62,7 +74,6 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
     uint32 lastMinuteWindowInBlocks = 10;
     uint32 objectionPeriodDurationInBlocks = 10;
     uint32 proposalUpdatablePeriodInBlocks = 10;
-    uint256 voteSnapshotBlockSwitchProposalId;
 
     function setUp() public virtual {
         timelock = new NounsDAOExecutor(address(1), TIMELOCK_DELAY);
@@ -157,6 +168,27 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
         bytes[] memory calldatas = new bytes[](1);
         calldatas[0] = data;
         dao.updateProposal(proposalId, targets, values, signatures, calldatas, description, updateMessage);
+    }
+
+    function updateProposalTransactions(
+        address proposer,
+        uint256 proposalId,
+        address target,
+        uint256 value,
+        string memory signature,
+        bytes memory data,
+        string memory updateMessage
+    ) internal {
+        vm.prank(proposer);
+        address[] memory targets = new address[](1);
+        targets[0] = target;
+        uint256[] memory values = new uint256[](1);
+        values[0] = value;
+        string[] memory signatures = new string[](1);
+        signatures[0] = signature;
+        bytes[] memory calldatas = new bytes[](1);
+        calldatas[0] = data;
+        dao.updateProposalTransactions(proposalId, targets, values, signatures, calldatas, updateMessage);
     }
 
     function proposeBySigs(
