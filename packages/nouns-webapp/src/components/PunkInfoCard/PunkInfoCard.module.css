@@ -23,7 +23,7 @@
 }
 
 .nounInfoRow {
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
   font-weight: 500;
   padding-bottom: 0.5rem;
   padding-top: 0.5rem;
@@ -33,6 +33,6 @@
 
 .nounInfoRowText {
   padding-left: 4;
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
   font-family: bold;
 }

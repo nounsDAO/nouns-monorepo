@@ -28,7 +28,7 @@
 
 .connectWalletText {
   color: var(--brand-gray-light-text);
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
   font-weight: 500;
   font-size: 16px;
   min-width: 12rem;
@@ -37,7 +37,7 @@
 
 .noVotesText {
   color: var(--brand-gray-light-text);
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
   font-weight: 500;
   font-size: 16px;
   margin-bottom: 1.15rem;
@@ -109,7 +109,7 @@
 }
 
 .voterIneligibleAlert {
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
   font-weight: 500;
   background-color: #e2e3e8;
   color: black;

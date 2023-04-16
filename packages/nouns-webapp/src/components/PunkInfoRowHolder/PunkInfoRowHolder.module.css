@@ -1,5 +1,5 @@
 .nounHolderEtherscanLinkCool {
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
   font-weight: bold;
   color: var(--brand-color-blue);
   margin-left: 5px;
@@ -8,7 +8,7 @@
 }
 
 .nounHolderEtherscanLinkWarm {
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
   font-weight: bold;
   color: var(--brand-color-red);
   margin-left: 5px;

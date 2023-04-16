@@ -1,7 +1,7 @@
 .wrapper {
   border-bottom: 1px solid var(--brand-gray-border);
   padding-bottom: 0.5rem;
-  font-family: PT Root UI;
+  font-family: 'Montserrat Regular', sans-serif;
   font-size: 18px;
   margin-top: 1rem;
   display: flex;

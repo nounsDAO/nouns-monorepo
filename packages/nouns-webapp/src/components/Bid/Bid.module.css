@@ -7,7 +7,7 @@
 }
 
 .bidBtn {
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
   border-radius: 12px !important;
   margin-left: 0.6rem !important;
   margin-top: 3px;
@@ -58,7 +58,7 @@
   background-color: white;
   outline: none !important;
   box-shadow: none !important;
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
   font-weight: bold;
   font-size: 25px;
   transition: all 0.2s ease-in-out;
@@ -71,7 +71,7 @@
 
 .customPlaceholder {
   color: var(--brand-cool-light-text);
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
   font-weight: bold;
   z-index: 3;
   user-select: none;
@@ -83,7 +83,7 @@
   top: 15%;
   left: 3%;
   color: var(--brand-cool-light-text);
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
   font-weight: bold;
   font-size: 25px;
   z-index: 1;
@@ -103,7 +103,7 @@
   border: transparent;
   background-color: var(--brand-black);
   font-weight: bold;
-  font-family: 'PT Root UI';
+  font-family: 'Montserrat Regular', sans-serif;
   font-size: 18px;
   border-radius: 10px;
 }
