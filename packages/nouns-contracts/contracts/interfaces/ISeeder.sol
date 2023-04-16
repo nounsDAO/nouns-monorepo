@@ -17,8 +17,6 @@
 
 pragma solidity ^0.8.6;
 
-import { IDescriptorMinimal } from './IDescriptorMinimal.sol';
-
 interface ISeeder {
     struct Accessory {
         uint16 accType;
