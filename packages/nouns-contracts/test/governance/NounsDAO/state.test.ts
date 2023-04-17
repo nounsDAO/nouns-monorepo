@@ -111,7 +111,7 @@ async function makeProposal(
   callDatas = [encodeParameters(['address'], [deployer.address])];
 
   for (let i = 0; transferAmount > 0; i++) {
-    await token.transferFrom(deployer.address, transferTo.address, i);
+    await token.transferFrom(deployer.address, transferTo.address, 10_000 + i);
     transferAmount--;
   }
 

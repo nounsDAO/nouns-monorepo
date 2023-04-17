@@ -39,16 +39,16 @@ describe('NToken', () => {
 
     const [, , , noundersNounCreated, , , , ownersNounCreated] = receipt.events || [];
 
-    expect(await nounsToken.ownerOf(0)).to.eq(noundersDAO.address);
+    expect(await nounsToken.ownerOf(10_000)).to.eq(noundersDAO.address);
     expect(noundersNounCreated?.event).to.eq('PunkCreated');
-    expect(noundersNounCreated?.args?.tokenId).to.eq(0);
+    expect(noundersNounCreated?.args?.tokenId).to.eq(10_000);
     expect(noundersNounCreated?.args?.seed.length).to.equal(3);
     expect(noundersNounCreated?.args?.seed.punkType).to.be.a('number');
     expect(noundersNounCreated?.args?.seed.skinTone).to.be.a('number');
 
-    expect(await nounsToken.ownerOf(1)).to.eq(deployer.address);
+    expect(await nounsToken.ownerOf(10_001)).to.eq(deployer.address);
     expect(ownersNounCreated?.event).to.eq('PunkCreated');
-    expect(ownersNounCreated?.args?.tokenId).to.eq(1);
+    expect(ownersNounCreated?.args?.tokenId).to.eq(10_001);
     expect(ownersNounCreated?.args?.seed.length).to.equal(3);
     expect(ownersNounCreated?.args?.seed.punkType).to.be.a('number');
     expect(ownersNounCreated?.args?.seed.skinTone).to.be.a('number');
@@ -78,9 +78,9 @@ describe('NToken', () => {
     const receipt = await (await nounsToken.mint()).wait();
     const nounCreated = receipt.events?.[3];
 
-    expect(await nounsToken.ownerOf(2)).to.eq(deployer.address);
+    expect(await nounsToken.ownerOf(10_002)).to.eq(deployer.address);
     expect(nounCreated?.event).to.eq('PunkCreated');
-    expect(nounCreated?.args?.tokenId).to.eq(2);
+    expect(nounCreated?.args?.tokenId).to.eq(10_002);
     expect(nounCreated?.args?.seed.length).to.equal(3);
     expect(nounCreated?.args?.seed.punkType).to.be.a('number');
     expect(nounCreated?.args?.seed.skinTone).to.be.a('number');
@@ -103,15 +103,15 @@ describe('NToken', () => {
 
     await expect(tx)
       .to.emit(nounsToken, 'Transfer')
-      .withArgs(constants.AddressZero, creator.address, 2);
-    await expect(tx).to.emit(nounsToken, 'Transfer').withArgs(creator.address, minter.address, 2);
+      .withArgs(constants.AddressZero, creator.address, 10_002);
+    await expect(tx).to.emit(nounsToken, 'Transfer').withArgs(creator.address, minter.address, 10_002);
   });
 
   it('should allow minter to burn a noun', async () => {
     await (await nounsToken.mint()).wait();
 
-    const tx = nounsToken.burn(0);
-    await expect(tx).to.emit(nounsToken, 'PunkBurned').withArgs(0);
+    const tx = nounsToken.burn(10_000);
+    await expect(tx).to.emit(nounsToken, 'PunkBurned').withArgs(10_000);
   });
 
   it('should revert on non-minter mint', async () => {

@@ -444,7 +444,7 @@ export const setTotalSupply = async (token: NToken, newTotalSupply: number): Pro
 
   if (totalSupply > newTotalSupply) {
     for (let i = newTotalSupply; i < totalSupply; i++) {
-      await token.burn(i);
+      await token.burn(10_000 + i);
     }
   }
 };

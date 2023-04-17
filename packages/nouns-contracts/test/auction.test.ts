@@ -258,7 +258,7 @@ describe('NAuctionHouse', () => {
 
     const { tokenId } = await nAuctionHouse.auction();
 
-    expect(tokenId).to.equal(1);
+    expect(tokenId).to.equal(10_001);
   });
 
   it('should create a new auction if the auction house is paused and unpaused after an auction is settled', async () => {

@@ -189,18 +189,18 @@ describe('End to End test with deployment, auction, proposing, voting, executing
 
     expect(await nounsToken.totalSupply()).to.equal(EthersBN.from('2'));
 
-    expect(await nounsToken.ownerOf(0)).to.equal(noundersDAO.address);
-    expect(await nounsToken.ownerOf(1)).to.equal(nounsAuctionHouse.address);
+    expect(await nounsToken.ownerOf(10_000)).to.equal(noundersDAO.address);
+    expect(await nounsToken.ownerOf(10_001)).to.equal(nounsAuctionHouse.address);
 
-    expect((await nounsAuctionHouse.auction()).tokenId).to.equal(EthersBN.from('1'));
+    expect((await nounsAuctionHouse.auction()).tokenId).to.equal(EthersBN.from('10001'));
   });
 
   it('allows bidding, settling, and transferring ETH correctly', async () => {
-    await nounsAuctionHouse.connect(bidderA).createBid(1, { value: RESERVE_PRICE });
+    await nounsAuctionHouse.connect(bidderA).createBid(10_001, { value: RESERVE_PRICE });
     await setNextBlockTimestamp(Number(await blockTimestamp('latest')) + DURATION);
     await nounsAuctionHouse.settleCurrentAndCreateNewAuction();
 
-    expect(await nounsToken.ownerOf(1)).to.equal(bidderA.address);
+    expect(await nounsToken.ownerOf(10_001)).to.equal(bidderA.address);
     expect(await ethers.provider.getBalance(timelock.address)).to.equal(RESERVE_PRICE);
   });
 
