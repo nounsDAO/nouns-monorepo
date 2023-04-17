@@ -78,7 +78,7 @@ async function propose(proposer: SignerWithAddress, mint = true) {
   if (mint) {
     await setTotalSupply(token, 1);
     if (proposer.address !== deployer.address) {
-      await token.transferFrom(deployer.address, proposer.address, 0);
+      await token.transferFrom(deployer.address, proposer.address, 10_000);
     }
   }
   await mineBlock();
@@ -203,9 +203,9 @@ describe('NDAO#vetoing', () => {
     });
     it('Defeated', async () => {
       await setTotalSupply(token, 3);
-      await token.transferFrom(deployer.address, account0.address, 0);
-      await token.transferFrom(deployer.address, account1.address, 1);
-      await token.transferFrom(deployer.address, account1.address, 2);
+      await token.transferFrom(deployer.address, account0.address, 10_000);
+      await token.transferFrom(deployer.address, account1.address, 10_001);
+      await token.transferFrom(deployer.address, account1.address, 10_002);
       await propose(account0, false);
       await mineBlock();
       await mineBlock();
@@ -221,9 +221,9 @@ describe('NDAO#vetoing', () => {
     });
     it('Succeeded', async () => {
       await setTotalSupply(token, 3);
-      await token.transferFrom(deployer.address, account0.address, 0);
-      await token.transferFrom(deployer.address, account1.address, 1);
-      await token.transferFrom(deployer.address, account1.address, 2);
+      await token.transferFrom(deployer.address, account0.address, 10_000);
+      await token.transferFrom(deployer.address, account1.address, 10_001);
+      await token.transferFrom(deployer.address, account1.address, 10_002);
       await propose(account0, false);
       await mineBlock();
       await mineBlock();

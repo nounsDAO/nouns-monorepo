@@ -54,7 +54,7 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
     mapping(uint256 => ISeeder.Seed) public seeds;
 
     // The internal punk ID tracker
-    uint256 private _currentPunkId;
+    uint256 private _currentPunkId = 10_000;
 
     // IPFS content hash of contract-level metadata
     string private _contractURIHash = 'QmZi1n79FqWt2tTLwCqiy6nLM6xLGRsEPQ5JmReJQKNNzX';
@@ -153,7 +153,7 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
      * @dev Call _mintTo with the to address(es).
      */
     function mint() public override onlyMinter returns (uint256) {
-        if (_currentPunkId <= 1820 && _currentPunkId % 10 == 0) {
+        if (_currentPunkId <= 11820 && _currentPunkId % 10 == 0) {
             _mintTo(punkersDAO, _currentPunkId++);
         }
         return _mintTo(minter, _currentPunkId++);
