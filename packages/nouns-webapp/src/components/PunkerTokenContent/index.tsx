@@ -89,7 +89,7 @@ const PunkerTokenContent: React.FC<{
             className={`${auctionActivityClasses.currentBidCol} ${tokenContentClasses.currentBidCol} ${auctionActivityClasses.auctionTimerCol}`}
           >
             <div className={auctionActivityClasses.section}>
-              <Winner winner={''} isNounders={true} />
+              <Winner />
             </div>
           </Col>
         </Row>

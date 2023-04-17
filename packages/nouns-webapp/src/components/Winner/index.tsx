@@ -11,13 +11,12 @@ import { buildEtherscanAddressLink } from '../../utils/etherscan';
 import Tooltip from '../Tooltip';
 
 interface WinnerProps {
-  winner: string;
-  isNounders?: boolean;
+  winner?: string;
 }
 
-const Winner: React.FC<WinnerProps> = props => {
-  const { winner, isNounders } = props;
+const Winner: React.FC<WinnerProps> = ({ winner = '' }) => {
   const activeAccount = useAppSelector(state => state.account.activeAccount);
+  const isNounders = !winner;
 
   const isCool = useAppSelector(state => state.application.isCoolBackground);
   // const isMobile = isMobileScreen();
@@ -84,6 +83,7 @@ const Winner: React.FC<WinnerProps> = props => {
           <h4
             style={{
               color: isCool ? 'var(--brand-cool-light-text)' : 'var(--brand-warm-light-text)',
+              marginTop: isNounders ? -5 : 0,
             }}
             className={classes.winnerCopy}
           >
