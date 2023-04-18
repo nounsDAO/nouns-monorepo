@@ -1,9 +1,10 @@
 import { Contract, utils } from 'ethers';
 import { NounsDAODataABI, NounsDaoDataFactory } from '@nouns/contracts';
-import { useContractFunction, useEthers } from '@usedapp/core';
+import { useContractCall, useContractFunction, useEthers } from '@usedapp/core';
 import config from '../config';
 import { candidateProposalQuery, candidateProposalsQuery } from './subgraph';
 import { useQuery } from '@apollo/client';
+import BigNumber from 'bignumber.js';
 
 const abi = new utils.Interface(NounsDAODataABI);
 
@@ -35,4 +36,19 @@ export const useCandidateProposals = () => {
 
 export const useCandidateProposal = (id: string) => {
   return useQuery(candidateProposalQuery(id)).data?.proposalCandidate;
+};
+
+export const useCreateCandidateCost = () => {
+  const createCandidateCost = useContractCall({
+    abi,
+    address: config.addresses.nounsDAOData,
+    method: 'createCandidateCost',
+    args: [],
+  });
+
+  if (!createCandidateCost) {
+    return;
+  }
+
+  return createCandidateCost[0];
 };

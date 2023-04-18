@@ -24,7 +24,8 @@ import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.modu
 import ProposalActionModal from '../../components/ProposalActionsModal';
 import config from '../../config';
 import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
-import { useCreateProposalCandidate } from '../../wrappers/nounsData';
+import { useCreateCandidateCost, useCreateProposalCandidate } from '../../wrappers/nounsData';
+import { ethers } from 'ethers';
 
 const CreateDraftProposalPage = () => {
   const history = useHistory();
@@ -45,6 +46,8 @@ const CreateDraftProposalPage = () => {
   const [totalUSDCPayment, setTotalUSDCPayment] = useState<number>(0);
   const [tokenBuyerTopUpEth, setTokenBuyerTopUpETH] = useState<string>('0');
   const ethNeeded = useEthNeeded(config.addresses.tokenBuyer ?? '', totalUSDCPayment);
+
+  const createCandidateCost = useCreateCandidateCost();
 
   const handleAddProposalAction = useCallback(
     (transaction: ProposalTransaction) => {
@@ -150,6 +153,7 @@ const CreateDraftProposalPage = () => {
       proposalTransactions.map(({ calldata }) => calldata), // Calldatas
       `# ${titleValue}\n\n${bodyValue}`, // Description
       slug, // Slug
+      { value: availableVotes! > 0 ? 0 : createCandidateCost },
     );
   };
 
@@ -233,6 +237,16 @@ const CreateDraftProposalPage = () => {
             Slug:
             <input type="text" value={slug} onChange={e => setSlug(e.target.value)} />
           </label>
+        </div>
+        <div className="d-grid">
+          {availableVotes ? (
+            <>You have votes, no need to pay</>
+          ) : (
+            <>
+              Cost to create candidate:{' '}
+              {createCandidateCost && ethers.utils.formatEther(createCandidateCost)} ETH
+            </>
+          )}
         </div>
         <div className="d-grid">
           <Button
