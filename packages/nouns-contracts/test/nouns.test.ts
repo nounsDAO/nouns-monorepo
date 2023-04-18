@@ -9,6 +9,51 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 chai.use(solidity);
 const { expect } = chai;
 
+interface Acc {
+  accType: number;
+  accId: number;
+}
+
+interface Seed {
+  punkType: number;
+  skinTone: number;
+  accessories: Array<Acc>;
+}
+
+// if the function is changed, please update its copy in tasks/utils/index.ts/calculateSeedHash()
+function calculateSeedHash(seed: Seed) {
+  const data = [];
+
+  if (seed.punkType > 255) {
+    throw new Error('Invalid value');
+  }
+  data.push(seed.punkType);
+  if (seed.skinTone > 255) {
+    throw new Error('Invalid value');
+  }
+  data.push(seed.skinTone);
+  if (seed.accessories.length > 14) {
+    throw new Error('Invalid value');
+  }
+  data.push(seed.accessories.length);
+  seed.accessories.sort((acc1, acc2) => acc1.accType - acc2.accType);
+  let prevAccType = -1; // check if acc types repeat
+  seed.accessories.forEach( acc => {
+    if (acc.accType > 255 || acc.accId > 255 || acc.accType == prevAccType) {
+      throw new Error('Invalid value');
+    }
+    prevAccType = acc.accType;
+    data.push(acc.accType);
+    data.push(acc.accId);
+  });
+
+  let seedHash = '';
+  data.forEach(n => { seedHash = (n > 15 ? '' : '0') + n.toString(16) + seedHash; });
+  seedHash = '0x' + seedHash.padStart(64, '0');
+
+  return seedHash;
+}
+
 describe('NToken', () => {
   let nounsToken: NToken;
   let deployer: SignerWithAddress;
@@ -132,10 +177,44 @@ describe('NToken', () => {
     }
   });
 
-  it('calculates correct seed hash', async () => {
+  it('calculates correct seed hash (1)', async () => {
     const seed = {punkType: 1, skinTone: 2, accessories: [{accType: 9, accId: 23}, {accType: 10, accId: 5}, {accType: 11, accId: 15}]}
     const seedHash = await nounsToken.calculateSeedHash(seed);
     expect(seedHash).to.be.equal('0x00000000000000000000000000000000000000000000000f0b050a1709030201');
+    const expectedSeedHash = calculateSeedHash(seed);
+    expect(seedHash).to.be.equal(expectedSeedHash);
+  });
+
+  it('calculates correct seed hash (2)', async () => {
+    const seed = {punkType: 0, skinTone: 0, accessories: []}
+    const seedHash = await nounsToken.calculateSeedHash(seed);
+    expect(seedHash).to.be.equal('0x0000000000000000000000000000000000000000000000000000000000000000');
+    const expectedSeedHash = calculateSeedHash(seed);
+    expect(seedHash).to.be.equal(expectedSeedHash);
+  });
+
+  it('calculates correct seed hash (3)', async () => {
+    const accessories = [
+      {accType: 0, accId: 0},
+      {accType: 1, accId: 1},
+      {accType: 2, accId: 2},
+      {accType: 3, accId: 3},
+      {accType: 4, accId: 4},
+      {accType: 5, accId: 5},
+      {accType: 6, accId: 6},
+      {accType: 7, accId: 7},
+      {accType: 8, accId: 16},
+      {accType: 9, accId: 9},
+      {accType: 10, accId: 10},
+      {accType: 11, accId: 11},
+      {accType: 12, accId: 12},
+      {accType: 13, accId: 13},
+    ];
+    const seed = {punkType: 2, skinTone: 6, accessories }
+    const seedHash = await nounsToken.calculateSeedHash(seed);
+    expect(seedHash).to.be.equal('0x000d0d0c0c0b0b0a0a09091008070706060505040403030202010100000e0602');
+    const expectedSeedHash = calculateSeedHash(seed);
+    expect(seedHash).to.be.equal(expectedSeedHash);
   });
 
   describe('contractURI', async () => {

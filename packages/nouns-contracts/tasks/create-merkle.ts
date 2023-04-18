@@ -5,6 +5,7 @@ import { task } from 'hardhat/config'
 import { parse } from 'csv-parse'
 import nameDoc from '../../nouns-assets/src/config/punk_name.json'
 import probDoc from '../../nouns-assets/src/config/probability.json'
+import { calculateSeedHash } from './utils'
 
 const fileList = [
     '0-999.csv',
@@ -64,15 +65,14 @@ task("create-merkle", "Create merkle tree")
                 accessories: punk[5].split("/").map(acc => acc.trim()).filter(acc => acc.length > 0),
             }
 
-            let seed: { id?: number, type?: number, skinTone?: number, accessories?: Array<any> } = {}
-            seed.type =
+            const punkType =
                 punkObj.type == "human"
                     ? (punkObj.gender == "male" ? 0 : 1)
                     : (punkObj.type == "alien" 
                         ? 2
                         : punkObj.type == "ape" ? 3 : 4)
             
-            seed.skinTone =
+            const skinTone =
                 punkObj.skinTone == "albino" ? 0
                 : punkObj.skinTone == "light" ? 1
                 : punkObj.skinTone == "medium" ? 2
@@ -82,7 +82,7 @@ task("create-merkle", "Create merkle tree")
                 : punkObj.skinTone == "blue" ? 6
                 : 0
 
-            seed.accessories = punkObj.accessories.map((accName => {
+            const accessories = punkObj.accessories.map((accName => {
                 const accEntry = Object.entries(nameDoc).find((entry: any) => entry[1].name == accName && entry[1].gender == punkObj.gender)
                 if(!accEntry) throw new Error("Accessory name not found.")
                 const accId = accEntry[0]
@@ -91,40 +91,11 @@ task("create-merkle", "Create merkle tree")
                 const accIndex = accGroupByType[accTypeIndex].indexOf(accId)
                 return { accType: accTypeIndex, accId: accIndex }
             }))
+            let seed = { punkType, skinTone, accessories }
 
-            let seedBuffer: Array<number> = []
-            seedBuffer = seedBuffer.concat(toByteArray(seed.type, 1, 32))
-            seedBuffer = seedBuffer.concat(toByteArray(seed.skinTone, 1, 32))
-            seedBuffer = seedBuffer.concat(toByteArray(seed.accessories.length, 32, 32))
-            seed.accessories.forEach(accessory => {
-                seedBuffer = seedBuffer.concat(toByteArray(accessory.accType, 2, 32))
-                seedBuffer = seedBuffer.concat(toByteArray(accessory.accId, 2, 32))
-            })
-            
-            const seedHash = ethers.utils.keccak256(seedBuffer)
+            const seedHash = calculateSeedHash(seed)
             seedHashes.push(seedHash)
         }
 
         return seedHashes
-        
-        // const queue = seedHashes.map(hash => ({ hash, parent: null, left: null, right: null }))
-        // while(queue.length > 1) {
-        //     let a: any, b: any
-        //     let firstNode = queue.shift()
-        //     let lastNode = queue.shift()
-        //     if(queue[0] < queue[1]) {
-        //         a = ethers.utils.arrayify(firstNode.hash)
-        //         b = ethers.utils.arrayify(lastNode.hash)
-        //     } else {
-        //         b = ethers.utils.arrayify(firstNode.hash)
-        //         a = ethers.utils.arrayify(lastNode.hash)
-        //     }
-        //     const aBuffer: number[] = Object.values(a), bBuffer: number[] = Object.values(b)
-        //     const mergedHash = ethers.utils.keccak256(aBuffer.concat(bBuffer))
-        //     const parentNode = { hash: mergedHash, left: firstNode, right: lastNode, parent: null }
-        //     firstNode.parent = lastNode.parent = parentNode
-        //     queue.push(parentNode)
-        // }
-        // const merkleRoot = queue[0];
-        // console.log(merkleRoot.parent, merkleRoot.left, merkleRoot.right)
     })

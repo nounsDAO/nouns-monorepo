@@ -258,7 +258,7 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
     /**
      * @dev calculates seed's hash.
      * Public for testing purposes.
-     * Accessories are assumed to be sorted.
+     * Accessories are assumed to be sorted by accType!
      * This is not hash actually, rather encoding.
      * It is assumed that there is no more than 14 accessories, accType and accId does not exceed 255.
      */
