@@ -11,7 +11,9 @@ const CandidateProposals = () => {
     candidates = data['proposalCandidates'].map((c: any) => {
       return (
         <div>
-          <Link to={`/candidates/${c.id}`}>{c.title}</Link>
+          <Link to={`/candidates/${c.id}`}>
+            {c.latestVersion.title} by {c.proposer}
+          </Link>
         </div>
       );
     });

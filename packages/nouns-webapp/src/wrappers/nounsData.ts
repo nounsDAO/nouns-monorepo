@@ -16,6 +16,17 @@ export const useCreateProposalCandidate = () => {
   return { createProposalCandidate, createProposalCandidateState };
 };
 
+export const useAddSignature = () => {
+  const nounsDAOData = new NounsDaoDataFactory().attach(config.addresses.nounsDAOData!);
+
+  const { send: addSignature, state: addSignatureState } = useContractFunction(
+    nounsDAOData,
+    'addSignature',
+  );
+
+  return { addSignature, addSignatureState };
+};
+
 export const useCandidateProposals = () => {
   const { loading, data, error } = useQuery(candidateProposalsQuery());
 

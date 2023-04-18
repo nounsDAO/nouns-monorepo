@@ -17,7 +17,8 @@ import {
   getDraftProposals,
   ProposalContent,
 } from '../CreateDraftProposal/DraftProposalsStorage';
-import { useCandidateProposal } from '../../wrappers/nounsData';
+import { useAddSignature, useCandidateProposal } from '../../wrappers/nounsData';
+import { ethers } from 'ethers';
 
 const domain = {
   name: 'Nouns DAO',
@@ -62,6 +63,38 @@ const CandidateProposalPage = ({
   const [proposalIdToUpdate, setProposalIdToUpdate] = useState('');
 
   const candidateProposal = useCandidateProposal(id);
+  const { addSignature, addSignatureState } = useAddSignature();
+
+  async function calcProposalEncodeData(
+    proposer: any,
+    targets: any,
+    values: any,
+    signatures: any[],
+    calldatas: any[],
+    description: string,
+  ) {
+    const signatureHashes = signatures.map((sig: string) =>
+      ethers.utils.keccak256(ethers.utils.toUtf8Bytes(sig)),
+    );
+
+    const calldatasHashes = calldatas.map((calldata: ethers.utils.BytesLike) =>
+      ethers.utils.keccak256(calldata),
+    );
+
+    const encodedData = ethers.utils.defaultAbiCoder.encode(
+      ['address', 'bytes32', 'bytes32', 'bytes32', 'bytes32', 'bytes32'],
+      [
+        proposer,
+        ethers.utils.keccak256(ethers.utils.solidityPack(['address[]'], [targets])),
+        ethers.utils.keccak256(ethers.utils.solidityPack(['uint256[]'], [values])),
+        ethers.utils.keccak256(ethers.utils.solidityPack(['bytes32[]'], [signatureHashes])),
+        ethers.utils.keccak256(ethers.utils.solidityPack(['bytes32[]'], [calldatasHashes])),
+        ethers.utils.keccak256(ethers.utils.toUtf8Bytes(description)),
+      ],
+    );
+
+    return encodedData;
+  }
 
   async function sign() {
     if (!candidateProposal) return;
@@ -69,11 +102,11 @@ const CandidateProposalPage = ({
     if (proposalIdToUpdate) {
       const value = {
         proposer: candidateProposal.proposer,
-        targets: candidateProposal.targets,
-        values: candidateProposal.values,
-        signatures: candidateProposal.signatures,
-        calldatas: candidateProposal.calldatas,
-        description: candidateProposal.description,
+        targets: candidateProposal.latestVersion.targets,
+        values: candidateProposal.latestVersion.values,
+        signatures: candidateProposal.latestVersion.signatures,
+        calldatas: candidateProposal.latestVersion.calldatas,
+        description: candidateProposal.latestVersion.description,
         expiry: expiry,
         proposalId: proposalIdToUpdate,
       };
@@ -81,16 +114,44 @@ const CandidateProposalPage = ({
     } else {
       const value = {
         proposer: candidateProposal.proposer,
-        targets: candidateProposal.targets,
-        values: candidateProposal.values,
-        signatures: candidateProposal.signatures,
-        calldatas: candidateProposal.calldatas,
-        description: candidateProposal.description,
+        targets: candidateProposal.latestVersion.targets,
+        values: candidateProposal.latestVersion.values,
+        signatures: candidateProposal.latestVersion.signatures,
+        calldatas: candidateProposal.latestVersion.calldatas,
+        description: candidateProposal.latestVersion.description,
         expiry: expiry,
       };
       signature = await signer!._signTypedData(domain, createProposalTypes, value);
     }
 
+    const encodedProp = await calcProposalEncodeData(
+      candidateProposal.proposer,
+      candidateProposal.latestVersion.targets,
+      candidateProposal.latestVersion.values,
+      candidateProposal.latestVersion.signatures,
+      candidateProposal.latestVersion.calldatas,
+      candidateProposal.latestVersion.description,
+    );
+
+    console.log('>>>> encodedProp', encodedProp);
+
+    console.log(
+      '>> addSignature',
+      signature,
+      expiry,
+      candidateProposal.proposer,
+      candidateProposal.slug,
+      encodedProp,
+    );
+
+    await addSignature(
+      signature,
+      expiry,
+      candidateProposal.proposer,
+      candidateProposal.slug,
+      encodedProp,
+      'TODO reason',
+    );
     // const updatedDraftProposal = addSignature(
     //   {
     //     signer: await signer!.getAddress(),
@@ -178,14 +239,18 @@ const CandidateProposalPage = ({
   }, [updateProposalBySigState, setModal]);
 
   async function proposeBySigsClicked() {
-    //   await proposeBySigs(
-    //     draftProposal?.signatures.map(s => [s.signature, s.signer, s.expiry]),
-    //     draftProposal?.proposalContent.targets,
-    //     draftProposal?.proposalContent.values,
-    //     draftProposal?.proposalContent.signatures,
-    //     draftProposal?.proposalContent.calldatas,
-    //     draftProposal?.proposalContent.description,
-    //   );
+    await proposeBySigs(
+      candidateProposal?.latestVersion.versionSignatures.map((s: any) => [
+        s.sig,
+        s.signer.id,
+        s.expirationTimestamp,
+      ]),
+      candidateProposal?.latestVersion.targets,
+      candidateProposal?.latestVersion.values,
+      candidateProposal?.latestVersion.signatures,
+      candidateProposal?.latestVersion.calldatas,
+      candidateProposal?.latestVersion.description,
+    );
   }
   async function updateProposalBySigsClicked() {
     //   const proposalId = Number.parseInt(proposalIdToUpdate);
@@ -199,6 +264,8 @@ const CandidateProposalPage = ({
     //     draftProposal?.proposalContent.description,
     //   )
   }
+
+  console.log('>> addSignatureState', addSignatureState);
 
   return (
     <Section fullWidth={false}>
@@ -226,7 +293,7 @@ const CandidateProposalPage = ({
       </label>
 
       <Button onClick={() => sign()} style={{ marginBottom: 10 }}>
-        Sign proposal
+        Sign proposal (status: {addSignatureState.status})
       </Button>
       <Button onClick={() => proposeBySigsClicked()} style={{ marginBottom: 10 }}>
         proposeBySigs

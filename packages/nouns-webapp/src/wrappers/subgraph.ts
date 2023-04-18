@@ -105,7 +105,10 @@ export const candidateProposalsQuery = (first = 1_000) => gql`
     proposalCandidates {
       id
       slug
-      title
+      proposer
+      latestVersion {
+        title
+      }
     }
   }
 `;
@@ -114,13 +117,23 @@ export const candidateProposalQuery = (id: string) => gql`
 {
   proposalCandidate(id: "${id}") {
     id
-    title
-    description
+    slug
     proposer
-    targets
-    values
-    signatures
-    calldatas
+    latestVersion {
+      title
+      description
+      targets
+      values
+      signatures
+      calldatas
+      versionSignatures {
+        signer {
+          id
+        }
+        sig
+        expirationTimestamp
+      }
+    }
   }
 }
 `;
