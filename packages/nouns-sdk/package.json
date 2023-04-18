@@ -10,6 +10,7 @@
   "scripts": {
     "clean": "rimraf dist tsconfig.build.tsbuildinfo",
     "build": "tsc -p tsconfig.build.json",
+    "generate-og-punks": "ts-node scripts/generate-og-punks.ts",
     "prepare": "yarn build",
     "test": "mocha -r ts-node/register \"test/**/*.test.ts\""
   },

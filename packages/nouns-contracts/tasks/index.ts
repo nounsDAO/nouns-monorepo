@@ -25,5 +25,6 @@ export * from './populate-seeder';
 export * from './tenderly-register';
 export * from './generate-metadata';
 export * from './generate-metadatas';
+export * from './generate-og-punks';
 export * from './metadata-stats';
 export * from './metadata-stats-2';
