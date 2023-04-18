@@ -52,10 +52,11 @@ contract NounsDAODataTest is Test, SigUtils {
     NounsDAODataProxy proxy;
     NounsDAOData data;
     address dataAdmin = makeAddr('data admin');
+    address nounsDao = makeAddr('nouns dao');
 
     function setUp() public {
         tokenLikeMock = new NounsTokenLikeMock();
-        NounsDAOData logic = new NounsDAOData(address(tokenLikeMock));
+        NounsDAOData logic = new NounsDAOData(address(tokenLikeMock), nounsDao);
         proxyAdmin = new NounsDAODataProxyAdmin();
 
         bytes memory initCallData = abi.encodeWithSignature(
@@ -407,7 +408,7 @@ contract NounsDAODataTest is Test, SigUtils {
         (address signer, uint256 signerKey) = makeAddrAndKey('signer');
         address proposer = address(this);
         uint256 expiration = 1234;
-        address verifyingContract = address(data);
+        address verifyingContract = nounsDao;
         string memory reason = 'reason';
         bytes memory sig = signProposal(
             proposer,
@@ -423,7 +424,7 @@ contract NounsDAODataTest is Test, SigUtils {
             NounsDAOV3Proposals.PROPOSAL_TYPEHASH,
             encodedProp,
             expiration,
-            address(data)
+            verifyingContract
         );
 
         vm.expectEmit(true, true, true, true);
