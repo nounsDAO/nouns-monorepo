@@ -1,4 +1,4 @@
-import { Bytes, log } from '@graphprotocol/graph-ts';
+import { Bytes, BigInt, ethereum, log } from '@graphprotocol/graph-ts';
 import { extractTitle } from './custom-types/ParsedProposalV3';
 import {
   FeedbackSent,
@@ -22,13 +22,6 @@ export function handleProposalCandidateCreated(event: ProposalCandidateCreated):
 
   candidate.proposer = event.params.msgSender;
   candidate.slug = event.params.slug;
-  candidate.targets = changetype<Bytes[]>(event.params.targets);
-  candidate.values = event.params.values;
-  candidate.signatures = event.params.signatures;
-  candidate.calldatas = event.params.calldatas;
-  candidate.description = event.params.description.split('\\n').join('\n');
-  candidate.title = extractTitle(candidate.description);
-  candidate.encodedProposalHash = event.params.encodedProposalHash;
   candidate.createdTransactionHash = event.transaction.hash;
   candidate.createdTimestamp = event.block.timestamp;
   candidate.createdBlock = event.block.number;
@@ -36,36 +29,46 @@ export function handleProposalCandidateCreated(event: ProposalCandidateCreated):
   candidate.lastUpdatedBlock = event.block.number;
   candidate.canceled = false;
 
-  candidate.save();
-
-  captureProposalCandidateVersion(
+  const version = captureProposalCandidateVersion(
     event.transaction.hash.toHexString(),
     event.logIndex.toString(),
-    candidate,
+    candidate.id,
+    changetype<Bytes[]>(event.params.targets),
+    event.params.values,
+    event.params.signatures,
+    event.params.calldatas,
+    event.params.description,
+    event.params.encodedProposalHash,
+    event.block,
   );
+
+  candidate.latestVersion = version.id;
+  candidate.save();
 }
 
 export function handleProposalCandidateUpdated(event: ProposalCandidateUpdated): void {
   const candidateId = event.params.msgSender.toHexString().concat('-').concat(event.params.slug);
   const candidate = getOrCreateProposalCandidate(candidateId);
 
-  candidate.targets = changetype<Bytes[]>(event.params.targets);
-  candidate.values = event.params.values;
-  candidate.signatures = event.params.signatures;
-  candidate.calldatas = event.params.calldatas;
-  candidate.description = event.params.description.split('\\n').join('\n');
-  candidate.title = extractTitle(candidate.description);
-  candidate.encodedProposalHash = event.params.encodedProposalHash;
   candidate.lastUpdatedTimestamp = event.block.timestamp;
   candidate.lastUpdatedBlock = event.block.number;
-  candidate.save();
 
-  captureProposalCandidateVersion(
+  const version = captureProposalCandidateVersion(
     event.transaction.hash.toHexString(),
     event.logIndex.toString(),
-    candidate,
+    candidate.id,
+    changetype<Bytes[]>(event.params.targets),
+    event.params.values,
+    event.params.signatures,
+    event.params.calldatas,
+    event.params.description,
+    event.params.encodedProposalHash,
+    event.block,
     event.params.reason,
   );
+
+  candidate.latestVersion = version.id;
+  candidate.save();
 }
 
 export function handleProposalCandidateCanceled(event: ProposalCandidateCanceled): void {
@@ -84,19 +87,18 @@ export function handleSignatureAdded(event: SignatureAdded): void {
   const candidateSig = getOrCreateProposalCandidateSignature(sigId);
   const candidateId = event.params.proposer.toHexString().concat('-').concat(event.params.slug);
   const candidate = getOrCreateProposalCandidate(candidateId);
-  const signedVersion = getMatchingCandidateVersion(
-    candidate.versions,
-    event.params.encodedPropHash,
-  );
-  if (signedVersion == null) {
-    log.error('Candidate version not found. Encoded proposal hash: {}. tx_hash: {}', [
+
+  const latestVersion = ProposalCandidateVersion.load(candidate.latestVersion!)!;
+  if (latestVersion.encodedProposalHash != event.params.encodedPropHash) {
+    log.error('Wrong encodedProposalHash. Latest version: {}. Event: {}. tx_hash: {}', [
+      latestVersion.encodedProposalHash.toHexString(),
       event.params.encodedPropHash.toHexString(),
       event.transaction.hash.toHexString(),
     ]);
     return;
   }
 
-  candidateSig.version = signedVersion.id;
+  candidateSig.version = candidate.latestVersion!;
   candidateSig.signer = getOrCreateDelegate(event.params.signer.toHexString()).id;
   candidateSig.sig = event.params.sig;
   candidateSig.expirationTimestamp = event.params.expirationTimestamp;
@@ -125,23 +127,32 @@ export function handleFeedbackSent(event: FeedbackSent): void {
 function captureProposalCandidateVersion(
   txHash: string,
   logIndex: string,
-  candidate: ProposalCandidate,
+  candidateId: string,
+  targets: Bytes[],
+  values: BigInt[],
+  signatures: string[],
+  calldatas: Bytes[],
+  description: string,
+  encodedProposalHash: Bytes,
+  block: ethereum.Block,
   updateMessage: string = '',
-): void {
+): ProposalCandidateVersion {
   const versionId = txHash.concat('-').concat(logIndex);
   const version = getOrCreateProposalCandidateVersion(versionId);
-  version.proposal = candidate.id;
-  version.createdTimestamp = candidate.lastUpdatedTimestamp;
-  version.createdBlock = candidate.lastUpdatedBlock;
-  version.targets = candidate.targets;
-  version.values = candidate.values;
-  version.signatures = candidate.signatures;
-  version.calldatas = candidate.calldatas;
-  version.description = candidate.description;
-  version.title = candidate.title;
-  version.encodedProposalHash = candidate.encodedProposalHash;
+  version.proposal = candidateId;
+  version.createdTimestamp = block.timestamp;
+  version.createdBlock = block.number;
+  version.targets = targets;
+  version.values = values;
+  version.signatures = signatures;
+  version.calldatas = calldatas;
+  version.description = description.split('\\n').join('\n');
+  version.title = extractTitle(description);
+  version.encodedProposalHash = encodedProposalHash;
   version.updateMessage = updateMessage;
   version.save();
+
+  return version;
 }
 
 function getMatchingCandidateVersion(

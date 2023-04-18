@@ -392,27 +392,6 @@ type ProposalCandidate @entity {
   "The candidate slug, together with the proposer account makes the candidate's unique key"
   slug: String!
 
-  "Targets data for the change"
-  targets: [Bytes!]
-
-  "Values data for the change"
-  values: [BigInt!]
-
-  "Signature data for the change"
-  signatures: [String!]
-
-  "Call data for the change"
-  calldatas: [Bytes!]
-
-  "The full proposal description, which includes the title"
-  description: String!
-
-  "The proposal title, parsed from the description"
-  title: String!
-
-  "The hash of the abi encoded proposal data"
-  encodedProposalHash: Bytes!
-
   "The proposal candidate creation transaction hash"
   createdTransactionHash: Bytes!
 
@@ -428,9 +407,6 @@ type ProposalCandidate @entity {
   "The proposal candidate's last update block"
   lastUpdatedBlock: BigInt!
 
-  "Delegates that add a signature on this proposal candidate to get it over the proposal threshold"
-  signers: [Delegate!]
-
   "Whether this candidate was canceled or not"
   canceled: Boolean!
 
@@ -439,6 +415,9 @@ type ProposalCandidate @entity {
 
   "The block number at which this candidate was canceled"
   canceledBlock: BigInt
+
+  "Latest version of the proposal"
+  latestVersion: ProposalCandidateVersion!
 
   "This candidate's versions"
   versions: [ProposalCandidateVersion!]! @derivedFrom(field: "proposal")

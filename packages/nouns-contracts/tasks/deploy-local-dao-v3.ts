@@ -182,7 +182,7 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
       },
       Multicall2: {},
       NounsDAOData: {
-        args: [() => contracts.NounsToken.instance?.address],
+        args: [() => contracts.NounsToken.instance?.address, expectedNounsDAOProxyAddress],
         waitForConfirmation: true,
       },
       NounsDAODataProxyAdmin: {
