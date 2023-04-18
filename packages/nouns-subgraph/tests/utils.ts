@@ -18,7 +18,7 @@ import {
 } from '../src/nouns-dao';
 import { Address, ethereum, Bytes, BigInt, ByteArray } from '@graphprotocol/graph-ts';
 import { BIGINT_ONE, BIGINT_ZERO } from '../src/utils/constants';
-import { ProposalCandidateCreated } from '../src/types/NounsDAOData/NounsDAOData';
+import { ProposalCandidateCreated, SignatureAdded } from '../src/types/NounsDAOData/NounsDAOData';
 
 export function createProposalCreatedWithRequirementsEventV3(
   input: ProposalCreatedWithRequirementsEvent,
@@ -370,6 +370,41 @@ export function createProposalCandidateCreatedEvent(
   newEvent.parameters.push(
     new ethereum.EventParam('encodedProposalHash', ethereum.Value.fromBytes(encodedProposalHash)),
   );
+
+  return newEvent;
+}
+
+export function createSignatureAddedEvent(
+  signer: Address,
+  sig: Bytes,
+  expirationTimestamp: BigInt,
+  proposer: Address,
+  slug: string,
+  encodedPropHash: Bytes,
+  sigDigest: Bytes,
+  reason: string,
+): SignatureAdded {
+  let newEvent = changetype<SignatureAdded>(newMockEvent());
+
+  newEvent.parameters.push(new ethereum.EventParam('signer', ethereum.Value.fromAddress(signer)));
+  newEvent.parameters.push(new ethereum.EventParam('sig', ethereum.Value.fromBytes(sig)));
+  newEvent.parameters.push(
+    new ethereum.EventParam(
+      'expirationTimestamp',
+      ethereum.Value.fromUnsignedBigInt(expirationTimestamp),
+    ),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('proposer', ethereum.Value.fromAddress(proposer)),
+  );
+  newEvent.parameters.push(new ethereum.EventParam('slug', ethereum.Value.fromString(slug)));
+  newEvent.parameters.push(
+    new ethereum.EventParam('encodedPropHash', ethereum.Value.fromBytes(encodedPropHash)),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam('sigDigest', ethereum.Value.fromBytes(sigDigest)),
+  );
+  newEvent.parameters.push(new ethereum.EventParam('reason', ethereum.Value.fromString(reason)));
 
   return newEvent;
 }
