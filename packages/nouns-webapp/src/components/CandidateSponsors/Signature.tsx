@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { useBlockNumber } from '@usedapp/core';
 import { CandidateSignature } from '../../utils/types';
 import dayjs from 'dayjs';
+import { useEthers } from '@usedapp/core';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
 import { useQuery } from '@apollo/client';
@@ -25,9 +26,15 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
   const expiration = dayjs().to(dayjs.unix(props.signature.expirationTimestamp.toNumber()));
   // get votes for signer
   const blockNumber = useBlockNumber();
+  const { account } = useEthers();
   const { data: delegateSnapshot } = useQuery<Delegates>(
     delegateNounsAtBlockQuery([props.signature.signer], blockNumber || 0),
   );
+  const handleRemoveSignature = () => {
+    // TODO: add functionality to remove signature
+    console.log('remove signature');
+  };
+
   return (
     <li className={classes.sponsor}>
       <div className={classes.details}>
@@ -58,10 +65,15 @@ const Signature: React.FC<CandidateSignatureProps> = props => {
             </p>
           </div>
           {!isReasonShown && (
-            <a href="#" className={classes.readMore}>
+            <button className={classes.readMore} onClick={() => {}}>
               more
-            </a>
+            </button>
           )}
+        </div>
+      )}
+      {account === props.signature.signer && (
+        <div className={classes.removeSignature}>
+          <button onClick={() => handleRemoveSignature()}>Remove sponsorship</button>
         </div>
       )}
     </li>

@@ -202,3 +202,43 @@
   color: var(--brand-gray-light-text);
   margin-bottom: 0.5rem;
 }
+
+/* candidate page */
+.editCandidate {
+  border: 1px solid #e6e6e6;
+  padding: 15px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.editCandidate .buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.editCandidate p {
+  margin: 0;
+  padding: 0;
+}
+
+.editCandidate button {
+  font-size: 16px;
+}
+
+.editCandidate .editButton {
+  font-weight: bold;
+  background-color: #000;
+  color: white;
+  border-radius: 8px;
+  border-color: #000;
+  transition: all 0.125s ease-in-out;
+}
+.editCandidate .editButton:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}

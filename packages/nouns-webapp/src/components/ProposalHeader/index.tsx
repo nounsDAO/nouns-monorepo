@@ -119,7 +119,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
                 {props.isCandidate ? (
                   <>
                     <div>
-                      <Trans>Proposal Candide</Trans>
+                      <Trans>Proposal Candidate</Trans>
                     </div>
                   </>
                 ) : (

@@ -12,8 +12,6 @@ function CandidateSponsors({ sponsors }: Props) {
   const [sponsorCountOverflow, setSponsorCountOverflow] = useState(0);
   React.useEffect(() => {
     if (sponsors.length < minSponsorCount) {
-      // const emptySpots = Array(minSponsorCount - sponsors.length).fill('');
-      // setSponsorSpots([...sponsors, ...emptySpots]);
       setSponsorSpots(sponsors);
       const emptySpots: number[] = Array(minSponsorCount - sponsors.length).fill(0);
       setEmptySponsorSpots(emptySpots);

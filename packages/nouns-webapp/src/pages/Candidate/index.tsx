@@ -363,6 +363,33 @@ const CandidatePage = ({
           />
         )}
       </Col>
+      {proposal && proposal.proposer === account && (
+        <Row>
+          <Col lg={12} className={classes.editCandidate}>
+            <p>
+              Editing a proposal will clear any previous sponsors and require each sponsor to
+              re-sign
+            </p>
+            <div className={classes.buttons}>
+              <Button
+                onClick={destructiveStateAction}
+                disabled={isCancelPending}
+                variant="danger"
+                className={classes.destructiveTransitionStateButton}
+              >
+                {isCancelPending ? <Spinner animation="border" /> : <Trans>Cancel candidate</Trans>}
+              </Button>
+              <Button
+                onClick={destructiveStateAction}
+                disabled={isCancelPending}
+                className={classes.editButton}
+              >
+                {isCancelPending ? <Spinner animation="border" /> : <Trans>Edit</Trans>}
+              </Button>
+            </div>
+          </Col>
+        </Row>
+      )}
       <Row>
         <Col lg={8} className={clsx(classes.proposal, classes.wrapper)}>
           <ProposalContent proposal={proposal} />
@@ -372,6 +399,7 @@ const CandidatePage = ({
             slug={'test-candidate-slug'}
             signatures={signatures}
             delegateSnapshot={delegateSnapshot}
+            isProposer={proposal?.proposer === account}
           />
         </Col>
       </Row>
