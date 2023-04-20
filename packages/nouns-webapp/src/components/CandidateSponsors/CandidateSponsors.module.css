@@ -10,13 +10,29 @@
     top: 0;
   }
 }
+
+.header {
+  margin-bottom: 4px;
+  font-size: 20px;
+}
+
+.subhead { 
+  margin: 0 0 10px;
+  padding-top: 0;
+  font-size: 14px;
+  line-height: 1.1;
+  color: #646465;
+}
+
 .sponsorsList {
   text-align: left;
   padding: 0;
   gap: 16px;
   display: flex;
-  flex-direction: column
+  flex-direction: column;
+  margin: 10px 0;
 }
+
 .sponsorsList li {
   /* placeholder styles */
   border: 1px solid #e6e6e6;
@@ -28,6 +44,10 @@
   margin: 0;
 }
 
+.sponsorsList p {
+  margin: 0; 
+  padding: 0;
+}
 .sponsorsList li.sponsor {
   background-color: #FBFBFC;
   border-width: 1px;
@@ -45,10 +65,36 @@
   justify-content: space-between;
 }
 
-.sponsorName {
-  font-size: 16px;
+.reason {
+  font-size: 13px;
+  color: #646465; 
+  border-top: 1px solid #e6e6e6;
+  margin-top: 8px;
+  padding-top: 10px;
+  line-height: 1.2;
+}
+
+.reasonWrapper {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+}
+
+.reasonWrapper.reasonShown {
+  display: block;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+
+.sponsorName a {
+  font-size: 14px;
   font-weight: bold;
   color: #000000;
+  text-decoration: none;
+}
+.sponsorName a:hover {
+  text-decoration: underline;
 }
 
 .expiration {
@@ -81,4 +127,49 @@
   font-weight: bold;
   color: #fff;
   cursor: pointer;
+}
+
+.readMore {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 13px;
+  font-weight: bold;
+  color: #000 !important;
+  background: rgb(251,251,252);
+  background: linear-gradient(0deg, rgba(251,251,252,1) 33%, rgba(251,251,252,0) 100%);
+  padding: 20px 3px 4px;
+  position: relative;
+  z-index: 2;
+  margin-top: -20px;
+}
+
+.withoutVotesMsg {
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+  line-height: 1;
+  color: var(--brand-gray-light-text); 
+  padding: 0 20px;
+  margin: 0 auto;
+}
+
+.thresholdMet {
+  color: var(--brand-color-green);
+  font-weight: bold;
+  font-size: 14px;
+  margin: 0 0 4px;
+  padding: 0;
+}
+
+.formWrapper {
+  text-align: left;
+}
+.formWrapper input, .formWrapper textarea {
+  width: 100%;
+}
+
+.formLabel {
+
 }

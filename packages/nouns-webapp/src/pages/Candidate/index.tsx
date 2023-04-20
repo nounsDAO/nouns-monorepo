@@ -45,6 +45,8 @@ import ShortAddress from '../../components/ShortAddress';
 import StreamWithdrawModal from '../../components/StreamWithdrawModal';
 import { parseStreamCreationCallData } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
 import CandidateSponsors from '../../components/CandidateSponsors';
+import { BigNumber } from 'ethers';
+import { CandidateSignature } from '../../utils/types';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -58,6 +60,29 @@ const CandidatePage = ({
   const proposal = useProposal(id);
   const { account } = useEthers();
 
+  const signatures: CandidateSignature[] = [
+    {
+      signer: '0x0055cd5f017027d10adf4f13332181e6d8d886bb',
+      expirationTimestamp: BigNumber.from(1683822753),
+      proposer: '0xCB43078C32423F5348Cab5885911C3B5faE217F9',
+      slug: 'test-candidate',
+      reason: '',
+    },
+    {
+      signer: '0xcc2688350d29623e2a0844cc8885f9050f0f6ed5',
+      expirationTimestamp: BigNumber.from(1684341153),
+      proposer: '0xCB43078C32423F5348Cab5885911C3B5faE217F9',
+      slug: 'test-candidate',
+      reason:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper nulla non metus auctor fringilla.',
+    },
+  ];
+  const [signedVotes, setSignedVotes] = React.useState<number>(0);
+  const blockNumber = useBlockNumber();
+  const signers = signatures.map(signature => signature.signer);
+  const { data: delegateSnapshot } = useQuery<Delegates>(
+    delegateNounsAtBlockQuery(signers, blockNumber ?? 0),
+  );
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
   const [showDynamicQuorumInfoModal, setShowDynamicQuorumInfoModal] = useState<boolean>(false);
   // Toggle between Noun centric view and delegate view
@@ -276,25 +301,25 @@ const CandidatePage = ({
     skip: !proposal,
   });
 
-  const voterIds = voters?.votes?.map(v => v.voter.id);
-  const { data: delegateSnapshot } = useQuery<Delegates>(
-    delegateNounsAtBlockQuery(voterIds ?? [], proposal?.createdBlock ?? 0),
-    {
-      skip: !voters?.votes?.length,
-    },
-  );
+  // const voterIds = voters?.votes?.map(v => v.voter.id);
+  // const { data: delegateSnapshot } = useQuery<Delegates>(
+  //   delegateNounsAtBlockQuery(voterIds ?? [], proposal?.createdBlock ?? 0),
+  //   {
+  //     skip: !voters?.votes?.length,
+  //   },
+  // );
 
-  const { delegates } = delegateSnapshot || {};
-  const delegateToNounIds = delegates?.reduce<Record<string, string[]>>((acc, curr) => {
-    acc[curr.id] = curr?.nounsRepresented?.map(nr => nr.id) ?? [];
-    return acc;
-  }, {});
+  // const { delegates } = delegateSnapshot || {};
+  // const delegateToNounIds = delegates?.reduce<Record<string, string[]>>((acc, curr) => {
+  //   acc[curr.id] = curr?.nounsRepresented?.map(nr => nr.id) ?? [];
+  //   return acc;
+  // }, {});
 
-  const data = voters?.votes?.map(v => ({
-    delegate: v.voter.id,
-    supportDetailed: v.supportDetailed,
-    nounsRepresented: delegateToNounIds?.[v.voter.id] ?? [],
-  }));
+  // const data = voters?.votes?.map(v => ({
+  //   delegate: v.voter.id,
+  //   supportDetailed: v.supportDetailed,
+  //   nounsRepresented: delegateToNounIds?.[v.voter.id] ?? [],
+  // }));
 
   const [showToast, setShowToast] = useState(true);
   useEffect(() => {
@@ -305,13 +330,13 @@ const CandidatePage = ({
     }
   }, [showToast]);
 
-  if (!proposal || loading || !data || loadingDQInfo || !dqInfo) {
-    return (
-      <div className={classes.spinner}>
-        <Spinner animation="border" />
-      </div>
-    );
-  }
+  // if (!proposal || loading || !data || loadingDQInfo || !dqInfo) {
+  //   return (
+  //     <div className={classes.spinner}>
+  //       <Spinner animation="border" />
+  //     </div>
+  //   );
+  // }
 
   if (error || dqError) {
     return <Trans>Failed to fetch</Trans>;
@@ -320,10 +345,10 @@ const CandidatePage = ({
   const isWalletConnected = !(activeAccount === undefined);
   const isActiveForVoting = startDate?.isBefore(now) && endDate?.isAfter(now);
 
-  const forNouns = getNounVotes(data, 1);
-  const againstNouns = getNounVotes(data, 0);
-  const abstainNouns = getNounVotes(data, 2);
-  const isV2Prop = dqInfo.proposal.quorumCoefficient > 0;
+  // const forNouns = getNounVotes(data, 1);
+  // const againstNouns = getNounVotes(data, 0);
+  // const abstainNouns = getNounVotes(data, 2);
+  // const isV2Prop = dqInfo.proposal.quorumCoefficient > 0;
 
   return (
     <Section fullWidth={false} className={classes.votePage}>
@@ -338,211 +363,16 @@ const CandidatePage = ({
           />
         )}
       </Col>
-      <Col lg={12} className={classes.wrapper}>
-        {proposal.status === ProposalState.EXECUTED &&
-          proposal.details
-            .filter(txn => txn?.functionSig.includes('createStream'))
-            .map(txn => {
-              const parsedCallData = parseStreamCreationCallData(txn.callData);
-              if (parsedCallData.recipient.toLowerCase() !== account?.toLowerCase()) {
-                return <></>;
-              }
-
-              return (
-                <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
-                  <span className={classes.boldedLabel}>
-                    <Trans>Only visible to you</Trans>
-                  </span>
-                  <Col className="d-grid gap-4">
-                    <Button
-                      onClick={() => {
-                        setShowStreamWithdrawModal(true);
-                        setStreamWithdrawInfo({
-                          streamAddress: parsedCallData.streamAddress,
-                          startTime: parsedCallData.startTime,
-                          endTime: parsedCallData.endTime,
-                          streamAmount: parsedCallData.streamAmount,
-                          tokenAddress: parsedCallData.tokenAddress,
-                        });
-                      }}
-                      variant="primary"
-                      className={classes.transitionStateButton}
-                    >
-                      <Trans>
-                        Withdraw from Stream{' '}
-                        <ShortAddress address={parsedCallData.streamAddress ?? ''} />
-                      </Trans>
-                    </Button>
-                  </Col>
-                </Row>
-              );
-            })}
-
-        {(isAwaitingStateChange() || isAwaitingDestructiveStateChange()) && (
-          <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
-            <Col className="d-grid gap-4">
-              {isAwaitingStateChange() && (
-                <Button
-                  onClick={moveStateAction}
-                  disabled={isQueuePending || isExecutePending}
-                  variant="dark"
-                  className={classes.transitionStateButton}
-                >
-                  {isQueuePending || isExecutePending ? (
-                    <Spinner animation="border" />
-                  ) : (
-                    <Trans>{moveStateButtonAction} Proposal ⌐◧-◧</Trans>
-                  )}
-                </Button>
-              )}
-
-              {isAwaitingDestructiveStateChange() && (
-                <Button
-                  onClick={destructiveStateAction}
-                  disabled={isCancelPending}
-                  variant="danger"
-                  className={classes.destructiveTransitionStateButton}
-                >
-                  {isCancelPending ? (
-                    <Spinner animation="border" />
-                  ) : (
-                    <Trans>{destructiveStateButtonAction} Proposal ⌐◧-◧</Trans>
-                  )}
-                </Button>
-              )}
-            </Col>
-          </Row>
-        )}
-      </Col>
       <Row>
-        <Col lg={9} className={clsx(classes.proposal, classes.wrapper)}>
-          {/* <p
-          onClick={() => setIsDelegateView(!isDelegateView)}
-          className={classes.toggleDelegateVoteView}
-        >
-          {isDelegateView ? (
-            <Trans>Switch to Noun view</Trans>
-          ) : (
-            <Trans>Switch to delegate view</Trans>
-          )}
-        </p>
-        <Row>
-          <VoteCard
-            proposal={proposal}
-            percentage={forPercentage}
-            nounIds={forNouns}
-            variant={VoteCardVariant.FOR}
-            delegateView={isDelegateView}
-            delegateGroupedVoteData={data}
-          />
-          <VoteCard
-            proposal={proposal}
-            percentage={againstPercentage}
-            nounIds={againstNouns}
-            variant={VoteCardVariant.AGAINST}
-            delegateView={isDelegateView}
-            delegateGroupedVoteData={data}
-          />
-          <VoteCard
-            proposal={proposal}
-            percentage={abstainPercentage}
-            nounIds={abstainNouns}
-            variant={VoteCardVariant.ABSTAIN}
-            delegateView={isDelegateView}
-            delegateGroupedVoteData={data}
-          />
-        </Row> */}
-
-          {/* TODO abstract this into a component  */}
-          {/* <Row>
-        <Col xl={4} lg={12}>
-          <Card className={classes.voteInfoCard}>
-            <Card.Body className="p-2">
-              <div className={classes.voteMetadataRow}>
-                <div className={classes.voteMetadataRowTitle}>
-                  <h1>
-                    <Trans>Threshold</Trans>
-                  </h1>
-                </div>
-                {isV2Prop && (
-                  <ReactTooltip
-                    id={'view-dq-info'}
-                    className={classes.delegateHover}
-                    getContent={dataTip => {
-                      return <Trans>View Threshold Info</Trans>;
-                    }}
-                  />
-                )}
-                <div
-                  data-for="view-dq-info"
-                  data-tip="View Dynamic Quorum Info"
-                  onClick={() => setShowDynamicQuorumInfoModal(true && isV2Prop)}
-                  className={clsx(classes.thresholdInfo, isV2Prop ? classes.cursorPointer : '')}
-                >
-                  <span>
-                    {isV2Prop ? <Trans>Current Threshold</Trans> : <Trans>Threshold</Trans>}
-                  </span>
-                  <h3>
-                    <Trans>
-                      {isV2Prop ? i18n.number(currentQuorum ?? 0) : proposal.quorumVotes} votes
-                    </Trans>
-                    {isV2Prop && <SearchIcon className={classes.dqIcon} />}
-                  </h3>
-                </div>
-              </div>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col xl={4} lg={12}>
-          <Card className={classes.voteInfoCard}>
-            <Card.Body className="p-2">
-              <div className={classes.voteMetadataRow}>
-                <div className={classes.voteMetadataRowTitle}>
-                  <h1>{startOrEndTimeCopy()}</h1>
-                </div>
-                <div className={classes.voteMetadataTime}>
-                  <span>
-                    {startOrEndTimeTime() &&
-                      i18n.date(new Date(startOrEndTimeTime()?.toISOString() || 0), {
-                        hour: 'numeric',
-                        minute: '2-digit',
-                        timeZoneName: 'short',
-                      })}
-                  </span>
-                  <h3>
-                    {startOrEndTimeTime() &&
-                      i18n.date(new Date(startOrEndTimeTime()?.toISOString() || 0), {
-                        dateStyle: 'long',
-                      })}
-                  </h3>
-                </div>
-              </div>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col xl={4} lg={12}>
-          <Card className={classes.voteInfoCard}>
-            <Card.Body className="p-2">
-              <div className={classes.voteMetadataRow}>
-                <div className={classes.voteMetadataRowTitle}>
-                  <h1>Snapshot</h1>
-                </div>
-                <div className={classes.snapshotBlock}>
-                  <span>
-                    <Trans>Taken at block</Trans>
-                  </span>
-                  <h3>{proposal.createdBlock}</h3>
-                </div>
-              </div>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row> */}
-
+        <Col lg={8} className={clsx(classes.proposal, classes.wrapper)}>
           <ProposalContent proposal={proposal} />
         </Col>
-        <Col lg={3}>
-          <CandidateSponsors slug={'test-candidate-slug'} />
+        <Col lg={4}>
+          <CandidateSponsors
+            slug={'test-candidate-slug'}
+            signatures={signatures}
+            delegateSnapshot={delegateSnapshot}
+          />
         </Col>
       </Row>
     </Section>
