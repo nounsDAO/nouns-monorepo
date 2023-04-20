@@ -3,6 +3,7 @@ import Section from '../../layout/Section';
 import {
   ProposalState,
   ProposalTransaction,
+  ProposalDetail,
   useProposal,
   useProposalCount,
   useProposalThreshold,
@@ -10,11 +11,12 @@ import {
 } from '../../wrappers/nounsDao';
 import { useUserVotes } from '../../wrappers/nounToken';
 import classes from './CreateProposal.module.css';
-import { Link } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import ProposalEditor from '../../components/ProposalEditor';
-import CreateProposalButton from '../../components/CreateProposalButton';
+import { processProposalDescriptionText } from '../../utils/processProposalDescriptionText';
+import EditProposalButton from '../../components/EditProposalButton/index';
 import ProposalTransactions from '../../components/ProposalTransactions';
 import { withStepProgress } from 'react-stepz';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -26,14 +28,24 @@ import ProposalActionModal from '../../components/ProposalActionsModal';
 import config from '../../config';
 import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
 
-const CreateProposalPage = () => {
+interface EditCandidateProps {
+  match: {
+    params: { id: string };
+  };
+}
+
+const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   const { account } = useEthers();
+  const proposal = useProposal(props.match.params.id);
+
   const latestProposalId = useProposalCount();
   const latestProposal = useProposal(latestProposalId ?? 0);
   const availableVotes = useUserVotes();
   const proposalThreshold = useProposalThreshold();
 
   const { propose, proposeState } = usePropose();
+
+  const [isProposalEdited, setIsProposalEdited] = useState(false);
 
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
   const [titleValue, setTitleValue] = useState('');
@@ -65,6 +77,7 @@ const CreateProposalPage = () => {
       });
       setProposalTransactions([...proposalTransactions, ...transactionsArray]);
 
+      // TODO: add a check to see if the added/removed transaction is different from the original proposal
       setShowTransactionFormModal(false);
     },
     [proposalTransactions, totalUSDCPayment],
@@ -126,15 +139,25 @@ const CreateProposalPage = () => {
   const handleTitleInput = useCallback(
     (title: string) => {
       setTitleValue(title);
+      if (title === proposal?.title) {
+        setIsProposalEdited(false);
+      } else {
+        setIsProposalEdited(true);
+      }
     },
-    [setTitleValue],
+    [setTitleValue, titleValue],
   );
 
   const handleBodyInput = useCallback(
     (body: string) => {
       setBodyValue(body);
+      if (body === proposal?.description) {
+        setIsProposalEdited(false);
+      } else {
+        setIsProposalEdited(true);
+      }
     },
-    [setBodyValue],
+    [setBodyValue, bodyValue],
   );
 
   const isFormInvalid = useMemo(
@@ -163,6 +186,8 @@ const CreateProposalPage = () => {
 
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
+
+  console.log('proposal', proposal);
 
   useEffect(() => {
     switch (proposeState.status) {
@@ -199,7 +224,78 @@ const CreateProposalPage = () => {
     }
   }, [proposeState, setModal]);
 
-  console.log('proposalTransactions', proposalTransactions);
+  // useEffect(() => {
+  //   if (proposal) {
+  //     const transactions = proposal.details.map(txn => {
+  //       return {
+  //         address: txn.target,
+  //         value: txn.value ?? '0',
+  //         calldata: 'txn.data', // TODO
+  //         signature: 'txn.signature', // TODO
+  //       };
+  //     });
+  //     setProposalTransactions(transactions);
+  //   }
+  // }, [proposal?.details.length]);
+
+  const [originalTitleValue, setOriginalTitleValue] = useState('');
+  const [originalBodyValue, setOriginalBodyValue] = useState('');
+  const [originalProposalTransactions, setOriginalProposalTransactions] = useState<
+    // { callData: string; target: string; value: string }[]
+    ProposalDetail[]
+  >([]);
+
+  useEffect(() => {
+    if (proposal) {
+      setTitleValue(proposal.title);
+      setBodyValue(proposal.description);
+      const transactions = proposal.details.map(txn => {
+        return {
+          address: txn.target,
+          value: txn.value ?? '0',
+          calldata: 'txn.data', // TODO
+          signature: 'txn.signature', // TODO
+        };
+      });
+      setProposalTransactions(transactions);
+      setOriginalTitleValue(proposal.title);
+      setOriginalBodyValue(proposal.description);
+      setOriginalProposalTransactions(proposal.details);
+    }
+  }, [proposal?.title, proposal?.description, proposal?.details.length]);
+
+  // const isProposalEdited = useMemo(() => {
+  const checkIsProposalEdited = () => {
+    if (proposal) {
+      if (originalTitleValue !== titleValue) {
+        console.log('titleValue', titleValue);
+        console.log('originalTitleValue', originalTitleValue);
+        return true;
+      }
+      if (originalBodyValue !== bodyValue) {
+        console.log('bodyValue', bodyValue);
+        return true;
+      }
+      if (originalProposalTransactions.length !== proposalTransactions.length) {
+        console.log('proposalTransactions', proposalTransactions);
+        return true;
+      }
+      for (let i = 0; i < originalProposalTransactions.length; i++) {
+        if (
+          originalProposalTransactions[i].target !== proposalTransactions[i].address ||
+          originalProposalTransactions[i].value !== proposalTransactions[i].value
+        ) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
+  // TODO: uncomment this
+  // if (proposal?.proposer !== account) {
+  //   return null;
+  // }
 
   return (
     <Section fullWidth={false} className={classes.createProposalPage}>
@@ -215,25 +311,14 @@ const CreateProposalPage = () => {
             <button className={clsx(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button>
           </Link>
           <h3 className={classes.heading}>
-            <Trans>Create Proposal</Trans>
+            <Trans>Edit Proposal Candidate</Trans>
           </h3>
         </div>
         <Alert variant="secondary" className={classes.voterIneligibleAlert}>
           <b>
-            <Trans>Tip</Trans>
+            <Trans>Note</Trans>
           </b>
-          :{' '}
-          <Trans>
-            Add one or more proposal actions and describe your proposal for the community. The
-            proposal cannot be modified after submission, so please verify all information before
-            submitting. The voting period will begin after 5 days and last for 5 days.
-          </Trans>
-          <br />
-          <br />
-          <Trans>
-            You <b>MUST</b> maintain enough voting power to meet the proposal threshold until your
-            proposal is executed. If you fail to do so, anyone can cancel your proposal.
-          </Trans>
+          : <Trans>Editing a proposal will clear all previous feedback</Trans>
         </Alert>
         <div className="d-grid">
           <Button
@@ -264,11 +349,11 @@ const CreateProposalPage = () => {
         )}
         <ProposalEditor
           title={titleValue}
-          body={bodyValue}
+          body={processProposalDescriptionText(bodyValue, titleValue)}
           onTitleInput={handleTitleInput}
           onBodyInput={handleBodyInput}
         />
-        <CreateProposalButton
+        <EditProposalButton
           className={classes.createProposalButton}
           isLoading={isProposePending}
           proposalThreshold={proposalThreshold}
@@ -277,13 +362,15 @@ const CreateProposalPage = () => {
               latestProposal?.status === ProposalState.PENDING) &&
             latestProposal.proposer === account
           }
-          hasEnoughVote={hasEnoughVote}
-          isFormInvalid={isFormInvalid}
+          hasEnoughVote={true}
+          isFormInvalid={isProposalEdited ? false : true}
           handleCreateProposal={handleCreateProposal}
         />
+
+        <p className="text-center">This will clear all previous sponsors and feedback votes</p>
       </Col>
     </Section>
   );
 };
 
-export default withStepProgress(CreateProposalPage);
+export default EditCandidatePage;

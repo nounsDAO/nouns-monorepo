@@ -26,6 +26,8 @@ import dayjs from 'dayjs';
 import DelegatePage from './pages/DelegatePage';
 import CreateCandidatePage from './pages/CreateCandidate';
 import CandidatePage from './pages/Candidate';
+import EditProposalPage from './pages/EditProposal';
+import EditCandidatePage from './pages/EditCandidate';
 
 function App() {
   const { account, chainId, library } = useEthers();
@@ -66,6 +68,8 @@ function App() {
             <Route exact path="/nounders" component={NoundersPage} />
             <Route exact path="/create-proposal" component={CreateProposalPage} />
             <Route exact path="/create-candidate" component={CreateCandidatePage} />
+            <Route exact path="/edit-proposal/:id" component={EditProposalPage} />
+            <Route exact path="/edit-candidate/:id" component={EditCandidatePage} />
             <Route exact path="/vote" component={GovernancePage} />
             <Route exact path="/vote/:id" component={VotePage} />
             <Route exact path="/candidate/:id" component={CandidatePage} />

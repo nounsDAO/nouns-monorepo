@@ -60,7 +60,7 @@ interface ProposalCallResult {
   quorumVotes: EthersBN;
 }
 
-interface ProposalDetail {
+export interface ProposalDetail {
   target: string;
   value?: string;
   functionSig: string;

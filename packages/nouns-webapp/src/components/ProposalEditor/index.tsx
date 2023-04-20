@@ -2,7 +2,7 @@ import classes from './ProposalEditor.module.css';
 import { InputGroup, FormControl, FormText } from 'react-bootstrap';
 import remarkBreaks from 'remark-breaks';
 import ReactMarkdown from 'react-markdown';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Trans } from '@lingui/macro';
 
 const ProposalEditor = ({
@@ -23,6 +23,10 @@ const ProposalEditor = ({
     setProposalText(body);
     onBodyInput(body);
   };
+
+  useEffect(() => {
+    setProposalText(body);
+  }, [body]);
 
   return (
     <div>
