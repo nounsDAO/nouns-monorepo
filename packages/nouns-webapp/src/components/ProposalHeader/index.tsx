@@ -190,6 +190,10 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
         )}
       </div>
 
+      <p className={classes.versionHistory}>
+        <strong>Version X</strong> <span>updated Y days ago</span>
+      </p>
+
       {isMobile && (
         <div className={classes.mobileSubmitProposalButton}>{isActiveForVoting && voteButton}</div>
       )}

@@ -190,3 +190,15 @@
     margin-left: 0.5rem;
   }
 }
+
+.versionHistory {
+  color: #14161b;
+}
+
+.versionHistory strong {
+  padding: 4px 10px;
+  background-color: #e2e3e8;
+  color: #14161b;
+  border-radius: 8px;
+  margin-right: 5px;
+} 
