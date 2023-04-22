@@ -17,9 +17,9 @@ export const type2PunkBasic = [
   { punkType: 1, skinTone: 1 },
   { punkType: 1, skinTone: 2 },
   { punkType: 1, skinTone: 3 },
-  { punkType: 4, skinTone: 4 },
+  { punkType: 2, skinTone: 6 },
   { punkType: 3, skinTone: 5 },
-  { punkType: 2, skinTone: 6 }
+  { punkType: 4, skinTone: 4 }
 ]
 const shortPunkType: any = {
   male: "m",
