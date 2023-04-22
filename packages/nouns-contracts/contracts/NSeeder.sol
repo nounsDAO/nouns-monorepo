@@ -78,15 +78,16 @@ contract NSeeder is ISeeder, Ownable {
 
         // Get possible groups for the current punk type
         tmp = uint16(accFlags[seed.punkType]); //punkType
-        uint256[] memory usedGroupFlags = new uint256[](accExclusiveGroup.length);
+        // assert(accExclusiveGroup.length < 256);
+        uint256 usedGroupFlags = 0;
         uint256 availableGroupCount = 0;
         for(uint8 acc = 0; tmp > 0; acc ++) {
             if(tmp & 0x01 == 1) {
                 if(accCountByType_[seed.punkType][acc] != 0) {
                     uint256 group = accExclusiveGroupMapping[acc];
-                    if(usedGroupFlags[group] == 0) {
+                    if(usedGroupFlags & (1 << group) == 0) {
                         availableGroupCount ++;
-                        usedGroupFlags[group] = 1;
+                        usedGroupFlags |= (1 << group);
                     }
                 }
             }
@@ -117,13 +118,12 @@ contract NSeeder is ISeeder, Ownable {
 
         tmp = 0; // accType
         uint maxValue = 0;
-        for(uint i = 0; i < accExclusiveGroup.length; i ++)
-            usedGroupFlags[i] = 0;
+        usedGroupFlags = 0;
         for(uint i = 0; i < curAccCount; i ++) {
             tmp = 0;
             maxValue = 0;
             for(uint j = 0; j < accTypeCount; j ++) {
-                if(usedGroupFlags[accExclusiveGroupMapping[typeOrderSortedByCount[seed.punkType][j]]] == 1) continue;
+                if(usedGroupFlags & (1 << accExclusiveGroupMapping[typeOrderSortedByCount[seed.punkType][j]])  > 0) continue;
 
                 if(maxValue >= accCountByType[seed.punkType][j] * 1000) break;
                 if(maxValue < selectedRandomness[j]) {
@@ -134,7 +134,7 @@ contract NSeeder is ISeeder, Ownable {
 
             uint256 accRand = uint8(pseudorandomness >> (i * 8)) % accCountByType[seed.punkType][tmp];
             uint256 accType = typeOrderSortedByCount[seed.punkType][tmp];
-            usedGroupFlags[accExclusiveGroupMapping[accType]] = 1;
+            usedGroupFlags |= 1 << accExclusiveGroupMapping[accType];
             seed.accessories[i] = Accessory({
                 accType: uint16(accType),
                 accId: uint16(accIdByType[seed.punkType][accType][accRand])
@@ -195,6 +195,7 @@ contract NSeeder is ISeeder, Ownable {
     // group list
     // key: group, value: accessory type
     function setExclusiveAcc(uint256 groupCount, uint256[] calldata exclusives) external onlyOwner {
+        require(groupCount < 256, "NSeeder: A");
         delete accExclusiveGroup;
         for(uint256 i = 0; i < groupCount; i ++)
             accExclusiveGroup.push();
