@@ -45,6 +45,7 @@ task("populate-seeder", "Initialize deployed smart contracts")
                         prev[typeIndex] = 1
                         return prev
                     }, Array(accTypeCount).fill(0))
+                    binaryArray.reverse()
                     return parseInt(binaryArray.join(""), 2)
                 })
         const typeAvailabilityResponse = await (await nSeeder.setAccAvailability(accTypeCount, accTypeAvailabilities)).wait()

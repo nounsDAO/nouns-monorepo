@@ -34,7 +34,8 @@ contract NSeeder is ISeeder, Ownable {
     mapping(uint256 => uint256) public accExclusiveGroupMapping; // i: acc index, group index
     uint256[][] accExclusiveGroup; // i: group id, j: acc index in a group
 
-    uint256[][] accCountByType; // typeOrderSorted acctually
+    uint256[][] accCountByType_; // accessories count by punk type, acc type
+    uint256[][] accCountByType; // typeOrderSorted actually
     uint256[][] typeOrderSortedByCount; // [sorted_index] = real_group_id
 
     // punk type, acc type, acc order id => accId
@@ -78,14 +79,13 @@ contract NSeeder is ISeeder, Ownable {
         // Get possible groups for the current punk type
         tmp = uint16(accFlags[seed.punkType]); //punkType
         uint256[] memory usedGroupFlags = new uint256[](accExclusiveGroup.length);
-        uint256[] memory availableGroups = new uint256[](accExclusiveGroup.length);
         uint256 availableGroupCount = 0;
         for(uint8 acc = 0; tmp > 0; acc ++) {
             if(tmp & 0x01 == 1) {
-                if(accCountByType[seed.punkType][acc] != 0) {
+                if(accCountByType_[seed.punkType][acc] != 0) {
                     uint256 group = accExclusiveGroupMapping[acc];
                     if(usedGroupFlags[group] == 0) {
-                        availableGroups[availableGroupCount ++] = group;
+                        availableGroupCount ++;
                         usedGroupFlags[group] = 1;
                     }
                 }
@@ -205,6 +205,12 @@ contract NSeeder is ISeeder, Ownable {
     }
 
     function setAccCountPerTypeAndPunk(uint256[][] memory counts) external {
+        for(uint k = 0; k < counts.length; k ++) {
+            accCountByType_.push();
+            for(uint i = 0; i < counts[k].length; i ++) {
+                accCountByType_[k].push(counts[k][i]);
+            }
+        }
         uint256[][] memory _typeOrderSortedByCount = new uint256[][](counts.length);
         for(uint k = 0; k < counts.length; k ++) {
             _typeOrderSortedByCount[k] = new uint256[](counts[k].length);
