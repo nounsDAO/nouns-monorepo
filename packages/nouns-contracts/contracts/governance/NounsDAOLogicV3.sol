@@ -154,7 +154,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         ds._setVotingPeriod(votingPeriod_);
         ds._setVotingDelay(votingDelay_);
         ds._setProposalThresholdBPS(proposalThresholdBPS_);
-        ds.timelock = INounsDAOExecutor(timelock_);
+        ds.timelock = INounsDAOExecutorV2(timelock_);
         ds.nouns = NounsTokenLike(nouns_);
         ds.vetoer = vetoer_;
         _setDynamicQuorumParams(
