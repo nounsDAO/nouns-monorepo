@@ -28,6 +28,7 @@ import CreateCandidatePage from './pages/CreateCandidate';
 import CandidatePage from './pages/Candidate';
 import EditProposalPage from './pages/EditProposal';
 import EditCandidatePage from './pages/EditCandidate';
+import ProposalHistory from './pages/ProposalHistory';
 
 function App() {
   const { account, chainId, library } = useEthers();
@@ -72,6 +73,7 @@ function App() {
             <Route exact path="/edit-candidate/:id" component={EditCandidatePage} />
             <Route exact path="/vote" component={GovernancePage} />
             <Route exact path="/vote/:id" component={VotePage} />
+            <Route exact path="/vote/:id/history" component={ProposalHistory} />
             <Route exact path="/candidate/:id" component={CandidatePage} />
             <Route exact path="/playground" component={Playground} />
             <Route exact path="/delegate" component={DelegatePage} />

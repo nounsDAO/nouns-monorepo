@@ -1,4 +1,6 @@
 import React from 'react';
+import { useEffect } from 'react';
+import { useBlockNumber } from '@usedapp/core';
 import { Alert, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import ProposalStatus from '../ProposalStatus';
@@ -18,6 +20,8 @@ import { useActiveLocale } from '../../hooks/useActivateLocale';
 import { Locales } from '../../i18n/locales';
 import HoverCard from '../HoverCard';
 import ByLineHoverCard from '../ByLineHoverCard';
+import { timestampFromBlockNumber } from '../../utils/timeUtils';
+import dayjs from 'dayjs';
 
 interface ProposalHeaderProps {
   proposal: Proposal;
@@ -51,7 +55,7 @@ const getTranslatedVoteCopyFromString = (proposalVote: string) => {
 
 const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const { proposal, isActiveForVoting, isWalletConnected, submitButtonClickHandler } = props;
-
+  const [updatedTimestamp, setUpdatedTimestamp] = React.useState<Date | null>(null);
   const isMobile = isMobileScreen();
   const availableVotes = useUserVotesAsOfBlock(proposal?.createdBlock) ?? 0;
   const hasVoted = useHasVotedOnProposal(proposal?.id);
@@ -59,6 +63,16 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const proposalCreationTimestamp = useBlockTimestamp(proposal?.createdBlock);
   const disableVoteButton = !isWalletConnected || !availableVotes || hasVoted;
   const activeLocale = useActiveLocale();
+  const currentBlock = useBlockNumber();
+  // TODO: remove this after getting real data from the contract
+  const tempUpdatedBlockNumber = 17097956;
+  useEffect(() => {
+    if (currentBlock) {
+      // TODO: remove this after getting real data from the contract
+      const timestamp = timestampFromBlockNumber(tempUpdatedBlockNumber, currentBlock);
+      setUpdatedTimestamp(timestamp.toDate());
+    }
+  }, [currentBlock]);
 
   const voteButton = (
     <>
@@ -191,7 +205,8 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
       </div>
 
       <p className={classes.versionHistory}>
-        <strong>Version X</strong> <span>updated Y days ago</span>
+        <strong>Version X</strong>{' '}
+        <span>updated {updatedTimestamp && dayjs(updatedTimestamp).fromNow()}</span>
       </p>
 
       {isMobile && (
