@@ -21,4 +21,8 @@ contract NounsTokenLikeMock is NounsTokenLike {
     ) external {
         priorVotes[account][blockNumber] = votes;
     }
+
+    function transferFrom(address from, address to, uint256 tokenId) external {
+        // noop
+    }
 }

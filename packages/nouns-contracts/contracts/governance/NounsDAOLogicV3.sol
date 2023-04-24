@@ -57,12 +57,14 @@ import { NounsDAOV3Admin } from './NounsDAOV3Admin.sol';
 import { NounsDAOV3DynamicQuorum } from './NounsDAOV3DynamicQuorum.sol';
 import { NounsDAOV3Votes } from './NounsDAOV3Votes.sol';
 import { NounsDAOV3Proposals } from './NounsDAOV3Proposals.sol';
+import { NounsDAOV3Split } from './split/NounsDAOV3Split.sol';
 
 contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     using NounsDAOV3Admin for StorageV3;
     using NounsDAOV3DynamicQuorum for StorageV3;
     using NounsDAOV3Votes for StorageV3;
     using NounsDAOV3Proposals for StorageV3;
+    using NounsDAOV3Split for StorageV3;
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -358,6 +360,24 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      */
     function proposalThreshold() public view returns (uint256) {
         return ds.proposalThreshold();
+    }
+
+    /**
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     *   DAO SPLIT
+     * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     */
+
+    function signalSplit(uint256[] calldata tokenIds) external {
+        ds.signalSplit(tokenIds);
+    }
+
+    function unsignalSplit(uint256[] calldata tokenIds) external {
+        ds.unsignalSplit(tokenIds);
+    }
+
+    function executeSplit() external {
+        ds.executeSplit();
     }
 
     /**

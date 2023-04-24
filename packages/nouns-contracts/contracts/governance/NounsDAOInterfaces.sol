@@ -517,6 +517,18 @@ interface NounsTokenLike {
     function getPriorVotes(address account, uint256 blockNumber) external view returns (uint96);
 
     function totalSupply() external view returns (uint256);
+
+    function transferFrom(address from, address to, uint256 tokenId) external;
+}
+
+interface ISplitDAODeployer {
+    function deploySplitDAO() external returns (address treasury);
+}
+
+interface INounsDAOExecutorV2 is INounsDAOExecutor {
+    function sendETHToNewDAO(address newDAOTreasury, uint256 ethToSend) external;
+
+    function sendERC20ToNewDAO(address newDAOTreasury, address erc20Token, uint256 tokensToSend) external;
 }
 
 contract NounsDAOStorageV3 {
@@ -544,7 +556,8 @@ contract NounsDAOStorageV3 {
         /// @notice The total number of proposals
         uint256 proposalCount;
         /// @notice The address of the Nouns DAO Executor NounsDAOExecutor
-        INounsDAOExecutor timelock;
+        // TODO: implement timelockV2 & plan upgrade path
+        INounsDAOExecutorV2 timelock;
         /// @notice The address of the Nouns tokens
         NounsTokenLike nouns;
         /// @notice The official record of all proposals ever proposed
@@ -564,6 +577,14 @@ contract NounsDAOStorageV3 {
         /// @notice The proposal at which to start using `startBlock` instead of `creationBlock` for vote snapshots
         /// @dev To be zeroed-out and removed in a V3.1 fix version once the switch takes place
         uint256 voteSnapshotBlockSwitchProposalId;
+
+        uint32 nounsInSplitEscrow;
+
+        mapping(address => address) splitEscrow;
+
+        ISplitDAODeployer splitDAOdeployer;
+
+        address[] erc20TokensToIncludeInSplit;
     }
 
     struct Proposal {
