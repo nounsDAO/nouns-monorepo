@@ -45,31 +45,12 @@
         "type": "uint256"
       }
     ],
-    "name": "accFlags",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
     "name": "cAccCountProbability",
     "outputs": [
       {
-        "internalType": "uint24",
+        "internalType": "uint256",
         "name": "",
-        "type": "uint24"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -77,11 +58,6 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
       {
         "internalType": "uint256",
         "name": "",
@@ -91,28 +67,22 @@
     "name": "cSkinProbability",
     "outputs": [
       {
-        "internalType": "uint24",
+        "internalType": "uint256",
         "name": "",
-        "type": "uint24"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "cTypeProbability",
+    "outputs": [
       {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
-      }
-    ],
-    "name": "cTypeProbability",
-    "outputs": [
-      {
-        "internalType": "uint24",
-        "name": "",
-        "type": "uint24"
       }
     ],
     "stateMutability": "view",
@@ -242,24 +212,6 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "count",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "flags",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "setAccAvailability",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "uint256[][]",
         "name": "counts",
         "type": "uint256[][]"
@@ -272,6 +224,11 @@
   },
   {
     "inputs": [
+      {
+        "internalType": "uint16",
+        "name": "punkType",
+        "type": "uint16"
+      },
       {
         "internalType": "uint256[]",
         "name": "probabilities",

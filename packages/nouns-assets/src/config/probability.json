@@ -7,30 +7,34 @@
     "male": {
       "probability": 60.15,
       "skin": [ 10, 30, 30, 30, 0, 0, 0 ],
-      "accessories": ["hair", "hat", "glasses", "eyes", "mouth", "neck", "ears", "beard", "teeth", "emotion", "face", "cheeks", "nose"]
+      "accessories": ["hair", "hat", "glasses", "eyes", "mouth", "neck", "ears", "beard", "teeth", "emotion", "face", "cheeks", "nose"],
+      "accessory_count_probabbilities": [0.08, 3.33, 35.6, 45.01, 14.2, 1.66, 0.11, 0.01]
     },
     "female": {
       "probability": 38.5, 
       "skin": [ 10, 30, 30, 30, 0, 0, 0 ],
-      "accessories": ["hair", "hat", "glasses", "eyes", "mouth", "neck", "ears", "lips", "emotion", "face", "cheeks", "nose"]
+      "accessories": ["hair", "hat", "glasses", "eyes", "mouth", "neck", "ears", "lips", "face", "cheeks", "nose"],
+      "accessory_count_probabbilities": [0.08, 3.33, 35.6, 45.01, 14.2, 1.66, 0.11, 0.01]
     },
     "alien": {
       "probability": 0.1,
       "skin": [ 0, 0, 0, 0, 0, 0, 100 ],
-      "accessories": ["hat", "glasses", "mouth", "neck", "ears" ]
+      "accessories": ["hat", "glasses", "mouth", "ears" ],
+      "accessory_count_probabbilities": [1.0, 3.9, 41.5, 53.6]
     },
     "ape": {
       "probability": 0.25,
       "skin": [ 0, 0, 0, 0, 0, 100, 0 ],
-      "accessories": ["hat", "glasses", "mouth", "neck", "ears"]
+      "accessories": ["hat", "glasses", "mouth", "neck", "ears"],
+      "accessory_count_probabbilities": [1.0, 3.9, 41.5, 53.6]
     },
     "zombie": {
       "probability": 1,
       "skin": [ 0, 0, 0, 0, 100, 0, 0 ],
-      "accessories": ["hair", "hat", "glasses", "eyes", "mouth", "neck", "ears", "beard", "face"]
+      "accessories": ["hair", "hat", "glasses", "eyes", "mouth", "neck", "ears", "beard", "emotion", "face", "cheeks", "nose"],
+      "accessory_count_probabbilities": [1.0, 3.9, 41.5, 53.6]
     }
   },
-  "accessory_count_probabbilities": [0.08, 3.33, 35.6, 45.01, 14.2, 1.66, 0.11, 0.01, 0.00],
   "accessories": {
     "12": { "type": "cheeks", "punk": "mz" },
     "13": { "type": "beard", "punk": "mz" },

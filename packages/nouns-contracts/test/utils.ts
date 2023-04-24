@@ -298,22 +298,14 @@ export const populateSeeder = async (nSeeder: NSeeder): Promise<void> => {
     const skinResponse = await (await nSeeder.setSkinProbability(skinIdx++, skinProbabilities)).wait()
   }
 
-  const accCountProbabilities = probDoc.accessory_count_probabbilities
-    .map((value: any) => Math.floor(value * 1000))
-  const accResponse = await (await nSeeder.setAccCountProbability(accCountProbabilities)).wait()
+  let accCountIdx = 0;
+  for(let [type, probObj] of Object.entries(probDoc.probabilities)) {
+    const accCountProbabilities = probObj.accessory_count_probabbilities
+      .map((value: any) => Math.floor(value * 1000))
+    const skinResponse = await (await nSeeder.setAccCountProbability(accCountIdx++, accCountProbabilities)).wait()
+  }
 
   const accTypeCount = Object.keys(probDoc.acc_types).length
-  const accTypeAvailabilities = Object.values(probDoc.probabilities)
-    .map((probObj: any) => {
-      const binaryArray = probObj.accessories.reduce((prev: any, acc: any) => {
-        const typeIndex = Object.keys(probDoc.acc_types).indexOf(acc)
-        if(typeIndex < 0) throw new Error(`Unknown type found in type availability - ${acc}`)
-        prev[typeIndex] = 1
-        return prev
-      }, Array(accTypeCount).fill(0))
-      return parseInt(binaryArray.join(""), 2)
-    })
-  const typeAvailabilityResponse = await (await nSeeder.setAccAvailability(accTypeCount, accTypeAvailabilities)).wait()
 
   const accCountPerType = probDoc.types.map((punkType: string) =>
       Object.keys(probDoc.acc_types).map(type =>
