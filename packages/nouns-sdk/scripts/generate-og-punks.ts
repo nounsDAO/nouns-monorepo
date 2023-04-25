@@ -95,6 +95,7 @@ async function main() {
       const accIndex = accGroupByType[accTypeIndex].indexOf(accId)
       return { accType: accTypeIndex, accId: accIndex }
     }))
+    accessories.sort( (a, b) => a.accType - b.accType)
     const seed = { punkType, skinTone, accessories }
     // ------------------
 
