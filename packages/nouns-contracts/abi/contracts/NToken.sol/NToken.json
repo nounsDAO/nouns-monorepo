@@ -1010,14 +1010,9 @@
     "name": "seeds",
     "outputs": [
       {
-        "internalType": "uint8",
-        "name": "punkType",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint8",
-        "name": "skinTone",
-        "type": "uint8"
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
       }
     ],
     "stateMutability": "view",

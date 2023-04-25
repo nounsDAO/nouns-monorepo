@@ -47,7 +47,7 @@ function calculateSeedHash(seed: Seed) {
     data.push(acc.accId);
   });
 
-  let seedHash = '';
+  let seedHash = '01';
   data.forEach(n => { seedHash = (n > 15 ? '' : '0') + n.toString(16) + seedHash; });
   seedHash = '0x' + seedHash.padStart(64, '0');
 
@@ -180,7 +180,7 @@ describe('NToken', () => {
   it('calculates correct seed hash (1)', async () => {
     const seed = {punkType: 1, skinTone: 2, accessories: [{accType: 9, accId: 23}, {accType: 10, accId: 5}, {accType: 11, accId: 15}]}
     const seedHash = await nounsToken.calculateSeedHash(seed);
-    expect(seedHash).to.be.equal('0x00000000000000000000000000000000000000000000000f0b050a1709030201');
+    expect(seedHash).to.be.equal('0x000000000000000000000000000000000000000000000f0b050a170903020101');
     const expectedSeedHash = calculateSeedHash(seed);
     expect(seedHash).to.be.equal(expectedSeedHash);
   });
@@ -188,7 +188,7 @@ describe('NToken', () => {
   it('calculates correct seed hash (2)', async () => {
     const seed = {punkType: 0, skinTone: 0, accessories: []}
     const seedHash = await nounsToken.calculateSeedHash(seed);
-    expect(seedHash).to.be.equal('0x0000000000000000000000000000000000000000000000000000000000000000');
+    expect(seedHash).to.be.equal('0x0000000000000000000000000000000000000000000000000000000000000001');
     const expectedSeedHash = calculateSeedHash(seed);
     expect(seedHash).to.be.equal(expectedSeedHash);
   });
@@ -212,7 +212,7 @@ describe('NToken', () => {
     ];
     const seed = {punkType: 2, skinTone: 6, accessories }
     const seedHash = await nounsToken.calculateSeedHash(seed);
-    expect(seedHash).to.be.equal('0x000d0d0c0c0b0b0a0a09091008070706060505040403030202010100000e0602');
+    expect(seedHash).to.be.equal('0x0d0d0c0c0b0b0a0a09091008070706060505040403030202010100000e060201');
     const expectedSeedHash = calculateSeedHash(seed);
     expect(seedHash).to.be.equal(expectedSeedHash);
   });

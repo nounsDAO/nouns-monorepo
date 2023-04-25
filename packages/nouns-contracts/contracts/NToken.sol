@@ -39,7 +39,7 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
 
     // The Punks token seeder
     ISeeder public seeder;
-    mapping(bytes32 => uint) seedHashes;
+    mapping(bytes32 => uint256) seedHashes;
 
     // Whether the minter can be updated
     bool public isMinterLocked;
@@ -51,7 +51,8 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
     bool public isSeederLocked;
 
     // The punk seeds
-    mapping(uint256 => ISeeder.Seed) public seeds;
+    /// @notice The value is the seed hash actually
+    mapping(uint256 => bytes32) public seeds;
 
     // The internal punk ID tracker
     uint256 private _currentPunkId = 10_000;
@@ -148,11 +149,12 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
 
     /**
      * @notice Mint a Punk to the minter, along with a possible Punkers reward
-     * Punks. Punkers reward Punks are minted every 10 Punks, starting at 0,
+     * Punks. Punkers reward Punks are minted every 10 Punks, starting at 10000,
      * until 183 punkers Punks have been minted (5 years w/ 24 hour auctions).
      * @dev Call _mintTo with the to address(es).
      */
     function mint() public override onlyMinter returns (uint256) {
+        // punk ids start with 10000
         if (_currentPunkId <= 11820 && _currentPunkId % 10 == 0) {
             _mintTo(punkersDAO, _currentPunkId++);
         }
@@ -173,7 +175,7 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
      */
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
         require(_exists(tokenId), 'PunkToken: URI query for nonexistent token');
-        return descriptor.tokenURI(tokenId, seeds[tokenId]);
+        return descriptor.tokenURI(tokenId, _decodeSeedHash(seeds[tokenId]));
     }
 
     /**
@@ -182,7 +184,7 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
      */
     function dataURI(uint256 tokenId) public view override returns (string memory) {
         require(_exists(tokenId), 'PunkToken: URI query for nonexistent token');
-        return descriptor.dataURI(tokenId, seeds[tokenId]);
+        return descriptor.dataURI(tokenId, _decodeSeedHash(seeds[tokenId]));
     }
 
     /**
@@ -264,13 +266,31 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
      */
     function calculateSeedHash(ISeeder.Seed memory seed) public pure returns (bytes32) {
         unchecked {
-            uint256 seedHash = uint256(seed.punkType) + (uint256(seed.skinTone) << 8) + (seed.accessories.length << 16);
+            // 1 is non zero marker - valid seedHash is never zero
+            uint256 seedHash = 1 + (uint256(seed.punkType) << 8) + (uint256(seed.skinTone) << 16) + (seed.accessories.length << 24);
             assert(seed.accessories.length < 15); // max 14 accessories
             for (uint256 i = 0 ; i < seed.accessories.length ; i ++) {
-                seedHash += (uint256(seed.accessories[i].accType) << (16*i + 24)) + (uint256(seed.accessories[i].accId) << (16*i + 32));
+                seedHash += (uint256(seed.accessories[i].accType) << (16*i + 32)) + (uint256(seed.accessories[i].accId) << (16*i + 40));
             }
             return bytes32(seedHash);
         }
+    }
+
+    function _decodeSeedHash(bytes32 seedHash) internal pure returns (ISeeder.Seed memory) {
+        uint256 value = uint256(seedHash);
+        ISeeder.Seed memory seed;
+
+        // non zero marker goes on the first byte
+        seed.punkType = uint8((value >> 8) & 0xff);
+        seed.skinTone = uint8((value >> 16) & 0xff);
+        seed.accessories = new ISeeder.Accessory[]((value >> 24) & 0xff);
+
+        for(uint i = 0; i < seed.accessories.length; i ++) {
+            seed.accessories[i].accType = uint16((value >> (16*i + 32)) & 0xff);
+            seed.accessories[i].accId = uint16((value >> (16*i + 40)) & 0xff);
+        }
+
+        return seed;
     }
 
     /**
@@ -289,18 +309,9 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
             seedHash = calculateSeedHash(seed);
         }
 
-        seedHashes[seedHash] = 1;
+        seedHashes[seedHash] = punkId + 1; // handles tokenId == 0 case
+        seeds[punkId] = seedHash;
 
-        seeds[punkId].punkType = seed.punkType;
-        seeds[punkId].skinTone = seed.skinTone;
-            
-        for(uint i = 0; i < seed.accessories.length; i ++) {
-            seeds[punkId].accessories.push(ISeeder.Accessory({
-                accType: seed.accessories[i].accType,
-                accId: seed.accessories[i].accId
-            }));
-        }
-        
         _mint(owner(), to, punkId);
         emit PunkCreated(punkId, seed);
 
@@ -312,17 +323,8 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
             seedHashes[hashes[i]] = 1;
         }
     }
+
     function getPunk(uint punkId) external view returns (ISeeder.Seed memory) {
-        ISeeder.Seed memory seed;
-        seed.punkType = seeds[punkId].punkType;
-        seed.skinTone = seeds[punkId].skinTone;
-        seed.accessories = new ISeeder.Accessory[](seeds[punkId].accessories.length);
-
-        for(uint i = 0; i < seeds[punkId].accessories.length; i ++) {
-            seed.accessories[i].accType = seeds[punkId].accessories[i].accType;
-            seed.accessories[i].accId = seeds[punkId].accessories[i].accId;
-        }
-
-        return seed;
+        return _decodeSeedHash(seeds[punkId]);
     }
 }

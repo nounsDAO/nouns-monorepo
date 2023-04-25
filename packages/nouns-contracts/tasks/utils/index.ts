@@ -79,7 +79,7 @@ export function calculateSeedHash(seed: Seed) {
     data.push(acc.accId);
   });
 
-  let seedHash = '';
+  let seedHash = '01';
   data.forEach(n => { seedHash = (n > 15 ? '' : '0') + n.toString(16) + seedHash; });
   seedHash = '0x' + seedHash.padStart(64, '0');
 
