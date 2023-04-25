@@ -44,6 +44,7 @@ import config from '../../config';
 import ShortAddress from '../../components/ShortAddress';
 import StreamWithdrawModal from '../../components/StreamWithdrawModal';
 import { parseStreamCreationCallData } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
+import VoteSignals from '../../components/VoteSignals/VoteSignals';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -553,9 +554,21 @@ const VotePage = ({
             </Card>
           </Col>
         </Row>
-
-        <ProposalContent proposal={proposal} />
       </Col>
+      <Row>
+        {proposal?.status === ProposalState.PENDING ? (
+          <>
+            <Col xl={8} lg={12}>
+              <ProposalContent proposal={proposal} />
+            </Col>
+            <Col xl={4} lg={12} className={classes.sidebar}>
+              <VoteSignals />
+            </Col>
+          </>
+        ) : (
+          <ProposalContent proposal={proposal} />
+        )}
+      </Row>
     </Section>
   );
 };

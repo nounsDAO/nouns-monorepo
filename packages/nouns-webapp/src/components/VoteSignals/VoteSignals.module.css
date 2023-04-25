@@ -1,0 +1,125 @@
+.voteSignals {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header {
+  margin: 1rem 0;
+}
+
+.header p {
+  font-size: 16px;
+  font-family: 'PT Root UI';
+  color: var(--brand-gray-light-text);
+  margin: 0;
+  padding: 0;
+}
+
+.header h2 {
+  font-size: 1.7rem;
+  margin: 0 0 0.5rem 0;
+  font-family: 'Londrina Solid';
+  color: var(--brand-gray-light-text);
+}
+
+
+.voteSignalGroupsList {
+  border: 1px solid #e6e6e6;
+  padding: 5px 15px;
+  border-radius: 12px;
+  position: sticky;
+  top: 20px
+}
+
+.voteSignalsList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.voteSignalLabel {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  /* margin-bottom: 20px; */
+  width: 100%;
+  border: none;
+  background: transparent;
+}
+
+.voteSignalLabel p {
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 1;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  text-align: left;
+}
+
+.voteSignalGroup {
+  border-bottom: 1px solid #e6e6e6;
+  padding: 10px 0;
+}
+
+.voteSignalGroup:last-child {
+  border: none;
+}
+
+.for p {
+  color: var(--brand-color-green);
+}
+
+.against p {
+  color: var(--brand-color-red);
+}
+
+.abstain p {
+  color: var(--brand-gray-light-text);
+}
+
+.voter {
+  display: flex;
+  line-height: 1;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.voter strong {
+  font-size: 16px;
+  font-weight: bold;
+  padding-top: 6px;
+}
+
+.voter span {
+  font-size: 13px;
+  color: var(--brand-gray-light-text);
+  font-weight: bold;
+}
+
+.avatar {
+  max-width: 30px;
+}
+
+.avatar img {
+  width: 100%;
+  border-radius: 100%;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
+
+.reason {
+  margin: 0;
+  padding: 0;
+  padding-left: calc(30px + 10px); 
+  font-size: 14px;
+  color: var(--brand-gray-light-text);
+}

@@ -69,12 +69,12 @@ function App() {
             <Route exact path="/nounders" component={NoundersPage} />
             <Route exact path="/create-proposal" component={CreateProposalPage} />
             <Route exact path="/create-candidate" component={CreateCandidatePage} />
-            <Route exact path="/edit-proposal/:id" component={EditProposalPage} />
-            <Route exact path="/edit-candidate/:id" component={EditCandidatePage} />
             <Route exact path="/vote" component={GovernancePage} />
             <Route exact path="/vote/:id" component={VotePage} />
             <Route exact path="/vote/:id/history" component={ProposalHistory} />
+            <Route exact path="/vote/:id/edit" component={EditProposalPage} />
             <Route exact path="/candidate/:id" component={CandidatePage} />
+            <Route exact path="/candidate/:id/edit" component={EditCandidatePage} />
             <Route exact path="/playground" component={Playground} />
             <Route exact path="/delegate" component={DelegatePage} />
             <Route exact path="/explore" component={ExplorePage} />

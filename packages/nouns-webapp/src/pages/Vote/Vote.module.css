@@ -199,3 +199,10 @@
   color: var(--brand-gray-light-text);
   margin-bottom: 0.5rem;
 }
+
+.sidebar > div {
+  @media (min-width: 993px) {
+    height: 100%
+  }
+}
+
