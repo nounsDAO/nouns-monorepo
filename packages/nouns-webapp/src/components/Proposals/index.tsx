@@ -280,7 +280,7 @@ const Proposals = ({ proposals }: { proposals: PartialProposal[] }) => {
                   </Alert>
                 )}
               </Col>
-              <Col lg={3}>
+              <Col lg={3} className={classes.candidatesSidebar}>
                 <h4>
                   <strong>
                     <Trans>About Proposal Candidates</Trans>
@@ -293,13 +293,14 @@ const Proposals = ({ proposals }: { proposals: PartialProposal[] }) => {
                     ac facilisis in, egestas eget quam.
                   </Trans>
                 </p>
-                <p>
+                <h5>
                   <strong>
-                    <Trans>Current threshold: </Trans>
-                    {threshold} Nouns
+                    <Trans>Current threshold: </Trans> {threshold} Nouns
                   </strong>
-                </p>
-                <a href="/create-candidate">Create a candidate</a>
+                </h5>
+                <a href="/create-candidate" className={classes.button}>
+                  Create a candidate
+                </a>
               </Col>
             </Row>
           </Col>

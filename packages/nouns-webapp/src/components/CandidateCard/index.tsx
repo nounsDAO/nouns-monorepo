@@ -57,8 +57,8 @@ function CandidateCard({ candidate }: Props) {
         <span className={classes.candidateTitle}>
           <span>{candidate.title}</span>
         </span>
-        <p>
-          by <a href="">[candidate.proposer]</a>
+        <p className={classes.proposer}>
+          by <a href="">candidate.proposer</a>
         </p>
 
         <div className={classes.footer}>
@@ -71,19 +71,9 @@ function CandidateCard({ candidate }: Props) {
               <Trans>sponsors</Trans>
             </span>
           </div>
-          <div>[x days left]</div>
+          <p className={classes.timestamp}>x days ago</p>
         </div>
-        {/* {isPropInStateToHaveCountDown && (
-          <div className={classes.desktopCountdownWrapper}>{countdownPill}</div>
-        )}
-        <div className={clsx(classes.proposalStatusWrapper, classes.votePillWrapper)}>
-          <ProposalStatus status={candidate.status}></ProposalStatus>
-        </div> */}
       </div>
-
-      {isPropInStateToHaveCountDown && (
-        <div className={classes.mobileCountdownWrapper}>{countdownPill}</div>
-      )}
     </a>
   );
 }

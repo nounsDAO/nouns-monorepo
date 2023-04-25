@@ -32,6 +32,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 }
 
 .candidateSponsors {
@@ -51,4 +52,23 @@
 
 .candidateSponsors strong {
   font-weight: bold;
+}
+
+.proposer {
+  font-size: 16px;
+  font-weight: normal;
+  margin: 0;
+  padding: 0;
+}
+.proposer a {
+  font-weight: bold;
+  text-decoration: none;
+  color: var(--brand-color-red)
+}
+
+.timestamp {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
 }
