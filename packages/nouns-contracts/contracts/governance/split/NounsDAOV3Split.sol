@@ -23,6 +23,9 @@ library NounsDAOV3Split {
 
     error SplitThresholdNotMet();
 
+    uint256 constant SPLIT_PERIOD_DURTION = 7 days; // TODO: extract to storage var?
+    uint256 constant SPLIT_THRESHOLD_BPS = 2_000; // 20%
+
     function signalSplit(NounsDAOStorageV3.StorageV3 storage ds, uint256[] calldata tokenIds) external {
         // TODO: require !splitPeriodActive()
 
@@ -55,18 +58,36 @@ library NounsDAOV3Split {
     function executeSplit(NounsDAOStorageV3.StorageV3 storage ds) external {
         if (ds.nounsInSplitEscrow < splitThreshold(ds)) revert SplitThresholdNotMet();
 
-        address newDAOTreasury = ds.splitDAOdeployer.deploySplitDAO();
-        sendProRataTreasury(ds, newDAOTreasury, ds.nounsInSplitEscrow, adjustedTotalSupply(ds));
+        ds.splitDAOTreasury = ds.splitDAODeployer.deploySplitDAO();
+        sendProRataTreasury(ds, ds.splitDAOTreasury, ds.nounsInSplitEscrow, adjustedTotalSupply(ds));
+
+        ds.splitEndTimestamp = block.timestamp + SPLIT_PERIOD_DURTION;
+    }
+
+    function joinSplit(NounsDAOStorageV3.StorageV3 storage ds, uint256[] calldata tokenIds) external {
+        sendProRataTreasury(ds, ds.splitDAOTreasury, tokenIds.length, adjustedTotalSupply(ds));
+
+        for (uint256 i = 0; i < tokenIds.length; i++) {
+            ds.nouns.transferFrom(msg.sender, address(ds.timelock), tokenIds[i]);
+        }
     }
 
     function splitThreshold(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (uint256) {
         // TODO: make this constant or configurable param
-        return adjustedTotalSupply(ds) * 20 / 100;
+        return adjustedTotalSupply(ds) * SPLIT_THRESHOLD_BPS / 10_000;
     }
 
     function adjustedTotalSupply(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (uint256) {
-        // TODO: don't count nouns in treasury / held by DAO
-        return ds.nouns.totalSupply();
+        uint256 totalSupply = ds.nouns.totalSupply() - ds.nouns.balanceOf(address(ds.timelock));
+        if (isSplitPeriodActive(ds)) {
+            return totalSupply - ds.nounsInSplitEscrow;
+        } else {
+            return totalSupply;
+        }
+    }
+
+    function isSplitPeriodActive(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (bool) {
+        return ds.splitEndTimestamp > block.timestamp;
     }
 
     function sendProRataTreasury(NounsDAOStorageV3.StorageV3 storage ds, address newDAOTreasury, uint256 tokenCount, uint256 totalSupply) internal {

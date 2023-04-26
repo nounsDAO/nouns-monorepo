@@ -85,6 +85,10 @@ library NounsDAOV3Admin {
         uint256 newVoteSnapshotBlockSwitchProposalId
     );
 
+    event SplitDAODeployerSet(address oldSplitDAODeployer, address newSplitDAODeployer);
+
+    event ERC20TokensToIncludeInSplitSet(address[] oldErc20Tokens, address[] newErc20tokens);
+
     /// @notice The minimum setable proposal threshold
     uint256 public constant MIN_PROPOSAL_THRESHOLD_BPS = 1; // 1 basis point or 0.01%
 
@@ -456,6 +460,34 @@ library NounsDAOV3Admin {
             oldVoteSnapshotBlockSwitchProposalId,
             newVoteSnapshotBlockSwitchProposalId
         );
+    }
+
+    function _setSplitDAODeployer(
+        NounsDAOStorageV3.StorageV3 storage ds, 
+        address newSplitDAODeployer
+    ) external {
+        if (msg.sender != ds.admin) {
+            revert AdminOnly();
+        }
+
+        address oldSplitDAODeployer = address(ds.splitDAODeployer);
+        ds.splitDAODeployer = ISplitDAODeployer(newSplitDAODeployer);
+
+        emit SplitDAODeployerSet(oldSplitDAODeployer, newSplitDAODeployer);
+    }
+
+    function _setErc20TokensToIncludeInSplit(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        address[] calldata erc20tokens
+    ) external {
+        if (msg.sender != ds.admin) {
+            revert AdminOnly();
+        }
+
+        address[] memory oldErc20TokensToIncludeInSplit = ds.erc20TokensToIncludeInSplit;
+        ds.erc20TokensToIncludeInSplit = erc20tokens;
+
+        emit ERC20TokensToIncludeInSplitSet(oldErc20TokensToIncludeInSplit, erc20tokens);
     }
 
     function _writeQuorumParamsCheckpoint(

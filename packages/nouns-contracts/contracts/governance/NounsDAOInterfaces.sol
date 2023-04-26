@@ -519,6 +519,8 @@ interface NounsTokenLike {
     function totalSupply() external view returns (uint256);
 
     function transferFrom(address from, address to, uint256 tokenId) external;
+
+    function balanceOf(address owner) external view returns (uint256 balance);
 }
 
 interface ISplitDAODeployer {
@@ -582,9 +584,13 @@ contract NounsDAOStorageV3 {
 
         mapping(address => address) splitEscrow;
 
-        ISplitDAODeployer splitDAOdeployer;
+        ISplitDAODeployer splitDAODeployer;
 
         address[] erc20TokensToIncludeInSplit;
+
+        address splitDAOTreasury;
+
+        uint256 splitEndTimestamp;
     }
 
     struct Proposal {

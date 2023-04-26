@@ -4,6 +4,7 @@ pragma solidity ^0.8.15;
 import 'forge-std/Test.sol';
 import { DeployUtils } from '../helpers/DeployUtils.sol';
 import { SigUtils, ERC1271Stub } from '../helpers/SigUtils.sol';
+import { ProxyRegistryMock } from '../helpers/ProxyRegistryMock.sol';
 import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsDAOV3Proposals } from '../../../contracts/governance/NounsDAOV3Proposals.sol';
 import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
@@ -11,7 +12,7 @@ import { NounsDAOStorageV3 } from '../../../contracts/governance/NounsDAOInterfa
 import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { NounsSeeder } from '../../../contracts/NounsSeeder.sol';
 import { IProxyRegistry } from '../../../contracts/external/opensea/IProxyRegistry.sol';
-import { NounsDAOExecutor } from '../../../contracts/governance/NounsDAOExecutor.sol';
+import { NounsDAOExecutorV2 } from '../../../contracts/governance/NounsDAOExecutorV2.sol';
 
 abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
     event ProposalUpdated(
@@ -66,7 +67,7 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
 
     NounsToken nounsToken;
     NounsDAOLogicV3 dao;
-    NounsDAOExecutor timelock;
+    NounsDAOExecutorV2 timelock;
 
     address noundersDAO = makeAddr('nounders');
     address minter = makeAddr('minter');
@@ -76,14 +77,14 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
     uint32 proposalUpdatablePeriodInBlocks = 10;
 
     function setUp() public virtual {
-        timelock = new NounsDAOExecutor(address(1), TIMELOCK_DELAY);
+        timelock = new NounsDAOExecutorV2(address(1), TIMELOCK_DELAY);
 
         nounsToken = new NounsToken(
             noundersDAO,
             minter,
             _deployAndPopulateV2(),
             new NounsSeeder(),
-            IProxyRegistry(address(0))
+            new ProxyRegistryMock()
         );
         nounsToken.transferOwnership(address(timelock));
 
