@@ -195,7 +195,7 @@ const addMissingSchemes = (descriptionText: string | undefined) => {
   const replacement = '[$1](https://$2)';
 
   return descriptionText?.replace(regex, replacement);
-}
+};
 
 export const useCurrentQuorum = (
   nounsDao: string,
