@@ -26,6 +26,10 @@ contract NounsTokenLikeMock is NounsTokenLike {
         return 0;
     }
 
+    function ownerOf(uint256) external pure returns (address owner) {
+        return address(0);
+    }
+
     function transferFrom(address from, address to, uint256 tokenId) external {
         // noop
     }

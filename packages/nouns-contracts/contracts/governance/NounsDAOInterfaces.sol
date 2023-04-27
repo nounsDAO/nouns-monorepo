@@ -521,6 +521,8 @@ interface NounsTokenLike {
     function transferFrom(address from, address to, uint256 tokenId) external;
 
     function balanceOf(address owner) external view returns (uint256 balance);
+
+    function ownerOf(uint256 tokenId) external view returns (address owner);
 }
 
 interface ISplitDAODeployer {
@@ -580,7 +582,8 @@ contract NounsDAOStorageV3 {
         /// @dev To be zeroed-out and removed in a V3.1 fix version once the switch takes place
         uint256 voteSnapshotBlockSwitchProposalId;
 
-        uint32 nounsInSplitEscrow;
+        /// @dev splitId => count of nouns in split escrow
+        mapping(uint32 => uint32) nounsInSplitEscrow;
 
         mapping(address => address) splitEscrow;
 
@@ -591,6 +594,8 @@ contract NounsDAOStorageV3 {
         address splitDAOTreasury;
 
         uint256 splitEndTimestamp;
+
+        uint32 splitId;
     }
 
     struct Proposal {
