@@ -6,12 +6,13 @@ import { NounsDAOLogicV3BaseTest } from './NounsDAOLogicV3BaseTest.sol';
 import { SplitDAODeployerMock } from '../helpers/SplitDAODeployerMock.sol';
 import { ERC20Mock } from '../helpers/ERC20Mock.sol';
 import { NounsDAOV3Split } from '../../../contracts/governance/split/NounsDAOV3Split.sol';
+import { NounsDAOSplitEscrow } from '../../../contracts/governance/split/NounsDAOSplitEscrow.sol';
 
 abstract contract DAOSplitZeroState is NounsDAOLogicV3BaseTest {
 
     address tokenHolder = makeAddr("tokenHolder");
     address tokenHolder2 = makeAddr("tokenHolder2");
-    uint[] tokenIds;
+    uint256[] tokenIds;
     SplitDAODeployerMock splitDAODeployer;
     ERC20Mock erc20Mock = new ERC20Mock();
     address[] erc20Tokens = [address(erc20Mock)];
@@ -22,6 +23,7 @@ abstract contract DAOSplitZeroState is NounsDAOLogicV3BaseTest {
         splitDAODeployer = new SplitDAODeployerMock();
         vm.startPrank(address(timelock));
         dao._setSplitDAODeployer(address(splitDAODeployer));
+        dao._setSplitEscrow(address(new NounsDAOSplitEscrow(address(dao), address(dao.nouns()))));
         dao._setErc20TokensToIncludeInSplit(erc20Tokens);
         vm.stopPrank();
 
@@ -117,7 +119,7 @@ contract DAOSplitSignaledUnderThresholdStateTest is DAOSplitSignaledUnderThresho
         vm.stopPrank();
 
         tokenIds = [7];
-        vm.expectRevert("ERC721: transfer caller is not owner nor approved");
+        vm.expectRevert(NounsDAOSplitEscrow.NotOwner.selector);
         vm.prank(tokenHolder);
         dao.unsignalSplit(tokenIds);
     }
@@ -223,6 +225,15 @@ contract DAOSplitExecutedStateTest is DAOSplitExecutedState {
         assertEq(erc20Mock.balanceOf(address(timelock)), 180e18);
         assertEq(erc20Mock.balanceOf(address(splitDAODeployer.mockTreasury())), 120e18);
     }
+
+    function test_withdrawTokensToDAO() public {
+        tokenIds = [1, 2, 3];
+        dao.withdrawSplitTokensToDAO(tokenIds);
+
+        assertEq(dao.nouns().ownerOf(1), address(dao.timelock()));
+        assertEq(dao.nouns().ownerOf(2), address(dao.timelock()));
+        assertEq(dao.nouns().ownerOf(3), address(dao.timelock()));
+    }
 }
 
 abstract contract DAOSplitExecutedActivePeriodOverState is DAOSplitExecutedState {
@@ -242,9 +253,8 @@ contract DAOSplitExecutedActivePeriodOverStateTest is DAOSplitExecutedActivePeri
         dao.joinSplit(tokenIds);
     }
 
-    // // TODO
-    // function test_execute_reverts() public {
-    //     vm.expectRevert(NounsDAOV3Split.SplitThresholdNotMet.selector);
-    //     dao.executeSplit();
-    // }
+    function test_execute_reverts() public {
+        vm.expectRevert(NounsDAOV3Split.SplitThresholdNotMet.selector);
+        dao.executeSplit();
+    }
 }

@@ -490,6 +490,12 @@ library NounsDAOV3Admin {
         emit ERC20TokensToIncludeInSplitSet(oldErc20TokensToIncludeInSplit, erc20tokens);
     }
 
+    function _setSplitEscrow(NounsDAOStorageV3.StorageV3 storage ds, address newSplitEscrow) external {
+        // TODO event?
+
+        ds.splitEscrow = INounsDAOSplitEscrow(newSplitEscrow);
+    }
+
     function _writeQuorumParamsCheckpoint(
         NounsDAOStorageV3.StorageV3 storage ds,
         NounsDAOStorageV3.DynamicQuorumParams memory params

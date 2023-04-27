@@ -384,6 +384,10 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         ds.joinSplit(tokenIds);
     }
 
+    function withdrawSplitTokensToDAO(uint256[] calldata tokenIds) external {
+        ds.withdrawSplitTokensToDAO(tokenIds);
+    }
+
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      *   VOTES
@@ -625,6 +629,10 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
 
     function _setErc20TokensToIncludeInSplit(address[] calldata erc20tokens) external {
         ds._setErc20TokensToIncludeInSplit(erc20tokens);
+    }
+
+    function _setSplitEscrow(address newSplitEscrow) external {
+        ds._setSplitEscrow(newSplitEscrow);
     }
 
     /**

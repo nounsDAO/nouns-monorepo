@@ -535,6 +535,20 @@ interface INounsDAOExecutorV2 is INounsDAOExecutor {
     function sendERC20ToNewDAO(address newDAOTreasury, address erc20Token, uint256 tokensToSend) external;
 }
 
+interface INounsDAOSplitEscrow {
+    function markOwner(address owner, uint256[] calldata tokenIds) external;
+
+    function returnTokensToOwner(address owner, uint256[] calldata tokenIds) external;
+
+    function closeEscrow() external;
+
+    function numTokensInEscrow() external view returns (uint256);
+
+    function numTokensOwnedByDAO() external view returns (uint256);
+
+    function withdrawTokensToDAO(uint256[] calldata tokenIds, address to) external;
+}
+
 contract NounsDAOStorageV3 {
     StorageV3 ds;
 
@@ -582,10 +596,7 @@ contract NounsDAOStorageV3 {
         /// @dev To be zeroed-out and removed in a V3.1 fix version once the switch takes place
         uint256 voteSnapshotBlockSwitchProposalId;
 
-        /// @dev splitId => count of nouns in split escrow
-        mapping(uint32 => uint32) nounsInSplitEscrow;
-
-        mapping(address => address) splitEscrow;
+        INounsDAOSplitEscrow splitEscrow;
 
         ISplitDAODeployer splitDAODeployer;
 
@@ -594,8 +605,6 @@ contract NounsDAOStorageV3 {
         address splitDAOTreasury;
 
         uint256 splitEndTimestamp;
-
-        uint32 splitId;
     }
 
     struct Proposal {
