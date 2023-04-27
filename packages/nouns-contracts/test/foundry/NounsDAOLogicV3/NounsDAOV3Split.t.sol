@@ -44,9 +44,9 @@ abstract contract DAOSplitZeroState is NounsDAOLogicV3BaseTest {
         assertEq(dao.nouns().balanceOf(tokenHolder), 18);
     }
 
-    function assertOwnerOfTokens(address token, uint256[] memory tokenIds, address owner) internal {
-        for (uint256 i = 0; i < tokenIds.length; i++) {
-            assertEq(IERC721(token).ownerOf(tokenIds[i]), owner);
+    function assertOwnerOfTokens(address token, uint256[] memory tokenIds_, address owner) internal {
+        for (uint256 i = 0; i < tokenIds_.length; i++) {
+            assertEq(IERC721(token).ownerOf(tokenIds_[i]), owner);
         }
     }
 }

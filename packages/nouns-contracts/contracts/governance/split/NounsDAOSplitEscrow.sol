@@ -26,7 +26,7 @@ contract NounsDAOSplitEscrow {
     address public immutable dao;
     NounsTokenLike public immutable nounsToken;
 
-    uint32 splitId;
+    uint32 public splitId;
 
     /// @dev tokenId => OwnerInfo
     mapping(uint256 => OwnerInfo) public ownerOf;
