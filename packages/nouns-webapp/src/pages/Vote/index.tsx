@@ -10,7 +10,7 @@ import {
 } from '../../wrappers/nounsDao';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Vote.module.css';
-import { RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import dayjs from 'dayjs';
@@ -98,10 +98,11 @@ const VotePage = ({
         )
       : undefined;
 
+  const endBlock = proposal?.objectionPeriodEndBlock || proposal?.endBlock;
   const endDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
+          AVERAGE_BLOCK_TIME_IN_SECS * (endBlock! - currentBlock),
           'seconds',
         )
       : undefined;
@@ -130,9 +131,12 @@ const VotePage = ({
     ProposalState.ACTIVE,
     ProposalState.SUCCEEDED,
     ProposalState.QUEUED,
+    ProposalState.OBJECTION_PERIOD
   ].includes(proposal?.status!);
   const isCancellable =
     isInNonFinalState && proposal?.proposer?.toLowerCase() === account?.toLowerCase();
+
+  const isUpdateable = proposal?.status == ProposalState.PENDING && proposal?.proposer?.toLowerCase() === account?.toLowerCase();
 
   const isAwaitingStateChange = () => {
     if (hasSucceeded) {
@@ -318,7 +322,7 @@ const VotePage = ({
   }
 
   const isWalletConnected = !(activeAccount === undefined);
-  const isActiveForVoting = startDate?.isBefore(now) && endDate?.isAfter(now);
+  const isActiveForVoting = proposal?.status === ProposalState.ACTIVE || proposal?.status === ProposalState.OBJECTION_PERIOD;
 
   const forNouns = getNounVotes(data, 1);
   const againstNouns = getNounVotes(data, 0);
@@ -428,6 +432,14 @@ const VotePage = ({
                   )}
                 </Button>
               )}
+            </Col>
+          </Row>
+        )}
+
+        { isUpdateable && (
+          <Row>
+            <Col className="d-grid gap-4">
+            <Link to={`/update-proposal/${id}`}><Button style={{marginTop: '10px'}}>Update Proposal</Button></Link>
             </Col>
           </Row>
         )}

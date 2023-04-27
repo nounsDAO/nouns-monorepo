@@ -92,6 +92,8 @@ contract NounsDAOData is OwnableUpgradeable {
 
     /// @notice The Nouns token contract.
     NounsTokenLike public immutable nounsToken;
+    /// @notice The Nouns DAO contract.
+    address public immutable nounsDao;
     /// @notice The cost non-Nouners must pay in ETH in order to emit a new proposal candidate event from this contract.
     uint256 public createCandidateCost;
     /// @notice The cost non-Nouners must pay in ETH in order to emit a proposal candidate update event from this contract.
@@ -99,8 +101,9 @@ contract NounsDAOData is OwnableUpgradeable {
     /// @notice The state of which (proposer,slug) pairs have been used to create a proposal candidate.
     mapping(address => mapping(bytes32 => bool)) public propCandidates;
 
-    constructor(address nounsToken_) {
+    constructor(address nounsToken_, address nounsDao_) {
         nounsToken = NounsTokenLike(nounsToken_);
+        nounsDao = nounsDao_;
     }
 
     /**
@@ -245,7 +248,7 @@ contract NounsDAOData is OwnableUpgradeable {
             NounsDAOV3Proposals.PROPOSAL_TYPEHASH,
             encodedProp,
             expirationTimestamp,
-            address(this)
+            nounsDao
         );
 
         if (!SignatureChecker.isValidSignatureNow(msg.sender, sigDigest, sig)) revert InvalidSignature();

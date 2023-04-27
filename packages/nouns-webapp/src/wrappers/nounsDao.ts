@@ -42,6 +42,7 @@ export enum ProposalState {
   EXPIRED,
   EXECUTED,
   VETOED,
+  OBJECTION_PERIOD
 }
 
 interface ProposalCallResult {
@@ -78,6 +79,7 @@ export interface PartialProposal {
   endBlock: number;
   eta: Date | undefined;
   quorumVotes: number;
+  objectionPeriodEndBlock: number;
 }
 
 export interface Proposal extends PartialProposal {
@@ -107,6 +109,7 @@ export interface PartialProposalSubgraphEntity {
   endBlock: string;
   executionETA: string | null;
   quorumVotes: string;
+  objectionPeriodEndBlock: string;
 }
 
 export interface ProposalSubgraphEntity
@@ -381,6 +384,9 @@ const getProposalState = (
       return ProposalState.UNDETERMINED;
     }
     if (blockNumber > parseInt(proposal.endBlock)) {
+      if (blockNumber <= parseInt(proposal.objectionPeriodEndBlock)) {
+        return ProposalState.OBJECTION_PERIOD;
+      }
       const forVotes = new BigNumber(proposal.forVotes);
       if (forVotes.lte(proposal.againstVotes) || forVotes.lt(proposal.quorumVotes)) {
         return ProposalState.DEFEATED;
@@ -454,6 +460,7 @@ const parseSubgraphProposal = (
     eta: proposal.executionETA ? new Date(Number(proposal.executionETA) * 1000) : undefined,
     details: formatProposalTransactionDetails(proposal),
     transactionHash: proposal.createdTransactionHash,
+    objectionPeriodEndBlock: parseInt(proposal.objectionPeriodEndBlock)
   };
 };
 
@@ -513,6 +520,7 @@ export const useAllProposalsViaChain = (skip = false): PartialProposalData => {
 
           startBlock: parseInt(proposal?.startBlock?.toString() ?? ''),
           endBlock: parseInt(proposal?.endBlock?.toString() ?? ''),
+          objectionPeriodEndBlock: 0, // TODO: this should read from the contract
           forCount: parseInt(proposal?.forVotes?.toString() ?? '0'),
           againstCount: parseInt(proposal?.againstVotes?.toString() ?? '0'),
           abstainCount: parseInt(proposal?.abstainVotes?.toString() ?? '0'),
@@ -596,6 +604,21 @@ export const usePropose = () => {
   const { send: propose, state: proposeState } = useContractFunction(nounsDaoContract, 'propose');
   return { propose, proposeState };
 };
+
+export const useUpdateProposal = () => {
+  const { send: updateProposal, state: updateProposalState } = useContractFunction(nounsDaoContract, 'updateProposal');
+  return { updateProposal, updateProposalState };
+}
+
+export const useProposeBySigs = () => {
+  const { send: proposeBySigs, state: proposeBySigsState } = useContractFunction(nounsDaoContract, 'proposeBySigs');
+  return { proposeBySigs, proposeBySigsState };
+};
+
+export const useUpdateProposalBySigs = () => {
+  const { send: updateProposalBySigs, state: updateProposalBySigState } = useContractFunction(nounsDaoContract, 'updateProposalBySigs');
+  return { updateProposalBySigs, updateProposalBySigState };
+}
 
 export const useQueueProposal = () => {
   const { send: queueProposal, state: queueProposalState } = useContractFunction(

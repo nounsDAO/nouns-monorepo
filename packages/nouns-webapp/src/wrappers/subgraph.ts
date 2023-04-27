@@ -69,6 +69,7 @@ export const proposalQuery = (id: string | number) => gql`
     createdBlock
     startBlock
     endBlock
+    objectionPeriodEndBlock
     executionETA
     targets
     values
@@ -94,6 +95,45 @@ export const partialProposalsQuery = (first = 1_000) => gql`
     executionETA
     startBlock
     endBlock
+    objectionPeriodEndBlock
+  }
+}
+`;
+
+export const candidateProposalsQuery = (first = 1_000) => gql`
+  {
+    proposalCandidates {
+      id
+      slug
+      proposer
+      latestVersion {
+        title
+      }
+    }
+  }
+`;
+
+export const candidateProposalQuery = (id: string) => gql`
+{
+  proposalCandidate(id: "${id}") {
+    id
+    slug
+    proposer
+    latestVersion {
+      title
+      description
+      targets
+      values
+      signatures
+      calldatas
+      versionSignatures {
+        signer {
+          id
+        }
+        sig
+        expirationTimestamp
+      }
+    }
   }
 }
 `;

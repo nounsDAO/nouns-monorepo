@@ -46,6 +46,7 @@
     "nounsAuctionHouseProxyAdmin": "0x8a791620dd6260079bf849dc5567adc3f2fdc318",
     "nounsDaoExecutor": "0xb7f8bc63bbcad18155201308c8f3540b07f84f5e",
     "nounsDAOProxy": "0x9A9f2CCfdE556A7E9Ff0848998Aa4a0CFD8863AE",
-    "nounsDAOLogicV1": "0x959922be3caee4b8cd9a407cc3ac1c251c2007b1"
+    "nounsDAOLogicV1": "0x959922be3caee4b8cd9a407cc3ac1c251c2007b1",
+    "nounsDAOData": "0x59b670e9fA9D0A427751Af201D676719a970857b"
   }
 }

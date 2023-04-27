@@ -18,6 +18,7 @@ export interface ContractAddresses {
   nounsDAOProxy: string;
   nounsDAOLogicV1: string;
   nounsDAOLogicV2?: string;
+  nounsDAOData?: string;
 }
 
 export interface Contracts {
