@@ -17,6 +17,10 @@ pragma solidity ^0.8.6;
 
 import { NounsTokenLike } from '../NounsDAOInterfaces.sol';
 
+interface NounsDAOLike {
+    function nouns() external view returns (NounsTokenLike);
+}
+
 contract NounsDAOSplitEscrow {
 
     address public immutable dao;
@@ -42,10 +46,9 @@ contract NounsDAOSplitEscrow {
     error NotEscrowed();
     error InvalidSplitId();
 
-    constructor(address dao_, address nounsToken_) {
+    constructor(address dao_) {
         dao = dao_;
-        // TODO: get token from dao: dao.nouns()
-        nounsToken = NounsTokenLike(nounsToken_);
+        nounsToken = NounsDAOLike(dao_).nouns();
     }
 
     modifier onlyDAO() {

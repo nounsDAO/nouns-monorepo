@@ -23,7 +23,7 @@ abstract contract DAOSplitZeroState is NounsDAOLogicV3BaseTest {
         splitDAODeployer = new SplitDAODeployerMock();
         vm.startPrank(address(timelock));
         dao._setSplitDAODeployer(address(splitDAODeployer));
-        dao._setSplitEscrow(address(new NounsDAOSplitEscrow(address(dao), address(dao.nouns()))));
+        dao._setSplitEscrow(address(new NounsDAOSplitEscrow(address(dao))));
         dao._setErc20TokensToIncludeInSplit(erc20Tokens);
         vm.stopPrank();
 
