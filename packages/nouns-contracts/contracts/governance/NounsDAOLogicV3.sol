@@ -388,6 +388,10 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         ds.withdrawSplitTokensToDAO(tokenIds);
     }
 
+    function adjustedTotalSupply() external view returns (uint256) {
+        return ds.adjustedTotalSupply();
+    }
+
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      *   VOTES

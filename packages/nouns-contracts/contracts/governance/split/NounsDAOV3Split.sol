@@ -24,8 +24,10 @@ library NounsDAOV3Split {
     error SplitPeriodNotActive();
     error SplitPeriodActive();
 
-    uint256 constant SPLIT_PERIOD_DURTION = 7 days; // TODO: extract to storage var?
-    uint256 constant SPLIT_THRESHOLD_BPS = 2_000; // 20%
+    // TODO: events
+
+    uint256 constant SPLIT_PERIOD_DURTION = 7 days; // TODO: should this be configurable?
+    uint256 constant SPLIT_THRESHOLD_BPS = 2_000; // 20% TODO: should this be configurable?
 
     function signalSplit(NounsDAOStorageV3.StorageV3 storage ds, uint256[] calldata tokenIds) external {
         if (isSplitPeriodActive(ds)) revert SplitPeriodActive();
@@ -71,20 +73,18 @@ library NounsDAOV3Split {
         NounsDAOStorageV3.StorageV3 storage ds, 
         uint256[] calldata tokenIds
     ) external {
-        // TODO: only treasury can call this. maybe the treasury should call the escrow directly?
+        // TODO: should this be limited to only timelock. maybe the timelock should call the escrow directly?
 
         // TODO: include a `to` param above?
         ds.splitEscrow.withdrawTokensToDAO(tokenIds, address(ds.timelock));
     }
 
     function splitThreshold(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (uint256) {
-        // TODO: make this constant or configurable param
         return adjustedTotalSupply(ds) * SPLIT_THRESHOLD_BPS / 10_000;
     }
 
-    function adjustedTotalSupply(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (uint256) {
-        uint256 totalSupply = ds.nouns.totalSupply() - ds.nouns.balanceOf(address(ds.timelock));
-        return totalSupply - ds.splitEscrow.numTokensOwnedByDAO();
+    function adjustedTotalSupply(NounsDAOStorageV3.StorageV3 storage ds) public view returns (uint256) {
+        return ds.nouns.totalSupply() - ds.nouns.balanceOf(address(ds.timelock)) - ds.splitEscrow.numTokensOwnedByDAO();
     }
 
     function isSplitPeriodActive(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (bool) {

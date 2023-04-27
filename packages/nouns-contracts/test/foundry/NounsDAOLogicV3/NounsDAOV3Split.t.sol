@@ -7,6 +7,7 @@ import { SplitDAODeployerMock } from '../helpers/SplitDAODeployerMock.sol';
 import { ERC20Mock } from '../helpers/ERC20Mock.sol';
 import { NounsDAOV3Split } from '../../../contracts/governance/split/NounsDAOV3Split.sol';
 import { NounsDAOSplitEscrow } from '../../../contracts/governance/split/NounsDAOSplitEscrow.sol';
+import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 
 abstract contract DAOSplitZeroState is NounsDAOLogicV3BaseTest {
 
@@ -16,6 +17,7 @@ abstract contract DAOSplitZeroState is NounsDAOLogicV3BaseTest {
     SplitDAODeployerMock splitDAODeployer;
     ERC20Mock erc20Mock = new ERC20Mock();
     address[] erc20Tokens = [address(erc20Mock)];
+    address splitEscrow;
 
     function setUp() public virtual override {
         super.setUp();
@@ -23,7 +25,8 @@ abstract contract DAOSplitZeroState is NounsDAOLogicV3BaseTest {
         splitDAODeployer = new SplitDAODeployerMock();
         vm.startPrank(address(timelock));
         dao._setSplitDAODeployer(address(splitDAODeployer));
-        dao._setSplitEscrow(address(new NounsDAOSplitEscrow(address(dao))));
+        splitEscrow = address(new NounsDAOSplitEscrow(address(dao)));
+        dao._setSplitEscrow(splitEscrow);
         dao._setErc20TokensToIncludeInSplit(erc20Tokens);
         vm.stopPrank();
 
@@ -39,6 +42,12 @@ abstract contract DAOSplitZeroState is NounsDAOLogicV3BaseTest {
         }
         vm.stopPrank();
         assertEq(dao.nouns().balanceOf(tokenHolder), 18);
+    }
+
+    function assertOwnerOfTokens(address token, uint256[] memory tokenIds, address owner) internal {
+        for (uint256 i = 0; i < tokenIds.length; i++) {
+            assertEq(IERC721(token).ownerOf(tokenIds[i]), owner);
+        }
     }
 }
 
@@ -123,6 +132,12 @@ contract DAOSplitSignaledUnderThresholdStateTest is DAOSplitSignaledUnderThresho
         vm.prank(tokenHolder);
         dao.unsignalSplit(tokenIds);
     }
+
+    function test_withdrawTokensToDAO_reverts() public {
+        tokenIds = [1];
+        vm.expectRevert(NounsDAOSplitEscrow.NotOwner.selector);
+        dao.withdrawSplitTokensToDAO(tokenIds);
+    }
 }
 
 abstract contract DAOSplitSignaledOverThresholdState is DAOSplitSignaledUnderThresholdState {
@@ -167,6 +182,12 @@ contract DAOSplitSignaledOverThresholdStateTest is DAOSplitSignaledOverThreshold
 
         vm.expectRevert(NounsDAOV3Split.SplitThresholdNotMet.selector);
         dao.executeSplit();
+    }
+
+    function test_withdrawTokensToDAO_reverts() public {
+        tokenIds = [1];
+        vm.expectRevert(NounsDAOSplitEscrow.NotOwner.selector);
+        dao.withdrawSplitTokensToDAO(tokenIds);
     }
 }
 
@@ -256,5 +277,91 @@ contract DAOSplitExecutedActivePeriodOverStateTest is DAOSplitExecutedActivePeri
     function test_execute_reverts() public {
         vm.expectRevert(NounsDAOV3Split.SplitThresholdNotMet.selector);
         dao.executeSplit();
+    }
+
+    function test_withdrawTokensToDAO() public {
+        tokenIds = [1, 2, 3];
+        dao.withdrawSplitTokensToDAO(tokenIds);
+
+        assertOwnerOfTokens(address(dao.nouns()), tokenIds, address(dao.timelock()));
+    }
+
+    function test_signalOnNewSplit() public {
+        tokenIds = [11, 12];
+        vm.prank(tokenHolder);
+        dao.signalSplit(tokenIds);
+
+        assertOwnerOfTokens(address(dao.nouns()), tokenIds, address(splitEscrow));
+    }
+}
+
+abstract contract DAOSecondSplitSignaledUnderThreshold is DAOSplitExecutedActivePeriodOverState {
+    function setUp() public virtual override {
+        super.setUp();
+
+        tokenIds = [11, 12];
+        vm.prank(tokenHolder);
+        dao.signalSplit(tokenIds);
+    }
+}
+
+contract DAOSecondSplitSignaledUnderThresholdTest is DAOSecondSplitSignaledUnderThreshold {
+    function test_executeSplit_reverts() public {
+        vm.expectRevert(NounsDAOV3Split.SplitThresholdNotMet.selector);
+        dao.executeSplit();
+    }
+
+    function test_joinSplit_reverts() public {
+        tokenIds = [14, 15];
+        vm.expectRevert(NounsDAOV3Split.SplitPeriodNotActive.selector);
+        vm.prank(tokenHolder);
+        dao.joinSplit(tokenIds);
+    }
+
+    function test_unsignalSplit_returnsTokens() public {
+        tokenIds = [11, 12];
+        assertOwnerOfTokens(address(dao.nouns()), tokenIds, address(splitEscrow));
+
+        vm.prank(tokenHolder);
+        dao.unsignalSplit(tokenIds);
+
+        assertOwnerOfTokens(address(dao.nouns()), tokenIds, tokenHolder);
+    }
+
+    function test_withdrawTokensToDAO_reverts() public {
+        tokenIds = [11];
+        vm.expectRevert(NounsDAOSplitEscrow.NotOwner.selector);
+        dao.withdrawSplitTokensToDAO(tokenIds);
+    }
+}
+
+abstract contract DAOSecondSplitSignaledOverThreshold is DAOSecondSplitSignaledUnderThreshold {
+    function setUp() public virtual override {
+        super.setUp();
+
+        // adjusted total supply is 15, so for 20% 3 tokens are enough (15 * 0.2 = 3)
+        tokenIds = [13];
+        vm.prank(tokenHolder);
+        dao.signalSplit(tokenIds);
+    }
+}
+
+contract DAOSecondSplitSignaledOverThresholdTest is DAOSecondSplitSignaledOverThreshold {
+    function test_executeSplit() public {
+        assertEq(address(timelock).balance, 750 ether);
+        assertEq(dao.adjustedTotalSupply(), 15);
+
+        dao.executeSplit();
+
+        assertEq(address(timelock).balance, 600 ether);
+        assertEq(address(splitDAODeployer.mockTreasury()).balance, 400 ether);
+        
+        assertEq(erc20Mock.balanceOf(address(timelock)), 180e18);
+        assertEq(erc20Mock.balanceOf(address(splitDAODeployer.mockTreasury())), 120e18);
+
+        tokenIds = [11, 12, 13];
+        dao.withdrawSplitTokensToDAO(tokenIds);
+
+        assertOwnerOfTokens(address(dao.nouns()), tokenIds, address(dao.timelock()));
     }
 }

@@ -36,6 +36,8 @@ contract NounsDAOSplitEscrow {
 
     uint256 public numTokensOwnedByDAO;
 
+    // TODO: events
+
     struct OwnerInfo {
         address owner;
         uint32 splitId;
@@ -97,12 +99,14 @@ contract NounsDAOSplitEscrow {
         return tokensInEscrowBySplitId[splitId];
     }
 
+    /// @dev returns address(0) if this tokenId is not registered as escrowed
     function currentOwnerOf(uint256 tokenId) public view returns (address) {
         OwnerInfo memory ownerInfo = ownerOf[tokenId];
+        if (ownerInfo.owner == address(0)) return address(0);
+
         if (ownerInfo.splitId == splitId) {
             return ownerInfo.owner;
         } else {
-            // TODO: should we check that owner != address(0), meaning that it was actually escrowed and not just transfered here?
             return dao;
         }
     }
