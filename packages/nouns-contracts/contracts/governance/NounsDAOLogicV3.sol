@@ -129,33 +129,28 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @param timelock_ The address of the NounsDAOExecutor
      * @param nouns_ The address of the NOUN tokens
      * @param vetoer_ The address allowed to unilaterally veto proposals
-     * @param votingPeriod_ The initial voting period
-     * @param votingDelay_ The initial voting delay
-     * @param proposalThresholdBPS_ The initial proposal threshold in basis points
+     * @param daoParams_ Initial DAO parameters
      * @param dynamicQuorumParams_ The initial dynamic quorum parameters
      */
     function initialize(
         address timelock_,
         address nouns_,
+        address splitEscrow_,
         address vetoer_,
-        uint256 votingPeriod_,
-        uint256 votingDelay_,
-        uint256 proposalThresholdBPS_,
-        DynamicQuorumParams calldata dynamicQuorumParams_,
-        uint32 lastMinuteWindowInBlocks_,
-        uint32 objectionPeriodDurationInBlocks_,
-        uint32 proposalUpdatablePeriodInBlocks_
+        NounsDAOParams calldata daoParams_,
+        DynamicQuorumParams calldata dynamicQuorumParams_
     ) public virtual {
         if (address(ds.timelock) != address(0)) revert CanOnlyInitializeOnce();
         if (msg.sender != ds.admin) revert AdminOnly();
         if (timelock_ == address(0)) revert InvalidTimelockAddress();
         if (nouns_ == address(0)) revert InvalidNounsAddress();
 
-        ds._setVotingPeriod(votingPeriod_);
-        ds._setVotingDelay(votingDelay_);
-        ds._setProposalThresholdBPS(proposalThresholdBPS_);
+        ds._setVotingPeriod(daoParams_.votingPeriod);
+        ds._setVotingDelay(daoParams_.votingDelay);
+        ds._setProposalThresholdBPS(daoParams_.proposalThresholdBPS);
         ds.timelock = INounsDAOExecutorV2(timelock_);
         ds.nouns = NounsTokenLike(nouns_);
+        ds.splitEscrow = INounsDAOSplitEscrow(splitEscrow_);
         ds.vetoer = vetoer_;
         _setDynamicQuorumParams(
             dynamicQuorumParams_.minQuorumVotesBPS,
@@ -163,9 +158,9 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
             dynamicQuorumParams_.quorumCoefficient
         );
 
-        ds._setLastMinuteWindowInBlocks(lastMinuteWindowInBlocks_);
-        ds._setObjectionPeriodDurationInBlocks(objectionPeriodDurationInBlocks_);
-        ds._setProposalUpdatablePeriodInBlock(proposalUpdatablePeriodInBlocks_);
+        ds._setLastMinuteWindowInBlocks(daoParams_.lastMinuteWindowInBlocks);
+        ds._setObjectionPeriodDurationInBlocks(daoParams_.objectionPeriodDurationInBlocks);
+        ds._setProposalUpdatablePeriodInBlock(daoParams_.proposalUpdatablePeriodInBlocks);
     }
 
     /**

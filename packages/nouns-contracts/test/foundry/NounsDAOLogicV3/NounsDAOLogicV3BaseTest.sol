@@ -13,6 +13,7 @@ import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { NounsSeeder } from '../../../contracts/NounsSeeder.sol';
 import { IProxyRegistry } from '../../../contracts/external/opensea/IProxyRegistry.sol';
 import { NounsDAOExecutorV2 } from '../../../contracts/governance/NounsDAOExecutorV2.sol';
+import { NounsDAOSplitEscrow } from '../../../contracts/governance/split/NounsDAOSplitEscrow.sol';
 
 abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
     event ProposalUpdated(
@@ -75,6 +76,7 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
     uint32 lastMinuteWindowInBlocks = 10;
     uint32 objectionPeriodDurationInBlocks = 10;
     uint32 proposalUpdatablePeriodInBlocks = 10;
+    address splitEscrow;
 
     function setUp() public virtual {
         timelock = new NounsDAOExecutorV2(address(1), TIMELOCK_DELAY);
@@ -86,30 +88,37 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
             new NounsSeeder(),
             new ProxyRegistryMock()
         );
-        nounsToken.transferOwnership(address(timelock));
+        nounsToken.transferOwnership(address(timelock));        
+        address daoLogicImplementation = address(new NounsDAOLogicV3());
 
+        uint256 nonce = vm.getNonce(address(this));
+        address predictedSplitEscrowAddress = computeCreateAddress(address(this), nonce+1);
         dao = NounsDAOLogicV3(
             payable(
                 new NounsDAOProxyV3(
                     address(timelock),
                     address(nounsToken),
+                    predictedSplitEscrowAddress,
                     vetoer,
                     address(timelock),
-                    address(new NounsDAOLogicV3()),
-                    VOTING_PERIOD,
-                    VOTING_DELAY,
-                    PROPOSAL_THRESHOLD,
+                    daoLogicImplementation,
+                    NounsDAOStorageV3.NounsDAOParams({
+                        votingPeriod: VOTING_PERIOD,
+                        votingDelay: VOTING_DELAY,
+                        proposalThresholdBPS: PROPOSAL_THRESHOLD,
+                        lastMinuteWindowInBlocks: lastMinuteWindowInBlocks,
+                        objectionPeriodDurationInBlocks: objectionPeriodDurationInBlocks,
+                        proposalUpdatablePeriodInBlocks: proposalUpdatablePeriodInBlocks
+                    }),
                     NounsDAOStorageV3.DynamicQuorumParams({
                         minQuorumVotesBPS: 200,
                         maxQuorumVotesBPS: 2000,
                         quorumCoefficient: 10000
-                    }),
-                    lastMinuteWindowInBlocks,
-                    objectionPeriodDurationInBlocks,
-                    proposalUpdatablePeriodInBlocks
+                    })
                 )
             )
         );
+        splitEscrow = address(new NounsDAOSplitEscrow(address(dao)));
 
         vm.prank(address(timelock));
         timelock.setPendingAdmin(address(dao));

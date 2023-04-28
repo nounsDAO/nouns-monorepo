@@ -19,11 +19,13 @@ pragma solidity ^0.8.6;
 
 import './NounsDAOInterfaces.sol';
 import { NounsDAOV3DynamicQuorum } from './NounsDAOV3DynamicQuorum.sol';
+import { NounsDAOV3Split } from './split/NounsDAOV3Split.sol';
 import { SignatureChecker } from '@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol';
 import { ECDSA } from '@openzeppelin/contracts/utils/cryptography/ECDSA.sol';
 
 library NounsDAOV3Proposals {
     using NounsDAOV3DynamicQuorum for NounsDAOStorageV3.StorageV3;
+    using NounsDAOV3Split for NounsDAOStorageV3.StorageV3;
 
     error CantCancelProposalAtFinalState();
     error ProposalInfoArityMismatch();
@@ -104,12 +106,6 @@ library NounsDAOV3Proposals {
     /// @notice Emitted when someone cancels a signature
     event SignatureCancelled(address indexed signer, bytes sig);
 
-    struct ProposalTemp {
-        uint256 totalSupply;
-        uint256 proposalThreshold;
-        uint256 latestProposalId;
-    }
-
     // Created to solve stack-too-deep errors
     struct ProposalTxs {
         address[] targets;
@@ -145,9 +141,7 @@ library NounsDAOV3Proposals {
         ProposalTxs memory txs,
         string memory description
     ) internal returns (uint256) {
-        ProposalTemp memory temp;
-        temp.totalSupply = ds.nouns.totalSupply();
-        temp.proposalThreshold = checkPropThreshold(ds, ds.nouns.getPriorVotes(msg.sender, block.number - 1));
+        uint256 proposalThreshold_ = checkPropThreshold(ds, ds.nouns.getPriorVotes(msg.sender, block.number - 1));
         checkProposalTxs(txs);
         checkNoActiveProp(ds, msg.sender);
 
@@ -155,7 +149,7 @@ library NounsDAOV3Proposals {
         NounsDAOStorageV3.Proposal storage newProposal = createNewProposal(
             ds,
             ds.proposalCount,
-            temp.proposalThreshold,
+            proposalThreshold_,
             txs
         );
         ds.latestProposalIds[newProposal.proposer] = newProposal.id;
@@ -643,7 +637,7 @@ library NounsDAOV3Proposals {
      * Differs from `GovernerBravo` which uses fixed amount
      */
     function proposalThreshold(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (uint256) {
-        return bps2Uint(ds.proposalThresholdBPS, ds.nouns.totalSupply());
+        return bps2Uint(ds.proposalThresholdBPS, ds.adjustedTotalSupply());
     }
 
     function isDefeated(NounsDAOStorageV3.StorageV3 storage ds, NounsDAOStorageV3.Proposal storage proposal)
@@ -694,7 +688,7 @@ library NounsDAOV3Proposals {
         newProposal.canceled = false;
         newProposal.executed = false;
         newProposal.vetoed = false;
-        newProposal.totalSupply = ds.nouns.totalSupply();
+        newProposal.totalSupply = ds.adjustedTotalSupply();
         newProposal.creationBlock = block.number;
         newProposal.updatePeriodEndBlock = updatePeriodEndBlock;
     }
@@ -743,9 +737,7 @@ library NounsDAOV3Proposals {
         view
         returns (uint256 propThreshold)
     {
-        uint256 totalSupply = ds.nouns.totalSupply();
-        propThreshold = bps2Uint(ds.proposalThresholdBPS, totalSupply);
-
+        propThreshold = proposalThreshold(ds);
         require(votes > propThreshold, 'NounsDAO::propose: proposer votes below proposal threshold');
     }
 

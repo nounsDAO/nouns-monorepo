@@ -83,7 +83,7 @@ library NounsDAOV3Split {
         return adjustedTotalSupply(ds) * SPLIT_THRESHOLD_BPS / 10_000;
     }
 
-    function adjustedTotalSupply(NounsDAOStorageV3.StorageV3 storage ds) public view returns (uint256) {
+    function adjustedTotalSupply(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (uint256) {
         return ds.nouns.totalSupply() - ds.nouns.balanceOf(address(ds.timelock)) - ds.splitEscrow.numTokensOwnedByDAO();
     }
 

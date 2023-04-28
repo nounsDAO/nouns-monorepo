@@ -18,6 +18,7 @@ import { NounsDAOProxy } from '../../../contracts/governance/NounsDAOProxy.sol';
 import { NounsDAOStorageV2, NounsDAOStorageV3 } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { NounsDAOProxyV2 } from '../../../contracts/governance/NounsDAOProxyV2.sol';
 import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
+import { NounsDAOSplitEscrow } from '../../../contracts/governance/split/NounsDAOSplitEscrow.sol';
 import { Inflator } from '../../../contracts/Inflator.sol';
 
 abstract contract DeployUtils is Test, DescriptorHelpers {
@@ -86,30 +87,37 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         address timelock,
         address nounsToken,
         address vetoer
-    ) internal returns (NounsDAOLogicV1) {
-        return
+    ) internal returns (NounsDAOLogicV1 dao) {
+
+        uint256 nonce = vm.getNonce(address(this));
+        address predictedSplitEscrowAddress = computeCreateAddress(address(this), nonce+2);
+        dao =
             NounsDAOLogicV1(
                 payable(
                     new NounsDAOProxyV3(
                         timelock,
                         nounsToken,
+                        predictedSplitEscrowAddress,
                         vetoer,
                         timelock,
                         address(new NounsDAOLogicV3()),
-                        VOTING_PERIOD,
-                        VOTING_DELAY,
-                        PROPOSAL_THRESHOLD,
+                        NounsDAOStorageV3.NounsDAOParams({
+                            votingPeriod: VOTING_PERIOD,
+                            votingDelay: VOTING_DELAY,
+                            proposalThresholdBPS: PROPOSAL_THRESHOLD,
+                            lastMinuteWindowInBlocks: 0,
+                            objectionPeriodDurationInBlocks: 0,
+                            proposalUpdatablePeriodInBlocks: 0
+                        }),
                         NounsDAOStorageV3.DynamicQuorumParams({
                             minQuorumVotesBPS: 200,
                             maxQuorumVotesBPS: 2000,
                             quorumCoefficient: 10000
-                        }),
-                        0,
-                        0,
-                        0
+                        })
                     )
                 )
             );
+        address(new NounsDAOSplitEscrow(address(dao)));
     }
 
     function _createDAOV2Proxy(

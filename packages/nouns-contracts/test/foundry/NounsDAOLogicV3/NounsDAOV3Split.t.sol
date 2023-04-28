@@ -17,7 +17,6 @@ abstract contract DAOSplitZeroState is NounsDAOLogicV3BaseTest {
     SplitDAODeployerMock splitDAODeployer;
     ERC20Mock erc20Mock = new ERC20Mock();
     address[] erc20Tokens = [address(erc20Mock)];
-    address splitEscrow;
 
     function setUp() public virtual override {
         super.setUp();
@@ -25,8 +24,6 @@ abstract contract DAOSplitZeroState is NounsDAOLogicV3BaseTest {
         splitDAODeployer = new SplitDAODeployerMock();
         vm.startPrank(address(timelock));
         dao._setSplitDAODeployer(address(splitDAODeployer));
-        splitEscrow = address(new NounsDAOSplitEscrow(address(dao)));
-        dao._setSplitEscrow(splitEscrow);
         dao._setErc20TokensToIncludeInSplit(erc20Tokens);
         vm.stopPrank();
 
@@ -188,6 +185,29 @@ contract DAOSplitSignaledOverThresholdStateTest is DAOSplitSignaledOverThreshold
         tokenIds = [1];
         vm.expectRevert(NounsDAOSplitEscrow.NotOwner.selector);
         dao.withdrawSplitTokensToDAO(tokenIds);
+    }
+
+    function test_proposalThresholdIsLowered() public {
+        vm.prank(address(timelock));
+        dao._setProposalThresholdBPS(1000); // 10%
+
+        // Before split execute
+        assertEq(dao.proposalThreshold(), 2);
+
+        dao.executeSplit();
+
+        // there are 20 tokens, but 5 are now the DAO's, so adjusted total supply is 15
+        assertEq(dao.adjustedTotalSupply(), 15);
+        assertEq(dao.proposalThreshold(), 1); // 1.5 tokens
+
+        // check that 2 tokens are enough for proposing
+        address someone = makeAddr("someone");
+        vm.prank(tokenHolder);
+        nounsToken.transferFrom(tokenHolder, someone, 13);
+        vm.prank(tokenHolder);
+        nounsToken.transferFrom(tokenHolder, someone, 14);
+        vm.roll(block.number + 1);
+        propose(someone, address(0), 0, '', '', '');
     }
 }
 

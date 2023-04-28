@@ -715,6 +715,15 @@ contract NounsDAOStorageV3 {
         uint32 quorumCoefficient;
     }
 
+    struct NounsDAOParams {
+        uint256 votingPeriod;
+        uint256 votingDelay;
+        uint256 proposalThresholdBPS;
+        uint32 lastMinuteWindowInBlocks;
+        uint32 objectionPeriodDurationInBlocks;
+        uint32 proposalUpdatablePeriodInBlocks;
+    }
+
     /// @notice A checkpoint for storing dynamic quorum params from a given block
     struct DynamicQuorumParamsCheckpoint {
         /// @notice The block at which the new values were set
