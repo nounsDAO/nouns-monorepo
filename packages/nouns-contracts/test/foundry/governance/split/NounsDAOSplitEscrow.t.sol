@@ -39,6 +39,11 @@ contract NounsDAOSplitEscrowTest is Test {
 
         assertEq(token.ownerOf(1), makeAddr("user1"));
         assertEq(token.ownerOf(2), makeAddr("user1"));
+
+        vm.prank(dao);
+        uint32 splitId1 = escrow.closeEscrow();
+
+        assertEq(escrow.ownerOfEscrowedToken(splitId1, 1), address(0));
     }
 
     function test_remembersWhoEscrowed_afterEscrowClosed() public {
