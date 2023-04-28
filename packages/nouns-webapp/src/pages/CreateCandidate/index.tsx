@@ -10,11 +10,10 @@ import {
 } from '../../wrappers/nounsDao';
 import { useUserVotes } from '../../wrappers/nounToken';
 import classes from '../CreateProposal/CreateProposal.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import ProposalEditor from '../../components/ProposalEditor';
-import CreateCandidateButton from '../../components/CreateCandidateButton';
 import ProposalTransactions from '../../components/ProposalTransactions';
 import { withStepProgress } from 'react-stepz';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -25,46 +24,46 @@ import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.modu
 import ProposalActionModal from '../../components/ProposalActionsModal';
 import config from '../../config';
 import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
+import { useCreateCandidateCost, useCreateProposalCandidate } from '../../wrappers/nounsData';
+import { ethers } from 'ethers';
+import CreateCandidateButton from '../../components/CreateCandidateButton';
 
 const CreateCandidatePage = () => {
+  const history = useHistory();
   const { account } = useEthers();
   const latestProposalId = useProposalCount();
   const latestProposal = useProposal(latestProposalId ?? 0);
   const availableVotes = useUserVotes();
   const proposalThreshold = useProposalThreshold();
 
-  const { propose, proposeState } = usePropose();
+  const { createProposalCandidate, createProposalCandidateState } = useCreateProposalCandidate();
 
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
   const [titleValue, setTitleValue] = useState('');
   const [bodyValue, setBodyValue] = useState('');
 
+  const [slug, setSlug] = useState('');
+
   const [totalUSDCPayment, setTotalUSDCPayment] = useState<number>(0);
   const [tokenBuyerTopUpEth, setTokenBuyerTopUpETH] = useState<string>('0');
-  const ethNeeded = useEthNeeded(
-    config.addresses.tokenBuyer ?? '',
-    totalUSDCPayment,
-    config.addresses.tokenBuyer === undefined || totalUSDCPayment === 0,
-  );
+  const ethNeeded = useEthNeeded(config.addresses.tokenBuyer ?? '', totalUSDCPayment);
+
+  const createCandidateCost = useCreateCandidateCost();
 
   const handleAddProposalAction = useCallback(
-    (transactions: ProposalTransaction | ProposalTransaction[]) => {
-      const transactionsArray = Array.isArray(transactions) ? transactions : [transactions];
+    (transaction: ProposalTransaction) => {
+      if (!transaction.address.startsWith('0x')) {
+        transaction.address = `0x${transaction.address}`;
+      }
+      if (!transaction.calldata.startsWith('0x')) {
+        transaction.calldata = `0x${transaction.calldata}`;
+      }
 
-      transactionsArray.forEach(transaction => {
-        if (!transaction.address.startsWith('0x')) {
-          transaction.address = `0x${transaction.address}`;
-        }
-        if (!transaction.calldata.startsWith('0x')) {
-          transaction.calldata = `0x${transaction.calldata}`;
-        }
+      if (transaction.usdcValue) {
+        setTotalUSDCPayment(totalUSDCPayment + transaction.usdcValue);
+      }
 
-        if (transaction.usdcValue) {
-          setTotalUSDCPayment(totalUSDCPayment + transaction.usdcValue);
-        }
-      });
-      setProposalTransactions([...proposalTransactions, ...transactionsArray]);
-
+      setProposalTransactions([...proposalTransactions, transaction]);
       setShowTransactionFormModal(false);
     },
     [proposalTransactions, totalUSDCPayment],
@@ -79,7 +78,7 @@ const CreateCandidatePage = () => {
   );
 
   useEffect(() => {
-    if (ethNeeded !== undefined && ethNeeded !== tokenBuyerTopUpEth && totalUSDCPayment > 0) {
+    if (ethNeeded !== undefined && ethNeeded !== tokenBuyerTopUpEth) {
       const hasTokenBuyterTopTop =
         proposalTransactions.filter(txn => txn.address === config.addresses.tokenBuyer).length > 0;
 
@@ -120,12 +119,18 @@ const CreateCandidatePage = () => {
     handleRemoveProposalAction,
     proposalTransactions,
     tokenBuyerTopUpEth,
-    totalUSDCPayment,
   ]);
 
   const handleTitleInput = useCallback(
     (title: string) => {
       setTitleValue(title);
+      // TODO: how to confirm slug is unique?
+      setSlug(
+        title
+          .toLowerCase()
+          .replace(/ /g, '-')
+          .replace(/[^\w-]+/g, ''),
+      );
     },
     [setTitleValue],
   );
@@ -147,14 +152,16 @@ const CreateCandidatePage = () => {
   );
 
   const handleCreateProposal = async () => {
-    if (!proposalTransactions?.length) return;
+    const description = `# ${titleValue}\n\n${bodyValue}`;
 
-    await propose(
+    await createProposalCandidate(
       proposalTransactions.map(({ address }) => address), // Targets
       proposalTransactions.map(({ value }) => value ?? '0'), // Values
       proposalTransactions.map(({ signature }) => signature), // Signatures
       proposalTransactions.map(({ calldata }) => calldata), // Calldatas
       `# ${titleValue}\n\n${bodyValue}`, // Description
+      slug, // Slug
+      { value: availableVotes! > 0 ? 0 : createCandidateCost },
     );
   };
 
@@ -165,7 +172,7 @@ const CreateCandidatePage = () => {
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
 
   useEffect(() => {
-    switch (proposeState.status) {
+    switch (createProposalCandidateState.status) {
       case 'None':
         setProposePending(false);
         break;
@@ -183,7 +190,7 @@ const CreateCandidatePage = () => {
       case 'Fail':
         setModal({
           title: <Trans>Transaction Failed</Trans>,
-          message: proposeState?.errorMessage || <Trans>Please try again.</Trans>,
+          message: createProposalCandidateState?.errorMessage || <Trans>Please try again.</Trans>,
           show: true,
         });
         setProposePending(false);
@@ -191,13 +198,13 @@ const CreateCandidatePage = () => {
       case 'Exception':
         setModal({
           title: <Trans>Error</Trans>,
-          message: proposeState?.errorMessage || <Trans>Please try again.</Trans>,
+          message: createProposalCandidateState?.errorMessage || <Trans>Please try again.</Trans>,
           show: true,
         });
         setProposePending(false);
         break;
     }
-  }, [proposeState, setModal]);
+  }, [createProposalCandidateState, setModal]);
 
   return (
     <Section fullWidth={false} className={classes.createProposalPage}>
@@ -224,10 +231,11 @@ const CreateCandidatePage = () => {
           </Trans>
           <br />
           <br />
-          {/* TODO: fetch fee amount from contract */}
+
           <strong>
             <Trans>
-              Submissions are free for Nouns voters. Non-voters can submit for a fee of 0.1 ETH.
+              Submissions are free for Nouns voters. Non-voters can submit for a{' '}
+              {createCandidateCost && ethers.utils.formatEther(createCandidateCost)} ETH fee.
             </Trans>
           </strong>
         </Alert>
@@ -278,7 +286,14 @@ const CreateCandidatePage = () => {
           handleCreateProposal={handleCreateProposal}
         />
         {/* TODO: fetch fee amount from contract */}
-        <p className={classes.feeNotice}>{!hasEnoughVote && '0.1 eth fee upon submission'}</p>
+        <p className={classes.feeNotice}>
+          {!hasEnoughVote && (
+            <>
+              {createCandidateCost && ethers.utils.formatEther(createCandidateCost)} ETH fee upon
+              submission
+            </>
+          )}
+        </p>
       </Col>
     </Section>
   );
