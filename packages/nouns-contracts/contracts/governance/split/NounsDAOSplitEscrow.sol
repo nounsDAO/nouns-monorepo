@@ -31,6 +31,9 @@ contract NounsDAOSplitEscrow {
     /// @dev tokenId => OwnerInfo
     mapping(uint256 => OwnerInfo) public ownerOf;
 
+    /// @dev splitId => tokenId => owner
+    mapping(uint32 => mapping(uint256 => address)) public escrowedTokensBySplitId;
+
     /// @dev splitId => count
     mapping(uint32 => uint256) public tokensInEscrowBySplitId;
 
@@ -63,6 +66,7 @@ contract NounsDAOSplitEscrow {
     function markOwner(address owner, uint256[] calldata tokenIds) onlyDAO external {
         for (uint256 i = 0; i < tokenIds.length; i++) {
             ownerOf[tokenIds[i]] = OwnerInfo(owner, splitId);
+            escrowedTokensBySplitId[splitId][tokenIds[i]] = owner;
         }
         tokensInEscrowBySplitId[splitId] += tokenIds.length;
     }
@@ -73,6 +77,7 @@ contract NounsDAOSplitEscrow {
 
             nounsToken.transferFrom(address(this), owner, tokenIds[i]);
             delete ownerOf[tokenIds[i]];
+            escrowedTokensBySplitId[splitId][tokenIds[i]] = address(0);
         }
 
         tokensInEscrowBySplitId[splitId] -= tokenIds.length;
@@ -89,10 +94,17 @@ contract NounsDAOSplitEscrow {
         numTokensOwnedByDAO -= tokenIds.length;
     }
 
-    function closeEscrow() onlyDAO external {
+    function closeEscrow() onlyDAO external returns (uint32 closedSplitId) {
         numTokensOwnedByDAO += tokensInEscrowBySplitId[splitId];
         tokensInEscrowBySplitId[splitId] = 0; // TODO: is this needed?
+
+        closedSplitId = splitId;
+
         splitId++;
+    }
+
+    function ownerOfEscrowedToken(uint32 splitId_, uint256 tokenId) external view returns (address) {
+        return escrowedTokensBySplitId[splitId_][tokenId];
     }
 
     function numTokensInEscrow() external view returns (uint256) {
