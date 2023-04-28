@@ -18,8 +18,11 @@
 pragma solidity ^0.8.6;
 
 import './NounsDAOInterfaces.sol';
+import { NounsDAOV3Split } from './split/NounsDAOV3Split.sol';
 
 library NounsDAOV3DynamicQuorum {
+    using NounsDAOV3Split for NounsDAOStorageV3.StorageV3;
+
     error UnsafeUint16Cast();
 
     /**
@@ -121,14 +124,14 @@ library NounsDAOV3DynamicQuorum {
      * @notice Current min quorum votes using Noun total supply
      */
     function minQuorumVotes(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (uint256) {
-        return bps2Uint(getDynamicQuorumParamsAt(ds, block.number).minQuorumVotesBPS, ds.nouns.totalSupply());
+        return bps2Uint(getDynamicQuorumParamsAt(ds, block.number).minQuorumVotesBPS, ds.adjustedTotalSupply());
     }
 
     /**
      * @notice Current max quorum votes using Noun total supply
      */
     function maxQuorumVotes(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (uint256) {
-        return bps2Uint(getDynamicQuorumParamsAt(ds, block.number).maxQuorumVotesBPS, ds.nouns.totalSupply());
+        return bps2Uint(getDynamicQuorumParamsAt(ds, block.number).maxQuorumVotesBPS, ds.adjustedTotalSupply());
     }
 
     function safe32(uint256 n, string memory errorMessage) internal pure returns (uint32) {
