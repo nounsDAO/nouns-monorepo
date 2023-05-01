@@ -37,7 +37,12 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
         string updateMessage
     );
 
-    event ProposalDescriptionUpdated(uint256 indexed id, address indexed proposer, string description, string updateMessage);
+    event ProposalDescriptionUpdated(
+        uint256 indexed id,
+        address indexed proposer,
+        string description,
+        string updateMessage
+    );
 
     event ProposalCreated(
         uint256 id,
@@ -79,7 +84,8 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
     address splitEscrow;
 
     function setUp() public virtual {
-        timelock = new NounsDAOExecutorV2(address(1), TIMELOCK_DELAY);
+        timelock = new NounsDAOExecutorV2();
+        timelock.initialize(address(1), TIMELOCK_DELAY);
 
         nounsToken = new NounsToken(
             noundersDAO,
@@ -88,11 +94,11 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
             new NounsSeeder(),
             new ProxyRegistryMock()
         );
-        nounsToken.transferOwnership(address(timelock));        
+        nounsToken.transferOwnership(address(timelock));
         address daoLogicImplementation = address(new NounsDAOLogicV3());
 
         uint256 nonce = vm.getNonce(address(this));
-        address predictedSplitEscrowAddress = computeCreateAddress(address(this), nonce+1);
+        address predictedSplitEscrowAddress = computeCreateAddress(address(this), nonce + 1);
         dao = NounsDAOLogicV3(
             payable(
                 new NounsDAOProxyV3(

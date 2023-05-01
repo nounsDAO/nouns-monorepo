@@ -19,6 +19,7 @@ import '@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol';
 import { ISplitDAODeployer, INounsDAOSplitEscrow } from '../NounsDAOInterfaces.sol';
 import { NounsToken } from './newdao/token/NounsToken.sol';
 import { NounsAuctionHouse } from './newdao/NounsAuctionHouse.sol';
+import { NounsDAOExecutorV2 } from '../NounsDAOExecutorV2.sol';
 
 contract SplitDAODeployer is ISplitDAODeployer {
     /// @notice The token implementation address
@@ -61,6 +62,13 @@ contract SplitDAODeployer is ISplitDAODeployer {
             originalAuction.minBidIncrementPercentage(),
             originalAuction.duration()
         );
+
+        NounsDAOExecutorV2(payable(treasury)).initialize(
+            governor,
+            NounsDAOExecutorV2(payable(originalToken.owner())).delay()
+        );
+
+        return treasury;
     }
 
     function getStartNounId(NounsAuctionHouse originalAuction) internal view returns (uint256) {
