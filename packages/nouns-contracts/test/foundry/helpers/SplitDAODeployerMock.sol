@@ -5,10 +5,9 @@ import 'forge-std/Test.sol';
 import { ISplitDAODeployer } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 
 contract SplitDAODeployerMock is ISplitDAODeployer, StdCheats {
+    address public mockTreasury = makeAddr('mock treasury');
 
-    address public mockTreasury = makeAddr("mock treasury");
-
-    function deploySplitDAO() external view returns (address treasury) {
+    function deploySplitDAO(address) external view returns (address treasury) {
         treasury = mockTreasury;
     }
 }

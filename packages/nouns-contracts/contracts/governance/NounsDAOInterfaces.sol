@@ -166,7 +166,12 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
         string updateMessage
     );
 
-    event ProposalDescriptionUpdated(uint256 indexed id, address indexed proposer, string description, string updateMessage);
+    event ProposalDescriptionUpdated(
+        uint256 indexed id,
+        address indexed proposer,
+        string description,
+        string updateMessage
+    );
 
     /// @notice Emitted when a proposal is set to have an objection period
     event ProposalObjectionPeriodSet(uint256 indexed id, uint256 objectionPeriodEndBlock);
@@ -518,7 +523,11 @@ interface NounsTokenLike {
 
     function totalSupply() external view returns (uint256);
 
-    function transferFrom(address from, address to, uint256 tokenId) external;
+    function transferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) external;
 
     function balanceOf(address owner) external view returns (uint256 balance);
 
@@ -526,13 +535,17 @@ interface NounsTokenLike {
 }
 
 interface ISplitDAODeployer {
-    function deploySplitDAO() external returns (address treasury);
+    function deploySplitDAO(address splitEscrowAddress) external returns (address treasury);
 }
 
 interface INounsDAOExecutorV2 is INounsDAOExecutor {
     function sendETHToNewDAO(address newDAOTreasury, uint256 ethToSend) external;
 
-    function sendERC20ToNewDAO(address newDAOTreasury, address erc20Token, uint256 tokensToSend) external;
+    function sendERC20ToNewDAO(
+        address newDAOTreasury,
+        address erc20Token,
+        uint256 tokensToSend
+    ) external;
 }
 
 interface INounsDAOSplitEscrow {
@@ -547,6 +560,14 @@ interface INounsDAOSplitEscrow {
     function numTokensOwnedByDAO() external view returns (uint256);
 
     function withdrawTokensToDAO(uint256[] calldata tokenIds, address to) external;
+
+    function splitId() external view returns (uint32);
+
+    function nounsToken() external view returns (NounsTokenLike);
+
+    function dao() external view returns (address);
+
+    function ownerOfEscrowedToken(uint32 splitId_, uint256 tokenId) external view returns (address);
 }
 
 contract NounsDAOStorageV3 {
@@ -595,15 +616,10 @@ contract NounsDAOStorageV3 {
         /// @notice The proposal at which to start using `startBlock` instead of `creationBlock` for vote snapshots
         /// @dev To be zeroed-out and removed in a V3.1 fix version once the switch takes place
         uint256 voteSnapshotBlockSwitchProposalId;
-
         INounsDAOSplitEscrow splitEscrow;
-
         ISplitDAODeployer splitDAODeployer;
-
         address[] erc20TokensToIncludeInSplit;
-
         address splitDAOTreasury;
-
         uint256 splitEndTimestamp;
     }
 

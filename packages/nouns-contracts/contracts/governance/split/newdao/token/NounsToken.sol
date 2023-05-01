@@ -25,7 +25,7 @@ import { INounsToken } from '../../../../interfaces/INounsToken.sol';
 import { ERC721 } from './base/ERC721.sol';
 import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
-import { INounsDAOSplitEscrowLike } from './INounsDAOSplitEscrowLike.sol';
+import { INounsDAOSplitEscrow } from '../../../NounsDAOInterfaces.sol';
 
 contract NounsToken is INounsToken, OwnableUpgradeable, ERC721Checkpointable, UUPSUpgradeable {
     error OnlyOwner();
@@ -44,7 +44,7 @@ contract NounsToken is INounsToken, OwnableUpgradeable, ERC721Checkpointable, UU
     // The Nouns token seeder
     INounsSeeder public seeder;
 
-    INounsDAOSplitEscrowLike public escrow;
+    INounsDAOSplitEscrow public escrow;
 
     uint32 public splitId;
 
@@ -109,24 +109,23 @@ contract NounsToken is INounsToken, OwnableUpgradeable, ERC721Checkpointable, UU
     }
 
     function initialize(
-        address _noundersDAO,
         address _minter,
-        INounsDescriptorMinimal _descriptor,
-        INounsSeeder _seeder,
-        INounsDAOSplitEscrowLike _escrow,
+        INounsDAOSplitEscrow _escrow,
         uint32 _splitId,
         uint256 startNounId,
         uint256 tokensToClaim
     ) external initializer {
         __ERC721_init('Nouns', 'NOUN');
-        noundersDAO = _noundersDAO;
         minter = _minter;
-        descriptor = _descriptor;
-        seeder = _seeder;
         escrow = _escrow;
         splitId = _splitId;
         _currentNounId = startNounId;
         remainingTokensToClaim = tokensToClaim;
+
+        NounsToken originalToken = NounsToken(address(escrow.nounsToken()));
+        noundersDAO = originalToken.noundersDAO();
+        descriptor = originalToken.descriptor();
+        seeder = originalToken.seeder();
     }
 
     function claimFromEscrow(uint256[] calldata tokenIds) external {

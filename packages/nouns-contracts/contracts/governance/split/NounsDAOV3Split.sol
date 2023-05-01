@@ -19,7 +19,6 @@ import { NounsDAOStorageV3, INounsDAOSplitEscrow } from '../NounsDAOInterfaces.s
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 
 library NounsDAOV3Split {
-
     error SplitThresholdNotMet();
     error SplitPeriodNotActive();
     error SplitPeriodActive();
@@ -51,7 +50,7 @@ library NounsDAOV3Split {
         uint256 tokensInEscrow = ds.splitEscrow.numTokensInEscrow();
         if (tokensInEscrow < splitThreshold(ds)) revert SplitThresholdNotMet();
 
-        ds.splitDAOTreasury = ds.splitDAODeployer.deploySplitDAO();
+        ds.splitDAOTreasury = ds.splitDAODeployer.deploySplitDAO(address(ds.splitEscrow));
         sendProRataTreasury(ds, ds.splitDAOTreasury, tokensInEscrow, adjustedTotalSupply(ds));
 
         ds.splitEscrow.closeEscrow();
@@ -69,10 +68,7 @@ library NounsDAOV3Split {
         }
     }
 
-    function withdrawSplitTokensToDAO(
-        NounsDAOStorageV3.StorageV3 storage ds, 
-        uint256[] calldata tokenIds
-    ) external {
+    function withdrawSplitTokensToDAO(NounsDAOStorageV3.StorageV3 storage ds, uint256[] calldata tokenIds) external {
         // TODO: should this be limited to only timelock. maybe the timelock should call the escrow directly?
 
         // TODO: include a `to` param above?
@@ -80,7 +76,7 @@ library NounsDAOV3Split {
     }
 
     function splitThreshold(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (uint256) {
-        return adjustedTotalSupply(ds) * SPLIT_THRESHOLD_BPS / 10_000;
+        return (adjustedTotalSupply(ds) * SPLIT_THRESHOLD_BPS) / 10_000;
     }
 
     function adjustedTotalSupply(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (uint256) {
@@ -92,18 +88,18 @@ library NounsDAOV3Split {
     }
 
     function sendProRataTreasury(
-        NounsDAOStorageV3.StorageV3 storage ds, 
-        address newDAOTreasury, 
-        uint256 tokenCount, 
+        NounsDAOStorageV3.StorageV3 storage ds,
+        address newDAOTreasury,
+        uint256 tokenCount,
         uint256 totalSupply
     ) internal {
-        uint256 ethToSend = address(ds.timelock).balance * tokenCount / totalSupply;
+        uint256 ethToSend = (address(ds.timelock).balance * tokenCount) / totalSupply;
 
         ds.timelock.sendETHToNewDAO(newDAOTreasury, ethToSend);
 
         for (uint256 i = 0; i < ds.erc20TokensToIncludeInSplit.length; i++) {
             IERC20 erc20token = IERC20(ds.erc20TokensToIncludeInSplit[i]);
-            uint256 tokensToSend = erc20token.balanceOf(address(ds.timelock)) * tokenCount / totalSupply;
+            uint256 tokensToSend = (erc20token.balanceOf(address(ds.timelock)) * tokenCount) / totalSupply;
             ds.timelock.sendERC20ToNewDAO(newDAOTreasury, address(erc20token), tokensToSend);
         }
     }
