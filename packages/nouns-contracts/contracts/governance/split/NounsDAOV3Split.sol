@@ -50,7 +50,7 @@ library NounsDAOV3Split {
         uint256 tokensInEscrow = ds.splitEscrow.numTokensInEscrow();
         if (tokensInEscrow < splitThreshold(ds)) revert SplitThresholdNotMet();
 
-        ds.splitDAOTreasury = ds.splitDAODeployer.deploySplitDAO(address(ds.splitEscrow));
+        ds.splitDAOTreasury = ds.splitDAODeployer.deploySplitDAO();
         sendProRataTreasury(ds, ds.splitDAOTreasury, tokensInEscrow, adjustedTotalSupply(ds));
 
         ds.splitEscrow.closeEscrow();

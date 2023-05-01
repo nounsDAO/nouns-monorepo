@@ -535,7 +535,7 @@ interface NounsTokenLike {
 }
 
 interface ISplitDAODeployer {
-    function deploySplitDAO(address splitEscrowAddress) external returns (address treasury);
+    function deploySplitDAO() external returns (address treasury);
 }
 
 interface INounsDAOExecutorV2 is INounsDAOExecutor {

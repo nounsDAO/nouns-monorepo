@@ -20,8 +20,12 @@ import { ISplitDAODeployer, INounsDAOSplitEscrow } from '../NounsDAOInterfaces.s
 import { NounsToken } from './newdao/token/NounsToken.sol';
 import { NounsAuctionHouse } from './newdao/NounsAuctionHouse.sol';
 import { NounsDAOExecutorV2 } from '../NounsDAOExecutorV2.sol';
+import { NounsDAOProxy } from '../NounsDAOProxy.sol';
+import { NounsDAOLogicV1 } from '../NounsDAOLogicV1.sol';
 
 contract SplitDAODeployer is ISplitDAODeployer {
+    event DAODeployed(address token, address auction, address governor, address treasury);
+
     /// @notice The token implementation address
     address public tokenImpl;
 
@@ -34,17 +38,34 @@ contract SplitDAODeployer is ISplitDAODeployer {
     /// @notice The governor implementation address
     address public governorImpl;
 
-    function deploySplitDAO(address splitEscrowAddress) external returns (address treasury) {
-        // TODO
+    /// @notice The address of the split escrow contract
+    address public splitEscrowAddress;
 
+    constructor(
+        address tokenImpl_,
+        address auctionImpl_,
+        address governorImpl_,
+        address treasuryImpl_,
+        address splitEscrowAddress_
+    ) {
+        tokenImpl = tokenImpl_;
+        auctionImpl = auctionImpl_;
+        governorImpl = governorImpl_;
+        treasuryImpl = treasuryImpl_;
+        splitEscrowAddress = splitEscrowAddress_;
+    }
+
+    function deploySplitDAO() external returns (address treasury) {
         address token = address(new ERC1967Proxy(tokenImpl, ''));
         address auction = address(new ERC1967Proxy(auctionImpl, ''));
+        address governor = address(new ERC1967Proxy(auctionImpl, ''));
         treasury = address(new ERC1967Proxy(treasuryImpl, ''));
-        address governor = address(new ERC1967Proxy(governorImpl, ''));
 
         INounsDAOSplitEscrow splitEscrow = INounsDAOSplitEscrow(splitEscrowAddress);
         NounsToken originalToken = NounsToken(address(splitEscrow.nounsToken()));
         NounsAuctionHouse originalAuction = NounsAuctionHouse(originalToken.minter());
+        NounsDAOExecutorV2 originalTimelock = NounsDAOExecutorV2(payable(originalToken.owner()));
+        NounsDAOLogicV1 originalDAO = NounsDAOLogicV1(originalTimelock.admin());
 
         NounsToken(token).initialize(
             auction,
@@ -63,10 +84,19 @@ contract SplitDAODeployer is ISplitDAODeployer {
             originalAuction.duration()
         );
 
-        NounsDAOExecutorV2(payable(treasury)).initialize(
-            governor,
-            NounsDAOExecutorV2(payable(originalToken.owner())).delay()
+        NounsDAOLogicV1(governor).initialize(
+            treasury,
+            token,
+            address(0),
+            originalDAO.votingPeriod(),
+            originalDAO.votingDelay(),
+            originalDAO.proposalThresholdBPS(),
+            originalDAO.quorumVotesBPS()
         );
+
+        NounsDAOExecutorV2(payable(treasury)).initialize(governor, originalTimelock.delay());
+
+        emit DAODeployed(token, auction, governor, treasury);
 
         return treasury;
     }
