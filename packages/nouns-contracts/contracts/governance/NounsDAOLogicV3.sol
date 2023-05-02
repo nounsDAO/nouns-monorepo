@@ -136,6 +136,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         address timelock_,
         address nouns_,
         address splitEscrow_,
+        address splitDAODeployer_,
         address vetoer_,
         NounsDAOParams calldata daoParams_,
         DynamicQuorumParams calldata dynamicQuorumParams_
@@ -151,6 +152,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         ds.timelock = INounsDAOExecutorV2(timelock_);
         ds.nouns = NounsTokenLike(nouns_);
         ds.splitEscrow = INounsDAOSplitEscrow(splitEscrow_);
+        ds.splitDAODeployer = ISplitDAODeployer(splitDAODeployer_);
         ds.vetoer = vetoer_;
         _setDynamicQuorumParams(
             dynamicQuorumParams_.minQuorumVotesBPS,
@@ -375,8 +377,8 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         ds.unsignalSplit(tokenIds);
     }
 
-    function executeSplit() external {
-        ds.executeSplit();
+    function executeSplit() external returns (address splitTreasury, address splitToken) {
+        return ds.executeSplit();
     }
 
     function joinSplit(uint256[] calldata tokenIds) external {

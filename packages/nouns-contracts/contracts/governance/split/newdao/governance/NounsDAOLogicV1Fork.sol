@@ -135,7 +135,6 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, NounsDAOStorageV1, NounsDAOEven
         uint256 delayedGovernanceExpirationTimestamp_
     ) public virtual {
         require(address(timelock) == address(0), 'NounsDAO::initialize: can only initialize once');
-        require(msg.sender == admin, 'NounsDAO::initialize: admin only');
         require(timelock_ != address(0), 'NounsDAO::initialize: invalid timelock address');
         require(nouns_ != address(0), 'NounsDAO::initialize: invalid nouns address');
         require(
@@ -148,11 +147,11 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, NounsDAOStorageV1, NounsDAOEven
         );
         require(
             proposalThresholdBPS_ >= MIN_PROPOSAL_THRESHOLD_BPS && proposalThresholdBPS_ <= MAX_PROPOSAL_THRESHOLD_BPS,
-            'NounsDAO::initialize: invalid proposal threshold'
+            'NounsDAO::initialize: invalid proposal threshold BPs'
         );
         require(
             quorumVotesBPS_ >= MIN_QUORUM_VOTES_BPS && quorumVotesBPS_ <= MAX_QUORUM_VOTES_BPS,
-            'NounsDAO::initialize: invalid proposal threshold'
+            'NounsDAO::initialize: invalid quorum votes BPs'
         );
 
         emit VotingPeriodSet(votingPeriod, votingPeriod_);
@@ -160,6 +159,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, NounsDAOStorageV1, NounsDAOEven
         emit ProposalThresholdBPSSet(proposalThresholdBPS, proposalThresholdBPS_);
         emit QuorumVotesBPSSet(quorumVotesBPS, quorumVotesBPS_);
 
+        admin = timelock_;
         timelock = NounsDAOExecutorV2(payable(timelock_));
         nouns = NounsTokenLike(nouns_);
         vetoer = vetoer_;
@@ -172,11 +172,11 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, NounsDAOStorageV1, NounsDAOEven
     }
 
     function quit(uint256[] calldata tokenIds) external {
+        uint256 totalSupply = adjustedTotalSupply();
+
         for (uint256 i = 0; i < tokenIds.length; i++) {
             nouns.transferFrom(msg.sender, address(timelock), tokenIds[i]);
         }
-
-        uint256 totalSupply = adjustedTotalSupply();
 
         uint256 ethToSend = (address(timelock).balance * tokenIds.length) / totalSupply;
         timelock.sendETHToNewDAO(msg.sender, ethToSend);
@@ -228,7 +228,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, NounsDAOStorageV1, NounsDAOEven
         bytes[] memory calldatas,
         string memory description
     ) public returns (uint256) {
-        if (block.timestamp < delayedGovernanceExpirationTimestamp || nouns.remainingTokensToClaim() > 0)
+        if (block.timestamp < delayedGovernanceExpirationTimestamp && nouns.remainingTokensToClaim() > 0)
             revert WaitingForTokensToClaimOrExpiration();
 
         ProposalTemp memory temp;

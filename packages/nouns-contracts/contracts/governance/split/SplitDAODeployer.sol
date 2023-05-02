@@ -15,14 +15,16 @@
 
 pragma solidity ^0.8.6;
 
-import '@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol';
-import { ISplitDAODeployer, INounsDAOSplitEscrow } from '../NounsDAOInterfaces.sol';
-import { NounsToken } from './newdao/token/NounsToken.sol';
-import { NounsAuctionHouse } from './newdao/NounsAuctionHouse.sol';
+import { ERC1967Proxy } from '@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol';
+import { ISplitDAODeployer, INounsDAOSplitEscrow, NounsDAOStorageV3 } from '../NounsDAOInterfaces.sol';
+import { NounsTokenFork } from './newdao/token/NounsTokenFork.sol';
+import { NounsAuctionHouseFork } from './newdao/NounsAuctionHouseFork.sol';
 import { NounsDAOExecutorV2 } from '../NounsDAOExecutorV2.sol';
 import { NounsDAOProxy } from '../NounsDAOProxy.sol';
 import { NounsDAOLogicV3 } from '../NounsDAOLogicV3.sol';
 import { NounsDAOLogicV1Fork } from './newdao/governance/NounsDAOLogicV1Fork.sol';
+import { NounsToken } from '../../NounsToken.sol';
+import { NounsAuctionHouse } from '../../NounsAuctionHouse.sol';
 
 contract SplitDAODeployer is ISplitDAODeployer {
     event DAODeployed(address token, address auction, address governor, address treasury);
@@ -61,10 +63,10 @@ contract SplitDAODeployer is ISplitDAODeployer {
         delayedGovernanceMaxDuration = delayedGovernanceMaxDuration_;
     }
 
-    function deploySplitDAO() external returns (address treasury) {
-        address token = address(new ERC1967Proxy(tokenImpl, ''));
+    function deploySplitDAO() external returns (address treasury, address token) {
+        token = address(new ERC1967Proxy(tokenImpl, ''));
         address auction = address(new ERC1967Proxy(auctionImpl, ''));
-        address governor = address(new ERC1967Proxy(auctionImpl, ''));
+        address governor = address(new ERC1967Proxy(governorImpl, ''));
         treasury = address(new ERC1967Proxy(treasuryImpl, ''));
 
         INounsDAOSplitEscrow splitEscrow = INounsDAOSplitEscrow(splitEscrowAddress);
@@ -73,7 +75,7 @@ contract SplitDAODeployer is ISplitDAODeployer {
         NounsDAOExecutorV2 originalTimelock = NounsDAOExecutorV2(payable(originalToken.owner()));
         NounsDAOLogicV3 originalDAO = NounsDAOLogicV3(payable(originalTimelock.admin()));
 
-        NounsToken(token).initialize(
+        NounsTokenFork(token).initialize(
             treasury,
             auction,
             splitEscrow,
@@ -82,7 +84,7 @@ contract SplitDAODeployer is ISplitDAODeployer {
             splitEscrow.numTokensInEscrow()
         );
 
-        NounsAuctionHouse(auction).initialize(
+        NounsAuctionHouseFork(auction).initialize(
             treasury,
             NounsToken(token),
             originalAuction.weth(),
@@ -92,6 +94,7 @@ contract SplitDAODeployer is ISplitDAODeployer {
             originalAuction.duration()
         );
 
+        NounsDAOStorageV3.DynamicQuorumParams memory dqParams = originalDAO.getDynamicQuorumParamsAt(block.number);
         NounsDAOLogicV1Fork(governor).initialize(
             treasury,
             token,
@@ -99,7 +102,7 @@ contract SplitDAODeployer is ISplitDAODeployer {
             originalDAO.votingPeriod(),
             originalDAO.votingDelay(),
             originalDAO.proposalThresholdBPS(),
-            originalDAO.quorumVotesBPS(),
+            dqParams.minQuorumVotesBPS,
             originalDAO.erc20TokensToIncludeInSplit(),
             block.timestamp + delayedGovernanceMaxDuration
         );
@@ -107,8 +110,6 @@ contract SplitDAODeployer is ISplitDAODeployer {
         NounsDAOExecutorV2(payable(treasury)).initialize(governor, originalTimelock.delay());
 
         emit DAODeployed(token, auction, governor, treasury);
-
-        return treasury;
     }
 
     function getStartNounId(NounsAuctionHouse originalAuction) internal view returns (uint256) {

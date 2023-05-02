@@ -41,11 +41,11 @@ pragma solidity ^0.8.6;
 import './NounsDAOInterfaces.sol';
 
 contract NounsDAOProxyV3 is NounsDAOProxyStorage, NounsDAOEvents {
-
     constructor(
         address timelock_,
         address nouns_,
         address splitEscrow_,
+        address splitDAODeployer_,
         address vetoer_,
         address admin_,
         address implementation_,
@@ -58,10 +58,11 @@ contract NounsDAOProxyV3 is NounsDAOProxyStorage, NounsDAOEvents {
         delegateTo(
             implementation_,
             abi.encodeWithSignature(
-                'initialize(address,address,address,address,(uint256,uint256,uint256,uint32,uint32,uint32),(uint16,uint16,uint32))',
+                'initialize(address,address,address,address,address,(uint256,uint256,uint256,uint32,uint32,uint32),(uint16,uint16,uint32))',
                 timelock_,
                 nouns_,
                 splitEscrow_,
+                splitDAODeployer_,
                 vetoer_,
                 daoParams_,
                 dynamicQuorumParams_

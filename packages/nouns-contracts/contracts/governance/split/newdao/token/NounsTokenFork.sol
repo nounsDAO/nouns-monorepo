@@ -27,7 +27,7 @@ import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
 import { INounsDAOSplitEscrow } from '../../../NounsDAOInterfaces.sol';
 
-contract NounsToken is INounsToken, OwnableUpgradeable, ERC721Checkpointable, UUPSUpgradeable {
+contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable, UUPSUpgradeable {
     error OnlyOwner();
     error OnlyTokenOwnerCanClaim();
     error OnlyOriginalDAO();
@@ -124,7 +124,7 @@ contract NounsToken is INounsToken, OwnableUpgradeable, ERC721Checkpointable, UU
         _currentNounId = startNounId;
         remainingTokensToClaim = tokensToClaim;
 
-        NounsToken originalToken = NounsToken(address(escrow.nounsToken()));
+        NounsTokenFork originalToken = NounsTokenFork(address(escrow.nounsToken()));
         noundersDAO = originalToken.noundersDAO();
         descriptor = originalToken.descriptor();
         seeder = originalToken.seeder();
@@ -151,7 +151,7 @@ contract NounsToken is INounsToken, OwnableUpgradeable, ERC721Checkpointable, UU
     }
 
     function _mintWithOriginalSeed(address to, uint256 nounId) internal {
-        (uint48 background, uint48 body, uint48 accessory, uint48 head, uint48 glasses) = NounsToken(
+        (uint48 background, uint48 body, uint48 accessory, uint48 head, uint48 glasses) = NounsTokenFork(
             address(escrow.nounsToken())
         ).seeds(nounId);
         INounsSeeder.Seed memory seed = INounsSeeder.Seed(background, body, accessory, head, glasses);

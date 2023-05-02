@@ -99,12 +99,16 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
 
         uint256 nonce = vm.getNonce(address(this));
         address predictedSplitEscrowAddress = computeCreateAddress(address(this), nonce + 1);
+
+        address splitDeployer = address(0);
+
         dao = NounsDAOLogicV3(
             payable(
                 new NounsDAOProxyV3(
                     address(timelock),
                     address(nounsToken),
                     predictedSplitEscrowAddress,
+                    splitDeployer,
                     vetoer,
                     address(timelock),
                     daoLogicImplementation,

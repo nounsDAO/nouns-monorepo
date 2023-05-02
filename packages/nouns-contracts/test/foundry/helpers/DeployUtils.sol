@@ -20,6 +20,16 @@ import { NounsDAOProxyV2 } from '../../../contracts/governance/NounsDAOProxyV2.s
 import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
 import { NounsDAOSplitEscrow } from '../../../contracts/governance/split/NounsDAOSplitEscrow.sol';
 import { Inflator } from '../../../contracts/Inflator.sol';
+import { NounsDAOExecutorV2 } from '../../../contracts/governance/NounsDAOExecutorV2.sol';
+import { ProxyRegistryMock } from './ProxyRegistryMock.sol';
+import { SplitDAODeployer } from '../../../contracts/governance/split/SplitDAODeployer.sol';
+import { NounsTokenFork } from '../../../contracts/governance/split/newdao/token/NounsTokenFork.sol';
+import { NounsAuctionHouseFork } from '../../../contracts/governance/split/newdao/NounsAuctionHouseFork.sol';
+import { NounsDAOLogicV1Fork } from '../../../contracts/governance/split/newdao/governance/NounsDAOLogicV1Fork.sol';
+import { NounsAuctionHouse } from '../../../contracts/NounsAuctionHouse.sol';
+import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionHouseProxy.sol';
+import { NounsAuctionHouseProxyAdmin } from '../../../contracts/proxies/NounsAuctionHouseProxyAdmin.sol';
+import { ERC1967Proxy } from '@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol';
 
 abstract contract DeployUtils is Test, DescriptorHelpers {
     uint256 constant TIMELOCK_DELAY = 2 days;
@@ -27,6 +37,10 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
     uint256 constant VOTING_DELAY = 1;
     uint256 constant PROPOSAL_THRESHOLD = 1;
     uint256 constant QUORUM_VOTES_BPS = 2000;
+    uint32 constant LAST_MINUTE_BLOCKS = 10;
+    uint32 constant OBJECTION_PERIOD_BLOCKS = 10;
+    uint32 constant UPDATABLE_PERIOD_BLOCKS = 10;
+    uint256 constant DELAYED_GOV_DURATION = 30 days;
 
     function _deployAndPopulateDescriptor() internal returns (NounsDescriptor) {
         NounsDescriptor descriptor = new NounsDescriptor();
@@ -88,35 +102,34 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         address nounsToken,
         address vetoer
     ) internal returns (NounsDAOLogicV1 dao) {
-
         uint256 nonce = vm.getNonce(address(this));
-        address predictedSplitEscrowAddress = computeCreateAddress(address(this), nonce+2);
-        dao =
-            NounsDAOLogicV1(
-                payable(
-                    new NounsDAOProxyV3(
-                        timelock,
-                        nounsToken,
-                        predictedSplitEscrowAddress,
-                        vetoer,
-                        timelock,
-                        address(new NounsDAOLogicV3()),
-                        NounsDAOStorageV3.NounsDAOParams({
-                            votingPeriod: VOTING_PERIOD,
-                            votingDelay: VOTING_DELAY,
-                            proposalThresholdBPS: PROPOSAL_THRESHOLD,
-                            lastMinuteWindowInBlocks: 0,
-                            objectionPeriodDurationInBlocks: 0,
-                            proposalUpdatablePeriodInBlocks: 0
-                        }),
-                        NounsDAOStorageV3.DynamicQuorumParams({
-                            minQuorumVotesBPS: 200,
-                            maxQuorumVotesBPS: 2000,
-                            quorumCoefficient: 10000
-                        })
-                    )
+        address predictedSplitEscrowAddress = computeCreateAddress(address(this), nonce + 2);
+        dao = NounsDAOLogicV1(
+            payable(
+                new NounsDAOProxyV3(
+                    timelock,
+                    nounsToken,
+                    predictedSplitEscrowAddress,
+                    address(0),
+                    vetoer,
+                    timelock,
+                    address(new NounsDAOLogicV3()),
+                    NounsDAOStorageV3.NounsDAOParams({
+                        votingPeriod: VOTING_PERIOD,
+                        votingDelay: VOTING_DELAY,
+                        proposalThresholdBPS: PROPOSAL_THRESHOLD,
+                        lastMinuteWindowInBlocks: 0,
+                        objectionPeriodDurationInBlocks: 0,
+                        proposalUpdatablePeriodInBlocks: 0
+                    }),
+                    NounsDAOStorageV3.DynamicQuorumParams({
+                        minQuorumVotesBPS: 200,
+                        maxQuorumVotesBPS: 2000,
+                        quorumCoefficient: 10000
+                    })
                 )
-            );
+            )
+        );
         address(new NounsDAOSplitEscrow(address(dao)));
     }
 
@@ -145,5 +158,82 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
                     )
                 )
             );
+    }
+
+    function _deployDAOV3() internal returns (NounsDAOLogicV3) {
+        address noundersDAO = makeAddr('noundersDAO');
+        address vetoer = makeAddr('vetoer');
+
+        NounsDAOExecutorV2 timelock = NounsDAOExecutorV2(
+            payable(address(new ERC1967Proxy(address(new NounsDAOExecutorV2()), '')))
+        );
+        timelock.initialize(address(1), TIMELOCK_DELAY);
+
+        NounsAuctionHouse auctionLogic = new NounsAuctionHouse();
+        NounsAuctionHouseProxyAdmin auctionAdmin = new NounsAuctionHouseProxyAdmin();
+        NounsAuctionHouseProxy auctionProxy = new NounsAuctionHouseProxy(
+            address(auctionLogic),
+            address(auctionAdmin),
+            ''
+        );
+        auctionAdmin.transferOwnership(address(timelock));
+
+        NounsToken nounsToken = new NounsToken(
+            noundersDAO,
+            address(auctionProxy),
+            _deployAndPopulateV2(),
+            new NounsSeeder(),
+            new ProxyRegistryMock()
+        );
+        nounsToken.transferOwnership(address(timelock));
+        address daoLogicImplementation = address(new NounsDAOLogicV3());
+
+        uint256 nonce = vm.getNonce(address(this));
+        address predictedSplitEscrowAddress = computeCreateAddress(address(this), nonce + 6);
+
+        SplitDAODeployer splitDeployer = new SplitDAODeployer(
+            address(new NounsTokenFork()),
+            address(new NounsAuctionHouseFork()),
+            address(new NounsDAOLogicV1Fork()),
+            address(new NounsDAOExecutorV2()),
+            predictedSplitEscrowAddress,
+            DELAYED_GOV_DURATION
+        );
+
+        NounsDAOLogicV3 dao = NounsDAOLogicV3(
+            payable(
+                new NounsDAOProxyV3(
+                    address(timelock),
+                    address(nounsToken),
+                    predictedSplitEscrowAddress,
+                    address(splitDeployer),
+                    vetoer,
+                    address(timelock),
+                    daoLogicImplementation,
+                    NounsDAOStorageV3.NounsDAOParams({
+                        votingPeriod: VOTING_PERIOD,
+                        votingDelay: VOTING_DELAY,
+                        proposalThresholdBPS: PROPOSAL_THRESHOLD,
+                        lastMinuteWindowInBlocks: LAST_MINUTE_BLOCKS,
+                        objectionPeriodDurationInBlocks: OBJECTION_PERIOD_BLOCKS,
+                        proposalUpdatablePeriodInBlocks: UPDATABLE_PERIOD_BLOCKS
+                    }),
+                    NounsDAOStorageV3.DynamicQuorumParams({
+                        minQuorumVotesBPS: 200,
+                        maxQuorumVotesBPS: 2000,
+                        quorumCoefficient: 10000
+                    })
+                )
+            )
+        );
+
+        address(new NounsDAOSplitEscrow(address(dao)));
+
+        vm.prank(address(timelock));
+        timelock.setPendingAdmin(address(dao));
+        vm.prank(address(dao));
+        timelock.acceptAdmin();
+
+        return dao;
     }
 }

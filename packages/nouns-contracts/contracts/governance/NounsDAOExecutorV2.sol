@@ -19,8 +19,9 @@ pragma solidity ^0.8.6;
 
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { Initializable } from '@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol';
+import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
 
-contract NounsDAOExecutorV2 is Initializable {
+contract NounsDAOExecutorV2 is UUPSUpgradeable, Initializable {
     event NewAdmin(address indexed newAdmin);
     event NewPendingAdmin(address indexed newPendingAdmin);
     event NewDelay(uint256 indexed newDelay);
@@ -191,5 +192,22 @@ contract NounsDAOExecutorV2 is Initializable {
         require(msg.sender == admin, 'NounsDAOExecutor::executeTransaction: Call must come from admin.');
 
         success = IERC20(erc20Token).transfer(newDAOTreasury, tokensToSend);
+    }
+
+    /**
+     * @dev Function that should revert when `msg.sender` is not authorized to upgrade the contract. Called by
+     * {upgradeTo} and {upgradeToAndCall}.
+     *
+     * Normally, this function will use an xref:access.adoc[access control] modifier such as {Ownable-onlyOwner}.
+     *
+     * ```solidity
+     * function _authorizeUpgrade(address) internal override onlyOwner {}
+     * ```
+     */
+    function _authorizeUpgrade(address) internal view override {
+        require(
+            msg.sender == address(this),
+            'NounsDAOExecutor::_authorizeUpgrade: Call must come from NounsDAOExecutor.'
+        );
     }
 }

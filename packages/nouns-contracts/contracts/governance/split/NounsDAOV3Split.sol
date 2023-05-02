@@ -17,6 +17,7 @@ pragma solidity ^0.8.6;
 
 import { NounsDAOStorageV3, INounsDAOSplitEscrow } from '../NounsDAOInterfaces.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+import { NounsTokenFork } from './newdao/token/NounsTokenFork.sol';
 
 library NounsDAOV3Split {
     error SplitThresholdNotMet();
@@ -44,17 +45,21 @@ library NounsDAOV3Split {
         ds.splitEscrow.returnTokensToOwner(msg.sender, tokenIds);
     }
 
-    function executeSplit(NounsDAOStorageV3.StorageV3 storage ds) external {
+    function executeSplit(NounsDAOStorageV3.StorageV3 storage ds)
+        external
+        returns (address splitTreasury, address splitToken)
+    {
         if (isSplitPeriodActive(ds)) revert SplitPeriodActive();
 
         uint256 tokensInEscrow = ds.splitEscrow.numTokensInEscrow();
         if (tokensInEscrow < splitThreshold(ds)) revert SplitThresholdNotMet();
 
-        ds.splitDAOTreasury = ds.splitDAODeployer.deploySplitDAO();
-        sendProRataTreasury(ds, ds.splitDAOTreasury, tokensInEscrow, adjustedTotalSupply(ds));
-
+        (splitTreasury, splitToken) = ds.splitDAODeployer.deploySplitDAO();
+        sendProRataTreasury(ds, splitTreasury, tokensInEscrow, adjustedTotalSupply(ds));
         ds.splitEscrow.closeEscrow();
 
+        ds.splitDAOTreasury = splitTreasury;
+        ds.splitDAOToken = splitToken;
         ds.splitEndTimestamp = block.timestamp + SPLIT_PERIOD_DURTION;
     }
 
@@ -66,6 +71,8 @@ library NounsDAOV3Split {
         for (uint256 i = 0; i < tokenIds.length; i++) {
             ds.nouns.transferFrom(msg.sender, address(ds.timelock), tokenIds[i]);
         }
+
+        NounsTokenFork(ds.splitDAOToken).claimDuringSplitPeriod(msg.sender, tokenIds);
     }
 
     function withdrawSplitTokensToDAO(NounsDAOStorageV3.StorageV3 storage ds, uint256[] calldata tokenIds) external {

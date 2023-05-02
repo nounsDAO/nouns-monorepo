@@ -6,8 +6,10 @@ import { ISplitDAODeployer } from '../../../contracts/governance/NounsDAOInterfa
 
 contract SplitDAODeployerMock is ISplitDAODeployer, StdCheats {
     address public mockTreasury = makeAddr('mock treasury');
+    address public mockToken = makeAddr('mock token');
 
-    function deploySplitDAO() external view returns (address treasury) {
+    function deploySplitDAO() external view returns (address treasury, address token) {
         treasury = mockTreasury;
+        token = mockToken;
     }
 }

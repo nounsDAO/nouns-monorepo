@@ -535,7 +535,7 @@ interface NounsTokenLike {
 }
 
 interface ISplitDAODeployer {
-    function deploySplitDAO() external returns (address treasury);
+    function deploySplitDAO() external returns (address treasury, address token);
 }
 
 interface INounsDAOExecutorV2 is INounsDAOExecutor {
@@ -620,6 +620,7 @@ contract NounsDAOStorageV3 {
         ISplitDAODeployer splitDAODeployer;
         address[] erc20TokensToIncludeInSplit;
         address splitDAOTreasury;
+        address splitDAOToken;
         uint256 splitEndTimestamp;
     }
 
