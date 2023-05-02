@@ -21,7 +21,7 @@ import { NounsToken } from './newdao/token/NounsToken.sol';
 import { NounsAuctionHouse } from './newdao/NounsAuctionHouse.sol';
 import { NounsDAOExecutorV2 } from '../NounsDAOExecutorV2.sol';
 import { NounsDAOProxy } from '../NounsDAOProxy.sol';
-import { NounsDAOLogicV1 } from '../NounsDAOLogicV1.sol';
+import { NounsDAOLogicV3 } from '../NounsDAOLogicV3.sol';
 import { NounsDAOLogicV1Fork } from './newdao/governance/NounsDAOLogicV1Fork.sol';
 
 contract SplitDAODeployer is ISplitDAODeployer {
@@ -71,7 +71,7 @@ contract SplitDAODeployer is ISplitDAODeployer {
         NounsToken originalToken = NounsToken(address(splitEscrow.nounsToken()));
         NounsAuctionHouse originalAuction = NounsAuctionHouse(originalToken.minter());
         NounsDAOExecutorV2 originalTimelock = NounsDAOExecutorV2(payable(originalToken.owner()));
-        NounsDAOLogicV1 originalDAO = NounsDAOLogicV1(originalTimelock.admin());
+        NounsDAOLogicV3 originalDAO = NounsDAOLogicV3(payable(originalTimelock.admin()));
 
         NounsToken(token).initialize(
             treasury,
@@ -100,6 +100,7 @@ contract SplitDAODeployer is ISplitDAODeployer {
             originalDAO.votingDelay(),
             originalDAO.proposalThresholdBPS(),
             originalDAO.quorumVotesBPS(),
+            originalDAO.erc20TokensToIncludeInSplit(),
             block.timestamp + delayedGovernanceMaxDuration
         );
 

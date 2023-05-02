@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.6;
 
-import { INounsDAOExecutor } from './INounsDAOExecutor.sol';
+import { NounsDAOExecutorV2 } from '../../../NounsDAOExecutorV2.sol';
 import { NounsTokenLike } from './NounsTokenLike.sol';
 
 /**
@@ -37,7 +37,7 @@ contract NounsDAOStorageV1 {
     uint256 public proposalCount;
 
     /// @notice The address of the Nouns DAO Executor NounsDAOExecutor
-    INounsDAOExecutor public timelock;
+    NounsDAOExecutorV2 public timelock;
 
     /// @notice The address of the Nouns tokens
     NounsTokenLike public nouns;
@@ -49,6 +49,8 @@ contract NounsDAOStorageV1 {
     mapping(address => uint256) public latestProposalIds;
 
     uint256 public delayedGovernanceExpirationTimestamp;
+
+    address[] public erc20TokensToIncludeInQuit;
 
     struct Proposal {
         /// @notice Unique id for looking up a proposal

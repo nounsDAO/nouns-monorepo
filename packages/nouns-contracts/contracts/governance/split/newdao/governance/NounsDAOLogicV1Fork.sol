@@ -63,11 +63,16 @@ pragma solidity ^0.8.6;
 import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
 import { NounsDAOEvents } from './NounsDAOEvents.sol';
 import { NounsDAOStorageV1 } from './NounsDAOStorageV1.sol';
-import { INounsDAOExecutor } from './INounsDAOExecutor.sol';
+import { NounsDAOExecutorV2 } from '../../../NounsDAOExecutorV2.sol';
 import { NounsTokenLike } from './NounsTokenLike.sol';
+import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 
 contract NounsDAOLogicV1Fork is UUPSUpgradeable, NounsDAOStorageV1, NounsDAOEvents {
+    error AdminOnly();
     error WaitingForTokensToClaimOrExpiration();
+
+    event ERC20TokensToIncludeInQuitSet(address[] oldErc20Tokens, address[] newErc20tokens);
+    event Quit(address indexed msgSender, uint256[] tokenIds);
 
     /// @notice The name of this contract
     string public constant name = 'Nouns DAO';
@@ -115,6 +120,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, NounsDAOStorageV1, NounsDAOEven
      * @param votingDelay_ The initial voting delay
      * @param proposalThresholdBPS_ The initial proposal threshold in basis points
      * @param quorumVotesBPS_ The initial quorum votes threshold in basis points
+     * @param erc20TokensToIncludeInQuit_ The initial list of ERC20 tokens to include when quitting
      * @param delayedGovernanceExpirationTimestamp_ The delayed governance expiration timestamp
      */
     function initialize(
@@ -125,6 +131,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, NounsDAOStorageV1, NounsDAOEven
         uint256 votingDelay_,
         uint256 proposalThresholdBPS_,
         uint256 quorumVotesBPS_,
+        address[] memory erc20TokensToIncludeInQuit_,
         uint256 delayedGovernanceExpirationTimestamp_
     ) public virtual {
         require(address(timelock) == address(0), 'NounsDAO::initialize: can only initialize once');
@@ -153,14 +160,47 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, NounsDAOStorageV1, NounsDAOEven
         emit ProposalThresholdBPSSet(proposalThresholdBPS, proposalThresholdBPS_);
         emit QuorumVotesBPSSet(quorumVotesBPS, quorumVotesBPS_);
 
-        timelock = INounsDAOExecutor(timelock_);
+        timelock = NounsDAOExecutorV2(payable(timelock_));
         nouns = NounsTokenLike(nouns_);
         vetoer = vetoer_;
         votingPeriod = votingPeriod_;
         votingDelay = votingDelay_;
         proposalThresholdBPS = proposalThresholdBPS_;
         quorumVotesBPS = quorumVotesBPS_;
+        erc20TokensToIncludeInQuit = erc20TokensToIncludeInQuit_;
         delayedGovernanceExpirationTimestamp = delayedGovernanceExpirationTimestamp_;
+    }
+
+    function quit(uint256[] calldata tokenIds) external {
+        for (uint256 i = 0; i < tokenIds.length; i++) {
+            nouns.transferFrom(msg.sender, address(timelock), tokenIds[i]);
+        }
+
+        uint256 totalSupply = adjustedTotalSupply();
+
+        uint256 ethToSend = (address(timelock).balance * tokenIds.length) / totalSupply;
+        timelock.sendETHToNewDAO(msg.sender, ethToSend);
+
+        for (uint256 i = 0; i < erc20TokensToIncludeInQuit.length; i++) {
+            IERC20 erc20token = IERC20(erc20TokensToIncludeInQuit[i]);
+            uint256 tokensToSend = (erc20token.balanceOf(address(timelock)) * tokenIds.length) / totalSupply;
+            timelock.sendERC20ToNewDAO(msg.sender, address(erc20token), tokensToSend);
+        }
+
+        emit Quit(msg.sender, tokenIds);
+    }
+
+    function _setErc20TokensToIncludeInQuit(address[] calldata erc20tokens) external {
+        if (msg.sender != admin) revert AdminOnly();
+
+        address[] memory oldErc20TokensToIncludeInQuit = erc20TokensToIncludeInQuit;
+        erc20TokensToIncludeInQuit = erc20tokens;
+
+        emit ERC20TokensToIncludeInQuitSet(oldErc20TokensToIncludeInQuit, erc20tokens);
+    }
+
+    function adjustedTotalSupply() public view returns (uint256) {
+        return nouns.totalSupply() - nouns.balanceOf(address(timelock));
     }
 
     struct ProposalTemp {
@@ -193,7 +233,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, NounsDAOStorageV1, NounsDAOEven
 
         ProposalTemp memory temp;
 
-        temp.totalSupply = nouns.totalSupply();
+        temp.totalSupply = adjustedTotalSupply();
 
         temp.proposalThreshold = bps2Uint(proposalThresholdBPS, temp.totalSupply);
 
@@ -671,7 +711,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, NounsDAOStorageV1, NounsDAOEven
      * Differs from `GovernerBravo` which uses fixed amount
      */
     function proposalThreshold() public view returns (uint256) {
-        return bps2Uint(proposalThresholdBPS, nouns.totalSupply());
+        return bps2Uint(proposalThresholdBPS, adjustedTotalSupply());
     }
 
     /**
@@ -679,7 +719,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, NounsDAOStorageV1, NounsDAOEven
      * Differs from `GovernerBravo` which uses fixed amount
      */
     function quorumVotes() public view returns (uint256) {
-        return bps2Uint(quorumVotesBPS, nouns.totalSupply());
+        return bps2Uint(quorumVotesBPS, adjustedTotalSupply());
     }
 
     function bps2Uint(uint256 bps, uint256 number) internal pure returns (uint256) {

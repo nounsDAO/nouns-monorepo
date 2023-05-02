@@ -226,7 +226,11 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @param description the updated description
      * @param updateMessage short message to explain the update
      */
-    function updateProposalDescription(uint256 proposalId, string calldata description, string calldata updateMessage) external {
+    function updateProposalDescription(
+        uint256 proposalId,
+        string calldata description,
+        string calldata updateMessage
+    ) external {
         ds.updateProposalDescription(proposalId, description, updateMessage);
     }
 
@@ -759,6 +763,10 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
 
     function objectionPeriodDurationInBlocks() public view returns (uint256) {
         return ds.objectionPeriodDurationInBlocks;
+    }
+
+    function erc20TokensToIncludeInSplit() public view returns (address[] memory) {
+        return ds.erc20TokensToIncludeInSplit;
     }
 
     receive() external payable {}
