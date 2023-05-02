@@ -22,6 +22,7 @@ import { NounsAuctionHouse } from './newdao/NounsAuctionHouse.sol';
 import { NounsDAOExecutorV2 } from '../NounsDAOExecutorV2.sol';
 import { NounsDAOProxy } from '../NounsDAOProxy.sol';
 import { NounsDAOLogicV1 } from '../NounsDAOLogicV1.sol';
+import { NounsDAOLogicV1Fork } from './newdao/governance/NounsDAOLogicV1Fork.sol';
 
 contract SplitDAODeployer is ISplitDAODeployer {
     event DAODeployed(address token, address auction, address governor, address treasury);
@@ -84,7 +85,7 @@ contract SplitDAODeployer is ISplitDAODeployer {
             originalAuction.duration()
         );
 
-        NounsDAOLogicV1(governor).initialize(
+        NounsDAOLogicV1Fork(governor).initialize(
             treasury,
             token,
             address(0),

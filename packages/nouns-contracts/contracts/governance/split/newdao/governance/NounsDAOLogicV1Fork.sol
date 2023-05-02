@@ -66,7 +66,7 @@ import { NounsDAOStorageV1 } from './NounsDAOStorageV1.sol';
 import { INounsDAOExecutor } from './INounsDAOExecutor.sol';
 import { NounsTokenLike } from './NounsTokenLike.sol';
 
-contract NounsDAOLogicV1 is UUPSUpgradeable, NounsDAOStorageV1, NounsDAOEvents {
+contract NounsDAOLogicV1Fork is UUPSUpgradeable, NounsDAOStorageV1, NounsDAOEvents {
     /// @notice The name of this contract
     string public constant name = 'Nouns DAO';
 
