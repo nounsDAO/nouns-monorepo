@@ -133,28 +133,28 @@ contract NounsToken is INounsToken, OwnableUpgradeable, ERC721Checkpointable, UU
             uint256 nounId = tokenIds[i];
             if (escrow.ownerOfEscrowedToken(splitId, nounId) != msg.sender) revert OnlyTokenOwnerCanClaim();
 
-            _mintWithOriginalSeed(nounId);
+            _mintWithOriginalSeed(msg.sender, nounId);
         }
 
         remainingTokensToClaim -= tokenIds.length;
     }
 
-    function claimDuringSplitPeriod(uint256[] calldata tokenIds) external {
+    function claimDuringSplitPeriod(address to, uint256[] calldata tokenIds) external {
         if (msg.sender != escrow.dao()) revert OnlyOriginalDAO();
 
         for (uint256 i = 0; i < tokenIds.length; i++) {
             uint256 nounId = tokenIds[i];
-            _mintWithOriginalSeed(nounId);
+            _mintWithOriginalSeed(to, nounId);
         }
     }
 
-    function _mintWithOriginalSeed(uint256 nounId) internal {
+    function _mintWithOriginalSeed(address to, uint256 nounId) internal {
         (uint48 background, uint48 body, uint48 accessory, uint48 head, uint48 glasses) = NounsToken(
             address(escrow.nounsToken())
         ).seeds(nounId);
         INounsSeeder.Seed memory seed = INounsSeeder.Seed(background, body, accessory, head, glasses);
 
-        _mint(owner(), msg.sender, nounId);
+        _mint(owner(), to, nounId);
         emit NounCreated(nounId, seed);
     }
 
