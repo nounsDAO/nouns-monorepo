@@ -74,6 +74,7 @@ contract SplitDAODeployer is ISplitDAODeployer {
         NounsDAOLogicV1 originalDAO = NounsDAOLogicV1(originalTimelock.admin());
 
         NounsToken(token).initialize(
+            treasury,
             auction,
             splitEscrow,
             splitEscrow.splitId(),
@@ -82,6 +83,7 @@ contract SplitDAODeployer is ISplitDAODeployer {
         );
 
         NounsAuctionHouse(auction).initialize(
+            treasury,
             NounsToken(token),
             originalAuction.weth(),
             originalAuction.timeBuffer(),

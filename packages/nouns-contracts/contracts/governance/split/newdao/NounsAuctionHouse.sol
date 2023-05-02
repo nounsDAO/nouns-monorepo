@@ -67,6 +67,7 @@ contract NounsAuctionHouse is
      * @dev This function can only be called once.
      */
     function initialize(
+        address _owner,
         INounsToken _nouns,
         address _weth,
         uint256 _timeBuffer,
@@ -76,7 +77,7 @@ contract NounsAuctionHouse is
     ) external initializer {
         __Pausable_init();
         __ReentrancyGuard_init();
-        __Ownable_init();
+        _transferOwnership(_owner);
 
         _pause();
 

@@ -109,6 +109,7 @@ contract NounsToken is INounsToken, OwnableUpgradeable, ERC721Checkpointable, UU
     }
 
     function initialize(
+        address _owner,
         address _minter,
         INounsDAOSplitEscrow _escrow,
         uint32 _splitId,
@@ -116,6 +117,7 @@ contract NounsToken is INounsToken, OwnableUpgradeable, ERC721Checkpointable, UU
         uint256 tokensToClaim
     ) external initializer {
         __ERC721_init('Nouns', 'NOUN');
+        _transferOwnership(_owner);
         minter = _minter;
         escrow = _escrow;
         splitId = _splitId;
