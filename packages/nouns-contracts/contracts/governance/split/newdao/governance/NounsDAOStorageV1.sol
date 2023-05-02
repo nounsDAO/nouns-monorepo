@@ -48,6 +48,8 @@ contract NounsDAOStorageV1 {
     /// @notice The latest proposal for each proposer
     mapping(address => uint256) public latestProposalIds;
 
+    uint256 public delayedGovernanceExpirationTimestamp;
+
     struct Proposal {
         /// @notice Unique id for looking up a proposal
         uint256 id;

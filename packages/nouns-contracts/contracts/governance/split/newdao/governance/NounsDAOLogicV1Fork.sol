@@ -67,6 +67,8 @@ import { INounsDAOExecutor } from './INounsDAOExecutor.sol';
 import { NounsTokenLike } from './NounsTokenLike.sol';
 
 contract NounsDAOLogicV1Fork is UUPSUpgradeable, NounsDAOStorageV1, NounsDAOEvents {
+    error WaitingForTokensToClaimOrExpiration();
+
     /// @notice The name of this contract
     string public constant name = 'Nouns DAO';
 
@@ -112,7 +114,8 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, NounsDAOStorageV1, NounsDAOEven
      * @param votingPeriod_ The initial voting period
      * @param votingDelay_ The initial voting delay
      * @param proposalThresholdBPS_ The initial proposal threshold in basis points
-     * * @param quorumVotesBPS_ The initial quorum votes threshold in basis points
+     * @param quorumVotesBPS_ The initial quorum votes threshold in basis points
+     * @param delayedGovernanceExpirationTimestamp_ The delayed governance expiration timestamp
      */
     function initialize(
         address timelock_,
@@ -121,7 +124,8 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, NounsDAOStorageV1, NounsDAOEven
         uint256 votingPeriod_,
         uint256 votingDelay_,
         uint256 proposalThresholdBPS_,
-        uint256 quorumVotesBPS_
+        uint256 quorumVotesBPS_,
+        uint256 delayedGovernanceExpirationTimestamp_
     ) public virtual {
         require(address(timelock) == address(0), 'NounsDAO::initialize: can only initialize once');
         require(msg.sender == admin, 'NounsDAO::initialize: admin only');
@@ -156,6 +160,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, NounsDAOStorageV1, NounsDAOEven
         votingDelay = votingDelay_;
         proposalThresholdBPS = proposalThresholdBPS_;
         quorumVotesBPS = quorumVotesBPS_;
+        delayedGovernanceExpirationTimestamp = delayedGovernanceExpirationTimestamp_;
     }
 
     struct ProposalTemp {
@@ -168,6 +173,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, NounsDAOStorageV1, NounsDAOEven
 
     /**
      * @notice Function used to propose a new proposal. Sender must have delegates above the proposal threshold
+     * Will revert as long as not all tokens were claimed, and as long as the delayed governance has not expired.
      * @param targets Target addresses for proposal calls
      * @param values Eth values for proposal calls
      * @param signatures Function signatures for proposal calls
@@ -182,6 +188,9 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, NounsDAOStorageV1, NounsDAOEven
         bytes[] memory calldatas,
         string memory description
     ) public returns (uint256) {
+        if (block.timestamp < delayedGovernanceExpirationTimestamp || nouns.remainingTokensToClaim() > 0)
+            revert WaitingForTokensToClaimOrExpiration();
+
         ProposalTemp memory temp;
 
         temp.totalSupply = nouns.totalSupply();

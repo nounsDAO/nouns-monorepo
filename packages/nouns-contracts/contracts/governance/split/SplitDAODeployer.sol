@@ -42,18 +42,23 @@ contract SplitDAODeployer is ISplitDAODeployer {
     /// @notice The address of the split escrow contract
     address public splitEscrowAddress;
 
+    /// @notice The maximum duration of the governance delay in new DAOs
+    uint256 public delayedGovernanceMaxDuration;
+
     constructor(
         address tokenImpl_,
         address auctionImpl_,
         address governorImpl_,
         address treasuryImpl_,
-        address splitEscrowAddress_
+        address splitEscrowAddress_,
+        uint256 delayedGovernanceMaxDuration_
     ) {
         tokenImpl = tokenImpl_;
         auctionImpl = auctionImpl_;
         governorImpl = governorImpl_;
         treasuryImpl = treasuryImpl_;
         splitEscrowAddress = splitEscrowAddress_;
+        delayedGovernanceMaxDuration = delayedGovernanceMaxDuration_;
     }
 
     function deploySplitDAO() external returns (address treasury) {
@@ -92,7 +97,8 @@ contract SplitDAODeployer is ISplitDAODeployer {
             originalDAO.votingPeriod(),
             originalDAO.votingDelay(),
             originalDAO.proposalThresholdBPS(),
-            originalDAO.quorumVotesBPS()
+            originalDAO.quorumVotesBPS(),
+            block.timestamp + delayedGovernanceMaxDuration
         );
 
         NounsDAOExecutorV2(payable(treasury)).initialize(governor, originalTimelock.delay());
