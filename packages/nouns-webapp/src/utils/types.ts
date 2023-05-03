@@ -35,11 +35,3 @@ export interface Bid {
   transactionHash: string;
   timestamp: BigNumber;
 }
-
-export interface CandidateSignature {
-  signer: string;
-  expirationTimestamp: BigNumber;
-  proposer: string;
-  slug: string;
-  reason: string | null;
-}

@@ -106,8 +106,14 @@ export const candidateProposalsQuery = (first = 1_000) => gql`
       id
       slug
       proposer
+      lastUpdatedTimestamp
       latestVersion {
         title
+        versionSignatures {
+          signer {
+            id
+          }
+        }
       }
     }
   }
@@ -119,6 +125,10 @@ export const candidateProposalQuery = (id: string) => gql`
     id
     slug
     proposer
+    lastUpdatedTimestamp
+    versions {
+      title
+    }
     latestVersion {
       title
       description
@@ -126,12 +136,17 @@ export const candidateProposalQuery = (id: string) => gql`
       values
       signatures
       calldatas
+      encodedProposalHash
       versionSignatures {
+        reason
+        expirationTimestamp
+        sig
         signer {
           id
+          proposals {
+            id
+          }
         }
-        sig
-        expirationTimestamp
       }
     }
   }

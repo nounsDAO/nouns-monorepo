@@ -15,7 +15,7 @@ import { useLogs } from '../hooks/useLogs';
 import * as R from 'ramda';
 import config, { CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
-import { proposalQuery, partialProposalsQuery } from './subgraph';
+import { proposalQuery, partialProposalsQuery, candidateProposalQuery } from './subgraph';
 import BigNumber from 'bignumber.js';
 import { useBlockTimestamp } from '../hooks/useBlockTimestamp';
 
@@ -42,7 +42,7 @@ export enum ProposalState {
   EXPIRED,
   EXECUTED,
   VETOED,
-  OBJECTION_PERIOD
+  OBJECTION_PERIOD,
 }
 
 interface ProposalCallResult {
@@ -96,6 +96,7 @@ interface ProposalTransactionDetails {
   values: string[];
   signatures: string[];
   calldatas: string[];
+  encodedProposalHash: string;
 }
 
 export interface PartialProposalSubgraphEntity {
@@ -135,6 +136,77 @@ export interface ProposalTransaction {
   calldata: string;
   decodedCalldata?: string;
   usdcValue?: number;
+}
+
+export interface ProposalCandidateInfo {
+  id: string;
+  slug: string;
+  proposer: string;
+  lastUpdatedTimestamp: number;
+  versionsCount: number;
+}
+
+export interface ProposalCandidateVersion {
+  title: string;
+  description: string;
+  // details: ProposalTransactionDetails;
+  details: ProposalDetail[];
+  versionSignatures: {
+    reason: string;
+    expirationTimestamp: number;
+    sig: string;
+    signer: {
+      id: string;
+      proposals: {
+        id: string;
+      }[];
+    };
+  }[];
+}
+
+export interface ProposalCandidate extends ProposalCandidateInfo {
+  version: ProposalCandidateVersion;
+}
+
+export interface ProposalCandidateSubgraphEntity extends ProposalCandidateInfo {
+  versions: {
+    title: string;
+  }[];
+  latestVersion: {
+    title: string;
+    description: string;
+    targets: string[];
+    values: string[];
+    signatures: string[];
+    calldatas: string[];
+    encodedProposalHash: string;
+    versionSignatures: {
+      reason: string;
+      expirationTimestamp: number;
+      sig: string;
+      signer: {
+        id: string;
+        proposals: {
+          id: string;
+        }[];
+      };
+    }[];
+  };
+}
+
+export interface PartialCandidateSignature {
+  signer: {
+    id: string;
+  };
+  expirationTimestamp: string;
+}
+
+export interface CandidateSignature {
+  signer: string;
+  expirationTimestamp: number;
+  proposer: string;
+  slug: string;
+  reason: string | null;
 }
 
 const abi = new utils.Interface(NounsDAOV2ABI);
@@ -433,6 +505,40 @@ const parsePartialSubgraphProposal = (
   };
 };
 
+const parseSubgraphCandidate = (
+  candidate: ProposalCandidateSubgraphEntity | undefined,
+  blockNumber: number | undefined,
+  timestamp: number | undefined,
+) => {
+  if (!candidate) {
+    return;
+  }
+  const description = candidate.latestVersion.description
+    ?.replace(/\\n/g, '\n')
+    .replace(/(^['"]|['"]$)/g, '');
+  const details = {
+    targets: candidate.latestVersion.targets,
+    values: candidate.latestVersion.values,
+    signatures: candidate.latestVersion.signatures,
+    calldatas: candidate.latestVersion.calldatas,
+    encodedProposalHash: candidate.latestVersion.encodedProposalHash,
+  };
+  return {
+    id: candidate.id,
+    slug: candidate.slug,
+    proposer: candidate.proposer,
+    lastUpdatedTimestamp: candidate.lastUpdatedTimestamp,
+    versionsCount: candidate.versions.length,
+    version: {
+      title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
+      description: description ?? 'No description.',
+      details: formatProposalTransactionDetails(details),
+      transactionHash: details.encodedProposalHash,
+      versionSignatures: candidate.latestVersion.versionSignatures,
+    },
+  };
+};
+
 const parseSubgraphProposal = (
   proposal: ProposalSubgraphEntity | undefined,
   blockNumber: number | undefined,
@@ -460,7 +566,7 @@ const parseSubgraphProposal = (
     eta: proposal.executionETA ? new Date(Number(proposal.executionETA) * 1000) : undefined,
     details: formatProposalTransactionDetails(proposal),
     transactionHash: proposal.createdTransactionHash,
-    objectionPeriodEndBlock: parseInt(proposal.objectionPeriodEndBlock)
+    objectionPeriodEndBlock: parseInt(proposal.objectionPeriodEndBlock),
   };
 };
 
@@ -545,6 +651,25 @@ export const useProposal = (id: string | number): Proposal | undefined => {
   return parseSubgraphProposal(useQuery(proposalQuery(id)).data?.proposal, blockNumber, timestamp);
 };
 
+export const useCandidate = (id: string): ProposalCandidate | undefined => {
+  const blockNumber = useBlockNumber();
+  const timestamp = useBlockTimestamp(blockNumber);
+  return parseSubgraphCandidate(
+    useQuery(candidateProposalQuery(id)).data?.proposalCandidate,
+    blockNumber,
+    timestamp,
+  );
+};
+
+export const useCancelSignature = () => {
+  const { send: cancelSig, state: cancelSigState } = useContractFunction(
+    nounsDaoContract,
+    'cancelSig',
+  );
+
+  return { cancelSig, cancelSigState };
+};
+
 export const useCastVote = () => {
   const { send: castVote, state: castVoteState } = useContractFunction(
     nounsDaoContract,
@@ -606,19 +731,28 @@ export const usePropose = () => {
 };
 
 export const useUpdateProposal = () => {
-  const { send: updateProposal, state: updateProposalState } = useContractFunction(nounsDaoContract, 'updateProposal');
+  const { send: updateProposal, state: updateProposalState } = useContractFunction(
+    nounsDaoContract,
+    'updateProposal',
+  );
   return { updateProposal, updateProposalState };
-}
+};
 
 export const useProposeBySigs = () => {
-  const { send: proposeBySigs, state: proposeBySigsState } = useContractFunction(nounsDaoContract, 'proposeBySigs');
+  const { send: proposeBySigs, state: proposeBySigsState } = useContractFunction(
+    nounsDaoContract,
+    'proposeBySigs',
+  );
   return { proposeBySigs, proposeBySigsState };
 };
 
 export const useUpdateProposalBySigs = () => {
-  const { send: updateProposalBySigs, state: updateProposalBySigState } = useContractFunction(nounsDaoContract, 'updateProposalBySigs');
+  const { send: updateProposalBySigs, state: updateProposalBySigState } = useContractFunction(
+    nounsDaoContract,
+    'updateProposalBySigs',
+  );
   return { updateProposalBySigs, updateProposalBySigState };
-}
+};
 
 export const useQueueProposal = () => {
   const { send: queueProposal, state: queueProposalState } = useContractFunction(
