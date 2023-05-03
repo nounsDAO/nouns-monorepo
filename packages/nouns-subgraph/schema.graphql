@@ -464,7 +464,7 @@ type ProposalCandidateVersion @entity(immutable: true) {
   versionSignatures: [ProposalCandidateSignature!]! @derivedFrom(field: "version")
 }
 
-type ProposalCandidateSignature @entity(immutable: true) {
+type ProposalCandidateSignature @entity {
   "A concatination of tx hash and log index, just to make sure these entities have a unique ID"
   id: ID!
 
@@ -488,6 +488,9 @@ type ProposalCandidateSignature @entity(immutable: true) {
 
   "The free text signer reason"
   reason: String!
+
+  "Whether this signature has been canceled"
+  canceled: Boolean!
 }
 
 type ProposalFeedback @entity(immutable: true) {

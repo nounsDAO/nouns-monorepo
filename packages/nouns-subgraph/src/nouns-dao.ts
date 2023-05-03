@@ -14,6 +14,7 @@ import {
   ProposalObjectionPeriodSet,
   ProposalDescriptionUpdated,
   ProposalTransactionsUpdated,
+  SignatureCancelled,
 } from './types/NounsDAO/NounsDAO';
 import {
   getOrCreateDelegate,
@@ -36,7 +37,7 @@ import {
 } from './utils/constants';
 import { dynamicQuorumVotes } from './utils/dynamicQuorum';
 import { ParsedProposalV3, extractTitle } from './custom-types/ParsedProposalV3';
-import { Proposal } from './types/schema';
+import { Proposal, ProposalCandidateSignature } from './types/schema';
 
 export function handleProposalCreatedWithRequirements(
   event: ProposalCreatedWithRequirements1,
@@ -297,6 +298,25 @@ export function handleProposalObjectionPeriodSet(event: ProposalObjectionPeriodS
   const proposal = getOrCreateProposal(event.params.id.toString());
   proposal.objectionPeriodEndBlock = event.params.objectionPeriodEndBlock;
   proposal.save();
+}
+
+export function handleSignatureCanceled(event: SignatureCancelled): void {
+  const sigId = event.params.signer
+    .toHexString()
+    .concat('-')
+    .concat(event.params.sig.toHexString());
+  const sig = ProposalCandidateSignature.load(sigId);
+
+  if (sig == null) {
+    log.error('[handleSignatureCanceled] Sig {} not found. Hash: {}', [
+      sigId,
+      event.transaction.hash.toHex(),
+    ]);
+    return;
+  }
+
+  sig.canceled = true;
+  sig.save();
 }
 
 function captureProposalVersion(
