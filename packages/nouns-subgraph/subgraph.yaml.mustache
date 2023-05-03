@@ -81,6 +81,7 @@ dataSources:
         - Proposal
         - Vote
         - Governance
+        - ProposalCandidateSignature
       abis:
         - name: NounsDAO
           file: ../nouns-contracts/abi/contracts/governance/NounsDAOLogicV3.sol/NounsDAOLogicV3.json
@@ -113,6 +114,8 @@ dataSources:
           handler: handleProposalTransactionsUpdated
         - event: ProposalObjectionPeriodSet(indexed uint256,uint256)
           handler: handleProposalObjectionPeriodSet
+        - event: SignatureCancelled(indexed address,bytes)
+          handler: handleSignatureCanceled
   - kind: ethereum/contract
     name: NounsDAOData
     network: {{network}}

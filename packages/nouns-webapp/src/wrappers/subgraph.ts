@@ -138,15 +138,17 @@ export const candidateProposalQuery = (id: string) => gql`
       calldatas
       encodedProposalHash
       versionSignatures {
-        reason
-        expirationTimestamp
-        sig
+        id
         signer {
           id
           proposals {
             id
           }
         }
+        sig
+        expirationTimestamp
+        canceled
+        reason
       }
     }
   }

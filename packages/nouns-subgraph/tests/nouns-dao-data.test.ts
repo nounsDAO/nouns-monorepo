@@ -124,7 +124,7 @@ describe('nouns-dao-data', () => {
       assert.i32Equals(version!.versionSignatures.length, 1);
       assert.stringEquals(
         version!.versionSignatures[0],
-        event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString()),
+        signerWithDelegate.toHexString().concat('-').concat(sig.toHexString()),
       );
 
       const signature = ProposalCandidateSignature.load(version!.versionSignatures[0])!;
