@@ -38,6 +38,7 @@
     "@types/js-yaml": "^4.0.5",
     "@types/prompt": "^1.1.0",
     "base64-sol": "^1.0.1",
+    "cryptopunk-icons": "^1.1.6",
     "dotenv": "^10.0.0",
     "ethereum-waffle": "^3.4.4",
     "hardhat": "^2.9.6",
