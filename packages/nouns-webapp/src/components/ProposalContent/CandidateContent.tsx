@@ -14,7 +14,7 @@ import { InformationCircleIcon } from '@heroicons/react/solid';
 import ShortAddress from '../ShortAddress';
 
 interface ProposalContentProps {
-  proposal?: Proposal;
+  proposal?: ProposalCandidate;
 }
 
 export const linkIfAddress = (content: string) => {
@@ -38,6 +38,7 @@ export const transactionLink = (content: string) => {
 
 const ProposalContent: React.FC<ProposalContentProps> = props => {
   const { proposal } = props;
+  console.log('proposal', proposal);
 
   return (
     <>
@@ -46,10 +47,13 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
           <h5>
             <Trans>Description</Trans>
           </h5>
-          {proposal?.description && (
+          {proposal?.version.description && (
             <ReactMarkdown
               className={classes.markdown}
-              children={processProposalDescriptionText(proposal.description, proposal.title)}
+              children={processProposalDescriptionText(
+                proposal.version.description,
+                proposal.version.title,
+              )}
               remarkPlugins={[remarkBreaks]}
             />
           )}
@@ -61,7 +65,7 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
             <Trans>Proposed Transactions</Trans>
           </h5>
           <ol>
-            {proposal?.details?.map((d, i) => {
+            {proposal?.version.details?.map((d, i) => {
               return (
                 <li key={i} className="m-0">
                   {linkIfAddress(d.target)}.{d.functionSig}

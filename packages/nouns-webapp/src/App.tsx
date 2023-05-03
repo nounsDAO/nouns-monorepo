@@ -79,7 +79,7 @@ function App() {
             <Route exact path="/create-draft-proposal" component={CreateDraftProposalPage} />
             <Route exact path="/candidates/create" component={CreateCandidateProposalPage} />
             <Route exact path="/candidates" component={CandidateProposals} />
-            <Route exact path="/candidates/:id" component={CandidateProposalPage} />
+            <Route exact path="/candidates-poc/:id" component={CandidateProposalPage} />
             <Route exact path="/update-proposal/:id" component={UpdateProposalPage} />
             <Route exact path="/draft-proposals" component={DraftProposals} />
             <Route exact path="/draft-proposals/:id" component={DraftProposalPage} />
@@ -87,8 +87,8 @@ function App() {
             <Route exact path="/vote/:id" component={VotePage} />
             <Route exact path="/vote/:id/history" component={ProposalHistory} />
             <Route exact path="/vote/:id/edit" component={EditProposalPage} />
-            <Route exact path="/candidate/:id" component={CandidatePage} />
-            <Route exact path="/candidate/:id/edit" component={EditCandidatePage} />
+            <Route exact path="/candidates/:id" component={CandidatePage} />
+            <Route exact path="/candidates/:id/edit" component={EditCandidatePage} />
             <Route exact path="/playground" component={Playground} />
             <Route exact path="/delegate" component={DelegatePage} />
             <Route exact path="/explore" component={ExplorePage} />

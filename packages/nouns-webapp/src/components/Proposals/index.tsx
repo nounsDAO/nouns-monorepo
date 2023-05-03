@@ -1,4 +1,9 @@
-import { PartialProposal, ProposalState, useProposalThreshold } from '../../wrappers/nounsDao';
+import {
+  PartialProposal,
+  ProposalCandidate,
+  ProposalState,
+  useProposalThreshold,
+} from '../../wrappers/nounsDao';
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 import ProposalStatus from '../ProposalStatus';
 import classes from './Proposals.module.css';
@@ -14,7 +19,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '../../i18n/locales';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DelegationModal from '../DelegationModal';
 import { i18n } from '@lingui/core';
 import en from 'dayjs/locale/en';
@@ -22,6 +27,7 @@ import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
 import Section from '../../layout/Section';
 import CandidateCard from '../CandidateCard';
 import Link from '../Link';
+import { useCandidateProposals } from '../../wrappers/nounsData';
 
 dayjs.extend(relativeTime);
 
@@ -101,6 +107,19 @@ const Proposals = ({ proposals }: { proposals: PartialProposal[] }) => {
     }
     return <Trans>Connect wallet to make a proposal.</Trans>;
   };
+
+  // Get candidates
+  const { loading, error, data } = useCandidateProposals();
+  const [candidates, setCandidates] = useState<ProposalCandidate[]>([]);
+  useEffect(() => {
+    if (!loading && !error) {
+      // const candidatesList = data['proposalCandidates'].map((c: PartialProposal) => {
+      //   return <CandidateCard key={c.id} candidate={c} />;
+      // });
+      // console.log(candidatesList);
+      setCandidates(data['proposalCandidates']);
+    }
+  }, [loading, error, data]);
 
   return (
     <div className={classes.proposals}>
@@ -258,14 +277,14 @@ const Proposals = ({ proposals }: { proposals: PartialProposal[] }) => {
           <Col lg={10} className={classes.proposalsList}>
             <Row>
               <Col lg={9}>
-                {proposals?.length ? (
-                  proposals
+                {candidates?.length ? (
+                  candidates
                     .slice(0)
                     .reverse()
-                    .map((p, i) => {
+                    .map((c: ProposalCandidate, i: number) => {
                       return (
                         <div>
-                          <CandidateCard candidate={p} key={p.id} />
+                          <CandidateCard candidate={c} key={c.id} />
                         </div>
                       );
                     })

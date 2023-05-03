@@ -1,32 +1,33 @@
 import React, { useState } from 'react';
 import classes from './CandidateSponsors.module.css';
+import { PartialCandidateSignature } from '../../wrappers/nounsDao';
 
 type Props = {
-  sponsors: `0x${string}`[];
+  signers: PartialCandidateSignature[];
 };
 
-function CandidateSponsors({ sponsors }: Props) {
-  const minSponsorCount = 5;
-  const [sponsorSpots, setSponsorSpots] = useState<`0x${string}`[] | ''[]>();
-  const [emptySponsorSpots, setEmptySponsorSpots] = useState<number[]>();
-  const [sponsorCountOverflow, setSponsorCountOverflow] = useState(0);
+function CandidateSponsors({ signers }: Props) {
+  // todo: get from contract
+  const minSignerCount = 5;
+  const [signerSpots, setSignerSpots] = useState<PartialCandidateSignature[]>();
+  const [emptySignerSpots, setEmptySignerSpots] = useState<number[]>();
+  const [signerCountOverflow, setSignerCountOverflow] = useState(0);
   React.useEffect(() => {
-    if (sponsors.length < minSponsorCount) {
-      setSponsorSpots(sponsors);
-      const emptySpots: number[] = Array(minSponsorCount - sponsors.length).fill(0);
-      setEmptySponsorSpots(emptySpots);
-    } else if (sponsors.length > minSponsorCount) {
-      setSponsorCountOverflow(sponsors.length - minSponsorCount);
-      setSponsorSpots(sponsors.slice(0, minSponsorCount));
+    if (signers && signers.length < minSignerCount) {
+      setSignerSpots(signers);
+    } else if (signers && signers.length > minSignerCount) {
+      setSignerCountOverflow(signers.length - minSignerCount);
+      setSignerSpots(signers.slice(0, minSignerCount));
     } else {
-      setSponsorSpots(sponsors);
+      setSignerSpots(signers);
     }
-  }, [sponsors]);
+  }, [signers]);
 
   return (
     <div className={classes.sponsors}>
-      {sponsorSpots?.length &&
-        sponsorSpots.map(sponsor => {
+      {signerSpots &&
+        signerSpots.length > 0 &&
+        signerSpots.map(signer => {
           return (
             <a href={'[sponsor]'} className={classes.sponsorAvatar}>
               {/* get noun image of sponsor */}
@@ -36,9 +37,11 @@ function CandidateSponsors({ sponsors }: Props) {
         })}
       {/* empty sponsor spots */}
 
-      {emptySponsorSpots &&
-        emptySponsorSpots.length < minSponsorCount &&
-        emptySponsorSpots.map((_, index) => <div className={classes.emptySponsorSpot} />)}
+      {Array(minSignerCount - signers.length)
+        .fill(0)
+        .map((_, index) => (
+          <div className={classes.emptySponsorSpot} />
+        ))}
     </div>
   );
 }
