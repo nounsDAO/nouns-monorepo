@@ -71,31 +71,27 @@
   border-top: 0px;
 }
 
-.destructiveTransitionStateButton {
-  height: 50px;
+.button {
   border-radius: 8px;
-  border-color: var(--brand-color-red);
   font-family: 'PT Root UI';
   font-weight: bold;
-  font-size: 24px;
   transition: all 0.125s ease-in-out;
-  background-color: var(--brand-color-red);
+  background-color: #FAF4F8;
+  color: var(--brand-gray-dark-text);
+  line-height: 1;
+  padding: 10px 16px;
+  height: fit-content;
+  border: none;
+}
+
+.destructiveTransitionStateButton {
+  color: var(--brand-gray-dark-text);
 }
 
 .destructiveTransitionStateButton:hover {
   background-color: var(--brand-color-red);
-  opacity: 0.5;
   cursor: pointer;
-}
-
-.destructiveTransitionStateButtonSection {
-  height: 50px;
-  border-radius: 8px;
-  font-family: 'PT Root UI';
-  font-weight: bold;
-  font-size: 24px;
-  transition: all 0.125s ease-in-out;
-  background-color: var(--brand-color-red);
+  color: #fff;
 }
 
 .spinner {
@@ -206,3 +202,43 @@
   }
 }
 
+.proposerOptionsWrapper {
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  padding: 5px 15px;
+  @media (max-width: 992px) {
+    text-align: center;
+    padding: 10px 10px;
+  }
+}
+
+.proposerOptions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  @media (max-width: 992px) {
+    flex-direction: column;   
+  }
+}
+/* .proposerOptions p {
+  padding-top: 0;
+  margin: 0;
+} */
+
+.proposerOptionsHeader {
+  font-size: 13px; 
+  opacity: 0.7;
+  padding: 0;
+  margin: 0;
+  display: block;
+}
+
+a.primaryButton {
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+}
+
+a.primaryButton:hover {
+  opacity: 0.75;
+}

@@ -1,6 +1,7 @@
 import { Row, Col, Button, Card, Spinner } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import {
+  PartialProposal,
   ProposalState,
   useCancelProposal,
   useCurrentQuorum,
@@ -17,6 +18,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import advanced from 'dayjs/plugin/advancedFormat';
+import en from 'dayjs/locale/en';
 import VoteModal from '../../components/VoteModal';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
@@ -45,10 +47,35 @@ import ShortAddress from '../../components/ShortAddress';
 import StreamWithdrawModal from '../../components/StreamWithdrawModal';
 import { parseStreamCreationCallData } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
 import VoteSignals from '../../components/VoteSignals/VoteSignals';
+import { useActiveLocale } from '../../hooks/useActivateLocale';
+import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '../../i18n/locales';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(advanced);
+
+const getCountdownCopy = (
+  proposal: PartialProposal,
+  currentBlock: number,
+  locale: SupportedLocale,
+) => {
+  const timestamp = Date.now();
+  const endDate =
+    proposal && timestamp && currentBlock
+      ? dayjs(timestamp).add(
+          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
+          'seconds',
+        )
+      : undefined;
+
+  return (
+    <Trans>
+      {dayjs(endDate)
+        .locale(SUPPORTED_LOCALE_TO_DAYSJS_LOCALE[locale] || en)
+        .fromNow(true)}
+    </Trans>
+  );
+};
 
 const VotePage = ({
   match: {
@@ -57,6 +84,7 @@ const VotePage = ({
 }: RouteComponentProps<{ id: string }>) => {
   const proposal = useProposal(id);
   const { account } = useEthers();
+  const activeLocale = useActiveLocale();
 
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
   const [showDynamicQuorumInfoModal, setShowDynamicQuorumInfoModal] = useState<boolean>(false);
@@ -101,10 +129,7 @@ const VotePage = ({
   const endBlock = proposal?.objectionPeriodEndBlock || proposal?.endBlock;
   const endDate =
     proposal && timestamp && currentBlock
-      ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * (endBlock! - currentBlock),
-          'seconds',
-        )
+      ? dayjs(timestamp).add(AVERAGE_BLOCK_TIME_IN_SECS * (endBlock! - currentBlock), 'seconds')
       : undefined;
   const now = dayjs();
 
@@ -131,12 +156,14 @@ const VotePage = ({
     ProposalState.ACTIVE,
     ProposalState.SUCCEEDED,
     ProposalState.QUEUED,
-    ProposalState.OBJECTION_PERIOD
+    ProposalState.OBJECTION_PERIOD,
   ].includes(proposal?.status!);
   const isCancellable =
     isInNonFinalState && proposal?.proposer?.toLowerCase() === account?.toLowerCase();
 
-  const isUpdateable = proposal?.status == ProposalState.PENDING && proposal?.proposer?.toLowerCase() === account?.toLowerCase();
+  const isUpdateable =
+    proposal?.status == ProposalState.PENDING &&
+    proposal?.proposer?.toLowerCase() === account?.toLowerCase();
 
   const isAwaitingStateChange = () => {
     if (hasSucceeded) {
@@ -322,7 +349,9 @@ const VotePage = ({
   }
 
   const isWalletConnected = !(activeAccount === undefined);
-  const isActiveForVoting = proposal?.status === ProposalState.ACTIVE || proposal?.status === ProposalState.OBJECTION_PERIOD;
+  const isActiveForVoting =
+    proposal?.status === ProposalState.ACTIVE ||
+    proposal?.status === ProposalState.OBJECTION_PERIOD;
 
   const forNouns = getNounVotes(data, 1);
   const againstNouns = getNounVotes(data, 0);
@@ -399,50 +428,72 @@ const VotePage = ({
                 </Row>
               );
             })}
-
-        {(isAwaitingStateChange() || isAwaitingDestructiveStateChange()) && (
-          <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
-            <Col className="d-grid gap-4">
-              {isAwaitingStateChange() && (
-                <Button
-                  onClick={moveStateAction}
-                  disabled={isQueuePending || isExecutePending}
-                  variant="dark"
-                  className={classes.transitionStateButton}
-                >
-                  {isQueuePending || isExecutePending ? (
-                    <Spinner animation="border" />
-                  ) : (
-                    <Trans>{moveStateButtonAction} Proposal ⌐◧-◧</Trans>
+        <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
+          <Col className="d-grid gap-4">
+            <div className={classes.proposerOptionsWrapper}>
+              <div className={classes.proposerOptions}>
+                <p>
+                  <span className={classes.proposerOptionsHeader}>Proposer functions</span>
+                  {isUpdateable && (
+                    <>
+                      <Trans>This proposal can be edited for the next </Trans>{' '}
+                      {getCountdownCopy(proposal, currentBlock || 0, activeLocale)}
+                    </>
                   )}
-                </Button>
-              )}
-
-              {isAwaitingDestructiveStateChange() && (
-                <Button
-                  onClick={destructiveStateAction}
-                  disabled={isCancelPending}
-                  variant="danger"
-                  className={classes.destructiveTransitionStateButton}
-                >
-                  {isCancelPending ? (
-                    <Spinner animation="border" />
-                  ) : (
-                    <Trans>{destructiveStateButtonAction} Proposal ⌐◧-◧</Trans>
+                  {isCancellable && !isUpdateable && (
+                    <>
+                      <Trans>This proposal can be canceled for the next </Trans>{' '}
+                      {getCountdownCopy(proposal, currentBlock || 0, activeLocale)}
+                    </>
                   )}
-                </Button>
-              )}
-            </Col>
-          </Row>
-        )}
+                </p>
+                <div className="d-flex gap-3">
+                  {(isAwaitingStateChange() || isAwaitingDestructiveStateChange()) && (
+                    <>
+                      {isAwaitingStateChange() && (
+                        <Button
+                          onClick={moveStateAction}
+                          disabled={isQueuePending || isExecutePending}
+                          variant="dark"
+                          className={classes.transitionStateButton}
+                        >
+                          {isQueuePending || isExecutePending ? (
+                            <Spinner animation="border" />
+                          ) : (
+                            <Trans>{moveStateButtonAction} Proposal ⌐◧-◧</Trans>
+                          )}
+                        </Button>
+                      )}
 
-        { isUpdateable && (
-          <Row>
-            <Col className="d-grid gap-4">
-            <Link to={`/update-proposal/${id}`}><Button style={{marginTop: '10px'}}>Update Proposal</Button></Link>
-            </Col>
-          </Row>
-        )}
+                      {isAwaitingDestructiveStateChange() && (
+                        <Button
+                          onClick={destructiveStateAction}
+                          disabled={isCancelPending}
+                          className={clsx(classes.destructiveTransitionStateButton, classes.button)}
+                        >
+                          {isCancelPending ? (
+                            <Spinner animation="border" />
+                          ) : (
+                            <Trans>{destructiveStateButtonAction} Proposal </Trans>
+                          )}
+                        </Button>
+                      )}
+                    </>
+                  )}
+
+                  {isUpdateable && (
+                    <Link
+                      to={`/update-proposal/${id}`}
+                      className={clsx(classes.primaryButton, classes.button)}
+                    >
+                      Edit
+                    </Link>
+                  )}
+                </div>
+              </div>
+            </div>
+          </Col>
+        </Row>
 
         <p
           onClick={() => setIsDelegateView(!isDelegateView)}
