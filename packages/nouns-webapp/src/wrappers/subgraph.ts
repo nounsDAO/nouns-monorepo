@@ -127,11 +127,13 @@ export const candidateProposalQuery = (id: string) => gql`
       signatures
       calldatas
       versionSignatures {
+        id
         signer {
           id
         }
         sig
         expirationTimestamp
+        canceled
       }
     }
   }
