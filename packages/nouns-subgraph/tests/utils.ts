@@ -56,6 +56,12 @@ export function createProposalCreatedWithRequirementsEventV3(
   );
   newEvent.parameters.push(
     new ethereum.EventParam(
+      'updatePeriodEndBlock',
+      ethereum.Value.fromUnsignedBigInt(input.updatePeriodEndBlock),
+    ),
+  );
+  newEvent.parameters.push(
+    new ethereum.EventParam(
       'proposalThreshold',
       ethereum.Value.fromUnsignedBigInt(input.proposalThreshold),
     ),
@@ -82,6 +88,7 @@ export class ProposalCreatedWithRequirementsEvent {
   calldatas: Bytes[];
   startBlock: BigInt;
   endBlock: BigInt;
+  updatePeriodEndBlock: BigInt;
   proposalThreshold: BigInt;
   quorumVotes: BigInt;
   description: string;
@@ -149,8 +156,9 @@ export function stubProposalCreatedWithRequirementsEventInput(
     values: [BigInt.fromI32(0)],
     signatures: ['some signature'],
     calldatas: [changetype<Bytes>(ByteArray.fromBigInt(BIGINT_ONE))],
-    startBlock: BigInt.fromI32(3),
-    endBlock: BigInt.fromI32(103),
+    startBlock: BigInt.fromI32(203),
+    endBlock: BigInt.fromI32(303),
+    updatePeriodEndBlock: BigInt.fromI32(103),
     proposalThreshold: BIGINT_ONE,
     quorumVotes: BIGINT_ONE,
     description: 'some description',

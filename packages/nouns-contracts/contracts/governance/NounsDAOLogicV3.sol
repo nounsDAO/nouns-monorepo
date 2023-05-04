@@ -163,7 +163,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
 
         ds._setLastMinuteWindowInBlocks(lastMinuteWindowInBlocks_);
         ds._setObjectionPeriodDurationInBlocks(objectionPeriodDurationInBlocks_);
-        ds._setProposalUpdatablePeriodInBlock(proposalUpdatablePeriodInBlocks_);
+        ds._setProposalUpdatablePeriodInBlocks(proposalUpdatablePeriodInBlocks_);
     }
 
     /**
@@ -493,10 +493,10 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
 
     /**
      * @notice Admin function for setting the proposal updatable period
-     * @param newProposalUpdatablePeriodInBlock the new proposal updatable period, in blocks
+     * @param newProposalUpdatablePeriodInBlocks the new proposal updatable period, in blocks
      */
-    function _setProposalUpdatablePeriodInBlock(uint32 newProposalUpdatablePeriodInBlock) external {
-        ds._setProposalUpdatablePeriodInBlock(newProposalUpdatablePeriodInBlock);
+    function _setProposalUpdatablePeriodInBlocks(uint32 newProposalUpdatablePeriodInBlocks) external {
+        ds._setProposalUpdatablePeriodInBlocks(newProposalUpdatablePeriodInBlocks);
     }
 
     /**
@@ -720,6 +720,10 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
 
     function objectionPeriodDurationInBlocks() public view returns (uint256) {
         return ds.objectionPeriodDurationInBlocks;
+    }
+
+    function proposalUpdatablePeriodInBlocks() public view returns (uint256) {
+        return ds.proposalUpdatablePeriodInBlocks;
     }
 
     receive() external payable {}

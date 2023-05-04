@@ -19,6 +19,7 @@ export class ParsedProposalV3 {
   createdTransactionHash: Bytes = Bytes.fromI32(0);
   startBlock: BigInt = BIGINT_ZERO;
   endBlock: BigInt = BIGINT_ZERO;
+  updatePeriodEndBlock: BigInt = BIGINT_ZERO;
   proposalThreshold: BigInt = BIGINT_ZERO;
   quorumVotes: BigInt = BIGINT_ZERO;
   description: string = '';
@@ -76,6 +77,8 @@ export class ParsedProposalV3 {
     for (let i = 0; i < event.params.signers.length; i++) {
       proposal.signers[i] = event.params.signers[i].toHexString();
     }
+
+    proposal.updatePeriodEndBlock = event.params.updatePeriodEndBlock;
 
     return proposal;
   }

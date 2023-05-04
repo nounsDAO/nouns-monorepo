@@ -269,6 +269,9 @@ type Proposal @entity {
   "The objection period end block"
   objectionPeriodEndBlock: BigInt!
 
+  "The update period end block"
+  updatePeriodEndBlock: BigInt!
+
   "Feedback posts associated to this proposal"
   feedbackPosts: [ProposalFeedback!]! @derivedFrom(field: "proposal")
 }
