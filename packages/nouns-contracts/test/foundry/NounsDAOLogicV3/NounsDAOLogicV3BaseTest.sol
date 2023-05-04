@@ -59,6 +59,7 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
         bytes[] calldatas,
         uint256 startBlock,
         uint256 endBlock,
+        uint256 updatePeriodEndBlock,
         uint256 proposalThreshold,
         uint256 quorumVotes,
         string description
@@ -313,6 +314,7 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
             txs.calldatas,
             expectedStartBlock,
             expectedEndBlock,
+            block.number + proposalUpdatablePeriodInBlocks,
             expectedPropThreshold,
             expectedMinQuorumVotes,
             'description'

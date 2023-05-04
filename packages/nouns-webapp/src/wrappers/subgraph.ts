@@ -69,6 +69,7 @@ export const proposalQuery = (id: string | number) => gql`
     createdBlock
     startBlock
     endBlock
+    updatePeriodEndBlock
     objectionPeriodEndBlock
     executionETA
     targets

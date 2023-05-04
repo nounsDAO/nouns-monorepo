@@ -128,7 +128,7 @@ contract NounsDAOEventsV2 is NounsDAOEvents {
 
 contract NounsDAOEventsV3 is NounsDAOEventsV2 {
     /// @notice An event emitted when a new proposal is created, which includes additional information
-    /// @dev V3 adds `signers` compared to the V1/V2 event.
+    /// @dev V3 adds `signers`, `updatePeriodEndBlock` compared to the V1/V2 event.
     event ProposalCreatedWithRequirements(
         uint256 id,
         address proposer,
@@ -139,6 +139,7 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
         bytes[] calldatas,
         uint256 startBlock,
         uint256 endBlock,
+        uint256 updatePeriodEndBlock,
         uint256 proposalThreshold,
         uint256 quorumVotes,
         string description

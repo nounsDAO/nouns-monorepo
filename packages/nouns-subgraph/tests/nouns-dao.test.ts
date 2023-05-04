@@ -178,8 +178,9 @@ describe('nouns-dao', () => {
         proposalEvent.createdTimestamp = BigInt.fromI32(946684800);
         proposalEvent.createdBlock = BigInt.fromI32(15537394);
         proposalEvent.createdTransactionHash = Bytes.fromI32(11);
-        proposalEvent.startBlock = proposalEvent.createdBlock.plus(BIGINT_ONE);
-        proposalEvent.endBlock = proposalEvent.startBlock.plus(BIGINT_10K);
+        proposalEvent.startBlock = proposalEvent.createdBlock.plus(BigInt.fromI32(200));
+        proposalEvent.endBlock = proposalEvent.createdBlock.plus(BigInt.fromI32(300));
+        proposalEvent.updatePeriodEndBlock = proposalEvent.createdBlock.plus(BigInt.fromI32(100));
         proposalEvent.proposalThreshold = BigInt.fromI32(7);
         proposalEvent.quorumVotes = BigInt.fromI32(60);
         proposalEvent.description = 'some description';
@@ -201,6 +202,7 @@ describe('nouns-dao', () => {
         assert.bytesEquals(proposal.createdTransactionHash, proposalEvent.createdTransactionHash);
         assert.bigIntEquals(proposal.startBlock, proposalEvent.startBlock);
         assert.bigIntEquals(proposal.endBlock, proposalEvent.endBlock);
+        assert.bigIntEquals(proposal.updatePeriodEndBlock, proposalEvent.updatePeriodEndBlock);
         assert.bigIntEquals(proposal.proposalThreshold, proposalEvent.proposalThreshold);
         assert.bigIntEquals(proposal.quorumVotes, proposalEvent.quorumVotes);
         assert.stringEquals(proposal.description, proposalEvent.description);

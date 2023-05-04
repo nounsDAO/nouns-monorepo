@@ -349,6 +349,12 @@
       {
         "indexed": false,
         "internalType": "uint256",
+        "name": "updatePeriodEndBlock",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "proposalThreshold",
         "type": "uint256"
       },
@@ -1090,11 +1096,11 @@
     "inputs": [
       {
         "internalType": "uint32",
-        "name": "newProposalUpdatablePeriodInBlock",
+        "name": "newProposalUpdatablePeriodInBlocks",
         "type": "uint32"
       }
     ],
-    "name": "_setProposalUpdatablePeriodInBlock",
+    "name": "_setProposalUpdatablePeriodInBlocks",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1694,6 +1700,19 @@
   {
     "inputs": [],
     "name": "proposalThresholdBPS",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "proposalUpdatablePeriodInBlocks",
     "outputs": [
       {
         "internalType": "uint256",
