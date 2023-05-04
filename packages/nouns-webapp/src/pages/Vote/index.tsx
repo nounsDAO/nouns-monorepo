@@ -152,6 +152,7 @@ const VotePage = ({
 
   const hasSucceeded = proposal?.status === ProposalState.SUCCEEDED;
   const isInNonFinalState = [
+    ProposalState.UPDATABLE,
     ProposalState.PENDING,
     ProposalState.ACTIVE,
     ProposalState.SUCCEEDED,
@@ -162,7 +163,7 @@ const VotePage = ({
     isInNonFinalState && proposal?.proposer?.toLowerCase() === account?.toLowerCase();
 
   const isUpdateable =
-    proposal?.status == ProposalState.PENDING &&
+    proposal?.status == ProposalState.UPDATABLE &&
     proposal?.proposer?.toLowerCase() === account?.toLowerCase();
 
   const isAwaitingStateChange = () => {
@@ -358,8 +359,11 @@ const VotePage = ({
   const abstainNouns = getNounVotes(data, 2);
   const isV2Prop = dqInfo.proposal.quorumCoefficient > 0;
 
+  console.log('proposal', proposal);
+
   return (
     <Section fullWidth={false} className={classes.votePage}>
+      proposal state: {proposal.status}
       {showDynamicQuorumInfoModal && (
         <DynamicQuorumInfoModal
           proposal={proposal}
@@ -625,7 +629,7 @@ const VotePage = ({
               <ProposalContent proposal={proposal} />
             </Col>
             <Col xl={4} lg={12} className={classes.sidebar}>
-              <VoteSignals />
+              <VoteSignals availableVotes={availableVotes} proposal={proposal} />
             </Col>
           </>
         ) : (

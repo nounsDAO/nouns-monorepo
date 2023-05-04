@@ -1,7 +1,13 @@
-.voteSignals {
+.wrapper {
+  border: 1px solid #e6e6e6;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  border-radius: 12px;
+  position: sticky;
+  top: 20px;
+  overflow: hidden;
 }
 
 .header {
@@ -17,19 +23,14 @@
 }
 
 .header h2 {
-  font-size: 1.7rem;
+  font-size: 16px;
   margin: 0 0 0.5rem 0;
-  font-family: 'Londrina Solid';
-  color: var(--brand-gray-light-text);
+  font-weight: bold;
 }
 
-
 .voteSignalGroupsList {
-  border: 1px solid #e6e6e6;
   padding: 5px 15px;
-  border-radius: 12px;
-  position: sticky;
-  top: 20px
+  width: 100%;
 }
 
 .voteSignalsList {
@@ -122,4 +123,79 @@
   padding-left: calc(30px + 10px); 
   font-size: 14px;
   color: var(--brand-gray-light-text);
+}
+
+
+.formLabel {
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.feedbackForm p {
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+}
+
+.feedbackForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  background-color: #F4F4F8;
+  padding: 20px;
+  width: 100%;
+  border-top: 1px solid #e6e6e6;
+}
+
+.feedbackForm .buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  @media (max-width: 767px) {
+    flex-direction: column;
+  }
+}
+
+.feedbackForm button {
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 10px;
+  background-color: #000;
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+}
+
+.feedbackForm button.selectedSupport {
+  border: 2px solid #fff;
+  outline: 2px solid #000;
+}
+
+.feedbackForm button.unselectedSupport {
+  opacity: 0.4;
+}
+
+.feedbackForm button.for {
+  background: var(--brand-color-green);
+}
+
+.feedbackForm button.against {
+  background: var(--brand-color-red);
+}
+
+.feedbackForm button.abstain {
+  background: var(--brand-gray-light-text);
+}
+
+.reasonInput {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #aaa !important;
+  border-radius: 8px;
+  margin-bottom: 0px;
+  width: 100%;
 }

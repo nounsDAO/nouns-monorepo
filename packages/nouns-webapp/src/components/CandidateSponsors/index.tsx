@@ -40,6 +40,7 @@ interface CandidateSponsorsProps {
     reason: string;
     expirationTimestamp: number;
     sig: string;
+    canceled: boolean;
     signer: {
       id: string;
       proposals: {
@@ -83,27 +84,25 @@ const updateProposalTypes = {
 };
 const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   const [signedVotes, setSignedVotes] = React.useState<number>(0);
-  const [requiredVotes, setRequiredVotes] = React.useState<number>(5);
+  const [requiredVotes, setRequiredVotes] = React.useState<number>();
   const [isFormDisplayed, setIsFormDisplayed] = React.useState<boolean>(false);
   const blockNumber = useBlockNumber();
   const { account } = useEthers();
   const connectedAccountNounVotes = useUserVotes() || 0;
-
   const [isAccountSigner, setIsAccountSigner] = React.useState<boolean>(false);
   const threshold = useProposalThreshold();
-  const nounsRequired = threshold !== undefined ? threshold + 1 : '...';
-
-  const signers = props.candidate.version.versionSignatures.map(signature => signature.signer.id);
-  console.log('signers', signers);
+  const signers = props.candidate.version.versionSignatures?.map(signature => signature.signer.id);
   const { data: delegateSnapshot } = useQuery<Delegates>(
-    delegateNounsAtBlockQuery(props.signers, blockNumber ?? 0),
+    delegateNounsAtBlockQuery(signers, blockNumber ?? 0),
   );
 
-  // useEffect(() => {
-  //   props.delegateSnapshot?.delegates?.map((delegate: { nounsRepresented: any }) => {
-  //     setSignedVotes(signedVotes => signedVotes + delegate.nounsRepresented.length);
-  //   });
-  // }, [props.delegateSnapshot]);
+  console.log('props.candidate', props.candidate, props.signatures);
+
+  useEffect(() => {
+    if (threshold !== undefined) {
+      setRequiredVotes(threshold + 1);
+    }
+  }, [threshold]);
 
   useEffect(() => {
     if (props.signatures && signedVotes === 0) {
@@ -121,10 +120,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
         });
       });
     }
-  }, [props.signatures]);
-
-  console.log('props.signatures', props.signatures);
-  console.log('isAccountSigner', isAccountSigner);
+  }, [props.signatures, delegateSnapshot]);
 
   // POC code below
   const { library, chainId } = useEthers();
@@ -309,39 +305,20 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
     }
   }, [updateProposalBySigState, setModal]);
 
-  async function proposeBySigsClicked() {
+  const submitProposalOnChain = async () => {
     await proposeBySigs(
-      candidateProposal?.latestVersion.versionSignatures.map((s: any) => [
-        s.sig,
-        s.signer.id,
-        s.expirationTimestamp,
-      ]),
+      props.signatures?.map((s: any) => [s.sig, s.signer.id, s.expirationTimestamp]),
       candidateProposal?.latestVersion.targets,
       candidateProposal?.latestVersion.values,
       candidateProposal?.latestVersion.signatures,
       candidateProposal?.latestVersion.calldatas,
       candidateProposal?.latestVersion.description,
     );
-  }
-  async function updateProposalBySigsClicked() {
-    //   const proposalId = Number.parseInt(proposalIdToUpdate);
-    //   await updateProposalBySigs(
-    //     proposalId,
-    //     draftProposal?.signatures.map(s => [s.signature, s.signer, s.expiry]),
-    //     draftProposal?.proposalContent.targets,
-    //     draftProposal?.proposalContent.values,
-    //     draftProposal?.proposalContent.signatures,
-    //     draftProposal?.proposalContent.calldatas,
-    //     draftProposal?.proposalContent.description,
-    //   )
-  }
-
-  console.log('>> addSignatureState', addSignatureState);
-
+  };
   return (
     <div className={classes.wrapper}>
       <div className={classes.interiorWrapper}>
-        {signedVotes >= requiredVotes && (
+        {requiredVotes && signedVotes >= requiredVotes && (
           <p className={classes.thresholdMet}>
             <FontAwesomeIcon icon={faCircleCheck} /> Sponsor threshold met
           </p>
@@ -349,11 +326,11 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
         <h4 className={classes.header}>
           <strong>
             {/* todo: add loading skeleton here */}
-            {signedVotes || ''} of {nounsRequired || ''} Sponsored Votes
+            {signedVotes || '...'} of {requiredVotes || '...'} Sponsored Votes
           </strong>
         </h4>
         <p className={classes.subhead}>
-          {signedVotes >= requiredVotes ? (
+          {requiredVotes && signedVotes >= requiredVotes ? (
             <Trans>
               This candidate has met the required threshold, but Nouns voters can still add support
               until it’s put on-chain.
@@ -364,25 +341,29 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
         </p>
         <ul className={classes.sponsorsList}>
           {props.signatures &&
-            props.signatures.map(signature => (
-              <Signature
-                key={signature.signer.id}
-                reason={signature.reason}
-                expirationTimestamp={signature.expirationTimestamp}
-                signer={signature.signer.id}
-                isAccountSigner={isAccountSigner}
-                sig={signature.sig}
-              />
-            ))}
+            props.signatures.map(signature => {
+              if (signature.canceled) return null;
+              return (
+                <Signature
+                  key={signature.signer.id}
+                  reason={signature.reason}
+                  expirationTimestamp={signature.expirationTimestamp}
+                  signer={signature.signer.id}
+                  isAccountSigner={isAccountSigner}
+                  sig={signature.sig}
+                />
+              );
+            })}
           {/* TODO: check this against num of votes instead of num of sigs */}
           {props.signatures &&
+            requiredVotes &&
             signedVotes < requiredVotes &&
             Array(requiredVotes - props.signatures.length)
               .fill('')
               .map((_s, i) => <li className={classes.placeholder}> </li>)}
 
-          {props.isProposer && signedVotes >= requiredVotes ? (
-            <button className={classes.button} onClick={() => setIsFormDisplayed(!isFormDisplayed)}>
+          {props.isProposer && requiredVotes && signedVotes >= requiredVotes ? (
+            <button className={classes.button} onClick={() => submitProposalOnChain()}>
               Submit on-chain
             </button>
           ) : (

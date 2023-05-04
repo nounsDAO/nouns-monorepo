@@ -1,7 +1,12 @@
 import React from 'react';
 import classes from './CandidateCard.module.css';
 import clsx from 'clsx';
-import { PartialProposal, ProposalCandidate, ProposalState } from '../../wrappers/nounsDao';
+import {
+  PartialProposal,
+  PartialProposalCandidate,
+  ProposalCandidate,
+  ProposalState,
+} from '../../wrappers/nounsDao';
 import proposalStatusClasses from '../ProposalStatus/ProposalStatus.module.css';
 import { i18n } from '@lingui/core';
 import { ClockIcon } from '@heroicons/react/solid';
@@ -18,7 +23,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { Link } from 'react-router-dom';
 
 type Props = {
-  candidate: ProposalCandidate;
+  candidate: PartialProposalCandidate;
 };
 
 // temporary hard-coded list of candidate sponsors
@@ -63,7 +68,7 @@ function CandidateCard({ candidate }: Props) {
       to={`/candidates/${candidate.id}`}
     >
       <div className={classes.title}>
-        {/* <span className={classes.candidateTitle}>
+        <span className={classes.candidateTitle}>
           <span>{candidate.latestVersion.title}</span>
         </span>
         <p className={classes.proposer}>
@@ -71,14 +76,14 @@ function CandidateCard({ candidate }: Props) {
           <a href="">
             <ShortAddress address={candidate.proposer} />
           </a>
-        </p> */}
+        </p>
 
-        {/* <div className={classes.footer}>
+        <div className={classes.footer}>
           <div className={classes.candidateSponsors}>
             <CandidateSponsors signers={candidate.latestVersion.versionSignatures} />
             <span className={classes.sponsorCount}>
               <strong>
-                {candidate.latestVersion.versionSignatures.length}/ {minSponsorCount}{' '}
+                {candidate.latestVersion.versionSignatures.length} / {minSponsorCount}{' '}
               </strong>{' '}
               <Trans>sponsors</Trans>
             </span>
@@ -86,7 +91,7 @@ function CandidateCard({ candidate }: Props) {
           <p className={classes.timestamp}>
             {dayjs.unix(candidate.lastUpdatedTimestamp).fromNow()}
           </p>
-        </div> */}
+        </div>
       </div>
     </Link>
   );

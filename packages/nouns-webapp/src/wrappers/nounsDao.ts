@@ -43,6 +43,7 @@ export enum ProposalState {
   EXECUTED,
   VETOED,
   OBJECTION_PERIOD,
+  UPDATABLE,
 }
 
 interface ProposalCallResult {
@@ -149,12 +150,12 @@ export interface ProposalCandidateInfo {
 export interface ProposalCandidateVersion {
   title: string;
   description: string;
-  // details: ProposalTransactionDetails;
   details: ProposalDetail[];
   versionSignatures: {
     reason: string;
     expirationTimestamp: number;
     sig: string;
+    canceled: boolean;
     signer: {
       id: string;
       proposals: {
@@ -166,6 +167,26 @@ export interface ProposalCandidateVersion {
 
 export interface ProposalCandidate extends ProposalCandidateInfo {
   version: ProposalCandidateVersion;
+}
+
+export interface PartialProposalCandidate extends ProposalCandidateInfo {
+  lastUpdatedTimestamp: number;
+  latestVersion: {
+    title: string;
+    description: string;
+    versionSignatures: {
+      reason: string;
+      expirationTimestamp: number;
+      sig: string;
+      canceled: boolean;
+      signer: {
+        id: string;
+        proposals: {
+          id: string;
+        }[];
+      };
+    }[];
+  };
 }
 
 export interface ProposalCandidateSubgraphEntity extends ProposalCandidateInfo {
@@ -184,6 +205,7 @@ export interface ProposalCandidateSubgraphEntity extends ProposalCandidateInfo {
       reason: string;
       expirationTimestamp: number;
       sig: string;
+      canceled: boolean;
       signer: {
         id: string;
         proposals: {
@@ -202,11 +224,16 @@ export interface PartialCandidateSignature {
 }
 
 export interface CandidateSignature {
-  signer: string;
+  reason: string;
   expirationTimestamp: number;
-  proposer: string;
-  slug: string;
-  reason: string | null;
+  sig: string;
+  canceled: boolean;
+  signer: {
+    id: string;
+    proposals: {
+      id: string;
+    }[];
+  };
 }
 
 const abi = new utils.Interface(NounsDAOV2ABI);
@@ -414,6 +441,28 @@ const formatProposalTransactionDetails = (details: ProposalTransactionDetails | 
   });
 };
 
+const formatProposalTransactionDetailsToUpdate = (details: ProposalTransactionDetails | Result) => {
+  return details.targets.map((target: string, i: number) => {
+    const signature: string = details.signatures[i];
+    const value = EthersBN.from(
+      // Handle both logs and subgraph responses
+      (details as ProposalTransactionDetails).values?.[i] ?? (details as Result)?.[3]?.[i] ?? 0,
+    );
+    const callData = details.calldatas[i];
+
+    // Split at first occurrence of '('
+    let [name, types] = signature.substring(0, signature.length - 1)?.split(/\((.*)/s);
+
+    // We failed to decode. Display the raw calldata, appending function selectors if they exist.
+    return {
+      signature: signature,
+      target,
+      callData: callData,
+      value: value,
+    };
+  });
+};
+
 const useFormattedProposalCreatedLogs = (skip: boolean, fromBlock?: number) => {
   const filter = useMemo(
     () => ({
@@ -510,6 +559,7 @@ const parseSubgraphCandidate = (
   blockNumber: number | undefined,
   timestamp: number | undefined,
 ) => {
+  console.log('parseSubgraphCandidate', candidate);
   if (!candidate) {
     return;
   }
@@ -523,6 +573,13 @@ const parseSubgraphCandidate = (
     calldatas: candidate.latestVersion.calldatas,
     encodedProposalHash: candidate.latestVersion.encodedProposalHash,
   };
+
+  const versionSignatures = candidate.latestVersion.versionSignatures.map(s => {
+    if (s.canceled === false) {
+      return s;
+    }
+  });
+
   return {
     id: candidate.id,
     slug: candidate.slug,
@@ -543,12 +600,21 @@ const parseSubgraphProposal = (
   proposal: ProposalSubgraphEntity | undefined,
   blockNumber: number | undefined,
   timestamp: number | undefined,
+  toUpdate?: boolean,
 ) => {
   if (!proposal) {
     return;
   }
 
   const description = proposal.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, '');
+  let details;
+  if (toUpdate) {
+    console.log('parseSubgraphProposal toUpdate', toUpdate);
+    details = formatProposalTransactionDetailsToUpdate(proposal);
+    console.log('parseSubgraphProposal details', details);
+  } else {
+    details = formatProposalTransactionDetails(proposal);
+  }
   return {
     id: proposal.id,
     title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
@@ -564,7 +630,7 @@ const parseSubgraphProposal = (
     startBlock: parseInt(proposal.startBlock),
     endBlock: parseInt(proposal.endBlock),
     eta: proposal.executionETA ? new Date(Number(proposal.executionETA) * 1000) : undefined,
-    details: formatProposalTransactionDetails(proposal),
+    details: details,
     transactionHash: proposal.createdTransactionHash,
     objectionPeriodEndBlock: parseInt(proposal.objectionPeriodEndBlock),
   };
@@ -645,10 +711,15 @@ export const useAllProposals = (): PartialProposalData => {
   return subgraph?.error ? onchain : subgraph;
 };
 
-export const useProposal = (id: string | number): Proposal | undefined => {
+export const useProposal = (id: string | number, toUpdate?: boolean): Proposal | undefined => {
   const blockNumber = useBlockNumber();
   const timestamp = useBlockTimestamp(blockNumber);
-  return parseSubgraphProposal(useQuery(proposalQuery(id)).data?.proposal, blockNumber, timestamp);
+  return parseSubgraphProposal(
+    useQuery(proposalQuery(id)).data?.proposal,
+    blockNumber,
+    timestamp,
+    toUpdate,
+  );
 };
 
 export const useCandidate = (id: string): ProposalCandidate | undefined => {

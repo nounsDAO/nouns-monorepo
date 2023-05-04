@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import classes from './CandidateSponsors.module.css';
-import { PartialCandidateSignature } from '../../wrappers/nounsDao';
+import { CandidateSignature, PartialCandidateSignature } from '../../wrappers/nounsDao';
 
 type Props = {
-  signers: PartialCandidateSignature[];
+  signers: CandidateSignature[];
 };
 
 function CandidateSponsors({ signers }: Props) {
   // todo: get from contract
   const minSignerCount = 5;
-  const [signerSpots, setSignerSpots] = useState<PartialCandidateSignature[]>();
+  const [signerSpots, setSignerSpots] = useState<CandidateSignature[]>();
   const [emptySignerSpots, setEmptySignerSpots] = useState<number[]>();
   const [signerCountOverflow, setSignerCountOverflow] = useState(0);
   React.useEffect(() => {

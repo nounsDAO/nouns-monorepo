@@ -1,5 +1,6 @@
 import {
   PartialProposal,
+  PartialProposalCandidate,
   ProposalCandidate,
   ProposalState,
   useProposalThreshold,
@@ -110,7 +111,7 @@ const Proposals = ({ proposals }: { proposals: PartialProposal[] }) => {
 
   // Get candidates
   const { loading, error, data } = useCandidateProposals();
-  const [candidates, setCandidates] = useState<ProposalCandidate[]>([]);
+  const [candidates, setCandidates] = useState<PartialProposalCandidate[]>([]);
   useEffect(() => {
     if (!loading && !error) {
       // const candidatesList = data['proposalCandidates'].map((c: PartialProposal) => {
@@ -120,6 +121,8 @@ const Proposals = ({ proposals }: { proposals: PartialProposal[] }) => {
       setCandidates(data['proposalCandidates']);
     }
   }, [loading, error, data]);
+
+  console.log('candidates', candidates);
 
   return (
     <div className={classes.proposals}>
@@ -281,7 +284,7 @@ const Proposals = ({ proposals }: { proposals: PartialProposal[] }) => {
                   candidates
                     .slice(0)
                     .reverse()
-                    .map((c: ProposalCandidate, i: number) => {
+                    .map((c, i) => {
                       return (
                         <div>
                           <CandidateCard candidate={c} key={c.id} />

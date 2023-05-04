@@ -4,8 +4,13 @@ import { Trans } from '@lingui/macro';
 import clsx from 'clsx';
 import VoteSignal from './VoteSignal';
 import VoteSignalGroup from './VoteSignalGroup';
+import { useAddFeedback } from '../../wrappers/nounsData';
+import { Proposal } from '../../wrappers/nounsDao';
 
-type Props = {};
+type Props = {
+  availableVotes?: number;
+  proposal: Proposal;
+};
 
 const tempVoteSignalsFor = [
   {
@@ -46,8 +51,24 @@ const tempVoteSignalsAgainst = [
 const tempVoteSignalsAbstain: any[] = [];
 
 const VoteSignals = (props: Props) => {
+  const [reasonText, setReasonText] = React.useState('');
+  const [support, setSupport] = React.useState<number>();
+  const { addFeedback, addFeedbackState } = useAddFeedback();
+
+  async function handleFeedbackSubmit() {
+    if (!support) {
+      return;
+    }
+
+    await addFeedback({
+      proposalId: '0x123',
+      support,
+      reason: reasonText,
+    });
+  }
+
   return (
-    <div className={classes.voteSignalsWrapper}>
+    <div className={classes.voteSignals}>
       <div className={classes.header}>
         <h2>
           <Trans>Pre-voting feedback</Trans>
@@ -57,11 +78,61 @@ const VoteSignals = (props: Props) => {
           they intend to vote and helpful guidance on proposal changes to change their vote.
         </p>
       </div>
-      <div className={classes.voteSignalGroupsList}>
-        <VoteSignalGroup voteSignals={tempVoteSignalsFor} support={1} />
-        <VoteSignalGroup voteSignals={tempVoteSignalsAgainst} support={0} />
-        <VoteSignalGroup voteSignals={tempVoteSignalsAbstain} support={2} />
+      <div className={classes.wrapper}>
+        <div className={classes.voteSignalGroupsList}>
+          <VoteSignalGroup voteSignals={tempVoteSignalsFor} support={1} />
+          <VoteSignalGroup voteSignals={tempVoteSignalsAgainst} support={0} />
+          <VoteSignalGroup voteSignals={tempVoteSignalsAbstain} support={2} />
+        </div>
+        {/* {props.availableVotes && props.availableVotes > 0 && ( */}
+        {/* // user is voter, show form */}
+        <div className={classes.feedbackForm}>
+          <p>Add your feedback</p>
+          <div className={classes.buttons}>
+            <button
+              className={clsx(
+                classes.button,
+                classes.for,
+                support && support === 1 ? classes.selectedSupport : classes.unselectedSupport,
+              )}
+              onClick={() => setSupport(1)}
+            >
+              For
+            </button>
+            <button
+              className={clsx(
+                classes.button,
+                classes.against,
+                support !== undefined && support === 0
+                  ? classes.selectedSupport
+                  : classes.unselectedSupport,
+              )}
+              onClick={() => setSupport(0)}
+            >
+              Against
+            </button>
+            <button
+              className={clsx(
+                classes.button,
+                classes.abstain,
+                support && support === 2 ? classes.selectedSupport : classes.unselectedSupport,
+              )}
+              onClick={() => setSupport(2)}
+            >
+              Abstain
+            </button>
+          </div>
+          <input
+            type="text"
+            className={classes.reasonInput}
+            placeholder="Optional reason"
+            value={reasonText}
+            onChange={event => setReasonText(event.target.value)}
+          />
+          <button className={clsx(classes.button, classes.submit)}>Submit</button>
+        </div>
       </div>
+      {/* )} */}
     </div>
   );
 };

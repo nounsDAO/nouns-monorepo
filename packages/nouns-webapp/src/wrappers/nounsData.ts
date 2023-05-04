@@ -28,6 +28,17 @@ export const useAddSignature = () => {
   return { addSignature, addSignatureState };
 };
 
+export const useAddFeedback = () => {
+  const nounsDAOData = new NounsDaoDataFactory().attach(config.addresses.nounsDAOData!);
+
+  const { send: addFeedback, state: addFeedbackState } = useContractFunction(
+    nounsDAOData,
+    'addFeedback',
+  );
+
+  return { addFeedback, addFeedbackState };
+};
+
 export const useCandidateProposals = () => {
   const { loading, data, error } = useQuery(candidateProposalsQuery());
 
@@ -51,4 +62,12 @@ export const useCreateCandidateCost = () => {
   }
 
   return createCandidateCost[0];
+};
+
+export const useCancelSignature = () => {
+  const nounsDAOData = new NounsDaoDataFactory().attach(config.addresses.nounsDAOData!);
+
+  const cancelSignature = useContractFunction(nounsDAOData, 'cancelSig');
+
+  return { cancelSignature };
 };

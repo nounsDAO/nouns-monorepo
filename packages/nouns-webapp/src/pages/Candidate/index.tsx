@@ -65,24 +65,14 @@ const CandidatePage = ({
   const candidate = useCandidate(id);
   console.log('candidate', candidate);
   const { account } = useEthers();
+  const [isProposer, setIsProposer] = useState<boolean>(false);
 
-  const signatures: CandidateSignature[] = [
-    {
-      signer: '0x0055cd5f017027d10adf4f13332181e6d8d886bb',
-      expirationTimestamp: 1683822753,
-      proposer: '0xCB43078C32423F5348Cab5885911C3B5faE217F9',
-      slug: 'test-candidate',
-      reason: '',
-    },
-    {
-      signer: '0xcc2688350d29623e2a0844cc8885f9050f0f6ed5',
-      expirationTimestamp: 1684341153,
-      proposer: '0xCB43078C32423F5348Cab5885911C3B5faE217F9',
-      slug: 'test-candidate',
-      reason:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ullamcorper nulla non metus auctor fringilla.',
-    },
-  ];
+  useEffect(() => {
+    if (candidate && account) {
+      setIsProposer(candidate.proposer.toLowerCase() === account.toLowerCase());
+    }
+  }, [candidate, account]);
+
   const [signedVotes, setSignedVotes] = React.useState<number>(0);
   const blockNumber = useBlockNumber();
   const [signers, setSigners] = useState<string[]>([]);
@@ -405,6 +395,7 @@ const CandidatePage = ({
       )} */}
       {candidate && (
         <Row>
+          {candidate?.proposer === account && 'is proposer'}
           <Col lg={8} className={clsx(classes.proposal, classes.wrapper)}>
             <CandidateContent proposal={candidate} />
           </Col>
@@ -413,8 +404,9 @@ const CandidatePage = ({
               candidate={candidate}
               slug={candidate.slug ?? ''}
               id={candidate.id} // placeholder
-              signatures={candidate.version.versionSignatures}
-              isProposer={candidate?.proposer === account}
+              // only show signatures that are not canceled
+              signatures={candidate.version.versionSignatures.filter(sig => sig.canceled === false)}
+              isProposer={isProposer}
               signers={signers}
             />
           </Col>

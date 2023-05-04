@@ -8,6 +8,8 @@ import {
   useProposalCount,
   useProposalThreshold,
   usePropose,
+  useUpdateProposal,
+  Proposal,
 } from '../../wrappers/nounsDao';
 import { useUserVotes } from '../../wrappers/nounToken';
 import classes from './CreateProposal.module.css';
@@ -37,7 +39,7 @@ interface EditProposalProps {
 
 const EditProposalPage: React.FC<EditProposalProps> = props => {
   const { account } = useEthers();
-  const proposal = useProposal(props.match.params.id);
+  const proposal = useProposal(props.match.params.id, true);
 
   const latestProposalId = useProposalCount();
   const latestProposal = useProposal(latestProposalId ?? 0);
@@ -45,6 +47,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   const proposalThreshold = useProposalThreshold();
 
   const { propose, proposeState } = usePropose();
+  const { updateProposal, updateProposalState } = useUpdateProposal();
 
   const [isProposalEdited, setIsProposalEdited] = useState(false);
 
@@ -225,6 +228,57 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     }
   }, [proposeState, setModal]);
 
+  useEffect(() => {
+    switch (updateProposalState.status) {
+      case 'None':
+        setProposePending(false);
+        break;
+      case 'Mining':
+        setProposePending(true);
+        break;
+      case 'Success':
+        setModal({
+          title: <Trans>Success</Trans>,
+          message: <Trans>Proposal Updated!</Trans>,
+          show: true,
+        });
+        setProposePending(false);
+        break;
+      case 'Fail':
+        setModal({
+          title: <Trans>Transaction Failed</Trans>,
+          message: updateProposalState?.errorMessage || <Trans>Please try again.</Trans>,
+          show: true,
+        });
+        setProposePending(false);
+        break;
+      case 'Exception':
+        setModal({
+          title: <Trans>Error</Trans>,
+          message: updateProposalState?.errorMessage || <Trans>Please try again.</Trans>,
+          show: true,
+        });
+        setProposePending(false);
+        break;
+    }
+  }, [updateProposalState, setModal]);
+
+  const handleUpdateProposal = async () => {
+    console.log('handle update proposalTransactions', proposalTransactions);
+    if (!proposalTransactions?.length) return;
+    if (proposal === undefined) return;
+
+    await updateProposal(
+      proposal.id, // proposalId
+      proposalTransactions.map(({ address }) => address), // Targets
+      proposalTransactions.map(({ value }) => value ?? '0'), // Values
+      proposalTransactions.map(({ signature }) => signature ?? ''), // Signatures
+      proposalTransactions.map(({ calldata }) => calldata), // Calldatas
+      `# ${titleValue}\n\n${bodyValue}`, // Description
+      'test commit message ',
+    );
+  };
+
   // useEffect(() => {
   //   if (proposal) {
   //     const transactions = proposal.details.map(txn => {
@@ -246,18 +300,20 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     ProposalDetail[]
   >([]);
 
+  // set initial values on page load and as they're changed
   useEffect(() => {
     if (proposal) {
-      setTitleValue(proposal.title);
-      setBodyValue(proposal.description);
       const transactions = proposal.details.map(txn => {
         return {
           address: txn.target,
           value: txn.value ?? '0',
-          calldata: 'txn.data', // TODO
-          signature: 'txn.signature', // TODO
+          calldata: txn.callData,
+          signature: txn.functionSig,
         };
       });
+      console.log('transactions', transactions);
+      setTitleValue(proposal.title);
+      setBodyValue(proposal.description);
       setProposalTransactions(transactions);
       setOriginalTitleValue(proposal.title);
       setOriginalBodyValue(proposal.description);
@@ -293,10 +349,11 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     return false;
   };
 
-  // TODO: uncomment this
-  // if (proposal?.proposer !== account) {
-  //   return null;
-  // }
+  if (proposal?.proposer?.toLowerCase() !== account?.toLowerCase()) {
+    return null;
+  }
+
+  console.log('proposalTransactions', proposalTransactions);
 
   return (
     <Section fullWidth={false} className={classes.createProposalPage}>
@@ -365,7 +422,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
           }
           hasEnoughVote={true}
           isFormInvalid={isProposalEdited ? false : true}
-          handleCreateProposal={handleCreateProposal}
+          handleCreateProposal={handleUpdateProposal}
         />
         {props.isCandidate && (
           <p className="text-center">This will clear all previous sponsors and feedback votes</p>

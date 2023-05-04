@@ -152,6 +152,7 @@ const UpdateProposalPage = ({
       proposalTransactions.map(({ signature }) => signature), // Signatures
       proposalTransactions.map(({ calldata }) => calldata), // Calldatas
       `# ${titleValue}\n\n${bodyValue}`, // Description
+      'commit message',
     );
   };
 
@@ -263,10 +264,11 @@ const UpdateProposalPage = ({
           onTitleInput={handleTitleInput}
           onBodyInput={handleBodyInput}
         />
-        <Button 
-        className={classes.createProposalButton}
-        disabled={isFormInvalid}
-        onClick={handleUpdateProposal}>
+        <Button
+          className={classes.createProposalButton}
+          disabled={isFormInvalid}
+          onClick={handleUpdateProposal}
+        >
           Update Proposal {id}
         </Button>
       </Col>
