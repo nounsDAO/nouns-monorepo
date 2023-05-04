@@ -210,6 +210,7 @@ const Proposals = ({ proposals }: { proposals: PartialProposal[] }) => {
                 .reverse()
                 .map((p, i) => {
                   const isPropInStateToHaveCountDown =
+                    p.status === ProposalState.UPDATABLE ||
                     p.status === ProposalState.PENDING ||
                     p.status === ProposalState.ACTIVE ||
                     p.status === ProposalState.QUEUED;

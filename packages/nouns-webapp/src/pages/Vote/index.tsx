@@ -363,7 +363,6 @@ const VotePage = ({
 
   return (
     <Section fullWidth={false} className={classes.votePage}>
-      proposal state: {proposal.status}
       {showDynamicQuorumInfoModal && (
         <DynamicQuorumInfoModal
           proposal={proposal}

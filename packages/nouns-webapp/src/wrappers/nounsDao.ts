@@ -112,6 +112,7 @@ export interface PartialProposalSubgraphEntity {
   executionETA: string | null;
   quorumVotes: string;
   objectionPeriodEndBlock: string;
+  updatePeriodEndBlock: string;
 }
 
 export interface ProposalSubgraphEntity
@@ -491,13 +492,26 @@ const getProposalState = (
   proposal: PartialProposalSubgraphEntity,
 ) => {
   const status = ProposalState[proposal.status];
+
+  console.log(
+    'getProposalState',
+    status,
+    proposal.updatePeriodEndBlock,
+    blockNumber,
+    blockTimestamp,
+    proposal,
+  );
   if (status === ProposalState.PENDING) {
     if (!blockNumber) {
       return ProposalState.UNDETERMINED;
     }
+    if (blockNumber <= parseInt(proposal.updatePeriodEndBlock)) {
+      return ProposalState.UPDATABLE;
+    }
     if (blockNumber <= parseInt(proposal.startBlock)) {
       return ProposalState.PENDING;
     }
+
     return ProposalState.ACTIVE;
   }
   if (status === ProposalState.ACTIVE) {

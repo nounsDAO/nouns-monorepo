@@ -19,6 +19,8 @@ const statusVariant = (status: ProposalState | undefined) => {
     case ProposalState.QUEUED:
     case ProposalState.CANCELLED:
     case ProposalState.EXPIRED:
+    case ProposalState.UPDATABLE:
+      return classes.updatable;
     default:
       return classes.secondary;
   }
@@ -46,6 +48,8 @@ const statusText = (status: ProposalState | undefined) => {
       return <Trans>Expired</Trans>;
     case ProposalState.OBJECTION_PERIOD:
       return <Trans>Objection period</Trans>;
+    case ProposalState.UPDATABLE:
+      return <Trans>Updatable</Trans>;
     default:
       return <Trans>Undetermined</Trans>;
   }

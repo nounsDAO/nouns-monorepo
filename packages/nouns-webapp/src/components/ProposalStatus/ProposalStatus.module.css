@@ -27,6 +27,10 @@
   background-color: var(--brand-gray-light-text);
 }
 
+.updatable {
+  background-color: #F0AD4E;
+}
+
 .votePageProposalStatus {
   margin-top: 0.8rem;
 }
