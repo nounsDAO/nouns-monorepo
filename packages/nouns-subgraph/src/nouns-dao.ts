@@ -77,6 +77,7 @@ export function handleProposalCreated(parsedProposal: ParsedProposalV3): void {
   proposal.createdTransactionHash = parsedProposal.createdTransactionHash;
   proposal.startBlock = parsedProposal.startBlock;
   proposal.endBlock = parsedProposal.endBlock;
+  proposal.updatePeriodEndBlock = parsedProposal.updatePeriodEndBlock;
   proposal.proposalThreshold = parsedProposal.proposalThreshold;
   proposal.quorumVotes = parsedProposal.quorumVotes;
   proposal.forVotes = BIGINT_ZERO;
