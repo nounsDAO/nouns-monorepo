@@ -86,6 +86,7 @@ function App() {
             <Route exact path="/vote" component={GovernancePage} />
             <Route exact path="/vote/:id" component={VotePage} />
             <Route exact path="/vote/:id/history" component={ProposalHistory} />
+            <Route exact path="/vote/:id/history/:versionNumber?" component={ProposalHistory} />
             <Route exact path="/vote/:id/edit" component={EditProposalPage} />
             <Route exact path="/candidates/:id" component={CandidatePage} />
             <Route exact path="/candidates/:id/edit" component={EditCandidatePage} />

@@ -30,8 +30,6 @@
 
 .section {
   word-wrap: break-word;
-  padding-top: 2rem;
-  margin-top: 2rem;
 }
 
 .section h5 {
@@ -220,10 +218,13 @@
     flex-direction: column;   
   }
 }
-/* .proposerOptions p {
-  padding-top: 0;
-  margin: 0;
-} */
+
+.proposerOptions p {
+  @media (max-width: 992px) {
+    padding-top: 0;
+    margin: 0 0 5px;
+  }
+}
 
 .proposerOptionsHeader {
   font-size: 13px; 

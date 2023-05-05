@@ -31,6 +31,7 @@ import dayjs from 'dayjs';
 interface ProposalHeaderProps {
   proposal: Proposal;
   proposalVersions?: ProposalVersion[];
+  versionNumber?: number;
   isActiveForVoting?: boolean;
   isWalletConnected: boolean;
   isCandidate?: boolean;
@@ -70,8 +71,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const disableVoteButton = !isWalletConnected || !availableVotes || hasVoted;
   const activeLocale = useActiveLocale();
   const currentBlock = useBlockNumber();
-  // TODO: remove this after getting real data from the contract
-  const tempUpdatedBlockNumber = 17097956;
+  const hasManyVersions = props.proposalVersions && props.proposalVersions.length > 1;
 
   useEffect(() => {
     if (currentBlock) {
@@ -128,14 +128,13 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
 
   return (
     <>
-      <Link to={'/vote'}>
-        <button className={clsx(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button>
-      </Link>
-
+      <div className={classes.backButtonWrapper}>
+        <Link to={'/vote'}>
+          <button className={clsx(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button>
+        </Link>
+      </div>
       <div className="d-flex justify-content-between align-items-center">
         <div className="d-flex justify-content-start align-items-start">
-          {/* TODO: bleed left on wide. move above on mobile */}
-
           <div className={classes.headerRow}>
             <span>
               <div className="d-flex">
@@ -213,10 +212,15 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
         )}
       </div>
 
-      <p className={classes.versionHistory}>
-        <strong>Version {props.proposalVersions?.length}</strong>{' '}
-        <span>updated {updatedTimestamp && dayjs(updatedTimestamp).fromNow()}</span>
-      </p>
+      {hasManyVersions && (
+        <p className={classes.versionHistory}>
+          <Link to={`/vote/${proposal.id}/history/`}>
+            {/* TODO: add option to link to different versions */}
+            <strong>Version {props.versionNumber}</strong>{' '}
+            <span>updated {updatedTimestamp && dayjs(updatedTimestamp).fromNow()}</span>
+          </Link>
+        </p>
+      )}
 
       {isMobile && (
         <div className={classes.mobileSubmitProposalButton}>{isActiveForVoting && voteButton}</div>

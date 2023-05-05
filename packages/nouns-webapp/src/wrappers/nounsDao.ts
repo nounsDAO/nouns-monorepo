@@ -65,6 +65,8 @@ interface ProposalCallResult {
   proposalThreshold: EthersBN;
   proposer: string;
   quorumVotes: EthersBN;
+  objectionPeriodEndBlock: EthersBN;
+  updatePeriodEndBlock: EthersBN;
 }
 
 export interface ProposalDetail {
@@ -86,6 +88,7 @@ export interface PartialProposal {
   eta: Date | undefined;
   quorumVotes: number;
   objectionPeriodEndBlock: number;
+  updatePeriodEndBlock: number;
 }
 
 export interface Proposal extends PartialProposal {
@@ -101,7 +104,17 @@ export interface ProposalVersion {
   id: string;
   createdAt: string;
   updateMessage: string;
-  proposal: Proposal;
+  description: string;
+  targets: string[];
+  values: string[];
+  signatures: string[];
+  calldatas: string[];
+  title: string;
+  details: ProposalDetail[];
+  proposal: {
+    id: string;
+  };
+  versionNumber: number;
 }
 
 interface ProposalTransactionDetails {
@@ -505,14 +518,6 @@ const getProposalState = (
 ) => {
   const status = ProposalState[proposal.status];
 
-  console.log(
-    'getProposalState',
-    status,
-    proposal.updatePeriodEndBlock,
-    blockNumber,
-    blockTimestamp,
-    proposal,
-  );
   if (status === ProposalState.PENDING) {
     if (!blockNumber) {
       return ProposalState.UNDETERMINED;
@@ -658,6 +663,48 @@ const parseSubgraphProposal = (
     details: details,
     transactionHash: proposal.createdTransactionHash,
     objectionPeriodEndBlock: parseInt(proposal.objectionPeriodEndBlock),
+    updatePeriodEndBlock: parseInt(proposal.updatePeriodEndBlock),
+  };
+};
+
+const parseSubgraphProposalVersions = (
+  proposal: ProposalSubgraphEntity | undefined,
+  blockNumber: number | undefined,
+  timestamp: number | undefined,
+  toUpdate?: boolean,
+) => {
+  if (!proposal) {
+    return;
+  }
+
+  const description = proposal.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, '');
+  let details;
+  if (toUpdate) {
+    console.log('parseSubgraphProposal toUpdate', toUpdate);
+    details = formatProposalTransactionDetailsToUpdate(proposal);
+    console.log('parseSubgraphProposal details', details);
+  } else {
+    details = formatProposalTransactionDetails(proposal);
+  }
+  return {
+    id: proposal.id,
+    title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
+    description: description ?? 'No description.',
+    proposer: proposal.proposer?.id,
+    status: getProposalState(blockNumber, new Date((timestamp ?? 0) * 1000), proposal),
+    proposalThreshold: parseInt(proposal.proposalThreshold),
+    quorumVotes: parseInt(proposal.quorumVotes),
+    forCount: parseInt(proposal.forVotes),
+    againstCount: parseInt(proposal.againstVotes),
+    abstainCount: parseInt(proposal.abstainVotes),
+    createdBlock: parseInt(proposal.createdBlock),
+    startBlock: parseInt(proposal.startBlock),
+    endBlock: parseInt(proposal.endBlock),
+    eta: proposal.executionETA ? new Date(Number(proposal.executionETA) * 1000) : undefined,
+    details: details,
+    transactionHash: proposal.createdTransactionHash,
+    objectionPeriodEndBlock: parseInt(proposal.objectionPeriodEndBlock),
+    updatePeriodEndBlock: parseInt(proposal.updatePeriodEndBlock),
   };
 };
 
@@ -723,6 +770,7 @@ export const useAllProposalsViaChain = (skip = false): PartialProposalData => {
           abstainCount: parseInt(proposal?.abstainVotes?.toString() ?? '0'),
           quorumVotes: parseInt(proposal?.quorumVotes?.toString() ?? '0'),
           eta: proposal?.eta ? new Date(proposal?.eta?.toNumber() * 1000) : undefined,
+          updatePeriodEndBlock: parseInt(proposal?.updatePeriodEndBlock?.toString() ?? ''),
         };
       }),
       loading: false,
@@ -755,13 +803,39 @@ export const useProposalVersions = (
   const timestamp = useBlockTimestamp(blockNumber);
   const proposalVersions = useQuery(proposalVersionsQuery(id)).data?.proposalVersions;
 
-  return proposalVersions;
-  // return parseSubgraphProposal(
-  //   useQuery(proposalQuery(id)).data?.proposal,
-  //   blockNumber,
-  //   timestamp,
-  //   toUpdate,
-  // );
+  const sortedProposalVersions =
+    proposalVersions &&
+    [...proposalVersions].sort((a: ProposalVersion, b: ProposalVersion) =>
+      a.createdAt > b.createdAt ? 1 : -1,
+    );
+
+  const sortedNumberedVersions = sortedProposalVersions?.map((proposalVersion: any, i: number) => {
+    console.log('proposalVersion', proposalVersion);
+    return {
+      id: proposalVersion.id,
+      versionNumber: i + 1,
+      createdAt: proposalVersion.createdAt,
+      updateMessage: proposalVersion.updateMessage,
+      description: proposalVersion.description,
+      targets: proposalVersion.targets,
+      values: proposalVersion.values,
+      signatures: proposalVersion.signatures,
+      calldatas: proposalVersion.calldatas,
+      title: proposalVersion.title,
+      details: formatProposalTransactionDetails(proposalVersion),
+      proposal: {
+        id: proposalVersion.proposal.id,
+      },
+      // proposal: parseSubgraphProposalVersions(
+      //   proposalVersion.proposal,
+      //   blockNumber,
+      //   timestamp,
+      //   toUpdate,
+      // ),
+    };
+  });
+
+  return sortedNumberedVersions;
 };
 
 export const useCandidate = (id: string): ProposalCandidate | undefined => {

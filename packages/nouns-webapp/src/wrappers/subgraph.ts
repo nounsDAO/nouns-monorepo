@@ -163,29 +163,14 @@ export const proposalVersionsQuery = (id: string | number) => gql`
       id
       createdAt
       updateMessage
+      title
+      description
+      targets
+      values
+      signatures
+      calldatas
       proposal {
         id
-        description
-        status
-        proposalThreshold
-        quorumVotes
-        forVotes
-        againstVotes
-        abstainVotes
-        createdTransactionHash
-        createdBlock
-        startBlock
-        endBlock
-        updatePeriodEndBlock
-        objectionPeriodEndBlock
-        executionETA
-        targets
-        values
-        signatures
-        calldatas
-        proposer {
-          id
-        }
       }
     }
   }

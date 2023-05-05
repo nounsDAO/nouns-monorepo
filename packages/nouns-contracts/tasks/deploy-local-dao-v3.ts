@@ -39,7 +39,13 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
   .addOptionalParam('auctionDuration', 'The auction duration (seconds)', 60 * 2, types.int) // Default: 2 minutes
   .addOptionalParam('timelockDelay', 'The timelock delay (seconds)', 60 * 60 * 24 * 2, types.int) // Default: 2 days
   .addOptionalParam('votingPeriod', 'The voting period (blocks)', 4 * 60 * 24 * 3, types.int) // Default: 3 days
-  .addOptionalParam('votingDelay', 'The voting delay (blocks)', 1, types.int) // Default: 1 block
+  .addOptionalParam('votingDelay', 'The voting delay (blocks)', 100, types.int) // Default: 1 block
+  .addOptionalParam(
+    'proposalUpdatablePeriodInBlocks',
+    'The updatable period in blocks',
+    100,
+    types.int,
+  ) // Default: 1 block
   .addOptionalParam('proposalThresholdBps', 'The proposal threshold (basis points)', 500, types.int) // Default: 5%
   .addOptionalParam(
     'minQuorumVotesBPS',
@@ -174,9 +180,9 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
             maxQuorumVotesBPS: args.maxQuorumVotesBPS,
             quorumCoefficient: parseUnits(args.quorumCoefficient.toString(), 6),
           }, // DynamicQuorumParams
-          0, // lastMinuteWindowInBlocks
-          0, // objectionPeriodDurationInBlocks
-          0, // proposalUpdatablePeriodInBlocks
+          50, // lastMinuteWindowInBlocks
+          100, // objectionPeriodDurationInBlocks
+          1000, // proposalUpdatablePeriodInBlocks
         ],
         waitForConfirmation: true,
       },
