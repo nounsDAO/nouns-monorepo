@@ -6,7 +6,12 @@ import { Link } from 'react-router-dom';
 import ProposalStatus from '../ProposalStatus';
 import classes from './ProposalHeader.module.css';
 import navBarButtonClasses from '../NavBarButton/NavBarButton.module.css';
-import { Proposal, useHasVotedOnProposal, useProposalVote } from '../../wrappers/nounsDao';
+import {
+  Proposal,
+  ProposalVersion,
+  useHasVotedOnProposal,
+  useProposalVote,
+} from '../../wrappers/nounsDao';
 import clsx from 'clsx';
 import { isMobileScreen } from '../../utils/isMobile';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
@@ -25,6 +30,7 @@ import dayjs from 'dayjs';
 
 interface ProposalHeaderProps {
   proposal: Proposal;
+  proposalVersions?: ProposalVersion[];
   isActiveForVoting?: boolean;
   isWalletConnected: boolean;
   isCandidate?: boolean;
@@ -66,10 +72,11 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const currentBlock = useBlockNumber();
   // TODO: remove this after getting real data from the contract
   const tempUpdatedBlockNumber = 17097956;
+
   useEffect(() => {
     if (currentBlock) {
       // TODO: remove this after getting real data from the contract
-      const timestamp = timestampFromBlockNumber(tempUpdatedBlockNumber, currentBlock);
+      const timestamp = timestampFromBlockNumber(props.proposal.createdBlock, currentBlock);
       setUpdatedTimestamp(timestamp.toDate());
     }
   }, [currentBlock]);
@@ -121,12 +128,14 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
 
   return (
     <>
+      <Link to={'/vote'}>
+        <button className={clsx(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button>
+      </Link>
+
       <div className="d-flex justify-content-between align-items-center">
         <div className="d-flex justify-content-start align-items-start">
           {/* TODO: bleed left on wide. move above on mobile */}
-          <Link to={'/vote'}>
-            <button className={clsx(classes.backButton, navBarButtonClasses.whiteInfo)}>←</button>
-          </Link>
+
           <div className={classes.headerRow}>
             <span>
               <div className="d-flex">
@@ -205,7 +214,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
       </div>
 
       <p className={classes.versionHistory}>
-        <strong>Version X</strong>{' '}
+        <strong>Version {props.proposalVersions?.length}</strong>{' '}
         <span>updated {updatedTimestamp && dayjs(updatedTimestamp).fromNow()}</span>
       </p>
 

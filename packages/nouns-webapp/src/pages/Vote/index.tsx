@@ -7,6 +7,7 @@ import {
   useCurrentQuorum,
   useExecuteProposal,
   useProposal,
+  useProposalVersions,
   useQueueProposal,
 } from '../../wrappers/nounsDao';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
@@ -83,6 +84,8 @@ const VotePage = ({
   },
 }: RouteComponentProps<{ id: string }>) => {
   const proposal = useProposal(id);
+  const proposalVersions = useProposalVersions(id);
+  console.log('proposalVersions', proposalVersions);
   const { account } = useEthers();
   const activeLocale = useActiveLocale();
 
@@ -359,8 +362,6 @@ const VotePage = ({
   const abstainNouns = getNounVotes(data, 2);
   const isV2Prop = dqInfo.proposal.quorumCoefficient > 0;
 
-  console.log('proposal', proposal);
-
   return (
     <Section fullWidth={false} className={classes.votePage}>
       {showDynamicQuorumInfoModal && (
@@ -386,6 +387,7 @@ const VotePage = ({
         {proposal && (
           <ProposalHeader
             proposal={proposal}
+            proposalVersions={proposalVersions}
             isActiveForVoting={isActiveForVoting}
             isWalletConnected={isWalletConnected}
             submitButtonClickHandler={() => setShowVoteModal(true)}

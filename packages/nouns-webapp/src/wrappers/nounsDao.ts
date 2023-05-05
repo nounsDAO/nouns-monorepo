@@ -15,7 +15,12 @@ import { useLogs } from '../hooks/useLogs';
 import * as R from 'ramda';
 import config, { CHAIN_ID } from '../config';
 import { useQuery } from '@apollo/client';
-import { proposalQuery, partialProposalsQuery, candidateProposalQuery } from './subgraph';
+import {
+  proposalQuery,
+  partialProposalsQuery,
+  candidateProposalQuery,
+  proposalVersionsQuery,
+} from './subgraph';
 import BigNumber from 'bignumber.js';
 import { useBlockTimestamp } from '../hooks/useBlockTimestamp';
 
@@ -90,6 +95,13 @@ export interface Proposal extends PartialProposal {
   proposalThreshold: number;
   details: ProposalDetail[];
   transactionHash: string;
+}
+
+export interface ProposalVersion {
+  id: string;
+  createdAt: string;
+  updateMessage: string;
+  proposal: Proposal;
 }
 
 interface ProposalTransactionDetails {
@@ -573,7 +585,6 @@ const parseSubgraphCandidate = (
   blockNumber: number | undefined,
   timestamp: number | undefined,
 ) => {
-  console.log('parseSubgraphCandidate', candidate);
   if (!candidate) {
     return;
   }
@@ -734,6 +745,23 @@ export const useProposal = (id: string | number, toUpdate?: boolean): Proposal |
     timestamp,
     toUpdate,
   );
+};
+
+export const useProposalVersions = (
+  id: string | number,
+  toUpdate?: boolean,
+): ProposalVersion[] | undefined => {
+  const blockNumber = useBlockNumber();
+  const timestamp = useBlockTimestamp(blockNumber);
+  const proposalVersions = useQuery(proposalVersionsQuery(id)).data?.proposalVersions;
+
+  return proposalVersions;
+  // return parseSubgraphProposal(
+  //   useQuery(proposalQuery(id)).data?.proposal,
+  //   blockNumber,
+  //   timestamp,
+  //   toUpdate,
+  // );
 };
 
 export const useCandidate = (id: string): ProposalCandidate | undefined => {

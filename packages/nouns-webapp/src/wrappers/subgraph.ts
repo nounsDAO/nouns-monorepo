@@ -157,6 +157,40 @@ export const candidateProposalQuery = (id: string) => gql`
 }
 `;
 
+export const proposalVersionsQuery = (id: string | number) => gql`
+  {
+    proposalVersions(where: { proposal_: { id: "${id}" } }) {
+      id
+      createdAt
+      updateMessage
+      proposal {
+        id
+        description
+        status
+        proposalThreshold
+        quorumVotes
+        forVotes
+        againstVotes
+        abstainVotes
+        createdTransactionHash
+        createdBlock
+        startBlock
+        endBlock
+        updatePeriodEndBlock
+        objectionPeriodEndBlock
+        executionETA
+        targets
+        values
+        signatures
+        calldatas
+        proposer {
+          id
+        }
+      }
+    }
+  }
+`;
+
 export const auctionQuery = (auctionId: number) => gql`
 {
 	auction(id: ${auctionId}) {
