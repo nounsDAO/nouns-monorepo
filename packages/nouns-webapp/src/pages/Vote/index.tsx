@@ -2,6 +2,7 @@ import { Row, Col, Button, Card, Spinner } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import {
   PartialProposal,
+  Proposal,
   ProposalState,
   useCancelProposal,
   useCurrentQuorum,
@@ -12,7 +13,7 @@ import {
 } from '../../wrappers/nounsDao';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Vote.module.css';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps, useParams, useRouteMatch } from 'react-router-dom';
 import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import dayjs from 'dayjs';
@@ -50,6 +51,7 @@ import { parseStreamCreationCallData } from '../../utils/streamingPaymentUtils/s
 import VoteSignals from '../../components/VoteSignals/VoteSignals';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '../../i18n/locales';
+import { isProposalUpdatable } from '../../utils/proposals';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -85,7 +87,6 @@ const VotePage = ({
 }: RouteComponentProps<{ id: string }>) => {
   const proposal = useProposal(id);
   const proposalVersions = useProposalVersions(id);
-  console.log('proposalVersions', proposalVersions);
   const { account } = useEthers();
   const activeLocale = useActiveLocale();
 
@@ -164,10 +165,11 @@ const VotePage = ({
   ].includes(proposal?.status!);
   const isCancellable =
     isInNonFinalState && proposal?.proposer?.toLowerCase() === account?.toLowerCase();
-
-  const isUpdateable =
-    proposal?.status == ProposalState.UPDATABLE &&
-    proposal?.proposer?.toLowerCase() === account?.toLowerCase();
+  const isProposer = proposal?.proposer?.toLowerCase() === account?.toLowerCase();
+  const isUpdateable = proposal && currentBlock && isProposalUpdatable(proposal, currentBlock);
+  const hasManyVersions = proposalVersions && proposalVersions.length > 1;
+  // let routeMatch = useRouteMatch('/vote/:id');
+  // const isLatestProposalVersion = routeMatch?.params?.id === proposal?.id;
 
   const isAwaitingStateChange = () => {
     if (hasSucceeded) {
@@ -391,6 +393,7 @@ const VotePage = ({
             isActiveForVoting={isActiveForVoting}
             isWalletConnected={isWalletConnected}
             submitButtonClickHandler={() => setShowVoteModal(true)}
+            versionNumber={hasManyVersions ? proposalVersions?.length : undefined}
           />
         )}
       </Col>
@@ -435,68 +438,73 @@ const VotePage = ({
             })}
         <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
           <Col className="d-grid gap-4">
-            <div className={classes.proposerOptionsWrapper}>
-              <div className={classes.proposerOptions}>
-                <p>
-                  <span className={classes.proposerOptionsHeader}>Proposer functions</span>
-                  {isUpdateable && (
-                    <>
-                      <Trans>This proposal can be edited for the next </Trans>{' '}
-                      {getCountdownCopy(proposal, currentBlock || 0, activeLocale)}
-                    </>
-                  )}
-                  {isCancellable && !isUpdateable && (
-                    <>
-                      <Trans>This proposal can be canceled for the next </Trans>{' '}
-                      {getCountdownCopy(proposal, currentBlock || 0, activeLocale)}
-                    </>
-                  )}
-                </p>
-                <div className="d-flex gap-3">
-                  {(isAwaitingStateChange() || isAwaitingDestructiveStateChange()) && (
-                    <>
-                      {isAwaitingStateChange() && (
-                        <Button
-                          onClick={moveStateAction}
-                          disabled={isQueuePending || isExecutePending}
-                          variant="dark"
-                          className={classes.transitionStateButton}
-                        >
-                          {isQueuePending || isExecutePending ? (
-                            <Spinner animation="border" />
-                          ) : (
-                            <Trans>{moveStateButtonAction} Proposal ⌐◧-◧</Trans>
-                          )}
-                        </Button>
-                      )}
+            {isProposer && (
+              <div className={classes.proposerOptionsWrapper}>
+                <div className={classes.proposerOptions}>
+                  <p>
+                    <span className={classes.proposerOptionsHeader}>Proposer functions</span>
+                    {isUpdateable && (
+                      <>
+                        <Trans>This proposal can be edited for the next </Trans>{' '}
+                        {getCountdownCopy(proposal, currentBlock || 0, activeLocale)}
+                      </>
+                    )}
+                    {isCancellable && !isUpdateable && (
+                      <>
+                        <Trans>This proposal can be canceled for the next </Trans>{' '}
+                        {getCountdownCopy(proposal, currentBlock || 0, activeLocale)}
+                      </>
+                    )}
+                  </p>
+                  <div className="d-flex gap-3">
+                    {(isAwaitingStateChange() || isAwaitingDestructiveStateChange()) && (
+                      <>
+                        {isAwaitingStateChange() && (
+                          <Button
+                            onClick={moveStateAction}
+                            disabled={isQueuePending || isExecutePending}
+                            variant="dark"
+                            className={classes.transitionStateButton}
+                          >
+                            {isQueuePending || isExecutePending ? (
+                              <Spinner animation="border" />
+                            ) : (
+                              <Trans>{moveStateButtonAction} Proposal ⌐◧-◧</Trans>
+                            )}
+                          </Button>
+                        )}
 
-                      {isAwaitingDestructiveStateChange() && (
-                        <Button
-                          onClick={destructiveStateAction}
-                          disabled={isCancelPending}
-                          className={clsx(classes.destructiveTransitionStateButton, classes.button)}
-                        >
-                          {isCancelPending ? (
-                            <Spinner animation="border" />
-                          ) : (
-                            <Trans>{destructiveStateButtonAction} Proposal </Trans>
-                          )}
-                        </Button>
-                      )}
-                    </>
-                  )}
+                        {isAwaitingDestructiveStateChange() && (
+                          <Button
+                            onClick={destructiveStateAction}
+                            disabled={isCancelPending}
+                            className={clsx(
+                              classes.destructiveTransitionStateButton,
+                              classes.button,
+                            )}
+                          >
+                            {isCancelPending ? (
+                              <Spinner animation="border" />
+                            ) : (
+                              <Trans>{destructiveStateButtonAction} Proposal </Trans>
+                            )}
+                          </Button>
+                        )}
+                      </>
+                    )}
 
-                  {isUpdateable && (
-                    <Link
-                      to={`/update-proposal/${id}`}
-                      className={clsx(classes.primaryButton, classes.button)}
-                    >
-                      Edit
-                    </Link>
-                  )}
+                    {isUpdateable && (
+                      <Link
+                        to={`/update-proposal/${id}`}
+                        className={clsx(classes.primaryButton, classes.button)}
+                      >
+                        Edit
+                      </Link>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </Col>
         </Row>
 
@@ -627,14 +635,22 @@ const VotePage = ({
         {proposal?.status === ProposalState.PENDING ? (
           <>
             <Col xl={8} lg={12}>
-              <ProposalContent proposal={proposal} />
+              <ProposalContent
+                description={proposal.description}
+                title={proposal.title}
+                details={proposal.details}
+              />
             </Col>
             <Col xl={4} lg={12} className={classes.sidebar}>
               <VoteSignals availableVotes={availableVotes} proposal={proposal} />
             </Col>
           </>
         ) : (
-          <ProposalContent proposal={proposal} />
+          <ProposalContent
+            description={proposal.description}
+            title={proposal.title}
+            details={proposal.details}
+          />
         )}
       </Row>
     </Section>
