@@ -613,8 +613,8 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
                 else if(i == 2) accBuffer = art.faces(accIdImage);
                 else if(i == 3) accBuffer = art.lipses(accIdImage);
                 else if(i == 4) accBuffer = art.emotions(accIdImage);
-                else if(i == 5) accBuffer = art.beards(accIdImage);
-                else if(i == 6) accBuffer = art.teeths(accIdImage);
+                else if(i == 5) accBuffer = art.teeths(accIdImage);
+                else if(i == 6) accBuffer = art.beards(accIdImage);
                 else if(i == 7) accBuffer = art.earses(accIdImage);
                 else if(i == 8) accBuffer = art.hats(accIdImage);
                 else if(i == 9) accBuffer = art.hairs(accIdImage);

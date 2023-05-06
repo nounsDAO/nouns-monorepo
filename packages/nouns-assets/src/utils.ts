@@ -6,7 +6,7 @@ import probDoc from './config/probability.json'
 
 const probs: any = probDoc
 const { types, necks, cheekses, faces, beards, mouths, earses, hats, hairs, teeths, lipses, emotions, eyeses, glasseses, noses } = images;
-const accResource = [ necks, cheekses, faces, lipses, emotions, beards, teeths, earses, hats, hairs, mouths, glasseses, eyeses, noses ]
+const accResource = [ necks, cheekses, faces, lipses, emotions, teeths, beards, earses, hats, hairs, mouths, glasseses, eyeses, noses ]
 
 export const type2PunkBasic = [
   { punkType: 0, skinTone: 0 },
