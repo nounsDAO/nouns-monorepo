@@ -7,7 +7,7 @@ import {
   ProposalCandidateUpdated,
   SignatureAdded,
 } from './types/NounsDAOData/NounsDAOData';
-import { ProposalCandidate, ProposalCandidateVersion } from './types/schema';
+import { ProposalCandidateVersion } from './types/schema';
 import {
   getOrCreateDelegate,
   getOrCreateProposalCandidate,
@@ -157,18 +157,4 @@ function captureProposalCandidateVersion(
   version.save();
 
   return version;
-}
-
-function getMatchingCandidateVersion(
-  versionIds: string[],
-  encodedPropHash: Bytes,
-): ProposalCandidateVersion | null {
-  for (let i = 0; i < versionIds.length; i++) {
-    const versionId = versionIds[i];
-    const version = getOrCreateProposalCandidateVersion(versionId);
-    if (encodedPropHash == version.encodedProposalHash) {
-      return version;
-    }
-  }
-  return null;
 }
