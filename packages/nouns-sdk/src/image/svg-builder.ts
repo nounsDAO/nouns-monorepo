@@ -69,10 +69,11 @@ export const buildSVG = (
               }" fill="#${hexColor}" />`,
             );
           } else {
+            const opacity = Math.floor(parseInt(hexOpacity, 16) * 100 / 255)
             svgRects.push(
               `<rect width="${length * 4}" height="4" x="${currentX * 4}" y="${
                 currentY * 4
-              }" fill="#${hexColor}" opacity="0.30" />`,
+              }" fill="#${hexColor}" opacity="0.${opacity}" />`,
             );
           }
         }

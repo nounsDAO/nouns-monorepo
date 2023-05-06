@@ -111,7 +111,7 @@ contract SVGRenderer is ISVGRenderer {
         for (uint8 p = 0; p < params.parts.length; p++) {
             DecodedImage memory image = _decodeRLEImage(params.parts[p].image);
             if (cachedPaletteId != image.paletteId) {
-                cache = new string[](128); // Initialize color cache, assumed that palette is shorter than 128
+                cache = new string[](144); // Initialize color cache, assumed that palette is shorter than 144
                 cachedPaletteId = image.paletteId;
             }
             uint256 currentX = image.bounds.left;
