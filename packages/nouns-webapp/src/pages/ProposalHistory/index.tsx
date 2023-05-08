@@ -24,6 +24,8 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import clsx from 'clsx';
 import ProposalHeader from '../../components/ProposalHeader';
 import ProposalContent from '../../components/ProposalContent';
+import ReactDiffViewer from 'react-diff-viewer';
+import ReactMarkdown from 'react-markdown';
 import VoteCard, { VoteCardVariant } from '../../components/VoteCard';
 import { useQuery } from '@apollo/client';
 import {
@@ -92,6 +94,21 @@ const ProposalHistory = ({
   const isWalletConnected = !(activeAccount === undefined);
   console.log('proposalVersions', proposalVersions);
 
+  const v1 = proposalVersions && proposalVersions[0].description;
+  const v2 = proposalVersions && proposalVersions[1].description;
+
+  const highlightSyntax = (str: string) => {
+    <ReactMarkdown
+      className={classes.markdown}
+      children={str}
+      // remarkPlugins={[remarkBreaks]}
+    />;
+  };
+  // <pre
+  // style={{ display: 'inline' }}
+  // dangerouslySetInnerHTML={{ __html: Prism.highlight(str, Prism.languages.javascript) }}
+  // />
+
   return (
     <Section fullWidth={false} className={classes.votePage}>
       <Col lg={10} className={classes.wrapper}>
@@ -107,11 +124,21 @@ const ProposalHistory = ({
       <Col lg={10} className={clsx(classes.proposal, classes.wrapper)}>
         <Row>
           <Col xl={8} lg={12}>
-            {proposalVersions && activeVersion && (
+            {/* {proposalVersions && activeVersion && (
               <ProposalContent
                 description={proposalVersions[activeVersion - 1].description}
                 title={proposalVersions[activeVersion - 1].title}
                 details={proposalVersions[activeVersion - 1].details}
+              />
+            )} */}
+            {proposalVersions && activeVersion && (
+              <ReactDiffViewer
+                oldValue={v1}
+                newValue={v2}
+                splitView={false}
+                hideLineNumbers={true}
+                extraLinesSurroundingDiff={10000}
+                // renderContent={highlightSyntax}
               />
             )}
           </Col>

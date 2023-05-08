@@ -632,7 +632,7 @@ const VotePage = ({
         </Row>
       </Col>
       <Row>
-        {proposal?.status === ProposalState.PENDING ? (
+        {proposal?.status === ProposalState.UPDATABLE ? (
           <>
             <Col xl={8} lg={12}>
               <ProposalContent
