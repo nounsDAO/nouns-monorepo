@@ -7,7 +7,7 @@ import {
   ProposalCandidateUpdated,
   SignatureAdded,
 } from './types/NounsDAOData/NounsDAOData';
-import { ProposalCandidate, ProposalCandidateVersion } from './types/schema';
+import { ProposalCandidateVersion } from './types/schema';
 import {
   getOrCreateDelegate,
   getOrCreateProposalCandidate,
@@ -83,7 +83,10 @@ export function handleProposalCandidateCanceled(event: ProposalCandidateCanceled
 }
 
 export function handleSignatureAdded(event: SignatureAdded): void {
-  const sigId = event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString());
+  const sigId = event.params.signer
+    .toHexString()
+    .concat('-')
+    .concat(event.params.sig.toHexString());
   const candidateSig = getOrCreateProposalCandidateSignature(sigId);
   const candidateId = event.params.proposer.toHexString().concat('-').concat(event.params.slug);
   const candidate = getOrCreateProposalCandidate(candidateId);
@@ -105,6 +108,7 @@ export function handleSignatureAdded(event: SignatureAdded): void {
   candidateSig.encodedProposalHash = event.params.encodedPropHash;
   candidateSig.sigDigest = event.params.sigDigest;
   candidateSig.reason = event.params.reason;
+  candidateSig.canceled = false;
 
   candidateSig.save();
 }
@@ -153,18 +157,4 @@ function captureProposalCandidateVersion(
   version.save();
 
   return version;
-}
-
-function getMatchingCandidateVersion(
-  versionIds: string[],
-  encodedPropHash: Bytes,
-): ProposalCandidateVersion | null {
-  for (let i = 0; i < versionIds.length; i++) {
-    const versionId = versionIds[i];
-    const version = getOrCreateProposalCandidateVersion(versionId);
-    if (encodedPropHash == version.encodedProposalHash) {
-      return version;
-    }
-  }
-  return null;
 }

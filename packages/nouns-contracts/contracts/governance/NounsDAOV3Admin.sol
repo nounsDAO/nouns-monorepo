@@ -201,7 +201,7 @@ library NounsDAOV3Admin {
         emit LastMinuteWindowSet(oldLastMinuteWindowInBlocks, newLastMinuteWindowInBlocks);
     }
 
-    function _setProposalUpdatablePeriodInBlock(
+    function _setProposalUpdatablePeriodInBlocks(
         NounsDAOStorageV3.StorageV3 storage ds,
         uint32 newProposalUpdatablePeriodInBlocks
     ) external {

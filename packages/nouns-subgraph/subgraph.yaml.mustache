@@ -81,13 +81,14 @@ dataSources:
         - Proposal
         - Vote
         - Governance
+        - ProposalCandidateSignature
       abis:
         - name: NounsDAO
           file: ../nouns-contracts/abi/contracts/governance/NounsDAOLogicV3.sol/NounsDAOLogicV3.json
       eventHandlers:
         - event: ProposalCreatedWithRequirements(uint256,address,address[],uint256[],string[],bytes[],uint256,uint256,uint256,uint256,string)
           handler: handleProposalCreatedWithRequirements
-        - event: ProposalCreatedWithRequirements(uint256,address,address[],address[],uint256[],string[],bytes[],uint256,uint256,uint256,uint256,string)
+        - event: ProposalCreatedWithRequirements(uint256,address,address[],address[],uint256[],string[],bytes[],uint256,uint256,uint256,uint256,uint256,string)
           handler: handleProposalCreatedWithRequirementsV3
         - event: ProposalCanceled(uint256)
           handler: handleProposalCanceled
@@ -113,6 +114,8 @@ dataSources:
           handler: handleProposalTransactionsUpdated
         - event: ProposalObjectionPeriodSet(indexed uint256,uint256)
           handler: handleProposalObjectionPeriodSet
+        - event: SignatureCancelled(indexed address,bytes)
+          handler: handleSignatureCanceled
   - kind: ethereum/contract
     name: NounsDAOData
     network: {{network}}

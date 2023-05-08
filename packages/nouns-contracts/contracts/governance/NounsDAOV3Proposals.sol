@@ -55,7 +55,7 @@ library NounsDAOV3Proposals {
     );
 
     /// @notice An event emitted when a new proposal is created, which includes additional information
-    /// @dev V3 adds `signers` compared to the V1/V2 event.
+    /// @dev V3 adds `signers`, `updatePeriodEndBlock` compared to the V1/V2 event.
     event ProposalCreatedWithRequirements(
         uint256 id,
         address proposer,
@@ -66,6 +66,7 @@ library NounsDAOV3Proposals {
         bytes[] calldatas,
         uint256 startBlock,
         uint256 endBlock,
+        uint256 updatePeriodEndBlock,
         uint256 proposalThreshold,
         uint256 quorumVotes,
         string description
@@ -715,7 +716,7 @@ library NounsDAOV3Proposals {
 
         /// @notice V1: Updated event with `proposalThreshold` and `quorumVotes` `minQuorumVotes`
         /// @notice V2: `quorumVotes` changed to `minQuorumVotes`
-        /// @notice V3: Added signers
+        /// @notice V3: Added signers and updatePeriodEndBlock
         emit ProposalCreatedWithRequirements(
             newProposal.id,
             msg.sender,
@@ -726,6 +727,7 @@ library NounsDAOV3Proposals {
             txs.calldatas,
             newProposal.startBlock,
             newProposal.endBlock,
+            newProposal.updatePeriodEndBlock,
             newProposal.proposalThreshold,
             minQuorumVotes,
             description
