@@ -85,9 +85,9 @@ library NounsDAOV3Admin {
         uint256 newVoteSnapshotBlockSwitchProposalId
     );
 
-    event SplitDAODeployerSet(address oldSplitDAODeployer, address newSplitDAODeployer);
+    event ForkDAODeployerSet(address oldForkDAODeployer, address newForkDAODeployer);
 
-    event ERC20TokensToIncludeInSplitSet(address[] oldErc20Tokens, address[] newErc20tokens);
+    event ERC20TokensToIncludeInForkSet(address[] oldErc20Tokens, address[] newErc20tokens);
 
     /// @notice The minimum setable proposal threshold
     uint256 public constant MIN_PROPOSAL_THRESHOLD_BPS = 1; // 1 basis point or 0.01%
@@ -462,21 +462,21 @@ library NounsDAOV3Admin {
         );
     }
 
-    function _setSplitDAODeployer(
+    function _setForkDAODeployer(
         NounsDAOStorageV3.StorageV3 storage ds, 
-        address newSplitDAODeployer
+        address newForkDAODeployer
     ) external {
         if (msg.sender != ds.admin) {
             revert AdminOnly();
         }
 
-        address oldSplitDAODeployer = address(ds.splitDAODeployer);
-        ds.splitDAODeployer = ISplitDAODeployer(newSplitDAODeployer);
+        address oldForkDAODeployer = address(ds.forkDAODeployer);
+        ds.forkDAODeployer = IForkDAODeployer(newForkDAODeployer);
 
-        emit SplitDAODeployerSet(oldSplitDAODeployer, newSplitDAODeployer);
+        emit ForkDAODeployerSet(oldForkDAODeployer, newForkDAODeployer);
     }
 
-    function _setErc20TokensToIncludeInSplit(
+    function _setErc20TokensToIncludeInFork(
         NounsDAOStorageV3.StorageV3 storage ds,
         address[] calldata erc20tokens
     ) external {
@@ -484,16 +484,16 @@ library NounsDAOV3Admin {
             revert AdminOnly();
         }
 
-        address[] memory oldErc20TokensToIncludeInSplit = ds.erc20TokensToIncludeInSplit;
-        ds.erc20TokensToIncludeInSplit = erc20tokens;
+        address[] memory oldErc20TokensToIncludeInFork = ds.erc20TokensToIncludeInFork;
+        ds.erc20TokensToIncludeInFork = erc20tokens;
 
-        emit ERC20TokensToIncludeInSplitSet(oldErc20TokensToIncludeInSplit, erc20tokens);
+        emit ERC20TokensToIncludeInForkSet(oldErc20TokensToIncludeInFork, erc20tokens);
     }
 
-    function _setSplitEscrow(NounsDAOStorageV3.StorageV3 storage ds, address newSplitEscrow) external {
+    function _setForkEscrow(NounsDAOStorageV3.StorageV3 storage ds, address newForkEscrow) external {
         // TODO event?
 
-        ds.splitEscrow = INounsDAOSplitEscrow(newSplitEscrow);
+        ds.forkEscrow = INounsDAOForkEscrow(newForkEscrow);
     }
 
     function _writeQuorumParamsCheckpoint(

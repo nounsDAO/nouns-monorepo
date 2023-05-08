@@ -19,13 +19,13 @@ pragma solidity ^0.8.6;
 
 import './NounsDAOInterfaces.sol';
 import { NounsDAOV3DynamicQuorum } from './NounsDAOV3DynamicQuorum.sol';
-import { NounsDAOV3Split } from './split/NounsDAOV3Split.sol';
+import { NounsDAOV3Fork } from './fork/NounsDAOV3Fork.sol';
 import { SignatureChecker } from '@openzeppelin/contracts/utils/cryptography/SignatureChecker.sol';
 import { ECDSA } from '@openzeppelin/contracts/utils/cryptography/ECDSA.sol';
 
 library NounsDAOV3Proposals {
     using NounsDAOV3DynamicQuorum for NounsDAOStorageV3.StorageV3;
-    using NounsDAOV3Split for NounsDAOStorageV3.StorageV3;
+    using NounsDAOV3Fork for NounsDAOStorageV3.StorageV3;
 
     error CantCancelProposalAtFinalState();
     error ProposalInfoArityMismatch();

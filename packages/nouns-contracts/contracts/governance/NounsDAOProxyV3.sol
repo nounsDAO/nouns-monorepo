@@ -44,8 +44,8 @@ contract NounsDAOProxyV3 is NounsDAOProxyStorage, NounsDAOEvents {
     constructor(
         address timelock_,
         address nouns_,
-        address splitEscrow_,
-        address splitDAODeployer_,
+        address forkEscrow_,
+        address forkDAODeployer_,
         address vetoer_,
         address admin_,
         address implementation_,
@@ -61,8 +61,8 @@ contract NounsDAOProxyV3 is NounsDAOProxyStorage, NounsDAOEvents {
                 'initialize(address,address,address,address,address,(uint256,uint256,uint256,uint32,uint32,uint32),(uint16,uint16,uint32))',
                 timelock_,
                 nouns_,
-                splitEscrow_,
-                splitDAODeployer_,
+                forkEscrow_,
+                forkDAODeployer_,
                 vetoer_,
                 daoParams_,
                 dynamicQuorumParams_

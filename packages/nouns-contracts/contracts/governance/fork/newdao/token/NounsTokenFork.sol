@@ -25,7 +25,7 @@ import { INounsToken } from '../../../../interfaces/INounsToken.sol';
 import { ERC721 } from './base/ERC721.sol';
 import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
-import { INounsDAOSplitEscrow } from '../../../NounsDAOInterfaces.sol';
+import { INounsDAOForkEscrow } from '../../../NounsDAOInterfaces.sol';
 
 contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable, UUPSUpgradeable {
     error OnlyOwner();
@@ -44,9 +44,9 @@ contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable
     // The Nouns token seeder
     INounsSeeder public seeder;
 
-    INounsDAOSplitEscrow public escrow;
+    INounsDAOForkEscrow public escrow;
 
-    uint32 public splitId;
+    uint32 public forkId;
 
     uint256 public remainingTokensToClaim;
 
@@ -111,8 +111,8 @@ contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable
     function initialize(
         address _owner,
         address _minter,
-        INounsDAOSplitEscrow _escrow,
-        uint32 _splitId,
+        INounsDAOForkEscrow _escrow,
+        uint32 _forkId,
         uint256 startNounId,
         uint256 tokensToClaim
     ) external initializer {
@@ -120,7 +120,7 @@ contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable
         _transferOwnership(_owner);
         minter = _minter;
         escrow = _escrow;
-        splitId = _splitId;
+        forkId = _forkId;
         _currentNounId = startNounId;
         remainingTokensToClaim = tokensToClaim;
 
@@ -133,7 +133,7 @@ contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable
     function claimFromEscrow(uint256[] calldata tokenIds) external {
         for (uint256 i = 0; i < tokenIds.length; i++) {
             uint256 nounId = tokenIds[i];
-            if (escrow.ownerOfEscrowedToken(splitId, nounId) != msg.sender) revert OnlyTokenOwnerCanClaim();
+            if (escrow.ownerOfEscrowedToken(forkId, nounId) != msg.sender) revert OnlyTokenOwnerCanClaim();
 
             _mintWithOriginalSeed(msg.sender, nounId);
         }
@@ -141,7 +141,7 @@ contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable
         remainingTokensToClaim -= tokenIds.length;
     }
 
-    function claimDuringSplitPeriod(address to, uint256[] calldata tokenIds) external {
+    function claimDuringForkPeriod(address to, uint256[] calldata tokenIds) external {
         if (msg.sender != escrow.dao()) revert OnlyOriginalDAO();
 
         for (uint256 i = 0; i < tokenIds.length; i++) {

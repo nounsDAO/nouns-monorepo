@@ -21,21 +21,21 @@ interface NounsDAOLike {
     function nouns() external view returns (NounsTokenLike);
 }
 
-contract NounsDAOSplitEscrow {
+contract NounsDAOForkEscrow {
 
     address public immutable dao;
     NounsTokenLike public immutable nounsToken;
 
-    uint32 public splitId;
+    uint32 public forkId;
 
     /// @dev tokenId => OwnerInfo
     mapping(uint256 => OwnerInfo) public ownerOf;
 
-    /// @dev splitId => tokenId => owner
-    mapping(uint32 => mapping(uint256 => address)) public escrowedTokensBySplitId;
+    /// @dev forkId => tokenId => owner
+    mapping(uint32 => mapping(uint256 => address)) public escrowedTokensByForkId;
 
-    /// @dev splitId => count
-    mapping(uint32 => uint256) public tokensInEscrowBySplitId;
+    /// @dev forkId => count
+    mapping(uint32 => uint256) public tokensInEscrowByForkId;
 
     uint256 public numTokensOwnedByDAO;
 
@@ -43,13 +43,13 @@ contract NounsDAOSplitEscrow {
 
     struct OwnerInfo {
         address owner;
-        uint32 splitId;
+        uint32 forkId;
     }
 
     error OnlyDAO();
     error NotOwner();
     error NotEscrowed();
-    error InvalidSplitId();
+    error InvalidForkId();
 
     constructor(address dao_) {
         dao = dao_;
@@ -65,10 +65,10 @@ contract NounsDAOSplitEscrow {
 
     function markOwner(address owner, uint256[] calldata tokenIds) onlyDAO external {
         for (uint256 i = 0; i < tokenIds.length; i++) {
-            ownerOf[tokenIds[i]] = OwnerInfo(owner, splitId);
-            escrowedTokensBySplitId[splitId][tokenIds[i]] = owner;
+            ownerOf[tokenIds[i]] = OwnerInfo(owner, forkId);
+            escrowedTokensByForkId[forkId][tokenIds[i]] = owner;
         }
-        tokensInEscrowBySplitId[splitId] += tokenIds.length;
+        tokensInEscrowByForkId[forkId] += tokenIds.length;
     }
 
     function returnTokensToOwner(address owner, uint256[] calldata tokenIds) onlyDAO external {
@@ -77,10 +77,10 @@ contract NounsDAOSplitEscrow {
 
             nounsToken.transferFrom(address(this), owner, tokenIds[i]);
             delete ownerOf[tokenIds[i]];
-            escrowedTokensBySplitId[splitId][tokenIds[i]] = address(0);
+            escrowedTokensByForkId[forkId][tokenIds[i]] = address(0);
         }
 
-        tokensInEscrowBySplitId[splitId] -= tokenIds.length;
+        tokensInEscrowByForkId[forkId] -= tokenIds.length;
     }
 
     function withdrawTokensToDAO(uint256[] calldata tokenIds, address to) onlyDAO external {
@@ -94,21 +94,21 @@ contract NounsDAOSplitEscrow {
         numTokensOwnedByDAO -= tokenIds.length;
     }
 
-    function closeEscrow() onlyDAO external returns (uint32 closedSplitId) {
-        numTokensOwnedByDAO += tokensInEscrowBySplitId[splitId];
-        tokensInEscrowBySplitId[splitId] = 0; // TODO: is this needed?
+    function closeEscrow() onlyDAO external returns (uint32 closedForkId) {
+        numTokensOwnedByDAO += tokensInEscrowByForkId[forkId];
+        tokensInEscrowByForkId[forkId] = 0; // TODO: is this needed?
 
-        closedSplitId = splitId;
+        closedForkId = forkId;
 
-        splitId++;
+        forkId++;
     }
 
-    function ownerOfEscrowedToken(uint32 splitId_, uint256 tokenId) external view returns (address) {
-        return escrowedTokensBySplitId[splitId_][tokenId];
+    function ownerOfEscrowedToken(uint32 forkId_, uint256 tokenId) external view returns (address) {
+        return escrowedTokensByForkId[forkId_][tokenId];
     }
 
     function numTokensInEscrow() external view returns (uint256) {
-        return tokensInEscrowBySplitId[splitId];
+        return tokensInEscrowByForkId[forkId];
     }
 
     /// @dev returns address(0) if this tokenId is not registered as escrowed
@@ -116,7 +116,7 @@ contract NounsDAOSplitEscrow {
         OwnerInfo memory ownerInfo = ownerOf[tokenId];
         if (ownerInfo.owner == address(0)) return address(0);
 
-        if (ownerInfo.splitId == splitId) {
+        if (ownerInfo.forkId == forkId) {
             return ownerInfo.owner;
         } else {
             return dao;

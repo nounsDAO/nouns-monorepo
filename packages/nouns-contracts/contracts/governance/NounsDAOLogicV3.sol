@@ -57,14 +57,14 @@ import { NounsDAOV3Admin } from './NounsDAOV3Admin.sol';
 import { NounsDAOV3DynamicQuorum } from './NounsDAOV3DynamicQuorum.sol';
 import { NounsDAOV3Votes } from './NounsDAOV3Votes.sol';
 import { NounsDAOV3Proposals } from './NounsDAOV3Proposals.sol';
-import { NounsDAOV3Split } from './split/NounsDAOV3Split.sol';
+import { NounsDAOV3Fork } from './fork/NounsDAOV3Fork.sol';
 
 contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     using NounsDAOV3Admin for StorageV3;
     using NounsDAOV3DynamicQuorum for StorageV3;
     using NounsDAOV3Votes for StorageV3;
     using NounsDAOV3Proposals for StorageV3;
-    using NounsDAOV3Split for StorageV3;
+    using NounsDAOV3Fork for StorageV3;
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
@@ -135,8 +135,8 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     function initialize(
         address timelock_,
         address nouns_,
-        address splitEscrow_,
-        address splitDAODeployer_,
+        address forkEscrow_,
+        address forkDAODeployer_,
         address vetoer_,
         NounsDAOParams calldata daoParams_,
         DynamicQuorumParams calldata dynamicQuorumParams_
@@ -151,8 +151,8 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         ds._setProposalThresholdBPS(daoParams_.proposalThresholdBPS);
         ds.timelock = INounsDAOExecutorV2(timelock_);
         ds.nouns = NounsTokenLike(nouns_);
-        ds.splitEscrow = INounsDAOSplitEscrow(splitEscrow_);
-        ds.splitDAODeployer = ISplitDAODeployer(splitDAODeployer_);
+        ds.forkEscrow = INounsDAOForkEscrow(forkEscrow_);
+        ds.forkDAODeployer = IForkDAODeployer(forkDAODeployer_);
         ds.vetoer = vetoer_;
         _setDynamicQuorumParams(
             dynamicQuorumParams_.minQuorumVotesBPS,
@@ -365,28 +365,28 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
 
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-     *   DAO SPLIT
+     *   DAO FORK
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
 
-    function signalSplit(uint256[] calldata tokenIds) external {
-        ds.signalSplit(tokenIds);
+    function signalFork(uint256[] calldata tokenIds) external {
+        ds.signalFork(tokenIds);
     }
 
-    function unsignalSplit(uint256[] calldata tokenIds) external {
-        ds.unsignalSplit(tokenIds);
+    function unsignalFork(uint256[] calldata tokenIds) external {
+        ds.unsignalFork(tokenIds);
     }
 
-    function executeSplit() external returns (address splitTreasury, address splitToken) {
-        return ds.executeSplit();
+    function executeFork() external returns (address forkTreasury, address forkToken) {
+        return ds.executeFork();
     }
 
-    function joinSplit(uint256[] calldata tokenIds) external {
-        ds.joinSplit(tokenIds);
+    function joinFork(uint256[] calldata tokenIds) external {
+        ds.joinFork(tokenIds);
     }
 
-    function withdrawSplitTokensToDAO(uint256[] calldata tokenIds) external {
-        ds.withdrawSplitTokensToDAO(tokenIds);
+    function withdrawForkTokensToDAO(uint256[] calldata tokenIds) external {
+        ds.withdrawForkTokensToDAO(tokenIds);
     }
 
     function adjustedTotalSupply() external view returns (uint256) {
@@ -628,16 +628,16 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         ds._setVoteSnapshotBlockSwitchProposalId(newVoteSnapshotBlockSwitchProposalId);
     }
 
-    function _setSplitDAODeployer(address newSplitDAODeployer) external {
-        ds._setSplitDAODeployer(newSplitDAODeployer);
+    function _setForkDAODeployer(address newForkDAODeployer) external {
+        ds._setForkDAODeployer(newForkDAODeployer);
     }
 
-    function _setErc20TokensToIncludeInSplit(address[] calldata erc20tokens) external {
-        ds._setErc20TokensToIncludeInSplit(erc20tokens);
+    function _setErc20TokensToIncludeInFork(address[] calldata erc20tokens) external {
+        ds._setErc20TokensToIncludeInFork(erc20tokens);
     }
 
-    function _setSplitEscrow(address newSplitEscrow) external {
-        ds._setSplitEscrow(newSplitEscrow);
+    function _setForkEscrow(address newForkEscrow) external {
+        ds._setForkEscrow(newForkEscrow);
     }
 
     /**
@@ -767,8 +767,8 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         return ds.objectionPeriodDurationInBlocks;
     }
 
-    function erc20TokensToIncludeInSplit() public view returns (address[] memory) {
-        return ds.erc20TokensToIncludeInSplit;
+    function erc20TokensToIncludeInFork() public view returns (address[] memory) {
+        return ds.erc20TokensToIncludeInFork;
     }
 
     receive() external payable {}

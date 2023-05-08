@@ -6,11 +6,11 @@ import 'forge-std/Test.sol';
 import { DeployUtils } from '../../helpers/DeployUtils.sol';
 import { NounsDAOLogicV3 } from '../../../../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsToken } from '../../../../contracts/NounsToken.sol';
-import { NounsTokenFork } from '../../../../contracts/governance/split/newdao/token/NounsTokenFork.sol';
+import { NounsTokenFork } from '../../../../contracts/governance/fork/newdao/token/NounsTokenFork.sol';
 import { NounsDAOExecutorV2 } from '../../../../contracts/governance/NounsDAOExecutorV2.sol';
-import { NounsDAOLogicV1Fork } from '../../../../contracts/governance/split/newdao/governance/NounsDAOLogicV1Fork.sol';
+import { NounsDAOLogicV1Fork } from '../../../../contracts/governance/fork/newdao/governance/NounsDAOLogicV1Fork.sol';
 
-contract SplitHappyFlowTest is DeployUtils {
+contract ForkHappyFlowTest is DeployUtils {
     address minter;
     NounsDAOLogicV3 daoV3;
     NounsToken ogToken;
@@ -20,12 +20,12 @@ contract SplitHappyFlowTest is DeployUtils {
 
     address nounerInEscrow1 = makeAddr('nouner in escrow 1');
     address nounerInEscrow2 = makeAddr('nouner in escrow 2');
-    address nounerSplitJoiner1 = makeAddr('nouner split joiner 1');
-    address nounerSplitJoiner2 = makeAddr('nouner split joiner 2');
-    address nounerNoSplit1 = makeAddr('nouner no split 1');
-    address nounerNoSplit2 = makeAddr('nouner no split 2');
+    address nounerForkJoiner1 = makeAddr('nouner fork joiner 1');
+    address nounerForkJoiner2 = makeAddr('nouner fork joiner 2');
+    address nounerNoFork1 = makeAddr('nouner no fork 1');
+    address nounerNoFork2 = makeAddr('nouner no fork 2');
 
-    function test_splitHappyFlow() public {
+    function test_forkHappyFlow() public {
         daoV3 = _deployDAOV3();
         ogToken = NounsToken(address(daoV3.nouns()));
         minter = ogToken.minter();
@@ -35,10 +35,10 @@ contract SplitHappyFlowTest is DeployUtils {
         uint256[] memory tokensInEscrow1 = getOwnedTokens(nounerInEscrow1);
         uint256[] memory tokensInEscrow2 = getOwnedTokens(nounerInEscrow2);
 
-        signalSplit(nounerInEscrow1);
-        signalSplit(nounerInEscrow2);
+        signalFork(nounerInEscrow1);
+        signalFork(nounerInEscrow2);
 
-        (address forkTreasuryAddress, address forkTokenAddress) = daoV3.executeSplit();
+        (address forkTreasuryAddress, address forkTokenAddress) = daoV3.executeFork();
         forkTreasury = NounsDAOExecutorV2(payable(forkTreasuryAddress));
         forkToken = NounsTokenFork(forkTokenAddress);
         forkDAO = NounsDAOLogicV1Fork(forkTreasury.admin());
@@ -48,8 +48,8 @@ contract SplitHappyFlowTest is DeployUtils {
         vm.expectRevert(abi.encodeWithSelector(NounsDAOLogicV1Fork.WaitingForTokensToClaimOrExpiration.selector));
         proposeToFork(makeAddr('target'), 0, 'signature', 'data');
 
-        joinSplit(nounerSplitJoiner1);
-        joinSplit(nounerSplitJoiner2);
+        joinFork(nounerForkJoiner1);
+        joinFork(nounerForkJoiner2);
 
         assertEqUint(forkTreasuryAddress.balance, 16 ether);
 
@@ -83,33 +83,33 @@ contract SplitHappyFlowTest is DeployUtils {
         ogToken.transferFrom(minter, nounerInEscrow1, 1);
         ogToken.transferFrom(minter, nounerInEscrow2, 2);
         ogToken.transferFrom(minter, nounerInEscrow2, 3);
-        ogToken.transferFrom(minter, nounerSplitJoiner1, 4);
-        ogToken.transferFrom(minter, nounerSplitJoiner1, 5);
-        ogToken.transferFrom(minter, nounerSplitJoiner2, 6);
-        ogToken.transferFrom(minter, nounerSplitJoiner2, 7);
-        ogToken.transferFrom(minter, nounerNoSplit1, 8);
-        ogToken.transferFrom(minter, nounerNoSplit1, 9);
+        ogToken.transferFrom(minter, nounerForkJoiner1, 4);
+        ogToken.transferFrom(minter, nounerForkJoiner1, 5);
+        ogToken.transferFrom(minter, nounerForkJoiner2, 6);
+        ogToken.transferFrom(minter, nounerForkJoiner2, 7);
+        ogToken.transferFrom(minter, nounerNoFork1, 8);
+        ogToken.transferFrom(minter, nounerNoFork1, 9);
 
         changePrank(nounders);
-        ogToken.transferFrom(nounders, nounerNoSplit2, 10);
+        ogToken.transferFrom(nounders, nounerNoFork2, 10);
 
         changePrank(minter);
-        ogToken.transferFrom(minter, nounerNoSplit2, 11);
+        ogToken.transferFrom(minter, nounerNoFork2, 11);
 
         vm.stopPrank();
     }
 
-    function signalSplit(address nouner) internal {
+    function signalFork(address nouner) internal {
         vm.startPrank(nouner);
         ogToken.setApprovalForAll(address(daoV3), true);
-        daoV3.signalSplit(getOwnedTokens(nouner));
+        daoV3.signalFork(getOwnedTokens(nouner));
         vm.stopPrank();
     }
 
-    function joinSplit(address nouner) internal {
+    function joinFork(address nouner) internal {
         vm.startPrank(nouner);
         ogToken.setApprovalForAll(address(daoV3), true);
-        daoV3.joinSplit(getOwnedTokens(nouner));
+        daoV3.joinFork(getOwnedTokens(nouner));
         vm.stopPrank();
     }
 

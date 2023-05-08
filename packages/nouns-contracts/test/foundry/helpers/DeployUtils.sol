@@ -18,14 +18,14 @@ import { NounsDAOProxy } from '../../../contracts/governance/NounsDAOProxy.sol';
 import { NounsDAOStorageV2, NounsDAOStorageV3 } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { NounsDAOProxyV2 } from '../../../contracts/governance/NounsDAOProxyV2.sol';
 import { NounsDAOProxyV3 } from '../../../contracts/governance/NounsDAOProxyV3.sol';
-import { NounsDAOSplitEscrow } from '../../../contracts/governance/split/NounsDAOSplitEscrow.sol';
+import { NounsDAOForkEscrow } from '../../../contracts/governance/fork/NounsDAOForkEscrow.sol';
 import { Inflator } from '../../../contracts/Inflator.sol';
 import { NounsDAOExecutorV2 } from '../../../contracts/governance/NounsDAOExecutorV2.sol';
 import { ProxyRegistryMock } from './ProxyRegistryMock.sol';
-import { SplitDAODeployer } from '../../../contracts/governance/split/SplitDAODeployer.sol';
-import { NounsTokenFork } from '../../../contracts/governance/split/newdao/token/NounsTokenFork.sol';
-import { NounsAuctionHouseFork } from '../../../contracts/governance/split/newdao/NounsAuctionHouseFork.sol';
-import { NounsDAOLogicV1Fork } from '../../../contracts/governance/split/newdao/governance/NounsDAOLogicV1Fork.sol';
+import { ForkDAODeployer } from '../../../contracts/governance/fork/ForkDAODeployer.sol';
+import { NounsTokenFork } from '../../../contracts/governance/fork/newdao/token/NounsTokenFork.sol';
+import { NounsAuctionHouseFork } from '../../../contracts/governance/fork/newdao/NounsAuctionHouseFork.sol';
+import { NounsDAOLogicV1Fork } from '../../../contracts/governance/fork/newdao/governance/NounsDAOLogicV1Fork.sol';
 import { NounsAuctionHouse } from '../../../contracts/NounsAuctionHouse.sol';
 import { NounsAuctionHouseProxy } from '../../../contracts/proxies/NounsAuctionHouseProxy.sol';
 import { NounsAuctionHouseProxyAdmin } from '../../../contracts/proxies/NounsAuctionHouseProxyAdmin.sol';
@@ -103,13 +103,13 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         address vetoer
     ) internal returns (NounsDAOLogicV1 dao) {
         uint256 nonce = vm.getNonce(address(this));
-        address predictedSplitEscrowAddress = computeCreateAddress(address(this), nonce + 2);
+        address predictedForkEscrowAddress = computeCreateAddress(address(this), nonce + 2);
         dao = NounsDAOLogicV1(
             payable(
                 new NounsDAOProxyV3(
                     timelock,
                     nounsToken,
-                    predictedSplitEscrowAddress,
+                    predictedForkEscrowAddress,
                     address(0),
                     vetoer,
                     timelock,
@@ -130,7 +130,7 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
                 )
             )
         );
-        address(new NounsDAOSplitEscrow(address(dao)));
+        address(new NounsDAOForkEscrow(address(dao)));
     }
 
     function _createDAOV2Proxy(
@@ -189,14 +189,14 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         address daoLogicImplementation = address(new NounsDAOLogicV3());
 
         uint256 nonce = vm.getNonce(address(this));
-        address predictedSplitEscrowAddress = computeCreateAddress(address(this), nonce + 6);
+        address predictedForkEscrowAddress = computeCreateAddress(address(this), nonce + 6);
 
-        SplitDAODeployer splitDeployer = new SplitDAODeployer(
+        ForkDAODeployer forkDeployer = new ForkDAODeployer(
             address(new NounsTokenFork()),
             address(new NounsAuctionHouseFork()),
             address(new NounsDAOLogicV1Fork()),
             address(new NounsDAOExecutorV2()),
-            predictedSplitEscrowAddress,
+            predictedForkEscrowAddress,
             DELAYED_GOV_DURATION
         );
 
@@ -205,8 +205,8 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
                 new NounsDAOProxyV3(
                     address(timelock),
                     address(nounsToken),
-                    predictedSplitEscrowAddress,
-                    address(splitDeployer),
+                    predictedForkEscrowAddress,
+                    address(forkDeployer),
                     vetoer,
                     address(timelock),
                     daoLogicImplementation,
@@ -227,7 +227,7 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
             )
         );
 
-        address(new NounsDAOSplitEscrow(address(dao)));
+        address(new NounsDAOForkEscrow(address(dao)));
 
         vm.prank(address(timelock));
         timelock.setPendingAdmin(address(dao));

@@ -3,28 +3,28 @@ pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
 import { NounsDAOLogicV3BaseTest } from './NounsDAOLogicV3BaseTest.sol';
-import { SplitDAODeployerMock } from '../helpers/SplitDAODeployerMock.sol';
+import { ForkDAODeployerMock } from '../helpers/ForkDAODeployerMock.sol';
 import { ERC20Mock } from '../helpers/ERC20Mock.sol';
-import { NounsDAOV3Split } from '../../../contracts/governance/split/NounsDAOV3Split.sol';
-import { NounsDAOSplitEscrow } from '../../../contracts/governance/split/NounsDAOSplitEscrow.sol';
+import { NounsDAOV3Fork } from '../../../contracts/governance/fork/NounsDAOV3Fork.sol';
+import { NounsDAOForkEscrow } from '../../../contracts/governance/fork/NounsDAOForkEscrow.sol';
 import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 
-abstract contract DAOSplitZeroState is NounsDAOLogicV3BaseTest {
+abstract contract DAOForkZeroState is NounsDAOLogicV3BaseTest {
 
     address tokenHolder = makeAddr("tokenHolder");
     address tokenHolder2 = makeAddr("tokenHolder2");
     uint256[] tokenIds;
-    SplitDAODeployerMock splitDAODeployer;
+    ForkDAODeployerMock forkDAODeployer;
     ERC20Mock erc20Mock = new ERC20Mock();
     address[] erc20Tokens = [address(erc20Mock)];
 
     function setUp() public virtual override {
         super.setUp();
 
-        splitDAODeployer = new SplitDAODeployerMock();
+        forkDAODeployer = new ForkDAODeployerMock();
         vm.startPrank(address(timelock));
-        dao._setSplitDAODeployer(address(splitDAODeployer));
-        dao._setErc20TokensToIncludeInSplit(erc20Tokens);
+        dao._setForkDAODeployer(address(forkDAODeployer));
+        dao._setErc20TokensToIncludeInFork(erc20Tokens);
         vm.stopPrank();
 
         // Seed treasury with 1000 ETH and 300e18 of an erc20 token
@@ -48,153 +48,153 @@ abstract contract DAOSplitZeroState is NounsDAOLogicV3BaseTest {
     }
 }
 
-contract DAOSplitZeroStateTest is DAOSplitZeroState {
-    function test_signalSplit_transfersTokens() public {
+contract DAOForkZeroStateTest is DAOForkZeroState {
+    function test_signalFork_transfersTokens() public {
         tokenIds = [1, 2, 3];
 
         vm.startPrank(tokenHolder);
         nounsToken.setApprovalForAll(address(dao), true);
-        dao.signalSplit(tokenIds);
+        dao.signalFork(tokenIds);
         vm.stopPrank();
 
         assertEq(dao.nouns().balanceOf(tokenHolder), 15);
     }
 
-    function test_executeSplit_reverts() public {
-        vm.expectRevert(NounsDAOV3Split.SplitThresholdNotMet.selector);
-        dao.executeSplit();
+    function test_executeFork_reverts() public {
+        vm.expectRevert(NounsDAOV3Fork.ForkThresholdNotMet.selector);
+        dao.executeFork();
     }
 
-    function test_joinSplit_reverts() public {
+    function test_joinFork_reverts() public {
         tokenIds = [4, 5];
-        vm.expectRevert(NounsDAOV3Split.SplitPeriodNotActive.selector);
+        vm.expectRevert(NounsDAOV3Fork.ForkPeriodNotActive.selector);
         vm.prank(tokenHolder);
-        dao.joinSplit(tokenIds);
+        dao.joinFork(tokenIds);
     }
 }
 
-abstract contract DAOSplitSignaledUnderThresholdState is DAOSplitZeroState {
+abstract contract DAOForkSignaledUnderThresholdState is DAOForkZeroState {
     function setUp() public virtual override {
         super.setUp();
 
-        // signal split with 3 tokens (15%)
+        // signal fork with 3 tokens (15%)
         tokenIds = [1, 2, 3];
 
         vm.startPrank(tokenHolder);
         nounsToken.setApprovalForAll(address(dao), true);
-        dao.signalSplit(tokenIds);
+        dao.signalFork(tokenIds);
         vm.stopPrank();
     }
 }
 
-contract DAOSplitSignaledUnderThresholdStateTest is DAOSplitSignaledUnderThresholdState {
-    function test_executeSplit_reverts() public {
-        vm.expectRevert(NounsDAOV3Split.SplitThresholdNotMet.selector);
-        dao.executeSplit();
+contract DAOForkSignaledUnderThresholdStateTest is DAOForkSignaledUnderThresholdState {
+    function test_executeFork_reverts() public {
+        vm.expectRevert(NounsDAOV3Fork.ForkThresholdNotMet.selector);
+        dao.executeFork();
     }
 
-    function test_joinSplit_reverts() public {
+    function test_joinFork_reverts() public {
         tokenIds = [4, 5];
-        vm.expectRevert(NounsDAOV3Split.SplitPeriodNotActive.selector);
+        vm.expectRevert(NounsDAOV3Fork.ForkPeriodNotActive.selector);
         vm.prank(tokenHolder);
-        dao.joinSplit(tokenIds);
+        dao.joinFork(tokenIds);
     }
 
-    function test_unsignalSplit_returnsTokens() public {
+    function test_unsignalFork_returnsTokens() public {
         assertEq(dao.nouns().balanceOf(tokenHolder), 15);
 
         tokenIds = [1, 2, 3];
 
         vm.prank(tokenHolder);
-        dao.unsignalSplit(tokenIds);
+        dao.unsignalFork(tokenIds);
 
         assertEq(dao.nouns().balanceOf(tokenHolder), 18);
     }
 
-    function test_unsignalSplitWithDifferentTokens_reverts() public {
+    function test_unsignalForkWithDifferentTokens_reverts() public {
         // move Noun #7 to tokenHolder2
         vm.prank(tokenHolder);
         nounsToken.transferFrom(tokenHolder, tokenHolder2, 7);
         assertEq(dao.nouns().ownerOf(7), tokenHolder2);
 
-        // tokenHolder2 signals split with Noun #7
+        // tokenHolder2 signals fork with Noun #7
         vm.startPrank(tokenHolder2);
         nounsToken.approve(address(dao), 7);
         tokenIds = [7];
-        dao.signalSplit(tokenIds);
+        dao.signalFork(tokenIds);
         vm.stopPrank();
 
         tokenIds = [7];
-        vm.expectRevert(NounsDAOSplitEscrow.NotOwner.selector);
+        vm.expectRevert(NounsDAOForkEscrow.NotOwner.selector);
         vm.prank(tokenHolder);
-        dao.unsignalSplit(tokenIds);
+        dao.unsignalFork(tokenIds);
     }
 
     function test_withdrawTokensToDAO_reverts() public {
         tokenIds = [1];
-        vm.expectRevert(NounsDAOSplitEscrow.NotOwner.selector);
-        dao.withdrawSplitTokensToDAO(tokenIds);
+        vm.expectRevert(NounsDAOForkEscrow.NotOwner.selector);
+        dao.withdrawForkTokensToDAO(tokenIds);
     }
 }
 
-abstract contract DAOSplitSignaledOverThresholdState is DAOSplitSignaledUnderThresholdState {
+abstract contract DAOForkSignaledOverThresholdState is DAOForkSignaledUnderThresholdState {
     function setUp() public virtual override {
         super.setUp();
 
-        // signal split with 5 tokens (25%)
+        // signal fork with 5 tokens (25%)
         tokenIds = [4, 5];
 
         vm.startPrank(tokenHolder);
         nounsToken.setApprovalForAll(address(dao), true);
-        dao.signalSplit(tokenIds);
+        dao.signalFork(tokenIds);
         vm.stopPrank();
     }
 }
 
-contract DAOSplitSignaledOverThresholdStateTest is DAOSplitSignaledOverThresholdState {
-    function test_joinSplit_reverts() public {
+contract DAOForkSignaledOverThresholdStateTest is DAOForkSignaledOverThresholdState {
+    function test_joinFork_reverts() public {
         tokenIds = [6, 7];
-        vm.expectRevert(NounsDAOV3Split.SplitPeriodNotActive.selector);
+        vm.expectRevert(NounsDAOV3Fork.ForkPeriodNotActive.selector);
         vm.prank(tokenHolder);
-        dao.joinSplit(tokenIds);
+        dao.joinFork(tokenIds);
     }
 
-    function test_executeSplit() public {
-        dao.executeSplit();
+    function test_executeFork() public {
+        dao.executeFork();
 
         // 25% of treasury should be sent to new DAO
         assertEq(address(timelock).balance, 750 ether);
-        assertEq(address(splitDAODeployer.mockTreasury()).balance, 250 ether);
+        assertEq(address(forkDAODeployer.mockTreasury()).balance, 250 ether);
 
         // 25% of erc20 should be sent to new DAO
         assertEq(erc20Mock.balanceOf(address(timelock)), 225e18);
-        assertEq(erc20Mock.balanceOf(address(splitDAODeployer.mockTreasury())), 75e18);
+        assertEq(erc20Mock.balanceOf(address(forkDAODeployer.mockTreasury())), 75e18);
     }
 
-    function test_unsignalSplitUnderThreshold_blocksExecuteSplit() public {
+    function test_unsignalForkUnderThreshold_blocksExecuteFork() public {
         tokenIds = [1, 2, 3];
 
         vm.prank(tokenHolder);
-        dao.unsignalSplit(tokenIds);
+        dao.unsignalFork(tokenIds);
 
-        vm.expectRevert(NounsDAOV3Split.SplitThresholdNotMet.selector);
-        dao.executeSplit();
+        vm.expectRevert(NounsDAOV3Fork.ForkThresholdNotMet.selector);
+        dao.executeFork();
     }
 
     function test_withdrawTokensToDAO_reverts() public {
         tokenIds = [1];
-        vm.expectRevert(NounsDAOSplitEscrow.NotOwner.selector);
-        dao.withdrawSplitTokensToDAO(tokenIds);
+        vm.expectRevert(NounsDAOForkEscrow.NotOwner.selector);
+        dao.withdrawForkTokensToDAO(tokenIds);
     }
 
     function test_proposalThresholdIsLowered() public {
         vm.prank(address(timelock));
         dao._setProposalThresholdBPS(1000); // 10%
 
-        // Before split execute
+        // Before fork execute
         assertEq(dao.proposalThreshold(), 2);
 
-        dao.executeSplit();
+        dao.executeFork();
 
         // there are 20 tokens, but 5 are now the DAO's, so adjusted total supply is 15
         assertEq(dao.adjustedTotalSupply(), 15);
@@ -211,65 +211,65 @@ contract DAOSplitSignaledOverThresholdStateTest is DAOSplitSignaledOverThreshold
     }
 }
 
-abstract contract DAOSplitExecutedState is DAOSplitSignaledOverThresholdState {
+abstract contract DAOForkExecutedState is DAOForkSignaledOverThresholdState {
     function setUp() public virtual override {
         super.setUp();
 
-        dao.executeSplit();
+        dao.executeFork();
     }
 }
 
-contract DAOSplitExecutedStateTest is DAOSplitExecutedState {
-    function test_signalSplit_reverts() public {
+contract DAOForkExecutedStateTest is DAOForkExecutedState {
+    function test_signalFork_reverts() public {
         tokenIds = [8, 9];
         
-        vm.expectRevert(NounsDAOV3Split.SplitPeriodActive.selector);
+        vm.expectRevert(NounsDAOV3Fork.ForkPeriodActive.selector);
         vm.prank(tokenHolder);
-        dao.signalSplit(tokenIds);
+        dao.signalFork(tokenIds);
     }
 
-    function test_executeSplit_reverts() public {
-        vm.expectRevert(NounsDAOV3Split.SplitPeriodActive.selector);
-        dao.executeSplit();
+    function test_executeFork_reverts() public {
+        vm.expectRevert(NounsDAOV3Fork.ForkPeriodActive.selector);
+        dao.executeFork();
     }
 
-    function test_unsignalSplit_reverts() public {
+    function test_unsignalFork_reverts() public {
         tokenIds = [4, 5];
 
-        vm.expectRevert(NounsDAOV3Split.SplitPeriodActive.selector);
+        vm.expectRevert(NounsDAOV3Fork.ForkPeriodActive.selector);
         vm.prank(tokenHolder);
-        dao.unsignalSplit(tokenIds);
+        dao.unsignalFork(tokenIds);
     }
 
-    function test_joinSplit() public {
+    function test_joinFork() public {
         tokenIds = [8, 9];
 
         vm.prank(tokenHolder);
-        dao.joinSplit(tokenIds);
+        dao.joinFork(tokenIds);
 
         // now 35% of the treasury is in the new DAO
         assertEq(address(timelock).balance, 650 ether);
-        assertEq(address(splitDAODeployer.mockTreasury()).balance, 350 ether);
+        assertEq(address(forkDAODeployer.mockTreasury()).balance, 350 ether);
 
         assertEq(erc20Mock.balanceOf(address(timelock)), 195e18);
-        assertEq(erc20Mock.balanceOf(address(splitDAODeployer.mockTreasury())), 105e18);
+        assertEq(erc20Mock.balanceOf(address(forkDAODeployer.mockTreasury())), 105e18);
 
         // 1 more token joins
         tokenIds = [7];
         vm.prank(tokenHolder);
-        dao.joinSplit(tokenIds);
+        dao.joinFork(tokenIds);
 
         // now 40% of the treasury is in the new DAO
         assertEq(address(timelock).balance, 600 ether);
-        assertEq(address(splitDAODeployer.mockTreasury()).balance, 400 ether);
+        assertEq(address(forkDAODeployer.mockTreasury()).balance, 400 ether);
 
         assertEq(erc20Mock.balanceOf(address(timelock)), 180e18);
-        assertEq(erc20Mock.balanceOf(address(splitDAODeployer.mockTreasury())), 120e18);
+        assertEq(erc20Mock.balanceOf(address(forkDAODeployer.mockTreasury())), 120e18);
     }
 
     function test_withdrawTokensToDAO() public {
         tokenIds = [1, 2, 3];
-        dao.withdrawSplitTokensToDAO(tokenIds);
+        dao.withdrawForkTokensToDAO(tokenIds);
 
         assertEq(dao.nouns().ownerOf(1), address(dao.timelock()));
         assertEq(dao.nouns().ownerOf(2), address(dao.timelock()));
@@ -277,110 +277,110 @@ contract DAOSplitExecutedStateTest is DAOSplitExecutedState {
     }
 }
 
-abstract contract DAOSplitExecutedActivePeriodOverState is DAOSplitExecutedState {
+abstract contract DAOForkExecutedActivePeriodOverState is DAOForkExecutedState {
     function setUp() public virtual override {
         super.setUp();
 
-        skip(NounsDAOV3Split.SPLIT_PERIOD_DURTION);
+        skip(NounsDAOV3Fork.FORK_PERIOD_DURTION);
     }
 }
 
-contract DAOSplitExecutedActivePeriodOverStateTest is DAOSplitExecutedActivePeriodOverState {
-    function test_joinSplit_reverts() public {
+contract DAOForkExecutedActivePeriodOverStateTest is DAOForkExecutedActivePeriodOverState {
+    function test_joinFork_reverts() public {
         tokenIds = [8, 9];
 
         vm.prank(tokenHolder);
-        vm.expectRevert(NounsDAOV3Split.SplitPeriodNotActive.selector);
-        dao.joinSplit(tokenIds);
+        vm.expectRevert(NounsDAOV3Fork.ForkPeriodNotActive.selector);
+        dao.joinFork(tokenIds);
     }
 
     function test_execute_reverts() public {
-        vm.expectRevert(NounsDAOV3Split.SplitThresholdNotMet.selector);
-        dao.executeSplit();
+        vm.expectRevert(NounsDAOV3Fork.ForkThresholdNotMet.selector);
+        dao.executeFork();
     }
 
     function test_withdrawTokensToDAO() public {
         tokenIds = [1, 2, 3];
-        dao.withdrawSplitTokensToDAO(tokenIds);
+        dao.withdrawForkTokensToDAO(tokenIds);
 
         assertOwnerOfTokens(address(dao.nouns()), tokenIds, address(dao.timelock()));
     }
 
-    function test_signalOnNewSplit() public {
+    function test_signalOnNewFork() public {
         tokenIds = [11, 12];
         vm.prank(tokenHolder);
-        dao.signalSplit(tokenIds);
+        dao.signalFork(tokenIds);
 
-        assertOwnerOfTokens(address(dao.nouns()), tokenIds, address(splitEscrow));
+        assertOwnerOfTokens(address(dao.nouns()), tokenIds, address(forkEscrow));
     }
 }
 
-abstract contract DAOSecondSplitSignaledUnderThreshold is DAOSplitExecutedActivePeriodOverState {
+abstract contract DAOSecondForkSignaledUnderThreshold is DAOForkExecutedActivePeriodOverState {
     function setUp() public virtual override {
         super.setUp();
 
         tokenIds = [11, 12];
         vm.prank(tokenHolder);
-        dao.signalSplit(tokenIds);
+        dao.signalFork(tokenIds);
     }
 }
 
-contract DAOSecondSplitSignaledUnderThresholdTest is DAOSecondSplitSignaledUnderThreshold {
-    function test_executeSplit_reverts() public {
-        vm.expectRevert(NounsDAOV3Split.SplitThresholdNotMet.selector);
-        dao.executeSplit();
+contract DAOSecondForkSignaledUnderThresholdTest is DAOSecondForkSignaledUnderThreshold {
+    function test_executeFork_reverts() public {
+        vm.expectRevert(NounsDAOV3Fork.ForkThresholdNotMet.selector);
+        dao.executeFork();
     }
 
-    function test_joinSplit_reverts() public {
+    function test_joinFork_reverts() public {
         tokenIds = [14, 15];
-        vm.expectRevert(NounsDAOV3Split.SplitPeriodNotActive.selector);
+        vm.expectRevert(NounsDAOV3Fork.ForkPeriodNotActive.selector);
         vm.prank(tokenHolder);
-        dao.joinSplit(tokenIds);
+        dao.joinFork(tokenIds);
     }
 
-    function test_unsignalSplit_returnsTokens() public {
+    function test_unsignalFork_returnsTokens() public {
         tokenIds = [11, 12];
-        assertOwnerOfTokens(address(dao.nouns()), tokenIds, address(splitEscrow));
+        assertOwnerOfTokens(address(dao.nouns()), tokenIds, address(forkEscrow));
 
         vm.prank(tokenHolder);
-        dao.unsignalSplit(tokenIds);
+        dao.unsignalFork(tokenIds);
 
         assertOwnerOfTokens(address(dao.nouns()), tokenIds, tokenHolder);
     }
 
     function test_withdrawTokensToDAO_reverts() public {
         tokenIds = [11];
-        vm.expectRevert(NounsDAOSplitEscrow.NotOwner.selector);
-        dao.withdrawSplitTokensToDAO(tokenIds);
+        vm.expectRevert(NounsDAOForkEscrow.NotOwner.selector);
+        dao.withdrawForkTokensToDAO(tokenIds);
     }
 }
 
-abstract contract DAOSecondSplitSignaledOverThreshold is DAOSecondSplitSignaledUnderThreshold {
+abstract contract DAOSecondForkSignaledOverThreshold is DAOSecondForkSignaledUnderThreshold {
     function setUp() public virtual override {
         super.setUp();
 
         // adjusted total supply is 15, so for 20% 3 tokens are enough (15 * 0.2 = 3)
         tokenIds = [13];
         vm.prank(tokenHolder);
-        dao.signalSplit(tokenIds);
+        dao.signalFork(tokenIds);
     }
 }
 
-contract DAOSecondSplitSignaledOverThresholdTest is DAOSecondSplitSignaledOverThreshold {
-    function test_executeSplit() public {
+contract DAOSecondForkSignaledOverThresholdTest is DAOSecondForkSignaledOverThreshold {
+    function test_executeFork() public {
         assertEq(address(timelock).balance, 750 ether);
         assertEq(dao.adjustedTotalSupply(), 15);
 
-        dao.executeSplit();
+        dao.executeFork();
 
         assertEq(address(timelock).balance, 600 ether);
-        assertEq(address(splitDAODeployer.mockTreasury()).balance, 400 ether);
+        assertEq(address(forkDAODeployer.mockTreasury()).balance, 400 ether);
         
         assertEq(erc20Mock.balanceOf(address(timelock)), 180e18);
-        assertEq(erc20Mock.balanceOf(address(splitDAODeployer.mockTreasury())), 120e18);
+        assertEq(erc20Mock.balanceOf(address(forkDAODeployer.mockTreasury())), 120e18);
 
         tokenIds = [11, 12, 13];
-        dao.withdrawSplitTokensToDAO(tokenIds);
+        dao.withdrawForkTokensToDAO(tokenIds);
 
         assertOwnerOfTokens(address(dao.nouns()), tokenIds, address(dao.timelock()));
     }

@@ -534,8 +534,8 @@ interface NounsTokenLike {
     function ownerOf(uint256 tokenId) external view returns (address owner);
 }
 
-interface ISplitDAODeployer {
-    function deploySplitDAO() external returns (address treasury, address token);
+interface IForkDAODeployer {
+    function deployForkDAO() external returns (address treasury, address token);
 }
 
 interface INounsDAOExecutorV2 is INounsDAOExecutor {
@@ -548,7 +548,7 @@ interface INounsDAOExecutorV2 is INounsDAOExecutor {
     ) external;
 }
 
-interface INounsDAOSplitEscrow {
+interface INounsDAOForkEscrow {
     function markOwner(address owner, uint256[] calldata tokenIds) external;
 
     function returnTokensToOwner(address owner, uint256[] calldata tokenIds) external;
@@ -561,13 +561,13 @@ interface INounsDAOSplitEscrow {
 
     function withdrawTokensToDAO(uint256[] calldata tokenIds, address to) external;
 
-    function splitId() external view returns (uint32);
+    function forkId() external view returns (uint32);
 
     function nounsToken() external view returns (NounsTokenLike);
 
     function dao() external view returns (address);
 
-    function ownerOfEscrowedToken(uint32 splitId_, uint256 tokenId) external view returns (address);
+    function ownerOfEscrowedToken(uint32 forkId_, uint256 tokenId) external view returns (address);
 }
 
 contract NounsDAOStorageV3 {
@@ -616,12 +616,12 @@ contract NounsDAOStorageV3 {
         /// @notice The proposal at which to start using `startBlock` instead of `creationBlock` for vote snapshots
         /// @dev To be zeroed-out and removed in a V3.1 fix version once the switch takes place
         uint256 voteSnapshotBlockSwitchProposalId;
-        INounsDAOSplitEscrow splitEscrow;
-        ISplitDAODeployer splitDAODeployer;
-        address[] erc20TokensToIncludeInSplit;
-        address splitDAOTreasury;
-        address splitDAOToken;
-        uint256 splitEndTimestamp;
+        INounsDAOForkEscrow forkEscrow;
+        IForkDAODeployer forkDAODeployer;
+        address[] erc20TokensToIncludeInFork;
+        address forkDAOTreasury;
+        address forkDAOToken;
+        uint256 forkEndTimestamp;
     }
 
     struct Proposal {

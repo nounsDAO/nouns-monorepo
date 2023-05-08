@@ -2,13 +2,13 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { ISplitDAODeployer } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { IForkDAODeployer } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 
-contract SplitDAODeployerMock is ISplitDAODeployer, StdCheats {
+contract ForkDAODeployerMock is IForkDAODeployer, StdCheats {
     address public mockTreasury = makeAddr('mock treasury');
     address public mockToken = makeAddr('mock token');
 
-    function deploySplitDAO() external view returns (address treasury, address token) {
+    function deployForkDAO() external view returns (address treasury, address token) {
         treasury = mockTreasury;
         token = mockToken;
     }

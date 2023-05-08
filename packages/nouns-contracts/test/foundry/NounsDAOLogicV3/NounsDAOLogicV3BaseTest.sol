@@ -13,7 +13,7 @@ import { NounsToken } from '../../../contracts/NounsToken.sol';
 import { NounsSeeder } from '../../../contracts/NounsSeeder.sol';
 import { IProxyRegistry } from '../../../contracts/external/opensea/IProxyRegistry.sol';
 import { NounsDAOExecutorV2 } from '../../../contracts/governance/NounsDAOExecutorV2.sol';
-import { NounsDAOSplitEscrow } from '../../../contracts/governance/split/NounsDAOSplitEscrow.sol';
+import { NounsDAOForkEscrow } from '../../../contracts/governance/fork/NounsDAOForkEscrow.sol';
 
 abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
     event ProposalUpdated(
@@ -81,7 +81,7 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
     uint32 lastMinuteWindowInBlocks = 10;
     uint32 objectionPeriodDurationInBlocks = 10;
     uint32 proposalUpdatablePeriodInBlocks = 10;
-    address splitEscrow;
+    address forkEscrow;
 
     function setUp() public virtual {
         timelock = new NounsDAOExecutorV2();
@@ -98,17 +98,17 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
         address daoLogicImplementation = address(new NounsDAOLogicV3());
 
         uint256 nonce = vm.getNonce(address(this));
-        address predictedSplitEscrowAddress = computeCreateAddress(address(this), nonce + 1);
+        address predictedForkEscrowAddress = computeCreateAddress(address(this), nonce + 1);
 
-        address splitDeployer = address(0);
+        address forkDeployer = address(0);
 
         dao = NounsDAOLogicV3(
             payable(
                 new NounsDAOProxyV3(
                     address(timelock),
                     address(nounsToken),
-                    predictedSplitEscrowAddress,
-                    splitDeployer,
+                    predictedForkEscrowAddress,
+                    forkDeployer,
                     vetoer,
                     address(timelock),
                     daoLogicImplementation,
@@ -128,7 +128,7 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
                 )
             )
         );
-        splitEscrow = address(new NounsDAOSplitEscrow(address(dao)));
+        forkEscrow = address(new NounsDAOForkEscrow(address(dao)));
 
         vm.prank(address(timelock));
         timelock.setPendingAdmin(address(dao));
