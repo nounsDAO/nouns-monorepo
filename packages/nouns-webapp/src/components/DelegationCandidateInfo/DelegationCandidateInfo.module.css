@@ -20,6 +20,13 @@
   margin-right: 1rem;
 }
 
+.avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: var(--brand-cool-background);
+}
+
 .ensText {
   color: var(--brand-cool-dark-text);
   font-weight: bold;

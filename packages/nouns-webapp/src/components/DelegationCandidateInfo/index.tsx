@@ -9,6 +9,7 @@ import { usePickByState } from '../../utils/pickByState';
 import DelegationCandidateVoteCountInfo from '../DelegationCandidateVoteCountInfo';
 import BrandSpinner from '../BrandSpinner';
 import classes from './DelegationCandidateInfo.module.css';
+import { useActiveLocale } from '../../hooks/useActivateLocale';
 
 interface DelegationCandidateInfoProps {
   address: string;
@@ -26,6 +27,8 @@ const DelegationCandidateInfo: React.FC<DelegationCandidateInfoProps> = props =>
   const votes = useAccountVotes(address);
 
   const countDelegatedNouns = votes ?? 0;
+
+  const locale = useActiveLocale();
 
   // Do this so that in the lag between the delegation happening on chain and the UI updating
   // we don't show that we've added the delegated votes twice
@@ -78,7 +81,7 @@ const DelegationCandidateInfo: React.FC<DelegationCandidateInfoProps> = props =>
   if (votes === null) {
     return (
       <div className={classes.spinner}>
-        <BrandSpinner />
+        <BrandSpinner/>
       </div>
     );
   }
@@ -87,13 +90,15 @@ const DelegationCandidateInfo: React.FC<DelegationCandidateInfoProps> = props =>
     <div className={classes.wrapper}>
       <div className={classes.delegateCandidateInfoWrapper}>
         <div className={classes.avatarWrapper}>
-          <Avatar address={address} size={45} />
+          {address ? <Avatar address={address} size={45}/> :
+            <div className={classes.avatar}/>}
         </div>
         <div>
           <div className={classes.ensText}>
-            <ShortAddress address={address} />
+            {address ? <ShortAddress address={address}/> : <span>Enter address above</span>}
           </div>
-          <div className={classes.shortAddress}>{shortAddress}</div>
+          <div
+            className={classes.shortAddress}>{address ? shortAddress : locale === 'en-US' ? '0x... or ...eth' : '0x... / ...eth'}</div>
         </div>
       </div>
 

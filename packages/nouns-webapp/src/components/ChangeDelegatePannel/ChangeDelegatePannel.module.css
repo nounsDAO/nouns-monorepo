@@ -42,10 +42,54 @@
   border: 2px solid var(--brand-color-red);
 }
 
-.buttonWrapper {
+.delegateWrapper {
+  border-top: 1px solid var(--brand-gray-border);
+  padding: 1.5rem 0.5rem 0;
+  margin-top: 1.5rem;
   display: flex;
   justify-content: space-between;
-  margin-top: 0.5rem;
+}
+
+.headingWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.headingText {
+  font-family: 'Montserrat Regular', sans-serif;
+  color: var(--brand-cool-dark-text);
+  font-weight: bold;
+  font-size: 22px;
+}
+
+.avatarWrapper {
+  margin-right: 1rem;
+}
+
+.avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: var(--brand-cool-background);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.noteText {
+  color: var(--brand-cool-light-text);
+  font-size: 13px;
+  margin-bottom: 1rem;
+}
+
+.buttonWrapper {
+  border-top: 1px solid var(--brand-gray-border);
+  padding: 1.5rem 0.5rem 0;
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
 }
 
 .btnVoteCount {
