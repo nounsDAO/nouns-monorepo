@@ -195,6 +195,17 @@ const addMissingSchemes = (descriptionText: string | undefined) => {
   const replacement = '[$1](https://$2)';
 
   return descriptionText?.replace(regex, replacement);
+};
+
+/**
+ * Replace invalid dropbox image download links in a proposal's description.
+ * @param descriptionText The description text of a proposal
+ */
+const replaceInvalidDropboxImageLinks = (descriptionText: string | undefined) => {
+  const regex = /(https:\/\/www.dropbox.com\/([^?]+))\?dl=1/g;
+  const replacement = '$1?raw=1';
+
+  return descriptionText?.replace(regex, replacement);
 }
 
 export const useCurrentQuorum = (
@@ -448,7 +459,9 @@ const parseSubgraphProposal = (
   }
 
   const description = addMissingSchemes(
-    proposal.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, ''),
+    replaceInvalidDropboxImageLinks(
+      proposal.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, ''),
+    ),
   );
   return {
     id: proposal.id,
