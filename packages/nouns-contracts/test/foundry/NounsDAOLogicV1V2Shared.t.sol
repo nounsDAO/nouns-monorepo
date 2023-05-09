@@ -6,7 +6,7 @@ import { NounsDAOLogicV1 } from '../../contracts/governance/NounsDAOLogicV1.sol'
 import { NounsDAOLogicV2 } from '../../contracts/governance/NounsDAOLogicV2.sol';
 import { NounsDAOProxy } from '../../contracts/governance/NounsDAOProxy.sol';
 import { NounsDAOProxyV2 } from '../../contracts/governance/NounsDAOProxyV2.sol';
-import { NounsDAOStorageV1, NounsDAOStorageV2 } from '../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsDAOStorageV1, NounsDAOStorageV2, NounsDAOStorageV3 } from '../../contracts/governance/NounsDAOInterfaces.sol';
 import { NounsDescriptorV2 } from '../../contracts/NounsDescriptorV2.sol';
 import { DeployUtils } from './helpers/DeployUtils.sol';
 import { NounsToken } from '../../contracts/NounsToken.sol';
@@ -32,7 +32,13 @@ abstract contract NounsDAOLogicV1V2StateTest is NounsDAOLogicSharedBaseTest {
 
     function testPendingGivenProposalJustCreated() public {
         uint256 proposalId = propose(address(0x1234), 100, '', '');
-        assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV1.ProposalState.Pending);
+        uint256 state = uint(daoProxyAsV3().state(proposalId));
+
+        if (daoVersion() < 3) {
+            assertEq(state, uint(NounsDAOStorageV1.ProposalState.Pending));
+        } else {
+            assertEq(state, uint(NounsDAOStorageV3.ProposalState.Updatable));
+        }
     }
 
     function testActiveGivenProposalPastVotingDelay() public {
@@ -229,6 +235,16 @@ contract NounsDAOLogicV2StateTest is NounsDAOLogicV1V2StateTest {
                     )
                 )
             );
+    }
+}
+
+contract NounsDAOLogicV3StateTest is NounsDAOLogicV1V2StateTest {
+    function deployDAOProxy(address timelock, address nounsToken, address vetoer) internal override returns (NounsDAOLogicV1) {
+        return _createDAOV3Proxy(timelock, nounsToken, vetoer);
+    }
+
+    function daoVersion() internal pure override returns (uint256) {
+        return 3;
     }
 }
 
