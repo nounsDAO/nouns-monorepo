@@ -77,7 +77,7 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
     NounsDAOExecutorV2 timelock;
 
     address noundersDAO = makeAddr('nounders');
-    address minter = makeAddr('minter');
+    address minter;
     address vetoer = makeAddr('vetoer');
     uint32 lastMinuteWindowInBlocks = 10;
     uint32 objectionPeriodDurationInBlocks = 10;
@@ -85,56 +85,11 @@ abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
     address forkEscrow;
 
     function setUp() public virtual {
-        timelock = new NounsDAOExecutorV2();
-        timelock.initialize(address(1), TIMELOCK_DELAY);
-
-        nounsToken = new NounsToken(
-            noundersDAO,
-            minter,
-            _deployAndPopulateV2(),
-            new NounsSeeder(),
-            new ProxyRegistryMock()
-        );
-        nounsToken.transferOwnership(address(timelock));
-        address daoLogicImplementation = address(new NounsDAOLogicV3());
-
-        uint256 nonce = vm.getNonce(address(this));
-        address predictedForkEscrowAddress = computeCreateAddress(address(this), nonce + 1);
-
-        address forkDeployer = address(0);
-
-        dao = NounsDAOLogicV3(
-            payable(
-                new NounsDAOProxyV3(
-                    address(timelock),
-                    address(nounsToken),
-                    predictedForkEscrowAddress,
-                    forkDeployer,
-                    vetoer,
-                    address(timelock),
-                    daoLogicImplementation,
-                    NounsDAOStorageV3.NounsDAOParams({
-                        votingPeriod: VOTING_PERIOD,
-                        votingDelay: VOTING_DELAY,
-                        proposalThresholdBPS: PROPOSAL_THRESHOLD,
-                        lastMinuteWindowInBlocks: lastMinuteWindowInBlocks,
-                        objectionPeriodDurationInBlocks: objectionPeriodDurationInBlocks,
-                        proposalUpdatablePeriodInBlocks: proposalUpdatablePeriodInBlocks
-                    }),
-                    NounsDAOStorageV3.DynamicQuorumParams({
-                        minQuorumVotesBPS: 200,
-                        maxQuorumVotesBPS: 2000,
-                        quorumCoefficient: 10000
-                    })
-                )
-            )
-        );
-        forkEscrow = address(new NounsDAOForkEscrow(address(dao)));
-
-        vm.prank(address(timelock));
-        timelock.setPendingAdmin(address(dao));
-        vm.prank(address(dao));
-        timelock.acceptAdmin();
+        dao = _deployDAOV3();
+        nounsToken = NounsToken(address(dao.nouns()));
+        minter = nounsToken.minter();
+        timelock = NounsDAOExecutorV2(payable(address(dao.timelock())));
+        forkEscrow = address(dao.forkEscrow());
     }
 
     function propose(

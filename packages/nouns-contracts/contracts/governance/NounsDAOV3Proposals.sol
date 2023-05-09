@@ -40,6 +40,7 @@ library NounsDAOV3Proposals {
     error ProposerCannotUpdateProposalWithSigners();
     error MustProvideSignatures();
     error SignatureIsCancelled();
+    error CannotExecuteDuringForkingPeriod();
 
     /// @notice An event emitted when a new proposal is created
     event ProposalCreated(
@@ -417,6 +418,8 @@ library NounsDAOV3Proposals {
             state(ds, proposalId) == NounsDAOStorageV3.ProposalState.Queued,
             'NounsDAO::execute: proposal can only be executed if it is queued'
         );
+        if (ds.isForkPeriodActive()) revert CannotExecuteDuringForkingPeriod();
+
         NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
         proposal.executed = true;
         for (uint256 i = 0; i < proposal.targets.length; i++) {
