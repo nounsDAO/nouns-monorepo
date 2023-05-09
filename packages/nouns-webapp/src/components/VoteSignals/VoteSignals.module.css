@@ -150,6 +150,10 @@
   border-top: 1px solid #e6e6e6;
 }
 
+.feedbackForm.voted {
+  display: block;
+}
+
 .feedbackForm .buttons {
   display: flex;
   flex-direction: row;
@@ -168,6 +172,13 @@
   font-weight: bold;
   color: #fff;
   cursor: pointer;
+  outline: 2px solid transparent;
+  border: 2px solid transparent;
+}
+
+.feedbackForm .button:hover {
+  outline: 2px solid rgba(0,0,0,0.6);
+  border: 2px solid #fff;
 }
 
 .feedbackForm button.selectedSupport {
@@ -177,6 +188,9 @@
 
 .feedbackForm button.unselectedSupport {
   opacity: 0.4;
+}
+.feedbackForm button.unselectedSupport.noSupportSelected { 
+  opacity: 1;
 }
 
 .feedbackForm button.for {
@@ -198,4 +212,26 @@
   border-radius: 8px;
   margin-bottom: 0px;
   width: 100%;
+}
+
+.forText {
+  color: var(--brand-color-green);
+}
+.againstText {
+  color: var(--brand-color-red);
+}
+.abstainText {
+  color: var(--brand-color-gray-light-text);
+}
+
+.voted {
+  text-align: left;
+}
+
+.userVotedReason p {
+  text-align: left;
+  font-weight: normal !important;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--brand-gray-light-text);
 }

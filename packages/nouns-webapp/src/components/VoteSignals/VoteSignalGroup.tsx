@@ -6,11 +6,10 @@ import VoteSignal from './VoteSignal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { AnimatePresence, motion } from 'framer-motion/dist/framer-motion';
-import VoteSignals from './VoteSignals';
+import { VoteSignalDetail } from '../../wrappers/nounsData';
 
 type Props = {
-  // temp vote signals
-  voteSignals: any[];
+  voteSignals: VoteSignalDetail[];
   support: number;
 };
 
@@ -110,9 +109,9 @@ const VoteSignalGroup = (props: Props) => {
               >
                 <VoteSignal
                   key={i}
-                  support={voteSignal.support}
-                  address={voteSignal.address}
-                  voteCount={voteSignal.voteCount}
+                  support={voteSignal.supportDetailed}
+                  address={voteSignal.voter.id}
+                  voteCount={voteSignal.votes}
                   reason={voteSignal.reason}
                 />
               </motion.div>

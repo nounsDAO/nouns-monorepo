@@ -200,7 +200,7 @@
   }
 }
 
-.proposerOptionsWrapper {
+.proposerOptionsWrapper, .objectionWrapper {
   border: 1px solid #e6e6e6;
   border-radius: 12px;
   padding: 5px 15px;
@@ -210,7 +210,7 @@
   }
 }
 
-.proposerOptions {
+.proposerOptions, .objection {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -219,14 +219,18 @@
   }
 }
 
-.proposerOptions p {
+.objection strong {
+  color: #000;
+}
+
+.proposerOptions p, .objection p {
   @media (max-width: 992px) {
     padding-top: 0;
     margin: 0 0 5px;
   }
 }
 
-.proposerOptionsHeader {
+.proposerOptionsHeader, .objectionHeader {
   font-size: 13px; 
   opacity: 0.7;
   padding: 0;
@@ -242,4 +246,17 @@ a.primaryButton {
 
 a.primaryButton:hover {
   opacity: 0.75;
+}
+
+.v3ProposalWrapper {
+  margin-top: 2rem;
+}
+
+.voteAgainst {
+  background-color: var(--brand-color-red);
+  color: #fff;
+}
+
+.voteAgainst:hover {
+  opacity: 0.7;
 }

@@ -35,6 +35,7 @@ interface ProposalHeaderProps {
   isActiveForVoting?: boolean;
   isWalletConnected: boolean;
   isCandidate?: boolean;
+  isObjectionPeriod?: boolean;
   submitButtonClickHandler: () => void;
 }
 
@@ -168,7 +169,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
         </div>
         {!isMobile && (
           <div className="d-flex justify-content-end align-items-end">
-            {isActiveForVoting && voteButton}
+            {isActiveForVoting && !props.isObjectionPeriod && voteButton}
           </div>
         )}
       </div>
@@ -215,7 +216,6 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
       {hasManyVersions && (
         <p className={classes.versionHistory}>
           <Link to={`/vote/${proposal.id}/history/`}>
-            {/* TODO: add option to link to different versions */}
             <strong>Version {props.versionNumber}</strong>{' '}
             <span>updated {updatedTimestamp && dayjs(updatedTimestamp).fromNow()}</span>
           </Link>
@@ -223,7 +223,9 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
       )}
 
       {isMobile && (
-        <div className={classes.mobileSubmitProposalButton}>{isActiveForVoting && voteButton}</div>
+        <div className={classes.mobileSubmitProposalButton}>
+          {isActiveForVoting && !props.isObjectionPeriod && voteButton}
+        </div>
       )}
 
       {proposal && isActiveForVoting && hasVoted && (

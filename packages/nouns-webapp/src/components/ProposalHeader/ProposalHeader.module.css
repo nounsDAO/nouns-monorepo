@@ -200,7 +200,7 @@
 }
 
 .versionHistory a {
-  color: #14161b;
+  color: #14161b !important;
   font-size: 14px;
   text-decoration: none;
 }

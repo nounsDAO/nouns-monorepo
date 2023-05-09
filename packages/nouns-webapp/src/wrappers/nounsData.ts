@@ -2,15 +2,28 @@ import { Contract, utils } from 'ethers';
 import { NounsDAODataABI, NounsDaoDataFactory } from '@nouns/contracts';
 import { useContractCall, useContractFunction, useEthers } from '@usedapp/core';
 import config from '../config';
-import { candidateProposalQuery, candidateProposalsQuery } from './subgraph';
+import {
+  candidateProposalQuery,
+  candidateProposalsQuery,
+  proposalFeedbacksQuery,
+} from './subgraph';
 import { useQuery } from '@apollo/client';
 import BigNumber from 'bignumber.js';
 
 const abi = new utils.Interface(NounsDAODataABI);
+const nounsDAOData = new NounsDaoDataFactory().attach(config.addresses.nounsDAOData!);
+
+export interface VoteSignalDetail {
+  supportDetailed: number;
+  reason: string;
+  votes: number;
+  createdTimestamp: number;
+  voter: {
+    id: string;
+  };
+}
 
 export const useCreateProposalCandidate = () => {
-  const nounsDAOData = new NounsDaoDataFactory().attach(config.addresses.nounsDAOData!);
-
   const { send: createProposalCandidate, state: createProposalCandidateState } =
     useContractFunction(nounsDAOData, 'createProposalCandidate');
 
@@ -18,25 +31,12 @@ export const useCreateProposalCandidate = () => {
 };
 
 export const useAddSignature = () => {
-  const nounsDAOData = new NounsDaoDataFactory().attach(config.addresses.nounsDAOData!);
-
   const { send: addSignature, state: addSignatureState } = useContractFunction(
     nounsDAOData,
     'addSignature',
   );
 
   return { addSignature, addSignatureState };
-};
-
-export const useAddFeedback = () => {
-  const nounsDAOData = new NounsDaoDataFactory().attach(config.addresses.nounsDAOData!);
-
-  const { send: addFeedback, state: addFeedbackState } = useContractFunction(
-    nounsDAOData,
-    'addFeedback',
-  );
-
-  return { addFeedback, addFeedbackState };
 };
 
 export const useCandidateProposals = () => {
@@ -65,9 +65,25 @@ export const useCreateCandidateCost = () => {
 };
 
 export const useCancelSignature = () => {
-  const nounsDAOData = new NounsDaoDataFactory().attach(config.addresses.nounsDAOData!);
-
   const cancelSignature = useContractFunction(nounsDAOData, 'cancelSig');
 
   return { cancelSignature };
+};
+
+export const useSendFeedback = () => {
+  const { send: sendFeedback, state: sendFeedbackState } = useContractFunction(
+    nounsDAOData,
+    'sendFeedback',
+  );
+
+  console.log('sendFeedbackState', sendFeedbackState);
+  // console.log('sendFeedback', sendFeedback);
+
+  return { sendFeedback, sendFeedbackState };
+};
+
+export const useProposalFeedback = (id: string) => {
+  const { loading, data, error } = useQuery(proposalFeedbacksQuery(id));
+
+  return { loading, data, error };
 };

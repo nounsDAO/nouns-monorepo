@@ -1,6 +1,7 @@
 import React from 'react';
 import classes from './VoteSignals.module.css';
 import ShortAddress from '../ShortAddress';
+import Avatar from '@davatar/react';
 
 type Props = {
   support: number;
@@ -13,10 +14,9 @@ const VoteSignal = (props: Props) => {
   return (
     <div className={classes.voteSignal}>
       <div className={classes.voteSignalAvatar}>
-        {/* fetch noun image for address */}
         <div className={classes.voter}>
           <div className={classes.avatar}>
-            <img src="https://noun.pics/0" alt="Voter avatar" />
+            <Avatar address={props.address} size={30} />
           </div>
           <div className={classes.details}>
             <strong>

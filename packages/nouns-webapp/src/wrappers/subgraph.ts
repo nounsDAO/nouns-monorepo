@@ -427,3 +427,20 @@ export const clientFactory = (uri: string) =>
     uri,
     cache: new InMemoryCache(),
   });
+
+export const proposalFeedbacksQuery = (proposalId: string) => gql`
+{
+  proposalFeedbacks(where: {proposal_:{id: "${proposalId}"}}) {
+    supportDetailed
+    votes
+    reason
+    createdTimestamp
+    voter {
+      id
+    }
+    proposal {
+      id
+    }
+  }
+}
+`;

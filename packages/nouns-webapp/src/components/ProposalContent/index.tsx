@@ -12,12 +12,14 @@ import EnsOrLongAddress from '../EnsOrLongAddress';
 import config from '../../config';
 import { InformationCircleIcon } from '@heroicons/react/solid';
 import ShortAddress from '../ShortAddress';
+import clsx from 'clsx';
 
 interface ProposalContentProps {
   // proposal?: Proposal;
   description: string;
   title: string;
   details: ProposalDetail[];
+  isV3Proposal?: boolean;
 }
 
 export const linkIfAddress = (content: string) => {
@@ -45,7 +47,7 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
   return (
     <>
       <Row>
-        <Col className={classes.section}>
+        <Col className={clsx(classes.section, props.isV3Proposal && classes.v3Proposal)}>
           <h5>
             <Trans>Description</Trans>
           </h5>
