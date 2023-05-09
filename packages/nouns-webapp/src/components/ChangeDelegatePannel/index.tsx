@@ -204,15 +204,11 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
             setDelegateInputText(e.target.value);
           }}
           value={delegateInputText}
-          placeholder={locale === 'en-US' ? '0x... or ...eth' : '0x... / ...eth'}
+          placeholder="Enter delegate address..."
         />
       )}
-
       <Collapse
-        in={
-          isAddress(delegateAddress) &&
-          !(changeDelegateState === ChangeDelegateState.CHANGE_FAILURE)
-        }
+        in={!(changeDelegateState === ChangeDelegateState.CHANGE_FAILURE)}
       >
         <div className={classes.delegateCandidateInfoWrapper}>
           {changeDelegateState === ChangeDelegateState.ENTER_DELEGATE_ADDRESS &&
@@ -221,20 +217,35 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
               <Trans>You've already delegated to this address</Trans>
             </span>
           ) : (
-            <>
-              {isAddress(delegateAddress) && (
-                <DelegationCandidateInfo
-                  address={delegateAddress || ''}
-                  votesToAdd={availableVotes}
-                  changeModalState={changeDelegateState}
-                />
-              )}
-            </>
+            <DelegationCandidateInfo
+              address={delegateAddress || ''}
+              votesToAdd={availableVotes}
+              changeModalState={changeDelegateState}
+            />
           )}
         </div>
       </Collapse>
-
+      <div className={classes.delegateWrapper}>
+        <div className={classes.headingWrapper}>
+          <div className={classes.avatarWrapper}>
+            <div className={classes.avatar}>P</div>
+          </div>
+          <div className={classes.headingText}>
+            <Trans>New CryptoPunks</Trans>
+          </div>
+        </div>
+        {primaryButton}
+      </div>
+      <div className={classes.delegateWrapper}>
+        ??PUNKS
+      </div>
       <div className={classes.buttonWrapper}>
+        <div className={classes.noteText}>
+          <Trans>
+            Note: OG CryptoPunks will need to be delegated to your own address if you'd like to use them to vote.
+            One delegation transaction is required per OG CryptoPunk. There are no batch txs for OG Punks.
+          </Trans>
+        </div>
         <NavBarButton
           buttonText={
             changeDelegateState === ChangeDelegateState.CHANGE_SUCCESS ? (
@@ -247,10 +258,10 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
           onClick={
             changeDelegateState === ChangeDelegateState.CHANGE_SUCCESS
               ? () => {
-                  setDelegateAddress('');
-                  setDelegateInputText('');
-                  setChangeDelegateState(ChangeDelegateState.ENTER_DELEGATE_ADDRESS);
-                }
+                setDelegateAddress('');
+                setDelegateInputText('');
+                setChangeDelegateState(ChangeDelegateState.ENTER_DELEGATE_ADDRESS);
+              }
               : onDismiss
           }
         />
@@ -262,7 +273,6 @@ const ChangeDelegatePannel: React.FC<ChangeDelegatePannelProps> = props => {
             )}
           />
         )}
-        {primaryButton}
       </div>
     </>
   );
