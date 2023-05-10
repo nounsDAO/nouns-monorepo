@@ -17,7 +17,7 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
     function test_setForkPeriod_works() public {
         vm.prank(address(dao.timelock()));
         vm.expectEmit(true, true, true, true);
-        emit ForkPeriodSet(0, 8 days);
+        emit ForkPeriodSet(7 days, 8 days);
         dao._setForkPeriod(8 days);
 
         assertEq(dao.forkPeriod(), 8 days);
@@ -31,7 +31,7 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
     function test_setForkThresholdBPS_works() public {
         vm.prank(address(dao.timelock()));
         vm.expectEmit(true, true, true, true);
-        emit ForkThresholdSet(0, 1234);
+        emit ForkThresholdSet(2000, 1234);
         dao._setForkThresholdBPS(1234);
 
         assertEq(dao.forkThresholdBPS(), 1234);
