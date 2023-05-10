@@ -608,6 +608,22 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     }
 
     /**
+     * @notice Admin function for setting the fork period
+     * @param newForkPeriod the new fork proposal period, in seconds
+     */
+    function _setForkPeriod(uint256 newForkPeriod) external {
+        ds._setForkPeriod(newForkPeriod);
+    }
+
+    /**
+     * @notice Admin function for setting the fork threshold
+     * @param newForkThresholdBPS the new fork proposal threshold, in basis points
+     */
+    function _setForkThresholdBPS(uint256 newForkThresholdBPS) external {
+        ds._setForkThresholdBPS(newForkThresholdBPS);
+    }
+
+    /**
      * @notice Admin function for setting the proposal id at which vote snapshots start using the voting start block
      * instead of the proposal creation block.
      * @param newVoteSnapshotBlockSwitchProposalId the new proposal id at which to flip the switch
@@ -765,6 +781,14 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
 
     function forkEndTimestamp() public view returns (uint256) {
         return ds.forkEndTimestamp;
+    }
+
+    function forkPeriod() public view returns (uint256) {
+        return ds.forkPeriod;
+    }
+
+    function forkThresholdBPS() public view returns (uint256) {
+        return ds.forkThresholdBPS;
     }
 
     function proposalUpdatablePeriodInBlocks() public view returns (uint256) {

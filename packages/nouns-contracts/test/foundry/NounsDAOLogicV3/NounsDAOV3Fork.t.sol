@@ -10,9 +10,8 @@ import { NounsDAOForkEscrow } from '../../../contracts/governance/fork/NounsDAOF
 import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 
 abstract contract DAOForkZeroState is NounsDAOLogicV3BaseTest {
-
-    address tokenHolder = makeAddr("tokenHolder");
-    address tokenHolder2 = makeAddr("tokenHolder2");
+    address tokenHolder = makeAddr('tokenHolder');
+    address tokenHolder2 = makeAddr('tokenHolder2');
     uint256[] tokenIds;
     ForkDAODeployerMock forkDAODeployer;
     ERC20Mock erc20Mock = new ERC20Mock();
@@ -152,6 +151,20 @@ abstract contract DAOForkSignaledOverThresholdState is DAOForkSignaledUnderThres
 }
 
 contract DAOForkSignaledOverThresholdStateTest is DAOForkSignaledOverThresholdState {
+    function test_increaseForkThreshold() public {
+        vm.prank(address(dao.timelock()));
+        dao._setForkThresholdBPS(3_000); // 30%
+
+        vm.expectRevert(NounsDAOV3Fork.ForkThresholdNotMet.selector);
+        dao.executeFork();
+
+        tokenIds = [6];
+        vm.prank(tokenHolder);
+        dao.signalFork(tokenIds);
+
+        dao.executeFork();
+    }
+
     function test_joinFork_reverts() public {
         tokenIds = [6, 7];
         vm.expectRevert(NounsDAOV3Fork.ForkPeriodNotActive.selector);
@@ -201,7 +214,7 @@ contract DAOForkSignaledOverThresholdStateTest is DAOForkSignaledOverThresholdSt
         assertEq(dao.proposalThreshold(), 1); // 1.5 tokens
 
         // check that 2 tokens are enough for proposing
-        address someone = makeAddr("someone");
+        address someone = makeAddr('someone');
         vm.prank(tokenHolder);
         nounsToken.transferFrom(tokenHolder, someone, 13);
         vm.prank(tokenHolder);
@@ -222,7 +235,7 @@ abstract contract DAOForkExecutedState is DAOForkSignaledOverThresholdState {
 contract DAOForkExecutedStateTest is DAOForkExecutedState {
     function test_signalFork_reverts() public {
         tokenIds = [8, 9];
-        
+
         vm.expectRevert(NounsDAOV3Fork.ForkPeriodActive.selector);
         vm.prank(tokenHolder);
         dao.signalFork(tokenIds);
@@ -281,7 +294,7 @@ abstract contract DAOForkExecutedActivePeriodOverState is DAOForkExecutedState {
     function setUp() public virtual override {
         super.setUp();
 
-        skip(NounsDAOV3Fork.FORK_PERIOD_DURTION);
+        skip(FORK_PERIOD);
     }
 }
 
@@ -375,7 +388,7 @@ contract DAOSecondForkSignaledOverThresholdTest is DAOSecondForkSignaledOverThre
 
         assertEq(address(timelock).balance, 600 ether);
         assertEq(address(forkDAODeployer.mockTreasury()).balance, 400 ether);
-        
+
         assertEq(erc20Mock.balanceOf(address(timelock)), 180e18);
         assertEq(erc20Mock.balanceOf(address(forkDAODeployer.mockTreasury())), 120e18);
 

@@ -26,9 +26,6 @@ library NounsDAOV3Fork {
 
     // TODO: events
 
-    uint256 constant FORK_PERIOD_DURTION = 7 days; // TODO: should this be configurable?
-    uint256 constant FORK_THRESHOLD_BPS = 2_000; // 20% TODO: should this be configurable?
-
     function signalFork(NounsDAOStorageV3.StorageV3 storage ds, uint256[] calldata tokenIds) external {
         if (isForkPeriodActive(ds)) revert ForkPeriodActive();
 
@@ -45,10 +42,9 @@ library NounsDAOV3Fork {
         ds.forkEscrow.returnTokensToOwner(msg.sender, tokenIds);
     }
 
-    function executeFork(NounsDAOStorageV3.StorageV3 storage ds)
-        external
-        returns (address forkTreasury, address forkToken)
-    {
+    function executeFork(
+        NounsDAOStorageV3.StorageV3 storage ds
+    ) external returns (address forkTreasury, address forkToken) {
         if (isForkPeriodActive(ds)) revert ForkPeriodActive();
 
         uint256 tokensInEscrow = ds.forkEscrow.numTokensInEscrow();
@@ -60,7 +56,7 @@ library NounsDAOV3Fork {
 
         ds.forkDAOTreasury = forkTreasury;
         ds.forkDAOToken = forkToken;
-        ds.forkEndTimestamp = block.timestamp + FORK_PERIOD_DURTION;
+        ds.forkEndTimestamp = block.timestamp + ds.forkPeriod;
     }
 
     function joinFork(NounsDAOStorageV3.StorageV3 storage ds, uint256[] calldata tokenIds) external {
@@ -83,7 +79,7 @@ library NounsDAOV3Fork {
     }
 
     function forkThreshold(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (uint256) {
-        return (adjustedTotalSupply(ds) * FORK_THRESHOLD_BPS) / 10_000;
+        return (adjustedTotalSupply(ds) * ds.forkThresholdBPS) / 10_000;
     }
 
     function adjustedTotalSupply(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (uint256) {

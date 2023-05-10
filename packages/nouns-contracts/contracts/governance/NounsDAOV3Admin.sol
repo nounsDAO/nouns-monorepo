@@ -89,6 +89,10 @@ library NounsDAOV3Admin {
 
     event ERC20TokensToIncludeInForkSet(address[] oldErc20Tokens, address[] newErc20tokens);
 
+    event ForkPeriodSet(uint256 oldForkPeriod, uint256 newForkPeriod);
+
+    event ForkThresholdSet(uint256 oldForkThreshold, uint256 newForkThreshold);
+
     /// @notice The minimum setable proposal threshold
     uint256 public constant MIN_PROPOSAL_THRESHOLD_BPS = 1; // 1 basis point or 0.01%
 
@@ -115,6 +119,13 @@ library NounsDAOV3Admin {
 
     /// @notice The upper bound of maximum quorum votes basis points
     uint256 public constant MAX_QUORUM_VOTES_BPS_UPPER_BOUND = 6_000; // 4,000 basis points or 60%
+
+    modifier onlyAdmin(NounsDAOStorageV3.StorageV3 storage ds) {
+        if (msg.sender != ds.admin) {
+            revert AdminOnly();
+        }
+        _;
+    }
 
     /**
      * @notice Admin function for setting the voting delay
@@ -157,9 +168,10 @@ library NounsDAOV3Admin {
      * @dev newProposalThresholdBPS must be greater than the hardcoded min
      * @param newProposalThresholdBPS new proposal threshold
      */
-    function _setProposalThresholdBPS(NounsDAOStorageV3.StorageV3 storage ds, uint256 newProposalThresholdBPS)
-        external
-    {
+    function _setProposalThresholdBPS(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        uint256 newProposalThresholdBPS
+    ) external {
         if (msg.sender != ds.admin) {
             revert AdminOnly();
         }
@@ -188,9 +200,10 @@ library NounsDAOV3Admin {
         emit ObjectionPeriodDurationSet(oldObjectionPeriodDurationInBlocks, newObjectionPeriodDurationInBlocks);
     }
 
-    function _setLastMinuteWindowInBlocks(NounsDAOStorageV3.StorageV3 storage ds, uint32 newLastMinuteWindowInBlocks)
-        external
-    {
+    function _setLastMinuteWindowInBlocks(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        uint32 newLastMinuteWindowInBlocks
+    ) external {
         if (msg.sender != ds.admin) {
             revert AdminOnly();
         }
@@ -462,10 +475,7 @@ library NounsDAOV3Admin {
         );
     }
 
-    function _setForkDAODeployer(
-        NounsDAOStorageV3.StorageV3 storage ds, 
-        address newForkDAODeployer
-    ) external {
+    function _setForkDAODeployer(NounsDAOStorageV3.StorageV3 storage ds, address newForkDAODeployer) external {
         if (msg.sender != ds.admin) {
             revert AdminOnly();
         }
@@ -494,6 +504,21 @@ library NounsDAOV3Admin {
         // TODO event?
 
         ds.forkEscrow = INounsDAOForkEscrow(newForkEscrow);
+    }
+
+    function _setForkPeriod(NounsDAOStorageV3.StorageV3 storage ds, uint256 newForkPeriod) external onlyAdmin(ds) {
+        emit ForkPeriodSet(ds.forkPeriod, newForkPeriod);
+
+        ds.forkPeriod = newForkPeriod;
+    }
+
+    function _setForkThresholdBPS(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        uint256 newForkThresholdBPS
+    ) external onlyAdmin(ds) {
+        emit ForkThresholdSet(ds.forkThresholdBPS, newForkThresholdBPS);
+
+        ds.forkThresholdBPS = newForkThresholdBPS;
     }
 
     function _writeQuorumParamsCheckpoint(

@@ -41,6 +41,8 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
     uint32 constant OBJECTION_PERIOD_BLOCKS = 10;
     uint32 constant UPDATABLE_PERIOD_BLOCKS = 10;
     uint256 constant DELAYED_GOV_DURATION = 30 days;
+    uint256 constant FORK_PERIOD = 7 days;
+    uint256 constant FORK_THRESHOLD_BPS = 2_000; // 20%
 
     function _deployAndPopulateDescriptor() internal returns (NounsDescriptor) {
         NounsDescriptor descriptor = new NounsDescriptor();
@@ -233,6 +235,11 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
         timelock.setPendingAdmin(address(dao));
         vm.prank(address(dao));
         timelock.acceptAdmin();
+
+        vm.startPrank(address(timelock));
+        dao._setForkPeriod(FORK_PERIOD);
+        dao._setForkThresholdBPS(FORK_THRESHOLD_BPS);
+        vm.stopPrank();
 
         return dao;
     }
