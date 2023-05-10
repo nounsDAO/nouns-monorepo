@@ -311,7 +311,9 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @return signatures
      * @return calldatas
      */
-    function getActions(uint256 proposalId)
+    function getActions(
+        uint256 proposalId
+    )
         external
         view
         returns (
@@ -441,11 +443,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @param reason The reason given for the vote by the voter
      * @dev Reentrancy is defended against in `castVoteInternal` at the `receipt.hasVoted == false` require statement.
      */
-    function castRefundableVoteWithReason(
-        uint256 proposalId,
-        uint8 support,
-        string calldata reason
-    ) external {
+    function castRefundableVoteWithReason(uint256 proposalId, uint8 support, string calldata reason) external {
         ds.castRefundableVoteWithReason(proposalId, support, reason);
     }
 
@@ -455,11 +453,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @param support The support value for the vote. 0=against, 1=for, 2=abstain
      * @param reason The reason given for the vote by the voter
      */
-    function castVoteWithReason(
-        uint256 proposalId,
-        uint8 support,
-        string calldata reason
-    ) external {
+    function castVoteWithReason(uint256 proposalId, uint8 support, string calldata reason) external {
         ds.castVoteWithReason(proposalId, support, reason);
     }
 
@@ -467,13 +461,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @notice Cast a vote for a proposal by signature
      * @dev External function that accepts EIP-712 signatures for voting on proposals.
      */
-    function castVoteBySig(
-        uint256 proposalId,
-        uint8 support,
-        uint8 v,
-        bytes32 r,
-        bytes32 s
-    ) external {
+    function castVoteBySig(uint256 proposalId, uint8 support, uint8 v, bytes32 r, bytes32 s) external {
         ds.castVoteBySig(proposalId, support, v, r, s);
     }
 
@@ -766,7 +754,6 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
     function objectionPeriodDurationInBlocks() public view returns (uint256) {
         return ds.objectionPeriodDurationInBlocks;
     }
-
 
     function erc20TokensToIncludeInFork() public view returns (address[] memory) {
         return ds.erc20TokensToIncludeInFork;
