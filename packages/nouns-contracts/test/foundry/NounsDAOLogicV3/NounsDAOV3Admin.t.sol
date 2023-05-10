@@ -8,6 +8,9 @@ import { NounsDAOV3Admin } from '../../../contracts/governance/NounsDAOV3Admin.s
 contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
     event ForkPeriodSet(uint256 oldForkPeriod, uint256 newForkPeriod);
     event ForkThresholdSet(uint256 oldForkThreshold, uint256 newForkThreshold);
+    event ERC20TokensToIncludeInForkSet(address[] oldErc20Tokens, address[] newErc20tokens);
+
+    address[] tokens;
 
     function test_setForkPeriod_onlyAdmin() public {
         vm.expectRevert(NounsDAOV3Admin.AdminOnly.selector);
@@ -35,5 +38,35 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
         dao._setForkThresholdBPS(1234);
 
         assertEq(dao.forkThresholdBPS(), 1234);
+    }
+
+    function test_setErc20TokensToIncludeInFork_onlyAdmin() public {
+        tokens = [address(1), address(2)];
+
+        vm.expectRevert(NounsDAOV3Admin.AdminOnly.selector);
+        dao._setErc20TokensToIncludeInFork(tokens);
+    }
+
+    function test_setErc20TokensToIncludeInFork_works() public {
+        tokens = [address(1), address(2)];
+
+        vm.prank(address(dao.timelock()));
+        vm.expectEmit(true, true, true, true);
+        emit ERC20TokensToIncludeInForkSet(new address[](0), tokens);
+        dao._setErc20TokensToIncludeInFork(tokens);
+
+        assertEq(dao.erc20TokensToIncludeInFork(), tokens);
+    }
+
+    function test_setForkEscrow_onlyAdmin() public {
+        vm.expectRevert(NounsDAOV3Admin.AdminOnly.selector);
+        dao._setForkEscrow(address(1));
+    }
+
+    function test_setForkEscrow_works() public {
+        vm.prank(address(dao.timelock()));
+        dao._setForkEscrow(address(1));
+
+        assertEq(address(dao.forkEscrow()), address(1));
     }
 }

@@ -489,20 +489,13 @@ library NounsDAOV3Admin {
     function _setErc20TokensToIncludeInFork(
         NounsDAOStorageV3.StorageV3 storage ds,
         address[] calldata erc20tokens
-    ) external {
-        if (msg.sender != ds.admin) {
-            revert AdminOnly();
-        }
+    ) external onlyAdmin(ds) {
+        emit ERC20TokensToIncludeInForkSet(ds.erc20TokensToIncludeInFork, erc20tokens);
 
-        address[] memory oldErc20TokensToIncludeInFork = ds.erc20TokensToIncludeInFork;
         ds.erc20TokensToIncludeInFork = erc20tokens;
-
-        emit ERC20TokensToIncludeInForkSet(oldErc20TokensToIncludeInFork, erc20tokens);
     }
 
-    function _setForkEscrow(NounsDAOStorageV3.StorageV3 storage ds, address newForkEscrow) external {
-        // TODO event?
-
+    function _setForkEscrow(NounsDAOStorageV3.StorageV3 storage ds, address newForkEscrow) external onlyAdmin(ds) {
         ds.forkEscrow = INounsDAOForkEscrow(newForkEscrow);
     }
 
