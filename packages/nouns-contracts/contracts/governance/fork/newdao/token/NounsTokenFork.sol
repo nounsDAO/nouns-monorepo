@@ -31,6 +31,7 @@ contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable
     error OnlyOwner();
     error OnlyTokenOwnerCanClaim();
     error OnlyOriginalDAO();
+    error NoundersCannotBeAddressZero();
 
     // The nounders DAO address (creators org)
     address public noundersDAO;
@@ -217,8 +218,12 @@ contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable
     /**
      * @notice Set the nounders DAO.
      * @dev Only callable by the nounders DAO when not locked.
+     * Reverts when called with address zero, because that would brick minting on the next founder reward,
+     * because you can't mint to address zero.
      */
     function setNoundersDAO(address _noundersDAO) external override onlyNoundersDAO {
+        if (_noundersDAO == address(0)) revert NoundersCannotBeAddressZero();
+
         noundersDAO = _noundersDAO;
 
         emit NoundersDAOUpdated(_noundersDAO);

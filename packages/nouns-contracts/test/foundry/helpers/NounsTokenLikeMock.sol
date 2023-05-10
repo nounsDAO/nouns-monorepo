@@ -2,8 +2,13 @@
 pragma solidity ^0.8.15;
 
 import { NounsTokenLike } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { INounsDescriptorMinimal } from '../../../contracts/interfaces/INounsDescriptorMinimal.sol';
+import { INounsSeeder } from '../../../contracts/interfaces/INounsSeeder.sol';
 
 contract NounsTokenLikeMock is NounsTokenLike {
+    address public noundersDAO;
+    INounsDescriptorMinimal public descriptor;
+    INounsSeeder public seeder;
     mapping(address => mapping(uint256 => uint96)) priorVotes;
 
     function getPriorVotes(address account, uint256 blockNumber) external view returns (uint96) {
@@ -30,7 +35,15 @@ contract NounsTokenLikeMock is NounsTokenLike {
         return address(0);
     }
 
-    function transferFrom(address from, address to, uint256 tokenId) external {
+    function transferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) external {
         // noop
+    }
+
+    function setNoundersDAO(address _noundersDAO) external {
+        noundersDAO = _noundersDAO;
     }
 }
