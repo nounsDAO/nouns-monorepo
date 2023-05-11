@@ -44,7 +44,6 @@ library NounsDAOV3Fork {
         emit EscrowedToFork(msg.sender, tokenIds, proposalIds, reason);
     }
 
-    // TODO: do we need a `to` param?
     function withdrawFromForkEscrow(NounsDAOStorageV3.StorageV3 storage ds, uint256[] calldata tokenIds) external {
         if (isForkPeriodActive(ds)) revert ForkPeriodActive();
 
