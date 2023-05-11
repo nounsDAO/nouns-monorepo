@@ -304,6 +304,15 @@ contract DAOForkExecutedStateTest is DAOForkExecutedState {
 
         assertEq(erc20Mock.balanceOf(address(timelock)), 180e18);
         assertEq(erc20Mock.balanceOf(address(forkDAODeployer.mockTreasury())), 120e18);
+
+        // DAO can withdraw the tokens sent in joinFork
+        tokenIds = [7, 8, 9];
+        vm.prank(address(dao.timelock()));
+        dao.withdrawDAONounsFromEscrow(tokenIds, address(1));
+
+        assertEq(dao.nouns().ownerOf(7), address(1));
+        assertEq(dao.nouns().ownerOf(8), address(1));
+        assertEq(dao.nouns().ownerOf(9), address(1));
     }
 
     function test_withdrawTokensToDAO() public {

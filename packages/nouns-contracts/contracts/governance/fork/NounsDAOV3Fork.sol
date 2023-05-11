@@ -74,7 +74,7 @@ library NounsDAOV3Fork {
         sendProRataTreasury(ds, ds.forkDAOTreasury, tokenIds.length, adjustedTotalSupply(ds));
 
         for (uint256 i = 0; i < tokenIds.length; i++) {
-            ds.nouns.transferFrom(msg.sender, address(ds.timelock), tokenIds[i]);
+            ds.nouns.transferFrom(msg.sender, address(ds.forkEscrow), tokenIds[i]);
         }
 
         NounsTokenFork(ds.forkDAOToken).claimDuringForkPeriod(msg.sender, tokenIds);
