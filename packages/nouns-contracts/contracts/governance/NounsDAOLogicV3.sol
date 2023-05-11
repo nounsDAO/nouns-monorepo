@@ -385,8 +385,8 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         ds.joinFork(tokenIds);
     }
 
-    function withdrawForkTokensToDAO(uint256[] calldata tokenIds, address to) external {
-        ds.withdrawForkTokensToDAO(tokenIds, to);
+    function withdrawDAONounsFromEscrow(uint256[] calldata tokenIds, address to) external {
+        ds.withdrawDAONounsFromEscrow(tokenIds, to);
     }
 
     function adjustedTotalSupply() external view returns (uint256) {

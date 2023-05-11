@@ -73,7 +73,7 @@ library NounsDAOV3Fork {
         NounsTokenFork(ds.forkDAOToken).claimDuringForkPeriod(msg.sender, tokenIds);
     }
 
-    function withdrawForkTokensToDAO(
+    function withdrawDAONounsFromEscrow(
         NounsDAOStorageV3.StorageV3 storage ds,
         uint256[] calldata tokenIds,
         address to
