@@ -35,8 +35,8 @@ contract ForkHappyFlowTest is DeployUtilsV3 {
         uint256[] memory tokensInEscrow1 = getOwnedTokens(nounerInEscrow1);
         uint256[] memory tokensInEscrow2 = getOwnedTokens(nounerInEscrow2);
 
-        signalFork(nounerInEscrow1);
-        signalFork(nounerInEscrow2);
+        escrowToFork(nounerInEscrow1);
+        escrowToFork(nounerInEscrow2);
 
         (address forkTreasuryAddress, address forkTokenAddress) = daoV3.executeFork();
         forkTreasury = NounsDAOExecutorV2(payable(forkTreasuryAddress));
@@ -99,10 +99,10 @@ contract ForkHappyFlowTest is DeployUtilsV3 {
         vm.stopPrank();
     }
 
-    function signalFork(address nouner) internal {
+    function escrowToFork(address nouner) internal {
         vm.startPrank(nouner);
         ogToken.setApprovalForAll(address(daoV3), true);
-        daoV3.signalFork(getOwnedTokens(nouner));
+        daoV3.escrowToFork(getOwnedTokens(nouner));
         vm.stopPrank();
     }
 

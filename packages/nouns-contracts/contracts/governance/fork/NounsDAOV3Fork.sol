@@ -26,7 +26,7 @@ library NounsDAOV3Fork {
 
     // TODO: events
 
-    function signalFork(NounsDAOStorageV3.StorageV3 storage ds, uint256[] calldata tokenIds) external {
+    function escrowToFork(NounsDAOStorageV3.StorageV3 storage ds, uint256[] calldata tokenIds) external {
         if (isForkPeriodActive(ds)) revert ForkPeriodActive();
 
         ds.forkEscrow.markOwner(msg.sender, tokenIds);
@@ -36,15 +36,16 @@ library NounsDAOV3Fork {
     }
 
     // TODO: do we need a `to` param?
-    function unsignalFork(NounsDAOStorageV3.StorageV3 storage ds, uint256[] calldata tokenIds) external {
+    function withdrawFromForkEscrow(NounsDAOStorageV3.StorageV3 storage ds, uint256[] calldata tokenIds) external {
         if (isForkPeriodActive(ds)) revert ForkPeriodActive();
 
         ds.forkEscrow.returnTokensToOwner(msg.sender, tokenIds);
     }
 
-    function executeFork(
-        NounsDAOStorageV3.StorageV3 storage ds
-    ) external returns (address forkTreasury, address forkToken) {
+    function executeFork(NounsDAOStorageV3.StorageV3 storage ds)
+        external
+        returns (address forkTreasury, address forkToken)
+    {
         if (isForkPeriodActive(ds)) revert ForkPeriodActive();
 
         uint256 tokensInEscrow = ds.forkEscrow.numTokensInEscrow();

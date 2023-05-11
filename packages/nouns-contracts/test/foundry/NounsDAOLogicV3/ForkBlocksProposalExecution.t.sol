@@ -40,7 +40,6 @@ contract ExecutableProposalStateTest is ExecutableProposalState {
 }
 
 abstract contract ExecutableProposalWithActiveForkState is ExecutableProposalState {
-
     uint256[] tokenIds;
 
     function setUp() public virtual override {
@@ -49,7 +48,7 @@ abstract contract ExecutableProposalWithActiveForkState is ExecutableProposalSta
         vm.startPrank(user);
         tokenIds = [1];
         nounsToken.approve(address(dao), 1);
-        dao.signalFork(tokenIds);
+        dao.escrowToFork(tokenIds);
         vm.stopPrank();
 
         dao.executeFork();

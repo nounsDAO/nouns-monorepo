@@ -40,7 +40,11 @@ abstract contract DAOForkZeroState is NounsDAOLogicV3BaseTest {
         assertEq(dao.nouns().balanceOf(tokenHolder), 18);
     }
 
-    function assertOwnerOfTokens(address token, uint256[] memory tokenIds_, address owner) internal {
+    function assertOwnerOfTokens(
+        address token,
+        uint256[] memory tokenIds_,
+        address owner
+    ) internal {
         for (uint256 i = 0; i < tokenIds_.length; i++) {
             assertEq(IERC721(token).ownerOf(tokenIds_[i]), owner);
         }
@@ -53,7 +57,7 @@ contract DAOForkZeroStateTest is DAOForkZeroState {
 
         vm.startPrank(tokenHolder);
         nounsToken.setApprovalForAll(address(dao), true);
-        dao.signalFork(tokenIds);
+        dao.escrowToFork(tokenIds);
         vm.stopPrank();
 
         assertEq(dao.nouns().balanceOf(tokenHolder), 15);
@@ -81,7 +85,7 @@ abstract contract DAOForkSignaledUnderThresholdState is DAOForkZeroState {
 
         vm.startPrank(tokenHolder);
         nounsToken.setApprovalForAll(address(dao), true);
-        dao.signalFork(tokenIds);
+        dao.escrowToFork(tokenIds);
         vm.stopPrank();
     }
 }
@@ -105,7 +109,7 @@ contract DAOForkSignaledUnderThresholdStateTest is DAOForkSignaledUnderThreshold
         tokenIds = [1, 2, 3];
 
         vm.prank(tokenHolder);
-        dao.unsignalFork(tokenIds);
+        dao.withdrawFromForkEscrow(tokenIds);
 
         assertEq(dao.nouns().balanceOf(tokenHolder), 18);
     }
@@ -120,13 +124,13 @@ contract DAOForkSignaledUnderThresholdStateTest is DAOForkSignaledUnderThreshold
         vm.startPrank(tokenHolder2);
         nounsToken.approve(address(dao), 7);
         tokenIds = [7];
-        dao.signalFork(tokenIds);
+        dao.escrowToFork(tokenIds);
         vm.stopPrank();
 
         tokenIds = [7];
         vm.expectRevert(NounsDAOForkEscrow.NotOwner.selector);
         vm.prank(tokenHolder);
-        dao.unsignalFork(tokenIds);
+        dao.withdrawFromForkEscrow(tokenIds);
     }
 
     function test_withdrawTokensToDAO_reverts() public {
@@ -145,7 +149,7 @@ abstract contract DAOForkSignaledOverThresholdState is DAOForkSignaledUnderThres
 
         vm.startPrank(tokenHolder);
         nounsToken.setApprovalForAll(address(dao), true);
-        dao.signalFork(tokenIds);
+        dao.escrowToFork(tokenIds);
         vm.stopPrank();
     }
 }
@@ -160,7 +164,7 @@ contract DAOForkSignaledOverThresholdStateTest is DAOForkSignaledOverThresholdSt
 
         tokenIds = [6];
         vm.prank(tokenHolder);
-        dao.signalFork(tokenIds);
+        dao.escrowToFork(tokenIds);
 
         dao.executeFork();
     }
@@ -188,7 +192,7 @@ contract DAOForkSignaledOverThresholdStateTest is DAOForkSignaledOverThresholdSt
         tokenIds = [1, 2, 3];
 
         vm.prank(tokenHolder);
-        dao.unsignalFork(tokenIds);
+        dao.withdrawFromForkEscrow(tokenIds);
 
         vm.expectRevert(NounsDAOV3Fork.ForkThresholdNotMet.selector);
         dao.executeFork();
@@ -238,7 +242,7 @@ contract DAOForkExecutedStateTest is DAOForkExecutedState {
 
         vm.expectRevert(NounsDAOV3Fork.ForkPeriodActive.selector);
         vm.prank(tokenHolder);
-        dao.signalFork(tokenIds);
+        dao.escrowToFork(tokenIds);
     }
 
     function test_executeFork_reverts() public {
@@ -251,7 +255,7 @@ contract DAOForkExecutedStateTest is DAOForkExecutedState {
 
         vm.expectRevert(NounsDAOV3Fork.ForkPeriodActive.selector);
         vm.prank(tokenHolder);
-        dao.unsignalFork(tokenIds);
+        dao.withdrawFromForkEscrow(tokenIds);
     }
 
     function test_joinFork() public {
@@ -322,7 +326,7 @@ contract DAOForkExecutedActivePeriodOverStateTest is DAOForkExecutedActivePeriod
     function test_signalOnNewFork() public {
         tokenIds = [11, 12];
         vm.prank(tokenHolder);
-        dao.signalFork(tokenIds);
+        dao.escrowToFork(tokenIds);
 
         assertOwnerOfTokens(address(dao.nouns()), tokenIds, address(forkEscrow));
     }
@@ -334,7 +338,7 @@ abstract contract DAOSecondForkSignaledUnderThreshold is DAOForkExecutedActivePe
 
         tokenIds = [11, 12];
         vm.prank(tokenHolder);
-        dao.signalFork(tokenIds);
+        dao.escrowToFork(tokenIds);
     }
 }
 
@@ -356,7 +360,7 @@ contract DAOSecondForkSignaledUnderThresholdTest is DAOSecondForkSignaledUnderTh
         assertOwnerOfTokens(address(dao.nouns()), tokenIds, address(forkEscrow));
 
         vm.prank(tokenHolder);
-        dao.unsignalFork(tokenIds);
+        dao.withdrawFromForkEscrow(tokenIds);
 
         assertOwnerOfTokens(address(dao.nouns()), tokenIds, tokenHolder);
     }
@@ -375,7 +379,7 @@ abstract contract DAOSecondForkSignaledOverThreshold is DAOSecondForkSignaledUnd
         // adjusted total supply is 15, so for 20% 3 tokens are enough (15 * 0.2 = 3)
         tokenIds = [13];
         vm.prank(tokenHolder);
-        dao.signalFork(tokenIds);
+        dao.escrowToFork(tokenIds);
     }
 }
 
