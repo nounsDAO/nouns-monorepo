@@ -30,6 +30,7 @@ library NounsDAOV3Admin {
     error InvalidMinQuorumVotesBPS();
     error InvalidMaxQuorumVotesBPS();
     error MinQuorumBPSGreaterThanMaxQuorumBPS();
+    error ForkPeriodTooLong();
 
     /// @notice Emitted when proposal threshold basis points is set
     event ProposalThresholdBPSSet(uint256 oldProposalThresholdBPS, uint256 newProposalThresholdBPS);
@@ -120,6 +121,9 @@ library NounsDAOV3Admin {
     /// @notice The upper bound of maximum quorum votes basis points
     uint256 public constant MAX_QUORUM_VOTES_BPS_UPPER_BOUND = 6_000; // 4,000 basis points or 60%
 
+    /// @notice Upper bound for forking period. If forking period is too high it can block proposals for too long.
+    uint256 public constant MAX_FORK_PERIOD = 14 days;
+
     modifier onlyAdmin(NounsDAOStorageV3.StorageV3 storage ds) {
         if (msg.sender != ds.admin) {
             revert AdminOnly();
@@ -168,10 +172,9 @@ library NounsDAOV3Admin {
      * @dev newProposalThresholdBPS must be greater than the hardcoded min
      * @param newProposalThresholdBPS new proposal threshold
      */
-    function _setProposalThresholdBPS(
-        NounsDAOStorageV3.StorageV3 storage ds,
-        uint256 newProposalThresholdBPS
-    ) external {
+    function _setProposalThresholdBPS(NounsDAOStorageV3.StorageV3 storage ds, uint256 newProposalThresholdBPS)
+        external
+    {
         if (msg.sender != ds.admin) {
             revert AdminOnly();
         }
@@ -200,10 +203,9 @@ library NounsDAOV3Admin {
         emit ObjectionPeriodDurationSet(oldObjectionPeriodDurationInBlocks, newObjectionPeriodDurationInBlocks);
     }
 
-    function _setLastMinuteWindowInBlocks(
-        NounsDAOStorageV3.StorageV3 storage ds,
-        uint32 newLastMinuteWindowInBlocks
-    ) external {
+    function _setLastMinuteWindowInBlocks(NounsDAOStorageV3.StorageV3 storage ds, uint32 newLastMinuteWindowInBlocks)
+        external
+    {
         if (msg.sender != ds.admin) {
             revert AdminOnly();
         }
@@ -486,10 +488,10 @@ library NounsDAOV3Admin {
         emit ForkDAODeployerSet(oldForkDAODeployer, newForkDAODeployer);
     }
 
-    function _setErc20TokensToIncludeInFork(
-        NounsDAOStorageV3.StorageV3 storage ds,
-        address[] calldata erc20tokens
-    ) external onlyAdmin(ds) {
+    function _setErc20TokensToIncludeInFork(NounsDAOStorageV3.StorageV3 storage ds, address[] calldata erc20tokens)
+        external
+        onlyAdmin(ds)
+    {
         emit ERC20TokensToIncludeInForkSet(ds.erc20TokensToIncludeInFork, erc20tokens);
 
         ds.erc20TokensToIncludeInFork = erc20tokens;
@@ -500,15 +502,19 @@ library NounsDAOV3Admin {
     }
 
     function _setForkPeriod(NounsDAOStorageV3.StorageV3 storage ds, uint256 newForkPeriod) external onlyAdmin(ds) {
+        if (newForkPeriod > MAX_FORK_PERIOD) {
+            revert ForkPeriodTooLong();
+        }
+
         emit ForkPeriodSet(ds.forkPeriod, newForkPeriod);
 
         ds.forkPeriod = newForkPeriod;
     }
 
-    function _setForkThresholdBPS(
-        NounsDAOStorageV3.StorageV3 storage ds,
-        uint256 newForkThresholdBPS
-    ) external onlyAdmin(ds) {
+    function _setForkThresholdBPS(NounsDAOStorageV3.StorageV3 storage ds, uint256 newForkThresholdBPS)
+        external
+        onlyAdmin(ds)
+    {
         emit ForkThresholdSet(ds.forkThresholdBPS, newForkThresholdBPS);
 
         ds.forkThresholdBPS = newForkThresholdBPS;
