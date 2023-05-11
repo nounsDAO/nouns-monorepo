@@ -4,6 +4,7 @@ pragma solidity ^0.8.15;
 import 'forge-std/Test.sol';
 import { NounsDAOLogicV1 } from '../../contracts/governance/NounsDAOLogicV1.sol';
 import { NounsDAOLogicV2 } from '../../contracts/governance/NounsDAOLogicV2.sol';
+import { NounsDAOLogicV3 } from '../../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsDAOProxy } from '../../contracts/governance/NounsDAOProxy.sol';
 import { NounsDAOProxyV2 } from '../../contracts/governance/NounsDAOProxyV2.sol';
 import { NounsDAOStorageV1, NounsDAOStorageV2, NounsDAOStorageV3 } from '../../contracts/governance/NounsDAOInterfaces.sol';
@@ -33,7 +34,7 @@ abstract contract NounsDAOLogicV1V2StateTest is NounsDAOLogicSharedBaseTest, Dep
 
     function testPendingGivenProposalJustCreated() public {
         uint256 proposalId = propose(address(0x1234), 100, '', '');
-        uint256 state = uint256(daoProxyAsV3().state(proposalId));
+        uint256 state = uint256(NounsDAOLogicV3(payable(address(daoProxy))).state(proposalId));
 
         if (daoVersion() < 3) {
             assertEq(state, uint256(NounsDAOStorageV1.ProposalState.Pending));

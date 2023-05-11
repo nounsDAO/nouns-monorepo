@@ -4,7 +4,6 @@ pragma solidity ^0.8.15;
 import 'forge-std/Test.sol';
 import { NounsDAOLogicV1 } from '../../../contracts/governance/NounsDAOLogicV1.sol';
 import { NounsDAOLogicV2 } from '../../../contracts/governance/NounsDAOLogicV2.sol';
-import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsDAOProxy } from '../../../contracts/governance/NounsDAOProxy.sol';
 import { NounsDAOProxyV2 } from '../../../contracts/governance/NounsDAOProxyV2.sol';
 import { NounsDescriptorV2 } from '../../../contracts/NounsDescriptorV2.sol';
@@ -43,7 +42,11 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtils {
         utils = new Utils();
     }
 
-    function deployDAOProxy(address timelock, address nounsToken, address vetoer) internal virtual returns (NounsDAOLogicV1);
+    function deployDAOProxy(
+        address timelock,
+        address nounsToken,
+        address vetoer
+    ) internal virtual returns (NounsDAOLogicV1);
 
     function daoVersion() internal virtual returns (uint256) {
         return 0; // override to specify version
@@ -106,9 +109,5 @@ abstract contract NounsDAOLogicSharedBaseTest is Test, DeployUtils {
 
     function daoProxyAsV2() internal view returns (NounsDAOLogicV2) {
         return NounsDAOLogicV2(payable(address(daoProxy)));
-    }
-
-    function daoProxyAsV3() internal view returns (NounsDAOLogicV3) {
-        return NounsDAOLogicV3(payable(address(daoProxy)));
     }
 }
