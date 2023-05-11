@@ -45,22 +45,9 @@
   margin-left: 12px;
 }
 
-.spinner {
-  position: absolute;
-  top: calc(50% - 128px / 2);
-  left: calc(50% - 128px / 2);
-  font-size: 8em;
-}
-
 @media (max-width: 1200px) {
   .circularTokenWrapper {
     height: 70%;
     width: 70%;
-  }
-
-  .spinner {
-    top: calc(50% - 96px / 2);
-    left: calc(50% - 96px / 2);
-    font-size: 6em;
   }
 }

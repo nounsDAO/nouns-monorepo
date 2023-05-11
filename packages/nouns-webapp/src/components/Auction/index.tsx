@@ -1,3 +1,4 @@
+import React from 'react';
 import { Col } from 'react-bootstrap';
 import { StandaloneTokenWithSeed } from '../StandaloneToken';
 import AuctionActivity from '../AuctionActivity';
@@ -41,7 +42,7 @@ const Auction: React.FC<AuctionProps> = props => {
     dispatch(setNextOnDisplayAuctionTokenId());
     currentAuction && history.push(`/punk/${currentAuction.tokenId.toNumber() + 1}`);
   };
-  console.log(currentAuction)
+  console.log(currentAuction);
 
   const nounContent = currentAuction && (
     <div className={classes.nounWrapper}>
@@ -53,13 +54,9 @@ const Auction: React.FC<AuctionProps> = props => {
     </div>
   );
 
-  const loadingPunk = (
-    <div className={classes.nounWrapper}>
-      <LoadingPunk />
-    </div>
-  );
+  const loadingPunk = <LoadingPunk />;
 
-  console.log("CUR_AUCTION", currentAuction)
+  console.log('CUR_AUCTION', currentAuction);
 
   const currentAuctionActivityContent = currentAuction && lastTokenId && (
     <AuctionActivity
