@@ -1,6 +1,6 @@
 import { useAppSelector } from '../../hooks';
 import classes from './NavBar.module.css';
-// import logo from '../../assets/logo.svg';
+import logo from '../../assets/logo.svg';
 import { useEtherBalance } from '@usedapp/core';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -13,7 +13,6 @@ import { buildEtherscanHoldingsLink } from '../../utils/etherscan';
 import useLidoBalance from '../../hooks/useLidoBalance';
 import NavBarButton, { NavBarButtonStyle } from '../NavBarButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome} from '@fortawesome/free-solid-svg-icons';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
 // import { faComments } from '@fortawesome/free-solid-svg-icons';
 // import { faPlay } from '@fortawesome/free-solid-svg-icons';
@@ -58,8 +57,7 @@ const NavBar = () => {
         <Container style={{ maxWidth: 'unset' }}>
           <div className={classes.brandAndTreasuryWrapper}>
             <Navbar.Brand as={Link} to="/" className={classes.navBarBrand}>
-              <FontAwesomeIcon icon={faHome} />
-              {/*<img src={logo} className={classes.navBarLogo} alt="Nouns DAO logo" />*/}
+              <img src={logo} className={classes.navBarLogo} alt="Punks DAO logo" />
             </Navbar.Brand>
             {Number(CHAIN_ID) !== 1 && (
               <Nav.Item>
