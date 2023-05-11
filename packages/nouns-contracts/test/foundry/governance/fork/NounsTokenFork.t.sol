@@ -47,5 +47,7 @@ contract NounsTokenForkTest is Test {
     function test_setNoundersDAO_worksForNoundersSettingNonZeroAddress() public {
         vm.prank(nounders);
         token.setNoundersDAO(address(1));
+
+        assertEq(token.noundersDAO(), address(1));
     }
 }
