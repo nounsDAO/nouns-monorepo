@@ -22,34 +22,21 @@ interface NounsDAOLike {
 }
 
 contract NounsDAOForkEscrow {
-
     address public immutable dao;
     NounsTokenLike public immutable nounsToken;
 
     uint32 public forkId;
 
-    /// @dev tokenId => OwnerInfo
-    mapping(uint256 => OwnerInfo) public ownerOf;
-
     /// @dev forkId => tokenId => owner
     mapping(uint32 => mapping(uint256 => address)) public escrowedTokensByForkId;
 
-    /// @dev forkId => count
-    mapping(uint32 => uint256) public tokensInEscrowByForkId;
-
-    uint256 public numTokensOwnedByDAO;
+    /// @notice Number of tokens in escrow contributing to the fork threshold. They can be unescrowed.
+    uint256 public numTokensInEscrow;
 
     // TODO: events
 
-    struct OwnerInfo {
-        address owner;
-        uint32 forkId;
-    }
-
     error OnlyDAO();
     error NotOwner();
-    error NotEscrowed();
-    error InvalidForkId();
 
     constructor(address dao_) {
         dao = dao_;
@@ -63,63 +50,54 @@ contract NounsDAOForkEscrow {
         _;
     }
 
-    function markOwner(address owner, uint256[] calldata tokenIds) onlyDAO external {
+    function markOwner(address owner, uint256[] calldata tokenIds) external onlyDAO {
         for (uint256 i = 0; i < tokenIds.length; i++) {
-            ownerOf[tokenIds[i]] = OwnerInfo(owner, forkId);
             escrowedTokensByForkId[forkId][tokenIds[i]] = owner;
         }
-        tokensInEscrowByForkId[forkId] += tokenIds.length;
+        numTokensInEscrow += tokenIds.length;
     }
 
-    function returnTokensToOwner(address owner, uint256[] calldata tokenIds) onlyDAO external {
+    function returnTokensToOwner(address owner, uint256[] calldata tokenIds) external onlyDAO {
         for (uint256 i = 0; i < tokenIds.length; i++) {
             if (currentOwnerOf(tokenIds[i]) != owner) revert NotOwner();
 
             nounsToken.transferFrom(address(this), owner, tokenIds[i]);
-            delete ownerOf[tokenIds[i]];
             escrowedTokensByForkId[forkId][tokenIds[i]] = address(0);
         }
 
-        tokensInEscrowByForkId[forkId] -= tokenIds.length;
+        numTokensInEscrow -= tokenIds.length;
     }
 
-    function withdrawTokensToDAO(uint256[] calldata tokenIds, address to) onlyDAO external {
+    function withdrawTokensToDAO(uint256[] calldata tokenIds, address to) external onlyDAO {
         for (uint256 i = 0; i < tokenIds.length; i++) {
             if (currentOwnerOf(tokenIds[i]) != dao) revert NotOwner();
 
-            delete ownerOf[tokenIds[i]];
             nounsToken.transferFrom(address(this), to, tokenIds[i]);
         }
-
-        numTokensOwnedByDAO -= tokenIds.length;
     }
 
-    function closeEscrow() onlyDAO external returns (uint32 closedForkId) {
-        numTokensOwnedByDAO += tokensInEscrowByForkId[forkId];
-        tokensInEscrowByForkId[forkId] = 0; // TODO: is this needed?
+    function closeEscrow() external onlyDAO returns (uint32 closedForkId) {
+        numTokensInEscrow = 0;
 
         closedForkId = forkId;
 
         forkId++;
     }
 
+    function numTokensOwnedByDAO() external view returns (uint256) {
+        return nounsToken.balanceOf(address(this)) - numTokensInEscrow;
+    }
+
     function ownerOfEscrowedToken(uint32 forkId_, uint256 tokenId) external view returns (address) {
         return escrowedTokensByForkId[forkId_][tokenId];
     }
 
-    function numTokensInEscrow() external view returns (uint256) {
-        return tokensInEscrowByForkId[forkId];
-    }
-
-    /// @dev returns address(0) if this tokenId is not registered as escrowed
     function currentOwnerOf(uint256 tokenId) public view returns (address) {
-        OwnerInfo memory ownerInfo = ownerOf[tokenId];
-        if (ownerInfo.owner == address(0)) return address(0);
-
-        if (ownerInfo.forkId == forkId) {
-            return ownerInfo.owner;
-        } else {
+        address owner = escrowedTokensByForkId[forkId][tokenId];
+        if (owner == address(0)) {
             return dao;
+        } else {
+            return owner;
         }
     }
 }
