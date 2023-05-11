@@ -23,6 +23,7 @@ library NounsDAOV3Fork {
     error ForkThresholdNotMet();
     error ForkPeriodNotActive();
     error ForkPeriodActive();
+    error AdminOnly();
 
     // TODO: events
 
@@ -72,11 +73,16 @@ library NounsDAOV3Fork {
         NounsTokenFork(ds.forkDAOToken).claimDuringForkPeriod(msg.sender, tokenIds);
     }
 
-    function withdrawForkTokensToDAO(NounsDAOStorageV3.StorageV3 storage ds, uint256[] calldata tokenIds) external {
-        // TODO: should this be limited to only timelock. maybe the timelock should call the escrow directly?
+    function withdrawForkTokensToDAO(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        uint256[] calldata tokenIds,
+        address to
+    ) external {
+        if (msg.sender != ds.admin) {
+            revert AdminOnly();
+        }
 
-        // TODO: include a `to` param above?
-        ds.forkEscrow.withdrawTokensToDAO(tokenIds, address(ds.timelock));
+        ds.forkEscrow.withdrawTokensToDAO(tokenIds, to);
     }
 
     function forkThreshold(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (uint256) {
