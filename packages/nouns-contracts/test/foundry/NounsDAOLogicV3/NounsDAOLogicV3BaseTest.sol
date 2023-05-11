@@ -2,7 +2,7 @@
 pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
-import { DeployUtils } from '../helpers/DeployUtils.sol';
+import { DeployUtilsV3 } from '../helpers/DeployUtilsV3.sol';
 import { SigUtils, ERC1271Stub } from '../helpers/SigUtils.sol';
 import { ProxyRegistryMock } from '../helpers/ProxyRegistryMock.sol';
 import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
@@ -15,7 +15,7 @@ import { IProxyRegistry } from '../../../contracts/external/opensea/IProxyRegist
 import { NounsDAOExecutorV2 } from '../../../contracts/governance/NounsDAOExecutorV2.sol';
 import { NounsDAOForkEscrow } from '../../../contracts/governance/fork/NounsDAOForkEscrow.sol';
 
-abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtils, SigUtils {
+abstract contract NounsDAOLogicV3BaseTest is Test, DeployUtilsV3, SigUtils {
     event ProposalUpdated(
         uint256 indexed id,
         address indexed proposer,

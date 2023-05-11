@@ -3,14 +3,14 @@ pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
 
-import { DeployUtils } from '../../helpers/DeployUtils.sol';
+import { DeployUtilsV3 } from '../../helpers/DeployUtilsV3.sol';
 import { NounsDAOLogicV3 } from '../../../../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsToken } from '../../../../contracts/NounsToken.sol';
 import { NounsTokenFork } from '../../../../contracts/governance/fork/newdao/token/NounsTokenFork.sol';
 import { NounsDAOExecutorV2 } from '../../../../contracts/governance/NounsDAOExecutorV2.sol';
 import { NounsDAOLogicV1Fork } from '../../../../contracts/governance/fork/newdao/governance/NounsDAOLogicV1Fork.sol';
 
-contract ForkHappyFlowTest is DeployUtils {
+contract ForkHappyFlowTest is DeployUtilsV3 {
     address minter;
     NounsDAOLogicV3 daoV3;
     NounsToken ogToken;

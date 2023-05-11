@@ -9,13 +9,14 @@ import { NounsDAOProxyV2 } from '../../contracts/governance/NounsDAOProxyV2.sol'
 import { NounsDAOStorageV1, NounsDAOStorageV2, NounsDAOStorageV3 } from '../../contracts/governance/NounsDAOInterfaces.sol';
 import { NounsDescriptorV2 } from '../../contracts/NounsDescriptorV2.sol';
 import { DeployUtils } from './helpers/DeployUtils.sol';
+import { DeployUtilsV3 } from './helpers/DeployUtilsV3.sol';
 import { NounsToken } from '../../contracts/NounsToken.sol';
 import { NounsSeeder } from '../../contracts/NounsSeeder.sol';
 import { IProxyRegistry } from '../../contracts/external/opensea/IProxyRegistry.sol';
 import { NounsDAOExecutor } from '../../contracts/governance/NounsDAOExecutor.sol';
 import { NounsDAOLogicSharedBaseTest } from './helpers/NounsDAOLogicSharedBase.t.sol';
 
-abstract contract NounsDAOLogicV1V2StateTest is NounsDAOLogicSharedBaseTest {
+abstract contract NounsDAOLogicV1V2StateTest is NounsDAOLogicSharedBaseTest, DeployUtilsV3 {
     function setUp() public override {
         super.setUp();
 
@@ -32,12 +33,12 @@ abstract contract NounsDAOLogicV1V2StateTest is NounsDAOLogicSharedBaseTest {
 
     function testPendingGivenProposalJustCreated() public {
         uint256 proposalId = propose(address(0x1234), 100, '', '');
-        uint256 state = uint(daoProxyAsV3().state(proposalId));
+        uint256 state = uint256(daoProxyAsV3().state(proposalId));
 
         if (daoVersion() < 3) {
-            assertEq(state, uint(NounsDAOStorageV1.ProposalState.Pending));
+            assertEq(state, uint256(NounsDAOStorageV1.ProposalState.Pending));
         } else {
-            assertEq(state, uint(NounsDAOStorageV3.ProposalState.Updatable));
+            assertEq(state, uint256(NounsDAOStorageV3.ProposalState.Updatable));
         }
     }
 
@@ -185,7 +186,11 @@ contract NounsDAOLogicV1StateTest is NounsDAOLogicV1V2StateTest {
         return 1;
     }
 
-    function deployDAOProxy(address timelock, address nounsToken, address vetoer) internal override returns (NounsDAOLogicV1) {
+    function deployDAOProxy(
+        address timelock,
+        address nounsToken,
+        address vetoer
+    ) internal override returns (NounsDAOLogicV1) {
         NounsDAOLogicV1 daoLogic = new NounsDAOLogicV1();
 
         return
@@ -212,7 +217,11 @@ contract NounsDAOLogicV2StateTest is NounsDAOLogicV1V2StateTest {
         return 2;
     }
 
-    function deployDAOProxy(address timelock, address nounsToken, address vetoer) internal override returns (NounsDAOLogicV1) {
+    function deployDAOProxy(
+        address timelock,
+        address nounsToken,
+        address vetoer
+    ) internal override returns (NounsDAOLogicV1) {
         NounsDAOLogicV2 daoLogic = new NounsDAOLogicV2();
 
         return
@@ -239,7 +248,11 @@ contract NounsDAOLogicV2StateTest is NounsDAOLogicV1V2StateTest {
 }
 
 contract NounsDAOLogicV3StateTest is NounsDAOLogicV1V2StateTest {
-    function deployDAOProxy(address timelock, address nounsToken, address vetoer) internal override returns (NounsDAOLogicV1) {
+    function deployDAOProxy(
+        address timelock,
+        address nounsToken,
+        address vetoer
+    ) internal override returns (NounsDAOLogicV1) {
         return _createDAOV3Proxy(timelock, nounsToken, vetoer);
     }
 
@@ -448,7 +461,11 @@ contract NounsDAOLogicV1VetoingTest is NounsDAOLogicV1V2VetoingTest {
         return 1;
     }
 
-    function deployDAOProxy(address timelock, address nounsToken, address vetoer) internal override returns (NounsDAOLogicV1) {
+    function deployDAOProxy(
+        address timelock,
+        address nounsToken,
+        address vetoer
+    ) internal override returns (NounsDAOLogicV1) {
         NounsDAOLogicV1 daoLogic = new NounsDAOLogicV1();
 
         return
@@ -546,7 +563,11 @@ contract NounsDAOLogicV2VetoingTest is NounsDAOLogicV1V2VetoingTest {
         return 2;
     }
 
-    function deployDAOProxy(address timelock, address nounsToken, address vetoer) internal override returns (NounsDAOLogicV1) {
+    function deployDAOProxy(
+        address timelock,
+        address nounsToken,
+        address vetoer
+    ) internal override returns (NounsDAOLogicV1) {
         NounsDAOLogicV2 daoLogic = new NounsDAOLogicV2();
 
         return
