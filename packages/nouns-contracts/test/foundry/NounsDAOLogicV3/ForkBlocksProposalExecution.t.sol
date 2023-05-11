@@ -48,7 +48,7 @@ abstract contract ExecutableProposalWithActiveForkState is ExecutableProposalSta
         vm.startPrank(user);
         tokenIds = [1];
         nounsToken.approve(address(dao), 1);
-        dao.escrowToFork(tokenIds);
+        dao.escrowToFork(tokenIds, new uint256[](0), '');
         vm.stopPrank();
 
         dao.executeFork();

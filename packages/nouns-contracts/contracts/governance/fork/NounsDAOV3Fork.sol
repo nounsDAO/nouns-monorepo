@@ -26,14 +26,22 @@ library NounsDAOV3Fork {
     error AdminOnly();
 
     // TODO: events
+    event EscrowedToFork(address indexed owner, uint256[] tokenIds, uint256[] proposalIds, string reason);
 
-    function escrowToFork(NounsDAOStorageV3.StorageV3 storage ds, uint256[] calldata tokenIds) external {
+    function escrowToFork(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        uint256[] calldata tokenIds,
+        uint256[] calldata proposalIds,
+        string calldata reason
+    ) external {
         if (isForkPeriodActive(ds)) revert ForkPeriodActive();
 
         ds.forkEscrow.markOwner(msg.sender, tokenIds);
         for (uint256 i = 0; i < tokenIds.length; i++) {
             ds.nouns.transferFrom(msg.sender, address(ds.forkEscrow), tokenIds[i]);
         }
+
+        emit EscrowedToFork(msg.sender, tokenIds, proposalIds, reason);
     }
 
     // TODO: do we need a `to` param?

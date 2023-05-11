@@ -13,6 +13,7 @@ abstract contract DAOForkZeroState is NounsDAOLogicV3BaseTest {
     address tokenHolder = makeAddr('tokenHolder');
     address tokenHolder2 = makeAddr('tokenHolder2');
     uint256[] tokenIds;
+    uint256[] proposalIds;
     ForkDAODeployerMock forkDAODeployer;
     ERC20Mock erc20Mock = new ERC20Mock();
     address[] erc20Tokens = [address(erc20Mock)];
@@ -52,15 +53,29 @@ abstract contract DAOForkZeroState is NounsDAOLogicV3BaseTest {
 }
 
 contract DAOForkZeroStateTest is DAOForkZeroState {
+    event EscrowedToFork(address indexed owner, uint256[] tokenIds, uint256[] proposalIds, string reason);
+
     function test_signalFork_transfersTokens() public {
         tokenIds = [1, 2, 3];
 
         vm.startPrank(tokenHolder);
         nounsToken.setApprovalForAll(address(dao), true);
-        dao.escrowToFork(tokenIds);
+        dao.escrowToFork(tokenIds, new uint256[](0), '');
         vm.stopPrank();
 
         assertEq(dao.nouns().balanceOf(tokenHolder), 15);
+    }
+
+    function test_escrowToForkEmitsEvent() public {
+        tokenIds = [1, 2, 3];
+        proposalIds = [4, 5, 6];
+
+        vm.startPrank(tokenHolder);
+        nounsToken.setApprovalForAll(address(dao), true);
+
+        vm.expectEmit(true, true, true, true);
+        emit EscrowedToFork(tokenHolder, tokenIds, proposalIds, 'time to fork');
+        dao.escrowToFork(tokenIds, proposalIds, 'time to fork');
     }
 
     function test_executeFork_reverts() public {
@@ -90,7 +105,7 @@ abstract contract DAOForkSignaledUnderThresholdState is DAOForkZeroState {
 
         vm.startPrank(tokenHolder);
         nounsToken.setApprovalForAll(address(dao), true);
-        dao.escrowToFork(tokenIds);
+        dao.escrowToFork(tokenIds, new uint256[](0), '');
         vm.stopPrank();
     }
 }
@@ -129,7 +144,7 @@ contract DAOForkSignaledUnderThresholdStateTest is DAOForkSignaledUnderThreshold
         vm.startPrank(tokenHolder2);
         nounsToken.approve(address(dao), 7);
         tokenIds = [7];
-        dao.escrowToFork(tokenIds);
+        dao.escrowToFork(tokenIds, new uint256[](0), '');
         vm.stopPrank();
 
         tokenIds = [7];
@@ -155,7 +170,7 @@ abstract contract DAOForkSignaledOverThresholdState is DAOForkSignaledUnderThres
 
         vm.startPrank(tokenHolder);
         nounsToken.setApprovalForAll(address(dao), true);
-        dao.escrowToFork(tokenIds);
+        dao.escrowToFork(tokenIds, new uint256[](0), '');
         vm.stopPrank();
     }
 }
@@ -170,7 +185,7 @@ contract DAOForkSignaledOverThresholdStateTest is DAOForkSignaledOverThresholdSt
 
         tokenIds = [6];
         vm.prank(tokenHolder);
-        dao.escrowToFork(tokenIds);
+        dao.escrowToFork(tokenIds, new uint256[](0), '');
 
         dao.executeFork();
     }
@@ -249,7 +264,7 @@ contract DAOForkExecutedStateTest is DAOForkExecutedState {
 
         vm.expectRevert(NounsDAOV3Fork.ForkPeriodActive.selector);
         vm.prank(tokenHolder);
-        dao.escrowToFork(tokenIds);
+        dao.escrowToFork(tokenIds, new uint256[](0), '');
     }
 
     function test_executeFork_reverts() public {
@@ -335,7 +350,7 @@ contract DAOForkExecutedActivePeriodOverStateTest is DAOForkExecutedActivePeriod
     function test_signalOnNewFork() public {
         tokenIds = [11, 12];
         vm.prank(tokenHolder);
-        dao.escrowToFork(tokenIds);
+        dao.escrowToFork(tokenIds, new uint256[](0), '');
 
         assertOwnerOfTokens(address(dao.nouns()), tokenIds, address(forkEscrow));
     }
@@ -347,7 +362,7 @@ abstract contract DAOSecondForkSignaledUnderThreshold is DAOForkExecutedActivePe
 
         tokenIds = [11, 12];
         vm.prank(tokenHolder);
-        dao.escrowToFork(tokenIds);
+        dao.escrowToFork(tokenIds, new uint256[](0), '');
     }
 }
 
@@ -389,7 +404,7 @@ abstract contract DAOSecondForkSignaledOverThreshold is DAOSecondForkSignaledUnd
         // adjusted total supply is 15, so for 20% 3 tokens are enough (15 * 0.2 = 3)
         tokenIds = [13];
         vm.prank(tokenHolder);
-        dao.escrowToFork(tokenIds);
+        dao.escrowToFork(tokenIds, new uint256[](0), '');
     }
 }
 

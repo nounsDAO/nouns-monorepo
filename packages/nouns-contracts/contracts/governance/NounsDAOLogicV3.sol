@@ -369,8 +369,19 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      */
 
-    function escrowToFork(uint256[] calldata tokenIds) external {
-        ds.escrowToFork(tokenIds);
+    /**
+     * @notice Escrow Nouns to contribute to the fork threshold
+     * @dev Requires approving the tokenIds or the entire noun token to the DAO contract
+     * @param tokenIds the tokenIds to escrow
+     * @param proposalIds array of proposal ids which are the reason for wanting to fork. This will only be used to emit event.
+     * @param reason the reason for want to fork. This will only be used to emit event.
+     */
+    function escrowToFork(
+        uint256[] calldata tokenIds,
+        uint256[] calldata proposalIds,
+        string calldata reason
+    ) external {
+        ds.escrowToFork(tokenIds, proposalIds, reason);
     }
 
     function withdrawFromForkEscrow(uint256[] calldata tokenIds) external {

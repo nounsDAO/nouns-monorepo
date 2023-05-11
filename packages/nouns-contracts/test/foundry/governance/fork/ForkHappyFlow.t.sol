@@ -102,7 +102,7 @@ contract ForkHappyFlowTest is DeployUtilsV3 {
     function escrowToFork(address nouner) internal {
         vm.startPrank(nouner);
         ogToken.setApprovalForAll(address(daoV3), true);
-        daoV3.escrowToFork(getOwnedTokens(nouner));
+        daoV3.escrowToFork(getOwnedTokens(nouner), new uint256[](0), '');
         vm.stopPrank();
     }
 
