@@ -1,12 +1,12 @@
-// import Banner from '../../components/Banner';
+import Banner from '../../components/Banner';
 import Auction from '../../components/Auction';
-// import Documentation from '../../components/Documentation';
+import Documentation from '../../components/Documentation';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setOnDisplayAuctionTokenId } from '../../state/slices/onDisplayAuction';
 import { push } from 'connected-react-router';
 import { tokenPath } from '../../utils/history';
 import useOnDisplayAuction from '../../wrappers/onDisplayAuction';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import ProfileActivityFeed from '../../components/ProfileActivityFeed';
 
 interface AuctionPageProps {
@@ -49,8 +49,10 @@ const AuctionPage: React.FC<AuctionPageProps> = props => {
       <Auction auction={onDisplayAuction} />
       {onDisplayAuctionTokenId !== undefined && onDisplayAuctionTokenId !== lastAuctionTokenId ? (
         <ProfileActivityFeed tokenId={onDisplayAuctionTokenId} />
-      ) : null}
-      {/*<Documentation />*/}
+      ) : (
+        <Banner />
+      )}
+      <Documentation />
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import classes from './Link.module.css';
 
 const Link: React.FC<{ text: ReactNode; url: string; leavesPage: boolean }> = props => {
