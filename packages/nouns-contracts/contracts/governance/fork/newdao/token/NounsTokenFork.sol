@@ -33,9 +33,6 @@ contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable
     error OnlyOriginalDAO();
     error NoundersCannotBeAddressZero();
 
-    // The nounders DAO address (creators org)
-    address public noundersDAO;
-
     // An address who has permissions to mint Nouns
     address public minter;
 
@@ -94,14 +91,6 @@ contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable
     }
 
     /**
-     * @notice Require that the sender is the nounders DAO.
-     */
-    modifier onlyNoundersDAO() {
-        require(msg.sender == noundersDAO, 'Sender is not the nounders DAO');
-        _;
-    }
-
-    /**
      * @notice Require that the sender is the minter.
      */
     modifier onlyMinter() {
@@ -126,7 +115,6 @@ contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable
         remainingTokensToClaim = tokensToClaim;
 
         NounsTokenFork originalToken = NounsTokenFork(address(escrow.nounsToken()));
-        noundersDAO = originalToken.noundersDAO();
         descriptor = originalToken.descriptor();
         seeder = originalToken.seeder();
     }
@@ -183,9 +171,6 @@ contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable
      * @dev Call _mintTo with the to address(es).
      */
     function mint() public override onlyMinter returns (uint256) {
-        if (_currentNounId <= 1820 && _currentNounId % 10 == 0) {
-            _mintTo(noundersDAO, _currentNounId++);
-        }
         return _mintTo(minter, _currentNounId++);
     }
 
@@ -213,20 +198,6 @@ contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable
     function dataURI(uint256 tokenId) public view override returns (string memory) {
         require(_exists(tokenId), 'NounsToken: URI query for nonexistent token');
         return descriptor.dataURI(tokenId, seeds[tokenId]);
-    }
-
-    /**
-     * @notice Set the nounders DAO.
-     * @dev Only callable by the nounders DAO when not locked.
-     * Reverts when called with address zero, because that would brick minting on the next founder reward,
-     * because you can't mint to address zero.
-     */
-    function setNoundersDAO(address _noundersDAO) external override onlyNoundersDAO {
-        if (_noundersDAO == address(0)) revert NoundersCannotBeAddressZero();
-
-        noundersDAO = _noundersDAO;
-
-        emit NoundersDAOUpdated(_noundersDAO);
     }
 
     /**
