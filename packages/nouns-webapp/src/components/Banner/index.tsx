@@ -1,7 +1,7 @@
 import classes from './Banner.module.css';
 import Section from '../../layout/Section';
 import { Col } from 'react-bootstrap';
-import calendar_noun from '../../assets/calendar_noun.png';
+import punk from '../../assets/punk.png';
 import Punk from '../Punk';
 import { Trans } from '@lingui/macro';
 
@@ -11,7 +11,7 @@ const Banner = () => {
       <Col lg={6}>
         <div className={classes.wrapper}>
           <h1>
-            <Trans>ONE NOUN,</Trans>
+            <Trans>ONE PUNK,</Trans>
             <br />
             <Trans>EVERY DAY,</Trans>
             <br />
@@ -21,7 +21,7 @@ const Banner = () => {
       </Col>
       <Col lg={6}>
         <div style={{ padding: '2rem' }}>
-          <Punk imgPath={calendar_noun} alt="punk" />
+          <Punk imgPath={punk} alt="punk" />
         </div>
       </Col>
     </Section>
