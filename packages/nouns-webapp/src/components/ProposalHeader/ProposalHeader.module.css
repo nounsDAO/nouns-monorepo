@@ -72,7 +72,7 @@
   font-weight: bold;
   margin-bottom: 0.5rem;
   border-radius: 12px;
-  border: var(--brand-dark-red);
+  border: var(--brand-pink);
   opacity: 0.5;
   box-shadow: none !important;
 }
