@@ -54,7 +54,11 @@ const Auction: React.FC<AuctionProps> = props => {
     </div>
   );
 
-  const loadingPunk = <LoadingPunk />;
+  const loadingPunk = (
+    <div className={classes.nounWrapper}>
+      <LoadingPunk />
+    </div>
+  );
 
   console.log('CUR_AUCTION', currentAuction);
 
