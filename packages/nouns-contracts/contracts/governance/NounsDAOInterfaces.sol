@@ -524,7 +524,11 @@ interface NounsTokenLike {
 
     function totalSupply() external view returns (uint256);
 
-    function transferFrom(address from, address to, uint256 tokenId) external;
+    function transferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) external;
 
     function balanceOf(address owner) external view returns (uint256 balance);
 
@@ -532,13 +536,17 @@ interface NounsTokenLike {
 }
 
 interface IForkDAODeployer {
-    function deployForkDAO() external returns (address treasury, address token);
+    function deployForkDAO(uint256 forkingPeriodEndTimestamp) external returns (address treasury, address token);
 }
 
 interface INounsDAOExecutorV2 is INounsDAOExecutor {
     function sendETHToNewDAO(address newDAOTreasury, uint256 ethToSend) external;
 
-    function sendERC20ToNewDAO(address newDAOTreasury, address erc20Token, uint256 tokensToSend) external;
+    function sendERC20ToNewDAO(
+        address newDAOTreasury,
+        address erc20Token,
+        uint256 tokensToSend
+    ) external;
 }
 
 interface INounsDAOForkEscrow {

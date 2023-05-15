@@ -32,6 +32,7 @@ contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable
     error OnlyTokenOwnerCanClaim();
     error OnlyOriginalDAO();
     error NoundersCannotBeAddressZero();
+    error OnlyDuringForkingPeriod();
 
     // An address who has permissions to mint Nouns
     address public minter;
@@ -47,6 +48,8 @@ contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable
     uint32 public forkId;
 
     uint256 public remainingTokensToClaim;
+
+    uint256 public forkingPeriodEndTimestamp;
 
     // Whether the minter can be updated
     bool public isMinterLocked;
@@ -104,7 +107,8 @@ contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable
         INounsDAOForkEscrow _escrow,
         uint32 _forkId,
         uint256 startNounId,
-        uint256 tokensToClaim
+        uint256 tokensToClaim,
+        uint256 _forkingPeriodEndTimestamp
     ) external initializer {
         __ERC721_init('Nouns', 'NOUN');
         _transferOwnership(_owner);
@@ -113,6 +117,7 @@ contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable
         forkId = _forkId;
         _currentNounId = startNounId;
         remainingTokensToClaim = tokensToClaim;
+        forkingPeriodEndTimestamp = _forkingPeriodEndTimestamp;
 
         NounsTokenFork originalToken = NounsTokenFork(address(escrow.nounsToken()));
         descriptor = originalToken.descriptor();
@@ -132,6 +137,7 @@ contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable
 
     function claimDuringForkPeriod(address to, uint256[] calldata tokenIds) external {
         if (msg.sender != escrow.dao()) revert OnlyOriginalDAO();
+        if (block.timestamp > forkingPeriodEndTimestamp) revert OnlyDuringForkingPeriod();
 
         for (uint256 i = 0; i < tokenIds.length; i++) {
             uint256 nounId = tokenIds[i];
@@ -145,7 +151,9 @@ contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable
         ).seeds(nounId);
         INounsSeeder.Seed memory seed = INounsSeeder.Seed(background, body, accessory, head, glasses);
 
+        seeds[nounId] = seed;
         _mint(owner(), to, nounId);
+
         emit NounCreated(nounId, seed);
     }
 

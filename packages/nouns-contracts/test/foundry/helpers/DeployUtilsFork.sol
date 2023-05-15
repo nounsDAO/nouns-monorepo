@@ -40,7 +40,7 @@ abstract contract DeployUtilsFork is DeployUtilsV3 {
             DELAYED_GOV_DURATION
         );
 
-        (treasury, token) = deployer.deployForkDAO();
+        (treasury, token) = deployer.deployForkDAO(block.timestamp + FORK_PERIOD);
         dao = NounsDAOExecutorV2(payable(treasury)).admin();
     }
 }

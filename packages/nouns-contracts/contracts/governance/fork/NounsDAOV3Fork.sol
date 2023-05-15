@@ -59,13 +59,15 @@ library NounsDAOV3Fork {
         uint256 tokensInEscrow = ds.forkEscrow.numTokensInEscrow();
         if (tokensInEscrow < forkThreshold(ds)) revert ForkThresholdNotMet();
 
-        (forkTreasury, forkToken) = ds.forkDAODeployer.deployForkDAO();
+        uint256 forkEndTimestamp = block.timestamp + ds.forkPeriod;
+
+        (forkTreasury, forkToken) = ds.forkDAODeployer.deployForkDAO(forkEndTimestamp);
         sendProRataTreasury(ds, forkTreasury, tokensInEscrow, adjustedTotalSupply(ds));
         ds.forkEscrow.closeEscrow();
 
         ds.forkDAOTreasury = forkTreasury;
         ds.forkDAOToken = forkToken;
-        ds.forkEndTimestamp = block.timestamp + ds.forkPeriod;
+        ds.forkEndTimestamp = forkEndTimestamp;
     }
 
     function joinFork(NounsDAOStorageV3.StorageV3 storage ds, uint256[] calldata tokenIds) external {

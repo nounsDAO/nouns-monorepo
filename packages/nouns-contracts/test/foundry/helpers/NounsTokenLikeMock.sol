@@ -10,6 +10,11 @@ contract NounsTokenLikeMock is NounsTokenLike {
     INounsDescriptorMinimal public descriptor;
     INounsSeeder public seeder;
     mapping(address => mapping(uint256 => uint96)) priorVotes;
+    mapping(uint256 => INounsSeeder.Seed) public seeds;
+
+    function setSeed(uint256 nounId, INounsSeeder.Seed memory seed) external {
+        seeds[nounId] = seed;
+    }
 
     function getPriorVotes(address account, uint256 blockNumber) external view returns (uint96) {
         return priorVotes[account][blockNumber];

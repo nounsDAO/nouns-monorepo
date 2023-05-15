@@ -63,17 +63,15 @@ contract ForkDAODeployer is IForkDAODeployer {
         delayedGovernanceMaxDuration = delayedGovernanceMaxDuration_;
     }
 
-    function deployForkDAO() external returns (address treasury, address token) {
+    function deployForkDAO(uint256 forkingPeriodEndTimestamp) external returns (address treasury, address token) {
         token = address(new ERC1967Proxy(tokenImpl, ''));
         address auction = address(new ERC1967Proxy(auctionImpl, ''));
         address governor = address(new ERC1967Proxy(governorImpl, ''));
         treasury = address(new ERC1967Proxy(treasuryImpl, ''));
 
         INounsDAOForkEscrow forkEscrow = INounsDAOForkEscrow(forkEscrowAddress);
-        NounsToken originalToken = NounsToken(address(forkEscrow.nounsToken()));
-        NounsAuctionHouse originalAuction = NounsAuctionHouse(originalToken.minter());
-        NounsDAOExecutorV2 originalTimelock = NounsDAOExecutorV2(payable(originalToken.owner()));
-        NounsDAOLogicV3 originalDAO = NounsDAOLogicV3(payable(originalTimelock.admin()));
+        NounsAuctionHouse originalAuction = getOriginalAuction(forkEscrow);
+        NounsDAOExecutorV2 originalTimelock = getOriginalTimelock(forkEscrow);
 
         NounsTokenFork(token).initialize(
             treasury,
@@ -81,7 +79,8 @@ contract ForkDAODeployer is IForkDAODeployer {
             forkEscrow,
             forkEscrow.forkId(),
             getStartNounId(originalAuction),
-            forkEscrow.numTokensInEscrow()
+            forkEscrow.numTokensInEscrow(),
+            forkingPeriodEndTimestamp
         );
 
         NounsAuctionHouseFork(auction).initialize(
@@ -94,7 +93,20 @@ contract ForkDAODeployer is IForkDAODeployer {
             originalAuction.duration()
         );
 
-        NounsDAOStorageV3.DynamicQuorumParams memory dqParams = originalDAO.getDynamicQuorumParamsAt(block.number);
+        initDAO(governor, treasury, token, originalTimelock);
+
+        NounsDAOExecutorV2(payable(treasury)).initialize(governor, originalTimelock.delay());
+
+        emit DAODeployed(token, auction, governor, treasury);
+    }
+
+    function initDAO(
+        address governor,
+        address treasury,
+        address token,
+        NounsDAOExecutorV2 originalTimelock
+    ) internal {
+        NounsDAOLogicV3 originalDAO = NounsDAOLogicV3(payable(originalTimelock.admin()));
         NounsDAOLogicV1Fork(governor).initialize(
             treasury,
             token,
@@ -102,14 +114,34 @@ contract ForkDAODeployer is IForkDAODeployer {
             originalDAO.votingPeriod(),
             originalDAO.votingDelay(),
             originalDAO.proposalThresholdBPS(),
-            dqParams.minQuorumVotesBPS,
+            getminQuorumVotesBPS(originalDAO),
             originalDAO.erc20TokensToIncludeInFork(),
             block.timestamp + delayedGovernanceMaxDuration
         );
+    }
 
-        NounsDAOExecutorV2(payable(treasury)).initialize(governor, originalTimelock.delay());
+    /**
+     * @dev Used to prevent the 'Stack too deep' error in the main deploy function.
+     */
+    function getOriginalTimelock(INounsDAOForkEscrow forkEscrow) internal view returns (NounsDAOExecutorV2) {
+        NounsToken originalToken = NounsToken(address(forkEscrow.nounsToken()));
+        return NounsDAOExecutorV2(payable(originalToken.owner()));
+    }
 
-        emit DAODeployed(token, auction, governor, treasury);
+    /**
+     * @dev Used to prevent the 'Stack too deep' error in the main deploy function.
+     */
+    function getOriginalAuction(INounsDAOForkEscrow forkEscrow) internal view returns (NounsAuctionHouse) {
+        NounsToken originalToken = NounsToken(address(forkEscrow.nounsToken()));
+        return NounsAuctionHouse(originalToken.minter());
+    }
+
+    /**
+     * @dev Used to prevent the 'Stack too deep' error in the main deploy function.
+     */
+    function getminQuorumVotesBPS(NounsDAOLogicV3 originalDAO) internal view returns (uint16) {
+        NounsDAOStorageV3.DynamicQuorumParams memory dqParams = originalDAO.getDynamicQuorumParamsAt(block.number);
+        return dqParams.minQuorumVotesBPS;
     }
 
     function getStartNounId(NounsAuctionHouse originalAuction) internal view returns (uint256) {

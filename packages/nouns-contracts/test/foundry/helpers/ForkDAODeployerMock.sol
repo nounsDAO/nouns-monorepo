@@ -12,7 +12,7 @@ contract ForkDAODeployerMock is IForkDAODeployer, StdCheats {
     address public mockTreasury = makeAddr('mock treasury');
     address public mockToken = address(new ForkDAOTokenMock());
 
-    function deployForkDAO() external view returns (address treasury, address token) {
+    function deployForkDAO(uint256) external view returns (address treasury, address token) {
         treasury = mockTreasury;
         token = mockToken;
     }
