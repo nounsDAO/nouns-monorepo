@@ -30,40 +30,59 @@ contract ForkHappyFlowTest is DeployUtilsV3 {
         ogToken = NounsToken(address(daoV3.nouns()));
         minter = ogToken.minter();
         dealNouns();
+        // Sending the DAO ETH that will be sent to the fork treasury and a key assertion for this test.
         vm.deal(address(daoV3.timelock()), 24 ether);
 
         uint256[] memory tokensInEscrow1 = getOwnedTokens(nounerInEscrow1);
         uint256[] memory tokensInEscrow2 = getOwnedTokens(nounerInEscrow2);
 
+        // Two Nouner accounts sigaling they want to fork. Their combined tokens meet the forking threshold.
         escrowToFork(nounerInEscrow1);
         escrowToFork(nounerInEscrow2);
 
+        // Execute the fork and get contract addresses for DAO, treasury and token.
         (address forkTreasuryAddress, address forkTokenAddress) = daoV3.executeFork();
         forkTreasury = NounsDAOExecutorV2(payable(forkTreasuryAddress));
         forkToken = NounsTokenFork(forkTokenAddress);
         forkDAO = NounsDAOLogicV1Fork(forkTreasury.admin());
 
+        // Assert the fork treasury has the expected balance, which is the pro rata ETH of the two Nouner accounts that
+        // escrowed above. They have 4 Nouns out of a total supply of 12, so a third. DAO balance was 24 ETH, a third
+        // of that is 8 ETH.
         assertEqUint(forkTreasuryAddress.balance, 8 ether);
 
+        // Asserting that delayed governance is working - no one should be able to propose until all fork tokens have
+        // been claimed, or until the delay period expires.
+        // Later in this test we make sure we CAN propose once all tokens have been claimed.
         vm.expectRevert(abi.encodeWithSelector(NounsDAOLogicV1Fork.WaitingForTokensToClaimOrExpiration.selector));
         proposeToFork(makeAddr('target'), 0, 'signature', 'data');
 
+        // Two additional Nouners join the fork during the forking period.
+        // This should grow the ETH balance sent from OG DAO to fork DAO.
         joinFork(nounerForkJoiner1);
         joinFork(nounerForkJoiner2);
 
+        // Asserting the expected ETH amount was sent. We're now at two thirds of OG Nouns forking, so we expect
+        // two thirds of the ETH to be sent, which is 16 out of the original 24.
         assertEqUint(forkTreasuryAddress.balance, 16 ether);
 
+        // This Nouner is going to vanilla-ragequit soon, so making it explicit their ETH balance is zero before
+        // so the next balance assertion is clearly new ETH they received from quitting the fork DAO.
         assertEqUint(nounerInEscrow1.balance, 0);
 
+        // The Nouners that originally escrowed their Nouns, now claiming their new fork tokens.
         vm.prank(nounerInEscrow1);
         forkToken.claimFromEscrow(tokensInEscrow1);
         vm.prank(nounerInEscrow2);
         forkToken.claimFromEscrow(tokensInEscrow2);
         vm.roll(block.number + 1);
 
+        // Demonstrating we're able to submit a proposal now that all claimable tokens have been claimed.
         vm.startPrank(nounerInEscrow1);
         proposeToFork(makeAddr('target'), 0, 'signature', 'data');
 
+        // This Nouner executes quit, and we assert they received the expected ETH; it's a quarter of the fork
+        // DAO balance (4 Nouners with equal token balances, 1 quits), so 4 ETH of the 16 ETH balance.
         forkToken.setApprovalForAll(address(forkDAO), true);
         forkDAO.quit(tokensInEscrow1);
         assertEqUint(nounerInEscrow1.balance, 4 ether);
