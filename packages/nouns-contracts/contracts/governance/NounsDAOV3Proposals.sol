@@ -161,6 +161,21 @@ library NounsDAOV3Proposals {
         return newProposal.id;
     }
 
+    function proposeOnTimelockV1(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        ProposalTxs memory txs,
+        string memory description
+    ) internal returns (uint256) {
+        uint256 newProposalId = propose(ds, txs, description);
+
+        NounsDAOStorageV3.Proposal storage newProposal = ds._proposals[newProposalId];
+        newProposal.executeOnTimelockV1 = true;
+
+        // TODO: add info in the event that this is proposed on timelock V1
+
+        return newProposalId;
+    }
+
     function proposeBySigs(
         NounsDAOStorageV3.StorageV3 storage ds,
         NounsDAOStorageV3.ProposerSignature[] memory proposerSignatures,
@@ -254,7 +269,7 @@ library NounsDAOV3Proposals {
             updateMessage
         );
     }
-    
+
     function updateProposalTransactions(
         NounsDAOStorageV3.StorageV3 storage ds,
         uint256 proposalId,
@@ -379,10 +394,11 @@ library NounsDAOV3Proposals {
             'NounsDAO::queue: proposal can only be queued if it is succeeded'
         );
         NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
-        uint256 eta = block.timestamp + ds.timelock.delay();
+        INounsDAOExecutor timelock = getProposalTimelock(ds, proposal);
+        uint256 eta = block.timestamp + timelock.delay();
         for (uint256 i = 0; i < proposal.targets.length; i++) {
             queueOrRevertInternal(
-                ds,
+                timelock,
                 proposal.targets[i],
                 proposal.values[i],
                 proposal.signatures[i],
@@ -395,7 +411,7 @@ library NounsDAOV3Proposals {
     }
 
     function queueOrRevertInternal(
-        NounsDAOStorageV3.StorageV3 storage ds,
+        INounsDAOExecutor timelock,
         address target,
         uint256 value,
         string memory signature,
@@ -403,10 +419,10 @@ library NounsDAOV3Proposals {
         uint256 eta
     ) internal {
         require(
-            !ds.timelock.queuedTransactions(keccak256(abi.encode(target, value, signature, data, eta))),
+            !timelock.queuedTransactions(keccak256(abi.encode(target, value, signature, data, eta))),
             'NounsDAO::queueOrRevertInternal: identical proposal action already queued at eta'
         );
-        ds.timelock.queueTransaction(target, value, signature, data, eta);
+        timelock.queueTransaction(target, value, signature, data, eta);
     }
 
     /**
@@ -414,16 +430,31 @@ library NounsDAOV3Proposals {
      * @param proposalId The id of the proposal to execute
      */
     function execute(NounsDAOStorageV3.StorageV3 storage ds, uint256 proposalId) external {
+        NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
+        INounsDAOExecutor timelock = getProposalTimelock(ds, proposal);
+        executeInternal(ds, proposal, timelock);
+    }
+
+    function executeOnTimelockV1(NounsDAOStorageV3.StorageV3 storage ds, uint256 proposalId) external {
+        NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
+        executeInternal(ds, proposal, ds.timelockV1);
+    }
+
+    function executeInternal(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        NounsDAOStorageV3.Proposal storage proposal,
+        INounsDAOExecutor timelock
+    ) internal {
         require(
-            state(ds, proposalId) == NounsDAOStorageV3.ProposalState.Queued,
+            state(ds, proposal.id) == NounsDAOStorageV3.ProposalState.Queued,
             'NounsDAO::execute: proposal can only be executed if it is queued'
         );
         if (ds.isForkPeriodActive()) revert CannotExecuteDuringForkingPeriod();
 
-        NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
         proposal.executed = true;
+
         for (uint256 i = 0; i < proposal.targets.length; i++) {
-            ds.timelock.executeTransaction(
+            timelock.executeTransaction(
                 proposal.targets[i],
                 proposal.values[i],
                 proposal.signatures[i],
@@ -431,7 +462,19 @@ library NounsDAOV3Proposals {
                 proposal.eta
             );
         }
-        emit ProposalExecuted(proposalId);
+        emit ProposalExecuted(proposal.id);
+    }
+
+    function getProposalTimelock(NounsDAOStorageV3.StorageV3 storage ds, NounsDAOStorageV3.Proposal storage proposal)
+        internal
+        view
+        returns (INounsDAOExecutor)
+    {
+        if (proposal.executeOnTimelockV1) {
+            return ds.timelockV1;
+        } else {
+            return ds.timelock;
+        }
     }
 
     /**
@@ -467,8 +510,9 @@ library NounsDAOV3Proposals {
         );
 
         proposal.canceled = true;
+        INounsDAOExecutor timelock = getProposalTimelock(ds, proposal);
         for (uint256 i = 0; i < proposal.targets.length; i++) {
-            ds.timelock.cancelTransaction(
+            timelock.cancelTransaction(
                 proposal.targets[i],
                 proposal.values[i],
                 proposal.signatures[i],
@@ -508,6 +552,8 @@ library NounsDAOV3Proposals {
     {
         require(ds.proposalCount >= proposalId, 'NounsDAO::state: invalid proposal id');
         NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
+        INounsDAOExecutor timelock = getProposalTimelock(ds, proposal);
+
         if (proposal.vetoed) {
             return NounsDAOStorageV3.ProposalState.Vetoed;
         } else if (proposal.canceled) {
@@ -526,7 +572,7 @@ library NounsDAOV3Proposals {
             return NounsDAOStorageV3.ProposalState.Succeeded;
         } else if (proposal.executed) {
             return NounsDAOStorageV3.ProposalState.Executed;
-        } else if (block.timestamp >= proposal.eta + ds.timelock.GRACE_PERIOD()) {
+        } else if (block.timestamp >= proposal.eta + timelock.GRACE_PERIOD()) {
             return NounsDAOStorageV3.ProposalState.Expired;
         } else {
             return NounsDAOStorageV3.ProposalState.Queued;

@@ -190,6 +190,20 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         return ds.propose(NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas), description);
     }
 
+    function proposeOnTimelockV1(
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas,
+        string memory description
+    ) public returns (uint256) {
+        return
+            ds.proposeOnTimelockV1(
+                NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas),
+                description
+            );
+    }
+
     function proposeBySigs(
         ProposerSignature[] memory proposerSignatures,
         address[] memory targets,
@@ -284,6 +298,10 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      */
     function execute(uint256 proposalId) external {
         ds.execute(proposalId);
+    }
+
+    function executeOnTimelockV1(uint256 proposalId) external {
+        ds.executeOnTimelockV1(proposalId);
     }
 
     /**

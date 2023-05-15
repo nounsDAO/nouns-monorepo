@@ -619,6 +619,8 @@ contract NounsDAOStorageV3 {
         uint256 forkPeriod;
         /// @notice Threshold defined in basis points (10,000 = 100%) required for forking
         uint256 forkThresholdBPS;
+        /// @notice Address of the original timelock
+        INounsDAOExecutor timelockV1;
     }
 
     struct Proposal {
@@ -665,6 +667,8 @@ contract NounsDAOStorageV3 {
         address[] signers;
         uint256 updatePeriodEndBlock;
         uint256 objectionPeriodEndBlock;
+        /// @notice When true, a proposal would be executed on timelockV1 instead of the current timelock
+        bool executeOnTimelockV1;
     }
 
     /// @notice Ballot receipt record for a voter
