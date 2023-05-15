@@ -19,6 +19,29 @@ type DelegationEvent @entity {
 
 }
 
+type OGPunkDelegationEvent @entity {
+  "The txn hash of this event + punkId"
+  id: ID!
+
+  "The OG Punk being delegated"
+  ogpunk: OGPunk!
+
+  "The Delegator"
+  delegator: Account!
+
+  "Previous delegate address"
+  previousDelegate: Delegate!
+
+  "New delegate address"
+  newDelegate: Delegate!
+
+ "Block number of the event"
+  blockNumber: BigInt!
+
+  "The timestamp of the block the event is in"
+  blockTimestamp: BigInt!
+
+}
 
 type TransferEvent @entity {
   "The txn hash of this event"
@@ -67,6 +90,17 @@ type Punk @entity {
 
   "Historical votes for the Punk"
   votes: [Vote!]! @derivedFrom(field: "punks")
+}
+
+type OGPunk @entity {
+  "The OG Punk's token id"
+  id: ID!
+
+  "The owner of the OG Punk"
+  owner: Account!
+
+  "Delegate address of the token holder which will participate in votings. Delegates don't need to hold any tokens and can even be the token holder itself."
+  delegate: Delegate
 }
 
 type Bid @entity {
@@ -143,6 +177,12 @@ type Account @entity {
   "Punk balance of this address expressed as a BigInt normalized value for the Punks ERC721 Token"
   tokenBalance: BigInt!
 
+  "OG Punk balance of this address expressed in the smallest unit of the OG Punks Token"
+  ogpunkBalanceRaw: BigInt!
+
+  "OG Punk balance of this address expressed as a BigInt normalized value for the OG Punks Token"
+  ogpunkBalance: BigInt!
+
   "Total amount of Punks ever held by this address expressed in the smallest unit of the Punks ERC721 Token"
   totalTokensHeldRaw: BigInt!
 
@@ -151,6 +191,9 @@ type Account @entity {
 
   "The Punks owned by this account"
   punks: [Punk!]!
+
+  "The OG Punks owned by this account"
+  ogpunks: [OGPunk!]!
 }
 
 type Delegate @entity {
@@ -163,6 +206,12 @@ type Delegate @entity {
   "Amount of votes delegated to this delegate to be used on proposal votings expressed as a BigInt normalized value for the Punks ERC721 Token"
   delegatedVotes: BigInt!
 
+  "Amount of votes delegated to this delegate to be used on proposal votings expressed in the smallest unit of the Punks ERC721 Token"
+  delegatedOGVotesRaw: BigInt!
+
+  "Amount of votes delegated to this delegate to be used on proposal votings expressed as a BigInt normalized value for the Punks ERC721 Token"
+  delegatedOGVotes: BigInt!
+
   tokenHoldersRepresentedAmount: Int!
 
   "Token holders that this delegate represents"
@@ -170,6 +219,9 @@ type Delegate @entity {
 
   "Punks that this delegate represents"
   punksRepresented: [Punk!]!
+
+  "OG Punks that this delegate represents"
+  ogpunksRepresented: [OGPunk!]!
 
   "Votes that a delegate has made in different proposals"
   votes: [Vote!]! @derivedFrom(field: "voter")

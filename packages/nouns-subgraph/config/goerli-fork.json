@@ -11,5 +11,13 @@
   "nDAO": {
     "address": "0x14b61C27E280788110Ed40f37d8766Ef8D241343",
     "startBlock": 8568700
+  },
+  "cryptopunksVote": {
+    "address": "0xfABD98b4976620eE2bc79641126C734FC49e2c81",
+    "startBlock": 8561584
+  },
+  "ogcryptopunks": {
+    "address": "0x85B353Ba06d16a237F24CB370ea291972F9bDd42",
+    "startBlock": 8542634
   }
 }

@@ -12,9 +12,12 @@ export function getOrCreateAccount(
     tokenHolder = new Account(id);
     tokenHolder.tokenBalanceRaw = BIGINT_ZERO;
     tokenHolder.tokenBalance = BIGINT_ZERO;
+    tokenHolder.ogpunkBalanceRaw = BIGINT_ZERO;
+    tokenHolder.ogpunkBalance = BIGINT_ZERO;
     tokenHolder.totalTokensHeldRaw = BIGINT_ZERO;
     tokenHolder.totalTokensHeld = BIGINT_ZERO;
     tokenHolder.punks = [];
+    tokenHolder.ogpunks = [];
 
     if (save) {
       tokenHolder.save();
@@ -35,8 +38,11 @@ export function getOrCreateDelegate(
     delegate = new Delegate(id);
     delegate.delegatedVotesRaw = BIGINT_ZERO;
     delegate.delegatedVotes = BIGINT_ZERO;
+    delegate.delegatedOGVotesRaw = BIGINT_ZERO;
+    delegate.delegatedOGVotes = BIGINT_ZERO;
     delegate.tokenHoldersRepresentedAmount = 0;
     delegate.punksRepresented = [];
+    delegate.ogpunksRepresented = [];
 
     if (id != ZERO_ADDRESS) {
       let governance = getGovernanceEntity();
