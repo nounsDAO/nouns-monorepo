@@ -393,7 +393,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         Proposal storage proposal = proposals[proposalId];
         require(
             msg.sender == proposal.proposer ||
-                nouns.getPriorVotes(proposal.proposer, block.number - 1) < proposal.proposalThreshold,
+                nouns.getPriorVotes(proposal.proposer, block.number - 1) <= proposal.proposalThreshold,
             'NounsDAO::cancel: proposer above threshold'
         );
 
