@@ -3,6 +3,7 @@ pragma solidity ^0.8.6;
 
 import "@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
 interface ICryptopunks {
     function punkIndexToAddress(uint256 punkIndex) view external returns(address);
@@ -29,10 +30,15 @@ contract CryptopunksVote is EIP712 {
     bytes32 public constant DELEGATION_TYPEHASH =
         keccak256('Delegation(address delegatee,uint256 punkIndex,uint256 nonce,uint256 expiry)');
 
+    /// @notice The EIP-712 typehash for the delegation struct used by the contract
+    bytes32 public constant DELEGATION_BATCH_TYPEHASH =
+        keccak256('DelegationBatch(address delegatee,uint256[] punkIndexes,uint256 nonce,uint256 expiry)');
+
     /// @notice A record of states for signing / validating signatures
     mapping(address => uint256) public nonces;
 
     ICryptopunks public immutable cryptopunks;
+    IERC721 public immutable wrappedPunk;
     uint256 internal constant CRYPTOPUNKS_TOTAL_SUPPLY = 10_000;
     /// @dev just for convenience, user cannot delegate to zero address
     address internal constant TOTAL_SUPPLY_HOLDER = address(0);
@@ -49,9 +55,11 @@ contract CryptopunksVote is EIP712 {
      */
     event DelegateVotesChanged(address indexed delegate, uint256 previousBalance, uint256 newBalance);
 
-    constructor(address cryptopunks_) EIP712("CryptopunksVote", "1.0") {
+    constructor(address cryptopunks_, address wrappedPunk_) EIP712("CryptopunksVote", "1.0") {
         require(cryptopunks_ != address (0), "CryptopunksVote: zero address of cryptopunks");
+        require(wrappedPunk_ != address (0), "CryptopunksVote: zero address of wrappedPunk");
         cryptopunks = ICryptopunks(cryptopunks_);
+        wrappedPunk = IERC721(wrappedPunk_);
     }
 
     /**
@@ -150,11 +158,35 @@ contract CryptopunksVote is EIP712 {
     }
 
     /**
+     * @dev Returns the delegate that `account` has chosen in a batch.
+     * IERC5805 not compliant
+     */
+    function delegatesBatch(uint256[] memory punkIndexes) external view returns (address[] memory) {
+        address[] memory delegateAddresses = new address[](punkIndexes.length);
+        for (uint256 i = 0 ; i < punkIndexes.length ; i++ ) {
+            delegateAddresses[i] = _delegates[punkIndexes[i]];
+
+        }
+        return delegateAddresses;
+    }
+
+    /**
      * @dev Delegates votes from the sender to `delegatee`.
      * IERC5805 not compliant
      */
     function delegate(address delegatee, uint256 punkIndex) external {
         _delegate(msg.sender, delegatee, punkIndex);
+    }
+
+    /**
+     * @dev Delegates votes from the sender to `delegatee`.
+     * Must be eligible for each punk.
+     * IERC5805 not compliant
+     */
+    function delegateBatch(address delegatee, uint256[] memory punkIndexes) external {
+        for (uint256 i = 0 ; i < punkIndexes.length ; i++ ) {
+            _delegate(msg.sender, delegatee, punkIndexes[i]);
+        }
     }
 
     /**
@@ -173,15 +205,46 @@ contract CryptopunksVote is EIP712 {
         _delegate(signatory, delegatee, punkIndex);
     }
 
+    /**
+     * @dev Delegates votes from signer to `delegatee`.
+     * Must be eligible for each punk.
+     * IERC5805 not compliant
+     */
+    function delegateBatchBySig(address delegatee, uint256[] memory punkIndexes, uint256 nonce, uint256 expiry, uint8 v, bytes32 r, bytes32 s) external {
+        require(block.timestamp <= expiry, "CryptopunksVote: signature expired");
+        address signatory = ECDSA.recover(
+            _hashTypedDataV4(keccak256(abi.encode(DELEGATION_BATCH_TYPEHASH, delegatee, keccak256(abi.encodePacked(punkIndexes)), nonce, expiry))),
+            v,
+            r,
+            s
+        );
+        require(nonce == nonces[signatory]++, "CryptopunksVote: invalid nonce");
+        for (uint256 i = 0 ; i < punkIndexes.length ; i++ ) {
+            _delegate(signatory, delegatee, punkIndexes[i]);
+        }
+    }
+
     function _delegate(address delegator, address delegatee, uint256 punkIndex) internal {
         require(punkIndex < CRYPTOPUNKS_TOTAL_SUPPLY, "CryptopunksVote: invalid punkIndex");
         require(block.number < type(uint32).max, "CryptopunksVote: max block exceeded");
         require(delegatee != address(0), "CryptopunksVote: invalid delegatee");
         address prevDelegatee = _delegates[punkIndex];
-        require(
-            delegator == prevDelegatee || delegator == cryptopunks.punkIndexToAddress(punkIndex),
-            "CryptopunksVote: illegal delegation"
-        );
+        address owner = cryptopunks.punkIndexToAddress(punkIndex);
+        if (owner == address(wrappedPunk)) {
+            owner = wrappedPunk.ownerOf(punkIndex);
+            require(
+                delegator == prevDelegatee
+                || delegator == owner
+                || delegator == wrappedPunk.getApproved(punkIndex)
+                || wrappedPunk.isApprovedForAll(owner, delegator),
+                "CryptopunksVote: illegal delegation"
+            );
+        } else {
+            require(
+                delegator == prevDelegatee || delegator == owner,
+                "CryptopunksVote: illegal delegation"
+            );
+        }
 
         _delegates[punkIndex] = delegatee;
 

@@ -9,6 +9,8 @@ import {
   NToken__factory as NTokenFactory,
   CryptopunksMock,
   CryptopunksMock__factory as CryptopunksMockFactory,
+  WrappedPunk,
+  WrappedPunk__factory as WrappedPunkFactory,
   CryptopunksVote,
   CryptopunksVote__factory as CryptopunksVoteFactory,
   NSeeder,
@@ -119,14 +121,18 @@ export const deployNToken = async (
 
 export const deployCryptopunksVote = async (
   deployer?: SignerWithAddress,
-): Promise<{cryptopunks: CryptopunksMock, cryptopunksVote: CryptopunksVote}> => {
+): Promise<{cryptopunks: CryptopunksMock, wrappedPunk: WrappedPunk, cryptopunksVote: CryptopunksVote}> => {
   const signer = deployer || (await getSigners()).deployer;
-  const cryptopunksMockFactory = new CryptopunksMockFactory(signer);
-  const cryptopunksVoteFactory = new CryptopunksVoteFactory(signer);
-  const cryptopunks = await cryptopunksMockFactory.deploy()
-  const cryptopunksVote = await cryptopunksVoteFactory.deploy(cryptopunks.address)
 
-  return {cryptopunks, cryptopunksVote};
+  const cryptopunksMockFactory = new CryptopunksMockFactory(signer);
+  const wrappedPunkFactory = new WrappedPunkFactory(signer);
+  const cryptopunksVoteFactory = new CryptopunksVoteFactory(signer);
+
+  const cryptopunks = await cryptopunksMockFactory.deploy();
+  const wrappedPunk = await wrappedPunkFactory.deploy(cryptopunks.address);
+  const cryptopunksVote = await cryptopunksVoteFactory.deploy(cryptopunks.address, wrappedPunk.address);
+
+  return {cryptopunks, wrappedPunk, cryptopunksVote};
 };
 
 export const deployWeth = async (deployer?: SignerWithAddress): Promise<WETH> => {
@@ -356,12 +362,15 @@ export const deployGovAndToken = async (
   // nonce 7: NDescriptor.setArt
   // nonce 8: Deploy NSeeder
   // nonce 9: Deploy NToken
-  // nonce 10: Deploy NDAOProxy
-  // nonce 11+: populate Descriptor
+  // nonce 10: Deploy OGCryptopunks
+  // nonce 11: Deploy WrappedPunk
+  // nonce 12: Deploy CryptopunksVote
+  // nonce 13: Deploy NDAOProxy
+  // nonce 14+: populate Descriptor
 
   const govDelegatorAddress = ethers.utils.getContractAddress({
     from: deployer.address,
-    nonce: (await deployer.getTransactionCount()) + 12,
+    nonce: (await deployer.getTransactionCount()) + 13,
   });
 
   // Deploy NDAOExecutor with pre-computed Delegator address

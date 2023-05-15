@@ -11,10 +11,6 @@ contract CryptopunksMock is ICryptopunks {
 
     uint256 internal _currentPunkIndex;
 
-    event Assign(address indexed to, uint256 punkIndex);
-    event Transfer(address indexed from, address indexed to, uint256 value);
-    event PunkTransfer(address indexed from, address indexed to, uint256 punkIndex);
-
     function transferPunk(address to, uint256 punkIndex) external {
         require(punkIndexToAddress[punkIndex] == msg.sender, "CryptopunksMock: A");
         require(punkIndex < 10000, "CryptopunksMock: B");
