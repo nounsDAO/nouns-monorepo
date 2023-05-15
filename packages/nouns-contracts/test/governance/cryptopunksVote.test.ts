@@ -3,6 +3,7 @@ import { solidity } from 'ethereum-waffle';
 import { ethers } from 'hardhat';
 import {
   CryptopunksMock,
+  WrappedPunk,
   CryptopunksVote,
 } from '../../typechain';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
@@ -23,6 +24,7 @@ const { expect } = chai;
 describe('CryptopunksVote', () => {
   let snapshotId: number;
   let cryptopunks: CryptopunksMock;
+  let wrappedPunk: WrappedPunk;
   let cryptopunksVote: CryptopunksVote;
   let account0: SignerWithAddress;
   let account1: SignerWithAddress;
@@ -46,6 +48,14 @@ describe('CryptopunksVote', () => {
       { name: 'expiry', type: 'uint256' },
     ],
   };
+  const TypesBatch = {
+    DelegationBatch: [
+      { name: 'delegatee', type: 'address' },
+      { name: 'punkIndexes', type: 'uint256[]' },
+      { name: 'nonce', type: 'uint256' },
+      { name: 'expiry', type: 'uint256' },
+    ],
+  };
 
   before(async () => {
     const signers: TestSigners = await getSigners();
@@ -55,7 +65,7 @@ describe('CryptopunksVote', () => {
     account2 = signers.account2;
     deployer = signers.deployer;
 
-    ({cryptopunks, cryptopunksVote} = await deployCryptopunksVote(deployer));
+    ({cryptopunks, wrappedPunk, cryptopunksVote} = await deployCryptopunksVote(deployer));
 
     domain = Domain('CryptopunksVote', '1.0', await chainId(), cryptopunksVote.address);
   });
@@ -121,12 +131,88 @@ describe('CryptopunksVote', () => {
 
       expect(await cryptopunksVote.delegates(0)).to.equal(account1.address);
     });
+
+    it('reverts if the signatory is invalid (batch)', async () => {
+      const delegatee = account1.address,
+        punkIndexes = [0],
+        nonce = 0,
+        expiry = 10e9;
+      const signature = await account1._signTypedData(domain, TypesBatch, { delegatee, punkIndexes, nonce, expiry });
+      const { v, r, s } = ethers.utils.splitSignature(signature);
+      await expect(
+        cryptopunksVote.connect(deployer).delegateBatchBySig(delegatee, punkIndexes, nonce, expiry, v, r, s),
+      ).to.be.revertedWith('CryptopunksVote: illegal delegation');
+    });
+
+    it('reverts if the nonce is bad (batch)', async () => {
+      const delegatee = account1.address,
+        punkIndexes = [0],
+        nonce = 1,
+        expiry = 10e9;
+      const signature = await account0._signTypedData(domain, TypesBatch, { delegatee, punkIndexes, nonce, expiry });
+      const { v, r, s } = ethers.utils.splitSignature(signature);
+      await expect(cryptopunksVote.connect(deployer).delegateBatchBySig(delegatee, punkIndexes, nonce, expiry, v, r, s)).to.be.revertedWith(
+        'CryptopunksVote: invalid nonce',
+      );
+    });
+
+    it('reverts if the signature has expired (batch)', async () => {
+      const delegatee = account1.address,
+        punkIndexes = [0],
+        nonce = 0,
+        expiry = 0;
+      const signature = await account0._signTypedData(domain, TypesBatch, { delegatee, punkIndexes, nonce, expiry });
+      const { v, r, s } = ethers.utils.splitSignature(signature);
+      await expect(cryptopunksVote.connect(deployer).delegateBatchBySig(delegatee, punkIndexes, nonce, expiry, v, r, s)).to.be.revertedWith(
+        'CryptopunksVote: signature expired',
+      );
+    });
+
+    it('a batch delegate call changes delegations', async () => {
+      await cryptopunks.mint(account0.address);
+      await cryptopunks.mint(account0.address);
+      await cryptopunks.mint(account0.address);
+
+      const delegatee = account1.address,
+        punkIndexes = [1, 2, 3],
+        nonce = 0,
+        expiry = 10e9;
+      const signature = await account0._signTypedData(domain, TypesBatch, { delegatee, punkIndexes, nonce, expiry });
+      const { v, r, s } = ethers.utils.splitSignature(signature);
+      // gasLimit because of hardhat
+      await cryptopunksVote.connect(deployer).delegateBatchBySig(delegatee, punkIndexes, nonce, expiry, v, r, s, { gasLimit:360000 });
+
+      expect(
+        await cryptopunksVote.delegatesBatch([1,2,3])
+      ).to.be.deep.equal(
+        [account1.address, account1.address, account1.address]
+      );
+      expect(await cryptopunksVote.delegates(1)).to.equal(account1.address);
+      expect(await cryptopunksVote.delegates(2)).to.equal(account1.address);
+      expect(await cryptopunksVote.delegates(3)).to.equal(account1.address);
+    });
+
+    it('cannot delegate a punk 10_000', async () => {
+      const delegatee = account1.address,
+        punkIndex = 10000,
+        nonce = 0,
+        expiry = 10e9;
+      const signature = await account0._signTypedData(domain, Types, { delegatee, punkIndex, nonce, expiry });
+      const { v, r, s } = ethers.utils.splitSignature(signature);
+
+      expect(await cryptopunksVote.delegates(0)).to.equal(address(0));
+
+      // gasLimit because of hardhat
+      const tx = cryptopunksVote.connect(deployer).delegateBySig(delegatee, punkIndex, nonce, expiry, v, r, s, { gasLimit:180000 });
+
+      await expect(tx).to.be.revertedWith('CryptopunksVote: invalid punkIndex');
+    });
   });
 
-  describe('numCheckpoints', () => {
+  describe('delegate', () => {
     beforeEach(async () => {
       snapshotId = await ethers.provider.send('evm_snapshot', []);
-      await cryptopunks.mint(deployer.address)
+      await cryptopunks.mint(deployer.address);
     });
 
     afterEach(async () => {
@@ -212,8 +298,71 @@ describe('CryptopunksVote', () => {
         .withArgs(deployer.address, 1, 2);
       expect(await cryptopunksVote.numCheckpoints(deployer.address)).to.equal(1);
     });
+
+    it('a batch delegate call changes delegations', async () => {
+      await cryptopunks.mint(deployer.address);
+      await cryptopunks.mint(deployer.address);
+
+      await cryptopunksVote.connect(deployer).delegateBatch(account1.address, [0, 1, 2]);
+
+      expect(
+        await cryptopunksVote.delegatesBatch([0,1,2])
+      ).to.be.deep.equal(
+        [account1.address, account1.address, account1.address]
+      );
+      expect(await cryptopunksVote.delegates(0)).to.equal(account1.address);
+      expect(await cryptopunksVote.delegates(1)).to.equal(account1.address);
+      expect(await cryptopunksVote.delegates(2)).to.equal(account1.address);
+    });
+
+    it('cannot delegate a punk 10_000', async () => {
+      const tx = cryptopunksVote.connect(deployer).delegate(deployer.address, 10000);
+      await expect(tx).to.be.revertedWith('CryptopunksVote: invalid punkIndex');
+    });
   });
 
+  describe('wrappedPunk', () => {
+    beforeEach(async () => {
+      snapshotId = await ethers.provider.send('evm_snapshot', []);
+      await cryptopunks.mint(deployer.address);
+      await wrappedPunk.registerProxy();
+      const proxyAddress = await wrappedPunk.proxyInfo(deployer.address);
+      await cryptopunks.connect(deployer).transferPunk(proxyAddress, 0);
+      await wrappedPunk.mint(0);
+    });
+
+    afterEach(async () => {
+      await ethers.provider.send('evm_revert', [snapshotId]);
+    });
+
+    it('cannot delegate a wrapped punk without permission', async () => {
+      const tx = cryptopunksVote.connect(account0).delegate(account1.address, 0);
+      await expect(tx).to.be.revertedWith('CryptopunksVote: illegal delegation');
+    });
+
+    it('can delegate a wrapped punk', async () => {
+      await cryptopunksVote.connect(deployer).delegate(deployer.address, 0);
+      expect(await cryptopunksVote.delegates(0)).to.equal(deployer.address);
+    });
+
+    it('transitive delegation', async () => {
+      await cryptopunksVote.connect(deployer).delegate(account0.address, 0);
+      await cryptopunksVote.connect(account0).delegate(account1.address, 0);
+      expect(await cryptopunksVote.delegates(0)).to.equal(account1.address);
+    });
+
+    it('can delegate a wrapped punk with an approval', async () => {
+      await wrappedPunk.approve(account0.address, 0);
+      await cryptopunksVote.connect(account0).delegate(account1.address, 0);
+      expect(await cryptopunksVote.delegates(0)).to.equal(account1.address);
+    });
+
+    it('can delegate a wrapped punk with an operator', async () => {
+      await wrappedPunk.setApprovalForAll(account0.address, true);
+      await cryptopunksVote.connect(account0).delegate(account1.address, 0);
+      expect(await cryptopunksVote.delegates(0)).to.equal(account1.address);
+    });
+  });
 
   describe('numCheckpoints', () => {
     beforeEach(async () => {

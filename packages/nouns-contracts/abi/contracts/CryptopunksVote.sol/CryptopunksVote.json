@@ -5,6 +5,11 @@
         "internalType": "address",
         "name": "cryptopunks_",
         "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "wrappedPunk_",
+        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
@@ -65,6 +70,19 @@
     ],
     "name": "DelegateVotesChanged",
     "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "DELEGATION_BATCH_TYPEHASH",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
     "inputs": [],
@@ -147,6 +165,67 @@
         "type": "address"
       },
       {
+        "internalType": "uint256[]",
+        "name": "punkIndexes",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "delegateBatch",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "delegatee",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "punkIndexes",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "nonce",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "expiry",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint8",
+        "name": "v",
+        "type": "uint8"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "r",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "s",
+        "type": "bytes32"
+      }
+    ],
+    "name": "delegateBatchBySig",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "delegatee",
+        "type": "address"
+      },
+      {
         "internalType": "uint256",
         "name": "punkIndex",
         "type": "uint256"
@@ -196,6 +275,25 @@
         "internalType": "address",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "punkIndexes",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "delegatesBatch",
+    "outputs": [
+      {
+        "internalType": "address[]",
+        "name": "",
+        "type": "address[]"
       }
     ],
     "stateMutability": "view",
@@ -352,6 +450,19 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "wrappedPunk",
+    "outputs": [
+      {
+        "internalType": "contract IERC721",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
