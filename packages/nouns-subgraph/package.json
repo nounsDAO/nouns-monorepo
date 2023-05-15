@@ -16,7 +16,7 @@
     "prepare:goerli": "mustache config/goerli-fork.json subgraph.yaml.mustache > subgraph.yaml",
     "prepare:mainnet": "mustache config/mainnet.json subgraph.yaml.mustache > subgraph.yaml",
     "create-local": "graph create --node http://localhost:8020/ stan7123/punks2",
-    "deploy-local": "graph deploy --debug --node http://localhost:8020/ --ipfs http://ipfs:5001/",    
+    "deploy-local": "graph deploy --debug --node http://localhost:8020/ --ipfs http://ipfs:5001/ stan7123/punks2",    
     "deploy:goerli": "yarn clean && yarn prepare:goerli && yarn codegen && yarn deploy punkdao/punks-subgraph-goerli",
     "deploy:mainnet": "yarn clean && yarn prepare:mainnet && yarn codegen && yarn deploy punkdao/punks-subgraph",
     "mustache": "mustache"

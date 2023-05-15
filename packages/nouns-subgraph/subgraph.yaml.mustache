@@ -97,3 +97,51 @@ dataSources:
           handler: handleProposalExecuted
         - event: VoteCast(indexed address,uint256,uint8,uint256,string)
           handler: handleVoteCast
+  - kind: ethereum/contract
+    name: CryptopunksVote
+    network: {{network}}
+    source:
+      address: '{{cryptopunksVote.address}}'
+      abi: CryptopunksVote
+      startBlock: {{cryptopunksVote.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/cryptopunks-vote.ts
+      entities:
+        - OGPunk
+        - Account
+        - Delegate
+        - Governance
+      abis:
+        - name: CryptopunksVote
+          file: ../nouns-contracts/abi/contracts/CryptopunksVote.sol/CryptopunksVote.json
+      eventHandlers:
+        - event: DelegateChanged(address,indexed address,indexed address,indexed uint256)
+          handler: handleOGPunkDelegateChanged
+        - event: DelegateVotesChanged(indexed address,uint256,uint256)
+          handler: handleOGPunkDelegateVotesChanged
+  - kind: ethereum/contract
+    name: OGCryptopunks
+    network: {{network}}
+    source:
+      address: '{{ogcryptopunks.address}}'
+      abi: OGCryptopunks
+      startBlock: {{ogcryptopunks.startBlock}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/og-cryptopunks.ts
+      entities:
+        - OGPunk
+        - Account
+      abis:
+        - name: OGCryptopunks
+          file: ../nouns-contracts/abi/contracts/interfaces/ICryptopunks.sol/ICryptopunks.json
+      eventHandlers:
+        - event: Assign(indexed address,uint256)
+          handler: handleOGPunkAssign
+        - event: PunkTransfer(indexed address,indexed address,uint256)
+          handler: handleOGPunkTransfer
