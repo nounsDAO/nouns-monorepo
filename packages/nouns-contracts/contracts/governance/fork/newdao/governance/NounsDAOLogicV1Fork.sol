@@ -66,8 +66,9 @@ import { NounsDAOStorageV1 } from './NounsDAOStorageV1.sol';
 import { NounsDAOExecutorV2 } from '../../../NounsDAOExecutorV2.sol';
 import { NounsTokenLike } from './NounsTokenLike.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+import { ReentrancyGuardUpgradeable } from '@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol';
 
-contract NounsDAOLogicV1Fork is UUPSUpgradeable, NounsDAOStorageV1, NounsDAOEvents {
+contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, NounsDAOStorageV1, NounsDAOEvents {
     error AdminOnly();
     error WaitingForTokensToClaimOrExpiration();
 
@@ -134,6 +135,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, NounsDAOStorageV1, NounsDAOEven
         address[] memory erc20TokensToIncludeInQuit_,
         uint256 delayedGovernanceExpirationTimestamp_
     ) public virtual {
+        __ReentrancyGuard_init_unchained();
         require(address(timelock) == address(0), 'NounsDAO::initialize: can only initialize once');
         require(timelock_ != address(0), 'NounsDAO::initialize: invalid timelock address');
         require(nouns_ != address(0), 'NounsDAO::initialize: invalid nouns address');
@@ -171,7 +173,7 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, NounsDAOStorageV1, NounsDAOEven
         delayedGovernanceExpirationTimestamp = delayedGovernanceExpirationTimestamp_;
     }
 
-    function quit(uint256[] calldata tokenIds) external {
+    function quit(uint256[] calldata tokenIds) external nonReentrant {
         uint256 totalSupply = adjustedTotalSupply();
 
         for (uint256 i = 0; i < tokenIds.length; i++) {
