@@ -500,7 +500,8 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
 
     /**
      * @notice Returns the proposal details given a proposal id.
-     *     The `quorumVotes` member holds the *current* quorum, given the current votes.
+     * @dev this explicit getter solves the `Stack too deep` problem that arose after
+     * adding a new field to the Proposal struct.
      * @param proposalId the proposal id to get the data for
      * @return A `ProposalCondensed` struct with the proposal data
      */
