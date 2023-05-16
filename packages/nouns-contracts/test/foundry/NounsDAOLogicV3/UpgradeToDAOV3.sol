@@ -68,7 +68,7 @@ contract UpgradeToDAOV3Test is DeployUtils {
         assertEq(proposer2.balance, 100 ether);
     }
 
-    function test_proposalWasQueuedBeforeUpgrade() public {
+    function test_proposalQueuedBeforeUpgrade_executeRevertsButExecuteOnV1Works() public {
         (NounsDAOExecutorV2 timelockV2, ) = deployAndInitTimelockV2();
         uint256 proposalId = proposeToUpgradeToDAOV3(
             address(new NounsDAOLogicV3()),
