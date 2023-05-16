@@ -685,6 +685,10 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         ds._setForkEscrow(newForkEscrow);
     }
 
+    function _setTimelocks(address newTimelock, address newTimelockV1) external {
+        ds._setTimelocks(newTimelock, newTimelockV1);
+    }
+
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      *   DYNAMIC QUORUM
@@ -834,6 +838,10 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
 
     function proposalUpdatablePeriodInBlocks() public view returns (uint256) {
         return ds.proposalUpdatablePeriodInBlocks;
+    }
+
+    function timelockV1() public view returns (address) {
+        return address(ds.timelockV1);
     }
 
     receive() external payable {}

@@ -115,4 +115,36 @@ abstract contract DeployUtils is Test, DescriptorHelpers {
                 )
             );
     }
+
+    function deployDAOV2() internal returns (NounsDAOLogicV1) {
+        NounsDAOExecutor timelock = new NounsDAOExecutor(address(1), TIMELOCK_DELAY);
+
+        NounsAuctionHouse auctionLogic = new NounsAuctionHouse();
+        NounsAuctionHouseProxyAdmin auctionAdmin = new NounsAuctionHouseProxyAdmin();
+        NounsAuctionHouseProxy auctionProxy = new NounsAuctionHouseProxy(
+            address(auctionLogic),
+            address(auctionAdmin),
+            ''
+        );
+        auctionAdmin.transferOwnership(address(timelock));
+
+        NounsDescriptorV2 descriptor = _deployAndPopulateV2();
+        NounsToken nounsToken = new NounsToken(
+            makeAddr('noundersDAO'),
+            address(auctionProxy),
+            descriptor,
+            new NounsSeeder(),
+            IProxyRegistry(address(0))
+        );
+        NounsDAOLogicV1 daoProxy = _createDAOV2Proxy(address(timelock), address(nounsToken), makeAddr('vetoer'));
+
+        vm.prank(address(timelock));
+        timelock.setPendingAdmin(address(daoProxy));
+        vm.prank(address(daoProxy));
+        timelock.acceptAdmin();
+
+        nounsToken.transferOwnership(address(timelock));
+
+        return daoProxy;
+    }
 }

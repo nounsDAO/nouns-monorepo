@@ -46,4 +46,12 @@ contract NounsTokenLikeMock is NounsTokenLike {
     function setNoundersDAO(address _noundersDAO) external {
         noundersDAO = _noundersDAO;
     }
+
+    function mint() public pure returns (uint256) {
+        return 0;
+    }
+
+    function minter() external pure returns (address) {
+        return address(0);
+    }
 }
