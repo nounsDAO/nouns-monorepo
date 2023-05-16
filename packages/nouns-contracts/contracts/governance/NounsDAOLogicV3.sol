@@ -685,6 +685,20 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         ds._setForkEscrow(newForkEscrow);
     }
 
+    function _setForkParams(
+        address forkEscrow_,
+        address forkDAODeployer_,
+        address[] calldata erc20TokensToIncludeInFork_,
+        uint256 forkPeriod_,
+        uint256 forkThresholdBPS_
+    ) external {
+        ds._setForkEscrow(forkEscrow_);
+        ds._setForkDAODeployer(forkDAODeployer_);
+        ds._setErc20TokensToIncludeInFork(erc20TokensToIncludeInFork_);
+        ds._setForkPeriod(forkPeriod_);
+        ds._setForkThresholdBPS(forkThresholdBPS_);
+    }
+
     function _setTimelocks(address newTimelock, address newTimelockV1) external {
         ds._setTimelocks(newTimelock, newTimelockV1);
     }

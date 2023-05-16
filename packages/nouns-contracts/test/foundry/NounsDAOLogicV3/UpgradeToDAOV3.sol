@@ -9,12 +9,19 @@ import { DeployUtils } from '../helpers/DeployUtils.sol';
 import { NounsDAOExecutorV2 } from '../../../contracts/governance/NounsDAOExecutorV2.sol';
 import { ERC1967Proxy } from '@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol';
 import { INounsDAOExecutor } from '../../../contracts/governance/NounsDAOInterfaces.sol';
+import { NounsDAOForkEscrow } from '../../../contracts/governance/fork/NounsDAOForkEscrow.sol';
+import { ForkDAODeployer } from '../../../contracts/governance/fork/ForkDAODeployer.sol';
 
 contract UpgradeToDAOV3Test is DeployUtils {
     NounsDAOLogicV1 daoProxy;
     address proposer = makeAddr('proposer');
     address proposer2 = makeAddr('proposer2');
     INounsDAOExecutor timelockV1;
+
+    address[] targets;
+    uint256[] values;
+    string[] signatures;
+    bytes[] calldatas;
 
     function setUp() public virtual {
         daoProxy = deployDAOV2();
@@ -114,6 +121,53 @@ contract UpgradeToDAOV3Test is DeployUtils {
         assertEq(proposer2.balance, 100 ether);
     }
 
+    function test_proposalAfterUpgrade() public {
+        upgradeToV3();
+
+        uint256 proposalId = proposeToSendETH(proposer2, proposer2, 100 ether);
+
+        rollAndCastVote(proposer, proposalId, 1);
+
+        queueAndExecute(proposalId);
+
+        assertEq(proposer2.balance, 100 ether);
+    }
+
+    function test_proposeOnTimelockV1() public {
+        upgradeToV3();
+
+        targets = [proposer];
+        values = [400 ether];
+        signatures = [''];
+        calldatas = [bytes('')];
+        vm.prank(proposer);
+        uint256 proposalId = NounsDAOLogicV3(payable(address(daoProxy))).proposeOnTimelockV1(
+            targets,
+            values,
+            signatures,
+            calldatas,
+            'send eth'
+        );
+
+        rollAndCastVote(proposer, proposalId, 1);
+        queueAndExecute(proposalId);
+
+        assertEq(proposer.balance, 400 ether);
+        assertEq(address(timelockV1).balance, 100 ether);
+        assertEq(address(daoProxy.timelock()).balance, 500 ether);
+    }
+
+    function upgradeToV3() internal {
+        uint256 proposalId = proposeToUpgradeToDAOV3(
+            address(new NounsDAOLogicV3()),
+            address(deployAndInitTimelockV2()),
+            address(daoProxy.timelock()),
+            500 ether
+        );
+        rollAndCastVote(proposer, proposalId, 1);
+        queueAndExecute(proposalId);
+    }
+
     function queueAndExecute(uint256 proposalId) internal {
         vm.roll(block.number + daoProxy.votingPeriod() + 1);
         daoProxy.queue(proposalId);
@@ -137,15 +191,10 @@ contract UpgradeToDAOV3Test is DeployUtils {
         address to,
         uint256 amount
     ) internal returns (uint256 proposalId) {
-        address[] memory targets = new address[](1);
-        uint256[] memory values = new uint256[](1);
-        string[] memory signatures = new string[](1);
-        bytes[] memory calldatas = new bytes[](1);
-
-        targets[0] = to;
-        values[0] = amount;
-        signatures[0] = '';
-        calldatas[0] = '';
+        targets = [to];
+        values = [amount];
+        signatures = [''];
+        calldatas = [bytes('')];
 
         vm.prank(proposer_);
         proposalId = daoProxy.propose(targets, values, signatures, calldatas, 'send eth');
@@ -165,12 +214,22 @@ contract UpgradeToDAOV3Test is DeployUtils {
         address timelockV1_,
         uint256 ethToSendToNewTimelock
     ) internal returns (uint256 proposalId) {
-        uint256 i = 0;
-        address[] memory targets = new address[](3);
-        uint256[] memory values = new uint256[](3);
-        string[] memory signatures = new string[](3);
-        bytes[] memory calldatas = new bytes[](3);
+        NounsDAOForkEscrow forkEscrow = new NounsDAOForkEscrow(address(daoProxy));
+        ForkDAODeployer forkDeployer = new ForkDAODeployer(
+            address(0), // tokenImpl_,
+            address(0), // auctionImpl_,
+            address(0), // governorImpl_,
+            address(0), // treasuryImpl_,
+            address(forkEscrow), //
+            30 days
+        );
 
+        targets = new address[](4);
+        values = new uint256[](4);
+        signatures = new string[](4);
+        calldatas = new bytes[](4);
+
+        uint256 i = 0;
         targets[i] = address(timelockV2);
         values[i] = ethToSendToNewTimelock;
         signatures[i] = '';
@@ -181,6 +240,12 @@ contract UpgradeToDAOV3Test is DeployUtils {
         values[i] = 0;
         signatures[i] = '_setImplementation(address)';
         calldatas[i] = abi.encode(daoV3Implementation);
+
+        i++;
+        targets[i] = address(daoProxy);
+        values[i] = 0;
+        signatures[i] = '_setForkParams(address,address,address[],uint256,uint256)';
+        calldatas[i] = abi.encode(address(forkEscrow), address(forkDeployer), new address[](0), 7 days, 2_000);
 
         i++;
         targets[i] = address(daoProxy);
