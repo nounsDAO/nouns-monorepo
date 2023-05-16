@@ -71,7 +71,7 @@ describe('NGovernance', () => {
       NSeederFactory.connect(await token.seeder(), signers.deployer),
     );
 
-    domain = Domain('Cryptopunks', token.address, await chainId());
+    domain = Domain('CRYPTOPUNKS', token.address, await chainId());
 
     tokenCallFromGuy = token.connect(signers.account0);
     tokenCallFromDeployer = token;

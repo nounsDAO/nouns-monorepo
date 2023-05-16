@@ -110,11 +110,11 @@ describe('NToken', () => {
   });
 
   it('should set symbol', async () => {
-    expect(await nounsToken.symbol()).to.eq('PUNK');
+    expect(await nounsToken.symbol()).to.eq('Ͼ');
   });
 
   it('should set name', async () => {
-    expect(await nounsToken.name()).to.eq('Cryptopunks');
+    expect(await nounsToken.name()).to.eq('CRYPTOPUNKS');
   });
 
   it('should allow minter to mint a noun to itself', async () => {
