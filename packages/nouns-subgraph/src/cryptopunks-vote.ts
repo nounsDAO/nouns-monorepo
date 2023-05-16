@@ -19,15 +19,15 @@ export function handleOGPunkDelegateChanged(event: DelegateChanged): void {
   ogpunk.delegate = newDelegate.id;
   ogpunk.save();
 
-  let previousPunksRepresented = previousDelegate.punksRepresented; // Re-assignment required to update array
-  previousDelegate.punksRepresented = previousPunksRepresented.filter(
+  let previousOGPunksRepresented = previousDelegate.ogpunksRepresented; // Re-assignment required to update array
+  previousDelegate.ogpunksRepresented = previousOGPunksRepresented.filter(
     n => n != delegatedPunkId,
   );
   previousDelegate.save();
 
-  let newPunksRepresented = newDelegate.punksRepresented; // Re-assignment required to update array
-  newPunksRepresented.push(ogpunk.id);
-  newDelegate.punksRepresented = newPunksRepresented;
+  let newOGPunksRepresented = newDelegate.ogpunksRepresented; // Re-assignment required to update array
+  newOGPunksRepresented.push(ogpunk.id);
+  newDelegate.ogpunksRepresented = newOGPunksRepresented;
   newDelegate.save();
 
   let delegateChangedEvent = new OGPunkDelegationEvent(
