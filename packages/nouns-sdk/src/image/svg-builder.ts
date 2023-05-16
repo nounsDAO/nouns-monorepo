@@ -90,7 +90,7 @@ export const buildSVG = (
     });
     result += svgRects.join('');
     return result;
-  }, `<svg width="384" height="384" viewBox="0 0 384 384" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" fill="#f0f0f0"><rect width="100%" height="100%" />`);
+  }, `<svg width="384" height="384" viewBox="0 0 384 384" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" fill="#597A8A"><rect width="100%" height="100%" />`);
 
   return `${svgWithoutEndTag}</svg>`;
 };
