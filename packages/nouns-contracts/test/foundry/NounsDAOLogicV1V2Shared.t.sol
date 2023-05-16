@@ -9,15 +9,13 @@ import { NounsDAOProxy } from '../../contracts/governance/NounsDAOProxy.sol';
 import { NounsDAOProxyV2 } from '../../contracts/governance/NounsDAOProxyV2.sol';
 import { NounsDAOStorageV1, NounsDAOStorageV2, NounsDAOStorageV3 } from '../../contracts/governance/NounsDAOInterfaces.sol';
 import { NounsDescriptorV2 } from '../../contracts/NounsDescriptorV2.sol';
-import { DeployUtils } from './helpers/DeployUtils.sol';
-import { DeployUtilsV3 } from './helpers/DeployUtilsV3.sol';
 import { NounsToken } from '../../contracts/NounsToken.sol';
 import { NounsSeeder } from '../../contracts/NounsSeeder.sol';
 import { IProxyRegistry } from '../../contracts/external/opensea/IProxyRegistry.sol';
 import { NounsDAOExecutor } from '../../contracts/governance/NounsDAOExecutor.sol';
 import { NounsDAOLogicSharedBaseTest } from './helpers/NounsDAOLogicSharedBase.t.sol';
 
-abstract contract NounsDAOLogicV1V2StateTest is NounsDAOLogicSharedBaseTest, DeployUtilsV3 {
+abstract contract NounsDAOLogicV1V2StateTest is NounsDAOLogicSharedBaseTest {
     function setUp() public override {
         super.setUp();
 
@@ -179,6 +177,20 @@ abstract contract NounsDAOLogicV1V2StateTest is NounsDAOLogicSharedBaseTest, Dep
 
         vm.warp(block.timestamp + timelock.delay() + timelock.GRACE_PERIOD() + 1);
         assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV1.ProposalState.Executed);
+    }
+}
+
+contract NounsDAOLogicV1ForkStateTest is NounsDAOLogicV1V2StateTest {
+    function daoVersion() internal pure override returns (uint256) {
+        return 1;
+    }
+
+    function deployDAOProxy(
+        address,
+        address,
+        address vetoer
+    ) internal override returns (NounsDAOLogicV1) {
+        return deployForkDAOProxy(vetoer);
     }
 }
 
@@ -438,6 +450,20 @@ abstract contract NounsDAOLogicV1V2VetoingTest is NounsDAOLogicSharedBaseTest {
         daoProxy.veto(proposalId);
 
         assertTrue(daoProxy.state(proposalId) == NounsDAOStorageV1.ProposalState.Vetoed);
+    }
+}
+
+contract NounsDAOLogicV1ForkVetoingTest is NounsDAOLogicV1V2VetoingTest {
+    function daoVersion() internal pure override returns (uint256) {
+        return 1;
+    }
+
+    function deployDAOProxy(
+        address,
+        address,
+        address vetoer
+    ) internal override returns (NounsDAOLogicV1) {
+        return deployForkDAOProxy(vetoer);
     }
 }
 
