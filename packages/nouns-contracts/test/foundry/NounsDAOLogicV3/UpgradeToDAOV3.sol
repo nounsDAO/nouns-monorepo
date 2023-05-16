@@ -40,7 +40,7 @@ contract UpgradeToDAOV3Test is DeployUtils {
 
     function test_upgradeToDAOV3() public {
         NounsDAOLogicV3 daoV3Implementation = new NounsDAOLogicV3();
-        NounsDAOExecutorV2 timelockV2 = deployAndInitTimelockV2();
+        (NounsDAOExecutorV2 timelockV2, ) = deployAndInitTimelockV2();
 
         uint256 proposalId = proposeToUpgradeToDAOV3(
             address(daoV3Implementation),
@@ -69,9 +69,10 @@ contract UpgradeToDAOV3Test is DeployUtils {
     }
 
     function test_proposalWasQueuedBeforeUpgrade() public {
+        (NounsDAOExecutorV2 timelockV2, ) = deployAndInitTimelockV2();
         uint256 proposalId = proposeToUpgradeToDAOV3(
             address(new NounsDAOLogicV3()),
-            address(deployAndInitTimelockV2()),
+            address(timelockV2),
             address(daoProxy.timelock()),
             500 ether
         );
@@ -98,9 +99,10 @@ contract UpgradeToDAOV3Test is DeployUtils {
     }
 
     function test_proposalWasQueuedAfterUpgrade() public {
+        (NounsDAOExecutorV2 timelockV2, ) = deployAndInitTimelockV2();
         uint256 proposalId = proposeToUpgradeToDAOV3(
             address(new NounsDAOLogicV3()),
-            address(deployAndInitTimelockV2()),
+            address(timelockV2),
             address(daoProxy.timelock()),
             500 ether
         );
@@ -157,15 +159,41 @@ contract UpgradeToDAOV3Test is DeployUtils {
         assertEq(address(daoProxy.timelock()).balance, 500 ether);
     }
 
-    function upgradeToV3() internal {
+    function test_timelockV2IsUpgradable() public {
+        address timelockV2Impl = upgradeToV3();
+
+        bytes32 slot = bytes32(uint256(keccak256('eip1967.proxy.implementation')) - 1);
+        address implementation = address(uint160(uint256(vm.load(address(daoProxy.timelock()), slot))));
+        assertEq(implementation, timelockV2Impl);
+
+        targets = [address(daoProxy.timelock())];
+        values = [0];
+        signatures = ['upgradeTo(address)'];
+        address newTimelock = address(new NewTimelockMock());
+        calldatas = [abi.encode(newTimelock)];
+        vm.prank(proposer);
+        uint256 proposalId = daoProxy.propose(targets, values, signatures, calldatas, 'upgrade to 1234');
+
+        rollAndCastVote(proposer, proposalId, 1);
+        queueAndExecute(proposalId);
+
+        implementation = address(uint160(uint256(vm.load(address(daoProxy.timelock()), slot))));
+        assertEq(implementation, address(newTimelock));
+        assertEq(NewTimelockMock(payable(address(daoProxy.timelock()))).banner(), 'NewTimelockMock');
+    }
+
+    function upgradeToV3() internal returns (address) {
+        (NounsDAOExecutorV2 timelockV2, address timelockV2Impl) = deployAndInitTimelockV2();
         uint256 proposalId = proposeToUpgradeToDAOV3(
             address(new NounsDAOLogicV3()),
-            address(deployAndInitTimelockV2()),
+            address(timelockV2),
             address(daoProxy.timelock()),
             500 ether
         );
         rollAndCastVote(proposer, proposalId, 1);
         queueAndExecute(proposalId);
+
+        return timelockV2Impl;
     }
 
     function queueAndExecute(uint256 proposalId) internal {
@@ -200,12 +228,11 @@ contract UpgradeToDAOV3Test is DeployUtils {
         proposalId = daoProxy.propose(targets, values, signatures, calldatas, 'send eth');
     }
 
-    function deployAndInitTimelockV2() internal returns (NounsDAOExecutorV2) {
-        NounsDAOExecutorV2 timelockV2 = NounsDAOExecutorV2(
-            payable(address(new ERC1967Proxy(address(new NounsDAOExecutorV2()), '')))
-        );
+    function deployAndInitTimelockV2() internal returns (NounsDAOExecutorV2 timelockV2, address timelockV2Impl) {
+        timelockV2Impl = address(new NounsDAOExecutorV2());
+        timelockV2 = NounsDAOExecutorV2(payable(address(new ERC1967Proxy(timelockV2Impl, ''))));
         timelockV2.initialize(address(daoProxy), timelockV1.delay());
-        return timelockV2;
+        return (timelockV2, timelockV2Impl);
     }
 
     function proposeToUpgradeToDAOV3(
@@ -255,5 +282,11 @@ contract UpgradeToDAOV3Test is DeployUtils {
 
         vm.prank(proposer);
         proposalId = daoProxy.propose(targets, values, signatures, calldatas, 'upgrade to v3');
+    }
+}
+
+contract NewTimelockMock is NounsDAOExecutorV2 {
+    function banner() public pure returns (string memory) {
+        return 'NewTimelockMock';
     }
 }
