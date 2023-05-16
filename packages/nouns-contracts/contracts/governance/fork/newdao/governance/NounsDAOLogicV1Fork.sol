@@ -180,14 +180,14 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
             nouns.transferFrom(msg.sender, address(timelock), tokenIds[i]);
         }
 
-        uint256 ethToSend = (address(timelock).balance * tokenIds.length) / totalSupply;
-        timelock.sendETHToNewDAO(msg.sender, ethToSend);
-
         for (uint256 i = 0; i < erc20TokensToIncludeInQuit.length; i++) {
             IERC20 erc20token = IERC20(erc20TokensToIncludeInQuit[i]);
             uint256 tokensToSend = (erc20token.balanceOf(address(timelock)) * tokenIds.length) / totalSupply;
             timelock.sendERC20ToNewDAO(msg.sender, address(erc20token), tokensToSend);
         }
+
+        uint256 ethToSend = (address(timelock).balance * tokenIds.length) / totalSupply;
+        timelock.sendETHToNewDAO(msg.sender, ethToSend);
 
         emit Quit(msg.sender, tokenIds);
     }
