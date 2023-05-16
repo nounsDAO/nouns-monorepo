@@ -79,4 +79,17 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
 
         assertEq(address(dao.forkEscrow()), address(1));
     }
+
+    function test_setTimelocks_onlyAdmin() public {
+        vm.expectRevert(NounsDAOV3Admin.AdminOnly.selector);
+        dao._setTimelocks(address(1), address(2));
+    }
+
+    function test_setTimelocks_works() public {
+        vm.prank(address(dao.timelock()));
+        dao._setTimelocks(address(1), address(2));
+
+        assertEq(address(dao.timelock()), address(1));
+        assertEq(address(dao.timelockV1()), address(2));
+    }
 }

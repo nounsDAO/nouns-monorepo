@@ -190,6 +190,20 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         return ds.propose(NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas), description);
     }
 
+    function proposeOnTimelockV1(
+        address[] memory targets,
+        uint256[] memory values,
+        string[] memory signatures,
+        bytes[] memory calldatas,
+        string memory description
+    ) public returns (uint256) {
+        return
+            ds.proposeOnTimelockV1(
+                NounsDAOV3Proposals.ProposalTxs(targets, values, signatures, calldatas),
+                description
+            );
+    }
+
     function proposeBySigs(
         ProposerSignature[] memory proposerSignatures,
         address[] memory targets,
@@ -284,6 +298,10 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      */
     function execute(uint256 proposalId) external {
         ds.execute(proposalId);
+    }
+
+    function executeOnTimelockV1(uint256 proposalId) external {
+        ds.executeOnTimelockV1(proposalId);
     }
 
     /**
@@ -667,6 +685,24 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         ds._setForkEscrow(newForkEscrow);
     }
 
+    function _setForkParams(
+        address forkEscrow_,
+        address forkDAODeployer_,
+        address[] calldata erc20TokensToIncludeInFork_,
+        uint256 forkPeriod_,
+        uint256 forkThresholdBPS_
+    ) external {
+        ds._setForkEscrow(forkEscrow_);
+        ds._setForkDAODeployer(forkDAODeployer_);
+        ds._setErc20TokensToIncludeInFork(erc20TokensToIncludeInFork_);
+        ds._setForkPeriod(forkPeriod_);
+        ds._setForkThresholdBPS(forkThresholdBPS_);
+    }
+
+    function _setTimelocks(address newTimelock, address newTimelockV1) external {
+        ds._setTimelocks(newTimelock, newTimelockV1);
+    }
+
     /**
      * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
      *   DYNAMIC QUORUM
@@ -816,6 +852,10 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
 
     function proposalUpdatablePeriodInBlocks() public view returns (uint256) {
         return ds.proposalUpdatablePeriodInBlocks;
+    }
+
+    function timelockV1() public view returns (address) {
+        return address(ds.timelockV1);
     }
 
     receive() external payable {}
