@@ -22,6 +22,27 @@ import { NounsDAOLogicV1Fork } from '../../../contracts/governance/fork/newdao/g
 import { NounsDAOStorageV3 } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 
 abstract contract DeployUtilsFork is DeployUtilsV3 {
+    function _deployForkDAO(address escrow)
+        public
+        returns (
+            address treasury,
+            address token,
+            address dao
+        )
+    {
+        ForkDAODeployer deployer = new ForkDAODeployer(
+            address(new NounsTokenFork()),
+            address(new NounsAuctionHouseFork()),
+            address(new NounsDAOLogicV1Fork()),
+            address(new NounsDAOExecutorV2()),
+            escrow,
+            DELAYED_GOV_DURATION
+        );
+
+        (treasury, token) = deployer.deployForkDAO(block.timestamp + FORK_PERIOD);
+        dao = NounsDAOExecutorV2(payable(treasury)).admin();
+    }
+
     function _deployForkDAO()
         public
         returns (
@@ -30,17 +51,7 @@ abstract contract DeployUtilsFork is DeployUtilsV3 {
             address dao
         )
     {
-        NounsDAOLogicV3 daoV3 = _deployDAOV3();
-        ForkDAODeployer deployer = new ForkDAODeployer(
-            address(new NounsTokenFork()),
-            address(new NounsAuctionHouseFork()),
-            address(new NounsDAOLogicV1Fork()),
-            address(new NounsDAOExecutorV2()),
-            address(daoV3.forkEscrow()),
-            DELAYED_GOV_DURATION
-        );
-
-        (treasury, token) = deployer.deployForkDAO(block.timestamp + FORK_PERIOD);
-        dao = NounsDAOExecutorV2(payable(treasury)).admin();
+        NounsDAOLogicV3 originalDAO = _deployDAOV3();
+        return _deployForkDAO(address(originalDAO.forkEscrow()));
     }
 }

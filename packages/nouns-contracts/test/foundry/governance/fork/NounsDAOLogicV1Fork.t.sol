@@ -10,6 +10,9 @@ import { NounsTokenFork } from '../../../../contracts/governance/fork/newdao/tok
 import { NounsDAOExecutorV2 } from '../../../../contracts/governance/NounsDAOExecutorV2.sol';
 import { NounsDAOLogicV1Fork } from '../../../../contracts/governance/fork/newdao/governance/NounsDAOLogicV1Fork.sol';
 import { NounsDAOStorageV1 } from '../../../../contracts/governance/fork/newdao/governance/NounsDAOStorageV1.sol';
+import { NounsDAOForkEscrowMock } from '../../helpers/NounsDAOForkEscrowMock.sol';
+import { NounsTokenLikeMock } from '../../helpers/NounsTokenLikeMock.sol';
+import { NounsTokenLike } from '../../../../contracts/governance/NounsDAOInterfaces.sol';
 
 abstract contract NounsDAOLogicV1ForkBase is DeployUtilsFork {
     NounsDAOLogicV1Fork dao;
@@ -144,5 +147,99 @@ contract NounsDAOLogicV1Fork_cancelProposalUnderThresholdBugFix_Test is NounsDAO
         vm.startPrank(makeAddr('not proposer'));
         vm.expectRevert('NounsDAO::cancel: proposer above threshold');
         dao.cancel(proposalId);
+    }
+}
+
+abstract contract ForkWithEscrow is NounsDAOLogicV1ForkBase {
+    NounsDAOForkEscrowMock escrow;
+    NounsTokenLike originalToken;
+    NounsDAOLogicV3 originalDAO;
+
+    address owner1 = makeAddr('owner1');
+
+    function setUp() public virtual override {
+        originalDAO = _deployDAOV3();
+        originalToken = originalDAO.nouns();
+        address originalMinter = originalToken.minter();
+
+        // Minting original tokens
+        vm.startPrank(originalMinter);
+        originalToken.mint();
+        originalToken.mint();
+        originalToken.transferFrom(originalMinter, proposer, 1);
+        originalToken.transferFrom(originalMinter, owner1, 2);
+
+        // Escrowing original tokens
+        changePrank(proposer);
+        originalToken.setApprovalForAll(address(originalDAO), true);
+        uint256[] memory proposerTokens = new uint256[](1);
+        proposerTokens[0] = 1;
+        originalDAO.escrowToFork(proposerTokens, new uint256[](0), '');
+
+        changePrank(owner1);
+        originalToken.setApprovalForAll(address(originalDAO), true);
+        uint256[] memory owner1Tokens = new uint256[](1);
+        owner1Tokens[0] = 2;
+        originalDAO.escrowToFork(owner1Tokens, new uint256[](0), '');
+
+        vm.stopPrank();
+
+        (address treasuryAddress, address tokenAddress, address daoAddress) = _deployForkDAO(
+            address(originalDAO.forkEscrow())
+        );
+
+        dao = NounsDAOLogicV1Fork(daoAddress);
+        token = NounsTokenFork(tokenAddress);
+        timelock = treasuryAddress;
+    }
+}
+
+contract NounsDAOLogicV1Fork_DelayedGovernance_Test is ForkWithEscrow {
+    function setUp() public override {
+        super.setUp();
+    }
+
+    function test_propose_givenTokenToClaim_reverts() public {
+        vm.expectRevert(abi.encodeWithSelector(NounsDAOLogicV1Fork.WaitingForTokensToClaimOrExpiration.selector));
+        propose();
+    }
+
+    function test_propose_givenPartialClaim_reverts() public {
+        uint256[] memory tokens = new uint256[](1);
+        tokens[0] = 1;
+        vm.prank(proposer);
+        token.claimFromEscrow(tokens);
+
+        vm.expectRevert(abi.encodeWithSelector(NounsDAOLogicV1Fork.WaitingForTokensToClaimOrExpiration.selector));
+        propose();
+    }
+
+    function test_propose_givenFullClaim_works() public {
+        uint256[] memory tokens = new uint256[](1);
+        tokens[0] = 1;
+        vm.prank(proposer);
+        token.claimFromEscrow(tokens);
+
+        tokens[0] = 2;
+        vm.prank(owner1);
+        token.claimFromEscrow(tokens);
+
+        // mining one block so proposer prior votes getter sees their tokens.
+        vm.roll(block.number + 1);
+
+        propose();
+    }
+
+    function test_propose_givenTokensToClaimAndDelayedGovernanceExpires_works() public {
+        uint256[] memory tokens = new uint256[](1);
+        tokens[0] = 1;
+        vm.prank(proposer);
+        token.claimFromEscrow(tokens);
+        // mining one block so proposer prior votes getter sees their tokens.
+        vm.roll(block.number + 1);
+
+        vm.warp(dao.delayedGovernanceExpirationTimestamp());
+
+        propose();
     }
 }

@@ -59,4 +59,6 @@ contract NounsTokenLikeMock is NounsTokenLike {
     function minter() external pure returns (address) {
         return address(0);
     }
+
+    function setApprovalForAll(address operator, bool approved) external {}
 }

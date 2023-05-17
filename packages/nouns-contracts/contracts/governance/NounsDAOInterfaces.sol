@@ -537,6 +537,8 @@ interface NounsTokenLike {
     function minter() external view returns (address);
 
     function mint() external returns (uint256);
+
+    function setApprovalForAll(address operator, bool approved) external;
 }
 
 interface IForkDAODeployer {
