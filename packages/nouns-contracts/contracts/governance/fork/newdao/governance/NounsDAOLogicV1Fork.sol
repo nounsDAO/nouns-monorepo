@@ -71,6 +71,8 @@ import { ReentrancyGuardUpgradeable } from '@openzeppelin/contracts-upgradeable/
 contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, NounsDAOStorageV1, NounsDAOEvents {
     error AdminOnly();
     error WaitingForTokensToClaimOrExpiration();
+    error QuitETHTransferFailed();
+    error QuitERC20TransferFailed();
 
     event ERC20TokensToIncludeInQuitSet(address[] oldErc20Tokens, address[] newErc20tokens);
     event Quit(address indexed msgSender, uint256[] tokenIds);
@@ -183,11 +185,13 @@ contract NounsDAOLogicV1Fork is UUPSUpgradeable, ReentrancyGuardUpgradeable, Nou
         for (uint256 i = 0; i < erc20TokensToIncludeInQuit.length; i++) {
             IERC20 erc20token = IERC20(erc20TokensToIncludeInQuit[i]);
             uint256 tokensToSend = (erc20token.balanceOf(address(timelock)) * tokenIds.length) / totalSupply;
-            timelock.sendERC20ToNewDAO(msg.sender, address(erc20token), tokensToSend);
+            bool erc20Sent = timelock.sendERC20ToNewDAO(msg.sender, address(erc20token), tokensToSend);
+            if (!erc20Sent) revert QuitERC20TransferFailed();
         }
 
         uint256 ethToSend = (address(timelock).balance * tokenIds.length) / totalSupply;
-        timelock.sendETHToNewDAO(msg.sender, ethToSend);
+        bool ethSent = timelock.sendETHToNewDAO(msg.sender, ethToSend);
+        if (!ethSent) revert QuitETHTransferFailed();
 
         emit Quit(msg.sender, tokenIds);
     }

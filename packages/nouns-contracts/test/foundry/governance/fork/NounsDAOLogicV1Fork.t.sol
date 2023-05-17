@@ -13,6 +13,8 @@ import { NounsDAOStorageV1 } from '../../../../contracts/governance/fork/newdao/
 import { NounsDAOForkEscrowMock } from '../../helpers/NounsDAOForkEscrowMock.sol';
 import { NounsTokenLikeMock } from '../../helpers/NounsTokenLikeMock.sol';
 import { NounsTokenLike } from '../../../../contracts/governance/NounsDAOInterfaces.sol';
+import { ERC20Mock } from '../../helpers/ERC20Mock.sol';
+import { MaliciousForkDAOQuitter } from '../../helpers/MaliciousForkDAOQuitter.sol';
 
 abstract contract NounsDAOLogicV1ForkBase is DeployUtilsFork {
     NounsDAOLogicV1Fork dao;
@@ -243,3 +245,124 @@ contract NounsDAOLogicV1Fork_DelayedGovernance_Test is ForkWithEscrow {
         propose();
     }
 }
+
+contract NounsDAOLogicV1Fork_Quit_Test is NounsDAOLogicV1ForkBase {
+    address quitter = makeAddr('quitter');
+    uint256[] quitterTokens;
+    ERC20Mock token1;
+    ERC20Mock token2;
+    uint256 constant TOKEN1_BALANCE = 12345;
+    uint256 constant TOKEN2_BALANCE = 8765;
+    address[] tokens;
+
+    function setUp() public override {
+        super.setUp();
+
+        // Set up ERC20s owned by the DAO
+        mintERC20s();
+        vm.prank(address(dao.timelock()));
+        dao._setErc20TokensToIncludeInQuit(tokens);
+
+        // Send ETH to the DAO
+        vm.deal(address(dao.timelock()), 120 ether);
+
+        mintNounsToQuitter();
+
+        vm.prank(quitter);
+        token.setApprovalForAll(address(dao), true);
+    }
+
+    function test_quit_tokensAreSentToTreasury() public {
+        vm.prank(quitter);
+        dao.quit(quitterTokens);
+
+        assertEq(token.balanceOf(timelock), 2);
+    }
+
+    function test_quit_sendsProRataETHAndERC20s() public {
+        assertEq(quitter.balance, 0);
+        assertEq(token1.balanceOf(quitter), 0);
+        assertEq(token2.balanceOf(quitter), 0);
+
+        vm.prank(quitter);
+        dao.quit(quitterTokens);
+
+        assertEq(quitter.balance, 24 ether);
+        assertEq(token1.balanceOf(quitter), (TOKEN1_BALANCE * 2) / 10);
+        assertEq(token2.balanceOf(quitter), (TOKEN2_BALANCE * 2) / 10);
+    }
+
+    function test_quit_reentranceReverts() public {
+        MaliciousForkDAOQuitter reentrancyQuitter = new MaliciousForkDAOQuitter(dao);
+        transferQuitterTokens(address(reentrancyQuitter));
+
+        vm.startPrank(address(reentrancyQuitter));
+        token.setApprovalForAll(address(dao), true);
+
+        vm.expectRevert(abi.encodeWithSelector(NounsDAOLogicV1Fork.QuitETHTransferFailed.selector));
+        dao.quit(quitterTokens);
+    }
+
+    function test_quit_givenRecipientRejectsETH_reverts() public {
+        ETHBlocker blocker = new ETHBlocker();
+        transferQuitterTokens(address(blocker));
+
+        vm.startPrank(address(blocker));
+        token.setApprovalForAll(address(dao), true);
+
+        vm.expectRevert(abi.encodeWithSelector(NounsDAOLogicV1Fork.QuitETHTransferFailed.selector));
+        dao.quit(quitterTokens);
+    }
+
+    function test_quit_givenERC20SendFailure_reverts() public {
+        token1.setFailNextTransfer(true);
+
+        vm.prank(quitter);
+        vm.expectRevert(abi.encodeWithSelector(NounsDAOLogicV1Fork.QuitERC20TransferFailed.selector));
+        dao.quit(quitterTokens);
+    }
+
+    function transferQuitterTokens(address to) internal {
+        uint256 quitterBalance = token.balanceOf(quitter);
+        uint256[] memory tokenIds = new uint256[](quitterBalance);
+        for (uint256 i = 0; i < quitterBalance; ++i) {
+            tokenIds[i] = token.tokenOfOwnerByIndex(quitter, i);
+        }
+        for (uint256 i = 0; i < tokenIds.length; ++i) {
+            vm.prank(quitter);
+            token.transferFrom(quitter, to, tokenIds[i]);
+        }
+        vm.roll(block.number + 1);
+    }
+
+    function mintERC20s() internal {
+        token1 = new ERC20Mock();
+        token1.mint(address(dao.timelock()), TOKEN1_BALANCE);
+        token2 = new ERC20Mock();
+        token2.mint(address(dao.timelock()), TOKEN2_BALANCE);
+        tokens.push(address(token1));
+        tokens.push(address(token2));
+    }
+
+    function mintNounsToQuitter() internal {
+        address minter = token.minter();
+        vm.startPrank(minter);
+        while (token.totalSupply() < 10) {
+            uint256 tokenId = token.mint();
+            address to = proposer;
+            if (tokenId > 7) {
+                to = quitter;
+                quitterTokens.push(tokenId);
+            }
+            token.transferFrom(token.minter(), to, tokenId);
+        }
+        vm.stopPrank();
+
+        vm.roll(block.number + 1);
+
+        assertEq(token.totalSupply(), 10);
+        assertEq(token.balanceOf(quitter), 2);
+    }
+}
+
+contract ETHBlocker {}
