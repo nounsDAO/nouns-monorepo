@@ -22,7 +22,7 @@ task('metadata-stats-2', 'Gather punks statistics from seeds')
     const types = [0,0,0,0,0];
     const skins = [[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]];
     const accCount = [[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0]];
-    const accTypes = [Array(14).fill(0), Array(14).fill(0), Array(14).fill(0), Array(14).fill(0), Array(14).fill(0)]
+    const accTypes = [Array(15).fill(0), Array(15).fill(0), Array(15).fill(0), Array(15).fill(0), Array(15).fill(0)]
 
     for (let i = 0; i < 100_000; i++) {
       let stringNumber = (i).toString(16);
@@ -45,7 +45,7 @@ task('metadata-stats-2', 'Gather punks statistics from seeds')
         console.log("skin tones per type", skins);
         console.log("accessories count per punk are: 0 accessories, 1 accessory, 2 accessories, ..., 7 accessories")
         console.log("accCount per type", accCount);
-        console.log("acc types are: neck, cheeks, face, lips, emotion, beard, teeth, ears, hat, hair, mouth, glasses, eyes, nose");
+        console.log("acc types are: neck, cheeks, face, lips, emotion, beard, teeth, ears, hat, hair, mouth, glasses, goggles, eyes, nose");
         console.log("accTypes per type", accTypes);
       }
     }
@@ -56,6 +56,6 @@ task('metadata-stats-2', 'Gather punks statistics from seeds')
     console.log("skin tones per type", skins);
     console.log("accessories count per punk are: 0 accessories, 1 accessory, 2 accessories, ..., 7 accessories")
     console.log("accCount per type", accCount);
-    console.log("acc types are: neck, cheeks, face, lips, emotion, beard, teeth, ears, hat, hair, mouth, glasses, eyes, nose");
+    console.log("acc types are: neck, cheeks, face, lips, emotion, beard, teeth, ears, hat, hair, mouth, glasses, goggles, eyes, nose");
     console.log("accTypes per type", accTypes);
   });

@@ -35,7 +35,7 @@ task(
   )
   .setAction(async ({ count, start, exportPath }, { ethers }) => {
     const { palette, images } = ImageData;
-    let { types, necks, cheekses, faces, beards, mouths, earses, hats, hairs, teeths, lipses, emotions, eyeses, glasseses, noses } = images;
+    let { types, necks, cheekses, faces, beards, mouths, earses, hats, hairs, teeths, lipses, emotions, eyeses, glasseses, goggleses, noses } = images;
 
     if (count !== undefined) {
       start = start === undefined ? 0 : start;
@@ -54,6 +54,7 @@ task(
       emotions = emotions.slice(start, count + start);
       eyeses = eyeses.slice(start, count + start);
       glasseses = glasseses.slice(start, count + start);
+      goggleses = goggleses.slice(start, count + start);
       noses = noses.slice(start, count + start);
     }
 
@@ -71,6 +72,7 @@ task(
     const emotionsPage = dataToDescriptorInput(emotions.map(({ data }) => data));
     const eyesesPage = dataToDescriptorInput(eyeses.map(({ data }) => data));
     const glassesesPage = dataToDescriptorInput(glasseses.map(({ data }) => data));
+    const gogglesesPage = dataToDescriptorInput(goggleses.map(({ data }) => data));
     const nosesPage = dataToDescriptorInput(noses.map(({ data }) => data));
 
     const paletteValue = `0x000000${palette.join('')}`;
@@ -166,6 +168,12 @@ task(
     console.log(`glassesesLength: ${glassesesPage.originalLength}\n`);
     console.log(`glasseses count: ${glassesesPage.itemCount}\n`);
     saveToFileAbiEncoded(path.join(exportPath, 'glassesPage.abi'), glassesesPage);
+
+    console.log('=== GOGGLESES ===\n');
+    console.log(`gogglesesCompressed: '${gogglesesPage.encodedCompressed}'\n`);
+    console.log(`gogglesesLength: ${gogglesesPage.originalLength}\n`);
+    console.log(`goggleses count: ${gogglesesPage.itemCount}\n`);
+    saveToFileAbiEncoded(path.join(exportPath, 'gogglesPage.abi'), gogglesesPage);
 
     console.log('=== NOSES ===\n');
     console.log(`nosesCompressed: '${nosesPage.encodedCompressed}'\n`);

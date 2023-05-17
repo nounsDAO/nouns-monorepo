@@ -125,43 +125,6 @@ contract NSeeder is ISeeder, Ownable {
             }
         }
 
-//        // Pick random values for accessories
-//        pseudorandomness >>= 72;
-//        uint256[] memory selectedRandomness = new uint256[](accTypeCount);
-//        tmp = 0; // selections counter
-//        unchecked {
-//            for (uint256 i = 0; i < accTypeCount; i ++) {
-//                if ((accCounts >> (i * 8)) & 0xff > 0) {
-//                    selectedRandomness[i] = uint16((pseudorandomness >> tmp) % (((accCounts >> (i * 8)) & 0xff) * 1000 - 1) + 1);
-//                    tmp += 16;
-//                }
-//            }
-//        }
-//
-//        pseudorandomness >>= curAccCount * 16;
-//        seed.accessories = new Accessory[](curAccCount);
-//
-//        uint256 usedGroupFlags = 0;
-//        for (uint256 i = 0; i < curAccCount; i ++) {
-//            uint256 accType = 0;
-//            uint256 maxValue = 0;
-//            for (uint j = 0; j < accTypeCount; j ++) {
-//                if (usedGroupFlags & (1 << accExclusiveGroupMapping[j]) > 0) continue;
-//
-//                if (maxValue < selectedRandomness[j]) {
-//                    maxValue = selectedRandomness[j];
-//                    accType = j;
-//                }
-//            }
-//
-//            uint256 accRand = uint8(pseudorandomness >> (i * 8)) % ((accCounts >> (accType * 8)) & 0xff);
-//            usedGroupFlags |= 1 << accExclusiveGroupMapping[accType];
-//            seed.accessories[i] = Accessory({
-//                accType: uint16(accType),
-//                accId: uint16(accIdByType[seed.punkType][accType][accRand])
-//            });
-//        }
-
         seed.accessories = _sortAccessories(seed.accessories);
         return seed;
     }
@@ -169,7 +132,7 @@ contract NSeeder is ISeeder, Ownable {
     function _sortAccessories(Accessory[] memory accessories) internal pure returns (Accessory[] memory) {
         // all operations are safe
         unchecked {
-            uint256[] memory accessoriesMap = new uint256[](14);
+            uint256[] memory accessoriesMap = new uint256[](15);
             for (uint256 i = 0 ; i < accessories.length; i ++) {
                 // just check
                 assert(accessoriesMap[accessories[i].accType] == 0);
@@ -179,7 +142,7 @@ contract NSeeder is ISeeder, Ownable {
 
             Accessory[] memory sortedAccessories = new Accessory[](accessories.length);
             uint256 j = 0;
-            for (uint256 i = 0 ; i < 14 ; i ++) {
+            for (uint256 i = 0 ; i < 15 ; i ++) {
                 if (accessoriesMap[i] != 0) {
                     sortedAccessories[j] = Accessory(uint16(i), uint16(accessoriesMap[i] - 10_000));
                     j++;

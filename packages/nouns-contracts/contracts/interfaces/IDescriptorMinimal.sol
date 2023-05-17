@@ -38,6 +38,7 @@ interface IDescriptorMinimal {
     function beardCount() external view returns (uint256);
     function eyesCount() external view returns (uint256);
     function glassesCount() external view returns (uint256);
+    function gogglesCount() external view returns (uint256);
     function mouthCount() external view returns (uint256);
     function teethCount() external view returns (uint256);
     function lipsCount() external view returns (uint256);

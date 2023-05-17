@@ -52,6 +52,7 @@ interface IDescriptorV2 is IDescriptorMinimal {
     function beards(uint256 index) external view returns (bytes memory);
     function eyeses(uint256 index) external view returns (bytes memory);
     function glasseses(uint256 index) external view returns (bytes memory);
+    function goggleses(uint256 index) external view returns (bytes memory);
     function mouths(uint256 index) external view returns (bytes memory);
     function teeths(uint256 index) external view returns (bytes memory);
     function lipses(uint256 index) external view returns (bytes memory);
@@ -68,6 +69,7 @@ interface IDescriptorV2 is IDescriptorMinimal {
     function beardCount() external view override returns (uint256);
     function eyesCount() external view override returns (uint256);
     function glassesCount() external view override returns (uint256);
+    function gogglesCount() external view override returns (uint256);
     function mouthCount() external view override returns (uint256);
     function teethCount() external view override returns (uint256);
     function lipsCount() external view override returns (uint256);
@@ -106,6 +108,11 @@ interface IDescriptorV2 is IDescriptorMinimal {
         uint16 imageCount
     ) external;
     function addGlasseses(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+    function addGoggleses(
         bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
@@ -184,6 +191,11 @@ interface IDescriptorV2 is IDescriptorMinimal {
         uint16 imageCount
     ) external;
     function addGlassesesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+    function addGogglesesFromPointer(
         address pointer,
         uint80 decompressedLength,
         uint16 imageCount

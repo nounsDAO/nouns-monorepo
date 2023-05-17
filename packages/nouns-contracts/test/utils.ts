@@ -143,7 +143,7 @@ export const deployWeth = async (deployer?: SignerWithAddress): Promise<WETH> =>
 
 export const populateDescriptor = async (nDescriptor: NDescriptor): Promise<void> => {
   const { /*bgcolors, */palette, images } = ImageDataV2;
-  const { types, necks, cheekses, faces, beards, mouths, earses, hats, hairs, teeths, lipses, emotions, eyeses, glasseses, noses } = images;
+  const { types, necks, cheekses, faces, beards, mouths, earses, hats, hairs, teeths, lipses, emotions, eyeses, glasseses, goggleses, noses } = images;
 
   // await nDescriptor.addManyBackgrounds(bgcolors);
   await nDescriptor.addManyColorsToPalette(0, palette);
@@ -164,12 +164,13 @@ export const populateDescriptor = async (nDescriptor: NDescriptor): Promise<void
   await nDescriptor.addManyEmotions(emotions.map(({ data }) => data));
   await nDescriptor.addManyEyeses(eyeses.map(({ data }) => data));
   await nDescriptor.addManyGlasseses(glasseses.map(({ data }) => data));
+  await nDescriptor.addManyGoggleses(goggleses.map(({ data }) => data));
   await nDescriptor.addManyNoses(noses.map(({ data }) => data));
 };
 
 export const populateDescriptorV2 = async (nDescriptor: NDescriptorV2): Promise<void> => {
   const { /*bgcolors, */palette, images } = ImageDataV2;
-  const { types, necks, cheekses, faces, beards, mouths, earses, hats, hairs, teeths, lipses, emotions, eyeses, glasseses, noses } = images;
+  const { types, necks, cheekses, faces, beards, mouths, earses, hats, hairs, teeths, lipses, emotions, eyeses, glasseses, goggleses, noses } = images;
 
   const typesPage = dataToDescriptorInput(types.map(({ data }) => data));
   const necksPage = dataToDescriptorInput(necks.map(({ data }) => data));
@@ -185,6 +186,7 @@ export const populateDescriptorV2 = async (nDescriptor: NDescriptorV2): Promise<
   const emotionsPage = dataToDescriptorInput(emotions.map(({ data }) => data));
   const eyesesPage = dataToDescriptorInput(eyeses.map(({ data }) => data));
   const glassesesPage = dataToDescriptorInput(glasseses.map(({ data }) => data));
+  const gogglesesPage = dataToDescriptorInput(goggleses.map(({ data }) => data));
   const nosesPage = dataToDescriptorInput(noses.map(({ data }) => data));
 
   // await nDescriptor.addManyBackgrounds(bgcolors);
@@ -274,6 +276,12 @@ export const populateDescriptorV2 = async (nDescriptor: NDescriptorV2): Promise<
     glassesesPage.encodedCompressed,
     glassesesPage.originalLength,
     glassesesPage.itemCount,
+    options,
+  );
+  await nDescriptor.addGoggleses(
+    gogglesesPage.encodedCompressed,
+    gogglesesPage.originalLength,
+    gogglesesPage.itemCount,
     options,
   );
   await nDescriptor.addNoses(

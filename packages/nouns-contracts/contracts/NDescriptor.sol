@@ -53,6 +53,7 @@ contract NDescriptor is IDescriptor, Ownable {
     bytes[] public override beards;
     bytes[] public override eyeses;
     bytes[] public override glasseses;
+    bytes[] public override goggleses;
     bytes[] public override mouths;
     bytes[] public override teeths;
     bytes[] public override lipses;
@@ -98,6 +99,9 @@ contract NDescriptor is IDescriptor, Ownable {
     }
     function glassesCount() external view override returns (uint256) {
         return glasseses.length;
+    }
+    function gogglesCount() external view override returns (uint256) {
+        return goggleses.length;
     }
     function mouthCount() external view override returns (uint256) {
         return mouths.length;
@@ -180,6 +184,11 @@ contract NDescriptor is IDescriptor, Ownable {
     function addManyGlasseses(bytes[] calldata _glasseses) external override onlyOwner whenPartsNotLocked {
         for (uint256 i = 0; i < _glasseses.length; i++) {
             _addGlasses(_glasseses[i]);
+        }
+    }
+    function addManyGoggleses(bytes[] calldata _goggleses) external override onlyOwner whenPartsNotLocked {
+        for (uint256 i = 0; i < _goggleses.length; i++) {
+            _addGoggles(_goggleses[i]);
         }
     }
     function addManyMouths(bytes[] calldata _mouths) external override onlyOwner whenPartsNotLocked {
@@ -266,6 +275,9 @@ contract NDescriptor is IDescriptor, Ownable {
     }
     function addGlasses(bytes calldata _glasses) external override onlyOwner whenPartsNotLocked {
         _addGlasses(_glasses);
+    }
+    function addGoggles(bytes calldata _goggles) external override onlyOwner whenPartsNotLocked {
+        _addGoggles(_goggles);
     }
     function addMouth(bytes calldata _mouth) external override onlyOwner whenPartsNotLocked {
         _addMouth(_mouth);
@@ -413,6 +425,9 @@ contract NDescriptor is IDescriptor, Ownable {
     function _addGlasses(bytes calldata _glasses) internal {
         glasseses.push(_glasses);
     }
+    function _addGoggles(bytes calldata _goggles) internal {
+        goggleses.push(_goggles);
+    }
     function _addMouth(bytes calldata _mouth) internal {
         mouths.push(_mouth);
     }
@@ -457,7 +472,7 @@ contract NDescriptor is IDescriptor, Ownable {
         }
         parts[0] = punkTypes[punkTypeId];
 
-        uint256[] memory sortedAccessories = new uint256[](14);
+        uint256[] memory sortedAccessories = new uint256[](15);
         for (uint256 i = 0 ; i < seed.accessories.length; i ++) {
             // 10_000 is a trick so filled entries are not zero
             unchecked {
@@ -467,7 +482,7 @@ contract NDescriptor is IDescriptor, Ownable {
 
         bytes memory accBuffer;
         uint256 idx = 1; // starts from 1, 0 is taken by punkType
-        for(uint i = 0; i < 14; i ++) {
+        for(uint i = 0; i < 15; i ++) {
             if (sortedAccessories[i] > 0) {
                 // i is accType
                 uint256 accIdImage = sortedAccessories[i] % 10_000;
@@ -483,8 +498,9 @@ contract NDescriptor is IDescriptor, Ownable {
                 else if(i == 9) accBuffer = hairs[accIdImage];
                 else if(i == 10) accBuffer = mouths[accIdImage];
                 else if(i == 11) accBuffer = glasseses[accIdImage];
-                else if(i == 12) accBuffer = eyeses[accIdImage];
-                else if(i == 13) accBuffer = noses[accIdImage];
+                else if(i == 12) accBuffer = goggleses[accIdImage];
+                else if(i == 13) accBuffer = eyeses[accIdImage];
+                else if(i == 14) accBuffer = noses[accIdImage];
                 else revert();
                 parts[idx] = accBuffer;
                 idx ++;

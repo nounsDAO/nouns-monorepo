@@ -127,6 +127,9 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
     function glassesCount() external view override returns (uint256) {
         return art.getGlassesesTrait().storedImagesCount;
     }
+    function gogglesCount() external view override returns (uint256) {
+        return art.getGogglesesTrait().storedImagesCount;
+    }
     function mouthCount() external view override returns (uint256) {
         return art.getMouthsTrait().storedImagesCount;
     }
@@ -231,6 +234,13 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
         uint16 imageCount
     ) external override onlyOwner whenPartsNotLocked {
         art.addGlasseses(encodedCompressed, decompressedLength, imageCount);
+    }
+    function addGoggleses(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyOwner whenPartsNotLocked {
+        art.addGoggleses(encodedCompressed, decompressedLength, imageCount);
     }
     function addMouths(
         bytes calldata encodedCompressed,
@@ -360,6 +370,13 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
     ) external override onlyOwner whenPartsNotLocked {
         art.addGlassesesFromPointer(pointer, decompressedLength, imageCount);
     }
+    function addGogglesesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyOwner whenPartsNotLocked {
+        art.addGogglesesFromPointer(pointer, decompressedLength, imageCount);
+    }
     function addMouthsFromPointer(
         address pointer,
         uint80 decompressedLength,
@@ -455,6 +472,9 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
     }
     function glasseses(uint256 index) public view override returns (bytes memory) {
         return art.glasseses(index);
+    }
+    function goggleses(uint256 index) public view override returns (bytes memory) {
+        return art.goggleses(index);
     }
     function mouths(uint256 index) public view override returns (bytes memory) {
         return art.mouths(index);
@@ -595,7 +615,7 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
         accBuffer = art.punkTypes(punkTypeId);
         parts[0] = ISVGRenderer.Part({ image: accBuffer, palette: _getPalette(accBuffer) });
 
-        uint256[] memory sortedAccessories = new uint256[](14);
+        uint256[] memory sortedAccessories = new uint256[](15);
         for (uint256 i = 0 ; i < seed.accessories.length; i ++) {
             // 10_000 is a trick so filled entries are not zero
             unchecked {
@@ -604,7 +624,7 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
         }
 
         uint256 idx = 1; // starts from 1, 0 is taken by punkType
-        for(uint i = 0; i < 14; i ++) {
+        for(uint i = 0; i < 15; i ++) {
             if (sortedAccessories[i] > 0) {
                 // i is accType
                 uint256 accIdImage = sortedAccessories[i] % 10_000;
@@ -620,8 +640,9 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
                 else if(i == 9) accBuffer = art.hairs(accIdImage);
                 else if(i == 10) accBuffer = art.mouths(accIdImage);
                 else if(i == 11) accBuffer = art.glasseses(accIdImage);
-                else if(i == 12) accBuffer = art.eyeses(accIdImage);
-                else if(i == 13) accBuffer = art.noses(accIdImage);
+                else if(i == 12) accBuffer = art.goggleses(accIdImage);
+                else if(i == 13) accBuffer = art.eyeses(accIdImage);
+                else if(i == 14) accBuffer = art.noses(accIdImage);
                 else revert();
                 parts[idx] = ISVGRenderer.Part({ image: accBuffer, palette: _getPalette(accBuffer) });
                 idx ++;

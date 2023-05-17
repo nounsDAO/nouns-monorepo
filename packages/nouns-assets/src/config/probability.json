@@ -1,7 +1,7 @@
 {
   "types": [ "male", "female", "alien", "ape", "zombie" ],
   "skins": [ "albino", "light", "mid", "dark", "green", "brown", "blue" ],
-  "acc_types": { "neck": 0, "cheeks": 0, "face": 0, "lips": 1, "emotion": 0, "teeth": 1, "beard": 4, "ears": 0, "hat": 6, "hair": 6, "mouth": 0, "glasses": 3, "eyes": 3, "nose": 0 },
+  "acc_types": { "neck": 0, "cheeks": 0, "face": 0, "lips": 1, "emotion": 0, "teeth": 1, "beard": 4, "ears": 0, "hat": 6, "hair": 6, "mouth": 0, "glasses": 3, "goggles": 3, "eyes": 3, "nose": 0 },
   "exclusive_groups": [ ["hair", "hat"], ["glasses", "eyes"], ["lips", "emotion", "teeth"], ["face", "cheeks"] ],
   "probabilities": {
     "male": {
@@ -13,7 +13,7 @@
     "female": {
       "probability": 38.5, 
       "skin": [ 10, 30, 30, 30, 0, 0, 0 ],
-      "accessories": ["hair", "hat", "glasses", "eyes", "mouth", "neck", "ears", "lips", "face", "cheeks", "nose"],
+      "accessories": ["hair", "hat", "glasses", "goggles", "eyes", "mouth", "neck", "ears", "lips", "face", "cheeks", "nose"],
       "accessory_count_probabbilities": [0.08, 3.33, 35.6, 45.01, 14.2, 1.66, 0.11, 0.01]
     },
     "alien": {
@@ -99,7 +99,7 @@
     "72": { "type": "glasses", "punk": "mpz" },
     "73": { "type": "eyes", "punk": "mz" },
     "74": { "type": "hair", "punk": "mz" },
-    "75": { "type": "hat", "punk": "f" }, 
+    "75": { "type": "goggles", "punk": "f" },
     "76": { "type": "hat", "punk": "f" }, 
     "77": { "type": "lips", "punk": "f" }, 
     "78": { "type": "eyes", "punk": "f" }, 
@@ -140,7 +140,7 @@
     "113": { "type": "hat", "punk": "f" }, 
     "114": { "type": "eyes", "punk": "f" }, 
     "115": { "type": "mouth", "punk": "f" }, 
-    "116": { "type": "glasses", "punk": "f" }, 
+    "116": { "type": "goggles", "punk": "f" },
     "117": { "type": "hair", "punk": "f" }, 
     "118": { "type": "neck", "punk": "f" }, 
     "119": { "type": "glasses", "punk": "f" }, 

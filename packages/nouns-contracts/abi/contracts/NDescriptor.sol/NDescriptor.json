@@ -163,6 +163,19 @@
     "inputs": [
       {
         "internalType": "bytes",
+        "name": "_goggles",
+        "type": "bytes"
+      }
+    ],
+    "name": "addGoggles",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
         "name": "_hair",
         "type": "bytes"
       }
@@ -303,6 +316,19 @@
       }
     ],
     "name": "addManyGlasseses",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes[]",
+        "name": "_goggleses",
+        "type": "bytes[]"
+      }
+    ],
+    "name": "addManyGoggleses",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -875,6 +901,38 @@
       }
     ],
     "name": "glasseses",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "gogglesCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "goggleses",
     "outputs": [
       {
         "internalType": "bytes",
