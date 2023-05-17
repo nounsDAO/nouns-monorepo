@@ -15,6 +15,22 @@
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  *********************************/
 
+// LICENSE
+// NounsDAOExecutor2.sol is a modified version of Compound Lab's Timelock.sol:
+// https://github.com/compound-finance/compound-protocol/blob/20abad28055a2f91df48a90f8bb6009279a4cb35/contracts/Timelock.sol
+//
+// Timelock.sol source code Copyright 2020 Compound Labs, Inc. licensed under the BSD-3-Clause license.
+// With modifications by Nounders DAO.
+//
+// Additional conditions of BSD-3-Clause can be found here: https://opensource.org/licenses/BSD-3-Clause
+//
+// MODIFICATIONS
+// See NounsDAOExecutor for initial Timelock modifications.
+//
+// NounsDAOExecutor2 adds:
+// - `sendETHToNewDAO` and `sendERC20ToNewDAO` functions used for DAO forks
+// - is upgradable via UUPSUpgradeable
+
 pragma solidity ^0.8.6;
 
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
@@ -50,7 +66,8 @@ contract NounsDAOExecutorV2 is UUPSUpgradeable, Initializable {
         uint256 eta
     );
 
-    uint256 public constant GRACE_PERIOD = 14 days;
+    /// @dev increased grace period from 14 days to 21 days to allow more time in case of a forking period
+    uint256 public constant GRACE_PERIOD = 21 days;
     uint256 public constant MINIMUM_DELAY = 2 days;
     uint256 public constant MAXIMUM_DELAY = 30 days;
 
