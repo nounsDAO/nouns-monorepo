@@ -114,7 +114,7 @@ contract ForkDAODeployer is IForkDAODeployer {
             originalDAO.votingPeriod(),
             originalDAO.votingDelay(),
             originalDAO.proposalThresholdBPS(),
-            getminQuorumVotesBPS(originalDAO),
+            getMinQuorumVotesBPS(originalDAO),
             originalDAO.erc20TokensToIncludeInFork(),
             block.timestamp + delayedGovernanceMaxDuration
         );
@@ -139,7 +139,7 @@ contract ForkDAODeployer is IForkDAODeployer {
     /**
      * @dev Used to prevent the 'Stack too deep' error in the main deploy function.
      */
-    function getminQuorumVotesBPS(NounsDAOLogicV3 originalDAO) internal view returns (uint16) {
+    function getMinQuorumVotesBPS(NounsDAOLogicV3 originalDAO) internal view returns (uint16) {
         NounsDAOStorageV3.DynamicQuorumParams memory dqParams = originalDAO.getDynamicQuorumParamsAt(block.number);
         return dqParams.minQuorumVotesBPS;
     }
