@@ -365,4 +365,66 @@ contract NounsDAOLogicV1Fork_Quit_Test is NounsDAOLogicV1ForkBase {
     }
 }
 
+contract NounsDAOLogicV1Fork_AdjustedTotalSupply_Test is NounsDAOLogicV1ForkBase {
+    uint256 constant TOTAL_MINTED = 20;
+    uint256 constant MIN_ID_FOR_QUITTER = TOTAL_MINTED - ((2 * TOTAL_MINTED) / 10); // 20% of tokens go to quitter
+
+    address quitter = makeAddr('quitter');
+    uint256[] quitterTokens;
+
+    function setUp() public override {
+        super.setUp();
+
+        address minter = token.minter();
+        vm.startPrank(minter);
+        while (token.totalSupply() < TOTAL_MINTED) {
+            uint256 tokenId = token.mint();
+            address to = proposer;
+            if (tokenId >= MIN_ID_FOR_QUITTER) {
+                to = quitter;
+                quitterTokens.push(tokenId);
+            }
+            token.transferFrom(token.minter(), to, tokenId);
+        }
+        vm.stopPrank();
+
+        vm.roll(block.number + 1);
+
+        vm.prank(quitter);
+        token.setApprovalForAll(address(dao), true);
+
+        vm.startPrank(address(dao.timelock()));
+        dao._setProposalThresholdBPS(1000);
+        dao._setQuorumVotesBPS(2000);
+        vm.stopPrank();
+    }
+
+    function test_proposalThreshold_usesAdjustedTotalSupply() public {
+        assertEq(dao.proposalThreshold(), 2);
+
+        vm.prank(quitter);
+        dao.quit(quitterTokens);
+
+        assertEq(dao.proposalThreshold(), 1);
+    }
+
+    function test_quorumVotes_usesAdjustedTotalSupply() public {
+        assertEq(dao.quorumVotes(), 4);
+
+        vm.prank(quitter);
+        dao.quit(quitterTokens);
+
+        assertEq(dao.quorumVotes(), 3);
+    }
+
+    function test_propose_setsThresholdAndQuorumUsingAdjustedTotalSupply() public {
+        vm.prank(quitter);
+        dao.quit(quitterTokens);
+        uint256 proposalId = propose();
+
+        assertEq(dao.proposals(proposalId).proposalThreshold, 1);
+        assertEq(dao.proposals(proposalId).quorumVotes, 3);
+    }
+}
+
 contract ETHBlocker {}
