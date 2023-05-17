@@ -8,6 +8,9 @@ contract NounsDAOForkEscrowMock is INounsDAOForkEscrow {
     address public dao;
     NounsTokenLike public nounsToken;
 
+    /// @dev forkId => tokenId => owner
+    mapping(uint32 => mapping(uint256 => address)) public escrowedTokensByForkId;
+
     constructor(
         uint32 forkId_,
         address dao_,
@@ -30,5 +33,13 @@ contract NounsDAOForkEscrowMock is INounsDAOForkEscrow {
 
     function withdrawTokensToDAO(uint256[] calldata tokenIds, address to) external {}
 
-    function ownerOfEscrowedToken(uint32 forkId_, uint256 tokenId) external view returns (address) {}
+    function ownerOfEscrowedToken(uint32 forkId_, uint256 tokenId) external view returns (address) {
+        return escrowedTokensByForkId[forkId_][tokenId];
+    }
+
+    function setOwnerOfTokens(address owner, uint256[] calldata tokenIds) external {
+        for (uint256 i = 0; i < tokenIds.length; ++i) {
+            escrowedTokensByForkId[forkId][tokenIds[i]] = owner;
+        }
+    }
 }
