@@ -11,12 +11,14 @@ import { ERC1967Proxy } from '@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy
 import { INounsDAOExecutor } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { NounsDAOForkEscrow } from '../../../contracts/governance/fork/NounsDAOForkEscrow.sol';
 import { ForkDAODeployer } from '../../../contracts/governance/fork/ForkDAODeployer.sol';
+import { ERC20Mock } from '../helpers/ERC20Mock.sol';
 
 contract UpgradeToDAOV3Test is DeployUtils {
     NounsDAOLogicV1 daoProxy;
     address proposer = makeAddr('proposer');
     address proposer2 = makeAddr('proposer2');
     INounsDAOExecutor timelockV1;
+    ERC20Mock stETH = new ERC20Mock();
 
     address[] targets;
     uint256[] values;
@@ -39,23 +41,43 @@ contract UpgradeToDAOV3Test is DeployUtils {
     }
 
     function test_upgradeToDAOV3() public {
-        NounsDAOLogicV3 daoV3Implementation = new NounsDAOLogicV3();
-        (NounsDAOExecutorV2 timelockV2, ) = deployAndInitTimelockV2();
-
-        uint256 proposalId = proposeToUpgradeToDAOV3(
+        address[] memory erc20TokensToIncludeInFork = new address[](1);
+        erc20TokensToIncludeInFork[0] = address(stETH);
+        (
+            NounsDAOForkEscrow forkEscrow,
+            ForkDAODeployer forkDeployer,
+            NounsDAOLogicV3 daoV3Implementation,
+            NounsDAOExecutorV2 timelockV2
+        ) = deployNewContracts();
+        uint256 proposalId = proposeUpgradeToDAOV3(
             address(daoV3Implementation),
             address(timelockV2),
             address(daoProxy.timelock()),
-            500 ether
+            500 ether,
+            forkEscrow,
+            forkDeployer,
+            erc20TokensToIncludeInFork
         );
 
         rollAndCastVote(proposer, proposalId, 1);
 
         queueAndExecute(proposalId);
 
+        NounsDAOLogicV3 daoProxyAsV3 = NounsDAOLogicV3(payable(address(daoProxy)));
+
         assertEq(daoProxy.implementation(), address(daoV3Implementation));
-        assertEq(NounsDAOLogicV3(payable(address(daoProxy))).timelockV1(), address(timelockV1));
+        assertEq(daoProxyAsV3.timelockV1(), address(timelockV1));
         assertEq(address(daoProxy.timelock()), address(timelockV2));
+
+        // check fork params
+        assertEq(address(daoProxyAsV3.forkEscrow()), address(forkEscrow));
+        assertEq(address(daoProxyAsV3.forkDAODeployer()), address(forkDeployer));
+        assertEq(daoProxyAsV3.forkPeriod(), 7 days);
+        assertEq(daoProxyAsV3.forkThresholdBPS(), 2_000);
+
+        address[] memory erc20sInFork = daoProxyAsV3.erc20TokensToIncludeInFork();
+        assertEq(erc20sInFork.length, 1);
+        assertEq(erc20sInFork[0], address(stETH));
     }
 
     function test_proposalToSendETHWorksBeforeUpgrade() public {
@@ -69,13 +91,7 @@ contract UpgradeToDAOV3Test is DeployUtils {
     }
 
     function test_proposalQueuedBeforeUpgrade_executeRevertsButExecuteOnV1Works() public {
-        (NounsDAOExecutorV2 timelockV2, ) = deployAndInitTimelockV2();
-        uint256 proposalId = proposeToUpgradeToDAOV3(
-            address(new NounsDAOLogicV3()),
-            address(timelockV2),
-            address(daoProxy.timelock()),
-            500 ether
-        );
+        uint256 proposalId = deployContractsAndProposeUpgradeToDAOV3(address(daoProxy.timelock()), 500 ether);
 
         uint256 proposalId2 = proposeToSendETH(proposer2, proposer2, 100 ether);
 
@@ -99,13 +115,7 @@ contract UpgradeToDAOV3Test is DeployUtils {
     }
 
     function test_proposalWasQueuedAfterUpgrade() public {
-        (NounsDAOExecutorV2 timelockV2, ) = deployAndInitTimelockV2();
-        uint256 proposalId = proposeToUpgradeToDAOV3(
-            address(new NounsDAOLogicV3()),
-            address(timelockV2),
-            address(daoProxy.timelock()),
-            500 ether
-        );
+        uint256 proposalId = deployContractsAndProposeUpgradeToDAOV3(address(daoProxy.timelock()), 500 ether);
 
         uint256 proposalId2 = proposeToSendETH(proposer2, proposer2, 100 ether);
 
@@ -160,11 +170,7 @@ contract UpgradeToDAOV3Test is DeployUtils {
     }
 
     function test_timelockV2IsUpgradable() public {
-        address timelockV2Impl = upgradeToV3();
-
-        bytes32 slot = bytes32(uint256(keccak256('eip1967.proxy.implementation')) - 1);
-        address implementation = address(uint160(uint256(vm.load(address(daoProxy.timelock()), slot))));
-        assertEq(implementation, timelockV2Impl);
+        upgradeToV3();
 
         targets = [address(daoProxy.timelock())];
         values = [0];
@@ -177,8 +183,7 @@ contract UpgradeToDAOV3Test is DeployUtils {
         rollAndCastVote(proposer, proposalId, 1);
         queueAndExecute(proposalId);
 
-        implementation = address(uint160(uint256(vm.load(address(daoProxy.timelock()), slot))));
-        assertEq(implementation, address(newTimelock));
+        assertEq(get1967Implementation(address(daoProxy.timelock())), address(newTimelock));
         assertEq(NewTimelockMock(payable(address(daoProxy.timelock()))).banner(), 'NewTimelockMock');
     }
 
@@ -198,18 +203,10 @@ contract UpgradeToDAOV3Test is DeployUtils {
         assertEq(daoProxy.implementation(), address(1234));
     }
 
-    function upgradeToV3() internal returns (address) {
-        (NounsDAOExecutorV2 timelockV2, address timelockV2Impl) = deployAndInitTimelockV2();
-        uint256 proposalId = proposeToUpgradeToDAOV3(
-            address(new NounsDAOLogicV3()),
-            address(timelockV2),
-            address(daoProxy.timelock()),
-            500 ether
-        );
+    function upgradeToV3() internal {
+        uint256 proposalId = deployContractsAndProposeUpgradeToDAOV3(address(daoProxy.timelock()), 500 ether);
         rollAndCastVote(proposer, proposalId, 1);
         queueAndExecute(proposalId);
-
-        return timelockV2Impl;
     }
 
     function queueAndExecute(uint256 proposalId) internal {
@@ -251,14 +248,17 @@ contract UpgradeToDAOV3Test is DeployUtils {
         return (timelockV2, timelockV2Impl);
     }
 
-    function proposeToUpgradeToDAOV3(
-        address daoV3Implementation,
-        address timelockV2,
-        address timelockV1_,
-        uint256 ethToSendToNewTimelock
-    ) internal returns (uint256 proposalId) {
-        NounsDAOForkEscrow forkEscrow = new NounsDAOForkEscrow(address(daoProxy));
-        ForkDAODeployer forkDeployer = new ForkDAODeployer(
+    function deployNewContracts()
+        internal
+        returns (
+            NounsDAOForkEscrow forkEscrow,
+            ForkDAODeployer forkDeployer,
+            NounsDAOLogicV3 daoV3Impl,
+            NounsDAOExecutorV2 timelockV2
+        )
+    {
+        forkEscrow = new NounsDAOForkEscrow(address(daoProxy));
+        forkDeployer = new ForkDAODeployer(
             address(0), // tokenImpl_,
             address(0), // auctionImpl_,
             address(0), // governorImpl_,
@@ -266,7 +266,43 @@ contract UpgradeToDAOV3Test is DeployUtils {
             address(forkEscrow), //
             30 days
         );
+        daoV3Impl = new NounsDAOLogicV3();
+        (timelockV2, ) = deployAndInitTimelockV2();
+    }
 
+    function deployContractsAndProposeUpgradeToDAOV3(address timelockV1_, uint256 ethToSendToNewTimelock)
+        internal
+        returns (uint256 proposalId)
+    {
+        (
+            NounsDAOForkEscrow forkEscrow,
+            ForkDAODeployer forkDeployer,
+            NounsDAOLogicV3 daoV3Impl,
+            NounsDAOExecutorV2 timelockV2
+        ) = deployNewContracts();
+
+        address[] memory erc20TokensToIncludeInFork = new address[](1);
+        erc20TokensToIncludeInFork[0] = address(stETH);
+        proposalId = proposeUpgradeToDAOV3(
+            address(daoV3Impl),
+            address(timelockV2),
+            timelockV1_,
+            ethToSendToNewTimelock,
+            forkEscrow,
+            forkDeployer,
+            erc20TokensToIncludeInFork
+        );
+    }
+
+    function proposeUpgradeToDAOV3(
+        address daoV3Implementation,
+        address timelockV2,
+        address timelockV1_,
+        uint256 ethToSendToNewTimelock,
+        NounsDAOForkEscrow forkEscrow,
+        ForkDAODeployer forkDeployer,
+        address[] memory erc20TokensToIncludeInFork
+    ) internal returns (uint256 proposalId) {
         targets = new address[](4);
         values = new uint256[](4);
         signatures = new string[](4);
@@ -288,7 +324,13 @@ contract UpgradeToDAOV3Test is DeployUtils {
         targets[i] = address(daoProxy);
         values[i] = 0;
         signatures[i] = '_setForkParams(address,address,address[],uint256,uint256)';
-        calldatas[i] = abi.encode(address(forkEscrow), address(forkDeployer), new address[](0), 7 days, 2_000);
+        calldatas[i] = abi.encode(
+            address(forkEscrow),
+            address(forkDeployer),
+            erc20TokensToIncludeInFork,
+            7 days,
+            2_000
+        );
 
         i++;
         targets[i] = address(daoProxy);

@@ -842,6 +842,10 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         return ds.forkEscrow;
     }
 
+    function forkDAODeployer() public view returns (IForkDAODeployer) {
+        return ds.forkDAODeployer;
+    }
+
     function forkEndTimestamp() public view returns (uint256) {
         return ds.forkEndTimestamp;
     }
