@@ -42,6 +42,7 @@ interface IDescriptor is IDescriptorMinimal {
     function beards(uint256 index) external view returns (bytes memory);
     function eyeses(uint256 index) external view returns (bytes memory);
     function glasseses(uint256 index) external view returns (bytes memory);
+    function goggleses(uint256 index) external view returns (bytes memory);
     function mouths(uint256 index) external view returns (bytes memory);
     function teeths(uint256 index) external view returns (bytes memory);
     function lipses(uint256 index) external view returns (bytes memory);
@@ -59,6 +60,7 @@ interface IDescriptor is IDescriptorMinimal {
     function beardCount() external view override returns (uint256);
     function eyesCount() external view override returns (uint256);
     function glassesCount() external view override returns (uint256);
+    function gogglesCount() external view override returns (uint256);
     function mouthCount() external view override returns (uint256);
     function teethCount() external view override returns (uint256);
     function lipsCount() external view override returns (uint256);
@@ -79,6 +81,7 @@ interface IDescriptor is IDescriptorMinimal {
     function addManyBeards(bytes[] calldata beards) external;
     function addManyEyeses(bytes[] calldata eyeses) external;
     function addManyGlasseses(bytes[] calldata glasseses) external;
+    function addManyGoggleses(bytes[] calldata goggleses) external;
     function addManyMouths(bytes[] calldata mouths) external;
     function addManyTeeths(bytes[] calldata teeths) external;
     function addManyLipses(bytes[] calldata lipses) external;
@@ -99,6 +102,7 @@ interface IDescriptor is IDescriptorMinimal {
     function addBeard(bytes calldata beard) external;
     function addEyes(bytes calldata eyes) external;
     function addGlasses(bytes calldata glasses) external;
+    function addGoggles(bytes calldata goggleses) external;
     function addMouth(bytes calldata mouth) external;
     function addTeeth(bytes calldata teeth) external;
     function addLips(bytes calldata lips) external;

@@ -49,6 +49,7 @@ interface IArt {
     event BeardsAdded(uint16 count);
     event EyesesAdded(uint16 count);
     event GlassesesAdded(uint16 count);
+    event GogglesesAdded(uint16 count);
     event MouthsAdded(uint16 count);
     event TeethsAdded(uint16 count);
     event LipsesAdded(uint16 count);
@@ -108,6 +109,11 @@ interface IArt {
         uint16 imageCount
     ) external;
     function addGlasseses(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+    function addGoggleses(
         bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
@@ -190,6 +196,11 @@ interface IArt {
         uint80 decompressedLength,
         uint16 imageCount
     ) external;
+    function addGogglesesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
     function addMouthsFromPointer(
         address pointer,
         uint80 decompressedLength,
@@ -243,6 +254,7 @@ interface IArt {
     function beards(uint256 index) external view returns (bytes memory);
     function eyeses(uint256 index) external view returns (bytes memory);
     function glasseses(uint256 index) external view returns (bytes memory);
+    function goggleses(uint256 index) external view returns (bytes memory);
     function mouths(uint256 index) external view returns (bytes memory);
     function teeths(uint256 index) external view returns (bytes memory);
     function lipses(uint256 index) external view returns (bytes memory);
@@ -259,6 +271,7 @@ interface IArt {
     function getBeardsTrait() external view returns (Trait memory);
     function getEyesesTrait() external view returns (Trait memory);
     function getGlassesesTrait() external view returns (Trait memory);
+    function getGogglesesTrait() external view returns (Trait memory);
     function getMouthsTrait() external view returns (Trait memory);
     function getTeethsTrait() external view returns (Trait memory);
     function getLipsesTrait() external view returns (Trait memory);

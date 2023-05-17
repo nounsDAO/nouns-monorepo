@@ -100,6 +100,8 @@ async function main() {
     // ------------------
 
     const { parts } = getPunkData(seed)
+    console.log(seed)
+    console.log(parts)
     const image = buildSVG(parts, data.palette)
 
     const formattedI = i.toString().padStart(5, "0")

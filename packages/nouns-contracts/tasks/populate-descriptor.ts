@@ -26,7 +26,7 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and Pu
     const descriptorContract = descriptorFactory.attach(nDescriptor);
 
     const { /*bgcolors, */palette, images } = ImageData;
-    const { types, necks, cheekses, faces, beards, mouths, earses, hats, hairs, teeths, lipses, emotions, eyeses, glasseses, noses } = images;
+    const { types, necks, cheekses, faces, beards, mouths, earses, hats, hairs, teeths, lipses, emotions, eyeses, glasseses, goggleses, noses } = images;
 
     const typesPage = dataToDescriptorInput(types.map(({ data }) => data));
     const necksPage = dataToDescriptorInput(necks.map(({ data }) => data));
@@ -42,6 +42,7 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and Pu
     const emotionsPage = dataToDescriptorInput(emotions.map(({ data }) => data));
     const eyesesPage = dataToDescriptorInput(eyeses.map(({ data }) => data));
     const glassesesPage = dataToDescriptorInput(glasseses.map(({ data }) => data));
+    const gogglesesPage = dataToDescriptorInput(goggleses.map(({ data }) => data));
     const nosesPage = dataToDescriptorInput(noses.map(({ data }) => data));
 
 //    await descriptorContract.addManyBackgrounds(bgcolors);
@@ -129,6 +130,12 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and Pu
       glassesesPage.encodedCompressed,
       glassesesPage.originalLength,
       glassesesPage.itemCount,
+      options,
+    );
+    await descriptorContract.addGoggleses(
+      gogglesesPage.encodedCompressed,
+      gogglesesPage.originalLength,
+      gogglesesPage.itemCount,
       options,
     );
     await descriptorContract.addNoses(

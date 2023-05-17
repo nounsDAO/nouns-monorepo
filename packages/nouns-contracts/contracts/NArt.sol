@@ -40,6 +40,7 @@ contract NArt is IArt {
     Trait public beardsTrait;
     Trait public eyesesTrait;
     Trait public glassesesTrait;
+    Trait public gogglesesTrait;
     Trait public mouthsTrait;
     Trait public teethsTrait;
     Trait public lipsesTrait;
@@ -110,6 +111,9 @@ contract NArt is IArt {
     }
     function getGlassesesTrait() external view override returns (Trait memory) {
         return glassesesTrait;
+    }
+    function getGogglesesTrait() external view override returns (Trait memory) {
+        return gogglesesTrait;
     }
     function getMouthsTrait() external view override returns (Trait memory) {
         return mouthsTrait;
@@ -241,6 +245,15 @@ contract NArt is IArt {
         addPage(glassesesTrait, encodedCompressed, decompressedLength, imageCount);
 
         emit GlassesesAdded(imageCount);
+    }
+    function addGoggleses(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyDescriptor {
+        addPage(gogglesesTrait, encodedCompressed, decompressedLength, imageCount);
+
+        emit GogglesesAdded(imageCount);
     }
     function addMouths(
         bytes calldata encodedCompressed,
@@ -402,6 +415,15 @@ contract NArt is IArt {
 
         emit GlassesesAdded(imageCount);
     }
+    function addGogglesesFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyDescriptor {
+        addPage(gogglesesTrait, pointer, decompressedLength, imageCount);
+
+        emit GogglesesAdded(imageCount);
+    }
     function addMouthsFromPointer(
         address pointer,
         uint80 decompressedLength,
@@ -511,6 +533,9 @@ contract NArt is IArt {
     }
     function glasseses(uint256 index) public view override returns (bytes memory) {
         return imageByIndex(glassesesTrait, index);
+    }
+    function goggleses(uint256 index) public view override returns (bytes memory) {
+        return imageByIndex(gogglesesTrait, index);
     }
     function mouths(uint256 index) public view override returns (bytes memory) {
         return imageByIndex(mouthsTrait, index);

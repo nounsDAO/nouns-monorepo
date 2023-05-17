@@ -175,6 +175,19 @@
         "type": "uint16"
       }
     ],
+    "name": "GogglesesAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "count",
+        "type": "uint16"
+      }
+    ],
     "name": "HairsAdded",
     "type": "event"
   },
@@ -619,6 +632,52 @@
       }
     ],
     "name": "addGlassesesFromPointer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "encodedCompressed",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addGoggleses",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "pointer",
+        "type": "address"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addGogglesesFromPointer",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1492,6 +1551,48 @@
   },
   {
     "inputs": [],
+    "name": "getGogglesesTrait",
+    "outputs": [
+      {
+        "components": [
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "imageCount",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint80",
+                "name": "decompressedLength",
+                "type": "uint80"
+              },
+              {
+                "internalType": "address",
+                "name": "pointer",
+                "type": "address"
+              }
+            ],
+            "internalType": "struct IArt.NArtStoragePage[]",
+            "name": "storagePages",
+            "type": "tuple[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "storedImagesCount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct IArt.Trait",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "getHairsTrait",
     "outputs": [
       {
@@ -1848,6 +1949,38 @@
   {
     "inputs": [],
     "name": "glassesesTrait",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "storedImagesCount",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "goggleses",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "gogglesesTrait",
     "outputs": [
       {
         "internalType": "uint256",
