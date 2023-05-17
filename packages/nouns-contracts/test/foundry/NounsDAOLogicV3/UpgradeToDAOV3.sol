@@ -182,6 +182,22 @@ contract UpgradeToDAOV3Test is DeployUtils {
         assertEq(NewTimelockMock(payable(address(daoProxy.timelock()))).banner(), 'NewTimelockMock');
     }
 
+    function test_daoCanBeUpgradedAfterUpgradeToV3() public {
+        upgradeToV3();
+
+        targets = [address(daoProxy)];
+        values = [0];
+        signatures = ['_setImplementation(address)'];
+        calldatas = [abi.encode(address(1234))];
+        vm.prank(proposer);
+        uint256 proposalId = daoProxy.propose(targets, values, signatures, calldatas, 'upgrade to 1234');
+
+        rollAndCastVote(proposer, proposalId, 1);
+        queueAndExecute(proposalId);
+
+        assertEq(daoProxy.implementation(), address(1234));
+    }
+
     function upgradeToV3() internal returns (address) {
         (NounsDAOExecutorV2 timelockV2, address timelockV2Impl) = deployAndInitTimelockV2();
         uint256 proposalId = proposeToUpgradeToDAOV3(
@@ -277,8 +293,8 @@ contract UpgradeToDAOV3Test is DeployUtils {
         i++;
         targets[i] = address(daoProxy);
         values[i] = 0;
-        signatures[i] = '_setTimelocks(address,address)';
-        calldatas[i] = abi.encode(timelockV2, timelockV1_);
+        signatures[i] = '_setTimelocksAndAdmin(address,address,address)';
+        calldatas[i] = abi.encode(timelockV2, timelockV1_, timelockV2);
 
         vm.prank(proposer);
         proposalId = daoProxy.propose(targets, values, signatures, calldatas, 'upgrade to v3');

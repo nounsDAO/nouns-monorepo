@@ -699,8 +699,12 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
         ds._setForkThresholdBPS(forkThresholdBPS_);
     }
 
-    function _setTimelocks(address newTimelock, address newTimelockV1) external {
-        ds._setTimelocks(newTimelock, newTimelockV1);
+    function _setTimelocksAndAdmin(
+        address newTimelock,
+        address newTimelockV1,
+        address newAdmin
+    ) external {
+        ds._setTimelocksAndAdmin(newTimelock, newTimelockV1, newAdmin);
     }
 
     /**

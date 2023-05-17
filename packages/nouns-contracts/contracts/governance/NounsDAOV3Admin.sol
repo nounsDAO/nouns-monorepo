@@ -94,7 +94,7 @@ library NounsDAOV3Admin {
 
     event ForkThresholdSet(uint256 oldForkThreshold, uint256 newForkThreshold);
 
-    event TimelocksSet(address timelock, address timelockV1);
+    event TimelocksAndAdminSet(address timelock, address timelockV1, address admin);
 
     /// @notice The minimum setable proposal threshold
     uint256 public constant MIN_PROPOSAL_THRESHOLD_BPS = 1; // 1 basis point or 0.01%
@@ -522,15 +522,17 @@ library NounsDAOV3Admin {
         ds.forkThresholdBPS = newForkThresholdBPS;
     }
 
-    function _setTimelocks(
+    function _setTimelocksAndAdmin(
         NounsDAOStorageV3.StorageV3 storage ds,
         address timelock,
-        address timelockV1
+        address timelockV1,
+        address admin
     ) external onlyAdmin(ds) {
         ds.timelock = INounsDAOExecutorV2(timelock);
         ds.timelockV1 = INounsDAOExecutor(timelockV1);
+        ds.admin = admin;
 
-        emit TimelocksSet(timelock, timelockV1);
+        emit TimelocksAndAdminSet(timelock, timelockV1, admin);
     }
 
     function _writeQuorumParamsCheckpoint(

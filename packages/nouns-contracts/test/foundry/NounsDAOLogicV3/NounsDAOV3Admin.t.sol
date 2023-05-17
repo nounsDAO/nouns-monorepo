@@ -4,6 +4,7 @@ pragma solidity ^0.8.15;
 import 'forge-std/Test.sol';
 import { NounsDAOLogicV3BaseTest } from './NounsDAOLogicV3BaseTest.sol';
 import { NounsDAOV3Admin } from '../../../contracts/governance/NounsDAOV3Admin.sol';
+import { NounsDAOProxy } from '../../../contracts/governance/NounsDAOProxy.sol';
 
 contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
     event ForkPeriodSet(uint256 oldForkPeriod, uint256 newForkPeriod);
@@ -82,14 +83,15 @@ contract NounsDAOLogicV3AdminTest is NounsDAOLogicV3BaseTest {
 
     function test_setTimelocks_onlyAdmin() public {
         vm.expectRevert(NounsDAOV3Admin.AdminOnly.selector);
-        dao._setTimelocks(address(1), address(2));
+        dao._setTimelocksAndAdmin(address(1), address(2), address(3));
     }
 
     function test_setTimelocks_works() public {
         vm.prank(address(dao.timelock()));
-        dao._setTimelocks(address(1), address(2));
+        dao._setTimelocksAndAdmin(address(1), address(2), address(3));
 
         assertEq(address(dao.timelock()), address(1));
         assertEq(address(dao.timelockV1()), address(2));
+        assertEq(NounsDAOProxy(payable(address(dao))).admin(), address(3));
     }
 }
