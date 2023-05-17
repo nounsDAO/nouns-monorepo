@@ -5,7 +5,7 @@ task('create-proposal', 'Create a governance proposal')
   .addOptionalParam(
     'nDaoProxy',
     'The `NDAOProxy` contract address',
-    '0x610178dA211FEF7D417bC0e6FeD39F05609AD788',
+    '0x959922bE3CAee4b8Cd9a407cc3ac1C251C2007B1',
     types.string,
   )
   .setAction(async ({ nDaoProxy }, { ethers }) => {

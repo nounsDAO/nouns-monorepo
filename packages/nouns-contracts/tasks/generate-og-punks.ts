@@ -38,7 +38,7 @@ task("generate-og-punks", "Generate images of OG Punks with Punk-2 contracts")
     .addOptionalParam(
         'nToken',
         'The `NToken` contract address',
-        '0x8A791620dd6260079BF849Dc5567aDC3F2FdC318',
+        '0x610178dA211FEF7D417bC0e6FeD39F05609AD788',
         types.string,
     )
     .setAction(async ({ nToken }, { ethers, run }) => {

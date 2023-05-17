@@ -41,7 +41,7 @@ contract NDAOProxy is NDAOProxyStorage, NDAOEvents {
     constructor(
         address timelock_,
         address npunks_,
-        address cryptopunks_,
+        address cryptopunksVote_,
         address vetoer_,
         address admin_,
         address implementation_,
@@ -59,7 +59,7 @@ contract NDAOProxy is NDAOProxyStorage, NDAOEvents {
                 'initialize(address,address,address,address,uint256,uint256,uint256,uint256)',
                 timelock_,
                 npunks_,
-                cryptopunks_,
+                cryptopunksVote_,
                 vetoer_,
                 votingPeriod_,
                 votingDelay_,

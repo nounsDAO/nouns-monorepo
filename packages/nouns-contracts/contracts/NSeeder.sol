@@ -63,8 +63,6 @@ contract NSeeder is ISeeder, Ownable {
             }
             tmp >>= 24;
         }
-        uint256 accCounts = accCountByType[seed.punkType];
-        assert(accCounts > 0);
 
         // Pick up random skin tone
         partRandom = uint24(pseudorandomness >> 24);
@@ -91,40 +89,78 @@ contract NSeeder is ISeeder, Ownable {
 
         // Pick random values for accessories
         pseudorandomness >>= 72;
-        uint256[] memory selectedRandomness = new uint256[](accTypeCount);
-        tmp = 0; // selections counter
-        unchecked {
-            for (uint256 i = 0; i < accTypeCount; i ++) {
-                if ((accCounts >> (i * 8)) & 0xff > 0) {
-                    selectedRandomness[i] = uint16((pseudorandomness >> tmp) % (((accCounts >> (i * 8)) & 0xff) * 1000 - 1) + 1);
-                    tmp += 16;
-                }
-            }
-        }
-
-        pseudorandomness >>= curAccCount * 16;
+        uint256 accCounts = accCountByType[seed.punkType];
+        assert(accCounts > 0);
         seed.accessories = new Accessory[](curAccCount);
-
-        uint256 usedGroupFlags = 0;
+        uint256 remainingAccCount = 0;
+        for (uint256 i = 0; i < accTypeCount; i ++) {
+            remainingAccCount += (accCounts >> (i * 8)) & 0xff;
+        }
         for (uint256 i = 0; i < curAccCount; i ++) {
-            uint256 accType = 0;
-            uint256 maxValue = 0;
+            // just in case
+            if (remainingAccCount == 0) {
+                break;
+            }
+            uint256 accSelection = pseudorandomness % remainingAccCount;
+            pseudorandomness >>= 16;
             for (uint j = 0; j < accTypeCount; j ++) {
-                if (usedGroupFlags & (1 << accExclusiveGroupMapping[j]) > 0) continue;
-
-                if (maxValue < selectedRandomness[j]) {
-                    maxValue = selectedRandomness[j];
-                    accType = j;
+                // we loop until accSelection overflow, and it WILL overflow
+                unchecked {
+                    accSelection -= (accCounts >> (j * 8)) & 0xff;
+                }
+                if (accSelection > remainingAccCount) {
+                    seed.accessories[i] = Accessory({
+                        accType: uint16(j),
+                        accId: uint16(accIdByType[seed.punkType][j][pseudorandomness % ((accCounts >> (j * 8)) & 0xff)])
+                    });
+                    pseudorandomness >>= 8;
+                    for (uint256 k = 0; k < accTypeCount; k ++) {
+                        if (accExclusiveGroupMapping[j] == accExclusiveGroupMapping[k]) {
+                            remainingAccCount -= (accCounts >> (k * 8)) & 0xff;
+                            accCounts &= (0xff << (k * 8)) ^ 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff;
+                        }
+                    }
+                    break;
                 }
             }
-
-            uint256 accRand = uint8(pseudorandomness >> (i * 8)) % ((accCounts >> (accType * 8)) & 0xff);
-            usedGroupFlags |= 1 << accExclusiveGroupMapping[accType];
-            seed.accessories[i] = Accessory({
-                accType: uint16(accType),
-                accId: uint16(accIdByType[seed.punkType][accType][accRand])
-            });
         }
+
+//        // Pick random values for accessories
+//        pseudorandomness >>= 72;
+//        uint256[] memory selectedRandomness = new uint256[](accTypeCount);
+//        tmp = 0; // selections counter
+//        unchecked {
+//            for (uint256 i = 0; i < accTypeCount; i ++) {
+//                if ((accCounts >> (i * 8)) & 0xff > 0) {
+//                    selectedRandomness[i] = uint16((pseudorandomness >> tmp) % (((accCounts >> (i * 8)) & 0xff) * 1000 - 1) + 1);
+//                    tmp += 16;
+//                }
+//            }
+//        }
+//
+//        pseudorandomness >>= curAccCount * 16;
+//        seed.accessories = new Accessory[](curAccCount);
+//
+//        uint256 usedGroupFlags = 0;
+//        for (uint256 i = 0; i < curAccCount; i ++) {
+//            uint256 accType = 0;
+//            uint256 maxValue = 0;
+//            for (uint j = 0; j < accTypeCount; j ++) {
+//                if (usedGroupFlags & (1 << accExclusiveGroupMapping[j]) > 0) continue;
+//
+//                if (maxValue < selectedRandomness[j]) {
+//                    maxValue = selectedRandomness[j];
+//                    accType = j;
+//                }
+//            }
+//
+//            uint256 accRand = uint8(pseudorandomness >> (i * 8)) % ((accCounts >> (accType * 8)) & 0xff);
+//            usedGroupFlags |= 1 << accExclusiveGroupMapping[accType];
+//            seed.accessories[i] = Accessory({
+//                accType: uint16(accType),
+//                accId: uint16(accIdByType[seed.punkType][accType][accRand])
+//            });
+//        }
 
         seed.accessories = _sortAccessories(seed.accessories);
         return seed;

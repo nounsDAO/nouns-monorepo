@@ -7,7 +7,7 @@ task('metadata-stats-2', 'Gather punks statistics from seeds')
   .addOptionalParam(
     'nToken',
     'The `NToken` contract address',
-    '0xa513e6e4b8f2a923d98304ec87f64353c4d5c853',
+    '0x610178dA211FEF7D417bC0e6FeD39F05609AD788',
     types.string,
   )
   .setAction(async ({ nToken }, { ethers }) => {
