@@ -4,7 +4,7 @@ import { Interface } from 'ethers/lib/utils';
 import { Contract as EthersContract } from 'ethers';
 import { ContractName } from './types';
 
-type LocalContractName = ContractName | 'WETH' | 'CryptopunksMock' | 'CryptopunksVote';
+type LocalContractName = ContractName | 'WETH' | 'CryptopunksMock' | 'WrappedPunk' |  'CryptopunksVote';
 
 interface Contract {
   args?: (string | number | (() => string | undefined))[];
@@ -38,9 +38,9 @@ task('deploy-local', 'Deploy contracts to hardhat')
 
     const proxyRegistryAddress = '0xa5409ec958c83c3f309868babaca7c86dcb077c1';
 
-    const N_ART_NONCE_OFFSET = 7;
-    const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 12;
-    const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 15;
+    const N_ART_NONCE_OFFSET = 8;
+    const AUCTION_HOUSE_PROXY_NONCE_OFFSET = 13;
+    const GOVERNOR_N_DELEGATOR_NONCE_OFFSET = 16;
 
     const [deployer] = await ethers.getSigners();
     const nonce = await deployer.getTransactionCount();
@@ -59,8 +59,11 @@ task('deploy-local', 'Deploy contracts to hardhat')
     const contracts: Record<LocalContractName, Contract> = {
       WETH: {},
       CryptopunksMock: {},
-      CryptopunksVote: {
+      WrappedPunk: {
         args: [() => contracts.CryptopunksMock.instance?.address]
+      },
+      CryptopunksVote: {
+        args: [() => contracts.CryptopunksMock.instance?.address, () => contracts.WrappedPunk.instance?.address]
       },
       NFTDescriptorV2: {},
       SVGRenderer: {},
@@ -116,7 +119,7 @@ task('deploy-local', 'Deploy contracts to hardhat')
         args: [
           () => contracts.NDAOExecutor.instance?.address,
           () => contracts.NToken.instance?.address,
-          () => contracts.CryptopunksMock.instance?.address,
+          () => contracts.CryptopunksVote.instance?.address,
           args.punkersdao || deployer.address,
           () => contracts.NDAOExecutor.instance?.address,
           () => contracts.NDAOLogicV1.instance?.address,
