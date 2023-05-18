@@ -154,13 +154,8 @@ library NounsDAOV3Proposals {
         checkProposalTxs(txs);
         checkNoActiveProp(ds, msg.sender);
 
-        ds.proposalCount++;
-        NounsDAOStorageV3.Proposal storage newProposal = createNewProposal(
-            ds,
-            ds.proposalCount,
-            proposalThreshold_,
-            txs
-        );
+        uint256 proposalId = ds.proposalCount = ds.proposalCount + 1;
+        NounsDAOStorageV3.Proposal storage newProposal = createNewProposal(ds, proposalId, proposalThreshold_, txs);
         ds.latestProposalIds[newProposal.proposer] = newProposal.id;
 
         emitNewPropEvents(newProposal, new address[](0), ds.minQuorumVotes(), txs, description);
