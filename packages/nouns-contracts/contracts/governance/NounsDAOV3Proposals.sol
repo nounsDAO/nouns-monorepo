@@ -754,7 +754,7 @@ library NounsDAOV3Proposals {
         uint256 adjustedTotalSupply,
         ProposalTxs memory txs
     ) internal returns (NounsDAOStorageV3.Proposal storage newProposal) {
-        uint256 updatePeriodEndBlock = block.number + ds.proposalUpdatablePeriodInBlocks;
+        uint64 updatePeriodEndBlock = uint64(block.number + ds.proposalUpdatablePeriodInBlocks);
         uint256 startBlock = updatePeriodEndBlock + ds.votingDelay;
         uint256 endBlock = startBlock + ds.votingPeriod;
 
