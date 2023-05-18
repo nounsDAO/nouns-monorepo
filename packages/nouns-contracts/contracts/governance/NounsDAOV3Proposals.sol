@@ -167,9 +167,9 @@ library NounsDAOV3Proposals {
             adjustedTotalSupply,
             txs
         );
-        ds.latestProposalIds[newProposal.proposer] = newProposal.id;
+        ds.latestProposalIds[msg.sender] = proposalId;
 
-        emitNewPropEvents(newProposal, new address[](0), ds.minQuorumVotes(), txs, description);
+        emitNewPropEvents(newProposal, new address[](0), ds.minQuorumVotes(adjustedTotalSupply), txs, description);
 
         return newProposal.id;
     }
@@ -199,26 +199,16 @@ library NounsDAOV3Proposals {
         checkProposalTxs(txs);
         uint256 proposalId = ds.proposalCount = ds.proposalCount + 1;
 
-        bytes memory proposalEncodeData = calcProposalEncodeData(msg.sender, txs, description);
-
-        uint256 votes;
-        address[] memory signers = new address[](proposerSignatures.length);
-        for (uint256 i = 0; i < proposerSignatures.length; ++i) {
-            verifyProposalSignature(ds, proposalEncodeData, proposerSignatures[i], PROPOSAL_TYPEHASH);
-            address signer = signers[i] = proposerSignatures[i].signer;
-
-            checkNoActiveProp(ds, signer);
-            ds.latestProposalIds[signer] = proposalId;
-            votes += ds.nouns.getPriorVotes(signer, block.number - 1);
-        }
-
-        checkNoActiveProp(ds, msg.sender);
-        ds.latestProposalIds[msg.sender] = proposalId;
-        votes += ds.nouns.getPriorVotes(msg.sender, block.number - 1);
+        (uint256 votes, address[] memory signers) = verifySignersCanBackThisProposalAndCountTheirVotes(
+            ds,
+            proposerSignatures,
+            txs,
+            description,
+            proposalId
+        );
 
         uint256 adjustedTotalSupply = ds.adjustedTotalSupply();
         uint256 propThreshold = checkPropThreshold(ds, votes, adjustedTotalSupply);
-
         NounsDAOStorageV3.Proposal storage newProposal = createNewProposal(
             ds,
             proposalId,
@@ -228,9 +218,34 @@ library NounsDAOV3Proposals {
         );
         newProposal.signers = signers;
 
-        emitNewPropEvents(newProposal, signers, ds.minQuorumVotes(), txs, description);
+        emitNewPropEvents(newProposal, signers, ds.minQuorumVotes(adjustedTotalSupply), txs, description);
 
         return proposalId;
+    }
+
+    function verifySignersCanBackThisProposalAndCountTheirVotes(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        NounsDAOStorageV3.ProposerSignature[] memory proposerSignatures,
+        ProposalTxs memory txs,
+        string memory description,
+        uint256 proposalId
+    ) internal returns (uint256 votes, address[] memory signers) {
+        NounsTokenLike nouns = ds.nouns;
+        bytes memory proposalEncodeData = calcProposalEncodeData(msg.sender, txs, description);
+
+        signers = new address[](proposerSignatures.length);
+        for (uint256 i = 0; i < proposerSignatures.length; ++i) {
+            verifyProposalSignature(ds, proposalEncodeData, proposerSignatures[i], PROPOSAL_TYPEHASH);
+            address signer = signers[i] = proposerSignatures[i].signer;
+
+            checkNoActiveProp(ds, signer);
+            ds.latestProposalIds[signer] = proposalId;
+            votes += nouns.getPriorVotes(signer, block.number - 1);
+        }
+
+        checkNoActiveProp(ds, msg.sender);
+        ds.latestProposalIds[msg.sender] = proposalId;
+        votes += nouns.getPriorVotes(msg.sender, block.number - 1);
     }
 
     function cancelSig(NounsDAOStorageV3.StorageV3 storage ds, bytes calldata sig) external {

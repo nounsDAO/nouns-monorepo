@@ -756,14 +756,14 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * @notice Current min quorum votes using Noun total supply
      */
     function minQuorumVotes() public view returns (uint256) {
-        return ds.minQuorumVotes();
+        return ds.minQuorumVotes(ds.adjustedTotalSupply());
     }
 
     /**
      * @notice Current max quorum votes using Noun total supply
      */
     function maxQuorumVotes() public view returns (uint256) {
-        return ds.maxQuorumVotes();
+        return ds.maxQuorumVotes(ds.adjustedTotalSupply());
     }
 
     /**
