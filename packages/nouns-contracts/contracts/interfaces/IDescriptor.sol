@@ -38,6 +38,7 @@ interface IDescriptor is IDescriptorMinimal {
 
     function punkTypes(uint256 index) external view returns (bytes memory);
     function hats(uint256 index) external view returns (bytes memory);
+    function helmets(uint256 index) external view returns (bytes memory);
     function hairs(uint256 index) external view returns (bytes memory);
     function beards(uint256 index) external view returns (bytes memory);
     function eyeses(uint256 index) external view returns (bytes memory);
@@ -57,6 +58,7 @@ interface IDescriptor is IDescriptorMinimal {
 
     function hatCount() external view override returns (uint256);
     function hairCount() external view override returns (uint256);
+    function helmetCount() external view override returns (uint256);
     function beardCount() external view override returns (uint256);
     function eyesCount() external view override returns (uint256);
     function glassesCount() external view override returns (uint256);
@@ -77,6 +79,7 @@ interface IDescriptor is IDescriptorMinimal {
 
     function addManyPunkTypes(bytes[] calldata punkTypes) external;
     function addManyHats(bytes[] calldata hats) external;
+    function addManyHelmets(bytes[] calldata helmets) external;
     function addManyHairs(bytes[] calldata hairs) external;
     function addManyBeards(bytes[] calldata beards) external;
     function addManyEyeses(bytes[] calldata eyeses) external;
@@ -98,6 +101,7 @@ interface IDescriptor is IDescriptorMinimal {
 
     function addPunkType(bytes calldata punkType) external;
     function addHat(bytes calldata hat) external;
+    function addHelmet(bytes calldata helmet) external;
     function addHair(bytes calldata hair) external;
     function addBeard(bytes calldata beard) external;
     function addEyes(bytes calldata eyes) external;

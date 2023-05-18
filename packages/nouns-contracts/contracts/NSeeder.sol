@@ -133,7 +133,7 @@ contract NSeeder is ISeeder, Ownable {
     function _sortAccessories(Accessory[] memory accessories) internal pure returns (Accessory[] memory) {
         // all operations are safe
         unchecked {
-            uint256[] memory accessoriesMap = new uint256[](15);
+            uint256[] memory accessoriesMap = new uint256[](16);
             for (uint256 i = 0 ; i < accessories.length; i ++) {
                 // just check
                 assert(accessoriesMap[accessories[i].accType] == 0);
@@ -143,7 +143,7 @@ contract NSeeder is ISeeder, Ownable {
 
             Accessory[] memory sortedAccessories = new Accessory[](accessories.length);
             uint256 j = 0;
-            for (uint256 i = 0 ; i < 15 ; i ++) {
+            for (uint256 i = 0 ; i < 16 ; i ++) {
                 if (accessoriesMap[i] != 0) {
                     sortedAccessories[j] = Accessory(uint16(i), uint16(accessoriesMap[i] - 10_000));
                     j++;
@@ -192,12 +192,12 @@ contract NSeeder is ISeeder, Ownable {
         delete accCountByType;
         require(counts.length > 0, "NSeeder: B");
         uint256 count = counts[0].length;
-        require(count < 32, "NSeeder: C");
+        require(count < 28, "NSeeder: C"); // beacuse of seedHash calculation
         for(uint256 k = 0; k < counts.length; k ++) {
             require(counts[k].length == count, "NSeeder: D");
             uint256 accCounts = 0;
             for(uint256 i = 0; i < counts[k].length; i ++) {
-                require(counts[k][i] < 256, "NSeeder: E");
+                require(counts[k][i] < 255, "NSeeder: E"); // 256 - 1, because of seedHash calculation
                 accCounts |= (1 << (i * 8)) * counts[k][i];
             }
             accCountByType.push(accCounts);

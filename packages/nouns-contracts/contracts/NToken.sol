@@ -262,7 +262,7 @@ contract NToken is IToken, Ownable, ERC721Checkpointable {
      * Public for testing purposes.
      * Accessories are assumed to be sorted by accType!
      * This is not hash actually, rather encoding.
-     * It is assumed that there is no more than 14 accessories, accType and accId does not exceed 255.
+     * It is assumed that there is no more than 14 accessories on a punk, accType and accId does not exceed 255.
      */
     function calculateSeedHash(ISeeder.Seed memory seed) public pure returns (bytes32) {
         unchecked {

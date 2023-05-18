@@ -36,6 +36,7 @@ contract NArt is IArt {
 
     Trait public punkTypesTrait;
     Trait public hatsTrait;
+    Trait public helmetsTrait;
     Trait public hairsTrait;
     Trait public beardsTrait;
     Trait public eyesesTrait;
@@ -99,6 +100,9 @@ contract NArt is IArt {
     }
     function getHatsTrait() external view override returns (Trait memory) {
         return hatsTrait;
+    }
+    function getHelmetsTrait() external view override returns (Trait memory) {
+        return helmetsTrait;
     }
     function getHairsTrait() external view override returns (Trait memory) {
         return hairsTrait;
@@ -209,6 +213,15 @@ contract NArt is IArt {
         addPage(hatsTrait, encodedCompressed, decompressedLength, imageCount);
 
         emit HatsAdded(imageCount);
+    }
+    function addHelmets(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyDescriptor {
+        addPage(helmetsTrait, encodedCompressed, decompressedLength, imageCount);
+
+        emit HelmetsAdded(imageCount);
     }
     function addHairs(
         bytes calldata encodedCompressed,
@@ -379,6 +392,15 @@ contract NArt is IArt {
 
         emit HatsAdded(imageCount);
     }
+    function addHelmetsFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyDescriptor {
+        addPage(helmetsTrait, pointer, decompressedLength, imageCount);
+
+        emit HelmetsAdded(imageCount);
+    }
     function addHairsFromPointer(
         address pointer,
         uint80 decompressedLength,
@@ -521,6 +543,9 @@ contract NArt is IArt {
     }
     function hats(uint256 index) public view override returns (bytes memory) {
         return imageByIndex(hatsTrait, index);
+    }
+    function helmets(uint256 index) public view override returns (bytes memory) {
+        return imageByIndex(helmetsTrait, index);
     }
     function hairs(uint256 index) public view override returns (bytes memory) {
         return imageByIndex(hairsTrait, index);

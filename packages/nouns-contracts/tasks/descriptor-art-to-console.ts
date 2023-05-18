@@ -35,7 +35,7 @@ task(
   )
   .setAction(async ({ count, start, exportPath }, { ethers }) => {
     const { palette, images } = ImageData;
-    let { types, necks, cheekses, faces, beards, mouths, earses, hats, hairs, teeths, lipses, emotions, eyeses, glasseses, goggleses, noses } = images;
+    let { types, necks, cheekses, faces, beards, mouths, earses, hats, helmets, hairs, teeths, lipses, emotions, eyeses, glasseses, goggleses, noses } = images;
 
     if (count !== undefined) {
       start = start === undefined ? 0 : start;
@@ -48,6 +48,7 @@ task(
       mouths = mouths.slice(start, count + start);
       earses = earses.slice(start, count + start);
       hats = hats.slice(start, count + start);
+      helmets = helmets.slice(start, count + start);
       hairs = hairs.slice(start, count + start);
       teeths = teeths.slice(start, count + start);
       lipses = lipses.slice(start, count + start);
@@ -66,6 +67,7 @@ task(
     const mouthsPage = dataToDescriptorInput(mouths.map(({ data }) => data));
     const earsesPage = dataToDescriptorInput(earses.map(({ data }) => data));
     const hatsPage = dataToDescriptorInput(hats.map(({ data }) => data));
+    const helmetsPage = dataToDescriptorInput(helmets.map(({ data }) => data));
     const hairsPage = dataToDescriptorInput(hairs.map(({ data }) => data));
     const teethsPage = dataToDescriptorInput(teeths.map(({ data }) => data));
     const lipsesPage = dataToDescriptorInput(lipses.map(({ data }) => data));
@@ -132,6 +134,12 @@ task(
     console.log(`hatsLength: ${hatsPage.originalLength}\n`);
     console.log(`hats count: ${hatsPage.itemCount}\n`);
     saveToFileAbiEncoded(path.join(exportPath, 'hatsPage.abi'), hatsPage);
+
+    console.log('=== HELMETS ===\n');
+    console.log(`helmetsCompressed: '${helmetsPage.encodedCompressed}'\n`);
+    console.log(`helmetsLength: ${helmetsPage.originalLength}\n`);
+    console.log(`helmets count: ${helmetsPage.itemCount}\n`);
+    saveToFileAbiEncoded(path.join(exportPath, 'helmetsPage.abi'), helmetsPage);
 
     console.log('=== HAIRS ===\n');
     console.log(`hairsCompressed: '${hairsPage.encodedCompressed}'\n`);

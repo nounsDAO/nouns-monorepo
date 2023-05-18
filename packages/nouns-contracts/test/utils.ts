@@ -143,7 +143,7 @@ export const deployWeth = async (deployer?: SignerWithAddress): Promise<WETH> =>
 
 export const populateDescriptor = async (nDescriptor: NDescriptor): Promise<void> => {
   const { /*bgcolors, */palette, images } = ImageDataV2;
-  const { types, necks, cheekses, faces, beards, mouths, earses, hats, hairs, teeths, lipses, emotions, eyeses, glasseses, goggleses, noses } = images;
+  const { types, necks, cheekses, faces, beards, mouths, earses, hats, helmets, hairs, teeths, lipses, emotions, eyeses, glasseses, goggleses, noses } = images;
 
   // await nDescriptor.addManyBackgrounds(bgcolors);
   await nDescriptor.addManyColorsToPalette(0, palette);
@@ -158,6 +158,7 @@ export const populateDescriptor = async (nDescriptor: NDescriptor): Promise<void
   await nDescriptor.addManyMouths(mouths.map(({ data }) => data));
   await nDescriptor.addManyEarses(earses.map(({ data }) => data));
   await nDescriptor.addManyHats(hats.map(({ data }) => data));
+  await nDescriptor.addManyHelmets(helmets.map(({ data }) => data));
   await nDescriptor.addManyHairs(hairs.map(({ data }) => data));
   await nDescriptor.addManyTeeths(teeths.map(({ data }) => data));
   await nDescriptor.addManyLipses(lipses.map(({ data }) => data));
@@ -170,7 +171,7 @@ export const populateDescriptor = async (nDescriptor: NDescriptor): Promise<void
 
 export const populateDescriptorV2 = async (nDescriptor: NDescriptorV2): Promise<void> => {
   const { /*bgcolors, */palette, images } = ImageDataV2;
-  const { types, necks, cheekses, faces, beards, mouths, earses, hats, hairs, teeths, lipses, emotions, eyeses, glasseses, goggleses, noses } = images;
+  const { types, necks, cheekses, faces, beards, mouths, earses, hats, helmets, hairs, teeths, lipses, emotions, eyeses, glasseses, goggleses, noses } = images;
 
   const typesPage = dataToDescriptorInput(types.map(({ data }) => data));
   const necksPage = dataToDescriptorInput(necks.map(({ data }) => data));
@@ -180,6 +181,7 @@ export const populateDescriptorV2 = async (nDescriptor: NDescriptorV2): Promise<
   const mouthsPage = dataToDescriptorInput(mouths.map(({ data }) => data));
   const earsesPage = dataToDescriptorInput(earses.map(({ data }) => data));
   const hatsPage = dataToDescriptorInput(hats.map(({ data }) => data));
+  const helmetsPage = dataToDescriptorInput(helmets.map(({ data }) => data));
   const hairsPage = dataToDescriptorInput(hairs.map(({ data }) => data));
   const teethsPage = dataToDescriptorInput(teeths.map(({ data }) => data));
   const lipsesPage = dataToDescriptorInput(lipses.map(({ data }) => data));
@@ -240,6 +242,12 @@ export const populateDescriptorV2 = async (nDescriptor: NDescriptorV2): Promise<
     hatsPage.encodedCompressed,
     hatsPage.originalLength,
     hatsPage.itemCount,
+    options,
+  );
+  await nDescriptor.addHelmets(
+    helmetsPage.encodedCompressed,
+    helmetsPage.originalLength,
+    helmetsPage.itemCount,
     options,
   );
   await nDescriptor.addHairs(

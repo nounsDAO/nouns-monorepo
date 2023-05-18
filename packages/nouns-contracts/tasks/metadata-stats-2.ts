@@ -45,7 +45,7 @@ task('metadata-stats-2', 'Gather punks statistics from seeds')
         console.log("skin tones per type", skins);
         console.log("accessories count per punk are: 0 accessories, 1 accessory, 2 accessories, ..., 7 accessories")
         console.log("accCount per type", accCount);
-        console.log("acc types are: neck, cheeks, face, lips, emotion, beard, teeth, ears, hat, hair, mouth, glasses, goggles, eyes, nose");
+        console.log("acc types are: neck, cheeks, face, lips, emotion, beard, teeth, ears, hat, helmet, hair, mouth, glasses, goggles, eyes, nose");
         console.log("accTypes per type", accTypes);
       }
     }
@@ -56,6 +56,6 @@ task('metadata-stats-2', 'Gather punks statistics from seeds')
     console.log("skin tones per type", skins);
     console.log("accessories count per punk are: 0 accessories, 1 accessory, 2 accessories, ..., 7 accessories")
     console.log("accCount per type", accCount);
-    console.log("acc types are: neck, cheeks, face, lips, emotion, beard, teeth, ears, hat, hair, mouth, glasses, goggles, eyes, nose");
+    console.log("acc types are: neck, cheeks, face, lips, emotion, beard, teeth, ears, hat, helmet, hair, mouth, glasses, goggles, eyes, nose");
     console.log("accTypes per type", accTypes);
   });

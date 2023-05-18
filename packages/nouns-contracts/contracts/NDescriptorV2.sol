@@ -52,7 +52,7 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
      * @notice Require that the parts have not been locked.
      */
     modifier whenPartsNotLocked() {
-        require(!arePartsLocked, 'Parts are locked');
+        require(!arePartsLocked, 'locked');
         _;
     }
 
@@ -114,6 +114,9 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
     }
     function hatCount() external view override returns (uint256) {
         return art.getHatsTrait().storedImagesCount;
+    }
+    function helmetCount() external view override returns (uint256) {
+        return art.getHelmetsTrait().storedImagesCount;
     }
     function hairCount() external view override returns (uint256) {
         return art.getHairsTrait().storedImagesCount;
@@ -206,6 +209,13 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
         uint16 imageCount
     ) external override onlyOwner whenPartsNotLocked {
         art.addHats(encodedCompressed, decompressedLength, imageCount);
+    }
+    function addHelmets(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyOwner whenPartsNotLocked {
+        art.addHelmets(encodedCompressed, decompressedLength, imageCount);
     }
     function addHairs(
         bytes calldata encodedCompressed,
@@ -342,6 +352,13 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
     ) external override onlyOwner whenPartsNotLocked {
         art.addHatsFromPointer(pointer, decompressedLength, imageCount);
     }
+    function addHelmetsFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external override onlyOwner whenPartsNotLocked {
+        art.addHelmetsFromPointer(pointer, decompressedLength, imageCount);
+    }
     function addHairsFromPointer(
         address pointer,
         uint80 decompressedLength,
@@ -460,6 +477,9 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
     }
     function hats(uint256 index) public view override returns (bytes memory) {
         return art.hats(index);
+    }
+    function helmets(uint256 index) public view override returns (bytes memory) {
+        return art.helmets(index);
     }
     function hairs(uint256 index) public view override returns (bytes memory) {
         return art.hairs(index);
@@ -615,7 +635,7 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
         accBuffer = art.punkTypes(punkTypeId);
         parts[0] = ISVGRenderer.Part({ image: accBuffer, palette: _getPalette(accBuffer) });
 
-        uint256[] memory sortedAccessories = new uint256[](15);
+        uint256[] memory sortedAccessories = new uint256[](16);
         for (uint256 i = 0 ; i < seed.accessories.length; i ++) {
             // 10_000 is a trick so filled entries are not zero
             unchecked {
@@ -624,7 +644,7 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
         }
 
         uint256 idx = 1; // starts from 1, 0 is taken by punkType
-        for(uint i = 0; i < 15; i ++) {
+        for(uint i = 0; i < 16; i ++) {
             if (sortedAccessories[i] > 0) {
                 // i is accType
                 uint256 accIdImage = sortedAccessories[i] % 10_000;
@@ -637,12 +657,13 @@ contract NDescriptorV2 is IDescriptorV2, Ownable {
                 else if(i == 6) accBuffer = art.beards(accIdImage);
                 else if(i == 7) accBuffer = art.earses(accIdImage);
                 else if(i == 8) accBuffer = art.hats(accIdImage);
-                else if(i == 9) accBuffer = art.hairs(accIdImage);
-                else if(i == 10) accBuffer = art.mouths(accIdImage);
-                else if(i == 11) accBuffer = art.glasseses(accIdImage);
-                else if(i == 12) accBuffer = art.goggleses(accIdImage);
-                else if(i == 13) accBuffer = art.eyeses(accIdImage);
-                else if(i == 14) accBuffer = art.noses(accIdImage);
+                else if(i == 9) accBuffer = art.helmets(accIdImage);
+                else if(i == 10) accBuffer = art.hairs(accIdImage);
+                else if(i == 11) accBuffer = art.mouths(accIdImage);
+                else if(i == 12) accBuffer = art.glasseses(accIdImage);
+                else if(i == 13) accBuffer = art.goggleses(accIdImage);
+                else if(i == 14) accBuffer = art.eyeses(accIdImage);
+                else if(i == 15) accBuffer = art.noses(accIdImage);
                 else revert();
                 parts[idx] = ISVGRenderer.Part({ image: accBuffer, palette: _getPalette(accBuffer) });
                 idx ++;

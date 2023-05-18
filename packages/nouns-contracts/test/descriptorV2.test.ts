@@ -27,6 +27,7 @@ describe('NDescriptorV2', () => {
     mouths: part,
     earses: part,
     hats: part,
+    helmets: part,
     hairs: part,
     teeths: part,
     lipses: part,
@@ -104,11 +105,11 @@ describe('NDescriptorV2', () => {
     console.log('Running... this may take a little while...');
 
     const { images } = ImageData;
-    const { types, necks, cheekses, faces, beards, mouths, earses, hats, hairs, teeths, lipses, emotions, eyeses, glasseses, goggleses, noses } = images;
-    const lengths = [ necks.length, cheekses.length, faces.length, beards.length, mouths.length, earses.length, hats.length, hairs.length, teeths.length, lipses.length, emotions.length, eyeses.length, glasseses.length, goggleses.length, noses.length ];
+    const { types, necks, cheekses, faces, beards, mouths, earses, hats, helmets, hairs, teeths, lipses, emotions, eyeses, glasseses, goggleses, noses } = images;
+    const lengths = [ necks.length, cheekses.length, faces.length, beards.length, mouths.length, earses.length, hats.length, helmets.length, hairs.length, teeths.length, lipses.length, emotions.length, eyeses.length, glasseses.length, goggleses.length, noses.length ];
     const punkTypes = [0,0,0,0,1,1,1,1,2,3,4];
     const skinTones = [0,1,2,3,0,1,2,3,4,5,6];
-    const max = Math.max(necks.length, cheekses.length, faces.length, beards.length, mouths.length, earses.length, hats.length, hairs.length, teeths.length, lipses.length, emotions.length, eyeses.length, glasseses.length, goggleses.length, noses.length );
+    const max = Math.max(necks.length, cheekses.length, faces.length, beards.length, mouths.length, earses.length, hats.length, helmets.length, hairs.length, teeths.length, lipses.length, emotions.length, eyeses.length, glasseses.length, goggleses.length, noses.length );
     for (let i = 0; i < max * 15; i++) {
       const type = i % types.length;
       const punkType = punkTypes[i];
