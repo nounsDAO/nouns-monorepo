@@ -29,9 +29,8 @@ contract NSeeder is ISeeder, Ownable {
     uint256 public cTypeProbability;
     uint256[] public cSkinProbability;
     uint256[] public cAccCountProbability;
-    uint256 accTypeCount;
-    mapping(uint256 => uint256) public accExclusiveGroupMapping; // i: acc index, group index
-    uint256[][] accExclusiveGroup; // i: group id, j: acc index in a group
+    uint256 public accTypeCount;
+    mapping(uint256 => uint256) public accExclusion; // i: acc index, excluded acc indexes as bitmap
 
     uint256[] accCountByType; // accessories count by punk type, acc type, joined with one byte chunks
 
@@ -99,6 +98,7 @@ contract NSeeder is ISeeder, Ownable {
         for (uint256 i = 0; i < curAccCount; i ++) {
             // just in case
             if (remainingAccCount == 0) {
+                // todo
                 break;
             }
             uint256 accSelection = pseudorandomness % remainingAccCount;
@@ -114,8 +114,9 @@ contract NSeeder is ISeeder, Ownable {
                         accId: uint16(accIdByType[seed.punkType][j][pseudorandomness % ((accCounts >> (j * 8)) & 0xff)])
                     });
                     pseudorandomness >>= 8;
+                    uint256 accExclusiveGroup = accExclusion[j];
                     for (uint256 k = 0; k < accTypeCount; k ++) {
-                        if (accExclusiveGroupMapping[j] == accExclusiveGroupMapping[k]) {
+                        if ((accExclusiveGroup >> k) & 1 == 1) {
                             remainingAccCount -= (accCounts >> (k * 8)) & 0xff;
                             accCounts &= (0xff << (k * 8)) ^ 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff;
                         }
@@ -176,14 +177,10 @@ contract NSeeder is ISeeder, Ownable {
 
     // group list
     // key: group, value: accessory type
-    function setExclusiveAcc(uint256 groupCount, uint256[] calldata exclusives) external onlyOwner {
-        require(groupCount < 256, "NSeeder: A");
-        delete accExclusiveGroup;
-        for(uint256 i = 0; i < groupCount; i ++)
-            accExclusiveGroup.push();
+    function setAccExclusion(uint256[] calldata _accExclusion) external onlyOwner {
+        require(_accExclusion.length == accTypeCount, "NSeeder: A");
         for(uint256 i = 0; i < accTypeCount; i ++) {
-            accExclusiveGroupMapping[i] = exclusives[i];
-            accExclusiveGroup[exclusives[i]].push(i);
+            accExclusion[i] = _accExclusion[i];
         }
     }
 

@@ -26,7 +26,20 @@
         "type": "uint256"
       }
     ],
-    "name": "accExclusiveGroupMapping",
+    "name": "accExclusion",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "accTypeCount",
     "outputs": [
       {
         "internalType": "uint256",
@@ -243,12 +256,12 @@
   {
     "inputs": [
       {
-        "internalType": "uint256[][][]",
-        "name": "accIds",
-        "type": "uint256[][][]"
+        "internalType": "uint256[]",
+        "name": "_accExclusion",
+        "type": "uint256[]"
       }
     ],
-    "name": "setAccIdByType",
+    "name": "setAccExclusion",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -256,17 +269,12 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "groupCount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "exclusives",
-        "type": "uint256[]"
+        "internalType": "uint256[][][]",
+        "name": "accIds",
+        "type": "uint256[][][]"
       }
     ],
-    "name": "setExclusiveAcc",
+    "name": "setAccIdByType",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
