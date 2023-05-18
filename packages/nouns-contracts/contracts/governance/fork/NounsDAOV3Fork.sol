@@ -15,7 +15,7 @@
 
 pragma solidity ^0.8.6;
 
-import { NounsDAOStorageV3, INounsDAOForkEscrow } from '../NounsDAOInterfaces.sol';
+import { NounsDAOStorageV3, INounsDAOForkEscrow, INounsDAOExecutorV2 } from '../NounsDAOInterfaces.sol';
 import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import { NounsTokenFork } from './newdao/token/NounsTokenFork.sol';
 
@@ -53,10 +53,11 @@ library NounsDAOV3Fork {
         string calldata reason
     ) external {
         if (isForkPeriodActive(ds)) revert ForkPeriodActive();
+        INounsDAOForkEscrow forkEscrow = ds.forkEscrow;
 
-        ds.forkEscrow.markOwner(msg.sender, tokenIds);
+        forkEscrow.markOwner(msg.sender, tokenIds);
         for (uint256 i = 0; i < tokenIds.length; i++) {
-            ds.nouns.transferFrom(msg.sender, address(ds.forkEscrow), tokenIds[i]);
+            ds.nouns.transferFrom(msg.sender, address(forkEscrow), tokenIds[i]);
         }
 
         emit EscrowedToFork(msg.sender, tokenIds, proposalIds, reason);
@@ -75,15 +76,16 @@ library NounsDAOV3Fork {
         returns (address forkTreasury, address forkToken)
     {
         if (isForkPeriodActive(ds)) revert ForkPeriodActive();
+        INounsDAOForkEscrow forkEscrow = ds.forkEscrow;
 
-        uint256 tokensInEscrow = ds.forkEscrow.numTokensInEscrow();
+        uint256 tokensInEscrow = forkEscrow.numTokensInEscrow();
         if (tokensInEscrow < forkThreshold(ds)) revert ForkThresholdNotMet();
 
         uint256 forkEndTimestamp = block.timestamp + ds.forkPeriod;
 
         (forkTreasury, forkToken) = ds.forkDAODeployer.deployForkDAO(forkEndTimestamp);
         sendProRataTreasury(ds, forkTreasury, tokensInEscrow, adjustedTotalSupply(ds));
-        uint32 forkId = ds.forkEscrow.closeEscrow();
+        uint32 forkId = forkEscrow.closeEscrow();
 
         ds.forkDAOTreasury = forkTreasury;
         ds.forkDAOToken = forkToken;
@@ -138,14 +140,16 @@ library NounsDAOV3Fork {
         uint256 tokenCount,
         uint256 totalSupply
     ) internal {
-        uint256 ethToSend = (address(ds.timelock).balance * tokenCount) / totalSupply;
+        INounsDAOExecutorV2 timelock = ds.timelock;
+        uint256 ethToSend = (address(timelock).balance * tokenCount) / totalSupply;
 
-        ds.timelock.sendETHToNewDAO(newDAOTreasury, ethToSend);
+        timelock.sendETHToNewDAO(newDAOTreasury, ethToSend);
 
-        for (uint256 i = 0; i < ds.erc20TokensToIncludeInFork.length; i++) {
+        uint256 erc20Count = ds.erc20TokensToIncludeInFork.length;
+        for (uint256 i = 0; i < erc20Count; ++i) {
             IERC20 erc20token = IERC20(ds.erc20TokensToIncludeInFork[i]);
-            uint256 tokensToSend = (erc20token.balanceOf(address(ds.timelock)) * tokenCount) / totalSupply;
-            ds.timelock.sendERC20ToNewDAO(newDAOTreasury, address(erc20token), tokensToSend);
+            uint256 tokensToSend = (erc20token.balanceOf(address(timelock)) * tokenCount) / totalSupply;
+            timelock.sendERC20ToNewDAO(newDAOTreasury, address(erc20token), tokensToSend);
         }
     }
 }
