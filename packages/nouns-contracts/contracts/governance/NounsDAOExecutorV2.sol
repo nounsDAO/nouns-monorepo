@@ -65,6 +65,8 @@ contract NounsDAOExecutorV2 is UUPSUpgradeable, Initializable {
         bytes data,
         uint256 eta
     );
+    event ETHSent(address indexed to, uint256 amount, bool success);
+    event ERC20Sent(address indexed to, address indexed erc20Token, uint256 amount, bool success);
 
     /// @dev increased grace period from 14 days to 21 days to allow more time in case of a forking period
     uint256 public constant GRACE_PERIOD = 21 days;
@@ -199,6 +201,8 @@ contract NounsDAOExecutorV2 is UUPSUpgradeable, Initializable {
         require(msg.sender == admin, 'NounsDAOExecutor::executeTransaction: Call must come from admin.');
 
         (success, ) = newDAOTreasury.call{ value: ethToSend }('');
+
+        emit ETHSent(newDAOTreasury, ethToSend, success);
     }
 
     function sendERC20ToNewDAO(
@@ -209,6 +213,8 @@ contract NounsDAOExecutorV2 is UUPSUpgradeable, Initializable {
         require(msg.sender == admin, 'NounsDAOExecutor::executeTransaction: Call must come from admin.');
 
         success = IERC20(erc20Token).transfer(newDAOTreasury, tokensToSend);
+
+        emit ERC20Sent(newDAOTreasury, erc20Token, tokensToSend, success);
     }
 
     /**

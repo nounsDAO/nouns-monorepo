@@ -197,7 +197,14 @@ contract DAOForkSignaledOverThresholdStateTest is DAOForkSignaledOverThresholdSt
         dao.joinFork(tokenIds);
     }
 
+    event ETHSent(address indexed to, uint256 amount, bool success);
+    event ERC20Sent(address indexed to, address indexed erc20Token, uint256 amount, bool success);
+
     function test_executeFork() public {
+        vm.expectEmit(true, true, true, true);
+        emit ETHSent(address(forkDAODeployer.mockTreasury()), 250 ether, true);
+        vm.expectEmit(true, true, true, true);
+        emit ERC20Sent(address(forkDAODeployer.mockTreasury()), address(erc20Mock), 75 ether, true);
         vm.expectEmit(true, true, true, true);
         emit NounsDAOV3Fork.ExecuteFork(
             0,
