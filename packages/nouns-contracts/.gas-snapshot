@@ -7,5 +7,5 @@ NounsDAOLogic_GasSnapshot_V3_propose:test_propose_longDescription() (gas: 571297
 NounsDAOLogic_GasSnapshot_V3_propose:test_propose_shortDescription() (gas: 437131)
 NounsDAOLogic_GasSnapshot_V3_vote:test_castVoteWithReason() (gas: 96210)
 NounsDAOLogic_GasSnapshot_V3_vote:test_castVote_against() (gas: 95134)
-NounsDAOLogic_GasSnapshot_V3_vote:test_castVote_lastMinuteFor() (gas: 137549)
+NounsDAOLogic_GasSnapshot_V3_vote:test_castVote_lastMinuteFor() (gas: 137459)
 NounsDAOLogic_GasSnapshot_V3_voteDuringObjectionPeriod:test_castVote_duringObjectionPeriod_against() (gas: 97034)

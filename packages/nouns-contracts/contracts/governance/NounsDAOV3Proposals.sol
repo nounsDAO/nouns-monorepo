@@ -665,7 +665,8 @@ library NounsDAOV3Proposals {
         view
         returns (bool)
     {
-        return proposal.forVotes <= proposal.againstVotes || proposal.forVotes < ds.quorumVotes(proposal.id);
+        uint256 forVotes = proposal.forVotes;
+        return forVotes <= proposal.againstVotes || forVotes < ds.quorumVotes(proposal.id);
     }
 
     function checkNoActiveProp(NounsDAOStorageV3.StorageV3 storage ds, address proposer) internal view {
