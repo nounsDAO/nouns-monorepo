@@ -223,62 +223,11 @@ library NounsDAOV3Proposals {
         return proposalId;
     }
 
-    function verifySignersCanBackThisProposalAndCountTheirVotes(
-        NounsDAOStorageV3.StorageV3 storage ds,
-        NounsDAOStorageV3.ProposerSignature[] memory proposerSignatures,
-        ProposalTxs memory txs,
-        string memory description,
-        uint256 proposalId
-    ) internal returns (uint256 votes, address[] memory signers) {
-        NounsTokenLike nouns = ds.nouns;
-        bytes memory proposalEncodeData = calcProposalEncodeData(msg.sender, txs, description);
-
-        signers = new address[](proposerSignatures.length);
-        for (uint256 i = 0; i < proposerSignatures.length; ++i) {
-            verifyProposalSignature(ds, proposalEncodeData, proposerSignatures[i], PROPOSAL_TYPEHASH);
-            address signer = signers[i] = proposerSignatures[i].signer;
-
-            checkNoActiveProp(ds, signer);
-            ds.latestProposalIds[signer] = proposalId;
-            votes += nouns.getPriorVotes(signer, block.number - 1);
-        }
-
-        checkNoActiveProp(ds, msg.sender);
-        ds.latestProposalIds[msg.sender] = proposalId;
-        votes += nouns.getPriorVotes(msg.sender, block.number - 1);
-    }
-
     function cancelSig(NounsDAOStorageV3.StorageV3 storage ds, bytes calldata sig) external {
         bytes32 sigHash = keccak256(sig);
         ds.cancelledSigs[msg.sender][sigHash] = true;
 
         emit SignatureCancelled(msg.sender, sig);
-    }
-
-    function calcProposalEncodeData(
-        address proposer,
-        ProposalTxs memory txs,
-        string memory description
-    ) internal pure returns (bytes memory) {
-        bytes32[] memory signatureHashes = new bytes32[](txs.signatures.length);
-        for (uint256 i = 0; i < txs.signatures.length; ++i) {
-            signatureHashes[i] = keccak256(bytes(txs.signatures[i]));
-        }
-
-        bytes32[] memory calldatasHashes = new bytes32[](txs.calldatas.length);
-        for (uint256 i = 0; i < txs.calldatas.length; ++i) {
-            calldatasHashes[i] = keccak256(txs.calldatas[i]);
-        }
-
-        return
-            abi.encode(
-                proposer,
-                keccak256(abi.encodePacked(txs.targets)),
-                keccak256(abi.encodePacked(txs.values)),
-                keccak256(abi.encodePacked(signatureHashes)),
-                keccak256(abi.encodePacked(calldatasHashes)),
-                keccak256(bytes(description))
-            );
     }
 
     function updateProposal(
@@ -348,17 +297,6 @@ library NounsDAOV3Proposals {
         checkProposalUpdatable(ds, proposalId, proposal);
 
         emit ProposalDescriptionUpdated(proposalId, msg.sender, description, updateMessage);
-    }
-
-    function checkProposalUpdatable(
-        NounsDAOStorageV3.StorageV3 storage ds,
-        uint256 proposalId,
-        NounsDAOStorageV3.Proposal storage proposal
-    ) internal view {
-        // TODO: gas: does reading the proposal once save gas?
-        if (state(ds, proposalId) != NounsDAOStorageV3.ProposalState.Updatable) revert CanOnlyEditUpdatableProposals();
-        if (msg.sender != proposal.proposer) revert OnlyProposerCanEdit();
-        if (proposal.signers.length > 0) revert ProposerCannotUpdateProposalWithSigners();
     }
 
     function updateProposalBySigs(
@@ -522,13 +460,14 @@ library NounsDAOV3Proposals {
 
         NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
         address proposer = proposal.proposer;
+        NounsTokenLike nouns = ds.nouns;
 
-        uint256 votes = ds.nouns.getPriorVotes(proposer, block.number - 1);
+        uint256 votes = nouns.getPriorVotes(proposer, block.number - 1);
         bool msgSenderIsProposer = proposer == msg.sender;
         address[] memory signers = proposal.signers;
         for (uint256 i = 0; i < signers.length; ++i) {
             msgSenderIsProposer = msgSenderIsProposer || msg.sender == signers[i];
-            votes += ds.nouns.getPriorVotes(signers[i], block.number - 1);
+            votes += nouns.getPriorVotes(signers[i], block.number - 1);
         }
 
         require(
@@ -740,6 +679,71 @@ library NounsDAOV3Proposals {
                 proposersLatestProposalState == NounsDAOStorageV3.ProposalState.Updatable
             ) revert ProposerAlreadyHasALiveProposal();
         }
+    }
+
+    /**
+     * @dev Extracted this function to fix the `Stack too deep` error `proposeBySigs` hit.
+     */
+    function verifySignersCanBackThisProposalAndCountTheirVotes(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        NounsDAOStorageV3.ProposerSignature[] memory proposerSignatures,
+        ProposalTxs memory txs,
+        string memory description,
+        uint256 proposalId
+    ) internal returns (uint256 votes, address[] memory signers) {
+        NounsTokenLike nouns = ds.nouns;
+        bytes memory proposalEncodeData = calcProposalEncodeData(msg.sender, txs, description);
+
+        signers = new address[](proposerSignatures.length);
+        for (uint256 i = 0; i < proposerSignatures.length; ++i) {
+            verifyProposalSignature(ds, proposalEncodeData, proposerSignatures[i], PROPOSAL_TYPEHASH);
+            address signer = signers[i] = proposerSignatures[i].signer;
+
+            checkNoActiveProp(ds, signer);
+            ds.latestProposalIds[signer] = proposalId;
+            votes += nouns.getPriorVotes(signer, block.number - 1);
+        }
+
+        checkNoActiveProp(ds, msg.sender);
+        ds.latestProposalIds[msg.sender] = proposalId;
+        votes += nouns.getPriorVotes(msg.sender, block.number - 1);
+    }
+
+    function calcProposalEncodeData(
+        address proposer,
+        ProposalTxs memory txs,
+        string memory description
+    ) internal pure returns (bytes memory) {
+        bytes32[] memory signatureHashes = new bytes32[](txs.signatures.length);
+        for (uint256 i = 0; i < txs.signatures.length; ++i) {
+            signatureHashes[i] = keccak256(bytes(txs.signatures[i]));
+        }
+
+        bytes32[] memory calldatasHashes = new bytes32[](txs.calldatas.length);
+        for (uint256 i = 0; i < txs.calldatas.length; ++i) {
+            calldatasHashes[i] = keccak256(txs.calldatas[i]);
+        }
+
+        return
+            abi.encode(
+                proposer,
+                keccak256(abi.encodePacked(txs.targets)),
+                keccak256(abi.encodePacked(txs.values)),
+                keccak256(abi.encodePacked(signatureHashes)),
+                keccak256(abi.encodePacked(calldatasHashes)),
+                keccak256(bytes(description))
+            );
+    }
+
+    function checkProposalUpdatable(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        uint256 proposalId,
+        NounsDAOStorageV3.Proposal storage proposal
+    ) internal view {
+        // TODO: gas: does reading the proposal once save gas?
+        if (state(ds, proposalId) != NounsDAOStorageV3.ProposalState.Updatable) revert CanOnlyEditUpdatableProposals();
+        if (msg.sender != proposal.proposer) revert OnlyProposerCanEdit();
+        if (proposal.signers.length > 0) revert ProposerCannotUpdateProposalWithSigners();
     }
 
     function createNewProposal(
