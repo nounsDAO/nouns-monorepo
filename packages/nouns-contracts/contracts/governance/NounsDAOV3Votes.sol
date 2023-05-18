@@ -337,7 +337,8 @@ library NounsDAOV3Votes {
         // The idea is to temporarily use this code that would still use `creationBlock` until all proposals are using
         // `startBlock`, then we can deploy a quick DAO fix that removes this line and only uses `startBlock`.
         // In that version upgrade we can also zero-out and remove this storage variable for max cleanup.
-        if (proposalId < ds.voteSnapshotBlockSwitchProposalId || ds.voteSnapshotBlockSwitchProposalId == 0) {
+        uint256 voteSnapshotBlockSwitchProposalId = ds.voteSnapshotBlockSwitchProposalId;
+        if (proposalId < voteSnapshotBlockSwitchProposalId || voteSnapshotBlockSwitchProposalId == 0) {
             return proposal.creationBlock;
         }
         return proposal.startBlock;
