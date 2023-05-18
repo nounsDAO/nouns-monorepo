@@ -143,13 +143,13 @@ library NounsDAOV3Fork {
         INounsDAOExecutorV2 timelock = ds.timelock;
         uint256 ethToSend = (address(timelock).balance * tokenCount) / totalSupply;
 
-        timelock.sendETHToNewDAO(newDAOTreasury, ethToSend);
+        timelock.sendETH(newDAOTreasury, ethToSend);
 
         uint256 erc20Count = ds.erc20TokensToIncludeInFork.length;
         for (uint256 i = 0; i < erc20Count; ++i) {
             IERC20 erc20token = IERC20(ds.erc20TokensToIncludeInFork[i]);
             uint256 tokensToSend = (erc20token.balanceOf(address(timelock)) * tokenCount) / totalSupply;
-            timelock.sendERC20ToNewDAO(newDAOTreasury, address(erc20token), tokensToSend);
+            timelock.sendERC20(newDAOTreasury, address(erc20token), tokensToSend);
         }
     }
 }

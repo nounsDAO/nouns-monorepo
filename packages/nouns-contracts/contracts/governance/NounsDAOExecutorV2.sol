@@ -28,7 +28,7 @@
 // See NounsDAOExecutor for initial Timelock modifications.
 //
 // NounsDAOExecutor2 adds:
-// - `sendETHToNewDAO` and `sendERC20ToNewDAO` functions used for DAO forks
+// - `sendETH` and `sendERC20` functions used for DAO forks
 // - is upgradable via UUPSUpgradeable
 
 pragma solidity ^0.8.6;
@@ -197,7 +197,7 @@ contract NounsDAOExecutorV2 is UUPSUpgradeable, Initializable {
 
     fallback() external payable {}
 
-    function sendETHToNewDAO(address newDAOTreasury, uint256 ethToSend) external returns (bool success) {
+    function sendETH(address newDAOTreasury, uint256 ethToSend) external returns (bool success) {
         require(msg.sender == admin, 'NounsDAOExecutor::executeTransaction: Call must come from admin.');
 
         (success, ) = newDAOTreasury.call{ value: ethToSend }('');
@@ -205,7 +205,7 @@ contract NounsDAOExecutorV2 is UUPSUpgradeable, Initializable {
         emit ETHSent(newDAOTreasury, ethToSend, success);
     }
 
-    function sendERC20ToNewDAO(
+    function sendERC20(
         address newDAOTreasury,
         address erc20Token,
         uint256 tokensToSend

@@ -569,9 +569,9 @@ interface IForkDAODeployer {
 }
 
 interface INounsDAOExecutorV2 is INounsDAOExecutor {
-    function sendETHToNewDAO(address newDAOTreasury, uint256 ethToSend) external;
+    function sendETH(address newDAOTreasury, uint256 ethToSend) external;
 
-    function sendERC20ToNewDAO(
+    function sendERC20(
         address newDAOTreasury,
         address erc20Token,
         uint256 tokensToSend
