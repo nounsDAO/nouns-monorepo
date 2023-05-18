@@ -202,6 +202,19 @@
     "inputs": [
       {
         "internalType": "bytes",
+        "name": "_helmet",
+        "type": "bytes"
+      }
+    ],
+    "name": "addHelmet",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
         "name": "_lips",
         "type": "bytes"
       }
@@ -355,6 +368,19 @@
       }
     ],
     "name": "addManyHats",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes[]",
+        "name": "_helmets",
+        "type": "bytes[]"
+      }
+    ],
+    "name": "addManyHelmets",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -997,6 +1023,38 @@
       }
     ],
     "name": "hats",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "helmetCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "helmets",
     "outputs": [
       {
         "internalType": "bytes",

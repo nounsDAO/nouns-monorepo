@@ -5,8 +5,8 @@ import { images/*, bgcolors*/ } from './image-data.json';
 import probDoc from './config/probability.json'
 
 const probs: any = probDoc
-const { types, necks, cheekses, faces, beards, mouths, earses, hats, hairs, teeths, lipses, emotions, eyeses, glasseses, goggleses, noses } = images;
-const accResource = [ necks, cheekses, faces, lipses, emotions, teeths, beards, earses, hats, hairs, mouths, glasseses, goggleses, eyeses, noses ]
+const { types, necks, cheekses, faces, beards, mouths, earses, hats, helmets, hairs, teeths, lipses, emotions, eyeses, glasseses, goggleses, noses } = images;
+const accResource = [ necks, cheekses, faces, lipses, emotions, teeths, beards, earses, hats, helmets, hairs, mouths, glasseses, goggleses, eyeses, noses ]
 
 export const type2PunkBasic = [
   { punkType: 0, skinTone: 0 },

@@ -95,22 +95,6 @@ task("populate-seeder", "Initialize deployed smart contracts")
         })
         const exclusionResponse = await (await nSeeder.setAccExclusion(accExclusion)).wait()
         console.log("setAccExclusion", accExclusion)
-//         const exclusives = probDoc.exclusive_groups.reduce((prev: any, group: any, groupIndex: number) => {
-//             group.forEach((item: any) => {
-//                 const typeIndex = Object.keys(probDoc.acc_types).indexOf(item)
-//                 if(typeIndex < 0) throw new Error(`Unknown type found in exclusive groups - ${item}`)
-//                 prev[typeIndex] = groupIndex
-//             })
-//             return prev
-//         }, Array(accTypeCount).fill(-1))
-//         let curExclusive = probDoc.exclusive_groups.length;
-//         for(let i in exclusives)
-//             if(exclusives[i] < 0)
-//                 exclusives[i] = curExclusive ++
-//         const exclusiveResponse = await (await nSeeder.setExclusiveAcc(curExclusive, exclusives)).wait()
-//         console.log("setExclusiveAcc", curExclusive, exclusives)
-
-        
 
         // for(let i = 0; i < 100; i ++) {
         //     const seed = await nSeeder.generateSeed(i)

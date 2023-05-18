@@ -26,7 +26,7 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and Pu
     const descriptorContract = descriptorFactory.attach(nDescriptor);
 
     const { /*bgcolors, */palette, images } = ImageData;
-    const { types, necks, cheekses, faces, beards, mouths, earses, hats, hairs, teeths, lipses, emotions, eyeses, glasseses, goggleses, noses } = images;
+    const { types, necks, cheekses, faces, beards, mouths, earses, hats, helmets, hairs, teeths, lipses, emotions, eyeses, glasseses, goggleses, noses } = images;
 
     const typesPage = dataToDescriptorInput(types.map(({ data }) => data));
     const necksPage = dataToDescriptorInput(necks.map(({ data }) => data));
@@ -36,6 +36,7 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and Pu
     const mouthsPage = dataToDescriptorInput(mouths.map(({ data }) => data));
     const earsesPage = dataToDescriptorInput(earses.map(({ data }) => data));
     const hatsPage = dataToDescriptorInput(hats.map(({ data }) => data));
+    const helmetsPage = dataToDescriptorInput(helmets.map(({ data }) => data));
     const hairsPage = dataToDescriptorInput(hairs.map(({ data }) => data));
     const teethsPage = dataToDescriptorInput(teeths.map(({ data }) => data));
     const lipsesPage = dataToDescriptorInput(lipses.map(({ data }) => data));
@@ -94,6 +95,12 @@ task('populate-descriptor', 'Populates the descriptor with color palettes and Pu
       hatsPage.encodedCompressed,
       hatsPage.originalLength,
       hatsPage.itemCount,
+      options,
+    );
+    await descriptorContract.addHelmets(
+      helmetsPage.encodedCompressed,
+      helmetsPage.originalLength,
+      helmetsPage.itemCount,
       options,
     );
     await descriptorContract.addHairs(

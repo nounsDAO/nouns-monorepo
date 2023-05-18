@@ -45,6 +45,7 @@ interface IArt {
 
     event PunkTypesAdded(uint16 count);
     event HatsAdded(uint16 count);
+    event HelmetsAdded(uint16 count);
     event HairsAdded(uint16 count);
     event BeardsAdded(uint16 count);
     event EyesesAdded(uint16 count);
@@ -89,6 +90,11 @@ interface IArt {
         uint16 imageCount
     ) external;
     function addHats(
+        bytes calldata encodedCompressed,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
+    function addHelmets(
         bytes calldata encodedCompressed,
         uint80 decompressedLength,
         uint16 imageCount
@@ -176,6 +182,11 @@ interface IArt {
         uint80 decompressedLength,
         uint16 imageCount
     ) external;
+    function addHelmetsFromPointer(
+        address pointer,
+        uint80 decompressedLength,
+        uint16 imageCount
+    ) external;
     function addHairsFromPointer(
         address pointer,
         uint80 decompressedLength,
@@ -250,6 +261,7 @@ interface IArt {
 
     function punkTypes(uint256 index) external view returns (bytes memory);
     function hats(uint256 index) external view returns (bytes memory);
+    function helmets(uint256 index) external view returns (bytes memory);
     function hairs(uint256 index) external view returns (bytes memory);
     function beards(uint256 index) external view returns (bytes memory);
     function eyeses(uint256 index) external view returns (bytes memory);
@@ -267,6 +279,7 @@ interface IArt {
 
     function getPunkTypesTrait() external view returns (Trait memory);
     function getHatsTrait() external view returns (Trait memory);
+    function getHelmetsTrait() external view returns (Trait memory);
     function getHairsTrait() external view returns (Trait memory);
     function getBeardsTrait() external view returns (Trait memory);
     function getEyesesTrait() external view returns (Trait memory);

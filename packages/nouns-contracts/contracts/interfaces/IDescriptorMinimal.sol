@@ -34,6 +34,7 @@ interface IDescriptorMinimal {
 
     function punkTypeCount() external view returns (uint256);
     function hatCount() external view returns (uint256);
+    function helmetCount() external view returns (uint256);
     function hairCount() external view returns (uint256);
     function beardCount() external view returns (uint256);
     function eyesCount() external view returns (uint256);

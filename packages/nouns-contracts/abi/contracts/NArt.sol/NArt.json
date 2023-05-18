@@ -209,6 +209,19 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "uint16",
+        "name": "count",
+        "type": "uint16"
+      }
+    ],
+    "name": "HelmetsAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "address",
         "name": "oldInflator",
         "type": "address"
@@ -770,6 +783,52 @@
       }
     ],
     "name": "addHatsFromPointer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "encodedCompressed",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addHelmets",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "pointer",
+        "type": "address"
+      },
+      {
+        "internalType": "uint80",
+        "name": "decompressedLength",
+        "type": "uint80"
+      },
+      {
+        "internalType": "uint16",
+        "name": "imageCount",
+        "type": "uint16"
+      }
+    ],
+    "name": "addHelmetsFromPointer",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1677,6 +1736,48 @@
   },
   {
     "inputs": [],
+    "name": "getHelmetsTrait",
+    "outputs": [
+      {
+        "components": [
+          {
+            "components": [
+              {
+                "internalType": "uint16",
+                "name": "imageCount",
+                "type": "uint16"
+              },
+              {
+                "internalType": "uint80",
+                "name": "decompressedLength",
+                "type": "uint80"
+              },
+              {
+                "internalType": "address",
+                "name": "pointer",
+                "type": "address"
+              }
+            ],
+            "internalType": "struct IArt.NArtStoragePage[]",
+            "name": "storagePages",
+            "type": "tuple[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "storedImagesCount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct IArt.Trait",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "getLipsesTrait",
     "outputs": [
       {
@@ -2045,6 +2146,38 @@
   {
     "inputs": [],
     "name": "hatsTrait",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "storedImagesCount",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      }
+    ],
+    "name": "helmets",
+    "outputs": [
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "helmetsTrait",
     "outputs": [
       {
         "internalType": "uint256",

@@ -49,6 +49,7 @@ contract NDescriptor is IDescriptor, Ownable {
     // Punk Bodies (Custom RLE)
     bytes[] public override punkTypes;
     bytes[] public override hats;
+    bytes[] public override helmets;
     bytes[] public override hairs;
     bytes[] public override beards;
     bytes[] public override eyeses;
@@ -87,6 +88,9 @@ contract NDescriptor is IDescriptor, Ownable {
     }
     function hatCount() external view override returns (uint256) {
         return hats.length;
+    }
+    function helmetCount() external view override returns (uint256) {
+        return helmets.length;
     }
     function hairCount() external view override returns (uint256) {
         return hairs.length;
@@ -164,6 +168,11 @@ contract NDescriptor is IDescriptor, Ownable {
     function addManyHats(bytes[] calldata _hats) external override onlyOwner whenPartsNotLocked {
         for (uint256 i = 0; i < _hats.length; i++) {
             _addHat(_hats[i]);
+        }
+    }
+    function addManyHelmets(bytes[] calldata _helmets) external override onlyOwner whenPartsNotLocked {
+        for (uint256 i = 0; i < _helmets.length; i++) {
+            _addHelmet(_helmets[i]);
         }
     }
     function addManyHairs(bytes[] calldata _hairs) external override onlyOwner whenPartsNotLocked {
@@ -263,6 +272,9 @@ contract NDescriptor is IDescriptor, Ownable {
     }
     function addHat(bytes calldata _hat) external override onlyOwner whenPartsNotLocked {
         _addHat(_hat);
+    }
+    function addHelmet(bytes calldata _helmet) external override onlyOwner whenPartsNotLocked {
+        _addHelmet(_helmet);
     }
     function addHair(bytes calldata _hair) external override onlyOwner whenPartsNotLocked {
         _addHair(_hair);
@@ -413,6 +425,9 @@ contract NDescriptor is IDescriptor, Ownable {
     function _addHat(bytes calldata _hat) internal {
         hats.push(_hat);
     }
+    function _addHelmet(bytes calldata _helmet) internal {
+        helmets.push(_helmet);
+    }
     function _addHair(bytes calldata _hair) internal {
         hairs.push(_hair);
     }
@@ -472,7 +487,7 @@ contract NDescriptor is IDescriptor, Ownable {
         }
         parts[0] = punkTypes[punkTypeId];
 
-        uint256[] memory sortedAccessories = new uint256[](15);
+        uint256[] memory sortedAccessories = new uint256[](16);
         for (uint256 i = 0 ; i < seed.accessories.length; i ++) {
             // 10_000 is a trick so filled entries are not zero
             unchecked {
@@ -482,7 +497,7 @@ contract NDescriptor is IDescriptor, Ownable {
 
         bytes memory accBuffer;
         uint256 idx = 1; // starts from 1, 0 is taken by punkType
-        for(uint i = 0; i < 15; i ++) {
+        for(uint i = 0; i < 16; i ++) {
             if (sortedAccessories[i] > 0) {
                 // i is accType
                 uint256 accIdImage = sortedAccessories[i] % 10_000;
@@ -495,12 +510,13 @@ contract NDescriptor is IDescriptor, Ownable {
                 else if(i == 6) accBuffer = teeths[accIdImage];
                 else if(i == 7) accBuffer = earses[accIdImage];
                 else if(i == 8) accBuffer = hats[accIdImage];
-                else if(i == 9) accBuffer = hairs[accIdImage];
-                else if(i == 10) accBuffer = mouths[accIdImage];
-                else if(i == 11) accBuffer = glasseses[accIdImage];
-                else if(i == 12) accBuffer = goggleses[accIdImage];
-                else if(i == 13) accBuffer = eyeses[accIdImage];
-                else if(i == 14) accBuffer = noses[accIdImage];
+                else if(i == 9) accBuffer = helmets[accIdImage];
+                else if(i == 10) accBuffer = hairs[accIdImage];
+                else if(i == 11) accBuffer = mouths[accIdImage];
+                else if(i == 12) accBuffer = glasseses[accIdImage];
+                else if(i == 13) accBuffer = goggleses[accIdImage];
+                else if(i == 14) accBuffer = eyeses[accIdImage];
+                else if(i == 15) accBuffer = noses[accIdImage];
                 else revert();
                 parts[idx] = accBuffer;
                 idx ++;
