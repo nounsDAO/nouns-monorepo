@@ -25,7 +25,9 @@ contract NounsDAOForkEscrowMock is INounsDAOForkEscrow {
 
     function returnTokensToOwner(address owner, uint256[] calldata tokenIds) external {}
 
-    function closeEscrow() external {}
+    function closeEscrow() external pure returns (uint32) {
+        return 1;
+    }
 
     function numTokensInEscrow() external view returns (uint256) {}
 

@@ -25,8 +25,26 @@ library NounsDAOV3Fork {
     error ForkPeriodActive();
     error AdminOnly();
 
-    // TODO: events
+    /// @notice Emitted when someones adds nouns to the fork escrow
     event EscrowedToFork(address indexed owner, uint256[] tokenIds, uint256[] proposalIds, string reason);
+
+    /// @notice Emitted when the owner withdraws their nouns from the fork escrow
+    event WithdrawFromForkEscrow(address indexed owner, uint256[] tokenIds);
+
+    /// @notice Emitted when the fork is executed and the forking period begins
+    event ExecuteFork(
+        uint32 forkId,
+        address forkTreasury,
+        address forkToken,
+        uint256 forkEndTimestamp,
+        uint256 tokensInEscrow
+    );
+
+    /// @notice Emitted when someone joins a fork during the forking period
+    event JoinFork(address indexed owner, uint256[] tokenIds);
+
+    /// @notice Emitted when the DAO withdraws nouns from the fork escrow after a fork has been executed
+    event DAOWithdrawNounsFromEscrow(uint256[] tokenIds, address to);
 
     function escrowToFork(
         NounsDAOStorageV3.StorageV3 storage ds,
@@ -48,6 +66,8 @@ library NounsDAOV3Fork {
         if (isForkPeriodActive(ds)) revert ForkPeriodActive();
 
         ds.forkEscrow.returnTokensToOwner(msg.sender, tokenIds);
+
+        emit WithdrawFromForkEscrow(msg.sender, tokenIds);
     }
 
     function executeFork(NounsDAOStorageV3.StorageV3 storage ds)
@@ -63,11 +83,13 @@ library NounsDAOV3Fork {
 
         (forkTreasury, forkToken) = ds.forkDAODeployer.deployForkDAO(forkEndTimestamp);
         sendProRataTreasury(ds, forkTreasury, tokensInEscrow, adjustedTotalSupply(ds));
-        ds.forkEscrow.closeEscrow();
+        uint32 forkId = ds.forkEscrow.closeEscrow();
 
         ds.forkDAOTreasury = forkTreasury;
         ds.forkDAOToken = forkToken;
         ds.forkEndTimestamp = forkEndTimestamp;
+
+        emit ExecuteFork(forkId, forkTreasury, forkToken, forkEndTimestamp, tokensInEscrow);
     }
 
     function joinFork(NounsDAOStorageV3.StorageV3 storage ds, uint256[] calldata tokenIds) external {
@@ -80,6 +102,8 @@ library NounsDAOV3Fork {
         }
 
         NounsTokenFork(ds.forkDAOToken).claimDuringForkPeriod(msg.sender, tokenIds);
+
+        emit JoinFork(msg.sender, tokenIds);
     }
 
     function withdrawDAONounsFromEscrow(
@@ -92,6 +116,8 @@ library NounsDAOV3Fork {
         }
 
         ds.forkEscrow.withdrawTokensToDAO(tokenIds, to);
+
+        emit DAOWithdrawNounsFromEscrow(tokenIds, to);
     }
 
     function forkThreshold(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (uint256) {

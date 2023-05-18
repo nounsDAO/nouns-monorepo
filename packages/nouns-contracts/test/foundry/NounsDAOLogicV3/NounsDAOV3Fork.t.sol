@@ -53,8 +53,6 @@ abstract contract DAOForkZeroState is NounsDAOLogicV3BaseTest {
 }
 
 contract DAOForkZeroStateTest is DAOForkZeroState {
-    event EscrowedToFork(address indexed owner, uint256[] tokenIds, uint256[] proposalIds, string reason);
-
     function test_signalFork_transfersTokens() public {
         tokenIds = [1, 2, 3];
 
@@ -74,7 +72,7 @@ contract DAOForkZeroStateTest is DAOForkZeroState {
         nounsToken.setApprovalForAll(address(dao), true);
 
         vm.expectEmit(true, true, true, true);
-        emit EscrowedToFork(tokenHolder, tokenIds, proposalIds, 'time to fork');
+        emit NounsDAOV3Fork.EscrowedToFork(tokenHolder, tokenIds, proposalIds, 'time to fork');
         dao.escrowToFork(tokenIds, proposalIds, 'time to fork');
     }
 
@@ -128,6 +126,8 @@ contract DAOForkSignaledUnderThresholdStateTest is DAOForkSignaledUnderThreshold
 
         tokenIds = [1, 2, 3];
 
+        vm.expectEmit(true, true, true, true);
+        emit NounsDAOV3Fork.WithdrawFromForkEscrow(tokenHolder, tokenIds);
         vm.prank(tokenHolder);
         dao.withdrawFromForkEscrow(tokenIds);
 
@@ -198,6 +198,14 @@ contract DAOForkSignaledOverThresholdStateTest is DAOForkSignaledOverThresholdSt
     }
 
     function test_executeFork() public {
+        vm.expectEmit(true, true, true, true);
+        emit NounsDAOV3Fork.ExecuteFork(
+            0,
+            forkDAODeployer.mockTreasury(),
+            forkDAODeployer.mockToken(),
+            block.timestamp + dao.forkPeriod(),
+            5
+        );
         dao.executeFork();
 
         // 25% of treasury should be sent to new DAO
@@ -283,6 +291,8 @@ contract DAOForkExecutedStateTest is DAOForkExecutedState {
     function test_joinFork() public {
         tokenIds = [8, 9];
 
+        vm.expectEmit(true, true, true, true);
+        emit NounsDAOV3Fork.JoinFork(tokenHolder, tokenIds);
         vm.prank(tokenHolder);
         dao.joinFork(tokenIds);
 
@@ -307,6 +317,8 @@ contract DAOForkExecutedStateTest is DAOForkExecutedState {
 
         // DAO can withdraw the tokens sent in joinFork
         tokenIds = [7, 8, 9];
+        vm.expectEmit(true, true, true, true);
+        emit NounsDAOV3Fork.DAOWithdrawNounsFromEscrow(tokenIds, address(1));
         vm.prank(address(dao.timelock()));
         dao.withdrawDAONounsFromEscrow(tokenIds, address(1));
 
