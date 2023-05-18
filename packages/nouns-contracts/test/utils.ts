@@ -338,19 +338,38 @@ export const populateSeeder = async (nSeeder: NSeeder): Promise<void> => {
   )
   const accIdSetResponse = await (await nSeeder.setAccIdByType(accIdPerType)).wait()
 
-  const exclusives = probDoc.exclusive_groups.reduce((prev: any, group: any, groupIndex: number) => {
-    group.forEach((item: any) => {
-      const typeIndex = Object.keys(probDoc.acc_types).indexOf(item)
-      if(typeIndex < 0) throw new Error(`Unknown type found in exclusive groups - ${item}`)
-      prev[typeIndex] = groupIndex
+  const accExclusion = Array()
+  for (let i = 0 ; i < accTypeCount ; i ++) {
+    accExclusion.push(1 << i)
+  }
+  probDoc.exclusive_groups.forEach( (group) => {
+    const groupExclusion = group.reduce( (groupExclusion, accType) => {
+      const accTypeIndex = Object.keys(probDoc.acc_types).indexOf(accType)
+      if (accTypeIndex < 0) throw new Error(`Unknown type found in exclusive groups - ${accType}`)
+      groupExclusion = groupExclusion | (1 << accTypeIndex)
+      return groupExclusion
+    }, 0)
+    group.forEach( (accType) => {
+      const accTypeIndex = Object.keys(probDoc.acc_types).indexOf(accType)
+      if (accTypeIndex < 0) throw new Error(`Unknown type found in exclusive groups - ${accType}`)
+      accExclusion[accTypeIndex] = accExclusion[accTypeIndex] | groupExclusion;
     })
-    return prev
-  }, Array(accTypeCount).fill(-1))
-  let curExclusive = probDoc.exclusive_groups.length;
-  for(let i in exclusives)
-    if(exclusives[i] < 0)
-      exclusives[i] = curExclusive ++
-  const exclusiveResponse = await (await nSeeder.setExclusiveAcc(curExclusive, exclusives)).wait()
+  })
+  const exclusionResponse = await (await nSeeder.setAccExclusion(accExclusion)).wait()
+//
+//   const exclusives = probDoc.exclusive_groups.reduce((prev: any, group: any, groupIndex: number) => {
+//     group.forEach((item: any) => {
+//       const typeIndex = Object.keys(probDoc.acc_types).indexOf(item)
+//       if(typeIndex < 0) throw new Error(`Unknown type found in exclusive groups - ${item}`)
+//       prev[typeIndex] = groupIndex
+//     })
+//     return prev
+//   }, Array(accTypeCount).fill(-1))
+//   let curExclusive = probDoc.exclusive_groups.length;
+//   for(let i in exclusives)
+//     if(exclusives[i] < 0)
+//       exclusives[i] = curExclusive ++
+//   const exclusiveResponse = await (await nSeeder.setExclusiveAcc(curExclusive, exclusives)).wait()
 }
 
 export const deployGovAndToken = async (
