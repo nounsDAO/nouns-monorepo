@@ -142,7 +142,7 @@ export interface PartialProposalSubgraphEntity {
 
 export interface ProposalSubgraphEntity
   extends ProposalTransactionDetails,
-    PartialProposalSubgraphEntity {
+  PartialProposalSubgraphEntity {
   description: string;
   createdBlock: string;
   createdTransactionHash: string;
@@ -536,7 +536,7 @@ const getProposalState = (
       return ProposalState.UNDETERMINED;
     }
     if (blockNumber > parseInt(proposal.endBlock)) {
-      if (blockNumber <= parseInt(proposal.objectionPeriodEndBlock)) {
+      if (parseInt(proposal.objectionPeriodEndBlock) > 0) {
         return ProposalState.OBJECTION_PERIOD;
       }
       const forVotes = new BigNumber(proposal.forVotes);

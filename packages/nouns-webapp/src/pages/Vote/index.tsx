@@ -51,7 +51,6 @@ import { parseStreamCreationCallData } from '../../utils/streamingPaymentUtils/s
 import VoteSignals from '../../components/VoteSignals/VoteSignals';
 import { useActiveLocale } from '../../hooks/useActivateLocale';
 import { SUPPORTED_LOCALE_TO_DAYSJS_LOCALE, SupportedLocale } from '../../i18n/locales';
-import { isProposalUpdatable } from '../../utils/proposals';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -66,9 +65,9 @@ const getCountdownCopy = (
   const endDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
-          'seconds',
-        )
+        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
+        'seconds',
+      )
       : undefined;
 
   return (
@@ -92,7 +91,7 @@ const VotePage = ({
   // TODO: set this to true when we want to enable v3 proposals
   const [isv3Proposal, setIsV3Proposal] = useState<boolean>(true);
   // TODO: make this dynamic
-  const [isObjectionPeriod, setIsObjectionPeriod] = useState<boolean>(true);
+  // const [isObjectionPeriod, setIsObjectionPeriod] = useState<boolean>(true);
 
   const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
   const [showDynamicQuorumInfoModal, setShowDynamicQuorumInfoModal] = useState<boolean>(false);
@@ -110,6 +109,8 @@ const VotePage = ({
     streamAmount: number;
     tokenAddress: string;
   } | null>(null);
+  // if objection period is active, then we are in objection period, unless the current block is greater than the end block
+  const [isObjectionPeriod, setIsObjectionPeriod] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
@@ -118,7 +119,6 @@ const VotePage = ({
     loading: loadingDQInfo,
     error: dqError,
   } = useQuery(propUsingDynamicQuorum(id ?? '0'));
-
   const { queueProposal, queueProposalState } = useQueueProposal();
   const { executeProposal, executeProposalState } = useExecuteProposal();
   const { cancelProposal, cancelProposalState } = useCancelProposal();
@@ -129,9 +129,9 @@ const VotePage = ({
   const startDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
-          'seconds',
-        )
+        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
+        'seconds',
+      )
       : undefined;
 
   const endBlock = proposal?.objectionPeriodEndBlock || proposal?.endBlock;
@@ -150,7 +150,7 @@ const VotePage = ({
   const abstainPercentage = proposal && totalVotes ? (proposal.abstainCount * 100) / totalVotes : 0;
 
   // Only count available votes as of the proposal created block
-  const availableVotes = useUserVotesAsOfBlock(proposal?.createdBlock ?? undefined);
+  const availableVotes = useUserVotesAsOfBlock(proposal?.createdBlock);
 
   const currentQuorum = useCurrentQuorum(
     config.addresses.nounsDAOProxy,
@@ -170,7 +170,8 @@ const VotePage = ({
   const isCancellable =
     isInNonFinalState && proposal?.proposer?.toLowerCase() === account?.toLowerCase();
   const isProposer = proposal?.proposer?.toLowerCase() === account?.toLowerCase();
-  const isUpdateable = proposal && currentBlock && isProposalUpdatable(proposal, currentBlock);
+  const isUpdateable = proposal?.status === ProposalState.UPDATABLE;
+
   const hasManyVersions = proposalVersions && proposalVersions.length > 1;
   // let routeMatch = useRouteMatch('/vote/:id');
   // const isLatestProposalVersion = routeMatch?.params?.id === proposal?.id;
@@ -235,6 +236,14 @@ const VotePage = ({
       };
     }
   })();
+
+  useEffect(() => {
+    if (currentBlock && proposal?.status === ProposalState.OBJECTION_PERIOD && proposal?.objectionPeriodEndBlock >= currentBlock) {
+      setIsObjectionPeriod(true);
+    } else {
+      setIsObjectionPeriod(false);
+    }
+  }, [currentBlock, proposal?.status, proposal?.objectionPeriodEndBlock]);
 
   const onTransactionStateChange = useCallback(
     (
@@ -444,31 +453,31 @@ const VotePage = ({
             })}
         <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
           <Col className="d-grid gap-4">
-            {/* {isObjectionPeriod && ( */}
-            <div className={classes.objectionWrapper}>
-              <div className={classes.objection}>
-                <div className={classes.objectionHeader}>
-                  <p>
-                    <strong className="d-block">
-                      <Trans>Objection only period</Trans>
-                    </strong>
-                    Voting is now limited to against votes. This objection-only period protects the
-                    DAO from last-minute vote swings.
-                  </p>
+            {isObjectionPeriod && (
+              <div className={classes.objectionWrapper}>
+                <div className={classes.objection}>
+                  <div className={classes.objectionHeader}>
+                    <p>
+                      <strong className="d-block">
+                        <Trans>Objection only period</Trans>
+                      </strong>
+                      Voting is now limited to against votes. This objection-only period protects the
+                      DAO from last-minute vote swings.
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setShowVoteModal(true)}
+                    className={clsx(
+                      classes.destructiveTransitionStateButton,
+                      classes.button,
+                      classes.voteAgainst,
+                    )}
+                  >
+                    Vote against
+                  </button>
                 </div>
-                <button
-                  onClick={() => setShowVoteModal(true)}
-                  className={clsx(
-                    classes.destructiveTransitionStateButton,
-                    classes.button,
-                    classes.voteAgainst,
-                  )}
-                >
-                  Vote against
-                </button>
               </div>
-            </div>
-            {/* )} */}
+            )}
             {isProposer && (
               <div className={classes.proposerOptionsWrapper}>
                 <div className={classes.proposerOptions}>
@@ -526,7 +535,7 @@ const VotePage = ({
 
                     {isUpdateable && (
                       <Link
-                        to={`/update-proposal/${id}`}
+                        to={`/vote/${id}/edit`}
                         className={clsx(classes.primaryButton, classes.button)}
                       >
                         Edit
@@ -538,7 +547,7 @@ const VotePage = ({
             )}
           </Col>
         </Row>
-        {proposal?.status !== ProposalState.UPDATABLE && (
+        {!isUpdateable && (
           <>
             <p
               onClick={() => setIsDelegateView(!isDelegateView)}

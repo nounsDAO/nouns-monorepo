@@ -29,6 +29,7 @@ import { timestampFromBlockNumber } from '../../utils/timeUtils';
 import dayjs from 'dayjs';
 
 interface ProposalHeaderProps {
+  title?: string;
   proposal: Proposal;
   proposalVersions?: ProposalVersion[];
   versionNumber?: number;
@@ -62,7 +63,7 @@ const getTranslatedVoteCopyFromString = (proposalVote: string) => {
 };
 
 const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
-  const { proposal, isActiveForVoting, isWalletConnected, submitButtonClickHandler } = props;
+  const { proposal, isActiveForVoting, isWalletConnected, title, submitButtonClickHandler } = props;
   const [updatedTimestamp, setUpdatedTimestamp] = React.useState<Date | null>(null);
   const isMobile = isMobileScreen();
   const availableVotes = useUserVotesAsOfBlock(proposal?.createdBlock) ?? 0;
@@ -74,11 +75,21 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
   const currentBlock = useBlockNumber();
   const hasManyVersions = props.proposalVersions && props.proposalVersions.length > 1;
 
+  // useEffect(() => {
+  //   if (currentBlock) {
+  //     // TODO: remove this after getting real data from the contract
+  //     const timestamp = timestampFromBlockNumber(props.proposal.createdBlock, currentBlock);
+  //     setUpdatedTimestamp(timestamp.toDate());
+  //   }
+  // }, [currentBlock]);
+
+  console.log('proposal in history', proposal);
+
   useEffect(() => {
-    if (currentBlock) {
-      // TODO: remove this after getting real data from the contract
-      const timestamp = timestampFromBlockNumber(props.proposal.createdBlock, currentBlock);
-      setUpdatedTimestamp(timestamp.toDate());
+    if (currentBlock && hasManyVersions) {
+      const latestProposalVersion = props.proposalVersions?.[props.proposalVersions.length - 1];
+      const date = latestProposalVersion && new Date(+latestProposalVersion.createdAt * 1000);
+      date && setUpdatedTimestamp(date);
     }
   }, [currentBlock]);
 
@@ -162,7 +173,7 @@ const ProposalHeader: React.FC<ProposalHeaderProps> = props => {
             </span>
             <div className={classes.proposalTitleWrapper}>
               <div className={classes.proposalTitle}>
-                <h1>{proposal.title} </h1>
+                <h1>{title ? title : proposal.title} </h1>
               </div>
             </div>
           </div>
