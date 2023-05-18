@@ -280,7 +280,7 @@ library NounsDAOV3Votes {
             // second part of the vote flip check
             !ds.isDefeated(proposal)
         ) {
-            proposal.objectionPeriodEndBlock = proposal.endBlock + ds.objectionPeriodDurationInBlocks;
+            proposal.objectionPeriodEndBlock = uint64(proposal.endBlock + ds.objectionPeriodDurationInBlocks);
 
             emit ProposalObjectionPeriodSet(proposal.id, proposal.objectionPeriodEndBlock);
         }

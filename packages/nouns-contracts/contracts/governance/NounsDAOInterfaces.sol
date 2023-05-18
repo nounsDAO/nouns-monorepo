@@ -704,7 +704,7 @@ contract NounsDAOStorageV3 {
         uint256 creationBlock;
         address[] signers;
         uint256 updatePeriodEndBlock;
-        uint256 objectionPeriodEndBlock;
+        uint64 objectionPeriodEndBlock;
         /// @notice When true, a proposal would be executed on timelockV1 instead of the current timelock
         bool executeOnTimelockV1;
     }
