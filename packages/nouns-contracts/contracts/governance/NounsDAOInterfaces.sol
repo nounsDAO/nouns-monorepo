@@ -643,9 +643,6 @@ contract NounsDAOStorageV3 {
         uint32 lastMinuteWindowInBlocks;
         uint32 objectionPeriodDurationInBlocks;
         uint32 proposalUpdatablePeriodInBlocks;
-        /// @notice The proposal at which to start using `startBlock` instead of `creationBlock` for vote snapshots
-        /// @dev To be zeroed-out and removed in a V3.1 fix version once the switch takes place
-        uint256 voteSnapshotBlockSwitchProposalId;
         INounsDAOForkEscrow forkEscrow;
         IForkDAODeployer forkDAODeployer;
         address[] erc20TokensToIncludeInFork;
@@ -658,6 +655,10 @@ contract NounsDAOStorageV3 {
         uint256 forkThresholdBPS;
         /// @notice Address of the original timelock
         INounsDAOExecutor timelockV1;
+        /// @notice The proposal at which to start using `startBlock` instead of `creationBlock` for vote snapshots
+        /// @dev Make sure this stays the last variable in this struct, so we can delete it in the next version
+        /// @dev To be zeroed-out and removed in a V3.1 fix version once the switch takes place
+        uint256 voteSnapshotBlockSwitchProposalId;
     }
 
     struct Proposal {
