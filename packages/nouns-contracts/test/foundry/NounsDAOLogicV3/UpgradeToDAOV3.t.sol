@@ -80,6 +80,10 @@ contract UpgradeToDAOV3Test is DeployUtils {
         address[] memory erc20sInFork = daoProxyAsV3.erc20TokensToIncludeInFork();
         assertEq(erc20sInFork.length, 1);
         assertEq(erc20sInFork[0], address(stETH));
+
+        // check funds were transferred
+        assertEq(address(daoProxyAsV3.timelock()).balance, 500 ether);
+        assertEq(address(daoProxyAsV3.timelockV1()).balance, 500 ether);
     }
 
     function test_proposalToSendETHWorksBeforeUpgrade() public {
