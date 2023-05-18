@@ -150,12 +150,23 @@ library NounsDAOV3Proposals {
         ProposalTxs memory txs,
         string memory description
     ) internal returns (uint256) {
-        uint256 proposalThreshold_ = checkPropThreshold(ds, ds.nouns.getPriorVotes(msg.sender, block.number - 1));
+        uint256 adjustedTotalSupply = ds.adjustedTotalSupply();
+        uint256 proposalThreshold_ = checkPropThreshold(
+            ds,
+            ds.nouns.getPriorVotes(msg.sender, block.number - 1),
+            adjustedTotalSupply
+        );
         checkProposalTxs(txs);
         checkNoActiveProp(ds, msg.sender);
 
         uint256 proposalId = ds.proposalCount = ds.proposalCount + 1;
-        NounsDAOStorageV3.Proposal storage newProposal = createNewProposal(ds, proposalId, proposalThreshold_, txs);
+        NounsDAOStorageV3.Proposal storage newProposal = createNewProposal(
+            ds,
+            proposalId,
+            proposalThreshold_,
+            adjustedTotalSupply,
+            txs
+        );
         ds.latestProposalIds[newProposal.proposer] = newProposal.id;
 
         emitNewPropEvents(newProposal, new address[](0), ds.minQuorumVotes(), txs, description);
@@ -205,9 +216,16 @@ library NounsDAOV3Proposals {
         ds.latestProposalIds[msg.sender] = proposalId;
         votes += ds.nouns.getPriorVotes(msg.sender, block.number - 1);
 
-        uint256 propThreshold = checkPropThreshold(ds, votes);
+        uint256 adjustedTotalSupply = ds.adjustedTotalSupply();
+        uint256 propThreshold = checkPropThreshold(ds, votes, adjustedTotalSupply);
 
-        NounsDAOStorageV3.Proposal storage newProposal = createNewProposal(ds, proposalId, propThreshold, txs);
+        NounsDAOStorageV3.Proposal storage newProposal = createNewProposal(
+            ds,
+            proposalId,
+            propThreshold,
+            adjustedTotalSupply,
+            txs
+        );
         newProposal.signers = signers;
 
         emitNewPropEvents(newProposal, signers, ds.minQuorumVotes(), txs, description);
@@ -680,8 +698,12 @@ library NounsDAOV3Proposals {
      * @notice Current proposal threshold using Noun Total Supply
      * Differs from `GovernerBravo` which uses fixed amount
      */
-    function proposalThreshold(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (uint256) {
-        return bps2Uint(ds.proposalThresholdBPS, ds.adjustedTotalSupply());
+    function proposalThreshold(NounsDAOStorageV3.StorageV3 storage ds, uint256 adjustedTotalSupply)
+        internal
+        view
+        returns (uint256)
+    {
+        return bps2Uint(ds.proposalThresholdBPS, adjustedTotalSupply);
     }
 
     function isDefeated(NounsDAOStorageV3.StorageV3 storage ds, NounsDAOStorageV3.Proposal storage proposal)
@@ -709,6 +731,7 @@ library NounsDAOV3Proposals {
         NounsDAOStorageV3.StorageV3 storage ds,
         uint256 proposalId,
         uint256 proposalThreshold_,
+        uint256 adjustedTotalSupply,
         ProposalTxs memory txs
     ) internal returns (NounsDAOStorageV3.Proposal storage newProposal) {
         uint256 updatePeriodEndBlock = block.number + ds.proposalUpdatablePeriodInBlocks;
@@ -732,7 +755,7 @@ library NounsDAOV3Proposals {
         newProposal.canceled = false;
         newProposal.executed = false;
         newProposal.vetoed = false;
-        newProposal.totalSupply = ds.adjustedTotalSupply();
+        newProposal.totalSupply = adjustedTotalSupply;
         newProposal.creationBlock = block.number;
         newProposal.updatePeriodEndBlock = updatePeriodEndBlock;
     }
@@ -777,12 +800,12 @@ library NounsDAOV3Proposals {
         );
     }
 
-    function checkPropThreshold(NounsDAOStorageV3.StorageV3 storage ds, uint256 votes)
-        internal
-        view
-        returns (uint256 propThreshold)
-    {
-        propThreshold = proposalThreshold(ds);
+    function checkPropThreshold(
+        NounsDAOStorageV3.StorageV3 storage ds,
+        uint256 votes,
+        uint256 adjustedTotalSupply
+    ) internal view returns (uint256 propThreshold) {
+        propThreshold = proposalThreshold(ds, adjustedTotalSupply);
         require(votes > propThreshold, 'NounsDAO::propose: proposer votes below proposal threshold');
     }
 

@@ -378,7 +378,7 @@ contract NounsDAOLogicV3 is NounsDAOStorageV3, NounsDAOEventsV3 {
      * Differs from `GovernerBravo` which uses fixed amount
      */
     function proposalThreshold() public view returns (uint256) {
-        return ds.proposalThreshold();
+        return ds.proposalThreshold(ds.adjustedTotalSupply());
     }
 
     /**
