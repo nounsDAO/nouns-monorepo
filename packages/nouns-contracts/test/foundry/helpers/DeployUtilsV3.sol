@@ -43,8 +43,8 @@ abstract contract DeployUtilsV3 is DeployUtils {
                         votingPeriod: VOTING_PERIOD,
                         votingDelay: VOTING_DELAY,
                         proposalThresholdBPS: PROPOSAL_THRESHOLD,
-                        lastMinuteWindowInBlocks: 0,
-                        objectionPeriodDurationInBlocks: 0,
+                        lastMinuteWindowInBlocks: LAST_MINUTE_BLOCKS,
+                        objectionPeriodDurationInBlocks: OBJECTION_PERIOD_BLOCKS,
                         proposalUpdatablePeriodInBlocks: 0
                     }),
                     NounsDAOStorageV3.DynamicQuorumParams({
