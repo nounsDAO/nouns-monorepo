@@ -25,6 +25,8 @@ contract UpgradeToDAOV3Test is DeployUtils {
     string[] signatures;
     bytes[] calldatas;
 
+    event ProposalCreatedOnTimelockV1(uint256 id);
+
     function setUp() public virtual {
         daoProxy = deployDAOV2();
         timelockV1 = daoProxy.timelock();
@@ -152,6 +154,8 @@ contract UpgradeToDAOV3Test is DeployUtils {
         values = [400 ether];
         signatures = [''];
         calldatas = [bytes('')];
+        vm.expectEmit(true, true, true, true);
+        emit ProposalCreatedOnTimelockV1(2);
         vm.prank(proposer);
         uint256 proposalId = NounsDAOLogicV3(payable(address(daoProxy))).proposeOnTimelockV1(
             targets,

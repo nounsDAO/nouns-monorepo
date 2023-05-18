@@ -145,6 +145,8 @@ contract NounsDAOEventsV3 is NounsDAOEventsV2 {
         string description
     );
 
+    event ProposalCreatedOnTimelockV1(uint256 id);
+
     /// @notice Emitted when a proposal is updated
     event ProposalUpdated(
         uint256 indexed id,

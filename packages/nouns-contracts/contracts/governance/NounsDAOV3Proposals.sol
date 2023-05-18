@@ -73,6 +73,8 @@ library NounsDAOV3Proposals {
         string description
     );
 
+    event ProposalCreatedOnTimelockV1(uint256 id);
+
     event ProposalUpdated(
         uint256 indexed id,
         address indexed proposer,
@@ -94,7 +96,12 @@ library NounsDAOV3Proposals {
         string updateMessage
     );
 
-    event ProposalDescriptionUpdated(uint256 indexed id, address indexed proposer, string description, string updateMessage);
+    event ProposalDescriptionUpdated(
+        uint256 indexed id,
+        address indexed proposer,
+        string description,
+        string updateMessage
+    );
 
     /// @notice An event emitted when a proposal has been queued in the NounsDAOExecutor
     event ProposalQueued(uint256 id, uint256 eta);
@@ -171,7 +178,7 @@ library NounsDAOV3Proposals {
         NounsDAOStorageV3.Proposal storage newProposal = ds._proposals[newProposalId];
         newProposal.executeOnTimelockV1 = true;
 
-        // TODO: add info in the event that this is proposed on timelock V1
+        emit ProposalCreatedOnTimelockV1(newProposalId);
 
         return newProposalId;
     }
@@ -281,15 +288,7 @@ library NounsDAOV3Proposals {
     ) external {
         updateProposalTransactionsInternal(ds, proposalId, targets, values, signatures, calldatas);
 
-        emit ProposalTransactionsUpdated(
-            proposalId,
-            msg.sender,
-            targets,
-            values,
-            signatures,
-            calldatas,
-            updateMessage
-        );
+        emit ProposalTransactionsUpdated(proposalId, msg.sender, targets, values, signatures, calldatas, updateMessage);
     }
 
     function updateProposalTransactionsInternal(
