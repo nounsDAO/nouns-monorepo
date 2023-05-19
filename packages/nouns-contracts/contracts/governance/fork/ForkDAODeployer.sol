@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 
+/// @title The deployer of new Nouns DAO forks
+
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -63,6 +65,14 @@ contract ForkDAODeployer is IForkDAODeployer {
         delayedGovernanceMaxDuration = delayedGovernanceMaxDuration_;
     }
 
+    /**
+     * @notice Deploys a new Nouns DAO fork, including a new token, auction house, governor, and treasury.
+     * All contracts are upgradable, and are almost entirely initialized with the same parameters as the original DAO,
+     * except for the vetoer address, which is set to the zero address.
+     * @param forkingPeriodEndTimestamp The timestamp at which the forking period ends
+     * @return treasury The address of the fork DAO treasury
+     * @return token The address of the fork DAO token
+     */
     function deployForkDAO(uint256 forkingPeriodEndTimestamp) external returns (address treasury, address token) {
         token = address(new ERC1967Proxy(tokenImpl, ''));
         address auction = address(new ERC1967Proxy(auctionImpl, ''));
@@ -100,6 +110,9 @@ contract ForkDAODeployer is IForkDAODeployer {
         emit DAODeployed(token, auction, governor, treasury);
     }
 
+    /**
+     * @dev Used to prevent the 'Stack too deep' error in the main deploy function.
+     */
     function initDAO(
         address governor,
         address treasury,
