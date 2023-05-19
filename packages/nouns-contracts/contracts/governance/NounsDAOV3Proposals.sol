@@ -518,7 +518,6 @@ library NounsDAOV3Proposals {
     {
         require(ds.proposalCount >= proposalId, 'NounsDAO::state: invalid proposal id');
         NounsDAOStorageV3.Proposal storage proposal = ds._proposals[proposalId];
-        INounsDAOExecutor timelock = getProposalTimelock(ds, proposal);
 
         if (proposal.vetoed) {
             return NounsDAOStorageV3.ProposalState.Vetoed;
@@ -538,7 +537,7 @@ library NounsDAOV3Proposals {
             return NounsDAOStorageV3.ProposalState.Succeeded;
         } else if (proposal.executed) {
             return NounsDAOStorageV3.ProposalState.Executed;
-        } else if (block.timestamp >= proposal.eta + timelock.GRACE_PERIOD()) {
+        } else if (block.timestamp >= proposal.eta + getProposalTimelock(ds, proposal).GRACE_PERIOD()) {
             return NounsDAOStorageV3.ProposalState.Expired;
         } else {
             return NounsDAOStorageV3.ProposalState.Queued;
