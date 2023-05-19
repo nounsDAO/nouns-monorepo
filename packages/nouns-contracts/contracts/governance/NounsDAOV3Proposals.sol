@@ -171,7 +171,7 @@ library NounsDAOV3Proposals {
 
         emitNewPropEvents(newProposal, new address[](0), ds.minQuorumVotes(adjustedTotalSupply), txs, description);
 
-        return newProposal.id;
+        return proposalId;
     }
 
     function proposeOnTimelockV1(
