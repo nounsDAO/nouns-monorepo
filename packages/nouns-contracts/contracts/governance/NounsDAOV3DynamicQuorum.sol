@@ -123,15 +123,23 @@ library NounsDAOV3DynamicQuorum {
     /**
      * @notice Current min quorum votes using Noun total supply
      */
-    function minQuorumVotes(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (uint256) {
-        return bps2Uint(getDynamicQuorumParamsAt(ds, block.number).minQuorumVotesBPS, ds.adjustedTotalSupply());
+    function minQuorumVotes(NounsDAOStorageV3.StorageV3 storage ds, uint256 adjustedTotalSupply)
+        internal
+        view
+        returns (uint256)
+    {
+        return bps2Uint(getDynamicQuorumParamsAt(ds, block.number).minQuorumVotesBPS, adjustedTotalSupply);
     }
 
     /**
      * @notice Current max quorum votes using Noun total supply
      */
-    function maxQuorumVotes(NounsDAOStorageV3.StorageV3 storage ds) internal view returns (uint256) {
-        return bps2Uint(getDynamicQuorumParamsAt(ds, block.number).maxQuorumVotesBPS, ds.adjustedTotalSupply());
+    function maxQuorumVotes(NounsDAOStorageV3.StorageV3 storage ds, uint256 adjustedTotalSupply)
+        internal
+        view
+        returns (uint256)
+    {
+        return bps2Uint(getDynamicQuorumParamsAt(ds, block.number).maxQuorumVotesBPS, adjustedTotalSupply);
     }
 
     function safe32(uint256 n, string memory errorMessage) internal pure returns (uint32) {

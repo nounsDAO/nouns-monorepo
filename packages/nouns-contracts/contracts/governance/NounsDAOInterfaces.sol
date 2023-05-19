@@ -569,9 +569,9 @@ interface IForkDAODeployer {
 }
 
 interface INounsDAOExecutorV2 is INounsDAOExecutor {
-    function sendETHToNewDAO(address newDAOTreasury, uint256 ethToSend) external;
+    function sendETH(address newDAOTreasury, uint256 ethToSend) external;
 
-    function sendERC20ToNewDAO(
+    function sendERC20(
         address newDAOTreasury,
         address erc20Token,
         uint256 tokensToSend
@@ -643,9 +643,6 @@ contract NounsDAOStorageV3 {
         uint32 lastMinuteWindowInBlocks;
         uint32 objectionPeriodDurationInBlocks;
         uint32 proposalUpdatablePeriodInBlocks;
-        /// @notice The proposal at which to start using `startBlock` instead of `creationBlock` for vote snapshots
-        /// @dev To be zeroed-out and removed in a V3.1 fix version once the switch takes place
-        uint256 voteSnapshotBlockSwitchProposalId;
         INounsDAOForkEscrow forkEscrow;
         IForkDAODeployer forkDAODeployer;
         address[] erc20TokensToIncludeInFork;
@@ -658,6 +655,10 @@ contract NounsDAOStorageV3 {
         uint256 forkThresholdBPS;
         /// @notice Address of the original timelock
         INounsDAOExecutor timelockV1;
+        /// @notice The proposal at which to start using `startBlock` instead of `creationBlock` for vote snapshots
+        /// @dev Make sure this stays the last variable in this struct, so we can delete it in the next version
+        /// @dev To be zeroed-out and removed in a V3.1 fix version once the switch takes place
+        uint256 voteSnapshotBlockSwitchProposalId;
     }
 
     struct Proposal {
@@ -702,8 +703,8 @@ contract NounsDAOStorageV3 {
         /// @notice The block at which this proposal was created
         uint256 creationBlock;
         address[] signers;
-        uint256 updatePeriodEndBlock;
-        uint256 objectionPeriodEndBlock;
+        uint64 updatePeriodEndBlock;
+        uint64 objectionPeriodEndBlock;
         /// @notice When true, a proposal would be executed on timelockV1 instead of the current timelock
         bool executeOnTimelockV1;
     }
