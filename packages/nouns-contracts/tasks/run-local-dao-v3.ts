@@ -33,7 +33,6 @@ task(
   await contracts.NounsAuctionHouse.instance
     .attach(contracts.NounsAuctionHouseProxy.instance.address)
     .transferOwnership(executorAddress);
-  await contracts.NounsDAODataProxyAdmin.instance.transferOwnership(executorAddress);
   console.log(
     'Transferred ownership of the descriptor, token, and proxy admin contracts to the executor.',
   );

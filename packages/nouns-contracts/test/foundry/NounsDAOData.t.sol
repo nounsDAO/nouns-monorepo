@@ -4,7 +4,6 @@ pragma solidity ^0.8.15;
 import 'forge-std/Test.sol';
 import { NounsDAOData } from '../../contracts/governance/data/NounsDAOData.sol';
 import { NounsDAODataProxy } from '../../contracts/governance/data/NounsDAODataProxy.sol';
-import { NounsDAODataProxyAdmin } from '../../contracts/governance/data/NounsDAODataProxyAdmin.sol';
 import { NounsTokenLikeMock } from './helpers/NounsTokenLikeMock.sol';
 import { NounsDAOV3Proposals } from '../../contracts/governance/NounsDAOV3Proposals.sol';
 import { SigUtils } from './helpers/SigUtils.sol';
@@ -48,7 +47,6 @@ contract NounsDAODataTest is Test, SigUtils {
     event ETHWithdrawn(address indexed to, uint256 amount);
 
     NounsTokenLikeMock tokenLikeMock;
-    NounsDAODataProxyAdmin proxyAdmin;
     NounsDAODataProxy proxy;
     NounsDAOData data;
     address dataAdmin = makeAddr('data admin');
@@ -57,7 +55,6 @@ contract NounsDAODataTest is Test, SigUtils {
     function setUp() public {
         tokenLikeMock = new NounsTokenLikeMock();
         NounsDAOData logic = new NounsDAOData(address(tokenLikeMock), nounsDao);
-        proxyAdmin = new NounsDAODataProxyAdmin();
 
         bytes memory initCallData = abi.encodeWithSignature(
             'initialize(address,uint256,uint256)',
@@ -66,7 +63,7 @@ contract NounsDAODataTest is Test, SigUtils {
             0.01 ether
         );
 
-        proxy = new NounsDAODataProxy(address(logic), address(proxyAdmin), initCallData);
+        proxy = new NounsDAODataProxy(address(logic), initCallData);
 
         data = NounsDAOData(address(proxy));
 

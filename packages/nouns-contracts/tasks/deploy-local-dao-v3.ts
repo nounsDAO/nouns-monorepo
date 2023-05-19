@@ -7,7 +7,10 @@ import { Contract as EthersContract } from 'ethers';
 import { ContractName } from './types';
 
 type LocalContractName =
-  | Exclude<ContractName, 'NounsDAOLogicV1' | 'NounsDAOProxy' | 'NounsDAOLogicV2'>
+  | Exclude<
+      ContractName,
+      'NounsDAOLogicV1' | 'NounsDAOProxy' | 'NounsDAOLogicV2' | 'NounsDAOExecutor'
+    >
   | 'NounsDAOLogicV3'
   | 'NounsDAOProxyV3'
   | 'NounsDAOV3Admin'
@@ -25,8 +28,7 @@ type LocalContractName =
   | 'WETH'
   | 'Multicall2'
   | 'NounsDAOData'
-  | 'NounsDAODataProxy'
-  | 'NounsDAODataProxyAdmin';
+  | 'NounsDAODataProxy';
 
 interface Contract {
   args?: (string | number | (() => string | undefined))[];
@@ -227,13 +229,9 @@ task('deploy-local-dao-v3', 'Deploy contracts to hardhat')
         args: [() => contracts.NounsToken.instance?.address, expectedNounsDAOProxyAddress],
         waitForConfirmation: true,
       },
-      NounsDAODataProxyAdmin: {
-        waitForConfirmation: true,
-      },
       NounsDAODataProxy: {
         args: [
           () => contracts.NounsDAOData.instance?.address,
-          () => contracts.NounsDAODataProxyAdmin.instance?.address,
           () =>
             new Interface(NounsDaoDataABI).encodeFunctionData('initialize', [
               contracts.NounsDAOExecutorProxy.instance?.address,
