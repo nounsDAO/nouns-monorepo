@@ -762,21 +762,14 @@ library NounsDAOV3Proposals {
         newProposal.id = proposalId;
         newProposal.proposer = msg.sender;
         newProposal.proposalThreshold = proposalThreshold_;
-        newProposal.eta = 0;
         newProposal.targets = txs.targets;
         newProposal.values = txs.values;
         newProposal.signatures = txs.signatures;
         newProposal.calldatas = txs.calldatas;
         newProposal.startBlock = startBlock;
         newProposal.endBlock = endBlock;
-        newProposal.forVotes = 0;
-        newProposal.againstVotes = 0;
-        newProposal.abstainVotes = 0;
-        newProposal.canceled = false;
-        newProposal.executed = false;
-        newProposal.vetoed = false;
         newProposal.totalSupply = adjustedTotalSupply;
-        newProposal.creationBlock = block.number;
+        newProposal.creationBlock = uint64(block.number);
         newProposal.updatePeriodEndBlock = updatePeriodEndBlock;
     }
 
