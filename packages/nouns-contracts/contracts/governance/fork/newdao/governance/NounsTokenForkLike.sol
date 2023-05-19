@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.6;
 
-interface NounsTokenLike {
+interface NounsTokenForkLike {
     function getPriorVotes(address account, uint256 blockNumber) external view returns (uint96);
 
     function totalSupply() external view returns (uint256);

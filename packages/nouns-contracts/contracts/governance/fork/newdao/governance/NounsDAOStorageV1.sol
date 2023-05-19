@@ -3,7 +3,7 @@
 pragma solidity ^0.8.6;
 
 import { NounsDAOExecutorV2 } from '../../../NounsDAOExecutorV2.sol';
-import { NounsTokenLike } from './NounsTokenLike.sol';
+import { NounsTokenForkLike } from './NounsTokenForkLike.sol';
 
 /**
  * @title Storage for Governor Bravo Delegate
@@ -40,7 +40,7 @@ contract NounsDAOStorageV1 {
     NounsDAOExecutorV2 public timelock;
 
     /// @notice The address of the Nouns tokens
-    NounsTokenLike public nouns;
+    NounsTokenForkLike public nouns;
 
     /// @notice The official record of all proposals ever proposed
     mapping(uint256 => Proposal) public _proposals;
