@@ -16,6 +16,7 @@
  *********************************/
 
 // LICENSE
+// NounsAuctionHouseFork.sol is a modified version of NounsAuctionHouse.sol.
 // NounsAuctionHouse.sol is a modified version of Zora's AuctionHouse.sol:
 // https://github.com/ourzora/auction-house/blob/54a12ec1a6cf562e49f0a4917990474b11350a2d/contracts/AuctionHouse.sol
 //
@@ -268,14 +269,8 @@ contract NounsAuctionHouseFork is
     }
 
     /**
-     * @dev Function that should revert when `msg.sender` is not authorized to upgrade the contract. Called by
-     * {upgradeTo} and {upgradeToAndCall}.
-     *
-     * Normally, this function will use an xref:access.adoc[access control] modifier such as {Ownable-onlyOwner}.
-     *
-     * ```solidity
-     * function _authorizeUpgrade(address) internal override onlyOwner {}
-     * ```
+     * @dev Reverts when `msg.sender` is not the owner of this contract; in the case of Noun DAOs it should be the
+     * DAO's treasury contract.
      */
     function _authorizeUpgrade(address) internal view override onlyOwner {}
 }
