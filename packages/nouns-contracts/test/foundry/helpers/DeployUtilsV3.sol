@@ -55,7 +55,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
                 )
             )
         );
-        address(new NounsDAOForkEscrow(address(dao)));
+        address(new NounsDAOForkEscrow(address(dao), address(nounsToken)));
     }
 
     function _deployDAOV3() internal returns (NounsDAOLogicV3) {
@@ -125,7 +125,7 @@ abstract contract DeployUtilsV3 is DeployUtils {
             )
         );
 
-        address(new NounsDAOForkEscrow(address(dao)));
+        address(new NounsDAOForkEscrow(address(dao), address(nounsToken)));
 
         vm.prank(address(timelock));
         timelock.setPendingAdmin(address(dao));

@@ -17,10 +17,6 @@ pragma solidity ^0.8.6;
 
 import { NounsTokenLike } from '../NounsDAOInterfaces.sol';
 
-interface NounsDAOLike {
-    function nouns() external view returns (NounsTokenLike);
-}
-
 contract NounsDAOForkEscrow {
     address public immutable dao;
     NounsTokenLike public immutable nounsToken;
@@ -38,9 +34,9 @@ contract NounsDAOForkEscrow {
     error OnlyDAO();
     error NotOwner();
 
-    constructor(address dao_) {
+    constructor(address dao_, address nounsToken_) {
         dao = dao_;
-        nounsToken = NounsDAOLike(dao_).nouns();
+        nounsToken = NounsTokenLike(nounsToken_);
     }
 
     modifier onlyDAO() {

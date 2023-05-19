@@ -3,28 +3,16 @@ pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
 
-import { NounsDAOForkEscrow, NounsDAOLike, NounsTokenLike } from '../../../../contracts/governance/fork/NounsDAOForkEscrow.sol';
+import { NounsDAOForkEscrow, NounsTokenLike } from '../../../../contracts/governance/fork/NounsDAOForkEscrow.sol';
 import { ERC721Mock } from '../../helpers/ERC721Mock.sol';
-
-contract NounsDAOMock is NounsDAOLike {
-    address public token;
-
-    constructor(address token_) {
-        token = token_;
-    }
-
-    function nouns() external view override returns (NounsTokenLike) {
-        return NounsTokenLike(token);
-    }
-}
 
 abstract contract ZeroState is Test {
     NounsDAOForkEscrow escrow;
     ERC721Mock token = new ERC721Mock();
-    address dao = address(new NounsDAOMock(address(token)));
+    address dao = makeAddr('dao');
 
     function setUp() public virtual {
-        escrow = new NounsDAOForkEscrow(dao);
+        escrow = new NounsDAOForkEscrow(dao, address(token));
     }
 }
 

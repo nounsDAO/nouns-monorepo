@@ -7,7 +7,7 @@ import { NounsDAOLogicV1 } from '../../../contracts/governance/NounsDAOLogicV1.s
 import { NounsDAOLogicV3 } from '../../../contracts/governance/NounsDAOLogicV3.sol';
 import { DeployUtils } from '../helpers/DeployUtils.sol';
 import { NounsDAOExecutorV2 } from '../../../contracts/governance/NounsDAOExecutorV2.sol';
-import { ERC1967Proxy } from '@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol';
+import { NounsDAOExecutorProxy } from '../../../contracts/governance/NounsDAOExecutorProxy.sol';
 import { INounsDAOExecutor } from '../../../contracts/governance/NounsDAOInterfaces.sol';
 import { NounsDAOForkEscrow } from '../../../contracts/governance/fork/NounsDAOForkEscrow.sol';
 import { ForkDAODeployer } from '../../../contracts/governance/fork/ForkDAODeployer.sol';
@@ -251,8 +251,18 @@ contract UpgradeToDAOV3Test is DeployUtils {
 
     function deployAndInitTimelockV2() internal returns (NounsDAOExecutorV2 timelockV2, address timelockV2Impl) {
         timelockV2Impl = address(new NounsDAOExecutorV2());
-        timelockV2 = NounsDAOExecutorV2(payable(address(new ERC1967Proxy(timelockV2Impl, ''))));
-        timelockV2.initialize(address(daoProxy), timelockV1.delay());
+
+        bytes memory initCallData = abi.encodeWithSignature(
+            'initialize(address,uint256)',
+            address(daoProxy),
+            timelockV1.delay()
+        );
+
+        timelockV2 = NounsDAOExecutorV2(payable(address(new NounsDAOExecutorProxy(timelockV2Impl, initCallData))));
+
+        assertEq(timelockV2.delay(), timelockV1.delay());
+        assertEq(get1967Implementation(address(timelockV2)), timelockV2Impl);
+
         return (timelockV2, timelockV2Impl);
     }
 
@@ -265,7 +275,7 @@ contract UpgradeToDAOV3Test is DeployUtils {
             NounsDAOExecutorV2 timelockV2
         )
     {
-        forkEscrow = new NounsDAOForkEscrow(address(daoProxy));
+        forkEscrow = new NounsDAOForkEscrow(address(daoProxy), address(daoProxy.nouns()));
         forkDeployer = new ForkDAODeployer(
             address(0), // tokenImpl_,
             address(0), // auctionImpl_,
