@@ -128,6 +128,9 @@ abstract contract DeployUtilsV3 is DeployUtils {
         address(new NounsDAOForkEscrow(address(dao), address(nounsToken)));
 
         vm.prank(address(timelock));
+        NounsAuctionHouse(address(auctionProxy)).initialize(nounsToken, makeAddr('weth'), 2, 0, 1, 10 minutes);
+
+        vm.prank(address(timelock));
         timelock.setPendingAdmin(address(dao));
         vm.prank(address(dao));
         timelock.acceptAdmin();

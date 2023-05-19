@@ -6,14 +6,15 @@ import 'forge-std/Test.sol';
 import { DeployUtilsFork } from '../../helpers/DeployUtilsFork.sol';
 import { NounsTokenFork } from '../../../../contracts/governance/fork/newdao/token/NounsTokenFork.sol';
 import { NounsDAOForkEscrowMock } from '../../helpers/NounsDAOForkEscrowMock.sol';
-import { NounsTokenLikeMock } from '../../helpers/NounsTokenLikeMock.sol';
-import { INounsSeeder } from '../../../../contracts/interfaces/INounsSeeder.sol';
 import { NounsSeeder } from '../../../../contracts/NounsSeeder.sol';
 import { NounsDescriptorV2 } from '../../../../contracts/NounsDescriptorV2.sol';
+import { NounsToken } from '../../../../contracts/NounsToken.sol';
+import { IProxyRegistry } from '../../../../contracts/external/opensea/IProxyRegistry.sol';
+import { NounsTokenLike } from '../../../../contracts/governance/NounsDAOInterfaces.sol';
 
 abstract contract NounsTokenForkBase is DeployUtilsFork {
     NounsTokenFork token;
-    NounsTokenLikeMock originalToken;
+    NounsToken originalToken;
     uint32 forkId;
     NounsSeeder seeder;
     NounsDescriptorV2 descriptor;
@@ -23,43 +24,34 @@ abstract contract NounsTokenForkBase is DeployUtilsFork {
     address minter = makeAddr('minter');
     address originalDAO = makeAddr('original dao');
 
+    address nouner = makeAddr('nouner');
     uint256[] tokenIds;
 
     function setUp() public virtual {
-        originalToken = new NounsTokenLikeMock();
+        descriptor = _deployAndPopulateV2();
+        seeder = new NounsSeeder();
+
+        originalToken = new NounsToken(makeAddr('noundersDAO'), minter, descriptor, seeder, IProxyRegistry(address(1)));
+        vm.startPrank(minter);
+        for (uint256 i = 0; i < 4; ++i) {
+            uint256 tokenId = originalToken.mint();
+            originalToken.transferFrom(address(minter), nouner, tokenId);
+        }
+        vm.stopPrank();
+
         forkId = 1;
-        escrow = new NounsDAOForkEscrowMock(forkId, originalDAO, originalToken);
+        escrow = new NounsDAOForkEscrowMock(forkId, originalDAO, NounsTokenLike(address(originalToken)));
 
         tokenIds.push(1);
         tokenIds.push(4);
         tokenIds.push(2);
-        originalToken.setSeed(1, INounsSeeder.Seed(0, 1, 2, 3, 4));
-        originalToken.setSeed(4, INounsSeeder.Seed(5, 6, 7, 8, 9));
-        originalToken.setSeed(2, INounsSeeder.Seed(10, 11, 12, 13, 14));
 
         token = new NounsTokenFork();
         token.initialize(treasury, minter, escrow, forkId, 0, 3, block.timestamp + FORK_PERIOD);
-
-        seeder = new NounsSeeder();
-        vm.prank(token.owner());
+        vm.startPrank(token.owner());
         token.setSeeder(seeder);
-
-        descriptor = _deployAndPopulateV2();
-        vm.prank(token.owner());
         token.setDescriptor(descriptor);
-    }
-
-    function assertSeedEquals(INounsSeeder.Seed memory actual, INounsSeeder.Seed memory expected) internal {
-        assertEqUint(expected.background, actual.background);
-        assertEqUint(expected.body, actual.body);
-        assertEqUint(expected.accessory, actual.accessory);
-        assertEqUint(expected.head, actual.head);
-        assertEqUint(expected.glasses, actual.glasses);
-    }
-
-    function getSeed(uint256 nounId) internal view returns (INounsSeeder.Seed memory) {
-        (uint48 background, uint48 body, uint48 accessory, uint48 head, uint48 glasses) = token.seeds(nounId);
-        return INounsSeeder.Seed(background, body, accessory, head, glasses);
+        vm.stopPrank();
     }
 }
 
@@ -99,15 +91,13 @@ contract NounsTokenFork_ClaimDuringForkPeriod_Test is NounsTokenForkBase {
         assertEq(token.ownerOf(1), recipient);
         assertEq(token.ownerOf(4), recipient);
         assertEq(token.ownerOf(2), recipient);
-        assertSeedEquals(getSeed(1), INounsSeeder.Seed(0, 1, 2, 3, 4));
-        assertSeedEquals(getSeed(4), INounsSeeder.Seed(5, 6, 7, 8, 9));
-        assertSeedEquals(getSeed(2), INounsSeeder.Seed(10, 11, 12, 13, 14));
+        assertEq(token.tokenURI(1), originalToken.tokenURI(1));
+        assertEq(token.tokenURI(4), originalToken.tokenURI(4));
+        assertEq(token.tokenURI(2), originalToken.tokenURI(2));
     }
 }
 
 contract NounsTokenFork_ClaimFromEscrow_Test is NounsTokenForkBase {
-    address nouner = makeAddr('nouner');
-
     function setUp() public override {
         super.setUp();
         escrow.setOwnerOfTokens(nouner, tokenIds);
@@ -126,9 +116,9 @@ contract NounsTokenFork_ClaimFromEscrow_Test is NounsTokenForkBase {
         assertEq(token.ownerOf(1), nouner);
         assertEq(token.ownerOf(4), nouner);
         assertEq(token.ownerOf(2), nouner);
-        assertSeedEquals(getSeed(1), INounsSeeder.Seed(0, 1, 2, 3, 4));
-        assertSeedEquals(getSeed(4), INounsSeeder.Seed(5, 6, 7, 8, 9));
-        assertSeedEquals(getSeed(2), INounsSeeder.Seed(10, 11, 12, 13, 14));
+        assertEq(token.tokenURI(1), originalToken.tokenURI(1));
+        assertEq(token.tokenURI(4), originalToken.tokenURI(4));
+        assertEq(token.tokenURI(2), originalToken.tokenURI(2));
 
         assertEq(token.remainingTokensToClaim(), 0);
     }

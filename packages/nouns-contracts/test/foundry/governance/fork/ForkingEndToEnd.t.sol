@@ -3,14 +3,17 @@ pragma solidity ^0.8.15;
 
 import 'forge-std/Test.sol';
 
-import { DeployUtilsV3 } from '../../helpers/DeployUtilsV3.sol';
+import { DeployUtilsFork } from '../../helpers/DeployUtilsFork.sol';
 import { NounsDAOLogicV3 } from '../../../../contracts/governance/NounsDAOLogicV3.sol';
 import { NounsToken } from '../../../../contracts/NounsToken.sol';
 import { NounsTokenFork } from '../../../../contracts/governance/fork/newdao/token/NounsTokenFork.sol';
 import { NounsDAOExecutorV2 } from '../../../../contracts/governance/NounsDAOExecutorV2.sol';
 import { NounsDAOLogicV1Fork } from '../../../../contracts/governance/fork/newdao/governance/NounsDAOLogicV1Fork.sol';
+import { NounsAuctionHouseFork } from '../../../../contracts/governance/fork/newdao/NounsAuctionHouseFork.sol';
+import { NounsTokenLike } from '../../../../contracts/governance/NounsDAOInterfaces.sol';
+import { INounsAuctionHouse } from '../../../../contracts/interfaces/INounsAuctionHouse.sol';
 
-contract ForkHappyFlowTest is DeployUtilsV3 {
+contract ForkingHappyFlowTest is DeployUtilsFork {
     address minter;
     NounsDAOLogicV3 daoV3;
     NounsToken ogToken;
@@ -155,5 +158,146 @@ contract ForkHappyFlowTest is DeployUtilsV3 {
         bytes[] memory calldatas = new bytes[](1);
         calldatas[0] = data;
         proposalId = forkDAO.propose(targets, values, signatures, calldatas, 'my proposal');
+    }
+}
+
+abstract contract ForkDAOBase is DeployUtilsFork {
+    NounsDAOLogicV3 originalDAO;
+    NounsTokenLike originalToken;
+    NounsDAOLogicV1Fork forkDAO;
+    NounsDAOExecutorV2 forkTreasury;
+    NounsTokenFork forkToken;
+    NounsAuctionHouseFork forkAuction;
+
+    address originalNouner = makeAddr('original nouner');
+    address newNouner = makeAddr('new nouner');
+    address proposalRecipient = makeAddr('recipient');
+
+    function setUp() public {
+        originalDAO = _deployDAOV3();
+        originalToken = originalDAO.nouns();
+        address originalMinter = originalToken.minter();
+
+        vm.startPrank(originalMinter);
+        originalToken.mint();
+        originalToken.mint();
+        originalToken.transferFrom(originalMinter, originalNouner, 1);
+        originalToken.transferFrom(originalMinter, originalNouner, 2);
+
+        changePrank(originalNouner);
+        uint256[] memory tokenIds = new uint256[](2);
+        tokenIds[0] = 1;
+        tokenIds[1] = 2;
+        originalToken.setApprovalForAll(address(originalDAO), true);
+        originalDAO.escrowToFork(tokenIds, new uint256[](0), '');
+
+        (address treasuryAddress, address tokenAddress) = originalDAO.executeFork();
+
+        forkTreasury = NounsDAOExecutorV2(payable(treasuryAddress));
+        forkDAO = NounsDAOLogicV1Fork(forkTreasury.admin());
+        forkToken = NounsTokenFork(tokenAddress);
+        forkAuction = NounsAuctionHouseFork(forkToken.minter());
+
+        forkToken.claimFromEscrow(tokenIds);
+        vm.stopPrank();
+        vm.roll(block.number + 1);
+    }
+
+    function bidAndSettleAuction() internal {
+        INounsAuctionHouse.Auction memory auction = getAuction();
+        uint256 newNounId = auction.nounId;
+        forkAuction.createBid{ value: 0.1 ether }(newNounId);
+        vm.warp(block.timestamp + auction.endTime);
+        forkAuction.settleCurrentAndCreateNewAuction();
+        assertEq(forkToken.ownerOf(newNounId), newNouner);
+        vm.roll(block.number + 1);
+    }
+
+    function getAuction() internal view returns (INounsAuctionHouse.Auction memory) {
+        (
+            uint256 nounId,
+            uint256 amount,
+            uint256 startTime,
+            uint256 endTime,
+            address payable bidder,
+            bool settled
+        ) = forkAuction.auction();
+
+        return INounsAuctionHouse.Auction(nounId, amount, startTime, endTime, bidder, settled);
+    }
+
+    function proposeToForkAndRollToVoting(
+        address target,
+        uint256 value,
+        string memory signature,
+        bytes memory data
+    ) internal returns (uint256 proposalId) {
+        address[] memory targets = new address[](1);
+        targets[0] = target;
+        uint256[] memory values = new uint256[](1);
+        values[0] = value;
+        string[] memory signatures = new string[](1);
+        signatures[0] = signature;
+        bytes[] memory calldatas = new bytes[](1);
+        calldatas[0] = data;
+        proposalId = forkDAO.propose(targets, values, signatures, calldatas, 'my proposal');
+        vm.roll(block.number + forkDAO.votingDelay() + 1);
+    }
+
+    function queueAndExecute(uint256 propId) internal {
+        vm.roll(block.number + forkDAO.votingPeriod());
+        forkDAO.queue(propId);
+        vm.warp(block.timestamp + forkTreasury.delay());
+        forkDAO.execute(propId);
+    }
+}
+
+contract ForkDAOProposalAndAuctionHappyFlowTest is ForkDAOBase {
+    function test_resumeAuctionViaProposal_buyOnAuctionAndPropose() public {
+        // Execute the proposal to resume the auction
+        vm.startPrank(originalNouner);
+        uint256 unpauseAuctionPropId = proposeToForkAndRollToVoting(address(forkAuction), 0, 'unpause()', '');
+        forkDAO.castVote(unpauseAuctionPropId, 1);
+        queueAndExecute(unpauseAuctionPropId);
+
+        // Buy a fork noun on auction as newNouner
+        vm.deal(newNouner, 1 ether);
+        changePrank(newNouner);
+        bidAndSettleAuction();
+
+        // Execute a proposal created by newNouner
+        vm.deal(address(forkTreasury), 0.142 ether);
+        uint256 transferProp = proposeToForkAndRollToVoting(proposalRecipient, 0.142 ether, '', '');
+        forkDAO.castVote(transferProp, 1);
+        queueAndExecute(transferProp);
+        vm.stopPrank();
+
+        assertEq(proposalRecipient.balance, 0.142 ether);
+    }
+}
+
+contract ForkDAOCanUpgradeItsTokenTest is ForkDAOBase {
+    function test_upgradeTokenWorks() public {
+        vm.expectRevert();
+        TokenUpgrade(address(forkToken)).theUpgradeWorked();
+
+        TokenUpgrade newTokenLogic = new TokenUpgrade();
+        vm.startPrank(originalNouner);
+        uint256 propId = proposeToForkAndRollToVoting(
+            address(forkToken),
+            0,
+            'upgradeTo(address)',
+            abi.encode(newTokenLogic)
+        );
+        forkDAO.castVote(propId, 1);
+        queueAndExecute(propId);
+
+        assertTrue(TokenUpgrade(address(forkToken)).theUpgradeWorked());
+    }
+}
+
+contract TokenUpgrade is NounsTokenFork {
+    function theUpgradeWorked() public pure returns (bool) {
+        return true;
     }
 }
