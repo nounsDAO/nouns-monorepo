@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-/// @title The Nouns ERC-721 token
+/// @title The Nouns ERC-721 token, adjusted for forks
 
 /*********************************
  * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
@@ -34,39 +34,43 @@ contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable
     error NoundersCannotBeAddressZero();
     error OnlyDuringForkingPeriod();
 
-    // An address who has permissions to mint Nouns
+    /// @notice  An address who has permissions to mint Nouns
     address public minter;
 
-    // The Nouns token URI descriptor
+    /// @notice The Nouns token URI descriptor
     INounsDescriptorMinimal public descriptor;
 
-    // The Nouns token seeder
+    /// @notice The Nouns token seeder
     INounsSeeder public seeder;
 
+    /// @notice The escrow contract used to verify ownership of the original Nouns in the post-fork claiming process
     INounsDAOForkEscrow public escrow;
 
+    /// @notice The fork ID, used when querying the escrow for token ownership
     uint32 public forkId;
 
+    /// @notice How many tokens are still available to be claimed by Nouners who put their original Nouns in escrow
     uint256 public remainingTokensToClaim;
 
+    /// @notice The forking period expiration timestamp, afterwhich new tokens cannot be claimed by the original DAO
     uint256 public forkingPeriodEndTimestamp;
 
-    // Whether the minter can be updated
+    /// @notice Whether the minter can be updated
     bool public isMinterLocked;
 
-    // Whether the descriptor can be updated
+    /// @notice Whether the descriptor can be updated
     bool public isDescriptorLocked;
 
-    // Whether the seeder can be updated
+    /// @notice Whether the seeder can be updated
     bool public isSeederLocked;
 
-    // The noun seeds
+    /// @notice The noun seeds
     mapping(uint256 => INounsSeeder.Seed) public seeds;
 
-    // The internal noun ID tracker
+    /// @notice The internal noun ID tracker
     uint256 private _currentNounId;
 
-    // IPFS content hash of contract-level metadata
+    /// @notice IPFS content hash of contract-level metadata
     string private _contractURIHash = 'QmZi1n79FqWt2tTLwCqiy6nLM6xLGRsEPQ5JmReJQKNNzX';
 
     /**
@@ -124,6 +128,12 @@ contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable
         seeder = originalToken.seeder();
     }
 
+    /**
+     * @notice Claim new tokens if you escrowed original Nouns and forked into a new DAO governed by holders of this
+     * token.
+     * @dev Reverts if the sender is not the owner of the escrowed token.
+     * @param tokenIds The token IDs to claim
+     */
     function claimFromEscrow(uint256[] calldata tokenIds) external {
         for (uint256 i = 0; i < tokenIds.length; i++) {
             uint256 nounId = tokenIds[i];
@@ -135,6 +145,13 @@ contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable
         remainingTokensToClaim -= tokenIds.length;
     }
 
+    /**
+     * @notice The original DAO can claim tokens during the forking period, on behalf of Nouners who choose to join
+     * a new fork DAO. Does not allow the original DAO to claim once the forking period has ended.
+     * @dev Assumes the original DAO is honest during the forking period.
+     * @param to The recipient of the tokens
+     * @param tokenIds The token IDs to claim
+     */
     function claimDuringForkPeriod(address to, uint256[] calldata tokenIds) external {
         if (msg.sender != escrow.dao()) revert OnlyOriginalDAO();
         if (block.timestamp > forkingPeriodEndTimestamp) revert OnlyDuringForkingPeriod();
@@ -143,18 +160,6 @@ contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable
             uint256 nounId = tokenIds[i];
             _mintWithOriginalSeed(to, nounId);
         }
-    }
-
-    function _mintWithOriginalSeed(address to, uint256 nounId) internal {
-        (uint48 background, uint48 body, uint48 accessory, uint48 head, uint48 glasses) = NounsTokenFork(
-            address(escrow.nounsToken())
-        ).seeds(nounId);
-        INounsSeeder.Seed memory seed = INounsSeeder.Seed(background, body, accessory, head, glasses);
-
-        seeds[nounId] = seed;
-        _mint(owner(), to, nounId);
-
-        emit NounCreated(nounId, seed);
     }
 
     /**
@@ -281,14 +286,23 @@ contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable
     }
 
     /**
-     * @dev Function that should revert when `msg.sender` is not authorized to upgrade the contract. Called by
-     * {upgradeTo} and {upgradeToAndCall}.
-     *
-     * Normally, this function will use an xref:access.adoc[access control] modifier such as {Ownable-onlyOwner}.
-     *
-     * ```solidity
-     * function _authorizeUpgrade(address) internal override onlyOwner {}
-     * ```
+     * @notice Mint a new token using the original Nouns seed.
+     */
+    function _mintWithOriginalSeed(address to, uint256 nounId) internal {
+        (uint48 background, uint48 body, uint48 accessory, uint48 head, uint48 glasses) = NounsTokenFork(
+            address(escrow.nounsToken())
+        ).seeds(nounId);
+        INounsSeeder.Seed memory seed = INounsSeeder.Seed(background, body, accessory, head, glasses);
+
+        seeds[nounId] = seed;
+        _mint(owner(), to, nounId);
+
+        emit NounCreated(nounId, seed);
+    }
+
+    /**
+     * @dev Reverts when `msg.sender` is not the owner of this contract; in the case of Noun DAOs it should be the
+     * DAO's treasury contract.
      */
     function _authorizeUpgrade(address) internal view override onlyOwner {}
 }
