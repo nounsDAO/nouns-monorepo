@@ -21,13 +21,12 @@ import { OwnableUpgradeable } from '@openzeppelin/contracts-upgradeable/access/O
 import { ERC721Checkpointable } from './base/ERC721Checkpointable.sol';
 import { INounsDescriptorMinimal } from '../../../../interfaces/INounsDescriptorMinimal.sol';
 import { INounsSeeder } from '../../../../interfaces/INounsSeeder.sol';
-import { INounsToken } from '../../../../interfaces/INounsToken.sol';
-import { ERC721 } from './base/ERC721.sol';
+import { INounsTokenFork } from './INounsTokenFork.sol';
 import { IERC721 } from '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import { UUPSUpgradeable } from '@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol';
 import { INounsDAOForkEscrow } from '../../../NounsDAOInterfaces.sol';
 
-contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable, UUPSUpgradeable {
+contract NounsTokenFork is INounsTokenFork, OwnableUpgradeable, ERC721Checkpointable, UUPSUpgradeable {
     error OnlyOwner();
     error OnlyTokenOwnerCanClaim();
     error OnlyOriginalDAO();
@@ -279,7 +278,7 @@ contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable
     function _mintTo(address to, uint256 nounId) internal returns (uint256) {
         INounsSeeder.Seed memory seed = seeds[nounId] = seeder.generateSeed(nounId, descriptor);
 
-        _mint(owner(), to, nounId);
+        _mint(to, nounId);
         emit NounCreated(nounId, seed);
 
         return nounId;
@@ -295,7 +294,7 @@ contract NounsTokenFork is INounsToken, OwnableUpgradeable, ERC721Checkpointable
         INounsSeeder.Seed memory seed = INounsSeeder.Seed(background, body, accessory, head, glasses);
 
         seeds[nounId] = seed;
-        _mint(owner(), to, nounId);
+        _mint(to, nounId);
 
         emit NounCreated(nounId, seed);
     }
