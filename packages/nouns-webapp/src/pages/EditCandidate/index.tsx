@@ -1,4 +1,4 @@
-import { Col, Alert, Button } from 'react-bootstrap';
+import { Col, Alert, Button, FormControl, InputGroup } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import {
   ProposalState,
@@ -8,9 +8,10 @@ import {
   useProposalCount,
   useProposalThreshold,
   usePropose,
+  useCandidate,
 } from '../../wrappers/nounsDao';
 import { useUserVotes } from '../../wrappers/nounToken';
-import classes from './CreateProposal.module.css';
+import classes from '../CreateProposal/CreateProposal.module.css';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
@@ -27,7 +28,8 @@ import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.modu
 import ProposalActionModal from '../../components/ProposalActionsModal';
 import config from '../../config';
 import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
-
+import { useGetCreateCandidateCost, useCreateProposalCandidate, useUpdateProposalCandidate, useCandidateProposal } from '../../wrappers/nounsData';
+import { ethers } from 'ethers';
 interface EditCandidateProps {
   match: {
     params: { id: string };
@@ -36,8 +38,7 @@ interface EditCandidateProps {
 
 const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   const { account } = useEthers();
-  const proposal = useProposal(props.match.params.id);
-
+  const candidate = useCandidateProposal(props.match.params.id);
   const latestProposalId = useProposalCount();
   const latestProposal = useProposal(latestProposalId ?? 0);
   const availableVotes = useUserVotes();
@@ -46,18 +47,20 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   const { propose, proposeState } = usePropose();
 
   const [isProposalEdited, setIsProposalEdited] = useState(false);
-
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
   const [titleValue, setTitleValue] = useState('');
   const [bodyValue, setBodyValue] = useState('');
-
   const [totalUSDCPayment, setTotalUSDCPayment] = useState<number>(0);
   const [tokenBuyerTopUpEth, setTokenBuyerTopUpETH] = useState<string>('0');
+  const [commitMessage, setCommitMessage] = useState<string>('');
   const ethNeeded = useEthNeeded(
     config.addresses.tokenBuyer ?? '',
     totalUSDCPayment,
     config.addresses.tokenBuyer === undefined || totalUSDCPayment === 0,
   );
+  const proposal = candidate?.version;
+  const updateCandidateCost = useGetCreateCandidateCost();
+  const { updateProposalCandidate, updateProposalCandidateState } = useUpdateProposalCandidate();
 
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
@@ -139,7 +142,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   const handleTitleInput = useCallback(
     (title: string) => {
       setTitleValue(title);
-      if (title === proposal?.title) {
+      if (title === candidate?.version.title) {
         setIsProposalEdited(false);
       } else {
         setIsProposalEdited(true);
@@ -151,7 +154,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
   const handleBodyInput = useCallback(
     (body: string) => {
       setBodyValue(body);
-      if (body === proposal?.description) {
+      if (body === candidate?.version?.description) {
         setIsProposalEdited(false);
       } else {
         setIsProposalEdited(true);
@@ -159,38 +162,20 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
     },
     [setBodyValue, bodyValue],
   );
-
   const isFormInvalid = useMemo(
     () => !proposalTransactions.length || titleValue === '' || bodyValue === '',
     [proposalTransactions, titleValue, bodyValue],
   );
-
   const hasEnoughVote = Boolean(
     availableVotes && proposalThreshold !== undefined && availableVotes > proposalThreshold,
   );
-
-  const handleCreateProposal = async () => {
-    if (!proposalTransactions?.length) return;
-
-    await propose(
-      proposalTransactions.map(({ address }) => address), // Targets
-      proposalTransactions.map(({ value }) => value ?? '0'), // Values
-      proposalTransactions.map(({ signature }) => signature), // Signatures
-      proposalTransactions.map(({ calldata }) => calldata), // Calldatas
-      `# ${titleValue}\n\n${bodyValue}`, // Description
-    );
-  };
-
   const [showTransactionFormModal, setShowTransactionFormModal] = useState(false);
   const [isProposePending, setProposePending] = useState(false);
-
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
 
-  console.log('proposal', proposal);
-
   useEffect(() => {
-    switch (proposeState.status) {
+    switch (updateProposalCandidateState.status) {
       case 'None':
         setProposePending(false);
         break;
@@ -208,7 +193,7 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       case 'Fail':
         setModal({
           title: <Trans>Transaction Failed</Trans>,
-          message: proposeState?.errorMessage || <Trans>Please try again.</Trans>,
+          message: updateProposalCandidateState?.errorMessage || <Trans>Please try again.</Trans>,
           show: true,
         });
         setProposePending(false);
@@ -216,13 +201,13 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
       case 'Exception':
         setModal({
           title: <Trans>Error</Trans>,
-          message: proposeState?.errorMessage || <Trans>Please try again.</Trans>,
+          message: updateProposalCandidateState?.errorMessage || <Trans>Please try again.</Trans>,
           show: true,
         });
         setProposePending(false);
         break;
     }
-  }, [proposeState, setModal]);
+  }, [updateProposalCandidateState, setModal]);
 
   // useEffect(() => {
   //   if (proposal) {
@@ -245,18 +230,26 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
     ProposalDetail[]
   >([]);
 
+  const removeTitleFromDescription = (description: string, title: string) => {
+    const titleRegex = new RegExp(`# ${title}\n\n`);
+    return description.replace(titleRegex, '');
+  };
+
   useEffect(() => {
-    if (proposal) {
-      setTitleValue(proposal.title);
-      setBodyValue(proposal.description);
-      const transactions = proposal.details.map(txn => {
+    console.log('proposal', proposal);
+    console.log('candidate', candidate);
+    if (proposal && candidate) {
+      const transactions = candidate?.version.details.map((txn: { target: any; value: any; callData: any; functionSig: any; }) => {
         return {
           address: txn.target,
           value: txn.value ?? '0',
-          calldata: 'txn.data', // TODO
-          signature: 'txn.signature', // TODO
+          calldata: txn.callData,
+          signature: txn.functionSig,
         };
       });
+      console.log('transactions', transactions);
+      setTitleValue(proposal.title);
+      setBodyValue(removeTitleFromDescription(proposal.description, proposal.title));
       setProposalTransactions(transactions);
       setOriginalTitleValue(proposal.title);
       setOriginalBodyValue(proposal.description);
@@ -292,10 +285,28 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
     return false;
   };
 
-  // TODO: uncomment this
-  // if (proposal?.proposer !== account) {
-  //   return null;
-  // }
+  if (candidate?.proposer.toLowerCase() !== account?.toLowerCase()) {
+    return null;
+  }
+
+  const handleUpdateProposal = async () => {
+    console.log('handleUpdateProposal');
+    console.log('proposalTransactions', proposalTransactions);
+    if (!proposalTransactions?.length) return;
+    if (candidate === undefined) return;
+
+    console.log('proposalTransactions', proposalTransactions);
+
+    await updateProposalCandidate(
+      proposalTransactions.map(({ address }) => address), // Targets
+      proposalTransactions.map(({ value }) => value ?? '0'), // Values
+      proposalTransactions.map(({ signature }) => signature ?? ''), // Signatures
+      proposalTransactions.map(({ calldata }) => calldata), // Calldatas
+      `# ${titleValue}\n\n${bodyValue}`, // Description
+      candidate?.slug, // Slug 
+      commitMessage,
+    );
+  };
 
   return (
     <Section fullWidth={false} className={classes.createProposalPage}>
@@ -353,21 +364,37 @@ const EditCandidatePage: React.FC<EditCandidateProps> = props => {
           onTitleInput={handleTitleInput}
           onBodyInput={handleBodyInput}
         />
+        <InputGroup className={classes.commitMessage}>
+          <FormControl
+            value={commitMessage}
+            onChange={e => setCommitMessage(e.target.value)}
+            placeholder="Optional commit message"
+          />
+        </InputGroup>
+
         <EditProposalButton
           className={classes.createProposalButton}
           isLoading={isProposePending}
           proposalThreshold={proposalThreshold}
-          hasActiveOrPendingProposal={
-            (latestProposal?.status === ProposalState.ACTIVE ||
-              latestProposal?.status === ProposalState.PENDING) &&
-            latestProposal.proposer === account
-          }
+          hasActiveOrPendingProposal={false} // not relevant for edit
           hasEnoughVote={true}
           isFormInvalid={isProposalEdited ? false : true}
-          handleCreateProposal={handleCreateProposal}
+          handleCreateProposal={handleUpdateProposal}
+          isCandidate={true}
         />
-
-        <p className="text-center">This will clear all previous sponsors and feedback votes</p>
+        <p className={classes.feeNotice}>
+          {!hasEnoughVote && (
+            <Trans>
+              {updateCandidateCost && ethers.utils.formatEther(updateCandidateCost)} ETH fee upon
+              submission
+            </Trans>
+          )}
+        </p>
+        <p className="text-center pt-0"><Trans>Updating this proposal candidate will clear all previous signers.
+          {proposal && proposal.versionSignatures?.length > 0 ? (
+            <>This candidate currently has {proposal.versionSignatures?.length} signatures.</>
+          ) : ('')}
+        </Trans></p>
       </Col>
     </Section>
   );

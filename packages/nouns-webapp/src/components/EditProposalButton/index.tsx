@@ -9,6 +9,7 @@ const EditProposalButton = ({
   hasActiveOrPendingProposal,
   hasEnoughVote,
   isFormInvalid,
+  isCandidate = false,
   handleCreateProposal,
 }: {
   className?: string;
@@ -17,6 +18,7 @@ const EditProposalButton = ({
   hasActiveOrPendingProposal: boolean;
   hasEnoughVote: boolean;
   isFormInvalid: boolean;
+  isCandidate?: boolean;
   handleCreateProposal: () => void;
 }) => {
   const buttonText = () => {
@@ -32,6 +34,9 @@ const EditProposalButton = ({
         );
       }
       return <Trans>You don't have enough votes to submit a proposal</Trans>;
+    }
+    if (isCandidate) {
+      return <Trans>Update Proposal Candidate</Trans>
     }
     return <Trans>Update Proposal</Trans>;
   };

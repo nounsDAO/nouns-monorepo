@@ -12,7 +12,7 @@ import {
   Proposal,
 } from '../../wrappers/nounsDao';
 import { useUserVotes } from '../../wrappers/nounToken';
-import classes from './CreateProposal.module.css';
+import classes from '../CreateProposal/CreateProposal.module.css';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
@@ -205,8 +205,6 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
 
-  console.log('proposal', proposal);
-
   useEffect(() => {
     switch (proposeState.status) {
       case 'None':
@@ -317,6 +315,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   // set initial values on page load and as they're changed
   useEffect(() => {
     if (proposal) {
+      console.log('proposal', proposal);
       const transactions = proposal.details.map(txn => {
         return {
           address: txn.target,
@@ -335,7 +334,6 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     }
   }, [proposal?.title, proposal?.description, proposal?.details.length]);
 
-  // const isProposalEdited = useMemo(() => {
   const checkIsProposalEdited = () => {
     if (proposal) {
       if (originalTitleValue !== titleValue) {
@@ -366,10 +364,6 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   if (proposal?.proposer?.toLowerCase() !== account?.toLowerCase()) {
     return null;
   }
-
-  console.log('proposalTransactions', proposalTransactions);
-  console.log('bodyValue', bodyValue);
-
 
   return (
     <Section fullWidth={false} className={classes.createProposalPage}>
@@ -439,11 +433,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
           className={classes.createProposalButton}
           isLoading={isProposePending}
           proposalThreshold={proposalThreshold}
-          hasActiveOrPendingProposal={
-            (latestProposal?.status === ProposalState.ACTIVE ||
-              latestProposal?.status === ProposalState.PENDING) &&
-            latestProposal.proposer === account
-          }
+          hasActiveOrPendingProposal={false} // not relevant for edit
           hasEnoughVote={true}
           isFormInvalid={isProposalEdited ? false : true}
           handleCreateProposal={handleUpdateProposal}

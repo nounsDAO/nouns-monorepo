@@ -24,7 +24,7 @@ import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.modu
 import ProposalActionModal from '../../components/ProposalActionsModal';
 import config from '../../config';
 import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
-import { useCreateCandidateCost, useCreateProposalCandidate } from '../../wrappers/nounsData';
+import { useGetCreateCandidateCost, useCreateProposalCandidate } from '../../wrappers/nounsData';
 import { ethers } from 'ethers';
 
 const CreateDraftProposalPage = () => {
@@ -47,7 +47,7 @@ const CreateDraftProposalPage = () => {
   const [tokenBuyerTopUpEth, setTokenBuyerTopUpETH] = useState<string>('0');
   const ethNeeded = useEthNeeded(config.addresses.tokenBuyer ?? '', totalUSDCPayment);
 
-  const createCandidateCost = useCreateCandidateCost();
+  const createCandidateCost = useGetCreateCandidateCost();
 
   const handleAddProposalAction = useCallback(
     (transaction: ProposalTransaction) => {

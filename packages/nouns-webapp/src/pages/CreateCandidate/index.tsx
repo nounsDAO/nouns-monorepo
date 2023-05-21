@@ -25,7 +25,7 @@ import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.modu
 import ProposalActionModal from '../../components/ProposalActionsModal';
 import config from '../../config';
 import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
-import { useCandidateProposals, useCreateCandidateCost, useCreateProposalCandidate } from '../../wrappers/nounsData';
+import { useCandidateProposals, useGetCreateCandidateCost, useCreateProposalCandidate } from '../../wrappers/nounsData';
 import { ethers } from 'ethers';
 import CreateCandidateButton from '../../components/CreateCandidateButton';
 import { checkEnoughVotes, checkHasActiveOrPendingProposalOrCandidate, checkIsEligibleToPropose } from '../../utils/proposals';
@@ -44,7 +44,7 @@ const CreateCandidatePage = () => {
   const availableVotes = useUserVotes();
   const proposalThreshold = useProposalThreshold();
   const ethNeeded = useEthNeeded(config.addresses.tokenBuyer ?? '', totalUSDCPayment);
-  const createCandidateCost = useCreateCandidateCost();
+  const createCandidateCost = useGetCreateCandidateCost();
   const history = useHistory();
   const { loading, error, data: candidates } = useCandidateProposals();
   // TODO: fetch candidates and proposals and check if user has an active or pending proposal or candidate
@@ -293,10 +293,10 @@ const CreateCandidatePage = () => {
         />
         <p className={classes.feeNotice}>
           {!hasEnoughVote && (
-            <>
+            <Trans>
               {createCandidateCost && ethers.utils.formatEther(createCandidateCost)} ETH fee upon
               submission
-            </>
+            </Trans>
           )}
         </p>
       </Col>

@@ -167,52 +167,52 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
     return encodedData;
   }
 
-  async function sign() {
-    if (!candidateProposal) return;
-    let signature;
-    if (proposalIdToUpdate) {
-      const value = {
-        proposer: candidateProposal.proposer,
-        targets: candidateProposal.latestVersion.targets,
-        values: candidateProposal.latestVersion.values,
-        signatures: candidateProposal.latestVersion.signatures,
-        calldatas: candidateProposal.latestVersion.calldatas,
-        description: candidateProposal.latestVersion.description,
-        expiry: expiry,
-        proposalId: proposalIdToUpdate,
-      };
-      signature = await signer!._signTypedData(domain, updateProposalTypes, value);
-    } else {
-      const value = {
-        proposer: candidateProposal.proposer,
-        targets: candidateProposal.latestVersion.targets,
-        values: candidateProposal.latestVersion.values,
-        signatures: candidateProposal.latestVersion.signatures,
-        calldatas: candidateProposal.latestVersion.calldatas,
-        description: candidateProposal.latestVersion.description,
-        expiry: expiry,
-      };
-      signature = await signer!._signTypedData(domain, createProposalTypes, value);
-    }
+  // async function sign() {
+  //   if (!candidateProposal) return;
+  //   let signature;
+  //   if (proposalIdToUpdate) {
+  //     const value = {
+  //       proposer: candidateProposal.proposer,
+  //       targets: candidateProposal.latestVersion.targets,
+  //       values: candidateProposal.latestVersion.values,
+  //       signatures: candidateProposal.latestVersion.signatures,
+  //       calldatas: candidateProposal.latestVersion.calldatas,
+  //       description: candidateProposal.latestVersion.description,
+  //       expiry: expiry,
+  //       proposalId: proposalIdToUpdate,
+  //     };
+  //     signature = await signer!._signTypedData(domain, updateProposalTypes, value);
+  //   } else {
+  //     const value = {
+  //       proposer: candidateProposal.proposer,
+  //       targets: candidateProposal.latestVersion.targets,
+  //       values: candidateProposal.latestVersion.values,
+  //       signatures: candidateProposal.latestVersion.signatures,
+  //       calldatas: candidateProposal.latestVersion.calldatas,
+  //       description: candidateProposal.latestVersion.description,
+  //       expiry: expiry,
+  //     };
+  //     signature = await signer!._signTypedData(domain, createProposalTypes, value);
+  //   }
 
-    const encodedProp = await calcProposalEncodeData(
-      candidateProposal.proposer,
-      candidateProposal.latestVersion.targets,
-      candidateProposal.latestVersion.values,
-      candidateProposal.latestVersion.signatures,
-      candidateProposal.latestVersion.calldatas,
-      candidateProposal.latestVersion.description,
-    );
+  //   const encodedProp = await calcProposalEncodeData(
+  //     candidateProposal.proposer,
+  //     candidateProposal.latestVersion.targets,
+  //     candidateProposal.latestVersion.values,
+  //     candidateProposal.latestVersion.signatures,
+  //     candidateProposal.latestVersion.calldatas,
+  //     candidateProposal.latestVersion.description,
+  //   );
 
-    await addSignature(
-      signature,
-      expiry,
-      candidateProposal.proposer,
-      candidateProposal.slug,
-      encodedProp,
-      'TODO reason',
-    );
-  }
+  //   await addSignature(
+  //     signature,
+  //     expiry,
+  //     candidateProposal.proposer,
+  //     candidateProposal.slug,
+  //     encodedProp,
+  //     'TODO reason',
+  //   );
+  // }
 
   const [isProposePending, setProposePending] = useState(false);
 
@@ -259,11 +259,11 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   const submitProposalOnChain = async () => {
     await proposeBySigs(
       props.signatures?.map((s: any) => [s.sig, s.signer.id, s.expirationTimestamp]),
-      candidateProposal?.latestVersion.targets,
-      candidateProposal?.latestVersion.values,
-      candidateProposal?.latestVersion.signatures,
-      candidateProposal?.latestVersion.calldatas,
-      candidateProposal?.latestVersion.description,
+      candidateProposal?.version.details.targets,
+      candidateProposal?.version.details.values,
+      candidateProposal?.version.details.signatures,
+      candidateProposal?.version.details.calldatas,
+      candidateProposal?.version.description,
     );
   };
 

@@ -117,7 +117,7 @@ export interface ProposalVersion {
   versionNumber: number;
 }
 
-interface ProposalTransactionDetails {
+export interface ProposalTransactionDetails {
   targets: string[];
   values: string[];
   signatures: string[];
@@ -195,6 +195,7 @@ export interface ProposalCandidateVersion {
 export interface ProposalCandidate extends ProposalCandidateInfo {
   version: ProposalCandidateVersion;
   canceled: boolean;
+  proposer: string;
 }
 
 export interface PartialProposalCandidate extends ProposalCandidateInfo {
@@ -302,7 +303,7 @@ const extractEqualTitle = (body: string) => body.match(equalTitleRegex);
  * Extract title from a proposal's body/description. Returns null if no title found in the first line.
  * @param body proposal body
  */
-const extractTitle = (body: string | undefined): string | null => {
+export const extractTitle = (body: string | undefined): string | null => {
   if (!body) return null;
   const hashResult = extractHashTitle(body);
   const equalResult = extractEqualTitle(body);
@@ -314,7 +315,7 @@ const removeBold = (text: string | null): string | null =>
 const removeItalics = (text: string | null): string | null =>
   text ? text.replace(/__/g, '') : text;
 
-const removeMarkdownStyle = R.compose(removeBold, removeItalics);
+export const removeMarkdownStyle = R.compose(removeBold, removeItalics);
 
 export const useCurrentQuorum = (
   nounsDao: string,
@@ -421,7 +422,7 @@ const concatSelectorToCalldata = (signature: string, callData: string) => {
   return callData;
 };
 
-const formatProposalTransactionDetails = (details: ProposalTransactionDetails | Result) => {
+export const formatProposalTransactionDetails = (details: ProposalTransactionDetails | Result) => {
   return details.targets.map((target: string, i: number) => {
     const signature: string = details.signatures[i];
     const value = EthersBN.from(
@@ -469,7 +470,7 @@ const formatProposalTransactionDetails = (details: ProposalTransactionDetails | 
   });
 };
 
-const formatProposalTransactionDetailsToUpdate = (details: ProposalTransactionDetails | Result) => {
+export const formatProposalTransactionDetailsToUpdate = (details: ProposalTransactionDetails | Result) => {
   return details.targets.map((target: string, i: number) => {
     const signature: string = details.signatures[i];
     const value = EthersBN.from(
@@ -588,9 +589,7 @@ const parsePartialSubgraphProposal = (
 };
 
 const parseSubgraphCandidate = (
-  candidate: ProposalCandidateSubgraphEntity | undefined,
-  blockNumber: number | undefined,
-  timestamp: number | undefined,
+  candidate: ProposalCandidateSubgraphEntity | undefined
 ) => {
   if (!candidate) {
     return;
@@ -598,6 +597,11 @@ const parseSubgraphCandidate = (
   const description = candidate.latestVersion.description
     ?.replace(/\\n/g, '\n')
     .replace(/(^['"]|['"]$)/g, '');
+  // const versionSignatures = candidate.latestVersion.versionSignatures.map(s => {
+  //   if (s.canceled === false) {
+  //     return s;
+  //   }
+  // });
   const details = {
     targets: candidate.latestVersion.targets,
     values: candidate.latestVersion.values,
@@ -606,11 +610,7 @@ const parseSubgraphCandidate = (
     encodedProposalHash: candidate.latestVersion.encodedProposalHash,
   };
 
-  const versionSignatures = candidate.latestVersion.versionSignatures.map(s => {
-    if (s.canceled === false) {
-      return s;
-    }
-  });
+
 
   return {
     id: candidate.id,
@@ -842,13 +842,8 @@ export const useProposalVersions = (
 };
 
 export const useCandidate = (id: string): ProposalCandidate | undefined => {
-  const blockNumber = useBlockNumber();
-  const timestamp = useBlockTimestamp(blockNumber);
   return parseSubgraphCandidate(
-    useQuery(candidateProposalQuery(id)).data?.proposalCandidate,
-    blockNumber,
-    timestamp,
-  );
+    useQuery(candidateProposalQuery(id)).data?.proposalCandidate);
 };
 
 export const useCancelSignature = () => {

@@ -210,13 +210,23 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
+  gap: 1rem;
+  @media (max-width: 992px) {
+    text-align: center;
+    flex-direction: column;
+  }
 }
 
 .editCandidate .buttons {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  gap: 10px;
+  justify-content: flex-end;
+  gap: 1rem;
+  width: 30%;
+  @media (max-width: 992px) {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 .editCandidate p {
