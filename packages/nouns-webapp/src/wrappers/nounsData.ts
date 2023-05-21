@@ -57,9 +57,10 @@ export const useCandidateProposals = () => {
   return { loading, data, error };
 };
 
-export const useCandidateProposal = (id: string) => {
+export const useCandidateProposal = (id: string, toUpdate?: boolean) => {
   return parseSubgraphCandidate(
-    useQuery(candidateProposalQuery(id)).data?.proposalCandidate
+    useQuery(candidateProposalQuery(id)).data?.proposalCandidate,
+    toUpdate
   );
 };
 
@@ -125,26 +126,30 @@ export const useProposalFeedback = (id: string) => {
 
 
 const parseSubgraphCandidate = (
-  candidate: ProposalCandidateSubgraphEntity | undefined
+  candidate: ProposalCandidateSubgraphEntity | undefined,
+  toUpdate?: boolean,
 ) => {
   if (!candidate) {
     return;
   }
-
-  console.log('parseSubgraphCandidate candidate', candidate);
   const description = candidate.latestVersion.description
     ?.replace(/\\n/g, '\n')
     .replace(/(^['"]|['"]$)/g, '');
-  const details: ProposalTransactionDetails = {
+  const transactionDetails: ProposalTransactionDetails = {
     targets: candidate.latestVersion.targets,
     values: candidate.latestVersion.values,
     signatures: candidate.latestVersion.signatures,
     calldatas: candidate.latestVersion.calldatas,
     encodedProposalHash: candidate.latestVersion.encodedProposalHash,
   };
-  console.log('parseSubgraphCandidate details', details);
-  const formattedDetails = formatProposalTransactionDetailsToUpdate(details);
-  console.log('parseSubgraphCandidate formattedDetails', formattedDetails);
+  let details;
+  if (toUpdate) {
+    details = formatProposalTransactionDetailsToUpdate(transactionDetails);
+  } else {
+    details = formatProposalTransactionDetails(transactionDetails);
+  }
+  console.log('candidate return', candidate);
+
   return {
     id: candidate.id,
     slug: candidate.slug,
@@ -152,11 +157,11 @@ const parseSubgraphCandidate = (
     lastUpdatedTimestamp: candidate.lastUpdatedTimestamp,
     canceled: candidate.canceled,
     versionsCount: candidate.versions.length,
+    createdTransactionHash: candidate.createdTransactionHash,
     version: {
       title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',
       description: description ?? 'No description.',
-      // details: formatProposalTransactionDetails(details),
-      details: formatProposalTransactionDetailsToUpdate(details),
+      details: details,
       transactionHash: details.encodedProposalHash,
       versionSignatures: candidate.latestVersion.versionSignatures,
     },
@@ -220,6 +225,7 @@ export interface ProposalCandidateInfo {
   lastUpdatedTimestamp: number;
   canceled: boolean;
   versionsCount: number;
+  createdTransactionHash: string;
 }
 
 export interface ProposalCandidateVersion {
@@ -242,8 +248,9 @@ export interface ProposalCandidateVersion {
 
 export interface ProposalCandidate extends ProposalCandidateInfo {
   version: ProposalCandidateVersion;
-  canceled: boolean;
-  proposer: string;
+  // canceled: boolean;
+  // proposer: string;
+  // createdTransactionHash: string;
 }
 
 export interface PartialProposalCandidate extends ProposalCandidateInfo {

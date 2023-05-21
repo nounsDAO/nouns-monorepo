@@ -14,8 +14,8 @@ type Props = {
 }
 
 export default function ProposalTransactions({ details }: Props) {
+  console.log('details', details);
   return (
-
     <ol>
       {details.map((d, i) => {
         return (

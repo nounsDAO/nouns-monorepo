@@ -7,8 +7,6 @@ import ProposalStatus from '../ProposalStatus';
 import classes from './ProposalHeader.module.css';
 import navBarButtonClasses from '../NavBarButton/NavBarButton.module.css';
 import {
-  Proposal,
-  ProposalCandidate,
   useHasVotedOnProposal,
   useProposalVote,
 } from '../../wrappers/nounsDao';
@@ -27,6 +25,7 @@ import HoverCard from '../HoverCard';
 import ByLineHoverCard from '../ByLineHoverCard';
 import { timestampFromBlockNumber } from '../../utils/timeUtils';
 import dayjs from 'dayjs';
+import { ProposalCandidate } from '../../wrappers/nounsData';
 
 interface CandidateHeaderProps {
   proposal: ProposalCandidate;
@@ -116,14 +115,14 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
     </a>
   );
 
-  // const proposedAtTransactionHash = (
-  //   <Trans>
-  //     at{' '}
-  //     <span className={classes.propTransactionHash}>
-  //       {transactionLink(proposal.version.details.encodedProposalHash)}
-  //     </span>
-  //   </Trans>
-  // );
+  const proposedAtTransactionHash = (
+    <Trans>
+      at{' '}
+      <span className={classes.propTransactionHash}>
+        {transactionLink(proposal.createdTransactionHash)}
+      </span>
+    </Trans>
+  );
 
   return (
     <>
@@ -146,12 +145,6 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
                   <>
                     <div>
                       <Trans>Proposal {i18n.number(parseInt(proposal.id || '0'))}</Trans>
-                    </div>
-                    <div>
-                      {/* <ProposalStatus
-                        status={proposal?.status}
-                        className={classes.proposalStatus}
-                      /> */}
                     </div>
                   </>
                 )}
@@ -182,9 +175,9 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
               <Trans>
                 <span className={classes.proposedByJp}>Proposed by: </span>
                 <span className={classes.proposerJp}>{proposer}</span>
-                {/* <span className={classes.propTransactionWrapperJp}>
+                <span className={classes.propTransactionWrapperJp}>
                   {proposedAtTransactionHash}
-                </span> */}
+                </span>
               </Trans>
             </div>
           </HoverCard>
@@ -200,9 +193,9 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
               >
                 <h3>
                   {proposer}
-                  {/* <span className={classes.propTransactionWrapper}>
+                  <span className={classes.propTransactionWrapper}>
                     {proposedAtTransactionHash}
-                  </span> */}
+                  </span>
                 </h3>
               </HoverCard>
             </div>
@@ -211,12 +204,13 @@ const CandidateHeader: React.FC<CandidateHeaderProps> = props => {
       </div>
 
       <p className={classes.versionHistory}>
-        <strong>Version {proposal.versionsCount}</strong>{' '}
-        {/* <span>updated {updatedTimestamp && dayjs(updatedTimestamp).fromNow()}</span> */}
-        <span>
-          {proposal.versionsCount === 1 ? 'created' : 'updated'}{' '}
-          {dayjs(proposal.lastUpdatedTimestamp * 1000).fromNow()}
-        </span>
+        <Link to={`/candidates/${proposal.id}/history/`}>
+          <strong>Version {proposal.versionsCount}</strong>{' '}
+          <span>
+            {proposal.versionsCount === 1 ? 'created' : 'updated'}{' '}
+            {dayjs(proposal.lastUpdatedTimestamp * 1000).fromNow()}
+          </span>
+        </Link>
       </p>
 
       {isMobile && (

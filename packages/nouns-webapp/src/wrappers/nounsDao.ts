@@ -642,9 +642,7 @@ const parseSubgraphProposal = (
   const description = proposal.description?.replace(/\\n/g, '\n').replace(/(^['"]|['"]$)/g, '');
   let details;
   if (toUpdate) {
-    console.log('parseSubgraphProposal toUpdate', toUpdate);
     details = formatProposalTransactionDetailsToUpdate(proposal);
-    console.log('parseSubgraphProposal details', details);
   } else {
     details = formatProposalTransactionDetails(proposal);
   }

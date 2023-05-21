@@ -110,6 +110,7 @@ export const candidateProposalsQuery = (first = 1_000) => gql`
       proposer
       lastUpdatedTimestamp
       canceled
+      createdTransactionHash
       latestVersion {
         title
         versionSignatures {
@@ -129,6 +130,7 @@ export const candidateProposalQuery = (id: string) => gql`
     slug
     proposer
     lastUpdatedTimestamp
+    createdTransactionHash
     versions {
       title
     }
