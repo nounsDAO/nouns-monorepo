@@ -35,7 +35,7 @@ interface CandidateSponsorsProps {
   candidate: ProposalCandidate;
   slug: string;
   // delegateSnapshot?: Delegates;
-  signers: string[];
+  // signers: string[];
   signatures?: {
     reason: string;
     expirationTimestamp: number;
@@ -86,17 +86,21 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   const [signedVotes, setSignedVotes] = React.useState<number>(0);
   const [requiredVotes, setRequiredVotes] = React.useState<number>();
   const [isFormDisplayed, setIsFormDisplayed] = React.useState<boolean>(false);
-  const blockNumber = useBlockNumber();
-  const { account } = useEthers();
-  const connectedAccountNounVotes = useUserVotes() || 0;
   const [isAccountSigner, setIsAccountSigner] = React.useState<boolean>(false);
+  const [isVoteCountUpdated, setIsVoteCountUpdated] = React.useState<boolean>(false);
+  const blockNumber = useBlockNumber();
+  const connectedAccountNounVotes = useUserVotes() || 0;
   const threshold = useProposalThreshold();
   const signers = props.candidate.version.versionSignatures?.map(signature => signature.signer.id);
+  const { account } = useEthers();
   const { data: delegateSnapshot } = useQuery<Delegates>(
     delegateNounsAtBlockQuery(signers, blockNumber ?? 0),
   );
 
-  console.log('props.candidate', props.candidate, props.signatures);
+  const handleSignerCountDecrease = (decreaseAmount: number) => {
+    setSignedVotes(updatedSignerCount => updatedSignerCount - decreaseAmount);
+    setIsVoteCountUpdated(true);
+  };
 
   useEffect(() => {
     if (threshold !== undefined) {
@@ -105,33 +109,33 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   }, [threshold]);
 
   useEffect(() => {
-    if (props.signatures && signedVotes === 0) {
-      props.signatures.map((signature, i) => {
-        if (signature.expirationTimestamp < Math.round(Date.now() / 1000)) {
-          props.signatures?.splice(i, 1);
-        }
-        if (signature.signer.id.toUpperCase() === account?.toUpperCase()) {
-          setIsAccountSigner(true);
-        }
-        delegateSnapshot?.delegates?.map(delegate => {
-          if (delegate.id === signature.signer.id) {
-            setSignedVotes(signedVotes => signedVotes + delegate.nounsRepresented.length);
+    // only set the vote count if the count hasn't been updated by remove/add signature
+    // this prevents the count from being reset to the stale value
+    if (!isVoteCountUpdated) {
+      if (props.signatures && signedVotes === 0) {
+        props.signatures.map((signature, i) => {
+          if (signature.expirationTimestamp < Math.round(Date.now() / 1000)) {
+            props.signatures?.splice(i, 1);
           }
+          if (signature.signer.id.toUpperCase() === account?.toUpperCase()) {
+            setIsAccountSigner(true);
+          }
+          delegateSnapshot?.delegates?.map(delegate => {
+            if (delegate.id === signature.signer.id) {
+              setSignedVotes(signedVotes => signedVotes + delegate.nounsRepresented.length);
+            }
+          });
         });
-      });
+      }
     }
   }, [props.signatures, delegateSnapshot]);
 
-  // POC code below
-  const { library, chainId } = useEthers();
+  const { library } = useEthers();
   const signer = library?.getSigner();
-
   const [expiry, setExpiry] = useState(Math.round(Date.now() / 1000) + 60 * 60 * 24);
   const [proposalIdToUpdate, setProposalIdToUpdate] = useState('');
-
   const candidateProposal = useCandidateProposal(props.id);
   const { addSignature, addSignatureState } = useAddSignature();
-
   async function calcProposalEncodeData(
     proposer: any,
     targets: any,
@@ -200,17 +204,6 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
       candidateProposal.latestVersion.description,
     );
 
-    console.log('>>>> encodedProp', encodedProp);
-
-    console.log(
-      '>> addSignature',
-      signature,
-      expiry,
-      candidateProposal.proposer,
-      candidateProposal.slug,
-      encodedProp,
-    );
-
     await addSignature(
       signature,
       expiry,
@@ -219,13 +212,6 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
       encodedProp,
       'TODO reason',
     );
-    // const updatedDraftProposal = addSignature(
-    //   {
-    //     signer: await signer!.getAddress(),
-    //     signature: signature!,
-    //     expiry: expiry},
-    //   proposalId);
-    //   setDraftProposal(updatedDraftProposal);
   }
 
   const [isProposePending, setProposePending] = useState(false);
@@ -233,7 +219,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
   const { proposeBySigs, proposeBySigsState } = useProposeBySigs();
-  const { updateProposalBySigs, updateProposalBySigState } = useUpdateProposalBySigs();
+  const [addSignatureTransactionState, setAddSignatureTransactionState] = useState<"None" | "Success" | "Mining" | "Fail" | "Exception">("None");
 
   useEffect(() => {
     switch (proposeBySigsState.status) {
@@ -270,41 +256,6 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
     }
   }, [proposeBySigsState, setModal]);
 
-  useEffect(() => {
-    switch (updateProposalBySigState.status) {
-      case 'None':
-        setProposePending(false);
-        break;
-      case 'Mining':
-        setProposePending(true);
-        break;
-      case 'Success':
-        setModal({
-          title: <Trans>Success</Trans>,
-          message: <Trans>Proposal Updated!</Trans>,
-          show: true,
-        });
-        setProposePending(false);
-        break;
-      case 'Fail':
-        setModal({
-          title: <Trans>Transaction Failed</Trans>,
-          message: updateProposalBySigState?.errorMessage || <Trans>Please try again.</Trans>,
-          show: true,
-        });
-        setProposePending(false);
-        break;
-      case 'Exception':
-        setModal({
-          title: <Trans>Error</Trans>,
-          message: updateProposalBySigState?.errorMessage || <Trans>Please try again.</Trans>,
-          show: true,
-        });
-        setProposePending(false);
-        break;
-    }
-  }, [updateProposalBySigState, setModal]);
-
   const submitProposalOnChain = async () => {
     await proposeBySigs(
       props.signatures?.map((s: any) => [s.sig, s.signer.id, s.expirationTimestamp]),
@@ -315,6 +266,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
       candidateProposal?.latestVersion.description,
     );
   };
+
   return (
     <div className={classes.wrapper}>
       <div className={classes.interiorWrapper}>
@@ -325,8 +277,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
         )}
         <h4 className={classes.header}>
           <strong>
-            {/* todo: add loading skeleton here */}
-            {signedVotes || '...'} of {requiredVotes || '...'} Sponsored Votes
+            {signedVotes >= 0 ? signedVotes : '...'} of {requiredVotes || '...'} Sponsored Votes
           </strong>
         </h4>
         <p className={classes.subhead}>
@@ -351,6 +302,7 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
                   signer={signature.signer.id}
                   isAccountSigner={isAccountSigner}
                   sig={signature.sig}
+                  handleSignerCountDecrease={handleSignerCountDecrease}
                 />
               );
             })}
@@ -390,6 +342,11 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
           )}
         </ul>
         <AnimatePresence>
+          {addSignatureTransactionState === 'Success' && (
+            <div className='transactionStatus success'>
+              <p>Success!</p>
+            </div>
+          )}
           {isFormDisplayed ? (
             <motion.div
               className={classes.formOverlay}
@@ -401,7 +358,11 @@ const CandidateSponsors: React.FC<CandidateSponsorsProps> = props => {
               <button className={classes.closeButton} onClick={() => setIsFormDisplayed(false)}>
                 &times;
               </button>
-              <SignatureForm id={props.id} />
+              <SignatureForm
+                id={props.id}
+                transactionState={addSignatureTransactionState}
+                setTransactionState={setAddSignatureTransactionState}
+              />
             </motion.div>
           ) : null}
         </AnimatePresence>

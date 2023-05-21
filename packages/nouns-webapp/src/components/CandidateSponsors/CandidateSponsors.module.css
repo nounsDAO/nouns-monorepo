@@ -54,6 +54,7 @@
 .sponsorsList li.sponsor {
   background-color: #FBFBFC;
   border-width: 1px;
+  position: relative;
 }
 
 .sponsorsList li.placeholder {
@@ -131,6 +132,14 @@
   cursor: pointer;
 }
 
+.button:disabled {
+  background-color: #f4f4f8;
+  border: #f4f4f8;
+  color: #8c8d92;
+  border: 1px solid #e2e3e8;
+  pointer-events: none;
+}
+
 .removeSignature {
   border: none;
   text-align: center;
@@ -199,9 +208,10 @@
   justify-content: center;
   align-items: center;
   border-radius: 12px;
+  border: 1px solid #e6e6e6;
 }
 
-.formOverlay .closeButton {
+.formOverlay .closeButton, .cancelStatusOverlay .closeButton {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -210,10 +220,13 @@
   cursor: pointer;
   border: none;
   background: transparent;
+  z-index: 99;
 }
 
 .formWrapper {
   text-align: left;
+  width: 100%;
+  padding: 15px;
 }
 .formWrapper input, .formWrapper textarea {
   width: 100%;
@@ -247,4 +260,48 @@
 .aboutText p {
   margin: 0 0 4px;
   padding: 0;
+}
+
+.transactionStatus {
+  font-size: 14px;
+  color: #646465;
+  line-height: 1.2;
+  margin-top: 15px;
+  text-align: center;
+}
+
+.cancelStatusOverlay, .submitSignatureStatusOverlay {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  background-color: #fff;
+  text-align: center;
+  padding: 10px;
+  height: calc(100% - 6px);
+  width: calc(100% - 6px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.cancelStatusOverlay .cancelStatusOverlayTitle, .submitSignatureStatusOverlay {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+} 
+
+.loadingNoggles {
+  margin: 0 auto;
+  max-width: 90px;
+}
+
+.submitSignatureStatusOverlay {
+  padding: 10px;
+  z-index: 100;
+  background-color: #fff;
+}
+.closeLink {
+  text-decoration: underline;
+  border: none;
+  background-color: transparent;
+  font-weight: bold;
 }

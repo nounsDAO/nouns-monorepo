@@ -182,7 +182,7 @@ function VoteSignals(props: Props) {
               <VoteSignalGroup voteSignals={againstFeedback} support={0} />
               <VoteSignalGroup voteSignals={abstainFeedback} support={2} />
             </div>
-            {props.availableVotes && props.availableVotes > 0 && (
+            {props.availableVotes !== undefined && props.availableVotes > 0 && (
               <div className={clsx(classes.feedbackForm, userVoteSupport && classes.voted)}>
                 {!hasUserVoted ? (
                   <>

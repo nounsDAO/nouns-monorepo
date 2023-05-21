@@ -29,6 +29,7 @@ const VoteSignalGroup = (props: Props) => {
           props.support === 1 && classes.for,
           props.support === 0 && classes.against,
           props.support === 2 && classes.abstain,
+          props.voteSignals.length > 0 && 'cursor-default',
         )}
         onClick={() => props.voteSignals.length > 0 && setIsExpanded(!isExpanded)}
       >
@@ -38,22 +39,24 @@ const VoteSignalGroup = (props: Props) => {
             (props.support === 0 && 'Against') ||
             (props.support === 2 && 'Abstain')}
         </p>
-        <motion.div
-          className={clsx(
-            classes.arrowIcon,
-            isExpanded && classes.expanded,
-            props.voteSignals.length > 0 ? 'opacity-100' : 'opacity-25',
-          )}
-          animate={{
-            rotate: isExpanded ? 0 : 180,
-          }}
-          transition={{
-            duration: 0.2,
-            ease: 'easeInOut',
-          }}
-        >
-          <FontAwesomeIcon icon={faChevronDown} />
-        </motion.div>
+        {props.voteSignals.length > 0 && (
+          <motion.div
+            className={clsx(
+              classes.arrowIcon,
+              isExpanded && classes.expanded,
+              props.voteSignals.length > 0 ? 'opacity-100' : 'opacity-25',
+            )}
+            animate={{
+              rotate: isExpanded ? 0 : 180,
+            }}
+            transition={{
+              duration: 0.2,
+              ease: 'easeInOut',
+            }}
+          >
+            <FontAwesomeIcon icon={faChevronDown} />
+          </motion.div>
+        )}
       </button>
       <AnimatePresence>
         {isExpanded && (
