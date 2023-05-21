@@ -11,6 +11,7 @@ import {
 } from '../../wrappers/nounsDao';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Vote.module.css';
+import editorClasses from '../../components/ProposalEditor/ProposalEditor.module.css';
 import { RouteComponentProps, useParams, useRouteMatch } from 'react-router-dom';
 import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
@@ -48,6 +49,9 @@ import ShortAddress from '../../components/ShortAddress';
 import StreamWithdrawModal from '../../components/StreamWithdrawModal';
 import { parseStreamCreationCallData } from '../../utils/streamingPaymentUtils/streamingPaymentUtils';
 import VersionTab from './VersionTab';
+import remarkBreaks from 'remark-breaks';
+import ProposalTransactions from '../../components/ProposalContent/ProposalTransactions';
+
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -64,12 +68,15 @@ const ProposalHistory = ({
 }: RouteComponentProps<{ id: string; versionNumber?: string }>) => {
   const proposal = useProposal(id);
   const proposalVersions = useProposalVersions(id);
-
+  const [isDiffsVisible, setIsDiffsVisible] = useState(false);
   const [activeVersion, setActiveVersion] = useState(0);
+  const [earlierVersion, setEarlierVersion] = useState(0);
 
   // Get and format date from data
   const timestamp = Date.now();
   const currentBlock = useBlockNumber();
+
+  console.log('proposalVersions', proposalVersions);
 
   useEffect(() => {
     if (versionNumber) {
@@ -77,6 +84,9 @@ const ProposalHistory = ({
     } else {
       // if no version number in url, set active version to latest
       setActiveVersion(proposalVersions?.length ?? 0);
+      if (proposalVersions && proposalVersions?.length > 1) {
+        setEarlierVersion(proposalVersions.length - 1);
+      }
     }
   }, [versionNumber, proposalVersions]);
 
@@ -92,28 +102,23 @@ const ProposalHistory = ({
   }, [showToast]);
 
   const isWalletConnected = !(activeAccount === undefined);
-  console.log('proposalVersions', proposalVersions);
-
-  const v1 = proposalVersions && proposalVersions[0].description;
-  const v2 = proposalVersions && proposalVersions[1].description;
-
   const highlightSyntax = (str: string) => {
-    <ReactMarkdown
-      className={classes.markdown}
-      children={str}
-      // remarkPlugins={[remarkBreaks]}
-    />;
+    return (
+      <ReactMarkdown
+        className={clsx(editorClasses.markdown, editorClasses.diffs)}
+        children={str}
+        remarkPlugins={[remarkBreaks]}
+      />);
   };
-  // <pre
-  // style={{ display: 'inline' }}
-  // dangerouslySetInnerHTML={{ __html: Prism.highlight(str, Prism.languages.javascript) }}
-  // />
+
+  console.log('activeVersion', activeVersion);
 
   return (
     <Section fullWidth={false} className={classes.votePage}>
-      <Col lg={10} className={classes.wrapper}>
+      <Col lg={12} className={classes.wrapper}>
         {proposal && (
           <ProposalHeader
+            title={proposalVersions ? proposalVersions[activeVersion > 0 ? activeVersion - 1 : activeVersion].title : proposal.title}
             proposal={proposal}
             isActiveForVoting={false}
             isWalletConnected={isWalletConnected}
@@ -121,30 +126,55 @@ const ProposalHistory = ({
           />
         )}
       </Col>
-      <Col lg={10} className={clsx(classes.proposal, classes.wrapper)}>
+      <Col lg={12} className={clsx(classes.proposal, classes.wrapper)}>
         <Row>
-          <Col xl={8} lg={12}>
-            {/* {proposalVersions && activeVersion && (
+          <Col lg={8} md={12}>
+            {((!isDiffsVisible && proposalVersions && activeVersion) || (isDiffsVisible && proposalVersions && activeVersion < 2)) && (
               <ProposalContent
                 description={proposalVersions[activeVersion - 1].description}
                 title={proposalVersions[activeVersion - 1].title}
                 details={proposalVersions[activeVersion - 1].details}
-              />
-            )} */}
-            {proposalVersions && activeVersion && (
-              <ReactDiffViewer
-                oldValue={v1}
-                newValue={v2}
-                splitView={false}
-                hideLineNumbers={true}
-                extraLinesSurroundingDiff={10000}
-                // renderContent={highlightSyntax}
+                isV3Proposal={true}
               />
             )}
+            {isDiffsVisible && proposalVersions && activeVersion >= 2 && (
+              <div className={classes.diffsWrapper}>
+                <ReactDiffViewer
+                  oldValue={proposalVersions[activeVersion - 2].description}
+                  newValue={proposalVersions[activeVersion - 1].description}
+                  splitView={false}
+                  hideLineNumbers={true}
+                  extraLinesSurroundingDiff={10000}
+                  renderContent={highlightSyntax}
+                />
+                <Row>
+                  <Col className={classes.section}>
+                    <h5>
+                      <Trans>Proposed Transactions</Trans>
+                    </h5>
+                    <p>Version {activeVersion - 1}</p>
+                    <ProposalTransactions details={proposalVersions[activeVersion - 1].details} />
+
+                    <p>Version {activeVersion - 2}</p>
+                    <ProposalTransactions details={proposalVersions[activeVersion - 2].details} />
+
+                  </Col>
+                </Row>
+
+              </div>
+            )}
           </Col>
-          <Col xl={4} lg={12}>
+          <Col lg={4} md={12}>
             <div className={classes.versionHistory}>
-              <h2>Version History</h2>
+              <div className={classes.versionHistoryHeader}>
+                <h2>Version History</h2>
+                <button
+                  className={classes.diffsLink}
+                  onClick={() => setIsDiffsVisible(!isDiffsVisible)}
+                >
+                  View diffs
+                </button>
+              </div>
               <div className={classes.versionsList}>
                 {proposalVersions &&
                   proposalVersions

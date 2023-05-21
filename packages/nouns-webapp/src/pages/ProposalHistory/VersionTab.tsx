@@ -27,8 +27,6 @@ const VersionTab = (props: Props) => {
 
   useEffect(() => {
     if (currentBlock) {
-      // const timestamp = timestampFromBlockNumber(props.version.createdAt, currentBlock);
-      // setUpdatedTimestamp(props.version.createdAt.toDate());
       const date = new Date(+props.version.createdAt * 1000);
       setUpdatedTimestamp(date);
     }
