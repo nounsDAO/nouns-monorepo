@@ -170,6 +170,7 @@ export interface ProposalCandidateInfo {
   slug: string;
   proposer: string;
   lastUpdatedTimestamp: number;
+  canceled: boolean;
   versionsCount: number;
 }
 
@@ -193,6 +194,7 @@ export interface ProposalCandidateVersion {
 
 export interface ProposalCandidate extends ProposalCandidateInfo {
   version: ProposalCandidateVersion;
+  canceled: boolean;
 }
 
 export interface PartialProposalCandidate extends ProposalCandidateInfo {
@@ -615,6 +617,7 @@ const parseSubgraphCandidate = (
     slug: candidate.slug,
     proposer: candidate.proposer,
     lastUpdatedTimestamp: candidate.lastUpdatedTimestamp,
+    canceled: candidate.canceled,
     versionsCount: candidate.versions.length,
     version: {
       title: R.pipe(extractTitle, removeMarkdownStyle)(description) ?? 'Untitled',

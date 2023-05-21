@@ -33,8 +33,6 @@
 
 .section {
   word-wrap: break-word;
-  padding-top: 2rem;
-  margin-top: 2rem;
 }
 
 .section h5 {
@@ -230,6 +228,19 @@
   font-size: 16px;
 }
 
+.button {
+  border-radius: 8px;
+  font-family: 'PT Root UI';
+  font-weight: bold;
+  transition: all 0.125s ease-in-out;
+  background-color: #FAF4F8;
+  color: var(--brand-gray-dark-text);
+  line-height: 1;
+  padding: 10px 16px;
+  height: fit-content;
+  border: none;
+}
+
 .editCandidate .editButton {
   font-weight: bold;
   background-color: #000;
@@ -238,7 +249,18 @@
   border-color: #000;
   transition: all 0.125s ease-in-out;
 }
+
 .editCandidate .editButton:hover {
   opacity: 0.8;
   cursor: pointer;
+}
+
+a.primaryButton {
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+}
+
+a.primaryButton:hover {
+  opacity: 0.75;
 }

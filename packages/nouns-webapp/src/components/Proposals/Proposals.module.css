@@ -30,7 +30,7 @@
 .tabs {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 10px;  
   margin: 0;
@@ -349,6 +349,13 @@
   text-align: center;
   text-decoration: none;
 }
+.candidatesSidebar .button.disabled {
+  background-color: #f4f4f8;
+  border: #f4f4f8;
+  color: #8c8d92;
+  border: 1px solid #e2e3e8;
+  pointer-events: none;
+}
 
 .candidatesSidebar .button:focus,
 .candidatesSidebar .button:hover {
@@ -356,4 +363,16 @@
   color: #e2e3e8;
   box-shadow: none;
   border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.candidatesSidebar .button.disabled:focus,
+.candidatesSidebar .button.disabled:hover,
+.candidatesSidebar .button.disabled:active {
+  cursor: not-allowed;
+  background-color: #f4f4f8 !important;
+  border: #f4f4f8 !important;
+  color: #8c8d92 !important;
+  border: 1px solid #e2e3e8 !important;
+  outline: none;
+  box-shadow: none;
 }

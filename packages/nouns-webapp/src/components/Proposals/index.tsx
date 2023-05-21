@@ -27,7 +27,7 @@ import en from 'dayjs/locale/en';
 import { AVERAGE_BLOCK_TIME_IN_SECS } from '../../utils/constants';
 import Section from '../../layout/Section';
 import CandidateCard from '../CandidateCard';
-import Link from '../Link';
+import { Link } from 'react-router-dom';
 import { useCandidateProposals } from '../../wrappers/nounsData';
 
 dayjs.extend(relativeTime);
@@ -41,17 +41,17 @@ const getCountdownCopy = (
   const startDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
-          'seconds',
-        )
+        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
+        'seconds',
+      )
       : undefined;
 
   const endDate =
     proposal && timestamp && currentBlock
       ? dayjs(timestamp).add(
-          AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
-          'seconds',
-        )
+        AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
+        'seconds',
+      )
       : undefined;
 
   const expiresDate = proposal && dayjs(proposal.eta).add(14, 'days');
@@ -110,19 +110,20 @@ const Proposals = ({ proposals }: { proposals: PartialProposal[] }) => {
   };
 
   // Get candidates
-  const { loading, error, data } = useCandidateProposals();
+  const { loading, error, data: allCandidates } = useCandidateProposals();
   const [candidates, setCandidates] = useState<PartialProposalCandidate[]>([]);
-  useEffect(() => {
-    if (!loading && !error) {
-      // const candidatesList = data['proposalCandidates'].map((c: PartialProposal) => {
-      //   return <CandidateCard key={c.id} candidate={c} />;
-      // });
-      // console.log(candidatesList);
-      setCandidates(data['proposalCandidates']);
-    }
-  }, [loading, error, data]);
 
-  console.log('candidates', candidates);
+  useEffect(() => {
+    if (!loading && !error && allCandidates) {
+      const filteredCandidates: PartialProposalCandidate[] = allCandidates['proposalCandidates'].filter(
+        (candidate: ProposalCandidate) => candidate.canceled === false,
+      );
+      setCandidates(filteredCandidates);
+    }
+    if (error) {
+      console.error(error);
+    }
+  }, [loading, error, allCandidates]);
 
   return (
     <div className={classes.proposals}>
@@ -321,9 +322,9 @@ const Proposals = ({ proposals }: { proposals: PartialProposal[] }) => {
                     <Trans>Current threshold: </Trans> {threshold} Nouns
                   </strong>
                 </h5>
-                <a href="/create-candidate" className={classes.button}>
+                <Link to="/create-candidate" className={clsx(classes.button)}>
                   Create a candidate
-                </a>
+                </Link>
               </Col>
             </Row>
           </Col>

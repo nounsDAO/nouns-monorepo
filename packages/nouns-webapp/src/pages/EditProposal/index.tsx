@@ -1,4 +1,4 @@
-import { Col, Alert, Button } from 'react-bootstrap';
+import { Col, Alert, Button, FormControl, InputGroup } from 'react-bootstrap';
 import Section from '../../layout/Section';
 import {
   ProposalState,
@@ -29,6 +29,7 @@ import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.modu
 import ProposalActionModal from '../../components/ProposalActionsModal';
 import config from '../../config';
 import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
+import { prop } from 'ramda';
 
 interface EditProposalProps {
   isCandidate?: boolean;
@@ -54,6 +55,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
   const [titleValue, setTitleValue] = useState('');
   const [bodyValue, setBodyValue] = useState('');
+  const [commitMessage, setCommitMessage] = useState<string>('');
 
   const [totalUSDCPayment, setTotalUSDCPayment] = useState<number>(0);
   const [tokenBuyerTopUpEth, setTokenBuyerTopUpETH] = useState<string>('0');
@@ -62,6 +64,12 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     totalUSDCPayment,
     config.addresses.tokenBuyer === undefined || totalUSDCPayment === 0,
   );
+
+
+  const removeTitleFromDescription = (description: string, title: string) => {
+    const titleRegex = new RegExp(`# ${title}\n\n`);
+    return description.replace(titleRegex, '');
+  };
 
   const handleAddProposalAction = useCallback(
     (transactions: ProposalTransaction | ProposalTransaction[]) => {
@@ -163,6 +171,12 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
     },
     [setBodyValue, bodyValue],
   );
+
+  // useEffect(() => {
+  //   // initial state
+  //   const proposalBody = removeTitleFromDescription(bodyValue, proposal?.title ?? '');
+  //   setBodyValue(proposalBody);
+  // }, []);
 
   const isFormInvalid = useMemo(
     () => !proposalTransactions.length || titleValue === '' || bodyValue === '',
@@ -275,7 +289,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
       proposalTransactions.map(({ signature }) => signature ?? ''), // Signatures
       proposalTransactions.map(({ calldata }) => calldata), // Calldatas
       `# ${titleValue}\n\n${bodyValue}`, // Description
-      'test commit message ',
+      commitMessage,
     );
   };
 
@@ -313,7 +327,7 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
       });
       console.log('transactions', transactions);
       setTitleValue(proposal.title);
-      setBodyValue(proposal.description);
+      setBodyValue(removeTitleFromDescription(proposal.description, proposal.title));
       setProposalTransactions(transactions);
       setOriginalTitleValue(proposal.title);
       setOriginalBodyValue(proposal.description);
@@ -354,6 +368,8 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
   }
 
   console.log('proposalTransactions', proposalTransactions);
+  console.log('bodyValue', bodyValue);
+
 
   return (
     <Section fullWidth={false} className={classes.createProposalPage}>
@@ -407,10 +423,18 @@ const EditProposalPage: React.FC<EditProposalProps> = props => {
         )}
         <ProposalEditor
           title={titleValue}
-          body={processProposalDescriptionText(bodyValue, titleValue)}
+          body={bodyValue}
           onTitleInput={handleTitleInput}
           onBodyInput={handleBodyInput}
         />
+        <InputGroup className={classes.commitMessage}>
+          <FormControl
+            value={commitMessage}
+            onChange={e => setCommitMessage(e.target.value)}
+            placeholder="Optional commit message"
+          />
+        </InputGroup>
+
         <EditProposalButton
           className={classes.createProposalButton}
           isLoading={isProposePending}

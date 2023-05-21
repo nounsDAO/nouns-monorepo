@@ -12,8 +12,9 @@ import EnsOrLongAddress from '../EnsOrLongAddress';
 import config from '../../config';
 import { InformationCircleIcon } from '@heroicons/react/solid';
 import ShortAddress from '../ShortAddress';
+import clsx from 'clsx';
 
-interface ProposalContentProps {
+interface ProposalCandidateContentProps {
   proposal?: ProposalCandidate;
 }
 
@@ -36,14 +37,13 @@ export const transactionLink = (content: string) => {
   );
 };
 
-const ProposalContent: React.FC<ProposalContentProps> = props => {
+const ProposalCandidateContent: React.FC<ProposalCandidateContentProps> = props => {
   const { proposal } = props;
-  console.log('proposal', proposal);
 
   return (
     <>
       <Row>
-        <Col className={classes.section}>
+        <Col className={clsx(classes.section, classes.v3Proposal)}>
           <h5>
             <Trans>Description</Trans>
           </h5>
@@ -130,4 +130,4 @@ const ProposalContent: React.FC<ProposalContentProps> = props => {
   );
 };
 
-export default ProposalContent;
+export default ProposalCandidateContent;

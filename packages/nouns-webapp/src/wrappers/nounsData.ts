@@ -30,6 +30,16 @@ export const useCreateProposalCandidate = () => {
   return { createProposalCandidate, createProposalCandidateState };
 };
 
+
+export const useCancelCandidate = () => {
+  const { send: cancelCandidate, state: cancelCandidateState } = useContractFunction(
+    nounsDAOData,
+    'cancelProposalCandidate',
+  );
+  return { cancelCandidate, cancelCandidateState };
+};
+
+
 export const useAddSignature = () => {
   const { send: addSignature, state: addSignatureState } = useContractFunction(
     nounsDAOData,

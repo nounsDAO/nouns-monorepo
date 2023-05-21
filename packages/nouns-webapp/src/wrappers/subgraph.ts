@@ -109,6 +109,7 @@ export const candidateProposalsQuery = (first = 1_000) => gql`
       slug
       proposer
       lastUpdatedTimestamp
+      canceled
       latestVersion {
         title
         versionSignatures {

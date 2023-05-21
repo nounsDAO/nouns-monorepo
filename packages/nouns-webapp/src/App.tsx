@@ -76,8 +76,8 @@ function App() {
             <Route exact path="/nounders" component={NoundersPage} />
             <Route exact path="/create-proposal" component={CreateProposalPage} />
             <Route exact path="/create-candidate" component={CreateCandidatePage} />
-            <Route exact path="/create-draft-proposal" component={CreateDraftProposalPage} />
-            <Route exact path="/candidates/create" component={CreateCandidateProposalPage} />
+            {/* <Route exact path="/create-draft-proposal" component={CreateDraftProposalPage} /> */}
+            {/* <Route exact path="/candidates/create" component={CreateCandidateProposalPage} /> */}
             <Route exact path="/candidates" component={CandidateProposals} />
             <Route exact path="/candidates-poc/:id" component={CandidateProposalPage} />
             <Route exact path="/update-proposal/:id" component={UpdateProposalPage} />

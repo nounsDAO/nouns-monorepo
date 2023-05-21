@@ -3,6 +3,7 @@ import Section from '../../layout/Section';
 import {
   ProposalState,
   ProposalTransaction,
+  useAllProposals,
   useProposal,
   useProposalCount,
   useProposalThreshold,
@@ -24,31 +25,31 @@ import navBarButtonClasses from '../../components/NavBarButton/NavBarButton.modu
 import ProposalActionModal from '../../components/ProposalActionsModal';
 import config from '../../config';
 import { useEthNeeded } from '../../utils/tokenBuyerContractUtils/tokenBuyer';
-import { useCreateCandidateCost, useCreateProposalCandidate } from '../../wrappers/nounsData';
+import { useCandidateProposals, useCreateCandidateCost, useCreateProposalCandidate } from '../../wrappers/nounsData';
 import { ethers } from 'ethers';
 import CreateCandidateButton from '../../components/CreateCandidateButton';
+import { checkEnoughVotes, checkHasActiveOrPendingProposalOrCandidate, checkIsEligibleToPropose } from '../../utils/proposals';
 
 const CreateCandidatePage = () => {
-  const history = useHistory();
+  const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
+  const [titleValue, setTitleValue] = useState('');
+  const [bodyValue, setBodyValue] = useState('');
+  const [slug, setSlug] = useState('');
+  const [totalUSDCPayment, setTotalUSDCPayment] = useState<number>(0);
+  const [tokenBuyerTopUpEth, setTokenBuyerTopUpETH] = useState<string>('0');
+  const { createProposalCandidate, createProposalCandidateState } = useCreateProposalCandidate();
   const { account } = useEthers();
   const latestProposalId = useProposalCount();
   const latestProposal = useProposal(latestProposalId ?? 0);
   const availableVotes = useUserVotes();
   const proposalThreshold = useProposalThreshold();
-
-  const { createProposalCandidate, createProposalCandidateState } = useCreateProposalCandidate();
-
-  const [proposalTransactions, setProposalTransactions] = useState<ProposalTransaction[]>([]);
-  const [titleValue, setTitleValue] = useState('');
-  const [bodyValue, setBodyValue] = useState('');
-
-  const [slug, setSlug] = useState('');
-
-  const [totalUSDCPayment, setTotalUSDCPayment] = useState<number>(0);
-  const [tokenBuyerTopUpEth, setTokenBuyerTopUpETH] = useState<string>('0');
   const ethNeeded = useEthNeeded(config.addresses.tokenBuyer ?? '', totalUSDCPayment);
-
   const createCandidateCost = useCreateCandidateCost();
+  const history = useHistory();
+  const { loading, error, data: candidates } = useCandidateProposals();
+  // TODO: fetch candidates and proposals and check if user has an active or pending proposal or candidate
+  // const proposalCandidates = candidates?.proposalCandidates ?? [];
+  // const { data: proposals } = useAllProposals();
 
   const handleAddProposalAction = useCallback(
     (transaction: ProposalTransaction) => {
@@ -147,13 +148,13 @@ const CreateCandidatePage = () => {
     [proposalTransactions, titleValue, bodyValue],
   );
 
-  const hasEnoughVote = Boolean(
-    availableVotes && proposalThreshold !== undefined && availableVotes > proposalThreshold,
-  );
-
+  // const hasEnoughVote = Boolean(
+  //   availableVotes && proposalThreshold !== undefined && availableVotes > proposalThreshold,
+  // );
+  const hasEnoughVote = checkEnoughVotes(availableVotes, proposalThreshold);
+  const isEligibleToPropose = checkIsEligibleToPropose(latestProposal, account)
   const handleCreateProposal = async () => {
     const description = `# ${titleValue}\n\n${bodyValue}`;
-
     await createProposalCandidate(
       proposalTransactions.map(({ address }) => address), // Targets
       proposalTransactions.map(({ value }) => value ?? '0'), // Values
@@ -182,7 +183,7 @@ const CreateCandidatePage = () => {
       case 'Success':
         setModal({
           title: <Trans>Success</Trans>,
-          message: <Trans>Proposal Created!</Trans>,
+          message: <Trans>Proposal Candidate Created!</Trans>,
           show: true,
         });
         setProposePending(false);
@@ -205,6 +206,14 @@ const CreateCandidatePage = () => {
         break;
     }
   }, [createProposalCandidateState, setModal]);
+
+
+
+  console.log('latestProposal', latestProposal);
+  console.log((latestProposal?.status === ProposalState.ACTIVE ||
+    latestProposal?.status === ProposalState.PENDING) &&
+    latestProposal.proposer === account);
+  console.log('isEligibleToPropose', isEligibleToPropose);
 
   return (
     <Section fullWidth={false} className={classes.createProposalPage}>
@@ -270,22 +279,18 @@ const CreateCandidatePage = () => {
           body={bodyValue}
           onTitleInput={handleTitleInput}
           onBodyInput={handleBodyInput}
+          isCandidate={true}
         />
         <CreateCandidateButton
           className={classes.createProposalButton}
           isLoading={isProposePending}
           proposalThreshold={proposalThreshold}
           // TODO: update this check to include proposals AND candidates
-          hasActiveOrPendingProposal={
-            (latestProposal?.status === ProposalState.ACTIVE ||
-              latestProposal?.status === ProposalState.PENDING) &&
-            latestProposal.proposer === account
-          }
+          hasActiveOrPendingProposal={checkHasActiveOrPendingProposalOrCandidate(latestProposal, account)}
           hasEnoughVote={hasEnoughVote}
           isFormInvalid={isFormInvalid}
           handleCreateProposal={handleCreateProposal}
         />
-        {/* TODO: fetch fee amount from contract */}
         <p className={classes.feeNotice}>
           {!hasEnoughVote && (
             <>

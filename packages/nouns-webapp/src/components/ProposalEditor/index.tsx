@@ -10,11 +10,13 @@ const ProposalEditor = ({
   body,
   onTitleInput,
   onBodyInput,
+  isCandidate = false,
 }: {
   title: string;
   body: string;
   onTitleInput: (title: string) => void;
   onBodyInput: (body: string) => void;
+  isCandidate?: boolean;
 }) => {
   const bodyPlaceholder = `## Summary\n\nInsert your summary here\n\n## Methodology\n\nInsert your methodology here\n\n## Conclusion\n\nInsert your conclusion here`;
   const [proposalText, setProposalText] = useState('');
@@ -32,13 +34,13 @@ const ProposalEditor = ({
     <div>
       <InputGroup className={`${classes.proposalEditor} d-flex flex-column`}>
         <FormText>
-          <Trans>Proposal</Trans>
+          {isCandidate ? <Trans>Candidate</Trans> : <Trans>Proposal</Trans>}
         </FormText>
         <FormControl
           className={classes.titleInput}
           value={title}
           onChange={e => onTitleInput(e.target.value)}
-          placeholder="Proposal Title"
+          placeholder={isCandidate ? "Proposal candidate title" : "Proposal title"}
         />
         <hr className={classes.divider} />
         <FormControl

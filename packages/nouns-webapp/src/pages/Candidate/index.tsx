@@ -11,7 +11,7 @@ import {
 } from '../../wrappers/nounsDao';
 import { useUserVotesAsOfBlock } from '../../wrappers/nounToken';
 import classes from './Candidate.module.css';
-import { RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { TransactionStatus, useBlockNumber, useEthers } from '@usedapp/core';
 import { AlertModal, setAlertModal } from '../../state/slices/application';
 import dayjs from 'dayjs';
@@ -50,7 +50,8 @@ import { BigNumber } from 'ethers';
 import { CandidateSignature } from '../../wrappers/nounsDao';
 import CandidateHeader from '../../components/ProposalHeader/CandidateHeader';
 import { version } from 'process';
-import CandidateContent from '../../components/ProposalContent/CandidateContent';
+import ProposalCandidateContent from '../../components/ProposalContent/ProposalCandidateContent';
+import { useCancelCandidate } from '../../wrappers/nounsData';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -61,296 +62,84 @@ const CandidatePage = ({
     params: { id },
   },
 }: RouteComponentProps<{ id: string }>) => {
-  // const proposal = useProposal(id);
-  const candidate = useCandidate(id);
-  console.log('candidate', candidate);
-  const { account } = useEthers();
   const [isProposer, setIsProposer] = useState<boolean>(false);
+  const [isCancelPending, setCancelPending] = useState<boolean>(false);
+  const candidate = useCandidate(id);
+  const { cancelCandidate, cancelCandidateState } = useCancelCandidate();
+  const activeAccount = useAppSelector(state => state.account.activeAccount);
+  const isWalletConnected = !(activeAccount === undefined);
+  const { account } = useEthers();
 
   useEffect(() => {
     if (candidate && account) {
       setIsProposer(candidate.proposer.toLowerCase() === account.toLowerCase());
     }
   }, [candidate, account]);
-
-  const [signedVotes, setSignedVotes] = React.useState<number>(0);
-  const blockNumber = useBlockNumber();
-  const [signers, setSigners] = useState<string[]>([]);
-  // useEffect(() => {
-  //   if (candidate && signers.length === 0) {
-  //     const signers = candidate.version.versionSignatures.map(signature => signature.signer.id);
-  //     setSigners(signers);
-  //   }
-  // }, [candidate]);
-  // const { data: delegateSnapshot } = useQuery<Delegates>(
-  //   delegateNounsAtBlockQuery(signers, blockNumber ?? 0),
-  // );
-  const [showVoteModal, setShowVoteModal] = useState<boolean>(false);
-  const [showDynamicQuorumInfoModal, setShowDynamicQuorumInfoModal] = useState<boolean>(false);
-  // Toggle between Noun centric view and delegate view
-  const [isDelegateView, setIsDelegateView] = useState(false);
-
-  const [isQueuePending, setQueuePending] = useState<boolean>(false);
-  const [isExecutePending, setExecutePending] = useState<boolean>(false);
-  const [isCancelPending, setCancelPending] = useState<boolean>(false);
-  const [showStreamWithdrawModal, setShowStreamWithdrawModal] = useState<boolean>(false);
-  const [streamWithdrawInfo, setStreamWithdrawInfo] = useState<{
-    streamAddress: string;
-    startTime: number;
-    endTime: number;
-    streamAmount: number;
-    tokenAddress: string;
-  } | null>(null);
-
   const dispatch = useAppDispatch();
   const setModal = useCallback((modal: AlertModal) => dispatch(setAlertModal(modal)), [dispatch]);
-  const {
-    data: dqInfo,
-    loading: loadingDQInfo,
-    error: dqError,
-  } = useQuery(propUsingDynamicQuorum(id ?? '0'));
 
-  const { queueProposal, queueProposalState } = useQueueProposal();
-  const { executeProposal, executeProposalState } = useExecuteProposal();
-  const { cancelProposal, cancelProposalState } = useCancelProposal();
+  const onTransactionStateChange = useCallback(
+    (
+      tx: TransactionStatus,
+      successMessage?: ReactNode,
+      setPending?: (isPending: boolean) => void,
+      getErrorMessage?: (error?: string) => ReactNode | undefined,
+      onFinalState?: () => void,
+    ) => {
+      console.log('tx', tx);
+      switch (tx.status) {
+        case 'None':
+          setPending?.(false);
+          break;
+        case 'Mining':
+          setPending?.(true);
+          break;
+        case 'Success':
+          setModal({
+            title: <Trans>Success</Trans>,
+            message: successMessage || <Trans>Transaction Successful!</Trans>,
+            show: true,
+          });
+          setPending?.(false);
+          onFinalState?.();
+          break;
+        case 'Fail':
+          setModal({
+            title: <Trans>Transaction Failed</Trans>,
+            message: tx?.errorMessage || <Trans>Please try again.</Trans>,
+            show: true,
+          });
+          setPending?.(false);
+          onFinalState?.();
+          break;
+        case 'Exception':
+          setModal({
+            title: <Trans>Error</Trans>,
+            message: getErrorMessage?.(tx?.errorMessage) || <Trans>Please try again.</Trans>,
+            show: true,
+          });
+          setPending?.(false);
+          onFinalState?.();
+          break;
+      }
+    },
+    [setModal],
+  );
 
-  // Get and format date from data
-  const timestamp = Date.now();
-  const currentBlock = useBlockNumber();
-  // const startDate =
-  //   proposal && timestamp && currentBlock
-  //     ? dayjs(timestamp).add(
-  //         AVERAGE_BLOCK_TIME_IN_SECS * (proposal.startBlock - currentBlock),
-  //         'seconds',
-  //       )
-  //     : undefined;
+  // handle cancel candidate
+  useEffect(
+    () => onTransactionStateChange(cancelCandidateState, 'Proposal Candidate Canceled!', setCancelPending),
+    [cancelCandidateState, onTransactionStateChange, setModal],
+  );
 
-  // const endDate =
-  //   proposal && timestamp && currentBlock
-  //     ? dayjs(timestamp).add(
-  //         AVERAGE_BLOCK_TIME_IN_SECS * (proposal.endBlock - currentBlock),
-  //         'seconds',
-  //       )
-  //     : undefined;
-  const now = dayjs();
+  const destructiveStateAction = (() => {
+    return () => {
+      if (candidate?.id) {
+        return cancelCandidate(candidate.slug);
+      }
+    };
+  })();
 
-  // Get total votes and format percentages for UI
-  // const totalVotes = proposal
-  //   ? proposal.forCount + proposal.againstCount + proposal.abstainCount
-  //   : undefined;
-  // const forPercentage = proposal && totalVotes ? (proposal.forCount * 100) / totalVotes : 0;
-  // const againstPercentage = proposal && totalVotes ? (proposal.againstCount * 100) / totalVotes : 0;
-  // const abstainPercentage = proposal && totalVotes ? (proposal.abstainCount * 100) / totalVotes : 0;
-
-  // Only count available votes as of the proposal created block
-  // const availableVotes = useUserVotesAsOfBlock(proposal?.createdBlock ?? undefined);
-
-  // const currentQuorum = useCurrentQuorum(
-  //   config.addresses.nounsDAOProxy,
-  //   proposal && proposal.id ? parseInt(proposal.id) : 0,
-  //   dqInfo && dqInfo.proposal ? dqInfo.proposal.quorumCoefficient === '0' : true,
-  // );
-
-  // const hasSucceeded = proposal?.status === ProposalState.SUCCEEDED;
-  // const isInNonFinalState = [
-  //   ProposalState.PENDING,
-  //   ProposalState.ACTIVE,
-  //   ProposalState.SUCCEEDED,
-  //   ProposalState.QUEUED,
-  // ].includes(proposal?.status!);
-  // const isCancellable =
-  //   isInNonFinalState && proposal?.proposer?.toLowerCase() === account?.toLowerCase();
-
-  // const isAwaitingStateChange = () => {
-  //   if (hasSucceeded) {
-  //     return true;
-  //   }
-  //   if (proposal?.status === ProposalState.QUEUED) {
-  //     return new Date() >= (proposal?.eta ?? Number.MAX_SAFE_INTEGER);
-  //   }
-  //   return false;
-  // };
-
-  // const isAwaitingDestructiveStateChange = () => {
-  //   if (isCancellable) {
-  //     return true;
-  //   }
-  //   return false;
-  // };
-
-  // const startOrEndTimeCopy = () => {
-  //   if (startDate?.isBefore(now) && endDate?.isAfter(now)) {
-  //     return <Trans>Ends</Trans>;
-  //   }
-  //   if (endDate?.isBefore(now)) {
-  //     return <Trans>Ended</Trans>;
-  //   }
-  //   return <Trans>Starts</Trans>;
-  // };
-
-  // const startOrEndTimeTime = () => {
-  //   if (!startDate?.isBefore(now)) {
-  //     return startDate;
-  //   }
-  //   return endDate;
-  // };
-
-  // const moveStateButtonAction = hasSucceeded ? <Trans>Queue</Trans> : <Trans>Execute</Trans>;
-  // const moveStateAction = (() => {
-  //   if (hasSucceeded) {
-  //     return () => {
-  //       if (proposal?.id) {
-  //         return queueProposal(proposal.id);
-  //       }
-  //     };
-  //   }
-  //   return () => {
-  //     if (proposal?.id) {
-  //       return executeProposal(proposal.id);
-  //     }
-  //   };
-  // })();
-
-  // const destructiveStateButtonAction = isCancellable ? <Trans>Cancel</Trans> : '';
-  // const destructiveStateAction = (() => {
-  //   if (isCancellable) {
-  //     return () => {
-  //       if (proposal?.id) {
-  //         return cancelProposal(proposal.id);
-  //       }
-  //     };
-  //   }
-  // })();
-
-  // const onTransactionStateChange = useCallback(
-  //   (
-  //     tx: TransactionStatus,
-  //     successMessage?: ReactNode,
-  //     setPending?: (isPending: boolean) => void,
-  //     getErrorMessage?: (error?: string) => ReactNode | undefined,
-  //     onFinalState?: () => void,
-  //   ) => {
-  //     switch (tx.status) {
-  //       case 'None':
-  //         setPending?.(false);
-  //         break;
-  //       case 'Mining':
-  //         setPending?.(true);
-  //         break;
-  //       case 'Success':
-  //         setModal({
-  //           title: <Trans>Success</Trans>,
-  //           message: successMessage || <Trans>Transaction Successful!</Trans>,
-  //           show: true,
-  //         });
-  //         setPending?.(false);
-  //         onFinalState?.();
-  //         break;
-  //       case 'Fail':
-  //         setModal({
-  //           title: <Trans>Transaction Failed</Trans>,
-  //           message: tx?.errorMessage || <Trans>Please try again.</Trans>,
-  //           show: true,
-  //         });
-  //         setPending?.(false);
-  //         onFinalState?.();
-  //         break;
-  //       case 'Exception':
-  //         setModal({
-  //           title: <Trans>Error</Trans>,
-  //           message: getErrorMessage?.(tx?.errorMessage) || <Trans>Please try again.</Trans>,
-  //           show: true,
-  //         });
-  //         setPending?.(false);
-  //         onFinalState?.();
-  //         break;
-  //     }
-  //   },
-  //   [setModal],
-  // );
-
-  // useEffect(
-  //   () =>
-  //     onTransactionStateChange(
-  //       queueProposalState,
-  //       <Trans>Proposal Queued!</Trans>,
-  //       setQueuePending,
-  //     ),
-  //   [queueProposalState, onTransactionStateChange, setModal],
-  // );
-
-  // useEffect(
-  //   () =>
-  //     onTransactionStateChange(
-  //       executeProposalState,
-  //       <Trans>Proposal Executed!</Trans>,
-  //       setExecutePending,
-  //     ),
-  //   [executeProposalState, onTransactionStateChange, setModal],
-  // );
-
-  // useEffect(
-  //   () => onTransactionStateChange(cancelProposalState, 'Proposal Canceled!', setCancelPending),
-  //   [cancelProposalState, onTransactionStateChange, setModal],
-  // );
-
-  const activeAccount = useAppSelector(state => state.account.activeAccount);
-  // const {
-  //   loading,
-  //   error,
-  //   data: voters,
-  // } = useQuery<ProposalVotes>(proposalVotesQuery(proposal?.id ?? '0'), {
-  //   skip: !proposal,
-  // });
-
-  // const voterIds = voters?.votes?.map(v => v.voter.id);
-  // const { data: delegateSnapshot } = useQuery<Delegates>(
-  //   delegateNounsAtBlockQuery(voterIds ?? [], proposal?.createdBlock ?? 0),
-  //   {
-  //     skip: !voters?.votes?.length,
-  //   },
-  // );
-
-  // const { delegates } = delegateSnapshot || {};
-  // const delegateToNounIds = delegates?.reduce<Record<string, string[]>>((acc, curr) => {
-  //   acc[curr.id] = curr?.nounsRepresented?.map(nr => nr.id) ?? [];
-  //   return acc;
-  // }, {});
-
-  // const data = voters?.votes?.map(v => ({
-  //   delegate: v.voter.id,
-  //   supportDetailed: v.supportDetailed,
-  //   nounsRepresented: delegateToNounIds?.[v.voter.id] ?? [],
-  // }));
-
-  // const [showToast, setShowToast] = useState(true);
-  // useEffect(() => {
-  //   if (showToast) {
-  //     setTimeout(() => {
-  //       setShowToast(false);
-  //     }, 5000);
-  //   }
-  // }, [showToast]);
-
-  // if (!proposal || loading || !data || loadingDQInfo || !dqInfo) {
-  //   return (
-  //     <div className={classes.spinner}>
-  //       <Spinner animation="border" />
-  //     </div>
-  //   );
-  // }
-
-  // if (error || dqError) {
-  //   return <Trans>Failed to fetch</Trans>;
-  // }
-
-  const isWalletConnected = !(activeAccount === undefined);
-  // const isActiveForVoting = startDate?.isBefore(now) && endDate?.isAfter(now);
-
-  // const forNouns = getNounVotes(data, 1);
-  // const againstNouns = getNounVotes(data, 0);
-  // const abstainNouns = getNounVotes(data, 2);
-  // const isV2Prop = dqInfo.proposal.quorumCoefficient > 0;
 
   return (
     <Section fullWidth={false} className={classes.votePage}>
@@ -359,55 +148,100 @@ const CandidatePage = ({
           <CandidateHeader
             proposal={candidate}
             isCandidate={true}
-            // isActiveForVoting={isActiveForVoting}
             isWalletConnected={isWalletConnected}
-            submitButtonClickHandler={() => setShowVoteModal(true)}
+            submitButtonClickHandler={() => { }}
           />
         )}
       </Col>
 
-      {/* {proposal && proposal.proposer === account && (
-        <Row>
-          <Col lg={12} className={classes.editCandidate}>
-            <p>
-              Editing a proposal will clear any previous sponsors and require each sponsor to
-              re-sign
-            </p>
-            <div className={classes.buttons}>
-              <Button
-                onClick={destructiveStateAction}
-                disabled={isCancelPending}
-                variant="danger"
-                className={classes.destructiveTransitionStateButton}
-              >
-                {isCancelPending ? <Spinner animation="border" /> : <Trans>Cancel candidate</Trans>}
-              </Button>
-              <Button
-                onClick={destructiveStateAction}
-                disabled={isCancelPending}
-                className={classes.editButton}
-              >
-                {isCancelPending ? <Spinner animation="border" /> : <Trans>Edit</Trans>}
-              </Button>
+      <Col lg={12} className={classes.editCandidate}>
+        <p>
+          <Trans>
+            Editing a proposal candidate will clear any previous sponsors and require each sponsor to
+            re-sign</Trans>
+        </p>
+        <div className={classes.buttons}>
+          <Button
+            onClick={destructiveStateAction}
+            disabled={isCancelPending}
+            variant="danger"
+            className={clsx(classes.destructiveTransitionStateButton, classes.button)}
+          >
+            {isCancelPending ? <Spinner animation="border" /> : <Trans>Cancel candidate</Trans>}
+          </Button>
+          <Link
+            to={`/candidates/${id}/edit`}
+            className={clsx(classes.primaryButton, classes.button)}
+          >
+            {isCancelPending ? <Spinner animation="border" /> : <Trans>Edit</Trans>}
+          </Link>
+        </div>
+      </Col>
+      {/* <Row className={clsx(classes.section, classes.transitionStateButtonSection)}>
+        <Col className="d-grid gap-4">
+          {isProposer && (
+            <div className={classes.proposerOptionsWrapper}>
+              <div className={classes.proposerOptions}>
+
+                <div className="d-flex gap-3">
+                  {isAwaitingStateChange() && (
+                    <Button
+                      onClick={moveStateAction}
+                      disabled={isQueuePending || isExecutePending}
+                      variant="dark"
+                      className={classes.transitionStateButton}
+                    >
+                      {isQueuePending || isExecutePending ? (
+                        <Spinner animation="border" />
+                      ) : (
+                        <Trans>{moveStateButtonAction} Proposal ⌐◧-◧</Trans>
+                      )}
+                    </Button>
+                  )}
+
+                  <Button
+                    onClick={destructiveStateAction}
+                    disabled={isCancelPending}
+                    className={clsx(
+                      classes.destructiveTransitionStateButton,
+                      classes.button,
+                    )}
+                  >
+                    {isCancelPending ? (
+                      <Spinner animation="border" />
+                    ) : (
+                      <Trans>{destructiveStateButtonAction} Proposal </Trans>
+                    )}
+                  </Button>
+
+                  {isUpdateable && (
+                    <Link
+                      to={`/vote/${id}/edit`}
+                      className={clsx(classes.primaryButton, classes.button)}
+                    >
+                      Edit
+                    </Link>
+                  )}
+                </div>
+              </div>
             </div>
-          </Col>
-        </Row>
-      )} */}
+          )}
+        </Col>
+      </Row> */}
       {candidate && (
         <Row>
           {candidate?.proposer === account && 'is proposer'}
           <Col lg={8} className={clsx(classes.proposal, classes.wrapper)}>
-            <CandidateContent proposal={candidate} />
+            <ProposalCandidateContent proposal={candidate} />
           </Col>
           <Col lg={4}>
             <CandidateSponsors
               candidate={candidate}
               slug={candidate.slug ?? ''}
-              id={candidate.id} // placeholder
+              id={candidate.id}
               // only show signatures that are not canceled
               signatures={candidate.version.versionSignatures.filter(sig => sig.canceled === false)}
               isProposer={isProposer}
-              signers={signers}
             />
           </Col>
         </Row>
