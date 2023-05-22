@@ -627,7 +627,6 @@ contract NounsDAOStorageV3 {
         /// @notice The total number of proposals
         uint256 proposalCount;
         /// @notice The address of the Nouns DAO Executor NounsDAOExecutor
-        // TODO: implement timelockV2 & plan upgrade path
         INounsDAOExecutorV2 timelock;
         /// @notice The address of the Nouns tokens
         NounsTokenLike nouns;
